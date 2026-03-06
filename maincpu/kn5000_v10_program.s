@@ -155553,7 +155553,7 @@ FileOpen_DeviceSearchLoop:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr z, FileOpen_DeviceFound
@@ -223999,7 +223999,7 @@ LABEL_F86841:
 	push xiz
 	ld xwa, (xsp + 8)
 	push xwa
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr z, LABEL_F8685A
@@ -257310,7 +257310,7 @@ LABEL_FA752A:
 	lds32 xde, 0
 	call 0xFA44E2
 	push xhl
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, LABEL_FA756C
@@ -258203,7 +258203,7 @@ LABEL_FA7C97:
 	ld_sril XWA, (xsp + 0x010c)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, LABEL_FA7CB2
@@ -258328,7 +258328,7 @@ LABEL_FA7DB7:
 	ld_sril XWA, (xsp + 0x010c)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, LABEL_FA7DD2
@@ -258452,7 +258452,7 @@ LABEL_FA7ED7:
 	ld_sril XWA, (xsp + 0x010c)
 	ld xwa, (xwa + 4)
 	push xwa
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, LABEL_FA7EF2
@@ -258639,7 +258639,7 @@ LABEL_FA8087:
 	ld xwa, (xwa + 4)
 	push xwa
 	push xhl
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, LABEL_FA80CF
@@ -258835,7 +258835,7 @@ LABEL_FA826E:
 	ld xwa, (xwa + 4)
 	push xwa
 	push xhl
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, LABEL_FA82B6
@@ -259140,7 +259140,7 @@ ViewID_EnumOpen_ScanLoop:
 	ld xwa, (xwa + 4)
 	push xwa
 	push xhl
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, ViewID_EnumOpen_ScanNext
@@ -259472,7 +259472,7 @@ ScreenID_EnumOpen_Compare:
 	push xwa
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, ScreenID_EnumOpen_ScanNext
@@ -259503,7 +259503,7 @@ ScreenID_EnumOpen_NotFound:
 	push xwa
 	pushw 0xEA
 	pushw 0xAB2A
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, ScreenID_EnumOpen_CheckEmpty
@@ -259824,7 +259824,7 @@ WindowID_EnumOpen_Compare:
 	push xwa
 	lda xwa, (xsp + 24)
 	push xwa
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, WindowID_EnumOpen_ScanNext
@@ -259855,7 +259855,7 @@ WindowID_EnumOpen_NotFound:
 	push xwa
 	pushw 0xEA
 	pushw 0xAB6C
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, WindowID_EnumOpen_CheckEmpty
@@ -260100,7 +260100,7 @@ ModeID_EnumOpen_Compare:
 	push xwa
 	lda xwa, (xsp + 20)
 	push xwa
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, ModeID_EnumOpen_SearchNext
@@ -260345,7 +260345,7 @@ TitleID_EnumOpen_Compare:
 	push xwa
 	lda xwa, (xsp + 20)
 	push xwa
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, TitleID_EnumOpen_SearchNext
@@ -260671,7 +260671,7 @@ CommonIDProc_EnumSearch_Compare:
 	push xwa
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0F35
+	call Strcmp
 	inc 8, xsp
 	cps hl, 0
 	jr nz, CommonIDProc_EnumSearch_Next
@@ -334054,7 +334054,7 @@ LABEL_FE298F:
 	call LABEL_FE5CBD
 	ld xwa, (xsp + 8)
 	lds bc, 0
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	ld xwa, (xsp + 8)
 	call LABEL_FE5824
 	cps l, 0
@@ -334123,7 +334123,7 @@ LABEL_FE2A45:
 	call LABEL_FE5CBD
 	ld xwa, (xsp + 8)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	ld xwa, (xsp + 8)
 	call LABEL_FE5A40
 	cps l, 0
@@ -334343,7 +334343,7 @@ LABEL_FE2D74:
 	call LABEL_FE5CBD
 	lda xwa, (xsp + 2)
 	lds bc, 0
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5824
 	cps l, 0
@@ -334413,7 +334413,7 @@ LABEL_FE2E4B:
 	call LABEL_FE5CBD
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	cps l, 0
@@ -334571,7 +334571,7 @@ LABEL_FE301A:
 	jrl nz, LABEL_FE30C1
 	ld xwa, (xsp + 8)
 	lds bc, 0
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	ld xwa, (xsp + 8)
 	call LABEL_FE5824
 	cps l, 1
@@ -334635,7 +334635,7 @@ LABEL_FE30C1:
 	jr nz, LABEL_FE30FB
 	ld xwa, (xsp + 8)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	ld xwa, (xsp + 8)
 	call LABEL_FE5A40
 	cps l, 1
@@ -334750,7 +334750,7 @@ LABEL_FE31BA:
 	jrl z, LABEL_FE33BA
 	lda xwa, (xsp + 2)
 	lds bc, 0
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5824
 	cps l, 1
@@ -334815,7 +334815,7 @@ LABEL_FE327E:
 	jr z, LABEL_FE32D5
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	cps l, 1
@@ -334932,7 +334932,7 @@ NoteMap_UpdateEntry:
 	jrl nz, LABEL_FE346A
 	ld xwa, (xsp + 8)
 	lds bc, 0
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	ld xwa, (xsp + 8)
 	call LABEL_FE5824
 	cps l, 0
@@ -334996,7 +334996,7 @@ LABEL_FE346A:
 	jr nz, LABEL_FE34A4
 	ld xwa, (xsp + 8)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	ld xwa, (xsp + 8)
 	call LABEL_FE5A40
 	cps l, 0
@@ -335111,7 +335111,7 @@ LABEL_FE3563:
 	jrl z, LABEL_FE3763
 	lda xwa, (xsp + 2)
 	lds bc, 0
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5824
 	cps l, 0
@@ -335176,7 +335176,7 @@ LABEL_FE3627:
 	jr z, LABEL_FE367E
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	cps l, 0
@@ -335299,7 +335299,7 @@ LABEL_FE376C:
 	call LABEL_FE614F
 	ld xwa, (xsp + 6)
 	lds bc, 0
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	ld xwa, (xsp + 6)
 	call LABEL_FE5824
 	cps l, 2
@@ -335343,7 +335343,7 @@ LABEL_FE37DE:
 	call LABEL_FE614F
 	ld xwa, (xsp + 6)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	ld xwa, (xsp + 6)
 	call LABEL_FE5A40
 	cps l, 2
@@ -335447,7 +335447,7 @@ LABEL_FE38C7:
 	jrl z, LABEL_FE3A4C
 	lda xwa, (xsp)
 	lds bc, 0
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp)
 	call LABEL_FE5824
 	cps l, 2
@@ -335486,7 +335486,7 @@ LABEL_FE3943:
 	jr z, LABEL_FE39B2
 	lda xwa, (xsp)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp)
 	call LABEL_FE5A40
 	cps l, 2
@@ -338410,7 +338410,7 @@ LABEL_FE5552:
 	inc 8, xsp
 	ret
 
-LABEL_FE5567:
+NoteMap_FindEntry:
 	lda xsp, (xsp - 14)
 	push_werp 0xFA
 	ld (xsp + 10), c
@@ -340882,7 +340882,7 @@ LABEL_FE6BFF:
 LABEL_FE6C1A:
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	call LABEL_FE8AFC
@@ -340933,7 +340933,7 @@ LABEL_FE6C49:
 	call LABEL_FE5CBD
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	cps l, 0
@@ -340972,7 +340972,7 @@ LABEL_FE6CF9:
 LABEL_FE6D15:
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	call LABEL_FE8AFC
@@ -341028,7 +341028,7 @@ LABEL_FE6D47:
 	call LABEL_FE5CBD
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	cps l, 0
@@ -341495,7 +341495,7 @@ LABEL_FE72A8:
 LABEL_FE72C3:
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	call LABEL_FE8AFC
@@ -341540,7 +341540,7 @@ LABEL_FE7310:	; NOTE: nothing seems to call here, but I saw this value on VGA un
 	jrl z, LABEL_FE7456
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	cps l, 0
@@ -341579,7 +341579,7 @@ LABEL_FE738A:
 LABEL_FE73A6:
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	call LABEL_FE8AFC
@@ -341627,7 +341627,7 @@ LABEL_FE73D7:
 	jr z, LABEL_FE7456
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	cps l, 0
@@ -341845,7 +341845,7 @@ LABEL_FE7640:
 	jr z, LABEL_FE768D
 	lda xwa, (xsp)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp)
 	call LABEL_FE5A40
 	call LABEL_FE8AFC
@@ -341881,7 +341881,7 @@ LABEL_FE768D:
 	call LABEL_FE5FC1
 	lda xwa, (xsp)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp)
 	call LABEL_FE5A40
 	cps l, 1
@@ -341928,7 +341928,7 @@ LABEL_FE772C:
 	jrl z, LABEL_FE7804
 	lda xwa, (xsp)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp)
 	call LABEL_FE5A40
 	call LABEL_FE8AFC
@@ -341969,7 +341969,7 @@ LABEL_FE777D:
 	call LABEL_FE5FC1
 	lda xwa, (xsp)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp)
 	call LABEL_FE5A40
 	cps l, 1
@@ -342230,7 +342230,7 @@ LABEL_FE7A83:
 	jr z, LABEL_FE7AD3
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	call LABEL_FE8AFC
@@ -342251,7 +342251,7 @@ LABEL_FE7AD3:
 	jr z, LABEL_FE7B10
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	call LABEL_FE8AFC
@@ -342299,7 +342299,7 @@ LABEL_FE7B22:
 	call LABEL_FE614F
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	cps l, 3
@@ -342337,7 +342337,7 @@ LABEL_FE7BA3:
 	call LABEL_FE614F
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	cps l, 2
@@ -342396,7 +342396,7 @@ LABEL_FE7C51:
 	jr z, LABEL_FE7CA1
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	call LABEL_FE8AFC
@@ -342417,7 +342417,7 @@ LABEL_FE7CA1:
 	jr z, LABEL_FE7CDE
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	call LABEL_FE8AFC
@@ -342470,7 +342470,7 @@ LABEL_FE7D05:
 	call LABEL_FE614F
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	cps l, 3
@@ -342508,7 +342508,7 @@ LABEL_FE7D86:
 	call LABEL_FE614F
 	lda xwa, (xsp + 2)
 	lds bc, 2
-	call LABEL_FE5567
+	call NoteMap_FindEntry
 	lda xwa, (xsp + 2)
 	call LABEL_FE5A40
 	cps l, 2
@@ -355591,13 +355591,13 @@ LABEL_FF0DE3:
 	cps bc, 2
 	jr lt, LABEL_FF0DF9
 	cp bc, 0x24
-	jr le, LABEL_FF0DFE
+	jr le, Itoa
 
 LABEL_FF0DF9:
 	ld (xhl), 0x0
 	jr LABEL_FF0E68
 
-LABEL_FF0DFE:
+Itoa:
 	ld wa, (xsp + 26)
 	ldfr_werp WA, 0xE6
 	lda xiz, (xsp + 4)
@@ -355721,7 +355721,7 @@ LABEL_FF0EFC:
 	ld wa, (xsp + 8)
 	inc 6, wa
 	extz xwa
-	call LABEL_FF0F79
+	call Heap_Alloc
 	ld xiz, xhl
 	ld xwa, xiz
 	cp xwa, 0xFFFFFFFF
@@ -355748,7 +355748,7 @@ LABEL_FF0F31:
 	inc 6, xsp
 	ret
 
-LABEL_FF0F35:
+Strcmp:
 	push xiz
 	ld xiz, (xsp + 8)
 	push xiz
@@ -355783,7 +355783,7 @@ LABEL_FF0F75:
 	pop xiz
 	ret
 
-LABEL_FF0F79:
+Heap_Alloc:
 	or xwa, xwa
 	jr nz, LABEL_FF0F83
 	ld32_24 xhl, 0x03d528
@@ -355835,9 +355835,9 @@ LABEL_FF0FBE:
 	ld xde, (xsp + 4)
 	ld wa, (xsp + 12)
 	cp wa, 0xA
-	jr nz, LABEL_FF0FEF
+	jr nz, Itoa_WithBase
 	cp xde, 0x0
-	jr ge, LABEL_FF0FEF
+	jr ge, Itoa_WithBase
 	ld (xbc), 0x2D
 	pushw wa
 	lda xwa, (xbc + 1)
@@ -355851,7 +355851,7 @@ LABEL_FF0FBE:
 	dec 1, xhl
 	ret
 
-LABEL_FF0FEF:
+Itoa_WithBase:
 	pushw wa
 	push xbc
 	push xde
