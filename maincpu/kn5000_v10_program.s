@@ -85783,11 +85783,11 @@ LABEL_F2057D:
 	jp DispatchHandler_ClearActiveFlag
 
 LABEL_F205F3:
-	call LABEL_F2068D
+	call PlayMode_CheckAndDispatch
 	jr DispatchHandler_ClearActiveFlag
 
 LABEL_F205F9:
-	call LABEL_F2068D
+	call PlayMode_CheckAndDispatch
 	jr DispatchHandler_ClearActiveFlag
 
 LABEL_F205FF:
@@ -85866,7 +85866,7 @@ LABEL_F20686:
 LABEL_F20687:
 	.byte 0xf1, 0x34, 0x0d, 0x00, 0x00, 0x0e
 
-LABEL_F2068D:
+PlayMode_CheckAndDispatch:
 	cpdi8 3380, 1
 	jr nz, LABEL_F206AA
 	stdi8 3380, 0
@@ -86200,7 +86200,7 @@ LABEL_F209BE:
 	call Song_AbortPlayback
 	ret
 
-LABEL_F209CC:
+PlayMode_SendCommand6C:
 	cpdi8 3380, 1
 	jrl nz, LABEL_F209ED
 	cpdi8 4420, 0
@@ -86380,13 +86380,13 @@ __jrt_nop_F20B8B:
 
 LABEL_F20B8B:
 	cpdi8 36151, 119
-	jr z, LABEL_F20BC4
+	jr z, PlayMode_ResetAndSchedule
 	cpdi8 36151, 120
-	jr z, LABEL_F20BC4
+	jr z, PlayMode_ResetAndSchedule
 	cpdi8 36151, 121
-	jr z, LABEL_F20BC4
+	jr z, PlayMode_ResetAndSchedule
 	cpdi8 36151, 122
-	jr z, LABEL_F20BC4
+	jr z, PlayMode_ResetAndSchedule
 	stdi8 4330, 1
 	call LABEL_FC5399
 	call SeqTimer_UpdateTempoReg
@@ -86395,7 +86395,7 @@ LABEL_F20B8B:
 	ldda16 xwa, 10357
 	stda16 61854, xwa
 
-LABEL_F20BC4:
+PlayMode_ResetAndSchedule:
 	stdi8 3380, 0
 	call 0xFDDE6F
 	ret
@@ -86857,7 +86857,7 @@ LABEL_F2101E:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F2068D
+	call PlayMode_CheckAndDispatch
 	pop xiz
 	pop xix
 	pop xhl
@@ -86916,7 +86916,7 @@ LABEL_F210B2:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F2068D
+	call PlayMode_CheckAndDispatch
 	pop xiz
 	pop xix
 	pop xhl
@@ -87283,7 +87283,7 @@ LABEL_F2144B:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F209CC
+	call PlayMode_SendCommand6C
 	pop xiz
 	pop xix
 	pop xhl
@@ -87364,7 +87364,7 @@ LABEL_F2152F:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F209CC
+	call PlayMode_SendCommand6C
 	pop xiz
 	pop xix
 	pop xhl
@@ -89066,7 +89066,7 @@ LABEL_F22B68:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F209CC
+	call PlayMode_SendCommand6C
 	pop xiz
 	pop xix
 	pop xhl
@@ -89077,7 +89077,7 @@ LABEL_F22B75:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F209CC
+	call PlayMode_SendCommand6C
 	pop xiz
 	pop xix
 	pop xhl
@@ -90106,7 +90106,7 @@ LABEL_F234CE:
 	call LABEL_F26E05
 	stdi8 4236, 0
 
-LABEL_F23504:
+SMF_ReadLoopWithRetry:
 	call LABEL_F23963
 	push xwa
 	push xbc
@@ -90174,7 +90174,7 @@ LABEL_F23579:
 	cpdi8 4009, 255
 	jrl z, LABEL_F2358C
 	cpdi8 4323, 0
-	jrl z, LABEL_F23504
+	jrl z, SMF_ReadLoopWithRetry
 	jrl Sequencer_ResetAfterFloppyIO
 
 LABEL_F2358C:
@@ -90207,7 +90207,7 @@ LABEL_F235BD:
 	jp SeqPlay_ResetAndStop
 
 LABEL_F235C3:
-	jrl LABEL_F23504
+	jrl SMF_ReadLoopWithRetry
 
 LABEL_F235C6:
 	bit 7, a
@@ -90231,7 +90231,7 @@ LABEL_F235E2:
 LABEL_F235E8:
 	cpdi8 4323, 0
 	jrl nz, Sequencer_ResetAfterFloppyIO
-	jrl LABEL_F23504
+	jrl SMF_ReadLoopWithRetry
 
 LABEL_F235F3:
 	call LABEL_F23D7F
@@ -90253,7 +90253,7 @@ LABEL_F23609:
 LABEL_F2360F:
 	cpdi8 4323, 0
 	jrl nz, Sequencer_ResetAfterFloppyIO
-	jrl LABEL_F23504
+	jrl SMF_ReadLoopWithRetry
 
 Sequencer_ResetAfterFloppyIO:
 	call FloppyIO_ReturnReady
@@ -90734,7 +90734,7 @@ LABEL_F23A76:
 	pushw wa
 	pushw de
 	push xiy
-	call LABEL_F2439C
+	call SoundGen_RefreshAllVoices
 	pop xiy
 	popw de
 	popw wa
@@ -90760,7 +90760,7 @@ LABEL_F23AC8:
 	pushw wa
 	pushw de
 	push xiy
-	call LABEL_F2439C
+	call SoundGen_RefreshAllVoices
 	pop xiy
 	popw de
 	popw wa
@@ -90787,7 +90787,7 @@ LABEL_F23AE7:
 	pushw wa
 	pushw de
 	push xiy
-	call LABEL_F2439C
+	call SoundGen_RefreshAllVoices
 	pop xiy
 	popw de
 	popw wa
@@ -90809,7 +90809,7 @@ LABEL_F23B20:
 	pushw wa
 	pushw de
 	push xiy
-	call LABEL_F2439C
+	call SoundGen_RefreshAllVoices
 	pop xiy
 	popw de
 	popw wa
@@ -91388,7 +91388,7 @@ LABEL_F23FA8:
 LABEL_F23FB2:
 	stdi8 4236, 0
 
-LABEL_F23FB7:
+SMF_ProcessVoiceData:
 	cpdi8 4323, 0
 	jrl nz, LABEL_F240E0
 	push xwa
@@ -91472,7 +91472,7 @@ LABEL_F24055:
 	cpdi8 4009, 255
 	jrl z, LABEL_F2406C
 	cpdi8 4323, 0
-	jrl z, LABEL_F23FB7
+	jrl z, SMF_ProcessVoiceData
 	stdi8 3830, 255
 	jr LABEL_F240E0
 
@@ -91518,7 +91518,7 @@ LABEL_F240AD:
 	jrl LABEL_F2410D
 
 LABEL_F240B7:
-	jrl LABEL_F23FB7
+	jrl SMF_ProcessVoiceData
 
 LABEL_F240BA:
 	bit 7, a
@@ -91534,7 +91534,7 @@ LABEL_F240BA:
 	jr lt, LABEL_F240DE
 	pop xbc
 	pop xwa
-	jp LABEL_F23FB7
+	jp SMF_ProcessVoiceData
 
 LABEL_F240DE:
 	pop xbc
@@ -91556,7 +91556,7 @@ LABEL_F240E8:
 	jr lt, LABEL_F24106
 	pop xbc
 	pop xwa
-	jp LABEL_F23FB7
+	jp SMF_ProcessVoiceData
 
 LABEL_F24106:
 	pop xbc
@@ -91825,7 +91825,7 @@ LABEL_F24391:
 	stda16 4213, xwa
 	ret
 
-LABEL_F2439C:
+SoundGen_RefreshAllVoices:
 	push xiy
 	call SoundGen_CaptureVoiceParams
 	pop xiy
@@ -94650,7 +94650,7 @@ LABEL_F25E96:
 	pop xiy
 	pop xhl
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F269CB
+	call VoiceChannel_LookupParams
 
 LABEL_F25EAB:
 	ret
@@ -94676,7 +94676,7 @@ LABEL_F25EC7:
 LABEL_F25ED8:
 	stda8 4234, a
 	stdi8 4235, 8
-	call LABEL_F26A24
+	call VoiceChannel_UpdateWithPitch
 	ret
 
 LABEL_F25EE6:
@@ -94696,7 +94696,7 @@ LABEL_F25EF7:
 	ldda8 a, 4013
 	stda8 4234, a
 	stdi8 4235, 127
-	call LABEL_F26A24
+	call VoiceChannel_UpdateWithPitch
 	ret
 
 LABEL_F25F0E:
@@ -94710,7 +94710,7 @@ LABEL_F25F1D:
 	ldda8 a, 4013
 	stda8 4234, a
 	stdi8 4235, 127
-	call LABEL_F26A24
+	call VoiceChannel_UpdateWithPitch
 	ret
 
 LABEL_F25F34:
@@ -94744,7 +94744,7 @@ LABEL_F25F34:
 
 LABEL_F25F7F:
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F269CB
+	call VoiceChannel_LookupParams
 
 LABEL_F25F88:
 	ret
@@ -94775,7 +94775,7 @@ LABEL_F25F8C:
 
 LABEL_F25FC3:
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F269CB
+	call VoiceChannel_LookupParams
 
 LABEL_F25FCC:
 	ret
@@ -94925,7 +94925,7 @@ LABEL_F26135:
 
 LABEL_F26136:
 	push xiy
-	call LABEL_F26BEE
+	call VoiceChannel_GetParamBlock
 	cpdi8 4600, 0
 	jr z, LABEL_F2614D
 	cpdi8 4600, 2
@@ -95096,7 +95096,7 @@ LABEL_F26304:
 	pop xiy
 	pop xhl
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
-	call LABEL_F269CB
+	call VoiceChannel_LookupParams
 
 LABEL_F26319:
 	ret
@@ -95235,7 +95235,7 @@ LABEL_F264DD:
 LABEL_F264F1:
 	stda8	4234, a
 	stdi8	4235, 127
-	call LABEL_F26A24
+	call VoiceChannel_UpdateWithPitch
 	ret
 LABEL_F264FF:
 	; --- Helper: call FEEA13, copy L to A (7 bytes) ---
@@ -95532,7 +95532,7 @@ LABEL_F269BF:
 	or a, l
 	ret
 
-LABEL_F269CB:
+VoiceChannel_LookupParams:
 	ldda16 xiy, 4011
 	and iy, 0xF
 	push xix
@@ -95556,7 +95556,7 @@ LABEL_F26A04:
 	ret
 
 LABEL_F26A05:
-	call LABEL_F26BEE
+	call VoiceChannel_GetParamBlock
 	ld w, (xiy + 4)
 	and w, 0xF7
 	xor a, a
@@ -95570,7 +95570,7 @@ LABEL_F26A1B:
 	ld (xiy + 4), w
 	ret
 
-LABEL_F26A24:
+VoiceChannel_UpdateWithPitch:
 	ldda16 xiy, 4011
 	and iy, 0xF
 	extz xiy
@@ -95702,7 +95702,7 @@ LABEL_F26B7E:
 	ret
 
 LABEL_F26B7F:
-	call LABEL_F26BEE
+	call VoiceChannel_GetParamBlock
 	ldda8 a, 4013
 	ld w, (xiy + 7)
 	and w, 0x80
@@ -95711,7 +95711,7 @@ LABEL_F26B7F:
 	ret
 
 LABEL_F26B93:
-	call LABEL_F26BEE
+	call VoiceChannel_GetParamBlock
 	ldda8 a, 4013
 	ld w, (xiy + 5)
 	and w, 0x80
@@ -95750,7 +95750,7 @@ LABEL_F26BDF:
 LABEL_F26BED:
 	ret
 
-LABEL_F26BEE:
+VoiceChannel_GetParamBlock:
 	xor h, h
 	ldda8 l, 4011
 	and l, 0xF
@@ -96185,7 +96185,7 @@ LABEL_F26FCE:
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a
 	call SoundBank_LoadToWorkRAM
-	call LABEL_F2706D
+	call SeqPlay_StartWithDisplay
 
 LABEL_F26FFD:
 	call SMF_ClearFileBuffer
@@ -96240,7 +96240,7 @@ LABEL_F27057:
 LABEL_F2706C:
 	ret
 
-LABEL_F2706D:
+SeqPlay_StartWithDisplay:
 	call SeqPlay_CheckStartConditions
 	cpdi8 62013, 255
 	jr z, LABEL_F27081
@@ -98422,7 +98422,7 @@ LABEL_F281DF:
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a
 	call SoundBank_LoadToWorkRAM
-	call LABEL_F2706D
+	call SeqPlay_StartWithDisplay
 	stdi16 6699, 2
 
 LABEL_F281FE:
@@ -98433,7 +98433,7 @@ LABEL_F28200:
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a
 	call SoundBank_LoadToWorkRAM
-	call LABEL_F2706D
+	call SeqPlay_StartWithDisplay
 	jr SMF_PopReturn
 
 ; ============================================================================
@@ -98453,7 +98453,7 @@ SMF_FlushAndFinalize:
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a
 	call SoundBank_LoadToWorkRAM
-	call LABEL_F2706D
+	call SeqPlay_StartWithDisplay
 	jr __jrt_nop_F28238
 __jrt_nop_F28238:
 
@@ -117508,7 +117508,7 @@ BmDrEdit_UpdateVelocityDisplay:
 
 BmDrEdit_InsertNoteEvent:
 	resda 0, 10591
-	calr LABEL_F37AF6
+	calr BmDrEdit_CalcTrackPosition
 	ldmm8 10592, 10118
 	ldda8 a, 10122
 	stda8 10593, a
@@ -117555,8 +117555,8 @@ BmDrEdit_RefreshAfterInsert_CheckFull:
 	ldda8 a, 10100
 	mul a, 0x60
 	cpdm16 10138, xwa
-	jrl nc, LABEL_F373CB
-	calr LABEL_F38445
+	jrl nc, BmDrEdit_NavigateAndLoadPosition
+	calr BmDrEdit_CalcBeatMeasure
 	call NoteEditSy_SendWidgetCmd0
 	calr NoteEdit_SendScrollCmds
 	jrl NoteEdit_UpdateScrollAndDisplay
@@ -117750,7 +117750,7 @@ LABEL_F37102:
 LABEL_F37107:
 	stdi16 10138, 0
 	calr BmDrEdit_LoadAlternateState
-	calr LABEL_F37AF6
+	calr BmDrEdit_CalcTrackPosition
 	calr BmDrEdit_SaveAndFindNote
 	calr BmDrEdit_CheckNoteAtPosition
 	calr BmDrEdit_SetupAndWalkToNote
@@ -117921,7 +117921,7 @@ LABEL_F37298:
 	jrl BmDrEdit_RefreshDisplayState
 
 LABEL_F3729B:
-	calr LABEL_F37AF6
+	calr BmDrEdit_CalcTrackPosition
 	calr BmDrEdit_SaveAndFindNote
 	calr BmDrEdit_CheckNoteAtPosition
 	calr BmDrEdit_SetupAndWalkToNote
@@ -118046,7 +118046,7 @@ LABEL_F373A8:
 	calr BmDrEdit_SendMetronomeNoteOn
 	ret
 
-LABEL_F373CB:
+BmDrEdit_NavigateAndLoadPosition:
 	calr LABEL_F3735F
 	calr BmDrEdit_SelectChannelAndLoadPos
 	cpdi8 10362, 0
@@ -118224,7 +118224,7 @@ LABEL_F37555:
 	mul c, 0x60
 	stda16 10138, xbc
 	bitda 0, 10591
-	jrl z, LABEL_F373CB
+	jrl z, BmDrEdit_NavigateAndLoadPosition
 	calr LABEL_F3735F
 	stdi8 10588, 0
 	calr LABEL_F383CB
@@ -118384,11 +118384,11 @@ LABEL_F376C9:
 	mul a, 0x60
 	cpdm16 10138, xwa
 	jr c, LABEL_F376EE
-	calr LABEL_F373CB
+	calr BmDrEdit_NavigateAndLoadPosition
 	jr LABEL_F37701
 
 LABEL_F376EE:
-	calr LABEL_F38445
+	calr BmDrEdit_CalcBeatMeasure
 	calr BmDrEdit_SetupAndWalkToNote
 	call NoteEditSy_SendWidgetCmd0
 	calr NoteEdit_SendScrollCmds
@@ -118403,10 +118403,10 @@ LABEL_F37704:
 	ldda8 a, 10100
 	mul a, 0x60
 	cpdm16 10138, xwa
-	jrl nc, LABEL_F373CB
+	jrl nc, BmDrEdit_NavigateAndLoadPosition
 	resda 0, 10591
 	calr BmDrEdit_RestoreEditState
-	calr LABEL_F38445
+	calr BmDrEdit_CalcBeatMeasure
 	call NoteEditSy_SendWidgetCmd0
 	calr NoteEdit_SendScrollCmds
 	jrl NoteEdit_UpdateScrollAndDisplay
@@ -118618,7 +118618,7 @@ LABEL_F378D7:
 	calr BmDrEdit_SaveEditState
 	ldmm16 10140, 10138
 	calr LABEL_F37863
-	calr LABEL_F38445
+	calr BmDrEdit_CalcBeatMeasure
 	bitda 0, 10591
 	jr nz, LABEL_F37969
 	calr LABEL_F37806
@@ -118846,7 +118846,7 @@ LABEL_F37ADA:
 	stdi8 10589, 5
 	jp 0xFDDE6F
 
-LABEL_F37AF6:
+BmDrEdit_CalcTrackPosition:
 	bitda 0, 10050
 	ret z
 	ldda16 xwa, 10142
@@ -118954,10 +118954,10 @@ LABEL_F37BD7:
 LABEL_F37BFF:
 	lda xwa, (xsp + 12)
 	lda xbc, (xsp + 10)
-	calr LABEL_F37C47
+	calr BmDrEdit_DecrementAndValidateCounter
 	lda xwa, (xsp + 8)
 	lda xbc, (xsp + 6)
-	calr LABEL_F37C47
+	calr BmDrEdit_DecrementAndValidateCounter
 	jr LABEL_F37BD7
 
 LABEL_F37C13:
@@ -118989,7 +118989,7 @@ LABEL_F37C42:
 	lda xsp, (xsp + 20)
 	ret
 
-LABEL_F37C47:
+BmDrEdit_DecrementAndValidateCounter:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xbc
@@ -119822,7 +119822,7 @@ LABEL_F38441:
 	calr BmDrEdit_RefreshDisplayState
 	ret
 
-LABEL_F38445:
+BmDrEdit_CalcBeatMeasure:
 	ldda16 xwa, 10138
 	extz xwa
 	div wa, 0x60
@@ -128094,10 +128094,10 @@ LABEL_F3D224:
 	call PartCtrl_WriteByte_ZeroExtended
 	lda xwa, (xsp + 12)
 	lda xbc, (xwa + 2)
-	call LABEL_F37C47
+	call BmDrEdit_DecrementAndValidateCounter
 	lda xwa, (xsp + 8)
 	lda xbc, (xwa + 2)
-	call LABEL_F37C47
+	call BmDrEdit_DecrementAndValidateCounter
 	cp (xsp + 2), 0x0
 	jr z, LABEL_F3D1FB
 
@@ -143034,7 +143034,7 @@ NoteEditSy_DisplayUpdateData:
 NoteEditSy_UpdateChordDisplay:
 	bitda 0, 10050
 	jr z, NoteEditSy_ChordDisplayEdit
-	call LABEL_F37AF6
+	call BmDrEdit_CalcTrackPosition
 	jp BmDrEdit_SendWidgetCmd
 
 NoteEditSy_ChordDisplayEdit:
