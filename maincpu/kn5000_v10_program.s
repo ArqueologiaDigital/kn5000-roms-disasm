@@ -182252,7 +182252,7 @@ LABEL_F61D99:
 
 LABEL_F61DC3:
 	anddi8 13520, 223
-	calr LABEL_F62536
+	calr ToneGen_CalcTempo
 	bitda 4, 14235
 	jr z, LABEL_F61DD6
 	calr LABEL_F61E7E
@@ -182264,7 +182264,7 @@ LABEL_F61DD6:
 LABEL_F61DD9:
 	call AccPatch_GetCurrentSlotAddr
 	calr LABEL_F62034
-	calr LABEL_F625E0
+	calr ToneGen_AdvanceByTempo
 	calr AccPlayback_CalcTimingPosition
 	call AccPatch_GetCurrentSlotAddr
 	calr AccVoice_InitPatternBuffer
@@ -182693,7 +182693,7 @@ LABEL_F621C4:
 	.byte 0x00, 0x00
 
 ToneGen_AdvanceSeqList:
-	calr LABEL_F6249A
+	calr ToneGen_InitPlaybackState
 	ldda32 xhl, 13640
 	ld wa, (xhl)
 	cpda16 xwa, 13383
@@ -182857,7 +182857,7 @@ AccVoice_InitPlaybackState:
 	xor w, w
 	ldda8 a, 13365
 	stda16 13918, xwa
-	calr LABEL_F623DA
+	calr ToneGen_ScanVoicePosition
 	call AccPatch_CopySequenceEntry
 	call AccPatch_GetCurrentSlotAddr
 	calr AccVoice_InitPatternBuffer
@@ -182874,8 +182874,8 @@ LABEL_F623D7:
 LABEL_F623D8:
 	.byte 0x00, 0x00
 
-LABEL_F623DA:
-	calr LABEL_F6249A
+ToneGen_ScanVoicePosition:
+	calr ToneGen_InitPlaybackState
 	call AccPatch_GetCurrentSlotAddr
 	calr ToneGen_GetSlotIndex
 	ld de, hl
@@ -182961,7 +182961,7 @@ LABEL_F62497:
 LABEL_F62498:
 	.byte 0x00, 0x00
 
-LABEL_F6249A:
+ToneGen_InitPlaybackState:
 	anddi8 13520, 191
 	ldda8 a, 14235
 	and a, 0x1F
@@ -183013,8 +183013,8 @@ LABEL_F62504:
 	bitda 2, 14099
 	jr z, LABEL_F62533
 	anddi8 13520, 223
-	calr LABEL_F62536
-	calr LABEL_F625E0
+	calr ToneGen_CalcTempo
+	calr ToneGen_AdvanceByTempo
 	calr AccPlayback_CalcTimingPosition
 	call AccPatch_GetCurrentSlotAddr
 	calr AccVoice_InitPatternBuffer
@@ -183029,7 +183029,7 @@ LABEL_F62533:
 LABEL_F62534:
 	.byte 0x00, 0x00
 
-LABEL_F62536:
+ToneGen_CalcTempo:
 	ldda8 l, 14100
 	cps l, 0
 	jr nz, LABEL_F62540
@@ -183101,7 +183101,7 @@ LABEL_F625C2:
 	.byte 0x40, 0x00, 0x60, 0x00, 0xc0, 0x00, 0x80, 0x01
 	.byte 0x00, 0x03, 0x80, 0x04, 0x00, 0x06
 
-LABEL_F625E0:
+ToneGen_AdvanceByTempo:
 	ldda8 a, 13359
 	ldda8 w, 13360
 	addda8 a, 13564
@@ -183498,13 +183498,13 @@ LABEL_F629E4:
 	jr nz, LABEL_F629F3
 	cp e, 0x90
 	jr z, LABEL_F629FB
-	calr LABEL_F629FE
+	calr ToneGen_CompareVoiceBlocks
 	jr LABEL_F629FB
 
 LABEL_F629F3:
 	cp e, 0x90
 	jr nz, LABEL_F629FB
-	calr LABEL_F629FE
+	calr ToneGen_CompareVoiceBlocks
 
 LABEL_F629FB:
 	ret
@@ -183512,7 +183512,7 @@ LABEL_F629FB:
 LABEL_F629FC:
 	.byte 0x00, 0x00
 
-LABEL_F629FE:
+ToneGen_CompareVoiceBlocks:
 	calr LABEL_F62A0D
 	calr LABEL_F62AAC
 	calr LABEL_F62B29
@@ -183603,7 +183603,7 @@ LABEL_F62AF7:
 	xor w, w
 	ldda8 a, 13365
 	stda16 13918, xwa
-	calr LABEL_F623DA
+	calr ToneGen_ScanVoicePosition
 	call AccPatch_CopySequenceEntry
 	ret
 
@@ -183800,7 +183800,7 @@ ToneGen_StepToNextStereoSlot:
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x87
 	jr nz, LABEL_F62CEA
-	calr LABEL_F62D0D
+	calr ToneGen_StepToNextBuffer
 
 LABEL_F62CEA:
 	inc 1, iy
@@ -183810,7 +183810,7 @@ LABEL_F62CEA:
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x87
 	jr nz, LABEL_F62D04
-	calr LABEL_F62D0D
+	calr ToneGen_StepToNextBuffer
 
 LABEL_F62D04:
 	stda16 13385, xiy
@@ -183821,7 +183821,7 @@ LABEL_F62D04:
 LABEL_F62D0B:
 	.byte 0x00, 0x00
 
-LABEL_F62D0D:
+ToneGen_StepToNextBuffer:
 	ldda16 xhl, 13419
 	calr ToneGen_CalcBufferAddr
 	xor iy, iy
@@ -184848,7 +184848,7 @@ LABEL_F636F9:
 LABEL_F636FB:
 	ldda32 xhl, 13668
 	add xhl, 0x118
-	calr LABEL_F637DB
+	calr RhythmROM_CountEntries
 	stda8 13747, e
 	ldda8 a, 13551
 	cps a, 0
@@ -184896,7 +184896,7 @@ LABEL_F63748:
 	jr LABEL_F637AC
 
 LABEL_F63782:
-	calr LABEL_F637DB
+	calr RhythmROM_CountEntries
 	ldda32 xhl, 13664
 	xor wa, wa
 	ld a, (xhl + 12)
@@ -184940,7 +184940,7 @@ LABEL_F637D8:
 LABEL_F637D9:
 	.byte 0x00, 0x00
 
-LABEL_F637DB:
+RhythmROM_CountEntries:
 	push xhl
 	ldda32 xhl, 13668
 	add xhl, 0x3D1
@@ -187954,7 +187954,7 @@ Tempo_DisplayBPMValue:
 Tempo_DisplayBPMFraction:
 	cpi_berp 0xFA, 0
 	jr z, Tempo_DisplayBPMWithDec
-	calr LABEL_F66B41
+	calr Voice_ReadEventBytes
 	calr LABEL_F66D15
 	ldda8 a, 14744
 	cp a, 0x81
@@ -188186,7 +188186,7 @@ SeqRec_StartRecord:
 	jr nc, SeqRec_UpdateFlags
 
 SeqRec_StartRecordImpl:
-	calr LABEL_F66B41
+	calr Voice_ReadEventBytes
 	ldada xhl, 14744
 	ld c, (xhl)
 	ld a, c
@@ -188460,7 +188460,7 @@ LABEL_F66B3E:
 LABEL_F66B40:
 	ret
 
-LABEL_F66B41:
+Voice_ReadEventBytes:
 	push xiz
 	calr LABEL_F66C60
 	ld xwa, xhl
@@ -188518,7 +188518,7 @@ LABEL_F66B9D:
 
 Voice_ScanTableByType:
 	push xiz
-	calr LABEL_F66CFB
+	calr Voice_ResolveTableAddr
 	ld xwa, xhl
 	ldda8 c, 14744
 	cp c, 0x83
@@ -188674,12 +188674,12 @@ LABEL_F66CBC:
 	setm 7, (xde)
 
 LABEL_F66CF7:
-	calr LABEL_F66CFB
+	calr Voice_ResolveTableAddr
 
 LABEL_F66CFA:
 	ret
 
-LABEL_F66CFB:
+Voice_ResolveTableAddr:
 	ldda16 xbc, 14724
 	extz xbc
 	ldda16 xwa, 14720
