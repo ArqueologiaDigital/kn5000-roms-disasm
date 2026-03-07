@@ -44572,7 +44572,7 @@ LABEL_EF1315:
 	jr nz, LABEL_EF132F
 	call LABEL_FB6CA9
 	call LABEL_EFAA03
-	call LABEL_FC700A
+	call MIDI_ProcessChangedChannels
 	call CPanel_Poll
 	call LABEL_FB78A5
 
@@ -44585,7 +44585,7 @@ LABEL_EF132F:
 LABEL_EF133D:
 	tset_dd16 6, 0x13, 0x04
 	jr nz, LABEL_EF134F
-	call LABEL_FC700A
+	call MIDI_ProcessChangedChannels
 	call CPanel_Poll
 	call LABEL_FEF6B1
 
@@ -277543,7 +277543,7 @@ BitMapOut_SaveDisplayToROM:
 BitMapOut_DetectChanges:
 	lda xsp, (xsp - 10)
 	pushw iz
-	call LABEL_FC4CED
+	call Voice_InitAllChannelEntries
 	calr BitMapOut_GetRenderMode
 	bit 0, l
 	jr nz, BitMapOut_DetectChanges_CheckMode
@@ -297591,7 +297591,7 @@ LABEL_FC4CEB:
 	jr __jrt_nop_FC4CED
 __jrt_nop_FC4CED:
 
-LABEL_FC4CED:
+Voice_InitAllChannelEntries:
 	lda xsp, (xsp - 14)
 	push xiz
 	ldw (xsp + 10), 0x0
@@ -299324,7 +299324,7 @@ LABEL_FC6A53:
 	srl a, 2
 	ld c, a
 	ld xwa, 0x8EB6
-	calr LABEL_FC6A9F
+	calr MIDI_WriteParamByte
 	ld_sd8b A, 0x40
 	and a, 0xF0
 	srl a, 4
@@ -299340,7 +299340,7 @@ LABEL_FC6A7C:
 	ld_sd8b C, 0x40
 	and c, 0xF0
 	srl c, 4
-	calr LABEL_FC6A9F
+	calr MIDI_WriteParamByte
 
 LABEL_FC6A94:
 	ldada xwa, 36542
@@ -299349,7 +299349,7 @@ LABEL_FC6A94:
 	jr __jrt_nop_FC6A9F
 __jrt_nop_FC6A9F:
 
-LABEL_FC6A9F:
+MIDI_WriteParamByte:
 	lda xsp, (xsp - 10)
 	push xiz
 	lda xhl, (xwa + 1)
@@ -299636,7 +299636,7 @@ LABEL_FC6EE0:
 	ldda8 c, 36604
 	extz bc
 	ld xde, 0x8F04
-	calr LABEL_FC6F86
+	calr MIDI_ComputeParamDelta
 	ldada xwa, 36612
 	bitm 3, (xwa)
 	jr z, LABEL_FC6F2D
@@ -299670,7 +299670,7 @@ LABEL_FC6F33:
 	ldda8 c, 36606
 	extz bc
 	ld xde, 0x8F06
-	calr LABEL_FC6F86
+	calr MIDI_ComputeParamDelta
 	ldada xwa, 36614
 	bitm 3, (xwa)
 	jr z, LABEL_FC6F80
@@ -299692,7 +299692,7 @@ LABEL_FC6F80:
 	inc 4, xsp
 	ret
 
-LABEL_FC6F86:
+MIDI_ComputeParamDelta:
 	dec 8, xsp
 	ld (xsp), xde
 	ld (xsp + 4), c
@@ -299765,7 +299765,7 @@ LABEL_FC7000:
 	ordi16 36674, 2
 	ret
 
-LABEL_FC700A:
+MIDI_ProcessChangedChannels:
 	cpdi8 36150, 251
 	ret z
 	calr LABEL_FC70EB
@@ -318773,7 +318773,7 @@ SoundMode_ProcessToneAndParams:
 	push xiz
 	call LABEL_FC4CDE
 	call LABEL_FC4C4B
-	call LABEL_FC4CED
+	call Voice_InitAllChannelEntries
 	call ToneGen_DispatchByMode
 	lds wa, 3
 	call BitMapOut_GetRenderMode_CheckBit3
