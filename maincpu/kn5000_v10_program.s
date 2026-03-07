@@ -262837,7 +262837,7 @@ LABEL_FAA69B:
 	ldto_berp A, 0xF8
 	extz wa
 	ld xbc, (xsp + 2)
-	call LABEL_FB31AB
+	call VGA_WritePaletteEntry
 	inc 1, iz
 	cp iz, 0x100
 	jr c, LABEL_FAA69B
@@ -262857,7 +262857,7 @@ LABEL_FAA6CC:
 	ldto_berp A, 0xF8
 	extz wa
 	ld xbc, (xsp + 2)
-	call LABEL_FB31AB
+	call VGA_WritePaletteEntry
 	inc 1, iz
 	cp iz, 0xF0
 	jr c, LABEL_FAA6CC
@@ -274064,7 +274064,7 @@ LABEL_FB2648:
 	jr z, LABEL_FB2678
 	ld a, (xiz)
 	extz wa
-	calr LABEL_FB27FD
+	calr HexCharToNibble
 	sll l, 4
 	ld xwa, (xsp + 4)
 	ld (xwa), l
@@ -274073,7 +274073,7 @@ LABEL_FB2648:
 	jr z, LABEL_FB2678
 	ld a, (xiz)
 	extz wa
-	calr LABEL_FB27FD
+	calr HexCharToNibble
 	ld xwa, (xsp + 4)
 	add (xwa), l
 	jr LABEL_FB26A4
@@ -274312,7 +274312,7 @@ LABEL_FB27EB:
 ; HexDigitToValue - Convert ASCII hex digit to 4-bit value
 ; Input:  A = ASCII character ('0'-'9', 'a'-'f', 'A'-'F')
 ; Output: L = 0x00-0x0F (value), or 0x00 if invalid
-LABEL_FB27FD:
+HexCharToNibble:
 	cp a, 0x30		; '0'
 	jr c, LABEL_FB280D
 	cp a, 0x39		; '9'
@@ -274885,7 +274885,7 @@ LABEL_FB319A:
 	jrl _Write_VGA_Register
 
 
-LABEL_FB31AB:
+VGA_WritePaletteEntry:
 	push xiz
 	ld xiz, xbc
 	ld c, a
@@ -279814,11 +279814,11 @@ LABEL_FB6C51:
 	call SndParam_LookupReadOnly
 	bit 7, hl
 	ret nz
-	calr LABEL_FB6C67
+	calr SndParam_LoadTransposeValues
 	stda16 36184, xhl
 	ret
 
-LABEL_FB6C67:
+SndParam_LoadTransposeValues:
 	ld xwa, 0x28000
 	call SndParam_LookupReadOnly
 	stda8 37098, l
@@ -279888,7 +279888,7 @@ LABEL_FB6CEB:
 	call SndParam_LookupReadOnly
 	bit 7, hl
 	jr nz, LABEL_FB6D09
-	calr LABEL_FB6C67
+	calr SndParam_LoadTransposeValues
 	cpda16 xhl, 36184
 	ret z
 	stda16 36184, xhl
