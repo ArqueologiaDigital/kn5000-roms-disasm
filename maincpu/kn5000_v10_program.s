@@ -39809,7 +39809,7 @@ LABEL_EE8570:
 	.long LABEL_FDE514
 	.long AccStyle_JumpTable2
 	.long UIState_KeyScan_Dispatch
-	.long LABEL_F98748
+	.long CtrlPanel_HandleKeyInput
 	.long BitMapOut_ByteData_RenderD
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE858C:
@@ -44552,7 +44552,7 @@ LABEL_EF12DE:
 	call SwbtWr_ProcessAll
 
 LABEL_EF12F0:
-	call LABEL_F980EE
+	call MainTitle_PrepareAndDispatch
 	calr LABEL_EF13AF
 	call AccDir_PeriodicEntry
 	calr Seq_EventProcessingTick
@@ -53834,7 +53834,7 @@ LABEL_EF7819:
 	jrl nz, LABEL_EF784F
 	call 0xEF885A
 	call 0xEFB769
-	call LABEL_F9951A
+	call SeqState_HasModeChanged
 	cps	hl, 0
 	jrl nz, LABEL_EF784F
 	.byte 0xf1, 0x57, 0x0f, 0xc8			; bit 0, (0x0F57)  [F1 prefix]
@@ -55949,7 +55949,7 @@ LABEL_EFAA84:
 	ld xiy, 0xD5E
 	cp (xiy), 0x0
 	jrl z, ControllerMode_UpdateFlags
-	call LABEL_F9951A
+	call SeqState_HasModeChanged
 	cps hl, 0
 	jrl nz, ControllerMode_UpdateFlags
 	decm8 1, (xiy)
@@ -194900,7 +194900,7 @@ StylCnvModl_OK_SelectItem:
 	add xde, xwa
 	ld xwa, xde
 	ld xbc, 0xE4C14A
-	call LABEL_F8AC27
+	call FileIO_OpenWithBuiltPath
 	cps hl, 0
 	jr ge, StylCnvModl_OK_Select_ClearMem
 	ldw wa, 0x10
@@ -195989,7 +195989,7 @@ LABEL_F6D029:
 	inc 8, xsp
 	lda xwa, (xsp + 18)
 	ld xbc, 0xE4C152
-	call LABEL_F8AC27
+	call FileIO_OpenWithBuiltPath
 	cps hl, 0
 	jrl lt, StylCnv_AbortWithError
 	ld wa, (xsp + 8)
@@ -230913,7 +230913,7 @@ LABEL_F8AC24:
 	lds hl, 0
 	ret
 
-LABEL_F8AC27:
+FileIO_OpenWithBuiltPath:
 	st_dri3b L, 0xFD, 0x70, 0xFF
 	push xiz
 	st_dri3l XBC, 0xFD, 0x90, 0x00
@@ -231342,7 +231342,7 @@ LABEL_F8B025:
 	ld16_24 xhl, 0x0272c8
 	ret
 
-LABEL_F8B02B:
+FileIO_ScanDirEntries:
 	st_dri3b L, 0xFD, 0xEE, 0xFE
 	pushw iz
 	lda_24 xbc, 0x02723c
@@ -231449,7 +231449,7 @@ LABEL_F8B106:
 
 LABEL_F8B12C:
 	st16_24 0x0271f0, xwa
-	calr LABEL_F8B02B
+	calr FileIO_ScanDirEntries
 
 LABEL_F8B134:
 	ld hl, iz
@@ -231489,7 +231489,7 @@ LABEL_F8B16D:
 LABEL_F8B16F:
 	sti16_24 0x0271ee, 0x0000
 	sti16_24 0x0271f0, 0x0009
-	calr LABEL_F8B02B
+	calr FileIO_ScanDirEntries
 	lds wa, 0
 	cps hl, 0
 	jr le, LABEL_F8B18A
@@ -233998,7 +233998,7 @@ LABEL_F980EA:
 	lds wa, 1
 	jr LABEL_F98098
 
-LABEL_F980EE:
+MainTitle_PrepareAndDispatch:
 	call 0xFA9A8B
 	ld xwa, 0x1400001
 	ld xbc, 0x1E000BB
@@ -234649,13 +234649,13 @@ LABEL_F9873F:
 	jr nz, LABEL_F9870A			; continue scanning
 	ret
 ; =============================================================================
-; LABEL_F98748 -- Alternate key handler (special key codes 0x00, 0x10)
+; CtrlPanel_HandleKeyInput -- Alternate key handler (special key codes 0x00, 0x10)
 ;
 ; Key code 0x10: calls FDDFA7, then dispatches event with state from 8D3A
 ; Key code 0x00: if C07F bits 1:0 set and 26E2 bits 1:0 clear, jumps to
 ;                PartSelect_UpdateDisplayState (activation handler)
 ; =============================================================================
-LABEL_F98748:
+CtrlPanel_HandleKeyInput:
 	ldda8 a, 0xC07D				; param byte (key code low)
 	cp a, 0x10				; Check for special key 0x10
 	jr z, LABEL_F98769			; Handle key 0x10
@@ -236028,7 +236028,7 @@ LABEL_F994FA:
 	lds32 xde, 0
 	jp 0xFA9D58
 
-LABEL_F9951A:
+SeqState_HasModeChanged:
 	ldda8 a, 36150
 	cpda8 a, 36152
 	scc16 nz, hl
@@ -317170,7 +317170,7 @@ LABEL_FD73A1:
 	calr LABEL_FD749F
 	calr LABEL_FD7517
 	calr LABEL_FD75BE
-	call LABEL_F980EE
+	call MainTitle_PrepareAndDispatch
 	ret
 
 LABEL_FD73C6:
