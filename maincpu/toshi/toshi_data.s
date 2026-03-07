@@ -499,7 +499,7 @@ LABEL_ED11DC:	aligned_string "      OFF       "
 	.byte 0x2f, 0x02, 0x00, 0x00, 0x2f, 0x02, 0xea, 0x08
 	.byte 0x5b, 0x04, 0x5b, 0x04, 0x06, 0x00, 0x00, 0x00
 	.byte 0x06, 0x00, 0x06, 0x00, 0x06, 0x00, 0x06, 0x00
-LABEL_ED1240:
+ParamStr_Table_01:
 	.long LABEL_ED1304
 	.long LABEL_ED12F0
 	.long LABEL_ED12DC
@@ -518,7 +518,7 @@ LABEL_ED12C8:	aligned_string "    SPLIT POINT    "
 LABEL_ED12DC:	aligned_string "   APC & MEMORY    "
 LABEL_ED12F0:	aligned_string "       TEMPO       "
 LABEL_ED1304:	aligned_string " RHYTHM SELECTION  "
-LABEL_ED1318:
+ParamStr_Table_02:
 	.long LABEL_ED13DC
 	.long LABEL_ED13C8
 	.long LABEL_ED13B4
@@ -562,7 +562,7 @@ LABEL_ED13DC:	aligned_string "     VOCALIST      "
 	.byte 0x7c, 0x00, 0x97, 0x02, 0xfa, 0x00, 0xfa, 0x00
 	.byte 0xd5, 0x00, 0x79, 0x01, 0xd5, 0x00, 0x79, 0x01
 	.byte 0x6d, 0x02, 0x45, 0x02, 0x45, 0x02
-LABEL_ED14B6:
+ParamStr_Table_03:
 	.long LABEL_ED154A
 	.long LABEL_ED1542
 	.long LABEL_ED153A
@@ -618,7 +618,7 @@ LABEL_ED154A:	aligned_string "  OFF  "
 	aligned_string "PAGE %d/%d"
 	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a
 	.byte 0x00
-LABEL_ED1626:
+ParamStr_Table_04:
 	.long LABEL_ED1642
 	.long LABEL_ED163E
 	.long LABEL_ED163A
@@ -648,7 +648,7 @@ LABEL_ED1642:
 	.byte 0xad, 0x00, 0x02, 0x00, 0xae, 0x00, 0x06, 0x01
 	.byte 0xc1, 0x00, 0x02, 0x00, 0xc2, 0x00, 0x16, 0x01
 	.byte 0xd5, 0x00
-LABEL_ED16AE:
+ParamStr_Table_05:
 	.long LABEL_ED1714
 	.long LABEL_ED170E
 	.long LABEL_ED170A
@@ -736,7 +736,7 @@ LABEL_ED1714:
 	.byte 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00
 
 
-LABEL_ED1B40:
+ParamStr_Table_06:
 	.long LABEL_ED1BA6
 	.long LABEL_ED1BA0
 	.long LABEL_ED1B9C
@@ -797,7 +797,7 @@ LABEL_ED1BEA:
 	aligned_string "          "
 	aligned_string "SPLIT<%s%s>"
 	.long LABEL_ED1C82
-LABEL_ED1C20:
+ParamStr_Table_07:
 	.long LABEL_ED1C7C
 	.long LABEL_ED1C78
 	.long LABEL_ED1C72
@@ -944,7 +944,7 @@ LABEL_ED20C6:
 LABEL_ED20CA:	aligned_string ""
 LABEL_ED20CC:
 	.byte 0x32, 0x21, 0xed, 0x00
-LABEL_ED20D0:
+ParamStr_Table_08:
 	.long LABEL_ED212C
 	.long LABEL_ED2122
 	.long LABEL_ED211C
@@ -969,7 +969,7 @@ LABEL_ED2106:
 	aligned_string "func"
 
 
-LABEL_ED2138:
+ParamStr_Table_09:
 	.long LABEL_ED219E
 	.long LABEL_ED2198
 	.long LABEL_ED218E
@@ -1005,7 +1005,7 @@ LABEL_ED21BA:	aligned_string ""
 LABEL_ED21BC:
 	.long LABEL_ED21C0
 LABEL_ED21C0:	aligned_string ""
-LABEL_ED21C2:
+ParamStr_Table_10:
 	.long LABEL_ED2206
 	.long LABEL_ED2200
 	.long LABEL_ED21F6
@@ -1020,14 +1020,14 @@ LABEL_ED21F0:	aligned_string "page"
 LABEL_ED21F6:	aligned_string "fontcolor"
 LABEL_ED2200:	aligned_string "font"
 LABEL_ED2206:	aligned_string "func"
-LABEL_ED220C:
+ParamStr_Table_11:
 	.long LABEL_ED2220
 	.long LABEL_ED221A
 	.long LABEL_ED2218
 LABEL_ED2218:	aligned_string ""
 LABEL_ED221A:	aligned_string "data"
 LABEL_ED2220:	aligned_string "func"
-LABEL_ED2226:
+ParamStr_Table_12:
 	.long LABEL_ED2268
 	.long LABEL_ED2262
 	.long LABEL_ED2258
@@ -1042,7 +1042,7 @@ LABEL_ED2262:	aligned_string "font"
 LABEL_ED2268:	aligned_string "func"
 
 
-LABEL_ED226E:
+ParamStr_Table_13:
 	.long LABEL_ED22B0
 	.long LABEL_ED22AA
 	.long LABEL_ED22A0
@@ -1070,7 +1070,7 @@ LABEL_ED22D6:
 	.long LABEL_ED22DE
 LABEL_ED22DE:	aligned_string ""
 LABEL_ED22E0:	aligned_string "page"
-LABEL_ED22E6:
+ParamStr_Table_14:
 	.long LABEL_ED2308
 	.long LABEL_ED22FE
 	.long LABEL_ED22F8
@@ -1081,7 +1081,7 @@ LABEL_ED22FE:	aligned_string "fixedrow"
 LABEL_ED2308:	aligned_string "fixedcol"
 
 
-LABEL_ED2312:
+ParamStr_Table_15:
 	.long LABEL_ED2334
 	.long LABEL_ED232A
 	.long LABEL_ED2324
@@ -1092,7 +1092,7 @@ LABEL_ED232A:	aligned_string "fixedrow"
 LABEL_ED2334:	aligned_string "fixedcol"
 
 
-LABEL_ED233E:
+ParamStr_Table_16:
 	.long LABEL_ED2360
 	.long LABEL_ED2356
 	.long LABEL_ED2350
@@ -1103,7 +1103,7 @@ LABEL_ED2356:	aligned_string "fixedrow"
 LABEL_ED2360:	aligned_string "fixedcol"
 
 
-LABEL_ED236A:
+ParamStr_Table_17:
 	.long LABEL_ED238C
 	.long LABEL_ED2382
 	.long LABEL_ED237C
@@ -1136,7 +1136,7 @@ LABEL_ED23EE:	jr	nz, 0x6f
 	aligned_string "fixedcol"
 
 
-LABEL_ED2438:
+ParamStr_Table_18:
 	.long LABEL_ED24AA
 	.long LABEL_ED24A0
 	.long LABEL_ED249A
@@ -1157,7 +1157,7 @@ LABEL_ED24A0:	aligned_string "fixedrow"
 LABEL_ED24AA:	aligned_string "fixedcol"
 LABEL_ED24B4:
 	.byte 0x16, 0x25, 0xed, 0x00
-LABEL_ED24B8:
+ParamStr_Table_19:
 	.long LABEL_ED250C
 	.long LABEL_ED2506
 	.long LABEL_ED24F6
@@ -1175,7 +1175,7 @@ LABEL_ED2506:
 	aligned_string "fixedcol"
 
 
-LABEL_ED2520:
+ParamStr_Table_20:
 	.long LABEL_ED258C
 	.long LABEL_ED2582
 	.long LABEL_ED257C
@@ -1192,7 +1192,7 @@ LABEL_ED2582:	aligned_string "fixedrow"
 LABEL_ED258C:	aligned_string "fixedcol"
 
 
-LABEL_ED2596:
+ParamStr_Table_21:
 	.long LABEL_ED2654
 	.long LABEL_ED264A
 	.long LABEL_ED2644
@@ -1233,7 +1233,7 @@ LABEL_ED26AE:	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedcol"
 
 
-LABEL_ED26C8:
+ParamStr_Table_22:
 	.long LABEL_ED277E
 	.long LABEL_ED2774
 	.long LABEL_ED276E
@@ -1261,7 +1261,7 @@ LABEL_ED2746:
 	aligned_string "fixedcol"
 
 
-LABEL_ED2788:
+ParamStr_Table_23:
 	.long LABEL_ED27C2
 	.long LABEL_ED27BC
 	.long LABEL_ED27B2
@@ -1274,7 +1274,7 @@ LABEL_ED27AA:	aligned_string "nowswno"
 LABEL_ED27B2:	aligned_string "fontcolor"
 LABEL_ED27BC:	aligned_string "font"
 LABEL_ED27C2:	aligned_string "func"
-LABEL_ED27C8:
+ParamStr_Table_24:
 	.long LABEL_ED27DE
 	.long LABEL_ED27D6
 	.long LABEL_ED27D4
@@ -1331,7 +1331,7 @@ LABEL_ED2CE8:	aligned_string "VariScreen"
 LABEL_ED2CF4:	aligned_string ""
 LABEL_ED2CF6:	aligned_string "NormScreen"
 	.byte 0x1c, 0x00, 0x84, 0x2d, 0xed, 0x00
-LABEL_ED2D08:
+ParamStr_Table_25:
 	.long LABEL_ED2D78
 	.long LABEL_ED2D6C
 	.long LABEL_ED2D62

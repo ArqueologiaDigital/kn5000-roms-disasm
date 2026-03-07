@@ -14,7 +14,7 @@
 	.byte 0x44, 0x00, 0x22, 0x00
 	.long LABEL_ED2CD2
 	.long LABEL_ED2CC8
-	.long LABEL_ED2138
+	.long ParamStr_Table_09
 	.long AcTransposeBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
@@ -50,25 +50,25 @@
 	.byte 0x38, 0x00, 0x16, 0x00
 	.long LABEL_ED2C78
 	.long LABEL_ED2C70
-	.long LABEL_ED21C2
+	.long ParamStr_Table_10
 	.long AcPmBkEditBoxProc
 	naka_header NAKA_TYPE_0x15
 	.byte 0x3a, 0x00, 0x08, 0x00
 	.long LABEL_ED2C62
 	.long LABEL_ED2C5E
-	.long LABEL_ED220C
+	.long ParamStr_Table_11
 	.long MsaModeScreenProc
 	naka_header NAKA_TYPE_0x33
 	.byte 0x34, 0x00, 0x12, 0x00
 	.long LABEL_ED2C50
 	.long LABEL_ED2C4A
-	.long LABEL_ED2226
+	.long ParamStr_Table_12
 	.long PmemModeBoxProc
 	naka_header NAKA_TYPE_GROUP
 	.byte 0x2c, 0x00, 0x12, 0x00
 	.long LABEL_ED2C3E
 	.long LABEL_ED2C38
-	.long LABEL_ED226E
+	.long ParamStr_Table_13
 	.long IvWindowPageControlProc
 	naka_header NAKA_TYPE_0x27
 	.byte 0x1a, 0x00, 0x04, 0x00
@@ -92,25 +92,25 @@
 	.byte 0x4a, 0x00, 0x0c, 0x00
 	.long LABEL_ED2BE2
 	.long LABEL_ED2BDE
-	.long LABEL_ED22E6
+	.long ParamStr_Table_14
 	.long AcFSWAssGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00, 0x0c, 0x00
 	.long LABEL_ED2BCE
 	.long LABEL_ED2BCA
-	.long LABEL_ED2312
+	.long ParamStr_Table_15
 	.long AcPmExpFilterGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00, 0x0c, 0x00
 	.long LABEL_ED2BB4
 	.long LABEL_ED2BB0
-	.long LABEL_ED233E
+	.long ParamStr_Table_16
 	.long AcDispTimeSetGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00, 0x0c, 0x00
 	.long LABEL_ED2B9A
 	.long LABEL_ED2B96
-	.long LABEL_ED236A
+	.long ParamStr_Table_17
 	.long AcMstSugAlpGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x66, 0x00, 0x28, 0x00
@@ -122,7 +122,7 @@
 	.byte 0x5e, 0x00, 0x20, 0x00
 	.long LABEL_ED2B60
 	.long LABEL_ED2B56
-	.long LABEL_ED2438
+	.long ParamStr_Table_18
 	.long AcMstStyle1GridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x56, 0x00, 0x18, 0x00
@@ -134,13 +134,13 @@
 	.byte 0x56, 0x00, 0x18, 0x00
 	.long LABEL_ED2B24
 	.long LABEL_ED2B1C
-	.long LABEL_ED2520
+	.long ParamStr_Table_20
 	.long AcMstStyle2GridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x66, 0x00, 0x28, 0x00
 	.long LABEL_ED2B08
 	.long LABEL_ED2AFC
-	.long LABEL_ED2596
+	.long ParamStr_Table_21
 	.long AcMstSong1GridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x56, 0x00, 0x18, 0x00
@@ -152,19 +152,19 @@
 	.byte 0x66, 0x00, 0x28, 0x00
 	.long LABEL_ED2AD0
 	.long LABEL_ED2AC4
-	.long LABEL_ED26C8
+	.long ParamStr_Table_22
 	.long SineWaveScreenProc
 	naka_header NAKA_TYPE_0x33
 	.byte 0x34, 0x00, 0x12, 0x00
 	.long LABEL_ED2AB4
 	.long LABEL_ED2AAE
-	.long LABEL_ED2788
+	.long ParamStr_Table_23
 	.long IvPageOverWrProc
 	naka_header NAKA_TYPE_0x27
 	.byte 0x1c, 0x00, 0x06, 0x00
 	.long LABEL_ED2AA0
 	.long LABEL_ED2A9C
-	.long LABEL_ED27C8
+	.long ParamStr_Table_24
 	.zero 24
 LABEL_ED2A9C:
 	.byte 0x41, 0x74, 0x00, 0xff

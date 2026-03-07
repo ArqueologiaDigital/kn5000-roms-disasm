@@ -5919,7 +5919,7 @@ LABEL_E2E5FA:
 	.byte 0x00, 0x00, 0xf1, 0x00, 0x01, 0x00, 0x0d, 0x00
 	.byte 0x40, 0x00, 0x28, 0x01
 
-LABEL_E2E624:	; registered from InitializeKubo
+Naka_SeqUI_Table_01:	; registered from InitializeKubo
 	.long LABEL_E27FA6
 	.long LABEL_E27FD8
 	.long LABEL_E28002
@@ -5935,7 +5935,7 @@ LABEL_E2E624:	; registered from InitializeKubo
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2E658:
+Naka_SeqUI_Table_02:
 	.long LABEL_E28160
 	.long LABEL_E28196
 	.long LABEL_E281BE
@@ -5951,7 +5951,7 @@ LABEL_E2E658:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2E68C:
+Naka_SeqUI_Table_03:
 	.long LABEL_E28320
 	.long LABEL_E28354
 	.long LABEL_E2837C
@@ -5992,7 +5992,7 @@ LABEL_E2E68C:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x88, 0x88, 0xe2, 0x00
 
 
-LABEL_E2E728:
+Naka_SeqUI_Table_04:
 	.long LABEL_E288C4
 	.long LABEL_E288EE
 	.long LABEL_E28918
@@ -6007,7 +6007,7 @@ LABEL_E2E728:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2E758:
+Naka_SeqUI_Table_05:
 	.long LABEL_E28A3C
 	.long LABEL_E28A76
 	.long LABEL_E28AB4
@@ -6023,7 +6023,7 @@ LABEL_E2E758:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x54, 0x8c, 0xe2, 0x00
 
 
-LABEL_E2E790:
+Naka_SeqUI_Table_06:
 	.long LABEL_E28C8E
 	.long LABEL_E28CB4
 	.long LABEL_E28CCA
@@ -6066,7 +6066,7 @@ Naka_CyclePlay_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x22, 0x92, 0xe2, 0x00
 
 
-LABEL_E2E828:
+Naka_SeqUI_Table_07:
 	.long LABEL_E29258
 	.long LABEL_E2927E
 	.long LABEL_E29298
@@ -6099,7 +6099,7 @@ Naka_CreateScreen_Items:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x34, 0x97, 0xe2, 0x00
 
 
-LABEL_E2E898:
+Naka_SeqUI_Table_08:
 	.long LABEL_E2976E
 	.long LABEL_E29784
 	.long LABEL_E297B0
@@ -6143,7 +6143,7 @@ Naka_SeqControls_Widgets:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf4, 0x9c, 0xe2, 0x00
 
 
-LABEL_E2E930:
+Naka_SeqUI_Table_09:
 	.long LABEL_E29D2C
 	.long LABEL_E29D42
 	.long LABEL_E29D5C
@@ -6170,7 +6170,7 @@ LABEL_E2E930:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2E990:
+Naka_SeqUI_Table_10:
 	.long LABEL_E2A09C
 	.long LABEL_E2A0D8
 	.long LABEL_E2A102
@@ -6188,7 +6188,7 @@ LABEL_E2E990:
 	.long LABEL_E2A364
 	.long LABEL_E2A38E
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E2E9D8:
+Naka_SeqUI_Table_11:
 	.long LABEL_E2A3A4
 	.long LABEL_E2A3DA
 	.long LABEL_E2A404
@@ -6209,7 +6209,7 @@ LABEL_E2E9D8:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2EA20:
+Naka_SeqUI_Table_12:
 	.long LABEL_E2A62A
 	.long LABEL_E2A664
 	.long LABEL_E2A682
@@ -6232,7 +6232,7 @@ LABEL_E2EA20:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2EA70:
+Naka_SeqUI_Table_13:
 	.long LABEL_E2A8D0
 	.long LABEL_E2A900
 	.long LABEL_E2A91C
@@ -6264,7 +6264,7 @@ LABEL_E2EA70:
 	.long LABEL_E2AE3C
 	.long LABEL_E2AE52
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E2EAF0:
+Naka_SeqUI_Table_14:
 	.long LABEL_E2AE7C
 	.long LABEL_E2AEB0
 	.long LABEL_E2AED8
@@ -6309,7 +6309,7 @@ Naka_DrumEdit_Screens:
 	.long LABEL_E2B478
 	.long LABEL_E2B48E
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E2EB98:
+Naka_SeqUI_Table_15:
 	.long LABEL_E2B4B8
 	.long LABEL_E2B4EC
 	.long LABEL_E2B514
@@ -6350,7 +6350,7 @@ Naka_SongMode_Items:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2EC28:
+Naka_SeqUI_Table_16:
 	.long LABEL_E2BA28
 	.long LABEL_E2BA5E
 	.long LABEL_E2BA74
@@ -6368,7 +6368,7 @@ LABEL_E2EC28:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x48, 0xbc, 0xe2, 0x00
 
 
-LABEL_E2EC68:
+Naka_SeqUI_Table_17:
 	.long LABEL_E2BC7E
 	.long LABEL_E2BC98
 	.long LABEL_E2BCB2
@@ -6393,7 +6393,7 @@ LABEL_E2EC68:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2ECC0:
+Naka_SeqUI_Table_18:
 	.long LABEL_E2BF7C
 	.long LABEL_E2BFB0
 	.long LABEL_E2BFD6
@@ -6418,7 +6418,7 @@ LABEL_E2ECC0:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2ED18:
+Naka_SeqUI_Table_19:
 	.long LABEL_E2C328
 	.long LABEL_E2C35C
 	.long LABEL_E2C382
@@ -6438,7 +6438,7 @@ LABEL_E2ED18:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xfc, 0xc5, 0xe2, 0x00
 
 
-LABEL_E2ED60:
+Naka_SeqUI_Table_20:
 	.long LABEL_E2C636
 	.long LABEL_E2C65C
 	.long LABEL_E2C686
@@ -6457,7 +6457,7 @@ LABEL_E2ED60:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2EDA0:
+Naka_SeqUI_Table_21:
 	.long LABEL_E2C8D6
 	.long LABEL_E2C90C
 	.long LABEL_E2C92C
@@ -6486,7 +6486,7 @@ LABEL_E2EDA0:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2EE08:
+Naka_SeqUI_Table_22:
 	.long LABEL_E2CCC6
 	.long LABEL_E2CCFE
 	.long LABEL_E2CD28
@@ -6506,7 +6506,7 @@ LABEL_E2EE08:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa0, 0xcf, 0xe2, 0x00
 
 
-LABEL_E2EE50:
+Naka_SeqUI_Table_23:
 	.long LABEL_E2CFD8
 	.long LABEL_E2D002
 	.long LABEL_E2D028
@@ -6525,7 +6525,7 @@ LABEL_E2EE50:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2EE90:
+Naka_SeqUI_Table_24:
 	.long LABEL_E2D27A
 	.long LABEL_E2D2B2
 	.long LABEL_E2D2DC
@@ -6546,7 +6546,7 @@ LABEL_E2EE90:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2EED8:
+Naka_SeqUI_Table_25:
 	.long LABEL_E2D4F2
 	.long LABEL_E2D52C
 	.long LABEL_E2D552
@@ -6565,7 +6565,7 @@ LABEL_E2EED8:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2EF18:
+Naka_SeqUI_Table_26:
 	.long LABEL_E2D78A
 	.long LABEL_E2D7C4
 	.long LABEL_E2D7EE
@@ -6603,7 +6603,7 @@ Naka_EnterTrainer_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x10, 0xdd, 0xe2, 0x00
 
 
-LABEL_E2EFB8:
+Naka_SeqUI_Table_27:
 	.long LABEL_E2DD48
 	.long LABEL_E2DD62
 	.long LABEL_E2DD8C
@@ -6667,7 +6667,7 @@ LABEL_E2EFB8:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf8, 0xf0, 0xe2, 0x00
 
 
-LABEL_E2F0B0:
+Naka_SeqUI_Table_28:
 	.long LABEL_E2F0F6
 	.long LABEL_E2F0F4
 	.long LABEL_E2F0F2
@@ -6722,7 +6722,7 @@ LABEL_E2F144:
 	.byte 0x00, 0xff
 LABEL_E2F146:
 	.byte 0x00, 0xff
-LABEL_E2F148:
+Naka_SeqUI_Table_29:
 	.long LABEL_E2F230
 	.long LABEL_E2F22E
 	.long LABEL_E2F22C
@@ -6829,7 +6829,7 @@ LABEL_E2F27C:
 	.byte 0x00, 0xff
 LABEL_E2F27E:
 	.byte 0x00, 0xff
-LABEL_E2F280:
+Naka_SeqUI_Table_30:
 	.long LABEL_E2F2CC
 	.long LABEL_E2F2CA
 	.long LABEL_E2F2C8
@@ -6936,7 +6936,7 @@ LABEL_E2F3DC:
 	.byte 0x00, 0xff
 LABEL_E2F3DE:
 	.byte 0x00, 0xff
-LABEL_E2F3E0:
+Naka_SeqUI_Table_31:
 	.long LABEL_E2F444
 	.long LABEL_E2F442
 	.long LABEL_E2F440
@@ -6998,7 +6998,7 @@ LABEL_E2F484:
 	.byte 0x00, 0xff
 LABEL_E2F486:
 	.byte 0x00, 0xff
-LABEL_E2F488:
+Naka_SeqUI_Table_32:
 	.long LABEL_E2F55E
 	.long LABEL_E2F55C
 	.long LABEL_E2F55A
@@ -7051,7 +7051,7 @@ LABEL_E2F558:	aligned_string ""
 LABEL_E2F55A:	aligned_string ""
 LABEL_E2F55C:	aligned_string ""
 LABEL_E2F55E:	aligned_string ""
-LABEL_E2F560:
+Naka_SeqRealtimeRec_Screens:
 	.long LABEL_E2F5B0
 	.long LABEL_E2F5AE
 	.long LABEL_E2F5AC
@@ -7166,7 +7166,7 @@ LABEL_E2F6DC:
 	.byte 0x00, 0xff
 LABEL_E2F6DE:
 	.byte 0x00, 0xff
-LABEL_E2F6E0:
+Naka_SeqUI_Table_34:
 	.long LABEL_E2F756
 	.long LABEL_E2F754
 	.long LABEL_E2F752
@@ -7203,7 +7203,7 @@ LABEL_E2F750:	aligned_string ""
 LABEL_E2F752:	aligned_string ""
 LABEL_E2F754:	aligned_string ""
 LABEL_E2F756:	aligned_string ""
-LABEL_E2F758:
+Naka_SongOclSure_Screens:
 	.long LABEL_E2F7DA
 	.long LABEL_E2F7D8
 	.long LABEL_E2F7D6
@@ -7245,7 +7245,7 @@ LABEL_E2F7D6:	aligned_string ""
 LABEL_E2F7D8:	aligned_string ""
 LABEL_E2F7DA:
 	.byte 0x00, 0xff, 0x96, 0xf8, 0xe2, 0x00
-LABEL_E2F7E0:
+Naka_SongCopySure_Screens:
 	.long LABEL_E2F894
 	.long LABEL_E2F888
 	.long LABEL_E2F886
@@ -7611,7 +7611,7 @@ LABEL_E2FC24:
 	.byte 0x00, 0xff
 LABEL_E2FC26:
 	.byte 0x00, 0xff
-LABEL_E2FC28:
+Naka_SeqUI_Table_37:
 	.long LABEL_E2FC98
 	.long LABEL_E2FC96
 	.long LABEL_E2FC94
@@ -7683,7 +7683,7 @@ LABEL_E2FD06:
 	.byte 0x00, 0xff
 LABEL_E2FD0A:
 	.byte 0x00, 0xff, 0xb2, 0xfd, 0xe2, 0x00
-LABEL_E2FD10:
+Naka_SeqUI_Table_38:
 	.long LABEL_E2FDB0
 	.long LABEL_E2FDAE
 	.long LABEL_E2FDAC
@@ -7737,7 +7737,7 @@ LABEL_E2FDB0:
 	.byte 0x00, 0xff
 LABEL_E2FDB2:
 	.byte 0x00, 0xff, 0x22, 0xfe, 0xe2, 0x00
-LABEL_E2FDB8:
+Naka_SeqUI_Table_39:
 	.long LABEL_E2FE20
 	.long LABEL_E2FE1E
 	.long LABEL_E2FE1C
@@ -7773,7 +7773,7 @@ LABEL_E2FE20:
 	.byte 0x00, 0xff
 LABEL_E2FE22:
 	.byte 0x00, 0xff, 0x94, 0xfe, 0xe2, 0x00
-LABEL_E2FE28:
+Naka_AdvancedSure_Screens:
 	.long LABEL_E2FE92
 	.long LABEL_E2FE90
 	.long LABEL_E2FE8E
@@ -7848,7 +7848,7 @@ LABEL_E2FF06:
 	.byte 0x00, 0xff
 LABEL_E2FF0A:
 	.byte 0x00, 0xff, 0x76, 0xff, 0xe2, 0x00
-LABEL_E2FF10:
+Naka_SeqUI_Table_41:
 	.long LABEL_E2FF74
 	.long LABEL_E2FF72
 	.long LABEL_E2FF70
@@ -7882,7 +7882,7 @@ LABEL_E2FF74:
 	.byte 0x00, 0xff
 LABEL_E2FF76:
 	.byte 0x00, 0xff
-LABEL_E2FF78:
+Naka_MedleySure_Screens:
 	.long LABEL_E2FFEE
 	.long LABEL_E2FFEC
 	.long LABEL_E2FFEA
@@ -8156,7 +8156,7 @@ LABEL_E302F6:
 	.byte 0xda, 0x77, 0xf4, 0x00, 0xf9, 0x6f, 0xf4, 0x00
 	.byte 0x50, 0x76, 0xf4, 0x00, 0x00, 0x00, 0x00, 0x00
 
-LABEL_E305D0:
+Naka_SeqUI_Table_43:
 	.long LABEL_E30932
 	.long LABEL_E30926
 	.long LABEL_E3091A
