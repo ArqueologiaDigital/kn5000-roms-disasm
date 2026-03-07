@@ -221446,7 +221446,7 @@ LABEL_F8469B:
 	ld xbc, 0x1C10005
 	jp 0xFA9D58
 
-LABEL_F846AD:
+Seq_DispatchEventType6:
 	ld de, wa
 	exts xde
 	ld xwa, 0xFFFFFFFF
@@ -223776,14 +223776,14 @@ LABEL_F863F2:
 	jr nz, LABEL_F8646C			; finalize failed
 	calr LABEL_F862AE			; post-processing
 	lds	wa, 1
-	calr LABEL_F86471			; additional display update
+	calr FDemoText_ProcessMarkupLoop			; additional display update
 LABEL_F8646C:
 	pop xiz
 	lda xsp, (xsp + 32)
 	ret
 
 
-LABEL_F86471:
+FDemoText_ProcessMarkupLoop:
 	pushw iz
 	ld iz, wa
 	ld32_24 xwa, 0x0249cc
@@ -224001,7 +224001,7 @@ Seq_StartWithFullInit:
 	ld wa, iz
 	calr LABEL_F862B5
 	lds wa, 2
-	calr LABEL_F86471
+	calr FDemoText_ProcessMarkupLoop
 	jrl ApPreControl_ReturnNull
 
 LABEL_F867B2:
@@ -224411,7 +224411,7 @@ Demo_SelectEntry_StartAutoPlay:
 	call_24 nz, 0xF22A4D
 	ldda8 a, 10404
 	extz wa
-	call LABEL_F846AD
+	call Seq_DispatchEventType6
 	ret
 
 Demo_SelectEntry_TimerTick:
@@ -224468,7 +224468,7 @@ Demo_SelectEntry_AfterSongLoad:
 	call_24 nz, 0xF22A4D
 	ldda8 a, 10404
 	extz wa
-	call LABEL_F846AD
+	call Seq_DispatchEventType6
 	stdi8 36686, 4
 	bitda 3, 10413
 	ret z
