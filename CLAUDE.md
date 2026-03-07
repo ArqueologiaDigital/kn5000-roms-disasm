@@ -490,7 +490,70 @@ This is a strict policy to ensure the disassembly is maintainable and understand
    Buffers:      NOUN_BUFFER format - CMD_DATA_BUFFER, DMA_SETUP_PARAMS
    ```
 
-6. **Benefits of symbolic references:**
+6. **Subsystem prefix conventions:**
+
+   These prefixes are established in the codebase. Use them when naming new symbols:
+
+   **Main CPU (maincpu/):**
+
+   | Prefix | Subsystem | Example |
+   |--------|-----------|---------|
+   | `Audio_` | Audio subsystem (locks, DMA, commands) | `Audio_Lock_Acquire`, `Audio_DMA_Transfer` |
+   | `AudioCmd_` | Audio command formatting | `AudioCmd_NoteOn`, `AudioCmd_ProgramChange` |
+   | `AudioInit_` | Audio initialization | `AudioInit_ResetChannels` |
+   | `Acc_` / `AccPedal_` / `AccVoice_` | Auto-accompaniment | `AccPedal_SustainHandler` |
+   | `BitMapOut_` | Bitmap rendering | `BitMapOut_DrawRegion` |
+   | `CPanel_` | Control panel protocol | `CPanel_ReadButtons` |
+   | `Display_` | Display/video routines | `Display_ClearScreen` |
+   | `DSPCfg_` | DSP configuration | `DSPCfg_SetReverb` |
+   | `Encoder_` | Rotary encoder handling | `Encoder_ReadDelta` |
+   | `FDC_` | Floppy disk controller | `FDC_ReadSectors`, `FDC_HANDLER_OFFSETS` |
+   | `FileIO_` | File I/O operations | `FileIO_OpenFile` |
+   | `InterCPU_` | Inter-CPU communication | `InterCPU_Send_Data_Block` |
+   | `MIDI_` | MIDI processing | `MIDI_SendSysExCmd`, `MIDI_RX_BYTE_DISPATCHER` |
+   | `MidiPkt_` | MIDI packet handling | `MidiPkt_Nop` |
+   | `MT_` | MIDI transport | `MT_StartPlay` |
+   | `Rhythm_` | Rhythm/style patterns | `Rhythm_LoadPattern` |
+   | `Scoop_` | Scoop event system | `Scoop_EventLoop` |
+   | `SeMenu_` | Sound editor menu | `SeMenu_DrawPage` |
+   | `Seq_` / `SeqStep_` / `SeqPart_` / `SeqPlay_` | Sequencer | `Seq_WriteMidi90` |
+   | `SMF_` | Standard MIDI File | `SMF_ParseHeader` |
+   | `SndParam_` | Sound parameters | `SndParam_SetVolume` |
+   | `SubCPU_` | Sub CPU management | `SubCPU_Send_Payload` |
+   | `SysEx_` | SysEx message handling | `SysEx_ValidateRolandHeader` |
+   | `TaskSched_` | Task scheduler | `TaskSched_Dispatch` |
+   | `ToneGen_` | Tone generator (keyboard input) | `ToneGen_KeyEvent` |
+   | `UI_` / `Widget_` | UI framework | `UI_STATE_MACHINE_TABLE` |
+
+   **Sub CPU (subcpu/):**
+
+   | Prefix | Subsystem | Example |
+   |--------|-----------|---------|
+   | `Voice_` | Voice parameter manipulation | `Voice_NoteOn`, `Voice_CtrlChange` |
+   | `DSP_` / `DSP2_` | DSP hardware control | `DSP_WriteRegister` |
+   | `EFF_` | Effects processing | `EFF_SetReverbDepth` |
+   | `FP_` | Fixed-point math | `FP_Multiply` |
+   | `InterCPU_` | Inter-CPU communication | `InterCPU_Latch_Setup` |
+   | `MIDI_` | MIDI dispatch | `MIDI_Dispatch` |
+   | `RingBuf_` | Ring buffer operations | `RingBuf_Write` |
+   | `Serial1_` | Serial port 1 (MIDI TX) | `Serial1_DataTransmit_Loop` |
+   | `ToneGen_` | Tone generator | `ToneGen_Init` |
+   | `VoiceSlot_` / `VoiceParam_` | Voice slot management | `VoiceSlot_Allocate` |
+
+   **Data labels:**
+
+   | Prefix | Type | Example |
+   |--------|------|---------|
+   | `Bitmap_` / `BitmapOut_` | Image data | `Bitmap_Technics_Logo` |
+   | `Str_` / `FuncName_` | String constants | `Str_Mixer_ON` |
+   | `IconName_` / `IconBitmapName_` | Icon metadata | `IconName_Piano` |
+   | `SOUND_DATA_` / `SOUND_CATEGORY_` | Sound category data | `SOUND_DATA_PIANO` |
+   | `Brass_PatchEntry_` / `WorldPerc_PatchEntry_` | Patch entries | `Brass_PatchEntry_084` |
+   | `WidgetPropStr_` | Widget property strings | `WidgetPropStr_Volume` |
+   | `HANDLE_UPDATE_` | Firmware update handlers | `HANDLE_UPDATE_OFFSETS` |
+   | `FILETYPE_SIG_` | File type signatures | `FILETYPE_SIG_PROGRAM_1` |
+
+7. **Benefits of symbolic references:**
    - Code is self-documenting
    - Renaming propagates automatically
    - Cross-reference analysis tools work correctly
