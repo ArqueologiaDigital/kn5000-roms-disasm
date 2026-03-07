@@ -193979,7 +193979,7 @@ LABEL_F6BC77:
 	jr LABEL_F6BC81
 
 LABEL_F6BC7D:
-	call LABEL_F6F095
+	call Voice_InitBankDataSafe
 
 LABEL_F6BC81:
 	ret
@@ -196990,7 +196990,7 @@ LABEL_F6DD19:
 	stda16 32326, xwa
 	ldda8 a, 32366
 	stda8 32365, a
-	calr LABEL_F6DE14
+	calr AccompSeq_InitEventDispatch
 	ldda8 a, 32365
 	stda8 32366, a
 	ldda16 xwa, 32326
@@ -197018,7 +197018,7 @@ LABEL_F6DD82:
 	stda16 32326, xwa
 	ldda8 a, 32367
 	stda8 32365, a
-	calr LABEL_F6DE14
+	calr AccompSeq_InitEventDispatch
 	ldda8 a, 32365
 	stda8 32367, a
 	ldda16 xwa, 32326
@@ -197046,7 +197046,7 @@ LABEL_F6DDEC:
 	call	16190259
 	ret
 
-LABEL_F6DE14:
+AccompSeq_InitEventDispatch:
 	ldb a, 0x9
 	anddi8 32339, 252
 
@@ -197094,7 +197094,7 @@ LABEL_F6DE3E:
 	jr AccompSeq_EventDispatchLoop
 
 AccompSeq_ProcessTimedEvent:
-	calr LABEL_F6DEC5
+	calr AccompSeq_CheckPatternEnd
 	call AccompSeq_CalcDeltaTime
 	cp a, 0x18
 	jr ugt, LABEL_F6DE86
@@ -197130,16 +197130,16 @@ LABEL_F6DEAE:
 LABEL_F6DEC4:
 	ret
 
-LABEL_F6DEC5:
+AccompSeq_CheckPatternEnd:
 	push xiy
 	calr ResolveVRAMAddressForVoice
 	ld a, (xiy + 1)
 	cp a, 0x87
 	jr nz, LABEL_F6DEDE
-	calr LABEL_F6DFA4
+	calr AccompSeq_ReadBeatHeader
 	ldfr_werp WA, 0xE2
 	lds wa, 6
-	calr LABEL_F6DF81
+	calr AccompSeq_BuildVRAMAddr
 	ld a, (xiy)
 
 LABEL_F6DEDE:
@@ -197172,12 +197172,12 @@ LABEL_F6DEFA:
 	ld a, (xiy)
 	cp a, 0x87
 	jr nz, LABEL_F6DF19
-	calr LABEL_F6DFA4
+	calr AccompSeq_ReadBeatHeader
 	stda16 32322, xwa
 	ldfr_werp WA, 0xE2
 	lds wa, 6
 	stda16 32324, xwa
-	calr LABEL_F6DF81
+	calr AccompSeq_BuildVRAMAddr
 	ld a, (xiy)
 
 LABEL_F6DF19:
@@ -197215,7 +197215,7 @@ LABEL_F6DF73:
 LABEL_F6DF80:
 	ret
 
-LABEL_F6DF81:
+AccompSeq_BuildVRAMAddr:
 	push xhl
 	ld xhl, xwa
 	ldto_werp WA, 0xE2
@@ -197229,7 +197229,7 @@ LABEL_F6DF81:
 	pop xhl
 	ret
 
-LABEL_F6DFA4:
+AccompSeq_ReadBeatHeader:
 	ldda16 xwa, 32322
 	and xwa, 0xFFF
 	sla xwa, 8
@@ -197825,8 +197825,8 @@ AccompSeq_ManualMidi_SaveAndCall:
 	ldda8 a, 49278
 	push xwa
 	push xhl
-	call LABEL_F719F4
-	call LABEL_F71018
+	call Voice_DecodeNoteParam
+	call Voice_DecodeNoteChannel
 	stdi8 49278, 1
 	cps h, 0
 	jr z, AccompSeq_ManualMidi_SetChannel
@@ -197956,7 +197956,7 @@ AccompSeq_InitPartFull:
 	ret
 
 AccompSeq_ResetMidiState:
-	call LABEL_F719F4
+	call Voice_DecodeNoteParam
 	ret
 
 AccompSeq_LookupStyleData:
@@ -198248,7 +198248,7 @@ AccompSeq_HandleSpecialMode:
 AccompSeq_OutputEvent:
 	pushw hl
 	pushw hl
-	call LABEL_F71018
+	call Voice_DecodeNoteChannel
 	ld bc, hl
 	popw hl
 	ld wa, hl
@@ -198693,7 +198693,7 @@ AccompSeq_SeqParse_TimeStore:
 	jr AccompSeq_SeqParse_Loop
 
 AccompSeq_SeqParse_MidiEvent:
-	calr LABEL_F6DEC5
+	calr AccompSeq_CheckPatternEnd
 	ldda16 xbc, 32326
 	ld c, a
 	ldda8 b, 32326
@@ -198878,9 +198878,9 @@ LABEL_F6F08D:
 	.byte 0x1b, 0x52, 0xf3, 0xf6
 
 LABEL_F6F091:
-	jp LABEL_F6F0B1
+	jp Voice_InitBankTables
 
-LABEL_F6F095:
+Voice_InitBankDataSafe:
 	push xiz
 	call Voice_InitBankData
 	pop xiz
@@ -198900,7 +198900,7 @@ LABEL_F6F09C:
 	pop	xiz
 	ret
 
-LABEL_F6F0B1:
+Voice_InitBankTables:
 	ld xiy, 0xF6F119
 	ld xix, 0x1E8800
 	ldw bc, 0x10
@@ -198963,7 +198963,7 @@ HEADER__USER_BANKS:	; F6F2C9
 	.ascii "  User Bank 1     User Bank 2                                   "
 
 Voice_InitBankData:
-	calr LABEL_F6F0B1
+	calr Voice_InitBankTables
 	ld xiy, 0xF6F42F
 	ld xix, 0x1E8820
 	ldw bc, 0xF0
@@ -198993,15 +198993,15 @@ LABEL_F6F352:
 	ld xhl, 0x7AEC
 	ldw bc, 0xFF
 	ldw de, 0xF6
-	calr LABEL_F6F375
+	calr Voice_SetBankParams
 	ld xhl, 0x7BEC
-	calr LABEL_F6F375
+	calr Voice_SetBankParams
 	calr LABEL_F6F385
 	calr LABEL_F6F39A
 	calr CountAvailableVoiceSlots
 	ret
 
-LABEL_F6F375:
+Voice_SetBankParams:
 	ld (xhl + 256), wa
 	ld (xhl + 2), bc
 	ld (xhl + 4), wa
@@ -199135,7 +199135,7 @@ LABEL_F70B37:
 	stda8 32266, a
 	ld xhl, 0x7AEC
 	ld xbc, 0x7D6C
-	calr LABEL_F70B9A
+	calr SeqEvt_ProcessReadLoop
 	ldda8 a, 32266
 	stda8 32264, a
 	stdi8 32263, 2
@@ -199143,14 +199143,14 @@ LABEL_F70B37:
 	stda8 32266, a
 	ld xhl, 0x7BEC
 	ld xbc, 0x7DB4
-	calr LABEL_F70B9A
+	calr SeqEvt_ProcessReadLoop
 	ldda8 a, 32266
 	stda8 32265, a
 	ldda8 a, 32253
 	stda8 32252, a
 	ret
 
-LABEL_F70B9A:
+SeqEvt_ProcessReadLoop:
 	ld ix, (xhl + 6)
 	stda16 32271, xix
 
@@ -199558,10 +199558,10 @@ LABEL_F70F52:
 	stdi16 32260, 72
 	stdi8 32263, 1
 	ld xhl, 0x7D6C
-	calr LABEL_F70F89
+	calr Voice_ScanSlotMetric
 	stdi8 32263, 2
 	ld xhl, 0x7DB4
-	calr LABEL_F70F89
+	calr Voice_ScanSlotMetric
 	ldda16 xwa, 32256
 	stda16 32254, xwa
 	jr __jrt_nop_F70F88
@@ -199570,7 +199570,7 @@ __jrt_nop_F70F88:
 LABEL_F70F88:
 	ret
 
-LABEL_F70F89:
+Voice_ScanSlotMetric:
 	xor iy, iy
 
 LABEL_F70F8B:
@@ -199630,7 +199630,7 @@ LABEL_F7100F:
 LABEL_F71017:
 	ret
 
-LABEL_F71018:
+Voice_DecodeNoteChannel:
 	cp l, 0x80
 	jr c, LABEL_F71033
 	xor h, h
@@ -199907,7 +199907,7 @@ LABEL_F719D0:
 	.byte 0xd0, 0x00, 0x20, 0x00, 0x20, 0x00, 0x20, 0x00
 	.byte 0x20, 0x00, 0x20, 0x00
 
-LABEL_F719F4:
+Voice_DecodeNoteParam:
 	cp l, 0x80
 	jr c, LABEL_F71A04
 	ldb h, 0x1
@@ -200264,7 +200264,7 @@ LABEL_F71FBD:
 	stda8 32340, a
 	stda8 32341, w
 	bitda 7, 32534
-	jr z, LABEL_F72030
+	jr z, TempoEvt_DispatchEvent
 	cp a, 0x81
 	jr nz, LABEL_F71FFF
 	ldda8 a, 32534
@@ -200296,13 +200296,13 @@ LABEL_F71FFF:
 	ordi8 32533, 16
 	ldda8 a, 32340
 	ldda8 w, 32341
-	jr LABEL_F72030
+	jr TempoEvt_DispatchEvent
 
 LABEL_F72029:
 	calr LABEL_F72A3B
 	jp TempoEvt_ProcessLoop
 
-LABEL_F72030:
+TempoEvt_DispatchEvent:
 	cpdi16 32280, 0
 	jr nz, LABEL_F7203D
 	calr LABEL_F72B16
@@ -200329,13 +200329,13 @@ LABEL_F72051:
 LABEL_F7205B:
 	cp a, 0xD1
 	jr nz, LABEL_F72065
-	calr LABEL_F72479
+	calr MidiSeq_ProcessSustainEvent
 	jr TempoEvent_ContinueLoop
 
 LABEL_F72065:
 	cp a, 0xD3
 	jr nz, LABEL_F7206F
-	calr LABEL_F72479
+	calr MidiSeq_ProcessSustainEvent
 	jr TempoEvent_ContinueLoop
 
 LABEL_F7206F:
@@ -200501,7 +200501,7 @@ LABEL_F721C2:
 LABEL_F721C3:
 	calr Voice_GetBankEntryPointer
 	push xiy
-	calr LABEL_F72A18
+	calr Voice_FindFreeSlot
 	ld hl, wa
 	calr LABEL_F72A04
 	ormi8 (xix), 0x80
@@ -200792,7 +200792,7 @@ LABEL_F7246A:
 	jr nz, LABEL_F72456
 	ret
 
-LABEL_F72479:
+MidiSeq_ProcessSustainEvent:
 	lds bc, 4
 	calr MidiSeqBuf_ScanAllEntries
 	ld xhl, 0x7F36
@@ -201235,10 +201235,10 @@ LABEL_F7276B:
 	ldb d, 0xD
 	ldb w, 0xCF
 	call SwbtWr_QueuePostEvent
-	calr LABEL_F72879
+	calr AccompSeq_QueueAllMutes
 	ret
 
-LABEL_F72879:
+AccompSeq_QueueAllMutes:
 	ldb e, 0x0
 	ldda8 a, 63939
 	calr AccompSeq_QueueMuteEvent
@@ -201363,7 +201363,7 @@ LABEL_F7295B:
 	ldb d, 0xD
 	ldb w, 0x4F
 	call SwbtWr_QueuePostEvent
-	calr LABEL_F72879
+	calr AccompSeq_QueueAllMutes
 	ret
 
 LABEL_F72A04:
@@ -201375,7 +201375,7 @@ LABEL_F72A04:
 	pop xhl
 	ret
 
-LABEL_F72A18:
+Voice_FindFreeSlot:
 	xor xix, xix
 	lds bc, 0
 
@@ -201453,7 +201453,7 @@ MidiSeqBuf_AdvancePosition:
 	push xix
 	push xde
 	push xhl
-	calr LABEL_F72A18
+	calr Voice_FindFreeSlot
 	xor ix, ix
 	ldda16 xhl, 32528
 	ld de, hl
@@ -296889,7 +296889,7 @@ LABEL_FC2C2C:
 	call LABEL_FC81EF
 	jr t, MainSysControl_PostDispatchFinalize
 LABEL_FC2C32:
-	call LABEL_F6F095
+	call Voice_InitBankDataSafe
 	jr t, MainSysControl_PostDispatchFinalize
 LABEL_FC2C38:
 	call 0xFC7EA9
