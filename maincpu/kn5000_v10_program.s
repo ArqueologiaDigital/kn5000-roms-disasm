@@ -176882,7 +176882,7 @@ LABEL_F5ECDB:
 	push xix
 	push xiy
 	push xiz
-	call LABEL_F69C79
+	call SoundCtrl_SendTempoScaled
 	pop xiz
 	pop xiy
 	pop xix
@@ -176908,7 +176908,7 @@ AccPatch_DetectModeChange:
 	push xiy
 	push xiz
 	call LABEL_F69C61
-	call LABEL_F69C79
+	call SoundCtrl_SendTempoScaled
 	pop xiz
 	pop xiy
 	pop xix
@@ -188357,7 +188357,7 @@ SetWall_StoreAndResolve:
 	stda16 10367, xwa
 	extz bc
 	ld wa, bc
-	jp LABEL_F66EE6
+	jp Voice_ResolveSlotAddr
 
 LABEL_F66A8B:
 	ld xbc, 0xF1A0
@@ -188429,7 +188429,7 @@ LABEL_F66B03:
 	extz wa
 
 LABEL_F66B0D:
-	call LABEL_F66EE6
+	call Voice_ResolveSlotAddr
 
 LABEL_F66B11:
 	ldmm8 14726, 10382
@@ -188911,7 +188911,7 @@ LABEL_F66EC1:
 	.byte 0x0e, 0x00, 0x00, 0x00, 0x28, 0x2b, 0x1d, 0x3e
 	.byte 0x62, 0xf6, 0xef, 0x64, 0x0e
 
-LABEL_F66EE6:
+Voice_ResolveSlotAddr:
 	push xiz
 	ldda8 w, 14742
 	call SetWall_SlotResolve
@@ -188979,14 +188979,14 @@ LABEL_F66F7C:
 	.byte 0xc1, 0x5a, 0xfc, 0x21, 0x20, 0x00, 0x25, 0x48
 	.byte 0x24, 0x00, 0x1d, 0xf1, 0xb3, 0xfd, 0x0e
 
-LABEL_F66FEB:
+DrumParam_ProcessChannel:
 	push xiz
-	calr LABEL_F66FF5
+	calr DrumParam_LookupChannelBit
 	call LABEL_F67013
 	pop xiz
 	ret
 
-LABEL_F66FF5:
+DrumParam_LookupChannelBit:
 	push xwa
 	push xix
 	ldda8 a, 14776
@@ -189002,7 +189002,7 @@ LABEL_F6700C:
 
 LABEL_F67013:
 	push_a
-	calr LABEL_F670FE
+	calr DrumParam_ReadVoiceCount
 	ld l, a
 	pop_a
 	push l
@@ -189030,22 +189030,22 @@ LABEL_F6703B:
 LABEL_F67042:
 	pop l
 	push l
-	calr LABEL_F674D4
+	calr DrumParam_ReadMaxCount
 	pop l
 	cp l, w
 	jr ule, LABEL_F67058
 	push w
-	calr LABEL_F670FE
+	calr DrumParam_ReadVoiceCount
 	pop w
 	ld (xix), w
 
 LABEL_F67058:
 	calr RhythmDrum_LoadVoiceParams
 	calr LABEL_F67459
-	calr LABEL_F67062
+	calr DrumParam_BuildActiveMask
 	ret
 
-LABEL_F67062:
+DrumParam_BuildActiveMask:
 	ldb w, 0x0
 	stda8 14280, w
 	xor bc, bc
@@ -189112,7 +189112,7 @@ LABEL_F670DD:
 	.zero 8
 	.byte 0x06
 
-LABEL_F670FE:
+DrumParam_ReadVoiceCount:
 	calr Rhythm_MapChannelToDrumIndex
 	ld xix, 0x37B2
 	add xix, xbc
@@ -189262,7 +189262,7 @@ LABEL_F67244:
 LABEL_F67278:
 	push xix
 	push xde
-	calr LABEL_F67323
+	calr DrumChannel_MapToIndexA
 	pop xde
 	pop xix
 	ld wa, bc
@@ -189305,7 +189305,7 @@ LABEL_F672B2:
 	push xix
 	pushw de
 	pushw hl
-	calr LABEL_F67368
+	calr DrumChannel_MapToIndexB
 	popw hl
 	popw de
 	pop xix
@@ -189352,7 +189352,7 @@ LABEL_F67304:
 	add xiy, xwa
 	ret
 
-LABEL_F67323:
+DrumChannel_MapToIndexA:
 	cpdi8 14281, 1
 	jr nz, LABEL_F6732E
 	lds32 xbc, 0
@@ -189394,7 +189394,7 @@ LABEL_F67365:
 LABEL_F67367:
 	ret
 
-LABEL_F67368:
+DrumChannel_MapToIndexB:
 	cpdi8 14281, 1
 	jr nz, LABEL_F67373
 	lds32 xbc, 0
@@ -189439,7 +189439,7 @@ LABEL_F673AC:
 LABEL_F673AD:
 	push xix
 	push xde
-	calr LABEL_F67323
+	calr DrumChannel_MapToIndexA
 	pop xde
 	pop xix
 	mul bc, 0x7
@@ -189539,16 +189539,16 @@ LABEL_F67459:
 	calr RhythmDrum_LoadVoiceParams
 	ret
 
-LABEL_F67482:
+DrumParam_ProcessChannelAlt:
 	push xiz
-	calr LABEL_F66FF5
+	calr DrumParam_LookupChannelBit
 	call LABEL_F6748C
 	pop xiz
 	ret
 
 LABEL_F6748C:
 	push_a
-	calr LABEL_F674D4
+	calr DrumParam_ReadMaxCount
 	pop_a
 	calr Rhythm_MapChannelToDrumIndex
 	ld xix, 0x37B2
@@ -189588,10 +189588,10 @@ LABEL_F674C9:
 LABEL_F674CB:
 	ld (xix), c
 	calr RhythmDrum_LoadVoiceParams
-	calr LABEL_F67062
+	calr DrumParam_BuildActiveMask
 	ret
 
-LABEL_F674D4:
+DrumParam_ReadMaxCount:
 	calr Rhythm_MapChannelToDrumIndex
 	ld xhl, xbc
 	add xhl, 0x37AB
@@ -189650,26 +189650,26 @@ LABEL_F674F4:
 
 LABEL_F67649:
 	calr LABEL_F676E6
-	calr LABEL_F67368
+	calr DrumChannel_MapToIndexB
 	sll xbc, 1
 	add xix, xbc
 	ld hl, (xix)
 	pushw hl
-	calr LABEL_F67704
+	calr AccPatch_ResolveEntryAddr
 	push xwa
 	add xwa, 0x3
 	ld hl, (xwa)
 	ldw (xwa), 0xFFFF
 	pop xwa
 	pushw hl
-	calr LABEL_F676A5
+	calr Voice_ClearSlotBuffer
 	calr LABEL_F676C1
 	popw hl
 
 LABEL_F67670:
 	cp hl, 0xFFFF
 	jr z, LABEL_F676A3
-	calr LABEL_F67704
+	calr AccPatch_ResolveEntryAddr
 	push xwa
 	add xwa, 0x3
 	ld hl, (xwa)
@@ -189683,7 +189683,7 @@ LABEL_F67670:
 	andmi8 (xwa), 0x7F
 	pop xwa
 	pushw hl
-	calr LABEL_F676A5
+	calr Voice_ClearSlotBuffer
 	popw hl
 	incdi16 1, 13524
 	jr LABEL_F67670
@@ -189692,7 +189692,7 @@ LABEL_F676A3:
 	popw hl
 	ret
 
-LABEL_F676A5:
+Voice_ClearSlotBuffer:
 	add xwa, 0x6
 	ld xix, xwa
 	ld xbc, 0xF9
@@ -189747,7 +189747,7 @@ LABEL_F676F3:
 LABEL_F67702:
 	.byte 0x00, 0x00
 
-LABEL_F67704:
+AccPatch_ResolveEntryAddr:
 	push xix
 	pushw hl
 	pushw hl
@@ -192166,7 +192166,7 @@ MainEsCmpFunc:
 	push xix
 	push xiz
 	ldb a, 0x0
-	call LABEL_F66FEB
+	call DrumParam_ProcessChannel
 	pop xiz
 	pop xix
 	pop xhl
@@ -192192,7 +192192,7 @@ LABEL_F69BBC:
 	push xix
 	push xiz
 	ldb a, 0x80
-	call LABEL_F66FEB
+	call DrumParam_ProcessChannel
 	pop xiz
 	pop xix
 	pop xhl
@@ -192219,7 +192219,7 @@ LABEL_F69C00:
 	push xix
 	push xiz
 	ldb a, 0x0
-	call LABEL_F67482
+	call DrumParam_ProcessChannelAlt
 	pop xiz
 	pop xix
 	pop xhl
@@ -192239,7 +192239,7 @@ LABEL_F69C2A:
 	push xix
 	push xiz
 	ldb a, 0x80
-	call LABEL_F67482
+	call DrumParam_ProcessChannelAlt
 	pop xiz
 	pop xix
 	pop xhl
@@ -192278,7 +192278,7 @@ LABEL_F69C61:
 	call 0xFA9E07
 	ret
 
-LABEL_F69C79:
+SoundCtrl_SendTempoScaled:
 	cpdi8 36152, 181
 	ret nz
 	calr LABEL_F69C94
@@ -193468,7 +193468,7 @@ LABEL_F6A9D7:
 
 LABEL_F6B207:
 	push xiz
-	calr LABEL_F6B21C
+	calr AccPatch_InitSlotChain
 	pop xiz
 	ret
 
@@ -193476,11 +193476,11 @@ LABEL_F6B20D:
 	push xiz
 	ld xiz, 0x94800
 	stda32 14766, xiz
-	calr LABEL_F6B21C
+	calr AccPatch_InitSlotChain
 	pop xiz
 	ret
 
-LABEL_F6B21C:
+AccPatch_InitSlotChain:
 	xor xwa, xwa
 	xor xbc, xbc
 	ldda32 xhl, 14766
@@ -193496,7 +193496,7 @@ LABEL_F6B21C:
 	ldw bc, 0x96
 	xor xhl, xhl
 
-LABEL_F6B24F:
+AccPatch_IterateSlotChain:
 	cpdi16 14206, 65535
 	jr z, LABEL_F6B28A
 	ldda16 xhl, 14206
@@ -193515,7 +193515,7 @@ LABEL_F6B26E:
 	ldda16 xhl, 14222
 	calr AccPatch_CalcSlotBufferAddr
 	stda32 14186, xiz
-	jr LABEL_F6B24F
+	jr AccPatch_IterateSlotChain
 
 LABEL_F6B28A:
 	ld xiz, 0x100
@@ -193523,7 +193523,7 @@ LABEL_F6B28A:
 	ldda32 xiz, 14190
 	ld wa, (xiz + 3)
 	stda16 14206, xwa
-	djnz xbc, LABEL_F6B24F
+	djnz xbc, AccPatch_IterateSlotChain
 	xor xwa, xwa
 	xor xhl, xhl
 	ldda16 xwa, 14222
@@ -194337,7 +194337,7 @@ LABEL_F6C004:
 	jr c, LABEL_F6BFFF
 	ret
 
-LABEL_F6C014:
+StyleConv_ClearWorkBuffer:
 	ldada xbc, 18572
 	ld xwa, xbc
 	lda xbc, (xbc + 32)
@@ -194369,7 +194369,7 @@ LABEL_F6C03A:
 	jr c, LABEL_F6C035
 	ret
 
-LABEL_F6C04F:
+StyleConv_InitEntryTable:
 	pushw iz
 	lds ix, 0
 
@@ -194516,7 +194516,7 @@ StylCnvWaitTtlFunc:
 	jr nz, LABEL_F6C1DB
 	cpdi8 36151, 96
 	jr nz, LABEL_F6C1B0
-	calr LABEL_F6C04F
+	calr StyleConv_InitEntryTable
 	stdi8 15622, 0
 	calr LABEL_F6BCA0
 	call LABEL_F8AC14
@@ -195659,7 +195659,7 @@ LABEL_F6CCE8:
 	jrl nz, LABEL_F6CDDB
 	stdi8 15622, 6
 	calr LABEL_F6BFF4
-	calr LABEL_F6C014
+	calr StyleConv_ClearWorkBuffer
 	ldw (xsp + 4), 0x0
 	stdi16 18648, 0
 
@@ -195858,7 +195858,7 @@ LABEL_F6CEEB:
 	jrl lt, LABEL_F6CE09
 
 LABEL_F6CEF6:
-	calr LABEL_F6C014
+	calr StyleConv_ClearWorkBuffer
 	ldw (xsp + 4), 0x0
 	ldda16 xix, 15620
 	mul ix, 0x25
@@ -196682,7 +196682,7 @@ StylCnv_FinalizeAndCheckStatus:
 	jrl StyleConv_DispatchSoundMemState
 
 LABEL_F6D77E:
-	calr LABEL_F6C04F
+	calr StyleConv_InitEntryTable
 	stdi16 14978, 0
 	lda xbc, (xsp + 18)
 	ld xwa, xbc
