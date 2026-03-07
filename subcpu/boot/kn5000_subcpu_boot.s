@@ -98693,8 +98693,8 @@ BOOT_INIT__clock_done2:
 
 	; Call initialization routines
 	call INIT_MEMORY_TEST	; 0xFF8956 - Memory test
-	call 0xFF85AE	; 0xFF85AE - DMA/Serial init
-	call 0xFF84A8	; 0xFF84A8 - Tone generator init
+	call INIT_DMA_SERIAL	; 0xFF85AE - DMA/Serial init
+	call INIT_TONE_GEN	; 0xFF84A8 - Tone generator init
 
 	jr __jrt_nop_FF840C	; Jump to main loop (2-byte NOP in fall-through)
 __jrt_nop_FF840C:
@@ -98709,7 +98709,7 @@ MAIN_LOOP__wait_loop:
 	bitda 6, 1278	; Check if payload ready
 	jr z, MAIN_LOOP__check_status
 	ei 6	; Enable interrupt level 6
-	call 0x400	; Call payload at 0x0400 (4-byte encoding)
+	call PAYLOAD_ENTRY	; Call payload at 0x0400 (4-byte encoding)
 MAIN_LOOP__check_status:
 	; Read serial status and update control
 	ldcf_dd8 1, 0x30
@@ -100597,7 +100597,7 @@ VECTOR_TRAMPOLINES:
 	jp DEFAULT_HANDLER
 	ret
 	; Handler 8 - Uses RESET_ENTRY (software reset)
-	jp 0xFF8433
+	jp RESET_ENTRY
 	ret
 	; Handler 9 - Serial Receive Interrupt (inter-CPU communication)
 	jp InterCPU_RX_Handler

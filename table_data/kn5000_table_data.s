@@ -3425,7 +3425,7 @@ DrawBitmap_UpdateDisplay__db_next_bit:
 	; Flush VGA display
 	lda_24 xwa, 0x1a0000                  ; LDA XWA, 0x1A0000
 	ldw de, 0x9600	; LD DE, 0x9600 - framebuffer size
-	call 0xFFFB0F	; CALL 0xFFFB0F
+	call BootRAM_MemoryCopy	; CALL 0xFFFB0F
 
 	popw iz	; 4e
 	inc 4, xsp	; INC 4, XSP
@@ -3522,11 +3522,11 @@ InitProgressDisplay_FillRegion__idp_done:
 
 	; === ROM-specific ending: initialize video buffers ===
 	; (Boot code runs from high RAM, so these are absolute calls)
-	call 0xFFFB18
+	call BootRAM_MemoryFill
 	lda_24 xwa, 0x1a0000
 	ld xbc, 0x43C00
 	ldw de, 0x9600
-	call 0xFFFB0F
+	call BootRAM_MemoryCopy
 
 	; Turn screen on (RET_VGA_SEQUENCER 01h, 001h with JRL optimization)
 	VGA_WRITE VGA_SEQ_ADDR, 0x1
@@ -3911,7 +3911,7 @@ Handler_INTA:
 
 	.org 0x9FFEE0 - 0x800000, 0xFF
 RESET_HANDLER:
-	jp 0xFFB4E8
+	jp BOOT_ENTRY
 	ret	; Dead code (never reached, but present in ROM)
 
 ; Reserved area between RESET_HANDLER and interrupt vector table
