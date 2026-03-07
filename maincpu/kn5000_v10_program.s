@@ -315195,7 +315195,7 @@ SeqAlt_ProcessAndFinalize:
 	call LABEL_FD83F4
 	calr LABEL_FD5D0C
 	calr LABEL_FD5D22
-	calr LABEL_FD5F37
+	calr SeqData_InitPlaybackFromField
 	jp LABEL_FD832E
 
 LABEL_FD5D0C:
@@ -315433,7 +315433,7 @@ LABEL_FD5F34:
 	ldb l, 0x0
 	ret
 
-LABEL_FD5F37:
+SeqData_InitPlaybackFromField:
 	ldda32 xwa, 48300
 	lds bc, 4
 	calr SeqData_ReadFieldByIndex
@@ -317111,7 +317111,7 @@ LABEL_FD72CE:
 	.byte 0x9f, 0xf8, 0x1b, 0x28, 0x84, 0xfd, 0x0e, 0x0e
 	.byte 0x0e
 
-LABEL_FD7317:
+MidiChan_ClearAllStates:
 	stdi8 48384, 0
 	stdi8 48386, 0
 	stdi8 48388, 0
@@ -317756,7 +317756,7 @@ MidiPkt_ArpChordHandler:
 	cps	l, 7
 	jr c, LABEL_FD7AF0
 	.byte 0xf1, 0x18, 0xbd, 0xbc			; set 4, (0xBD18)  [F1 prefix]
-	call LABEL_FD7317
+	call MidiChan_ClearAllStates
 	jr t, LABEL_FD7AE0
 LABEL_FD7AC8:
 	ldda32	xwa, 48300
@@ -319429,7 +319429,7 @@ SysEx_InitiateSend:
 	jr z, LABEL_FD8CFD
 	setda 6, 48408
 	call LABEL_FD832E
-	call LABEL_FD7317
+	call MidiChan_ClearAllStates
 	call LABEL_FD7669
 	ldda8 a, 48380
 	and a, 0x7
@@ -319531,7 +319531,7 @@ LABEL_FD8DB0:
 	ret
 
 LABEL_FD8DB4:
-	call LABEL_FD5F37
+	call SeqData_InitPlaybackFromField
 	ldda32 xwa, 48300
 	lds bc, 4
 	call SeqData_ReadFieldByIndex
