@@ -653,6 +653,42 @@ All ROM files must undergo thorough exploratory disassembly until every byte is 
 
 This procedure should be run periodically until 100% documentation is achieved.
 
+### Systematic Jump/Call Table Documentation (STRICT POLICY)
+
+**All call-tables and jump-tables must be systematically detected, documented, and their targets fully disassembled. This process must iterate until no undocumented tables or undisassembled referenced code remains.**
+
+This is a strict, iterative policy:
+
+1. **Detection phase:** Find all jump tables and call tables in the ROM:
+   - Search for `.long LABEL_*` clusters (address tables)
+   - Search for indirect calls/jumps: `CALL T, XHL`, `JP T, XIX + WA`, etc.
+   - Search for offset tables used with base addresses
+   - Search for switch-case dispatch patterns
+
+2. **Documentation phase:** For each table found:
+   - Give the table a meaningful semantic name (not `LABEL_XXXXXX`)
+   - Add a header comment explaining what the table dispatches
+   - Document the number of entries and what triggers each entry
+
+3. **Target disassembly phase:** For each entry in each table:
+   - Verify the target routine is fully disassembled (not raw bytes)
+   - Give each target routine a meaningful semantic label
+   - Add header comments documenting the routine's purpose
+   - Analyze register usage, control flow, and called functions
+
+4. **Iteration phase:** After disassembling all targets:
+   - Check if newly disassembled code contains MORE jump/call tables
+   - If yes, repeat from step 1 for the newly discovered tables
+   - Continue until no new tables are found and all referenced code is documented
+
+5. **Completion criteria:** The process is complete when:
+   - Every jump/call table has a semantic name and header comment
+   - Every target routine referenced by any table is fully disassembled
+   - Every target routine has a semantic label and header comment
+   - No newly disassembled code reveals additional undocumented tables
+
+**This policy exists because** jump tables are the primary dispatch mechanism in the firmware. Undocumented tables and their targets represent significant gaps in firmware understanding. Systematic coverage ensures complete reverse engineering.
+
 ### Binary Include Splitting (MANDATORY)
 
 **When disassembled code references an address inside a binary include, the binary must be split.**
