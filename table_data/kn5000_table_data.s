@@ -5,6 +5,55 @@
 	.include "shared/sfr_tmp94c241.s"
 
 ; =============================================================================
+; TABLE DATA ROM — Structure Overview
+; =============================================================================
+; Address range: 0x800000 - 0x9FFFFF (2MB)
+; At boot time, this ROM is mapped at 0xE00000-0xFFFFFF (same as Program ROM).
+; After memory controller reconfiguration by Boot_Init, it moves to 0x800000.
+;
+; ROM LAYOUT:
+;
+; 0x800000-0x800087  Section Directory Table (33 x 4-byte LE pointers + terminator)
+; 0x800088-0x87FFEF  Preset Data Banks (sound presets, registration, panel memory)
+;                     - 33 sections of varying size (see directory table)
+;                     - Factory defaults: 0xF7 (erased flash), 0x07, 0x00, or 0xFF
+;                     - Entries 12-24: 13 x 3,016-byte slots (zero-filled)
+;                     - Entries 25-27: 3 x 31,968-byte slots (0xFF-filled)
+; 0x87FFF0-0x8CFFFF  Feature Demo Data (SSF file, BMP bitmaps, file entries)
+; 0x8D0000-0x8DFFFF  Unused (0xFF fill)
+; 0x8E0000-0x8ECFFF  LZSS Compressed Preset Data (SLIDE4K format, ~28KB)
+; 0x8ED000-0x937FFF  Wallpapers (2 x 320x240 8bpp = 76,800 bytes each) + gap data
+; 0x938000-0x944D77  UI Icons (176 x 24x24 4bpp, 288 bytes each) + icon table
+; 0x944D78-0x945BFF  Miscellaneous data tables
+; 0x945C00-0x945CAF  Font Descriptor Table (10 font entries x 16 bytes)
+; 0x945CB0-0x94FFFF  Font Glyph Bitmaps (1bpp, variable size per font)
+; 0x950000-0x95FFFF  Sound Parameter Data (bitmap-like data + preset records)
+; 0x960000-0x97FFFF  Sound/Voice Name Strings (space-padded, 16 bytes each)
+; 0x980000-0x985FFF  Registration/Panel Memory Defaults
+; 0x986000-0x986FFF  Model-Specific Preset Pointer Table A (KN5000/KN3000)
+; 0x987000-0x987FFF  Model-Specific Preset Pointer Table B (other models)
+; 0x988000-0x98FFFF  Demo Song Index + Data
+; 0x990000-0x99EBFF  Demo Song MIDI/Sequence Data
+; 0x99EC00-0x99FFFF  Demo Category Names ("Tour Of The 5000", "Accordion", etc.)
+; 0x9A0000-0x9BFFFF  Tone Generator Configuration Data
+; 0x9C0000-0x9C3FFF  Tone Generator Parameters
+; 0x9C4000-0x9C404F  Waveform Sample Pointer Table (19 entries x 4 bytes + null)
+; 0x9C4050-0x9F9FFF  Waveform Sample Data (18 variable-length PCM samples)
+; 0x9FA000-0x9FA14F  File Identifier Strings (floppy disk format IDs)
+; 0x9FA150-0x9FB495  Boot Screen Bitmaps (1bpp: "Flash Memory Update", etc.)
+; 0x9FB496-0x9FB4D1  Boot Initialization Data Tables
+; 0x9FB4D2-0x9FB4E7  Boot Data (bit mask table, init params)
+; 0x9FB4E8-0x9FFFFF  First-Stage Bootloader Code + IVT
+;
+; KEY TABLES (accessed by Main CPU ROM):
+;   Font Glyph Table @ 0x945C00: 10 fonts, 16 bytes/entry (w,h,desc,asc,glyph_ptr,kern_ptr)
+;   Waveform Samples @ 0x9C4000: 19 entries, 4 bytes/entry (absolute pointer to PCM data)
+;   Model Presets    @ 0x986000/0x987000: Selected by model code (0xC2/0xC5 vs others)
+;   Demo Song Index  @ 0x988000: 12 entries, 4 bytes/entry (pointers to song data)
+;   Section Directory@ 0x800000: 33 entries indexing preset data banks for floppy I/O
+; =============================================================================
+
+; =============================================================================
 ; Subcpu boot ROM handler addresses (cross-ROM references for IVT)
 ; =============================================================================
 .equ BOOT_RESET_HANDLER, 0x00FFFEE0
@@ -23,12 +72,31 @@
 .equ REGION_CODE_VAR, 0xC06	; RAM address for region code
 .equ BOOT_ENTRY_POINT, Boot_Init	; Entry point for watchdog reset
 
-	.org 0x800000 - 0x800000, 0xFF
-TableData_BootRegionReserved:
-	.byte 0x88	; First byte of data region (pointer table starts here)
+; =============================================================================
+; SECTION DIRECTORY TABLE (0x800000)
+; =============================================================================
+; 33 entries of 4-byte little-endian pointers, terminated by 0x00000000.
+; Each entry points to a preset data bank within the ROM.
+; These sections are read/written during floppy disk save/load operations.
+; Factory-default fill patterns indicate uninitialized user data slots:
+;   0xF7 = erased flash, 0x07 = default values, 0x00 = zeroed, 0xFF = empty
+;
+; Entry sizes (consecutive entries):
+;   0-1: 11,400 bytes each    8-11: 1,440-2,850 bytes
+;   2: 1,764 bytes            12-24: 3,016 bytes each (13 identical slots)
+;   3-5: 4,884 bytes each     25-27: 31,968 bytes each (3 identical slots)
+;   6: 14,040 bytes           28-32: variable (10K-861K)
+;   7: 983,646 bytes
+; =============================================================================
 
-	; Data region (0x800001 - 0x87FFEF)
-	; Contains waveform samples, lookup tables, and other data
+	.org 0x800000 - 0x800000, 0xFF
+SectionDirectory_Table:
+	.byte 0x88	; First byte of section directory (start of 4-byte LE pointer table)
+
+	; Preset data banks and section directory (0x800001 - 0x87FFEF)
+	; Contains the remaining 131 bytes of the directory table (entries 1-32 + terminator),
+	; followed by preset data banks: sound presets, registration memory slots,
+	; panel memory defaults, and waveform/lookup data.
 	.incbin "includes/initial_data.bin"
 
 	.org 0x87FFF0 - 0x800000, 0xFF
@@ -224,8 +292,39 @@ IconTable:
 IconPixelData:
 	.incbin "includes/icon_pixel_data.bin"
 
-	; Gap between icon data and FileIdentifierStringsTable (0x944D78 - 0x9F9FFF)
-	; Contains various data tables, string data, and padding blocks
+; =============================================================================
+; MIXED DATA TABLES (0x944D78 - 0x9F9FFF)
+; =============================================================================
+; This 753KB region contains multiple data structures referenced by the main
+; CPU ROM. Key sub-regions:
+;
+;   0x944D78-0x945BFF  Miscellaneous data tables
+;   0x945C00-0x945CAF  Font Descriptor Table (10 fonts x 16 bytes)
+;                       Format: word width, word height, word descent, word ascent,
+;                               long glyph_data_ptr, long kerning_table_ptr
+;                       Referenced by DrawString at 0xFA7E7C
+;   0x945CB0-0x94FFFF  Font Glyph Bitmaps (1bpp, 8 pixels/byte, MSB first)
+;   0x950000-0x95FFFF  Sound Parameter Data (bitmap-like patterns + preset records)
+;                       Records at 0x951000+: 198 bytes each, contain preset names
+;                       ("Easy Listening", "German S...")
+;   0x960000-0x97FFFF  Sound/Voice Name Tables (space-padded ASCII, 16 bytes/entry)
+;                       Mixed with demo song parameters and MIDI sequence data
+;   0x980000-0x985FFF  Registration/Panel Memory Default Data
+;   0x986000-0x986FFF  Model Preset Ptr Table A (selected when model=0xC2 or 0xC5)
+;                       16+ entries of 4-byte LE pointers into 0x9510xx range
+;   0x987000-0x987FFF  Model Preset Ptr Table B (selected for other model codes)
+;   0x988000-0x98FFFF  Demo Song Index Table (12 entries x 4 bytes) + song data
+;   0x990000-0x99EBFF  Demo Song MIDI/Sequence Data (compressed binary)
+;   0x99EC00-0x99FFFF  Demo Category Names: "Tour Of The 5000", "Accordion",
+;                       "Piano Styles", "Jazz&Rock Organ", "Church & Theatre",
+;                       "Light Orchestra", "Split Sounds", "Layer Production",
+;                       "Special DSP FX", "World", "xPiano Atmosphere"
+;   0x9A0000-0x9BFFFF  Tone Generator Configuration Data
+;   0x9C0000-0x9C3FFF  Tone Generator Parameters
+;   0x9C4000-0x9C404F  Waveform Sample Pointer Table (19 x 4-byte LE pointers + null)
+;                       Accessed by main CPU: sla wa,2; add xwa,0x9C4000; ld xwa,(xwa)
+;   0x9C4050-0x9F9FFF  Waveform Sample Data (18 variable-length PCM samples)
+; =============================================================================
 	.incbin "includes/icons_to_strings.bin"
 
 	.org 0x9FA000 - 0x800000, 0xFF
