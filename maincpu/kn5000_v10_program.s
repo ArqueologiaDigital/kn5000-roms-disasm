@@ -39815,10 +39815,10 @@ LABEL_EE8570:
 LABEL_EE858C:
 	.long LABEL_FD8BCC
 UIState_EventHandler_Table:
-	.long LABEL_FEAC83
-	.long LABEL_FDE981
-	.long LABEL_FC7BBA
-	.long LABEL_F202EC
+	.long UIStateEvt_ProcessHandler
+	.long UIStateEvt_StubReturn
+	.long UIStateEvt_NullHandler
+	.long UIStateEvt_VoiceParamHandler
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE85A8:
@@ -41571,21 +41571,21 @@ LABEL_EE8ED8:	.ascii "!\"#$"
 	.byte 0x0c, 0x0d, 0x07, 0x09, 0x0c, 0x0e, 0xf4, 0x0c
 	.byte 0x05, 0x0c, 0xf6, 0xfb, 0x8f, 0x8c, 0xfe, 0x00
 SoundEffect_Dispatch_Table:
-	.long LABEL_FE8DC5
-	.long LABEL_FE8DD9
-	.long LABEL_FE8E38
-	.long LABEL_FE8EA1
-	.long LABEL_FE8F0A
-	.long LABEL_FE8FA5
-	.long LABEL_FE9075
-	.long LABEL_FE9171
-	.long LABEL_FE9241
-	.long LABEL_FE933D
-	.long LABEL_FE9360
-	.long LABEL_FE9383
-	.long LABEL_FE8DB1
-	.long LABEL_FE9075
-	.long LABEL_FE9075
+	.long SoundFX_Handler_0
+	.long SoundFX_Handler_1
+	.long SoundFX_Handler_2
+	.long SoundFX_Handler_3
+	.long SoundFX_Handler_4
+	.long SoundFX_Handler_5
+	.long SoundFX_Handler_6
+	.long SoundFX_Handler_7
+	.long SoundFX_Handler_8
+	.long SoundFX_Handler_9
+	.long SoundFX_Handler_10
+	.long SoundFX_Handler_11
+	.long SoundFX_Handler_12
+	.long SoundFX_Handler_6
+	.long SoundFX_Handler_6
 	.zero 28
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x15, 0x89
 	.byte 0x00, 0x00, 0x00, 0x00, 0x06, 0x09, 0x23, 0x80
@@ -41896,10 +41896,10 @@ SoundEffect_Dispatch_Table:
 ; =============================================================================
 ; Character mapping table - preamble/header (sparse)
 CharMap_Preamble_Table:
-	.long LABEL_FEE3F6
-	.long LABEL_FEE3F7
-	.long LABEL_FEE3F8
-	.long LABEL_FEE3F9
+	.long CharMap_NullPreamble_0
+	.long CharMap_NullPreamble_1
+	.long CharMap_NullPreamble_2
+	.long CharMap_ActivePreamble
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -52455,18 +52455,18 @@ ToneParam_Evt0F_BytecodeHandler:
 	.byte 0x1d, 0x2e, 0x90, 0xef, 0x1d, 0x9f, 0x78, 0xef
 	.byte 0x0e
 PerfMode_ParamHandler_Table:
-	.long LABEL_EF646F
-	.long LABEL_EF6581
-	.long LABEL_EF665D
-	.long LABEL_EF66F8
-	.long LABEL_EF67A6
-	.long LABEL_EF6841
-	.long LABEL_EF665D
-	.long LABEL_EF68DC
-	.long LABEL_EF698A
-	.long LABEL_EF6AD7
-	.long LABEL_EF6C50
-	.long LABEL_EFDCA6
+	.long PerfMode_ParamHandler_0
+	.long PerfMode_ParamHandler_1
+	.long PerfMode_ParamHandler_2
+	.long PerfMode_ParamHandler_3
+	.long PerfMode_ParamHandler_4
+	.long PerfMode_ParamHandler_5
+	.long PerfMode_ParamHandler_2
+	.long PerfMode_ParamHandler_7
+	.long PerfMode_ParamHandler_8
+	.long PerfMode_ParamHandler_9
+	.long PerfMode_ParamHandler_10
+	.long PerfMode_ParamHandler_11
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -52499,7 +52499,7 @@ LABEL_EF6423:
 	.long LABEL_EF73A4
 	.long LABEL_EF743F
 	.long LABEL_EF74DA
-LABEL_EF646F:
+PerfMode_ParamHandler_0:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf, 0x1f
 	.byte 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c
 	.byte 0x44, 0x8a, 0x64, 0xef, 0x00, 0xe3, 0x07, 0xf0
@@ -52578,7 +52578,7 @@ LABEL_EF6580:
 	ret
 
 
-LABEL_EF6581:
+PerfMode_ParamHandler_1:
 	.byte 0xd9, 0x8b, 0xdb
 	.byte 0xcf, 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec
 	.byte 0x02, 0x3c, 0x44, 0xdd, 0x65, 0xef, 0x00, 0xe3
@@ -52630,7 +52630,7 @@ LABEL_EF65DD:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-LABEL_EF665D:
+PerfMode_ParamHandler_2:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf, 0x1f, 0x00, 0x7b
 	.byte 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44, 0x78
 	.byte 0x66, 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -52667,7 +52667,7 @@ LABEL_EF667C:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-LABEL_EF66F8:
+PerfMode_ParamHandler_3:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf
 	.byte 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02
 	.ascii "<D&g"
@@ -52711,7 +52711,7 @@ LABEL_EF6726:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-LABEL_EF67A6:
+PerfMode_ParamHandler_4:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf, 0x1f, 0x00
 	.byte 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44
 	.long LABEL_EF67C1
@@ -52750,7 +52750,7 @@ LABEL_EF67C5:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-LABEL_EF6841:
+PerfMode_ParamHandler_5:
 	.byte 0xd9, 0x8b, 0xdb
 	.byte 0xcf, 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec
 	.byte 0x02
@@ -52790,7 +52790,7 @@ LABEL_EF685C:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-LABEL_EF68DC:
+PerfMode_ParamHandler_7:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf, 0x1f, 0x00, 0x7b, 0x11
 	.byte 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44, 0x0a, 0x69
 	.byte 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23, 0x5c
@@ -52832,7 +52832,7 @@ LABEL_EF690E:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-LABEL_EF698A:
+PerfMode_ParamHandler_8:
 	ld	hl, bc
 	.byte 0xdb, 0xcf, 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb
 	.byte 0xec, 0x02, 0x3c, 0x44, 0xa5, 0x69, 0xef, 0x00
@@ -52898,7 +52898,7 @@ LABEL_EF6A25:
 	.byte 0x00, 0xd9, 0xab, 0x85, 0x11, 0x1d, 0x07, 0x5c
 	.byte 0xef, 0x0e
 	.ascii "VOLUME = "
-LABEL_EF6AD7:
+PerfMode_ParamHandler_9:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf, 0x1f
 	.byte 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c
 	.byte 0x44, 0xf2, 0x6a, 0xef, 0x00, 0xe3, 0x07, 0xf0
@@ -52968,7 +52968,7 @@ LABEL_EF6BE7:
 	.byte 0x00, 0xce, 0xf1, 0x76, 0x0d, 0x00, 0xc9, 0x61
 	.byte 0x1b, 0x4f, 0x6c, 0xef, 0xcf, 0xf1, 0x76, 0x02
 	.byte 0x00, 0xc9, 0x69, 0x0e
-LABEL_EF6C50:
+PerfMode_ParamHandler_10:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf
 	.byte 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02
 	.ascii "<Dkl"
@@ -58091,7 +58091,7 @@ LABEL_EFDC43:
 	.byte 0x7b, 0x08, 0x00, 0x1d, 0x04, 0x90, 0xef, 0x1b
 	.byte 0xa1, 0xdc, 0xef, 0x1d, 0x70, 0x8f, 0xef, 0xf1
 	.byte 0x54, 0x0d, 0xb2, 0x0e
-LABEL_EFDCA6:
+PerfMode_ParamHandler_11:
 	.byte 0xd9, 0x8b, 0xdb, 0xcf
 	.byte 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02
 	.byte 0x3c, 0x44, 0xc1, 0xdc, 0xef, 0x00, 0xe3, 0x07
@@ -85548,7 +85548,7 @@ SetWall_LoadBankToToneGen:
 	ldir85
 	ret
 
-LABEL_F202EC:
+UIStateEvt_VoiceParamHandler:
 	.byte 0xc1, 0x36, 0x8d, 0x21, 0xc9, 0xcf, 0x8e, 0x66
 	.byte 0x13, 0xc9, 0xcf, 0x64, 0x66, 0x0e, 0xc9, 0xcf
 	.byte 0x6c, 0x61, 0x11, 0xc9, 0xcf, 0x7a, 0x62, 0x04
@@ -300986,7 +300986,7 @@ LABEL_FC7B61:
 	.byte 0x8f, 0x3e, 0x00, 0x01, 0x0e, 0xd1, 0x42, 0x8f
 	.byte 0x3e, 0x10, 0x00, 0x0e, 0xd1, 0x3e, 0x8f, 0x3e
 	.byte 0x00, 0x02, 0x0e
-LABEL_FC7BBA:
+UIStateEvt_NullHandler:
 	.byte 0x0e
 LABEL_FC7BBB:
 	; --- Switch on A = (0xC07D): or bits into (0x8F42) (51 bytes) ---
@@ -327595,7 +327595,7 @@ LABEL_FDE7EB:
 	.byte 0xc3, 0x00, 0x00, 0x40, 0x02, 0x50, 0x00, 0x00
 	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xf1, 0x63, 0xc3, 0x47
 	.byte 0x0e
-LABEL_FDE981:
+UIStateEvt_StubReturn:
 	.byte 0x0e, 0x0e
 LABEL_FDE983:
 	.byte 0xc1, 0x7d, 0xc0, 0x21, 0xc9
@@ -344289,7 +344289,7 @@ LABEL_FE8DAE:
 	ld hl, (xwa)
 	ret
 
-LABEL_FE8DB1:
+SoundFX_Handler_12:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
@@ -344303,7 +344303,7 @@ LABEL_FE8DC1:
 	pop xiz
 	ret
 
-LABEL_FE8DC5:
+SoundFX_Handler_0:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
@@ -344317,7 +344317,7 @@ LABEL_FE8DD5:
 	pop xiz
 	ret
 
-LABEL_FE8DD9:
+SoundFX_Handler_1:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
@@ -344366,7 +344366,7 @@ LABEL_FE8E34:
 	pop xiz
 	ret
 
-LABEL_FE8E38:
+SoundFX_Handler_2:
 	push xiz
 	ld xiz, xwa
 	ldda8 a, 52959
@@ -344412,7 +344412,7 @@ LABEL_FE8E9D:
 	pop xiz
 	ret
 
-LABEL_FE8EA1:
+SoundFX_Handler_3:
 	push xiz
 	ld xiz, xwa
 	ldda8 a, 52959
@@ -344458,7 +344458,7 @@ LABEL_FE8F06:
 	pop xiz
 	ret
 
-LABEL_FE8F0A:
+SoundFX_Handler_4:
 	push xiz
 	ld xiz, xwa
 	ldda8 a, 52959
@@ -344522,7 +344522,7 @@ LABEL_FE8FA1:
 	pop xiz
 	ret
 
-LABEL_FE8FA5:
+SoundFX_Handler_5:
 	push xiz
 	ld xiz, xwa
 	ldda8 a, 52959
@@ -344602,7 +344602,7 @@ LABEL_FE9071:
 	pop xiz
 	ret
 
-LABEL_FE9075:
+SoundFX_Handler_6:
 	push xiz
 	ld xiz, xwa
 	ldda8 a, 52959
@@ -344698,7 +344698,7 @@ LABEL_FE916D:
 	pop xiz
 	ret
 
-LABEL_FE9171:
+SoundFX_Handler_7:
 	push xiz
 	ld xiz, xwa
 	ldda8 a, 52959
@@ -344778,7 +344778,7 @@ LABEL_FE923D:
 	pop xiz
 	ret
 
-LABEL_FE9241:
+SoundFX_Handler_8:
 	push xiz
 	ld xiz, xwa
 	ldda8 a, 52959
@@ -344874,7 +344874,7 @@ LABEL_FE9339:
 	pop xiz
 	ret
 
-LABEL_FE933D:
+SoundFX_Handler_9:
 	ld8_24 e, 0xeeadfe
 	ldda8 c, 52906
 	sub c, e
@@ -344887,7 +344887,7 @@ LABEL_FE933D:
 	lds hl, 2
 	ret
 
-LABEL_FE9360:
+SoundFX_Handler_10:
 	ld8_24 e, 0xeeae00
 	ldda8 c, 52906
 	sub c, e
@@ -344900,7 +344900,7 @@ LABEL_FE9360:
 	lds hl, 2
 	ret
 
-LABEL_FE9383:
+SoundFX_Handler_11:
 	ld8_24 e, 0xeeae02
 	ldda8 c, 52906
 	sub c, e
@@ -347026,7 +347026,7 @@ LABEL_FEABD9:
 	.byte 0x00, 0x1e, 0x99, 0x0e, 0xef, 0x64, 0x0e, 0x0e
 LABEL_FEAC82:
 	.byte 0x0e
-LABEL_FEAC83:
+UIStateEvt_ProcessHandler:
 	.byte 0xef, 0x6c, 0xbf, 0x00, 0x14, 0x80, 0xc0
 	.byte 0xbf, 0x01, 0x14, 0x7d, 0xc0, 0xbf, 0x02, 0x14
 	.byte 0x7e, 0xc0, 0xbf, 0x03, 0x14, 0x7f, 0xc0, 0x8f
@@ -352374,16 +352374,16 @@ LABEL_FEE3E1:
 	popw	iz
 	ret
 
-LABEL_FEE3F6:
+CharMap_NullPreamble_0:
 	ret
 
-LABEL_FEE3F7:
+CharMap_NullPreamble_1:
 	ret
 
-LABEL_FEE3F8:
+CharMap_NullPreamble_2:
 	ret
 
-LABEL_FEE3F9:
+CharMap_ActivePreamble:
 	stdi8 57658, 0
 	stdi8 57659, 1
 	ld xde, 0xE13A
