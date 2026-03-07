@@ -55,7 +55,7 @@ INT_HANDLER_08:	; 0428: watchdog
 	ret
 
 INT_HANDLER_09:	; 042D: Interrupt #0: Receive data from main-cpu via 8bit latch
-	jp 0x20E86
+	jp INT0_HANDLER
 	ret
 
 INT_HANDLER_0A:
@@ -151,11 +151,11 @@ INT_HANDLER_20:
 	ret
 
 INT_HANDLER_21:
-	jp 0x1F736
+	jp INTRX1_HANDLER
 	ret
 
 INT_HANDLER_22:
-	jp 0x1F765
+	jp INTTX1_HANDLER
 	ret
 
 INT_HANDLER_23:
@@ -163,7 +163,7 @@ INT_HANDLER_23:
 	ret
 
 INT_HANDLER_24:
-	jp 0x20F1F	; Channel #0 completion
+	jp MICRODMA_CH0_HANDLER	; Channel #0 completion
 	ret
 
 INT_HANDLER_25:
@@ -171,7 +171,7 @@ INT_HANDLER_25:
 	ret
 
 INT_HANDLER_26:
-	jp 0x20F01	; Channel #2 completion (STOP AND CLEAR TIMER #2)
+	jp MICRODMA_CH2_HANDLER	; Channel #2 completion (STOP AND CLEAR TIMER #2)
 	ret
 
 INT_HANDLER_27:
@@ -9021,7 +9021,7 @@ Audio_DMA_RingBuf_CheckSend:
 	lds wa, 4
 	ld bc, iz
 	ld xde, 0x600
-	call 0x20C6B
+	call InterCPU_DMA_Send
 
 Audio_DMA_RingBuf_Done:
 	popw iz
@@ -9225,12 +9225,12 @@ __jrt_nop_01FACB:
 ; ============================================================================
 Audio_System_Init:	; 01FACBh
 	pushw iz
-	call 0x20C15	; Setup inter-CPU comms via latches
-	call 0x1F8DF	; Initialize serial port #1 ring buffers
-	call 0x34C45	; Initialize DSP state buffers, toggle reset signals
-	call 0x3581D	; Initialize DSP2 (second DSP chip)
-	call 0x1FC95	; Write channel config to DSP at 0x00130000
-	call 0x3D016	; Initialize tone generator at 0x00110000
+	call InterCPU_Latch_Setup	; Setup inter-CPU comms via latches
+	call INIT_RING_BUFFERS	; Initialize serial port #1 ring buffers
+	call DSP_System_Init	; Initialize DSP state buffers, toggle reset signals
+	call DSP2_Init	; Initialize DSP2 (second DSP chip)
+	call DSP_Init_Channels	; Write channel config to DSP at 0x00130000
+	call ToneGen_Init	; Initialize tone generator at 0x00110000
 	ei 0	; Enable interrupts
 
 Audio_Main_Loop:
@@ -9248,8 +9248,8 @@ AudioLoop_CheckPeriodicReinit:
 	bitda 1, 4158
 	jr z, AudioLoop_CallProcessors
 	resda 1, 4158
-	call 0x20FBC
-	call 0x34CDB
+	call Cmd_Check_E2_Pending
+	call Audio_Process_Init
 	ldda16 xwa, 61458
 	ld bc, wa
 	inc 1, wa
@@ -9264,10 +9264,10 @@ AudioLoop_DecrementDelay:
 	dec 1, iz
 
 AudioLoop_CallProcessors:
-	call 0x3D01E
-	call 0x34D93
-	call 0x35AC8
-	call 0x1F8D5
+	call ToneGen_Process_Notes
+	call MIDI_Dispatch
+	call Audio_Process_DSP
+	call Audio_Process_Final
 	jr Audio_Main_Loop
 
 
@@ -17959,7 +17959,7 @@ Voice_Chan_Fallback_WritePrecomputed:
 	st16_24 0x045208, xwa
 	ld wa, (xsp + 14)
 	lda_24 xbc, 0x0451cc
-	call 0x2DA16
+	call ToneGen_WriteExtParams_56
 
 Voice_Chan_SecondaryPitch_Trigger:
 	ld xwa, (xsp + 4)
@@ -18035,7 +18035,7 @@ Voice_Chan_SecondaryPitch_ComputeDelta:
 	st16_24 0x04520a, xwa
 	ld wa, (xsp + 14)
 	lda_24 xbc, 0x0451cc
-	call 0x2DB33
+	call ToneGen_WriteExtParams_56b
 
 Voice_Chan_ComputeParams_Return:
 	pop xiz
@@ -18281,7 +18281,7 @@ Voice1_UpdatePitch_WriteAltFreq:
 	st16_24 0x045206, xwa
 	ld wa, iz
 	lda_24 xbc, 0x0451cc
-	call 0x2DC50
+	call ToneGen_WriteExtParams_15
 
 Voice1_UpdatePitch_WriteStereoField:
 	ld xwa, (xsp + 22)
@@ -21342,7 +21342,7 @@ Voice_UpdateNoteOff:
 	extz wa
 	ld xbc, (xsp + 2)
 	ld bc, (xbc + 45)
-	call 0x2D41B
+	call ToneGen_WriteSingleReg
 	ld xwa, (xsp + 2)
 	ld a, (xwa)
 	extz wa
@@ -21815,7 +21815,7 @@ Voice_TickNoteDecay:
 	ldto_berp A, 0xFB
 	extz wa
 	lda_24 xbc, 0x0451cc
-	call 0x2D101
+	call ToneGen_WriteVoiceParams
 	ldto_berp A, 0xFB
 	ld l, a
 	extz hl
@@ -21826,7 +21826,7 @@ Voice_TickNoteDecay:
 	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
-	call 0x2D41B
+	call ToneGen_WriteSingleReg
 
 Voice_TickNoteDecay_Reload:
 	decdi8_24 1, 267102
@@ -21911,7 +21911,7 @@ Voice_LoadPitchTable_Ch_LoopBody:
 	ld wa, (xwa)
 	ldb w, 0x0
 	lda_24 xbc, 0x0451cc
-	call 0x2DA16
+	call ToneGen_WriteExtParams_56
 	inc 1, iz
 
 Voice_LoadPitchTable_Ch_LoopCheck:
@@ -21957,7 +21957,7 @@ Voice_LoadPitchTable_All_LoopBody:
 	ld wa, (xwa)
 	ldb w, 0x0
 	lda_24 xbc, 0x0451cc
-	call 0x2DA16
+	call ToneGen_WriteExtParams_56
 	incm 1, (xsp + 4)
 
 Voice_LoadPitchTable_All_LoopCheck:
@@ -22046,7 +22046,7 @@ Voice_LoadFilterTable_Ch_LoopBody:
 	ld wa, (xwa)
 	ldb w, 0x0
 	lda_24 xbc, 0x0451cc
-	call 0x2DB33
+	call ToneGen_WriteExtParams_56b
 	inc 1, iz
 
 Voice_LoadFilterTable_Ch_LoopCheck:
@@ -22092,7 +22092,7 @@ Voice_LoadFilterTable_All_LoopBody:
 	ld wa, (xwa)
 	ldb w, 0x0
 	lda_24 xbc, 0x0451cc
-	call 0x2DB33
+	call ToneGen_WriteExtParams_56b
 	incm 1, (xsp + 4)
 
 Voice_LoadFilterTable_All_LoopCheck:
@@ -25169,7 +25169,7 @@ Voice_CC_Portamento:
 	extz wa
 	call Voice_AllocateForRelease
 	ld xwa, xhl
-	call 0x2CF07
+	call Voice_ParamInit
 	jrl Voice_CC_Exit
 	ld a, (xiz + 1)
 	ld e, a
@@ -26848,7 +26848,7 @@ Voice_Init_Type4:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x0451cc
-	call 0x2D101
+	call ToneGen_WriteVoiceParams
 	pop xiz
 	inc 2, xsp
 	ret
@@ -27615,7 +27615,7 @@ Voice_Release_Type4_BranchB:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x0451cc
-	call 0x2D101
+	call ToneGen_WriteVoiceParams
 	pop xiz
 	inc 2, xsp
 	ret
@@ -27962,7 +27962,7 @@ Voice_Init_Type2:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x0451cc
-	call 0x2D101
+	call ToneGen_WriteVoiceParams
 	pop xiz
 	inc 2, xsp
 	ret
@@ -28259,7 +28259,7 @@ Voice_Init_Type1:
 	ld a, (xsp + 4)
 	extz wa
 	lda_24 xbc, 0x0451cc
-	call 0x2D101
+	call ToneGen_WriteVoiceParams
 	pop xiz
 	inc 2, xsp
 	ret
@@ -28599,7 +28599,7 @@ Voice_SetPitch_NopCont2:
 	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
-	call 0x2D41B
+	call ToneGen_WriteSingleReg
 
 Voice_SetPitch_Exit:
 	pop_werp 0xFA
@@ -28699,7 +28699,7 @@ Voice_NoteOff_NopCont2:
 	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
-	call 0x2D41B
+	call ToneGen_WriteSingleReg
 	ldto_berp A, 0xFB
 	extz wa
 	call VoiceSlot_NoteOff
@@ -28860,7 +28860,7 @@ Voice_SetVelocity_Type0_Loop2Body:
 	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
-	call 0x2D41B
+	call ToneGen_WriteSingleReg
 
 Voice_SetVelocity_Type0_Loop2Step:
 	inc1_berp 0xFA
@@ -28974,7 +28974,7 @@ Voice_SetVelocity_Type40_Loop2Body:
 	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
-	call 0x2D41B
+	call ToneGen_WriteSingleReg
 
 Voice_SetVelocity_Type40_Loop2Step:
 	inc1_berp 0xFA
@@ -29085,7 +29085,7 @@ Voice_SetVelocity_Type80_Loop2Body:
 	lda_24 xde, 0x0430bb
 	ld wa, hl
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
-	call 0x2D41B
+	call ToneGen_WriteSingleReg
 
 Voice_SetVelocity_Type80_Loop2Step:
 	inc1_berp 0xFA
@@ -29218,7 +29218,7 @@ Voice_Release_BranchA:
 	ld a, (xsp + 4)
 	extz wa
 	ld bc, (xiz + 45)
-	call 0x2D41B
+	call ToneGen_WriteSingleReg
 	ld a, (xsp + 4)
 	extz wa
 	call VoiceSlot_Release
@@ -29251,7 +29251,7 @@ Voice_Release_BranchC:
 	ld a, (xsp + 4)
 	extz wa
 	ld bc, (xiz + 45)
-	call 0x2D41B
+	call ToneGen_WriteSingleReg
 	ld a, (xsp + 4)
 	extz wa
 	call VoiceSlot_Release
@@ -29453,7 +29453,7 @@ Voice_NoteOn:
 	jr z, Voice_NoteOn_ZeroVelocity
 	ld a, (xiz)
 	and a, 0x8
-	call 0x21036
+	call RingBuf_SetOffsetLo
 	ld l, (xiz + 1)
 	ld c, (xiz + 2)
 	ld e, (xiz + 3)
@@ -34152,7 +34152,7 @@ VoiceParamFinalize_CallDispatch:
 	ld xde, xwa
 	ld wa, bc
 	ld bc, hl
-	call 0x20C6B
+	call InterCPU_DMA_Send
 
 VoiceParamFinalize_Return:
 	pop xiz
@@ -38349,8 +38349,8 @@ DSP_System_Init_Continue:
 	st32_24 0x045314, xwa
 	lda_24 xwa, 0x0a0000
 	st32_24 0x045318, xwa
-	call 0x2DFA8
-	call 0x360A7
+	call DSP_Config_Init
+	call DSP_Reset
 	lds wa, 0
 	call ToneGen_EmitCommandLoop
 	call DSP_ResetWriteBufferPtr
@@ -38508,7 +38508,7 @@ MIDI_Dispatch:
 	push xiz
 	ldada xiz, 11021
 	ld wa, (xiz + 4)
-	call 0x21031
+	call RingBuf_SetOffsetHi
 	jrl MIDI_Dispatch_NextByte
 
 MIDI_Dispatch_ParseStatus:
@@ -38549,7 +38549,7 @@ MIDI_Dispatch_ParseStatus:
 	calr RingBuf_ReadByte
 	stda8 10989, l
 	ldada xwa, 10984
-	call 0x31A72
+	call Voice_ParamFinalize
 	jrl MIDI_Dispatch_Exit
 
 MIDI_Status_NoteOn_Extended:
@@ -38570,7 +38570,7 @@ MIDI_Status_NoteOn_Extended:
 	calr RingBuf_ReadByte
 	stda8 10995, l
 	ldada xwa, 10990
-	call 0x31A72
+	call Voice_ParamFinalize
 	jrl MIDI_Dispatch_Exit
 
 MIDI_Status_Incomplete:
@@ -38595,12 +38595,12 @@ MIDI_Status_NoteOn:
 	cp a, 0xF0
 	jr nc, MIDI_Status_NoteOn_Poly
 	ldada xwa, 10996
-	call 0x2CF97
+	call Voice_NoteOn
 	jrl MIDI_Dispatch_Exit
 
 MIDI_Status_NoteOn_Poly:
 	ldada xwa, 10996
-	call 0x356C9
+	call Voice_Poly_NoteOn
 	jrl MIDI_Dispatch_Exit
 
 MIDI_Status_NoteOn_Skip:
@@ -38622,7 +38622,7 @@ MIDI_Status_CtrlChange:
 	calr RingBuf_ReadByte
 	stda8 11003, l
 	ldada xwa, 11000
-	call 0x2A282
+	call Voice_CtrlChange
 	jrl MIDI_Dispatch_Exit
 
 MIDI_Status_CtrlChange_Skip:
@@ -38647,7 +38647,7 @@ MIDI_Status_ProgChange:
 	calr RingBuf_ReadByte
 	stda8 11008, l
 	ldada xwa, 11004
-	call 0x34A4A
+	call Voice_ProgChange
 	jrl MIDI_Dispatch_Exit
 
 MIDI_Status_ProgChange_Skip:
@@ -38669,7 +38669,7 @@ MIDI_Status_ChanPressure:
 	calr RingBuf_ReadByte
 	stda8 11012, l
 	ldada xwa, 11009
-	call 0x2A4EA
+	call Voice_ChanPressure
 	jrl MIDI_Dispatch_Exit
 
 MIDI_Status_ChanPressure_Skip:
@@ -38691,7 +38691,7 @@ MIDI_Status_PitchBend:
 	calr RingBuf_ReadByte
 	stda8 11016, l
 	ldada xwa, 11013
-	call 0x2A5E6
+	call Voice_PitchBend
 	jr MIDI_Dispatch_Exit
 
 MIDI_Status_PitchBend_Skip:
@@ -38713,7 +38713,7 @@ MIDI_Status_System:
 	calr RingBuf_ReadByte
 	stda8 11020, l
 	ldada xwa, 11017
-	call 0x2A7AF
+	call Voice_SystemMsg
 	jr MIDI_Dispatch_Exit
 
 MIDI_Status_System_Skip:
@@ -38919,7 +38919,7 @@ DSP_FlushAllSlots_Loop3Next:
 	lda_24 xwa, 0x007800
 	ldw bc, 0x72AA
 	ld xde, 0x1E0000
-	call 0x20DB3
+	call InterCPU_E1_DMA_Transfer
 	popw iz
 	inc 4, xsp
 	ret
@@ -39059,7 +39059,7 @@ DSP_WriteAlgoBuffer_Epilogue:
 	lda_24 xwa, 0x007800
 	ldw bc, 0x72AA
 	ld xde, 0x1E0000
-	call 0x20DB3
+	call InterCPU_E1_DMA_Transfer
 	ldb l, 0x0
 
 DSP_WriteAlgoBuffer_Data:
@@ -39203,7 +39203,7 @@ DSP_Reinit_VoiceSlots_DMAFlush:
 	lda_24 xwa, 0x007800
 	ldw bc, 0x72AA
 	ld xde, 0x1E0000
-	call 0x20DB3
+	call InterCPU_E1_DMA_Transfer
 	pop xiz
 	inc 4, xsp
 	ret
@@ -39380,11 +39380,11 @@ ToneGen_SetupPolyVoice_Path:
 	ld a, (xsp + 2)
 	extz wa
 	ldada xbc, 15132
-	call 0x2D101
+	call ToneGen_WriteVoiceParams
 	ld a, (xsp + 2)
 	extz wa
 	ldda16 xbc, 15132
-	call 0x2D41B
+	call ToneGen_WriteSingleReg
 	inc 4, xsp
 	retd 0x2
 
@@ -39419,11 +39419,11 @@ ToneGen_SetupPercussionVoice:
 	ld a, (xsp)
 	extz wa
 	ldada xbc, 15132
-	call 0x2D101
+	call ToneGen_WriteVoiceParams
 	ld a, (xsp)
 	extz wa
 	ldda16 xbc, 15132
-	call 0x2D41B
+	call ToneGen_WriteSingleReg
 	inc 2, xsp
 	retd 0x2
 
@@ -39822,7 +39822,7 @@ DSP_Cmd_LoadEffectPreset:
 	add wa, bc
 	cp wa, 0x122
 	jr nz, DSP_LoadEffPreset_Loop3Next
-	call 0x361D4
+	call DSP_GetConfigBuffer
 	ld (xsp + 6), xhl
 	ldw (xsp + 4), 0x8
 	lds iz, 0
@@ -39847,7 +39847,7 @@ DSP_LoadEffPreset_Loop1Next:
 
 DSP_LoadEffPreset_Loop2:
 	ldto_werp WA, 0xFA
-	call 0x361D9
+	call EFF_GetSlotBuffer
 	ld (xsp + 6), xhl
 	lds iz, 0
 	cp iz, (xsp + 4)
@@ -40207,7 +40207,7 @@ DSP_Cmd2B_PostProcess:
 	ldada xde, 17256
 	ld bc, hl
 	lds wa, 3
-	call 0x20C6B
+	call InterCPU_DMA_Send
 	jrl DSP_Process_ReadNext
 
 DSP_Cmd2B_SkipAndContinue:
@@ -40368,7 +40368,7 @@ DSP_CmdHandler_2D:
 	exts xwa
 	cp xwa, 0xFFFFFFFF
 	jrl z, DSP_Process_ReadNext
-	call 0x361C5
+	call DSP_ReconfigAndStatus
 	jrl DSP_Process_ReadNext
 
 CmdHandler2D_PathA:
@@ -40379,7 +40379,7 @@ CmdHandler2D_PathA:
 	ldto_berp A, 0xFB
 	sub a, 0xA
 	extz wa
-	call 0x361D9
+	call EFF_GetSlotBuffer
 	ld (xsp + 10), xhl
 	ld xwa, (xsp + 10)
 	cp xwa, 0xFFFFFFFF
@@ -40402,7 +40402,7 @@ CmdHandler2D_PathA:
 	ld e, l
 	extz de
 	ld wa, ix
-	call 0x3616A
+	call DSP_ApplyConfig
 	jr DSP_Process_ReadNext
 
 CmdHandler2D_PathB:
@@ -40473,14 +40473,14 @@ DSP_Process_Exit:
 	ret
 
 DSP_WriteAlgoInitPreset:
-	call 0x37E30
+	call DSP_State_LookupAlgoIndex
 	ld wa, hl
 	cps wa, 2
 	jr nz, DSP_WriteAlgoInitPreset_PresetPath
 	lda_24 xwa, 0x0121f3
 	push xwa
 	pushw 0x4
-	call 0x34D5F
+	call Audio_CmdHandler_00_1F
 	inc 6, xsp
 	jr DSP_WriteAlgoInitPreset_Epilogue
 
@@ -40490,7 +40490,7 @@ DSP_WriteAlgoInitPreset_PresetPath:
 	lda_24 xwa, 0x0121ef
 	push xwa
 	pushw 0x4
-	call 0x34D5F
+	call Audio_CmdHandler_00_1F
 	inc 6, xsp
 	jr DSP_WriteAlgoInitPreset_Epilogue
 
@@ -40498,11 +40498,11 @@ DSP_WriteAlgoInitPreset_DefaultPath:
 	lda_24 xwa, 0x0121eb
 	push xwa
 	pushw 0x4
-	call 0x34D5F
+	call Audio_CmdHandler_00_1F
 	inc 6, xsp
 
 DSP_WriteAlgoInitPreset_Epilogue:
-	jp 0x34D93
+	jp MIDI_Dispatch
 
 DSP_ApplyAlgoForVoiceType:
 	cp wa, 0x35
@@ -40559,9 +40559,9 @@ DSP_SlotState_DisplayRestore:
 	lda_24 xwa, 0x0121f3
 	push xwa
 	pushw 0x4
-	call 0x34D5F
+	call Audio_CmdHandler_00_1F
 	inc 6, xsp
-	jp 0x34D93
+	jp MIDI_Dispatch
 
 DSP_SlotState_DisplayRestore_ActivePath:
 	cps hl, 2
@@ -40569,9 +40569,9 @@ DSP_SlotState_DisplayRestore_ActivePath:
 	lda_24 xwa, 0x0121ef
 	push xwa
 	pushw 0x4
-	call 0x34D5F
+	call Audio_CmdHandler_00_1F
 	inc 6, xsp
-	jp 0x34D93
+	jp MIDI_Dispatch
 
 DSP_SlotState_DisplayRestore_Epilogue:
 	cps hl, 1
@@ -40579,9 +40579,9 @@ DSP_SlotState_DisplayRestore_Epilogue:
 	lda_24 xwa, 0x0121eb
 	push xwa
 	pushw 0x4
-	call 0x34D5F
+	call Audio_CmdHandler_00_1F
 	inc 6, xsp
-	call 0x34D93
+	call MIDI_Dispatch
 	ret
 
 DSP_ApplyConfig:
@@ -40740,15 +40740,15 @@ DSP_Send_Command:	; 036331h
 	ldw (xsp + 4), 0x0	; Result = success
 	ldw (xsp + 2), 0x1F40	; Timeout counter
 	ei 6
-	call 0x383BB
-	call 0x383B3
+	call DSP_Deassert_Read
+	call DSP_Deassert_Write
 	ld wa, (xsp + 6)
-	call 0x383BF
+	call DSP_Select_Chip
 	ld wa, (xsp + 6)
-	call 0x383F7
+	call DSP_Read_Status
 	ld iz, hl
 	ld wa, (xsp + 6)
-	call 0x383DB
+	call DSP_Deselect_Chip
 	ei 0
 	cps iz, 0
 	jr nz, DSP_Send_Cmd_Ready
@@ -40763,15 +40763,15 @@ DSP_Send_Cmd_WaitLoop:
 
 DSP_Send_Cmd_Poll:
 	ei 6
-	call 0x383BB
-	call 0x383B3
+	call DSP_Deassert_Read
+	call DSP_Deassert_Write
 	ld wa, (xsp + 6)
-	call 0x383BF
+	call DSP_Select_Chip
 	ld wa, (xsp + 6)
-	call 0x383F7
+	call DSP_Read_Status
 	ld iz, hl
 	ld wa, (xsp + 6)
-	call 0x383DB
+	call DSP_Deselect_Chip
 	ei 0
 	cps iz, 0
 	jr z, DSP_Send_Cmd_WaitLoop	; Still not ready, keep waiting
@@ -40779,14 +40779,14 @@ DSP_Send_Cmd_Poll:
 DSP_Send_Cmd_Ready:
 	ei 6
 	ld wa, (xsp + 6)
-	call 0x383DB
-	call 0x383BB
-	call 0x383AF
-	call 0x383A7
+	call DSP_Deselect_Chip
+	call DSP_Deassert_Read
+	call DSP_Assert_Write
+	call DSP_Set_Command_Mode
 	ld wa, (xsp + 6)
-	call 0x383BF
+	call DSP_Select_Chip
 	ld wa, (xsp + 6)
-	call 0x383F7
+	call DSP_Read_Status
 	cps hl, 0
 	jr z, DSP_Send_Cmd_Error
 	ld a, (xsp + 8)	; Get command byte
@@ -40798,17 +40798,17 @@ DSP_Send_Cmd_Error:
 
 DSP_Send_Cmd_Cleanup:
 	ld wa, (xsp + 6)
-	call 0x383DB
-	call 0x383B3
-	call 0x383AB
+	call DSP_Deselect_Chip
+	call DSP_Deassert_Write
+	call DSP_Set_Data_Mode
 	ei 0
 	lda_24 xwa, 0x012207
-	call 0x38365
+	call Debug_Print_String
 	ld a, (xsp + 8)
 	extz wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x01220a
-	call 0x38365
+	call Debug_Print_String
 	ld hl, (xsp + 4)	; Return result
 	popw iz
 	inc 8, xsp
@@ -41095,7 +41095,7 @@ __jrt_nop_0364BA:
 DSP2_ClkHigh_Nop55:
 	nop
 	lda_24 xwa, 0x01220d
-	jp 0x38365
+	jp Debug_Print_String
 
 DSP2_SPI_BusIdle:
 	res_dd8 2, 0x3C
@@ -41773,7 +41773,7 @@ __jrt_nop_036661:
 DSP2_BusIdle_Nop134:
 	nop
 	lda_24 xwa, 0x012215
-	jp 0x38365
+	jp Debug_Print_String
 
 DSP2_Send_Command:
 	dec 6, xsp
@@ -41786,7 +41786,7 @@ DSP2_Send_Command:
 	ld a, (xsp + 8)
 	ldfr_berp A, 0xFB
 	ld wa, (xsp + 6)
-	call 0x383BF
+	call DSP_Select_Chip
 	calr DSP2_SPI_ClockPulseHigh
 	ldw iz, 0x8
 	cps iz, 0
@@ -42172,7 +42172,7 @@ __jrt_nop_036792:
 DSP2_SendCmd_PostClkLow_Nop19:
 	nop
 	ld wa, (xsp + 6)
-	call 0x383DB
+	call DSP_Deselect_Chip
 	jr __jrt_nop_03679C
 __jrt_nop_03679C:
 
@@ -42255,12 +42255,12 @@ DSP2_SendCmd_Epilogue_Nop16:
 	nop
 	ei 0
 	lda_24 xwa, 0x01221d
-	call 0x38365
+	call Debug_Print_String
 	ld a, (xsp + 8)
 	extz wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x01221f
-	call 0x38365
+	call Debug_Print_String
 	ld hl, (xsp + 4)
 	pop xiz
 	inc 6, xsp
@@ -42281,15 +42281,15 @@ DSP_Send_Data:	; 0367EEh
 	ldw (xsp + 4), 0x0	; Result = success
 	ldw (xsp + 2), 0x1F40	; Timeout counter
 	ei 6
-	call 0x383BB
-	call 0x383B3
+	call DSP_Deassert_Read
+	call DSP_Deassert_Write
 	ld wa, (xsp + 6)
-	call 0x383BF
+	call DSP_Select_Chip
 	ld wa, (xsp + 6)
-	call 0x383F7
+	call DSP_Read_Status
 	ld iz, hl
 	ld wa, (xsp + 6)
-	call 0x383DB
+	call DSP_Deselect_Chip
 	ei 0
 	cps iz, 0
 	jr nz, DSP_Send_Data_Ready
@@ -42304,30 +42304,30 @@ DSP_Send_Data_WaitLoop:
 
 DSP_Send_Data_Poll:
 	ei 6
-	call 0x383BB
-	call 0x383B3
+	call DSP_Deassert_Read
+	call DSP_Deassert_Write
 	ld wa, (xsp + 6)
-	call 0x383BF
+	call DSP_Select_Chip
 	ld wa, (xsp + 6)
-	call 0x383F7
+	call DSP_Read_Status
 	ld iz, hl
 	ld wa, (xsp + 6)
-	call 0x383DB
+	call DSP_Deselect_Chip
 	ei 0
 	cps iz, 0
 	jr z, DSP_Send_Data_WaitLoop
 
 DSP_Send_Data_Ready:
 	ei 6
-	call 0x383AB	; Set data mode (unlike command routine)
+	call DSP_Set_Data_Mode	; Set data mode (unlike command routine)
 	ld wa, (xsp + 6)
-	call 0x383DB
-	call 0x383BB
-	call 0x383AF
+	call DSP_Deselect_Chip
+	call DSP_Deassert_Read
+	call DSP_Assert_Write
 	ld wa, (xsp + 6)
-	call 0x383BF
+	call DSP_Select_Chip
 	ld wa, (xsp + 6)
-	call 0x383F7
+	call DSP_Read_Status
 	cps hl, 0
 	jr z, DSP_Send_Data_Error
 	ld a, (xsp + 8)	; Get data byte
@@ -42339,14 +42339,14 @@ DSP_Send_Data_Error:
 
 DSP_Send_Data_Cleanup:
 	ld wa, (xsp + 6)
-	call 0x383DB
-	call 0x383B3
+	call DSP_Deselect_Chip
+	call DSP_Deassert_Write
 	ei 0
 	ld a, (xsp + 8)
 	extz wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x012222
-	call 0x38365
+	call Debug_Print_String
 	ld hl, (xsp + 4)	; Return result
 	popw iz
 	inc 8, xsp
@@ -42362,7 +42362,7 @@ DSP2_Send_Data:
 	ld a, (xsp + 8)
 	ldfr_berp A, 0xFB
 	ld wa, (xsp + 6)
-	call 0x383BF
+	call DSP_Select_Chip
 	ldw iz, 0x8
 	cps iz, 0
 	jrl le, DSP2_SendData_PostLoop_Entry
@@ -42747,7 +42747,7 @@ __jrt_nop_0369DB:
 DSP2_SendData_PostClkLow_Nop19:
 	nop
 	ld wa, (xsp + 6)
-	call 0x383DB
+	call DSP_Deselect_Chip
 	jr __jrt_nop_0369E5
 __jrt_nop_0369E5:
 
@@ -42831,9 +42831,9 @@ DSP2_SendData_Epilogue_Nop16:
 	ei 0
 	ld a, (xsp + 8)
 	extz wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x012224
-	call 0x38365
+	call Debug_Print_String
 	ld hl, (xsp + 4)
 	pop xiz
 	inc 6, xsp
@@ -44293,7 +44293,7 @@ EFF_MuteLoop_SlotBody:
 
 EFF_MuteLoop_NoMute:
 	ld wa, iz
-	call 0x37EB4
+	call EFF_Mute_WithDebug
 	lds de, 1
 
 EFF_MuteLoop_SlotNext:
@@ -44305,7 +44305,7 @@ EFF_MuteLoop_Epilogue:
 	cps de, 1
 	jr nz, EFF_MuteLoop_NoFlush
 	ldw wa, 0x14
-	call 0x38392
+	call DSP_ScheduleDelay
 
 EFF_MuteLoop_NoFlush:
 	popw iz
@@ -44319,7 +44319,7 @@ DSP_ResetLoop:
 
 DSP_ResetLoop_Body:
 	ld wa, iz
-	call 0x37E62
+	call DSP_Reset_WithDebug
 	inc 1, iz
 	cps iz, 2
 	jr c, DSP_ResetLoop_Body
@@ -44343,7 +44343,7 @@ DSP_MuteLoop_Body:
 	cpw (xwa), 0x1
 	jr nz, DSP_MuteLoop_Next
 	ld wa, iz
-	call 0x37EE9
+	call DSP_Mute_WithDebug
 
 DSP_MuteLoop_Next:
 	inc 1, iz
@@ -44369,7 +44369,7 @@ DSP_UnmuteLoop_Body:
 	cpw (xwa), 0x1
 	jr nz, DSP_UnmuteLoop_Next
 	ld wa, iz
-	call 0x37F1C
+	call DSP_Unmute_WithDebug
 
 DSP_UnmuteLoop_Next:
 	inc 1, iz
@@ -44383,7 +44383,7 @@ DSP_UnmuteLoop_Epilogue:
 DSP_AlgorithmChangeCheck:
 	cpdi16 18750, 1
 	ret nz
-	call 0x3800D
+	call DSP_AlgorithmChange
 	ret
 
 Unsigned_Max_Select:
@@ -44466,7 +44466,7 @@ EFF_ParamIter_StdLoop:
 	ld wa, (xsp + 12)
 	ld bc, (xbc)
 	ld de, iz
-	call 0x38200
+	call EFF_ParamEdit_WithDebug
 
 EFF_ParamIter_StdLoopNext:
 	inc 1, iz
@@ -44519,7 +44519,7 @@ EFF_ParamIter_SpecialLoop:
 	push xwa
 	ld wa, (xsp + 12)
 	ld bc, (xbc)
-	call 0x38200
+	call EFF_ParamEdit_WithDebug
 
 EFF_ParamIter_SpecialLoopNext:
 	inc 1, xiz
@@ -44564,14 +44564,14 @@ EFF_Change_Handler:
 	ld wa, iz
 	ld xbc, (xsp + 2)
 	ld bc, (xbc + 6)
-	call 0x37F4F
+	call EFF_Disconnect
 	jr EFF_Change_Handler_SlotDispatch
 
 EFF_Change_Handler_NonSlot2:
 	ld wa, iz
 	ld xbc, (xsp + 2)
 	ld bc, (xbc + 6)
-	call 0x37F4F
+	call EFF_Disconnect
 
 EFF_Change_Handler_SlotDispatch:
 	ld wa, iz
@@ -44591,7 +44591,7 @@ EFF_Change_Handler_SlotDispatch:
 	add xbc, (xsp + 2)
 	ld wa, iz
 	ld bc, (xbc)
-	call 0x380EC
+	call EFF_Change_WithDebug
 	jr EFF_Change_Handler_Epilogue
 
 EFF_Change_Handler_Slot234_AlgoPath:
@@ -44608,7 +44608,7 @@ EFF_Change_Handler_Slot234_AlgoPath:
 	add xbc, (xsp + 2)
 	ld wa, iz
 	ld bc, (xbc)
-	call 0x380EC
+	call EFF_Change_WithDebug
 	jr EFF_Change_Handler_Epilogue
 
 EFF_Change_Handler_Slot234_AltPath:
@@ -44622,7 +44622,7 @@ EFF_Change_Handler_Slot234_AltPath:
 	add xbc, (xsp + 2)
 	ld wa, iz
 	ld bc, (xbc)
-	call 0x381BC
+	call EFF_DataChange_WithDebug
 
 EFF_Change_Handler_Epilogue:
 	ld wa, iz
@@ -44651,7 +44651,7 @@ EFF_HeaderChangeLoop_Body:
 
 EFF_HeaderChangeLoop_CallAlgo:
 	ld wa, iz
-	call 0x380AB
+	call EFF_WriteHeader
 
 EFF_HeaderChangeLoop_PostAlgo:
 	ld wa, iz
@@ -44686,7 +44686,7 @@ EFF_HeaderChangeLoop_Epilogue:
 	cpi_werp 0xFA, 0
 	jr z, EFF_HeaderChangeLoop_SkipApply
 	ldto_werp WA, 0xFA
-	call 0x38392
+	call DSP_ScheduleDelay
 
 EFF_HeaderChangeLoop_SkipApply:
 	pop xiz
@@ -44721,7 +44721,7 @@ EFF_LinkLoop_Body:
 	ld wa, iz
 	ld xbc, (xsp + 2)
 	ld bc, (xbc + 6)
-	call 0x37FAE
+	call EFF_Link
 
 EFF_LinkLoop_Next:
 	dec 1, iz
@@ -44773,7 +44773,7 @@ EFF_SecLinkPath_Pass1Epilogue:
 	cps iz, 0
 	jr z, EFF_SecLinkPath_Pass2Start
 	ld wa, iz
-	call 0x38392
+	call DSP_ScheduleDelay
 
 EFF_SecLinkPath_Pass2Start:
 	lds iz, 0
@@ -44805,7 +44805,7 @@ EFF_SecLinkPath_Pass2Body:
 	ldto_werp WA, 0xFA
 	ld xbc, (xsp + 4)
 	ld bc, (xbc + 6)
-	call 0x37F4F
+	call EFF_Disconnect
 
 EFF_SecLinkPath_Pass2MaxVol:
 	ld de, iz
@@ -44826,7 +44826,7 @@ EFF_SecLinkPath_Pass2Epilogue:
 	cps iz, 0
 	jr z, EFF_SecLinkPath_Epilogue
 	ld wa, iz
-	call 0x38392
+	call DSP_ScheduleDelay
 
 EFF_SecLinkPath_Epilogue:
 	pop xiz
@@ -44944,7 +44944,7 @@ EFF_VolumeLoop_ApplyDelta:
 	push xwa
 	ld wa, iz
 	ld bc, (xbc)
-	call 0x3826E
+	call EFF_VolumeUpdate_WithDebug
 
 EFF_VolumeLoop_Next:
 	inc 1, iz
@@ -44972,7 +44972,7 @@ EFF_DisconnectLoop_Body:
 	ld wa, iz
 	ld xbc, (xsp + 2)
 	ld bc, (xbc + 6)
-	call 0x37F4F
+	call EFF_Disconnect
 
 EFF_DisconnectLoop_Next:
 	dec 1, iz
@@ -45007,7 +45007,7 @@ DSP_StateDispatcher_PostMute:
 
 DSP_StateDispatcher_DisconnectPath:
 	lds wa, 0
-	call 0x380AB
+	call EFF_WriteHeader
 	ld xwa, xiz
 	calr EFF_DisconnectLoop
 
@@ -45095,16 +45095,16 @@ DSP_Reset_WithDebug:
 	pushw iz
 	ld iz, wa
 	lda_24 xwa, 0x0122cc
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x0122d2
-	call 0x38365
-	call 0x3839A
-	call 0x383A2
-	call 0x38396
-	call 0x3839E
-	call 0x3839A
+	call Debug_Print_String
+	call DSP1_Deassert_Reset
+	call DSP2_Deassert_Reset
+	call DSP1_Assert_Reset
+	call DSP2_Assert_Reset
+	call DSP1_Deassert_Reset
 	popw iz
 	ret
 
@@ -45112,12 +45112,12 @@ DSP_AntiReset_WithDebug:
 	pushw iz
 	ld iz, wa
 	lda_24 xwa, 0x0122da
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x0122e0
-	call 0x38365
-	call 0x383A2
+	call Debug_Print_String
+	call DSP2_Deassert_Reset
 	popw iz
 	ret
 
@@ -45125,12 +45125,12 @@ EFF_Mute_WithDebug:
 	pushw iz
 	ld iz, wa
 	lda_24 xwa, 0x0122ed
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	inc 1, wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x0122f3
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
@@ -45138,7 +45138,7 @@ EFF_Mute_WithDebug:
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
-	call 0x3C161
+	call DSP_WriteEFFConfig
 	popw iz
 	ret
 
@@ -45146,11 +45146,11 @@ DSP_Mute_WithDebug:
 	pushw iz
 	ld iz, wa
 	lda_24 xwa, 0x0122fa
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x012300
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
@@ -45158,7 +45158,7 @@ DSP_Mute_WithDebug:
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	popw iz
 	ret
 
@@ -45166,11 +45166,11 @@ DSP_Unmute_WithDebug:
 	pushw iz
 	ld iz, wa
 	lda_24 xwa, 0x012307
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x01230d
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
@@ -45178,7 +45178,7 @@ DSP_Unmute_WithDebug:
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	popw iz
 	ret
 
@@ -45188,12 +45188,12 @@ EFF_Disconnect:
 	ld (xsp + 2), bc
 	ld iz, wa
 	lda_24 xwa, 0x012318
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	inc 1, wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x01231e
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	extz xwa
 	ld xbc, 0x1ED6D
@@ -45216,7 +45216,7 @@ EFF_Disconnect:
 	add xbc, xde
 	ld wa, hl
 	ld xbc, (xbc)
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	popw iz
 	inc 2, xsp
 	ret
@@ -45227,12 +45227,12 @@ EFF_Link:
 	ld (xsp + 2), bc
 	ld iz, wa
 	lda_24 xwa, 0x01232b
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	inc 1, wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x012331
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	extz xwa
 	ld xbc, 0x1ED6D
@@ -45255,7 +45255,7 @@ EFF_Link:
 	add xbc, xde
 	ld wa, hl
 	ld xbc, (xbc)
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	popw iz
 	inc 2, xsp
 	ret
@@ -45265,15 +45265,15 @@ DSP_AlgorithmChange:
 	pushw iz
 	ld (xsp + 2), xwa
 	lda_24 xwa, 0x012338
-	call 0x38365
+	call Debug_Print_String
 	ld xwa, (xsp + 2)
 	ld wa, (xwa + 6)
-	call 0x3836C
+	call Debug_Print_Byte
 	lds iz, 0
 	lda_24 xwa, 0x01e63c
 	ld xbc, xwa
 	ld wa, iz
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	ld xwa, (xsp + 2)
 	cpw (xwa + 4), 0x1
 	jr nz, EFF_LoadConfigs_ForChannel
@@ -45284,34 +45284,34 @@ EFF_LoadConfigs_ForChannel:
 	lda_24 xwa, 0x01e6be
 	ld xbc, xwa
 	ld wa, iz
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	lds iz, 1
 	lda_24 xwa, 0x01e996
 	ld xbc, xwa
 	ld wa, iz
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	lda_24 xwa, 0x01ea12
 	ld xbc, xwa
 	ld wa, iz
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	lds wa, 1
-	call 0x36305
+	call DSP_WaitForDelay
 	lda_24 xwa, 0x01e7c5
 	ld xbc, xwa
 	ld wa, iz
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	lda_24 xwa, 0x01e8a7
 	ld xbc, xwa
 	ld wa, iz
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	lda_24 xwa, 0x01e891
 	ld xbc, xwa
 	ld wa, iz
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	lda_24 xwa, 0x01e947
 	ld xbc, xwa
 	ld wa, iz
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 	popw iz
 	inc 4, xsp
 	ret
@@ -45320,12 +45320,12 @@ EFF_WriteHeader:
 	pushw iz
 	ld iz, wa
 	lda_24 xwa, 0x012346
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	inc 1, wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x01234c
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	extz xwa
 	ld xbc, 0x1ED6D
@@ -45338,7 +45338,7 @@ EFF_WriteHeader:
 	lda_24 xwa, 0x01e496
 	ld xbc, xwa
 	ld wa, de
-	call 0x3C181
+	call DSP_WriteGlobalConfig
 
 EFF_WriteHeader_Return:
 	popw iz
@@ -45350,14 +45350,14 @@ EFF_Change_WithDebug:
 	ld (xsp + 2), bc
 	ld iz, wa
 	lda_24 xwa, 0x012355
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	inc 1, wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x01235b
-	call 0x38365
+	call Debug_Print_String
 	ld wa, (xsp + 2)
-	call 0x3836C
+	call Debug_Print_Byte
 	ld wa, iz
 	cps wa, 1
 	jr nz, EFF_Change_ChannelNot1
@@ -45368,19 +45368,19 @@ EFF_Change_WithDebug:
 	jr nz, EFF_Change_GenericLookup
 	ld wa, iz
 	lda_24 xbc, 0x01dfa5
-	call 0x3C161
+	call DSP_WriteEFFConfig
 	ld wa, iz
 	lda_24 xbc, 0x01e0b9
-	call 0x3C161
+	call DSP_WriteEFFConfig
 	jr EFF_Change_Return
 
 EFF_Change_Case0xA:
 	ld wa, iz
 	lda_24 xbc, 0x01e1de
-	call 0x3C161
+	call DSP_WriteEFFConfig
 	ld wa, iz
 	lda_24 xbc, 0x01e342
-	call 0x3C161
+	call DSP_WriteEFFConfig
 	jr EFF_Change_Return
 
 EFF_Change_GenericLookup:
@@ -45391,7 +45391,7 @@ EFF_Change_GenericLookup:
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
-	call 0x3C161
+	call DSP_WriteEFFConfig
 	ld wa, (xsp + 2)
 	extz xwa
 	sll xwa, 2
@@ -45399,7 +45399,7 @@ EFF_Change_GenericLookup:
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
-	call 0x3C161
+	call DSP_WriteEFFConfig
 	jr EFF_Change_Return
 
 EFF_Change_ChannelNot1:
@@ -45410,7 +45410,7 @@ EFF_Change_ChannelNot1:
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
-	call 0x3C161
+	call DSP_WriteEFFConfig
 	ld wa, (xsp + 2)
 	extz xwa
 	sll xwa, 2
@@ -45418,7 +45418,7 @@ EFF_Change_ChannelNot1:
 	add xbc, xwa
 	ld wa, iz
 	ld xbc, (xbc)
-	call 0x3C161
+	call DSP_WriteEFFConfig
 
 EFF_Change_Return:
 	popw iz
@@ -45431,14 +45431,14 @@ EFF_DataChange_WithDebug:
 	ld iz, bc
 	ld (xsp + 2), wa
 	lda_24 xwa, 0x012364
-	call 0x38365
+	call Debug_Print_String
 	ld wa, (xsp + 2)
 	inc 1, wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x01236a
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
-	call 0x3836C
+	call Debug_Print_Byte
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
@@ -45446,7 +45446,7 @@ EFF_DataChange_WithDebug:
 	add xbc, xwa
 	ld wa, (xsp + 2)
 	ld xbc, (xbc)
-	call 0x3C161
+	call DSP_WriteEFFConfig
 	popw iz
 	inc 2, xsp
 	ret
@@ -45458,16 +45458,16 @@ EFF_ParamEdit_WithDebug:
 	ld (xsp + 4), bc
 	ld iz, wa
 	lda_24 xwa, 0x012378
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	inc 1, wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x01237e
-	call 0x38365
+	call Debug_Print_String
 	ld wa, (xsp + 2)
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x012384
-	call 0x38365
+	call Debug_Print_String
 	ld wa, (xsp + 2)
 	extz xwa
 	ld xbc, xwa
@@ -45481,13 +45481,13 @@ EFF_ParamEdit_WithDebug:
 	add xde, xbc
 	add xde, (xsp + 10)
 	ld wa, (xde + 12)
-	call 0x38375
+	call Debug_Print_Word
 	ld xwa, (xsp + 10)
 	push xwa
 	ld wa, iz
 	ld bc, (xsp + 8)
 	ld de, (xsp + 6)
-	call 0x3C190
+	call DSP_WriteParameter
 	popw iz
 	inc 4, xsp
 	retd 0x4
@@ -45501,12 +45501,12 @@ EFF_VolumeUpdate_WithDebug:
 	cpw (xsp + 4), 0x63
 	jrl z, EFF_VolumeUpdate_Return
 	lda_24 xwa, 0x01238b
-	call 0x38365
+	call Debug_Print_String
 	ld wa, iz
 	inc 1, wa
-	call 0x3836C
+	call Debug_Print_Byte
 	lda_24 xwa, 0x012391
-	call 0x38365
+	call Debug_Print_String
 	ld wa, (xsp + 4)
 	extz xwa
 	ld xbc, xwa
@@ -45520,7 +45520,7 @@ EFF_VolumeUpdate_WithDebug:
 	add xde, xbc
 	add xde, (xsp + 12)
 	ld wa, (xde + 12)
-	call 0x38375
+	call Debug_Print_Word
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -45537,7 +45537,7 @@ EFF_VolumeUpdate_WithDebug:
 	ld wa, iz
 	ld bc, (xsp + 10)
 	ld de, (xsp + 8)
-	call 0x3C190
+	call DSP_WriteParameter
 	jr EFF_VolumeUpdate_Return
 
 EFF_VolumeUpdate_ZeroAndReload:
@@ -45573,7 +45573,7 @@ EFF_VolumeUpdate_ZeroAndReload:
 	ld wa, iz
 	ld bc, (xsp + 10)
 	ld de, (xsp + 8)
-	call 0x3C190
+	call DSP_WriteParameter
 	ld wa, (xsp + 4)
 	extz xwa
 	ld xbc, xwa
@@ -45639,7 +45639,7 @@ Debug_Print_Word:	; 038375h
 	ret
 
 DSP_ScheduleDelay:
-	jp 0x36305
+	jp DSP_WaitForDelay
 
 ; ============================================================================
 ; DSP CONTROL ROUTINES
@@ -45768,13 +45768,13 @@ DSP_WriteParamWord:
 	and xwa, 0xFF
 	extz wa
 	ld bc, (xsp + 4)
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, xiz
 	sra xwa, 8
 	and xwa, 0xFF
 	extz wa
 	ld bc, (xsp + 4)
-	call 0x36A4F
+	call DSP_DispatchData
 	pop xiz
 	inc 2, xsp
 	ret
@@ -45787,14 +45787,14 @@ DSP_WriteParamCmd30:
 	ld iz, wa
 	ld bc, iz
 	ldw wa, 0x30
-	call 0x36A2E
+	call DSP_DispatchCommand
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld wa, (xsp + 6)
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	ld bc, iz
 	calr DSP_WriteParamWord
@@ -45813,10 +45813,10 @@ DSP_WriteFreqParam_AlgoType:
 	jrl z, DSP_WriteFreqParam_AlgoType_UseCmd30
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld wa, (xsp + 12)
 	add wa, (xsp + 6)
 	srl wa, 4
@@ -45824,46 +45824,46 @@ DSP_WriteFreqParam_AlgoType:
 	add wa, 0x10
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld wa, (xsp + 12)
 	add wa, (xsp + 6)
 	sll wa, 4
 	and wa, 0xF0
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld bc, iz
 	ldw wa, 0xA
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
 	sra xwa, 0
 	and xwa, 0x7F
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 9
 	and xwa, 0xFF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
 	and xwa, 0xFF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sla xwa, 7
 	and xwa, 0x80
 	add xwa, 0x15
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	jr DSP_WriteFreqParam_AlgoType_Return
 
 DSP_WriteFreqParam_AlgoType_UseCmd30:
@@ -45888,10 +45888,10 @@ DSP_WriteFreqParam:
 	jrl z, DSP_WriteFreqParam_UseCmd30
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld wa, (xsp + 12)
 	add wa, (xsp + 6)
 	srl wa, 4
@@ -45899,46 +45899,46 @@ DSP_WriteFreqParam:
 	add wa, 0x10
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld wa, (xsp + 12)
 	add wa, (xsp + 6)
 	sll wa, 4
 	and wa, 0xF0
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld bc, iz
 	ldw wa, 0xA
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
 	sra xwa, 0
 	and xwa, 0x7F
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 9
 	and xwa, 0xFF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
 	and xwa, 0xFF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sla xwa, 7
 	and xwa, 0x80
 	add xwa, 0x15
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	jr DSP_WriteFreqParam_Return
 
 DSP_WriteFreqParam_UseCmd30:
@@ -45959,33 +45959,33 @@ DSP_WriteCoeffData_5B:
 	ld xiz, xwa
 	ld bc, (xsp + 4)
 	ldw wa, 0xA
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, xiz
 	sra xwa, 1
 	sra xwa, 0
 	and xwa, 0x7F
 	extz wa
 	ld bc, (xsp + 4)
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, xiz
 	sra xwa, 9
 	and xwa, 0xFF
 	extz wa
 	ld bc, (xsp + 4)
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, xiz
 	sra xwa, 1
 	and xwa, 0xFF
 	extz wa
 	ld bc, (xsp + 4)
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, xiz
 	sla xwa, 7
 	and xwa, 0x80
 	add xwa, 0x15
 	extz wa
 	ld bc, (xsp + 4)
-	call 0x36A4F
+	call DSP_DispatchData
 	pop xiz
 	inc 2, xsp
 	ret
@@ -46077,15 +46077,15 @@ DSP_WriteLUT_MainLoop_Body:
 	jr z, DSP_WriteLUT_MainLoop_FirstEntry
 	ld bc, (xsp + 26)
 	lds wa, 1
-	call 0x36A2E
+	call DSP_DispatchCommand
 	ld iz, hl
 	ld bc, (xsp + 26)
 	lds wa, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ld iz, hl
 	ld bc, (xsp + 26)
 	ldw wa, 0x60
-	call 0x36A4F
+	call DSP_DispatchData
 	ld iz, hl
 
 DSP_WriteLUT_MainLoop_FirstEntry:
@@ -46124,7 +46124,7 @@ DSP_WriteLUT_MainLoop_FirstEntry:
 	ld iz, hl
 	ld bc, (xsp + 26)
 	lds wa, 3
-	call 0x36A2E
+	call DSP_DispatchCommand
 	incm 1, (xsp + 4)
 	ld wa, (xsp + 2)
 	srl wa, 2
@@ -46151,17 +46151,17 @@ DSP_WriteOscParam:
 	jrl z, DSP_WriteOscParam_UseCmd30
 	ld bc, iz
 	ldw wa, 0x8
-	call 0x36A4F
+	call DSP_DispatchData
 	ld bc, iz
 	lds wa, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ld wa, (xsp + 12)
 	add wa, (xsp + 6)
 	srl wa, 4
 	and wa, 0xF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld wa, (xsp + 12)
 	add wa, (xsp + 6)
 	sll wa, 4
@@ -46169,39 +46169,39 @@ DSP_WriteOscParam:
 	inc 8, wa
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld bc, iz
 	ldw wa, 0x21
-	call 0x36A4F
+	call DSP_DispatchData
 	ld bc, iz
 	ldw wa, 0xA
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
 	sra xwa, 0
 	and xwa, 0x7F
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 9
 	and xwa, 0xFF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
 	and xwa, 0xFF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sla xwa, 7
 	and xwa, 0x80
 	add xwa, 0x26
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	jr DSP_WriteOscParam_Return
 
 DSP_WriteOscParam_UseCmd30:
@@ -46222,33 +46222,33 @@ DSP_WriteCoeffData_5B_Direct:
 	ld xiz, xwa
 	ld bc, (xsp + 4)
 	ldw wa, 0xA
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, xiz
 	sra xwa, 1
 	sra xwa, 0
 	and xwa, 0x7F
 	extz wa
 	ld bc, (xsp + 4)
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, xiz
 	sra xwa, 9
 	and xwa, 0xFF
 	extz wa
 	ld bc, (xsp + 4)
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, xiz
 	sra xwa, 1
 	and xwa, 0xFF
 	extz wa
 	ld bc, (xsp + 4)
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, xiz
 	sla xwa, 7
 	and xwa, 0x80
 	add xwa, 0x26
 	extz wa
 	ld bc, (xsp + 4)
-	call 0x36A4F
+	call DSP_DispatchData
 	pop xiz
 	inc 2, xsp
 	ret
@@ -46261,17 +46261,17 @@ DSP_WriteOscParam_Offset:
 	ld (xsp + 6), wa
 	ld bc, iz
 	ldw wa, 0x8
-	call 0x36A4F
+	call DSP_DispatchData
 	ld bc, iz
 	lds wa, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ld wa, (xsp + 16)
 	add wa, (xsp + 6)
 	srl wa, 4
 	and wa, 0xF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld wa, (xsp + 16)
 	add wa, (xsp + 6)
 	sll wa, 4
@@ -46279,41 +46279,41 @@ DSP_WriteOscParam_Offset:
 	inc 8, wa
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld bc, iz
 	ldw wa, 0x25
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 12)
 	add (xsp + 2), xwa
 	ld bc, iz
 	ldw wa, 0xA
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
 	sra xwa, 0
 	and xwa, 0x7F
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 9
 	and xwa, 0xFF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
 	and xwa, 0xFF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sla xwa, 7
 	and xwa, 0x80
 	add xwa, 0x4C
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	popw iz
 	inc 6, xsp
 	retd 0x6
@@ -46339,27 +46339,27 @@ DSP_WriteOscParam_Offset:
 	ld (xsp + 2), wa
 	ld bc, iz
 	lds wa, 1
-	call 0x36A2E
+	call DSP_DispatchCommand
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 2)
 	incm 1, (xsp + 2)
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	cpw (xsp + 18), 0x63
 	jr z, DSP_AlgoSelect_TypeEq63
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 16)
 	add wa, (xsp + 8)
@@ -46367,7 +46367,7 @@ DSP_WriteOscParam_Offset:
 	and wa, 0xF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 16)
 	add wa, (xsp + 8)
@@ -46375,34 +46375,34 @@ DSP_WriteOscParam_Offset:
 	and wa, 0xF0
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	jr DSP_AlgoSelect_WriteHeader
 
 DSP_AlgoSelect_TypeEq63:
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	ldw wa, 0x20
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 
 DSP_AlgoSelect_WriteHeader:
@@ -46410,23 +46410,23 @@ DSP_AlgoSelect_WriteHeader:
 	jr nz, DSP_AlgoSelect_WriteHeaderNonZero
 	ld bc, iz
 	ldw wa, 0x8
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	ldw wa, 0x80
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	ldw wa, 0xB4
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 7
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	jr DSP_AlgoSelect_HeaderReturn
 
@@ -46437,28 +46437,28 @@ DSP_AlgoSelect_WriteHeaderNonZero:
 	add wa, 0xC
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 2)
 	srl wa, 7
 	and wa, 0x1
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 2)
 	add wa, wa
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 4
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 7
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 
 DSP_AlgoSelect_HeaderReturn:
@@ -46488,25 +46488,25 @@ DSP_AlgoSelect_HeaderReturn:
 	ld (xsp + 2), wa
 	ld bc, iz
 	lds wa, 1
-	call 0x36A2E
+	call DSP_DispatchCommand
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 2)
 	incm 1, (xsp + 2)
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	ldw wa, 0x8
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 18)
 	add wa, (xsp + 8)
@@ -46514,7 +46514,7 @@ DSP_AlgoSelect_HeaderReturn:
 	and wa, 0xF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 16)
 	add wa, (xsp + 8)
@@ -46523,33 +46523,33 @@ DSP_AlgoSelect_HeaderReturn:
 	inc 8, wa
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	ldw wa, 0x21
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	cpw (xsp + 6), 0x0
 	jr nz, DSP_OscAlgoSelect_WriteHeaderNonZero
 	ld bc, iz
 	ldw wa, 0x8
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	ldw wa, 0x80
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	ldw wa, 0xB4
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	ldw wa, 0x8
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	jr DSP_OscAlgoSelect_Return
 
@@ -46560,28 +46560,28 @@ DSP_OscAlgoSelect_WriteHeaderNonZero:
 	add wa, 0xC
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 2)
 	srl wa, 7
 	and wa, 0x1
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 2)
 	add wa, wa
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 4
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	ldw wa, 0x8
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 
 DSP_OscAlgoSelect_Return:
@@ -46619,23 +46619,23 @@ DSP_TuneOffset_Increment:
 DSP_TuneOffset_WriteSequence:
 	ld bc, iz
 	lds wa, 1
-	call 0x36A2E
+	call DSP_DispatchCommand
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	ldw wa, 0x60
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 2)
 	srl wa, 4
@@ -46643,22 +46643,22 @@ DSP_TuneOffset_WriteSequence:
 	add wa, 0x10
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld wa, (xsp + 2)
 	sll wa, 4
 	and wa, 0xF0
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 0
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	ldw wa, 0xA
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld xwa, (xsp + 6)
 	sra xwa, 1
@@ -46666,21 +46666,21 @@ DSP_TuneOffset_WriteSequence:
 	and xwa, 0x7F
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld xwa, (xsp + 6)
 	sra xwa, 9
 	and xwa, 0xFF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld xwa, (xsp + 6)
 	sra xwa, 1
 	and xwa, 0xFF
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld xwa, (xsp + 6)
 	sla xwa, 7
@@ -46688,11 +46688,11 @@ DSP_TuneOffset_WriteSequence:
 	add xwa, 0x15
 	extz wa
 	ld bc, iz
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 4), hl
 	ld bc, iz
 	lds wa, 3
-	call 0x36A2E
+	call DSP_DispatchCommand
 	ld (xsp + 4), hl
 	ld hl, (xsp + 4)
 	popw iz
@@ -48211,7 +48211,7 @@ DSP_ParamEQ_Curve_FP:
 	lda xwa, (xsp + 64)
 	lda_24 xbc, 0x012e2f
 	lds de, 1
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, DSP_ParamEQ_Range1_NonzeroCoeff
 	lda xbc, (xsp + 72)
@@ -49461,7 +49461,7 @@ DSP_BiquadCoeff_Algo0_Assembly:
 	st_dri3b W, 0xFD, 0x9E, 0x00
 	lda_24 xbc, 0x012f9b
 	lds de, 0
-	call 0x3D306
+	call ToneGen_Compare_Voice_32
 	cps hl, 0
 	jr nz, DSP_BiquadCoeff_Algo0_Fixup
 	ld xwa, 0x3F800000
@@ -50929,45 +50929,45 @@ DSP_MixerCoeff_Compute:
 	call FP_SP_Decode_ReadSign
 	ldw wa, 0x30
 	lds bc, 1
-	call 0x36A2E
+	call DSP_DispatchCommand
 	lds wa, 0
 	lds bc, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ldw wa, 0xD0
 	lds bc, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 8)
 	srl xwa, 8
 	srl xwa, 0
 	lds bc, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 8)
 	srl xwa, 0
 	lds bc, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	call DSP2_SPI_BusIdle
-	call 0x3C253
+	call DSP_Bytecode_NotifyStateChange
 	ldw wa, 0x30
 	lds bc, 1
-	call 0x36A2E
+	call DSP_DispatchCommand
 	lds wa, 0
 	lds bc, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ldw wa, 0xD3
 	lds bc, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 16)
 	srl xwa, 9
 	srl xwa, 0
 	lds bc, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ld xwa, (xsp + 16)
 	srl xwa, 1
 	srl xwa, 0
 	lds bc, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	call DSP2_SPI_BusIdle
-	call 0x3C253
+	call DSP_Bytecode_NotifyStateChange
 	pop xiz
 	lda xsp, (xsp + 20)
 	ret
@@ -50984,7 +50984,7 @@ DSP_WriteEFFConfig:
 	ld bc, wa
 	lda_24 xde, 0x014777
 	ld wa, hl
-	call 0x3C259
+	call DSP_BytecodeInterpreter_Init
 	ret
 
 DSP_WriteGlobalConfig:
@@ -50992,7 +50992,7 @@ DSP_WriteGlobalConfig:
 	push xbc
 	ld bc, de
 	lda_24 xde, 0x0147b3
-	call 0x3C259
+	call DSP_BytecodeInterpreter_Init
 	ret
 
 DSP_WriteParameter:
@@ -51025,7 +51025,7 @@ DSP_WriteParam_EFFCase:
 	push xbc
 	lda_24 xbc, 0x014777
 	ld xde, xhl
-	call 0x3C9E6
+	call DSP_ParameterWriteEngine
 	jr DSP_WriteParam_Return
 
 DSP_WriteParam_EFFCase0xA:
@@ -51045,7 +51045,7 @@ DSP_WriteParam_EFFCase0xA:
 	push xbc
 	lda_24 xbc, 0x014777
 	ld xde, xhl
-	call 0x3C9E6
+	call DSP_ParameterWriteEngine
 	jr DSP_WriteParam_Return
 
 DSP_WriteParam_Generic:
@@ -51074,7 +51074,7 @@ DSP_WriteParam_Generic:
 	push xbc
 	lda_24 xbc, 0x014777
 	ld xde, xhl
-	call 0x3C9E6
+	call DSP_ParameterWriteEngine
 
 DSP_WriteParam_Return:
 	retd 0x4
@@ -51388,7 +51388,7 @@ DSP_Bytecode_Op0E_SendCommand:
 	ld a, c
 	extz wa
 	ld bc, (xsp + 20)
-	call 0x36A2E
+	call DSP_DispatchCommand
 	ldfr_werp HL, 0xFA
 	ldw (xsp + 4), 0x1
 	ld wa, (xsp + 6)
@@ -51403,7 +51403,7 @@ DSP_Bytecode_Op0E_DataLoop:
 	ld a, c
 	extz wa
 	ld bc, (xsp + 20)
-	call 0x36A4F
+	call DSP_DispatchData
 	ldfr_werp HL, 0xFA
 	incm 1, (xsp + 4)
 	ld wa, (xsp + 6)
@@ -51460,15 +51460,15 @@ DSP_ParamLoop_Iterate:
 	jr nz, DSP_ParamLoop_CallTranslator
 	ld bc, (xsp + 4)
 	lds wa, 1
-	call 0x36A2E
+	call DSP_DispatchCommand
 	ld (xsp + 10), hl
 	ld bc, (xsp + 4)
 	lds wa, 1
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 10), hl
 	ld bc, (xsp + 4)
 	ldw wa, 0x60
-	call 0x36A4F
+	call DSP_DispatchData
 	ld (xsp + 10), hl
 
 DSP_ParamLoop_CallTranslator:
@@ -51497,7 +51497,7 @@ DSP_ParamLoop_PostCall:
 	jr nz, DSP_ParamLoop_SendEndCmd
 	ld bc, (xsp + 4)
 	lds wa, 3
-	call 0x36A2E
+	call DSP_DispatchCommand
 	ld (xsp + 10), hl
 
 DSP_ParamLoop_SendEndCmd:
@@ -52109,7 +52109,7 @@ ToneGen_Note_Loop:	; 03D02Eh
 	ld xde, 0x4A42
 	lds wa, 2
 	lds bc, 3
-	call 0x20C6B	; Send via DMA
+	call InterCPU_DMA_Send	; Send via DMA
 	jr ToneGen_Note_Continue
 
 ToneGen_Note_Off_Slot:	; 03D06Dh
@@ -52136,7 +52136,7 @@ ToneGen_Note_Off_Slot:	; 03D06Dh
 	ld xde, 0x4A42
 	lds wa, 2
 	lds bc, 3
-	call 0x20C6B
+	call InterCPU_DMA_Send
 
 ToneGen_Note_Continue:	; 03D0B6h
 	lda xwa, (xsp)
@@ -52730,13 +52730,13 @@ VoiceFloat_CompareAndConvert:
 	lda xwa, (xsp + 74)
 	lda_24 xbc, 0x01f646
 	lds de, 1
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoiceFloat_CompareAndConvert_Invalid
 	lda xwa, (xsp + 74)
 	lda_24 xbc, 0x01f64e
 	lds de, 3
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoiceFloat_CompareAndConvert_Invalid
 	lda xbc, (xsp + 74)
@@ -52760,7 +52760,7 @@ VoiceFloat_CompareAndConvert_AfterRange:
 	lda xwa, (xsp + 18)
 	lda xbc, (xsp + 74)
 	lds de, 4
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoiceFloat_CompareAndConvert_AltPath
 	sti16_24 0x040c22, 0x0021
@@ -52793,7 +52793,7 @@ VoiceFloat_CompareAndConvert_AltPath2:
 	lda xwa, (xsp + 18)
 	lda xbc, (xsp + 74)
 	lds de, 5
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jrl nz, VoiceFloat_ConvergenceLoop
 	ld xwa, (xsp + 54)
@@ -53229,7 +53229,7 @@ VoiceFloat_BlendAndMerge_InRange:
 	lda xwa, (xsp + 100)
 	lda_24 xbc, 0x01f696
 	lds de, 1
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoiceFloat_BlendAndMerge_Phase2
 	lda xwa, (xsp + 116)
@@ -53261,7 +53261,7 @@ VoiceFloat_BlendAndMerge_Phase3:
 	lda xwa, (xsp + 92)
 	st_dri3b A, 0xFD, 0x94, 0x00
 	lds de, 4
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoiceFloat_BlendAndMerge_Phase4
 	lda xwa, (xsp + 116)
@@ -53324,7 +53324,7 @@ VoiceFloat_BlendAndMerge_Phase4:
 	lda_24 xbc, 0x00f3a6
 	lda xwa, (xsp + 76)
 	lds de, 0
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jrl nz, VoiceFloat_BlendAndMerge_FinalCheck
 	lda xde, (xsp + 124)
@@ -54790,7 +54790,7 @@ VoicePitch_SlideEngine_NonZero:
 	lda xwa, (xsp + 58)
 	lda_24 xbc, 0x01f6c6
 	lds de, 0
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoicePitch_SlideEngine_LessPath
 	sti16_24 0x040c22, 0x0022
@@ -54803,7 +54803,7 @@ VoicePitch_SlideEngine_LessPath:
 	lda xwa, (xsp + 58)
 	lda_24 xbc, 0x01f6ce
 	lds de, 2
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoicePitch_SlideEngine_StartIter
 	ld xwa, (xsp + 54)
@@ -54839,7 +54839,7 @@ VoicePitch_SlideEngine_IterLoop:
 	lda xwa, (xsp + 26)
 	lda xbc, (xsp + 34)
 	lds de, 5
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr z, VoicePitch_SlideEngine_Done
 	inc 1, iz
@@ -54946,7 +54946,7 @@ VoiceAmp_ConvergeEngine_IterLoop:
 	lda xwa, (xsp + 80)
 	lda xbc, (xsp + 88)
 	lds de, 5
-	call 0x3D2AC
+	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoiceAmp_ConvergeEngine_IterLoop
 	lda_24 xiz, 0x00f3d2
