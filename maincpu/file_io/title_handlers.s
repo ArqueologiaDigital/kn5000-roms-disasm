@@ -96,11 +96,11 @@ FmmUtilityTitleFunc:
 	ld xwa, 0x7B0013
 	ld xbc, 0x1E50005
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ldmm8 32604, 36151
 	cpdi16 34048, 0
 	jr ge, FmmUtility_DispatchState
-	call 0xF89520
+	call GetDiskSizeInfo
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
@@ -115,10 +115,10 @@ FmmUtility_DispatchState:
 	jr z, FmmUtility_HandleCancel
 	cpdi16 34050, 0
 	jr ge, FmmUtility_ScanFormat
-	call 0xF8987D
+	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	call LABEL_F8958D
-	call 0xF8953B
+	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
 FmmUtility_ScanFormat:
@@ -126,7 +126,7 @@ FmmUtility_ScanFormat:
 	jrl nz, FmmUtility_ContinueWait
 	cpdi16 34052, 0
 	jr ge, FmmUtility_CheckCapacity
-	call 0xF89C78
+	call GetFileCountEncoded
 	stda16 34052, xhl
 	calr SignalProgressUpdate
 
@@ -138,7 +138,7 @@ FmmUtility_CheckCapacity:
 	ld xwa, 0x7B0013
 	ld xbc, 0x1E50006
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ldw wa, 0x7C
 	jr FmmUtility_CallHandler
 
@@ -146,18 +146,18 @@ FmmUtility_HandleCancel:
 	ld xwa, 0x7B0013
 	ld xbc, 0x1E50006
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	ldda8 a, 32604
 	extz wa
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	stdi8 32578, 0
 	ldw wa, 0xEE
 	jr FmmUtility_ShowStatus
@@ -166,11 +166,11 @@ FmmUtility_HandleError:
 	ld xwa, 0x7B0013
 	ld xbc, 0x1E50006
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ldw wa, 0x7D
 
 FmmUtility_CallHandler:
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	jr FmmUtility_Return
 
 FmmUtility_HandleSuccess:
@@ -178,18 +178,18 @@ FmmUtility_HandleSuccess:
 	ld xwa, 0x7B0013
 	ld xbc, 0x1E50006
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	ldda8 a, 32604
 	extz wa
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
@@ -201,11 +201,11 @@ FmmUtility_ContinueWait:
 	ld xwa, 0x7B0013
 	ld xbc, 0x1E50006
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	jr FmmUtility_Return
 
 FmmUtility_HandleAbort:
@@ -228,11 +228,11 @@ FmmSmfUtilityTitleFunc:
 	ld xwa, 0x7B002A
 	ld xbc, 0x1E50005
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ldmm8 32606, 36151
 	cpdi16 34048, 0
 	jr ge, FmmSmfUtility_DispatchState
-	call 0xF89520
+	call GetDiskSizeInfo
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
@@ -247,10 +247,10 @@ FmmSmfUtility_DispatchState:
 	jr z, FmmSmfUtility_HandleCancel
 	cpdi16 34052, 0
 	jr ge, FmmSmfUtility_ScanFormat
-	call 0xF89C78
+	call GetFileCountEncoded
 	stda16 34052, xhl
 	call LABEL_F8958D
-	call 0xF8953B
+	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
 FmmSmfUtility_ScanFormat:
@@ -258,7 +258,7 @@ FmmSmfUtility_ScanFormat:
 	jrl nz, FmmSmfUtility_ContinueWait
 	cpdi16 34050, 0
 	jr ge, FmmSmfUtility_CheckCapacity
-	call 0xF8987D
+	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 
@@ -270,7 +270,7 @@ FmmSmfUtility_CheckCapacity:
 	ld xwa, 0x7B002A
 	ld xbc, 0x1E50006
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ldw wa, 0x7B
 	jr FmmSmfUtility_CallHandler
 
@@ -278,18 +278,18 @@ FmmSmfUtility_HandleCancel:
 	ld xwa, 0x7B002A
 	ld xbc, 0x1E50006
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	ldda8 a, 32606
 	extz wa
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	stdi8 32578, 0
 	ldw wa, 0xEE
 	jr FmmSmfUtility_ShowStatus
@@ -298,11 +298,11 @@ FmmSmfUtility_HandleError:
 	ld xwa, 0x7B002A
 	ld xbc, 0x1E50006
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ldw wa, 0x7D
 
 FmmSmfUtility_CallHandler:
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	jr FmmSmfUtility_Return
 
 FmmSmfUtility_HandleSuccess:
@@ -310,18 +310,18 @@ FmmSmfUtility_HandleSuccess:
 	ld xwa, 0x7B002A
 	ld xbc, 0x1E50006
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	ldda8 a, 32606
 	extz wa
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
@@ -333,11 +333,11 @@ FmmSmfUtility_ContinueWait:
 	ld xwa, 0x7B002A
 	ld xbc, 0x1E50006
 	lds32 xde, 0
-	call 0xFA9E07
+	call ApDeliveryEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	jr FmmSmfUtility_Return
 
 FmmSmfUtility_HandleAbort:

@@ -69,7 +69,7 @@ Boot_CallInitHandlers__handler_loop:
 	ld_sril3 xbc, 0x07, 0xE8, 0xE4
 
 	; Call indirect call helper (address differs between ROMs)
-	call 0xEF183D
+	call INDIRECT_CALL_HELPER
 
 	; INC 1, QIZH
 	inc_berp 0xfb, 1

@@ -35,12 +35,12 @@ ExcSendFunc:
 	ld xwa, 0x570003
 	ld xbc, 0x1E00090
 	lds32 xde, 0
-	call 0xFA9660
+	call SendEvent
 	exts xhl
 	ld xwa, 0x1430001
 	ld xbc, 0x1E30001
 	ld xde, xhl
-	call 0xFA4A63
+	call MainFuncCall
 
 ExcSendFunc_InvalidParam_Exit:
 	lds32 xhl, 0

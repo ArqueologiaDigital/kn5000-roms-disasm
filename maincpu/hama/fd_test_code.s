@@ -247,7 +247,7 @@ FDListDirectory:
 	lds wa, 0
 	lda_24 xwa, 0xe1ff1a
 	lda xbc, (xsp + 4)
-	call 0xF5298A
+	call _findfirst
 	ld xiz, xhl
 	ld xwa, xiz
 	cp xwa, 0xFFFFFFFF
@@ -260,7 +260,7 @@ FDListDir_LogEntry:
 	calr FDTest_PrintDiag
 	ld xwa, xiz
 	lda xbc, (xsp + 4)
-	call 0xF52AE8
+	call _findnext
 	cp hl, 0xFFFF
 	jr z, FDListDir_CloseDir
 
@@ -269,13 +269,13 @@ FDListDir_NextEntry:
 	calr FDTest_PrintDiag
 	ld xwa, xiz
 	lda xbc, (xsp + 4)
-	call 0xF52AE8
+	call _findnext
 	cp hl, 0xFFFF
 	jr nz, FDListDir_NextEntry
 
 FDListDir_CloseDir:
 	ld xwa, xiz
-	call 0xF52AAA
+	call _findclose
 	lds hl, 0
 
 FDListDir_Return:
@@ -323,13 +323,13 @@ FDTestDlg_FormatDisplay:
 	ld (xsp + 2), de
 	lda_24 xwa, 0xe1ff1e
 	ld (xsp + 4), xwa
-	call 0xFA44D0
+	call GetFocusObject
 	lda xwa, (xsp)
 	ld xbc, xwa
 	ld xwa, xhl
 	ld xde, xbc
 	ld xbc, 0x1E0008C
-	call 0xFA9660
+	call SendEvent
 	lds32 xhl, 0
 	jr FDTestDlg_Return
 
@@ -354,11 +354,11 @@ HamaListProc:
 	cp xde, 0x1E00086
 	jr z, HamaList_HandleSelect
 	ld xde, xiz
-	call 0xFA4409
+	call InheritedProc
 	jr HamaList_Return
 
 HamaList_HandleSelect:
-	call 0xFA6266
+	call GetViewInstance
 	ld xwa, xiz
 	push xwa
 	ld xwa, (xhl + 42)

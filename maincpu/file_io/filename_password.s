@@ -258,7 +258,7 @@ FmmFileNameFunc:
 	cp xwa, 0x1E50004
 	jrl nz, FileName_Return
 	stda32 32626, xbc
-	call 0xF895EF
+	call GetCurrentFileIndex
 	stda16 32634, xhl
 	cps hl, 0
 	jr lt, FileName_ListSelect_Negative
@@ -275,7 +275,7 @@ FileName_ListSelect_Negative:
 	lds32 xde, 0
 
 FileName_ListSelect_Forward:
-	call 0xFA9D58
+	call ApPostEvent
 	lds32 xwa, 0
 	stda32 32630, xwa
 	jrl FileName_Return
@@ -314,7 +314,7 @@ FileName_DrawItemLoop:
 	add xde, xbc
 	ldda32 xwa, 32626
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	incm 1, (xsp + 6)
 	cpw (xsp + 6), 0x14
 	jr lt, FileName_DrawItemLoop
@@ -367,7 +367,7 @@ FileName_ScrollApply:
 FileName_OpSave:
 	cp xiz, 0x3
 	jrl nz, FileName_OpLoad
-	call 0xF8943E
+	call CheckFileSystemStatus
 	cps hl, 0
 	jrl z, FileName_OpLoad
 	call FileIO_WriteRecordName_Loop
@@ -376,7 +376,7 @@ FileName_OpSave:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	ldda16 xwa, 32634
 	extz wa
 	calr LABEL_F8B337
@@ -391,11 +391,11 @@ FileName_OpSave:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	cpdi16 61854, 0
 	jr z, FileName_OpSave_ShowCode1
 	lds wa, 2
@@ -423,7 +423,7 @@ FileName_OpSave_CallHandler:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0xEE
 	jrl FileName_CallStatusDisplay
 
@@ -443,7 +443,7 @@ FileName_OpLoad:
 	jrl FileName_OpDispatch
 
 FileName_OpLoad_NoPwd:
-	call 0xF8943E
+	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, FileName_OpLoad_Execute
 	cpi8_24 0x0340ea, 0x00
@@ -451,7 +451,7 @@ FileName_OpLoad_NoPwd:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0x600037
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -461,7 +461,7 @@ FileName_OpLoad_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
 	call LABEL_F87EAD
@@ -470,24 +470,24 @@ FileName_OpLoad_Execute:
 	calr LABEL_F8B48E
 	stda8 32578, l
 	call LABEL_F89568
-	call 0xF8953B
-	call 0xF8987D
+	call GetEncodedFreeSpaceData
+	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0xEE
 	jrl FileName_CallStatusDisplay
 
@@ -497,7 +497,7 @@ FileName_OpFormat:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
 	call LABEL_F87EAD
@@ -506,31 +506,31 @@ FileName_OpFormat:
 	calr LABEL_F8B48E
 	stda8 32578, l
 	call LABEL_F89568
-	call 0xF8953B
-	call 0xF8987D
+	call GetEncodedFreeSpaceData
+	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0xEE
 	jrl FileName_CallStatusDisplay
 
 FileName_OpDelete:
 	cp xiz, 0x5
 	jrl nz, FileName_OpFormatVariant
-	call 0xF8943E
+	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, FileName_OpFormatVariant
 	cpi8_24 0x0340ea, 0x00
@@ -538,20 +538,20 @@ FileName_OpDelete:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0x7B0051
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
 FileName_OpDispatch:
-	call 0xFA9D58
+	call ApPostEvent
 	jrl FileName_GetSelection
 
 FileName_OpDelete_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
 	call ReadSingleFile
@@ -561,13 +561,13 @@ FileName_OpDelete_Execute:
 	stda8 32578, l
 	calr SignalProgressUpdate
 	call LABEL_F89568
-	call 0xF8953B
-	call 0xF8987D
+	call GetEncodedFreeSpaceData
+	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0xEE
 	jrl FileName_CallStatusDisplay
 
@@ -577,7 +577,7 @@ FileName_OpFormatVariant:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
 	call ReadSingleFile
@@ -587,20 +587,20 @@ FileName_OpFormatVariant:
 	stda8 32578, l
 	calr SignalProgressUpdate
 	call LABEL_F89568
-	call 0xF8953B
-	call 0xF8987D
+	call GetEncodedFreeSpaceData
+	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0xEE
 	jrl FileName_CallStatusDisplay
 
 FileName_OpNavigate:
 	cp xiz, 0x6
 	jrl nz, FileName_GetSelection
-	call 0xF8943E
+	call CheckFileSystemStatus
 	cps hl, 0
 	jrl z, FileName_GetSelection
 	ld xbc, (xsp + 8)
@@ -630,7 +630,7 @@ FileName_Navigate_CheckChanged:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
 	ldda16 xwa, 32634
@@ -640,12 +640,12 @@ FileName_Navigate_CheckChanged:
 	calr LABEL_F8B48E
 	stda8 32578, l
 	calr SignalProgressUpdate
-	call 0xF8987D
+	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0xEE
 
 FileName_CallStatusDisplay:
@@ -657,13 +657,13 @@ FileName_GetSelection:
 FileName_UpdateDisplay:
 	cp (xsp + 4), wa
 	jrl z, FileName_Return
-	call 0xF89605
+	call NotifyUIOfSelectionChange
 	stdi8 35320, 4
 	ldda16 xde, 32634
 	exts xde
 	ldda32 xwa, 32626
 	ld xbc, 0x1E50002
-	call 0xFA9D58
+	call ApPostEvent
 	ld de, (xsp + 4)
 	sll de, 5
 	ldada xbc, 34060
@@ -671,7 +671,7 @@ FileName_UpdateDisplay:
 	add xde, xbc
 	ldda32 xwa, 32626
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	ldda16 xde, 32634
 	sll de, 5
 	ldada xbc, 34060
@@ -679,7 +679,7 @@ FileName_UpdateDisplay:
 	add xde, xbc
 	ldda32 xwa, 32626
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	ldw (xsp + 6), 0x0
 
 FileName_UpdateButtons_Loop:
@@ -717,7 +717,7 @@ FileName_CheckCallback:
 	jrl z, FileName_Return
 	cpdi8 36150, 103
 	jr z, FileName_Callback_Simple
-	call 0xF8943E
+	call CheckFileSystemStatus
 	ld iz, hl
 	ldw wa, 0x8
 	call FileIO_CheckRecordValid
@@ -759,7 +759,7 @@ FileName_HandleRegister:
 	stda32 32630, xbc
 	cpdi8 36150, 103
 	jr z, FileName_Register_Simple
-	call 0xF8943E
+	call CheckFileSystemStatus
 	ld iz, hl
 	ldw wa, 0x8
 	call FileIO_CheckRecordValid
@@ -797,7 +797,7 @@ FileName_Register_Simple:
 	ld xde, xhl
 
 FileName_DispatchWidget:
-	call 0xFA9D58
+	call ApPostEvent
 
 FileName_Return:
 	lds32 xhl, 0

@@ -109,7 +109,7 @@ IntTx0_FlagBit2Branch:
 	jr IntTx0_CheckQueueEmpty
 
 IntTx0_DequeueAndSend:
-	call 0xEF280E
+	call SeqAlt1_ReadByte
 	cp hl, 0xFFFF
 	jr z, IntTx0_CheckQueueEmpty
 	stda8 208, l
@@ -719,10 +719,10 @@ MIDI_QUEUE_EVENT_TO_SEQUENCER:
 	jr c, QueueToSeq_OverflowFlag
 	ld a, d
 	pushw wa
-	call 0xEF276D
+	call SeqMain_WriteByte
 	inc 2, xsp
 	pushw de
-	call 0xEF276D
+	call SeqMain_WriteByte
 	inc 2, xsp
 	ret
 
@@ -758,14 +758,14 @@ ChanDisp_EnqueueThreeBytes:
 	jr c, ChanDisp_QueueOverflowSet
 	ld a, d
 	pushw wa
-	call 0xEF276D
+	call SeqMain_WriteByte
 	inc 2, xsp
 	ld a, c
 	pushw wa
-	call 0xEF276D
+	call SeqMain_WriteByte
 	inc 2, xsp
 	pushw de
-	call 0xEF276D
+	call SeqMain_WriteByte
 	inc 2, xsp
 	anddi8 1063, 189
 
@@ -860,7 +860,7 @@ SC0Init_Entry:
 	ret
 
 SC0Init_StandardBaudTable:
-	call 0xEF0865
+	call Get_Region_Code
 	cps l, 4
 	jr z, SC0Init_AlternateBaudTable
 	stdi16 47060, 31250

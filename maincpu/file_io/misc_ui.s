@@ -86,7 +86,7 @@ SetupOkFunc:
 	jr nz, SetupOk_Return
 	ld xwa, 0x1450030
 	ld xbc, 0x1E5000B
-	call 0xFA4A63
+	call MainFuncCall
 
 SetupOk_Return:
 	lds32 xhl, 0
@@ -98,7 +98,7 @@ SetupExitFunc:
 	cp xbc, 0x1C00002
 	jr nz, SetupExit_Return
 	ld xde, xiz
-	call 0xFA4409
+	call InheritedProc
 	or xiz, xiz
 	jr nz, SetupExit_Return
 	lds wa, 6
@@ -108,7 +108,7 @@ SetupExitFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9660
+	call SendEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
@@ -121,7 +121,7 @@ SetupExitFunc:
 	ld xwa, 0x1450030
 	ld xbc, 0x1E5000C
 	ld xde, xiz
-	call 0xFA4A63
+	call MainFuncCall
 
 SetupExit_Return:
 	lds32 xhl, 0
@@ -141,11 +141,11 @@ TechnicsFileNaming:
 	jr z, TechnicsFileNaming_Validate
 	cp xiz, 0x1E0003A
 	jr nz, TechnicsFileNaming_DefaultReturn
-	call 0xFA1FC7
+	call GetNamingWindowID
 	ld xwa, 0x145000E
 	ld xbc, xiz
 	ld xde, xhl
-	call 0xFA4A63
+	call MainFuncCall
 	ld xhl, (xsp + 4)
 	jr TechnicsFileNaming_Return
 
@@ -158,19 +158,19 @@ TechnicsFileNaming_Cancel:
 	jr TechnicsFileNaming_Return
 
 TechnicsFileNaming_HandleOk:
-	call 0xFA1FC7
+	call GetNamingWindowID
 	ld xwa, xhl
 	ld xbc, 0x1E0003A
 	ld xde, 0x2742C
-	call 0xFA9660
+	call SendEvent
 	ld xwa, 0x145000E
 	ld xbc, 0x1E00086
 	ld xde, 0x2742C
-	call 0xFA4A63
+	call MainFuncCall
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00067
-	call 0xFA9660
+	call SendEvent
 
 TechnicsFileNaming_DefaultReturn:
 	lds32 xhl, 0
@@ -193,11 +193,11 @@ TechnicsFileRename:
 	jr z, TechnicsFileRename_Validate
 	cp xiz, 0x1E0003A
 	jr nz, TechnicsFileRename_DefaultReturn
-	call 0xFA1FC7
+	call GetNamingWindowID
 	ld xwa, 0x1450022
 	ld xbc, xiz
 	ld xde, xhl
-	call 0xFA4A63
+	call MainFuncCall
 	ld xhl, (xsp + 4)
 	jr TechnicsFileRename_Return
 
@@ -210,15 +210,15 @@ TechnicsFileRename_Cancel:
 	jr TechnicsFileRename_Return
 
 TechnicsFileRename_HandleOk:
-	call 0xFA1FC7
+	call GetNamingWindowID
 	ld xwa, xhl
 	ld xbc, 0x1E0003A
 	ld xde, 0x2743E
-	call 0xFA9660
+	call SendEvent
 	ld xwa, 0x1450022
 	ld xbc, 0x1E00086
 	ld xde, 0x2743E
-	call 0xFA4A63
+	call MainFuncCall
 	ld xwa, 0x7B0000
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -245,11 +245,11 @@ SmfFileNaming:
 	jr z, SmfFileNaming_Validate
 	cp xiz, 0x1E0003A
 	jr nz, SmfFileNaming_DefaultReturn
-	call 0xFA1FC7
+	call GetNamingWindowID
 	ld xwa, 0x145002F
 	ld xbc, xiz
 	ld xde, xhl
-	call 0xFA4A63
+	call MainFuncCall
 	ld xhl, (xsp + 4)
 	jr SmfFileNaming_Return
 
@@ -262,19 +262,19 @@ SmfFileNaming_Cancel:
 	jr SmfFileNaming_Return
 
 SmfFileNaming_HandleOk:
-	call 0xFA1FC7
+	call GetNamingWindowID
 	ld xwa, xhl
 	ld xbc, 0x1E0003A
 	ld xde, 0x27450
-	call 0xFA9660
+	call SendEvent
 	ld xwa, 0x145002F
 	ld xbc, 0x1E00086
 	ld xde, 0x27450
-	call 0xFA4A63
+	call MainFuncCall
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A0006B
-	call 0xFA9660
+	call SendEvent
 
 SmfFileNaming_DefaultReturn:
 	lds32 xhl, 0
@@ -297,11 +297,11 @@ SmfFileRename:
 	jr z, SmfFileRename_Validate
 	cp xiz, 0x1E0003A
 	jr nz, SmfFileRename_DefaultReturn
-	call 0xFA1FC7
+	call GetNamingWindowID
 	ld xwa, 0x1450023
 	ld xbc, xiz
 	ld xde, xhl
-	call 0xFA4A63
+	call MainFuncCall
 	ld xhl, (xsp + 4)
 	jr SmfFileRename_Return
 
@@ -314,15 +314,15 @@ SmfFileRename_Cancel:
 	jr SmfFileRename_Return
 
 SmfFileRename_HandleOk:
-	call 0xFA1FC7
+	call GetNamingWindowID
 	ld xwa, xhl
 	ld xbc, 0x1E0003A
 	ld xde, 0x27462
-	call 0xFA9660
+	call SendEvent
 	ld xwa, 0x1450023
 	ld xbc, 0x1E00086
 	ld xde, 0x27462
-	call 0xFA4A63
+	call MainFuncCall
 	ld xwa, 0x7B0019
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -349,11 +349,11 @@ FormatDiskNaming:
 	jr z, FormatDiskNaming_Validate
 	cp xiz, 0x1E0003A
 	jr nz, FormatDiskNaming_DefaultReturn
-	call 0xFA1FC7
+	call GetNamingWindowID
 	ld xwa, 0x145000B
 	ld xbc, xiz
 	ld xde, xhl
-	call 0xFA4A63
+	call MainFuncCall
 	ld xhl, (xsp + 4)
 	jr FormatDiskNaming_Return
 
@@ -366,15 +366,15 @@ FormatDiskNaming_Cancel:
 	jr FormatDiskNaming_Return
 
 FormatDiskNaming_HandleOk:
-	call 0xFA1FC7
+	call GetNamingWindowID
 	ld xwa, xhl
 	ld xbc, 0x1E0003A
 	ld xde, 0x27474
-	call 0xFA9660
+	call SendEvent
 	ld xwa, 0x145000B
 	ld xbc, 0x1E00086
 	ld xde, 0x27474
-	call 0xFA4A63
+	call MainFuncCall
 
 FormatDiskNaming_DefaultReturn:
 	lds32 xhl, 0
@@ -476,7 +476,7 @@ WaitingFunc_DrawMessage:
 	ld xwa, (xsp + 68)
 	lda xde, (xsp + 4)
 	ld xbc, 0x1C0000F
-	call 0xFA9660
+	call SendEvent
 
 WaitingFunc_Return:
 	lds32 xhl, 0
@@ -492,7 +492,7 @@ DiskMedleyShowHideFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9660
+	call SendEvent
 
 DiskMedley_Return:
 	lds32 xhl, 0
@@ -528,7 +528,7 @@ PsFileNameBoxProc:
 	cp xwa, 0x1C00001
 	jrl nz, PsFileNameBox_DefaultHandler
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xFA6266
+	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
 	ldw (xwa), 0x1
@@ -537,7 +537,7 @@ PsFileNameBoxProc:
 	ld_sril XDE, (xsp + 0x00aa)
 	ld xwa, (xiz + 34)
 	ld xbc, 0x1E50004
-	call 0xFA4A63
+	call MainFuncCall
 	cpw (xiz + 46), 0x0
 	jr z, PsFileNameBox_Init_Forward
 	cpw (xiz + 40), 0x1
@@ -547,7 +547,7 @@ PsFileNameBoxProc:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00017
 	lds32 xde, 0
-	call 0xF9A579
+	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00018
 	lds32 xde, 0
@@ -557,15 +557,15 @@ PsFileNameBox_Init_HideFirst:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00018
 	lds32 xde, 0
-	call 0xF9A579
+	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00017
 	lds32 xde, 0
 
 PsFileNameBox_Init_Configure:
-	call 0xF9A58A
+	call SetDialDown
 	lds wa, 1
-	call 0xF9A53B
+	call SetDialEnable
 
 PsFileNameBox_Init_Forward:
 	ld_sril XWA, (xsp + 0x00aa)
@@ -577,21 +577,21 @@ PsFileNameBox_HandleShow:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
-	call 0xFA4409
+	call InheritedProc
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xFA6266
+	call GetViewInstance
 	ld (xsp + 14), xhl
 	ld xwa, (xsp + 14)
 	ld xwa, (xwa + 34)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
-	call 0xFA4A63
+	call MainFuncCall
 	ld xwa, (xsp + 14)
 	cpw (xwa + 38), 0x2
 	jr lt, PsFileNameBox_CheckScrollButtons
 	st_dri3b A, 0xFD, 0x92, 0x00
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xF995DD
+	call GetClientBox
 	st_dri3b B, 0xFD, 0x92, 0x00
 	ld bc, (xde + 4)
 	sub bc, (xde)
@@ -620,7 +620,7 @@ PsFileNameBox_DrawItem_Body:
 	ld de, (xwa)
 	ld (xbc), de
 	lds de, 7
-	call 0xFAA98A
+	call DrawLine
 	incm 1, (xsp + 12)
 
 PsFileNameBox_DrawItem_Check:
@@ -640,7 +640,7 @@ PsFileNameBox_CheckScrollButtons:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00017
 	lds32 xde, 0
-	call 0xF9A579
+	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00018
 	lds32 xde, 0
@@ -650,20 +650,20 @@ PsFileNameBox_Scroll_HideDown:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00018
 	lds32 xde, 0
-	call 0xF9A579
+	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
 	ld xbc, 0x1C00017
 	lds32 xde, 0
 
 PsFileNameBox_Scroll_Apply:
-	call 0xF9A58A
+	call SetDialDown
 	lds wa, 1
-	call 0xF9A53B
+	call SetDialEnable
 	jrl PsFileNameBox_ReturnZero
 
 PsFileNameBox_HandleConfirm:
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xFA6266
+	call GetViewInstance
 	ld (xsp + 10), xhl
 	ld xwa, (xsp + 10)
 	ld (xsp + 4), xwa
@@ -673,7 +673,7 @@ PsFileNameBox_HandleConfirm:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
-	call 0xFA4409
+	call InheritedProc
 	ld_sril XWA, (xsp + 0x00a2)
 	or xwa, xwa
 	jrl z, PsFileNameBox_ReturnZero
@@ -686,10 +686,10 @@ PsFileNameBox_HandleConfirm:
 	cpw (xhl), 0x1
 	jr nz, PsFileNameBox_Confirm_MultiItem
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xF995DD
+	call GetClientBox
 	st_dri3b W, 0xFD, 0x92, 0x00
 	st_dri3b A, 0xFD, 0x9E, 0x00
-	call 0xF9979A
+	call GetBoxCenter
 	ld_sril XWA, (xsp + 0x00a2)
 	inc 1, xwa
 	push xwa
@@ -727,7 +727,7 @@ PsFileNameBox_Confirm_Existing:
 	pushw 0x0
 
 PsFileNameBox_Confirm_Execute:
-	call 0xFAD084
+	call DrawStringReverse
 	jrl PsFileNameBox_ReturnZero
 
 PsFileNameBox_Confirm_MultiItem:
@@ -740,7 +740,7 @@ PsFileNameBox_Confirm_MultiItem:
 	cp wa, de
 	jrl ge, PsFileNameBox_ReturnZero
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xF995DD
+	call GetClientBox
 	st_dri3b A, 0xFD, 0x92, 0x00
 	lda xwa, (xbc + 4)
 	ld (xsp + 14), xwa
@@ -827,12 +827,12 @@ PsFileNameBox_Confirm_NewItem:
 	pushm (xhl + 22)
 
 PsFileNameBox_Confirm_Finish:
-	call 0xFACACA
+	call DrawString
 	jrl PsFileNameBox_ReturnZero
 
 PsFileNameBox_HandleListSelect:
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xFA6266
+	call GetViewInstance
 	ld xbc, (xhl + 42)
 	ld_sril XWA, (xsp + 0x00a2)
 	ld (xbc), wa
@@ -840,16 +840,16 @@ PsFileNameBox_HandleListSelect:
 
 PsFileNameBox_HandleScrollEvt:
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xFA6266
+	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 34)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
-	call 0xFA4A63
+	call MainFuncCall
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
-	call 0xFA4409
+	call InheritedProc
 	cpw (xiz + 48), 0x0
 	jrl z, PsFileNameBox_ReturnZero
 	ld_sril XWA, (xsp + 0x00a2)
@@ -869,16 +869,16 @@ PsFileNameBox_ScrollEvt_Down:
 	ld_sril XDE, (xsp + 0x00a2)
 
 PsFileNameBox_ScrollEvt_Send:
-	call 0xF9A5BD
+	call SetAutoInc
 	jr PsFileNameBox_ReturnZero
 
 PsFileNameBox_HandleScrollDone:
 	ld_sril XWA, (xsp + 0x00aa)
 	ld_sril XBC, (xsp + 0x00a6)
 	ld_sril XDE, (xsp + 0x00a2)
-	call 0xFA4409
+	call InheritedProc
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xFA6266
+	call GetViewInstance
 	cpw (xhl + 48), 0x0
 	jr z, PsFileNameBox_ReturnZero
 	ld_sril XWA, (xsp + 0x00a2)
@@ -900,7 +900,7 @@ PsFileNameBox_ScrollDone_PairDown:
 	ld_sril XDE, (xsp + 0x00a2)
 
 PsFileNameBox_ScrollDone_Forward:
-	call 0xFA4A63
+	call MainFuncCall
 
 PsFileNameBox_ReturnZero:
 	lds32 xhl, 0
@@ -908,7 +908,7 @@ PsFileNameBox_ReturnZero:
 
 PsFileNameBox_HandleClose:
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xFA6266
+	call GetViewInstance
 	ld xwa, (xhl + 50)
 	ldw (xwa), 0x0
 	ld_sril XWA, (xsp + 0x00aa)
@@ -918,7 +918,7 @@ PsFileNameBox_HandleClose:
 
 PsFileNameBox_HandleCancelState:
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xFA6266
+	call GetViewInstance
 	ld xbc, (xhl + 50)
 	ld_sril XWA, (xsp + 0x00a2)
 	or xwa, xwa
@@ -937,7 +937,7 @@ PsFileNameBox_CancelState_Forward:
 
 PsFileNameBox_HandleOkState:
 	ld_sril XWA, (xsp + 0x00aa)
-	call 0xFA6266
+	call GetViewInstance
 	ld xbc, (xhl + 54)
 	ld_sril XWA, (xsp + 0x00a2)
 	or xwa, xwa
@@ -960,7 +960,7 @@ PsFileNameBox_DefaultHandler:
 	ld_sril XDE, (xsp + 0x00a2)
 
 PsFileNameBox_DispatchParent:
-	call 0xFA4409
+	call InheritedProc
 
 PsFileNameBox_Return:
 	pop xiz

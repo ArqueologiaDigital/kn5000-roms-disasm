@@ -42,7 +42,7 @@ DemoModeFunc:
 	push xhl
 	push xix
 	push xiz
-	call 0xF8696F
+	call DemoMode_Main_Operation
 	pop xiz
 	pop xix
 	pop xhl
@@ -54,7 +54,7 @@ DemoModeFunc_Initialize:
 	push xhl
 	push xix
 	push xiz
-	call 0xF869E3
+	call DemoMode_Initialize
 	pop xiz
 	pop xix
 	pop xhl
@@ -125,7 +125,7 @@ DemoStyle_DirectionHandler:
 	ldw wa, 0xE3
 
 DemoStyle_PostEventCommon:
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	jr DemoStyleTtlFunc_Exit
 
 DemoStyle_EnterHandler:
@@ -133,7 +133,7 @@ DemoStyle_EnterHandler:
 	push xhl
 	push xix
 	push xiz
-	call 0xF86A47
+	call Demo_SelectionEntryHandler
 	pop xiz
 	pop xix
 	pop xhl
@@ -199,7 +199,7 @@ DemoSound_DirectionHandler:
 	ldw wa, 0xE3
 
 DemoSound_PostEventCommon:
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	jr DemoSoundTtlFunc_Exit
 
 DemoSound_EnterHandler:
@@ -207,7 +207,7 @@ DemoSound_EnterHandler:
 	push xhl
 	push xix
 	push xiz
-	call 0xF86A47
+	call Demo_SelectionEntryHandler
 	pop xiz
 	pop xix
 	pop xhl
@@ -273,7 +273,7 @@ DemoRhythm_DirectionHandler:
 	ldw wa, 0xE2
 
 DemoRhythm_PostEventCommon:
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	jr DemoRhyTtlFunc_Exit
 
 DemoRhythm_EnterHandler:
@@ -281,7 +281,7 @@ DemoRhythm_EnterHandler:
 	push xhl
 	push xix
 	push xiz
-	call 0xF86A47
+	call Demo_SelectionEntryHandler
 	pop xiz
 	pop xix
 	pop xhl

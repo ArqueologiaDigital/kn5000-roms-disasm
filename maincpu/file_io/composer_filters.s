@@ -32,10 +32,10 @@ FmmComposerLoadFunc:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	cpdi16 34048, 0
 	jr ge, CompLoad_DispatchState
-	call 0xF89520
+	call GetDiskSizeInfo
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
@@ -50,17 +50,17 @@ CompLoad_DispatchState:
 	jr z, CompLoad_HandleCancel
 	cpdi16 34050, 0
 	jr ge, CompLoad_ContinueWait
-	call 0xF8987D
+	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	call LABEL_F8958D
-	call 0xF8953B
+	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
 CompLoad_ContinueWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
@@ -70,17 +70,17 @@ CompLoad_HandleCancel:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	stdi8 32578, 0
 	ldw wa, 0xEE
 	jr CompLoad_CallStatusDisplay
@@ -89,9 +89,9 @@ CompLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0x7D
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	jrl CompLoad_Return
 
 CompLoad_HandleSuccess:
@@ -99,17 +99,17 @@ CompLoad_HandleSuccess:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
@@ -123,7 +123,7 @@ CompLoad_HandleAbort:
 
 CompLoad_HandleSelection:
 	stda32 32636, xde
-	call 0xF895EF
+	call GetCurrentFileIndex
 	stda16 32640, xhl
 	cps hl, 0
 	jr lt, CompLoad_Selection_Negative
@@ -185,7 +185,7 @@ CompLoad_DrawItem_Continue:
 	add xde, xbc
 	ldda32 xwa, 32636
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	inc 1, iz
 	cp iz, 0x14
 	jr lt, CompLoad_DrawItemLoop
@@ -235,13 +235,13 @@ CompLoad_StorePosition:
 CompLoad_OpLoad:
 	cp xde, 0x3
 	jrl nz, CompLoad_GetSelection
-	call 0xF8943E
+	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, CompLoad_GetSelection
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	lds iz, 0
 
 CompLoad_HideButtons_Loop:
@@ -264,17 +264,17 @@ CompLoad_HideButtons_Loop:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0xEE
 	call SoundCtrl_SendCommand
 
@@ -284,12 +284,12 @@ CompLoad_GetSelection:
 CompLoad_UpdateDisplay:
 	cp (xsp + 2), wa
 	jr z, CompLoad_Return
-	call 0xF89605
+	call NotifyUIOfSelectionChange
 	ldda16 xde, 32640
 	exts xde
 	ldda32 xwa, 32636
 	ld xbc, 0x1E50002
-	call 0xFA9D58
+	call ApPostEvent
 	ld de, (xsp + 2)
 	sll de, 5
 	ldada xbc, 34060
@@ -297,7 +297,7 @@ CompLoad_UpdateDisplay:
 	add xde, xbc
 	ldda32 xwa, 32636
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	ldda16 xde, 32640
 	sll de, 5
 	ldada xbc, 34060
@@ -307,7 +307,7 @@ CompLoad_UpdateDisplay:
 	ld xbc, 0x1C0000F
 
 CompLoad_DispatchWidget:
-	call 0xFA9D58
+	call ApPostEvent
 
 CompLoad_Return:
 	lds32 xhl, 0
@@ -448,7 +448,7 @@ LoadFilter_DrawLoop:
 	add xde, xbc
 	ldda32 xwa, 32642
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	incm 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, LoadFilter_DrawLoop
@@ -526,14 +526,14 @@ LoadFilter_UpdateDisplay:
 	st_dri3b B, 0x07, 0xE4, 0xE0
 	ldda32 xwa, 32642
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	jrl LoadFilter_Return
 
 LoadFilter_OpLoad:
 	ld xwa, (xsp + 2)
 	cp xwa, 0xA
 	jrl nz, LoadFilter_Return
-	call 0xF8943E
+	call CheckFileSystemStatus
 	cps hl, 0
 	jrl z, LoadFilter_Return
 	call FileIO_WriteRecordName_Loop
@@ -542,8 +542,8 @@ LoadFilter_OpLoad:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
-	call 0xF895EF
+	call ApPostEvent
+	call GetCurrentFileIndex
 	extz hl
 	ld wa, hl
 	calr LABEL_F8B337
@@ -558,11 +558,11 @@ LoadFilter_OpLoad:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	cpdi16 61854, 0
 	jr z, LoadFilter_Load_ShowCode1
 	lds wa, 2
@@ -590,7 +590,7 @@ LoadFilter_Load_CallHandler:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0xEE
 	call SoundCtrl_SendCommand
 
@@ -669,7 +669,7 @@ SaveFilter_DrawLoop:
 	add xde, xbc
 	ldda32 xwa, 32774
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	incm 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_DrawLoop
@@ -784,7 +784,7 @@ SaveFilter_SelectAll_Update:
 	add xde, xbc
 	ldda32 xwa, 32774
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	incm 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_SelectAll_Loop
@@ -816,7 +816,7 @@ SaveFilter_DeselectAll_Loop:
 	add xde, xbc
 	ldda32 xwa, 32774
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	incm 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_DeselectAll_Loop
@@ -839,7 +839,7 @@ SaveFilter_OpSave:
 	jr SaveFilter_DispatchWidget
 
 SaveFilter_Save_NoPwd:
-	call 0xF8943E
+	call CheckFileSystemStatus
 	cps hl, 0
 	jr z, SaveFilter_Save_Execute
 	cpi8_24 0x0340ea, 0x00
@@ -847,20 +847,20 @@ SaveFilter_Save_NoPwd:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C50000
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0x600037
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
 SaveFilter_DispatchWidget:
-	call 0xFA9D58
+	call ApPostEvent
 	jrl SaveFilter_Return
 
 SaveFilter_Save_Execute:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
 	call LABEL_F87EAD
@@ -869,24 +869,24 @@ SaveFilter_Save_Execute:
 	calr LABEL_F8B48E
 	stda8 32578, l
 	call LABEL_F89568
-	call 0xF8953B
-	call 0xF8987D
+	call GetEncodedFreeSpaceData
+	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0xEE
 	jr SaveFilter_CallStatusDisplay
 
@@ -897,7 +897,7 @@ SaveFilter_OpFormat:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
 	call LABEL_F87EAD
@@ -906,24 +906,24 @@ SaveFilter_OpFormat:
 	calr LABEL_F8B48E
 	stda8 32578, l
 	call LABEL_F89568
-	call 0xF8953B
-	call 0xF8987D
+	call GetEncodedFreeSpaceData
+	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0xEE
 
 SaveFilter_CallStatusDisplay:
@@ -956,7 +956,7 @@ SaveFilter_ResetAll_Loop:
 	add xde, xbc
 	ldda32 xwa, 32774
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	incm 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_ResetAll_Loop

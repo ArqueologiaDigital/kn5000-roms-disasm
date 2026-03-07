@@ -34,10 +34,10 @@ FmmWallpaperLoadFunc:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	cpdi16 34048, 0
 	jr ge, WPLoad_DispatchState
-	call 0xF89520
+	call GetDiskSizeInfo
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
@@ -55,14 +55,14 @@ WPLoad_DispatchState:
 	call LABEL_F8B16F
 	stda16 34058, xhl
 	call LABEL_F8958D
-	call 0xF8953B
+	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
 WPLoad_ContinueWait:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
@@ -72,17 +72,17 @@ WPLoad_HandleCancel:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0x48
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	stdi8 32578, 0
 	ldw wa, 0xEE
 	jr WPLoad_CallStatusDisplay
@@ -91,9 +91,9 @@ WPLoad_HandleError:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0x7D
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	jrl WPLoad_Return
 
 WPLoad_HandleSuccess:
@@ -101,17 +101,17 @@ WPLoad_HandleSuccess:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0x48
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
@@ -153,7 +153,7 @@ WPLoad_HandleShow:
 WPLoad_HandleScroll:
 	ld xbc, 0x1C50001
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	ldda16 xhl, 33204
 	ld (xsp + 4), hl
 	ld xwa, (xsp + 6)
@@ -227,7 +227,7 @@ WPLoad_OpLoad:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	call 0xFA9D58
+	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
 	call LoadFromSecondaryPage
@@ -239,17 +239,17 @@ WPLoad_OpLoad:
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0x48
-	call 0xF99490
+	call UI_PostModeChangeEvent
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
-	call 0xFA9D58
+	call ApPostEvent
 	ldw wa, 0xEE
 	call SoundCtrl_SendCommand
 
@@ -268,7 +268,7 @@ WPLoad_UpdateDisplay:
 	exts xde
 	ldda32 xwa, 33200
 	ld xbc, 0x1E50002
-	call 0xFA9D58
+	call ApPostEvent
 	ldda16 xbc, 33204
 	exts xbc
 	divs bc, 0xA
@@ -288,7 +288,7 @@ WPLoad_UpdateDisplay:
 	extz xde
 	add xde, xhl
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	ldda16 xwa, 33204
 	exts xwa
 	divs wa, 0xA
@@ -300,7 +300,7 @@ WPLoad_UpdateDisplay:
 	add xde, xbc
 	ldda32 xwa, 33200
 	ld xbc, 0x1C0000F
-	call 0xFA9D58
+	call ApPostEvent
 	jr WPLoad_SendState
 
 WPLoad_RedrawPage:
@@ -313,7 +313,7 @@ WPLoad_SendState:
 	lds32 xde, 0
 
 WPLoad_DispatchWidget:
-	call 0xFA9D58
+	call ApPostEvent
 
 WPLoad_Return:
 	lds32 xhl, 0
@@ -323,7 +323,7 @@ WPLoad_Return:
 
 WP_ScanAvailability:
 	push xiz
-	call 0xF8943E
+	call CheckFileSystemStatus
 	ldfr_werp HL, 0xFA
 	stdi16 35318, 0
 	lds iz, 0

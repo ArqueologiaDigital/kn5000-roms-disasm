@@ -121,7 +121,7 @@ CmptCnct_DrawDiagramDefault:
 	ldw de, 0x128
 
 CmptCnctBitmapDrawComplete:
-	call 0xFAC3DB
+	call DrawBitmapSPFast
 	ld xhl, xiz
 	jr MdCmptCnct_Epilogue
 

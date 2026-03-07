@@ -175,7 +175,7 @@ TitleFunc_LifecycleTable:
 	ld xbc, xiz
 	lds32 xwa, 0
 	ld xde, 0xffffffff
-	call 0xfaa257
+	call KillApTimer
 	lda_24 xwa, 0xe1fdba
 	calr FDTest_PrintDiag
 	lds wa, 0
@@ -190,7 +190,7 @@ TitleFunc_LifecycleTable:
 	ld xbc, xiz
 	ld xwa, 0x53
 	ld xde, 0xffffffff
-	call 0xfaa135
+	call SetApTimer
 	lds wa, 1
 	jr TitleFunc_Return
 	lda_24 xwa, 0xe1fde0
@@ -223,7 +223,7 @@ ListDir2_Entry:
 	push xiz
 	lda_24 xwa, 0xe1fe1a
 	lda xbc, (xsp + 4)
-	call 0xf5298a
+	call _findfirst
 	ld xiz, xhl
 	cp xiz, 0xffffffff
 	jr nz, ListDir2_LogEntry
@@ -234,7 +234,7 @@ ListDir2_LogEntry:
 	calr FDTest_PrintDiag
 	ld xbc, (xsp + 4)
 	ld xwa, xiz
-	call 0xf52ae8
+	call _findnext
 	cp hl, 0xffff
 	jr z, ListDir2_CloseDir
 ListDir2_NextEntry:
@@ -242,12 +242,12 @@ ListDir2_NextEntry:
 	calr FDTest_PrintDiag
 	ld xbc, (xsp + 4)
 	ld xwa, xiz
-	call 0xf52ae8
+	call _findnext
 	cp hl, 0xffff
 	jr nz, ListDir2_NextEntry
 ListDir2_CloseDir:
 	ld xwa, xiz
-	call 0xf52aaa
+	call _findclose
 	lds hl, 0
 ListDir2_Return:
 	pop xiz
@@ -259,7 +259,7 @@ ListDir2_Return:
 ; then displays updated counts via NAKA widget system (0xFA9D58).
 ; Returns: l = 0xFF if status invalid, otherwise falls through to display
 RunTestCounters_Entry:
-	call 0xf525ec
+	call GetMediaType
 	cps l, 3
 	jr z, RunTestCounters_RunTest
 	cps l, 2
@@ -283,17 +283,17 @@ RunTestCounters_Display:
 	exts xde
 	ld xwa, 0x00fc0001
 	ld xbc, 0x01c0000f
-	call 0xfa9d58
+	call ApPostEvent
 	ld16_24 de, 0x03dd00
 	exts xde
 	ld xwa, 0x00fc0003
 	ld xbc, 0x01c0000f
-	call 0xfa9d58
+	call ApPostEvent
 	ld16_24 de, 0x03dd02
 	exts xde
 	ld xwa, 0x00fc0002
 	ld xbc, 0x01c0000f
-	jp 0xfa9d58
+	jp ApPostEvent
 
 ; CreateAndRunFDOperation — Builds a 16-byte parameter struct on the stack,
 ; calls 0xF97CCA to execute the FD operation, then prints success/failure.
@@ -311,7 +311,7 @@ CreateRunFDOp_Entry:
 	ld (xsp + 12), xwa
 	lda xwa, (xsp)
 	push xwa
-	call 0xf97cca
+	call FDC_CommandEntry
 	inc 4, xsp
 	cps hl, 0
 	jr nz, CreateRunFDOp_Fail
@@ -331,9 +331,9 @@ CreateRunFDOp_Return:
 ; Calls 0xF51E4F with WA=2, then 0xF5289C with string at 0xE1FF42
 RegHamaTitle1_Entry:
 	lds wa, 2
-	call 0xf51e4f
+	call format_FD
 	lda_24 xwa, 0xe1ff42
-	call 0xf5289c
+	call LABEL_F5289C
 	lds hl, 0
 	ret
 
@@ -341,9 +341,9 @@ RegHamaTitle1_Entry:
 ; Calls 0xF51E4F with WA=3, then 0xF5289C with string at 0xE1FF4C
 RegHamaTitle2_Entry:
 	lds wa, 3
-	call 0xf51e4f
+	call format_FD
 	lda_24 xwa, 0xe1ff4c
-	call 0xf5289c
+	call LABEL_F5289C
 	lds hl, 0
 	ret
 
@@ -353,7 +353,7 @@ SendEvent_Entry:
 	ld xde, xwa
 	ld xwa, 0xffffffff
 	ld xbc, 0x01c00025
-	jp 0xfa9660
+	jp SendEvent
 
 ; HamaEventDispatcher — Dispatches events for HAMA subsystem
 ; Handles 0x1C00007 (title lifecycle) and 0x1E00085 (extension event)
@@ -390,7 +390,7 @@ HamaEvtDisp_Return:
 ; extension DRAM (0x200000) if status is 2 or 3
 CheckFDStatusLoad_Entry:
 	push xiz
-	call 0xf525ec
+	call GetMediaType
 	extz hl
 	cps hl, 2
 	jr z, CheckFDStatusLoad_DoLoad
@@ -404,7 +404,7 @@ CheckFDStatusLoad_DoLoad:
 	push xwa
 	pushw 0xe1
 	pushw 0xff84
-	call 0xf4eb97
+	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
@@ -418,9 +418,9 @@ CheckFDStatusLoad_Transfer:
 	pushw 0x1
 	ld xwa, 0x200000
 	push xwa
-	call 0xf4ee70
+	call FileRead
 	push xiz
-	call 0xf4f05a
+	call FileClose
 	lda xsp, (xsp + 16)
 CheckFDStatusLoad_Return:
 	pop xiz
@@ -434,7 +434,7 @@ LoadExtROM_Entry:
 	pushw 0xff9c
 	ld xwa, 0x200000
 	push xwa
-	call 0xff0cc1
+	call String_Compare
 	add xsp, 0xa
 	cps hl, 0
 	jr z, LoadExtROM_JumpEntry
@@ -455,7 +455,7 @@ LoadXaprInit_Entry:
 	pushw 0xFFB0	; "XAPR"
 	ld xwa, 0x280000
 	push xwa
-	call 0xFF0CC1
+	call String_Compare
 	add xsp, 0xA
 	cps hl, 0
 	ret nz
@@ -484,7 +484,7 @@ LoadAndRunXapr_Entry:
 	pushw 0xFFC6	; "XAPR"
 	ld xwa, 0x280000
 	push xwa
-	call 0xFF0CC1
+	call String_Compare
 	add xsp, 0xA
 	cps hl, 0
 	jr nz, LoadAndRunXapr_ClearFlag

@@ -48,10 +48,10 @@ SeMenuModeFunc:
 	jr z, SeMenuModeFunc_Handler
 	or xde, xde
 	ret nz
-	jp 0xF0A110
+	jp InitializeSeMenuDefaults
 
 SeMenuModeFunc_Handler:
-	call 0xF0A136
+	call UpdateSeMenuSelection
 	ret
 
 SeMenuTitleFunc:
