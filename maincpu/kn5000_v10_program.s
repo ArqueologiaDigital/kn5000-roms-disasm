@@ -262765,7 +262765,7 @@ LABEL_FAA61D:
 ;
 ; Called from the main loop to copy changed regions from OFFSCREEN_BUFFER_1
 ; (0x43C00) to VIDEO_RAM (0x1A0000). The actual blit is performed by
-; LABEL_FAA65A which:
+; Gfx_BlitDirtyRegions which:
 ;
 ; 1. Checks if palette update is pending (0x03EF9E palette index)
 ;    - Full palette update: iterates all 256 DAC entries (0x00-0xFF)
@@ -262786,7 +262786,7 @@ UpdateScreen:	; FAA61D
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, LABEL_FAA636
-	calr LABEL_FAA65A
+	calr Gfx_BlitDirtyRegions
 	ld16_24 xwa, 0x030450
 	cps wa, 0
 	ret nz
@@ -262807,7 +262807,7 @@ LABEL_FAA648:
 	.byte 0xd8, 0xd8, 0xb0, 0xfe, 0xf2, 0x4e, 0x04, 0x03
 	.byte 0x50, 0x0e
 
-LABEL_FAA65A:
+Gfx_BlitDirtyRegions:
 	dec 8, xsp
 	pushw iz
 	cpdi16_24 257938, 0
@@ -266779,7 +266779,7 @@ DrawBitmapFile_Impl_DecodeRowLoop:
 	ld de, (xwa + 14)
 	ld xwa, (xsp + 24)
 	ld xbc, (xsp + 20)
-	calr LABEL_FAEBA7
+	calr Gfx_ProcessSplashData
 	ld xwa, (xsp + 16)
 	cp xwa, 0x140
 	jr lt, DrawBitmapFile_Impl_TileRow
@@ -266877,7 +266877,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	push xwa
 	call Free
 	inc 4, xsp
-	calr LABEL_FAED27
+	calr Gfx_DecodeImageToBuffer
 	ld_sril XWA, (xsp + 0x0438)
 	calr IsPointOnScreen
 	cps hl, 0
@@ -269705,7 +269705,7 @@ LABEL_FAE7DE:
 	.byte 0x63, 0xbe, 0x1e, 0x2f, 0xbf, 0x5e, 0xef, 0x64
 	.byte 0x0e
 
-LABEL_FAE837:
+Gfx_ClearFrameBuffers:
 	pushw 0x9600
 	pushw 0x0
 	ld xwa, 0x56800
@@ -269722,7 +269722,7 @@ LABEL_FAE837:
 	push xwa
 	call Memset
 	lda xsp, (xsp + 24)
-	jrl LABEL_FAF00B
+	jrl Flash_SaveSplashScreen
 
 LABEL_FAE86D:
 	st_dri3b L, 0xFD, 0xAA, 0xFB
@@ -269930,7 +269930,7 @@ LABEL_FAEA8B:
 	ld_sriw DE, (xsp + 0x0430)
 	ld xwa, (xsp + 26)
 	ld xbc, (xsp + 18)
-	calr LABEL_FAEBA7
+	calr Gfx_ProcessSplashData
 	ld xwa, (xsp + 14)
 	cp xwa, 0x140
 	jr lt, LABEL_FAEAB1
@@ -270026,8 +270026,8 @@ LABEL_FAEB66:
 	jr lt, LABEL_FAEB66
 
 LABEL_FAEB93:
-	calr LABEL_FAED27
-	calr LABEL_FAF00B
+	calr Gfx_DecodeImageToBuffer
+	calr Flash_SaveSplashScreen
 	lds wa, 2
 	calr ChangePalette
 	lds hl, 1
@@ -270037,7 +270037,7 @@ LABEL_FAEBA0:
 	st_dri3b L, 0xFD, 0x56, 0x04
 	ret
 
-LABEL_FAEBA7:
+Gfx_ProcessSplashData:
 	lda xsp, (xsp - 28)
 	push xiz
 	ld (xsp + 22), de
@@ -270199,7 +270199,7 @@ LABEL_FAED22:
 	lda xsp, (xsp + 28)
 	ret
 
-LABEL_FAED27:
+Gfx_DecodeImageToBuffer:
 	st_dri3b L, 0xFD, 0xD4, 0xFB
 	push xiz
 	st_dri3b A, 0xFD, 0x30, 0x02
@@ -270493,7 +270493,7 @@ LABEL_FAEFF0:
 	st_dri3b L, 0xFD, 0x2C, 0x04
 	ret
 
-LABEL_FAF00B:
+Flash_SaveSplashScreen:
 	lds wa, 1
 	ld xbc, 0x56800
 	ld xde, 0x3C0000
@@ -296368,7 +296368,7 @@ LABEL_FC269D:
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
 	call 0xFA9D58
-	call LABEL_FAE837
+	call Gfx_ClearFrameBuffers
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
@@ -298310,7 +298310,7 @@ LABEL_FC54B2:
 	push xiz
 	call Free
 	inc 4, xsp
-	call LABEL_FAE837
+	call Gfx_ClearFrameBuffers
 
 LABEL_FC5541:
 	pop xiz
