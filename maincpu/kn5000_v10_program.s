@@ -200071,7 +200071,7 @@ LABEL_F71E2A:
 	.byte 0x1b, 0xb5, 0x20, 0xf7, 0x1b, 0x2e, 0x2b, 0xf7
 
 LABEL_F71E32:
-	jp LABEL_F72B42
+	jp AccPlay_CheckAndToggle
 
 LABEL_F71E36:
 	jp LABEL_F72B74
@@ -200108,7 +200108,7 @@ LABEL_F71E6C:
 	bitda 0, 32565
 	jr z, LABEL_F71E7D
 	anddi8 32565, 254
-	calr LABEL_F72B42
+	calr AccPlay_CheckAndToggle
 
 LABEL_F71E7D:
 	ldda8 a, 32523
@@ -200305,7 +200305,7 @@ LABEL_F72029:
 TempoEvt_DispatchEvent:
 	cpdi16 32280, 0
 	jr nz, LABEL_F7203D
-	calr LABEL_F72B16
+	calr AccPlay_InitAndStartLoop
 	jr TempoEvent_ContinueLoop
 
 LABEL_F7203D:
@@ -201390,7 +201390,7 @@ LABEL_F72A1C:
 	jr c, LABEL_F72A1C
 	ldw bc, 0xFFFF
 	pushw bc
-	calr LABEL_F72B16
+	calr AccPlay_InitAndStartLoop
 	popw bc
 
 LABEL_F72A38:
@@ -201507,7 +201507,7 @@ MidiSeqBuf_WriteByte:
 	pop xix
 	ret
 
-LABEL_F72B16:
+AccPlay_InitAndStartLoop:
 	stdi8 32523, 0
 	call LABEL_F61380
 	ordi8 32533, 4
@@ -201521,7 +201521,7 @@ LABEL_F72B2E:
 	.byte 0x0b, 0x7f, 0x00, 0x00, 0x1d, 0x80, 0x13, 0xf6
 	.byte 0x1e, 0xbf, 0xf3, 0x0e
 
-LABEL_F72B42:
+AccPlay_CheckAndToggle:
 	bitda 1, 32523
 	jr z, LABEL_F72B73
 	bitda 2, 1055
