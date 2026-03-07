@@ -297610,7 +297610,7 @@ LABEL_FC4CF6:
 	jr z, LABEL_FC4D58
 	ld a, (xsp + 8)
 	extz wa
-	call LABEL_FC9E04
+	call VoiceData_LookupPtrByChannel
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	cp xwa, 0xFFFFFFFF
@@ -298164,7 +298164,7 @@ LABEL_FC5399:
 	calr SoundParam_NotifyMultipleChanges
 	call SwbtWr_ReinitOutputBank
 	call ToneGen_DispatchByMode
-	call LABEL_FC90D6
+	call CtrlPanel_RefreshIndicatorState
 	call LABEL_FC99F2
 	resda 5, 36470
 	ret
@@ -302300,7 +302300,7 @@ LABEL_FC9047:
 	.byte 0x9b, 0x05, 0x9f, 0x04, 0x61, 0x9f, 0x04, 0x3f
 	.byte 0x20, 0x00, 0x67, 0x88, 0x5e, 0xef, 0x62, 0x0e
 
-LABEL_FC90D6:
+CtrlPanel_RefreshIndicatorState:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
@@ -303310,7 +303310,7 @@ MIDI_DistributeParamToChannels:
 LABEL_FC9D10:
 	ld a, (xsp + 6)
 	extz wa
-	calr LABEL_FC9E04
+	calr VoiceData_LookupPtrByChannel
 	cp xhl, 0xFFFFFFFF
 	jr z, LABEL_FC9D31
 	ld c, (xsp + 4)
@@ -303389,7 +303389,7 @@ VoiceData_LookupPtrByIndex:
 	ld_sril3 XHL, 0x07, 0xE4, 0xE0
 	ret
 
-LABEL_FC9E04:
+VoiceData_LookupPtrByChannel:
 	cp a, 0x1F
 	jr ugt, LABEL_FC9E19
 	extz wa
@@ -303838,7 +303838,7 @@ LABEL_FCA166:	.ascii "89:;<=>"
 	.byte 0x5e, 0x5d, 0x5c, 0x5b, 0x5a
 	.byte 0x59, 0x58, 0x0e
 
-LABEL_FCA179:
+SwbtWr_WriteParamBlockSafe:
 	push xwa
 	push xbc
 	push xde
@@ -305583,7 +305583,7 @@ LABEL_FCB5B2:
 	stda16 37159, xwa
 	ldda16 xwa, 37213
 	stda16 37161, xwa
-	call LABEL_FCA179
+	call SwbtWr_WriteParamBlockSafe
 
 LABEL_FCB5F2:
 	ldda8 l, 37320
@@ -306497,7 +306497,7 @@ MidiStream_LoadMultiLoop:
 	ldb c, 0xB1
 	stda16 37159, xbc
 	stda16 37161, xwa
-	call LABEL_FCA179
+	call SwbtWr_WriteParamBlockSafe
 
 MidiStream_LoadMultiNext:
 	inc 1, b
@@ -327964,7 +327964,7 @@ LABEL_FDECF4:
 	push xix
 	push xiz
 	ldada xwa, 49662
-	call LABEL_FC90D6
+	call CtrlPanel_RefreshIndicatorState
 	pop xiz
 	pop xix
 	pop xhl
