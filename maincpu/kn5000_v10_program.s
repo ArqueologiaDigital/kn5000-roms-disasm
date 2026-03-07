@@ -51627,10 +51627,6 @@ VRAM_FillRect_Done:
 ; Uses macros and code from ../shared/vga_init.asm
 ; =============================================================================
 	.include "shared/vga_init.s"
-; Aliases for external references using original label names
-.equ LABEL_EF5163, VGA_Extended_Init
-.equ Some_VGA_setup, VGA_Setup
-
 	; === ROM-specific ending: initialize video buffers ===
 	call Fill_memory_at_XWA_with_DE_words_of_BC_value
 	lda_24 xwa, 0x1a0000
