@@ -2891,7 +2891,7 @@ LABEL_E5A336:	aligned_string ""
 LABEL_E5A338:	aligned_string ""
 LABEL_E5A33A:	aligned_string "MdmenuPage"
 LABEL_E5A346:	aligned_string "MidiMenu"
-LABEL_E5A350:
+Naka_MIDI_PartEditorTable:
 	.long LABEL_E5A38E
 	.long LABEL_E5A37C
 	.long LABEL_E5A37A

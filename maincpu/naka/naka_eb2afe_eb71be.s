@@ -551,7 +551,7 @@ LABEL_EB33E0:
 	.long LABEL_EB31C4
 	.long LABEL_EB31E8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x32, 0xeb, 0x00
-LABEL_EB3448:
+Naka_RhythmStyle_DisplayTable:
 	.long LABEL_EB3238
 	.long LABEL_EB3252
 	.long LABEL_EB3290

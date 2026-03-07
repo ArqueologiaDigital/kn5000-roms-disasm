@@ -3079,7 +3079,7 @@ LABEL_E854C8:
 	.long LABEL_E82CA2
 	.long LABEL_E82CEA
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E85618:
+Naka_AudioDemo_ModeTable:
 	.long LABEL_E82D32
 	.long LABEL_E82D6A
 	.long LABEL_E82DB6
@@ -3144,7 +3144,7 @@ LABEL_E85630:
 	.long LABEL_E836A0
 	.long LABEL_E836CA
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E85718:
+Naka_UIComponent_UpdateTable:
 	.long LABEL_E83716
 	.long LABEL_E83746
 	.long LABEL_E8376A
@@ -3333,7 +3333,7 @@ LABEL_E859A8:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E859D8:
+Naka_SongDisplay_FormatTable:
 	.long LABEL_E8531A
 	.long LABEL_E85352
 	.long LABEL_E85394
@@ -3563,7 +3563,7 @@ LABEL_E85CE4:
 LABEL_E85CE6:
 	.byte 0x00, 0xff
 LABEL_E85CE8:	aligned_string "Sdpart"
-LABEL_E85CF0:
+Naka_SDMenu_TuneTable:
 	.long LABEL_E85D0C
 	.long LABEL_E85D0A
 	.long LABEL_E85D08

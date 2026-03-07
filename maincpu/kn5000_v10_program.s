@@ -40468,7 +40468,7 @@ LABEL_EE8C7E:
 	.long LABEL_EDB2E4
 	.long DiskOp_ChannelCfgTable
 	.long LABEL_EB7932
-	.long LABEL_EDA02C
+	.long EffectMode_DispatchTable
 	.long LABEL_ED9D1E
 	.long LABEL_EED3DE
 	.long LABEL_E44636

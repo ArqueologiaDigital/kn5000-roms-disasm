@@ -6054,7 +6054,7 @@ LABEL_E2E790:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2E800:
+Naka_CyclePlay_Screens:
 	.long LABEL_E29080
 	.long LABEL_E290B6
 	.long LABEL_E290D6
@@ -6085,7 +6085,7 @@ LABEL_E2E828:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2E868:
+Naka_CreateScreen_Items:
 	.long LABEL_E29498
 	.long LABEL_E294CA
 	.long LABEL_E2950E
@@ -6121,7 +6121,7 @@ LABEL_E2E898:
 	.byte 0xb8, 0xe1, 0x03, 0x00, 0xe4, 0xe1, 0x03, 0x00
 
 
-LABEL_E2E8E8:
+Naka_RealtimeRecord_Controls:
 	.long LABEL_E29A36
 	.long LABEL_E29A4C
 	.long LABEL_E29A70
@@ -6129,7 +6129,7 @@ LABEL_E2E8E8:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xc2, 0x9a, 0xe2, 0x00
 
 
-LABEL_E2E900:
+Naka_SeqControls_Widgets:
 	.long LABEL_E29AFC
 	.long LABEL_E29B1C
 	.long LABEL_E29B64
@@ -6295,7 +6295,7 @@ LABEL_E2EAF0:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E2EB60:
+Naka_DrumEdit_Screens:
 	.long LABEL_E2B272
 	.long LABEL_E2B2A8
 	.long LABEL_E2B2DA
@@ -6339,7 +6339,7 @@ LABEL_E2EB98:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x86, 0xb8, 0xe2, 0x00
 
 
-LABEL_E2EC08:
+Naka_SongMode_Items:
 	.long LABEL_E2B8BC
 	.long LABEL_E2B8EE
 	.long LABEL_E2B918
@@ -6591,7 +6591,7 @@ LABEL_E2EF18:
 	.long LABEL_E2DB52
 	.byte 0x04, 0xe2, 0x03, 0x00, 0x3a, 0xe2, 0x03, 0x00
 	.byte 0x70, 0xe2, 0x03, 0x00, 0xa6, 0xe2, 0x03, 0x00
-LABEL_E2EF90:
+Naka_EnterTrainer_Screens:
 	.long LABEL_E2DBBA
 	.long LABEL_E2DBE4
 	.long LABEL_E2DC0E
@@ -7301,7 +7301,7 @@ LABEL_E2F894:
 	.byte 0x00, 0xff
 LABEL_E2F896:
 	.byte 0x00, 0xff
-LABEL_E2F898:
+Naka_NTBitmap_WidgetRefs:
 	.long LABEL_E2F8B4
 	.long LABEL_E2F8B2
 	.long LABEL_E2F8B0
@@ -7395,7 +7395,7 @@ LABEL_E2F996:
 	.byte 0x00, 0xff
 LABEL_E2F99A:
 	.byte 0x00, 0xff, 0xb8, 0xf9, 0xe2, 0x00
-LABEL_E2F9A0:
+Naka_DRBitmap_WidgetRefs:
 	.long LABEL_E2F9B6
 	.long LABEL_E2F9B4
 	.long LABEL_E2F9B2
@@ -7464,7 +7464,7 @@ LABEL_E2FA5E:
 	.byte 0x00, 0xff
 LABEL_E2FA62:
 	.byte 0x00, 0xff, 0x98, 0xfa, 0xe2, 0x00
-LABEL_E2FA68:
+Naka_TrkClrSure_Display:
 	.long LABEL_E2FA96
 	.long LABEL_E2FA94
 	.long LABEL_E2FA92
@@ -7935,7 +7935,7 @@ LABEL_E3000C:
 	.byte 0x00, 0xff, 0x8e, 0x00
 	.byte 0xe3, 0x00, 0x8c, 0x00, 0xe3, 0x00, 0x8a, 0x00
 	.byte 0xe3, 0x00
-LABEL_E3001A:
+Naka_SwitchControls_Table:
 	.long LABEL_E30080
 	.long LABEL_E30074
 	.long LABEL_E3006C

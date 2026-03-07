@@ -476,7 +476,7 @@ LABEL_E1B4D4:	aligned_string "ON BASS : ON"
 	.long LABEL_E1772E
 	.long LABEL_E1774A
 	.zero 4
-LABEL_E1B4F2:
+Naka_Accomp1_Screens:
 	.long LABEL_E17774
 	.long LABEL_E177B0
 	.long LABEL_E177CA
@@ -486,7 +486,7 @@ LABEL_E1B4F2:
 	.long LABEL_E17888
 	.long LABEL_E178B6
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E1B516:
+Naka_Accomp2_Screens:
 	.long LABEL_E178DA
 	.long LABEL_E17912
 	.long LABEL_E1792C
@@ -495,19 +495,19 @@ LABEL_E1B516:
 	.long LABEL_E179B8
 	.long LABEL_E179EA
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E1B536:
+Naka_Accomp3_Screens:
 	.long LABEL_E17A18
 	.long LABEL_E17A50
 	.long LABEL_E17A9E
 	.long LABEL_E17AC8
 	.zero 4
-LABEL_E1B54A:
+Naka_Accomp4_Screens:
 	.long LABEL_E17AF4
 	.long LABEL_E17B2C
 	.long LABEL_E17B48
 	.long LABEL_E17B6E
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E1B55E:
+Naka_Accomp5_Screens:
 	.long LABEL_E17B88
 	.long LABEL_E17BC0
 	.long LABEL_E17BDA
@@ -517,7 +517,7 @@ LABEL_E1B55E:
 	.long LABEL_E17C98
 	.long LABEL_E17CC6
 	.zero 4
-LABEL_E1B582:
+Naka_Accomp6_Screens:
 	.long LABEL_E17CEA
 	.long LABEL_E17D22
 	.long LABEL_E17D3C
@@ -584,7 +584,7 @@ LABEL_E1B622:
 	.long LABEL_E18788
 	.long LABEL_E187B4
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E1B67E:
+Naka_VariationNaming_Screens:
 	.long LABEL_E187DE
 	.long LABEL_E1881A
 	.long LABEL_E18834
@@ -644,7 +644,7 @@ LABEL_E1B6E2:
 	.zero 4
 	.long LABEL_E1910E
 	.zero 4
-LABEL_E1B76A:
+Naka_PartBalance_Screens:
 	.long LABEL_E19130
 	.long LABEL_E19168
 	.long LABEL_E19188
@@ -673,7 +673,7 @@ LABEL_E1B786:
 	.long LABEL_E19478
 	.byte 0x72, 0xd8
 	.byte 0x03, 0x00
-LABEL_E1B7D2:
+Naka_ComposerMenu_Screens:
 	.long LABEL_E19492
 	.long LABEL_E194BA
 	.long LABEL_E194E2

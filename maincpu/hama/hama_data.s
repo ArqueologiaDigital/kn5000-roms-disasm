@@ -1,4 +1,4 @@
-LABEL_E1F032:
+Hama_ModeInit_Table:
 	.long LABEL_E1EF5A
 	.long LABEL_E1EF5A
 	.long LABEL_E1EFB2

@@ -1262,7 +1262,7 @@ LABEL_ED822C:
 	.byte 0xed, 0x00
 LABEL_ED8232:
 	.byte 0x00, 0xff, 0x62, 0x82, 0xed, 0x00
-LABEL_ED8238:
+Naka_ControlSys_StateTable:
 	.long LABEL_ED8260
 	.long LABEL_ED825E
 	.long LABEL_ED825C
@@ -1435,7 +1435,7 @@ LABEL_ED8468:	aligned_string ""
 LABEL_ED846A:	aligned_string ""
 LABEL_ED846C:	aligned_string ""
 LABEL_ED846E:	aligned_string "MSSCTSEL"
-LABEL_ED8478:
+Naka_SongList_PageTable:
 	.long LABEL_ED84AC
 	.long LABEL_ED84AA
 	.long LABEL_ED84A8
@@ -1454,7 +1454,7 @@ LABEL_ED84A6:	aligned_string ""
 LABEL_ED84A8:	aligned_string ""
 LABEL_ED84AA:	aligned_string ""
 LABEL_ED84AC:	aligned_string "MSSONGLIST"
-LABEL_ED84B8:
+Naka_SongSlot_SelectTable:
 	.long LABEL_ED84E6
 	.long LABEL_ED84E4
 	.long LABEL_ED84E2
@@ -1471,7 +1471,7 @@ LABEL_ED84E0:	aligned_string ""
 LABEL_ED84E2:	aligned_string ""
 LABEL_ED84E4:	aligned_string ""
 LABEL_ED84E6:	aligned_string "MSSTLSEL"
-LABEL_ED84F0:
+Naka_PresetBank_SelectTable:
 	.long LABEL_ED8518
 	.long LABEL_ED8516
 	.long LABEL_ED8514
@@ -1534,7 +1534,7 @@ LABEL_ED85A4:
 LABEL_ED85A6:
 	.byte 0x00, 0xff
 LABEL_ED85A8:	aligned_string "PMNAME"
-LABEL_ED85B0:
+Naka_PresetBank_InfoTable:
 	.long LABEL_ED85DE
 	.long LABEL_ED85DC
 	.long LABEL_ED85DA
@@ -2510,7 +2510,7 @@ LABEL_ED9D1E:
 	.byte 0x02, 0x03, 0x04, 0x05, 0x06, 0xff, 0x0f, 0xff
 	.byte 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e
 	.byte 0x02, 0x01, 0x00, 0xff, 0x97, 0x67, 0xfc, 0x00
-LABEL_ED9D68:
+SoundParam_EncoderHandlers:
 	.long LABEL_FC67BC
 	.long LABEL_FC65E8
 	.long LABEL_FC64EA
@@ -2629,7 +2629,7 @@ LABEL_ED9F94:
 LABEL_ED9F9C:
 	.byte 0x08, 0x08, 0x08, 0x08
 	.byte 0x08, 0x08, 0x08, 0x08, 0xfc, 0x9e, 0xed, 0x00
-LABEL_ED9FA8:
+Encoder_ValueQuantizeTable:
 	.long LABEL_ED9F04
 	.long LABEL_ED9F0C
 	.long LABEL_ED9F14
@@ -2656,7 +2656,7 @@ LABEL_ED9FD0:
 	.zero 20
 	.byte 0x1c, 0x00, 0x00, 0x00, 0x1d, 0x00, 0x0f, 0x0f
 	.byte 0x1e, 0x00, 0x00, 0x00
-LABEL_EDA02C:
+EffectMode_DispatchTable:
 	.long LABEL_FC6972
 	.long LABEL_FC6994
 	.long LABEL_FC6995

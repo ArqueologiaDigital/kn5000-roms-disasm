@@ -113,7 +113,7 @@ LABEL_ED01CE:	.byte 0x75, 0x73, 0x34, 0x00
 	.byte 0x44, 0x20, 0x00, 0xff, 0x44, 0x7e
 	.byte 0x61, 0x30, 0x00, 0xff, 0x43, 0x20, 0x00, 0xff
 	.byte 0x20, 0x20, 0x00, 0xff, 0x22, 0x03, 0xed, 0x00
-LABEL_ED02A0:
+NoteNameStr_Table_0:
 	.long LABEL_ED031E
 	.long LABEL_ED0318
 	.long LABEL_ED0314
@@ -158,7 +158,7 @@ LABEL_ED0322:
 	.byte 0xff
 
 
-LABEL_ED0326:
+NoteNameStr_Table_1:
 	.long LABEL_ED03AC
 	.long LABEL_ED03A8
 	.long LABEL_ED03A2
@@ -203,7 +203,7 @@ LABEL_ED03AC:
 	.byte 0x20, 0x20, 0x00, 0xff
 
 
-LABEL_ED03B0:
+NoteNameStr_Table_2:
 	.long LABEL_ED0436
 	.long LABEL_ED0432
 	.long LABEL_ED042C
@@ -248,7 +248,7 @@ LABEL_ED0436:
 	.byte 0xff
 
 
-LABEL_ED043A:
+NoteNameStr_Table_3:
 	.long LABEL_ED04C0
 	.long LABEL_ED04BC
 	.long LABEL_ED04B6
@@ -292,18 +292,18 @@ LABEL_ED04BC:
 	.byte 0x43, 0x20, 0x00, 0xff
 LABEL_ED04C0:
 	.byte 0x20, 0x20, 0x00, 0xff, 0x12, 0x05, 0xed, 0x00
-LABEL_ED04C8:
-	.long LABEL_ED0508
-	.long LABEL_ED04FC
-	.long LABEL_ED04F0
-	.long LABEL_ED04E8
-	.long LABEL_ED04DC
-LABEL_ED04DC:	aligned_string "PERHATIAN!"
-LABEL_ED04E8:	aligned_string "Italian"
-LABEL_ED04F0:	aligned_string "ATTENCI0N!"
-LABEL_ED04FC:	aligned_string "ATTENTION!"
-LABEL_ED0508:	aligned_string "ACHTUNG!"
-LABEL_ED0512:	aligned_string "ATTENTION!"
+Str_Attention_Multilingual:
+	.long Str_Attention_DE
+	.long Str_Attention_FR
+	.long Str_Attention_ES
+	.long Str_Attention_IT
+	.long Str_Attention_ID
+Str_Attention_ID:	aligned_string "PERHATIAN!"
+Str_Attention_IT:	aligned_string "Italian"
+Str_Attention_ES:	aligned_string "ATTENCI0N!"
+Str_Attention_FR:	aligned_string "ATTENTION!"
+Str_Attention_DE:	aligned_string "ACHTUNG!"
+Str_Attention_EN:	aligned_string "ATTENTION!"
 	.byte 0xe6, 0x06
 	.byte 0xed, 0x00, 0x7e, 0x06, 0xed, 0x00, 0x18, 0x06
 	.byte 0xed, 0x00, 0xac, 0x05, 0xed, 0x00, 0xa4, 0x05
@@ -329,7 +329,7 @@ LABEL_ED0770:	aligned_string "Italian"
 	aligned_string "SIND SIE SICHER?"
 	aligned_string "Are You Sure?"
 	.byte 0x04, 0x0a, 0xed, 0x00, 0x8e, 0x09, 0xed, 0x00
-LABEL_ED07BE:
+Str_FactoryResetDesc_Multilingual:
 	.long LABEL_ED091E
 	.long LABEL_ED08AE
 	.long LABEL_ED083E
@@ -343,7 +343,7 @@ LABEL_ED091E:	aligned_string "                               Resets the PERFORMA
 	.byte 0x6b, 0x2e, 0x00, 0xff
 	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
 	.byte 0x56, 0x0b, 0xed, 0x00
-LABEL_ED0A78:
+Str_StoreSoundBalance_Multilingual:
 	.long LABEL_ED0B24
 	.long LABEL_ED0AFE
 	.long LABEL_ED0AD8
@@ -356,7 +356,7 @@ LABEL_ED0AFE:	aligned_string "Stores sound & balance settings only."
 LABEL_ED0B24:	.asciz "Speichert nur Klang- und Lautstärkeeinstellungen."
 	aligned_string "Stores sound & balance settings only."
 	.byte 0xda, 0x0c, 0xed, 0x00
-LABEL_ED0B80:
+Str_StoreTotalSetting_Multilingual:
 	.long LABEL_ED0C8C
 	.long LABEL_ED0C4E
 	.long LABEL_ED0C10

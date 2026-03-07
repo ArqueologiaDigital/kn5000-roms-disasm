@@ -584,7 +584,7 @@ LABEL_EEEDD4:
 	.byte 0x1d, 0x00, 0x1d, 0x00, 0x16, 0x00, 0x14, 0x00
 	.byte 0x13, 0x00, 0x12, 0x00, 0x15, 0x00, 0x17, 0x00
 	.byte 0x11, 0x00, 0x10, 0x00, 0xff, 0x00, 0xff, 0x00
-LABEL_E14347:
+Naka_DrawbarSlider_Resources:
 	.long LABEL_FF00FF
 	.long LABEL_FF00FF
 	.long LABEL_FF00FF
@@ -850,14 +850,14 @@ LABEL_EEF588:
 	.long LABEL_ED0212
 	.long LABEL_ED0212
 	.long LABEL_ED0212
-	.long LABEL_ED0326
+	.long NoteNameStr_Table_1
 	.long LABEL_ED0212
-	.long LABEL_ED03B0
+	.long NoteNameStr_Table_2
 	.long LABEL_ED0212
 	.long LABEL_ED029C
 	.long LABEL_ED0212
 	.long LABEL_ED0212
-	.long LABEL_ED043A
+	.long NoteNameStr_Table_3
 	.long LABEL_ED0212
 	.long LABEL_ED029C
 	.byte 0x28, 0xf2, 0x03, 0x00

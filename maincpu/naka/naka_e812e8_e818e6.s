@@ -115,7 +115,7 @@
 	.byte 0x00, 0xff
 	aligned_string "IvSdpart"
 	.byte 0x25, 0x00, 0x94, 0x13, 0xe8, 0x00
-LABEL_E812E8:
+Naka_EventDispatch_Table:
 	.long LABEL_E81380
 	.long LABEL_E81372
 	.long LABEL_E81366
