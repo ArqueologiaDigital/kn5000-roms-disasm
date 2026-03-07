@@ -2386,7 +2386,7 @@ LABEL_E1AB2C:
 	.byte 0x03, 0x00, 0x02, 0xd9, 0x03, 0x00
 	.long LABEL_E195F0
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E1B80E:
+Naka_SeqToComposer_Screens:
 	.long LABEL_E19610
 	.long LABEL_E19650
 	.long LABEL_E1967E
@@ -2421,7 +2421,7 @@ LABEL_E1B80E:
 	.long LABEL_E19A0E
 	.long LABEL_E19A32
 	.byte 0x6e, 0xd9, 0x03, 0x00
-LABEL_E1B88E:
+Naka_SeqCopy_Screens:
 	.long LABEL_E19A56
 	.long LABEL_E19A76
 	.long LABEL_E19AF4
@@ -2430,7 +2430,7 @@ LABEL_E1B88E:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E1B8A6:
+Naka_EasyComposer_Screens:
 	.long LABEL_E19B5E
 	.long LABEL_E19B96
 	.long LABEL_E19BB0
@@ -2448,7 +2448,7 @@ LABEL_E1B8A6:
 	.zero 4
 
 
-LABEL_E1B8E2:
+Naka_EasyComposer2_Screens:
 	.long LABEL_E19E36
 	.long LABEL_E19E82
 	.long LABEL_E19EAC
@@ -2456,7 +2456,7 @@ LABEL_E1B8E2:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E1B8F6:
+Naka_ModeSelect_Screens:
 	.long LABEL_E19F20
 	.long LABEL_E19F56
 	.long LABEL_E19F94
@@ -2471,7 +2471,7 @@ LABEL_E1B8F6:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E1B926:
+Naka_ExpandMode_Screens:
 	.long LABEL_E1A1CE
 	.long LABEL_E1A204
 	.long LABEL_E1A22A
@@ -2508,7 +2508,7 @@ LABEL_E1B926:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E1B9AE:
+Naka_Accomp7_Screens:
 	.long LABEL_E1A704
 	.long LABEL_E1A73E
 	.long LABEL_E1A762
@@ -2539,7 +2539,7 @@ LABEL_E1B9AE:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.long LABEL_E1AB58
 
-LABEL_E1BA22:
+Naka_Accomp8_Screens:
 	.long LABEL_E1AB98
 	.long LABEL_E1ABB4
 	.long LABEL_E1ABE6
@@ -2558,7 +2558,7 @@ LABEL_E1BA22:
 	.zero 4
 
 
-LABEL_E1BA62:
+Naka_Accomp9_Screens:
 	.long LABEL_E1ADDC
 	.long LABEL_E1AE10
 	.long LABEL_E1AE52
@@ -2568,7 +2568,7 @@ LABEL_E1BA62:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E1BA7E:
+Naka_Accomp10_Screens:
 	.long LABEL_E1AF32
 	.long LABEL_E1AF64
 	.long LABEL_E1AF90
@@ -2576,7 +2576,7 @@ LABEL_E1BA7E:
 	.zero 4
 
 
-LABEL_E1BA92:
+Naka_Accomp11_Screens:
 	.long LABEL_E1AFCE
 	.long LABEL_E1B00C
 	.long LABEL_E1B038
@@ -2589,7 +2589,7 @@ LABEL_E1BA92:
 	.zero 4
 
 
-LABEL_E1BABA:
+Naka_Accomp12_Screens:
 	.long LABEL_E1B1A6
 	.long LABEL_E1B1E0
 	.long LABEL_E1B212
@@ -2601,7 +2601,7 @@ LABEL_E1BABA:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E1BADE:
+Naka_Accomp13_Screens:
 	.long LABEL_E1B356
 	.long LABEL_E1B390
 	.long LABEL_E1B3D0
@@ -2611,7 +2611,7 @@ LABEL_E1BADE:
 	.zero 4
 
 
-LABEL_E1BAFA:
+Naka_Accomp14_Screens:
 	.long LABEL_E1BB10
 	.long LABEL_E1BB0E
 	.long LABEL_E1BB0C
@@ -2620,7 +2620,7 @@ LABEL_E1BB0A:	aligned_string ""
 LABEL_E1BB0C:	aligned_string ""
 LABEL_E1BB0E:	aligned_string ""
 LABEL_E1BB10:	aligned_string "StylCnvWaitScreen"
-LABEL_E1BB22:
+Naka_StylCnvWait_Screens:
 	.long LABEL_E1BB6E
 	.long LABEL_E1BB6C
 	.long LABEL_E1BB5C
@@ -2639,7 +2639,7 @@ LABEL_E1BB5A:	aligned_string ""
 LABEL_E1BB5C:	aligned_string "StylCnvModlBox"
 LABEL_E1BB6C:	aligned_string ""
 LABEL_E1BB6E:	aligned_string "StylCnvModlScreen"
-LABEL_E1BB80:
+Naka_StylCnvVer_Screens:
 	.long LABEL_E1BBBC
 	.long LABEL_E1BBBA
 	.long LABEL_E1BBAA
@@ -2658,7 +2658,7 @@ LABEL_E1BBBA:	aligned_string ""
 LABEL_E1BBBC:	aligned_string "StylCnvCnvtScreen"
 	.byte 0xea, 0xbb
 	.byte 0xe1, 0x00
-LABEL_E1BBD2:
+Naka_StylCnvCnvtBox_Screens:
 	.long LABEL_E1BBE8
 	.long LABEL_E1BBE6
 	.long LABEL_E1BBE4
@@ -2669,7 +2669,7 @@ LABEL_E1BBE6:	aligned_string ""
 LABEL_E1BBE8:	aligned_string ""
 LABEL_E1BBEA:	aligned_string "StylCnvStorScreen"
 	.long LABEL_E1BC18
-LABEL_E1BC00:
+Naka_StylCnvStor_Screens:
 	.long LABEL_E1BC16
 	.long LABEL_E1BC14
 	.long LABEL_E1BC12
@@ -2679,7 +2679,7 @@ LABEL_E1BC12:	aligned_string ""
 LABEL_E1BC14:	aligned_string ""
 LABEL_E1BC16:	aligned_string ""
 LABEL_E1BC18:	aligned_string "StylCnvTxtScreen"
-LABEL_E1BC2A:
+Naka_StylCnvTxt_Screens:
 	.long LABEL_E1BC6A
 	.long LABEL_E1BC68
 	.long LABEL_E1BC5A
@@ -2699,7 +2699,7 @@ LABEL_E1BC5A:	aligned_string "StylCnvSelBox"
 LABEL_E1BC68:	aligned_string ""
 LABEL_E1BC6A:	aligned_string "StylCnvSelScreen"
 	.long LABEL_E1BCAA
-LABEL_E1BC80:
+Naka_StylCnvSelBox_Screens:
 	.long LABEL_E1BCA8
 	.long LABEL_E1BCA6
 	.long LABEL_E1BCA4
@@ -2716,7 +2716,7 @@ LABEL_E1BCA6:	aligned_string ""
 LABEL_E1BCA8:	aligned_string ""
 LABEL_E1BCAA:	aligned_string "StylCnvContScreen"
 	.long LABEL_E1BD2C
-LABEL_E1BCC0:
+Naka_StylCnvCont_Screens:
 	.long LABEL_E1BD2A
 	.long LABEL_E1BD28
 	.long LABEL_E1BD26
@@ -2754,7 +2754,7 @@ LABEL_E1BD26:	aligned_string ""
 LABEL_E1BD28:	aligned_string ""
 LABEL_E1BD2A:	aligned_string ""
 LABEL_E1BD2C:	aligned_string "CmpMenuScreen"
-LABEL_E1BD3A:
+Naka_CmpMenu_Screens:
 	.long LABEL_E1BD86
 	.long LABEL_E1BD84
 	.long LABEL_E1BD82
@@ -2782,7 +2782,7 @@ LABEL_E1BD82:	aligned_string ""
 LABEL_E1BD84:	aligned_string ""
 LABEL_E1BD86:	aligned_string "CmpBkslScreen"
 	.long LABEL_E1BE44
-LABEL_E1BD98:
+Naka_CmpBookshelf_Screens:
 	.long LABEL_E1BE42
 	.long LABEL_E1BE40
 	.long LABEL_E1BE3E
@@ -2829,7 +2829,7 @@ LABEL_E1BE40:	aligned_string ""
 LABEL_E1BE42:	aligned_string ""
 LABEL_E1BE44:	aligned_string "CmpBkslSScreen"
 	.long LABEL_E1BE8A
-LABEL_E1BE58:
+Naka_CmpBookshelfSub_Screens:
 	.long LABEL_E1BE88
 	.long LABEL_E1BE86
 	.long LABEL_E1BE78
@@ -2841,7 +2841,7 @@ LABEL_E1BE78:	aligned_string "NameMemLabel"
 LABEL_E1BE86:	aligned_string ""
 LABEL_E1BE88:	aligned_string ""
 LABEL_E1BE8A:	aligned_string "CmpNamingScreen"
-LABEL_E1BE9A:
+Naka_NamingMem_Screens:
 	.long LABEL_E1BF6C
 	.long LABEL_E1BF6A
 	.long LABEL_E1BF60
@@ -2880,7 +2880,7 @@ LABEL_E1BF54:	aligned_string "CmSetP1Ctl"
 LABEL_E1BF60:	aligned_string "CmSetPage"
 LABEL_E1BF6A:	aligned_string ""
 LABEL_E1BF6C:	aligned_string "CmpSetScreen"
-LABEL_E1BF7A:
+Naka_CmSetP1Grid_Screens:
 	.long LABEL_E1C068
 	.long LABEL_E1C066
 	.long LABEL_E1C05E
@@ -2950,7 +2950,7 @@ LABEL_E1C068:	aligned_string "CmpRealScreen"
 	.long LABEL_E1C07E
 LABEL_E1C07E:	aligned_string ""
 LABEL_E1C080:	aligned_string ""
-LABEL_E1C082:
+Naka_CmpMem_Screens:
 	.long LABEL_E1C0D2
 	.long LABEL_E1C0C8
 	.long LABEL_E1C0BE
@@ -5919,7 +5919,7 @@ LABEL_E248BC:	aligned_string ""
 LABEL_E248BE:	aligned_string ""
 LABEL_E248C0:	aligned_string "DpMdlyDoc"
 LABEL_E248CA:	.byte 0x00, 0xff, 0x30, 0x49, 0xe2, 0x00
-LABEL_E248D0:
+Naka_DigitalDelay_Screens:
 	.long LABEL_E2492E
 	.long LABEL_E2492C
 	.long LABEL_E2492A
@@ -5947,7 +5947,7 @@ LABEL_E2492A:	aligned_string ""
 LABEL_E2492C:	aligned_string ""
 LABEL_E2492E:	aligned_string ""
 LABEL_E24930:	aligned_string "DpMdlyPd"
-LABEL_E2493A:
+Naka_PDMedR1_Screens:
 	.long LABEL_E2496E
 	.long LABEL_E2496C
 	.long LABEL_E2496A
@@ -17958,7 +17958,7 @@ LABEL_E80070:	aligned_string " GM   "
 	aligned_string "   GM   "
 	aligned_string " Error! "
 	.byte 0x00, 0x00, 0x74, 0x00, 0x00, 0x00, 0x74, 0x00
-	.long LABEL_EE0310
+	.long Naka_MainDispatch_Table
 	.byte 0xee, 0x00, 0xb1, 0x00
 	.byte 0xb1, 0x00, 0xb1, 0x00, 0xb1, 0x00, 0xdf, 0x02
 	.byte 0xb5, 0x02, 0xb5, 0x02, 0x6a, 0x00, 0x6a, 0x00
@@ -20030,7 +20030,7 @@ LABEL_E9AFE6:	aligned_string "ERROR 49"
 	aligned_string "The quantity of  this song is over the capacity of GN7/GN9/FN3. Please try again after reducing the quantity like omitting the TRACK or MEASURE."
 LABEL_E9B27C:
 	.byte 0xf6, 0xb4, 0xe9, 0x00
-LABEL_E9B280:
+Str_SongCapacityExceeded_Multilingual:
 	.long LABEL_E9B480
 	.long LABEL_E9B3C4
 	.long LABEL_E9B326
@@ -20108,7 +20108,7 @@ LABEL_E9B634:	aligned_string "ERROR 55"
 	.byte 0xe0, 0xc7, 0xe9, 0x00
 
 
-LABEL_E9C528:
+Str_RKBLKBSpecialTracks_Multilingual:
 	.long LABEL_E9C6FC
 	.long LABEL_E9C62A
 	.long LABEL_E9C54C
@@ -20151,7 +20151,7 @@ LABEL_E9C62A:	.ascii "RKB et LKB sont des pistes d"
 	.byte 0x60, 0xd1, 0xe9, 0x00
 
 
-LABEL_E9CF18:
+Str_InitSettingWarning_Multilingual:
 	.long LABEL_E9D0E0
 	.long LABEL_E9D04A
 	.long LABEL_E9CFB8
@@ -20373,7 +20373,7 @@ LABEL_E9D7F4:	aligned_string "PLEASE WAIT!"
 	.asciz "UILLEZ PATIENTER!"	; DB "!", 000h
 	aligned_string "BITTE WARTEN!"
 	aligned_string "PLEASE WAIT!"
-LABEL_E9D846:
+Str_PleaseWait_Multilingual:
 	.long LABEL_E9D88A
 	.long LABEL_E9D882
 	.long LABEL_E9D87A
@@ -20431,7 +20431,7 @@ LABEL_E9D9B0:	aligned_string "RIGHT 1:"
 	.byte 0x09, 0x00, 0x0a, 0x00, 0x0b, 0x00, 0x0c, 0x00
 	.byte 0xff, 0xff
 	aligned_string "TeC1"
-LABEL_E9DA28:
+Naka_TechniChord1_Screens:
 	.long LABEL_E9DB0C
 	.long LABEL_E9DB02
 	.long LABEL_E9DAF8
@@ -20490,7 +20490,7 @@ LABEL_E9DB0C:	aligned_string " RIGHT 1 "
 	.byte 0x00, 0x11, 0x00, 0x12, 0x00, 0x13, 0x00, 0x14
 	.byte 0x00, 0x15, 0x00, 0x16, 0x00, 0x80, 0x00, 0xff
 	.byte 0xff
-LABEL_E9DBD6:
+Naka_Scale2_Screens:
 	.long LABEL_E9DCFA
 	.long LABEL_E9DCEC
 	.long LABEL_E9DCDE
@@ -20526,7 +20526,7 @@ LABEL_E9DCDE:	aligned_string "   PIANO    "
 LABEL_E9DCEC:	aligned_string "   RANDOM   "
 LABEL_E9DCFA:	aligned_string "    OFF     "
 	aligned_string " NO TYPE !! "
-LABEL_E9DD16:
+Scale_Arabic2_NameTable:
 	.long LABEL_E9DD72
 	.long LABEL_E9DD6E
 	.long LABEL_E9DD6A
@@ -20563,7 +20563,7 @@ LABEL_E9DD6E:
 	.byte 0x2b, 0x20, 0x31, 0x00
 LABEL_E9DD72:
 	.byte 0x20, 0x20, 0x30, 0x00
-LABEL_E9DD76:
+Scale_Names_Table:
 	.long LABEL_E9DE14
 	.long LABEL_E9DE0A
 	.long LABEL_E9DE00
@@ -23008,7 +23008,7 @@ LABEL_EA9DFC:
 	.byte 0x62, 0x00
 LABEL_EA9DFE:
 	.byte 0x61, 0x00
-LABEL_EA9E00:
+Naka_SoundEditor_Screens:
 	.long LABEL_EA9ED0
 	.long LABEL_EA9ECE
 	.long LABEL_EA9ECC
@@ -23217,7 +23217,7 @@ LABEL_EAA316:
 	aligned_string "PMEM:%2d-%d %16s"
 	aligned_string "PMEM:%2d-  %16s"
 	aligned_string "PMEM:%2d-                  "
-LABEL_EAA40A:
+Naka_InternalVar_Screens:
 	.long LABEL_EAA508
 	.long LABEL_EAA504
 	.long LABEL_EAA4FE
@@ -23350,7 +23350,7 @@ LABEL_EAA508:
 	.byte 0x1e, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
 
 
-LABEL_EAA750:
+Naka_Debug3_Screens:
 	.long LABEL_EAA7EC
 	.long LABEL_EAA7E8
 	.long LABEL_EAA7E4
@@ -23773,7 +23773,7 @@ LABEL_EAB1A0:
 	.byte 0xc3, 0xeb, 0xf9, 0x00, 0x6c, 0x3d, 0xfa, 0x00
 	.byte 0xd5, 0xc5, 0xf9, 0x00, 0x82, 0x31, 0xfa, 0x00
 	.byte 0xa1, 0x87, 0xf9, 0x00, 0x00, 0x00, 0x00, 0x00
-LABEL_EAB2E8:
+Naka_SoundParam_Screens:
 	.long LABEL_EAB3BA
 	.long LABEL_EAB3AC
 	.long LABEL_EAB39E
@@ -23801,7 +23801,7 @@ LABEL_EAB39E:	aligned_string "RamEditCheck"
 LABEL_EAB3AC:	aligned_string "LswEditCheck"
 LABEL_EAB3BA:	aligned_string "DefaultFunction"
 	.byte 0x22, 0x00, 0xfa, 0xb8, 0xea, 0x00
-LABEL_EAB3D0:
+Naka_LanguageCheck_Screens:
 	.long LABEL_EAB8EC
 	.long LABEL_EAB8E2
 	.long LABEL_EAB8D8
@@ -32383,7 +32383,7 @@ LABEL_ECDBAC:	aligned_string "Torero's Trumpet             125"
 	aligned_string "Reggae Horns                  90"
 	aligned_string "Marley's Drums                90"
 	aligned_string "Wailers' Guitar               90"
-LABEL_ECE2F0:
+StyleGroup_ModernDance_Table:
 	.long LABEL_ECE60C
 	.long LABEL_EC40D4
 	.long LABEL_ECE5FA
@@ -32550,7 +32550,7 @@ LABEL_ECE820:	aligned_string " Ballads"
 	aligned_string "Fifties Rock    "
 
 
-LABEL_ECE980:
+StyleGroup_PopBallad_Table:
 	.long LABEL_ECEB30
 	.long LABEL_EC6A54
 	.long LABEL_ECEB1E
@@ -32646,7 +32646,7 @@ LABEL_ECEB42:
 	aligned_string "J.Last Hitparade"
 
 
-LABEL_ECED38:
+StyleGroup_Swing_Table:
 	.long LABEL_ECEF02
 	.long LABEL_EC81AC
 	.long LABEL_ECEEF0
@@ -32704,7 +32704,7 @@ LABEL_ECEEF0:	aligned_string "Detroit Pop     "
 LABEL_ECEF02:	aligned_string "King Of Soul    "
 LABEL_ECEF14:
 	.byte 0x16, 0xf2, 0xec, 0x00
-LABEL_ECEF18:
+StyleGroup_FunkFusion_Table:
 	.long LABEL_EC8D58
 	.long LABEL_ECF204
 	.long LABEL_EC8DFE
@@ -32799,7 +32799,7 @@ LABEL_ECF204:	aligned_string "Steady Swingband"
 	aligned_string "Up Tempo Bigband"
 
 
-LABEL_ECF228:
+StyleGroup_JazzCombo_Table:
 	.long LABEL_ECF544
 	.long LABEL_ECA0CC
 	.long LABEL_ECF532
@@ -32949,7 +32949,7 @@ LABEL_ECF556:
 	aligned_string "Stadium Events  "
 
 
-LABEL_ECF7E8:
+StyleGroup_WorldMusic_Table:
 	.long LABEL_ECF998
 	.long LABEL_ECC51C
 	.long LABEL_ECF986
@@ -33064,24 +33064,24 @@ LABEL_ECF9AA:
 	aligned_string "Bossa Pianist   "
 	aligned_string "Romantic Bossa  "
 	.byte 0x96, 0xfd, 0xec, 0x00
-LABEL_ECFCA8:
-	.long LABEL_ECE2F0
+StyleGroup_LatinDance_Table:
+	.long StyleGroup_ModernDance_Table
 	.long LABEL_ECFD84
 	.long LABEL_ECE61E
 	.long LABEL_ECFD72
-	.long LABEL_ECE980
+	.long StyleGroup_PopBallad_Table
 	.long LABEL_ECFD60
 	.long LABEL_ECEB42
 	.long LABEL_ECFD4E
-	.long LABEL_ECED38
+	.long StyleGroup_Swing_Table
 	.long LABEL_ECFD3C
 	.long LABEL_ECEF14
 	.long LABEL_ECFD2A
-	.long LABEL_ECF228
+	.long StyleGroup_JazzCombo_Table
 	.long LABEL_ECFD18
 	.long LABEL_ECF556
 	.long LABEL_ECFD06
-	.long LABEL_ECF7E8
+	.long StyleGroup_WorldMusic_Table
 	.long LABEL_ECFCF4
 	.long LABEL_ECF9AA
 LABEL_ECFCF4:	aligned_string "Latin / World   "
@@ -33114,7 +33114,7 @@ LABEL_ECFDE0:	aligned_string "MEMORY-C"
 LABEL_ECFDEA:	aligned_string "MEMORY-B"
 LABEL_ECFDF4:	aligned_string "MEMORY-A"
 	aligned_string "RIGHT1 RIGHT2 LEFT   PART4  PART5  PART6  PART7  PART8  PART9  PART10 PART11 PART12 PART13 PART14 PART15 PART16 ACCOMP1ACCOMP2ACCOMP3BASS   DRUMS  CHORD  R.BASS MSP    MSP    CONTROLPART27 PART28 PART29 PART30 PART31 PART32 "
-LABEL_ECFEE0:
+Naka_MemoryC_Screens:
 	.long LABEL_ECFF66
 	.long LABEL_ECFF62
 	.long LABEL_ECFF5C
@@ -33290,7 +33290,7 @@ LABEL_EE0142:
 	.byte 0x01, 0xa0, 0x02, 0x00, 0x80, 0x09
 	.byte 0x40, 0x00, 0x01, 0x06, 0x00, 0xff, 0x01, 0x01
 	.byte 0x01, 0x00, 0x00, 0xff, 0xa4, 0xba, 0xed, 0x00
-LABEL_EE0158:
+Naka_SubDispatch_A_Table:
 	.long LABEL_EDBC50
 	.long LABEL_EDE9F2
 	.long LABEL_EDBC94
@@ -33304,7 +33304,7 @@ LABEL_EE0158:
 	.byte 0xe4, 0x8e, 0x00, 0x00, 0xe6, 0x8e, 0x00, 0x00
 	.byte 0xe8, 0x8e, 0x00, 0x00, 0xea, 0x8e, 0x00, 0x00
 	.byte 0xf4, 0x8e, 0x00, 0x00, 0xec, 0xc1, 0x00, 0x00
-LABEL_EE0198:
+Naka_SubDispatch_B_Table:
 	.long LABEL_EDC89C
 	.long LABEL_EDC430
 	.long LABEL_EDBA44
@@ -33401,7 +33401,7 @@ LABEL_EE0198:
 	.long LABEL_EDBDF4
 
 
-LABEL_EE0310:
+Naka_MainDispatch_Table:
 	.long LABEL_EDBE06
 	.long LABEL_EDBE18
 	.long LABEL_EDBE2A
@@ -38504,7 +38504,7 @@ LABEL_EE7756:
 	.long LABEL_EE6BE0
 	.long LABEL_EE6C02
 	.zero 16
-LABEL_EE7776:
+Naka_DisplayMode_Table:
 	.long LABEL_EE71B6
 	.long LABEL_EE7218
 	.long LABEL_EE727A
@@ -39032,7 +39032,7 @@ UIState_DefaultConfig_A:
 	.fill 7, 1, 0xff
 
 
-LABEL_EE7CA7:
+Naka_RenderMode_A_Table:
 	.long LABEL_EE7FA8
 	.long LABEL_EE7FD4
 	.long LABEL_EE7FFC
@@ -39066,7 +39066,7 @@ LABEL_EE7CA7:
 	.long LABEL_EE8348
 	.long LABEL_EE8364
 
-LABEL_EE7D27:
+Naka_RenderMode_B_Table:
 	.long LABEL_EE8380
 	.long LABEL_EE8384
 	.long LABEL_EE8388
@@ -39921,7 +39921,7 @@ UIState_DefaultConfig_B:
 	.long BitMapOut_ByteData_RenderC
 	.long FDemoText_ProcessVoiceFlags
 	.byte 0xff, 0xff, 0xff, 0xff
-LABEL_EE86D0:
+Naka_EventHandler_Table:
 	.long LABEL_EE89D1
 	.long LABEL_EE89D9
 	.long LABEL_EE89E1
