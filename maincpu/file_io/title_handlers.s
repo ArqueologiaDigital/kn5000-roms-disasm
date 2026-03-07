@@ -69,7 +69,7 @@ SetupFlashFunc:
 	ldw wa, 0xEE
 	call SoundCtrl_SendCommand
 	lds wa, 6
-	call LABEL_FC55A9
+	call CtrlPanel_IndicatorJumpTable
 	stdi8 32578, 35
 	ldw wa, 0xEE
 	call SoundCtrl_SendCommand
