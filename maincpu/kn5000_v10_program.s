@@ -44755,7 +44755,7 @@ LABEL_EF149F:
 	ret
 
 Seq_EventProcessingTick:
-	call LABEL_FE06E7
+	call AccNoteOn_ProcessVoiceSetup
 	bitda 7, 1058
 	jr nz, LABEL_EF14B0
 	calr SeqEvt_CheckExpiry
@@ -44991,7 +44991,7 @@ SeqEvt_ProcessTimedEvents:
 	call LABEL_F43D05
 	calr Seq_TickWrapper
 	call 0xFCF4F7
-	call LABEL_FE06E7
+	call AccNoteOn_ProcessVoiceSetup
 	call 0xEF150A
 	ret
 
@@ -330134,7 +330134,7 @@ LABEL_FE0245:
 	st_dri3b W, 0xFD, 0x50, 0x01
 	ld xbc, xwa
 	ld xwa, xde
-	call LABEL_FE1F45
+	call MidiEvent_ProcessNoteEntry
 	cps l, 0
 	jrl z, LABEL_FE06E0
 
@@ -330565,7 +330565,7 @@ NoteOnProcess_StoreAndAllocate:
 	st_dri3b W, 0xFD, 0x50, 0x01
 	ld xbc, xwa
 	ld xwa, xde
-	call LABEL_FE1F45
+	call MidiEvent_ProcessNoteEntry
 	cps l, 0
 	jrl nz, LABEL_FE0275
 
@@ -330574,7 +330574,7 @@ LABEL_FE06E0:
 	st_dri3b L, 0xFD, 0xF8, 0x01
 	ret
 
-LABEL_FE06E7:
+AccNoteOn_ProcessVoiceSetup:
 	lda xsp, (xsp - 18)
 	pushw iz
 	ldada xwa, 49662
@@ -330591,7 +330591,7 @@ LABEL_FE06E7:
 	ld (xsp + 14), 0x0
 	lda xwa, (xsp + 14)
 	ld xbc, 0xCC1E
-	call LABEL_FE1E8C
+	call MidiEvent_ParseNoteSequence
 	cps l, 0
 	jrl z, LABEL_FE09BB
 
@@ -330858,7 +330858,7 @@ LABEL_FE0992:
 AccNoteOn_FinalizeAndAutoPlay:
 	lda xwa, (xsp + 14)
 	ld xbc, 0xCC1E
-	call LABEL_FE1E8C
+	call MidiEvent_ParseNoteSequence
 	cps l, 0
 	jrl nz, LABEL_FE0721
 
@@ -332996,7 +332996,7 @@ LABEL_FE1E7B:
 	inc 6, xsp
 	ret
 
-LABEL_FE1E8C:
+MidiEvent_ParseNoteSequence:
 	dec 8, xsp
 	push xiz
 	ld xiz, xbc
@@ -333081,7 +333081,7 @@ LABEL_FE1F41:
 	inc 8, xsp
 	ret
 
-LABEL_FE1F45:
+MidiEvent_ProcessNoteEntry:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 10), xbc
