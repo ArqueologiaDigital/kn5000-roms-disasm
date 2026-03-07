@@ -1,0 +1,12905 @@
+LABEL_FB69EA:
+	pushw iz
+	ldada xbc, 64773
+	ldada xhl, 63904
+	sub xbc, xhl
+	lda_24 xde, 0x03c2c4
+	add xbc, xde
+	cp (xbc), 0x3
+	jr nz, LABEL_FB6A58
+	ldada xix, 64004
+	ld xbc, xix
+	sub xbc, xhl
+	ld xiy, xbc
+	add xiy, xde
+	ld c, (xwa + 29)
+	ld (xiy), c
+	lda xbc, (xix + 1)
+	sub xbc, xhl
+	ld xiy, xbc
+	add xiy, xde
+	ld c, (xwa + 30)
+	ld (xiy), c
+	lda xbc, (xix + 3)
+	sub xbc, xhl
+	ld xiy, xbc
+	add xiy, xde
+	ld c, (xwa + 31)
+	ld (xiy), c
+	ld c, (xwa + 32)
+	and c, 0xCF
+	ldfr_berp C, 0xF8
+	lda xbc, (xix + 4)
+	sub xbc, xhl
+	ld xiy, xbc
+	add xiy, xde
+	ld c, (xiy)
+	and c, 0x30
+	ld (xiy), c
+	or_berp C, 0xF8
+	ld (xiy), c
+	lda xbc, (xix + 8)
+	sub xbc, xhl
+	add xbc, xde
+	ld a, (xwa + 33)
+	ld (xbc), a
+
+LABEL_FB6A58:
+	popw iz
+	ret
+
+
+LABEL_FB6A5A:
+	.byte 0xf1, 0x58, 0x8d, 0x02, 0xff, 0xff, 0x78, 0x88
+	.byte 0x02
+LABEL_FB6A63:
+	.byte 0xc1, 0x7d, 0xc0, 0x3f, 0x02, 0xb0, 0xfe
+	.byte 0xc1, 0x7e, 0xc0, 0x21, 0xc1, 0x7f, 0xc0, 0xc1
+	.byte 0xc9, 0x33, 0x00, 0x76, 0x91, 0x00, 0xc1, 0x34
+	.byte 0x8d, 0x3f, 0x01, 0x66, 0x4e, 0xc1, 0x36, 0x8d
+	.byte 0x21, 0xc9, 0xcf, 0xc0, 0x66, 0x28, 0xc9, 0xcf
+	.byte 0xc1, 0x66, 0x0f, 0xc9, 0xcf, 0xc2, 0x66, 0x0a
+	.byte 0xc9, 0xcf, 0xc3, 0x66, 0x05, 0xc9, 0xcf, 0xc5
+	.byte 0xb0, 0xfe, 0x40, 0xff, 0xff, 0xff, 0xff, 0x41
+	.byte 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x58
+	.byte 0x9d, 0xfa, 0xd8, 0xa9, 0x68, 0x36, 0xc1, 0x4e
+	.byte 0x8d, 0x3f, 0x00, 0xb0, 0xfe, 0x40, 0xff, 0xff
+	.byte 0xff, 0xff, 0x41, 0x9a, 0x00, 0xe0, 0x01, 0xea
+	.byte 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0xd8, 0xa9, 0x1b
+	.byte 0x63, 0x94, 0xf9, 0xc1, 0x4e, 0x8d, 0x3f, 0x00
+	.byte 0x66, 0x18, 0x40, 0xff, 0xff, 0xff, 0xff, 0x41
+	.byte 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x58
+	.byte 0x9d, 0xfa, 0xd8, 0xa9, 0x1d, 0x63, 0x94, 0xf9
+	.byte 0x68, 0x3b, 0x40, 0xff, 0xff, 0xff, 0xff, 0x41
+	.byte 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x58
+	.byte 0x9d, 0xfa, 0x30, 0x12, 0x00, 0x1d, 0x63, 0x94
+	.byte 0xf9, 0xf1, 0x4e, 0x8d, 0x00, 0x0f, 0x0e, 0xc1
+	.byte 0x4e, 0x8d, 0x3f, 0x00, 0xb0, 0xf6, 0x40, 0xff
+	.byte 0xff, 0xff, 0xff, 0x41, 0x9a, 0x00, 0xe0, 0x01
+	.byte 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x30, 0xc1
+	.byte 0x00, 0x1d, 0x90, 0x94, 0xf9, 0xf1, 0x4e, 0x8d
+	.byte 0x00, 0x00, 0x0e
+LABEL_FB6B2D:
+	.byte 0xc1, 0x7d, 0xc0, 0x21, 0xc9
+	.byte 0xd8, 0x6e, 0x5f, 0xc1, 0x7f, 0xc0, 0x3f, 0x00
+	.byte 0x66, 0x53, 0xf1, 0x7e, 0xc0, 0xcf, 0x6e, 0x4d
+	.byte 0xf1, 0x52, 0x8d, 0xcc, 0x6e, 0x47, 0xc1, 0x36
+	.byte 0x8d, 0x3f, 0xc0, 0x6e, 0x06, 0x1d, 0xfa, 0x94
+	.byte 0xf9, 0x68, 0x3a, 0x40, 0x01, 0x04, 0x00, 0x00
+	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0xdb, 0x66, 0x04
+	.byte 0xdb, 0xda, 0x6e, 0x29, 0x40, 0x00, 0x04, 0x00
+	.byte 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0xd8, 0x66
+	.byte 0x1c, 0x40, 0x02, 0x80, 0x02, 0x00, 0x1d, 0x37
+	.byte 0xd4, 0xfc, 0xf1, 0x54, 0x8d, 0x47, 0xf1, 0xe2
+	.byte 0xb7, 0xbf, 0xf1, 0x52, 0x8d, 0xbb, 0x1e, 0x57
+	.byte 0x06, 0xf1, 0x52, 0x8d, 0xb3, 0xf1, 0x52, 0x8d
+	.byte 0xb4, 0x0e, 0xc9, 0xdf, 0x6e, 0x3b, 0xc1, 0x52
+	.byte 0x8d, 0x21, 0xc9, 0xcc
+	.ascii "(f2@"
+	.byte 0x01, 0x04, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc
+	.byte 0xdb, 0xdb, 0x66, 0x04, 0xdb, 0xda, 0x6e, 0x21
+	.byte 0x40, 0x00, 0x04, 0x00, 0x00, 0x1d, 0x37, 0xd4
+	.byte 0xfc, 0xdb, 0xd8, 0x66, 0x14, 0x40, 0x02, 0x80
+	.byte 0x02, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xf1, 0x54
+	.byte 0x8d, 0x47, 0xf1, 0xe2, 0xb7, 0xbf, 0x1e, 0x0f
+	.byte 0x06, 0xc1, 0x52, 0x8d, 0x3c, 0xd7, 0x0e
+LABEL_FB6BD9:
+	.byte 0xc1
+	.byte 0x7d, 0xc0, 0x3f, 0x03, 0x6e, 0x44, 0xc1, 0x7e
+	.byte 0xc0, 0x21, 0xc9, 0xcc, 0x07, 0x66, 0x3b, 0xc1
+	.byte 0x52, 0x8d, 0x21, 0xc9, 0xcc, 0x28, 0x66, 0x32
+	.byte 0x40, 0x01, 0x04, 0x00, 0x00, 0x1d, 0x37, 0xd4
+	.byte 0xfc, 0xdb, 0xdb, 0x66, 0x04, 0xdb, 0xda, 0x6e
+	.byte 0x21, 0x40, 0x00, 0x04, 0x00, 0x00, 0x1d, 0x37
+	.byte 0xd4, 0xfc, 0xdb, 0xd8, 0x66, 0x14, 0x40, 0x02
+	.byte 0x80, 0x02, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xf1
+	.byte 0x54, 0x8d, 0x47, 0xf1, 0xe2, 0xb7, 0xbf, 0x1e
+	.byte 0xbe, 0x05, 0xc1, 0x52, 0x8d, 0x3c, 0xd7, 0x0e
+
+
+LABEL_FB6C2A:
+	calr LABEL_FB6D16
+	cpdi8 36150, 192
+	jr nz, LABEL_FB6C4A
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 0
+	call ApPostEvent
+	lds wa, 1
+	call UI_PostPartChangeEvent
+
+LABEL_FB6C4A:
+	stdi8 36174, 0
+	jr __jrt_nop_FB6C51
+__jrt_nop_FB6C51:
+
+LABEL_FB6C51:
+	ld xwa, 0x28000
+	call SndParam_LookupReadOnly
+	bit 7, hl
+	ret nz
+	calr SndParam_LoadTransposeValues
+	stda16 36184, xhl
+	ret
+
+SndParam_LoadTransposeValues:
+	ld xwa, 0x28000
+	call SndParam_LookupReadOnly
+	stda8 37098, l
+	ld xwa, 0x28001
+	call SndParam_LookupReadOnly
+	ldada xwa, 37098
+	ld (xwa + 1), l
+	ld (xwa + 2), 0x48
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call Rhythm_DispatchNote_Finalize
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	ldada xbc, 37102
+	ld e, (xbc + 1)
+	extz de
+	ld a, (xbc)
+	extz wa
+	sll wa, 8
+	add wa, de
+	ld hl, wa
+	ret
+
+EffectMode_TimerCountdown:
+	ldda8 a, 36174
+	cps a, 0
+	ret z
+	dec 1, a
+	stda8 36174, a
+	cps a, 0
+	ret nz
+	cpdi16 36182, 0
+	jr z, LABEL_FB6CCE
+	push xde
+	push xhl
+	push xix
+	push xiz
+	calr LABEL_FB6C2A
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+
+LABEL_FB6CCE:
+	ldda8 a, 36150
+	cp a, 0xC5
+	jr z, LABEL_FB6CE1
+	cp a, 0xC2
+	jr z, LABEL_FB6CE1
+	cp a, 0xC1
+	jr nz, LABEL_FB6CE6
+
+LABEL_FB6CE1:
+	resda 7, 47074
+	ret
+
+LABEL_FB6CE6:
+	setda 7, 47074
+	ret
+
+LABEL_FB6CEB:
+	ld xwa, 0x28000
+	call SndParam_LookupReadOnly
+	bit 7, hl
+	jr nz, LABEL_FB6D09
+	calr SndParam_LoadTransposeValues
+	cpda16 xhl, 36184
+	ret z
+	stda16 36184, xhl
+	jrl BitMapOut_ApplyPatch_SkipHeader
+
+LABEL_FB6D09:
+	stdi16 36184, 65535
+	stdi16 36182, 0
+	ret
+
+LABEL_FB6D16:
+	dec 4, xsp
+	push xiz
+	ldda16 xbc, 36182
+	ld wa, bc
+	cps bc, 0
+	jr z, LABEL_FB6D27
+	dec 1, wa
+	jr LABEL_FB6D2D
+
+LABEL_FB6D27:
+	bitda 7, 47074
+	jr nz, LABEL_FB6D83
+
+LABEL_FB6D2D:
+	calr LABEL_FB6DAB
+	ld xwa, xhl
+	stda32 36192, xwa
+	calr LABEL_FB6EC3
+	ldada xwa, 64602
+	ld (xsp + 4), xwa
+	sub xwa, 0xF9A0
+	lda_24 xbc, 0x03c2c4
+	ld xiz, xwa
+	add xiz, xbc
+	ld xwa, (xsp + 4)
+	ld xbc, xiz
+	calr LABEL_FB706A
+	ld xwa, (xsp + 4)
+	ld xbc, xiz
+	calr LABEL_FB709F
+	ld xwa, xiz
+	calr LABEL_FB7141
+	ldada xwa, 63983
+	sub xwa, 0xF9A0
+	lda_24 xbc, 0x03c2c4
+	add xwa, xbc
+	andmi8 (xwa), 0x80
+	ld xwa, (xsp + 4)
+	ld xbc, xiz
+	calr LABEL_FB7142
+	calr LABEL_FB717F
+
+LABEL_FB6D83:
+	resda 7, 47074
+	pop xiz
+	inc 4, xsp
+	ret
+
+LABEL_FB6D8B:
+	ldada	xwa, 64007
+	ldada	xde, 63904
+	sub	xwa, xde
+	lda_24	xbc, 246468
+	ld	xhl, xwa
+	add	xhl, xbc
+	ldada	xwa, 64423
+	sub	xwa, xde
+	add	xwa, xbc
+	ld	a, (xwa)
+	ld	(xhl), a
+	ret
+
+LABEL_FB6DAB:
+	cp wa, 0x3E8
+	jr ule, LABEL_FB6DB3
+	lds wa, 1
+
+LABEL_FB6DB3:
+	ldda8 c, 36152
+	cp c, 0xC2
+	jr z, LABEL_FB6DC1
+	cp c, 0xC5
+	jr nz, LABEL_FB6DC8
+
+LABEL_FB6DC1:
+	ld xbc, 0x986000
+	jr LABEL_FB6DCD
+
+LABEL_FB6DC8:
+	ld xbc, 0x987000
+
+LABEL_FB6DCD:
+	extz xwa
+	sll xwa, 2
+	add xwa, xbc
+	ld xwa, (xwa)
+	ld xhl, xwa
+	add xhl, (xwa + 4)
+	ret
+
+LABEL_FB6DDC:
+	pushw iz
+	ldda8 c, 36152
+	cp c, 0xC0
+	jr z, LABEL_FB6DF0
+	cp c, 0xC2
+	jr z, LABEL_FB6DF0
+	cp c, 0xC5
+	jr nz, LABEL_FB6E67
+
+LABEL_FB6DF0:
+	ldda16 xwa, 36182
+	ld iz, wa
+	cps wa, 0
+	jr z, LABEL_FB6DFC
+	dec 1, iz
+
+LABEL_FB6DFC:
+	cp c, 0xC2
+	jr z, LABEL_FB6E06
+	cp c, 0xC5
+	jr nz, LABEL_FB6E25
+
+LABEL_FB6E06:
+	ld wa, iz
+	calr LABEL_FB6E69
+	cp xhl, 0xFFFFFFFF
+	jr z, LABEL_FB6E1E
+	pushw 0x10
+	ld wa, iz
+	calr LABEL_FB6E69
+	push xhl
+	jr LABEL_FB6E54
+
+LABEL_FB6E1E:
+	ld xwa, 0x986000
+	jr LABEL_FB6E42
+
+LABEL_FB6E25:
+	ld wa, iz
+	calr LABEL_FB6E97
+	cp xhl, 0xFFFFFFFF
+	jr z, LABEL_FB6E3D
+	pushw 0x10
+	ld wa, iz
+	calr LABEL_FB6E97
+	push xhl
+	jr LABEL_FB6E54
+
+LABEL_FB6E3D:
+	ld xwa, 0x987000
+
+LABEL_FB6E42:
+	ld bc, iz
+	extz xbc
+	sll xbc, 2
+	add xbc, xwa
+	ld xwa, (xbc)
+	pushw 0x10
+	lda xwa, (xwa + 43)
+	push xwa
+
+LABEL_FB6E54:
+	ldada xwa, 63906
+	push xwa
+	call Strncpy
+	lda xsp, (xsp + 10)
+	ldw wa, 0x80
+	call BitMapOut_GetRenderMode_CheckBit3
+
+LABEL_FB6E67:
+	popw iz
+	ret
+
+LABEL_FB6E69:
+	lds ix, 0
+	lda_24 xhl, 0xeb7ca0
+
+LABEL_FB6E70:
+	ld bc, ix
+	extz xbc
+	ld xde, xbc
+	sll xde, 3
+	add xde, xbc
+	add xde, xde
+	ld xbc, xhl
+	add xbc, xde
+	cp wa, (xbc)
+	jr nz, LABEL_FB6E89
+	lda xhl, (xbc + 2)
+	ret
+
+LABEL_FB6E89:
+	inc 1, ix
+	cp ix, 0x16
+	jr c, LABEL_FB6E70
+	ld xhl, 0xFFFFFFFF
+	ret
+
+LABEL_FB6E97:
+	lds ix, 0
+	lda_24 xhl, 0xeb7e2c
+
+LABEL_FB6E9E:
+	ld bc, ix
+	extz xbc
+	ld xde, xbc
+	sll xde, 3
+	add xde, xbc
+	add xde, xde
+	ld xbc, xhl
+	add xbc, xde
+	cp wa, (xbc)
+	jr nz, LABEL_FB6EB7
+	lda xhl, (xbc + 2)
+	ret
+
+LABEL_FB6EB7:
+	inc 1, ix
+	cps ix, 5
+	jr c, LABEL_FB6E9E
+	ld xhl, 0xFFFFFFFF
+	ret
+
+LABEL_FB6EC3:
+	push xiz
+	ld xiz, xwa
+	calr LABEL_FB704E
+	ldda8 a, 36178
+	bit 5, a
+	jr z, LABEL_FB6EE0
+	res 5, a
+	stda8 36178, a
+	ld xwa, xiz
+	calr BitMapOut_ByteData_PatchTable
+	jr LABEL_FB6EE3
+
+LABEL_FB6EE0:
+	calr LABEL_FB6EEA
+
+LABEL_FB6EE3:
+	ld xwa, xiz
+	calr LABEL_FB69EA
+	pop xiz
+	ret
+
+LABEL_FB6EEA:
+	lda xsp, (xsp - 48)
+	push xiz
+	lda xwa, (xsp + 48)
+	ld (xsp + 12), xwa
+	ldada xwa, 63930
+	ldada xde, 63904
+	sub xwa, xde
+	lda_24 xbc, 0x03c2c4
+	ld (xsp + 32), xwa
+	add (xsp + 32), xbc
+	ld xwa, (xsp + 32)
+	ld l, (xwa)
+	and l, 0x20
+	ld xix, (xsp + 12)
+	ld (xix), l
+	lda xwa, (xix + 1)
+	ld (xsp + 24), xwa
+	ldada xwa, 63956
+	sub xwa, xde
+	ld (xsp + 36), xwa
+	add (xsp + 36), xbc
+	ld xwa, (xsp + 36)
+	ld l, (xwa)
+	and l, 0x20
+	ld xwa, (xsp + 24)
+	ld (xwa), l
+	lda xwa, (xix + 2)
+	ld (xsp + 20), xwa
+	ldada xwa, 63982
+	sub xwa, xde
+	ld (xsp + 40), xwa
+	add (xsp + 40), xbc
+	ld xwa, (xsp + 40)
+	ld l, (xwa)
+	and l, 0x20
+	ld xwa, (xsp + 20)
+	ld (xwa), l
+	lda xwa, (xix + 3)
+	ld (xsp + 16), xwa
+	ldada xwa, 64008
+	sub xwa, xde
+	ld (xsp + 44), xwa
+	add (xsp + 44), xbc
+	ld xwa, (xsp + 44)
+	ld l, (xwa)
+	and l, 0x20
+	ld xwa, (xsp + 16)
+	ld (xwa), l
+	ldada xwa, 64770
+	sub xwa, xde
+	ld (xsp + 28), xwa
+	add (xsp + 28), xbc
+	ld xwa, (xsp + 28)
+	ld a, (xwa)
+	and a, 0x3B
+	ld (xsp + 4), a
+	ldada xhl, 64623
+	sub xhl, xde
+	add xhl, xbc
+	ld a, (xhl)
+	and a, 0x20
+	ld (xsp + 6), a
+	ldda32 xwa, 36192
+	ld (xsp + 8), xwa
+	lds iy, 0
+	jr LABEL_FB6FCD
+
+LABEL_FB6FA5:
+	ld a, (xix + 4)
+	extz wa
+	ld xde, (xix)
+	exts xwa
+	add xwa, xde
+	ld xiz, xbc
+	add xiz, xwa
+	ldb w, 0x0
+	jr LABEL_FB6FC6
+
+LABEL_FB6FB8:
+	ld xde, (xsp + 8)
+	ld_spib A, 0xE8
+	lda_dpi XBC, 0xF8
+	ld (xsp + 8), xde
+	inc 1, w
+
+LABEL_FB6FC6:
+	cp (xix + 5), w
+	jr ugt, LABEL_FB6FB8
+	inc 1, iy
+
+LABEL_FB6FCD:
+	ld de, iy
+	extz xde
+	ld xwa, xde
+	add xwa, xwa
+	add xwa, xde
+	add xwa, xwa
+	ld xix, 0xEB7BDA
+	add xix, xwa
+	ld xwa, (xix)
+	cp xwa, 0xFF
+	jr nz, LABEL_FB6FA5
+	ld xde, (xsp + 32)
+	ld c, (xde)
+	res 5, c
+	ld (xde), c
+	ld xwa, (xsp + 12)
+	or c, (xwa)
+	ld (xde), c
+	ld xde, (xsp + 36)
+	ld c, (xde)
+	res 5, c
+	ld (xde), c
+	ld xwa, (xsp + 24)
+	or c, (xwa)
+	ld (xde), c
+	ld xde, (xsp + 40)
+	ld c, (xde)
+	res 5, c
+	ld (xde), c
+	ld xwa, (xsp + 20)
+	or c, (xwa)
+	ld (xde), c
+	ld xde, (xsp + 44)
+	ld c, (xde)
+	res 5, c
+	ld (xde), c
+	ld xwa, (xsp + 16)
+	or c, (xwa)
+	ld (xde), c
+	ld xwa, (xsp + 28)
+	ld c, (xwa)
+	and c, 0xC4
+	ld (xwa), c
+	or c, (xsp + 4)
+	ld (xwa), c
+	ld a, (xhl)
+	res 5, a
+	ld (xhl), a
+	or a, (xsp + 6)
+	ld (xhl), a
+	pop xiz
+	lda xsp, (xsp + 48)
+	ret
+
+LABEL_FB704E:
+	ldada xbc, 63904
+	ldada xwa, 64862
+	sub xwa, xbc
+	inc 2, xwa
+	pushw wa
+	push xbc
+	pushw 0x3
+	pushw 0xC2C4
+	call Mem_Copy
+	lda xsp, (xsp + 10)
+	ret
+
+LABEL_FB706A:
+	ldda8 e, 36152
+	cp e, 0xC0
+	ret z
+	cp e, 0xC2
+	ret z
+	cp e, 0xC5
+	ret z
+	bitda 2, 1056
+	ret z
+	ld l, (xwa + 8)
+	and l, 0xFF
+	ld e, (xwa + 9)
+	and e, 0x1
+	lda xwa, (xbc + 8)
+	ld (xwa), 0x0
+	lda xbc, (xbc + 9)
+	resm 0, (xbc)
+	or (xwa), l
+	or (xbc), e
+	ret
+
+LABEL_FB709F:
+	push xiz
+	ld xiz, xbc
+	ld h, (xwa + 3)
+	ld a, h
+	and a, 0x7
+	jr nz, LABEL_FB70B8
+	call Get_Region_Code
+	ldb h, 0xA
+	cps l, 2
+	jr nz, LABEL_FB70B8
+	ldb h, 0x9
+
+LABEL_FB70B8:
+	lda xbc, (xiz + 3)
+	ld a, (xbc)
+	and a, 0xF8
+	ld (xbc), a
+	or a, h
+	ld (xbc), a
+	setm 1, (xiz + 5)
+	ldada xbc, 64770
+	ld h, (xbc)
+	and h, 0x3
+	sub xbc, 0xF9A0
+	lda_24 xde, 0x03c2c4
+	add xbc, xde
+	ld a, (xbc)
+	and a, 0xFC
+	ld (xbc), a
+	or a, h
+	ld (xbc), a
+	ldda8 a, 36152
+	cp a, 0xC2
+	jr z, LABEL_FB70F8
+	cp a, 0xC5
+	jr nz, EffectMode_PopIzRet
+
+LABEL_FB70F8:
+	bitda 2, 1054
+	jr nz, EffectMode_PopIzRet
+	ldda16 xwa, 36182
+	bit 0, wa
+	jr z, LABEL_FB7124
+	ld xwa, 0x28101
+	call SndParam_LookupReadOnly
+	cps hl, 2
+	jr z, EffectMode_PopIzRet
+	push xde
+	push xhl
+	push xix
+	push xiz
+	lds wa, 0
+	call AccReplay_SendPedalType5
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	jr EffectMode_PopIzRet
+
+LABEL_FB7124:
+	ld xwa, 0x28101
+	call SndParam_LookupReadOnly
+	cps hl, 3
+	jr z, EffectMode_PopIzRet
+	push xde
+	push xhl
+	push xix
+	push xiz
+	lds wa, 1
+	call AccReplay_SendPedalType5
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+
+EffectMode_PopIzRet:
+	pop xiz
+	ret
+
+LABEL_FB7141:
+	ret
+
+LABEL_FB7142:
+	ld xde, xbc
+	bitda 7, 47074
+	ret z
+	ld c, (xwa)
+	ld (xde), c
+	ld c, (xwa + 1)
+	res 7, c
+	ldfr_berp C, 0xF0
+	lda xhl, (xde + 1)
+	ld c, (xhl)
+	and c, 0x80
+	ld (xhl), c
+	or_berp C, 0xF0
+	ld (xhl), c
+	ld a, (xwa + 4)
+	and a, 0x7
+	ldfr_berp A, 0xF0
+	lda xbc, (xde + 4)
+	ld a, (xbc)
+	and a, 0xF8
+	ld (xbc), a
+	or_berp A, 0xF0
+	ld (xbc), a
+	ret
+
+LABEL_FB717F:
+	ld xwa, 0x302
+	call SndParam_LookupReadOnly
+	stda8 36176, l
+	ld xwa, 0x302
+	lds bc, 1
+	lds de, 0
+	call SoundParam_NotifyChange
+	ldw wa, 0x80
+	ld xbc, 0x3C2C4
+	call BitMapOut_CopyVoicePreset9
+	ldw wa, 0x80
+	call BitMapOut_SnapshotFromROM
+	calr LABEL_FB6DDC
+	resda 4, 36178
+	cpdi8 36176, 1
+	jr z, LABEL_FB71C5
+	ld xwa, 0x302
+	lds bc, 0
+	lds de, 0
+	jr LABEL_FB71CE
+
+LABEL_FB71C5:
+	ld xwa, 0x302
+	lds bc, 1
+	lds de, 0
+
+LABEL_FB71CE:
+	call SoundParam_NotifyChange
+	jp SwbtWr_ReinitOutputBank
+
+LABEL_FB71D6:
+	setda 5, 36178
+	calr LABEL_FB71E2
+	resda 5, 36178
+	ret
+
+LABEL_FB71E2:
+	ldda8 c, 36150
+	cp c, 0x78
+	jr z, SndOutput_ReinitByMode
+	cp c, 0x7A
+	jr z, SndOutput_ReinitByMode
+	ldda8 a, 36148
+	cps a, 2
+	jr z, SndOutput_ReinitByMode
+	cps a, 1
+	jr z, SndOutput_ReinitByMode
+	cp c, 0x85
+	jr z, SndOutput_ReinitByMode
+	cp c, 0x81
+	jr z, SndOutput_ReinitByMode
+	cp c, 0x7F
+	jr z, SndOutput_ReinitByMode
+	cp c, 0x60
+	jr z, SndOutput_ReinitByMode
+	cps a, 7
+	ret nz
+
+SndOutput_ReinitByMode:
+	ld xwa, 0x401
+	call SndParam_LookupReadOnly
+	cps hl, 3
+	jr z, LABEL_FB7227
+	cps hl, 2
+	ret nz
+	jr LABEL_FB722B
+
+LABEL_FB7227:
+	calr LABEL_FB726A
+	ret
+
+LABEL_FB722B:
+	push xiz
+	ldda16 xiz, 36184
+	ldda16 xwa, 36182
+	ldfr_werp WA, 0xFA
+	stdi16 36184, 65535
+	calr LABEL_FB6CEB
+	ldda16 xbc, 36182
+	cps bc, 0
+	jr z, LABEL_FB725D
+	dec 1, bc
+	ldda8 a, 36180
+	extz wa
+	add bc, wa
+	stda16 36182, xbc
+	calr LABEL_FB6D16
+	call SwbtWr_ReinitOutputBank
+
+LABEL_FB725D:
+	ldto_werp WA, 0xFA
+	stda16 36182, xwa
+	stda16 36184, xiz
+	pop xiz
+	ret
+
+LABEL_FB726A:
+	ldda8 c, 36180
+	inc 1, c
+	extz bc
+	ld xwa, 0x300
+	lds de, 3
+	call SoundParam_NotifyChange
+	ldda8 a, 36178
+	bit 5, a
+	jr z, LABEL_FB728D
+	set 2, a
+	stda8 36178, a
+
+LABEL_FB728D:
+	ldda8 a, 36178
+	bit 3, a
+	ret z
+	set 1, a
+	stda8 36178, a
+	ret
+
+
+MainCPU_self_test_routines:	; FB729E
+	set_dd8 1, 0x30
+	bit_dd8 0, 0x30
+	ret nz
+	lds wa, 0
+	calr Test_DRAM_IC10_and_IC9
+	extz hl
+	ld wa, hl
+	calr Test_SRAM_IC21
+	extz hl
+	ld wa, hl
+	calr Report_test_result_by_blinking_LED
+	calr A_Short_Pause
+	lds wa, 0
+	calr Test_PROGRAM_and_TABLE_DATA_ROMs
+	extz hl
+	ld wa, hl
+	calr Report_test_result_by_blinking_LED
+	lds wa, 0
+	calr Test_Rhythm_data_ROM_IC14
+	extz hl
+	ld wa, hl
+	calr Test_Custom_data_ROM_IC19
+	extz hl
+	ld wa, hl
+	calr Test_LCD_Controller_IC206
+	extz hl
+	ld wa, hl
+	calr Test_Video_RAM_IC207
+	extz hl
+	ld wa, hl
+	calr Report_test_result_by_blinking_LED
+	ret
+
+
+Report_test_result_by_blinking_LED:	; FB72EA
+	ldb l, 0x0
+
+LABEL_FB72EC:
+	res_dd8 1, 0x30
+	ldw bc, 0x4000
+	bit 0, a
+	jr z, LABEL_FB72FC
+	ldw bc, 0xC000
+	jr LABEL_FB7300
+
+LABEL_FB72FC:
+	cps bc, 0
+	jr z, LABEL_FB730C
+
+LABEL_FB7300:
+	ldb e, 0x0
+
+LABEL_FB7302:
+	inc 1, e
+	cp e, 0x20
+	jr c, LABEL_FB7302
+	djnz xbc, LABEL_FB7300
+
+LABEL_FB730C:
+	set_dd8 1, 0x30
+	ldw bc, 0x4000
+
+LABEL_FB7312:
+	ldb e, 0x0
+
+LABEL_FB7314:
+	inc 1, e
+	cp e, 0x20
+	jr c, LABEL_FB7314
+	djnz xbc, LABEL_FB7312
+	srl a, 1
+	inc 1, l
+	cps l, 3
+	jr ule, LABEL_FB72EC
+	ret
+
+
+A_Short_Pause:	; FB7328
+	lds bc, 0
+
+LABEL_FB732A:
+	lds wa, 0
+
+LABEL_FB732C:
+	inc 1, wa
+	cp wa, 0x100
+	jr c, LABEL_FB732C
+	inc 1, bc
+	cp bc, 0x1000
+	jr c, LABEL_FB732A
+	ret
+
+DramTest_Loop:
+	lds wa, 0
+
+LABEL_FB733F:
+	inc 1, wa
+	cp wa, 0x10
+	jr c, LABEL_FB733F
+	ret
+
+
+Test_DRAM_IC10_and_IC9:	; FB7348
+	lda xsp, (xsp - 12)
+	push xiz
+	ld (xsp + 14), a
+	ld (xsp + 4), 0x0
+
+LABEL_FB7353:
+	ld a, (xsp + 4)
+	extz wa
+	muls wa, 0xA
+	lda_24 xbc, 0xeb802e
+	st_dri3b B, 0x07, 0xE4, 0xE0
+	ld xhl, (xde)
+	ld xiz, (xde + 4)
+	srl xiz, 3
+	or xiz, xiz
+	jr z, LABEL_FB73EC
+
+LABEL_FB7372:
+	ld xwa, (xhl)
+	ld (xsp + 6), xwa
+	ld xwa, 0x5A5A5A5A
+	ld (xhl), xwa
+	ld xiy, xhl
+	lda xix, (xsp + 10)
+	ldiw
+	ldiw
+	lda xwa, (xsp + 10)
+	ld xbc, xwa
+	cpw (xwa), 0x5A5A
+	jr z, LABEL_FB7398
+	ld a, (xde + 8)
+	or (xsp + 14), a
+
+LABEL_FB7398:
+	cpw (xbc + 2), 0x5A5A
+	jr z, LABEL_FB73A5
+	ld a, (xde + 9)
+	or (xsp + 14), a
+
+LABEL_FB73A5:
+	ld xwa, (xsp + 6)
+	st_dpil XWA, 0xEE
+	ld xwa, (xhl)
+	ld (xsp + 6), xwa
+	ld xwa, 0xA5A5A5A5
+	ld (xhl), xwa
+	ld xiy, xhl
+	lda xix, (xsp + 10)
+	ldiw
+	ldiw
+	lda xwa, (xsp + 10)
+	ld xbc, xwa
+	cpw (xwa), 0xA5A5
+	jr z, LABEL_FB73D1
+	ld a, (xde + 8)
+	or (xsp + 14), a
+
+LABEL_FB73D1:
+	cpw (xbc + 2), 0xA5A5
+	jr z, LABEL_FB73DE
+	ld a, (xde + 9)
+	or (xsp + 14), a
+
+LABEL_FB73DE:
+	ld xwa, (xsp + 6)
+	st_dpil XWA, 0xEE
+	sub xiz, 0x1
+	jr nz, LABEL_FB7372
+
+LABEL_FB73EC:
+	incm8 1, (xsp + 4)
+	cp (xsp + 4), 0x1
+	jrl nz, LABEL_FB7353
+	ld l, (xsp + 14)
+	extz hl
+	pop xiz
+	lda xsp, (xsp + 12)
+	ret
+
+
+Test_SRAM_IC21:	; FB7400
+	ldb l, 0x0
+
+LABEL_FB7402:
+	ld c, l
+	extz bc
+	muls bc, 0xA
+	lda_24 xde, 0xeb8038
+	st_dri3b B, 0x07, 0xE8, 0xE4
+	ld xiy, (xde)
+	ld xbc, (xde + 4)
+	srl xbc, 1
+	ld xix, xbc
+	or xix, xix
+	jr z, LABEL_FB744B
+
+LABEL_FB7422:
+	ld w, (xiy)
+	ld (xiy), 0x5A
+	lda xbc, (xde + 8)
+	cp (xiy), 0x5A
+	jr z, LABEL_FB7431
+	or a, (xbc)
+
+LABEL_FB7431:
+	lda_dpi XWA, 0xF4
+	ld w, (xiy)
+	ld (xiy), 0xA5
+	cp (xiy), 0xA5
+	jr z, LABEL_FB7440
+	or a, (xbc)
+
+LABEL_FB7440:
+	lda_dpi XWA, 0xF4
+	sub xix, 0x1
+	jr nz, LABEL_FB7422
+
+LABEL_FB744B:
+	inc 1, l
+	cps l, 1
+	jr nz, LABEL_FB7402
+	ld l, a
+	extz hl
+	ret
+
+Test_PROGRAM_and_TABLE_DATA_ROMs:	; FB7456
+	lda xsp, (xsp - 18)
+	push xiz
+	ld (xsp + 20), a
+	lda xbc, (xsp + 16)
+	ldw (xbc), 0x0
+	lda xwa, (xbc + 2)
+	ld (xsp + 4), xwa
+	ldw (xwa), 0x0
+	lda xde, (xsp + 12)
+	ldw (xde), 0x0
+	lda xwa, (xde + 2)
+	ld (xsp + 8), xwa
+	ldw (xwa), 0x0
+	ldi_berp 0xE2, 0
+
+LABEL_FB7482:
+	ld xhl, 0xE00000
+	lds32 xix, 0
+
+LABEL_FB7489:
+	ldto_berp A, 0xE2
+	extz wa
+	sla wa, 1
+	ld iy, wa
+	st_dri3b H, 0x07, 0xE4, 0xF4
+	ld wa, (xiz)
+	ldfr_werp WA, 0xF6
+	ld wa, (xhl)
+	add_werp WA, 0xF6
+	ld (xiz), wa
+	exts xiy
+	add xiy, xde
+	ld wa, (xiy)
+	lda xiz, (xhl + 2)
+	inc 4, xhl
+	ld iz, (xiz)
+	add iz, wa
+	ld (xiy), iz
+	inc 1, xix
+	cp xix, 0x40000
+	jr c, LABEL_FB7489
+	inc1_berp 0xE2
+	cpi_berp 0xE2, 2
+	jr c, LABEL_FB7482
+	ld hl, (xbc)
+	ld xwa, (xsp + 4)
+	ld wa, (xwa)
+	cp wa, hl
+	jr z, LABEL_FB74D5
+	setm 0, (xsp + 20)
+
+LABEL_FB74D5:
+	ld hl, (xde)
+	ld xwa, (xsp + 8)
+	cp (xwa), hl
+	jr z, LABEL_FB74E1
+	setm 1, (xsp + 20)
+
+LABEL_FB74E1:
+	ldw (xbc), 0x0
+	ld xwa, (xsp + 4)
+	ldw (xwa), 0x0
+	ldw (xde), 0x0
+	ld xwa, (xsp + 8)
+	ldw (xwa), 0x0
+	ldi_berp 0xE2, 0
+
+LABEL_FB74FA:
+	ld xhl, 0x800000
+	lds32 xix, 0
+
+LABEL_FB7501:
+	ldto_berp A, 0xE2
+	extz wa
+	sla wa, 1
+	ld iy, wa
+	st_dri3b H, 0x07, 0xE4, 0xF4
+	ld wa, (xiz)
+	ldfr_werp WA, 0xF6
+	ld wa, (xhl)
+	add_werp WA, 0xF6
+	ld (xiz), wa
+	exts xiy
+	add xiy, xde
+	ld wa, (xiy)
+	lda xiz, (xhl + 2)
+	inc 4, xhl
+	ld iz, (xiz)
+	add iz, wa
+	ld (xiy), iz
+	inc 1, xix
+	cp xix, 0x40000
+	jr c, LABEL_FB7501
+	inc1_berp 0xE2
+	cpi_berp 0xE2, 2
+	jr c, LABEL_FB74FA
+	ld xwa, (xsp + 4)
+	ld wa, (xwa)
+	cp wa, (xbc)
+	jr z, LABEL_FB754B
+	setm 2, (xsp + 20)
+
+LABEL_FB754B:
+	ld xwa, (xsp + 8)
+	ld wa, (xwa)
+	cp wa, (xde)
+	jr z, LABEL_FB7557
+	setm 3, (xsp + 20)
+
+LABEL_FB7557:
+	ld l, (xsp + 20)
+	extz hl
+	pop xiz
+	lda xsp, (xsp + 18)
+	ret
+
+Test_Rhythm_data_ROM_IC14:
+	dec 4, xsp
+	push xiz
+	lda xix, (xsp + 4)
+	ldw (xix), 0x0
+	lda xhl, (xix + 2)
+	ldw (xhl), 0x0
+	ldb w, 0x0
+
+LABEL_FB7574:
+	ld xiy, 0x400000
+	lds32 xiz, 0
+
+LABEL_FB757B:
+	ld c, w
+	extz bc
+	add bc, bc
+	st_dri3b B, 0x07, 0xF0, 0xE4
+	ld bc, (xde)
+	ldfr_werp BC, 0xE2
+	ld_spiw BC, 0xF5
+	add_werp BC, 0xE2
+	ld (xde), bc
+	inc 1, xiz
+	cp xiz, 0x100000
+	jr c, LABEL_FB757B
+	inc 1, w
+	cps w, 2
+	jr c, LABEL_FB7574
+	ld bc, (xhl)
+	cp bc, (xix)
+	jr z, LABEL_FB75AC
+	set 0, a
+
+LABEL_FB75AC:
+	lda_24 xix, 0xeb800c
+	ld xiy, (xix)
+	lda xbc, (xix + 4)
+	ld xde, xbc
+	lda xhl, (xbc + 4)
+
+LABEL_FB75BB:
+	ld c, (xiy)
+	cp c, (xde)
+	jr z, LABEL_FB75C4
+	or a, (xix + 8)
+
+LABEL_FB75C4:
+	inc 1, xiy
+	inc 1, xde
+	cp xde, xhl
+	jr c, LABEL_FB75BB
+	ld l, a
+	extz hl
+	pop xiz
+	inc 4, xsp
+	ret
+
+Test_Custom_data_ROM_IC19:
+	dec 6, xsp
+	pushw iz
+	ld (xsp + 6), a
+	lds wa, 1
+	call Flash_IdentifyAndValidateChip
+	cp hl, 0xFFFF
+	jr nz, LABEL_FB75E9
+	setm 1, (xsp + 6)
+
+LABEL_FB75E9:
+	lda xhl, (xsp + 2)
+	ldw (xhl), 0x0
+	lda xde, (xhl + 2)
+	ldw (xde), 0x0
+	ldi_berp 0xE2, 0
+
+LABEL_FB75FA:
+	ld xix, 0x300000
+	lds32 xiy, 0
+
+LABEL_FB7601:
+	ldto_berp A, 0xE2
+	extz wa
+	add wa, wa
+	st_dri3b A, 0x07, 0xEC, 0xE0
+	ld wa, (xbc)
+	ld_spiw IZ, 0xF1
+	add iz, wa
+	ld (xbc), iz
+	inc 1, xiy
+	cp xiy, 0x40000
+	jr c, LABEL_FB7601
+	inc1_berp 0xE2
+	cpi_berp 0xE2, 2
+	jr c, LABEL_FB75FA
+	ld wa, (xde)
+	cp wa, (xhl)
+	jr z, LABEL_FB7631
+	setm 1, (xsp + 6)
+
+LABEL_FB7631:
+	ld l, (xsp + 6)
+	extz hl
+	popw iz
+	inc 6, xsp
+	ret
+
+Test_LCD_Controller_IC206:
+	dec 2, xsp
+	ld (xsp), a
+
+	; equivalent to "_VGA_WRITE 3c3h, 0" but with CALL instead of CALR
+	ldw wa, 0x3C3
+	lds bc, 0
+	call _Write_VGA_Register
+
+	; equivalent to "_VGA_READ 3c3h" but with CALL instead of CALR
+	ldw wa, 0x3C3
+	call _Read_VGA_Register
+
+	cps l, 0
+	jr z, LABEL_FB7654
+	setm 2, (xsp)
+
+LABEL_FB7654:
+	; equivalent to "_VGA_WRITE 3c3h, 1" but with CALL instead of CALR
+	ldw wa, 0x3C3
+	lds bc, 1
+	call _Write_VGA_Register
+
+	; equivalent to "_VGA_READ 3c3h" but with CALL instead of CALR
+	ldw wa, 0x3C3
+	call _Read_VGA_Register
+
+	cps l, 1
+	jr z, LABEL_FB766A
+	setm 2, (xsp)
+
+LABEL_FB766A:
+	; equivalent to "_VGA_WRITE 3c3h, 0" but with CALL instead of CALR
+	ldw wa, 0x3C3
+	lds bc, 0
+	call _Write_VGA_Register
+
+	; equivalent to "_VGA_READ 3c3h" but with CALL instead of CALR
+	ldw wa, 0x3C3
+	call _Read_VGA_Register
+
+	cps l, 0
+	jr z, LABEL_FB7680
+	setm 2, (xsp)
+
+LABEL_FB7680:
+	ld l, (xsp)
+	extz hl
+	inc 2, xsp
+	ret
+
+Test_Video_RAM_IC207:
+	dec 2, xsp
+	ld (xsp), a
+	ld32_24 xhl, 0xeb7932
+	call (xhl)
+	sti16_24 0x1a0000, 0x5a5a              ; VRAM self-test pattern 1
+	calr DramTest_Loop
+	cpdi16_24 1703936, 23130
+	jr z, LABEL_FB76A7
+	setm 3, (xsp)
+
+LABEL_FB76A7:
+	sti16_24 0x1a0004, 0xa5a5              ; VRAM self-test pattern 2
+	calr DramTest_Loop
+	cpdi16_24 1703940, 42405
+	jr z, LABEL_FB76BC
+	setm 3, (xsp)
+
+LABEL_FB76BC:
+	sti16_24 0x1a0008, 0x5a5a
+	calr DramTest_Loop
+	cpdi16_24 1703944, 23130
+	jr z, LABEL_FB76D1
+	setm 3, (xsp)
+
+LABEL_FB76D1:
+	ld l, (xsp)
+	extz hl
+	inc 2, xsp
+	ret
+
+LABEL_FB76D8:
+	push_werp 0xFA
+	call Get_Firmware_Version
+	cp l, 0x77
+	jr nz, LABEL_FB76F7
+	ldw wa, 0xFB
+	call UI_PostModeChangeEvent
+	call SubCPU_PayloadErrorStore
+	stdi8 36226, 2
+	jrl EffectMode_PopRetFA
+
+LABEL_FB76F7:
+	ld xwa, 0xF002
+	ldw bc, 0x8
+	ld xde, 0x8D64
+	call InterCPU_E2_Send
+	ld xwa, 0x3FFFFF
+	jr LABEL_FB7723
+
+LABEL_FB770F:
+	ld xiy, 0x620
+	ld xix, 0x620
+	ldiw
+	sub xwa, 0x1
+	jr z, LABEL_FB7729
+
+LABEL_FB7723:
+	bitda 7, 1568
+	jr nz, LABEL_FB770F
+
+LABEL_FB7729:
+	ldi_berp 0xFA, 0
+	ldi_berp 0xFB, 0
+
+LABEL_FB772F:
+	ldto_berp C, 0xFB
+	extz bc
+	ldada xwa, 36196
+	extz xbc
+	add xbc, xwa
+	ld a, (xbc)
+	extz wa
+	calr LABEL_FB788F
+	ldto_berp A, 0xFA
+	add a, l
+	ldfr_berp A, 0xFA
+	inc1_berp 0xFB
+	cp_erpb 0xFB, 0x08
+	jr c, LABEL_FB772F
+	cpi_berp 0xFA, 2
+	jr nz, LABEL_FB77D4
+	ldada xde, 36196
+	ld c, (xde + 3)
+	lda xwa, (xde + 4)
+	bit 0, c
+	jr z, LABEL_FB776C
+	bitm 4, (xwa)
+	jr nz, LABEL_FB77D1
+
+LABEL_FB776C:
+	bit 2, c
+	jr z, LABEL_FB777A
+	bitm 6, (xwa)
+	jr z, LABEL_FB777A
+	ldw wa, 0xF5
+	jr EffectMode_UIPostModeChangeEvent
+
+LABEL_FB777A:
+	inc 5, xde
+	bit 4, c
+	jr z, LABEL_FB7793
+	bitm 0, (xde)
+	jr z, LABEL_FB7793
+	ldw wa, 0xF6
+	call UI_PostModeChangeEvent
+	call SubCPU_PayloadErrorStore
+	jrl EffectMode_PopRetFA
+
+LABEL_FB7793:
+	bit 5, c
+	jr z, LABEL_FB77A1
+	bitm 1, (xde)
+	jr z, LABEL_FB77A1
+	ldw wa, 0xF7
+	jr EffectMode_UIPostModeChangeEvent
+
+LABEL_FB77A1:
+	bit 7, c
+	jr z, LABEL_FB77AF
+	bitm 3, (xde)
+	jr z, LABEL_FB77AF
+	ldw wa, 0xF8
+	jr EffectMode_UIPostModeChangeEvent
+
+LABEL_FB77AF:
+	ld a, (xwa)
+	bit 1, a
+	jr z, LABEL_FB77BF
+	bitm 5, (xde)
+	jr z, LABEL_FB77BF
+	ldw wa, 0xF9
+	jr EffectMode_UIPostModeChangeEvent
+
+LABEL_FB77BF:
+	bit 3, a
+	jrl z, EffectMode_PopRetFA
+	bitm 7, (xde)
+	jrl z, EffectMode_PopRetFA
+	ldw wa, 0xFC
+
+EffectMode_UIPostModeChangeEvent:
+	call UI_PostModeChangeEvent
+
+LABEL_FB77D1:
+	jrl EffectMode_PopRetFA
+
+LABEL_FB77D4:
+	ldi_berp 0xFA, 0
+	lds wa, 0
+	calr Test_SRAM_IC21
+	cps hl, 0
+	jr z, LABEL_FB7824
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	call DeleteEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000F4
+	call ApPostEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 1
+	call ApPostEvent
+	ld xwa, 0xF40001
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	ldi_berp 0xFA, 1
+
+LABEL_FB7824:
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call LABEL_FC3EDC
+	stda8 36220, a
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	ldda8 a, 36220
+	cpl a
+	and a, 0x9
+	stda8 36220, a
+	cps a, 0
+	jr z, EffectMode_PopRetFA
+	cpi_berp 0xFA, 0
+	jr nz, LABEL_FB786B
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	call DeleteEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000F4
+	call ApPostEvent
+
+LABEL_FB786B:
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 1
+	call ApPostEvent
+	ld xwa, 0xF40007
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+
+EffectMode_PopRetFA:
+	pop_werp 0xFA
+	ret
+
+LABEL_FB788F:
+	ldb l, 0x0
+	ldb c, 0x0
+
+LABEL_FB7893:
+	bit 0, a
+	jr z, LABEL_FB789A
+	inc 1, l
+
+LABEL_FB789A:
+	srl a, 1
+	inc 1, c
+	cp c, 0x8
+	jr c, LABEL_FB7893
+	ret
+
+EffectMode_CheckAndDispatch:
+	cpdi8 36150, 251
+	jr nz, EffectMode_DispatchUpdate
+	ldda8 a, 36226
+	cps a, 2
+	jr z, LABEL_FB7904
+	ldda8 a, 36224
+	bit 0, a
+	jr z, LABEL_FB78DE
+	bit 4, a
+	jr nz, EffectMode_DispatchUpdate
+	set 4, a
+	stda8 36224, a
+	ldda8 a, 36226
+	cps a, 1
+	jr z, EffectMode_DispatchUpdate
+	stdi8 36226, 1
+	calr LABEL_FB792E
+	calr LABEL_FB7C31
+	jr EffectMode_DispatchUpdate
+
+LABEL_FB78DE:
+	bit 4, a
+	jr z, EffectMode_DispatchUpdate
+	res 4, a
+	stda8 36224, a
+	ldda8 a, 36226
+	cps a, 0
+	jr z, EffectMode_DispatchUpdate
+	stdi8 36226, 0
+	calr LABEL_FB796E
+	calr LED_SetAll_WithBlank
+	stdi8 58334, 16
+	jr EffectMode_DispatchUpdate
+
+LABEL_FB7904:
+	stdi8 36226, 0
+	calr LED_SetAll_WithBlank
+	calr LABEL_FB796E
+
+EffectMode_DispatchUpdate:
+	cpdi8 36150, 248
+	call_24 z, 0xFB79AA
+	cpdi8 36150, 247
+	call_24 z, 0xFB7BFF
+	cpdi8 36150, 251
+	ret nz
+	calr LABEL_FB7A86
+	ret
+
+LABEL_FB792E:
+	ldada xwa, 63926
+	stib_dpi 0xE0, 0x00
+	andmi8 (xwa), 0x80
+	ldada xbc, 64950
+	andmi8 (xbc), 0xF0
+	ld (xbc), 0x6
+	ld e, (xwa)
+	extz de
+	pushw 0x7F
+	lds wa, 0
+	lds bc, 1
+	call AddswbWr
+	pushw 0xFF
+	lds wa, 0
+	lds bc, 0
+	lds de, 0
+	call AddswbWr
+	pushw 0xF
+	ldw wa, 0x93
+	lds bc, 0
+	lds de, 6
+	call AddswbWr
+	ret
+
+LABEL_FB796E:
+	ldada xwa, 63926
+	stib_dpi 0xE0, 0x40
+	andmi8 (xwa), 0x80
+	anddi8 64950, 240
+	ld e, (xwa)
+	extz de
+	pushw 0x7F
+	lds wa, 0
+	lds bc, 1
+	call AddswbWr
+	pushw 0xFF
+	lds wa, 0
+	lds bc, 0
+	ldw de, 0x40
+	call AddswbWr
+	pushw 0xF
+	ldw wa, 0x93
+	lds bc, 0
+	lds de, 0
+	call AddswbWr
+	ret
+
+LABEL_FB79AA:
+	call CtrlPanel_GetSelectionState
+	cps hl, 0
+	ret nz
+	ldda8 a, 36218
+	cp a, 0x96
+	jrl z, LABEL_FB7A67
+	cp a, 0x78
+	jrl z, LABEL_FB7A4A
+	cp a, 0x5A
+	jr z, LABEL_FB7A2D
+	cp a, 0x3C
+	jr z, LABEL_FB7A10
+	cp a, 0x1E
+	jr z, LABEL_FB79F3
+	cps a, 0
+	jrl nz, LABEL_FB7A7D
+	ld xwa, 0xF8000C
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	ldda8 a, 36218
+	inc 1, a
+	inc 1, a
+	stda8 36218, a
+	ret
+
+LABEL_FB79F3:
+	ld xwa, 0xF8000E
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	ldda8 a, 36218
+	inc 1, a
+	inc 1, a
+	stda8 36218, a
+	ret
+
+LABEL_FB7A10:
+	ld xwa, 0xF80010
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	ldda8 a, 36218
+	inc 1, a
+	inc 1, a
+	stda8 36218, a
+	ret
+
+LABEL_FB7A2D:
+	ld xwa, 0xF80006
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	ldda8 a, 36218
+	inc 1, a
+	inc 1, a
+	stda8 36218, a
+	ret
+
+LABEL_FB7A4A:
+	ld xwa, 0xF80008
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	ldda8 a, 36218
+	inc 1, a
+	inc 1, a
+	stda8 36218, a
+	ret
+
+LABEL_FB7A67:
+	ld xwa, 0xF8000A
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	stdi8 36218, 220
+	ret
+
+LABEL_FB7A7D:
+	inc 1, a
+	inc 1, a
+	stda8 36218, a
+	ret
+
+LABEL_FB7A86:
+	ldda8 a, 36218
+	cps a, 0
+	jr nz, LABEL_FB7B01
+	ld xwa, 0xF80006
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	calr A_Short_Pause
+	calr A_Short_Pause
+	ld xwa, 0xF80008
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	calr A_Short_Pause
+	calr A_Short_Pause
+	ld xwa, 0xF8000A
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	calr A_Short_Pause
+	calr A_Short_Pause
+	ld xwa, 0xF8000C
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	calr A_Short_Pause
+	calr A_Short_Pause
+	ld xwa, 0xF8000E
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call ApPostEvent
+	calr A_Short_Pause
+	calr A_Short_Pause
+	incdi8 1, 36218
+	ret
+
+LABEL_FB7B01:
+	ldda8 c, 36216
+	cps c, 0
+	jr nz, LABEL_FB7B46
+	extz wa
+	lda_24 xbc, 0xeb7e86
+	lds32 xde, 0
+	ld_srib3 E, 0x07, 0xE4, 0xE0
+	add xde, 0x1A00000
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	call ApPostEvent
+	ldda8 a, 36218
+	cps a, 5
+	jr nz, LABEL_FB7B3A
+	stdi8 36218, 1
+	jr LABEL_FB7B40
+
+LABEL_FB7B3A:
+	inc 1, a
+	stda8 36218, a
+
+LABEL_FB7B40:
+	stdi8 36216, 30
+	ret
+
+LABEL_FB7B46:
+	dec 1, c
+	stda8 36216, c
+	ret
+
+LABEL_FB7B4D:
+	push	qiz
+	.byte 0x3a, 0x3b, 0x3c, 0x3e
+	.byte 0x1d
+	.byte 0xdc, 0x3e, 0xfc, 0xf1, 0x7c, 0x8d, 0x41, 0x5e
+	.byte 0x5c, 0x5b, 0x5a, 0xc1, 0x7c, 0x8d, 0x21, 0xc9
+	.byte 0x06, 0xc7, 0xfb, 0x99, 0xc9, 0xcc, 0x09, 0xd8
+	.byte 0x12, 0x1e, 0x79, 0xf7, 0xc7, 0xfb, 0x89, 0xc9
+	.byte 0xcc, 0x09, 0x6e, 0x0e, 0x40, 0x0b, 0x00, 0xf5
+	.byte 0x00, 0x41, 0x01, 0x00, 0xc0, 0x01, 0xea, 0xa8
+	.byte 0x68, 0x33, 0xc9, 0xcf, 0x09, 0x6e, 0x0e, 0x40
+	.byte 0x0e, 0x00, 0xf5, 0x00, 0x41, 0x01, 0x00, 0xc0
+	.byte 0x01, 0xea, 0xa8, 0x68, 0x20, 0xc7, 0xfb, 0x33
+	.byte 0x00, 0x66, 0x0e, 0x40, 0x11, 0x00, 0xf5, 0x00
+	.byte 0x41, 0x01, 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x68
+	.byte 0x0c, 0x40, 0x14, 0x00, 0xf5, 0x00, 0x41, 0x01
+	.byte 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x1d, 0x58, 0x9d
+	.byte 0xfa, 0xd7, 0xfa, 0x05, 0x0e, 0xc1, 0x37, 0x8d
+	.byte 0x21, 0xc1, 0x36, 0x8d, 0xf1, 0xb0, 0xf6, 0x40
+	.byte 0x02, 0x40, 0x00, 0x00, 0x31, 0x80, 0x00, 0xda
+	.byte 0xab, 0x1d, 0x2f, 0xd3, 0xfc, 0x1d, 0x75, 0x0e
+	.byte 0xfe, 0x0e
+
+LABEL_FB7BDF:
+	cpdi8 36150, 246
+	ret nz
+	stda8 36228, a
+	stda8 36230, c
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E20017
+	lds32 xde, 0
+	call ApPostEvent
+	ret
+
+LABEL_FB7BFF:
+	ldda8 a, 36151
+	cpda8 a, 36150
+	jrl z, LABEL_FB7CCA
+	calr LABEL_FB7C31
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call CPanel_Poll
+	call CPanel_Poll
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	calr A_Short_Pause
+	calr A_Short_Pause
+	calr A_Short_Pause
+	calr A_Short_Pause
+	calr A_Short_Pause
+	calr A_Short_Pause
+	jr LED_SetAll_WithBlank
+
+LABEL_FB7C31:
+	push_werp 0xFA
+	ldi_berp 0xFB, 0
+	jr LABEL_FB7C45
+
+LABEL_FB7C39:
+	ld wa, bc
+	srl wa, 8
+	call Set_LEDs
+	inc1_berp 0xFB
+
+LABEL_FB7C45:
+	ldto_berp A, 0xFB
+	extz wa
+	add wa, wa
+	lda_24 xbc, 0xeb7fec
+	ld_sriw3 BC, 0x07, 0xE4, 0xE0
+	cp bc, 0xFFFF
+	jr nz, LABEL_FB7C39
+	pop_werp 0xFA
+	ret
+
+LED_SetAll_WithBlank:
+	push_werp 0xFA
+	ldi_berp 0xFB, 0
+	jr LABEL_FB7C74
+
+LABEL_FB7C68:
+	srl wa, 8
+	lds bc, 0
+	call Set_LEDs
+	inc1_berp 0xFB
+
+LABEL_FB7C74:
+	ldto_berp A, 0xFB
+	extz wa
+	add wa, wa
+	lda_24 xbc, 0xeb7fec
+	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	cp wa, 0xFFFF
+	jr nz, LABEL_FB7C68
+	pop_werp 0xFA
+	ret
+
+
+LABEL_FB7C8F:
+	; --- Stack-frame: alloc 16, conditional XDE setup, call dispatch (59 bytes) ---
+	lda	xsp, (xsp-16)
+	lda	xwa, (xsp)
+	.byte 0xb0, 0x02, 0x03, 0x00			; ld (xwa), 0x0003  [16-bit store]
+	push xwa
+	call FDC_CommandEntry
+	inc 4, xsp
+	ldda8	a, 35364
+	cp a, 0xfc
+	jr nz, LABEL_FB7CB6
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x01C0001E
+	lds32	xde, 2
+	jr t, LABEL_FB7CC2
+LABEL_FB7CB6:
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x01C0001E
+	lds32	xde, 1
+LABEL_FB7CC2:
+	call ApPostEvent
+	lda	xsp, (xsp+16)
+	ret
+
+
+LABEL_FB7CCA:
+	push xiz
+	ldada xiz, 36204
+	ld xwa, xiz
+	call MIDI_ParseThreeByteParams
+	cp hl, 0xFFFF
+	jr z, LABEL_FB7CEC
+
+LABEL_FB7CDB:
+	ld xwa, xiz
+	calr LABEL_FB7CEE
+	ld xwa, xiz
+	call MIDI_ParseThreeByteParams
+	cp hl, 0xFFFF
+	jr nz, LABEL_FB7CDB
+
+LABEL_FB7CEC:
+	pop xiz
+	ret
+
+LABEL_FB7CEE:
+	push xiz
+	ld xiz, xwa
+	cp (xiz), 0x15
+	jr ugt, LABEL_FB7D42
+	lds32 xwa, 0
+	ld a, (xiz + 2)
+	call LABEL_FC7C33
+	ld a, l
+	add a, l
+	ld c, a
+	extz bc
+	ld a, (xiz)
+	extz wa
+	sll wa, 4
+	add wa, bc
+	extz xwa
+	lda_24 xde, 0xeb7e8c
+	ld xhl, xde
+	add xhl, xwa
+	ld l, (xhl)
+	ld a, (xiz)
+	extz wa
+	sll wa, 4
+	add wa, bc
+	inc 1, wa
+	extz xwa
+	add xde, xwa
+	ld c, (xde)
+	ld a, (xiz + 2)
+	and a, (xiz + 1)
+	jr nz, LABEL_FB7D38
+	ldb c, 0x0
+
+LABEL_FB7D38:
+	extz hl
+	extz bc
+	ld wa, hl
+	call Set_LEDs
+
+LABEL_FB7D42:
+	pop xiz
+	ret
+
+TEST2FUNC:
+	cp xbc, 0x1C00013
+	jr nz, TableDispatch_Return3
+	dec 2, xde
+	cp xde, 0x0
+	jr c, TableDispatch_Return3
+	cp xde, 0x5
+	jr ugt, TableDispatch_Return3
+	add xde, xde
+	add xde, 0xEB8042
+	ld de, (xde)
+	lda_24 xix, 0xfb7d72
+	jp_dri 8, 0x07, 0xF0, 0xE8
+LABEL_FB7D72:
+	calr	0xfdd8
+
+TableDispatch_Return3:
+	lds32 xhl, 0
+	ret
+
+TEST3FUNC:
+	cp xbc, 0x1C00013
+	jr nz, TableDispatch_Return4
+	dec 2, xde
+	cp xde, 0x0
+	jr c, TableDispatch_Return4
+	cp xde, 0x5
+	jr ugt, TableDispatch_Return4
+	add xde, xde
+	add xde, 0xEB804E
+	ld de, (xde)
+	lda_24 xix, 0xfb7da6
+	jp_dri 8, 0x07, 0xF0, 0xE8
+LABEL_FB7DA6:
+	calr	0xfe19
+
+TableDispatch_Return4:
+	lds32 xhl, 0
+	ret
+
+TEST4FUNC:
+	cp xbc, 0x1C00013
+	jr nz, TableDispatch_Return5
+	dec 2, xde
+	cp xde, 0x0
+	jr c, TableDispatch_Return5
+	cp xde, 0x5
+	jr ugt, TableDispatch_Return5
+	add xde, xde
+	add xde, 0xEB805A
+	ld de, (xde)
+	lda_24 xix, 0xfb7dda
+	jp_dri 8, 0x07, 0xF0, 0xE8
+LABEL_FB7DDA:
+	calr	0xfe22
+
+TableDispatch_Return5:
+	lds32 xhl, 0
+	ret
+
+TEST6FUNC:
+	cp xbc, 0x1C00013
+	jr nz, TableDispatch_Return
+	dec 2, xde
+	cp xde, 0x0
+	jr c, TableDispatch_Return
+	cp xde, 0x5
+	jr ugt, TableDispatch_Return
+	add xde, xde
+	add xde, 0xEB8066
+	ld de, (xde)
+	lda_24 xix, 0xfb7e0e
+	jp_dri 8, 0x07, 0xF0, 0xE8
+LABEL_FB7E0E:
+	calr	0xfe7e
+
+TableDispatch_Return:
+	lds32 xhl, 0
+	ret
+
+LABEL_FB7E14:
+	.byte 0x1d, 0x97, 0x07, 0xef, 0xdb, 0xd8, 0xb0, 0xf6
+	.byte 0xc1, 0x80, 0xc0, 0x21, 0xc1, 0x3a, 0x8d, 0xf1
+	.byte 0xb0, 0xfe, 0xc1, 0x7d, 0xc0, 0x3f, 0x00, 0xb0
+	.byte 0xfe, 0x1d, 0x67, 0x58, 0xfa, 0xeb, 0xcf, 0xf6
+	.byte 0x00, 0xa0, 0x01, 0xb0, 0xfe, 0x40, 0xff, 0xff
+	.byte 0xff, 0xff, 0x41, 0x0b, 0x00, 0xc0, 0x01, 0xea
+	.byte 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x0e
+
+BitmapFinpic:
+	cp xbc, 0x1E000A3
+	jr z, LABEL_FB7E71
+	cp xbc, 0x1E000A2
+	jr z, LABEL_FB7E6B
+	cp xbc, 0x1E000A1
+	jr z, LABEL_FB7E65
+	lds32 xhl, 0
+	ret
+
+LABEL_FB7E65:
+	lda_24 xhl, 0xeb8072
+	ret
+
+LABEL_FB7E6B:
+	ld xhl, 0x70
+	ret
+
+LABEL_FB7E71:
+	ld xhl, 0x19
+	ret
+
+BitmapFinst:
+	cp xbc, 0x1E000A3
+	jr z, LABEL_FB7E9E
+	cp xbc, 0x1E000A2
+	jr z, LABEL_FB7E98
+	cp xbc, 0x1E000A1
+	jr z, LABEL_FB7E92
+	lds32 xhl, 0
+	ret
+
+LABEL_FB7E92:
+	lda_24 xhl, 0xeb8b62
+	ret
+
+LABEL_FB7E98:
+	ld xhl, 0x50
+	ret
+
+LABEL_FB7E9E:
+	ld xhl, 0x12
+	ret
+
+BitmapFoutpic:
+	cp xbc, 0x1E000A3
+	jr z, LABEL_FB7ECB
+	cp xbc, 0x1E000A2
+	jr z, LABEL_FB7EC5
+	cp xbc, 0x1E000A1
+	jr z, LABEL_FB7EBF
+	lds32 xhl, 0
+	ret
+
+LABEL_FB7EBF:
+	lda_24 xhl, 0xeb9102
+	ret
+
+LABEL_FB7EC5:
+	ld xhl, 0x71
+	ret
+
+LABEL_FB7ECB:
+	ld xhl, 0x19
+	ret
+
+BitmapFoutst:
+	cp xbc, 0x1E000A3
+	jr z, LABEL_FB7EF8
+	cp xbc, 0x1E000A2
+	jr z, LABEL_FB7EF2
+	cp xbc, 0x1E000A1
+	jr z, LABEL_FB7EEC
+	lds32 xhl, 0
+	ret
+
+LABEL_FB7EEC:
+	lda_24 xhl, 0xeb9c24
+	ret
+
+LABEL_FB7EF2:
+	ld xhl, 0x6C
+	ret
+
+LABEL_FB7EF8:
+	ld xhl, 0x14
+	ret
+
+SystemInitMDFunc:
+	cp xbc, 0x1C00001
+	jr nz, LABEL_FB7F45
+	call GetTitleOld
+	cp xhl, 0x1A000EE
+	jr nz, LABEL_FB7F45
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 1
+	call SendEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call PostEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00014
+	ld xde, 0x1800001
+	call PostEvent
+
+LABEL_FB7F45:
+	lds32 xhl, 0
+	ret
+
+SystemInitOkFunc:
+	ld xwa, 0x410002
+	ld xbc, 0x1E00090
+	lds32 xde, 0
+	call SendEvent
+	exts xhl
+	st32_24 0x0340de, xhl
+	cpi8_24 0x0340ea, 0x00
+	jr nz, LABEL_FB7F79
+	ld xwa, 0x142000A
+	ld xbc, 0x1E20013
+	ld xde, xhl
+	call MainFuncCall
+	jr LABEL_FB7F89
+
+LABEL_FB7F79:
+	ld xwa, 0x410007
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call PostEvent
+
+LABEL_FB7F89:
+	lds32 xhl, 0
+	ret
+
+SysIniNoFunc:
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00015
+	ld xde, 0x1A00041
+	call PostEvent
+	lds32 xhl, 0
+	ret
+
+SysIniYesFunc:
+	ld32_24 xde, 0x0340de
+	ld xwa, 0x142000A
+	ld xbc, 0x1E20013
+	call MainFuncCall
+	lds32 xhl, 0
+	ret
+
+SysSureShowHideFunc:
+	lds32 xhl, 0
+	ret
+
+AttnLngCheck:
+	cp xbc, 0x1E0009F
+	jr nz, LABEL_FB7FC9
+	lda_24 xhl, 0xed04c4
+	ret
+
+LABEL_FB7FC9:
+	lds32 xhl, 0
+	ret
+
+SysSureLngCheck:
+	cp xbc, 0x1E0009F
+	jr nz, LABEL_FB7FDA
+	lda_24 xhl, 0xed051e
+	ret
+
+LABEL_FB7FDA:
+	lds32 xhl, 0
+	ret
+
+SureLngCheck:
+	cp xbc, 0x1E0009F
+	jr nz, LABEL_FB7FEB
+	lda_24 xhl, 0xed073e
+	ret
+
+LABEL_FB7FEB:
+	lds32 xhl, 0
+	ret
+
+CtlIniLngCheck:
+	cp xbc, 0x1E0009F
+	jr nz, LABEL_FB7FFC
+	lda_24 xhl, 0xed07b6
+	ret
+
+LABEL_FB7FFC:
+	lds32 xhl, 0
+	ret
+
+PmemNormLngCheck:
+	cp xbc, 0x1E0009F
+	jr nz, LABEL_FB800D
+	lda_24 xhl, 0xed0a74
+	ret
+
+LABEL_FB800D:
+	lds32 xhl, 0
+	ret
+
+PmemExpLngCheck:
+	cp xbc, 0x1E0009F
+	jr nz, LABEL_FB801E
+	lda_24 xhl, 0xed0b7c
+	ret
+
+LABEL_FB801E:
+	lds32 xhl, 0
+	ret
+LABEL_FB8021:
+
+AcMstSugAlpGridBoxProc:
+	jp InheritedProc
+
+MstSugAlpGridCheck:
+	lds32 xhl, 0
+	ret
+LABEL_FB8028:
+
+AcMstStyleAlpGridBoxProc:
+	lda xsp, (xsp - 74)
+	push xiz
+	ld (xsp + 66), xde
+	ld (xsp + 70), xbc
+	ld (xsp + 74), xwa
+	ld xbc, (xsp + 70)
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FB88AB
+	ld xwa, (xsp + 70)
+	cp xwa, 0x1E0008B
+	jrl z, LABEL_FB8820
+	cp xwa, 0x1E0008A
+	jrl z, LABEL_FB8808
+	cp xwa, 0x1C00007
+	jrl z, LABEL_FB816B
+	cp xwa, 0x1C00002
+	jrl z, LABEL_FB814B
+	cp xwa, 0x1C00001
+	jr z, LABEL_FB809C
+	sub xbc, 0x1C00017
+	cp xbc, 0x0
+	jrl lt, LABEL_FB88C3
+	cp xbc, 0x6
+	jrl gt, LABEL_FB88C3
+	add xbc, xbc
+	add xbc, 0xED0D24
+	ld bc, (xbc)
+	lda_24 xix, 0xfb809c
+	jp_dri 8, 0x07, 0xF0, 0xE4
+
+LABEL_FB809C:
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call InheritedProc
+	ld xwa, (xsp + 74)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld xiz, xhl
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, xiz
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C00018
+	call SetDialUp
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, xiz
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C00017
+	call SetDialDown
+	lds wa, 1
+	call SetDialEnable
+	ld bc, iz
+	ld (xsp + 60), bc
+	ld xwa, (xsp + 66)
+	or xwa, xwa
+	jrl nz, SeqFile_ReturnZeroJmp2
+	ld xwa, (xsp + 8)
+	ld xde, (xwa + 78)
+	ld xwa, (xwa + 90)
+	ld wa, (xwa)
+	muls wa, 0x9
+	sub wa, 0x9
+	add wa, (xde)
+	add bc, wa
+	muls bc, 0x6
+	ld wa, bc
+	lda_24 xbc, 0xeba498
+	ld_sriw3 DE, 0x07, 0xE4, 0xE0
+	extz xde
+	ld xwa, 0x142000D
+	ld xbc, 0x1E20018
+	jr LABEL_FB8164
+
+LABEL_FB814B:
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call InheritedProc
+	ld xwa, 0x142000D
+	ld xbc, 0x1E20019
+	lds32 xde, 0
+
+LABEL_FB8164:
+	call MainFuncCall
+	jrl SeqFile_ReturnZeroJmp2
+
+LABEL_FB816B:
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call InheritedProc
+	ld xwa, (xsp + 74)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 8)
+	ld (xsp + 4), xwa
+	lda xbc, (xwa + 78)
+	ld xwa, (xsp + 66)
+	cp xwa, 0x80
+	jrl z, LABEL_FB828B
+	or xwa, xwa
+	jrl nz, SeqFile_ReturnZeroJmp2
+	ld xbc, (xbc)
+	cpw (xbc), 0x0
+	jr z, LABEL_FB81C5
+	ld wa, (xbc)
+	dec 1, wa
+	ld (xbc), wa
+	muls wa, 0x6
+	lda_24 xbc, 0xeba494
+	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	push xwa
+	lda xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jr LABEL_FB81DF
+
+LABEL_FB81C5:
+	ld32_24 xwa, 0xebbbfe
+	push xwa
+	lda xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 78)
+	ldw (xwa), 0x3E7
+
+LABEL_FB81DF:
+	ld xde, (xsp + 8)
+	ld xbc, (xde + 74)
+	ld a, (xsp + 12)
+	extz wa
+	ld (xbc), wa
+	ld xwa, (xde + 78)
+	ld iz, (xwa)
+	cps iz, 0
+	jr z, LABEL_FB8223
+
+LABEL_FB81F5:
+	pushw 0x1
+	ld wa, iz
+	extz xwa
+	ld xbc, xwa
+	add xbc, xbc
+	add xbc, xwa
+	add xbc, xbc
+	ld xwa, 0xEBA494
+	add xwa, xbc
+	ld xwa, (xwa)
+	push xwa
+	lda xwa, (xsp + 18)
+	push xwa
+	call String_Compare
+	add xsp, 0xA
+	cps hl, 0
+	jr nz, LABEL_FB8223
+	djnz xiz, LABEL_FB81F5
+
+LABEL_FB8223:
+	cps iz, 0
+	jr z, LABEL_FB8229
+	inc 1, iz
+
+LABEL_FB8229:
+	ld xwa, (xsp + 8)
+	lda xhl, (xwa + 82)
+	ld xbc, (xhl)
+	lda xde, (xwa + 78)
+	ld xwa, (xde)
+	ld wa, (xwa)
+	sub wa, iz
+	ld (xbc), wa
+	ld xwa, (xde)
+	ld (xwa), iz
+	ld xde, (xsp + 4)
+	ld xbc, (xde + 86)
+	ld xwa, (xhl)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x9
+	inc 1, wa
+	ld (xbc), wa
+	ld xwa, (xde + 90)
+	ldw (xwa), 0x1
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1E0008E
+	ld xde, 0xFFFF0000
+	call SendEvent
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 66)
+	jrl SeqFile_CallApFunc
+
+LABEL_FB828B:
+	ld xix, xbc
+	ld xde, (xbc)
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 82)
+	ld bc, (xwa)
+	add bc, (xde)
+	inc 1, bc
+	ld hl, bc
+	lda xbc, (xsp + 12)
+	cp hl, 0x3E8
+	jr nc, LABEL_FB82CC
+	ld hl, (xde)
+	ld wa, (xwa)
+	add wa, hl
+	inc 1, wa
+	ld (xde), wa
+	ld xwa, (xix)
+	ld wa, (xwa)
+	muls wa, 0x6
+	lda_24 xde, 0xeba494
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	push xwa
+	push xbc
+	call Strcpy
+	inc 8, xsp
+	jr LABEL_FB82E3
+
+LABEL_FB82CC:
+	ld32_24 xwa, 0xeba494
+	push xwa
+	push xbc
+	call Strcpy
+	inc 8, xsp
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 78)
+	ldw (xwa), 0x0
+
+LABEL_FB82E3:
+	ld xwa, (xsp + 8)
+	ld xbc, (xwa + 74)
+	ld a, (xsp + 12)
+	extz wa
+	ld (xbc), wa
+	lds iz, 0
+	jr LABEL_FB8321
+
+LABEL_FB82F4:
+	pushw 0x1
+	add wa, iz
+	extz xwa
+	ld xbc, xwa
+	add xbc, xbc
+	add xbc, xwa
+	add xbc, xbc
+	ld xwa, 0xEBA494
+	add xwa, xbc
+	ld xwa, (xwa)
+	push xwa
+	lda xwa, (xsp + 18)
+	push xwa
+	call String_Compare
+	add xsp, 0xA
+	cps hl, 0
+	jr nz, LABEL_FB8332
+	inc 1, iz
+
+LABEL_FB8321:
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 78)
+	ld wa, (xwa)
+	ldw bc, 0x3E8
+	sub bc, wa
+	cp iz, bc
+	jr c, LABEL_FB82F4
+
+LABEL_FB8332:
+	ld xhl, (xsp + 8)
+	lda xbc, (xhl + 82)
+	ld xwa, (xbc)
+	ld de, iz
+	dec 1, de
+	ld (xwa), de
+	ld xde, (xhl + 86)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x9
+	inc 1, wa
+	ld (xde), wa
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 90)
+	ldw (xwa), 0x1
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1E0008E
+	ld xde, 0xFFFF0000
+	call SendEvent
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 66)
+	jrl SeqFile_CallApFunc
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call InheritedProc
+	ld xwa, (xsp + 74)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 8)
+	ld (xsp + 4), xwa
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 66)
+	call SendEvent
+	or xhl, xhl
+	jrl z, LABEL_FB8561
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	cps hl, 0
+	jrl nz, LABEL_FB8529
+	ld xbc, (xsp + 8)
+	ld xwa, (xbc + 90)
+	cpw (xwa), 0x1
+	jrl nz, LABEL_FB84EC
+	ld xbc, (xbc + 78)
+	lda xde, (xsp + 12)
+	lda_24 xhl, 0xeba494
+	cpw (xbc), 0x0
+	jr z, LABEL_FB8406
+	ld wa, (xbc)
+	dec 1, wa
+	ld (xbc), wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xEC, 0xE0
+	push xwa
+	push xde
+	call Strcpy
+	inc 8, xsp
+	jr LABEL_FB841D
+
+LABEL_FB8406:
+	ld_sril XWA, (xhl + 0x176a)
+	push xwa
+	push xde
+	call Strcpy
+	inc 8, xsp
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 78)
+	ldw (xwa), 0x3E7
+
+LABEL_FB841D:
+	ld xde, (xsp + 8)
+	ld xbc, (xde + 74)
+	ld a, (xsp + 12)
+	extz wa
+	ld (xbc), wa
+	ld xwa, (xde + 78)
+	ld iz, (xwa)
+	cps iz, 0
+	jr z, LABEL_FB8461
+
+LABEL_FB8433:
+	pushw 0x1
+	ld wa, iz
+	extz xwa
+	ld xbc, xwa
+	add xbc, xbc
+	add xbc, xwa
+	add xbc, xbc
+	ld xwa, 0xEBA494
+	add xwa, xbc
+	ld xwa, (xwa)
+	push xwa
+	lda xwa, (xsp + 18)
+	push xwa
+	call String_Compare
+	add xsp, 0xA
+	cps hl, 0
+	jr nz, LABEL_FB8461
+	djnz xiz, LABEL_FB8433
+
+LABEL_FB8461:
+	cps iz, 0
+	jr z, LABEL_FB8467
+	inc 1, iz
+
+LABEL_FB8467:
+	ld xwa, (xsp + 8)
+	lda xhl, (xwa + 82)
+	ld xbc, (xhl)
+	ld xix, (xsp + 4)
+	lda xde, (xix + 78)
+	ld xwa, (xde)
+	ld wa, (xwa)
+	sub wa, iz
+	ld (xbc), wa
+	ld xwa, (xde)
+	ld (xwa), iz
+	lda xde, (xix + 86)
+	ld xbc, (xde)
+	ld xwa, (xhl)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x9
+	inc 1, wa
+	ld (xbc), wa
+	ld xbc, (xix + 90)
+	ld xwa, (xde)
+	ld wa, (xwa)
+	ld (xbc), wa
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 82)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x9
+	ldto_werp DE, 0xE2
+	extz xde
+	add xde, 0xFFFF0000
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000E
+	call SendEvent
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call SetAutoInc
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	jrl SeqFile_CallApFunc
+
+LABEL_FB84EC:
+	decm 1, (xwa)
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0008
+	call SendEvent
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call SetAutoInc
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	jrl SeqFile_CallApFunc
+
+LABEL_FB8529:
+	dec 1, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+	call SendEvent
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call SetAutoInc
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call ApFuncCall
+	jrl SeqFile_ReturnZeroJmp2
+
+LABEL_FB8561:
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 66)
+	call SendEvent
+	or xhl, xhl
+	jrl z, SeqFile_ReturnZeroJmp2
+	ld xwa, (xsp + 74)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call ApFuncCall
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call SetAutoInc
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 66)
+	call SetDialUp
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 66)
+	call SetDialDown
+	lds wa, 1
+	jrl LABEL_FB8801
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call InheritedProc
+	ld xwa, (xsp + 74)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 8)
+	ld (xsp + 4), xwa
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 66)
+	call SendEvent
+	or xhl, xhl
+	jrl z, LABEL_FB87AC
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld xix, (xsp + 8)
+	ld xde, (xix + 82)
+	ld xbc, (xix + 90)
+	ld wa, (xbc)
+	muls wa, 0x9
+	dec 1, wa
+	cp wa, (xde)
+	jrl lt, LABEL_FB8724
+	ld wa, (xde)
+	exts xwa
+	divs wa, 0x9
+	ldto_werp WA, 0xE2
+	cp wa, hl
+	jrl nz, LABEL_FB8774
+	lda xix, (xix + 78)
+	ld xwa, (xix)
+	ld bc, (xde)
+	add bc, (xwa)
+	inc 1, bc
+	ld hl, bc
+	lda_24 xbc, 0xeba494
+	cp hl, 0x3E8
+	jr nc, LABEL_FB865A
+	ld hl, (xwa)
+	ld de, (xde)
+	add de, hl
+	inc 1, de
+	ld (xwa), de
+	ld xwa, (xix)
+	ld wa, (xwa)
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	push xwa
+	lda xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jr LABEL_FB8671
+
+LABEL_FB865A:
+	ld xwa, (xbc)
+	push xwa
+	lda xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 78)
+	ldw (xwa), 0x0
+
+LABEL_FB8671:
+	ld xwa, (xsp + 8)
+	ld xbc, (xwa + 74)
+	ld a, (xsp + 12)
+	extz wa
+	ld (xbc), wa
+	lds iz, 0
+	jr LABEL_FB86AF
+
+LABEL_FB8682:
+	pushw 0x1
+	add wa, iz
+	extz xwa
+	ld xbc, xwa
+	add xbc, xbc
+	add xbc, xwa
+	add xbc, xbc
+	ld xwa, 0xEBA494
+	add xwa, xbc
+	ld xwa, (xwa)
+	push xwa
+	lda xwa, (xsp + 18)
+	push xwa
+	call String_Compare
+	add xsp, 0xA
+	cps hl, 0
+	jr nz, LABEL_FB86C0
+	inc 1, iz
+
+LABEL_FB86AF:
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 78)
+	ld wa, (xwa)
+	ldw bc, 0x3E8
+	sub bc, wa
+	cp iz, bc
+	jr c, LABEL_FB8682
+
+LABEL_FB86C0:
+	ld xwa, (xsp + 8)
+	lda xbc, (xwa + 82)
+	ld xwa, (xbc)
+	ld de, iz
+	dec 1, de
+	ld (xwa), de
+	ld xhl, (xsp + 4)
+	ld xde, (xhl + 86)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x9
+	inc 1, wa
+	ld (xde), wa
+	ld xwa, (xhl + 90)
+	ldw (xwa), 0x1
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0000
+	call SendEvent
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call SetAutoInc
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	jrl SeqFile_CallApFunc
+
+LABEL_FB8724:
+	cp hl, 0x8
+	jr nz, LABEL_FB8774
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 86)
+	ld wa, (xwa)
+	cp wa, (xbc)
+	jrl z, SeqFile_ReturnZeroJmp2
+	incm 1, (xbc)
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0000
+	call SendEvent
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call SetAutoInc
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 70)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	jrl SeqFile_CallApFunc
+
+LABEL_FB8774:
+	inc 1, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+	call SendEvent
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call SetAutoInc
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call ApFuncCall
+	jrl SeqFile_ReturnZeroJmp2
+
+LABEL_FB87AC:
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 66)
+	call SendEvent
+	or xhl, xhl
+	jrl z, SeqFile_ReturnZeroJmp2
+	ld xwa, (xsp + 74)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call ApFuncCall
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call SetAutoInc
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 66)
+	call SetDialUp
+	ld xwa, (xsp + 74)
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 66)
+	call SetDialDown
+	lds wa, 1
+
+LABEL_FB8801:
+	call SetDialEnable
+	jrl SeqFile_ReturnZeroJmp2
+
+LABEL_FB8808:
+	ld xwa, (xsp + 74)
+	call GetViewInstance
+	ld xwa, (xhl + 62)
+	push xwa
+	ld xwa, (xsp + 70)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jrl SeqFile_ReturnZeroJmp2
+
+LABEL_FB8820:
+	ld xwa, (xsp + 74)
+	call GetViewInstance
+	ld xiz, xhl
+	ld xwa, (xiz + 66)
+	push xwa
+	ld xwa, (xsp + 70)
+	push xwa
+	call Strcpy
+	lda xhl, (xsp + 54)
+	ldw (xhl), 0xE
+	lda xbc, (xhl + 2)
+	ldw (xbc), 0x2E
+	lda xde, (xsp + 58)
+	ld wa, (xhl)
+	ld (xde), wa
+	ld wa, (xhl)
+	add wa, 0x50
+	ld (xde + 4), wa
+	ld wa, (xbc)
+	ld (xde + 2), wa
+	ld wa, (xbc)
+	add wa, 0x13
+	ld (xde + 6), wa
+	ld xwa, (xiz + 86)
+	pushm (xwa)
+	ld xwa, (xiz + 90)
+	pushm (xwa)
+	ld xwa, (xiz + 74)
+	pushm (xwa)
+	pushw 0xED
+	pushw 0xD18
+	lda xwa, (xsp + 30)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 22)
+	lda xwa, (xsp + 50)
+	lda xbc, (xsp + 46)
+	lda xde, (xsp + 12)
+	lds32 xhl, 1
+	push xhl
+	pushw 0xFB
+	pushw 0xF5
+	call DrawString
+	jr SeqFile_ReturnZeroJmp2
+	ld xwa, (xsp + 74)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	jr SeqFile_CallApFunc
+
+LABEL_FB88AB:
+	ld xwa, (xsp + 74)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+
+SeqFile_CallApFunc:
+	call ApFuncCall
+
+SeqFile_ReturnZeroJmp2:
+	lds32 xhl, 0
+	jr LABEL_FB88D0
+
+LABEL_FB88C3:
+	ld xwa, (xsp + 74)
+	ld xbc, (xsp + 70)
+	ld xde, (xsp + 66)
+	call InheritedProc
+
+LABEL_FB88D0:
+	pop xiz
+	lda xsp, (xsp + 74)
+	ret
+
+MstStyleAlpGridCheck:
+	lda xsp, (xsp - 58)
+	push xiz
+	ld (xsp + 58), xde
+	ld xwa, xbc
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FB896C
+	sub xwa, 0x1C00017
+	cp xwa, 0x0
+	jrl lt, EffectMode_SendEvent_Return
+	cp xwa, 0x6
+	jrl gt, EffectMode_SendEvent_Return
+	add xwa, xwa
+	add xwa, 0xED0D58
+	ld wa, (xwa)
+	lda_24 xix, 0xfb8913
+	jp_dri 8, 0x07, 0xF0, 0xE0
+
+LABEL_FB8913:
+	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
+	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
+	.byte 0xfa, 0xbf, 0x3a, 0x63, 0x1d, 0xd0, 0x44, 0xfa
+	.byte 0xeb, 0x88, 0x1d, 0x66, 0x62, 0xfa, 0xaf, 0x3a
+	.byte 0x22, 0xbf, 0x34, 0x52, 0xab, 0x4e, 0x21, 0xab
+	.byte 0x5a, 0x20, 0x90, 0x20, 0xd8, 0x09, 0x09, 0x00
+	.byte 0xd8, 0xca, 0x09, 0x00, 0x91, 0x80, 0xd8, 0x82
+	.byte 0xda, 0x09, 0x06, 0x00, 0xf2, 0x98, 0xa4, 0xeb
+	.byte 0x31, 0xd3, 0x07, 0xe4, 0xe8, 0x22, 0xea, 0x12
+	.byte 0x40, 0x0d, 0x00, 0x42, 0x01, 0x41, 0x18, 0x00
+	.byte 0xe2, 0x01, 0x1d, 0x63, 0x4a, 0xfa, 0x78, 0x98
+	.byte 0x01
+
+LABEL_FB896C:
+	call GetFocusObject
+	ld xwa, xhl
+	call GetViewInstance
+	ld (xsp + 4), xhl
+	lda xde, (xsp + 50)
+	ld xwa, (xsp + 58)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	ld (xde), wa
+	lda xbc, (xde + 2)
+	ld xwa, (xsp + 58)
+	ld (xbc), wa
+	lda xwa, (xsp + 16)
+	ld (xsp + 12), xwa
+	ld (xde + 4), xwa
+	ld xwa, (xsp + 4)
+	lda xix, (xwa + 90)
+	ld xhl, (xix)
+	lda xde, (xwa + 86)
+	ld xiy, (xde)
+	lda_24 xwa, 0xeba494
+	ld (xsp + 8), xwa
+	ld xix, (xix)
+	ld xwa, (xsp + 4)
+	ld xiz, (xwa + 78)
+	ld wa, (xix)
+	muls wa, 0x9
+	sub wa, 0x9
+	ld ix, wa
+	add ix, (xiz)
+	ld wa, (xiy)
+	cp wa, (xhl)
+	jrl nz, LABEL_FB8A72
+	ld xwa, (xsp + 4)
+	ld xhl, (xwa + 82)
+	ld xwa, (xde)
+	ld wa, (xwa)
+	muls wa, 0x9
+	sub wa, 0xA
+	ld de, (xhl)
+	sub de, wa
+	ld wa, (xbc)
+	cp wa, de
+	jr ge, LABEL_FB8A60
+	add wa, ix
+	muls wa, 0x6
+	ld bc, wa
+	ld xwa, (xsp + 8)
+	ld_sril3 XWA, 0x07, 0xE0, 0xE4
+	push xwa
+	ld xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	ld (xsp + 14), 0x0
+	jr LABEL_FB8A1E
+
+LABEL_FB8A07:
+	pushw 0x1
+	pushw 0xED
+	pushw 0xD32
+	lda xwa, (xsp + 22)
+	push xwa
+	call Strncat
+	lda xsp, (xsp + 10)
+	incm8 1, (xsp + 14)
+
+LABEL_FB8A1E:
+	ld xwa, (xsp + 4)
+	ld xbc, (xwa + 78)
+	ld xwa, (xwa + 90)
+	ld wa, (xwa)
+	muls wa, 0x9
+	sub wa, 0x9
+	add wa, (xbc)
+	ld bc, (xsp + 52)
+	add bc, wa
+	muls bc, 0x6
+	ld wa, bc
+	lda_24 xbc, 0xeba494
+	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	push xwa
+	call Strlen
+	inc 4, xsp
+	ldw bc, 0x20
+	sub bc, hl
+	ld a, (xsp + 14)
+	extz wa
+	cp wa, bc
+	jr c, LABEL_FB8A07
+	jrl LABEL_FB8AEB
+
+LABEL_FB8A60:
+	pushw 0xED
+	pushw 0xD34
+	ld xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jr LABEL_FB8AEB
+
+LABEL_FB8A72:
+	ld wa, (xbc)
+	add wa, ix
+	muls wa, 0x6
+	ld bc, wa
+	ld xwa, (xsp + 8)
+	ld_sril3 XWA, 0x07, 0xE0, 0xE4
+	push xwa
+	ld xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	ld (xsp + 14), 0x0
+	jr LABEL_FB8AAC
+
+LABEL_FB8A95:
+	pushw 0x1
+	pushw 0xED
+	pushw 0xD56
+	lda xwa, (xsp + 22)
+	push xwa
+	call Strncat
+	lda xsp, (xsp + 10)
+	incm8 1, (xsp + 14)
+
+LABEL_FB8AAC:
+	ld xwa, (xsp + 4)
+	ld xbc, (xwa + 78)
+	ld xwa, (xwa + 90)
+	ld wa, (xwa)
+	muls wa, 0x9
+	sub wa, 0x9
+	add wa, (xbc)
+	ld bc, (xsp + 52)
+	add bc, wa
+	muls bc, 0x6
+	ld wa, bc
+	lda_24 xbc, 0xeba494
+	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	push xwa
+	call Strlen
+	inc 4, xsp
+	ldw bc, 0x20
+	sub bc, hl
+	ld a, (xsp + 14)
+	extz wa
+	cp wa, bc
+	jr c, LABEL_FB8A95
+
+LABEL_FB8AEB:
+	ld wa, (xsp + 50)
+	cps wa, 1
+	jr nz, EffectMode_SendEvent_Return
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 50)
+	ld xbc, 0x1E0008C
+	call SendEvent
+
+EffectMode_SendEvent_Return:
+	lds32 xhl, 0
+	pop xiz
+	lda xsp, (xsp + 58)
+	ret
+LABEL_FB8B0B:
+
+AcMstStyle1GridBoxProc:
+	lda xsp, (xsp - 16)
+	push xiz
+	ld (xsp + 8), xde
+	ld (xsp + 12), xbc
+	ld (xsp + 16), xwa
+	ld xbc, (xsp + 12)
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FB8E65
+	ld xwa, (xsp + 12)
+	cp xwa, 0x1E0008B
+	jrl z, LABEL_FB8E48
+	cp xwa, 0x1E0008A
+	jrl z, LABEL_FB8E3E
+	cp xwa, 0x1C00001
+	jr z, LABEL_FB8B6D
+	sub xbc, 0x1C00017
+	cp xbc, 0x0
+	jrl lt, LABEL_FB8E7D
+	cp xbc, 0x6
+	jrl gt, LABEL_FB8E7D
+	add xbc, xbc
+	add xbc, 0xED0D66
+	ld bc, (xbc)
+	lda_24 xix, 0xfb8b6d
+	jp_dri 8, 0x07, 0xF0, 0xE4
+
+LABEL_FB8B6D:
+	ld xwa, (xsp + 16)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call InheritedProc
+	ld xwa, (xsp + 16)
+	call GetViewInstance
+	ld xiz, xhl
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xiz + 78)
+	ldw (xwa), 0x1
+	ld xwa, (xiz + 74)
+	ldw (xwa), 0xA
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld iy, hl
+	ld xwa, (xiz + 82)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	add wa, iy
+	st16_24 0x0340c4, xwa
+	jrl SeqFileAlt_ReturnZeroJmp
+	ld xwa, (xsp + 16)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call InheritedProc
+	ld xwa, (xsp + 16)
+	call GetViewInstance
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 8)
+	call SendEvent
+	or xhl, xhl
+	jrl z, LABEL_FB8C9E
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld iy, hl
+	cps iy, 0
+	jr nz, LABEL_FB8C5F
+	ld xwa, (xsp + 4)
+	lda xbc, (xwa + 82)
+	ld xwa, (xbc)
+	cpw (xwa), 0x1
+	jrl le, SeqFileAlt_ReturnZeroJmp
+	decm 1, (xwa)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 1, wa
+	st16_24 0x0340c4, xwa
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0009
+	call SendEvent
+	ld xwa, (xsp + 16)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call SetAutoInc
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C20005
+	lds32 xde, 0
+	jr LABEL_FB8C97
+
+LABEL_FB8C5F:
+	decdi16_24 1, 213188
+	ld wa, iy
+	dec 1, wa
+	ld de, wa
+	extz xde
+	add xde, 0xFFFF0000
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1C0000E
+	call SendEvent
+	ld xwa, (xsp + 16)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call SetAutoInc
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C20005
+	lds32 xde, 0
+
+LABEL_FB8C97:
+	call SendEvent
+	jrl SeqFileAlt_ReturnZeroJmp
+
+LABEL_FB8C9E:
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 8)
+	call SendEvent
+	or xhl, xhl
+	jrl z, SeqFileAlt_ReturnZeroJmp
+	ld xwa, (xsp + 16)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call ApFuncCall
+	ld xwa, (xsp + 16)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	jrl LABEL_FB8E38
+	ld xwa, (xsp + 16)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call InheritedProc
+	ld xwa, (xsp + 16)
+	call GetViewInstance
+	ld xiz, xhl
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 8)
+	call SendEvent
+	or xhl, xhl
+	jrl z, LABEL_FB8E08
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld iy, hl
+	lda xhl, (xiz + 82)
+	ld xde, (xhl)
+	ld xix, (xiz + 78)
+	ld bc, iy
+	inc 1, bc
+	ld wa, (xde)
+	cp wa, (xix)
+	jrl ge, LABEL_FB8DA9
+	cp iy, 0x9
+	jr nz, LABEL_FB8D73
+	incm 1, (xde)
+	ld xwa, (xhl)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	st16_24 0x0340c4, xwa
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0000
+	call SendEvent
+	ld xwa, (xsp + 16)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call SetAutoInc
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C20005
+	lds32 xde, 0
+	jrl LABEL_FB8E02
+
+LABEL_FB8D73:
+	incdi16_24 1, 213188
+	ld de, bc
+	extz xde
+	add xde, 0xFFFF0000
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1C0000E
+	call SendEvent
+	ld xwa, (xsp + 16)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call SetAutoInc
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C20005
+	lds32 xde, 0
+	jr LABEL_FB8E02
+
+LABEL_FB8DA9:
+	ld xwa, (xiz + 74)
+	ld de, (xwa)
+	ld wa, de
+	exts xwa
+	divs wa, 0xA
+	muls wa, 0xA
+	ld hl, wa
+	exts xde
+	divs de, 0xA
+	ldto_werp DE, 0xEA
+	add de, hl
+	ld wa, bc
+	cp bc, de
+	jrl ge, SeqFileAlt_ReturnZeroJmp
+	incdi16_24 1, 213188
+	ld de, wa
+	extz xde
+	add xde, 0xFFFF0000
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1C0000E
+	call SendEvent
+	ld xwa, (xsp + 16)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call SetAutoInc
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C20005
+	lds32 xde, 0
+
+LABEL_FB8E02:
+	call SendEvent
+	jr SeqFileAlt_ReturnZeroJmp
+
+LABEL_FB8E08:
+	ld xwa, (xsp + 16)
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 8)
+	call SendEvent
+	or xhl, xhl
+	jr z, SeqFileAlt_ReturnZeroJmp
+	ld xwa, (xsp + 16)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call ApFuncCall
+	ld xwa, (xsp + 16)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+
+LABEL_FB8E38:
+	call SetAutoInc
+	jr SeqFileAlt_ReturnZeroJmp
+
+LABEL_FB8E3E:
+	ld xwa, (xsp + 16)
+	ld xiz, 0x3E
+	jr LABEL_FB8E50
+
+LABEL_FB8E48:
+	ld xwa, (xsp + 16)
+	ld xiz, 0x42
+
+LABEL_FB8E50:
+	call GetViewInstance
+	add xhl, xiz
+	ld xwa, (xhl)
+	push xwa
+	ld xwa, (xsp + 12)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jr SeqFileAlt_ReturnZeroJmp
+
+LABEL_FB8E65:
+	ld xwa, (xsp + 16)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call ApFuncCall
+
+SeqFileAlt_ReturnZeroJmp:
+	lds32 xhl, 0
+	jr LABEL_FB8E8A
+
+LABEL_FB8E7D:
+	ld xwa, (xsp + 16)
+	ld xbc, (xsp + 12)
+	ld xde, (xsp + 8)
+	call InheritedProc
+
+LABEL_FB8E8A:
+	pop xiz
+	lda xsp, (xsp + 16)
+	ret
+
+MstStyle1GridCheck:
+	lda xsp, (xsp - 38)
+	push xiz
+	ld (xsp + 38), xde
+	ld xwa, xbc
+	cp xbc, 0x1E0008D
+	jr z, LABEL_FB8ED1
+	lds32 xhl, 0
+	sub xwa, 0x1C00017
+	cp xwa, 0x0
+	jrl lt, LABEL_FB9038
+	cp xwa, 0x6
+	jrl gt, LABEL_FB9038
+	add xwa, xwa
+	add xwa, 0xED0D8A
+	ld wa, (xwa)
+	lda_24 xix, 0xfb8ece
+	jp_dri 8, 0x07, 0xF0, 0xE0
+
+LABEL_FB8ECE:
+	jrl	t, 0x0167
+
+LABEL_FB8ED1:
+	call GetFocusObject
+	ld xwa, xhl
+	call GetViewInstance
+	ld (xsp + 4), xhl
+	lda xhl, (xsp + 30)
+	ld xwa, (xsp + 38)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	ld (xhl), wa
+	lda xde, (xhl + 2)
+	ld xwa, (xsp + 38)
+	ld (xde), wa
+	lda xbc, (xsp + 12)
+	ld (xhl + 4), xbc
+	ld xwa, (xsp + 4)
+	lda xix, (xwa + 82)
+	ld xiy, (xix)
+	lda xhl, (xwa + 78)
+	ld xiz, (xhl)
+	lda_24 xwa, 0xecfca4
+	ld (xsp + 8), xwa
+	ld xwa, (xix)
+	ld ix, (xwa)
+	muls ix, 0xA
+	sub ix, 0xA
+	ld wa, (xiz)
+	cp wa, (xiy)
+	jrl nz, LABEL_FB8FB6
+	ld xwa, (xsp + 4)
+	ld xiy, (xwa + 74)
+	ld xwa, (xhl)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	ld hl, (xiy)
+	sub hl, wa
+	ld wa, (xde)
+	cp wa, hl
+	jr ge, LABEL_FB8FA7
+	add ix, wa
+	sla ix, 3
+	ld xwa, (xsp + 8)
+	ld_sril3 XWA, 0x07, 0xE0, 0xF0
+	push xwa
+	push xbc
+	call Strcpy
+	inc 8, xsp
+	ld (xsp + 10), 0x0
+	jr LABEL_FB8F70
+
+LABEL_FB8F59:
+	pushw 0x1
+	pushw 0xED
+	pushw 0xD74
+	lda xwa, (xsp + 18)
+	push xwa
+	call Strncat
+	lda xsp, (xsp + 10)
+	incm8 1, (xsp + 10)
+
+LABEL_FB8F70:
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 82)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	add wa, (xsp + 32)
+	sla wa, 3
+	lda_24 xbc, 0xecfca4
+	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	push xwa
+	call Strlen
+	inc 4, xsp
+	ldw bc, 0x10
+	sub bc, hl
+	ld a, (xsp + 10)
+	extz wa
+	cp wa, bc
+	jr c, LABEL_FB8F59
+	jr LABEL_FB901D
+
+LABEL_FB8FA7:
+	pushw 0xED
+	pushw 0xD76
+	push xbc
+	call Strcpy
+	inc 8, xsp
+	jr LABEL_FB901D
+
+LABEL_FB8FB6:
+	add ix, (xde)
+	sla ix, 3
+	ld xwa, (xsp + 8)
+	ld_sril3 XWA, 0x07, 0xE0, 0xF0
+	push xwa
+	push xbc
+	call Strcpy
+	inc 8, xsp
+	ld (xsp + 10), 0x0
+	jr LABEL_FB8FE8
+
+LABEL_FB8FD1:
+	pushw 0x1
+	pushw 0xED
+	pushw 0xD88
+	lda xwa, (xsp + 18)
+	push xwa
+	call Strncat
+	lda xsp, (xsp + 10)
+	incm8 1, (xsp + 10)
+
+LABEL_FB8FE8:
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 82)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	add wa, (xsp + 32)
+	sla wa, 3
+	lda_24 xbc, 0xecfca4
+	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	push xwa
+	call Strlen
+	inc 4, xsp
+	ldw bc, 0x10
+	sub bc, hl
+	ld a, (xsp + 10)
+	extz wa
+	cp wa, bc
+	jr c, LABEL_FB8FD1
+
+LABEL_FB901D:
+	ld wa, (xsp + 30)
+	cps wa, 1
+	jr nz, LABEL_FB9036
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 30)
+	ld xbc, 0x1E0008C
+	call SendEvent
+
+LABEL_FB9036:
+	lds32 xhl, 0
+
+LABEL_FB9038:
+	pop xiz
+	lda xsp, (xsp + 38)
+	ret
+LABEL_FB903D:
+
+AcMstStyle1SubGridBoxProc:
+	lda xsp, (xsp - 66)
+	push xiz
+	ld (xsp + 58), xde
+	ld (xsp + 62), xbc
+	ld (xsp + 66), xwa
+	ld xbc, (xsp + 62)
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FB95C2
+	ld xwa, (xsp + 62)
+	cp xwa, 0x1E0008B
+	jrl z, LABEL_FB9547
+	cp xwa, 0x1E0008A
+	jrl z, LABEL_FB952F
+	cp xwa, 0x1C20005
+	jrl z, LABEL_FB91E1
+	cp xwa, 0x1C0000B
+	jrl z, LABEL_FB91A8
+	cp xwa, 0x1C00001
+	jr z, LABEL_FB90B1
+	sub xbc, 0x1C00017
+	cp xbc, 0x0
+	jrl lt, LABEL_FB95DA
+	cp xbc, 0x6
+	jrl gt, LABEL_FB95DA
+	add xbc, xbc
+	add xbc, 0xED0D9E
+	ld bc, (xbc)
+	lda_24 xix, 0xfb90b1
+	jp_dri 8, 0x07, 0xF0, 0xE4
+
+LABEL_FB90B1:
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	call InheritedProc
+	ld xwa, (xsp + 66)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, (xsp + 4)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C00018
+	call SetDialUp
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, (xsp + 4)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C00017
+	call SetDialDown
+	lds wa, 1
+	call SetDialEnable
+	ld xwa, (xsp + 58)
+	or xwa, xwa
+	jrl nz, SeqFile_ReturnZeroJmp
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	sll xwa, 3
+	lda_24 xbc, 0xecfca8
+	add xbc, xwa
+	ld xde, (xbc)
+	st32_24 0x0340d2, xde
+	ldb c, 0x0
+
+LABEL_FB9143:
+	ld a, c
+	extz wa
+	sla wa, 3
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB915A
+	inc 1, c
+	cp c, 0xFF
+	jr c, LABEL_FB9143
+
+LABEL_FB915A:
+	cps c, 0
+	jr z, LABEL_FB9160
+	dec 1, c
+
+LABEL_FB9160:
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	ld xde, 0x340C8
+	add xde, xwa
+	ld a, (xde)
+	extz wa
+	st16_24 0x0340c6, xwa
+	ld xhl, (xsp + 8)
+	ld xde, (xhl + 74)
+	ld a, c
+	extz wa
+	ld (xde), wa
+	ld xde, (xhl + 78)
+	extz bc
+	div c, 0xA
+	inc 1, c
+	extz bc
+	ld (xde), bc
+	ld xwa, xhl
+	ld xbc, (xwa + 82)
+	ld16_24 xwa, 0x0340c6
+	extz xwa
+	div wa, 0xA
+	inc 1, wa
+	ld (xbc), wa
+	jrl SeqFile_ReturnZeroJmp
+
+LABEL_FB91A8:
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	call InheritedProc
+	ld xwa, (xsp + 66)
+	call GetViewInstance
+	ld16_24 xwa, 0x0340c6
+	extz xwa
+	div wa, 0xA
+	ldto_werp DE, 0xE2
+	extz xde
+	add xde, 0xFFFF0000
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C0000E
+	call SendEvent
+	jrl SeqFile_ReturnZeroJmp
+
+LABEL_FB91E1:
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	call InheritedProc
+	ld xwa, (xsp + 66)
+	call GetViewInstance
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	sll xwa, 3
+	lda_24 xbc, 0xecfca8
+	add xbc, xwa
+	ld xde, (xbc)
+	st32_24 0x0340d2, xde
+	ldb c, 0x0
+
+LABEL_FB920F:
+	ld a, c
+	extz wa
+	sla wa, 3
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB9226
+	inc 1, c
+	cp c, 0xFF
+	jr c, LABEL_FB920F
+
+LABEL_FB9226:
+	cps c, 0
+	jr z, LABEL_FB922C
+	dec 1, c
+
+LABEL_FB922C:
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	ld xde, 0x340C8
+	add xde, xwa
+	ld a, (xde)
+	extz wa
+	st16_24 0x0340c6, xwa
+	ld xde, (xhl + 74)
+	ld a, c
+	extz wa
+	ld (xde), wa
+	ld xde, (xhl + 78)
+	extz bc
+	div c, 0xA
+	inc 1, c
+	extz bc
+	ld (xde), bc
+	ld xbc, (xhl + 82)
+	ld16_24 xwa, 0x0340c6
+	extz xwa
+	div wa, 0xA
+	inc 1, wa
+	ld (xbc), wa
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	call PostEvent
+	jrl SeqFile_ReturnZeroJmp
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	call InheritedProc
+	ld xwa, (xsp + 66)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 58)
+	call SendEvent
+	or xhl, xhl
+	jrl z, LABEL_FB9353
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	lda_24 xbc, 0x0340c8
+	cps hl, 0
+	jr nz, LABEL_FB9314
+	ld xwa, (xsp + 8)
+	lda xde, (xwa + 82)
+	ld xwa, (xde)
+	cpw (xwa), 0x1
+	jrl le, SeqFile_ReturnZeroJmp
+	decm 1, (xwa)
+	ld xwa, (xde)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 1, wa
+	st16_24 0x0340c6, xwa
+	ld16_24 xde, 0x0340c4
+	extz xde
+	add xbc, xde
+	ld (xbc), a
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0009
+	call SendEvent
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	jr LABEL_FB934C
+
+LABEL_FB9314:
+	ld16_24 xwa, 0x0340c6
+	dec 1, wa
+	st16_24 0x0340c6, xwa
+	ld16_24 xde, 0x0340c4
+	extz xde
+	add xbc, xde
+	ld (xbc), a
+	dec 1, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+	call SendEvent
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+
+LABEL_FB934C:
+	call SetAutoInc
+	jrl SeqFile_ReturnZeroJmp
+
+LABEL_FB9353:
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 58)
+	call SendEvent
+	or xhl, xhl
+	jrl z, SeqFile_ReturnZeroJmp
+	ld xwa, (xsp + 66)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	call ApFuncCall
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	call SetAutoInc
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 58)
+	call SetDialUp
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 58)
+	call SetDialDown
+	lds wa, 1
+	jrl LABEL_FB9528
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	call InheritedProc
+	ld xwa, (xsp + 66)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 8)
+	ld (xsp + 4), xwa
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 58)
+	call SendEvent
+	or xhl, xhl
+	jrl z, LABEL_FB94D3
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 8)
+	lda xiz, (xwa + 82)
+	ld xiy, (xiz)
+	ld xix, (xwa + 78)
+	ld wa, hl
+	inc 1, wa
+	ld de, wa
+	extz xde
+	add xde, 0xFFFF0000
+	ld16_24 xbc, 0x0340c6
+	ld wa, (xiy)
+	cp wa, (xix)
+	jr ge, LABEL_FB948A
+	lda_24 xix, 0x0340c8
+	cp hl, 0x9
+	jr nz, LABEL_FB9461
+	incm 1, (xiy)
+	ld xwa, (xiz)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	st16_24 0x0340c6, xwa
+	ld16_24 xbc, 0x0340c4
+	extz xbc
+	add xix, xbc
+	ld (xix), a
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0000
+	call SendEvent
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	jr LABEL_FB94CC
+
+LABEL_FB9461:
+	inc 1, bc
+	st16_24 0x0340c6, xbc
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	add xix, xwa
+	ld (xix), c
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C0000E
+	call SendEvent
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	jr LABEL_FB94CC
+
+LABEL_FB948A:
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 74)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0xA
+	ldto_werp WA, 0xE2
+	cp hl, wa
+	jrl ge, SeqFile_ReturnZeroJmp
+	inc 1, bc
+	st16_24 0x0340c6, xbc
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	ld xhl, 0x340C8
+	add xhl, xwa
+	ld (xhl), c
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C0000E
+	call SendEvent
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+
+LABEL_FB94CC:
+	call SetAutoInc
+	jrl SeqFile_ReturnZeroJmp
+
+LABEL_FB94D3:
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 58)
+	call SendEvent
+	or xhl, xhl
+	jrl z, SeqFile_ReturnZeroJmp
+	ld xwa, (xsp + 66)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	call ApFuncCall
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	call SetAutoInc
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 58)
+	call SetDialUp
+	ld xwa, (xsp + 66)
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 58)
+	call SetDialDown
+	lds wa, 1
+
+LABEL_FB9528:
+	call SetDialEnable
+	jrl SeqFile_ReturnZeroJmp
+
+LABEL_FB952F:
+	ld xwa, (xsp + 66)
+	call GetViewInstance
+	ld xwa, (xhl + 62)
+	push xwa
+	ld xwa, (xsp + 62)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jrl SeqFile_ReturnZeroJmp
+
+LABEL_FB9547:
+	ld xwa, (xsp + 66)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 66)
+	push xwa
+	ld xwa, (xsp + 62)
+	push xwa
+	call Strcpy
+	lda xhl, (xsp + 54)
+	ldw (xhl), 0xFE
+	lda xbc, (xhl + 2)
+	ldw (xbc), 0x23
+	lda xde, (xsp + 58)
+	ld wa, (xhl)
+	ld (xde), wa
+	ld wa, (xhl)
+	add wa, 0x1E
+	ld (xde + 4), wa
+	ld wa, (xbc)
+	ld (xde + 2), wa
+	ld wa, (xbc)
+	add wa, 0x13
+	ld (xde + 6), wa
+	ld xbc, (xsp + 16)
+	ld xwa, (xbc + 78)
+	pushm (xwa)
+	ld xwa, (xbc + 82)
+	pushm (xwa)
+	pushw 0xED
+	pushw 0xD98
+	lda xwa, (xsp + 28)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 20)
+	lda xwa, (xsp + 50)
+	lda xbc, (xsp + 46)
+	lda xde, (xsp + 12)
+	lds32 xhl, 6
+	push xhl
+	pushw 0xFF
+	pushw 0xF5
+	call DrawString
+	jr SeqFile_ReturnZeroJmp
+
+LABEL_FB95C2:
+	ld xwa, (xsp + 66)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	call ApFuncCall
+
+SeqFile_ReturnZeroJmp:
+	lds32 xhl, 0
+	jr LABEL_FB95E7
+
+LABEL_FB95DA:
+	ld xwa, (xsp + 66)
+	ld xbc, (xsp + 62)
+	ld xde, (xsp + 58)
+	call InheritedProc
+
+LABEL_FB95E7:
+	pop xiz
+	lda xsp, (xsp + 66)
+	ret
+
+MstStyle1SubGridCheck:
+	lda xsp, (xsp - 30)
+	push xiz
+	ld xiz, xde
+	ld xwa, xbc
+	cp xbc, 0x1E0008D
+	jr z, LABEL_FB962D
+	lds32 xhl, 0
+	sub xwa, 0x1C00017
+	cp xwa, 0x0
+	jrl lt, LABEL_FB9788
+	cp xwa, 0x6
+	jrl gt, LABEL_FB9788
+	add xwa, xwa
+	add xwa, 0xED0DC2
+	ld wa, (xwa)
+	lda_24 xix, 0xfb962a
+	jp_dri 8, 0x07, 0xF0, 0xE0
+
+LABEL_FB962A:
+	jrl	t, 0x015b
+
+LABEL_FB962D:
+	call GetFocusObject
+	ld xwa, xhl
+	call GetViewInstance
+	ld (xsp + 4), xhl
+	lda xwa, (xsp + 26)
+	ld xbc, xiz
+	srl xbc, 0
+	ldi_werp 0xE6, 0
+	ld (xwa), bc
+	lda xbc, (xwa + 2)
+	ld de, iz
+	ld (xbc), de
+	lda xde, (xsp + 8)
+	ld (xwa + 4), xde
+	ld xwa, (xsp + 4)
+	lda xhl, (xwa + 82)
+	ld xiy, (xhl)
+	lda xix, (xwa + 78)
+	ld xiz, (xix)
+	ld xwa, (xhl)
+	ld hl, (xwa)
+	muls hl, 0xA
+	sub hl, 0xA
+	ld wa, (xiz)
+	cp wa, (xiy)
+	jrl nz, LABEL_FB9707
+	ld xwa, (xsp + 4)
+	ld xiy, (xwa + 74)
+	ld xwa, (xix)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	ld ix, (xiy)
+	sub ix, wa
+	ld wa, (xbc)
+	cp wa, ix
+	jr gt, LABEL_FB96F8
+	add hl, wa
+	exts xhl
+	sll xhl, 3
+	addda32_24 xhl, 213202
+	ld xwa, (xhl)
+	push xwa
+	push xde
+	call Strcpy
+	inc 8, xsp
+	ldi_berp 0xFB, 0
+	jr LABEL_FB96C2
+
+LABEL_FB96AB:
+	pushw 0x1
+	pushw 0xED
+	pushw 0xDAC
+	lda xwa, (xsp + 14)
+	push xwa
+	call Strncat
+	lda xsp, (xsp + 10)
+	inc1_berp 0xFB
+
+LABEL_FB96C2:
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 82)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	add wa, (xsp + 28)
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xwa, (xwa)
+	push xwa
+	call Strlen
+	inc 4, xsp
+	ldw bc, 0x10
+	sub bc, hl
+	ldto_berp A, 0xFB
+	extz wa
+	cp wa, bc
+	jr c, LABEL_FB96AB
+	jr LABEL_FB976D
+
+LABEL_FB96F8:
+	pushw 0xED
+	pushw 0xDAE
+	push xde
+	call Strcpy
+	inc 8, xsp
+	jr LABEL_FB976D
+
+LABEL_FB9707:
+	add hl, (xbc)
+	exts xhl
+	sll xhl, 3
+	addda32_24 xhl, 213202
+	ld xwa, (xhl)
+	push xwa
+	push xde
+	call Strcpy
+	inc 8, xsp
+	ldi_berp 0xFB, 0
+	jr LABEL_FB9739
+
+LABEL_FB9722:
+	pushw 0x1
+	pushw 0xED
+	pushw 0xDC0
+	lda xwa, (xsp + 14)
+	push xwa
+	call Strncat
+	lda xsp, (xsp + 10)
+	inc1_berp 0xFB
+
+LABEL_FB9739:
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 82)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	add wa, (xsp + 28)
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xwa, (xwa)
+	push xwa
+	call Strlen
+	inc 4, xsp
+	ldw bc, 0x10
+	sub bc, hl
+	ldto_berp A, 0xFB
+	extz wa
+	cp wa, bc
+	jr c, LABEL_FB9722
+
+LABEL_FB976D:
+	ld wa, (xsp + 26)
+	cps wa, 1
+	jr nz, LABEL_FB9786
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 26)
+	ld xbc, 0x1E0008C
+	call SendEvent
+
+LABEL_FB9786:
+	lds32 xhl, 0
+
+LABEL_FB9788:
+	pop xiz
+	lda xsp, (xsp + 30)
+	ret
+LABEL_FB978D:
+
+AcMstStyle2GridBoxProc:
+	lda xsp, (xsp - 56)
+	push xiz
+	ld (xsp + 48), xde
+	ld (xsp + 52), xbc
+	ld (xsp + 56), xwa
+	ld xbc, (xsp + 52)
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FBA397
+	ld xwa, (xsp + 52)
+	cp xwa, 0x1E0008B
+	jrl z, LABEL_FBA1B2
+	cp xwa, 0x1E0008A
+	jrl z, LABEL_FBA19A
+	cp xwa, 0x1C00007
+	jrl z, LABEL_FB9AAB
+	cp xwa, 0x1C00002
+	jrl z, LABEL_FB9A8B
+	cp xwa, 0x1C00001
+	jr z, LABEL_FB9801
+	sub xbc, 0x1C00017
+	cp xbc, 0x0
+	jrl lt, LABEL_FBA3AF
+	cp xbc, 0x6
+	jrl gt, LABEL_FBA3AF
+	add xbc, xbc
+	add xbc, 0xED0E04
+	ld bc, (xbc)
+	lda_24 xix, 0xfb9801
+	jp_dri 8, 0x07, 0xF0, 0xE4
+
+LABEL_FB9801:
+	ld xwa, (xsp + 56)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call InheritedProc
+	ld xwa, (xsp + 56)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 8)
+	ld (xsp + 4), xwa
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld xiz, xhl
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, xiz
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C00018
+	call SetDialUp
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, xiz
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C00017
+	call SetDialDown
+	lds wa, 1
+	call SetDialEnable
+	ld xwa, (xsp + 48)
+	cp xwa, 0x4
+	jrl z, LABEL_FB9A61
+	cp xwa, 0x3
+	jrl z, LABEL_FB9A61
+	or xwa, xwa
+	jrl nz, SeqData_ReturnZero
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	sll xwa, 3
+	lda_24 xbc, 0xecfca8
+	add xbc, xwa
+	ld xde, (xbc)
+	st32_24 0x0340d2, xde
+	ldb c, 0x0
+
+LABEL_FB98A8:
+	ld a, c
+	extz wa
+	sla wa, 3
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB98BF
+	inc 1, c
+	cp c, 0xFF
+	jr c, LABEL_FB98A8
+
+LABEL_FB98BF:
+	cps c, 0
+	jr z, LABEL_FB98C5
+	dec 1, c
+
+LABEL_FB98C5:
+	ld xix, (xsp + 8)
+	lda xde, (xix + 74)
+	ld xhl, (xde)
+	ld a, c
+	extz wa
+	ld (xhl), wa
+	ld xhl, (xix + 78)
+	srl c, 1
+	inc 1, c
+	extz bc
+	ld (xhl), bc
+	ld xhl, (xsp + 4)
+	ld xbc, (xhl + 82)
+	ld16_24 xwa, 0x0340c6
+	srl wa, 1
+	inc 1, wa
+	ld (xbc), wa
+	ld xbc, (xhl + 86)
+	ld16_24 xwa, 0x0340c6
+	ld (xbc), wa
+	ld xwa, (xhl + 90)
+	ldw (xwa), 0x1
+	ld16_24 xwa, 0x0340c6
+	bit 0, wa
+	jrl nz, LABEL_FB99B0
+	extz xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xhl, (xwa + 4)
+	st32_24 0x0340d6, xhl
+	ldb c, 0x0
+
+LABEL_FB9921:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xEC, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB9938
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FB9921
+
+LABEL_FB9938:
+	cps c, 0
+	jr z, LABEL_FB993E
+	dec 1, c
+
+LABEL_FB993E:
+	ld xwa, (xsp + 8)
+	ld xhl, (xwa + 94)
+	extz bc
+	ld (xhl), bc
+	ld xwa, (xde)
+	ld bc, (xwa)
+	ld16_24 xwa, 0x0340c6
+	cp bc, wa
+	jr ule, LABEL_FB9992
+	inc 1, wa
+	extz xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xde, (xwa + 4)
+	st32_24 0x0340da, xde
+	ldb c, 0x0
+
+LABEL_FB996B:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB9982
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FB996B
+
+LABEL_FB9982:
+	cps c, 0
+	jr z, LABEL_FB9988
+	dec 1, c
+
+LABEL_FB9988:
+	ld xwa, (xsp + 8)
+	ld xde, (xwa + 98)
+	extz bc
+	ld (xde), bc
+
+LABEL_FB9992:
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0000
+	jrl LABEL_FB9A48
+
+LABEL_FB99B0:
+	dec 1, wa
+	extz xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xde, (xwa + 4)
+	st32_24 0x0340d6, xde
+	ldb c, 0x0
+
+LABEL_FB99C6:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB99DD
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FB99C6
+
+LABEL_FB99DD:
+	cps c, 0
+	jr z, LABEL_FB99E3
+	dec 1, c
+
+LABEL_FB99E3:
+	ld xwa, (xsp + 8)
+	ld xde, (xwa + 94)
+	extz bc
+	ld (xde), bc
+	ld16_24 xwa, 0x0340c6
+	extz xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xde, (xwa + 4)
+	st32_24 0x0340da, xde
+	ldb c, 0x0
+
+LABEL_FB9A06:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB9A1D
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FB9A06
+
+LABEL_FB9A1D:
+	cps c, 0
+	jr z, LABEL_FB9A23
+	dec 1, c
+
+LABEL_FB9A23:
+	ld xwa, (xsp + 8)
+	ld xde, (xwa + 98)
+	extz bc
+	ld (xde), bc
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0005
+
+LABEL_FB9A48:
+	call SendEvent
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 48)
+	call ApFuncCall
+	jrl SeqData_ReturnZero
+
+LABEL_FB9A61:
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 48)
+	ld de, wa
+	extz xde
+	add xde, 0xFFFF0000
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000E
+	call SendEvent
+	jrl SeqData_ReturnZero
+
+LABEL_FB9A8B:
+	ld xwa, (xsp + 56)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call InheritedProc
+	ld xwa, 0x142000D
+	ld xbc, 0x1E20019
+	lds32 xde, 0
+	call MainFuncCall
+	jrl SeqData_ReturnZero
+
+LABEL_FB9AAB:
+	ld xwa, (xsp + 56)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call InheritedProc
+	ld xwa, (xsp + 56)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 8)
+	ld (xsp + 4), xwa
+	lda_24 xbc, 0x0340c8
+	lda xhl, (xwa + 82)
+	lda xix, (xwa + 86)
+	ld xwa, (xsp + 48)
+	cp xwa, 0x80
+	jrl z, LABEL_FB9C12
+	or xwa, xwa
+	jrl nz, SeqData_ReturnZero
+	ld xde, xix
+	ld xix, (xix)
+	cpw (xix), 0x0
+	jrl z, SeqData_ReturnZero
+	ld wa, (xix)
+	exts xwa
+	divs wa, 0x2
+	ldto_werp WA, 0xE2
+	cps wa, 0
+	jr z, LABEL_FB9B31
+	decm 1, (xix)
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	add xbc, xwa
+	ld xwa, (xde)
+	ld wa, (xwa)
+	ld (xbc), a
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1E0008E
+	ld xde, 0xFFFF0000
+	call SendEvent
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 48)
+	jrl Seq_ApplyFunctionAndReturn
+
+LABEL_FB9B31:
+	ld xix, xhl
+	ld xwa, (xhl)
+	decm 1, (xwa)
+	ld xwa, (xhl)
+	ld wa, (xwa)
+	sla wa, 1
+	dec 2, wa
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xhl, (xwa + 4)
+	st32_24 0x0340d6, xhl
+	ldb c, 0x0
+
+LABEL_FB9B54:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xEC, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB9B6B
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FB9B54
+
+LABEL_FB9B6B:
+	cps c, 0
+	jr z, LABEL_FB9B71
+	dec 1, c
+
+LABEL_FB9B71:
+	ld xwa, (xsp + 4)
+	ld xhl, (xwa + 94)
+	extz bc
+	ld (xhl), bc
+	ld xhl, (xwa + 74)
+	ld xwa, (xix)
+	ld wa, (xwa)
+	sla wa, 1
+	ld bc, wa
+	dec 2, bc
+	cp (xhl), bc
+	jr le, LABEL_FB9BCA
+	dec 1, wa
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xhl, (xwa + 4)
+	st32_24 0x0340da, xhl
+	ldb c, 0x0
+
+LABEL_FB9BA3:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xEC, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB9BBA
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FB9BA3
+
+LABEL_FB9BBA:
+	cps c, 0
+	jr z, LABEL_FB9BC0
+	dec 1, c
+
+LABEL_FB9BC0:
+	ld xwa, (xsp + 8)
+	ld xhl, (xwa + 98)
+	extz bc
+	ld (xhl), bc
+
+LABEL_FB9BCA:
+	ld xwa, (xde)
+	decm 1, (xwa)
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	ld xbc, 0x340C8
+	add xbc, xwa
+	ld xwa, (xde)
+	ld wa, (xwa)
+	ld (xbc), a
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0005
+	call SendEvent
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 48)
+	jrl Seq_ApplyFunctionAndReturn
+
+LABEL_FB9C12:
+	ld xde, xix
+	ld xiy, (xix)
+	ld xwa, (xsp + 8)
+	lda xix, (xwa + 74)
+	ld xiz, (xix)
+	ld wa, (xiy)
+	cp wa, (xiz)
+	jrl ge, SeqData_ReturnZero
+	ld wa, (xiy)
+	exts xwa
+	divs wa, 0x2
+	ldto_werp WA, 0xE2
+	cps wa, 0
+	jr nz, LABEL_FB9C67
+	incm 1, (xiy)
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	add xbc, xwa
+	ld xwa, (xde)
+	ld wa, (xwa)
+	ld (xbc), a
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1E0008E
+	ld xde, 0xFFFF0005
+	call SendEvent
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 48)
+	jrl Seq_ApplyFunctionAndReturn
+
+LABEL_FB9C67:
+	ld xiy, xhl
+	ld xwa, (xhl)
+	incm 1, (xwa)
+	ld xwa, (xhl)
+	ld wa, (xwa)
+	sla wa, 1
+	dec 2, wa
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xhl, (xwa + 4)
+	st32_24 0x0340d6, xhl
+	ldb c, 0x0
+
+LABEL_FB9C8A:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xEC, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB9CA1
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FB9C8A
+
+LABEL_FB9CA1:
+	cps c, 0
+	jr z, LABEL_FB9CA7
+	dec 1, c
+
+LABEL_FB9CA7:
+	ld xwa, (xsp + 4)
+	ld xhl, (xwa + 94)
+	extz bc
+	ld (xhl), bc
+	ld xwa, (xix)
+	ld wa, (xwa)
+	st16_24 0x0340bc, xwa
+	ld xwa, (xiy)
+	ld wa, (xwa)
+	sla wa, 1
+	dec 2, wa
+	st16_24 0x0340be, xwa
+	cpdm16_24 213180, xwa
+	jr le, LABEL_FB9D13
+	ld xwa, (xiy)
+	ld wa, (xwa)
+	sla wa, 1
+	dec 1, wa
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xhl, (xwa + 4)
+	st32_24 0x0340da, xhl
+	ldb c, 0x0
+
+LABEL_FB9CEC:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xEC, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB9D03
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FB9CEC
+
+LABEL_FB9D03:
+	cps c, 0
+	jr z, LABEL_FB9D09
+	dec 1, c
+
+LABEL_FB9D09:
+	ld xwa, (xsp + 8)
+	ld xhl, (xwa + 98)
+	extz bc
+	ld (xhl), bc
+
+LABEL_FB9D13:
+	ld xwa, (xde)
+	incm 1, (xwa)
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	ld xbc, 0x340C8
+	add xbc, xwa
+	ld xwa, (xde)
+	ld wa, (xwa)
+	ld (xbc), a
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0000
+	call SendEvent
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 48)
+	jrl Seq_ApplyFunctionAndReturn
+	ld xwa, (xsp + 56)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call InheritedProc
+	ld xwa, (xsp + 56)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 8)
+	ld (xsp + 4), xwa
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 48)
+	call SendEvent
+	or xhl, xhl
+	jrl z, LABEL_FB9F13
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld ix, hl
+	lda_24 xbc, 0x0340c8
+	cps ix, 0
+	jrl nz, LABEL_FB9EA5
+	ld xhl, (xsp + 8)
+	lda xde, (xhl + 82)
+	ld xwa, (xde)
+	ld wa, (xwa)
+	st16_24 0x0340bc, xwa
+	cps wa, 1
+	jrl le, LABEL_FB9F03
+	lda xhl, (xhl + 86)
+	ld xwa, (xhl)
+	decm 1, (xwa)
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	add xbc, xwa
+	ld xwa, (xhl)
+	ld wa, (xwa)
+	ld (xbc), a
+	ld xwa, (xde)
+	decm 1, (xwa)
+	ld xwa, (xde)
+	ld wa, (xwa)
+	sla wa, 1
+	dec 2, wa
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xhl, (xwa + 4)
+	st32_24 0x0340d6, xhl
+	ldb c, 0x0
+
+LABEL_FB9DF1:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xEC, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB9E08
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FB9DF1
+
+LABEL_FB9E08:
+	cps c, 0
+	jr z, LABEL_FB9E0E
+	dec 1, c
+
+LABEL_FB9E0E:
+	ld xwa, (xsp + 4)
+	ld xhl, (xwa + 94)
+	extz bc
+	ld (xhl), bc
+	ld xhl, (xwa + 74)
+	ld xwa, (xde)
+	ld wa, (xwa)
+	sla wa, 1
+	ld bc, wa
+	dec 2, bc
+	cp (xhl), bc
+	jr le, LABEL_FB9E67
+	dec 1, wa
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xde, (xwa + 4)
+	st32_24 0x0340da, xde
+	ldb c, 0x0
+
+LABEL_FB9E40:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FB9E57
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FB9E40
+
+LABEL_FB9E57:
+	cps c, 0
+	jr z, LABEL_FB9E5D
+	dec 1, c
+
+LABEL_FB9E5D:
+	ld xwa, (xsp + 8)
+	ld xde, (xwa + 98)
+	extz bc
+	ld (xde), bc
+
+LABEL_FB9E67:
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 98)
+	ld wa, (xwa)
+	inc 5, wa
+	ld de, wa
+	extz xde
+	add xde, 0xFFFF0000
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000E
+	call SendEvent
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 48)
+	jr LABEL_FB9EFF
+
+LABEL_FB9EA5:
+	cps ix, 5
+	jr nz, LABEL_FB9ED9
+	ld xhl, (xsp + 4)
+	lda xde, (xhl + 86)
+	ld xwa, (xde)
+	decm 1, (xwa)
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	add xbc, xwa
+	ld xwa, (xde)
+	ld wa, (xwa)
+	ld (xbc), a
+	ld xwa, (xhl + 94)
+	ld de, (xwa)
+	extz xde
+	add xde, 0xFFFF0000
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000E
+	jr LABEL_FB9EED
+
+LABEL_FB9ED9:
+	dec 1, ix
+	ld de, ix
+	extz xde
+	add xde, 0xFFFF0000
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000E
+
+LABEL_FB9EED:
+	call SendEvent
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 70)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 48)
+
+LABEL_FB9EFF:
+	call ApFuncCall
+
+LABEL_FB9F03:
+	ld xwa, (xsp + 56)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call SetAutoInc
+	jrl SeqData_ReturnZero
+
+LABEL_FB9F13:
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 48)
+	call SendEvent
+	or xhl, xhl
+	jrl z, SeqData_ReturnZero
+	ld xwa, (xsp + 56)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call ApFuncCall
+	ld xwa, (xsp + 56)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call SetAutoInc
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 48)
+	call SetDialUp
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 48)
+	call SetDialDown
+	lds wa, 1
+	jrl LABEL_FBA193
+	ld xwa, (xsp + 56)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call InheritedProc
+	ld xwa, (xsp + 56)
+	call GetViewInstance
+	ld xiz, xhl
+	ld (xsp + 4), xiz
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 48)
+	call SendEvent
+	or xhl, xhl
+	jrl z, LABEL_FBA13E
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld ix, hl
+	lda xhl, (xiz + 94)
+	ld xwa, (xhl)
+	cp ix, (xwa)
+	jr nz, LABEL_FB9FFD
+	ld xbc, (xiz + 74)
+	ld xwa, (xiz + 82)
+	ld wa, (xwa)
+	sla wa, 1
+	dec 2, wa
+	cp (xbc), wa
+	jrl le, LABEL_FBA12E
+	lda xbc, (xiz + 86)
+	ld xwa, (xbc)
+	incm 1, (xwa)
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	ld xde, 0x340C8
+	add xde, xwa
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	ld (xde), a
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0005
+	call SendEvent
+	ld xwa, (xiz + 70)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 48)
+	jrl LABEL_FBA12A
+
+LABEL_FB9FFD:
+	ld xbc, (xsp + 4)
+	lda xde, (xbc + 98)
+	ld xwa, (xde)
+	ld wa, (xwa)
+	inc 5, wa
+	cp wa, ix
+	jrl nz, LABEL_FBA105
+	lda xix, (xbc + 82)
+	ld xwa, (xix)
+	ld wa, (xwa)
+	st16_24 0x0340bc, xwa
+	ld xwa, (xbc + 78)
+	ld wa, (xwa)
+	st16_24 0x0340be, xwa
+	cpdm16_24 213180, xwa
+	jrl ge, LABEL_FBA12E
+	ld xwa, (xix)
+	incm 1, (xwa)
+	ld xwa, (xix)
+	ld wa, (xwa)
+	sla wa, 1
+	dec 2, wa
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xiy, (xwa + 4)
+	st32_24 0x0340d6, xiy
+	ldb c, 0x0
+
+LABEL_FBA04D:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xF4, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FBA064
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FBA04D
+
+LABEL_FBA064:
+	cps c, 0
+	jr z, LABEL_FBA06A
+	dec 1, c
+
+LABEL_FBA06A:
+	ld xhl, (xhl)
+	extz bc
+	ld (xhl), bc
+	ld xwa, (xsp + 4)
+	ld xhl, (xwa + 74)
+	ld xwa, (xix)
+	ld wa, (xwa)
+	sla wa, 1
+	ld bc, wa
+	dec 2, bc
+	cp (xhl), bc
+	jr le, LABEL_FBA0BE
+	dec 1, wa
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xhl, (xwa + 4)
+	st32_24 0x0340da, xhl
+	ldb c, 0x0
+
+LABEL_FBA09B:
+	ld a, c
+	extz wa
+	muls wa, 0x6
+	ld_sril3 XWA, 0x07, 0xEC, 0xE0
+	or xwa, xwa
+	jr z, LABEL_FBA0B2
+	inc 1, c
+	cps c, 4
+	jr c, LABEL_FBA09B
+
+LABEL_FBA0B2:
+	cps c, 0
+	jr z, LABEL_FBA0B8
+	dec 1, c
+
+LABEL_FBA0B8:
+	ld xde, (xde)
+	extz bc
+	ld (xde), bc
+
+LABEL_FBA0BE:
+	lda xbc, (xiz + 86)
+	ld xwa, (xbc)
+	incm 1, (xwa)
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	ld xde, 0x340C8
+	add xde, xwa
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	ld (xde), a
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0000
+	call SendEvent
+	ld xwa, (xiz + 70)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 48)
+	jr LABEL_FBA12A
+
+LABEL_FBA105:
+	ld wa, ix
+	inc 1, wa
+	ld de, wa
+	extz xde
+	add xde, 0xFFFF0000
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C0000E
+	call SendEvent
+	ld xwa, (xiz + 70)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 48)
+
+LABEL_FBA12A:
+	call ApFuncCall
+
+LABEL_FBA12E:
+	ld xwa, (xsp + 56)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call SetAutoInc
+	jrl SeqData_ReturnZero
+
+LABEL_FBA13E:
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 48)
+	call SendEvent
+	or xhl, xhl
+	jrl z, SeqData_ReturnZero
+	ld xwa, (xsp + 56)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call ApFuncCall
+	ld xwa, (xsp + 56)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call SetAutoInc
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 48)
+	call SetDialUp
+	ld xwa, (xsp + 56)
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 48)
+	call SetDialDown
+	lds wa, 1
+
+LABEL_FBA193:
+	call SetDialEnable
+	jrl SeqData_ReturnZero
+
+LABEL_FBA19A:
+	ld xwa, (xsp + 56)
+	call GetViewInstance
+	ld xwa, (xhl + 62)
+	push xwa
+	ld xwa, (xsp + 52)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jrl SeqData_ReturnZero
+
+LABEL_FBA1B2:
+	ld xwa, (xsp + 56)
+	call GetViewInstance
+	ld xiz, xhl
+	ld xwa, (xiz + 66)
+	push xwa
+	ld xwa, (xsp + 52)
+	push xwa
+	call Strcpy
+	lda xhl, (xsp + 44)
+	ldw (xhl), 0xA
+	lda xbc, (xhl + 2)
+	ldw (xbc), 0x32
+	lda xde, (xsp + 48)
+	ld wa, (xhl)
+	ld (xde), wa
+	ld wa, (xhl)
+	add wa, 0x94
+	ld (xde + 4), wa
+	ld wa, (xbc)
+	ld (xde + 2), wa
+	ld wa, (xbc)
+	add wa, 0x14
+	ld (xde + 6), wa
+	ld xwa, (xiz + 82)
+	ld wa, (xwa)
+	sla wa, 1
+	dec 2, wa
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xwa, (xwa)
+	push xwa
+	pushw 0xED
+	pushw 0xDD0
+	lda xwa, (xsp + 34)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 20)
+	lda xwa, (xsp + 40)
+	lda xbc, (xsp + 36)
+	lda xde, (xsp + 18)
+	lds32 xhl, 0
+	push xhl
+	pushw 0xFB
+	pushw 0xF5
+	call DrawString
+	ld xbc, (xiz + 82)
+	ld xwa, (xiz + 78)
+	lda xde, (xsp + 18)
+	ld wa, (xwa)
+	cp wa, (xbc)
+	jr nz, LABEL_FBA284
+	ld xhl, (xiz + 74)
+	ld wa, (xbc)
+	sla wa, 1
+	dec 1, wa
+	cp wa, (xhl)
+	jr le, LABEL_FBA262
+	pushw 0xED
+	pushw 0xDD4
+	push xde
+	call Strcpy
+	inc 8, xsp
+	ld xwa, 0xED0DE6
+	jr LABEL_FBA2AB
+
+LABEL_FBA262:
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xwa, (xwa)
+	push xwa
+	pushw 0xED
+	pushw 0xDEC
+	push xde
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	ld xwa, 0xED0DF0
+	jr LABEL_FBA2AB
+
+LABEL_FBA284:
+	ld wa, (xbc)
+	sla wa, 1
+	dec 1, wa
+	exts xwa
+	sll xwa, 3
+	addda32_24 xwa, 213202
+	ld xwa, (xwa)
+	push xwa
+	pushw 0xED
+	pushw 0xDF6
+	push xde
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	ld xwa, 0xED0DFA
+
+LABEL_FBA2AB:
+	push xwa
+	lda xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	lda xbc, (xsp + 36)
+	ldw (xbc), 0xA
+	lda xhl, (xbc + 2)
+	ldw (xhl), 0x82
+	lda xwa, (xsp + 40)
+	ld de, (xbc)
+	ld (xwa), de
+	ld de, (xbc)
+	add de, 0x94
+	ld (xwa + 4), de
+	ld de, (xhl)
+	ld (xwa + 2), de
+	ld de, (xhl)
+	add de, 0x14
+	ld (xwa + 6), de
+	lda xde, (xsp + 18)
+	lds32 xhl, 0
+	push xhl
+	pushw 0xFB
+	pushw 0xF5
+	call DrawString
+	lda xbc, (xsp + 36)
+	ldw (xbc), 0x10B
+	lda xhl, (xbc + 2)
+	ldw (xhl), 0x82
+	lda xwa, (xsp + 40)
+	ld de, (xbc)
+	ld (xwa), de
+	ld de, (xbc)
+	add de, 0x2C
+	ld (xwa + 4), de
+	ld de, (xhl)
+	ld (xwa + 2), de
+	ld de, (xhl)
+	add de, 0x13
+	ld (xwa + 6), de
+	lda xde, (xsp + 12)
+	lds32 xhl, 0
+	push xhl
+	pushw 0xFB
+	pushw 0xF5
+	call DrawString
+	lda xhl, (xsp + 36)
+	ldw (xhl), 0x91
+	lda xbc, (xhl + 2)
+	ldw (xbc), 0x20
+	lda xde, (xsp + 40)
+	ld wa, (xhl)
+	ld (xde), wa
+	ld wa, (xhl)
+	add wa, 0x94
+	ld (xde + 4), wa
+	ld wa, (xbc)
+	ld (xde + 2), wa
+	ld wa, (xbc)
+	add wa, 0x14
+	ld (xde + 6), wa
+	ld16_24 xwa, 0x0340c4
+	extz xwa
+	sll xwa, 3
+	ld xbc, 0xECFCA4
+	add xbc, xwa
+	ld xwa, (xbc)
+	push xwa
+	pushw 0xED
+	pushw 0xE00
+	lda xwa, (xsp + 26)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	lda xwa, (xsp + 40)
+	lda xbc, (xsp + 36)
+	lda xde, (xsp + 18)
+	lds32 xhl, 0
+	push xhl
+	pushw 0xFF
+	pushw 0xF7
+	call DrawString
+	jr SeqData_ReturnZero
+
+LABEL_FBA397:
+	ld xwa, (xsp + 56)
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+
+Seq_ApplyFunctionAndReturn:
+	call ApFuncCall
+
+SeqData_ReturnZero:
+	lds32 xhl, 0
+	jr LABEL_FBA3BC
+
+LABEL_FBA3AF:
+	ld xwa, (xsp + 56)
+	ld xbc, (xsp + 52)
+	ld xde, (xsp + 48)
+	call InheritedProc
+
+LABEL_FBA3BC:
+	pop xiz
+	lda xsp, (xsp + 56)
+	ret
+
+MstStyle2GridCheck:
+	lda xsp, (xsp - 62)
+	push xiz
+	ld (xsp + 62), xde
+	ld xwa, xbc
+	cp xbc, 0x1E0008D
+	jrl z, MstGrid2_CellSelect
+	sub xwa, 0x1C00017
+	cp xwa, 0x0
+	jrl lt, MstGrid2_Return
+	cp xwa, 0x6
+	jrl gt, MstGrid2_Return
+	add xwa, xwa
+	add xwa, 0xED0EC4
+	ld wa, (xwa)
+	lda_24 xix, 0xfba3ff
+	jp_dri 8, 0x07, 0xF0, 0xE0
+
+MstGrid2_ScrollJumpTable:
+	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
+	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
+	.byte 0xfa, 0xbf, 0x3e, 0x63, 0x1d, 0xd0, 0x44, 0xfa
+	.byte 0xeb, 0x88, 0x1d, 0x66, 0x62, 0xfa, 0xaf, 0x3e
+	.byte 0x21, 0xbf, 0x38, 0x51, 0xd9, 0xdc, 0x69, 0x2a
+	.byte 0xab, 0x5e, 0x20, 0x90, 0xf1, 0x7a, 0xab, 0x02
+	.byte 0xd9, 0x88, 0xe8, 0x13, 0xe8, 0x89, 0xe9, 0x81
+	.byte 0xe8, 0x81, 0xe9, 0x81, 0xe2, 0xd6, 0x40, 0x03
+	.byte 0x81, 0x99, 0x04, 0x22, 0xea, 0x12, 0x40, 0x0d
+	.byte 0x00, 0x42, 0x01, 0x41, 0x18, 0x00, 0xe2, 0x01
+	.byte 0x68, 0x2e, 0xab, 0x62, 0x20, 0x90, 0x20, 0xd8
+	.byte 0x65, 0xd8, 0xf1, 0x7a, 0x7d, 0x02, 0xd9, 0x6d
+	.byte 0xd9, 0x88, 0xe8, 0x13, 0xe8, 0x89, 0xe9, 0x81
+	.byte 0xe8, 0x81, 0xe9, 0x81, 0xe2, 0xda, 0x40, 0x03
+	.byte 0x81, 0x99, 0x04, 0x22, 0xea, 0x12, 0x40, 0x0d
+	.byte 0x00, 0x42, 0x01, 0x41, 0x18, 0x00, 0xe2, 0x01
+	.byte 0x1d, 0x63, 0x4a, 0xfa, 0x78, 0x54, 0x02
+
+MstGrid2_CellSelect:
+	call GetFocusObject
+	ld xwa, xhl
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xix, (xsp + 8)
+	ld (xsp + 4), xix
+	lda xhl, (xsp + 54)
+	ld xwa, (xsp + 62)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	ld (xhl), wa
+	lda xbc, (xhl + 2)
+	ld xwa, (xsp + 62)
+	ld de, wa
+	ld (xbc), de
+	lda xwa, (xsp + 20)
+	ld (xsp + 12), xwa
+	ld (xhl + 4), xwa
+	ld xhl, (xix + 82)
+	ld xwa, xix
+	ld xix, (xwa + 78)
+	ld de, (xbc)
+	ld wa, de
+	exts xwa
+	ld bc, de
+	dec 5, bc
+	exts xbc
+	ld xiy, xwa
+	add xiy, xiy
+	add xiy, xwa
+	add xiy, xiy
+	addda32_24 xiy, 213206
+	ld xwa, xbc
+	add xwa, xwa
+	add xwa, xbc
+	add xwa, xwa
+	ld (xsp + 16), xwa
+	ld32_24 xwa, 0x0340da
+	add (xsp + 16), xwa
+	ld xwa, (xsp + 8)
+	ld xbc, (xwa + 98)
+	ld xiz, (xwa + 94)
+	ld bc, (xbc)
+	inc 5, bc
+	ld wa, (xhl)
+	cp wa, (xix)
+	jrl ge, MstGrid2_LowerSection
+	cps de, 4
+	jr ge, MstGrid2_UpperHalf
+	cp de, (xiz)
+	jr gt, MstGrid2_OutOfRange_LowCol
+	ld xwa, (xiy)
+	push xwa
+	ld xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	ld (xsp + 18), 0x0
+	jr MstGrid2_PadLeft_CheckA
+
+MstGrid2_PadLeft_LoopA:
+	pushw 0x1
+	pushw 0xED
+	pushw 0xE12
+	lda xwa, (xsp + 26)
+	push xwa
+	call Strncat
+	lda xsp, (xsp + 10)
+	incm8 1, (xsp + 18)
+
+MstGrid2_PadLeft_CheckA:
+	ld wa, (xsp + 56)
+	exts xwa
+	ld xbc, xwa
+	add xbc, xbc
+	add xbc, xwa
+	add xbc, xbc
+	addda32_24 xbc, 213206
+	ld xwa, (xbc)
+	push xwa
+	call Strlen
+	inc 4, xsp
+	ldw bc, 0x20
+	sub bc, hl
+	ld a, (xsp + 18)
+	extz wa
+	cp wa, bc
+	jr c, MstGrid2_PadLeft_LoopA
+	jrl MstGrid2_CheckPlayAudio
+
+MstGrid2_OutOfRange_LowCol:
+	ld xwa, 0xED0E14
+	jrl MstGrid2_CopyFallback
+
+MstGrid2_UpperHalf:
+	cp de, bc
+	jr gt, MstGrid2_OutOfRange_HighCol
+	ld xwa, (xsp + 16)
+	ld xwa, (xwa)
+	push xwa
+	ld xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	ld (xsp + 18), 0x0
+	jr MstGrid2_PadLeft_CheckB
+
+MstGrid2_PadLeft_LoopB:
+	pushw 0x1
+	pushw 0xED
+	pushw 0xE36
+	lda xwa, (xsp + 26)
+	push xwa
+	call Strncat
+	lda xsp, (xsp + 10)
+	incm8 1, (xsp + 18)
+
+MstGrid2_PadLeft_CheckB:
+	ld wa, (xsp + 56)
+	dec 5, wa
+	exts xwa
+	ld xbc, xwa
+	add xbc, xbc
+	add xbc, xwa
+	add xbc, xbc
+	addda32_24 xbc, 213210
+	ld xwa, (xbc)
+	push xwa
+	call Strlen
+	inc 4, xsp
+	ldw bc, 0x20
+	sub bc, hl
+	ld a, (xsp + 18)
+	extz wa
+	cp wa, bc
+	jr c, MstGrid2_PadLeft_LoopB
+	jrl MstGrid2_CheckPlayAudio
+
+MstGrid2_OutOfRange_HighCol:
+	ld xwa, 0xED0E38
+	jrl MstGrid2_CopyFallback
+
+MstGrid2_LowerSection:
+	cps de, 4
+	jr ge, MstGrid2_BottomRight
+	cp de, (xiz)
+	jr gt, MstGrid2_OutOfRange_LowCol2
+	ld xwa, (xiy)
+	push xwa
+	ld xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	ld (xsp + 18), 0x0
+	jr MstGrid2_PadLeft_CheckC
+
+MstGrid2_PadLeft_LoopC:
+	pushw 0x1
+	pushw 0xED
+	pushw 0xE5A
+	lda xwa, (xsp + 26)
+	push xwa
+	call Strncat
+	lda xsp, (xsp + 10)
+	incm8 1, (xsp + 18)
+
+MstGrid2_PadLeft_CheckC:
+	ld wa, (xsp + 56)
+	exts xwa
+	ld xbc, xwa
+	add xbc, xbc
+	add xbc, xwa
+	add xbc, xbc
+	addda32_24 xbc, 213206
+	ld xwa, (xbc)
+	push xwa
+	call Strlen
+	inc 4, xsp
+	ldw bc, 0x20
+	sub bc, hl
+	ld a, (xsp + 18)
+	extz wa
+	cp wa, bc
+	jr c, MstGrid2_PadLeft_LoopC
+	jrl MstGrid2_CheckPlayAudio
+
+MstGrid2_OutOfRange_LowCol2:
+	ld xwa, 0xED0E5C
+	jrl MstGrid2_CopyFallback
+
+MstGrid2_BottomRight:
+	ld xwa, (xsp + 8)
+	ld xhl, (xwa + 74)
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 82)
+	ld wa, (xwa)
+	sla wa, 1
+	dec 2, wa
+	cp wa, (xhl)
+	jr ge, MstGrid2_OutOfRange_BeyondMax
+	cp de, bc
+	jr gt, MstGrid2_OutOfRange_HighCol2
+	ld xwa, (xsp + 16)
+	ld xwa, (xwa)
+	push xwa
+	ld xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	ld (xsp + 18), 0x0
+	jr MstGrid2_PadLeft_CheckD
+
+MstGrid2_PadLeft_LoopD:
+	pushw 0x1
+	pushw 0xED
+	pushw 0xE7E
+	lda xwa, (xsp + 26)
+	push xwa
+	call Strncat
+	lda xsp, (xsp + 10)
+	incm8 1, (xsp + 18)
+
+MstGrid2_PadLeft_CheckD:
+	ld wa, (xsp + 56)
+	dec 5, wa
+	exts xwa
+	ld xbc, xwa
+	add xbc, xbc
+	add xbc, xwa
+	add xbc, xbc
+	addda32_24 xbc, 213210
+	ld xwa, (xbc)
+	push xwa
+	call Strlen
+	inc 4, xsp
+	ldw bc, 0x20
+	sub bc, hl
+	ld a, (xsp + 18)
+	extz wa
+	cp wa, bc
+	jr c, MstGrid2_PadLeft_LoopD
+	jr MstGrid2_CheckPlayAudio
+
+MstGrid2_OutOfRange_HighCol2:
+	ld xwa, 0xED0E80
+	jr MstGrid2_CopyFallback
+
+MstGrid2_OutOfRange_BeyondMax:
+	ld xwa, 0xED0EA2
+
+MstGrid2_CopyFallback:
+	push xwa
+	ld xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+
+MstGrid2_CheckPlayAudio:
+	ld wa, (xsp + 54)
+	cps wa, 1
+	jr nz, MstGrid2_Return
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 54)
+	ld xbc, 0x1E0008C
+	call SendEvent
+
+MstGrid2_Return:
+	lds32 xhl, 0
+	pop xiz
+	lda xsp, (xsp + 62)
+	ret
+MstGrid2_Boundary:
+
+AcMstSong1GridBoxProc:
+	jp InheritedProc
+
+MstSong1GridCheck:
+	lds32 xhl, 0
+	ret
+LABEL_FBA6E8:
+
+AcMstSong2GridBoxProc:
+	jp InheritedProc
+
+MstSong2GridCheck:
+	lds32 xhl, 0
+	ret
+LABEL_FBA6EF:
+
+IvMstStyleWindowPgCtlProc:
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), xde
+	ld xiz, xwa
+	cp xbc, 0x1C00007
+	jr z, LABEL_FBA743
+	cp xbc, 0x1C00001
+	jr z, LABEL_FBA713
+	ld xwa, xiz
+	ld xde, (xsp + 4)
+	call InheritedProc
+	jrl LABEL_FBA7B7
+
+LABEL_FBA713:
+	ld xwa, xiz
+	ld xde, (xsp + 4)
+	call InheritedProc
+	ld xwa, (xsp + 4)
+	or xwa, xwa
+	jrl nz, LABEL_FBA7B5
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 22)
+	ldw (xwa), 0x1
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0001E
+	lds32 xde, 1
+	call SendEvent
+	jr LABEL_FBA7B5
+
+LABEL_FBA743:
+	ld xwa, xiz
+	call GetViewInstance
+	lda xbc, (xhl + 22)
+	ld xwa, (xsp + 4)
+	cp xwa, 0xB
+	jr nz, LABEL_FBA775
+	ld xde, xbc
+	ld xwa, (xbc)
+	cpw (xwa), 0x1
+	jr nz, LABEL_FBA7B5
+	incm 1, (xwa)
+	ld xwa, (xde)
+	ld de, (xwa)
+	exts xde
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0001E
+	jr LABEL_FBA79C
+
+LABEL_FBA775:
+	ld xwa, (xsp + 4)
+	cp xwa, 0xF
+	jr nz, LABEL_FBA7B5
+	ld xde, xbc
+	ld xwa, (xbc)
+	cpw (xwa), 0x1
+	jr z, LABEL_FBA7A2
+	decm 1, (xwa)
+	ld xwa, (xde)
+	ld de, (xwa)
+	exts xde
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0001E
+
+LABEL_FBA79C:
+	call SendEvent
+	jr LABEL_FBA7B5
+
+LABEL_FBA7A2:
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00015
+	ld xde, 0x1A000C1
+	call PostEvent
+
+LABEL_FBA7B5:
+	lds32 xhl, 0
+
+LABEL_FBA7B7:
+	pop xiz
+	inc 4, xsp
+	ret
+LABEL_FBA7BB:
+
+AcTchSensGridBoxProc:
+	lda xsp, (xsp - 16)
+	push xiz
+	ld (xsp + 12), xde
+	ld (xsp + 16), xbc
+	ld xiz, xwa
+	ld xbc, (xsp + 16)
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FBAA39
+	ld xwa, (xsp + 16)
+	cp xwa, 0x1E0008B
+	jrl z, LABEL_FBAA0C
+	cp xwa, 0x1E0008A
+	jrl z, LABEL_FBAA03
+	cp xwa, 0x1C00001
+	jr z, LABEL_FBA81C
+	sub xbc, 0x1C00017
+	cp xbc, 0x0
+	jrl lt, LABEL_FBAA50
+	cp xbc, 0x6
+	jrl gt, LABEL_FBAA50
+	add xbc, xbc
+	add xbc, 0xED0ED2
+	ld bc, (xbc)
+	lda_24 xix, 0xfba81c
+	jp_dri 8, 0x07, 0xF0, 0xE4
+
+LABEL_FBA81C:
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+	ld xwa, xiz
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, (xsp + 4)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	call SetDialUp
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, (xsp + 4)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	call SetDialDown
+	lds wa, 1
+	jrl LABEL_FBA9FD
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+	ld xwa, xiz
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jr z, LABEL_FBA8F0
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	cps hl, 4
+	jr nz, LABEL_FBA8CA
+	dec 3, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+	jr LABEL_FBA8DD
+
+LABEL_FBA8CA:
+	dec 1, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+
+LABEL_FBA8DD:
+	call SendEvent
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	jrl TchSens_ReturnZeroJmp
+
+LABEL_FBA8F0:
+	ld xwa, xiz
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jrl z, TchSens_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call ApFuncCall
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 12)
+	call SetDialUp
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 12)
+	call SetDialDown
+	lds wa, 1
+	jrl LABEL_FBA9FD
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+	ld xwa, xiz
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jr z, LABEL_FBA9AD
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	cps hl, 1
+	jr nz, LABEL_FBA987
+	inc 3, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+	jr LABEL_FBA99A
+
+LABEL_FBA987:
+	inc 1, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+
+LABEL_FBA99A:
+	call SendEvent
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	jrl TchSens_ReturnZeroJmp
+
+LABEL_FBA9AD:
+	ld xwa, xiz
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jrl z, TchSens_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call ApFuncCall
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 12)
+	call SetDialUp
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 12)
+	call SetDialDown
+	lds wa, 1
+
+LABEL_FBA9FD:
+	call SetDialEnable
+	jr TchSens_ReturnZeroJmp
+
+LABEL_FBAA03:
+	ld xwa, xiz
+	ld xiz, 0x3E
+	jr LABEL_FBAA13
+
+LABEL_FBAA0C:
+	ld xwa, xiz
+	ld xiz, 0x42
+
+LABEL_FBAA13:
+	call GetViewInstance
+	add xhl, xiz
+	ld xwa, (xhl)
+	push xwa
+	ld xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jr TchSens_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	jr LABEL_FBAA48
+
+LABEL_FBAA39:
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+
+LABEL_FBAA48:
+	call ApFuncCall
+
+TchSens_ReturnZeroJmp:
+	lds32 xhl, 0
+	jr LABEL_FBAA5C
+
+LABEL_FBAA50:
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+
+LABEL_FBAA5C:
+	pop xiz
+	lda xsp, (xsp + 16)
+	ret
+
+TchSensGridCheck:
+	lda xsp, (xsp - 18)
+	push xiz
+	ld xwa, xbc
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FBAC96
+	sub xwa, 0x1C00017
+	cp xwa, 0x0
+	jrl lt, TchSensGrid_ReturnZero
+	cp xwa, 0x6
+	jrl gt, TchSensGrid_ReturnZero
+	add xwa, xwa
+	add xwa, 0xED0F08
+	ld wa, (xwa)
+	lda_24 xix, 0xfbaa9c
+	jp_dri 8, 0x07, 0xF0, 0xE0
+
+LABEL_FBAA9C:
+	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
+	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
+	.byte 0xfa, 0xeb, 0x8a, 0xbf, 0x0e, 0x30, 0xea, 0x89
+	.byte 0xe9, 0xef, 0x00, 0xd7, 0xe6, 0xa8, 0xb0, 0x51
+	.byte 0xb8, 0x02, 0x52, 0x90, 0x3f, 0x01, 0x00, 0x6e
+	.byte 0x10, 0xda, 0xd9, 0x6e, 0x0c, 0x40, 0x00, 0x01
+	.byte 0x00, 0x00, 0xd9, 0xa9, 0xda, 0xaa, 0x78, 0xbe
+	.byte 0x00, 0x90, 0x3f, 0x01, 0x00, 0x6e, 0x10, 0xda
+	.byte 0xdc, 0x6e, 0x0c, 0x40, 0x04, 0x01, 0x00, 0x00
+	.byte 0xd9, 0xa9, 0xda, 0xaa, 0x78, 0xa8, 0x00, 0x90
+	.byte 0x3f, 0x01, 0x00, 0x6e, 0x10, 0xda, 0xdd, 0x6e
+	.byte 0x0c, 0x40, 0x02, 0x01, 0x00, 0x00, 0xd9, 0xa9
+	.byte 0xda, 0xaa, 0x78, 0x92, 0x00, 0x90, 0x3f, 0x01
+	.byte 0x00, 0x7e, 0x8c, 0x02, 0xda, 0xde, 0x7e, 0x87
+	.byte 0x02, 0x40, 0x03, 0x01, 0x00, 0x00, 0xd9, 0xa9
+	.byte 0xda, 0xaa, 0x68, 0x7b, 0x1d, 0xd0, 0x44, 0xfa
+	.byte 0xeb, 0x88, 0x41, 0x8f, 0x00, 0xe0, 0x01, 0xea
+	.byte 0xa8, 0x1d, 0x60, 0x96, 0xfa, 0xeb, 0x8a, 0xbf
+	.byte 0x0e, 0x30, 0xea, 0x89, 0xe9, 0xef, 0x00, 0xd7
+	.byte 0xe6, 0xa8, 0xb0, 0x51, 0xb8, 0x02, 0x52, 0x90
+	.byte 0x3f, 0x01, 0x00, 0x6e, 0x10, 0xda, 0xd9, 0x6e
+	.byte 0x0c, 0x40, 0x00, 0x01, 0x00, 0x00, 0x31, 0xff
+	.byte 0xff, 0xda, 0xaa, 0x68, 0x42, 0x90, 0x3f, 0x01
+	.byte 0x00, 0x6e, 0x10, 0xda, 0xdc, 0x6e, 0x0c, 0x40
+	.byte 0x04, 0x01, 0x00, 0x00, 0x31, 0xff, 0xff, 0xda
+	.byte 0xaa, 0x68, 0x2c, 0x90, 0x3f, 0x01, 0x00, 0x6e
+	.byte 0x10, 0xda, 0xdd, 0x6e, 0x0c, 0x40, 0x02, 0x01
+	.byte 0x00, 0x00, 0x31, 0xff, 0xff, 0xda, 0xaa, 0x68
+	.byte 0x16, 0x90, 0x3f, 0x01, 0x00, 0x7e, 0x10, 0x02
+	.byte 0xda, 0xde, 0x7e, 0x0b, 0x02, 0x40, 0x03, 0x01
+	.byte 0x00, 0x00, 0x31, 0xff, 0xff, 0xda, 0xaa, 0x1d
+	.byte 0x42, 0xf9, 0xf9, 0x78, 0xfa, 0x01, 0xba, 0x04
+	.byte 0x34, 0xa2, 0x20, 0xe8, 0xcf, 0x00, 0x01, 0x00
+	.byte 0x00, 0x6e, 0x33, 0xbf, 0x0e, 0x30, 0xb0, 0x02
+	.byte 0x01, 0x00, 0xb8, 0x02, 0x02, 0x01, 0x00, 0xbf
+	.byte 0x04, 0x31, 0xb8, 0x04, 0x61, 0x94, 0x04, 0x0b
+	.byte 0xed, 0x00, 0x0b, 0xe0, 0x0e, 0x39, 0x1d, 0x72
+	.byte 0x0a, 0xff, 0xbf, 0x0a, 0x37, 0x1d, 0xd0, 0x44
+	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x0e, 0x32, 0x41, 0x8c
+	.byte 0x00, 0xe0, 0x01, 0x78, 0xb6, 0x01, 0xa2, 0x20
+	.byte 0xe8, 0xcf, 0x04, 0x01, 0x00, 0x00, 0x6e, 0x3b
+	.byte 0xbf, 0x0e, 0x30, 0xb0, 0x02, 0x01, 0x00, 0xb8
+	.byte 0x02, 0x02, 0x04, 0x00, 0xbf, 0x04, 0x31, 0xb8
+	.byte 0x04, 0x61, 0x40, 0xe8, 0x0e, 0xed, 0x00, 0x94
+	.byte 0x3f, 0x00, 0x00, 0x66, 0x05, 0x40, 0xe4, 0x0e
+	.byte 0xed, 0x00, 0x38, 0x39, 0x1d, 0x4d, 0x0f, 0xff
+	.byte 0xef, 0x60, 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88
+	.byte 0xbf, 0x0e, 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01
+	.byte 0x78, 0x71, 0x01, 0xbf, 0x0e, 0x35, 0xbf, 0x04
+	.byte 0x36, 0xbd, 0x02, 0x31, 0xbd, 0x04, 0x33, 0xa2
+	.byte 0x20, 0xe8, 0xcf, 0x02, 0x01, 0x00, 0x00, 0x6e
+	.byte 0x2b, 0xb5, 0x02, 0x01, 0x00, 0xb1, 0x02, 0x05
+	.byte 0x00, 0xb3, 0x66, 0x94, 0x04, 0x0b, 0xed, 0x00
+	.byte 0x0b, 0xec, 0x0e, 0x3e, 0x1d, 0x72, 0x0a, 0xff
+	.byte 0xbf, 0x0a, 0x37, 0x1d, 0xd0, 0x44, 0xfa, 0xeb
+	.byte 0x88, 0xbf, 0x0e, 0x32, 0x41, 0x8c, 0x00, 0xe0
+	.byte 0x01, 0x78, 0x30, 0x01, 0xa2, 0x20, 0xe8, 0xcf
+	.byte 0x03, 0x01, 0x00, 0x00, 0x7e, 0x29, 0x01, 0xb5
+	.byte 0x02, 0x01, 0x00, 0xb1, 0x02, 0x06, 0x00, 0xb3
+	.byte 0x66, 0x94, 0x04, 0x0b, 0xed, 0x00, 0x0b, 0xf0
+	.byte 0x0e, 0x3e, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0a
+	.byte 0x37, 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf
+	.byte 0x0e, 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78
+	.byte 0xfa, 0x00
+
+LABEL_FBAC96:
+	lda xbc, (xsp + 14)
+	ld xwa, xde
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	ld (xbc), wa
+	lda xwa, (xbc + 2)
+	ld (xwa), de
+	lda xde, (xsp + 4)
+	ld (xbc + 4), xde
+	cpw (xbc), 0x1
+	jr nz, LABEL_FBACE6
+	cpw (xwa), 0x1
+	jr nz, LABEL_FBACE6
+	ld xwa, 0x100
+	call SndParam_LookupReadOnly
+	pushw hl
+	pushw 0xED
+	pushw 0xEF4
+	lda xwa, (xsp + 10)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 10)
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 14)
+	ld xbc, 0x1E0008C
+	jrl TchSensGrid_SendEvent
+
+LABEL_FBACE6:
+	cpw (xbc), 0x1
+	jr nz, LABEL_FBAD24
+	cpw (xwa), 0x4
+	jr nz, LABEL_FBAD24
+	ld xwa, 0x104
+	call SndParam_LookupReadOnly
+	ld xwa, 0xED0EFC
+	cps hl, 0
+	jr nz, LABEL_FBAD09
+	ld xwa, 0xED0EF8
+
+LABEL_FBAD09:
+	push xwa
+	lda xwa, (xsp + 8)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 14)
+	ld xbc, 0x1E0008C
+	jr TchSensGrid_SendEvent
+
+LABEL_FBAD24:
+	cpw (xbc), 0x1
+	jr nz, LABEL_FBAD5B
+	cpw (xwa), 0x5
+	jr nz, LABEL_FBAD5B
+	ld xwa, 0x102
+	call SndParam_LookupReadOnly
+	pushw hl
+	pushw 0xED
+	pushw 0xF00
+	lda xwa, (xsp + 10)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 10)
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 14)
+	ld xbc, 0x1E0008C
+	jr TchSensGrid_SendEvent
+
+LABEL_FBAD5B:
+	cpw (xbc), 0x1
+	jr nz, TchSensGrid_ReturnZero
+	cpw (xwa), 0x6
+	jr nz, TchSensGrid_ReturnZero
+	ld xwa, 0x103
+	call SndParam_LookupReadOnly
+	pushw hl
+	pushw 0xED
+	pushw 0xF04
+	lda xwa, (xsp + 10)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 10)
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 14)
+	ld xbc, 0x1E0008C
+
+TchSensGrid_SendEvent:
+	call SendEvent
+
+TchSensGrid_ReturnZero:
+	lds32 xhl, 0
+	pop xiz
+	lda xsp, (xsp + 18)
+	ret
+LABEL_FBAD9B:
+
+AcFSWAssGridBoxProc:
+	lda xsp, (xsp - 16)
+	push xiz
+	ld (xsp + 12), xde
+	ld (xsp + 16), xbc
+	ld xiz, xwa
+	ld xbc, (xsp + 16)
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FBAFE7
+	ld xwa, (xsp + 16)
+	cp xwa, 0x1E0008B
+	jrl z, LABEL_FBAFBA
+	cp xwa, 0x1E0008A
+	jrl z, LABEL_FBAFB1
+	cp xwa, 0x1C00001
+	jr z, LABEL_FBADFC
+	sub xbc, 0x1C00017
+	cp xbc, 0x0
+	jrl lt, LABEL_FBAFFE
+	cp xbc, 0x6
+	jrl gt, LABEL_FBAFFE
+	add xbc, xbc
+	add xbc, 0xED0F16
+	ld bc, (xbc)
+	lda_24 xix, 0xfbadfc
+	jp_dri 8, 0x07, 0xF0, 0xE4
+
+LABEL_FBADFC:
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+	ld xwa, xiz
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, (xsp + 4)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	call SetDialUp
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, (xsp + 4)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	call SetDialDown
+	lds wa, 1
+	jrl LABEL_FBAFAB
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+	ld xwa, xiz
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jr z, LABEL_FBAEB7
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	dec 1, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+	call SendEvent
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	jrl FSWAss_ReturnZeroJmp
+
+LABEL_FBAEB7:
+	ld xwa, xiz
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jrl z, FSWAss_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call ApFuncCall
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 12)
+	call SetDialUp
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 12)
+	call SetDialDown
+	lds wa, 1
+	jrl LABEL_FBAFAB
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+	ld xwa, xiz
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jr z, LABEL_FBAF5B
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	inc 1, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+	call SendEvent
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	jrl FSWAss_ReturnZeroJmp
+
+LABEL_FBAF5B:
+	ld xwa, xiz
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jrl z, FSWAss_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call ApFuncCall
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 12)
+	call SetDialUp
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 12)
+	call SetDialDown
+	lds wa, 1
+
+LABEL_FBAFAB:
+	call SetDialEnable
+	jr FSWAss_ReturnZeroJmp
+
+LABEL_FBAFB1:
+	ld xwa, xiz
+	ld xiz, 0x3E
+	jr LABEL_FBAFC1
+
+LABEL_FBAFBA:
+	ld xwa, xiz
+	ld xiz, 0x42
+
+LABEL_FBAFC1:
+	call GetViewInstance
+	add xhl, xiz
+	ld xwa, (xhl)
+	push xwa
+	ld xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jr FSWAss_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	jr LABEL_FBAFF6
+
+LABEL_FBAFE7:
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+
+LABEL_FBAFF6:
+	call ApFuncCall
+
+FSWAss_ReturnZeroJmp:
+	lds32 xhl, 0
+	jr LABEL_FBB00A
+
+LABEL_FBAFFE:
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+
+LABEL_FBB00A:
+	pop xiz
+	lda xsp, (xsp + 16)
+	ret
+
+FSWAssGridCheck:
+	st_dri3b L, 0xFD, 0xF8, 0xFE
+	push xiz
+	ld xwa, xbc
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FBB6EC
+	sub xwa, 0x1C00017
+	cp xwa, 0x0
+	jrl lt, AudioTable_ReturnZero
+	cp xwa, 0x6
+	jrl gt, AudioTable_ReturnZero
+	add xwa, xwa
+	add xwa, 0xED1226
+	ld wa, (xwa)
+	lda_24 xix, 0xfbb04c
+	jp_dri 8, 0x07, 0xF0, 0xE0
+
+LABEL_FBB04C:
+	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
+	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
+	.byte 0xfa, 0xeb, 0x8a, 0xf3, 0xfd, 0x04, 0x01, 0x30
+	.byte 0xea, 0x89, 0xe9, 0xef, 0x00, 0xd7, 0xe6, 0xa8
+	.byte 0xb0, 0x51, 0xb8, 0x02, 0x52, 0x90, 0x3f, 0x01
+	.byte 0x00, 0x6e, 0x44, 0xda, 0xda, 0x6e, 0x40, 0x40
+	.byte 0x86, 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc
+	.byte 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0xb4, 0x08, 0xcf
+	.byte 0xcf, 0x1c, 0x7f, 0xa5, 0x08, 0x40, 0x86, 0x28
+	.byte 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12
+	.byte 0xdb, 0x88, 0x1e, 0x9e, 0x08, 0xcf, 0x61, 0xdb
+	.byte 0x12, 0xf2, 0x24, 0x0f, 0xed, 0x31, 0xc3, 0x07
+	.byte 0xe4, 0xec, 0x23, 0xd9, 0x12, 0x40, 0x86, 0x28
+	.byte 0x00, 0x00, 0xda, 0xaa, 0x78, 0xe5, 0x03, 0x90
+	.byte 0x3f, 0x01, 0x00, 0x6e, 0x44, 0xda, 0xdb, 0x6e
+	.byte 0x40, 0x40, 0x88, 0x28, 0x00, 0x00, 0x1d, 0x37
+	.byte 0xd4, 0xfc, 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0x6a
+	.byte 0x08, 0xcf, 0xcf, 0x1c, 0x7f, 0x5b, 0x08, 0x40
+	.byte 0x88, 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc
+	.byte 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0x54, 0x08, 0xcf
+	.byte 0x61, 0xdb, 0x12, 0xf2, 0x24, 0x0f, 0xed, 0x31
+	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23, 0xd9, 0x12, 0x40
+	.byte 0x88, 0x28, 0x00, 0x00, 0xda, 0xaa, 0x78, 0x9b
+	.byte 0x03, 0x90, 0x3f, 0x01, 0x00, 0x6e, 0x44, 0xda
+	.byte 0xdc, 0x6e, 0x40, 0x40, 0x8a, 0x28, 0x00, 0x00
+	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12, 0xdb, 0x88
+	.byte 0x1e, 0x20, 0x08, 0xcf, 0xcf, 0x1c, 0x7f, 0x11
+	.byte 0x08, 0x40, 0x8a, 0x28, 0x00, 0x00, 0x1d, 0x37
+	.byte 0xd4, 0xfc, 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0x0a
+	.byte 0x08, 0xcf, 0x61, 0xdb, 0x12, 0xf2, 0x24, 0x0f
+	.byte 0xed, 0x31, 0xc3, 0x07, 0xe4, 0xec, 0x23, 0xd9
+	.byte 0x12, 0x40, 0x8a, 0x28, 0x00, 0x00, 0xda, 0xaa
+	.byte 0x78, 0x51, 0x03, 0x90, 0x3f, 0x01, 0x00, 0x6e
+	.byte 0x44, 0xda, 0xdd, 0x6e, 0x40, 0x40, 0x8c, 0x28
+	.byte 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12
+	.byte 0xdb, 0x88, 0x1e, 0xd6, 0x07, 0xcf, 0xcf, 0x1c
+	.byte 0x7f, 0xc7, 0x07, 0x40, 0x8c, 0x28, 0x00, 0x00
+	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12, 0xdb, 0x88
+	.byte 0x1e, 0xc0, 0x07, 0xcf, 0x61, 0xdb, 0x12, 0xf2
+	.byte 0x24, 0x0f, 0xed, 0x31, 0xc3, 0x07, 0xe4, 0xec
+	.byte 0x23, 0xd9, 0x12, 0x40, 0x8c, 0x28, 0x00, 0x00
+	.byte 0xda, 0xaa, 0x78, 0x07, 0x03, 0x90, 0x3f, 0x01
+	.byte 0x00, 0x6e, 0x44, 0xda, 0xde, 0x6e, 0x40, 0x40
+	.byte 0x8e, 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc
+	.byte 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0x8c, 0x07, 0xcf
+	.byte 0xcf, 0x1c, 0x7f, 0x7d, 0x07, 0x40, 0x8e, 0x28
+	.byte 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12
+	.byte 0xdb, 0x88, 0x1e, 0x76, 0x07, 0xcf, 0x61, 0xdb
+	.byte 0x12, 0xf2, 0x24, 0x0f, 0xed, 0x31, 0xc3, 0x07
+	.byte 0xe4, 0xec, 0x23, 0xd9, 0x12, 0x40, 0x8e, 0x28
+	.byte 0x00, 0x00, 0xda, 0xaa, 0x78, 0xbd, 0x02, 0x90
+	.byte 0x3f, 0x01, 0x00, 0x6e, 0x44, 0xda, 0xdf, 0x6e
+	.byte 0x40, 0x40, 0x90, 0x28, 0x00, 0x00, 0x1d, 0x37
+	.byte 0xd4, 0xfc, 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0x42
+	.byte 0x07, 0xcf, 0xcf, 0x1c, 0x7f, 0x33, 0x07, 0x40
+	.byte 0x90, 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc
+	.byte 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0x2c, 0x07, 0xcf
+	.byte 0x61, 0xdb, 0x12, 0xf2, 0x24, 0x0f, 0xed, 0x31
+	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23, 0xd9, 0x12, 0x40
+	.byte 0x90, 0x28, 0x00, 0x00, 0xda, 0xaa, 0x78, 0x73
+	.byte 0x02, 0x90, 0x3f, 0x01, 0x00, 0x7e, 0x02, 0x07
+	.byte 0xda, 0xcf, 0x08, 0x00, 0x7e, 0xfb, 0x06, 0x40
+	.byte 0x80, 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc
+	.byte 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0xf4, 0x06, 0xcf
+	.byte 0xcf, 0x1e, 0x7f, 0xe5, 0x06, 0x40, 0x80, 0x28
+	.byte 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12
+	.byte 0xdb, 0x88, 0x1e, 0xde, 0x06, 0xcf, 0x61, 0xdb
+	.byte 0x12, 0xf2, 0x24, 0x0f, 0xed, 0x31, 0xc3, 0x07
+	.byte 0xe4, 0xec, 0x23, 0xd9, 0x12, 0x40, 0x80, 0x28
+	.byte 0x00, 0x00, 0xda, 0xaa, 0x78, 0x25, 0x02, 0x1d
+	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f, 0x00
+	.byte 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96, 0xfa
+	.byte 0xeb, 0x8a, 0xf3, 0xfd, 0x04, 0x01, 0x30, 0xea
+	.long LABEL_EFE989
+	.byte 0xd7, 0xe6, 0xa8, 0xb0
+	.byte 0x51, 0xb8, 0x02, 0x52, 0x90, 0x3f, 0x01, 0x00
+	.byte 0x6e, 0x43, 0xda, 0xda, 0x6e, 0x3f, 0x40, 0x86
+	.byte 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb
+	.byte 0x12, 0xdb, 0x88, 0x1e, 0x85, 0x06, 0xcf, 0xd8
+	.byte 0x76, 0x77, 0x06, 0x40, 0x86, 0x28, 0x00, 0x00
+	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12, 0xdb, 0x88
+	.byte 0x1e, 0x70, 0x06, 0xcf, 0x69, 0xdb, 0x12, 0xf2
+	.byte 0x24, 0x0f, 0xed, 0x31, 0xc3, 0x07, 0xe4, 0xec
+	.byte 0x23, 0xd9, 0x12, 0x40, 0x86, 0x28, 0x00, 0x00
+	.byte 0xda, 0xaa, 0x78, 0xb7, 0x01, 0x90, 0x3f, 0x01
+	.byte 0x00, 0x6e, 0x43, 0xda, 0xdb, 0x6e, 0x3f, 0x40
+	.byte 0x88, 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc
+	.byte 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0x3c, 0x06, 0xcf
+	.byte 0xd8, 0x76, 0x2e, 0x06, 0x40, 0x88, 0x28, 0x00
+	.byte 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12, 0xdb
+	.byte 0x88, 0x1e, 0x27, 0x06, 0xcf, 0x69, 0xdb, 0x12
+	.byte 0xf2, 0x24, 0x0f, 0xed, 0x31, 0xc3, 0x07, 0xe4
+	.byte 0xec, 0x23, 0xd9, 0x12, 0x40, 0x88, 0x28, 0x00
+	.byte 0x00, 0xda, 0xaa, 0x78, 0x6e, 0x01, 0x90, 0x3f
+	.byte 0x01, 0x00, 0x6e, 0x43, 0xda, 0xdc, 0x6e, 0x3f
+	.byte 0x40, 0x8a, 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4
+	.byte 0xfc, 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0xf3, 0x05
+	.byte 0xcf, 0xd8, 0x76, 0xe5, 0x05, 0x40, 0x8a, 0x28
+	.byte 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12
+	.byte 0xdb, 0x88, 0x1e, 0xde, 0x05, 0xcf, 0x69, 0xdb
+	.byte 0x12, 0xf2, 0x24, 0x0f, 0xed, 0x31, 0xc3, 0x07
+	.byte 0xe4, 0xec, 0x23, 0xd9, 0x12, 0x40, 0x8a, 0x28
+	.byte 0x00, 0x00, 0xda, 0xaa, 0x78, 0x25, 0x01, 0x90
+	.byte 0x3f, 0x01, 0x00, 0x6e, 0x43, 0xda, 0xdd, 0x6e
+	.byte 0x3f, 0x40, 0x8c, 0x28, 0x00, 0x00, 0x1d, 0x37
+	.byte 0xd4, 0xfc, 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0xaa
+	.byte 0x05, 0xcf, 0xd8, 0x76, 0x9c, 0x05, 0x40, 0x8c
+	.byte 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb
+	.byte 0x12, 0xdb, 0x88, 0x1e, 0x95, 0x05, 0xcf, 0x69
+	.byte 0xdb, 0x12, 0xf2, 0x24, 0x0f, 0xed, 0x31, 0xc3
+	.byte 0x07, 0xe4, 0xec, 0x23, 0xd9, 0x12, 0x40, 0x8c
+	.byte 0x28, 0x00, 0x00, 0xda, 0xaa, 0x78, 0xdc, 0x00
+	.byte 0x90, 0x3f, 0x01, 0x00, 0x6e, 0x43, 0xda, 0xde
+	.byte 0x6e, 0x3f, 0x40, 0x8e, 0x28, 0x00, 0x00, 0x1d
+	.byte 0x37, 0xd4, 0xfc, 0xdb, 0x12, 0xdb, 0x88, 0x1e
+	.byte 0x61, 0x05, 0xcf, 0xd8, 0x76, 0x53, 0x05, 0x40
+	.byte 0x8e, 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc
+	.byte 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0x4c, 0x05, 0xcf
+	.byte 0x69, 0xdb, 0x12, 0xf2, 0x24, 0x0f, 0xed, 0x31
+	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23, 0xd9, 0x12, 0x40
+	.byte 0x8e, 0x28, 0x00, 0x00, 0xda, 0xaa, 0x78, 0x93
+	.byte 0x00, 0x90, 0x3f, 0x01, 0x00, 0x6e, 0x42, 0xda
+	.byte 0xdf, 0x6e, 0x3e, 0x40, 0x90, 0x28, 0x00, 0x00
+	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12, 0xdb, 0x88
+	.byte 0x1e, 0x18, 0x05, 0xcf, 0xd8, 0x76, 0x0a, 0x05
+	.byte 0x40, 0x90, 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4
+	.byte 0xfc, 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0x03, 0x05
+	.byte 0xcf, 0x69, 0xdb, 0x12, 0xf2, 0x24, 0x0f, 0xed
+	.byte 0x31, 0xc3, 0x07, 0xe4, 0xec, 0x23, 0xd9, 0x12
+	.byte 0x40, 0x90, 0x28, 0x00, 0x00, 0xda, 0xaa, 0x68
+	.byte 0x4b, 0x90, 0x3f, 0x01, 0x00, 0x7e, 0xda, 0x04
+	.byte 0xda, 0xcf, 0x08, 0x00, 0x7e, 0xd3, 0x04, 0x40
+	.byte 0x80, 0x28, 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc
+	.byte 0xdb, 0x12, 0xdb, 0x88, 0x1e, 0xcc, 0x04, 0xcf
+	.byte 0xcf, 0x1d, 0x73, 0xbd, 0x04, 0x40, 0x80, 0x28
+	.byte 0x00, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x12
+	.byte 0xdb, 0x88, 0x1e, 0xb6, 0x04, 0xcf, 0x69, 0xdb
+	.byte 0x12, 0xf2, 0x24, 0x0f, 0xed, 0x31, 0xc3, 0x07
+	.byte 0xe4, 0xec, 0x23, 0xd9, 0x12, 0x40, 0x80, 0x28
+	.byte 0x00, 0x00, 0xda, 0xaa, 0x1d, 0x8a, 0xf8, 0xf9
+	.byte 0x78, 0x8f, 0x04, 0xba, 0x04, 0x34, 0xbf, 0x04
+	.byte 0x35, 0xa2, 0x20, 0xe8, 0xcf, 0x86, 0x28, 0x00
+	.byte 0x00, 0x6e, 0x4c, 0xf3, 0xfd, 0x04, 0x01, 0x30
+	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x02
+	.byte 0x00, 0xb8, 0x04, 0x65, 0x94, 0x20, 0xd8, 0x12
+	.byte 0x1e, 0x70, 0x04, 0xdb, 0x12, 0xdb, 0xec, 0x02
+	.byte 0xf2, 0x44, 0x0f, 0xed, 0x31, 0xe3, 0x07, 0xe4
+	.byte 0xec, 0x20, 0x38, 0x0b, 0xed, 0x00, 0x0b, 0xee
+	.byte 0x11, 0xbf, 0x0c, 0x30, 0x38, 0x1d, 0x72, 0x0a
+	.byte 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0, 0x44, 0xfa
+	.byte 0xeb, 0x88, 0xf3, 0xfd, 0x04, 0x01, 0x32, 0x41
+	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x2f, 0x04, 0xf3
+	.byte 0xfd, 0x04, 0x01, 0x33, 0xbb, 0x04, 0x31, 0xa2
+	.byte 0x20, 0xe8, 0xcf, 0x88, 0x28, 0x00, 0x00, 0x6e
+	.byte 0x46, 0xb3, 0x02, 0x01, 0x00, 0xbb, 0x02, 0x02
+	.byte 0x03, 0x00, 0xb1, 0x65, 0x94, 0x20, 0xd8, 0x12
+	.byte 0x1e, 0x18, 0x04, 0xdb, 0x12, 0xdb, 0xec, 0x02
+	.byte 0xf2, 0x44, 0x0f, 0xed, 0x31, 0xe3, 0x07, 0xe4
+	.byte 0xec, 0x20, 0x38, 0x0b, 0xed, 0x00, 0x0b, 0xf2
+	.byte 0x11, 0xbf, 0x0c, 0x30, 0x38, 0x1d, 0x72, 0x0a
+	.byte 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0, 0x44, 0xfa
+	.byte 0xeb, 0x88, 0xf3, 0xfd, 0x04, 0x01, 0x32, 0x41
+	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xd7, 0x03, 0xa2
+	.byte 0x20, 0xe8, 0xcf, 0x8a, 0x28, 0x00, 0x00, 0x6e
+	.byte 0x46, 0xb3, 0x02, 0x01, 0x00, 0xbb, 0x02, 0x02
+	.byte 0x04, 0x00, 0xb1, 0x65, 0x94, 0x20, 0xd8, 0x12
+	.byte 0x1e, 0xc8, 0x03, 0xdb, 0x12, 0xdb, 0xec, 0x02
+	.byte 0xf2, 0x44, 0x0f, 0xed, 0x31, 0xe3, 0x07, 0xe4
+	.byte 0xec, 0x20, 0x38, 0x0b, 0xed, 0x00, 0x0b, 0xf6
+	.byte 0x11, 0xbf, 0x0c, 0x30, 0x38, 0x1d, 0x72, 0x0a
+	.byte 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0, 0x44, 0xfa
+	.byte 0xeb, 0x88, 0xf3, 0xfd, 0x04, 0x01, 0x32, 0x41
+	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x87, 0x03, 0xa2
+	.byte 0x20, 0xe8, 0xcf, 0x8c, 0x28, 0x00, 0x00, 0x6e
+	.byte 0x46, 0xb3, 0x02, 0x01, 0x00, 0xbb, 0x02, 0x02
+	.byte 0x05, 0x00, 0xb1, 0x65, 0x94, 0x20, 0xd8, 0x12
+	.byte 0x1e, 0x78, 0x03, 0xdb, 0x12, 0xdb, 0xec, 0x02
+	.byte 0xf2, 0x44, 0x0f, 0xed, 0x31, 0xe3, 0x07, 0xe4
+	.byte 0xec, 0x20, 0x38, 0x0b, 0xed, 0x00, 0x0b, 0xfa
+	.byte 0x11, 0xbf, 0x0c, 0x30, 0x38, 0x1d, 0x72, 0x0a
+	.byte 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0, 0x44, 0xfa
+	.byte 0xeb, 0x88, 0xf3, 0xfd, 0x04, 0x01, 0x32, 0x41
+	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x37, 0x03, 0xbb
+	.byte 0x02, 0x36, 0xa2, 0x20, 0xe8, 0xcf, 0x8e, 0x28
+	.byte 0x00, 0x00, 0x6e, 0x45, 0xb3, 0x02, 0x01, 0x00
+	.byte 0xb6, 0x02, 0x06, 0x00, 0xb1, 0x65, 0x94, 0x20
+	.byte 0xd8, 0x12, 0x1e, 0x26, 0x03, 0xdb, 0x12, 0xdb
+	.byte 0xec, 0x02, 0xf2, 0x44, 0x0f, 0xed, 0x31, 0xe3
+	.byte 0x07, 0xe4, 0xec, 0x20, 0x38, 0x0b, 0xed, 0x00
+	.byte 0x0b, 0xfe, 0x11, 0xbf, 0x0c, 0x30, 0x38, 0x1d
+	.byte 0x72, 0x0a, 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0
+	.byte 0x44, 0xfa, 0xeb, 0x88, 0xf3, 0xfd, 0x04, 0x01
+	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xe5
+	.byte 0x02, 0xa2, 0x20, 0xe8, 0xcf, 0x90, 0x28, 0x00
+	.byte 0x00, 0x6e, 0x45, 0xb3, 0x02, 0x01, 0x00, 0xb6
+	.byte 0x02, 0x07, 0x00, 0xb1, 0x65, 0x94, 0x20, 0xd8
+	.byte 0x12, 0x1e, 0xd7, 0x02, 0xdb, 0x12, 0xdb, 0xec
+	.byte 0x02, 0xf2, 0x44, 0x0f, 0xed, 0x31, 0xe3, 0x07
+	.byte 0xe4, 0xec, 0x20, 0x38, 0x0b, 0xed, 0x00, 0x0b
+	.byte 0x02, 0x12, 0xbf, 0x0c, 0x30, 0x38, 0x1d, 0x72
+	.byte 0x0a, 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0, 0x44
+	.byte 0xfa, 0xeb, 0x88, 0xf3, 0xfd, 0x04, 0x01, 0x32
+	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x96, 0x02
+	.byte 0xa2, 0x20, 0xe8, 0xcf, 0x80, 0x28, 0x00, 0x00
+	.byte 0x7e, 0x8f, 0x02, 0xb3, 0x02, 0x01, 0x00, 0xb6
+	.byte 0x02, 0x08, 0x00, 0xb1, 0x65, 0x94, 0x20, 0xd8
+	.byte 0x12, 0x1e, 0x87, 0x02, 0xdb, 0x12, 0xdb, 0xec
+	.byte 0x02, 0xf2, 0x44, 0x0f, 0xed, 0x31, 0xe3, 0x07
+	.byte 0xe4, 0xec, 0x20, 0x38, 0x0b, 0xed, 0x00, 0x0b
+	.byte 0x06, 0x12, 0xbf, 0x0c, 0x30, 0x38, 0x1d, 0x72
+	.byte 0x0a, 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0, 0x44
+	.byte 0xfa, 0xeb, 0x88, 0xf3, 0xfd, 0x04, 0x01, 0x32
+	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x46, 0x02
+
+LABEL_FBB6EC:
+	st_dri3b A, 0xFD, 0x04, 0x01
+	ld xwa, xde
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	ld (xbc), wa
+	lda xwa, (xbc + 2)
+	ld (xwa), de
+	lda xde, (xsp + 4)
+	ld (xbc + 4), xde
+	cpw (xbc), 0x1
+	jr nz, LABEL_FBB756
+	cpw (xwa), 0x2
+	jr nz, LABEL_FBB756
+	ld xwa, 0x2886
+	call SndParam_LookupReadOnly
+	extz hl
+	ld wa, hl
+	calr AudioTable_FindMatchIndex
+	extz hl
+	sla hl, 2
+	lda_24 xbc, 0xed0f44
+	ld_sril3 XWA, 0x07, 0xE4, 0xEC
+	push xwa
+	pushw 0xED
+	pushw 0x120A
+	lda xwa, (xsp + 12)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	st_dri3b B, 0xFD, 0x04, 0x01
+	ld xbc, 0x1E0008C
+	jrl AudioTable_SendEventAndContinue
+
+LABEL_FBB756:
+	cpw (xbc), 0x1
+	jr nz, LABEL_FBB7A6
+	cpw (xwa), 0x3
+	jr nz, LABEL_FBB7A6
+	ld xwa, 0x2888
+	call SndParam_LookupReadOnly
+	extz hl
+	ld wa, hl
+	calr AudioTable_FindMatchIndex
+	extz hl
+	sla hl, 2
+	lda_24 xbc, 0xed0f44
+	ld_sril3 XWA, 0x07, 0xE4, 0xEC
+	push xwa
+	pushw 0xED
+	pushw 0x120E
+	lda xwa, (xsp + 12)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	st_dri3b B, 0xFD, 0x04, 0x01
+	ld xbc, 0x1E0008C
+	jrl AudioTable_SendEventAndContinue
+
+LABEL_FBB7A6:
+	cpw (xbc), 0x1
+	jr nz, LABEL_FBB7F6
+	cpw (xwa), 0x4
+	jr nz, LABEL_FBB7F6
+	ld xwa, 0x288A
+	call SndParam_LookupReadOnly
+	extz hl
+	ld wa, hl
+	calr AudioTable_FindMatchIndex
+	extz hl
+	sla hl, 2
+	lda_24 xbc, 0xed0f44
+	ld_sril3 XWA, 0x07, 0xE4, 0xEC
+	push xwa
+	pushw 0xED
+	pushw 0x1212
+	lda xwa, (xsp + 12)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	st_dri3b B, 0xFD, 0x04, 0x01
+	ld xbc, 0x1E0008C
+	jrl AudioTable_SendEventAndContinue
+
+LABEL_FBB7F6:
+	cpw (xbc), 0x1
+	jr nz, LABEL_FBB846
+	cpw (xwa), 0x5
+	jr nz, LABEL_FBB846
+	ld xwa, 0x288C
+	call SndParam_LookupReadOnly
+	extz hl
+	ld wa, hl
+	calr AudioTable_FindMatchIndex
+	extz hl
+	sla hl, 2
+	lda_24 xbc, 0xed0f44
+	ld_sril3 XWA, 0x07, 0xE4, 0xEC
+	push xwa
+	pushw 0xED
+	pushw 0x1216
+	lda xwa, (xsp + 12)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	st_dri3b B, 0xFD, 0x04, 0x01
+	ld xbc, 0x1E0008C
+	jrl AudioTable_SendEventAndContinue
+
+LABEL_FBB846:
+	cpw (xbc), 0x1
+	jr nz, LABEL_FBB896
+	cpw (xwa), 0x6
+	jr nz, LABEL_FBB896
+	ld xwa, 0x288E
+	call SndParam_LookupReadOnly
+	extz hl
+	ld wa, hl
+	calr AudioTable_FindMatchIndex
+	extz hl
+	sla hl, 2
+	lda_24 xbc, 0xed0f44
+	ld_sril3 XWA, 0x07, 0xE4, 0xEC
+	push xwa
+	pushw 0xED
+	pushw 0x121A
+	lda xwa, (xsp + 12)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	st_dri3b B, 0xFD, 0x04, 0x01
+	ld xbc, 0x1E0008C
+	jrl AudioTable_SendEventAndContinue
+
+LABEL_FBB896:
+	cpw (xbc), 0x1
+	jr nz, LABEL_FBB8E5
+	cpw (xwa), 0x7
+	jr nz, LABEL_FBB8E5
+	ld xwa, 0x2890
+	call SndParam_LookupReadOnly
+	extz hl
+	ld wa, hl
+	calr AudioTable_FindMatchIndex
+	extz hl
+	sla hl, 2
+	lda_24 xbc, 0xed0f44
+	ld_sril3 XWA, 0x07, 0xE4, 0xEC
+	push xwa
+	pushw 0xED
+	pushw 0x121E
+	lda xwa, (xsp + 12)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	st_dri3b B, 0xFD, 0x04, 0x01
+	ld xbc, 0x1E0008C
+	jr AudioTable_SendEventAndContinue
+
+LABEL_FBB8E5:
+	cpw (xbc), 0x1
+	jr nz, AudioTable_ReturnZero
+	cpw (xwa), 0x8
+	jr nz, AudioTable_ReturnZero
+	ld xwa, 0x2880
+	call SndParam_LookupReadOnly
+	extz hl
+	ld wa, hl
+	calr AudioTable_FindMatchIndex
+	extz hl
+	sla hl, 2
+	lda_24 xbc, 0xed0f44
+	ld_sril3 XWA, 0x07, 0xE4, 0xEC
+	push xwa
+	pushw 0xED
+	pushw 0x1222
+	lda xwa, (xsp + 12)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	st_dri3b B, 0xFD, 0x04, 0x01
+	ld xbc, 0x1E0008C
+
+AudioTable_SendEventAndContinue:
+	call SendEvent
+
+AudioTable_ReturnZero:
+	lds32 xhl, 0
+	pop xiz
+	st_dri3b L, 0xFD, 0x08, 0x01
+	ret
+
+AudioTable_FindMatchIndex:
+	ldb l, 0x0
+	lda_24 xde, 0xed0f24
+
+LABEL_FBB946:
+	ld c, l
+	extz bc
+	cp_srib_rm A, 0x07, 0xE8, 0xE4
+	ret z
+	inc 1, l
+	cp l, 0x1E
+	jr c, LABEL_FBB946
+	ret
+
+FswAsIniFunc:
+	cp xbc, 0x1C00013
+	jr nz, SeqLoadFunc_ReturnZero
+	dec 2, xde
+	cp xde, 0x0
+	jr c, SeqLoadFunc_ReturnZero
+	cp xde, 0x5
+	jr ugt, SeqLoadFunc_ReturnZero
+	add xde, xde
+	add xde, 0xED1234
+	ld de, (xde)
+	lda_24 xix, 0xfbb987
+	jp_dri 8, 0x07, 0xF0, 0xE8
+LABEL_FBB987:
+	.byte 0x1e, 0x06, 0x00, 0x1e, 0x1e, 0x00
+
+SeqLoadFunc_ReturnZero:
+	lds32 xhl, 0
+	ret
+
+LABEL_FBB990:
+	; --- Init/check function (27 bytes) ---
+	ld xwa, 0x00004080
+	call SndParam_LookupReadOnly
+	cps	hl, 1
+	ret nz
+	ld xwa, 0x00004080
+	lds	bc, 0
+	lds	de, 4
+	call SoundParam_NotifyChange
+	ret
+LABEL_FBB9AB:
+	; --- Multi-call setup function (37 bytes) ---
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call AudioInit_RefreshToneBank
+	call NoteMap_ProcessAndMerge
+	call Voice_InitializeAll
+	call NoteMap_SendAllNotesOff
+	call Voice_InitTableGroup
+	call Voice_InitTablePair
+	call MIDI_SendAllSoundOff
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	ret
+
+
+LABEL_FBB9D0:
+
+IvPmemWindowPageCtlProc:
+	dec 4, xsp
+	push xiz
+	ld xiz, xde
+	ld (xsp + 4), xwa
+	cp xbc, 0x1C00007
+	jr z, LABEL_FBBA41
+	cp xbc, 0x1C00001
+	jr z, LABEL_FBB9F4
+	ld xwa, (xsp + 4)
+	ld xde, xiz
+	call InheritedProc
+	jrl LABEL_FBBB48
+
+LABEL_FBB9F4:
+	ld xwa, (xsp + 4)
+	ld xde, xiz
+	call InheritedProc
+	cp xiz, 0x4
+	jr z, GridBox_NotifySelection
+	cp xiz, 0x3
+	jr z, GridBox_NotifySelection
+	cp xiz, 0x5
+	jr z, GridBox_NotifySelection
+	or xiz, xiz
+	jrl nz, SeqLoad_ReturnZeroJmp2
+
+GridBox_NotifySelection:
+	ld xwa, (xsp + 4)
+	call GetViewInstance
+	lda xbc, (xhl + 22)
+	ld xwa, (xbc)
+	ldw (xwa), 0x1
+	ld xwa, (xbc)
+	ld de, (xwa)
+	exts xde
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0001E
+	call SendEvent
+	jrl SeqLoad_ReturnZeroJmp2
+
+LABEL_FBBA41:
+	ld xwa, (xsp + 4)
+	call GetViewInstance
+	lda xwa, (xhl + 22)
+	cp xiz, 0x10
+	jr nz, LABEL_FBBAC4
+	ld xwa, (xwa)
+	ld bc, (xwa)
+	cps bc, 2
+	jr z, LABEL_FBBA86
+	cps bc, 1
+	jrl nz, SeqLoad_ReturnZeroJmp2
+	incm 1, (xwa)
+	sti8_24 0x0340e2, 0x01
+	ld xwa, 0x450005
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call PostEvent
+	ld xwa, 0x45000D
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	jr SeqLoad_PostEvent
+
+LABEL_FBBA86:
+	cpi8_24 0x0340e2, 0x01
+	jr nz, LABEL_FBBAA2
+	sti8_24 0x0340e2, 0x02
+	ld xwa, 0x45000D
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	jr SeqLoad_PostEvent
+
+LABEL_FBBAA2:
+	ldw (xwa), 0x1
+	ld xwa, 0x45000D
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call PostEvent
+	ld xwa, 0x450005
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	jr SeqLoad_PostEvent
+
+LABEL_FBBAC4:
+	cp xiz, 0x90
+	jr nz, SeqLoad_ReturnZeroJmp2
+	ld xwa, (xwa)
+	ld bc, (xwa)
+	cps bc, 2
+	jr z, LABEL_FBBB04
+	cps bc, 1
+	jr nz, SeqLoad_ReturnZeroJmp2
+	ldw (xwa), 0x2
+	sti8_24 0x0340e2, 0x02
+	ld xwa, 0x450005
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call PostEvent
+	ld xwa, 0x45000D
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+
+SeqLoad_PostEvent:
+	call PostEvent
+	jr SeqLoad_ReturnZeroJmp2
+
+LABEL_FBBB04:
+	cpi8_24 0x0340e2, 0x01
+	jr nz, LABEL_FBBB30
+	decm 1, (xwa)
+	ld xwa, 0x45000D
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call PostEvent
+	ld xwa, 0x450005
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call PostEvent
+	jr SeqLoad_ReturnZeroJmp2
+
+LABEL_FBBB30:
+	ld xwa, 0x45000D
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	call PostEvent
+	sti8_24 0x0340e2, 0x01
+
+SeqLoad_ReturnZeroJmp2:
+	lds32 xhl, 0
+
+LABEL_FBBB48:
+	pop xiz
+	inc 4, xsp
+	ret
+LABEL_FBBB4C:
+
+AcPmExpFilterGridBoxProc:
+	st_dri3b L, 0xFD, 0xDC, 0xFE
+	push xiz
+	st_dri3l XDE, 0xFD, 0x20, 0x01
+	st_dri3l XBC, 0xFD, 0x24, 0x01
+	ld xiz, xwa
+	ld_sril XBC, (xsp + 0x0124)
+	cp xbc, 0x1C00007
+	jrl z, LABEL_FBC0CA
+	ld_sril XWA, (xsp + 0x0124)
+	cp xwa, 0x1E0008D
+	jrl z, LABEL_FBC0AF
+	cp xwa, 0x1E0008B
+	jrl z, LABEL_FBC07C
+	cp xwa, 0x1E0008A
+	jrl z, LABEL_FBC073
+	cp xwa, 0x1C0000F
+	jrl z, LABEL_FBBC63
+	cp xwa, 0x1C0000B
+	jrl z, LABEL_FBBC40
+	cp xwa, 0x1C00001
+	jr z, LABEL_FBBBD2
+	sub xbc, 0x1C00017
+	cp xbc, 0x0
+	jrl lt, LABEL_FBC120
+	cp xbc, 0x6
+	jrl gt, LABEL_FBC120
+	add xbc, xbc
+	add xbc, 0xED1420
+	ld bc, (xbc)
+	lda_24 xix, 0xfbbbd2
+	jp_dri 8, 0x07, 0xF0, 0xE4
+
+LABEL_FBBBD2:
+	ld xwa, xiz
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	call InheritedProc
+	ld xwa, xiz
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, (xsp + 4)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	call SetDialUp
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, (xsp + 4)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	call SetDialDown
+	lds wa, 1
+	jrl LABEL_FBC06D
+
+LABEL_FBBC40:
+	ld xwa, xiz
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	call InheritedProc
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0002
+	call SendEvent
+	jrl SeqLoad_ReturnZeroJmp
+
+LABEL_FBBC63:
+	ld xwa, xiz
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	call InheritedProc
+	lda xbc, (xsp + 12)
+	ldw (xbc), 0x3A
+	lda xhl, (xbc + 2)
+	ldw (xhl), 0x23
+	lda xwa, (xsp + 16)
+	ld de, (xbc)
+	ld (xwa), de
+	ld de, (xbc)
+	add de, 0x5C
+	ld (xwa + 4), de
+	ld de, (xhl)
+	ld (xwa + 2), de
+	ld de, (xhl)
+	add de, 0x10
+	ld (xwa + 6), de
+	lds32 xde, 0
+	push xde
+	pushw 0xFB
+	pushw 0xF5
+	ld xde, 0xED13F0
+	call DrawString
+	lda xbc, (xsp + 12)
+	ldw (xbc), 0xE0
+	lda xhl, (xbc + 2)
+	ldw (xhl), 0x23
+	lda xwa, (xsp + 16)
+	ld de, (xbc)
+	ld (xwa), de
+	ld de, (xbc)
+	add de, 0x34
+	ld (xwa + 4), de
+	ld de, (xhl)
+	ld (xwa + 2), de
+	ld de, (xhl)
+	add de, 0x10
+	ld (xwa + 6), de
+	lds32 xde, 0
+	push xde
+	pushw 0xFB
+	pushw 0xF5
+	ld xde, 0xED13FC
+	call DrawString
+	ld (xsp + 10), 0x0
+	cpi8_24 0x0340e2, 0x01
+	jrl nz, LABEL_FBBDC4
+
+LABEL_FBBCFC:
+	st_dri3b A, 0xFD, 0x18, 0x01
+	ldw (xbc), 0x0
+	ld a, (xsp + 10)
+	inc 2, a
+	extz wa
+	ld (xbc + 2), wa
+	lda xde, (xsp + 24)
+	ld (xbc + 4), xde
+	ld a, (xsp + 10)
+	extz wa
+	sla wa, 2
+	lda_24 xbc, 0xed1240
+	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	push xwa
+	pushw 0xED
+	pushw 0x1404
+	push xde
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	st_dri3b B, 0xFD, 0x18, 0x01
+	ld xbc, 0x1E0008C
+	call SendEvent
+	incm8 1, (xsp + 10)
+	cp (xsp + 10), 0x9
+	jr c, LABEL_FBBCFC
+	lda xwa, (xsp + 16)
+	ldw (xwa + 2), 0x6
+	ldw (xwa + 6), 0x17
+	ldw (xwa), 0xF5
+	ldw (xwa + 4), 0x13B
+	ldw bc, 0xC1
+	ldw de, 0xF3
+	call DrawDesignBox
+	lda xde, (xsp + 16)
+	ld wa, (xde + 4)
+	sub wa, (xde)
+	exts xwa
+	divs wa, 0x2
+	ld bc, (xde)
+	add bc, wa
+	lda xhl, (xsp + 12)
+	ld (xhl), bc
+	ld bc, (xde + 2)
+	ld wa, (xde + 6)
+	sub wa, bc
+	exts xwa
+	divs wa, 0x2
+	add bc, wa
+	inc 1, bc
+	ld (xhl + 2), bc
+	pushw 0xED
+	pushw 0x1408
+	lda xwa, (xsp + 28)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	lda xwa, (xsp + 16)
+	lda xbc, (xsp + 12)
+	lda xde, (xsp + 24)
+	lds32 xhl, 0
+	push xhl
+	pushw 0x0
+	pushw 0xF7
+	jrl LABEL_FBBE89
+
+LABEL_FBBDC4:
+	st_dri3b A, 0xFD, 0x18, 0x01
+	ldw (xbc), 0x0
+	ld a, (xsp + 10)
+	inc 2, a
+	extz wa
+	ld (xbc + 2), wa
+	lda xde, (xsp + 24)
+	ld (xbc + 4), xde
+	ld a, (xsp + 10)
+	extz wa
+	sla wa, 2
+	lda_24 xbc, 0xed1318
+	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	push xwa
+	pushw 0xED
+	pushw 0x1412
+	push xde
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	st_dri3b B, 0xFD, 0x18, 0x01
+	ld xbc, 0x1E0008C
+	call SendEvent
+	incm8 1, (xsp + 10)
+	cp (xsp + 10), 0x9
+	jr c, LABEL_FBBDC4
+	lda xwa, (xsp + 16)
+	ldw (xwa + 2), 0x6
+	ldw (xwa + 6), 0x17
+	ldw (xwa), 0xF5
+	ldw (xwa + 4), 0x13B
+	ldw bc, 0xC1
+	ldw de, 0xF3
+	call DrawDesignBox
+	lda xde, (xsp + 16)
+	ld wa, (xde + 4)
+	sub wa, (xde)
+	exts xwa
+	divs wa, 0x2
+	ld bc, (xde)
+	add bc, wa
+	lda xhl, (xsp + 12)
+	ld (xhl), bc
+	ld bc, (xde + 2)
+	ld wa, (xde + 6)
+	sub wa, bc
+	exts xwa
+	divs wa, 0x2
+	add bc, wa
+	inc 1, bc
+	ld (xhl + 2), bc
+	pushw 0xED
+	pushw 0x1416
+	lda xwa, (xsp + 28)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	lda xwa, (xsp + 16)
+	lda xbc, (xsp + 12)
+	lda xde, (xsp + 24)
+	lds32 xhl, 0
+	push xhl
+	pushw 0x0
+	pushw 0xF7
+
+LABEL_FBBE89:
+	call DrawStringCentered
+	jrl SeqLoad_ReturnZeroJmp
+	ld xwa, xiz
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	call InheritedProc
+	ld xwa, xiz
+	ld xbc, 0x1E00050
+	ld_sril XDE, (xsp + 0x0120)
+	call SendEvent
+	or xhl, xhl
+	jr z, LABEL_FBBF18
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	cpi8_24 0x0340e2, 0x02
+	jr nz, LABEL_FBBEEE
+	cps hl, 2
+	jr nz, LABEL_FBBEEE
+	sti8_24 0x0340e2, 0x01
+	ld xwa, xiz
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF000A
+	jr LABEL_FBBF01
+
+LABEL_FBBEEE:
+	dec 1, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+
+LABEL_FBBF01:
+	call SendEvent
+	ld xwa, xiz
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	call SetAutoInc
+	jrl SeqLoad_ReturnZeroJmp
+
+LABEL_FBBF18:
+	ld xwa, xiz
+	ld xbc, 0x1E00091
+	ld_sril XDE, (xsp + 0x0120)
+	call SendEvent
+	or xhl, xhl
+	jrl z, SeqLoad_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	call ApFuncCall
+	ld xwa, xiz
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	call SetAutoInc
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	ld_sril XDE, (xsp + 0x0120)
+	call SetDialUp
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	ld_sril XDE, (xsp + 0x0120)
+	call SetDialDown
+	lds wa, 1
+	jrl LABEL_FBC06D
+	ld xwa, xiz
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	call InheritedProc
+	ld xwa, xiz
+	ld xbc, 0x1E00050
+	ld_sril XDE, (xsp + 0x0120)
+	call SendEvent
+	or xhl, xhl
+	jr z, LABEL_FBC00F
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld8_24 a, 0x0340e2
+	cps a, 2
+	jr nz, LABEL_FBBFBA
+	cp hl, 0xA
+	jrl z, SeqLoad_ReturnZeroJmp
+
+LABEL_FBBFBA:
+	cps a, 1
+	jr nz, LABEL_FBBFE5
+	cp hl, 0xA
+	jr nz, LABEL_FBBFE5
+	sti8_24 0x0340e2, 0x02
+	ld xwa, xiz
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, 0xFFFF0002
+	jr LABEL_FBBFF8
+
+LABEL_FBBFE5:
+	inc 1, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+
+LABEL_FBBFF8:
+	call SendEvent
+	ld xwa, xiz
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	call SetAutoInc
+	jrl SeqLoad_ReturnZeroJmp
+
+LABEL_FBC00F:
+	ld xwa, xiz
+	ld xbc, 0x1E00091
+	ld_sril XDE, (xsp + 0x0120)
+	call SendEvent
+	or xhl, xhl
+	jrl z, SeqLoad_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	call ApFuncCall
+	ld xwa, xiz
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	call SetAutoInc
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	ld_sril XDE, (xsp + 0x0120)
+	call SetDialUp
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	ld_sril XDE, (xsp + 0x0120)
+	call SetDialDown
+	lds wa, 1
+
+LABEL_FBC06D:
+	call SetDialEnable
+	jr SeqLoad_ReturnZeroJmp
+
+LABEL_FBC073:
+	ld xwa, xiz
+	ld xiz, 0x3E
+	jr LABEL_FBC083
+
+LABEL_FBC07C:
+	ld xwa, xiz
+	ld xiz, 0x42
+
+LABEL_FBC083:
+	call GetViewInstance
+	add xhl, xiz
+	ld xwa, (xhl)
+	push xwa
+	ld_sril XWA, (xsp + 0x0124)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jr SeqLoad_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	jr LABEL_FBC0C2
+
+LABEL_FBC0AF:
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+
+LABEL_FBC0C2:
+	call ApFuncCall
+
+SeqLoad_ReturnZeroJmp:
+	lds32 xhl, 0
+	jr LABEL_FBC130
+
+LABEL_FBC0CA:
+	ld_sril XWA, (xsp + 0x0120)
+	cp xwa, 0xF
+	jr nz, LABEL_FBC112
+	call GetTitleNow
+	ld xwa, xhl
+	ld xbc, 0x1E0007A
+	lds32 xde, 0
+	call SendEvent
+	or xhl, xhl
+	jr z, LABEL_FBC0FF
+	call GetTitleNow
+	ld xwa, xhl
+	ld xbc, 0x1E00079
+	lds32 xde, 0
+	call SendEvent
+	jr LABEL_FBC112
+
+LABEL_FBC0FF:
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00015
+	ld xde, 0x1A00040
+	call PostEvent
+
+LABEL_FBC112:
+	ld xwa, xiz
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+	jr LABEL_FBC12C
+
+LABEL_FBC120:
+	ld xwa, xiz
+	ld_sril XBC, (xsp + 0x0124)
+	ld_sril XDE, (xsp + 0x0120)
+
+LABEL_FBC12C:
+	call InheritedProc
+
+LABEL_FBC130:
+	pop xiz
+	st_dri3b L, 0xFD, 0x24, 0x01
+	ret
+
+PmExpFilterGridCheck:
+	st_dri3b L, 0xFD, 0xF8, 0xFE
+	ld xwa, xbc
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FBC33F
+	sub xwa, 0x1C00017
+	cp xwa, 0x0
+	jrl lt, SeqLoad_StoreReturnZero
+	cp xwa, 0x6
+	jrl gt, SeqLoad_StoreReturnZero
+	add xwa, xwa
+	add xwa, 0xED149A
+	ld wa, (xwa)
+	lda_24 xix, 0xfbc173
+	jp_dri 8, 0x07, 0xF0, 0xE0
+
+LABEL_FBC173:
+	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
+	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
+	.byte 0xfa, 0xeb, 0x8a, 0xf3, 0xfd, 0x00, 0x01, 0x30
+	.byte 0xea, 0x89, 0xe9, 0xef, 0x00, 0xd7, 0xe6, 0xa8
+	.byte 0xb0, 0x51, 0xb8, 0x02, 0x52, 0x90, 0x3f, 0x01
+	.byte 0x00, 0x7e, 0x6b, 0x02, 0xc2, 0xe2, 0x40, 0x03
+	.byte 0x23, 0xda, 0x88, 0xd8, 0xec, 0x02, 0xd8, 0x68
+	.byte 0xcb, 0xda, 0x66, 0x23, 0xcb, 0xd9, 0x7e, 0x56
+	.byte 0x02, 0xda, 0xda, 0x71, 0x51, 0x02, 0xda, 0xcf
+	.byte 0x0a, 0x00, 0x7a, 0x4a, 0x02, 0xf2, 0x2e, 0x14
+	.byte 0xed, 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x31
+	.byte 0xff, 0xff, 0xda, 0xaa, 0x78, 0x94, 0x00, 0xda
+	.byte 0xda, 0x71, 0x33, 0x02, 0xda, 0xcf, 0x0a, 0x00
+	.byte 0x7a, 0x2c, 0x02, 0xf2, 0x52, 0x14, 0xed, 0x31
+	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x31, 0xff, 0xff
+	.byte 0xda, 0xaa, 0x68, 0x77, 0x1d, 0xd0, 0x44, 0xfa
+	.byte 0xeb, 0x88, 0x41, 0x8f, 0x00, 0xe0, 0x01, 0xea
+	.byte 0xa8, 0x1d, 0x60, 0x96, 0xfa, 0xeb, 0x8a, 0xf3
+	.byte 0xfd, 0x00, 0x01, 0x31, 0xea, 0x88, 0xe8, 0xef
+	.byte 0x00, 0xd7, 0xe2, 0xa8, 0xb1, 0x50, 0xb9, 0x02
+	.byte 0x52, 0xda, 0x88, 0xd8, 0xec, 0x02, 0xd8, 0x68
+	.byte 0x91, 0x3f, 0x01, 0x00, 0x7e, 0xe8, 0x01, 0xc2
+	.byte 0xe2, 0x40, 0x03, 0x23, 0xcb, 0xda, 0x66, 0x21
+	.byte 0xcb, 0xd9, 0x7e, 0xda, 0x01, 0xda, 0xda, 0x71
+	.byte 0xd5, 0x01, 0xda, 0xcf, 0x0a, 0x00, 0x7a, 0xce
+	.byte 0x01, 0xf2, 0x2e, 0x14, 0xed, 0x31, 0xe3, 0x07
+	.byte 0xe4, 0xe0, 0x20, 0xd9, 0xa9, 0xda, 0xaa, 0x68
+	.byte 0x1a, 0xda, 0xda, 0x71, 0xb9, 0x01, 0xda, 0xcf
+	.byte 0x0a, 0x00, 0x7a, 0xb2, 0x01, 0xf2, 0x52, 0x14
+	.byte 0xed, 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0xd9
+	.byte 0xa9, 0xda, 0xaa, 0x1d, 0x42, 0xf9, 0xf9, 0x78
+	.byte 0x9d, 0x01, 0xc2, 0xe2, 0x40, 0x03, 0x21, 0xc9
+	.byte 0xda, 0x66, 0x67, 0xc9, 0xd9, 0x7e, 0x8f, 0x01
+	.byte 0x27, 0x00, 0xf2, 0x2e, 0x14, 0xed, 0x34, 0xa2
+	.byte 0x20, 0xcf, 0x8b, 0xd9, 0x12, 0xd9, 0xec, 0x02
+	.byte 0xe3, 0x07, 0xf0, 0xe4, 0xf0, 0x6e, 0x41, 0xf3
+	.byte 0xfd, 0x00, 0x01, 0x31, 0xb1, 0x02, 0x01, 0x00
+	.byte 0xcf, 0x62, 0xdb, 0x12, 0xb9, 0x02, 0x53, 0xb7
+	.byte 0x33, 0xb9, 0x04, 0x63, 0x40, 0x7a, 0x14, 0xed
+	.byte 0x00, 0x9a, 0x04, 0x3f, 0x00, 0x00, 0x66, 0x05
+	.byte 0x40, 0x76, 0x14, 0xed, 0x00, 0x38, 0x3b, 0x1d
+	.byte 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x1d, 0xd0, 0x44
+	.byte 0xfa, 0xeb, 0x88, 0xf3, 0xfd, 0x00, 0x01, 0x32
+	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x33, 0x01
+	.byte 0xcf, 0x61, 0xcf, 0xcf, 0x09, 0x67, 0xaa, 0x78
+	.byte 0x2d, 0x01, 0x27, 0x00, 0xf2, 0x52, 0x14, 0xed
+	.byte 0x34, 0xa2, 0x20, 0xcf, 0x8b, 0xd9, 0x12, 0xd9
+	.byte 0xec, 0x02, 0xe3, 0x07, 0xf0, 0xe4, 0xf0, 0x6e
+	.byte 0x41, 0xf3, 0xfd, 0x00, 0x01, 0x31, 0xb1, 0x02
+	.byte 0x01, 0x00, 0xcf, 0x62, 0xdb, 0x12, 0xb9, 0x02
+	.byte 0x53, 0xb7, 0x33, 0xb9, 0x04, 0x63, 0x40, 0x82
+	.byte 0x14, 0xed, 0x00, 0x9a, 0x04, 0x3f, 0x00, 0x00
+	.byte 0x66, 0x05, 0x40, 0x7e, 0x14, 0xed, 0x00, 0x38
+	.byte 0x3b, 0x1d, 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x1d
+	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xf3, 0xfd, 0x00
+	.byte 0x01, 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78
+	.byte 0xd1, 0x00, 0xcf, 0x61, 0xcf, 0xcf, 0x09, 0x67
+	.byte 0xaa, 0x78, 0xcb, 0x00
+
+LABEL_FBC33F:
+	st_dri3b C, 0xFD, 0x00, 0x01
+	ld xwa, xde
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	ld (xhl), wa
+	lda xbc, (xhl + 2)
+	ld wa, de
+	ld (xbc), wa
+	lda xde, (xsp)
+	ld (xhl + 4), xde
+	ld wa, (xbc)
+	ld bc, wa
+	sla bc, 2
+	cpw (xhl), 0x1
+	jrl nz, SeqLoad_StoreReturnZero
+	ld8_24 l, 0x0340e2
+	dec 8, bc
+	cps l, 2
+	jr z, LABEL_FBC3BD
+	cps l, 1
+	jrl nz, SeqLoad_StoreReturnZero
+	cps wa, 2
+	jrl lt, SeqLoad_StoreReturnZero
+	cp wa, 0xA
+	jrl gt, SeqLoad_StoreReturnZero
+	lda_24 xwa, 0xed142e
+	ld_sril3 XWA, 0x07, 0xE0, 0xE4
+	call SndParam_LookupReadOnly
+	ld xwa, 0xED148A
+	cps hl, 0
+	jr nz, LABEL_FBC3A0
+	ld xwa, 0xED1486
+
+LABEL_FBC3A0:
+	push xwa
+	lda xwa, (xsp + 4)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	call GetFocusObject
+	ld xwa, xhl
+	st_dri3b B, 0xFD, 0x00, 0x01
+	ld xbc, 0x1E0008C
+	jr LABEL_FBC406
+
+LABEL_FBC3BD:
+	cps wa, 2
+	jr lt, LABEL_FBC3E9
+	cp wa, 0xA
+	jr gt, LABEL_FBC3E9
+	lda_24 xwa, 0xed1452
+	ld_sril3 XWA, 0x07, 0xE0, 0xE4
+	call SndParam_LookupReadOnly
+	lda xbc, (xsp)
+	ld xwa, 0xED1492
+	cps hl, 0
+	jr nz, LABEL_FBC3E5
+	ld xwa, 0xED148E
+
+LABEL_FBC3E5:
+	push xwa
+	push xbc
+	jr LABEL_FBC3F0
+
+LABEL_FBC3E9:
+	pushw 0xED
+	pushw 0x1496
+	push xde
+
+LABEL_FBC3F0:
+	call Strcpy
+	inc 8, xsp
+	call GetFocusObject
+	ld xwa, xhl
+	st_dri3b B, 0xFD, 0x00, 0x01
+	ld xbc, 0x1E0008C
+
+LABEL_FBC406:
+	call SendEvent
+
+SeqLoad_StoreReturnZero:
+	lds32 xhl, 0
+	st_dri3b L, 0xFD, 0x08, 0x01
+	ret
+LABEL_FBC412:
+
+AcDispTimeSetGridBoxProc:
+	lda xsp, (xsp - 16)
+	push xiz
+	ld (xsp + 12), xde
+	ld (xsp + 16), xbc
+	ld xiz, xwa
+	ld xbc, (xsp + 16)
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FBC6D2
+	ld xwa, (xsp + 16)
+	cp xwa, 0x1E0008B
+	jrl z, LABEL_FBC6A5
+	cp xwa, 0x1E0008A
+	jrl z, LABEL_FBC69C
+	cp xwa, 0x1C00002
+	jrl z, LABEL_FBC4E6
+	cp xwa, 0x1C00001
+	jr z, LABEL_FBC47C
+	sub xbc, 0x1C00017
+	cp xbc, 0x0
+	jrl lt, LABEL_FBC6E9
+	cp xbc, 0x6
+	jrl gt, LABEL_FBC6E9
+	add xbc, xbc
+	add xbc, 0xED14A8
+	ld bc, (xbc)
+	lda_24 xix, 0xfbc47c
+	jp_dri 8, 0x07, 0xF0, 0xE4
+
+LABEL_FBC47C:
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+	ld xwa, xiz
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, (xsp + 4)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	call SetDialUp
+	ld xwa, (xsp + 8)
+	ld bc, (xwa + 26)
+	ld xwa, (xsp + 4)
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	add wa, bc
+	ld de, wa
+	extz xde
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	call SetDialDown
+	lds wa, 1
+	jrl LABEL_FBC696
+
+LABEL_FBC4E6:
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+	ld xwa, (xsp + 12)
+	or xwa, xwa
+	jrl nz, SeqSave_ReturnZeroJmp
+	lds wa, 5
+	call PanelDisplay_DispatchByMode
+	cps hl, 0
+	jrl z, SeqSave_ReturnZeroJmp
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 1
+	call SendEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call PostEvent
+	stdi8 32578, 72
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000EE
+	call PostEvent
+	ld xwa, 0x142000E
+	ld xbc, 0x1E20015
+	ld xde, (xsp + 12)
+	call MainFuncCall
+	jrl SeqSave_ReturnZeroJmp
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+	ld xwa, xiz
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jr z, LABEL_FBC5A2
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	dec 1, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+	call SendEvent
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	jrl SeqSave_ReturnZeroJmp
+
+LABEL_FBC5A2:
+	ld xwa, xiz
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jrl z, SeqSave_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call ApFuncCall
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 12)
+	call SetDialUp
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 12)
+	call SetDialDown
+	lds wa, 1
+	jrl LABEL_FBC696
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+	ld xwa, xiz
+	ld xbc, 0x1E00050
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jr z, LABEL_FBC646
+	ld xwa, xiz
+	ld xbc, 0x1E0008F
+	lds32 xde, 0
+	call SendEvent
+	inc 1, hl
+	extz xhl
+	add xhl, 0xFFFF0000
+	ld xwa, xiz
+	ld xbc, 0x1C0000E
+	ld xde, xhl
+	call SendEvent
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	jrl SeqSave_ReturnZeroJmp
+
+LABEL_FBC646:
+	ld xwa, xiz
+	ld xbc, 0x1E00091
+	ld xde, (xsp + 12)
+	call SendEvent
+	or xhl, xhl
+	jrl z, SeqSave_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call ApFuncCall
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call SetAutoInc
+	ld xwa, xiz
+	ld xbc, 0x1C00017
+	ld xde, (xsp + 12)
+	call SetDialUp
+	ld xwa, xiz
+	ld xbc, 0x1C00018
+	ld xde, (xsp + 12)
+	call SetDialDown
+	lds wa, 1
+
+LABEL_FBC696:
+	call SetDialEnable
+	jr SeqSave_ReturnZeroJmp
+
+LABEL_FBC69C:
+	ld xwa, xiz
+	ld xiz, 0x3E
+	jr LABEL_FBC6AC
+
+LABEL_FBC6A5:
+	ld xwa, xiz
+	ld xiz, 0x42
+
+LABEL_FBC6AC:
+	call GetViewInstance
+	add xhl, xiz
+	ld xwa, (xhl)
+	push xwa
+	ld xwa, (xsp + 16)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jr SeqSave_ReturnZeroJmp
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	jr LABEL_FBC6E1
+
+LABEL_FBC6D2:
+	ld xwa, xiz
+	call GetViewInstance
+	ld xwa, (xhl + 70)
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+
+LABEL_FBC6E1:
+	call ApFuncCall
+
+SeqSave_ReturnZeroJmp:
+	lds32 xhl, 0
+	jr LABEL_FBC6F5
+
+LABEL_FBC6E9:
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	ld xde, (xsp + 12)
+	call InheritedProc
+
+LABEL_FBC6F5:
+	pop xiz
+	lda xsp, (xsp + 16)
+	ret
+
+DispTimeSetGridCheck:
+	lda xsp, (xsp - 44)
+	push xiz
+	ld xwa, xbc
+	cp xbc, 0x1E0008D
+	jrl z, LABEL_FBCB6E
+	sub xwa, 0x1C00017
+	cp xwa, 0x0
+	jrl lt, DispTimeSet_ReturnZero
+	cp xwa, 0x6
+	jrl gt, DispTimeSet_ReturnZero
+	add xwa, xwa
+	add xwa, 0xED1582
+	ld wa, (xwa)
+	lda_24 xix, 0xfbc735
+	jp_dri 8, 0x07, 0xF0, 0xE0
+
+LABEL_FBC735:
+	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
+	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
+	.byte 0xfa, 0xeb, 0x8a, 0xbf, 0x28, 0x30, 0xea, 0x89
+	.byte 0xe9, 0xef, 0x00, 0xd7, 0xe6, 0xa8, 0xb0, 0x51
+	.byte 0xb8, 0x02, 0x52, 0x90, 0x3f, 0x01, 0x00, 0x6e
+	.byte 0x28, 0xda, 0xda, 0x6e, 0x24, 0xbf, 0x08, 0x30
+	.byte 0xf2, 0xe6, 0x40, 0x03, 0x31, 0xb0, 0x61, 0xb8
+	.byte 0x04, 0x02, 0x01, 0x00, 0xe9, 0xa9, 0xb8, 0x0e
+	.byte 0x61, 0x41, 0x0c, 0x00, 0x00, 0x00, 0xb8, 0x06
+	.byte 0x61, 0xe9, 0xa8, 0xb8, 0x0a, 0x61, 0x78, 0x2b
+	.byte 0x02, 0x90, 0x3f, 0x01, 0x00, 0x6e, 0x28, 0xda
+	.byte 0xdb, 0x6e, 0x24, 0xbf, 0x08, 0x30, 0xf2, 0xe8
+	.byte 0x40, 0x03, 0x31, 0xb0, 0x61, 0xb8, 0x04, 0x02
+	.byte 0x01, 0x00, 0xe9, 0xa9, 0xb8, 0x0e, 0x61, 0x41
+	.byte 0x0c, 0x00, 0x00, 0x00, 0xb8, 0x06, 0x61, 0xe9
+	.byte 0xa8, 0xb8, 0x0a, 0x61, 0x78, 0xfd, 0x01, 0x90
+	.byte 0x3f, 0x01, 0x00, 0x6e, 0x25, 0xda, 0xdc, 0x6e
+	.byte 0x21, 0xbf, 0x08, 0x30, 0xf2, 0xea, 0x40, 0x03
+	.byte 0x31, 0xb0, 0x61, 0xb8, 0x04, 0x02, 0x01, 0x00
+	.byte 0xe9, 0xa9, 0xb8, 0x0e, 0x61, 0xe9, 0xaa, 0xb8
+	.byte 0x06, 0x61, 0xe9, 0xa8, 0xb8, 0x0a, 0x61, 0x78
+	.byte 0xd2, 0x01, 0x90, 0x3f, 0x01, 0x00, 0x6e, 0x28
+	.byte 0xda, 0xdd, 0x6e, 0x24, 0xbf, 0x08, 0x30, 0xf2
+	.byte 0xec, 0x40, 0x03, 0x31, 0xb0, 0x61, 0xb8, 0x04
+	.byte 0x02, 0x01, 0x00, 0xe9, 0xa9, 0xb8, 0x0e, 0x61
+	.byte 0x41, 0x0c, 0x00, 0x00, 0x00, 0xb8, 0x06, 0x61
+	.byte 0xe9, 0xa9, 0xb8, 0x0a, 0x61, 0x78, 0xa4, 0x01
+	.byte 0x90, 0x3f, 0x01, 0x00, 0x6e, 0x28, 0xda, 0xde
+	.byte 0x6e, 0x24, 0xbf, 0x08, 0x30, 0xf2, 0xee, 0x40
+	.byte 0x03, 0x31, 0xb0, 0x61, 0xb8, 0x04, 0x02, 0x01
+	.byte 0x00, 0xe9, 0xa9, 0xb8, 0x0e, 0x61, 0x41, 0x0c
+	.byte 0x00, 0x00, 0x00, 0xb8, 0x06, 0x61, 0xe9, 0xa9
+	.byte 0xb8, 0x0a, 0x61, 0x78, 0x76, 0x01, 0x90, 0x3f
+	.byte 0x01, 0x00, 0x7e, 0xaf, 0x04, 0xda, 0xdf, 0x7e
+	.byte 0xaa, 0x04, 0xbf, 0x08, 0x30, 0xf2, 0xf0, 0x40
+	.byte 0x03, 0x31, 0xb0, 0x61, 0xb8, 0x04, 0x02, 0x01
+	.byte 0x00, 0xe9, 0xa9, 0xb8, 0x0e, 0x61, 0x41, 0x0c
+	.byte 0x00, 0x00, 0x00, 0xb8, 0x06, 0x61, 0xe9, 0xa9
+	.byte 0xb8, 0x0a, 0x61, 0x78, 0x46, 0x01, 0x1d, 0xd0
+	.byte 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f, 0x00, 0xe0
+	.byte 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96, 0xfa, 0xeb
+	.byte 0x8a, 0xbf, 0x28, 0x35, 0xea, 0x88, 0xe8, 0xef
+	.byte 0x00, 0xd7, 0xe2, 0xa8, 0xb5, 0x50, 0xda, 0x8e
+	.byte 0xbd, 0x02, 0x56, 0x95, 0x3f, 0x01, 0x00, 0x6e
+	.byte 0x2b, 0xde, 0xda, 0x6e, 0x27, 0xbf, 0x08, 0x30
+	.byte 0xf2, 0xe6, 0x40, 0x03, 0x31, 0xb0, 0x61, 0xb8
+	.byte 0x04, 0x02, 0x01, 0x00, 0x41, 0xff, 0xff, 0xff
+	.byte 0xff, 0xb8, 0x0e, 0x61, 0x41, 0x0c, 0x00, 0x00
+	.byte 0x00, 0xb8, 0x06, 0x61, 0xe9, 0xa8, 0xb8, 0x0a
+	.byte 0x61, 0x78, 0xf0, 0x00, 0x95, 0x3f, 0x01, 0x00
+	.byte 0x6e, 0x2b, 0xde, 0xdb, 0x6e, 0x27, 0xbf, 0x08
+	.byte 0x30, 0xf2, 0xe8, 0x40, 0x03, 0x31, 0xb0, 0x61
+	.byte 0xb8, 0x04, 0x02, 0x01, 0x00, 0x41, 0xff, 0xff
+	.byte 0xff, 0xff, 0xb8, 0x0e, 0x61, 0x41, 0x0c, 0x00
+	.byte 0x00, 0x00, 0xb8, 0x06, 0x61, 0xe9, 0xa8, 0xb8
+	.byte 0x0a, 0x61, 0x78, 0xbf, 0x00, 0x95, 0x3f, 0x01
+	.byte 0x00, 0x6e, 0x28, 0xde, 0xdc, 0x6e, 0x24, 0xbf
+	.byte 0x08, 0x30, 0xf2, 0xea, 0x40, 0x03, 0x31, 0xb0
+	.byte 0x61, 0xb8, 0x04, 0x02, 0x01, 0x00, 0x41, 0xff
+	.byte 0xff, 0xff, 0xff, 0xb8, 0x0e, 0x61, 0xe9, 0xaa
+	.byte 0xb8, 0x06, 0x61, 0xe9, 0xa8, 0xb8, 0x0a, 0x61
+	.byte 0x78, 0x91, 0x00, 0x95, 0x3f, 0x01, 0x00, 0x6e
+	.byte 0x2a, 0xde, 0xdd, 0x6e, 0x26, 0xbf, 0x08, 0x30
+	.byte 0xf2, 0xec, 0x40, 0x03, 0x31, 0xb0, 0x61, 0xb8
+	.byte 0x04, 0x02, 0x01, 0x00, 0x41, 0xff, 0xff, 0xff
+	.byte 0xff, 0xb8, 0x0e, 0x61, 0x41, 0x0c, 0x00, 0x00
+	.byte 0x00, 0xb8, 0x06, 0x61, 0xe9, 0xa9, 0xb8, 0x0a
+	.byte 0x61, 0x68, 0x61, 0xbf, 0x08, 0x30, 0xb8, 0x04
+	.byte 0x31, 0xb8, 0x06, 0x33, 0xb8, 0x0a, 0x32, 0xb8
+	.byte 0x0e, 0x34, 0x95, 0x3f, 0x01, 0x00, 0x6e, 0x23
+	.byte 0xde, 0xde, 0x6e, 0x1f, 0xf2, 0xee, 0x40, 0x03
+	.byte 0x35, 0xb0, 0x65, 0xb1, 0x02, 0x01, 0x00, 0x41
+	.byte 0xff, 0xff, 0xff, 0xff, 0xb4, 0x61, 0x41, 0x0c
+	.byte 0x00, 0x00, 0x00, 0xb3, 0x61, 0xe9, 0xa9, 0xb2
+	.byte 0x61, 0x68, 0x29, 0x95, 0x3f, 0x01, 0x00, 0x7e
+	.byte 0x62, 0x03, 0xde, 0xdf, 0x7e, 0x5d, 0x03, 0xf2
+	.byte 0xf0, 0x40, 0x03, 0x35, 0xb0, 0x65, 0xb1, 0x02
+	.byte 0x01, 0x00, 0x41, 0xff, 0xff, 0xff, 0xff, 0xb4
+	.byte 0x61, 0x41, 0x0c, 0x00, 0x00, 0x00, 0xb3, 0x61
+	.byte 0xe9, 0xa9, 0xb2, 0x61, 0x1d, 0x8a, 0xfe, 0xf9
+	.byte 0x78, 0x39, 0x03, 0xf2, 0xe6, 0x40, 0x03, 0x30
+	.byte 0xba, 0x0e, 0x35, 0xa2, 0xf0, 0x6e, 0x40, 0xbf
+	.byte 0x28, 0x30, 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02
+	.byte 0x02, 0x02, 0x00, 0xbf, 0x1e, 0x31, 0xb8, 0x04
+	.byte 0x61, 0xa5, 0x20, 0xe8, 0xee, 0x02, 0x42, 0xb6
+	.byte 0x14, 0xed, 0x00, 0xe8, 0x82, 0xa2, 0x20, 0x38
+	.byte 0x0b, 0xed, 0x00, 0x0b, 0x52, 0x15, 0x39, 0x1d
+	.byte 0x72, 0x0a, 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0
+	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x28, 0x32, 0x41
+	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xe9, 0x02, 0xf2
+	.byte 0xe8, 0x40, 0x03, 0x30, 0xa2, 0xf0, 0x6e, 0x40
+	.byte 0xbf, 0x28, 0x30, 0xb0, 0x02, 0x01, 0x00, 0xb8
+	.byte 0x02, 0x02, 0x03, 0x00, 0xbf, 0x1e, 0x31, 0xb8
+	.byte 0x04, 0x61, 0xa5, 0x20, 0xe8, 0xee, 0x02, 0x42
+	.byte 0xb6, 0x14, 0xed, 0x00
+	.byte 0xe8, 0x82, 0xa2, 0x20
+	.byte 0x38, 0x0b, 0xed, 0x00
+	.byte 0x0b, 0x56, 0x15, 0x39
+	.byte 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0c, 0x37, 0x1d
+	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x28, 0x32
+	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xa0, 0x02
+	.byte 0xf2, 0xea, 0x40, 0x03, 0x31, 0xf2, 0xb6, 0x14
+	.byte 0xed, 0x30, 0xbf, 0x04, 0x60, 0xa2, 0xf1, 0x6e
+	.byte 0x3e, 0xbf, 0x28, 0x30, 0xb0, 0x02, 0x01, 0x00
+	.byte 0xb8, 0x02, 0x02, 0x04, 0x00, 0xbf, 0x1e, 0x31
+	.byte 0xb8, 0x04, 0x61, 0xa5, 0x20, 0xe8, 0xee, 0x02
+	.byte 0xaf, 0x04, 0x22, 0xe8, 0x82, 0xa2, 0x20, 0x38
+	.byte 0x0b, 0xed, 0x00, 0x0b, 0x5a, 0x15, 0x39, 0x1d
+	.byte 0x72, 0x0a, 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0
+	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x28, 0x32, 0x41
+	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x51, 0x02, 0xf2
+	.byte 0xec, 0x40, 0x03, 0x30, 0xa2, 0xf0, 0x6e, 0x3e
+	.byte 0xbf, 0x28, 0x30, 0xb0, 0x02, 0x01, 0x00, 0xb8
+	.byte 0x02, 0x02, 0x05, 0x00, 0xbf, 0x1e, 0x31, 0xb8
+	.byte 0x04, 0x61, 0xa5, 0x20, 0xe8, 0xee, 0x02, 0xaf
+	.byte 0x04, 0x22, 0xe8, 0x82, 0xa2, 0x20, 0x38, 0x0b
+	.byte 0xed, 0x00, 0x0b, 0x5e, 0x15, 0x39, 0x1d, 0x72
+	.byte 0x0a, 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0, 0x44
+	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x28, 0x32, 0x41, 0x8c
+	.byte 0x00, 0xe0, 0x01, 0x78, 0x0a, 0x02, 0xf2, 0xee
+	.byte 0x40, 0x03, 0x36, 0xbf, 0x28, 0x33, 0xbf, 0x1e
+	.byte 0x34, 0xbb, 0x02, 0x30, 0xbb, 0x04, 0x31, 0xa2
+	.byte 0xf6, 0x6e, 0x36, 0xb3, 0x02, 0x01, 0x00, 0xb0
+	.byte 0x02, 0x06, 0x00, 0xb1, 0x64, 0xa5, 0x20, 0xe8
+	.byte 0xee, 0x02, 0xaf, 0x04, 0x21, 0xe8, 0x81, 0xa1
+	.byte 0x20, 0x38, 0x0b, 0xed, 0x00, 0x0b, 0x62, 0x15
+	.byte 0x3c, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0c, 0x37
+	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x28
+	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xbf
+	.byte 0x01, 0xf2, 0xf0, 0x40, 0x03, 0x36, 0xa2, 0xf6
+	.byte 0x7e, 0xb9, 0x01, 0xb3, 0x02, 0x01, 0x00, 0xb0
+	.byte 0x02, 0x07, 0x00, 0xb1, 0x64, 0xa5, 0x20, 0xe8
+	.byte 0xee, 0x02, 0xaf, 0x04, 0x21, 0xe8, 0x81, 0xa1
+	.byte 0x20, 0x38, 0x0b, 0xed, 0x00, 0x0b, 0x66, 0x15
+	.byte 0x3c, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0c, 0x37
+	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x28
+	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x7f
+	.byte 0x01
+
+LABEL_FBCB6E:
+	lda xhl, (xsp + 40)
+	ld xwa, xde
+	srl xwa, 0
+	ldi_werp 0xE2, 0
+	ld (xhl), wa
+	lda xwa, (xhl + 2)
+	ld (xwa), de
+	lda xbc, (xsp + 30)
+	ld (xhl + 4), xbc
+	cpw (xhl), 0x1
+	jr nz, LABEL_FBCBC6
+	cpw (xwa), 0x2
+	jr nz, LABEL_FBCBC6
+	ld8_24 a, 0x0340e6
+	extz wa
+	sla wa, 2
+	lda_24 xde, 0xed14b6
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	push xwa
+	pushw 0xED
+	pushw 0x156A
+	push xbc
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 40)
+	ld xbc, 0x1E0008C
+	jrl DispTimeSet_SendEventReturn
+
+LABEL_FBCBC6:
+	lda_24 xde, 0xed14b6
+	cpw (xhl), 0x1
+	jr nz, LABEL_FBCC06
+	cpw (xwa), 0x3
+	jr nz, LABEL_FBCC06
+	ld8_24 a, 0x0340e8
+	extz wa
+	sla wa, 2
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	push xwa
+	pushw 0xED
+	pushw 0x156E
+	push xbc
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 40)
+	ld xbc, 0x1E0008C
+	jrl DispTimeSet_SendEventReturn
+
+LABEL_FBCC06:
+	cpw (xhl), 0x1
+	jr nz, LABEL_FBCC41
+	cpw (xwa), 0x4
+	jr nz, LABEL_FBCC41
+	ld8_24 a, 0x0340ea
+	extz wa
+	sla wa, 2
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	push xwa
+	pushw 0xED
+	pushw 0x1572
+	push xbc
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 40)
+	ld xbc, 0x1E0008C
+	jrl DispTimeSet_SendEventReturn
+
+LABEL_FBCC41:
+	cpw (xhl), 0x1
+	jr nz, LABEL_FBCC7B
+	cpw (xwa), 0x5
+	jr nz, LABEL_FBCC7B
+	ld8_24 a, 0x0340ec
+	extz wa
+	sla wa, 2
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	push xwa
+	pushw 0xED
+	pushw 0x1576
+	push xbc
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 40)
+	ld xbc, 0x1E0008C
+	jr DispTimeSet_SendEventReturn
+
+LABEL_FBCC7B:
+	cpw (xhl), 0x1
+	jr nz, LABEL_FBCCB5
+	cpw (xwa), 0x6
+	jr nz, LABEL_FBCCB5
+	ld8_24 a, 0x0340ee
+	extz wa
+	sla wa, 2
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	push xwa
+	pushw 0xED
+	pushw 0x157A
+	push xbc
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 40)
+	ld xbc, 0x1E0008C
+	jr DispTimeSet_SendEventReturn
+
+LABEL_FBCCB5:
+	cpw (xhl), 0x1
+	jr nz, DispTimeSet_ReturnZero
+	cpw (xwa), 0x7
+	jr nz, DispTimeSet_ReturnZero
+	ld8_24 a, 0x0340f0
+	extz wa
+	sla wa, 2
+	ld_sril3 XWA, 0x07, 0xE8, 0xE0
+	push xwa
+	pushw 0xED
+	pushw 0x157E
+	push xbc
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	call GetFocusObject
+	ld xwa, xhl
+	lda xde, (xsp + 40)
+	ld xbc, 0x1E0008C
+
+DispTimeSet_SendEventReturn:
+	call SendEvent
+
+DispTimeSet_ReturnZero:
+	lds32 xhl, 0
+	pop xiz
+	lda xsp, (xsp + 44)
+	ret
+
+DispTimeSetOKFunc:
+	cp xbc, 0x1C00007
+	jr nz, LABEL_FBCD0E
+	ld xwa, 0x142000E
+	ld xbc, 0x1E20014
+	call MainFuncCall
+
+LABEL_FBCD0E:
+	lds32 xhl, 0
+	ret
+
+MainTimeFlashFunc:
+	cp xbc, 0x1E20015
+	jr z, LABEL_FBCD59
+	cp xbc, 0x1E20014
+	jr nz, LABEL_FBCD5F
+	stdi8 32578, 40
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000EE
+	call ApPostEvent
+	lds wa, 5
+	call CtrlPanel_IndicatorJumpTable
+	stdi8 32578, 35
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000EE
+	call ApPostEvent
+	jr LABEL_FBCD5F
+
+LABEL_FBCD59:
+	lds wa, 5
+	call Audio_DispatchCommand
+
+LABEL_FBCD5F:
+	lds32 xhl, 0
+	ret
+LABEL_FBCD62:
+
+NormScreenProc:
+	dec 8, xsp
+	push xiz
+	ld (xsp + 4), xde
+	ld (xsp + 8), xbc
+	ld xiz, xwa
+	ld xwa, (xsp + 8)
+	cp xwa, 0x1C00001
+	jr z, LABEL_FBCD86
+	ld xwa, xiz
+	ld xbc, (xsp + 8)
+	ld xde, (xsp + 4)
+	call InheritedProc
+	jr LABEL_FBCDED
+
+LABEL_FBCD86:
+	ld xwa, xiz
+	call GetViewInstance
+	cpi8_24 0x0340e6, 0x00
+	jr z, LABEL_FBCDDB
+	ldda8 a, 36232
+	extz wa
+	bit 0, wa
+	jr z, LABEL_FBCDDB
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 1
+	call SendEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009E
+	lds32 xde, 0
+	call PostEvent
+	stdi8 32578, 36
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000EE
+	call PostEvent
+	resda 0, 36232
+
+LABEL_FBCDDB:
+	resda 0, 36232
+	ld xwa, xiz
+	ld xbc, (xsp + 8)
+	ld xde, (xsp + 4)
+	call InheritedProc
+	lds32 xhl, 0
+
+LABEL_FBCDED:
+	pop xiz
+	inc 8, xsp
+	ret
+LABEL_FBCDF1:
+
+IvWindowPageControlProc:
+	dec 8, xsp
+	push xiz
+	ld (xsp + 8), xde
+	ld xiz, xwa
+	cp xbc, 0x1C00007
+	jrl z, LABEL_FBCEE8
+	cp xbc, 0x1C20006
+	jrl z, LABEL_FBCE8B
+	cp xbc, 0x1C00002
+	jr z, LABEL_FBCE73
+	cp xbc, 0x1C00001
+	jr z, LABEL_FBCE27
+	ld xwa, xiz
+	ld xde, (xsp + 8)
+	call InheritedProc
+	jrl LABEL_FBD01E
+
+LABEL_FBCE27:
+	ld xwa, xiz
+	ld xde, (xsp + 8)
+	call InheritedProc
+	ld xwa, xiz
+	call GetViewInstance
+	ld xiz, xhl
+	ld xwa, 0xC0
+	call SndParam_LookupReadOnly
+	lda xbc, (xiz + 22)
+	lds wa, 1
+	cps hl, 1
+	jr nz, LABEL_FBCE4C
+	lds wa, 3
+
+LABEL_FBCE4C:
+	ld xde, (xbc)
+	ld (xde), wa
+	ld xwa, (xbc)
+	ld de, (xwa)
+	exts xde
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C20004
+	call SendEvent
+	ld xwa, 0x1400001
+	ld xbc, 0x1E000AB
+	lds32 xde, 1
+	jrl UI_MainFuncCall_Execute
+
+LABEL_FBCE73:
+	ld xwa, xiz
+	ld xde, (xsp + 8)
+	call InheritedProc
+	ld xwa, 0x1400001
+	ld xbc, 0x1E000AB
+	lds32 xde, 0
+	jrl UI_MainFuncCall_Execute
+
+LABEL_FBCE8B:
+	ld xwa, xiz
+	ld xde, (xsp + 8)
+	call InheritedProc
+	ld xwa, xiz
+	call GetViewInstance
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 4)
+	lda xde, (xwa + 22)
+	ld xbc, (xde)
+	ld xwa, (xsp + 8)
+	ld (xbc), wa
+	ld xwa, (xde)
+	ld de, (xwa)
+	exts xde
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0001E
+	call SendEvent
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 22)
+	cpw (xwa), 0x5
+	jr ge, LABEL_FBCED9
+	ld xwa, 0x1400001
+	ld xbc, 0x1E000AB
+	lds32 xde, 1
+	jrl UI_MainFuncCall_Execute
+
+LABEL_FBCED9:
+	ld xwa, 0x1400001
+	ld xbc, 0x1E000AB
+	lds32 xde, 0
+	jrl UI_MainFuncCall_Execute
+
+LABEL_FBCEE8:
+	ld xwa, xiz
+	ld xde, (xsp + 8)
+	call InheritedProc
+	ld xwa, xiz
+	call GetViewInstance
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 8)
+	cp xwa, 0xF
+	jrl z, LABEL_FBCFA1
+	cp xwa, 0x8F
+	jrl nz, LABEL_FBD01C
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 22)
+	cpw (xwa), 0x4
+	jr ge, LABEL_FBCF43
+	incm 1, (xwa)
+	ld xwa, 0x1400001
+	ld xbc, 0x1E000AB
+	lds32 xde, 1
+	call MainFuncCall
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 22)
+	ld de, (xwa)
+	exts xde
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0001E
+	jr LABEL_FBCF88
+
+LABEL_FBCF43:
+	cpw (xwa), 0x4
+	jr nz, LABEL_FBCF8F
+	ld xwa, 0xC0
+	call SndParam_LookupReadOnly
+	ld xwa, (xsp + 4)
+	lda xbc, (xwa + 22)
+	lds wa, 1
+	cps hl, 1
+	jr nz, LABEL_FBCF60
+	lds wa, 2
+
+LABEL_FBCF60:
+	ld xbc, (xbc)
+	ld (xbc), wa
+	ld xwa, 0x1400001
+	ld xbc, 0x1E000AB
+	lds32 xde, 1
+	call MainFuncCall
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 22)
+	ld de, (xwa)
+	exts xde
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0001E
+
+LABEL_FBCF88:
+	call SendEvent
+	jrl LABEL_FBD01C
+
+LABEL_FBCF8F:
+	ld xwa, 0x1400001
+	ld xbc, 0x1E000AB
+	lds32 xde, 0
+
+UI_MainFuncCall_Execute:
+	call MainFuncCall
+	jr LABEL_FBD01C
+
+LABEL_FBCFA1:
+	ld xwa, 0xC0
+	call SndParam_LookupReadOnly
+	cps hl, 1
+	jr nz, LABEL_FBCFE4
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 22)
+	cpw (xwa), 0x3
+	jr z, LABEL_FBD01C
+	ldw (xwa), 0x3
+	ld xwa, 0x1400001
+	ld xbc, 0x1E000AB
+	lds32 xde, 1
+	call MainFuncCall
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 22)
+	ld de, (xwa)
+	exts xde
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0001E
+	jr LABEL_FBD018
+
+LABEL_FBCFE4:
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 22)
+	cpw (xwa), 0x1
+	jr z, LABEL_FBD01C
+	ldw (xwa), 0x1
+	ld xwa, 0x1400001
+	ld xbc, 0x1E000AB
+	lds32 xde, 1
+	call MainFuncCall
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 22)
+	ld de, (xwa)
+	exts xde
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C0001E
+
+LABEL_FBD018:
+	call SendEvent
+
+LABEL_FBD01C:
+	lds32 xhl, 0
+
+LABEL_FBD01E:
+	pop xiz
+	inc 8, xsp
+	ret
+LABEL_FBD022:
+
+IvPageOverWrProc:
+	lda xsp, (xsp - 12)
+	push xiz
+	ld (xsp + 4), xde
+	ld (xsp + 8), xbc
+	ld (xsp + 12), xwa
+	ld xwa, (xsp + 8)
+	cp xwa, 0x1C0001E
+	jrl z, LABEL_FBD0DC
+	cp xwa, 0x1C20004
+	jr z, LABEL_FBD090
+	cp xwa, 0x1E0003A
+	jr z, LABEL_FBD07D
+	cp xwa, 0x1C0000D
+	jr z, LABEL_FBD063
+	ld xwa, (xsp + 12)
+	ld xbc, (xsp + 8)
+	ld xde, (xsp + 4)
+	call InheritedProc
+	jrl LABEL_FBD12C
+
+LABEL_FBD063:
+	ld xwa, (xsp + 12)
+	ld xbc, (xsp + 8)
+	ld xde, (xsp + 4)
+	call InheritedProc
+	ld xwa, (xsp + 12)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	jrl LABEL_FBD126
+
+LABEL_FBD07D:
+	pushw 0xED
+	pushw 0x1590
+	ld xwa, (xsp + 8)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	jrl PmNamingCheck_CleanupRet
+
+LABEL_FBD090:
+	ld xwa, (xsp + 12)
+	call GetViewInstance
+	ld xiz, xhl
+	ld xwa, (xiz + 24)
+	ld xbc, 0x1E00094
+	lds32 xde, 0
+	call SendEvent
+	or xhl, xhl
+	jr z, LABEL_FBD0B9
+	ld xwa, (xiz + 24)
+	ld xbc, 0x1C00002
+	lds32 xde, 0
+	call SendEvent
+
+LABEL_FBD0B9:
+	ld xwa, (xsp + 12)
+	ld xbc, (xsp + 8)
+	ld xde, (xsp + 4)
+	call InheritedProc
+	ld wa, (xiz + 22)
+	exts xwa
+	cp xwa, (xsp + 4)
+	jr nz, PmNamingCheck_CleanupRet
+	ld xwa, (xiz + 24)
+	ld xbc, 0x1C00001
+	lds32 xde, 0
+	jr LABEL_FBD126
+
+LABEL_FBD0DC:
+	ld xwa, (xsp + 12)
+	call GetViewInstance
+	ld xiz, xhl
+	ld xwa, (xiz + 24)
+	ld xbc, 0x1E00094
+	lds32 xde, 0
+	call SendEvent
+	or xhl, xhl
+	jr z, LABEL_FBD105
+	ld xwa, (xiz + 24)
+	ld xbc, 0x1C00002
+	lds32 xde, 5
+	call SendEvent
+
+LABEL_FBD105:
+	ld xwa, (xsp + 12)
+	ld xbc, (xsp + 8)
+	ld xde, (xsp + 4)
+	call InheritedProc
+	ld wa, (xiz + 22)
+	exts xwa
+	cp xwa, (xsp + 4)
+	jr nz, PmNamingCheck_CleanupRet
+	ld xwa, (xiz + 24)
+	ld xbc, 0x1C00001
+	lds32 xde, 5
+
+LABEL_FBD126:
+	call SendEvent
+
+PmNamingCheck_CleanupRet:
+	lds32 xhl, 0
+
+LABEL_FBD12C:
+	pop xiz
+	lda xsp, (xsp + 12)
+	ret
+
+PmNamingCheck:
+	lda xsp, (xsp - 22)
+	push xiz
+	ld (xsp + 22), xde
+	ld xiz, xwa
+	cp xbc, 0x1C00007
+	jr z, LABEL_FBD17D
+	cp xbc, 0x1E0007C
+	jr z, LABEL_FBD175
+	cp xbc, 0x1E00084
+	jrl z, PmBankNamingCheck_Ret
+	cp xbc, 0x1E0003A
+	jrl nz, PmBankNamingCheck_Ret
+	ld xwa, 0x300
+	call SndParam_LookupReadOnly
+	extz hl
+	ld wa, hl
+	ld xbc, (xsp + 22)
+	call BitMapOut_UpdateDisplayWidget
+	ld xhl, xiz
+	jrl LABEL_FBD230
+
+LABEL_FBD175:
+	ld xhl, 0x10
+	jrl LABEL_FBD230
+
+LABEL_FBD17D:
+	ld xwa, (xsp + 22)
+	cp xwa, 0xB
+	jr nz, LABEL_FBD200
+	ld xwa, 0x300
+	call SndParam_LookupReadOnly
+	cps l, 0
+	jr z, LABEL_FBD200
+	call GetNamingWindowID
+	ld xwa, xhl
+	lda xde, (xsp + 4)
+	ld xbc, 0x1E0003A
+	call SendEvent
+	ld xwa, 0x300
+	call SndParam_LookupReadOnly
+	extz hl
+	lda xbc, (xsp + 4)
+	ld wa, hl
+	call BitMapOut_UpdateWidget_TypeB
+	call GetNamingWindowID
+	ld xwa, xhl
+	lda xde, (xsp + 4)
+	ld xbc, 0x1E0003A
+	call SendEvent
+	lda xwa, (xsp + 4)
+	push xwa
+	pushw 0x0
+	pushw 0xF9A2
+	call Strcpy
+	inc 8, xsp
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000D1
+	call PostEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 1
+	call PostEvent
+
+LABEL_FBD200:
+	ld xwa, (xsp + 22)
+	cp xwa, 0xF
+	jr nz, PmBankNamingCheck_Ret
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000D1
+	call PostEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 1
+	call PostEvent
+
+PmBankNamingCheck_Ret:
+	lds32 xhl, 0
+
+LABEL_FBD230:
+	pop xiz
+	lda xsp, (xsp + 22)
+	ret
+
+PmBankNamingCheck:
+	lda xsp, (xsp - 22)
+	push xiz
+	ld (xsp + 22), xde
+	ld xiz, xwa
+	cp xbc, 0x1C00007
+	jr z, LABEL_FBD279
+	cp xbc, 0x1E0007C
+	jr z, LABEL_FBD272
+	cp xbc, 0x1E00084
+	jrl z, MssNameFunc_CleanupRet
+	cp xbc, 0x1E0003A
+	jrl nz, MssNameFunc_CleanupRet
+	call BitMapOut_PrepareRender_CheckBit1
+	ld a, l
+	ld xbc, (xsp + 22)
+	call BitMapOut_UpdateWidget_PostDraw
+	ld xhl, xiz
+	jrl LABEL_FBD2F6
+
+LABEL_FBD272:
+	ld xhl, 0x10
+	jr LABEL_FBD2F6
+
+LABEL_FBD279:
+	ld xwa, (xsp + 22)
+	cp xwa, 0xB
+	jr nz, LABEL_FBD2C6
+	call GetNamingWindowID
+	ld xwa, xhl
+	lda xde, (xsp + 4)
+	ld xbc, 0x1E0003A
+	call SendEvent
+	call BitMapOut_PrepareRender_CheckBit1
+	ld a, l
+	lda xbc, (xsp + 4)
+	call BitMapOut_UpdateWidget_Finalize
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000D1
+	call PostEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 1
+	call PostEvent
+
+LABEL_FBD2C6:
+	ld xwa, (xsp + 22)
+	cp xwa, 0xF
+	jr nz, MssNameFunc_CleanupRet
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000D1
+	call PostEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 1
+	call PostEvent
+
+MssNameFunc_CleanupRet:
+	lds32 xhl, 0
+
+LABEL_FBD2F6:
+	pop xiz
+	lda xsp, (xsp + 22)
+	ret
+
+MssNameFunc:
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), xwa
+	sub xbc, 0x1E0003E
+	cp xbc, 0x0
+	jrl lt, LABEL_FBD3E6
+	cp xbc, 0x9
+	jrl gt, LABEL_FBD3E6
+	add xbc, xbc
+	add xbc, 0xED15AC
+	ld bc, (xbc)
+	lda_24 xix, 0xfbd32d
+	jp_dri 8, 0x07, 0xF0, 0xE4
+LABEL_FBD32D:
+	.byte 0xea, 0x8e, 0xbe, 0x0e, 0x31, 0xa1, 0x20, 0xe8
+	.byte 0xe0, 0x6e, 0x13, 0x0b, 0xed, 0x00, 0x0b, 0x96
+	.byte 0x15, 0xae, 0x12, 0x20, 0x38, 0x1d, 0x4d, 0x0f
+	.byte 0xff, 0xef, 0x60, 0x78, 0x81, 0x00, 0xe8, 0x69
+	.byte 0xe8, 0xcf, 0x20, 0x03, 0x00, 0x00, 0x62, 0x04
+	.byte 0xe8, 0xaa, 0xb1, 0x60, 0xa1, 0x20, 0xe8, 0x69
+	.byte 0x1d, 0x97, 0x6e, 0xfb, 0xae, 0x0e, 0x20, 0xe8
+	.byte 0x69, 0xeb, 0xcf, 0xff, 0xff, 0xff, 0xff, 0x66
+	.byte 0x2b, 0x0b, 0x10, 0x00, 0x1d, 0x97, 0x6e, 0xfb
+	.byte 0x3b, 0xae, 0x12, 0x20, 0x38, 0x1d, 0xf3, 0x0c
+	.byte 0xff, 0x0b, 0x02, 0x00, 0x0b, 0x20, 0x00, 0xae
+	.byte 0x12, 0x20, 0xb8, 0x10, 0x30, 0x38, 0x1d, 0xe9
+	.byte 0x28, 0xff, 0xbf, 0x12, 0x37, 0x40, 0xa4, 0x15
+	.byte 0xed, 0x00, 0x68, 0x25, 0xe8, 0xee, 0x02, 0xe8
+	.byte 0xc8, 0x00, 0x70, 0x98, 0x00, 0xa0, 0x21, 0x89
+	.byte 0x2a, 0x21, 0xd8, 0x12, 0x28, 0xb9, 0x2b, 0x30
+	.byte 0x38, 0xae, 0x12, 0x20, 0x38, 0x1d, 0xf3, 0x0c
+	.byte 0xff, 0xbf, 0x0a, 0x37, 0x40, 0xa8, 0x15, 0xed
+	.byte 0x00, 0x38, 0xae, 0x12, 0x20, 0x38, 0x1d, 0x1d
+	.byte 0x09, 0xff, 0xef, 0x60, 0xb3, 0x00, 0x00, 0xaf
+	.byte 0x04, 0x23, 0x68, 0x17, 0xeb, 0xa9, 0x68, 0x13
+	.byte 0x43, 0x00, 0x02, 0x00, 0x00, 0x68, 0x0c, 0xf1
+	.byte 0x56, 0x8d, 0x33, 0x68, 0x06, 0xeb, 0xaa, 0x68
+	.byte 0x02
+
+LABEL_FBD3E6:
+	lds32 xhl, 0
+	pop xiz
+	inc 4, xsp
+	ret
+LABEL_FBD3EC:
+
+AcPmBkNoBoxProc:
+	st_dri3b L, 0xFD, 0xFC, 0xFE
+	push xiz
+	ld xiz, xde
+	st_dri3l XWA, 0xFD, 0x04, 0x01
+	cp xbc, 0x1C0001C
+	jr z, LABEL_FBD47C
+	cp xbc, 0x1C0000C
+	jr z, LABEL_FBD466
+	cp xbc, 0x1C0000B
+	jr z, LABEL_FBD466
+	cp xbc, 0x1C00002
+	jr z, LABEL_FBD44B
+	cp xbc, 0x1C00001
+	jr z, LABEL_FBD42F
+	ld_sril XWA, (xsp + 0x0104)
+	ld xde, xiz
+	call InheritedProc
+	jrl LABEL_FBD4E4
+
+LABEL_FBD42F:
+	ld_sril XWA, (xsp + 0x0104)
+	ld xde, xiz
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0104)
+	ld xbc, 0x300
+	call SetLswFilter
+	jrl UI_AcPmBkNoBoxProc_Return
+
+LABEL_FBD44B:
+	ld_sril XWA, (xsp + 0x0104)
+	ld xde, xiz
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0104)
+	ld xbc, 0x300
+	call ResetLswFilter
+	jr UI_AcPmBkNoBoxProc_Return
+
+LABEL_FBD466:
+	ld_sril XWA, (xsp + 0x0104)
+	ld xde, xiz
+	call InheritedProc
+	ld xwa, 0x300
+	call MainLswGet
+	jr UI_AcPmBkNoBoxProc_Return
+
+LABEL_FBD47C:
+	ld_sril XWA, (xsp + 0x0104)
+	ld xde, xiz
+	call InheritedProc
+	ld xwa, (xiz)
+	cp xwa, 0x300
+	jr nz, UI_AcPmBkNoBoxProc_Return
+	lda xde, (xsp + 4)
+	ld bc, (xiz + 4)
+	cps bc, 0
+	jr nz, LABEL_FBD4AA
+	pushw 0xED
+	pushw 0x15C0
+	push xde
+	call Strcpy
+	inc 8, xsp
+	jr LABEL_FBD4D1
+
+LABEL_FBD4AA:
+	dec 1, bc
+	ld wa, bc
+	exts xwa
+	divs wa, 0x8
+	ldto_werp WA, 0xE2
+	inc 1, wa
+	pushw wa
+	exts xbc
+	divs bc, 0x8
+	inc 1, bc
+	pushw bc
+	pushw 0xED
+	pushw 0x15CA
+	push xde
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+
+LABEL_FBD4D1:
+	lda xde, (xsp + 4)
+	ld_sril XWA, (xsp + 0x0104)
+	ld xbc, 0x1C0000F
+	call SendEvent
+
+UI_AcPmBkNoBoxProc_Return:
+	lds32 xhl, 0
+
+LABEL_FBD4E4:
+	pop xiz
+	st_dri3b L, 0xFD, 0x04, 0x01
+	ret
+LABEL_FBD4EB:
+
+AcBkNoBoxProc:
+	st_dri3b L, 0xFD, 0xFC, 0xFE
+	push xiz
+	ld xiz, xde
+	st_dri3l XWA, 0xFD, 0x04, 0x01
+	cp xbc, 0x1C0001C
+	jr z, LABEL_FBD57A
+	cp xbc, 0x1C0000C
+	jr z, LABEL_FBD564
+	cp xbc, 0x1C0000B
+	jr z, LABEL_FBD564
+	cp xbc, 0x1C00002
+	jr z, LABEL_FBD549
+	cp xbc, 0x1C00001
+	jr z, LABEL_FBD52E
+	ld_sril XWA, (xsp + 0x0104)
+	ld xde, xiz
+	call InheritedProc
+	jrl LABEL_FBD5BC
+
+LABEL_FBD52E:
+	ld_sril XWA, (xsp + 0x0104)
+	ld xde, xiz
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0104)
+	ld xbc, 0x300
+	call SetLswFilter
+	jr UI_AcBkNoBoxProc_Return
+
+LABEL_FBD549:
+	ld_sril XWA, (xsp + 0x0104)
+	ld xde, xiz
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0104)
+	ld xbc, 0x300
+	call ResetLswFilter
+	jr UI_AcBkNoBoxProc_Return
+
+LABEL_FBD564:
+	ld_sril XWA, (xsp + 0x0104)
+	ld xde, xiz
+	call InheritedProc
+	ld xwa, 0x300
+	call MainLswGet
+	jr UI_AcBkNoBoxProc_Return
+
+LABEL_FBD57A:
+	ld_sril XWA, (xsp + 0x0104)
+	ld xde, xiz
+	call InheritedProc
+	ld xwa, (xiz)
+	cp xwa, 0x300
+	jr nz, UI_AcBkNoBoxProc_Return
+	call BitMapOut_PrepareRender_CheckBit1
+	inc 1, l
+	extz hl
+	pushw hl
+	pushw 0xED
+	pushw 0x15D2
+	lda xwa, (xsp + 10)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 10)
+	lda xde, (xsp + 4)
+	ld_sril XWA, (xsp + 0x0104)
+	ld xbc, 0x1C0000F
+	call SendEvent
+
+UI_AcBkNoBoxProc_Return:
+	lds32 xhl, 0
+
+LABEL_FBD5BC:
+	pop xiz
+	st_dri3b L, 0xFD, 0x04, 0x01
+	ret
+LABEL_FBD5C3:
+
+MsaModeScreenProc:
+	lda xsp, (xsp - 24)
+	push xiz
+	ld (xsp + 20), xde
+	ld xiz, xbc
+	ld (xsp + 24), xwa
+	cp xiz, 0x1C00007
+	jrl z, MsaMode_OK
+	cp xiz, 0x1C0000E
+	jrl z, MsaMode_Select
+	cp xiz, 0x1C0000D
+	jrl z, MsaMode_Paint
+	cp xiz, 0x1C0001C
+	jr z, MsaMode_Match
+	cp xiz, 0x1C0000B
+	jr z, MsaMode_Show
+	cp xiz, 0x1C00001
+	jrl nz, MsaMode_Default
+	ld xwa, (xsp + 20)
+	cp xwa, 0x4
+	jr z, MsaMode_Init_Forward
+	cp xwa, 0x3
+	jr nz, MsaMode_Init_Forward
+	ld xwa, 0x400
+	call SndParam_LookupReadOnly
+	cps hl, 0
+	jr nz, MsaMode_Init_Forward
+	ld xwa, 0x400
+	lds bc, 1
+	lds de, 3
+	call MainLswPut
+
+MsaMode_Init_Forward:
+	ld xwa, (xsp + 24)
+	ld xbc, xiz
+	ld xde, (xsp + 20)
+	call InheritedProc
+	jrl MsaMode_ReturnZero
+
+MsaMode_Show:
+	ld xwa, (xsp + 24)
+	ld xbc, xiz
+	ld xde, (xsp + 20)
+	call InheritedProc
+	ld xwa, (xsp + 24)
+	call GetViewInstance
+	ld xwa, 0x401
+	call MainLswGet
+	jrl MsaMode_ReturnZero
+
+MsaMode_Match:
+	ld xwa, (xsp + 24)
+	ld xbc, xiz
+	ld xde, (xsp + 20)
+	call InheritedProc
+	ld xwa, (xsp + 24)
+	call GetViewInstance
+	ld xix, (xsp + 20)
+	ld xwa, (xix)
+	cp xwa, 0x401
+	jrl nz, MsaMode_ReturnZero
+	ld xde, (xhl + 48)
+	lda xbc, (xhl + 44)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	ld (xde), wa
+	ld xbc, (xbc)
+	ld wa, (xix + 4)
+	ld (xbc), wa
+	ld xwa, (xsp + 24)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	jr MsaMode_DispatchSelect
+
+MsaMode_Paint:
+	ld xwa, (xsp + 24)
+	ld xbc, xiz
+	ld xde, (xsp + 20)
+	call InheritedProc
+	ld xwa, (xsp + 24)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+
+MsaMode_DispatchSelect:
+	call SendEvent
+	jrl MsaMode_ReturnZero
+
+MsaMode_Select:
+	ld xwa, (xsp + 24)
+	ld xbc, xiz
+	ld xde, (xsp + 20)
+	call InheritedProc
+	ld xwa, (xsp + 24)
+	call GetViewInstance
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 48)
+	lda_24 xbc, 0xecfdb0
+	ld wa, (xwa)
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	lda xbc, (xsp + 8)
+	call GetEditSwPoint
+	lda xwa, (xsp + 12)
+	lda xhl, (xsp + 8)
+	lda xde, (xhl + 2)
+	ld bc, (xde)
+	sub bc, 0xB
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0xB
+	ld (xwa + 6), bc
+	lda xbc, (xwa + 4)
+	cpw (xhl), 0x0
+	jr nz, MsaMode_Select_RightSide
+	ldw (xwa), 0x8
+	ldw (xbc), 0x9C
+	jr MsaMode_Select_DrawHighlight1
+
+MsaMode_Select_RightSide:
+	ldw (xwa), 0xA3
+	ldw (xbc), 0x137
+
+MsaMode_Select_DrawHighlight1:
+	pushw 0xF5
+	lds bc, 1
+	lds de, 2
+	call DrawDesignFrame
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 44)
+	lda_24 xbc, 0xecfdb0
+	ld wa, (xwa)
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	lda xbc, (xsp + 8)
+	call GetEditSwPoint
+	lda xwa, (xsp + 12)
+	lda xhl, (xsp + 8)
+	lda xde, (xhl + 2)
+	ld bc, (xde)
+	sub bc, 0xB
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0xB
+	ld (xwa + 6), bc
+	lda xbc, (xwa + 4)
+	cpw (xhl), 0x0
+	jr nz, MsaMode_Select_RightSide2
+	ldw (xwa), 0x8
+	ldw (xbc), 0x9C
+	jr MsaMode_Select_DrawHighlight2
+
+MsaMode_Select_RightSide2:
+	ldw (xwa), 0xA3
+	ldw (xbc), 0x137
+
+MsaMode_Select_DrawHighlight2:
+	pushw 0xF2
+	lds bc, 1
+	lds de, 2
+	call DrawDesignFrame
+	jrl MsaMode_ReturnZero
+
+MsaMode_OK:
+	ld xwa, (xsp + 24)
+	ld xbc, xiz
+	ld xde, (xsp + 20)
+	call InheritedProc
+	ld xwa, (xsp + 24)
+	call GetViewInstance
+	ld xwa, (xsp + 20)
+	cp xwa, 0x8B
+	jr z, MsaMode_OK_Cmd8B
+	cp xwa, 0x8A
+	jr z, MsaMode_OK_Cmd8A
+	cp xwa, 0x89
+	jr z, MsaMode_OK_Cmd89
+	cp xwa, 0xF
+	jr nz, MsaMode_OK_DefaultForward
+	call GetTitleNow
+	ld xwa, xhl
+	ld xbc, 0x1E0007A
+	lds32 xde, 0
+	call SendEvent
+	or xhl, xhl
+	jr z, MsaMode_OK_Navigate
+	call GetTitleNow
+	ld xwa, xhl
+	ld xbc, 0x1E00079
+	lds32 xde, 0
+	call SendEvent
+	jr MsaMode_ReturnZero
+
+MsaMode_OK_Cmd89:
+	ld xwa, 0x401
+	lds bc, 1
+	lds de, 1
+	jr MsaMode_OK_ModeChange
+
+MsaMode_OK_Cmd8A:
+	ld xwa, 0x401
+	lds bc, 2
+	lds de, 1
+	jr MsaMode_OK_ModeChange
+
+MsaMode_OK_Cmd8B:
+	ld xwa, 0x401
+	lds bc, 3
+	lds de, 1
+
+MsaMode_OK_ModeChange:
+	call MainLswPut
+	jr MsaMode_ReturnZero
+
+MsaMode_OK_Navigate:
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00015
+	ld xde, 0x1A00040
+	call PostEvent
+
+MsaMode_ReturnZero:
+	lds32 xhl, 0
+	jr MsaMode_Epilogue
+
+MsaMode_OK_DefaultForward:
+	ld xwa, (xsp + 24)
+	ld xbc, xiz
+	ld xde, (xsp + 20)
+	jr MsaMode_CallHandler
+
+MsaMode_Default:
+	ld xwa, (xsp + 24)
+	ld xbc, xiz
+	ld xde, (xsp + 20)
+
+MsaMode_CallHandler:
+	call InheritedProc
+
+MsaMode_Epilogue:
+	pop xiz
+	lda xsp, (xsp + 24)
+	ret
+MsaMode_Boundary:
+
+PmemModeBoxProc:
+	st_dri3b L, 0xFD, 0xE8, 0xFE
+	push xiz
+	st_dri3l XDE, 0xFD, 0x14, 0x01
+	ld xiz, xbc
+	st_dri3l XWA, 0xFD, 0x18, 0x01
+	cp xiz, 0x1C00007
+	jrl z, PmemMode_OK
+	cp xiz, 0x1C0000E
+	jrl z, PmemMode_Select
+	cp xiz, 0x1C0000D
+	jrl z, PmemMode_Paint
+	cp xiz, 0x1C0001C
+	jr z, PmemMode_Match
+	cp xiz, 0x1C0000B
+	jr z, PmemMode_Show
+	cp xiz, 0x1C00001
+	jrl nz, PmemMode_Default
+	ld_sril XWA, (xsp + 0x0118)
+	ld xbc, xiz
+	ld_sril XDE, (xsp + 0x0114)
+	call InheritedProc
+	jrl PmemMode_ReturnZero
+
+PmemMode_Show:
+	ld_sril XWA, (xsp + 0x0118)
+	ld xbc, xiz
+	ld_sril XDE, (xsp + 0x0114)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0118)
+	call GetViewInstance
+	ld xwa, 0x302
+	call MainLswGet
+	jrl PmemMode_ReturnZero
+
+PmemMode_Match:
+	ld_sril XWA, (xsp + 0x0118)
+	ld xbc, xiz
+	ld_sril XDE, (xsp + 0x0114)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0118)
+	call GetViewInstance
+	ld_sril XIX, (xsp + 0x0114)
+	ld xwa, (xix)
+	cp xwa, 0x302
+	jrl nz, PmemMode_ReturnZero
+	ld xde, (xhl + 40)
+	lda xbc, (xhl + 36)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	ld (xde), wa
+	ld xbc, (xbc)
+	ld wa, (xix + 4)
+	ld (xbc), wa
+	ld_sril XWA, (xsp + 0x0118)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	jrl PmemMode_DispatchSelect
+
+PmemMode_Paint:
+	ld_sril XWA, (xsp + 0x0118)
+	ld xbc, xiz
+	ld_sril XDE, (xsp + 0x0114)
+	call InheritedProc
+	st_dri3b W, 0xFD, 0x0C, 0x01
+	ldw (xwa + 2), 0x6
+	ldw (xwa + 6), 0x17
+	ldw (xwa), 0xF5
+	ldw (xwa + 4), 0x13B
+	ldw bc, 0xC1
+	ldw de, 0xF3
+	call DrawDesignBox
+	st_dri3b B, 0xFD, 0x0C, 0x01
+	ld wa, (xde + 4)
+	sub wa, (xde)
+	exts xwa
+	divs wa, 0x2
+	ld bc, (xde)
+	add bc, wa
+	st_dri3b C, 0xFD, 0x08, 0x01
+	ld (xhl), bc
+	ld bc, (xde + 2)
+	ld wa, (xde + 6)
+	sub wa, bc
+	exts xwa
+	divs wa, 0x2
+	add bc, wa
+	inc 1, bc
+	ld (xhl + 2), bc
+	pushw 0xED
+	pushw 0x15D6
+	lda xwa, (xsp + 12)
+	push xwa
+	call Strcpy
+	inc 8, xsp
+	st_dri3b W, 0xFD, 0x0C, 0x01
+	st_dri3b A, 0xFD, 0x08, 0x01
+	lda xde, (xsp + 8)
+	lds32 xhl, 0
+	push xhl
+	pushw 0x0
+	pushw 0xF7
+	call DrawStringCentered
+	ld_sril XWA, (xsp + 0x0118)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+
+PmemMode_DispatchSelect:
+	call SendEvent
+	jrl PmemMode_ReturnZero
+
+PmemMode_Select:
+	ld_sril XWA, (xsp + 0x0118)
+	ld xbc, xiz
+	ld_sril XDE, (xsp + 0x0114)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0118)
+	call GetViewInstance
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 40)
+	lda_24 xbc, 0xecfdb4
+	ld wa, (xwa)
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	st_dri3b A, 0xFD, 0x08, 0x01
+	call GetEditSwPoint
+	st_dri3b W, 0xFD, 0x0C, 0x01
+	st_dri3b C, 0xFD, 0x08, 0x01
+	lda xde, (xhl + 2)
+	ld bc, (xde)
+	sub bc, 0xB
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0xB
+	ld (xwa + 6), bc
+	lda xbc, (xwa + 4)
+	cpw (xhl), 0x0
+	jr nz, PmemMode_Select_RightSide
+	ldw (xwa), 0x8
+	ldw (xbc), 0x9C
+	jr PmemMode_Select_DrawHighlight1
+
+PmemMode_Select_RightSide:
+	ldw (xwa), 0xA3
+	ldw (xbc), 0x137
+
+PmemMode_Select_DrawHighlight1:
+	pushw 0xF5
+	lds bc, 1
+	lds de, 2
+	call DrawDesignFrame
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 36)
+	lda_24 xbc, 0xecfdb4
+	ld wa, (xwa)
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	st_dri3b A, 0xFD, 0x08, 0x01
+	call GetEditSwPoint
+	st_dri3b W, 0xFD, 0x0C, 0x01
+	st_dri3b C, 0xFD, 0x08, 0x01
+	lda xde, (xhl + 2)
+	ld bc, (xde)
+	sub bc, 0xB
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0xB
+	ld (xwa + 6), bc
+	lda xbc, (xwa + 4)
+	cpw (xhl), 0x0
+	jr nz, PmemMode_Select_RightSide2
+	ldw (xwa), 0x8
+	ldw (xbc), 0x9C
+	jr PmemMode_Select_DrawHighlight2
+
+PmemMode_Select_RightSide2:
+	ldw (xwa), 0xA3
+	ldw (xbc), 0x137
+
+PmemMode_Select_DrawHighlight2:
+	pushw 0xF2
+	lds bc, 1
+	lds de, 2
+	call DrawDesignFrame
+	jr PmemMode_ReturnZero
+
+PmemMode_OK:
+	ld_sril XWA, (xsp + 0x0118)
+	ld xbc, xiz
+	ld_sril XDE, (xsp + 0x0114)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0118)
+	call GetViewInstance
+	ld_sril XWA, (xsp + 0x0114)
+	cp xwa, 0x8B
+	jr z, PmemMode_OK_Cmd8B
+	cp xwa, 0x89
+	jr z, PmemMode_OK_Cmd89
+	cp xwa, 0xF
+	jr nz, PmemMode_OK_DefaultForward
+	call GetTitleNow
+	ld xwa, xhl
+	ld xbc, 0x1E0007A
+	lds32 xde, 0
+	call SendEvent
+	or xhl, xhl
+	jr z, PmemMode_OK_Navigate
+	call GetTitleNow
+	ld xwa, xhl
+	ld xbc, 0x1E00079
+	lds32 xde, 0
+	call SendEvent
+	jr PmemMode_OK_DefaultForward
+
+PmemMode_OK_Cmd89:
+	ld xwa, 0x302
+	lds bc, 0
+	lds de, 1
+	jr PmemMode_OK_ModeChange
+
+PmemMode_OK_Cmd8B:
+	ld xwa, 0x302
+	lds bc, 1
+	lds de, 1
+
+PmemMode_OK_ModeChange:
+	call MainLswPut
+
+PmemMode_ReturnZero:
+	lds32 xhl, 0
+	jr PmemMode_Epilogue
+
+PmemMode_OK_Navigate:
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00015
+	ld xde, 0x1A00040
+	call PostEvent
+
+PmemMode_OK_DefaultForward:
+	ld_sril XWA, (xsp + 0x0118)
+	ld xbc, xiz
+	ld_sril XDE, (xsp + 0x0114)
+	jr PmemMode_CallHandler
+
+PmemMode_Default:
+	ld_sril XWA, (xsp + 0x0118)
+	ld xbc, xiz
+	ld_sril XDE, (xsp + 0x0114)
+
+PmemMode_CallHandler:
+	call InheritedProc
+
+PmemMode_Epilogue:
+	pop xiz
+	st_dri3b L, 0xFD, 0x18, 0x01
+	ret
+PmemMode_Boundary:
+
+AcPmBkEditBoxProc:
+	st_dri3b L, 0xFD, 0xCE, 0xFE
+	push xiz
+	st_dri3l XDE, 0xFD, 0x2E, 0x01
+	st_dri3l XWA, 0xFD, 0x32, 0x01
+	cp xbc, 0x1C00007
+	jrl z, AcPmBkEdit_OK
+	cp xbc, 0x1C00018
+	jrl z, AcPmBkEdit_AutoIncDown
+	cp xbc, 0x1C0001A
+	jrl z, AcPmBkEdit_ScrollDown
+	cp xbc, 0x1C00017
+	jrl z, AcPmBkEdit_ScrollUp
+	cp xbc, 0x1C00019
+	jrl z, AcPmBkEdit_AutoIncUp
+	cp xbc, 0x1C0001D
+	jrl z, AcPmBkEdit_Assign
+	cp xbc, 0x1C0000C
+	jrl z, AcPmBkEdit_ShowHide
+	cp xbc, 0x1C0000B
+	jrl z, AcPmBkEdit_ShowHide
+	cp xbc, 0x1E0003D
+	jrl z, AcPmBkEdit_AddDelta
+	cp xbc, 0x1E0003B
+	jrl z, AcPmBkEdit_SetValue
+	lda xwa, (xsp + 46)
+	ld (xsp + 8), xwa
+	cp xbc, 0x1C20003
+	jrl z, AcPmBkEdit_BankEdit
+	cp xbc, 0x1C20002
+	jr z, AcPmBkEdit_BankChanged
+	cp xbc, 0x1E0003A
+	jrl nz, AcPmBkEdit_Default
+	ld_sril XWA, (xsp + 0x012e)
+	ld (xwa), 0x0
+	ld_sril XWA, (xsp + 0x0132)
+	call GetViewInstance
+	ld xwa, (xhl + 54)
+	ld xwa, (xwa)
+	ldb w, 0x0
+	extz xwa
+	st_dri3l XWA, 0xFD, 0x2E, 0x01
+	ld xwa, 0x1420008
+	ld xbc, 0x1E20010
+	ld_sril XDE, (xsp + 0x012e)
+	call MainFuncCall
+	jrl AcPmBkEdit_ReturnZero
+
+AcPmBkEdit_BankChanged:
+	ld_sril XWA, (xsp + 0x012e)
+	ld (xsp + 4), xwa
+	ld a, (xwa)
+	inc 1, a
+	extz wa
+	pushw wa
+	pushw 0xED
+	pushw 0x15E0
+	ld xwa, (xsp + 14)
+	push xwa
+	call Audio_SendCommand
+	ld_sril XWA, (xsp + 0x0138)
+	inc 1, xwa
+	push xwa
+	lda xwa, (xsp + 60)
+	push xwa
+	call Strcat
+	lda xsp, (xsp + 18)
+	lda xde, (xsp + 46)
+	ld_sril XWA, (xsp + 0x0132)
+	ld xbc, 0x1C0000F
+	call SendEvent
+	ldi_berp 0xFB, 1
+
+AcPmBkEdit_BankChanged_UpdateLoop:
+	ld xwa, (xsp + 4)
+	ld a, (xwa)
+	sll a, 3
+	add_berp A, 0xFB
+	ldb w, 0x0
+	extz xwa
+	st_dri3l XWA, 0xFD, 0x2E, 0x01
+	ld xwa, 0x1420008
+	ld xbc, 0x1E20012
+	ld_sril XDE, (xsp + 0x012e)
+	call MainFuncCall
+	inc1_berp 0xFB
+	cp_erpb 0xFB, 0x08
+	jr ule, AcPmBkEdit_BankChanged_UpdateLoop
+	jrl AcPmBkEdit_ReturnZero
+
+AcPmBkEdit_BankEdit:
+	lda xbc, (xsp + 12)
+	ldw (xbc), 0x23
+	ld_sril XDE, (xsp + 0x012e)
+	ld a, (xde)
+	dec 1, a
+	and a, 0x7
+	mul a, 0x11
+	add a, 0x5A
+	extz wa
+	ld (xbc + 2), wa
+	lda xwa, (xsp + 16)
+	ldw (xwa + 2), 0x55
+	ldw (xwa + 6), 0xEB
+	ldw (xwa), 0x22
+	ldw (xwa + 4), 0x12C
+	ld a, (xde)
+	dec 1, a
+	and a, 0x7
+	inc 1, a
+	extz wa
+	pushw wa
+	pushw 0xED
+	pushw 0x15EA
+	ld xwa, (xsp + 14)
+	push xwa
+	call Audio_SendCommand
+	ld_sril XWA, (xsp + 0x0138)
+	inc 2, xwa
+	push xwa
+	lda xwa, (xsp + 60)
+	push xwa
+	call Strcat
+	lda xsp, (xsp + 18)
+	lda xhl, (xsp + 46)
+	lda xwa, (xsp + 16)
+	lda xde, (xsp + 12)
+	ld_sril XIX, (xsp + 0x012e)
+	ld c, (xix + 1)
+	cp c, (xix)
+	jr nz, AcPmBkEdit_BankEdit_DrawDiff
+	lds32 xbc, 0
+	push xbc
+	pushw 0x9
+	pushw 0xF5
+	ld xbc, xde
+	ld xde, xhl
+	jr AcPmBkEdit_BankEdit_DrawCall
+
+AcPmBkEdit_BankEdit_DrawDiff:
+	lds32 xbc, 0
+	push xbc
+	pushw 0xFF
+	pushw 0xF5
+	ld xbc, xde
+	ld xde, xhl
+
+AcPmBkEdit_BankEdit_DrawCall:
+	call DrawStringLeftJustify
+	jrl AcPmBkEdit_ReturnZero
+
+AcPmBkEdit_SetValue:
+	ld_sril XWA, (xsp + 0x0132)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 50)
+	ld xbc, 0x1E00045
+	lds32 xde, 0
+	call ApFuncCall
+	ld (xsp + 24), xhl
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 50)
+	ld xbc, 0x1E00046
+	lds32 xde, 0
+	call ApFuncCall
+	lda xwa, (xsp + 24)
+	ld (xwa + 4), hl
+	ld_sril XBC, (xsp + 0x012e)
+	ld (xwa + 14), xbc
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 50)
+	ld xbc, 0x1E00043
+	lds32 xde, 0
+	call ApFuncCall
+	ld (xsp + 30), xhl
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 50)
+	ld xbc, 0x1E00044
+	lds32 xde, 0
+	call ApFuncCall
+	lda xwa, (xsp + 24)
+	ld (xwa + 10), xhl
+	call MainRamPut
+	jrl AcPmBkEdit_ReturnZero
+
+AcPmBkEdit_AddDelta:
+	ld_sril XWA, (xsp + 0x0132)
+	call GetViewInstance
+	ld (xsp + 8), xhl
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 50)
+	ld xbc, 0x1E00045
+	lds32 xde, 0
+	call ApFuncCall
+	ld (xsp + 24), xhl
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 50)
+	ld xbc, 0x1E00046
+	lds32 xde, 0
+	call ApFuncCall
+	lda xwa, (xsp + 24)
+	ld (xwa + 4), hl
+	ld_sril XBC, (xsp + 0x012e)
+	ld (xwa + 14), xbc
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 50)
+	ld xbc, 0x1E00043
+	lds32 xde, 0
+	call ApFuncCall
+	ld (xsp + 30), xhl
+	ld xwa, (xsp + 8)
+	ld xwa, (xwa + 50)
+	ld xbc, 0x1E00044
+	lds32 xde, 0
+	call ApFuncCall
+	lda xwa, (xsp + 24)
+	ld (xwa + 10), xhl
+	call MainRamAdd
+	jrl AcPmBkEdit_ReturnZero
+
+AcPmBkEdit_ShowHide:
+	ld_sril XWA, (xsp + 0x0132)
+	ld_sril XDE, (xsp + 0x012e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0132)
+	call GetViewInstance
+	ld xiz, xhl
+	ld xwa, (xiz + 50)
+	ld xbc, 0x1E00045
+	lds32 xde, 0
+	call ApFuncCall
+	ld (xsp + 8), xhl
+	ld xwa, (xiz + 50)
+	ld xbc, 0x1E00046
+	lds32 xde, 0
+	call ApFuncCall
+	ld xwa, (xsp + 8)
+	ld bc, hl
+	call MainRamGet
+	jrl AcPmBkEdit_ReturnZero
+
+AcPmBkEdit_Assign:
+	ld_sril XWA, (xsp + 0x0132)
+	ld_sril XDE, (xsp + 0x012e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0132)
+	call GetViewInstance
+	ld xiz, xhl
+	ld xwa, (xiz + 50)
+	ld xbc, 0x1E00045
+	lds32 xde, 0
+	call ApFuncCall
+	ld_sril XDE, (xsp + 0x012e)
+	ld xwa, (xde)
+	cp xwa, xhl
+	jrl nz, AcPmBkEdit_ReturnZero
+	ld xbc, (xiz + 54)
+	ld xwa, (xde + 14)
+	ld (xbc), xwa
+	ld_sril XWA, (xsp + 0x0132)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	jrl AcPmBkEdit_DispatchAndReturn
+
+AcPmBkEdit_AutoIncUp:
+	ld_sril XWA, (xsp + 0x0132)
+	ld_sril XDE, (xsp + 0x012e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0132)
+	call GetViewInstance
+	ld xiz, xhl
+	ld_sril XWA, (xsp + 0x0132)
+	ld xbc, 0x1E0003C
+	ld_sril XDE, (xsp + 0x012e)
+	call SendEvent
+	or xhl, xhl
+	jrl z, AcPmBkEdit_ReturnZero
+	ld xwa, (xiz + 50)
+	ld xbc, 0x1E0003E
+	lds32 xde, 0
+	call ApFuncCall
+	ld xde, xhl
+	ld_sril XWA, (xsp + 0x0132)
+	ld xbc, 0x1E0003D
+	jrl AcPmBkEdit_DispatchAndReturn
+
+AcPmBkEdit_ScrollUp:
+	ld_sril XWA, (xsp + 0x0132)
+	ld_sril XDE, (xsp + 0x012e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0132)
+	call GetViewInstance
+	ld xiz, xhl
+	ld_sril XWA, (xsp + 0x0132)
+	ld xbc, 0x1E0003C
+	ld_sril XDE, (xsp + 0x012e)
+	call SendEvent
+	or xhl, xhl
+	jrl z, AcPmBkEdit_ReturnZero
+	ld xwa, (xiz + 50)
+	ld xbc, 0x1E0003F
+	lds32 xde, 0
+	call ApFuncCall
+	ld xde, xhl
+	ld_sril XWA, (xsp + 0x0132)
+	ld xbc, 0x1E0003D
+	jrl AcPmBkEdit_DispatchAndReturn
+
+AcPmBkEdit_ScrollDown:
+	ld_sril XWA, (xsp + 0x0132)
+	ld_sril XDE, (xsp + 0x012e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0132)
+	call GetViewInstance
+	ld xiz, xhl
+	ld_sril XWA, (xsp + 0x0132)
+	ld xbc, 0x1E0003C
+	ld_sril XDE, (xsp + 0x012e)
+	call SendEvent
+	or xhl, xhl
+	jrl z, AcPmBkEdit_ReturnZero
+	ld xwa, (xiz + 50)
+	ld xbc, 0x1E0003E
+	lds32 xde, 0
+	call ApFuncCall
+	cpl hl
+	cpl_werp 0xEE
+	inc 1, xhl
+	ld_sril XWA, (xsp + 0x0132)
+	ld xbc, 0x1E0003D
+	ld xde, xhl
+	jr AcPmBkEdit_DispatchAndReturn
+
+AcPmBkEdit_AutoIncDown:
+	ld_sril XWA, (xsp + 0x0132)
+	ld_sril XDE, (xsp + 0x012e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0132)
+	call GetViewInstance
+	ld xiz, xhl
+	ld_sril XWA, (xsp + 0x0132)
+	ld xbc, 0x1E0003C
+	ld_sril XDE, (xsp + 0x012e)
+	call SendEvent
+	or xhl, xhl
+	jrl z, AcPmBkEdit_ReturnZero
+	ld xwa, (xiz + 50)
+	ld xbc, 0x1E0003F
+	lds32 xde, 0
+	call ApFuncCall
+	cpl hl
+	cpl_werp 0xEE
+	inc 1, xhl
+	ld_sril XWA, (xsp + 0x0132)
+	ld xbc, 0x1E0003D
+	ld xde, xhl
+
+AcPmBkEdit_DispatchAndReturn:
+	call SendEvent
+	jrl AcPmBkEdit_ReturnZero
+
+AcPmBkEdit_OK:
+	ld_sril XWA, (xsp + 0x0132)
+	ld_sril XDE, (xsp + 0x012e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0132)
+	call GetViewInstance
+	ld_sril XWA, (xsp + 0x012e)
+	cp xwa, 0x10
+	jrl z, AcPmBkEdit_OK_SaveDelete
+	cp xwa, 0x90
+	jrl z, AcPmBkEdit_OK_SaveDelete
+	cp xwa, 0xA
+	jr z, AcPmBkEdit_OK_Load
+	cp xwa, 0x9
+	jrl nz, AcPmBkEdit_ReturnZero
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000D3
+	call PostEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 1
+	jrl AcPmBkEdit_OK_NavComplete
+
+AcPmBkEdit_OK_Load:
+	ld xwa, 0x300
+	call SndParam_LookupReadOnly
+	cps l, 0
+	jr z, AcPmBkEdit_OK_LoadEmpty
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000D2
+	call PostEvent
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 1
+	call PostEvent
+	jr AcPmBkEdit_ReturnZero
+
+AcPmBkEdit_OK_LoadEmpty:
+	stdi8 32578, 73
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000EE
+	call ApPostEvent
+	jr AcPmBkEdit_ReturnZero
+
+AcPmBkEdit_OK_SaveDelete:
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C00016
+	ld xde, 0x1A000D0
+	call PostEvent
+	call GetTitleNow
+	ld xwa, xhl
+	ld xbc, 0x1E000AA
+	lds32 xde, 0
+	call SendEvent
+	cps hl, 0
+	jr z, AcPmBkEdit_ReturnZero
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1E0009A
+	lds32 xde, 1
+
+AcPmBkEdit_OK_NavComplete:
+	call PostEvent
+
+AcPmBkEdit_ReturnZero:
+	lds32 xhl, 0
+	jr AcPmBkEdit_Epilogue
+
+AcPmBkEdit_Default:
+	ld_sril XWA, (xsp + 0x0132)
+	ld_sril XDE, (xsp + 0x012e)
+	call InheritedProc
+
+AcPmBkEdit_Epilogue:
+	pop xiz
+	st_dri3b L, 0xFD, 0x32, 0x01
+	ret
+
+PmBkNameFunc:
+	ld xhl, xwa
+	sub xbc, 0x1E0003E
+	cp xbc, 0x0
+	jr lt, LABEL_FBE0F9
+	cp xbc, 0x9
+	jr gt, LABEL_FBE0F9
+	add xbc, xbc
+	add xbc, 0xED15EE
+	ld bc, (xbc)
+	lda_24 xix, 0xfbe0ef
+	jp_dri 8, 0x07, 0xF0, 0xE4
+LABEL_FBE0EF:
+	.byte 0x0e, 0xeb, 0xa9, 0x0e, 0x43, 0x09, 0x00, 0x00
+	.byte 0x00, 0x0e
+
+LABEL_FBE0F9:
+	lds32 xhl, 0
+	ret
+
+LABEL_FBE0FC:
+	.byte 0xf1, 0x48, 0x8d, 0x33, 0x0e
+
+GmOnOffFunc:
+	lda xsp, (xsp - 12)
+	push xiz
+	ld xiz, xwa
+	cp xbc, 0x1E00083
+	jr z, LABEL_FBE15F
+	cp xbc, 0x1E0003F
+	jrl z, LABEL_FBE1E0
+	cp xbc, 0x1E0003E
+	jr z, LABEL_FBE15A
+	cp xbc, 0x1E00041
+	jr z, LABEL_FBE15A
+	cp xbc, 0x1E00040
+	jr z, LABEL_FBE152
+	cp xbc, 0x1E00042
+	jrl nz, LABEL_FBE1E0
+	pushm (xde + 4)
+	pushw 0xED
+	pushw 0x1602
+	ld xwa, (xde + 8)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 10)
+	ld xhl, xiz
+	jrl VariScreen_CleanupRet
+
+LABEL_FBE152:
+	ld xhl, 0xC0
+	jrl VariScreen_CleanupRet
+
+LABEL_FBE15A:
+	lds32 xhl, 1
+	jrl VariScreen_CleanupRet
+
+LABEL_FBE15F:
+	lda xix, (xsp + 4)
+	ldw (xix), 0x10
+	lda xhl, (xix + 2)
+	ldw (xhl), 0x5F
+	lda xwa, (xsp + 8)
+	ld bc, (xix)
+	dec 2, bc
+	ld (xwa), bc
+	ld bc, (xix)
+	add bc, 0x19
+	ld (xwa + 4), bc
+	ld bc, (xhl)
+	dec 2, bc
+	ld (xwa + 2), bc
+	ld bc, (xhl)
+	add bc, 0x19
+	ld (xwa + 6), bc
+	cp xde, 0x1
+	jr nz, LABEL_FBE1BB
+	ldw bc, 0xC4
+	ldw de, 0xF0
+	call DrawDesignBox
+	lda xwa, (xsp + 4)
+	ld xbc, 0x20
+	call DrawIcons
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C20006
+	lds32 xde, 3
+	jr LABEL_FBE1DC
+
+LABEL_FBE1BB:
+	ldda8 c, 36160
+	orda8 c, 36162
+	orda8 c, 36164
+	jr nz, LABEL_FBE1D0
+	ldw bc, 0xF5
+	call DrawBox
+
+LABEL_FBE1D0:
+	ld xwa, 0xFFFFFFFF
+	ld xbc, 0x1C20006
+	lds32 xde, 1
+
+LABEL_FBE1DC:
+	call SendEvent
+
+LABEL_FBE1E0:
+	lds32 xhl, 0
+
+VariScreen_CleanupRet:
+	pop xiz
+	lda xsp, (xsp + 12)
+	ret
+LABEL_FBE1E7:
+
+VariScreenProc:
+	st_dri3b L, 0xFD, 0xCA, 0xFD
+	push xiz
+	st_dri3l XDE, 0xFD, 0x2E, 0x02
+	st_dri3l XBC, 0xFD, 0x32, 0x02
+	st_dri3l XWA, 0xFD, 0x36, 0x02
+	ld_sril XWA, (xsp + 0x0232)
+	cp xwa, 0x1C00007
+	jrl z, LABEL_FBF06A
+	cp xwa, 0x1E20005
+	jrl z, LABEL_FBEE34
+	cp xwa, 0x1C0000F
+	jrl z, LABEL_FBEAFA
+	cp xwa, 0x1C0000E
+	jrl z, LABEL_FBE4BE
+	cp xwa, 0x1C0000D
+	jrl z, LABEL_FBE321
+	cp xwa, 0x1C0000B
+	jr z, LABEL_FBE284
+	cp xwa, 0x1C20007
+	jr z, LABEL_FBE259
+	cp xwa, 0x1C00001
+	jrl nz, LABEL_FBF4DF
+	ld_sril XWA, (xsp + 0x0236)
+	ld_sril XBC, (xsp + 0x0232)
+	ld_sril XDE, (xsp + 0x022e)
+	jrl LABEL_FBE31A
+
+LABEL_FBE259:
+	ld_sril XWA, (xsp + 0x0236)
+	ld_sril XBC, (xsp + 0x0232)
+	ld_sril XDE, (xsp + 0x022e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0236)
+	call GetViewInstance
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000B
+	lds32 xde, 0
+	jrl LABEL_FBE4B7
+
+LABEL_FBE284:
+	ld_sril XWA, (xsp + 0x0236)
+	call GetViewInstance
+	ld (xsp + 24), xhl
+	ld xwa, (xsp + 24)
+	ld (xsp + 4), xwa
+	ldda8 a, 36154
+	extz wa
+	lds bc, 0
+	call SndParam_LookupViaEncode
+	ld (xsp + 31), l
+	ldda8 a, 36154
+	extz wa
+	ldw bc, 0x20
+	call SndParam_LookupViaEncode
+	lda xwa, (xsp + 28)
+	ld (xwa + 4), l
+	ldmi16 (xwa + 2), 0x8D3A
+	call SndParam_FetchOscTableEntry
+	ld xhl, (xsp + 24)
+	ld xde, (xhl + 56)
+	lda xbc, (xsp + 28)
+	ld a, (xbc)
+	extz wa
+	ld (xde), wa
+	ld xde, (xhl + 60)
+	ld a, (xbc + 1)
+	extz wa
+	ld (xde), wa
+	ld a, (xbc)
+	extz wa
+	call LABEL_FEE4A7
+	ld xde, (xsp + 24)
+	ld xbc, (xde + 52)
+	extz hl
+	ld (xbc), hl
+	ld xbc, (xde + 48)
+	ld a, (xsp + 30)
+	extz wa
+	ld (xbc), wa
+	ld xbc, (xde + 44)
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 60)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0xA
+	inc 1, wa
+	ld (xbc), wa
+	ld_sril XWA, (xsp + 0x0236)
+	ld_sril XBC, (xsp + 0x0232)
+	ld_sril XDE, (xsp + 0x022e)
+
+LABEL_FBE31A:
+	call InheritedProc
+	jrl FileBrowser_ReturnZero
+
+LABEL_FBE321:
+	ld_sril XWA, (xsp + 0x0236)
+	ld_sril XBC, (xsp + 0x0232)
+	ld_sril XDE, (xsp + 0x022e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0236)
+	call GetViewInstance
+	ld (xsp + 24), xhl
+	st_dri3b C, 0xFD, 0x22, 0x02
+	ldw (xhl), 0x4
+	lda xde, (xhl + 2)
+	ldw (xde), 0x2
+	st_dri3b W, 0xFD, 0x26, 0x02
+	ld bc, (xhl)
+	dec 2, bc
+	ld (xwa), bc
+	ld bc, (xhl)
+	add bc, 0x19
+	ld (xwa + 4), bc
+	ld bc, (xde)
+	dec 2, bc
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0x19
+	ld (xwa + 6), bc
+	ldw bc, 0xC0
+	ldw de, 0xF0
+	call DrawDesignBox
+	st_dri3b W, 0xFD, 0x22, 0x02
+	ld xbc, 0x8C
+	call DrawIcons
+	st_dri3b A, 0xFD, 0x22, 0x02
+	ldw (xbc), 0x23
+	lda xhl, (xbc + 2)
+	ldw (xhl), 0x8
+	st_dri3b W, 0xFD, 0x26, 0x02
+	ld de, (xbc)
+	ld (xwa), de
+	ld de, (xbc)
+	add de, 0x64
+	ld (xwa + 4), de
+	ld de, (xhl)
+	ld (xwa + 2), de
+	ld de, (xhl)
+	add de, 0x32
+	ld (xwa + 6), de
+	lds32 xde, 4
+	push xde
+	pushw 0xFF
+	pushw 0xF7
+	ld xde, 0xED1604
+	call DrawString
+	ldda8 a, 36154
+	extz wa
+	lds bc, 0
+	call SndParam_LookupViaEncode
+	ld (xsp + 31), l
+	ldda8 a, 36154
+	extz wa
+	ldw bc, 0x20
+	call SndParam_LookupViaEncode
+	lda xwa, (xsp + 28)
+	ld (xwa + 4), l
+	ldmi16 (xwa + 2), 0x8D3A
+	call SndParam_FetchOscTableEntry
+	ld a, (xsp + 28)
+	extz wa
+	st_dri3b A, 0xFD, 0x22, 0x01
+	call LABEL_FEE608
+	st_dri3b A, 0xFD, 0x22, 0x02
+	ldw (xbc), 0x68
+	lda xhl, (xbc + 2)
+	ldw (xhl), 0xC
+	st_dri3b W, 0xFD, 0x26, 0x02
+	ld de, (xbc)
+	ld (xwa), de
+	ld de, (xbc)
+	add de, 0x80
+	ld (xwa + 4), de
+	ld de, (xhl)
+	ld (xwa + 2), de
+	ld de, (xhl)
+	add de, 0xF
+	ld (xwa + 6), de
+	st_dri3b B, 0xFD, 0x22, 0x01
+	lds32 xhl, 0
+	push xhl
+	pushw 0xFB
+	pushw 0xF7
+	call DrawString
+	st_dri3b A, 0xFD, 0x22, 0x02
+	ldw (xbc), 0x90
+	lda xhl, (xbc + 2)
+	ldw (xhl), 0x0
+	st_dri3b W, 0xFD, 0x26, 0x02
+	ld de, (xbc)
+	ld (xwa), de
+	ld de, (xbc)
+	add de, 0x38
+	ld (xwa + 4), de
+	ld de, (xhl)
+	ld (xwa + 2), de
+	ld de, (xhl)
+	add de, 0xF
+	ld (xwa + 6), de
+	ld xde, (xsp + 24)
+	ld xde, (xde + 48)
+	ld de, (xde)
+	muls de, 0x7
+	lda_24 xhl, 0xecfdfe
+	exts xde
+	add xde, xhl
+	lds32 xhl, 0
+	push xhl
+	pushw 0xFF
+	pushw 0xF7
+	call DrawString
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+
+LABEL_FBE4B7:
+	call SendEvent
+	jrl FileBrowser_ReturnZero
+
+LABEL_FBE4BE:
+	ld_sril XWA, (xsp + 0x0236)
+	ld_sril XBC, (xsp + 0x0232)
+	ld_sril XDE, (xsp + 0x022e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0236)
+	call GetViewInstance
+	ld (xsp + 24), xhl
+	ld xwa, (xsp + 24)
+	ld (xsp + 4), xwa
+	ld (xsp + 8), 0x9
+	lda xde, (xwa + 52)
+	ld xhl, (xde)
+	lda xbc, (xwa + 44)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 1, wa
+	ld hl, (xhl)
+	sub hl, wa
+	jr ge, LABEL_FBE515
+	ld xde, (xde)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 1, wa
+	sub wa, (xde)
+	ldw de, 0x9
+	sub de, wa
+	ld (xsp + 8), e
+
+LABEL_FBE515:
+	ld xde, (xbc)
+	ld xwa, (xsp + 24)
+	ld xbc, (xwa + 64)
+	ld wa, (xbc)
+	exts xwa
+	divs wa, 0xA
+	inc 1, wa
+	cp wa, (xde)
+	jrl nz, LABEL_FBE80A
+	ld e, (xsp + 8)
+	srl e, 1
+	extz de
+	sla de, 2
+	lda_24 xhl, 0x03f214
+	ld wa, (xbc)
+	exts xwa
+	divs wa, 0xA
+	ldto_werp BC, 0xE2
+	ld_sril3 XWA, 0x07, 0xEC, 0xE8
+	ld_srib3 A, 0x07, 0xE0, 0xE4
+	extz wa
+	st_dri3b A, 0xFD, 0x22, 0x02
+	call GetEditSwPoint
+	st_dri3b W, 0xFD, 0x26, 0x02
+	st_dri3b C, 0xFD, 0x22, 0x02
+	lda xde, (xhl + 2)
+	ld bc, (xde)
+	sub bc, 0xF
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0x10
+	ld (xwa + 6), bc
+	lda xbc, (xwa + 4)
+	cpw (xhl), 0x0
+	jr nz, LABEL_FBE58E
+	ldw (xwa), 0x8
+	ldw (xbc), 0x9C
+	jr LABEL_FBE596
+
+LABEL_FBE58E:
+	ldw (xwa), 0xA3
+	ldw (xbc), 0x137
+
+LABEL_FBE596:
+	lds bc, 0
+	ldw de, 0xF5
+	call DrawDesignBox
+	lda xwa, (xsp + 28)
+	ld xhl, (xsp + 24)
+	ld xbc, (xhl + 56)
+	ld bc, (xbc)
+	ld (xwa), c
+	lda xde, (xhl + 64)
+	ld xbc, (xde)
+	ld bc, (xbc)
+	ld (xwa + 1), c
+	ld xbc, (xhl + 48)
+	ld bc, (xbc)
+	ld (xwa + 2), c
+	ld xbc, (xde)
+	ld bc, (xbc)
+	extz bc
+	div c, 0xA
+	ld c, b
+	ld (xwa + 3), c
+	call SndParam_ApplyProgramChange
+	lda xbc, (xsp + 28)
+	ld a, (xbc + 3)
+	extz wa
+	ld c, (xbc + 4)
+	extz bc
+	st_dri3b B, 0xFD, 0x22, 0x01
+	call SndParam_ApplyProgramChangeAsync
+	stib_dri 0xFD, 0x32, 0x01, 0x00
+	ld (xsp + 8), 0x9
+	ld xwa, (xsp + 24)
+	ld xde, (xwa + 52)
+	ld xhl, (xwa + 44)
+	ld bc, (xhl)
+	muls bc, 0xA
+	ld wa, bc
+	dec 1, wa
+	ld ix, (xde)
+	sub ix, wa
+	jr ge, LABEL_FBE613
+	sub wa, (xde)
+	ldw de, 0x9
+	sub de, wa
+	ld (xsp + 8), e
+
+LABEL_FBE613:
+	ld (xsp + 12), 0xFF
+	ld (xsp + 14), 0xF5
+	ld xix, (xsp + 24)
+	ld xde, (xix + 60)
+	ld wa, (xde)
+	exts xwa
+	divs wa, 0xA
+	inc 1, wa
+	cp wa, (xhl)
+	jr nz, LABEL_FBE64F
+	sub bc, 0xA
+	ld xwa, (xix + 64)
+	ld wa, (xwa)
+	extz wa
+	div a, 0xA
+	ld a, w
+	extz wa
+	add wa, bc
+	cp (xde), wa
+	jr nz, LABEL_FBE64F
+	ld (xsp + 12), 0x0
+	ld (xsp + 14), 0x7
+
+LABEL_FBE64F:
+	ld c, (xsp + 8)
+	srl c, 1
+	extz bc
+	sla bc, 2
+	lda_24 xde, 0x03f214
+	ld xwa, (xsp + 24)
+	ld xwa, (xwa + 64)
+	ld wa, (xwa)
+	extz wa
+	div a, 0xA
+	ld l, w
+	extz hl
+	ld_sril3 XWA, 0x07, 0xE8, 0xE4
+	ld_srib3 A, 0x07, 0xE0, 0xEC
+	extz wa
+	call DrawEditSw
+	ld c, (xsp + 8)
+	srl c, 1
+	extz bc
+	sla bc, 2
+	lda_24 xde, 0x03f214
+	ld xwa, (xsp + 24)
+	ld xwa, (xwa + 64)
+	ld wa, (xwa)
+	extz wa
+	div a, 0xA
+	ld l, w
+	extz hl
+	ld_sril3 XWA, 0x07, 0xE8, 0xE4
+	ld_srib3 A, 0x07, 0xE0, 0xEC
+	extz wa
+	st_dri3b A, 0xFD, 0x22, 0x02
+	call GetEditSwPoint
+	ld xwa, (xsp + 24)
+	ld xwa, (xwa + 56)
+	cpw (xwa), 0x10
+	jr z, LABEL_FBE6C9
+	cpw (xwa), 0x11
+	jrl nz, LABEL_FBE7B6
+
+LABEL_FBE6C9:
+	st_dri3b B, 0xFD, 0x26, 0x02
+	st_dri3b C, 0xFD, 0x22, 0x02
+	lda xbc, (xhl + 2)
+	ld wa, (xbc)
+	sub wa, 0xF
+	ld (xde + 2), wa
+	ld wa, (xbc)
+	add wa, 0x10
+	ld (xde + 6), wa
+	lda xwa, (xde + 4)
+	cpw (xhl), 0x0
+	jr nz, LABEL_FBE6FB
+	ldw (xde), 0x8
+	ldw (xwa), 0x1E
+	jr LABEL_FBE703
+
+LABEL_FBE6FB:
+	ldw (xde), 0xA3
+	ldw (xwa), 0xBE
+
+LABEL_FBE703:
+	decm 8, (xbc)
+	ld xwa, (xsp + 24)
+	ld xwa, (xwa + 44)
+	ld bc, (xwa)
+	muls bc, 0xA
+	sub bc, 0xA
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 64)
+	ld wa, (xwa)
+	extz wa
+	div a, 0xA
+	ld a, w
+	inc 1, a
+	extz wa
+	add wa, bc
+	pushw wa
+	pushw 0xED
+	pushw 0x160A
+	lda xwa, (xsp + 40)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 10)
+	st_dri3b C, 0xFD, 0x26, 0x02
+	st_dri3b A, 0xFD, 0x22, 0x02
+	lda xde, (xsp + 34)
+	lds32 xwa, 3
+	push xwa
+	ld a, (xsp + 16)
+	extz wa
+	pushw wa
+	ld a, (xsp + 20)
+	extz wa
+	pushw wa
+	ld xwa, xhl
+	call DrawStringLeftJustify
+	st_dri3b A, 0xFD, 0x22, 0x02
+	lda xde, (xbc + 2)
+	ld wa, (xde)
+	add wa, 0xC
+	ld (xde), wa
+	st_dri3b C, 0xFD, 0x26, 0x02
+	sub wa, 0xF
+	ld (xhl + 2), wa
+	ld wa, (xde)
+	add wa, 0x10
+	ld (xhl + 6), wa
+	lda xwa, (xhl + 4)
+	cpw (xbc), 0x0
+	jr nz, LABEL_FBE796
+	ldw (xhl), 0x10
+	ldw (xwa), 0x9C
+	jr LABEL_FBE79E
+
+LABEL_FBE796:
+	ldw (xhl), 0xAB
+	ldw (xwa), 0x137
+
+LABEL_FBE79E:
+	st_dri3b B, 0xFD, 0x22, 0x01
+	lds32 xwa, 1
+	push xwa
+	ld a, (xsp + 16)
+	extz wa
+	pushw wa
+	ld a, (xsp + 20)
+	extz wa
+	pushw wa
+	ld xwa, xhl
+	jr LABEL_FBE806
+
+LABEL_FBE7B6:
+	st_dri3b C, 0xFD, 0x26, 0x02
+	st_dri3b A, 0xFD, 0x22, 0x02
+	lda xde, (xbc + 2)
+	ld wa, (xde)
+	sub wa, 0xF
+	ld (xhl + 2), wa
+	ld wa, (xde)
+	add wa, 0x10
+	ld (xhl + 6), wa
+	lda xwa, (xhl + 4)
+	cpw (xbc), 0x0
+	jr nz, LABEL_FBE7E8
+	ldw (xhl), 0x10
+	ldw (xwa), 0x9C
+	jr LABEL_FBE7F0
+
+LABEL_FBE7E8:
+	ldw (xhl), 0xAB
+	ldw (xwa), 0x137
+
+LABEL_FBE7F0:
+	st_dri3b B, 0xFD, 0x22, 0x01
+	lds32 xwa, 1
+	push xwa
+	ld a, (xsp + 16)
+	extz wa
+	pushw wa
+	ld a, (xsp + 20)
+	extz wa
+	pushw wa
+	ld xwa, xhl
+
+LABEL_FBE806:
+	call DrawStringLeftJustify
+
+LABEL_FBE80A:
+	ld xwa, (xsp + 24)
+	ld xde, (xwa + 44)
+	ld xbc, (xwa + 60)
+	ld wa, (xbc)
+	exts xwa
+	divs wa, 0xA
+	inc 1, wa
+	cp wa, (xde)
+	jrl nz, FileBrowser_ReturnZero
+	ld e, (xsp + 8)
+	srl e, 1
+	extz de
+	sla de, 2
+	lda_24 xhl, 0x03f214
+	ld wa, (xbc)
+	exts xwa
+	divs wa, 0xA
+	ldto_werp BC, 0xE2
+	ld_sril3 XWA, 0x07, 0xEC, 0xE8
+	ld_srib3 A, 0x07, 0xE0, 0xE4
+	extz wa
+	st_dri3b A, 0xFD, 0x22, 0x02
+	call GetEditSwPoint
+	st_dri3b W, 0xFD, 0x26, 0x02
+	st_dri3b C, 0xFD, 0x22, 0x02
+	lda xde, (xhl + 2)
+	ld bc, (xde)
+	sub bc, 0xF
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0x10
+	ld (xwa + 6), bc
+	lda xbc, (xwa + 4)
+	cpw (xhl), 0x0
+	jr nz, LABEL_FBE884
+	ldw (xwa), 0x8
+	ldw (xbc), 0x9C
+	jr LABEL_FBE88C
+
+LABEL_FBE884:
+	ldw (xwa), 0xA3
+	ldw (xbc), 0x137
+
+LABEL_FBE88C:
+	ldw bc, 0xC1
+	lds de, 7
+	call DrawDesignBox
+	lda xwa, (xsp + 28)
+	ld xhl, (xsp + 24)
+	ld xbc, (xhl + 56)
+	ld bc, (xbc)
+	ld (xwa), c
+	lda xde, (xhl + 60)
+	ld xbc, (xde)
+	ld bc, (xbc)
+	ld (xwa + 1), c
+	ld xbc, (xhl + 48)
+	ld bc, (xbc)
+	ld (xwa + 2), c
+	ld xbc, (xde)
+	ld bc, (xbc)
+	extz bc
+	div c, 0xA
+	ld c, b
+	ld (xwa + 3), c
+	call SndParam_ApplyProgramChange
+	lda xbc, (xsp + 28)
+	ld a, (xbc + 3)
+	extz wa
+	ld c, (xbc + 4)
+	extz bc
+	st_dri3b B, 0xFD, 0x22, 0x01
+	call SndParam_ApplyProgramChangeAsync
+	stib_dri 0xFD, 0x32, 0x01, 0x00
+	ld (xsp + 8), 0x9
+	ld xwa, (xsp + 24)
+	ld xde, (xwa + 52)
+	ld xhl, (xwa + 44)
+	ld bc, (xhl)
+	muls bc, 0xA
+	ld wa, bc
+	dec 1, wa
+	ld ix, (xde)
+	sub ix, wa
+	jr ge, LABEL_FBE909
+	sub wa, (xde)
+	ldw de, 0x9
+	sub de, wa
+	ld (xsp + 8), e
+
+LABEL_FBE909:
+	ld (xsp + 12), 0xFF
+	ld (xsp + 14), 0xF5
+	ld xwa, (xsp + 24)
+	ld xde, (xwa + 60)
+	ld wa, (xde)
+	exts xwa
+	divs wa, 0xA
+	inc 1, wa
+	cp wa, (xhl)
+	jr nz, LABEL_FBE946
+	ld hl, bc
+	sub hl, 0xA
+	ld bc, (xde)
+	ld a, c
+	extz wa
+	div a, 0xA
+	ld a, w
+	extz wa
+	add wa, hl
+	cp bc, wa
+	jr nz, LABEL_FBE946
+	ld (xsp + 12), 0x0
+	ld (xsp + 14), 0x7
+
+LABEL_FBE946:
+	ld c, (xsp + 8)
+	srl c, 1
+	extz bc
+	sla bc, 2
+	lda_24 xhl, 0x03f214
+	ld wa, (xde)
+	extz wa
+	div a, 0xA
+	ld e, w
+	extz de
+	ld_sril3 XWA, 0x07, 0xEC, 0xE4
+	ld_srib3 A, 0x07, 0xE0, 0xE8
+	extz wa
+	call DrawEditSw
+	ld c, (xsp + 8)
+	srl c, 1
+	extz bc
+	sla bc, 2
+	lda_24 xde, 0x03f214
+	ld xwa, (xsp + 24)
+	ld xwa, (xwa + 60)
+	ld wa, (xwa)
+	extz wa
+	div a, 0xA
+	ld l, w
+	extz hl
+	ld_sril3 XWA, 0x07, 0xE8, 0xE4
+	ld_srib3 A, 0x07, 0xE0, 0xEC
+	extz wa
+	st_dri3b A, 0xFD, 0x22, 0x02
+	call GetEditSwPoint
+	ld xwa, (xsp + 24)
+	ld xwa, (xwa + 56)
+	cpw (xwa), 0x10
+	jr z, LABEL_FBE9BA
+	cpw (xwa), 0x11
+	jrl nz, LABEL_FBEAA5
+
+LABEL_FBE9BA:
+	st_dri3b B, 0xFD, 0x26, 0x02
+	st_dri3b C, 0xFD, 0x22, 0x02
+	lda xbc, (xhl + 2)
+	ld wa, (xbc)
+	sub wa, 0xF
+	ld (xde + 2), wa
+	ld wa, (xbc)
+	add wa, 0x10
+	ld (xde + 6), wa
+	lda xwa, (xde + 4)
+	cpw (xhl), 0x0
+	jr nz, LABEL_FBE9EC
+	ldw (xde), 0x8
+	ldw (xwa), 0x1E
+	jr LABEL_FBE9F4
+
+LABEL_FBE9EC:
+	ldw (xde), 0xA3
+	ldw (xwa), 0xBE
+
+LABEL_FBE9F4:
+	decm 8, (xbc)
+	ld xde, (xsp + 24)
+	ld xwa, (xde + 44)
+	ld bc, (xwa)
+	muls bc, 0xA
+	sub bc, 0xA
+	ld xwa, (xde + 60)
+	ld wa, (xwa)
+	extz wa
+	div a, 0xA
+	ld a, w
+	inc 1, a
+	extz wa
+	add wa, bc
+	pushw wa
+	pushw 0xED
+	pushw 0x160E
+	lda xwa, (xsp + 40)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 10)
+	st_dri3b C, 0xFD, 0x26, 0x02
+	st_dri3b A, 0xFD, 0x22, 0x02
+	lda xde, (xsp + 34)
+	lds32 xwa, 3
+	push xwa
+	ld a, (xsp + 16)
+	extz wa
+	pushw wa
+	ld a, (xsp + 20)
+	extz wa
+	pushw wa
+	ld xwa, xhl
+	call DrawStringLeftJustify
+	st_dri3b A, 0xFD, 0x22, 0x02
+	lda xde, (xbc + 2)
+	ld wa, (xde)
+	add wa, 0xC
+	ld (xde), wa
+	st_dri3b C, 0xFD, 0x26, 0x02
+	sub wa, 0xF
+	ld (xhl + 2), wa
+	ld wa, (xde)
+	add wa, 0x10
+	ld (xhl + 6), wa
+	lda xwa, (xhl + 4)
+	cpw (xbc), 0x0
+	jr nz, LABEL_FBEA84
+	ldw (xhl), 0x10
+	ldw (xwa), 0x9C
+	jr LABEL_FBEA8C
+
+LABEL_FBEA84:
+	ldw (xhl), 0xAB
+	ldw (xwa), 0x137
+
+LABEL_FBEA8C:
+	st_dri3b B, 0xFD, 0x22, 0x01
+	lds32 xwa, 1
+	push xwa
+	ld a, (xsp + 16)
+	extz wa
+	pushw wa
+	ld a, (xsp + 20)
+	extz wa
+	pushw wa
+	ld xwa, xhl
+	jrl FileBrowser_DrawString
+
+LABEL_FBEAA5:
+	st_dri3b B, 0xFD, 0x26, 0x02
+	st_dri3b A, 0xFD, 0x22, 0x02
+	lda xhl, (xbc + 2)
+	ld wa, (xhl)
+	sub wa, 0xF
+	ld (xde + 2), wa
+	ld wa, (xhl)
+	add wa, 0x10
+	ld (xde + 6), wa
+	lda xwa, (xde + 4)
+	cpw (xbc), 0x0
+	jr nz, LABEL_FBEAD7
+	ldw (xde), 0x10
+	ldw (xwa), 0x9C
+	jr LABEL_FBEADF
+
+LABEL_FBEAD7:
+	ldw (xde), 0xAB
+	ldw (xwa), 0x137
+
+LABEL_FBEADF:
+	st_dri3b C, 0xFD, 0x22, 0x01
+	lds32 xwa, 1
+	push xwa
+	ld a, (xsp + 16)
+	extz wa
+	pushw wa
+	ld a, (xsp + 20)
+	extz wa
+	pushw wa
+	ld xwa, xde
+	ld xde, xhl
+	jrl FileBrowser_DrawString
+
+LABEL_FBEAFA:
+	ld_sril XWA, (xsp + 0x0236)
+	ld_sril XBC, (xsp + 0x0232)
+	ld_sril XDE, (xsp + 0x022e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0236)
+	call GetViewInstance
+	ld (xsp + 16), xhl
+	ld xwa, (xsp + 16)
+	ld (xsp + 4), xwa
+	st_dri3b W, 0xFD, 0x26, 0x02
+	ldw (xwa + 2), 0x6
+	ldw (xwa + 6), 0x17
+	ldw (xwa), 0xF5
+	ldw (xwa + 4), 0x13B
+	ldw bc, 0xC1
+	ldw de, 0xF3
+	call DrawDesignBox
+	st_dri3b B, 0xFD, 0x26, 0x02
+	ld wa, (xde + 4)
+	sub wa, (xde)
+	exts xwa
+	divs wa, 0x2
+	ld bc, (xde)
+	add bc, wa
+	st_dri3b C, 0xFD, 0x22, 0x02
+	ld (xhl), bc
+	ld bc, (xde + 2)
+	ld wa, (xde + 6)
+	sub wa, bc
+	exts xwa
+	divs wa, 0x2
+	add bc, wa
+	inc 1, bc
+	ld (xhl + 2), bc
+	ld xbc, (xsp + 16)
+	ld xwa, (xbc + 52)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0xA
+	inc 1, wa
+	pushw wa
+	ld xwa, (xbc + 44)
+	pushm (xwa)
+	pushw 0xED
+	pushw 0x1612
+	st_dri3b W, 0xFD, 0x2A, 0x01
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	st_dri3b W, 0xFD, 0x26, 0x02
+	st_dri3b A, 0xFD, 0x22, 0x02
+	st_dri3b B, 0xFD, 0x22, 0x01
+	lds32 xhl, 0
+	push xhl
+	pushw 0x0
+	pushw 0xF7
+	call DrawStringCentered
+	ld (xsp + 8), 0x9
+	ld xwa, (xsp + 16)
+	ld xbc, (xwa + 52)
+	ld xwa, (xwa + 44)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 1, wa
+	ld de, (xbc)
+	sub de, wa
+	jr ge, LABEL_FBEBDB
+	sub wa, (xbc)
+	ldw bc, 0x9
+	sub bc, wa
+	ld (xsp + 8), c
+
+LABEL_FBEBDB:
+	ld (xsp + 10), 0x0
+	cp (xsp + 8), 0x0
+	jrl c, FileBrowser_ReturnZero
+
+LABEL_FBEBE6:
+	lda xwa, (xsp + 28)
+	ld xde, (xsp + 16)
+	ld xbc, (xde + 56)
+	ld bc, (xbc)
+	ld (xwa), c
+	ld xbc, (xde + 44)
+	ld bc, (xbc)
+	dec 1, bc
+	mul c, 0xA
+	add c, (xsp + 10)
+	ld (xwa + 1), c
+	ld xbc, (xde + 48)
+	ld bc, (xbc)
+	ld (xwa + 2), c
+	call SndParam_ApplyProgramChange
+	lda xbc, (xsp + 28)
+	ld a, (xbc + 3)
+	extz wa
+	ld c, (xbc + 4)
+	extz bc
+	st_dri3b B, 0xFD, 0x22, 0x01
+	call SndParam_ApplyProgramChangeAsync
+	stib_dri 0xFD, 0x32, 0x01, 0x00
+	ld (xsp + 8), 0x9
+	ld xwa, (xsp + 16)
+	ld xde, (xwa + 52)
+	ld xhl, (xwa + 44)
+	ld bc, (xhl)
+	muls bc, 0xA
+	ld wa, bc
+	dec 1, wa
+	ld ix, (xde)
+	sub ix, wa
+	jr ge, LABEL_FBEC52
+	sub wa, (xde)
+	ldw de, 0x9
+	sub de, wa
+	ld (xsp + 8), e
+
+LABEL_FBEC52:
+	ld (xsp + 12), 0xFF
+	ld (xsp + 14), 0xF5
+	ld xwa, (xsp + 16)
+	ld xde, (xwa + 60)
+	ld wa, (xde)
+	exts xwa
+	divs wa, 0xA
+	inc 1, wa
+	cp wa, (xhl)
+	jr nz, LABEL_FBEC85
+	sub bc, 0xA
+	ld a, (xsp + 10)
+	extz wa
+	add wa, bc
+	cp (xde), wa
+	jr nz, LABEL_FBEC85
+	ld (xsp + 12), 0x0
+	ld (xsp + 14), 0x7
+
+LABEL_FBEC85:
+	ld c, (xsp + 8)
+	srl c, 1
+	extz bc
+	sla bc, 2
+	lda_24 xde, 0x03f214
+	ld l, (xsp + 10)
+	extz hl
+	ld_sril3 XWA, 0x07, 0xE8, 0xE4
+	ld_srib3 A, 0x07, 0xE0, 0xEC
+	extz wa
+	call DrawEditSw
+	ld c, (xsp + 8)
+	srl c, 1
+	extz bc
+	sla bc, 2
+	lda_24 xde, 0x03f214
+	ld l, (xsp + 10)
+	extz hl
+	ld_sril3 XWA, 0x07, 0xE8, 0xE4
+	ld_srib3 A, 0x07, 0xE0, 0xEC
+	extz wa
+	st_dri3b A, 0xFD, 0x22, 0x02
+	call GetEditSwPoint
+	ld xwa, (xsp + 16)
+	ld xiz, (xwa + 56)
+	st_dri3b E, 0xFD, 0x26, 0x02
+	st_dri3b D, 0xFD, 0x22, 0x02
+	lda xbc, (xix + 2)
+	lda xde, (xiy + 2)
+	lda xwa, (xiy + 4)
+	ld (xsp + 24), xwa
+	lda xhl, (xiy + 6)
+	cpw (xiz), 0x10
+	jr z, LABEL_FBED00
+	cpw (xiz), 0x11
+	jrl nz, LABEL_FBEDDA
+
+LABEL_FBED00:
+	ld xiz, xiy
+	ld xiy, xbc
+	ld wa, (xbc)
+	sub wa, 0xF
+	ld (xde), wa
+	ld wa, (xbc)
+	add wa, 0x10
+	ld (xhl), wa
+	ld xwa, (xsp + 24)
+	cpw (xix), 0x0
+	jr nz, LABEL_FBED27
+	ldw (xiz), 0x8
+	ldw (xwa), 0x1E
+	jr LABEL_FBED2F
+
+LABEL_FBED27:
+	ldw (xiz), 0xA3
+	ldw (xwa), 0xBE
+
+LABEL_FBED2F:
+	decm 8, (xiy)
+	ld xwa, (xsp + 4)
+	ld xwa, (xwa + 44)
+	ld bc, (xwa)
+	muls bc, 0xA
+	sub bc, 0xA
+	ld a, (xsp + 10)
+	inc 1, a
+	extz wa
+	add wa, bc
+	pushw wa
+	pushw 0xED
+	pushw 0x161E
+	lda xwa, (xsp + 40)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 10)
+	st_dri3b W, 0xFD, 0x26, 0x02
+	st_dri3b B, 0xFD, 0x22, 0x02
+	lda xhl, (xsp + 34)
+	lds32 xbc, 3
+	push xbc
+	ld c, (xsp + 16)
+	extz bc
+	pushw bc
+	ld c, (xsp + 20)
+	extz bc
+	pushw bc
+	ld xbc, xde
+	ld xde, xhl
+	call DrawStringLeftJustify
+	st_dri3b B, 0xFD, 0x22, 0x02
+	lda xbc, (xde + 2)
+	ld hl, (xbc)
+	add hl, 0xC
+	ld (xbc), hl
+	st_dri3b W, 0xFD, 0x26, 0x02
+	sub hl, 0xF
+	ld (xwa + 2), hl
+	ld bc, (xbc)
+	add bc, 0x10
+	ld (xwa + 6), bc
+	lda xbc, (xwa + 4)
+	cpw (xde), 0x0
+	jr nz, LABEL_FBEDB8
+	ldw (xwa), 0x10
+	ldw (xbc), 0x9C
+	jr LABEL_FBEDC0
+
+LABEL_FBEDB8:
+	ldw (xwa), 0xAB
+	ldw (xbc), 0x137
+
+LABEL_FBEDC0:
+	st_dri3b C, 0xFD, 0x22, 0x01
+	lds32 xbc, 1
+	push xbc
+	ld c, (xsp + 16)
+	extz bc
+	pushw bc
+	ld c, (xsp + 20)
+	extz bc
+	pushw bc
+	ld xbc, xde
+	ld xde, xhl
+	jr LABEL_FBEE21
+
+LABEL_FBEDDA:
+	ld xwa, xiy
+	ld (xsp + 20), xix
+	ld iy, (xbc)
+	sub iy, 0xF
+	ld (xde), iy
+	ld bc, (xbc)
+	add bc, 0x10
+	ld (xhl), bc
+	ld xbc, (xsp + 24)
+	cpw (xix), 0x0
+	jr nz, LABEL_FBEE02
+	ldw (xwa), 0x10
+	ldw (xbc), 0x9C
+	jr LABEL_FBEE0A
+
+LABEL_FBEE02:
+	ldw (xwa), 0xAB
+	ldw (xbc), 0x137
+
+LABEL_FBEE0A:
+	st_dri3b B, 0xFD, 0x22, 0x01
+	lds32 xbc, 1
+	push xbc
+	ld c, (xsp + 16)
+	extz bc
+	pushw bc
+	ld c, (xsp + 20)
+	extz bc
+	pushw bc
+	ld xbc, (xsp + 28)
+
+LABEL_FBEE21:
+	call DrawStringLeftJustify
+	incm8 1, (xsp + 10)
+	ld a, (xsp + 10)
+	cp a, (xsp + 8)
+	jrl ule, LABEL_FBEBE6
+	jrl FileBrowser_ReturnZero
+
+LABEL_FBEE34:
+	ld_sril XWA, (xsp + 0x0236)
+	call GetViewInstance
+	ld (xsp + 24), xhl
+	ld_sril XWA, (xsp + 0x022e)
+	ld (xsp + 20), xwa
+	ld (xsp + 8), 0x9
+	ld xwa, (xsp + 24)
+	lda xde, (xwa + 52)
+	ld xhl, (xde)
+	lda xbc, (xwa + 44)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 1, wa
+	ld hl, (xhl)
+	sub hl, wa
+	jr ge, LABEL_FBEE7D
+	ld xde, (xde)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 1, wa
+	sub wa, (xde)
+	ldw de, 0x9
+	sub de, wa
+	ld (xsp + 8), e
+
+LABEL_FBEE7D:
+	ld (xsp + 12), 0xFF
+	ld (xsp + 14), 0xF5
+	ld xde, (xbc)
+	ld xwa, (xsp + 24)
+	ld xbc, (xwa + 60)
+	ld wa, (xbc)
+	exts xwa
+	divs wa, 0xA
+	inc 1, wa
+	cp wa, (xde)
+	jr nz, LABEL_FBEEBC
+	ld de, (xde)
+	muls de, 0xA
+	sub de, 0xA
+	ld_sril XWA, (xsp + 0x022e)
+	ld a, (xwa)
+	extz wa
+	add wa, de
+	cp (xbc), wa
+	jr nz, LABEL_FBEEBC
+	ld (xsp + 12), 0x0
+	ld (xsp + 14), 0x7
+
+LABEL_FBEEBC:
+	ld c, (xsp + 8)
+	srl c, 1
+	extz bc
+	sla bc, 2
+	lda_24 xde, 0x03f214
+	ld_sril XWA, (xsp + 0x022e)
+	ld l, (xwa)
+	extz hl
+	ld_sril3 XWA, 0x07, 0xE8, 0xE4
+	ld_srib3 A, 0x07, 0xE0, 0xEC
+	extz wa
+	call DrawEditSw
+	ld c, (xsp + 8)
+	srl c, 1
+	extz bc
+	sla bc, 2
+	lda_24 xde, 0x03f214
+	ld_sril XWA, (xsp + 0x022e)
+	ld l, (xwa)
+	extz hl
+	ld_sril3 XWA, 0x07, 0xE8, 0xE4
+	ld_srib3 A, 0x07, 0xE0, 0xEC
+	extz wa
+	st_dri3b A, 0xFD, 0x22, 0x02
+	call GetEditSwPoint
+	ld xwa, (xsp + 24)
+	ld xwa, (xwa + 56)
+	cpw (xwa), 0x10
+	jr z, LABEL_FBEF26
+	cpw (xwa), 0x11
+	jrl nz, LABEL_FBF00E
+
+LABEL_FBEF26:
+	st_dri3b B, 0xFD, 0x26, 0x02
+	st_dri3b C, 0xFD, 0x22, 0x02
+	lda xbc, (xhl + 2)
+	ld wa, (xbc)
+	sub wa, 0xF
+	ld (xde + 2), wa
+	ld wa, (xbc)
+	add wa, 0x10
+	ld (xde + 6), wa
+	lda xwa, (xde + 4)
+	cpw (xhl), 0x0
+	jr nz, LABEL_FBEF58
+	ldw (xde), 0x8
+	ldw (xwa), 0x1E
+	jr LABEL_FBEF60
+
+LABEL_FBEF58:
+	ldw (xde), 0xA3
+	ldw (xwa), 0xBE
+
+LABEL_FBEF60:
+	decm 8, (xbc)
+	ld xwa, (xsp + 24)
+	ld xwa, (xwa + 44)
+	ld bc, (xwa)
+	muls bc, 0xA
+	sub bc, 0xA
+	ld xwa, (xsp + 20)
+	ld a, (xwa)
+	inc 1, a
+	extz wa
+	add wa, bc
+	pushw wa
+	pushw 0xED
+	pushw 0x1622
+	lda xwa, (xsp + 40)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 10)
+	st_dri3b W, 0xFD, 0x26, 0x02
+	st_dri3b B, 0xFD, 0x22, 0x02
+	lda xhl, (xsp + 34)
+	lds32 xbc, 3
+	push xbc
+	ld c, (xsp + 16)
+	extz bc
+	pushw bc
+	ld c, (xsp + 20)
+	extz bc
+	pushw bc
+	ld xbc, xde
+	ld xde, xhl
+	call DrawStringLeftJustify
+	st_dri3b C, 0xFD, 0x22, 0x02
+	lda xbc, (xhl + 2)
+	ld de, (xbc)
+	add de, 0xC
+	ld (xbc), de
+	st_dri3b W, 0xFD, 0x26, 0x02
+	sub de, 0xF
+	ld (xwa + 2), de
+	ld bc, (xbc)
+	add bc, 0x10
+	ld (xwa + 6), bc
+	lda xbc, (xwa + 4)
+	cpw (xhl), 0x0
+	jr nz, LABEL_FBEFEB
+	ldw (xwa), 0x10
+	ldw (xbc), 0x9C
+	jr LABEL_FBEFF3
+
+LABEL_FBEFEB:
+	ldw (xwa), 0xAB
+	ldw (xbc), 0x137
+
+LABEL_FBEFF3:
+	ld_sril XBC, (xsp + 0x022e)
+	lda xde, (xbc + 1)
+	lds32 xbc, 1
+	push xbc
+	ld c, (xsp + 16)
+	extz bc
+	pushw bc
+	ld c, (xsp + 20)
+	extz bc
+	pushw bc
+	ld xbc, xhl
+	jr FileBrowser_DrawString
+
+LABEL_FBF00E:
+	st_dri3b W, 0xFD, 0x26, 0x02
+	st_dri3b B, 0xFD, 0x22, 0x02
+	lda xhl, (xde + 2)
+	ld bc, (xhl)
+	sub bc, 0xF
+	ld (xwa + 2), bc
+	ld bc, (xhl)
+	add bc, 0x10
+	ld (xwa + 6), bc
+	lda xbc, (xwa + 4)
+	cpw (xde), 0x0
+	jr nz, LABEL_FBF040
+	ldw (xwa), 0x10
+	ldw (xbc), 0x9C
+	jr LABEL_FBF048
+
+LABEL_FBF040:
+	ldw (xwa), 0xAB
+	ldw (xbc), 0x137
+
+LABEL_FBF048:
+	ld_sril XBC, (xsp + 0x022e)
+	lda xhl, (xbc + 1)
+	lds32 xbc, 1
+	push xbc
+	ld c, (xsp + 16)
+	extz bc
+	pushw bc
+	ld c, (xsp + 20)
+	extz bc
+	pushw bc
+	ld xbc, xde
+	ld xde, xhl
+
+FileBrowser_DrawString:
+	call DrawStringLeftJustify
+	jrl FileBrowser_ReturnZero
+
+LABEL_FBF06A:
+	ld_sril XWA, (xsp + 0x0236)
+	ld_sril XBC, (xsp + 0x0232)
+	ld_sril XDE, (xsp + 0x022e)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0236)
+	call GetViewInstance
+	ld (xsp + 16), xhl
+	ld xde, (xsp + 16)
+	ld (xsp + 4), xde
+	ld (xsp + 8), 0x9
+	lda xwa, (xde + 52)
+	ld (xsp + 20), xwa
+	ld xbc, (xwa)
+	lda xwa, (xde + 44)
+	ld (xsp + 24), xwa
+	ld xwa, (xwa)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 1, wa
+	ld bc, (xbc)
+	sub bc, wa
+	jr ge, LABEL_FBF0CD
+	ld xwa, (xsp + 20)
+	ld xbc, (xwa)
+	ld xwa, (xsp + 24)
+	ld xwa, (xwa)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 1, wa
+	sub wa, (xbc)
+	ldw bc, 0x9
+	sub bc, wa
+	ld (xsp + 8), c
+
+LABEL_FBF0CD:
+	ld_sril XBC, (xsp + 0x022e)
+	cp xbc, 0xC
+	jrl z, LABEL_FBF3D5
+	cp xbc, 0xB
+	jrl z, LABEL_FBF37D
+	cp xbc, 0xA
+	jrl z, LABEL_FBF324
+	cp xbc, 0x9
+	jrl z, LABEL_FBF2CB
+	ld a, (xsp + 8)
+	extz wa
+	cp xbc, 0x8
+	jrl z, LABEL_FBF277
+	cp xbc, 0x8C
+	jrl z, LABEL_FBF237
+	cp xbc, 0x8B
+	jrl z, LABEL_FBF1F7
+	cp xbc, 0x8A
+	jrl z, LABEL_FBF1B7
+	cp xbc, 0x89
+	jr z, LABEL_FBF175
+	cp xbc, 0x88
+	jrl nz, LABEL_FBF432
+	lds bc, 0
+	calr VariScreen_IsHalfRangeAbove
+	cps l, 0
+	jrl z, FileBrowser_ReturnZero
+	ld xwa, (xsp + 16)
+	ld xde, (xwa + 64)
+	ld xhl, (xsp + 4)
+	lda xbc, (xhl + 60)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	ld (xde), wa
+	ld xbc, (xbc)
+	ld xwa, (xhl + 44)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	ld (xbc), wa
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0236)
+	jrl RVari_NotifyAndReturn
+
+LABEL_FBF175:
+	lds bc, 1
+	calr VariScreen_IsHalfRangeAbove
+	cps l, 0
+	jrl z, FileBrowser_ReturnZero
+	ld xhl, (xsp + 16)
+	ld xde, (xhl + 64)
+	lda xbc, (xhl + 60)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	ld (xde), wa
+	ld xbc, (xbc)
+	ld xwa, (xhl + 44)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0x9
+	ld (xbc), wa
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0236)
+	jrl RVari_NotifyAndReturn
+
+LABEL_FBF1B7:
+	lds bc, 2
+	calr VariScreen_IsHalfRangeAbove
+	cps l, 0
+	jrl z, FileBrowser_ReturnZero
+	ld xhl, (xsp + 16)
+	ld xde, (xhl + 64)
+	lda xbc, (xhl + 60)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	ld (xde), wa
+	ld xbc, (xbc)
+	ld xwa, (xhl + 44)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 8, wa
+	ld (xbc), wa
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0236)
+	jrl RVari_NotifyAndReturn
+
+LABEL_FBF1F7:
+	lds bc, 3
+	calr VariScreen_IsHalfRangeAbove
+	cps l, 0
+	jrl z, FileBrowser_ReturnZero
+	ld xhl, (xsp + 16)
+	ld xde, (xhl + 64)
+	lda xbc, (xhl + 60)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	ld (xde), wa
+	ld xbc, (xbc)
+	ld xwa, (xhl + 44)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 7, wa
+	ld (xbc), wa
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0236)
+	jrl RVari_NotifyAndReturn
+
+LABEL_FBF237:
+	lds bc, 4
+	calr VariScreen_IsHalfRangeAbove
+	cps l, 0
+	jrl z, FileBrowser_ReturnZero
+	ld xhl, (xsp + 16)
+	ld xde, (xhl + 64)
+	lda xbc, (xhl + 60)
+	ld xwa, (xbc)
+	ld wa, (xwa)
+	ld (xde), wa
+	ld xbc, (xbc)
+	ld xwa, (xhl + 44)
+	ld wa, (xwa)
+	muls wa, 0xA
+	dec 6, wa
+	ld (xbc), wa
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0236)
+	jrl RVari_NotifyAndReturn
+
+LABEL_FBF277:
+	lds bc, 0
+	calr VariScreen_CalcValidNoteRow
+	cps l, 0
+	jrl z, FileBrowser_ReturnZero
+	ld xwa, (xsp + 16)
+	ld xbc, (xwa + 64)
+	ld xwa, (xwa + 60)
+	ld wa, (xwa)
+	ld (xbc), wa
+	ld a, (xsp + 8)
+	extz wa
+	lds bc, 0
+	calr VariScreen_CalcValidNoteRow
+	extz hl
+	ld xbc, (xsp + 16)
+	ld xwa, (xbc + 44)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	ld de, wa
+	add de, hl
+	ld xwa, (xbc + 60)
+	ld (xwa), de
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0236)
+	jrl RVari_NotifyAndReturn
+
+LABEL_FBF2CB:
+	ld a, (xsp + 8)
+	extz wa
+	lds bc, 1
+	calr VariScreen_CalcValidNoteRow
+	cps l, 0
+	jrl z, FileBrowser_ReturnZero
+	ld xwa, (xsp + 16)
+	ld xbc, (xwa + 64)
+	ld xwa, (xwa + 60)
+	ld wa, (xwa)
+	ld (xbc), wa
+	ld a, (xsp + 8)
+	extz wa
+	lds bc, 1
+	calr VariScreen_CalcValidNoteRow
+	extz hl
+	ld xbc, (xsp + 16)
+	ld xwa, (xbc + 44)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	ld de, wa
+	add de, hl
+	ld xwa, (xbc + 60)
+	ld (xwa), de
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0236)
+	jrl RVari_NotifyAndReturn
+
+LABEL_FBF324:
+	ld a, (xsp + 8)
+	extz wa
+	lds bc, 2
+	calr VariScreen_CalcValidNoteRow
+	cps l, 0
+	jrl z, FileBrowser_ReturnZero
+	ld xwa, (xsp + 16)
+	ld xbc, (xwa + 64)
+	ld xwa, (xwa + 60)
+	ld wa, (xwa)
+	ld (xbc), wa
+	ld a, (xsp + 8)
+	extz wa
+	lds bc, 2
+	calr VariScreen_CalcValidNoteRow
+	extz hl
+	ld xbc, (xsp + 16)
+	ld xwa, (xbc + 44)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	ld de, wa
+	add de, hl
+	ld xwa, (xbc + 60)
+	ld (xwa), de
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0236)
+	jrl RVari_NotifyAndReturn
+
+LABEL_FBF37D:
+	ld a, (xsp + 8)
+	extz wa
+	lds bc, 3
+	calr VariScreen_CalcValidNoteRow
+	cps l, 0
+	jrl z, FileBrowser_ReturnZero
+	ld xwa, (xsp + 16)
+	ld xbc, (xwa + 64)
+	ld xwa, (xwa + 60)
+	ld wa, (xwa)
+	ld (xbc), wa
+	ld a, (xsp + 8)
+	extz wa
+	lds bc, 3
+	calr VariScreen_CalcValidNoteRow
+	extz hl
+	ld xbc, (xsp + 16)
+	ld xwa, (xbc + 44)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	ld de, wa
+	add de, hl
+	ld xwa, (xbc + 60)
+	ld (xwa), de
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0236)
+	jr RVari_NotifyAndReturn
+
+LABEL_FBF3D5:
+	ld a, (xsp + 8)
+	extz wa
+	lds bc, 4
+	calr VariScreen_CalcValidNoteRow
+	cps l, 0
+	jr z, FileBrowser_ReturnZero
+	ld xwa, (xsp + 16)
+	ld xbc, (xwa + 64)
+	ld xwa, (xwa + 60)
+	ld wa, (xwa)
+	ld (xbc), wa
+	ld a, (xsp + 8)
+	extz wa
+	lds bc, 4
+	calr VariScreen_CalcValidNoteRow
+	extz hl
+	ld xbc, (xsp + 16)
+	ld xwa, (xbc + 44)
+	ld wa, (xwa)
+	muls wa, 0xA
+	sub wa, 0xA
+	ld de, wa
+	add de, hl
+	ld xwa, (xbc + 60)
+	ld (xwa), de
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0236)
+
+RVari_NotifyAndReturn:
+	calr RVari_UpdateDisplayNotify
+
+FileBrowser_ReturnZero:
+	lds32 xhl, 0
+	jrl LABEL_FBF4F2
+
+LABEL_FBF432:
+	ld_sril XWA, (xsp + 0x022e)
+	cp xwa, 0x10
+	jr nz, LABEL_FBF47F
+	ld xwa, (xsp + 24)
+	ld xbc, (xwa)
+	ld xwa, (xsp + 20)
+	ld xwa, (xwa)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0xA
+	inc 1, wa
+	cp (xbc), wa
+	jr ge, LABEL_FBF467
+	incm 1, (xbc)
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000D
+	lds32 xde, 0
+	jr LABEL_FBF47B
+
+LABEL_FBF467:
+	cps wa, 1
+	jr le, LABEL_FBF47F
+	ldw (xbc), 0x1
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000D
+	lds32 xde, 0
+
+LABEL_FBF47B:
+	call SendEvent
+
+LABEL_FBF47F:
+	ld_sril XWA, (xsp + 0x022e)
+	cp xwa, 0x90
+	jr nz, LABEL_FBF4CE
+	ld xwa, (xsp + 16)
+	ld xbc, (xwa + 44)
+	cpw (xbc), 0x1
+	jr le, LABEL_FBF4A8
+	decm 1, (xbc)
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000D
+	lds32 xde, 0
+	jr LABEL_FBF4CA
+
+LABEL_FBF4A8:
+	ld xwa, (xsp + 16)
+	ld xwa, (xwa + 52)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0xA
+	inc 1, wa
+	cps wa, 1
+	jr le, LABEL_FBF4CE
+	ld (xbc), wa
+	ld_sril XWA, (xsp + 0x0236)
+	ld xbc, 0x1C0000D
+	lds32 xde, 0
+
+LABEL_FBF4CA:
+	call SendEvent
+
+LABEL_FBF4CE:
+	ld_sril XWA, (xsp + 0x0236)
+	ld_sril XBC, (xsp + 0x0232)
+	ld_sril XDE, (xsp + 0x022e)
+	jr LABEL_FBF4EE
+
+LABEL_FBF4DF:
+	ld_sril XWA, (xsp + 0x0236)
+	ld_sril XBC, (xsp + 0x0232)
+	ld_sril XDE, (xsp + 0x022e)
+
+LABEL_FBF4EE:
+	call InheritedProc
+
+LABEL_FBF4F2:
+	pop xiz
+	st_dri3b L, 0xFD, 0x36, 0x02
+	ret
+
+VariScreen_CalcValidNoteRow:
+	ld e, a
+	srl e, 1
+	add e, c
+	ld c, e
+	inc 1, c
+	cp a, c
+	jr c, LABEL_FBF50D
+	inc 1, e
+	ld l, e
+	ret
+
+LABEL_FBF50D:
+	ldb l, 0x0
+	ret
+
+VariScreen_IsHalfRangeAbove:
+	srl a, 1
+	cp a, c
+	scc8 nc, l
+	ret
+LABEL_FBF518:
+
+RVariScreenProc:
+	st_dri3b L, 0xFD, 0xD8, 0xFD
+	push xiz
+	st_dri3l XDE, 0xFD, 0x20, 0x02
+	st_dri3l XBC, 0xFD, 0x24, 0x02
+	st_dri3l XWA, 0xFD, 0x28, 0x02
+	ld_sril XBC, (xsp + 0x0224)
+	cp xbc, 0x1C00007
+	jrl z, RVari_OK
+	cp xbc, 0x1E2000B
+	jrl z, RVari_EnumNotify
+	cp xbc, 0x1C0000F
+	jrl z, RVari_Confirm
+	cp xbc, 0x1C0000E
+	jrl z, RVari_Select
+	cp xbc, 0x1C0000D
+	jrl z, RVari_Paint
+	cp xbc, 0x1C0000B
+	jrl z, RVari_Show
+	cp xbc, 0x1C00001
+	jrl nz, RVari_Default
+	ld_sril XWA, (xsp + 0x0228)
+	call GetViewInstance
+	ld xiz, xhl
+	ld xwa, 0x28000
+	call SndParam_LookupReadOnly
+	ld (xsp + 17), l
+	ld xwa, 0x28001
+	call SndParam_LookupReadOnly
+	lda xwa, (xsp + 14)
+	ld (xwa + 4), l
+	ld (xwa + 2), 0x48
+	call SndParam_ResolveVoiceEntry
+	ld xbc, (xiz + 56)
+	lda xde, (xsp + 14)
+	ld a, (xde)
+	extz wa
+	ld (xbc), wa
+	ld xhl, (xiz + 60)
+	lda xbc, (xde + 1)
+	ld a, (xbc)
+	extz wa
+	ld (xhl), wa
+	ld xhl, (xiz + 64)
+	ld a, (xbc)
+	extz wa
+	ld (xhl), wa
+	ld a, (xde)
+	extz wa
+	call AccVoice_GetChannelCount_Wrap
+	ld xbc, (xiz + 52)
+	extz hl
+	ld (xbc), hl
+	ld xwa, (xiz + 48)
+	ldw (xwa), 0x48
+	ld xwa, (xiz + 56)
+	cpw (xwa), 0xE
+	jr nz, RVari_Init_TypeNotE
+	ld xbc, (xiz + 44)
+	ld xwa, (xiz + 60)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x28
+	inc 1, wa
+	ld (xbc), wa
+	jr RVari_Init_ForwardEvent
+
+RVari_Init_TypeNotE:
+	ld xbc, (xiz + 44)
+	ld xwa, (xiz + 60)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0xA
+	inc 1, wa
+	ld (xbc), wa
+
+RVari_Init_ForwardEvent:
+	ld_sril XWA, (xsp + 0x0228)
+	ld_sril XBC, (xsp + 0x0224)
+	ld_sril XDE, (xsp + 0x0220)
+	call InheritedProc
+	lds32 xhl, 0
+	jrl RVari_Epilogue
+
+RVari_Show:
+	ld_sril XWA, (xsp + 0x0228)
+	ld_sril XBC, (xsp + 0x0224)
+	ld_sril XDE, (xsp + 0x0220)
+	call InheritedProc
+	lds32 xhl, 0
+	jrl RVari_Epilogue
+
+RVari_Paint:
+	ld_sril XWA, (xsp + 0x0228)
+	ld_sril XBC, (xsp + 0x0224)
+	ld_sril XDE, (xsp + 0x0220)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0228)
+	call GetViewInstance
+	st_dri3b C, 0xFD, 0x14, 0x02
+	ldw (xhl), 0x4
+	lda xde, (xhl + 2)
+	ldw (xde), 0x2
+	st_dri3b W, 0xFD, 0x18, 0x02
+	ld bc, (xhl)
+	dec 2, bc
+	ld (xwa), bc
+	ld bc, (xhl)
+	add bc, 0x19
+	ld (xwa + 4), bc
+	ld bc, (xde)
+	dec 2, bc
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0x19
+	ld (xwa + 6), bc
+	ldw bc, 0xC0
+	ldw de, 0xF0
+	call DrawDesignBox
+	st_dri3b W, 0xFD, 0x14, 0x02
+	ld xbc, 0x90
+	call DrawIcons
+	st_dri3b A, 0xFD, 0x14, 0x02
+	ldw (xbc), 0x23
+	lda xhl, (xbc + 2)
+	ldw (xhl), 0x8
+	st_dri3b W, 0xFD, 0x18, 0x02
+	ld de, (xbc)
+	ld (xwa), de
+	ld de, (xbc)
+	add de, 0x64
+	ld (xwa + 4), de
+	ld de, (xhl)
+	ld (xwa + 2), de
+	ld de, (xhl)
+	add de, 0x32
+	ld (xwa + 6), de
+	lds32 xde, 4
+	push xde
+	pushw 0xFF
+	pushw 0xF7
+	ld xde, 0xED1646
+	call DrawString
+	ld xwa, 0x28000
+	call SndParam_LookupReadOnly
+	ld (xsp + 17), l
+	ld xwa, 0x28001
+	call SndParam_LookupReadOnly
+	lda xwa, (xsp + 14)
+	ld (xwa + 4), l
+	ld (xwa + 2), 0x48
+	call SndParam_ResolveVoiceEntry
+	ld a, (xsp + 14)
+	extz wa
+	call AccVoice_CopyFromROM_Wrap
+	extz xhl
+	pushw 0x10
+	push xhl
+	st_dri3b W, 0xFD, 0x1A, 0x01
+	push xwa
+	call Mem_Copy
+	lda xsp, (xsp + 10)
+	st_dri3b B, 0xFD, 0x14, 0x01
+	ld (xde + 16), 0x0
+	st_dri3b A, 0xFD, 0x14, 0x02
+	ldw (xbc), 0x6B
+	lda xix, (xbc + 2)
+	ldw (xix), 0x0
+	st_dri3b W, 0xFD, 0x18, 0x02
+	ld hl, (xbc)
+	ld (xwa), hl
+	ld hl, (xbc)
+	add hl, 0x80
+	ld (xwa + 4), hl
+	ld hl, (xix)
+	ld (xwa + 2), hl
+	ld hl, (xix)
+	add hl, 0xF
+	ld (xwa + 6), hl
+	lds32 xhl, 0
+	push xhl
+	pushw 0xFB
+	pushw 0xF7
+	call DrawString
+	ld_sril XWA, (xsp + 0x0228)
+	ld xbc, 0x1C0000F
+	lds32 xde, 0
+	call SendEvent
+	ld_sril XWA, (xsp + 0x0228)
+	ld xbc, 0x1C0000E
+	lds32 xde, 0
+	call SendEvent
+	lds32 xhl, 0
+	jrl RVari_Epilogue
+
+RVari_Select:
+	ld_sril XWA, (xsp + 0x0228)
+	ld_sril XBC, (xsp + 0x0224)
+	ld_sril XDE, (xsp + 0x0220)
+	call InheritedProc
+	ld_sril XWA, (xsp + 0x0228)
+	call GetViewInstance
+	ld xiz, xhl
+	ld xwa, (xhl + 56)
+	cpw (xwa), 0xF
+	jrl nz, RVari_Select_CalcVisibleCount
+	ld xwa, (xiz + 64)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	ldto_werp WA, 0xE2
+	lda_24 xbc, 0xecfda8
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	st_dri3b A, 0xFD, 0x14, 0x02
+	call GetEditSwPoint
+	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b B, 0xFD, 0x16, 0x02
+	ld bc, (xde)
+	sub bc, 0xF
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0x10
+	ld (xwa + 6), bc
+	ldw (xwa), 0xA3
+	ldw (xwa + 4), 0x137
+	lds bc, 0
+	ldw de, 0xF5
+	call DrawDesignBox
+	ld xwa, (xiz + 56)
+	ld wa, (xwa)
+	extz wa
+	ld xbc, (xiz + 64)
+	ld bc, (xbc)
+	extz bc
+	call AccVoice_DispatchWithChannel
+	extz xhl
+	pushw 0xD
+	push xhl
+	st_dri3b W, 0xFD, 0x1A, 0x01
+	push xwa
+	call Mem_Copy
+	lda xsp, (xsp + 10)
+	stib_dri 0xFD, 0x21, 0x01, 0x00
+	ld (xsp + 10), 0xFF
+	ld (xsp + 12), 0xF5
+	ld xwa, (xiz + 60)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	ldto_werp BC, 0xE2
+	ld xwa, (xiz + 64)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	ldto_werp WA, 0xE2
+	cp wa, bc
+	jr nz, RVari_Select_CheckSameBank
+	ld (xsp + 10), 0x0
+	ld (xsp + 12), 0x7
+
+RVari_Select_CheckSameBank:
+	ld xwa, (xiz + 64)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	ldto_werp WA, 0xE2
+	lda_24 xbc, 0xecfda8
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	call DrawEditSw
+	ld xwa, (xiz + 64)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	ldto_werp WA, 0xE2
+	lda_24 xbc, 0xecfda8
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	st_dri3b A, 0xFD, 0x14, 0x02
+	call GetEditSwPoint
+	st_dri3b B, 0xFD, 0x18, 0x02
+	st_dri3b A, 0xFD, 0x16, 0x02
+	ld wa, (xbc)
+	sub wa, 0xF
+	ld (xde + 2), wa
+	ld wa, (xbc)
+	add wa, 0x10
+	ld (xde + 6), wa
+	ldw (xde), 0xA3
+	ldw (xde + 4), 0xBE
+	decm 8, (xbc)
+	ld xwa, (xiz + 64)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	ldto_werp WA, 0xE2
+	sla wa, 2
+	lda_24 xbc, 0xed1626
+	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	push xwa
+	pushw 0xED
+	pushw 0x164E
+	lda xwa, (xsp + 28)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	st_dri3b C, 0xFD, 0x18, 0x02
+	st_dri3b A, 0xFD, 0x14, 0x02
+	lda xde, (xsp + 20)
+	lds32 xwa, 3
+	push xwa
+	ld a, (xsp + 14)
+	extz wa
+	pushw wa
+	ld a, (xsp + 18)
+	extz wa
+	pushw wa
+	ld xwa, xhl
+	call DrawStringLeftJustify
+	st_dri3b C, 0xFD, 0x14, 0x02
+	lda xde, (xhl + 2)
+	ld wa, (xde)
+	add wa, 0xC
+	ld (xde), wa
+	st_dri3b A, 0xFD, 0x18, 0x02
+	sub wa, 0xF
+	ld (xbc + 2), wa
+	ld wa, (xde)
+	add wa, 0x10
+	ld (xbc + 6), wa
+	ldw (xbc), 0xB7
+	ldw (xbc + 4), 0x14B
+	st_dri3b B, 0xFD, 0x14, 0x01
+	lds32 xwa, 1
+	push xwa
+	ld a, (xsp + 14)
+	extz wa
+	pushw wa
+	ld a, (xsp + 18)
+	extz wa
+	pushw wa
+	ld xwa, xbc
+	ld xbc, xhl
+	call DrawStringLeftJustify
+	ld xwa, (xiz + 60)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	ldto_werp WA, 0xE2
+	lda_24 xbc, 0xecfda8
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	st_dri3b A, 0xFD, 0x14, 0x02
+	call GetEditSwPoint
+	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b B, 0xFD, 0x16, 0x02
+	ld bc, (xde)
+	sub bc, 0xF
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0x10
+	ld (xwa + 6), bc
+	ldw (xwa), 0xA3
+	ldw (xwa + 4), 0x137
+	ldw bc, 0xC1
+	lds de, 7
+	call DrawDesignBox
+	ld xwa, (xiz + 56)
+	ld wa, (xwa)
+	extz wa
+	ld xbc, (xiz + 60)
+	ld bc, (xbc)
+	extz bc
+	call AccVoice_DispatchWithChannel
+	extz xhl
+	pushw 0xD
+	push xhl
+	st_dri3b W, 0xFD, 0x1A, 0x01
+	push xwa
+	call Mem_Copy
+	lda xsp, (xsp + 10)
+	stib_dri 0xFD, 0x21, 0x01, 0x00
+	ld xwa, (xiz + 60)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	ldto_werp WA, 0xE2
+	lda_24 xbc, 0xecfda8
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	call DrawEditSw
+	ld xwa, (xiz + 60)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	ldto_werp WA, 0xE2
+	lda_24 xbc, 0xecfda8
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	st_dri3b A, 0xFD, 0x14, 0x02
+	call GetEditSwPoint
+	st_dri3b B, 0xFD, 0x18, 0x02
+	st_dri3b A, 0xFD, 0x16, 0x02
+	ld wa, (xbc)
+	sub wa, 0xF
+	ld (xde + 2), wa
+	ld wa, (xbc)
+	add wa, 0x10
+	ld (xde + 6), wa
+	ldw (xde), 0xA3
+	ldw (xde + 4), 0xBE
+	decm 8, (xbc)
+	ld xwa, (xiz + 60)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	ldto_werp WA, 0xE2
+	sla wa, 2
+	lda_24 xbc, 0xed1626
+	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	push xwa
+	pushw 0xED
+	pushw 0x1652
+	lda xwa, (xsp + 28)
+	push xwa
+	call Audio_SendCommand
+	lda xsp, (xsp + 12)
+	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b A, 0xFD, 0x14, 0x02
+	lda xde, (xsp + 20)
+	lds32 xhl, 3
+	push xhl
+	pushw 0x0
+	pushw 0x7
+	call DrawStringLeftJustify
+	st_dri3b A, 0xFD, 0x14, 0x02
+	lda xhl, (xbc + 2)
+	ld de, (xhl)
+	add de, 0xC
+	ld (xhl), de
+	st_dri3b W, 0xFD, 0x18, 0x02
+	sub de, 0xF
+	ld (xwa + 2), de
+	ld de, (xhl)
+	add de, 0x10
+	ld (xwa + 6), de
+	ldw (xwa), 0xB7
+	ldw (xwa + 4), 0x14B
+	st_dri3b B, 0xFD, 0x14, 0x01
+	lds32 xhl, 1
+	push xhl
+	pushw 0x0
+	pushw 0x7
+	call DrawStringLeftJustify
+	ld xwa, (xiz + 64)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	lda_24 xbc, 0xecfdac
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	st_dri3b A, 0xFD, 0x14, 0x02
+	call GetEditSwPoint
+	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b B, 0xFD, 0x16, 0x02
+	ld bc, (xde)
+	sub bc, 0xF
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0x10
+	ld (xwa + 6), bc
+	ldw (xwa), 0x8
+	ldw (xwa + 4), 0x9C
+	lds bc, 0
+	ldw de, 0xF5
+	call DrawDesignBox
+	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b A, 0xFD, 0x14, 0x02
+	lda xhl, (xbc + 2)
+	ld de, (xhl)
+	sub de, 0xF
+	ld (xwa + 2), de
+	ld de, (xhl)
+	add de, 0x10
+	ld (xwa + 6), de
+	ldw (xwa), 0x2D
+	ldw (xwa + 4), 0xAC
+	ld xde, (xiz + 64)
+	ld de, (xde)
+	srl e, 2
+	extz de
+	sla de, 2
+	lda_24 xhl, 0xecfdd4
+	ld_sril3 XDE, 0x07, 0xEC, 0xE8
+	lds32 xhl, 1
+	push xhl
+	pushw 0xFF
+	pushw 0xF7
+	call DrawStringLeftJustify
+	ld xwa, (xiz + 60)
+	ld wa, (xwa)
+	exts xwa
+	divs wa, 0x4
+	lda_24 xbc, 0xecfdac
+	ld_srib3 A, 0x07, 0xE4, 0xE0
+	extz wa
+	st_dri3b A, 0xFD, 0x14, 0x02
+	call GetEditSwPoint
+	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b B, 0xFD, 0x16, 0x02
+	ld bc, (xde)
+	sub bc, 0xF
+	ld (xwa + 2), bc
+	ld bc, (xde)
+	add bc, 0x10
+	ld (xwa + 6), bc
+	ldw (xwa), 0x8
+	ldw (xwa + 4), 0x9C
+	ldw bc, 0xC1
+	lds de, 7
+	call DrawDesignBox
+	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b A, 0xFD, 0x14, 0x02
+	lda xhl, (xbc + 2)
+	ld de, (xhl)
+	sub de, 0xF
+	ld (xwa + 2), de
+	ld de, (xhl)
+	add de, 0x10
+	ld (xwa + 6), de
+	ldw (xwa), 0x2D
+	ldw (xwa + 4), 0xAC
+	ld xde, (xiz + 60)
+	ld de, (xde)
+	srl e, 2
+	extz de
+	sla de, 2
+	lda_24 xhl, 0xecfdd4
+	ld_sril3 XDE, 0x07, 0xEC, 0xE8
+	lds32 xhl, 1
+	push xhl
+	pushw 0x0
+	pushw 0xF7
+	call DrawStringLeftJustify
+	jrl RVari_Select_ReturnZero
+
+	.include "rvari_routines.s"
