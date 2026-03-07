@@ -44507,7 +44507,7 @@ LABEL_EF1279:
 	anddi8 1063, 211
 	ei 0
 	call 0xFE0E75
-	call LABEL_FEBE77
+	call MIDI_BroadcastPitchReset
 
 LABEL_EF1297:
 	ei 0
@@ -224246,7 +224246,7 @@ DemoMode_Main_Operation:
 	resda 0, 1115
 	call AccompSeq_StopSequence
 	calr Voice_CopyPreset
-	call LABEL_FEBE77
+	call MIDI_BroadcastPitchReset
 	calr Timer7_DisableInterrupt
 	call 0xFDDE6F
 	setda 6, 47074
@@ -256895,7 +256895,7 @@ LABEL_FA70BC:
 	sub wa, (xbc)
 	inc 1, wa
 	pushw wa
-	call LABEL_FF0DE3
+	call Itoa_Safe
 	inc 8, xsp
 
 LABEL_FA70DC:
@@ -256995,7 +256995,7 @@ LABEL_FA7193:
 	sub wa, (xbc)
 	inc 1, wa
 	pushw wa
-	call LABEL_FF0DE3
+	call Itoa_Safe
 	inc 8, xsp
 
 LABEL_FA71B3:
@@ -335741,7 +335741,7 @@ LABEL_FE3A52:
 	extz de
 	ld xwa, (xsp + 6)
 	ld xbc, (xsp + 2)
-	call LABEL_FE62F9
+	call NoteMap_ComputePitchOffset
 	ld a, (xsp)
 	ld c, a
 	extz bc
@@ -335895,7 +335895,7 @@ LABEL_FE3BB4:
 	extz de
 	ld xwa, xbc
 	ld_sril XBC, (xsp + 0x00a6)
-	call LABEL_FE62F9
+	call NoteMap_ComputePitchOffset
 	lda xwa, (xsp)
 	ld xde, xwa
 	ld_srib A, (xsp + 0x00a4)
@@ -340135,7 +340135,7 @@ LABEL_FE62E4:
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_FE62F9:
+NoteMap_ComputePitchOffset:
 	lda xsp, (xsp - 16)
 	push_werp 0xFA
 	ld (xsp + 12), e
@@ -343638,7 +343638,7 @@ LABEL_FE87B6:
 	jrl RhythmBuf_EventDispatchLoop
 
 LABEL_FE87B9:
-	call LABEL_FEB932
+	call Song_SendPartDataBlocks
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -343887,7 +343887,7 @@ LABEL_FE8A75:
 	jrl SeqEvtBuf_NonNoteDispatchLoop
 
 LABEL_FE8A78:
-	call LABEL_FEB932
+	call Song_SendPartDataBlocks
 	pop xiz
 	inc 6, xsp
 	ret
@@ -347639,7 +347639,7 @@ LABEL_FEB2C3:
 	.byte 0x60, 0x68, 0x04, 0xf1, 0xc4, 0xcf, 0x60, 0x1d
 	.byte 0x79, 0xbf, 0xfe, 0x5e, 0xef, 0x64, 0x0e
 
-LABEL_FEB932:
+Song_SendPartDataBlocks:
 	pushw iz
 	ldda32 xwa, 53172
 	cp xwa, 0xFFFFFFFF
@@ -348121,7 +348121,7 @@ LABEL_FEBE52:
 	inc 4, xsp
 	ret
 
-LABEL_FEBE77:
+MIDI_BroadcastPitchReset:
 	push xiz
 	ldw iz, 0x40
 	lds wa, 0
@@ -355844,7 +355844,7 @@ LABEL_FF0DDA:
 	ld (xde), 0x0
 	ret
 
-LABEL_FF0DE3:
+Itoa_Safe:
 	lda xsp, (xsp - 18)
 	push xiz
 	ld xhl, (xsp + 28)
