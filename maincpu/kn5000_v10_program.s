@@ -45592,7 +45592,7 @@ INTT3_EnterScheduler:
 ;        "ERROR in CPU data transmission".
 ;
 ; See also:
-;   - ScreenGroup_Dispatch (LABEL_FDDB46) - Alternative dispatcher
+;   - ScreenGroup_Dispatch (ScreenGroup_DispatchAlt) - Alternative dispatcher
 ;   - ErrorDialog_CPUTransmissionError - Error dialog in Screen Group 7
 ; ===========================================================================
 Show_ScreenGroup:	; EF1B9C
@@ -143734,7 +143734,7 @@ MainExeCall:
 
 MainExe_HandleD6:
 	call NoteMap_ProcessAndMerge
-	call LABEL_FDB99B
+	call MIDI_BroadcastControlChange
 	call SeqData_SendVoiceTableBlock
 	jrl MainExe_ReturnZero
 
@@ -144199,7 +144199,7 @@ MainPanic:
 	cp xbc, 0x1E80076
 	jr nz, LABEL_F47664
 	call NoteMap_ProcessAndMerge
-	call LABEL_FDB99B
+	call MIDI_BroadcastControlChange
 	call SeqData_SendVoiceTableBlock
 
 LABEL_F47664:
@@ -296874,7 +296874,7 @@ MainSysControl:	; fc2bbf
 LABEL_FC2C12:
 	; --- Dispatch table: 9 call entries (54 bytes) ---
 	lds	wa, 2
-	call LABEL_FDDB46
+	call ScreenGroup_DispatchAlt
 	jr t, MainSysControl_PostDispatchFinalize
 LABEL_FC2C1A:
 	call LABEL_F5E931
@@ -323219,7 +323219,7 @@ LABEL_FDB996:
 	lda xsp, (xsp + 12)
 	ret
 
-LABEL_FDB99B:
+MIDI_BroadcastControlChange:
 	dec 8, xsp
 	push_werp 0xFA
 	ld xiy, 0xEE4FBA
@@ -326674,7 +326674,7 @@ LABEL_FDDB2E:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog in Screen Group 7
 ; ===========================================================================
 ScreenGroup_Dispatch:	; FDDB46
-LABEL_FDDB46:
+ScreenGroup_DispatchAlt:
 	push xiz
 	ld iz, wa	; Screen group ID
 	cps iz, 0
