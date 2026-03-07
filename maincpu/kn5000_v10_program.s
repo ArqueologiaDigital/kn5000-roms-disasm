@@ -193,7 +193,7 @@ SOUND_DATA_STRINGS_VOCAL:	; STRINGS & VOCAL data (referenced from sound category
 	.incbin "includes/e04b30_e06baf.bin"
 
 SOUND_DATA_BRASS_PTRS:
-LABEL_E06BB0:
+BrassSound_SamplePtr_Table:
 	.long LABEL_E06DB0
 	.long LABEL_E06DB3
 	.long LABEL_E06DB6
@@ -1560,7 +1560,7 @@ LABEL_E16A90:	aligned_string ""
 LABEL_E16A92:
 	.long LABEL_E16A96
 LABEL_E16A96:	aligned_string ""
-LABEL_E16A98:
+GridProperty_Config_Table:
 	.long LABEL_E16ABA
 	.long LABEL_E16AB0
 	.long LABEL_E16AAA
@@ -1572,7 +1572,7 @@ LABEL_E16ABA:	aligned_string "fixedcol"
 LABEL_E16AC4:
 	.long LABEL_E16AC8
 LABEL_E16AC8:	aligned_string ""
-LABEL_E16ACA:
+GridProperty_AltConfig_Table:
 	.long LABEL_E16AEC
 	.long LABEL_E16AE2
 	.long LABEL_E16ADC
@@ -1845,7 +1845,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.byte 0x0c, 0x00
 	.long StrName_AcCmpSetGridBox
 	.long StrPrefix_AcCmpSetGrid
-	.long LABEL_E16A98
+	.long GridProperty_Config_Table
 	.long PsRgpSetBnkBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
@@ -1859,7 +1859,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.byte 0x0c, 0x00
 	.long StrName_AcEasyCmpGridBox
 	.long StrPrefix_AcEasyCmpGrid
-	.long LABEL_E16ACA
+	.long GridProperty_AltConfig_Table
 	.long PsMspMeasBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
@@ -7936,7 +7936,7 @@ LABEL_E33FFA:	.asciz "L'utilisation de TRACK CLEAR effacera tout enregistrement 
 	aligned_string "ExPR"
 	.byte 0x45, 0x78
 	.byte 0x41, 0x50, 0x00, 0xff, 0x66, 0x38, 0xe3, 0x00
-LABEL_E344D8:
+ExtDevice_ModeDispatch_Table:
 	.long LABEL_E33874
 	.long LABEL_E33886
 	.long LABEL_E33896
@@ -8578,7 +8578,7 @@ LABEL_E44DF8:
 	.byte 0x18, 0x18, 0x18, 0x18
 	.ascii "        ((((((((0000000088888888@@@@@@@@HHHHHHHHPPPPPPPPXXXXXXXX"
 	.byte 0x7f, 0x7f, 0x7f, 0x7f
-LABEL_E44E58:
+Display_FontPalette_Table:
 	.long LABEL_E44DF8
 	.long LABEL_E44CD8
 	.long LABEL_E44D98
@@ -16571,7 +16571,7 @@ LABEL_E4C0D2:
 	.byte 0x4f, 0x44, 0xf7, 0x00, 0x9b, 0x46, 0xf7, 0x00
 	.byte 0x75, 0x45, 0xf7, 0x00, 0xbc, 0x46, 0xf7, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x52, 0x57, 0xe5, 0x00
-LABEL_E55308:
+Naka_UIStringRef_Table:
 	.long LABEL_E55746
 	.long LABEL_E55738
 	.long LABEL_E55728
@@ -17740,7 +17740,7 @@ LABEL_E7F7DE:
 	aligned_string " Error! "
 
 
-LABEL_E7F900:
+DisplayMode_OnOff_Table:
 	.long LABEL_E7F922
 	.long LABEL_E7F91C
 	.long LABEL_E7F916
@@ -17793,10 +17793,10 @@ LABEL_E7F916:
 	.long LABEL_E7FC9C
 LABEL_E7FC9C:	aligned_string " ON  "
 LABEL_E7FCA2:	aligned_string " OFF "
-	.long LABEL_E7FCBA
+	.long ControlMode_Option_Table
 	.long LABEL_E7FCB0
 LABEL_E7FCB0:	aligned_string " DIRECT  "
-LABEL_E7FCBA:	aligned_string "CONDUCTOR"
+ControlMode_Option_Table:	aligned_string "CONDUCTOR"
 	.long LABEL_E7FCE4
 	.long LABEL_E7FCDA
 	.long LABEL_E7FCD0
@@ -17830,7 +17830,7 @@ LABEL_E7FCE4:	aligned_string " DIRECT "
 	.byte 0x31, 0x00, 0x31, 0x00, 0x3a, 0x00, 0x3a, 0x00
 	.byte 0x3a, 0x00, 0x34, 0x00, 0x3a, 0x00, 0x3d, 0x00
 	.byte 0x31, 0x00, 0x00, 0x00
-LABEL_E7FD9E:
+FileTransfer_Status_Table:
 	.long LABEL_E7FDCC
 	.long LABEL_E7FDC2
 	.long LABEL_E7FDB8
@@ -17873,7 +17873,7 @@ LABEL_E7FEA0:
 	.byte 0xe7, 0x00, 0xbe, 0xfe, 0xe7, 0x00
 LABEL_E7FEBE:	.asciz " YES "
 LABEL_E7FEC4:	aligned_string " NO  "
-LABEL_E7FECA:
+UserMemory_Config_Table:
 	.long LABEL_E7FEF8
 	.long LABEL_E7FEEE
 	.long LABEL_E7FEE4
@@ -18116,7 +18116,7 @@ LABEL_E80168:	aligned_string " ON  "
 	.byte 0x00, 0x00, 0x06, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x07, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x00
 	.byte 0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x06, 0x00
-LABEL_E80660:
+Transpose_ValueDisplay_Table:
 	.long LABEL_E806AA
 	.long LABEL_E806A4
 	.long LABEL_E8069E
@@ -18268,14 +18268,14 @@ LABEL_E80B1A:
 	.byte 0x00, 0xff, 0x26, 0x0b, 0xe8, 0x00
 LABEL_E80B26:
 	.byte 0x00, 0xff
-LABEL_E80B28:
+AudioStream_Property_Table:
 	.long LABEL_E80B3C
 	.long LABEL_E80B36
 	.long LABEL_E80B34
 LABEL_E80B34:	aligned_string ""
 LABEL_E80B36:	aligned_string "str3"
 LABEL_E80B3C:	aligned_string "str1"
-LABEL_E80B42:
+UIElement_Property_Table:
 	.long LABEL_E80B8A
 	.long LABEL_E80B84
 	.long LABEL_E80B7A
@@ -18330,7 +18330,7 @@ LABEL_E80BF6:
 	.byte 0x00, 0xff
 	.long LABEL_E80BFC
 LABEL_E80BFC:	aligned_string ""
-LABEL_E80BFE:
+TextInput_Property_Table:
 	.long LABEL_E80C3A
 	.long LABEL_E80C30
 	.long LABEL_E80C2A
@@ -18359,7 +18359,7 @@ LABEL_E80C56:
 LABEL_E80C64:	aligned_string ""
 LABEL_E80C66:	aligned_string "data"
 LABEL_E80C6C:	aligned_string "func"
-LABEL_E80C72:
+Widget_DataProperty_Table:
 	.long LABEL_E80CA0
 	.long LABEL_E80C98
 	.long LABEL_E80C8E
@@ -18877,7 +18877,7 @@ LABEL_E81C98:
 	.byte 0xe8, 0x00, 0x64, 0x60, 0xe8, 0x00
 
 
-LABEL_E85F76:
+TechniChord_StyleDispatch_Table:
 	.long LABEL_E8605C
 	.long LABEL_E86054
 	.long LABEL_E8604C
@@ -23411,7 +23411,7 @@ LABEL_EAA7E8:
 	.byte 0x4c, 0x46, 0x54, 0x00
 LABEL_EAA7EC:
 	.byte 0x52, 0x54, 0x31, 0x00
-LABEL_EAA7F0:
+Naka_SeqPlay_Screens:
 	.long LABEL_EAA818
 	.long LABEL_EAA814
 	.long LABEL_EAA80E
@@ -23430,7 +23430,7 @@ LABEL_EAA818:
 	aligned_string "PsTextBox"
 	aligned_string "AcLanguageText"
 	.long LABEL_EAA888
-LABEL_EAA848:
+Naka_SeqPlayMode_Screens:
 	.long LABEL_EAA880
 	.long LABEL_EAA878
 	.long LABEL_EAA870
@@ -37458,7 +37458,7 @@ LABEL_EE5FC8:
 	.fill 8, 1, 0x05
 	.fill 8, 1, 0x05
 	.byte 0x0c, 0x0c, 0x0d, 0x0d, 0xc6, 0x4f, 0xee, 0x00
-LABEL_EE6048:
+ToneKit_VoiceDispatch_Table:
 	.long LABEL_EE50BC
 	.long LABEL_EE50DA
 	.long LABEL_EE5104
@@ -38429,7 +38429,7 @@ LABEL_EE75C0:
 	.byte 0x00, 0x00
 
 
-LABEL_EE75FA:
+PerfMode_SetupDispatch_Table:
 	.long LABEL_EE64DA
 	.long LABEL_EE650C
 	.long LABEL_EE6556
@@ -38441,7 +38441,7 @@ LABEL_EE75FA:
 	.long LABEL_EE699C
 	.long LABEL_EE69E8
 	.zero 16
-LABEL_EE7632:
+VoiceEdit_ParamDispatch_Table:
 	.long LABEL_EE67CC
 	.long LABEL_EE736E
 	.long LABEL_EE73A4
@@ -38456,7 +38456,7 @@ LABEL_EE7632:
 	.long LABEL_EE758A
 	.long LABEL_EE75C0
 	.zero 16
-LABEL_EE7676:
+AccompStyle_ConfigDispatch_Table:
 	.long LABEL_EE63BA
 	.long LABEL_EE63E0
 	.long LABEL_EE6406
@@ -38474,21 +38474,21 @@ LABEL_EE7676:
 	.long LABEL_EE675E
 	.long LABEL_EE683A
 	.long 0x0
-LABEL_EE76D6:
+RhythmKit_SelectDispatch_Table:
 	.long LABEL_EE6952
 	.long LABEL_EE6A5C
 	.long LABEL_EE6A9E
 	.long LABEL_EE6AE0
 	.long LABEL_EE6B22
 	.zero 12
-LABEL_EE76F6:
+ChordMode_ConfigDispatch_Table:
 	.long LABEL_EE6C24
 	.long LABEL_EE6CA2
 	.long LABEL_EE6D26
 	.long LABEL_EE6DDA
 	.long LABEL_EE6E54
 	.long 0x0
-LABEL_EE770E:
+RecordMode_SetupDispatch_Table:
 	.long LABEL_EE6F08
 	.long LABEL_EE6FB0
 	.long LABEL_EE7010
@@ -38498,7 +38498,7 @@ LABEL_EE770E:
 	.zero 12
 	.long LABEL_EE6B64
 	.zero 32
-LABEL_EE7756:
+ControlPanel_ButtonDispatch_Table:
 	.long LABEL_EE6B9C
 	.long LABEL_EE6BBE
 	.long LABEL_EE6BE0
@@ -39163,7 +39163,7 @@ Naka_RenderMode_B_Table:
 	.long UIState_DefaultConfig_B
 	.long UIState_DefaultConfig_B
 	.long UIState_DefaultConfig_B
-	.long LABEL_EE8558
+	.long UIState_SeqInit_Table
 	.long LABEL_EE856C
 	.long UIState_DefaultConfig_B
 	.long UIState_DefaultConfig_B
@@ -39794,7 +39794,7 @@ LABEL_EE8550:
 	.fill 4, 1, 0xff
 LABEL_EE8554:
 	.fill 4, 1, 0xff
-LABEL_EE8558:
+UIState_SeqInit_Table:
 	.long LABEL_FEAC82
 	.long LABEL_FDE7EB
 	.long LABEL_FC9A40
@@ -39814,7 +39814,7 @@ LABEL_EE8570:
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE858C:
 	.long LABEL_FD8BCC
-LABEL_EE8590:
+UIState_EventHandler_Table:
 	.long LABEL_FEAC83
 	.long LABEL_FDE981
 	.long LABEL_FC7BBA
@@ -41570,7 +41570,7 @@ LABEL_EE8ED8:	.ascii "!\"#$"
 	.byte 0x0c, 0x10, 0x07, 0x0b, 0x0c, 0x11, 0x06, 0x08
 	.byte 0x0c, 0x0d, 0x07, 0x09, 0x0c, 0x0e, 0xf4, 0x0c
 	.byte 0x05, 0x0c, 0xf6, 0xfb, 0x8f, 0x8c, 0xfe, 0x00
-LABEL_EEAE08:
+SoundEffect_Dispatch_Table:
 	.long LABEL_FE8DC5
 	.long LABEL_FE8DD9
 	.long LABEL_FE8E38
@@ -41895,7 +41895,7 @@ LABEL_EEAE08:
 ; The pointer table at EF0319 references these in pairs (forward/reverse).
 ; =============================================================================
 ; Character mapping table - preamble/header (sparse)
-LABEL_EEC288:
+CharMap_Preamble_Table:
 	.long LABEL_FEE3F6
 	.long LABEL_FEE3F7
 	.long LABEL_FEE3F8
@@ -42719,7 +42719,7 @@ LABEL_EED118:
 	.byte 0x37, 0x00, 0x97, 0x00, 0x59, 0x00, 0xa4, 0x00
 	.byte 0xf5, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
-LABEL_EEDD36:
+ScaleNote_Display_Table:
 	.long LABEL_E1CE0E
 	.long LABEL_E1CE0A
 	.long LABEL_E1CE06
@@ -52454,7 +52454,7 @@ ToneParam_Evt0F_BytecodeHandler:
 	.byte 0xb4, 0x63, 0xef, 0xc1, 0xd3, 0x0d, 0x3c, 0xfe
 	.byte 0x1d, 0x2e, 0x90, 0xef, 0x1d, 0x9f, 0x78, 0xef
 	.byte 0x0e
-LABEL_EF63BD:
+PerfMode_ParamHandler_Table:
 	.long LABEL_EF646F
 	.long LABEL_EF6581
 	.long LABEL_EF665D
@@ -53818,7 +53818,7 @@ LABEL_EF7808:
 	ret
 
 
-LABEL_EF7809:
+Timer_ModeSelect_Table:
 	.long LABEL_EF788C
 	.long LABEL_EF7819
 	.long LABEL_EF7819
@@ -54682,7 +54682,7 @@ LABEL_EF87FB:
 	.byte 0x0e
 
 
-LABEL_EF8F92:
+DMA_ChannelSelect_Table:
 	.long LABEL_EF8FDB
 	.long LABEL_EF8FA2
 	.long LABEL_EF8FC1
@@ -55318,7 +55318,7 @@ LABEL_EF97E0:
 	.byte 0xf4, 0x25, 0x5a, 0xb5, 0xe8, 0x5b, 0x0e
 
 
-LABEL_EF9DDF:
+SerialPort_ModeSelect_Table:
 	.long LABEL_EF9E03
 	.long LABEL_EF9DEF
 	.long LABEL_EF9DEF
@@ -55533,7 +55533,7 @@ LABEL_EFA349:
 LABEL_EFA360:
 	ret
 
-LABEL_EFA361:
+Interrupt_VectorSelect_Table:
 	.long LABEL_EFA375
 	.long LABEL_EFA38A
 	.long LABEL_EFA394
@@ -55702,7 +55702,7 @@ LABEL_EFA4B8:
 	.byte 0xd8, 0xcc, 0x03, 0x00, 0xd8, 0xec, 0x02, 0xd8
 	.byte 0x8b, 0x3c, 0x44, 0x08, 0xa5, 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EFA508:
+PortConfig_Select_Table:
 	.long LABEL_EFA565
 	.long LABEL_EFA518
 	.long LABEL_EFA518
@@ -55809,7 +55809,7 @@ LABEL_EFA75F:
 	.byte 0xef, 0x00, 0xc1, 0x65, 0x0d, 0x21, 0xc9, 0xcc
 	.byte 0x03, 0xc3, 0x03, 0xec, 0xe0, 0x21, 0xf1, 0xef
 	.byte 0x0d, 0x41, 0x0e, 0x00, 0x00, 0x00, 0x0c, 0x0e
-LABEL_EFA7A8:
+ClockConfig_Select_Table:
 	.long LABEL_EFA7BE
 	.long LABEL_EFA7B8
 	.long LABEL_EFA7B8
@@ -56013,7 +56013,7 @@ LABEL_EFAADB:
 	.byte 0x00, 0xc9, 0xce, 0x80, 0xf1, 0x19, 0x37, 0x41
 	.byte 0x1d, 0xec, 0xf4, 0xef, 0x1d, 0x07, 0x5c, 0xef
 	.byte 0x0e
-LABEL_EFABE4:
+MemoryConfig_Handler_Table:
 	.long LABEL_EFAD94
 	.long LABEL_EFADF8
 	.long LABEL_EFACF7
@@ -56488,7 +56488,7 @@ LABEL_EFB7C9:
 	ret
 
 
-LABEL_EFB7DB:
+SystemInit_Handler_Table:
 	.long LABEL_EFB875
 	.long LABEL_EFB875
 	.long LABEL_EFB869
@@ -72887,7 +72887,7 @@ LABEL_F12C97:
 	.byte 0x1b, 0x0a, 0x40, 0x00, 0xa7, 0x00, 0xb8, 0x00
 	.byte 0xb4, 0x00, 0x1b, 0x0a, 0xc0, 0x00, 0xa7, 0x00
 	.byte 0xf8, 0x00, 0xb4, 0x00, 0xae, 0x2b, 0xf1, 0x00
-LABEL_F12CAF:
+DrumKit_VariantSelect_Table:
 	.long LABEL_F12BE0
 	.long LABEL_F12C12
 	.long LABEL_F12C6F
@@ -73114,7 +73114,7 @@ LABEL_F132B4:
 	.byte 0x1b, 0x0a, 0x0d, 0x00, 0x4c, 0x00, 0xa6, 0x00
 	.byte 0xc8, 0x00, 0x1b, 0x0a, 0xb5, 0x00, 0x43, 0x00
 	.byte 0xf9, 0x00, 0xc8, 0x00, 0xa9, 0x32, 0xf1, 0x00
-LABEL_F13447:
+TuningSystem_Handler_Table:
 	.long LABEL_F131E5
 	.long LABEL_F131F0
 	.long LABEL_F131FB
@@ -73562,13 +73562,13 @@ LABEL_F14419:
 	.byte 0x44
 LABEL_F14420:
 	.byte 0x20, 0x07, 0xb6, 0x18, 0x34, 0x54, 0x48
-LABEL_F14427:
+RhythmTransport_Control_Table:
 	.long LABEL_F1440B
 	.long LABEL_F1440B
 	.long LABEL_F14412
 	.long LABEL_F14419
 	.long LABEL_F14420
-	.long LABEL_F14427
+	.long RhythmTransport_Control_Table
 LABEL_F1443F:
 	.byte 0x03, 0x0c, 0x06, 0x0c, 0xf1, 0x00, 0x06, 0x0a
 	.byte 0x03, 0x00, 0x0a, 0x00
@@ -73583,13 +73583,13 @@ LABEL_F14463:
 	.byte 0xf1, 0x00, 0xb6, 0x18, 0x03, 0x00, 0x0a, 0x00
 
 
-LABEL_F1446F:
+DrumSound_ParamEdit_Table:
 	.long LABEL_F1443F
 	.long LABEL_F1443F
 	.long LABEL_F1444B
 	.long LABEL_F14457
 	.long LABEL_F14463
-	.long LABEL_F1446F
+	.long DrumSound_ParamEdit_Table
 	.long LABEL_F14497
 	.long LABEL_F144AB
 	.long LABEL_F144BF
@@ -74211,7 +74211,7 @@ LABEL_F144D3:
 	.byte 0xaa, 0x11, 0x05, 0x0b, 0x68, 0x06, 0xff, 0x00
 	.byte 0x20, 0x73, 0x1b, 0x02, 0x00, 0x05, 0x0b, 0x67
 	.byte 0x06, 0xff, 0x00, 0x20, 0x1b, 0x19, 0x02, 0x00
-LABEL_F158A7:
+FlashWrite_BlockHandler_Table:
 	.long LABEL_F15907
 	.long LABEL_F1593A
 	.long LABEL_F15907
@@ -74221,9 +74221,9 @@ LABEL_F158A7:
 	.long LABEL_F15907
 	.long LABEL_F1593A
 	.long LABEL_F15952
-	.long LABEL_F1598F
+	.long FlashRead_BlockHandler_Table
 	.long LABEL_F15952
-	.long LABEL_F1598F
+	.long FlashRead_BlockHandler_Table
 	.long LABEL_F159B3
 	.long LABEL_F159E0
 	.long LABEL_F159F4
@@ -74269,7 +74269,7 @@ LABEL_F15985:
 	.byte 0x00, 0x0a
 	.long TmFlashWrite_Block3
 	.byte 0x20, 0xc4, 0x16, 0x02
-LABEL_F1598F:
+FlashRead_BlockHandler_Table:
 	.long LABEL_F15952
 	.long LABEL_F15952
 	.long LABEL_F1595C
@@ -74547,7 +74547,7 @@ LABEL_F15A91:
 	.byte 0x8a, 0x00, 0x0d, 0x00, 0x8d, 0x00, 0x18, 0x01
 	.byte 0xa8, 0x00, 0x1b, 0x0a, 0x0d, 0x00, 0x71, 0x00
 	.byte 0x18, 0x01, 0xa8, 0x00, 0xe6, 0x60, 0xf1, 0x00
-LABEL_F1612F:
+DrumDetailEdit_Menu_Table:
 	.long LABEL_F16006
 	.long LABEL_F16006
 	.long LABEL_F1604A
@@ -74700,7 +74700,7 @@ LABEL_F1612F:
 	.byte 0x0f, 0x6a, 0x06, 0x80, 0x07, 0x20, 0x15, 0x65
 	.byte 0xf1, 0x00, 0x0d, 0x00, 0x8e, 0x1e, 0x4f, 0x46
 	.ascii "F          OFF          "
-LABEL_F1652F:
+EffectParam_Edit_Table:
 	.long LABEL_F164EC
 	.long LABEL_F1649B
 	.long LABEL_F164A6
@@ -93159,7 +93159,7 @@ LABEL_F24F9B:
 LABEL_F24F9F:
 	ret
 
-LABEL_F24FA0:
+VoiceSynth_Algorithm_Table:
 	.long LABEL_F263F9
 	.long LABEL_F26412
 	.long LABEL_F26471
@@ -93867,7 +93867,7 @@ LABEL_F256B8:
 	ret
 
 
-LABEL_F256B9:
+VoiceParam_ReadUpdate_Table:
 	.long LABEL_F26627
 	.long LABEL_F26640
 	.long LABEL_F26471
@@ -207126,7 +207126,7 @@ LABEL_F78A11:
 	.byte 0x31, 0xb0, 0xcf, 0x66, 0x0f, 0x0b, 0xe8, 0x00
 	.byte 0x0b, 0x74, 0x01, 0x39, 0x1d, 0x4d, 0x0f, 0xff
 	.byte 0xef, 0x60, 0x68, 0x13, 0x80, 0x21, 0xd8, 0x12
-	.long LABEL_E80B28
+	.long AudioStream_Property_Table
 	.byte 0x0b, 0x7a, 0x01, 0x39
 	.byte 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0a, 0x37, 0xbf
 	.byte 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41
@@ -207520,7 +207520,7 @@ LABEL_F79260:
 	.byte 0x31, 0xb0, 0xcf, 0x66, 0x0f, 0x0b, 0xe8, 0x00
 	.byte 0x0b, 0x2a, 0x02, 0x39, 0x1d, 0x4d, 0x0f, 0xff
 	.byte 0xef, 0x60, 0x68, 0x13, 0x80, 0x21, 0xd8, 0x12
-	.long LABEL_E80B28
+	.long AudioStream_Property_Table
 	.byte 0x0b, 0x30, 0x02, 0x39
 	.byte 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0a, 0x37, 0x1d
 	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x20, 0x32
@@ -304148,7 +304148,7 @@ LABEL_FCA3A1:
 	ld xix, 0xFCA3BB
 	ld_sril3 XIX, 0x07, 0xF0, 0xEC
 	jp (xix)
-LABEL_FCA3BB:
+RegisterBit_Manipulate_Table:
 	.long LABEL_FCA3E4
 	.long LABEL_FCA3DB
 	.long LABEL_FCA3E4
@@ -304268,7 +304268,7 @@ LABEL_FCA4F7:
 	ret
 
 
-LABEL_FCA4F9:
+MidiStream_Processor_Table:
 	.long LABEL_FCA554
 	.long LABEL_FCA573
 	.long LABEL_FCA592
@@ -305025,7 +305025,7 @@ LABEL_FCADA2:
 	.byte 0xff
 
 
-LABEL_FCADA3:
+VoiceMode_ParamDispatch_Table:
 	.long LABEL_FCB40B
 	.long LABEL_FCADC3
 	.long LABEL_FCADC3
@@ -305779,7 +305779,7 @@ LABEL_FCB7CA:
 	jp (xix)
 
 
-LABEL_FCB80D:
+MidiNote_VelocityHandler_Table:
 	.long LABEL_FCB81D
 	.long LABEL_FCB857
 	.long LABEL_FCB896
@@ -309168,7 +309168,7 @@ MidiSerial_HandleDefault_Data:
 	.byte 0x96, 0x69, 0x6e, 0xca, 0x0e, 0xff
 
 
-LABEL_FCFB3D:
+MidiCC_LowRange_Table:
 	.long LABEL_FCFB5D
 	.long LABEL_FCFB5D
 	.long LABEL_FCFB5D
@@ -309192,7 +309192,7 @@ LABEL_FCFB63:
 	.byte 0xe3, 0x07, 0xf0, 0xe0, 0x24, 0xb4, 0xe8, 0x0e
 
 
-LABEL_FCFBB3:
+MidiCC_ExtendedRange_Table:
 	.long LABEL_FCFE0B
 	.long LABEL_FCFECD
 	.long LABEL_FCFF0E
