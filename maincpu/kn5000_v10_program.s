@@ -254575,7 +254575,7 @@ Viewable_GetChild:
 
 Viewable_GetClass:
 	ld xwa, xiz
-	calr LABEL_FA5F72
+	calr View_ResolveInstanceAddr
 	jrl Viewable_Return
 
 Viewable_SetVisible:
@@ -254955,7 +254955,7 @@ LABEL_FA5F70:
 	pop xiz
 	ret
 
-LABEL_FA5F72:
+View_ResolveInstanceAddr:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
@@ -255132,7 +255132,7 @@ Unlink:
 	push xiz
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 12)
-	calr LABEL_FA5F72
+	calr View_ResolveInstanceAddr
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 8)
 	cp xwa, 0xFFFFFFFF
