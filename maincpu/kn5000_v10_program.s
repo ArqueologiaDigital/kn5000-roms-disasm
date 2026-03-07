@@ -44488,7 +44488,7 @@ MainLoop:
 LABEL_EF1259:
 	tset_dd16 0, 0x22, 0x04
 	jr nz, LABEL_EF126F
-	call LABEL_FC6ED1
+	call MidiParam_ProcessDeltas
 	call LABEL_FC3E94
 	call LABEL_FC6997
 	call LABEL_FC7AA8
@@ -299550,7 +299550,7 @@ LABEL_FC6C54:
 
 	.include "midi_encoder_routines.s"
 
-LABEL_FC6E42:
+MidiParam_ForceResync:
 	stdi8 297, 131
 	stdi8 296, 7
 	lds wa, 0
@@ -299589,38 +299589,38 @@ LABEL_FC6E42:
 
 MidiChannel_GetParamByIndex:
 	cps a, 3
-	jr z, LABEL_FC6EC9
+	jr z, MidiChannel_GetParam3
 	cps a, 2
-	jr z, LABEL_FC6EC3
+	jr z, MidiChannel_GetParam2
 	cps a, 1
-	jr z, LABEL_FC6EBD
+	jr z, MidiChannel_GetParam1
 	cps a, 0
-	jr nz, LABEL_FC6ECD
+	jr nz, MidiChannel_GetParamReturn
 	ldada xbc, 288
-	jr LABEL_FC6ECD
+	jr MidiChannel_GetParamReturn
 
-LABEL_FC6EBD:
+MidiChannel_GetParam1:
 	ldada xbc, 290
-	jr LABEL_FC6ECD
+	jr MidiChannel_GetParamReturn
 
-LABEL_FC6EC3:
+MidiChannel_GetParam2:
 	ldada xbc, 292
-	jr LABEL_FC6ECD
+	jr MidiChannel_GetParamReturn
 
-LABEL_FC6EC9:
+MidiChannel_GetParam3:
 	ldada xbc, 294
 
-LABEL_FC6ECD:
+MidiChannel_GetParamReturn:
 	ld l, (xbc + 1)
 	ret
 
-LABEL_FC6ED1:
+MidiParam_ProcessDeltas:
 	ld xwa, 0x8F10
-	calr LABEL_FC6EE0
+	calr MidiParam_ProcessChannel0
 	ld xwa, 0x8F16
-	jr LABEL_FC6F33
+	jr MidiParam_ProcessChannel1
 
-LABEL_FC6EE0:
+MidiParam_ProcessChannel0:
 	dec 4, xsp
 	push_werp 0xFA
 	ld (xsp + 2), xwa
@@ -299635,7 +299635,7 @@ LABEL_FC6EE0:
 	calr MIDI_ComputeParamDelta
 	ldada xwa, 36612
 	bitm 3, (xwa)
-	jr z, LABEL_FC6F2D
+	jr z, MidiParam_Ch0_Done
 	resm 3, (xwa)
 	ldto_berp A, 0xFB
 	stda8 36604, a
@@ -299644,17 +299644,17 @@ LABEL_FC6EE0:
 	lds bc, 2
 	call 0xFC6C5F
 	cp hl, 0xFFFF
-	jr z, LABEL_FC6F2D
+	jr z, MidiParam_Ch0_Done
 	ld xwa, (xsp + 2)
 	ld (xwa), l
 	setm 7, (xwa + 1)
 
-LABEL_FC6F2D:
+MidiParam_Ch0_Done:
 	pop_werp 0xFA
 	inc 4, xsp
 	ret
 
-LABEL_FC6F33:
+MidiParam_ProcessChannel1:
 	dec 4, xsp
 	push_werp 0xFA
 	ld (xsp + 2), xwa
@@ -299669,7 +299669,7 @@ LABEL_FC6F33:
 	calr MIDI_ComputeParamDelta
 	ldada xwa, 36614
 	bitm 3, (xwa)
-	jr z, LABEL_FC6F80
+	jr z, MidiParam_Ch1_Done
 	resm 3, (xwa)
 	ldto_berp A, 0xFB
 	stda8 36606, a
@@ -299678,12 +299678,12 @@ LABEL_FC6F33:
 	lds bc, 5
 	call 0xFC6C5F
 	cp hl, 0xFFFF
-	jr z, LABEL_FC6F80
+	jr z, MidiParam_Ch1_Done
 	ld xwa, (xsp + 2)
 	ld (xwa), l
 	setm 7, (xwa + 1)
 
-LABEL_FC6F80:
+MidiParam_Ch1_Done:
 	pop_werp 0xFA
 	inc 4, xsp
 	ret
@@ -299702,7 +299702,7 @@ MIDI_ComputeParamDelta:
 	call Math_AbsInt16
 	inc 2, xsp
 	cps hl, 2
-	jr le, LABEL_FC6FF4
+	jr le, MidiParam_DeltaTooSmall
 	ld c, (xsp + 4)
 	extz bc
 	ld a, (xsp + 6)
@@ -299712,12 +299712,12 @@ MIDI_ComputeParamDelta:
 	call Math_AbsInt16
 	inc 2, xsp
 	cps hl, 6
-	jr le, LABEL_FC6FDD
+	jr le, MidiParam_DeltaMedium
 	ld xwa, (xsp)
 	ld a, (xwa)
 	and a, 0x3
 	xor a, 0x3
-	jr z, LABEL_FC6FE3
+	jr z, MidiParam_DeltaConfirmed
 	ld xbc, (xsp)
 	ld a, (xbc)
 	and a, 0x3
@@ -299725,34 +299725,34 @@ MIDI_ComputeParamDelta:
 	and a, 0x3
 	andmi8 (xbc), 0xFC
 	or (xbc), a
-	jr LABEL_FC6FF9
+	jr MidiParam_DeltaClearActive
 
-LABEL_FC6FDD:
+MidiParam_DeltaMedium:
 	ld xwa, (xsp)
 	bitm 2, (xwa)
-	jr z, LABEL_FC6FEE
+	jr z, MidiParam_DeltaStartDebounce
 
-LABEL_FC6FE3:
+MidiParam_DeltaConfirmed:
 	ld xwa, (xsp)
 	andmi8 (xwa), 0xFC
 	resm 2, (xwa)
 	setm 3, (xwa)
-	jr LABEL_FC6FFD
+	jr MidiParam_DeltaDone
 
-LABEL_FC6FEE:
+MidiParam_DeltaStartDebounce:
 	ld xwa, (xsp)
 	setm 2, (xwa)
-	jr LABEL_FC6FFD
+	jr MidiParam_DeltaDone
 
-LABEL_FC6FF4:
+MidiParam_DeltaTooSmall:
 	ld xwa, (xsp)
 	andmi8 (xwa), 0xFC
 
-LABEL_FC6FF9:
+MidiParam_DeltaClearActive:
 	ld xwa, (xsp)
 	resm 2, (xwa)
 
-LABEL_FC6FFD:
+MidiParam_DeltaDone:
 	inc 8, xsp
 	ret
 
@@ -326643,7 +326643,7 @@ LABEL_FDDB19:
 	ret
 
 LABEL_FDDB2E:
-	call LABEL_FC6E42
+	call MidiParam_ForceResync
 	call LABEL_FC7000
 	call Reset_Floppy_Disk_Controller
 	call LABEL_FEA7EB
