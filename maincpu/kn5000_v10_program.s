@@ -122123,7 +122123,7 @@ LABEL_F39BA0:
 	calr SeqPlay_IterateAllChannels
 	ldda8 a, 10404
 	extz wa
-	call LABEL_F86FFF
+	call Demo_ProcessRecordEntry
 	cps l, 0
 	jr z, LABEL_F39BF8
 	setda 1, 10407
@@ -139604,7 +139604,7 @@ LABEL_F43CA9:
 	stdi8 1051, 0
 	ldda8 a, 10404
 	extz wa
-	call LABEL_F86FFF
+	call Demo_ProcessRecordEntry
 	cps l, 0
 	jr z, LABEL_F43CF3
 	stdi8 1054, 1
@@ -224386,7 +224386,7 @@ Demo_SelectEntry_ProcessSongList:
 	cpda8 a, 4439
 	ret nz
 	calr LABEL_F86E76
-	calr LABEL_F86F2E
+	calr Demo_WaitForDisplayBit
 	calr LABEL_F86E17
 	cpdi8 36152, 228
 	call_24 nz, 0xF22A4D
@@ -224394,7 +224394,7 @@ Demo_SelectEntry_ProcessSongList:
 
 Demo_SelectEntry_ManualSelect:
 	calr LABEL_F86E76
-	calr LABEL_F86F2E
+	calr Demo_WaitForDisplayBit
 	calr LABEL_F86E17
 	ldda8 a, 10404
 	cpda8 a, 4439
@@ -224608,7 +224608,7 @@ Voice_LoadVoiceTable:
 LABEL_F86DAC:
 	ldto_berp A, 0xFB
 	extz wa
-	calr LABEL_F86F1E
+	calr Demo_LookupPartTableEntry
 	ld c, (xhl + 13)
 	ldto_berp A, 0xFB
 	st8_24 0x025b86, a
@@ -224629,7 +224629,7 @@ LABEL_F86DAC:
 	cp_erpb 0xFB, 0x16
 	jr ule, LABEL_F86DAC
 	ldw wa, 0x19
-	calr LABEL_F86F1E
+	calr Demo_LookupPartTableEntry
 	ld c, (xhl + 13)
 	sti8_24 0x025b86, 0x19
 	and c, 0xF
@@ -224764,7 +224764,7 @@ Voice_CopyPreset:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_F86F1E:
+Demo_LookupPartTableEntry:
 	extz wa
 	sla wa, 2
 	ldda32 xbc, 37106
@@ -224773,7 +224773,7 @@ LABEL_F86F1E:
 	ld xhl, (xwa)
 	ret
 
-LABEL_F86F2E:
+Demo_WaitForDisplayBit:
 	ld xwa, 0xFFFFFF
 	bitda 2, 1056
 	ret z
@@ -224876,7 +224876,7 @@ LABEL_F86FFB:
 	lda xhl, (xwa + 32)
 	ret
 
-LABEL_F86FFF:
+Demo_ProcessRecordEntry:
 	lda xsp, (xsp - 14)
 	push_werp 0xFA
 	ld (xsp + 14), a
@@ -225253,7 +225253,7 @@ LABEL_F87339:
 	lda xsp, (xsp + 24)
 	ret
 
-LABEL_F8733E:
+FileIO_ReadHeaderAt4:
 	pushw iz
 	lds iz, 1
 	lds32 xwa, 4
@@ -225311,7 +225311,7 @@ LABEL_F873AD:
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
 	jr z, LABEL_F873BC
-	calr LABEL_F8733E
+	calr FileIO_ReadHeaderAt4
 	ldfr_werp HL, 0xFA
 
 LABEL_F873BC:
@@ -225323,7 +225323,7 @@ LABEL_F873C3:
 	lda xsp, (xsp + 24)
 	ret
 
-LABEL_F873C8:
+FileIO_ReadHeaderAtF:
 	pushw iz
 	lds iz, 1
 	ld xwa, 0xF
@@ -225379,7 +225379,7 @@ LABEL_F87434:
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
 	jr z, LABEL_F87443
-	calr LABEL_F873C8
+	calr FileIO_ReadHeaderAtF
 	ldfr_werp HL, 0xFA
 
 LABEL_F87443:
@@ -225469,7 +225469,7 @@ LABEL_F874E8:
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
 	jrl z, LABEL_F87574
-	calr LABEL_F873C8			; check extended mode
+	calr FileIO_ReadHeaderAtF			; check extended mode
 	cps hl, 0
 	jr z, LABEL_F87550
 	lds	wa, 0
@@ -225602,7 +225602,7 @@ LABEL_F8763E:
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
 	jr z, LABEL_F876B2
-	calr LABEL_F8733E			; check extended mode (region 2)
+	calr FileIO_ReadHeaderAt4			; check extended mode (region 2)
 	cps hl, 0
 	jr z, LABEL_F87680
 	call 0xF47850				; primary ext memory init
@@ -225748,7 +225748,7 @@ LABEL_F877CC:
 	call FileIO_ReturnError
 	ld (xsp + 2), hl
 	cpw (xsp + 2), 0x0
-	jr lt, LABEL_F87830
+	jr lt, Song_LoadAndInitPlayback
 	call FileIO_CloseHandle
 	lda xwa, (xsp + 12)
 	ld xbc, (xsp + 26)
@@ -225760,7 +225760,7 @@ LABEL_F877CC:
 	call FileIO_ReturnError
 	ld (xsp + 2), hl
 	cpw (xsp + 2), 0x0
-	jr lt, LABEL_F87830
+	jr lt, Song_LoadAndInitPlayback
 	lda_24 xwa, 0x0b0000
 	ld xde, xwa
 	lda_24 xbc, 0x0fd800
@@ -225769,7 +225769,7 @@ LABEL_F877CC:
 	call FileIO_ReturnError
 	ld (xsp + 2), hl
 
-LABEL_F87830:
+Song_LoadAndInitPlayback:
 	lds wa, 0
 	call FileData_LoadFromSlot
 	call SMF_InitSongPlayback
@@ -230497,7 +230497,7 @@ LABEL_F8A7DE:
 	ld16_24 xhl, 0x0271ea
 	ret
 
-LABEL_F8A7E4:
+FileIO_BuildFileExtName:
 	dec 8, xsp
 	push xiz
 	ld xiz, xwa
@@ -230513,7 +230513,7 @@ LABEL_F8A7E4:
 	inc 8, xsp
 	ret
 
-LABEL_F8A807:
+FileIO_InitDirScan:
 	lda xsp, (xsp - 16)
 	push xiz
 	lda_24 xbc, 0x025eb2
@@ -230568,7 +230568,7 @@ LABEL_F8A866:
 	lda_24 xbc, 0x025eb2
 	exts xwa
 	add xwa, xbc
-	calr LABEL_F8A7E4
+	calr FileIO_BuildFileExtName
 	inc 1, iz
 	cpda16_24 xiz, 160240
 	jr le, LABEL_F8A866
@@ -230623,7 +230623,7 @@ LABEL_F8A8E4:
 	lda_24 xbc, 0x025eb2
 	exts xwa
 	add xwa, xbc
-	calr LABEL_F8A7E4
+	calr FileIO_BuildFileExtName
 
 LABEL_F8A94A:
 	inc1_werp 0xFA
@@ -230658,7 +230658,7 @@ LABEL_F8A96B:
 
 LABEL_F8A991:
 	st16_24 0x0271f0, xwa
-	calr LABEL_F8A807
+	calr FileIO_InitDirScan
 
 LABEL_F8A999:
 	ld hl, iz
@@ -230697,7 +230697,7 @@ LABEL_F8A9D4:
 LABEL_F8A9D6:
 	sti16_24 0x0271ee, 0x0000
 	sti16_24 0x0271f0, 0x003b
-	calr LABEL_F8A807
+	calr FileIO_InitDirScan
 	lds wa, 0
 	cps hl, 0
 	jr le, LABEL_F8A9F1
