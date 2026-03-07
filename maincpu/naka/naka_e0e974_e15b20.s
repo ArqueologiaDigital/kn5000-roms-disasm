@@ -4363,7 +4363,7 @@ LABEL_E1342A:
 NAKA_UIObjectTable:
 	.long LABEL_E0E974
 	.long FTDEMO_SCREEN01_TECHNICS_GLOBE
-LABEL_E13456:
+Naka_PresentationReg_Table1:
 	.long LABEL_E0E9C2
 	.long LABEL_E0E9EE
 	.long LABEL_E0EA08
@@ -4473,7 +4473,7 @@ LABEL_E13456:
 	.long LABEL_E0F61A
 	.long LABEL_E0F650
 	.long FTDEMO_SCREEN02_SUBWOOFERS
-LABEL_E1360A:
+Naka_PresentationReg_Table2:
 	.long LABEL_E0F69E
 	.long LABEL_E0F6C8
 	.long LABEL_E0F6E2
@@ -4486,7 +4486,7 @@ LABEL_E1360A:
 	.long FTDEMO_SCREEN03_FLOPPY_DISKS
 	.long LABEL_E0F82E
 	.long FTDEMO_SCREEN04_DISK_INSERT
-LABEL_E1363A:
+Naka_PresentationReg_Table3:
 	.long LABEL_E0F87C
 	.long LABEL_E0F8A6
 	.long LABEL_E0F8D2
@@ -4500,7 +4500,7 @@ LABEL_E1363A:
 	.long LABEL_E0FA28
 	.long LABEL_E0FA52
 	.long FTDEMO_SCREEN05_SURROUND_ARROWS
-LABEL_E1366E:
+Naka_PresentationReg_Table4:
 	.long LABEL_E0FA9E
 	.long LABEL_E0FACA
 	.long LABEL_E0FAF4
@@ -4593,7 +4593,7 @@ LABEL_E1366E:
 	.long FTDEMO_SCREEN06_KN5000_RAINBOW
 
 
-LABEL_E137D6:
+Naka_PresentationReg_Table5:
 	.long LABEL_E108BA
 	.long LABEL_E108F8
 	.long LABEL_E10912
@@ -4849,7 +4849,7 @@ LABEL_E137D6:
 	.long 0x0
 
 
-LABEL_E13BCA:
+Naka_PresentationReg_Table6:
 	.long LABEL_E14810
 	.long LABEL_E14802
 	.long LABEL_E147F8
@@ -5228,7 +5228,7 @@ LABEL_E13BCA:
 	.long FTDEMO_FILENAME_46
 
 
-LABEL_E141AA:
+Naka_PresentationReg_Table7:
 	.long LABEL_E1442A
 	.long LABEL_E14428
 	.long LABEL_E14426
@@ -5254,7 +5254,7 @@ LABEL_E141AA:
 	.long FTDEMO_FILENAME_47
 
 
-LABEL_E14206:
+Naka_PresentationReg_Table8:
 	.long LABEL_E143F4
 	.long LABEL_E143F2
 	.long LABEL_E143F0
@@ -5278,7 +5278,7 @@ LABEL_E14206:
 	.long FTDEMO_FILENAME_48
 
 
-LABEL_E1425A:
+Naka_PresentationReg_Table9:
 	.long LABEL_E143C2
 	.long LABEL_E143C0
 	.long LABEL_E143BE
@@ -5302,7 +5302,7 @@ LABEL_E1425A:
 	.long FTDEMO_FILENAME_43
 
 
-LABEL_E142AE:
+Naka_PresentationReg_Table10:
 	.long LABEL_E14390
 	.long LABEL_E1438E
 	.long LABEL_E1438C
@@ -5851,7 +5851,7 @@ MSG_BASS_PORT_FR:	aligned_string "Amplification des graves"
 MSG_BASS_PORT_EN2:	aligned_string "Bass Port Speaker"
 MSG_BASS_PORT_ID:	aligned_string "Bass Port Speaker"
 
-LABEL_E148A0:
+Str_BassPortSpeaker_Help:
 	.long LABEL_E148DE
 	.long LABEL_E148DC
 	.long LABEL_E148DA
@@ -5865,7 +5865,7 @@ LABEL_E148BC:	.asciz "Altavoz con portón para bajos"
 LABEL_E148DA:	aligned_string ""
 LABEL_E148DC:	aligned_string ""
 LABEL_E148DE:	aligned_string ""
-LABEL_E148E0:
+Str_Feature1_Help:
 	.long LABEL_E14A88
 	.long LABEL_E14A2C
 	.long LABEL_E149BC
@@ -5885,7 +5885,7 @@ LABEL_E14960:
 LABEL_E149BC:	aligned_string "Le système spécial d'amplification des graves du KN-5000 donne encore plus de puissance et de richesse sonore!"
 LABEL_E14A2C:	aligned_string "Der spezielle Woofer & Bass Port des SX-KN5000 erzeugt einen kraft- und druckvollen Klang."
 LABEL_E14A88:	aligned_string "The KN5000's Special Woofer & Bass Port produce a Rich & Powerful sound!"
-LABEL_E14AD2:
+Str_Feature2_Help:
 	.long LABEL_E14B3E
 	.long LABEL_E14B24
 	.long LABEL_E14B0E
@@ -5898,7 +5898,7 @@ LABEL_E14AFE:	aligned_string "Estilos enormes"
 LABEL_E14B0E:	aligned_string "Diversité des styles"
 LABEL_E14B24:	aligned_string "Riesige Auswahl an Styles"
 LABEL_E14B3E:	aligned_string "Huge Styles"
-LABEL_E14B4A:
+Str_HugeStyles_Help:
 	.long LABEL_E14C86
 	.long LABEL_E14C32
 	.long LABEL_E14BDC
@@ -5913,7 +5913,7 @@ LABEL_E14BDC:
 	.byte 0x57, 0xe4
 	aligned_string "hlen Sie aus 1000 stilistisch sortierten Gesamtregistrierungen im MUSIC STYLIST."
 	aligned_string "Explore 1000 Musical Styles with the Music Stylist."
-LABEL_E14CBA:
+Str_MusicStylist_Help:
 	.long LABEL_E14E0E
 	.long LABEL_E14DB6
 	.long LABEL_E14D70
@@ -5927,7 +5927,7 @@ LABEL_E14D70:	.asciz "Encore plus de possibilités grâce à la diversité du softwa
 LABEL_E14DB6:	.asciz "Nutzen Sie das große Technics-Softwareangebot zur individuellen Gestaltung Ihrer Musik."
 LABEL_E14E0E:	aligned_string "Add to your enjoyment with a wide range of Technics Software"
 	.byte 0x9e, 0x4f, 0xe1, 0x00
-LABEL_E14E50:
+Str_SoftwareMusic_Help:
 	.long LABEL_E14F4A
 	.long LABEL_E14EF2
 	.long LABEL_E14EBA
@@ -5939,7 +5939,7 @@ LABEL_E14EBA:	.asciz "¡Y convierta el software de casi todos los fabricantes!"
 LABEL_E14EF2:	aligned_string "Et vous pouvez convertir les softwares de la plupart des autres principaux fabricants!"
 LABEL_E14F4A:	aligned_string "Konvertieren Sie Software vieler anderer Hersteller zur Verwendung auf dem KN5000."
 	aligned_string "And convert software from almost any other manufacturer!"
-LABEL_E14FD8:
+Str_StyleConvert_Help:
 	.long LABEL_E15168
 	.long LABEL_E15110
 	.long LABEL_E150B0
@@ -5954,7 +5954,7 @@ LABEL_E15110:	aligned_string "Speichern Sie Ihre Lieblings Software-Rhythmen per
 LABEL_E15168:	aligned_string "Store your favorite software patterns in the Custom Rhythm Group .....permanently!"
 
 
-LABEL_E151BC:
+Str_CustomRhythm_Help:
 	.long LABEL_E1522C
 	.long LABEL_E15218
 	.long LABEL_E15204
@@ -5969,7 +5969,7 @@ LABEL_E15218:	aligned_string "Accordion Register"
 LABEL_E1522C:	aligned_string "Accordion Register"
 
 
-LABEL_E15240:
+Str_AccordionRegister_Help:
 	.long LABEL_E15396
 	.long LABEL_E15354
 	.long LABEL_E152FE
@@ -5984,7 +5984,7 @@ LABEL_E15354:	aligned_string "ACCORDION REGISTER eröffnet Ihnen die Welt der Akk
 LABEL_E15396:	aligned_string "A World of Accordion Sounds at your fingertips with the Accordion Register!"
 
 
-LABEL_E153E2:
+Str_AccordionRegisterDesc_Help:
 	.long LABEL_E15442
 	.long LABEL_E15432
 	.long LABEL_E15422
@@ -5999,7 +5999,7 @@ LABEL_E15432:	aligned_string "Digital Drawbar"
 LABEL_E15442:	aligned_string "Digital Drawbar"
 
 
-LABEL_E15452:
+Str_DigitalDrawbar_Help:
 	.long LABEL_E15582
 	.long LABEL_E1553C
 	.long LABEL_E154E6
@@ -6014,7 +6014,7 @@ LABEL_E1553C:	aligned_string "Erzeugen Sie legendäre Orgelsounds mit den Jazz- u
 LABEL_E15582:	aligned_string "Classic Organ Sounds with Jazz and Rock Drawbars!"
 
 
-LABEL_E155B4:
+Str_DigitalDrawbarDesc_Help:
 	.long LABEL_E1561C
 	.long LABEL_E1560A
 	.long LABEL_E155F8
@@ -6027,7 +6027,7 @@ LABEL_E155E6:	aligned_string "Acoustic Illusion"
 LABEL_E155F8:	aligned_string "Acoustic Illusion"
 LABEL_E1560A:	aligned_string "Acoustic Illusion"
 LABEL_E1561C:	aligned_string "Acoustic Illusion"
-LABEL_E1562E:
+Str_AcousticIllusion_Help:
 	.long LABEL_E15758
 	.long LABEL_E15712
 	.long LABEL_E156C2
@@ -6040,7 +6040,7 @@ LABEL_E1568A:	.asciz "¡El Acoustic Illusion amplia su música a 3 dimensiones!"
 LABEL_E156C2:	aligned_string "La fonction « Acoustic Illusion » apporte à votre musique une 3 ème dimension!"
 LABEL_E15712:	aligned_string "ACCOUSTIC ILLUSION verleiht dem Klang dreidimensionale Räumlichkeit."
 LABEL_E15758:	aligned_string "Acoustic Illusion broadens your music to 3-Dimensions!"
-LABEL_E15790:
+Str_AcousticIllusionDesc_Help:
 	.long LABEL_E158CA
 	.long LABEL_E15874
 	.long LABEL_E15840
@@ -6053,7 +6053,7 @@ LABEL_E157FA:	.asciz "¡Una serie de funciones apropiadas para cualquier estilo y
 LABEL_E15840:	aligned_string "Une grande diversité de fonctions pour tout jouer!"
 LABEL_E15874:	aligned_string "Viele weitere leistungsfähige Funktionen zur Darbietung und Bearbeitung Ihrer Musik!"
 LABEL_E158CA:	aligned_string "A host of features to suit any style of performance!"
-LABEL_E15900:
+Str_StyleImages_Help:
 	.long LABEL_E15954
 	.long LABEL_E15944
 	.long LABEL_E15938
@@ -6066,7 +6066,7 @@ LABEL_E1592C:	aligned_string "Huge Styles"
 LABEL_E15938:	aligned_string "Huge Styles"
 LABEL_E15944:	aligned_string "Huge Styles(G)"
 LABEL_E15954:	aligned_string "Huge Styles"
-LABEL_E15960:
+Str_HugeStyles2_Help:
 	.long LABEL_E159B4
 	.long LABEL_E159A4
 	.long LABEL_E15998
@@ -6079,7 +6079,7 @@ LABEL_E1598C:	aligned_string "Huge Styles"
 LABEL_E15998:	aligned_string "Huge Styles"
 LABEL_E159A4:	aligned_string "Huge Styles(G)"
 LABEL_E159B4:	aligned_string "Huge Styles"
-LABEL_E159C0:
+Str_HugeStyles3_Help:
 	.long LABEL_E15A14
 	.long LABEL_E15A04
 	.long LABEL_E159F8

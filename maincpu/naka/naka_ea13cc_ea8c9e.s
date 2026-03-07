@@ -4327,7 +4327,7 @@ LABEL_EA625A:	aligned_string "FILE COPY"
 	aligned_string "HardDiskMenu"
 	.byte 0x00, 0xff
 	aligned_string "DiskMenu"
-LABEL_EA7228:
+Naka_IntSongMedley_Screens:
 	.long LABEL_EA75BC
 	.long LABEL_EA75AE
 	.long LABEL_EA75AC
@@ -4593,7 +4593,7 @@ LABEL_EA75CA:
 	.byte 0x00, 0xff, 0xd6, 0x75, 0xea, 0x00
 LABEL_EA75D6:
 	.byte 0x00, 0xff
-LABEL_EA75D8:
+Naka_DiskLoadPage_Screens:
 	.long LABEL_EA75EE
 	.long LABEL_EA75EC
 	.long LABEL_EA75EA
@@ -4812,7 +4812,7 @@ LABEL_EA7866:
 LABEL_EA786A:
 	.byte 0x00, 0xff
 LABEL_EA786C:	aligned_string "DiskSmfSave"
-LABEL_EA7878:
+Naka_DiskSmfSave_Screens:
 	.long LABEL_EA7AB8
 	.long LABEL_EA7AB6
 	.long LABEL_EA7AB4
@@ -5232,7 +5232,7 @@ LABEL_EA7E9C:
 	.byte 0xea, 0x00
 LABEL_EA7EA2:
 	.byte 0x00, 0xff, 0xd8, 0x7e, 0xea, 0x00
-LABEL_EA7EA8:
+Naka_DiskUtility_Screens:
 	.long LABEL_EA7ED6
 	.long LABEL_EA7ED4
 	.long LABEL_EA7ED2
@@ -5304,7 +5304,7 @@ LABEL_EA7EE6:
 	.byte 0x00, 0xae, 0x18, 0xf9, 0x00, 0x2f, 0xe9, 0xf8
 	.byte 0x00, 0x19, 0xc9, 0xf8, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00
-LABEL_EA80B6:
+Naka_DiskOps_Table:
 	.long LABEL_EA85B8
 	.long LABEL_EA85A4
 	.long LABEL_EA8592
@@ -5422,7 +5422,7 @@ LABEL_EA857E:	aligned_string "FmmDocFileNameFunc"
 LABEL_EA8592:	aligned_string "FmmPdFileNameFunc"
 LABEL_EA85A4:	aligned_string "FmmSmfFileNameFunc"
 LABEL_EA85B8:	aligned_string "FmmFileNameFunc"
-LABEL_EA85C8:
+Naka_SongMedleyFunc_Screens:
 	.long LABEL_EA8672
 	.long LABEL_EA8650
 	.long LABEL_EA8634
@@ -5437,7 +5437,7 @@ LABEL_EA8650:	aligned_string "Bitte geben Sie das Password ein."
 LABEL_EA8672:	aligned_string "Please enter the password."
 	.byte 0xf2, 0x87, 0xea, 0x00, 0xa6, 0x87, 0xea
 	.byte 0x00
-LABEL_EA8696:
+Str_PasswordEntry_Multilingual:
 	.long LABEL_EA8766
 	.long LABEL_EA8726
 	.long LABEL_EA86E6
@@ -5451,7 +5451,7 @@ LABEL_EA8766:	aligned_string "The data is already copy protected. Please enter t
 	aligned_string "The data is already copy protected. Please enter the password."
 	.byte 0xc2, 0x89, 0xea, 0x00, 0x72, 0x89, 0xea
 	.byte 0x00
-LABEL_EA883A:
+Str_CopyProtected_Multilingual:
 	.long LABEL_EA8928
 	.long LABEL_EA88DE
 	.long LABEL_EA8894
@@ -5463,7 +5463,7 @@ LABEL_EA8928:	aligned_string "The songs in the Sequencer are copy protected. Ple
 	aligned_string "Die Songs im Sequenzer sind kopiergeschützt. Bitte geben Sie das Password ein."
 	aligned_string "The songs in the Sequencer are copy protected. Please enter the password."
 	.byte 0xa4, 0x8b, 0xea, 0x00
-LABEL_EA8A10:
+Str_SeqCopyProtected_Multilingual:
 	.long LABEL_EA8B54
 	.long LABEL_EA8B08
 	.long LABEL_EA8ABC
@@ -5491,7 +5491,7 @@ LABEL_EA8C22:	aligned_string "ATTENTION!"
 	aligned_string "ACHTUNG !"
 	aligned_string "ATTENTION!"
 	.byte 0xce, 0x8c, 0xea, 0x00
-LABEL_EA8C60:
+Str_Attention2_Multilingual:
 	.long LABEL_EA8CBC
 	.long LABEL_EA8CAC
 	.long LABEL_EA8C9E

@@ -241,7 +241,7 @@ String_CONSOLE:	; E1FBC8
 	aligned_string "CONSOLE"
 	.byte 0x00, 0x00, 0x00, 0x00, 0xd4, 0xdc, 0x03, 0x00
 
-LABEL_E1FBD8:
+FDTest_DataBlock_Table:
 	.long LABEL_E1F794
 	.long LABEL_E1F7D2
 	.long LABEL_E1F810
@@ -270,7 +270,7 @@ LABEL_E1FBD8:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.long LABEL_E1FC44
 LABEL_E1FC44:	aligned_string ""
-LABEL_E1FC46:
+FDTest_Config_Table:
 	.long LABEL_E1FD0E
 	.long LABEL_E1FD08
 	.long LABEL_E1FD04

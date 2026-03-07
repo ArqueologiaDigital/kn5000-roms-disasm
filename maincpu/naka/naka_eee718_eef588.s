@@ -226,7 +226,7 @@
 	.zero 64
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 64
-LABEL_EEE718:
+Naka_DrawbarOrgan_Screens:
 	.long LABEL_F50C83
 	.long LABEL_F5133C
 	.long LABEL_F51352
@@ -433,7 +433,7 @@ LABEL_EEECC0:
 	.long Str_PartName_Rhythm
 	.long Str_PartName_Empty
 	.byte 0x08, 0x00, 0x00, 0x00
-LABEL_EEED44:
+Naka_DrawbarControl_Table:
 	.long LABEL_E9D9B0
 	.long LABEL_E9D9A6
 	.long LABEL_E9D99C
@@ -711,7 +711,7 @@ Naka_DrawbarSlider_Resources:
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xf5, 0x00
 	.byte 0xff, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0xff
-LABEL_EEF350:
+Naka_DrawbarDisplay_Table1:
 	.long LABEL_EADAE0
 	.long LABEL_EADAD8
 	.long LABEL_EADAD0
@@ -726,7 +726,7 @@ LABEL_EEF350:
 	.zero 84
 
 
-LABEL_EEF3D0:
+Naka_DrawbarDisplay_Table2:
 	.long LABEL_EADB56
 	.long LABEL_EADB4A
 	.long LABEL_EADB3E
@@ -790,7 +790,7 @@ LABEL_EEF3D0:
 	.byte 0xee, 0x00, 0x00, 0x00, 0x00, 0x00, 0x86, 0x2e
 	.byte 0xeb, 0x00, 0x82, 0x2e, 0xeb, 0x00, 0xd2, 0xf0
 	.byte 0x03, 0x00, 0x04, 0x00, 0x00, 0x00, 0x02, 0x00
-LABEL_EEF588:
+Naka_DrawbarReg_Table:
 	.long LABEL_EB3FDE
 	.long LABEL_EB3BDE
 	.long LABEL_EB4FDE

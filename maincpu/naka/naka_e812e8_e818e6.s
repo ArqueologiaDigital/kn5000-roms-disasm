@@ -137,7 +137,7 @@ LABEL_E81372:	aligned_string "EV_READACTION"
 LABEL_E81380:	aligned_string "EV_READPRESENTATION"
 	aligned_string "EV_ACCORDIONTAB"
 	.byte 0x0a, 0x00
-LABEL_E813A6:
+Naka_Event_Table3:
 	.long LABEL_E814E6
 	.long LABEL_E814D6
 	.long LABEL_E814C8
@@ -189,7 +189,7 @@ LABEL_E814E6:	aligned_string "MT_GetPart"
 	.byte 0x48, 0xde, 0xf7, 0x00, 0x5e, 0x2a, 0xf8, 0x00
 	.byte 0x06, 0x2b, 0xf8, 0x00, 0x22, 0xf4, 0xf7, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa2, 0x18, 0xe8, 0x00
-LABEL_E81590:
+Naka_Event_Table2:
 	.long LABEL_E8188C
 	.long LABEL_E81876
 	.long LABEL_E81868

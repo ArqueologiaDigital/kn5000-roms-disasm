@@ -1097,7 +1097,7 @@
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "ControlMenu"
-LABEL_ED803C:
+Naka_EditorMenu_Screens:
 	.long LABEL_ED80B6
 	.long LABEL_ED80B4
 	.long LABEL_ED80AC
@@ -1356,7 +1356,7 @@ LABEL_ED835E:
 LABEL_ED8360:	aligned_string ""
 LABEL_ED8362:	aligned_string "MUSICSTYL"
 	.long LABEL_ED83F4
-LABEL_ED8370:
+Naka_EditorParam_Screens:
 	.long LABEL_ED83F2
 	.long LABEL_ED83F0
 	.long LABEL_ED83EE
@@ -1399,7 +1399,7 @@ LABEL_ED83F0:	aligned_string ""
 LABEL_ED83F2:	aligned_string ""
 LABEL_ED83F4:	.byte 0x4d, 0x53, 0x43, 0x54
 	.byte 0x53, 0x45, 0x4c, 0x00, 0x6e, 0x84, 0xed, 0x00
-LABEL_ED8400:
+Naka_EditorSetting_Screens:
 	.long LABEL_ED846C
 	.long LABEL_ED846A
 	.long LABEL_ED8468
@@ -1486,7 +1486,7 @@ LABEL_ED8512:	aligned_string ""
 LABEL_ED8514:	aligned_string ""
 LABEL_ED8516:	aligned_string ""
 LABEL_ED8518:	aligned_string "PMBANK"
-LABEL_ED8520:
+Naka_EditorConfig_Screens:
 	.long LABEL_ED8572
 	.long LABEL_ED8570
 	.long LABEL_ED856E
@@ -1535,7 +1535,7 @@ LABEL_ED85A6:
 	.byte 0x00, 0xff
 LABEL_ED85A8:	aligned_string "PMNAME"
 Naka_PresetBank_InfoTable:
-	.long LABEL_ED85DE
+	.long Naka_PresetBankName_Label
 	.long LABEL_ED85DC
 	.long LABEL_ED85DA
 	.long LABEL_ED85D8
@@ -1550,7 +1550,7 @@ LABEL_ED85D6:	aligned_string ""
 LABEL_ED85D8:	aligned_string ""
 LABEL_ED85DA:	aligned_string ""
 LABEL_ED85DC:	aligned_string ""
-LABEL_ED85DE:	aligned_string "PMBKNAME"
+Naka_PresetBankName_Label:	aligned_string "PMBKNAME"
 	.long LABEL_ED85F8
 	.long LABEL_ED85F6
 	.long LABEL_ED85F4
@@ -2554,7 +2554,7 @@ SoundParam_EncoderHandlers:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xde, 0x63, 0xfc, 0x00
-LABEL_ED9EA8:
+Naka_EditorValue_Screens:
 	.long LABEL_FC645A
 	.long LABEL_FC647F
 	.long LABEL_FC64EA
@@ -2639,7 +2639,7 @@ Encoder_ValueQuantizeTable:
 	.long LABEL_ED9F34
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3c, 0x9f, 0xed, 0x00
-LABEL_ED9FD0:
+Naka_EditorEffect_Screens:
 	.long LABEL_ED9F44
 	.long LABEL_ED9F4C
 	.long LABEL_ED9F54

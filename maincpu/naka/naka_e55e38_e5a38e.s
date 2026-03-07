@@ -2795,7 +2795,7 @@ LABEL_E5A1C4:
 	.byte 0x00, 0xff
 LABEL_E5A1C6:	aligned_string "ReverbPreset"
 	.long LABEL_E5A22A
-LABEL_E5A1D8:
+Naka_MidiChannel_Table:
 	.long LABEL_E5A228
 	.long LABEL_E5A226
 	.long LABEL_E5A224
@@ -2848,7 +2848,7 @@ LABEL_E5A28E:
 	.byte 0x00, 0xff
 LABEL_E5A290:	aligned_string ""
 LABEL_E5A292:	aligned_string "ReverbEqualizerPreset"
-LABEL_E5A2A8:
+Naka_MidiPart_Table1:
 	.long LABEL_E5A346
 	.long LABEL_E5A33A
 	.long LABEL_E5A338

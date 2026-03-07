@@ -2972,7 +2972,7 @@ LABEL_E8545A:
 	.byte 0x0f, 0x00, 0x61, 0x01, 0x00, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x04, 0x00, 0x18, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x1f, 0x00, 0x1f, 0x00
-LABEL_E85470:
+Naka_SoundSelect_Table:
 	.long LABEL_E818B0
 	.long LABEL_E818E6
 	.long LABEL_E8190A
@@ -2994,7 +2994,7 @@ LABEL_E85470:
 	.long LABEL_E81C58
 	.long LABEL_E81C98
 	.byte 0x00, 0x00, 0x00, 0x00, 0xdc, 0x1c, 0xe8, 0x00
-LABEL_E854C8:
+Naka_SoundDemo_Table:
 	.long LABEL_E81D1A
 	.long LABEL_E81D42
 	.long LABEL_E81D6A
@@ -3085,7 +3085,7 @@ Naka_AudioDemo_ModeTable:
 	.long LABEL_E82DB6
 	.long LABEL_E82DDA
 	.byte 0x00, 0x00, 0x00, 0x00, 0x04, 0x2e, 0xe8, 0x00
-LABEL_E85630:
+Naka_SoundList_Table:
 	.long LABEL_E82E3A
 	.long LABEL_E82E5E
 	.long LABEL_E82E7A
@@ -3150,7 +3150,7 @@ Naka_UIComponent_UpdateTable:
 	.long LABEL_E8376A
 	.long LABEL_E8378E
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa4, 0x37, 0xe8, 0x00
-LABEL_E85730:
+Naka_SoundGroup_Table:
 	.long LABEL_E837DC
 	.long LABEL_E83800
 	.long LABEL_E8381C
@@ -3184,7 +3184,7 @@ LABEL_E85730:
 	.long LABEL_E83D4E
 	.long LABEL_E83D72
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E857B8:
+Naka_SoundPreset_Table:
 	.long LABEL_E83D88
 	.long LABEL_E83DC8
 	.long LABEL_E83E10
@@ -3203,7 +3203,7 @@ LABEL_E857B8:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E857F8:
+Naka_SoundEdit_Table:
 	.long LABEL_E84006
 	.long LABEL_E84032
 	.long LABEL_E8404A
@@ -3251,7 +3251,7 @@ LABEL_E857F8:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xe4, 0x46, 0xe8, 0x00
 
 
-LABEL_E858B0:
+Naka_SoundMixer_Table:
 	.long LABEL_E84706
 	.long LABEL_E84720
 	.long LABEL_E84738
@@ -3291,7 +3291,7 @@ LABEL_E858B0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x50, 0x4e, 0xe8, 0x00
 
 
-LABEL_E85948:
+Naka_SoundEffect_Table:
 	.long LABEL_E84E72
 	.long LABEL_E84E88
 	.long LABEL_E84EAC
@@ -3318,7 +3318,7 @@ LABEL_E85948:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
-LABEL_E859A8:
+Naka_SoundCtrl_Table:
 	.long LABEL_E851C8
 	.long LABEL_E851EA
 	.long LABEL_E85202
@@ -3343,7 +3343,7 @@ Naka_SongDisplay_FormatTable:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x86, 0x5a, 0xe8, 0x00
 
 
-LABEL_E859F8:
+Naka_SoundConfig_Table:
 	.long LABEL_E85A7A
 	.long LABEL_E85A78
 	.long LABEL_E85A76
@@ -3575,7 +3575,7 @@ LABEL_E85D08:	aligned_string ""
 LABEL_E85D0A:	aligned_string ""
 LABEL_E85D0C:	aligned_string "Sdmtune"
 	.long LABEL_E85F00
-LABEL_E85D18:
+Naka_SoundParam2_Table:
 	.long LABEL_E85EF2
 	.long LABEL_E85EF0
 	.long LABEL_E85EEE
