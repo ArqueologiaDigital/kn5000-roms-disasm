@@ -51420,6 +51420,33 @@ DSP_BytecodeInterpreter_Loop:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 
+// DSP_Bytecode_Programs: 1613 bytes of native TLCS-900 code implementing
+// 6 opcode handlers (0-5) for the DSP bytecode interpreter.
+// Dispatch table at OFFSETS_14739 contains 16-bit offsets from this address.
+//
+// Uses prevbank registers (D7), auto-increment addressing ld C,(XWA+),
+// and compact register forms. Cannot be converted to LLVM native instructions
+// due to unsupported addressing modes.
+//
+// Handler 0 (offset 0x000, 570 bytes): Command + 2 preamble + groups-of-5
+//   3-way branch per group: 0x00=static addr, 0x0A=raw, else=param-modified
+//   Mixes 32-bit runtime parameter into template coefficients (Branch C)
+//
+// Handler 1 (offset 0x23A, 249 bytes): Command + 2 preamble + groups-of-5
+//   12-bit address computation (4-bit shift), accumulator at stack[0x08]
+//
+// Handler 2 (offset 0x333, 167 bytes): Command + 2 preamble + groups-of-3
+//   Pure raw data writes, no address computation
+//
+// Handler 3 (offset 0x3DA, 153 bytes): Command + 16-bit address + raw tail
+//   16-bit address (8-bit shift), accumulator at stack[0x0E]
+//
+// Handler 4 (offset 0x473, 26 bytes): Single command byte only
+//   Simplest handler - no data, no loop
+//
+// Handler 5 (offset 0x48D, 448 bytes): Command + 2 preamble + groups-of-5
+//   2-way branch: 0x08=addr (with IZH mask), else=param-modified
+//   Variant of Handler 0 with different branching and accumulator at stack[0x0C]
 DSP_Bytecode_Programs:
 	.byte 0xaf, 0x1a, 0x20, 0xc5, 0xe0, 0x23, 0xbf, 0x1a
 	.byte 0x60, 0xcb, 0x89, 0xd8, 0x12, 0x9f, 0x14, 0x21
