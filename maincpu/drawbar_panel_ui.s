@@ -1386,7 +1386,8 @@ PmemOutRGridCheck:
 	ld hl, (xhl)
 	lda_24 xix, 0xf79260
 	jp_dri 8, 0x07, 0xF0, 0xEC
-LABEL_F79260:
+; TtMdCtlMsg event dispatch (7-entry, table 0xE80272)
+TtMdCtlMsg_EventDispatch:	; F79260
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xeb, 0x8e, 0xbf, 0x20, 0x30, 0xee, 0x89
@@ -15369,7 +15370,8 @@ AcPresentationControlProc:
 	ld bc, (xbc)
 	lda_24 xix, 0xf84563
 	jp_dri 8, 0x07, 0xF0, 0xE4
-LABEL_F84563:
+; AcPresentationControlProc event dispatch (11-entry, table 0xE9F9B2)
+AcPresCtrl_EventDispatch:	; F84563
 	; --- AcPresentationControlProc jump table handler body ---
 	; Handles events 0x1C00002-0x1C0000C via jump table at 0xE9F9B2.
 	; Dispatches presentation control events: start, register handlers,

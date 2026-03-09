@@ -56,7 +56,8 @@ MainPreControl:
 	ld bc, (xbc)
 	lda_24 xix, 0xf86625
 	jp_dri 8, 0x07, 0xF0, 0xE4
-LABEL_F86625:
+; MainPreControl dispatch (11-entry, table 0xEA007A)
+MainPreControl_Dispatch:	; F86625
 	sti16_24	0x0251D8, 0
 
 MainPreControl_ReturnNull:
@@ -95,9 +96,9 @@ LABEL_F8666C:
 	call Demo_SelectEntry_ProcessSongList			; additional handler
 	jr MainPreControl_ReturnNull
 	.byte 0xd2, 0xd8, 0x51, 0x02, 0x3f, 0x00, 0x00	; cp (0x0251D8), 0x0000  [16-bit direct]
-	jr z, LABEL_F86625			; if zero, clear state
+	jr z, MainPreControl_Dispatch			; if zero, clear state
 	call Part_InitFromPreset			; process display state
-	jr LABEL_F86625
+	jr MainPreControl_Dispatch
 	ld16_24	hl, 152024
 	exts xhl
 	ret
