@@ -25793,7 +25793,8 @@ LABEL_F67F79:
 	ld de, (xde)
 	lda_24 xix, 0xf67f8d
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_F67F8D:	.asciz ":;<> "
+; CmpSetTtlFunc title dispatch 2
+CmpSetTtl_Dispatch2:	; F67F8D	.asciz ":;<> "
 	.byte 0x1d, 0x4c
 	jr	lt, 0xf6
 	.ascii "^\\[ZhN:;<> "
@@ -25837,7 +25838,8 @@ CmpRealTtlFunc:
 	ld de, (xde)
 	lda_24 xix, 0xf68027
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_F68027:	.ascii ":;<>"
+; CmpRealTtlFunc title dispatch
+CmpRealTtl_Dispatch:	; F68027	.ascii ":;<>"
 	.byte 0x1d, 0x55, 0x4f, 0xf6
 	.byte 0x5e, 0x5c, 0x5b, 0x5a
 	.byte 0x1e, 0x43, 0x1c, 0x78
@@ -26094,7 +26096,8 @@ CmpBkslTtlFunc:
 	ld de, (xde)
 	lda_24 xix, 0xf6831b
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_F6831B:	.ascii ":;<>"
+; CmpBkslTtlFunc title dispatch
+CmpBkslTtl_Dispatch:	; F6831B	.ascii ":;<>"
 	.byte 0x1d, 0xa7, 0x4c, 0xf6
 	.ascii "^\\[Zx."
 	.byte 0x01, 0x3a
@@ -26285,7 +26288,8 @@ CmpBksl_STtlFunc:
 	ld de, (xde)
 	lda_24 xix, 0xf68494
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_F68494:	.ascii ":;<>"
+; CmpBksl_STtlFunc title dispatch
+CmpBkslSTtl_Dispatch:	; F68494	.ascii ":;<>"
 	call	16141798
 	pop	xiz
 	pop	xix
@@ -26458,7 +26462,8 @@ CmpNcpTtlFunc:
 	ld de, (xde)
 	lda_24 xix, 0xf68633
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_F68633:	.ascii ":;<>"
+; CmpNcpTtlFunc title dispatch
+CmpNcpTtl_Dispatch:	; F68633	.ascii ":;<>"
 	.byte 0x1d, 0x25, 0x55, 0xf6
 	.byte 0x5e, 0x5c, 0x5b, 0x5a
 	.byte 0xc1, 0x80, 0x3a, 0x21
