@@ -54,7 +54,7 @@ WPLoad_DispatchState:
 	jr ge, WPLoad_ContinueWait
 	call LABEL_F8B16F
 	stda16 34058, xhl
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
@@ -233,7 +233,7 @@ WPLoad_OpLoad:
 	call LoadFromSecondaryPage
 	ld wa, hl
 	lds bc, 1
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026

@@ -163,10 +163,10 @@ FCopy_CopyConfirm_Execute:
 	call WriteFileWithVerify
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
@@ -200,10 +200,10 @@ FCopy_CopyExecute:
 	call WriteFileWithVerify
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
@@ -316,7 +316,7 @@ FRename_HandleApply:
 	call ReadDualFile
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
 	call GetEncodedFileSizeData
@@ -419,7 +419,7 @@ FRenameSmf_HandleApply:
 	call SearchAndOpen
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
 	call GetFileCountEncoded
@@ -537,7 +537,7 @@ FmmFmt_HandleProgress:
 	call ApPostEvent
 	ld wa, iz
 	ldw bc, 0x8
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	ldw wa, 0xEE
 	call SoundCtrl_SendCommand
@@ -655,7 +655,7 @@ FmmLoadTtl_StateDispatch:
 	jr ge, FmmLoadTtl_CheckFileHandle
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
@@ -822,7 +822,7 @@ FmmSaveTitleFunc:
 	jr ge, FmmSaveTtl_CheckFont
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
@@ -842,7 +842,7 @@ FmmSaveTtl_SlotLoop:
 	call FileIO_BuildRecordPath_Return
 	lds wa, 7
 	call FileIO_BuildRecordPath_Return
-	call LABEL_F893CA
+	call FileIO_SetModeFlag_Reading
 	ld xiy, 0xEA066A
 	ld xix, 0x8A0C
 	ldiw
@@ -891,7 +891,7 @@ DiskNameFunc:
 	lds wa, 0
 	calr InitializeOperationState
 	ldada xiz, 34700
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
@@ -904,7 +904,7 @@ DiskName_TextChange:
 	lds wa, 0
 	calr InitializeOperationState
 	ldada xiz, 34700
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString

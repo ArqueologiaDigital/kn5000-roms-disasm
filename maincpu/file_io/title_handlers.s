@@ -28,7 +28,7 @@ SaveTtlJgFunc:
 	cp xbc, 0x1C00007
 	jr nz, SaveTtl_Return
 	ldw wa, 0x67
-	calr LABEL_F8B435
+	calr FileIO_GetDiskCapacity
 
 SaveTtl_Return:
 	lds32 xhl, 0
@@ -38,7 +38,7 @@ SaveSmfTtlJgFunc:
 	cp xbc, 0x1C00007
 	jr nz, SaveSmfTtl_Return
 	ldw wa, 0x6B
-	calr LABEL_F8B435
+	calr FileIO_GetDiskCapacity
 
 SaveSmfTtl_Return:
 	lds32 xhl, 0
@@ -54,7 +54,7 @@ SongMedleyTtlJgFunc:
 	cp xbc, 0x1C00007
 	jr nz, SongMedleyTtl_Return
 	ldw wa, 0x77
-	calr LABEL_F8B435
+	calr FileIO_GetDiskCapacity
 
 SongMedleyTtl_Return:
 	lds32 xhl, 0
@@ -117,7 +117,7 @@ FmmUtility_DispatchState:
 	jr ge, FmmUtility_ScanFormat
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
@@ -249,7 +249,7 @@ FmmSmfUtility_DispatchState:
 	jr ge, FmmSmfUtility_ScanFormat
 	call GetFileCountEncoded
 	stda16 34052, xhl
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 

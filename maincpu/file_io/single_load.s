@@ -1455,7 +1455,7 @@ SLDst_ScrollDispatch:
 	call (xix)
 	ld wa, hl
 	lds bc, 1
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -1896,7 +1896,7 @@ CmpDst_ScrollModeA:
 	call (xix)
 	ld wa, hl
 	lds bc, 1
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -2173,7 +2173,7 @@ FmmCmpLoad_DispatchState:
 	jr ge, FmmCmpLoad_ContinueLoad
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 

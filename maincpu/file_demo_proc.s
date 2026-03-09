@@ -4662,11 +4662,11 @@ FileIO_GetRecordAttr_Default:
 	ld8_24 l, 0x0272d0
 	ret
 
-LABEL_F893C3:
+FileIO_SetModeFlag_Writing:
 	sti8_24 0x0272d0, 0x01
 	ret
 
-LABEL_F893CA:
+FileIO_SetModeFlag_Reading:
 	sti8_24 0x0272d0, 0x00
 	ret
 
@@ -4851,7 +4851,7 @@ FileIO_GetDiskFreeSpace:
 	ld32_24 xhl, 0x025d6c
 	ret
 
-LABEL_F89568:
+FileIO_ResetCurrentRecord:
 	ld32_24 xwa, 0xea0390
 	st32_24 0x025d6c, xwa
 	ret
@@ -4865,7 +4865,7 @@ LABEL_F89573:
 	ld32_24 xhl, 0x025d70
 	ret
 
-LABEL_F8958D:
+FileIO_SearchAndLoadFile:
 	push xiz
 	lda_24 xwa, 0x025d74
 	lda_24 xbc, 0xea0398
@@ -7988,7 +7988,7 @@ LABEL_F8B425:
 	call SoundCtrl_SendCommand
 	ret
 
-LABEL_F8B435:
+FileIO_GetDiskCapacity:
 	dec 2, xsp
 	ld (xsp), a
 	cpdi16 34048, 0
@@ -8037,7 +8037,7 @@ LABEL_F8B48B:
 	inc 2, xsp
 	ret
 
-LABEL_F8B48E:
+FileIO_ValidateSignedValue:
 	cps wa, 0
 	jr ge, LABEL_F8B4C9
 	ld de, wa

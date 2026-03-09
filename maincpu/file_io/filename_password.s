@@ -385,7 +385,7 @@ FileName_OpSave:
 	call LABEL_F87A08
 	ld wa, hl
 	lds bc, 1
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
@@ -467,9 +467,9 @@ FileName_OpLoad_Execute:
 	call LABEL_F87EAD
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
@@ -503,9 +503,9 @@ FileName_OpFormat:
 	call LABEL_F87EAD
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
@@ -557,10 +557,10 @@ FileName_OpDelete_Execute:
 	call ReadSingleFile
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
@@ -583,10 +583,10 @@ FileName_OpFormatVariant:
 	call ReadSingleFile
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
@@ -637,7 +637,7 @@ FileName_Navigate_CheckChanged:
 	call ReadDualFileEx
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
 	call GetEncodedFileSizeData

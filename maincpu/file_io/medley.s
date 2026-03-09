@@ -136,9 +136,9 @@ SeqName_LoadAndPlay:
 	call LoadFileMultiPass
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
@@ -163,9 +163,9 @@ SeqName_HandleAction32:
 	call LoadFileMultiPass
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
@@ -1032,7 +1032,7 @@ FmmDiskMedleySelectFunc:
 	call ApPostEvent
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -1193,7 +1193,7 @@ DiskSel_SendFileInfo:
 	call UI_PostModeChangeEvent
 	ldto_werp WA, 0xFA
 	lds bc, 1
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	ldw wa, 0xEE
 	jrl DiskSel_ShowErrorAndExit
@@ -1305,7 +1305,7 @@ DiskSel_RepeatSendInfo:
 	call UI_PostModeChangeEvent
 	ldto_werp WA, 0xFA
 	lds bc, 1
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	ldw wa, 0xEE
 	jrl DiskSel_ShowErrorAndExit
@@ -1677,7 +1677,7 @@ DiskSel_PlayFindLoop:
 	call UI_PostModeChangeEvent
 	ldto_werp WA, 0xFA
 	lds bc, 1
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	ldw wa, 0xEE
 
@@ -2178,7 +2178,7 @@ SmfMed_InitFromDisk:
 	call ApPostEvent
 	call GetFileCountEncoded
 	stda16 34052, xhl
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002
@@ -3231,7 +3231,7 @@ DocDiskNameFunc:
 	ld xiz, xde
 	cp xbc, 0x1C0000B
 	jr nz, DocDisk_Exit
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	lds ix, 0
 	jr DocDisk_CopyLoop
 

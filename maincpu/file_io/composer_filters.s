@@ -52,7 +52,7 @@ CompLoad_DispatchState:
 	jr ge, CompLoad_ContinueWait
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
@@ -258,7 +258,7 @@ CompLoad_HideButtons_Loop:
 	call LABEL_F87A08
 	ld wa, hl
 	lds bc, 1
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
@@ -552,7 +552,7 @@ LoadFilter_OpLoad:
 	call LABEL_F87A08
 	ld wa, hl
 	lds bc, 1
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
@@ -686,7 +686,7 @@ SaveFilter_HandleScroll:
 	call FileIO_GetRecordAttr_Check
 	cps l, 0
 	jr z, SaveFilter_ScrollUp_Unavail
-	call LABEL_F893CA
+	call FileIO_SetModeFlag_Reading
 	ld xwa, (xsp + 2)
 	extz wa
 	jr SaveFilter_UnlockFilter
@@ -713,7 +713,7 @@ SaveFilter_ScrollDown_Unlock:
 	call FileIO_GetRecordAttr_Check
 	cps l, 0
 	jr nz, SaveFilter_UpdateDisplay
-	call LABEL_F893C3
+	call FileIO_SetModeFlag_Writing
 	ld xwa, (xsp + 2)
 	extz wa
 	jr SaveFilter_LockFilter
@@ -754,7 +754,7 @@ SaveFilter_SelectAll:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x8
 	jr nz, SaveFilter_DeselectAll
-	call LABEL_F893CA
+	call FileIO_SetModeFlag_Reading
 	ldw (xsp), 0x0
 
 SaveFilter_SelectAll_Loop:
@@ -794,7 +794,7 @@ SaveFilter_DeselectAll:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x9
 	jr nz, SaveFilter_OpSave
-	call LABEL_F893CA
+	call FileIO_SetModeFlag_Reading
 	ldw (xsp), 0x0
 
 SaveFilter_DeselectAll_Loop:
@@ -866,9 +866,9 @@ SaveFilter_Save_Execute:
 	call LABEL_F87EAD
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
@@ -903,9 +903,9 @@ SaveFilter_OpFormat:
 	call LABEL_F87EAD
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
@@ -934,7 +934,7 @@ SaveFilter_ResetAll:
 	ld xwa, (xsp + 2)
 	cp xwa, 0xB
 	jr nz, SaveFilter_Return
-	call LABEL_F893CA
+	call FileIO_SetModeFlag_Reading
 	ldw (xsp), 0x0
 
 SaveFilter_ResetAll_Loop:

@@ -50,7 +50,7 @@ SmfLoad_DispatchState:
 	jr ge, SmfLoad_CheckFileCount
 	call GetFileCountEncoded
 	stda16 34052, xhl
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
@@ -178,7 +178,7 @@ FmmSmfSaveTitleFunc:
 	jr ge, SmfSave_SendWait
 	call GetFileCountEncoded
 	stda16 34052, xhl
-	call LABEL_F8958D
+	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
@@ -774,7 +774,7 @@ SmfFN_Save_CallResult:
 	call UI_PostPartChangeEvent
 	ld wa, (xsp + 6)
 	lds bc, 1
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
@@ -822,9 +822,9 @@ SmfFN_Open_Execute:
 	call LoadFileVariant
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
 	stda16 34052, xhl
@@ -864,9 +864,9 @@ SmfFN_HandleOpen2:
 	call LoadFileVariant
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
 	stda16 34052, xhl
@@ -912,10 +912,10 @@ SmfFN_Delete_Execute:
 	call GetFirstRecordAndOpen
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
 	stda16 34052, xhl
@@ -948,10 +948,10 @@ SmfFN_HandleDelete2:
 	call GetFirstRecordAndOpen
 	ld wa, hl
 	lds bc, 5
-	calr LABEL_F8B48E
+	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	calr SignalProgressUpdate
-	call LABEL_F89568
+	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
 	stda16 34052, xhl
