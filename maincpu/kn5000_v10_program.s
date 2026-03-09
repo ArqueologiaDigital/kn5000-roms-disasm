@@ -34223,26 +34223,27 @@ AcVocalGridBoxProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F738AA
+	jrl z, AcVocalGrid_FuncCallA
 	ld xwa, (xsp + 16)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_F7387D
+	jrl z, AcVocalGrid_ViewAccess
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_F73874
+	jrl z, AcVocalGrid_StringCopy
 	cp xwa, 0x1C00001
-	jr z, LABEL_F736A3
+	jr z, AcVocalGrid_DialSetup
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_F738C1
+	jrl lt, AcVocalGrid_FuncCallC
 	cp xbc, 0x6
-	jrl gt, LABEL_F738C1
+	jrl gt, AcVocalGrid_FuncCallC
 	add xbc, xbc
 	add xbc, 0xE7ED7C
 	ld bc, (xbc)
 	lda_24 xix, 0xf736a3
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_F736A3:
+; AcVocalGridBoxProc dial setup handler
+AcVocalGrid_DialSetup:	; F736A3
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -34399,12 +34400,14 @@ LABEL_F7386E:
 	call SetDialEnable
 	jr Vocalist_ReturnZeroJmp
 
-LABEL_F73874:
+; AcVocalGridBoxProc string copy handler
+AcVocalGrid_StringCopy:	; F73874
 	ld xwa, xiz
 	ld xiz, 0x3E
 	jr LABEL_F73884
 
-LABEL_F7387D:
+; AcVocalGridBoxProc view access handler
+AcVocalGrid_ViewAccess:	; F7387D
 	ld xwa, xiz
 	ld xiz, 0x42
 
@@ -34423,29 +34426,33 @@ LABEL_F73884:
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
-	jr LABEL_F738B9
+	jr AcVocalGrid_FuncCallB
 
-LABEL_F738AA:
+; AcVocalGridBoxProc function callback A
+AcVocalGrid_FuncCallA:	; F738AA
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 
-LABEL_F738B9:
+; AcVocalGridBoxProc function callback B
+AcVocalGrid_FuncCallB:	; F738B9
 	call ApFuncCall
 
 Vocalist_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F738CD
+	jr AcVocalGrid_FuncCallD
 
-LABEL_F738C1:
+; AcVocalGridBoxProc function callback C
+AcVocalGrid_FuncCallC:	; F738C1
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
-LABEL_F738CD:
+; AcVocalGridBoxProc function callback D
+AcVocalGrid_FuncCallD:	; F738CD
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -34468,7 +34475,7 @@ VocalistGridCheck:
 	ld (xsp + 8), xwa
 	lda xiy, (xbc + 2)
 	cp xhl, 0x1E0008D
-	jrl z, LABEL_F73C8E
+	jrl z, VocalistGrid_CheckHandler
 	ld xwa, xix
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
@@ -34593,7 +34600,8 @@ LABEL_F73938:
 	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x0c, 0x32, 0x41, 0x8c
 	.byte 0x00, 0xe0, 0x01, 0x78, 0x1c, 0x03
 
-LABEL_F73C8E:
+; VocalistGridCheck dispatch handler
+VocalistGrid_CheckHandler:	; F73C8E
 	ld (xsp + 4), xbc
 	ld xwa, xde
 	srl xwa, 0
@@ -34726,12 +34734,13 @@ AcVocalistListBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000E
-	jr z, LABEL_F73FC8
+	jr z, AcVocalist_ListSetup
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F74017
+	jr AcVocalist_ListCase2
 
-LABEL_F73FC8:
+; AcVocalist list setup
+AcVocalist_ListSetup:	; F73FC8
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -34739,7 +34748,7 @@ LABEL_F73FC8:
 	lds32 xde, 0
 	call SendEvent
 	cp xhl, 0x5
-	jr ugt, LABEL_F74015
+	jr ugt, AcVocalist_ListCase1
 	add xhl, xhl
 	add xhl, 0xE7F0A6
 	ld hl, (xhl)
@@ -34756,10 +34765,12 @@ AcVocalist_ListDispatch:	; F73FF7
 	lds32	xde, 1
 	call	16422496
 
-LABEL_F74015:
+; AcVocalist list case 1
+AcVocalist_ListCase1:	; F74015
 	lds32 xhl, 0
 
-LABEL_F74017:
+; AcVocalist list case 2
+AcVocalist_ListCase2:	; F74017
 	pop xiz
 	ret
 
@@ -34927,7 +34938,7 @@ VocalistPage1OKFunc:
 	push xiz
 	ld xhl, xde
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F741E2
+	jr nz, VocalistP1OK_Case0
 	ld xwa, 0xD7000A
 	ld xbc, 0x1E00090
 	lds32 xde, 0
@@ -34946,20 +34957,22 @@ VocalistPage1OKFunc:
 	ld xde, xhl
 	call MainFuncCall
 
-LABEL_F741E2:
+; VocalistPage1OK case 0
+VocalistP1OK_Case0:	; F741E2
 	lds32 xhl, 0
 	pop xiz
 	ret
 
 VocalistPage2OKFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F741FE
+	jr nz, VocalistP1OK_Case1
 	ld xwa, 0x1430005
 	ld xbc, 0x1E30008
 	lds32 xde, 0
 	call MainFuncCall
 
-LABEL_F741FE:
+; VocalistPage1OK case 1
+VocalistP1OK_Case1:	; F741FE
 	lds32 xhl, 0
 	ret
 
@@ -34967,13 +34980,13 @@ MainVocalistPage1OKFunc:
 	dec 4, xsp
 	ld (xsp), xde
 	cp xbc, 0x1E30007
-	jr nz, LABEL_F7428A
+	jr nz, VocalistPage_Handler
 	ld xwa, (xsp)
 	ld de, wa
 	extz wa
 	ld bc, wa
 	cps de, 5
-	jr ugt, LABEL_F7428A
+	jr ugt, VocalistPage_Handler
 	add de, de
 	lda_24 xix, 0xe7f0da
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
@@ -34994,7 +35007,8 @@ VocalistPage1OK_Dispatch:	; F7422F
 	.byte 0x00, 0x01, 0x1d, 0xf2, 0x57, 0xfd, 0xf1, 0x40
 	jrl	nc, 0x0000
 
-LABEL_F7428A:
+; Vocalist page handler
+VocalistPage_Handler:	; F7428A
 	lds32 xhl, 0
 	inc 4, xsp
 	ret
@@ -36321,26 +36335,27 @@ AcFadeSetGridBoxProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F75496
+	jrl z, VoiceUI_GridCase2
 	ld xwa, (xsp + 16)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_F75469
+	jrl z, VoiceUI_GridCase1
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_F75460
+	jrl z, VoiceUI_GridCase0
 	cp xwa, 0x1C00001
-	jr z, LABEL_F7528A
+	jr z, VoiceParam_ListHandler
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_F754AD
+	jrl lt, VoiceUI_GridCase3
 	cp xbc, 0x6
-	jrl gt, LABEL_F754AD
+	jrl gt, VoiceUI_GridCase3
 	add xbc, xbc
 	add xbc, 0xE7F964
 	ld bc, (xbc)
 	lda_24 xix, 0xf7528a
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_F7528A:
+; Voice parameter list handler
+VoiceParam_ListHandler:	; F7528A
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -36499,12 +36514,14 @@ LABEL_F7545A:
 	call SetDialEnable
 	jr AudioMix_ReturnZeroJmp3
 
-LABEL_F75460:
+; Voice UI grid case 0
+VoiceUI_GridCase0:	; F75460
 	ld xwa, xiz
 	ld xiz, 0x3E
 	jr LABEL_F75470
 
-LABEL_F75469:
+; Voice UI grid case 1
+VoiceUI_GridCase1:	; F75469
 	ld xwa, xiz
 	ld xiz, 0x42
 
@@ -36525,7 +36542,8 @@ LABEL_F75470:
 	ld xde, (xsp + 12)
 	jr LABEL_F754A5
 
-LABEL_F75496:
+; Voice UI grid case 2
+VoiceUI_GridCase2:	; F75496
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -36537,15 +36555,17 @@ LABEL_F754A5:
 
 AudioMix_ReturnZeroJmp3:
 	lds32 xhl, 0
-	jr LABEL_F754B9
+	jr VoiceUI_GridCase4
 
-LABEL_F754AD:
+; Voice UI grid case 3
+VoiceUI_GridCase3:	; F754AD
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
-LABEL_F754B9:
+; Voice UI grid case 4
+VoiceUI_GridCase4:	; F754B9
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -36577,7 +36597,7 @@ FadeSetGridCheck:
 	ldirw
 	ld xwa, xde
 	cp xde, 0x1E0008D
-	jrl z, LABEL_F75664
+	jrl z, AcInOutGrid_Handler
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
 	jrl lt, SndParam_ReturnZero2
@@ -36639,7 +36659,8 @@ LABEL_F75517:
 	ld	xbc, 31457420
 	jrl	173
 
-LABEL_F75664:
+; AcInOutGrid handler
+AcInOutGrid_Handler:	; F75664
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 28)
 	srl xwa, 0
@@ -37037,7 +37058,7 @@ InOutGridCheck:
 	ld xwa, xde
 	lda xbc, (xsp + 12)
 	cp xde, 0x1E0008D
-	jrl z, LABEL_F75F26
+	jrl z, ParaLoadOpt_Entry
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
 	jrl lt, MdPreset_ReturnZero2
@@ -37189,7 +37210,8 @@ LABEL_F75ADE:
 	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x04, 0x32
 	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xce, 0x02
 
-LABEL_F75F26:
+; ParaLoadOpt entry handler
+ParaLoadOpt_Entry:	; F75F26
 	lda xde, (xsp + 4)
 	ld xwa, xiz
 	srl xwa, 0
@@ -37703,7 +37725,7 @@ LABEL_F768AF:
 	ld (xsp + 4), a
 	ldda8 a, 48438
 	bit 0, a
-	jr z, LABEL_F768D9
+	jr z, ParaLoadOpt_CaseA
 	res 0, a
 	stda8 48438, a
 	ld xwa, 0x570006
@@ -37711,10 +37733,11 @@ LABEL_F768AF:
 	lds32 xde, 0
 	call ApPostEvent
 
-LABEL_F768D9:
+; ParaLoadOpt case A
+ParaLoadOpt_CaseA:	; F768D9
 	ld8_24 a, 0x02475c
 	cp a, (xsp + 2)
-	jr z, LABEL_F768FB
+	jr z, ParaLoadOpt_CaseB
 	ld a, (xsp + 2)
 	st8_24 0x02475c, a
 	ld xwa, 0x570010
@@ -37722,10 +37745,11 @@ LABEL_F768D9:
 	lds32 xde, 0
 	call ApPostEvent
 
-LABEL_F768FB:
+; ParaLoadOpt case B
+ParaLoadOpt_CaseB:	; F768FB
 	ld8_24 a, 0x02475e
 	cp a, (xsp)
-	jr z, LABEL_F7691B
+	jr z, ParaLoadOpt_CaseC
 	ld a, (xsp)
 	st8_24 0x02475e, a
 	ld xwa, 0x570010
@@ -37733,7 +37757,8 @@ LABEL_F768FB:
 	lds32 xde, 0
 	call ApPostEvent
 
-LABEL_F7691B:
+; ParaLoadOpt case C
+ParaLoadOpt_CaseC:	; F7691B
 	ld8_24 a, 0x02475a
 	cp a, (xsp + 4)
 	jrl z, MidiFunc_SendEvtReturnAlt
@@ -37796,7 +37821,7 @@ LABEL_F76A52:
 	ld (xsp + 4), a
 	ldda8 a, 48438
 	bit 1, a
-	jr z, LABEL_F76A7C
+	jr z, ParaLoadOpt_CaseD
 	res 1, a
 	stda8 48438, a
 	ld xwa, 0x570011
@@ -37804,10 +37829,11 @@ LABEL_F76A52:
 	lds32 xde, 0
 	call ApPostEvent
 
-LABEL_F76A7C:
+; ParaLoadOpt case D
+ParaLoadOpt_CaseD:	; F76A7C
 	ldda8 a, 48400
 	bit 7, a
-	jr z, LABEL_F76AA4
+	jr z, ParaLoadOpt_CaseE
 	res 7, a
 	stda8 48400, a
 	ld a, (xsp + 2)
@@ -37817,10 +37843,11 @@ LABEL_F76A7C:
 	lds32 xde, 0
 	call ApPostEvent
 
-LABEL_F76AA4:
+; ParaLoadOpt case E
+ParaLoadOpt_CaseE:	; F76AA4
 	ldda8 a, 48404
 	bit 7, a
-	jr z, LABEL_F76ACB
+	jr z, ParaLoadOpt_CaseF
 	res 7, a
 	stda8 48404, a
 	ld a, (xsp)
@@ -37830,7 +37857,8 @@ LABEL_F76AA4:
 	lds32 xde, 0
 	call ApPostEvent
 
-LABEL_F76ACB:
+; ParaLoadOpt case F
+ParaLoadOpt_CaseF:	; F76ACB
 	ldda8 a, 48396
 	bit 7, a
 	jrl z, MidiFunc_SendEventReturn
@@ -37926,28 +37954,29 @@ AcParaLoadOptGridBoxProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F76F3A
+	jrl z, ParaLoadOpt_GridCheck2
 	ld xwa, (xsp + 16)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_F76F0D
+	jrl z, ParaLoadOpt_GridCheck1
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_F76F04
+	jrl z, ParaLoadOpt_GridCheck0
 	cp xwa, 0x1C00002
-	jrl z, LABEL_F76D32
+	jrl z, ParaLoadOpt_GridReturn
 	cp xwa, 0x1C00001
-	jr z, LABEL_F76CC8
+	jr z, ParaLoadOpt_GridHandler
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_F76F51
+	jrl lt, ParaLoadOpt_GridCheck3
 	cp xbc, 0x6
-	jrl gt, LABEL_F76F51
+	jrl gt, ParaLoadOpt_GridCheck3
 	add xbc, xbc
 	add xbc, 0xE7FE92
 	ld bc, (xbc)
 	lda_24 xix, 0xf76cc8
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_F76CC8:
+; ParaLoadOpt grid handler
+ParaLoadOpt_GridHandler:	; F76CC8
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -37985,7 +38014,8 @@ LABEL_F76CC8:
 	lds wa, 1
 	jrl LABEL_F76EFE
 
-LABEL_F76D32:
+; ParaLoadOpt grid return
+ParaLoadOpt_GridReturn:	; F76D32
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -38135,12 +38165,14 @@ LABEL_F76EFE:
 	call SetDialEnable
 	jr AccFunc_ReturnZeroJmp
 
-LABEL_F76F04:
+; ParaLoadOpt grid check case 0
+ParaLoadOpt_GridCheck0:	; F76F04
 	ld xwa, xiz
 	ld xiz, 0x3E
 	jr LABEL_F76F14
 
-LABEL_F76F0D:
+; ParaLoadOpt grid check case 1
+ParaLoadOpt_GridCheck1:	; F76F0D
 	ld xwa, xiz
 	ld xiz, 0x42
 
@@ -38161,7 +38193,8 @@ LABEL_F76F14:
 	ld xde, (xsp + 12)
 	jr LABEL_F76F49
 
-LABEL_F76F3A:
+; ParaLoadOpt grid check case 2
+ParaLoadOpt_GridCheck2:	; F76F3A
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -38173,15 +38206,17 @@ LABEL_F76F49:
 
 AccFunc_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F76F5D
+	jr ParaLoadOpt_GridCheck4
 
-LABEL_F76F51:
+; ParaLoadOpt grid check case 3
+ParaLoadOpt_GridCheck3:	; F76F51
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
-LABEL_F76F5D:
+; ParaLoadOpt grid check case 4
+ParaLoadOpt_GridCheck4:	; F76F5D
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -38211,7 +38246,7 @@ ParaLoadOptGridCheck:
 	lda xix, (xiy + 4)
 	ld (xsp + 12), xix
 	cp xde, 0x1E0008D
-	jrl z, LABEL_F7724E
+	jrl z, VoiceUI_MiscHandler
 	ld xde, (xsp + 16)
 	sub xde, 0x1C00017
 	cp xde, 0x0
@@ -38308,7 +38343,8 @@ ParaLoadOpt_GridDispatch:	; F76FE2
 	.byte 0x88, 0xbf, 0x14, 0x32, 0x41, 0x8c, 0x00, 0xe0
 	.byte 0x01, 0x78, 0xd9, 0x00
 
-LABEL_F7724E:
+; Voice UI misc handler
+VoiceUI_MiscHandler:	; F7724E
 	ld xde, xhl
 	srl xde, 0
 	ldi_werp 0xEA, 0
