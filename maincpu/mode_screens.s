@@ -2054,7 +2054,8 @@ TEST2FUNC:
 	ld de, (xde)
 	lda_24 xix, 0xfb7d72
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_FB7D72:
+; TEST2FUNC event dispatch return (6-entry, event 0x1C00013)
+TEST2FUNC_DispatchReturn:	; FB7D72
 	calr	0xfdd8
 
 TableDispatch_Return3:
@@ -2074,7 +2075,8 @@ TEST3FUNC:
 	ld de, (xde)
 	lda_24 xix, 0xfb7da6
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_FB7DA6:
+; TEST3FUNC event dispatch return (6-entry, event 0x1C00013)
+TEST3FUNC_DispatchReturn:	; FB7DA6
 	calr	0xfe19
 
 TableDispatch_Return4:
@@ -2094,7 +2096,8 @@ TEST4FUNC:
 	ld de, (xde)
 	lda_24 xix, 0xfb7dda
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_FB7DDA:
+; TEST4FUNC event dispatch return (6-entry, event 0x1C00013)
+TEST4FUNC_DispatchReturn:	; FB7DDA
 	calr	0xfe22
 
 TableDispatch_Return5:
@@ -2114,7 +2117,8 @@ TEST6FUNC:
 	ld de, (xde)
 	lda_24 xix, 0xfb7e0e
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_FB7E0E:
+; TEST6FUNC event dispatch return (6-entry, event 0x1C00013)
+TEST6FUNC_DispatchReturn:	; FB7E0E
 	calr	0xfe7e
 
 TableDispatch_Return:
@@ -2374,7 +2378,7 @@ AcMstStyleAlpGridBoxProc:
 	cp xwa, 0x1C00002
 	jrl z, LABEL_FB814B
 	cp xwa, 0x1C00001
-	jr z, LABEL_FB809C
+	jr z, MasterSetup_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
 	jrl lt, LABEL_FB88C3
@@ -2386,7 +2390,8 @@ AcMstStyleAlpGridBoxProc:
 	lda_24 xix, 0xfb809c
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_FB809C:
+; MasterSetup event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0D24)
+MasterSetup_EventDispatch:	; FB809C
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
@@ -3205,7 +3210,8 @@ MstStyleAlpGridCheck:
 	lda_24 xix, 0xfb8913
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FB8913:
+; MstStyleAlpGridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0D58)
+MstStyleAlp_EventDispatch:	; FB8913
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xbf, 0x3a, 0x63, 0x1d, 0xd0, 0x44, 0xfa
@@ -3402,7 +3408,7 @@ AcMstStyle1GridBoxProc:
 	cp xwa, 0x1E0008A
 	jrl z, LABEL_FB8E3E
 	cp xwa, 0x1C00001
-	jr z, LABEL_FB8B6D
+	jr z, MstStyle_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
 	jrl lt, LABEL_FB8E7D
@@ -3414,7 +3420,8 @@ AcMstStyle1GridBoxProc:
 	lda_24 xix, 0xfb8b6d
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_FB8B6D:
+; MasterStyle event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0D66)
+MstStyle_EventDispatch:	; FB8B6D
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
@@ -3714,7 +3721,8 @@ MstStyle1GridCheck:
 	lda_24 xix, 0xfb8ece
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FB8ECE:
+; MstStyle1GridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0D8A)
+MstStyle1Grid_EventDispatch:	; FB8ECE
 	jrl	t, 0x0167
 
 LABEL_FB8ED1:
@@ -3887,7 +3895,7 @@ AcMstStyle1SubGridBoxProc:
 	cp xwa, 0x1C0000B
 	jrl z, LABEL_FB91A8
 	cp xwa, 0x1C00001
-	jr z, LABEL_FB90B1
+	jr z, MstStyle1_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
 	jrl lt, LABEL_FB95DA
@@ -3899,7 +3907,8 @@ AcMstStyle1SubGridBoxProc:
 	lda_24 xix, 0xfb90b1
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_FB90B1:
+; MstStyle1 event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0D9E)
+MstStyle1_EventDispatch:	; FB90B1
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
@@ -4399,7 +4408,8 @@ MstStyle1SubGridCheck:
 	lda_24 xix, 0xfb962a
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FB962A:
+; MstStyle1SubGridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0DC2)
+MstStyle1Sub_EventDispatch:	; FB962A
 	jrl	t, 0x015b
 
 LABEL_FB962D:
@@ -4574,7 +4584,7 @@ AcMstStyle2GridBoxProc:
 	cp xwa, 0x1C00002
 	jrl z, LABEL_FB9A8B
 	cp xwa, 0x1C00001
-	jr z, LABEL_FB9801
+	jr z, MstStyle1Page_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
 	jrl lt, LABEL_FBA3AF
@@ -4586,7 +4596,8 @@ AcMstStyle2GridBoxProc:
 	lda_24 xix, 0xfb9801
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_FB9801:
+; MstStyle1 subpage event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0E04)
+MstStyle1Page_EventDispatch:	; FB9801
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
@@ -6200,7 +6211,7 @@ AcTchSensGridBoxProc:
 	cp xwa, 0x1E0008A
 	jrl z, LABEL_FBAA03
 	cp xwa, 0x1C00001
-	jr z, LABEL_FBA81C
+	jr z, MstStyle2_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
 	jrl lt, LABEL_FBAA50
@@ -6212,7 +6223,8 @@ AcTchSensGridBoxProc:
 	lda_24 xix, 0xfba81c
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_FBA81C:
+; MstStyle2 event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0ED2)
+MstStyle2_EventDispatch:	; FBA81C
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6455,7 +6467,8 @@ TchSensGridCheck:
 	lda_24 xix, 0xfbaa9c
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FBAA9C:
+; TchSensGridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0F08)
+TchSensGrid_EventDispatch:	; FBAA9C
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xeb, 0x8a, 0xbf, 0x0e, 0x30, 0xea, 0x89
@@ -6638,7 +6651,7 @@ AcFSWAssGridBoxProc:
 	cp xwa, 0x1E0008A
 	jrl z, LABEL_FBAFB1
 	cp xwa, 0x1C00001
-	jr z, LABEL_FBADFC
+	jr z, TchSens_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
 	jrl lt, LABEL_FBAFFE
@@ -6650,7 +6663,8 @@ AcFSWAssGridBoxProc:
 	lda_24 xix, 0xfbadfc
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_FBADFC:
+; TouchSensitivity event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0F16)
+TchSens_EventDispatch:	; FBADFC
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6867,7 +6881,8 @@ FSWAssGridCheck:
 	lda_24 xix, 0xfbb04c
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FBB04C:
+; FSWAssGridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED1226)
+FSWAssGrid_EventDispatch:	; FBB04C
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xeb, 0x8a, 0xf3, 0xfd, 0x04, 0x01, 0x30
@@ -7315,7 +7330,8 @@ FswAsIniFunc:
 	ld de, (xde)
 	lda_24 xix, 0xfbb987
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_FBB987:
+; FswAsIniFunc event dispatch (6-entry, event 0x1C00013, table 0xED1234)
+FswAsIni_EventDispatch:	; FBB987
 	.byte 0x1e, 0x06, 0x00, 0x1e, 0x1e, 0x00
 
 SeqLoadFunc_ReturnZero:
@@ -7513,7 +7529,7 @@ AcPmExpFilterGridBoxProc:
 	cp xwa, 0x1C0000B
 	jrl z, LABEL_FBBC40
 	cp xwa, 0x1C00001
-	jr z, LABEL_FBBBD2
+	jr z, PmemPageCtl_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
 	jrl lt, LABEL_FBC120
@@ -7525,7 +7541,8 @@ AcPmExpFilterGridBoxProc:
 	lda_24 xix, 0xfbbbd2
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_FBBBD2:
+; IvPmemWindowPageCtl event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED1420)
+PmemPageCtl_EventDispatch:	; FBBBD2
 	ld xwa, xiz
 	ld_sril XBC, (xsp + 0x0124)
 	ld_sril XDE, (xsp + 0x0120)
@@ -8015,7 +8032,8 @@ PmExpFilterGridCheck:
 	lda_24 xix, 0xfbc173
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FBC173:
+; PmExpFilterGridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED149A)
+PmExpFilter_EventDispatch:	; FBC173
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xeb, 0x8a, 0xf3, 0xfd, 0x00, 0x01, 0x30
@@ -8179,7 +8197,7 @@ AcDispTimeSetGridBoxProc:
 	cp xwa, 0x1C00002
 	jrl z, LABEL_FBC4E6
 	cp xwa, 0x1C00001
-	jr z, LABEL_FBC47C
+	jr z, PmExpFilter2_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
 	jrl lt, LABEL_FBC6E9
@@ -8191,7 +8209,8 @@ AcDispTimeSetGridBoxProc:
 	lda_24 xix, 0xfbc47c
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_FBC47C:
+; PmExpFilter event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED14A8)
+PmExpFilter2_EventDispatch:	; FBC47C
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -8439,7 +8458,8 @@ DispTimeSetGridCheck:
 	lda_24 xix, 0xfbc735
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FBC735:
+; DispTimeSetGridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED1582)
+DispTimeSet_EventDispatch:	; FBC735
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xeb, 0x8a, 0xbf, 0x28, 0x30, 0xea, 0x89
@@ -9299,7 +9319,8 @@ MssNameFunc:
 	ld bc, (xbc)
 	lda_24 xix, 0xfbd32d
 	jp_dri 8, 0x07, 0xF0, 0xE4
-LABEL_FBD32D:
+; MssNameFunc event dispatch (10-entry, event 0x1C00013, table 0xED15AC)
+MssName_EventDispatch:	; FBD32D
 	.byte 0xea, 0x8e, 0xbe, 0x0e, 0x31, 0xa1, 0x20, 0xe8
 	.byte 0xe0, 0x6e, 0x13, 0x0b, 0xed, 0x00, 0x0b, 0x96
 	.byte 0x15, 0xae, 0x12, 0x20, 0x38, 0x1d, 0x4d, 0x0f
@@ -10463,7 +10484,8 @@ PmBkNameFunc:
 	ld bc, (xbc)
 	lda_24 xix, 0xfbe0ef
 	jp_dri 8, 0x07, 0xF0, 0xE4
-LABEL_FBE0EF:
+; PmBkNameFunc event dispatch (10-entry, event 0x1C00013, table 0xED15EE)
+PmBkName_EventDispatch:	; FBE0EF
 	.byte 0x0e, 0xeb, 0xa9, 0x0e, 0x43, 0x09, 0x00, 0x00
 	.byte 0x00, 0x0e
 
