@@ -67,7 +67,7 @@ LABEL_FC5874:
 	.byte 0x66, 0x2e, 0xc9, 0xcf, 0x0f, 0x66, 0x22, 0xc9
 	.byte 0xcf, 0x0a, 0x66, 0x16, 0xc9, 0xdb, 0x66, 0x0b
 	cps	a, 1
-	.ascii "n=@.ÔøΩÔøΩ"
+	.ascii "n=@.ùÌ"
 	.byte 0x00
 	.ascii "h!@0"
 	.byte 0x9d, 0xed, 0x00
@@ -5586,7 +5586,7 @@ ToneGen_DispatchByMode:
 
 ; Register bit manipulation dispatch
 ; Index: DRAM[64605] & 0x7 (0-7), entries: 8
-; Dispatches register bit set/clear/test operations
+; 32-bit function pointers, call (xhl)
 RegBitManip_Dispatch:	; FCA3A1
 	extz xhl
 	xor h, h
@@ -5699,9 +5699,9 @@ LABEL_FCA4CF:
 	and d, a
 	jr z, LABEL_FCA4BF
 
-; MIDI stream processor dispatch
+; MIDI stream processor dispatch A
 ; Index: w & 0x7 (0-7), entries: 8
-; Processes MIDI stream data based on status byte type
+; 32-bit function pointers, call (xhl)
 MidiStream_ProcessorDispatch:	; FCA4DB
 	and w, 0x7
 	sll w, 2
@@ -5832,8 +5832,9 @@ LABEL_FCA662:
 	and d, a
 	jr z, LABEL_FCA652
 
-; MIDI stream processor dispatch (variant B)
+; MIDI stream processor dispatch B
 ; Index: w & 0x7 (0-7), entries: 8
+; 32-bit function pointers, call (xhl)
 MidiStream_ProcessorDispatchB:	; FCA66E
 	stdi8 37319, 0
 	and w, 0x7
@@ -6058,8 +6059,9 @@ LABEL_FCA87E:
 	and d, a
 	jr z, LABEL_FCA86E
 
-; MIDI stream processor dispatch (variant C ‚Äî 16-entry)
+; MIDI stream processor dispatch C
 ; Index: w & 0xF (0-15), entries: 16
+; 32-bit function pointers, call (xhl)
 MidiStream_ProcessorDispatchC:	; FCA88A
 	and w, 0xF
 	sll w, 2
@@ -6464,8 +6466,8 @@ LABEL_FCAD62:
 	jr z, LABEL_FCAD62
 
 ; Voice mode parameter dispatch
-; Index: DRAM[37301] bits [6:4] (3-bit field), entries: 8
-; Dispatches voice mode parameter processing
+; Index: DRAM[37301] bits [6:4] (0-7), entries: 8
+; 32-bit function pointers, call (xhl)
 VoiceMode_ParamDispatch:	; FCAD7D
 	ld (xiy), 0xFF
 	ldda8 a, 37302

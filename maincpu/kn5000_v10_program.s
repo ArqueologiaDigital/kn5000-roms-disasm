@@ -26030,7 +26030,7 @@ MidiEvent_NoteOffA:
 	jrl MidiNoteOff_NullRetA
 
 LABEL_F24714:
-	call LABEL_F24ED9
+	call VoiceSynth_CommandDispatch
 	jrl MidiNoteOff_NullRetA
 
 LABEL_F2471B:
@@ -26092,7 +26092,7 @@ MidiEvent_NoteOffB:
 	jrl MidiNoteOff_NullRetB
 
 LABEL_F24793:
-	call LABEL_F255F2
+	call VoiceParam_CommandDispatch
 	jrl MidiNoteOff_NullRetB
 
 LABEL_F2479A:
@@ -26892,10 +26892,12 @@ ToneGen_LoopAdvanceChkAlt:
 LABEL_F24ED8:
 	ret
 
-LABEL_F24ED9:
+; Voice synthesis command dispatcher
+; Dispatches on DRAM[4012] value: <0x10 uses algorithm table, others are direct handlers
+VoiceSynth_CommandDispatch:	; F24ED9
 	ldda8 a, 4012
 	cp a, 0x10
-	jrl c, LABEL_F24F34
+	jrl c, VoiceSynth_AlgoTableDispatch
 	cp a, 0x20
 	jrl z, LABEL_F24F4E
 	cp a, 0x26
@@ -26924,7 +26926,9 @@ LABEL_F24ED9:
 	jrl z, LABEL_F24F94
 	jrl VoiceSynth_NullRet
 
-LABEL_F24F34:
+; Dispatch via VoiceSynth_Algorithm_Table (16-entry, call (xhl))
+; Index: DRAM[4012] (0x00-0x0F), 32-bit function pointers
+VoiceSynth_AlgoTableDispatch:	; F24F34
 	ld l, a
 	xor h, h
 	sla l, 2
@@ -27599,10 +27603,12 @@ ToneGen_LoopAdvanceCheck:
 LABEL_F255F1:
 	ret
 
-LABEL_F255F2:
+; Voice parameter command dispatcher
+; Dispatches on DRAM[4012] value: <0x10 uses read-update table, others are direct handlers
+VoiceParam_CommandDispatch:	; F255F2
 	ldda8 a, 4012
 	cp a, 0x10
-	jrl c, LABEL_F2564D
+	jrl c, VoiceParam_ReadUpdateDispatch
 	cp a, 0x20
 	jrl z, LABEL_F25667
 	cp a, 0x26
@@ -27631,7 +27637,9 @@ LABEL_F255F2:
 	jrl z, LABEL_F256AD
 	jrl VoiceParam_NullRet
 
-LABEL_F2564D:
+; Dispatch via VoiceParam_ReadUpdate_Table (16-entry, call (xhl))
+; Index: DRAM[4012] (0x00-0x0F), 32-bit function pointers
+VoiceParam_ReadUpdateDispatch:	; F2564D
 	ld l, a
 	xor h, h
 	sla l, 2
