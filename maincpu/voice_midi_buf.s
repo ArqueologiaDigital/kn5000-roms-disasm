@@ -182,12 +182,13 @@ LABEL_FB15B5:
 	ld a, (xiz + 1)
 	ld (xsp + 4), a
 	cp c, 0x23
-	jr ule, LABEL_FB15C9
+	jr ule, VoiceMidi_EventHandler
 	ld xwa, xiz
 	calr LABEL_FB1589
 	jr LABEL_FB15EF
 
-LABEL_FB15C9:
+; Voice MIDI event handler dispatch
+VoiceMidi_EventHandler:	; FB15C9
 	ld a, c
 	extz wa
 	sla wa, 2
@@ -224,12 +225,13 @@ LABEL_FB1611:
 	ld a, (xiz + 1)
 	ld (xsp + 4), a
 	cp c, 0xB
-	jr ule, LABEL_FB1625
+	jr ule, VoiceMidi_AltEventHandler
 	ld xwa, xiz
 	calr LABEL_FB1589
 	jr LABEL_FB1649
 
-LABEL_FB1625:
+; Voice MIDI alt event handler dispatch
+VoiceMidi_AltEventHandler:	; FB1625
 	ld a, c
 	extz wa
 	sla wa, 2

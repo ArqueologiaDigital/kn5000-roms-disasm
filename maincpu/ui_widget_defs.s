@@ -3223,7 +3223,7 @@ LABEL_FA0BDC:
 	cp_srib_im 0xFD, 0x28, 0x01, 0x0E
 	jrl z, LABEL_FA0CF7
 	cp_srib_im 0xFD, 0x28, 0x01, 0x03
-	jrl nz, LABEL_FA0E15
+	jrl nz, ButtonState_DispatchDSP
 	lds de, 0
 	call DrawLine
 	st_dri3b W, 0xFD, 0x18, 0x01
@@ -3354,7 +3354,8 @@ LABEL_FA0E0E:
 	call DrawStringCentered
 	jrl LABEL_FA0EDD
 
-LABEL_FA0E15:
+; ButtonState event dispatch via DSP handler table
+ButtonState_DispatchDSP:	; FA0E15
 	ld_srib A, (xsp + 0x0128)
 	extz wa
 	cps wa, 0
@@ -3568,13 +3569,14 @@ LABEL_FA1035:
 	jr z, LABEL_FA1088
 	ld xwa, xiz
 	ld xiz, 0x28
-	jr LABEL_FA108F
+	jr AcIndexEdit_DispatchDSP
 
 LABEL_FA1088:
 	ld xwa, xiz
 	ld xiz, 0x26
 
-LABEL_FA108F:
+; AcIndexEdit widget dispatch with view lookup
+AcIndexEdit_DispatchDSP:	; FA108F
 	call GetViewInstance
 	add xhl, xiz
 	ld a, (xhl)
@@ -4027,7 +4029,7 @@ LABEL_FA1502:
 	add xhl, xiz
 	ld hl, (xhl)
 	exts xhl
-	jr LABEL_FA158B
+	jr PsToggleBoxProc_Epilogue
 
 LABEL_FA150E:
 	ld xwa, (xsp + 12)
@@ -4082,7 +4084,7 @@ LABEL_FA156C:
 LABEL_FA1578:
 	call SendEvent
 	lds32 xhl, 0
-	jr LABEL_FA158B
+	jr PsToggleBoxProc_Epilogue
 
 LABEL_FA1580:
 	ld xwa, (xsp + 12)
@@ -4092,7 +4094,8 @@ LABEL_FA1580:
 LABEL_FA1588:
 	calr PsPageBoxProc
 
-LABEL_FA158B:
+; PsToggleBoxProc epilogue handler
+PsToggleBoxProc_Epilogue:	; FA158B
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -8165,11 +8168,12 @@ LABEL_FA3D6A:
 
 LanguageCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_FA3D7A
+	jr nz, ObjectProc_ClassDispatch
 	lda_24 xhl, 0xeaa844
 	ret
 
-LABEL_FA3D7A:
+; ObjectProc class dispatch with dual handler
+ObjectProc_ClassDispatch:	; FA3D7A
 	lds32 xhl, 0
 	ret
 
@@ -8588,7 +8592,7 @@ LABEL_FA4353:
 	ld xhl, (xsp + 8)
 	sll xhl, 0
 	add xhl, (xsp + 12)
-	jr LABEL_FA43AE
+	jr UnRegisterObject_Epilogue
 
 LABEL_FA43A1:
 	inc 1, iy
@@ -8596,7 +8600,8 @@ LABEL_FA43A1:
 	jr c, LABEL_FA4353
 	ld xhl, 0xFFFFFFFF
 
-LABEL_FA43AE:
+; UnRegisterObject epilogue handler
+UnRegisterObject_Epilogue:	; FA43AE
 	pop xiz
 	lda xsp, (xsp + 20)
 	ret
@@ -8697,12 +8702,13 @@ InheritedProc:
 	ld xwa, xhl
 	ld xbc, (xsp + 4)
 	st32_24 0x02bc14, xbc
-	jr LABEL_FA44A6
+	jr RootObject_GetterBlock
 
 LABEL_FA44A4:
 	lds32 xwa, 0
 
-LABEL_FA44A6:
+; GetRootObject/Event/Param block
+RootObject_GetterBlock:	; FA44A6
 	ld xhl, xwa
 	pop xiz
 	inc 4, xsp
@@ -9103,7 +9109,7 @@ SupportClassProc:
 	cp xbc, 0x1E0000F
 	jr z, SupportClass_PopIzRet
 	cp xbc, 0x1E00000
-	jr nz, LABEL_FA4896
+	jr nz, SupportClass_VirtualDispatch
 	ld xhl, 0x1600005
 	jr SupportClass_PopIzRet
 
@@ -9112,7 +9118,8 @@ LABEL_FA488F:
 	extz xhl
 	jr SupportClass_PopIzRet
 
-LABEL_FA4896:
+; SupportClass virtual dispatch with type check
+SupportClass_VirtualDispatch:	; FA4896
 	cp xix, 0x1600005
 	jr z, LABEL_FA48A4
 	ld xix, (xhl)
@@ -9149,7 +9156,7 @@ FunctionProc:
 	extz xde
 	sll xde, 2
 	cp xbc, 0x1E00015
-	jr z, LABEL_FA4916
+	jr z, FunctionProc_Dispatch
 	ld xhl, xde
 	add xhl, xix
 	cp xbc, 0x1E0002A
@@ -9170,7 +9177,8 @@ LABEL_FA4912:
 	ld xhl, (xhl)
 	jr FuncProc_PopIzSkip4Ret
 
-LABEL_FA4916:
+; FunctionProc complex heap indexing dispatch
+FunctionProc_Dispatch:	; FA4916
 	add hl, 0x300
 	extz xhl
 	ld xbc, xhl
@@ -9215,13 +9223,14 @@ FuncCall:
 
 ApFunctionProc:
 	cp xbc, 0x1E00015
-	jr z, LABEL_FA4983
+	jr z, ApFuncCall_VirtualDispatch
 	cp xbc, 0x1E00000
 	jrl nz, FunctionProc
 	ld xhl, 0x1600002
 	ret
 
-LABEL_FA4983:
+; ApFuncCall object ID lookup dispatch
+ApFuncCall_VirtualDispatch:	; FA4983
 	ld xbc, xwa
 	srl xbc, 0
 	and xbc, 0xFFF
@@ -9293,13 +9302,14 @@ DefaultFunction:
 
 MainFunctionProc:
 	cp xbc, 0x1E00015
-	jr z, LABEL_FA4A2F
+	jr z, MainFuncCall_DispatchDSP
 	cp xbc, 0x1E00000
 	jrl nz, FunctionProc
 	ld xhl, 0x1600003
 	ret
 
-LABEL_FA4A2F:
+; MainFuncCall DSP variant dispatch
+MainFuncCall_DispatchDSP:	; FA4A2F
 	ld xbc, xwa
 	srl xbc, 0
 	and xbc, 0xFFF
@@ -9365,9 +9375,9 @@ ModeProc:
 	jr z, LABEL_FA4AFD
 	sub xbc, 0x1E0002B
 	cp xbc, 0x0
-	jrl lt, LABEL_FA4D12
+	jrl lt, GetMode_DispatchDSP
 	cp xbc, 0x5
-	jrl gt, LABEL_FA4D12
+	jrl gt, GetMode_DispatchDSP
 	add xbc, xbc
 	add xbc, 0xEAA908
 	ld bc, (xbc)
@@ -9565,7 +9575,8 @@ LABEL_FA4D0E:
 	lds32 xhl, 0
 	jr GetMode_Epilogue10
 
-LABEL_FA4D12:
+; GetMode virtual dispatch via DSP
+GetMode_DispatchDSP:	; FA4D12
 	ld xbc, xiz
 	ld xde, (xsp + 10)
 	calr ObjectProc
@@ -10695,13 +10706,14 @@ ResMethodProc:
 	add xhl, xix
 	ld xhl, (xhl)
 	cp xbc, 0x1E00015
-	jr z, LABEL_FA5989
+	jr z, ViewableProc_VirtualDispatch
 	cp xbc, 0x1E00000
 	jrl nz, ObjectProc
 	ld xhl, 0x160000D
 	ret
 
-LABEL_FA5989:
+; ViewableProc object dispatch helper
+ViewableProc_VirtualDispatch:	; FA5989
 	ld wa, iy
 	extz xwa
 	sll xwa, 2
@@ -17032,7 +17044,8 @@ pProcProc:
 
 pPropProc:
 	jrl LABEL_FA64E0
-LABEL_FA92FE:
+; WidgetType dispatch (pStringProc/EventIDProc)
+WidgetType_DispatchDSP:	; FA92FE
 
 pStringProc:
 	jrl LABEL_FA64E0
@@ -17310,7 +17323,8 @@ DispatchEvent:	; LABEL_FA9585
 	cps hl, 0
 	jrl z, LABEL_FA965C
 
-LABEL_FA9598:
+; EventHandler dual-phase dispatch
+EventHandler_ObjectDispatch:	; FA9598
 	ld xwa, (xsp + 8)
 	cp xwa, 0xFFFFFFFF
 	jrl z, EventHandler_ContinueProc
@@ -17376,7 +17390,7 @@ EventHandler_ContinueProc:
 	lda xde, (xsp)
 	calr GetEvent
 	cps hl, 0
-	jrl nz, LABEL_FA9598
+	jrl nz, EventHandler_ObjectDispatch
 
 LABEL_FA965C:
 	lda xsp, (xsp + 12)
@@ -17389,11 +17403,12 @@ SendEvent:
 	ld (xsp + 24), xbc
 	ld xiz, xwa
 	cp xiz, 0xFFFFFFFF
-	jr nz, LABEL_FA9679
+	jr nz, EventRoute_ObjectDispatch
 	calr GetCurrentTarget
 	ld xiz, xhl
 
-LABEL_FA9679:
+; EventRoute dual dispatch with context setup
+EventRoute_ObjectDispatch:	; FA9679
 	ld xwa, xiz
 	srl xwa, 0
 	and xwa, 0xFFF
@@ -17868,7 +17883,8 @@ MainDispatchEvent:
 	cps hl, 0
 	jr z, LABEL_FA9AF0
 
-LABEL_FA9A9D:
+; MainSendEvent object dispatch
+MainSendEvent_VirtualDispatch:	; FA9A9D
 	ld xwa, (xsp + 8)
 	cp xwa, 0xFFFFFFFF
 	jr z, LABEL_FA9AE1
@@ -17900,7 +17916,7 @@ LABEL_FA9AE1:
 	lda xde, (xsp)
 	calr MainGetEvent
 	cps hl, 0
-	jr nz, LABEL_FA9A9D
+	jr nz, MainSendEvent_VirtualDispatch
 
 LABEL_FA9AF0:
 	lda xsp, (xsp + 12)
@@ -17913,11 +17929,12 @@ MainSendEvent:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	cp xiz, 0xFFFFFFFF
-	jr nz, LABEL_FA9B0B
+	jr nz, MainPostEvent_VirtualDispatch
 	lds32 xhl, 0
 	jr LABEL_FA9B59
 
-LABEL_FA9B0B:
+; MainPostEvent queued dispatch with validation
+MainPostEvent_VirtualDispatch:	; FA9B0B
 	ld xwa, xiz
 	ld xbc, 0x1E00014
 	ld xde, 0x1600003
@@ -18427,7 +18444,7 @@ LABEL_FA9FCD:
 	add xbc, xde
 	ld xde, (xbc)
 	or xde, xde
-	jr nz, LABEL_FAA03A
+	jr nz, RootContext_Setup
 	ld xde, xhl
 	ld bc, (xwa)
 	ldw (xix), 0xFFFF
@@ -18450,7 +18467,8 @@ LABEL_FAA02C:
 	stiw_dri 0x07, 0xE8, 0xE4, 0xFF, 0xFF
 	jrl LABEL_FAA10D
 
-LABEL_FAA03A:
+; RootContext setup handler
+RootContext_Setup:	; FAA03A
 	st32_24 0x02bc24, xiz
 	st32_24 0x02bc18, xiz
 	ld xwa, (xsp + 4)
@@ -18503,11 +18521,12 @@ LABEL_FAA03A:
 	ld (xix + 8), xwa
 	st16_24 0x030448, xbc
 	cp bc, 0xFFFF
-	jr z, LABEL_FAA0F8
+	jr z, ApTimer_VirtualDispatch
 	muls bc, 0x18
 	stiw_dri 0x07, 0xEC, 0xE4, 0xFF, 0xFF
 
-LABEL_FAA0F8:
+; ApTimer dispatcher
+ApTimer_VirtualDispatch:	; FAA0F8
 	ld xhl, xde
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -18744,12 +18763,13 @@ DrawTask_EventLoop:
 	calr LABEL_FAA356
 	ld xiz, xhl
 	cpdi16_24 257870, 0
-	jr z, LABEL_FAA311
+	jr z, DrawTask_FuncDispatch
 	lds wa, 5
 	lds bc, 3
 	call TaskSched_ChangePriority
 
-LABEL_FAA311:
+; DrawTask function dispatch with priority
+DrawTask_FuncDispatch:	; FAA311
 	or xiz, xiz
 	jr z, LABEL_FAA333
 	ld xhl, (xiz)
@@ -18930,14 +18950,15 @@ DrawQueue_Alloc:
 	ld xiz, xbc
 	add xbc, xde
 	st32_24 0x03246a, xbc
-	jr LABEL_FAA481
+	jr DrawFunc_CallHandler
 
 LABEL_FAA478:
 	ld xiz, xhl
 	add xhl, xde
 	st32_24 0x03246a, xhl
 
-LABEL_FAA481:
+; DrawFunc handler with audio lock release
+DrawFunc_CallHandler:	; FAA481
 	lds wa, 4
 	call Audio_Lock_Release
 	ld xhl, xiz
@@ -18990,7 +19011,8 @@ LABEL_FAA4D6:
 	pop xiz
 	ret
 
-LABEL_FAA4D8:
+; DrawFunc stack handler
+DrawFunc_StackHandler:	; FAA4D8
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, (xiz+4)
@@ -19031,7 +19053,8 @@ LABEL_FAA518:
 	pop xiz
 	ret
 
-LABEL_FAA51A:
+; DrawFunc XSP region check variant
+DrawFunc_XspCheck:	; FAA51A
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, (xiz+4)

@@ -19739,10 +19739,10 @@ LABEL_F1EB27:
 	ret
 
 rcm_ld_XAPR_j:	; F1EB28
-	jp LABEL_F18A74
+	jp FloppyDisk_LoadNoteEvents
 
 rcm_sv_XAPR_j:
-	jp LABEL_F18BFF
+	jp FloppyDisk_ComputeToneParams
 
 SetSepaOutMode:
 	lda xsp, (xsp - 20)
@@ -42162,7 +42162,7 @@ LABEL_FC582F:
 	slla l
 
 LABEL_FC5838:
-	jr LABEL_FC584C
+	jr FileIO_CallbackHandler
 
 LABEL_FC583A:
 	.include "file_io_engine.s"

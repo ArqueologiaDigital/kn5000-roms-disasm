@@ -4948,7 +4948,8 @@ LABEL_FDDB55:
 	ldi_werp 0xFA, 0
 	jr LABEL_FDDB7D
 
-LABEL_FDDB5A:
+; Voice initialization dispatch
+VoiceInit_Dispatch:	; FDDB5A
 	push xiz
 	ld de, iz
 	extz xde
@@ -4973,7 +4974,7 @@ LABEL_FDDB7D:
 	add xbc, xwa
 	ld xwa, (xbc)
 	or xwa, xwa
-	jr nz, LABEL_FDDB5A
+	jr nz, VoiceInit_Dispatch
 	cps iz, 0
 	call_24 z, 0xFDDB2E
 	pop xiz
@@ -5178,17 +5179,18 @@ AudioInit_ProcessModeChange:
 	call Audio_CheckInitStatus
 	anddi16 50580, 65531
 	bitda 1, 64615
-	jr z, LABEL_FDDE1A
+	jr z, AudioModeChange_Handler
 	ldda16 xwa, 50580
 	bit 4, wa
 	jr nz, LABEL_FDDE15
 	setda 2, 49662
-	jr LABEL_FDDE1A
+	jr AudioModeChange_Handler
 
 LABEL_FDDE15:
 	stdi8 49662, 0
 
-LABEL_FDDE1A:
+; Audio mode change handler
+AudioModeChange_Handler:	; FDDE1A
 	resda 3, 49662
 	stdi8 49844, 255
 	stdi8 49852, 255
@@ -5219,17 +5221,18 @@ Audio_CheckSubsystemReady:
 	and wa, 0x60
 	call_24 z, 0xFDF5F5
 	bitda 1, 64615
-	jr z, LABEL_FDDE9A
+	jr z, AudioSubsystem_Callback
 	ldda16 xwa, 50580
 	bit 4, wa
 	jr nz, LABEL_FDDE95
 	setda 2, 49662
-	jr LABEL_FDDE9A
+	jr AudioSubsystem_Callback
 
 LABEL_FDDE95:
 	stdi8 49662, 0
 
-LABEL_FDDE9A:
+; Audio subsystem callback
+AudioSubsystem_Callback:	; FDDE9A
 	resda 3, 49662
 	stdi8 49844, 255
 	stdi8 49852, 255
@@ -5292,7 +5295,7 @@ LABEL_FDDF42:
 
 LABEL_FDDF47:
 	bitda 1, 64615
-	jr z, LABEL_FDDF67
+	jr z, AudioVoice_Callback
 	ldda16 xwa, 50580
 	bit 4, wa
 	jr nz, LABEL_FDDF5C
@@ -5305,7 +5308,8 @@ LABEL_FDDF5C:
 LABEL_FDDF61:
 	ordi16 50588, 1
 
-LABEL_FDDF67:
+; Audio voice callback dispatch
+AudioVoice_Callback:	; FDDF67
 	ldda8 a, 36148
 	extz wa
 	sla wa, 2
@@ -5332,17 +5336,18 @@ AudioMode_SetStereoFlags:
 
 AudioMode_ResetVoiceState:
 	bitda 1, 64615
-	jr z, LABEL_FDDFC1
+	jr z, AudioVoiceReset_Handler
 	ldda16 xwa, 50580
 	bit 4, wa
 	jr nz, LABEL_FDDFBC
 	setda 2, 49662
-	jr LABEL_FDDFC1
+	jr AudioVoiceReset_Handler
 
 LABEL_FDDFBC:
 	stdi8 49662, 0
 
-LABEL_FDDFC1:
+; Audio voice reset handler
+AudioVoiceReset_Handler:	; FDDFC1
 	resda 3, 49662
 	stdi8 49844, 255
 	stdi8 49852, 255

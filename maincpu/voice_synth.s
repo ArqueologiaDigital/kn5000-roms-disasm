@@ -3725,14 +3725,15 @@ LABEL_FAD608:
 	cps wa, 0
 	jr mi, Draw_StyledBoxWithFrame
 	cp wa, 0xB
-	jr le, LABEL_FAD633
+	jr le, Draw_DispatchByPartType
 	sub wa, 0xB4
 	cp wa, 0xC
 	jr lt, Draw_StyledBoxWithFrame
 	cp wa, 0x18
 	jr gt, Draw_StyledBoxWithFrame
 
-LABEL_FAD633:
+; Draw dispatch by part type
+Draw_DispatchByPartType:	; FAD633
 	add wa, wa
 	lda_24 xix, 0xeaae16
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -4218,14 +4219,15 @@ LABEL_FADAD6:
 	cps wa, 0
 	jr lt, DrawPartGroup_TableJump_DefaultCase
 	cps wa, 7
-	jr le, LABEL_FADB24
+	jr le, DrawPartGroup_DispatchByType
 	sub wa, 0x18
 	cp wa, 0x8
 	jr lt, DrawPartGroup_TableJump_DefaultCase
 	cp wa, 0xF
 	jr gt, DrawPartGroup_TableJump_DefaultCase
 
-LABEL_FADB24:
+; DrawPartGroup dispatch by type
+DrawPartGroup_DispatchByType:	; FADB24
 	add wa, wa
 	lda_24 xix, 0xeaadf6
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0

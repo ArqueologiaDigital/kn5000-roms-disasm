@@ -4402,19 +4402,20 @@ GroupBoxProc:
 	cp xwa, 0x0
 	jrl lt, GroupBox_ForwardToBoxProc
 	cp xwa, 0x9
-	jr le, LABEL_F99940
+	jr le, CtrlPanel_FuncDispatch
 	sub xwa, 0x20008A
 	cp xwa, 0xA
 	jrl lt, GroupBox_ForwardToBoxProc
 	cp xwa, 0x13
-	jr le, LABEL_F99940
+	jr le, CtrlPanel_FuncDispatch
 	dec 6, xwa
 	cp xwa, 0x14
 	jrl lt, GroupBox_ForwardToBoxProc
 	cp xwa, 0x26
 	jrl gt, GroupBox_ForwardToBoxProc
 
-LABEL_F99940:
+; Control panel function dispatch
+CtrlPanel_FuncDispatch:	; F99940
 	add xwa, 0xEA9ADA
 	ld wa, (xwa)
 	extz wa

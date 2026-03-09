@@ -10208,7 +10208,8 @@ PsMixer_ControlCase4:	; F7FC9F
 	ld (xsp + 8), wa
 	ldw (xsp + 10), 0x0
 
-LABEL_F7FCB0:
+; PsMixer control dispatch helper
+PsMixer_ControlHelper:	; F7FCB0
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
 	ld (xsp + 4), xhl
@@ -10232,7 +10233,7 @@ LABEL_F7FCB0:
 	st_dri3b C, 0x07, 0xE4, 0xE0
 	ld16_24 xwa, 0x024792
 	cp wa, (xsp + 8)
-	jr nz, LABEL_F7FD13
+	jr nz, PsMixer_EventCallback
 	add xde, 0x10000
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1C0000E
@@ -10240,7 +10241,8 @@ LABEL_F7FCB0:
 	call (xhl)
 	jr LABEL_F7FD1F
 
-LABEL_F7FD13:
+; PsMixer event callback dispatch
+PsMixer_EventCallback:	; F7FD13
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1C0000E
 	ld xhl, (xhl)
@@ -10251,7 +10253,8 @@ LABEL_F7FD1F:
 	sla iz, 3
 	ldw (xsp + 12), 0x0
 
-LABEL_F7FD2C:
+; PsMixer grid loop handler
+PsMixer_GridLoop:	; F7FD2C
 	ld bc, (xsp + 8)
 	extz xbc
 	ld wa, iz
@@ -10271,11 +10274,11 @@ LABEL_F7FD2C:
 	inc 1, iz
 	incm 1, (xsp + 12)
 	cpw (xsp + 12), 0x8
-	jr c, LABEL_F7FD2C
+	jr c, PsMixer_GridLoop
 	incm 1, (xsp + 8)
 	incm 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
-	jrl c, LABEL_F7FCB0
+	jrl c, PsMixer_ControlHelper
 	ld16_24 xwa, 0x024790
 	calr PsMixer_ReadWordArrayEntry
 	ldfr_werp HL, 0xFA
@@ -10330,7 +10333,7 @@ PsMixer_ControlCase5:	; F7FDFE
 	call SendEvent
 	ld iz, hl
 	cps iz, 7
-	jrl gt, LABEL_F7FF08
+	jrl gt, AudioCtrl_DispatchHandler
 	ld16_24 xwa, 0x024794
 	sla wa, 3
 	add iz, wa
@@ -10416,7 +10419,8 @@ LABEL_F7FEF6:
 	call SetAutoInc
 	jrl AudioCtrl_ReturnToCallerExit
 
-LABEL_F7FF08:
+; Audio controller dispatch handler
+AudioCtrl_DispatchHandler:	; F7FF08
 	cp iz, 0x88
 	jrl lt, LABEL_F7FFFB
 	cp iz, 0x8C
@@ -10756,7 +10760,8 @@ LABEL_F802F1:
 	sla iz, 3
 	ldw (xsp + 12), 0x0
 
-LABEL_F8031C:
+; PsMixer array read handler
+PsMixer_ArrayReadHandler:	; F8031C
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
 	ldfr_werp HL, 0xFA
@@ -10773,7 +10778,7 @@ LABEL_F8031C:
 	ld xbc, 0x1E10001
 	call ApFuncCall
 	cp hl, (xsp + 66)
-	jr nz, LABEL_F80393
+	jr nz, AudioCtrl_MixerDispatch
 	ld de, (xsp + 74)
 	exts xde
 	ld xwa, (xsp + 14)
@@ -10797,7 +10802,8 @@ LABEL_F8031C:
 	call (xhl)
 	jr AudioCtrl_MixerLoopNext
 
-LABEL_F80393:
+; AudioCtrl mixer dispatch handler
+AudioCtrl_MixerDispatch:	; F80393
 	ld de, (xsp + 66)
 	extz xde
 	ld xwa, (xsp + 4)
@@ -10832,7 +10838,7 @@ AudioCtrl_MixerLoopNext:
 	inc 1, iz
 	incm 1, (xsp + 12)
 	cpw (xsp + 12), 0x8
-	jrl c, LABEL_F8031C
+	jrl c, PsMixer_ArrayReadHandler
 	incm 1, (xsp + 8)
 	incm 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
@@ -10853,7 +10859,8 @@ LABEL_F80406:
 	sla iz, 3
 	ldw (xsp + 12), 0x0
 
-LABEL_F80431:
+; AudioCtrl array read handler
+AudioCtrl_ArrayReadHandler:	; F80431
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
 	ldfr_werp HL, 0xFA
@@ -10864,7 +10871,7 @@ LABEL_F80431:
 	call ApFuncCall
 	lda xwa, (xsp + 70)
 	cp (xwa), xhl
-	jr nz, LABEL_F80493
+	jr nz, AudioCtrl_DispatchCallback
 	ld de, (xwa + 4)
 	exts xde
 	ld xwa, (xsp + 14)
@@ -10888,7 +10895,8 @@ LABEL_F80431:
 	call (xhl)
 	jr LABEL_F804E5
 
-LABEL_F80493:
+; AudioCtrl dispatch callback
+AudioCtrl_DispatchCallback:	; F80493
 	ld xde, (xwa)
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
@@ -10922,7 +10930,7 @@ LABEL_F804E5:
 	inc 1, iz
 	incm 1, (xsp + 12)
 	cpw (xsp + 12), 0x8
-	jrl c, LABEL_F80431
+	jrl c, AudioCtrl_ArrayReadHandler
 	incm 1, (xsp + 8)
 	incm 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
@@ -11083,7 +11091,8 @@ LABEL_F806AE:
 	ld (xsp + 8), wa
 	ldw (xsp + 10), 0x0
 
-LABEL_F806BF:
+; PsMixer event forward helper
+PsMixer_EventForwardHelper:	; F806BF
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
 	ld (xsp + 4), xhl
@@ -11110,7 +11119,7 @@ LABEL_F80704:
 	incm 1, (xsp + 8)
 	incm 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
-	jr c, LABEL_F806BF
+	jr c, PsMixer_EventForwardHelper
 	jr AudioCtrl_ReturnZero
 
 ; PsMixer control common handler

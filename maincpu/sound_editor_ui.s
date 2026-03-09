@@ -9878,7 +9878,8 @@ LABEL_F18373:
 	.byte 0x8b, 0xf8, 0x5e, 0xf3, 0xfd, 0x0c, 0x04, 0x37
 	.byte 0x0e
 
-LABEL_F18A74:
+; Floppy disk load and store note events via dispatch
+FloppyDisk_LoadNoteEvents:	; F18A74
 	st_dri3b L, 0xFD, 0xF8, 0xFB
 	pushw iz
 	st_dri3l XBC, 0xFD, 0x02, 0x04
@@ -10015,7 +10016,8 @@ LABEL_F18BF8:
 	st_dri3b L, 0xFD, 0x08, 0x04
 	ret
 
-LABEL_F18BFF:
+; Floppy disk compute tone parameters and validate
+FloppyDisk_ComputeToneParams:	; F18BFF
 	st_dri3b L, 0xFD, 0xE8, 0xFB
 	push xiz
 	st_dri3l XDE, 0xFD, 0x10, 0x04
@@ -10133,11 +10135,12 @@ LABEL_F18BFF:
 	ld_sril XIX, (xsp + 0x0418)
 	call (xix)
 	cp xhl, xiz
-	jr ge, LABEL_F18D4A
+	jr ge, FloppyDisk_CopyNoteBuffers
 	ldw hl, 0xFF9B
 	jrl FloppyCtrl_PopIzStoreRet
 
-LABEL_F18D4A:
+; Floppy disk copy note buffers to slots and write tone data
+FloppyDisk_CopyNoteBuffers:	; F18D4A
 	lda xwa, (xsp + 16)
 	ld_sril XIX, (xsp + 0x0414)
 	ld xbc, 0x400

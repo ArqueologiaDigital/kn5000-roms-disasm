@@ -1684,7 +1684,8 @@ LABEL_FE1311:
 	cpda16 xiz, 50378
 	jrl nc, LABEL_FE143D
 
-LABEL_FE131B:
+; Voice event type dispatch
+VoiceEvent_TypeDispatch:	; FE131B
 	ld wa, iz
 	sll wa, 2
 	ldada xbc, 50380
@@ -1825,7 +1826,7 @@ LABEL_FE1428:
 AudioInit_FlushQueue_LoopNext:
 	inc 1, iz
 	cpda16 xiz, 50378
-	jrl c, LABEL_FE131B
+	jrl c, VoiceEvent_TypeDispatch
 
 LABEL_FE143D:
 	stdi16 50378, 0
@@ -13534,9 +13535,9 @@ SeqEvtBuf_NonNoteDispatchLoop:
 	jrl z, LABEL_FE8A78
 	ld wa, (xsp + 4)
 	cp wa, 0xD2
-	jrl z, LABEL_FE894D
+	jrl z, SeqEvtBuf_NoteDispatch
 	cp wa, 0xD1
-	jrl z, LABEL_FE894D
+	jrl z, SeqEvtBuf_NoteDispatch
 	cp wa, 0xD0
 	jrl z, LABEL_FE889A
 	cp wa, 0xC2
@@ -13658,7 +13659,8 @@ LABEL_FE88D2:
 	jr lt, LABEL_FE88D2
 	jrl SeqEvtBuf_NonNoteDispatchLoop
 
-LABEL_FE894D:
+; Sequencer event buffer note dispatch
+SeqEvtBuf_NoteDispatch:	; FE894D
 	call SeqEvtBuf_ReadAlternate
 	ldfr_werp HL, 0xFA
 	ldto_werp WA, 0xFA
@@ -13956,12 +13958,13 @@ UIParam_ScanAndCollect:
 	ldda8 a, 52907
 	sub a, 0xF
 	ldfr_berp A, 0xFB
-	jr LABEL_FE8C1B
+	jr UIParam_CallbackDispatch
 
 LABEL_FE8C18:
 	ldi_berp 0xFB, 1
 
-LABEL_FE8C1B:
+; UIParam callback dispatch
+UIParam_CallbackDispatch:	; FE8C1B
 	lda xwa, (xsp + 2)
 	ldda8 c, 59838
 	extz bc
@@ -18220,7 +18223,7 @@ LABEL_FEC009:
 LABEL_FEC02C:
 	ld a, l
 	extz wa
-	calr LABEL_FED63B
+	calr MidiSysMsg_Handler
 	ld wa, hl
 	cps wa, 0
 	jr ge, AccSong_ProcessRecord_Loop
@@ -20764,7 +20767,8 @@ LABEL_FED637:
 	popw iz
 	ret
 
-LABEL_FED63B:
+; MIDI system message handler
+MidiSysMsg_Handler:	; FED63B
 	lda xsp, (xsp - 10)
 	push xiz
 	ld c, a
@@ -23175,7 +23179,8 @@ LABEL_FEEB54:
 	inc 2, xsp
 	retd 0x2
 
-LABEL_FEEB59:
+; Sound parameter offset dispatch handler
+SndParam_OffsetHandler:	; FEEB59
 	dec 4, xsp
 	ld (xsp), e
 	ld (xsp + 2), a
@@ -23250,7 +23255,7 @@ Param_SignExtendReturn:
 	extz wa
 	extz bc
 	extz de
-	jrl LABEL_FEEB59
+	jrl SndParam_OffsetHandler
 
 LABEL_FEEBE5:
 	ret
@@ -24695,7 +24700,8 @@ LABEL_FF0240:
 	st_dri3w HL, 0xE5, 0xA8, 0x72
 	ret
 
-LABEL_FF024E:
+; HDAE ROM data dispatch handler
+HdaeRom_DataHandler:	; FF024E
 	st_dri3b L, 0xFD, 0x48, 0xFE
 	push xiz
 	lda_dri3 XHL, 0xFD, 0xB8, 0x01
@@ -24791,7 +24797,8 @@ LABEL_FF03FB:
 	.byte 0x61, 0xda, 0x62, 0xc7, 0xea, 0xcf, 0x80, 0x67
 	.byte 0xdf, 0x0e
 
-LABEL_FF0445:
+; HDAE ROM alt dispatch handler
+HdaeRom_AltHandler:	; FF0445
 	pushw iz
 	ld xwa, 0x1E0000
 	calr LABEL_FF012E
@@ -24836,10 +24843,10 @@ PostTmLoad:
 	jr lt, LABEL_FF04D6
 	ldw wa, 0xFF
 	ldw bc, 0xFF
-	calr LABEL_FF024E
+	calr HdaeRom_DataHandler
 	ldw wa, 0xFF
 	ldw bc, 0xFF
-	calr LABEL_FF0445
+	calr HdaeRom_AltHandler
 	calr LABEL_FF03DC
 	ld xwa, 0x1E0000
 	ldw bc, 0x72AA
@@ -24879,10 +24886,10 @@ PostTmSave_Success:
 	jr lt, PostTmSave_Failure
 	ldw wa, 0xFF
 	ldw bc, 0xFF
-	calr LABEL_FF024E
+	calr HdaeRom_DataHandler
 	ldw wa, 0xFF
 	ldw bc, 0xFF
-	calr LABEL_FF0445
+	calr HdaeRom_AltHandler
 	calr LABEL_FF03DC
 	ld xwa, 0x1E0000
 	ldw bc, 0x72AA

@@ -6,10 +6,11 @@
 LABEL_FC5843:
 	ld a, e
 	and a, 0xF
-	jr z, LABEL_FC584C
+	jr z, FileIO_CallbackHandler
 	srla l
 
-LABEL_FC584C:
+; File I/O callback handler
+FileIO_CallbackHandler:	; FC584C
 	cps l, 0
 	jr z, LABEL_FC5863
 	ld a, (xiz + 1)
@@ -1325,7 +1326,8 @@ DispatchBitmaskHandlers:
 	cpw (xiz), 0xFFFF
 	jr z, LABEL_FC714D
 
-LABEL_FC7139:
+; Bitmask dispatch loop handler
+BitmaskDispatch_LoopHandler:	; FC7139
 	ld wa, (xsp + 4)
 	and wa, (xiz)
 	jr z, LABEL_FC7145
@@ -1335,7 +1337,7 @@ LABEL_FC7139:
 LABEL_FC7145:
 	inc 6, xiz
 	cpw (xiz), 0xFFFF
-	jr nz, LABEL_FC7139
+	jr nz, BitmaskDispatch_LoopHandler
 
 LABEL_FC714D:
 	pop xiz
@@ -3214,7 +3216,8 @@ LABEL_FC84DC:
 	ldmm16 37088, 37086
 	jr LABEL_FC851C
 
-LABEL_FC84EA:
+; File I/O operation dispatch
+FileIO_OperationDispatch:	; FC84EA
 	calr LABEL_FC95CE
 	ldda8 a, 37159
 	extz wa
@@ -3241,7 +3244,7 @@ LABEL_FC851C:
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0xFF
-	jr nz, LABEL_FC84EA
+	jr nz, FileIO_OperationDispatch
 	ldada xbc, 48444
 	ldda16 xwa, 37086
 	extz xwa
@@ -6561,11 +6564,12 @@ LABEL_FCAE33:
 
 LABEL_FCAE84:
 	cpdi8 37211, 0
-	jr nz, LABEL_FCAE92
+	jr nz, MidiCtrl_DispatchHandler
 	bitda 3, 64848
 	jrl nz, MidiCtrl_NullRet
 
-LABEL_FCAE92:
+; MIDI controller dispatch handler
+MidiCtrl_DispatchHandler:	; FCAE92
 	xor h, h
 	ldda8 l, 37320
 	ld xix, 0xF1A0
@@ -6905,7 +6909,7 @@ LABEL_FCB44D:
 	ret
 
 VoiceParam_DispatchByMode:
-	calr LABEL_FCB6E3
+	calr MidiVoiceNote_Dispatch
 	cpdi8 37301, 255
 	jr z, LABEL_FCB46E
 	ldda8 a, 37301
@@ -7135,7 +7139,8 @@ MIDI_VoiceNote_CtrlExit:
 LABEL_FCB6E2:
 	ret
 
-LABEL_FCB6E3:
+; MIDI voice note dispatch
+MidiVoiceNote_Dispatch:	; FCB6E3
 	ldda8 l, 37301
 	and l, 0x3
 	sll l, 2
@@ -7200,7 +7205,7 @@ LABEL_FCB771:
 	call PartCtrl_WriteProgramChange
 	stda16 37327, xhl
 	call PartCtrl_CheckBitmaskBit
-	jr nc, LABEL_FCB7CA
+	jr nc, MidiPart_ChannelDispatch
 	ld xix, 0xFC5A
 	call MIDI_SetupChannelParams
 	ldda16 xwa, 37213
@@ -7218,7 +7223,8 @@ LABEL_FCB771:
 	call SwbtWr_QueuePostEvent
 	popw hl
 
-LABEL_FCB7CA:
+; MIDI part channel dispatch
+MidiPart_ChannelDispatch:	; FCB7CA
 	extz hl
 	ldda8 l, 37320
 	ld xix, 0xF1A0

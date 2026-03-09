@@ -19132,7 +19132,8 @@ LABEL_F43B08:
 LABEL_F43B18:
 	ldi_werp 0xFA, 1
 
-LABEL_F43B1B:
+; Sequencer data field dispatch
+SeqData_DispatchByField:	; F43B1B
 	lda xde, (xsp + 4)
 	lda xbc, (xde + 2)
 	ld wa, (xbc)
@@ -19177,7 +19178,7 @@ LABEL_F43B7D:
 LABEL_F43B81:
 	inc1_werp 0xFA
 	cp_erpw 0xFA, 0x08, 0x00
-	jr c, LABEL_F43B1B
+	jr c, SeqData_DispatchByField
 
 SeqData_SaveParsedState:
 	ld c, (xsp + 18)

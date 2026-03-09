@@ -1165,11 +1165,12 @@ FileData_ValidateAndDispatch:
 	calr FileData_ValidateFormat
 	popw wa
 	cp hl, 0xFFFF
-	jr z, LABEL_FD0E1D
+	jr z, FileData_DispatchHandler
 	inc 1, xix
 	dec 1, c
 
-LABEL_FD0E1D:
+; File data dispatch handler
+FileData_DispatchHandler:	; FD0E1D
 	push xix
 	ld wa, bc
 	extz wa
@@ -8707,7 +8708,7 @@ LABEL_FD7AC8:
 LABEL_FD7ADC:
 	call SeqAlt_ProcessAndFinalize
 LABEL_FD7AE0:
-	calr LABEL_FD7AF5
+	calr MidiTable_DispatchHelper
 	.byte 0xf1, 0x18, 0xbd, 0xcc			; bit 4, (0xBD18)  [F1 prefix]
 	jr nz, LABEL_FD7AC8
 LABEL_FD7AE9:
@@ -8716,7 +8717,8 @@ LABEL_FD7AE9:
 LABEL_FD7AF0:
 	.byte 0xf1, 0x18, 0xbd, 0xb4			; res 4, (0xBD18)  [F1 prefix]
 	ret
-LABEL_FD7AF5:
+; MIDI table dispatch helper
+MidiTable_DispatchHelper:	; FD7AF5
 	; --- Helper 1: table dispatch via (XBC+WA) with guard checks (58 bytes) ---
 	ldda32	xwa, 48300
 	lds	bc, 4
@@ -10462,14 +10464,15 @@ LABEL_FD8D9C:
 	cp_erpb 0xFB, 0xF7
 	jr nz, LABEL_FD8D80
 	call VoiceQueue_Append
-	calr LABEL_FD8DB4
+	calr SeqData_DispatchHandler
 	jr SysEx_ParserLoop
 
 LABEL_FD8DB0:
 	pop_werp 0xFA
 	ret
 
-LABEL_FD8DB4:
+; Sequencer data dispatch handler
+SeqData_DispatchHandler:	; FD8DB4
 	call SeqData_InitPlaybackFromField
 	ldda32 xwa, 48300
 	lds bc, 4

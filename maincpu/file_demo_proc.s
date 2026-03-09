@@ -2197,7 +2197,8 @@ LABEL_F87A1F:
 	ldw (xsp + 8), 0x0
 	lds iz, 0
 
-LABEL_F87A3E:
+; File demo record callback dispatch
+FileDemo_RecordCallback:	; F87A3E
 	ld wa, iz
 	muls wa, 0x6
 	lda_24 xbc, 0xea01c0
@@ -2233,7 +2234,7 @@ LABEL_F87A92:
 FileIO_RecordLoop_Continue:
 	inc 1, iz
 	cp iz, 0x8
-	jr lt, LABEL_F87A3E
+	jr lt, FileDemo_RecordCallback
 	lds wa, 2
 	call FileIO_WriteRecordName_Done
 	cps l, 0
@@ -2735,7 +2736,8 @@ LABEL_F87F23:
 	call FileIO_FormatFileIndex
 	ldi_werp 0xFA, 0
 
-LABEL_F87F6A:
+; File demo process callback dispatch
+FileDemo_ProcessCallback:	; F87F6A
 	ldto_werp WA, 0xFA
 	muls wa, 0x6
 	lda_24 xbc, 0xea0210
@@ -2758,7 +2760,7 @@ LABEL_F87F6A:
 LABEL_F87FA4:
 	inc1_werp 0xFA
 	cp_erpw 0xFA, 0x08, 0x00
-	jr lt, LABEL_F87F6A
+	jr lt, FileDemo_ProcessCallback
 
 LABEL_F87FAE:
 	cpw (xsp + 4), 0x0

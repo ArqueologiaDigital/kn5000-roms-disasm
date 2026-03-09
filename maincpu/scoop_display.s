@@ -2774,10 +2774,11 @@ LABEL_EF8791:
 	ldda8	w, 3538
 	ld xiy, 0x00000D8F
 	call 0xEFBDD0
-	call LABEL_EF87A3
+	call Display_ModeHandler
 LABEL_EF87A2:
 	ret
-LABEL_EF87A3:
+; Display mode handler
+Display_ModeHandler:	; EF87A3
 	.byte 0xc1, 0xd3, 0x0d, 0x3e, 0x01	; or (0x0DD3), 0x01  [8-bit direct]
 	xor	a, a
 	stda8	3538, a
@@ -3893,10 +3894,11 @@ LABEL_EFA336:
 	jrl nz, Interrupt_NullRet
 	ldda8 a, 3432
 	cps a, 4
-	jrl ule, LABEL_EFA349
+	jrl ule, Interrupt_CodeDispatch
 	xor a, a
 
-LABEL_EFA349:
+; Interrupt dispatch by code
+Interrupt_CodeDispatch:	; EFA349
 	xor w, w
 	sla a, 2
 	ld hl, wa
