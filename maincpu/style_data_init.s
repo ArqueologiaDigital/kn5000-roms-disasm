@@ -1615,7 +1615,7 @@ SeqEvt_CallTimingHelper:
 SeqEvt_ProcessTimedEvents:
 	bitda 5, 10412
 	jr z, SeqEvt_ProcessTimedEvents_Idle
-	call LABEL_F43D05
+	call SeqEvent_CaseA
 	calr Seq_TickWrapper
 	call MIDI_START_PLAYBACK_REQUEST
 	call AccNoteOn_ProcessVoiceSetup

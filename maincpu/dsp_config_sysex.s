@@ -1714,7 +1714,7 @@ CompIface_FromSource2:
 	call SeqState_GetFlags
 	and hl, 0x7
 	jr z, CompIface_Source2_ZeroCheck
-	call LABEL_F22B37
+	call SqTrSel_CaseG
 	jr CompIface_PostProcess
 
 CompIface_Source2_ZeroCheck:

@@ -1835,7 +1835,7 @@ LABEL_F876B5:
 	cps iz, 0				; check result
 	jr lt, LABEL_F876C4			; error, skip
 	ld xwa, (xsp + 16)			; restore caller arg
-	call LABEL_F1EA20				; additional processing
+	call VoiceSynth_CmdCase0				; additional processing
 LABEL_F876C4:
 	ld hl, iz
 LABEL_F876C6:

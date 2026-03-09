@@ -13452,7 +13452,7 @@ DspItem0CngFunc:
 	ld xix, (xsp + 20)
 	ld (xsp), xix
 	cp xix, 0x1E80069
-	jrl z, DspItem0_Epilogue
+	jrl z, DspItem0_DispatchTarget
 	cp xix, 0x1E00046
 	jrl z, LABEL_F357C8
 	ld8_24 l, 0x021098
@@ -13720,8 +13720,8 @@ EffectEdit_ReturnZero:
 	ldda8 l, 10666
 	jr DspItem0_Epilogue
 
-; DspItem0 epilogue
-DspItem0_Epilogue:	; F35801
+; DspItem0 dispatch target (calls GetTitleNow then falls through to epilogue)
+DspItem0_DispatchTarget:	; F35801
 	call GetTitleNow
 	ldb h, 0x0
 	extz xhl
