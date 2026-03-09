@@ -38973,24 +38973,25 @@ GetEditSwPoint:
 	ld hl, wa
 	lda xde, (xbc + 2)
 	cp wa, 0x8C
-	jr z, LABEL_F9A9AB
+	jr z, EditSwParam_Mode4
 	cp wa, 0x8B
-	jr z, LABEL_F9A99D
+	jr z, EditSwParam_Mode3
 	cp wa, 0x8A
-	jr z, LABEL_F9A98F
+	jr z, EditSwParam_Mode2
 	cp wa, 0x89
-	jr z, LABEL_F9A981
+	jr z, EditSwParam_Mode1
 	cp wa, 0x88
-	jr z, LABEL_F9A973
+	jr z, EditSwParam_Mode0
 	cp hl, 0xC
-	jrl ugt, LABEL_F9A9E6
+	jrl ugt, EditSwParam_Default
 	add hl, hl
 	lda_24 xix, 0xea9b1c
 	ld_sriw3 HL, 0x07, 0xF0, 0xEC
 	lda_24 xix, 0xf9a973
 	jp_dri 8, 0x07, 0xF0, 0xEC
 
-LABEL_F9A973:
+; GetEditSwPoint handler: mode 0 (value=0x2B)
+EditSwParam_Mode0:	; F9A973
 	lds wa, 0
 	jr LABEL_F9A97A
 	ldw wa, 0x13F
@@ -39000,7 +39001,8 @@ LABEL_F9A97A:
 	ldw (xde), 0x2B
 	ret
 
-LABEL_F9A981:
+; GetEditSwPoint handler: mode 1 (value=0x55)
+EditSwParam_Mode1:	; F9A981
 	lds wa, 0
 	jr LABEL_F9A988
 	ldw wa, 0x13F
@@ -39010,7 +39012,8 @@ LABEL_F9A988:
 	ldw (xde), 0x55
 	ret
 
-LABEL_F9A98F:
+; GetEditSwPoint handler: mode 2 (value=0x7F)
+EditSwParam_Mode2:	; F9A98F
 	lds wa, 0
 	jr LABEL_F9A996
 	ldw wa, 0x13F
@@ -39020,27 +39023,32 @@ LABEL_F9A996:
 	ldw (xde), 0x7F
 	ret
 
-LABEL_F9A99D:
+; GetEditSwPoint handler: mode 3 (value=0xA9)
+EditSwParam_Mode3:	; F9A99D
 	lds wa, 0
-	jr LABEL_F9A9A4
+	jr EditSwParam_Mode3_Store
 	ldw wa, 0x13F
 
-LABEL_F9A9A4:
+; GetEditSwPoint: store mode 3 result
+EditSwParam_Mode3_Store:	; F9A9A4
 	ld (xbc), wa
 	ldw (xde), 0xA9
 	ret
 
-LABEL_F9A9AB:
+; GetEditSwPoint handler: mode 4 (value=0xD3)
+EditSwParam_Mode4:	; F9A9AB
 	lds wa, 0
-	jr LABEL_F9A9B2
+	jr EditSwParam_Mode4_Store
 	ldw wa, 0x13F
 
-LABEL_F9A9B2:
+; GetEditSwPoint: store mode 4 result
+EditSwParam_Mode4_Store:	; F9A9B2
 	ld (xbc), wa
 	ldw (xde), 0xD3
 	ret
 
-LABEL_F9A9B9:
+; GetEditSwPoint handler: tempo table lookup
+EditSwParam_TempoTable:	; F9A9B9
 	ldw	wa, 0x0014
 	.asciz "h!0<"
 	jr	28
@@ -39059,7 +39067,8 @@ LABEL_F9A9B9:
 	.long LABEL_EF02B2
 	.byte 0x0e
 
-LABEL_F9A9E6:
+; GetEditSwPoint handler: default (value=0xA0/0x78)
+EditSwParam_Default:	; F9A9E6
 	ldw (xbc), 0xA0
 	ldw (xde), 0x78
 	ret
@@ -39304,7 +39313,7 @@ LABEL_F9ABF6:
 StringDraw_JoinPoint:
 	ld xwa, (xsp + 42)
 	or xwa, xwa
-	jr z, LABEL_F9AC5B
+	jr z, DirmdEmu_CaseA
 	lda xhl, (xsp + 12)
 	ld wa, (xsp + 8)
 	exts xwa
@@ -39333,7 +39342,8 @@ StringDraw_JoinPoint:
 	ld xbc, (xsp + 42)
 	call DrawIcons
 
-LABEL_F9AC5B:
+; DirmdEmulator dispatch case A
+DirmdEmu_CaseA:	; F9AC5B
 	pop xiz
 	lda xsp, (xsp + 42)
 	retd 0x6
@@ -39346,30 +39356,32 @@ IvDirmdScreenProc:
 	ld (xsp + 12), xwa
 	ld xbc, (xsp + 8)
 	cp xbc, 0x1E000B1
-	jrl z, LABEL_F9ADCF
+	jrl z, DirmdEmu_CaseD
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C0003A
-	jr z, LABEL_F9ACC6
+	jr z, DirmdEmu_CaseC
 	cp xwa, 0x1C00039
-	jr z, LABEL_F9ACBA
+	jr z, DirmdEmu_CaseB
 	sub xbc, 0x1C00001
 	cp xbc, 0x0
-	jrl lt, LABEL_F9ADDF
+	jrl lt, DirmdEmu_CaseE
 	cp xbc, 0xE
-	jrl gt, LABEL_F9ADDF
+	jrl gt, DirmdEmu_CaseE
 	add xbc, xbc
 	add xbc, 0xEA9B42
 	ld bc, (xbc)
 	lda_24 xix, 0xf9acba
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_F9ACBA:
+; DirmdEmulator dispatch case B
+DirmdEmu_CaseB:	; F9ACBA
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	jrl LABEL_F9AD62
 
-LABEL_F9ACC6:
+; DirmdEmulator dispatch case C
+DirmdEmu_CaseC:	; F9ACC6
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -39458,7 +39470,8 @@ LABEL_F9ADC4:
 	ld xde, (xsp + 4)
 	jr LABEL_F9ADE8
 
-LABEL_F9ADCF:
+; DirmdEmulator dispatch case D
+DirmdEmu_CaseD:	; F9ADCF
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -39466,7 +39479,8 @@ LABEL_F9ADCF:
 	inc 3, xhl
 	jr LABEL_F9ADEB
 
-LABEL_F9ADDF:
+; DirmdEmulator dispatch case E
+DirmdEmu_CaseE:	; F9ADDF
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -39497,7 +39511,8 @@ DirmdTitleFunc:
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F9AE12:
+; DirmdEmulator dispatch case F
+DirmdEmu_CaseF:	; F9AE12
 	.byte 0xc1, 0x38, 0x8d, 0x21, 0xc1, 0x39, 0x8d, 0xf1
 	.byte 0x66, 0x19, 0x30, 0xff, 0x00, 0x1d, 0x50, 0x14
 	.byte 0xfb, 0x30, 0xf5, 0x00, 0x1d, 0x4a, 0x14, 0xfb
@@ -39522,9 +39537,9 @@ DirmdEmulator:
 	ld xiz, xwa
 	sub xbc, 0x1C00000
 	cp xbc, 0x0
-	jrl lt, LABEL_F9AF46
+	jrl lt, DirmdEmu_DefaultCase
 	cp xbc, 0xF
-	jrl gt, LABEL_F9AF46
+	jrl gt, DirmdEmu_DefaultCase
 	add xbc, xbc
 	add xbc, 0xEA9BBE
 	ld bc, (xbc)
@@ -39553,7 +39568,8 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 	.byte 0xb2, 0xe8, 0xef
 	.ascii "d^\\[Z"
 
-LABEL_F9AF46:
+; DirmdEmulator default/fallthrough case
+DirmdEmu_DefaultCase:	; F9AF46
 	bitda 1, 58334
 	jr z, LABEL_F9AF56
 	ldda8 a, 58332
@@ -39618,20 +39634,20 @@ WindowProc:
 	cp xwa, 0x1C00026
 	jrl z, WindowProc_ForwardToGroupBoxes
 	cp xwa, 0x1E00094
-	jrl z, LABEL_F9B230
+	jrl z, WindowField_GetChildCount
 	cp xwa, 0x1E0004B
-	jrl z, LABEL_F9B21B
+	jrl z, WindowField_ReadValue
 	cp xwa, 0x1E00049
-	jrl z, LABEL_F9B203
+	jrl z, WindowField_Focus
 	cp xwa, 0x1E0004A
-	jrl z, LABEL_F9B1F9
+	jrl z, WindowField_GetValue
 	cp xwa, 0x1E00048
-	jrl z, LABEL_F9B1EF
+	jrl z, WindowField_SetValue
 	sub xbc, 0x1C00001
 	cp xbc, 0x0
-	jrl lt, LABEL_F9B320
+	jrl lt, WindowProc_DefaultHandler
 	cp xbc, 0x9
-	jrl gt, LABEL_F9B320
+	jrl gt, WindowProc_DefaultHandler
 	add xbc, xbc
 	add xbc, 0xEA9BDE
 	ld bc, (xbc)
@@ -39690,17 +39706,20 @@ WindowProc_EventDispatch:	; F9B061
 	.byte 0x7e, 0xf8, 0x01, 0xaf, 0x0c, 0x20, 0xa8, 0x1c
 	.byte 0x20, 0xa0, 0x20, 0x78, 0xe9, 0x01
 
-LABEL_F9B1EF:
+; WindowProc field set value handler (event 0x1C00048)
+WindowField_SetValue:	; F9B1EF
 	ld xwa, (xsp + 24)
 	ld xiz, 0x1C
 	jr LABEL_F9B20B
 
-LABEL_F9B1F9:
+; WindowProc field get value handler (event 0x1C0004A)
+WindowField_GetValue:	; F9B1F9
 	ld xwa, (xsp + 24)
 	ld xiz, 0x1C
 	jr LABEL_F9B223
 
-LABEL_F9B203:
+; WindowProc field focus handler (event 0x1C00049)
+WindowField_Focus:	; F9B203
 	ld xwa, (xsp + 24)
 	ld xiz, 0x20
 
@@ -39712,7 +39731,8 @@ LABEL_F9B20B:
 	ld (xbc), xwa
 	jrl AcNaming_ReturnZero
 
-LABEL_F9B21B:
+; WindowProc field read value handler (event 0x1C0004B)
+WindowField_ReadValue:	; F9B21B
 	ld xwa, (xsp + 24)
 	ld xiz, 0x20
 
@@ -39723,7 +39743,8 @@ LABEL_F9B223:
 	ld xhl, (xwa)
 	jrl LABEL_F9B3DE
 
-LABEL_F9B230:
+; WindowProc get child count handler (event 0x1E00094)
+WindowField_GetChildCount:	; F9B230
 	ld xwa, (xsp + 24)
 	call GetViewInstance
 	ld xwa, (xhl + 28)
@@ -39807,7 +39828,8 @@ LABEL_F9B2AA:
 	ld xwa, (xsp + 4)
 	jrl LABEL_F9B3D8
 
-LABEL_F9B320:
+; WindowProc default handler (returns 0)
+WindowProc_DefaultHandler:	; F9B320
 	ld xwa, (xsp + 20)
 	srl xwa, 0
 	and xwa, 0xFFF
@@ -41165,7 +41187,7 @@ LABEL_FC4DE9:
 	ld xbc, 0xED8FE0
 	add xbc, xde
 	ld xwa, (xsp + 2)
-	calr LABEL_FC4E9C
+	calr DSPCfg_Init_Entry1
 	inc 1, iz
 	cp iz, 0x2E
 	jr c, LABEL_FC4DE9
@@ -41204,7 +41226,8 @@ LABEL_FC4E6E:
 	ld (xsp + 2), xwa
 	lds iz, 0
 
-LABEL_FC4E76:
+; DSPCfg_InitAllEntries handler: entry 0
+DSPCfg_Init_Entry0:	; FC4E76
 	ld bc, iz
 	extz xbc
 	ld xwa, xbc
@@ -41214,15 +41237,16 @@ LABEL_FC4E76:
 	ld xbc, 0xED91AC
 	add xbc, xwa
 	ld xwa, (xsp + 2)
-	calr LABEL_FC4E9C
+	calr DSPCfg_Init_Entry1
 	inc 1, iz
 	cp iz, 0x1E
-	jr c, LABEL_FC4E76
+	jr c, DSPCfg_Init_Entry0
 	popw iz
 	inc 4, xsp
 	ret
 
-LABEL_FC4E9C:
+; DSPCfg_InitAllEntries handler: entry 1
+DSPCfg_Init_Entry1:	; FC4E9C
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
@@ -41231,29 +41255,32 @@ LABEL_FC4E9C:
 	add (xsp + 4), xwa
 	ld xiz, (xbc + 4)
 	cp (xiz), 0xFF
-	jr z, LABEL_FC4EC2
+	jr z, DSPCfg_Init_Setup
 
-LABEL_FC4EB1:
+; DSPCfg_InitAllEntries handler: entry 2
+DSPCfg_Init_Entry2:	; FC4EB1
 	ld xwa, (xsp + 4)
 	ld xbc, xiz
-	calr LABEL_FC4EC6
+	calr DSPCfg_Init_BoundsCheck
 	extz xhl
 	add xiz, xhl
 	cp (xiz), 0xFF
-	jr nz, LABEL_FC4EB1
+	jr nz, DSPCfg_Init_Entry2
 
-LABEL_FC4EC2:
+; DSPCfg_InitAllEntries setup before dispatch
+DSPCfg_Init_Setup:	; FC4EC2
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_FC4EC6:
+; DSPCfg_InitAllEntries bounds check and dispatch
+DSPCfg_Init_BoundsCheck:	; FC4EC6
 	ld e, (xbc)
 	extz de
 	cps de, 0
-	jr mi, LABEL_FC4F17
+	jr mi, DSPCfg_Init_Finalize
 	cp de, 0x8
-	jr gt, LABEL_FC4F17
+	jr gt, DSPCfg_Init_Finalize
 	add de, de
 	lda_24 xix, 0xed930a
 	ld_sriw3 DE, 0x07, 0xF0, 0xE8
@@ -41280,7 +41307,8 @@ DSPCfg_InitDispatch:	; FC4EEA
 	calr	343
 	jr	2
 
-LABEL_FC4F17:
+; DSPCfg_InitAllEntries finalize after dispatch
+DSPCfg_Init_Finalize:	; FC4F17
 	lds hl, 1
 	ret
 
@@ -41720,7 +41748,7 @@ LABEL_FC54B2:
 	inc 2, xsp
 	ld xiz, xhl
 	or xiz, xiz
-	jr z, LABEL_FC5541
+	jr z, DSPCfg_Param_CaseA
 	pushw 0x0
 	pushw 0x50
 	push xiz
@@ -41767,11 +41795,13 @@ LABEL_FC54B2:
 	inc 4, xsp
 	call Gfx_ClearFrameBuffers
 
-LABEL_FC5541:
+; DSP config parameter handler A
+DSPCfg_Param_CaseA:	; FC5541
 	pop xiz
 	ret
 
-LABEL_FC5543:
+; DSP config parameter handler B
+DSPCfg_Param_CaseB:	; FC5543
 	pushw 0x2
 	ld xwa, 0x3D3400
 	push xwa
@@ -41818,7 +41848,8 @@ CtrlPanel_IndicatorJumpTable:
 	lda_24 xix, 0xfc55cb
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FC55CB:
+; DSP config parameter handler C
+DSPCfg_Param_CaseC:	; FC55CB
 	.byte 0x0e, 0x40, 0x00, 0x34, 0x3d, 0x00, 0x38, 0xd8
 	.byte 0xa9, 0x41, 0xe4, 0x40, 0x03, 0x00, 0xda, 0xaa
 	.byte 0x68, 0x43, 0x40, 0x10, 0x34, 0x3d, 0x00, 0x38
@@ -41846,7 +41877,8 @@ Audio_DispatchCommand:
 	lda_24 xix, 0xfc5647
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FC5647:
+; DSP config parameter handler D
+DSPCfg_Param_CaseD:	; FC5647
 	ret
 	pushw	2
 	ld	xwa, 4011008
@@ -41871,9 +41903,9 @@ LABEL_FC5647:
 PanelDisplay_DispatchByMode:
 	extz wa
 	cps wa, 0
-	jrl mi, LABEL_FC5754
+	jrl mi, DSPCfg_Param_Default
 	cp wa, 0x8
-	jrl gt, LABEL_FC5754
+	jrl gt, DSPCfg_Param_Default
 	add wa, wa
 	lda_24 xix, 0xed962c
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -41904,7 +41936,8 @@ LABEL_FC56C5:
 	.byte 0x21, 0xc5, 0xe8, 0xf1, 0x66, 0x03, 0xdb, 0xa9
 	.byte 0x0e, 0xd9, 0x61, 0xd9, 0xde, 0x67, 0xef
 
-LABEL_FC5754:
+; DSP config parameter default handler
+DSPCfg_Param_Default:	; FC5754
 	lds hl, 0
 	ret
 

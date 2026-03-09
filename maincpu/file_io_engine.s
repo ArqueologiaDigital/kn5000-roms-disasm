@@ -2520,7 +2520,7 @@ LABEL_FC7CA9:
 	cp xwa, xbc
 	jr ule, LABEL_FC7CA9
 	call LABEL_FC53CE
-	jp LABEL_FC5543
+	jp DSPCfg_Param_CaseB
 
 LABEL_FC7CB9:
 	call SubCPU_Payload_GetErrorFlag
