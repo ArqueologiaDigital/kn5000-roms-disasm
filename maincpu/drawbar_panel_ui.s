@@ -163,7 +163,7 @@ ComSetGridCheck:
 	ldirw
 	ld xwa, xde
 	cp xde, 0x1E0008D
-	jrl z, LABEL_F781C1
+	jrl z, ComSetGrid_EventHandler
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
 	jrl lt, UI_ReturnZero
@@ -251,7 +251,8 @@ LABEL_F77FC4:
 	ld	xbc, 31457420
 	jrl	271
 
-LABEL_F781C1:
+; ComSetGridCheck event handler dispatch
+ComSetGrid_EventHandler:	; F781C1
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 22)
 	srl xwa, 0
@@ -1006,7 +1007,7 @@ PmemOutLGridCheck:
 	ld (xsp + 28), xwa
 	ld (xsp + 32), xiz
 	cp xde, 0x1E0008D
-	jrl z, LABEL_F79102
+	jrl z, PmemOutL_GridCheck
 	ld xwa, xix
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
@@ -1252,7 +1253,8 @@ LABEL_F78A11:
 	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xd7
 	.byte 0x00
 
-LABEL_F79102:
+; PmemOutLGridCheck dispatch
+PmemOutL_GridCheck:	; F79102
 	ld xwa, xhl
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -1292,7 +1294,7 @@ LABEL_F79102:
 	ld xwa, xhl
 	lda xde, (xsp + 36)
 	ld xbc, 0x1E0008C
-	jr LABEL_F791D9
+	jr PmemOutL_GridCheck_Return
 
 LABEL_F7916A:
 	lds32 xwa, 0
@@ -1322,7 +1324,7 @@ LABEL_F79193:
 	ld xwa, xhl
 	lda xde, (xsp + 36)
 	ld xbc, 0x1E0008C
-	jr LABEL_F791D9
+	jr PmemOutL_GridCheck_Return
 
 LABEL_F791AE:
 	ld8_24 c, 0x024774
@@ -1340,7 +1342,8 @@ LABEL_F791AE:
 	lda xde, (xsp + 36)
 	ld xbc, 0x1E0008C
 
-LABEL_F791D9:
+; PmemOutLGridCheck return
+PmemOutL_GridCheck_Return:	; F791D9
 	call SendEvent
 
 PmemOutGrid_ReturnZero:
@@ -1375,7 +1378,7 @@ PmemOutRGridCheck:
 	lda xwa, (xbc + 4)
 	ld (xsp + 24), xwa
 	cp xde, 0x1E0008D
-	jrl z, LABEL_F79957
+	jrl z, CtlMsgGrid_EventHandler
 	sub xhl, 0x1C00017
 	cp xhl, 0x0
 	jrl lt, TtMdCtlMsg_ReturnZero2
@@ -1619,7 +1622,8 @@ TtMdCtlMsg_EventDispatch:	; F79260
 	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x20, 0x32, 0x41
 	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x36, 0x01
 
-LABEL_F79957:
+; CtlMsgGridCheck event handler dispatch
+CtlMsgGrid_EventHandler:	; F79957
 	ld xwa, xiz
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -2226,7 +2230,7 @@ CtlMsgGridCheck:
 	ld (xsp + 8), xwa
 	lda xbc, (xhl + 2)
 	cp xde, 0x1E0008D
-	jrl z, LABEL_F7A113
+	jrl z, MidiSetup_TtlDispatch
 	ld xwa, xix
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
@@ -2279,7 +2283,8 @@ LABEL_F79FF0:
 	.byte 0x51, 0x92, 0x21, 0xd9, 0xcf, 0x09, 0x00, 0x61
 	.byte 0xad, 0x68, 0x71
 
-LABEL_F7A113:
+; MidiSetup title dispatch
+MidiSetup_TtlDispatch:	; F7A113
 	ld xwa, (xsp + 30)
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -2332,7 +2337,7 @@ TtMdPart:
 	cp xbc, 0x1C0000B
 	jr z, TtMdPart_ReturnZero
 	cp xbc, 0x1C00002
-	jr z, LABEL_F7A1DA
+	jr z, MidiSetup_TtlCase1
 	cp xbc, 0x1C00001
 	jr nz, TtMdPart_ReturnZero
 	or xde, xde
@@ -2347,16 +2352,18 @@ TtMdPart:
 	ld xwa, 0x1400002
 	ld xbc, 0x1E000A0
 	lds32 xde, 0
-	jr LABEL_F7A1ED
+	jr MidiSetup_TtlCase2
 
-LABEL_F7A1DA:
+; MidiSetup title case 1
+MidiSetup_TtlCase1:	; F7A1DA
 	or xde, xde
 	jr nz, TtMdPart_ReturnZero
 	ld xwa, 0x1400002
 	ld xbc, 0x1E000A0
 	ld xde, 0x3F
 
-LABEL_F7A1ED:
+; MidiSetup title case 2
+MidiSetup_TtlCase2:	; F7A1ED
 	call MainFuncCall
 
 TtMdPart_ReturnZero:
@@ -2375,30 +2382,31 @@ AcMidiPartGridBoxProc:
 	ldirw
 	ld xbc, (xsp + 28)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F7A83F
+	jrl z, MidiSetup_GridBoxCase2
 	ld xwa, (xsp + 28)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_F7A7F5
+	jrl z, MidiSetup_GridBoxCase1
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_F7A7E8
+	jrl z, MidiSetup_GridBoxDispatch
 	cp xwa, 0x1C00007
-	jrl z, LABEL_F7A34F
+	jrl z, MidiSetup_TtlCase5
 	cp xwa, 0x1C0000B
-	jrl z, LABEL_F7A2F0
+	jrl z, MidiSetup_TtlCase4
 	cp xwa, 0x1C00001
-	jr z, LABEL_F7A275
+	jr z, MidiSetup_TtlCase3
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_F7A857
+	jrl lt, MidiSetup_GridBoxCase4
 	cp xbc, 0x6
-	jrl gt, LABEL_F7A857
+	jrl gt, MidiSetup_GridBoxCase4
 	add xbc, xbc
 	add xbc, 0xE80512
 	ld bc, (xbc)
 	lda_24 xix, 0xf7a275
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_F7A275:
+; MidiSetup title case 3
+MidiSetup_TtlCase3:	; F7A275
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
@@ -2441,7 +2449,8 @@ LABEL_F7A275:
 	lds wa, 1
 	jrl LABEL_F7A7E2
 
-LABEL_F7A2F0:
+; MidiSetup title case 4
+MidiSetup_TtlCase4:	; F7A2F0
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
@@ -2473,7 +2482,8 @@ LABEL_F7A2F0:
 	call DrawStringCentered
 	jrl MidiPart_ReturnZeroJmp
 
-LABEL_F7A34F:
+; MidiSetup title case 5
+MidiSetup_TtlCase5:	; F7A34F
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
@@ -2837,7 +2847,7 @@ LABEL_F7A792:
 	ld xde, (xsp + 24)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F7A7E8
+	jr z, MidiSetup_GridBoxDispatch
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 70)
 	ld xbc, (xsp + 28)
@@ -2861,14 +2871,16 @@ LABEL_F7A7E2:
 	call SetDialEnable
 	jr MidiPart_ReturnZeroJmp
 
-LABEL_F7A7E8:
+; MidiSetup grid box dispatch
+MidiSetup_GridBoxDispatch:	; F7A7E8
 	ld xwa, (xsp + 32)
 	call GetViewInstance
 	ld xwa, (xhl + 62)
 	push xwa
 	jr LABEL_F7A821
 
-LABEL_F7A7F5:
+; MidiSetup grid box case 1
+MidiSetup_GridBoxCase1:	; F7A7F5
 	ld xwa, (xsp + 32)
 	call GetViewInstance
 	ld xwa, (xhl + 74)
@@ -2903,29 +2915,33 @@ LABEL_F7A821:
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
-	jr LABEL_F7A84F
+	jr MidiSetup_GridBoxCase3
 
-LABEL_F7A83F:
+; MidiSetup grid box case 2
+MidiSetup_GridBoxCase2:	; F7A83F
 	ld xwa, (xsp + 32)
 	call GetViewInstance
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
 
-LABEL_F7A84F:
+; MidiSetup grid box case 3
+MidiSetup_GridBoxCase3:	; F7A84F
 	call ApFuncCall
 
 MidiPart_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F7A864
+	jr MidiSetup_GridBoxCase5
 
-LABEL_F7A857:
+; MidiSetup grid box case 4
+MidiSetup_GridBoxCase4:	; F7A857
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
 	call InheritedProc
 
-LABEL_F7A864:
+; MidiSetup grid box case 5
+MidiSetup_GridBoxCase5:	; F7A864
 	pop xiz
 	lda xsp, (xsp + 32)
 	ret
@@ -2950,7 +2966,7 @@ MidiPartGridCheck:
 	lda xde, (xiy + 4)
 	ld xwa, (xsp + 38)
 	cp xwa, 0x1E0008D
-	jrl z, LABEL_F7AC20
+	jrl z, MidiSetup_EventHandler
 	ld xwa, xix
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
@@ -3072,7 +3088,8 @@ LABEL_F7A8D4:
 	.byte 0x90, 0x21, 0xd9, 0xcf, 0x0a, 0x00, 0x71, 0x9c
 	.byte 0xfe, 0x78, 0x22, 0x01
 
-LABEL_F7AC20:
+; MidiSetup event handler dispatch (6-entry, table 0xE806FC)
+MidiSetup_EventHandler:	; F7AC20
 	ld xwa, (xsp + 34)
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -3527,13 +3544,13 @@ LswLeftHold:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E0003F
-	jr z, LABEL_F7B721
+	jr z, IvSdpart_TtlCase2
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7B721
+	jr z, IvSdpart_TtlCase2
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7B71D
+	jr z, IvSdpart_TtlCase1
 	cp xbc, 0x1E00040
-	jr z, LABEL_F7B716
+	jr z, IvSdpart_TtlCase0
 	cp xbc, 0x1E00042
 	jr z, LABEL_F7B6E7
 	lds32 xhl, 0
@@ -3563,15 +3580,18 @@ LABEL_F7B70B:
 	ld xhl, xiz
 	jr LswLeftHold_PopIzRet
 
-LABEL_F7B716:
+; IvSdpartProc title case 0
+IvSdpart_TtlCase0:	; F7B716
 	ld xhl, 0x28082
 	jr LswLeftHold_PopIzRet
 
-LABEL_F7B71D:
+; IvSdpartProc title case 1
+IvSdpart_TtlCase1:	; F7B71D
 	lds32 xhl, 4
 	jr LswLeftHold_PopIzRet
 
-LABEL_F7B721:
+; IvSdpartProc title case 2
+IvSdpart_TtlCase2:	; F7B721
 	lds32 xhl, 1
 
 LswLeftHold_PopIzRet:
@@ -10003,42 +10023,43 @@ PsMixerControlProc:
 	ld (xsp + 90), xwa
 	ld xbc, (xsp + 86)
 	cp xbc, 0x1E0003A
-	jrl z, LABEL_F80713
+	jrl z, PsMixer_ControlCommon
 	ld xwa, (xsp + 86)
 	cp xwa, 0x1C0002F
-	jrl z, LABEL_F80503
+	jrl z, PsMixer_ControlCase9
 	cp xwa, 0x1C00031
-	jrl z, LABEL_F80274
+	jrl z, PsMixer_ControlCase8
 	cp xwa, 0x1C00030
-	jrl z, LABEL_F80205
+	jrl z, PsMixer_ControlCase7
 	cp xwa, 0x1C00027
-	jrl z, LABEL_F80196
+	jrl z, PsMixer_ControlCase6
 	cp xwa, 0x1C00007
-	jrl z, LABEL_F7FDFE
+	jrl z, PsMixer_ControlCase5
 	cp xwa, 0x1E000A7
-	jrl z, LABEL_F7FC9F
+	jrl z, PsMixer_ControlCase4
 	cp xwa, 0x1C0000D
-	jrl z, LABEL_F7FC85
+	jrl z, PsMixer_ControlCase3
 	cp xwa, 0x1C0000C
-	jrl z, LABEL_F7FC1B
+	jrl z, PsMixer_ControlCase2
 	cp xwa, 0x1C0000B
-	jrl z, LABEL_F7FC1B
+	jrl z, PsMixer_ControlCase2
 	cp xwa, 0x1C00002
-	jrl z, LABEL_F7FBB6
+	jrl z, PsMixer_ControlCase1
 	cp xwa, 0x1C00001
-	jr z, LABEL_F7FB04
+	jr z, PsMixer_ControlHandler
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_F80727
+	jrl lt, PsMixer_ControlReturn
 	cp xbc, 0x9
-	jrl gt, LABEL_F80727
+	jrl gt, PsMixer_ControlReturn
 	add xbc, xbc
 	add xbc, 0xE9F5A8
 	ld bc, (xbc)
 	lda_24 xix, 0xf7fb04
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_F7FB04:
+; PsMixerControlProc control handler dispatch (10-entry)
+PsMixer_ControlHandler:	; F7FB04
 	ld xwa, (xsp + 82)
 	cp xwa, 0x4
 	jr z, LABEL_F7FB86
@@ -10096,7 +10117,8 @@ AudioCtrl_MainFuncCallPt:
 	call InheritedProc
 	jrl AudioCtrl_ReturnZero
 
-LABEL_F7FBB6:
+; PsMixer control case 1
+PsMixer_ControlCase1:	; F7FBB6
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -10133,7 +10155,8 @@ LABEL_F7FC08:
 	call MainFuncCall
 	jrl AudioCtrl_ReturnZero
 
-LABEL_F7FC1B:
+; PsMixer control case 2
+PsMixer_ControlCase2:	; F7FC1B
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -10167,7 +10190,8 @@ LABEL_F7FC1B:
 	ld xde, xhl
 	jrl PsMixer_SendEventAndForward
 
-LABEL_F7FC85:
+; PsMixer control case 3
+PsMixer_ControlCase3:	; F7FC85
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -10177,7 +10201,8 @@ LABEL_F7FC85:
 	lds32 xde, 0
 	jrl PsMixer_SendEventAndForward
 
-LABEL_F7FC9F:
+; PsMixer control case 4
+PsMixer_ControlCase4:	; F7FC9F
 	ld16_24 xwa, 0x024796
 	muls wa, 0x5
 	ld (xsp + 8), wa
@@ -10297,7 +10322,8 @@ LABEL_F7FDEF:
 	lds32 xde, 0
 	jrl PsMixer_SendEventAndForward
 
-LABEL_F7FDFE:
+; PsMixer control case 5
+PsMixer_ControlCase5:	; F7FDFE
 	ld xwa, 0x2600024
 	ld xbc, 0x1E00029
 	ld xde, (xsp + 82)
@@ -10592,7 +10618,8 @@ AudioCtrl_ReturnToCallerExit:
 	ld xde, (xsp + 82)
 	jrl AudioCtrl_ProcessParamsAndReturn
 
-LABEL_F80196:
+; PsMixer control case 6
+PsMixer_ControlCase6:	; F80196
 	ld xwa, 0x2600024
 	ld xbc, 0x1E00029
 	ld xde, (xsp + 82)
@@ -10635,7 +10662,8 @@ LABEL_F801F9:
 	ld xde, (xsp + 82)
 	jrl AudioCtrl_ProcessParamsAndReturn
 
-LABEL_F80205:
+; PsMixer control case 7
+PsMixer_ControlCase7:	; F80205
 	ld xwa, 0x2600024
 	ld xbc, 0x1E00029
 	ld xde, (xsp + 82)
@@ -10672,7 +10700,8 @@ LABEL_F80268:
 	ld xde, (xsp + 82)
 	jrl AudioCtrl_ProcessParamsAndReturn
 
-LABEL_F80274:
+; PsMixer control case 8
+PsMixer_ControlCase8:	; F80274
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -10900,7 +10929,8 @@ LABEL_F804E5:
 	jrl c, LABEL_F80406
 	jrl AudioCtrl_ReturnZero
 
-LABEL_F80503:
+; PsMixer control case 9
+PsMixer_ControlCase9:	; F80503
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -11083,7 +11113,8 @@ LABEL_F80704:
 	jr c, LABEL_F806BF
 	jr AudioCtrl_ReturnZero
 
-LABEL_F80713:
+; PsMixer control common handler
+PsMixer_ControlCommon:	; F80713
 	pushw 0xE9
 	pushw 0xF58E
 	ld xwa, (xsp + 86)
@@ -11095,7 +11126,8 @@ AudioCtrl_ReturnZero:
 	lds32 xhl, 0
 	jr LABEL_F80734
 
-LABEL_F80727:
+; PsMixer control return
+PsMixer_ControlReturn:	; F80727
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -14513,7 +14545,7 @@ LABEL_F83CA5:
 
 LABEL_F83CA7:
 	ld wa, iz
-	calr LABEL_F83DB3
+	calr DemoMenu_WorkspaceReturn
 	ld bc, hl
 	ld wa, iz
 	calr DemoMenu_BuildItemWorkspace
@@ -14591,13 +14623,14 @@ DemoMenu_BuildItemWorkspace:
 	ld (xwa), xhl
 	ld (xwa + 4), iz
 	cpw (xsp + 6), 0x8
-	jr ugt, LABEL_F83D37
+	jr ugt, DemoMenu_WorkspaceFunc
 	ld xwa, 0x247CE
 	add xwa, xde
 	ld (xwa), iz
 	jr DemoMenu_BuildItemWorkspace_Post
 
-LABEL_F83D37:
+; DemoMenu workspace function
+DemoMenu_WorkspaceFunc:	; F83D37
 	ld wa, (xsp + 6)
 	sub wa, 0x9
 	cps wa, 0
@@ -14610,7 +14643,8 @@ LABEL_F83D37:
 	lda_24 xix, 0xf83d5c
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F83D5C:
+; DemoMenu workspace dispatch (6-entry, table 0xE9F984)
+DemoMenu_WorkspaceDispatch:	; F83D5C
 	.byte 0xf2, 0xe0, 0x47, 0x02, 0x56, 0x68, 0x2a, 0xf2
 	.byte 0xe2, 0x47, 0x02, 0x56, 0x68, 0x23, 0xf2, 0xe4
 	.byte 0x47, 0x02, 0x56, 0x68, 0x13, 0xf2, 0xe6, 0x47
@@ -14634,9 +14668,10 @@ DemoMenu_BuildItemWorkspace_Post:
 	inc 6, xsp
 	ret
 
-LABEL_F83DB3:
+; DemoMenu workspace return
+DemoMenu_WorkspaceReturn:	; F83DB3
 	cp wa, 0x8
-	jr ugt, LABEL_F83DC7
+	jr ugt, DemoMenu_DescriptorFunc
 	extz xwa
 	add xwa, xwa
 	ld xbc, 0x247CE
@@ -14644,12 +14679,13 @@ LABEL_F83DB3:
 	ld hl, (xbc)
 	ret
 
-LABEL_F83DC7:
+; DemoMenu descriptor function
+DemoMenu_DescriptorFunc:	; F83DC7
 	sub wa, 0x9
 	cps wa, 0
-	jr c, LABEL_F83E0D
+	jr c, DemoMenu_DescriptorReturn
 	cps wa, 5
-	jr ugt, LABEL_F83E0D
+	jr ugt, DemoMenu_DescriptorReturn
 	add wa, wa
 	lda_24 xix, 0xe9f990
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -14670,7 +14706,8 @@ LABEL_F83DE9:
 	ld16_24	hl, 149482
 	ret
 
-LABEL_F83E0D:
+; DemoMenu descriptor return
+DemoMenu_DescriptorReturn:	; F83E0D
 	lds hl, 0
 	ret
 
@@ -15136,7 +15173,7 @@ AcPresentationBoxProc:
 	ld xiz, xbc
 	ld (xsp + 12), xwa
 	cp xiz, 0x1E0003C
-	jrl z, LABEL_F844DA
+	jrl z, AcPresCtrl_Case0
 	cp xiz, 0x1E0003A
 	jrl z, LABEL_F844C2
 	cp xiz, 0x1C0001B
@@ -15154,7 +15191,7 @@ AcPresentationBoxProc:
 	cp xiz, 0x1C0000D
 	jr z, LABEL_F84337
 	cp xiz, 0x1C00001
-	jrl nz, LABEL_F844FA
+	jrl nz, AcPresCtrl_Case1
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	ld xwa, (xhl + 42)
@@ -15166,7 +15203,7 @@ AcPresentationBoxProc:
 
 AudioCtrl_ReturnZeroJmp:
 	lds32 xhl, 0
-	jrl LABEL_F84506
+	jrl AcPresCtrl_Case3
 
 LABEL_F84337:
 	ld xwa, (xsp + 12)
@@ -15242,7 +15279,7 @@ LABEL_F843FD:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
-	jrl LABEL_F84502
+	jrl AcPresCtrl_Case2
 
 LABEL_F84408:
 	ld xwa, (xsp + 12)
@@ -15320,7 +15357,8 @@ LABEL_F844C2:
 	inc 8, xsp
 	jrl AudioCtrl_ReturnZeroJmp
 
-LABEL_F844DA:
+; AcPresCtrl event case 0
+AcPresCtrl_Case0:	; F844DA
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	ld wa, (xhl + 26)
@@ -15331,17 +15369,20 @@ LABEL_F844DA:
 	cpw (xwa), 0x1
 	jrl nz, AudioCtrl_ReturnZeroJmp
 	lds32 xhl, 1
-	jr LABEL_F84506
+	jr AcPresCtrl_Case3
 
-LABEL_F844FA:
+; AcPresCtrl event case 1
+AcPresCtrl_Case1:	; F844FA
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
 
-LABEL_F84502:
+; AcPresCtrl event case 2
+AcPresCtrl_Case2:	; F84502
 	call InheritedProc
 
-LABEL_F84506:
+; AcPresCtrl event case 3
+AcPresCtrl_Case3:	; F84506
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -15357,14 +15398,14 @@ AcPresentationControlProc:
 	jrl z, AcPresentCtrl_CheckSSFStart
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C10006
-	jrl z, LABEL_F845F6
+	jrl z, AcPresCtrl_Case5
 	cp xwa, 0x1C10005
-	jrl z, LABEL_F845D8
+	jrl z, AcPresCtrl_Case4
 	sub xbc, 0x1C00002
 	cp xbc, 0x0
-	jrl lt, LABEL_F8468B
+	jrl lt, AcPresCtrl_DefaultCase
 	cp xbc, 0xA
-	jrl gt, LABEL_F8468B
+	jrl gt, AcPresCtrl_DefaultCase
 	add xbc, xbc
 	add xbc, 0xE9F9B2
 	ld bc, (xbc)
@@ -15410,7 +15451,8 @@ LABEL_F845D1:
 	jrl AcPresent_ReturnZeroJmp			; exit
 
 
-LABEL_F845D8:
+; AcPresCtrl event case 4
+AcPresCtrl_Case4:	; F845D8
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -15421,7 +15463,8 @@ LABEL_F845D8:
 	call ApFuncCall
 	jrl AcPresent_ReturnZeroJmp
 
-LABEL_F845F6:
+; AcPresCtrl event case 5
+AcPresCtrl_Case5:	; F845F6
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -15482,7 +15525,8 @@ AcPresent_ReturnZeroJmp:
 	lds32 xhl, 0
 	jr LABEL_F84697
 
-LABEL_F8468B:
+; AcPresCtrl default case
+AcPresCtrl_DefaultCase:	; F8468B
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)

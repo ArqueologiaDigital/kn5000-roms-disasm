@@ -8441,7 +8441,8 @@ LABEL_F16ACB:
 	.byte 0x12, 0x1e, 0x2c, 0x18, 0x1d, 0x19, 0xe9, 0xf5
 	.byte 0x27, 0x00, 0xef, 0x62, 0x0e, 0x78, 0xee, 0xfa
 
-LABEL_F16DF3:
+; PartGrid column dispatch (7-entry, table 0xE1611A)
+PartGrid_ColumnDispatch:	; F16DF3
 	ldda32 xhl, 3182
 	ldda32 xbc, 3186
 	cp a, 0x1E
@@ -8489,7 +8490,7 @@ Util_FrameSetup10:
 	ld (xsp + 8), a
 	ld a, (xsp + 8)
 	extz wa
-	calr LABEL_F16DF3
+	calr PartGrid_ColumnDispatch
 	ld (xsp), xhl
 	cp (xsp + 8), 0x1E
 	jr c, LABEL_F16E7C
@@ -8608,12 +8609,14 @@ LABEL_F16F2C:
 	.byte 0x21, 0xb1, 0x41, 0xbf, 0x0e, 0x37, 0x0f, 0x02
 	.byte 0x00
 
-LABEL_F16FFD:
+; PartGrid column dispatch end
+PartGrid_ColumnDispatch_End:	; F16FFD
 	lds wa, 0
 	jr __jrt_nop_F17001
 __jrt_nop_F17001:
 
-LABEL_F17001:
+; PartGrid column dispatch default case
+PartGrid_ColumnDispatch_Default:	; F17001
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), a
@@ -8681,7 +8684,8 @@ LABEL_F1704A:
 	jrl ule, LABEL_F1700A
 	ldi_werp 0xFA, 0
 
-LABEL_F170A2:
+; NoteEventBuffer CopyToSlot dispatch (7-entry, table 0xE16128)
+NoteEvent_CopyToSlot:	; F170A2
 	ldto_werp WA, 0xFA
 	extz xwa
 	sll xwa, 8
@@ -8713,7 +8717,7 @@ LABEL_F170A2:
 	ld (xbc + 3), wa
 	inc1_werp 0xFA
 	cp_erpw 0xFA, 0x53, 0x01
-	jr ule, LABEL_F170A2
+	jr ule, NoteEvent_CopyToSlot
 	pop xiz
 	inc 2, xsp
 	ret
@@ -8728,7 +8732,8 @@ Pack12BitValueWithBank:
 	or hl, bc
 	ret
 
-LABEL_F17120:
+; NoteEventBuffer Store dispatch (7-entry, table 0xE16136)
+NoteEvent_Store:	; F17120
 	extz wa
 	lda_24 xbc, 0xe160de
 	ld_srib3 L, 0x07, 0xE4, 0xE0
@@ -8740,9 +8745,9 @@ NoteEventBuffer_CopyToSlot:
 	extz bc
 	dec 1, bc
 	cps bc, 0
-	jr lt, LABEL_F17186
+	jr lt, NoteEvent_CopyCommon
 	cps bc, 6
-	jr gt, LABEL_F17186
+	jr gt, NoteEvent_CopyCommon
 	add bc, bc
 	lda_24 xix, 0xe16128
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
@@ -8771,24 +8776,25 @@ NOTE_EVENT_COPY_COMMON:	; F1717D - Common handler
 	ldw bc, 0xB400	; BC = 46080 byte count
 	ldirw	; Block copy words
 
-LABEL_F17186:
-	jrl LABEL_F16FFD
+; NoteEventBuffer copy common handler
+NoteEvent_CopyCommon:	; F17186
+	jrl PartGrid_ColumnDispatch_End
 
 NoteEventBuffer_Store:
 	lda xsp, (xsp - 10)
 	ld (xsp + 8), a
 	ld a, (xsp + 8)
 	extz wa
-	calr LABEL_F17001
+	calr PartGrid_ColumnDispatch_Default
 	ldda32 xwa, 3186
 	ld (xsp), xwa
 	ld a, (xsp + 8)
 	extz wa
 	dec 1, wa
 	cps wa, 0
-	jrl lt, LABEL_F17255
+	jrl lt, NoteEvent_StoreCommon
 	cps wa, 6
-	jrl gt, LABEL_F17255
+	jrl gt, NoteEvent_StoreCommon
 	add wa, wa
 	lda_24 xix, 0xe16136
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -8849,7 +8855,8 @@ LABEL_F17203:
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
 
-LABEL_F17255:
+; NoteEventBuffer store common handler
+NoteEvent_StoreCommon:	; F17255
 	cps a, 0
 	jrl nz, Flash_SectorWriteExecute
 
@@ -10444,7 +10451,7 @@ LABEL_F193A6:
 	calr LABEL_F1809B
 	ld a, (xsp + 12)
 	extz wa
-	calr LABEL_F17120
+	calr NoteEvent_Store
 	ld (xsp + 6), l
 	ld a, (xsp + 6)
 	extz wa
@@ -10854,7 +10861,7 @@ AcCmpMdBoxProc:
 	ld (xsp + 4), xde
 	ld xiz, xwa
 	cp xbc, 0x1E0004D
-	jrl z, LABEL_F1A436
+	jrl z, CmpSetP1_TtlDispatch
 	cp xbc, 0x1C0001D
 	jr z, LABEL_F1A3EB
 	cp xbc, 0x1C0000C
@@ -10864,7 +10871,7 @@ AcCmpMdBoxProc:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jrl LABEL_F1A45A
+	jrl CmpSetP1_TtlDispatch_End
 
 LABEL_F1A3CF:
 	ld xwa, xiz
@@ -10910,7 +10917,8 @@ LABEL_F1A423:
 	call SendEvent
 	jr GridBoxProc_Return
 
-LABEL_F1A436:
+; CmpSetP1 title dispatch
+CmpSetP1_TtlDispatch:	; F1A436
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -10925,11 +10933,13 @@ LABEL_F1A436:
 GridBoxProc_Return:
 	lds32 xhl, 0
 
-LABEL_F1A45A:
+; CmpSetP1 title dispatch end
+CmpSetP1_TtlDispatch_End:	; F1A45A
 	pop xiz
 	inc 4, xsp
 	ret
-LABEL_F1A45E:
+; CmpSetP1 title dispatch default
+CmpSetP1_TtlDispatch_Default:	; F1A45E
 
 AcCmpSetGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -10939,26 +10949,27 @@ AcCmpSetGridBoxProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F1A6B4
+	jrl z, CmpSetP1_GridCheck_Case3
 	ld xwa, (xsp + 16)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_F1A698
+	jrl z, CmpSetP1_GridCheck_Case1
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_F1A68F
+	jrl z, CmpSetP1_GridCheckDispatch
 	cp xwa, 0x1C00001
-	jr z, LABEL_F1A4BF
+	jr z, CmpSetP1_DialGrid
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_F1A6CB
+	jrl lt, CmpSetP1_GridCheck_Case4
 	cp xbc, 0x6
-	jrl gt, LABEL_F1A6CB
+	jrl gt, CmpSetP1_GridCheck_Case4
 	add xbc, xbc
 	add xbc, 0xE1CE3A
 	ld bc, (xbc)
 	lda_24 xix, 0xf1a4bf
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_F1A4BF:
+; CmpSetP1 dial grid dispatch (7-entry, table 0xE1CE3A)
+CmpSetP1_DialGrid:	; F1A4BF
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -11115,16 +11126,19 @@ LABEL_F1A689:
 	call SetDialEnable
 	jr CmpSetP1_ReturnZeroJmp
 
-LABEL_F1A68F:
+; CmpSetP1 grid check dispatch
+CmpSetP1_GridCheckDispatch:	; F1A68F
 	ld xwa, xiz
 	ld xiz, 0x3E
-	jr LABEL_F1A69F
+	jr CmpSetP1_GridCheck_Case2
 
-LABEL_F1A698:
+; CmpSetP1 grid check case 1
+CmpSetP1_GridCheck_Case1:	; F1A698
 	ld xwa, xiz
 	ld xiz, 0x42
 
-LABEL_F1A69F:
+; CmpSetP1 grid check case 2
+CmpSetP1_GridCheck_Case2:	; F1A69F
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -11135,7 +11149,8 @@ LABEL_F1A69F:
 	inc 8, xsp
 	jr CmpSetP1_ReturnZeroJmp
 
-LABEL_F1A6B4:
+; CmpSetP1 grid check case 3
+CmpSetP1_GridCheck_Case3:	; F1A6B4
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -11145,15 +11160,17 @@ LABEL_F1A6B4:
 
 CmpSetP1_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F1A6D7
+	jr CmpSetP1_GridCheck_Case5
 
-LABEL_F1A6CB:
+; CmpSetP1 grid check case 4
+CmpSetP1_GridCheck_Case4:	; F1A6CB
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
-LABEL_F1A6D7:
+; CmpSetP1 grid check case 5
+CmpSetP1_GridCheck_Case5:	; F1A6D7
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -11162,7 +11179,7 @@ CmpSetP1GridCheck:
 	lda xsp, (xsp - 28)
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F1A78B
+	jrl z, CmpSetP1_GridCheck_Return
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
 	jrl lt, Widget_PostEvtReturnZero
@@ -11174,7 +11191,8 @@ CmpSetP1GridCheck:
 	lda_24 xix, 0xf1a716
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F1A716:
+; CmpSetP1 grid check event encoding dispatch
+CmpSetP1_GridCheck_EventEnc:	; F1A716
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xeb, 0x8a, 0xbf, 0x14, 0x30, 0xea, 0x89
@@ -11191,7 +11209,8 @@ LABEL_F1A716:
 	.byte 0x01, 0x41, 0x0f, 0x00, 0xe4, 0x01, 0x1d, 0x63
 	.byte 0x4a, 0xfa, 0x78, 0xfd, 0x00
 
-LABEL_F1A78B:
+; CmpSetP1 grid check return
+CmpSetP1_GridCheck_Return:	; F1A78B
 	lda xbc, (xsp + 20)
 	ld xwa, xde
 	srl xwa, 0
@@ -11302,7 +11321,7 @@ CmpSetGridCheck:
 	push xiz
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F1A95C
+	jrl z, CmpSet_GridCheck_Dispatch
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
 	jrl lt, GridCheck_ReturnZero
@@ -11386,7 +11405,8 @@ GridCheck_SendEvent:
 	call MainFuncCall	; Send event
 	jr GridCheck_ReturnZero	; Return to caller
 
-LABEL_F1A95C:
+; CmpSet grid check dispatch (7-entry, table 0xE1D40E)
+CmpSet_GridCheck_Dispatch:	; F1A95C
 	lda xbc, (xsp + 14)
 	ld xwa, xde
 	srl xwa, 0
@@ -11991,7 +12011,7 @@ PsS2cTransBoxProc:
 	jr z, LABEL_F1AF3A
 	ld_sril XWA, (xsp + 0x0104)
 	call InheritedProc
-	jr LABEL_F1AFAE
+	jr SndArg_GridBnk_Case2
 
 LABEL_F1AF3A:
 	ld_sril XWA, (xsp + 0x0104)
@@ -12012,16 +12032,18 @@ LABEL_F1AF3A:
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
 	cpdi8 14967, 2
-	jr nz, LABEL_F1AF83
+	jr nz, SndArg_GridBnk_Case0
 	ldw (xbc), 0x0
 	ldw (xwa), 0xFF
-	jr LABEL_F1AF8B
+	jr SndArg_GridBnk_Case1
 
-LABEL_F1AF83:
+; SndArgGridBnk case 0
+SndArg_GridBnk_Case0:	; F1AF83
 	ldw (xbc), 0xFF
 	ldw (xwa), 0xF5
 
-LABEL_F1AF8B:
+; SndArgGridBnk case 1
+SndArg_GridBnk_Case1:	; F1AF8B
 	ld_sril XWA, (xsp + 0x0104)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
@@ -12032,11 +12054,13 @@ LABEL_F1AF8B:
 	call SendEvent
 	lds32 xhl, 0
 
-LABEL_F1AFAE:
+; SndArgGridBnk case 2
+SndArg_GridBnk_Case2:	; F1AFAE
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
-LABEL_F1AFB5:
+; SndArgGridBnk case 3
+SndArg_GridBnk_Case3:	; F1AFB5
 
 S2cGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -12046,27 +12070,28 @@ S2cGridBoxProc:
 	ld (xsp + 16), xwa
 	ld xwa, xiz
 	cp xiz, 0x1E40031
-	jrl z, LABEL_F1B230
+	jrl z, FdcFormat_GridCheck_Case3
 	cp xiz, 0x1E0008D
-	jrl z, LABEL_F1B21B
+	jrl z, FdcFormat_GridCheck_Case2
 	cp xiz, 0x1E0008B
-	jrl z, LABEL_F1B1FE
+	jrl z, FdcFormat_GridCheck_Case1
 	cp xiz, 0x1E0008A
-	jrl z, LABEL_F1B1F4
+	jrl z, FdcFormat_GridCheck
 	cp xiz, 0x1C00001
-	jr z, LABEL_F1B01B
+	jr z, FdcFormat_DialGrid
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
-	jrl lt, LABEL_F1B257
+	jrl lt, FdcFormat_GridCheck_Case4
 	cp xwa, 0x6
-	jrl gt, LABEL_F1B257
+	jrl gt, FdcFormat_GridCheck_Case4
 	add xwa, xwa
 	add xwa, 0xE1D728
 	ld wa, (xwa)
 	lda_24 xix, 0xf1b01b
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F1B01B:
+; FdcFormat dial grid dispatch (7-entry, table 0xE1D728)
+FdcFormat_DialGrid:	; F1B01B
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
 	ld xde, (xsp + 12)
@@ -12217,12 +12242,14 @@ LABEL_F1B1EE:
 	call SetDialEnable
 	jr FdcFormat_ReturnZeroJmp
 
-LABEL_F1B1F4:
+; FdcFormat grid check dispatch
+FdcFormat_GridCheck:	; F1B1F4
 	ld xwa, (xsp + 16)
 	ld xiz, 0x3E
 	jr LABEL_F1B206
 
-LABEL_F1B1FE:
+; FdcFormat grid check case 1
+FdcFormat_GridCheck_Case1:	; F1B1FE
 	ld xwa, (xsp + 16)
 	ld xiz, 0x42
 
@@ -12237,7 +12264,8 @@ LABEL_F1B206:
 	inc 8, xsp
 	jr FdcFormat_ReturnZeroJmp
 
-LABEL_F1B21B:
+; FdcFormat grid check case 2
+FdcFormat_GridCheck_Case2:	; F1B21B
 	ld xwa, (xsp + 16)
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -12246,7 +12274,8 @@ LABEL_F1B21B:
 	call ApFuncCall
 	jr FdcFormat_ReturnZeroJmp
 
-LABEL_F1B230:
+; FdcFormat grid check case 3
+FdcFormat_GridCheck_Case3:	; F1B230
 	call GetFocusObject
 	ld xwa, xhl
 	ld xbc, 0x1E0008F
@@ -12260,15 +12289,17 @@ LABEL_F1B230:
 
 FdcFormat_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F1B263
+	jr FdcFormat_GridCheck_Case5
 
-LABEL_F1B257:
+; FdcFormat grid check case 4
+FdcFormat_GridCheck_Case4:	; F1B257
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
 	ld xde, (xsp + 12)
 	call InheritedProc
 
-LABEL_F1B263:
+; FdcFormat grid check case 5
+FdcFormat_GridCheck_Case5:	; F1B263
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -12294,12 +12325,12 @@ S2cGridCheck:
 	lda xsp, (xsp - 18)
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F1B341
+	jrl z, S2c_GridCheck_Dispatch
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
-	jrl lt, LABEL_F1B39C
+	jrl lt, S2c_GridCheck_EventEnc
 	cp xwa, 0x6
-	jrl gt, LABEL_F1B39C
+	jrl gt, S2c_GridCheck_EventEnc
 	add xwa, xwa
 	add xwa, 0xE1D78E
 	ld wa, (xwa)
@@ -12323,7 +12354,8 @@ LABEL_F1B2CE:
 	.byte 0x41, 0x11, 0x00, 0xe4, 0x01, 0x1d, 0x63, 0x4a
 	.byte 0xfa, 0x68, 0x5b
 
-LABEL_F1B341:
+; S2cGridCheck dispatch
+S2c_GridCheck_Dispatch:	; F1B341
 	lda xbc, (xsp + 10)
 	ld xwa, xde
 	srl xwa, 0
@@ -12358,7 +12390,8 @@ LABEL_F1B38A:
 	ld xbc, 0x1E0008C
 	call SendEvent
 
-LABEL_F1B39C:
+; S2cGridCheck event encoding dispatch
+S2c_GridCheck_EventEnc:	; F1B39C
 	lds32 xhl, 0
 	lda xsp, (xsp + 18)
 	ret
@@ -13530,7 +13563,7 @@ PsNameMemBoxProc:
 	jr z, LABEL_F1BF63
 	ld_sril XWA, (xsp + 0x010c)
 	call InheritedProc
-	jrl LABEL_F1C03A
+	jrl EasyCmp_TtlCase3
 
 LABEL_F1BF63:
 	ld_sril XWA, (xsp + 0x010c)
@@ -13541,7 +13574,7 @@ LABEL_F1BF6A:
 
 LABEL_F1BF6F:
 	call InheritedProc
-	jrl LABEL_F1C038
+	jrl EasyCmp_TtlCase2
 
 LABEL_F1BF76:
 	ld_sril XWA, (xsp + 0x010c)
@@ -13584,7 +13617,7 @@ LABEL_F1BFCE:
 	call SendEvent
 	call GetTitleNow
 	cp xhl, 0x1A000B8
-	jr nz, LABEL_F1C038
+	jr nz, EasyCmp_TtlCase2
 	st_dri3b W, 0xFD, 0x04, 0x01
 	ldw (xwa), 0xC5
 	lda xde, (xwa + 2)
@@ -13596,28 +13629,33 @@ LABEL_F1BFCE:
 	add bc, 0x26
 	ld (xwa + 6), bc
 	cpdi8 14760, 0
-	jr nz, LABEL_F1C02D
+	jr nz, EasyCmp_TtlDispatch
 	pushw 0xF2
 	lds bc, 1
 	lds de, 2
-	jr LABEL_F1C034
+	jr EasyCmp_TtlCase1
 
-LABEL_F1C02D:
+; EasyCmp title dispatch
+EasyCmp_TtlDispatch:	; F1C02D
 	pushw 0xF5
 	lds bc, 1
 	lds de, 2
 
-LABEL_F1C034:
+; EasyCmp title case 1
+EasyCmp_TtlCase1:	; F1C034
 	call DrawDesignFrame
 
-LABEL_F1C038:
+; EasyCmp title case 2
+EasyCmp_TtlCase2:	; F1C038
 	lds32 xhl, 0
 
-LABEL_F1C03A:
+; EasyCmp title case 3
+EasyCmp_TtlCase3:	; F1C03A
 	pop xiz
 	st_dri3b L, 0xFD, 0x0C, 0x01
 	ret
-LABEL_F1C041:
+; EasyCmp title default
+EasyCmp_TtlDefault:	; F1C041
 
 AcEasyCmpGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -13627,26 +13665,27 @@ AcEasyCmpGridBoxProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F1C27B
+	jrl z, EasyCmp_GridCheck_Case3
 	ld xwa, (xsp + 16)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_F1C25F
+	jrl z, EasyCmp_GridCheck_Case1
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_F1C256
+	jrl z, EasyCmp_GridCheck
 	cp xwa, 0x1C00001
-	jr z, LABEL_F1C0A2
+	jr z, EasyCmp_DialGrid
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_F1C292
+	jrl lt, EasyCmp_GridCheck_Case4
 	cp xbc, 0x6
-	jrl gt, LABEL_F1C292
+	jrl gt, EasyCmp_GridCheck_Case4
 	add xbc, xbc
 	add xbc, 0xE1DE4C
 	ld bc, (xbc)
 	lda_24 xix, 0xf1c0a2
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-LABEL_F1C0A2:
+; EasyCmp dial grid dispatch (7-entry, table 0xE1DE4C)
+EasyCmp_DialGrid:	; F1C0A2
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -13795,16 +13834,19 @@ LABEL_F1C250:
 	call SetDialEnable
 	jr EasyCmp_ReturnZeroJmp
 
-LABEL_F1C256:
+; EasyCmpGridCheck dispatch
+EasyCmp_GridCheck:	; F1C256
 	ld xwa, xiz
 	ld xiz, 0x3E
-	jr LABEL_F1C266
+	jr EasyCmp_GridCheck_Case2
 
-LABEL_F1C25F:
+; EasyCmpGridCheck case 1
+EasyCmp_GridCheck_Case1:	; F1C25F
 	ld xwa, xiz
 	ld xiz, 0x42
 
-LABEL_F1C266:
+; EasyCmpGridCheck case 2
+EasyCmp_GridCheck_Case2:	; F1C266
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -13815,7 +13857,8 @@ LABEL_F1C266:
 	inc 8, xsp
 	jr EasyCmp_ReturnZeroJmp
 
-LABEL_F1C27B:
+; EasyCmpGridCheck case 3
+EasyCmp_GridCheck_Case3:	; F1C27B
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -13825,15 +13868,17 @@ LABEL_F1C27B:
 
 EasyCmp_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F1C29E
+	jr EasyCmp_GridCheck_Case5
 
-LABEL_F1C292:
+; EasyCmpGridCheck case 4
+EasyCmp_GridCheck_Case4:	; F1C292
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
-LABEL_F1C29E:
+; EasyCmpGridCheck case 5
+EasyCmp_GridCheck_Case5:	; F1C29E
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -13842,12 +13887,12 @@ EasyCmpGridCheck:
 	lda xsp, (xsp - 28)
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F1C372
+	jrl z, EasyCmp_GridCheck_EventEnc
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
-	jrl lt, LABEL_F1C3F5
+	jrl lt, EasyCmp_GridCheck_EventCase4
 	cp xwa, 0x6
-	jrl gt, LABEL_F1C3F5
+	jrl gt, EasyCmp_GridCheck_EventCase4
 	add xwa, xwa
 	add xwa, 0xE1DF16
 	ld wa, (xwa)
@@ -13875,7 +13920,8 @@ LABEL_F1C2DD:
 	.byte 0x01, 0x41, 0x2a, 0x00, 0xe4, 0x01, 0x1d, 0x63
 	.byte 0x4a, 0xfa, 0x78, 0x83, 0x00
 
-LABEL_F1C372:
+; EasyCmpGridCheck event encoding dispatch
+EasyCmp_GridCheck_EventEnc:	; F1C372
 	lda xbc, (xsp + 20)
 	ld xwa, xde
 	srl xwa, 0
@@ -13892,7 +13938,7 @@ LABEL_F1C372:
 	cps bc, 2
 	jr z, LABEL_F1C3B5
 	cps bc, 1
-	jr nz, LABEL_F1C3E3
+	jr nz, EasyCmp_GridCheck_EventCase3
 	ldada xbc, 14251
 	extz xwa
 	add xwa, xbc
@@ -13902,7 +13948,7 @@ LABEL_F1C372:
 	lda_24 xbc, 0x03dc92
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	push xwa
-	jr LABEL_F1C3C9
+	jr EasyCmp_GridCheck_EventCase1
 
 LABEL_F1C3B5:
 	ldada xbc, 14258
@@ -13910,17 +13956,19 @@ LABEL_F1C3B5:
 	add xwa, xbc
 	ld a, (xwa)
 	cps a, 0
-	jr nz, LABEL_F1C3D2
+	jr nz, EasyCmp_GridCheck_EventCase2
 	ld xwa, 0xE1DF0E
 	push xwa
 
-LABEL_F1C3C9:
+; EasyCmpGridCheck event case 1
+EasyCmp_GridCheck_EventCase1:	; F1C3C9
 	push xde
 	call Audio_SendCommand
 	inc 8, xsp
-	jr LABEL_F1C3E3
+	jr EasyCmp_GridCheck_EventCase3
 
-LABEL_F1C3D2:
+; EasyCmpGridCheck event case 2
+EasyCmp_GridCheck_EventCase2:	; F1C3D2
 	extz wa
 	pushw wa
 	pushw 0xE1
@@ -13929,14 +13977,16 @@ LABEL_F1C3D2:
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
-LABEL_F1C3E3:
+; EasyCmpGridCheck event case 3
+EasyCmp_GridCheck_EventCase3:	; F1C3E3
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 20)
 	ld xbc, 0x1E0008C
 	call SendEvent
 
-LABEL_F1C3F5:
+; EasyCmpGridCheck event case 4
+EasyCmp_GridCheck_EventCase4:	; F1C3F5
 	lds32 xhl, 0
 	lda xsp, (xsp + 28)
 	ret
@@ -13952,7 +14002,7 @@ MspNameBnkFunc:
 	ldirw
 	ld xwa, xhl
 	cp xhl, 0x1E00082
-	jr z, LABEL_F1C46F
+	jr z, MspNameBnk_Dispatch
 	sub xwa, 0x1E0003E
 	cp xwa, 0x0
 	jrl lt, MspNaming_CleanupExit
@@ -13984,7 +14034,8 @@ LABEL_F1C445:
 	ldada	xhl, 32574
 	jr	t, 0x41
 
-LABEL_F1C46F:
+; MspNameBnkFunc dispatch (10-entry, table 0xE1DF5C)
+MspNameBnk_Dispatch:	; F1C46F
 	cp xde, 0x4
 	jr nc, MspNaming_CleanupExit
 	ld xwa, xde
@@ -14667,7 +14718,7 @@ PsMspBnkNameBoxProc:
 	st_dri3l XDE, 0xFD, 0x04, 0x01
 	ld xiz, xwa
 	cp xbc, 0x1E4001E
-	jrl z, LABEL_F1CCC7
+	jrl z, RgpSetBnk_GridCheck
 	cp xbc, 0x1E4001D
 	jrl z, LABEL_F1CCA5
 	cp xbc, 0x1E4001C
@@ -14679,7 +14730,7 @@ PsMspBnkNameBoxProc:
 	cp xbc, 0x1C00002
 	jr z, LABEL_F1CBF1
 	cp xbc, 0x1C00001
-	jrl nz, LABEL_F1CCEF
+	jrl nz, RgpSetBnk_GridCheck_Case2
 	ld xwa, xiz
 	ld_sril XDE, (xsp + 0x0104)
 	jr LABEL_F1CBF8
@@ -14690,7 +14741,7 @@ LABEL_F1CBF1:
 
 LABEL_F1CBF8:
 	call InheritedProc
-	jrl LABEL_F1CCEB
+	jrl RgpSetBnk_GridCheck_Case1
 
 LABEL_F1CBFF:
 	ld xwa, xiz
@@ -14706,7 +14757,7 @@ LABEL_F1CBFF:
 	cps a, 1
 	jr z, LABEL_F1CC32
 	cps a, 0
-	jrl nz, LABEL_F1CCEB
+	jrl nz, RgpSetBnk_GridCheck_Case1
 	ld xwa, 0x1440010
 	ld xbc, 0x1E40017
 	lds32 xde, 0
@@ -14731,7 +14782,7 @@ LABEL_F1CC4E:
 
 MspBnk_MainFuncDispatch:
 	call MainFuncCall
-	jrl LABEL_F1CCEB
+	jrl RgpSetBnk_GridCheck_Case1
 
 LABEL_F1CC61:
 	ld xwa, xiz
@@ -14775,7 +14826,8 @@ LABEL_F1CCA5:
 	ld xbc, 0x1C0000F
 	jr MspBnk_SendEventJoin
 
-LABEL_F1CCC7:
+; RgpSetBnkCheck dispatch
+RgpSetBnk_GridCheck:	; F1CCC7
 	ld xwa, xiz
 	call GetViewInstance
 	ld_sril XWA, (xsp + 0x0104)
@@ -14791,16 +14843,19 @@ LABEL_F1CCC7:
 MspBnk_SendEventJoin:
 	call SendEvent
 
-LABEL_F1CCEB:
+; RgpSetBnkCheck case 1
+RgpSetBnk_GridCheck_Case1:	; F1CCEB
 	lds32 xhl, 0
-	jr LABEL_F1CCFA
+	jr RgpSetBnk_GridCheck_Case3
 
-LABEL_F1CCEF:
+; RgpSetBnkCheck case 2
+RgpSetBnk_GridCheck_Case2:	; F1CCEF
 	ld xwa, xiz
 	ld_sril XDE, (xsp + 0x0104)
 	call InheritedProc
 
-LABEL_F1CCFA:
+; RgpSetBnkCheck case 3
+RgpSetBnk_GridCheck_Case3:	; F1CCFA
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
@@ -14809,12 +14864,12 @@ MspRGrpSetGridCheck:
 	lda xsp, (xsp - 28)
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_F1CDD0
+	jrl z, RgpSetBnk_GridCheck_EventEnc
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
-	jrl lt, LABEL_F1CE7C
+	jrl lt, RgpSetBnk_GridCheck_Return
 	cp xwa, 0x6
-	jrl gt, LABEL_F1CE7C
+	jrl gt, RgpSetBnk_GridCheck_Return
 	add xwa, xwa
 	add xwa, 0xE1E2C2
 	ld wa, (xwa)
@@ -14842,7 +14897,8 @@ LABEL_F1CD3B:
 	.byte 0x01, 0x41, 0x15, 0x00, 0xe4, 0x01, 0x1d, 0x63
 	.byte 0x4a, 0xfa, 0x78, 0xac, 0x00
 
-LABEL_F1CDD0:
+; RgpSetBnkCheck event encoding dispatch
+RgpSetBnk_GridCheck_EventEnc:	; F1CDD0
 	lda xhl, (xsp + 20)
 	ld xwa, xde
 	srl xwa, 0
@@ -14916,7 +14972,8 @@ AudioEvt_GetFocusRetZero:
 	ld xbc, 0x1E0008C
 	call SendEvent
 
-LABEL_F1CE7C:
+; RgpSetBnkCheck return
+RgpSetBnk_GridCheck_Return:	; F1CE7C
 	lds32 xhl, 0
 	lda xsp, (xsp + 28)
 	ret
@@ -15253,7 +15310,7 @@ PsMspRecPadBoxProc:
 	jr z, LABEL_F1D17B
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F1D1C3
+	jr AcSndArgGrid_BnkCase2
 
 LABEL_F1D17B:
 	ld xwa, xiz
@@ -15264,7 +15321,7 @@ LABEL_F1D17F:
 
 LABEL_F1D181:
 	call InheritedProc
-	jr LABEL_F1D1C1
+	jr AcSndArgGrid_BnkCase1
 
 LABEL_F1D187:
 	ld xwa, xiz
@@ -15273,10 +15330,11 @@ LABEL_F1D187:
 	call GetViewInstance
 	ldda8 a, 32532
 	cps a, 5
-	jr ule, LABEL_F1D19D
+	jr ule, AcSndArgGrid_BnkDispatch
 	dec 6, a
 
-LABEL_F1D19D:
+; AcSndArgGridBnkFunc dispatch
+AcSndArgGrid_BnkDispatch:	; F1D19D
 	inc 1, a
 	extz wa
 	pushw wa
@@ -15291,10 +15349,12 @@ LABEL_F1D19D:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F1D1C1:
+; AcSndArgGridBnk case 1
+AcSndArgGrid_BnkCase1:	; F1D1C1
 	lds32 xhl, 0
 
-LABEL_F1D1C3:
+; AcSndArgGridBnk case 2
+AcSndArgGrid_BnkCase2:	; F1D1C3
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
@@ -15311,12 +15371,12 @@ MspPlayModeFunc:
 	ldirw
 	ld xwa, xde
 	cp xde, 0x1E00082
-	jr z, LABEL_F1D251
+	jr z, AcSndArgGrid_BoxProc
 	sub xwa, 0x1E0003E
 	cp xwa, 0x0
-	jr lt, LABEL_F1D261
+	jr lt, AcSndArgGrid_BoxCase1
 	cp xwa, 0x9
-	jr gt, LABEL_F1D261
+	jr gt, AcSndArgGrid_BoxCase1
 	add xwa, xwa
 	add xwa, 0xE1E344
 	ld wa, (xwa)
@@ -15349,18 +15409,21 @@ LABEL_F1D215:
 	ldada	xhl, 32575
 	jr	18
 
-LABEL_F1D251:
+; AcSndArgGridBoxProc dispatch (7-entry, table 0xE1E35E)
+AcSndArgGrid_BoxProc:	; F1D251
 	ld xwa, 0x1440015
 	ld xbc, 0x1E4001F
 	ld xde, xiz
 	call MainFuncCall
 
-LABEL_F1D261:
+; AcSndArgGridBox case 1
+AcSndArgGrid_BoxCase1:	; F1D261
 	lds32 xhl, 0
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
-LABEL_F1D268:
+; AcSndArgGridBox case 2
+AcSndArgGrid_BoxCase2:	; F1D268
 
 AcSndArgGridBoxProc:
 	lda xsp, (xsp - 22)
@@ -15914,7 +15977,7 @@ PsParaListBoxProc:
 	st_dri3l XDE, 0xFD, 0x9E, 0x00
 	ld xiz, xwa
 	cp xbc, 0x1E4002F
-	jrl z, LABEL_F1DA08
+	jrl z, SndArgGrid_CheckCase2
 	cp xbc, 0x1C0000F
 	jrl z, LABEL_F1D8F9
 	cp xbc, 0x1C0000B
@@ -15922,7 +15985,7 @@ PsParaListBoxProc:
 	ld xwa, xiz
 	ld_sril XDE, (xsp + 0x009e)
 	call InheritedProc
-	jrl LABEL_F1DA1A
+	jrl SndArgGrid_CheckCase3
 
 LABEL_F1D86F:
 	ld xwa, xiz
@@ -16063,25 +16126,28 @@ LABEL_F1D8F9:
 	st_dri3b A, 0xFD, 0x9A, 0x00
 	st_dri3b W, 0xFD, 0x8E, 0x00
 	cp iy, (xix)
-	jr nz, LABEL_F1D9F6
+	jr nz, SndArgGrid_CheckDispatch
 	ld xhl, (xhl)
 	push xhl
 	pushw 0x0
 	pushw 0xFF
-	jr LABEL_F1DA02
+	jr SndArgGrid_CheckCase1
 
-LABEL_F1D9F6:
+; SndArgGridCheck dispatch (7-entry, table 0xE1E36C)
+SndArgGrid_CheckDispatch:	; F1D9F6
 	ld xhl, (xhl)
 	push xhl
 	ld xhl, (xsp + 10)
 	pushm (xhl + 32)
 	pushm (xhl + 22)
 
-LABEL_F1DA02:
+; SndArgGridCheck case 1
+SndArgGrid_CheckCase1:	; F1DA02
 	call DrawString
 	jr PsParaListBoxProc_Return
 
-LABEL_F1DA08:
+; SndArgGridCheck case 2
+SndArgGrid_CheckCase2:	; F1DA08
 	ld xwa, xiz
 	call GetViewInstance
 	ld xbc, (xhl + 38)
@@ -16091,7 +16157,8 @@ LABEL_F1DA08:
 PsParaListBoxProc_Return:
 	lds32 xhl, 0
 
-LABEL_F1DA1A:
+; SndArgGridCheck case 3
+SndArgGrid_CheckCase3:	; F1DA1A
 	pop xiz
 	st_dri3b L, 0xFD, 0x9E, 0x00
 	ret
@@ -16108,9 +16175,9 @@ StylCnvStorBnkSel:
 	ldirw
 	sub xde, 0x1E0003E
 	cp xde, 0x0
-	jr lt, LABEL_F1DA8F
+	jr lt, PsSCTxtBox_EventDispatch
 	cp xde, 0x9
-	jr gt, LABEL_F1DA8F
+	jr gt, PsSCTxtBox_EventDispatch
 	add xde, xde
 	add xde, 0xE1E4BC
 	ld de, (xde)
@@ -16126,7 +16193,8 @@ LABEL_F1DA62:
 	.ascii "M:3h"
 	.byte 0x02
 
-LABEL_F1DA8F:
+; PsSCTxtBoxProc event dispatch (10-entry, table 0xE1E4BC)
+PsSCTxtBox_EventDispatch:	; F1DA8F
 	lds32 xhl, 0
 	pop xiz
 	lda xsp, (xsp + 92)
