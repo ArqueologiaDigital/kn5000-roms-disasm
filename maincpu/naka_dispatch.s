@@ -1966,7 +1966,7 @@ LABEL_EE2D6C:
 	.long LABEL_FD8262
 	.long LABEL_FD8263
 	.long LABEL_FD80B2
-	.long LABEL_FD8137
+	.long MidiSysEx_ProcessBlock
 	.long LABEL_FD8273
 	.long LABEL_FD8264
 	.long LABEL_FD7B67

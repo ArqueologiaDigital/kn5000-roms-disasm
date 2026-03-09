@@ -18116,14 +18116,15 @@ LABEL_EF0563:
 LABEL_EF05A2:
 	call LABEL_EF3B05
 	bit_dd8 0, 0x38	;  Is the optional HD-AE5000 board present?
-	jr nz, LABEL_EF05B5
+	jr nz, BootInit_SeqAndPanel
 	calr Get_Region_Code
 	cps l, 4
 	call_24 nz, 0xEF4BCC	; if it is present (and this unit was sold in
 					; a specific market region), then call the
 					; HDAE5000 PPI init code
 
-LABEL_EF05B5:
+; Boot initialization handler (SeqInit + CPanel scan)
+BootInit_SeqAndPanel:	; EF05B5
 	call Seq_FullInit
 	ei 0
 	ld32_24 xhl, 0xfc3e65
