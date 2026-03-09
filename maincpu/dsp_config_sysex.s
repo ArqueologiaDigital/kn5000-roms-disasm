@@ -4034,14 +4034,15 @@ LABEL_FDD27E:
 	cps bc, 0
 	jr lt, AssSwb_SwapEntriesAndDispatch
 	cp bc, 0x8
-	jr le, LABEL_FDD29D
+	jr le, DspConfig_EventDispatch
 	sub bc, 0x12
 	cp bc, 0x9
 	jr lt, AssSwb_SwapEntriesAndDispatch
 	cp bc, 0x14
 	jr gt, AssSwb_SwapEntriesAndDispatch
 
-LABEL_FDD29D:
+; DSP config event dispatch
+DspConfig_EventDispatch:	; FDD29D
 	add bc, bc
 	lda_24 xix, 0xee6390
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4

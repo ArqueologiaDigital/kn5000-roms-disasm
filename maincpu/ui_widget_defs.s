@@ -9746,7 +9746,7 @@ TitleProc:
 	cp xiz, 0x1E0000F
 	jr z, LABEL_FA4F7E
 	cp xiz, 0x1E00000
-	jr z, LABEL_FA4F76
+	jr z, TitleProc_EventDispatch
 	sub xde, 0x1E00030
 	cp xde, 0x0
 	jrl lt, LABEL_FA5857
@@ -9758,7 +9758,8 @@ TitleProc:
 	lda_24 xix, 0xfa4f76
 	jp_dri 8, 0x07, 0xF0, 0xE8
 
-LABEL_FA4F76:
+; TitleProc event dispatch
+TitleProc_EventDispatch:	; FA4F76
 	ld xhl, 0x1600007
 	jrl TitleFunc_Epilogue34
 
