@@ -1721,7 +1721,8 @@ LABEL_FE131B:
 	lda_24 xix, 0xfe137d
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FE137D:
+; Voice event handler dispatch (14-entry, table 0xEE8F06)
+VoiceEvent_Dispatch:	; FE137D
 	ld a, l
 	extz wa
 	extz bc
@@ -13686,7 +13687,8 @@ LABEL_FE894D:
 	lda_24 xix, 0xfe89a8
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FE89A8:
+; Sequence performance event dispatch (6-entry, table 0xEE8FC0)
+SeqPerformance_EventDispatch:	; FE89A8
 	ld	wa, (xsp+4)
 	ld	de, iz
 	lds	bc, 1
@@ -13974,7 +13976,8 @@ LABEL_FE8C1B:
 	lds hl, 0
 	jr LABEL_FE8C74
 
-LABEL_FE8C3C:
+; UI parameter callback return (table 0xEEAE04)
+UIParam_CallbackReturn:	; FE8C3C
 	ld wa, hl
 	extz xwa
 	add xwa, xwa
@@ -14003,7 +14006,7 @@ LABEL_FE8C3C:
 
 LABEL_FE8C74:
 	cp hl, (xsp + 2)
-	jr c, LABEL_FE8C3C
+	jr c, UIParam_CallbackReturn
 
 LABEL_FE8C79:
 	ldda16 xwa, 52772
@@ -20780,7 +20783,8 @@ LABEL_FED63B:
 	lda_24 xix, 0xfed672
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FED672:
+; MIDI system message dispatch (15-entry, table 0xEEC1E8)
+MidiSysMsg_Dispatch:	; FED672
 	.byte 0x1e, 0x47, 0x09, 0xdb, 0x88, 0xd8, 0xd8, 0x69
 	.byte 0x06, 0x33, 0xff, 0xff, 0x78, 0x50, 0x01, 0xcf
 	.byte 0xcf, 0xf7, 0x6e, 0xec, 0x78, 0x46, 0x01, 0xde
@@ -23121,7 +23125,8 @@ SndParam_LookupByChannel:
 	lda_24 xix, 0xfeeb06
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FEEB06:
+; Sound parameter type dispatch (6-entry, table 0xEED3C6)
+SndParam_TypeDispatch:	; FEEB06
 	extz hl
 	muls hl, 0x18
 	jr SndParam_LoadTableConverge
@@ -23195,7 +23200,8 @@ LABEL_FEEB59:
 	lda_24 xix, 0xfeeb97
 	jp_dri 8, 0x07, 0xF0, 0xE8
 
-LABEL_FEEB97:
+; Sound parameter offset dispatch (6-entry, table 0xEED3D2)
+SndParam_OffsetDispatch:	; FEEB97
 	ldw bc, 0x10
 	jr SndParam_LookupTableConverge
 
@@ -24708,7 +24714,8 @@ LABEL_FF024E:
 	ld_sriw3 HL, 0x07, 0xF0, 0xEC
 	lda_24 xix, 0xff028f
 	jp_dri 8, 0x07, 0xF0, 0xEC
-LABEL_FF028F:
+; HDAE5000 extension ROM data dispatch (6-entry, table 0xEED747)
+HdaeRom_DataDispatch:	; FF028F
 	.byte 0xbf, 0x06, 0x61, 0xc3, 0xfd, 0xba, 0x01, 0x3f
 	.byte 0xff, 0x7e, 0x33, 0x01, 0xc3, 0xfd, 0xb8, 0x01
 	.byte 0x3f, 0xff, 0x7e, 0x2a, 0x01, 0xbf, 0x04, 0x02
@@ -24799,7 +24806,8 @@ LABEL_FF0445:
 	ld_sriw3 HL, 0x07, 0xF0, 0xEC
 	lda_24 xix, 0xff0470
 	jp_dri 8, 0x07, 0xF0, 0xEC
-LABEL_FF0470:
+; HDAE5000 extension ROM alt dispatch (6-entry, table 0xEED753)
+HdaeRom_AltDispatch:	; FF0470
 	.byte 0x40, 0x00, 0x00, 0x1e, 0x00, 0x1e, 0x83, 0xff
 	.byte 0xde, 0xa8, 0x68, 0x03
 

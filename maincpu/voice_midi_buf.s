@@ -3085,7 +3085,8 @@ ToneGen_WriteParamByIndex:
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
 	lda_24 xix, 0xfc22d7
 	jp_dri 8, 0x07, 0xF0, 0xE4
-LABEL_FC22D7:
+; ToneGen_WriteParamByIndex dispatch table
+ToneGen_ParamWriteDispatch:	; FC22D7
 	.byte 0xbf, 0x06, 0x34, 0xd9, 0xac, 0x95, 0x11, 0xbf
 	.byte 0x02, 0x32, 0xbf, 0x06, 0x31, 0x91, 0x23, 0xdb
 	.byte 0x61, 0xb2, 0x53, 0x99, 0x02, 0x23, 0xdb, 0x61
@@ -3147,7 +3148,7 @@ WallHomeEditCheck:
 	cp xbc, 0x1E00082
 	jrl z, WallHomeEditCheck_ReturnFalse
 	cp xbc, 0x1C00002
-	jr z, LABEL_FC248A
+	jr z, WallHomeEdit_EventDispatch
 	sub xwa, 0x1E0003E
 	cp xwa, 0x0
 	jr lt, WallHomeEditCheck_ReturnFalse
@@ -3159,7 +3160,8 @@ WallHomeEditCheck:
 	lda_24 xix, 0xfc248a
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FC248A:
+; WallHomeEditCheck event dispatch
+WallHomeEdit_EventDispatch:	; FC248A
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
@@ -3247,7 +3249,8 @@ WallMenuEditCheck:
 	lda_24 xix, 0xfc256e
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FC256E:
+; WallMenuEditCheck event dispatch
+WallMenuEdit_EventDispatch:	; FC256E
 	ld	xwa, (xde+14)
 	ld	xbc, (xde+18)
 	cp	xwa, 1
@@ -3294,7 +3297,8 @@ WallOthEditCheck:
 	lda_24 xix, 0xfc25e9
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FC25E9:
+; WallOthEditCheck event dispatch
+WallOthEdit_EventDispatch:	; FC25E9
 	ld	xwa, (xde+14)
 	ld	xbc, (xde+18)
 	cp	xwa, 1
@@ -3869,7 +3873,8 @@ MainSysControl:	; fc2bbf
 	lda_24 xix, 0xfc2c12
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FC2C12:
+; MainSysControl dispatch table
+MainSysCtrl_DispatchTable:	; FC2C12
 	; --- Dispatch table: 9 call entries (54 bytes) ---
 	lds	wa, 2
 	call ScreenGroup_DispatchAlt
@@ -3947,7 +3952,8 @@ CntIniFunc:
 	ld de, (xde)
 	lda_24 xix, 0xfc2cd9
 	jp_dri 8, 0x07, 0xF0, 0xE8
-LABEL_FC2CD9:
+; CntIniFunc event dispatch
+CntIniFunc_EventDispatch:	; FC2CD9
 	.byte 0x1d, 0xb9, 0x9a, 0xf5, 0x1d, 0x3a, 0xe6, 0xf6
 
 CntIniFunc_ReturnZero:
