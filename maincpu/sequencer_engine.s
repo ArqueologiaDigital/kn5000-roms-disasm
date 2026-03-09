@@ -12735,7 +12735,8 @@ SeqVoice_InitReturnZero:
 	lds wa, 0
 	jrl Part_InitVoiceDefaults
 
-LABEL_F3FF1F:
+; AppEvent extended handler
+AppEvent_ExtendedHandler:	; F3FF1F
 	ld xwa, 0xE445A6
 	jr Part_LoadAndApplyVoiceTable
 	ld xwa, 0xE445B2
@@ -19334,44 +19335,50 @@ LABEL_F43CFF:
 	stdi8 10598, 0
 	ret
 
-LABEL_F43D05:
+; SeqEvent dispatch case A
+SeqEvent_CaseA:	; F43D05
 	cpdi16 61854, 0
-	jr z, LABEL_F43D16
+	jr z, SeqEvent_CaseB
 	anddi8 10407, 247
 	call SeqAcc_InitPlaybackState
 
-LABEL_F43D16:
+; SeqEvent dispatch case B
+SeqEvent_CaseB:	; F43D16
 	anddi8 10412, 223
 	ret
 
 ApEditSyori:
 	cp xbc, 0x1E80015
-	jr z, LABEL_F43D44
+	jr z, SeqEvent_CaseD
 	cp xbc, 0x1E80014
-	jr z, LABEL_F43D3D
+	jr z, SeqEvent_CaseC
 	cp xbc, 0x1C0000B
-	jr nz, LABEL_F43D49
+	jr nz, SeqEvent_CaseE
 	stda32 10610, xde
-	calr LABEL_F43D4C
-	jr LABEL_F43D49
+	calr SeqEvent_MainHandler
+	jr SeqEvent_CaseE
 
-LABEL_F43D3D:
+; SeqEvent dispatch case C
+SeqEvent_CaseC:	; F43D3D
 	ld xwa, xde
-	calr LABEL_F44147
-	jr LABEL_F43D49
+	calr AppEvent_ChainDispatch1
+	jr SeqEvent_CaseE
 
-LABEL_F43D44:
+; SeqEvent dispatch case D
+SeqEvent_CaseD:	; F43D44
 	ld xwa, xde
-	calr LABEL_F44882
+	calr AppEvent_InlineHandler
 
-LABEL_F43D49:
+; SeqEvent dispatch case E
+SeqEvent_CaseE:	; F43D49
 	lds32 xhl, 0
 	ret
 
-LABEL_F43D4C:
+; SeqEvent main handler
+SeqEvent_MainHandler:	; F43D4C
 	ldda8 a, 36150
 	cp a, 0x91
-	jrl z, LABEL_F440A7
+	jrl z, AppEvent_SubHandler0
 	cp a, 0x90
 	jr z, SeqEvent_Dispatch
 	extz wa
@@ -19589,7 +19596,8 @@ SeqEvent_Dispatch:	; F43D83
 	ld xde, 0x1A
 	jrl AppEvent_PostEvent_Stub
 
-LABEL_F440A7:
+; AppEvent sub-handler 0
+AppEvent_SubHandler0:	; F440A7
 	ldda8 a, 9992
 	extz wa
 	ld xbc, 0x2842
@@ -19635,7 +19643,8 @@ AppEvent_PostDefaultEvents:
 AppEvent_PostEvent_Stub:
 	jp ApDeliveryEvent
 
-LABEL_F44147:
+; AppEvent chain dispatch 1
+AppEvent_ChainDispatch1:	; F44147
 	dec 4, xsp
 	push xiz
 	ld xbc, xwa
@@ -20207,12 +20216,13 @@ AppEvent_Epilogue:
 	inc 4, xsp
 	ret
 
-LABEL_F44882:
+; AppEvent inline handler dispatch
+AppEvent_InlineHandler:	; F44882
 	dec 4, xsp
 	push xiz
 	ld xbc, xwa
 	cp xbc, 0x1F
-	jrl ugt, LABEL_F44F98
+	jrl ugt, SeqState_DispatchEntry
 	add xbc, xbc
 	add xbc, 0xE44992
 	ld bc, (xbc)
@@ -20488,7 +20498,8 @@ AppEvent_SubDispatch:	; F448A4
 	.byte 0x00, 0xc0, 0x01, 0x42, 0x22, 0x00, 0x00, 0x00
 	.byte 0x1d, 0x07, 0x9e, 0xfa
 
-LABEL_F44F98:
+; Sequencer state dispatch entry
+SeqState_DispatchEntry:	; F44F98
 	pop xiz
 	inc 4, xsp
 	ret
@@ -20632,7 +20643,7 @@ LABEL_F450A1:
 	cp e, 0x94
 	jrl z, LABEL_F45231
 	cp e, 0x89
-	jrl z, LABEL_F4519B
+	jrl z, SeqState_LabelDispatch
 	ldda16 xwa, 61854
 	ldfr_werp WA, 0xFA
 	extz bc
@@ -20679,7 +20690,7 @@ LABEL_F45111:
 	call ApPostEvent
 	ld a, (xsp + 4)
 	extz wa
-	jr LABEL_F45195
+	jr SeqState_Case4
 
 LABEL_F45136:
 	ldda16 xiz, 10408
@@ -20687,32 +20698,36 @@ LABEL_F45136:
 	call LABEL_F43268
 	ldda16 xbc, 61854
 	cp_werp BC, 0xFA
-	jr nz, LABEL_F45150
+	jr nz, SeqState_Case0
 	cpdm16 10408, xiz
 	jrl z, AppEvent_PopIzSkip2Ret
 
-LABEL_F45150:
+; Sequencer state case 0
+SeqState_Case0:	; F45150
 	lds de, 1
 	ld a, (xsp + 4)
 	and a, 0xF
-	jr z, LABEL_F4515C
+	jr z, SeqState_Case1
 	slaa de
 
-LABEL_F4515C:
+; Sequencer state case 1
+SeqState_Case1:	; F4515C
 	ld wa, de
 	andda16 xde, 10408
-	jr z, LABEL_F45168
+	jr z, SeqState_Case2
 	ldb l, 0x1
-	jr LABEL_F45172
+	jr SeqState_Case3
 
-LABEL_F45168:
+; Sequencer state case 2
+SeqState_Case2:	; F45168
 	and wa, bc
 	ldb l, 0x0
 	cps wa, 0
-	jr z, LABEL_F45172
+	jr z, SeqState_Case3
 	ldb l, 0x2
 
-LABEL_F45172:
+; Sequencer state case 3
+SeqState_Case3:	; F45172
 	ldb h, 0x0
 	extz xhl
 	lds32 xwa, 0
@@ -20726,11 +20741,13 @@ LABEL_F45172:
 	ld a, (xsp + 4)
 	extz wa
 
-LABEL_F45195:
+; Sequencer state case 4
+SeqState_Case4:	; F45195
 	calr SeqVoice_DispatchEventToHandler
 	jrl AppEvent_PopIzSkip2Ret
 
-LABEL_F4519B:
+; Sequencer state label dispatch
+SeqState_LabelDispatch:	; F4519B
 	extz bc
 	dec 1, bc
 	cps bc, 0
@@ -21475,11 +21492,11 @@ ApPlaySyori:
 	pushw iz
 	ld (xsp + 2), xde
 	cp xbc, 0x1E80046
-	jrl z, LABEL_F46358
+	jrl z, NoteEditSy_ModeScrollReturn
 	cp xbc, 0x1E80045
-	jrl z, LABEL_F462D3
+	jrl z, NoteEditSy_ModeScroll
 	cp xbc, 0x1E80044
-	jrl z, LABEL_F46210
+	jrl z, SeqAccomp_StartHelper
 	ldda16 xde, 9832
 	ldda16 xhl, 9506
 	ldda16 xiy, 9504
@@ -21491,9 +21508,9 @@ ApPlaySyori:
 	ldda8 a, 36150
 	ldfr_berp A, 0xEF
 	cp xbc, 0x1E80015
-	jrl z, LABEL_F45FD9
+	jrl z, SeqAccomp_SubChain
 	cp xbc, 0x1E80014
-	jrl z, LABEL_F45DC1
+	jrl z, SeqAccomp_ParamDelivery
 	cp xbc, 0x1C0000B
 	jrl nz, AppEvent_ReturnZero
 	ld xwa, (xsp + 2)
@@ -21701,7 +21718,8 @@ SeqAccomp_DispatchRhythmEvents:
 	ld xde, 0xB
 	jrl SeqAccomp_StartHandler
 
-LABEL_F45DC1:
+; SeqAccomp parameter delivery
+SeqAccomp_ParamDelivery:	; F45DC1
 	ld xwa, (xsp + 2)
 	cp xwa, 0xB
 	jrl ugt, AppEvent_ReturnZero
@@ -21788,7 +21806,8 @@ SeqAccomp_SubHandlerA:	; F45DE1
 	.byte 0xd1, 0x9e, 0xf1, 0x19, 0x38, 0x28, 0xf1, 0x21
 	.byte 0x04, 0xca, 0x76, 0x33, 0x02, 0x78, 0xa2, 0x03
 
-LABEL_F45FD9:
+; SeqAccomp sub-handler chain
+SeqAccomp_SubChain:	; F45FD9
 	ld xwa, (xsp + 2)
 	cp xwa, 0xB
 	jrl ugt, AppEvent_ReturnZero
@@ -21888,7 +21907,8 @@ SeqAccomp_StartHandler:
 	call SeqPlay_AllocBuffersAndInit
 	jrl AppEvent_ReturnZero
 
-LABEL_F46210:
+; SeqAccomp start helper
+SeqAccomp_StartHelper:	; F46210
 	cpdi8 36150, 133
 	jrl nz, LABEL_F46298
 	bitda 2, 1057
@@ -21975,7 +21995,8 @@ LABEL_F462CD:
 	call UI_PostModeChangeEvent
 	jr SeqAccomp_InitAndReturn
 
-LABEL_F462D3:
+; NoteEditSy mode scroll dispatch
+NoteEditSy_ModeScroll:	; F462D3
 	bitda 2, 1057
 	jr nz, LABEL_F462E2
 	ldda8 c, 10418
@@ -22001,7 +22022,7 @@ LABEL_F462F5:
 	ld xwa, (xsp + 2)
 
 LABEL_F46301:
-	calr LABEL_F464A4
+	calr NoteEditSy_ScrollReset
 	jr AppEvent_ReturnZero
 
 LABEL_F46306:
@@ -22015,14 +22036,14 @@ LABEL_F46313:
 	cp a, 0x87
 	jr nz, LABEL_F46320
 	ld xwa, (xsp + 2)
-	calr LABEL_F464C4
+	calr NoteEditSy_ScrollCase1
 	jr AppEvent_ReturnZero
 
 LABEL_F46320:
 	cp a, 0x88
 	jr nz, AppEvent_ReturnZero
 	ld xwa, (xsp + 2)
-	calr LABEL_F464D4
+	calr NoteEditSy_ScrollCase2
 	jr AppEvent_ReturnZero
 
 LABEL_F4632D:
@@ -22045,7 +22066,8 @@ SeqAccomp_InitAndReturn:
 	call SeqPlay_InitStartState
 	jr AppEvent_ReturnZero
 
-LABEL_F46358:
+; NoteEditSy mode scroll return
+NoteEditSy_ModeScrollReturn:	; F46358
 	call LABEL_F38A32
 	cps hl, 0
 	jr z, AppEvent_ReturnZero
@@ -22189,7 +22211,8 @@ AppEvent_SendPlayStatus:
 	ld xbc, 0x1E0003B
 	jp ApDeliveryEvent
 
-LABEL_F464A4:
+; NoteEditSy scroll reset dispatch
+NoteEditSy_ScrollReset:	; F464A4
 	ld xde, xwa
 	ld xwa, 0x850006
 	ld xbc, 0x1E0003B
@@ -22201,13 +22224,15 @@ AppEvent_SendAccompStatus:
 	ld xbc, 0x1E0003B
 	jp ApDeliveryEvent
 
-LABEL_F464C4:
+; NoteEditSy scroll case 1
+NoteEditSy_ScrollCase1:	; F464C4
 	ld xde, xwa
 	ld xwa, 0x87000D
 	ld xbc, 0x1E0003B
 	jp ApDeliveryEvent
 
-LABEL_F464D4:
+; NoteEditSy scroll case 2
+NoteEditSy_ScrollCase2:	; F464D4
 	ld xde, xwa
 	ld xwa, 0x880004
 	ld xbc, 0x1E0003B
@@ -22217,13 +22242,13 @@ NoteEditSy_SendModeScrollReset:
 	ldda8 c, 36152
 	ldda32 xwa, 10610
 	cp c, 0x99
-	jr z, LABEL_F46557
+	jr z, NoteEditSy_ScrollCase4
 	cp c, 0x96
-	jr z, LABEL_F46557
+	jr z, NoteEditSy_ScrollCase4
 	cp c, 0x7A
-	jr z, LABEL_F4654E
+	jr z, NoteEditSy_ScrollCase3
 	cp c, 0x78
-	jr z, LABEL_F4654E
+	jr z, NoteEditSy_ScrollCase3
 	extz bc
 	sub bc, 0x81
 	cps bc, 0
@@ -22255,12 +22280,14 @@ LABEL_F46540:
 	lds32 xde, 0
 	jr NoteEditSy_DeliverEvent
 
-LABEL_F4654E:
+; NoteEditSy scroll case 3
+NoteEditSy_ScrollCase3:	; F4654E
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	jr NoteEditSy_DeliverEvent
 
-LABEL_F46557:
+; NoteEditSy scroll case 4
+NoteEditSy_ScrollCase4:	; F46557
 	ld xbc, 0x1C0000F
 	lds32 xde, 3
 	jr NoteEditSy_DeliverEvent
@@ -22378,13 +22405,14 @@ SeqAcc_ResetAndReinit:
 SeqAcc_CheckLoopAndSendEvent:
 	ld8_24 a, 0x00ffe3
 	cp_berp A, 0xFB
-	jr z, LABEL_F46685
+	jr z, NoteEditSy_UpScrollTable
 	ldda32 xwa, 10694
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	call ApDeliveryEvent
 
-LABEL_F46685:
+; NoteEditSy up-scroll table
+NoteEditSy_UpScrollTable:	; F46685
 	lds32 xhl, 0
 	pop_werp 0xFA
 	ret
@@ -23375,9 +23403,9 @@ EtmenuTitleFunc:
 	cp xbc, 0x1C00013
 	jrl nz, EtmenuTtl_ReturnZero
 	cp xde, 0x7
-	jrl z, LABEL_F4709C
+	jrl z, MainExe_DispatchReturn
 	cp xde, 0x3
-	jrl z, LABEL_F47097
+	jrl z, MainExe_DispatchEntry
 	cp xde, 0x2
 	jrl nz, EtmenuTtl_ReturnZero
 	stdi8 58252, 0
@@ -23413,10 +23441,12 @@ EtmenuTitleFunc:
 	call ApDeliveryEvent
 	jr EtmenuTtl_ReturnZero
 
-LABEL_F47097:
+; MainExeCall dispatch entry
+MainExe_DispatchEntry:	; F47097
 	stdi8 58252, 0
 
-LABEL_F4709C:
+; MainExeCall dispatch return
+MainExe_DispatchReturn:	; F4709C
 	lds wa, 0
 	calr VoiceParam_SetD6Group
 
@@ -30995,7 +31025,7 @@ SeqPart_VelEditStartWalk:
 	ldmm8 10362, 9782
 
 SeqPart_VelEditReturn:
-	call LABEL_F3FF1F
+	call AppEvent_ExtendedHandler
 	call SeqVoice_InitReturnZero
 	pop_werp 0xFA
 	ret

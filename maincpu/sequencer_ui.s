@@ -2107,7 +2107,8 @@ TrAsGrid_LookupByteTable:
 	add xwa, xbc
 	ld l, (xwa)
 	ret
-LABEL_F2BF1E:
+; AcTrAsGridBoxProc dispatch
+TrAsGrid_BoxProc:	; F2BF1E
 
 AcTrAsGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -3208,7 +3209,7 @@ AcCurSongNameBoxProc:
 	jr z, LABEL_F2CBA7
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F2CC0F
+	jr MuteChSel_TtlDefault
 
 LABEL_F2CBA7:
 	ld xwa, xiz
@@ -3219,7 +3220,7 @@ LABEL_F2CBAB:
 
 LABEL_F2CBAD:
 	call InheritedProc
-	jr LABEL_F2CC0D
+	jr MuteChSel_TtlSetup
 
 LABEL_F2CBB3:
 	ld xwa, xiz
@@ -3228,7 +3229,7 @@ LABEL_F2CBB3:
 	ld xbc, 0x1E7000D
 	lds32 xde, 0
 	call MainFuncCall
-	jr LABEL_F2CC0D
+	jr MuteChSel_TtlSetup
 
 LABEL_F2CBCB:
 	ld xwa, xiz
@@ -3254,10 +3255,12 @@ LABEL_F2CBCB:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F2CC0D:
+; SmfMuteChSelFunc title setup
+MuteChSel_TtlSetup:	; F2CC0D
 	lds32 xhl, 0
 
-LABEL_F2CC0F:
+; SmfMuteChSelFunc title default
+MuteChSel_TtlDefault:	; F2CC0F
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
@@ -3274,9 +3277,9 @@ SmfMuteChSelFunc:
 	ld xiz, xwa
 	sub xbc, 0x1E0003E
 	cp xbc, 0x0
-	jr lt, LABEL_F2CC7D
+	jr lt, MuteChSel_ReturnZero
 	cp xbc, 0x9
-	jr gt, LABEL_F2CC7D
+	jr gt, MuteChSel_ReturnZero
 	add xbc, xbc
 	add xbc, 0xE265B0
 	ld bc, (xbc)
@@ -3291,12 +3294,14 @@ MuteChSel_Dispatch:	; F2CC54
 	.byte 0x68, 0x10, 0x43, 0x0f, 0x00, 0x00, 0x00, 0x68
 	.byte 0x09
 
-LABEL_F2CC7D:
+; SmfMuteChSelFunc return zero
+MuteChSel_ReturnZero:	; F2CC7D
 	lds32 xhl, 0
-	jr LABEL_F2CC86
+	jr MuteChSel_Epilogue
 	lda_24 xhl, 0x021084
 
-LABEL_F2CC86:
+; SmfMuteChSelFunc epilogue
+MuteChSel_Epilogue:	; F2CC86
 	pop xiz
 	ret
 
@@ -3305,9 +3310,9 @@ SqTrAsPsSongFunc:
 	ld xiz, xwa
 	sub xbc, 0x1E0003E
 	cp xbc, 0x0
-	jr lt, LABEL_F2CCDE
+	jr lt, SqTrAsPsSong_ReturnZero
 	cp xbc, 0x9
-	jr gt, LABEL_F2CCDE
+	jr gt, SqTrAsPsSong_ReturnZero
 	add xbc, xbc
 	add xbc, 0xE2665E
 	ld bc, (xbc)
@@ -3322,7 +3327,8 @@ SqTrAsPsSong_Dispatch:	; F2CCB5
 	.byte 0x68, 0x0f, 0x43, 0x0a, 0x00, 0x00, 0x00, 0x68
 	.byte 0x08
 
-LABEL_F2CCDE:
+; SqTrAsPsSongFunc return zero
+SqTrAsPsSong_ReturnZero:	; F2CCDE
 	lds32 xhl, 0
 	jr LABEL_F2CCE6
 	ldada xhl, 3391
@@ -3335,13 +3341,13 @@ SqAftSetFunc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E00065
-	jr z, LABEL_F2CD35
+	jr z, SqAftSet_Case2
 	cp xbc, 0x1E00064
-	jr z, LABEL_F2CD31
+	jr z, SqAftSet_Case1
 	cp xbc, 0x1E00063
-	jr z, LABEL_F2CD2A
+	jr z, SqAftSet_Case0
 	cp xbc, 0x1E00062
-	jr nz, LABEL_F2CD35
+	jr nz, SqAftSet_Case2
 	ld wa, (xde + 8)
 	sla wa, 2
 	lda_24 xbc, 0xe26672
@@ -3354,15 +3360,18 @@ SqAftSetFunc:
 	ld xhl, xiz
 	jr SqAftSet_LookupExit
 
-LABEL_F2CD2A:
+; SqAftSetFunc case 0
+SqAftSet_Case0:	; F2CD2A
 	lda_24 xhl, 0x00ffc2
 	jr SqAftSet_LookupExit
 
-LABEL_F2CD31:
+; SqAftSetFunc case 1
+SqAftSet_Case1:	; F2CD31
 	lds32 xhl, 1
 	jr SqAftSet_LookupExit
 
-LABEL_F2CD35:
+; SqAftSetFunc case 2
+SqAftSet_Case2:	; F2CD35
 	lds32 xhl, 0
 
 SqAftSet_LookupExit:
@@ -3382,7 +3391,7 @@ MuteChSetFunc:
 	ld xiz, xwa
 	ld xwa, xbc
 	cp xbc, 0x1E00082
-	jr z, LABEL_F2CDB4
+	jr z, MuteChSet_ParamCheck
 	sub xwa, 0x1E0003E
 	cp xwa, 0x0
 	jr lt, MuteChSetFunc_Exit
@@ -3415,7 +3424,8 @@ MuteChSet_Dispatch:	; F2CD84
 	lda_24	xhl, 135306
 	jr	36
 
-LABEL_F2CDB4:
+; MuteChSetFunc parameter check
+MuteChSet_ParamCheck:	; F2CDB4
 	cpi8_24 0x021088, 0x01
 	jr nz, MuteChSetFunc_Exit
 	ld8_24 a, 0x02108a
@@ -3675,23 +3685,25 @@ AcDemoMedleyDispBoxProc:
 	cp xbc, 0x1C0000B
 	jr z, AcDemoMedley_HandleScrollEvent
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2D070
+	jr z, DemoMedDsp_LoadEntry
 	cp xbc, 0x1C00001
 	jr z, LABEL_F2D06C
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F2D0AB
+	jr DPPauseDsp_CheckEntry
 
 LABEL_F2D06C:
 	ld xwa, xiz
-	jr LABEL_F2D072
+	jr DemoMedDsp_LoadReturn
 
-LABEL_F2D070:
+; DemoMedDspCheck load entry
+DemoMedDsp_LoadEntry:	; F2D070
 	ld xwa, xiz
 
-LABEL_F2D072:
+; DemoMedDspCheck load return
+DemoMedDsp_LoadReturn:	; F2D072
 	call InheritedProc
-	jr LABEL_F2D0A9
+	jr DPPlayDsp_ReturnPath
 
 AcDemoMedley_HandleScrollEvent:
 	ld xwa, xiz
@@ -3699,10 +3711,11 @@ AcDemoMedley_HandleScrollEvent:
 	lda xbc, (xsp + 4)
 	ld xwa, 0xE26786
 	cpi8_24 0x021090, 0x01
-	jr nz, LABEL_F2D093
+	jr nz, DPPlayDsp_CheckEntry
 	ld xwa, 0xE2677A
 
-LABEL_F2D093:
+; DPPlayDspCheck entry
+DPPlayDsp_CheckEntry:	; F2D093
 	push xwa
 	push xbc
 	call Audio_SendCommand
@@ -3712,10 +3725,12 @@ LABEL_F2D093:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F2D0A9:
+; DPPlayDspCheck return path
+DPPlayDsp_ReturnPath:	; F2D0A9
 	lds32 xhl, 0
 
-LABEL_F2D0AB:
+; DPPauseDspCheck entry
+DPPauseDsp_CheckEntry:	; F2D0AB
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
@@ -5351,11 +5366,11 @@ NoteEditBoxProc:
 	ld xiz, xbc
 	ld (xsp + 94), xwa
 	cp xiz, 0x1C00018
-	jrl z, LABEL_F2F9BC
+	jrl z, NoteEdit_FormatDispatch
 	cp xiz, 0x1C00017
-	jrl z, LABEL_F2F9BC
+	jrl z, NoteEdit_FormatDispatch
 	cp xiz, 0x1C80004
-	jrl z, LABEL_F2F251
+	jrl z, NoteEditBox_GridDispatch2
 	cp xiz, 0x1C0000F
 	jr z, LABEL_F2F0F9
 	cp xiz, 0x1C0000B
@@ -5364,7 +5379,7 @@ NoteEditBoxProc:
 	ld xbc, xiz
 	ld xde, (xsp + 90)
 	call InheritedProc
-	jrl LABEL_F2FA55
+	jrl NoteEdit_FormatReturn
 
 LABEL_F2F0BA:
 	ld xwa, (xsp + 94)
@@ -5448,10 +5463,11 @@ LABEL_F2F0F9:
 	ld xwa, xbc
 	lda xbc, (xbc + 32)
 
-LABEL_F2F1A2:
+; NoteEditBox grid setup dispatch
+NoteEditBox_SetupGrid:	; F2F1A2
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F2F1A2
+	jr c, NoteEditBox_SetupGrid
 	ld xhl, (xsp + 90)
 	ld xwa, (xsp + 12)
 	lda xbc, (xwa + 26)
@@ -5509,7 +5525,8 @@ NoteEditBoxProc_SetupGridDisplay:
 	call DrawStringLeftJustify
 	jrl NoteEdit_ReturnZero
 
-LABEL_F2F251:
+; NoteEditBox grid dispatch 2
+NoteEditBox_GridDispatch2:	; F2F251
 	ld xwa, (xsp + 94)
 	call GetViewInstance
 	ld (xsp + 12), xhl
@@ -5804,14 +5821,15 @@ NoteEditGrid_LoadCoordinates:
 	call DrawDesignBox
 	jrl NoteEdit_ReturnZero
 
-LABEL_F2F9BC:
+; NoteEdit format dispatch
+NoteEdit_FormatDispatch:	; F2F9BC
 	ld xwa, (xsp + 94)
 	ld xbc, xiz
 	ld xde, (xsp + 90)
 	call InheritedProc
 	ld xwa, (xsp + 90)
 	cp xwa, 0xE
-	jr ugt, LABEL_F2FA09
+	jr ugt, NoteEdit_FormatEntry
 	ld xwa, 0x148001F
 	ld xbc, 0x1C00017
 	call MainDeleteEvent
@@ -5827,7 +5845,8 @@ LABEL_F2F9BC:
 	ld xde, (xsp + 90)
 	call SetAutoInc
 
-LABEL_F2FA09:
+; NoteEdit format entry
+NoteEdit_FormatEntry:	; F2FA09
 	ld xwa, (xsp + 90)
 	cp xwa, 0xB
 	jr ugt, NoteEdit_ReturnZero
@@ -5854,7 +5873,8 @@ NoteEditBox_GridDispatch:	; F2FA35
 NoteEdit_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2FA55:
+; NoteEdit format return
+NoteEdit_FormatReturn:	; F2FA55
 	pop xiz
 	lda xsp, (xsp + 94)
 	ret
@@ -6451,9 +6471,9 @@ PlaySong_ReturnZero:
 
 PlySngSel2Func:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F30045
+	jr nz, EntGrid_InitDispatch
 	bitda 2, 1057
-	jr nz, LABEL_F30045
+	jr nz, EntGrid_InitDispatch
 	ld xwa, 0x810012
 	ld xbc, 0x1C00002
 	lds32 xde, 5
@@ -6463,7 +6483,8 @@ PlySngSel2Func:
 	lds32 xde, 5
 	call SendEvent
 
-LABEL_F30045:
+; AcEntertainerGridBoxProc init dispatch
+EntGrid_InitDispatch:	; F30045
 	lds32 xhl, 0
 	ret
 
@@ -6475,23 +6496,23 @@ AcEntertainerGridBoxProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
 	cp xbc, 0x1E8000F
-	jrl z, LABEL_F302FE
+	jrl z, EntGrid_CellAction2
 	ld xwa, (xsp + 16)
 	cp xwa, 0x1E8000E
-	jrl z, LABEL_F302ED
+	jrl z, EntGrid_CellAction1
 	cp xwa, 0x1E0008D
-	jrl z, LABEL_F302DC
+	jrl z, EntGrid_CellSelect
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_F302AF
+	jrl z, EntGrid_PostReturn
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_F302A6
+	jrl z, EntGrid_PostEvent
 	cp xwa, 0x1C00001
 	jr z, AcEntertainer_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_F30315
+	jrl lt, EntGrid_CellAction3
 	cp xbc, 0x6
-	jrl gt, LABEL_F30315
+	jrl gt, EntGrid_CellAction3
 	add xbc, xbc
 	add xbc, 0xE34742
 	ld bc, (xbc)
@@ -6663,12 +6684,14 @@ LABEL_F302A0:
 	call SetDialEnable
 	jr Entertainer_ReturnZeroJmp
 
-LABEL_F302A6:
+; Entertainer grid post event
+EntGrid_PostEvent:	; F302A6
 	ld xwa, xiz
 	ld xiz, 0x3E
 	jr LABEL_F302B6
 
-LABEL_F302AF:
+; Entertainer grid post return
+EntGrid_PostReturn:	; F302AF
 	ld xwa, xiz
 	ld xiz, 0x42
 
@@ -6689,7 +6712,8 @@ LABEL_F302B6:
 	ld xde, (xsp + 12)
 	jr CallApFuncPath
 
-LABEL_F302DC:
+; Entertainer grid cell select
+EntGrid_CellSelect:	; F302DC
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -6697,7 +6721,8 @@ LABEL_F302DC:
 	ld xde, (xsp + 12)
 	jr CallApFuncPath
 
-LABEL_F302ED:
+; Entertainer grid cell action 1
+EntGrid_CellAction1:	; F302ED
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -6705,7 +6730,8 @@ LABEL_F302ED:
 	ld xde, (xsp + 12)
 	jr CallApFuncPath
 
-LABEL_F302FE:
+; Entertainer grid cell action 2
+EntGrid_CellAction2:	; F302FE
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -6719,7 +6745,8 @@ Entertainer_ReturnZeroJmp:
 	lds32 xhl, 0
 	jr LABEL_F30321
 
-LABEL_F30315:
+; Entertainer grid cell action 3
+EntGrid_CellAction3:	; F30315
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6761,14 +6788,14 @@ EntertainerGridCheck:
 	lda xwa, (xbc + 4)
 	ld (xsp + 32), xwa
 	cp xde, 0x1E8000F
-	jrl z, LABEL_F30826
+	jrl z, EntGridCheck_Default
 	lda_24 xwa, 0xe32a7a
 	ld (xsp + 16), xwa
 	cp xde, 0x1E8000E
-	jrl z, LABEL_F307E2
+	jrl z, EntGridCheck_Return
 	ld xwa, xde
 	cp xwa, 0x1E0008D
-	jrl z, LABEL_F305C9
+	jrl z, EntGridCheck_Handler
 	ld xwa, (xsp + 20)
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
@@ -6847,7 +6874,8 @@ SndParam_Dispatch:	; F303D6
 	.byte 0xbf, 0x28, 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01
 	jrl	t, 0x036b
 
-LABEL_F305C9:
+; EntertainerGridCheck handler
+EntGridCheck_Handler:	; F305C9
 	ld xwa, (xsp + 58)
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -7038,7 +7066,8 @@ LABEL_F307BD:
 	ld xbc, 0x1E0008C
 	jrl SndParam_SendEventReturnZero
 
-LABEL_F307E2:
+; EntertainerGridCheck return
+EntGridCheck_Return:	; F307E2
 	ldw (xbc), 0x1
 	ld xwa, (xsp + 36)
 	ldw (xwa), 0x4
@@ -7063,7 +7092,8 @@ LABEL_F307E2:
 	ld xbc, 0x1E0008C
 	jrl SndParam_SendEventReturnZero
 
-LABEL_F30826:
+; EntertainerGridCheck default
+EntGridCheck_Default:	; F30826
 	ldw (xbc), 0x1
 	ld xde, (xsp + 58)
 	ld bc, de
@@ -9506,10 +9536,11 @@ LABEL_F32380:
 	ld xwa, xhl
 	lda xbc, (xhl + 20)
 
-LABEL_F3240A:
+; SqplyVal extra params dispatch
+SqplyVal_ExtraParams:	; F3240A
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F3240A
+	jr c, SqplyVal_ExtraParams
 	ld (xde + 18), xhl
 	ld xhl, (xsp + 66)
 	ld xwa, (xsp + 4)
@@ -11294,10 +11325,11 @@ LABEL_F339BF:
 	ld xwa, xbc
 	lda xbc, (xbc + 20)
 
-LABEL_F33A51:
+; EffectBox name setup dispatch
+EffectBox_NameSetup:	; F33A51
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F33A51
+	jr c, EffectBox_NameSetup
 	ld_sril XDE, (xsp + 0x014e)
 	inc 1, xde
 	ld xwa, (xsp + 4)
@@ -11842,10 +11874,11 @@ LABEL_F34061:
 	ld xwa, xbc
 	lda xbc, (xbc + 20)
 
-LABEL_F340F2:
+; EffectBox state dispatch
+EffectBox_StateDispatch:	; F340F2
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F340F2
+	jr c, EffectBox_StateDispatch
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1E00045
@@ -11861,9 +11894,9 @@ LABEL_F340F2:
 	ld xwa, (xhl)
 	dec 1, xbc
 	cp xbc, 0x0
-	jr c, LABEL_F34179
+	jr c, EffectBox_State1
 	cp xbc, 0x6
-	jr ugt, LABEL_F34179
+	jr ugt, EffectBox_State1
 	add xbc, xbc
 	add xbc, 0xE34936
 	ld bc, (xbc)
@@ -11881,7 +11914,8 @@ SeqAccomp_Dispatch:	; F34148
 	.byte 0x68, 0x0e, 0x41, 0x68, 0x00, 0xe8, 0x01, 0x68
 	.byte 0x07
 
-LABEL_F34179:
+; EffectBox state 1
+EffectBox_State1:	; F34179
 	ld xwa, (xhl)
 	ld xbc, 0x1E80061
 	call ApFuncCall
@@ -12285,7 +12319,7 @@ EqOnOffFuncToggleProc:
 	jr z, LABEL_F345FF
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F34653
+	jr SqplyFunc_FormatEntry
 
 LABEL_F345FF:
 	ld xwa, xiz
@@ -12308,7 +12342,7 @@ LABEL_F3461D:
 LABEL_F34628:
 	ld xwa, (xde)
 	cp xwa, 0x4006
-	jr nz, LABEL_F34651
+	jr nz, SqplyFunc_FormatDispatch
 	cpw (xde + 4), 0x1
 	jr nz, LABEL_F34644
 	ld xwa, xiz
@@ -12324,10 +12358,12 @@ LABEL_F34644:
 SqEdit_SendEventEpilog:
 	call SendEvent
 
-LABEL_F34651:
+; SqplyFunc format dispatch
+SqplyFunc_FormatDispatch:	; F34651
 	lds32 xhl, 0
 
-LABEL_F34653:
+; SqplyFunc format entry
+SqplyFunc_FormatEntry:	; F34653
 	pop xiz
 	ret
 
@@ -12657,21 +12693,21 @@ SqedtFunc:
 	call GetTitleNow
 	ld xde, xiz
 	cp xiz, 0x1E80069
-	jrl z, LABEL_F35231
+	jrl z, SqedtFunc_StateChainA
 	cp xiz, 0x1E00045
-	jrl z, LABEL_F34FED
+	jrl z, SqedtFunc_ModeD
 	cp xiz, 0x1E80073
-	jrl z, LABEL_F34FCB
+	jrl z, SqedtFunc_ModeB
 	cp xiz, 0x1E80072
-	jrl z, LABEL_F34FBC
+	jrl z, SqedtFunc_ModeA
 	cp xiz, 0x1E8004B
-	jrl z, LABEL_F34F7D
+	jrl z, SqedtFunc_CheckMode
 	cp xiz, 0x1E8004A
-	jrl z, LABEL_F34F46
+	jrl z, SqedtFunc_Case2
 	cp xiz, 0x1E80049
-	jrl z, LABEL_F34F36
+	jrl z, SqedtFunc_Case1
 	cp xiz, 0x1E80048
-	jrl z, LABEL_F34F16
+	jrl z, SqedtFunc_Case0
 	ld xwa, (xsp + 8)
 	sub xde, 0x1E80016
 	cp xde, 0x0
@@ -12853,7 +12889,8 @@ Sqedt_ParamDispatch:	; F34A5C
 	.byte 0xe3, 0x00, 0xe8, 0x13, 0xe9, 0x80, 0x38, 0x78
 	.byte 0xc3, 0x00
 
-LABEL_F34F16:
+; SqedtFunc dispatch case 0
+SqedtFunc_Case0:	; F34F16
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	pushw 0x6
@@ -12864,16 +12901,18 @@ LABEL_F34F16:
 	exts xwa
 	add xwa, xbc
 	push xwa
-	jrl LABEL_F34FD9
+	jrl SqedtFunc_ModeC_Entry
 
-LABEL_F34F36:
+; SqedtFunc dispatch case 1
+SqedtFunc_Case1:	; F34F36
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	pushw 0x10
 	ldada xwa, 9706
-	jrl LABEL_F34FD8
+	jrl SqedtFunc_ModeC
 
-LABEL_F34F46:
+; SqedtFunc dispatch case 2
+SqedtFunc_Case2:	; F34F46
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	cpdi8 10360, 10
@@ -12897,7 +12936,8 @@ LABEL_F34F68:
 	push xwa
 	jr LABEL_F34FB3
 
-LABEL_F34F7D:
+; SqedtFunc check mode
+SqedtFunc_CheckMode:	; F34F7D
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	cpdi8 10360, 10
@@ -12926,23 +12966,27 @@ LABEL_F34FB3:
 	lda xsp, (xsp + 10)
 	jr StringCopyEpilog
 
-LABEL_F34FBC:
+; SqedtFunc mode A
+SqedtFunc_ModeA:	; F34FBC
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	pushw 0x10
 	ldada xwa, 10306
-	jr LABEL_F34FD8
+	jr SqedtFunc_ModeC
 
-LABEL_F34FCB:
+; SqedtFunc mode B
+SqedtFunc_ModeB:	; F34FCB
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	pushw 0x10
 	ldada xwa, 10322
 
-LABEL_F34FD8:
+; SqedtFunc mode C
+SqedtFunc_ModeC:	; F34FD8
 	push xwa
 
-LABEL_F34FD9:
+; SqedtFunc mode C entry
+SqedtFunc_ModeC_Entry:	; F34FD9
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 18)
 	push xwa
@@ -12953,9 +12997,10 @@ StringCopyEpilog:
 	ld xhl, (xsp + 12)
 	jrl SqedtFunc_Epilogue12
 
-LABEL_F34FED:
+; SqedtFunc mode D
+SqedtFunc_ModeD:	; F34FED
 	ld xwa, (xsp + 8)
-	calr LABEL_F3523E
+	calr SqedtFunc_StateChainB
 	jrl SqedtFunc_Epilogue12
 	lds32 xhl, 0
 	ld8_24 l, 0x02109c
@@ -13013,19 +13058,21 @@ SqedtFunc_SignExtendAndReturn:
 	exts xhl
 	jrl SqedtFunc_Epilogue12
 	cp l, 0x9B
-	jr z, LABEL_F35115
+	jr z, SqedtFunc_SignExtend
 	cp l, 0x9F
-	jr z, LABEL_F35111
+	jr z, SqedtFunc_ReturnNeg1
 	cp l, 0x9C
 	jr nz, SqedtFunc_ReturnNegOne
 	ldb l, 0x9
 	jr SqedtFunc_SignExtendAndReturn
 
-LABEL_F35111:
+; SqedtFunc return -1
+SqedtFunc_ReturnNeg1:	; F35111
 	ldb l, 0xB
 	jr SqedtFunc_SignExtendAndReturn
 
-LABEL_F35115:
+; SqedtFunc sign extend and return
+SqedtFunc_SignExtend:	; F35115
 	ldb l, 0xE
 	jr SqedtFunc_SignExtendAndReturn
 	extz wa
@@ -13073,7 +13120,8 @@ SeqFormat_DispatchA:	; F3513D
 	.byte 0xde, 0xe2, 0x03, 0x21, 0xe9, 0xf0, 0xdb, 0x76
 	.byte 0xeb, 0x12, 0x68, 0x08
 
-LABEL_F35231:
+; SqedtFunc state chain A
+SqedtFunc_StateChainA:	; F35231
 	call GetTitleNow
 	ldb h, 0x0
 	extz xhl
@@ -13083,13 +13131,14 @@ SqedtFunc_Epilogue12:
 	lda xsp, (xsp + 12)
 	ret
 
-LABEL_F3523E:
+; SqedtFunc state chain B
+SqedtFunc_StateChainB:	; F3523E
 	push xiz
 	ld xiz, xwa
 	call GetTitleNow
 	ld a, l
 	cp l, 0x91
-	jrl z, LABEL_F354C7
+	jrl z, DspItem0_CngFunc
 	cp l, 0x90
 	jr z, SeqFormat_DispatchB
 	extz wa
@@ -13337,7 +13386,8 @@ LABEL_F354C1:
 	ldada xhl, 61921
 	jr SqedtFunc_Epilogue
 
-LABEL_F354C7:
+; DspItem0CngFunc dispatch
+DspItem0_CngFunc:	; F354C7
 	cp xiz, 0x1E
 	jr z, LABEL_F354EB
 	cp xiz, 0x1D
@@ -13402,7 +13452,7 @@ DspItem0CngFunc:
 	ld xix, (xsp + 20)
 	ld (xsp), xix
 	cp xix, 0x1E80069
-	jrl z, LABEL_F35801
+	jrl z, DspItem0_Epilogue
 	cp xix, 0x1E00046
 	jrl z, LABEL_F357C8
 	ld8_24 l, 0x021098
@@ -13670,7 +13720,8 @@ EffectEdit_ReturnZero:
 	ldda8 l, 10666
 	jr DspItem0_Epilogue
 
-LABEL_F35801:
+; DspItem0 epilogue
+DspItem0_Epilogue:	; F35801
 	call GetTitleNow
 	ldb h, 0x0
 	extz xhl
@@ -13684,16 +13735,16 @@ EqualizerCngFunc:
 	ld xiz, xwa
 	ld xwa, xbc
 	cp xbc, 0x1E00045
-	jrl z, LABEL_F35914
+	jrl z, Equalizer_ParamByIndex
 	cp xbc, 0x1E80013
 	jr z, Equalizer_DispatchA
 	lda_24 xbc, 0xe321fa
 	ldada xhl, 10616
 	sub xwa, 0x1E80061
 	cp xwa, 0x0
-	jrl lt, LABEL_F359C7
+	jrl lt, Equalizer_ParamString
 	cp xwa, 0x8
-	jrl gt, LABEL_F359C7
+	jrl gt, Equalizer_ParamString
 	add xwa, xwa
 	add xwa, 0xE34DDC
 	ld wa, (xwa)
@@ -13782,7 +13833,8 @@ Equalizer_LookupParamByIndex:
 	extz xhl
 	jrl Equalizer_PopIzRet
 
-LABEL_F35914:
+; Equalizer param by index lookup
+Equalizer_ParamByIndex:	; F35914
 	ldada xbc, 10616
 	dec 1, xde
 	cp xde, 0x0
@@ -13860,7 +13912,8 @@ LABEL_F359AE:
 	extz xhl
 	jr Equalizer_PopIzRet
 
-LABEL_F359C7:
+; Equalizer param string lookup
+Equalizer_ParamString:	; F359C7
 	lds32 xhl, 0
 
 Equalizer_PopIzRet:
@@ -13869,11 +13922,12 @@ Equalizer_PopIzRet:
 
 MainExeFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F359DC
+	jr nz, Equalizer_FormatValue
 	ld xwa, 0x1480001
 	call MainPostEvent
 
-LABEL_F359DC:
+; Equalizer format param value
+Equalizer_FormatValue:	; F359DC
 	lds32 xhl, 0
 	ret
 
@@ -13881,20 +13935,21 @@ SureJudgeFunc:
 	cp xbc, 0x1C00007
 	jrl nz, ParamCmd_ReturnZero
 	cpi8_24 0x0340ea, 0x00
-	jr nz, LABEL_F359FC
+	jr nz, Equalizer_CmdDispatch
 	ld xwa, 0x1480001
 	call MainPostEvent
 	jrl ParamCmd_ReturnZero
 
-LABEL_F359FC:
+; Equalizer command dispatch
+Equalizer_CmdDispatch:	; F359FC
 	lds wa, 0
 	call SetDialEnable
 	call GetTitleNow
 	ld xwa, xhl
 	cp xhl, 0x1A00091
-	jr z, LABEL_F35A53
+	jr z, Equalizer_CmdCase1
 	cp xhl, 0x1A00090
-	jr z, LABEL_F35A44
+	jr z, Equalizer_CmdCase0
 	sub xwa, 0x1A0009A
 	cp xwa, 0x0
 	jrl lt, ParamCmd_ReturnZero
@@ -13906,13 +13961,15 @@ LABEL_F359FC:
 	lda_24 xix, 0xf35a44
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F35A44:
+; Equalizer command case 0
+Equalizer_CmdCase0:	; F35A44
 	ld xwa, 0x900009
 	ld xbc, 0x1C00001
 	lds32 xde, 5
 	jrl ParamCmd_SendAndReturnZero
 
-LABEL_F35A53:
+; Equalizer command case 1
+Equalizer_CmdCase1:	; F35A53
 	ld xwa, 0x91000B
 	ld xbc, 0x1C00001
 	lds32 xde, 5
@@ -13987,7 +14044,7 @@ FormatParamValueStr:
 	extz bc
 	ldada xde, 10616
 	cp w, 0x49
-	jrl z, LABEL_F35BC7
+	jrl z, Equalizer_FormatDefault
 	cp w, 0x47
 	jr z, FormatParamString
 	cp w, 0x41
@@ -14000,14 +14057,15 @@ FormatParamValueStr:
 	cps wa, 0
 	jrl lt, PrepareAudioParam
 	cp wa, 0x11
-	jr le, LABEL_F35B62
+	jr le, Equalizer_FormatDispatch
 	dec 6, wa
 	cp wa, 0x12
 	jrl lt, PrepareAudioParam
 	cp wa, 0x2B
 	jrl gt, PrepareAudioParam
 
-LABEL_F35B62:
+; Equalizer format dispatch
+Equalizer_FormatDispatch:	; F35B62
 	lda_24 xix, 0xe34e28
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	extz wa
@@ -14035,7 +14093,8 @@ FormatParamString:
 	ld xwa, 0xE31E02
 	jrl FormatParamStr_CopyEnumName
 
-LABEL_F35BC7:
+; Equalizer format default
+Equalizer_FormatDefault:	; F35BC7
 	pushw 0x5
 	ld xwa, 0xE31C0E
 	jrl FormatParamStr_CopyEnumName
