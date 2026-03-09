@@ -362,7 +362,7 @@ IntMed_NextSlot:
 	jrl IntMed_Exit
 
 IntMed_CheckPlaying:
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	cps l, 1
 	jrl nz, IntMed_HandleError
 	stdi8 34046, 1
@@ -443,7 +443,7 @@ IntMed_ClearPlayFlag:
 	jrl IntMed_Exit
 
 IntMed_HandleError:
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	stdi8 34046, 0
 	cps l, 0
 	jrl z, IntMed_Exit
@@ -1080,7 +1080,7 @@ DiskSel_NextFile:
 	jrl DiskSel_Exit
 
 DiskSel_CheckPlaying:
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	cps l, 1
 	jrl nz, DiskSel_HandleError
 	stdi8 34046, 1
@@ -1175,7 +1175,7 @@ DiskSel_SendFileInfo:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	call LABEL_F87A08
+	call FileIO_ParseDirectoryEntry
 	ldfr_werp HL, 0xFA
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
@@ -1287,7 +1287,7 @@ DiskSel_RepeatSendInfo:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	call LABEL_F87A08
+	call FileIO_ParseDirectoryEntry
 	ldfr_werp HL, 0xFA
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
@@ -1335,7 +1335,7 @@ DiskSel_RepeatNext:
 	jrl DiskSel_Exit
 
 DiskSel_HandleError:
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	stdi8 34046, 0
 	cps l, 0
 	jr nz, DiskSel_ShowError
@@ -1659,7 +1659,7 @@ DiskSel_PlayFindLoop:
 	ld xbc, 0x1C00001
 	lds32 xde, 5
 	call ApPostEvent
-	call LABEL_F87A08
+	call FileIO_ParseDirectoryEntry
 	ldfr_werp HL, 0xFA
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
@@ -2006,7 +2006,7 @@ FmmSmfMedleyFunc:
 
 SmfMed_CheckNotPlaying:
 	stdi8 34046, 0
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	cps l, 4
 	jr z, SmfMed_Error3F
 	cps l, 3
@@ -2037,10 +2037,10 @@ SmfMed_CheckPlayMode:
 	jrl nz, SmfMed_InitFromDisk
 
 SmfMed_CheckPlaying:
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	cps l, 1
 	jrl c, SmfMed_CheckNotPlayError
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	cps l, 4
 	jr z, SmfMed_PlayError3F
 	cps l, 3
@@ -2156,7 +2156,7 @@ SmfMed_ClearRepeatCount:
 	jr SmfMed_ClearPlaying
 
 SmfMed_CheckNotPlayError:
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	cps l, 0
 	jrl nz, SmfMed_Exit
 
@@ -2835,7 +2835,7 @@ FmmPdMedleyFunc:
 	cp a, 0x71
 	jr nz, PdMed_CheckPlayMode
 	stdi8 34046, 0
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	cps l, 2
 	jrl c, PdMed_Exit
 	stdi8 32578, 1
@@ -2845,7 +2845,7 @@ FmmPdMedleyFunc:
 PdMed_CheckPlayMode:
 	cp a, 0x75
 	jrl nz, PdMed_InitFromDisk
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	cps l, 1
 	jrl nz, PdMed_HandleError
 	stdi8 34046, 1
@@ -2931,7 +2931,7 @@ PdMed_ClearPlaying:
 	jrl PdMed_Exit
 
 PdMed_HandleError:
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	stdi8 34046, 0
 	cps l, 0
 	jrl z, PdMed_Exit
@@ -3642,7 +3642,7 @@ FmmDocMedleyFunc:
 	cp a, 0x70
 	jr nz, DocMed_CheckPlayMode
 	stdi8 34046, 0
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	cps l, 2
 	jrl c, DocMed_Exit
 	stdi8 32578, 1
@@ -3652,7 +3652,7 @@ FmmDocMedleyFunc:
 DocMed_CheckPlayMode:
 	cp a, 0x74
 	jrl nz, DocMed_CheckInit
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	cps l, 1
 	jrl nz, DocMed_HandleError
 	stdi8 34046, 1
@@ -3738,7 +3738,7 @@ DocMed_ClearPlaying:
 	jrl DocMed_Exit
 
 DocMed_HandleError:
-	call LABEL_F2076D
+	call Medley_GetPlaybackStatus
 	stdi8 34046, 0
 	cps l, 0
 	jrl z, DocMed_Exit

@@ -20491,7 +20491,7 @@ LABEL_F20764:
 LABEL_F2076C:
 	ret
 
-LABEL_F2076D:
+Medley_GetPlaybackStatus:
 	xor hl, hl
 	ldda8 l, 4437
 	ret

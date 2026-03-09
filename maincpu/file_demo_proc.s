@@ -2173,7 +2173,7 @@ LABEL_F87A03:
 	ret
 
 
-LABEL_F87A08:
+FileIO_ParseDirectoryEntry:
 	lda xsp, (xsp - 16)
 	push xiz
 	ldi_werp 0xFA, 0
@@ -7834,7 +7834,7 @@ LABEL_F8B2F1:
 	stdi8 32578, 37
 	ldw wa, 0xEE
 	call SoundCtrl_SendCommand
-	call LABEL_F87A08
+	call FileIO_ParseDirectoryEntry
 	ld iz, hl
 	call SwbtWr_ReinitOutputBank
 	calr SignalProgressUpdate

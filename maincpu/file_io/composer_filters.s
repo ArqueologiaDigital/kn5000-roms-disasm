@@ -255,7 +255,7 @@ CompLoad_HideButtons_Loop:
 	call FileIO_FormatName_Loop
 	lds wa, 0
 	calr InitializeOperationState
-	call LABEL_F87A08
+	call FileIO_ParseDirectoryEntry
 	ld wa, hl
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
@@ -549,7 +549,7 @@ LoadFilter_OpLoad:
 	calr LABEL_F8B337
 	lds wa, 0
 	calr InitializeOperationState
-	call LABEL_F87A08
+	call FileIO_ParseDirectoryEntry
 	ld wa, hl
 	lds bc, 1
 	calr FileIO_ValidateSignedValue
