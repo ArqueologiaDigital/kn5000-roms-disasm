@@ -6054,11 +6054,13 @@ LABEL_FCA86E:
 LABEL_FCA87E:
 	ld_spiw WA, 0xF1
 	cp c, 0xB1
-	jr z, LABEL_FCA88A
+	jr z, MidiStream_ProcessorDispatchC
 	and d, a
 	jr z, LABEL_FCA86E
 
-LABEL_FCA88A:
+; MIDI stream processor dispatch (variant C — 16-entry)
+; Index: w & 0xF (0-15), entries: 16
+MidiStream_ProcessorDispatchC:	; FCA88A
 	and w, 0xF
 	sll w, 2
 	ld xix, 0xFCA8B9
@@ -6456,12 +6458,15 @@ LABEL_FCAD62:
 	popw hl
 	ld hl, (xix - 10)
 	cp hl, (xix - 6)
-	jr z, LABEL_FCAD7D
+	jr z, VoiceMode_ParamDispatch
 	ld_srib3 A, 0x07, 0xF0, 0xEC
 	bit 7, a
 	jr z, LABEL_FCAD62
 
-LABEL_FCAD7D:
+; Voice mode parameter dispatch
+; Index: DRAM[37301] bits [6:4] (3-bit field), entries: 8
+; Dispatches voice mode parameter processing
+VoiceMode_ParamDispatch:	; FCAD7D
 	ld (xiy), 0xFF
 	ldda8 a, 37302
 	stda8 37112, a
