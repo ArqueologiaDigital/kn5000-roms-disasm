@@ -67,7 +67,7 @@ LABEL_FC5874:
 	.byte 0x66, 0x2e, 0xc9, 0xcf, 0x0f, 0x66, 0x22, 0xc9
 	.byte 0xcf, 0x0a, 0x66, 0x16, 0xc9, 0xdb, 0x66, 0x0b
 	cps	a, 1
-	.ascii "n=@.ùÌ"
+	.ascii "n=@.ÔøΩÔøΩ"
 	.byte 0x00
 	.ascii "h!@0"
 	.byte 0x9d, 0xed, 0x00
@@ -5581,10 +5581,13 @@ ToneGen_DispatchByMode:
 	ldda16 xwa, 64614
 	and wa, 0x203
 	cps a, 0
-	jr nz, LABEL_FCA3A1
+	jr nz, RegBitManip_Dispatch
 	ldb a, 0x1
 
-LABEL_FCA3A1:
+; Register bit manipulation dispatch
+; Index: DRAM[64605] & 0x7 (0-7), entries: 8
+; Dispatches register bit set/clear/test operations
+RegBitManip_Dispatch:	; FCA3A1
 	extz xhl
 	xor h, h
 	ldda8 l, 64605
@@ -5692,11 +5695,14 @@ LABEL_FCA4BF:
 LABEL_FCA4CF:
 	ld_spiw WA, 0xF1
 	cp c, 0xB1
-	jr z, LABEL_FCA4DB
+	jr z, MidiStream_ProcessorDispatch
 	and d, a
 	jr z, LABEL_FCA4BF
 
-LABEL_FCA4DB:
+; MIDI stream processor dispatch
+; Index: w & 0x7 (0-7), entries: 8
+; Processes MIDI stream data based on status byte type
+MidiStream_ProcessorDispatch:	; FCA4DB
 	and w, 0x7
 	sll w, 2
 	ld xix, 0xFCA4F9
@@ -5822,11 +5828,13 @@ LABEL_FCA652:
 LABEL_FCA662:
 	ld_spiw WA, 0xF1
 	cp c, 0xB1
-	jr z, LABEL_FCA66E
+	jr z, MidiStream_ProcessorDispatchB
 	and d, a
 	jr z, LABEL_FCA652
 
-LABEL_FCA66E:
+; MIDI stream processor dispatch (variant B)
+; Index: w & 0x7 (0-7), entries: 8
+MidiStream_ProcessorDispatchB:	; FCA66E
 	stdi8 37319, 0
 	and w, 0x7
 	sll w, 2
