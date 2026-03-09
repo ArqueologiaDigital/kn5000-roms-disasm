@@ -5491,7 +5491,7 @@ INTTC0_HANDLER:	; EF35E8
 	cps a, 3
 	jr z, LABEL_EF3662
 	cps a, 2
-	jr z, LABEL_EF363F
+	jr z, E1DMA_TransferSetup
 	cps a, 1
 	jr nz, E1DMA_ISR_Epilogue
 	ldda8 c, 1508
@@ -5510,7 +5510,8 @@ INTTC0_HANDLER:	; EF35E8
 	stdi8 1506, 0
 	jr LABEL_EF367E
 
-LABEL_EF363F:
+; E1DMA ISR - DMA transfer setup (after SeqRingBuf dispatch)
+E1DMA_TransferSetup:	; EF363F
 	ldada xwa, 1550
 	ld xbc, (xwa)
 	ldc_cr32 xbc, 0x20
