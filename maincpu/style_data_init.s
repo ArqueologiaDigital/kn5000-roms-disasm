@@ -522,11 +522,14 @@ LABEL_EF0D3D:
 	ldda8 a, 1041
 	inc 1, a
 	cps a, 2
-	jr ule, LABEL_EF0D51
+	jr ule, UIStateMachine_PrimaryDispatch
 	sub a, a
 	incdi8 1, 1042
 
-LABEL_EF0D51:
+; UI state machine primary dispatch
+; Index: DRAM[1041] (0-2), entries: 3
+; State 0: Idle, State 1: Process, State 2: Sub-state dispatch
+UIStateMachine_PrimaryDispatch:	; EF0D51
 	stda8 1041, a
 	sll a, 2
 	lda_24 xhl, 0xef0d64

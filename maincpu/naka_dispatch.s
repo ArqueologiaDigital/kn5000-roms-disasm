@@ -2118,7 +2118,11 @@ LABEL_EE2F8C:
 	.byte 0x10, 0x00, 0x00, 0x00, 0x02, 0x00, 0x04, 0x00
 	.byte 0x07, 0x00, 0x0a, 0x00, 0x0d, 0x00, 0x10, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff
-LABEL_EE304C:
+; MIDI packet event type dispatch table
+; Index: event byte from queue (0x00-0xBF), entries: 192
+; Called from MidiPkt_ProcessEventQueue (midipkt_routines.s:275)
+; Most entries are Nop; active entries dispatch to sub-table handlers
+MidiPkt_EventType_Table:	; EE304C
 	.long MidiPkt_Nop
 	.long MidiPkt_Nop
 	.long MidiPkt_Nop

@@ -64,15 +64,19 @@ LABEL_E00008:
 LABEL_E00010:
 	.byte 0x10, 0xff
 
-LABEL_E00012:
-	.long Seq_MultiWrite_Alt4
-	.long Seq_MultiWrite_Alt5
-	.long Seq_WriteMidi90
-	.long Seq_MultiWrite_Alt3
-	.long Seq_MultiWrite_Alt1
-	.long Seq_RingBuf_Nop
-	.long Seq_RingBuf_Nop
-	.long Seq_RingBuf_Nop
+; Sequencer ring buffer write dispatch table
+; Index: DRAM[1508] bits [7:5] (top 3 bits), entries: 8
+; Called from E1DMA_ISR handler (style_data_init.s:5506)
+; Each handler writes event data to the sequencer ring buffer
+SeqRingBuf_WriteDispatch_Table:	; E00012
+	.long Seq_MultiWrite_Alt4	; 0: Multi-write variant 4
+	.long Seq_MultiWrite_Alt5	; 1: Multi-write variant 5
+	.long Seq_WriteMidi90		; 2: Write MIDI 0x90 (Note On)
+	.long Seq_MultiWrite_Alt3	; 3: Multi-write variant 3
+	.long Seq_MultiWrite_Alt1	; 4: Multi-write variant 1
+	.long Seq_RingBuf_Nop		; 5: No-op
+	.long Seq_RingBuf_Nop		; 6: No-op
+	.long Seq_RingBuf_Nop		; 7: No-op
 
 SLIDE_STRING:	aligned_string "SLIDE"
 FILETYPE_SIG_PROGRAM_1:	aligned_string "Technics KN5000 Program  DATA FILE 1/2"
