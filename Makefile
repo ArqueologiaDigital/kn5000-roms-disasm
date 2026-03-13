@@ -20,16 +20,28 @@ llvm-all: rebuilt_ROMs/kn5000_v10_program.llvm.rom rebuilt_ROMs/kn5000_subprogra
 PARAMBLOCK_NAMES = alta altb altc altd alte bal common extended meas medium short value
 PARAMBLOCK_BINS = $(patsubst %,maincpu/includes/generated/style_ui_paramblock_%.bin,$(PARAMBLOCK_NAMES))
 
+SCREENDATA_NAMES = ctlonly main meascursor yesctl
+SCREENDATA_BINS = $(patsubst %,maincpu/includes/generated/style_ui_screendata_%.bin,$(SCREENDATA_NAMES))
+
+C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS)
+
 maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/c_src/style_ui_paramblock_%.c maincpu/c_src/screendata_types.h
 	@mkdir -p maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/c_src -o $@.o $<
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
 	@rm -f $@.o
 
+maincpu/includes/generated/style_ui_screendata_%.bin: maincpu/c_src/style_ui_screendata_%.c maincpu/c_src/screendata_types.h
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/c_src -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
 paramblocks: $(PARAMBLOCK_BINS)
+screendata: $(SCREENDATA_BINS)
 
 # --- Maincpu ---
-rebuilt_ROMs/kn5000_v10_program.llvm.o: maincpu/kn5000_v10_program.s original_ROMs/kn5000_v10_program.rom $(PARAMBLOCK_BINS)
+rebuilt_ROMs/kn5000_v10_program.llvm.o: maincpu/kn5000_v10_program.s original_ROMs/kn5000_v10_program.rom $(C_DATA_BINS)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I maincpu -o $@ $<
 
