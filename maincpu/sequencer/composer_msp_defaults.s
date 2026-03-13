@@ -46,92 +46,92 @@
 ; ---------------------------------------------------------------------------
 MSP_DefaultSettings:
 MSP_Default_SoundVoice:
-MSP_Default_Signature1:			.byte 0x48, 0x00, 0x4b, 0x00	; "H\0K\0" signature
-MSP_Default_Flags1:			.long 0x00000000	; reserved flags
-MSP_Default_Padding1:			.byte 0x00, 0x00, 0x00
-MSP_Default_Volume:			.byte 0x5a, 0x5a, 0x5a	; default volume = 90 (x3 channels)
-MSP_Default_VolumeFlags:		.short 0x0000
-MSP_Default_BankSelect:			.byte 0x01	; bank select = 1
-MSP_Default_BankFlags:			.long 0x00000000
-MSP_Default_PartAssign1:		.byte 0x01, 0x01, 0x01, 0x01	; channels 1-4: part 1
-MSP_Default_PartAssign2:		.byte 0x02, 0x02, 0x02, 0x02	; channels 5-8: part 2
-MSP_Default_PartFlags:			.byte 0x00
-MSP_Default_ReverbLevel:		.byte 0x80	; reverb send level
-MSP_Default_ChorusLevel:		.byte 0x16	; chorus send level
-MSP_Default_PanPosition1:		.byte 0x60, 0x00	; pan = 96 (slightly right)
-MSP_Default_PanPosition2:		.byte 0x60, 0x00	; pan = 96
-MSP_Default_EffectDepth:		.byte 0x1e, 0x00	; effect depth = 30
-MSP_Default_VoiceMode:			.byte 0x00, 0x01	; voice mode
-MSP_Default_Transpose:			.byte 0x54	; transpose (offset-encoded)
-MSP_Default_OctaveShift:		.byte 0x01	; octave shift
-MSP_Default_TouchSense:			.byte 0x40	; touch sensitivity = 64
-MSP_Default_TouchFlags:			.byte 0x00, 0x00, 0x00
-MSP_Default_ReverbLevel2:		.byte 0x80	; reverb level (secondary)
-MSP_Default_ChorusLevel2:		.byte 0x16	; chorus level (secondary)
-MSP_Default_SoundPadding:		.zero 48
-MSP_Default_VoiceEnable:		.byte 0x80	; voice enable master flag
-MSP_Default_VoiceMask:			.byte 0xff, 0xff, 0xff, 0xff	; voice channel mask (all enabled)
-MSP_Default_VoiceConfig:		.byte 0x87	; voice config flags
-MSP_Default_VoiceFlags1:		.byte 0x81, 0x81	; per-voice flags
-MSP_Default_VoiceFlags2:		.byte 0x81, 0x81, 0x81, 0x81	; per-voice flags (cont.)
-MSP_Default_VoiceFlags3:		.byte 0x81, 0x81	; per-voice flags (cont.)
-MSP_Default_VoiceFlags4:		.byte 0x83, 0x87	; per-voice flags (last 2)
-MSP_Default_SoundReserved:		.zero 112
+MSP_Default_Signature1:		.byte 0x48, 0x00, 0x4b, 0x00	; "H\0K\0" signature
+MSP_Default_Flags1:		.long 0x00000000	; reserved flags
+MSP_Default_Padding1:		.byte 0x00, 0x00, 0x00
+MSP_Default_Volume:		.byte 90, 90, 90		; (3 channels, range 0-99)
+MSP_Default_VolumeFlags:	.short 0x0000
+MSP_Default_BankSelect:		.byte 0x01	; bank select = 1
+MSP_Default_BankFlags:		.long 0x00000000
+MSP_Default_PartAssign1:	.byte 0x01, 0x01, 0x01, 0x01	; channels 1-4: part 1
+MSP_Default_PartAssign2:	.byte 0x02, 0x02, 0x02, 0x02	; channels 5-8: part 2
+MSP_Default_PartFlags:		.byte 0x00
+MSP_Default_ReverbLevel:	.byte 0x80	; reverb send level
+MSP_Default_ChorusLevel:	.byte 0x16	; chorus send level
+MSP_Default_PanPosition1:	.byte 0x60, 0x00	; pan = 96 (slightly right)
+MSP_Default_PanPosition2:	.byte 0x60, 0x00	; pan = 96
+MSP_Default_EffectDepth:	.byte 0x1e, 0x00	; effect depth = 30
+MSP_Default_VoiceMode:		.byte 0x00, 0x01	; voice mode
+MSP_Default_Transpose:		.byte 0x54	; transpose (offset-encoded)
+MSP_Default_OctaveShift:	.byte 0x01	; octave shift
+MSP_Default_TouchSense:		.byte 0x40	; touch sensitivity = 64
+MSP_Default_TouchFlags:		.byte 0x00, 0x00, 0x00
+MSP_Default_ReverbLevel2:	.byte 0x80	; reverb level (secondary)
+MSP_Default_ChorusLevel2:	.byte 0x16	; chorus level (secondary)
+MSP_Default_SoundPadding:	.zero 48
+MSP_Default_VoiceEnable:	.byte 0x80	; voice enable master flag
+MSP_Default_VoiceMask:		.byte 0xff, 0xff, 0xff, 0xff	; voice channel mask (all enabled)
+MSP_Default_VoiceConfig:	.byte 0x87	; voice config flags
+MSP_Default_VoiceFlags1:	.byte 0x81, 0x81	; per-voice flags
+MSP_Default_VoiceFlags2:	.byte 0x81, 0x81, 0x81, 0x81	; per-voice flags (cont.)
+MSP_Default_VoiceFlags3:	.byte 0x81, 0x81	; per-voice flags (cont.)
+MSP_Default_VoiceFlags4:	.byte 0x83, 0x87	; per-voice flags (last 2)
+MSP_Default_SoundReserved:	.zero 112
 
 ; ---------------------------------------------------------------------------
 ; Sub-block 2: Sequencer Defaults (offset 0xE0, 96 bytes)
 ; ---------------------------------------------------------------------------
 MSP_Default_Sequencer:
-MSP_Default_Signature2:			.byte 0x48, 0x00, 0x4b, 0x00	; "H\0K\0" signature
-MSP_Default_SeqFlags:			.long 0x00000000	; reserved flags
-MSP_Default_Tempo:			.byte 0x28, 0x00	; tempo = 40 (internal units)
-MSP_Default_TimeSig:			.byte 0x04, 0x00	; time signature numerator = 4
-MSP_Default_Quantize:			.byte 0x10, 0x00	; quantize = 16 (16th note)
-MSP_Default_SeqMode:			.byte 0x00, 0x01	; sequencer mode
-MSP_Default_SeqReserved:		.zero 80
+MSP_Default_Signature2:		.byte 0x48, 0x00, 0x4b, 0x00	; "H\0K\0" signature
+MSP_Default_SeqFlags:		.long 0x00000000	; reserved flags
+MSP_Default_Tempo:		.byte 0x28, 0x00	; tempo = 40 (internal units)
+MSP_Default_TimeSig:		.byte 0x04, 0x00	; time signature numerator = 4
+MSP_Default_Quantize:		.byte 0x10, 0x00	; quantize = 16 (16th note)
+MSP_Default_SeqMode:		.byte 0x00, 0x01	; sequencer mode
+MSP_Default_SeqReserved:	.zero 80
 
 ; ---------------------------------------------------------------------------
 ; Sub-block 3: Accompaniment/Rhythm Defaults (offset 0x140, ~1220 bytes)
 ; ---------------------------------------------------------------------------
 MSP_Default_Accompaniment:
-MSP_Default_Signature3:			.byte 0x48, 0x00, 0x4b, 0x00	; "H\0K\0" signature
-MSP_Default_AccompFlags:		.long 0x00000000	; reserved flags
-MSP_Default_NumParts:			.byte 0x14, 0x00	; number of parts = 20
-MSP_Default_PartsField1:		.byte 0x00, 0x00
-MSP_Default_NumVariations:		.byte 0x0a, 0x00	; variations = 10
-MSP_Default_VarField1:			.byte 0x00, 0x00
-MSP_Default_NumGroups:			.byte 0x07, 0x00	; groups = 7
-MSP_Default_GroupField1:		.byte 0x00, 0x00
-MSP_Default_PartsPerGroup:		.byte 0x03, 0x00	; parts per group = 3
-MSP_Default_GroupField2:		.byte 0x00, 0x00
-MSP_Default_NumChannels:		.byte 0x08, 0x00	; channels = 8
-MSP_Default_ChannelField:		.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-MSP_Default_AccompPad1:			.zero 32
-MSP_Default_RhythmFlags:		.byte 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-MSP_Default_AccompPad2:			.zero 24
-MSP_Default_RhythmConfig:		.byte 0x00, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-MSP_Default_AccompReserved:		.zero 920
+MSP_Default_Signature3:		.byte 0x48, 0x00, 0x4b, 0x00	; "H\0K\0" signature
+MSP_Default_AccompFlags:	.long 0x00000000	; reserved flags
+MSP_Default_NumParts:		.byte 0x14, 0x00	; number of parts = 20
+MSP_Default_PartsField1:	.byte 0x00, 0x00
+MSP_Default_NumVariations:	.byte 0x0a, 0x00	; variations = 10
+MSP_Default_VarField1:		.byte 0x00, 0x00
+MSP_Default_NumGroups:		.byte 0x07, 0x00	; groups = 7
+MSP_Default_GroupField1:	.byte 0x00, 0x00
+MSP_Default_PartsPerGroup:	.byte 0x03, 0x00	; parts per group = 3
+MSP_Default_GroupField2:	.byte 0x00, 0x00
+MSP_Default_NumChannels:	.byte 0x08, 0x00	; channels = 8
+MSP_Default_ChannelField:	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+MSP_Default_AccompPad1:		.zero 32
+MSP_Default_RhythmFlags:	.byte 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+MSP_Default_AccompPad2:		.zero 24
+MSP_Default_RhythmConfig:	.byte 0x00, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+MSP_Default_AccompReserved:	.zero 920
 
 ; Rhythm channel mapping table (30 entries + 10 padding)
 ; Maps interleaved part indices: group 0=[0,4,8], group 1=[1,5,9], ...
-MSP_Default_ChannelMap:			.byte 0x00, 0x04, 0x08, 0x01, 0x05, 0x09, 0x02, 0x06	; group 0 parts [0,4,8], group 1 [1,5,9]
+MSP_Default_ChannelMap:		.byte 0x00, 0x04, 0x08, 0x01, 0x05, 0x09, 0x02, 0x06	; group 0 parts [0,4,8], group 1 [1,5,9]
 				.byte 0x0a, 0x03, 0x07, 0x0b, 0x0c, 0x12, 0x18, 0x0d	; group 2 [2,6,10], group 3 [3,7,11]
 				.byte 0x13, 0x19, 0x0e, 0x14, 0x1a, 0x0f, 0x15, 0x1b	; extras [12,18,24,13,19,25,14,20]
 				.byte 0x10, 0x16, 0x1c, 0x11, 0x17, 0x1d, 0x00, 0x00	; extras [26,15,21,27,16,22,28,17,23,29] + 2 pad
-MSP_Default_ChannelMapPad:		.zero 8
+MSP_Default_ChannelMapPad:	.zero 8
 
 ; Group index table: maps each of 20 parts to its group (1-7)
-MSP_Default_GroupIndex:			.byte 0x01, 0x01, 0x01	; parts 0-2: group 1
+MSP_Default_GroupIndex:		.byte 0x01, 0x01, 0x01	; parts 0-2: group 1
 				.byte 0x02, 0x02, 0x02	; parts 3-5: group 2
 				.byte 0x03, 0x03, 0x03	; parts 6-8: group 3
 				.byte 0x04, 0x04, 0x04	; parts 9-11: group 4
 				.byte 0x05, 0x05, 0x05	; parts 12-14: group 5
 				.byte 0x06, 0x06, 0x06	; parts 15-17: group 6
 				.byte 0x07, 0x07	; parts 18-19: group 7
-MSP_Default_GroupIndexPad:		.zero 10
+MSP_Default_GroupIndexPad:	.zero 10
 
 ; Variation index table: maps each of 20 parts to its variation (0-2)
-MSP_Default_VarIndex:			.byte 0x00, 0x01, 0x02	; group 1: variations 0,1,2
+MSP_Default_VarIndex:		.byte 0x00, 0x01, 0x02	; group 1: variations 0,1,2
 				.byte 0x00, 0x01, 0x02	; group 2
 				.byte 0x00, 0x01, 0x02	; group 3
 				.byte 0x00, 0x01, 0x02	; group 4
@@ -140,16 +140,16 @@ MSP_Default_VarIndex:			.byte 0x00, 0x01, 0x02	; group 1: variations 0,1,2
 				.byte 0x00, 0x01	; group 7 (2 parts only)
 
 ; Group offset table A: byte offsets for 7 groups (little-endian .short)
-MSP_Default_GroupOffsetA:		.short 0x0000, 0x0006, 0x000c, 0x0012, 0x0018, 0x001e, 0x0024	; byte offsets for 7 groups
+MSP_Default_GroupOffsetA:	.short 0x0000, 0x0006, 0x000c, 0x0012, 0x0018, 0x001e, 0x0024	; byte offsets for 7 groups
 
 ; Group offset table B: duplicate/alternate offsets
-MSP_Default_GroupOffsetB:		.short 0x0000, 0x0006, 0x000c, 0x0012, 0x0018, 0x001e, 0x0024	; duplicate/alternate offsets
+MSP_Default_GroupOffsetB:	.short 0x0000, 0x0006, 0x000c, 0x0012, 0x0018, 0x001e, 0x0024	; duplicate/alternate offsets
 
 ; Variation size table: cumulative sizes (little-endian .short)
-MSP_Default_VarSize:			.short 0x0000, 0x000a, 0x0064, 0x006d, 0x0076, 0x007f, 0x0088	; cumulative variation sizes
+MSP_Default_VarSize:		.short 0x0000, 0x000a, 0x0064, 0x006d, 0x0076, 0x007f, 0x0088	; cumulative variation sizes
 
 ; Part-to-bank mapping: (bank_hi, bank_lo) pairs for 14 entries
-MSP_Default_PartBankMap:		.byte 0x00, 0x00	; part 0: bank 0.0
+MSP_Default_PartBankMap:	.byte 0x00, 0x00	; part 0: bank 0.0
 				.byte 0x00, 0x01	; part 1: bank 0.1
 				.byte 0x00, 0x02	; part 2: bank 0.2
 				.byte 0x00, 0x03	; part 3: bank 0.3
@@ -163,7 +163,7 @@ MSP_Default_PartBankMap:		.byte 0x00, 0x00	; part 0: bank 0.0
 				.byte 0x01, 0x03	; entry 11: bank 1.3
 				.byte 0x01, 0x04	; entry 12: bank 1.4
 				.byte 0x01, 0x05	; entry 13: bank 1.5
-MSP_Default_TrailingPad:		.zero 36
+MSP_Default_TrailingPad:	.zero 36
 
 Composer_SettingsBlock:
 	.byte 0x48, 0x00, 0x4b, 0x00, 0x00, 0x03
