@@ -1,4 +1,4 @@
-; SoundData_Flute_Extra: Additional FLUTE data (referenced by pointer table)
+; SOUND_DATA_FLUTE_EXTRA: Additional FLUTE data (referenced by pointer table)
 ; Total: 4798 bytes
 ; Source: e078f2_e08baf.bin
 ; Format: Raw data (structure not yet fully decoded)
