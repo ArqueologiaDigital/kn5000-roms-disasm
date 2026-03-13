@@ -10,7 +10,7 @@ import glob
 import os
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-C_SRC = os.path.join(REPO, 'maincpu', 'c_src')
+C_SRC = os.path.join(REPO, 'maincpu', 'includes')
 
 
 def remove_index_comments(content):

@@ -12,18 +12,18 @@
 ;
 ; ===========================================================================
 
-StyleUI_ParamBlock_BAL:		.include "includes/style_ui_paramblock_bal.s"
-StyleUI_ParamBlock_VALUE:	.include "includes/style_ui_paramblock_value.s"
-StyleUI_ParamBlock_Common:	.include "includes/style_ui_paramblock_common.s"
-StyleUI_ParamBlock_Short:	.include "includes/style_ui_paramblock_short.s"
-StyleUI_ParamBlock_Extended:	.include "includes/style_ui_paramblock_extended.s"
-StyleUI_ParamBlock_Medium:	.include "includes/style_ui_paramblock_medium.s"
-StyleUI_ParamBlock_MEAS:	.include "includes/style_ui_paramblock_meas.s"
-StyleUI_ParamBlock_AltA:	.include "includes/style_ui_paramblock_alta.s"
-StyleUI_ParamBlock_AltB:	.include "includes/style_ui_paramblock_altb.s"
-StyleUI_ParamBlock_AltC:	.include "includes/style_ui_paramblock_altc.s"
-StyleUI_ParamBlock_AltD:	.include "includes/style_ui_paramblock_altd.s"
-StyleUI_ParamBlock_AltE:	.include "includes/style_ui_paramblock_alte.s"
+StyleUI_ParamBlock_BAL:		.incbin "includes/generated/style_ui_paramblock_bal.bin"
+StyleUI_ParamBlock_VALUE:	.incbin "includes/generated/style_ui_paramblock_value.bin"
+StyleUI_ParamBlock_Common:	.incbin "includes/generated/style_ui_paramblock_common.bin"
+StyleUI_ParamBlock_Short:	.incbin "includes/generated/style_ui_paramblock_short.bin"
+StyleUI_ParamBlock_Extended:	.incbin "includes/generated/style_ui_paramblock_extended.bin"
+StyleUI_ParamBlock_Medium:	.incbin "includes/generated/style_ui_paramblock_medium.bin"
+StyleUI_ParamBlock_MEAS:	.incbin "includes/generated/style_ui_paramblock_meas.bin"
+StyleUI_ParamBlock_AltA:	.incbin "includes/generated/style_ui_paramblock_alta.bin"
+StyleUI_ParamBlock_AltB:	.incbin "includes/generated/style_ui_paramblock_altb.bin"
+StyleUI_ParamBlock_AltC:	.incbin "includes/generated/style_ui_paramblock_altc.bin"
+StyleUI_ParamBlock_AltD:	.incbin "includes/generated/style_ui_paramblock_altd.bin"
+StyleUI_ParamBlock_AltE:	.incbin "includes/generated/style_ui_paramblock_alte.bin"
 
 StyleUI_ParamBlockPtrTable:
 	.long StyleUI_ParamBlock_BAL
@@ -103,8 +103,8 @@ StyleUI_ParamBlockPtrTable:
 	.long StyleUI_ParamBlock_AltB
 	.long StyleUI_ParamBlock_AltE
 
-StyleUI_ScreenData_Main:	.include "includes/style_ui_screendata_main.s"
-StyleUI_ScreenData_MeasCursor:	.include "includes/style_ui_screendata_meascursor.s"
-StyleUI_ScreenData_YesCtl:	.include "includes/style_ui_screendata_yesctl.s"
-StyleUI_ScreenData_CtlOnly:	.include "includes/style_ui_screendata_ctlonly.s"
+StyleUI_ScreenData_Main:	.incbin "includes/generated/style_ui_screendata_main.bin"
+StyleUI_ScreenData_MeasCursor:	.incbin "includes/generated/style_ui_screendata_meascursor.bin"
+StyleUI_ScreenData_YesCtl:	.incbin "includes/generated/style_ui_screendata_yesctl.bin"
+StyleUI_ScreenData_CtlOnly:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin"
 
