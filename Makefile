@@ -2,6 +2,7 @@ LLVM_BIN=/mnt/shared/llvm-project/build/bin
 LLVM_MC=$(LLVM_BIN)/llvm-mc
 LLVM_LLD=$(LLVM_BIN)/ld.lld
 LLVM_OBJCOPY=$(LLVM_BIN)/llvm-objcopy
+CLANG=$(LLVM_BIN)/clang
 
 # Primary build: LLVM assembly (authoritative source)
 all: llvm-all
@@ -10,8 +11,25 @@ all: llvm-all
 # LLVM build targets (primary)
 llvm-all: rebuilt_ROMs/kn5000_v10_program.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom rebuilt_ROMs/kn5000_table_data.llvm.rom rebuilt_ROMs/kn5000_custom_data.llvm.rom
 
+# ============================================================================
+# C-compiled ScreenData paramblocks
+# ============================================================================
+# C struct source files are compiled to raw binaries, then .incbin'd by assembly.
+# This provides type-safe, self-documenting data definitions.
+
+PARAMBLOCK_NAMES = alta altb altc altd alte bal common extended meas medium short value
+PARAMBLOCK_BINS = $(patsubst %,maincpu/includes/generated/style_ui_paramblock_%.bin,$(PARAMBLOCK_NAMES))
+
+maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/c_src/style_ui_paramblock_%.c maincpu/c_src/screendata_types.h
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/c_src -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+paramblocks: $(PARAMBLOCK_BINS)
+
 # --- Maincpu ---
-rebuilt_ROMs/kn5000_v10_program.llvm.o: maincpu/kn5000_v10_program.s original_ROMs/kn5000_v10_program.rom
+rebuilt_ROMs/kn5000_v10_program.llvm.o: maincpu/kn5000_v10_program.s original_ROMs/kn5000_v10_program.rom $(PARAMBLOCK_BINS)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I maincpu -o $@ $<
 
@@ -213,6 +231,7 @@ clean:
 	rm -f rebuilt_ROMs/hd-ae5000_v2_06i.llvm.*
 	rm -f rebuilt_ROMs/kn5000_table_data.llvm.*
 	rm -f rebuilt_ROMs/kn5000_custom_data.llvm.*
+	rm -rf maincpu/includes/generated/
 
 clean-asl:
 	rm -f rebuilt_ROMs/kn5000_v10_program.rebuilt.*

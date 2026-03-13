@@ -1,36 +1,7 @@
 ; StyleUI_ParamBlock_Short: Style UI parameter block (Short)
-; Total: 39 bytes, 5 commands
+; Total: 39 bytes
 ; Source: e0b6a6_e0b6cc.bin
 ;
-; Screen elements:
-;   Labels: "TEMPO" (39,31)
-;   Up/Down arrows: 1 up, 1 down
-;   FILLED_RECTs: 1
-;   HLINEs: 1
-
-; [0] STRING "TEMPO" at (39,31)
-	.byte 0x20                                     ; .opcode  = STRING
-	.byte 0x09                                     ; .length  = 9
-	.byte 0x27, 0x1f                               ; .x, .y   = (39, 31)
-	.byte 0x54, 0x45, 0x4d, 0x50, 0x4f             ; .text    = "TEMPO"
-; [1] STRING "|" at (225,32)
-	.byte 0x20                                     ; .opcode  = STRING
-	.byte 0x05                                     ; .length  = 5
-	.byte 0xe1, 0x20                               ; .x, .y   = (225, 32)
-	.byte 0x8d                                     ; .text    = "|"
-; [2] STRING "~" at (233,34)
-	.byte 0x20                                     ; .opcode  = STRING
-	.byte 0x05                                     ; .length  = 5
-	.byte 0xe9, 0x22                               ; .x, .y   = (233, 34)
-	.byte 0x8e                                     ; .text    = "~"
-; [3] FILLED_RECT (125,210)-(155,236)
-	.byte 0x0a                                     ; .opcode  = FILLED_RECT
-	.byte 0x0a                                     ; .length  = 10
-	.byte 0x7d, 0x00, 0xd2, 0x00                   ; .x1, .y1 = (125, 210)
-	.byte 0x9b, 0x00, 0xec, 0x00                   ; .x2, .y2 = (155, 236)
-; [4] HLINE (125,223)-(155,223)
-	.byte 0x01                                     ; .opcode  = HLINE
-	.byte 0x0a                                     ; .length  = 10
-	.byte 0x7d, 0x00, 0xdf, 0x00                   ; .x1, .y1 = (125, 223)
-	.byte 0x9b, 0x00, 0xdf, 0x00                   ; .x2, .y2 = (155, 223)
-
+; Canonical source: maincpu/c_src/style_ui_paramblock_short.c
+; Built by: make paramblocks (clang -> llvm-objcopy -> .bin)
+	.incbin "includes/generated/style_ui_paramblock_short.bin"
