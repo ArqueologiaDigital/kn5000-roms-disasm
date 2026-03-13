@@ -207,13 +207,13 @@ SOUND_CATEGORY_NAMES:	; E023F0
 	.ascii "    MEMORY B    "	; 17: Memory B
 
 SOUND_DATA_PIANO:
-	.incbin "includes/e02510_e0458f.bin"	; Instrument category data (PIANO, ORGAN, etc.)
+	.include "audio/sound_data_piano.s"	; Instrument category data (PIANO, ORGAN, etc.)
 
 SOUND_DATA_GUITAR:	; GUITAR data (referenced from sound category table)
-	.incbin "includes/e04590_e04b2f.bin"
+	.include "audio/sound_data_guitar.s"
 
 SOUND_DATA_STRINGS_VOCAL:	; STRINGS & VOCAL data (referenced from sound category table)
-	.incbin "includes/e04b30_e06baf.bin"
+	.include "audio/sound_data_strings_vocal.s"
 
 SOUND_DATA_BRASS_PTRS:
 BrassSound_SamplePtr_Table:
@@ -620,16 +620,16 @@ Brass_PatchEntry_128:
 	.byte 0x7b, 0x02, 0xff
 
 SOUND_DATA_FLUTE:	; FLUTE sound data
-	.incbin "includes/e06f30_e078f1.bin"
+	.include "audio/sound_data_flute.s"
 
 SoundData_Flute_Extra:	; Additional FLUTE data (referenced by pointer table)
-	.incbin "includes/e078f2_e08baf.bin"
+	.include "audio/sound_data_flute_extra.s"
 
 SOUND_DATA_SAX_REED:	; SAX & REED sound data
-	.incbin "includes/e08bb0_e0914f.bin"
+	.include "audio/sound_data_sax_reed.s"
 
 SOUND_DATA_MALLET_ORCH_PERC:	; MALLET & ORCH PERC sound data
-	.incbin "includes/e09150_e0adcf.bin"
+	.include "audio/sound_data_mallet_orch_perc.s"
 
 SOUND_DATA_WORLD_PERC:
 
@@ -1063,61 +1063,61 @@ SOUND_DATA_ORGAN_ACCORDION:
 	.byte 0xf0, 0x00, 0xf0, 0x00, 0xf0, 0x00, 0xf0, 0x00
 
 SOUND_DATA_ORCHESTRAL_PAD:
-	.incbin "includes/e0b250_e0b2cf.bin"
+	.include "audio/sound_data_orchestral_pad.s"
 
 SOUND_DATA_SYNTH:
-	.incbin "includes/e0b2d0_e0b3cf.bin"
+	.include "audio/sound_data_synth.s"
 
 SOUND_DATA_BASS:
-	.incbin "includes/e0b3d0_e0b3e1.bin"
+	.include "audio/sound_data_bass.s"
 
 SOUND_DATA_DIGITAL_DRAWBAR:
-	.incbin "includes/e0b3e2_e0b3f3.bin"
+	.include "audio/sound_data_digital_drawbar.s"
 
 SOUND_DATA_ACCORDION_REG:
-	.incbin "includes/e0b3f4_e0b405.bin"
+	.include "audio/sound_data_accordion_reg.s"
 
 SOUND_DATA_GM_SPECIAL:
-	.incbin "includes/e0b406_e0b417.bin"
+	.include "audio/sound_data_gm_special.s"
 
 SOUND_DATA_DRUM_KITS:
-	.incbin "includes/e0b418_e0b4ec.bin"
+	.include "audio/sound_data_drum_kits.s"
 
 StyleUI_ParamBlock_BAL:
-	.incbin "includes/e0b4ed_e0b5e6.bin"
+	.include "includes/style_ui_paramblock_bal.s"
 
 StyleUI_ParamBlock_VALUE:
-	.incbin "includes/e0b5e7_e0b60d.bin"
+	.include "includes/style_ui_paramblock_value.s"
 
 StyleUI_ParamBlock_Common:
-	.incbin "includes/e0b60e_e0b6a5.bin"
+	.include "includes/style_ui_paramblock_common.s"
 
 StyleUI_ParamBlock_Short:
-	.incbin "includes/e0b6a6_e0b6cc.bin"
+	.include "includes/style_ui_paramblock_short.s"
 
 StyleUI_ParamBlock_Extended:
-	.incbin "includes/e0b6cd_e0b783.bin"
+	.include "includes/style_ui_paramblock_extended.s"
 
 StyleUI_ParamBlock_Medium:
-	.incbin "includes/e0b784_e0b842.bin"
+	.include "includes/style_ui_paramblock_medium.s"
 
 StyleUI_ParamBlock_MEAS:
-	.incbin "includes/e0b843_e0b8dd.bin"
+	.include "includes/style_ui_paramblock_meas.s"
 
 StyleUI_ParamBlock_AltA:
-	.incbin "includes/e0b8de_e0b904.bin"
+	.include "includes/style_ui_paramblock_alta.s"
 
 StyleUI_ParamBlock_AltB:
-	.incbin "includes/e0b905_e0b92d.bin"
+	.include "includes/style_ui_paramblock_altb.s"
 
 StyleUI_ParamBlock_AltC:
-	.incbin "includes/e0b92e_e0b99c.bin"
+	.include "includes/style_ui_paramblock_altc.s"
 
 StyleUI_ParamBlock_AltD:
-	.incbin "includes/e0b99d_e0b9ec.bin"
+	.include "includes/style_ui_paramblock_altd.s"
 
 StyleUI_ParamBlock_AltE:
-	.incbin "includes/e0b9ed_e0ba5f.bin"
+	.include "includes/style_ui_paramblock_alte.s"
 
 
 StyleUI_ParamBlockPtrTable:
@@ -1199,25 +1199,25 @@ StyleUI_ParamBlockPtrTable:
 	.long StyleUI_ParamBlock_AltE
 
 StyleUI_ScreenData_Main:
-	.incbin "includes/e0bb90_e0c95a.bin"
+	.include "includes/style_ui_screendata_main.s"
 
 StyleUI_ScreenData_MeasCursor:
-	.incbin "includes/e0c95b_e0ca12.bin"
+	.include "includes/style_ui_screendata_meascursor.s"
 
 StyleUI_ScreenData_YesCtl:
-	.incbin "includes/e0ca13_e0caf6.bin"
+	.include "includes/style_ui_screendata_yesctl.s"
 
 StyleUI_ScreenData_CtlOnly:
-	.incbin "includes/e0caf7_e0cd1d.bin"
+	.include "includes/style_ui_screendata_ctlonly.s"
 
 GUI_FormatStrings:
-	.incbin "includes/e0cd1e_e0cfdd.bin"
+	.include "includes/gui_format_strings.s"
 
 GUI_DisplayStructData:
-	.incbin "includes/e0cfde_e0e406.bin"
+	.include "includes/gui_display_struct_data.s"
 
 ToneGen_ParamTable:
-	.incbin "includes/e0e407_e0e973.bin"
+	.include "audio/tonegen_param_table.s"
 
 ; =============================================================================
 ; NAKA UI Descriptor Blocks (ROM E0E974-EEF587)
