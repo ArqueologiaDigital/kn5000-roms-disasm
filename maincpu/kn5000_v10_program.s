@@ -29365,7 +29365,7 @@ LABEL_F268AF:
 	ret
 
 VoiceChannel_AdvanceIndex:
-	.include "seq_task_sched.s"
+	.include "smf_event_processor.s"
 	ei 0
 	stda8 12927, a
 	ret
@@ -38374,7 +38374,7 @@ VoiceUI_MiscHandler:	; F7724E
 	push xwa
 	ld xwa, (xsp + 20)
 	push xwa
-	.include "tonegen_voice_ctrl.s"
+	.include "ui_control_panel.s"
 	call SendEvent
 	ld xde, (xsp + 30)
 	set 7, de
@@ -42166,7 +42166,7 @@ LABEL_FC5838:
 	jr FileIO_CallbackHandler
 
 LABEL_FC583A:
-	.include "file_io_engine.s"
+	.include "audio_control_engine.s"
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -42275,7 +42275,7 @@ SoundParam_NotifyChange:
 
 ; MIDI Serial Communication routines (SC0)
 	.include "midi_serial_routines.s"
-	.include "midi_voice_routing.s"
+	.include "midi_dispatch_handlers.s"
 	.include "dsp_config_sysex.s"
 	.include "note_voice_mapping.s"
 
