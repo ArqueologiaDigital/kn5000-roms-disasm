@@ -183,26 +183,28 @@ SOUND_DATA_SECTION_PTRS:	; E023B0
 	.long SOUND_DATA_GM_SPECIAL
 	.long SOUND_DATA_DRUM_KITS
 
-; Sound category names - 18 categories for the sound selection UI
+; Sound category names - fixed-width string table for the sound selection UI
+; 18 entries x 16 characters each, space-padded and centered
+; Referenced via structure at E023A0: pointer, count=18, field=0x28
 SOUND_CATEGORY_NAMES:	; E023F0
-	.ascii "     PIANO      "	; Category 0
-	.ascii "     GUITAR     "	; Category 1
-	.ascii "STRINGS & VOCAL      "	; Category 2
-	.ascii "BRASS           "	; Category 3
-	.ascii "FLUTE         "	; Category 4
-	.ascii "SAX & REED   "	; Category 5
-	.ascii "MALLET&ORCH PERC   "	; Category 6
-	.ascii "WORLD PERC   "	; Category 7
-	.ascii "ORGAN&ACCORDION  "	; Category 8
-	.ascii "ORCHESTRAL PAD      "	; Category 9
-	.ascii "SYNTH            "	; Category 10
-	.ascii "BASS      "	; Category 11
-	.ascii "DIGITAL DRAWBAR  "	; Category 12
-	.ascii "ACCORDION REG.    "	; Category 13
-	.ascii "GM SPECIAL      "	; Category 14
-	.ascii "DRUM KITS        "	; Category 15
-	.ascii "MEMORY A        "	; Category 16
-	.ascii "MEMORY B    "	; Category 17
+	.ascii "     PIANO      "	;  0: Piano
+	.ascii "     GUITAR     "	;  1: Guitar
+	.ascii "STRINGS & VOCAL "	;  2: Strings & Vocal
+	.ascii "     BRASS      "	;  3: Brass
+	.ascii "     FLUTE      "	;  4: Flute
+	.ascii "   SAX & REED   "	;  5: Sax & Reed
+	.ascii "MALLET&ORCH PERC"	;  6: Mallet & Orch Perc
+	.ascii "   WORLD PERC   "	;  7: World Perc
+	.ascii "ORGAN&ACCORDION "	;  8: Organ & Accordion
+	.ascii " ORCHESTRAL PAD "	;  9: Orchestral Pad
+	.ascii "     SYNTH      "	; 10: Synth
+	.ascii "      BASS      "	; 11: Bass
+	.ascii "DIGITAL DRAWBAR "	; 12: Digital Drawbar
+	.ascii " ACCORDION REG. "	; 13: Accordion Reg.
+	.ascii "   GM SPECIAL   "	; 14: GM Special
+	.ascii "   DRUM KITS    "	; 15: Drum Kits
+	.ascii "    MEMORY A    "	; 16: Memory A
+	.ascii "    MEMORY B    "	; 17: Memory B
 
 SOUND_DATA_PIANO:
 	.incbin "includes/e02510_e0458f.bin"	; Instrument category data (PIANO, ORGAN, etc.)
