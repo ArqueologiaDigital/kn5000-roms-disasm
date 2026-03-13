@@ -644,7 +644,7 @@ LABEL_E28A3C:
 	.long String_SEQUENCER_MENU
 	.byte 0x33, 0x00, 0x00, 0x00
 
-String_SEQUENCER_MENU:	; E28A66
+String_SEQUENCER_MENU:
 	aligned_string "SEQUENCER MENU"
 LABEL_E28A76:
 
@@ -659,7 +659,7 @@ LABEL_E28A76:
 	.byte 0x8a, 0x00, 0x00, 0x00
 LABEL_E28AAC:
 
-String_CREATE:	; E28AAC
+String_CREATE:
 	aligned_string "CREATE"
 LABEL_E28AB4:
 

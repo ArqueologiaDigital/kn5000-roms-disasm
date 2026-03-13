@@ -12331,7 +12331,7 @@ LABEL_F5E97F:
 	ret
 
 
-Not_sure_maybe_SOFT_VERSION_related:	; F5E985
+Not_sure_maybe_SOFT_VERSION_related:
 	.byte 0xc1, 0x16, 0x36, 0x3c, 0xfe, 0xf1, 0xd5, 0x35
 	.byte 0x00, 0x00, 0x40, 0x00, 0x48, 0x09, 0x00, 0xdb
 	.byte 0xd8, 0x66, 0x13, 0xf1, 0xd5, 0x35, 0x00, 0x01
@@ -24317,11 +24317,11 @@ LABEL_F66CBC:
 	setm 7, (xde)
 
 ; Rhythm parameter dispatch setup
-RhythmParam_Setup:	; F66CF7
+RhythmParam_Setup:
 	calr Voice_ResolveTableAddr
 
 ; Rhythm parameter entry
-RhythmParam_Entry:	; F66CFA
+RhythmParam_Entry:
 	ret
 
 Voice_ResolveTableAddr:
@@ -24336,7 +24336,7 @@ Voice_ResolveTableAddr:
 	ret
 
 ; Rhythm parameter type check
-RhythmParam_TypeCheck:	; F66D15
+RhythmParam_TypeCheck:
 	ldada xwa, 14744
 	bitda 0, 14743
 	jr z, RhythmParam_Process
@@ -24352,7 +24352,7 @@ RhythmParam_TypeCheck:	; F66D15
 	ret
 
 ; Rhythm parameter dispatch (voice type classification)
-RhythmParam_Dispatch:	; F66D36
+RhythmParam_Dispatch:
 	extz bc
 	sub bc, 0x80
 	cps bc, 0
@@ -24373,7 +24373,7 @@ LABEL_F66D5E:
 	.byte 0xb2, 0x00, 0x83, 0x0e
 
 ; Rhythm parameter processing
-RhythmParam_Process:	; F66D62
+RhythmParam_Process:
 	ld xhl, xwa
 	ld e, (xwa)
 	ld d, e
@@ -24506,7 +24506,7 @@ LABEL_F66E4B:
 	ret
 
 ; Voice parameter D0 type (fine tuning)
-VoiceParam_D0Handler:	; F66E64
+VoiceParam_D0Handler:
 	cp e, 0xD2
 	jr nz, VoiceParam_D3Special
 	ld e, (xwa)
@@ -24520,7 +24520,7 @@ VoiceParam_D0Handler:	; F66E64
 	ret
 
 ; Voice param downscale below 0x40
-VoiceParam_DownscaleBelow40:	; F66E7E
+VoiceParam_DownscaleBelow40:
 	ldb a, 0x40
 	sub a, e
 	extz wa
@@ -24532,14 +24532,14 @@ VoiceParam_DownscaleBelow40:	; F66E7E
 	ret
 
 ; Voice parameter D3 special case (transition to D5)
-VoiceParam_D3Special:	; F66E90
+VoiceParam_D3Special:
 	cp e, 0xD3
 	ret nz
 	ld (xhl), 0xD5
 	ret
 
 ; Voice slot dispatch
-VoiceSlot_Dispatch:	; F66E99
+VoiceSlot_Dispatch:
 	extz de
 	sub de, 0x80
 	cps de, 0
@@ -25648,8 +25648,7 @@ LABEL_F67D15:
 	.byte 0x68, 0x07, 0xf1, 0xb8, 0x39, 0x00, 0x06, 0x68
 	.byte 0x00, 0x0e
 ; CmpMenuTtlFunc setup
-CmpMenuTtl_Setup:	; F67D9F
-
+CmpMenuTtl_Setup:
 CmpModeFunc:
 	cp xbc, 0x1C00013
 	jr nz, DrumKitExit_ReturnZero
@@ -25669,7 +25668,7 @@ CmpModeFunc:
 	jr DrumKitExit_ReturnZero
 
 ; CmpMenuTtlFunc init title
-CmpMenuTtl_InitTitle:	; F67DC1
+CmpMenuTtl_InitTitle:
 	push xde
 	push xhl
 	push xix
@@ -25684,8 +25683,7 @@ DrumKitExit_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; CmpMenuTtlFunc main handler
-CmpMenuTtl_MainHandler:	; F67DD0
-
+CmpMenuTtl_MainHandler:
 CmpMenuTtlFunc:
 	cp xbc, 0x1C00007
 	jr z, CmpMenuTtl_SpecialKeys
@@ -25702,12 +25700,12 @@ CmpMenuTtlFunc:
 	lda_24 xix, 0xf67e06
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CmpMenuTtlFunc title dispatch
-CmpMenuTtl_Dispatch:	; F67E06
+CmpMenuTtl_Dispatch:
 	.byte 0xf1, 0xa7, 0x28, 0xba, 0x1d, 0xb9, 0x9a, 0xf5
 	jr	t, 0x46
 
 ; CmpMenuTtl special key handler (0x88-0x8A)
-CmpMenuTtl_SpecialKeys:	; F67E10
+CmpMenuTtl_SpecialKeys:
 	ldda8 a, 13517
 	cp xde, 0x8A
 	jr z, CmpMenuTtl_SetBit4
@@ -25720,7 +25718,7 @@ CmpMenuTtl_SpecialKeys:	; F67E10
 	jr CmpMenuTtl_PostModeEvent
 
 ; CmpMenuTtl set mode bit 5
-CmpMenuTtl_SetBit5:	; F67E36
+CmpMenuTtl_SetBit5:
 	and a, 0xCF
 	set 5, a
 	stda8 13517, a
@@ -25728,22 +25726,21 @@ CmpMenuTtl_SetBit5:	; F67E36
 	jr CmpMenuTtl_PostModeEvent
 
 ; CmpMenuTtl set mode bit 4
-CmpMenuTtl_SetBit4:	; F67E45
+CmpMenuTtl_SetBit4:
 	and a, 0xCF
 	set 4, a
 	stda8 13517, a
 	ldw wa, 0xB1
 
 ; CmpMenuTtl post mode change event
-CmpMenuTtl_PostModeEvent:	; F67E52
+CmpMenuTtl_PostModeEvent:
 	call UI_PostModeChangeEvent
 
 CmpMenuTtl_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; CmpSetTtlFunc main handler
-CmpSetTtl_MainHandler:	; F67E59
-
+CmpSetTtl_MainHandler:
 CmpSetTtlFunc:
 	cp xbc, 0x1C00007
 	jr z, CmpSetTtl_ModeSwitch
@@ -25760,7 +25757,7 @@ CmpSetTtlFunc:
 	lda_24 xix, 0xf67e92
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CmpSetTtlFunc title dispatch
-CmpSetTtl_Dispatch:	; F67E92
+CmpSetTtl_Dispatch:
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0xb4, 0x76, 0x51, 0x01
 	.byte 0x1d, 0x0c, 0x52, 0xf6, 0x40, 0x07, 0x00, 0xb4
 	.byte 0x00, 0x41, 0x8e, 0x00, 0xe0, 0x01, 0x42, 0x01
@@ -25770,7 +25767,7 @@ CmpSetTtl_Dispatch:	; F67E92
 	.byte 0x01
 
 ; CmpSetTtl mode switch (5-way branch)
-CmpSetTtl_ModeSwitch:	; F67EC3
+CmpSetTtl_ModeSwitch:
 	cpdi8 13580, 0
 	jrl nz, CmpSetTtl_SecondaryDispatch
 	cp xde, 0x85
@@ -25817,7 +25814,7 @@ LABEL_F67F1D:
 	jrl CmpReal_ReturnZero
 
 ; CmpSetTtl drum voice select (w=0)
-CmpSetTtl_DrumVoice0:	; F67F2E
+CmpSetTtl_DrumVoice0:
 	push xde
 	push xhl
 	push xix
@@ -25831,7 +25828,7 @@ CmpSetTtl_DrumVoice0:	; F67F2E
 	jrl CmpReal_ReturnZero
 
 ; CmpSetTtl drum voice select (w=0x80)
-CmpSetTtl_DrumVoice1:	; F67F3F
+CmpSetTtl_DrumVoice1:
 	push xde
 	push xhl
 	push xix
@@ -25845,7 +25842,7 @@ CmpSetTtl_DrumVoice1:	; F67F3F
 	jrl CmpReal_ReturnZero
 
 ; CmpSetTtl secondary dispatch
-CmpSetTtl_SecondaryDispatch:	; F67F50
+CmpSetTtl_SecondaryDispatch:
 	dec 1, xde
 	cp xde, 0x0
 	jrl c, CmpReal_ReturnZero
@@ -25858,14 +25855,14 @@ CmpSetTtl_SecondaryDispatch:	; F67F50
 	jr ugt, CmpReal_ReturnZero
 
 ; CmpSetTtl dynamic table lookup
-CmpSetTtl_DynamicLookup:	; F67F79
+CmpSetTtl_DynamicLookup:
 	add xde, xde
 	add xde, 0xE4BE80
 	ld de, (xde)
 	lda_24 xix, 0xf67f8d
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CmpSetTtlFunc title dispatch 2
-CmpSetTtl_Dispatch2:	; F67F8D
+CmpSetTtl_Dispatch2:
 	.asciz ":;<> "
 	.byte 0x1d, 0x4c
 	jr	lt, 0xf6
@@ -25894,8 +25891,7 @@ CmpReal_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; CmpRealTtlFunc entry
-CmpRealTtl_Entry:	; F67FEE
-
+CmpRealTtl_Entry:
 CmpRealTtlFunc:
 	cp xbc, 0x1C00007
 	jr z, CmpRealTtl_MajorDispatch
@@ -25912,7 +25908,7 @@ CmpRealTtlFunc:
 	lda_24 xix, 0xf68027
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CmpRealTtlFunc title dispatch
-CmpRealTtl_Dispatch:	; F68027
+CmpRealTtl_Dispatch:
 	.ascii ":;<>"
 	.byte 0x1d, 0x55, 0x4f, 0xf6
 	.byte 0x5e, 0x5c, 0x5b, 0x5a
@@ -25925,7 +25921,7 @@ CmpRealTtl_Dispatch:	; F68027
 	.byte 0x02
 
 ; CmpRealTtl major dispatch (5-way)
-CmpRealTtl_MajorDispatch:	; F68048
+CmpRealTtl_MajorDispatch:
 	ld xwa, xde
 	cp xde, 0x84
 	jrl z, CmpRealTtl_RhythmVar4
@@ -25946,7 +25942,7 @@ CmpRealTtl_MajorDispatch:	; F68048
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; CmpRealTtl rhythm variation 0
-CmpRealTtl_RhythmVar0:	; F68093
+CmpRealTtl_RhythmVar0:
 	push xde
 	push xhl
 	push xix
@@ -25979,7 +25975,7 @@ CmpRealTtl_RhythmVar0:	; F68093
 	jrl CmpBk_DeliverEvent
 
 ; CmpRealTtl rhythm variation 1
-CmpRealTtl_RhythmVar1:	; F680F0
+CmpRealTtl_RhythmVar1:
 	push xde
 	push xhl
 	push xix
@@ -26012,7 +26008,7 @@ CmpRealTtl_RhythmVar1:	; F680F0
 	jrl CmpBk_DeliverEvent
 
 ; CmpRealTtl rhythm variation 2
-CmpRealTtl_RhythmVar2:	; F6814D
+CmpRealTtl_RhythmVar2:
 	push xde
 	push xhl
 	push xix
@@ -26045,7 +26041,7 @@ CmpRealTtl_RhythmVar2:	; F6814D
 	jrl CmpBk_DeliverEvent
 
 ; CmpRealTtl rhythm variation 3
-CmpRealTtl_RhythmVar3:	; F681AA
+CmpRealTtl_RhythmVar3:
 	push xde
 	push xhl
 	push xix
@@ -26078,7 +26074,7 @@ CmpRealTtl_RhythmVar3:	; F681AA
 	jrl CmpBk_DeliverEvent
 
 ; CmpRealTtl rhythm variation 4
-CmpRealTtl_RhythmVar4:	; F68207
+CmpRealTtl_RhythmVar4:
 	push xde
 	push xhl
 	push xix
@@ -26160,8 +26156,7 @@ CmpBk_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; CmpOffsetFunc dispatch
-CmpOffset_Dispatch:	; F682E2
-
+CmpOffset_Dispatch:
 CmpBkslTtlFunc:
 	cp xbc, 0x1C00007
 	jr z, CmpBkslTtl_Mode1
@@ -26178,7 +26173,7 @@ CmpBkslTtlFunc:
 	lda_24 xix, 0xf6831b
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CmpBkslTtlFunc title dispatch
-CmpBkslTtl_Dispatch:	; F6831B
+CmpBkslTtl_Dispatch:
 	.ascii ":;<>"
 	.byte 0x1d, 0xa7, 0x4c, 0xf6
 	.ascii "^\\[Zx."
@@ -26188,7 +26183,7 @@ CmpBkslTtl_Dispatch:	; F6831B
 	.byte 0x1f, 0x01
 
 ; CmpBkslTtl mode 1
-CmpBkslTtl_Mode1:	; F68339
+CmpBkslTtl_Mode1:
 	cp xde, 0x8C
 	jrl z, CmpBkslTtl_ModeDefault
 	cp xde, 0xC
@@ -26322,7 +26317,7 @@ LABEL_F6841B:
 	jr CmpBksl_ApplyAndReturnZero
 
 ; CmpBkslTtl mode select
-CmpBkslTtl_ModeSelect:	; F6842E
+CmpBkslTtl_ModeSelect:
 	push xde
 	push xhl
 	push xix
@@ -26337,7 +26332,7 @@ CmpBkslTtl_ModeSelect:	; F6842E
 	jr CmpBksl_ApplyAndReturnZero
 
 ; CmpBkslTtl mode default
-CmpBkslTtl_ModeDefault:	; F68442
+CmpBkslTtl_ModeDefault:
 	push xde
 	push xhl
 	push xix
@@ -26357,8 +26352,7 @@ CmpBksl_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; CmpBksl_STtlFunc main handler
-CmpBkslSTtl_MainHandler:	; F6845B
-
+CmpBkslSTtl_MainHandler:
 CmpBksl_STtlFunc:
 	cp xbc, 0x1C00007
 	jr z, CmpBkslSTtl_DirectMode
@@ -26375,7 +26369,7 @@ CmpBksl_STtlFunc:
 	lda_24 xix, 0xf68494
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CmpBksl_STtlFunc title dispatch
-CmpBkslSTtl_Dispatch:	; F68494
+CmpBkslSTtl_Dispatch:
 	.ascii ":;<>"
 	call	16141798
 	pop	xiz
@@ -26398,7 +26392,7 @@ CmpBkslSTtl_Dispatch:	; F68494
 	jrl	t, 0x0137
 
 ; CmpBkslSTtl direct mode handler (0x80+)
-CmpBkslSTtl_DirectMode:	; F684BF
+CmpBkslSTtl_DirectMode:
 	ld xwa, xde
 	cp xde, 0x4
 	jrl z, CmpBkslSTtl_FillIn8
@@ -26422,7 +26416,7 @@ CmpBkslSTtl_DirectMode:	; F684BF
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; CmpBkslSTtl fill-in level 4
-CmpBkslSTtl_FillIn4:	; F68513
+CmpBkslSTtl_FillIn4:
 	cpdi8 13580, 0
 	jrl nz, DisplayFunc_ReturnZero
 	push xde
@@ -26439,7 +26433,7 @@ CmpBkslSTtl_FillIn4:	; F68513
 	jrl CmpBk_PostModeChange
 
 ; CmpBkslSTtl fill-in level 5
-CmpBkslSTtl_FillIn5:	; F6852F
+CmpBkslSTtl_FillIn5:
 	cpdi8 13580, 0
 	jrl nz, DisplayFunc_ReturnZero
 	push xde
@@ -26456,7 +26450,7 @@ CmpBkslSTtl_FillIn5:	; F6852F
 	jrl CmpBk_PostModeChange
 
 ; CmpBkslSTtl fill-in level 6
-CmpBkslSTtl_FillIn6:	; F6854B
+CmpBkslSTtl_FillIn6:
 	cpdi8 13580, 0
 	jrl nz, DisplayFunc_ReturnZero
 	push xde
@@ -26473,7 +26467,7 @@ CmpBkslSTtl_FillIn6:	; F6854B
 	jrl CmpBk_PostModeChange
 
 ; CmpBkslSTtl fill-in level 7
-CmpBkslSTtl_FillIn7:	; F68567
+CmpBkslSTtl_FillIn7:
 	cpdi8 13580, 0
 	jrl nz, DisplayFunc_ReturnZero
 	push xde
@@ -26490,7 +26484,7 @@ CmpBkslSTtl_FillIn7:	; F68567
 	jr CmpBk_PostModeChange
 
 ; CmpBkslSTtl fill-in level 8
-CmpBkslSTtl_FillIn8:	; F68582
+CmpBkslSTtl_FillIn8:
 	cpdi8 13580, 0
 	jr nz, DisplayFunc_ReturnZero
 	push xde
@@ -26516,7 +26510,7 @@ CmpBkslSTtl_FillIn8:	; F68582
 	jr DisplayFunc_ReturnZero
 
 ; CmpBkslSTtl post accompaniment event
-CmpBkslSTtl_EventPost:	; F685BE
+CmpBkslSTtl_EventPost:
 	stdi8 13580, 1
 	ld xwa, 0xB20012
 	ld xbc, 0x1C00001
@@ -26540,8 +26534,7 @@ DisplayFunc_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; CmpNcpTtlFunc main handler
-CmpNcpTtl_MainHandler:	; F685F9
-
+CmpNcpTtl_MainHandler:
 CmpNcpTtlFunc:
 	cp xbc, 0x1C00007
 	jrl z, CmpNcpTtl_SpecialMode7
@@ -26558,7 +26551,7 @@ CmpNcpTtlFunc:
 	lda_24 xix, 0xf68633
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CmpNcpTtlFunc title dispatch
-CmpNcpTtl_Dispatch:	; F68633
+CmpNcpTtl_Dispatch:
 	.ascii ":;<>"
 	.byte 0x1d, 0x25, 0x55, 0xf6
 	.byte 0x5e, 0x5c, 0x5b, 0x5a
@@ -26604,7 +26597,7 @@ CmpNcpTtl_Dispatch:	; F68633
 	jrl	1363
 
 ; CmpNcpTtl special mode 7
-CmpNcpTtl_SpecialMode7:	; F686C3
+CmpNcpTtl_SpecialMode7:
 	cp xde, 0xB
 	jr ule, CmpNcpTtl_TableDispatch
 	sub xde, 0x74
@@ -26614,14 +26607,14 @@ CmpNcpTtl_SpecialMode7:	; F686C3
 	jrl ugt, CmEsy_ReturnZero
 
 ; CmpNcpTtl table-driven dispatch
-CmpNcpTtl_TableDispatch:	; F686E3
+CmpNcpTtl_TableDispatch:
 	add xde, xde
 	add xde, 0xE4BF00
 	ld de, (xde)
 	lda_24 xix, 0xf686f7
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CmpNcpTtlFunc title dispatch 2
-CmpNcpTtl_Dispatch2:	; F686F7
+CmpNcpTtl_Dispatch2:
 	.byte 0xd8, 0xa9, 0x1d, 0x45, 0x95, 0xf9, 0x3a, 0x3b
 	.byte 0x3c, 0x3e, 0x20, 0x00, 0x1d, 0xb0, 0x55, 0xf6
 	.byte 0x5e, 0x5c, 0x5b, 0x5a
@@ -26804,8 +26797,7 @@ CmEsy_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; CmEsyTtlFunc main handler
-CmpEsyTtl_MainHandler:	; F68C19
-
+CmpEsyTtl_MainHandler:
 CmEsyTtlFunc:
 	cp xbc, 0x1C00007
 	jrl z, CmpEsyTtl_Mode1
@@ -26822,7 +26814,7 @@ CmEsyTtlFunc:
 	lda_24 xix, 0xf68c53
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CmEsyTtlFunc title dispatch
-CmEsyTtl_Dispatch:	; F68C53
+CmEsyTtl_Dispatch:
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0xba, 0x76, 0x84, 0x01
 	.byte 0xc1, 0xd6, 0x34, 0x21, 0xc9, 0xcf, 0x1d, 0x63
 	.byte 0x0a, 0xc9, 0xca, 0x1e, 0xc9, 0xee, 0x02, 0xf1
@@ -26844,7 +26836,7 @@ CmEsyTtl_Dispatch:	; F68C53
 	.byte 0xc7, 0x37, 0x19, 0xd6, 0x34, 0x78, 0x04, 0x01
 
 ; CmpEsyTtl mode 1
-CmpEsyTtl_Mode1:	; F68CDB
+CmpEsyTtl_Mode1:
 	cp xde, 0xB
 	jr ule, CmpEsyTtl_Mode2
 	sub xde, 0x74
@@ -26854,7 +26846,7 @@ CmpEsyTtl_Mode1:	; F68CDB
 	jrl ugt, S2cTtl_ReturnZero
 
 ; CmpEsyTtl mode 2
-CmpEsyTtl_Mode2:	; F68CFB
+CmpEsyTtl_Mode2:
 	add xde, 0xE4BF36
 	ld de, (xde)
 	extz de
@@ -26864,7 +26856,7 @@ CmpEsyTtl_Mode2:	; F68CFB
 	lda_24 xix, 0xf68d1c
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CmEsyTtlFunc title dispatch 2
-CmEsyTtl_Dispatch2:	; F68D1C
+CmEsyTtl_Dispatch2:
 	; --- Multi-branch dispatch subroutine (195 bytes) ---
 	lds	wa, 0
 	jrl t, CmpEsyTtl_SubModeD_Cont
@@ -26934,7 +26926,7 @@ LABEL_F68D7D:
 	ldada	xde, 14272
 	lds32	xbc, 0
 ; CmpEsyTtl sub-mode B
-CmpEsyTtl_SubModeB:	; F68DAF
+CmpEsyTtl_SubModeB:
 	.byte 0xc5, 0xf4, 0x21			; ld a, (xiy+)  [post-increment]
 	.byte 0xf5, 0xf0, 0x41			; ld (xix+), a  [post-increment]
 	.byte 0xc5, 0xec, 0x21			; ld a, (xhl+)  [post-increment]
@@ -26945,7 +26937,7 @@ CmpEsyTtl_SubModeB:	; F68DAF
 	.byte 0xc1, 0xd6, 0x34, 0x19, 0xc7, 0x37	; ld (0x37C7), (0x34D6)  [mem-to-mem 8-bit direct]
 	jr t, CmpEsyTtl_SubModeD
 ; CmpEsyTtl sub-mode C
-CmpEsyTtl_SubModeC:	; F68DCD
+CmpEsyTtl_SubModeC:
 	push xde
 	push xhl
 	push xix
@@ -26956,10 +26948,10 @@ CmpEsyTtl_SubModeC:	; F68DCD
 	pop xhl
 	pop xde
 ; CmpEsyTtl sub-mode D entry
-CmpEsyTtl_SubModeD:	; F68DD9
+CmpEsyTtl_SubModeD:
 	lds	wa, 0
 ; CmpEsyTtl sub-mode D continuation
-CmpEsyTtl_SubModeD_Cont:	; F68DDB
+CmpEsyTtl_SubModeD_Cont:
 	call UI_PostDialEnable
 
 
@@ -26967,8 +26959,7 @@ S2cTtl_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; CmpEsyTtl sub-mode E dispatch
-CmpEsyTtl_SubModeE:	; F68DE2
-
+CmpEsyTtl_SubModeE:
 S2cTtlFunc:
 	cp xbc, 0x1C00007
 	jrl z, CmpEsyTtl_E_Var1
@@ -26985,7 +26976,7 @@ S2cTtlFunc:
 	lda_24 xix, 0xf68e1c
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; S2cTtlFunc title dispatch
-S2cTtl_Dispatch:	; F68E1C
+S2cTtl_Dispatch:
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0xb9, 0x66, 0x13, 0x40
 	.byte 0x21, 0x00, 0xb9, 0x00, 0x41, 0x8e, 0x00, 0xe0
 	.byte 0x01, 0x42, 0x02, 0x00, 0xff, 0xff, 0x1d, 0x07
@@ -27002,7 +26993,7 @@ S2cTtl_Dispatch:	; F68E1C
 	.byte 0x9e, 0x03
 
 ; CmpEsyTtl E variant 1
-CmpEsyTtl_E_Var1:	; F68E86
+CmpEsyTtl_E_Var1:
 	ld xwa, xde
 	cp xde, 0x86
 	jrl z, CstmCp_ReturnZero
@@ -27043,7 +27034,7 @@ LABEL_F68ED2:
 	.byte 0x02
 
 ; CmpEsyTtl E variant 2
-CmpEsyTtl_E_Var2:	; F68F5B
+CmpEsyTtl_E_Var2:
 	lds wa, 1
 	call UI_PostEvent_0x6E
 	lds wa, 1
@@ -27124,7 +27115,7 @@ LABEL_F69029:
 	jrl TtlFunc_SendEventAndReturn
 
 ; S2cTtlFunc main handler
-S2cTtl_MainHandler:	; F6906D
+S2cTtl_MainHandler:
 	lds wa, 1
 	call UI_PostEvent_0x6E
 	lds wa, 1
@@ -27201,7 +27192,7 @@ LABEL_F6912B:
 	jrl TtlFunc_SendEventAndReturn
 
 ; S2cTtlFunc secondary handler
-S2cTtl_SecondaryHandler:	; F6916F
+S2cTtl_SecondaryHandler:
 	lds wa, 1
 	call UI_PostEvent_0x6E
 	lds wa, 1
@@ -27263,8 +27254,7 @@ CstmCp_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; CstmCpTtl record dispatch
-CstmCpTtl_RecDispatch:	; F69227
-
+CstmCpTtl_RecDispatch:
 CstmCpTtlFunc:
 	cp xbc, 0x1C00007
 	jrl z, CstmCpTtl_RecMode1
@@ -27281,7 +27271,7 @@ CstmCpTtlFunc:
 	lda_24 xix, 0xf69261
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CstmCpTtlFunc title dispatch
-CstmCpTtl_Dispatch:	; F69261
+CstmCpTtl_Dispatch:
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0xbe, 0x66, 0x08, 0xf1
 	.byte 0x7e, 0x3a, 0x00, 0x00, 0x78, 0x24, 0x03, 0xc1
 	.byte 0x39, 0x8d, 0x3f, 0xee, 0x7e, 0x1c, 0x03, 0xc1
@@ -27300,7 +27290,7 @@ CstmCpTtl_Dispatch:	; F69261
 	jrl	t, 0x0283
 
 ; CstmCpTtl record mode 1
-CstmCpTtl_RecMode1:	; F692DC
+CstmCpTtl_RecMode1:
 	cp xde, 0xB
 	jr ule, CstmCpTtl_RecMode2
 	sub xde, 0x74
@@ -27310,14 +27300,14 @@ CstmCpTtl_RecMode1:	; F692DC
 	jrl ugt, CstmCp_ReturnZero2
 
 ; CstmCpTtl record mode 2
-CstmCpTtl_RecMode2:	; F692FC
+CstmCpTtl_RecMode2:
 	add xde, xde
 	add xde, 0xE4BF8A
 	ld de, (xde)
 	lda_24 xix, 0xf69310
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CstmCpTtlFunc title dispatch 2
-CstmCpTtl_Dispatch2:	; F69310
+CstmCpTtl_Dispatch2:
 	.byte 0xc1, 0x7e, 0x3a, 0x3f, 0x00, 0x7e, 0x7c, 0x02
 	.byte 0xd8, 0xa9, 0x1d, 0x45, 0x95, 0xf9, 0x23, 0x1d
 	.byte 0xc1, 0xb6, 0x39, 0x21, 0xc9, 0xcf, 0x0a, 0x6f
@@ -27770,7 +27760,7 @@ LABEL_F6996D:
 	jr MainCmpSet_Case1
 
 ; MainCmpSetFunc init
-MainCmpSet_Init:	; F69990
+MainCmpSet_Init:
 	cp a, 0xDC
 	jr nz, MainCmpSet_Case2
 	ld xwa, 0xDC0002
@@ -27778,28 +27768,27 @@ MainCmpSet_Init:	; F69990
 	ld xde, xiz
 
 ; MainCmpSetFunc case 1
-MainCmpSet_Case1:	; F699A1
+MainCmpSet_Case1:
 	call ApDeliveryEvent
 
 ; MainCmpSetFunc case 2
-MainCmpSet_Case2:	; F699A5
+MainCmpSet_Case2:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E00023
 	ld xde, xiz
 
 ; MainCmpSetFunc case 3
-MainCmpSet_Case3:	; F699B1
+MainCmpSet_Case3:
 	call ApPostEvent
 
 ; MainCmpSetFunc case 4
-MainCmpSet_Case4:	; F699B5
+MainCmpSet_Case4:
 	lds32 xhl, 0
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
 ; CmpSongTtlFunc main handler
-CmpSong_MainHandler:	; F699BC
-
+CmpSong_MainHandler:
 MainCmpSetFunc:
 	dec 4, xsp
 	ld (xsp), xde
@@ -27824,7 +27813,7 @@ MainCmpSetFunc:
 	lda_24 xix, 0xf69a0c
 	jp_dri 8, 0x07, 0xF0, 0xEC
 ; MainCmpSetFunc dispatch
-MainCmpSet_Dispatch:	; F69A0C
+MainCmpSet_Dispatch:
 	.byte 0xa7, 0x20, 0xe8, 0xee, 0x03, 0xe8, 0xc8, 0x10
 	.byte 0x00, 0x00, 0x00, 0xea, 0x80, 0xe8, 0x62, 0x80
 	.byte 0x23, 0xcb, 0xcf, 0x7f, 0x7f, 0x24, 0x01, 0xcb
@@ -27868,7 +27857,7 @@ MainCmpSet_Dispatch:	; F69A0C
 	.byte 0x07, 0x9e, 0xfa
 
 ; CmpSong variant A
-CmpSong_VariantA:	; F69B47
+CmpSong_VariantA:
 	lds32 xhl, 0
 	inc 4, xsp
 	ret
@@ -28143,7 +28132,7 @@ LABEL_F69DBE:
 	jr AccBass_EventDeliver
 
 ; MspMenuTtlFunc init
-MspMenuTtl_Init:	; F69DDF
+MspMenuTtl_Init:
 	cpdi8 32523, 0
 	jr nz, AccBass_ReturnZero
 	ld xbc, xwa
@@ -28157,7 +28146,7 @@ MspMenuTtl_Init:	; F69DDF
 	jr AccBass_EventDeliver
 
 ; MspMenuTtlFunc case 1
-MspMenuTtl_Case1:	; F69DFE
+MspMenuTtl_Case1:
 	cpdi8 32523, 0
 	jr nz, AccBass_ReturnZero
 	ld xbc, xwa
@@ -28176,8 +28165,7 @@ AccBass_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; MspMenuTtlFunc case 2
-MspMenuTtl_Case2:	; F69E22
-
+MspMenuTtl_Case2:
 MspMenuTtlFunc:
 	cp xbc, 0x1C00013
 	jr nz, MspNameTtl_ReturnZero
@@ -28192,7 +28180,7 @@ MspMenuTtlFunc:
 	lda_24 xix, 0xf69e50
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; MspMenuTtlFunc title dispatch
-MspMenuTtl_Dispatch:	; F69E50
+MspMenuTtl_Dispatch:
 	ld	xwa, 165888
 	call	16569399
 	cp	l, 13
@@ -28227,8 +28215,7 @@ MspNameTtl_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; MspNameTtlFunc mode 1
-MspNameTtl_Mode1:	; F69EA9
-
+MspNameTtl_Mode1:
 MspNameTtlFunc:
 	cp xbc, 0x1C00013
 	jr nz, MspRecMode_ReturnZero
@@ -28243,7 +28230,7 @@ MspNameTtlFunc:
 	lda_24 xix, 0xf69ed7
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; MspNameTtlFunc title dispatch
-MspNameTtl_Dispatch:	; F69ED7
+MspNameTtl_Dispatch:
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0xcb, 0x66, 0x14, 0xc1
 	.byte 0x3e, 0x7f, 0x23, 0xcb, 0xc8, 0x0d, 0xd9, 0x12
 	.byte 0x40, 0x00, 0x88, 0x02, 0x00, 0xda, 0xa8, 0x1d
@@ -28256,8 +28243,7 @@ MspRecMode_ReturnZero:
 	lds32 xhl, 0
 	ret
 ; MspNameTtlFunc mode 2
-MspNameTtl_Mode2:	; F69F0F
-
+MspNameTtl_Mode2:
 MspRecModeFunc:
 	cp xbc, 0x1C00013
 	jr nz, MspNameTtl_Mode4
@@ -28267,16 +28253,15 @@ MspRecModeFunc:
 	jr nz, MspNameTtl_Mode4
 
 ; MspNameTtlFunc mode 3
-MspNameTtl_Mode3:	; F69F23
+MspNameTtl_Mode3:
 	stdi8 32523, 0
 
 ; MspNameTtlFunc mode 4
-MspNameTtl_Mode4:	; F69F28
+MspNameTtl_Mode4:
 	lds32 xhl, 0
 	ret
 ; MspNameTtlFunc mode 5
-MspNameTtl_Mode5:	; F69F2B
-
+MspNameTtl_Mode5:
 MspRecTtlFunc:
 	cp xbc, 0x1E4001F
 	jrl z, MspRecTtl_SubA
@@ -28293,7 +28278,7 @@ MspRecTtlFunc:
 	lda_24 xix, 0xf69f65
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; MspRecTtlFunc title dispatch
-MspRecTtl_Dispatch:	; F69F65
+MspRecTtl_Dispatch:
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0xc9, 0x66, 0x3d, 0x40
 	.byte 0x03, 0x81, 0x02, 0x00, 0xd9, 0xa8, 0xda, 0xab
 	.byte 0x1d, 0x01, 0xd2, 0xfc, 0x40, 0x00, 0x88, 0x02
@@ -28309,7 +28294,7 @@ MspRecTtl_Dispatch:	; F69F65
 	.byte 0x32
 
 ; MspRecTtlFunc sub-handler A
-MspRecTtl_SubA:	; F69FC6
+MspRecTtl_SubA:
 	ld xwa, 0x28800
 	call SndParam_LookupReadOnly
 	cp l, 0xD
@@ -28349,8 +28334,7 @@ LABEL_F6A01B:
 	.byte 0x05, 0x00, 0xdc, 0x00, 0x41, 0x0f, 0x00, 0xc0
 	.byte 0x01, 0xea, 0xa8, 0x1d, 0x07, 0x9e, 0xfa, 0x0e
 ; SndArgTtlFunc sub-handler A
-SndArgTtl_SubA:	; F6A033
-
+SndArgTtl_SubA:
 SndArgModeFunc:
 	cp xbc, 0x1C00013
 	jr nz, AccStyle_ExitReturn
@@ -28370,7 +28354,7 @@ SndArgModeFunc:
 	jr AccStyle_ExitReturn
 
 ; SndArgTtlFunc sub-handler B
-SndArgTtl_SubB:	; F6A055
+SndArgTtl_SubB:
 	push xde
 	push xhl
 	push xix
@@ -28385,8 +28369,7 @@ AccStyle_ExitReturn:
 	lds32 xhl, 0
 	ret
 ; SndArgTtlFunc sub-handler C
-SndArgTtl_SubC:	; F6A064
-
+SndArgTtl_SubC:
 SndArgTtlFunc:
 	cp xbc, 0x1C00013
 	jr nz, SndArgTtl_ReturnZero
@@ -28401,7 +28384,7 @@ SndArgTtlFunc:
 	lda_24 xix, 0xf6a092
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; SndArgTtlFunc title dispatch
-SndArgTtl_Dispatch:	; F6A092
+SndArgTtl_Dispatch:
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0xdc, 0x66, 0x13, 0x40
 	.byte 0x05, 0x00, 0xdc, 0x00, 0x41, 0x8e, 0x00, 0xe0
 	.byte 0x01, 0x42, 0x02, 0x00, 0xff, 0xff, 0x1d, 0x07

@@ -197,7 +197,7 @@ LABEL_FB15B5:
 	jr LABEL_FB15EF
 
 ; Voice MIDI event handler dispatch
-VoiceMidi_EventHandler:	; FB15C9
+VoiceMidi_EventHandler:
 	ld a, c
 	extz wa
 	sla wa, 2
@@ -240,7 +240,7 @@ LABEL_FB1611:
 	jr LABEL_FB1649
 
 ; Voice MIDI alt event handler dispatch
-VoiceMidi_AltEventHandler:	; FB1625
+VoiceMidi_AltEventHandler:
 	ld a, c
 	extz wa
 	sla wa, 2
@@ -3097,7 +3097,7 @@ ToneGen_WriteParamByIndex:
 	lda_24 xix, 0xfc22d7
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ; ToneGen_WriteParamByIndex dispatch table
-ToneGen_ParamWriteDispatch:	; FC22D7
+ToneGen_ParamWriteDispatch:
 	.byte 0xbf, 0x06, 0x34, 0xd9, 0xac, 0x95, 0x11, 0xbf
 	.byte 0x02, 0x32, 0xbf, 0x06, 0x31, 0x91, 0x23, 0xdb
 	.byte 0x61, 0xb2, 0x53, 0x99, 0x02, 0x23, 0xdb, 0x61
@@ -3172,7 +3172,7 @@ WallHomeEditCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; WallHomeEditCheck event dispatch
-WallHomeEdit_EventDispatch:	; FC248A
+WallHomeEdit_EventDispatch:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
@@ -3261,7 +3261,7 @@ WallMenuEditCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; WallMenuEditCheck event dispatch
-WallMenuEdit_EventDispatch:	; FC256E
+WallMenuEdit_EventDispatch:
 	ld	xwa, (xde+14)
 	ld	xbc, (xde+18)
 	cp	xwa, 1
@@ -3309,7 +3309,7 @@ WallOthEditCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; WallOthEditCheck event dispatch
-WallOthEdit_EventDispatch:	; FC25E9
+WallOthEdit_EventDispatch:
 	ld	xwa, (xde+14)
 	ld	xbc, (xde+18)
 	cp	xwa, 1
@@ -3852,7 +3852,7 @@ LABEL_FC2BB7:
 	inc 8, xsp
 	ret
 
-MainSysControl:	; fc2bbf
+MainSysControl:
 	dec 4, xsp
 	push_werp 0xFA
 	ld (xsp + 2), xde
@@ -3885,7 +3885,7 @@ MainSysControl:	; fc2bbf
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; MainSysControl dispatch table
-MainSysCtrl_DispatchTable:	; FC2C12
+MainSysCtrl_DispatchTable:
 	; --- Dispatch table: 9 call entries (54 bytes) ---
 	lds	wa, 2
 	call ScreenGroup_DispatchAlt
@@ -3964,7 +3964,7 @@ CntIniFunc:
 	lda_24 xix, 0xfc2cd9
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CntIniFunc event dispatch
-CntIniFunc_EventDispatch:	; FC2CD9
+CntIniFunc_EventDispatch:
 	.byte 0x1d, 0xb9, 0x9a, 0xf5, 0x1d, 0x3a, 0xe6, 0xf6
 
 CntIniFunc_ReturnZero:

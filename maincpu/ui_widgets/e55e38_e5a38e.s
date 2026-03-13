@@ -441,10 +441,10 @@ LABEL_E56908:	aligned_string "Live Room"
 	.byte 0x4a, 0xe4, 0x03, 0x00
 	.byte 0x0c, 0x00, 0x3b, 0x00, 0x23, 0x01
 
-String_EQ_OFF:	; E5693E
+String_EQ_OFF:
 	aligned_string "EQ : OFF"
 
-String_EQ_ON:	; E56948
+String_EQ_ON:
 	aligned_string "EQ : ON"
 
 
@@ -464,7 +464,7 @@ String_EQ_ON:	; E56948
 	.long String_MIDI_MENU
 	.byte 0x19, 0x00, 0x00, 0x00
 
-String_MIDI_MENU:	; E56994
+String_MIDI_MENU:
 	aligned_string "MIDI MENU"
 	ldb	e, 0x00
 	.byte 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x02, 0x00

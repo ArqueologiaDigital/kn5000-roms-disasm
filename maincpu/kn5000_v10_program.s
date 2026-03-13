@@ -49,7 +49,7 @@
 
 	.org PROGRAM_FLASH__BASE_ADDR - 0xE00000, 0xFF
 
-LED_patterns_indicating_firmware_version:	; E00000
+LED_patterns_indicating_firmware_version:
 	.byte 0x10	; v0:  0001 0000
 	.byte 0x18	; v1:  0001 1000
 	.byte 0x14	; v2:  0001 0100
@@ -81,7 +81,7 @@ LABEL_E00010:
 ;   VoiceMap   (0x0201C1) -> note_voice_mapping
 ;   DspSysEx   (0x01FCA3) -> dsp_config_sysex
 ;   MidiOut    (0x01F785) -> midi_serial_routines  (not in this table)
-SeqRingBuf_WriteDispatch_Table:	; E00012
+SeqRingBuf_WriteDispatch_Table:
 	.long SeqDMA_MultiWrite_NoteEvent	; 0: -> NoteEvent buffer (block writes)
 	.long SeqDMA_MultiWrite_SoundEdit	; 1: -> SoundEdit buffer
 	.long SeqDMA_WriteMidi_NoteOn		; 2: -> NoteEvent buffer (MIDI 0x90 Note On)
@@ -103,7 +103,7 @@ FILETYPE_SIG_HDAE_PRG:	aligned_string "Technics KN5000 HD-AEPRG DATA FILE    "
 
 .equ HANDLE_UPDATE_BASE_ADDR, HANDLE_UPDATE_FILE_TYPE_ID_001h
 
-HANDLE_UPDATE_OFFSETS:	; E00178
+HANDLE_UPDATE_OFFSETS:
 	.short HANDLE_UPDATE_FILE_TYPE_ID_001h - HANDLE_UPDATE_BASE_ADDR	; "Technics KN5000 Program DATA FILE 1/2"
 	.short SHOW_ILLEGAL_DISK_MESSAGE - HANDLE_UPDATE_BASE_ADDR	; "Technics KN5000 Program DATA FILE 2/2"
 	.short HANDLE_UPDATE_FILE_TYPE_ID_003h - HANDLE_UPDATE_BASE_ADDR	; "Technics KN5000 Table DATA FILE 1/2"
@@ -116,30 +116,14 @@ HANDLE_UPDATE_OFFSETS:	; E00178
 SLIDE_STRING_2:
 	aligned_string "SLIDE"
 
-Bitmap_1bit_Flash_Memory_Update:	; e0018e
-	.incbin "images/Bitmap_1bit_Flash_Memory_Update.bin"
-
-Bitmap_1bit_Now_Erasing:	; e003f6
-	.incbin "images/Bitmap_1bit_Now_Erasing.bin"
-
-Bitmap_1bit_FD_to_Flash_Memory:	; e0065e
-	.incbin "images/Bitmap_1bit_FD_to_Flash_Memory.bin"
-
-Bitmap_1bit_Completed:	; e008c6
-	.incbin "images/Bitmap_1bit_Completed.bin"
-
-Bitmap_1bit_Please_Wait:	; e00b2e
-	.incbin "images/Bitmap_1bit_Please_Wait.bin"
-
-Bitmap_1bit_Change_FD_2_of_2:	; e00d96
-	.incbin "images/Bitmap_1bit_Change_FD_2_of_2.bin"
-
-Bitmap_1bit_Illegal_Disk:	; e00ffe
-	.incbin "images/Bitmap_1bit_Illegal_Disk.bin"
-
-Bitmap_1bit_Turn_On_AGAIN:	; e01266
-	.incbin "images/Bitmap_1bit_Turn_On_AGAIN.bin"
-
+Bitmap_1bit_Flash_Memory_Update:	.incbin "images/Bitmap_1bit_Flash_Memory_Update.bin"
+Bitmap_1bit_Now_Erasing:		.incbin "images/Bitmap_1bit_Now_Erasing.bin"
+Bitmap_1bit_FD_to_Flash_Memory:		.incbin "images/Bitmap_1bit_FD_to_Flash_Memory.bin"
+Bitmap_1bit_Completed:			.incbin "images/Bitmap_1bit_Completed.bin"
+Bitmap_1bit_Please_Wait:		.incbin "images/Bitmap_1bit_Please_Wait.bin"
+Bitmap_1bit_Change_FD_2_of_2:		.incbin "images/Bitmap_1bit_Change_FD_2_of_2.bin"
+Bitmap_1bit_Illegal_Disk:		.incbin "images/Bitmap_1bit_Illegal_Disk.bin"
+Bitmap_1bit_Turn_On_AGAIN:		.incbin "images/Bitmap_1bit_Turn_On_AGAIN.bin"
 
 
 ; --- SSF (Style Synthesis Format) Gate State Data ---
@@ -149,42 +133,18 @@ Bitmap_1bit_Turn_On_AGAIN:	; e01266
 ; --- Instrument Sound Data & Category Metadata ---
 	.include "audio/sound_data.s"
 
-StyleUI_ParamBlock_BAL:
-	.include "includes/style_ui_paramblock_bal.s"
-
-StyleUI_ParamBlock_VALUE:
-	.include "includes/style_ui_paramblock_value.s"
-
-StyleUI_ParamBlock_Common:
-	.include "includes/style_ui_paramblock_common.s"
-
-StyleUI_ParamBlock_Short:
-	.include "includes/style_ui_paramblock_short.s"
-
-StyleUI_ParamBlock_Extended:
-	.include "includes/style_ui_paramblock_extended.s"
-
-StyleUI_ParamBlock_Medium:
-	.include "includes/style_ui_paramblock_medium.s"
-
-StyleUI_ParamBlock_MEAS:
-	.include "includes/style_ui_paramblock_meas.s"
-
-StyleUI_ParamBlock_AltA:
-	.include "includes/style_ui_paramblock_alta.s"
-
-StyleUI_ParamBlock_AltB:
-	.include "includes/style_ui_paramblock_altb.s"
-
-StyleUI_ParamBlock_AltC:
-	.include "includes/style_ui_paramblock_altc.s"
-
-StyleUI_ParamBlock_AltD:
-	.include "includes/style_ui_paramblock_altd.s"
-
-StyleUI_ParamBlock_AltE:
-	.include "includes/style_ui_paramblock_alte.s"
-
+StyleUI_ParamBlock_BAL:		.include "includes/style_ui_paramblock_bal.s"
+StyleUI_ParamBlock_VALUE:	.include "includes/style_ui_paramblock_value.s"
+StyleUI_ParamBlock_Common:	.include "includes/style_ui_paramblock_common.s"
+StyleUI_ParamBlock_Short:	.include "includes/style_ui_paramblock_short.s"
+StyleUI_ParamBlock_Extended:	.include "includes/style_ui_paramblock_extended.s"
+StyleUI_ParamBlock_Medium:	.include "includes/style_ui_paramblock_medium.s"
+StyleUI_ParamBlock_MEAS:	.include "includes/style_ui_paramblock_meas.s"
+StyleUI_ParamBlock_AltA:	.include "includes/style_ui_paramblock_alta.s"
+StyleUI_ParamBlock_AltB:	.include "includes/style_ui_paramblock_altb.s"
+StyleUI_ParamBlock_AltC:	.include "includes/style_ui_paramblock_altc.s"
+StyleUI_ParamBlock_AltD:	.include "includes/style_ui_paramblock_altd.s"
+StyleUI_ParamBlock_AltE:	.include "includes/style_ui_paramblock_alte.s"
 
 StyleUI_ParamBlockPtrTable:
 	.long StyleUI_ParamBlock_BAL
@@ -264,27 +224,13 @@ StyleUI_ParamBlockPtrTable:
 	.long StyleUI_ParamBlock_AltB
 	.long StyleUI_ParamBlock_AltE
 
-StyleUI_ScreenData_Main:
-	.include "includes/style_ui_screendata_main.s"
-
-StyleUI_ScreenData_MeasCursor:
-	.include "includes/style_ui_screendata_meascursor.s"
-
-StyleUI_ScreenData_YesCtl:
-	.include "includes/style_ui_screendata_yesctl.s"
-
-StyleUI_ScreenData_CtlOnly:
-	.include "includes/style_ui_screendata_ctlonly.s"
-
-GUI_FormatStrings:
-	.include "includes/gui_format_strings.s"
-
-GUI_DisplayStructData:
-	.include "includes/gui_display_struct_data.s"
-
-ToneGen_ParamTable:
-	.include "audio/tonegen_param_table.s"
-
+StyleUI_ScreenData_Main:	.include "includes/style_ui_screendata_main.s"
+StyleUI_ScreenData_MeasCursor:	.include "includes/style_ui_screendata_meascursor.s"
+StyleUI_ScreenData_YesCtl:	.include "includes/style_ui_screendata_yesctl.s"
+StyleUI_ScreenData_CtlOnly:	.include "includes/style_ui_screendata_ctlonly.s"
+GUI_FormatStrings:		.include "includes/gui_format_strings.s"
+GUI_DisplayStructData:		.include "includes/gui_display_struct_data.s"
+ToneGen_ParamTable:		.include "audio/tonegen_param_table.s"
 ; =============================================================================
 ; NAKA UI Descriptor Blocks (ROM E0E974-EEF587)
 ; Screen layouts, style selection, sequencer UI, effect editors,
@@ -1279,7 +1225,7 @@ LABEL_E176C4:	aligned_string "MT_CmpNameSet"
 	.long String_MSP_BANK_SELECT
 	.long 0xA5
 
-String_MSP_BANK_SELECT:	; E1A72E
+String_MSP_BANK_SELECT:
 	aligned_string "MSP BANK SELECT"
 
 LABEL_E1A73E:
@@ -2891,7 +2837,7 @@ LABEL_EF03C2:
 
 
 ; --- RESET Handler & Boot Sequence ---
-RESET_HANDLER:	; EF03C6
+RESET_HANDLER:
 	; Hardware initialization code shared with table_data ROM
 	.include "shared/boot_hw_init.s"
 	; End of shared boot code (315 bytes)
@@ -2914,7 +2860,7 @@ LABEL_EF0529:
 	cp l, 0xFF
 	jr nz, LABEL_EF054F
 
-We_seem_to_be_running_boot_ROM_code:	; EF0536
+We_seem_to_be_running_boot_ROM_code:
 	call VGA_Setup
 	pushw 0x8
 	pushw 0x3
@@ -2961,7 +2907,7 @@ LABEL_EF05A2:
 					; HDAE5000 PPI init code
 
 ; Boot initialization handler (SeqInit + CPanel scan)
-BootInit_SeqAndPanel:	; EF05B5
+BootInit_SeqAndPanel:
 	call Seq_FullInit
 	ei 0
 	ld32_24 xhl, 0xfc3e65
@@ -3006,7 +2952,7 @@ LABEL_EF05E6:
 ;   - SubCPU_Payload_Verify - Checksum verification
 ;   - ErrorDialog_CPUTransmissionError - Error dialog widget
 ; ===========================================================================
-User_didnt_request_flash_mem_update:	; EF05E8
+User_didnt_request_flash_mem_update:
 	ldda8 a, 1026		; Load boot combo code
 	extz wa
 	calr Boot_HandleFactoryReset	; Reset if combo 1 + invalid checksums
@@ -3027,10 +2973,10 @@ User_didnt_request_flash_mem_update:	; EF05E8
 	jr Boot_DisplayScreen
 
 ; Sub-CPU payload transfer or verification failed
-Boot_PayloadError:	; EF061E
+Boot_PayloadError:
 	lds wa, 2	; Error: use screen group 2
 
-Boot_DisplayScreen:	; EF0620
+Boot_DisplayScreen:
 	call ScreenGroup_Dispatch	; Display appropriate screen group
 	stdi8 1024, 6
 	lds wa, 3
@@ -3294,12 +3240,11 @@ LABEL_EF0839:
 	.include "audio/sound_editor_ui.s"
 
 ; VoiceSynth command handler case 0
-VoiceSynth_CmdCase0:	; F1EA20
+VoiceSynth_CmdCase0:
 	.byte 0xc2, 0x04, 0xdd, 0x03, 0x3f, 0x00, 0xb0, 0xf6
 	.byte 0x43, 0x14, 0x00, 0x28, 0x00, 0xb3, 0xe8, 0x0e
 ; VoiceSynth command handler case 1
-VoiceSynth_CmdCase1:	; F1EA30
-
+VoiceSynth_CmdCase1:
 ; Get resource info based on resource type (WA 0-9)
 ; Uses offset table at RESOURCE_INFO_HANDLER_OFFSETS (10 entries)
 GetResouceInfo:
@@ -3311,7 +3256,7 @@ GetResouceInfo:
 	lda_24 xix, 0xf1ea4c
 	jp_dri 8, 0x07, 0xF0, 0xE0
 ; Resource info handlers - 10 handlers for different resource types
-RESOURCE_INFO_HANDLERS:	; F1EA4C
+RESOURCE_INFO_HANDLERS:
 	ldada xwa, 63872
 	ld (xbc), xwa
 	ldada xwa, 65470
@@ -3406,7 +3351,7 @@ LABEL_F1EB1A:
 LABEL_F1EB27:
 	ret
 
-rcm_ld_XAPR_j:	; F1EB28
+rcm_ld_XAPR_j:
 	jp FloppyDisk_LoadNoteEvents
 
 rcm_sv_XAPR_j:
@@ -3824,13 +3769,13 @@ LABEL_F6F149:
 	.zero 248
 	.byte 0x00, 0x87
 
-BLOCK_OF_64_ZEROES:	; F6F249
+BLOCK_OF_64_ZEROES:
 	.zero 64
 
-HEADER__COMPILE_BANKS:	; F6F289
+HEADER__COMPILE_BANKS:
 	.ascii " Compile Bank 1  Compile Bank 2                                 "
 
-HEADER__USER_BANKS:	; F6F2C9
+HEADER__USER_BANKS:
 	.ascii "  User Bank 1     User Bank 2                                   "
 
 Voice_InitBankData:
@@ -3987,7 +3932,7 @@ LABEL_F6F42F:
 ; F6F60F:
 	.zero 32
 
-; MSP_FACTORY_DEFAULTS:		; F6F62F
+; MSP_FACTORY_DEFAULTS:	
 	.include "msp_factory_defaults.s"
 .include "sequencer/seq_event_playback.s"
 	.include "midi/computer_interface_config.s"
@@ -5222,7 +5167,7 @@ LABEL_FFFF00:
 ; RESERVED:
 	.fill 52, 1, 0xff
 
-FIRMWARE_VERSION:	; FFFFE8
+FIRMWARE_VERSION:
 	.byte 0x0a
 
 ; RESERVED:

@@ -68,11 +68,11 @@ LABEL_F2258E:
 	jr	4
 
 ; SqTrSelTtl case B
-SqTrSel_CaseB:	; F22621
+SqTrSel_CaseB:
 	call LABEL_FECC0C
 
 ; SqTrSelTtl case C
-SqTrSel_CaseC:	; F22625
+SqTrSel_CaseC:
 	lds32 xhl, 0
 	ret
 
@@ -516,14 +516,14 @@ SeqRecPlay_DisableBoth:
 	jp ApPostEvent
 
 ; SqTrSelTtl case D
-SqTrSel_CaseD:	; F22AF0
+SqTrSel_CaseD:
 	calr SeqRecPlay_DisableBoth
 	call Song_AbortPlayback
 	stdi8 7498, 0
 	ret
 
 ; SqTrSelTtl case E
-SqTrSel_CaseE:	; F22AFD
+SqTrSel_CaseE:
 	calr SeqRecPlay_DisableBoth
 	call Song_AbortPlayback
 	ld xwa, 0x6F0026
@@ -534,7 +534,7 @@ SqTrSel_CaseE:	; F22AFD
 	ret
 
 ; SqTrSelTtl case F
-SqTrSel_CaseF:	; F22B1A
+SqTrSel_CaseF:
 	calr SeqRecPlay_DisableBoth
 	call Song_AbortPlayback
 	stdi8 7498, 0
@@ -547,7 +547,7 @@ PlayMode_SendStopEvent:
 	jp ApPostEvent
 
 ; SqTrSelTtl case G
-SqTrSel_CaseG:	; F22B37
+SqTrSel_CaseG:
 	ldda8 a, 36150
 	extz wa
 	sub wa, 0x6F

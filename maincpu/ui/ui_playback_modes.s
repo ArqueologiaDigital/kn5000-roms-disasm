@@ -675,7 +675,7 @@ LABEL_F209EE:
 	.byte 0x00, 0x0e
 
 ; SqSngNameTtlFunc title dispatch
-SqSngNameTtl_Dispatch:	; F20A00
+SqSngNameTtl_Dispatch:
 	xor wa, wa
 	ldb a, 0x73
 	call UI_PostModeChangeEvent
@@ -935,7 +935,7 @@ LABEL_F20C7C:
 	ret
 
 ; SqTrAs setup handler
-SqTrAs_Setup:	; F20C98
+SqTrAs_Setup:
 	ld xiy, 0xCCE
 	ld xix, 0xF1A0
 	xor bc, bc
@@ -944,7 +944,7 @@ SqTrAs_Setup:	; F20C98
 	ret
 
 ; SqTrAs init wall data
-SqTrAs_InitWall:	; F20CA9
+SqTrAs_InitWall:
 	ld xix, 0xCCE
 	ld xiy, 0xF1A0
 	xor bc, bc
@@ -953,7 +953,7 @@ SqTrAs_InitWall:	; F20CA9
 	ret
 
 ; SqTrAs load inline code
-SqTrAs_LoadInline:	; F20CBA
+SqTrAs_LoadInline:
 	.byte 0x0e
 
 SqAftSetTtlFunc:
@@ -975,7 +975,7 @@ SqSngSelTtlFunc:
 	jp_dri 8, 0x07, 0xF0, 0xE8
 
 ; SqTrAs conditional voice check
-SqTrAs_CondCheck:	; F20CEC
+SqTrAs_CondCheck:
 	.ascii ":;<>"
 	.byte 0x1d, 0x87, 0x00, 0xf2
 	.ascii "^\\[Zh"
@@ -1002,7 +1002,7 @@ SqSngNameTtlFunc:
 	jp_dri 8, 0x07, 0xF0, 0xE8
 
 ; Sequencer track dispatch table 1 - Handler for SqTrAsTtlFunc, 6 cases (XDE 0-5)
-SQTR_DISPATCH_TABLE_1:	; F20D37
+SQTR_DISPATCH_TABLE_1:
 	push xde
 	push xhl
 	push xix
@@ -1044,68 +1044,67 @@ SqTrAsTtlFunc:
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; Sequencer track dispatch table 2 - SqTrAsTtlFunc handler
 ; 6 dispatch cases (XDE 0-5)
-SQTR_DISPATCH_TABLE_2:	; F20D8E
-	ld xwa, 0x8B0004	; F20D8E
-	ld xbc, 0x1E0008E	; F20D93
-	ld xde, 0xFFFF0002	; F20D98
-	call ApPostEvent	; F20D9D
-	push xde	; F20DA1
-	push xhl	; F20DA2
-	push xix	; F20DA3
-	push xiz	; F20DA4
-	call SetWall_JumpStubData	; F20DA5
-	pop xiz	; F20DA9
-	pop xix	; F20DAA
-	pop xhl	; F20DAB
-	pop xde	; F20DAC
+SQTR_DISPATCH_TABLE_2:
+	ld xwa, 0x8B0004
+	ld xbc, 0x1E0008E
+	ld xde, 0xFFFF0002
+	call ApPostEvent
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call SetWall_JumpStubData
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
 	setda 0, 36700	; F20DAD: LD (XIX+5Ch), 0B8h (TMP94C241 encoding)
-	ldw wa, 0x60	; F20DB1
-	call CtrlPanel_SetIndicatorBit	; F20DB4
-	ldmmb_dd24 0x82, 0x10, 0x02, 0x73, 0x28	; F20DB8
-	jr CDlikeSwTtl_ReturnZero2	; F20DBF
-SQTR_DISPATCH_TABLE_2_CASE1:	; F20DC1
-	push xde	; F20DC1
-	push xhl	; F20DC2
-	push xix	; F20DC3
-	push xiz	; F20DC4
-	call SetWall_InlineCodeBlock	; F20DC5
-	pop xiz	; F20DC9
-	pop xix	; F20DCA
-	pop xhl	; F20DCB
-	pop xde	; F20DCC
+	ldw wa, 0x60
+	call CtrlPanel_SetIndicatorBit
+	ldmmb_dd24 0x82, 0x10, 0x02, 0x73, 0x28
+	jr CDlikeSwTtl_ReturnZero2
+SQTR_DISPATCH_TABLE_2_CASE1:
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call SetWall_InlineCodeBlock
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
 	resda 0, 36700	; F20DCD: LD (XIX+5Ch), 0B0h (TMP94C241 encoding)
-	ldw wa, 0x60	; F20DD1
-	call CtrlPanel_SetIndicatorBit	; F20DD4
-	jr CDlikeSwTtl_ReturnZero2	; F20DD8
-SQTR_DISPATCH_TABLE_2_CASE2:	; F20DDA
-	cpdi8 36150, 139	; F20DDA
-	jr nz, CDlikeSwTtl_ReturnZero2	; F20DDF
-	cpdi8 32578, 35	; F20DE1
-	scc16 z, bc	; F20DE6
-	cpdi8 36153, 238	; F20DE8
-	scc16 z, wa	; F20DED
-	and wa, bc	; F20DEF
-	jr z, SQTR_DISPATCH_TABLE_2_CASE5	; F20DF1
-	ld xwa, 0x8B0004	; F20DF3
-	ld xbc, 0x1E0008E	; F20DF8
-	ld xde, 0xFFFF0002	; F20DFD
-	call ApPostEvent	; F20E02
-	jr CDlikeSwTtl_ReturnZero2	; F20E06
-SQTR_DISPATCH_TABLE_2_CASE5:	; F20E08
-	push xde	; F20E08
-	push xhl	; F20E09
-	push xix	; F20E0A
-	push xiz	; F20E0B
-	call SetWall_UpdateSlotIndex	; F20E0C
-	ldmmb_dd24 0x82, 0x10, 0x02, 0x73, 0x28	; F20E10
-	pop xiz	; F20E17
-	pop xix	; F20E18
-	pop xhl	; F20E19
-	pop xde	; F20E1A
-	jr CDlikeSwTtl_ReturnZero2	; F20E1B
-
+	ldw wa, 0x60
+	call CtrlPanel_SetIndicatorBit
+	jr CDlikeSwTtl_ReturnZero2
+SQTR_DISPATCH_TABLE_2_CASE2:
+	cpdi8 36150, 139
+	jr nz, CDlikeSwTtl_ReturnZero2
+	cpdi8 32578, 35
+	scc16 z, bc
+	cpdi8 36153, 238
+	scc16 z, wa
+	and wa, bc
+	jr z, SQTR_DISPATCH_TABLE_2_CASE5
+	ld xwa, 0x8B0004
+	ld xbc, 0x1E0008E
+	ld xde, 0xFFFF0002
+	call ApPostEvent
+	jr CDlikeSwTtl_ReturnZero2
+SQTR_DISPATCH_TABLE_2_CASE5:
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call SetWall_UpdateSlotIndex
+	ldmmb_dd24 0x82, 0x10, 0x02, 0x73, 0x28
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	jr CDlikeSwTtl_ReturnZero2
 ; SqTrAs event handler
-SqTrAs_EventHandler:	; F20E1D
+SqTrAs_EventHandler:
 	cp xde, 0xB
 	jr nz, CDlikeSwTtl_ReturnZero2
 	push xde
@@ -1143,7 +1142,7 @@ SqTrAsSureFunc:
 	jr SqTrAsPs_ReturnZero
 
 ; SqTrAsPsTtl case A
-SqTrAsPsTtl_CaseA:	; F20E62
+SqTrAsPsTtl_CaseA:
 	push xde
 	push xhl
 	push xix
@@ -1156,7 +1155,7 @@ SqTrAsPsTtl_CaseA:	; F20E62
 	jr SqTrAsPsTtl_CaseC
 
 ; SqTrAsPsTtl case B
-SqTrAsPsTtl_CaseB:	; F20E70
+SqTrAsPsTtl_CaseB:
 	push xde
 	push xhl
 	push xix
@@ -1168,7 +1167,7 @@ SqTrAsPsTtl_CaseB:	; F20E70
 	pop xde
 
 ; SqTrAsPsTtl case C
-SqTrAsPsTtl_CaseC:	; F20E7C
+SqTrAsPsTtl_CaseC:
 	ldmmb_dd24 0x82, 0x10, 0x02, 0x73, 0x28
 
 SqTrAsPs_ReturnZero:
@@ -1213,7 +1212,7 @@ SqTrAsPsTtl_Dispatch:	.ascii ":;<>"
 	.byte 0x5b, 0x5a, 0x68, 0x14
 
 ; SqTrAsPsTtl case D
-SqTrAsPsTtl_CaseD:	; F20F09
+SqTrAsPsTtl_CaseD:
 	cp xde, 0xB
 	jr nz, SqTrAsPsTtl_ReturnZero
 	push xde
@@ -1249,7 +1248,7 @@ SqTrAsPsSureFunc:
 	jr SetWall_ReturnZero
 
 ; SqTrAsPsTtl case E
-SqTrAsPsTtl_CaseE:	; F20F46
+SqTrAsPsTtl_CaseE:
 	push xde
 	push xhl
 	push xix
@@ -1265,7 +1264,7 @@ SetWall_ReturnZero:
 	ret
 
 ; SqTrAsPsTtl case F
-SqTrAsPsTtl_CaseF:	; F20F55
+SqTrAsPsTtl_CaseF:
 	.byte 0xc1, 0x36, 0x8d, 0x21, 0xd8, 0x12, 0xd8, 0xca
 	.byte 0x6c, 0x00, 0xd8, 0xd8, 0x61, 0x29, 0xd8, 0xcf
 	.byte 0x0d, 0x00, 0x6a, 0x23, 0xf2, 0x2a, 0x00, 0xe2
@@ -1298,7 +1297,7 @@ SqMdlyPlyTtl_Dispatch:	.ascii ":;<>"
 	.byte 0x5b, 0x5a, 0x1e, 0x68, 0xff, 0x68, 0x3b
 
 ; SqMdlyPly init playback
-SqMdlyPly_InitPlay:	; F20FEF
+SqMdlyPly_InitPlay:
 	cp xde, 0xF
 	jr z, SqMdlyPly_CheckState
 	cp xde, 0x8A
@@ -1317,13 +1316,13 @@ SqMdlyPly_InitPlay:	; F20FEF
 	jr SqMdlyPly_ReturnZero
 
 ; SqMdlyPly send audio command
-SqMdlyPly_SendAudioCmd:	; F21015
+SqMdlyPly_SendAudioCmd:
 	ldw wa, 0xA5
 	call SoundCtrl_SendCommand
 	jr SqMdlyPly_ReturnZero
 
 ; SqMdlyPly check playback state
-SqMdlyPly_CheckState:	; F2101E
+SqMdlyPly_CheckState:
 	push xde
 	push xhl
 	push xix
@@ -1360,7 +1359,7 @@ DkMdlyPlyTtl_Dispatch:	.ascii ":;<>"
 	.byte 0x5b, 0x5a, 0x1e, 0xd4, 0xfe, 0x68, 0x3b
 
 ; DkMdlyPly init playback
-DkMdlyPly_InitPlay:	; F21083
+DkMdlyPly_InitPlay:
 	cp xde, 0xF
 	jr z, LABEL_F210B2
 	cp xde, 0x8A
@@ -1399,7 +1398,7 @@ DkMdlyPly_ReturnZero:
 	ret
 
 ; DkMdlyPly send audio command
-DkMdlyPly_SendAudioCmd:	; F210C1
+DkMdlyPly_SendAudioCmd:
 	lds hl, 0
 	lda_24 xde, 0xe20054
 
@@ -1415,7 +1414,7 @@ LABEL_F210C8:
 	ret
 
 ; DkMdlyPly check playback state
-DkMdlyPly_CheckState:	; F210DE
+DkMdlyPly_CheckState:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), wa
@@ -1433,7 +1432,7 @@ Snd_ParamLookupSetupWerp:
 	ldi_werp 0xFA, 0
 
 ; DkMdlyPly handle result
-DkMdlyPly_HandleResult:	; F210FF
+DkMdlyPly_HandleResult:
 	ldto_werp WA, 0xFA
 	add wa, wa
 	lda_24 xbc, 0xe20074
@@ -1460,13 +1459,13 @@ DkMdlyPly_HandleResult:	; F210FF
 	jr DkMdlyPly_Finalize
 
 ; DkMdlyPly extended check
-DkMdlyPly_ExtendedCheck:	; F2114B
+DkMdlyPly_ExtendedCheck:
 	inc1_werp 0xFA
 	cp_erpw 0xFA, 0x20, 0x00
 	jr lt, DkMdlyPly_HandleResult
 
 ; DkMdlyPly finalize
-DkMdlyPly_Finalize:	; F21155
+DkMdlyPly_Finalize:
 	pop xiz
 	inc 2, xsp
 	ret
@@ -1563,7 +1562,7 @@ DpMdlyDocTtlFunc:
 	lda_24 xix, 0xf21284
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; DpMdlyDocTtlFunc title dispatch
-DpMdlyDocTtl_Dispatch:	; F21284
+DpMdlyDocTtl_Dispatch:
 	sti16_24	135302, 0
 	calr	65452
 	calr	65224
@@ -1583,7 +1582,7 @@ DpMdlyDocTtl_Dispatch:	; F21284
 	.byte 0xa7, 0xfc, 0x68, 0x48
 
 ; DpMdlyDoc case A
-DpMdlyDoc_CaseA:	; F212B0
+DpMdlyDoc_CaseA:
 	cp xde, 0xF
 	jr z, DpMdlyDoc_CaseE
 	cp xde, 0x8C
@@ -1596,16 +1595,16 @@ DpMdlyDoc_CaseA:	; F212B0
 	jr DpMdlyDoc_CaseC
 
 ; DpMdlyDoc case B
-DpMdlyDoc_CaseB:	; F212D5
+DpMdlyDoc_CaseB:
 	ldw wa, 0xD6
 
 ; DpMdlyDoc case C
-DpMdlyDoc_CaseC:	; F212D8
+DpMdlyDoc_CaseC:
 	call SoundCtrl_SendCommand
 	jr DpMdlyDoc_ReturnZero
 
 ; DpMdlyDoc case D
-DpMdlyDoc_CaseD:	; F212DE
+DpMdlyDoc_CaseD:
 	push xde
 	push xhl
 	push xix
@@ -1618,7 +1617,7 @@ DpMdlyDoc_CaseD:	; F212DE
 	jr DpMdlyDoc_ReturnZero
 
 ; DpMdlyDoc case E
-DpMdlyDoc_CaseE:	; F212EC
+DpMdlyDoc_CaseE:
 	push xde
 	push xhl
 	push xix
@@ -1649,7 +1648,7 @@ DpMdlyPdTtlFunc:
 	lda_24 xix, 0xf21334
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; DpMdlyPdTtlFunc title dispatch
-DpMdlyPdTtl_Dispatch:	; F21334
+DpMdlyPdTtl_Dispatch:
 	sti16_24	135302, 0
 	calr	65276
 	calr	65048
@@ -1669,7 +1668,7 @@ DpMdlyPdTtl_Dispatch:	; F21334
 	.byte 0xf7, 0xfb, 0x68, 0x48
 
 ; DpMdlyPd case A
-DpMdlyPd_CaseA:	; F21360
+DpMdlyPd_CaseA:
 	cp xde, 0xF
 	jr z, DpMdlyPd_CaseE
 	cp xde, 0x8C
@@ -1682,16 +1681,16 @@ DpMdlyPd_CaseA:	; F21360
 	jr DpMdlyPd_CaseC
 
 ; DpMdlyPd case B
-DpMdlyPd_CaseB:	; F21385
+DpMdlyPd_CaseB:
 	ldw wa, 0xD6
 
 ; DpMdlyPd case C
-DpMdlyPd_CaseC:	; F21388
+DpMdlyPd_CaseC:
 	call SoundCtrl_SendCommand
 	jr DpMdlyPd_ReturnZero
 
 ; DpMdlyPd case D
-DpMdlyPd_CaseD:	; F2138E
+DpMdlyPd_CaseD:
 	push xde
 	push xhl
 	push xix
@@ -1704,7 +1703,7 @@ DpMdlyPd_CaseD:	; F2138E
 	jr DpMdlyPd_ReturnZero
 
 ; DpMdlyPd case E
-DpMdlyPd_CaseE:	; F2139C
+DpMdlyPd_CaseE:
 	push xde
 	push xhl
 	push xix
@@ -1735,7 +1734,7 @@ DpMdlySmfTtlFunc:
 	lda_24 xix, 0xf213e4
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; DpMdlySmfTtlFunc title dispatch
-DpMdlySmfTtl_Dispatch:	; F213E4
+DpMdlySmfTtl_Dispatch:
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0x76, 0x66, 0x13, 0xf2
 	.byte 0x88, 0x10, 0x02, 0x00, 0x00, 0xf2, 0x86, 0x10
 	.byte 0x02, 0x02, 0x00, 0x00, 0x1e, 0x3f, 0xfe, 0x1e
@@ -1750,7 +1749,7 @@ DpMdlySmfTtl_Dispatch:	; F213E4
 	.byte 0x48
 
 ; DpMdlySmf case A
-DpMdlySmf_CaseA:	; F2141D
+DpMdlySmf_CaseA:
 	cp xde, 0xF
 	jr z, DpMdlySmf_CaseE
 	cp xde, 0x8C
@@ -1763,16 +1762,16 @@ DpMdlySmf_CaseA:	; F2141D
 	jr DpMdlySmf_CaseC
 
 ; DpMdlySmf case B
-DpMdlySmf_CaseB:	; F21442
+DpMdlySmf_CaseB:
 	ldw wa, 0xD6
 
 ; DpMdlySmf case C
-DpMdlySmf_CaseC:	; F21445
+DpMdlySmf_CaseC:
 	call SoundCtrl_SendCommand
 	jr DpMdlySmf_ReturnZero
 
 ; DpMdlySmf case D
-DpMdlySmf_CaseD:	; F2144B
+DpMdlySmf_CaseD:
 	push xde
 	push xhl
 	push xix
@@ -1785,7 +1784,7 @@ DpMdlySmf_CaseD:	; F2144B
 	jr DpMdlySmf_ReturnZero
 
 ; DpMdlySmf case E
-DpMdlySmf_CaseE:	; F21459
+DpMdlySmf_CaseE:
 	push xde
 	push xhl
 	push xix
@@ -1816,7 +1815,7 @@ DpMdlySmfLyrTtlFunc:
 	lda_24 xix, 0xf214a2
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; DpMdlySmfLyrTtlFunc title dispatch
-DpMdlySmfLyrTtl_Dispatch:	; F214A2
+DpMdlySmfLyrTtl_Dispatch:
 	.byte 0xc1, 0x37, 0x8d, 0x21, 0xc9, 0xcf, 0x6c, 0x6e
 	.byte 0x26, 0xc9, 0xcf, 0x76, 0x66, 0x13, 0xf2, 0x88
 	.byte 0x10, 0x02, 0x00, 0x00, 0xf2, 0x86, 0x10, 0x02
@@ -1845,7 +1844,7 @@ DpMdlySmfLyrTtl_Dispatch:	; F214A2
 	jr	59
 
 ; DpMdlySmfLyr case A
-DpMdlySmfLyr_CaseA:	; F2150E
+DpMdlySmfLyr_CaseA:
 	cp xde, 0xF
 	jr z, DpMdlySmfLyr_CaseC
 	cp xde, 0x8C
@@ -1857,7 +1856,7 @@ DpMdlySmfLyr_CaseA:	; F2150E
 	jr DpMdlySmfLyr_ReturnZero
 
 ; DpMdlySmfLyr case B
-DpMdlySmfLyr_CaseB:	; F2152F
+DpMdlySmfLyr_CaseB:
 	push xde
 	push xhl
 	push xix
@@ -1870,7 +1869,7 @@ DpMdlySmfLyr_CaseB:	; F2152F
 	jr DpMdlySmfLyr_ReturnZero
 
 ; DpMdlySmfLyr case C
-DpMdlySmfLyr_CaseC:	; F2153D
+DpMdlySmfLyr_CaseC:
 	push xde
 	push xhl
 	push xix
@@ -1897,7 +1896,7 @@ NameGetFuncCall:
 	lda_24 xix, 0xf21578
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ; NameGetFuncCall dispatch
-NameGetFuncCall_Dispatch:	; F21578
+NameGetFuncCall_Dispatch:
 	.byte 0x0b, 0x10, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x80
 	.byte 0xf2, 0x0b, 0x00, 0x00, 0x0b, 0xe8, 0x1a, 0x1d
 	.byte 0xf3, 0x0c, 0xff, 0xf1, 0xe8, 0x1a, 0x30, 0xb8
@@ -1988,7 +1987,7 @@ NameGetFuncCall_Dispatch:	; F21578
 	.byte 0xfa
 
 ; NameGetFuncCall entry handler
-NameGetFunc_Entry:	; F21831
+NameGetFunc_Entry:
 	lds32 xhl, 0
 	ret
 
@@ -2461,7 +2460,7 @@ DpDocTtlFunc:
 	lda_24 xix, 0xf21d5a
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; DpDocTtlFunc title dispatch
-DpDocTtl_Dispatch:	; F21D5A
+DpDocTtl_Dispatch:
 	.byte 0xf2, 0x86, 0x10, 0x02, 0x02, 0x00, 0x00, 0x1e
 	.byte 0xd6, 0xf4, 0x1e, 0xf2, 0xf3, 0x1e, 0x51, 0xfb
 	.byte 0x78, 0xce, 0x00, 0x1d, 0x7a, 0xbf, 0xfe, 0xdb
@@ -2470,7 +2469,7 @@ DpDocTtl_Dispatch:	; F21D5A
 	.byte 0x00
 
 ; DpDocTtl case A
-DpDoc_CaseA:	; F21D83
+DpDoc_CaseA:
 	ld xwa, xde
 	cp xde, 0x5
 	jr z, DpDoc_CaseE
@@ -2492,12 +2491,12 @@ DpDoc_CaseA:	; F21D83
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; DpDocTtl case B
-DpDoc_CaseB:	; F21DD0
+DpDoc_CaseB:
 	ldw wa, 0xFFFF
 	jr LABEL_F21E00
 
 ; DpDocTtl case C
-DpDoc_CaseC:	; F21DD5
+DpDoc_CaseC:
 	call SeqState_GetFlags
 	bit 1, hl
 	jr z, LABEL_F21DE7
@@ -2514,12 +2513,12 @@ LABEL_F21DE7:
 	jr DpDocTtl_ReturnZero
 
 ; DpDocTtl case D
-DpDoc_CaseD:	; F21DF9
+DpDoc_CaseD:
 	calr CDlikeSwTtl_DocBitCheck
 	jr DpDocTtl_ReturnZero
 
 ; DpDocTtl case E
-DpDoc_CaseE:	; F21DFE
+DpDoc_CaseE:
 	lds wa, 1
 
 LABEL_F21E00:
@@ -2530,31 +2529,31 @@ LABEL_F21E00:
 	ldw wa, 0xD6
 
 ; DpDocTtl case F
-DpDoc_CaseF:	; F21E0D
+DpDoc_CaseF:
 	call SoundCtrl_SendCommand
 	jr DpDocTtl_ReturnZero
 
 ; DpDocTtl case G
-DpDoc_CaseG:	; F21E13
+DpDoc_CaseG:
 	cp xde, 0x84
 	jr z, DpDoc_CaseH
 	cp xde, 0x4
 	jr nz, DpDocTtl_ReturnZero
 
 ; DpDocTtl case H
-DpDoc_CaseH:	; F21E23
+DpDoc_CaseH:
 	calr CDlikeSwTtl_DocConfirmStart
 	jr DpDocTtl_ReturnZero
 
 ; DpDocTtl case I
-DpDoc_CaseI:	; F21E28
+DpDoc_CaseI:
 	cp xde, 0x84
 	jr z, DpDoc_CaseJ
 	cp xde, 0x4
 	jr nz, DpDocTtl_ReturnZero
 
 ; DpDocTtl case J
-DpDoc_CaseJ:	; F21E38
+DpDoc_CaseJ:
 	calr CDlikeSwTtl_SongConfirmDispatch
 
 DpDocTtl_ReturnZero:
@@ -2581,7 +2580,7 @@ DpPdTtlFunc:
 	lda_24 xix, 0xf21e89
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; DpPdTtlFunc title dispatch
-DpPdTtl_Dispatch:	; F21E89
+DpPdTtl_Dispatch:
 	.byte 0xf2, 0x86, 0x10, 0x02, 0x02, 0x00, 0x00, 0x1e
 	.byte 0xa7, 0xf3, 0x1e, 0xc3, 0xf2, 0x1e, 0x66, 0xfa
 	.byte 0x78, 0xce, 0x00, 0x1d, 0x7a, 0xbf, 0xfe, 0xdb
@@ -2590,7 +2589,7 @@ DpPdTtl_Dispatch:	; F21E89
 	.byte 0x00
 
 ; DpPdTtl case A
-DpPd_CaseA:	; F21EB2
+DpPd_CaseA:
 	ld xwa, xde
 	cp xde, 0x5
 	jr z, DpPd_CaseE
@@ -2612,12 +2611,12 @@ DpPd_CaseA:	; F21EB2
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; DpPdTtl case B
-DpPd_CaseB:	; F21EFF
+DpPd_CaseB:
 	ldw wa, 0xFFFF
 	jr LABEL_F21F2F
 
 ; DpPdTtl case C
-DpPd_CaseC:	; F21F04
+DpPd_CaseC:
 	call SeqState_GetFlags
 	bit 1, hl
 	jr z, LABEL_F21F16
@@ -2634,12 +2633,12 @@ LABEL_F21F16:
 	jr DpPdTtl_ReturnZero
 
 ; DpPdTtl case D
-DpPd_CaseD:	; F21F28
+DpPd_CaseD:
 	calr CDlikeSwTtl_PdBitCheck
 	jr DpPdTtl_ReturnZero
 
 ; DpPdTtl case E
-DpPd_CaseE:	; F21F2D
+DpPd_CaseE:
 	lds wa, 1
 
 LABEL_F21F2F:
@@ -2650,31 +2649,31 @@ LABEL_F21F2F:
 	ldw wa, 0xD6
 
 ; DpPdTtl case F
-DpPd_CaseF:	; F21F3C
+DpPd_CaseF:
 	call SoundCtrl_SendCommand
 	jr DpPdTtl_ReturnZero
 
 ; DpPdTtl case G
-DpPd_CaseG:	; F21F42
+DpPd_CaseG:
 	cp xde, 0x84
 	jr z, DpPd_CaseH
 	cp xde, 0x4
 	jr nz, DpPdTtl_ReturnZero
 
 ; DpPdTtl case H
-DpPd_CaseH:	; F21F52
+DpPd_CaseH:
 	calr CDlikeSwTtl_PdConfirmStart
 	jr DpPdTtl_ReturnZero
 
 ; DpPdTtl case I
-DpPd_CaseI:	; F21F57
+DpPd_CaseI:
 	cp xde, 0x84
 	jr z, DpPd_CaseJ
 	cp xde, 0x4
 	jr nz, DpPdTtl_ReturnZero
 
 ; DpPdTtl case J
-DpPd_CaseJ:	; F21F67
+DpPd_CaseJ:
 	calr CDlikeSwTtl_SongConfirmDispatch
 
 DpPdTtl_ReturnZero:
@@ -2701,7 +2700,7 @@ DpSmfTtlFunc:
 	lda_24 xix, 0xf21fb9
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; DpSmfTtlFunc title dispatch
-DpSmfTtl_Dispatch:	; F21FB9
+DpSmfTtl_Dispatch:
 	.byte 0xc1, 0x37, 0x8d, 0x3f, 0x72, 0x76, 0xff, 0x00
 	.byte 0xf2, 0x88, 0x10, 0x02, 0x00, 0x00, 0xf2, 0x86
 	.byte 0x10, 0x02, 0x02, 0x00, 0x00, 0x1e, 0x69, 0xf2
@@ -2714,7 +2713,7 @@ DpSmfTtl_Dispatch:	; F21FB9
 	.byte 0xfa, 0x1e, 0x50, 0xef, 0x78, 0xb8, 0x00
 
 ; DpSmfTtl case A
-DpSmf_CaseA:	; F22008
+DpSmf_CaseA:
 	ld xwa, xde
 	cp xde, 0x5
 	jr z, DpSmf_CaseE
@@ -2736,12 +2735,12 @@ DpSmf_CaseA:	; F22008
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; DpSmfTtl case B
-DpSmf_CaseB:	; F22055
+DpSmf_CaseB:
 	ldw wa, 0xFFFF
 	jr LABEL_F22085
 
 ; DpSmfTtl case C
-DpSmf_CaseC:	; F2205A
+DpSmf_CaseC:
 	call SeqState_GetFlags
 	bit 1, hl
 	jr z, LABEL_F2206C
@@ -2758,12 +2757,12 @@ LABEL_F2206C:
 	jr DpSmfTtl_ReturnZero
 
 ; DpSmfTtl case D
-DpSmf_CaseD:	; F2207E
+DpSmf_CaseD:
 	calr CDlikeSwTtl_SongBit1Check
 	jr DpSmfTtl_ReturnZero
 
 ; DpSmfTtl case E
-DpSmf_CaseE:	; F22083
+DpSmf_CaseE:
 	lds wa, 1
 
 LABEL_F22085:
@@ -2774,31 +2773,31 @@ LABEL_F22085:
 	ldw wa, 0xD6
 
 ; DpSmfTtl case F
-DpSmf_CaseF:	; F22092
+DpSmf_CaseF:
 	call SoundCtrl_SendCommand
 	jr DpSmfTtl_ReturnZero
 
 ; DpSmfTtl case G
-DpSmf_CaseG:	; F22098
+DpSmf_CaseG:
 	cp xde, 0x84
 	jr z, DpSmf_CaseH
 	cp xde, 0x4
 	jr nz, DpSmfTtl_ReturnZero
 
 ; DpSmfTtl case H
-DpSmf_CaseH:	; F220A8
+DpSmf_CaseH:
 	calr CDlikeSwTtl_SongConfirmStart
 	jr DpSmfTtl_ReturnZero
 
 ; DpSmfTtl case I
-DpSmf_CaseI:	; F220AD
+DpSmf_CaseI:
 	cp xde, 0x84
 	jr z, DpSmf_CaseJ
 	cp xde, 0x4
 	jr nz, DpSmfTtl_ReturnZero
 
 ; DpSmfTtl case J
-DpSmf_CaseJ:	; F220BD
+DpSmf_CaseJ:
 	calr CDlikeSwTtl_SongConfirmDispatch
 
 DpSmfTtl_ReturnZero:
@@ -2825,7 +2824,7 @@ DpSmfLyrTtlFunc:
 	lda_24 xix, 0xf2210e
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; DpSmfLyrTtlFunc title dispatch
-DpSmfLyrTtl_Dispatch:	; F2210E
+DpSmfLyrTtl_Dispatch:
 	ld	xwa, 7274534
 	ld	xbc, 29818890
 	lds32	xde, 0
@@ -2839,7 +2838,7 @@ DpSmfLyrTtl_Dispatch:	; F2210E
 	jrl	174
 
 ; DpSmfLyrTtl case A
-DpSmfLyr_CaseA:	; F22135
+DpSmfLyr_CaseA:
 	cp xde, 0x88
 	jr z, LABEL_F221B2
 	cp xde, 0x85
@@ -2896,7 +2895,7 @@ LABEL_F221B2:
 	jr SeqStep_ReturnZero
 
 ; DpSmfLyrTtl case B
-DpSmfLyr_CaseB:	; F221BB
+DpSmfLyr_CaseB:
 	cp xde, 0x84
 	jr z, LABEL_F221CB
 	cp xde, 0x4
@@ -2907,7 +2906,7 @@ LABEL_F221CB:
 	jr SeqStep_ReturnZero
 
 ; DpSmfLyrTtl case C
-DpSmfLyr_CaseC:	; F221D0
+DpSmfLyr_CaseC:
 	cp xde, 0x84
 	jr z, LABEL_F221E0
 	cp xde, 0x4
@@ -2939,7 +2938,7 @@ SeqStepModeFunc:
 	jr SeqStepMode_ReturnZero
 
 ; DpSmfLyrTtl case D
-DpSmfLyr_CaseD:	; F22208
+DpSmfLyr_CaseD:
 	push xde
 	push xhl
 	push xix
@@ -3021,7 +3020,7 @@ LABEL_F22295:
 	pop xde
 	ret
 ; SqTrSelTtl case A
-SqTrSel_CaseA:	; F222A2
+SqTrSel_CaseA:
 	push xde
 	push xhl
 	push xix

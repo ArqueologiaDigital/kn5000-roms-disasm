@@ -744,7 +744,7 @@ GetEditSwPoint:
 	jp_dri 8, 0x07, 0xF0, 0xEC
 
 ; GetEditSwPoint handler: mode 0 (value=0x2B)
-EditSwParam_Mode0:	; F9A973
+EditSwParam_Mode0:
 	lds wa, 0
 	jr LABEL_F9A97A
 	ldw wa, 0x13F
@@ -755,7 +755,7 @@ LABEL_F9A97A:
 	ret
 
 ; GetEditSwPoint handler: mode 1 (value=0x55)
-EditSwParam_Mode1:	; F9A981
+EditSwParam_Mode1:
 	lds wa, 0
 	jr LABEL_F9A988
 	ldw wa, 0x13F
@@ -766,7 +766,7 @@ LABEL_F9A988:
 	ret
 
 ; GetEditSwPoint handler: mode 2 (value=0x7F)
-EditSwParam_Mode2:	; F9A98F
+EditSwParam_Mode2:
 	lds wa, 0
 	jr LABEL_F9A996
 	ldw wa, 0x13F
@@ -777,31 +777,31 @@ LABEL_F9A996:
 	ret
 
 ; GetEditSwPoint handler: mode 3 (value=0xA9)
-EditSwParam_Mode3:	; F9A99D
+EditSwParam_Mode3:
 	lds wa, 0
 	jr EditSwParam_Mode3_Store
 	ldw wa, 0x13F
 
 ; GetEditSwPoint: store mode 3 result
-EditSwParam_Mode3_Store:	; F9A9A4
+EditSwParam_Mode3_Store:
 	ld (xbc), wa
 	ldw (xde), 0xA9
 	ret
 
 ; GetEditSwPoint handler: mode 4 (value=0xD3)
-EditSwParam_Mode4:	; F9A9AB
+EditSwParam_Mode4:
 	lds wa, 0
 	jr EditSwParam_Mode4_Store
 	ldw wa, 0x13F
 
 ; GetEditSwPoint: store mode 4 result
-EditSwParam_Mode4_Store:	; F9A9B2
+EditSwParam_Mode4_Store:
 	ld (xbc), wa
 	ldw (xde), 0xD3
 	ret
 
 ; GetEditSwPoint handler: tempo table lookup
-EditSwParam_TempoTable:	; F9A9B9
+EditSwParam_TempoTable:
 	ldw	wa, 0x0014
 	.asciz "h!0<"
 	jr	28
@@ -821,7 +821,7 @@ EditSwParam_TempoTable:	; F9A9B9
 	.byte 0x0e
 
 ; GetEditSwPoint handler: default (value=0xA0/0x78)
-EditSwParam_Default:	; F9A9E6
+EditSwParam_Default:
 	ldw (xbc), 0xA0
 	ldw (xde), 0x78
 	ret
@@ -1096,7 +1096,7 @@ StringDraw_JoinPoint:
 	call DrawIcons
 
 ; DirmdEmulator dispatch case A
-DirmdEmu_CaseA:	; F9AC5B
+DirmdEmu_CaseA:
 	pop xiz
 	lda xsp, (xsp + 42)
 	retd 0x6
@@ -1127,14 +1127,14 @@ IvDirmdScreenProc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 ; DirmdEmulator dispatch case B
-DirmdEmu_CaseB:	; F9ACBA
+DirmdEmu_CaseB:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	jrl LABEL_F9AD62
 
 ; DirmdEmulator dispatch case C
-DirmdEmu_CaseC:	; F9ACC6
+DirmdEmu_CaseC:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1224,7 +1224,7 @@ LABEL_F9ADC4:
 	jr LABEL_F9ADE8
 
 ; DirmdEmulator dispatch case D
-DirmdEmu_CaseD:	; F9ADCF
+DirmdEmu_CaseD:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1233,7 +1233,7 @@ DirmdEmu_CaseD:	; F9ADCF
 	jr LABEL_F9ADEB
 
 ; DirmdEmulator dispatch case E
-DirmdEmu_CaseE:	; F9ADDF
+DirmdEmu_CaseE:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1265,7 +1265,7 @@ DirmdTitleFunc:
 	ret
 
 ; DirmdEmulator dispatch case F
-DirmdEmu_CaseF:	; F9AE12
+DirmdEmu_CaseF:
 	.byte 0xc1, 0x38, 0x8d, 0x21, 0xc1, 0x39, 0x8d, 0xf1
 	.byte 0x66, 0x19, 0x30, 0xff, 0x00, 0x1d, 0x50, 0x14
 	.byte 0xfb, 0x30, 0xf5, 0x00, 0x1d, 0x4a, 0x14, 0xfb
@@ -1322,7 +1322,7 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 	.ascii "d^\\[Z"
 
 ; DirmdEmulator default/fallthrough case
-DirmdEmu_DefaultCase:	; F9AF46
+DirmdEmu_DefaultCase:
 	bitda 1, 58334
 	jr z, LABEL_F9AF56
 	ldda8 a, 58332
@@ -1407,7 +1407,7 @@ WindowProc:
 	lda_24 xix, 0xf9b061
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ; WindowProc event dispatch
-WindowProc_EventDispatch:	; F9B061
+WindowProc_EventDispatch:
 	.byte 0xaf, 0x18, 0x20, 0x1d, 0x66, 0x62, 0xfa, 0xbf
 	.byte 0x0c, 0x63, 0xaf, 0x10, 0x20, 0xe8, 0xcf, 0x04
 	.byte 0x00, 0x00, 0x00, 0x66, 0x7a, 0xe8, 0xcf, 0x03
@@ -1460,19 +1460,19 @@ WindowProc_EventDispatch:	; F9B061
 	.byte 0x20, 0xa0, 0x20, 0x78, 0xe9, 0x01
 
 ; WindowProc field set value handler (event 0x1C00048)
-WindowField_SetValue:	; F9B1EF
+WindowField_SetValue:
 	ld xwa, (xsp + 24)
 	ld xiz, 0x1C
 	jr LABEL_F9B20B
 
 ; WindowProc field get value handler (event 0x1C0004A)
-WindowField_GetValue:	; F9B1F9
+WindowField_GetValue:
 	ld xwa, (xsp + 24)
 	ld xiz, 0x1C
 	jr LABEL_F9B223
 
 ; WindowProc field focus handler (event 0x1C00049)
-WindowField_Focus:	; F9B203
+WindowField_Focus:
 	ld xwa, (xsp + 24)
 	ld xiz, 0x20
 
@@ -1485,7 +1485,7 @@ LABEL_F9B20B:
 	jrl AcNaming_ReturnZero
 
 ; WindowProc field read value handler (event 0x1C0004B)
-WindowField_ReadValue:	; F9B21B
+WindowField_ReadValue:
 	ld xwa, (xsp + 24)
 	ld xiz, 0x20
 
@@ -1497,7 +1497,7 @@ LABEL_F9B223:
 	jrl LABEL_F9B3DE
 
 ; WindowProc get child count handler (event 0x1E00094)
-WindowField_GetChildCount:	; F9B230
+WindowField_GetChildCount:
 	ld xwa, (xsp + 24)
 	call GetViewInstance
 	ld xwa, (xhl + 28)
@@ -1582,7 +1582,7 @@ LABEL_F9B2AA:
 	jrl LABEL_F9B3D8
 
 ; WindowProc default handler (returns 0)
-WindowProc_DefaultHandler:	; F9B320
+WindowProc_DefaultHandler:
 	ld xwa, (xsp + 20)
 	srl xwa, 0
 	and xwa, 0xFFF

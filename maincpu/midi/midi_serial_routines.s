@@ -60,7 +60,7 @@ INTRX0_CLEAR_ERROR_STATE:
 	popw wa
 	reti
 
-INTTX0_HANDLER:	; FCF15B
+INTTX0_HANDLER:
 	pushw wa
 	pushw hl
 	ldda8 a, 1065
@@ -128,7 +128,7 @@ IntTx0_Epilogue:
 	popw wa
 	reti
 
-INTRX0_HANDLER:	; FCF1F0
+INTRX0_HANDLER:
 	pushw wa
 	ldda8 a, 209
 	and a, 0x1C
@@ -880,7 +880,7 @@ SC0Init_AlternateBaudTable:
 SC0Init_BaudTableReturn:
 	ret
 
-READ_COM_SELECT_SWITCH:	; FCF8F6
+READ_COM_SELECT_SWITCH:
 	ldda8 a, 104
 	srl a, 4
 	ld xix, 0xFCF90C

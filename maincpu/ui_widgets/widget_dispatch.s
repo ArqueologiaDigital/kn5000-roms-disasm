@@ -2122,7 +2122,7 @@ LABEL_EE2F8C:
 ; Index: event byte from queue (0x00-0xBF), entries: 192
 ; Called from MidiPkt_ProcessEventQueue (midipkt_routines.s:275)
 ; Most entries are Nop; active entries dispatch to sub-table handlers
-MidiPkt_EventType_Table:	; EE304C
+MidiPkt_EventType_Table:
 	.long MidiPkt_Nop
 	.long MidiPkt_Nop
 	.long MidiPkt_Nop

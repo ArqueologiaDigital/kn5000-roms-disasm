@@ -261,7 +261,7 @@ LABEL_F77FC4:
 	jrl	271
 
 ; ComSetGridCheck event handler dispatch
-ComSetGrid_EventHandler:	; F781C1
+ComSetGrid_EventHandler:
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 22)
 	srl xwa, 0
@@ -1279,7 +1279,7 @@ LABEL_F78A11:
 	.byte 0x00
 
 ; PmemOutLGridCheck dispatch
-PmemOutL_GridCheck:	; F79102
+PmemOutL_GridCheck:
 	ld xwa, xhl
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -1368,7 +1368,7 @@ LABEL_F791AE:
 	ld xbc, 0x1E0008C
 
 ; PmemOutLGridCheck return
-PmemOutL_GridCheck_Return:	; F791D9
+PmemOutL_GridCheck_Return:
 	call SendEvent
 
 PmemOutGrid_ReturnZero:
@@ -1423,7 +1423,7 @@ PmemOutRGridCheck:
 ; event handling, and message routing.
 ; -----------------------------------------------------------------------------
 
-TtMdCtlMsg_EventDispatch:	; F79260
+TtMdCtlMsg_EventDispatch:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xeb, 0x8e, 0xbf, 0x20, 0x30, 0xee, 0x89
@@ -1656,7 +1656,7 @@ TtMdCtlMsg_EventDispatch:	; F79260
 	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x36, 0x01
 
 ; CtlMsgGridCheck event handler dispatch
-CtlMsgGrid_EventHandler:	; F79957
+CtlMsgGrid_EventHandler:
 	ld xwa, xiz
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -2317,7 +2317,7 @@ LABEL_F79FF0:
 	.byte 0xad, 0x68, 0x71
 
 ; MidiSetup title dispatch
-MidiSetup_TtlDispatch:	; F7A113
+MidiSetup_TtlDispatch:
 	ld xwa, (xsp + 30)
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -2388,7 +2388,7 @@ TtMdPart:
 	jr MidiSetup_TtlCase2
 
 ; MidiSetup title case 1
-MidiSetup_TtlCase1:	; F7A1DA
+MidiSetup_TtlCase1:
 	or xde, xde
 	jr nz, TtMdPart_ReturnZero
 	ld xwa, 0x1400002
@@ -2396,7 +2396,7 @@ MidiSetup_TtlCase1:	; F7A1DA
 	ld xde, 0x3F
 
 ; MidiSetup title case 2
-MidiSetup_TtlCase2:	; F7A1ED
+MidiSetup_TtlCase2:
 	call MainFuncCall
 
 TtMdPart_ReturnZero:
@@ -2439,7 +2439,7 @@ AcMidiPartGridBoxProc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 ; MidiSetup title case 3
-MidiSetup_TtlCase3:	; F7A275
+MidiSetup_TtlCase3:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
@@ -2483,7 +2483,7 @@ MidiSetup_TtlCase3:	; F7A275
 	jrl LABEL_F7A7E2
 
 ; MidiSetup title case 4
-MidiSetup_TtlCase4:	; F7A2F0
+MidiSetup_TtlCase4:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
@@ -2516,7 +2516,7 @@ MidiSetup_TtlCase4:	; F7A2F0
 	jrl MidiPart_ReturnZeroJmp
 
 ; MidiSetup title case 5
-MidiSetup_TtlCase5:	; F7A34F
+MidiSetup_TtlCase5:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
@@ -2905,7 +2905,7 @@ LABEL_F7A7E2:
 	jr MidiPart_ReturnZeroJmp
 
 ; MidiSetup grid box dispatch
-MidiSetup_GridBoxDispatch:	; F7A7E8
+MidiSetup_GridBoxDispatch:
 	ld xwa, (xsp + 32)
 	call GetViewInstance
 	ld xwa, (xhl + 62)
@@ -2913,7 +2913,7 @@ MidiSetup_GridBoxDispatch:	; F7A7E8
 	jr LABEL_F7A821
 
 ; MidiSetup grid box case 1
-MidiSetup_GridBoxCase1:	; F7A7F5
+MidiSetup_GridBoxCase1:
 	ld xwa, (xsp + 32)
 	call GetViewInstance
 	ld xwa, (xhl + 74)
@@ -2951,7 +2951,7 @@ LABEL_F7A821:
 	jr MidiSetup_GridBoxCase3
 
 ; MidiSetup grid box case 2
-MidiSetup_GridBoxCase2:	; F7A83F
+MidiSetup_GridBoxCase2:
 	ld xwa, (xsp + 32)
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -2959,7 +2959,7 @@ MidiSetup_GridBoxCase2:	; F7A83F
 	ld xde, (xsp + 24)
 
 ; MidiSetup grid box case 3
-MidiSetup_GridBoxCase3:	; F7A84F
+MidiSetup_GridBoxCase3:
 	call ApFuncCall
 
 MidiPart_ReturnZeroJmp:
@@ -2967,14 +2967,14 @@ MidiPart_ReturnZeroJmp:
 	jr MidiSetup_GridBoxCase5
 
 ; MidiSetup grid box case 4
-MidiSetup_GridBoxCase4:	; F7A857
+MidiSetup_GridBoxCase4:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
 	call InheritedProc
 
 ; MidiSetup grid box case 5
-MidiSetup_GridBoxCase5:	; F7A864
+MidiSetup_GridBoxCase5:
 	pop xiz
 	lda xsp, (xsp + 32)
 	ret
@@ -3122,7 +3122,7 @@ LABEL_F7A8D4:
 	.byte 0xfe, 0x78, 0x22, 0x01
 
 ; MidiSetup event handler dispatch (6-entry, table 0xE806FC)
-MidiSetup_EventHandler:	; F7AC20
+MidiSetup_EventHandler:
 	ld xwa, (xsp + 34)
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -3424,7 +3424,7 @@ LABEL_F7B4F1:
 	ret
 
 
-BitmapTechnics:	; f7b578
+BitmapTechnics:
 	cp xbc, 0x1E000A3
 	jr z, LABEL_F7B59F
 	cp xbc, 0x1E000A2
@@ -3447,7 +3447,7 @@ LABEL_F7B59F:
 	ret
 
 
-BitmapKn5000:	; f7b5a5
+BitmapKn5000:
 	cp xbc, 0x1E000A3
 	jr z, LABEL_F7B5CC
 	cp xbc, 0x1E000A2
@@ -3614,17 +3614,17 @@ LABEL_F7B70B:
 	jr LswLeftHold_PopIzRet
 
 ; IvSdpartProc title case 0
-IvSdpart_TtlCase0:	; F7B716
+IvSdpart_TtlCase0:
 	ld xhl, 0x28082
 	jr LswLeftHold_PopIzRet
 
 ; IvSdpartProc title case 1
-IvSdpart_TtlCase1:	; F7B71D
+IvSdpart_TtlCase1:
 	lds32 xhl, 4
 	jr LswLeftHold_PopIzRet
 
 ; IvSdpartProc title case 2
-IvSdpart_TtlCase2:	; F7B721
+IvSdpart_TtlCase2:
 	lds32 xhl, 1
 
 LswLeftHold_PopIzRet:
@@ -10092,7 +10092,7 @@ PsMixerControlProc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 ; PsMixerControlProc control handler dispatch (10-entry)
-PsMixer_ControlHandler:	; F7FB04
+PsMixer_ControlHandler:
 	ld xwa, (xsp + 82)
 	cp xwa, 0x4
 	jr z, LABEL_F7FB86
@@ -10151,7 +10151,7 @@ AudioCtrl_MainFuncCallPt:
 	jrl AudioCtrl_ReturnZero
 
 ; PsMixer control case 1
-PsMixer_ControlCase1:	; F7FBB6
+PsMixer_ControlCase1:
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -10189,7 +10189,7 @@ LABEL_F7FC08:
 	jrl AudioCtrl_ReturnZero
 
 ; PsMixer control case 2
-PsMixer_ControlCase2:	; F7FC1B
+PsMixer_ControlCase2:
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -10224,7 +10224,7 @@ PsMixer_ControlCase2:	; F7FC1B
 	jrl PsMixer_SendEventAndForward
 
 ; PsMixer control case 3
-PsMixer_ControlCase3:	; F7FC85
+PsMixer_ControlCase3:
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -10235,14 +10235,14 @@ PsMixer_ControlCase3:	; F7FC85
 	jrl PsMixer_SendEventAndForward
 
 ; PsMixer control case 4
-PsMixer_ControlCase4:	; F7FC9F
+PsMixer_ControlCase4:
 	ld16_24 xwa, 0x024796
 	muls wa, 0x5
 	ld (xsp + 8), wa
 	ldw (xsp + 10), 0x0
 
 ; PsMixer control dispatch helper
-PsMixer_ControlHelper:	; F7FCB0
+PsMixer_ControlHelper:
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
 	ld (xsp + 4), xhl
@@ -10275,7 +10275,7 @@ PsMixer_ControlHelper:	; F7FCB0
 	jr LABEL_F7FD1F
 
 ; PsMixer event callback dispatch
-PsMixer_EventCallback:	; F7FD13
+PsMixer_EventCallback:
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1C0000E
 	ld xhl, (xhl)
@@ -10287,7 +10287,7 @@ LABEL_F7FD1F:
 	ldw (xsp + 12), 0x0
 
 ; PsMixer grid loop handler
-PsMixer_GridLoop:	; F7FD2C
+PsMixer_GridLoop:
 	ld bc, (xsp + 8)
 	extz xbc
 	ld wa, iz
@@ -10359,7 +10359,7 @@ LABEL_F7FDEF:
 	jrl PsMixer_SendEventAndForward
 
 ; PsMixer control case 5
-PsMixer_ControlCase5:	; F7FDFE
+PsMixer_ControlCase5:
 	ld xwa, 0x2600024
 	ld xbc, 0x1E00029
 	ld xde, (xsp + 82)
@@ -10453,7 +10453,7 @@ LABEL_F7FEF6:
 	jrl AudioCtrl_ReturnToCallerExit
 
 ; Audio controller dispatch handler
-AudioCtrl_DispatchHandler:	; F7FF08
+AudioCtrl_DispatchHandler:
 	cp iz, 0x88
 	jrl lt, LABEL_F7FFFB
 	cp iz, 0x8C
@@ -10656,7 +10656,7 @@ AudioCtrl_ReturnToCallerExit:
 	jrl AudioCtrl_ProcessParamsAndReturn
 
 ; PsMixer control case 6
-PsMixer_ControlCase6:	; F80196
+PsMixer_ControlCase6:
 	ld xwa, 0x2600024
 	ld xbc, 0x1E00029
 	ld xde, (xsp + 82)
@@ -10700,7 +10700,7 @@ LABEL_F801F9:
 	jrl AudioCtrl_ProcessParamsAndReturn
 
 ; PsMixer control case 7
-PsMixer_ControlCase7:	; F80205
+PsMixer_ControlCase7:
 	ld xwa, 0x2600024
 	ld xbc, 0x1E00029
 	ld xde, (xsp + 82)
@@ -10738,7 +10738,7 @@ LABEL_F80268:
 	jrl AudioCtrl_ProcessParamsAndReturn
 
 ; PsMixer control case 8
-PsMixer_ControlCase8:	; F80274
+PsMixer_ControlCase8:
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -10794,7 +10794,7 @@ LABEL_F802F1:
 	ldw (xsp + 12), 0x0
 
 ; PsMixer array read handler
-PsMixer_ArrayReadHandler:	; F8031C
+PsMixer_ArrayReadHandler:
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
 	ldfr_werp HL, 0xFA
@@ -10836,7 +10836,7 @@ PsMixer_ArrayReadHandler:	; F8031C
 	jr AudioCtrl_MixerLoopNext
 
 ; AudioCtrl mixer dispatch handler
-AudioCtrl_MixerDispatch:	; F80393
+AudioCtrl_MixerDispatch:
 	ld de, (xsp + 66)
 	extz xde
 	ld xwa, (xsp + 4)
@@ -10893,7 +10893,7 @@ LABEL_F80406:
 	ldw (xsp + 12), 0x0
 
 ; AudioCtrl array read handler
-AudioCtrl_ArrayReadHandler:	; F80431
+AudioCtrl_ArrayReadHandler:
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
 	ldfr_werp HL, 0xFA
@@ -10929,7 +10929,7 @@ AudioCtrl_ArrayReadHandler:	; F80431
 	jr LABEL_F804E5
 
 ; AudioCtrl dispatch callback
-AudioCtrl_DispatchCallback:	; F80493
+AudioCtrl_DispatchCallback:
 	ld xde, (xwa)
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
@@ -10971,7 +10971,7 @@ LABEL_F804E5:
 	jrl AudioCtrl_ReturnZero
 
 ; PsMixer control case 9
-PsMixer_ControlCase9:	; F80503
+PsMixer_ControlCase9:
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -11125,7 +11125,7 @@ LABEL_F806AE:
 	ldw (xsp + 10), 0x0
 
 ; PsMixer event forward helper
-PsMixer_EventForwardHelper:	; F806BF
+PsMixer_EventForwardHelper:
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
 	ld (xsp + 4), xhl
@@ -11156,7 +11156,7 @@ LABEL_F80704:
 	jr AudioCtrl_ReturnZero
 
 ; PsMixer control common handler
-PsMixer_ControlCommon:	; F80713
+PsMixer_ControlCommon:
 	pushw 0xE9
 	pushw 0xF58E
 	ld xwa, (xsp + 86)
@@ -11169,7 +11169,7 @@ AudioCtrl_ReturnZero:
 	jr LABEL_F80734
 
 ; PsMixer control return
-PsMixer_ControlReturn:	; F80727
+PsMixer_ControlReturn:
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -14672,7 +14672,7 @@ DemoMenu_BuildItemWorkspace:
 	jr DemoMenu_BuildItemWorkspace_Post
 
 ; DemoMenu workspace function
-DemoMenu_WorkspaceFunc:	; F83D37
+DemoMenu_WorkspaceFunc:
 	ld wa, (xsp + 6)
 	sub wa, 0x9
 	cps wa, 0
@@ -14686,7 +14686,7 @@ DemoMenu_WorkspaceFunc:	; F83D37
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; DemoMenu workspace dispatch (6-entry, table 0xE9F984)
-DemoMenu_WorkspaceDispatch:	; F83D5C
+DemoMenu_WorkspaceDispatch:
 	.byte 0xf2, 0xe0, 0x47, 0x02, 0x56, 0x68, 0x2a, 0xf2
 	.byte 0xe2, 0x47, 0x02, 0x56, 0x68, 0x23, 0xf2, 0xe4
 	.byte 0x47, 0x02, 0x56, 0x68, 0x13, 0xf2, 0xe6, 0x47
@@ -14711,7 +14711,7 @@ DemoMenu_BuildItemWorkspace_Post:
 	ret
 
 ; DemoMenu workspace return
-DemoMenu_WorkspaceReturn:	; F83DB3
+DemoMenu_WorkspaceReturn:
 	cp wa, 0x8
 	jr ugt, DemoMenu_DescriptorFunc
 	extz xwa
@@ -14722,7 +14722,7 @@ DemoMenu_WorkspaceReturn:	; F83DB3
 	ret
 
 ; DemoMenu descriptor function
-DemoMenu_DescriptorFunc:	; F83DC7
+DemoMenu_DescriptorFunc:
 	sub wa, 0x9
 	cps wa, 0
 	jr c, DemoMenu_DescriptorReturn
@@ -14749,7 +14749,7 @@ LABEL_F83DE9:
 	ret
 
 ; DemoMenu descriptor return
-DemoMenu_DescriptorReturn:	; F83E0D
+DemoMenu_DescriptorReturn:
 	lds hl, 0
 	ret
 
@@ -14995,7 +14995,7 @@ LABEL_F840C5:
 	ret
 
 
-VwUserBitmapSpProc:	; f840cc
+VwUserBitmapSpProc:
 	lda xsp, (xsp - 10)
 	push xiz
 	cp xbc, 0x1C0000D
@@ -15400,7 +15400,7 @@ LABEL_F844C2:
 	jrl AudioCtrl_ReturnZeroJmp
 
 ; AcPresCtrl event case 0
-AcPresCtrl_Case0:	; F844DA
+AcPresCtrl_Case0:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	ld wa, (xhl + 26)
@@ -15414,17 +15414,17 @@ AcPresCtrl_Case0:	; F844DA
 	jr AcPresCtrl_Case3
 
 ; AcPresCtrl event case 1
-AcPresCtrl_Case1:	; F844FA
+AcPresCtrl_Case1:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
 
 ; AcPresCtrl event case 2
-AcPresCtrl_Case2:	; F84502
+AcPresCtrl_Case2:
 	call InheritedProc
 
 ; AcPresCtrl event case 3
-AcPresCtrl_Case3:	; F84506
+AcPresCtrl_Case3:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -15454,7 +15454,7 @@ AcPresentationControlProc:
 	lda_24 xix, 0xf84563
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ; AcPresentationControlProc event dispatch (11-entry, table 0xE9F9B2)
-AcPresCtrl_EventDispatch:	; F84563
+AcPresCtrl_EventDispatch:
 	; --- AcPresentationControlProc jump table handler body ---
 	; Handles events 0x1C00002-0x1C0000C via jump table at 0xE9F9B2.
 	; Dispatches presentation control events: start, register handlers,
@@ -15494,7 +15494,7 @@ LABEL_F845D1:
 
 
 ; AcPresCtrl event case 4
-AcPresCtrl_Case4:	; F845D8
+AcPresCtrl_Case4:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -15506,7 +15506,7 @@ AcPresCtrl_Case4:	; F845D8
 	jrl AcPresent_ReturnZeroJmp
 
 ; AcPresCtrl event case 5
-AcPresCtrl_Case5:	; F845F6
+AcPresCtrl_Case5:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -15568,7 +15568,7 @@ AcPresent_ReturnZeroJmp:
 	jr LABEL_F84697
 
 ; AcPresCtrl default case
-AcPresCtrl_DefaultCase:	; F8468B
+AcPresCtrl_DefaultCase:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)

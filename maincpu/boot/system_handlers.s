@@ -13,10 +13,10 @@
 .equ LABEL_EF07A2, Boot_HandleComboDisplay
 .equ LABEL_EF07F3, Boot_HandleFactoryReset
 
-INTT2_HANDLER:	; EF08A4
+INTT2_HANDLER:
 	reti
 
-NMI_HANDLER:	; EF08A5
+NMI_HANDLER:
 	sti16_24 0x00ffca, 0x0000
 	calr NMI_StorePayloadChecksums
 	bitda 2, 64941
@@ -50,7 +50,7 @@ LABEL_EF08D2:
 ;        On success the checksums are stored so SubCPU_Payload_Verify can verify
 ;        the payload on the next boot and show the splash screen (not "ALL INITIAL SETTING!").
 ; ===========================================================================
-NMI_StorePayloadChecksums:	; EF08D4
+NMI_StorePayloadChecksums:
 LABEL_EF08D4:
 	cpdi8 1024, 128
 	ret nz
@@ -94,7 +94,7 @@ LABEL_EF0914:
 ;   - SubCPU_Payload_GetErrorFlag - Reads the error flag
 ;   - ErrorDialog_CPUTransmissionError - Error dialog shown on failure
 ; ===========================================================================
-SubCPU_Payload_Verify:	; EF092B
+SubCPU_Payload_Verify:
 LABEL_EF092B:
 	ld xwa, 0xF180	; Start of payload region 1
 	ldw bc, 0x800	; Size: 0x800 words
@@ -110,7 +110,7 @@ LABEL_EF092B:
 	sti8_24 0x01e53e, 0xff                 ; Second region failed
 	ret
 
-SubCPU_Payload_Verify_Fail:	; EF095E
+SubCPU_Payload_Verify_Fail:
 LABEL_EF095E:
 	sti8_24 0x01e53e, 0xff                 ; Mark as failed
 	ldw bc, 0x280
@@ -134,7 +134,7 @@ LABEL_EF095E:
 ;   - SubCPU_Payload_Verify - Sets the error flag
 ;   - ErrorDialog_CPUTransmissionError - Error dialog shown when HL != 0
 ; ===========================================================================
-SubCPU_Payload_GetErrorFlag:	; EF0979
+SubCPU_Payload_GetErrorFlag:
 LABEL_EF0979:
 	ld8_24 l, 0x01e53e
 	exts hl
@@ -393,7 +393,7 @@ LABEL_EF0BF4:
 LABEL_EF0BF8:
 	.byte 0x0e
 
-INTT1_HANDLER:	; EF0BF9
+INTT1_HANDLER:
 	incdi16 1, 1475
 	pushw wa
 	push xhl
@@ -538,7 +538,7 @@ LABEL_EF0D3D:
 ; UI state machine primary dispatch
 ; Index: DRAM[1041] (0-2), entries: 3
 ; State 0: Idle, State 1: Process, State 2: Sub-state dispatch
-UIStateMachine_PrimaryDispatch:	; EF0D51
+UIStateMachine_PrimaryDispatch:
 	stda8 1041, a
 	sll a, 2
 	lda_24 xhl, 0xef0d64
@@ -547,15 +547,15 @@ UIStateMachine_PrimaryDispatch:	; EF0D51
 
 ; UI state machine - primary state dispatch
 ; Uses (0411h) as state index (0-2), multiplied by 4
-UI_STATE_MACHINE_TABLE:	; EF0D64
+UI_STATE_MACHINE_TABLE:
 	.long UI_STATE_0_IDLE
 	.long UI_STATE_1_PROCESS
 	.long UI_STATE_2_SUBSTATE
 
-UI_STATE_0_IDLE:	; EF0D70
+UI_STATE_0_IDLE:
 	jrl UIStateMachine_ExitToScheduler
 
-UI_STATE_1_PROCESS:	; EF0D73
+UI_STATE_1_PROCESS:
 	anddi8 1058, 110
 	bitda 0, 1042
 	jr nz, LABEL_EF0D8C
@@ -570,7 +570,7 @@ LABEL_EF0D89:
 LABEL_EF0D8C:
 	jrl UIStateMachine_ExitToScheduler
 
-UI_STATE_2_SUBSTATE:	; EF0D8F
+UI_STATE_2_SUBSTATE:
 	ldda8 a, 1042
 	and a, 0xF
 	sll a, 2
@@ -581,7 +581,7 @@ UI_STATE_2_SUBSTATE:	; EF0D8F
 ; UI sub-state dispatch table (16 entries)
 ; Uses (0412h) & 0x0F as index, multiplied by 4
 ; Pattern repeats every 4 entries with different action in slot 2
-UI_SUBSTATE_TABLE:	; EF0DA5
+UI_SUBSTATE_TABLE:
 	.long UI_SUBSTATE_CLEAR_FLAGS
 	.long UI_SUBSTATE_PROCESS_A
 	.long UI_SUBSTATE_ACTION_0
@@ -599,12 +599,12 @@ UI_SUBSTATE_TABLE:	; EF0DA5
 	.long UI_SUBSTATE_ACTION_3
 	.long UI_SUBSTATE_CLEAR_BIT3
 
-UI_SUBSTATE_CLEAR_FLAGS:	; EF0DE5
+UI_SUBSTATE_CLEAR_FLAGS:
 	resda 6, 1058
 	resda 0, 1043
 	jr UIStateMachine_ExitToScheduler
 
-UI_SUBSTATE_PROCESS_A:	; EF0DEF
+UI_SUBSTATE_PROCESS_A:
 	resda 1, 1043
 	resda 0, 1044
 	ldb a, 0x2
@@ -635,7 +635,7 @@ UIStateMachine_ExitToScheduler:
 	popw wa
 	jp INTT3_CheckNesting
 
-INTTR4_HANDLER:	; EF0E21
+INTTR4_HANDLER:
 	pushw wa
 	push xhl
 	push xiy
@@ -1884,7 +1884,7 @@ LABEL_EF185A:
 ; Example: Blit full screen (320x240 @ 8bpp = 38400 words):
 ;   XWA = 0x1A0000 (VRAM), XBC = 0x43C00 (offscreen), DE = 0x9600
 ; =============================================================================
-Copy_DE_words_from_XBC_to_XWA:	; ef18d7
+Copy_DE_words_from_XBC_to_XWA:
 	ld xix, xwa
 	ld xiy, xbc
 	ld bc, de
@@ -1902,7 +1902,7 @@ Copy_DE_words_from_XBC_to_XWA:	; ef18d7
 ;   XDE = word count (decrements to zero)
 ;   BC  = 16-bit fill pattern (e.g., color | (color << 8) for 8bpp)
 ; =============================================================================
-Fill_memory_at_XWA_with_DE_words_of_BC_value:	; ef18e0
+Fill_memory_at_XWA_with_DE_words_of_BC_value:
 	st_dpiw BC, 0xE1
 	djnz xde, Fill_memory_at_XWA_with_DE_words_of_BC_value
 	ret
@@ -1951,7 +1951,7 @@ LABEL_EF1958:
 	jrl TaskSched_ChangePriority_Inline
 	ret
 
-INTT3_HANDLER:	; EF1965
+INTT3_HANDLER:
 	incdi16 1, 1475
 	incdi8 1, 1158
 	pushw wa
@@ -2231,7 +2231,7 @@ INTT3_EnterScheduler:
 ;   - ScreenGroup_Dispatch (ScreenGroup_DispatchAlt) - Alternative dispatcher
 ;   - ErrorDialog_CPUTransmissionError - Error dialog in Screen Group 7
 ; ===========================================================================
-Show_ScreenGroup:	; EF1B9C
+Show_ScreenGroup:
 LABEL_EF1B9C:
 	push_sr
 	ei 6
@@ -5069,7 +5069,7 @@ SubCPU_Init_DMA_Channels:
 	ret
 LABEL_EF32F4:
 
-sendCOMM:	; ef32f4
+sendCOMM:
 	dec 6, xsp
 	pushw iz
 	ld (xsp + 2), xde
@@ -5394,7 +5394,7 @@ FlashBufferIO_Exit:
 	popw iz
 	ret
 
-INT0_HANDLER:	; EF3525
+INT0_HANDLER:
 	bit_dd8 1, 0x68	; MSTAT1 - test own status (check if transfer in progress)
 	jr nz, LABEL_EF3532
 	stdi8 265, 1
@@ -5466,7 +5466,7 @@ LABEL_EF35C4:
 	pop xwa
 	ret
 
-INTTC2_HANDLER:	; EF35CA
+INTTC2_HANDLER:
 	res_dd8 2, 0x80
 	cpdi8 1504, 1
 	jr nz, LABEL_EF35DB
@@ -5481,7 +5481,7 @@ LABEL_EF35DB:
 LABEL_EF35E7:
 	reti
 
-INTTC0_HANDLER:	; EF35E8
+INTTC0_HANDLER:
 	push xiz
 	push xiy
 	push xix
@@ -5520,7 +5520,7 @@ INTTC0_HANDLER:	; EF35E8
 	jr LABEL_EF367E
 
 ; E1DMA ISR - DMA transfer setup (after SeqRingBuf dispatch)
-E1DMA_TransferSetup:	; EF363F
+E1DMA_TransferSetup:
 	ldada xwa, 1550
 	ld xbc, (xwa)
 	ldc_cr32 xbc, 0x20
@@ -6785,7 +6785,7 @@ FDC_ReadSectors_Done:
 	inc 6, xsp
 	ret
 
-Detect_Disk_Type:	; EF42FE
+Detect_Disk_Type:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), 0xFF
@@ -7157,7 +7157,7 @@ FDC_WriteCompressed_Return:
 	lda xsp, (xsp + 18)
 	retd 0x2
 
-SHOW_FD_TO_FLASH_MEMORY_MESSAGE:	; EF468E
+SHOW_FD_TO_FLASH_MEMORY_MESSAGE:
 	pushw 0x8
 	pushw 0x2
 	ld xwa, 0xE0065E	; "FD -> Flash Memory"
@@ -7170,7 +7170,7 @@ LABEL_EF46A4:
 	dec 2, xsp
 	ld (xsp), a
 
-SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE:	; EF46A8
+SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE:
 	pushw 0x8
 	pushw 0x2
 	ld xwa, 0xE00D96	; "Change FD (2/2)"
@@ -7247,7 +7247,7 @@ LABEL_EF4743:
 	popw iz
 	ret
 
-Erase_and_Burn____when_disk_is_valid:	; EF4745
+Erase_and_Burn____when_disk_is_valid:
 	dec 2, xsp
 	ld (xsp), a
 	pushw 0x8
@@ -7271,7 +7271,7 @@ Erase_and_Burn____when_disk_is_valid:	; EF4745
 
 
 ; "Technics KN5000 Program DATA FILE 1/2"
-HANDLE_UPDATE_FILE_TYPE_ID_001h:	; EF4784
+HANDLE_UPDATE_FILE_TYPE_ID_001h:
 	calr Flash_BurnWithProgress
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	ldw wa, 0x24
@@ -7285,7 +7285,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_001h:	; EF4784
 
 
 ; "Technics KN5000 Table DATA FILE 1/2"
-HANDLE_UPDATE_FILE_TYPE_ID_003h:	; EF47A4
+HANDLE_UPDATE_FILE_TYPE_ID_003h:
 	calr Flash_BurnWithProgress
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	ldw wa, 0x24
@@ -7302,7 +7302,7 @@ LABEL_EF47C2:
 
 
 ; "Technics KN5000 CMPCUSTOMDATA FILE"
-HANDLE_UPDATE_FILE_TYPE_ID_005h:	; EF47C7
+HANDLE_UPDATE_FILE_TYPE_ID_005h:
 	lds wa, 1
 	call Flash_WaitUntilReady
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
@@ -7314,7 +7314,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_005h:	; EF47C7
 
 
 ; "Technics KN5000 HD-AEPRG DATA FILE"
-HANDLE_UPDATE_FILE_TYPE_ID_006h:	; EF47DF
+HANDLE_UPDATE_FILE_TYPE_ID_006h:
 	lds wa, 2
 	call Flash_WaitUntilReady
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
@@ -7329,7 +7329,7 @@ LABEL_EF47F5:
 
 
 ; "Technics KN5000 Program DATA FILE PCK"
-HANDLE_UPDATE_FILE_TYPE_ID_007h:	; EF47FA
+HANDLE_UPDATE_FILE_TYPE_ID_007h:
 	lds wa, 1
 	ld xbc, 0x3E0000
 	call Flash_EraseSectorWithBankSelect
@@ -7344,7 +7344,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_007h:	; EF47FA
 
 
 ; "Technics KN5000 Table DATA FILE PCK"
-HANDLE_UPDATE_FILE_TYPE_ID_008h:	; EF481E
+HANDLE_UPDATE_FILE_TYPE_ID_008h:
 	calr Flash_BurnWithProgress
 	calr SHOW_FD_TO_FLASH_MEMORY_MESSAGE
 	calr LZ_Decompress_Init
@@ -7355,7 +7355,7 @@ UpdateFile_StackCleanup:
 
 
 ; "Technics KN5000 Program DATA FILE 2/2" or "Technics KN5000 Table DATA FILE 2/2"
-SHOW_ILLEGAL_DISK_MESSAGE:	; EF482A
+SHOW_ILLEGAL_DISK_MESSAGE:
 	pushw 0x8
 	pushw 0x2
 	ld xwa, 0xE00FFE	; "Illegal Disk!"
@@ -7659,7 +7659,7 @@ LABEL_EF4B9F:
 LABEL_EF4BCA:
 	jr LABEL_EF4BCA
 
-HDAE5000_Parport_Setup:	; EF4BCC
+HDAE5000_Parport_Setup:
 	stdi8 340, 102
 	sti8_24 0x160006, 0x82
 	sti8_24 0x160000, 0x00
@@ -8015,7 +8015,7 @@ LZ_Decompress_Done:
 	lda xsp, (xsp + 16)
 	ret
 
-FLASH_MEM_UPDATE:	; EF4F6F
+FLASH_MEM_UPDATE:
 	push_werp 0xFA
 	call Check_for_Floppy_Disk_Change
 	cps l, 0
@@ -8082,7 +8082,7 @@ Flash_CheckAndValidate:
 	ldw de, 0xC8
 	call Draw_FlashMemUpdate_message_bitmap
 
-flash_update__not_today:	; EF503C
+flash_update__not_today:
 	pop_werp 0xFA
 	ret
 
@@ -8105,7 +8105,7 @@ flash_update__not_today:	; EF503C
 ; Output:
 ;   Screen updated with rendered bitmap
 ; =============================================================================
-Draw_FlashMemUpdate_message_bitmap:	; EF5040
+Draw_FlashMemUpdate_message_bitmap:
 	dec 4, xsp
 	pushw iz
 	ld hl, bc
@@ -8202,7 +8202,7 @@ LABEL_EF50BB:
 ;
 ; Clobbers: XIZ, XHL, XWA, XDE, IX, IY
 ;=============================================================================
-VRAM_FillRect:	; EF50DF
+VRAM_FillRect:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 6), e	; Save color value

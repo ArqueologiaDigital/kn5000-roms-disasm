@@ -6602,7 +6602,7 @@ LABEL_F5274A:
 	lda xsp, (xsp + 20)
 	ret
 
-GetDiskFreeSpace:	; f52751
+GetDiskFreeSpace:
 	dec 4, xsp
 	push xiz
 	ld xiz, xbc

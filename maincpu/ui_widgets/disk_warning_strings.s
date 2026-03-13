@@ -141,7 +141,7 @@ Str_SaveType_Composer:	ldb	w, 0x20
 ; FDC (Floppy Disk Controller) handler offset table
 ; Used with FDC_HANDLER_DISPATCH_BASE for command dispatching
 ; Entry = (8A40h) value 0-11, multiplied by 2 to get offset
-FDC_HANDLER_OFFSETS:	; EA98CA
+FDC_HANDLER_OFFSETS:
 	.short FDC_HANDLER_DISPATCH_BASE - FDC_HANDLER_DISPATCH_BASE	; 0: offset 0x00
 	.short FDC_HANDLER_01 - FDC_HANDLER_DISPATCH_BASE	; 1: offset 0x05
 	.short FDC_HANDLER_02 - FDC_HANDLER_DISPATCH_BASE	; 2: offset 0x0D
@@ -598,9 +598,7 @@ LABEL_EA9EF4:
 	aligned_string "0x%02X : %s"
 	aligned_string "0x%02X : %s"
 
-Bitmap_WormWearingHat:	; ea9f20
-	.incbin "images/BitmapWormWearingHat.bin"
-
+Bitmap_WormWearingHat:	.incbin "images/BitmapWormWearingHat.bin"
 LABEL_EAA160:	aligned_string ".BMP"
 	.byte 0x7e, 0x37
 	jr	z, 0

@@ -3364,7 +3364,7 @@ LABEL_FA0E0E:
 	jrl LABEL_FA0EDD
 
 ; ButtonState event dispatch via DSP handler table
-ButtonState_DispatchDSP:	; FA0E15
+ButtonState_DispatchDSP:
 	ld_srib A, (xsp + 0x0128)
 	extz wa
 	cps wa, 0
@@ -3585,7 +3585,7 @@ LABEL_FA1088:
 	ld xiz, 0x26
 
 ; AcIndexEdit widget dispatch with view lookup
-AcIndexEdit_DispatchDSP:	; FA108F
+AcIndexEdit_DispatchDSP:
 	call GetViewInstance
 	add xhl, xiz
 	ld a, (xhl)
@@ -4104,7 +4104,7 @@ LABEL_FA1588:
 	calr PsPageBoxProc
 
 ; PsToggleBoxProc epilogue handler
-PsToggleBoxProc_Epilogue:	; FA158B
+PsToggleBoxProc_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -8182,7 +8182,7 @@ LanguageCheck:
 	ret
 
 ; ObjectProc class dispatch with dual handler
-ObjectProc_ClassDispatch:	; FA3D7A
+ObjectProc_ClassDispatch:
 	lds32 xhl, 0
 	ret
 
@@ -8610,7 +8610,7 @@ LABEL_FA43A1:
 	ld xhl, 0xFFFFFFFF
 
 ; UnRegisterObject epilogue handler
-UnRegisterObject_Epilogue:	; FA43AE
+UnRegisterObject_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 20)
 	ret
@@ -8717,7 +8717,7 @@ LABEL_FA44A4:
 	lds32 xwa, 0
 
 ; GetRootObject/Event/Param block
-RootObject_GetterBlock:	; FA44A6
+RootObject_GetterBlock:
 	ld xhl, xwa
 	pop xiz
 	inc 4, xsp
@@ -9128,7 +9128,7 @@ LABEL_FA488F:
 	jr SupportClass_PopIzRet
 
 ; SupportClass virtual dispatch with type check
-SupportClass_VirtualDispatch:	; FA4896
+SupportClass_VirtualDispatch:
 	cp xix, 0x1600005
 	jr z, LABEL_FA48A4
 	ld xix, (xhl)
@@ -9187,7 +9187,7 @@ LABEL_FA4912:
 	jr FuncProc_PopIzSkip4Ret
 
 ; FunctionProc complex heap indexing dispatch
-FunctionProc_Dispatch:	; FA4916
+FunctionProc_Dispatch:
 	add hl, 0x300
 	extz xhl
 	ld xbc, xhl
@@ -9239,7 +9239,7 @@ ApFunctionProc:
 	ret
 
 ; ApFuncCall object ID lookup dispatch
-ApFuncCall_VirtualDispatch:	; FA4983
+ApFuncCall_VirtualDispatch:
 	ld xbc, xwa
 	srl xbc, 0
 	and xbc, 0xFFF
@@ -9318,7 +9318,7 @@ MainFunctionProc:
 	ret
 
 ; MainFuncCall DSP variant dispatch
-MainFuncCall_DispatchDSP:	; FA4A2F
+MainFuncCall_DispatchDSP:
 	ld xbc, xwa
 	srl xbc, 0
 	and xbc, 0xFFF
@@ -9585,7 +9585,7 @@ LABEL_FA4D0E:
 	jr GetMode_Epilogue10
 
 ; GetMode virtual dispatch via DSP
-GetMode_DispatchDSP:	; FA4D12
+GetMode_DispatchDSP:
 	ld xbc, xiz
 	ld xde, (xsp + 10)
 	calr ObjectProc
@@ -9779,7 +9779,7 @@ TitleProc:
 	jp_dri 8, 0x07, 0xF0, 0xE8
 
 ; TitleProc event dispatch
-TitleProc_EventDispatch:	; FA4F76
+TitleProc_EventDispatch:
 	ld xhl, 0x1600007
 	jrl TitleFunc_Epilogue34
 
@@ -10722,7 +10722,7 @@ ResMethodProc:
 	ret
 
 ; ViewableProc object dispatch helper
-ViewableProc_VirtualDispatch:	; FA5989
+ViewableProc_VirtualDispatch:
 	ld wa, iy
 	extz xwa
 	sll xwa, 2
@@ -17054,8 +17054,7 @@ pProcProc:
 pPropProc:
 	jrl LABEL_FA64E0
 ; WidgetType dispatch (pStringProc/EventIDProc)
-WidgetType_DispatchDSP:	; FA92FE
-
+WidgetType_DispatchDSP:
 pStringProc:
 	jrl LABEL_FA64E0
 
@@ -17333,7 +17332,7 @@ DispatchEvent:	; LABEL_FA9585
 	jrl z, LABEL_FA965C
 
 ; EventHandler dual-phase dispatch
-EventHandler_ObjectDispatch:	; FA9598
+EventHandler_ObjectDispatch:
 	ld xwa, (xsp + 8)
 	cp xwa, 0xFFFFFFFF
 	jrl z, EventHandler_ContinueProc
@@ -17417,7 +17416,7 @@ SendEvent:
 	ld xiz, xhl
 
 ; EventRoute dual dispatch with context setup
-EventRoute_ObjectDispatch:	; FA9679
+EventRoute_ObjectDispatch:
 	ld xwa, xiz
 	srl xwa, 0
 	and xwa, 0xFFF
@@ -17893,7 +17892,7 @@ MainDispatchEvent:
 	jr z, LABEL_FA9AF0
 
 ; MainSendEvent object dispatch
-MainSendEvent_VirtualDispatch:	; FA9A9D
+MainSendEvent_VirtualDispatch:
 	ld xwa, (xsp + 8)
 	cp xwa, 0xFFFFFFFF
 	jr z, LABEL_FA9AE1
@@ -17943,7 +17942,7 @@ MainSendEvent:
 	jr LABEL_FA9B59
 
 ; MainPostEvent queued dispatch with validation
-MainPostEvent_VirtualDispatch:	; FA9B0B
+MainPostEvent_VirtualDispatch:
 	ld xwa, xiz
 	ld xbc, 0x1E00014
 	ld xde, 0x1600003
@@ -18477,7 +18476,7 @@ LABEL_FAA02C:
 	jrl LABEL_FAA10D
 
 ; RootContext setup handler
-RootContext_Setup:	; FAA03A
+RootContext_Setup:
 	st32_24 0x02bc24, xiz
 	st32_24 0x02bc18, xiz
 	ld xwa, (xsp + 4)
@@ -18535,7 +18534,7 @@ RootContext_Setup:	; FAA03A
 	stiw_dri 0x07, 0xEC, 0xE4, 0xFF, 0xFF
 
 ; ApTimer dispatcher
-ApTimer_VirtualDispatch:	; FAA0F8
+ApTimer_VirtualDispatch:
 	ld xhl, xde
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -18778,7 +18777,7 @@ DrawTask_EventLoop:
 	call TaskSched_ChangePriority
 
 ; DrawTask function dispatch with priority
-DrawTask_FuncDispatch:	; FAA311
+DrawTask_FuncDispatch:
 	or xiz, xiz
 	jr z, LABEL_FAA333
 	ld xhl, (xiz)
@@ -18967,7 +18966,7 @@ LABEL_FAA478:
 	st32_24 0x03246a, xhl
 
 ; DrawFunc handler with audio lock release
-DrawFunc_CallHandler:	; FAA481
+DrawFunc_CallHandler:
 	lds wa, 4
 	call Audio_Lock_Release
 	ld xhl, xiz
@@ -19021,7 +19020,7 @@ LABEL_FAA4D6:
 	ret
 
 ; DrawFunc stack handler
-DrawFunc_StackHandler:	; FAA4D8
+DrawFunc_StackHandler:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, (xiz+4)
@@ -19063,7 +19062,7 @@ LABEL_FAA518:
 	ret
 
 ; DrawFunc XSP region check variant
-DrawFunc_XspCheck:	; FAA51A
+DrawFunc_XspCheck:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, (xiz+4)
@@ -19079,7 +19078,7 @@ DrawFunc_XspCheck:	; FAA51A
 	jr	-65
 
 
-IS_XSP_INSIDE_4K_REGION_AT_1C032:	; FAA532
+IS_XSP_INSIDE_4K_REGION_AT_1C032:
 	xor xhl, xhl
 	cp xsp, 0x1C032
 	jr lt, LABEL_FAA546
@@ -19149,7 +19148,7 @@ LABEL_FAA5D0:
 	jp LABEL_FB318A
 
 ; LcdOff - Disable LCD display output (clears flag at 0x030464)
-LcdOff:	; faa5db
+LcdOff:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr nz, LABEL_FAA5F5
@@ -19209,7 +19208,7 @@ LABEL_FAA61D:
 ; only for rows within the dirty bounding box. Processes rows in two passes
 ; (even lines first, then remaining) for potential interlace support.
 ; =============================================================================
-UpdateScreen:	; FAA61D
+UpdateScreen:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, LABEL_FAA636

@@ -837,7 +837,7 @@ LABEL_F16ACB:
 	.byte 0x27, 0x00, 0xef, 0x62, 0x0e, 0x78, 0xee, 0xfa
 
 ; PartGrid column dispatch (7-entry, table 0xE1611A)
-PartGrid_ColumnDispatch:	; F16DF3
+PartGrid_ColumnDispatch:
 	ldda32 xhl, 3182
 	ldda32 xbc, 3186
 	cp a, 0x1E
@@ -1005,13 +1005,13 @@ LABEL_F16F2C:
 	.byte 0x00
 
 ; PartGrid column dispatch end
-PartGrid_ColumnDispatch_End:	; F16FFD
+PartGrid_ColumnDispatch_End:
 	lds wa, 0
 	jr __jrt_nop_F17001
 __jrt_nop_F17001:
 
 ; PartGrid column dispatch default case
-PartGrid_ColumnDispatch_Default:	; F17001
+PartGrid_ColumnDispatch_Default:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), a
@@ -1080,7 +1080,7 @@ LABEL_F1704A:
 	ldi_werp 0xFA, 0
 
 ; NoteEventBuffer CopyToSlot dispatch (7-entry, table 0xE16128)
-NoteEvent_CopyToSlot:	; F170A2
+NoteEvent_CopyToSlot:
 	ldto_werp WA, 0xFA
 	extz xwa
 	sll xwa, 8
@@ -1128,7 +1128,7 @@ Pack12BitValueWithBank:
 	ret
 
 ; NoteEventBuffer Store dispatch (7-entry, table 0xE16136)
-NoteEvent_Store:	; F17120
+NoteEvent_Store:
 	extz wa
 	lda_24 xbc, 0xe160de
 	ld_srib3 L, 0x07, 0xE4, 0xE0
@@ -1151,7 +1151,7 @@ NoteEventBuffer_CopyToSlot:
 ; Note event buffer copy dispatch - 7 cases (BC 0-6)
 ; Selects destination buffer pointer based on case, then copies 46080 bytes
 ; Offset table at 0xE16128
-NOTE_EVENT_DISPATCH_1:	; F17155
+NOTE_EVENT_DISPATCH_1:
 	ldda32 xbc, 3190	; Case 0: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
 	ldda32 xbc, 3194	; Case 1: Load dest pointer
@@ -1172,7 +1172,7 @@ NOTE_EVENT_COPY_COMMON:	; F1717D - Common handler
 	ldirw	; Block copy words
 
 ; NoteEventBuffer copy common handler
-NoteEvent_CopyCommon:	; F17186
+NoteEvent_CopyCommon:
 	jrl PartGrid_ColumnDispatch_End
 
 NoteEventBuffer_Store:
@@ -1197,11 +1197,11 @@ NoteEventBuffer_Store:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 ; Note event dispatch table 2
 ; 7 cases (WA 0-6), offset table at 0xE16136
-NOTE_EVENT_DISPATCH_2:	; F171C4
+NOTE_EVENT_DISPATCH_2:
 	ldda32 xwa, 3190
 	ld (xsp + 4), xwa
 	jrl Flash_WriteSectorWithMirrorCopy
-NOTE_EVENT_DISPATCH_2b:	; F171CE
+NOTE_EVENT_DISPATCH_2b:
 	ldda32 xwa, 3194
 	ld (xsp + 4), xwa
 
@@ -1251,7 +1251,7 @@ LABEL_F17203:
 	jr Flash_WriteSectorWithMirrorCopy
 
 ; NoteEventBuffer store common handler
-NoteEvent_StoreCommon:	; F17255
+NoteEvent_StoreCommon:
 	cps a, 0
 	jrl nz, Flash_SectorWriteExecute
 
@@ -2274,7 +2274,7 @@ LABEL_F18373:
 	.byte 0x0e
 
 ; Floppy disk load and store note events via dispatch
-FloppyDisk_LoadNoteEvents:	; F18A74
+FloppyDisk_LoadNoteEvents:
 	st_dri3b L, 0xFD, 0xF8, 0xFB
 	pushw iz
 	st_dri3l XBC, 0xFD, 0x02, 0x04
@@ -2412,7 +2412,7 @@ LABEL_F18BF8:
 	ret
 
 ; Floppy disk compute tone parameters and validate
-FloppyDisk_ComputeToneParams:	; F18BFF
+FloppyDisk_ComputeToneParams:
 	st_dri3b L, 0xFD, 0xE8, 0xFB
 	push xiz
 	st_dri3l XDE, 0xFD, 0x10, 0x04
@@ -2535,7 +2535,7 @@ FloppyDisk_ComputeToneParams:	; F18BFF
 	jrl FloppyCtrl_PopIzStoreRet
 
 ; Floppy disk copy note buffers to slots and write tone data
-FloppyDisk_CopyNoteBuffers:	; F18D4A
+FloppyDisk_CopyNoteBuffers:
 	lda xwa, (xsp + 16)
 	ld_sril XIX, (xsp + 0x0414)
 	ld xbc, 0x400
@@ -3316,7 +3316,7 @@ LABEL_F1A423:
 	jr GridBoxProc_Return
 
 ; CmpSetP1 title dispatch
-CmpSetP1_TtlDispatch:	; F1A436
+CmpSetP1_TtlDispatch:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -3332,13 +3332,12 @@ GridBoxProc_Return:
 	lds32 xhl, 0
 
 ; CmpSetP1 title dispatch end
-CmpSetP1_TtlDispatch_End:	; F1A45A
+CmpSetP1_TtlDispatch_End:
 	pop xiz
 	inc 4, xsp
 	ret
 ; CmpSetP1 title dispatch default
-CmpSetP1_TtlDispatch_Default:	; F1A45E
-
+CmpSetP1_TtlDispatch_Default:
 AcCmpSetGridBoxProc:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -3367,7 +3366,7 @@ AcCmpSetGridBoxProc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 ; CmpSetP1 dial grid dispatch (7-entry, table 0xE1CE3A)
-CmpSetP1_DialGrid:	; F1A4BF
+CmpSetP1_DialGrid:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -3525,18 +3524,18 @@ LABEL_F1A689:
 	jr CmpSetP1_ReturnZeroJmp
 
 ; CmpSetP1 grid check dispatch
-CmpSetP1_GridCheckDispatch:	; F1A68F
+CmpSetP1_GridCheckDispatch:
 	ld xwa, xiz
 	ld xiz, 0x3E
 	jr CmpSetP1_GridCheck_Case2
 
 ; CmpSetP1 grid check case 1
-CmpSetP1_GridCheck_Case1:	; F1A698
+CmpSetP1_GridCheck_Case1:
 	ld xwa, xiz
 	ld xiz, 0x42
 
 ; CmpSetP1 grid check case 2
-CmpSetP1_GridCheck_Case2:	; F1A69F
+CmpSetP1_GridCheck_Case2:
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -3548,7 +3547,7 @@ CmpSetP1_GridCheck_Case2:	; F1A69F
 	jr CmpSetP1_ReturnZeroJmp
 
 ; CmpSetP1 grid check case 3
-CmpSetP1_GridCheck_Case3:	; F1A6B4
+CmpSetP1_GridCheck_Case3:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -3561,14 +3560,14 @@ CmpSetP1_ReturnZeroJmp:
 	jr CmpSetP1_GridCheck_Case5
 
 ; CmpSetP1 grid check case 4
-CmpSetP1_GridCheck_Case4:	; F1A6CB
+CmpSetP1_GridCheck_Case4:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
 ; CmpSetP1 grid check case 5
-CmpSetP1_GridCheck_Case5:	; F1A6D7
+CmpSetP1_GridCheck_Case5:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -3590,7 +3589,7 @@ CmpSetP1GridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; CmpSetP1 grid check event encoding dispatch
-CmpSetP1_GridCheck_EventEnc:	; F1A716
+CmpSetP1_GridCheck_EventEnc:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xeb, 0x8a, 0xbf, 0x14, 0x30, 0xea, 0x89
@@ -3608,7 +3607,7 @@ CmpSetP1_GridCheck_EventEnc:	; F1A716
 	.byte 0x4a, 0xfa, 0x78, 0xfd, 0x00
 
 ; CmpSetP1 grid check return
-CmpSetP1_GridCheck_Return:	; F1A78B
+CmpSetP1_GridCheck_Return:
 	lda xbc, (xsp + 20)
 	ld xwa, xde
 	srl xwa, 0
@@ -3632,7 +3631,7 @@ CmpSetP1_GridCheck_Return:	; F1A78B
 	jp_dri 8, 0x07, 0xF0, 0xE0
 ; UI component dispatch table - handles cases 0-7 for grid/focus handling
 ; Offset table at 0xE1CEF0 selects which handler to run based on WA value
-UI_COMPONENT_DISPATCH:	; F1A7CB
+UI_COMPONENT_DISPATCH:
 	ldda8 a, 13527	; Load byte from UI state
 	inc 1, a	; Increment by 1
 	extz wa	; Zero-extend A to WA
@@ -3643,7 +3642,7 @@ UI_COMPONENT_DISPATCH:	; F1A7CB
 	call Audio_SendCommand	; Call handler function
 	lda xsp, (xsp + 10)	; Clean up stack (10 bytes)
 	jrl WidgetHandler_PostEventAndReturnZero	; Jump to end
-UI_COMPONENT_DISPATCH_CASE1:	; F1A7E5
+UI_COMPONENT_DISPATCH_CASE1:
 	ldda8 a, 13518	; Load byte from UI state
 	srl a, 7	; Shift right logical by 7
 	extz wa	; Zero-extend A to WA
@@ -3663,39 +3662,39 @@ UI_COMPONENT_DISPATCH_CASE1:	; F1A7E5
 	call Audio_SendCommand	; Call handler function
 	lda xsp, (xsp + 16)	; Clean up stack (16 bytes)
 	jr WidgetHandler_PostEventAndReturnZero	; Jump to end
-UI_COMPONENT_DISPATCH_CASE2:	; F1A820
+UI_COMPONENT_DISPATCH_CASE2:
 	ldda8 c, 13545	; Load byte from UI state
 	ld xwa, 0x3D9C6	; Load table address
 	jr UI_COMPONENT_DISPATCH_CASE2_COMMON	; Jump to common code
-UI_COMPONENT_DISPATCH_CASE3:	; F1A82B
+UI_COMPONENT_DISPATCH_CASE3:
 	ldda8 a, 13546	; Load byte from UI state
 	srl a, 4	; Shift right logical by 4
 	and a, 0x1	; Mask to get bit 4
 	ld c, a	; Copy to C
 	ld xwa, 0x3D9FE	; Load table address
-UI_COMPONENT_DISPATCH_CASE2_COMMON:	; F1A83C
+UI_COMPONENT_DISPATCH_CASE2_COMMON:
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; Shift left by 2 (multiply by 4)
 	ld_sril3 XWA, 0x07, 0xE0, 0xE4	; Load entry from table
 	push xwa	; Push parameter
 	jr UI_COMPONENT_DISPATCH_PUSH_CALL	; Jump to push and call
-UI_COMPONENT_DISPATCH_CASE4:	; F1A849
+UI_COMPONENT_DISPATCH_CASE4:
 	lds wa, 6	; Load 6
 	jr UI_COMPONENT_DISPATCH_CASE5_COMMON	; Jump to common code
-UI_COMPONENT_DISPATCH_CASE5:	; F1A84D
+UI_COMPONENT_DISPATCH_CASE5:
 	lds wa, 5	; Load 5
-UI_COMPONENT_DISPATCH_CASE5_COMMON:	; F1A84F
+UI_COMPONENT_DISPATCH_CASE5_COMMON:
 	ldda8 c, 13546	; Load byte from UI state
 	and a, 0xF	; Mask lower nibble
 	jr z, UI_COMPONENT_DISPATCH_CASE5_SKIP	; Skip shift if zero
 	srla c	; Shift A right by C
-UI_COMPONENT_DISPATCH_CASE5_SKIP:	; F1A85A
+UI_COMPONENT_DISPATCH_CASE5_SKIP:
 	and c, 0x1	; Mask C to get bit 0
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; Shift left by 2 (multiply by 4)
 	ld_sril3 XWA, 0x07, 0xEC, 0xE4	; Load entry from table
 	push xwa	; Push parameter
-UI_COMPONENT_DISPATCH_PUSH_CALL:	; F1A868
+UI_COMPONENT_DISPATCH_PUSH_CALL:
 	push xde	; Push XDE
 	call Audio_SendCommand	; Call handler function
 	inc 8, xsp	; Increment stack pointer
@@ -3804,7 +3803,7 @@ GridCheck_SendEvent:
 	jr GridCheck_ReturnZero	; Return to caller
 
 ; CmpSet grid check dispatch (7-entry, table 0xE1D40E)
-CmpSet_GridCheck_Dispatch:	; F1A95C
+CmpSet_GridCheck_Dispatch:
 	lda xbc, (xsp + 14)
 	ld xwa, xde
 	srl xwa, 0
@@ -4436,12 +4435,12 @@ LABEL_F1AF3A:
 	jr SndArg_GridBnk_Case1
 
 ; SndArgGridBnk case 0
-SndArg_GridBnk_Case0:	; F1AF83
+SndArg_GridBnk_Case0:
 	ldw (xbc), 0xFF
 	ldw (xwa), 0xF5
 
 ; SndArgGridBnk case 1
-SndArg_GridBnk_Case1:	; F1AF8B
+SndArg_GridBnk_Case1:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
@@ -4453,13 +4452,12 @@ SndArg_GridBnk_Case1:	; F1AF8B
 	lds32 xhl, 0
 
 ; SndArgGridBnk case 2
-SndArg_GridBnk_Case2:	; F1AFAE
+SndArg_GridBnk_Case2:
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
 ; SndArgGridBnk case 3
-SndArg_GridBnk_Case3:	; F1AFB5
-
+SndArg_GridBnk_Case3:
 S2cGridBoxProc:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -4489,7 +4487,7 @@ S2cGridBoxProc:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; FdcFormat dial grid dispatch (7-entry, table 0xE1D728)
-FdcFormat_DialGrid:	; F1B01B
+FdcFormat_DialGrid:
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
 	ld xde, (xsp + 12)
@@ -4641,13 +4639,13 @@ LABEL_F1B1EE:
 	jr FdcFormat_ReturnZeroJmp
 
 ; FdcFormat grid check dispatch
-FdcFormat_GridCheck:	; F1B1F4
+FdcFormat_GridCheck:
 	ld xwa, (xsp + 16)
 	ld xiz, 0x3E
 	jr LABEL_F1B206
 
 ; FdcFormat grid check case 1
-FdcFormat_GridCheck_Case1:	; F1B1FE
+FdcFormat_GridCheck_Case1:
 	ld xwa, (xsp + 16)
 	ld xiz, 0x42
 
@@ -4663,7 +4661,7 @@ LABEL_F1B206:
 	jr FdcFormat_ReturnZeroJmp
 
 ; FdcFormat grid check case 2
-FdcFormat_GridCheck_Case2:	; F1B21B
+FdcFormat_GridCheck_Case2:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -4673,7 +4671,7 @@ FdcFormat_GridCheck_Case2:	; F1B21B
 	jr FdcFormat_ReturnZeroJmp
 
 ; FdcFormat grid check case 3
-FdcFormat_GridCheck_Case3:	; F1B230
+FdcFormat_GridCheck_Case3:
 	call GetFocusObject
 	ld xwa, xhl
 	ld xbc, 0x1E0008F
@@ -4690,14 +4688,14 @@ FdcFormat_ReturnZeroJmp:
 	jr FdcFormat_GridCheck_Case5
 
 ; FdcFormat grid check case 4
-FdcFormat_GridCheck_Case4:	; F1B257
+FdcFormat_GridCheck_Case4:
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
 	ld xde, (xsp + 12)
 	call InheritedProc
 
 ; FdcFormat grid check case 5
-FdcFormat_GridCheck_Case5:	; F1B263
+FdcFormat_GridCheck_Case5:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret

@@ -2637,7 +2637,7 @@ AcVocalGridBoxProc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 ; AcVocalGridBoxProc dial setup handler
-AcVocalGrid_DialSetup:	; F736A3
+AcVocalGrid_DialSetup:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -2795,13 +2795,13 @@ LABEL_F7386E:
 	jr Vocalist_ReturnZeroJmp
 
 ; AcVocalGridBoxProc string copy handler
-AcVocalGrid_StringCopy:	; F73874
+AcVocalGrid_StringCopy:
 	ld xwa, xiz
 	ld xiz, 0x3E
 	jr LABEL_F73884
 
 ; AcVocalGridBoxProc view access handler
-AcVocalGrid_ViewAccess:	; F7387D
+AcVocalGrid_ViewAccess:
 	ld xwa, xiz
 	ld xiz, 0x42
 
@@ -2823,7 +2823,7 @@ LABEL_F73884:
 	jr AcVocalGrid_FuncCallB
 
 ; AcVocalGridBoxProc function callback A
-AcVocalGrid_FuncCallA:	; F738AA
+AcVocalGrid_FuncCallA:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -2831,7 +2831,7 @@ AcVocalGrid_FuncCallA:	; F738AA
 	ld xde, (xsp + 12)
 
 ; AcVocalGridBoxProc function callback B
-AcVocalGrid_FuncCallB:	; F738B9
+AcVocalGrid_FuncCallB:
 	call ApFuncCall
 
 Vocalist_ReturnZeroJmp:
@@ -2839,14 +2839,14 @@ Vocalist_ReturnZeroJmp:
 	jr AcVocalGrid_FuncCallD
 
 ; AcVocalGridBoxProc function callback C
-AcVocalGrid_FuncCallC:	; F738C1
+AcVocalGrid_FuncCallC:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
 ; AcVocalGridBoxProc function callback D
-AcVocalGrid_FuncCallD:	; F738CD
+AcVocalGrid_FuncCallD:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -2995,7 +2995,7 @@ LABEL_F73938:
 	.byte 0x00, 0xe0, 0x01, 0x78, 0x1c, 0x03
 
 ; VocalistGridCheck dispatch handler
-VocalistGrid_CheckHandler:	; F73C8E
+VocalistGrid_CheckHandler:
 	ld (xsp + 4), xbc
 	ld xwa, xde
 	srl xwa, 0
@@ -3134,7 +3134,7 @@ AcVocalistListBoxProc:
 	jr AcVocalist_ListCase2
 
 ; AcVocalist list setup
-AcVocalist_ListSetup:	; F73FC8
+AcVocalist_ListSetup:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -3149,7 +3149,7 @@ AcVocalist_ListSetup:	; F73FC8
 	lda_24 xix, 0xf73ff7
 	jp_dri 8, 0x07, 0xF0, 0xEC
 ; AcVocalistListBoxProc dispatch
-AcVocalist_ListDispatch:	; F73FF7
+AcVocalist_ListDispatch:
 	ld	xwa, 14090252
 	ld	xbc, 29360143
 	lds32	xde, 0
@@ -3160,11 +3160,11 @@ AcVocalist_ListDispatch:	; F73FF7
 	call	16422496
 
 ; AcVocalist list case 1
-AcVocalist_ListCase1:	; F74015
+AcVocalist_ListCase1:
 	lds32 xhl, 0
 
 ; AcVocalist list case 2
-AcVocalist_ListCase2:	; F74017
+AcVocalist_ListCase2:
 	pop xiz
 	ret
 
@@ -3352,7 +3352,7 @@ VocalistPage1OKFunc:
 	call MainFuncCall
 
 ; VocalistPage1OK case 0
-VocalistP1OK_Case0:	; F741E2
+VocalistP1OK_Case0:
 	lds32 xhl, 0
 	pop xiz
 	ret
@@ -3366,7 +3366,7 @@ VocalistPage2OKFunc:
 	call MainFuncCall
 
 ; VocalistPage1OK case 1
-VocalistP1OK_Case1:	; F741FE
+VocalistP1OK_Case1:
 	lds32 xhl, 0
 	ret
 
@@ -3387,7 +3387,7 @@ MainVocalistPage1OKFunc:
 	lda_24 xix, 0xf7422f
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; MainVocalistPage1OKFunc dispatch
-VocalistPage1OK_Dispatch:	; F7422F
+VocalistPage1OK_Dispatch:
 	.byte 0x1d, 0x3a, 0x5c, 0xfd, 0x1d, 0xdd, 0x5b, 0xfd
 	.byte 0xf1, 0xec, 0xb7, 0x00, 0x0b, 0x1d, 0x76, 0x54
 	.byte 0xfd, 0xa7, 0x20, 0xe8, 0xef, 0x00, 0xd7, 0xe2
@@ -3402,7 +3402,7 @@ VocalistPage1OK_Dispatch:	; F7422F
 	jrl	nc, 0x0000
 
 ; Vocalist page handler
-VocalistPage_Handler:	; F7428A
+VocalistPage_Handler:
 	lds32 xhl, 0
 	inc 4, xsp
 	ret

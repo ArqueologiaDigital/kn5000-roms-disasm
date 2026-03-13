@@ -65,7 +65,7 @@ MainPreControl:
 	lda_24 xix, 0xf86625
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ; MainPreControl dispatch (11-entry, table 0xEA007A)
-MainPreControl_Dispatch:	; F86625
+MainPreControl_Dispatch:
 	sti16_24	0x0251D8, 0
 
 MainPreControl_ReturnNull:
@@ -2206,7 +2206,7 @@ LABEL_F87A1F:
 	lds iz, 0
 
 ; File demo record callback dispatch
-FileDemo_RecordCallback:	; F87A3E
+FileDemo_RecordCallback:
 	ld wa, iz
 	muls wa, 0x6
 	lda_24 xbc, 0xea01c0
@@ -2745,7 +2745,7 @@ LABEL_F87F23:
 	ldi_werp 0xFA, 0
 
 ; File demo process callback dispatch
-FileDemo_ProcessCallback:	; F87F6A
+FileDemo_ProcessCallback:
 	ldto_werp WA, 0xFA
 	muls wa, 0x6
 	lda_24 xbc, 0xea0210

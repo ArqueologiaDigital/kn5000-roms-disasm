@@ -331,33 +331,20 @@ Str_DrawCtrl_Empty:	aligned_string ""
 Str_DrawCtrl_MainMemDrawCtrl:	aligned_string "MainMemDrawControl"
 Str_DrawCtrl_MainPreControl:	aligned_string "MainPreControl"
 
-Bitmap_Accita16:	; e86676
-	.incbin "images/BitmapAccita16.bin"
-
-Bitmap_Accger16:	; e892fe
-	.incbin "images/BitmapAccger16.bin"
-
-Bitmap_SomeArrows:	; e8bf86
-	.incbin "images/BitmapSomeArrows.bin"
+Bitmap_Accita16:	.incbin "images/BitmapAccita16.bin"
+Bitmap_Accger16:	.incbin "images/BitmapAccger16.bin"
+Bitmap_SomeArrows:	.incbin "images/BitmapSomeArrows.bin"
 BitmapBound_DrawbarSlider1_Start:
 
-Bitmap_DrawbarNumberedSlider_1:	; e8c66a
-	.incbin "images/BitmapDrawbarNumberedSlider_1.bin"
+Bitmap_DrawbarNumberedSlider_1:	.incbin "images/BitmapDrawbarNumberedSlider_1.bin"
 BitmapBound_DrawbarSlider2_Start:
 
-Bitmap_DrawbarNumberedSlider_2:	; e8d97e
-	.incbin "images/BitmapDrawbarNumberedSlider_2.bin"
+Bitmap_DrawbarNumberedSlider_2:	.incbin "images/BitmapDrawbarNumberedSlider_2.bin"
 BitmapBound_DrawbarSlider3_Start:
 
-Bitmap_DrawbarNumberedSlider_3:	; e8ec92
-	.incbin "images/BitmapDrawbarNumberedSlider_3.bin"
-
-Bitmap_Technics_Logo:	; e8ffa6
-	.incbin "images/BitmapTechnicsLogo.bin"
-
-Bitmap_KN5000_Logo:	; e9367e
-	.incbin "images/BitmapKN5000Logo.bin"
-
+Bitmap_DrawbarNumberedSlider_3:	.incbin "images/BitmapDrawbarNumberedSlider_3.bin"
+Bitmap_Technics_Logo:		.incbin "images/BitmapTechnicsLogo.bin"
+Bitmap_KN5000_Logo:		.incbin "images/BitmapKN5000Logo.bin"
 Str_Mixer_ON:	.asciz "ON "
 MixerPartTable_Start:
 	.byte 0x4f, 0x46, 0x46, 0x00, 0x45, 0x52

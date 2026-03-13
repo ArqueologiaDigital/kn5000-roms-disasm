@@ -19,7 +19,7 @@ LABEL_FC5843:
 	srla l
 
 ; File I/O callback handler
-FileIO_CallbackHandler:	; FC584C
+FileIO_CallbackHandler:
 	cps l, 0
 	jr z, LABEL_FC5863
 	ld a, (xiz + 1)
@@ -1336,7 +1336,7 @@ DispatchBitmaskHandlers:
 	jr z, LABEL_FC714D
 
 ; Bitmask dispatch loop handler
-BitmaskDispatch_LoopHandler:	; FC7139
+BitmaskDispatch_LoopHandler:
 	ld wa, (xsp + 4)
 	and wa, (xiz)
 	jr z, LABEL_FC7145
@@ -1398,7 +1398,7 @@ LABEL_FC71AC:
 	ret
 
 
-Set_LEDs:	; FC71B2
+Set_LEDs:
 	; Input: WA: row of LEDs
 	;         C: LED pattern
 	ld e, a
@@ -3226,7 +3226,7 @@ LABEL_FC84DC:
 	jr LABEL_FC851C
 
 ; File I/O operation dispatch
-FileIO_OperationDispatch:	; FC84EA
+FileIO_OperationDispatch:
 	calr LABEL_FC95CE
 	ldda8 a, 37159
 	extz wa
@@ -5599,7 +5599,7 @@ ToneGen_DispatchByMode:
 ; Register bit manipulation dispatch
 ; Index: DRAM[64605] & 0x7 (0-7), entries: 8
 ; 32-bit function pointers, call (xhl)
-RegBitManip_Dispatch:	; FCA3A1
+RegBitManip_Dispatch:
 	extz xhl
 	xor h, h
 	ldda8 l, 64605
@@ -5714,7 +5714,7 @@ LABEL_FCA4CF:
 ; MIDI stream processor dispatch A
 ; Index: w & 0x7 (0-7), entries: 8
 ; 32-bit function pointers, call (xhl)
-MidiStream_ProcessorDispatch:	; FCA4DB
+MidiStream_ProcessorDispatch:
 	and w, 0x7
 	sll w, 2
 	ld xix, 0xFCA4F9
@@ -5847,7 +5847,7 @@ LABEL_FCA662:
 ; MIDI stream processor dispatch B
 ; Index: w & 0x7 (0-7), entries: 8
 ; 32-bit function pointers, call (xhl)
-MidiStream_ProcessorDispatchB:	; FCA66E
+MidiStream_ProcessorDispatchB:
 	stdi8 37319, 0
 	and w, 0x7
 	sll w, 2
@@ -6074,7 +6074,7 @@ LABEL_FCA87E:
 ; MIDI stream processor dispatch C
 ; Index: w & 0xF (0-15), entries: 16
 ; 32-bit function pointers, call (xhl)
-MidiStream_ProcessorDispatchC:	; FCA88A
+MidiStream_ProcessorDispatchC:
 	and w, 0xF
 	sll w, 2
 	ld xix, 0xFCA8B9
@@ -6480,7 +6480,7 @@ LABEL_FCAD62:
 ; Voice mode parameter dispatch
 ; Index: DRAM[37301] bits [6:4] (0-7), entries: 8
 ; 32-bit function pointers, call (xhl)
-VoiceMode_ParamDispatch:	; FCAD7D
+VoiceMode_ParamDispatch:
 	ld (xiy), 0xFF
 	ldda8 a, 37302
 	stda8 37112, a
@@ -6578,7 +6578,7 @@ LABEL_FCAE84:
 	jrl nz, MidiCtrl_NullRet
 
 ; MIDI controller dispatch handler
-MidiCtrl_DispatchHandler:	; FCAE92
+MidiCtrl_DispatchHandler:
 	xor h, h
 	ldda8 l, 37320
 	ld xix, 0xF1A0
@@ -7149,7 +7149,7 @@ LABEL_FCB6E2:
 	ret
 
 ; MIDI voice note dispatch
-MidiVoiceNote_Dispatch:	; FCB6E3
+MidiVoiceNote_Dispatch:
 	ldda8 l, 37301
 	and l, 0x3
 	sll l, 2
@@ -7233,7 +7233,7 @@ LABEL_FCB771:
 	popw hl
 
 ; MIDI part channel dispatch
-MidiPart_ChannelDispatch:	; FCB7CA
+MidiPart_ChannelDispatch:
 	extz hl
 	ldda8 l, 37320
 	ld xix, 0xF1A0

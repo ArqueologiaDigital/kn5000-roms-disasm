@@ -390,7 +390,7 @@ LABEL_E17D82:
 	.byte 0x02, 0x00, 0x00, 0x00, 0xff, 0x00
 LABEL_E17DA2:
 
-String_Next__questionmark:	; E17DA2
+String_Next__questionmark:
 	aligned_string "Next ?"
 LABEL_E17DAA:
 
@@ -427,7 +427,7 @@ LABEL_E17E06:
 	.long String_COMPOSER_MENU
 	.byte 0x4d, 0x00, 0x00, 0x00
 
-String_COMPOSER_MENU:	; E17E30
+String_COMPOSER_MENU:
 	aligned_string "COMPOSER MENU"
 LABEL_E17E3E:
 
@@ -441,7 +441,7 @@ LABEL_E17E3E:
 	.byte 0xbb, 0x00, 0xa0, 0x01
 	.byte 0x0b, 0x00, 0x00, 0x00
 
-String_BEND_RANGE_SET:	; E17E74
+String_BEND_RANGE_SET:
 	aligned_string "BEND RANGE SET"
 LABEL_E17E84:
 
@@ -455,7 +455,7 @@ LABEL_E17E84:
 	.byte 0xba, 0x00, 0xa0, 0x01, 0x51, 0x00
 	.byte 0x00, 0x00
 
-String_EASY_COMPOSER:	; E17EBA
+String_EASY_COMPOSER:
 	aligned_string "EASY COMPOSER"
 LABEL_E17EC8:
 
@@ -2440,7 +2440,7 @@ LABEL_E1A1CE:
 	.byte 0xa1, 0x00, 0x00, 0x00
 LABEL_E1A1F8:
 
-String_CUSTOM_COPY:	; 1A1F8
+String_CUSTOM_COPY:
 	aligned_string "CUSTOM COPY"
 LABEL_E1A204:
 
@@ -2718,7 +2718,7 @@ LABEL_E1A69E:
 	.long String_EXECUTE
 LABEL_E1A6CA:
 
-String_EXECUTE:	; E1A6CA
+String_EXECUTE:
 	aligned_string "EXECUTE"
 LABEL_E1A6D2:
 
@@ -2734,7 +2734,7 @@ LABEL_E1A6D2:
 	.long String_ABORT
 LABEL_E1A6FE:
 
-String_ABORT:	; E1A6FE
+String_ABORT:
 	aligned_string "ABORT"
 
 

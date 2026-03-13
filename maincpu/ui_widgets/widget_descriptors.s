@@ -777,18 +777,10 @@ LABEL_E34C50:	aligned_string " %2d "
 	.byte 0x57, 0x00, 0x42, 0x00, 0x4d, 0x00, 0x37, 0x00
 
 
-Bitmap_Ntedt0k:	; e34e78
-	.incbin "images/BitmapNtedt0k.bin"
-
-Bitmap_Ntedt0d:	; e35668
-	.incbin "images/BitmapNtedt0d.bin"
-
-Bitmap_Dredt0k:	; e3cd78
-	.incbin "images/BitmapDredt0k.bin"
-
-Bitmap_Dredt0d:	; e3f660
-	.incbin "images/BitmapDredt0d.bin"
-
+Bitmap_Ntedt0k:	.incbin "images/BitmapNtedt0k.bin"
+Bitmap_Ntedt0d:	.incbin "images/BitmapNtedt0d.bin"
+Bitmap_Dredt0k:	.incbin "images/BitmapDredt0k.bin"
+Bitmap_Dredt0d:	.incbin "images/BitmapDredt0d.bin"
 LABEL_E44478:
 	.byte 0x00, 0x17, 0x09, 0x23, 0x15, 0x2f, 0x21, 0x3b
 	.ascii "-G9SE_Qk]wi"

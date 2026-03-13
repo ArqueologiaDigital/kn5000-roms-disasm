@@ -24,7 +24,7 @@ LABEL_F768AF:
 	call ApPostEvent
 
 ; ParaLoadOpt case A
-ParaLoadOpt_CaseA:	; F768D9
+ParaLoadOpt_CaseA:
 	ld8_24 a, 0x02475c
 	cp a, (xsp + 2)
 	jr z, ParaLoadOpt_CaseB
@@ -36,7 +36,7 @@ ParaLoadOpt_CaseA:	; F768D9
 	call ApPostEvent
 
 ; ParaLoadOpt case B
-ParaLoadOpt_CaseB:	; F768FB
+ParaLoadOpt_CaseB:
 	ld8_24 a, 0x02475e
 	cp a, (xsp)
 	jr z, ParaLoadOpt_CaseC
@@ -48,7 +48,7 @@ ParaLoadOpt_CaseB:	; F768FB
 	call ApPostEvent
 
 ; ParaLoadOpt case C
-ParaLoadOpt_CaseC:	; F7691B
+ParaLoadOpt_CaseC:
 	ld8_24 a, 0x02475a
 	cp a, (xsp + 4)
 	jrl z, MidiFunc_SendEvtReturnAlt
@@ -120,7 +120,7 @@ LABEL_F76A52:
 	call ApPostEvent
 
 ; ParaLoadOpt case D
-ParaLoadOpt_CaseD:	; F76A7C
+ParaLoadOpt_CaseD:
 	ldda8 a, 48400
 	bit 7, a
 	jr z, ParaLoadOpt_CaseE
@@ -134,7 +134,7 @@ ParaLoadOpt_CaseD:	; F76A7C
 	call ApPostEvent
 
 ; ParaLoadOpt case E
-ParaLoadOpt_CaseE:	; F76AA4
+ParaLoadOpt_CaseE:
 	ldda8 a, 48404
 	bit 7, a
 	jr z, ParaLoadOpt_CaseF
@@ -148,7 +148,7 @@ ParaLoadOpt_CaseE:	; F76AA4
 	call ApPostEvent
 
 ; ParaLoadOpt case F
-ParaLoadOpt_CaseF:	; F76ACB
+ParaLoadOpt_CaseF:
 	ldda8 a, 48396
 	bit 7, a
 	jrl z, MidiFunc_SendEventReturn
@@ -266,7 +266,7 @@ AcParaLoadOptGridBoxProc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 ; ParaLoadOpt grid handler
-ParaLoadOpt_GridHandler:	; F76CC8
+ParaLoadOpt_GridHandler:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -305,7 +305,7 @@ ParaLoadOpt_GridHandler:	; F76CC8
 	jrl LABEL_F76EFE
 
 ; ParaLoadOpt grid return
-ParaLoadOpt_GridReturn:	; F76D32
+ParaLoadOpt_GridReturn:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -456,13 +456,13 @@ LABEL_F76EFE:
 	jr AccFunc_ReturnZeroJmp
 
 ; ParaLoadOpt grid check case 0
-ParaLoadOpt_GridCheck0:	; F76F04
+ParaLoadOpt_GridCheck0:
 	ld xwa, xiz
 	ld xiz, 0x3E
 	jr LABEL_F76F14
 
 ; ParaLoadOpt grid check case 1
-ParaLoadOpt_GridCheck1:	; F76F0D
+ParaLoadOpt_GridCheck1:
 	ld xwa, xiz
 	ld xiz, 0x42
 
@@ -484,7 +484,7 @@ LABEL_F76F14:
 	jr LABEL_F76F49
 
 ; ParaLoadOpt grid check case 2
-ParaLoadOpt_GridCheck2:	; F76F3A
+ParaLoadOpt_GridCheck2:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -499,14 +499,14 @@ AccFunc_ReturnZeroJmp:
 	jr ParaLoadOpt_GridCheck4
 
 ; ParaLoadOpt grid check case 3
-ParaLoadOpt_GridCheck3:	; F76F51
+ParaLoadOpt_GridCheck3:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
 ; ParaLoadOpt grid check case 4
-ParaLoadOpt_GridCheck4:	; F76F5D
+ParaLoadOpt_GridCheck4:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -549,7 +549,7 @@ ParaLoadOptGridCheck:
 	lda_24 xix, 0xf76fe2
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; ParaLoadOptGridCheck dispatch
-ParaLoadOpt_GridDispatch:	; F76FE2
+ParaLoadOpt_GridDispatch:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xbf, 0x14, 0x30, 0xeb, 0x89, 0xe9, 0xef
@@ -634,7 +634,7 @@ ParaLoadOpt_GridDispatch:	; F76FE2
 	.byte 0x01, 0x78, 0xd9, 0x00
 
 ; Voice UI misc handler
-VoiceUI_MiscHandler:	; F7724E
+VoiceUI_MiscHandler:
 	ld xde, xhl
 	srl xde, 0
 	ldi_werp 0xEA, 0

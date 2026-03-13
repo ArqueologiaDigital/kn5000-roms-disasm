@@ -258,7 +258,7 @@ LABEL_FC4E6E:
 	lds iz, 0
 
 ; DSPCfg_InitAllEntries handler: entry 0
-DSPCfg_Init_Entry0:	; FC4E76
+DSPCfg_Init_Entry0:
 	ld bc, iz
 	extz xbc
 	ld xwa, xbc
@@ -277,7 +277,7 @@ DSPCfg_Init_Entry0:	; FC4E76
 	ret
 
 ; DSPCfg_InitAllEntries handler: entry 1
-DSPCfg_Init_Entry1:	; FC4E9C
+DSPCfg_Init_Entry1:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
@@ -289,7 +289,7 @@ DSPCfg_Init_Entry1:	; FC4E9C
 	jr z, DSPCfg_Init_Setup
 
 ; DSPCfg_InitAllEntries handler: entry 2
-DSPCfg_Init_Entry2:	; FC4EB1
+DSPCfg_Init_Entry2:
 	ld xwa, (xsp + 4)
 	ld xbc, xiz
 	calr DSPCfg_Init_BoundsCheck
@@ -299,13 +299,13 @@ DSPCfg_Init_Entry2:	; FC4EB1
 	jr nz, DSPCfg_Init_Entry2
 
 ; DSPCfg_InitAllEntries setup before dispatch
-DSPCfg_Init_Setup:	; FC4EC2
+DSPCfg_Init_Setup:
 	pop xiz
 	inc 4, xsp
 	ret
 
 ; DSPCfg_InitAllEntries bounds check and dispatch
-DSPCfg_Init_BoundsCheck:	; FC4EC6
+DSPCfg_Init_BoundsCheck:
 	ld e, (xbc)
 	extz de
 	cps de, 0
@@ -318,7 +318,7 @@ DSPCfg_Init_BoundsCheck:	; FC4EC6
 	lda_24 xix, 0xfc4eea
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; DSPCfg_InitAllEntries dispatch
-DSPCfg_InitDispatch:	; FC4EEA
+DSPCfg_InitDispatch:
 	calr	45
 	jr	42
 	calr	58
@@ -339,7 +339,7 @@ DSPCfg_InitDispatch:	; FC4EEA
 	jr	2
 
 ; DSPCfg_InitAllEntries finalize after dispatch
-DSPCfg_Init_Finalize:	; FC4F17
+DSPCfg_Init_Finalize:
 	lds hl, 1
 	ret
 
@@ -827,12 +827,12 @@ LABEL_FC54B2:
 	call Gfx_ClearFrameBuffers
 
 ; DSP config parameter handler A
-DSPCfg_Param_CaseA:	; FC5541
+DSPCfg_Param_CaseA:
 	pop xiz
 	ret
 
 ; DSP config parameter handler B
-DSPCfg_Param_CaseB:	; FC5543
+DSPCfg_Param_CaseB:
 	pushw 0x2
 	ld xwa, 0x3D3400
 	push xwa
@@ -880,7 +880,7 @@ CtrlPanel_IndicatorJumpTable:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; DSP config parameter handler C
-DSPCfg_Param_CaseC:	; FC55CB
+DSPCfg_Param_CaseC:
 	.byte 0x0e, 0x40, 0x00, 0x34, 0x3d, 0x00, 0x38, 0xd8
 	.byte 0xa9, 0x41, 0xe4, 0x40, 0x03, 0x00, 0xda, 0xaa
 	.byte 0x68, 0x43, 0x40, 0x10, 0x34, 0x3d, 0x00, 0x38
@@ -909,7 +909,7 @@ Audio_DispatchCommand:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; DSP config parameter handler D
-DSPCfg_Param_CaseD:	; FC5647
+DSPCfg_Param_CaseD:
 	ret
 	pushw	2
 	ld	xwa, 4011008
@@ -968,7 +968,7 @@ LABEL_FC56C5:
 	.byte 0x0e, 0xd9, 0x61, 0xd9, 0xde, 0x67, 0xef
 
 ; DSP config parameter default handler
-DSPCfg_Param_Default:	; FC5754
+DSPCfg_Param_Default:
 	lds hl, 0
 	ret
 

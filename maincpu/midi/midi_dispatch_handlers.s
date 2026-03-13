@@ -1179,7 +1179,7 @@ FileData_ValidateAndDispatch:
 	dec 1, c
 
 ; File data dispatch handler
-FileData_DispatchHandler:	; FD0E1D
+FileData_DispatchHandler:
 	push xix
 	ld wa, bc
 	extz wa
@@ -6307,7 +6307,7 @@ MIDI_ReadChannelParam:
 	lda_24 xix, 0xfd5e5c
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ; MIDI channel parameter read dispatch
-MidiChan_ParamDispatch:	; FD5E5C
+MidiChan_ParamDispatch:
 	.byte 0xb0, 0x45, 0x0e, 0xe9, 0xa9, 0x68, 0x4e, 0xe9
 	.byte 0xaa, 0x68, 0x4a, 0xe9, 0xab, 0x68, 0x46, 0xe9
 	.byte 0xac, 0x68, 0x42, 0xe9, 0xad, 0x68, 0x3e, 0xe9
@@ -6341,7 +6341,7 @@ SeqData_ReadFieldByIndex:
 	lda_24 xix, 0xfd5ed8
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ; Sequence data field read dispatch
-SeqData_FieldDispatch:	; FD5ED8
+SeqData_FieldDispatch:
 	ld	l, (xwa)
 	jr	90
 	lds32	xbc, 1
@@ -8727,7 +8727,7 @@ LABEL_FD7AF0:
 	.byte 0xf1, 0x18, 0xbd, 0xb4			; res 4, (0xBD18)  [F1 prefix]
 	ret
 ; MIDI table dispatch helper
-MidiTable_DispatchHelper:	; FD7AF5
+MidiTable_DispatchHelper:
 	; --- Helper 1: table dispatch via (XBC+WA) with guard checks (58 bytes) ---
 	ldda32	xwa, 48300
 	lds	bc, 4
@@ -9169,7 +9169,7 @@ LABEL_FD8126:
 	.byte 0xa8, 0x1d, 0x3a, 0x5e, 0xfd, 0xf1, 0x1a, 0xbd
 	.byte 0xba, 0x0e
 ; MIDI SysEx processing block with dispatch
-MidiSysEx_ProcessBlock:	; FD8137
+MidiSysEx_ProcessBlock:
 	.byte 0xe1, 0xac, 0xbc, 0x20, 0xd9, 0xab
 	.byte 0xda, 0xa8, 0x1d, 0x3a, 0x5e, 0xfd, 0xf1, 0x18
 	.byte 0xbd, 0xb4, 0x1e, 0x6f, 0x00, 0x1e, 0xa1, 0x00
@@ -10395,7 +10395,7 @@ SysEx_InitiateSend:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; SysEx send dispatch
-SysEx_SendDispatch:	; FD8CF1
+SysEx_SendDispatch:
 	.byte 0x1d, 0x17, 0x76, 0xfd, 0x1d, 0x59, 0x7a, 0xfd
 	.byte 0x1d, 0x61, 0x75, 0xfd
 
@@ -10482,7 +10482,7 @@ LABEL_FD8DB0:
 	ret
 
 ; Sequencer data dispatch handler
-SeqData_DispatchHandler:	; FD8DB4
+SeqData_DispatchHandler:
 	call SeqData_InitPlaybackFromField
 	ldda32 xwa, 48300
 	lds bc, 4

@@ -58,7 +58,7 @@
 ;
 ; =============================================================================
 
-CPanel_ScanButtons:	; FC3EE5
+CPanel_ScanButtons:
 	push xix
 	push xiz
 	push xhl
@@ -253,7 +253,7 @@ CPanel_InitLEDBuffer:
 ; But these values are also suspiciously similar to proportions
 ; between typical baudrates, but this is just a hunch for now...
 
-DELAY_2_LOOPS:	; FC40DE
+DELAY_2_LOOPS:
 	lds wa, 2
 
 Delay2L_Loop:
@@ -266,7 +266,7 @@ Delay2L_Done:
 	ret
 
 
-DELAY_6_LOOPS:	; FC40E9
+DELAY_6_LOOPS:
 	lds wa, 6
 
 Delay6L_Loop:
@@ -279,7 +279,7 @@ Delay6L_Done:
 	ret
 
 
-DELAY_10_LOOPS:	; FC40F4
+DELAY_10_LOOPS:
 	ldw wa, 0xA
 
 Delay10L_Loop:
@@ -292,7 +292,7 @@ Delay10L_Done:
 	ret
 
 
-DELAY_300_LOOPS:	; FC4100
+DELAY_300_LOOPS:
 	ldw wa, 0x12C
 
 Delay300L_Loop:
@@ -305,7 +305,7 @@ Delay300L_Done:
 	ret
 
 
-DELAY_1500_LOOPS:	; FC410C
+DELAY_1500_LOOPS:
 	ldw wa, 0x5DC
 
 Delay1500L_Loop:
@@ -318,7 +318,7 @@ Delay1500L_Done:
 	ret
 
 
-DELAY_3000_LOOPS:	; FC4118
+DELAY_3000_LOOPS:
 	ldw wa, 0xBB8
 
 Delay3000L_Loop:
@@ -670,7 +670,7 @@ CPanel_SendCommand:
 	ret
 
 
-INTA_HANDLER:	; fc442b
+INTA_HANDLER:
 	stdi8 36248, 0
 	push xwa
 	cpdi8 36235, 0
@@ -699,7 +699,7 @@ INTA_DecrementRXCount:
 	ordi8 36242, 64	; CP_Flags_B.6 = 1  ; UNUSED
 	anddi8 36236, 253	; CP_Flags_A.1 = 0
 
-INTA_HANDLER_END:	; FC447E
+INTA_HANDLER_END:
 	pop xwa
 	ldio 0xF8, 0x12	; INTA Pin
 	ldio 0xF8, 0x22	; INTRX1: Serial receive 1
@@ -707,7 +707,7 @@ INTA_HANDLER_END:	; FC447E
 	reti
 
 
-CPANEL_STATE_MACHINE_TABLE:	; FC4489
+CPANEL_STATE_MACHINE_TABLE:
 	.long CPanel_SM_Idle
 	.long CPanel_SM_StartTX
 	.long CPanel_SM_SendByte1
@@ -721,7 +721,7 @@ CPANEL_STATE_MACHINE_TABLE:	; FC4489
 	.long CPanel_SM_Idle
 
 
-INTTX1_HANDLER:	; FC44B5
+INTTX1_HANDLER:
 	push xwa
 	push xhl
 	push xiy
@@ -733,7 +733,7 @@ INTTX1_HANDLER:	; FC44B5
 	jp (xhl)
 
 
-MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:	; FC44CA
+MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 	pop xiy
 	pop xhl
 	pop xwa
@@ -743,7 +743,7 @@ MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:	; FC44CA
 	reti
 
 
-INTRX1_HANDLER:	; FC44D7
+INTRX1_HANDLER:
 	push xwa
 	push xhl
 	push xiy
@@ -754,7 +754,7 @@ INTRX1_HANDLER:	; FC44D7
 	ld xhl, (xhl)
 	jp (xhl)
 
-LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:	; FC44EC
+LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 	pop xiy
 	pop xhl
 	pop xwa
@@ -795,7 +795,7 @@ CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the cont
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
-CPanel_SM_TXDelay1:	; FC4544
+CPanel_SM_TXDelay1:
 	calr DELAY_10_LOOPS
 	anddi8 36238, 175
 	ldda8 a, 36238
@@ -813,7 +813,7 @@ CPanel_SM_TXDelay1:	; FC4544
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
-CPanel_SM_TXDelay2:	; FC4573
+CPanel_SM_TXDelay2:
 	calr DELAY_10_LOOPS
 	anddi8 36238, 175
 	ldda8 a, 36238
@@ -833,7 +833,7 @@ CPanel_SM_TXDelay2:	; FC4573
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
-CPanel_SM_SendByte1:	; FC45A8
+CPanel_SM_SendByte1:
 	ldio 0xD7, 0x14	; Internal Clock T2 (16/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
@@ -870,7 +870,7 @@ SendByte1_AdvanceState:
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
-CPanel_SM_SendByteN:	; FC460D
+CPanel_SM_SendByteN:
 	ldio 0xD7, 0x14	; Internal Clock T2 (16/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/16/4 = 250kHz
@@ -906,7 +906,7 @@ SendByteN_AdvanceState:
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
-CPanel_SM_TXComplete:	; FC4672
+CPanel_SM_TXComplete:
 	stdi8 36235, 0
 	stdi8 36234, 0	; ROUTINE_0
 	ldda16 xwa, 36351
@@ -947,7 +947,7 @@ TXComplete_BufferEmpty:
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
-CPanel_SM_RXByte1:	; FC46EA
+CPanel_SM_RXByte1:
 	anddi8 36238, 159
 	ldda8 a, 36238
 	st_dd8b A, 0x3E
@@ -997,7 +997,7 @@ RXByte1_AdvanceState:
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
-CPanel_SM_RXByteN:	; FC4767
+CPanel_SM_RXByteN:
 	ld_sd8b A, 0xD4
 	ld xiy, 0x8DA1
 	addda16 xiy, 36255
@@ -1414,7 +1414,7 @@ CPanel_RX_SyncPacket:
 	ordi8 36242, 8	; CP_Flags_B.3 = 1  ; UNUSED
 	jrl CPanel_RX_ParseNext
 
-CPanel_RX_Done:	; FC4B2C
+CPanel_RX_Done:
 	ret
 
 
@@ -1516,7 +1516,7 @@ LEDs_Return:
 	ret
 
 
-CPanel_IncRXPtr:	; FC4C08
+CPanel_IncRXPtr:
 	inc 1, iy
 	cp iy, 0x5C
 	jr c, IncRX_NoWrap
@@ -1526,7 +1526,7 @@ IncRX_NoWrap:
 	ret
 
 
-CPanel_IncLEDPtr:	; FC4C13
+CPanel_IncLEDPtr:
 	inc 1, iy
 	cp iy, 0x3C
 	jr c, IncLED_NoWrap
@@ -1536,7 +1536,7 @@ IncLED_NoWrap:
 	ret
 
 
-CPanel_IncEventPtr:	; FC4C1E
+CPanel_IncEventPtr:
 	inc 1, ix
 	cp ix, 0x80
 	jr c, IncEvt_NoWrap
@@ -1546,7 +1546,7 @@ IncEvt_NoWrap:
 	ret
 
 
-CPanel_DecEventPtr:	; FC4C29
+CPanel_DecEventPtr:
 	cps ix, 0
 	jr nz, DecEvt_NoWrap
 	ldw ix, 0x7F

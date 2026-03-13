@@ -36,7 +36,7 @@ SoundData_CategoryDesc:
 
 ; Sound data section pointers (16 entries)
 ; Each pointer references a sound data block for a category
-SOUND_DATA_SECTION_PTRS:	; E023B0
+SOUND_DATA_SECTION_PTRS:
 	.long SOUND_DATA_PIANO
 	.long SOUND_DATA_GUITAR
 	.long SOUND_DATA_STRINGS_VOCAL
@@ -57,7 +57,7 @@ SOUND_DATA_SECTION_PTRS:	; E023B0
 ; Sound category names - fixed-width string table for the sound selection UI
 ; 18 entries x 16 characters each, space-padded and centered
 ; Referenced via structure at E023A0: pointer, count=18, field=0x28
-SOUND_CATEGORY_NAMES:	; E023F0
+SOUND_CATEGORY_NAMES:
 	.ascii "     PIANO      "	;  0: Piano
 	.ascii "     GUITAR     "	;  1: Guitar
 	.ascii "STRINGS & VOCAL "	;  2: Strings & Vocal

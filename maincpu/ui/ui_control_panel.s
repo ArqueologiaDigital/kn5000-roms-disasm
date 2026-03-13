@@ -2166,7 +2166,7 @@ RefreshApTask:
 	lds32 xde, 0
 	jp ApPostEvent
 
-RefreshSwEvent:	; f98926
+RefreshSwEvent:
 	lds32 xwa, 0
 	st32_24 0x02749a, xwa
 	st32_24 0x02749e, xwa
@@ -3323,7 +3323,7 @@ GroupBoxProc:
 	jrl gt, GroupBox_ForwardToBoxProc
 
 ; Control panel function dispatch
-CtrlPanel_FuncDispatch:	; F99940
+CtrlPanel_FuncDispatch:
 	add xwa, 0xEA9ADA
 	ld wa, (xwa)
 	extz wa

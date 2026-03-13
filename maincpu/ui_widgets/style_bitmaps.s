@@ -545,18 +545,10 @@ LABEL_EB7932:
 ; Sizes:  FadeInPicture=2800, FadeInText=1440,
 ;         FadeOutPicture=2850, FadeOutText=2160
 ; =============================================================================
-Bitmap_FadeInPicture:	; eb8072
-	.incbin "images/BitmapFadeInPicture.bin"
-
-Bitmap_FadeInText:	; eb8b62
-	.incbin "images/BitmapFadeInText.bin"
-
-Bitmap_FadeOutPicture:	; eb9102
-	.incbin "images/BitmapFadeOutPicture.bin"
-
-Bitmap_FadeOutText:	; eb9c24
-	.incbin "images/BitmapFadeOutText.bin"
-
+Bitmap_FadeInPicture:	.incbin "images/BitmapFadeInPicture.bin"
+Bitmap_FadeInText:	.incbin "images/BitmapFadeInText.bin"
+Bitmap_FadeOutPicture:	.incbin "images/BitmapFadeOutPicture.bin"
+Bitmap_FadeOutText:	.incbin "images/BitmapFadeOutText.bin"
 LABEL_EBA494:
 	.long LABEL_EC40B2
 	.byte 0x11, 0x02, 0x90, 0x40, 0xec, 0x00, 0xb5, 0x03

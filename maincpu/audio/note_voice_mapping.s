@@ -1727,7 +1727,7 @@ LABEL_FE1311:
 	jrl nc, LABEL_FE143D
 
 ; Voice event type dispatch
-VoiceEvent_TypeDispatch:	; FE131B
+VoiceEvent_TypeDispatch:
 	ld wa, iz
 	sll wa, 2
 	ldada xbc, 50380
@@ -1765,7 +1765,7 @@ VoiceEvent_TypeDispatch:	; FE131B
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; Voice event handler dispatch (14-entry, table 0xEE8F06)
-VoiceEvent_Dispatch:	; FE137D
+VoiceEvent_Dispatch:
 	ld a, l
 	extz wa
 	extz bc
@@ -13718,7 +13718,7 @@ LABEL_FE88D2:
 	jrl SeqEvtBuf_NonNoteDispatchLoop
 
 ; Sequencer event buffer note dispatch
-SeqEvtBuf_NoteDispatch:	; FE894D
+SeqEvtBuf_NoteDispatch:
 	call SeqEvtBuf_ReadAlternate
 	ldfr_werp HL, 0xFA
 	ldto_werp WA, 0xFA
@@ -13748,7 +13748,7 @@ SeqEvtBuf_NoteDispatch:	; FE894D
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; Sequence performance event dispatch (6-entry, table 0xEE8FC0)
-SeqPerformance_EventDispatch:	; FE89A8
+SeqPerformance_EventDispatch:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	lds	bc, 1
@@ -14022,7 +14022,7 @@ LABEL_FE8C18:
 	ldi_berp 0xFB, 1
 
 ; UIParam callback dispatch
-UIParam_CallbackDispatch:	; FE8C1B
+UIParam_CallbackDispatch:
 	lda xwa, (xsp + 2)
 	ldda8 c, 59838
 	extz bc
@@ -14038,7 +14038,7 @@ UIParam_CallbackDispatch:	; FE8C1B
 	jr LABEL_FE8C74
 
 ; UI parameter callback return (table 0xEEAE04)
-UIParam_CallbackReturn:	; FE8C3C
+UIParam_CallbackReturn:
 	ld wa, hl
 	extz xwa
 	add xwa, xwa
@@ -20826,7 +20826,7 @@ LABEL_FED637:
 	ret
 
 ; MIDI system message handler
-MidiSysMsg_Handler:	; FED63B
+MidiSysMsg_Handler:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld c, a
@@ -20846,7 +20846,7 @@ MidiSysMsg_Handler:	; FED63B
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; MIDI system message dispatch (15-entry, table 0xEEC1E8)
-MidiSysMsg_Dispatch:	; FED672
+MidiSysMsg_Dispatch:
 	.byte 0x1e, 0x47, 0x09, 0xdb, 0x88, 0xd8, 0xd8, 0x69
 	.byte 0x06, 0x33, 0xff, 0xff, 0x78, 0x50, 0x01, 0xcf
 	.byte 0xcf, 0xf7, 0x6e, 0xec, 0x78, 0x46, 0x01, 0xde
@@ -23188,7 +23188,7 @@ SndParam_LookupByChannel:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; Sound parameter type dispatch (6-entry, table 0xEED3C6)
-SndParam_TypeDispatch:	; FEEB06
+SndParam_TypeDispatch:
 	extz hl
 	muls hl, 0x18
 	jr SndParam_LoadTableConverge
@@ -23238,7 +23238,7 @@ LABEL_FEEB54:
 	retd 0x2
 
 ; Sound parameter offset dispatch handler
-SndParam_OffsetHandler:	; FEEB59
+SndParam_OffsetHandler:
 	dec 4, xsp
 	ld (xsp), e
 	ld (xsp + 2), a
@@ -23264,7 +23264,7 @@ SndParam_OffsetHandler:	; FEEB59
 	jp_dri 8, 0x07, 0xF0, 0xE8
 
 ; Sound parameter offset dispatch (6-entry, table 0xEED3D2)
-SndParam_OffsetDispatch:	; FEEB97
+SndParam_OffsetDispatch:
 	ldw bc, 0x10
 	jr SndParam_LookupTableConverge
 
@@ -24759,7 +24759,7 @@ LABEL_FF0240:
 	ret
 
 ; HDAE ROM data dispatch handler
-HdaeRom_DataHandler:	; FF024E
+HdaeRom_DataHandler:
 	st_dri3b L, 0xFD, 0x48, 0xFE
 	push xiz
 	lda_dri3 XHL, 0xFD, 0xB8, 0x01
@@ -24779,7 +24779,7 @@ HdaeRom_DataHandler:	; FF024E
 	lda_24 xix, 0xff028f
 	jp_dri 8, 0x07, 0xF0, 0xEC
 ; HDAE5000 extension ROM data dispatch (6-entry, table 0xEED747)
-HdaeRom_DataDispatch:	; FF028F
+HdaeRom_DataDispatch:
 	.byte 0xbf, 0x06, 0x61, 0xc3, 0xfd, 0xba, 0x01, 0x3f
 	.byte 0xff, 0x7e, 0x33, 0x01, 0xc3, 0xfd, 0xb8, 0x01
 	.byte 0x3f, 0xff, 0x7e, 0x2a, 0x01, 0xbf, 0x04, 0x02
@@ -24856,7 +24856,7 @@ LABEL_FF03FB:
 	.byte 0xdf, 0x0e
 
 ; HDAE ROM alt dispatch handler
-HdaeRom_AltHandler:	; FF0445
+HdaeRom_AltHandler:
 	pushw iz
 	ld xwa, 0x1E0000
 	calr LABEL_FF012E
@@ -24872,7 +24872,7 @@ HdaeRom_AltHandler:	; FF0445
 	lda_24 xix, 0xff0470
 	jp_dri 8, 0x07, 0xF0, 0xEC
 ; HDAE5000 extension ROM alt dispatch (6-entry, table 0xEED753)
-HdaeRom_AltDispatch:	; FF0470
+HdaeRom_AltDispatch:
 	.byte 0x40, 0x00, 0x00, 0x1e, 0x00, 0x1e, 0x83, 0xff
 	.byte 0xde, 0xa8, 0x68, 0x03
 

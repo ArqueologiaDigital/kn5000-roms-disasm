@@ -2824,7 +2824,7 @@ LABEL_F24ED8:
 
 ; Voice synthesis command dispatcher
 ; Dispatches on DRAM[4012] value: <0x10 uses algorithm table, others are direct handlers
-VoiceSynth_CommandDispatch:	; F24ED9
+VoiceSynth_CommandDispatch:
 	ldda8 a, 4012
 	cp a, 0x10
 	jrl c, VoiceSynth_AlgoTableDispatch
@@ -2858,7 +2858,7 @@ VoiceSynth_CommandDispatch:	; F24ED9
 
 ; Dispatch via VoiceSynth_Algorithm_Table (16-entry, call (xhl))
 ; Index: DRAM[4012] (0x00-0x0F), 32-bit function pointers
-VoiceSynth_AlgoTableDispatch:	; F24F34
+VoiceSynth_AlgoTableDispatch:
 	ld l, a
 	xor h, h
 	sla l, 2
@@ -3535,7 +3535,7 @@ LABEL_F255F1:
 
 ; Voice parameter command dispatcher
 ; Dispatches on DRAM[4012] value: <0x10 uses read-update table, others are direct handlers
-VoiceParam_CommandDispatch:	; F255F2
+VoiceParam_CommandDispatch:
 	ldda8 a, 4012
 	cp a, 0x10
 	jrl c, VoiceParam_ReadUpdateDispatch
@@ -3569,7 +3569,7 @@ VoiceParam_CommandDispatch:	; F255F2
 
 ; Dispatch via VoiceParam_ReadUpdate_Table (16-entry, call (xhl))
 ; Index: DRAM[4012] (0x00-0x0F), 32-bit function pointers
-VoiceParam_ReadUpdateDispatch:	; F2564D
+VoiceParam_ReadUpdateDispatch:
 	ld l, a
 	xor h, h
 	sla l, 2

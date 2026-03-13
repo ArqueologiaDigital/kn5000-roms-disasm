@@ -1670,7 +1670,7 @@ LABEL_FDBB32:
 	setda 6, 47074
 	ret
 
-GET_COMPUTER_INTERFACE_SELECTION:	; FDBB37
+GET_COMPUTER_INTERFACE_SELECTION:
 	ldda8 l, 47072
 	ret
 
@@ -4051,7 +4051,7 @@ LABEL_FDD27E:
 	jr gt, AssSwb_SwapEntriesAndDispatch
 
 ; DSP config event dispatch
-DspConfig_EventDispatch:	; FDD29D
+DspConfig_EventDispatch:
 	add bc, bc
 	lda_24 xix, 0xee6390
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
@@ -4938,7 +4938,7 @@ LABEL_FDDE15:
 	stdi8 49662, 0
 
 ; Audio mode change handler
-AudioModeChange_Handler:	; FDDE1A
+AudioModeChange_Handler:
 	resda 3, 49662
 	stdi8 49844, 255
 	stdi8 49852, 255
@@ -4980,7 +4980,7 @@ LABEL_FDDE95:
 	stdi8 49662, 0
 
 ; Audio subsystem callback
-AudioSubsystem_Callback:	; FDDE9A
+AudioSubsystem_Callback:
 	resda 3, 49662
 	stdi8 49844, 255
 	stdi8 49852, 255
@@ -5057,7 +5057,7 @@ LABEL_FDDF61:
 	ordi16 50588, 1
 
 ; Audio voice callback dispatch
-AudioVoice_Callback:	; FDDF67
+AudioVoice_Callback:
 	ldda8 a, 36148
 	extz wa
 	sla wa, 2
@@ -5095,7 +5095,7 @@ LABEL_FDDFBC:
 	stdi8 49662, 0
 
 ; Audio voice reset handler
-AudioVoiceReset_Handler:	; FDDFC1
+AudioVoiceReset_Handler:
 	resda 3, 49662
 	stdi8 49844, 255
 	stdi8 49852, 255

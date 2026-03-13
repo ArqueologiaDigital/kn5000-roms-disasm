@@ -482,57 +482,23 @@ MainFunc_MpstFunc:	aligned_string "MainMpstFunc"
 MainFunc_ExcSend:	aligned_string "MainExcSend"
 MainFunc_PcgOutSend:	aligned_string "MainPcgOutSend"
 
-Bitmap_SplitPoint_no_split:	; e5ae4a
-	.incbin "images/BitmapSplitPoint_no_split.bin"
-
-Bitmap_SplitPoint_C:	; e5ba12
-	.incbin "images/BitmapSplitPoint_C.bin"
-
-Bitmap_SplitPoint_Db:	; e5c5da
-	.incbin "images/BitmapSplitPoint_Db.bin"
-
-Bitmap_SplitPoint_D:	; e5d1a2
-	.incbin "images/BitmapSplitPoint_D.bin"
-
-Bitmap_SplitPoint_Eb:	; e5dd6a
-	.incbin "images/BitmapSplitPoint_Eb.bin"
-
-Bitmap_SplitPoint_E:	; e5e932
-	.incbin "images/BitmapSplitPoint_E.bin"
-
-Bitmap_SplitPoint_F:	; e5f4fa
-	.incbin "images/BitmapSplitPoint_F.bin"
-
-Bitmap_SplitPoint_Gb:	; e600c2
-	.incbin "images/BitmapSplitPoint_Gb.bin"
-
-Bitmap_SplitPoint_G:	; e60c8a
-	.incbin "images/BitmapSplitPoint_G.bin"
-
-Bitmap_SplitPoint_Ab:	; e61852
-	.incbin "images/BitmapSplitPoint_Ab.bin"
-
-Bitmap_SplitPoint_A:	; e6241a
-	.incbin "images/BitmapSplitPoint_A.bin"
-
-Bitmap_SplitPoint_Bb:	; e62fe2
-	.incbin "images/BitmapSplitPoint_Bb.bin"
-
-Bitmap_SplitPoint_B:	; e63baa
-	.incbin "images/BitmapSplitPoint_B.bin"
-
-Bitmap_MIDIConnections_1:	; e64772
-	.incbin "images/BitmapMIDIConnections_1.bin"
-
-Bitmap_MIDIConnections_2:	; e6c452
-	.incbin "images/BitmapMIDIConnections_2.bin"
-
-Bitmap_MIDIConnections_3:	; e74132
-	.incbin "images/BitmapMIDIConnections_3.bin"
-
-Bitmap_Bmphk:	; e7be12
-	.incbin "images/BitmapBmphk.bin"
-
+Bitmap_SplitPoint_no_split:	.incbin "images/BitmapSplitPoint_no_split.bin"
+Bitmap_SplitPoint_C:		.incbin "images/BitmapSplitPoint_C.bin"
+Bitmap_SplitPoint_Db:		.incbin "images/BitmapSplitPoint_Db.bin"
+Bitmap_SplitPoint_D:		.incbin "images/BitmapSplitPoint_D.bin"
+Bitmap_SplitPoint_Eb:		.incbin "images/BitmapSplitPoint_Eb.bin"
+Bitmap_SplitPoint_E:		.incbin "images/BitmapSplitPoint_E.bin"
+Bitmap_SplitPoint_F:		.incbin "images/BitmapSplitPoint_F.bin"
+Bitmap_SplitPoint_Gb:		.incbin "images/BitmapSplitPoint_Gb.bin"
+Bitmap_SplitPoint_G:		.incbin "images/BitmapSplitPoint_G.bin"
+Bitmap_SplitPoint_Ab:		.incbin "images/BitmapSplitPoint_Ab.bin"
+Bitmap_SplitPoint_A:		.incbin "images/BitmapSplitPoint_A.bin"
+Bitmap_SplitPoint_Bb:		.incbin "images/BitmapSplitPoint_Bb.bin"
+Bitmap_SplitPoint_B:		.incbin "images/BitmapSplitPoint_B.bin"
+Bitmap_MIDIConnections_1:	.incbin "images/BitmapMIDIConnections_1.bin"
+Bitmap_MIDIConnections_2:	.incbin "images/BitmapMIDIConnections_2.bin"
+Bitmap_MIDIConnections_3:	.incbin "images/BitmapMIDIConnections_3.bin"
+Bitmap_Bmphk:			.incbin "images/BitmapBmphk.bin"
 MidiPart_PageDisplay_Data:
 	.byte 0xf5, 0x00, 0x06, 0x00, 0x3a, 0x01
 	.byte 0x17, 0x00, 0x18, 0x01, 0x0f, 0x00, 0x10, 0xed

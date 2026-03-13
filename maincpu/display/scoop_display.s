@@ -23,7 +23,7 @@
 ; Clears both the enable flag (0x205E6) and dirty bitmap (0x205E4) to zero.
 ; Call this to initialize display state or force a full refresh.
 ;=============================================================================
-Display_ResetDirtyFlags:	; EF5B27
+Display_ResetDirtyFlags:
 	sti16_24 0x0205e6, 0x0000
 	sti16_24 0x0205e4, 0x0000
 	ret
@@ -39,7 +39,7 @@ Display_ResetDirtyFlags:	; EF5B27
 ;   0x205E4 - DISPLAY_DIRTY_FLAGS: Bitmap of dirty regions
 ;   0x205E6 - DISPLAY_ENABLE_FLAG: Update enable flag
 ;=============================================================================
-Display_UpdateDirtyRegions:	; EF5B36
+Display_UpdateDirtyRegions:
 	sti8_24 0x0205e6, 0x01
 	cpdi16_24 132580, 0
 	jr z, Display_MarkClean
@@ -55,12 +55,12 @@ Display_UpdateDirtyRegions:	; EF5B36
 	call Display_UpdateRegion4	; Side panel
 	call Display_UpdateRegion2	; Selection highlight
 
-Display_MarkClean:	; EF5B71
+Display_MarkClean:
 	sti16_24 0x0205e4, 0xffff
 	ret
 
 ; Undisassembled data block (18 bytes) - possibly lookup table
-Display_Data_EF5B79:	; EF5B79
+Display_Data_EF5B79:
 	.byte 0x21, 0xff, 0xf2, 0xea, 0x05, 0x02, 0x41, 0xf2
 	.byte 0xe8, 0x05, 0x02, 0x41, 0xf2, 0xec, 0x05, 0x02
 	.byte 0x41, 0x0e
@@ -71,13 +71,13 @@ Display_Data_EF5B79:	; EF5B79
 ; Checks if status bar needs refresh by comparing cached values.
 ; If changed, calls the status bar redraw routine.
 ;-----------------------------------------------------------------------------
-Display_UpdateRegion0:	; EF5B8B
+Display_UpdateRegion0:
 	bitda_24 0, 132582
 	jr nz, Display_UpdateRegion0_Check
 	setda_24 0, 132580
 	ret
 
-Display_UpdateRegion0_Check:	; EF5B98
+Display_UpdateRegion0_Check:
 	bitda_24 0, 132580
 	jr z, Display_UpdateRegion0_Done
 	pushw wa
@@ -91,7 +91,7 @@ Display_UpdateRegion0_Check:	; EF5B98
 	cpda8_24 a, 132588
 	jr z, Display_UpdateRegion0_NoChange
 
-Display_UpdateRegion0_Changed:	; EF5BC1
+Display_UpdateRegion0_Changed:
 	bitda 0, 3927
 	jrl nz, Display_UpdateRegion0_NoChange
 	call Display_RedrawStatusBar
@@ -102,184 +102,184 @@ Display_UpdateRegion0_Changed:	; EF5BC1
 	ldda8 a, 3424
 	st8_24 0x0205ec, a
 
-Display_UpdateRegion0_NoChange:	; EF5BE7
+Display_UpdateRegion0_NoChange:
 	popw wa
 
-Display_UpdateRegion0_Done:	; EF5BE8
+Display_UpdateRegion0_Done:
 	ret
 
 ;-----------------------------------------------------------------------------
 ; Display_UpdateRegion1 - Update title bar region (bit 1)
 ;-----------------------------------------------------------------------------
-Display_UpdateRegion1:	; EF5BE9
+Display_UpdateRegion1:
 	bitda_24 0, 132582
 	jr nz, Display_UpdateRegion1_Check
 	setda_24 1, 132580
 	ret
 
-Display_UpdateRegion1_Check:	; EF5BF6
+Display_UpdateRegion1_Check:
 	bitda_24 1, 132580
 	jr z, Display_UpdateRegion1_Done
 	call Display_RedrawTitleBar
 
-Display_UpdateRegion1_Done:	; EF5C01
+Display_UpdateRegion1_Done:
 	ret
 
-Display_UpdateRegion1_Alt:	; EF5C02
+Display_UpdateRegion1_Alt:
 	call Display_RedrawAltContent
 	ret
 
 ;-----------------------------------------------------------------------------
 ; Display_UpdateRegion3 - Update main content area (bit 3)
 ;-----------------------------------------------------------------------------
-Display_UpdateRegion3:	; EF5C07
+Display_UpdateRegion3:
 	bitda_24 0, 132582
 	jr nz, Display_UpdateRegion3_Check
 	setda_24 3, 132580
 	ret
 
-Display_UpdateRegion3_Check:	; EF5C14
+Display_UpdateRegion3_Check:
 	bitda_24 3, 132580
 	jr z, Display_UpdateRegion3_Done
 	call Display_RedrawMainContent
 
-Display_UpdateRegion3_Done:	; EF5C1F
+Display_UpdateRegion3_Done:
 	ret
 
 ;-----------------------------------------------------------------------------
 ; Display_UpdateRegion2 - Update selection highlight (bit 4)
 ;-----------------------------------------------------------------------------
-Display_UpdateRegion2:	; EF5C20
+Display_UpdateRegion2:
 	bitda_24 0, 132582
 	jr nz, Display_UpdateRegion2_Check
 	setda_24 4, 132580
 	ret
 
-Display_UpdateRegion2_Check:	; EF5C2D
+Display_UpdateRegion2_Check:
 	bitda_24 4, 132580
 	jr z, Display_UpdateRegion2_Done
 	call Display_RedrawSelection
 
-Display_UpdateRegion2_Done:	; EF5C38
+Display_UpdateRegion2_Done:
 	ret
 
 ;-----------------------------------------------------------------------------
 ; Display_UpdateRegion4 - Update side panel (bit 5)
 ;-----------------------------------------------------------------------------
-Display_UpdateRegion4:	; EF5C39
+Display_UpdateRegion4:
 	bitda_24 0, 132582
 	jr nz, Display_UpdateRegion4_Check
 	setda_24 5, 132580
 	ret
 
-Display_UpdateRegion4_Check:	; EF5C46
+Display_UpdateRegion4_Check:
 	bitda_24 5, 132580
 	jr z, Display_UpdateRegion4_Done
 	call Display_RedrawSidePanel
 
-Display_UpdateRegion4_Done:	; EF5C51
+Display_UpdateRegion4_Done:
 	ret
 
 ;-----------------------------------------------------------------------------
 ; Display_UpdateRegion5 - Update menu area (bit 6)
 ;-----------------------------------------------------------------------------
-Display_UpdateRegion5:	; EF5C52
+Display_UpdateRegion5:
 	bitda_24 0, 132582
 	jr nz, Display_UpdateRegion5_Check
 	setda_24 6, 132580
 	ret
 
-Display_UpdateRegion5_Check:	; EF5C5F
+Display_UpdateRegion5_Check:
 	bitda_24 6, 132580
 	jr z, Display_UpdateRegion5_Done
 	call Display_RedrawMenu
 
-Display_UpdateRegion5_Done:	; EF5C6A
+Display_UpdateRegion5_Done:
 	ret
 
 ;-----------------------------------------------------------------------------
 ; Display_UpdateRegion6 - Update button labels (bit 7)
 ;-----------------------------------------------------------------------------
-Display_UpdateRegion6:	; EF5C6B
+Display_UpdateRegion6:
 	bitda_24 0, 132582
 	jr nz, Display_UpdateRegion6_Check
 	setda_24 7, 132580
 	ret
 
-Display_UpdateRegion6_Check:	; EF5C78
+Display_UpdateRegion6_Check:
 	bitda_24 7, 132580
 	jr z, Display_UpdateRegion6_Done
 	call Display_RedrawButtonLabels
 
-Display_UpdateRegion6_Done:	; EF5C83
+Display_UpdateRegion6_Done:
 	ret
 
 ;-----------------------------------------------------------------------------
 ; Display_UpdateRegion7 - Update parameter display (bit 0 of 0x205E5)
 ;-----------------------------------------------------------------------------
-Display_UpdateRegion7:	; EF5C84
+Display_UpdateRegion7:
 	bitda_24 0, 132582
 	jr nz, Display_UpdateRegion7_Check
 	setda_24 0, 132581
 	ret
 
-Display_UpdateRegion7_Check:	; EF5C91
+Display_UpdateRegion7_Check:
 	bitda_24 0, 132581
 	jr z, Display_UpdateRegion7_Done
 	call Display_RedrawParameters
 
-Display_UpdateRegion7_Done:	; EF5C9C
+Display_UpdateRegion7_Done:
 	ret
 
 ;-----------------------------------------------------------------------------
 ; Display_UpdateRegion8 - Update value display (bit 1 of 0x205E5)
 ;-----------------------------------------------------------------------------
-Display_UpdateRegion8:	; EF5C9D
+Display_UpdateRegion8:
 	bitda_24 0, 132582
 	jr nz, Display_UpdateRegion8_Check
 	setda_24 1, 132581
 	ret
 
-Display_UpdateRegion8_Check:	; EF5CAA
+Display_UpdateRegion8_Check:
 	bitda_24 1, 132581
 	jr z, Display_UpdateRegion8_Done
 	call Display_RedrawValues
 
-Display_UpdateRegion8_Done:	; EF5CB5
+Display_UpdateRegion8_Done:
 	ret
 
 ;-----------------------------------------------------------------------------
 ; Display_UpdateRegion9 - Update indicator area (bit 2 of 0x205E5)
 ;-----------------------------------------------------------------------------
-Display_UpdateRegion9:	; EF5CB6
+Display_UpdateRegion9:
 	bitda_24 0, 132582
 	jr nz, Display_UpdateRegion9_Check
 	setda_24 2, 132581
 	ret
 
-Display_UpdateRegion9_Check:	; EF5CC3
+Display_UpdateRegion9_Check:
 	bitda_24 2, 132581
 	jr z, Display_UpdateRegion9_Done
 	call Display_RedrawIndicators
 
-Display_UpdateRegion9_Done:	; EF5CCE
+Display_UpdateRegion9_Done:
 	ret
 
 ;-----------------------------------------------------------------------------
 ; Display_UpdateRegion10 - Update footer area (bit 3 of 0x205E5)
 ;-----------------------------------------------------------------------------
-Display_UpdateRegion10:	; EF5CCF
+Display_UpdateRegion10:
 	bitda_24 0, 132582
 	jr nz, Display_UpdateRegion10_Check
 	setda_24 3, 132581
 	ret
 
-Display_UpdateRegion10_Check:	; EF5CDC
+Display_UpdateRegion10_Check:
 	bitda_24 3, 132581
 	jr z, Display_UpdateRegion10_Done
 	call Display_RedrawFooter
 
-Display_UpdateRegion10_Done:	; EF5CE7
+Display_UpdateRegion10_Done:
 	ret
 
 UIRender_SingleTable:
@@ -1601,7 +1601,7 @@ LABEL_EF6F01:
 	ret
 
 
-Display_RedrawParameters:	; EF6F1A
+Display_RedrawParameters:
 	anddi8 3922, 252
 	stdi16 3660, 0
 	call LABEL_EF736D
@@ -1648,7 +1648,7 @@ LABEL_EF6F82:
 LABEL_EF6FA2:
 	ret
 
-Display_RedrawValues:	; EF6FA3
+Display_RedrawValues:
 	anddi8 3922, 243
 	call LABEL_EF95BD
 	ldda16 xwa, 14106
@@ -1704,7 +1704,7 @@ LABEL_EF702A:
 LABEL_EF704A:
 	ret
 
-Display_RedrawIndicators:	; EF704B
+Display_RedrawIndicators:
 	anddi8 3922, 207
 	call LABEL_EF7381
 	ldda16 xwa, 14106
@@ -2811,7 +2811,7 @@ LABEL_EF8791:
 LABEL_EF87A2:
 	ret
 ; Display mode handler
-Display_ModeHandler:	; EF87A3
+Display_ModeHandler:
 	.byte 0xc1, 0xd3, 0x0d, 0x3e, 0x01	; or (0x0DD3), 0x01  [8-bit direct]
 	xor	a, a
 	stda8	3538, a
@@ -3931,7 +3931,7 @@ LABEL_EFA336:
 	xor a, a
 
 ; Interrupt dispatch by code
-Interrupt_CodeDispatch:	; EFA349
+Interrupt_CodeDispatch:
 	xor w, w
 	sla a, 2
 	ld hl, wa
@@ -7319,7 +7319,7 @@ LABEL_EFF0A2:	.ascii "        START   STOP    FILL IN1FILL IN2INTRO1  COUNT INEN
 	.byte 0x0e, 0x1d, 0x20, 0x5c, 0xef
 	.byte 0x0e
 
-Display_RedrawMenu:	; EFF110
+Display_RedrawMenu:
 	ldda16 xwa, 14106
 	cp wa, 0x3E8
 	jrl c, LABEL_EFF123
@@ -8058,7 +8058,7 @@ LABEL_EFFEA1:	.ascii "APC OFF         BASIC           ADVANCED 1      PIANIST   
 ;
 ; Updates the top status bar area with current mode, tempo, and status info.
 ;=============================================================================
-Display_RedrawStatusBar:	; F00999
+Display_RedrawStatusBar:
 	bitda 0, 3927
 	jrl nz, Scoop_Return
 	cpdi8 36152, 138
@@ -8234,7 +8234,7 @@ Scoop_InitDisplayFull:
 	call Scoop_ConditionalCurveUpdate
 	ret
 
-Display_RedrawMainContent:	; F00C33
+Display_RedrawMainContent:
 	cpdi8 36152, 138
 	jr nz, Scoop_RedrawMainContent_End
 	sti8_24 0x03efa8, 0x00
@@ -8244,7 +8244,7 @@ Display_RedrawMainContent:	; F00C33
 Scoop_RedrawMainContent_End:
 	ret
 
-Display_RedrawFooter:	; F00C4A
+Display_RedrawFooter:
 	cpdi8 36152, 138
 	jr nz, Scoop_RedrawFooter_End
 	sti8_24 0x03efa8, 0x00
@@ -8271,7 +8271,7 @@ Scoop_RedrawFooter_End:
 ;=============================================================================
 ; Display_RedrawTitleBar - Redraw the title bar region
 ;=============================================================================
-Display_RedrawTitleBar:	; F00C89
+Display_RedrawTitleBar:
 	cpdi8 36152, 138
 	jrl nz, Scoop_TitleBar_End
 	sti8_24 0x03efa8, 0x02
@@ -8386,7 +8386,7 @@ Scoop_TitleBar_ShowPartSlot:
 Scoop_TitleBar_GetPartConfig_End:
 	ret
 
-Display_RedrawSelection:	; F00DA5
+Display_RedrawSelection:
 	cpdi8 36152, 138
 	jr z, Scoop_Selection_RedrawActive
 	jp Scoop_Selection_End
@@ -8439,7 +8439,7 @@ Scoop_Selection_DrawMode2:
 Scoop_Selection_End:
 	ret
 
-Display_RedrawSidePanel:	; F00E35
+Display_RedrawSidePanel:
 	bitda 0, 3927
 	jrl nz, Scoop_SidePanel_End
 	cpdi8 36152, 138
@@ -8541,7 +8541,7 @@ Scoop_SidePanel_DrawOneSlot:
 	pop xiy
 	ret
 
-Display_RedrawAltContent:	; F00F3A
+Display_RedrawAltContent:
 	cpdi8 3930, 0
 	jr z, Scoop_AltContent_ClearRegions
 	ld xix, 0x820
@@ -8593,7 +8593,7 @@ Scoop_AltContent_ClearOneRegion:
 	call LABEL_EF5D81
 	ret
 
-Display_RedrawButtonLabels:	; F00FDC
+Display_RedrawButtonLabels:
 	cpdi8 36152, 138
 	jr nz, Scoop_ButtonLabels_End
 	sti8_24 0x03efa8, 0x00

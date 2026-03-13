@@ -12787,7 +12787,7 @@ SeqVoice_InitReturnZero:
 	jrl Part_InitVoiceDefaults
 
 ; AppEvent extended handler
-AppEvent_ExtendedHandler:	; F3FF1F
+AppEvent_ExtendedHandler:
 	ld xwa, 0xE445A6
 	jr Part_LoadAndApplyVoiceTable
 	ld xwa, 0xE445B2
@@ -19184,7 +19184,7 @@ LABEL_F43B18:
 	ldi_werp 0xFA, 1
 
 ; Sequencer data field dispatch
-SeqData_DispatchByField:	; F43B1B
+SeqData_DispatchByField:
 	lda xde, (xsp + 4)
 	lda xbc, (xde + 2)
 	ld wa, (xbc)
@@ -19388,14 +19388,14 @@ LABEL_F43CFF:
 	ret
 
 ; SeqEvent dispatch case A
-SeqEvent_CaseA:	; F43D05
+SeqEvent_CaseA:
 	cpdi16 61854, 0
 	jr z, SeqEvent_CaseB
 	anddi8 10407, 247
 	call SeqAcc_InitPlaybackState
 
 ; SeqEvent dispatch case B
-SeqEvent_CaseB:	; F43D16
+SeqEvent_CaseB:
 	anddi8 10412, 223
 	ret
 
@@ -19411,23 +19411,23 @@ ApEditSyori:
 	jr SeqEvent_CaseE
 
 ; SeqEvent dispatch case C
-SeqEvent_CaseC:	; F43D3D
+SeqEvent_CaseC:
 	ld xwa, xde
 	calr AppEvent_ChainDispatch1
 	jr SeqEvent_CaseE
 
 ; SeqEvent dispatch case D
-SeqEvent_CaseD:	; F43D44
+SeqEvent_CaseD:
 	ld xwa, xde
 	calr AppEvent_InlineHandler
 
 ; SeqEvent dispatch case E
-SeqEvent_CaseE:	; F43D49
+SeqEvent_CaseE:
 	lds32 xhl, 0
 	ret
 
 ; SeqEvent main handler
-SeqEvent_MainHandler:	; F43D4C
+SeqEvent_MainHandler:
 	ldda8 a, 36150
 	cp a, 0x91
 	jrl z, AppEvent_SubHandler0
@@ -19446,7 +19446,7 @@ SeqEvent_MainHandler:	; F43D4C
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; Sequencer event handler dispatch
-SeqEvent_Dispatch:	; F43D83
+SeqEvent_Dispatch:
 	call SeqData_CopyBlockWithLookup
 	ldda8 a, 10360
 	extz wa
@@ -19649,7 +19649,7 @@ SeqEvent_Dispatch:	; F43D83
 	jrl AppEvent_PostEvent_Stub
 
 ; AppEvent sub-handler 0
-AppEvent_SubHandler0:	; F440A7
+AppEvent_SubHandler0:
 	ldda8 a, 9992
 	extz wa
 	ld xbc, 0x2842
@@ -19696,7 +19696,7 @@ AppEvent_PostEvent_Stub:
 	jp ApDeliveryEvent
 
 ; AppEvent chain dispatch 1
-AppEvent_ChainDispatch1:	; F44147
+AppEvent_ChainDispatch1:
 	dec 4, xsp
 	push xiz
 	ld xbc, xwa
@@ -19710,7 +19710,7 @@ AppEvent_ChainDispatch1:	; F44147
 ; Application event handler dispatch table
 ; Handles up to 32 event types (XBC 0-0x1F), used by ApDeliveryEvent system
 ; Each handler increments counters, sends notifications via CALL 0FA9E07h
-APP_EVENT_HANDLER_TABLE:	; F44169
+APP_EVENT_HANDLER_TABLE:
 	ldda8 a, 36150
 	extz wa
 	sub wa, 0x9C
@@ -20269,7 +20269,7 @@ AppEvent_Epilogue:
 	ret
 
 ; AppEvent inline handler dispatch
-AppEvent_InlineHandler:	; F44882
+AppEvent_InlineHandler:
 	dec 4, xsp
 	push xiz
 	ld xbc, xwa
@@ -20281,7 +20281,7 @@ AppEvent_InlineHandler:	; F44882
 	lda_24 xix, 0xf448a4
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ; Application event sub-dispatch
-AppEvent_SubDispatch:	; F448A4
+AppEvent_SubDispatch:
 	.byte 0xc1, 0x36, 0x8d, 0x21, 0xd8, 0x12, 0xd8, 0xca
 	.byte 0x9c, 0x00, 0xd8, 0xd8, 0x61, 0x04, 0xd8, 0xdf
 	.byte 0x62, 0x03, 0x30, 0x08, 0x00, 0xd8, 0xee, 0x02
@@ -20551,7 +20551,7 @@ AppEvent_SubDispatch:	; F448A4
 	.byte 0x1d, 0x07, 0x9e, 0xfa
 
 ; Sequencer state dispatch entry
-SeqState_DispatchEntry:	; F44F98
+SeqState_DispatchEntry:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -20755,7 +20755,7 @@ LABEL_F45136:
 	jrl z, AppEvent_PopIzSkip2Ret
 
 ; Sequencer state case 0
-SeqState_Case0:	; F45150
+SeqState_Case0:
 	lds de, 1
 	ld a, (xsp + 4)
 	and a, 0xF
@@ -20763,7 +20763,7 @@ SeqState_Case0:	; F45150
 	slaa de
 
 ; Sequencer state case 1
-SeqState_Case1:	; F4515C
+SeqState_Case1:
 	ld wa, de
 	andda16 xde, 10408
 	jr z, SeqState_Case2
@@ -20771,7 +20771,7 @@ SeqState_Case1:	; F4515C
 	jr SeqState_Case3
 
 ; Sequencer state case 2
-SeqState_Case2:	; F45168
+SeqState_Case2:
 	and wa, bc
 	ldb l, 0x0
 	cps wa, 0
@@ -20779,7 +20779,7 @@ SeqState_Case2:	; F45168
 	ldb l, 0x2
 
 ; Sequencer state case 3
-SeqState_Case3:	; F45172
+SeqState_Case3:
 	ldb h, 0x0
 	extz xhl
 	lds32 xwa, 0
@@ -20794,12 +20794,12 @@ SeqState_Case3:	; F45172
 	extz wa
 
 ; Sequencer state case 4
-SeqState_Case4:	; F45195
+SeqState_Case4:
 	calr SeqVoice_DispatchEventToHandler
 	jrl AppEvent_PopIzSkip2Ret
 
 ; Sequencer state label dispatch
-SeqState_LabelDispatch:	; F4519B
+SeqState_LabelDispatch:
 	extz bc
 	dec 1, bc
 	cps bc, 0
@@ -20812,7 +20812,7 @@ SeqState_LabelDispatch:	; F4519B
 	lda_24 xix, 0xf451c1
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ; Sound data handler dispatch
-SoundData_HandlerDispatch:	; F451C1
+SoundData_HandlerDispatch:
 	.byte 0x1d, 0x88, 0x04, 0xf2, 0x78, 0xf5, 0x00, 0x1d
 	.byte 0x93, 0x04, 0xf2, 0x78, 0xee, 0x00, 0x1d, 0x9e
 	.byte 0x04, 0xf2, 0x78, 0xe7, 0x00, 0x1d, 0xa9, 0x04
@@ -21589,7 +21589,7 @@ ApPlaySyori:
 	lda_24 xix, 0xf45b63
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ; Sequencer accompaniment event dispatch
-SeqAccomp_EventDispatch:	; F45B63
+SeqAccomp_EventDispatch:
 	.byte 0x41, 0x0f, 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x1d
 	.byte 0x07, 0x9e, 0xfa, 0xc1, 0x33, 0x04, 0x19, 0x32
 	ldb	c, 0xe1
@@ -21771,7 +21771,7 @@ SeqAccomp_DispatchRhythmEvents:
 	jrl SeqAccomp_StartHandler
 
 ; SeqAccomp parameter delivery
-SeqAccomp_ParamDelivery:	; F45DC1
+SeqAccomp_ParamDelivery:
 	ld xwa, (xsp + 2)
 	cp xwa, 0xB
 	jrl ugt, AppEvent_ReturnZero
@@ -21782,7 +21782,7 @@ SeqAccomp_ParamDelivery:	; F45DC1
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; Sequencer accompaniment sub-handler A
-SeqAccomp_SubHandlerA:	; F45DE1
+SeqAccomp_SubHandlerA:
 	.byte 0xf1, 0x21, 0x04, 0xca, 0x7e, 0x93, 0x05, 0xda
 	.byte 0x88, 0xda, 0xcf, 0xe7, 0x03, 0x7f, 0x8a, 0x05
 	.byte 0xd8, 0x61, 0xf1, 0x68, 0x26, 0x50, 0xe1, 0x72
@@ -21859,7 +21859,7 @@ SeqAccomp_SubHandlerA:	; F45DE1
 	.byte 0x04, 0xca, 0x76, 0x33, 0x02, 0x78, 0xa2, 0x03
 
 ; SeqAccomp sub-handler chain
-SeqAccomp_SubChain:	; F45FD9
+SeqAccomp_SubChain:
 	ld xwa, (xsp + 2)
 	cp xwa, 0xB
 	jrl ugt, AppEvent_ReturnZero
@@ -21870,7 +21870,7 @@ SeqAccomp_SubChain:	; F45FD9
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; Sequencer accompaniment sub-handler B
-SeqAccomp_SubHandlerB:	; F45FF9
+SeqAccomp_SubHandlerB:
 	.byte 0xf1, 0x21, 0x04, 0xca, 0x7e, 0x7b, 0x03, 0xda
 	.byte 0x88, 0xda, 0xd9, 0x73, 0x4b, 0x03, 0xd8, 0x69
 	.byte 0xf1, 0x68, 0x26, 0x50, 0xe1, 0x72, 0x29, 0x20
@@ -21960,7 +21960,7 @@ SeqAccomp_StartHandler:
 	jrl AppEvent_ReturnZero
 
 ; SeqAccomp start helper
-SeqAccomp_StartHelper:	; F46210
+SeqAccomp_StartHelper:
 	cpdi8 36150, 133
 	jrl nz, LABEL_F46298
 	bitda 2, 1057
@@ -22048,7 +22048,7 @@ LABEL_F462CD:
 	jr SeqAccomp_InitAndReturn
 
 ; NoteEditSy mode scroll dispatch
-NoteEditSy_ModeScroll:	; F462D3
+NoteEditSy_ModeScroll:
 	bitda 2, 1057
 	jr nz, LABEL_F462E2
 	ldda8 c, 10418
@@ -22119,7 +22119,7 @@ SeqAccomp_InitAndReturn:
 	jr AppEvent_ReturnZero
 
 ; NoteEditSy mode scroll return
-NoteEditSy_ModeScrollReturn:	; F46358
+NoteEditSy_ModeScrollReturn:
 	call LABEL_F38A32
 	cps hl, 0
 	jr z, AppEvent_ReturnZero
@@ -22264,7 +22264,7 @@ AppEvent_SendPlayStatus:
 	jp ApDeliveryEvent
 
 ; NoteEditSy scroll reset dispatch
-NoteEditSy_ScrollReset:	; F464A4
+NoteEditSy_ScrollReset:
 	ld xde, xwa
 	ld xwa, 0x850006
 	ld xbc, 0x1E0003B
@@ -22277,14 +22277,14 @@ AppEvent_SendAccompStatus:
 	jp ApDeliveryEvent
 
 ; NoteEditSy scroll case 1
-NoteEditSy_ScrollCase1:	; F464C4
+NoteEditSy_ScrollCase1:
 	ld xde, xwa
 	ld xwa, 0x87000D
 	ld xbc, 0x1E0003B
 	jp ApDeliveryEvent
 
 ; NoteEditSy scroll case 2
-NoteEditSy_ScrollCase2:	; F464D4
+NoteEditSy_ScrollCase2:
 	ld xde, xwa
 	ld xwa, 0x880004
 	ld xbc, 0x1E0003B
@@ -22314,7 +22314,7 @@ NoteEditSy_SendModeScrollReset:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 ; Note editor mode dispatch
-NoteEditSy_ModeDispatch:	; F46524
+NoteEditSy_ModeDispatch:
 	ld xwa, 0x810005
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
@@ -22333,13 +22333,13 @@ LABEL_F46540:
 	jr NoteEditSy_DeliverEvent
 
 ; NoteEditSy scroll case 3
-NoteEditSy_ScrollCase3:	; F4654E
+NoteEditSy_ScrollCase3:
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	jr NoteEditSy_DeliverEvent
 
 ; NoteEditSy scroll case 4
-NoteEditSy_ScrollCase4:	; F46557
+NoteEditSy_ScrollCase4:
 	ld xbc, 0x1C0000F
 	lds32 xde, 3
 	jr NoteEditSy_DeliverEvent
@@ -22464,7 +22464,7 @@ SeqAcc_CheckLoopAndSendEvent:
 	call ApDeliveryEvent
 
 ; NoteEditSy up-scroll table
-NoteEditSy_UpScrollTable:	; F46685
+NoteEditSy_UpScrollTable:
 	lds32 xhl, 0
 	pop_werp 0xFA
 	ret
@@ -23494,11 +23494,11 @@ EtmenuTitleFunc:
 	jr EtmenuTtl_ReturnZero
 
 ; MainExeCall dispatch entry
-MainExe_DispatchEntry:	; F47097
+MainExe_DispatchEntry:
 	stdi8 58252, 0
 
 ; MainExeCall dispatch return
-MainExe_DispatchReturn:	; F4709C
+MainExe_DispatchReturn:
 	lds wa, 0
 	calr VoiceParam_SetD6Group
 

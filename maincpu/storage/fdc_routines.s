@@ -132,7 +132,7 @@ FDC_WaitReady:
 ; FDC command dispatcher
 ; Reads command from (8A40h), dispatches to 12 handlers (0-0xB)
 ; Uses offset table at 0xEA98B2
-FDC_COMMAND_DISPATCHER:	; F96DB1
+FDC_COMMAND_DISPATCHER:
 	stdi8 35370, 0
 	ldda16 xwa, 35392
 	cp wa, 0xB
@@ -143,7 +143,7 @@ FDC_COMMAND_DISPATCHER:	; F96DB1
 	lda_24 xix, 0xf96dd6
 	jp_dri 8, 0x07, 0xF0, 0xE0
 ; FDC command handler base - entry point for command 0
-FDC_CMD_HANDLER_BASE:	; F96DD6
+FDC_CMD_HANDLER_BASE:
 	calr FDC_SetupFormatParams
 	ldda8 l, 35364
 	ret
@@ -823,7 +823,7 @@ FDC_ClearStatus_InitTimer:
 	.byte 0x66, 0xde, 0x5e, 0x0e
 
 
-SOME_DELAY:	; F97612
+SOME_DELAY:
 	srl wa, 1
 	ldda16 xde, 1033
 	lds hl, 0
@@ -1307,7 +1307,7 @@ FDC_ByteTransfer_PIO:
 	.byte 0x83, 0x23, 0xf2, 0x00, 0x00, 0x12, 0x43, 0xeb
 	.byte 0x61, 0xf1, 0x4e, 0x8a, 0x63, 0x68, 0xde
 
-INTTC3_HANDLER:	; F97E35
+INTTC3_HANDLER:
 	push xiz
 	push xiy
 	push xix
@@ -1404,7 +1404,7 @@ INT4_ExitRestore:
 	reti
 
 
-Reset_Floppy_Disk_Controller:	; F97EC9
+Reset_Floppy_Disk_Controller:
 ; I am not entirely sure yet, but it looks like FDC initialization code...
 
 	; reset FDC by toggling Port D bit 0
@@ -1490,13 +1490,13 @@ FDC_Reset_BuildParams:
 	incdi16 1, 58330
 	ret
 
-Check_for_Floppy_Disk_Change:	; F98001
+Check_for_Floppy_Disk_Change:
 	bit_dd8 6, 0x34
 	jr z, Detected_Floppy_Disk_Change
 	ldb l, 0x0
 	ret
 
-Detected_Floppy_Disk_Change:	; F98009
+Detected_Floppy_Disk_Change:
 	ldb l, 0x1
 	ret
 

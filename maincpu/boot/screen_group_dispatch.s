@@ -34,7 +34,7 @@ LABEL_FDDB2E:
 ;   - Show_ScreenGroup (LABEL_EF1B9C) - Alternative screen display routine
 ;   - ErrorDialog_CPUTransmissionError - Error dialog in Screen Group 7
 ; ===========================================================================
-ScreenGroup_Dispatch:	; FDDB46
+ScreenGroup_Dispatch:
 ScreenGroup_DispatchAlt:
 	push xiz
 	ld iz, wa	; Screen group ID
@@ -48,7 +48,7 @@ LABEL_FDDB55:
 	jr LABEL_FDDB7D
 
 ; Voice initialization dispatch
-VoiceInit_Dispatch:	; FDDB5A
+VoiceInit_Dispatch:
 	push xiz
 	ld de, iz
 	extz xde

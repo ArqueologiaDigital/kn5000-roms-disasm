@@ -1995,7 +1995,7 @@ ErrorDialog_RecoveryLine3:
 	.fill 6, 1, 0xff
 
 
-Protocol_values_for_LED_rows:	; EDA616
+Protocol_values_for_LED_rows:
 	; LED row lookup table: maps internal index (0-14) to protocol row value
 	; Used by Set_LEDs (FC71B2) to translate row index to serial protocol value
 	;

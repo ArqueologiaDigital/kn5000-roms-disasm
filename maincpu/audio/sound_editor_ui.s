@@ -7675,7 +7675,7 @@ LABEL_F1B2CE:
 	.byte 0xfa, 0x68, 0x5b
 
 ; S2cGridCheck dispatch
-S2c_GridCheck_Dispatch:	; F1B341
+S2c_GridCheck_Dispatch:
 	lda xbc, (xsp + 10)
 	ld xwa, xde
 	srl xwa, 0
@@ -7711,7 +7711,7 @@ LABEL_F1B38A:
 	call SendEvent
 
 ; S2cGridCheck event encoding dispatch
-S2c_GridCheck_EventEnc:	; F1B39C
+S2c_GridCheck_EventEnc:
 	lds32 xhl, 0
 	lda xsp, (xsp + 18)
 	ret
@@ -8956,27 +8956,26 @@ LABEL_F1BFCE:
 	jr EasyCmp_TtlCase1
 
 ; EasyCmp title dispatch
-EasyCmp_TtlDispatch:	; F1C02D
+EasyCmp_TtlDispatch:
 	pushw 0xF5
 	lds bc, 1
 	lds de, 2
 
 ; EasyCmp title case 1
-EasyCmp_TtlCase1:	; F1C034
+EasyCmp_TtlCase1:
 	call DrawDesignFrame
 
 ; EasyCmp title case 2
-EasyCmp_TtlCase2:	; F1C038
+EasyCmp_TtlCase2:
 	lds32 xhl, 0
 
 ; EasyCmp title case 3
-EasyCmp_TtlCase3:	; F1C03A
+EasyCmp_TtlCase3:
 	pop xiz
 	st_dri3b L, 0xFD, 0x0C, 0x01
 	ret
 ; EasyCmp title default
-EasyCmp_TtlDefault:	; F1C041
-
+EasyCmp_TtlDefault:
 AcEasyCmpGridBoxProc:
 	lda xsp, (xsp - 16)
 	push xiz
@@ -9005,7 +9004,7 @@ AcEasyCmpGridBoxProc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 ; EasyCmp dial grid dispatch (7-entry, table 0xE1DE4C)
-EasyCmp_DialGrid:	; F1C0A2
+EasyCmp_DialGrid:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -9155,18 +9154,18 @@ LABEL_F1C250:
 	jr EasyCmp_ReturnZeroJmp
 
 ; EasyCmpGridCheck dispatch
-EasyCmp_GridCheck:	; F1C256
+EasyCmp_GridCheck:
 	ld xwa, xiz
 	ld xiz, 0x3E
 	jr EasyCmp_GridCheck_Case2
 
 ; EasyCmpGridCheck case 1
-EasyCmp_GridCheck_Case1:	; F1C25F
+EasyCmp_GridCheck_Case1:
 	ld xwa, xiz
 	ld xiz, 0x42
 
 ; EasyCmpGridCheck case 2
-EasyCmp_GridCheck_Case2:	; F1C266
+EasyCmp_GridCheck_Case2:
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -9178,7 +9177,7 @@ EasyCmp_GridCheck_Case2:	; F1C266
 	jr EasyCmp_ReturnZeroJmp
 
 ; EasyCmpGridCheck case 3
-EasyCmp_GridCheck_Case3:	; F1C27B
+EasyCmp_GridCheck_Case3:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -9191,14 +9190,14 @@ EasyCmp_ReturnZeroJmp:
 	jr EasyCmp_GridCheck_Case5
 
 ; EasyCmpGridCheck case 4
-EasyCmp_GridCheck_Case4:	; F1C292
+EasyCmp_GridCheck_Case4:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
 ; EasyCmpGridCheck case 5
-EasyCmp_GridCheck_Case5:	; F1C29E
+EasyCmp_GridCheck_Case5:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -9241,7 +9240,7 @@ LABEL_F1C2DD:
 	.byte 0x4a, 0xfa, 0x78, 0x83, 0x00
 
 ; EasyCmpGridCheck event encoding dispatch
-EasyCmp_GridCheck_EventEnc:	; F1C372
+EasyCmp_GridCheck_EventEnc:
 	lda xbc, (xsp + 20)
 	ld xwa, xde
 	srl xwa, 0
@@ -9281,14 +9280,14 @@ LABEL_F1C3B5:
 	push xwa
 
 ; EasyCmpGridCheck event case 1
-EasyCmp_GridCheck_EventCase1:	; F1C3C9
+EasyCmp_GridCheck_EventCase1:
 	push xde
 	call Audio_SendCommand
 	inc 8, xsp
 	jr EasyCmp_GridCheck_EventCase3
 
 ; EasyCmpGridCheck event case 2
-EasyCmp_GridCheck_EventCase2:	; F1C3D2
+EasyCmp_GridCheck_EventCase2:
 	extz wa
 	pushw wa
 	pushw 0xE1
@@ -9298,7 +9297,7 @@ EasyCmp_GridCheck_EventCase2:	; F1C3D2
 	lda xsp, (xsp + 10)
 
 ; EasyCmpGridCheck event case 3
-EasyCmp_GridCheck_EventCase3:	; F1C3E3
+EasyCmp_GridCheck_EventCase3:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 20)
@@ -9306,7 +9305,7 @@ EasyCmp_GridCheck_EventCase3:	; F1C3E3
 	call SendEvent
 
 ; EasyCmpGridCheck event case 4
-EasyCmp_GridCheck_EventCase4:	; F1C3F5
+EasyCmp_GridCheck_EventCase4:
 	lds32 xhl, 0
 	lda xsp, (xsp + 28)
 	ret
@@ -9355,7 +9354,7 @@ LABEL_F1C445:
 	jr	t, 0x41
 
 ; MspNameBnkFunc dispatch (10-entry, table 0xE1DF5C)
-MspNameBnk_Dispatch:	; F1C46F
+MspNameBnk_Dispatch:
 	cp xde, 0x4
 	jr nc, MspNaming_CleanupExit
 	ld xwa, xde
@@ -10147,7 +10146,7 @@ LABEL_F1CCA5:
 	jr MspBnk_SendEventJoin
 
 ; RgpSetBnkCheck dispatch
-RgpSetBnk_GridCheck:	; F1CCC7
+RgpSetBnk_GridCheck:
 	ld xwa, xiz
 	call GetViewInstance
 	ld_sril XWA, (xsp + 0x0104)
@@ -10164,18 +10163,18 @@ MspBnk_SendEventJoin:
 	call SendEvent
 
 ; RgpSetBnkCheck case 1
-RgpSetBnk_GridCheck_Case1:	; F1CCEB
+RgpSetBnk_GridCheck_Case1:
 	lds32 xhl, 0
 	jr RgpSetBnk_GridCheck_Case3
 
 ; RgpSetBnkCheck case 2
-RgpSetBnk_GridCheck_Case2:	; F1CCEF
+RgpSetBnk_GridCheck_Case2:
 	ld xwa, xiz
 	ld_sril XDE, (xsp + 0x0104)
 	call InheritedProc
 
 ; RgpSetBnkCheck case 3
-RgpSetBnk_GridCheck_Case3:	; F1CCFA
+RgpSetBnk_GridCheck_Case3:
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
@@ -10218,7 +10217,7 @@ LABEL_F1CD3B:
 	.byte 0x4a, 0xfa, 0x78, 0xac, 0x00
 
 ; RgpSetBnkCheck event encoding dispatch
-RgpSetBnk_GridCheck_EventEnc:	; F1CDD0
+RgpSetBnk_GridCheck_EventEnc:
 	lda xhl, (xsp + 20)
 	ld xwa, xde
 	srl xwa, 0
@@ -10293,7 +10292,7 @@ AudioEvt_GetFocusRetZero:
 	call SendEvent
 
 ; RgpSetBnkCheck return
-RgpSetBnk_GridCheck_Return:	; F1CE7C
+RgpSetBnk_GridCheck_Return:
 	lds32 xhl, 0
 	lda xsp, (xsp + 28)
 	ret
@@ -10654,7 +10653,7 @@ LABEL_F1D187:
 	dec 6, a
 
 ; AcSndArgGridBnkFunc dispatch
-AcSndArgGrid_BnkDispatch:	; F1D19D
+AcSndArgGrid_BnkDispatch:
 	inc 1, a
 	extz wa
 	pushw wa
@@ -10670,11 +10669,11 @@ AcSndArgGrid_BnkDispatch:	; F1D19D
 	call SendEvent
 
 ; AcSndArgGridBnk case 1
-AcSndArgGrid_BnkCase1:	; F1D1C1
+AcSndArgGrid_BnkCase1:
 	lds32 xhl, 0
 
 ; AcSndArgGridBnk case 2
-AcSndArgGrid_BnkCase2:	; F1D1C3
+AcSndArgGrid_BnkCase2:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
@@ -10730,21 +10729,20 @@ LABEL_F1D215:
 	jr	18
 
 ; AcSndArgGridBoxProc dispatch (7-entry, table 0xE1E35E)
-AcSndArgGrid_BoxProc:	; F1D251
+AcSndArgGrid_BoxProc:
 	ld xwa, 0x1440015
 	ld xbc, 0x1E4001F
 	ld xde, xiz
 	call MainFuncCall
 
 ; AcSndArgGridBox case 1
-AcSndArgGrid_BoxCase1:	; F1D261
+AcSndArgGrid_BoxCase1:
 	lds32 xhl, 0
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
 ; AcSndArgGridBox case 2
-AcSndArgGrid_BoxCase2:	; F1D268
-
+AcSndArgGrid_BoxCase2:
 AcSndArgGridBoxProc:
 	lda xsp, (xsp - 22)
 	push xiz
@@ -11454,7 +11452,7 @@ LABEL_F1D8F9:
 	jr SndArgGrid_CheckCase1
 
 ; SndArgGridCheck dispatch (7-entry, table 0xE1E36C)
-SndArgGrid_CheckDispatch:	; F1D9F6
+SndArgGrid_CheckDispatch:
 	ld xhl, (xhl)
 	push xhl
 	ld xhl, (xsp + 10)
@@ -11462,12 +11460,12 @@ SndArgGrid_CheckDispatch:	; F1D9F6
 	pushm (xhl + 22)
 
 ; SndArgGridCheck case 1
-SndArgGrid_CheckCase1:	; F1DA02
+SndArgGrid_CheckCase1:
 	call DrawString
 	jr PsParaListBoxProc_Return
 
 ; SndArgGridCheck case 2
-SndArgGrid_CheckCase2:	; F1DA08
+SndArgGrid_CheckCase2:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xbc, (xhl + 38)
@@ -11478,7 +11476,7 @@ PsParaListBoxProc_Return:
 	lds32 xhl, 0
 
 ; SndArgGridCheck case 3
-SndArgGrid_CheckCase3:	; F1DA1A
+SndArgGrid_CheckCase3:
 	pop xiz
 	st_dri3b L, 0xFD, 0x9E, 0x00
 	ret
@@ -11514,7 +11512,7 @@ LABEL_F1DA62:
 	.byte 0x02
 
 ; PsSCTxtBoxProc event dispatch (10-entry, table 0xE1E4BC)
-PsSCTxtBox_EventDispatch:	; F1DA8F
+PsSCTxtBox_EventDispatch:
 	lds32 xhl, 0
 	pop xiz
 	lda xsp, (xsp + 92)

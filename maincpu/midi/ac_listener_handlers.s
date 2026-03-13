@@ -530,7 +530,7 @@ AcFadeSetGridBoxProc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
 ; Voice parameter list handler
-VoiceParam_ListHandler:	; F7528A
+VoiceParam_ListHandler:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -690,13 +690,13 @@ LABEL_F7545A:
 	jr AudioMix_ReturnZeroJmp3
 
 ; Voice UI grid case 0
-VoiceUI_GridCase0:	; F75460
+VoiceUI_GridCase0:
 	ld xwa, xiz
 	ld xiz, 0x3E
 	jr LABEL_F75470
 
 ; Voice UI grid case 1
-VoiceUI_GridCase1:	; F75469
+VoiceUI_GridCase1:
 	ld xwa, xiz
 	ld xiz, 0x42
 
@@ -718,7 +718,7 @@ LABEL_F75470:
 	jr LABEL_F754A5
 
 ; Voice UI grid case 2
-VoiceUI_GridCase2:	; F75496
+VoiceUI_GridCase2:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -733,14 +733,14 @@ AudioMix_ReturnZeroJmp3:
 	jr VoiceUI_GridCase4
 
 ; Voice UI grid case 3
-VoiceUI_GridCase3:	; F754AD
+VoiceUI_GridCase3:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
 ; Voice UI grid case 4
-VoiceUI_GridCase4:	; F754B9
+VoiceUI_GridCase4:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -835,7 +835,7 @@ LABEL_F75517:
 	jrl	173
 
 ; AcInOutGrid handler
-AcInOutGrid_Handler:	; F75664
+AcInOutGrid_Handler:
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 28)
 	srl xwa, 0
@@ -1386,7 +1386,7 @@ LABEL_F75ADE:
 	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xce, 0x02
 
 ; ParaLoadOpt entry handler
-ParaLoadOpt_Entry:	; F75F26
+ParaLoadOpt_Entry:
 	lda xde, (xsp + 4)
 	ld xwa, xiz
 	srl xwa, 0

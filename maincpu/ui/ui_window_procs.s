@@ -264,7 +264,7 @@ WndEvt_DispatchByEventCode:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ; Window event dispatch by event code
-WndEvt_EventCodeDispatch:	; F9B83F
+WndEvt_EventCodeDispatch:
 	.byte 0xd2, 0xd8, 0x74, 0x02, 0x20, 0xd8, 0xd8, 0x76
 	.byte 0xcc, 0x08, 0xd8, 0x69, 0xf2, 0xd8, 0x74, 0x02
 	.byte 0x50, 0xd8, 0x8a, 0xea, 0x12, 0xaf, 0x32, 0x20
@@ -3743,7 +3743,7 @@ LABEL_FAD608:
 	jr gt, Draw_StyledBoxWithFrame
 
 ; Draw dispatch by part type
-Draw_DispatchByPartType:	; FAD633
+Draw_DispatchByPartType:
 	add wa, wa
 	lda_24 xix, 0xeaae16
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -4237,7 +4237,7 @@ LABEL_FADAD6:
 	jr gt, DrawPartGroup_TableJump_DefaultCase
 
 ; DrawPartGroup dispatch by type
-DrawPartGroup_DispatchByType:	; FADB24
+DrawPartGroup_DispatchByType:
 	add wa, wa
 	lda_24 xix, 0xeaadf6
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
