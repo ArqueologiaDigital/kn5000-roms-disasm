@@ -406,6 +406,36 @@ Apply this whenever editing or creating table-like blocks of assembly. When touc
 
 **Do NOT add address comments like `; e0018e` or `; E023F0` to labels or lines.** These are redundant — addresses are available from the ELF output (`llvm-objdump -d`) and the linker map. Inline address comments add noise and become stale when code moves.
 
+### Comment Quality (STRICT POLICY)
+
+**Do NOT write comments that merely restate the label name.** Comments must add information beyond what the label already conveys. If a label is self-explanatory, omit the comment entirely.
+
+```asm
+; WRONG - restates the label
+MSP_Default_ReverbLevel:	.byte 128	; reverb send level
+
+; CORRECT - no comment needed, label is clear
+MSP_Default_ReverbLevel:	.byte 128
+
+; CORRECT - adds info not in the label
+MSP_Default_PanPosition1:	.byte 96, 0	; slightly right of center
+```
+
+### Best Notation for Values (STRICT POLICY)
+
+**Use the most readable numeric notation for each value's domain:**
+
+- **Decimal** for counts, levels, indices, offsets, and human-meaningful ranges (volume 0-99, MIDI 0-127, part counts, tempo).
+- **Hexadecimal** for bitmasks, flags, hardware registers, signatures, and bit-pattern data (0x80, 0xff, 0x48).
+
+```asm
+; WRONG - hex for a count
+MSP_Default_NumParts:		.byte 0x14, 0x00
+
+; CORRECT - decimal for a count
+MSP_Default_NumParts:		.byte 20, 0
+```
+
 ### String Literals in Disassembly (STRICT POLICY)
 
 **When data is clearly readable text, it MUST be represented as a string literal, not raw bytes.**
