@@ -146,7 +146,7 @@ Bitmap_1bit_Turn_On_AGAIN:	; e01266
 .include "sequencer/ssf_gate_states.s"
 
 
-
+; --- Instrument Sound Data & Category Metadata ---
 	.include "audio/sound_data.s"
 
 StyleUI_ParamBlock_BAL:
