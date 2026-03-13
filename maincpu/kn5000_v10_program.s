@@ -1,3 +1,8 @@
+; =============================================================================
+; KN5000 Main CPU Program ROM (2MB: E00000-FFFFFF)
+; =============================================================================
+
+; --- Constants, Macros & SFR Definitions ---
 	.text
 
 	.include "shared/macros.s"
@@ -9,6 +14,8 @@
 	.include "cpanel_constants.s"
 	.include "midi_encoder_constants.s"
 
+
+; --- Boot Dispatch Tables, LED Patterns & Dialog Bitmaps ---
 ; =============================================================================
 ; Constants for shared boot routines
 ; =============================================================================
@@ -128,8 +135,12 @@ Bitmap_1bit_Turn_On_AGAIN:	; e01266
 	.incbin "images/Bitmap_1bit_Turn_On_AGAIN.bin"
 
 
+
+; --- SSF (Style Synthesis Format) Gate State Data ---
 .include "ssf_gate_states.s"
 
+
+; --- Instrument Sound Data & Category Metadata ---
 ; Possibly a region identifier: "HK" (Hong Kong variant?), 16-byte padded string + version + sentinels.
 ; Unreferenced -- may be accessed via computed address or unused.
 LABEL_E02380:	.ascii "HK              "
@@ -1199,6 +1210,12 @@ GUI_DisplayStructData:
 
 ToneGen_ParamTable:
 	.incbin "includes/e0e407_e0e973.bin"
+
+; =============================================================================
+; NAKA UI Descriptor Blocks (ROM E0E974-EEF587)
+; Screen layouts, style selection, sequencer UI, effect editors,
+; chord recognition, MIDI control, language dialogs, style bitmaps
+; =============================================================================
 .include "naka/naka_e0e974_e15b20.s"
 	.ascii "     Init       "
 	.zero 16
@@ -17950,6 +17967,10 @@ LABEL_EB2AE4:
 	.byte 0x08, 0x00, 0x06, 0x00, 0x22, 0x00, 0x38, 0x01
 	.byte 0x4e, 0x00, 0x01, 0x00, 0x00, 0x00
 .include "naka/naka_eb2afe_eb71be.s"
+
+; =============================================================================
+; Character Encoding Tables & System Core (ROM EEF588-FC3113)
+; =============================================================================
 	.include "naka_style_bitmap.s"
 	.include "naka_dispatch.s"
 	.ascii " \"!#\"$#%$&%'&(')(*)+*,+-,.-/.0/102132435465768798:9;:<;=<>=?>@?A@BACBDCEDFEGFHGIHJIKJLKMLNMONPOQPRQSRTSUTVUWVXWYXZY[Z\\[]\\^]_^`_a`bacbdce"
@@ -18054,6 +18075,8 @@ LABEL_EF03C1:
 LABEL_EF03C2:
 	.byte 0x0e, 0x68, 0x01, 0x0e
 
+
+; --- RESET Handler & Boot Sequence ---
 RESET_HANDLER:	; EF03C6
 	; Hardware initialization code shared with table_data ROM
 	.include "shared/boot_hw_init.s"
@@ -18440,12 +18463,16 @@ LABEL_EF0839:
 .equ INDIRECT_CALL_HELPER, AudioMix_WriteChannelGroup	; indirect call helper in maincpu
 
 	.include "shared/boot_call_init_handlers.s"
+
+; --- System Handlers (interrupts, NMI, UI state machine, task scheduler) ---
 	.include "system_handlers.s"
 
 ; =============================================================================
 ; VGA Initialization Code - Shared with table_data ROM
 ; Uses macros and code from ../shared/vga_init.asm
 ; =============================================================================
+
+; --- VGA Initialization & Display Subsystem ---
 	.include "shared/vga_init.s"
 	.include "scoop_display.s"
 
@@ -19623,6 +19650,8 @@ Scoop_SoundEditorData:
 	.byte 0xd8, 0xa8, 0x1d, 0x2f, 0x69, 0xf0, 0x30, 0x20
 	.byte 0x00, 0xd9, 0xa8, 0x1d, 0x70, 0x61, 0xf0, 0x0e
 
+
+; --- Sound Editor ---
 	.include "semenu_routines.s"
 	.include "sound_editor_ui.s"
 
@@ -20071,6 +20100,8 @@ free_X:
 	inc 4, xsp
 	ret
 
+
+; --- Wallpaper & Demo Routines ---
 	.include "setwall_routines.s"
 UIStateEvt_VoiceParamHandler:
 	.byte 0xc1, 0x36, 0x8d, 0x21, 0xc9, 0xcf, 0x8e, 0x66
@@ -23112,6 +23143,8 @@ SqStepTtlFunc:
 	lda xsp, (xsp + 16)
 	ret
 
+
+; --- Demo Routines ---
 	.include "demo_routines.s"
 
 MiddleFuncCall:
@@ -24171,6 +24204,8 @@ LABEL_F22F85:
 	ldw (xhl + 3), 0xFFFF
 	jrl LABEL_F22E2F
 
+
+; --- SMF Playback & Sequencer ---
 	.include "smf_playback.s"
 Sequencer_ResetAfterFloppyIO:
 	call FloppyIO_ReturnReady
@@ -29365,6 +29400,8 @@ LABEL_F268AF:
 	ret
 
 VoiceChannel_AdvanceIndex:
+
+; --- SMF Event Processing, Sequencer UI & Engine ---
 	.include "smf_event_processor.s"
 	ei 0
 	stda8 12927, a
@@ -31374,6 +31411,8 @@ LABEL_F54BEB:
 AccPatch_NullReturn:
 	ret
 
+
+; --- Rhythm, Accompaniment & Factory Defaults ---
 	.include "rhythm_routines.s"
 	.include "accompaniment_engine.s"
 Voice_InitBankDataSafe:
@@ -35832,6 +35871,8 @@ R12Octave_PopIzRet:
 
 
 ; Computer Interface routines (Connection config and PCG Output)
+
+; --- Computer Interface & SysEx ---
 	.include "computer_interface_config.s"
 
 
@@ -38374,6 +38415,8 @@ VoiceUI_MiscHandler:	; F7724E
 	push xwa
 	ld xwa, (xsp + 20)
 	push xwa
+
+; --- UI Control Panel, Sound Navigation & Voice Control ---
 	.include "ui_control_panel.s"
 	call SendEvent
 	ld xde, (xsp + 30)
@@ -40135,6 +40178,8 @@ LABEL_F9B558:
 	lds iz, 0
 	cpdi16_24 160982, 0
 	jr ule, LABEL_F9B588
+
+; --- UI Window Procs, Graphics & Mode Screens ---
 	.include "ui_window_procs.s"
 	.byte 0xe8, 0x13, 0xeb, 0x80, 0xe8, 0x82, 0xb2, 0xcf
 	.byte 0x66, 0x04, 0xb2, 0xb6, 0x68, 0x02, 0xb2, 0xbe
@@ -40949,6 +40994,10 @@ LABEL_FC3114:
 	ld xhl, 0x1020005
 	ret
 
+
+; =============================================================================
+; Extension Device Initialization (TOSHI) & Control Panel (ROM FC3114-FFFFFF)
+; =============================================================================
 .include "toshi/toshi_code.s"
 
 InitializeKSS:
@@ -42166,6 +42215,8 @@ LABEL_FC5838:
 	jr FileIO_CallbackHandler
 
 LABEL_FC583A:
+
+; --- Audio Control, File I/O & MIDI Processing ---
 	.include "audio_control_engine.s"
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -42271,6 +42322,8 @@ SoundParam_NotifyChange:
 	ld ix, hl
 	jr SndParam_ProbeEntry
 
+
+; --- Sound Parameters, MIDI Serial, DSP & Voice Mapping ---
 	.include "sndparam_routines.s"
 
 ; MIDI Serial Communication routines (SC0)
