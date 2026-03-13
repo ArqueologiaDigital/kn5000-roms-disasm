@@ -173,7 +173,9 @@ def main():
     for line in text.split(b'\n'):
         line = line.strip()
         if line.startswith(b'.byte'):
-            parts = line[5:].split(b',')
+            # Strip comments (;) before parsing
+            code = line.split(b';')[0]
+            parts = code[5:].split(b',')
             for p in parts:
                 p = p.strip()
                 if p.startswith(b'0x'):
