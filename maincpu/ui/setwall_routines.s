@@ -1,3 +1,12 @@
+; =============================================================================
+; Wallpaper & Wall Display
+; =============================================================================
+;
+; Wallpaper image loading and wall display update routines.
+; Manages the panel slot selection/matching system for the
+; background display.
+; =============================================================================
+
 SetWall_X:
 	st32_24 0x030452, xwa
 	ret

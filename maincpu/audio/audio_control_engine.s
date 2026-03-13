@@ -1,3 +1,12 @@
+; =============================================================================
+; Audio Control Engine
+; =============================================================================
+;
+; MIDI stream processing, control panel LED management, voice/tone
+; parameter control, and sound preset dispatch. This is the main
+; bridge between the UI layer and the SubCPU audio engine.
+; =============================================================================
+
 	ld a, e
 	and a, 0xF
 	jr z, LABEL_FC5843

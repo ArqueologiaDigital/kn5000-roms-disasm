@@ -1,3 +1,12 @@
+; =============================================================================
+; Sound Navigation
+; =============================================================================
+;
+; Sound bank browsing functions: MainGetSoundName,
+; Sound_Navigate_Next/Prev, MainGetRhythmName, MainGetPmemName,
+; and MainTrSwControl for sound selection UI.
+; =============================================================================
+
 MainGetSoundName:
 	lda xsp, (xsp - 20)
 	push xiz

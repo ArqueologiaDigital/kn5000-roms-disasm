@@ -1,3 +1,13 @@
+; =============================================================================
+; UI Window Procedures (8K lines)
+; =============================================================================
+;
+; Window procedure handlers for all standard widget types:
+; ModeEdit, TitleEdit, StringBox, Label, Bitmap, Icon, Line,
+; Frame, EditSw, TextBox, VwBox, ListBox, RadioBox, TempoBox,
+; GridBox. The core UI rendering and event dispatch layer.
+; =============================================================================
+
 	lda_24 xde, 0x0274b0
 	ld32_24 xhl, 0x0274e4
 	lds32 xbc, 0

@@ -1,3 +1,11 @@
+; =============================================================================
+; Feature Demo Text Processing
+; =============================================================================
+;
+; Text data processing for Feature Demo mode: voice probing,
+; flag processing, and formatted output for demo displays.
+; =============================================================================
+
 FDemoText:
 	cp xbc, 0x1E0009F
 	jr nz, FDemoText_ReturnNull

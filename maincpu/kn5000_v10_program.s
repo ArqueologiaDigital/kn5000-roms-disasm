@@ -17969,10 +17969,14 @@ LABEL_EB2AE4:
 .include "ui_widgets/eb2afe_eb71be.s"
 
 ; =============================================================================
-; Character Encoding Tables & System Core (ROM EEF588-FC3113)
+; UI Widget Style Bitmaps & Dispatch (end of NAKA widget section)
 ; =============================================================================
 	.include "ui_widgets/style_bitmaps.s"
 	.include "ui_widgets/widget_dispatch.s"
+
+; =============================================================================
+; Character Encoding Tables & System Core (ROM EEF588-FC3113)
+; =============================================================================
 	.ascii " \"!#\"$#%$&%'&(')(*)+*,+-,.-/.0/102132435465768798:9;:<;=<>=?>@?A@BACBDCEDFEGFHGIHJIKJLKMLNMONPOQPRQSRTSUTVUWVXWYXZY[Z\\[]\\^]_^`_a`bacbdce"
 LABEL_EF0000:	.ascii "dfegfhgihjikjlkmlnmonpoqprqsrtsutvuwvxwyxzy{z|{}|~}"
 	.byte 0x7f, 0x7e, 0x80, 0x7f, 0x00

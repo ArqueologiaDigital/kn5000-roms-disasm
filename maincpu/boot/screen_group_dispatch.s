@@ -1,3 +1,12 @@
+; =============================================================================
+; Screen Group Dispatch
+; =============================================================================
+;
+; Boot screen group dispatcher for startup screens and error
+; dialogs. Also contains the system reinitialization routine
+; called during display mode transitions.
+; =============================================================================
+
 LABEL_FDDB2E:
 	call MidiParam_ForceResync
 	call LABEL_FC7000

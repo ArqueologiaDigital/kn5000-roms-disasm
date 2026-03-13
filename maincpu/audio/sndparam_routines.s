@@ -1,3 +1,11 @@
+; =============================================================================
+; Sound Parameter Routines
+; =============================================================================
+;
+; Sound parameter probe, match, and heap allocation. Provides
+; lookup and comparison services for sound preset data.
+; =============================================================================
+
 SndParam_ProbeCheckMatch:
 	lds bc, 0
 	cp xiz, xde

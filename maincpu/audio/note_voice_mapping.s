@@ -1,3 +1,13 @@
+; =============================================================================
+; Note & Voice Mapping (26K lines)
+; =============================================================================
+;
+; Note-on processing, polyphonic voice allocation and stealing,
+; NoteMap dispatch (91 functions), sequence playback support, MIDI
+; output formatting, sound parameter management, and utility routines.
+; One of the largest files in the ROM.
+; =============================================================================
+
 LABEL_FE0245:
 	st_dri3b L, 0xFD, 0x08, 0xFE
 	pushw iz

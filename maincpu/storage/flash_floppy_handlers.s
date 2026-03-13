@@ -1,3 +1,12 @@
+; =============================================================================
+; Flash & Floppy Handlers
+; =============================================================================
+;
+; Flash memory sector write routines, floppy disk note event
+; loading, and FDC format UI. Bridges storage hardware to the
+; file I/O subsystem.
+; =============================================================================
+
 FlashWrite_BlockHandler_Table:
 	.long LABEL_F15907
 	.long LABEL_F1593A

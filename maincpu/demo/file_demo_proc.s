@@ -1,3 +1,11 @@
+; =============================================================================
+; File Demo Procedures
+; =============================================================================
+;
+; File demo procedures and title handlers. Manages demo file
+; playback, title display, and demo mode UI integration.
+; =============================================================================
+
 LABEL_F864A0:
 	.byte 0xf3, 0xfd, 0xdc, 0xfe, 0x37, 0x3e, 0xe8, 0x8e
 	.byte 0xbf, 0x06, 0x02, 0x00, 0x00, 0xf3, 0xfd, 0x08

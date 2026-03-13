@@ -1,3 +1,12 @@
+; =============================================================================
+; MIDI Dispatch Handlers (11K lines)
+; =============================================================================
+;
+; MIDI Control Change handlers (22 types), serial input parsing,
+; file data validation, sound mode handlers, and arpeggiator queue.
+; The main MIDI message routing and processing layer.
+; =============================================================================
+
 
 
 MidiSerial_RetStub:

@@ -1,3 +1,12 @@
+; =============================================================================
+; UI Mode Handlers (12K lines)
+; =============================================================================
+;
+; Mode-specific UI handlers for Pmem (parametric memory), bank
+; editor, filter grid, RVari (rhythm variation), and DSP effect
+; editing modes.
+; =============================================================================
+
 LABEL_FB69EA:
 	pushw iz
 	ldada xbc, 64773

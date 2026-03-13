@@ -1,3 +1,12 @@
+; =============================================================================
+; Audio Initialization
+; =============================================================================
+;
+; Audio subsystem initialization and stereo voice configuration.
+; Called during system boot to set up voice slots, output routing,
+; and default sound parameters.
+; =============================================================================
+
 AudioInit_ConfigStereoVoice:
 	ldda8 a, 36154
 	extz wa

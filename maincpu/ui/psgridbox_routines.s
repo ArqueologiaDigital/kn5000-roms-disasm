@@ -1,3 +1,11 @@
+; =============================================================================
+; PS Grid Box Widget
+; =============================================================================
+;
+; Parameter Selection Grid Box widget: initialization, memory
+; allocation, visibility control, and event handling.
+; =============================================================================
+
 PsGridBox_Init:
 	ld_sril XWA, (xsp + 0x014e)
 	call GetViewInstance

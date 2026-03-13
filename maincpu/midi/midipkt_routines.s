@@ -1,3 +1,12 @@
+; =============================================================================
+; MIDI Packet Routines
+; =============================================================================
+;
+; MIDI packet extraction, packing, and queue management.
+; Handles the low-level MIDI message framing between the
+; serial I/O layer and the dispatch handlers.
+; =============================================================================
+
 MidiPkt_ExtractAndPack:
 	; --- Stack-frame: XIZ struct field extraction + packed lookup (96 bytes) ---
 	lda	xsp, (xsp-16)

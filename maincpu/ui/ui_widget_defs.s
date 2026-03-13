@@ -1,3 +1,12 @@
+; =============================================================================
+; UI Widget Definitions (19K lines)
+; =============================================================================
+;
+; Grid box implementations, exit window handling, title/resource
+; widgets, event dispatch loops, and object enumeration. Defines
+; the widget infrastructure used by all UI screens.
+; =============================================================================
+
 AcGridBoxProc:
 	lda xsp, (xsp - 16)
 	push xiz

@@ -1,3 +1,12 @@
+; =============================================================================
+; Sound Editor UI
+; =============================================================================
+;
+; Sound editor user interface: patch/bank selection, parameter
+; editing, drum kit editor. Includes flash/floppy integration
+; for saving/loading sound patches.
+; =============================================================================
+
 InitializeSeMenuDefaults:
 	lds wa, 0
 	call SeMenu_SetSoundBank

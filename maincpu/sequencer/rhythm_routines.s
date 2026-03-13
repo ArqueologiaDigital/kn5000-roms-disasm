@@ -1,3 +1,11 @@
+; =============================================================================
+; Rhythm Pattern Routines
+; =============================================================================
+;
+; Rhythm pattern comparison, trigger logic, and transposition.
+; Evaluates accompaniment pattern matching and rhythm dispatch.
+; =============================================================================
+
 Rhythm_CompareAndTrigger:
 	bitda 0, 12931
 	jrl z, Rhythm_SaveNoteState

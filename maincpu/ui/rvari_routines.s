@@ -1,3 +1,12 @@
+; =============================================================================
+; RVari (Rhythm Variation) Screen
+; =============================================================================
+;
+; Rhythm variation selection screen renderer and interaction
+; handlers. Displays and navigates rhythm variation options
+; with type-specific rendering (Type E/Other).
+; =============================================================================
+
 RVari_Select_CalcVisibleCount:
 	ld (xsp + 4), 0x9
 	ld xbc, (xiz + 52)

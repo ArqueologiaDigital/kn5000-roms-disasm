@@ -1,3 +1,12 @@
+; =============================================================================
+; Accompaniment Engine (32K lines)
+; =============================================================================
+;
+; Rhythm note dispatch, accompaniment voice selection, timing,
+; patch management, drum configuration, and style conversion.
+; One of the largest files in the ROM.
+; =============================================================================
+
 Rhythm_DispatchNote:
 	ld l, a
 	ld h, d

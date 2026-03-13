@@ -1,3 +1,12 @@
+; =============================================================================
+; DSP Configuration & SysEx Processing
+; =============================================================================
+;
+; DSP effect parameter handlers (reverb, chorus, EQ, compressor)
+; and System Exclusive (SysEx) command processing. Manages effect
+; presets and real-time parameter editing.
+; =============================================================================
+
 SysEx_ClampVoiceIndex8:
 	cp a, 0x8
 	jr c, SysEx_ClampVoiceIndex8_DoLookup

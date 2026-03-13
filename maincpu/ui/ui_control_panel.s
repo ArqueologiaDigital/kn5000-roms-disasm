@@ -1,3 +1,12 @@
+; =============================================================================
+; UI Control Panel (4K lines)
+; =============================================================================
+;
+; Control panel key dispatch, UI task control, slider/scrollbar
+; handlers, and the GroupBoxProc container widget. Routes button
+; presses and dial events to the appropriate UI handlers.
+; =============================================================================
+
 	call Strcpy
 	inc 8, xsp
 	call GetFocusObject

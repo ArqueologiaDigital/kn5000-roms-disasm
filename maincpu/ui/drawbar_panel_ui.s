@@ -1,3 +1,12 @@
+; =============================================================================
+; Drawbar & Panel UI (15K lines)
+; =============================================================================
+;
+; Drawbar organ slider UI, DSP effect controls, the presentation
+; system, and the demo menu. Handles the real-time parameter
+; display for the drawbar interface.
+; =============================================================================
+
 
 
 AcSendEditSwProc:

@@ -1,3 +1,11 @@
+; =============================================================================
+; Accompaniment Sequencer
+; =============================================================================
+;
+; Accompaniment sequencer periodic processing. Handles real-time
+; accompaniment playback, manual MIDI mode, and fade-out timing.
+; =============================================================================
+
 AccompSeq_PeriodicEntry:
 	jp LABEL_F6DCB5
 

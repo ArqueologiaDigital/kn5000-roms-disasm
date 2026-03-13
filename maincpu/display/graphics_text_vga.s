@@ -1,3 +1,12 @@
+; =============================================================================
+; Graphics, Text & VGA Routines
+; =============================================================================
+;
+; VGA palette initialization, text rendering engine, string
+; layout, character set handling, and VRAM blit operations.
+; The low-level graphics API used by all UI subsystems.
+; =============================================================================
+
 	add xwa, xbc
 	lda_24 xiz, 0x043c00
 	add xiz, xwa

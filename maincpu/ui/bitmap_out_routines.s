@@ -1,3 +1,11 @@
+; =============================================================================
+; Bitmap Output Routines
+; =============================================================================
+;
+; Bitmap blitting and palette loading for VGA display.
+; Handles bitmap decompression and rendering to the framebuffer.
+; =============================================================================
+
 BitMapOut_PaletteLoadLoop:
 	lda xwa, (xiz + 54)
 	ld (xsp + 12), xwa

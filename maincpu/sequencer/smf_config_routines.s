@@ -1,3 +1,11 @@
+; =============================================================================
+; SMF Configuration
+; =============================================================================
+;
+; SMF (Standard MIDI File) configuration and parameter setup.
+; Manages playback settings, channel assignments, and tempo.
+; =============================================================================
+
 LABEL_F28107:
 	ldda8 l, 4215
 

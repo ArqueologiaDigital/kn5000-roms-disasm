@@ -1,3 +1,11 @@
+; =============================================================================
+; Sequencer UI (14K lines)
+; =============================================================================
+;
+; Sequencer editing user interface: track display, step/event
+; editing, and the bitmap drum editor integration.
+; =============================================================================
+
 InitializeYoko:
 	lda xsp, (xsp - 14)
 

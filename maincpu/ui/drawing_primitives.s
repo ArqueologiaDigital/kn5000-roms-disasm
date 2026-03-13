@@ -1,3 +1,12 @@
+; =============================================================================
+; Drawing Primitives
+; =============================================================================
+;
+; Low-level drawing routines: Bresenham line drawing, rectangle
+; fill, and reverse string rendering. Used by higher-level UI
+; widgets for all graphical output.
+; =============================================================================
+
 DrawLine_Epilogue:
 	popw iz
 	inc 6, xsp

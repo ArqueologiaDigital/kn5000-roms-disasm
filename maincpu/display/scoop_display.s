@@ -1,3 +1,12 @@
+; =============================================================================
+; Scoop Display & Performance Parameters (10K lines)
+; =============================================================================
+;
+; Display dirty-region tracking, performance mode parameter
+; handlers, and the Scoop (oscilloscope) editor UI. Manages
+; the real-time display update system for the 320x240 LCD.
+; =============================================================================
+
 	; === ROM-specific ending: initialize video buffers ===
 	call Fill_memory_at_XWA_with_DE_words_of_BC_value
 	lda_24 xwa, 0x1a0000

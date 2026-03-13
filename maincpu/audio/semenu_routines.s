@@ -1,3 +1,12 @@
+; =============================================================================
+; Sound Editor Menu (SeMenu)
+; =============================================================================
+;
+; Event handling and navigation for the Sound Editor menu system.
+; Manages dialog boxes, notification handlers, object registration,
+; and display flushing for sound editing screens.
+; =============================================================================
+
 SeMenu_SendEvent:
 	dec 2, xsp
 	ld (xsp), c

@@ -1,3 +1,12 @@
+; =============================================================================
+; Bitmap Drum Editor
+; =============================================================================
+;
+; Bitmap drum editor: stream positioning, sequence display,
+; and voice allocation UI. Provides the graphical drum pattern
+; editing interface.
+; =============================================================================
+
 BmDrEdit_AdvanceStreamPos:
 	ld16_24 xwa, 0x0210a6
 	cp wa, 0xFF

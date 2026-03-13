@@ -1,3 +1,12 @@
+; =============================================================================
+; SMF Event Processor
+; =============================================================================
+;
+; Standard MIDI File (SMF) event processing, tone generation
+; dispatch, and voice channel management. Bridges SMF playback
+; data to the audio engine.
+; =============================================================================
+
 	and ix, 0xFF
 	inc 1, ix
 	cp ix, 0xFF

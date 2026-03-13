@@ -1,3 +1,12 @@
+; =============================================================================
+; Main Title & System Initialization
+; =============================================================================
+;
+; System initialization sequence (graphics, event queue, timers,
+; object table, LCD power-on) and the main title screen UI event
+; loop. Entry point after boot completes.
+; =============================================================================
+
 ;==================== (guessed) end of floppy routines =========================
 
 

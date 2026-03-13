@@ -1,3 +1,12 @@
+; =============================================================================
+; System Handlers (8K lines)
+; =============================================================================
+;
+; Core system infrastructure: interrupt handlers (NMI, DMA, timers),
+; the UI state machine, cooperative task scheduler, flash memory
+; update routines, and LZSS decompression engine.
+; =============================================================================
+
 
 ; Alias labels for backward compatibility with existing code
 .equ LABEL_EF086F, Boot_CallInitHandlers

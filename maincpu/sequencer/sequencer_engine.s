@@ -1,3 +1,14 @@
+; =============================================================================
+; Sequencer Engine (32K lines)
+; =============================================================================
+;
+; Core sequencer: note editor UI, playback control, voice
+; allocation, application event framework, and part/voice data
+; management. One of the largest files in the ROM.
+;
+; Internal codename: "YOKO" (Matsushita/Technics developer name).
+; =============================================================================
+
 NoteEditSy_SendCompoundWidgetUpdate:
 	call NoteEditSy_SendWidgetCmd2
 	jp NoteEditSy_SendModeWidgetCmd
