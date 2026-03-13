@@ -50,61 +50,56 @@ def u32(data, off):
     return data[off] | (data[off + 1] << 8) | (data[off + 2] << 16) | (data[off + 3] << 24)
 
 
-def fmt_hline(data, off, comment=""):
+def fmt_hline(data, off):
     """Format 10-byte HLINE as C initializer."""
     p1x, p1y = u16(data, off + 2), u16(data, off + 4)
     p2x, p2y = u16(data, off + 6), u16(data, off + 8)
-    c = f"  /* ({p1x},{p1y})-({p2x},{p2y}){' ' + comment if comment else ''} */"
     return (f"{{ .opcode = SD_OP_HLINE, .length = 0x0a, "
             f".p1 = {{ .x = {p1x}, .y = {p1y} }}, "
-            f".p2 = {{ .x = {p2x}, .y = {p2y} }} }},{c}")
+            f".p2 = {{ .x = {p2x}, .y = {p2y} }} }},")
 
 
-def fmt_vline(data, off, comment=""):
+def fmt_vline(data, off):
     """Format 10-byte VLINE as C initializer."""
     p1x, p1y = u16(data, off + 2), u16(data, off + 4)
     p2x, p2y = u16(data, off + 6), u16(data, off + 8)
-    c = f"  /* ({p1x},{p1y})-({p2x},{p2y}){' ' + comment if comment else ''} */"
     return (f"{{ .opcode = SD_OP_VLINE_WIDGET, .subtype = SD_SUB_VLINE, "
             f".p1 = {{ .x = {p1x}, .y = {p1y} }}, "
-            f".p2 = {{ .x = {p2x}, .y = {p2y} }} }},{c}")
+            f".p2 = {{ .x = {p2x}, .y = {p2y} }} }},")
 
 
-def fmt_filled_rect(data, off, comment=""):
+def fmt_filled_rect(data, off):
     """Format 10-byte FILLED_RECT as C initializer."""
     tlx, tly = u16(data, off + 2), u16(data, off + 4)
     brx, bry = u16(data, off + 6), u16(data, off + 8)
-    c = f"  /* ({tlx},{tly})-({brx},{bry}){' ' + comment if comment else ''} */"
     return (f"{{ .opcode = SD_OP_FILLED_RECT, .length = 0x0a, "
             f".top_left = {{ .x = {tlx}, .y = {tly} }}, "
-            f".bottom_right = {{ .x = {brx}, .y = {bry} }} }},{c}")
+            f".bottom_right = {{ .x = {brx}, .y = {bry} }} }},")
 
 
-def fmt_ref1(data, off, comment=""):
+def fmt_ref1(data, off):
     """Format 5-byte LABELED_REF with 1-byte param."""
     addr = u16(data, off + 2)
     param = data[off + 4]
-    c = f"  /* addr=0x{addr:04x} param={param}{' ' + comment if comment else ''} */"
     return (f"{{ .opcode = SD_OP_LABELED_REF, .length = 5, "
-            f".addr = 0x{addr:04x}, .label = {{ 0x{param:02x} }} }},{c}")
+            f".addr = 0x{addr:04x}, .label = {{ 0x{param:02x} }} }},")
 
 
-def fmt_ref_ex(data, off, comment=""):
+def fmt_ref_ex(data, off):
     """Format 10-byte REF_EX."""
     id_val = u16(data, off + 2)
     d = data[off + 4:off + 10]
     dstr = ', '.join(f'0x{b:02x}' for b in d)
-    c = f"  /* id=0x{id_val:04x}{' ' + comment if comment else ''} */"
     return (f"{{ .opcode = SD_OP_LABELED_REF, .length = 0x0a, "
-            f".id = 0x{id_val:04x}, .data = {{ {dstr} }} }},{c}")
+            f".id = 0x{id_val:04x}, .data = {{ {dstr} }} }},")
 
 
-def fmt_nop_10(data, off, comment=""):
+def fmt_nop_10(data, off):
     """Format 10-byte NOP/PAD."""
     d = data[off + 2:off + 10]
     dstr = ', '.join(f'0x{b:02x}' for b in d)
     return (f"{{ .opcode = 0x{data[off]:02x}, .length = 0x{data[off+1]:02x}, "
-            f".data = {{ {dstr} }} }},{' /* ' + comment + ' */' if comment else ''}")
+            f".data = {{ {dstr} }} }},")
 
 
 def fmt_widget(data, off):
@@ -122,7 +117,7 @@ def fmt_widget(data, off):
             f".id = 0x{id_val:04x}, .flags = 0x{flags:04x}, "
             f".ref_tag = 0x{ref_tag:02x}, .handler = 0x{handler:08x}, "
             f".param = {param}, .x = {x}, .y = {y} }},"
-            f"  /* {hname} pos=({x},{y}) */")
+            f"  /* {hname} */")
 
 
 def fmt_raw(data, start, end, indent='\t\t', width=16):
@@ -337,11 +332,11 @@ def main():
     # --- Row labels ---
     off = ROW_LABELS
     out.append('\t/* Row label references */')
-    out.append(f'\t.row_label_1 = {fmt_ref_ex(raw, off, "row_label_1")}')
+    out.append(f'\t.row_label_1 = {fmt_ref_ex(raw, off)}')
     off += 10
-    out.append(f'\t.row_label_2 = {fmt_ref_ex(raw, off, "row_label_2")}')
+    out.append(f'\t.row_label_2 = {fmt_ref_ex(raw, off)}')
     off += 10
-    out.append(f'\t.row_label_3 = {fmt_ref_ex(raw, off, "row_label_3")}')
+    out.append(f'\t.row_label_3 = {fmt_ref_ex(raw, off)}')
     off += 10
     out.append(f'\t.row_ref_1   = {fmt_ref1(raw, off, "param=45")}')
     off += 5

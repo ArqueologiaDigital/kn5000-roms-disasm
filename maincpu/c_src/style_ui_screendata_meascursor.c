@@ -33,10 +33,10 @@ typedef struct __attribute__((packed)) {
     sd_string_1_t       nav_right;        /* ">" at (53,34) */
 
     /* Bottom bar */
-    sd_filled_rect_t    bottom_bar_left;  /* (5,210)-(35,236) */
-    sd_filled_rect_t    bottom_bar_right; /* (245,210)-(275,236) */
-    sd_filled_rect_t    bottom_bar_far_right; /* (285,210)-(315,236) */
-    sd_hline_t          bottom_divider;   /* (5,223)-(35,223) */
+    sd_filled_rect_t    bottom_bar_left;
+    sd_filled_rect_t    bottom_bar_right;
+    sd_filled_rect_t    bottom_bar_far_right;
+    sd_hline_t          bottom_divider;
 
     /* BAL button + selection box */
     sd_labeled_ref_3_t  bal_ref;          /* "BAL" addr=0x06DB */
@@ -49,7 +49,7 @@ typedef struct __attribute__((packed)) {
     sd_short_ref_3_t    ers_shortref;
 
     /* Status bar */
-    sd_filled_rect_t    status_bar;       /* (5,175)-(250,195) */
+    sd_filled_rect_t    status_bar;
 } screendata_meascursor_t;
 
 _Static_assert(sizeof(screendata_meascursor_t) == 184,
@@ -61,17 +61,17 @@ const screendata_meascursor_t StyleUI_ScreenData_MeasCursor
     /* Labels */
     .label_meas = {
         .opcode = SD_OP_STRING, .length = 8,
-        .x = 0x19, .y = 0x1f,
+        .x = 25, .y = 31,
         .text = "MEAS",
     },
     .label_cursor = {
         .opcode = SD_OP_STRING, .length = 10,
-        .x = 0x38, .y = 0x1f,
+        .x = 56, .y = 31,
         .text = "CURSOR",
     },
     .label_ctl = {
         .opcode = SD_OP_STRING, .length = 7,
-        .x = 0x5b, .y = 0x13,
+        .x = 91, .y = 19,
         .text = "CTL",
     },
 
@@ -96,24 +96,24 @@ const screendata_meascursor_t StyleUI_ScreenData_MeasCursor
     /* Up/down arrows */
     .arrow_up = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0xd2, .y = 0x20,
+        .x = 210, .y = 32,
         .text = { LCD_CHAR_VBAR },
     },
     .arrow_down = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0xda, .y = 0x22,
+        .x = 218, .y = 34,
         .text = { LCD_CHAR_DARROW },
     },
 
     /* Navigation arrows */
     .nav_left = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0x30, .y = 0x22,
+        .x = 48, .y = 34,
         .text = "<",
     },
     .nav_right = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0x35, .y = 0x22,
+        .x = 53, .y = 34,
         .text = ">",
     },
 

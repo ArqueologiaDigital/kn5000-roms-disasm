@@ -37,7 +37,7 @@ const screendata_ctlonly_t StyleUI_ScreenData_CtlOnly
     /* Bytecode header */
     .label_ctl = {
         .opcode = SD_OP_STRING, .length = 7,
-        .x = 0x5b, .y = 0x13,
+        .x = 91, .y = 19,
         .text = "CTL",
     },
     .ctl_shortref = {

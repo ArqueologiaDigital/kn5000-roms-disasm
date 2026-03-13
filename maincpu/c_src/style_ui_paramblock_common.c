@@ -13,55 +13,38 @@
 #include "screendata_types.h"
 
 typedef struct __attribute__((packed)) {
-    /* [0] STRING "MEAS" at (25,31) */
     sd_string_4_t       label_meas;
 
-    /* [1] STRING "CURSOR" at (56,31) */
     sd_string_6_t       label_cursor;
 
-    /* [2] STRING "|" at (210,32) — up arrow */
     sd_string_1_t       arrow_up;
 
-    /* [3] STRING "~" at (218,34) — down arrow */
     sd_string_1_t       arrow_down;
 
-    /* [4] STRING "<" at (48,34) */
     sd_string_1_t       nav_left;
 
-    /* [5] STRING ">" at (53,34) */
     sd_string_1_t       nav_right;
 
-    /* [6] FILLED_RECT (5,210)-(35,236) */
     sd_filled_rect_t    button_fill_1;
 
-    /* [7] FILLED_RECT (245,210)-(275,236) */
     sd_filled_rect_t    button_fill_2;
 
-    /* [8] FILLED_RECT (285,210)-(315,236) */
     sd_filled_rect_t    button_fill_3;
 
-    /* [9] HLINE (5,223)-(35,223) */
     sd_hline_t          button_hline;
 
-    /* [10] LABELED_REF "BAL" */
     sd_labeled_ref_3_t  bal_ref;
 
-    /* [11-12] BAL selection box */
     sd_selection_box_t  bal_box;
 
-    /* [13] SHORT_REF */
     sd_short_ref_3_t    bal_shortref;
 
-    /* [14] LABELED_REF "ERS" */
     sd_labeled_ref_3_t  ers_ref;
 
-    /* [15-16] ERS selection box */
     sd_selection_box_t  ers_box;
 
-    /* [17] SHORT_REF */
     sd_short_ref_3_t    ers_shortref;
 
-    /* [18] FILLED_RECT (5,175)-(250,195) */
     sd_filled_rect_t    status_bar;
 } paramblock_common_t;
 
@@ -70,61 +53,54 @@ _Static_assert(sizeof(paramblock_common_t) == 152,
 
 const paramblock_common_t StyleUI_ParamBlock_Common
     __attribute__((section(".text"), used)) = {
-    /* [0] STRING "MEAS" at (25,31) */
     .label_meas = {
         .opcode = SD_OP_STRING,
         .length = 8,
-        .x      = 0x19,
-        .y      = 0x1f,
+        .x      = 25,
+        .y      = 31,
         .text   = "MEAS",
     },
 
-    /* [1] STRING "CURSOR" at (56,31) */
     .label_cursor = {
         .opcode = SD_OP_STRING,
         .length = 10,
-        .x      = 0x38,
-        .y      = 0x1f,
+        .x      = 56,
+        .y      = 31,
         .text   = "CURSOR",
     },
 
-    /* [2] STRING "|" at (210,32) — up arrow */
     .arrow_up = {
         .opcode = SD_OP_STRING,
         .length = 5,
-        .x      = 0xd2,
-        .y      = 0x20,
+        .x      = 210,
+        .y      = 32,
         .text   = { LCD_CHAR_VBAR },
     },
 
-    /* [3] STRING "~" at (218,34) — down arrow */
     .arrow_down = {
         .opcode = SD_OP_STRING,
         .length = 5,
-        .x      = 0xda,
-        .y      = 0x22,
+        .x      = 218,
+        .y      = 34,
         .text   = { LCD_CHAR_DARROW },
     },
 
-    /* [4] STRING "<" at (48,34) */
     .nav_left = {
         .opcode = SD_OP_STRING,
         .length = 5,
-        .x      = 0x30,
-        .y      = 0x22,
+        .x      = 48,
+        .y      = 34,
         .text   = "<",
     },
 
-    /* [5] STRING ">" at (53,34) */
     .nav_right = {
         .opcode = SD_OP_STRING,
         .length = 5,
-        .x      = 0x35,
-        .y      = 0x22,
+        .x      = 53,
+        .y      = 34,
         .text   = ">",
     },
 
-    /* [6] FILLED_RECT (5,210)-(35,236) */
     .button_fill_1 = {
         .opcode       = SD_OP_FILLED_RECT,
         .length       = 0x0A,
@@ -132,7 +108,6 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .bottom_right = { .x = 35, .y = 236 },
     },
 
-    /* [7] FILLED_RECT (245,210)-(275,236) */
     .button_fill_2 = {
         .opcode       = SD_OP_FILLED_RECT,
         .length       = 0x0A,
@@ -140,7 +115,6 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .bottom_right = { .x = 275, .y = 236 },
     },
 
-    /* [8] FILLED_RECT (285,210)-(315,236) */
     .button_fill_3 = {
         .opcode       = SD_OP_FILLED_RECT,
         .length       = 0x0A,
@@ -148,7 +122,6 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .bottom_right = { .x = 315, .y = 236 },
     },
 
-    /* [9] HLINE (5,223)-(35,223) */
     .button_hline = {
         .opcode = SD_OP_HLINE,
         .length = 0x0A,
@@ -156,7 +129,6 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .p2     = { .x = 35, .y = 223 },
     },
 
-    /* [10] LABELED_REF "BAL" */
     .bal_ref = {
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
@@ -164,7 +136,6 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .label  = "BAL",
     },
 
-    /* [11-12] BAL selection box */
     .bal_box = {
         .inner = {
             .opcode       = SD_OP_RECT,
@@ -180,14 +151,12 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         },
     },
 
-    /* [13] SHORT_REF */
     .bal_shortref = {
         .opcode = SD_OP_SHORT_REF,
         .length = 5,
         .data   = { 0xB7, 0x06, 0x11 },
     },
 
-    /* [14] LABELED_REF "ERS" */
     .ers_ref = {
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
@@ -195,7 +164,6 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .label  = "ERS",
     },
 
-    /* [15-16] ERS selection box */
     .ers_box = {
         .inner = {
             .opcode       = SD_OP_RECT,
@@ -211,14 +179,12 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         },
     },
 
-    /* [17] SHORT_REF */
     .ers_shortref = {
         .opcode = SD_OP_SHORT_REF,
         .length = 5,
         .data   = { 0xF7, 0x0C, 0x11 },
     },
 
-    /* [18] FILLED_RECT (5,175)-(250,195) */
     .status_bar = {
         .opcode       = SD_OP_FILLED_RECT,
         .length       = 0x0A,

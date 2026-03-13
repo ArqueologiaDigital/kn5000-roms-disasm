@@ -47,17 +47,17 @@ typedef struct __attribute__((packed)) {
     sd_string_1_t       nav_right;        /* ">" at (53,34) */
 
     /* Bottom bar */
-    sd_filled_rect_t    bottom_bar_1;     /* (5,210)-(35,236) */
-    sd_hline_t          bottom_divider_1; /* (5,223)-(35,223) */
-    sd_filled_rect_t    bottom_bar_2;     /* (45,210)-(75,236) */
-    sd_hline_t          bottom_divider_2; /* (45,223)-(75,223) */
-    sd_filled_rect_t    bottom_bar_3;     /* (125,210)-(155,236) */
-    sd_hline_t          bottom_divider_3; /* (125,223)-(155,223) */
-    sd_filled_rect_t    bottom_bar_4;     /* (245,210)-(275,236) */
-    sd_filled_rect_t    bottom_bar_5;     /* (285,210)-(315,236) */
+    sd_filled_rect_t    bottom_bar_1;
+    sd_hline_t          bottom_divider_1;
+    sd_filled_rect_t    bottom_bar_2;
+    sd_hline_t          bottom_divider_2;
+    sd_filled_rect_t    bottom_bar_3;
+    sd_hline_t          bottom_divider_3;
+    sd_filled_rect_t    bottom_bar_4;
+    sd_filled_rect_t    bottom_bar_5;
 
     /* Status bar */
-    sd_filled_rect_t    status_bar;       /* (5,175)-(250,195) */
+    sd_filled_rect_t    status_bar;
 } screendata_yesctl_t;
 
 _Static_assert(sizeof(screendata_yesctl_t) == 228,
@@ -115,70 +115,70 @@ const screendata_yesctl_t StyleUI_ScreenData_YesCtl
     /* Labels */
     .label_meas = {
         .opcode = SD_OP_STRING, .length = 8,
-        .x = 0x19, .y = 0x1f,
+        .x = 25, .y = 31,
         .text = "MEAS",
     },
     .label_cursor = {
         .opcode = SD_OP_STRING, .length = 10,
-        .x = 0x38, .y = 0x1f,
+        .x = 56, .y = 31,
         .text = "CURSOR",
     },
 
     /* Arrow pairs */
     .arrow_up_1 = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0xd2, .y = 0x20,
+        .x = 210, .y = 32,
         .text = { LCD_CHAR_VBAR },
     },
     .arrow_down_1 = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0xda, .y = 0x22,
+        .x = 218, .y = 34,
         .text = { LCD_CHAR_DARROW },
     },
     .arrow_up_2 = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0xd7, .y = 0x20,
+        .x = 215, .y = 32,
         .text = { LCD_CHAR_VBAR },
     },
     .arrow_down_2 = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0xdf, .y = 0x22,
+        .x = 223, .y = 34,
         .text = { LCD_CHAR_DARROW },
     },
 
     /* CTL / VALUE labels */
     .label_ctl = {
         .opcode = SD_OP_STRING, .length = 7,
-        .x = 0x1e, .y = 0x1f,
+        .x = 30, .y = 31,
         .text = "CTL",
     },
     .label_value = {
         .opcode = SD_OP_STRING, .length = 9,
-        .x = 0x28, .y = 0x1f,
+        .x = 40, .y = 31,
         .text = "VALUE",
     },
 
     /* Third arrow pair */
     .arrow_up_3 = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0xe1, .y = 0x20,
+        .x = 225, .y = 32,
         .text = { LCD_CHAR_VBAR },
     },
     .arrow_down_3 = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0xe9, .y = 0x22,
+        .x = 233, .y = 34,
         .text = { LCD_CHAR_DARROW },
     },
 
     /* Navigation arrows */
     .nav_left = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0x30, .y = 0x22,
+        .x = 48, .y = 34,
         .text = "<",
     },
     .nav_right = {
         .opcode = SD_OP_STRING, .length = 5,
-        .x = 0x35, .y = 0x22,
+        .x = 53, .y = 34,
         .text = ">",
     },
 

@@ -12,19 +12,14 @@
 #include "screendata_types.h"
 
 typedef struct __attribute__((packed)) {
-    /* [0] STRING "VALUE" at (44,31) */
     sd_string_5_t       label_value;
 
-    /* [1] STRING "|" at (230,32) — up arrow */
     sd_string_1_t       arrow_up;
 
-    /* [2] STRING "~" at (238,34) — down arrow */
     sd_string_1_t       arrow_down;
 
-    /* [3] FILLED_RECT (165,210)-(195,236) */
     sd_filled_rect_t    button_fill;
 
-    /* [4] HLINE (165,223)-(195,223) */
     sd_hline_t          button_hline;
 } paramblock_value_t;
 
@@ -33,34 +28,30 @@ _Static_assert(sizeof(paramblock_value_t) == 39,
 
 const paramblock_value_t StyleUI_ParamBlock_VALUE
     __attribute__((section(".text"), used)) = {
-    /* [0] STRING "VALUE" at (44,31) */
     .label_value = {
         .opcode = SD_OP_STRING,
         .length = 9,
-        .x      = 0x2c,
-        .y      = 0x1f,
+        .x      = 44,
+        .y      = 31,
         .text   = "VALUE",
     },
 
-    /* [1] STRING "|" at (230,32) — up arrow */
     .arrow_up = {
         .opcode = SD_OP_STRING,
         .length = 5,
-        .x      = 0xe6,
-        .y      = 0x20,
+        .x      = 230,
+        .y      = 32,
         .text   = { LCD_CHAR_VBAR },
     },
 
-    /* [2] STRING "~" at (238,34) — down arrow */
     .arrow_down = {
         .opcode = SD_OP_STRING,
         .length = 5,
-        .x      = 0xee,
-        .y      = 0x22,
+        .x      = 238,
+        .y      = 34,
         .text   = { LCD_CHAR_DARROW },
     },
 
-    /* [3] FILLED_RECT (165,210)-(195,236) */
     .button_fill = {
         .opcode       = SD_OP_FILLED_RECT,
         .length       = 0x0A,
@@ -68,7 +59,6 @@ const paramblock_value_t StyleUI_ParamBlock_VALUE
         .bottom_right = { .x = 195, .y = 236 },
     },
 
-    /* [4] HLINE (165,223)-(195,223) */
     .button_hline = {
         .opcode = SD_OP_HLINE,
         .length = 0x0A,
