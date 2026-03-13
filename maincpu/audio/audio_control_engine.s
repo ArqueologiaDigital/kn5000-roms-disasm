@@ -994,7 +994,7 @@ LABEL_FC6C54:
 	stdi8 36548, 0
 	ret
 
-	.include "midi_encoder_routines.s"
+	.include "midi/midi_encoder_routines.s"
 
 MidiParam_ForceResync:
 	stdi8 297, 131

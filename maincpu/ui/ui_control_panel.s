@@ -104,9 +104,9 @@ LABEL_F77399:
 
 
 ; Computer Interface PCG Output routines
-	.include "computer_interface_pcg.s"
-	.include "drawbar_panel_ui.s"
-	.include "file_demo_proc.s"
+	.include "midi/computer_interface_pcg.s"
+	.include "ui/drawbar_panel_ui.s"
+	.include "demo/file_demo_proc.s"
 	.include "file_io/disk_operations.s"
 	.include "file_io/filename_password.s"
 	.include "file_io/composer_filters.s"
@@ -114,7 +114,7 @@ LABEL_F77399:
 	.include "file_io/wallpaper.s"
 	.include "file_io/single_load.s"
 	.include "file_io/medley.s"
-	.include "password_slot_routines.s"
+	.include "ui/password_slot_routines.s"
 	.include "file_io/misc_ui.s"
 
 
@@ -1858,9 +1858,9 @@ EditControlProc:
 
 ; =============================================================================
 ; =============================================================================
-	.include "fdc_routines.s"
+	.include "storage/fdc_routines.s"
 
-	.include "main_title_ctrl_panel.s"
+	.include "boot/main_title_ctrl_panel.s"
 
 
 ; =============================================================================
@@ -2552,7 +2552,7 @@ LABEL_F98CA8:
 	ret
 
 
-	.include "sound_navigation.s"
+	.include "audio/sound_navigation.s"
 
 
 MainPmanControl:

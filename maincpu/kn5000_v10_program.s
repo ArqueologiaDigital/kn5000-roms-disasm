@@ -137,7 +137,7 @@ Bitmap_1bit_Turn_On_AGAIN:	; e01266
 
 
 ; --- SSF (Style Synthesis Format) Gate State Data ---
-.include "ssf_gate_states.s"
+.include "sequencer/ssf_gate_states.s"
 
 
 ; --- Instrument Sound Data & Category Metadata ---
@@ -7545,7 +7545,7 @@ MT_GetEffFixString_Name:	aligned_string "MT_GetEffFixString"
 LABEL_E27FA2:
 	.byte 0x77, 0x00
 .include "naka/naka_e27fa4_e30932.s"
-	.include "naka_descriptors.s"
+	.include "naka/naka_descriptors.s"
 	jr	gt, 0x00
 	aligned_string "AcPmemOutLGridBox"
 	.byte 0x58, 0x58, 0x6a, 0x00
@@ -17971,8 +17971,8 @@ LABEL_EB2AE4:
 ; =============================================================================
 ; Character Encoding Tables & System Core (ROM EEF588-FC3113)
 ; =============================================================================
-	.include "naka_style_bitmap.s"
-	.include "naka_dispatch.s"
+	.include "naka/naka_style_bitmap.s"
+	.include "naka/naka_dispatch.s"
 	.ascii " \"!#\"$#%$&%'&(')(*)+*,+-,.-/.0/102132435465768798:9;:<;=<>=?>@?A@BACBDCEDFEGFHGIHJIKJLKMLNMONPOQPRQSRTSUTVUWVXWYXZY[Z\\[]\\^]_^`_a`bacbdce"
 LABEL_EF0000:	.ascii "dfegfhgihjikjlkmlnmonpoqprqsrtsutvuwvxwyxzy{z|{}|~}"
 	.byte 0x7f, 0x7e, 0x80, 0x7f, 0x00
@@ -18465,7 +18465,7 @@ LABEL_EF0839:
 	.include "shared/boot_call_init_handlers.s"
 
 ; --- System Handlers (interrupts, NMI, UI state machine, task scheduler) ---
-	.include "system_handlers.s"
+	.include "boot/system_handlers.s"
 
 ; =============================================================================
 ; VGA Initialization Code - Shared with table_data ROM
@@ -18474,7 +18474,7 @@ LABEL_EF0839:
 
 ; --- VGA Initialization & Display Subsystem ---
 	.include "shared/vga_init.s"
-	.include "scoop_display.s"
+	.include "display/scoop_display.s"
 
 
 Scoop_SoundEditorData:
@@ -19652,8 +19652,8 @@ Scoop_SoundEditorData:
 
 
 ; --- Sound Editor ---
-	.include "semenu_routines.s"
-	.include "sound_editor_ui.s"
+	.include "audio/semenu_routines.s"
+	.include "audio/sound_editor_ui.s"
 
 ; VoiceSynth command handler case 0
 VoiceSynth_CmdCase0:	; F1EA20
@@ -20102,7 +20102,7 @@ free_X:
 
 
 ; --- Wallpaper & Demo Routines ---
-	.include "setwall_routines.s"
+	.include "ui/setwall_routines.s"
 UIStateEvt_VoiceParamHandler:
 	.byte 0xc1, 0x36, 0x8d, 0x21, 0xc9, 0xcf, 0x8e, 0x66
 	.byte 0x13, 0xc9, 0xcf, 0x64, 0x66, 0x0e, 0xc9, 0xcf
@@ -23145,7 +23145,7 @@ SqStepTtlFunc:
 
 
 ; --- Demo Routines ---
-	.include "demo_routines.s"
+	.include "demo/demo_routines.s"
 
 MiddleFuncCall:
 	ld xwa, xbc
@@ -24206,7 +24206,7 @@ LABEL_F22F85:
 
 
 ; --- SMF Playback & Sequencer ---
-	.include "smf_playback.s"
+	.include "sequencer/smf_playback.s"
 Sequencer_ResetAfterFloppyIO:
 	call FloppyIO_ReturnReady
 	call SeqPlay_RestoreVoiceState_Return
@@ -29402,7 +29402,7 @@ LABEL_F268AF:
 VoiceChannel_AdvanceIndex:
 
 ; --- SMF Event Processing, Sequencer UI & Engine ---
-	.include "smf_event_processor.s"
+	.include "sequencer/smf_event_processor.s"
 	ei 0
 	stda8 12927, a
 	ret
@@ -31413,8 +31413,8 @@ AccPatch_NullReturn:
 
 
 ; --- Rhythm, Accompaniment & Factory Defaults ---
-	.include "rhythm_routines.s"
-	.include "accompaniment_engine.s"
+	.include "sequencer/rhythm_routines.s"
+	.include "sequencer/accompaniment_engine.s"
 Voice_InitBankDataSafe:
 	push xiz
 	call Voice_InitBankData
@@ -35873,7 +35873,7 @@ R12Octave_PopIzRet:
 ; Computer Interface routines (Connection config and PCG Output)
 
 ; --- Computer Interface & SysEx ---
-	.include "computer_interface_config.s"
+	.include "midi/computer_interface_config.s"
 
 
 AcLswFuncBoxProc:
@@ -37758,7 +37758,7 @@ TtMdExc_ReturnZero:
 	lds32 xhl, 0
 	ret
 
-	.include "sysex_routines.s"
+	.include "midi/sysex_routines.s"
 
 LABEL_F768AF:
 	dec 6, xsp
@@ -38417,7 +38417,7 @@ VoiceUI_MiscHandler:	; F7724E
 	push xwa
 
 ; --- UI Control Panel, Sound Navigation & Voice Control ---
-	.include "ui_control_panel.s"
+	.include "ui/ui_control_panel.s"
 	call SendEvent
 	ld xde, (xsp + 30)
 	set 7, de
@@ -40180,7 +40180,7 @@ LABEL_F9B558:
 	jr ule, LABEL_F9B588
 
 ; --- UI Window Procs, Graphics & Mode Screens ---
-	.include "ui_window_procs.s"
+	.include "ui/ui_window_procs.s"
 	.byte 0xe8, 0x13, 0xeb, 0x80, 0xe8, 0x82, 0xb2, 0xcf
 	.byte 0x66, 0x04, 0xb2, 0xb6, 0x68, 0x02, 0xb2, 0xbe
 	.byte 0x8f, 0x18, 0x61, 0xaf, 0x0c, 0x20, 0xaf, 0x04
@@ -40844,7 +40844,7 @@ LABEL_FB1371:
 	sll xbc, 6
 	ld wa, (xde)
 	exts xwa
-	.include "graphics_text_vga.s"
+	.include "display/graphics_text_vga.s"
 	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 
@@ -41143,7 +41143,7 @@ EMPTY_ROUTINE__FC3EE4:
 	ret
 
 
-	.include "cpanel_routines.s"
+	.include "ui/cpanel_routines.s"
 
 
 LABEL_FC4C34:
@@ -42217,7 +42217,7 @@ LABEL_FC5838:
 LABEL_FC583A:
 
 ; --- Audio Control, File I/O & MIDI Processing ---
-	.include "audio_control_engine.s"
+	.include "audio/audio_control_engine.s"
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -42324,13 +42324,13 @@ SoundParam_NotifyChange:
 
 
 ; --- Sound Parameters, MIDI Serial, DSP & Voice Mapping ---
-	.include "sndparam_routines.s"
+	.include "audio/sndparam_routines.s"
 
 ; MIDI Serial Communication routines (SC0)
-	.include "midi_serial_routines.s"
-	.include "midi_dispatch_handlers.s"
-	.include "dsp_config_sysex.s"
-	.include "note_voice_mapping.s"
+	.include "midi/midi_serial_routines.s"
+	.include "midi/midi_dispatch_handlers.s"
+	.include "audio/dsp_config_sysex.s"
+	.include "audio/note_voice_mapping.s"
 
 LABEL_FFFE80:
 	push	xiz

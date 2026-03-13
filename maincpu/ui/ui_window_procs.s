@@ -3490,8 +3490,8 @@ PsGridBoxProc:
 	lda_24 xix, 0xf9de32
 	jp_dri 8, 0x07, 0xF0, 0xE4
 
-	.include "psgridbox_routines.s"
-	.include "ui_widget_defs.s"
+	.include "ui/psgridbox_routines.s"
+	.include "ui/ui_widget_defs.s"
 IsPointOnScreen:
 	cpw (xwa), 0x0
 	jr lt, IsPointOnScreen_OutOfBounds

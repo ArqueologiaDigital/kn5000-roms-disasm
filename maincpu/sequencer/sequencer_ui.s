@@ -14369,4 +14369,4 @@ BitmapDredt0d_ReturnSize77:
 	ld xhl, 0x77
 	ret
 
-	.include "bmdredit_routines.s"
+	.include "sequencer/bmdredit_routines.s"

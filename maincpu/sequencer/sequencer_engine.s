@@ -32091,4 +32091,4 @@ SeqPart_VoiceCheckEndExit:
 	jr __jrt_nop_F4CE4D
 __jrt_nop_F4CE4D:
 
-	.include "seq_step_routines.s"
+	.include "sequencer/seq_step_routines.s"

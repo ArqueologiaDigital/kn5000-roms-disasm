@@ -11502,4 +11502,4 @@ LABEL_FD9CC8:
 	lda xsp, (xsp + 12)
 	ret
 
-	.include "midipkt_routines.s"
+	.include "midi/midipkt_routines.s"

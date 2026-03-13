@@ -19637,4 +19637,4 @@ LABEL_FAA965:
 	add xde, xwa
 	xor (xde), c
 
-	.include "drawing_primitives.s"
+	.include "ui/drawing_primitives.s"

@@ -10367,4 +10367,4 @@ InitializeScoop:
 
 
 ; Sound Editor mode and title routines
-	.include "sound_editor_routines.s"
+	.include "audio/sound_editor_routines.s"

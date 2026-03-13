@@ -15578,4 +15578,4 @@ Seq_IsMelodyActive:
 	lds32 xde, 0
 	jp MainPreControl
 
-	.include "fdemotext_routines.s"
+	.include "demo/fdemotext_routines.s"

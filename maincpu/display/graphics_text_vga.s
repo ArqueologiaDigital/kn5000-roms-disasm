@@ -2328,8 +2328,8 @@ BitMapOut:
 	calr _Write_VGA_Register
 	lds32 xiz, 0
 
-	.include "bitmap_out_routines.s"
-	.include "ui_mode_handlers.s"
+	.include "ui/bitmap_out_routines.s"
+	.include "ui/ui_mode_handlers.s"
 PmBankScreenProc:
 	st_dri3b L, 0xFD, 0xE8, 0xFE
 	push xiz

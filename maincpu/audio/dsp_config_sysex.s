@@ -4909,7 +4909,7 @@ LABEL_FDDB19:
 	ret
 
 
-	.include "screen_group_dispatch.s"
+	.include "boot/screen_group_dispatch.s"
 
 AudioInit_ProcessModeChange:
 	ldda16 xwa, 50580
@@ -5623,4 +5623,4 @@ LABEL_FDE983:
 ; Default handler in voice-source dispatch table. Routes voices by type:
 ; simple stereo (type < 3) or extended routing with panning configuration.
 ; ============================================================================
-	.include "audioinit_routines.s"
+	.include "audio/audioinit_routines.s"

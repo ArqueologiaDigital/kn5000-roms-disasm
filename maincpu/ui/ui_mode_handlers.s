@@ -12924,4 +12924,4 @@ RVari_Select_CheckSameBank:
 	call DrawStringLeftJustify
 	jrl RVari_Select_ReturnZero
 
-	.include "rvari_routines.s"
+	.include "ui/rvari_routines.s"

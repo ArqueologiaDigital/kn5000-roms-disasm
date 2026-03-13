@@ -2855,9 +2855,9 @@ LABEL_F280F9:
 	bitda 0, 4236
 	jrl z, SMF_ProcessEventLoop
 
-	.include "smf_config_routines.s"
-	.include "sequencer_ui.s"
-	.include "sequencer_engine.s"
+	.include "sequencer/smf_config_routines.s"
+	.include "sequencer/sequencer_ui.s"
+	.include "sequencer/sequencer_engine.s"
 
 FileOpen:
 	lda xsp, (xsp - 16)
