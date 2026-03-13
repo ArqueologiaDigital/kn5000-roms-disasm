@@ -1,3 +1,23 @@
+; =============================================================================
+; Factory Diagnostic Tests (internal codename: "HAMA")
+; =============================================================================
+;
+; This subsystem provides factory diagnostic test modes for hardware validation
+; during manufacturing. It includes floppy disk read/write tests (FDD TEST)
+; and hard disk extension tests (HDD EXT, EXT APR). These test screens are
+; accessed through hidden button combinations and are not part of the normal
+; user interface.
+;
+; "HAMA" is the Matsushita/Technics developer codename for this subsystem.
+; All original symbol names (InitializeHama, RegObjTableHama, etc.) are preserved.
+;
+; Files in this directory:
+;   test_init.s     - InitializeHama(): test mode registration
+;   test_data.s     - Test UI configuration data
+;   fd_test_code.s  - Floppy disk test execution routines
+;   fd_test_data.s  - Floppy disk test parameters and dialog data
+; =============================================================================
+
 .macro RegObjTableHama ParamA, ParamB, ParamC, ParamD, ParamE
 	.if \ParamA <= 7
 	lds32 xwa, \ParamA
@@ -325,7 +345,7 @@ CreateRunFDOp_Return:
 	lda xsp, (xsp + 16)
 	ret
 
-.include "hama/fd_test_code.s"
+.include "factory_test/fd_test_code.s"
 
 ; RegisterHamaTitle1 — Registers title with widget table 0x7F (FDD/HD test)
 ; Calls 0xF51E4F with WA=2, then 0xF5289C with string at 0xE1FF42

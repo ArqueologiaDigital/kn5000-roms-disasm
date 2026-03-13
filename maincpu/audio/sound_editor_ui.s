@@ -11943,4 +11943,4 @@ LABEL_F1E13F:
 	ret
 
 
-.include "hama/hama_code.s"
+.include "factory_test/test_init.s"

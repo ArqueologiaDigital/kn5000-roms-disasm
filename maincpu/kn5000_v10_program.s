@@ -1216,7 +1216,7 @@ ToneGen_ParamTable:
 ; Screen layouts, style selection, sequencer UI, effect editors,
 ; chord recognition, MIDI control, language dialogs, style bitmaps
 ; =============================================================================
-.include "naka/naka_e0e974_e15b20.s"
+.include "ui_widgets/e0e974_e15b20.s"
 	.ascii "     Init       "
 	.zero 16
 
@@ -2198,7 +2198,7 @@ LABEL_E176C4:	aligned_string "MT_CmpNameSet"
 	.byte 0x32, 0x00, 0xb1, 0xdf, 0xf1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xe6, 0x76, 0xe1, 0x00
 	.long LABEL_E176E4
-.include "naka/naka_e176e4_e1a704.s"
+.include "ui_widgets/e176e4_e1a704.s"
 	.short 0x0
 	.long Naka_PresentationRootState
 	.byte 0xff, 0x00, 0x00, 0x00, 0x01, 0x00, 0xa0, 0x01, 0x26, 0xd7, 0x03, 0x00
@@ -2398,7 +2398,7 @@ LABEL_E1AB2C:
 	.byte 0xb5, 0x00, 0x07, 0x00, 0xc1, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x0b, 0x00, 0x60, 0xd7, 0x03, 0x00, 0x12, 0x00
-.include "naka/naka_e1ab58_e1b7d2.s"
+.include "ui_widgets/e1ab58_e1b7d2.s"
 	xor	(xiz), wa
 	.byte 0x03, 0x00, 0xba, 0xd8, 0x03, 0x00
 	.long LABEL_E1959E
@@ -4694,8 +4694,8 @@ LABEL_E1EFB2:	aligned_string "Select the sound for each part."
 LABEL_E1EFD2:	aligned_string "Select the sound for each part."
 LABEL_E1EFF2:	aligned_string "Select the sound for each part."
 LABEL_E1F012:	aligned_string "Select the sound for each part."
-.include "hama/hama_data.s"
-.include "hama/fd_test_data.s"
+.include "factory_test/test_data.s"
+.include "factory_test/fd_test_data.s"
 RESOURCE_INFO_HANDLER_OFFSETS:
 	.short RESOURCE_INFO_HANDLERS - RESOURCE_INFO_HANDLERS
 	.short LABEL_F1EA64 - RESOURCE_INFO_HANDLERS
@@ -5363,7 +5363,7 @@ MtName_SongNameSet:	aligned_string "MT_SongNameSet"
 	.byte 0x1b, 0x00, 0xf9, 0xbb, 0xf2, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x7e, 0x10, 0xe2, 0x00
 	.long NakaBoxData_PsSongSelBox
-.include "naka/naka_e2107c_e24034.s"
+.include "ui_widgets/e2107c_e24034.s"
 	xor	(xwa), xiz
 	.byte 0x03, 0x00, 0x06, 0x00, 0x07, 0x00
 	aligned_string "RHYTHM"
@@ -7273,7 +7273,7 @@ NakaFld_Empty_J:	aligned_string ""
 	.long NakaInst_SngSel2
 	.long NakaDesc_Empty_B
 	.byte 0x74, 0xf0, 0xf2, 0x00
-.include "naka/naka_e27408_e27556.s"
+.include "ui_widgets/e27408_e27556.s"
 	jr	gt, 0x00
 	aligned_string "SqedtVal2"
 	aligned_string "^^jC"
@@ -7544,8 +7544,8 @@ MT_GetEffFixString_Name:	aligned_string "MT_GetEffFixString"
 
 LABEL_E27FA2:
 	.byte 0x77, 0x00
-.include "naka/naka_e27fa4_e30932.s"
-	.include "naka/naka_descriptors.s"
+.include "ui_widgets/e27fa4_e30932.s"
+	.include "ui_widgets/widget_descriptors.s"
 	jr	gt, 0x00
 	aligned_string "AcPmemOutLGridBox"
 	.byte 0x58, 0x58, 0x6a, 0x00
@@ -7631,7 +7631,7 @@ MidiMenu_NakaProcName_Table:
 	.long NakaProc_NullEntry
 NakaProc_NullEntry:
 	.byte 0x00, 0xff
-.include "naka/naka_e55e38_e5a38e.s"
+.include "ui_widgets/e55e38_e5a38e.s"
 	sub	hl, iz
 	.byte 0xe5, 0x00, 0xdc, 0xa3, 0xe5, 0x00, 0xce, 0xa3
 	.byte 0xe5, 0x00, 0xcc, 0xa3, 0xe5, 0x00, 0xca, 0xa3
@@ -9300,7 +9300,7 @@ LABEL_E80CF4:
 	.byte 0x00, 0x00, 0xe4, 0x10, 0xe8, 0x00, 0xe2, 0x10
 	.byte 0xe8, 0x00, 0xa4, 0x0c, 0xe8, 0x00, 0x49, 0x41
 	.byte 0xf8, 0x00
-.include "naka/naka_e812e8_e818e6.s"
+.include "ui_widgets/e812e8_e818e6.s"
 	.short 0xFFFF, 0x2
 	.short 0xFFFF, 0x8
 	.short 0xF5	; X-left coord of the button
@@ -9565,7 +9565,7 @@ LABEL_E81C98:
 	.long LABEL_E81CCE
 	.byte 0x0d, 0x00
 	.byte 0xa0, 0x01, 0x18, 0x00, 0x00, 0x00
-.include "naka/naka_e81cce_e85f46.s"
+.include "ui_widgets/e81cce_e85f46.s"
 	incm8	8, (xiz)
 	.byte 0xe8, 0x00, 0x7a, 0x60, 0xe8, 0x00, 0x78, 0x60
 	.byte 0xe8, 0x00, 0x76, 0x60, 0xe8, 0x00, 0x74, 0x60
@@ -13224,7 +13224,7 @@ PtrTbl_NakaModuleHandlers:
 	.long Data_NakaSep_EA13CA
 Data_NakaSep_EA13CA:
 	.byte 0x00, 0xff
-.include "naka/naka_ea13cc_ea8c9e.s"
+.include "ui_widgets/ea13cc_ea8c9e.s"
 	.ascii "Etes vous sû"
 	.byte 0x72, 0x3f, 0x00, 0xff
 	aligned_string "Sind Sie sicher ?"
@@ -15569,7 +15569,7 @@ WidgetPropStr_FileProp:	aligned_string "file"
 	.byte 0x0a, 0x00, 0xda, 0xd8, 0xea, 0x00, 0xd4, 0xd8
 	.byte 0xea, 0x00, 0x62, 0xc2, 0xea, 0x00, 0xb8, 0x0f
 	.byte 0xfa, 0x00
-.include "naka/naka_block_012.s"
+.include "ui_widgets/block_012.s"
 	jr	gt, 0x00
 	aligned_string "VwUserBitmap"
 	.byte 0x00, 0xff
@@ -17966,13 +17966,13 @@ LABEL_EB2AE4:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x02, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x06, 0x00, 0x22, 0x00, 0x38, 0x01
 	.byte 0x4e, 0x00, 0x01, 0x00, 0x00, 0x00
-.include "naka/naka_eb2afe_eb71be.s"
+.include "ui_widgets/eb2afe_eb71be.s"
 
 ; =============================================================================
 ; Character Encoding Tables & System Core (ROM EEF588-FC3113)
 ; =============================================================================
-	.include "naka/naka_style_bitmap.s"
-	.include "naka/naka_dispatch.s"
+	.include "ui_widgets/style_bitmaps.s"
+	.include "ui_widgets/widget_dispatch.s"
 	.ascii " \"!#\"$#%$&%'&(')(*)+*,+-,.-/.0/102132435465768798:9;:<;=<>=?>@?A@BACBDCEDFEGFHGIHJIKJLKMLNMONPOQPRQSRTSUTVUWVXWYXZY[Z\\[]\\^]_^`_a`bacbdce"
 LABEL_EF0000:	.ascii "dfegfhgihjikjlkmlnmonpoqprqsrtsutvuwvxwyxzy{z|{}|~}"
 	.byte 0x7f, 0x7e, 0x80, 0x7f, 0x00
@@ -40998,7 +40998,7 @@ LABEL_FC3114:
 ; =============================================================================
 ; Extension Device Initialization (TOSHI) & Control Panel (ROM FC3114-FFFFFF)
 ; =============================================================================
-.include "toshi/toshi_code.s"
+.include "extensions/extension_init.s"
 
 InitializeKSS:
 	ret
