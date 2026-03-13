@@ -440,6 +440,14 @@ LABEL_FE06A2:
 	ld xbc, (xsp + 2)
 	call NoteMap_UpdateEntry
 
+
+; -----------------------------------------------------------------------------
+; Section: Note-On Processing & Voice Allocation
+; -----------------------------------------------------------------------------
+; Note-on channel processing, voice slot allocation, and
+; accompaniment note-on setup.
+; -----------------------------------------------------------------------------
+
 NoteOnProcess_NextChannel:
 	incm 1, (xsp + 6)
 	cpw (xsp + 6), 0x1A
@@ -869,6 +877,14 @@ LABEL_FE0A9E:
 	ld xbc, (xsp + 2)
 	call NoteMap_ProcessNoteEvent
 
+
+; -----------------------------------------------------------------------------
+; Section: Rhythm & Accompaniment MIDI Processing
+; -----------------------------------------------------------------------------
+; MIDI event input handling for rhythm patterns and
+; accompaniment playback. Includes CC dispatch.
+; -----------------------------------------------------------------------------
+
 AccMidi_ReadNextEvent:
 	lda xwa, (xsp + 6)
 	ld xde, xwa
@@ -1230,6 +1246,14 @@ RhythmMidi_SeqEvt_Return:
 	st_dri3b L, 0xFD, 0xAE, 0x00
 	ret
 
+
+; -----------------------------------------------------------------------------
+; Section: Voice Initialization & Event Dispatch
+; -----------------------------------------------------------------------------
+; Voice state initialization, per-voice event dispatch,
+; and voice table group setup.
+; -----------------------------------------------------------------------------
+
 Voice_InitializeAll:
 	st_dri3b L, 0xFD, 0x10, 0xFE
 	push xiz
@@ -1421,6 +1445,14 @@ LABEL_FE1063:
 	pop xiz
 	st_dri3b L, 0xFD, 0xF0, 0x01
 	ret
+
+
+; -----------------------------------------------------------------------------
+; Section: NoteMap Entry Management
+; -----------------------------------------------------------------------------
+; NoteMap storage, retrieval, voice linking, merge
+; allocation, and control change encoding.
+; -----------------------------------------------------------------------------
 
 NoteMap_ProcessAndMerge:
 	st_dri3b L, 0xFD, 0xB8, 0xFE
@@ -2609,6 +2641,14 @@ Audio_StoreParamAndReturn:
 	st_dri3b L, 0xFD, 0x50, 0x01
 	ret
 
+
+; -----------------------------------------------------------------------------
+; Section: MIDI Event & Channel Configuration
+; -----------------------------------------------------------------------------
+; MIDI channel configuration, voice slot data init,
+; and note sequence parsing.
+; -----------------------------------------------------------------------------
+
 MidiEvent_ConfigChannel:
 	st_dri3b L, 0xFD, 0xB0, 0xFE
 	lda_dri3 XHL, 0xFD, 0x4E, 0x01
@@ -3529,6 +3569,14 @@ LABEL_FE2405:
 LABEL_FE246A:
 	incm 1, (xsp + 2)
 	jrl LABEL_FE2322
+
+
+; -----------------------------------------------------------------------------
+; Section: Voice Program Change & Notification
+; -----------------------------------------------------------------------------
+; Voice program change notification, NoteMap finalization,
+; and extended control change processing.
+; -----------------------------------------------------------------------------
 
 Voice_BuildProgramNotify:
 	ldto_berp A, 0xF8

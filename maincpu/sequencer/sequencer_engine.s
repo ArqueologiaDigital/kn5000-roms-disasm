@@ -84,6 +84,14 @@ LABEL_F38912:
 	call AccWrap_PlayModeDispatch
 	jp SeqBuffer_ClearAndInitIteration
 
+
+; -----------------------------------------------------------------------------
+; Section: Sequencer Playback Control
+; -----------------------------------------------------------------------------
+; Playback state machine: tick handling, start/stop,
+; repeat management, tempo, and part activation.
+; -----------------------------------------------------------------------------
+
 SeqAcc_HandlePlaybackTick:
 	cpdi8 36150, 136
 	jr z, LABEL_F3894C
@@ -409,6 +417,14 @@ LABEL_F38BBE:
 	.byte 0xd1, 0x3f, 0xf2, 0xa0, 0xf1, 0x68, 0x26, 0x50
 	.byte 0xf1, 0xec
 	.ascii "&PxCü"
+
+
+; -----------------------------------------------------------------------------
+; Section: Part & Voice Processing
+; -----------------------------------------------------------------------------
+; Per-part voice iteration, event processing, tempo
+; events, and playback abort/cleanup.
+; -----------------------------------------------------------------------------
 
 SeqPlay_ProcessPartVoices:
 	dec 4, xsp
@@ -1562,6 +1578,14 @@ LABEL_F39935:
 	inc 4, xsp
 	ret
 
+
+; -----------------------------------------------------------------------------
+; Section: Drum Parts & Channel Dispatch
+; -----------------------------------------------------------------------------
+; Drum part handling, counter management, channel
+; slot allocation, and MIDI event dispatch.
+; -----------------------------------------------------------------------------
+
 SeqPlay_CheckDrumPartAndClearCounters:
 	ldda8 a, 8988
 	cp a, 0xFF
@@ -1927,6 +1951,14 @@ LABEL_F39C92:
 	pop_werp 0xFA
 	inc 4, xsp
 	ret
+
+
+; -----------------------------------------------------------------------------
+; Section: Playback Initialization & Voice Assignment
+; -----------------------------------------------------------------------------
+; Playback state setup, voice finding, channel
+; configuration, and position/flag management.
+; -----------------------------------------------------------------------------
 
 SeqPlay_InitializePlayback:
 	push_werp 0xFA
@@ -2465,6 +2497,14 @@ LABEL_F3A1F3:
 SeqPlay_ClearFlagsRet:
 	ldb l, 0x0
 	ret
+
+
+; -----------------------------------------------------------------------------
+; Section: Voice Processing & Cleanup
+; -----------------------------------------------------------------------------
+; Voice and note processing, stop/cleanup routines,
+; and playback finalization.
+; -----------------------------------------------------------------------------
 
 SeqPlay_ProcessVoiceAndNotes:
 	lda xsp, (xsp - 12)

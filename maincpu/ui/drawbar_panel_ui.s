@@ -370,6 +370,14 @@ UI_ReturnZero:
 	lda xsp, (xsp + 22)
 	ret
 
+
+; -----------------------------------------------------------------------------
+; Section: Accompaniment Parameter Output
+; -----------------------------------------------------------------------------
+; Left/right parameter output grid boxes, cell
+; initialization, scroll, and navigation.
+; -----------------------------------------------------------------------------
+
 TtMdPmemOut:
 	cp xbc, 0x1C0000C
 	jr z, TtMdPmemOut_ReturnZero
@@ -987,6 +995,14 @@ AcPmemOutR_Return:
 	lda xsp, (xsp + 16)
 	ret
 
+
+; -----------------------------------------------------------------------------
+; Section: Parameter Output Grid Checks
+; -----------------------------------------------------------------------------
+; Grid validation, checking, and event handling
+; for left/right parameter output panels.
+; -----------------------------------------------------------------------------
+
 PmemOutLGridCheck:
 	lda xsp, (xsp - 78)
 	push xiz
@@ -1399,6 +1415,14 @@ PmemOutRGridCheck:
 	lda_24 xix, 0xf79260
 	jp_dri 8, 0x07, 0xF0, 0xEC
 ; TtMdCtlMsg event dispatch (7-entry, table 0xE80272)
+
+; -----------------------------------------------------------------------------
+; Section: Control Message Dispatch
+; -----------------------------------------------------------------------------
+; MIDI control message event dispatch, grid box
+; event handling, and message routing.
+; -----------------------------------------------------------------------------
+
 TtMdCtlMsg_EventDispatch:	; F79260
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96

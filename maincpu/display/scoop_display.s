@@ -308,6 +308,14 @@ LABEL_EF5D01:
 
 ; Render UI element from two ROM descriptor tables (paired renderer)
 ; Input: XIY = descriptor table 1, XIX = descriptor table 2
+
+; -----------------------------------------------------------------------------
+; Section: Graphics Rendering
+; -----------------------------------------------------------------------------
+; Two-table rendering, conditional updates, event
+; checking, and curve/glide setup.
+; -----------------------------------------------------------------------------
+
 GraphicsRender_TwoTable:
 	bitda_24 0, 132582
 	jr nz, LABEL_EF5D12
@@ -503,6 +511,14 @@ LABEL_EF5ED4:
 	stda8 4482, c
 	add wa, 0xA
 	stda8 4483, a
+
+
+; -----------------------------------------------------------------------------
+; Section: Parameter Update Routines
+; -----------------------------------------------------------------------------
+; Parameter add/store, zero-check, and conditional
+; update helpers.
+; -----------------------------------------------------------------------------
 
 ParamUpdate_AddAndStore:
 	adddi8 4481, 48
@@ -834,6 +850,14 @@ ToneParam_Evt0F_BytecodeHandler:
 	.byte 0xb4, 0x63, 0xef, 0xc1, 0xd3, 0x0d, 0x3c, 0xfe
 	.byte 0x1d, 0x2e, 0x90, 0xef, 0x1d, 0x9f, 0x78, 0xef
 	.byte 0x0e
+
+; -----------------------------------------------------------------------------
+; Section: Performance Mode Parameter Handlers
+; -----------------------------------------------------------------------------
+; Parameter handler dispatch table and individual
+; handlers for each performance mode parameter.
+; -----------------------------------------------------------------------------
+
 PerfMode_ParamHandler_Table:
 	.long PerfMode_ParamHandler_0
 	.long PerfMode_ParamHandler_1

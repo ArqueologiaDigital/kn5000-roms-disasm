@@ -528,6 +528,14 @@ LABEL_F5616E:
 	calr LABEL_F56281
 	jr LABEL_F5617F
 
+
+; -----------------------------------------------------------------------------
+; Section: Sequence Processing & Voice Selection
+; -----------------------------------------------------------------------------
+; Sequence continuation and accompaniment voice
+; part offset selection.
+; -----------------------------------------------------------------------------
+
 Seq_ProcessAndContinue:
 	calr LABEL_F562DA
 	jr LABEL_F5617F
@@ -651,6 +659,14 @@ LABEL_F562B6:
 
 LABEL_F562C5:
 	ret
+
+
+; -----------------------------------------------------------------------------
+; Section: Accompaniment Part Management
+; -----------------------------------------------------------------------------
+; Part position initialization, buffer reset, tuning
+; configuration, and style index lookup.
+; -----------------------------------------------------------------------------
 
 AccPart_InitPositionsAndBase:
 	call AccInit_AllPartPositions
@@ -1038,6 +1054,14 @@ LABEL_F5679C:
 	stda8 13291, a
 	ret
 
+
+; -----------------------------------------------------------------------------
+; Section: Voice Event Processing
+; -----------------------------------------------------------------------------
+; Per-voice event loop, event dispatch, and
+; sound patch handling.
+; -----------------------------------------------------------------------------
+
 AccVoice_ProcessEventLoop:
 	bitda 0, 13044
 	jr z, LABEL_F567D5
@@ -1249,6 +1273,14 @@ LABEL_F5698D:
 	bitda 7, 13153
 	jr nz, AccVoice_SetChordChangeFlags
 	jr AccVoice_NullRet
+
+
+; -----------------------------------------------------------------------------
+; Section: Chord, Table & Address Lookup
+; -----------------------------------------------------------------------------
+; Chord change flags, voice table address lookup,
+; and buffer advance routines.
+; -----------------------------------------------------------------------------
 
 AccVoice_SetChordChangeFlags:
 	ordi8 13043, 128
@@ -1670,6 +1702,14 @@ AccPart_CheckAnyActive:
 	orda8 a, 13074
 	orda8 a, 13075
 	ret
+
+
+; -----------------------------------------------------------------------------
+; Section: Pedal Direction & MIDI Dispatch
+; -----------------------------------------------------------------------------
+; Pedal direction control (forward/reverse/alternate)
+; and accompaniment MIDI event dispatch.
+; -----------------------------------------------------------------------------
 
 AccPedal_DirectionA:
 	ldda8 a, 13424
