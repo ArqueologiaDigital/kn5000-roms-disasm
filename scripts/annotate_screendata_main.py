@@ -37,7 +37,9 @@ def extract_bytes(text):
     for line in text.split(b'\n'):
         line = line.strip()
         if line.startswith(b'.byte'):
-            parts = line[5:].split(b',')
+            # Strip comments before parsing
+            code = line.split(b';')[0]
+            parts = code[5:].split(b',')
             for p in parts:
                 p = p.strip()
                 if p.startswith(b'0x'):
@@ -67,9 +69,9 @@ def fmt_bytes_with_ascii(data, per_line=16):
             if 0x20 <= b < 0x7f:
                 ascii_str += chr(b)
             elif b == 0x88:
-                ascii_str += '#'  # sharp
-            elif b == 0x8c:
                 ascii_str += 'b'  # flat
+            elif b == 0x8c:
+                ascii_str += '#'  # sharp
             else:
                 ascii_str += '.'
         lines.append(f'\t.byte {hex_vals}\t; "{ascii_str}"')
@@ -282,13 +284,13 @@ def main():
     out.append(b'')
     out.append(b'; ---------------------------------------------------------------------------')
     out.append(b'; Chord Name & Type String Tables')
-    out.append(b'; LCD character codes: 0x88=sharp(#), 0x8c=flat(b)')
+    out.append(b'; LCD character codes: 0x88=flat(b), 0x8c=sharp(#)')
     out.append(b'; ---------------------------------------------------------------------------')
     out.append(b'')
 
     # Chord root names (2070-2101, 32 bytes)
     out.append(b'; Chord root names (12 entries, 2 bytes each + 8 padding)')
-    out.append(b'; C  D# D  E# E  F  Fb G  A# A  B# B')
+    out.append(b'; C  Db D  Eb E  F  F# G  Ab A  Bb B')
     out.append(fmt_bytes_with_ascii(raw[2070:2102]).encode('latin-1'))
 
     # Chord type suffixes (2102-2407, ~306 bytes)

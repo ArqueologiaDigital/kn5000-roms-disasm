@@ -139,9 +139,9 @@ def describe_command(op, sub, size, raw):
             if 0x20 <= b < 0x7f:
                 printable += chr(b)
             elif b == 0x88:
-                printable += '#'
+                printable += 'b'  # flat
             elif b == 0x8c:
-                printable += 'b'
+                printable += '#'  # sharp
             else:
                 printable += f'\\x{b:02x}'
         return f'STRING "{printable}"'
