@@ -51,7 +51,7 @@ const paramblock_altb_t StyleUI_ParamBlock_AltB
         .opcode = SD_OP_LABELED_REF,
         .length = 10,
         .addr   = 0x028F,
-        .label  = { 'T', 'R', 'A', 'C', 'K', ':' },
+        .label  = "TRACK:",
     },
 
     /* [3] FILLED_RECT (5,175)-(250,195) */

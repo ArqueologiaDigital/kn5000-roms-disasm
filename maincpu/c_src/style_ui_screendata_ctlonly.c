@@ -38,7 +38,7 @@ const screendata_ctlonly_t StyleUI_ScreenData_CtlOnly
     .label_ctl = {
         .opcode = SD_OP_STRING, .length = 7,
         .x = 0x5b, .y = 0x13,
-        .text = { 'C', 'T', 'L' },
+        .text = "CTL",
     },
     .ctl_shortref = {
         .opcode = SD_OP_SHORT_REF, .length = 5,

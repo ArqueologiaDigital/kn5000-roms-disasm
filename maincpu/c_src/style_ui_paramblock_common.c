@@ -76,7 +76,7 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .length = 8,
         .x      = 0x19,
         .y      = 0x1f,
-        .text   = { 'M', 'E', 'A', 'S' },
+        .text   = "MEAS",
     },
 
     /* [1] STRING "CURSOR" at (56,31) */
@@ -85,7 +85,7 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .length = 10,
         .x      = 0x38,
         .y      = 0x1f,
-        .text   = { 'C', 'U', 'R', 'S', 'O', 'R' },
+        .text   = "CURSOR",
     },
 
     /* [2] STRING "|" at (210,32) — up arrow */
@@ -112,7 +112,7 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .length = 5,
         .x      = 0x30,
         .y      = 0x22,
-        .text   = { '<' },
+        .text   = "<",
     },
 
     /* [5] STRING ">" at (53,34) */
@@ -121,7 +121,7 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .length = 5,
         .x      = 0x35,
         .y      = 0x22,
-        .text   = { '>' },
+        .text   = ">",
     },
 
     /* [6] FILLED_RECT (5,210)-(35,236) */
@@ -161,7 +161,7 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x06DB,
-        .label  = { 'B', 'A', 'L' },
+        .label  = "BAL",
     },
 
     /* [11-12] BAL selection box */
@@ -192,7 +192,7 @@ const paramblock_common_t StyleUI_ParamBlock_Common
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x0D1B,
-        .label  = { 'E', 'R', 'S' },
+        .label  = "ERS",
     },
 
     /* [15-16] ERS selection box */

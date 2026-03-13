@@ -52,7 +52,7 @@ const paramblock_altc_t StyleUI_ParamBlock_AltC
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x0D1B,
-        .label  = { 'Y', 'E', 'S' },
+        .label  = "YES",
     },
     /* [1] SHORT_REF */
     .yes_shortref = {
@@ -81,7 +81,7 @@ const paramblock_altc_t StyleUI_ParamBlock_AltC
         .opcode = SD_OP_LABELED_REF,
         .length = 6,
         .addr   = 0x135B,
-        .label  = { 'N', 'O' },
+        .label  = "NO",
     },
     /* [5] SHORT_REF */
     .no_shortref = {
@@ -111,7 +111,7 @@ const paramblock_altc_t StyleUI_ParamBlock_AltC
         .length = 8,
         .x      = 0x19,
         .y      = 0x1f,
-        .text   = { 'M', 'E', 'A', 'S' },
+        .text   = "MEAS",
     },
 
     /* [9] STRING "|" at (210,32) — up arrow */

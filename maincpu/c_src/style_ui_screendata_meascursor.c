@@ -62,17 +62,17 @@ const screendata_meascursor_t StyleUI_ScreenData_MeasCursor
     .label_meas = {
         .opcode = SD_OP_STRING, .length = 8,
         .x = 0x19, .y = 0x1f,
-        .text = { 'M', 'E', 'A', 'S' },
+        .text = "MEAS",
     },
     .label_cursor = {
         .opcode = SD_OP_STRING, .length = 10,
         .x = 0x38, .y = 0x1f,
-        .text = { 'C', 'U', 'R', 'S', 'O', 'R' },
+        .text = "CURSOR",
     },
     .label_ctl = {
         .opcode = SD_OP_STRING, .length = 7,
         .x = 0x5b, .y = 0x13,
-        .text = { 'C', 'T', 'L' },
+        .text = "CTL",
     },
 
     /* CTL shortref + selection box */
@@ -109,12 +109,12 @@ const screendata_meascursor_t StyleUI_ScreenData_MeasCursor
     .nav_left = {
         .opcode = SD_OP_STRING, .length = 5,
         .x = 0x30, .y = 0x22,
-        .text = { '<' },
+        .text = "<",
     },
     .nav_right = {
         .opcode = SD_OP_STRING, .length = 5,
         .x = 0x35, .y = 0x22,
-        .text = { '>' },
+        .text = ">",
     },
 
     /* Bottom bar */
@@ -143,7 +143,7 @@ const screendata_meascursor_t StyleUI_ScreenData_MeasCursor
     .bal_ref = {
         .opcode = SD_OP_LABELED_REF, .length = 7,
         .addr = 0x06DB,
-        .label = { 'B', 'A', 'L' },
+        .label = "BAL",
     },
     .bal_box = {
         .inner = {
@@ -166,7 +166,7 @@ const screendata_meascursor_t StyleUI_ScreenData_MeasCursor
     .ers_ref = {
         .opcode = SD_OP_LABELED_REF, .length = 7,
         .addr = 0x0D1B,
-        .label = { 'E', 'R', 'S' },
+        .label = "ERS",
     },
     .ers_box = {
         .inner = {

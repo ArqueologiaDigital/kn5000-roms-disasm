@@ -70,7 +70,7 @@ const screendata_yesctl_t StyleUI_ScreenData_YesCtl
     .yes_ref = {
         .opcode = SD_OP_LABELED_REF, .length = 7,
         .addr = 0x135B,
-        .label = { 'Y', 'E', 'S' },
+        .label = "YES",
     },
     .yes_shortref = {
         .opcode = SD_OP_SHORT_REF, .length = 5,
@@ -93,7 +93,7 @@ const screendata_yesctl_t StyleUI_ScreenData_YesCtl
     .no_ref = {
         .opcode = SD_OP_LABELED_REF, .length = 7,
         .addr = 0x199B,
-        .label = { 'N', 'O', ' ' },
+        .label = "NO ",
     },
     .no_box = {
         .inner = {
@@ -116,12 +116,12 @@ const screendata_yesctl_t StyleUI_ScreenData_YesCtl
     .label_meas = {
         .opcode = SD_OP_STRING, .length = 8,
         .x = 0x19, .y = 0x1f,
-        .text = { 'M', 'E', 'A', 'S' },
+        .text = "MEAS",
     },
     .label_cursor = {
         .opcode = SD_OP_STRING, .length = 10,
         .x = 0x38, .y = 0x1f,
-        .text = { 'C', 'U', 'R', 'S', 'O', 'R' },
+        .text = "CURSOR",
     },
 
     /* Arrow pairs */
@@ -150,12 +150,12 @@ const screendata_yesctl_t StyleUI_ScreenData_YesCtl
     .label_ctl = {
         .opcode = SD_OP_STRING, .length = 7,
         .x = 0x1e, .y = 0x1f,
-        .text = { 'C', 'T', 'L' },
+        .text = "CTL",
     },
     .label_value = {
         .opcode = SD_OP_STRING, .length = 9,
         .x = 0x28, .y = 0x1f,
-        .text = { 'V', 'A', 'L', 'U', 'E' },
+        .text = "VALUE",
     },
 
     /* Third arrow pair */
@@ -174,12 +174,12 @@ const screendata_yesctl_t StyleUI_ScreenData_YesCtl
     .nav_left = {
         .opcode = SD_OP_STRING, .length = 5,
         .x = 0x30, .y = 0x22,
-        .text = { '<' },
+        .text = "<",
     },
     .nav_right = {
         .opcode = SD_OP_STRING, .length = 5,
         .x = 0x35, .y = 0x22,
-        .text = { '>' },
+        .text = ">",
     },
 
     /* Bottom bar */

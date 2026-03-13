@@ -70,7 +70,7 @@ const paramblock_alte_t StyleUI_ParamBlock_AltE
         .opcode = SD_OP_LABELED_REF,
         .length = 10,
         .addr   = 0x028F,
-        .label  = { 'T', 'R', 'A', 'C', 'K', ':' },
+        .label  = "TRACK:",
     },
 
     /* [2] STRING "TRACK" at (26,23) */
@@ -79,7 +79,7 @@ const paramblock_alte_t StyleUI_ParamBlock_AltE
         .length = 9,
         .x      = 0x1a,
         .y      = 0x17,
-        .text   = { 'T', 'R', 'A', 'C', 'K' },
+        .text   = "TRACK",
     },
 
     /* [3] LABELED_REF "CLR" */
@@ -87,7 +87,7 @@ const paramblock_alte_t StyleUI_ParamBlock_AltE
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x199B,
-        .label  = { 'C', 'L', 'R' },
+        .label  = "CLR",
     },
 
     /* [4-5] CLR selection box */
@@ -127,7 +127,7 @@ const paramblock_alte_t StyleUI_ParamBlock_AltE
         .length = 8,
         .x      = 0x19,
         .y      = 0x1f,
-        .text   = { 'M', 'E', 'A', 'S' },
+        .text   = "MEAS",
     },
 
     /* [9] STRING "|" at (210,32) — up arrow */

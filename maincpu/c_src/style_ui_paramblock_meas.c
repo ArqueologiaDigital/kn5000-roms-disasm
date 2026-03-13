@@ -80,7 +80,7 @@ const paramblock_meas_t StyleUI_ParamBlock_MEAS
         .length = 8,
         .x      = 0x19,
         .y      = 0x1f,
-        .text   = { 'M', 'E', 'A', 'S' },
+        .text   = "MEAS",
     },
 
     /* [1] STRING "|" at (210,32) — up arrow */
@@ -122,7 +122,7 @@ const paramblock_meas_t StyleUI_ParamBlock_MEAS
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x222A,
-        .label  = { 'R', 'E', 'P' },
+        .label  = "REP",
     },
 
     /* [6] LABELED_REF "END" */
@@ -130,7 +130,7 @@ const paramblock_meas_t StyleUI_ParamBlock_MEAS
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x222F,
-        .label  = { 'E', 'N', 'D' },
+        .label  = "END",
     },
 
     /* [7] FILLED_RECT (205,210)-(235,236) */
@@ -154,7 +154,7 @@ const paramblock_meas_t StyleUI_ParamBlock_MEAS
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x0D1B,
-        .label  = { 'E', 'R', 'S' },
+        .label  = "ERS",
     },
 
     /* [10-11] ERS selection box */
@@ -186,7 +186,7 @@ const paramblock_meas_t StyleUI_ParamBlock_MEAS
         .length = 9,
         .x      = 0x1a,
         .y      = 0x17,
-        .text   = { 'T', 'R', 'A', 'C', 'K' },
+        .text   = "TRACK",
     },
 
     /* [14] LABELED_REF "CLR" */
@@ -194,7 +194,7 @@ const paramblock_meas_t StyleUI_ParamBlock_MEAS
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x199B,
-        .label  = { 'C', 'L', 'R' },
+        .label  = "CLR",
     },
 
     /* [15-16] CLR selection box */

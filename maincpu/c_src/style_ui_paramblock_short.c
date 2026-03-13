@@ -39,7 +39,7 @@ const paramblock_short_t StyleUI_ParamBlock_Short
         .length = 9,
         .x      = 0x27,
         .y      = 0x1f,
-        .text   = { 'T', 'E', 'M', 'P', 'O' },
+        .text   = "TEMPO",
     },
 
     /* [1] STRING "|" at (225,32) — up arrow */

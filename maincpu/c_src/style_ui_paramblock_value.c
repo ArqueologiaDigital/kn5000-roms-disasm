@@ -39,7 +39,7 @@ const paramblock_value_t StyleUI_ParamBlock_VALUE
         .length = 9,
         .x      = 0x2c,
         .y      = 0x1f,
-        .text   = { 'V', 'A', 'L', 'U', 'E' },
+        .text   = "VALUE",
     },
 
     /* [1] STRING "|" at (230,32) — up arrow */

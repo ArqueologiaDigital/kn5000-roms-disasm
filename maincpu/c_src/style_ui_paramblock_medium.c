@@ -91,7 +91,7 @@ const paramblock_medium_t StyleUI_ParamBlock_Medium
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x06DB,
-        .label  = { 'B', 'A', 'L' },
+        .label  = "BAL",
     },
 
     /* [1] SHORT_REF */
@@ -122,7 +122,7 @@ const paramblock_medium_t StyleUI_ParamBlock_Medium
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x0D1B,
-        .label  = { 'E', 'R', 'S' },
+        .label  = "ERS",
     },
 
     /* [5-6] ERS selection box */
@@ -154,7 +154,7 @@ const paramblock_medium_t StyleUI_ParamBlock_Medium
         .length = 8,
         .x      = 0x19,
         .y      = 0x1f,
-        .text   = { 'M', 'E', 'A', 'S' },
+        .text   = "MEAS",
     },
 
     /* [9] STRING "CURSOR" at (56,31) */
@@ -163,7 +163,7 @@ const paramblock_medium_t StyleUI_ParamBlock_Medium
         .length = 10,
         .x      = 0x38,
         .y      = 0x1f,
-        .text   = { 'C', 'U', 'R', 'S', 'O', 'R' },
+        .text   = "CURSOR",
     },
 
     /* [10] STRING "|" at (210,32) — up arrow 1 */
@@ -190,7 +190,7 @@ const paramblock_medium_t StyleUI_ParamBlock_Medium
         .length = 9,
         .x      = 0x2c,
         .y      = 0x1f,
-        .text   = { 'V', 'A', 'L', 'U', 'E' },
+        .text   = "VALUE",
     },
 
     /* [13] STRING "|" at (230,32) — up arrow 2 */
@@ -217,7 +217,7 @@ const paramblock_medium_t StyleUI_ParamBlock_Medium
         .length = 5,
         .x      = 0x30,
         .y      = 0x22,
-        .text   = { '<' },
+        .text   = "<",
     },
 
     /* [16] STRING ">" at (53,34) */
@@ -226,7 +226,7 @@ const paramblock_medium_t StyleUI_ParamBlock_Medium
         .length = 5,
         .x      = 0x35,
         .y      = 0x22,
-        .text   = { '>' },
+        .text   = ">",
     },
 
     /* [17] FILLED_RECT (5,210)-(35,236) */

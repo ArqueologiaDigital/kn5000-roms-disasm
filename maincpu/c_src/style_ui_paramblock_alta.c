@@ -39,7 +39,7 @@ const paramblock_alta_t StyleUI_ParamBlock_AltA
         .length = 9,
         .x      = 0x27,
         .y      = 0x1f,
-        .text   = { 'V', 'A', 'L', 'U', 'E' },
+        .text   = "VALUE",
     },
 
     /* [1] STRING "|" at (225,32) — up arrow */

@@ -88,7 +88,7 @@ const paramblock_bal_t StyleUI_ParamBlock_BAL
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x06DB,
-        .label  = { 'B', 'A', 'L' },
+        .label  = "BAL",
     },
 
     /* [1-2] BAL selection box */
@@ -119,7 +119,7 @@ const paramblock_bal_t StyleUI_ParamBlock_BAL
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x0D1B,
-        .label  = { 'E', 'R', 'S' },
+        .label  = "ERS",
     },
 
     /* [5-6] ERS selection box */
@@ -151,7 +151,7 @@ const paramblock_bal_t StyleUI_ParamBlock_BAL
         .length = 7,
         .x      = 0x5b,
         .y      = 0x13,
-        .text   = { 'C', 'T', 'L' },
+        .text   = "CTL",
     },
 
     /* [9] SHORT_REF */
@@ -182,7 +182,7 @@ const paramblock_bal_t StyleUI_ParamBlock_BAL
         .opcode = SD_OP_LABELED_REF,
         .length = 8,
         .addr   = 0x199A,
-        .label  = { 'R', 'E', 'S', 'T' },
+        .label  = "REST",
     },
 
     /* [13-14] REST selection box */
@@ -214,12 +214,7 @@ const paramblock_bal_t StyleUI_ParamBlock_BAL
         .length = 41,
         .x      = 0x19,
         .y      = 0x1f,
-        .text   = { 'M', 'E', 'A', 'S', ' ',
-                    'N', 'O', 'T', 'E', ' ',
-                    'V', 'E', 'L', ' ', ' ', ' ',
-                    'L', 'E', 'N', 'G', 'T', 'H', ' ', ' ', ' ',
-                    'P', 'H', 'R', 'S', ' ', ' ',
-                    'C', 'U', 'R', 'S', 'O', 'R' },
+        .text   = "MEAS NOTE VEL   LENGTH   PHRS  CURSOR",
     },
 
     /* [17] STRING "|" at (210,32) */
@@ -325,7 +320,7 @@ const paramblock_bal_t StyleUI_ParamBlock_BAL
         .length = 5,
         .x      = 0x30,
         .y      = 0x22,
-        .text   = { '<' },
+        .text   = "<",
     },
 
     /* [30] STRING ">" at (53,34) */
@@ -334,7 +329,7 @@ const paramblock_bal_t StyleUI_ParamBlock_BAL
         .length = 5,
         .x      = 0x35,
         .y      = 0x22,
-        .text   = { '>' },
+        .text   = ">",
     },
 
     /* [31] FILLED_RECT (5,175)-(250,195) */

@@ -85,7 +85,7 @@ const paramblock_extended_t StyleUI_ParamBlock_Extended
         .length = 8,
         .x      = 0x19,
         .y      = 0x1f,
-        .text   = { 'M', 'E', 'A', 'S' },
+        .text   = "MEAS",
     },
 
     /* [1] STRING "CURSOR" at (56,31) */
@@ -94,7 +94,7 @@ const paramblock_extended_t StyleUI_ParamBlock_Extended
         .length = 10,
         .x      = 0x38,
         .y      = 0x1f,
-        .text   = { 'C', 'U', 'R', 'S', 'O', 'R' },
+        .text   = "CURSOR",
     },
 
     /* [2] STRING "|" at (210,32) — up arrow */
@@ -121,7 +121,7 @@ const paramblock_extended_t StyleUI_ParamBlock_Extended
         .length = 5,
         .x      = 0x30,
         .y      = 0x22,
-        .text   = { '<' },
+        .text   = "<",
     },
 
     /* [5] STRING ">" at (53,34) */
@@ -130,7 +130,7 @@ const paramblock_extended_t StyleUI_ParamBlock_Extended
         .length = 5,
         .x      = 0x35,
         .y      = 0x22,
-        .text   = { '>' },
+        .text   = ">",
     },
 
     /* [6] FILLED_RECT (5,210)-(35,236) */
@@ -170,7 +170,7 @@ const paramblock_extended_t StyleUI_ParamBlock_Extended
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x06DB,
-        .label  = { 'B', 'A', 'L' },
+        .label  = "BAL",
     },
 
     /* [11] SHORT_REF */
@@ -201,7 +201,7 @@ const paramblock_extended_t StyleUI_ParamBlock_Extended
         .opcode = SD_OP_LABELED_REF,
         .length = 7,
         .addr   = 0x135B,
-        .label  = { 'Y', 'E', 'S' },
+        .label  = "YES",
     },
 
     /* [15] SHORT_REF */
@@ -232,7 +232,7 @@ const paramblock_extended_t StyleUI_ParamBlock_Extended
         .opcode = SD_OP_LABELED_REF,
         .length = 6,
         .addr   = 0x199B,
-        .label  = { 'N', 'O' },
+        .label  = "NO",
     },
 
     /* [19] SHORT_REF */
