@@ -131,6 +131,7 @@ typedef SD_STRING_TYPE(5)  sd_string_5_t;    /* "VALUE", "TRACK" */
 typedef SD_STRING_TYPE(6)  sd_string_6_t;    /* "CURSOR" */
 typedef SD_STRING_TYPE(37) sd_string_37_t;   /* long label row */
 
+typedef SD_LABELED_REF_TYPE(1)  sd_labeled_ref_1_t;  /* single-byte param (chord box refs) */
 typedef SD_LABELED_REF_TYPE(2)  sd_labeled_ref_2_t;  /* "NO" */
 typedef SD_LABELED_REF_TYPE(3)  sd_labeled_ref_3_t;  /* "BAL", "ERS", "YES", "CLR", "CTL" */
 typedef SD_LABELED_REF_TYPE(4)  sd_labeled_ref_4_t;  /* "REST" */
@@ -147,6 +148,41 @@ typedef SD_MESSAGE_TYPE(13) sd_message_13_t; /* "Are You Sure?" */
 #define LCD_CHAR_SHARP  0x8C  /* ♯ */
 #define LCD_CHAR_VBAR   0x8D  /* | (up arrow) */
 #define LCD_CHAR_DARROW 0x8E  /* ~ (down arrow) */
+
+/* ── Widget command (op=0x02, sub != 0x0A) ─────────────────── */
+
+/** WIDGET: UI widget element (15 bytes)
+ *  op=0x02, subtype != SD_SUB_VLINE
+ *  Contains handler address (24-bit, zero-extended to 32-bit LE)
+ */
+typedef struct __attribute__((packed)) {
+    uint8_t  opcode;     /* SD_OP_VLINE_WIDGET (0x02) */
+    uint8_t  subtype;    /* widget sub-type (not 0x0A) */
+    uint16_t id;         /* widget ID (LE) */
+    uint16_t flags;      /* widget flags (LE) */
+    uint8_t  ref_tag;    /* reference tag (0x06) */
+    uint32_t handler;    /* 24-bit handler address, zero-extended to 32-bit LE */
+    uint16_t param;      /* parameter value (LE) */
+    uint8_t  x;          /* screen x position */
+    uint8_t  y;          /* screen y position */
+} sd_widget_t;
+
+/** REF_EX: extended reference (op=0x06, length=0x0A, 10 bytes)
+ *  Used for row label references with binary parameter data
+ */
+typedef struct __attribute__((packed)) {
+    uint8_t  opcode;     /* SD_OP_LABELED_REF (0x06) */
+    uint8_t  length;     /* 0x0A */
+    uint16_t id;         /* reference ID (LE) */
+    uint8_t  data[6];    /* parameter data */
+} sd_ref_ex_t;
+
+/** NOP/PAD: padding command (10 bytes) */
+typedef struct __attribute__((packed)) {
+    uint8_t  opcode;     /* 0x00 */
+    uint8_t  length;     /* 0x0A */
+    uint8_t  data[8];    /* padding data */
+} sd_nop_10_t;
 
 /* ── Helper for unknown opcodes ──────────────────────────────── */
 
