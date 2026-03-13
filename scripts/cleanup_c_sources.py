@@ -10,7 +10,7 @@ import glob
 import os
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-C_SRC = os.path.join(REPO, 'maincpu', 'includes')
+C_SRC = os.path.join(REPO, 'maincpu', 'style_ui')
 
 
 def remove_index_comments(content):
@@ -79,7 +79,8 @@ def process_file(filepath):
     return False
 
 
-files = sorted(glob.glob(os.path.join(C_SRC, 'style_ui_*.c')))
+files = sorted(glob.glob(os.path.join(C_SRC, '*.c')) +
+               glob.glob(os.path.join(C_SRC, 'paramblock', '*.c')))
 changed = 0
 for f in files:
     name = os.path.basename(f)

@@ -25,15 +25,15 @@ SCREENDATA_BINS = $(patsubst %,maincpu/includes/generated/style_ui_screendata_%.
 
 C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS)
 
-maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/includes/style_ui_paramblock_%.c maincpu/includes/screendata_types.h
+maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/paramblock/%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
-	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/includes -o $@.o $<
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/style_ui -o $@.o $<
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
 	@rm -f $@.o
 
-maincpu/includes/generated/style_ui_screendata_%.bin: maincpu/includes/style_ui_screendata_%.c maincpu/includes/screendata_types.h
+maincpu/includes/generated/style_ui_screendata_%.bin: maincpu/style_ui/%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
-	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/includes -o $@.o $<
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/style_ui -o $@.o $<
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
 	@rm -f $@.o
 

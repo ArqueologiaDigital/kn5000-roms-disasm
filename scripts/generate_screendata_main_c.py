@@ -13,7 +13,7 @@ import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROM_FILE = os.path.join(REPO, 'original_ROMs', 'kn5000_v10_program.rom')
-C_FILE = os.path.join(REPO, 'maincpu', 'includes', 'style_ui_screendata_main.c')
+C_FILE = os.path.join(REPO, 'maincpu', 'style_ui', 'main.c')
 # ROM offset for this data block (0xE0BB90 - 0xE00000 = 0xBB90)
 ROM_OFFSET = 0xBB90
 DATA_SIZE = 3531
