@@ -374,28 +374,37 @@ The issue tracker is:
 
 This policy ensures the disassembly remains useful for understanding the firmware, not just rebuilding it.
 
-### Visual Alignment in Tables & Include Blocks (STRICT POLICY)
+### Label+Include Compaction & Visual Alignment (STRICT POLICY)
 
-When a group of lines share the same structure (e.g., label + directive, label + `.include`, label + `.long`, etc.), **tab-align the directives to a common column** so the block reads as a visual table. This applies to:
+**When a label's only content is a single `.include` or `.incbin` directive, the label and directive MUST be on the same line.** Consecutive such entries MUST have no blank lines between them and MUST be tab-aligned to a common column.
 
-- **Include blocks:** Labels and `.include`/`.incbin` directives aligned to the same column
+```asm
+; WRONG - separate lines, blank-line spacing, ragged alignment
+Bitmap_1bit_Flash_Memory_Update:	; e0018e
+	.incbin "images/Bitmap_1bit_Flash_Memory_Update.bin"
+
+Bitmap_1bit_Now_Erasing:	; e003f6
+	.incbin "images/Bitmap_1bit_Now_Erasing.bin"
+
+; CORRECT - same line, no spacing, aligned columns
+Bitmap_1bit_Flash_Memory_Update:	.incbin "images/Bitmap_1bit_Flash_Memory_Update.bin"
+Bitmap_1bit_Now_Erasing:		.incbin "images/Bitmap_1bit_Now_Erasing.bin"
+```
+
+This same visual alignment rule applies to all table-like blocks:
+
+- **Include/incbin blocks:** Labels and directives aligned to the same column
 - **Pointer tables:** Labels and `.long` targets aligned
 - **Data tables:** Parallel `.byte`/`.short`/`.ascii` entries with comments aligned
 - **Dispatch tables:** Handler labels and jump targets aligned
 
-Use tabs (not spaces) to reach the alignment column. The column should be the next tab stop after the longest label in the block. Example:
-
-```asm
-; WRONG - ragged alignment
-SOUND_DATA_PIANO:	.include "audio/sound_data_piano.s"
-SOUND_DATA_MALLET_ORCH_PERC:	.include "audio/sound_data_mallet_orch_perc.s"
-
-; CORRECT - visually aligned columns
-SOUND_DATA_PIANO:		.include "audio/sound_data_piano.s"
-SOUND_DATA_MALLET_ORCH_PERC:	.include "audio/sound_data_mallet_orch_perc.s"
-```
+Use tabs (not spaces) to reach the alignment column. The column should be the next tab stop after the longest label in the block.
 
 Apply this whenever editing or creating table-like blocks of assembly. When touching existing unaligned blocks, align them as part of the change.
+
+### No Inline Address Comments (STRICT POLICY)
+
+**Do NOT add address comments like `; e0018e` or `; E023F0` to labels or lines.** These are redundant — addresses are available from the ELF output (`llvm-objdump -d`) and the linker map. Inline address comments add noise and become stale when code moves.
 
 ### String Literals in Disassembly (STRICT POLICY)
 
