@@ -146,65 +146,6 @@ Bitmap_1bit_Turn_On_AGAIN:	; e01266
 .include "sequencer/ssf_gate_states.s"
 
 
-; --- Instrument Sound Data & Category Metadata ---
-; Possibly a region identifier: "HK" (Hong Kong variant?), 16-byte padded string + version + sentinels.
-; Unreferenced -- may be accessed via computed address or unused.
-LABEL_E02380:	.ascii "HK              "
-	.byte 0x01, 0x00, 0x00, 0x00
-	.byte 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff
-
-LABEL_E0239C:
-	.long LABEL_E023A0
-
-LABEL_E023A0:
-	.long SOUND_CATEGORY_NAMES
-	.byte 0x12, 0x00, 0x00, 0x00
-	.byte 0x28, 0x00, 0x00, 0x00
-	.byte 0xff, 0xff, 0xff, 0xff
-
-; Sound data section pointers (16 entries)
-; Each pointer references a sound data block for a category
-SOUND_DATA_SECTION_PTRS:	; E023B0
-	.long SOUND_DATA_PIANO
-	.long SOUND_DATA_GUITAR
-	.long SOUND_DATA_STRINGS_VOCAL
-	.long SOUND_DATA_BRASS_PTRS
-	.long SOUND_DATA_FLUTE
-	.long SOUND_DATA_SAX_REED
-	.long SOUND_DATA_MALLET_ORCH_PERC
-	.long SOUND_DATA_WORLD_PERC
-	.long SOUND_DATA_ORGAN_ACCORDION
-	.long SOUND_DATA_ORCHESTRAL_PAD
-	.long SOUND_DATA_SYNTH
-	.long SOUND_DATA_BASS
-	.long SOUND_DATA_DIGITAL_DRAWBAR
-	.long SOUND_DATA_ACCORDION_REG
-	.long SOUND_DATA_GM_SPECIAL
-	.long SOUND_DATA_DRUM_KITS
-
-; Sound category names - fixed-width string table for the sound selection UI
-; 18 entries x 16 characters each, space-padded and centered
-; Referenced via structure at E023A0: pointer, count=18, field=0x28
-SOUND_CATEGORY_NAMES:	; E023F0
-	.ascii "     PIANO      "	;  0: Piano
-	.ascii "     GUITAR     "	;  1: Guitar
-	.ascii "STRINGS & VOCAL "	;  2: Strings & Vocal
-	.ascii "     BRASS      "	;  3: Brass
-	.ascii "     FLUTE      "	;  4: Flute
-	.ascii "   SAX & REED   "	;  5: Sax & Reed
-	.ascii "MALLET&ORCH PERC"	;  6: Mallet & Orch Perc
-	.ascii "   WORLD PERC   "	;  7: World Perc
-	.ascii "ORGAN&ACCORDION "	;  8: Organ & Accordion
-	.ascii " ORCHESTRAL PAD "	;  9: Orchestral Pad
-	.ascii "     SYNTH      "	; 10: Synth
-	.ascii "      BASS      "	; 11: Bass
-	.ascii "DIGITAL DRAWBAR "	; 12: Digital Drawbar
-	.ascii " ACCORDION REG. "	; 13: Accordion Reg.
-	.ascii "   GM SPECIAL   "	; 14: GM Special
-	.ascii "   DRUM KITS    "	; 15: Drum Kits
-	.ascii "    MEMORY A    "	; 16: Memory A
-	.ascii "    MEMORY B    "	; 17: Memory B
 
 	.include "audio/sound_data.s"
 
