@@ -1222,13 +1222,13 @@ SeqOut_WriteTimedBytes:
 	ei 6
 	cpdi8 47072, 0	; zero means MIDI
 	jr nz, LABEL_FDB7A3
-	call SeqAlt1_GetTimingValue
+	call SeqBuf_MidiOut_GetTimingValue
 	cp hl, iz
 	jr c, LABEL_FDB79C
 	ld xwa, (xsp + 10)
 	push xwa
 	pushw iz
-	call SeqAlt1_WriteBytes
+	call SeqBuf_MidiOut_WriteBytes
 	inc 6, xsp
 	ldfr_werp HL, 0xFA
 	call MIDI_SC0_ENABLE_TX
@@ -1248,7 +1248,7 @@ LABEL_FDB7A3:
 	jr nz, MIDI_SeqProcess_DisableIntReturn
 
 LABEL_FDB7B3:
-	call SeqAlt1_GetTimingValue
+	call SeqBuf_MidiOut_GetTimingValue
 	cp hl, iz
 	jr c, MIDI_SeqProcess_DisableIntReturn
 	ld xwa, (xsp + 10)
@@ -1299,7 +1299,7 @@ LABEL_FDB80C:
 	jr LABEL_FDB832
 
 LABEL_FDB814:
-	call SeqAlt1_GetTimingValue
+	call SeqBuf_MidiOut_GetTimingValue
 	cp hl, (xsp + 6)
 	jr c, LABEL_FDB832
 	ld xwa, (xsp + 8)
@@ -1349,7 +1349,7 @@ LABEL_FDB869:
 	ld a, (xwa)
 	extz wa
 	call MIDI_RX_BYTE_DISPATCHER
-	call SeqAlt1_GetTimingValue
+	call SeqBuf_MidiOut_GetTimingValue
 	cps hl, 1
 	jr lt, LABEL_FDB896
 	ld xwa, (xsp + 10)
@@ -1358,7 +1358,7 @@ LABEL_FDB869:
 	ld a, (xwa)
 	extz wa
 	pushw wa
-	call SeqAlt1_WriteByte
+	call SeqBuf_MidiOut_WriteByte
 	inc 2, xsp
 	ld (xsp + 2), hl
 	call MIDI_SC0_ENABLE_TX
@@ -1379,7 +1379,7 @@ LABEL_FDB8A5:
 	jr z, LABEL_FDB8DC
 
 LABEL_FDB8AD:
-	call SeqAlt1_GetTimingValue
+	call SeqBuf_MidiOut_GetTimingValue
 	cps hl, 1
 	jr lt, LABEL_FDB8CF
 	ld xwa, (xsp + 10)
@@ -1388,7 +1388,7 @@ LABEL_FDB8AD:
 	ld a, (xwa)
 	extz wa
 	pushw wa
-	call SeqAlt1_WriteByte
+	call SeqBuf_MidiOut_WriteByte
 	inc 2, xsp
 	ld (xsp + 2), hl
 	call MIDI_SC0_ENABLE_TX
@@ -1408,11 +1408,11 @@ LABEL_FDB8DC:
 	inc 2, xsp
 	ret
 
-SeqAlt2_DataReadLoop:
+SeqBuf_DspSysEx_DataReadLoop:
 	dec 2, xsp
 
 LABEL_FDB8E7:
-	call SeqAlt2_ReadByte_1024
+	call SeqBuf_DspSysEx_ReadByte
 	cp hl, 0xFFFF
 	jr z, LABEL_FDB900
 	ld (xsp), l
@@ -1507,7 +1507,7 @@ LABEL_FDB9B1:
 	lda xwa, (xsp + 2)
 	push xwa
 	pushw 0x7
-	call SeqAlt1_WriteBytes
+	call SeqBuf_MidiOut_WriteBytes
 	inc 6, xsp
 	ei 0
 	call MIDI_SC0_ENABLE_TX

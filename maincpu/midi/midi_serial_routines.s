@@ -109,7 +109,7 @@ IntTx0_FlagBit2Branch:
 	jr IntTx0_CheckQueueEmpty
 
 IntTx0_DequeueAndSend:
-	call SeqAlt1_ReadByte
+	call SeqBuf_MidiOut_ReadByte
 	cp hl, 0xFFFF
 	jr z, IntTx0_CheckQueueEmpty
 	stda8 208, l
@@ -118,7 +118,7 @@ IntTx0_CheckQueueEmpty:
 	ldda8 a, 1065
 	and a, 0x1F
 	jr nz, IntTx0_Epilogue
-	call SeqAlt1_CheckEmpty
+	call SeqBuf_MidiOut_CheckEmpty
 	and hl, hl
 	jr nz, IntTx0_Epilogue
 	stdi8 234, 253
@@ -984,7 +984,7 @@ MIDI_SC0_ENABLE_TX:
 	jr SC0TxEnable_Return
 
 SC0TxEnable_MidiActivePath:
-	call SeqAlt1_Init
+	call SeqBuf_MidiOut_Init
 	stdi8 1065, 0
 
 SC0TxEnable_Return:

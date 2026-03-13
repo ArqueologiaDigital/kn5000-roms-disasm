@@ -7876,12 +7876,12 @@ LABEL_F8B337:
 	stdi8 1060, 243
 	ei 6
 	pushw 0xF3
-	call SeqAlt1_WriteByte
+	call SeqBuf_MidiOut_WriteByte
 	ld a, (xsp + 2)
 	res 7, a
 	extz wa
 	pushw wa
-	call SeqAlt1_WriteByte
+	call SeqBuf_MidiOut_WriteByte
 	inc 4, xsp
 	call MIDI_SC0_TX_DISPATCH
 	ei 0

@@ -2938,7 +2938,7 @@ MidiEvent_ParseNoteSequence:
 	jr z, MidiEvent_NoteSeqCount
 
 LABEL_FE1EAC:
-	call SeqAlt4_ReadByte
+	call SeqBuf_NoteEvent_ReadByte
 	ld (xsp + 6), hl
 	ld wa, (xsp + 6)
 	cp wa, 0xFFFF
@@ -2948,7 +2948,7 @@ LABEL_FE1EAC:
 	jr MidiEvent_NoteSeqCount
 
 LABEL_FE1EC4:
-	call SeqAlt4_ReadByte
+	call SeqBuf_NoteEvent_ReadByte
 	ld wa, hl
 	cp wa, 0xFFFF
 	jr nz, LABEL_FE1ED8
@@ -22512,7 +22512,7 @@ SndParam_StoreDRAMInit:
 	jr LABEL_FEE5EF
 
 LABEL_FEE57A:
-	call SeqAlt3_ReadByte
+	call SeqBuf_VoiceMap_ReadByte
 	cp hl, 0xFFFF
 	jr z, LABEL_FEE5DF
 	lda xwa, (xsp + 12)
@@ -22522,7 +22522,7 @@ LABEL_FEE57A:
 	lds iz, 0
 
 LABEL_FEE591:
-	call SeqAlt3_ReadByte
+	call SeqBuf_VoiceMap_ReadByte
 	ld xwa, (xsp + 8)
 	lda_dpi XSP, 0xE0
 	ld (xsp + 8), xwa
@@ -22539,7 +22539,7 @@ LABEL_FEE591:
 	jr ule, LABEL_FEE5D9
 
 LABEL_FEE5BF:
-	call SeqAlt3_ReadByte
+	call SeqBuf_VoiceMap_ReadByte
 	ld_sril XWA, (xsp + 0x0136)
 	lda_dpi XSP, 0xE0
 	st_dri3l XWA, 0xFD, 0x36, 0x01

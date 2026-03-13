@@ -3015,7 +3015,7 @@ SeMenu_PopupDialog_CheckState:
 	jr nc, SeMenu_PopupDialog_ShowTitle
 
 SeMenu_PopupDialog_Setup:
-	call SeqAlt5_ReadByte
+	call SeqBuf_SoundEdit_ReadByte
 	cps hl, 0
 	jr ge, SeMenu_PopupDialog_CheckState
 
@@ -3028,7 +3028,7 @@ SeMenu_PopupDialog_ShowTitle:
 	jr z, SeMenu_PopupDialog_ShowBody_Data
 
 SeMenu_PopupDialog_ShowBody:
-	call SeqAlt5_ReadByte
+	call SeqBuf_SoundEdit_ReadByte
 	cps hl, 0
 	jr ge, SeMenu_PopupDialog_ShowBody
 	jrl SeMenu_ListSelector_ScrollDown
@@ -3058,7 +3058,7 @@ SeMenu_PopupDialog_HandleInput:
 	jrl nc, SeMenu_ListSelector_ScrollUp
 
 SeMenu_PopupDialog_HandleInput_Data:
-	call SeqAlt5_ReadByte
+	call SeqBuf_SoundEdit_ReadByte
 	cps hl, 0
 	jr ge, SeMenu_PopupDialog_HandleInput
 	jrl SeMenu_ListSelector_ScrollUp
@@ -3066,8 +3066,8 @@ SeMenu_PopupDialog_HandleInput_Data:
 SeMenu_PopupDialog_Confirm:
 	cp a, 0x17
 	jr nz, SeMenu_PopupDialog_Cancel
-	call SeqAlt5_ReadByte
-	call SeqAlt5_ReadByte
+	call SeqBuf_SoundEdit_ReadByte
+	call SeqBuf_SoundEdit_ReadByte
 	jrl SeMenu_ListSelector_ScrollDown
 
 SeMenu_PopupDialog_Cancel:
@@ -3079,7 +3079,7 @@ SeMenu_PopupDialog_Cancel:
 	jr nz, SeMenu_ValueEditor_Setup
 
 SeMenu_PopupDialog_Close:
-	call SeqAlt5_ReadByte
+	call SeqBuf_SoundEdit_ReadByte
 	cps hl, 0
 	jr lt, SeMenu_PopupDialog_Close_Data
 	ldto_werp WA, 0xFA
@@ -3115,7 +3115,7 @@ SeMenu_ValueEditor_Init:
 	jrl SeMenu_ListSelector_ScrollDown
 
 SeMenu_ValueEditor_Setup:
-	call SeqAlt5_ReadByte
+	call SeqBuf_SoundEdit_ReadByte
 	lda_24 xwa, 0x020c33
 	cps hl, 0
 	jr lt, SeMenu_ValueEditor_Draw
@@ -3218,7 +3218,7 @@ SeMenu_ValueEditor_Data5:
 SeMenu_ListSelector_Init:
 	cps iz, 0
 	jr z, SeMenu_ListSelector_Setup
-	call SeqAlt5_ReadByte
+	call SeqBuf_SoundEdit_ReadByte
 	cps hl, 0
 	jr ge, SeMenu_ValueEditor_Data5
 
@@ -3269,13 +3269,13 @@ SeMenu_ListSelector_ScrollDown:
 	ret
 
 SeMenu_ListSelector_Select:
-	call SeqAlt4_CheckSongEnd
+	call SeqBuf_NoteEvent_CheckSongEnd
 	cps hl, 0
 	ret z
 
 SeMenu_ListSelector_Complete:
 	calr SeMenu_PopupDialog_Init
-	call SeqAlt4_CheckSongEnd
+	call SeqBuf_NoteEvent_CheckSongEnd
 	cps hl, 0
 	jr nz, SeMenu_ListSelector_Complete
 	ret

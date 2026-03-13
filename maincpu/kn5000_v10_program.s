@@ -71,19 +71,25 @@ LABEL_E00008:
 LABEL_E00010:
 	.byte 0x10, 0xff
 
-; Sequencer ring buffer write dispatch table
-; Index: DRAM[1508] bits [7:5] (top 3 bits), entries: 8
-; Called from E1DMA_ISR handler (system_handlers.s:5506)
-; Each handler writes event data to the sequencer ring buffer
+; DMA ISR event router: dispatches incoming sequencer data to ring buffers
+; Index: DRAM[1508] bits [7:5] (top 3 bits of status byte), 8 entries
+; Called from E1DMA_ISR handler (system_handlers.s)
+;
+; Each entry routes DMA event bytes to a specific ring buffer, consumed by:
+;   NoteEvent  (0x0203D5) -> note_voice_mapping, sound_editor_ui
+;   SoundEdit  (via EF2E39) -> sound_editor_ui
+;   VoiceMap   (0x0201C1) -> note_voice_mapping
+;   DspSysEx   (0x01FCA3) -> dsp_config_sysex
+;   MidiOut    (0x01F785) -> midi_serial_routines  (not in this table)
 SeqRingBuf_WriteDispatch_Table:	; E00012
-	.long Seq_MultiWrite_Alt4	; 0: Multi-write variant 4
-	.long Seq_MultiWrite_Alt5	; 1: Multi-write variant 5
-	.long Seq_WriteMidi90		; 2: Write MIDI 0x90 (Note On)
-	.long Seq_MultiWrite_Alt3	; 3: Multi-write variant 3
-	.long Seq_MultiWrite_Alt1	; 4: Multi-write variant 1
-	.long Seq_RingBuf_Nop		; 5: No-op
-	.long Seq_RingBuf_Nop		; 6: No-op
-	.long Seq_RingBuf_Nop		; 7: No-op
+	.long SeqDMA_MultiWrite_NoteEvent	; 0: -> NoteEvent buffer (block writes)
+	.long SeqDMA_MultiWrite_SoundEdit	; 1: -> SoundEdit buffer
+	.long SeqDMA_WriteMidi_NoteOn		; 2: -> NoteEvent buffer (MIDI 0x90 Note On)
+	.long SeqDMA_MultiWrite_VoiceMap	; 3: -> VoiceMap buffer
+	.long SeqDMA_MultiWrite_DspSysEx	; 4: -> DspSysEx buffer
+	.long SeqDMA_Nop			; 5: unused
+	.long SeqDMA_Nop			; 6: unused
+	.long SeqDMA_Nop			; 7: unused
 
 SLIDE_STRING:	aligned_string "SLIDE"
 FILETYPE_SIG_PROGRAM_1:	aligned_string "Technics KN5000 Program  DATA FILE 1/2"
@@ -4618,7 +4624,7 @@ EditSwRefresh:
 putc_mtx_bf_X:
 	extz wa
 	pushw wa
-	call SeqAlt1_WriteByte
+	call SeqBuf_MidiOut_WriteByte
 	inc 2, xsp
 	ret
 

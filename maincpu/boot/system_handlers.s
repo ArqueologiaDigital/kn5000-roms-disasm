@@ -1161,12 +1161,12 @@ MainLoop_AfterBit1Check:
 	jr nz, MainLoop_AfterBit3Check
 
 MainLoop_AfterBit3Check:
-	call SeqAlt2_CheckSongEnd
+	call SeqBuf_DspSysEx_CheckSongEnd
 	and hl, hl
-	jr z, MainLoop_AfterSeqAlt2
-	call SeqAlt2_DataReadLoop
+	jr z, MainLoop_AfterSeqBuf_DspSysEx
+	call SeqBuf_DspSysEx_DataReadLoop
 
-MainLoop_AfterSeqAlt2:
+MainLoop_AfterSeqBuf_DspSysEx:
 	ldda8 a, 13421
 	and a, 0x3
 	jr z, MainLoop_AfterAccWrap
@@ -1192,12 +1192,12 @@ MainLoop_AfterSwbtWr:
 	calr MainLoop_ReinitSwbtWr
 	call AccDir_PeriodicEntry
 	calr Seq_EventProcessingTick
-	call SeqAlt4_CheckSongEnd
+	call SeqBuf_NoteEvent_CheckSongEnd
 	and hl, hl
-	jr z, MainLoop_AfterSeqAlt4
+	jr z, MainLoop_AfterSeqBuf_NoteEvent
 	call SeMenu_ListSelector_Select
 
-MainLoop_AfterSeqAlt4:
+MainLoop_AfterSeqBuf_NoteEvent:
 	ldada xiy, 1058
 	mrid2 0xB5, 0xAE
 	jr nz, MainLoop_AfterDialCheck
@@ -1778,16 +1778,16 @@ Seq_FullInit:
 	call TempoRingBuf_Init
 	call SeqMain_InitBuffer
 	call RhythmBuf_Init
-	call SeqAlt1_Init
+	call SeqBuf_MidiOut_Init
 	call SeqEvtBuf_Init
 	call SeqBuf2_Init
 	call AltEvtBuf_Init
-	call SeqAlt4_Flush
-	call SeqAlt3_Flush
+	call SeqBuf_NoteEvent_Flush
+	call SeqBuf_VoiceMap_Flush
 	call LABEL_EF2E89
-	call SeqAlt5_Flush
+	call SeqBuf_SoundEdit_Flush
 	call SeqBuf3_Init
-	call SeqAlt2_InitBuffer
+	call SeqBuf_DspSysEx_InitBuffer
 	stdi8 48953, 255
 	ret
 
@@ -3792,7 +3792,7 @@ LABEL_EF27E6:
 	popw	hl
 	ret
 
-SeqAlt1_ReadByte:
+SeqBuf_MidiOut_ReadByte:
 	pushw ix
 	push xde
 	lda_24 xde, 0x01f785
@@ -3801,7 +3801,7 @@ SeqAlt1_ReadByte:
 	popw ix
 	ret
 
-SeqAlt1_WriteByte:
+SeqBuf_MidiOut_WriteByte:
 	link32 0xEE, 0x0C, 0x00, 0x00
 	pushw ix
 	push xde
@@ -3813,7 +3813,7 @@ SeqAlt1_WriteByte:
 	unlk32 xiz
 	ret
 
-SeqAlt1_WriteBytes:
+SeqBuf_MidiOut_WriteBytes:
 	link32 0xEE, 0x0C, 0x00, 0x00
 	push xiy
 	push xix
@@ -3822,32 +3822,32 @@ SeqAlt1_WriteBytes:
 	ld xiy, (xiz + 10)
 	lda_24 xde, 0x01f785
 
-SeqAlt1_WriteBytes_Loop:
+SeqBuf_MidiOut_WriteBytes_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte_Small
 	inc 1, xiy
-	djnz xbc, SeqAlt1_WriteBytes_Loop
+	djnz xbc, SeqBuf_MidiOut_WriteBytes_Loop
 	pop xde
 	pop xix
 	pop xiy
 	unlk32 xiz
 	ret
 
-SeqAlt1_CheckEmpty:
+SeqBuf_MidiOut_CheckEmpty:
 	ld16_24 xhl, 0x01f781
 	cpda16_24 xhl, 128893
 	lds hl, 0
-	jr z, SeqAlt1_CheckEmpty_Return
+	jr z, SeqBuf_MidiOut_CheckEmpty_Return
 	ldw hl, 0xFFFF
 
-SeqAlt1_CheckEmpty_Return:
+SeqBuf_MidiOut_CheckEmpty_Return:
 	ret
 
-SeqAlt1_GetTimingValue:
+SeqBuf_MidiOut_GetTimingValue:
 	ld16_24 xhl, 0x01f783
 	ret
 
-SeqAlt1_Init:
+SeqBuf_MidiOut_Init:
 	pushw ix
 	push xde
 	lda_24 xde, 0x01f785
@@ -3856,14 +3856,14 @@ SeqAlt1_Init:
 	popw ix
 	ret
 
-SeqAlt1_SaveReadPos:
+SeqBuf_MidiOut_SaveReadPos:
 	; --- Sub 1: copy (0x01F77D)->HL->(0x01F77B) (13 bytes) ---
 	pushw hl
 	ld16_24	hl, 128893
 	st16_24	128891, hl
 	popw hl
 	ret
-SeqAlt1_ReadAlternate:
+SeqBuf_MidiOut_ReadAlternate:
 	; --- Sub 2: call EF2FA1 with XDE=0x01F785 (14 bytes) ---
 	pushw ix
 	push xde
@@ -3872,7 +3872,7 @@ SeqAlt1_ReadAlternate:
 	pop xde
 	popw ix
 	ret
-SeqAlt1_ReadAlternate2:
+SeqBuf_MidiOut_ReadAlternate2:
 	; --- Sub 3: call EF2FBC with XDE=0x01F785 (14 bytes) ---
 	pushw ix
 	push xde
@@ -3881,14 +3881,14 @@ SeqAlt1_ReadAlternate2:
 	pop xde
 	popw ix
 	ret
-SeqAlt1_SaveReadPos2:
+SeqBuf_MidiOut_SaveReadPos2:
 	; --- Sub 4: copy (0x01F77F)->HL->(0x01F77D) (13 bytes) ---
 	pushw hl
 	ld16_24	hl, 128895
 	st16_24	128893, hl
 	popw hl
 	ret
-SeqAlt1_SaveReadPos3:
+SeqBuf_MidiOut_SaveReadPos3:
 	; --- Sub 5: copy (0x01F781)->HL->(0x01F77F) (13 bytes) ---
 	pushw hl
 	ld16_24	hl, 128897
@@ -4083,7 +4083,7 @@ SeqBuf3_Helpers:
 	popw	hl
 	ret
 
-SeqAlt2_ReadByte_1024:
+SeqBuf_DspSysEx_ReadByte:
 	pushw ix
 	push xde
 	lda_24 xde, 0x01fca3
@@ -4093,7 +4093,7 @@ SeqAlt2_ReadByte_1024:
 	ret
 
 
-SeqAlt2_WriteByte:
+SeqBuf_DspSysEx_WriteByte:
 	link32 0xEE, 0x0C, 0x00, 0x00
 	pushw ix
 	push xde
@@ -4105,7 +4105,7 @@ SeqAlt2_WriteByte:
 	unlk32 xiz
 	ret
 
-SeqAlt2_WriteBytes:
+SeqBuf_DspSysEx_WriteBytes:
 	link32 0xEE, 0x0C, 0x00, 0x00
 	push xiy
 	push xix
@@ -4126,7 +4126,7 @@ LABEL_EF2A4D:
 	ret
 
 
-SeqAlt2_CheckSongEnd:
+SeqBuf_DspSysEx_CheckSongEnd:
 	ld16_24 xhl, 0x01fc9f
 	cpda16_24 xhl, 130203
 	lds hl, 0
@@ -4139,7 +4139,7 @@ LABEL_EF2A6E:
 LABEL_EF2A6F:
 	.byte 0xd2, 0xa1, 0xfc, 0x01, 0x23, 0x0e
 
-SeqAlt2_InitBuffer:
+SeqBuf_DspSysEx_InitBuffer:
 	pushw ix
 	push xde
 	lda_24 xde, 0x01fca3
@@ -4249,7 +4249,7 @@ LABEL_EF2B97:
 	.byte 0x53, 0x4b, 0x0e
 
 
-SeqAlt3_ReadByte:
+SeqBuf_VoiceMap_ReadByte:
 	pushw ix
 	push xde
 	lda_24 xde, 0x0201c1
@@ -4259,7 +4259,7 @@ SeqAlt3_ReadByte:
 	ret
 
 
-SeqAlt3_WriteByte:
+SeqBuf_VoiceMap_WriteByte:
 	link32 0xEE, 0x0C, 0x00, 0x00
 	pushw ix
 	push xde
@@ -4272,7 +4272,7 @@ SeqAlt3_WriteByte:
 	ret
 
 
-SeqAlt3_WriteBlock:
+SeqBuf_VoiceMap_WriteBlock:
 	link32 0xEE, 0x0C, 0x00, 0x00
 	push xiy
 	push xix
@@ -4281,34 +4281,34 @@ SeqAlt3_WriteBlock:
 	ld xiy, (xiz + 10)
 	lda_24 xde, 0x0201c1
 
-SeqAlt3_WriteBlock_Loop:
+SeqBuf_VoiceMap_WriteBlock_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte_Small
 	inc 1, xiy
-	djnz xbc, SeqAlt3_WriteBlock_Loop
+	djnz xbc, SeqBuf_VoiceMap_WriteBlock_Loop
 	pop xde
 	pop xix
 	pop xiy
 	unlk32 xiz
 	ret
 
-SeqAlt3_CheckEmpty:
+SeqBuf_VoiceMap_CheckEmpty:
 	ld16_24 xhl, 0x0201bd
 	cpda16_24 xhl, 131513
 	lds hl, 0
-	jr z, SeqAlt3_CheckEmpty_Done
+	jr z, SeqBuf_VoiceMap_CheckEmpty_Done
 	ldw hl, 0xFFFF
 
-SeqAlt3_CheckEmpty_Done:
+SeqBuf_VoiceMap_CheckEmpty_Done:
 	ret
 
 
-SeqAlt3_GetWritePos:
+SeqBuf_VoiceMap_GetWritePos:
 	ld16_24 xhl, 0x0201bf
 	ret
 
 
-SeqAlt3_Flush:
+SeqBuf_VoiceMap_Flush:
 	pushw ix
 	push xde
 	lda_24 xde, 0x0201c1
@@ -4317,14 +4317,14 @@ SeqAlt3_Flush:
 	popw ix
 	ret
 
-SeqAlt3_SaveWritePtr:
+SeqBuf_VoiceMap_SaveWritePtr:
 	; --- Sub 1: copy (0x0201B9)->HL->(0x0201B7) (13 bytes) ---
 	pushw hl
 	ld16_24	hl, 131513
 	st16_24	131511, hl
 	popw hl
 	ret
-SeqAlt3_CommitWrite:
+SeqBuf_VoiceMap_CommitWrite:
 	; --- Sub 2: call EF2FA1 with XDE=0x0201C1 (14 bytes) ---
 	pushw ix
 	push xde
@@ -4333,7 +4333,7 @@ SeqAlt3_CommitWrite:
 	pop xde
 	popw ix
 	ret
-SeqAlt3_RollbackWrite:
+SeqBuf_VoiceMap_RollbackWrite:
 	; --- Sub 3: call EF2FBC with XDE=0x0201C1 (14 bytes) ---
 	pushw ix
 	push xde
@@ -4342,14 +4342,14 @@ SeqAlt3_RollbackWrite:
 	pop xde
 	popw ix
 	ret
-SeqAlt3_SaveReadPtr:
+SeqBuf_VoiceMap_SaveReadPtr:
 	; --- Sub 4: copy (0x0201BB)->HL->(0x0201B9) (13 bytes) ---
 	pushw hl
 	ld16_24	hl, 131515
 	st16_24	131513, hl
 	popw hl
 	ret
-SeqAlt3_AdvanceCheckpoint:
+SeqBuf_VoiceMap_AdvanceCheckpoint:
 	; --- Sub 5: copy (0x0201BD)->HL->(0x0201BB) (13 bytes) ---
 	pushw hl
 	ld16_24	hl, 131517
@@ -4358,7 +4358,7 @@ SeqAlt3_AdvanceCheckpoint:
 	ret
 
 
-SeqAlt4_ReadByte:
+SeqBuf_NoteEvent_ReadByte:
 	pushw ix
 	push xde
 	lda_24 xde, 0x0202cb
@@ -4367,7 +4367,7 @@ SeqAlt4_ReadByte:
 	popw ix
 	ret
 
-SeqAlt4_WriteByte_Data:
+SeqBuf_NoteEvent_WriteByte_Data:
 	.byte 0xee, 0x0c, 0x00, 0x00, 0x2c, 0x3a, 0x8e, 0x08
 	.byte 0x21, 0xf2, 0xcb, 0x02, 0x02, 0x32, 0x1e, 0xe9
 	.byte 0x02, 0x5a, 0x4c, 0xee, 0x0d, 0x0e, 0xee, 0x0c
@@ -4379,7 +4379,7 @@ SeqAlt4_WriteByte_Data:
 	.byte 0x02, 0xf3, 0xdb, 0xa8, 0x66, 0x03, 0x33, 0xff
 	.byte 0xff, 0x0e, 0xd2, 0xc9, 0x02, 0x02, 0x23, 0x0e
 
-SeqAlt4_Flush:
+SeqBuf_NoteEvent_Flush:
 	pushw ix
 	push xde
 	lda_24 xde, 0x0202cb
@@ -4389,7 +4389,7 @@ SeqAlt4_Flush:
 	ret
 
 
-SeqAlt4_SaveWritePtr:
+SeqBuf_NoteEvent_SaveWritePtr:
 	pushw	hl
 	ld16_24	hl, 131779
 	st16_24	131777, hl
@@ -4427,7 +4427,7 @@ SeqAlt4_SaveWritePtr:
 	popw	ix
 	ret
 
-SeqAlt4_WriteByte_Block:
+SeqBuf_NoteEvent_WriteByte_Block:
 	.byte 0xee, 0x0c, 0x00, 0x00, 0x2c, 0x3a, 0x8e, 0x08
 	.byte 0x21, 0xf2, 0xd5, 0x03, 0x02, 0x32, 0x1e, 0x3b
 	.byte 0x02, 0x5a, 0x4c, 0xee, 0x0d, 0x0e, 0xee, 0x0c
@@ -4439,7 +4439,7 @@ SeqAlt4_WriteByte_Block:
 	.byte 0x02, 0xf3, 0xdb, 0xa8, 0x66, 0x03, 0x33, 0xff
 	.byte 0xff, 0x0e, 0xd2, 0xd3, 0x03, 0x02, 0x23, 0x0e
 
-SeqAlt5_Flush:
+SeqBuf_SoundEdit_Flush:
 	pushw ix
 	push xde
 	lda_24 xde, 0x0203d5
@@ -4448,14 +4448,14 @@ SeqAlt5_Flush:
 	popw ix
 	ret
 
-SeqAlt5_SaveWritePtr:
+SeqBuf_SoundEdit_SaveWritePtr:
 	; --- Sub 1: copy (0x0203CD)->HL->(0x0203CB) (13 bytes) ---
 	pushw hl
 	ld16_24	hl, 132045
 	st16_24	132043, hl
 	popw hl
 	ret
-SeqAlt5_CommitWrite:
+SeqBuf_SoundEdit_CommitWrite:
 	; --- Sub 2: call EF2FA1 with XDE=0x0203D5 (14 bytes) ---
 	pushw ix
 	push xde
@@ -4464,7 +4464,7 @@ SeqAlt5_CommitWrite:
 	pop xde
 	popw ix
 	ret
-SeqAlt5_RollbackWrite:
+SeqBuf_SoundEdit_RollbackWrite:
 	; --- Sub 3: call EF2FBC with XDE=0x0203D5 (14 bytes) ---
 	pushw ix
 	push xde
@@ -4473,14 +4473,14 @@ SeqAlt5_RollbackWrite:
 	pop xde
 	popw ix
 	ret
-SeqAlt5_SaveReadPtr:
+SeqBuf_SoundEdit_SaveReadPtr:
 	; --- Sub 4: copy (0x0203CF)->HL->(0x0203CD) (13 bytes) ---
 	pushw hl
 	ld16_24	hl, 132047
 	st16_24	132045, hl
 	popw hl
 	ret
-SeqAlt5_AdvanceCheckpoint:
+SeqBuf_SoundEdit_AdvanceCheckpoint:
 	; --- Sub 5: copy (0x0203D1)->HL->(0x0203CF) (13 bytes) ---
 	pushw hl
 	ld16_24	hl, 132049
@@ -4489,7 +4489,7 @@ SeqAlt5_AdvanceCheckpoint:
 	ret
 
 
-SeqAlt5_ReadByte:
+SeqBuf_SoundEdit_ReadByte:
 	pushw ix
 	push xde
 	lda_24 xde, 0x0204df
@@ -4507,7 +4507,7 @@ LABEL_EF2E39:
 	.byte 0x85, 0x21, 0x1e, 0x71, 0x01, 0xed, 0x61, 0xd9
 	.byte 0x1c, 0xf6, 0x5a, 0x5c, 0x5d, 0xee, 0x0d, 0x0e
 
-SeqAlt4_CheckSongEnd:
+SeqBuf_NoteEvent_CheckSongEnd:
 	ld16_24 xhl, 0x0204db
 	cpda16_24 xhl, 132311
 	lds hl, 0
@@ -4875,11 +4875,11 @@ Seq_RingBuf_WriteByte_Store:
 	ret
 
 
-Seq_RingBuf_Nop:
+SeqDMA_Nop:
 	ret
 
 
-Seq_MultiWrite_Alt4:
+SeqDMA_MultiWrite_NoteEvent:
 	dec 6, xsp
 	pushw iz
 	ld (xsp + 2), xbc
@@ -4888,29 +4888,29 @@ Seq_MultiWrite_Alt4:
 	ld a, (xsp + 6)
 	extz wa
 	cps wa, 0
-	jr ule, Seq_MultiWrite_Alt4_Done
+	jr ule, SeqDMA_MultiWrite_NoteEvent_Done
 
-Seq_MultiWrite_Alt4_Loop:
+SeqDMA_MultiWrite_NoteEvent_Loop:
 	ld xwa, (xsp + 2)
 	ld_spib C, 0xE0
 	ld (xsp + 2), xwa
 	extz bc
 	pushw bc
-	call SeqAlt4_WriteByte_Block
+	call SeqBuf_NoteEvent_WriteByte_Block
 	inc 2, xsp
 	inc 1, iz
 	ld a, (xsp + 6)
 	extz wa
 	cp iz, wa
-	jr c, Seq_MultiWrite_Alt4_Loop
+	jr c, SeqDMA_MultiWrite_NoteEvent_Loop
 
-Seq_MultiWrite_Alt4_Done:
+SeqDMA_MultiWrite_NoteEvent_Done:
 	popw iz
 	inc 6, xsp
 	ret
 
 
-Seq_MultiWrite_Alt3:
+SeqDMA_MultiWrite_VoiceMap:
 	dec 6, xsp
 	pushw iz
 	ld (xsp + 2), xbc
@@ -4919,28 +4919,28 @@ Seq_MultiWrite_Alt3:
 	ld a, (xsp + 6)
 	extz wa
 	cps wa, 0
-	jr ule, Seq_MultiWrite_Alt3_Done
+	jr ule, SeqDMA_MultiWrite_VoiceMap_Done
 
-Seq_MultiWrite_Alt3_Loop:
+SeqDMA_MultiWrite_VoiceMap_Loop:
 	ld xwa, (xsp + 2)
 	ld_spib C, 0xE0
 	ld (xsp + 2), xwa
 	extz bc
 	pushw bc
-	call SeqAlt3_WriteByte
+	call SeqBuf_VoiceMap_WriteByte
 	inc 2, xsp
 	inc 1, iz
 	ld a, (xsp + 6)
 	extz wa
 	cp iz, wa
-	jr c, Seq_MultiWrite_Alt3_Loop
+	jr c, SeqDMA_MultiWrite_VoiceMap_Loop
 
-Seq_MultiWrite_Alt3_Done:
+SeqDMA_MultiWrite_VoiceMap_Done:
 	popw iz
 	inc 6, xsp
 	ret
 
-Seq_MultiWrite_Alt1:
+SeqDMA_MultiWrite_DspSysEx:
 	dec 6, xsp
 	pushw iz
 	ld (xsp + 2), xbc
@@ -4949,29 +4949,29 @@ Seq_MultiWrite_Alt1:
 	ld a, (xsp + 6)
 	extz wa
 	cps wa, 0
-	jr ule, Seq_MultiWrite_Alt1_Done
+	jr ule, SeqDMA_MultiWrite_DspSysEx_Done
 
-Seq_MultiWrite_Alt1_Loop:
+SeqDMA_MultiWrite_DspSysEx_Loop:
 	ld xwa, (xsp + 2)
 	ld_spib C, 0xE0
 	ld (xsp + 2), xwa
 	extz bc
 	pushw bc
-	call SeqAlt2_WriteByte
+	call SeqBuf_DspSysEx_WriteByte
 	inc 2, xsp
 	inc 1, iz
 	ld a, (xsp + 6)
 	extz wa
 	cp iz, wa
-	jr c, Seq_MultiWrite_Alt1_Loop
+	jr c, SeqDMA_MultiWrite_DspSysEx_Loop
 
-Seq_MultiWrite_Alt1_Done:
+SeqDMA_MultiWrite_DspSysEx_Done:
 	popw iz
 	inc 6, xsp
 	ret
 
 
-Seq_MultiWrite_Alt5:
+SeqDMA_MultiWrite_SoundEdit:
 	dec 6, xsp
 	pushw iz
 	ld (xsp + 2), xbc
@@ -4980,9 +4980,9 @@ Seq_MultiWrite_Alt5:
 	ld a, (xsp + 6)
 	extz wa
 	cps wa, 0
-	jr ule, Seq_MultiWrite_Alt5_Done
+	jr ule, SeqDMA_MultiWrite_SoundEdit_Done
 
-Seq_MultiWrite_Alt5_Loop:
+SeqDMA_MultiWrite_SoundEdit_Loop:
 	ld xwa, (xsp + 2)
 	ld_spib C, 0xE0
 	ld (xsp + 2), xwa
@@ -4994,33 +4994,33 @@ Seq_MultiWrite_Alt5_Loop:
 	ld a, (xsp + 6)
 	extz wa
 	cp iz, wa
-	jr c, Seq_MultiWrite_Alt5_Loop
+	jr c, SeqDMA_MultiWrite_SoundEdit_Loop
 
-Seq_MultiWrite_Alt5_Done:
+SeqDMA_MultiWrite_SoundEdit_Done:
 	popw iz
 	inc 6, xsp
 	ret
 
 
-Seq_WriteMidi90:
+SeqDMA_WriteMidi_NoteOn:
 	push xiz
 	ld xiz, xbc
 	ld a, (xiz)
 	cp a, 0x90
-	jr nz, Seq_WriteMidi90_Done
+	jr nz, SeqDMA_WriteMidi_NoteOn_Done
 	inc 1, xiz
 	ld a, (xiz)
 	extz wa
 	pushw wa
-	call SeqAlt4_WriteByte_Data
+	call SeqBuf_NoteEvent_WriteByte_Data
 	inc 1, xiz
 	ld a, (xiz)
 	extz wa
 	pushw wa
-	call SeqAlt4_WriteByte_Data
+	call SeqBuf_NoteEvent_WriteByte_Data
 	inc 4, xsp
 
-Seq_WriteMidi90_Done:
+SeqDMA_WriteMidi_NoteOn_Done:
 	pop xiz
 	ret
 

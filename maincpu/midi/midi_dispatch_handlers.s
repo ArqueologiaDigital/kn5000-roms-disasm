@@ -6149,7 +6149,7 @@ LABEL_FD5D0C:
 	ldw iz, 0xFFFE
 
 LABEL_FD5D10:
-	call SeqAlt1_CheckEmpty
+	call SeqBuf_MidiOut_CheckEmpty
 	cps hl, 0
 	jr z, LABEL_FD5D20
 	ld wa, iz

@@ -908,7 +908,7 @@ FDemoText_ScanMIDIChannels:
 	lds bc, 6
 	call sendCOMM
 	ldw (xsp + 6), 0x0
-	call SeqAlt4_CheckSongEnd
+	call SeqBuf_NoteEvent_CheckSongEnd
 	cps hl, 0
 	jr nz, FDemoText_ScanMIDI_ReadResponse
 
@@ -916,7 +916,7 @@ FDemoText_ScanMIDI_WaitLoop:
 	incm 1, (xsp + 6)
 	cpw (xsp + 6), 0x2710
 	jr ugt, FDemoText_ScanMIDI_ReadResponse
-	call SeqAlt4_CheckSongEnd
+	call SeqBuf_NoteEvent_CheckSongEnd
 	cps hl, 0
 	jr z, FDemoText_ScanMIDI_WaitLoop
 
