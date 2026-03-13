@@ -66,7 +66,7 @@ LABEL_E00010:
 
 ; Sequencer ring buffer write dispatch table
 ; Index: DRAM[1508] bits [7:5] (top 3 bits), entries: 8
-; Called from E1DMA_ISR handler (style_data_init.s:5506)
+; Called from E1DMA_ISR handler (system_handlers.s:5506)
 ; Each handler writes event data to the sequencer ring buffer
 SeqRingBuf_WriteDispatch_Table:	; E00012
 	.long Seq_MultiWrite_Alt4	; 0: Multi-write variant 4
@@ -18440,7 +18440,7 @@ LABEL_EF0839:
 .equ INDIRECT_CALL_HELPER, AudioMix_WriteChannelGroup	; indirect call helper in maincpu
 
 	.include "shared/boot_call_init_handlers.s"
-	.include "style_data_init.s"
+	.include "system_handlers.s"
 
 ; =============================================================================
 ; VGA Initialization Code - Shared with table_data ROM

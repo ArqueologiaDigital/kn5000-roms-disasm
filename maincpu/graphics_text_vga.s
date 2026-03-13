@@ -2329,7 +2329,7 @@ BitMapOut:
 	lds32 xiz, 0
 
 	.include "bitmap_out_routines.s"
-	.include "mode_screens.s"
+	.include "ui_mode_handlers.s"
 PmBankScreenProc:
 	st_dri3b L, 0xFD, 0xE8, 0xFE
 	push xiz
