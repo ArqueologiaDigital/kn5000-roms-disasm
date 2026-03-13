@@ -374,6 +374,29 @@ The issue tracker is:
 
 This policy ensures the disassembly remains useful for understanding the firmware, not just rebuilding it.
 
+### Visual Alignment in Tables & Include Blocks (STRICT POLICY)
+
+When a group of lines share the same structure (e.g., label + directive, label + `.include`, label + `.long`, etc.), **tab-align the directives to a common column** so the block reads as a visual table. This applies to:
+
+- **Include blocks:** Labels and `.include`/`.incbin` directives aligned to the same column
+- **Pointer tables:** Labels and `.long` targets aligned
+- **Data tables:** Parallel `.byte`/`.short`/`.ascii` entries with comments aligned
+- **Dispatch tables:** Handler labels and jump targets aligned
+
+Use tabs (not spaces) to reach the alignment column. The column should be the next tab stop after the longest label in the block. Example:
+
+```asm
+; WRONG - ragged alignment
+SOUND_DATA_PIANO:	.include "audio/sound_data_piano.s"
+SOUND_DATA_MALLET_ORCH_PERC:	.include "audio/sound_data_mallet_orch_perc.s"
+
+; CORRECT - visually aligned columns
+SOUND_DATA_PIANO:		.include "audio/sound_data_piano.s"
+SOUND_DATA_MALLET_ORCH_PERC:	.include "audio/sound_data_mallet_orch_perc.s"
+```
+
+Apply this whenever editing or creating table-like blocks of assembly. When touching existing unaligned blocks, align them as part of the change.
+
 ### String Literals in Disassembly (STRICT POLICY)
 
 **When data is clearly readable text, it MUST be represented as a string literal, not raw bytes.**
