@@ -120,6 +120,35 @@ def fmt_widget(data, off):
             f"  /* {hname} */")
 
 
+def fmt_lcd_byte(b):
+    """Format a byte as a C char literal, LCD char define, or hex value."""
+    if b == 0x88:
+        return 'LCD_CHAR_FLAT'
+    elif b == 0x8c:
+        return 'LCD_CHAR_SHARP'
+    elif b == 0x8d:
+        return 'LCD_CHAR_VBAR'
+    elif b == 0x8e:
+        return 'LCD_CHAR_DARROW'
+    elif 0x20 <= b < 0x7f:
+        c = chr(b)
+        if c in ("'", '\\'):
+            return f"'\\{c}'"
+        return f"'{c}'"
+    else:
+        return f'0x{b:02x}'
+
+
+def fmt_raw_lcd(data, start, end, indent='\t\t', width=16):
+    """Format raw bytes using char literals for printable bytes, hex for others."""
+    lines = []
+    for i in range(start, end, width):
+        chunk = data[i:min(i + width, end)]
+        parts = ', '.join(fmt_lcd_byte(b) for b in chunk)
+        lines.append(f'{indent}{parts},')
+    return '\n'.join(lines)
+
+
 def fmt_raw(data, start, end, indent='\t\t', width=16):
     """Format raw bytes as C hex initializer."""
     lines = []
@@ -338,18 +367,18 @@ def main():
     off += 10
     out.append(f'\t.row_label_3 = {fmt_ref_ex(raw, off)}')
     off += 10
-    out.append(f'\t.row_ref_1   = {fmt_ref1(raw, off, "param=45")}')
+    out.append(f'\t.row_ref_1   = {fmt_ref1(raw, off)}')
     off += 5
-    out.append(f'\t.row_ref_2   = {fmt_ref1(raw, off, "param=45")}')
+    out.append(f'\t.row_ref_2   = {fmt_ref1(raw, off)}')
     off += 5
-    out.append(f'\t.row_ref_3   = {fmt_ref1(raw, off, "param=45")}')
+    out.append(f'\t.row_ref_3   = {fmt_ref1(raw, off)}')
     off += 5
-    out.append(f'\t.nop_pad     = {fmt_nop_10(raw, off, "NOP/PAD")}')
+    out.append(f'\t.nop_pad     = {fmt_nop_10(raw, off)}')
     off += 10
     assert off == CONTROL, f"row_labels end: expected {CONTROL}, got {off}"
     out.append('')
 
-    # --- Control widgets (raw) ---
+    # --- Control widgets (raw — complex interleaved data with inline text) ---
     out.append('\t/* Control widgets (complex interleaved STRING + WIDGET data) */')
     out.append('\t.control_widgets = {')
     out.append(fmt_raw(raw, CONTROL, PARAM_WIDGETS))
@@ -385,31 +414,62 @@ def main():
     out.append('\t},')
     out.append('')
 
-    # --- Chord root names ---
-    out.append('\t/* Chord root names: C Db D Eb E F F# G Ab A Bb B */')
+    # --- Chord root names (2 bytes each: 12 notes + padding) ---
+    out.append('\t/* Chord root names (2 chars each): " ", C, Db, D, Eb, E, F, F#, G, Ab, A, Bb, B, padding */')
     out.append('\t.chord_root_names = {')
-    out.append(fmt_raw(raw, CHORD_ROOTS, CHORD_TYPES))
+    off = CHORD_ROOTS
+    entries = []
+    for i in range(0, 32, 2):
+        b0, b1 = raw[off + i], raw[off + i + 1]
+        entries.append(fmt_lcd_byte(b0) + ', ' + fmt_lcd_byte(b1))
+    # Format as groups of entries with trailing comments
+    root_labels = ['pad', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B', 'pad', 'pad', 'pad']
+    for i, (entry, label) in enumerate(zip(entries, root_labels)):
+        comma = ',' if i < len(entries) - 1 else ''
+        out.append(f'\t\t{entry}{comma}')
     out.append('\t},')
     out.append('')
 
-    # --- Chord type names ---
-    out.append('\t/* Chord type names (Maj7, aug, min, dim, 7sus4, etc.) */')
+    # --- Chord type names (5 bytes each) ---
+    CHORD_TYPE_LABELS = [
+        '(none)', '(none)', '7', 'Maj7', 'aug', 'min', 'min7', 'dim',
+        'm7b5', 'mM7', '7sus4', '6', 'aug7', 'b5', '7b5', '79',
+        '7b9', 'M79', '69', 'm6', 'mb5', 'm79', 'm69', 'sus4',
+        '7#9', 'M7b5', 'M7#5', 'mM7b5', '13', '9#5', 'b9 13', '#9 13',
+        'b13', 'b9b13', '#9b13', '13', 'b13', '7#11', 'm7 11', '+7#11',
+        'add9', 'madd9', 'pad', 'pad', 'pad', 'pad', 'pad', 'pad',
+    ]
+    # 242 = 48*5 + 2 padding
+    out.append('\t/* Chord type names (5 chars each, 48 entries + 2-byte pad) */')
     out.append('\t.chord_type_names = {')
-    out.append(fmt_raw(raw, CHORD_TYPES, FOOTER_LABELS))
+    off = CHORD_TYPES
+    for i in range(48):
+        chunk = raw[off + i*5 : off + i*5 + 5]
+        parts = ', '.join(fmt_lcd_byte(b) for b in chunk)
+        label = CHORD_TYPE_LABELS[i] if i < len(CHORD_TYPE_LABELS) else ''
+        out.append(f'\t\t{parts},  /* {label} */')
+    # Last 2 bytes of padding
+    pad = raw[off + 240], raw[off + 241]
+    out.append(f'\t\t{fmt_lcd_byte(pad[0])}, {fmt_lcd_byte(pad[1])},')
     out.append('\t},')
     out.append('')
 
-    # --- Footer labels ---
-    out.append('\t/* Footer labels and control bytes */')
+    # --- Footer labels (40 bytes of spaces) ---
+    out.append('\t/* Footer labels (40 spaces) */')
     out.append('\t.footer_labels = {')
-    out.append(fmt_raw(raw, FOOTER_LABELS, SETUP_CONTROL))
+    parts = ', '.join(fmt_lcd_byte(raw[FOOTER_LABELS + i]) for i in range(40))
+    out.append(f'\t\t{parts},')
     out.append('\t},')
     out.append('')
 
     # --- Setup/control data ---
+    # First 46 bytes are text (40 spaces + "_ 7 6 "), rest is binary control data
     out.append('\t/* SETUP/CONTROL blocks with coordinate arrays */')
     out.append('\t.setup_control_data = {')
-    out.append(fmt_raw(raw, SETUP_CONTROL, CHORD_BITMAP))
+    text_end = SETUP_CONTROL + 46
+    parts = ', '.join(fmt_lcd_byte(raw[SETUP_CONTROL + i]) for i in range(46))
+    out.append(f'\t\t{parts},')
+    out.append(fmt_raw(raw, text_end, CHORD_BITMAP))
     out.append('\t},')
     out.append('')
 
