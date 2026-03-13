@@ -309,76 +309,74 @@ const screendata_main_t StyleUI_ScreenData_Main
 		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 79, .y = 22 },  /* chord_quality */
 	},
 
-	/* Chord root names (2 chars each): " ", C, Db, D, Eb, E, F, F#, G, Ab, A, Bb, B, padding */
 	.chord_root_names = {
-		' ', ' ',
-		'C', ' ',
-		'D', LCD_CHAR_FLAT,
-		'D', ' ',
-		'E', LCD_CHAR_FLAT,
-		'E', ' ',
-		'F', ' ',
-		'F', LCD_CHAR_SHARP,
-		'G', ' ',
-		'A', LCD_CHAR_FLAT,
-		'A', ' ',
-		'B', LCD_CHAR_FLAT,
-		'B', ' ',
-		' ', ' ',
-		' ', ' ',
-		' ', ' '
+		CHORD_ROOT(  ' ',   ' '),  /* pad */
+		CHORD_ROOT(  'C',   ' '),  /* C */
+		CHORD_ROOT(  'D',  FLAT),  /* Db */
+		CHORD_ROOT(  'D',   ' '),  /* D */
+		CHORD_ROOT(  'E',  FLAT),  /* Eb */
+		CHORD_ROOT(  'E',   ' '),  /* E */
+		CHORD_ROOT(  'F',   ' '),  /* F */
+		CHORD_ROOT(  'F', SHARP),  /* F# */
+		CHORD_ROOT(  'G',   ' '),  /* G */
+		CHORD_ROOT(  'A',  FLAT),  /* Ab */
+		CHORD_ROOT(  'A',   ' '),  /* A */
+		CHORD_ROOT(  'B',  FLAT),  /* Bb */
+		CHORD_ROOT(  'B',   ' '),  /* B */
+		CHORD_ROOT(  ' ',   ' '),  /* pad */
+		CHORD_ROOT(  ' ',   ' '),  /* pad */
+		CHORD_ROOT(  ' ',   ' '),  /* pad */
 	},
 
-	/* Chord type names (5 chars each, 48 entries + 2-byte pad) */
 	.chord_type_names = {
-		' ', ' ', ' ', ' ', ' ',  /* (none) */
-		' ', ' ', ' ', ' ', ' ',  /* (none) */
-		'7', ' ', ' ', ' ', ' ',  /* 7 */
-		'M', 'a', 'j', '7', ' ',  /* Maj7 */
-		'a', 'u', 'g', ' ', ' ',  /* aug */
-		'm', 'i', 'n', ' ', ' ',  /* min */
-		'm', 'i', 'n', '7', ' ',  /* min7 */
-		'd', 'i', 'm', ' ', ' ',  /* dim */
-		'm', '7', LCD_CHAR_FLAT, '5', ' ',  /* m7b5 */
-		'm', 'M', '7', ' ', ' ',  /* mM7 */
-		'7', 's', 'u', 's', '4',  /* 7sus4 */
-		'6', ' ', ' ', ' ', ' ',  /* 6 */
-		'a', 'u', 'g', '7', ' ',  /* aug7 */
-		' ', ' ', LCD_CHAR_FLAT, '5', ' ',  /* b5 */
-		'7', ' ', LCD_CHAR_FLAT, '5', ' ',  /* 7b5 */
-		'7', '9', ' ', ' ', ' ',  /* 79 */
-		'7', ' ', LCD_CHAR_FLAT, '9', ' ',  /* 7b9 */
-		'M', '7', '9', ' ', ' ',  /* M79 */
-		'6', '9', ' ', ' ', ' ',  /* 69 */
-		'm', '6', ' ', ' ', ' ',  /* m6 */
-		'm', ' ', LCD_CHAR_FLAT, '5', ' ',  /* mb5 */
-		'm', '7', '9', ' ', ' ',  /* m79 */
-		'm', '6', '9', ' ', ' ',  /* m69 */
-		's', 'u', 's', '4', ' ',  /* sus4 */
-		'7', ' ', LCD_CHAR_SHARP, '9', ' ',  /* 7#9 */
-		'M', '7', LCD_CHAR_FLAT, '5', ' ',  /* M7b5 */
-		'M', '7', LCD_CHAR_SHARP, '5', ' ',  /* M7#5 */
-		'm', 'M', '7', LCD_CHAR_FLAT, '5',  /* mM7b5 */
-		' ', ' ', ' ', '1', '3',  /* 13 */
-		'9', LCD_CHAR_SHARP, '5', ' ', ' ',  /* 9#5 */
-		LCD_CHAR_FLAT, '9', ' ', '1', '3',  /* b9 13 */
-		LCD_CHAR_SHARP, '9', ' ', '1', '3',  /* #9 13 */
-		' ', ' ', LCD_CHAR_FLAT, '1', '3',  /* b13 */
-		LCD_CHAR_FLAT, '9', LCD_CHAR_FLAT, '1', '3',  /* b9b13 */
-		LCD_CHAR_SHARP, '9', LCD_CHAR_FLAT, '1', '3',  /* #9b13 */
-		' ', ' ', ' ', '1', '3',  /* 13 */
-		' ', ' ', LCD_CHAR_FLAT, '1', '3',  /* b13 */
-		'7', ' ', LCD_CHAR_SHARP, '1', '1',  /* 7#11 */
-		'm', '7', ' ', '1', '1',  /* m7 11 */
-		'+', '7', LCD_CHAR_SHARP, '1', '1',  /* +7#11 */
-		' ', 'a', 'd', 'd', '9',  /* add9 */
-		'm', 'a', 'd', 'd', '9',  /* madd9 */
-		' ', ' ', ' ', ' ', ' ',  /* pad */
-		' ', ' ', ' ', ' ', ' ',  /* pad */
-		' ', ' ', ' ', ' ', ' ',  /* pad */
-		' ', ' ', ' ', ' ', ' ',  /* pad */
-		' ', ' ', ' ', ' ', ' ',  /* pad */
-		' ', ' ', ' ', ' ', ' ',  /* pad */
+		CHORD_TYPE(  ' ',   ' ',   ' ',   ' ',   ' '),  /* (none) */
+		CHORD_TYPE(  ' ',   ' ',   ' ',   ' ',   ' '),  /* (none) */
+		CHORD_TYPE(  '7',   ' ',   ' ',   ' ',   ' '),  /* 7 */
+		CHORD_TYPE(  'M',   'a',   'j',   '7',   ' '),  /* Maj7 */
+		CHORD_TYPE(  'a',   'u',   'g',   ' ',   ' '),  /* aug */
+		CHORD_TYPE(  'm',   'i',   'n',   ' ',   ' '),  /* min */
+		CHORD_TYPE(  'm',   'i',   'n',   '7',   ' '),  /* min7 */
+		CHORD_TYPE(  'd',   'i',   'm',   ' ',   ' '),  /* dim */
+		CHORD_TYPE(  'm',   '7',  FLAT,   '5',   ' '),  /* m7♭5 */
+		CHORD_TYPE(  'm',   'M',   '7',   ' ',   ' '),  /* mM7 */
+		CHORD_TYPE(  '7',   's',   'u',   's',   '4'),  /* 7sus4 */
+		CHORD_TYPE(  '6',   ' ',   ' ',   ' ',   ' '),  /* 6 */
+		CHORD_TYPE(  'a',   'u',   'g',   '7',   ' '),  /* aug7 */
+		CHORD_TYPE(  ' ',   ' ',  FLAT,   '5',   ' '),  /* ♭5 */
+		CHORD_TYPE(  '7',   ' ',  FLAT,   '5',   ' '),  /* 7♭5 */
+		CHORD_TYPE(  '7',   '9',   ' ',   ' ',   ' '),  /* 79 */
+		CHORD_TYPE(  '7',   ' ',  FLAT,   '9',   ' '),  /* 7♭9 */
+		CHORD_TYPE(  'M',   '7',   '9',   ' ',   ' '),  /* M79 */
+		CHORD_TYPE(  '6',   '9',   ' ',   ' ',   ' '),  /* 69 */
+		CHORD_TYPE(  'm',   '6',   ' ',   ' ',   ' '),  /* m6 */
+		CHORD_TYPE(  'm',   ' ',  FLAT,   '5',   ' '),  /* m♭5 */
+		CHORD_TYPE(  'm',   '7',   '9',   ' ',   ' '),  /* m79 */
+		CHORD_TYPE(  'm',   '6',   '9',   ' ',   ' '),  /* m69 */
+		CHORD_TYPE(  's',   'u',   's',   '4',   ' '),  /* sus4 */
+		CHORD_TYPE(  '7',   ' ', SHARP,   '9',   ' '),  /* 7♯9 */
+		CHORD_TYPE(  'M',   '7',  FLAT,   '5',   ' '),  /* M7♭5 */
+		CHORD_TYPE(  'M',   '7', SHARP,   '5',   ' '),  /* M7♯5 */
+		CHORD_TYPE(  'm',   'M',   '7',  FLAT,   '5'),  /* mM7♭5 */
+		CHORD_TYPE(  ' ',   ' ',   ' ',   '1',   '3'),  /* 13 */
+		CHORD_TYPE(  '9', SHARP,   '5',   ' ',   ' '),  /* 9♯5 */
+		CHORD_TYPE( FLAT,   '9',   ' ',   '1',   '3'),  /* ♭9 13 */
+		CHORD_TYPE(SHARP,   '9',   ' ',   '1',   '3'),  /* ♯9 13 */
+		CHORD_TYPE(  ' ',   ' ',  FLAT,   '1',   '3'),  /* ♭13 */
+		CHORD_TYPE( FLAT,   '9',  FLAT,   '1',   '3'),  /* ♭9♭13 */
+		CHORD_TYPE(SHARP,   '9',  FLAT,   '1',   '3'),  /* ♯9♭13 */
+		CHORD_TYPE(  ' ',   ' ',   ' ',   '1',   '3'),  /* 13 */
+		CHORD_TYPE(  ' ',   ' ',  FLAT,   '1',   '3'),  /* ♭13 */
+		CHORD_TYPE(  '7',   ' ', SHARP,   '1',   '1'),  /* 7♯11 */
+		CHORD_TYPE(  'm',   '7',   ' ',   '1',   '1'),  /* m7 11 */
+		CHORD_TYPE(  '+',   '7', SHARP,   '1',   '1'),  /* +7♯11 */
+		CHORD_TYPE(  ' ',   'a',   'd',   'd',   '9'),  /* add9 */
+		CHORD_TYPE(  'm',   'a',   'd',   'd',   '9'),  /* madd9 */
+		CHORD_TYPE(  ' ',   ' ',   ' ',   ' ',   ' '),  /* pad */
+		CHORD_TYPE(  ' ',   ' ',   ' ',   ' ',   ' '),  /* pad */
+		CHORD_TYPE(  ' ',   ' ',   ' ',   ' ',   ' '),  /* pad */
+		CHORD_TYPE(  ' ',   ' ',   ' ',   ' ',   ' '),  /* pad */
+		CHORD_TYPE(  ' ',   ' ',   ' ',   ' ',   ' '),  /* pad */
+		CHORD_TYPE(  ' ',   ' ',   ' ',   ' ',   ' '),  /* pad */
 		' ', ' ',
 	},
 

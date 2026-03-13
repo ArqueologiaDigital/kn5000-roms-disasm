@@ -149,6 +149,18 @@ typedef SD_MESSAGE_TYPE(13) sd_message_13_t; /* "Are You Sure?" */
 #define LCD_CHAR_VBAR   0x8D  /* | (up arrow) */
 #define LCD_CHAR_DARROW 0x8E  /* ~ (down arrow) */
 
+/* Short aliases for chord name tables */
+#define FLAT  LCD_CHAR_FLAT
+#define SHARP LCD_CHAR_SHARP
+
+/* ── Chord name table macros ───────────────────────────────── */
+
+/** Chord root entry (2 chars, e.g. " C", "D♭", "F♯") */
+#define CHORD_ROOT(a, b)  (a), (b)
+
+/** Chord type entry (5 chars, right-padded with spaces) */
+#define CHORD_TYPE(a, b, c, d, e)  (a), (b), (c), (d), (e)
+
 /* ── Widget command (op=0x02, sub != 0x0A) ─────────────────── */
 
 /** WIDGET: UI widget element (15 bytes)

@@ -120,12 +120,12 @@ def fmt_widget(data, off):
             f"  /* {hname} */")
 
 
-def fmt_lcd_byte(b):
+def fmt_lcd_byte(b, short_names=False):
     """Format a byte as a C char literal, LCD char define, or hex value."""
     if b == 0x88:
-        return 'LCD_CHAR_FLAT'
+        return 'FLAT' if short_names else 'LCD_CHAR_FLAT'
     elif b == 0x8c:
-        return 'LCD_CHAR_SHARP'
+        return 'SHARP' if short_names else 'LCD_CHAR_SHARP'
     elif b == 0x8d:
         return 'LCD_CHAR_VBAR'
     elif b == 0x8e:
@@ -414,43 +414,40 @@ def main():
     out.append('\t},')
     out.append('')
 
-    # --- Chord root names (2 bytes each: 12 notes + padding) ---
-    out.append('\t/* Chord root names (2 chars each): " ", C, Db, D, Eb, E, F, F#, G, Ab, A, Bb, B, padding */')
+    # --- Chord root names (2 bytes each: 16 entries = 32 bytes) ---
+    ROOT_LABELS = [
+        'pad', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#',
+        'G', 'Ab', 'A', 'Bb', 'B', 'pad', 'pad', 'pad',
+    ]
     out.append('\t.chord_root_names = {')
     off = CHORD_ROOTS
-    entries = []
-    for i in range(0, 32, 2):
-        b0, b1 = raw[off + i], raw[off + i + 1]
-        entries.append(fmt_lcd_byte(b0) + ', ' + fmt_lcd_byte(b1))
-    # Format as groups of entries with trailing comments
-    root_labels = ['pad', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B', 'pad', 'pad', 'pad']
-    for i, (entry, label) in enumerate(zip(entries, root_labels)):
-        comma = ',' if i < len(entries) - 1 else ''
-        out.append(f'\t\t{entry}{comma}')
+    for i in range(16):
+        b0, b1 = raw[off + i*2], raw[off + i*2 + 1]
+        a, b = fmt_lcd_byte(b0, short_names=True), fmt_lcd_byte(b1, short_names=True)
+        label = ROOT_LABELS[i]
+        out.append(f'\t\tCHORD_ROOT({a:>5s}, {b:>5s}),  /* {label} */')
     out.append('\t},')
     out.append('')
 
-    # --- Chord type names (5 bytes each) ---
-    CHORD_TYPE_LABELS = [
+    # --- Chord type names (5 bytes each: 48 entries + 2 pad = 242 bytes) ---
+    TYPE_LABELS = [
         '(none)', '(none)', '7', 'Maj7', 'aug', 'min', 'min7', 'dim',
-        'm7b5', 'mM7', '7sus4', '6', 'aug7', 'b5', '7b5', '79',
-        '7b9', 'M79', '69', 'm6', 'mb5', 'm79', 'm69', 'sus4',
-        '7#9', 'M7b5', 'M7#5', 'mM7b5', '13', '9#5', 'b9 13', '#9 13',
-        'b13', 'b9b13', '#9b13', '13', 'b13', '7#11', 'm7 11', '+7#11',
+        'm7♭5', 'mM7', '7sus4', '6', 'aug7', '♭5', '7♭5', '79',
+        '7♭9', 'M79', '69', 'm6', 'm♭5', 'm79', 'm69', 'sus4',
+        '7♯9', 'M7♭5', 'M7♯5', 'mM7♭5', '13', '9♯5', '♭9 13', '♯9 13',
+        '♭13', '♭9♭13', '♯9♭13', '13', '♭13', '7♯11', 'm7 11', '+7♯11',
         'add9', 'madd9', 'pad', 'pad', 'pad', 'pad', 'pad', 'pad',
     ]
-    # 242 = 48*5 + 2 padding
-    out.append('\t/* Chord type names (5 chars each, 48 entries + 2-byte pad) */')
     out.append('\t.chord_type_names = {')
     off = CHORD_TYPES
     for i in range(48):
         chunk = raw[off + i*5 : off + i*5 + 5]
-        parts = ', '.join(fmt_lcd_byte(b) for b in chunk)
-        label = CHORD_TYPE_LABELS[i] if i < len(CHORD_TYPE_LABELS) else ''
-        out.append(f'\t\t{parts},  /* {label} */')
+        parts = ', '.join(f'{fmt_lcd_byte(b, short_names=True):>5s}' for b in chunk)
+        label = TYPE_LABELS[i] if i < len(TYPE_LABELS) else ''
+        out.append(f'\t\tCHORD_TYPE({parts}),  /* {label} */')
     # Last 2 bytes of padding
-    pad = raw[off + 240], raw[off + 241]
-    out.append(f'\t\t{fmt_lcd_byte(pad[0])}, {fmt_lcd_byte(pad[1])},')
+    p0, p1 = raw[off + 240], raw[off + 241]
+    out.append(f"\t\t{fmt_lcd_byte(p0)}, {fmt_lcd_byte(p1)},")
     out.append('\t},')
     out.append('')
 
