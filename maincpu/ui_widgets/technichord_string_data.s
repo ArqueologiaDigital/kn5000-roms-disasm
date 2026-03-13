@@ -148,12 +148,12 @@ LABEL_E86186:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.byte 0x00, 0xff
-Str_Drawbar_Black23:	aligned_string "Black23"
-Str_Drawbar_White23:	aligned_string "White23"
+Str_Drawbar_Black23:		aligned_string "Black23"
+Str_Drawbar_White23:		aligned_string "White23"
 Str_Drawbar_DrawPerc223:	aligned_string "DrawPerc223"
-Str_Drawbar_DrawPerc4:	aligned_string "DrawPerc4"
-Str_Drawbar_Empty:	aligned_string ""
-Str_Drawbar_Drawbar:	aligned_string "Drawbar"
+Str_Drawbar_DrawPerc4:		aligned_string "DrawPerc4"
+Str_Drawbar_Empty:		aligned_string ""
+Str_Drawbar_Drawbar:		aligned_string "Drawbar"
 	.byte 0xf4, 0x63, 0xe8, 0x00, 0xf2, 0x63
 	.byte 0xe8, 0x00, 0xf0, 0x63, 0xe8, 0x00, 0xee, 0x63
 	.byte 0xe8, 0x00, 0xec, 0x63, 0xe8, 0x00, 0xea, 0x63
@@ -223,7 +223,7 @@ AccordionStrNull_E863C6:
 AccordionStrNull_E863CA:
 	.byte 0x00, 0xff
 Str_Accordion_Accordion1:	aligned_string "Accordion1"
-Str_Accordion_Empty:	aligned_string ""
+Str_Accordion_Empty:		aligned_string ""
 Str_Accordion_AccordionPart:	aligned_string "AccordionPart"
 	.byte 0x00, 0xff
 AccordionStrNull_E863EA:
@@ -301,13 +301,13 @@ StrTable_SoftwareVersionComps:
 	.long Str_SoftVer_SoundTable
 	.long Str_SoftVer_Empty2
 	.long Str_SoftVer_Empty1
-Str_SoftVer_Empty1:	aligned_string ""
-Str_SoftVer_Empty2:	aligned_string ""
-Str_SoftVer_SoundTable:	aligned_string "SoundTable"
-Str_SoftVer_SubProgram:	aligned_string "SubProgram"
-Str_SoftVer_MainTable:	aligned_string "MainTable"
+Str_SoftVer_Empty1:		aligned_string ""
+Str_SoftVer_Empty2:		aligned_string ""
+Str_SoftVer_SoundTable:		aligned_string "SoundTable"
+Str_SoftVer_SubProgram:		aligned_string "SubProgram"
+Str_SoftVer_MainTable:		aligned_string "MainTable"
 Str_SoftVer_MainProgram:	aligned_string "MainProgram"
-Str_SoftVer_Softver:	aligned_string "Softver"
+Str_SoftVer_Softver:		aligned_string "Softver"
 	aligned_string "MD_SOUND"
 	aligned_string "TT_SDMENU"
 	aligned_string "TT_SDPART"
@@ -327,7 +327,7 @@ Str_SoftVer_Softver:	aligned_string "Softver"
 	.byte 0x00, 0x00, 0x00, 0x00, 0x66, 0x66, 0xe8, 0x00
 	.long Str_DrawCtrl_MainMemDrawCtrl
 	.long Str_DrawCtrl_Empty
-Str_DrawCtrl_Empty:	aligned_string ""
+Str_DrawCtrl_Empty:		aligned_string ""
 Str_DrawCtrl_MainMemDrawCtrl:	aligned_string "MainMemDrawControl"
 Str_DrawCtrl_MainPreControl:	aligned_string "MainPreControl"
 
@@ -527,7 +527,7 @@ StrTable_ReminderLabel:
 	.long Str_Reminder_Italian
 	.long Str_Reminder_Indonesian
 Str_Reminder_Indonesian:	aligned_string "REMINDER !"
-Str_Reminder_Italian:	.asciz "REMINDER! "
+Str_Reminder_Italian:		.asciz "REMINDER! "
 	.byte 0xff
 Str_Reminder_Spanish:	aligned_string "¡RECUERDE!"
 Str_Reminder_French:	aligned_string "RAPPEL! "
@@ -539,7 +539,7 @@ StrTable_CompletedLabel:
 	.byte 0xe9, 0x00, 0x10, 0x58, 0xe9, 0x00, 0x02, 0x58
 	.byte 0xe9, 0x00
 Str_Completed_Indonesian:	aligned_string "LENGKAPILAH!"
-Str_Completed_Italian:	aligned_string "COMPLETED!"
+Str_Completed_Italian:		aligned_string "COMPLETED!"
 	.byte 0xa1
 	aligned_string "FINALIZADO!"
 	aligned_string "TERMINE!"
@@ -551,7 +551,7 @@ StrTable_PleaseWaitLabel:
 	.byte 0xe9, 0x00, 0x7c, 0x58, 0xe9, 0x00, 0x6a, 0x58
 	.byte 0xe9, 0x00
 Str_PleaseWait_Indonesian:	aligned_string "SILAHKAN TUNGGU!"
-Str_PleaseWait_Italian:	aligned_string "PLEASE WAIT!"
+Str_PleaseWait_Italian:		aligned_string "PLEASE WAIT!"
 	.byte 0xa1
 	.asciz "POR FAVOR, ESPERE!"
 	.byte 0x56, 0x45
@@ -589,17 +589,17 @@ StrTable_GenericError:
 	.long Str_GenericErr_Italian
 	.long Str_GenericErr_Indonesian
 Str_GenericErr_Indonesian:	aligned_string "ERROR!"
-Str_GenericErr_Italian:	aligned_string "ERROR!"
-Str_GenericErr_Spanish:	aligned_string "ERROR!"
-Str_GenericErr_French:	aligned_string "ERREUR!"
-Str_GenericErr_German:	aligned_string "ERROR!"
-Str_GenericErr_English:	aligned_string "ERROR!"
+Str_GenericErr_Italian:		aligned_string "ERROR!"
+Str_GenericErr_Spanish:		aligned_string "ERROR!"
+Str_GenericErr_French:		aligned_string "ERREUR!"
+Str_GenericErr_German:		aligned_string "ERROR!"
+Str_GenericErr_English:		aligned_string "ERROR!"
 	.byte 0x94, 0x60, 0xe9, 0x00, 0x54, 0x60
 	.byte 0xe9, 0x00, 0x00, 0x60, 0xe9, 0x00, 0xb2, 0x5f
 	.byte 0xe9, 0x00, 0xa8, 0x5f, 0xe9, 0x00, 0x5a, 0x5f
 	.byte 0xe9, 0x00
 Str_DiskErr00_Indonesian:	aligned_string "Data pada disk yang Anda pergunakan untuk produk lain (bukan untuk Technics)"
-Str_DiskErr00_Italian:	aligned_string "ERROR 00"
+Str_DiskErr00_Italian:		aligned_string "ERROR 00"
 	aligned_string "Los datos del disco que usted está utilizando son para un aparato diferente."
 	aligned_string "Les informations contenues dans la disquette sont destinées à un autre instrument."
 	.ascii "Die Daten auf dieser Diskette stammen von einem anderen Gerä"
@@ -615,11 +615,11 @@ StrTable_DiskErr01:
 	.long Str_DiskErr01_Italian
 	.long Str_DiskErr01_Indonesian
 Str_DiskErr01_Indonesian:	aligned_string "Kesalahan sudah terjadi ketika disket sedang dipanggil. Harap dicoba lagi."
-Str_DiskErr01_Italian:	aligned_string "ERROR 01"
-Str_DiskErr01_Spanish:	aligned_string "Se ha producido un error mientras se cargaba el disco. Pruebe otra vez."
-Str_DiskErr01_French:	.asciz "Une erreur s'est produite pendant la procédure de chargement. Essayez encore!"
-Str_DiskErr01_German:	aligned_string "Beim Laden von der Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."
-Str_DiskErr01_English:	aligned_string "An error has occurred while the disk was loading. Please try again!"
+Str_DiskErr01_Italian:		aligned_string "ERROR 01"
+Str_DiskErr01_Spanish:		aligned_string "Se ha producido un error mientras se cargaba el disco. Pruebe otra vez."
+Str_DiskErr01_French:		.asciz "Une erreur s'est produite pendant la procédure de chargement. Essayez encore!"
+Str_DiskErr01_German:		aligned_string "Beim Laden von der Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."
+Str_DiskErr01_English:		aligned_string "An error has occurred while the disk was loading. Please try again!"
 	ldb	w, 0x63
 	.byte 0xe9, 0x00, 0x04, 0x63, 0xe9, 0x00, 0xd8, 0x62
 	.byte 0xe9, 0x00, 0xbc, 0x62, 0xe9, 0x00, 0xb2, 0x62
@@ -640,10 +640,10 @@ StrTable_DiskErr03:
 	.long Str_DiskErr03_Italian
 	.long Str_DiskErr03_Indonesian
 Str_DiskErr03_Indonesian:	aligned_string "File yang dicoba untuk dikeluarkan/ditampilkan, kosong.( File didalam disket kosong )"
-Str_DiskErr03_Italian:	aligned_string "ERROR 03"
-Str_DiskErr03_Spanish:	aligned_string "El disco que trató de cargar estaba vacío."
-Str_DiskErr03_French:	aligned_string "Le fichier que vous avez essayé de charger est vide!"
-Str_DiskErr03_German:	aligned_string "Die Diskettenbank, die Sie gerade laden wollen, ist leer."
+Str_DiskErr03_Italian:		aligned_string "ERROR 03"
+Str_DiskErr03_Spanish:		aligned_string "El disco que trató de cargar estaba vacío."
+Str_DiskErr03_French:		aligned_string "Le fichier que vous avez essayé de charger est vide!"
+Str_DiskErr03_German:		aligned_string "Die Diskettenbank, die Sie gerade laden wollen, ist leer."
 	aligned_string "The file that you tried to load is empty."
 StrTable_DiskErr05:
 	.byte 0xe4, 0x65, 0xe9, 0x00, 0x8a, 0x65
@@ -651,8 +651,8 @@ StrTable_DiskErr05:
 	.byte 0xe9, 0x00, 0xdc, 0x64, 0xe9, 0x00, 0x9a, 0x64
 	.byte 0xe9, 0x00
 Str_DiskErr05_Indonesian:	aligned_string "Kesalahan terjadi ketika disket sedang diisi. Harap dicoba lagi."
-Str_DiskErr05_Italian:	aligned_string "ERROR 05"
-Str_DiskErr05_Spanish:	aligned_string "Se ha producido un error mientras se almacenaban datos en el disco. Pruebe otra vez."
+Str_DiskErr05_Italian:		aligned_string "ERROR 05"
+Str_DiskErr05_Spanish:		aligned_string "Se ha producido un error mientras se almacenaban datos en el disco. Pruebe otra vez."
 	aligned_string "Une erreur s'est produite pendant la procédure de sauvegarde. Essayez encore!"
 	aligned_string "Beim Speichern auf die Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."
 	aligned_string "An error has occurred while the disk was saving. Please try again!"
@@ -664,18 +664,18 @@ StrTable_DiskErr06:
 	.long Str_DiskErr06_Italian
 	.long Str_DiskErr06_Indonesian
 Str_DiskErr06_Indonesian:	aligned_string "Disket yang Anda pergunakan sedang dikunci/diprotek. Bukalah proteksinya dan silahkan coba lagi. "
-Str_DiskErr06_Italian:	aligned_string "ERROR 06"
-Str_DiskErr06_Spanish:	aligned_string "El disco que está utilizando está protegido contra escritura. Retire la protección contra escritura y pruebe otra vez."
-Str_DiskErr06_French:	aligned_string "La disquette que vous utilisez est protégée contre l'écriture!Otez la protection de la disquette et recommencez!"
-Str_DiskErr06_German:	aligned_string "Ihre Diskette ist schreibgeschützt. Schieben Sie den Schreibschutz zurück und speichern noch einmal."
-Str_DiskErr06_English:	aligned_string "The disk that you are using is write protected. Please remove the write protection and try again."
+Str_DiskErr06_Italian:		aligned_string "ERROR 06"
+Str_DiskErr06_Spanish:		aligned_string "El disco que está utilizando está protegido contra escritura. Retire la protección contra escritura y pruebe otra vez."
+Str_DiskErr06_French:		aligned_string "La disquette que vous utilisez est protégée contre l'écriture!Otez la protection de la disquette et recommencez!"
+Str_DiskErr06_German:		aligned_string "Ihre Diskette ist schreibgeschützt. Schieben Sie den Schreibschutz zurück und speichern noch einmal."
+Str_DiskErr06_English:		aligned_string "The disk that you are using is write protected. Please remove the write protection and try again."
 StrTable_DiskErr07:
 	.byte 0x8a, 0x69
 	.byte 0xe9, 0x00, 0x52, 0x69, 0xe9, 0x00, 0x08, 0x69
 	.byte 0xe9, 0x00, 0xca, 0x68, 0xe9, 0x00, 0xc0, 0x68
 	.byte 0xe9, 0x00, 0x76, 0x68, 0xe9, 0x00
 Str_DiskErr07_Indonesian:	aligned_string "Disket yang Anda dipergunakan sudah penuh. Harap pergunakan disket lain/"
-Str_DiskErr07_Italian:	aligned_string "ERROR 07"
+Str_DiskErr07_Italian:		aligned_string "ERROR 07"
 	aligned_string "El disco que está utilizando está lleno. Utilice otro disco."
 	.asciz "La disquette que vous utilisez est saturée. Utilisez une autre disquette!"
 	aligned_string "Ihre Diskette ist voll. Benutzen Sie bette eine andere."
@@ -688,11 +688,11 @@ StrTable_DiskErr08:
 	.long Str_DiskErr08_Italian
 	.long Str_DiskErr08_Indonesian
 Str_DiskErr08_Indonesian:	aligned_string "Kesalahan sudah terjadi ketika disket sedang diformat. Disket yang anda pergunakan mungkin rusak. Cobalah format disket lain."
-Str_DiskErr08_Italian:	aligned_string "ERROR 08"
-Str_DiskErr08_Spanish:	.asciz "Se ha producido un error mientras se hacía el formato del disco. El disco que está utilizando puede estar defectuoso. Intente hacer el formato de otro disco."
-Str_DiskErr08_French:	aligned_string "Une erreur s'est produite pendant la procédure de formatage. La disquette que vous utilisez est peut être détériorée. Essayez de formater une autre disquette."
-Str_DiskErr08_German:	aligned_string "Beim Formatieren ist ein Fehler aufgetreten. Benutzen Sie bette eine andere."
-Str_DiskErr08_English:	aligned_string "An error has occurred while the disk was formatting. The disk that you are using may be faulty. Please try formatting another disk."
+Str_DiskErr08_Italian:		aligned_string "ERROR 08"
+Str_DiskErr08_Spanish:		.asciz "Se ha producido un error mientras se hacía el formato del disco. El disco que está utilizando puede estar defectuoso. Intente hacer el formato de otro disco."
+Str_DiskErr08_French:		aligned_string "Une erreur s'est produite pendant la procédure de formatage. La disquette que vous utilisez est peut être détériorée. Essayez de formater une autre disquette."
+Str_DiskErr08_German:		aligned_string "Beim Formatieren ist ein Fehler aufgetreten. Benutzen Sie bette eine andere."
+Str_DiskErr08_English:		aligned_string "An error has occurred while the disk was formatting. The disk that you are using may be faulty. Please try formatting another disk."
 
 
 StrTable_DiskErr09:
@@ -703,11 +703,11 @@ StrTable_DiskErr09:
 	.long Str_DiskErr09_Italian
 	.long Str_DiskErr09_Indonesian
 Str_DiskErr09_Indonesian:	aligned_string "Data didalam disk diprotek, tidak bisa dicopy. Masukkan kode password."
-Str_DiskErr09_Italian:	aligned_string "(ERROR 09)cp_prtct"
-Str_DiskErr09_Spanish:	aligned_string "Los datos del disco están protegidos contra copia. Por favor, ingrese la contraseña."
-Str_DiskErr09_French:	.asciz "Cette disquette est protégée. Veuillez entrer votre mot de passe."
-Str_DiskErr09_German:	aligned_string "Die Daten auf dieser Diskette sind schreibgeschützt. Bitte geben Sie das Password ein."
-Str_DiskErr09_English:	aligned_string "The data on the disk is copy protected. Please enter the password."
+Str_DiskErr09_Italian:		aligned_string "(ERROR 09)cp_prtct"
+Str_DiskErr09_Spanish:		aligned_string "Los datos del disco están protegidos contra copia. Por favor, ingrese la contraseña."
+Str_DiskErr09_French:		.asciz "Cette disquette est protégée. Veuillez entrer votre mot de passe."
+Str_DiskErr09_German:		aligned_string "Die Daten auf dieser Diskette sind schreibgeschützt. Bitte geben Sie das Password ein."
+Str_DiskErr09_English:		aligned_string "The data on the disk is copy protected. Please enter the password."
 StrTable_DiskErr10:
 	.long Str_DiskErr10_English
 	.long Str_DiskErr10_German
@@ -716,18 +716,18 @@ StrTable_DiskErr10:
 	.long Str_DiskErr10_Italian
 	.long Str_DiskErr10_Indonesian
 Str_DiskErr10_Indonesian:	aligned_string "Data  sudah diprotek."
-Str_DiskErr10_Italian:	aligned_string "ERROR 10"
-Str_DiskErr10_Spanish:	aligned_string "Los datos ya están protegidos contra la copia."
-Str_DiskErr10_French:	.asciz "Ces données sont protégées contre la copie!"
-Str_DiskErr10_German:	.asciz "Diese Daten sind bereits kopiergeschützt."
-Str_DiskErr10_English:	aligned_string "The data is already copy protected."
+Str_DiskErr10_Italian:		aligned_string "ERROR 10"
+Str_DiskErr10_Spanish:		aligned_string "Los datos ya están protegidos contra la copia."
+Str_DiskErr10_French:		.asciz "Ces données sont protégées contre la copie!"
+Str_DiskErr10_German:		.asciz "Diese Daten sind bereits kopiergeschützt."
+Str_DiskErr10_English:		aligned_string "The data is already copy protected."
 StrTable_DiskErr11:
 	.byte 0xb8, 0x6f, 0xe9, 0x00, 0x92, 0x6f
 	.byte 0xe9, 0x00, 0x70, 0x6f, 0xe9, 0x00, 0x48, 0x6f
 	.byte 0xe9, 0x00, 0x3e, 0x6f, 0xe9, 0x00, 0x1a, 0x6f
 	.byte 0xe9, 0x00
 Str_DiskErr11_Indonesian:	aligned_string "Password yang anda masukkan salah."
-Str_DiskErr11_Italian:	aligned_string "ERROR 11"
+Str_DiskErr11_Italian:		aligned_string "ERROR 11"
 	aligned_string "La contraseña ingresada es incorrecta."
 	aligned_string "Votre mot de passe est incorrect"
 	aligned_string "Das eingegebene Password ist falsch."
@@ -740,9 +740,9 @@ StrTable_DiskErr12:
 	.long Str_DiskErr12_Italian
 	.long Str_DiskErr12_Indonesian
 Str_DiskErr12_Indonesian:	aligned_string "Batu Baterei sudah lemah. Ganti segera semua batu baterei dengan yang baru."
-Str_DiskErr12_Italian:	aligned_string "ERROR 12"
-Str_DiskErr12_Spanish:	aligned_string "La carga de las baterías es muy baja. Reemplace inmediatamente todas las baterías por baterías nuevas."
-Str_DiskErr12_French:	.asciz "La batterie interne est pratiquement déchargée. Remplacez toutes les piles immédiatement."
+Str_DiskErr12_Italian:		aligned_string "ERROR 12"
+Str_DiskErr12_Spanish:		aligned_string "La carga de las baterías es muy baja. Reemplace inmediatamente todas las baterías por baterías nuevas."
+Str_DiskErr12_French:		.asciz "La batterie interne est pratiquement déchargée. Remplacez toutes les piles immédiatement."
 	aligned_string "Die verbleibende Kapazität der Batterien ist sehr schwach. Ersetzen Sie umgehend alle Batterien gegen neue."
 	aligned_string "The remaining battery power is very low. Replace all the batteries with new ones immediately."
 	.byte 0xd2, 0x72
@@ -765,10 +765,10 @@ StrTable_DiskErr16:
 	.long Str_DiskErr16_Italian
 	.long Str_DiskErr16_Indonesian
 Str_DiskErr16_Indonesian:	aligned_string "Standard MIDI File tidak kompatibel dengan KN-5000 dan tidak bisa dimuat/diisi."
-Str_DiskErr16_Italian:	aligned_string "(ERROR 16)err_cnv"
-Str_DiskErr16_Spanish:	aligned_string "Este archivo MIDI estándar es incompatible con el KN5000 y no puede ser cargado."
-Str_DiskErr16_French:	aligned_string "Cette séquence STANDARD MIDI FILE est incompatible avec le KN5000 et ne peut être chargée."
-Str_DiskErr16_German:	aligned_string "Dieses STANDARD MIDI FILE ist nicht kompatibel zum SX-KN5000 und kann daher nicht geladen werden."
+Str_DiskErr16_Italian:		aligned_string "(ERROR 16)err_cnv"
+Str_DiskErr16_Spanish:		aligned_string "Este archivo MIDI estándar es incompatible con el KN5000 y no puede ser cargado."
+Str_DiskErr16_French:		aligned_string "Cette séquence STANDARD MIDI FILE est incompatible avec le KN5000 et ne peut être chargée."
+Str_DiskErr16_German:		aligned_string "Dieses STANDARD MIDI FILE ist nicht kompatibel zum SX-KN5000 und kann daher nicht geladen werden."
 	aligned_string "This Standard MIDI File is incompatible with the KN5000 and cannot be loaded."
 StrPtr_DiskErr17Table:
 	.byte 0x98, 0x75, 0xe9, 0x00
@@ -779,17 +779,17 @@ StrTable_DiskErr17:
 	.long Str_DiskErr17_Italian
 	.long Str_DiskErr17_Indonesian
 Str_DiskErr17_Indonesian:	aligned_string "Ini tidak STANDARD MIDI FILE."
-Str_DiskErr17_Italian:	aligned_string "(ERROR 17)err_no_midi"
-Str_DiskErr17_Spanish:	aligned_string "Este no es un archivo MIDI estándar."
-Str_DiskErr17_French:	.asciz "Ceci n'est pas une séquence STANDARD MIDI FILE."
-Str_DiskErr17_German:	aligned_string "Dies ist kein STANDARD MIDI FILE."
+Str_DiskErr17_Italian:		aligned_string "(ERROR 17)err_no_midi"
+Str_DiskErr17_Spanish:		aligned_string "Este no es un archivo MIDI estándar."
+Str_DiskErr17_French:		.asciz "Ceci n'est pas une séquence STANDARD MIDI FILE."
+Str_DiskErr17_German:		aligned_string "Dies ist kein STANDARD MIDI FILE."
 	aligned_string "This is not a STANDARD MIDI FILE."
 	.byte 0x58, 0x77, 0xe9, 0x00, 0xf0, 0x76
 	.byte 0xe9, 0x00, 0x98, 0x76, 0xe9, 0x00, 0x3e, 0x76
 	.byte 0xe9, 0x00, 0x26, 0x76, 0xe9, 0x00, 0xd2, 0x75
 	.byte 0xe9, 0x00
 Str_DiskErr18_Indonesian:	aligned_string "Timebase (resolusi PPQ) yang anda coba untuk dimuat bukan 24/48/96/192/288/384 PPQ."
-Str_DiskErr18_Italian:	aligned_string "(ERROR 18)err_timebase"
+Str_DiskErr18_Italian:		aligned_string "(ERROR 18)err_timebase"
 	.byte 0x4c, 0x61
 	aligned_string " base de tiempo (resolución de PPQ) que intenta cargar no es 24/48/96/192/288/384 PPQ."
 	aligned_string "La résolution {PPQ} que vous avez essayé de charger n'est pas 24/48/96/192/288/384 PPQ."
@@ -801,8 +801,8 @@ StrTable_DiskErr19:
 	.byte 0xe9, 0x00, 0x2e, 0x78, 0xe9, 0x00, 0x1e, 0x78
 	.byte 0xe9, 0x00, 0xc6, 0x77, 0xe9, 0x00
 Str_DiskErr19_Indonesian:	aligned_string "Disket ini adalah satu FORMAT 1 MIDI FILE dan tidak dapat dimainkan kembali (Play Back)"
-Str_DiskErr19_Italian:	aligned_string "(ERROR 19)dctp"
-Str_DiskErr19_Spanish:	aligned_string "Este es un archivo MIDI de FORMATO 1 y no puede ser reproducido."
+Str_DiskErr19_Italian:		aligned_string "(ERROR 19)dctp"
+Str_DiskErr19_Spanish:		aligned_string "Este es un archivo MIDI de FORMATO 1 y no puede ser reproducido."
 	aligned_string "Ceci est une séquence STANDARD MIDI FILE au FORMAT 1 et ne peut pas être reproduite dans ce mode."
 	aligned_string "Dies ist ein FORMAT 1 MIDI FILE und kann daher nicht direkt abgespielt werden. Bitte laden Sie diesen Song komplett ein."
 	aligned_string "This is a FORMAT 1 MIDI FILE disk and cannot be played back."
@@ -811,7 +811,7 @@ Str_DiskErr19_Spanish:	aligned_string "Este es un archivo MIDI de FORMATO 1 y no
 	.byte 0xe9, 0x00, 0x0e, 0x7a, 0xe9, 0x00, 0xa2, 0x79
 	.byte 0xe9, 0x00
 Str_DiskErr20_Indonesian:	aligned_string "Satu masalah  terjadi terhadap data Sequencer anda. Ini mungkin berhubungan dengan dikset salah atau rusak."
-Str_DiskErr20_Italian:	aligned_string "ERROR 20"
+Str_DiskErr20_Italian:		aligned_string "ERROR 20"
 	.asciz "Se ha producido un problema con sus datos SEQUENCER. Esto puede deberse a que el disco está estropeado."
 	aligned_string "Je ne peux pas charger le SEQUENCER que vous me demandez! Cela est certainement dû à une perte de données ou à une détérioration de la disquette."
 	aligned_string "Die Sequenzerdaten sind nicht in Ordnung. Das kann an einer beschädigten oder fehlerhaften Diskette liegen."
@@ -864,8 +864,8 @@ StrTable_DiskErr24_Rhythm:
 Str_Err24Rhythm_Indonesian:	aligned_string "Satu Rhythm Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu Rhythm."
 Str_Err24Rhythm_Italian:	aligned_string "ERROR 24"
 Str_Err24Rhythm_Spanish:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al ritmo."
-Str_Err24Rhythm_French:	.asciz "Vous avez déjà choisi une piste pour le rythme! Vous ne pouvez pas assigner deux pistes à celui-ci."
-Str_Err24Rhythm_German:	.asciz "Es ist nicht möglich, zwei RHYTHM-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
+Str_Err24Rhythm_French:		.asciz "Vous avez déjà choisi une piste pour le rythme! Vous ne pouvez pas assigner deux pistes à celui-ci."
+Str_Err24Rhythm_German:		.asciz "Es ist nicht möglich, zwei RHYTHM-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
 	aligned_string "A Rhythm Track already exists. It is impossible to assign two Tracks to Rhythm."
 StrTable_DiskErr24_Chord:
 	.long Str_Err24Chord_English
@@ -875,17 +875,17 @@ StrTable_DiskErr24_Chord:
 	.long Str_Err24Chord_Italian
 	.long Str_Err24Chord_Indonesian
 Str_Err24Chord_Indonesian:	aligned_string "Satu Chord Track sudah ada. tidak mungkin menunjuk 2 Track untuk satu Chord."
-Str_Err24Chord_Italian:	aligned_string "ERROR 24"
-Str_Err24Chord_Spanish:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."
-Str_Err24Chord_French:	aligned_string "Vous avez déjà choisi une piste pour le Chord! Vous ne pouvez pas assigner deux pistes à celui-ci."
-Str_Err24Chord_German:	aligned_string "Es ist nicht möglich, zwei CHORD-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
-Str_Err24Chord_English:	aligned_string "A Chord Track already exists. It is impossible to assign two Tracks to Chord."
+Str_Err24Chord_Italian:		aligned_string "ERROR 24"
+Str_Err24Chord_Spanish:		aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."
+Str_Err24Chord_French:		aligned_string "Vous avez déjà choisi une piste pour le Chord! Vous ne pouvez pas assigner deux pistes à celui-ci."
+Str_Err24Chord_German:		aligned_string "Es ist nicht möglich, zwei CHORD-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
+Str_Err24Chord_English:		aligned_string "A Chord Track already exists. It is impossible to assign two Tracks to Chord."
 	.byte 0x0a, 0x85, 0xe9, 0x00, 0xac, 0x84
 	.byte 0xe9, 0x00, 0x46, 0x84, 0xe9, 0x00, 0xf6, 0x83
 	.byte 0xe9, 0x00, 0xec, 0x83, 0xe9, 0x00, 0x9a, 0x83
 	.byte 0xe9, 0x00
 Str_Err24Ctrl_Indonesian:	aligned_string "Satu Control Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu Control."
-Str_Err24Ctrl_Italian:	aligned_string "ERROR 24"
+Str_Err24Ctrl_Italian:		aligned_string "ERROR 24"
 	.byte 0x59, 0x61
 	aligned_string " existe una pista de ritmo. No es posible asignar dos pistas al automáticos."
 	.byte 0x56, 0x6f
@@ -900,9 +900,9 @@ StrTable_DiskErr24_APC:
 	.long Str_Err24APC_Italian
 	.long Str_Err24APC_Indonesian
 Str_Err24APC_Indonesian:	aligned_string "Satu APC Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu APC."
-Str_Err24APC_Italian:	aligned_string "ERROR 24"
-Str_Err24APC_Spanish:	aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."
-Str_Err24APC_French:	aligned_string "Vous avez déjà choisi une piste pour le APC! Vous ne pouvez pas assigner deux pistes à celui-ci."
+Str_Err24APC_Italian:		aligned_string "ERROR 24"
+Str_Err24APC_Spanish:		aligned_string "Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."
+Str_Err24APC_French:		aligned_string "Vous avez déjà choisi une piste pour le APC! Vous ne pouvez pas assigner deux pistes à celui-ci."
 	.byte 0x45, 0x73
 	aligned_string " ist nicht möglich, zwei APC-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben."
 	aligned_string "A APC Track already exists. It is impossible to assign two Tracks to APC."
@@ -958,10 +958,10 @@ StrTable_DiskErr28:
 	.long Str_DiskErr28_Italian
 	.long Str_DiskErr28_Indonesian
 Str_DiskErr28_Indonesian:	aligned_string "Lagu ini terlalu panjang untuk disimpan dalam MIDI FILE."
-Str_DiskErr28_Italian:	aligned_string "ERROR 28"
-Str_DiskErr28_Spanish:	.asciz "Esta canción dura demasiado para poder ser almacenada en un fichero MIDI."
-Str_DiskErr28_French:	aligned_string "Cette séquence est trop longue pour pouvoir être sauvegardée sous le format MIDI File."
-Str_DiskErr28_German:	aligned_string "Dieser Titel ist zu lang, um als MIDI File gespeichert zu werden."
+Str_DiskErr28_Italian:		aligned_string "ERROR 28"
+Str_DiskErr28_Spanish:		.asciz "Esta canción dura demasiado para poder ser almacenada en un fichero MIDI."
+Str_DiskErr28_French:		aligned_string "Cette séquence est trop longue pour pouvoir être sauvegardée sous le format MIDI File."
+Str_DiskErr28_German:		aligned_string "Dieser Titel ist zu lang, um als MIDI File gespeichert zu werden."
 	aligned_string "This song is too long to be saved as a MIDI FILE."
 StrTable_DiskErr29:
 	.byte 0x5c, 0x91
@@ -969,8 +969,8 @@ StrTable_DiskErr29:
 	.byte 0xe9, 0x00, 0x72, 0x8f, 0xe9, 0x00, 0x68, 0x8f
 	.byte 0xe9, 0x00, 0xde, 0x8e, 0xe9, 0x00
 Str_DiskErr29_Indonesian:	aligned_string "MIDI FILE yang anda coba untuk dimuat melampaui kapasitas memori dari KN-5000 dan tidak dapat dimainkan.  Memori Sequencer sudah dihapus."
-Str_DiskErr29_Italian:	aligned_string "ERROR 29"
-Str_DiskErr29_Spanish:	aligned_string "El fichero MIDI que usted ha tratado de cargar excede la capacidad de la memoria del KN3000 y no puede reproducirse. La memoria SEQUENCER ha sido borrada."
+Str_DiskErr29_Italian:		aligned_string "ERROR 29"
+Str_DiskErr29_Spanish:		aligned_string "El fichero MIDI que usted ha tratado de cargar excede la capacidad de la memoria del KN3000 y no puede reproducirse. La memoria SEQUENCER ha sido borrada."
 	.byte 0x4c, 0x61
 	.byte 0x20, 0x73, 0xe9
 	aligned_string "quence MIDI File que vous essayez de charger est trop longue pour ma capacité de mémoire et je ne peux pas vous l'interpréter. J'ai ré-initialisé la mémoire de mon séquenceur."
@@ -983,7 +983,7 @@ StrTable_DiskErr30:
 	.byte 0xe9, 0x00, 0xda, 0x92, 0xe9, 0x00, 0xd0, 0x92
 	.byte 0xe9, 0x00, 0x06, 0x92, 0xe9, 0x00
 Str_DiskErr30_Indonesian:	aligned_string "Ini tidak mungkin untuk mengubah Time Signature atau ukuran panjang Composer Pattern yang telah direkam. Jika anda ingin mengubahnya, pertama anda harus menghapus/menghilangkan semua Composer Pattern."
-Str_DiskErr30_Italian:	aligned_string "ERROR 30"
+Str_DiskErr30_Italian:		aligned_string "ERROR 30"
 	aligned_string "No es posible cambiar la signatura de tiempo ni la duración del compás de un patrón COMPOSER después de haber sido grabado. Si desea proseguir, usted tendrá que borrar primero todo el patrón COMPOSER."
 	aligned_string "Je ne peux pas changer la mesure ou la durée d'un style après qu'il ait été enregistré. Si vous désirez modifier ces données vous devez effacer la totalité du style et recommencer l'enregistrement."
 	.ascii "Nach einer Aufnahme im COMPOSER ist es nicht mehr möglich, das Takt-Maß bzw. die Pattern-Länge zu ände"
@@ -1032,9 +1032,9 @@ StrTable_DiskErr41:
 	.long Str_DiskErr41_Italian
 	.long Str_DiskErr41_Indonesian
 Str_DiskErr41_Indonesian:	aligned_string "Satu kesalahan sudah terjadi sejak penerimaan data System Exclusive. Data dari yang dimaksudkan (transmitting device) tidak lengkap.  Harap dicoba lagi."
-Str_DiskErr41_Italian:	aligned_string "ERROR 41"
-Str_DiskErr41_Spanish:	aligned_string "Se ha producido un error durante la recepción de datos exclusivos del sistema. Los datos del dispositivo de transmisión quizá no estén completos. Pruebe otra vez."
-Str_DiskErr41_French:	.ascii "Une erreur s'est produite pendant la r"
+Str_DiskErr41_Italian:		aligned_string "ERROR 41"
+Str_DiskErr41_Spanish:		aligned_string "Se ha producido un error durante la recepción de datos exclusivos del sistema. Los datos del dispositivo de transmisión quizá no estén completos. Pruebe otra vez."
+Str_DiskErr41_French:		.ascii "Une erreur s'est produite pendant la r"
 	.byte 0xe9
 	.ascii "ception des données de Syst"
 	dec	5, xwa
@@ -1066,10 +1066,10 @@ StrTable_DiskErr43:
 	.long Str_DiskErr43_Italian
 	.long Str_DiskErr43_Indonesian
 Str_DiskErr43_Indonesian:	aligned_string "File yang sedang anda coba untuk dimuat/disimpan sudah disimpan pada keyboard  KN terdahulu.Hanya mungkin menyimpan dengan menggunakan tambahan PERMAINAN."
-Str_DiskErr43_Italian:	aligned_string "ERROR 43"
-Str_DiskErr43_Spanish:	.asciz "El fichero que trata de cargar fue almacenado en un teclado KN anterior. Sólo es posible cargar utilizando la opción “ALL”."
-Str_DiskErr43_French:	.asciz "Le fichier que vous essayez de charger a été sauvegardé à partir d'un clavier KN antérieur. Vous ne pouvez le charger qu'en utilisant l'option “ALL”."
-Str_DiskErr43_German:	.asciz "Der Datensatz (File), den Sie gerade laden möchten, wurde auf einem älteren KN-Keybord gespeichert. In diesem Fall kann nur unter Verwendung der „ALL“-Option geladen werden."
+Str_DiskErr43_Italian:		aligned_string "ERROR 43"
+Str_DiskErr43_Spanish:		.asciz "El fichero que trata de cargar fue almacenado en un teclado KN anterior. Sólo es posible cargar utilizando la opción “ALL”."
+Str_DiskErr43_French:		.asciz "Le fichier que vous essayez de charger a été sauvegardé à partir d'un clavier KN antérieur. Vous ne pouvez le charger qu'en utilisant l'option “ALL”."
+Str_DiskErr43_German:		.asciz "Der Datensatz (File), den Sie gerade laden möchten, wurde auf einem älteren KN-Keybord gespeichert. In diesem Fall kann nur unter Verwendung der „ALL“-Option geladen werden."
 	aligned_string "The file that you are trying to load was saved on a previous KN keyboard. It is only possible to load using the \"PERFORMANCE\" option."
 
 
@@ -1081,9 +1081,9 @@ StrTable_DiskErr44:
 	.long Str_DiskErr44_Italian
 	.long Str_DiskErr44_Indonesian
 Str_DiskErr44_Indonesian:	aligned_string "Tidak mungkin untuk meng-edit satu Drum Kit. Silahkan pilih suara yang berbeda dari group apa saja, kecuali Keyboard Percussion."
-Str_DiskErr44_Italian:	aligned_string "ERROR 44"
-Str_DiskErr44_Spanish:	aligned_string "No es posible editar un juego de batería. Por favor, seleccione un sonido diferente de cualquier grupo excepto percusión de teclado."
-Str_DiskErr44_French:	.ascii "Il est impossible d'"
+Str_DiskErr44_Italian:		aligned_string "ERROR 44"
+Str_DiskErr44_Spanish:		aligned_string "No es posible editar un juego de batería. Por favor, seleccione un sonido diferente de cualquier grupo excepto percusión de teclado."
+Str_DiskErr44_French:		.ascii "Il est impossible d'"
 	inc	4, xbc
 	.ascii "iter un Kit de percussions. Veuillez s"
 	dec	4, xbc
@@ -1096,7 +1096,7 @@ StrTable_DiskErr46:
 	.byte 0xe9, 0x00, 0xec, 0xa8, 0xe9, 0x00, 0x82, 0xa8
 	.byte 0xe9, 0x00
 Str_DiskErr46_Indonesian:	aligned_string "Hanya mungkin dimasukkan Melody Tracks. Tracks seperti Rhythm, Chord dan Control tidak dapat dimasukkan."
-Str_DiskErr46_Italian:	aligned_string "ERROR 46"
+Str_DiskErr46_Italian:		aligned_string "ERROR 46"
 	aligned_string "Sólo es posible insertar pistas de melodías. Las pistas tales como ritmo, acorde y control no pueden ser insertadas."
 	.ascii "Il est seulement possible d'insérer des pistes comportant une mélodie. Des pistes assignées à Rhythm, Chord and Control ne peuvent être insé"
 	.byte 0x72, 0xe9, 0x65, 0x73, 0x2e, 0x00, 0x45, 0x73
@@ -1111,9 +1111,9 @@ StrTable_DiskErr47:
 	.long Str_DiskErr47_Italian
 	.long Str_DiskErr47_Indonesian
 Str_DiskErr47_Indonesian:	aligned_string "Tidak mungkin untuk menggunakan Sound Arranger dengan Composer Pattern. Silahkan pilih satu contoh preset (Preset Pattern)."
-Str_DiskErr47_Italian:	aligned_string "ERROR 47"
-Str_DiskErr47_Spanish:	aligned_string "No es posible utilizar el arreglador musical con un esquema del compositor. Por favor, seleccione un esquema preconfigurado."
-Str_DiskErr47_French:	.ascii "L'utilisation du \"Sound Arranger\" n'est pas possible avec un \"Composer\". Veuillez choisir un rythme pr"
+Str_DiskErr47_Italian:		aligned_string "ERROR 47"
+Str_DiskErr47_Spanish:		aligned_string "No es posible utilizar el arreglador musical con un esquema del compositor. Por favor, seleccione un esquema preconfigurado."
+Str_DiskErr47_French:		.ascii "L'utilisation du \"Sound Arranger\" n'est pas possible avec un \"Composer\". Veuillez choisir un rythme pr"
 	.byte 0xe9, 0x73
 	.byte 0xe9
 	.ascii "lectionn"
@@ -2408,13 +2408,13 @@ Midi_PartToChMappingTable:
 	.byte 0xff, 0x00, 0xff, 0x00
 PartName6_Blank:	aligned_string "      "
 PartName6_Rhythm:	aligned_string "RHYTHM"
-PartName6_Ctrl:	aligned_string "CTRL  "
-PartName6_Apc:	aligned_string "APC   "
-PartName6_Mic:	aligned_string "MIC   "
+PartName6_Ctrl:		aligned_string "CTRL  "
+PartName6_Apc:		aligned_string "APC   "
+PartName6_Mic:		aligned_string "MIC   "
 PartName6_Metro:	aligned_string "METRO "
-PartName6_Msp:	aligned_string "MSP   "
+PartName6_Msp:		aligned_string "MSP   "
 PartName6_Drums:	aligned_string "DRUMS "
-PartName6_Bass:	aligned_string "BASS  "
+PartName6_Bass:		aligned_string "BASS  "
 PartName6_Acomp3:	aligned_string "ACOMP3"
 PartName6_Acomp2:	aligned_string "ACOMP2"
 PartName6_Acomp1:	aligned_string "ACOMP1"
@@ -2433,18 +2433,18 @@ PartName6_Part7:	aligned_string "PART 7"
 PartName6_Part6:	aligned_string "PART 6"
 PartName6_Part5:	aligned_string "PART 5"
 PartName6_Part4:	aligned_string "PART 4"
-PartName6_Left:	aligned_string "LEFT  "
+PartName6_Left:		aligned_string "LEFT  "
 PartName6_Right2:	aligned_string "RIGHT2"
 PartName6_Right1:	aligned_string "RIGHT1"
 PartName6_TableEnd:	aligned_string "    "
 PartName4_Rhythm:	aligned_string "RHY "
-PartName4_Ctrl:	aligned_string "CTRL"
-PartName4_Apc:	aligned_string "APC "
-PartName4_Mic:	aligned_string "MIC "
+PartName4_Ctrl:		aligned_string "CTRL"
+PartName4_Apc:		aligned_string "APC "
+PartName4_Mic:		aligned_string "MIC "
 PartName4_Metro:	aligned_string "METR"
-PartName4_Msp:	aligned_string "MSP "
+PartName4_Msp:		aligned_string "MSP "
 PartName4_Drums:	aligned_string "DRUM"
-PartName4_Bass:	aligned_string "BASS"
+PartName4_Bass:		aligned_string "BASS"
 PartName4_Acomp3:	aligned_string "ACP3"
 PartName4_Acomp2:	aligned_string "ACP2"
 PartName4_Acomp1:	aligned_string "ACP1"
@@ -2463,7 +2463,7 @@ PartName4_Part7:	aligned_string "PT 7"
 PartName4_Part6:	aligned_string "PT 6"
 PartName4_Part5:	aligned_string "PT 5"
 PartName4_Part4:	aligned_string "PT 4"
-PartName4_Left:	aligned_string "LEFT"
+PartName4_Left:		aligned_string "LEFT"
 PartName4_Right2:	aligned_string "RT 2"
 PartName4_Right1:	aligned_string "RT 1"
 AccompName6_Chord:	aligned_string "CHORD "
@@ -2481,15 +2481,15 @@ TrackName6_Tr13:	aligned_string " TR13 "
 TrackName6_Tr12:	aligned_string " TR12 "
 TrackName6_Tr11:	aligned_string " TR11 "
 TrackName6_Tr10:	aligned_string " TR10 "
-TrackName6_Tr9:	aligned_string " TR 9 "
-TrackName6_Tr8:	aligned_string " TR 8 "
-TrackName6_Tr7:	aligned_string " TR 7 "
-TrackName6_Tr6:	aligned_string " TR 6 "
-TrackName6_Tr5:	aligned_string " TR 5 "
-TrackName6_Tr4:	aligned_string " TR 4 "
-TrackName6_Tr3:	aligned_string " TR 3 "
-TrackName6_Tr2:	aligned_string " TR 2 "
-TrackName6_Tr1:	aligned_string " TR 1 "
+TrackName6_Tr9:		aligned_string " TR 9 "
+TrackName6_Tr8:		aligned_string " TR 8 "
+TrackName6_Tr7:		aligned_string " TR 7 "
+TrackName6_Tr6:		aligned_string " TR 6 "
+TrackName6_Tr5:		aligned_string " TR 5 "
+TrackName6_Tr4:		aligned_string " TR 4 "
+TrackName6_Tr3:		aligned_string " TR 3 "
+TrackName6_Tr2:		aligned_string " TR 2 "
+TrackName6_Tr1:		aligned_string " TR 1 "
 TrackName6_Unassigned:	.asciz " -- "
 	.byte 0xff
 TrackName6_Unassigned_02:	aligned_string " -- "
@@ -2499,22 +2499,22 @@ TrackName6_Unassigned_05:	aligned_string " -- "
 TrackName6_Unassigned_06:	aligned_string " -- "
 TrackName6_Unassigned_07:	aligned_string " -- "
 TrackName6_Unassigned_08:	aligned_string " -- "
-TrackName4_Tr16:	aligned_string "TR16"
-TrackName4_Tr15:	aligned_string "TR15"
-TrackName4_Tr14:	aligned_string "TR14"
-TrackName4_Tr13:	aligned_string "TR13"
-TrackName4_Tr12:	aligned_string "TR12"
-TrackName4_Tr11:	aligned_string "TR11"
-TrackName4_Tr10:	aligned_string "TR10"
-TrackName4_Tr9:	aligned_string "TR 9"
-TrackName4_Tr8:	aligned_string "TR 8"
-TrackName4_Tr7:	aligned_string "TR 7"
-TrackName4_Tr6:	aligned_string "TR 6"
-TrackName4_Tr5:	aligned_string "TR 5"
-TrackName4_Tr4:	aligned_string "TR 4"
-TrackName4_Tr3:	aligned_string "TR 3"
-TrackName4_Tr2:	aligned_string "TR 2"
-TrackName4_Tr1:	aligned_string "TR 1"
+TrackName4_Tr16:		aligned_string "TR16"
+TrackName4_Tr15:		aligned_string "TR15"
+TrackName4_Tr14:		aligned_string "TR14"
+TrackName4_Tr13:		aligned_string "TR13"
+TrackName4_Tr12:		aligned_string "TR12"
+TrackName4_Tr11:		aligned_string "TR11"
+TrackName4_Tr10:		aligned_string "TR10"
+TrackName4_Tr9:			aligned_string "TR 9"
+TrackName4_Tr8:			aligned_string "TR 8"
+TrackName4_Tr7:			aligned_string "TR 7"
+TrackName4_Tr6:			aligned_string "TR 6"
+TrackName4_Tr5:			aligned_string "TR 5"
+TrackName4_Tr4:			aligned_string "TR 4"
+TrackName4_Tr3:			aligned_string "TR 3"
+TrackName4_Tr2:			aligned_string "TR 2"
+TrackName4_Tr1:			aligned_string "TR 1"
 	aligned_string "%s SOUND : %s"
 	aligned_string "RIGHT 1: Sound Name xxxxx"
 	.byte 0x70, 0x07, 0x70, 0x07, 0x70, 0x07, 0x70, 0x07
@@ -2727,10 +2727,10 @@ DemoDisk_LangPromptTable:
 	.long DemoDiskPrompt_Italian
 	.long DemoDiskPrompt_Indonesian
 DemoDiskPrompt_Indonesian:	aligned_string "Untuk memulai suatu DEMO eksternal, masukkanlah disket fasilitas Demo.~0dMemanggil satu data demo eksternal akan menghapus seluruh data yang ada Data Sequencer."
-DemoDiskPrompt_Italian:	aligned_string "Italian"
+DemoDiskPrompt_Italian:		aligned_string "Italian"
 DemoDiskPrompt_English2:	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
 DemoDiskPrompt_English3:	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
-DemoDiskPrompt_German:	.asciz "Um eine externe DEMO zu starten, legen Sie bitte eine Feature-Demo-Disk in das Laufwerk ein.~0dDurch das Laden einer externen Demo werden alle Sequenzerdaten gelöscht."
+DemoDiskPrompt_German:		.asciz "Um eine externe DEMO zu starten, legen Sie bitte eine Feature-Demo-Disk in das Laufwerk ein.~0dDurch das Laden einer externen Demo werden alle Sequenzerdaten gelöscht."
 DemoDiskPrompt_English1:	aligned_string "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data."
 	.byte 0x01, 0x02, 0x04, 0xff
 	.byte 0x08, 0x10, 0x20, 0xff, 0x01, 0x04, 0x10, 0xff
@@ -3300,35 +3300,35 @@ Data_DiskFuncPtrTbl_EA0B12:
 	.byte 0xea, 0x00, 0x46, 0x0b, 0xea, 0x00
 Data_PasswordSep_EA0B46:
 	.byte 0x00, 0xff
-Str_CheckPasswordNo:	aligned_string "CheckPasswordNo"
-Str_CheckPasswordOk:	aligned_string "CheckPasswordOk"
-Str_CheckPasswordText:	aligned_string "CheckPasswordText"
-Str_PasswordText:	aligned_string "PasswordText"
-Str_PasswordNo:	aligned_string "PasswordNo"
-Str_PasswordOk:	aligned_string "PasswordOk"
-Str_WakeUpPassword:	aligned_string "WakeUpPassword"
-Str_SaveNo:	aligned_string "SaveNo"
-Str_SaveYes:	aligned_string "SaveYes"
-Str_DeleteNo:	aligned_string "DeleteNo"
-Str_DeleteYes:	aligned_string "DeleteYes"
-Str_SaveText:	aligned_string "SaveText"
-Str_DeleteText:	aligned_string "DeleteText"
-Str_FormatText:	aligned_string "FormatText"
-Str_DiskSure:	aligned_string "DiskSure"
-Str_DiskAttention:	aligned_string "DiskAttention"
+Str_CheckPasswordNo:		aligned_string "CheckPasswordNo"
+Str_CheckPasswordOk:		aligned_string "CheckPasswordOk"
+Str_CheckPasswordText:		aligned_string "CheckPasswordText"
+Str_PasswordText:		aligned_string "PasswordText"
+Str_PasswordNo:			aligned_string "PasswordNo"
+Str_PasswordOk:			aligned_string "PasswordOk"
+Str_WakeUpPassword:		aligned_string "WakeUpPassword"
+Str_SaveNo:			aligned_string "SaveNo"
+Str_SaveYes:			aligned_string "SaveYes"
+Str_DeleteNo:			aligned_string "DeleteNo"
+Str_DeleteYes:			aligned_string "DeleteYes"
+Str_SaveText:			aligned_string "SaveText"
+Str_DeleteText:			aligned_string "DeleteText"
+Str_FormatText:			aligned_string "FormatText"
+Str_DiskSure:			aligned_string "DiskSure"
+Str_DiskAttention:		aligned_string "DiskAttention"
 Str_DiskMedleyShowHideFunc:	aligned_string "DiskMedleyShowHideFunc"
-Str_WaitingFunc:	aligned_string "WaitingFunc"
-Str_FormatDiskNaming:	aligned_string "FormatDiskNaming"
-Str_SmfFileNaming:	aligned_string "SmfFileNaming"
-Str_SmfFileRename:	aligned_string "SmfFileRename"
-Str_TechnicsFileRename:	aligned_string "TechnicsFileRename"
-Str_TechnicsFileNaming:	aligned_string "TechnicsFileNaming"
-Str_SetupExitFunc:	aligned_string "SetupExitFunc"
-Str_SetupOkFunc:	aligned_string "SetupOkFunc"
-Str_FilePriorityFunc:	aligned_string "FilePriorityFunc"
-Str_JumpInsertFunc:	aligned_string "JumpInsertFunc"
-Str_TypePriorityText:	aligned_string "TypePriorityText"
-Str_InsertOptionText:	aligned_string "InsertOptionText"
+Str_WaitingFunc:		aligned_string "WaitingFunc"
+Str_FormatDiskNaming:		aligned_string "FormatDiskNaming"
+Str_SmfFileNaming:		aligned_string "SmfFileNaming"
+Str_SmfFileRename:		aligned_string "SmfFileRename"
+Str_TechnicsFileRename:		aligned_string "TechnicsFileRename"
+Str_TechnicsFileNaming:		aligned_string "TechnicsFileNaming"
+Str_SetupExitFunc:		aligned_string "SetupExitFunc"
+Str_SetupOkFunc:		aligned_string "SetupOkFunc"
+Str_FilePriorityFunc:		aligned_string "FilePriorityFunc"
+Str_JumpInsertFunc:		aligned_string "JumpInsertFunc"
+Str_TypePriorityText:		aligned_string "TypePriorityText"
+Str_InsertOptionText:		aligned_string "InsertOptionText"
 PtrTbl_UiWidgetProps_EA0CE8:
 	.long Str_UiProp_Font
 	.long Str_UiProp_FontColor
@@ -3342,11 +3342,11 @@ PtrTbl_UiWidgetProps_EA0CE8:
 	.long Str_UiProp_Aicok
 	.long Str_UiProp_Empty_EA0D14
 Str_UiProp_Empty_EA0D14:	aligned_string ""
-Str_UiProp_Aicok:	.asciz "aicok"
-Str_UiProp_Paintok:	aligned_string "paintok"
-Str_UiProp_AutoInc:	aligned_string "auto_inc"
-Str_UiProp_Dial:	aligned_string "dial"
-Str_UiProp_SelNum:	aligned_string "sel_num"
+Str_UiProp_Aicok:		.asciz "aicok"
+Str_UiProp_Paintok:		aligned_string "paintok"
+Str_UiProp_AutoInc:		aligned_string "auto_inc"
+Str_UiProp_Dial:		aligned_string "dial"
+Str_UiProp_SelNum:		aligned_string "sel_num"
 Str_UiProp_Row:
 	.byte 0x72, 0x6f, 0x77, 0x00
 Str_UiProp_Column:	aligned_string "column"
@@ -3380,7 +3380,7 @@ PtrTbl_UiWidgetProps_EA0DC0:
 Str_UiProp_Empty_EA0DD0:	aligned_string ""
 Str_UiProp_Paintok_EA0DD2:	aligned_string "paintok"
 Str_UiProp_MainFunc_EA0DDA:	aligned_string "main_func"
-Str_UiProp_Font_EA0DE4:	aligned_string "font"
+Str_UiProp_Font_EA0DE4:		aligned_string "font"
 	.byte 0xf4, 0x0d, 0xea, 0x00, 0xf2, 0x0d
 	.byte 0xea, 0x00
 Data_IndexPropSep_EA0DF2:
@@ -3424,10 +3424,10 @@ PtrTbl_UiWidgetProps_EA0E7A:
 Data_DialPropSep_EA0E92:
 	.byte 0x00, 0xff
 Str_UiProp_AutoInc_EA0E94:	aligned_string "auto_inc"
-Str_UiProp_DialInv:	aligned_string "dial_inv"
-Str_UiProp_Dial_EA0EA8:	aligned_string "dial"
-Str_UiProp_IndexMax:	aligned_string "index_max"
-Str_UiProp_IndexMin:	aligned_string "index_min"
+Str_UiProp_DialInv:		aligned_string "dial_inv"
+Str_UiProp_Dial_EA0EA8:		aligned_string "dial"
+Str_UiProp_IndexMax:		aligned_string "index_max"
+Str_UiProp_IndexMin:		aligned_string "index_min"
 PtrTbl_UiWidgetProps_EA0EC2:
 	.long Str_UiProp_Func
 	.long Str_UiProp_Interval
@@ -3437,9 +3437,9 @@ PtrTbl_UiWidgetProps_EA0EC2:
 Data_PaintokPropSep_EA0ED6:
 	.byte 0x00, 0xff
 Str_UiProp_Paintok_EA0ED8:	aligned_string "paintok"
-Str_UiProp_Length:	aligned_string "length"
-Str_UiProp_Interval:	aligned_string "interval"
-Str_UiProp_Func:	aligned_string "func"
+Str_UiProp_Length:		aligned_string "length"
+Str_UiProp_Interval:		aligned_string "interval"
+Str_UiProp_Func:		aligned_string "func"
 PtrTbl_UiWidgetProps_EA0EF8:
 	.long Str_UiProp_IndexMin_EA0F2E
 	.long Str_UiProp_IndexMax_EA0F24
@@ -3447,7 +3447,7 @@ PtrTbl_UiWidgetProps_EA0EF8:
 	.long Str_UiProp_SendIndex
 	.long Str_UiProp_Empty_EA0F0C
 Str_UiProp_Empty_EA0F0C:	aligned_string ""
-Str_UiProp_SendIndex:	aligned_string "send_index"
+Str_UiProp_SendIndex:		aligned_string "send_index"
 Str_UiProp_Interval_EA0F1A:	aligned_string "interval"
 Str_UiProp_IndexMax_EA0F24:	aligned_string "index_max"
 Str_UiProp_IndexMin_EA0F2E:	aligned_string "index_min"
@@ -3610,22 +3610,22 @@ PtrTbl_MsgTypeNames_EA11F8:
 	.long Str_Mt_CheckPassword2
 	.long Str_Mt_CheckPassword3
 	.byte 0x00, 0x00, 0x00, 0x00
-Str_Mt_CheckPassword3:	aligned_string "MT_CheckPassword3"
-Str_Mt_CheckPassword2:	aligned_string "MT_CheckPassword2"
-Str_Mt_CheckPassword:	aligned_string "MT_CheckPassword"
-Str_Mt_SetPassword:	aligned_string "MT_SetPassword"
-Str_Mt_FlashLoad:	aligned_string "MT_FlashLoad"
-Str_Mt_FlashWrite:	aligned_string "MT_FlashWrite"
-Str_Mt_WakeUpNow:	aligned_string "MT_WakeUpNow"
-Str_Mt_WakeUpTime:	aligned_string "MT_WakeUpTime"
-Str_Mt_IWillWakeUp:	aligned_string "MT_IWillWakeUp"
-Str_Mt_WhichWindow:	aligned_string "MT_WhichWindow"
-Str_Mt_OffWindow:	aligned_string "MT_OffWindow"
-Str_Mt_OnWindow:	aligned_string "MT_OnWindow"
-Str_Mt_PsFileNameBoxId:	aligned_string "MT_PsFileNameBoxID"
+Str_Mt_CheckPassword3:		aligned_string "MT_CheckPassword3"
+Str_Mt_CheckPassword2:		aligned_string "MT_CheckPassword2"
+Str_Mt_CheckPassword:		aligned_string "MT_CheckPassword"
+Str_Mt_SetPassword:		aligned_string "MT_SetPassword"
+Str_Mt_FlashLoad:		aligned_string "MT_FlashLoad"
+Str_Mt_FlashWrite:		aligned_string "MT_FlashWrite"
+Str_Mt_WakeUpNow:		aligned_string "MT_WakeUpNow"
+Str_Mt_WakeUpTime:		aligned_string "MT_WakeUpTime"
+Str_Mt_IWillWakeUp:		aligned_string "MT_IWillWakeUp"
+Str_Mt_WhichWindow:		aligned_string "MT_WhichWindow"
+Str_Mt_OffWindow:		aligned_string "MT_OffWindow"
+Str_Mt_OnWindow:		aligned_string "MT_OnWindow"
+Str_Mt_PsFileNameBoxId:		aligned_string "MT_PsFileNameBoxID"
 Str_Mt_GetSelectedFileNumber:	aligned_string "MT_GetSelectedFileNumber"
 Str_Mt_SetSelectedFileNumber:	aligned_string "MT_SetSelectedFileNumber"
-Str_Mt_SetFileSfx:	aligned_string "MT_SetFileSfx"
+Str_Mt_SetFileSfx:		aligned_string "MT_SetFileSfx"
 	aligned_string "MT_GetFileSfx"
 	.byte 0x11, 0x00, 0x57, 0x55, 0xf9, 0x00, 0x01, 0x5c
 	.byte 0xf9, 0x00, 0xca, 0x5a, 0xf9, 0x00, 0x2a, 0x5b

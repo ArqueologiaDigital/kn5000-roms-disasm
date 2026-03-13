@@ -1543,13 +1543,13 @@ Naka_PresetBank_InfoTable:
 	.long LABEL_ED85D4
 	.long LABEL_ED85D2
 	.long LABEL_ED85D0
-LABEL_ED85D0:	aligned_string ""
-LABEL_ED85D2:	aligned_string ""
-LABEL_ED85D4:	aligned_string ""
-LABEL_ED85D6:	aligned_string ""
-LABEL_ED85D8:	aligned_string ""
-LABEL_ED85DA:	aligned_string ""
-LABEL_ED85DC:	aligned_string ""
+LABEL_ED85D0:			aligned_string ""
+LABEL_ED85D2:			aligned_string ""
+LABEL_ED85D4:			aligned_string ""
+LABEL_ED85D6:			aligned_string ""
+LABEL_ED85D8:			aligned_string ""
+LABEL_ED85DA:			aligned_string ""
+LABEL_ED85DC:			aligned_string ""
 Naka_PresetBankName_Label:	aligned_string "PMBKNAME"
 	.long LABEL_ED85F8
 	.long LABEL_ED85F6

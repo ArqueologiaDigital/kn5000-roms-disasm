@@ -21,8 +21,8 @@ PtrTbl_DiskFormatWarning:
 Str_DiskFormatWarn_Indonesian:	aligned_string "Gunakan Disk Format untuk menghapus suatu data yang ada sekarang didalam disk."
 Str_DiskFormatWarn_English:	aligned_string "Using DISK FORMAT will erase any current data on the disk."
 Str_DiskFormatWarn_Spanish:	aligned_string "Al formatear el disco  se borran los datos del disco."
-LABEL_EA8DB6:	.asciz "L'utilisation deDISK FORMAT effacera toute donnée existante sur la disquette."
-LABEL_EA8E04:	.asciz "DISK FORMAT löscht alle Daten auf der Diskette."
+LABEL_EA8DB6:			.asciz "L'utilisation deDISK FORMAT effacera toute donnée existante sur la disquette."
+LABEL_EA8E04:			.asciz "DISK FORMAT löscht alle Daten auf der Diskette."
 	aligned_string "Using DISK FORMAT will erase any current data on the disk."
 PtrTbl_FileDeleteWarning:
 	.long Str_FileDeleteWarn_English2
@@ -31,11 +31,11 @@ PtrTbl_FileDeleteWarning:
 	.long LABEL_EA8F72
 	.long Str_FileDeleteWarn_English
 	.long LABEL_EA8E88
-LABEL_EA8E88:	aligned_string "Usando FILE DELETE si cancelleràil file completamente. Se sei incerto per favore conferma la tua selezione del file."
+LABEL_EA8E88:			aligned_string "Usando FILE DELETE si cancelleràil file completamente. Se sei incerto per favore conferma la tua selezione del file."
 Str_FileDeleteWarn_English:	aligned_string "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
-LABEL_EA8F72:	.asciz "El uso del FILE DELETE borrará completamente el archivo seleccionado. Si no está seguro, confirme la selección del archivo."
-LABEL_EA8FEE:	aligned_string "La fonction FILE DELETE va effacer complètement le fichier que vous m'avez indiqué. Si vous avez un doute, veuillez vérifier le numéro du fichier."
-LABEL_EA9082:	.asciz "Die gewählte Disketten-Bank wird komplett gelöscht."
+LABEL_EA8F72:			.asciz "El uso del FILE DELETE borrará completamente el archivo seleccionado. Si no está seguro, confirme la selección del archivo."
+LABEL_EA8FEE:			aligned_string "La fonction FILE DELETE va effacer complètement le fichier que vous m'avez indiqué. Si vous avez un doute, veuillez vérifier le numéro du fichier."
+LABEL_EA9082:			.asciz "Die gewählte Disketten-Bank wird komplett gelöscht."
 Str_FileDeleteWarn_English2:	aligned_string "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
 	.byte 0xca, 0x93, 0xea, 0x00, 0x44, 0x93
 	.byte 0xea, 0x00, 0xa6, 0x92, 0xea, 0x00, 0x2c, 0x92
@@ -59,7 +59,7 @@ Str_DiskInsertOpen_Lang0:	aligned_string "When a disk is inserted open this page
 Str_DiskInsertOpen_Lang1:	aligned_string "When a disk is inserted open this page."
 Str_DiskInsertOpen_Lang2:	aligned_string "When a disk is inserted open this page."
 Str_DiskInsertOpen_Lang3:	aligned_string "When a disk is inserted open this page."
-LABEL_EA94F4:	.asciz "Diese Seite wird geöffnet, wenn Sie eine Diskette einlegen."
+LABEL_EA94F4:			.asciz "Diese Seite wird geöffnet, wenn Sie eine Diskette einlegen."
 	aligned_string "When a disk is inserted open this page."
 PtrTbl_FilePriorityMsg:
 	.long Str_FilePriority_Lang5
@@ -72,7 +72,7 @@ Str_FilePriority_Lang0:	aligned_string "When a disk contains Technics & SMF file
 Str_FilePriority_Lang1:	aligned_string "When a disk contains Technics & SMF files."
 Str_FilePriority_Lang2:	aligned_string "When a disk contains Technics & SMF files."
 Str_FilePriority_Lang3:	aligned_string "When a disk contains Technics & SMF files."
-LABEL_EA9620:	.asciz "Priorität, wenn eine Diskette Technics und SMF Files enthält."
+LABEL_EA9620:		.asciz "Priorität, wenn eine Diskette Technics und SMF Files enthält."
 Str_FilePriority_Lang5:	aligned_string "When a disk contains Technics & SMF files."
 PtrTbl_DiskStartupModeNames:
 	.long Str_DiskMode_Off
@@ -82,9 +82,9 @@ PtrTbl_DiskStartupModeNames:
 	.long Str_DiskMode_SongMedley
 Str_DiskMode_SongMedley:	aligned_string " SONG MEDLEY "
 Str_DiskMode_DirectPlay:	aligned_string " DIRECT PLAY "
-Str_DiskMode_Load:	aligned_string "    LOAD     "
-Str_DiskMode_DiskMenu:	aligned_string "  DISK MENU  "
-Str_DiskMode_Off:	aligned_string "     OFF     "
+Str_DiskMode_Load:		aligned_string "    LOAD     "
+Str_DiskMode_DiskMenu:		aligned_string "  DISK MENU  "
+Str_DiskMode_Off:		aligned_string "     OFF     "
 	calr	7680
 	nop
 	ldb	h, 0
@@ -108,19 +108,19 @@ PtrTbl_PleaseWaitStrings:
 	.long Str_PleaseWait_English
 	.long Str_PleaseWaitDisk_Indonesian
 Str_PleaseWaitDisk_Indonesian:	aligned_string "SILAHKAN TUNGGU!................"
-Str_PleaseWait_English:	aligned_string "PLEASE WAIT!............"
-Str_PleaseWait_Spanish:	aligned_string "¡POR FAVOR, ESPERE!..................."
-Str_PleaseWait_French:	aligned_string "VEUILLEZ PATIENTER!..................."
-Str_PleaseWait_German:	aligned_string "BITTE WARTEN!............."
+Str_PleaseWait_English:		aligned_string "PLEASE WAIT!............"
+Str_PleaseWait_Spanish:		aligned_string "¡POR FAVOR, ESPERE!..................."
+Str_PleaseWait_French:		aligned_string "VEUILLEZ PATIENTER!..................."
+Str_PleaseWait_German:		aligned_string "BITTE WARTEN!............."
 Str_PleaseWait_English2:	aligned_string "PLEASE WAIT!............"
 	.byte 0x86, 0x98, 0xea, 0x00, 0x78, 0x98
 	.byte 0xea, 0x00, 0x6a, 0x98, 0xea, 0x00, 0x5c, 0x98
 	.byte 0xea, 0x00, 0x4e, 0x98, 0xea, 0x00, 0x40, 0x98
 	.byte 0xea, 0x00, 0x32, 0x98, 0xea, 0x00, 0x24, 0x98
 	.byte 0xea, 0x00, 0x16, 0x98, 0xea, 0x00
-Str_SaveType_UserMidi:	aligned_string "  USER MIDI  "
+Str_SaveType_UserMidi:		aligned_string "  USER MIDI  "
 Str_SaveType_RhythmCustom:	aligned_string "RHYTHM CUSTOM"
-Str_SaveType_Msp:	aligned_string "     MSP     "
+Str_SaveType_Msp:		aligned_string "     MSP     "
 Str_SaveType_SoundMemory:	aligned_string "SOUND MEMORY "
 Str_SaveType_Composer:	ldb	w, 0x20
 	aligned_string "COMPOSER   "
@@ -1387,7 +1387,7 @@ BmpFilenameTable_InstrIcons:
 	.long BmpStr_Sentinel
 	.zero 884
 BmpStr_Sentinel:	aligned_string ""
-BmpStr_MicIcon:	aligned_string "19mic.bmp"
+BmpStr_MicIcon:		aligned_string "19mic.bmp"
 BmpStr_MetroIcon:	aligned_string "18metro.bmp"
 BmpStr_GmSpecialIcon:	aligned_string "14gmsp.bmp"
 BmpStr_LedSwOffIcon:	aligned_string "ledswoff.bmp"
@@ -1396,7 +1396,7 @@ BmpStr_AccordionIcon:	aligned_string "13accod.bmp"
 BmpStr_DrawbarIcon:	aligned_string "12draw.bmp"
 BmpStr_SynthIcon:	aligned_string "10synth.bmp"
 BmpStr_StringsIcon:	aligned_string "02string.bmp"
-BmpStr_SaxIcon:	aligned_string "05sax.bmp"
+BmpStr_SaxIcon:		aligned_string "05sax.bmp"
 BmpStr_PianoIcon:	aligned_string "00piano.bmp"
 BmpStr_OrchIcon:	aligned_string "09orch.bmp"
 BmpStr_OrganIcon:	aligned_string "08organ.bmp"
@@ -1413,8 +1413,8 @@ BmpStr_NextIcon:	aligned_string "next.bmp"
 BmpStr_BeforeIcon:	aligned_string "before.bmp"
 BmpStr_StartIcon:	aligned_string "start.bmp"
 BmpStr_PauseIcon:	aligned_string "pause.bmp"
-BmpStr_BwdIcon:	aligned_string "bwd.bmp"
-BmpStr_FwdIcon:	aligned_string "fwd.bmp"
+BmpStr_BwdIcon:		aligned_string "bwd.bmp"
+BmpStr_FwdIcon:		aligned_string "fwd.bmp"
 BmpStr_MixPointIcon:	aligned_string "mixpoint.bmp"
 BmpStr_MixCtrIcon:	aligned_string "mixctr.bmp"
 BmpStr_SlMoveIcon:	aligned_string "slmove.bmp"
@@ -1458,9 +1458,9 @@ WidgetPropTab_PropList:
 	.long WidgetPropSentinel_PropList
 WidgetPropSentinel_PropList:
 	.byte 0x00, 0xff
-WidgetPropStr_Prop:	aligned_string "prop"
-WidgetPropStr_Size:	aligned_string "size"
-WidgetPropStr_Count:	aligned_string "count"
+WidgetPropStr_Prop:		aligned_string "prop"
+WidgetPropStr_Size:		aligned_string "size"
+WidgetPropStr_Count:		aligned_string "count"
 WidgetPropStr_PropListProc:	aligned_string "proc"
 WidgetPropTab_Task:
 	.long WidgetPropStr_TaskProc
@@ -1469,10 +1469,10 @@ WidgetPropTab_Task:
 	.long WidgetPropStr_TaskName
 	.long WidgetPropStr_TaskSentinel
 WidgetPropStr_TaskSentinel:	aligned_string ""
-WidgetPropStr_TaskName:	aligned_string "name"
-WidgetPropStr_TaskUser:	aligned_string "user"
+WidgetPropStr_TaskName:		aligned_string "name"
+WidgetPropStr_TaskUser:		aligned_string "user"
 WidgetPropStr_TaskTitle:	aligned_string "title"
-WidgetPropStr_TaskProc:	aligned_string "proc"
+WidgetPropStr_TaskProc:		aligned_string "proc"
 WidgetPropTab_ListNode:
 	.long WidgetPropStr_NodeProc
 	.long WidgetPropStr_Top
@@ -1544,8 +1544,8 @@ WidgetPropTab_WidgetBase:
 	.long WidgetPropSentinel_WidgetBase
 WidgetPropSentinel_WidgetBase:
 	.byte 0x00, 0xff
-WidgetPropStr_Rect:	aligned_string "rect"
-WidgetPropStr_Flag:	aligned_string "flag"
+WidgetPropStr_Rect:		aligned_string "rect"
+WidgetPropStr_Flag:		aligned_string "flag"
 WidgetPropStr_WidgetPrev:	aligned_string "prev"
 WidgetPropStr_WidgetNext:	aligned_string "next"
 WidgetPropStr_Sub:
@@ -1559,8 +1559,8 @@ WidgetPropTab_ColorScheme:
 	.long WidgetPropStr_ColorSentinel
 WidgetPropStr_ColorSentinel:	aligned_string ""
 WidgetPropStr_ColorIndex:	aligned_string "index"
-WidgetPropStr_Border:	aligned_string "border"
-WidgetPropStr_Color:	aligned_string "color"
+WidgetPropStr_Border:		aligned_string "border"
+WidgetPropStr_Color:		aligned_string "color"
 	and	w, w
 	.byte 0xea, 0x00, 0xbe, 0xc0, 0xea, 0x00, 0xb8, 0xc0
 	.byte 0xea, 0x00, 0xb6, 0xc0, 0xea, 0x00, 0x00, 0xff
@@ -1587,14 +1587,14 @@ WidgetPropTab_Spinbox:
 	.long WidgetPropSentinel_Spinbox
 WidgetPropSentinel_Spinbox:
 	.byte 0x00, 0xff
-WidgetPropStr_Selected:	aligned_string "selected"
-WidgetPropStr_Dial:	aligned_string "dial"
-WidgetPropStr_EditSw:	aligned_string "editsw"
-WidgetPropStr_Length:	aligned_string "length"
-WidgetPropStr_Align:	aligned_string "align"
+WidgetPropStr_Selected:		aligned_string "selected"
+WidgetPropStr_Dial:		aligned_string "dial"
+WidgetPropStr_EditSw:		aligned_string "editsw"
+WidgetPropStr_Length:		aligned_string "length"
+WidgetPropStr_Align:		aligned_string "align"
 WidgetPropStr_FontColor:	aligned_string "fontcolor"
-WidgetPropStr_Font:	aligned_string "font"
-WidgetPropStr_Caption:	aligned_string "caption"
+WidgetPropStr_Font:		aligned_string "font"
+WidgetPropStr_Caption:		aligned_string "caption"
 	.byte 0x5c, 0xc1, 0xea, 0x00, 0x5a, 0xc1
 	.byte 0xea, 0x00
 WidgetPropSentinel_Figures:
@@ -1636,8 +1636,8 @@ WidgetPropStr_Min:
 	.long WidgetPropStr_DataProp
 	.long WidgetPropStr_DataFuncSentinel
 WidgetPropStr_DataFuncSentinel:	aligned_string ""
-WidgetPropStr_DataProp:	aligned_string "data"
-WidgetPropStr_FuncProp:	aligned_string "func"
+WidgetPropStr_DataProp:		aligned_string "data"
+WidgetPropStr_FuncProp:		aligned_string "func"
 WidgetPropTab_TextLabel:
 	.long WidgetPropStr_LblFont
 	.long WidgetPropStr_LblFontColor
@@ -1649,17 +1649,17 @@ WidgetPropSentinel_TextLabel:
 	.byte 0x00, 0xff
 WidgetPropStr_LblSelected:	aligned_string "selected"
 WidgetPropStr_LblEditSw:	aligned_string "editsw"
-WidgetPropStr_LblAlign:	aligned_string "align"
+WidgetPropStr_LblAlign:		aligned_string "align"
 WidgetPropStr_LblFontColor:	aligned_string "fontcolor"
-WidgetPropStr_LblFont:	aligned_string "font"
+WidgetPropStr_LblFont:		aligned_string "font"
 WidgetPropTab_IconTitle:
 	.long WidgetPropStr_Str
 	.long WidgetPropStr_Title
 	.long WidgetPropStr_Icon
 	.long WidgetPropStr_IconTitleSentinel
 WidgetPropStr_IconTitleSentinel:	aligned_string ""
-WidgetPropStr_Icon:	aligned_string "icon"
-WidgetPropStr_Title:	aligned_string "title"
+WidgetPropStr_Icon:			aligned_string "icon"
+WidgetPropStr_Title:			aligned_string "title"
 WidgetPropStr_Str:
 	.byte 0x73, 0x74
 	.byte 0x72, 0x00, 0x90, 0xc2, 0xea, 0x00, 0x86, 0xc2
@@ -1683,7 +1683,7 @@ WidgetPropStr_StyleFunc:	aligned_string "func"
 	.long WidgetPropStr_EditSw2
 	.long WidgetPropStr_EditSw2Sentinel
 WidgetPropStr_EditSw2Sentinel:	aligned_string ""
-WidgetPropStr_EditSw2:	aligned_string "editsw2"
+WidgetPropStr_EditSw2:		aligned_string "editsw2"
 	.byte 0xdc, 0xc2, 0xea, 0x00, 0xda, 0xc2
 	.byte 0xea, 0x00
 WidgetPropSentinel_Style2:
@@ -1705,8 +1705,8 @@ WidgetPropStr_Page:
 	.long WidgetPropStr_PageMax
 	.long WidgetPropStr_PagedSentinel
 WidgetPropStr_PagedSentinel:	aligned_string ""
-WidgetPropStr_PageMax:	aligned_string "pagemax"
-WidgetPropStr_PageMin:	aligned_string "pagemin"
+WidgetPropStr_PageMax:		aligned_string "pagemax"
+WidgetPropStr_PageMin:		aligned_string "pagemin"
 WidgetPropTab_ToggleSwitch:
 	.long WidgetPropStr_ToggleFont
 	.long WidgetPropStr_StrOn
@@ -1717,9 +1717,9 @@ WidgetPropTab_ToggleSwitch:
 WidgetPropSentinel_Toggle:
 	.byte 0x00, 0xff
 WidgetPropStr_ToggleEditSw:	aligned_string "editsw"
-WidgetPropStr_OnOff2:	aligned_string "onoff"
-WidgetPropStr_StrOff:	aligned_string "stroff"
-WidgetPropStr_StrOn:	aligned_string "stron"
+WidgetPropStr_OnOff2:		aligned_string "onoff"
+WidgetPropStr_StrOff:		aligned_string "stroff"
+WidgetPropStr_StrOn:		aligned_string "stron"
 WidgetPropStr_ToggleFont:	aligned_string "font"
 	.byte 0x6a, 0xc3
 	.byte 0xea, 0x00
@@ -1728,16 +1728,16 @@ WidgetPropSentinel_WinPage:
 	.long WidgetPropStr_Window
 	.long WidgetPropStr_WinPageSentinel
 WidgetPropStr_WinPageSentinel:	aligned_string ""
-WidgetPropStr_Window:	aligned_string "window"
-WidgetPropStr_PageProp:	aligned_string "page"
+WidgetPropStr_Window:		aligned_string "window"
+WidgetPropStr_PageProp:		aligned_string "page"
 	.long WidgetPropStr_Func2
 	.long WidgetPropStr_FuncSentinel2
 WidgetPropStr_FuncSentinel2:	aligned_string ""
-WidgetPropStr_Func2:	aligned_string "func"
+WidgetPropStr_Func2:		aligned_string "func"
 	.long WidgetPropStr_Part
 	.long WidgetPropStr_PartSentinel
 WidgetPropStr_PartSentinel:	aligned_string ""
-WidgetPropStr_Part:	aligned_string "part"
+WidgetPropStr_Part:		aligned_string "part"
 WidgetPropTab_FontColor:
 	.long WidgetPropStr_FcStr
 	.long WidgetPropStr_FcFont
@@ -1745,7 +1745,7 @@ WidgetPropTab_FontColor:
 	.long WidgetPropStr_FcSentinel
 WidgetPropStr_FcSentinel:	aligned_string ""
 WidgetPropStr_FcFontColor:	aligned_string "fontcolor"
-WidgetPropStr_FcFont:	aligned_string "font"
+WidgetPropStr_FcFont:		aligned_string "font"
 WidgetPropStr_FcStr:
 	.byte 0x73, 0x74, 0x72, 0x00, 0xd8, 0xc3
 	.byte 0xea, 0x00, 0xd6, 0xc3, 0xea, 0x00
@@ -1761,7 +1761,7 @@ WidgetPropStr_IconProp:
 	.long WidgetPropStr_LineMode
 	.long WidgetPropStr_LineSentinel
 WidgetPropStr_LineSentinel:	aligned_string ""
-WidgetPropStr_LineMode:	aligned_string "linemode"
+WidgetPropStr_LineMode:		aligned_string "linemode"
 WidgetPropStr_LineColor:	aligned_string "color"
 	.byte 0x28, 0xc4, 0xea, 0x00, 0x22, 0xc4
 	.byte 0xea, 0x00, 0x1c, 0xc4, 0xea, 0x00, 0x1a, 0xc4
@@ -1770,7 +1770,7 @@ WidgetPropSentinel_Frame:
 	.byte 0x00, 0xff
 WidgetPropStr_FrameColor:	aligned_string "color"
 WidgetPropStr_FrameWidth:	aligned_string "width"
-WidgetPropStr_Frame:	aligned_string "frame"
+WidgetPropStr_Frame:		aligned_string "frame"
 	.byte 0x4c, 0xc4
 	.byte 0xea, 0x00, 0x46, 0xc4, 0xea, 0x00, 0x40, 0xc4
 	.byte 0xea, 0x00, 0x3e, 0xc4, 0xea, 0x00
@@ -1785,7 +1785,7 @@ WidgetPropStr_FuncEncoded:	jr	z, 0x75
 	.long WidgetPropStr_IdxSentinel
 WidgetPropStr_IdxSentinel:	aligned_string ""
 WidgetPropStr_IdxBorder:	aligned_string "border"
-WidgetPropStr_IdxColor:	aligned_string "color"
+WidgetPropStr_IdxColor:		aligned_string "color"
 	.long WidgetPropSentinel_WinExit
 WidgetPropSentinel_WinExit:
 	.byte 0x00, 0xff, 0x8c, 0xc4
@@ -1806,9 +1806,9 @@ WidgetPropStr_DlgTitle:	.byte 0x74, 0x69
 	.long WidgetPropStr_Child
 	.long WidgetPropStr_DlgSentinel
 WidgetPropStr_DlgSentinel:	aligned_string ""
-WidgetPropStr_Child:	.asciz "child"
+WidgetPropStr_Child:		.asciz "child"
 WidgetPropStr_DlgParent:	aligned_string "parent"
-WidgetPropStr_Modal:	aligned_string "modal"
+WidgetPropStr_Modal:		aligned_string "modal"
 WidgetPropTab_MultilineText:
 	.long WidgetPropStr_Text
 	.long WidgetPropStr_MlFontEncoded
@@ -1818,7 +1818,7 @@ WidgetPropTab_MultilineText:
 	.long WidgetPropSentinel_Multiline
 WidgetPropSentinel_Multiline:
 	.byte 0x00, 0xff
-WidgetPropStr_Lines:	aligned_string "lines"
+WidgetPropStr_Lines:		aligned_string "lines"
 WidgetPropStr_Alignment:	aligned_string "alignment"
 WidgetPropStr_MlFontColor:	aligned_string "fontcolor"
 WidgetPropStr_MlFontEncoded:
@@ -1832,7 +1832,7 @@ WidgetPropSentinel_RichText:
 	.byte 0x00, 0xff
 WidgetPropStr_RtAlignment:	aligned_string "alignment"
 WidgetPropStr_RtFontColor:	aligned_string "fontcolor"
-WidgetPropStr_RtFont:	aligned_string "font"
+WidgetPropStr_RtFont:		aligned_string "font"
 WidgetPropStr_RtStr:	.byte 0x73, 0x74, 0x72, 0x00, 0x78, 0xc5
 	.byte 0xea, 0x00, 0x72, 0xc5, 0xea, 0x00, 0x6c, 0xc5
 	.byte 0xea, 0x00, 0x66, 0xc5, 0xea, 0x00, 0x60, 0xc5
@@ -1864,7 +1864,7 @@ WidgetPropSentinel_EditOnOff:
 	.long WidgetPropStr_EoEditSw
 	.long WidgetPropStr_EoSentinel
 WidgetPropStr_EoSentinel:	aligned_string ""
-WidgetPropStr_EoEditSw:	aligned_string "editsw"
+WidgetPropStr_EoEditSw:		aligned_string "editsw"
 WidgetPropStr_EoPart:
 	.byte 0x70, 0x61
 	.byte 0x72, 0x74, 0x00, 0xff, 0xf0, 0xc5, 0xea, 0x00
@@ -1893,8 +1893,8 @@ WidgetPropStr_StyleBlock2:
 	.long WidgetPropStr_ImIcon
 	.long WidgetPropStr_ImSentinel
 WidgetPropStr_ImSentinel:	aligned_string ""
-WidgetPropStr_ImIcon:	aligned_string "icon"
-WidgetPropStr_ImMode:	aligned_string "mode"
+WidgetPropStr_ImIcon:		aligned_string "icon"
+WidgetPropStr_ImMode:		aligned_string "mode"
 WidgetPropStr_ImStr:	.byte 0x73, 0x74, 0x72, 0x00, 0x66, 0xc6
 	.byte 0xea, 0x00, 0x5e, 0xc6, 0xea, 0x00, 0x58, 0xc6
 	.byte 0xea, 0x00, 0x56, 0xc6, 0xea, 0x00
@@ -1920,11 +1920,11 @@ WidgetPropStr_DfFunc:	aligned_string "func"
 	.long WidgetPropStr_Func3
 	.long WidgetPropStr_FuncSentinel3
 WidgetPropStr_FuncSentinel3:	aligned_string ""
-WidgetPropStr_Func3:	aligned_string "func"
+WidgetPropStr_Func3:		aligned_string "func"
 	.long WidgetPropStr_EditSw2b
 	.long WidgetPropStr_EditSw2Sentinel2
 WidgetPropStr_EditSw2Sentinel2:	aligned_string ""
-WidgetPropStr_EditSw2b:	aligned_string "editsw2"
+WidgetPropStr_EditSw2b:		aligned_string "editsw2"
 	.byte 0xce, 0xc6, 0xea, 0x00
 WidgetPropSentinel_Mode:
 	.byte 0x00, 0xff
@@ -1943,14 +1943,14 @@ WidgetPropStr_ScreenProp:	aligned_string "screen"
 	.long WidgetPropStr_WinProp
 	.long WidgetPropStr_WinSentinel
 WidgetPropStr_WinSentinel:	aligned_string ""
-WidgetPropStr_WinProp:	aligned_string "window"
+WidgetPropStr_WinProp:		aligned_string "window"
 	.byte 0x0e, 0xc7, 0xea, 0x00
 WidgetPropSentinel_Cursor:
 	.byte 0x00, 0xff
 	.long WidgetPropStr_Cursor
 	.long WidgetPropStr_CursorSentinel
 WidgetPropStr_CursorSentinel:	aligned_string ""
-WidgetPropStr_Cursor:	aligned_string "cursor"
+WidgetPropStr_Cursor:		aligned_string "cursor"
 	.byte 0x2c, 0xc7, 0xea, 0x00, 0x2a, 0xc7
 	.byte 0xea, 0x00
 WidgetPropSentinel_Func3:
@@ -1981,9 +1981,9 @@ WidgetPropStr_TabTag:
 	.byte 0x74, 0x61, 0x67, 0x00
 WidgetPropStr_TabSelected:	aligned_string "selected"
 WidgetPropStr_TabEditSw:	aligned_string "editsw"
-WidgetPropStr_TabAlign:	aligned_string "align"
+WidgetPropStr_TabAlign:		aligned_string "align"
 WidgetPropStr_TabFontColor:	aligned_string "fontcolor"
-WidgetPropStr_TabFont:	aligned_string "font"
+WidgetPropStr_TabFont:		aligned_string "font"
 	.byte 0xb8, 0xc7
 	.byte 0xea, 0x00, 0xb6, 0xc7, 0xea, 0x00
 WidgetPropSentinel_TabStr:
@@ -2007,7 +2007,7 @@ WidgetPropStr_GridRow:
 	.byte 0x72, 0x6f, 0x77, 0x00
 WidgetPropStr_GridAlign:	aligned_string "align"
 WidgetPropStr_GridFontColor:	aligned_string "fontcolor"
-WidgetPropStr_GridFont:	aligned_string "font"
+WidgetPropStr_GridFont:		aligned_string "font"
 	.byte 0x80, 0xc8, 0xea, 0x00, 0x76, 0xc8
 	.byte 0xea, 0x00, 0x70, 0xc8, 0xea, 0x00, 0x6c, 0xc8
 	.byte 0xea, 0x00, 0x68, 0xc8, 0xea, 0x00, 0x5e, 0xc8
@@ -2043,9 +2043,9 @@ WidgetPropTab_GridCtrl:
 	.long WidgetPropStr_GcFunc
 	.long WidgetPropStr_GcSentinel
 WidgetPropStr_GcSentinel:	aligned_string ""
-WidgetPropStr_GcFunc:	aligned_string "func"
-WidgetPropStr_FixedRow:	aligned_string "fixedrow"
-WidgetPropStr_FixedCol:	aligned_string "fixedcol"
+WidgetPropStr_GcFunc:		aligned_string "func"
+WidgetPropStr_FixedRow:		aligned_string "fixedrow"
+WidgetPropStr_FixedCol:		aligned_string "fixedcol"
 	.long WidgetPropStr_PageSub
 	.long WidgetPropSentinel_PageSub
 WidgetPropSentinel_PageSub:
@@ -2059,9 +2059,9 @@ WidgetPropTab_SeqTrack:
 	.long WidgetPropStr_RecPlay
 	.long WidgetPropStr_SeqSentinel
 WidgetPropStr_SeqSentinel:	aligned_string ""
-WidgetPropStr_RecPlay:	aligned_string "recplay"
-WidgetPropStr_SeqPart:	aligned_string "part"
-WidgetPropStr_SeqOnOff:	aligned_string "onoff"
+WidgetPropStr_RecPlay:		aligned_string "recplay"
+WidgetPropStr_SeqPart:		aligned_string "part"
+WidgetPropStr_SeqOnOff:		aligned_string "onoff"
 WidgetPropStr_SeqTrack:	.byte 0x74, 0x72
 	.byte 0x61, 0x63, 0x6b, 0x00, 0x10, 0xc9, 0xea, 0x00
 	.byte 0x00, 0xff, 0x16, 0xc9, 0xea, 0x00
@@ -2098,7 +2098,7 @@ WidgetPropSentinel_GenFunc:
 	.long WidgetPropStr_GenFunc
 	.long WidgetPropStr_GenSentinel
 WidgetPropStr_GenSentinel:	aligned_string ""
-WidgetPropStr_GenFunc:	aligned_string "func"
+WidgetPropStr_GenFunc:		aligned_string "func"
 WidgetPropTab_MlTextFont:
 	.long WidgetPropStr_MtfFont
 	.long WidgetPropStr_MtfFontColor
@@ -2106,10 +2106,10 @@ WidgetPropTab_MlTextFont:
 	.long WidgetPropStr_MtfLines
 	.long WidgetPropStr_MtfSentinel
 WidgetPropStr_MtfSentinel:	aligned_string ""
-WidgetPropStr_MtfLines:	.asciz "lines"
+WidgetPropStr_MtfLines:		.asciz "lines"
 WidgetPropStr_MtfAlignment:	aligned_string "alignment"
 WidgetPropStr_MtfFontColor:	aligned_string "fontcolor"
-WidgetPropStr_MtfFont:	aligned_string "font"
+WidgetPropStr_MtfFont:		aligned_string "font"
 	.byte 0xb0, 0xc9
 	.byte 0xea, 0x00, 0xae, 0xc9, 0xea, 0x00
 WidgetPropSentinel_FuncTerm:

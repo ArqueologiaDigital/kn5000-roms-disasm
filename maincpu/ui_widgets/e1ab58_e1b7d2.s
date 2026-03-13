@@ -470,7 +470,7 @@ LABEL_E1B496:
 	.long LABEL_E1B4C6
 	.byte 0xb2, 0xd7, 0x03, 0x00, 0x0a, 0x00, 0x10, 0x00
 	.byte 0x24, 0x01, 0x01, 0x00, 0x00, 0x00
-LABEL_E1B4C6:	aligned_string "ON BASS : OFF"
+LABEL_E1B4C6:			aligned_string "ON BASS : OFF"
 Naka_AccOnBass_Handlers:	aligned_string "ON BASS : ON"
 	.long LABEL_E176F6
 	.long LABEL_E1772E

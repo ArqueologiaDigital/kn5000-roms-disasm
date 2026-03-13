@@ -9241,7 +9241,7 @@ NakaDesc_PmanOnOff2_Data:	aligned_string "data"
 	.byte 0xe5, 0x00
 NakaDesc_GridBox1_NullEntry:
 	.byte 0x00, 0xff
-NakaDesc_GridBox1_Func:	aligned_string "func"
+NakaDesc_GridBox1_Func:		aligned_string "func"
 NakaDesc_GridBox1_FixedRow:	aligned_string "fixedrow"
 NakaDesc_GridBox1_FixedCol:	aligned_string "fixedcol"
 	.byte 0x98, 0x58
@@ -9249,7 +9249,7 @@ NakaDesc_GridBox1_FixedCol:	aligned_string "fixedcol"
 	.byte 0xe5, 0x00, 0x86, 0x58, 0xe5, 0x00
 NakaDesc_GridBox2_NullEntry:
 	.byte 0x00, 0xff
-NakaDesc_GridBox2_Func:	aligned_string "func"
+NakaDesc_GridBox2_Func:		aligned_string "func"
 NakaDesc_GridBox2_FixedRow:	aligned_string "fixedrow"
 NakaDesc_GridBox2_FixedCol:	aligned_string "fixedcol"
 	.byte 0xc4, 0x58, 0xe5, 0x00, 0xba, 0x58
@@ -9257,7 +9257,7 @@ NakaDesc_GridBox2_FixedCol:	aligned_string "fixedcol"
 	.byte 0xe5, 0x00
 NakaDesc_GridBox3_NullEntry:
 	.byte 0x00, 0xff
-NakaDesc_GridBox3_Func:	aligned_string "func"
+NakaDesc_GridBox3_Func:		aligned_string "func"
 NakaDesc_GridBox3_FixedRow:	aligned_string "fixedrow"
 NakaDesc_GridBox3_FixedCol:	aligned_string "fixedcol"
 	.byte 0xf0, 0x58
@@ -9265,7 +9265,7 @@ NakaDesc_GridBox3_FixedCol:	aligned_string "fixedcol"
 	.byte 0xe5, 0x00, 0xde, 0x58, 0xe5, 0x00
 NakaDesc_GridBox4_NullEntry:
 	.byte 0x00, 0xff
-NakaDesc_GridBox4_Func:	aligned_string "func"
+NakaDesc_GridBox4_Func:		aligned_string "func"
 NakaDesc_GridBox4_FixedRow:	aligned_string "fixedrow"
 NakaDesc_GridBox4_FixedCol:	aligned_string "fixedcol"
 	.byte 0x1c, 0x59, 0xe5, 0x00, 0x12, 0x59
@@ -9273,7 +9273,7 @@ NakaDesc_GridBox4_FixedCol:	aligned_string "fixedcol"
 	.byte 0xe5, 0x00
 NakaDesc_GridBox5_NullEntry:
 	.byte 0x00, 0xff
-NakaDesc_GridBox5_Func:	aligned_string "func"
+NakaDesc_GridBox5_Func:		aligned_string "func"
 NakaDesc_GridBox5_FixedRow:	aligned_string "fixedrow"
 NakaDesc_GridBox5_FixedCol:	aligned_string "fixedcol"
 	.byte 0x48, 0x59
@@ -9281,7 +9281,7 @@ NakaDesc_GridBox5_FixedCol:	aligned_string "fixedcol"
 	.byte 0xe5, 0x00, 0x36, 0x59, 0xe5, 0x00
 NakaDesc_GridBox6_NullEntry:
 	.byte 0x00, 0xff
-NakaDesc_GridBox6_Func:	aligned_string "func"
+NakaDesc_GridBox6_Func:		aligned_string "func"
 NakaDesc_GridBox6_FixedRow:	aligned_string "fixedrow"
 NakaDesc_GridBox6_FixedCol:	aligned_string "fixedcol"
 	.byte 0x74, 0x59, 0xe5, 0x00, 0x6a, 0x59
@@ -9289,7 +9289,7 @@ NakaDesc_GridBox6_FixedCol:	aligned_string "fixedcol"
 	.byte 0xe5, 0x00
 NakaDesc_GridBox7_NullEntry:
 	.byte 0x00, 0xff
-NakaDesc_GridBox7_Func:	aligned_string "func"
+NakaDesc_GridBox7_Func:		aligned_string "func"
 NakaDesc_GridBox7_FixedRow:	aligned_string "fixedrow"
 NakaDesc_GridBox7_FixedCol:	aligned_string "fixedcol"
 NakaDesc_PageGridBox1_Table:
