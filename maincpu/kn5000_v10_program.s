@@ -40135,7 +40135,7 @@ LABEL_F9B558:
 	lds iz, 0
 	cpdi16_24 160982, 0
 	jr ule, LABEL_F9B588
-	.include "voice_synth.s"
+	.include "ui_window_procs.s"
 	.byte 0xe8, 0x13, 0xeb, 0x80, 0xe8, 0x82, 0xb2, 0xcf
 	.byte 0x66, 0x04, 0xb2, 0xb6, 0x68, 0x02, 0xb2, 0xbe
 	.byte 0x8f, 0x18, 0x61, 0xaf, 0x0c, 0x20, 0xaf, 0x04
@@ -40799,7 +40799,7 @@ LABEL_FB1371:
 	sll xbc, 6
 	ld wa, (xde)
 	exts xwa
-	.include "voice_midi_buf.s"
+	.include "graphics_text_vga.s"
 	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 
