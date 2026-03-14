@@ -203,6 +203,11 @@ typedef struct __attribute__((packed)) {
     uint8_t  data[10];   /* padding/setup data */
 } sd_nop_12_t;
 
+/* ── Space padding initializer ──────────────────────────────── */
+
+/** Fill N bytes with ASCII space (0x20) using GNU range designators */
+#define SD_SPACES(n) { [0 ... ((n)-1)] = ' ' }
+
 /* ── Helper for unknown opcodes ──────────────────────────────── */
 
 #define SD_UNKNOWN_TYPE(data_len) \
