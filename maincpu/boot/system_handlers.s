@@ -20,19 +20,19 @@ NMI_HANDLER:
 	sti16_24 0x00ffca, 0x0000
 	calr NMI_StorePayloadChecksums
 	bitda 2, 64941
-	jr z, LABEL_EF08BE
+	jr z, NMI_SetPowerOffCode_A5A5
 	sti16_24 0x00ffcc, 0x5a5a
-	jr LABEL_EF08C5
+	jr NMI_ClearGuardAndHalt
 
-LABEL_EF08BE:
+NMI_SetPowerOffCode_A5A5:
 	sti16_24 0x00ffcc, 0xa5a5
 
-LABEL_EF08C5:
+NMI_ClearGuardAndHalt:
 	stdi8 1024, 0
 	resda 7, 354
 	set_dd8 2, 0x3C
 	halt
-LABEL_EF08D2:
+NMI_HaltLoop:
 	jr	t, 0xfd
 
 ; ===========================================================================
@@ -51,7 +51,7 @@ LABEL_EF08D2:
 ;        the payload on the next boot and show the splash screen (not "ALL INITIAL SETTING!").
 ; ===========================================================================
 NMI_StorePayloadChecksums:
-LABEL_EF08D4:
+NMI_StorePayloadChecksums_Entry:
 	cpdi8 1024, 128
 	ret nz
 	call Demo_SelectEntry_PreSaveCheck
@@ -66,10 +66,10 @@ LABEL_EF08D4:
 	st16_24 0x00ffd2, xhl
 	call Seq_IsMelodyActive
 	cps hl, 0
-	jr z, LABEL_EF0914
+	jr z, NMI_CopyPayloadToSRAM
 	adddi16_24 65492, 1000
 
-LABEL_EF0914:
+NMI_CopyPayloadToSRAM:
 	lda_24 xde, 0x00066e
 	srl xde, 1
 	ld xwa, 0x1E8000
@@ -95,7 +95,7 @@ LABEL_EF0914:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog shown on failure
 ; ===========================================================================
 SubCPU_Payload_Verify:
-LABEL_EF092B:
+SubCPU_Payload_Verify_Entry:
 	ld xwa, 0xF180	; Start of payload region 1
 	ldw bc, 0x800	; Size: 0x800 words
 	call Checksum_ComputeComplement	; Compute checksum -> HL
@@ -111,7 +111,7 @@ LABEL_EF092B:
 	ret
 
 SubCPU_Payload_Verify_Fail:
-LABEL_EF095E:
+SubCPU_Payload_Verify_Fail_Entry:
 	sti8_24 0x01e53e, 0xff                 ; Mark as failed
 	ldw bc, 0x280
 	call Checksum_ComputeComplement
@@ -135,7 +135,7 @@ LABEL_EF095E:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog shown when HL != 0
 ; ===========================================================================
 SubCPU_Payload_GetErrorFlag:
-LABEL_EF0979:
+SubCPU_Payload_GetErrorFlag_Entry:
 	ld8_24 l, 0x01e53e
 	exts hl
 	ret
@@ -144,7 +144,7 @@ SubCPU_PayloadErrorStore:
 	sti8_24 0x01e53e, 0xff
 	ret
 
-LABEL_EF0988:
+Sys_CheckPowerStableFlag:
 	cpdi16_24 65484, 23130
 	scc16 z, hl
 	ret
@@ -152,10 +152,10 @@ LABEL_EF0988:
 Vga_WritePortShortDelay:
 	lds de, 0
 
-LABEL_EF0994:
+Vga_WritePort_DelayLoop:
 	inc 1, de
 	cp de, 0x80
-	jr c, LABEL_EF0994
+	jr c, Vga_WritePort_DelayLoop
 	extz xwa
 	ld xde, 0x170000
 	add xde, xwa
@@ -260,7 +260,7 @@ Vga_RestoreMultiPlaneDisplay:
 	calr Vga_SelectWritePlane
 	jp Start_8bit_Timer_3
 
-LABEL_EF0AFC:
+Vga_BackupPlane3ToBuffer:
 	call Stop_and_Clear_8bit_Timer_3
 	lds wa, 3
 	calr Vga_SelectWritePlane
@@ -272,7 +272,7 @@ LABEL_EF0AFC:
 	calr Vga_SelectWritePlane
 	jp Start_8bit_Timer_3
 
-LABEL_EF0B21:
+Vga_RestorePlane3FromBuffer:
 	call Stop_and_Clear_8bit_Timer_3
 	lds wa, 3
 	calr Vga_SelectWritePlane
@@ -322,16 +322,16 @@ Boot_InitWorkRAM:
 	jr z, MemCopy_DataValidation
 	ldto_werp WA, 0xE6
 
-LABEL_EF0B6E:
+Boot_InitWorkRAM_ZeroBlock1_Loop:
 	ldirw93
-	djnz xwa, LABEL_EF0B6E
+	djnz xwa, Boot_InitWorkRAM_ZeroBlock1_Loop
 
 MemCopy_DataValidation:
 	bit 0, ix
-	jr z, LABEL_EF0B7B
+	jr z, Boot_InitWorkRAM_ZeroBlock1_Done
 	ld (xde), 0x0
 
-LABEL_EF0B7B:
+Boot_InitWorkRAM_ZeroBlock1_Done:
 	ld xde, 0x400
 	ld xbc, 0xDF5D
 	ld ix, bc
@@ -347,50 +347,50 @@ LABEL_EF0B7B:
 	jr z, MemCopy_SetupAndDMA
 	ldto_werp WA, 0xE6
 
-LABEL_EF0BA3:
+Boot_InitWorkRAM_ZeroBlock2_Loop:
 	ldirw93
-	djnz xwa, LABEL_EF0BA3
+	djnz xwa, Boot_InitWorkRAM_ZeroBlock2_Loop
 
 MemCopy_SetupAndDMA:
 	bit 0, ix
-	jr z, LABEL_EF0BB0
+	jr z, Boot_InitWorkRAM_ROMCopy1_Start
 	ld (xde), 0x0
 
-LABEL_EF0BB0:
+Boot_InitWorkRAM_ROMCopy1_Start:
 	ld xde, 0x3D524
 	ld xhl, 0xEED8C8
 	ld xbc, 0x219E
 	or xbc, xbc
-	jr z, LABEL_EF0BD2
+	jr z, Boot_InitWorkRAM_ROMCopy2_Start
 	ldir83
 	cpi_werp 0xE6, 0
-	jr z, LABEL_EF0BD2
+	jr z, Boot_InitWorkRAM_ROMCopy2_Start
 	ldto_werp WA, 0xE6
 
-LABEL_EF0BCD:
+Boot_InitWorkRAM_ROMCopy1_Loop:
 	ldir83
-	djnz xwa, LABEL_EF0BCD
+	djnz xwa, Boot_InitWorkRAM_ROMCopy1_Loop
 
-LABEL_EF0BD2:
+Boot_InitWorkRAM_ROMCopy2_Start:
 	ld xde, 0xE35E
 	ld xhl, 0xEEFA66
 	ld xbc, 0x95B
 	or xbc, xbc
-	jr z, LABEL_EF0BF4
+	jr z, Boot_InitWorkRAM_Done
 	ldir83
 	cpi_werp 0xE6, 0
-	jr z, LABEL_EF0BF4
+	jr z, Boot_InitWorkRAM_Done
 	ldto_werp WA, 0xE6
 
-LABEL_EF0BEF:
+Boot_InitWorkRAM_ROMCopy2_Loop:
 	ldir83
-	djnz xwa, LABEL_EF0BEF
+	djnz xwa, Boot_InitWorkRAM_ROMCopy2_Loop
 
-LABEL_EF0BF4:
+Boot_InitWorkRAM_Done:
 	jrl LABEL_EF0529
 	ret
 
-LABEL_EF0BF8:
+Boot_InitWorkRAM_Trailer:
 	.byte 0x0e
 
 INTT1_HANDLER:
@@ -406,48 +406,48 @@ INTT1_HANDLER:
 	ldda8 a, 1063
 	ldda8 w, 1062
 	bit 7, a
-	jr z, LABEL_EF0C2C
+	jr z, INTT1_NoOverflow
 	incdi8 1, 1061
 	cpdi8 1061, 165
-	jr ule, LABEL_EF0C2C
+	jr ule, INTT1_NoOverflow
 	and a, 0x7F
 	or a, 0x20
 
-LABEL_EF0C2C:
+INTT1_NoOverflow:
 	inc 1, w
 	cp w, 0x86
-	jr ule, LABEL_EF0C3E
+	jr ule, INTT1_StoreCounters
 	ldb w, 0x0
 	ordi8 1065, 16
 	call MIDI_SC0_TX_DISPATCH
 
-LABEL_EF0C3E:
+INTT1_StoreCounters:
 	stda8 1062, w
 	stda8 1063, a
 	pop_sr
 	ldda8 a, 1066
 	cp a, 0xF1
-	jr ugt, LABEL_EF0C52
+	jr ugt, INTT1_CheckScanFlag
 	inc 1, a
 
-LABEL_EF0C52:
+INTT1_CheckScanFlag:
 	stda8 1066, a
 	bitda 2, 64848
-	jrl nz, LABEL_EF0CE9
+	jrl nz, INTT1_UpdateAlternateTimers
 	incdi8 1, 1050
 	bitda 0, 1056
-	jr nz, LABEL_EF0CA5
+	jr nz, INTT1_CheckTickOverflow
 	bitda 5, 1056
-	jr nz, LABEL_EF0C76
+	jr nz, INTT1_CheckTickCount
 	stdi8 1050, 0
 	jp UIStateMachine_DispatchEntry
 
-LABEL_EF0C76:
+INTT1_CheckTickCount:
 	cpdi8 1050, 1
 	jrl nc, UIStateMachine_DispatchEntry
 	stdi8 1056, 16
 
-LABEL_EF0C83:
+INTT1_CheckMidiSync:
 	cpdi8 36148, 19
 	jr z, UIState_DispatchBranch
 	bitda 2, 64850
@@ -463,70 +463,70 @@ LABEL_EF0C83:
 UIState_DispatchBranch:
 	jr UIStateMachine_DispatchEntry
 
-LABEL_EF0CA5:
+INTT1_CheckTickOverflow:
 	cpdi8 1050, 1
 	jr ule, UIStateMachine_DispatchEntry
 	stdi8 1056, 6
 	resda 0, 1139
 	bitda 0, 1054
-	jr z, LABEL_EF0CC4
+	jr z, INTT1_CheckAltSeqOverflow
 	stdi8 1054, 6
 	resda 0, 1139
 
-LABEL_EF0CC4:
+INTT1_CheckAltSeqOverflow:
 	bitda 0, 1057
-	jr z, LABEL_EF0CD3
+	jr z, INTT1_CheckMidiSyncGate
 	stdi8 1057, 6
 	resda 0, 1139
 
-LABEL_EF0CD3:
+INTT1_CheckMidiSyncGate:
 	cpdi8 36148, 19
-	jr z, LABEL_EF0CE7
+	jr z, INTT1_SkipToDispatch
 	push_sr
 	ei 6
 	ordi8 1065, 1
 	call MIDI_SC0_TX_DISPATCH
 	pop_sr
 
-LABEL_EF0CE7:
+INTT1_SkipToDispatch:
 	jr UIStateMachine_DispatchEntry
 
-LABEL_EF0CE9:
+INTT1_UpdateAlternateTimers:
 	bitda 3, 1054
-	jr z, LABEL_EF0CF4
+	jr z, INTT1_CheckAltSeqTimer
 	stdi8 1054, 16
 
-LABEL_EF0CF4:
+INTT1_CheckAltSeqTimer:
 	bitda 3, 1057
-	jr z, LABEL_EF0D0F
+	jr z, INTT1_CheckMetroTimer
 	stdi8 1057, 16
 	ldda8 a, 1045
 	stda8 1078, a
 	ldda8 a, 1046
 	stda8 1079, a
 
-LABEL_EF0D0F:
+INTT1_CheckMetroTimer:
 	bitda 3, 1056
 	jr z, UIStateMachine_DispatchEntry
 	stdi8 1056, 16
-	jrl LABEL_EF0C83
+	jrl INTT1_CheckMidiSync
 
 UIStateMachine_DispatchEntry:
 	ldada xhl, 1055
 	ld a, (xhl)
 	bitda 2, 64848
-	jr nz, LABEL_EF0D35
+	jr nz, UIStateMachine_CheckPending
 	bit 0, a
-	jr z, LABEL_EF0D35
+	jr z, UIStateMachine_CheckPending
 	ld (xhl), 0x6
 	resda 0, 1139
 
-LABEL_EF0D35:
+UIStateMachine_CheckPending:
 	bit 3, a
-	jr z, LABEL_EF0D3D
+	jr z, UIStateMachine_ClearBit3
 	ld (xhl), 0x10
 
-LABEL_EF0D3D:
+UIStateMachine_ClearBit3:
 	resda 2, 1043
 	ldda8 a, 1041
 	inc 1, a
@@ -558,16 +558,16 @@ UI_STATE_0_IDLE:
 UI_STATE_1_PROCESS:
 	anddi8 1058, 110
 	bitda 0, 1042
-	jr nz, LABEL_EF0D8C
+	jr nz, UIState1_AlternateExit
 	ldada xhl, 1116
 	cp (xhl), 0x0
-	jr z, LABEL_EF0D89
+	jr z, UIState1_SkipToExit
 	decm8 1, (xhl)
 
-LABEL_EF0D89:
+UIState1_SkipToExit:
 	jrl UIStateMachine_ExitToScheduler
 
-LABEL_EF0D8C:
+UIState1_AlternateExit:
 	jrl UIStateMachine_ExitToScheduler
 
 UI_STATE_2_SUBSTATE:
@@ -1251,22 +1251,22 @@ MainLoop_SequencerPhase:
 Seq_TickWrapper:
 	ldada xiy, 1115
 	cp (xiy), 0x1
-	jr nz, LABEL_EF139B
+	jr nz, SeqTick_CheckActive
 	cpdi8 52959, 0
-	jr z, LABEL_EF139B
+	jr z, SeqTick_CheckActive
 	ld (xiy), 0x0
 
-LABEL_EF139B:
+SeqTick_CheckActive:
 	bitm 0, (xiy)
-	jr z, LABEL_EF13A5
+	jr z, SeqTick_Dispatch
 	bitda 2, 1054
-	jr nz, LABEL_EF13AE
+	jr nz, SeqTick_Return
 
-LABEL_EF13A5:
+SeqTick_Dispatch:
 	call Seq_DispatcherEntry
 	stdi8 1124, 0
 
-LABEL_EF13AE:
+SeqTick_Return:
 	ret
 
 MainLoop_ReinitSwbtWr:
@@ -1289,22 +1289,22 @@ Seq_ProcessMidiEvent:
 	xor bc, bc
 	ld iz, bc
 
-LABEL_EF13DC:
+MidiEvt_ScanLoop:
 	bit_dri 7, 0x07, 0xEC, 0xF4
-	jr nz, LABEL_EF13F0
+	jr nz, MidiEvt_FoundStatusByte
 	inc 1, iz
 	minc1_16 iy, 0x3FF
 	cp iy, ix
 	jrl z, MidiSerial_BufferWrap
-	jr LABEL_EF13DC
+	jr MidiEvt_ScanLoop
 
-LABEL_EF13F0:
+MidiEvt_FoundStatusByte:
 	ld_srib3 C, 0x07, 0xEC, 0xF4
 	and c, 0xF0
 	cp c, 0x90
-	jr z, LABEL_EF141B
+	jr z, MidiEvt_SetNoteOnFlag
 	cp c, 0x80
-	jr z, LABEL_EF141B
+	jr z, MidiEvt_SetNoteOnFlag
 	cp c, 0xB0
 	jr nz, MidiSerial_DataReceive
 	ld de, iy
@@ -1315,20 +1315,20 @@ LABEL_EF13F0:
 	cp_srib_im 0x07, 0xEC, 0xF4, 0x7B
 	jr c, MidiSerial_DataReceive
 
-LABEL_EF141B:
+MidiEvt_SetNoteOnFlag:
 	ldb b, 0x1
 
 MidiSerial_DataReceive:
 	bit_dri 7, 0x07, 0xEC, 0xF4
-	jr z, LABEL_EF1465
+	jr z, MidiEvt_AdvancePointer
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	and a, 0xF0
 	cp a, 0x90
-	jr z, LABEL_EF1455
+	jr z, MidiEvt_SetDataFlag
 	cp a, 0x80
-	jr z, LABEL_EF1455
+	jr z, MidiEvt_SetDataFlag
 	cp a, 0xB0
-	jr nz, LABEL_EF145A
+	jr nz, MidiEvt_ClearDataFlag
 	ld de, iy
 	ld wa, iz
 	inc 1, iz
@@ -1338,22 +1338,22 @@ MidiSerial_DataReceive:
 	cp_srib_im 0x07, 0xEC, 0xF4, 0x7B
 	ld iz, wa
 	ld iy, de
-	jr c, LABEL_EF145A
+	jr c, MidiEvt_ClearDataFlag
 
-LABEL_EF1455:
+MidiEvt_SetDataFlag:
 	or b, 0x2
-	jr LABEL_EF145D
+	jr MidiEvt_CheckProcessMode
 
-LABEL_EF145A:
+MidiEvt_ClearDataFlag:
 	and b, 0xFD
 
-LABEL_EF145D:
+MidiEvt_CheckProcessMode:
 	cps b, 1
-	jr z, LABEL_EF1474
+	jr z, MidiEvt_ProcessNoteOn
 	cps b, 2
 	jr z, MidiSerial_ProcessAndReinit
 
-LABEL_EF1465:
+MidiEvt_AdvancePointer:
 	inc 1, iz
 	minc1_16 iy, 0x3FF
 	cp iy, ix
@@ -1363,11 +1363,11 @@ MidiSerial_BufferWrap:
 	bit 0, b
 	jr z, MidiSerial_ProcessAndReinit
 
-LABEL_EF1474:
+MidiEvt_ProcessNoteOn:
 	pushw iz
 	ld (xhl - 6), iy
 	call NoteOn_EntryPoint
-	jr LABEL_EF148F
+	jr MidiEvt_UpdateReadPosition
 
 MidiSerial_ProcessAndReinit:
 	pushw iz
@@ -1378,7 +1378,7 @@ MidiSerial_ProcessAndReinit:
 	jr __jrt_nop_EF148F
 __jrt_nop_EF148F:
 
-LABEL_EF148F:
+MidiEvt_UpdateReadPosition:
 	lda_24 xhl, 0x01f37b
 	ld wa, (xhl - 6)
 	ld (xhl - 8), wa
@@ -1393,49 +1393,49 @@ RhythmBuf_DispatchWrap:
 Seq_EventProcessingTick:
 	call AccNoteOn_ProcessVoiceSetup
 	bitda 7, 1058
-	jr nz, LABEL_EF14B0
+	jr nz, SeqEvtTick_ProcessTimers
 	calr SeqEvt_CheckExpiry
 
-LABEL_EF14B0:
+SeqEvtTick_ProcessTimers:
 	calr SeqEvt_ProcessTimedEvents
 	call RhythmBuf_ProcessEvents
 	call SeqEvt_ProcessBuffer
 	call MIDI_OutputFlush
 	call SysEx_ParseAndDispatch
 	cpdi8 1140, 85
-	jr z, LABEL_EF14D7
+	jr z, SeqEvtTick_Return
 
 Seq_ProcessEventLoop:
 	call Seq_CheckSongEnd
 	and hl, hl
-	jr z, LABEL_EF14D7
+	jr z, SeqEvtTick_Return
 	calr Seq_ProcessMidiEvent
 	jr Seq_ProcessEventLoop
 
-LABEL_EF14D7:
+SeqEvtTick_Return:
 	ret
 SwbtWr_ReinitBothBanks:
 
 assswb_op:
 	cpdi8 48444, 255
-	jr z, LABEL_EF14F2
+	jr z, SwbtWr_ReinitBothBanks_Return
 	call SwbtWr_InitBank1
 	call SwbtWr_InitBank2
 	stdi8 48444, 255
 	stdi16 37086, 0
 
-LABEL_EF14F2:
+SwbtWr_ReinitBothBanks_Return:
 	ret
 SwbtWr_ReinitOutputBank:
 
 assswb_out:
 	cpdi8 48444, 255
-	jr z, LABEL_EF1509
+	jr z, SwbtWr_ReinitOutputBank_Return
 	call SwbtWr_InitBank2
 	stdi8 48444, 255
 	stdi16 37086, 0
 
-LABEL_EF1509:
+SwbtWr_ReinitOutputBank_Return:
 	ret
 
 RhythmBuf_ProcessEvents:
@@ -1446,11 +1446,11 @@ RhythmBuf_ProcessEvents:
 RhythmBuf_ProcessLoop:
 	ld16_24 xwa, 0x01ef59
 	cpda16_24 xwa, 126805
-	jr z, LABEL_EF1524
+	jr z, RhythmBuf_ProcessLoop_Done
 	calr RhythmBuf_DispatchEvent
 	jr RhythmBuf_ProcessLoop
 
-LABEL_EF1524:
+RhythmBuf_ProcessLoop_Done:
 	ret
 
 RhythmBuf_DispatchEvent:
@@ -1851,7 +1851,7 @@ AudioMix_WriteChannelGroup_Loop:
 	popw de
 	ret
 
-LABEL_EF185A:
+AudioMix_BytecodeData:
 	.byte 0x39, 0x3a, 0x0b, 0x01, 0x00, 0x1e, 0x24, 0x00
 	.byte 0xaf, 0x0a, 0x21, 0xee, 0x8a, 0x0b, 0x00, 0x00
 	.byte 0x1e, 0x19, 0x00, 0xe8, 0x89, 0xeb, 0x8a, 0x0b
@@ -1912,19 +1912,19 @@ Checksum_ComputeComplement:
 	extz xbc
 	add xbc, xwa
 
-LABEL_EF18ED:
+Checksum_AccumulateLoop:
 	add_spil XHL, 0xE2
 	cp xwa, xbc
-	jr lt, LABEL_EF18ED
+	jr lt, Checksum_AccumulateLoop
 	cpl hl
 	ret
 
-LABEL_EF18F7:
+TaskSched_ScreenGroupTable:
 	.long LABEL_EF0563
 	.byte 0x34, 0xdc, 0x01, 0x00
 	.byte 0x00, 0x88, 0x03, 0x00, 0x92, 0x2d, 0xf5, 0x00
 	.byte 0x36, 0xe4, 0x01, 0x00, 0x00, 0x88, 0x03, 0x00
-	.long LABEL_EF1949
+	.long TaskSched_ScreenGroupTable_End
 	.byte 0xb8, 0xe4, 0x01, 0x00
 	.byte 0x00, 0x88, 0x01, 0x00, 0x6c, 0x80, 0xf9, 0x00
 	.byte 0x30, 0xc0, 0x01, 0x00, 0x00, 0x88, 0x03, 0x00
@@ -1933,17 +1933,17 @@ LABEL_EF18F7:
 	.fill 8, 1, 0x01
 	.fill 8, 1, 0x01
 	.byte 0x01, 0x01
-LABEL_EF1949:
+TaskSched_ScreenGroupTable_End:
 	.byte 0x68, 0xfe
 
-LABEL_EF194B:
+INTT3_PriorityAdjust:
 	bitda 0, 1158
-	jr nz, LABEL_EF1958
+	jr nz, INTT3_PriorityAdjust_Active
 	ldb a, 0x5
 	ldb c, 0x2
 	jrl TaskSched_ChangePriority_Inline
 
-LABEL_EF1958:
+INTT3_PriorityAdjust_Active:
 	ldb a, 0x3
 	calr TaskSched_YieldToQueue_NoBlock
 	ldb a, 0x5
@@ -1956,7 +1956,7 @@ INTT3_HANDLER:
 	incdi8 1, 1158
 	pushw wa
 	pushw bc
-	calr LABEL_EF194B
+	calr INTT3_PriorityAdjust
 	popw bc
 	popw wa
 	jrl INTT3_CheckNesting
@@ -2232,7 +2232,7 @@ INTT3_EnterScheduler:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog in Screen Group 7
 ; ===========================================================================
 Show_ScreenGroup:
-LABEL_EF1B9C:
+Show_ScreenGroup_Entry:
 	push_sr
 	ei 6
 	push xhl
@@ -3423,10 +3423,10 @@ TempoRingBuf_CheckEmpty:
 	ld16_24 xhl, 0x01e74f
 	cpda16_24 xhl, 124747
 	lds hl, 0
-	jr z, LABEL_EF24FE
+	jr z, TempoRingBuf_CheckEmpty_Return
 	ldw hl, 0xFFFF
 
-LABEL_EF24FE:
+TempoRingBuf_CheckEmpty_Return:
 	ret
 
 TempoRingBuf_BytecodeSnippet2:
@@ -3723,11 +3723,11 @@ SeqMain_WriteBytes:
 	ld xiy, (xiz + 10)
 	lda_24 xde, 0x01f37b
 
-LABEL_EF2795:
+SeqMain_WriteBytes_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte
 	inc 1, xiy
-	djnz xbc, LABEL_EF2795
+	djnz xbc, SeqMain_WriteBytes_Loop
 	pop xde
 	pop xix
 	pop xiy
@@ -3738,10 +3738,10 @@ Seq_CheckSongEnd:
 	ld16_24 xhl, 0x01f377
 	cpda16_24 xhl, 127859
 	lds hl, 0
-	jr z, LABEL_EF27B6
+	jr z, Seq_CheckSongEnd_Return
 	ldw hl, 0xFFFF
 
-LABEL_EF27B6:
+Seq_CheckSongEnd_Return:
 	ret
 
 SeqMain_GetTimingValue:
@@ -3773,7 +3773,7 @@ SeqMain_ReadData:
 	popw ix
 	ret
 
-LABEL_EF27E6:
+SeqMain_ReadAlternate:
 	pushw	ix
 	push	xde
 	lda_24	xde, 127867

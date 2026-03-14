@@ -2636,7 +2636,7 @@ Audio_FullReinitWithPreset:
 	stda32 37106, xwa
 	lda_24 xwa, 0xedb264
 	stda32 37250, xwa
-	call LABEL_EF0988
+	call Sys_CheckPowerStableFlag
 	cps hl, 0
 	jr nz, Audio_CheckAndReinitReverb
 	ld xwa, 0xC0

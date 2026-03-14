@@ -29851,14 +29851,14 @@ AccBankData_CopyLoop_NonZero:
 	jr c, AccBankData_CopyLoop
 	cp (xsp + 2), 0x2
 	jr ule, AccBankData_InitSlotScan
-	call LABEL_EF0AFC
+	call Vga_BackupPlane3ToBuffer
 	ld c, (xsp + 2)
 	inc 7, c
 	extz bc
 	ldda32 xde, 15708
 	lds wa, 0
 	call LABEL_F193A6
-	call LABEL_EF0B21
+	call Vga_RestorePlane3FromBuffer
 	call AccPatch_CountSlotsAlt
 	jrl AccBankData_PostModeChange
 
