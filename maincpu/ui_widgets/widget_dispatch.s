@@ -6549,7 +6549,7 @@ UIState_ConfigB_051:
 UIState_ConfigB_052:
 	.long HdaeRom_ProcessBlock
 	.long UIState_KeyScan_Dispatch
-	.long LABEL_F454F1
+	.long EffEdit_DSPConfigBlock
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_053:
 	.long HdaeRom_ReadParam
@@ -6558,18 +6558,18 @@ UIState_ConfigB_053:
 UIState_ConfigB_054:
 	.byte 0xc5, 0xaa, 0xfe, 0x00
 	.long UIState_KeyScan_Dispatch
-	.long LABEL_F454F1
+	.long EffEdit_DSPConfigBlock
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_055:
-	.long LABEL_F454F1
+	.long EffEdit_DSPConfigBlock
 	.long HdaeRom_WriteParam
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_056:
-	.long LABEL_F454F1
+	.long EffEdit_DSPConfigBlock
 	.long HdaeRom_CheckResult
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_057:
-	.long LABEL_F454F1
+	.long EffEdit_DSPConfigBlock
 	.long HdaeRom_FinishBlock
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_058:

@@ -496,7 +496,7 @@ MainTrSwControl:
 	jr LABEL_F99172
 
 LABEL_F9916E:
-	call LABEL_F450A1
+	call AppEvent_HandleChannelEvent
 
 LABEL_F99172:
 	lds32 xhl, 0
