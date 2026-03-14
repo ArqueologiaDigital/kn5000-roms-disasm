@@ -712,16 +712,16 @@ Naka_DrawbarSlider_Resources:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xf5, 0x00
 	.byte 0xff, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0xff
 Naka_DrawbarDisplay_Table1:
-	.long LABEL_EADAE0
-	.long LABEL_EADAD8
-	.long LABEL_EADAD0
-	.long LABEL_EADAC8
-	.long LABEL_EADAC0
-	.long LABEL_EADAB8
-	.long LABEL_EADAB0
-	.long LABEL_EADAA8
-	.long LABEL_EADAA0
-	.long LABEL_EADA98
+	.long NakaInst_CHARA1
+	.long NakaInst_CHARA2
+	.long NakaInst_CHARA3
+	.long NakaInst_CHARA4
+	.long NakaInst_CHARA5
+	.long NakaInst_CHARA1P
+	.long NakaInst_CHARA6
+	.long NakaInst_CHARA1W
+	.long NakaInst_CHARA2W
+	.long NakaInst_CHARA5W
 	.long LABEL_EADA96
 	.zero 84
 
@@ -733,10 +733,10 @@ Naka_DrawbarDisplay_Table2:
 	.long LABEL_EADB32
 	.long LABEL_EADB26
 	.long LABEL_EADB1A
-	.long LABEL_EADB0E
-	.long LABEL_EADB02
-	.long LABEL_EADAF6
-	.long LABEL_EADAEA
+	.long NakaInst_ara6_fnt
+	.long NakaInst_chara1w_fnt
+	.long NakaInst_chara2w_fnt
+	.long NakaInst_chara5w_fnt
 	.long LABEL_EADAE8
 	.zero 84
 	.byte 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00

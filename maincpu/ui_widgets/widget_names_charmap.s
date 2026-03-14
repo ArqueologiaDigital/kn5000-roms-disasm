@@ -240,21 +240,21 @@
 	.byte 0x00, 0xff
 	aligned_string "Object"
 	.byte 0x6d, 0x00, 0x0a, 0x00, 0x00, 0xff
-LABEL_EADA98:	aligned_string "CHARA5W"
-LABEL_EADAA0:	aligned_string "CHARA2W"
-LABEL_EADAA8:	aligned_string "CHARA1W"
-LABEL_EADAB0:	aligned_string "CHARA6"
-LABEL_EADAB8:	aligned_string "CHARA1P"
-LABEL_EADAC0:	aligned_string "CHARA5"
-LABEL_EADAC8:	aligned_string "CHARA4"
-LABEL_EADAD0:	aligned_string "CHARA3"
-LABEL_EADAD8:	aligned_string "CHARA2"
-LABEL_EADAE0:	aligned_string "CHARA1"
+NakaInst_CHARA5W:	aligned_string "CHARA5W"
+NakaInst_CHARA2W:	aligned_string "CHARA2W"
+NakaInst_CHARA1W:	aligned_string "CHARA1W"
+NakaInst_CHARA6:	aligned_string "CHARA6"
+NakaInst_CHARA1P:	aligned_string "CHARA1P"
+NakaInst_CHARA5:	aligned_string "CHARA5"
+NakaInst_CHARA4:	aligned_string "CHARA4"
+NakaInst_CHARA3:	aligned_string "CHARA3"
+NakaInst_CHARA2:	aligned_string "CHARA2"
+NakaInst_CHARA1:	aligned_string "CHARA1"
 LABEL_EADAE8:	aligned_string ""
-LABEL_EADAEA:	aligned_string "chara5w.fnt"
-LABEL_EADAF6:	aligned_string "chara2w.fnt"
-LABEL_EADB02:	aligned_string "chara1w.fnt"
-LABEL_EADB0E:
+NakaInst_chara5w_fnt:	aligned_string "chara5w.fnt"
+NakaInst_chara2w_fnt:	aligned_string "chara2w.fnt"
+NakaInst_chara1w_fnt:	aligned_string "chara1w.fnt"
+NakaInst_ara6_fnt:
 	jr	ule, 0x68
 	aligned_string "ara6.fnt"
 	aligned_string "chara1p.fnt"
@@ -1205,33 +1205,33 @@ LABEL_EB01C6:
 	.byte 0xeb, 0x00, 0x76, 0x05, 0xeb, 0x00
 LABEL_EB0576:
 	.byte 0x00, 0xff
-LABEL_EB0578:			aligned_string "DrawBitmapSP2"
-LABEL_EB0586:			aligned_string "MainDeleteEvent"
-LABEL_EB0596:			aligned_string "MainDeleteSpecificEvent"
-LABEL_EB05AE:			aligned_string "DrawFunc"
-LABEL_EB05B8:			aligned_string "SetRootParam"
-LABEL_EB05C6:			aligned_string "SetRootEvent"
-LABEL_EB05D4:			aligned_string "InitDrawTask"
-LABEL_EB05E2:			aligned_string "RefreshSwEvent"
-LABEL_EB05F2:			aligned_string "LcdOn"
-LABEL_EB05F8:			aligned_string "LcdOff"
-LABEL_EB0600:			aligned_string "DrawBitmapFile"
-LABEL_EB0610:			aligned_string "VwUserBitmapByNameProc"
-LABEL_EB0628:			aligned_string "ApDeliveryEvent"
+NakaInst_DrawBitmapSP2:			aligned_string "DrawBitmapSP2"
+NakaInst_MainDeleteEvent:			aligned_string "MainDeleteEvent"
+NakaInst_MainDeleteSpecificEvent:			aligned_string "MainDeleteSpecificEvent"
+NakaInst_DrawFunc:			aligned_string "DrawFunc"
+NakaInst_SetRootParam:			aligned_string "SetRootParam"
+NakaInst_SetRootEvent:			aligned_string "SetRootEvent"
+NakaInst_InitDrawTask:			aligned_string "InitDrawTask"
+NakaInst_RefreshSwEvent:			aligned_string "RefreshSwEvent"
+NakaInst_LcdOn:			aligned_string "LcdOn"
+NakaInst_LcdOff:			aligned_string "LcdOff"
+NakaInst_DrawBitmapFile:			aligned_string "DrawBitmapFile"
+NakaInst_VwUserBitmapByNameProc:			aligned_string "VwUserBitmapByNameProc"
+NakaInst_ApDeliveryEvent:			aligned_string "ApDeliveryEvent"
 LABEL_EB0638:			.asciz "RefreshApTask"
-LABEL_EB0646:			aligned_string "WakeUpApTask"
+NakaInst_WakeUpApTask:			aligned_string "WakeUpApTask"
 LABEL_EB0654:			.asciz "SleepApTask"
-LABEL_EB0660:			aligned_string "WakeUpMainTask"
-LABEL_EB0670:			aligned_string "SleepMainTask"
-LABEL_EB067E:			aligned_string "DeleteEvent"
-LABEL_EB068A:			aligned_string "DeleteSpecificEvent"
-LABEL_EB069E:			aligned_string "FuncCall"
-LABEL_EB06A8:			aligned_string "IvIntWelcomeProc"
-LABEL_EB06BA:			aligned_string "SetWallColor"
-LABEL_EB06C8:			aligned_string "SetWallPaper"
-LABEL_EB06D6:			aligned_string "InitPaletteRGB"
-LABEL_EB06E6:			aligned_string "SetPaletteRGB"
-LABEL_EB06F4:			aligned_string "DrawBitmapFast"
+NakaInst_WakeUpMainTask:			aligned_string "WakeUpMainTask"
+NakaInst_SleepMainTask:			aligned_string "SleepMainTask"
+NakaInst_DeleteEvent:			aligned_string "DeleteEvent"
+NakaInst_DeleteSpecificEvent:			aligned_string "DeleteSpecificEvent"
+NakaInst_FuncCall:			aligned_string "FuncCall"
+NakaInst_IvIntWelcomeProc:			aligned_string "IvIntWelcomeProc"
+NakaInst_SetWallColor:			aligned_string "SetWallColor"
+NakaInst_SetWallPaper:			aligned_string "SetWallPaper"
+NakaInst_InitPaletteRGB:			aligned_string "InitPaletteRGB"
+NakaInst_SetPaletteRGB:			aligned_string "SetPaletteRGB"
+NakaInst_DrawBitmapFast:			aligned_string "DrawBitmapFast"
 Str_DrawBitmapSPFast:		aligned_string "DrawBitmapSPFast"
 Str_GetNamingWindowID:		aligned_string "GetNamingWindowID"
 Str_IvScreenProc:		aligned_string "IvScreenProc"
@@ -1964,7 +1964,7 @@ IconName_i0:		aligned_string "i0"
 IconName_Default:	aligned_string "Default"
 	aligned_string "None"
 IconBitmapNamePtrTable:
-	.long LABEL_EB2AB8
+	.long NakaInst_trash_bmp
 	.long LABEL_EB2AAE
 	.long LABEL_EB2AA6
 	.long LABEL_EB2A9E
@@ -2036,24 +2036,24 @@ IconBitmapNamePtrTable:
 	.long LABEL_EB288E
 	.long LABEL_EB2886
 	.long LABEL_EB287E
-	.long LABEL_EB2876
-	.long LABEL_EB286E
-	.long LABEL_EB2866
-	.long LABEL_EB285C
-	.long LABEL_EB2852
-	.long LABEL_EB284A
-	.long LABEL_EB2842
-	.long LABEL_EB283A
-	.long LABEL_EB2832
-	.long LABEL_EB282A
-	.long LABEL_EB2822
-	.long LABEL_EB281A
-	.long LABEL_EB2812
-	.long LABEL_EB280A
-	.long LABEL_EB2800
-	.long LABEL_EB27F8
-	.long LABEL_EB27F0
-	.long LABEL_EB27E8
+	.long NakaInst_0_bmp
+	.long NakaInst_i71_bmp
+	.long NakaInst_i72_bmp
+	.long NakaInst_i73o_bmp
+	.long NakaInst_i74o_bmp
+	.long NakaInst_i75_bmp
+	.long NakaInst_i76_bmp
+	.long NakaInst_i77_bmp
+	.long NakaInst_i78_bmp
+	.long NakaInst_i79_bmp
+	.long NakaInst_i80_bmp
+	.long NakaInst_i81_bmp
+	.long NakaInst_i82_bmp
+	.long NakaInst_i83_bmp
+	.long NakaInst_i84o_bmp
+	.long NakaInst_i85_bmp
+	.long NakaInst_i86_bmp
+	.long NakaInst_i87_bmp
 	.long IconBitmapName_i88
 	.long IconBitmapName_i89
 	.long IconBitmapName_i90o
@@ -2232,24 +2232,24 @@ IconBitmapName_i91o:	aligned_string "i91o.bmp"
 IconBitmapName_i90o:	aligned_string "i90o.bmp"
 IconBitmapName_i89:	aligned_string "i89.bmp"
 IconBitmapName_i88:	aligned_string "i88.bmp"
-LABEL_EB27E8:		aligned_string "i87.bmp"
-LABEL_EB27F0:		aligned_string "i86.bmp"
-LABEL_EB27F8:		aligned_string "i85.bmp"
-LABEL_EB2800:		aligned_string "i84o.bmp"
-LABEL_EB280A:		aligned_string "i83.bmp"
-LABEL_EB2812:		aligned_string "i82.bmp"
-LABEL_EB281A:		aligned_string "i81.bmp"
-LABEL_EB2822:		aligned_string "i80.bmp"
-LABEL_EB282A:		aligned_string "i79.bmp"
-LABEL_EB2832:		aligned_string "i78.bmp"
-LABEL_EB283A:		aligned_string "i77.bmp"
-LABEL_EB2842:		aligned_string "i76.bmp"
-LABEL_EB284A:		aligned_string "i75.bmp"
-LABEL_EB2852:		aligned_string "i74o.bmp"
-LABEL_EB285C:		aligned_string "i73o.bmp"
-LABEL_EB2866:		aligned_string "i72.bmp"
-LABEL_EB286E:		aligned_string "i71.bmp"
-LABEL_EB2876:
+NakaInst_i87_bmp:		aligned_string "i87.bmp"
+NakaInst_i86_bmp:		aligned_string "i86.bmp"
+NakaInst_i85_bmp:		aligned_string "i85.bmp"
+NakaInst_i84o_bmp:		aligned_string "i84o.bmp"
+NakaInst_i83_bmp:		aligned_string "i83.bmp"
+NakaInst_i82_bmp:		aligned_string "i82.bmp"
+NakaInst_i81_bmp:		aligned_string "i81.bmp"
+NakaInst_i80_bmp:		aligned_string "i80.bmp"
+NakaInst_i79_bmp:		aligned_string "i79.bmp"
+NakaInst_i78_bmp:		aligned_string "i78.bmp"
+NakaInst_i77_bmp:		aligned_string "i77.bmp"
+NakaInst_i76_bmp:		aligned_string "i76.bmp"
+NakaInst_i75_bmp:		aligned_string "i75.bmp"
+NakaInst_i74o_bmp:		aligned_string "i74o.bmp"
+NakaInst_i73o_bmp:		aligned_string "i73o.bmp"
+NakaInst_i72_bmp:		aligned_string "i72.bmp"
+NakaInst_i71_bmp:		aligned_string "i71.bmp"
+NakaInst_0_bmp:
 	jr	ge, 0x37
 	aligned_string "0.bmp"
 	jr	ge, 0x36
@@ -2387,7 +2387,7 @@ LABEL_EB2876:
 	aligned_string "i1.bmp"
 	aligned_string "i0.bmp"
 	aligned_string "trash.bmp"
-LABEL_EB2AB8:	aligned_string "trash.bmp"
+NakaInst_trash_bmp:	aligned_string "trash.bmp"
 
 
 	naka_header NAKA_TYPE_0x33

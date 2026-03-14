@@ -16,10 +16,10 @@ LABEL_EB2B36:
 	.byte 0x37, 0x01, 0xdf, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x0c, 0x00, 0xb0, 0xf0, 0x03, 0x00
-	.long LABEL_EB2B6C
+	.long NakaInst_CHECK_TITLE
 	.byte 0xff, 0x00, 0xa0, 0x01
 	.byte 0x01, 0x00, 0x00, 0x00
-LABEL_EB2B6C:	aligned_string "CHECK TITLE"
+NakaInst_CHECK_TITLE:	aligned_string "CHECK TITLE"
 LABEL_EB2B78:
 
 
@@ -567,11 +567,11 @@ Naka_RhythmGroup_Table:
 	.long LABEL_EB3614
 	.long LABEL_EB3612
 	.long LABEL_EB3610
-	.long LABEL_EB3606
-	.long LABEL_EB35FA
+	.long NakaInst_ClipBoard
+	.long NakaInst_DebugWindow
 	.long LABEL_EB35F8
 	.long LABEL_EB35F6
-	.long LABEL_EB35E8
+	.long NakaInst_NamingWindow
 	.long LABEL_EB35E6
 	.long LABEL_EB35E4
 	.long LABEL_EB35E2
@@ -583,17 +583,17 @@ Naka_RhythmGroup_Table:
 	.long LABEL_EB35D6
 	.long LABEL_EB35D4
 	.long LABEL_EB35D2
-	.long LABEL_EB35C2
-	.long LABEL_EB35B8
-	.long LABEL_EB35AE
-	.long LABEL_EB35A0
+	.long NakaInst_NamingCursorBox
+	.long NakaInst_NamingABC
+	.long NakaInst_Namingabc
+	.long NakaInst_NamingSymbol
 	.long LABEL_EB359E
 	.long LABEL_EB359C
 	.long LABEL_EB359A
-	.long LABEL_EB358E
-	.long LABEL_EB3582
+	.long NakaInst_NamingLabel
+	.long NakaInst_MemoWindow
 	.long LABEL_EB3580
-	.long LABEL_EB356E
+	.long NakaInst_TrackSwitchWindow
 	.long LABEL_EB356C
 	.long LABEL_EB356A
 	.long LABEL_EB3568
@@ -610,12 +610,12 @@ Naka_RhythmGroup_Table:
 	.long LABEL_EB3552
 	.long LABEL_EB3550
 	.long LABEL_EB354E
-	.long LABEL_EB3540
+	.long NakaInst_MemDumpWindow
 	.long LABEL_EB353E
 	.long LABEL_EB353C
 LABEL_EB353C:	aligned_string ""
 LABEL_EB353E:	aligned_string ""
-LABEL_EB3540:	aligned_string "MemDumpWindow"
+NakaInst_MemDumpWindow:	aligned_string "MemDumpWindow"
 LABEL_EB354E:	aligned_string ""
 LABEL_EB3550:	aligned_string ""
 LABEL_EB3552:	aligned_string ""
@@ -632,17 +632,17 @@ LABEL_EB3566:	aligned_string ""
 LABEL_EB3568:	aligned_string ""
 LABEL_EB356A:	aligned_string ""
 LABEL_EB356C:	aligned_string ""
-LABEL_EB356E:	aligned_string "TrackSwitchWindow"
+NakaInst_TrackSwitchWindow:	aligned_string "TrackSwitchWindow"
 LABEL_EB3580:	aligned_string ""
-LABEL_EB3582:	aligned_string "MemoWindow"
-LABEL_EB358E:	aligned_string "NamingLabel"
+NakaInst_MemoWindow:	aligned_string "MemoWindow"
+NakaInst_NamingLabel:	aligned_string "NamingLabel"
 LABEL_EB359A:	aligned_string ""
 LABEL_EB359C:	aligned_string ""
 LABEL_EB359E:	aligned_string ""
-LABEL_EB35A0:	aligned_string "NamingSymbol"
-LABEL_EB35AE:	aligned_string "Namingabc"
-LABEL_EB35B8:	aligned_string "NamingABC"
-LABEL_EB35C2:	aligned_string "NamingCursorBox"
+NakaInst_NamingSymbol:	aligned_string "NamingSymbol"
+NakaInst_Namingabc:	aligned_string "Namingabc"
+NakaInst_NamingABC:	aligned_string "NamingABC"
+NakaInst_NamingCursorBox:	aligned_string "NamingCursorBox"
 LABEL_EB35D2:	aligned_string ""
 LABEL_EB35D4:	aligned_string ""
 LABEL_EB35D6:	aligned_string ""
@@ -654,17 +654,17 @@ LABEL_EB35E0:	aligned_string ""
 LABEL_EB35E2:	aligned_string ""
 LABEL_EB35E4:	aligned_string ""
 LABEL_EB35E6:	aligned_string ""
-LABEL_EB35E8:	aligned_string "NamingWindow"
+NakaInst_NamingWindow:	aligned_string "NamingWindow"
 LABEL_EB35F6:	aligned_string ""
 LABEL_EB35F8:	aligned_string ""
-LABEL_EB35FA:	aligned_string "DebugWindow"
-LABEL_EB3606:	aligned_string "ClipBoard"
+NakaInst_DebugWindow:	aligned_string "DebugWindow"
+NakaInst_ClipBoard:	aligned_string "ClipBoard"
 LABEL_EB3610:	aligned_string ""
 LABEL_EB3612:	aligned_string ""
 LABEL_EB3614:	aligned_string ""
 LABEL_EB3616:	aligned_string ""
 LABEL_EB3618:	aligned_string ""
-LABEL_EB361A:	aligned_string "PanelSimulator"
+NakaInst_PanelSimulator:	aligned_string "PanelSimulator"
 	.byte 0x76, 0x36, 0xeb, 0x00, 0x74, 0x36
 	.byte 0xeb, 0x00, 0x72, 0x36, 0xeb, 0x00, 0x70, 0x36
 	.byte 0xeb, 0x00, 0x64, 0x36, 0xeb, 0x00, 0x62, 0x36
@@ -675,17 +675,17 @@ LABEL_EB3652:
 	.byte 0x00, 0xff
 LABEL_EB3654:
 	.byte 0x00, 0xff
-LABEL_EB3656:	aligned_string "CheckWall"
+NakaInst_CheckWall:	aligned_string "CheckWall"
 	.byte 0x00, 0xff
 LABEL_EB3662:
 	.byte 0x00, 0xff
-LABEL_EB3664:	aligned_string "CheckNaming"
+NakaInst_CheckNaming:	aligned_string "CheckNaming"
 	.byte 0x00, 0xff
 LABEL_EB3672:
 	.byte 0x00, 0xff
 LABEL_EB3674:
 	.byte 0x00, 0xff
-LABEL_EB3676:	aligned_string "CheckTitle"
+NakaInst_CheckTitle:	aligned_string "CheckTitle"
 	aligned_string "MD_PS"
 	aligned_string "TT_PS"
 	aligned_string "TT_CHECK"
@@ -697,34 +697,34 @@ LABEL_EB3676:	aligned_string "CheckTitle"
 	.byte 0x48, 0x91, 0xf9, 0x00, 0xf6, 0xad, 0xf9, 0x00
 	.byte 0xe9, 0x87, 0xf9, 0x00, 0x00, 0x00, 0x00, 0x00
 Naka_RhythmEdit_Table:
-	.long LABEL_EB37CE
-	.long LABEL_EB37BC
-	.long LABEL_EB37AC
-	.long LABEL_EB379E
-	.long LABEL_EB378C
-	.long LABEL_EB377A
-	.long LABEL_EB376A
-	.long LABEL_EB375A
-	.long LABEL_EB374A
-	.long LABEL_EB373A
-	.long LABEL_EB372A
-	.long LABEL_EB371A
-	.long LABEL_EB370A
+	.long NakaInst_DefMainFunction
+	.long NakaInst_MainTitleControl
+	.long NakaInst_MainPmanControl
+	.long NakaInst_MainAutoFree
+	.long NakaInst_MainGetSoundName
+	.long NakaInst_MainGetRhythmName
+	.long NakaInst_MainGetPmemName
+	.long NakaInst_MainBitControl
+	.long NakaInst_MainRamControl
+	.long NakaInst_CheckTitleFunc
+	.long NakaInst_MainTrSwControl
+	.long NakaInst_DirmdTitleFunc
+	.long NakaInst_MainTaskControl
 	.long LABEL_EB3708
 LABEL_EB3708:	aligned_string ""
-LABEL_EB370A:	aligned_string "MainTaskControl"
-LABEL_EB371A:	aligned_string "DirmdTitleFunc"
-LABEL_EB372A:	aligned_string "MainTrSwControl"
-LABEL_EB373A:	aligned_string "CheckTitleFunc"
-LABEL_EB374A:	aligned_string "MainRamControl"
-LABEL_EB375A:	aligned_string "MainBitControl"
-LABEL_EB376A:	aligned_string "MainGetPmemName"
-LABEL_EB377A:	aligned_string "MainGetRhythmName"
-LABEL_EB378C:	aligned_string "MainGetSoundName"
-LABEL_EB379E:	aligned_string "MainAutoFree"
-LABEL_EB37AC:	aligned_string "MainPmanControl"
-LABEL_EB37BC:	aligned_string "MainTitleControl"
-LABEL_EB37CE:	aligned_string "DefMainFunction"
+NakaInst_MainTaskControl:	aligned_string "MainTaskControl"
+NakaInst_DirmdTitleFunc:	aligned_string "DirmdTitleFunc"
+NakaInst_MainTrSwControl:	aligned_string "MainTrSwControl"
+NakaInst_CheckTitleFunc:	aligned_string "CheckTitleFunc"
+NakaInst_MainRamControl:	aligned_string "MainRamControl"
+NakaInst_MainBitControl:	aligned_string "MainBitControl"
+NakaInst_MainGetPmemName:	aligned_string "MainGetPmemName"
+NakaInst_MainGetRhythmName:	aligned_string "MainGetRhythmName"
+NakaInst_MainGetSoundName:	aligned_string "MainGetSoundName"
+NakaInst_MainAutoFree:	aligned_string "MainAutoFree"
+NakaInst_MainPmanControl:	aligned_string "MainPmanControl"
+NakaInst_MainTitleControl:	aligned_string "MainTitleControl"
+NakaInst_DefMainFunction:	aligned_string "DefMainFunction"
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x80
 	.byte 0x00, 0x00, 0x80, 0x80, 0x00, 0x00, 0x00, 0x00
@@ -888,7 +888,7 @@ LABEL_EB6806:
 	.long LABEL_EB6818
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_EB6818:	aligned_string ""
-LABEL_EB681A:
+NakaInst_False:
 	.byte 0x3a, 0x68, 0xeb, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x34, 0x68, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x32, 0x68, 0xeb, 0x00, 0x00, 0x00
@@ -1025,69 +1025,69 @@ LABEL_EB692C:
 	aligned_string "CL_Maroon"
 	aligned_string "CL_Black"
 LABEL_EB6BD0:
-	.long LABEL_EB6D5A
+	.long NakaInst_BD_None
 	.byte 0x00, 0x00, 0x00, 0x00
-	.long LABEL_EB6D4E
+	.long NakaInst_BD_Single1
 	.byte 0x01, 0x00, 0x00, 0x00
-	.long LABEL_EB6D42
+	.long NakaInst_BD_Single2
 	.byte 0x02, 0x00, 0x00, 0x00
-	.long LABEL_EB6D36
+	.long NakaInst_BD_Double1
 	.byte 0x03, 0x00, 0x00, 0x00
-	.long LABEL_EB6D2A
+	.long NakaInst_BD_Shadow1
 	.byte 0x04, 0x00, 0x00, 0x00
-	.long LABEL_EB6D1E
+	.long NakaInst_BD_Shadow2
 	.byte 0x05, 0x00, 0x00, 0x00
-	.long LABEL_EB6D14
+	.long NakaInst_BD_Round0
 	.byte 0x06, 0x00, 0x00, 0x00
-	.long LABEL_EB6D0A
+	.long NakaInst_BD_Round1
 	.byte 0x07, 0x00, 0x00, 0x00
-	.long LABEL_EB6D00
+	.long NakaInst_BD_Round2
 	.byte 0x08, 0x00, 0x00, 0x00
-	.long LABEL_EB6CF6
+	.long NakaInst_BD_Round5
 	.byte 0x09, 0x00, 0x00, 0x00
-	.long LABEL_EB6CEC
+	.long NakaInst_BD_Round9
 	.byte 0x0a, 0x00, 0x00, 0x00
-	.long LABEL_EB6CE0
+	.long NakaInst_BD_Round14
 	.byte 0x0b, 0x00, 0x00, 0x00
-	.long LABEL_EB6CD6
+	.long NakaInst_BD_3D_UP1
 	.byte 0xc0, 0x00, 0x00, 0x00
-	.long LABEL_EB6CCC
+	.long NakaInst_BD_3D_UP2
 	.byte 0xc1, 0x00, 0x00, 0x00
-	.long LABEL_EB6CC0
+	.long NakaInst_BD_3D_DOWN1
 	.byte 0xc2, 0x00, 0x00, 0x00
-	.long LABEL_EB6CB4
+	.long NakaInst_BD_3D_DOWN2
 	.byte 0xc3, 0x00, 0x00, 0x00
-	.long LABEL_EB6CA6
+	.long NakaInst_BD_EditSwitch
 	.byte 0xc9, 0x00, 0x00, 0x00
-	.long LABEL_EB6C98
+	.long NakaInst_BD_EditSwDown
 	.byte 0xca, 0x00, 0x00, 0x00
-	.long LABEL_EB6C8A
+	.long NakaInst_BD_TrackSwUp
 	.byte 0xcb, 0x00, 0x00, 0x00
-	.long LABEL_EB6C7A
+	.long NakaInst_BD_TrackSwDown
 	.byte 0xcc, 0x00, 0x00, 0x00
 	.long LABEL_EB6C78
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_EB6C78:	aligned_string ""
-LABEL_EB6C7A:	aligned_string "BD_TrackSwDown"
-LABEL_EB6C8A:	aligned_string "BD_TrackSwUp"
-LABEL_EB6C98:	aligned_string "BD_EditSwDown"
-LABEL_EB6CA6:	aligned_string "BD_EditSwitch"
-LABEL_EB6CB4:	aligned_string "BD_3D_DOWN2"
-LABEL_EB6CC0:	aligned_string "BD_3D_DOWN1"
-LABEL_EB6CCC:	aligned_string "BD_3D_UP2"
-LABEL_EB6CD6:	aligned_string "BD_3D_UP1"
-LABEL_EB6CE0:	aligned_string "BD_Round14"
-LABEL_EB6CEC:	aligned_string "BD_Round9"
-LABEL_EB6CF6:	aligned_string "BD_Round5"
-LABEL_EB6D00:	aligned_string "BD_Round2"
-LABEL_EB6D0A:	aligned_string "BD_Round1"
-LABEL_EB6D14:	aligned_string "BD_Round0"
-LABEL_EB6D1E:	aligned_string "BD_Shadow2"
-LABEL_EB6D2A:	aligned_string "BD_Shadow1"
-LABEL_EB6D36:	aligned_string "BD_Double1"
-LABEL_EB6D42:	aligned_string "BD_Single2"
-LABEL_EB6D4E:	aligned_string "BD_Single1"
-LABEL_EB6D5A:	aligned_string "BD_None"
+NakaInst_BD_TrackSwDown:	aligned_string "BD_TrackSwDown"
+NakaInst_BD_TrackSwUp:	aligned_string "BD_TrackSwUp"
+NakaInst_BD_EditSwDown:	aligned_string "BD_EditSwDown"
+NakaInst_BD_EditSwitch:	aligned_string "BD_EditSwitch"
+NakaInst_BD_3D_DOWN2:	aligned_string "BD_3D_DOWN2"
+NakaInst_BD_3D_DOWN1:	aligned_string "BD_3D_DOWN1"
+NakaInst_BD_3D_UP2:	aligned_string "BD_3D_UP2"
+NakaInst_BD_3D_UP1:	aligned_string "BD_3D_UP1"
+NakaInst_BD_Round14:	aligned_string "BD_Round14"
+NakaInst_BD_Round9:	aligned_string "BD_Round9"
+NakaInst_BD_Round5:	aligned_string "BD_Round5"
+NakaInst_BD_Round2:	aligned_string "BD_Round2"
+NakaInst_BD_Round1:	aligned_string "BD_Round1"
+NakaInst_BD_Round0:	aligned_string "BD_Round0"
+NakaInst_BD_Shadow2:	aligned_string "BD_Shadow2"
+NakaInst_BD_Shadow1:	aligned_string "BD_Shadow1"
+NakaInst_BD_Double1:	aligned_string "BD_Double1"
+NakaInst_BD_Single2:	aligned_string "BD_Single2"
+NakaInst_BD_Single1:	aligned_string "BD_Single1"
+NakaInst_BD_None:	aligned_string "BD_None"
 	.byte 0x6a, 0x6d, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff
 LABEL_EB6D6C:
@@ -1185,7 +1185,7 @@ LABEL_EB6DD6:
 	aligned_string "SS_Down"
 	aligned_string "SS_Up"
 	aligned_string "SS_Special"
-LABEL_EB707A:
+NakaInst_LM_RightDown:
 	.byte 0xa2, 0x70, 0xeb, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x94, 0x70, 0xeb, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x92, 0x70, 0xeb, 0x00, 0x00, 0x00
@@ -1211,37 +1211,37 @@ LABEL_EB70EE:
 	.byte 0x01, 0x00, 0x00, 0x00
 	.long LABEL_EB71BE
 	.byte 0x02, 0x00, 0x00, 0x00
-	.long LABEL_EB71B6
+	.long NakaInst_iduEast
 	.byte 0x03, 0x00, 0x00, 0x00
-	.long LABEL_EB71AE
+	.long NakaInst_iduSuna
 	.byte 0x04, 0x00, 0x00, 0x00
-	.long LABEL_EB71A4
+	.long NakaInst_iduCheap
 	.byte 0x05, 0x00, 0x00, 0x00
-	.long LABEL_EB719A
+	.long NakaInst_iduScoop
 	.byte 0x06, 0x00, 0x00, 0x00
-	.long LABEL_EB7192
+	.long NakaInst_iduYoko
 	.byte 0x07, 0x00, 0x00, 0x00
-	.long LABEL_EB718A
+	.long NakaInst_iduKubo
 	.byte 0x08, 0x00, 0x00, 0x00
-	.long LABEL_EB7182
+	.long NakaInst_iduHama
 	.byte 0x09, 0x00, 0x00, 0x00
-	.long LABEL_EB717A
+	.long NakaInst_iduKSS
 	.byte 0x0a, 0x00, 0x00, 0x00
-	.long LABEL_EB7172
+	.long NakaInst_iduNaka
 	.byte 0x0b, 0x00, 0x00, 0x00
-	.long LABEL_EB716A
+	.long NakaInst_iduNone
 	.byte 0xff, 0xff, 0xff, 0xff
 	.long LABEL_EB7168
 	.byte 0x00, 0x00, 0x00, 0x00
 LABEL_EB7168:	aligned_string ""
-LABEL_EB716A:	aligned_string "iduNone"
-LABEL_EB7172:	aligned_string "iduNaka"
-LABEL_EB717A:	aligned_string "iduKSS"
-LABEL_EB7182:	aligned_string "iduHama"
-LABEL_EB718A:	aligned_string "iduKubo"
-LABEL_EB7192:	aligned_string "iduYoko"
-LABEL_EB719A:	aligned_string "iduScoop"
-LABEL_EB71A4:	aligned_string "iduCheap"
-LABEL_EB71AE:	aligned_string "iduSuna"
-LABEL_EB71B6:	aligned_string "iduEast"
+NakaInst_iduNone:	aligned_string "iduNone"
+NakaInst_iduNaka:	aligned_string "iduNaka"
+NakaInst_iduKSS:	aligned_string "iduKSS"
+NakaInst_iduHama:	aligned_string "iduHama"
+NakaInst_iduKubo:	aligned_string "iduKubo"
+NakaInst_iduYoko:	aligned_string "iduYoko"
+NakaInst_iduScoop:	aligned_string "iduScoop"
+NakaInst_iduCheap:	aligned_string "iduCheap"
+NakaInst_iduSuna:	aligned_string "iduSuna"
+NakaInst_iduEast:	aligned_string "iduEast"
 LABEL_EB71BE:

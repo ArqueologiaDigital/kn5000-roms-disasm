@@ -718,12 +718,12 @@ GMMode_Attention_English2:	aligned_string "ATTENTION!"
 
 SplitPoint_NoteNameTable:
 	.long LABEL_E7F7DE
-	.long LABEL_E7F7D8
+	.long NakaInst_D_a0
 	.long LABEL_E7F7D4
-	.long LABEL_E7F7CE
+	.long NakaInst_E_a0
 	.long LABEL_E7F7CA
 	.long LABEL_E7F7C6
-	.long LABEL_E7F7C0
+	.long NakaInst_F_9e
 	.long SplitPoint_NoteEntry_G_Code
 	.long SplitPoint_NoteStr_A
 	.long SplitPoint_NoteEntry_A_Code
@@ -737,14 +737,14 @@ SplitPoint_NoteEntry_A_Code:
 SplitPoint_NoteStr_A:	aligned_string "A~a0"
 SplitPoint_NoteEntry_G_Code:
 	.byte 0x47, 0x20, 0x00, 0xff
-LABEL_E7F7C0:	aligned_string "F~9e"
+NakaInst_F_9e:	aligned_string "F~9e"
 LABEL_E7F7C6:	aligned_string "F "
 LABEL_E7F7CA:
 	.byte 0x45, 0x20, 0x00, 0xff
-LABEL_E7F7CE:	aligned_string "E~a0"
+NakaInst_E_a0:	aligned_string "E~a0"
 LABEL_E7F7D4:
 	.byte 0x44, 0x20, 0x00, 0xff
-LABEL_E7F7D8:	aligned_string "D~a0"
+NakaInst_D_a0:	aligned_string "D~a0"
 LABEL_E7F7DE:
 	.byte 0x43, 0x20
 	.byte 0x00, 0xff, 0x4a, 0xae, 0xe5, 0x00, 0x12, 0xba
@@ -781,10 +781,10 @@ LABEL_E7F7DE:
 DisplayMode_OnOff_Table:
 	.long LABEL_E7F922
 	.long LABEL_E7F91C
-	.long LABEL_E7F916
-	.long LABEL_E7F910
-LABEL_E7F910:	aligned_string " ON  "
-LABEL_E7F916:
+	.long NakaInst_OFF
+	.long NakaInst_ON
+NakaInst_ON:	aligned_string " ON  "
+NakaInst_OFF:
 	ldb	w, 0x4f
 	.byte 0x4e, 0x20, 0x20, 0x00
 	aligned_string " OFF "
@@ -828,19 +828,19 @@ LABEL_E7F916:
 	jr	nov, 0x00
 	.byte 0x5b, 0x01, 0x6c, 0x00, 0x5b, 0x01, 0xb5, 0x02
 	.byte 0x8b, 0x02, 0x8b, 0x02, 0xa2, 0xfc, 0xe7, 0x00
-	.long LABEL_E7FC9C
-LABEL_E7FC9C:	aligned_string " ON  "
-LABEL_E7FCA2:	aligned_string " OFF "
+	.long NakaInst_ON_E7FC9C
+NakaInst_ON_E7FC9C:	aligned_string " ON  "
+NakaInst_OFF_E7FCA2:	aligned_string " OFF "
 	.long ControlMode_Option_Table
-	.long LABEL_E7FCB0
-LABEL_E7FCB0:			aligned_string " DIRECT  "
+	.long NakaInst_DIRECT
+NakaInst_DIRECT:			aligned_string " DIRECT  "
 ControlMode_Option_Table:	aligned_string "CONDUCTOR"
-	.long LABEL_E7FCE4
-	.long LABEL_E7FCDA
-	.long LABEL_E7FCD0
-LABEL_E7FCD0:	aligned_string "  FIX   "
-LABEL_E7FCDA:	aligned_string " OFFSET "
-LABEL_E7FCE4:	aligned_string " DIRECT "
+	.long NakaInst_DIRECT_E7FCE4
+	.long NakaInst_OFFSET
+	.long NakaInst_FIX
+NakaInst_FIX:	aligned_string "  FIX   "
+NakaInst_OFFSET:	aligned_string " OFFSET "
+NakaInst_DIRECT_E7FCE4:	aligned_string " DIRECT "
 	.zero 10
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
@@ -870,12 +870,12 @@ LABEL_E7FCE4:	aligned_string " DIRECT "
 	.byte 0x31, 0x00, 0x00, 0x00
 FileTransfer_Status_Table:
 	.long LABEL_E7FDCC
-	.long LABEL_E7FDC2
-	.long LABEL_E7FDB8
-	.long LABEL_E7FDAE
-LABEL_E7FDAE:	aligned_string "COMPLETED"
-LABEL_E7FDB8:	aligned_string "RECIEVING"
-LABEL_E7FDC2:	aligned_string " SENDING "
+	.long NakaInst_SENDING
+	.long NakaInst_RECIEVING
+	.long NakaInst_COMPLETED
+NakaInst_COMPLETED:	aligned_string "COMPLETED"
+NakaInst_RECIEVING:	aligned_string "RECIEVING"
+NakaInst_SENDING:	aligned_string " SENDING "
 LABEL_E7FDCC:	aligned_string "         "
 	.byte 0x1e, 0x00
 	.byte 0x1e, 0x00, 0x26, 0x00, 0x26, 0x00, 0x26, 0x00
@@ -910,16 +910,16 @@ LABEL_E7FEA0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc4, 0xfe
 	.byte 0xe7, 0x00, 0xbe, 0xfe, 0xe7, 0x00
 LABEL_E7FEBE:	.asciz " YES "
-LABEL_E7FEC4:	aligned_string " NO  "
+NakaInst_NO:	aligned_string " NO  "
 UserMemory_Config_Table:
-	.long LABEL_E7FEF8
-	.long LABEL_E7FEEE
-	.long LABEL_E7FEE4
-	.long LABEL_E7FEDA
-LABEL_E7FEDA:	aligned_string "  USER3  "
-LABEL_E7FEE4:	aligned_string "  USER2  "
-LABEL_E7FEEE:	aligned_string "  USER1  "
-LABEL_E7FEF8:	aligned_string " INITIAL "
+	.long NakaInst_INITIAL
+	.long NakaInst_USER1
+	.long NakaInst_USER2
+	.long NakaInst_USER3
+NakaInst_USER3:	aligned_string "  USER3  "
+NakaInst_USER2:	aligned_string "  USER2  "
+NakaInst_USER1:	aligned_string "  USER1  "
+NakaInst_INITIAL:	aligned_string " INITIAL "
 	.zero 14
 	.byte 0x00, 0x00, 0x00, 0x00, 0xb7, 0x00, 0x00, 0x00
 	.byte 0xb7, 0x00, 0x49, 0x03, 0x49, 0x03, 0x90, 0x01
@@ -979,13 +979,13 @@ LABEL_E8000E:
 LABEL_E80040:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.ascii " ON "
-LABEL_E80048:	aligned_string " "
+NakaInst_OFF_E80048:	aligned_string " "
 	aligned_string " OFF "
 	aligned_string "  ----  "
-LABEL_E8005A:	aligned_string " NORMAL "
+NakaInst_NORMAL:	aligned_string " NORMAL "
 	aligned_string "  TECH  "
 	.byte 0x20, 0x20
-LABEL_E80070:	aligned_string " GM   "
+NakaInst_GM:	aligned_string " GM   "
 	aligned_string " Error! "
 	aligned_string " ON  "
 	aligned_string " OFF "
@@ -1006,26 +1006,26 @@ LABEL_E800E8:
 LABEL_E800ED:
 	.byte 0x00, 0xfe, 0x00
 	.byte 0xe8, 0x00, 0xf6, 0x00, 0xe8, 0x00
-LABEL_E800F6:	aligned_string " LEFT  "
-LABEL_E800FE:	aligned_string "RIGHT 2"
-LABEL_E80106:	aligned_string "RIGHT 1"
+NakaInst_LEFT:	aligned_string " LEFT  "
+NakaInst_RIGHT_2:	aligned_string "RIGHT 2"
+NakaInst_RIGHT_1:	aligned_string "RIGHT 1"
 LABEL_E8010E:
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01
-LABEL_E8011D:
+NakaInst_2d_d:
 	.zero 23
 	aligned_string " %2d-%d "
 	.byte 0x20, 0x4f
 	.byte 0x4e, 0x20, 0x20, 0x00
-LABEL_E80144:	aligned_string " OFF "
+NakaInst_OFF_E80144:	aligned_string " OFF "
 	aligned_string " OFF "
 	aligned_string " %3d "
 	ldb	w, 0x25
 	.byte 0x33, 0x64, 0x20, 0x00
 	aligned_string " OFF "
 	aligned_string " %3d "
-LABEL_E80168:	aligned_string " ON  "
+NakaInst_ON_E80168:	aligned_string " ON  "
 	ldb	w, 0x4f
 	.byte 0x46, 0x46, 0x20, 0x00
 	aligned_string " OFF "
@@ -1282,21 +1282,21 @@ LABEL_E8069E:
 	aligned_string "LswLeftHold"
 	aligned_string "TtSdmenu"
 	.byte 0xd6, 0x0a, 0xe8, 0x00, 0x00, 0xff
-	.long LABEL_E80AEC
-	.long LABEL_E80AE6
+	.long NakaInst_func
+	.long NakaInst_data
 	.long LABEL_E80AE4
 LABEL_E80AE4:	aligned_string ""
-LABEL_E80AE6:	aligned_string "data"
-LABEL_E80AEC:	aligned_string "func"
+NakaInst_data:	aligned_string "data"
+NakaInst_func:	aligned_string "func"
 	.byte 0x10, 0x0b, 0xe8, 0x00, 0x0a, 0x0b
 	.byte 0xe8, 0x00, 0x04, 0x0b, 0xe8, 0x00, 0x02, 0x0b
 LABEL_E80B00:
 	.byte 0xe8, 0x00
 LABEL_E80B02:
 	.byte 0x00, 0xff
-LABEL_E80B04:	aligned_string "data"
-LABEL_E80B0A:	aligned_string "fmute"
-LABEL_E80B10:	aligned_string "fvol"
+NakaInst_data_E80B04:	aligned_string "data"
+NakaInst_fmute:	aligned_string "fmute"
+NakaInst_fvol:	aligned_string "fvol"
 	.byte 0x1a
 LABEL_E80B17:
 	.byte 0x0b
@@ -1307,27 +1307,27 @@ LABEL_E80B1A:
 LABEL_E80B26:
 	.byte 0x00, 0xff
 AudioStream_Property_Table:
-	.long LABEL_E80B3C
-	.long LABEL_E80B36
+	.long NakaInst_str1
+	.long NakaInst_str3
 	.long LABEL_E80B34
 LABEL_E80B34:	aligned_string ""
-LABEL_E80B36:	aligned_string "str3"
-LABEL_E80B3C:	aligned_string "str1"
+NakaInst_str3:	aligned_string "str3"
+NakaInst_str1:	aligned_string "str1"
 UIElement_Property_Table:
 	.long LABEL_E80B8A
-	.long LABEL_E80B84
-	.long LABEL_E80B7A
-	.long LABEL_E80B74
-	.long LABEL_E80B6A
-	.long LABEL_E80B60
+	.long NakaInst_font
+	.long NakaInst_fontcolor
+	.long NakaInst_align
+	.long NakaInst_selected
+	.long NakaInst_dialfocus
 	.long LABEL_E80B5E
 LABEL_E80B5E:
 	.byte 0x00, 0xff
-LABEL_E80B60:	aligned_string "dialfocus"
-LABEL_E80B6A:	aligned_string "selected"
-LABEL_E80B74:	aligned_string "align"
-LABEL_E80B7A:	aligned_string "fontcolor"
-LABEL_E80B84:	aligned_string "font"
+NakaInst_dialfocus:	aligned_string "dialfocus"
+NakaInst_selected:	aligned_string "selected"
+NakaInst_align:	aligned_string "align"
+NakaInst_fontcolor:	aligned_string "fontcolor"
+NakaInst_font:	aligned_string "font"
 LABEL_E80B8A:
 	.byte 0x73, 0x74, 0x72, 0x00, 0x92, 0x0b
 	.byte 0xe8, 0x00
@@ -1352,8 +1352,8 @@ LABEL_E80BBC:
 	.byte 0xe8, 0x00
 LABEL_E80BCA:
 	.byte 0x00, 0xff
-LABEL_E80BCC:	aligned_string "window"
-LABEL_E80BD4:	aligned_string "page"
+NakaInst_window:	aligned_string "window"
+NakaInst_page:	aligned_string "page"
 	.byte 0xde, 0x0b, 0xe8, 0x00
 LABEL_E80BDE:
 	.byte 0x00, 0xff
@@ -1369,19 +1369,19 @@ LABEL_E80BF6:
 	.long LABEL_E80BFC
 LABEL_E80BFC:	aligned_string ""
 TextInput_Property_Table:
-	.long LABEL_E80C3A
-	.long LABEL_E80C30
-	.long LABEL_E80C2A
-	.long LABEL_E80C22
-	.long LABEL_E80C18
+	.long NakaInst_font_E80C3A
+	.long NakaInst_fontcolor_E80C30
+	.long NakaInst_align_E80C2A
+	.long NakaInst_editsw
+	.long NakaInst_selected_E80C18
 	.long LABEL_E80C16
 LABEL_E80C16:
 	.byte 0x00, 0xff
-LABEL_E80C18:	aligned_string "selected"
-LABEL_E80C22:	aligned_string "editsw"
-LABEL_E80C2A:	aligned_string "align"
-LABEL_E80C30:	aligned_string "fontcolor"
-LABEL_E80C3A:	aligned_string "font"
+NakaInst_selected_E80C18:	aligned_string "selected"
+NakaInst_editsw:	aligned_string "editsw"
+NakaInst_align_E80C2A:	aligned_string "align"
+NakaInst_fontcolor_E80C30:	aligned_string "fontcolor"
+NakaInst_font_E80C3A:	aligned_string "font"
 	.long LABEL_E80C44
 LABEL_E80C44:
 	.byte 0x00, 0xff, 0x4a, 0x0c
@@ -1391,23 +1391,23 @@ LABEL_E80C4A:
 	.byte 0x00, 0xff, 0x56, 0x0c, 0xe8, 0x00
 LABEL_E80C56:
 	.byte 0x00, 0xff
-	.long LABEL_E80C6C
-	.long LABEL_E80C66
+	.long NakaInst_func_E80C6C
+	.long NakaInst_data_E80C66
 	.long LABEL_E80C64
 LABEL_E80C64:	aligned_string ""
-LABEL_E80C66:	aligned_string "data"
-LABEL_E80C6C:	aligned_string "func"
+NakaInst_data_E80C66:	aligned_string "data"
+NakaInst_func_E80C6C:	aligned_string "func"
 Widget_DataProperty_Table:
 	.long LABEL_E80CA0
-	.long LABEL_E80C98
-	.long LABEL_E80C8E
-	.long LABEL_E80C88
+	.long NakaInst_editsw_E80C98
+	.long NakaInst_selected_E80C8E
+	.long NakaInst_song
 	.long LABEL_E80C86
 LABEL_E80C86:
 	.byte 0x00, 0xff
-LABEL_E80C88:	aligned_string "song"
-LABEL_E80C8E:	aligned_string "selected"
-LABEL_E80C98:	aligned_string "editsw"
+NakaInst_song:	aligned_string "song"
+NakaInst_selected_E80C8E:	aligned_string "selected"
+NakaInst_editsw_E80C98:	aligned_string "editsw"
 LABEL_E80CA0:
 	.byte 0x73, 0x74, 0x72, 0x00, 0xa8, 0x0c, 0xe8, 0x00
 	.byte 0x00, 0xff, 0xae, 0x0c, 0xe8, 0x00
@@ -1427,11 +1427,11 @@ LABEL_E80CCA:
 LABEL_E80CCE:
 	.byte 0x69, 0x6e
 	.byte 0x64, 0x65, 0x78, 0x00, 0xea, 0x0c, 0xe8, 0x00
-	.long LABEL_E80CE2
+	.long NakaInst_editsw_E80CE2
 	.long LABEL_E80CE0
 LABEL_E80CE0:	aligned_string ""
-LABEL_E80CE2:	aligned_string "editsw"
-LABEL_E80CEA:	aligned_string "part"
+NakaInst_editsw_E80CE2:	aligned_string "editsw"
+NakaInst_part:	aligned_string "part"
 	.long LABEL_E80CF4
 LABEL_E80CF4:
 	.byte 0x00, 0xff, 0x25, 0xb7

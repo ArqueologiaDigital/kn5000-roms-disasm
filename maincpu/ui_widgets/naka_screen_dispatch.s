@@ -241,37 +241,37 @@ Naka_Accomp13_Screens:
 
 
 Naka_Accomp14_Screens:
-	.long LABEL_E1BB10
+	.long NakaInst_StylCnvWaitScreen
 	.long LABEL_E1BB0E
 	.long LABEL_E1BB0C
 	.long LABEL_E1BB0A
 LABEL_E1BB0A:	aligned_string ""
 LABEL_E1BB0C:	aligned_string ""
 LABEL_E1BB0E:	aligned_string ""
-LABEL_E1BB10:	aligned_string "StylCnvWaitScreen"
+NakaInst_StylCnvWaitScreen:	aligned_string "StylCnvWaitScreen"
 Naka_StylCnvWait_Screens:
-	.long LABEL_E1BB6E
+	.long NakaInst_StylCnvModlScreen
 	.long LABEL_E1BB6C
-	.long LABEL_E1BB5C
+	.long NakaInst_StylCnvModlBox
 	.long LABEL_E1BB5A
 	.long LABEL_E1BB58
 	.long LABEL_E1BB56
 	.long LABEL_E1BB54
-	.long LABEL_E1BB48
+	.long NakaInst_StylCnvVer
 	.long LABEL_E1BB46
 LABEL_E1BB46:	aligned_string ""
-LABEL_E1BB48:	aligned_string "StylCnvVer"
+NakaInst_StylCnvVer:	aligned_string "StylCnvVer"
 LABEL_E1BB54:	aligned_string ""
 LABEL_E1BB56:	aligned_string ""
 LABEL_E1BB58:	aligned_string ""
 LABEL_E1BB5A:	aligned_string ""
-LABEL_E1BB5C:	aligned_string "StylCnvModlBox"
+NakaInst_StylCnvModlBox:	aligned_string "StylCnvModlBox"
 LABEL_E1BB6C:	aligned_string ""
-LABEL_E1BB6E:	aligned_string "StylCnvModlScreen"
+NakaInst_StylCnvModlScreen:	aligned_string "StylCnvModlScreen"
 Naka_StylCnvVer_Screens:
-	.long LABEL_E1BBBC
+	.long NakaInst_StylCnvCnvtScreen
 	.long LABEL_E1BBBA
-	.long LABEL_E1BBAA
+	.long NakaInst_StylCnvCnvtBox
 	.long LABEL_E1BBA8
 	.long LABEL_E1BBA6
 	.long LABEL_E1BBA4
@@ -282,9 +282,9 @@ LABEL_E1BBA2:	aligned_string ""
 LABEL_E1BBA4:	aligned_string ""
 LABEL_E1BBA6:	aligned_string ""
 LABEL_E1BBA8:	aligned_string ""
-LABEL_E1BBAA:	aligned_string "StylCnvCnvtBox"
+NakaInst_StylCnvCnvtBox:	aligned_string "StylCnvCnvtBox"
 LABEL_E1BBBA:	aligned_string ""
-LABEL_E1BBBC:	aligned_string "StylCnvCnvtScreen"
+NakaInst_StylCnvCnvtScreen:	aligned_string "StylCnvCnvtScreen"
 	.byte 0xea, 0xbb
 	.byte 0xe1, 0x00
 Naka_StylCnvCnvtBox_Screens:
@@ -296,8 +296,8 @@ LABEL_E1BBE2:	aligned_string ""
 LABEL_E1BBE4:	aligned_string ""
 LABEL_E1BBE6:	aligned_string ""
 LABEL_E1BBE8:	aligned_string ""
-LABEL_E1BBEA:	aligned_string "StylCnvStorScreen"
-	.long LABEL_E1BC18
+NakaInst_StylCnvStorScreen:	aligned_string "StylCnvStorScreen"
+	.long NakaInst_StylCnvTxtScreen
 Naka_StylCnvStor_Screens:
 	.long LABEL_E1BC16
 	.long LABEL_E1BC14
@@ -307,11 +307,11 @@ LABEL_E1BC10:	aligned_string ""
 LABEL_E1BC12:	aligned_string ""
 LABEL_E1BC14:	aligned_string ""
 LABEL_E1BC16:	aligned_string ""
-LABEL_E1BC18:	aligned_string "StylCnvTxtScreen"
+NakaInst_StylCnvTxtScreen:	aligned_string "StylCnvTxtScreen"
 Naka_StylCnvTxt_Screens:
-	.long LABEL_E1BC6A
+	.long NakaInst_StylCnvSelScreen
 	.long LABEL_E1BC68
-	.long LABEL_E1BC5A
+	.long NakaInst_StylCnvSelBox
 	.long LABEL_E1BC58
 	.long LABEL_E1BC56
 	.long LABEL_E1BC54
@@ -324,10 +324,10 @@ LABEL_E1BC52:	aligned_string ""
 LABEL_E1BC54:	aligned_string ""
 LABEL_E1BC56:	aligned_string ""
 LABEL_E1BC58:	aligned_string ""
-LABEL_E1BC5A:	aligned_string "StylCnvSelBox"
+NakaInst_StylCnvSelBox:	aligned_string "StylCnvSelBox"
 LABEL_E1BC68:	aligned_string ""
-LABEL_E1BC6A:	aligned_string "StylCnvSelScreen"
-	.long LABEL_E1BCAA
+NakaInst_StylCnvSelScreen:	aligned_string "StylCnvSelScreen"
+	.long NakaInst_StylCnvContScreen
 Naka_StylCnvSelBox_Screens:
 	.long LABEL_E1BCA8
 	.long LABEL_E1BCA6
@@ -343,8 +343,8 @@ LABEL_E1BCA2:	aligned_string ""
 LABEL_E1BCA4:	aligned_string ""
 LABEL_E1BCA6:	aligned_string ""
 LABEL_E1BCA8:	aligned_string ""
-LABEL_E1BCAA:	aligned_string "StylCnvContScreen"
-	.long LABEL_E1BD2C
+NakaInst_StylCnvContScreen:	aligned_string "StylCnvContScreen"
+	.long NakaInst_CmpMenuScreen
 Naka_StylCnvCont_Screens:
 	.long LABEL_E1BD2A
 	.long LABEL_E1BD28
@@ -382,9 +382,9 @@ LABEL_E1BD24:	aligned_string ""
 LABEL_E1BD26:	aligned_string ""
 LABEL_E1BD28:	aligned_string ""
 LABEL_E1BD2A:	aligned_string ""
-LABEL_E1BD2C:	aligned_string "CmpMenuScreen"
+NakaInst_CmpMenuScreen:	aligned_string "CmpMenuScreen"
 Naka_CmpMenu_Screens:
-	.long LABEL_E1BD86
+	.long NakaInst_CmpBkslScreen
 	.long LABEL_E1BD84
 	.long LABEL_E1BD82
 	.long LABEL_E1BD80
@@ -409,8 +409,8 @@ LABEL_E1BD7E:	aligned_string ""
 LABEL_E1BD80:	aligned_string ""
 LABEL_E1BD82:	aligned_string ""
 LABEL_E1BD84:	aligned_string ""
-LABEL_E1BD86:	aligned_string "CmpBkslScreen"
-	.long LABEL_E1BE44
+NakaInst_CmpBkslScreen:	aligned_string "CmpBkslScreen"
+	.long NakaInst_CmpBkslSScreen
 Naka_CmpBookshelf_Screens:
 	.long LABEL_E1BE42
 	.long LABEL_E1BE40
@@ -427,20 +427,20 @@ Naka_CmpBookshelf_Screens:
 	.long LABEL_E1BE2A
 	.long LABEL_E1BE28
 	.long LABEL_E1BE26
-	.long LABEL_E1BE1A
+	.long NakaInst_CmpNameMenu
 	.long LABEL_E1BE18
-	.long LABEL_E1BE0C
-	.long LABEL_E1BE00
-	.long LABEL_E1BDF4
+	.long NakaInst_CmpClrSure
+	.long NakaInst_CmpClrYesSw
+	.long NakaInst_CmpClrNoSw
 	.long LABEL_E1BDF2
 	.long LABEL_E1BDF0
 LABEL_E1BDF0:	aligned_string ""
 LABEL_E1BDF2:	aligned_string ""
-LABEL_E1BDF4:	aligned_string "CmpClrNoSw"
-LABEL_E1BE00:	aligned_string "CmpClrYesSw"
-LABEL_E1BE0C:	aligned_string "CmpClrSure"
+NakaInst_CmpClrNoSw:	aligned_string "CmpClrNoSw"
+NakaInst_CmpClrYesSw:	aligned_string "CmpClrYesSw"
+NakaInst_CmpClrSure:	aligned_string "CmpClrSure"
 LABEL_E1BE18:	aligned_string ""
-LABEL_E1BE1A:	aligned_string "CmpNameMenu"
+NakaInst_CmpNameMenu:	aligned_string "CmpNameMenu"
 LABEL_E1BE26:	aligned_string ""
 LABEL_E1BE28:	aligned_string ""
 LABEL_E1BE2A:	aligned_string ""
@@ -456,63 +456,63 @@ LABEL_E1BE3C:	aligned_string ""
 LABEL_E1BE3E:	aligned_string ""
 LABEL_E1BE40:	aligned_string ""
 LABEL_E1BE42:	aligned_string ""
-LABEL_E1BE44:	aligned_string "CmpBkslSScreen"
-	.long LABEL_E1BE8A
+NakaInst_CmpBkslSScreen:	aligned_string "CmpBkslSScreen"
+	.long NakaInst_CmpNamingScreen
 Naka_CmpBookshelfSub_Screens:
 	.long LABEL_E1BE88
 	.long LABEL_E1BE86
-	.long LABEL_E1BE78
-	.long LABEL_E1BE6E
+	.long NakaInst_NameMemLabel
+	.long NakaInst_NamingMem
 	.long LABEL_E1BE6C
 LABEL_E1BE6C:	aligned_string ""
-LABEL_E1BE6E:	aligned_string "NamingMem"
-LABEL_E1BE78:	aligned_string "NameMemLabel"
+NakaInst_NamingMem:	aligned_string "NamingMem"
+NakaInst_NameMemLabel:	aligned_string "NameMemLabel"
 LABEL_E1BE86:	aligned_string ""
 LABEL_E1BE88:	aligned_string ""
-LABEL_E1BE8A:	aligned_string "CmpNamingScreen"
+NakaInst_CmpNamingScreen:	aligned_string "CmpNamingScreen"
 Naka_NamingMem_Screens:
-	.long LABEL_E1BF6C
+	.long NakaInst_CmpSetScreen
 	.long LABEL_E1BF6A
-	.long LABEL_E1BF60
-	.long LABEL_E1BF54
-	.long LABEL_E1BF48
+	.long NakaInst_CmSetPage
+	.long NakaInst_CmSetP1Ctl
+	.long NakaInst_CmSetP2Ctl
 	.long LABEL_E1BF46
-	.long LABEL_E1BF3A
-	.long LABEL_E1BF2E
+	.long NakaInst_CmSetPage1
+	.long NakaInst_CmSetP1Grid
 	.long LABEL_E1BF2C
 	.long LABEL_E1BF2A
 	.long LABEL_E1BF28
 	.long LABEL_E1BF26
 	.long LABEL_E1BF24
-	.long LABEL_E1BF18
-	.long LABEL_E1BF0C
-	.long LABEL_E1BF00
-	.long LABEL_E1BEF4
-	.long LABEL_E1BEE8
+	.long NakaInst_CmSetPage2
+	.long NakaInst_CmpSetGrid
+	.long NakaInst_CmSetPartSw
+	.long NakaInst_CmSetPanSw
+	.long NakaInst_CmSetRLmtSw
 	.long LABEL_E1BEE6
 LABEL_E1BEE6:	aligned_string ""
-LABEL_E1BEE8:	aligned_string "CmSetRLmtSw"
-LABEL_E1BEF4:	aligned_string "CmSetPanSw"
-LABEL_E1BF00:	aligned_string "CmSetPartSw"
-LABEL_E1BF0C:	aligned_string "CmpSetGrid"
-LABEL_E1BF18:	aligned_string "CmSetPage2"
+NakaInst_CmSetRLmtSw:	aligned_string "CmSetRLmtSw"
+NakaInst_CmSetPanSw:	aligned_string "CmSetPanSw"
+NakaInst_CmSetPartSw:	aligned_string "CmSetPartSw"
+NakaInst_CmpSetGrid:	aligned_string "CmpSetGrid"
+NakaInst_CmSetPage2:	aligned_string "CmSetPage2"
 LABEL_E1BF24:	aligned_string ""
 LABEL_E1BF26:	aligned_string ""
 LABEL_E1BF28:	aligned_string ""
 LABEL_E1BF2A:	aligned_string ""
 LABEL_E1BF2C:	aligned_string ""
-LABEL_E1BF2E:	aligned_string "CmSetP1Grid"
-LABEL_E1BF3A:	aligned_string "CmSetPage1"
+NakaInst_CmSetP1Grid:	aligned_string "CmSetP1Grid"
+NakaInst_CmSetPage1:	aligned_string "CmSetPage1"
 LABEL_E1BF46:	aligned_string ""
-LABEL_E1BF48:	aligned_string "CmSetP2Ctl"
-LABEL_E1BF54:	aligned_string "CmSetP1Ctl"
-LABEL_E1BF60:	aligned_string "CmSetPage"
+NakaInst_CmSetP2Ctl:	aligned_string "CmSetP2Ctl"
+NakaInst_CmSetP1Ctl:	aligned_string "CmSetP1Ctl"
+NakaInst_CmSetPage:	aligned_string "CmSetPage"
 LABEL_E1BF6A:	aligned_string ""
-LABEL_E1BF6C:	aligned_string "CmpSetScreen"
+NakaInst_CmpSetScreen:	aligned_string "CmpSetScreen"
 Naka_CmSetP1Grid_Screens:
-	.long LABEL_E1C068
+	.long NakaInst_CmpRealScreen
 	.long LABEL_E1C066
-	.long LABEL_E1C05E
+	.long NakaInst_CmpMem
 	.long LABEL_E1C05C
 	.long LABEL_E1C05A
 	.long LABEL_E1C058
@@ -534,22 +534,22 @@ Naka_CmSetP1Grid_Screens:
 	.long LABEL_E1C038
 	.long LABEL_E1C036
 	.long LABEL_E1C034
-	.long LABEL_E1C02C
-	.long LABEL_E1C024
-	.long LABEL_E1C01C
-	.long LABEL_E1C014
-	.long LABEL_E1C00C
-	.long LABEL_E1C004
-	.long LABEL_E1BFFC
+	.long NakaInst_DrmRec
+	.long NakaInst_Ac3Rec
+	.long NakaInst_Ac2Rec
+	.long NakaInst_Ac1Rec
+	.long NakaInst_BasRec
+	.long NakaInst_CmpQtz
+	.long NakaInst_CmpMeas
 	.long LABEL_E1BFFA
 LABEL_E1BFFA:	aligned_string ""
-LABEL_E1BFFC:	aligned_string "CmpMeas"
-LABEL_E1C004:	aligned_string "CmpQtz"
-LABEL_E1C00C:	aligned_string "BasRec"
-LABEL_E1C014:	aligned_string "Ac1Rec"
-LABEL_E1C01C:	aligned_string "Ac2Rec"
-LABEL_E1C024:	aligned_string "Ac3Rec"
-LABEL_E1C02C:	aligned_string "DrmRec"
+NakaInst_CmpMeas:	aligned_string "CmpMeas"
+NakaInst_CmpQtz:	aligned_string "CmpQtz"
+NakaInst_BasRec:	aligned_string "BasRec"
+NakaInst_Ac1Rec:	aligned_string "Ac1Rec"
+NakaInst_Ac2Rec:	aligned_string "Ac2Rec"
+NakaInst_Ac3Rec:	aligned_string "Ac3Rec"
+NakaInst_DrmRec:	aligned_string "DrmRec"
 LABEL_E1C034:	aligned_string ""
 LABEL_E1C036:	aligned_string ""
 LABEL_E1C038:	aligned_string ""
@@ -571,29 +571,29 @@ LABEL_E1C056:	aligned_string ""
 LABEL_E1C058:	aligned_string ""
 LABEL_E1C05A:	aligned_string ""
 LABEL_E1C05C:	aligned_string ""
-LABEL_E1C05E:	aligned_string "CmpMem"
+NakaInst_CmpMem:	aligned_string "CmpMem"
 LABEL_E1C066:	aligned_string ""
-LABEL_E1C068:	aligned_string "CmpRealScreen"
+NakaInst_CmpRealScreen:	aligned_string "CmpRealScreen"
 	and	w, (xwa)
 	.byte 0xe1, 0x00
 	.long LABEL_E1C07E
 LABEL_E1C07E:	aligned_string ""
 LABEL_E1C080:	aligned_string ""
 Naka_CmpMem_Screens:
-	.long LABEL_E1C0D2
-	.long LABEL_E1C0C8
-	.long LABEL_E1C0BE
-	.long LABEL_E1C0B4
-	.long LABEL_E1C0AA
-	.long LABEL_E1C0A0
+	.long NakaInst_CmpBalScreen
+	.long NakaInst_CmpDrmVol
+	.long NakaInst_CmpAc3Vol
+	.long NakaInst_CmpAc2Vol
+	.long NakaInst_CmpAc1Vol
+	.long NakaInst_CmpBasVol
 	.long LABEL_E1C09E
 LABEL_E1C09E:	aligned_string ""
-LABEL_E1C0A0:	aligned_string "CmpBasVol"
-LABEL_E1C0AA:	aligned_string "CmpAc1Vol"
-LABEL_E1C0B4:	aligned_string "CmpAc2Vol"
-LABEL_E1C0BE:	aligned_string "CmpAc3Vol"
-LABEL_E1C0C8:	aligned_string "CmpDrmVol"
-LABEL_E1C0D2:	aligned_string "CmpBalScreen"
+NakaInst_CmpBasVol:	aligned_string "CmpBasVol"
+NakaInst_CmpAc1Vol:	aligned_string "CmpAc1Vol"
+NakaInst_CmpAc2Vol:	aligned_string "CmpAc2Vol"
+NakaInst_CmpAc3Vol:	aligned_string "CmpAc3Vol"
+NakaInst_CmpDrmVol:	aligned_string "CmpDrmVol"
+NakaInst_CmpBalScreen:	aligned_string "CmpBalScreen"
 LABEL_E1C0E0:
 	.long StrCmpNcpScreen
 	.long StrCmpNcpFitmSw_Empty
@@ -2292,13 +2292,13 @@ MSG_INSERT_STYLE_CONVERT_ID:	.asciz "Please Insert the Style Convert Disk!"	; In
 	.long MSG_INSERT_STYLE_CONVERT_ES
 	.long MSG_INSERT_STYLE_CONVERT_EN2
 	.long MSG_INSERT_STYLE_CONVERT_ID
-LABEL_E1EF5A:
+NakaInst_Select_the_sound_for_each_part:
 
 
 	aligned_string "Select the sound for each part."
 	.byte 0x57, 0xe4
 	aligned_string "hlen Sie einen Klang für jede gewünschte Klanggruppe"
-LABEL_E1EFB2:	aligned_string "Select the sound for each part."
-LABEL_E1EFD2:	aligned_string "Select the sound for each part."
-LABEL_E1EFF2:	aligned_string "Select the sound for each part."
-LABEL_E1F012:	aligned_string "Select the sound for each part."
+NakaInst_Select_the_sound_for_each_part_E1EFB2:	aligned_string "Select the sound for each part."
+NakaInst_Select_the_sound_for_each_part_E1EFD2:	aligned_string "Select the sound for each part."
+NakaInst_Select_the_sound_for_each_part_E1EFF2:	aligned_string "Select the sound for each part."
+NakaInst_Select_the_sound_for_each_part_E1F012:	aligned_string "Select the sound for each part."

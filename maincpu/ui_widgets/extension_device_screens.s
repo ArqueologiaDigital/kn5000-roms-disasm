@@ -1098,14 +1098,14 @@
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "ControlMenu"
 Naka_EditorMenu_Screens:
-	.long LABEL_ED80B6
+	.long NakaInst_ControlIni
 	.long LABEL_ED80B4
-	.long LABEL_ED80AC
+	.long NakaInst_SYSINI
 	.long LABEL_ED80AA
 	.long LABEL_ED80A8
 	.long LABEL_ED80A6
 	.long LABEL_ED80A4
-	.long LABEL_ED8098
+	.long NakaInst_SYSINISURE
 	.long LABEL_ED8096
 	.long LABEL_ED8094
 	.long LABEL_ED8092
@@ -1126,14 +1126,14 @@ LABEL_ED8090:	aligned_string ""
 LABEL_ED8092:	aligned_string ""
 LABEL_ED8094:	aligned_string ""
 LABEL_ED8096:	aligned_string ""
-LABEL_ED8098:	aligned_string "SYSINISURE"
+NakaInst_SYSINISURE:	aligned_string "SYSINISURE"
 LABEL_ED80A4:	aligned_string ""
 LABEL_ED80A6:	aligned_string ""
 LABEL_ED80A8:	aligned_string ""
 LABEL_ED80AA:	aligned_string ""
-LABEL_ED80AC:	aligned_string "SYSINI"
+NakaInst_SYSINI:	aligned_string "SYSINI"
 LABEL_ED80B4:	aligned_string ""
-LABEL_ED80B6:	aligned_string "ControlIni"
+NakaInst_ControlIni:	aligned_string "ControlIni"
 	.byte 0xea, 0x80, 0xed, 0x00, 0xe8, 0x80
 	.byte 0xed, 0x00, 0xe6, 0x80, 0xed, 0x00, 0xe4, 0x80
 	.byte 0xed, 0x00, 0xe2, 0x80, 0xed, 0x00, 0xe0, 0x80
@@ -1148,7 +1148,7 @@ LABEL_ED80E4:
 LABEL_ED80E6:
 	.byte 0x00, 0xff
 LABEL_ED80E8:	aligned_string ""
-LABEL_ED80EA:	aligned_string "ControlFsw"
+NakaInst_ControlFsw:	aligned_string "ControlFsw"
 	.byte 0x2a, 0x81
 	.byte 0xed, 0x00, 0x28, 0x81, 0xed, 0x00, 0x26, 0x81
 	.byte 0xed, 0x00, 0x24, 0x81, 0xed, 0x00, 0x22, 0x81
@@ -1169,7 +1169,7 @@ LABEL_ED8124:
 LABEL_ED8126:
 	.byte 0x00, 0xff
 LABEL_ED8128:	aligned_string ""
-LABEL_ED812A:	aligned_string "ControlSns"
+NakaInst_ControlSns:	aligned_string "ControlSns"
 	.byte 0xac, 0x81
 	.byte 0xed, 0x00, 0xaa, 0x81, 0xed, 0x00, 0xa8, 0x81
 	.byte 0xed, 0x00, 0xa6, 0x81, 0xed, 0x00, 0xa4, 0x81
@@ -1236,7 +1236,7 @@ LABEL_ED8204:
 LABEL_ED8206:
 	.byte 0x00, 0xff
 LABEL_ED8208:	aligned_string ""
-LABEL_ED820A:	aligned_string "PMEM2"
+NakaInst_PMEM2:	aligned_string "PMEM2"
 	.byte 0x00, 0xff
 LABEL_ED8212:
 	.byte 0x00, 0xff
@@ -1277,7 +1277,7 @@ LABEL_ED825A:	aligned_string ""
 LABEL_ED825C:	aligned_string ""
 LABEL_ED825E:	aligned_string ""
 LABEL_ED8260:	aligned_string ""
-LABEL_ED8262:	aligned_string "ControlSys"
+NakaInst_ControlSys:	aligned_string "ControlSys"
 	.byte 0x20, 0x83
 	.byte 0xed, 0x00, 0x1e, 0x83, 0xed, 0x00, 0x0e, 0x83
 	.byte 0xed, 0x00, 0x0c, 0x83, 0xed, 0x00, 0x0a, 0x83
@@ -1309,7 +1309,7 @@ LABEL_ED82E4:
 LABEL_ED82E6:
 	.byte 0x00, 0xff
 LABEL_ED82E8:	aligned_string ""
-LABEL_ED82EA:	aligned_string "WALLSETSURE"
+NakaInst_WALLSETSURE:	aligned_string "WALLSETSURE"
 LABEL_ED82F6:	aligned_string ""
 	.byte 0x00, 0xff
 LABEL_ED82FA:
@@ -1330,7 +1330,7 @@ LABEL_ED830A:
 	.byte 0x00, 0xff
 LABEL_ED830C:
 	.byte 0x00, 0xff
-LABEL_ED830E:	aligned_string "ControlWallSet"
+NakaInst_ControlWallSet:	aligned_string "ControlWallSet"
 LABEL_ED831E:	aligned_string ""
 LABEL_ED8320:	.byte 0x00, 0xff, 0x3e, 0x83, 0xed, 0x00, 0x3c, 0x83
 	.byte 0xed, 0x00, 0x3a, 0x83, 0xed, 0x00, 0x38, 0x83
@@ -1342,7 +1342,7 @@ LABEL_ED833A:
 	.byte 0x00, 0xff
 LABEL_ED833C:
 	.byte 0x00, 0xff
-LABEL_ED833E:	aligned_string "ONETCH"
+NakaInst_ONETCH:	aligned_string "ONETCH"
 	.byte 0x62, 0x83
 	.byte 0xed, 0x00, 0x60, 0x83, 0xed, 0x00, 0x5e, 0x83
 	.byte 0xed, 0x00, 0x5c, 0x83, 0xed, 0x00, 0x5a, 0x83
@@ -1354,13 +1354,13 @@ LABEL_ED835C:
 LABEL_ED835E:
 	.byte 0x00, 0xff
 LABEL_ED8360:	aligned_string ""
-LABEL_ED8362:	aligned_string "MUSICSTYL"
+NakaInst_MUSICSTYL:	aligned_string "MUSICSTYL"
 	.long LABEL_ED83F4
 Naka_EditorParam_Screens:
 	.long LABEL_ED83F2
 	.long LABEL_ED83F0
 	.long LABEL_ED83EE
-	.long LABEL_ED83E6
+	.long NakaInst_STYLE1
 	.long LABEL_ED83E4
 	.long LABEL_ED83E2
 	.long LABEL_ED83E0
@@ -1368,7 +1368,7 @@ Naka_EditorParam_Screens:
 	.long LABEL_ED83DC
 	.long LABEL_ED83DA
 	.long LABEL_ED83D8
-	.long LABEL_ED83D0
+	.long NakaInst_STYLE2
 	.long LABEL_ED83CE
 	.long LABEL_ED83CC
 	.long LABEL_ED83CA
@@ -1385,7 +1385,7 @@ LABEL_ED83C8:	aligned_string ""
 LABEL_ED83CA:	aligned_string ""
 LABEL_ED83CC:	aligned_string ""
 LABEL_ED83CE:	aligned_string ""
-LABEL_ED83D0:	aligned_string "STYLE2"
+NakaInst_STYLE2:	aligned_string "STYLE2"
 LABEL_ED83D8:	aligned_string ""
 LABEL_ED83DA:	aligned_string ""
 LABEL_ED83DC:	aligned_string ""
@@ -1393,7 +1393,7 @@ LABEL_ED83DE:	aligned_string ""
 LABEL_ED83E0:	aligned_string ""
 LABEL_ED83E2:	aligned_string ""
 LABEL_ED83E4:	aligned_string ""
-LABEL_ED83E6:	aligned_string "STYLE1"
+NakaInst_STYLE1:	aligned_string "STYLE1"
 LABEL_ED83EE:	aligned_string ""
 LABEL_ED83F0:	aligned_string ""
 LABEL_ED83F2:	aligned_string ""
@@ -1403,7 +1403,7 @@ Naka_EditorSetting_Screens:
 	.long LABEL_ED846C
 	.long LABEL_ED846A
 	.long LABEL_ED8468
-	.long LABEL_ED8462
+	.long NakaInst_SONG1
 	.long LABEL_ED8460
 	.long LABEL_ED845E
 	.long LABEL_ED845C
@@ -1430,13 +1430,13 @@ LABEL_ED845A:	aligned_string ""
 LABEL_ED845C:	aligned_string ""
 LABEL_ED845E:	aligned_string ""
 LABEL_ED8460:	aligned_string ""
-LABEL_ED8462:	aligned_string "SONG1"
+NakaInst_SONG1:	aligned_string "SONG1"
 LABEL_ED8468:	aligned_string ""
 LABEL_ED846A:	aligned_string ""
 LABEL_ED846C:	aligned_string ""
-LABEL_ED846E:	aligned_string "MSSCTSEL"
+NakaInst_MSSCTSEL:	aligned_string "MSSCTSEL"
 Naka_SongList_PageTable:
-	.long LABEL_ED84AC
+	.long NakaInst_MSSONGLIST
 	.long LABEL_ED84AA
 	.long LABEL_ED84A8
 	.long LABEL_ED84A6
@@ -1453,9 +1453,9 @@ LABEL_ED84A4:	aligned_string ""
 LABEL_ED84A6:	aligned_string ""
 LABEL_ED84A8:	aligned_string ""
 LABEL_ED84AA:	aligned_string ""
-LABEL_ED84AC:	aligned_string "MSSONGLIST"
+NakaInst_MSSONGLIST:	aligned_string "MSSONGLIST"
 Naka_SongSlot_SelectTable:
-	.long LABEL_ED84E6
+	.long NakaInst_MSSTLSEL
 	.long LABEL_ED84E4
 	.long LABEL_ED84E2
 	.long LABEL_ED84E0
@@ -1470,9 +1470,9 @@ LABEL_ED84DE:	aligned_string ""
 LABEL_ED84E0:	aligned_string ""
 LABEL_ED84E2:	aligned_string ""
 LABEL_ED84E4:	aligned_string ""
-LABEL_ED84E6:	aligned_string "MSSTLSEL"
+NakaInst_MSSTLSEL:	aligned_string "MSSTLSEL"
 Naka_PresetBank_SelectTable:
-	.long LABEL_ED8518
+	.long NakaInst_PMBANK
 	.long LABEL_ED8516
 	.long LABEL_ED8514
 	.long LABEL_ED8512
@@ -1485,9 +1485,9 @@ LABEL_ED8510:	aligned_string ""
 LABEL_ED8512:	aligned_string ""
 LABEL_ED8514:	aligned_string ""
 LABEL_ED8516:	aligned_string ""
-LABEL_ED8518:	aligned_string "PMBANK"
+NakaInst_PMBANK:	aligned_string "PMBANK"
 Naka_EditorConfig_Screens:
-	.long LABEL_ED8572
+	.long NakaInst_PMVIEW
 	.long LABEL_ED8570
 	.long LABEL_ED856E
 	.long LABEL_ED856C
@@ -1514,7 +1514,7 @@ LABEL_ED856A:	aligned_string ""
 LABEL_ED856C:	aligned_string ""
 LABEL_ED856E:	aligned_string ""
 LABEL_ED8570:	aligned_string ""
-LABEL_ED8572:	aligned_string "PMVIEW"
+NakaInst_PMVIEW:	aligned_string "PMVIEW"
 	.byte 0xa8, 0x85, 0xed, 0x00, 0xa6, 0x85
 	.byte 0xed, 0x00, 0xa4, 0x85, 0xed, 0x00, 0xa2, 0x85
 	.byte 0xed, 0x00, 0xa0, 0x85, 0xed, 0x00, 0x9e, 0x85
@@ -1533,7 +1533,7 @@ LABEL_ED85A4:
 	.byte 0x00, 0xff
 LABEL_ED85A6:
 	.byte 0x00, 0xff
-LABEL_ED85A8:	aligned_string "PMNAME"
+NakaInst_PMNAME:	aligned_string "PMNAME"
 Naka_PresetBank_InfoTable:
 	.long Naka_PresetBankName_Label
 	.long LABEL_ED85DC
@@ -1551,12 +1551,12 @@ LABEL_ED85D8:			aligned_string ""
 LABEL_ED85DA:			aligned_string ""
 LABEL_ED85DC:			aligned_string ""
 Naka_PresetBankName_Label:	aligned_string "PMBKNAME"
-	.long LABEL_ED85F8
+	.long NakaInst_SVARI
 	.long LABEL_ED85F6
 	.long LABEL_ED85F4
 LABEL_ED85F4:	aligned_string ""
 LABEL_ED85F6:	aligned_string ""
-LABEL_ED85F8:	aligned_string "SVARI"
+NakaInst_SVARI:	aligned_string "SVARI"
 	.byte 0x14, 0x86
 	.byte 0xed, 0x00, 0x12, 0x86, 0xed, 0x00, 0x10, 0x86
 	.byte 0xed, 0x00, 0x0e, 0x86, 0xed, 0x00
@@ -1586,7 +1586,7 @@ LABEL_ED865E:
 	.byte 0x00, 0xff
 LABEL_ED8662:
 	.byte 0x00, 0xff
-LABEL_ED8664:	aligned_string "TEST1CP"
+NakaInst_TEST1CP:	aligned_string "TEST1CP"
 LABEL_ED866C:
 	.byte 0x00, 0xff
 LABEL_ED866E:
@@ -1596,7 +1596,7 @@ LABEL_ED8672:
 	.byte 0x00, 0xff
 LABEL_ED8674:
 	.byte 0x00, 0xff
-LABEL_ED8676:	aligned_string "TEST1RAM"
+NakaInst_TEST1RAM:	aligned_string "TEST1RAM"
 LABEL_ED8680:	.byte 0x00, 0xff, 0x30, 0x87, 0xed, 0x00, 0x2e, 0x87
 	.byte 0xed, 0x00, 0x2c, 0x87, 0xed, 0x00, 0x2a, 0x87
 	.byte 0xed, 0x00, 0x28, 0x87, 0xed, 0x00, 0x26, 0x87
@@ -1616,18 +1616,18 @@ LABEL_ED86E4:
 	.byte 0x00, 0xff
 LABEL_ED86E6:
 	.byte 0x00, 0xff
-LABEL_ED86E8:	aligned_string "TEST2OKNG"
+NakaInst_TEST2OKNG:	aligned_string "TEST2OKNG"
 	.byte 0x00, 0xff
 LABEL_ED86F4:
 	.byte 0x00, 0xff
-LABEL_ED86F6:	aligned_string "TEST2NGOK"
+NakaInst_TEST2NGOK:	aligned_string "TEST2NGOK"
 	.byte 0x00, 0xff
 LABEL_ED8702:
 	.byte 0x00, 0xff
-LABEL_ED8704:	aligned_string "TEST2NGNG"
+NakaInst_TEST2NGNG:	aligned_string "TEST2NGNG"
 LABEL_ED870E:	aligned_string ""
 LABEL_ED8710:	aligned_string ""
-LABEL_ED8712:	aligned_string "TEST2OKOK"
+NakaInst_TEST2OKOK:	aligned_string "TEST2OKOK"
 	.byte 0x00, 0xff
 LABEL_ED871E:
 	.byte 0x00, 0xff
@@ -1645,12 +1645,12 @@ LABEL_ED872C:
 	.byte 0x00, 0xff
 LABEL_ED872E:
 	.byte 0x00, 0xff
-LABEL_ED8730:	aligned_string "TEST2"
+NakaInst_TEST2:	aligned_string "TEST2"
 	.byte 0x40, 0x87
 	.byte 0xed, 0x00, 0x3e, 0x87, 0xed, 0x00
 LABEL_ED873E:
 	.byte 0x00, 0xff
-LABEL_ED8740:	aligned_string "TEST3"
+NakaInst_TEST3:	aligned_string "TEST3"
 	.byte 0x5c, 0x87
 	.byte 0xed, 0x00, 0x5a, 0x87, 0xed, 0x00, 0x58, 0x87
 	.byte 0xed, 0x00, 0x56, 0x87, 0xed, 0x00
@@ -1785,18 +1785,18 @@ LABEL_ED88D4:
 	.byte 0x00, 0xff
 LABEL_ED88D6:
 	.byte 0x00, 0xff
-LABEL_ED88D8:	aligned_string "TEST56"
+NakaInst_TEST56:	aligned_string "TEST56"
 LABEL_ED88E0:	aligned_string ""
-LABEL_ED88E2:	aligned_string "TEST55"
+NakaInst_TEST55:	aligned_string "TEST55"
 LABEL_ED88EA:	aligned_string ""
-LABEL_ED88EC:	aligned_string "TEST54"
+NakaInst_TEST54:	aligned_string "TEST54"
 LABEL_ED88F4:
 	.byte 0x00, 0xff
-LABEL_ED88F6:	aligned_string "TEST53"
+NakaInst_TEST53:	aligned_string "TEST53"
 LABEL_ED88FE:	aligned_string ""
-LABEL_ED8900:	aligned_string "TEST52"
+NakaInst_TEST52:	aligned_string "TEST52"
 LABEL_ED8908:	aligned_string ""
-LABEL_ED890A:	aligned_string "TEST51"
+NakaInst_TEST51:	aligned_string "TEST51"
 	.byte 0x00, 0xff
 LABEL_ED8914:
 	.byte 0x00, 0xff
@@ -1816,9 +1816,9 @@ LABEL_ED894A:
 	.byte 0x00, 0xff
 LABEL_ED894C:
 	.byte 0x00, 0xff
-LABEL_ED894E:	aligned_string "TEST6NG"
+NakaInst_TEST6NG:	aligned_string "TEST6NG"
 LABEL_ED8956:	aligned_string ""
-LABEL_ED8958:	aligned_string "TEST6OK"
+NakaInst_TEST6OK:	aligned_string "TEST6OK"
 	.byte 0x00, 0xff
 LABEL_ED8962:
 	.byte 0x00, 0xff
@@ -1826,12 +1826,12 @@ LABEL_ED8964:
 	.byte 0x00, 0xff
 LABEL_ED8966:
 	.byte 0x00, 0xff
-LABEL_ED8968:	aligned_string "TEST6"
+NakaInst_TEST6:	aligned_string "TEST6"
 	.byte 0x78, 0x89
 	.byte 0xed, 0x00, 0x76, 0x89, 0xed, 0x00
 LABEL_ED8976:
 	.byte 0x00, 0xff
-LABEL_ED8978:	aligned_string "EXT"
+NakaInst_EXT:	aligned_string "EXT"
 	aligned_string "MD_NORMAL"
 	aligned_string "MD_CONTROL"
 	aligned_string "MD_OTP"
