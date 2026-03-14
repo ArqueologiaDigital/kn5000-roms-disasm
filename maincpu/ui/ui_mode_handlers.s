@@ -1556,7 +1556,7 @@ SelfTest_SramAndRom_CheckROM:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_FC3EDC
+	call CPanel_PanelDetection_Wrapper
 	stda8 36220, a
 	pop xiz
 	pop xix

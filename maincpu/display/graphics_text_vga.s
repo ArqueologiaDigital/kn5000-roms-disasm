@@ -60,7 +60,7 @@ TextRender_CheckColumnEnd:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	cp (xsp + 28), wa
-	jrl c, LABEL_FB1371
+	jrl c, TextRender_XorMode_DrawPixel
 
 TextRender_AdvanceToNextLine:
 	ld wa, (xsp + 24)
@@ -68,14 +68,14 @@ TextRender_AdvanceToNextLine:
 	incm 1, (xsp + 26)
 	ld wa, (xsp + 26)
 	cp wa, (xsp + 22)
-	jrl c, LABEL_FB11B5
+	jrl c, TextRender_ScanLineLoop
 
 TextRender_AdvanceStringPointer:
 	lds32 xwa, 1
 	add (xsp + 30), xwa
 	ld xwa, (xsp + 30)
 	cp (xwa), 0x0
-	jrl nz, LABEL_FB113D
+	jrl nz, TextRender_CharEncodeAndDraw
 
 TextRender_Finalize:
 	st_dri3b W, 0xFD, 0x2E, 0x01
@@ -4192,7 +4192,7 @@ AcTransposeBoxProc:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	jrl LABEL_FC2FAE
+	jrl UI_EventHandler_PopAndReturn
 
 AcTranspose_Init:
 	ld_sril XWA, (xsp + 0x0104)
@@ -4238,7 +4238,7 @@ AcTranspose_ValueChanged:
 	push xbc
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_FC2F9B
+	jr ChordProc_SendRefreshEvent
 
 AcTranspose_FormatLabel:
 	sla wa, 2

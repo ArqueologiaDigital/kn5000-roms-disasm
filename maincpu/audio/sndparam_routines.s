@@ -1925,7 +1925,7 @@ SndParam_AllocAndInsert:
 	or xwa, xwa
 	jr nz, SndParam_AllocBuildKey
 	ld xwa, 0xEE1560
-	call LABEL_FFFEA1
+	call Debug_PrintString
 	pushw 0x1
 	call Boot_HaltInstruction
 	inc 2, xsp

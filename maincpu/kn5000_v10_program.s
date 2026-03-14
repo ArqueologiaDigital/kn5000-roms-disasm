@@ -3682,11 +3682,11 @@ DrawText_QueueOrDirect:
 	ld (xsp + 16), xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
-	jr z, LABEL_FB0EBF
+	jr z, DrawText_QueueDeferred
 	ld8_24 a, 0x03efa8
 	st8_24 0x03efaa, a
 	cpdi16_24 197710, 0
-	jrl z, LABEL_FB0F2A
+	jrl z, DrawText_PopAndReturn
 	ld xwa, (xsp + 28)
 	push xwa
 	pushm (xsp + 30)
@@ -3694,10 +3694,10 @@ DrawText_QueueOrDirect:
 	ld xwa, (xsp + 24)
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
-	calr LABEL_FB0F67
-	jr LABEL_FB0F2A
+	calr TextRender_BeginDraw
+	jr DrawText_PopAndReturn
 
-LABEL_FB0EBF:
+DrawText_QueueDeferred:
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strlen
@@ -3739,7 +3739,7 @@ LABEL_FB0EBF:
 	ld xwa, xiz
 	calr DisplayCmd_DequeueAndExecute
 
-LABEL_FB0F2A:
+DrawText_PopAndReturn:
 	pop xiz
 	lda xsp, (xsp + 16)
 	retd 0x8
@@ -3753,21 +3753,21 @@ LABEL_FB0F2A:
 	ld a, (xiz + 28)
 	st8_24 0x03efaa, a
 	cpdi16_24 197710, 0
-	jr z, LABEL_FB0F5F
+	jr z, DrawText_DeferredFreeAndReturn
 	push xiy
 	pushw ix
 	pushw de
 	ld xde, (xiz + 16)
 	ld xwa, xhl
-	calr LABEL_FB0F67
+	calr TextRender_BeginDraw
 
-LABEL_FB0F5F:
+DrawText_DeferredFreeAndReturn:
 	ld xwa, (xiz + 16)
 	calr DrawFunc_Return
 	pop xiz
 	ret
 
-LABEL_FB0F67:
+TextRender_BeginDraw:
 	st_dri3b L, 0xFD, 0xC6, 0xFE
 	push xiz
 	st_dri3l XDE, 0xFD, 0x36, 0x01
@@ -3779,53 +3779,53 @@ LABEL_FB0F67:
 	inc 2, xwa
 	ld (xsp + 34), xwa
 	cpw (xwa), 0x0
-	jr ge, LABEL_FB0F99
+	jr ge, TextRender_ClampYOrigin
 	ld xwa, (xsp + 34)
 	ldw (xwa), 0x0
 
-LABEL_FB0F99:
+TextRender_ClampYOrigin:
 	ld_sril XWA, (xsp + 0x013a)
 	cpw (xwa), 0x0
-	jr ge, LABEL_FB0FA8
+	jr ge, TextRender_ClampXOrigin
 	ldw (xwa), 0x0
 
-LABEL_FB0FA8:
+TextRender_ClampXOrigin:
 	ld_sril XWA, (xsp + 0x013a)
 	inc 4, xwa
 	cpw (xwa), 0x140
-	jr lt, LABEL_FB0FB9
+	jr lt, TextRender_ClampXRight
 	ldw (xwa), 0x13F
 
-LABEL_FB0FB9:
+TextRender_ClampXRight:
 	ld_sril XWA, (xsp + 0x013a)
 	lda xde, (xwa + 6)
 	cpw (xde), 0xF0
-	jr lt, LABEL_FB0FCB
+	jr lt, TextRender_SetupColorAndFont
 	ldw (xde), 0xEF
 
-LABEL_FB0FCB:
+TextRender_SetupColorAndFont:
 	ld xiy, xbc
 	st_dri3b D, 0xFD, 0x2A, 0x01
 	ldiw
 	ldiw
 	ld_sril XIX, (xsp + 0x0146)
 	or xix, xix
-	jr nz, LABEL_FB0FE4
+	jr nz, TextRender_ClampNullXStart
 	dec_sriw 2, 0xFD, 0x2C, 0x01
 
-LABEL_FB0FE4:
+TextRender_ClampNullXStart:
 	st_dri3b C, 0xFD, 0x2A, 0x01
 	cpw (xhl), 0x0
-	jr ge, LABEL_FB0FF3
+	jr ge, TextRender_ClampNullYStart
 	ldw (xhl), 0x0
 
-LABEL_FB0FF3:
+TextRender_ClampNullYStart:
 	lda xbc, (xhl + 2)
 	cpw (xbc), 0x0
-	jr ge, LABEL_FB1000
+	jr ge, TextRender_LoadFontData
 	ldw (xbc), 0x0
 
-LABEL_FB1000:
+TextRender_LoadFontData:
 	ld xwa, 0x945C00
 	ld (xsp + 4), xwa
 	ld xwa, xix
@@ -3835,18 +3835,18 @@ LABEL_FB1000:
 	ld xiz, (xwa + 12)
 	ld xiy, (xwa + 8)
 	or xiz, xiz
-	jr nz, LABEL_FB102D
+	jr nz, TextRender_StoreGlyphPos
 	ld wa, (xwa)
 	ld (xsp + 20), wa
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 6)
 	ld (xsp + 22), wa
-	jr LABEL_FB1030
+	jr TextRender_SetupGlyph
 
-LABEL_FB102D:
+TextRender_StoreGlyphPos:
 	ld (xsp + 8), xiz
 
-LABEL_FB1030:
+TextRender_SetupGlyph:
 	ld (xsp + 12), xiy
 	st_dri3b H, 0xFD, 0x2E, 0x01
 	lda xiy, (xiz + 2)
@@ -3864,24 +3864,24 @@ LABEL_FB1030:
 	ld wa, hl
 	ld (xbc), hl
 	or xix, xix
-	jr nz, LABEL_FB1061
+	jr nz, TextRender_HasCustomFont
 	dec 1, wa
 	ld (xbc), wa
 
-LABEL_FB1061:
+TextRender_HasCustomFont:
 	ld xwa, (xsp + 34)
 	ld wa, (xwa)
 	cp (xiy), wa
-	jr ge, LABEL_FB106C
+	jr ge, TextRender_DefaultFontWidth
 	ld (xiy), wa
 
-LABEL_FB106C:
+TextRender_DefaultFontWidth:
 	ld wa, (xde)
 	cp (xbc), wa
-	jr le, LABEL_FB1074
+	jr le, TextRender_CustomFontWidth
 	ld (xbc), wa
 
-LABEL_FB1074:
+TextRender_CustomFontWidth:
 	ld_sril XWA, (xsp + 0x0136)
 	push xwa
 	lda xwa, (xsp + 42)
@@ -3893,21 +3893,21 @@ LABEL_FB1074:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 12)
 	or xwa, xwa
-	jr nz, LABEL_FB10A5
+	jr nz, TextRender_ProcessStringLoop
 	ld xwa, (xsp + 30)
 	push xwa
 	call Strlen
 	inc 4, xsp
 	ld wa, (xsp + 20)
 	mul xwa, xhl
-	jr LABEL_FB10D7
+	jr TextRender_AddToDrawPos
 
-LABEL_FB10A5:
+TextRender_ProcessStringLoop:
 	ld xwa, (xsp + 30)
 	cp (xwa), 0x0
-	jr z, LABEL_FB10D4
+	jr z, TextRender_MaxWidthReached
 
-LABEL_FB10AD:
+TextRender_CharWidthAccum:
 	ld xwa, (xsp + 30)
 	ld_spib C, 0xE0
 	ld (xsp + 30), xwa
@@ -3922,46 +3922,46 @@ LABEL_FB10AD:
 	ld (xsp + 20), wa
 	ld xwa, (xsp + 30)
 	cp (xwa), 0x0
-	jr nz, LABEL_FB10AD
+	jr nz, TextRender_CharWidthAccum
 
-LABEL_FB10D4:
+TextRender_MaxWidthReached:
 	ld wa, (xsp + 20)
 
-LABEL_FB10D7:
+TextRender_AddToDrawPos:
 	add_sriw_mr WA, 0xFD, 0x32, 0x01
 	st_dri3b W, 0xFD, 0x2E, 0x01
 	lda xde, (xwa + 2)
 	ld_sril XBC, (xsp + 0x013a)
 	ld bc, (xbc + 2)
 	cp (xde), bc
-	jr ge, LABEL_FB10F2
+	jr ge, TextRender_ClampGlyphTop
 	ld (xde), bc
 
-LABEL_FB10F2:
+TextRender_ClampGlyphTop:
 	ld de, (xwa)
 	ld_sril XBC, (xsp + 0x013a)
 	cp de, (xbc)
-	jr ge, LABEL_FB1101
+	jr ge, TextRender_ClampGlyphLeft
 	ld bc, (xbc)
 	ld (xwa), bc
 
-LABEL_FB1101:
+TextRender_ClampGlyphLeft:
 	lda xde, (xwa + 4)
 	ld_sril XBC, (xsp + 0x013a)
 	ld bc, (xbc + 4)
 	cp (xde), bc
-	jr le, LABEL_FB1112
+	jr le, TextRender_ClampGlyphRight
 	ld (xde), bc
 
-LABEL_FB1112:
+TextRender_ClampGlyphRight:
 	lda xde, (xwa + 6)
 	ld_sril XBC, (xsp + 0x013a)
 	ld bc, (xbc + 6)
 	cp (xde), bc
-	jr le, LABEL_FB1123
+	jr le, TextRender_ClampGlyphBottom
 	ld (xde), bc
 
-LABEL_FB1123:
+TextRender_ClampGlyphBottom:
 	ld_sriw BC, (xsp + 0x0142)
 	cp bc, 0xF7
 	call_24 nz, 0xFAF938
@@ -3970,7 +3970,7 @@ LABEL_FB1123:
 	cp (xwa), 0x0
 	jrl z, TextRender_Finalize
 
-LABEL_FB113D:
+TextRender_CharEncodeAndDraw:
 	ld xhl, (xsp + 30)
 	ld c, (xhl)
 	extz bc
@@ -3980,7 +3980,7 @@ LABEL_FB113D:
 	ld xbc, (xsp + 4)
 	ld xwa, (xbc + 12)
 	or xwa, xwa
-	jr nz, LABEL_FB1174
+	jr nz, TextRender_CustomFontCharDraw
 	ld bc, (xbc + 2)
 	ld a, (xhl)
 	sub a, 0x20
@@ -3990,9 +3990,9 @@ LABEL_FB113D:
 	ld (xsp + 16), xwa
 	ld xwa, (xsp + 12)
 	add (xsp + 16), xwa
-	jr LABEL_FB11A8
+	jr TextRender_BeginScanLines
 
-LABEL_FB1174:
+TextRender_CustomFontCharDraw:
 	ld xwa, (xsp + 30)
 	ld c, (xwa)
 	sub c, 0x20
@@ -4014,33 +4014,33 @@ LABEL_FB1174:
 	ld xwa, (xsp + 12)
 	add (xsp + 16), xwa
 
-LABEL_FB11A8:
+TextRender_BeginScanLines:
 	ldw (xsp + 26), 0x0
 	cpw (xsp + 22), 0x0
 	jrl ule, TextRender_AdvanceStringPointer
 
-LABEL_FB11B5:
+TextRender_ScanLineLoop:
 	ld bc, (xsp + 26)
 	sll bc, 3
 	ld wa, (xsp + 20)
 	sub wa, bc
 	ld (xsp + 24), wa
 	cpw (xsp + 24), 0x8
-	jr c, LABEL_FB11CF
+	jr c, TextRender_SelectDrawMode
 	ldw (xsp + 24), 0x8
 
-LABEL_FB11CF:
+TextRender_SelectDrawMode:
 	ld8_24 a, 0x03efaa
 	cps a, 2
-	jrl z, LABEL_FB1369
+	jrl z, TextRender_XorMode_Init
 	cps a, 1
-	jrl z, LABEL_FB12B7
+	jrl z, TextRender_BitMask5_Init
 	cps a, 0
 	jrl nz, TextRender_AdvanceToNextLine
 	ldw (xsp + 28), 0x0
-	jrl LABEL_FB12A8
+	jrl TextRender_BitMask4_CheckColumnEnd
 
-LABEL_FB11EB:
+TextRender_BitMask4_DrawPixel:
 	ld xwa, (xsp + 16)
 	cp (xwa), 0x0
 	jrl z, TextRender_BitMask5_ProcessCharacter
@@ -4072,7 +4072,7 @@ LABEL_FB11EB:
 	cpw (xsp + 24), 0x0
 	jr ule, TextRender_BitMask5_ProcessCharacter
 
-LABEL_FB1244:
+TextRender_BitMask4_PixelLoop:
 	ld xwa, (xsp + 34)
 	ld de, (xwa)
 	add de, hl
@@ -4087,10 +4087,10 @@ LABEL_FB1244:
 	sub wa, hl
 	lds iy, 1
 	and a, 0xF
-	jr z, LABEL_FB126A
+	jr z, TextRender_BitMask4_ShiftAndTest
 	slaa iy
 
-LABEL_FB126A:
+TextRender_BitMask4_ShiftAndTest:
 	ld xwa, (xsp + 16)
 	ld a, (xwa)
 	extz wa
@@ -4113,25 +4113,25 @@ TextRender_BitMask4_Return:
 	inc 1, hl
 	inc 1, xix
 	cp hl, (xsp + 24)
-	jr c, LABEL_FB1244
+	jr c, TextRender_BitMask4_PixelLoop
 
 TextRender_BitMask5_ProcessCharacter:
 	lds32 xwa, 1
 	add (xsp + 16), xwa
 	incm 1, (xsp + 28)
 
-LABEL_FB12A8:
+TextRender_BitMask4_CheckColumnEnd:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	cp (xsp + 28), wa
-	jrl c, LABEL_FB11EB
+	jrl c, TextRender_BitMask4_DrawPixel
 	jrl TextRender_AdvanceToNextLine
 
-LABEL_FB12B7:
+TextRender_BitMask5_Init:
 	ldw (xsp + 28), 0x0
-	jrl LABEL_FB135A
+	jrl TextRender_BitMask5_CheckColumnEnd
 
-LABEL_FB12BF:
+TextRender_BitMask5_DrawPixel:
 	ld xwa, (xsp + 16)
 	cp (xwa), 0x0
 	jrl z, TextRender_BitMask5_AdvancePointer
@@ -4161,7 +4161,7 @@ LABEL_FB12BF:
 	cpw (xsp + 24), 0x0
 	jr ule, TextRender_BitMask5_AdvancePointer
 
-LABEL_FB1311:
+TextRender_BitMask5_PixelLoop:
 	ld bc, (xde)
 	add bc, hl
 	ld (xix), bc
@@ -4175,46 +4175,46 @@ LABEL_FB1311:
 	sub wa, hl
 	lds iy, 1
 	and a, 0xF
-	jr z, LABEL_FB1334
+	jr z, TextRender_BitMask5_ShiftAndTest
 	slaa iy
 
-LABEL_FB1334:
+TextRender_BitMask5_ShiftAndTest:
 	ld xwa, (xsp + 16)
 	ld a, (xwa)
 	extz wa
 	and wa, iy
 	jr z, TextRender_BitMask5_Return
 	bitm 7, (xiz)
-	jr z, LABEL_FB1347
+	jr z, TextRender_BitMask5_SetBit
 	resm 5, (xiz)
 	jr TextRender_BitMask5_Return
 
-LABEL_FB1347:
+TextRender_BitMask5_SetBit:
 	setm 5, (xiz)
 
 TextRender_BitMask5_Return:
 	inc 1, hl
 	inc 1, xiz
 	cp hl, (xsp + 24)
-	jr c, LABEL_FB1311
+	jr c, TextRender_BitMask5_PixelLoop
 
 TextRender_BitMask5_AdvancePointer:
 	lds32 xwa, 1
 	add (xsp + 16), xwa
 	incm 1, (xsp + 28)
 
-LABEL_FB135A:
+TextRender_BitMask5_CheckColumnEnd:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	cp (xsp + 28), wa
-	jrl c, LABEL_FB12BF
+	jrl c, TextRender_BitMask5_DrawPixel
 	jrl TextRender_AdvanceToNextLine
 
-LABEL_FB1369:
+TextRender_XorMode_Init:
 	ldw (xsp + 28), 0x0
 	jrl TextRender_CheckColumnEnd
 
-LABEL_FB1371:
+TextRender_XorMode_DrawPixel:
 	ld xwa, (xsp + 16)
 	cp (xwa), 0x0
 	jrl z, TextRender_AdvancePointerAndUpdateLine
@@ -4241,7 +4241,7 @@ LABEL_FB1371:
 	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 
-LABEL_FC2F9B:
+ChordProc_SendRefreshEvent:
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
 	ld xbc, 0x1C0000F
@@ -4250,14 +4250,14 @@ LABEL_FC2F9B:
 UI_EventHandler_InitReturnZero:
 	lds32 xhl, 0
 
-LABEL_FC2FAE:
+UI_EventHandler_PopAndReturn:
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
 
-LABEL_FC2FB5:
+ChordProc_TrailingData:
 	.byte 0x43, 0x03, 0x00, 0x02, 0x01, 0x0e
-LABEL_FC2FBB:
+AcChordBoxProc_Entry:
 
 AcChordBoxProc:
 	st_dri3b L, 0xFD, 0xFC, 0xFE
@@ -4265,17 +4265,17 @@ AcChordBoxProc:
 	ld xiz, xde
 	st_dri3l XWA, 0xFD, 0x04, 0x01
 	cp xbc, 0x1C20001
-	jr z, LABEL_FC300A
+	jr z, AcChordBox_HandleChordUpdate
 	cp xbc, 0x1C00001
-	jr z, LABEL_FC2FED
+	jr z, AcChordBox_HandleInitOrSelect
 	cp xbc, 0x1C20000
-	jr z, LABEL_FC2FED
+	jr z, AcChordBox_HandleInitOrSelect
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	jr LABEL_FC3047
+	jr AcChordBox_PopAndReturn
 
-LABEL_FC2FED:
+AcChordBox_HandleInitOrSelect:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -4283,9 +4283,9 @@ LABEL_FC2FED:
 	ld xbc, 0x1E2000D
 	lds32 xde, 0
 	call MainFuncCall
-	jr LABEL_FC3045
+	jr AcChordBox_ReturnZero
 
-LABEL_FC300A:
+AcChordBox_HandleChordUpdate:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -4299,16 +4299,16 @@ LABEL_FC300A:
 	ld xwa, 0xC0
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr nz, LABEL_FC3045
+	jr nz, AcChordBox_ReturnZero
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_FC3045:
+AcChordBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_FC3047:
+AcChordBox_PopAndReturn:
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
@@ -4316,7 +4316,7 @@ LABEL_FC3047:
 MainChordPre:
 	push xiz
 	cp xbc, 0x1E2000D
-	jrl nz, LABEL_FC3110
+	jrl nz, MainChordPre_ReturnZero
 	pushw 0x15
 	call Malloc
 	ld xiz, xhl
@@ -4339,16 +4339,16 @@ MainChordPre:
 	call Strcat
 	lda xsp, (xsp + 18)
 	cpdi8 36164, 0
-	jr z, LABEL_FC30AD
+	jr z, MainChordPre_EmptyChordStr
 	bitda 1, 52958
-	jr z, LABEL_FC30AD
+	jr z, MainChordPre_EmptyChordStr
 	ld xwa, 0xED1C96
-	jr LABEL_FC30B2
+	jr MainChordPre_AppendChordSuffix
 
-LABEL_FC30AD:
+MainChordPre_EmptyChordStr:
 	ld xwa, 0xED1C9A
 
-LABEL_FC30B2:
+MainChordPre_AppendChordSuffix:
 	push xwa
 	push xiz
 	call Strcat
@@ -4378,12 +4378,12 @@ LABEL_FC30B2:
 	ld xde, xiz
 	call ApPostEvent
 
-LABEL_FC3110:
+MainChordPre_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	ret
 
-LABEL_FC3114:
+MainChordPre_ReturnDefaultResult:
 	ld xhl, 0x1020005
 	ret
 
@@ -4459,13 +4459,13 @@ InitializeUser31:
 EMPTY_ROUTINE__FC3E64:
 	ret
 
-LABEL_FC3E65:
-	.long LABEL_FC3E75
+CPanel_InitDispatchTable:
+	.long CPanel_InitSequence
 	.long EMPTY_ROUTINE__FC3EE4
 	.long EMPTY_ROUTINE__FC3EE4
 	.long EMPTY_ROUTINE__FC3E93
 
-LABEL_FC3E75:
+CPanel_InitSequence:
 	ei 0
 	calr DELAY_51_TICKS
 	calr DELAY_51_TICKS
@@ -4486,7 +4486,7 @@ EMPTY_ROUTINE__FC3E93:
 CPanel_RX_ProcessOrInit:
 	ldda8 a, 36236
 	and a, 0xC0
-	jr z, LABEL_FC3EC8
+	jr z, CPanel_RX_SkipToProcess
 				; if CP_Flags_A.76 != 0:
 	ld xhl, 0x200AD
 	ldw (xhl - 4), 0x0
@@ -4497,12 +4497,12 @@ CPanel_RX_ProcessOrInit:
 	stdi16 36255, 0
 	ordi8 36242, 1	; CP_Flags_B.0 = 1
 	ei 0
-	jr LABEL_FC3ECB
+	jr CPanel_RX_Return
 				; else:
-LABEL_FC3EC8:
+CPanel_RX_SkipToProcess:
 	calr CPanel_RX_Process
 
-LABEL_FC3ECB:
+CPanel_RX_Return:
 	ret
 
 CPanel_Poll:
@@ -4522,12 +4522,12 @@ CPanel_InitButtonState_SaveRegs:
 	ret
 
 
-LABEL_FC3EDC:
+CPanel_PanelDetection_Wrapper:
 	calr CPanel_PanelDetection
 	ret
 
 
-LABEL_FC3EE0:
+CPanel_KeyProcessing_Wrapper:
 	calr LABEL_FC4C4A
 	ret
 
@@ -4655,7 +4655,7 @@ SoundParam_NotifyChange:
 	.include "audio/dsp_config_sysex.s"
 	.include "audio/note_voice_mapping.s"
 
-LABEL_FFFE80:
+Debug_PrintHexByte:
 	push	xiz
 	calr	61
 	pop	xiz
@@ -4674,28 +4674,28 @@ LABEL_FFFE80:
 	pop	xiz
 	.byte 0x0e
 
-LABEL_FFFEA1:
+Debug_PrintString:
 	push xiz
 	ld xix, xwa
 
-LABEL_FFFEA4:
+Debug_PrintString_Loop:
 	ld_spib A, 0xF0
 	cps a, 0
-	jr z, LABEL_FFFEB2
+	jr z, Debug_PrintString_Done
 	push xix
-	calr LABEL_FFFEC1
+	calr Debug_UartDelay
 	pop xix
-	jr LABEL_FFFEA4
+	jr Debug_PrintString_Loop
 
-LABEL_FFFEB2:
+Debug_PrintString_Done:
 	pop xiz
 	ret
 
-LABEL_FFFEB4:
+Debug_UartHelpers:
 	.byte 0xc9, 0xcf, 0x0a, 0x6f, 0x04, 0xc9, 0xc8, 0x30
 	.byte 0x0e, 0xc9, 0xc8, 0x57, 0x0e
 
-LABEL_FFFEC1:
+Debug_UartDelay:
 	ldw iz, 0xFE00
 	nop
 	nop
@@ -4712,7 +4712,7 @@ LABEL_FFFEC1:
 	nop
 	ret
 
-LABEL_FFFED2:
+Debug_SWI_JumpTable:
 	swi	7
 	swi	7
 	jp	15666168
@@ -4725,15 +4725,15 @@ Get_Firmware_Version:
 	ld8_24 l, 0xffffe8
 	ret
 
-LABEL_FFFEEB:
+ROM_PaddingFF:
 	.byte 0xff, 0xff, 0xff, 0x00, 0xff
 
-LABEL_FFFEF0:
+System_TimestampPointers:
 	.long 0x409
 	.long 0x409
 	.long 0x409
 	.long 0x409
-LABEL_FFFF00:
+InterruptVectorTable:
 
 
 ; TMP94C241C Interrupt Vector Table:

@@ -118,7 +118,7 @@ InitializeHama:
 	ret
 
 FDTest_PrintDiag:
-	jp LABEL_FFFEA1
+	jp Debug_PrintString
 
 ; TestTitleFunc - Title lifecycle and action handler for FD diagnostic tests
 ; Dispatches on two event codes:

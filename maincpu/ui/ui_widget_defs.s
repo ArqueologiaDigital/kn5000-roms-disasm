@@ -8191,7 +8191,7 @@ TrTransposeBoxProc:
 	jp AcTranspose_ParamData_End
 
 TrChordBoxProc:
-	jp LABEL_FC2FBB
+	jp AcChordBoxProc_Entry
 
 ObjectProc:
 	st_dri3b L, 0xFD, 0x70, 0xFF
