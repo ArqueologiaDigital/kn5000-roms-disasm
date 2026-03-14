@@ -29857,7 +29857,7 @@ AccBankData_CopyLoop_NonZero:
 	extz bc
 	ldda32 xde, 15708
 	lds wa, 0
-	call LABEL_F193A6
+	call DualVoice_LoadAndScan
 	call Vga_RestorePlane3FromBuffer
 	call AccPatch_CountSlotsAlt
 	jrl AccBankData_PostModeChange
