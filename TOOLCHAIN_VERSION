@@ -1,0 +1,13 @@
+# LLVM Toolchain Version
+#
+# This file records the exact LLVM source used to build the toolchain
+# (llvm-mc, ld.lld, clang, llvm-objcopy) that produces the ROM binaries.
+#
+# STRICT POLICY: This commit is immutable once used. No amend/rebase/force-push.
+# Further LLVM changes must be new commits on top.
+
+Branch: tlcs900_backend
+Commit: 59277bffe1ce (59277bffe1cea83069c8e21363688e087f335f5a)
+Date: 2026-03-08 13:56:26 +0000
+Subject: [TLCS900] Fix large displacements: handle MemStore/MemLoadDst and d16 overflow
+Repository: /mnt/shared/llvm-project
