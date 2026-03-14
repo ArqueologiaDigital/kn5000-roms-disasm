@@ -15,6 +15,20 @@
 /* Sentinel marker pattern in control parameter tables */
 #define CTL_SENTINEL { 0x00, 0x00, 0x00, 0x00, 0x3f, 0x01, 0xef, 0x00 }
 
+/* Handler function addresses (defined in scoop_display.s) */
+#define SCOOP_ENVCALC_HANDLER0       0x00F01C29u  /* Scoop_EnvCalc_Handler0 */
+#define SCOOP_ENVCALC_HANDLER1       0x00F01C6Cu  /* Scoop_EnvCalc_Handler1 */
+#define SCOOP_ENVCALC_HANDLER2       0x00F01D09u  /* Scoop_EnvCalc_Handler2 */
+#define SCOOP_ENVCALC_HANDLER3       0x00F01D38u  /* Scoop_EnvCalc_Handler3 */
+#define SCOOP_GLIDEPARAM_SETUP       0x00F01DABu  /* Scoop_GlideParam_Setup */
+#define SCOOP_GLIDEPARAM_DATA        0x00F01E89u  /* Scoop_GlideParam_Data */
+#define SCOOP_GLIDECALC_HANDLER0     0x00F01F26u  /* Scoop_GlideCalc_Handler0 */
+#define SCOOP_GLIDECALC_HANDLER1     0x00F01FB7u  /* Scoop_GlideCalc_Handler1 */
+#define SCOOP_GLIDECALC_HANDLER2     0x00F01FDDu  /* Scoop_GlideCalc_Handler2 */
+#define SCOOP_DISPATCH_NOP           0x00F020D6u  /* Scoop_Dispatch_Nop */
+#define SCOOP_DISPATCH_CALL_FAA98A   0x00F020D7u  /* Scoop_Dispatch_CallFAA98A */
+#define SCOOP_DISPATCH_CALL_FAB273   0x00F02106u  /* Scoop_Dispatch_CallFAB273 */
+
 typedef struct __attribute__((packed)) {
     /* Bytecode header (32 bytes) */
     sd_string_3_t       label_ctl;        /* "CTL" at (91,19) */
@@ -104,17 +118,44 @@ const screendata_ctlonly_t StyleUI_ScreenData_CtlOnly
     .header_sentinel_1 = CTL_SENTINEL,
     .header_sentinel_2 = CTL_SENTINEL,
 
-    /* Handler addresses (36 entries, 0xF0XXXX range) */
+    /* Handler addresses (36 entries — Scoop display handlers) */
     .handlers = {
-        0x00F020D6, 0x00F01D09, 0x00F020D7, 0x00F020D6,
-        0x00F020D6, 0x00F020D6, 0x00F01DAB, 0x00F01E89,
-        0x00F01F26, 0x00F01FB7, 0x00F01FDD, 0x00F020D6,
-        0x00F020D6, 0x00F020D6, 0x00F01C29, 0x00F020D6,
-        0x00F020D6, 0x00F020D6, 0x00F020D6, 0x00F020D6,
-        0x00F020D6, 0x00F020D6, 0x00F020D6, 0x00F020D6,
-        0x00F020D6, 0x00F020D6, 0x00F020D6, 0x00F02106,
-        0x00F020D6, 0x00F020D6, 0x00F020D6, 0x00F020D6,
-        0x00F01C6C, 0x00F020D6, 0x00F020D6, 0x00F01D38,
+        SCOOP_DISPATCH_NOP,           /*  [0] nop */
+        SCOOP_ENVCALC_HANDLER2,       /*  [1] envelope calc variant */
+        SCOOP_DISPATCH_CALL_FAA98A,   /*  [2] draw line */
+        SCOOP_DISPATCH_NOP,           /*  [3] nop */
+        SCOOP_DISPATCH_NOP,           /*  [4] nop */
+        SCOOP_DISPATCH_NOP,           /*  [5] nop */
+        SCOOP_GLIDEPARAM_SETUP,       /*  [6] glide param setup */
+        SCOOP_GLIDEPARAM_DATA,        /*  [7] glide param data */
+        SCOOP_GLIDECALC_HANDLER0,     /*  [8] glide calc variant */
+        SCOOP_GLIDECALC_HANDLER1,     /*  [9] glide calc variant */
+        SCOOP_GLIDECALC_HANDLER2,     /* [10] glide calc variant */
+        SCOOP_DISPATCH_NOP,           /* [11] nop */
+        SCOOP_DISPATCH_NOP,           /* [12] nop */
+        SCOOP_DISPATCH_NOP,           /* [13] nop */
+        SCOOP_ENVCALC_HANDLER0,       /* [14] envelope calc */
+        SCOOP_DISPATCH_NOP,           /* [15] nop */
+        SCOOP_DISPATCH_NOP,           /* [16] nop */
+        SCOOP_DISPATCH_NOP,           /* [17] nop */
+        SCOOP_DISPATCH_NOP,           /* [18] nop */
+        SCOOP_DISPATCH_NOP,           /* [19] nop */
+        SCOOP_DISPATCH_NOP,           /* [20] nop */
+        SCOOP_DISPATCH_NOP,           /* [21] nop */
+        SCOOP_DISPATCH_NOP,           /* [22] nop */
+        SCOOP_DISPATCH_NOP,           /* [23] nop */
+        SCOOP_DISPATCH_NOP,           /* [24] nop */
+        SCOOP_DISPATCH_NOP,           /* [25] nop */
+        SCOOP_DISPATCH_NOP,           /* [26] nop */
+        SCOOP_DISPATCH_CALL_FAB273,   /* [27] draw graphics */
+        SCOOP_DISPATCH_NOP,           /* [28] nop */
+        SCOOP_DISPATCH_NOP,           /* [29] nop */
+        SCOOP_DISPATCH_NOP,           /* [30] nop */
+        SCOOP_DISPATCH_NOP,           /* [31] nop */
+        SCOOP_ENVCALC_HANDLER1,       /* [32] envelope calc variant */
+        SCOOP_DISPATCH_NOP,           /* [33] nop */
+        SCOOP_DISPATCH_NOP,           /* [34] nop */
+        SCOOP_ENVCALC_HANDLER3,       /* [35] envelope calc variant */
     },
 
     /* Format string groups (sentinel + NUL-terminated printf format strings) */
