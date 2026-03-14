@@ -1,4 +1,4 @@
-LABEL_ED0008:
+ExtData_ChordTypeTable_Top:
 	.long SeqVoice_ValidateState_StoreChannel
 	.byte 0xed, 0x00, 0xee, 0x00
 	.long LABEL_E800ED
@@ -7,7 +7,7 @@ LABEL_ED0008:
 	.byte 0xed, 0x00, 0xd0, 0x00, 0xed, 0x00, 0xca, 0x00
 	.byte 0xed, 0x00, 0xc4, 0x00, 0xed, 0x00, 0xbe, 0x00
 	.byte 0xed, 0x00, 0xb8, 0x00, 0xed, 0x00, 0xb2, 0x00
-LABEL_ED0038:
+ExtData_ChordTypeTable_Mid:
 	.byte 0xed, 0x00, 0xac, 0x00, 0xed, 0x00, 0xa6, 0x00
 	.byte 0xed, 0x00, 0xa0, 0x00, 0xed, 0x00, 0x9a, 0x00
 	.byte 0xed, 0x00, 0x94, 0x00, 0xed, 0x00, 0x8e, 0x00
@@ -15,11 +15,11 @@ LABEL_ED0038:
 	.byte 0xed, 0x00, 0x7c, 0x00, 0xed, 0x00, 0x76, 0x00
 	.byte 0xed, 0x00, 0x70, 0x00, 0xed, 0x00, 0x6a, 0x00
 	.byte 0xed
-LABEL_ED0069:
+ExtData_ChordType_NullByte:
 	.byte 0x00
-LABEL_ED006A:	aligned_string "     "
-LABEL_ED0070:	aligned_string "     "
-LABEL_ED0076:	ldb	w, 0x20
+ChordTypeStr_Blank_0:	aligned_string "     "
+ChordTypeStr_Blank_1:	aligned_string "     "
+ChordTypeStr_Blank_2:	ldb	w, 0x20
 	.byte 0x20, 0x20, 0x20, 0x00
 	aligned_string "     "
 	aligned_string "     "
@@ -53,25 +53,25 @@ LABEL_ED0076:	ldb	w, 0x20
 	aligned_string "  ~a013"
 	aligned_string "   13"
 	aligned_string "~9e9~a013"
-LABEL_ED0128:	aligned_string "~a09~a013"
-LABEL_ED0132:	aligned_string "  ~a013"
-LABEL_ED013A:	aligned_string "~9e9 13"
-LABEL_ED0142:	aligned_string "~a09 13"
-LABEL_ED014A:	aligned_string "9~9e5  "
-LABEL_ED0152:	aligned_string "   13"
-LABEL_ED0158:	aligned_string "mM7~a05"
-LABEL_ED0160:	aligned_string "M7~9e5 "
-LABEL_ED0168:	aligned_string "M7~a05 "
-LABEL_ED0170:	aligned_string "7 ~9e9 "
-LABEL_ED0178:	aligned_string "sus4 "
-LABEL_ED017E:	jr	pl, 0x36
+ChordTypeStr_Flat9_Flat13:	aligned_string "~a09~a013"
+ChordTypeStr_Sharp9_Flat13:	aligned_string "  ~a013"
+ChordTypeStr_Flat13_Only:	aligned_string "~9e9 13"
+ChordTypeStr_Sharp9_13:	aligned_string "~a09 13"
+ChordTypeStr_9_Flat5:	aligned_string "9~9e5  "
+ChordTypeStr_13_Only:	aligned_string "   13"
+ChordTypeStr_mM7_Sharp5:	aligned_string "mM7~a05"
+ChordTypeStr_M7_Flat5:	aligned_string "M7~9e5 "
+ChordTypeStr_M7_Sharp5:	aligned_string "M7~a05 "
+ChordTypeStr_7_Flat9:	aligned_string "7 ~9e9 "
+ChordTypeStr_sus4:	aligned_string "sus4 "
+ChordTypeStr_69:	jr	pl, 0x36
 	.byte 0x39, 0x20, 0x20, 0x00
 	aligned_string "m79  "
 	aligned_string "m ~a05 "
 	aligned_string "m6   "
 	aligned_string "69   "
 	.byte 0x4d, 0x37
-LABEL_ED019E:	.byte 0x39, 0x20, 0x20, 0x00
+ChordTypeStr_M7_9:	.byte 0x39, 0x20, 0x20, 0x00
 	aligned_string "7 ~a09 "
 	aligned_string "79   "
 	aligned_string "7 ~a05 "
@@ -79,7 +79,7 @@ LABEL_ED019E:	.byte 0x39, 0x20, 0x20, 0x00
 	aligned_string "aug7 "
 	aligned_string "6    "
 	.byte 0x37, 0x73
-LABEL_ED01CE:	.byte 0x75, 0x73, 0x34, 0x00
+ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
 	aligned_string "mM7  "
 	aligned_string "m7~a05 "
 	aligned_string "dim  "
@@ -114,183 +114,183 @@ LABEL_ED01CE:	.byte 0x75, 0x73, 0x34, 0x00
 	.byte 0x61, 0x30, 0x00, 0xff, 0x43, 0x20, 0x00, 0xff
 	.byte 0x20, 0x20, 0x00, 0xff, 0x22, 0x03, 0xed, 0x00
 NoteNameStr_Table_0:
-	.long LABEL_ED031E
-	.long LABEL_ED0318
-	.long LABEL_ED0314
-	.long LABEL_ED030E
-	.long LABEL_ED030A
-	.long LABEL_ED0306
-	.long LABEL_ED0300
-	.long LABEL_ED02FC
-	.long LABEL_ED02F6
-	.long LABEL_ED02F2
-	.long LABEL_ED02EC
-	.long LABEL_ED02E8
-	.long LABEL_ED02E4
-	.long LABEL_ED02E0
-	.long LABEL_ED02DC
-LABEL_ED02DC:
+	.long NoteStr0_C
+	.long NoteStr0_CSharp
+	.long NoteStr0_D
+	.long NoteStr0_DSharp
+	.long NoteStr0_E
+	.long NoteStr0_F
+	.long NoteStr0_FSharp
+	.long NoteStr0_G
+	.long NoteStr0_GSharp
+	.long NoteStr0_A
+	.long NoteStr0_ASharp
+	.long NoteStr0_B
+	.long NoteStr0_Blank_2
+	.long NoteStr0_Blank_1
+	.long NoteStr0_Blank_0
+NoteStr0_Blank_0:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED02E0:
+NoteStr0_Blank_1:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED02E4:
+NoteStr0_Blank_2:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED02E8:
+NoteStr0_B:
 	.byte 0x42, 0x20, 0x00, 0xff
-LABEL_ED02EC:	aligned_string "A~9e"
-LABEL_ED02F2:
+NoteStr0_ASharp:	aligned_string "A~9e"
+NoteStr0_A:
 	.byte 0x41, 0x20, 0x00, 0xff
-LABEL_ED02F6:	aligned_string "G~9e"
-LABEL_ED02FC:
+NoteStr0_GSharp:	aligned_string "G~9e"
+NoteStr0_G:
 	.byte 0x47, 0x20, 0x00, 0xff
-LABEL_ED0300:	aligned_string "F~9e"
-LABEL_ED0306:	aligned_string "F "
-LABEL_ED030A:
+NoteStr0_FSharp:	aligned_string "F~9e"
+NoteStr0_F:	aligned_string "F "
+NoteStr0_E:
 	.byte 0x45, 0x20, 0x00, 0xff
-LABEL_ED030E:	aligned_string "D~9e"
-LABEL_ED0314:
+NoteStr0_DSharp:	aligned_string "D~9e"
+NoteStr0_D:
 	.byte 0x44, 0x20, 0x00, 0xff
-LABEL_ED0318:	aligned_string "C~9e"
-LABEL_ED031E:
+NoteStr0_CSharp:	aligned_string "C~9e"
+NoteStr0_C:
 	.byte 0x43, 0x20, 0x00, 0xff
-LABEL_ED0322:
+NoteStr0_Blank_3:
 	.byte 0x20, 0x20, 0x00
 	.byte 0xff
 
 
 NoteNameStr_Table_1:
-	.long LABEL_ED03AC
-	.long LABEL_ED03A8
-	.long LABEL_ED03A2
-	.long LABEL_ED039E
-	.long LABEL_ED0398
-	.long LABEL_ED0394
-	.long LABEL_ED0390
-	.long LABEL_ED038A
-	.long LABEL_ED0386
-	.long LABEL_ED0380
-	.long LABEL_ED037C
-	.long LABEL_ED0376
-	.long LABEL_ED0372
-	.long LABEL_ED036E
-	.long LABEL_ED036A
-	.long LABEL_ED0366
-LABEL_ED0366:
+	.long NoteStr1_Blank_3
+	.long NoteStr1_C
+	.long NoteStr1_CSharp
+	.long NoteStr1_D
+	.long NoteStr1_DSharp
+	.long NoteStr1_E
+	.long NoteStr1_F
+	.long NoteStr1_FSharp
+	.long NoteStr1_G
+	.long NoteStr1_ASharp
+	.long NoteStr1_A
+	.long NoteStr1_AFlat
+	.long NoteStr1_B
+	.long NoteStr1_Blank_2
+	.long NoteStr1_Blank_1
+	.long NoteStr1_Blank_0
+NoteStr1_Blank_0:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED036A:
+NoteStr1_Blank_1:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED036E:
+NoteStr1_Blank_2:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED0372:
+NoteStr1_B:
 	.byte 0x42, 0x20, 0x00, 0xff
-LABEL_ED0376:
+NoteStr1_AFlat:
 	.byte 0x41, 0x7e, 0x39, 0x65, 0x00, 0xff
-LABEL_ED037C:
+NoteStr1_A:
 	.byte 0x41, 0x20, 0x00, 0xff
-LABEL_ED0380:	aligned_string "A~a0"
-LABEL_ED0386:	aligned_string "G "
-LABEL_ED038A:	aligned_string "F~9e"
-LABEL_ED0390:
+NoteStr1_ASharp:	aligned_string "A~a0"
+NoteStr1_G:	aligned_string "G "
+NoteStr1_FSharp:	aligned_string "F~9e"
+NoteStr1_F:
 	.byte 0x46, 0x20, 0x00, 0xff
-LABEL_ED0394:
+NoteStr1_E:
 	.byte 0x45, 0x20, 0x00, 0xff
-LABEL_ED0398:	aligned_string "D~9e"
-LABEL_ED039E:	aligned_string "D "
-LABEL_ED03A2:	aligned_string "C~9e"
-LABEL_ED03A8:
+NoteStr1_DSharp:	aligned_string "D~9e"
+NoteStr1_D:	aligned_string "D "
+NoteStr1_CSharp:	aligned_string "C~9e"
+NoteStr1_C:
 	.byte 0x43, 0x20, 0x00, 0xff
-LABEL_ED03AC:
+NoteStr1_Blank_3:
 	.byte 0x20, 0x20, 0x00, 0xff
 
 
 NoteNameStr_Table_2:
-	.long LABEL_ED0436
-	.long LABEL_ED0432
-	.long LABEL_ED042C
-	.long LABEL_ED0428
-	.long LABEL_ED0422
-	.long LABEL_ED041E
-	.long LABEL_ED041A
-	.long LABEL_ED0414
-	.long LABEL_ED0410
-	.long LABEL_ED040A
-	.long LABEL_ED0406
-	.long LABEL_ED0400
-	.long LABEL_ED03FC
-	.long LABEL_ED03F8
-	.long LABEL_ED03F4
-	.long LABEL_ED03F0
-LABEL_ED03F0:
+	.long NoteStr2_Blank_3
+	.long NoteStr2_C
+	.long NoteStr2_CSharp
+	.long NoteStr2_D
+	.long NoteStr2_DSharp
+	.long NoteStr2_E
+	.long NoteStr2_F
+	.long NoteStr2_FSharp
+	.long NoteStr2_G
+	.long NoteStr2_GSharp
+	.long NoteStr2_A
+	.long NoteStr2_BFlat
+	.long NoteStr2_B
+	.long NoteStr2_Blank_2
+	.long NoteStr2_Blank_1
+	.long NoteStr2_Blank_0
+NoteStr2_Blank_0:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED03F4:
+NoteStr2_Blank_1:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED03F8:
+NoteStr2_Blank_2:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED03FC:
+NoteStr2_B:
 	.byte 0x42, 0x20, 0x00, 0xff
-LABEL_ED0400:	aligned_string "B~a0"
-LABEL_ED0406:	aligned_string "A "
-LABEL_ED040A:	aligned_string "G~9e"
-LABEL_ED0410:
+NoteStr2_BFlat:	aligned_string "B~a0"
+NoteStr2_A:	aligned_string "A "
+NoteStr2_GSharp:	aligned_string "G~9e"
+NoteStr2_G:
 	.byte 0x47, 0x20, 0x00, 0xff
-LABEL_ED0414:	aligned_string "F~9e"
-LABEL_ED041A:
+NoteStr2_FSharp:	aligned_string "F~9e"
+NoteStr2_F:
 	.byte 0x46, 0x20, 0x00, 0xff
-LABEL_ED041E:	aligned_string "E "
-LABEL_ED0422:	aligned_string "D~9e"
-LABEL_ED0428:
+NoteStr2_E:	aligned_string "E "
+NoteStr2_DSharp:	aligned_string "D~9e"
+NoteStr2_D:
 	.byte 0x44, 0x20, 0x00, 0xff
-LABEL_ED042C:	aligned_string "C~9e"
-LABEL_ED0432:
+NoteStr2_CSharp:	aligned_string "C~9e"
+NoteStr2_C:
 	.byte 0x43, 0x20, 0x00, 0xff
-LABEL_ED0436:
+NoteStr2_Blank_3:
 	.byte 0x20, 0x20, 0x00
 	.byte 0xff
 
 
 NoteNameStr_Table_3:
-	.long LABEL_ED04C0
-	.long LABEL_ED04BC
-	.long LABEL_ED04B6
-	.long LABEL_ED04B2
-	.long LABEL_ED04AC
-	.long LABEL_ED04A8
-	.long LABEL_ED04A4
-	.long LABEL_ED049E
-	.long LABEL_ED049A
-	.long LABEL_ED0494
-	.long LABEL_ED0490
-	.long LABEL_ED048A
-	.long LABEL_ED0486
-	.long LABEL_ED0482
-	.long LABEL_ED047E
-	.long LABEL_ED047A
-LABEL_ED047A:
+	.long NoteStr3_Blank_3
+	.long NoteStr3_C
+	.long NoteStr3_CSharp
+	.long NoteStr3_D
+	.long NoteStr3_EFlat
+	.long NoteStr3_E
+	.long NoteStr3_F
+	.long NoteStr3_FSharp
+	.long NoteStr3_G
+	.long NoteStr3_GSharp
+	.long NoteStr3_A
+	.long NoteStr3_AFlat
+	.long NoteStr3_B
+	.long NoteStr3_Blank_2
+	.long NoteStr3_Blank_1
+	.long NoteStr3_Blank_0
+NoteStr3_Blank_0:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED047E:
+NoteStr3_Blank_1:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED0482:
+NoteStr3_Blank_2:
 	.byte 0x20, 0x20, 0x00, 0xff
-LABEL_ED0486:
+NoteStr3_B:
 	.byte 0x42, 0x20, 0x00, 0xff
-LABEL_ED048A:	aligned_string "A~9e"
-LABEL_ED0490:
+NoteStr3_AFlat:	aligned_string "A~9e"
+NoteStr3_A:
 	.byte 0x41, 0x20, 0x00, 0xff
-LABEL_ED0494:	aligned_string "G~9e"
-LABEL_ED049A:
+NoteStr3_GSharp:	aligned_string "G~9e"
+NoteStr3_G:
 	.byte 0x47, 0x20, 0x00, 0xff
-LABEL_ED049E:	aligned_string "F~9e"
-LABEL_ED04A4:
+NoteStr3_FSharp:	aligned_string "F~9e"
+NoteStr3_F:
 	.byte 0x46, 0x20, 0x00, 0xff
-LABEL_ED04A8:
+NoteStr3_E:
 	.byte 0x45, 0x20, 0x00, 0xff
-LABEL_ED04AC:	aligned_string "E~a0"
-LABEL_ED04B2:
+NoteStr3_EFlat:	aligned_string "E~a0"
+NoteStr3_D:
 	.byte 0x44, 0x20, 0x00, 0xff
-LABEL_ED04B6:	aligned_string "C~9e"
-LABEL_ED04BC:
+NoteStr3_CSharp:	aligned_string "C~9e"
+NoteStr3_C:
 	.byte 0x43, 0x20, 0x00, 0xff
-LABEL_ED04C0:
+NoteStr3_Blank_3:
 	.byte 0x20, 0x20, 0x00, 0xff, 0x12, 0x05, 0xed, 0x00
 Str_Attention_Multilingual:
 	.long Str_Attention_DE
@@ -308,8 +308,8 @@ Str_Attention_EN:	aligned_string "ATTENTION!"
 	.byte 0xed, 0x00, 0x7e, 0x06, 0xed, 0x00, 0x18, 0x06
 	.byte 0xed, 0x00, 0xac, 0x05, 0xed, 0x00, 0xa4, 0x05
 	.byte 0xed, 0x00, 0x36, 0x05, 0xed, 0x00
-LABEL_ED0536:	aligned_string "Menggunakan Initial Setting akan menghapus semua data yang telah diset dengan susunan data asli dari pabrik."
-LABEL_ED05A4:	aligned_string "Italian"
+Str_InitSettingWarn_ID:	aligned_string "Menggunakan Initial Setting akan menghapus semua data yang telah diset dengan susunan data asli dari pabrik."
+Str_InitSettingWarn_IT:	aligned_string "Italian"
 	aligned_string "El uso del ajuste inicial hará que se reemplacen los datos actuales por los ajustes originales de fá brica!"
 	aligned_string "La procédure d'initialisation va remplacer tous les réglages effectués par les présélections d'usine"
 	.byte 0x44, 0x75
@@ -319,8 +319,8 @@ LABEL_ED05A4:	aligned_string "Italian"
 	.byte 0xed, 0x00, 0x96, 0x07, 0xed, 0x00, 0x86, 0x07
 	.byte 0xed, 0x00, 0x78, 0x07, 0xed, 0x00, 0x70, 0x07
 	.byte 0xed, 0x00, 0x56, 0x07, 0xed, 0x00
-LABEL_ED0756:	aligned_string "Apakah Anda sudah yakin ?"
-LABEL_ED0770:	aligned_string "Italian"
+Str_AreYouSure_ID:	aligned_string "Apakah Anda sudah yakin ?"
+Str_AreYouSure_IT:	aligned_string "Italian"
 	.byte 0xbf, 0x45, 0x73, 0x74, 0xe1
 	aligned_string " seguro?"
 	.byte 0x45, 0x74
@@ -330,43 +330,43 @@ LABEL_ED0770:	aligned_string "Italian"
 	aligned_string "Are You Sure?"
 	.byte 0x04, 0x0a, 0xed, 0x00, 0x8e, 0x09, 0xed, 0x00
 Str_FactoryResetDesc_Multilingual:
-	.long LABEL_ED091E
-	.long LABEL_ED08AE
-	.long LABEL_ED083E
-	.long LABEL_ED07CE
-LABEL_ED07CE:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-LABEL_ED083E:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-LABEL_ED08AE:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
-LABEL_ED091E:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+	.long Str_FactoryResetDesc_EN3
+	.long Str_FactoryResetDesc_EN2
+	.long Str_FactoryResetDesc_EN1
+	.long Str_FactoryResetDesc_EN0
+Str_FactoryResetDesc_EN0:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+Str_FactoryResetDesc_EN1:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+Str_FactoryResetDesc_EN2:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
+Str_FactoryResetDesc_EN3:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
 	.byte 0x53, 0x65
 	.ascii "tzt die PERFORMANCE Daten, d.h. die von Ihnen erstellten Daten und Einstellungen, auf die Werkseinstellung zurüc"
 	.byte 0x6b, 0x2e, 0x00, 0xff
 	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
 	.byte 0x56, 0x0b, 0xed, 0x00
 Str_StoreSoundBalance_Multilingual:
-	.long LABEL_ED0B24
-	.long LABEL_ED0AFE
-	.long LABEL_ED0AD8
-	.long LABEL_ED0AB2
-	.long LABEL_ED0A8C
-LABEL_ED0A8C:	aligned_string "Stores sound & balance settings only."
-LABEL_ED0AB2:	aligned_string "Stores sound & balance settings only."
-LABEL_ED0AD8:	aligned_string "Stores sound & balance settings only."
-LABEL_ED0AFE:	aligned_string "Stores sound & balance settings only."
-LABEL_ED0B24:	.asciz "Speichert nur Klang- und Lautstärkeeinstellungen."
+	.long Str_StoreSoundBalance_DE
+	.long Str_StoreSoundBalance_EN3
+	.long Str_StoreSoundBalance_EN2
+	.long Str_StoreSoundBalance_EN1
+	.long Str_StoreSoundBalance_EN0
+Str_StoreSoundBalance_EN0:	aligned_string "Stores sound & balance settings only."
+Str_StoreSoundBalance_EN1:	aligned_string "Stores sound & balance settings only."
+Str_StoreSoundBalance_EN2:	aligned_string "Stores sound & balance settings only."
+Str_StoreSoundBalance_EN3:	aligned_string "Stores sound & balance settings only."
+Str_StoreSoundBalance_DE:	.asciz "Speichert nur Klang- und Lautstärkeeinstellungen."
 	aligned_string "Stores sound & balance settings only."
 	.byte 0xda, 0x0c, 0xed, 0x00
 Str_StoreTotalSetting_Multilingual:
-	.long LABEL_ED0C8C
-	.long LABEL_ED0C4E
-	.long LABEL_ED0C10
-	.long LABEL_ED0BD2
-	.long LABEL_ED0B94
-LABEL_ED0B94:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-LABEL_ED0BD2:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-LABEL_ED0C10:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-LABEL_ED0C4E:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-LABEL_ED0C8C:	.asciz "Speichert die gesamte Einstellung einschließlich Rhythmus, Transpose & Tempo."
+	.long Str_StoreTotalSetting_DE
+	.long Str_StoreTotalSetting_EN3
+	.long Str_StoreTotalSetting_EN2
+	.long Str_StoreTotalSetting_EN1
+	.long Str_StoreTotalSetting_EN0
+Str_StoreTotalSetting_EN0:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_EN1:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_EN2:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_EN3:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschließlich Rhythmus, Transpose & Tempo."
 	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
 	aligned_string "%c:%d/%d  "
 	.byte 0xef, 0x02, 0x1d, 0x05
@@ -427,67 +427,67 @@ LABEL_ED0C8C:	.asciz "Speichert die gesamte Einstellung einschließlich Rhythmus,
 
 
 NoteNameStr_Table_4:
-	.long LABEL_ED11CA
-	.long LABEL_ED11B8
-	.long LABEL_ED11A6
-	.long LABEL_ED1194
-	.long LABEL_ED1182
-	.long LABEL_ED1170
-	.long LABEL_ED115E
-	.long LABEL_ED114C
-	.long LABEL_ED113A
-	.long LABEL_ED1128
-	.long LABEL_ED1116
-	.long LABEL_ED1104
-	.long LABEL_ED10F2
-	.long LABEL_ED10E0
-	.long LABEL_ED10CE
-	.long LABEL_ED10BC
-	.long LABEL_ED10AA
-	.long LABEL_ED1098
-	.long LABEL_ED1086
-	.long LABEL_ED1074
-	.long LABEL_ED1062
-	.long LABEL_ED1050
-	.long LABEL_ED103E
-	.long LABEL_ED102C
-	.long LABEL_ED101A
-	.long LABEL_ED1008
-	.long LABEL_ED0FF6
-	.long LABEL_ED0FE4
-	.long LABEL_ED0FD2
-	.long LABEL_ED0FC0
-LABEL_ED0FC0:	aligned_string "PART EXPRESSION "
-LABEL_ED0FD2:	aligned_string "TOTAL EXPRESSION"
-LABEL_ED0FE4:	aligned_string "    FADE OUT    "
-LABEL_ED0FF6:	aligned_string "    FADE IN     "
-LABEL_ED1008:	aligned_string "   APC HOLD     "
-LABEL_ED101A:	aligned_string "  PUNCH RECORD  "
-LABEL_ED102C:	aligned_string "ROTARY SLOW/FAST"
-LABEL_ED103E:	aligned_string "  DSP EFFECT    "
-LABEL_ED1050:	aligned_string "DIGITAL EFFECT  "
-LABEL_ED1062:	aligned_string " TECHNI-CHORD   "
-LABEL_ED1074:	aligned_string "     GLIDE      "
-LABEL_ED1086:	aligned_string "    SUSTAIN     "
-LABEL_ED1098:	aligned_string "INTRO&ENDING 2  "
-LABEL_ED10AA:	aligned_string "INTRO&ENDING 1  "
-LABEL_ED10BC:	aligned_string "   FILL IN 2    "
-LABEL_ED10CE:	aligned_string "   FILL IN 1    "
-LABEL_ED10E0:	aligned_string "  START/STOP    "
-LABEL_ED10F2:	aligned_string "P.MEM INC.+DEC. "
-LABEL_ED1104:	aligned_string "PANEL MEMORY 8  "
-LABEL_ED1116:	aligned_string "PANEL MEMORY 7  "
-LABEL_ED1128:	aligned_string "PANEL MEMORY 6  "
-LABEL_ED113A:	aligned_string "PANEL MEMORY 5  "
-LABEL_ED114C:	aligned_string "PANEL MEMORY 4  "
-LABEL_ED115E:	aligned_string "PANEL MEMORY 3  "
-LABEL_ED1170:	aligned_string "PANEL MEMORY 2  "
-LABEL_ED1182:	aligned_string "PANEL MEMORY 1  "
-LABEL_ED1194:	aligned_string "P.MEM BANK DEC. "
-LABEL_ED11A6:	aligned_string "P.MEM BANK INC. "
-LABEL_ED11B8:	aligned_string "P.MEM DECREMENT "
-LABEL_ED11CA:	aligned_string "P.MEM INCREMENT "
-LABEL_ED11DC:	aligned_string "      OFF       "
+	.long CtrlAssignStr_PMemIncrement
+	.long CtrlAssignStr_PMemDecrement
+	.long CtrlAssignStr_PMemBankInc
+	.long CtrlAssignStr_PMemBankDec
+	.long CtrlAssignStr_PanelMemory1
+	.long CtrlAssignStr_PanelMemory2
+	.long CtrlAssignStr_PanelMemory3
+	.long CtrlAssignStr_PanelMemory4
+	.long CtrlAssignStr_PanelMemory5
+	.long CtrlAssignStr_PanelMemory6
+	.long CtrlAssignStr_PanelMemory7
+	.long CtrlAssignStr_PanelMemory8
+	.long CtrlAssignStr_PMemIncDec
+	.long CtrlAssignStr_StartStop
+	.long CtrlAssignStr_FillIn1
+	.long CtrlAssignStr_FillIn2
+	.long CtrlAssignStr_IntroEnding1
+	.long CtrlAssignStr_IntroEnding2
+	.long CtrlAssignStr_Sustain
+	.long CtrlAssignStr_Glide
+	.long CtrlAssignStr_TechniChord
+	.long CtrlAssignStr_DigitalEffect
+	.long CtrlAssignStr_DspEffect
+	.long CtrlAssignStr_RotarySlowFast
+	.long CtrlAssignStr_PunchRecord
+	.long CtrlAssignStr_ApcHold
+	.long CtrlAssignStr_FadeIn
+	.long CtrlAssignStr_FadeOut
+	.long CtrlAssignStr_TotalExpression
+	.long CtrlAssignStr_PartExpression
+CtrlAssignStr_PartExpression:	aligned_string "PART EXPRESSION "
+CtrlAssignStr_TotalExpression:	aligned_string "TOTAL EXPRESSION"
+CtrlAssignStr_FadeOut:	aligned_string "    FADE OUT    "
+CtrlAssignStr_FadeIn:	aligned_string "    FADE IN     "
+CtrlAssignStr_ApcHold:	aligned_string "   APC HOLD     "
+CtrlAssignStr_PunchRecord:	aligned_string "  PUNCH RECORD  "
+CtrlAssignStr_RotarySlowFast:	aligned_string "ROTARY SLOW/FAST"
+CtrlAssignStr_DspEffect:	aligned_string "  DSP EFFECT    "
+CtrlAssignStr_DigitalEffect:	aligned_string "DIGITAL EFFECT  "
+CtrlAssignStr_TechniChord:	aligned_string " TECHNI-CHORD   "
+CtrlAssignStr_Glide:	aligned_string "     GLIDE      "
+CtrlAssignStr_Sustain:	aligned_string "    SUSTAIN     "
+CtrlAssignStr_IntroEnding2:	aligned_string "INTRO&ENDING 2  "
+CtrlAssignStr_IntroEnding1:	aligned_string "INTRO&ENDING 1  "
+CtrlAssignStr_FillIn2:	aligned_string "   FILL IN 2    "
+CtrlAssignStr_FillIn1:	aligned_string "   FILL IN 1    "
+CtrlAssignStr_StartStop:	aligned_string "  START/STOP    "
+CtrlAssignStr_PMemIncDec:	aligned_string "P.MEM INC.+DEC. "
+CtrlAssignStr_PanelMemory8:	aligned_string "PANEL MEMORY 8  "
+CtrlAssignStr_PanelMemory7:	aligned_string "PANEL MEMORY 7  "
+CtrlAssignStr_PanelMemory6:	aligned_string "PANEL MEMORY 6  "
+CtrlAssignStr_PanelMemory5:	aligned_string "PANEL MEMORY 5  "
+CtrlAssignStr_PanelMemory4:	aligned_string "PANEL MEMORY 4  "
+CtrlAssignStr_PanelMemory3:	aligned_string "PANEL MEMORY 3  "
+CtrlAssignStr_PanelMemory2:	aligned_string "PANEL MEMORY 2  "
+CtrlAssignStr_PanelMemory1:	aligned_string "PANEL MEMORY 1  "
+CtrlAssignStr_PMemBankDec:	aligned_string "P.MEM BANK DEC. "
+CtrlAssignStr_PMemBankInc:	aligned_string "P.MEM BANK INC. "
+CtrlAssignStr_PMemDecrement:	aligned_string "P.MEM DECREMENT "
+CtrlAssignStr_PMemIncrement:	aligned_string "P.MEM INCREMENT "
+CtrlAssignStr_Off:	aligned_string "      OFF       "
 	.byte 0x25, 0x73
 	.byte 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73
 	.byte 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73
@@ -500,43 +500,43 @@ LABEL_ED11DC:	aligned_string "      OFF       "
 	.byte 0x5b, 0x04, 0x5b, 0x04, 0x06, 0x00, 0x00, 0x00
 	.byte 0x06, 0x00, 0x06, 0x00, 0x06, 0x00, 0x06, 0x00
 ParamStr_Table_01:
-	.long LABEL_ED1304
-	.long LABEL_ED12F0
-	.long LABEL_ED12DC
-	.long LABEL_ED12C8
-	.long LABEL_ED12B4
-	.long LABEL_ED12A0
-	.long LABEL_ED128C
-	.long LABEL_ED1278
-	.long LABEL_ED1264
-LABEL_ED1264:	aligned_string "   R1/R2 OCTAVE    "
-LABEL_ED1278:	aligned_string "FADE IN/OUT SETTING"
-LABEL_ED128C:	aligned_string "MIC LEVEL & REVERB "
-LABEL_ED12A0:	aligned_string "FOOT CONT. SETTING "
-LABEL_ED12B4:	aligned_string "     TRANSPOSE     "
-LABEL_ED12C8:	aligned_string "    SPLIT POINT    "
-LABEL_ED12DC:	aligned_string "   APC & MEMORY    "
-LABEL_ED12F0:	aligned_string "       TEMPO       "
-LABEL_ED1304:	aligned_string " RHYTHM SELECTION  "
+	.long ParamStr01_RhythmSelection
+	.long ParamStr01_Tempo
+	.long ParamStr01_ApcMemory
+	.long ParamStr01_SplitPoint
+	.long ParamStr01_Transpose
+	.long ParamStr01_FootContSetting
+	.long ParamStr01_MicLevelReverb
+	.long ParamStr01_FadeInOutSetting
+	.long ParamStr01_R1R2Octave
+ParamStr01_R1R2Octave:	aligned_string "   R1/R2 OCTAVE    "
+ParamStr01_FadeInOutSetting:	aligned_string "FADE IN/OUT SETTING"
+ParamStr01_MicLevelReverb:	aligned_string "MIC LEVEL & REVERB "
+ParamStr01_FootContSetting:	aligned_string "FOOT CONT. SETTING "
+ParamStr01_Transpose:	aligned_string "     TRANSPOSE     "
+ParamStr01_SplitPoint:	aligned_string "    SPLIT POINT    "
+ParamStr01_ApcMemory:	aligned_string "   APC & MEMORY    "
+ParamStr01_Tempo:	aligned_string "       TEMPO       "
+ParamStr01_RhythmSelection:	aligned_string " RHYTHM SELECTION  "
 ParamStr_Table_02:
-	.long LABEL_ED13DC
-	.long LABEL_ED13C8
-	.long LABEL_ED13B4
-	.long LABEL_ED13A0
-	.long LABEL_ED138C
-	.long LABEL_ED1378
-	.long LABEL_ED1364
-	.long LABEL_ED1350
-	.long LABEL_ED133C
-LABEL_ED133C:	aligned_string "     MSP BANK      "
-LABEL_ED1350:	aligned_string "     KEY SCALE     "
-LABEL_ED1364:	aligned_string " PART4-16 SETTING  "
-LABEL_ED1378:	aligned_string "     EQUALIZER     "
-LABEL_ED138C:	aligned_string " ACOUSTIC ILLUSION "
-LABEL_ED13A0:	aligned_string "    DSP EFFECT     "
-LABEL_ED13B4:	aligned_string "      REVERB       "
-LABEL_ED13C8:	aligned_string "       MIDI        "
-LABEL_ED13DC:	aligned_string "     VOCALIST      "
+	.long ParamStr02_Vocalist
+	.long ParamStr02_Midi
+	.long ParamStr02_Reverb
+	.long ParamStr02_DspEffect
+	.long ParamStr02_AcousticIllusion
+	.long ParamStr02_Equalizer
+	.long ParamStr02_Part4_16Setting
+	.long ParamStr02_KeyScale
+	.long ParamStr02_MspBank
+ParamStr02_MspBank:	aligned_string "     MSP BANK      "
+ParamStr02_KeyScale:	aligned_string "     KEY SCALE     "
+ParamStr02_Part4_16Setting:	aligned_string " PART4-16 SETTING  "
+ParamStr02_Equalizer:	aligned_string "     EQUALIZER     "
+ParamStr02_AcousticIllusion:	aligned_string " ACOUSTIC ILLUSION "
+ParamStr02_DspEffect:	aligned_string "    DSP EFFECT     "
+ParamStr02_Reverb:	aligned_string "      REVERB       "
+ParamStr02_Midi:	aligned_string "       MIDI        "
+ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	aligned_string "FILTER TYPE"
 	.byte 0x4f, 0x4e, 0x2f, 0x4f
 	.byte 0x46, 0x46, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
@@ -563,32 +563,32 @@ LABEL_ED13DC:	aligned_string "     VOCALIST      "
 	.byte 0xd5, 0x00, 0x79, 0x01, 0xd5, 0x00, 0x79, 0x01
 	.byte 0x6d, 0x02, 0x45, 0x02, 0x45, 0x02
 ParamStr_Table_03:
-	.long LABEL_ED154A
-	.long LABEL_ED1542
-	.long LABEL_ED153A
-	.long LABEL_ED1532
-	.long LABEL_ED152A
-	.long LABEL_ED1522
-	.long LABEL_ED151A
-	.long LABEL_ED1512
-	.long LABEL_ED150A
-	.long LABEL_ED1502
-	.long LABEL_ED14FA
-	.long LABEL_ED14F2
-	.long LABEL_ED14EA
-LABEL_ED14EA:	aligned_string "10 sec "
-LABEL_ED14F2:	aligned_string " 9 sec "
-LABEL_ED14FA:	aligned_string " 8 sec "
-LABEL_ED1502:	aligned_string " 7 sec "
-LABEL_ED150A:	aligned_string " 6 sec "
-LABEL_ED1512:	aligned_string " 5 sec "
-LABEL_ED151A:	aligned_string " 4 sec "
-LABEL_ED1522:	aligned_string " 3 sec "
-LABEL_ED152A:	aligned_string " 2 sec "
-LABEL_ED1532:	aligned_string " 1 sec "
-LABEL_ED153A:	aligned_string " HOLD  "
-LABEL_ED1542:	aligned_string "DEFAULT"
-LABEL_ED154A:	aligned_string "  OFF  "
+	.long FadeTimeStr_Off
+	.long FadeTimeStr_Default
+	.long FadeTimeStr_Hold
+	.long FadeTimeStr_1sec
+	.long FadeTimeStr_2sec
+	.long FadeTimeStr_3sec
+	.long FadeTimeStr_4sec
+	.long FadeTimeStr_5sec
+	.long FadeTimeStr_6sec
+	.long FadeTimeStr_7sec
+	.long FadeTimeStr_8sec
+	.long FadeTimeStr_9sec
+	.long FadeTimeStr_10sec
+FadeTimeStr_10sec:	aligned_string "10 sec "
+FadeTimeStr_9sec:	aligned_string " 9 sec "
+FadeTimeStr_8sec:	aligned_string " 8 sec "
+FadeTimeStr_7sec:	aligned_string " 7 sec "
+FadeTimeStr_6sec:	aligned_string " 6 sec "
+FadeTimeStr_5sec:	aligned_string " 5 sec "
+FadeTimeStr_4sec:	aligned_string " 4 sec "
+FadeTimeStr_3sec:	aligned_string " 3 sec "
+FadeTimeStr_2sec:	aligned_string " 2 sec "
+FadeTimeStr_1sec:	aligned_string " 1 sec "
+FadeTimeStr_Hold:	aligned_string " HOLD  "
+FadeTimeStr_Default:	aligned_string "DEFAULT"
+FadeTimeStr_Off:	aligned_string "  OFF  "
 	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73
 	.byte 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73
 	.byte 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73
@@ -619,17 +619,17 @@ LABEL_ED154A:	aligned_string "  OFF  "
 	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a
 	.byte 0x00
 ParamStr_Table_04:
-	.long LABEL_ED1642
-	.long LABEL_ED163E
-	.long LABEL_ED163A
-	.long LABEL_ED1636
-LABEL_ED1636:
+	.long VariationStr_V1
+	.long VariationStr_V2
+	.long VariationStr_V3
+	.long VariationStr_V4
+VariationStr_V4:
 	.byte 0x56, 0x34, 0x00, 0xff
-LABEL_ED163A:
+VariationStr_V3:
 	.byte 0x56, 0x33, 0x00, 0xff
-LABEL_ED163E:
+VariationStr_V2:
 	.byte 0x56, 0x32, 0x00, 0xff
-LABEL_ED1642:
+VariationStr_V1:
 	.byte 0x56, 0x31, 0x00, 0xff
 	aligned_string "RHYTHM"
 	.byte 0x25, 0x73
@@ -649,36 +649,36 @@ LABEL_ED1642:
 	.byte 0xc1, 0x00, 0x02, 0x00, 0xc2, 0x00, 0x16, 0x01
 	.byte 0xd5, 0x00
 ParamStr_Table_05:
-	.long LABEL_ED1714
-	.long LABEL_ED170E
-	.long LABEL_ED170A
-	.long LABEL_ED1704
-	.long LABEL_ED1700
-	.long LABEL_ED16FC
-	.long LABEL_ED16F6
-	.long LABEL_ED16F2
-	.long LABEL_ED16EC
-	.long LABEL_ED16E8
-	.long LABEL_ED16E2
-	.long LABEL_ED16DE
-LABEL_ED16DE:
+	.long TransposeNoteStr_C
+	.long TransposeNoteStr_DFlat
+	.long TransposeNoteStr_D
+	.long TransposeNoteStr_EFlat
+	.long TransposeNoteStr_E
+	.long TransposeNoteStr_F
+	.long TransposeNoteStr_FSharp
+	.long TransposeNoteStr_G
+	.long TransposeNoteStr_AFlat
+	.long TransposeNoteStr_A
+	.long TransposeNoteStr_BFlat
+	.long TransposeNoteStr_B
+TransposeNoteStr_B:
 	.byte 0x42, 0x20, 0x00, 0xff
-LABEL_ED16E2:	aligned_string "B~a0"
-LABEL_ED16E8:
+TransposeNoteStr_BFlat:	aligned_string "B~a0"
+TransposeNoteStr_A:
 	.byte 0x41, 0x20, 0x00, 0xff
-LABEL_ED16EC:	aligned_string "A~a0"
-LABEL_ED16F2:
+TransposeNoteStr_AFlat:	aligned_string "A~a0"
+TransposeNoteStr_G:
 	.byte 0x47, 0x20, 0x00, 0xff
-LABEL_ED16F6:	aligned_string "F~9e"
-LABEL_ED16FC:
+TransposeNoteStr_FSharp:	aligned_string "F~9e"
+TransposeNoteStr_F:
 	.byte 0x46, 0x20, 0x00, 0xff
-LABEL_ED1700:
+TransposeNoteStr_E:
 	.byte 0x45, 0x20, 0x00, 0xff
-LABEL_ED1704:	aligned_string "E~a0"
-LABEL_ED170A:
+TransposeNoteStr_EFlat:	aligned_string "E~a0"
+TransposeNoteStr_D:
 	.byte 0x44, 0x20, 0x00, 0xff
-LABEL_ED170E:	aligned_string "D~a0"
-LABEL_ED1714:
+TransposeNoteStr_DFlat:	aligned_string "D~a0"
+TransposeNoteStr_C:
 	.byte 0x43, 0x20, 0x00, 0xff
 	aligned_string "(%s%2d, %3d)"
 	aligned_string "CHECK BY SINE WAVE"
@@ -737,35 +737,35 @@ LABEL_ED1714:
 
 
 ParamStr_Table_06:
-	.long LABEL_ED1BA6
-	.long LABEL_ED1BA0
-	.long LABEL_ED1B9C
-	.long LABEL_ED1B96
-	.long LABEL_ED1B92
-	.long LABEL_ED1B8E
-	.long LABEL_ED1B88
-	.long LABEL_ED1B84
-	.long LABEL_ED1B7E
-	.long LABEL_ED1B7A
-	.long LABEL_ED1B74
-	.long LABEL_ED1B70
-LABEL_ED1B70:
+	.long SplitNoteStr_C
+	.long SplitNoteStr_DFlat
+	.long SplitNoteStr_D
+	.long SplitNoteStr_EFlat
+	.long SplitNoteStr_E
+	.long SplitNoteStr_F
+	.long SplitNoteStr_FSharp
+	.long SplitNoteStr_G
+	.long SplitNoteStr_AFlat
+	.long SplitNoteStr_A
+	.long SplitNoteStr_BFlat
+	.long SplitNoteStr_B
+SplitNoteStr_B:
 	.byte 0x42, 0x20, 0x00, 0xff
-LABEL_ED1B74:	aligned_string "B~a0"
-LABEL_ED1B7A:
+SplitNoteStr_BFlat:	aligned_string "B~a0"
+SplitNoteStr_A:
 	.byte 0x41, 0x20, 0x00, 0xff
-LABEL_ED1B7E:	aligned_string "A~a0"
-LABEL_ED1B84:
+SplitNoteStr_AFlat:	aligned_string "A~a0"
+SplitNoteStr_G:
 	.byte 0x47, 0x20, 0x00, 0xff
-LABEL_ED1B88:	aligned_string "F~9e"
-LABEL_ED1B8E:	aligned_string "F "
-LABEL_ED1B92:
+SplitNoteStr_FSharp:	aligned_string "F~9e"
+SplitNoteStr_F:	aligned_string "F "
+SplitNoteStr_E:
 	.byte 0x45, 0x20, 0x00, 0xff
-LABEL_ED1B96:	aligned_string "E~a0"
-LABEL_ED1B9C:
+SplitNoteStr_EFlat:	aligned_string "E~a0"
+SplitNoteStr_D:
 	.byte 0x44, 0x20, 0x00, 0xff
-LABEL_ED1BA0:	aligned_string "D~a0"
-LABEL_ED1BA6:
+SplitNoteStr_DFlat:	aligned_string "D~a0"
+SplitNoteStr_C:
 	.byte 0x43, 0x20
 	.byte 0x00, 0xff, 0xea, 0x1b, 0xed, 0x00, 0xe8, 0x1b
 	.byte 0xed, 0x00, 0xe6, 0x1b, 0xed, 0x00, 0xe4, 0x1b
@@ -773,58 +773,58 @@ LABEL_ED1BA6:
 	.byte 0xed, 0x00, 0xde, 0x1b, 0xed, 0x00, 0xdc, 0x1b
 	.byte 0xed, 0x00, 0xda, 0x1b, 0xed, 0x00, 0xd8, 0x1b
 	.byte 0xed, 0x00, 0xd6, 0x1b, 0xed, 0x00
-LABEL_ED1BD6:
+OctaveDigitStr_8:
 	.byte 0x38, 0x00
 	.byte 0x37, 0x00
-LABEL_ED1BDA:
+OctaveDigitStr_6:
 	.byte 0x36, 0x00
-LABEL_ED1BDC:
+OctaveDigitStr_5:
 	.byte 0x35, 0x00
-LABEL_ED1BDE:
+OctaveDigitStr_4:
 	.byte 0x34, 0x00
 	.byte 0x33, 0x00
-LABEL_ED1BE2:
+OctaveDigitStr_2:
 	.byte 0x32, 0x00
-LABEL_ED1BE4:
+OctaveDigitStr_1:
 	.byte 0x31, 0x00
-LABEL_ED1BE6:
+OctaveDigitStr_0A:
 	.byte 0x30, 0x00
 	.byte 0x30, 0x00
-LABEL_ED1BEA:
+OctaveDigitStr_0B:
 	.byte 0x30, 0x00
 	aligned_string "          "
 	aligned_string "SPLIT<%s%s>"
 	aligned_string "          "
 	aligned_string "SPLIT<%s%s>"
-	.long LABEL_ED1C82
+	.long KeyScaleNoteStr_G
 ParamStr_Table_07:
-	.long LABEL_ED1C7C
-	.long LABEL_ED1C78
-	.long LABEL_ED1C72
-	.long LABEL_ED1C6E
-	.long LABEL_ED1C6A
-	.long LABEL_ED1C64
-	.long LABEL_ED1C60
-	.long LABEL_ED1C5A
-	.long LABEL_ED1C56
-	.long LABEL_ED1C52
-	.long LABEL_ED1C4C
-LABEL_ED1C4C:	aligned_string "F~9e"
-LABEL_ED1C52:
+	.long KeyScaleNoteStr_AFlat
+	.long KeyScaleNoteStr_A
+	.long KeyScaleNoteStr_BFlat
+	.long KeyScaleNoteStr_B
+	.long KeyScaleNoteStr_C
+	.long KeyScaleNoteStr_DFlat
+	.long KeyScaleNoteStr_D
+	.long KeyScaleNoteStr_EFlat
+	.long KeyScaleNoteStr_E
+	.long KeyScaleNoteStr_F
+	.long KeyScaleNoteStr_FSharp
+KeyScaleNoteStr_FSharp:	aligned_string "F~9e"
+KeyScaleNoteStr_F:
 	.byte 0x46, 0x20, 0x00, 0xff
-LABEL_ED1C56:	aligned_string "E "
-LABEL_ED1C5A:	aligned_string "E~a0"
-LABEL_ED1C60:
+KeyScaleNoteStr_E:	aligned_string "E "
+KeyScaleNoteStr_EFlat:	aligned_string "E~a0"
+KeyScaleNoteStr_D:
 	.byte 0x44, 0x20, 0x00, 0xff
-LABEL_ED1C64:	aligned_string "D~a0"
-LABEL_ED1C6A:
+KeyScaleNoteStr_DFlat:	aligned_string "D~a0"
+KeyScaleNoteStr_C:
 	.byte 0x43, 0x20, 0x00, 0xff
-LABEL_ED1C6E:	aligned_string "B "
-LABEL_ED1C72:	aligned_string "B~a0"
-LABEL_ED1C78:
+KeyScaleNoteStr_B:	aligned_string "B "
+KeyScaleNoteStr_BFlat:	aligned_string "B~a0"
+KeyScaleNoteStr_A:
 	.byte 0x41, 0x20, 0x00, 0xff
-LABEL_ED1C7C:	aligned_string "A~a0"
-LABEL_ED1C82:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
+KeyScaleNoteStr_AFlat:	aligned_string "A~a0"
+KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	.byte 0x20, 0x20, 0x00, 0xff
 	aligned_string "<%s>"
 	.byte 0x25, 0x73, 0x00, 0xff, 0x6f, 0x6e, 0x00
