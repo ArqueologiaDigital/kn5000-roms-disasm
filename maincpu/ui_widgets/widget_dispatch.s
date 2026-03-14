@@ -6684,7 +6684,7 @@ UIState_ConfigB_081:
 	.long BitMapOut_ByteData_RenderState
 	.long UIState_KeyScan_Dispatch
 	.long LABEL_F69CC2
-	.long LABEL_F7AD49
+	.long MidiPart_DataBlock
 	.long LABEL_F6D84D
 	.long HelpLang_DispatchDataBlock
 	.byte 0xff, 0xff, 0xff, 0xff

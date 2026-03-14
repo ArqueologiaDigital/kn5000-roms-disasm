@@ -1823,7 +1823,7 @@ LABEL_F8763E:
 	call SeqLoadPost				; post-setup
 	jr LABEL_F876B5
 LABEL_F87680:
-	call LABEL_F478BA				; alternate ext memory init
+	call SeqLoad_JumpInitFromPreset				; alternate ext memory init
 	ld xwa, 0x000AB000
 	ld xbc, 0x00000800			; smaller size
 	call FileIO_ReadBlock
@@ -1835,7 +1835,7 @@ LABEL_F87680:
 	call FileIO_ReturnError
 	ld iz, hl
 	ld wa, iz
-	call LABEL_F478BE				; post-setup (alt)
+	call SeqLoad_PostAltEntry				; post-setup (alt)
 	jr LABEL_F876B5
 LABEL_F876B2:
 	ldw iz, 0xFF9A				; mode unavailable error
