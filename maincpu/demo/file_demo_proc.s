@@ -879,7 +879,7 @@ LABEL_F86E1F:
 	ldto_berp C, 0xFB
 	ld (xwa + 3), c
 	lds bc, 4
-	call LABEL_F3DA16
+	call SeqBuf_WriteMidiEventDirect
 
 Banner_Loop_Exit:
 	inc1_berp 0xFB

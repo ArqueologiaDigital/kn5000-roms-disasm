@@ -3503,7 +3503,7 @@ LABEL_EF9797:
 	pushw hl
 	call SeqBuf_WriteByte
 	inc 2, xsp
-	call LABEL_F3DB45
+	call VoiceAlloc_ScoopDisplayProcess
 	popw wa
 	pop xhl
 	ret
