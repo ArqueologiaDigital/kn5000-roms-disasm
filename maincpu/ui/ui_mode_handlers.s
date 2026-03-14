@@ -2908,7 +2908,7 @@ MasterSetup_FallbackEvent:
 	ld xde, (xsp + 66)
 	call SendEvent
 	or xhl, xhl
-	jrl z, LABEL_FB87AC
+	jrl z, MstStyleAlp_FallbackDispatch
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -2920,13 +2920,13 @@ MasterSetup_FallbackEvent:
 	muls wa, 0x9
 	dec 1, wa
 	cp wa, (xde)
-	jrl lt, LABEL_FB8724
+	jrl lt, MstStyleAlp_PageForward
 	ld wa, (xde)
 	exts xwa
 	divs wa, 0x9
 	ldto_werp WA, 0xE2
 	cp wa, hl
-	jrl nz, LABEL_FB8774
+	jrl nz, MstStyleAlp_SelectAndAutoInc
 	lda xix, (xix + 78)
 	ld xwa, (xix)
 	ld bc, (xde)
@@ -2935,7 +2935,7 @@ MasterSetup_FallbackEvent:
 	ld hl, bc
 	lda_24 xbc, 0xeba494
 	cp hl, 0x3E8
-	jr nc, LABEL_FB865A
+	jr nc, MstStyleAlp_OverflowCopy
 	ld hl, (xwa)
 	ld de, (xde)
 	add de, hl
@@ -2950,9 +2950,9 @@ MasterSetup_FallbackEvent:
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_FB8671
+	jr MstStyleAlp_UpdateFocusIndex
 
-LABEL_FB865A:
+MstStyleAlp_OverflowCopy:
 	ld xwa, (xbc)
 	push xwa
 	lda xwa, (xsp + 16)
@@ -2963,16 +2963,16 @@ LABEL_FB865A:
 	ld xwa, (xwa + 78)
 	ldw (xwa), 0x0
 
-LABEL_FB8671:
+MstStyleAlp_UpdateFocusIndex:
 	ld xwa, (xsp + 8)
 	ld xbc, (xwa + 74)
 	ld a, (xsp + 12)
 	extz wa
 	ld (xbc), wa
 	lds iz, 0
-	jr LABEL_FB86AF
+	jr MstStyleAlp_CompareLoopCond
 
-LABEL_FB8682:
+MstStyleAlp_CompareEntry:
 	pushw 0x1
 	add wa, iz
 	extz xwa
@@ -2989,19 +2989,19 @@ LABEL_FB8682:
 	call String_Compare
 	add xsp, 0xA
 	cps hl, 0
-	jr nz, LABEL_FB86C0
+	jr nz, MstStyleAlp_CompareComplete
 	inc 1, iz
 
-LABEL_FB86AF:
+MstStyleAlp_CompareLoopCond:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 78)
 	ld wa, (xwa)
 	ldw bc, 0x3E8
 	sub bc, wa
 	cp iz, bc
-	jr c, LABEL_FB8682
+	jr c, MstStyleAlp_CompareEntry
 
-LABEL_FB86C0:
+MstStyleAlp_CompareComplete:
 	ld xwa, (xsp + 8)
 	lda xbc, (xwa + 82)
 	ld xwa, (xbc)
@@ -3036,9 +3036,9 @@ LABEL_FB86C0:
 	ld xde, (xsp + 66)
 	jrl SeqFile_CallApFunc
 
-LABEL_FB8724:
+MstStyleAlp_PageForward:
 	cp hl, 0x8
-	jr nz, LABEL_FB8774
+	jr nz, MstStyleAlp_SelectAndAutoInc
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 86)
 	ld wa, (xwa)
@@ -3063,7 +3063,7 @@ LABEL_FB8724:
 	ld xde, (xsp + 66)
 	jrl SeqFile_CallApFunc
 
-LABEL_FB8774:
+MstStyleAlp_SelectAndAutoInc:
 	inc 1, hl
 	extz xhl
 	add xhl, 0xFFFF0000
@@ -3082,7 +3082,7 @@ LABEL_FB8774:
 	call ApFuncCall
 	jrl SeqFile_ReturnZeroJmp2
 
-LABEL_FB87AC:
+MstStyleAlp_FallbackDispatch:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 66)
@@ -3267,7 +3267,7 @@ MstStyleAlp_CellSelect:
 	add ix, (xiz)
 	ld wa, (xiy)
 	cp wa, (xhl)
-	jrl nz, LABEL_FB8A72
+	jrl nz, MstStyleAlp_CopyEntryAndPad
 	ld xwa, (xsp + 4)
 	ld xhl, (xwa + 82)
 	ld xwa, (xde)
@@ -3278,7 +3278,7 @@ MstStyleAlp_CellSelect:
 	sub de, wa
 	ld wa, (xbc)
 	cp wa, de
-	jr ge, LABEL_FB8A60
+	jr ge, MstStyleAlp_OverflowStr
 	add wa, ix
 	muls wa, 0x6
 	ld bc, wa
@@ -3290,9 +3290,9 @@ MstStyleAlp_CellSelect:
 	call Strcpy
 	inc 8, xsp
 	ld (xsp + 14), 0x0
-	jr LABEL_FB8A1E
+	jr MstStyleAlp_PadLoopCond
 
-LABEL_FB8A07:
+MstStyleAlp_AppendPadChar:
 	pushw 0x1
 	pushw 0xED
 	pushw 0xD32
@@ -3302,7 +3302,7 @@ LABEL_FB8A07:
 	lda xsp, (xsp + 10)
 	incm8 1, (xsp + 14)
 
-LABEL_FB8A1E:
+MstStyleAlp_PadLoopCond:
 	ld xwa, (xsp + 4)
 	ld xbc, (xwa + 78)
 	ld xwa, (xwa + 90)
@@ -3324,19 +3324,19 @@ LABEL_FB8A1E:
 	ld a, (xsp + 14)
 	extz wa
 	cp wa, bc
-	jr c, LABEL_FB8A07
-	jrl LABEL_FB8AEB
+	jr c, MstStyleAlp_AppendPadChar
+	jrl MstStyleAlp_FinalSendEvent
 
-LABEL_FB8A60:
+MstStyleAlp_OverflowStr:
 	pushw 0xED
 	pushw 0xD34
 	ld xwa, (xsp + 16)
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_FB8AEB
+	jr MstStyleAlp_FinalSendEvent
 
-LABEL_FB8A72:
+MstStyleAlp_CopyEntryAndPad:
 	ld wa, (xbc)
 	add wa, ix
 	muls wa, 0x6
@@ -3349,9 +3349,9 @@ LABEL_FB8A72:
 	call Strcpy
 	inc 8, xsp
 	ld (xsp + 14), 0x0
-	jr LABEL_FB8AAC
+	jr MstStyleAlp_PadLoopCond2
 
-LABEL_FB8A95:
+MstStyleAlp_AppendPadChar2:
 	pushw 0x1
 	pushw 0xED
 	pushw 0xD56
@@ -3361,7 +3361,7 @@ LABEL_FB8A95:
 	lda xsp, (xsp + 10)
 	incm8 1, (xsp + 14)
 
-LABEL_FB8AAC:
+MstStyleAlp_PadLoopCond2:
 	ld xwa, (xsp + 4)
 	ld xbc, (xwa + 78)
 	ld xwa, (xwa + 90)
@@ -3383,9 +3383,9 @@ LABEL_FB8AAC:
 	ld a, (xsp + 14)
 	extz wa
 	cp wa, bc
-	jr c, LABEL_FB8A95
+	jr c, MstStyleAlp_AppendPadChar2
 
-LABEL_FB8AEB:
+MstStyleAlp_FinalSendEvent:
 	ld wa, (xsp + 50)
 	cps wa, 1
 	jr nz, EffectMode_SendEvent_Return
@@ -7400,15 +7400,15 @@ IvPmemWindowPageCtlProc:
 	ld xiz, xde
 	ld (xsp + 4), xwa
 	cp xbc, 0x1C00007
-	jr z, LABEL_FBBA41
+	jr z, PmemPageCtl_OK_PageSwitch
 	cp xbc, 0x1C00001
-	jr z, LABEL_FBB9F4
+	jr z, PmemPageCtl_InitForward
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
-	jrl LABEL_FBBB48
+	jrl PmemPageCtl_Epilogue
 
-LABEL_FBB9F4:
+PmemPageCtl_InitForward:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
@@ -7435,16 +7435,16 @@ GridBox_NotifySelection:
 	call SendEvent
 	jrl SeqLoad_ReturnZeroJmp2
 
-LABEL_FBBA41:
+PmemPageCtl_OK_PageSwitch:
 	ld xwa, (xsp + 4)
 	call GetViewInstance
 	lda xwa, (xhl + 22)
 	cp xiz, 0x10
-	jr nz, LABEL_FBBAC4
+	jr nz, PmemPageCtl_OK_Rotate
 	ld xwa, (xwa)
 	ld bc, (xwa)
 	cps bc, 2
-	jr z, LABEL_FBBA86
+	jr z, PmemPageCtl_OK_AdvanceTo2
 	cps bc, 1
 	jrl nz, SeqLoad_ReturnZeroJmp2
 	incm 1, (xwa)
@@ -7458,16 +7458,16 @@ LABEL_FBBA41:
 	lds32 xde, 0
 	jr SeqLoad_PostEvent
 
-LABEL_FBBA86:
+PmemPageCtl_OK_AdvanceTo2:
 	cpi8_24 0x0340e2, 0x01
-	jr nz, LABEL_FBBAA2
+	jr nz, PmemPageCtl_OK_ResetTo1
 	sti8_24 0x0340e2, 0x02
 	ld xwa, 0x45000D
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 	jr SeqLoad_PostEvent
 
-LABEL_FBBAA2:
+PmemPageCtl_OK_ResetTo1:
 	ldw (xwa), 0x1
 	ld xwa, 0x45000D
 	ld xbc, 0x1C00002
@@ -7478,13 +7478,13 @@ LABEL_FBBAA2:
 	lds32 xde, 0
 	jr SeqLoad_PostEvent
 
-LABEL_FBBAC4:
+PmemPageCtl_OK_Rotate:
 	cp xiz, 0x90
 	jr nz, SeqLoad_ReturnZeroJmp2
 	ld xwa, (xwa)
 	ld bc, (xwa)
 	cps bc, 2
-	jr z, LABEL_FBBB04
+	jr z, PmemPageCtl_OK_RotateReverse
 	cps bc, 1
 	jr nz, SeqLoad_ReturnZeroJmp2
 	ldw (xwa), 0x2
@@ -7501,9 +7501,9 @@ SeqLoad_PostEvent:
 	call PostEvent
 	jr SeqLoad_ReturnZeroJmp2
 
-LABEL_FBBB04:
+PmemPageCtl_OK_RotateReverse:
 	cpi8_24 0x0340e2, 0x01
-	jr nz, LABEL_FBBB30
+	jr nz, PmemPageCtl_OK_RotatePost
 	decm 1, (xwa)
 	ld xwa, 0x45000D
 	ld xbc, 0x1C00002
@@ -7515,7 +7515,7 @@ LABEL_FBBB04:
 	call PostEvent
 	jr SeqLoad_ReturnZeroJmp2
 
-LABEL_FBBB30:
+PmemPageCtl_OK_RotatePost:
 	ld xwa, 0x45000D
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -7525,11 +7525,11 @@ LABEL_FBBB30:
 SeqLoad_ReturnZeroJmp2:
 	lds32 xhl, 0
 
-LABEL_FBBB48:
+PmemPageCtl_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
-LABEL_FBBB4C:
+PmemPageCtl_Boundary:
 
 AcPmExpFilterGridBoxProc:
 	st_dri3b L, 0xFD, 0xDC, 0xFE
@@ -7539,25 +7539,25 @@ AcPmExpFilterGridBoxProc:
 	ld xiz, xwa
 	ld_sril XBC, (xsp + 0x0124)
 	cp xbc, 0x1C00007
-	jrl z, LABEL_FBC0CA
+	jrl z, PmExpFilter_OkHandler
 	ld_sril XWA, (xsp + 0x0124)
 	cp xwa, 0x1E0008D
-	jrl z, LABEL_FBC0AF
+	jrl z, PmExpFilter_ForwardToView
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_FBC07C
+	jrl z, PmExpFilter_GetNameB
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_FBC073
+	jrl z, PmExpFilter_GetNameA
 	cp xwa, 0x1C0000F
-	jrl z, LABEL_FBBC63
+	jrl z, PmExpFilter_Repaint
 	cp xwa, 0x1C0000B
-	jrl z, LABEL_FBBC40
+	jrl z, PmExpFilter_ShowHide
 	cp xwa, 0x1C00001
 	jr z, PmemPageCtl_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_FBC120
+	jrl lt, PmExpFilter_DefaultInherited
 	cp xbc, 0x6
-	jrl gt, LABEL_FBC120
+	jrl gt, PmExpFilter_DefaultInherited
 	add xbc, xbc
 	add xbc, 0xED1420
 	ld bc, (xbc)
@@ -7601,9 +7601,9 @@ PmemPageCtl_EventDispatch:
 	ld xbc, 0x1C00018
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_FBC06D
+	jrl PmExpFilter_SetDialEnable
 
-LABEL_FBBC40:
+PmExpFilter_ShowHide:
 	ld xwa, xiz
 	ld_sril XBC, (xsp + 0x0124)
 	ld_sril XDE, (xsp + 0x0120)
@@ -7614,7 +7614,7 @@ LABEL_FBBC40:
 	call SendEvent
 	jrl SeqLoad_ReturnZeroJmp
 
-LABEL_FBBC63:
+PmExpFilter_Repaint:
 	ld xwa, xiz
 	ld_sril XBC, (xsp + 0x0124)
 	ld_sril XDE, (xsp + 0x0120)
@@ -7663,9 +7663,9 @@ LABEL_FBBC63:
 	call DrawString
 	ld (xsp + 10), 0x0
 	cpi8_24 0x0340e2, 0x01
-	jrl nz, LABEL_FBBDC4
+	jrl nz, PmExpFilter_DrawCellBank2
 
-LABEL_FBBCFC:
+PmExpFilter_DrawCellBank1:
 	st_dri3b A, 0xFD, 0x18, 0x01
 	ldw (xbc), 0x0
 	ld a, (xsp + 10)
@@ -7692,7 +7692,7 @@ LABEL_FBBCFC:
 	call SendEvent
 	incm8 1, (xsp + 10)
 	cp (xsp + 10), 0x9
-	jr c, LABEL_FBBCFC
+	jr c, PmExpFilter_DrawCellBank1
 	lda xwa, (xsp + 16)
 	ldw (xwa + 2), 0x6
 	ldw (xwa + 6), 0x17
@@ -7731,9 +7731,9 @@ LABEL_FBBCFC:
 	push xhl
 	pushw 0x0
 	pushw 0xF7
-	jrl LABEL_FBBE89
+	jrl PmExpFilter_DrawCentered
 
-LABEL_FBBDC4:
+PmExpFilter_DrawCellBank2:
 	st_dri3b A, 0xFD, 0x18, 0x01
 	ldw (xbc), 0x0
 	ld a, (xsp + 10)
@@ -7760,7 +7760,7 @@ LABEL_FBBDC4:
 	call SendEvent
 	incm8 1, (xsp + 10)
 	cp (xsp + 10), 0x9
-	jr c, LABEL_FBBDC4
+	jr c, PmExpFilter_DrawCellBank2
 	lda xwa, (xsp + 16)
 	ldw (xwa + 2), 0x6
 	ldw (xwa + 6), 0x17
@@ -7800,7 +7800,7 @@ LABEL_FBBDC4:
 	pushw 0x0
 	pushw 0xF7
 
-LABEL_FBBE89:
+PmExpFilter_DrawCentered:
 	call DrawStringCentered
 	jrl SeqLoad_ReturnZeroJmp
 	ld xwa, xiz
@@ -7812,15 +7812,15 @@ LABEL_FBBE89:
 	ld_sril XDE, (xsp + 0x0120)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_FBBF18
+	jr z, PmExpFilter_FallbackForward
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
 	call SendEvent
 	cpi8_24 0x0340e2, 0x02
-	jr nz, LABEL_FBBEEE
+	jr nz, PmExpFilter_DecAndUpdate
 	cps hl, 2
-	jr nz, LABEL_FBBEEE
+	jr nz, PmExpFilter_DecAndUpdate
 	sti8_24 0x0340e2, 0x01
 	ld xwa, xiz
 	ld xbc, 0x1C0000F
@@ -7829,9 +7829,9 @@ LABEL_FBBE89:
 	ld xwa, xiz
 	ld xbc, 0x1C0000E
 	ld xde, 0xFFFF000A
-	jr LABEL_FBBF01
+	jr PmExpFilter_SendSelEvent
 
-LABEL_FBBEEE:
+PmExpFilter_DecAndUpdate:
 	dec 1, hl
 	extz xhl
 	add xhl, 0xFFFF0000
@@ -7839,7 +7839,7 @@ LABEL_FBBEEE:
 	ld xbc, 0x1C0000E
 	ld xde, xhl
 
-LABEL_FBBF01:
+PmExpFilter_SendSelEvent:
 	call SendEvent
 	ld xwa, xiz
 	ld_sril XBC, (xsp + 0x0124)
@@ -7847,7 +7847,7 @@ LABEL_FBBF01:
 	call SetAutoInc
 	jrl SeqLoad_ReturnZeroJmp
 
-LABEL_FBBF18:
+PmExpFilter_FallbackForward:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld_sril XDE, (xsp + 0x0120)
@@ -7873,7 +7873,7 @@ LABEL_FBBF18:
 	ld_sril XDE, (xsp + 0x0120)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_FBC06D
+	jrl PmExpFilter_SetDialEnable
 	ld xwa, xiz
 	ld_sril XBC, (xsp + 0x0124)
 	ld_sril XDE, (xsp + 0x0120)
@@ -7883,22 +7883,22 @@ LABEL_FBBF18:
 	ld_sril XDE, (xsp + 0x0120)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_FBC00F
+	jr z, PmExpFilter_FallbackForward2
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
 	call SendEvent
 	ld8_24 a, 0x0340e2
 	cps a, 2
-	jr nz, LABEL_FBBFBA
+	jr nz, PmExpFilter_CheckAdvBank
 	cp hl, 0xA
 	jrl z, SeqLoad_ReturnZeroJmp
 
-LABEL_FBBFBA:
+PmExpFilter_CheckAdvBank:
 	cps a, 1
-	jr nz, LABEL_FBBFE5
+	jr nz, PmExpFilter_IncAndUpdate
 	cp hl, 0xA
-	jr nz, LABEL_FBBFE5
+	jr nz, PmExpFilter_IncAndUpdate
 	sti8_24 0x0340e2, 0x02
 	ld xwa, xiz
 	ld xbc, 0x1C0000F
@@ -7907,9 +7907,9 @@ LABEL_FBBFBA:
 	ld xwa, xiz
 	ld xbc, 0x1C0000E
 	ld xde, 0xFFFF0002
-	jr LABEL_FBBFF8
+	jr PmExpFilter_SendSelEvent2
 
-LABEL_FBBFE5:
+PmExpFilter_IncAndUpdate:
 	inc 1, hl
 	extz xhl
 	add xhl, 0xFFFF0000
@@ -7917,7 +7917,7 @@ LABEL_FBBFE5:
 	ld xbc, 0x1C0000E
 	ld xde, xhl
 
-LABEL_FBBFF8:
+PmExpFilter_SendSelEvent2:
 	call SendEvent
 	ld xwa, xiz
 	ld_sril XBC, (xsp + 0x0124)
@@ -7925,7 +7925,7 @@ LABEL_FBBFF8:
 	call SetAutoInc
 	jrl SeqLoad_ReturnZeroJmp
 
-LABEL_FBC00F:
+PmExpFilter_FallbackForward2:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld_sril XDE, (xsp + 0x0120)
@@ -7952,20 +7952,20 @@ LABEL_FBC00F:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_FBC06D:
+PmExpFilter_SetDialEnable:
 	call SetDialEnable
 	jr SeqLoad_ReturnZeroJmp
 
-LABEL_FBC073:
+PmExpFilter_GetNameA:
 	ld xwa, xiz
 	ld xiz, 0x3E
-	jr LABEL_FBC083
+	jr PmExpFilter_GetNameCommon
 
-LABEL_FBC07C:
+PmExpFilter_GetNameB:
 	ld xwa, xiz
 	ld xiz, 0x42
 
-LABEL_FBC083:
+PmExpFilter_GetNameCommon:
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -7980,61 +7980,61 @@ LABEL_FBC083:
 	ld xwa, (xhl + 70)
 	ld_sril XBC, (xsp + 0x0124)
 	ld_sril XDE, (xsp + 0x0120)
-	jr LABEL_FBC0C2
+	jr PmExpFilter_ForwardApFunc
 
-LABEL_FBC0AF:
+PmExpFilter_ForwardToView:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
 	ld_sril XBC, (xsp + 0x0124)
 	ld_sril XDE, (xsp + 0x0120)
 
-LABEL_FBC0C2:
+PmExpFilter_ForwardApFunc:
 	call ApFuncCall
 
 SeqLoad_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_FBC130
+	jr PmExpFilter_Epilogue
 
-LABEL_FBC0CA:
+PmExpFilter_OkHandler:
 	ld_sril XWA, (xsp + 0x0120)
 	cp xwa, 0xF
-	jr nz, LABEL_FBC112
+	jr nz, PmExpFilter_OK_InheritedFwd
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E0007A
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_FBC0FF
+	jr z, PmExpFilter_OK_Navigate
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E00079
 	lds32 xde, 0
 	call SendEvent
-	jr LABEL_FBC112
+	jr PmExpFilter_OK_InheritedFwd
 
-LABEL_FBC0FF:
+PmExpFilter_OK_Navigate:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00040
 	call PostEvent
 
-LABEL_FBC112:
+PmExpFilter_OK_InheritedFwd:
 	ld xwa, xiz
 	ld_sril XBC, (xsp + 0x0124)
 	ld_sril XDE, (xsp + 0x0120)
-	jr LABEL_FBC12C
+	jr PmExpFilter_CallInherited
 
-LABEL_FBC120:
+PmExpFilter_DefaultInherited:
 	ld xwa, xiz
 	ld_sril XBC, (xsp + 0x0124)
 	ld_sril XDE, (xsp + 0x0120)
 
-LABEL_FBC12C:
+PmExpFilter_CallInherited:
 	call InheritedProc
 
-LABEL_FBC130:
+PmExpFilter_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x24, 0x01
 	ret
@@ -8043,7 +8043,7 @@ PmExpFilterGridCheck:
 	st_dri3b L, 0xFD, 0xF8, 0xFE
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FBC33F
+	jrl z, PmExpFilterCheck_CellDecode
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
 	jrl lt, SeqLoad_StoreReturnZero
@@ -8116,7 +8116,7 @@ PmExpFilter_EventDispatch:
 	.byte 0xd1, 0x00, 0xcf, 0x61, 0xcf, 0xcf, 0x09, 0x67
 	.byte 0xaa, 0x78, 0xcb, 0x00
 
-LABEL_FBC33F:
+PmExpFilterCheck_CellDecode:
 	st_dri3b C, 0xFD, 0x00, 0x01
 	ld xwa, xde
 	srl xwa, 0
@@ -8135,7 +8135,7 @@ LABEL_FBC33F:
 	ld8_24 l, 0x0340e2
 	dec 8, bc
 	cps l, 2
-	jr z, LABEL_FBC3BD
+	jr z, PmExpFilterCheck_AltDecode
 	cps l, 1
 	jrl nz, SeqLoad_StoreReturnZero
 	cps wa, 2
@@ -8147,10 +8147,10 @@ LABEL_FBC33F:
 	call SndParam_LookupReadOnly
 	ld xwa, 0xED148A
 	cps hl, 0
-	jr nz, LABEL_FBC3A0
+	jr nz, PmExpFilterCheck_SendNameA
 	ld xwa, 0xED1486
 
-LABEL_FBC3A0:
+PmExpFilterCheck_SendNameA:
 	push xwa
 	lda xwa, (xsp + 4)
 	push xwa
@@ -8160,33 +8160,33 @@ LABEL_FBC3A0:
 	ld xwa, xhl
 	st_dri3b B, 0xFD, 0x00, 0x01
 	ld xbc, 0x1E0008C
-	jr LABEL_FBC406
+	jr PmExpFilterCheck_DoSend
 
-LABEL_FBC3BD:
+PmExpFilterCheck_AltDecode:
 	cps wa, 2
-	jr lt, LABEL_FBC3E9
+	jr lt, PmExpFilterCheck_PushDefault
 	cp wa, 0xA
-	jr gt, LABEL_FBC3E9
+	jr gt, PmExpFilterCheck_PushDefault
 	lda_24 xwa, 0xed1452
 	ld_sril3 XWA, 0x07, 0xE0, 0xE4
 	call SndParam_LookupReadOnly
 	lda xbc, (xsp)
 	ld xwa, 0xED1492
 	cps hl, 0
-	jr nz, LABEL_FBC3E5
+	jr nz, PmExpFilterCheck_PushNameB
 	ld xwa, 0xED148E
 
-LABEL_FBC3E5:
+PmExpFilterCheck_PushNameB:
 	push xwa
 	push xbc
-	jr LABEL_FBC3F0
+	jr PmExpFilterCheck_StrcpySend
 
-LABEL_FBC3E9:
+PmExpFilterCheck_PushDefault:
 	pushw 0xED
 	pushw 0x1496
 	push xde
 
-LABEL_FBC3F0:
+PmExpFilterCheck_StrcpySend:
 	call Strcpy
 	inc 8, xsp
 	call GetFocusObject
@@ -8194,14 +8194,14 @@ LABEL_FBC3F0:
 	st_dri3b B, 0xFD, 0x00, 0x01
 	ld xbc, 0x1E0008C
 
-LABEL_FBC406:
+PmExpFilterCheck_DoSend:
 	call SendEvent
 
 SeqLoad_StoreReturnZero:
 	lds32 xhl, 0
 	st_dri3b L, 0xFD, 0x08, 0x01
 	ret
-LABEL_FBC412:
+PmExpFilterCheck_Boundary:
 
 AcDispTimeSetGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -8211,21 +8211,21 @@ AcDispTimeSetGridBoxProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FBC6D2
+	jrl z, DispTimeSet_CellSelectFwd
 	ld xwa, (xsp + 16)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_FBC6A5
+	jrl z, DispTimeSet_GetNameB
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_FBC69C
+	jrl z, DispTimeSet_GetNameA
 	cp xwa, 0x1C00002
-	jrl z, LABEL_FBC4E6
+	jrl z, DispTimeSet_SelectInit
 	cp xwa, 0x1C00001
 	jr z, PmExpFilter2_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_FBC6E9
+	jrl lt, DispTimeSet_DefaultInherited
 	cp xbc, 0x6
-	jrl gt, LABEL_FBC6E9
+	jrl gt, DispTimeSet_DefaultInherited
 	add xbc, xbc
 	add xbc, 0xED14A8
 	ld bc, (xbc)
@@ -8269,9 +8269,9 @@ PmExpFilter2_EventDispatch:
 	ld xbc, 0x1C00018
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_FBC696
+	jrl DispTimeSet_SetDialEnabled
 
-LABEL_FBC4E6:
+DispTimeSet_SelectInit:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -8310,7 +8310,7 @@ LABEL_FBC4E6:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_FBC5A2
+	jr z, DispTimeSet_DialFallback
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -8328,7 +8328,7 @@ LABEL_FBC4E6:
 	call SetAutoInc
 	jrl SeqSave_ReturnZeroJmp
 
-LABEL_FBC5A2:
+DispTimeSet_DialFallback:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -8354,7 +8354,7 @@ LABEL_FBC5A2:
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_FBC696
+	jrl DispTimeSet_SetDialEnabled
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -8364,7 +8364,7 @@ LABEL_FBC5A2:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_FBC646
+	jr z, DispTimeSet_DialFallback2
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -8382,7 +8382,7 @@ LABEL_FBC5A2:
 	call SetAutoInc
 	jrl SeqSave_ReturnZeroJmp
 
-LABEL_FBC646:
+DispTimeSet_DialFallback2:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -8409,20 +8409,20 @@ LABEL_FBC646:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_FBC696:
+DispTimeSet_SetDialEnabled:
 	call SetDialEnable
 	jr SeqSave_ReturnZeroJmp
 
-LABEL_FBC69C:
+DispTimeSet_GetNameA:
 	ld xwa, xiz
 	ld xiz, 0x3E
-	jr LABEL_FBC6AC
+	jr DispTimeSet_GetNameCommon
 
-LABEL_FBC6A5:
+DispTimeSet_GetNameB:
 	ld xwa, xiz
 	ld xiz, 0x42
 
-LABEL_FBC6AC:
+DispTimeSet_GetNameCommon:
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -8437,29 +8437,29 @@ LABEL_FBC6AC:
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
-	jr LABEL_FBC6E1
+	jr DispTimeSet_CallApFunc
 
-LABEL_FBC6D2:
+DispTimeSet_CellSelectFwd:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 
-LABEL_FBC6E1:
+DispTimeSet_CallApFunc:
 	call ApFuncCall
 
 SeqSave_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_FBC6F5
+	jr DispTimeSet_Epilogue
 
-LABEL_FBC6E9:
+DispTimeSet_DefaultInherited:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
-LABEL_FBC6F5:
+DispTimeSet_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -8469,7 +8469,7 @@ DispTimeSetGridCheck:
 	push xiz
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FBCB6E
+	jrl z, DispTimeSetCheck_CellDecode
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
 	jrl lt, DispTimeSet_ReturnZero
@@ -8622,7 +8622,7 @@ DispTimeSet_EventDispatch:
 	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x7f
 	.byte 0x01
 
-LABEL_FBCB6E:
+DispTimeSetCheck_CellDecode:
 	lda xhl, (xsp + 40)
 	ld xwa, xde
 	srl xwa, 0
@@ -8633,9 +8633,9 @@ LABEL_FBCB6E:
 	lda xbc, (xsp + 30)
 	ld (xhl + 4), xbc
 	cpw (xhl), 0x1
-	jr nz, LABEL_FBCBC6
+	jr nz, DispTimeSetCheck_TryRow3
 	cpw (xwa), 0x2
-	jr nz, LABEL_FBCBC6
+	jr nz, DispTimeSetCheck_TryRow3
 	ld8_24 a, 0x0340e6
 	extz wa
 	sla wa, 2
@@ -8653,12 +8653,12 @@ LABEL_FBCB6E:
 	ld xbc, 0x1E0008C
 	jrl DispTimeSet_SendEventReturn
 
-LABEL_FBCBC6:
+DispTimeSetCheck_TryRow3:
 	lda_24 xde, 0xed14b6
 	cpw (xhl), 0x1
-	jr nz, LABEL_FBCC06
+	jr nz, DispTimeSetCheck_TryRow4
 	cpw (xwa), 0x3
-	jr nz, LABEL_FBCC06
+	jr nz, DispTimeSetCheck_TryRow4
 	ld8_24 a, 0x0340e8
 	extz wa
 	sla wa, 2
@@ -8675,11 +8675,11 @@ LABEL_FBCBC6:
 	ld xbc, 0x1E0008C
 	jrl DispTimeSet_SendEventReturn
 
-LABEL_FBCC06:
+DispTimeSetCheck_TryRow4:
 	cpw (xhl), 0x1
-	jr nz, LABEL_FBCC41
+	jr nz, DispTimeSetCheck_TryRow5
 	cpw (xwa), 0x4
-	jr nz, LABEL_FBCC41
+	jr nz, DispTimeSetCheck_TryRow5
 	ld8_24 a, 0x0340ea
 	extz wa
 	sla wa, 2
@@ -8696,11 +8696,11 @@ LABEL_FBCC06:
 	ld xbc, 0x1E0008C
 	jrl DispTimeSet_SendEventReturn
 
-LABEL_FBCC41:
+DispTimeSetCheck_TryRow5:
 	cpw (xhl), 0x1
-	jr nz, LABEL_FBCC7B
+	jr nz, DispTimeSetCheck_TryRow6
 	cpw (xwa), 0x5
-	jr nz, LABEL_FBCC7B
+	jr nz, DispTimeSetCheck_TryRow6
 	ld8_24 a, 0x0340ec
 	extz wa
 	sla wa, 2
@@ -8717,11 +8717,11 @@ LABEL_FBCC41:
 	ld xbc, 0x1E0008C
 	jr DispTimeSet_SendEventReturn
 
-LABEL_FBCC7B:
+DispTimeSetCheck_TryRow6:
 	cpw (xhl), 0x1
-	jr nz, LABEL_FBCCB5
+	jr nz, DispTimeSetCheck_TryRow7
 	cpw (xwa), 0x6
-	jr nz, LABEL_FBCCB5
+	jr nz, DispTimeSetCheck_TryRow7
 	ld8_24 a, 0x0340ee
 	extz wa
 	sla wa, 2
@@ -8738,7 +8738,7 @@ LABEL_FBCC7B:
 	ld xbc, 0x1E0008C
 	jr DispTimeSet_SendEventReturn
 
-LABEL_FBCCB5:
+DispTimeSetCheck_TryRow7:
 	cpw (xhl), 0x1
 	jr nz, DispTimeSet_ReturnZero
 	cpw (xwa), 0x7
@@ -8769,20 +8769,20 @@ DispTimeSet_ReturnZero:
 
 DispTimeSetOKFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_FBCD0E
+	jr nz, DispTimeSetOK_ReturnZero
 	ld xwa, 0x142000E
 	ld xbc, 0x1E20014
 	call MainFuncCall
 
-LABEL_FBCD0E:
+DispTimeSetOK_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 MainTimeFlashFunc:
 	cp xbc, 0x1E20015
-	jr z, LABEL_FBCD59
+	jr z, MainTimeFlash_DispatchCmd
 	cp xbc, 0x1E20014
-	jr nz, LABEL_FBCD5F
+	jr nz, MainTimeFlash_ReturnZero
 	stdi8 32578, 40
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
@@ -8795,16 +8795,16 @@ MainTimeFlashFunc:
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
 	call ApPostEvent
-	jr LABEL_FBCD5F
+	jr MainTimeFlash_ReturnZero
 
-LABEL_FBCD59:
+MainTimeFlash_DispatchCmd:
 	lds wa, 5
 	call Audio_DispatchCommand
 
-LABEL_FBCD5F:
+MainTimeFlash_ReturnZero:
 	lds32 xhl, 0
 	ret
-LABEL_FBCD62:
+MainTimeFlash_Boundary:
 
 NormScreenProc:
 	dec 8, xsp
@@ -8814,22 +8814,22 @@ NormScreenProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C00001
-	jr z, LABEL_FBCD86
+	jr z, NormScreen_InitHandler
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_FBCDED
+	jr NormScreen_Epilogue
 
-LABEL_FBCD86:
+NormScreen_InitHandler:
 	ld xwa, xiz
 	call GetViewInstance
 	cpi8_24 0x0340e6, 0x00
-	jr z, LABEL_FBCDDB
+	jr z, NormScreen_ClearBit
 	ldda8 a, 36232
 	extz wa
 	bit 0, wa
-	jr z, LABEL_FBCDDB
+	jr z, NormScreen_ClearBit
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
@@ -8845,7 +8845,7 @@ LABEL_FBCD86:
 	call PostEvent
 	resda 0, 36232
 
-LABEL_FBCDDB:
+NormScreen_ClearBit:
 	resda 0, 36232
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -8853,11 +8853,11 @@ LABEL_FBCDDB:
 	call InheritedProc
 	lds32 xhl, 0
 
-LABEL_FBCDED:
+NormScreen_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
-LABEL_FBCDF1:
+NormScreen_Boundary:
 
 IvWindowPageControlProc:
 	dec 8, xsp
@@ -8865,19 +8865,19 @@ IvWindowPageControlProc:
 	ld (xsp + 8), xde
 	ld xiz, xwa
 	cp xbc, 0x1C00007
-	jrl z, LABEL_FBCEE8
+	jrl z, IvWindowPgCtl_OkHandler
 	cp xbc, 0x1C20006
-	jrl z, LABEL_FBCE8B
+	jrl z, IvWindowPgCtl_PageChanged
 	cp xbc, 0x1C00002
-	jr z, LABEL_FBCE73
+	jr z, IvWindowPgCtl_Deselect
 	cp xbc, 0x1C00001
-	jr z, LABEL_FBCE27
+	jr z, IvWindowPgCtl_Init
 	ld xwa, xiz
 	ld xde, (xsp + 8)
 	call InheritedProc
-	jrl LABEL_FBD01E
+	jrl IvWindowPgCtl_Epilogue
 
-LABEL_FBCE27:
+IvWindowPgCtl_Init:
 	ld xwa, xiz
 	ld xde, (xsp + 8)
 	call InheritedProc
@@ -8889,10 +8889,10 @@ LABEL_FBCE27:
 	lda xbc, (xiz + 22)
 	lds wa, 1
 	cps hl, 1
-	jr nz, LABEL_FBCE4C
+	jr nz, IvWindowPgCtl_SetPageIndex
 	lds wa, 3
 
-LABEL_FBCE4C:
+IvWindowPgCtl_SetPageIndex:
 	ld xde, (xbc)
 	ld (xde), wa
 	ld xwa, (xbc)
@@ -8906,7 +8906,7 @@ LABEL_FBCE4C:
 	lds32 xde, 1
 	jrl UI_MainFuncCall_Execute
 
-LABEL_FBCE73:
+IvWindowPgCtl_Deselect:
 	ld xwa, xiz
 	ld xde, (xsp + 8)
 	call InheritedProc
@@ -8915,7 +8915,7 @@ LABEL_FBCE73:
 	lds32 xde, 0
 	jrl UI_MainFuncCall_Execute
 
-LABEL_FBCE8B:
+IvWindowPgCtl_PageChanged:
 	ld xwa, xiz
 	ld xde, (xsp + 8)
 	call InheritedProc
@@ -8936,19 +8936,19 @@ LABEL_FBCE8B:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 22)
 	cpw (xwa), 0x5
-	jr ge, LABEL_FBCED9
+	jr ge, IvWindowPgCtl_DisableFunc
 	ld xwa, 0x1400001
 	ld xbc, 0x1E000AB
 	lds32 xde, 1
 	jrl UI_MainFuncCall_Execute
 
-LABEL_FBCED9:
+IvWindowPgCtl_DisableFunc:
 	ld xwa, 0x1400001
 	ld xbc, 0x1E000AB
 	lds32 xde, 0
 	jrl UI_MainFuncCall_Execute
 
-LABEL_FBCEE8:
+IvWindowPgCtl_OkHandler:
 	ld xwa, xiz
 	ld xde, (xsp + 8)
 	call InheritedProc
@@ -8957,13 +8957,13 @@ LABEL_FBCEE8:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 8)
 	cp xwa, 0xF
-	jrl z, LABEL_FBCFA1
+	jrl z, IvWindowPgCtl_JumpToEnd
 	cp xwa, 0x8F
-	jrl nz, LABEL_FBD01C
+	jrl nz, IvWindowPgCtl_ReturnZero
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 22)
 	cpw (xwa), 0x4
-	jr ge, LABEL_FBCF43
+	jr ge, IvWindowPgCtl_TryNextPage
 	incm 1, (xwa)
 	ld xwa, 0x1400001
 	ld xbc, 0x1E000AB
@@ -8975,21 +8975,21 @@ LABEL_FBCEE8:
 	exts xde
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001E
-	jr LABEL_FBCF88
+	jr IvWindowPgCtl_SendPageEvent
 
-LABEL_FBCF43:
+IvWindowPgCtl_TryNextPage:
 	cpw (xwa), 0x4
-	jr nz, LABEL_FBCF8F
+	jr nz, IvWindowPgCtl_DisableAll
 	ld xwa, 0xC0
 	call SndParam_LookupReadOnly
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 22)
 	lds wa, 1
 	cps hl, 1
-	jr nz, LABEL_FBCF60
+	jr nz, IvWindowPgCtl_SetNextPage
 	lds wa, 2
 
-LABEL_FBCF60:
+IvWindowPgCtl_SetNextPage:
 	ld xbc, (xbc)
 	ld (xbc), wa
 	ld xwa, 0x1400001
@@ -9003,28 +9003,28 @@ LABEL_FBCF60:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001E
 
-LABEL_FBCF88:
+IvWindowPgCtl_SendPageEvent:
 	call SendEvent
-	jrl LABEL_FBD01C
+	jrl IvWindowPgCtl_ReturnZero
 
-LABEL_FBCF8F:
+IvWindowPgCtl_DisableAll:
 	ld xwa, 0x1400001
 	ld xbc, 0x1E000AB
 	lds32 xde, 0
 
 UI_MainFuncCall_Execute:
 	call MainFuncCall
-	jr LABEL_FBD01C
+	jr IvWindowPgCtl_ReturnZero
 
-LABEL_FBCFA1:
+IvWindowPgCtl_JumpToEnd:
 	ld xwa, 0xC0
 	call SndParam_LookupReadOnly
 	cps hl, 1
-	jr nz, LABEL_FBCFE4
+	jr nz, IvWindowPgCtl_JumpToStart
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 22)
 	cpw (xwa), 0x3
-	jr z, LABEL_FBD01C
+	jr z, IvWindowPgCtl_ReturnZero
 	ldw (xwa), 0x3
 	ld xwa, 0x1400001
 	ld xbc, 0x1E000AB
@@ -9036,13 +9036,13 @@ LABEL_FBCFA1:
 	exts xde
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001E
-	jr LABEL_FBD018
+	jr IvWindowPgCtl_DoSendEvent
 
-LABEL_FBCFE4:
+IvWindowPgCtl_JumpToStart:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 22)
 	cpw (xwa), 0x1
-	jr z, LABEL_FBD01C
+	jr z, IvWindowPgCtl_ReturnZero
 	ldw (xwa), 0x1
 	ld xwa, 0x1400001
 	ld xbc, 0x1E000AB
@@ -9055,17 +9055,17 @@ LABEL_FBCFE4:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001E
 
-LABEL_FBD018:
+IvWindowPgCtl_DoSendEvent:
 	call SendEvent
 
-LABEL_FBD01C:
+IvWindowPgCtl_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_FBD01E:
+IvWindowPgCtl_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
-LABEL_FBD022:
+IvWindowPgCtl_Boundary:
 
 IvPageOverWrProc:
 	lda xsp, (xsp - 12)
@@ -9075,20 +9075,20 @@ IvPageOverWrProc:
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C0001E
-	jrl z, LABEL_FBD0DC
+	jrl z, IvPageOverWr_PageChanged
 	cp xwa, 0x1C20004
-	jr z, LABEL_FBD090
+	jr z, IvPageOverWr_PageSelect
 	cp xwa, 0x1E0003A
-	jr z, LABEL_FBD07D
+	jr z, IvPageOverWr_GetName
 	cp xwa, 0x1C0000D
-	jr z, LABEL_FBD063
+	jr z, IvPageOverWr_KeyPress
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jrl LABEL_FBD12C
+	jrl IvPageOverWr_Epilogue
 
-LABEL_FBD063:
+IvPageOverWr_KeyPress:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -9096,9 +9096,9 @@ LABEL_FBD063:
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
-	jrl LABEL_FBD126
+	jrl IvPageOverWr_SendAndReturn
 
-LABEL_FBD07D:
+IvPageOverWr_GetName:
 	pushw 0xED
 	pushw 0x1590
 	ld xwa, (xsp + 8)
@@ -9107,7 +9107,7 @@ LABEL_FBD07D:
 	inc 8, xsp
 	jrl PmNamingCheck_CleanupRet
 
-LABEL_FBD090:
+IvPageOverWr_PageSelect:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	ld xiz, xhl
@@ -9116,13 +9116,13 @@ LABEL_FBD090:
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_FBD0B9
+	jr z, IvPageOverWr_PageSelect2
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1C00002
 	lds32 xde, 0
 	call SendEvent
 
-LABEL_FBD0B9:
+IvPageOverWr_PageSelect2:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -9134,9 +9134,9 @@ LABEL_FBD0B9:
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jr LABEL_FBD126
+	jr IvPageOverWr_SendAndReturn
 
-LABEL_FBD0DC:
+IvPageOverWr_PageChanged:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	ld xiz, xhl
@@ -9145,13 +9145,13 @@ LABEL_FBD0DC:
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_FBD105
+	jr z, IvPageOverWr_PageChanged2
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1C00002
 	lds32 xde, 5
 	call SendEvent
 
-LABEL_FBD105:
+IvPageOverWr_PageChanged2:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -9164,13 +9164,13 @@ LABEL_FBD105:
 	ld xbc, 0x1C00001
 	lds32 xde, 5
 
-LABEL_FBD126:
+IvPageOverWr_SendAndReturn:
 	call SendEvent
 
 PmNamingCheck_CleanupRet:
 	lds32 xhl, 0
 
-LABEL_FBD12C:
+IvPageOverWr_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret

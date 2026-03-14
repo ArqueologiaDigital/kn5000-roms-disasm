@@ -3269,7 +3269,7 @@ AcCurSongName_CallInherited:
 	call InheritedProc
 	jr MuteChSel_TtlSetup
 
-AcCurSongName_HandleFocusGained:
+AcCurSongName_HandleFocusAndInit:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, 0x147001D
@@ -3377,10 +3377,10 @@ SqTrAsPsSong_Dispatch:
 ; SqTrAsPsSongFunc return zero
 SqTrAsPsSong_ReturnZero:
 	lds32 xhl, 0
-	jr MuteChSel_Epilogue
+	jr SqTrAsPsSong_Epilogue
 	ldada xhl, 3391
 
-MuteChSel_Epilogue:
+SqTrAsPsSong_Epilogue:
 	pop xiz
 	ret
 
