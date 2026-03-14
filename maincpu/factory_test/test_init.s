@@ -353,7 +353,7 @@ RegHamaTitle1_Entry:
 	lds wa, 2
 	call format_FD
 	lda_24 xwa, 0xe1ff42
-	call LABEL_F5289C
+	call FileIO_CheckPathAndVolumeLabel
 	lds hl, 0
 	ret
 
@@ -363,7 +363,7 @@ RegHamaTitle2_Entry:
 	lds wa, 3
 	call format_FD
 	lda_24 xwa, 0xe1ff4c
-	call LABEL_F5289C
+	call FileIO_CheckPathAndVolumeLabel
 	lds hl, 0
 	ret
 

@@ -4609,7 +4609,7 @@ LABEL_F500B5:
 	.byte 0x10
 LABEL_F500D6:
 	.byte 0xa6
-LABEL_F500D7:
+SeqByteBlock_PathNormalize:
 	.byte 0x21, 0xaf, 0x08, 0x20, 0x81, 0x23
 	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x43, 0xe8, 0xa9, 0xa6
 	.byte 0x88, 0xda, 0x61, 0xda
@@ -6753,7 +6753,7 @@ LABEL_F52897:
 	lda xsp, (xsp + 56)
 	ret
 
-LABEL_F5289C:
+FileIO_CheckPathAndVolumeLabel:
 	lda xsp, (xsp - 18)
 	push xiz
 	ld xiz, xwa
@@ -7806,7 +7806,7 @@ LABEL_F5329F:
 	pop xiz
 	ret
 
-LABEL_F532A1:
+SeqByteBlock_DispatchJumpTable:
 	.byte 0xb2, 0x32, 0xf5, 0x00, 0xb1, 0x32, 0xf5, 0x00
 	.byte 0xbb, 0x32, 0xf5, 0x00, 0xb1, 0x32, 0xf5, 0x00
 
@@ -7853,7 +7853,7 @@ Rhythm_NoteDispatchWrapper:
 	pop xiz
 	ret
 
-LABEL_F532FE:
+RhythmPart_CopyData_Tramp:
 	jp RhythmPart_CopyData
 
 LABEL_F53302:
