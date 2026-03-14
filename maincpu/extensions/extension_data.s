@@ -939,10 +939,10 @@ LABEL_ED208C:	aligned_string "MssNameFunc"
 LABEL_ED2098:	aligned_string "PmNamingCheck"
 LABEL_ED20A6:	aligned_string "PmBankNamingCheck"
 LABEL_ED20B8:	aligned_string "PmBkNameFunc"
-LABEL_ED20C6:
+NakaParam_VariScreen:
 	.long LABEL_ED20CA
 LABEL_ED20CA:	aligned_string ""
-LABEL_ED20CC:
+NakaParam_RVariScreen:
 	.byte 0x32, 0x21, 0xed, 0x00
 ParamStr_Table_08:
 	.long LABEL_ED212C
@@ -990,19 +990,19 @@ LABEL_ED2188:	aligned_string "page"
 LABEL_ED218E:	aligned_string "fontcolor"
 LABEL_ED2198:	aligned_string "font"
 LABEL_ED219E:	aligned_string "func"
-LABEL_ED21A4:
+NakaParam_AcChordBox:
 	.long LABEL_ED21A8
 LABEL_ED21A8:	aligned_string ""
-LABEL_ED21AA:
+NakaParam_AcFreeSplitBox:
 	.long LABEL_ED21AE
 LABEL_ED21AE:	aligned_string ""
-LABEL_ED21B0:
+NakaParam_AcBkNoBox:
 	.long LABEL_ED21B4
 LABEL_ED21B4:	aligned_string ""
-LABEL_ED21B6:
+NakaParam_AcPmBkNoBox:
 	.long LABEL_ED21BA
 LABEL_ED21BA:	aligned_string ""
-LABEL_ED21BC:
+NakaParam_PmBankScreen:
 	.long LABEL_ED21C0
 LABEL_ED21C0:	aligned_string ""
 ParamStr_Table_10:
@@ -1055,17 +1055,17 @@ LABEL_ED2294:	aligned_string "newpmemmode"
 LABEL_ED22A0:	aligned_string "fontcolo"
 LABEL_ED22AA:	aligned_string "font"
 LABEL_ED22B0:	aligned_string "func"
-LABEL_ED22B6:
+NakaParam_IvPmemWindowPageCtl:
 	.long LABEL_ED22C0
 	.long LABEL_ED22BE
 LABEL_ED22BE:	aligned_string ""
 LABEL_ED22C0:	aligned_string "page"
-LABEL_ED22C6:
+NakaParam_IvMstStyleWindowPgCtl:
 	.long LABEL_ED22D0
 	.long LABEL_ED22CE
 LABEL_ED22CE:	aligned_string ""
 LABEL_ED22D0:	aligned_string "page"
-LABEL_ED22D6:
+NakaParam_AcTchSensGridBox:
 	.long LABEL_ED22E0
 	.long LABEL_ED22DE
 LABEL_ED22DE:	aligned_string ""
@@ -1112,7 +1112,7 @@ LABEL_ED237A:	aligned_string ""
 LABEL_ED237C:	aligned_string "func"
 LABEL_ED2382:	aligned_string "fixedrow"
 LABEL_ED238C:	aligned_string "fixedcol"
-LABEL_ED2396:
+NakaParam_AcMstStyleAlpGridBox:
 	.byte 0x2e, 0x24
 	.byte 0xed, 0x00, 0x24, 0x24, 0xed, 0x00, 0x1e, 0x24
 	.byte 0xed, 0x00, 0x16, 0x24, 0xed, 0x00, 0x0a, 0x24
@@ -1155,7 +1155,7 @@ LABEL_ED2492:	aligned_string "nowalph"
 LABEL_ED249A:	aligned_string "func"
 LABEL_ED24A0:	aligned_string "fixedrow"
 LABEL_ED24AA:	aligned_string "fixedcol"
-LABEL_ED24B4:
+NakaParam_AcMstStyle1SubGridBox:
 	.byte 0x16, 0x25, 0xed, 0x00
 ParamStr_Table_19:
 	.long LABEL_ED250C
@@ -1215,7 +1215,7 @@ LABEL_ED2630:	aligned_string "nowstylesubctgdtno"
 LABEL_ED2644:	aligned_string "func"
 LABEL_ED264A:	aligned_string "fixedrow"
 LABEL_ED2654:	aligned_string "fixedcol"
-LABEL_ED265E:
+NakaParam_AcMstSong2GridBox:
 	.byte 0xbe, 0x26
 	.byte 0xed, 0x00, 0xb4, 0x26, 0xed, 0x00, 0xae, 0x26
 	.byte 0xed, 0x00, 0x9e, 0x26, 0xed, 0x00, 0x8c, 0x26
@@ -1287,13 +1287,13 @@ LABEL_ED27E4:
 .include "ui_widgets/master_style_grid_screens.s"
 	jr	gt, 0x00
 	aligned_string "AcDispTimeSetGridBox"
-LABEL_ED2BB0:
+NakaDesc_AcDispTimeSetGridBox:
 	.byte 0x58, 0x58, 0x6a, 0x00
-LABEL_ED2BB4:	aligned_string "AcPmExpFilterGridBox"
-LABEL_ED2BCA:
+NakaInst_AcDispTimeSetGridBox:	aligned_string "AcPmExpFilterGridBox"
+NakaDesc_AcPmExpFilterGridBox:
 	.byte 0x58, 0x58, 0x6a, 0x00
-LABEL_ED2BCE:	aligned_string "AcFSWAssGridBox"
-LABEL_ED2BDE:
+NakaInst_AcPmExpFilterGridBox:	aligned_string "AcFSWAssGridBox"
+NakaDesc_AcFSWAssGridBox:
 	.byte 0x58, 0x58
 	jr	gt, 0x00
 	aligned_string "AcTchSensGridBox"
@@ -1303,33 +1303,33 @@ LABEL_ED2BDE:
 	aligned_string "IvPmemWindowPageCtl"
 	jr	nz, 0x00
 	aligned_string "IvWindowPageControl"
-LABEL_ED2C38:	aligned_string "kc^nn"
-LABEL_ED2C3E:	aligned_string "PmemModeBox"
-LABEL_ED2C4A:	aligned_string "kc^nn"
-LABEL_ED2C50:	aligned_string "MsaModeScreen"
-LABEL_ED2C5E:
+NakaDesc_IvWindowPageControl:	aligned_string "kc^nn"
+NakaInst_IvWindowPageControl:	aligned_string "PmemModeBox"
+NakaDesc_PmemModeBox:	aligned_string "kc^nn"
+NakaInst_PmemModeBox:	aligned_string "MsaModeScreen"
+NakaDesc_MsaModeScreen:
 	jr	gt, 0x72
 	.byte 0x00, 0xff
 	aligned_string "AcPmBkEditBox"
-LABEL_ED2C70:	aligned_string "kc^nnn"
-LABEL_ED2C78:	.asciz "PmBankScreen"
+NakaDesc_AcPmBkEditBox:	aligned_string "kc^nnn"
+NakaInst_AcPmBkEditBox:	.asciz "PmBankScreen"
 	.byte 0xff
-LABEL_ED2C86:	aligned_string ""
-LABEL_ED2C88:	aligned_string "PmBkNoBox"
-LABEL_ED2C92:	aligned_string ""
-LABEL_ED2C94:	aligned_string "BkNoBox"
-LABEL_ED2C9C:	aligned_string ""
-LABEL_ED2C9E:	aligned_string "FreeSplitBox"
-LABEL_ED2CAC:	aligned_string ""
-LABEL_ED2CAE:	aligned_string "ChordBox"
-LABEL_ED2CB8:	aligned_string ""
-LABEL_ED2CBA:	aligned_string "TransposeBox"
-LABEL_ED2CC8:	aligned_string "kc^nnnnnn"
-LABEL_ED2CD2:	aligned_string "RVariScreen"
-LABEL_ED2CDE:	aligned_string "kc^nnnnnn"
-LABEL_ED2CE8:	aligned_string "VariScreen"
-LABEL_ED2CF4:	aligned_string ""
-LABEL_ED2CF6:	aligned_string "NormScreen"
+NakaDesc_PmBankScreen:	aligned_string ""
+NakaInst_PmBankScreen:	aligned_string "PmBkNoBox"
+NakaDesc_AcPmBkNoBox:	aligned_string ""
+NakaInst_AcPmBkNoBox:	aligned_string "BkNoBox"
+NakaDesc_AcBkNoBox:	aligned_string ""
+NakaInst_AcBkNoBox:	aligned_string "FreeSplitBox"
+NakaDesc_AcFreeSplitBox:	aligned_string ""
+NakaInst_AcFreeSplitBox:	aligned_string "ChordBox"
+NakaDesc_AcChordBox:	aligned_string ""
+NakaInst_AcChordBox:	aligned_string "TransposeBox"
+NakaDesc_AcTransposeBox:	aligned_string "kc^nnnnnn"
+NakaInst_AcTransposeBox:	aligned_string "RVariScreen"
+NakaDesc_RVariScreen:	aligned_string "kc^nnnnnn"
+NakaInst_RVariScreen:	aligned_string "VariScreen"
+NakaDesc_VariScreen:	aligned_string ""
+NakaInst_VariScreen:	aligned_string "NormScreen"
 	.byte 0x1c, 0x00, 0x84, 0x2d, 0xed, 0x00
 ParamStr_Table_25:
 	.long LABEL_ED2D78

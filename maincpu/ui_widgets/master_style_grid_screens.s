@@ -1,189 +1,189 @@
 	naka_header NAKA_TYPE_CONTAINER
 	.byte 0x2a, 0x00, 0x00, 0x00
-	.long LABEL_ED2CF6
-	.long LABEL_ED2CF4
-	.long LABEL_ED20C6
+	.long NakaInst_VariScreen
+	.long NakaDesc_VariScreen
+	.long NakaParam_VariScreen
 	.long VariScreenProc
 	naka_header NAKA_TYPE_0x33
 	.byte 0x44, 0x00, 0x22, 0x00
-	.long LABEL_ED2CE8
-	.long LABEL_ED2CDE
-	.long LABEL_ED20CC
+	.long NakaInst_RVariScreen
+	.long NakaDesc_RVariScreen
+	.long NakaParam_RVariScreen
 	.long RVariScreenProc
 	naka_header NAKA_TYPE_0x33
 	.byte 0x44, 0x00, 0x22, 0x00
-	.long LABEL_ED2CD2
-	.long LABEL_ED2CC8
+	.long NakaInst_AcTransposeBox
+	.long NakaDesc_AcTransposeBox
 	.long ParamStr_Table_09
 	.long AcTransposeBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_ED2CBA
-	.long LABEL_ED2CB8
-	.long LABEL_ED21A4
+	.long NakaInst_AcChordBox
+	.long NakaDesc_AcChordBox
+	.long NakaParam_AcChordBox
 	.long AcChordBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_ED2CAE
-	.long LABEL_ED2CAC
-	.long LABEL_ED21AA
+	.long NakaInst_AcFreeSplitBox
+	.long NakaDesc_AcFreeSplitBox
+	.long NakaParam_AcFreeSplitBox
 	.long AcFreeSplitBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_ED2C9E
-	.long LABEL_ED2C9C
-	.long LABEL_ED21B0
+	.long NakaInst_AcBkNoBox
+	.long NakaDesc_AcBkNoBox
+	.long NakaParam_AcBkNoBox
 	.long AcBkNoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_ED2C94
-	.long LABEL_ED2C92
-	.long LABEL_ED21B6
+	.long NakaInst_AcPmBkNoBox
+	.long NakaDesc_AcPmBkNoBox
+	.long NakaParam_AcPmBkNoBox
 	.long AcPmBkNoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00, 0x00, 0x00
-	.long LABEL_ED2C88
-	.long LABEL_ED2C86
-	.long LABEL_ED21BC
+	.long NakaInst_PmBankScreen
+	.long NakaDesc_PmBankScreen
+	.long NakaParam_PmBankScreen
 	.long PmBankScreenProc
 	naka_header NAKA_TYPE_0x33
 	.byte 0x38, 0x00, 0x16, 0x00
-	.long LABEL_ED2C78
-	.long LABEL_ED2C70
+	.long NakaInst_AcPmBkEditBox
+	.long NakaDesc_AcPmBkEditBox
 	.long ParamStr_Table_10
 	.long AcPmBkEditBoxProc
 	naka_header NAKA_TYPE_0x15
 	.byte 0x3a, 0x00, 0x08, 0x00
-	.long LABEL_ED2C62
-	.long LABEL_ED2C5E
+	.long NakaInst_MsaModeScreen
+	.long NakaDesc_MsaModeScreen
 	.long ParamStr_Table_11
 	.long MsaModeScreenProc
 	naka_header NAKA_TYPE_0x33
 	.byte 0x34, 0x00, 0x12, 0x00
-	.long LABEL_ED2C50
-	.long LABEL_ED2C4A
+	.long NakaInst_PmemModeBox
+	.long NakaDesc_PmemModeBox
 	.long ParamStr_Table_12
 	.long PmemModeBoxProc
 	naka_header NAKA_TYPE_GROUP
 	.byte 0x2c, 0x00, 0x12, 0x00
-	.long LABEL_ED2C3E
-	.long LABEL_ED2C38
+	.long NakaInst_IvWindowPageControl
+	.long NakaDesc_IvWindowPageControl
 	.long ParamStr_Table_13
 	.long IvWindowPageControlProc
 	naka_header NAKA_TYPE_0x27
 	.byte 0x1a, 0x00, 0x04, 0x00
-	.long LABEL_ED2C24
-	.long LABEL_ED2C22
-	.long LABEL_ED22B6
+	.long NakaInst_IvPmemWindowPageCtl
+	.long NakaDesc_IvPmemWindowPageCtl
+	.long NakaParam_IvPmemWindowPageCtl
 	.long IvPmemWindowPageCtlProc
 	naka_header NAKA_TYPE_0x27
 	.byte 0x1a, 0x00, 0x04, 0x00
-	.long LABEL_ED2C0E
-	.long LABEL_ED2C0C
-	.long LABEL_ED22C6
+	.long NakaInst_IvMstStyleWindowPgCtl
+	.long NakaDesc_IvMstStyleWindowPgCtl
+	.long NakaParam_IvMstStyleWindowPgCtl
 	.long IvMstStyleWindowPgCtlProc
 	naka_header NAKA_TYPE_0x27
 	.byte 0x1a, 0x00, 0x04, 0x00
-	.long LABEL_ED2BF6
-	.long LABEL_ED2BF4
-	.long LABEL_ED22D6
+	.long NakaInst_AcTchSensGridBox
+	.long NakaDesc_AcTchSensGridBox
+	.long NakaParam_AcTchSensGridBox
 	.long AcTchSensGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00, 0x0c, 0x00
-	.long LABEL_ED2BE2
-	.long LABEL_ED2BDE
+	.long NakaInst_AcFSWAssGridBox
+	.long NakaDesc_AcFSWAssGridBox
 	.long ParamStr_Table_14
 	.long AcFSWAssGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00, 0x0c, 0x00
-	.long LABEL_ED2BCE
-	.long LABEL_ED2BCA
+	.long NakaInst_AcPmExpFilterGridBox
+	.long NakaDesc_AcPmExpFilterGridBox
 	.long ParamStr_Table_15
 	.long AcPmExpFilterGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00, 0x0c, 0x00
-	.long LABEL_ED2BB4
-	.long LABEL_ED2BB0
+	.long NakaInst_AcDispTimeSetGridBox
+	.long NakaDesc_AcDispTimeSetGridBox
 	.long ParamStr_Table_16
 	.long AcDispTimeSetGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00, 0x0c, 0x00
-	.long LABEL_ED2B9A
-	.long LABEL_ED2B96
+	.long NakaInst_AcMstSugAlpGridBox
+	.long NakaDesc_AcMstSugAlpGridBox
 	.long ParamStr_Table_17
 	.long AcMstSugAlpGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x66, 0x00, 0x28, 0x00
-	.long LABEL_ED2B82
-	.long LABEL_ED2B76
-	.long LABEL_ED2396
+	.long NakaInst_AcMstStyleAlpGridBox
+	.long NakaDesc_AcMstStyleAlpGridBox
+	.long NakaParam_AcMstStyleAlpGridBox
 	.long AcMstStyleAlpGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x5e, 0x00, 0x20, 0x00
-	.long LABEL_ED2B60
-	.long LABEL_ED2B56
+	.long NakaInst_AcMstStyle1GridBox
+	.long NakaDesc_AcMstStyle1GridBox
 	.long ParamStr_Table_18
 	.long AcMstStyle1GridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x56, 0x00, 0x18, 0x00
-	.long LABEL_ED2B42
-	.long LABEL_ED2B3A
-	.long LABEL_ED24B4
+	.long NakaInst_AcMstStyle1SubGridBox
+	.long NakaDesc_AcMstStyle1SubGridBox
+	.long NakaParam_AcMstStyle1SubGridBox
 	.long AcMstStyle1SubGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x56, 0x00, 0x18, 0x00
-	.long LABEL_ED2B24
-	.long LABEL_ED2B1C
+	.long NakaInst_AcMstStyle2GridBox
+	.long NakaDesc_AcMstStyle2GridBox
 	.long ParamStr_Table_20
 	.long AcMstStyle2GridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x66, 0x00, 0x28, 0x00
-	.long LABEL_ED2B08
-	.long LABEL_ED2AFC
+	.long NakaInst_AcMstSong1GridBox
+	.long NakaDesc_AcMstSong1GridBox
 	.long ParamStr_Table_21
 	.long AcMstSong1GridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x56, 0x00, 0x18, 0x00
-	.long LABEL_ED2AEA
-	.long LABEL_ED2AE2
-	.long LABEL_ED265E
+	.long NakaInst_AcMstSong2GridBox
+	.long NakaDesc_AcMstSong2GridBox
+	.long NakaParam_AcMstSong2GridBox
 	.long AcMstSong2GridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x66, 0x00, 0x28, 0x00
-	.long LABEL_ED2AD0
-	.long LABEL_ED2AC4
+	.long NakaInst_SineWaveScreen
+	.long NakaDesc_SineWaveScreen
 	.long ParamStr_Table_22
 	.long SineWaveScreenProc
 	naka_header NAKA_TYPE_0x33
 	.byte 0x34, 0x00, 0x12, 0x00
-	.long LABEL_ED2AB4
-	.long LABEL_ED2AAE
+	.long NakaInst_IvPageOverWr
+	.long NakaDesc_IvPageOverWr
 	.long ParamStr_Table_23
 	.long IvPageOverWrProc
 	naka_header NAKA_TYPE_0x27
 	.byte 0x1c, 0x00, 0x06, 0x00
-	.long LABEL_ED2AA0
-	.long LABEL_ED2A9C
+	.long NakaInst_IvPageOverWr_ED2AA0
+	.long NakaDesc_IvPageOverWr_ED2A9C
 	.long ParamStr_Table_24
 	.zero 24
-LABEL_ED2A9C:
+NakaDesc_IvPageOverWr_ED2A9C:
 	.byte 0x41, 0x74, 0x00, 0xff
-LABEL_ED2AA0:	aligned_string "IvPageOverWr"
-LABEL_ED2AAE:	.asciz "kc^nn"
-LABEL_ED2AB4:	aligned_string "SineWaveScreen"
-LABEL_ED2AC4:	aligned_string "XXjnnnnnnn"
-LABEL_ED2AD0:	aligned_string "AcMstSong2GridBox"
-LABEL_ED2AE2:	aligned_string "XXjnnn"
-LABEL_ED2AEA:	aligned_string "AcMstSong1GridBox"
-LABEL_ED2AFC:	aligned_string "XXjnnnnnnn"
-LABEL_ED2B08:	aligned_string "AcMstStyle2GridBox"
-LABEL_ED2B1C:	aligned_string "XXjnnn"
-LABEL_ED2B24:	aligned_string "AcMstStyle1SubGridBox"
-LABEL_ED2B3A:	aligned_string "XXjnnn"
-LABEL_ED2B42:	aligned_string "AcMstStyle1GridBox"
-LABEL_ED2B56:	aligned_string "XXjnnnnn"
-LABEL_ED2B60:	aligned_string "AcMstStyleAlpGridBox"
-LABEL_ED2B76:	aligned_string "XXjnnnnnnn"
-LABEL_ED2B82:	aligned_string "AcMstSugAlpGridBox"
-LABEL_ED2B96:
+NakaInst_IvPageOverWr_ED2AA0:	aligned_string "IvPageOverWr"
+NakaDesc_IvPageOverWr:	.asciz "kc^nn"
+NakaInst_IvPageOverWr:	aligned_string "SineWaveScreen"
+NakaDesc_SineWaveScreen:	aligned_string "XXjnnnnnnn"
+NakaInst_SineWaveScreen:	aligned_string "AcMstSong2GridBox"
+NakaDesc_AcMstSong2GridBox:	aligned_string "XXjnnn"
+NakaInst_AcMstSong2GridBox:	aligned_string "AcMstSong1GridBox"
+NakaDesc_AcMstSong1GridBox:	aligned_string "XXjnnnnnnn"
+NakaInst_AcMstSong1GridBox:	aligned_string "AcMstStyle2GridBox"
+NakaDesc_AcMstStyle2GridBox:	aligned_string "XXjnnn"
+NakaInst_AcMstStyle2GridBox:	aligned_string "AcMstStyle1SubGridBox"
+NakaDesc_AcMstStyle1SubGridBox:	aligned_string "XXjnnn"
+NakaInst_AcMstStyle1SubGridBox:	aligned_string "AcMstStyle1GridBox"
+NakaDesc_AcMstStyle1GridBox:	aligned_string "XXjnnnnn"
+NakaInst_AcMstStyle1GridBox:	aligned_string "AcMstStyleAlpGridBox"
+NakaDesc_AcMstStyleAlpGridBox:	aligned_string "XXjnnnnnnn"
+NakaInst_AcMstStyleAlpGridBox:	aligned_string "AcMstSugAlpGridBox"
+NakaDesc_AcMstSugAlpGridBox:
 	.byte 0x58, 0x58

@@ -5294,15 +5294,15 @@ FIRMWARE_VERSION:
 	.set LABEL_ED276E, 0xED276E
 	.set LABEL_ED2774, 0xED2774
 	.set LABEL_ED277E, 0xED277E
-	.set LABEL_ED2B9A, 0xED2B9A
-	.set LABEL_ED2BE2, 0xED2BE2
-	.set LABEL_ED2BF4, 0xED2BF4
-	.set LABEL_ED2BF6, 0xED2BF6
-	.set LABEL_ED2C0C, 0xED2C0C
-	.set LABEL_ED2C0E, 0xED2C0E
-	.set LABEL_ED2C22, 0xED2C22
-	.set LABEL_ED2C24, 0xED2C24
-	.set LABEL_ED2C62, 0xED2C62
+	.set NakaInst_AcMstSugAlpGridBox, 0xED2B9A
+	.set NakaInst_AcFSWAssGridBox, 0xED2BE2
+	.set NakaDesc_AcTchSensGridBox, 0xED2BF4
+	.set NakaInst_AcTchSensGridBox, 0xED2BF6
+	.set NakaDesc_IvMstStyleWindowPgCtl, 0xED2C0C
+	.set NakaInst_IvMstStyleWindowPgCtl, 0xED2C0E
+	.set NakaDesc_IvPmemWindowPageCtl, 0xED2C22
+	.set NakaInst_IvPmemWindowPageCtl, 0xED2C24
+	.set NakaInst_MsaModeScreen, 0xED2C62
 	.set LABEL_ED46D2, 0xED46D2
 	.set LABEL_ED4722, 0xED4722
 	.set LABEL_ED474A, 0xED474A
