@@ -991,10 +991,10 @@ SMF_Setup_FileUnderflow:
 SMF_Setup_WriteLoop:
 	ld xiy, 0xF2827C
 	cpdi8 4324, 0
-	jr nz, LABEL_F2725F
+	jr nz, SMF_Setup_SelectTablePtr
 	ld xiy, 0xF28284
 
-LABEL_F2725F:
+SMF_Setup_SelectTablePtr:
 	ldda32 xix, 4376
 	ldw bc, 0x8
 
@@ -1739,7 +1739,7 @@ SMF_ProcessEventLoop:
 	cp a, 0x82
 	jrl z, SMF_IncrementPosition
 
-LABEL_F2781E:
+SMF_EventLoop_ReadDataBytes:
 	push xde
 	ld xde, 0x1073
 	lda_dri3 XBC, 0x07, 0xE8, 0xEC
@@ -1750,14 +1750,14 @@ LABEL_F2781E:
 	pop xhl
 	inc 1, hl
 	bit 7, a
-	jr z, LABEL_F2781E
+	jr z, SMF_EventLoop_ReadDataBytes
 	ldda8 a, 4211
 	cp a, 0x82
 	jrl z, SMF_IncrementPosition
 	cp a, 0x84
 	jrl z, SMF_IncrementPosition
 	cp a, 0x81
-	jr z, LABEL_F2788E
+	jr z, SMF_MetaTiming_IncrementCount
 	cp a, 0x85
 	jrl z, SMF_ProcessEventLoop
 	cp a, 0x86
@@ -1765,33 +1765,33 @@ LABEL_F2781E:
 	ld w, a
 	and w, 0xF0
 	cp w, 0x90
-	jrl z, LABEL_F27A84
+	jrl z, SMF_NoteOn_Handler
 	cp w, 0xB0
-	jrl z, LABEL_F27D1A
+	jrl z, SMF_ControlChange_Handler
 	cp w, 0xC0
-	jrl z, LABEL_F27B48
+	jrl z, SMF_ProgramChange_Handler
 	cp w, 0xD0
-	jrl z, LABEL_F2796F
+	jrl z, SMF_ChannelPressure_Handler
 	cp w, 0xF0
-	jrl z, LABEL_F27A17
+	jrl z, SMF_SystemExclusive_Handler
 	cp w, 0xA0
-	jrl z, LABEL_F278C2
+	jrl z, SMF_PolyAftertouch_Dispatch
 	cp w, 0xE0
-	jrl z, LABEL_F279C5
+	jrl z, SMF_PitchBend_Handler
 	jrl SMF_ProcessEventLoop
 
-LABEL_F2788E:
+SMF_MetaTiming_IncrementCount:
 	incdi16 1, 3946
 
-LABEL_F27892:
+SMF_MetaTiming_GetNextLoop:
 	call SMF_GetNextEvent
 	cp a, 0x81
-	jr nz, LABEL_F278A5
+	jr nz, SMF_MetaTiming_ApplyMultiplier
 	incdi16 1, 3946
 	call SMF_AdvancePosition
-	jr LABEL_F27892
+	jr SMF_MetaTiming_GetNextLoop
 
-LABEL_F278A5:
+SMF_MetaTiming_ApplyMultiplier:
 	ldda16 xwa, 3946
 	ldw de, 0x60
 	mul xwa, xde
@@ -1801,9 +1801,9 @@ LABEL_F278A5:
 	stdi16 3946, 0
 	jrl SMF_ProcessEventLoop
 
-LABEL_F278C2:
+SMF_PolyAftertouch_Dispatch:
 	cps hl, 3
-	jr z, LABEL_F2791E
+	jr z, SMF_PolyAftertouch_3Byte_CalcTime
 	cps hl, 4
 	jrl nz, SMF_ProcessEventLoop
 	ldda8 c, 4212
@@ -1814,17 +1814,17 @@ LABEL_F278C2:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F278E9
+	jr lt, SMF_PolyAftertouch_4Byte_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F278EF
+	jp SMF_PolyAftertouch_4Byte_WriteOutput
 
-LABEL_F278E9:
+SMF_PolyAftertouch_4Byte_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F278EF:
+SMF_PolyAftertouch_4Byte_WriteOutput:
 	ldda16 xhl, 4213
 	and l, 0x7F
 	and h, 0x1
@@ -1843,7 +1843,7 @@ LABEL_F278EF:
 	call SMF_OutputCommandSeq
 	jrl SMF_ProcessEventLoop
 
-LABEL_F2791E:
+SMF_PolyAftertouch_3Byte_CalcTime:
 	ldda8 c, 4212
 	pushw wa
 	call SMF_CalcTimeDelta
@@ -1854,17 +1854,17 @@ LABEL_F2791E:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F2793E
+	jr lt, SMF_PolyAftertouch_3Byte_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27944
+	jp SMF_PolyAftertouch_3Byte_SendStatus
 
-LABEL_F2793E:
+SMF_PolyAftertouch_3Byte_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27944:
+SMF_PolyAftertouch_3Byte_SendStatus:
 	and a, 0xF
 	or a, 0xD0
 	ldda8 w, 4213
@@ -1875,20 +1875,20 @@ LABEL_F27944:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27966
+	jr lt, SMF_PolyAftertouch_3Byte_WriteUnderflow
 	pop xbc
 	pop xwa
-	jp LABEL_F2796C
+	jp SMF_PolyAftertouch_3Byte_Done
 
-LABEL_F27966:
+SMF_PolyAftertouch_3Byte_WriteUnderflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F2796C:
+SMF_PolyAftertouch_3Byte_Done:
 	jrl SMF_ProcessEventLoop
 
-LABEL_F2796F:
+SMF_ChannelPressure_Handler:
 	cps hl, 3
 	jrl nz, SMF_ProcessEventLoop
 	ldda8 c, 4212
@@ -1901,17 +1901,17 @@ LABEL_F2796F:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27994
+	jr lt, SMF_ChannelPressure_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F2799A
+	jp SMF_ChannelPressure_WriteCC
 
-LABEL_F27994:
+SMF_ChannelPressure_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F2799A:
+SMF_ChannelPressure_WriteCC:
 	and a, 0xF
 	or a, 0xB0
 	ldb w, 0x1
@@ -1922,20 +1922,20 @@ LABEL_F2799A:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F279BC
+	jr lt, SMF_ChannelPressure_WriteUnderflow
 	pop xbc
 	pop xwa
-	jp LABEL_F279C2
+	jp SMF_ChannelPressure_Done
 
-LABEL_F279BC:
+SMF_ChannelPressure_WriteUnderflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F279C2:
+SMF_ChannelPressure_Done:
 	jrl SMF_ProcessEventLoop
 
-LABEL_F279C5:
+SMF_PitchBend_Handler:
 	cps hl, 4
 	jrl nz, SMF_ProcessEventLoop
 	ldda8 c, 4212
@@ -1948,17 +1948,17 @@ LABEL_F279C5:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F279EA
+	jr lt, SMF_PitchBend_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F279F0
+	jp SMF_PitchBend_WriteCC_MSB
 
-LABEL_F279EA:
+SMF_PitchBend_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F279F0:
+SMF_PitchBend_WriteCC_MSB:
 	ldda8 w, 4213
 	ldda8 l, 4214
 	call SMF_WriteByteLoop
@@ -1967,20 +1967,20 @@ LABEL_F279F0:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27A0E
+	jr lt, SMF_PitchBend_WriteCC_MSB_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27A14
+	jp SMF_PitchBend_WriteCC_LSB
 
-LABEL_F27A0E:
+SMF_PitchBend_WriteCC_MSB_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27A14:
+SMF_PitchBend_WriteCC_LSB:
 	jrl SMF_ProcessEventLoop
 
-LABEL_F27A17:
+SMF_SystemExclusive_Handler:
 	cps hl, 3
 	jrl nz, SMF_ProcessEventLoop
 	ld l, a
@@ -2001,17 +2001,17 @@ LABEL_F27A17:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27A53
+	jr lt, SMF_SystemExclusive_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27A59
+	jp SMF_SystemExclusive_WriteCC_MSB
 
-LABEL_F27A53:
+SMF_SystemExclusive_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27A59:
+SMF_SystemExclusive_WriteCC_MSB:
 	and a, 0xF
 	or a, 0xB0
 	ldb w, 0xB
@@ -2022,33 +2022,33 @@ LABEL_F27A59:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27A7B
+	jr lt, SMF_SystemExclusive_WriteCC_MSB_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27A81
+	jp SMF_SystemExclusive_Done
 
-LABEL_F27A7B:
+SMF_SystemExclusive_WriteCC_MSB_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27A81:
+SMF_SystemExclusive_Done:
 	jrl SMF_ProcessEventLoop
 
-LABEL_F27A84:
+SMF_NoteOn_Handler:
 	cps hl, 6
 	jrl nz, SMF_ProcessEventLoop
 	xor xhl, xhl
 
-LABEL_F27A8B:
+SMF_NoteOn_FindVoiceSlot:
 	push xde
 	ld xde, 0x11F9
 	bit_dri 7, 0x07, 0xE8, 0xEC
 	pop xde
-	jr z, LABEL_F27AC0
+	jr z, SMF_NoteOn_SlotFound
 	add hl, 0x5
 	cp hl, 0xA0
-	jr ule, LABEL_F27A8B
+	jr ule, SMF_NoteOn_FindVoiceSlot
 	push xiy
 	push xix
 	push xwa
@@ -2068,7 +2068,7 @@ LABEL_F27A8B:
 	pop xiy
 	jrl SMF_ProcessEventLoop
 
-LABEL_F27AC0:
+SMF_NoteOn_SlotFound:
 	ordi8 4236, 1
 	pushw hl
 	ldda8 c, 4212
@@ -2080,17 +2080,17 @@ LABEL_F27AC0:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27AE5
+	jr lt, SMF_NoteOn_SlotFound_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27AEB
+	jp SMF_NoteOn_WriteEventBytes
 
-LABEL_F27AE5:
+SMF_NoteOn_SlotFound_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27AEB:
+SMF_NoteOn_WriteEventBytes:
 	pushw hl
 	ldda8 a, 4211
 	ldda8 w, 4213
@@ -2102,17 +2102,17 @@ LABEL_F27AEB:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27B0F
+	jr lt, SMF_NoteOn_WriteEvent_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27B15
+	jp SMF_NoteOn_StoreVoiceData
 
-LABEL_F27B0F:
+SMF_NoteOn_WriteEvent_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27B15:
+SMF_NoteOn_StoreVoiceData:
 	ld xix, 0x11F9
 	st_dri3b D, 0x07, 0xF0, 0xEC
 	ldb a, 0x80
@@ -2130,7 +2130,7 @@ LABEL_F27B15:
 	st_dpiw WA, 0xF1
 	jrl SMF_ProcessEventLoop
 
-LABEL_F27B48:
+SMF_ProgramChange_Handler:
 	cps hl, 6
 	jrl nz, SMF_ProcessEventLoop
 	cpdi8 4213, 127
@@ -2139,11 +2139,11 @@ LABEL_F27B48:
 	cps a, 0
 	jrl nz, SMF_ProcessEventLoop
 	cpdi8 6709, 0
-	jr z, LABEL_F27B6C
+	jr z, SMF_ProgramChange_CalcTime
 	bitda 0, 4236
 	jrl z, SMF_ProcessEventLoop
 
-LABEL_F27B6C:
+SMF_ProgramChange_CalcTime:
 	ldda8 c, 4212
 	pushw wa
 	call SMF_CalcTimeDelta
@@ -2154,19 +2154,19 @@ LABEL_F27B6C:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27B8C
+	jr lt, SMF_ProgramChange_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27B92
+	jp SMF_ProgramChange_ProcessPatch
 
-LABEL_F27B8C:
+SMF_ProgramChange_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27B92:
+SMF_ProgramChange_ProcessPatch:
 	cpdi8 4324, 0
-	jrl z, LABEL_F27C79
+	jrl z, SMF_ProgramChange_DirectWrite
 	ldda8 l, 4211
 	ld h, l
 	and l, 0x1
@@ -2205,17 +2205,17 @@ LABEL_F27B92:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27C16
+	jr lt, SMF_ProgramChange_WriteBankMSB_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27C1C
+	jp SMF_ProgramChange_WriteBankMSB_Data
 
-LABEL_F27C16:
+SMF_ProgramChange_WriteBankMSB_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27C1C:
+SMF_ProgramChange_WriteBankMSB_Data:
 	stdi16 4206, 0
 	stdi8 4208, 0
 	ldb w, 0x20
@@ -2226,17 +2226,17 @@ LABEL_F27C1C:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27C43
+	jr lt, SMF_ProgramChange_WriteBankLSB_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27C49
+	jp SMF_ProgramChange_WriteBankLSB_Data
 
-LABEL_F27C43:
+SMF_ProgramChange_WriteBankLSB_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27C49:
+SMF_ProgramChange_WriteBankLSB_Data:
 	ldb a, 0xC0
 	ldda8 w, 4213
 	and w, 0xF
@@ -2249,20 +2249,20 @@ LABEL_F27C49:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27C70
+	jr lt, SMF_ProgramChange_WriteVolume_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27C76
+	jp SMF_ProgramChange_WriteVolume_Data
 
-LABEL_F27C70:
+SMF_ProgramChange_WriteVolume_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27C76:
+SMF_ProgramChange_WriteVolume_Data:
 	jrl SMF_ProcessEventLoop
 
-LABEL_F27C79:
+SMF_ProgramChange_DirectWrite:
 	ldb w, 0x0
 	ldda8 l, 4211
 	and l, 0x1
@@ -2272,17 +2272,17 @@ LABEL_F27C79:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27C98
+	jr lt, SMF_ProgramChange_SendConfig_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27C9E
+	jp SMF_ProgramChange_SendConfig_Data
 
-LABEL_F27C98:
+SMF_ProgramChange_SendConfig_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27C9E:
+SMF_ProgramChange_SendConfig_Data:
 	stdi16 4206, 0
 	stdi8 4208, 0
 	ldb w, 0x20
@@ -2303,17 +2303,17 @@ LABEL_F27C9E:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27CE4
+	jr lt, SMF_ProgramChange_WritePatch_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27CEA
+	jp SMF_ProgramChange_WritePatchByte
 
-LABEL_F27CE4:
+SMF_ProgramChange_WritePatch_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27CEA:
+SMF_ProgramChange_WritePatchByte:
 	ldb a, 0xC0
 	ldda8 w, 4213
 	and w, 0xF
@@ -2326,27 +2326,27 @@ LABEL_F27CEA:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27D11
+	jr lt, SMF_ProgramChange_WritePatch_Done_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27D17
+	jp SMF_ProgramChange_WritePatch_Done
 
-LABEL_F27D11:
+SMF_ProgramChange_WritePatch_Done_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27D17:
+SMF_ProgramChange_WritePatch_Done:
 	jrl SMF_ProcessEventLoop
 
-LABEL_F27D1A:
+SMF_ControlChange_Handler:
 	cps hl, 6
 	jrl nz, SMF_ProcessEventLoop
 	cpdi8 4213, 127
 	jrl z, LABEL_F28152
 	ldda8 l, 4214
 	ldda8 a, 4213
-	jrl LABEL_F27D5C
+	jrl SMF_ControlChange_ValidateRange
 	ldda8 l, 4214
 	cp l, 0x7F
 	jrl z, LABEL_F28152
@@ -2362,7 +2362,7 @@ LABEL_F27D1A:
 	jrl SMF_ProcessEventLoop
 	jrl SMF_ProcessEventLoop
 
-LABEL_F27D5C:
+SMF_ControlChange_ValidateRange:
 	cps l, 3
 	jrl c, SMF_ProcessEventLoop
 	cp l, 0xB
@@ -2373,30 +2373,30 @@ LABEL_F27D5C:
 	or a, w
 	ldb w, 0x7
 	cps l, 3
-	jrl z, LABEL_F280F9
+	jrl z, SMF_CC_Volume_Handler
 	cps l, 4
-	jrl z, LABEL_F28097
+	jrl z, SMF_CC_Portamento_CheckBit3
 	cps l, 5
-	jrl z, LABEL_F280A3
+	jrl z, SMF_CC_Reverb_Handler
 	cps l, 7
-	jrl z, LABEL_F280DE
+	jrl z, SMF_CC_Chorus_Handler
 	cp l, 0x8
-	jrl z, LABEL_F28031
+	jrl z, SMF_CC_Pan_Handler
 	cp l, 0x9
-	jrl z, LABEL_F27F5F
+	jrl z, SMF_CC_Modulation_Handler
 	cp l, 0xA
-	jr z, LABEL_F27DA2
+	jr z, SMF_CC_RPN_Handler
 	cp l, 0xB
-	jrl z, LABEL_F27E8D
+	jrl z, SMF_CC_PitchBendSens_Handler
 	jrl nz, SMF_ProcessEventLoop
 
-LABEL_F27DA2:
+SMF_CC_RPN_Handler:
 	cpdi8 6709, 0
-	jrl z, LABEL_F27DB1
+	jrl z, SMF_CC_RPN_CalcTime
 	bitda 0, 4236
 	jrl z, SMF_ProcessEventLoop
 
-LABEL_F27DB1:
+SMF_CC_RPN_CalcTime:
 	ldda8 c, 4212
 	pushw wa
 	push xhl
@@ -2409,17 +2409,17 @@ LABEL_F27DB1:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27DD3
+	jr lt, SMF_CC_RPN_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27DD9
+	jp SMF_CC_RPN_WriteCC101
 
-LABEL_F27DD3:
+SMF_CC_RPN_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27DD9:
+SMF_CC_RPN_WriteCC101:
 	ldb a, 0xB0
 	ldda8 w, 4213
 	and w, 0xF
@@ -2434,17 +2434,17 @@ LABEL_F27DD9:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27E00
+	jr lt, SMF_CC_RPN_WriteCC101_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27E06
+	jp SMF_CC_RPN_WriteCC100
 
-LABEL_F27E00:
+SMF_CC_RPN_WriteCC101_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27E06:
+SMF_CC_RPN_WriteCC100:
 	ldb w, 0x64
 	ldb l, 0x1
 	stdi8 4206, 0
@@ -2456,17 +2456,17 @@ LABEL_F27E06:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27E27
+	jr lt, SMF_CC_RPN_WriteCC100_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27E2D
+	jp SMF_CC_RPN_WriteCC6_DataEntry
 
-LABEL_F27E27:
+SMF_CC_RPN_WriteCC100_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27E2D:
+SMF_CC_RPN_WriteCC6_DataEntry:
 	ldb w, 0x6
 	ldda8 l, 4215
 	ldda8 h, 4211
@@ -2482,17 +2482,17 @@ LABEL_F27E2D:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27E5A
+	jr lt, SMF_CC_RPN_WriteCC6_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27E60
+	jp SMF_CC_RPN_WriteCC38_DataEntryLSB
 
-LABEL_F27E5A:
+SMF_CC_RPN_WriteCC6_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27E60:
+SMF_CC_RPN_WriteCC38_DataEntryLSB:
 	ldb w, 0x26
 	ldda8 l, 4215
 	and l, 0x1
@@ -2505,26 +2505,26 @@ LABEL_F27E60:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27E84
+	jr lt, SMF_CC_RPN_WriteCC38_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27E8A
+	jp SMF_CC_RPN_Done
 
-LABEL_F27E84:
+SMF_CC_RPN_WriteCC38_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27E8A:
+SMF_CC_RPN_Done:
 	jrl SMF_ProcessEventLoop
 
-LABEL_F27E8D:
+SMF_CC_PitchBendSens_Handler:
 	cpdi8 6709, 0
-	jrl z, LABEL_F27E9C
+	jrl z, SMF_CC_PitchBendSens_CalcTime
 	bitda 0, 4236
 	jrl z, SMF_ProcessEventLoop
 
-LABEL_F27E9C:
+SMF_CC_PitchBendSens_CalcTime:
 	ldda8 c, 4212
 	pushw wa
 	pushw hl
@@ -2537,17 +2537,17 @@ LABEL_F27E9C:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27EBE
+	jr lt, SMF_CC_PitchBendSens_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27EC4
+	jp SMF_CC_PitchBendSens_WriteCC101
 
-LABEL_F27EBE:
+SMF_CC_PitchBendSens_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27EC4:
+SMF_CC_PitchBendSens_WriteCC101:
 	ldb a, 0xB0
 	ldda8 w, 4213
 	and w, 0xF
@@ -2562,17 +2562,17 @@ LABEL_F27EC4:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27EEB
+	jr lt, SMF_CC_PitchBendSens_WriteCC101_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27EF1
+	jp SMF_CC_PitchBendSens_WriteCC100
 
-LABEL_F27EEB:
+SMF_CC_PitchBendSens_WriteCC101_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27EF1:
+SMF_CC_PitchBendSens_WriteCC100:
 	ldb w, 0x64
 	ldb l, 0x0
 	stdi8 4206, 0
@@ -2584,17 +2584,17 @@ LABEL_F27EF1:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27F12
+	jr lt, SMF_CC_PitchBendSens_WriteCC100_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27F18
+	jp SMF_CC_PitchBendSens_WriteCC6
 
-LABEL_F27F12:
+SMF_CC_PitchBendSens_WriteCC100_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27F18:
+SMF_CC_PitchBendSens_WriteCC6:
 	ldb w, 0x6
 	ldda8 l, 4215
 	pushw wa
@@ -2605,17 +2605,17 @@ LABEL_F27F18:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27F36
+	jr lt, SMF_CC_PitchBendSens_WriteCC6_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27F3C
+	jp SMF_CC_PitchBendSens_WriteCC38
 
-LABEL_F27F36:
+SMF_CC_PitchBendSens_WriteCC6_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27F3C:
+SMF_CC_PitchBendSens_WriteCC38:
 	ldb w, 0x26
 	ldb l, 0x0
 	call SMF_WriteByteLoop
@@ -2624,26 +2624,26 @@ LABEL_F27F3C:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27F56
+	jr lt, SMF_CC_PitchBendSens_WriteCC38_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27F5C
+	jp SMF_CC_PitchBendSens_Done
 
-LABEL_F27F56:
+SMF_CC_PitchBendSens_WriteCC38_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27F5C:
+SMF_CC_PitchBendSens_Done:
 	jrl SMF_ProcessEventLoop
 
-LABEL_F27F5F:
+SMF_CC_Modulation_Handler:
 	cpdi8 6709, 0
-	jrl z, LABEL_F27F6E
+	jrl z, SMF_CC_Modulation_CalcTime
 	bitda 0, 4236
 	jrl z, SMF_ProcessEventLoop
 
-LABEL_F27F6E:
+SMF_CC_Modulation_CalcTime:
 	ldda8 c, 4212
 	pushw wa
 	push xhl
@@ -2656,17 +2656,17 @@ LABEL_F27F6E:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27F90
+	jr lt, SMF_CC_Modulation_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27F96
+	jp SMF_CC_Modulation_WriteCC101
 
-LABEL_F27F90:
+SMF_CC_Modulation_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27F96:
+SMF_CC_Modulation_WriteCC101:
 	ldb a, 0xB0
 	ldda8 w, 4213
 	and w, 0xF
@@ -2681,17 +2681,17 @@ LABEL_F27F96:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27FBD
+	jr lt, SMF_CC_Modulation_WriteCC101_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27FC3
+	jp SMF_CC_Modulation_WriteCC100
 
-LABEL_F27FBD:
+SMF_CC_Modulation_WriteCC101_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27FC3:
+SMF_CC_Modulation_WriteCC100:
 	ldb w, 0x64
 	ldb l, 0x2
 	stdi8 4206, 0
@@ -2703,17 +2703,17 @@ LABEL_F27FC3:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27FE4
+	jr lt, SMF_CC_Modulation_WriteCC100_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27FEA
+	jp SMF_CC_Modulation_WriteCC6
 
-LABEL_F27FE4:
+SMF_CC_Modulation_WriteCC100_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27FEA:
+SMF_CC_Modulation_WriteCC6:
 	ldb w, 0x6
 	ldda8 l, 4215
 	pushw wa
@@ -2724,17 +2724,17 @@ LABEL_F27FEA:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F28008
+	jr lt, SMF_CC_Modulation_WriteCC6_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F2800E
+	jp SMF_CC_Modulation_WriteCC38
 
-LABEL_F28008:
+SMF_CC_Modulation_WriteCC6_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F2800E:
+SMF_CC_Modulation_WriteCC38:
 	ldb w, 0x26
 	ldb l, 0x0
 	call SMF_WriteByteLoop
@@ -2743,26 +2743,26 @@ LABEL_F2800E:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F28028
+	jr lt, SMF_CC_Modulation_WriteCC38_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F2802E
+	jp SMF_CC_Modulation_Done
 
-LABEL_F28028:
+SMF_CC_Modulation_WriteCC38_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F2802E:
+SMF_CC_Modulation_Done:
 	jrl SMF_ProcessEventLoop
 
-LABEL_F28031:
+SMF_CC_Pan_Handler:
 	cpdi8 6709, 0
-	jr z, LABEL_F2803F
+	jr z, SMF_CC_Pan_CalcTime
 	bitda 0, 4236
 	jrl z, SMF_ProcessEventLoop
 
-LABEL_F2803F:
+SMF_CC_Pan_CalcTime:
 	ldda8 c, 4212
 	pushw wa
 	push xhl
@@ -2775,17 +2775,17 @@ LABEL_F2803F:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F28061
+	jr lt, SMF_CC_Pan_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F28067
+	jp SMF_CC_Pan_WriteCC10
 
-LABEL_F28061:
+SMF_CC_Pan_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F28067:
+SMF_CC_Pan_WriteCC10:
 	ldb a, 0xB0
 	ldda8 w, 4213
 	and w, 0xF
@@ -2798,46 +2798,46 @@ LABEL_F28067:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F2808E
+	jr lt, SMF_CC_Pan_WriteCC10_Underflow
 	pop xbc
 	pop xwa
-	jp LABEL_F28094
+	jp SMF_CC_Pan_Done
 
-LABEL_F2808E:
+SMF_CC_Pan_WriteCC10_Underflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F28094:
+SMF_CC_Pan_Done:
 	jrl SMF_ProcessEventLoop
 
-LABEL_F28097:
+SMF_CC_Portamento_CheckBit3:
 	ldda16 xbc, 4215
 	bit 3, b
-	jr nz, LABEL_F280B9
+	jr nz, SMF_CC_Sustain_CheckBits
 	jrl SMF_ProcessEventLoop
 
-LABEL_F280A3:
+SMF_CC_Reverb_Handler:
 	cpdi8 6709, 0
-	jr z, LABEL_F280B1
+	jr z, SMF_CC_Reverb_SetupCC93
 	bitda 0, 4236
 	jrl z, SMF_ProcessEventLoop
 
-LABEL_F280B1:
+SMF_CC_Reverb_SetupCC93:
 	ldb w, 0x5D
 	ldda8 l, 4215
 	jr SMF_ProcessTimedEvent_Continue
 
-LABEL_F280B9:
+SMF_CC_Sustain_CheckBits:
 	ldda16 xbc, 4215
 	bit 3, b
 	jrl z, SMF_ProcessEventLoop
 	cpdi8 6709, 0
-	jr z, LABEL_F280D1
+	jr z, SMF_CC_Sustain_SetCC64Value
 	bitda 0, 4236
 	jrl z, SMF_ProcessEventLoop
 
-LABEL_F280D1:
+SMF_CC_Sustain_SetCC64Value:
 	ldb w, 0x40
 	ldb l, 0x0
 	bit 3, c
@@ -2845,20 +2845,20 @@ LABEL_F280D1:
 	ldb l, 0x7F
 	jr SMF_ProcessTimedEvent_Continue
 
-LABEL_F280DE:
+SMF_CC_Chorus_Handler:
 	ldb w, 0x5B
 	ldb l, 0x0
 	cpdi8 6709, 0
-	jr z, LABEL_F280F0
+	jr z, SMF_CC_Chorus_SetupCC91
 	bitda 0, 4236
 	jrl z, SMF_ProcessEventLoop
 
-LABEL_F280F0:
+SMF_CC_Chorus_SetupCC91:
 	ldda8 l, 4215
 	and l, 0x7F
 	jr SMF_ProcessTimedEvent_Continue
 
-LABEL_F280F9:
+SMF_CC_Volume_Handler:
 	cpdi8 6709, 0
 	jr z, LABEL_F28107
 	bitda 0, 4236
