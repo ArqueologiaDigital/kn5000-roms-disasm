@@ -53,92 +53,92 @@ Naka_SeqToComposer_Screens:
 Naka_SeqCopy_Screens:
 	.long NakaNode_SeqToComposer_ProgressBar
 	.long NakaNode_SeqToComposer_PartDisplay
-	.long LABEL_E19AF4
-	.long LABEL_E19B1C
-	.long LABEL_E19B44
+	.long Naka0x1F_SeqToComposer_PartSel1
+	.long Naka0x1F_SeqToComposer_PartSel2
+	.long Naka0x64_SeqToComposer_TabContent
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
 Naka_EasyComposer_Screens:
-	.long LABEL_E19B5E
-	.long LABEL_E19B96
-	.long LABEL_E19BB0
-	.long LABEL_E19BE8
-	.long LABEL_E19C16
-	.long LABEL_E19C44
-	.long LABEL_E19C74
-	.long LABEL_E19CA6
-	.long LABEL_E19CCA
-	.long LABEL_E19CE6
-	.long LABEL_E19D0A
-	.long LABEL_E19DBA
-	.long LABEL_E19DE4
-	.long LABEL_E19E0E
+	.long NakaContainer_EasyComposer_Root
+	.long Naka0x29_EasyComposer_Scrollbar
+	.long Naka0x3D_EasyComposer_EditBtn
+	.long Naka0x3E_EasyComposer_DestBtn
+	.long Naka0x3E_EasyComposer_SourceBtn
+	.long Naka0x3E_EasyComposer_InfoBtn
+	.long NakaLabel_EasyComposer_CompMemLabel
+	.long NakaLabel_EasyComposer_MemField
+	.long Naka0x11_EasyComposer_ListFrame
+	.long NakaNode_EasyComposer_StatusField
+	.long NakaNode_EasyComposer_PartDisplay
+	.long Naka0x22_EasyComposer_PartSel1
+	.long Naka0x22_EasyComposer_PartSel2
+	.long Naka0x1F_EasyComposer_PartSel3
 	.zero 4
 
 
 Naka_EasyComposer2_Screens:
-	.long LABEL_E19E36
-	.long LABEL_E19E82
-	.long LABEL_E19EAC
-	.long LABEL_E19EFA
+	.long NakaContainer_BendRange_Root
+	.long Naka0x22_BendRange_PartSelector
+	.long Naka0x1A_BendRange_RangeControl
+	.long NakaLabel_BendRange_ValueLabel
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
 Naka_ModeSelect_Screens:
-	.long LABEL_E19F20
-	.long LABEL_E19F56
-	.long LABEL_E19F94
-	.long LABEL_E19FD2
-	.long LABEL_E1A016
-	.long LABEL_E1A054
-	.long LABEL_E1A094
-	.long LABEL_E1A0D4
-	.long LABEL_E1A110
-	.long LABEL_E1A14A
-	.long LABEL_E1A18C
+	.long NakaContainer_ModeSelect_Root
+	.long NakaLabel_ModeSelect_IntroFillIns
+	.long NakaLabel_ModeSelect_ForEachPattern
+	.long NakaLabel_ModeSelect_BeCopied
+	.long NakaLabel_ModeSelect_MemAssigned
+	.long NakaLabel_ModeSelect_ToEachIntro
+	.long NakaLabel_ModeSelect_FillInEnding
+	.long NakaLabel_ModeSelect_SoYouCanCreate
+	.long NakaLabel_ModeSelect_IntroFillEnding
+	.long NakaNode_ModeSelect_NormalMode
+	.long NakaNode_ModeSelect_ExpandMode
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
 Naka_ExpandMode_Screens:
-	.long LABEL_E1A1CE
-	.long LABEL_E1A204
-	.long LABEL_E1A22A
-	.long LABEL_E1A246
-	.long LABEL_E1A26C
-	.long LABEL_E1A292
-	.long LABEL_E1A2B6
-	.long LABEL_E1A2D2
-	.long LABEL_E1A2EC
-	.long LABEL_E1A31C
-	.long LABEL_E1A354
-	.long LABEL_E1A38E
-	.long LABEL_E1A3B4
-	.long LABEL_E1A3E2
-	.long LABEL_E1A408
-	.long LABEL_E1A42E
-	.long LABEL_E1A454
-	.long LABEL_E1A474
-	.long LABEL_E1A498
-	.long LABEL_E1A4B4
-	.long LABEL_E1A4DE
-	.long LABEL_E1A508
-	.long LABEL_E1A532
-	.long LABEL_E1A556
-	.long LABEL_E1A58A
-	.long LABEL_E1A5BC
-	.long LABEL_E1A5E0
-	.long LABEL_E1A5FC
-	.long LABEL_E1A626
-	.long LABEL_E1A650
-	.long LABEL_E1A67A
-	.long LABEL_E1A69E
-	.long LABEL_E1A6D2
+	.long NakaNode_CustomCopy_RootOuter
+	.long NakaLabel_CustomCopy_FromLabel
+	.long Naka0x11_CustomCopy_FromFrame
+	.long NakaNode_CustomCopy_FromField
+	.long NakaNode_CustomCopy_ToFieldTop
+	.long NakaLabel_CustomCopy_ToLabel
+	.long Naka0x11_CustomCopy_ToFrame
+	.long Naka0x29_CustomCopy_Scrollbar
+	.long Naka0x3F_CustomCopy_Selector1
+	.long Naka0x3F_CustomCopy_Selector2
+	.long Naka0x3F_CustomCopy_Selector3
+	.long NakaNode_CustomCopy_DestField
+	.long Naka0x3E_CustomCopy_InfoBtn
+	.long NakaNode_CustomCopy_SrcPatternField
+	.long NakaNode_CustomCopy_DstPatternField
+	.long NakaNode_CustomCopy_MemoryField
+	.long NakaNode_CustomCopy_ProgressBar
+	.long Naka0x35_CustomCopy_SongBar
+	.long Naka0x11_CustomCopy_PresetFrame
+	.long NakaList_CustomCopy_PresetList
+	.long NakaList_CustomCopy_GroupList
+	.long NakaList_CustomCopy_RhythmList
+	.long NakaNode_CustomCopy_RhythmStatus
+	.long Naka0x3E_CustomCopy_ExecuteBtn
+	.long Naka0x3E_CustomCopy_AbortBtn1
+	.long Naka0x35_CustomCopy_DestSongBar
+	.long Naka0x11_CustomCopy_DestFrame
+	.long NakaList_CustomCopy_DestPresetList
+	.long NakaList_CustomCopy_DestGroupList
+	.long NakaList_CustomCopy_DestRhythmList
+	.long NakaNode_CustomCopy_DestRhythmStatus
+	.long Naka0x3E_CustomCopy_ExecuteBtn2
+	.long Naka0x3E_CustomCopy_AbortBtn2
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
 Naka_Accomp7_Screens:
-	.long LABEL_E1A704
+	.long NakaContainer_CustomCopy_FinalRoot
 	.long LABEL_E1A73E
 	.long LABEL_E1A762
 	.long LABEL_E1A77E
