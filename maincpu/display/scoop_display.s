@@ -290,7 +290,7 @@ UIRender_SingleTable:
 UIRender_SingleTable_Body:
 	ld xwa, xiy
 	ld xbc, xix
-	call LABEL_FB1594
+	call GraphicsRender_ProcessEntries
 	ret
 
 ; Render UI element from two ROM descriptor tables (general renderer)
@@ -354,7 +354,7 @@ UIRender_TwoTableEvtCheck:
 UIRender_TwoTableEvtCheck_Body:
 	push xwa
 	ld xwa, xiy
-	call LABEL_FB24CB
+	call ColorBlit_WithPaletteSave
 	pop xwa
 	ret
 
@@ -409,7 +409,7 @@ UIRender_ConditionalFBCall:
 UIRender_ConditionalFBCall_Body:
 	push xwa
 	ld xwa, xiy
-	call LABEL_FB1DFA
+	call ColorBlit_ComputeRectAndBlit
 	pop xwa
 	ret
 

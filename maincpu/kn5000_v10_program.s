@@ -3774,7 +3774,7 @@ LABEL_FB0F67:
 	st_dri3l XWA, 0xFD, 0x3A, 0x01
 	ld_sril XWA, (xsp + 0x0136)
 	cp (xwa), 0x0
-	jrl z, LABEL_FB1441
+	jrl z, TextRender_PopAndReturn
 	ld_sril XWA, (xsp + 0x013a)
 	inc 2, xwa
 	ld (xsp + 34), xwa
@@ -3968,7 +3968,7 @@ LABEL_FB1123:
 	lda xwa, (xsp + 38)
 	ld (xsp + 30), xwa
 	cp (xwa), 0x0
-	jrl z, LABEL_FB1439
+	jrl z, TextRender_Finalize
 
 LABEL_FB113D:
 	ld xhl, (xsp + 30)
@@ -4017,7 +4017,7 @@ LABEL_FB1174:
 LABEL_FB11A8:
 	ldw (xsp + 26), 0x0
 	cpw (xsp + 22), 0x0
-	jrl ule, LABEL_FB142B
+	jrl ule, TextRender_AdvanceStringPointer
 
 LABEL_FB11B5:
 	ld bc, (xsp + 26)
@@ -4212,7 +4212,7 @@ LABEL_FB135A:
 
 LABEL_FB1369:
 	ldw (xsp + 28), 0x0
-	jrl LABEL_FB140B
+	jrl TextRender_CheckColumnEnd
 
 LABEL_FB1371:
 	ld xwa, (xsp + 16)

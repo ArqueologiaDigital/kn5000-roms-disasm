@@ -8188,7 +8188,7 @@ ObjectProc_ClassDispatch:
 	ret
 
 TrTransposeBoxProc:
-	jp LABEL_FC2EC3
+	jp AcTranspose_ParamData_End
 
 TrChordBoxProc:
 	jp LABEL_FC2FBB
@@ -19176,7 +19176,7 @@ __jrt_nop_FAA5D0:
 
 InitGraphics_SetupVRAM_Loop:
 	sti16_24 0x030464, 0x0001
-	jp LABEL_FB318A
+	jp VGA_ScreenUnblank
 
 ; LcdOff - Disable LCD display output (clears flag at 0x030464)
 LcdOff:
@@ -19195,7 +19195,7 @@ LcdOn_Done:
 __jrt_nop_FAA5F5:
 
 LcdOn_Return:
-	call LABEL_FB319A
+	call VGA_ScreenBlank
 	sti16_24 0x030464, 0x0000
 	ret
 
@@ -19204,7 +19204,7 @@ LcdOff_Done:
 	cpdi16_24 197732, 0
 	ret z
 
-	call LABEL_FB318A
+	call VGA_ScreenUnblank
 	ret
 
 
@@ -19212,7 +19212,7 @@ LcdOff_Return:
 	cpdi16_24 197732, 0
 	ret z
 
-	call LABEL_FB319A
+	call VGA_ScreenBlank
 	ret
 LcdOff_Epilogue:
 

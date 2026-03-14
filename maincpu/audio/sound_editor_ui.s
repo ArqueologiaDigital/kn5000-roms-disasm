@@ -3348,7 +3348,7 @@ SeMenu_NameEditor_Setup:
 	push xbc
 	ld xwa, xiy
 	ld xbc, xix
-	call LABEL_FB1594
+	call GraphicsRender_ProcessEntries
 	pop xbc
 	pop xwa
 	ret
@@ -3409,14 +3409,14 @@ SeMenu_NameEditor_MoveCursor_Data:
 	; --- Wrapper function 8: push xwa, ld xwa=xiy, call, pop, ret ---
 	push xwa
 	ld xwa, xiy
-	call LABEL_FB164E
+	call DrawText_LayoutAndRender
 	pop xwa
 	ret
 SeMenu_NameEditor_ChangeCase:
 	; --- Wrapper function 9 ---
 	push xwa
 	ld xwa, xiy
-	call LABEL_FB16E9
+	call DrawText_LayoutAndRender_Variant1
 	pop xwa
 	ret
 SeMenu_NameEditor_ChangeCase_Data:
@@ -3431,7 +3431,7 @@ SeMenu_NameEditor_SelectCharSet:
 	; --- Wrapper function 11 ---
 	push xwa
 	ld xwa, xiy
-	call LABEL_FB1DFA
+	call ColorBlit_ComputeRectAndBlit
 	pop xwa
 	ret
 SeMenu_NameEditor_SelectCharSet_Data:
@@ -3447,7 +3447,7 @@ SeMenu_NameEditor_Complete:
 	sti8_24	257960, 0
 	push xwa
 	ld xwa, 0x000006CA
-	call LABEL_FB1E40
+	call ColorBlit_ByteData
 	pop xwa
 	ret
 SeMenu_NameEditor_Cancel:
@@ -3461,14 +3461,14 @@ SeMenu_NameEditor_Cancel_Data:
 	; --- Wrapper function 15 ---
 	push xwa
 	ld xwa, xiy
-	call LABEL_FB1E6A
+	call DrawText_ExtendedLayout
 	pop xwa
 	ret
 SeMenu_NameEditor_Redraw:
 	; --- Wrapper function 16 ---
 	push xwa
 	ld xwa, xiy
-	call LABEL_FB24CB
+	call ColorBlit_WithPaletteSave
 	pop xwa
 	ret
 SeMenu_NameEditor_Redraw_Data:

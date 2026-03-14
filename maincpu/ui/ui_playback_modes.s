@@ -2980,7 +2980,7 @@ SqTrSelTtl_ReturnZero:
 LABEL_F22262:
 	; --- Init sequence + 4 register-save call thunks ---
 	ldw wa, 0x00FF
-	call LABEL_FB1450
+	call GraphicsRender_ByteData
 	ldw wa, 0x00F5
 	call 0xFB144A
 	call 0xFB14B7

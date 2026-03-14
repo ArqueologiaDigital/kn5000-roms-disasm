@@ -14,7 +14,7 @@
 	cpw (xsp + 24), 0x0
 	jr ule, TextRender_AdvancePointerAndUpdateLine
 
-LABEL_FB13C2:
+TextRender_PixelLoop:
 	ld bc, (xde)
 	add bc, hl
 	ld (xix), bc
@@ -28,35 +28,35 @@ LABEL_FB13C2:
 	sub wa, hl
 	lds iy, 1
 	and a, 0xF
-	jr z, LABEL_FB13E5
+	jr z, TextRender_CheckBitMask
 	slaa iy
 
-LABEL_FB13E5:
+TextRender_CheckBitMask:
 	ld xwa, (xsp + 16)
 	ld a, (xwa)
 	extz wa
 	and wa, iy
 	jr z, TextRender_BitMask6_Return
 	bitm 7, (xiz)
-	jr z, LABEL_FB13F8
+	jr z, TextRender_SetBit6
 	resm 6, (xiz)
 	jr TextRender_BitMask6_Return
 
-LABEL_FB13F8:
+TextRender_SetBit6:
 	setm 6, (xiz)
 
 TextRender_BitMask6_Return:
 	inc 1, hl
 	inc 1, xiz
 	cp hl, (xsp + 24)
-	jr c, LABEL_FB13C2
+	jr c, TextRender_PixelLoop
 
 TextRender_AdvancePointerAndUpdateLine:
 	lds32 xwa, 1
 	add (xsp + 16), xwa
 	incm 1, (xsp + 28)
 
-LABEL_FB140B:
+TextRender_CheckColumnEnd:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	cp (xsp + 28), wa
@@ -70,25 +70,25 @@ TextRender_AdvanceToNextLine:
 	cp wa, (xsp + 22)
 	jrl c, LABEL_FB11B5
 
-LABEL_FB142B:
+TextRender_AdvanceStringPointer:
 	lds32 xwa, 1
 	add (xsp + 30), xwa
 	ld xwa, (xsp + 30)
 	cp (xwa), 0x0
 	jrl nz, LABEL_FB113D
 
-LABEL_FB1439:
+TextRender_Finalize:
 	st_dri3b W, 0xFD, 0x2E, 0x01
 	calr SetChangeRect
 
-LABEL_FB1441:
+TextRender_PopAndReturn:
 	pop xiz
 	st_dri3b L, 0xFD, 0x3A, 0x01
 	retd 0x8
 	st16_24 0x03efa2, xwa
 	ret
 
-LABEL_FB1450:
+GraphicsRender_ByteData:
 	.byte 0xf2, 0xa4, 0xef, 0x03, 0x50, 0x0e, 0x2e, 0xd8
 	.byte 0x8e, 0x1e, 0xd6, 0x90, 0xdb, 0xd8, 0x66, 0x07
 	.byte 0xde, 0x88, 0x1e, 0x1d, 0x00, 0x68, 0x14, 0xd8
@@ -131,7 +131,7 @@ LABEL_FB1450:
 Display_DeferOrDrawWall:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
-	jr nz, LABEL_FB1550
+	jr nz, Display_DeferOrDrawWall_Direct
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
@@ -141,7 +141,7 @@ Display_DeferOrDrawWall:
 	jr __jrt_nop_FB1550
 __jrt_nop_FB1550:
 
-LABEL_FB1550:
+Display_DeferOrDrawWall_Direct:
 	sti16_24 0x03ef92, 0x0000
 	lds wa, 0
 	calr SetNeedUpdate
@@ -150,7 +150,7 @@ LABEL_FB1550:
 Display_DeferOrUpdateScreen:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
-	jr nz, LABEL_FB1579
+	jr nz, Display_DeferOrUpdateScreen_Direct
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
@@ -160,21 +160,21 @@ Display_DeferOrUpdateScreen:
 	jr __jrt_nop_FB1579
 __jrt_nop_FB1579:
 
-LABEL_FB1579:
+Display_DeferOrUpdateScreen_Direct:
 	sti16_24 0x03ef92, 0x0001
 	lds wa, 1
 	calr SetNeedUpdate
 	jrl UpdateScreen
 	ret
 
-LABEL_FB1589:
+GraphicsRender_RetStub:
 	ret
 
-LABEL_FB158A:
+GraphicsRender_ShortByteBlock:
 	.byte 0xb8, 0x01, 0x31, 0x68, 0x05, 0xb8, 0x01, 0x31
 	jr	t, 0x62
 
-LABEL_FB1594:
+GraphicsRender_ProcessEntries:
 	st_dri3b L, 0xFD, 0x6A, 0xFF
 	push xiz
 	st_dri3l XBC, 0xFD, 0x96, 0x00
@@ -184,17 +184,17 @@ LABEL_FB1594:
 	ldw bc, 0x48
 	ldirw
 	cp_sril_mr XIZ, 0xFD, 0x96, 0x00
-	jr ule, LABEL_FB15EF
+	jr ule, GraphicsRender_ProcessEntries_Done
 
-LABEL_FB15B5:
+GraphicsRender_ProcessEntry_Loop:
 	ld c, (xiz)
 	ld a, (xiz + 1)
 	ld (xsp + 4), a
 	cp c, 0x23
 	jr ule, VoiceMidi_EventHandler
 	ld xwa, xiz
-	calr LABEL_FB1589
-	jr LABEL_FB15EF
+	calr GraphicsRender_RetStub
+	jr GraphicsRender_ProcessEntries_Done
 
 ; Voice MIDI event handler dispatch
 VoiceMidi_EventHandler:
@@ -210,9 +210,9 @@ VoiceMidi_EventHandler:
 	extz wa
 	st_dri3b H, 0x07, 0xF8, 0xE0
 	cp_sril_mr XIZ, 0xFD, 0x96, 0x00
-	jr ugt, LABEL_FB15B5
+	jr ugt, GraphicsRender_ProcessEntry_Loop
 
-LABEL_FB15EF:
+GraphicsRender_ProcessEntries_Done:
 	pop xiz
 	st_dri3b L, 0xFD, 0x96, 0x00
 	ret
@@ -227,17 +227,17 @@ GraphicsRender_Start:
 	ldw bc, 0x18
 	ldirw
 	cp (xsp + 54), xiz
-	jr ule, LABEL_FB1649
+	jr ule, GraphicsRender_Start_Done
 
-LABEL_FB1611:
+GraphicsRender_Start_EntryLoop:
 	ld c, (xiz)
 	ld a, (xiz + 1)
 	ld (xsp + 4), a
 	cp c, 0xB
 	jr ule, VoiceMidi_AltEventHandler
 	ld xwa, xiz
-	calr LABEL_FB1589
-	jr LABEL_FB1649
+	calr GraphicsRender_RetStub
+	jr GraphicsRender_Start_Done
 
 ; Voice MIDI alt event handler dispatch
 VoiceMidi_AltEventHandler:
@@ -253,14 +253,14 @@ VoiceMidi_AltEventHandler:
 	extz wa
 	st_dri3b H, 0x07, 0xF8, 0xE0
 	cp (xsp + 54), xiz
-	jr ugt, LABEL_FB1611
+	jr ugt, GraphicsRender_Start_EntryLoop
 
-LABEL_FB1649:
+GraphicsRender_Start_Done:
 	pop xiz
 	lda xsp, (xsp + 54)
 	ret
 
-LABEL_FB164E:
+DrawText_LayoutAndRender:
 	st_dri3b L, 0xFD, 0xEE, 0xFE
 	push xiz
 	ld xiy, 0xEAAFD4
@@ -285,11 +285,11 @@ LABEL_FB164E:
 	ld (xbc), hl
 	lds iy, 0
 	cpw (xsp + 4), 0x0
-	jr ule, LABEL_FB16BC
+	jr ule, DrawText_NullTerminate
 	lda xhl, (xsp + 10)
 	lds32 xde, 4
 
-LABEL_FB169E:
+DrawText_CopyCharLoop:
 	ld xix, xde
 	ld xbc, 0xFFFFFFFC
 	add xix, xbc
@@ -302,9 +302,9 @@ LABEL_FB169E:
 	inc 1, iy
 	inc 1, xde
 	cp iy, (xsp + 4)
-	jr c, LABEL_FB169E
+	jr c, DrawText_CopyCharLoop
 
-LABEL_FB16BC:
+DrawText_NullTerminate:
 	ld wa, iy
 	extz xwa
 	lda xde, (xsp + 10)
@@ -322,7 +322,7 @@ LABEL_FB16BC:
 	st_dri3b L, 0xFD, 0x12, 0x01
 	ret
 
-LABEL_FB16E9:
+DrawText_LayoutAndRender_Variant1:
 	.byte 0xf3, 0xfd, 0xee, 0xfe, 0x37, 0x3e, 0x45, 0xdc
 	.byte 0xaf, 0xea, 0x00
 	lda	xix, (xsp+270)
@@ -563,7 +563,7 @@ LABEL_FB16E9:
 	.byte 0xef, 0x03, 0x41, 0xd7, 0xfa, 0x05, 0xef, 0x60
 	.byte 0x0e
 
-LABEL_FB1DFA:
+ColorBlit_ComputeRectAndBlit:
 	dec 8, xsp
 	ld xbc, xwa
 	lda xwa, (xsp)
@@ -592,7 +592,7 @@ LABEL_FB1DFA:
 	inc 8, xsp
 	ret
 
-LABEL_FB1E40:
+ColorBlit_ByteData:
 	.byte 0xef, 0x68, 0xb7, 0x31, 0x98, 0x02, 0x22, 0xb1
 	.byte 0x52, 0x98, 0x04, 0x22, 0xb9, 0x02, 0x52, 0x98
 	.byte 0x06, 0x22, 0xb9, 0x04, 0x52, 0x98, 0x08, 0x20
@@ -600,7 +600,7 @@ LABEL_FB1E40:
 	.byte 0xe9, 0x88, 0xda, 0x89, 0x1e, 0x59, 0xda, 0xef
 	jr	f, 0x0e
 
-LABEL_FB1E6A:
+DrawText_ExtendedLayout:
 	st_dri3b L, 0xFD, 0xE4, 0xFE
 	push xiz
 	st_dri3l XWA, 0xFD, 0x1C, 0x01
@@ -620,10 +620,10 @@ LABEL_FB1E6A:
 	ld a, (xsp + 14)
 	ld c, (xsp + 6)
 	and a, 0xF
-	jr z, LABEL_FB1EAA
+	jr z, DrawText_ExtLayout_SkipShift
 	srla c
 
-LABEL_FB1EAA:
+DrawText_ExtLayout_SkipShift:
 	ld (xsp + 6), c
 	ld wa, (xde + 13)
 	ld (xsp + 10), wa
@@ -644,7 +644,7 @@ LABEL_FB1EAA:
 	ld (xhl), bc
 	lds hl, 0
 	cpw (xsp + 4), 0x0
-	jr ule, LABEL_FB1F1A
+	jr ule, DrawText_ExtLayout_NullAndDraw
 	lda xwa, (xde + 7)
 	ld (xsp + 8), xwa
 	lda xix, (xsp + 16)
@@ -654,7 +654,7 @@ LABEL_FB1EAA:
 	ld xbc, xwa
 	lds32 xde, 0
 
-LABEL_FB1EFE:
+DrawText_ExtLayout_CopyLoop:
 	ld xwa, (xsp + 8)
 	ld xiy, (xwa)
 	ld xiz, xix
@@ -667,9 +667,9 @@ LABEL_FB1EFE:
 	inc 1, xde
 	inc 1, xbc
 	cp hl, (xsp + 4)
-	jr c, LABEL_FB1EFE
+	jr c, DrawText_ExtLayout_CopyLoop
 
-LABEL_FB1F1A:
+DrawText_ExtLayout_NullAndDraw:
 	extz xhl
 	lda xwa, (xsp + 16)
 	ld (xsp + 8), xwa
@@ -693,7 +693,7 @@ LABEL_FB1F1A:
 	st_dri3b L, 0xFD, 0x1C, 0x01
 	ret
 
-LABEL_FB1F61:
+DrawText_ExtLayout_Variant1:
 	.byte 0xf3, 0xfd, 0xe4, 0xfe, 0x37, 0x3e, 0xf3, 0xfd
 	.byte 0x1c, 0x01, 0x60, 0x45, 0x1c, 0xb1, 0xea, 0x00
 	lda	xix, (xsp+276)
@@ -746,10 +746,10 @@ DrawFunc_Init:
 	and l, e
 	ld a, c
 	and a, 0xF
-	jr z, LABEL_FB2072
+	jr z, DrawFunc_Init_SkipShift
 	srla l
 
-LABEL_FB2072:
+DrawFunc_Init_SkipShift:
 	ld de, (xiz + 7)
 	ld a, (xiz + 9)
 	ldfr_berp A, 0xF0
@@ -767,20 +767,20 @@ LABEL_FB2072:
 	lda xbc, (xsp + 4)
 	pushw hl
 	cps ix, 2
-	jr z, LABEL_FB20AD
+	jr z, DrawFunc_Init_FontTable2
 	cps ix, 1
-	jr nz, LABEL_FB20B4
+	jr nz, DrawFunc_Init_FontTable0
 	ld xwa, 0xEAB12C
-	jr LABEL_FB20B9
+	jr DrawFunc_Init_PushFontAndDraw
 
-LABEL_FB20AD:
+DrawFunc_Init_FontTable2:
 	ld xwa, 0xEAB130
-	jr LABEL_FB20B9
+	jr DrawFunc_Init_PushFontAndDraw
 
-LABEL_FB20B4:
+DrawFunc_Init_FontTable0:
 	ld xwa, 0xEAB134
 
-LABEL_FB20B9:
+DrawFunc_Init_PushFontAndDraw:
 	push xwa
 	push xbc
 	call Audio_SendCommand
@@ -802,7 +802,7 @@ LABEL_FB20B9:
 	st_dri3b L, 0xFD, 0x0C, 0x01
 	ret
 
-LABEL_FB20F9:
+DrawFunc_Init_Variant1:
 	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37, 0x3e, 0xe8, 0x8e
 	.byte 0x45, 0x38, 0xb1, 0xea, 0x00, 0xf3, 0xfd, 0x08
 	.byte 0x01, 0x34, 0xd9, 0xac, 0x95, 0x11, 0x9e, 0x02
@@ -945,7 +945,7 @@ LABEL_FB20F9:
 	.byte 0x1e, 0xbb, 0xe9, 0x5e, 0xf3, 0xfd, 0x0c, 0x01
 	.byte 0x37, 0x0e
 
-LABEL_FB24CB:
+ColorBlit_WithPaletteSave:
 	dec 8, xsp
 	push_werp 0xFA
 	ld xbc, xwa
@@ -958,10 +958,10 @@ LABEL_FB24CB:
 	ld l, a
 	ld a, e
 	and a, 0xF
-	jr z, LABEL_FB24EC
+	jr z, ColorBlit_PalSave_SkipShift
 	srla l
 
-LABEL_FB24EC:
+ColorBlit_PalSave_SkipShift:
 	sll l, 2
 	extz hl
 	add hl, hl
@@ -987,7 +987,7 @@ LABEL_FB24EC:
 	inc 8, xsp
 	ret
 
-LABEL_FB2538:
+ColorBlit_Variant_ByteData:
 	.byte 0xef, 0x68, 0xe8, 0x89, 0x99, 0x02, 0x20, 0xe8
 	.byte 0x12, 0x89, 0x04, 0x27, 0x89, 0x05, 0x25, 0x80
 	.byte 0x21, 0xcf, 0xc1, 0xc9, 0x8f, 0xcd, 0x89, 0xc9
@@ -1059,20 +1059,20 @@ GetCharDescent:
 
 GetCenteredDelta:
 	cp xwa, 0x7
-	jr z, LABEL_FB2638
+	jr z, GetCenteredDelta_RetNeg1
 	cp xwa, 0x5
-	jr z, LABEL_FB2638
+	jr z, GetCenteredDelta_RetNeg1
 	or xwa, xwa
-	jr nz, LABEL_FB263D
+	jr nz, GetCenteredDelta_RetZero
 
-LABEL_FB2638:
+GetCenteredDelta_RetNeg1:
 	ldw hl, 0xFFFF
-	jr LABEL_FB263F
+	jr GetCenteredDelta_Return
 
-LABEL_FB263D:
+GetCenteredDelta_RetZero:
 	lds hl, 0
 
-LABEL_FB263F:
+GetCenteredDelta_Return:
 	ret
 
 ; =============================================================================
@@ -1096,12 +1096,12 @@ ConvertStrings:
 	ld (xsp + 4), xbc
 	ld xiz, xwa
 
-LABEL_FB2648:
+ConvertStrings_MainLoop:
 	cp (xiz), 0x7E		; Check for escape prefix
-	jr nz, LABEL_FB2680
+	jr nz, ConvertStrings_CheckNull
 	inc 1, xiz
 	cp (xiz), 0x0
-	jr z, LABEL_FB2678
+	jr z, ConvertStrings_NullTerminate
 	ld a, (xiz)
 	extz wa
 	calr HexCharToNibble
@@ -1110,71 +1110,71 @@ LABEL_FB2648:
 	ld (xwa), l
 	inc 1, xiz
 	cp (xiz), 0x0
-	jr z, LABEL_FB2678
+	jr z, ConvertStrings_NullTerminate
 	ld a, (xiz)
 	extz wa
 	calr HexCharToNibble
 	ld xwa, (xsp + 4)
 	add (xwa), l
-	jr LABEL_FB26A4
+	jr ConvertStrings_AdvancePointer
 
-LABEL_FB2678:
+ConvertStrings_NullTerminate:
 	ld xwa, (xsp + 4)
 	ld (xwa), 0x0
-	jr LABEL_FB268C
+	jr ConvertStrings_PopAndReturn
 
-LABEL_FB2680:
+ConvertStrings_CheckNull:
 	cp (xiz), 0x0
-	jr nz, LABEL_FB2690
+	jr nz, ConvertStrings_CheckPrintable
 	ld xwa, (xsp + 4)
 	ld c, (xiz)
 	ld (xwa), c
 
-LABEL_FB268C:
+ConvertStrings_PopAndReturn:
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_FB2690:
+ConvertStrings_CheckPrintable:
 	cp (xiz), 0x20
-	jr nc, LABEL_FB269D
+	jr nc, ConvertStrings_CopyChar
 	ld xwa, (xsp + 4)
 	ld (xwa), 0x20
-	jr LABEL_FB26A4
+	jr ConvertStrings_AdvancePointer
 
-LABEL_FB269D:
+ConvertStrings_CopyChar:
 	ld xwa, (xsp + 4)
 	ld c, (xiz)
 	ld (xwa), c
 
-LABEL_FB26A4:
+ConvertStrings_AdvancePointer:
 	inc 1, xiz
 	lds32 xwa, 1
 	add (xsp + 4), xwa
-	jr LABEL_FB2648
+	jr ConvertStrings_MainLoop
 
 ConvertStringsEx:
 	ld xde, xwa
 
-LABEL_FB26AF:
+ConvertStringsEx_Loop:
 	cp (xde), 0x7E
-	jr nz, LABEL_FB26C2
+	jr nz, ConvertStringsEx_CopyChar
 	ld a, (xde)
 	lda_dpi XBC, 0xE4
 	stib_dpi 0xE4, 0x34
 	addmi8 (xbc), 0x30
-	jr LABEL_FB26CB
+	jr ConvertStringsEx_Advance
 
-LABEL_FB26C2:
+ConvertStringsEx_CopyChar:
 	ld a, (xde)
 	ld (xbc), a
 	cp (xde), 0x0
 	ret z
 
-LABEL_FB26CB:
+ConvertStringsEx_Advance:
 	inc 1, xde
 	inc 1, xbc
-	jr LABEL_FB26AF
+	jr ConvertStringsEx_Loop
 
 ; =============================================================================
 ; CalcTotalWidth - Calculate pixel width of a rendered string
@@ -1220,19 +1220,19 @@ CalcTotalWidth:
 	inc 4, xsp
 	ld xbc, (xiz + 12)
 	or xbc, xbc
-	jr nz, LABEL_FB271C
+	jr nz, CalcTotalWidth_KerningLoop_Init
 	mriw2 0x96, 0x4B
 	ld iz, hl
-	jr LABEL_FB2749
+	jr CalcTotalWidth_FreeAndReturn
 
-LABEL_FB271C:
+CalcTotalWidth_KerningLoop_Init:
 	lds iz, 0
 	ld xix, xbc
 	lds de, 0
 	cps hl, 0
-	jr le, LABEL_FB2749
+	jr le, CalcTotalWidth_FreeAndReturn
 
-LABEL_FB2726:
+CalcTotalWidth_KerningLoop:
 	ld xwa, (xsp + 4)
 	ld_srib3 A, 0x07, 0xE0, 0xE8
 	sub a, 0x20
@@ -1245,9 +1245,9 @@ LABEL_FB2726:
 	ld xix, xbc
 	inc 1, de
 	cp de, hl
-	jr lt, LABEL_FB2726
+	jr lt, CalcTotalWidth_KerningLoop
 
-LABEL_FB2749:
+CalcTotalWidth_FreeAndReturn:
 	ld xwa, (xsp + 8)
 	push xwa
 	call Free
@@ -1291,33 +1291,33 @@ WordwrapStrings:
 	ld xwa, (xsp + 12)
 	ld (xsp + 6), xwa
 	cp (xiz), 0x0
-	jr z, LABEL_FB27EB
+	jr z, Wordwrap_FreeAndReturn
 
-LABEL_FB2790:
+Wordwrap_ScanWordStart:
 	cp (xiz), 0x0
-	jr z, LABEL_FB27A4
+	jr z, Wordwrap_CheckSpaces
 
-LABEL_FB2795:
+Wordwrap_ScanWordChars:
 	cp (xiz), 0x20
-	jr z, LABEL_FB27A4
+	jr z, Wordwrap_CheckSpaces
 	inc 1, xiz
 	incm 1, (xsp + 4)
 	cp (xiz), 0x0
-	jr nz, LABEL_FB2795
+	jr nz, Wordwrap_ScanWordChars
 
-LABEL_FB27A4:
+Wordwrap_CheckSpaces:
 	cp (xiz), 0x0
-	jr z, LABEL_FB27B8
+	jr z, Wordwrap_MeasureWidth
 
-LABEL_FB27A9:
+Wordwrap_SkipSpaces:
 	cp (xiz), 0x20
-	jr nz, LABEL_FB27B8
+	jr nz, Wordwrap_MeasureWidth
 	inc 1, xiz
 	incm 1, (xsp + 4)
 	cp (xiz), 0x0
-	jr nz, LABEL_FB27A9
+	jr nz, Wordwrap_SkipSpaces
 
-LABEL_FB27B8:
+Wordwrap_MeasureWidth:
 	ld xwa, (xsp + 22)
 	push xwa
 	ld xwa, (xsp + 10)
@@ -1331,15 +1331,15 @@ LABEL_FB27B8:
 	ld xbc, (xsp + 18)
 	calr CalcTotalWidth
 	cp hl, (xsp + 16)
-	jr gt, LABEL_FB27E6
+	jr gt, Wordwrap_CheckEndOfString
 	ld wa, (xsp + 4)
 	ld (xsp + 10), wa
 
-LABEL_FB27E6:
+Wordwrap_CheckEndOfString:
 	cp (xiz), 0x0
-	jr nz, LABEL_FB2790
+	jr nz, Wordwrap_ScanWordStart
 
-LABEL_FB27EB:
+Wordwrap_FreeAndReturn:
 	ld xwa, (xsp + 12)
 	push xwa
 	call Free
@@ -1354,36 +1354,36 @@ LABEL_FB27EB:
 ; Output: L = 0x00-0x0F (value), or 0x00 if invalid
 HexCharToNibble:
 	cp a, 0x30		; '0'
-	jr c, LABEL_FB280D
+	jr c, HexCharToNibble_CheckLower
 	cp a, 0x39		; '9'
-	jr ugt, LABEL_FB280D
+	jr ugt, HexCharToNibble_CheckLower
 	sub a, 0x30		; '0'-'9' → 0-9
 	ld l, a
 	ret
 
-LABEL_FB280D:
+HexCharToNibble_CheckLower:
 	cp a, 0x61		; 'a'
-	jr c, LABEL_FB281D
+	jr c, HexCharToNibble_CheckUpper
 	cp a, 0x66		; 'f'
-	jr ugt, LABEL_FB281D
+	jr ugt, HexCharToNibble_CheckUpper
 	sub a, 0x57		; 'a'-'f' → 10-15
 	ld l, a
 	ret
 
-LABEL_FB281D:
+HexCharToNibble_CheckUpper:
 	cp a, 0x41		; 'A'
-	jr c, LABEL_FB282D
+	jr c, HexCharToNibble_Invalid
 	cp a, 0x46		; 'F'
-	jr ugt, LABEL_FB282D
+	jr ugt, HexCharToNibble_Invalid
 	sub a, 0x37		; 'A'-'F' → 10-15
 	ld l, a
 	ret
 
-LABEL_FB282D:
+HexCharToNibble_Invalid:
 	ldb l, 0x0		; Invalid → 0
 	ret
 
-LABEL_FB2830:
+FontGlyph_ByteData:
 	.byte 0x80, 0x21, 0xd8, 0x12, 0xf2, 0xb4, 0xb1, 0xea
 	.byte 0x32, 0xc3, 0x07, 0xe8, 0xe0, 0x21, 0xb1, 0x41
 	.byte 0x0e, 0x80, 0x25, 0xcd, 0xcf, 0x20, 0x66, 0x04
@@ -1407,11 +1407,11 @@ InitPaletteRGB:
 	ld xbc, xwa
 	st_dri3b C, 0xE1, 0x00, 0x04
 
-LABEL_FB288A:
+InitPaletteRGB_CopyLoop:
 	ld_spil XWA, 0xE6
 	st_dpil XWA, 0xEA
 	cp xbc, xhl
-	jr c, LABEL_FB288A
+	jr c, InitPaletteRGB_CopyLoop
 	ret
 
 SetPaletteRGB:
@@ -1736,7 +1736,7 @@ VGA_Palette_WriteBlue:
 	incm 1, (xsp + 4)
 	cpw (xsp + 4), 0x100
 	jrl c, VGA_Palette_Loop
-	calr LABEL_FB36A9
+	calr VGA_ConfigExtSequencer
 	calr VGA_ClearVRAM
 	_VGA_SEQUENCER 0x1, 0x1
 	pop xiz
@@ -1823,9 +1823,9 @@ DisplayBuffer_Process:
 	add (xsp + 4), xwa
 	ld iz, (xbc + 2)
 	extz xiz
-	jr LABEL_FB3137
+	jr DisplayBuf_CheckEvenRowEnd
 
-LABEL_FB3108:
+DisplayBuf_CopyEvenRow:
 	ld xwa, (xsp + 4)
 	pushw wa
 	ld xwa, xiz
@@ -1845,17 +1845,17 @@ LABEL_FB3108:
 	lda xsp, (xsp + 10)
 	inc 1, xiz
 
-LABEL_FB3137:
+DisplayBuf_CheckEvenRowEnd:
 	ld xwa, (xsp + 12)
 	ld wa, (xwa + 6)
 	srl wa, 1
 	extz xwa
 	cp xiz, xwa
-	jr ule, LABEL_FB3108
+	jr ule, DisplayBuf_CopyEvenRow
 	ld xiz, xwa
-	jr LABEL_FB3179
+	jr DisplayBuf_CheckOddRowEnd
 
-LABEL_FB314A:
+DisplayBuf_CopyOddRow:
 	ld xwa, (xsp + 4)
 	pushw wa
 	ld xwa, xiz
@@ -1875,25 +1875,25 @@ LABEL_FB314A:
 	lda xsp, (xsp + 10)
 	inc 1, xiz
 
-LABEL_FB3179:
+DisplayBuf_CheckOddRowEnd:
 	ld xwa, (xsp + 12)
 	ld wa, (xwa + 6)
 	extz xwa
 	cp xiz, xwa
-	jr ule, LABEL_FB314A
+	jr ule, DisplayBuf_CopyOddRow
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
 
 
 ; =============================================================================
-; VGA_ScreenUnblank (LABEL_FB318A) - Enable display output
+; VGA_ScreenUnblank (VGA_ScreenUnblank) - Enable display output
 ;
 ; Writes VGA Sequencer register 01h = 01h (screen on, no blanking).
 ; Sequencer register 01h bit 5: 0=display on, 1=display blanked.
 ; Value 0x01 = 8-dot character clocks, display active.
 ; =============================================================================
-LABEL_FB318A:
+VGA_ScreenUnblank:
 	; For byte-matching purposes:
 	; This is equivalent to:
 	;
@@ -1906,13 +1906,13 @@ LABEL_FB318A:
 	jrl _Write_VGA_Register
 
 ; =============================================================================
-; VGA_ScreenBlank (LABEL_FB319A) - Blank display output
+; VGA_ScreenBlank (VGA_ScreenBlank) - Blank display output
 ;
 ; Writes VGA Sequencer register 01h = 21h (screen blanked).
 ; Bit 5 = 1: blanks display during VRAM updates to prevent tearing.
 ; Used during large screen updates and palette changes.
 ; =============================================================================
-LABEL_FB319A:
+VGA_ScreenBlank:
 	; For byte-matching purposes:
 	; This is equivalent to:
 	;
@@ -1933,31 +1933,31 @@ VGA_WritePaletteEntry:
 	ldw wa, 0x3C8
 	calr _Write_VGA_Register
 	bitm 3, (xiz)
-	jr z, LABEL_FB31DD
+	jr z, VGA_WritePalEntry_RedLow
 	cp (xiz), 0xF0
-	jr nc, LABEL_FB31D1
+	jr nc, VGA_WritePalEntry_RedHigh
 	ld a, (xiz)
 	srl a, 4
 	inc 1, a
 	ld c, a
 	extz bc
 	ldw wa, 0x3C9
-	jr LABEL_FB31E7
+	jr VGA_WritePalEntry_WriteRed
 
-LABEL_FB31D1:
+VGA_WritePalEntry_RedHigh:
 	ld c, (xiz)
 	srl c, 4
 	extz bc
 	ldw wa, 0x3C9
-	jr LABEL_FB31E7
+	jr VGA_WritePalEntry_WriteRed
 
-LABEL_FB31DD:
+VGA_WritePalEntry_RedLow:
 	ld c, (xiz)
 	srl c, 4
 	extz bc
 	ldw wa, 0x3C9
 
-LABEL_FB31E7:
+VGA_WritePalEntry_WriteRed:
 	calr _Write_VGA_Register
 	ld e, (xiz + 1)
 	ld a, e
@@ -1965,23 +1965,23 @@ LABEL_FB31E7:
 	ld c, a
 	extz bc
 	bit 3, e
-	jr z, LABEL_FB3210
+	jr z, VGA_WritePalEntry_GreenLow
 	cp e, 0xF0
-	jr nc, LABEL_FB320B
+	jr nc, VGA_WritePalEntry_GreenHigh
 	inc 1, a
 	ld c, a
 	extz bc
 	ldw wa, 0x3C9
-	jr LABEL_FB3213
+	jr VGA_WritePalEntry_WriteGreen
 
-LABEL_FB320B:
+VGA_WritePalEntry_GreenHigh:
 	ldw wa, 0x3C9
-	jr LABEL_FB3213
+	jr VGA_WritePalEntry_WriteGreen
 
-LABEL_FB3210:
+VGA_WritePalEntry_GreenLow:
 	ldw wa, 0x3C9
 
-LABEL_FB3213:
+VGA_WritePalEntry_WriteGreen:
 	calr _Write_VGA_Register
 	ld e, (xiz + 2)
 	ld a, e
@@ -1989,28 +1989,28 @@ LABEL_FB3213:
 	ld c, a
 	extz bc
 	bit 3, e
-	jr z, LABEL_FB323C
+	jr z, VGA_WritePalEntry_BlueLow
 	cp e, 0xF0
-	jr nc, LABEL_FB3237
+	jr nc, VGA_WritePalEntry_BlueHigh
 	inc 1, a
 	ld c, a
 	extz bc
 	ldw wa, 0x3C9
-	jr LABEL_FB323F
+	jr VGA_WritePalEntry_WriteBlue
 
-LABEL_FB3237:
+VGA_WritePalEntry_BlueHigh:
 	ldw wa, 0x3C9
-	jr LABEL_FB323F
+	jr VGA_WritePalEntry_WriteBlue
 
-LABEL_FB323C:
+VGA_WritePalEntry_BlueLow:
 	ldw wa, 0x3C9
 
-LABEL_FB323F:
+VGA_WritePalEntry_WriteBlue:
 	calr _Write_VGA_Register
 	pop xiz
 	ret
 
-LABEL_FB3244:
+VGA_CRTCTiming_ByteData:
 	.byte 0xef, 0x6c, 0xd7, 0xfa, 0x04, 0xbf, 0x02, 0x60
 	.byte 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0x89, 0xd8, 0x12
 	.byte 0xaf, 0x02, 0x21, 0x1e, 0x51, 0xff, 0xe8, 0xac
@@ -2153,7 +2153,7 @@ LABEL_FB3244:
 	.byte 0xd9, 0xae, 0x1e, 0xe6, 0xf9, 0x30, 0xc5, 0x03
 	.byte 0xd9, 0xa8, 0x78, 0xde, 0xf9
 
-LABEL_FB36A9:
+VGA_ConfigExtSequencer:
 	_VGA_SEQUENCER 0x6, 0x1
 
 	_VGA_SEQUENCER 0x9, 0x4
@@ -2250,7 +2250,7 @@ LABEL_FB36A9:
 
 
 ; who calls here?
-LABEL_FB3AED:
+VGA_ConfigExtSequencer_Alt:
 	_VGA_SEQUENCER 0x6, 0x1
 	_VGA_SEQUENCER 0x9, 0x4
 	_VGA_SEQUENCER 0xa, 0x10
@@ -2811,27 +2811,27 @@ SineWaveScreenProc:
 	ld xiz, xbc
 	st_dri3l XWA, 0xFD, 0x18, 0x01
 	cp xiz, 0x1C00007
-	jrl z, LABEL_FC226F
+	jrl z, PmBank_OnEnumNotify
 	cp xiz, 0x1C0000F
-	jrl z, LABEL_FC221A
+	jrl z, PmBank_OnConfirm
 	cp xiz, 0x1C0000E
-	jrl z, LABEL_FC218C
+	jrl z, PmBank_OnSelect
 	cp xiz, 0x1C0000D
-	jrl z, LABEL_FC2061
+	jrl z, PmBank_OnPaint
 	cp xiz, 0x1E20017
-	jr z, LABEL_FC1FDF
+	jr z, PmBank_DrawRegionInfo
 	cp xiz, 0x1E20002
-	jr z, LABEL_FC1FAE
+	jr z, PmBank_OnBankChanged
 	cp xiz, 0x1C0000B
-	jr z, LABEL_FC1F8B
+	jr z, PmBank_InitDisplay
 	cp xiz, 0x1C00001
-	jrl nz, LABEL_FC2296
+	jrl nz, PmBank_DefaultPassthrough
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
-	jr LABEL_FC1FA7
+	jr PmBank_CallInherited
 
-LABEL_FC1F8B:
+PmBank_InitDisplay:
 	ld xwa, 0x1420001
 	ld xbc, 0x1E20001
 	lds32 xde, 0
@@ -2840,11 +2840,11 @@ LABEL_FC1F8B:
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
 
-LABEL_FC1FA7:
+PmBank_CallInherited:
 	call InheritedProc
 	jrl ToneGen_InitDone
 
-LABEL_FC1FAE:
+PmBank_OnBankChanged:
 	ld_sril XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld xde, (xhl + 48)
@@ -2860,9 +2860,9 @@ LABEL_FC1FAE:
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, 0x1C0000E
 	lds32 xde, 0
-	jrl LABEL_FC2185
+	jrl PmBank_SendEventAndDone
 
-LABEL_FC1FDF:
+PmBank_DrawRegionInfo:
 	ldda8 a, 36230
 	extz wa
 	pushw wa
@@ -2910,7 +2910,7 @@ LABEL_FC1FDF:
 	call DrawString
 	jrl ToneGen_InitDone
 
-LABEL_FC2061:
+PmBank_OnPaint:
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
@@ -3003,11 +3003,11 @@ LABEL_FC2061:
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 
-LABEL_FC2185:
+PmBank_SendEventAndDone:
 	call SendEvent
 	jrl ToneGen_InitDone
 
-LABEL_FC218C:
+PmBank_OnSelect:
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
@@ -3050,9 +3050,9 @@ LABEL_FC218C:
 	ld xwa, (xwa + 44)
 	ld wa, (xwa)
 	lds bc, 0
-	jr LABEL_FC2268
+	jr PmBank_WriteLastParam
 
-LABEL_FC221A:
+PmBank_OnConfirm:
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
@@ -3080,14 +3080,14 @@ LABEL_FC221A:
 	lds wa, 6
 	ldw bc, 0xFF
 
-LABEL_FC2268:
+PmBank_WriteLastParam:
 	calr ToneGen_WriteParamByIndex
 
 ToneGen_InitDone:
 	lds32 xhl, 0
-	jr LABEL_FC22A6
+	jr PmBank_OnDefault
 
-LABEL_FC226F:
+PmBank_OnEnumNotify:
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
@@ -3097,17 +3097,17 @@ LABEL_FC226F:
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
-	jr LABEL_FC22A2
+	jr PmBank_CallInheritedDirect
 
-LABEL_FC2296:
+PmBank_DefaultPassthrough:
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
 
-LABEL_FC22A2:
+PmBank_CallInheritedDirect:
 	call InheritedProc
 
-LABEL_FC22A6:
+PmBank_OnDefault:
 	pop xiz
 	st_dri3b L, 0xFD, 0x18, 0x01
 	ret
@@ -3120,7 +3120,7 @@ ToneGen_WriteParamByIndex:
 	ld wa, iz
 	lda_24 xiy, 0xed167e
 	cps bc, 5
-	jrl ugt, LABEL_FC2440
+	jrl ugt, ToneGen_WriteParam_Return
 	add bc, bc
 	lda_24 xix, 0xed18a2
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
@@ -3175,7 +3175,7 @@ ToneGen_ParamWriteDispatch:
 	.byte 0x42, 0x7e, 0x18, 0xed, 0x00, 0x1d, 0xca, 0xca
 	.byte 0xfa
 
-LABEL_FC2440:
+ToneGen_WriteParam_Return:
 	popw iz
 	lda xsp, (xsp + 12)
 	ret
@@ -3236,28 +3236,28 @@ WallHomeEditCheck_ReturnFalse:
 	ld xde, (xiz + 14)
 	lda xwa, (xiz + 18)
 	cp xde, 0x1
-	jr z, LABEL_FC2509
+	jr z, WallHomeEdit_PushSndAddr
 	ld xbc, (xwa)
 	or xde, xde
-	jr nz, LABEL_FC2514
+	jr nz, WallHomeEdit_LoadSndAddr3
 	ld xwa, 0xED18AE
-	jr LABEL_FC2519
+	jr WallHomeEdit_PushAddr
 
-LABEL_FC2509:
+WallHomeEdit_PushSndAddr:
 	pushw 0xED
 	pushw 0x18B6
 	ld xwa, (xwa)
 	push xwa
-	jr LABEL_FC251B
+	jr WallHomeEdit_CallAudio
 
-LABEL_FC2514:
+WallHomeEdit_LoadSndAddr3:
 	ld xwa, 0xED18BE
 
-LABEL_FC2519:
+WallHomeEdit_PushAddr:
 	push xwa
 	push xbc
 
-LABEL_FC251B:
+WallHomeEdit_CallAudio:
 	call Audio_SendCommand
 	inc 8, xsp
 	ld xhl, (xsp + 4)
@@ -3371,22 +3371,22 @@ WallOthCheckLoop_RetZero:
 
 WallSetOKFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_FC2643
+	jr nz, WallSetOK_ReturnZero
 	ld xwa, 0x142000F
 	ld xbc, 0x1E20014
 	call MainFuncCall
 
-LABEL_FC2643:
+WallSetOK_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 MainWallSetFlashFunc:
 	cp xbc, 0x1E20016
-	jr z, LABEL_FC269D
+	jr z, MainWallFlash_ClearAndRestore
 	cp xbc, 0x1E20015
-	jr z, LABEL_FC2694
+	jr z, MainWallFlash_DispatchAudio
 	cp xbc, 0x1E20014
-	jrl nz, LABEL_FC2704
+	jrl nz, MainWallFlash_ReturnZero
 	stdi8 32578, 40
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
@@ -3398,14 +3398,14 @@ MainWallSetFlashFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	jr LABEL_FC2700
+	jr MainWallFlash_PostEvent
 
-LABEL_FC2694:
+MainWallFlash_DispatchAudio:
 	ldw wa, 0x8
 	call Audio_DispatchCommand
-	jr LABEL_FC2704
+	jr MainWallFlash_ReturnZero
 
-LABEL_FC269D:
+MainWallFlash_ClearAndRestore:
 	stdi8 32578, 40
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
@@ -3429,38 +3429,38 @@ LABEL_FC269D:
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
 
-LABEL_FC2700:
+MainWallFlash_PostEvent:
 	call ApPostEvent
 
-LABEL_FC2704:
+MainWallFlash_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 WallUsrIniFunc:
 	cpi8_24 0x0340ea, 0x00
-	jr nz, LABEL_FC271F
+	jr nz, WallUsrIni_PostBootEvent
 	ld xwa, 0x142000F
 	ld xbc, 0x1E20016
 	call MainFuncCall
-	jr LABEL_FC272F
+	jr WallUsrIni_ReturnZero
 
-LABEL_FC271F:
+WallUsrIni_PostBootEvent:
 	ld xwa, 0x48000F
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 	call PostEvent
 
-LABEL_FC272F:
+WallUsrIni_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 WallSureLngCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_FC2740
+	jr nz, WallSureLng_ReturnZero
 	lda_24 xhl, 0xed1932
 	ret
 
-LABEL_FC2740:
+WallSureLng_ReturnZero:
 	lds32 xhl, 0
 	ret
 
@@ -3522,7 +3522,7 @@ MainVariSet_ReturnZero:
 MainVariSet:
 	push xiz
 	cp xbc, 0x1E20000
-	jr nz, LABEL_FC2811
+	jr nz, MainVariSet_Done
 	ld xiz, xde
 	ld a, (xiz)
 	extz wa
@@ -3543,7 +3543,7 @@ MainVariSet:
 	lds wa, 1
 	call BitMapOut_StorePresetValue
 
-LABEL_FC2811:
+MainVariSet_Done:
 	lds32 xhl, 0
 	pop xiz
 	ret
@@ -3551,7 +3551,7 @@ LABEL_FC2811:
 MainSvariIni:
 	push xiz
 	cp xbc, 0x1E20001
-	jr nz, LABEL_FC2883
+	jr nz, MainSvariIni_ReturnZero
 	pushw 0x6
 	call Malloc
 	inc 2, xsp
@@ -3583,7 +3583,7 @@ MainSvariIni:
 	ld xde, xiz
 	call ApPostEvent
 
-LABEL_FC2883:
+MainSvariIni_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	ret
@@ -3591,7 +3591,7 @@ LABEL_FC2883:
 MainRvariIni:
 	push xiz
 	cp xbc, 0x1E20007
-	jr nz, LABEL_FC28E8
+	jr nz, MainRvariIni_ReturnZero
 	pushw 0x6
 	call Malloc
 	inc 2, xsp
@@ -3618,7 +3618,7 @@ MainRvariIni:
 	ld xde, xiz
 	call ApPostEvent
 
-LABEL_FC28E8:
+MainRvariIni_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	ret
@@ -3627,7 +3627,7 @@ MainGetSndGrpName:
 	dec 6, xsp
 	push xiz
 	cp xbc, 0x1E20004
-	jr nz, LABEL_FC2958
+	jr nz, MainGetSndGrpName_ReturnZero
 	pushw 0x12
 	call Malloc
 	inc 2, xsp
@@ -3658,7 +3658,7 @@ MainGetSndGrpName:
 	ld xde, xiz
 	call ApPostEvent
 
-LABEL_FC2958:
+MainGetSndGrpName_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	inc 6, xsp
@@ -3669,7 +3669,7 @@ MainGetSndName:
 	push xiz
 	ld xiz, xde
 	cp xbc, 0x1E20003
-	jr nz, LABEL_FC29C4
+	jr nz, MainGetSndName_ReturnZero
 	pushw 0x12
 	call Malloc
 	inc 2, xsp
@@ -3698,7 +3698,7 @@ MainGetSndName:
 	ld xde, (xsp + 6)
 	call ApPostEvent
 
-LABEL_FC29C4:
+MainGetSndName_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	inc 6, xsp
@@ -3708,7 +3708,7 @@ MainGetRhyGrpName:
 	dec 6, xsp
 	push xiz
 	cp xbc, 0x1E2000A
-	jr nz, LABEL_FC2A3E
+	jr nz, MainGetRhyGrpName_ReturnZero
 	pushw 0x11
 	call Malloc
 	inc 2, xsp
@@ -3741,7 +3741,7 @@ MainGetRhyGrpName:
 	ld xde, xiz
 	call ApPostEvent
 
-LABEL_FC2A3E:
+MainGetRhyGrpName_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	inc 6, xsp
@@ -3752,7 +3752,7 @@ MainGetRhyName:
 	push xiz
 	ld xiz, xde
 	cp xbc, 0x1E20009
-	jr nz, LABEL_FC2AB3
+	jr nz, MainGetRhyName_ReturnZero
 	pushw 0xF
 	call Malloc
 	inc 2, xsp
@@ -3786,7 +3786,7 @@ MainGetRhyName:
 	ld xde, (xsp + 6)
 	call ApPostEvent
 
-LABEL_FC2AB3:
+MainGetRhyName_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	inc 6, xsp
@@ -3797,13 +3797,13 @@ MainPmGet:
 	push_werp 0xFA
 	ld (xsp + 6), xde
 	cp xbc, 0x1E20012
-	jrl z, LABEL_FC2B61
+	jrl z, MainPmGet_HandleBankDisplay
 	cp xbc, 0x1E20011
-	jr z, LABEL_FC2B44
+	jr z, MainPmGet_HandleCheckBit2
 	cp xbc, 0x1E20010
-	jr z, LABEL_FC2AFE
+	jr z, MainPmGet_HandleBankData
 	cp xbc, 0x1E2000F
-	jrl nz, LABEL_FC2BB7
+	jrl nz, MainPmGet_ReturnZero
 	call BitMapOut_PrepareRender_CheckBit1
 	ldb h, 0x0
 	extz xhl
@@ -3813,7 +3813,7 @@ MainPmGet:
 	ld xde, (xsp + 6)
 	jrl MainPmGet_PostEvent
 
-LABEL_FC2AFE:
+MainPmGet_HandleBankData:
 	pushw 0x12
 	call Malloc
 	inc 2, xsp
@@ -3836,7 +3836,7 @@ LABEL_FC2AFE:
 	ld xde, (xsp + 2)
 	jr MainPmGet_PostEvent
 
-LABEL_FC2B44:
+MainPmGet_HandleCheckBit2:
 	ld xwa, (xsp + 6)
 	ldfr_berp A, 0xFB
 	extz wa
@@ -3847,7 +3847,7 @@ LABEL_FC2B44:
 	ld xbc, 0x1C0000E
 	jr MainPmGet_PostEvent
 
-LABEL_FC2B61:
+MainPmGet_HandleBankDisplay:
 	pushw 0x13
 	call Malloc
 	inc 2, xsp
@@ -3876,7 +3876,7 @@ LABEL_FC2B61:
 MainPmGet_PostEvent:
 	call ApPostEvent
 
-LABEL_FC2BB7:
+MainPmGet_ReturnZero:
 	lds32 xhl, 0
 	pop_werp 0xFA
 	inc 8, xsp
@@ -3920,28 +3920,28 @@ MainSysCtrl_DispatchTable:
 	lds	wa, 2
 	call ScreenGroup_DispatchAlt
 	jr t, MainSysControl_PostDispatchFinalize
-LABEL_FC2C1A:
+MainSysCtrl_Entry1_AccDemo:
 	call AccDemo_InitDone
 	jr t, MainSysControl_PostDispatchFinalize
-LABEL_FC2C20:
+MainSysCtrl_Entry2_PartInit:
 	call Part_InitFromPreset
 	jr t, MainSysControl_PostDispatchFinalize
-LABEL_FC2C26:
+MainSysCtrl_Entry3_Misc:
 	call LABEL_FEF99E
 	jr t, MainSysControl_PostDispatchFinalize
-LABEL_FC2C2C:
+MainSysCtrl_Entry4_CopyBitmaps:
 	call Display_CopyAndRenderBitmaps
 	jr t, MainSysControl_PostDispatchFinalize
-LABEL_FC2C32:
+MainSysCtrl_Entry5_VoiceInit:
 	call Voice_InitBankDataSafe
 	jr t, MainSysControl_PostDispatchFinalize
-LABEL_FC2C38:
+MainSysCtrl_Entry6:
 	call 0xFC7EA9
 	jr t, MainSysControl_PostDispatchFinalize
-LABEL_FC2C3E:
+MainSysCtrl_Entry7:
 	call 0xFC7EC2
 	jr t, MainSysControl_PostDispatchFinalize
-LABEL_FC2C44:
+MainSysCtrl_Entry8:
 	call 0xFC7F31
 
 
@@ -3950,16 +3950,16 @@ MainSysControl_PostDispatchFinalize:
 	call CPanel_InitButtonState_SaveRegs
 	lds bc, 0
 
-LABEL_FC2C52:
+MainSysCtrl_DelayOuter:
 	lds wa, 0
 
-LABEL_FC2C54:
+MainSysCtrl_DelayInner:
 	inc 1, wa
 	cp wa, 0x100
-	jr c, LABEL_FC2C54
+	jr c, MainSysCtrl_DelayInner
 	inc 1, bc
 	cp bc, 0x1000
-	jr c, LABEL_FC2C52
+	jr c, MainSysCtrl_DelayOuter
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
@@ -4003,21 +4003,21 @@ CntIniFunc_ReturnZero:
 
 MainMssSetUp:
 	cp xbc, 0x1E20019
-	jr z, LABEL_FC2D03
+	jr z, MainMssSetUp_ClearMode
 	cp xbc, 0x1E20018
-	jr nz, LABEL_FC2D08
+	jr nz, MainMssSetUp_ReturnZero
 	stda16 36182, xde
 	incdi16 1, 36182
 	stdi8 36174, 7
-	jr LABEL_FC2D08
+	jr MainMssSetUp_ReturnZero
 
-LABEL_FC2D03:
+MainMssSetUp_ClearMode:
 	stdi8 36174, 0
 
-LABEL_FC2D08:
+MainMssSetUp_ReturnZero:
 	lds32 xhl, 0
 	ret
-LABEL_FC2D0B:
+MainMssSetUp_End:
 
 AcFreeSplitBoxProc:
 	st_dri3b L, 0xFD, 0xFC, 0xFE
@@ -4025,21 +4025,21 @@ AcFreeSplitBoxProc:
 	ld xiz, xde
 	st_dri3l XWA, 0xFD, 0x04, 0x01
 	cp xbc, 0x1C0001C
-	jr z, LABEL_FC2D9D
+	jr z, AcFreeSplit_ValueChanged
 	cp xbc, 0x1C0000C
-	jr z, LABEL_FC2D86
+	jr z, AcFreeSplit_ShowHide
 	cp xbc, 0x1C0000B
-	jr z, LABEL_FC2D86
+	jr z, AcFreeSplit_ShowHide
 	cp xbc, 0x1C00002
-	jr z, LABEL_FC2D6A
+	jr z, AcFreeSplit_Release
 	cp xbc, 0x1C00001
-	jr z, LABEL_FC2D4E
+	jr z, AcFreeSplit_Init
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	jrl LABEL_FC2EB6
+	jrl AcFreeSplit_PopAndReturn
 
-LABEL_FC2D4E:
+AcFreeSplit_Init:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -4048,7 +4048,7 @@ LABEL_FC2D4E:
 	call SetLswFilter
 	jrl UI_AccChordBoxProc_Return
 
-LABEL_FC2D6A:
+AcFreeSplit_Release:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -4057,7 +4057,7 @@ LABEL_FC2D6A:
 	call ResetLswFilter
 	jrl UI_AccChordBoxProc_Return
 
-LABEL_FC2D86:
+AcFreeSplit_ShowHide:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -4065,25 +4065,25 @@ LABEL_FC2D86:
 	call MainLswGet
 	jrl UI_AccChordBoxProc_Return
 
-LABEL_FC2D9D:
+AcFreeSplit_ValueChanged:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, (xiz)
 	st32_24 0x0340c0, xwa
 	cp xwa, 0x4180
-	jr nz, LABEL_FC2E2E
+	jr nz, AcFreeSplit_CheckSecondKey
 	cpw (xiz + 4), 0x0
-	jr z, LABEL_FC2DD0
+	jr z, AcFreeSplit_LookupNoteLabel
 	pushw 0xED
 	pushw 0x1BEC
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_FC2E1E
+	jr AcFreeSplit_SendConfirmEvent
 
-LABEL_FC2DD0:
+AcFreeSplit_LookupNoteLabel:
 	ld xwa, 0x4181
 	call SndParam_LookupReadOnly
 	exts xhl
@@ -4108,28 +4108,28 @@ LABEL_FC2DD0:
 	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 
-LABEL_FC2E1E:
+AcFreeSplit_SendConfirmEvent:
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
 	ld xbc, 0x1C0000F
-	jrl LABEL_FC2EB0
+	jrl AcFreeSplit_SendEventAndReturn
 
-LABEL_FC2E2E:
+AcFreeSplit_CheckSecondKey:
 	cp xwa, 0x4181
 	jr nz, UI_AccChordBoxProc_Return
 	ld xwa, 0x4180
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_FC2E55
+	jr z, AcFreeSplit_LookupSecondNote
 	pushw 0xED
 	pushw 0x1C04
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_FC2EA3
+	jr AcFreeSplit_SendSecondConfirm
 
-LABEL_FC2E55:
+AcFreeSplit_LookupSecondNote:
 	ld xwa, 0x4181
 	call SndParam_LookupReadOnly
 	exts xhl
@@ -4154,25 +4154,25 @@ LABEL_FC2E55:
 	call Audio_SendCommand
 	lda xsp, (xsp + 16)
 
-LABEL_FC2EA3:
+AcFreeSplit_SendSecondConfirm:
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
 	ld xbc, 0x1C0000F
 
-LABEL_FC2EB0:
+AcFreeSplit_SendEventAndReturn:
 	call SendEvent
 
 UI_AccChordBoxProc_Return:
 	lds32 xhl, 0
 
-LABEL_FC2EB6:
+AcFreeSplit_PopAndReturn:
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
 
-LABEL_FC2EBD:
+AcTranspose_ParamData:
 	.byte 0x43, 0x04, 0x00, 0x02, 0x01, 0x0e
-LABEL_FC2EC3:
+AcTranspose_ParamData_End:
 
 AcTransposeBoxProc:
 	st_dri3b L, 0xFD, 0xFC, 0xFE
@@ -4180,21 +4180,21 @@ AcTransposeBoxProc:
 	ld xiz, xde
 	st_dri3l XWA, 0xFD, 0x04, 0x01
 	cp xbc, 0x1C0001C
-	jr z, LABEL_FC2F4A
+	jr z, AcTranspose_ValueChanged
 	cp xbc, 0x1C0000C
-	jr z, LABEL_FC2F37
+	jr z, AcTranspose_ShowHide
 	cp xbc, 0x1C0000B
-	jr z, LABEL_FC2F37
+	jr z, AcTranspose_ShowHide
 	cp xbc, 0x1C00002
-	jr z, LABEL_FC2F1F
+	jr z, AcTranspose_Release
 	cp xbc, 0x1C00001
-	jr z, LABEL_FC2F06
+	jr z, AcTranspose_Init
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	jrl LABEL_FC2FAE
 
-LABEL_FC2F06:
+AcTranspose_Init:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -4203,7 +4203,7 @@ LABEL_FC2F06:
 	call SetLswFilter
 	jrl UI_EventHandler_InitReturnZero
 
-LABEL_FC2F1F:
+AcTranspose_Release:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -4212,7 +4212,7 @@ LABEL_FC2F1F:
 	call ResetLswFilter
 	jr UI_EventHandler_InitReturnZero
 
-LABEL_FC2F37:
+AcTranspose_ShowHide:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -4220,7 +4220,7 @@ LABEL_FC2F37:
 	call MainLswGet
 	jr UI_EventHandler_InitReturnZero
 
-LABEL_FC2F4A:
+AcTranspose_ValueChanged:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -4230,9 +4230,9 @@ LABEL_FC2F4A:
 	lda xbc, (xsp + 4)
 	ld wa, (xiz + 4)
 	cps wa, 5
-	jr nz, LABEL_FC2F7F
+	jr nz, AcTranspose_FormatLabel
 	cpdi8 36156, 0
-	jr nz, LABEL_FC2F7F
+	jr nz, AcTranspose_FormatLabel
 	pushw 0xED
 	pushw 0x1C86
 	push xbc
@@ -4240,7 +4240,7 @@ LABEL_FC2F4A:
 	inc 8, xsp
 	jr LABEL_FC2F9B
 
-LABEL_FC2F7F:
+AcTranspose_FormatLabel:
 	sla wa, 2
 	lda_24 xde, 0xed1c1c
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
