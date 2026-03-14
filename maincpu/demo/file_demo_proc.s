@@ -6,7 +6,7 @@
 ; playback, title display, and demo mode UI integration.
 ; =============================================================================
 
-LABEL_F864A0:
+FDemo_DisplayResourceData:
 	.byte 0xf3, 0xfd, 0xdc, 0xfe, 0x37, 0x3e, 0xe8, 0x8e
 	.byte 0xbf, 0x06, 0x02, 0x00, 0x00, 0xf3, 0xfd, 0x08
 	.byte 0x01, 0x31, 0xe9, 0x88, 0xb9, 0x20, 0x31, 0xf5
@@ -73,7 +73,7 @@ MainPreControl_ReturnNull:
 	lds32 xhl, 0
 	ret
 
-LABEL_F8662F:
+FDemo_DisplayCtrlJumpHandler:
 	; --- Display control jump table handler stubs ---
 	; Three stubs call display resource loaders (F86360/F864A0/F863E4),
 	; convert result, set up event codes, then dispatch via FA9D58.
@@ -84,21 +84,21 @@ LABEL_F8662F:
 	ld xwa, 0xFFFFFFFF			; broadcast target
 	ld xbc, 0x01C10001			; event code
 	ld xde, xhl				; result as param
-	jr LABEL_F8666C				; dispatch
+	jr FDemo_DispatchEventPost				; dispatch
 	ld xwa, xde				; workspace
-	calr LABEL_F864A0			; load alternate display resource
+	calr FDemo_DisplayResourceData			; load alternate display resource
 	exts xhl
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x01C10003			; event code 3
 	ld xde, xhl
-	jr LABEL_F8666C
+	jr FDemo_DispatchEventPost
 	ld xwa, xde				; workspace
 	calr LABEL_F863E4			; load named display resource
 	exts xhl
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x01C10002			; event code 2
 	ld xde, xhl
-LABEL_F8666C:
+FDemo_DispatchEventPost:
 	call ApPostEvent				; dispatch event
 	jr MainPreControl_ReturnNull		; return null
 	stdi8	10404, 19
@@ -125,7 +125,7 @@ ApPreControl:
 	jrl z, Seq_PostMelodyEventAlt
 	ld de, iz
 	cp xbc, 0x1C00006
-	jrl z, LABEL_F867B2
+	jrl z, FDemo_ProcessDisplayStateQuery
 	cp xbc, 0x1E10007
 	jr z, Seq_StartWithFullInit
 	cp xbc, 0x1E1000C
@@ -207,7 +207,7 @@ Seq_StartWithFullInit:
 	calr FDemoText_ProcessMarkupLoop
 	jrl ApPreControl_ReturnNull
 
-LABEL_F867B2:
+FDemo_ProcessDisplayStateQuery:
 	cps de, 0
 	jrl lt, ApPreControl_ReturnNull
 	cp de, 0x7F
@@ -218,12 +218,12 @@ LABEL_F867B2:
 	cp (xwa), 0x0
 	jrl z, ApPreControl_ReturnNull
 
-LABEL_F867D1:
+FDemo_DisplayStateQueryLoop:
 	lds bc, 0
 	calr FDemoText_ProcessTextMarkup
 	ld xwa, xhl
 	cp (xwa), 0x0
-	jr nz, LABEL_F867D1
+	jr nz, FDemo_DisplayStateQueryLoop
 	jrl ApPreControl_ReturnNull
 
 Seq_PostMelodyEventAlt:
@@ -243,7 +243,7 @@ ApPreControl_Exit:
 	pop xiz
 	ret
 
-LABEL_F867FA:
+FDemo_MultiGuardCheck:
 	; --- Routine 1: multi-guard check, return HL=1 or 0 (30 bytes) ---
 	.byte 0xc1, 0x38, 0x8d, 0x3f, 0xe4		; cp (0x8D38), 0xE4  [C1 prefix]
 	jr nz, Banner_ReturnZero
@@ -258,7 +258,7 @@ LABEL_F867FA:
 Banner_ReturnZero:
 	lds	hl, 0
 	ret
-LABEL_F8681C:
+FDemo_LoadRegsAndPostEvent:
 	; --- Routine 2: load regs, jp FA9D58 (23 bytes) ---
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x01C10007
@@ -266,39 +266,39 @@ LABEL_F8681C:
 	jp ApPostEvent
 
 
-LABEL_F8682F:
+FDemo_LinkedListSearch:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
 	ld32_24 xiz, 0x880008
 	ld xwa, (xiz + 16)
 	or xwa, xwa
-	jr z, LABEL_F8685A
+	jr z, FDemo_LinkedListSearchFound
 
-LABEL_F86841:
+FDemo_LinkedListSearchLoop:
 	push xiz
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcmp
 	inc 8, xsp
 	cps hl, 0
-	jr z, LABEL_F8685A
+	jr z, FDemo_LinkedListSearchFound
 	lda xiz, (xiz + 24)
 	ld xwa, (xiz + 16)
 	or xwa, xwa
-	jr nz, LABEL_F86841
+	jr nz, FDemo_LinkedListSearchLoop
 
-LABEL_F8685A:
+FDemo_LinkedListSearchFound:
 	ld xwa, (xiz + 16)
 	or xwa, xwa
-	jr z, LABEL_F86865
+	jr z, FDemo_LinkedListSearchRetNull
 	ld xhl, xiz
-	jr LABEL_F86867
+	jr FDemo_LinkedListSearchExit
 
-LABEL_F86865:
+FDemo_LinkedListSearchRetNull:
 	lds32 xhl, 0
 
-LABEL_F86867:
+FDemo_LinkedListSearchExit:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -310,7 +310,7 @@ LABEL_F86867:
 ;    Returns pointer to matching entry or falls through.
 ; 2) Insert: Walks the same list checking node+16 for empty slot,
 ;    calls insert function (0xFF3F4D), returns success (HL=1) or fail.
-LABEL_F8686B:
+FDemo_LinkedListSearchInsert:
 	dec	8, xsp
 	pushw	iz
 	ld	(xsp+6), xwa
@@ -366,18 +366,18 @@ LABEL_F8686B:
 	inc	4, xsp
 	ret
 
-LABEL_F868EF:
-	calr LABEL_F8682F
+FDemo_LinkedListLookupField:
+	calr FDemo_LinkedListSearch
 	or xhl, xhl
-	jr z, LABEL_F868FA
+	jr z, FDemo_LinkedListLookupNull
 	ld xhl, (xhl + 16)
 	ret
 
-LABEL_F868FA:
+FDemo_LinkedListLookupNull:
 	lds32 xhl, 0
 	ret
 
-LABEL_F868FD:
+FDemo_FileOpenAndProcess:
 	; --- Stack-frame function: alloc, multi-call dispatch (114 bytes) ---
 	lda	xsp, (xsp-22)
 	push xiz
@@ -389,16 +389,16 @@ LABEL_F868FD:
 	lda	xwa, (xsp+10)
 	calr	65369
 	or xhl, xhl
-	jr z, LABEL_F8691A
+	jr z, FDemo_FileOpen_DoOpen
 	lds	hl, 0
-	jr t, LABEL_F8696A
-LABEL_F8691A:
+	jr t, FDemo_FileOpen_Exit
+FDemo_FileOpen_DoOpen:
 	lda	xwa, (xsp+10)
 	ld xbc, 0x00EA00A8
 	call FileIO_OpenWithMode
 	ld (xsp+4), hl
 	cpw (xsp+4), 0x0000
-	jr lt, LABEL_F86967
+	jr lt, FDemo_FileOpen_GetResult
 	lds32	xwa, 0
 	lds	bc, 2
 	call FileIO_SeekAndReadBlock
@@ -410,18 +410,18 @@ LABEL_F8691A:
 	ld (xsp+6), xhl
 	ld xwa, (xsp+6)
 	or xwa, xwa
-	jr z, LABEL_F8695A
+	jr z, FDemo_FileOpen_CloseHandle
 	ld xbc, xiz
 	ld xwa, (xsp+6)
 	call FileIO_ReadBlock
-LABEL_F8695A:
+FDemo_FileOpen_CloseHandle:
 	call FileIO_CloseHandle
 	lda	xwa, (xsp+10)
 	ld xbc, (xsp+6)
 	calr	65355
-LABEL_F86967:
+FDemo_FileOpen_GetResult:
 	ld hl, (xsp+4)
-LABEL_F8696A:
+FDemo_FileOpen_Exit:
 	pop xiz
 	lda	xsp, (xsp+22)
 	ret
@@ -458,7 +458,7 @@ DemoMode_Main_Operation:
 	call SeqInit_FinalEvent
 	jp Seq_StartMainControl
 
-LABEL_F869D2:
+FDemo_IndicatorSetup:
 	ldw wa, 0x22
 	lds bc, 0
 	lds de, 0
@@ -487,10 +487,10 @@ DemoMode_Initialize:
 	ldw wa, 0x22
 	call CtrlPanel_SetIndicatorLED
 	bitda 0, 10405
-	jr z, LABEL_F86A3B
+	jr z, FDemo_PostBannerCheck
 	ldmm_sd24w 0xEC, 0xFF, 0x00, 0x9E, 0xF1
 
-LABEL_F86A3B:
+FDemo_PostBannerCheck:
 	calr Banner_Loop_Check
 	call Audio_CheckSubsystemReady
 	resda 6, 47074
@@ -588,7 +588,7 @@ Demo_SelectEntry_ProcessSongList:
 	ldda8 a, 10404
 	cpda8 a, 4439
 	ret nz
-	calr LABEL_F86E76
+	calr Demo_PreSetupAndScan
 	calr Demo_WaitForDisplayBit
 	calr Banner_Loop_Check
 	cpdi8 36152, 228
@@ -596,7 +596,7 @@ Demo_SelectEntry_ProcessSongList:
 	jrl Demo_SelectEntry_AfterSongLoad
 
 Demo_SelectEntry_ManualSelect:
-	calr LABEL_F86E76
+	calr Demo_PreSetupAndScan
 	calr Demo_WaitForDisplayBit
 	calr Banner_Loop_Check
 	ldda8 a, 10404
@@ -606,7 +606,7 @@ Demo_SelectEntry_ManualSelect:
 	call_24 nz, 0xF22A4D
 
 Demo_SelectEntry_ToCountdown:
-	jrl LABEL_F86D86
+	jrl Demo_ResetCountdownTimer
 
 Demo_SelectEntry_StartAutoPlay:
 	stdi8 36686, 4
@@ -630,7 +630,7 @@ Demo_SelectEntry_TimerTick:
 	jr nz, Demo_SelectEntry_CheckCountdown
 	ldda8 a, 10404
 	extz wa
-	calr LABEL_F87189
+	calr Demo_ParseSlideHeader
 	jrl Demo_SelectEntry_PlaySong
 
 Demo_SelectEntry_CheckCountdown:
@@ -700,7 +700,7 @@ Demo_SelectEntry_ClampSongIdx:
 Demo_SelectEntry_UpdateDisplay:
 	calr Demo_SelectEntry_LoadPattern
 	calr Demo_SelectEntry_DrawSecondary
-	calr LABEL_F86D86
+	calr Demo_ResetCountdownTimer
 	incdi8 1, 4440
 	ret
 
@@ -730,7 +730,7 @@ Demo_SelectEntry_PlaySong:
 	ret nz
 	ldda8 a, 10404
 	extz wa
-	calr LABEL_F86F6D
+	calr Demo_GetPresetBaseForPartAlt
 	ld xwa, xhl
 	call LABEL_FC534C
 	lds wa, 2
@@ -769,13 +769,13 @@ Audio_WaitForReady:
 	ld xbc, 0xF000
 	ldda8 a, 1056
 
-LABEL_F86D67:
+Audio_WaitForReady_PollLoop:
 	bit 2, a
-	jr z, LABEL_F86D74
+	jr z, Audio_WaitForReady_Dispatch
 	sub xbc, 0x1
-	jr nz, LABEL_F86D67
+	jr nz, Audio_WaitForReady_PollLoop
 
-LABEL_F86D74:
+Audio_WaitForReady_Dispatch:
 	stdi8 13046, 255
 	push xde
 	push xhl
@@ -788,7 +788,7 @@ LABEL_F86D74:
 	pop xde
 	ret
 
-LABEL_F86D86:
+Demo_ResetCountdownTimer:
 	stdi8 3375, 15
 	ret
 
@@ -808,7 +808,7 @@ Voice_LoadVoiceTable:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
 
-LABEL_F86DAC:
+Voice_LoadVoiceTable_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	calr Demo_LookupPartTableEntry
@@ -830,7 +830,7 @@ LABEL_F86DAC:
 	pop xde
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x16
-	jr ule, LABEL_F86DAC
+	jr ule, Voice_LoadVoiceTable_Loop
 	ldw wa, 0x19
 	calr Demo_LookupPartTableEntry
 	ld c, (xhl + 13)
@@ -856,7 +856,7 @@ Banner_Loop_Check:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
 
-LABEL_F86E1F:
+Banner_Loop_CheckEntry:
 	ldto_berp A, 0xFB
 	extz wa
 	ldada xbc, 61856
@@ -884,14 +884,14 @@ LABEL_F86E1F:
 Banner_Loop_Exit:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr c, LABEL_F86E1F
+	jr c, Banner_Loop_CheckEntry
 	sti16_24 0x025b84, 0x0000
 	pop_werp 0xFA
 	inc 4, xsp
 	ret
 
-LABEL_F86E76:
-	calr LABEL_F86E8D
+Demo_PreSetupAndScan:
+	calr Demo_ScanActivePartChannels
 	jr __jrt_nop_F86E7B
 __jrt_nop_F86E7B:
 
@@ -902,17 +902,17 @@ Demo_PreSetup:
 	stdi8 1073, 0
 	ret
 
-LABEL_F86E8D:
+Demo_ScanActivePartChannels:
 	ldb l, 0x0
 	ldada xix, 61856
 
-LABEL_F86E93:
+Demo_ScanPartLoop:
 	ld a, l
 	extz wa
 	extz xwa
 	add xwa, xix
 	cp (xwa), 0x10
-	jr nz, LABEL_F86EDB
+	jr nz, Demo_ScanPartNext
 	ld a, l
 	extz wa
 	ld bc, wa
@@ -920,27 +920,27 @@ LABEL_F86E93:
 	lda_24 xde, 0xea00da
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
 	andda16 xbc, 61854
-	jr z, LABEL_F86ED9
+	jr z, Demo_ScanPartSkipToEnd
 	muls wa, 0x3
 	ldada xbc, 62032
 	bit_dri 7, 0x07, 0xE4, 0xE0
-	jr z, LABEL_F86ED9
+	jr z, Demo_ScanPartSkipToEnd
 	ld a, l
 	inc 1, a
 	stda8 3414, a
 	setda 0, 3412
 	setda 2, 10363
-	jr LABEL_F86EE2
+	jr Demo_ScanPartDone
 
-LABEL_F86ED9:
+Demo_ScanPartSkipToEnd:
 	ldb l, 0xF
 
-LABEL_F86EDB:
+Demo_ScanPartNext:
 	inc 1, l
 	cp l, 0x10
-	jr c, LABEL_F86E93
+	jr c, Demo_ScanPartLoop
 
-LABEL_F86EE2:
+Demo_ScanPartDone:
 	cp l, 0x10
 	ret nz
 	resda 0, 3412
@@ -981,64 +981,64 @@ Demo_WaitForDisplayBit:
 	bitda 2, 1056
 	ret z
 
-LABEL_F86F39:
+Demo_WaitForDisplayBit_Loop:
 	sub xwa, 0x1
 	ret z
 	bitda 2, 1056
-	jr nz, LABEL_F86F39
+	jr nz, Demo_WaitForDisplayBit_Loop
 	ret
 
-LABEL_F86F48:
+Demo_GetPresetBaseForPart:
 	extz wa
 	sla wa, 2
 	extz xwa
 	add xwa, 0x9C4000
 	ld xwa, (xwa)
 	or xwa, xwa
-	jr z, LABEL_F86F62
+	jr z, Demo_GetPresetBase_Default
 	ld xhl, 0x69800
-	jr LABEL_F86F67
+	jr Demo_GetPresetBase_StoreAndRet
 
-LABEL_F86F62:
+Demo_GetPresetBase_Default:
 	lda_24 xhl, 0x0ab000
 
-LABEL_F86F67:
+Demo_GetPresetBase_StoreAndRet:
 	st_dri3b C, 0xED, 0x00, 0x08
 	ret
 
-LABEL_F86F6D:
+Demo_GetPresetBaseForPartAlt:
 	extz wa
 	sla wa, 2
 	extz xwa
 	add xwa, 0x9C4000
 	ld xwa, (xwa)
 	or xwa, xwa
-	jr z, LABEL_F86F87
+	jr z, Demo_GetPresetBaseAlt_Default
 	ld xhl, 0x69800
-	jr LABEL_F86F8C
+	jr Demo_GetPresetBaseAlt_StoreAndRet
 
-LABEL_F86F87:
+Demo_GetPresetBaseAlt_Default:
 	lda_24 xhl, 0x0ab000
 
-LABEL_F86F8C:
+Demo_GetPresetBaseAlt_StoreAndRet:
 	st_dri3b C, 0xED, 0x00, 0x03
 	ret
 
-LABEL_F86F92:
+Demo_GetPresetBaseForPartExt:
 	extz wa
 	sla wa, 2
 	extz xwa
 	add xwa, 0x9C4000
 	ld xwa, (xwa)
 	or xwa, xwa
-	jr z, LABEL_F86FAC
+	jr z, Demo_GetPresetBaseExt_Default
 	ld xwa, 0x69800
-	jr LABEL_F86FB1
+	jr Demo_GetPresetBaseExt_StoreAndRet
 
-LABEL_F86FAC:
+Demo_GetPresetBaseExt_Default:
 	lda_24 xwa, 0x0ab000
 
-LABEL_F86FB1:
+Demo_GetPresetBaseExt_StoreAndRet:
 	st_dri3b C, 0xE1, 0xD0, 0x00
 	ret
 
@@ -1049,33 +1049,33 @@ Voice_GetPresetFieldWord:
 	add xwa, 0x9C4000
 	ld xwa, (xwa)
 	or xwa, xwa
-	jr z, LABEL_F86FD1
+	jr z, Voice_GetPresetField_Default
 	ld xwa, 0x69800
-	jr LABEL_F86FD6
+	jr Voice_GetPresetField_Compute
 
-LABEL_F86FD1:
+Voice_GetPresetField_Default:
 	lda_24 xwa, 0x0ab000
 
-LABEL_F86FD6:
+Voice_GetPresetField_Compute:
 	lda xwa, (xwa + 30)
 	ld hl, (xwa)
 	ret
 
-LABEL_F86FDC:
+Voice_GetPresetFieldAddr:
 	extz wa
 	sla wa, 2
 	extz xwa
 	add xwa, 0x9C4000
 	ld xwa, (xwa)
 	or xwa, xwa
-	jr z, LABEL_F86FF6
+	jr z, Voice_GetPresetFieldAddr_Default
 	ld xwa, 0x69800
-	jr LABEL_F86FFB
+	jr Voice_GetPresetFieldAddr_Compute
 
-LABEL_F86FF6:
+Voice_GetPresetFieldAddr_Default:
 	lda_24 xwa, 0x0ab000
 
-LABEL_F86FFB:
+Voice_GetPresetFieldAddr_Compute:
 	lda xhl, (xwa + 32)
 	ret
 
@@ -1090,15 +1090,15 @@ Demo_ProcessRecordEntry:
 	ld (xsp + 2), hl
 	ld a, (xsp + 14)
 	extz wa
-	calr LABEL_F86FDC
+	calr Voice_GetPresetFieldAddr
 	ld (xsp + 4), xhl
 	ld a, (xsp + 14)
 	extz wa
-	calr LABEL_F86F92
+	calr Demo_GetPresetBaseForPartExt
 	ld (xsp + 8), xhl
 	ldi_berp 0xFB, 0
 
-LABEL_F87030:
+Demo_RecordChainScanLoop:
 	ldto_berp C, 0xFB
 	extz bc
 	ld xwa, (xsp + 4)
@@ -1127,7 +1127,7 @@ Demo_VoiceTypeDispatch:
 	jrl z, Demo_RecordChainLoopExit
 	ld a, (xsp + 14)
 	extz wa
-	calr LABEL_F86F48
+	calr Demo_GetPresetBaseForPart
 	ld xwa, xhl
 	ldto_berp C, 0xFB
 	mul c, 0x3
@@ -1137,50 +1137,50 @@ Demo_VoiceTypeDispatch:
 	ld xbc, (xsp + 8)
 	ld_sriw3 BC, 0x07, 0xE4, 0xE8
 	lds de, 0
-	calr LABEL_F8711B
+	calr Demo_StoreRecordChainParams
 	jr RecordChain_SkipToNext
 
-LABEL_F8709E:
+RecordChain_ParseMidiStatus:
 	ld a, l
 	and a, 0xF0
 	cp hl, 0x85
-	jr nz, LABEL_F870AF
+	jr nz, RecordChain_HandleStatus80
 	ld (xsp + 12), 0x1
-	jr LABEL_F87111
+	jr Demo_RecordChainReturn
 
-LABEL_F870AF:
+RecordChain_HandleStatus80:
 	cp hl, 0x80
-	jr nz, LABEL_F870BE
+	jr nz, RecordChain_HandleOtherStatus
 	calr RecordChain_ReadNextByte
 	cps hl, 0
 	jr z, RecordChain_SkipToNext
 	jr RecordChain_ContinueLoop
 
-LABEL_F870BE:
+RecordChain_HandleOtherStatus:
 	cp a, 0x80
 	jr z, RecordChain_ContinueLoop
 	cp a, 0x90
-	jr z, LABEL_F870D2
+	jr z, RecordChain_SkipDataByte
 	cp a, 0xB0
-	jr z, LABEL_F870D2
+	jr z, RecordChain_SkipDataByte
 	cp a, 0xC0
-	jr nz, LABEL_F870DB
+	jr nz, RecordChain_HandleStatusD2
 
-LABEL_F870D2:
+RecordChain_SkipDataByte:
 	calr RecordChain_ReadNextByte
 	cps hl, 0
 	jr z, RecordChain_SkipToNext
 	jr RecordChain_ContinueLoop
 
-LABEL_F870DB:
+RecordChain_HandleStatusD2:
 	cp hl, 0xD2
-	jr nz, LABEL_F870EA
+	jr nz, RecordChain_HandleStatusD0
 	calr RecordChain_ReadNextByte
 	cps hl, 0
 	jr z, RecordChain_SkipToNext
 	jr RecordChain_ContinueLoop
 
-LABEL_F870EA:
+RecordChain_HandleStatusD0:
 	cp a, 0xD0
 	jr nz, RecordChain_SkipToNext
 	calr RecordChain_ReadNextByte
@@ -1188,27 +1188,27 @@ LABEL_F870EA:
 	jr nz, RecordChain_ContinueLoop
 
 RecordChain_SkipToNext:
-	calr LABEL_F87178
+	calr RecordChain_SkipToStatusByte
 	ld wa, hl
 	cp wa, 0xFFFF
-	jr nz, LABEL_F8709E
+	jr nz, RecordChain_ParseMidiStatus
 
 RecordChain_ContinueLoop:
 	cp (xsp + 12), 0x1
-	jr z, LABEL_F87111
+	jr z, Demo_RecordChainReturn
 
 Demo_RecordChainLoopExit:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jrl c, LABEL_F87030
+	jrl c, Demo_RecordChainScanLoop
 
-LABEL_F87111:
+Demo_RecordChainReturn:
 	ld l, (xsp + 12)
 	pop_werp 0xFA
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F8711B:
+Demo_StoreRecordChainParams:
 	st32_24 0x025b8a, xwa
 	st16_24 0x03ec4e, xbc
 	st16_24 0x025b8e, xde
@@ -1217,11 +1217,11 @@ LABEL_F8711B:
 RecordChain_ReadNextByte:
 	ld16_24 xwa, 0x03ec4e
 	cp wa, 0xFFFF
-	jr nz, LABEL_F8713A
+	jr nz, RecordChain_ReadAdvance
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F8713A:
+RecordChain_ReadAdvance:
 	sll wa, 8
 	sub wa, 0x100
 	ld de, wa
@@ -1243,20 +1243,20 @@ LABEL_F8713A:
 	sti16_24 0x025b8e, 0x0000
 	ret
 
-LABEL_F87178:
-	jr LABEL_F8717F
+RecordChain_SkipToStatusByte:
+	jr RecordChain_SkipReadNext
 
-LABEL_F8717A:
+RecordChain_SkipCheckBit7:
 	bit 7, hl
 	ret nz
 
-LABEL_F8717F:
+RecordChain_SkipReadNext:
 	calr RecordChain_ReadNextByte
 	cp hl, 0xFFFF
-	jr nz, LABEL_F8717A
+	jr nz, RecordChain_SkipCheckBit7
 	ret
 
-LABEL_F87189:
+Demo_ParseSlideHeader:
 	extz wa
 	sla wa, 2
 	extz xwa
@@ -1282,12 +1282,12 @@ FileIO_CheckRegionSignature:
 	call FileIO_SeekAndReadBlock
 	ldi_werp 0xFA, 1
 	lds iz, 0
-	jr LABEL_F871F7
+	jr FileIO_CheckSig_LoopTest
 
-LABEL_F871CD:
+FileIO_CheckSig_ReadLoop:
 	call FileIO_ReadByte
 	cps hl, 0
-	jr lt, LABEL_F871F0
+	jr lt, FileIO_CheckSig_Fail
 	ld a, (xsp + 4)
 	extz wa
 	sla wa, 3
@@ -1295,43 +1295,43 @@ LABEL_F871CD:
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld_srib3 A, 0x07, 0xE0, 0xF8
 	cp l, a
-	jr z, LABEL_F871F5
+	jr z, FileIO_CheckSig_Match
 
-LABEL_F871F0:
+FileIO_CheckSig_Fail:
 	ldi_werp 0xFA, 0
-	jr LABEL_F8720D
+	jr FileIO_CheckSig_Return
 
-LABEL_F871F5:
+FileIO_CheckSig_Match:
 	inc 1, iz
 
-LABEL_F871F7:
+FileIO_CheckSig_LoopTest:
 	ld a, (xsp + 4)
 	extz wa
 	sla wa, 3
 	lda_24 xbc, 0xea010a
 	ld de, iz
 	cp_sriw_rm DE, 0x07, 0xE4, 0xE0
-	jr c, LABEL_F871CD
+	jr c, FileIO_CheckSig_ReadLoop
 
-LABEL_F8720D:
+FileIO_CheckSig_Return:
 	call FileIO_SeekRead_ExtReturn
 	ldto_werp HL, 0xFA
 	pop xiz
 	inc 2, xsp
 	ret
 
-LABEL_F87218:
+FileIO_ValidateFileSignature:
 	lda xsp, (xsp - 26)
 	push xiz
 	ld (xsp + 28), a
 	ldi_werp 0xFA, 0
 	call GetCurrentFileIndex
 	cps hl, 0
-	jr ge, LABEL_F8722E
+	jr ge, FileIO_ValidateSig_Process
 	lds hl, 0
-	jr LABEL_F87277
+	jr FileIO_ValidateSig_Return
 
-LABEL_F8722E:
+FileIO_ValidateSig_Process:
 	ld a, l
 	ldfr_berp A, 0xF8
 	extz iz
@@ -1350,22 +1350,22 @@ LABEL_F8722E:
 	ld xbc, 0xEA0172
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr lt, LABEL_F87274
+	jr lt, FileIO_ValidateSig_Done
 	ld a, (xsp + 28)
 	extz wa
 	calr FileIO_CheckRegionSignature
 	ldfr_werp HL, 0xFA
 	call FileIO_CloseHandle
 
-LABEL_F87274:
+FileIO_ValidateSig_Done:
 	ldto_werp HL, 0xFA
 
-LABEL_F87277:
+FileIO_ValidateSig_Return:
 	pop xiz
 	lda xsp, (xsp + 26)
 	ret
 
-LABEL_F8727C:
+FileIO_ReadAndValidateHeader:
 	dec 4, xsp
 	pushw iz
 	lds32 xwa, 0
@@ -1373,18 +1373,18 @@ LABEL_F8727C:
 	call FileIO_SeekAndReadBlock
 	lds iz, 0
 
-LABEL_F87289:
+FileIO_ReadValidateHdr_Loop:
 	call FileIO_ReadByte
 	cps hl, 0
-	jr ge, LABEL_F87293
+	jr ge, FileIO_ReadValidateHdr_Store
 	lds hl, 0
 
-LABEL_F87293:
+FileIO_ReadValidateHdr_Store:
 	lda xwa, (xsp + 2)
 	lda_dri3 XSP, 0x07, 0xE0, 0xF8
 	inc 1, iz
 	cps iz, 3
-	jr lt, LABEL_F87289
+	jr lt, FileIO_ReadValidateHdr_Loop
 	call FileIO_SeekRead_ExtReturn
 	lda xwa, (xsp + 2)
 	ld xbc, 0xEA017E
@@ -1444,7 +1444,7 @@ FileIO_ValidateOpen_Process:
 	call FileIO_OpenWithMode
 	cps hl, 0
 	jr lt, FileIO_ValidateOpen_Done
-	calr LABEL_F8727C
+	calr FileIO_ReadAndValidateHeader
 	ldfr_werp HL, 0xFA
 	call FileIO_CloseHandle
 

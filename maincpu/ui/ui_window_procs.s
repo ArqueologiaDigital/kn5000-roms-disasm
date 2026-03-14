@@ -1248,7 +1248,7 @@ LABEL_F9C639:
 	call Strcat
 	lda xsp, (xsp + 16)
 	lda xwa, (xsp + 4)
-	call LABEL_F868EF
+	call FDemo_LinkedListLookupField
 	ld xbc, xhl
 	lda xwa, (xsp + 20)
 	or xbc, xbc

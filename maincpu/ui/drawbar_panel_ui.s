@@ -15074,7 +15074,7 @@ FdemoScreen_Init:
 	ld xbc, 0x1E000AC
 	lds32 xde, 0
 	call ApFuncCall
-	call LABEL_F869D2
+	call FDemo_IndicatorSetup
 	ld xwa, 0x120000B
 	ld xbc, 0x1E000AD
 	lds32 xde, 0

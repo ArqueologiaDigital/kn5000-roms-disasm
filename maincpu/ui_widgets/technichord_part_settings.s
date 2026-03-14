@@ -3345,44 +3345,44 @@ Naka_SongDisplay_FormatTable:
 
 Naka_SoundConfig_Table:
 	.long NakaInst_SdmenuPage
-	.long LABEL_E85A78
-	.long LABEL_E85A76
-	.long LABEL_E85A74
-	.long LABEL_E85A72
+	.long Naka_SdConfig_EmptyStr17
+	.long Naka_SdConfig_EmptyStr16
+	.long Naka_SdConfig_EmptyStr15
+	.long Naka_SdConfig_EmptyStr14
 	.long NakaInst_Sdmenu1
-	.long LABEL_E85A68
-	.long LABEL_E85A66
-	.long LABEL_E85A64
-	.long LABEL_E85A62
-	.long LABEL_E85A60
-	.long LABEL_E85A5E
-	.long LABEL_E85A5C
-	.long LABEL_E85A5A
-	.long LABEL_E85A58
-	.long LABEL_E85A56
+	.long Naka_SdConfig_EmptyStr13
+	.long Naka_SdConfig_EmptyStr12
+	.long Naka_SdConfig_EmptyStr11
+	.long Naka_SdConfig_EmptyStr10
+	.long Naka_SdConfig_EmptyStr09
+	.long Naka_SdConfig_EmptyStr08
+	.long Naka_SdConfig_EmptyStr07
+	.long Naka_SdConfig_EmptyStr06
+	.long Naka_SdConfig_EmptyStr05
+	.long Naka_SdConfig_EmptyStr04
 	.long NakaInst_Sdmenu2
-	.long LABEL_E85A4C
-	.long LABEL_E85A4A
-	.long LABEL_E85A48
-LABEL_E85A48:	aligned_string ""
-LABEL_E85A4A:	aligned_string ""
-LABEL_E85A4C:	aligned_string ""
+	.long Naka_SdConfig_EmptyStr03
+	.long Naka_SdConfig_EmptyStr02
+	.long Naka_SdConfig_EmptyStr01
+Naka_SdConfig_EmptyStr01:	aligned_string ""
+Naka_SdConfig_EmptyStr02:	aligned_string ""
+Naka_SdConfig_EmptyStr03:	aligned_string ""
 NakaInst_Sdmenu2:	aligned_string "Sdmenu2"
-LABEL_E85A56:	aligned_string ""
-LABEL_E85A58:	aligned_string ""
-LABEL_E85A5A:	aligned_string ""
-LABEL_E85A5C:	aligned_string ""
-LABEL_E85A5E:	aligned_string ""
-LABEL_E85A60:	aligned_string ""
-LABEL_E85A62:	aligned_string ""
-LABEL_E85A64:	aligned_string ""
-LABEL_E85A66:	aligned_string ""
-LABEL_E85A68:	aligned_string ""
+Naka_SdConfig_EmptyStr04:	aligned_string ""
+Naka_SdConfig_EmptyStr05:	aligned_string ""
+Naka_SdConfig_EmptyStr06:	aligned_string ""
+Naka_SdConfig_EmptyStr07:	aligned_string ""
+Naka_SdConfig_EmptyStr08:	aligned_string ""
+Naka_SdConfig_EmptyStr09:	aligned_string ""
+Naka_SdConfig_EmptyStr10:	aligned_string ""
+Naka_SdConfig_EmptyStr11:	aligned_string ""
+Naka_SdConfig_EmptyStr12:	aligned_string ""
+Naka_SdConfig_EmptyStr13:	aligned_string ""
 NakaInst_Sdmenu1:	aligned_string "Sdmenu1"
-LABEL_E85A72:	aligned_string ""
-LABEL_E85A74:	aligned_string ""
-LABEL_E85A76:	aligned_string ""
-LABEL_E85A78:	aligned_string ""
+Naka_SdConfig_EmptyStr14:	aligned_string ""
+Naka_SdConfig_EmptyStr15:	aligned_string ""
+Naka_SdConfig_EmptyStr16:	aligned_string ""
+Naka_SdConfig_EmptyStr17:	aligned_string ""
 NakaInst_SdmenuPage:	aligned_string "SdmenuPage"
 NakaInst_Sdmenu:	aligned_string "Sdmenu"
 	.byte 0xe8, 0x5c
@@ -3429,169 +3429,169 @@ NakaInst_Sdmenu:	aligned_string "Sdmenu"
 	.byte 0xe8, 0x00, 0xe8, 0x5b, 0xe8, 0x00, 0xe6, 0x5b
 	.byte 0xe8, 0x00, 0xe4, 0x5b, 0xe8, 0x00, 0xe2, 0x5b
 	.byte 0xe8, 0x00
-LABEL_E85BE2:
+Naka_Sdpart_Pad01:
 	.byte 0x00, 0xff
-LABEL_E85BE4:
+Naka_Sdpart_Pad02:
 	.byte 0x00, 0xff
-LABEL_E85BE6:
+Naka_Sdpart_Pad03:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E85BEA:
+Naka_Sdpart_Pad04:
 	.byte 0x00, 0xff
-LABEL_E85BEC:
+Naka_Sdpart_Pad05:
 	.byte 0x00, 0xff
-LABEL_E85BEE:
+Naka_Sdpart_Pad06:
 	.byte 0x00, 0xff
 NakaInst_SdpartOth:	aligned_string "SdpartOth"
 	.byte 0x00, 0xff
-LABEL_E85BFC:
+Naka_SdpartOth_Pad1:
 	.byte 0x00, 0xff
-LABEL_E85BFE:
+Naka_SdpartOth_Pad2:
 	.byte 0x00, 0xff
 NakaInst_SdpartBnd:	aligned_string "SdpartBnd"
 	.byte 0x00, 0xff
-LABEL_E85C0C:
+Naka_SdpartBnd_Pad1:
 	.byte 0x00, 0xff
-LABEL_E85C0E:
+Naka_SdpartBnd_Pad2:
 	.byte 0x00, 0xff
 NakaInst_SdpartTun:	aligned_string "SdpartTun"
 	.byte 0x00, 0xff
-LABEL_E85C1C:
+Naka_SdpartTun_Pad1:
 	.byte 0x00, 0xff
-LABEL_E85C1E:
+Naka_SdpartTun_Pad2:
 	.byte 0x00, 0xff
 NakaInst_SdpartKey:	aligned_string "SdpartKey"
 	.byte 0x00, 0xff
-LABEL_E85C2C:
+Naka_SdpartKey_Pad1:
 	.byte 0x00, 0xff
-LABEL_E85C2E:
+Naka_SdpartKey_Pad2:
 	.byte 0x00, 0xff
-LABEL_E85C30:	aligned_string ""
+Naka_SdpartKey_EmptyStr:	aligned_string ""
 NakaInst_SdpartSus:	aligned_string "SdpartSus"
 	.byte 0x00, 0xff
-LABEL_E85C3E:
+Naka_SdpartSus_Pad1:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E85C42:
+Naka_SdpartSus_Pad2:
 	.byte 0x00, 0xff
-LABEL_E85C44:
+Naka_SdpartSus_Pad3:
 	.byte 0x00, 0xff
 NakaInst_SdpartEff:	aligned_string "SdpartEff"
 	.byte 0x00, 0xff
-LABEL_E85C52:
+Naka_SdpartEff_Pad1:
 	.byte 0x00, 0xff
-LABEL_E85C54:
+Naka_SdpartEff_Pad2:
 	.byte 0x00, 0xff
-LABEL_E85C56:
+Naka_SdpartEff_Pad3:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E85C5A:
+Naka_SdpartEff_Pad4:
 	.byte 0x00, 0xff
 NakaInst_SdpartPan:	aligned_string "SdpartPan"
-LABEL_E85C66:	aligned_string ""
+Naka_SdpartPan_EmptyStr:	aligned_string ""
 	.byte 0x00, 0xff
-LABEL_E85C6A:
+Naka_SdpartPan_Pad1:
 	.byte 0x00, 0xff
 NakaInst_SdpartVol:	aligned_string "SdpartVol"
-LABEL_E85C76:	aligned_string ""
+Naka_SdpartVol_EmptyStr:	aligned_string ""
 	.byte 0x00, 0xff
-LABEL_E85C7A:
+Naka_SdpartVol_Pad1:
 	.byte 0x00, 0xff
-LABEL_E85C7C:
+Naka_SdpartVol_Pad2:
 	.byte 0x00, 0xff
-LABEL_E85C7E:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_E85C82:
-	.byte 0x00, 0xff
-LABEL_E85C84:
-	.byte 0x00, 0xff
-LABEL_E85C86:
+Naka_SdpartVol_Pad3:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E85C8A:
+Naka_SdpartVol_Pad4:
 	.byte 0x00, 0xff
-LABEL_E85C8C:
+Naka_SdpartVol_Pad5:
 	.byte 0x00, 0xff
-LABEL_E85C8E:
+Naka_SdpartVol_Pad6:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+Naka_SdpartVol_Pad7:
+	.byte 0x00, 0xff
+Naka_SdpartVol_Pad8:
+	.byte 0x00, 0xff
+Naka_SdpartVol_Pad9:
 	.byte 0x00, 0xff
 NakaInst_SdpartMain:	aligned_string "SdpartMain"
 	.byte 0x00, 0xff
-LABEL_E85C9E:
+Naka_SdpartMain_Pad1:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E85CA2:
+Naka_SdpartMain_Pad2:
 	.byte 0x00, 0xff
-LABEL_E85CA4:
+Naka_SdpartMain_Pad3:
 	.byte 0x00, 0xff
-LABEL_E85CA6:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_E85CAA:
-	.byte 0x00, 0xff
-LABEL_E85CAC:
-	.byte 0x00, 0xff
-LABEL_E85CAE:
+Naka_SdpartMain_Pad4:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E85CB2:
+Naka_SdpartMain_Pad5:
 	.byte 0x00, 0xff
-LABEL_E85CB4:
+Naka_SdpartMain_Pad6:
 	.byte 0x00, 0xff
-LABEL_E85CB6:
+Naka_SdpartMain_Pad7:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E85CBA:
+Naka_SdpartMain_Pad8:
 	.byte 0x00, 0xff
-LABEL_E85CBC:
+Naka_SdpartMain_Pad9:
+	.byte 0x00, 0xff
+Naka_SdpartMain_PadA:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+Naka_SdpartMain_PadB:
+	.byte 0x00, 0xff
+Naka_SdpartMain_PadC:
 	.byte 0x00, 0xff
 NakaInst_SdpartPart:	aligned_string "SdpartPart"
 NakaInst_SdpartSound:	aligned_string "SdpartSound"
-LABEL_E85CD6:	aligned_string ""
+Naka_SdpartSound_EmptyStr:	aligned_string ""
 	.byte 0x00, 0xff
-LABEL_E85CDA:
+Naka_SdpartSound_Pad1:
 	.byte 0x00, 0xff
-LABEL_E85CDC:
+Naka_SdpartSound_Pad2:
 	.byte 0x00, 0xff
-LABEL_E85CDE:
+Naka_SdpartSound_Pad3:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E85CE2:
+Naka_SdpartSound_Pad4:
 	.byte 0x00, 0xff
-LABEL_E85CE4:
+Naka_SdpartSound_Pad5:
 	.byte 0x00, 0xff
-LABEL_E85CE6:
+Naka_SdpartSound_Pad6:
 	.byte 0x00, 0xff
 NakaInst_Sdpart:	aligned_string "Sdpart"
 Naka_SDMenu_TuneTable:
 	.long NakaInst_Sdmtune
-	.long LABEL_E85D0A
-	.long LABEL_E85D08
-	.long LABEL_E85D06
-	.long LABEL_E85D04
-LABEL_E85D04:	aligned_string ""
-LABEL_E85D06:	aligned_string ""
-LABEL_E85D08:	aligned_string ""
-LABEL_E85D0A:	aligned_string ""
+	.long Naka_SdmTune_EmptyStr4
+	.long Naka_SdmTune_EmptyStr3
+	.long Naka_SdmTune_EmptyStr2
+	.long Naka_SdmTune_EmptyStr1
+Naka_SdmTune_EmptyStr1:	aligned_string ""
+Naka_SdmTune_EmptyStr2:	aligned_string ""
+Naka_SdmTune_EmptyStr3:	aligned_string ""
+Naka_SdmTune_EmptyStr4:	aligned_string ""
 NakaInst_Sdmtune:	aligned_string "Sdmtune"
 	.long NakaInst_Sdscltyp
 Naka_SoundParam2_Table:
 	.long NakaInst_SdscltypPage
-	.long LABEL_E85EF0
-	.long LABEL_E85EEE
-	.long LABEL_E85EEC
+	.long Naka_Sdscltyp_EmptyStr12
+	.long Naka_Sdscltyp_EmptyStr11
+	.long Naka_Sdscltyp_EmptyStr10
 	.long NakaInst_Sdscltyp1
-	.long LABEL_E85EE0
+	.long Naka_Sdscltyp_EmptyStr09
 	.long NakaInst_ScalingType
-	.long LABEL_E85ED2
-	.long LABEL_E85ED0
-	.long LABEL_E85ECE
+	.long Naka_Sdscltyp_EmptyStr08
+	.long Naka_Sdscltyp_EmptyStr07
+	.long Naka_Sdscltyp_EmptyStr06
 	.long NakaInst_Sdscltyp2
-	.long LABEL_E85EC2
-	.long LABEL_E85EC0
-	.long LABEL_E85EBE
-	.long LABEL_E85EBC
-	.long LABEL_E85EBA
+	.long Naka_Sdscltyp_EmptyStr05
+	.long Naka_Sdscltyp_EmptyStr04
+	.long Naka_Sdscltyp_EmptyStr03
+	.long Naka_Sdscltyp_EmptyStr02
+	.long Naka_Sdscltyp_EmptyStr01
 	.long NakaInst_ScalingKey1
 	.long NakaInst_ScalingKey2
 	.long NakaInst_ScalingKey3
@@ -3604,58 +3604,58 @@ Naka_SoundParam2_Table:
 	.long NakaInst_ScalingKey10
 	.long NakaInst_ScalingKey11
 	.long NakaInst_ScalingKey12
-	.long LABEL_E85E22
-	.long LABEL_E85E20
-	.long LABEL_E85E1E
-	.long LABEL_E85E1C
-	.long LABEL_E85E1A
-	.long LABEL_E85E18
-	.long LABEL_E85E16
-	.long LABEL_E85E14
-	.long LABEL_E85E12
-	.long LABEL_E85E10
-	.long LABEL_E85E0E
-	.long LABEL_E85E0C
-	.long LABEL_E85E0A
-	.long LABEL_E85E08
-	.long LABEL_E85E06
-	.long LABEL_E85E04
-	.long LABEL_E85E02
-	.long LABEL_E85E00
-	.long LABEL_E85DFE
-	.long LABEL_E85DFC
-	.long LABEL_E85DFA
-	.long LABEL_E85DF8
-	.long LABEL_E85DF6
-	.long LABEL_E85DF4
-	.long LABEL_E85DF2
-	.long LABEL_E85DF0
-LABEL_E85DF0:	aligned_string ""
-LABEL_E85DF2:	aligned_string ""
-LABEL_E85DF4:	aligned_string ""
-LABEL_E85DF6:	aligned_string ""
-LABEL_E85DF8:	aligned_string ""
-LABEL_E85DFA:	aligned_string ""
-LABEL_E85DFC:	aligned_string ""
-LABEL_E85DFE:	aligned_string ""
-LABEL_E85E00:	aligned_string ""
-LABEL_E85E02:	aligned_string ""
-LABEL_E85E04:	aligned_string ""
-LABEL_E85E06:	aligned_string ""
-LABEL_E85E08:	aligned_string ""
-LABEL_E85E0A:	aligned_string ""
-LABEL_E85E0C:	aligned_string ""
-LABEL_E85E0E:	aligned_string ""
-LABEL_E85E10:	aligned_string ""
-LABEL_E85E12:	aligned_string ""
-LABEL_E85E14:	aligned_string ""
-LABEL_E85E16:	aligned_string ""
-LABEL_E85E18:	aligned_string ""
-LABEL_E85E1A:	aligned_string ""
-LABEL_E85E1C:	aligned_string ""
-LABEL_E85E1E:	aligned_string ""
-LABEL_E85E20:	aligned_string ""
-LABEL_E85E22:	aligned_string ""
+	.long Naka_ScalingKey_EmptyStr26
+	.long Naka_ScalingKey_EmptyStr25
+	.long Naka_ScalingKey_EmptyStr24
+	.long Naka_ScalingKey_EmptyStr23
+	.long Naka_ScalingKey_EmptyStr22
+	.long Naka_ScalingKey_EmptyStr21
+	.long Naka_ScalingKey_EmptyStr20
+	.long Naka_ScalingKey_EmptyStr19
+	.long Naka_ScalingKey_EmptyStr18
+	.long Naka_ScalingKey_EmptyStr17
+	.long Naka_ScalingKey_EmptyStr16
+	.long Naka_ScalingKey_EmptyStr15
+	.long Naka_ScalingKey_EmptyStr14
+	.long Naka_ScalingKey_EmptyStr13
+	.long Naka_ScalingKey_EmptyStr12
+	.long Naka_ScalingKey_EmptyStr11
+	.long Naka_ScalingKey_EmptyStr10
+	.long Naka_ScalingKey_EmptyStr09
+	.long Naka_ScalingKey_EmptyStr08
+	.long Naka_ScalingKey_EmptyStr07
+	.long Naka_ScalingKey_EmptyStr06
+	.long Naka_ScalingKey_EmptyStr05
+	.long Naka_ScalingKey_EmptyStr04
+	.long Naka_ScalingKey_EmptyStr03
+	.long Naka_ScalingKey_EmptyStr02
+	.long Naka_ScalingKey_EmptyStr01
+Naka_ScalingKey_EmptyStr01:	aligned_string ""
+Naka_ScalingKey_EmptyStr02:	aligned_string ""
+Naka_ScalingKey_EmptyStr03:	aligned_string ""
+Naka_ScalingKey_EmptyStr04:	aligned_string ""
+Naka_ScalingKey_EmptyStr05:	aligned_string ""
+Naka_ScalingKey_EmptyStr06:	aligned_string ""
+Naka_ScalingKey_EmptyStr07:	aligned_string ""
+Naka_ScalingKey_EmptyStr08:	aligned_string ""
+Naka_ScalingKey_EmptyStr09:	aligned_string ""
+Naka_ScalingKey_EmptyStr10:	aligned_string ""
+Naka_ScalingKey_EmptyStr11:	aligned_string ""
+Naka_ScalingKey_EmptyStr12:	aligned_string ""
+Naka_ScalingKey_EmptyStr13:	aligned_string ""
+Naka_ScalingKey_EmptyStr14:	aligned_string ""
+Naka_ScalingKey_EmptyStr15:	aligned_string ""
+Naka_ScalingKey_EmptyStr16:	aligned_string ""
+Naka_ScalingKey_EmptyStr17:	aligned_string ""
+Naka_ScalingKey_EmptyStr18:	aligned_string ""
+Naka_ScalingKey_EmptyStr19:	aligned_string ""
+Naka_ScalingKey_EmptyStr20:	aligned_string ""
+Naka_ScalingKey_EmptyStr21:	aligned_string ""
+Naka_ScalingKey_EmptyStr22:	aligned_string ""
+Naka_ScalingKey_EmptyStr23:	aligned_string ""
+Naka_ScalingKey_EmptyStr24:	aligned_string ""
+Naka_ScalingKey_EmptyStr25:	aligned_string ""
+Naka_ScalingKey_EmptyStr26:	aligned_string ""
 NakaInst_ScalingKey12:	aligned_string "ScalingKey12"
 NakaInst_ScalingKey11:	aligned_string "ScalingKey11"
 NakaInst_ScalingKey10:	aligned_string "ScalingKey10"
@@ -3668,41 +3668,41 @@ NakaInst_ScalingKey4:	aligned_string "ScalingKey4"
 NakaInst_ScalingKey3:	aligned_string "ScalingKey3"
 NakaInst_ScalingKey2:	aligned_string "ScalingKey2"
 NakaInst_ScalingKey1:	aligned_string "ScalingKey1"
-LABEL_E85EBA:	aligned_string ""
-LABEL_E85EBC:	aligned_string ""
-LABEL_E85EBE:	aligned_string ""
-LABEL_E85EC0:	aligned_string ""
-LABEL_E85EC2:	aligned_string ""
+Naka_Sdscltyp_EmptyStr01:	aligned_string ""
+Naka_Sdscltyp_EmptyStr02:	aligned_string ""
+Naka_Sdscltyp_EmptyStr03:	aligned_string ""
+Naka_Sdscltyp_EmptyStr04:	aligned_string ""
+Naka_Sdscltyp_EmptyStr05:	aligned_string ""
 NakaInst_Sdscltyp2:	aligned_string "Sdscltyp2"
-LABEL_E85ECE:	aligned_string ""
-LABEL_E85ED0:	aligned_string ""
-LABEL_E85ED2:	aligned_string ""
+Naka_Sdscltyp_EmptyStr06:	aligned_string ""
+Naka_Sdscltyp_EmptyStr07:	aligned_string ""
+Naka_Sdscltyp_EmptyStr08:	aligned_string ""
 NakaInst_ScalingType:	aligned_string "ScalingType"
-LABEL_E85EE0:	aligned_string ""
+Naka_Sdscltyp_EmptyStr09:	aligned_string ""
 NakaInst_Sdscltyp1:	aligned_string "Sdscltyp1"
-LABEL_E85EEC:	aligned_string ""
-LABEL_E85EEE:	aligned_string ""
-LABEL_E85EF0:	aligned_string ""
+Naka_Sdscltyp_EmptyStr10:	aligned_string ""
+Naka_Sdscltyp_EmptyStr11:	aligned_string ""
+Naka_Sdscltyp_EmptyStr12:	aligned_string ""
 NakaInst_SdscltypPage:	aligned_string "SdscltypPage"
 NakaInst_Sdscltyp:	aligned_string "Sdscltyp"
 	.byte 0x20, 0x5f, 0xe8, 0x00, 0x1e, 0x5f
 	.byte 0xe8, 0x00, 0x1c, 0x5f, 0xe8, 0x00, 0x1a, 0x5f
 	.byte 0xe8, 0x00
-LABEL_E85F1A:
+Naka_Sdlfthld_Pad1:
 	.byte 0x00, 0xff
-LABEL_E85F1C:
+Naka_Sdlfthld_Pad2:
 	.byte 0x00, 0xff
-LABEL_E85F1E:
+Naka_Sdlfthld_Pad3:
 	.byte 0x00, 0xff
 NakaInst_Sdlfthld:	aligned_string "Sdlfthld"
 	.byte 0x46, 0x5f, 0xe8, 0x00, 0x44, 0x5f
 	.byte 0xe8, 0x00, 0x42, 0x5f, 0xe8, 0x00, 0x40, 0x5f
 	.byte 0xe8, 0x00, 0x3e, 0x5f, 0xe8, 0x00
-LABEL_E85F3E:
+Naka_Sdmixer_Pad1:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E85F42:
+Naka_Sdmixer_Pad2:
 	.byte 0x00, 0xff
-LABEL_E85F44:
+Naka_Sdmixer_Pad3:
 	.byte 0x00, 0xff
 NakaInst_Sdmixer:	aligned_string "Sdmixer"

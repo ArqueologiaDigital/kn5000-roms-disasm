@@ -368,7 +368,7 @@ WPScan_TypeNotThree:
 	ld a, c
 	cps c, 2
 	jr nz, WPScan_TypeGeneric
-	call LABEL_F87218
+	call FileIO_ValidateFileSignature
 	cps hl, 0
 	jr z, WPScan_LoopContinue
 	call FileIO_ValidateFileWithRegion
@@ -391,7 +391,7 @@ WPScan_TypeTwo_Mark:
 	jr WPScan_LoopContinue
 
 WPScan_TypeGeneric:
-	call LABEL_F87218
+	call FileIO_ValidateFileSignature
 	cps hl, 0
 	jr z, WPScan_LoopContinue
 	ld wa, iz

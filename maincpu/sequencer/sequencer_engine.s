@@ -1892,11 +1892,11 @@ SeqPlay_InitDemo_LoadVoiceData:
 	ldda8 a, 10404
 	ldfr_berp A, 0xFB
 	extz wa
-	call LABEL_F86F48
+	call Demo_GetPresetBaseForPart
 	stda32 10302, xhl
 	ldto_berp A, 0xFB
 	extz wa
-	call LABEL_F86F92
+	call Demo_GetPresetBaseForPartExt
 	ld (xsp + 2), xhl
 	ldi_berp 0xFB, 1
 
@@ -19282,7 +19282,7 @@ SeqTimer_BarReturn:
 	call Audio_CheckSubsystemReady
 	ldto_berp A, 0xFB
 	extz wa
-	call LABEL_F86FDC
+	call Voice_GetPresetFieldAddr
 	ld (xsp + 2), xhl
 	ldi_berp 0xFB, 1
 
