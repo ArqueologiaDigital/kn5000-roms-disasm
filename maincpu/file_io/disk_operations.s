@@ -960,7 +960,7 @@ DiskName_HandleApply:
 	lds wa, 0
 	calr InitializeOperationState
 	ld xwa, 0x878C
-	call LABEL_F5289C
+	call FileIO_CheckPathAndVolumeLabel
 	calr SignalProgressUpdate
 	calr ResetProgressIndication
 	ldw wa, 0x60
