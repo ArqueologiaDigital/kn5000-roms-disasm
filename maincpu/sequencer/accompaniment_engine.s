@@ -14351,7 +14351,7 @@ AccPatch_SeqDispatch_ProcessFlags:
 	jr z, AccPatch_SeqDispatch_RunNotes
 
 AccPatch_SeqDispatch_ModeChange:
-	calr LABEL_F600C2
+	calr AccPatch_UpdateSequenceState
 	jr AccPatch_SyncStateAndReturn
 
 AccPatch_SeqDispatch_RunNotes:
@@ -14361,7 +14361,7 @@ AccPatch_SeqDispatch_RunNotes:
 	stdi16 13834, 0
 	stdi16 13838, 0
 	stdi8 13823, 0
-	calr LABEL_F60611
+	calr AccPatch_EventDispatch_Nop
 	cpdi16 13834, 0
 	jr z, AccPatch_SeqDispatch_CheckQueued
 	ldda16 xwa, 13826
@@ -14499,10 +14499,10 @@ AccPatch_ResetSeqCounters:
 	ld xhl, 0x361A
 	ldw bc, 0x8
 
-LABEL_F6003E:
+AccPatch_ResetSeqCounters_Loop:
 	ldw (xhl), 0x0
 	add hl, 0x6
-	djnz xbc, LABEL_F6003E
+	djnz xbc, AccPatch_ResetSeqCounters_Loop
 	ei 6
 	ldda8 a, 1077
 	ldda8 c, 1046
@@ -14516,60 +14516,60 @@ LABEL_F6003E:
 	call AccPatch_InitCurrentSlotPointer
 	popw bc
 	cps bc, 0
-	jr z, LABEL_F60076
+	jr z, AccPatch_ResetSeqCounters_Done
 
-LABEL_F6006E:
+AccPatch_ResetSeqCounters_AdvLoop:
 	pushw bc
 	calr AccPatch_ScanToSequenceEnd
 	popw bc
-	djnz xbc, LABEL_F6006E
+	djnz xbc, AccPatch_ResetSeqCounters_AdvLoop
 
-LABEL_F60076:
+AccPatch_ResetSeqCounters_Done:
 	ret
 
-LABEL_F60077:
+__pad_F60077:
 	.byte 0x00, 0x00
 
 AccPatch_ScanToSequenceEnd:
 	calr AccPatch_SeqReadByte
 	cp a, 0x81
-	jr z, LABEL_F6008C
+	jr z, AccPatch_ScanSeqEnd_HandleMarker
 	calr AccPatch_AdvanceSeqIndex
 	bitda 0, 13846
 	jr nz, AccPatch_ScanDone
 	jr AccPatch_ScanToSequenceEnd
 
-LABEL_F6008C:
+AccPatch_ScanSeqEnd_HandleMarker:
 	calr AccPatch_AdvanceSeqIndex
 	bitda 0, 13846
 	jr nz, AccPatch_ScanDone
 	calr AccPatch_SeqReadByte
 	cp a, 0x83
 	jr nz, AccPatch_ScanDone
-	calr LABEL_F600A3
+	calr AccPatch_MarkAllSlotsActive
 
 AccPatch_ScanDone:
 	ret
 
-LABEL_F600A1:
+__pad_F600A1:
 	.byte 0x00, 0x00
 
-LABEL_F600A3:
+AccPatch_MarkAllSlotsActive:
 	ld xhl, 0x361A
 
-LABEL_F600A8:
+AccPatch_MarkSlots_Loop:
 	bitm 7, (xhl)
-	jr z, LABEL_F600B0
+	jr z, AccPatch_MarkSlots_Next
 	ormi8 (xhl + 1), 0x80
 
-LABEL_F600B0:
+AccPatch_MarkSlots_Next:
 	add xhl, 0x6
 	cp xhl, 0x364A
-	jr c, LABEL_F600A8
+	jr c, AccPatch_MarkSlots_Loop
 	calr AccPatch_InitCurrentSlotPointer
 	ret
 
-LABEL_F600C2:
+AccPatch_UpdateSequenceState:
 	ldda16 xwa, 13842
 	stda16 13786, xwa
 	ldda16 xwa, 13844
@@ -14583,71 +14583,71 @@ LABEL_F600C2:
 	ldda8 a, 13519
 	ldda8 w, 13820
 	bit 2, a
-	jr nz, LABEL_F600FA
+	jr nz, AccPatch_UpdateSeqState_CheckXor
 	bit 2, w
-	jr nz, LABEL_F600FA
-	jr LABEL_F6011E
+	jr nz, AccPatch_UpdateSeqState_CheckXor
+	jr AccPatch_UpdateSeqState_CheckBit4
 
-LABEL_F600FA:
+AccPatch_UpdateSeqState_CheckXor:
 	ld c, a
 	xor c, w
 	and a, c
 	cps a, 0
-	jr z, LABEL_F6010E
+	jr z, AccPatch_UpdateSeqState_AndCheck
 	calr AccPatch_SeekToPosition
 	ordi8 13821, 1
 	jr AccPatch_LoadNextSequencePointers
 
-LABEL_F6010E:
+AccPatch_UpdateSeqState_AndCheck:
 	and w, c
 	cps w, 0
-	jr z, LABEL_F60119
+	jr z, AccPatch_UpdateSeqState_ResumeSeq
 	calr AccPatch_InitAndLoadSequence
-	jr LABEL_F6017B
+	jr AccPatch_UpdateSeqState_CheckBit3
 
-LABEL_F60119:
-	calr LABEL_F602CD
+AccPatch_UpdateSeqState_ResumeSeq:
+	calr AccPatch_ResumeSequencePlayback
 	jr AccPatch_LoadNextSequencePointers
 
-LABEL_F6011E:
+AccPatch_UpdateSeqState_CheckBit4:
 	bitda 4, 14235
 	jr z, AccPatch_LoadNextSequencePointers
 	ldda8 a, 13656
 	stda8 13819, a
 	bitda 3, 13519
-	jr z, LABEL_F60142
+	jr z, AccPatch_UpdateSeqState_ClearBit7
 	bitda 7, 13656
-	jr nz, LABEL_F6013D
-	calr LABEL_F601A5
-	jr LABEL_F60140
+	jr nz, AccPatch_UpdateSeqState_ScanNoteOff
+	calr AccPatch_ClearAndScanForNote
+	jr AccPatch_UpdateSeqState_AfterScan
 
-LABEL_F6013D:
+AccPatch_UpdateSeqState_ScanNoteOff:
 	calr AccPatch_ScanForNoteOff
 
-LABEL_F60140:
-	jr LABEL_F60147
+AccPatch_UpdateSeqState_AfterScan:
+	jr AccPatch_UpdateSeqState_CompareBits
 
-LABEL_F60142:
+AccPatch_UpdateSeqState_ClearBit7:
 	anddi8 13656, 127
 
-LABEL_F60147:
+AccPatch_UpdateSeqState_CompareBits:
 	ldda8 a, 13656
 	ldda8 c, 13819
 	bit 7, a
-	jr z, LABEL_F6015E
+	jr z, AccPatch_UpdateSeqState_CheckC7
 	bit 7, c
-	jr nz, LABEL_F60168
+	jr nz, AccPatch_UpdateSeqState_BothSet
 	calr AccPatch_SeekToPosition
 	jr AccPatch_LoadNextSequencePointers
 
-LABEL_F6015E:
+AccPatch_UpdateSeqState_CheckC7:
 	bit 7, c
 	jr z, AccPatch_LoadNextSequencePointers
 	calr AccPatch_InitAndLoadSequence
-	jr LABEL_F6017B
+	jr AccPatch_UpdateSeqState_CheckBit3
 
-LABEL_F60168:
-	calr LABEL_F60515
+AccPatch_UpdateSeqState_BothSet:
+	calr AccPatch_PrepareAndProcessEvents
 
 AccPatch_LoadNextSequencePointers:
 	ldda16 xwa, 13786
@@ -14655,40 +14655,40 @@ AccPatch_LoadNextSequencePointers:
 	ldda16 xwa, 13788
 	stda16 13844, xwa
 
-LABEL_F6017B:
+AccPatch_UpdateSeqState_CheckBit3:
 	bitda 3, 13519
-	jr nz, LABEL_F6018A
+	jr nz, AccPatch_UpdateSeqState_StoreFlags
 	bitda 3, 13820
-	jr z, LABEL_F6018A
+	jr z, AccPatch_UpdateSeqState_StoreFlags
 	calr AccPatch_InitAndLoadSequence
 
-LABEL_F6018A:
+AccPatch_UpdateSeqState_StoreFlags:
 	ldda8 a, 13519
 	stda8 13820, a
 	anddi8 13819, 253
 	bitda 0, 13819
-	jr z, LABEL_F601A2
+	jr z, AccPatch_UpdateSeqState_Return
 	ordi8 13819, 2
 
-LABEL_F601A2:
+AccPatch_UpdateSeqState_Return:
 	ret
 
-LABEL_F601A3:
+__pad_F601A3:
 	.byte 0x00, 0x00
 
-LABEL_F601A5:
+AccPatch_ClearAndScanForNote:
 	anddi8 13656, 127
 
-LABEL_F601AA:
+AccPatch_ScanForActiveNote:
 	call AccPatch_CheckEmpty
 	cps wa, 0
-	jr z, LABEL_F601E2
+	jr z, AccPatch_ScanNote_Done
 	lds bc, 1
 	calr TempoRingBuf_SkipBytes
 	ld w, a
 	and w, 0xF0
 	cp w, 0x90
-	jr nz, LABEL_F601E0
+	jr nz, AccPatch_ScanNote_Continue
 	lds bc, 2
 	calr TempoRingBuf_SkipBytes
 	ld l, a
@@ -14697,33 +14697,33 @@ LABEL_F601AA:
 	calr TempoRingBuf_SkipBytes
 	pop l
 	cps a, 0
-	jr z, LABEL_F601E0
+	jr z, AccPatch_ScanNote_Continue
 	or l, 0x80
 	stda8 13656, l
 	call TempoRingBuf_ReInitAndRet
 
-LABEL_F601E0:
-	jr LABEL_F601AA
+AccPatch_ScanNote_Continue:
+	jr AccPatch_ScanForActiveNote
 
-LABEL_F601E2:
+AccPatch_ScanNote_Done:
 	ret
 
 TempoRingBuf_SkipBytes:
 	cps bc, 0
-	jr z, LABEL_F601F1
+	jr z, TempoRingBuf_SkipBytes_Done
 	pushw bc
 	call TempoRingBuf_ReadByteToA
 	popw bc
 	dec 1, bc
 	jr TempoRingBuf_SkipBytes
 
-LABEL_F601F1:
+TempoRingBuf_SkipBytes_Done:
 	ret
 
 AccPatch_ScanForNoteOff:
 	call AccPatch_CheckEmpty
 	cps wa, 0
-	jr z, LABEL_F6022F
+	jr z, AccPatch_ScanForNoteOff_Done
 	lds bc, 1
 	calr TempoRingBuf_SkipBytes
 	ld w, a
@@ -14747,7 +14747,7 @@ AccPatch_ScanForNoteOff:
 AccPatch_ErrorExit:
 	jr AccPatch_ScanForNoteOff
 
-LABEL_F6022F:
+AccPatch_ScanForNoteOff_Done:
 	ret
 
 AccPatch_SeekToPosition:
@@ -14772,18 +14772,18 @@ AccPatch_SeekForwardSteps:
 	calr AccPatch_InitCurrentSlotPointer
 	popw bc
 	cps bc, 0
-	jr z, LABEL_F60272
+	jr z, AccPatch_SeekFwd_Done
 
-LABEL_F6026A:
+AccPatch_SeekFwd_AdvLoop:
 	pushw bc
 	calr AccPatch_ScanToSequenceEnd
 	popw bc
-	djnz xbc, LABEL_F6026A
+	djnz xbc, AccPatch_SeekFwd_AdvLoop
 
-LABEL_F60272:
+AccPatch_SeekFwd_Done:
 	ret
 
-LABEL_F60273:
+__pad_F60273:
 	.byte 0x00, 0x00
 
 AccPatch_ParseSequenceHeader:
@@ -14793,43 +14793,43 @@ AccPatch_ParseSequenceHeader:
 	stda16 14076, xwa
 	calr AccPatch_SeqReadByte
 	cp a, 0x81
-	jr z, LABEL_F602BA
+	jr z, AccPatch_ParseHdr_RestorePos
 	cp a, 0x83
-	jr nz, LABEL_F60299
+	jr nz, AccPatch_ParseHdr_AdvanceAndCompare
 	ordi8 13846, 2
-	jr LABEL_F602CA
+	jr AccPatch_ParseHdr_Return
 
-LABEL_F60299:
+AccPatch_ParseHdr_AdvanceAndCompare:
 	calr AccPatch_AdvanceSeqIndex
 	calr AccPatch_SeqReadByte
 	cpda8 a, 14072
-	jr ugt, LABEL_F602BA
+	jr ugt, AccPatch_ParseHdr_RestorePos
 
-LABEL_F602A5:
+AccPatch_ParseHdr_AdvanceAndRead:
 	calr AccPatch_AdvanceSeqIndex
 	calr AccPatch_SeqReadByte
 	bitda 0, 13846
-	jr z, LABEL_F602B3
-	jr LABEL_F602CA
+	jr z, AccPatch_ParseHdr_CheckBit7
+	jr AccPatch_ParseHdr_Return
 
-LABEL_F602B3:
+AccPatch_ParseHdr_CheckBit7:
 	bit 7, a
-	jr z, LABEL_F602A5
+	jr z, AccPatch_ParseHdr_AdvanceAndRead
 	jr AccPatch_ParseSequenceHeader
 
-LABEL_F602BA:
+AccPatch_ParseHdr_RestorePos:
 	ldda16 xwa, 14074
 	stda16 13842, xwa
 	ldda16 xwa, 14076
 	stda16 13844, xwa
 
-LABEL_F602CA:
+AccPatch_ParseHdr_Return:
 	ret
 
-LABEL_F602CB:
+__pad_F602CB:
 	.byte 0x00, 0x00
 
-LABEL_F602CD:
+AccPatch_ResumeSequencePlayback:
 	anddi8 13821, 254
 	calr AccPatch_PrepareSequencePlayback
 	ldda16 xwa, 13790
@@ -14838,52 +14838,52 @@ LABEL_F602CD:
 	stda16 13844, xwa
 	stdi16 13834, 0
 
-LABEL_F602EB:
+AccPatch_ResumeSeq_ComparePos:
 	ldda16 xwa, 13842
 	cpda16 xwa, 13794
-	jr nz, LABEL_F60305
+	jr nz, AccPatch_ResumeSeq_ReadByte
 	ldda16 xwa, 13844
 	cpda16 xwa, 13796
-	jr nz, LABEL_F60305
+	jr nz, AccPatch_ResumeSeq_ReadByte
 	calr AccPatch_CheckSequenceChanged
-	jrl LABEL_F60385
+	jrl AccPatch_ResumeSeq_Return
 
-LABEL_F60305:
+AccPatch_ResumeSeq_ReadByte:
 	calr AccPatch_SeqReadByte
 	cp a, 0x90
-	jr z, LABEL_F60329
+	jr z, AccPatch_ResumeSeq_Skip6
 	cp a, 0x91
-	jr z, LABEL_F6032D
+	jr z, AccPatch_ResumeSeq_Skip8
 	cp a, 0x92
-	jr z, LABEL_F60329
+	jr z, AccPatch_ResumeSeq_Skip6
 	cp a, 0x81
-	jr z, LABEL_F60340
+	jr z, AccPatch_ResumeSeq_HandleMarker
 	and a, 0xF0
 	cp a, 0xD0
-	jr z, LABEL_F60332
-	calr LABEL_F60610
-	jr LABEL_F60385
+	jr z, AccPatch_ResumeSeq_Skip3
+	calr AccPatch_ProcessSeqEvt_RetNop
+	jr AccPatch_ResumeSeq_Return
 
-LABEL_F60329:
+AccPatch_ResumeSeq_Skip6:
 	lds bc, 6
-	jr LABEL_F60334
+	jr AccPatch_ResumeSeq_AddAndAdvance
 
-LABEL_F6032D:
+AccPatch_ResumeSeq_Skip8:
 	ldw bc, 0x8
-	jr LABEL_F60334
+	jr AccPatch_ResumeSeq_AddAndAdvance
 
-LABEL_F60332:
+AccPatch_ResumeSeq_Skip3:
 	lds bc, 3
 
-LABEL_F60334:
+AccPatch_ResumeSeq_AddAndAdvance:
 	adddm16 13834, xbc
 
-LABEL_F60338:
+AccPatch_ResumeSeq_AdvLoop:
 	calr AccPatch_AdvanceSeqIndex
-	djnz xbc, LABEL_F60338
-	jr LABEL_F602EB
+	djnz xbc, AccPatch_ResumeSeq_AdvLoop
+	jr AccPatch_ResumeSeq_ComparePos
 
-LABEL_F60340:
+AccPatch_ResumeSeq_HandleMarker:
 	calr AccPatch_CheckSequenceChanged
 	calr AccPatch_AdvanceSeqIndex
 	ldda16 xwa, 13842
@@ -14892,26 +14892,26 @@ LABEL_F60340:
 	stda16 13792, xwa
 	calr AccPatch_SeqReadByte
 	cp a, 0x83
-	jr z, LABEL_F60372
+	jr z, AccPatch_ResumeSeq_InitSlot
 	cpdi16 13834, 0
-	jr z, LABEL_F6036F
+	jr z, AccPatch_ResumeSeq_LoopBack
 	calr AccPatch_PrepareSequencePlayback
 	stdi16 13834, 0
 
-LABEL_F6036F:
-	jrl LABEL_F602EB
+AccPatch_ResumeSeq_LoopBack:
+	jrl AccPatch_ResumeSeq_ComparePos
 
-LABEL_F60372:
+AccPatch_ResumeSeq_InitSlot:
 	calr AccPatch_InitCurrentSlotPointer
 	ldda16 xwa, 13842
 	stda16 13790, xwa
 	ldda16 xwa, 13844
 	stda16 13792, xwa
 
-LABEL_F60385:
+AccPatch_ResumeSeq_Return:
 	ret
 
-LABEL_F60386:
+__pad_F60386:
 	.byte 0x00, 0x00
 
 AccPatch_PrepareSequencePlayback:
@@ -14927,7 +14927,7 @@ AccPatch_PrepareSequencePlayback:
 
 AccPatch_CheckSequenceChanged:
 	cpdi16 13834, 0
-	jr z, LABEL_F603FB
+	jr z, AccPatch_CheckChanged_Return
 	ldda16 xwa, 13790
 	stda16 13914, xwa
 	ldda16 xwa, 13792
@@ -14938,24 +14938,24 @@ AccPatch_CheckSequenceChanged:
 	stda16 13918, xwa
 	ldda16 xwa, 13914
 	cpda16 xwa, 13912
-	jr nz, LABEL_F603E5
+	jr nz, AccPatch_CheckChanged_DoCopy
 	ldda16 xwa, 13920
 	cpda16 xwa, 13918
-	jr nz, LABEL_F603E5
-	jr LABEL_F603FB
+	jr nz, AccPatch_CheckChanged_DoCopy
+	jr AccPatch_CheckChanged_Return
 
-LABEL_F603E5:
+AccPatch_CheckChanged_DoCopy:
 	calr AccPatch_CopySequenceEntry
-	calr LABEL_F60466
+	calr AccPatch_UpdateEntryFromTable
 	ldda16 xwa, 13790
 	stda16 13842, xwa
 	ldda16 xwa, 13792
 	stda16 13844, xwa
 
-LABEL_F603FB:
+AccPatch_CheckChanged_Return:
 	ret
 
-LABEL_F603FC:
+__pad_F603FC:
 	.byte 0x00, 0x00
 
 AccPatch_CopySequenceEntry:
@@ -14973,7 +14973,7 @@ AccPatch_CopySequenceEntry:
 	stda16 14084, xix
 	ldda16 xwa, 13914
 	cpda16 xwa, 13830
-	jr z, LABEL_F60453
+	jr z, AccPatch_CopyEntry_Store
 	incdi16 1, 13524
 	ldda16 xhl, 13914
 	calr AccPatch_GetEntryAddr
@@ -14984,17 +14984,17 @@ AccPatch_CopySequenceEntry:
 	andmi8 (xix), 0x7F
 	ldw (xix + 1), 0xFFFF
 
-LABEL_F60453:
+AccPatch_CopyEntry_Store:
 	ldda16 xwa, 13914
 	stda16 13830, xwa
 	ldda16 xwa, 14084
 	stda16 13832, xwa
 	ret
 
-LABEL_F60464:
+__pad_F60464:
 	.byte 0x00, 0x00
 
-LABEL_F60466:
+AccPatch_UpdateEntryFromTable:
 	calr AccPatch_LoadTablePointers
 	ld de, (xix)
 	ld hl, (xiy)
@@ -15004,22 +15004,22 @@ LABEL_F60466:
 	popw hl
 	popw de
 	cpda16 xhl, 13790
-	jr z, LABEL_F60486
+	jr z, AccPatch_UpdateEntry_CheckDE
 	cpw (xix + 1), 0xFFFF
 	jr z, AccPatch_NullRet
-	calr LABEL_F604DE
+	calr AccPatch_AdjustTableEntryPos
 	jr AccPatch_NullRet
 
-LABEL_F60486:
+AccPatch_UpdateEntry_CheckDE:
 	cpda16 xde, 13792
-	jr nc, LABEL_F6048E
+	jr nc, AccPatch_UpdateEntry_AdjustOffset
 	jr AccPatch_NullRet
 
-LABEL_F6048E:
+AccPatch_UpdateEntry_AdjustOffset:
 	subda16 xde, 13834
 	cps de, 6
-	jr z, LABEL_F604B3
-	jr ugt, LABEL_F604B3
+	jr z, AccPatch_UpdateEntry_StoreDirect
+	jr ugt, AccPatch_UpdateEntry_StoreDirect
 	lds hl, 6
 	sub hl, de
 	ld de, hl
@@ -15035,7 +15035,7 @@ LABEL_F6048E:
 	ld (xix), hl
 	jr AccPatch_NullRet
 
-LABEL_F604B3:
+AccPatch_UpdateEntry_StoreDirect:
 	pushw de
 	calr AccPatch_LoadTablePointers
 	popw de
@@ -15044,7 +15044,7 @@ LABEL_F604B3:
 AccPatch_NullRet:
 	ret
 
-LABEL_F604BB:
+__pad_F604BB:
 	.byte 0x00, 0x00
 
 AccPatch_LoadTablePointers:
@@ -15063,19 +15063,19 @@ AccPatch_LoadTablePointers:
 	pop xbc
 	ret
 
-LABEL_F604DE:
+AccPatch_AdjustTableEntryPos:
 	calr AccPatch_LoadTablePointers
 	ld de, (xix)
 	ld wa, (xiy)
 	sub de, 0x6
 	cpda16 xde, 13834
-	jr c, LABEL_F604FB
+	jr c, AccPatch_AdjustEntry_Overflow
 	subda16 xde, 13834
 	add de, 0x6
 	ld (xix), de
-	jr LABEL_F60514
+	jr AccPatch_AdjustEntry_Return
 
-LABEL_F604FB:
+AccPatch_AdjustEntry_Overflow:
 	ldda16 xhl, 13834
 	sub hl, de
 	ldw de, 0xFF
@@ -15088,10 +15088,10 @@ LABEL_F604FB:
 	ld hl, (xix + 1)
 	ld (xiy), hl
 
-LABEL_F60514:
+AccPatch_AdjustEntry_Return:
 	ret
 
-LABEL_F60515:
+AccPatch_PrepareAndProcessEvents:
 	calr AccPatch_PrepareSequencePlayback
 	ldda16 xwa, 13790
 	stda16 13842, xwa
@@ -15101,13 +15101,13 @@ LABEL_F60515:
 AccPatch_ProcessSequenceEvents:
 	ldda16 xwa, 13842
 	cpda16 xwa, 13794
-	jr nz, LABEL_F6053F
+	jr nz, AccPatch_ProcessSeqEvt_SavePos
 	ldda16 xwa, 13844
 	cpda16 xwa, 13796
-	jr nz, LABEL_F6053F
-	jrl LABEL_F605FF
+	jr nz, AccPatch_ProcessSeqEvt_SavePos
+	jrl AccPatch_ProcessSeqEvt_StorePos
 
-LABEL_F6053F:
+AccPatch_ProcessSeqEvt_SavePos:
 	ldda16 xwa, 13842
 	stda16 14074, xwa
 	ldda16 xwa, 13844
@@ -15121,11 +15121,11 @@ LABEL_F6053F:
 	cp a, 0x92
 	jr z, AccPatch_SkipNoteOff
 	cp a, 0x81
-	jr z, LABEL_F605B1
+	jr z, AccPatch_ProcessSeqEvt_HandleEnd
 	and a, 0xF0
 	cp a, 0xD0
-	jr z, LABEL_F605BF
-	jrl LABEL_F60610
+	jr z, AccPatch_ProcessSeqEvt_SkipD
+	jrl AccPatch_ProcessSeqEvt_RetNop
 
 AccPatch_SkipNoteOff:
 	calr AccPatch_AdvanceSeqIndex
@@ -15134,48 +15134,48 @@ AccPatch_SkipNoteOff:
 	stda8 13818, a
 	lds bc, 6
 	cpdi8 14073, 145
-	jr z, LABEL_F6058D
+	jr z, AccPatch_ProcessSeqEvt_AdvLoop
 	lds bc, 4
 
-LABEL_F6058D:
+AccPatch_ProcessSeqEvt_AdvLoop:
 	calr AccPatch_AdvanceSeqIndex
-	djnz xbc, LABEL_F6058D
+	djnz xbc, AccPatch_ProcessSeqEvt_AdvLoop
 	ldda8 a, 13818
 	ldda8 b, 13656
 	and b, 0x7F
 	cp a, b
-	jr z, LABEL_F605CA
+	jr z, AccPatch_ProcessSeqEvt_SetSize
 	cp a, 0x5D
-	jr nz, LABEL_F605AE
+	jr nz, AccPatch_ProcessSeqEvt_LoopBack
 	cp b, 0x30
-	jr nz, LABEL_F605AE
-	jr LABEL_F605CA
+	jr nz, AccPatch_ProcessSeqEvt_LoopBack
+	jr AccPatch_ProcessSeqEvt_SetSize
 
-LABEL_F605AE:
+AccPatch_ProcessSeqEvt_LoopBack:
 	jrl AccPatch_ProcessSequenceEvents
 
-LABEL_F605B1:
+AccPatch_ProcessSeqEvt_HandleEnd:
 	calr AccPatch_AdvanceSeqIndex
 	calr AccPatch_SeqReadByte
 	cp a, 0x83
-	jr z, LABEL_F605FC
+	jr z, AccPatch_ProcessSeqEvt_InitSlot
 	jrl AccPatch_ProcessSequenceEvents
 
-LABEL_F605BF:
+AccPatch_ProcessSeqEvt_SkipD:
 	lds bc, 3
 
-LABEL_F605C1:
+AccPatch_ProcessSeqEvt_SkipDLoop:
 	calr AccPatch_AdvanceSeqIndex
-	djnz xbc, LABEL_F605C1
+	djnz xbc, AccPatch_ProcessSeqEvt_SkipDLoop
 	jrl AccPatch_ProcessSequenceEvents
 
-LABEL_F605CA:
+AccPatch_ProcessSeqEvt_SetSize:
 	stdi16 13834, 8
 	cpdi8 14073, 145
-	jr z, LABEL_F605DD
+	jr z, AccPatch_ProcessSeqEvt_StoreAndPrep
 	stdi16 13834, 6
 
-LABEL_F605DD:
+AccPatch_ProcessSeqEvt_StoreAndPrep:
 	ldda16 xwa, 14074
 	stda16 13790, xwa
 	ldda16 xwa, 14076
@@ -15185,83 +15185,83 @@ LABEL_F605DD:
 	calr AccPatch_PrepareSequencePlayback
 	jrl AccPatch_ProcessSequenceEvents
 
-LABEL_F605FC:
+AccPatch_ProcessSeqEvt_InitSlot:
 	calr AccPatch_InitCurrentSlotPointer
 
-LABEL_F605FF:
+AccPatch_ProcessSeqEvt_StorePos:
 	ldda16 xwa, 13842
 	stda16 13790, xwa
 	ldda16 xwa, 13844
 	stda16 13792, xwa
 	ret
 
-LABEL_F60610:
+AccPatch_ProcessSeqEvt_RetNop:
 	ret
 
-LABEL_F60611:
+AccPatch_EventDispatch_Nop:
 	nop
 
-LABEL_F60612:
+AccPatch_EventDispatchLoop:
 	call AccPatch_CheckEmpty
 	cps wa, 0
-	jr nz, LABEL_F6061D
-	jrl LABEL_F60698
+	jr nz, AccPatch_EventDispatch_ReadCmd
+	jrl AccPatch_EventDispatch_Done
 
-LABEL_F6061D:
+AccPatch_EventDispatch_ReadCmd:
 	call LABEL_F61385
 	cp a, 0x81
-	jr z, LABEL_F6066E
+	jr z, AccPatch_EventDispatch_EndMarker
 	ldb w, 0xF0
 	and w, a
 	cp w, 0x90
-	jr z, LABEL_F60655
+	jr z, AccPatch_EventDispatch_NoteOn
 	cp a, 0xD1
-	jr nz, LABEL_F60636
+	jr nz, AccPatch_EventDispatch_CheckD2
 	jr AccPatch_ProcessMarkerCommand
 
-LABEL_F60636:
+AccPatch_EventDispatch_CheckD2:
 	cp a, 0xD2
-	jr nz, LABEL_F6063D
+	jr nz, AccPatch_EventDispatch_CheckD4
 	jr AccPatch_ProcessMarkerCommand
 
-LABEL_F6063D:
+AccPatch_EventDispatch_CheckD4:
 	cp a, 0xD4
-	jr nz, LABEL_F60644
+	jr nz, AccPatch_EventDispatch_CheckD3
 	jr AccPatch_ProcessMarkerCommand
 
-LABEL_F60644:
+AccPatch_EventDispatch_CheckD3:
 	cp a, 0xD3
-	jr nz, LABEL_F6064B
+	jr nz, AccPatch_EventDispatch_CheckD5
 	jr AccPatch_ProcessMarkerCommand
 
-LABEL_F6064B:
+AccPatch_EventDispatch_CheckD5:
 	cp a, 0xD5
 	jr z, AccPatch_ProcessMarkerCommand
 	calr AccPatch_SkipToMarker
 	jr AccPatch_ContinueProcessing
 
-LABEL_F60655:
+AccPatch_EventDispatch_NoteOn:
 	lds bc, 5
 	calr AccPatch_ReadRingBufBytes
 	cpdi8 14061, 0
-	jr nz, LABEL_F60666
-	calr LABEL_F60A2B
+	jr nz, AccPatch_EventDispatch_NoteResolve
+	calr AccPatch_TransposeAndCopyNote
 	jr AccPatch_ContinueProcessing
 
-LABEL_F60666:
+AccPatch_EventDispatch_NoteResolve:
 	calr AccPatch_ParseAndResolve
-	calr LABEL_F607AC
+	calr AccPatch_CopyNoteStepsToSlots
 	jr AccPatch_ContinueProcessing
 
-LABEL_F6066E:
+AccPatch_EventDispatch_EndMarker:
 	call TempoRingBuf_ReadByteToA
 	calr AccPatch_UpdatePlayback
 	bitda 1, 13898
-	jr nz, LABEL_F6067E
+	jr nz, AccPatch_EventDispatch_AdvSlots
 	calr AccPatch_ScanToSequenceEnd
 
-LABEL_F6067E:
-	calr LABEL_F606D5
+AccPatch_EventDispatch_AdvSlots:
+	calr AccPatch_AdvanceSlotCounters
 	anddi8 13898, 253
 	jr AccPatch_ContinueProcessing
 
@@ -15269,22 +15269,22 @@ AccPatch_ProcessMarkerCommand:
 	lds bc, 3
 	calr AccPatch_ReadRingBufBytes
 	calr AccPatch_ParseAndResolve
-	calr LABEL_F60A53
+	calr AccPatch_ProcessMarkerEvent
 	jr __jrt_nop_F60695
 __jrt_nop_F60695:
 
 AccPatch_ContinueProcessing:
-	jrl LABEL_F60612
+	jrl AccPatch_EventDispatchLoop
 
-LABEL_F60698:
+AccPatch_EventDispatch_Done:
 	ret
 
-LABEL_F60699:
+__pad_F60699:
 	.byte 0x00, 0x00
 
 AccPatch_UpdatePlayback:
 	cpdi16 13834, 0
-	jr z, LABEL_F606C2
+	jr z, AccPatch_UpdatePlayback_CheckQueue
 	ldda16 xwa, 13826
 	stda16 14078, xwa
 	ldda16 xwa, 13828
@@ -15294,97 +15294,97 @@ AccPatch_UpdatePlayback:
 	calr AccPatch_AdvanceAllSteps
 	stdi16 13834, 0
 
-LABEL_F606C2:
+AccPatch_UpdatePlayback_CheckQueue:
 	cpdi16 13838, 0
-	jr z, LABEL_F606CD
+	jr z, AccPatch_UpdatePlayback_ClearStep
 	calr AccPatch_DispatchQueuedNotes
 
-LABEL_F606CD:
+AccPatch_UpdatePlayback_ClearStep:
 	stdi8 13823, 0
 	ret
 
-LABEL_F606D3:
+__pad_F606D3:
 	.byte 0x00, 0x00
 
-LABEL_F606D5:
+AccPatch_AdvanceSlotCounters:
 	ld xhl, 0x361A
 
-LABEL_F606DA:
+AccPatch_AdvSlotCtr_Loop:
 	bitm 7, (xhl)
-	jr z, LABEL_F606EB
+	jr z, AccPatch_AdvSlotCtr_Next
 	ld a, (xhl + 1)
 	cp a, 0xFF
-	jr z, LABEL_F606E8
+	jr z, AccPatch_AdvSlotCtr_Store
 	inc 1, a
 
-LABEL_F606E8:
+AccPatch_AdvSlotCtr_Store:
 	ld (xhl + 1), a
 
-LABEL_F606EB:
+AccPatch_AdvSlotCtr_Next:
 	add xhl, 0x6
 	cp xhl, 0x364A
-	jr nz, LABEL_F606DA
+	jr nz, AccPatch_AdvSlotCtr_Loop
 	ret
 
-LABEL_F606FA:
+__pad_F606FA:
 	.byte 0x00, 0x00
 
 AccPatch_ReadRingBufBytes:
 	lds32 xhl, 0
 
-LABEL_F606FE:
+AccPatch_ReadBuf_Loop:
 	cp hl, bc
-	jr z, LABEL_F6071E
+	jr z, AccPatch_ReadBuf_Done
 	pushw bc
 	pushw hl
 	call TempoRingBuf_ReadByteToA
 	cp a, 0xFF
-	jr nz, LABEL_F6070E
+	jr nz, AccPatch_ReadBuf_StoreAndNext
 	nop
 
-LABEL_F6070E:
+AccPatch_ReadBuf_StoreAndNext:
 	popw hl
 	popw bc
 	ld xiz, 0x36EA
 	lda_dri3 XBC, 0x07, 0xF8, 0xEC
 	inc 1, hl
-	jr LABEL_F606FE
+	jr AccPatch_ReadBuf_Loop
 
-LABEL_F6071E:
+AccPatch_ReadBuf_Done:
 	ret
 
-LABEL_F6071F:
+__pad_F6071F:
 	.byte 0x00, 0x00
 
 AccPatch_ParseAndResolve:
 	ldda8 a, 14059
 	stda8 14071, a
 	stda8 14072, a
-	calr LABEL_F60766
+	calr AccPatch_LookupStepByDrumParam
 	cpdi8 13823, 0
-	jr z, LABEL_F60744
+	jr z, AccPatch_ParseResolve_ParseHdr
 	ldda8 a, 13824
 	cpda8 a, 14072
-	jr z, LABEL_F60757
+	jr z, AccPatch_ParseResolve_IncStep
 	calr AccPatch_UpdatePlayback
 
-LABEL_F60744:
+AccPatch_ParseResolve_ParseHdr:
 	calr AccPatch_ParseSequenceHeader
 	ldda16 xwa, 13842
 	stda16 13826, xwa
 	ldda16 xwa, 13844
 	stda16 13828, xwa
 
-LABEL_F60757:
+AccPatch_ParseResolve_IncStep:
 	incdi8 1, 13823
 	ldda8 a, 14072
 	stda8 13824, a
 	ret
 
-LABEL_F60764:
+__pad_F60764:
 	.byte 0x00, 0x00
 
-LABEL_F60766:
+AccPatch_LookupStepByDrumParam:
 	xor w, w
 	ld iy, wa
 	ldda8 a, 13531
@@ -15395,7 +15395,7 @@ LABEL_F60766:
 	and w, 0x7
 	call DrumParam_Wrapper
 	cp a, 0x7F
-	jr nz, LABEL_F607A1
+	jr nz, AccPatch_LookupStep_StoreResult
 	ldb a, 0x0
 	stda8 14072, a
 	stda8 14059, a
@@ -15406,39 +15406,39 @@ LABEL_F60766:
 	calr AccPatch_ScanToSequenceEnd
 	jr AccPatch_SetStepDone
 
-LABEL_F607A1:
+AccPatch_LookupStep_StoreResult:
 	stda8 14072, a
 	stda8 14059, a
 
 AccPatch_SetStepDone:
 	ret
 
-LABEL_F607AA:
+__pad_F607AA:
 	.byte 0x00, 0x00
 
-LABEL_F607AC:
+AccPatch_CopyNoteStepsToSlots:
 	ld xhl, 0x361A
 	xor iy, iy
 
-LABEL_F607B3:
+AccPatch_CopySteps_FindFreeSlot:
 	bit_dri 7, 0x07, 0xEC, 0xF4
-	jr z, LABEL_F607C6
+	jr z, AccPatch_CopySteps_ProcessEntry
 	add iy, 0x6
 	cp iy, 0x30
 	jr z, AccPatch_CopyStepsDone
-	jr LABEL_F607B3
+	jr AccPatch_CopySteps_FindFreeSlot
 
-LABEL_F607C6:
+AccPatch_CopySteps_ProcessEntry:
 	ld de, iy
 	cpdi16 13524, 0
-	jr z, LABEL_F60839
+	jr z, AccPatch_CopySteps_Overflow
 	stdi8 13361, 0
 	stdi8 14058, 144
 	bitda 4, 14235
-	jr nz, LABEL_F607E3
+	jr nz, AccPatch_CopySteps_StartFetch
 	calr AccPatch_TransposeNote
 
-LABEL_F607E3:
+AccPatch_CopySteps_StartFetch:
 	ldda8 a, 14058
 	calr AccPatch_FetchStepEntry
 	calr AccPatch_SeqAdvanceStep
@@ -15447,7 +15447,7 @@ LABEL_F607E3:
 	calr AccPatch_SeqAdvanceStep
 	ldda8 a, 14060
 	calr AccPatch_FetchStepEntry
-	calr LABEL_F609F0
+	calr AccPatch_UpdateSlotVoiceData
 	calr AccPatch_SeqAdvanceStep
 	ldda8 a, 14061
 	calr AccPatch_FetchStepEntry
@@ -15470,7 +15470,7 @@ LABEL_F607E3:
 AccPatch_CopyStepsDone:
 	ret
 
-LABEL_F60839:
+AccPatch_CopySteps_Overflow:
 	stdi8 32578, 15
 	call DrumVoice_NotifyEE
 	ldb a, 0x8
@@ -15481,63 +15481,63 @@ AccPatch_TransposeNote:
 	ldda8 a, 13545
 	and a, 0xF
 	cps a, 0
-	jr z, LABEL_F60874
+	jr z, AccPatch_Transpose_LookupTable
 	calr AccPatch_ReadTransposeAmount
 	cpda8 a, 14926
-	jr ugt, LABEL_F6086C
+	jr ugt, AccPatch_Transpose_AddBack
 	subdm8 14060, a
-	jr nc, LABEL_F6086A
+	jr nc, AccPatch_Transpose_Done
 	ldb a, 0xC
 	adddm8 14060, a
 
-LABEL_F6086A:
-	jr LABEL_F60874
+AccPatch_Transpose_Done:
+	jr AccPatch_Transpose_LookupTable
 
-LABEL_F6086C:
+AccPatch_Transpose_AddBack:
 	ldb w, 0xC
 	sub w, a
 	adddm8 14060, w
 
-LABEL_F60874:
+AccPatch_Transpose_LookupTable:
 	lds32 xhl, 0
 	ldda8 l, 14060
 	add xhl, 0xE46142
 	ld a, (xhl)
 	bitda 4, 13546
-	jr z, LABEL_F608A9
+	jr z, AccPatch_Transpose_CheckBit6
 	ld w, a
 	lds32 xhl, 0
 	ld l, a
 	add xhl, 0xF60909
 	ld l, (xhl)
 	bit 0, l
-	jr z, LABEL_F608A9
+	jr z, AccPatch_Transpose_CheckBit6
 	inc 1, w
 	ldda8 a, 14060
 	inc 1, a
 	stda8 14060, a
 	ld a, w
 
-LABEL_F608A9:
+AccPatch_Transpose_CheckBit6:
 	bitda 6, 13546
-	jr z, LABEL_F608B7
+	jr z, AccPatch_Transpose_CheckBit5
 	bitda 3, 14235
-	jr z, LABEL_F608B7
-	jr LABEL_F608C3
+	jr z, AccPatch_Transpose_CheckBit5
+	jr AccPatch_Transpose_SetDrumSplit
 
-LABEL_F608B7:
+AccPatch_Transpose_CheckBit5:
 	bitda 5, 13546
 	jr z, AccPatch_StoreDrumParams
 	bitda 3, 14235
 	jr nz, AccPatch_StoreDrumParams
 
-LABEL_F608C3:
+AccPatch_Transpose_SetDrumSplit:
 	cps a, 7
 	jr nz, AccPatch_StoreDrumParams
 	stdi8 13361, 1
 	stdi8 14064, 3
 	stdi8 14065, 0
-	jr LABEL_F608FB
+	jr AccPatch_StoreDrumParams_CheckSplit
 
 AccPatch_StoreDrumParams:
 	lds32 xhl, 0
@@ -15552,15 +15552,15 @@ AccPatch_StoreDrumParams:
 	ld a, (xhl + 2)
 	stda8 14065, a
 
-LABEL_F608FB:
+AccPatch_StoreDrumParams_CheckSplit:
 	bitda 0, 13361
-	jr z, LABEL_F60906
+	jr z, AccPatch_StoreDrumParams_Return
 	stdi8 14058, 145
 
-LABEL_F60906:
+AccPatch_StoreDrumParams_Return:
 	ret
 
-LABEL_F60907:
+AccPatch_TransposeNoteTable:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01
@@ -15611,7 +15611,7 @@ AccPatch_FetchStepEntry:
 	stda16 13834, xhl
 	ret
 
-LABEL_F60990:
+AccPatch_FetchStepData:
 	.byte 0x45, 0xaa, 0x36, 0x00, 0x00, 0xd1, 0x0e, 0x36
 	.byte 0x23, 0xf3, 0x07, 0xf4, 0xec, 0x41, 0xdb, 0x61
 	.byte 0xf1, 0x0e, 0x36, 0x53, 0x0e
@@ -15619,46 +15619,46 @@ LABEL_F60990:
 AccPatch_SeqAdvanceStep:
 	ldda16 xwa, 13844
 	cp wa, 0xFE
-	jr nz, LABEL_F609BC
+	jr nz, AccPatch_SeqAdvStep_Increment
 	cpdi16 13524, 0
-	jr z, LABEL_F609C2
-	calr LABEL_F609C3
-	jr LABEL_F609C2
+	jr z, AccPatch_SeqAdvStep_Return
+	calr AccPatch_SeqAdvStep_WrapToNext
+	jr AccPatch_SeqAdvStep_Return
 
-LABEL_F609BC:
+AccPatch_SeqAdvStep_Increment:
 	inc 1, wa
 	stda16 13844, xwa
 
-LABEL_F609C2:
+AccPatch_SeqAdvStep_Return:
 	ret
 
-LABEL_F609C3:
+AccPatch_SeqAdvStep_WrapToNext:
 	ldda16 xhl, 13842
 	calr AccPatch_GetEntryAddr
 	ld hl, (xix + 3)
 	cp hl, 0xFFFF
-	jr z, LABEL_F609D5
-	jr LABEL_F609E3
+	jr z, AccPatch_SeqAdvStep_ScanFromStart
+	jr AccPatch_SeqAdvStep_StorePos
 
-LABEL_F609D5:
+AccPatch_SeqAdvStep_ScanFromStart:
 	ldw hl, 0x95
 
-LABEL_F609D8:
+AccPatch_SeqAdvStep_ScanLoop:
 	inc 1, hl
 	calr AccPatch_GetEntryAddr
 	bitm 7, (xix)
-	jr z, LABEL_F609E3
-	jr LABEL_F609D8
+	jr z, AccPatch_SeqAdvStep_StorePos
+	jr AccPatch_SeqAdvStep_ScanLoop
 
-LABEL_F609E3:
+AccPatch_SeqAdvStep_StorePos:
 	stda16 13842, xhl
 	stdi16 13844, 6
 	ret
 
-LABEL_F609EE:
+__pad_F609EE:
 	.byte 0x00, 0x00
 
-LABEL_F609F0:
+AccPatch_UpdateSlotVoiceData:
 	ld xhl, 0x361A
 	ld iy, de
 	or a, 0x80
@@ -15678,12 +15678,12 @@ LABEL_F609F0:
 	popw iy
 	ret
 
-LABEL_F60A2B:
+AccPatch_TransposeAndCopyNote:
 	bitda 4, 14235
-	jr nz, LABEL_F60A34
+	jr nz, AccPatch_TransposeCopy_DoCopy
 	calr AccPatch_TransposeNote
 
-LABEL_F60A34:
+AccPatch_TransposeCopy_DoCopy:
 	ld xiy, 0x36EA
 	ld xix, 0x36AA
 	lds32 xbc, 0
@@ -15694,25 +15694,25 @@ LABEL_F60A34:
 	adddi16 13838, 6
 	ret
 
-LABEL_F60A51:
+__pad_F60A51:
 	.byte 0x00, 0x00
 
-LABEL_F60A53:
+AccPatch_ProcessMarkerEvent:
 	cpdi16 13524, 0
-	jr z, LABEL_F60A94
+	jr z, AccPatch_ProcessMarker_Return
 	ldda8 a, 14058
 	cp a, 0xD4
-	jr nz, LABEL_F60A68
+	jr nz, AccPatch_ProcessMarker_CheckD3
 	ldb a, 0xD3
 	jr AccPatch_FetchSequence
 
-LABEL_F60A68:
+AccPatch_ProcessMarker_CheckD3:
 	cp a, 0xD3
-	jr nz, LABEL_F60A71
+	jr nz, AccPatch_ProcessMarker_CheckD5
 	ldb a, 0xD5
 	jr AccPatch_FetchSequence
 
-LABEL_F60A71:
+AccPatch_ProcessMarker_CheckD5:
 	cp a, 0xD5
 	jr nz, AccPatch_FetchSequence
 	ldb a, 0xD4
@@ -15729,10 +15729,10 @@ AccPatch_FetchSequence:
 	calr AccPatch_FetchStepEntry
 	calr AccPatch_SeqAdvanceStep
 
-LABEL_F60A94:
+AccPatch_ProcessMarker_Return:
 	ret
 
-LABEL_F60A95:
+__pad_F60A95:
 	.byte 0x00, 0x00
 
 AccPatch_SkipToMarker:
@@ -15741,7 +15741,7 @@ AccPatch_SkipToMarker:
 	jr z, AccPatch_SkipToMarker
 	ret
 
-LABEL_F60AA1:
+AccPatch_SlotCopyDataBlock:
 	.byte 0x00, 0x00, 0x29, 0x1d, 0x79, 0x13, 0xf6, 0x49
 	.byte 0xd9, 0x69, 0xd9, 0xd8, 0x6e, 0xf4, 0x0e, 0xf1
 	.byte 0x10, 0x36, 0x02, 0x00, 0x00, 0x44, 0xaa, 0x36
@@ -15767,10 +15767,10 @@ AccPatch_InitSlotAndCopyData:
 	sub bc, wa
 	stda16 14082, xbc
 	cpda16 xbc, 13834
-	jr nc, LABEL_F60B15
-	jr LABEL_F60B32
+	jr nc, AccPatch_InitSlot_SameBlock
+	jr AccPatch_InitSlot_CrossBlock
 
-LABEL_F60B15:
+AccPatch_InitSlot_SameBlock:
 	ldda16 xhl, 13830
 	stda16 13914, xhl
 	calr AccPatch_GetEntryAddr
@@ -15778,10 +15778,10 @@ LABEL_F60B15:
 	ldda16 xwa, 13832
 	addda16 xwa, 13834
 	stda16 13920, xwa
-	jr LABEL_F60B52
+	jr AccPatch_InitSlot_StoreAddrs
 
-LABEL_F60B32:
-	calr LABEL_F60BD2
+AccPatch_InitSlot_CrossBlock:
+	calr AccPatch_FindFreeEntrySlot
 	stda16 13914, xwa
 	ld hl, wa
 	calr AccPatch_GetEntryAddr
@@ -15791,12 +15791,12 @@ LABEL_F60B32:
 	add wa, 0x5
 	stda16 13920, xwa
 
-LABEL_F60B52:
+AccPatch_InitSlot_StoreAddrs:
 	ldda16 xwa, 13914
 	stda16 13830, xwa
 	ldda16 xwa, 13920
 	stda16 13832, xwa
-	calr LABEL_F60E2C
+	calr AccPatch_CalcBlockCopySetup
 	inc 1, ix
 	stda16 14084, xix
 	ldda16 xhl, 13826
@@ -15810,13 +15810,13 @@ LABEL_F60B52:
 	subda16 xbc, 13828
 	inc 1, bc
 	cpda16 xbc, 13834
-	jr c, LABEL_F60B9A
+	jr c, AccPatch_InitSlot_SplitCopy
 	lds32 xbc, 0
 	ldda16 xbc, 13834
 	ldir85
-	jr LABEL_F60BBF
+	jr AccPatch_InitSlot_Finalize
 
-LABEL_F60B9A:
+AccPatch_InitSlot_SplitCopy:
 	ld wa, bc
 	ldir85
 	lds32 xbc, 0
@@ -15828,30 +15828,30 @@ LABEL_F60B9A:
 	calr AccPatch_GetEntryAddr
 	add xix, 0x6
 	cps bc, 0
-	jr z, LABEL_F60BBF
+	jr z, AccPatch_InitSlot_Finalize
 	ldir85
 
-LABEL_F60BBF:
+AccPatch_InitSlot_Finalize:
 	ldda16 xwa, 13914
 	stda16 13826, xwa
 	ldda16 xwa, 14084
 	stda16 13828, xwa
 	ret
 
-LABEL_F60BD0:
+__pad_F60BD0:
 	.byte 0x00, 0x00
 
-LABEL_F60BD2:
+AccPatch_FindFreeEntrySlot:
 	ldw hl, 0x95
 
-LABEL_F60BD5:
+AccPatch_FindFreeSlot_Loop:
 	inc 1, hl
 	calr AccPatch_GetEntryAddr
 	bitm 7, (xix)
-	jr z, LABEL_F60BE0
-	jr LABEL_F60BD5
+	jr z, AccPatch_FindFreeSlot_Found
+	jr AccPatch_FindFreeSlot_Loop
 
-LABEL_F60BE0:
+AccPatch_FindFreeSlot_Found:
 	ld wa, hl
 	push xix
 	ldda16 xhl, 13830
@@ -15867,7 +15867,7 @@ LABEL_F60BE0:
 	decdi16 1, 13524
 	ret
 
-LABEL_F60C04:
+__pad_F60C04:
 	.byte 0x00, 0x00
 
 AccPatch_AdvancePlayPos:
@@ -15880,21 +15880,21 @@ AccPatch_AdvancePlayPos:
 	popw hl
 	popw de
 	cpda16 xhl, 14078
-	jr z, LABEL_F60C23
+	jr z, AccPatch_AdvPlayPos_CheckDE
 	cpw (xix + 1), 0xFFFF
-	jr nz, LABEL_F60C2B
+	jr nz, AccPatch_AdvPlayPos_AddAndCheck
 	jr AccPatch_StoreEntryPtr
 
-LABEL_F60C23:
+AccPatch_AdvPlayPos_CheckDE:
 	cpda16 xde, 14080
-	jr nc, LABEL_F60C2B
+	jr nc, AccPatch_AdvPlayPos_AddAndCheck
 	jr AccPatch_StoreEntryPtr
 
-LABEL_F60C2B:
+AccPatch_AdvPlayPos_AddAndCheck:
 	addda16 xde, 13834
 	cp de, 0xFE
-	jr z, LABEL_F60C52
-	jr c, LABEL_F60C52
+	jr z, AccPatch_AdvPlayPos_StoreDirect
+	jr c, AccPatch_AdvPlayPos_StoreDirect
 	sub de, 0xFE
 	pushw de
 	calr AccPatch_GetEntryAddr
@@ -15908,7 +15908,7 @@ LABEL_F60C2B:
 	ld (xix), de
 	jr AccPatch_StoreEntryPtr
 
-LABEL_F60C52:
+AccPatch_AdvPlayPos_StoreDirect:
 	pushw de
 	calr AccPatch_LoadTablePointers
 	popw de
@@ -15917,7 +15917,7 @@ LABEL_F60C52:
 AccPatch_StoreEntryPtr:
 	ret
 
-LABEL_F60C5A:
+AccPatch_AdvPlayPos_DataBlock:
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x9d, 0x32, 0x00, 0x00, 0x9f
 	.byte 0x32, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xa1
@@ -15937,29 +15937,29 @@ LABEL_F60C5A:
 AccPatch_AdvanceAllSteps:
 	ld xix, 0x361A
 
-LABEL_F60CEE:
+AccPatch_AdvAllSteps_Loop:
 	bitm 7, (xix + 1)
-	jr z, LABEL_F60CFD
+	jr z, AccPatch_AdvAllSteps_Next
 	ldda16 xbc, 13834
 
-LABEL_F60CF7:
-	calr LABEL_F60D0E
-	djnz xbc, LABEL_F60CF7
+AccPatch_AdvAllSteps_InnerLoop:
+	calr AccPatch_AdvanceSingleStep
+	djnz xbc, AccPatch_AdvAllSteps_InnerLoop
 
-LABEL_F60CFD:
+AccPatch_AdvAllSteps_Next:
 	add xix, 0x6
 	cp xix, 0x364A
-	jr c, LABEL_F60CEE
+	jr c, AccPatch_AdvAllSteps_Loop
 	ret
 
-LABEL_F60D0C:
+__pad_F60D0C:
 	.byte 0x00, 0x00
 
-LABEL_F60D0E:
+AccPatch_AdvanceSingleStep:
 	xor w, w
 	ld a, (xix + 5)
 	cp wa, 0xFE
-	jr nz, LABEL_F60D2D
+	jr nz, AccPatch_AdvSingleStep_Inc
 	ld hl, (xix + 3)
 	push xix
 	calr AccPatch_GetEntryAddr
@@ -15968,45 +15968,45 @@ LABEL_F60D0E:
 	ld wa, (xiy + 3)
 	ld (xix + 3), wa
 	lds wa, 6
-	jr LABEL_F60D2F
+	jr AccPatch_AdvSingleStep_Store
 
-LABEL_F60D2D:
+AccPatch_AdvSingleStep_Inc:
 	inc 1, wa
 
-LABEL_F60D2F:
+AccPatch_AdvSingleStep_Store:
 	ld (xix + 5), a
 	ret
 
-LABEL_F60D33:
+__pad_F60D33:
 	.byte 0x00, 0x00
 
 AccPatch_DispatchQueuedNotes:
 	ld xix, 0x36AA
 
-LABEL_F60D3A:
-	calr LABEL_F60D5A
+AccPatch_DispatchQueued_Loop:
+	calr AccPatch_DispatchNoteToVoice
 	add xix, 0x6
 	ld xwa, xix
 	sub xwa, 0x36AA
 	cpda16 xwa, 13838
-	jr c, LABEL_F60D3A
+	jr c, AccPatch_DispatchQueued_Loop
 	stdi16 13838, 0
 	ret
 
-LABEL_F60D58:
+__pad_F60D58:
 	.byte 0x00, 0x00
 
-LABEL_F60D5A:
+AccPatch_DispatchNoteToVoice:
 	ld xhl, 0x361A
 	ldw iy, 0x2A
 
-LABEL_F60D62:
+AccPatch_DispatchNote_Loop:
 	bit_dri 7, 0x07, 0xEC, 0xF4
-	jr z, LABEL_F60DA9
+	jr z, AccPatch_DispatchNote_NextSlot
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	and a, 0x7F
 	cp a, (xix + 2)
-	jr nz, LABEL_F60DA9
+	jr nz, AccPatch_DispatchNote_NextSlot
 	and_srib_im 0x07, 0xEC, 0xF4, 0x7F
 	inc 1, iy
 	and_srib_im 0x07, 0xEC, 0xF4, 0x7F
@@ -16015,31 +16015,31 @@ LABEL_F60D62:
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	ld c, (xix + 1)
 	cp c, a
-	jr nc, LABEL_F60DA0
+	jr nc, AccPatch_DispatchNote_CalcVelocity
 	add c, 0x60
 	cps d, 0
-	jr z, LABEL_F60DA0
+	jr z, AccPatch_DispatchNote_CalcVelocity
 	dec 1, d
 
-LABEL_F60DA0:
+AccPatch_DispatchNote_CalcVelocity:
 	sub c, a
 	ld a, c
-	calr LABEL_F60DB6
-	jr LABEL_F60DB3
+	calr AccPatch_WriteVelocityToSeq
+	jr AccPatch_DispatchNote_Return
 
-LABEL_F60DA9:
+AccPatch_DispatchNote_NextSlot:
 	sub iy, 0x6
 	cps iy, 0
-	jr lt, LABEL_F60DB3
-	jr LABEL_F60D62
+	jr lt, AccPatch_DispatchNote_Return
+	jr AccPatch_DispatchNote_Loop
 
-LABEL_F60DB3:
+AccPatch_DispatchNote_Return:
 	ret
 
-LABEL_F60DB4:
+__pad_F60DB4:
 	.byte 0x00, 0x00
 
-LABEL_F60DB6:
+AccPatch_WriteVelocityToSeq:
 	pushw de
 	pushw wa
 	ldda16 xwa, 13842
@@ -16057,12 +16057,12 @@ LABEL_F60DB6:
 	stda16 13844, xwa
 	calr AccPatch_SeqReadByte
 	cp a, (xix + 2)
-	jr z, LABEL_F60DEE
+	jr z, AccPatch_WriteVel_MatchFound
 	popw wa
 	popw de
-	jr LABEL_F60E01
+	jr AccPatch_WriteVel_RestorePos
 
-LABEL_F60DEE:
+AccPatch_WriteVel_MatchFound:
 	calr AccPatch_AdvanceSeqIndex
 	calr AccPatch_AdvanceSeqIndex
 	popw wa
@@ -16072,14 +16072,14 @@ LABEL_F60DEE:
 	ld a, d
 	calr AccPatch_WriteSeqByte
 
-LABEL_F60E01:
+AccPatch_WriteVel_RestorePos:
 	ldda16 xwa, 14074
 	stda16 13842, xwa
 	ldda16 xwa, 14076
 	stda16 13844, xwa
 	ret
 
-LABEL_F60E12:
+__pad_F60E12:
 	.byte 0x00, 0x00
 
 AccPatch_WriteSeqByte:
@@ -16095,13 +16095,13 @@ AccPatch_WriteSeqByte:
 	pop xix
 	ret
 
-LABEL_F60E2A:
+__pad_F60E2A:
 	.byte 0x00, 0x00
 
-LABEL_F60E2C:
+AccPatch_CalcBlockCopySetup:
 	stdi8 32578, 0
 	cpda16 xde, 13912
-	jr nz, LABEL_F60E60
+	jr nz, AccPatch_CalcBlockCopy_DiffEntry
 	ldda16 xiy, 13918
 	sub iy, 0x6
 	inc 1, iy
@@ -16113,35 +16113,35 @@ LABEL_F60E2C:
 	stda16 13926, xix
 	ldda16 xix, 13920
 	calr AccPatch_CalcBlockCopyBounds
-	jr LABEL_F60E85
+	jr AccPatch_CalcBlockCopy_Done
 
-LABEL_F60E60:
+AccPatch_CalcBlockCopy_DiffEntry:
 	ldda16 xwa, 13920
 	cpda16 xwa, 13918
-	jr ugt, LABEL_F60E6E
-	jr z, LABEL_F60E73
-	jr LABEL_F60E78
+	jr ugt, AccPatch_CalcBlockCopy_Clamp
+	jr z, AccPatch_CalcBlockCopy_StoreIY
+	jr AccPatch_CalcBlockCopy_CheckIX
 
-LABEL_F60E6E:
-	calr LABEL_F60E86
-	jr LABEL_F60E7B
+AccPatch_CalcBlockCopy_Clamp:
+	calr __pad_F60E86
+	jr AccPatch_CalcBlockCopy_StoreIX
 
-LABEL_F60E73:
+AccPatch_CalcBlockCopy_StoreIY:
 	calr LABEL_F60F7C
-	jr LABEL_F60E7B
+	jr AccPatch_CalcBlockCopy_StoreIX
 
-LABEL_F60E78:
+AccPatch_CalcBlockCopy_CheckIX:
 	calr LABEL_F60FE3
 
-LABEL_F60E7B:
+AccPatch_CalcBlockCopy_StoreIX:
 	cpdi8 32578, 0
-	jr nz, LABEL_F60E85
+	jr nz, AccPatch_CalcBlockCopy_Done
 	calr AccPatch_CalcBlockCopyBounds
 
-LABEL_F60E85:
+AccPatch_CalcBlockCopy_Done:
 	ret
 
-LABEL_F60E86:
+__pad_F60E86:
 	ldda16 xwa, 13920
 	subda16 xwa, 13918
 	stda16 13908, xwa
