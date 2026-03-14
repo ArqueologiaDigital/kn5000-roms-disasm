@@ -18838,7 +18838,7 @@ SeqPlay_HandleVoiceReassign:
 	ldda8 a, 64607
 	and a, 0x30
 	jr nz, SeqPlay_CheckNoteDisplayPending
-	call LABEL_F20712
+	call SeqRestart_CheckAndDispatch
 	ldda8 a, 10419
 	res 2, a
 	set 4, a

@@ -2509,7 +2509,7 @@ SeqStep_MainTimerTick:
 	call SeqNotify_CheckAndClearStart
 	calr SeqStep_PlaybackStateMachine
 	call SeqPlay_SetupRhythmMode
-	call LABEL_F2057D
+	call PlaybackMode_DispatchByType
 	call SeqTimer_CheckPlaybackCountdown
 	jp BmDrEdit_TempoAnimTimer
 

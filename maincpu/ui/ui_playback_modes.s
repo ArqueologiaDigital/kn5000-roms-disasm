@@ -73,9 +73,9 @@ SeqTimer_PostTempoUpdate:
 	call SeqTimer_UpdateTempoReg
 	ret
 
-LABEL_F20457:
+PlayMode_NullRet:
 	ret
-LABEL_F20458:
+PlayMode_SetupAndDispatch:
 	; --- Setup: load/store/call/set flag ---
 	ldda16	wa, 61854
 	stda16	10357, wa
@@ -83,7 +83,7 @@ LABEL_F20458:
 	call AccWrap_PlayModeDispatch
 	.byte 0xc1, 0xa7, 0x28, 0x3e, 0x04		; or (0x28A7), 0x04  [C1 prefix]
 	ret
-LABEL_F2046F:
+PlayMode_TeardownAndRestore:
 	; --- Teardown: load/store/clear flags ---
 	ldda16	wa, 10357
 	stda16	61854, wa
@@ -91,84 +91,84 @@ LABEL_F2046F:
 	.byte 0xc1, 0xb3, 0x28, 0x3e, 0x10		; or (0x28B3), 0x10  [C1 prefix]
 	.byte 0xc1, 0xa7, 0x28, 0x3c, 0xf7		; and (0x28A7), 0xF7  [C1 prefix]
 	ret
-LABEL_F20487:
+PartLookup_NullRet:
 	ret
-LABEL_F20488:
+PartParam_Handler_00:
 	ldb c, 0x00
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F20493:
+PartParam_Handler_01:
 	ldb c, 0x01
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F2049E:
+PartParam_Handler_02:
 	ldb c, 0x02
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F204A9:
+PartParam_Handler_03:
 	ldb c, 0x03
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F204B4:
+PartParam_Handler_04:
 	ldb c, 0x04
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F204BF:
+PartParam_Handler_05:
 	ldb c, 0x05
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F204CA:
+PartParam_Handler_06:
 	ldb c, 0x06
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F204D5:
+PartParam_Handler_07:
 	ldb c, 0x07
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F204E0:
+PartParam_Handler_08:
 	ldb c, 0x08
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F204EB:
+PartParam_Handler_09:
 	ldb c, 0x09
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F204F6:
+PartParam_Handler_0A:
 	ldb c, 0x0A
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F20501:
+PartParam_Handler_0B:
 	ldb c, 0x0B
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F2050C:
+PartParam_Handler_0C:
 	ldb c, 0x0C
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F20517:
+PartParam_Handler_0D:
 	ldb c, 0x0D
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F20522:
+PartParam_Handler_0E:
 	ldb c, 0x0E
 	call Part_LookupParam
 	call Part_ValidateAndActivate
 	ret
-LABEL_F2052D:
+PartParam_Handler_0F:
 	ldb c, 0x0F
 	call Part_LookupParam
 	call Part_ValidateAndActivate
@@ -189,42 +189,42 @@ Part_ValidateAndActivate:
 	stdi16	10367, 1
 	stdi16	3383, 0
 	.byte 0xc1, 0x60, 0x0d, 0x3f, 0x00		; cp (0x0D60), 0x00  [C1 prefix]
-	jr z, LABEL_F2057B
+	jr z, PartValidate_Done
 	.byte 0xc1, 0x60, 0x0d, 0x3f, 0x10		; cp (0x0D60), 0x10  [C1 prefix]
-	jr ugt, LABEL_F2057B
+	jr ugt, PartValidate_Done
 	stdi16	4360, 0
 	xor	wa, wa
 	ldb a, 0x8A
 	call UI_PostModeChangeEvent
-LABEL_F2057B:
+PartValidate_Done:
 	ret
-LABEL_F2057C:
+PlaybackDispatch_NullRet:
 	ret
 
 
-LABEL_F2057D:
+PlaybackMode_DispatchByType:
 	bitda 0, 3381
 	jrl z, DispatchHandler_ClearActiveFlag
 	cpdi8 36150, 122
-	jr z, LABEL_F205F3
+	jr z, PlaybackDisp_Type122_Play
 	cpdi8 36150, 120
-	jr z, LABEL_F205F9
+	jr z, PlaybackDisp_Type120_Play
 	cpdi8 36150, 115
-	jr z, LABEL_F205FF
+	jr z, PlaybackDisp_Type115_Stop
 	cpdi8 36150, 118
-	jr z, LABEL_F20605
+	jr z, PlaybackDisp_Type118_Stop
 	cpdi8 36150, 116
-	jr z, LABEL_F2060B
+	jr z, PlaybackDisp_Type116_Song
 	cpdi8 36150, 117
-	jrl z, LABEL_F20611
+	jrl z, PlaybackDisp_Type117_PartFmt
 	cpdi8 36150, 111
-	jr z, LABEL_F20617
+	jr z, PlaybackDisp_Type111_CDSong
 	cpdi8 36150, 114
-	jr z, LABEL_F2061D
+	jr z, PlaybackDisp_Type114_CDSong
 	cpdi8 36150, 112
-	jr z, LABEL_F20623
+	jr z, PlaybackDisp_Type112_CDDoc
 	cpdi8 36150, 113
-	jrl z, LABEL_F20629
+	jrl z, PlaybackDisp_Type113_CDPd
 	cpdi8 36150, 121
 	jr z, Part_ValidateCallAndClear
 	cpdi8 36150, 119
@@ -237,43 +237,43 @@ LABEL_F2057D:
 	jr z, Part_ValidateCallAndClear
 	jp DispatchHandler_ClearActiveFlag
 
-LABEL_F205F3:
+PlaybackDisp_Type122_Play:
 	call PlayMode_CheckAndDispatch
 	jr DispatchHandler_ClearActiveFlag
 
-LABEL_F205F9:
+PlaybackDisp_Type120_Play:
 	call PlayMode_CheckAndDispatch
 	jr DispatchHandler_ClearActiveFlag
 
-LABEL_F205FF:
+PlaybackDisp_Type115_Stop:
 	call PlayMode_StopAbortRetZero
 	jr DispatchHandler_ClearActiveFlag
 
-LABEL_F20605:
+PlaybackDisp_Type118_Stop:
 	call PlayMode_StopAbortRetZero
 	jr DispatchHandler_ClearActiveFlag
 
-LABEL_F2060B:
+PlaybackDisp_Type116_Song:
 	call SongMode_CheckAndDispatch
 	jr DispatchHandler_ClearActiveFlag
 
-LABEL_F20611:
+PlaybackDisp_Type117_PartFmt:
 	call PartFormat_CheckAndDispatch
 	jr DispatchHandler_ClearActiveFlag
 
-LABEL_F20617:
+PlaybackDisp_Type111_CDSong:
 	call CDlikeSwTtl_SongBit1Check
 	jr DispatchHandler_ClearActiveFlag
 
-LABEL_F2061D:
+PlaybackDisp_Type114_CDSong:
 	call CDlikeSwTtl_SongBit1Check
 	jr DispatchHandler_ClearActiveFlag
 
-LABEL_F20623:
+PlaybackDisp_Type112_CDDoc:
 	call CDlikeSwTtl_DocBitCheck
 	jr DispatchHandler_ClearActiveFlag
 
-LABEL_F20629:
+PlaybackDisp_Type113_CDPd:
 	call CDlikeSwTtl_PdBitCheck
 	jr DispatchHandler_ClearActiveFlag
 
@@ -284,14 +284,14 @@ DispatchHandler_ClearActiveFlag:
 	anddi8 3381, 254
 	ret
 
-LABEL_F20639:
+PlayMode_InitFlagBlock:
 	.byte 0x1d, 0x3e, 0x06, 0xf2, 0x0e, 0xc1, 0x34, 0x0d
 	.byte 0x3f, 0x00, 0x6e, 0x09, 0xf1, 0x34, 0x0d, 0x00
 	.byte 0x01, 0x1d, 0x4f, 0x06, 0xf2, 0x0e, 0xc1, 0xac
 	.byte 0x28, 0x3e, 0x04, 0xf1, 0x44, 0x11, 0x00, 0x0a
 	.byte 0x0e
 
-LABEL_F2065A:
+SongBank_ScanActiveVoices:
 	xor bc, bc
 	ld l, a
 	extz hl
@@ -300,25 +300,25 @@ LABEL_F2065A:
 	ld xiy, xhl
 	ldb b, 0x10
 	cp_sriw_im 0xF5, 0x4E, 0xFF, 0x00, 0x00
-	jr z, LABEL_F20680
+	jr z, ScanVoice_NoneFound
 
-LABEL_F20677:
+ScanVoice_LoopCheckBit7:
 	bitm 7, (xiy)
-	jr nz, LABEL_F20684
+	jr nz, ScanVoice_Found
 	inc 3, xiy
-	djnz8 b, LABEL_F20677
+	djnz8 b, ScanVoice_LoopCheckBit7
 
-LABEL_F20680:
+ScanVoice_NoneFound:
 	xor hl, hl
-	jr LABEL_F20686
+	jr ScanVoice_Return
 
-LABEL_F20684:
+ScanVoice_Found:
 	lds hl, 1
 
-LABEL_F20686:
+ScanVoice_Return:
 	ret
 
-LABEL_F20687:
+PlayMode_ClearModeFlag:
 	.byte 0xf1, 0x34, 0x0d, 0x00, 0x00, 0x0e
 
 PlayMode_CheckAndDispatch:
@@ -326,7 +326,7 @@ PlayMode_CheckAndDispatch:
 	jr nz, PlayMode_SendModeCommand
 	stdi8 3380, 0
 	stdi8 4420, 0
-	call LABEL_F206D0
+	call PlayMode_DispatchAndClearBit2
 	bitda 2, 3394
 	jr z, PlayMode_SendModeCommand
 	jr __jrt_nop_F206AA
@@ -335,25 +335,25 @@ __jrt_nop_F206AA:
 PlayMode_SendModeCommand:
 	stdi8 4437, 0
 	cpdi8 36150, 122
-	jr z, LABEL_F206BD
+	jr z, PlayCheck_PostMode79
 	cpdi8 36150, 120
-	jr z, LABEL_F206C7
+	jr z, PlayCheck_PostMode77
 
-LABEL_F206BD:
+PlayCheck_PostMode79:
 	xor wa, wa
 	ldb a, 0x79
 	call UI_PostModeChangeEvent
-	jr LABEL_F206CF
+	jr PlayCheck_Return
 
-LABEL_F206C7:
+PlayCheck_PostMode77:
 	xor wa, wa
 	ldb a, 0x77
 	call UI_PostModeChangeEvent
 
-LABEL_F206CF:
+PlayCheck_Return:
 	ret
 
-LABEL_F206D0:
+PlayMode_DispatchAndClearBit2:
 	call AccWrap_PlayModeDispatch
 	anddi8 10412, 251
 	ret
@@ -363,20 +363,20 @@ PlayMode_StartAndSendCommand:
 	jr nz, SongMode_PostEvtRetZero
 	cpdi8 4420, 0
 	jr nz, SongMode_PostEvtRetZero
-	call LABEL_F206D0
+	call PlayMode_DispatchAndClearBit2
 	stdi8 4437, 1
 	cpdi8 36150, 122
-	jr z, LABEL_F206FF
+	jr z, PlayStart_PostMode79
 	cpdi8 36150, 120
-	jr z, LABEL_F20709
+	jr z, PlayStart_PostMode77
 
-LABEL_F206FF:
+PlayStart_PostMode79:
 	xor wa, wa
 	ldb a, 0x79
 	call UI_PostModeChangeEvent
 	jr SongMode_PostEvtRetZero
 
-LABEL_F20709:
+PlayStart_PostMode77:
 	xor wa, wa
 	ldb a, 0x77
 	call UI_PostModeChangeEvent
@@ -384,53 +384,53 @@ LABEL_F20709:
 SongMode_PostEvtRetZero:
 	ret
 
-LABEL_F20712:
+SeqRestart_CheckAndDispatch:
 	bitda 2, 10412
-	jr z, LABEL_F20740
+	jr z, SeqRestart_Return
 	ld iz, wa
 	ldda8 a, 64607
 	and a, 0x30
 	ld wa, iz
-	jr nz, LABEL_F20740
+	jr nz, SeqRestart_Return
 	call AccWrap_PlayModeDispatch
 	ldw bc, 0xF000
 
-LABEL_F2072C:
+SeqRestart_WaitBit2Loop:
 	bitda 2, 1056
-	jr z, LABEL_F20738
+	jr z, SeqRestart_DispatchAndNotify
 	nop
 	nop
 	nop
-	djnz xbc, LABEL_F2072C
+	djnz xbc, SeqRestart_WaitBit2Loop
 
-LABEL_F20738:
+SeqRestart_DispatchAndNotify:
 	call Seq_DispatcherEntry
-	call LABEL_F20741
+	call SeqRestart_SendPlaybackNotify
 
-LABEL_F20740:
+SeqRestart_Return:
 	ret
 
-LABEL_F20741:
+SeqRestart_SendPlaybackNotify:
 	bitda 2, 10412
-	jr z, LABEL_F2076C
+	jr z, SeqNotify_Return
 	stdi8 4437, 1
 	cpdi8 36150, 122
-	jr z, LABEL_F2075A
+	jr z, SeqNotify_PostMode79
 	cpdi8 36150, 120
-	jr z, LABEL_F20764
+	jr z, SeqNotify_PostMode77
 
-LABEL_F2075A:
+SeqNotify_PostMode79:
 	xor wa, wa
 	ldb a, 0x79
 	call UI_PostModeChangeEvent
-	jr LABEL_F2076C
+	jr SeqNotify_Return
 
-LABEL_F20764:
+SeqNotify_PostMode77:
 	xor wa, wa
 	ldb a, 0x77
 	call UI_PostModeChangeEvent
 
-LABEL_F2076C:
+SeqNotify_Return:
 	ret
 
 Medley_GetPlaybackStatus:
@@ -438,7 +438,7 @@ Medley_GetPlaybackStatus:
 	ldda8 l, 4437
 	ret
 
-LABEL_F20774:
+SongMode_InitFlagBlock:
 	.byte 0x0e, 0x0e, 0x1d, 0x7b, 0x07, 0xf2, 0x0e, 0xc1
 	.byte 0x34, 0x0d, 0x3f, 0x00, 0x6e, 0x09, 0xf1, 0x34
 	.byte 0x0d, 0x00, 0x01, 0x1d, 0x8c, 0x07, 0xf2, 0x0e
@@ -451,7 +451,7 @@ SongMode_CheckAndDispatch:
 	jr nz, SongMode_SendStopCommand
 	stdi8 3380, 0
 	stdi8 4420, 0
-	call LABEL_F207C8
+	call SongMode_AbortAndClearBit2
 	bitda 2, 3394
 	jr z, SongMode_SendStopCommand
 	jr __jrt_nop_F207BA
@@ -464,64 +464,64 @@ SongMode_SendStopCommand:
 	call UI_PostModeChangeEvent
 	ret
 
-LABEL_F207C8:
+SongMode_AbortAndClearBit2:
 	anddi8 10412, 251
 	call Song_AbortPlayback
 	ret
 
 SongMode_StartPlayback:
 	cpdi8 3380, 1
-	jrl nz, LABEL_F207F3
+	jrl nz, SongMode_StartReturn
 	cpdi8 4420, 0
-	jrl nz, LABEL_F207F3
-	call LABEL_F207C8
+	jrl nz, SongMode_StartReturn
+	call SongMode_AbortAndClearBit2
 	stdi8 4437, 1
 	xor wa, wa
 	ldb a, 0x6D
 	call UI_PostModeChangeEvent
 
-LABEL_F207F3:
+SongMode_StartReturn:
 	ret
 
 SongMode_VoiceStateDisp:
 	cp wa, 0xFFFF
-	jr z, LABEL_F2080A
+	jr z, VoiceState_SetStatus2
 	cp wa, 0xFFFE
-	jr z, LABEL_F20813
+	jr z, VoiceState_SetStatus3
 	cp wa, 0xFFFC
-	jr z, LABEL_F2081C
-	jp LABEL_F20825
+	jr z, VoiceState_SetStatus4
+	jp VoiceState_SetStatus1AndDispatch
 
-LABEL_F2080A:
+VoiceState_SetStatus2:
 	stdi8 4437, 2
 	jp PartFormat_PartTypeDisp
 
-LABEL_F20813:
+VoiceState_SetStatus3:
 	stdi8 4437, 3
 	jp PartFormat_PartTypeDisp
 
-LABEL_F2081C:
+VoiceState_SetStatus4:
 	stdi8 4437, 4
 	jp PartFormat_PartTypeDisp
 
-LABEL_F20825:
+VoiceState_SetStatus1AndDispatch:
 	stdi8 4437, 1
 	cpdi8 36150, 116
 	jr z, PartFormat_PostMode6D
 	cpdi8 36150, 112
-	jrl z, LABEL_F208C6
+	jrl z, VoiceState_SqTrSelCaseD
 	cpdi8 36150, 117
 	jr z, PartFormat_PostMode6E
 	cpdi8 36150, 113
-	jrl z, LABEL_F208CC
+	jrl z, VoiceState_SqTrSelCaseF
 	cpdi8 36150, 115
 	jr z, PartFormat_SendPlaybackCmd
 	cpdi8 36150, 111
-	jr z, LABEL_F208D2
+	jr z, VoiceState_SqTrSelCaseE
 	cpdi8 36150, 118
 	jr z, PartFormat_SendPlaybackCmd
 	cpdi8 36150, 114
-	jr z, LABEL_F208D2
+	jr z, VoiceState_SqTrSelCaseE
 	jp PartFormat_NullRet
 
 PartFormat_PartTypeDisp:
@@ -562,21 +562,21 @@ PartFormat_SendPlaybackCmd:
 	call UI_PostModeChangeEvent
 	jr PartFormat_NullRet
 
-LABEL_F208C6:
+VoiceState_SqTrSelCaseD:
 	call SqTrSel_CaseD
 	jr PartFormat_NullRet
 
-LABEL_F208CC:
+VoiceState_SqTrSelCaseF:
 	call SqTrSel_CaseF
 	jr PartFormat_NullRet
 
-LABEL_F208D2:
+VoiceState_SqTrSelCaseE:
 	call SqTrSel_CaseE
 
 PartFormat_NullRet:
 	ret
 
-LABEL_F208D7:
+PartFormat_InitFlagBlock:
 	.byte 0x0e, 0x0e, 0x0e, 0x0e, 0x0e, 0x1d, 0xe1, 0x08
 	.byte 0xf2, 0x0e, 0xc1, 0x34, 0x0d, 0x3f, 0x00, 0x6e
 	.byte 0x09, 0xf1, 0x34, 0x0d, 0x00, 0x01, 0x1d, 0xf2
@@ -589,7 +589,7 @@ PartFormat_CheckAndDispatch:
 	jr nz, PartFormat_SendStopCommand
 	stdi8 3380, 0
 	stdi8 4420, 0
-	call LABEL_F2092E
+	call PartFormat_AbortAndClearBit2
 	bitda 2, 3394
 	jr z, PartFormat_SendStopCommand
 	jr __jrt_nop_F20920
@@ -602,26 +602,26 @@ PartFormat_SendStopCommand:
 	call UI_PostModeChangeEvent
 	ret
 
-LABEL_F2092E:
+PartFormat_AbortAndClearBit2:
 	anddi8 10412, 251
 	call Song_AbortPlayback
 	ret
 
 PartFormat_StartPlayback:
 	cpdi8 3380, 1
-	jrl nz, LABEL_F20959
+	jrl nz, PartFormat_StartReturn
 	cpdi8 4420, 0
-	jrl nz, LABEL_F20959
-	call LABEL_F2092E
+	jrl nz, PartFormat_StartReturn
+	call PartFormat_AbortAndClearBit2
 	stdi8 4437, 1
 	xor wa, wa
 	ldb a, 0x6E
 	call UI_PostModeChangeEvent
 
-LABEL_F20959:
+PartFormat_StartReturn:
 	ret
 
-LABEL_F2095A:
+PlayModeStop_InitFlagBlock:
 	.byte 0x0e, 0x0e, 0x0e, 0x0e, 0xc1, 0x37, 0x8d, 0x3f
 	.byte 0x76, 0x66, 0x04, 0x1d, 0x6a, 0x09, 0xf2, 0x0e
 	.byte 0xc1, 0x34, 0x0d, 0x3f, 0x00, 0x6e, 0x09, 0xf1
@@ -633,16 +633,16 @@ LABEL_F2095A:
 
 PlayMode_StopAbortRetZero:
 	cpdi8 3380, 1
-	jr nz, LABEL_F209B0
+	jr nz, PlayModeStop_SendStopCmd
 	stdi8 3380, 0
 	stdi8 4420, 0
 	call PlayMode_StopAndAbort
 	bitda 2, 3394
-	jr z, LABEL_F209B0
+	jr z, PlayModeStop_SendStopCmd
 	jr __jrt_nop_F209B0
 __jrt_nop_F209B0:
 
-LABEL_F209B0:
+PlayModeStop_SendStopCmd:
 	stdi8 4437, 0
 	xor wa, wa
 	ldb a, 0x6C
@@ -657,19 +657,19 @@ PlayMode_StopAndAbort:
 
 PlayMode_SendCommand6C:
 	cpdi8 3380, 1
-	jrl nz, LABEL_F209ED
+	jrl nz, PlayModeStop_SendReturn
 	cpdi8 4420, 0
-	jrl nz, LABEL_F209ED
+	jrl nz, PlayModeStop_SendReturn
 	call PlayMode_StopAndAbort
 	stdi8 4437, 1
 	xor wa, wa
 	ldb a, 0x6C
 	call UI_PostModeChangeEvent
 
-LABEL_F209ED:
+PlayModeStop_SendReturn:
 	ret
 
-LABEL_F209EE:
+PlayModeStop_ClearFlagBlock:
 	.byte 0x0e, 0x0e, 0x0e, 0x0e, 0x0e, 0xc1, 0x36, 0x8d
 	.byte 0x3f, 0x6c, 0x6e, 0x05, 0xf1, 0x34, 0x0d, 0x00
 	.byte 0x00, 0x0e
@@ -681,23 +681,23 @@ SqSngNameTtl_Dispatch:
 	call UI_PostModeChangeEvent
 	ret
 
-LABEL_F20A09:
+CDlikeSwitch_NullRet:
 	.byte 0x0e
 
 CDlikeSwitch_PlaybackTimer:
 	ldda8 w, 4420
 	cps w, 0
-	jr z, LABEL_F20A8C
+	jr z, CDlikeTimer_Return
 	dec 1, w
 	cps w, 5
-	jr nz, LABEL_F20A3A
+	jr nz, CDlikeTimer_CheckZeroCount
 	cpdi8 36150, 122
-	jr z, LABEL_F20A28
+	jr z, CDlikeTimer_ResetAccompaniment
 	cpdi8 36150, 120
-	jr z, LABEL_F20A28
+	jr z, CDlikeTimer_ResetAccompaniment
 	jr CDlikeSwTtl_StorePlaybackMode
 
-LABEL_F20A28:
+CDlikeTimer_ResetAccompaniment:
 	pushw wa
 	anddi8 10418, 249
 	anddi8 10407, 247
@@ -705,53 +705,53 @@ LABEL_F20A28:
 	popw wa
 	jr CDlikeSwTtl_StorePlaybackMode
 
-LABEL_F20A3A:
+CDlikeTimer_CheckZeroCount:
 	cps w, 0
 	jr nz, CDlikeSwTtl_StorePlaybackMode
 	cpdi8 36150, 122
-	jr z, LABEL_F20A82
+	jr z, CDlikeTimer_InitResetState
 	cpdi8 36150, 120
-	jr z, LABEL_F20A82
+	jr z, CDlikeTimer_InitResetState
 	cpdi8 36150, 116
-	jr z, LABEL_F20A7A
+	jr z, CDlikeTimer_ShowDocTitle
 	cpdi8 36150, 117
-	jr z, LABEL_F20A6A
+	jr z, CDlikeTimer_ShowPdTitle
 	cpdi8 36150, 115
-	jr z, LABEL_F20A72
+	jr z, CDlikeTimer_ShowSongTitle
 	cpdi8 36150, 118
-	jr z, LABEL_F20A72
+	jr z, CDlikeTimer_ShowSongTitle
 	jr CDlikeSwTtl_StorePlaybackMode
 
-LABEL_F20A6A:
+CDlikeTimer_ShowPdTitle:
 	pushw wa
 	call CDlikeSwTtl_ShowPdTitle
 	popw wa
 	jr CDlikeSwTtl_StorePlaybackMode
 
-LABEL_F20A72:
+CDlikeTimer_ShowSongTitle:
 	pushw wa
 	call CDlikeSwTtl_ShowSongTitle
 	popw wa
 	jr CDlikeSwTtl_StorePlaybackMode
 
-LABEL_F20A7A:
+CDlikeTimer_ShowDocTitle:
 	pushw wa
 	call CDlikeSwTtl_ShowDocTitle
 	popw wa
 	jr CDlikeSwTtl_StorePlaybackMode
 
-LABEL_F20A82:
+CDlikeTimer_InitResetState:
 	pushw wa
-	call LABEL_F20A8D
+	call CDlike_ResetPlaybackState
 	popw wa
 
 CDlikeSwTtl_StorePlaybackMode:
 	stda8 4420, w
 
-LABEL_F20A8C:
+CDlikeTimer_Return:
 	ret
 
-LABEL_F20A8D:
+CDlike_ResetPlaybackState:
 	ei 6
 	xor wa, wa
 	stda16 1052, xwa
@@ -759,26 +759,26 @@ LABEL_F20A8D:
 	stda16 1048, xwa
 	stda8 1047, a
 	bitda 1, 10407
-	jr z, LABEL_F20AC0
+	jr z, CDlikeReset_SetTimerFlags
 	stdi8 1054, 1
 	stdi8 1045, 0
 	stdi8 1046, 0
 	stdi8 1076, 0
 	stdi8 1077, 0
 
-LABEL_F20AC0:
+CDlikeReset_SetTimerFlags:
 	stdi8 1057, 1
 	stdi8 1056, 1
 	ei 0
 	ret
 
-LABEL_F20ACD:
+CDlike_InitModeAndLoadBank:
 	ordi8 47074, 64
 	ldda8 a, 64941
 	stda8 3394, a
 	stdi8 3380, 0
 	stdi8 4420, 0
-	call LABEL_F20B2C
+	call CDlike_LoadSongBankData
 	cpdi8 36150, 119
 	jr z, CDlikeSw_NullRet
 	cpdi8 36150, 120
@@ -800,13 +800,13 @@ LABEL_F20ACD:
 CDlikeSw_NullRet:
 	ret
 
-LABEL_F20B2C:
+CDlike_LoadSongBankData:
 	stdi8 6882, 0
 	cpdi16 61854, 0
-	jr nz, LABEL_F20B3E
+	jr nz, CDlikeBankLoad_CheckSavedState
 	stdi8 6882, 1
 
-LABEL_F20B3E:
+CDlikeBankLoad_CheckSavedState:
 	ld16_24 xwa, 0x00ffec
 	stda16 61854, xwa
 	ld xiy, 0xF180
@@ -818,23 +818,23 @@ LABEL_F20B3E:
 	ldw bc, 0x800
 	ldir85
 	cpdi8 6882, 1
-	jr nz, LABEL_F20B6F
+	jr nz, CDlikeBankLoad_Return
 	stdi16 61854, 0
 
-LABEL_F20B6F:
+CDlikeBankLoad_Return:
 	ret
 
-LABEL_F20B70:
+CDlike_ExitModeAndRestore:
 	call LABEL_F22B9C
 	anddi8 47074, 191
 	anddi8 10412, 251
 	stdi8 4420, 0
 	bitda 2, 3394
-	jr z, LABEL_F20B8B
+	jr z, CDlikeExit_CheckPlaybackType
 	jr __jrt_nop_F20B8B
 __jrt_nop_F20B8B:
 
-LABEL_F20B8B:
+CDlikeExit_CheckPlaybackType:
 	cpdi8 36151, 119
 	jr z, PlayMode_ResetAndSchedule
 	cpdi8 36151, 120
@@ -856,19 +856,19 @@ PlayMode_ResetAndSchedule:
 	call Audio_CheckSubsystemReady
 	ret
 
-LABEL_F20BCE:
+SongBank_SwitchAndUpdateTempo:
 	st8_24 0x00ffe3, a
-	call LABEL_F20BDC
+	call SongBank_SaveAndReload
 	call SeqTimer_PostTempoUpdate
 	ret
 
-LABEL_F20BDC:
+SongBank_SaveAndReload:
 	ldda16 xwa, 61999
 	stda16 10351, xwa
 	ldda16 xwa, 62001
 	stda16 10353, xwa
 	call SongBank_LoadToWorkArea
-	call LABEL_F20C2F
+	call SongBank_CheckAccompanimentMode
 	anddi8 10417, 254
 	ret
 
@@ -889,22 +889,22 @@ SongBank_LoadToWorkArea:
 	stda16 62001, xwa
 	ret
 
-LABEL_F20C2F:
+SongBank_CheckAccompanimentMode:
 	cpdi8 62013, 255
-	jr z, LABEL_F20C45
+	jr z, SongBank_EnableAccompaniment
 	bitda 2, 64941
-	jr z, LABEL_F20C65
+	jr z, SongBank_CheckBassMode
 	anddi8 64941, 251
 	xor a, a
-	jr LABEL_F20C52
+	jr SongBank_SendAccompEvent
 
-LABEL_F20C45:
+SongBank_EnableAccompaniment:
 	bitda 2, 64941
-	jr nz, LABEL_F20C65
+	jr nz, SongBank_CheckBassMode
 	ordi8 64941, 4
 	ldb a, 0x4
 
-LABEL_F20C52:
+SongBank_SendAccompEvent:
 	stdi8 4330, 1
 	ldb e, 0x91
 	ldb d, 0x3
@@ -912,18 +912,18 @@ LABEL_F20C52:
 	call SwbtWr_QueueMainEvent
 	call SwbtWr_ReinitBothBanks
 
-LABEL_F20C65:
+SongBank_CheckBassMode:
 	cpdi8 62027, 255
-	jr z, LABEL_F20C75
+	jr z, SongBank_EnableBassMode
 	anddi8 64941, 254
 	xor a, a
-	jr LABEL_F20C7C
+	jr SongBank_SendBassEvent
 
-LABEL_F20C75:
+SongBank_EnableBassMode:
 	ordi8 64941, 1
 	ldb a, 0x1
 
-LABEL_F20C7C:
+SongBank_SendBassEvent:
 	ldb e, 0x91
 	ldb d, 0x3
 	ldb w, 0x1
@@ -1361,9 +1361,9 @@ DkMdlyPlyTtl_Dispatch:	.ascii ":;<>"
 ; DkMdlyPly init playback
 DkMdlyPly_InitPlay:
 	cp xde, 0xF
-	jr z, LABEL_F210B2
+	jr z, DkMdlyPly_CheckPlayState
 	cp xde, 0x8A
-	jr z, LABEL_F210A9
+	jr z, DkMdlyPly_SendAudioA5
 	cp xde, 0xA
 	jr nz, DkMdlyPly_ReturnZero
 	push xde
@@ -1377,12 +1377,12 @@ DkMdlyPly_InitPlay:
 	pop xde
 	jr DkMdlyPly_ReturnZero
 
-LABEL_F210A9:
+DkMdlyPly_SendAudioA5:
 	ldw wa, 0xA5
 	call SoundCtrl_SendCommand
 	jr DkMdlyPly_ReturnZero
 
-LABEL_F210B2:
+DkMdlyPly_CheckPlayState:
 	push xde
 	push xhl
 	push xix
@@ -1402,7 +1402,7 @@ DkMdlyPly_SendAudioCmd:
 	lds hl, 0
 	lda_24 xde, 0xe20054
 
-LABEL_F210C8:
+DkMdlyPly_VoiceScanLoop:
 	ld bc, hl
 	add bc, bc
 	ld_sriw3 BC, 0x07, 0xE8, 0xE4
@@ -1410,7 +1410,7 @@ LABEL_F210C8:
 	ret nz
 	inc 1, hl
 	cp hl, 0x10
-	jr lt, LABEL_F210C8
+	jr lt, DkMdlyPly_VoiceScanLoop
 	ret
 
 ; DkMdlyPly check playback state
@@ -1489,7 +1489,7 @@ DisplayMode_DispatchEvents:
 ; Pattern per entry: XWA=event_id, XBC=0x1E0043B (target), XDE=0 (param),
 ;   then call EventDispatch (0xFAC558) or jump to common tail.
 ; Event IDs encode mode/sub-function: 0x6F000A, 0x70000x, 0x73000C, etc.
-LABEL_F21181:
+DisplayMode_BatchEventSend:
 	ld	xwa, 7274506
 	ld	xbc, 31457339
 	lds32	xde, 0
@@ -2493,18 +2493,18 @@ DpDoc_CaseA:
 ; DpDocTtl case B
 DpDoc_CaseB:
 	ldw wa, 0xFFFF
-	jr LABEL_F21E00
+	jr DpDoc_NavigateBackward
 
 ; DpDocTtl case C
 DpDoc_CaseC:
 	call SeqState_GetFlags
 	bit 1, hl
-	jr z, LABEL_F21DE7
+	jr z, DpDoc_CheckBit0PlayMode
 	calr SeqRecPlay_EnableRecordOnly
 	call Acc_StopPlayMode
 	jr DpDocTtl_ReturnZero
 
-LABEL_F21DE7:
+DpDoc_CheckBit0PlayMode:
 	call SeqState_GetFlags
 	bit 0, hl
 	jr z, DpDocTtl_ReturnZero
@@ -2521,7 +2521,7 @@ DpDoc_CaseD:
 DpDoc_CaseE:
 	lds wa, 1
 
-LABEL_F21E00:
+DpDoc_NavigateBackward:
 	calr CDlikeSwTtl_DocNavDispatch
 	jr DpDocTtl_ReturnZero
 	ldw wa, 0xA5
@@ -2613,18 +2613,18 @@ DpPd_CaseA:
 ; DpPdTtl case B
 DpPd_CaseB:
 	ldw wa, 0xFFFF
-	jr LABEL_F21F2F
+	jr DpPd_NavigateBackward
 
 ; DpPdTtl case C
 DpPd_CaseC:
 	call SeqState_GetFlags
 	bit 1, hl
-	jr z, LABEL_F21F16
+	jr z, DpPd_CheckBit0PlayMode
 	calr SeqRecPlay_EnableRecordOnly
 	call Acc_StopPlayMode
 	jr DpPdTtl_ReturnZero
 
-LABEL_F21F16:
+DpPd_CheckBit0PlayMode:
 	call SeqState_GetFlags
 	bit 0, hl
 	jr z, DpPdTtl_ReturnZero
@@ -2641,7 +2641,7 @@ DpPd_CaseD:
 DpPd_CaseE:
 	lds wa, 1
 
-LABEL_F21F2F:
+DpPd_NavigateBackward:
 	calr CDlikeSwTtl_PdNavDispatch
 	jr DpPdTtl_ReturnZero
 	ldw wa, 0xA5
@@ -2737,18 +2737,18 @@ DpSmf_CaseA:
 ; DpSmfTtl case B
 DpSmf_CaseB:
 	ldw wa, 0xFFFF
-	jr LABEL_F22085
+	jr DpSmf_NavigateBackward
 
 ; DpSmfTtl case C
 DpSmf_CaseC:
 	call SeqState_GetFlags
 	bit 1, hl
-	jr z, LABEL_F2206C
+	jr z, DpSmf_CheckBit0PlayMode
 	calr SeqRecPlay_EnableRecordOnly
 	call Acc_StopPlayMode
 	jr DpSmfTtl_ReturnZero
 
-LABEL_F2206C:
+DpSmf_CheckBit0PlayMode:
 	call SeqState_GetFlags
 	bit 0, hl
 	jr z, DpSmfTtl_ReturnZero
@@ -2765,7 +2765,7 @@ DpSmf_CaseD:
 DpSmf_CaseE:
 	lds wa, 1
 
-LABEL_F22085:
+DpSmf_NavigateBackward:
 	calr CDlikeSwTtl_SongNavDispatch
 	jr DpSmfTtl_ReturnZero
 	ldw wa, 0xA5
@@ -2840,37 +2840,37 @@ DpSmfLyrTtl_Dispatch:
 ; DpSmfLyrTtl case A
 DpSmfLyr_CaseA:
 	cp xde, 0x88
-	jr z, LABEL_F221B2
+	jr z, DpSmfLyr_SendSoundD6
 	cp xde, 0x85
-	jr z, LABEL_F221AB
+	jr z, DpSmfLyr_NavigateForward
 	cp xde, 0x5
-	jr z, LABEL_F221AB
+	jr z, DpSmfLyr_NavigateForward
 	cp xde, 0x83
-	jr z, LABEL_F221A6
+	jr z, DpSmfLyr_CheckSongBit1
 	cp xde, 0x3
-	jr z, LABEL_F221A6
+	jr z, DpSmfLyr_CheckSongBit1
 	cp xde, 0x82
 	jr z, SeqRecPlay_ToggleRecordOrPlay
 	cp xde, 0x2
 	jr z, SeqRecPlay_ToggleRecordOrPlay
 	cp xde, 0x81
-	jr z, LABEL_F2217D
+	jr z, DpSmfLyr_NavigateBackward
 	cp xde, 0x1
 	jr nz, SeqStep_ReturnZero
 
-LABEL_F2217D:
+DpSmfLyr_NavigateBackward:
 	ldw wa, 0xFFFF
-	jr LABEL_F221AD
+	jr DpSmfLyr_DispatchNavigation
 
 SeqRecPlay_ToggleRecordOrPlay:
 	call SeqState_GetFlags
 	bit 1, hl
-	jr z, LABEL_F22194
+	jr z, DpSmfLyr_CheckBit0PlayMode
 	calr SeqRecPlay_EnableRecordOnly
 	call Acc_StopPlayMode
 	jr SeqStep_ReturnZero
 
-LABEL_F22194:
+DpSmfLyr_CheckBit0PlayMode:
 	call SeqState_GetFlags
 	bit 0, hl
 	jr z, SeqStep_ReturnZero
@@ -2878,18 +2878,18 @@ LABEL_F22194:
 	call Acc_TransitionPlayMode
 	jr SeqStep_ReturnZero
 
-LABEL_F221A6:
+DpSmfLyr_CheckSongBit1:
 	calr CDlikeSwTtl_SongBit1Check
 	jr SeqStep_ReturnZero
 
-LABEL_F221AB:
+DpSmfLyr_NavigateForward:
 	lds wa, 1
 
-LABEL_F221AD:
+DpSmfLyr_DispatchNavigation:
 	calr CDlikeSwTtl_SongNavDispatch
 	jr SeqStep_ReturnZero
 
-LABEL_F221B2:
+DpSmfLyr_SendSoundD6:
 	ldw wa, 0xD6
 	call SoundCtrl_SendCommand
 	jr SeqStep_ReturnZero
@@ -2897,22 +2897,22 @@ LABEL_F221B2:
 ; DpSmfLyrTtl case B
 DpSmfLyr_CaseB:
 	cp xde, 0x84
-	jr z, LABEL_F221CB
+	jr z, DpSmfLyr_ConfirmStart
 	cp xde, 0x4
 	jr nz, SeqStep_ReturnZero
 
-LABEL_F221CB:
+DpSmfLyr_ConfirmStart:
 	calr CDlikeSwTtl_SongConfirmStart
 	jr SeqStep_ReturnZero
 
 ; DpSmfLyrTtl case C
 DpSmfLyr_CaseC:
 	cp xde, 0x84
-	jr z, LABEL_F221E0
+	jr z, DpSmfLyr_ConfirmDispatch
 	cp xde, 0x4
 	jr nz, SeqStep_ReturnZero
 
-LABEL_F221E0:
+DpSmfLyr_ConfirmDispatch:
 	calr CDlikeSwTtl_SongConfirmDispatch
 
 SeqStep_ReturnZero:
@@ -2977,7 +2977,7 @@ SqTrSelTtl_ReturnZero:
 	lds32 xhl, 0
 	ret
 
-LABEL_F22262:
+Display_InitGraphicsAndScreen:
 	; --- Init sequence + 4 register-save call thunks ---
 	ldw wa, 0x00FF
 	call GraphicsRender_ByteData
@@ -2986,7 +2986,7 @@ LABEL_F22262:
 	call 0xFB14B7
 	ldw wa, 0x00FF
 	call 0xFB1456
-LABEL_F2227B:
+Display_CallInitScreenLayout:
 	push xde
 	push xhl
 	push xix
@@ -2997,7 +2997,7 @@ LABEL_F2227B:
 	pop xhl
 	pop xde
 	ret
-LABEL_F22288:
+Display_CallConditionalCompare:
 	push xde
 	push xhl
 	push xix
@@ -3008,7 +3008,7 @@ LABEL_F22288:
 	pop xhl
 	pop xde
 	ret
-LABEL_F22295:
+Display_CallPollAudioUpdate:
 	push xde
 	push xhl
 	push xix

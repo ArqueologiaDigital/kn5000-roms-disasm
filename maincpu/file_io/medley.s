@@ -326,7 +326,7 @@ FmmIntMedleyFunc:
 	jrl nz, IntMed_Exit
 	cpdi8 36151, 122
 	jr z, IntMed_CheckPlaying
-	call LABEL_F20ACD
+	call CDlike_InitModeAndLoadBank
 	stdi8 34046, 0
 	stdi8 34972, 0
 	stdi8 34970, 0
@@ -335,7 +335,7 @@ FmmIntMedleyFunc:
 IntMed_CheckSlotLoop:
 	ldto_berp A, 0xF8
 	extz wa
-	call LABEL_F2065A
+	call SongBank_ScanActiveVoices
 	cps l, 0
 	jr z, IntMed_MarkSlotEmpty
 	ldada xwa, 34960
@@ -385,7 +385,7 @@ IntMed_FindCurrentSong:
 	calr FmmSeqSongNameFunc
 	ldto_berp A, 0xF8
 	extz wa
-	call LABEL_F20BCE
+	call SongBank_SwitchAndUpdateTempo
 	incdi8 1, 34972
 	ldda32 xwa, 33502
 	or xwa, xwa
@@ -420,7 +420,7 @@ IntMed_PlayFromStart:
 	calr FmmSeqSongNameFunc
 	ldto_berp A, 0xF8
 	extz wa
-	call LABEL_F20BCE
+	call SongBank_SwitchAndUpdateTempo
 	incdi8 1, 34972
 	ldda32 xwa, 33502
 	or xwa, xwa
@@ -455,7 +455,7 @@ IntMed_HandleError:
 IntMed_HandleStop:
 	cpdi8 36150, 122
 	jrl z, IntMed_Exit
-	call LABEL_F20B70
+	call CDlike_ExitModeAndRestore
 	stdi8 34046, 0
 	jrl IntMed_Exit
 
@@ -724,7 +724,7 @@ IntMed_StartPlayLoop:
 	calr FmmSeqSongNameFunc
 	ldto_berp A, 0xF8
 	extz wa
-	call LABEL_F20BCE
+	call SongBank_SwitchAndUpdateTempo
 	incdi8 1, 34972
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
@@ -899,7 +899,7 @@ DiskMed_InitPlayOrder:
 DiskMed_CheckSlotLoop:
 	ldto_berp A, 0xF8
 	extz wa
-	call LABEL_F2065A
+	call SongBank_ScanActiveVoices
 	ldada xbc, 34960
 	ld wa, iz
 	extz xwa
@@ -973,7 +973,7 @@ DiskMed_FindFirstLoop:
 	extz wa
 
 DiskMed_PlaySong:
-	call LABEL_F20BCE
+	call SongBank_SwitchAndUpdateTempo
 	incdi8 1, 34972
 	lds32 xhl, 1
 	jr DiskMed_HelperExit
@@ -1076,7 +1076,7 @@ DiskSel_NextFile:
 	inc 1, iz
 	cp iz, 0x14
 	jr lt, DiskSel_CheckFileLoop
-	call LABEL_F20ACD
+	call CDlike_InitModeAndLoadBank
 	jrl DiskSel_Exit
 
 DiskSel_CheckPlaying:
@@ -1361,7 +1361,7 @@ DiskSel_ShowError:
 DiskSel_HandleStopEvent:
 	cpdi8 36150, 120
 	jr z, DiskSel_PostStopEvent
-	call LABEL_F20B70
+	call CDlike_ExitModeAndRestore
 	stdi8 34046, 0
 
 DiskSel_PostStopEvent:
@@ -2217,7 +2217,7 @@ SmfMed_ClearSlotsLoop:
 	jr c, SmfMed_ClearSlotsLoop
 
 SmfMed_FinishInit:
-	call LABEL_F20ACD
+	call CDlike_InitModeAndLoadBank
 	lds32 xwa, 0
 	stda32 33844, xwa
 	jrl SmfMed_Exit
@@ -2233,7 +2233,7 @@ SmfMed_HandleStop:
 	jrl z, SmfMed_Exit
 	cp a, 0x76
 	jrl z, SmfMed_Exit
-	call LABEL_F20B70
+	call CDlike_ExitModeAndRestore
 	calr CancelOperationCleanup
 	stdi8 34046, 0
 	jrl SmfMed_Exit
@@ -2989,7 +2989,7 @@ PdMed_ClearSlotsLoop:
 	jr c, PdMed_ClearSlotsLoop
 
 PdMed_FinishInit:
-	call LABEL_F20ACD
+	call CDlike_InitModeAndLoadBank
 	lds32 xwa, 0
 	stda32 33944, xwa
 	jrl PdMed_Exit
@@ -3000,7 +3000,7 @@ PdMed_HandleStop:
 	jrl z, PdMed_Exit
 	cp a, 0x75
 	jrl z, PdMed_Exit
-	call LABEL_F20B70
+	call CDlike_ExitModeAndRestore
 	call CancelOperationCleanup
 	stdi8 34046, 0
 	jrl PdMed_Exit
@@ -3801,7 +3801,7 @@ DocMed_ClearSlotsLoop:
 	jr c, DocMed_ClearSlotsLoop
 
 DocMed_FinishInit:
-	call LABEL_F20ACD
+	call CDlike_InitModeAndLoadBank
 	lds32 xwa, 0
 	stda32 34040, xwa
 	jrl DocMed_Exit
@@ -3812,7 +3812,7 @@ DocMed_HandleStop:
 	jrl z, DocMed_Exit
 	cp a, 0x74
 	jrl z, DocMed_Exit
-	call LABEL_F20B70
+	call CDlike_ExitModeAndRestore
 	call CancelOperationCleanup
 	stdi8 34046, 0
 	jrl DocMed_Exit
