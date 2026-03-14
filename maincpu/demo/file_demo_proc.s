@@ -751,7 +751,7 @@ Demo_SelectEntry_PlaySong:
 	stdi8 36686, 6
 	ldda8 a, 10404
 	extz wa
-	call LABEL_F8469B
+	call Seq_DispatchEventType5
 	ret
 
 Demo_SelectEntry_StartPlayback:
@@ -1391,41 +1391,41 @@ LABEL_F87293:
 	lds de, 3
 	call FileIO_Search_SkipEntry
 	cps hl, 0
-	jr z, LABEL_F872DD
+	jr z, FileIO_ReadHeader_TypeMatch
 	lda xwa, (xsp + 2)
 	ld xbc, 0xEA0176
 	lds de, 3
 	call FileIO_Search_SkipEntry
 	cps hl, 0
-	jr z, LABEL_F872DD
+	jr z, FileIO_ReadHeader_TypeMatch
 	lda xwa, (xsp + 2)
 	ld xbc, 0xEA017A
 	lds de, 3
 	call FileIO_Search_SkipEntry
 	lds wa, 0
 	cps hl, 0
-	jr nz, LABEL_F872DF
+	jr nz, FileIO_ReadValidateHdr_Return
 
-LABEL_F872DD:
+FileIO_ReadHeader_TypeMatch:
 	lds wa, 1
 
-LABEL_F872DF:
+FileIO_ReadValidateHdr_Return:
 	ld hl, wa
 	popw iz
 	inc 4, xsp
 	ret
 
-LABEL_F872E5:
+FileIO_ValidateAndOpenFile:
 	lda xsp, (xsp - 24)
 	push xiz
 	ldi_werp 0xFA, 0
 	call GetCurrentFileIndex
 	cps hl, 0
-	jr ge, LABEL_F872F8
+	jr ge, FileIO_ValidateOpen_Process
 	lds hl, 0
-	jr LABEL_F87339
+	jr FileIO_ValidateOpen_Return
 
-LABEL_F872F8:
+FileIO_ValidateOpen_Process:
 	ld a, l
 	ldfr_berp A, 0xF8
 	extz iz
@@ -1443,15 +1443,15 @@ LABEL_F872F8:
 	ld xbc, 0xEA0182
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr lt, LABEL_F87336
+	jr lt, FileIO_ValidateOpen_Done
 	calr LABEL_F8727C
 	ldfr_werp HL, 0xFA
 	call FileIO_CloseHandle
 
-LABEL_F87336:
+FileIO_ValidateOpen_Done:
 	ldto_werp HL, 0xFA
 
-LABEL_F87339:
+FileIO_ValidateOpen_Return:
 	pop xiz
 	lda xsp, (xsp + 24)
 	ret
@@ -1464,28 +1464,28 @@ FileIO_ReadHeaderAt4:
 	call FileIO_SeekAndReadBlock
 	call FileIO_ReadByte
 	cps hl, 0
-	jr lt, LABEL_F8735C
+	jr lt, FileIO_ReadHdr4_Fail
 	ld32_24 xwa, 0xea0186
 	ld a, (xwa)
 	cp l, a
-	jr z, LABEL_F8735E
+	jr z, FileIO_ReadHdr4_Success
 
-LABEL_F8735C:
+FileIO_ReadHdr4_Fail:
 	lds iz, 0
 
-LABEL_F8735E:
+FileIO_ReadHdr4_Success:
 	call FileIO_SeekRead_ExtReturn
 	ld hl, iz
 	popw iz
 	ret
 
-LABEL_F87366:
+FileIO_ValidateFileWithRegion:
 	lda xsp, (xsp - 24)
 	push xiz
 	ldi_werp 0xFA, 0
 	call GetCurrentFileIndex
 	cps hl, 0
-	jr lt, LABEL_F873A9
+	jr lt, FileIO_ValidateRegion_NoFile
 	ld a, l
 	ldfr_berp A, 0xF8
 	extz iz
@@ -1503,25 +1503,25 @@ LABEL_F87366:
 	ld xbc, 0xEA018C
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F873AD
+	jr ge, FileIO_ValidateRegion_CheckSig
 
-LABEL_F873A9:
+FileIO_ValidateRegion_NoFile:
 	lds hl, 0
-	jr LABEL_F873C3
+	jr FileIO_ValidateRegion_Return
 
-LABEL_F873AD:
+FileIO_ValidateRegion_CheckSig:
 	lds wa, 2
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
-	jr z, LABEL_F873BC
+	jr z, FileIO_ValidateRegion_Close
 	calr FileIO_ReadHeaderAt4
 	ldfr_werp HL, 0xFA
 
-LABEL_F873BC:
+FileIO_ValidateRegion_Close:
 	call FileIO_CloseHandle
 	ldto_werp HL, 0xFA
 
-LABEL_F873C3:
+FileIO_ValidateRegion_Return:
 	pop xiz
 	lda xsp, (xsp + 24)
 	ret
@@ -1534,26 +1534,26 @@ FileIO_ReadHeaderAtF:
 	call FileIO_SeekAndReadBlock
 	call FileIO_ReadByte
 	cps hl, 0
-	jr lt, LABEL_F873E3
+	jr lt, FileIO_ReadHdrF_Fail
 	cp l, 0x8
-	jr z, LABEL_F873E5
+	jr z, FileIO_ReadHdrF_Success
 
-LABEL_F873E3:
+FileIO_ReadHdrF_Fail:
 	lds iz, 0
 
-LABEL_F873E5:
+FileIO_ReadHdrF_Success:
 	call FileIO_SeekRead_ExtReturn
 	ld hl, iz
 	popw iz
 	ret
 
-LABEL_F873ED:
+FileIO_ValidateWithExtHeader:
 	lda xsp, (xsp - 24)
 	push xiz
 	ldi_werp 0xFA, 0
 	call GetCurrentFileIndex
 	cps hl, 0
-	jr lt, LABEL_F87430
+	jr lt, FileIO_ValidateExt_NoFile
 	ld a, l
 	ldfr_berp A, 0xF8
 	extz iz
@@ -1571,25 +1571,25 @@ LABEL_F873ED:
 	ld xbc, 0xEA0190
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F87434
+	jr ge, FileIO_ValidateExt_CheckSig
 
-LABEL_F87430:
+FileIO_ValidateExt_NoFile:
 	lds hl, 0
-	jr LABEL_F8744A
+	jr FileIO_ValidateExt_Return
 
-LABEL_F87434:
+FileIO_ValidateExt_CheckSig:
 	lds wa, 1
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
-	jr z, LABEL_F87443
+	jr z, FileIO_ValidateExt_Close
 	calr FileIO_ReadHeaderAtF
 	ldfr_werp HL, 0xFA
 
-LABEL_F87443:
+FileIO_ValidateExt_Close:
 	call FileIO_CloseHandle
 	ldto_werp HL, 0xFA
 
-LABEL_F8744A:
+FileIO_ValidateExt_Return:
 	pop xiz
 	lda xsp, (xsp + 24)
 	ret

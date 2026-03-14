@@ -666,7 +666,7 @@ FDemoText_SendExtVoiceParams:
 	ld (xsp + 22), a
 	lda xwa, (xsp + 6)
 	ld (xsp + 2), xwa
-	call LABEL_F83E10
+	call DemoDesc_BuildCompactParams
 	lda xde, (xsp + 16)
 	ld (xde), 0xB0
 	ld a, (xsp + 22)
@@ -783,7 +783,7 @@ FDemoText_SendExtParamsAlt:
 	ld (xsp + 22), a
 	lda xwa, (xsp + 6)
 	ld (xsp + 2), xwa
-	call LABEL_F83E10
+	call DemoDesc_BuildCompactParams
 	lda xbc, (xsp + 16)
 	ld (xbc), 0x88
 	ld a, (xsp + 22)

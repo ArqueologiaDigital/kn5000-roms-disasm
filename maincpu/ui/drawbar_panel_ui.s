@@ -13816,7 +13816,7 @@ IvDrawbar1_DrawbarUpdate_Store:
 IvDrawbar1_DrawbarUpdate_Render:
 	ld xwa, (xsp + 4)
 	ld bc, (xde)
-	calr LABEL_F83B92
+	calr DrawbarBitmapHelper
 	lds wa, 1
 	call SetNeedUpdate
 	call UpdateScreen
@@ -14125,23 +14125,23 @@ IvDrawbar2Proc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1E0003A
-	jrl z, LABEL_F839C1
+	jrl z, IvDrawbar2_GetText
 	cp xiz, 0x1C00018
-	jrl z, LABEL_F8396F
+	jrl z, IvDrawbar2_OKHandler
 	cp xiz, 0x1C00017
-	jrl z, LABEL_F8396F
+	jrl z, IvDrawbar2_OKHandler
 	cp xiz, 0x1C0001C
-	jrl z, LABEL_F83900
+	jrl z, IvDrawbar2_MatchHandler
 	cp xiz, 0x1E10008
-	jr z, LABEL_F8389E
+	jr z, IvDrawbar2_LoadValsHandler
 	cp xiz, 0x1C0000D
-	jr z, LABEL_F83881
+	jr z, IvDrawbar2_PaintHandler
 	cp xiz, 0x1C0000C
-	jr z, LABEL_F83859
+	jr z, IvDrawbar2_ShowHideHandler
 	cp xiz, 0x1C0000B
-	jr z, LABEL_F83859
+	jr z, IvDrawbar2_ShowHideHandler
 	cp xiz, 0x1C00001
-	jrl nz, LABEL_F839D5
+	jrl nz, IvDrawbar2_ForwardToBase
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1E10008
 	lds32 xde, 0
@@ -14149,9 +14149,9 @@ IvDrawbar2Proc:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
-	jrl LABEL_F83969
+	jrl IvDrawbar2_CallInherited
 
-LABEL_F83859:
+IvDrawbar2_ShowHideHandler:
 	call GetPartSelect
 	st16_24 0x02479a, xhl
 	ld xwa, (xsp + 8)
@@ -14162,9 +14162,9 @@ LABEL_F83859:
 	exts xde
 	ld xwa, 0xEA000C
 	ld xbc, 0x1E0003B
-	jr LABEL_F83897
+	jr IvDrawbar2_SendEventShared
 
-LABEL_F83881:
+IvDrawbar2_PaintHandler:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -14173,14 +14173,14 @@ LABEL_F83881:
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 
-LABEL_F83897:
+IvDrawbar2_SendEventShared:
 	call SendEvent
 	jrl IvDrawbar_ReturnZeroJmp
 
-LABEL_F8389E:
+IvDrawbar2_LoadValsHandler:
 	call GetModeNow
 	cp xhl, 0x1800003
-	jr z, LABEL_F838F1
+	jr z, IvDrawbar2_LoadMode3
 	ld16_24 xwa, 0x02479a
 	ldw bc, 0x2CC
 	call SndParam_LookupViaEncode
@@ -14199,13 +14199,13 @@ LABEL_F8389E:
 	st16_24 0x0247cc, xhl
 	jrl IvDrawbar_ReturnZeroJmp
 
-LABEL_F838F1:
+IvDrawbar2_LoadMode3:
 	ld xwa, 0x1410001
 	ld xbc, 0x1E10008
 	lds32 xde, 0
-	jrl LABEL_F839BB
+	jrl IvDrawbar2_MainFuncCallShared
 
-LABEL_F83900:
+IvDrawbar2_MatchHandler:
 	ld xhl, (xsp + 4)
 	ld16_24 xbc, 0x02479a
 	exts xbc
@@ -14215,30 +14215,30 @@ LABEL_F83900:
 	ld xwa, (xsp + 4)
 	lda xde, (xwa + 4)
 	cp xix, (xwa)
-	jr nz, LABEL_F83928
+	jr nz, IvDrawbar2_MatchCheck2CB
 	ld wa, (xde)
 	st16_24 0x0247c6, xwa
 	jr IvDrawbar_ForwardUnhandled
 
-LABEL_F83928:
+IvDrawbar2_MatchCheck2CB:
 	ld xwa, xbc
 	add xwa, 0x82CB
 	cp xwa, (xhl)
-	jr nz, LABEL_F8393D
+	jr nz, IvDrawbar2_MatchCheck294
 	ld wa, (xde)
 	st16_24 0x0247c8, xwa
 	jr IvDrawbar_ForwardUnhandled
 
-LABEL_F8393D:
+IvDrawbar2_MatchCheck294:
 	ld xix, xbc
 	add xix, 0x8294
 	ld wa, (xde)
 	cp xix, (xhl)
-	jr nz, LABEL_F83952
+	jr nz, IvDrawbar2_MatchCheck293
 	st16_24 0x0247cc, xwa
 	jr IvDrawbar_ForwardUnhandled
 
-LABEL_F83952:
+IvDrawbar2_MatchCheck293:
 	add xbc, 0x8293
 	cp xbc, (xhl)
 	jr nz, IvDrawbar_ForwardUnhandled
@@ -14249,11 +14249,11 @@ IvDrawbar_ForwardUnhandled:
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 
-LABEL_F83969:
+IvDrawbar2_CallInherited:
 	call InheritedProc
 	jr IvDrawbar_ReturnZeroJmp
 
-LABEL_F8396F:
+IvDrawbar2_OKHandler:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -14277,11 +14277,11 @@ LABEL_F8396F:
 	ld xwa, 0x1400004
 	ld xbc, 0x1E000A8
 
-LABEL_F839BB:
+IvDrawbar2_MainFuncCallShared:
 	call MainFuncCall
 	jr IvDrawbar_ReturnZeroJmp
 
-LABEL_F839C1:
+IvDrawbar2_GetText:
 	pushw 0xE9
 	pushw 0xF93C
 	ld xwa, (xsp + 8)
@@ -14291,15 +14291,15 @@ LABEL_F839C1:
 
 IvDrawbar_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F839E1
+	jr IvDrawbar2_Epilogue
 
-LABEL_F839D5:
+IvDrawbar2_ForwardToBase:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
 
-LABEL_F839E1:
+IvDrawbar2_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14311,23 +14311,23 @@ IvDrawbarNormProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1E0003A
-	jrl z, LABEL_F83B2D
+	jrl z, DrawbarNorm_GetText
 	cp xiz, 0x1C0002F
-	jrl z, LABEL_F83B08
+	jrl z, DrawbarNorm_Refresh
 	cp xiz, 0x1C0001C
-	jrl z, LABEL_F83ADF
+	jrl z, DrawbarNorm_Match
 	cp xiz, 0x1C0001B
-	jrl z, LABEL_F83ABD
+	jrl z, DrawbarNorm_Notify
 	cp xiz, 0x1E000A7
-	jr z, LABEL_F83A75
+	jr z, DrawbarNorm_Update
 	cp xiz, 0x1C0000D
-	jr z, LABEL_F83A5C
+	jr z, DrawbarNorm_Paint
 	cp xiz, 0x1C0000C
-	jr z, LABEL_F83A35
+	jr z, DrawbarNorm_ShowHide
 	cp xiz, 0x1C0000B
-	jrl nz, LABEL_F83B41
+	jrl nz, DrawbarNorm_ForwardToBase
 
-LABEL_F83A35:
+DrawbarNorm_ShowHide:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -14341,7 +14341,7 @@ LABEL_F83A35:
 	lds32 xde, 4
 	jrl IvDrawbarNorm_SendEvent
 
-LABEL_F83A5C:
+DrawbarNorm_Paint:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -14351,10 +14351,10 @@ LABEL_F83A5C:
 	lds32 xde, 0
 	jrl IvDrawbarNorm_SendEvent
 
-LABEL_F83A75:
+DrawbarNorm_Update:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x4
-	jr z, LABEL_F83A9F
+	jr z, DrawbarNorm_UpdateCase4
 	or xwa, xwa
 	jrl nz, IvDrawbarNorm_ReturnZeroJmp
 	ld xwa, 0x4003
@@ -14365,7 +14365,7 @@ LABEL_F83A75:
 	ld xde, xhl
 	jrl IvDrawbarNorm_SendEvent
 
-LABEL_F83A9F:
+DrawbarNorm_UpdateCase4:
 	ld16_24 xwa, 0x02479a
 	sla wa, 2
 	lda_24 xbc, 0x03e9a0
@@ -14374,7 +14374,7 @@ LABEL_F83A9F:
 	ld xbc, 0x1C0000F
 	jr IvDrawbarNorm_SendEvent
 
-LABEL_F83ABD:
+DrawbarNorm_Notify:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -14388,24 +14388,24 @@ LABEL_F83ABD:
 	call MainLswPut
 	jr IvDrawbarNorm_ReturnZeroJmp
 
-LABEL_F83ADF:
+DrawbarNorm_Match:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa)
 	cp xwa, 0x4003
-	jr nz, LABEL_F83AFA
+	jr nz, DrawbarNorm_MatchForward
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1E000A7
 	lds32 xde, 0
 	call SendEvent
 
-LABEL_F83AFA:
+DrawbarNorm_MatchForward:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
 	jr IvDrawbarNorm_ReturnZeroJmp
 
-LABEL_F83B08:
+DrawbarNorm_Refresh:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -14420,7 +14420,7 @@ IvDrawbarNorm_SendEvent:
 	call SendEvent
 	jr IvDrawbarNorm_ReturnZeroJmp
 
-LABEL_F83B2D:
+DrawbarNorm_GetText:
 	pushw 0xE9
 	pushw 0xF942
 	ld xwa, (xsp + 8)
@@ -14430,15 +14430,15 @@ LABEL_F83B2D:
 
 IvDrawbarNorm_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F83B4D
+	jr DrawbarNorm_Epilogue
 
-LABEL_F83B41:
+DrawbarNorm_ForwardToBase:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
 
-LABEL_F83B4D:
+DrawbarNorm_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14447,37 +14447,37 @@ IvDrawbarSndEProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E0003A
-	jr z, LABEL_F83B81
+	jr z, DrawbarSndE_GetText
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F83B6C
+	jr z, DrawbarSndE_Paint
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F83B90
+	jr DrawbarSndE_Epilogue
 
-LABEL_F83B6C:
+DrawbarSndE_Paint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	call SendEvent
-	jr LABEL_F83B8E
+	jr DrawbarSndE_ReturnZero
 
-LABEL_F83B81:
+DrawbarSndE_GetText:
 	pushw 0xE9
 	pushw 0xF948
 	push xde
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F83B8E:
+DrawbarSndE_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F83B90:
+DrawbarSndE_Epilogue:
 	pop xiz
 	ret
 
-LABEL_F83B92:
+DrawbarBitmapHelper:
 	dec 4, xsp
 	ld de, wa
 	lda xwa, (xsp)
@@ -14507,11 +14507,11 @@ MainMemDrawControl:
 	pushw iz
 	ld (xsp + 2), xde
 	cp xbc, 0x1E1000E
-	jrl z, LABEL_F83CBD
+	jrl z, MemDraw_CheckVoiceState
 	cp xbc, 0x1E10008
-	jrl z, LABEL_F83CA5
+	jrl z, MemDraw_RestoreAll
 	cp xbc, 0x1E1000A
-	jr z, LABEL_F83C6B
+	jr z, MemDraw_UpdateItem
 	cp xbc, 0x1E10009
 	jrl nz, DemoMenu_ReturnZero
 	call GetPartSelect
@@ -14519,7 +14519,7 @@ MainMemDrawControl:
 	ld wa, hl
 	call FDemoText_ProbeVoiceType
 	cp l, 0xC
-	jr z, LABEL_F83C43
+	jr z, MemDraw_InitParamLoop
 	call GetPartSelect
 	extz hl
 	ld wa, hl
@@ -14538,10 +14538,10 @@ MainMemDrawControl:
 	calr DemoMenu_BuildItemWorkspace
 	jrl DemoMenu_ReturnZero
 
-LABEL_F83C43:
+MemDraw_InitParamLoop:
 	lds iz, 0
 
-LABEL_F83C45:
+MemDraw_ParamLoopBody:
 	ld wa, iz
 	extz xwa
 	add xwa, xwa
@@ -14555,10 +14555,10 @@ LABEL_F83C45:
 	calr DemoMenu_BuildItemWorkspace
 	inc 1, iz
 	cp iz, 0xE
-	jr ule, LABEL_F83C45
+	jr ule, MemDraw_ParamLoopBody
 	jr DemoMenu_ReturnZero
 
-LABEL_F83C6B:
+MemDraw_UpdateItem:
 	ld xwa, (xsp + 2)
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -14568,24 +14568,24 @@ LABEL_F83C6B:
 	srl xwa, 0
 	ldi_werp 0xE2, 0
 	cp wa, 0x8
-	jr ule, LABEL_F83C97
+	jr ule, MemDraw_SendExtVoice
 	call GetPartSelect
 	extz hl
 	ld wa, hl
 	call FDemoText_SendExtParamsAlt
 	jr DemoMenu_ReturnZero
 
-LABEL_F83C97:
+MemDraw_SendExtVoice:
 	call GetPartSelect
 	extz hl
 	ld wa, hl
 	call FDemoText_SendExtVoiceParams
 	jr DemoMenu_ReturnZero
 
-LABEL_F83CA5:
+MemDraw_RestoreAll:
 	lds iz, 0
 
-LABEL_F83CA7:
+MemDraw_RestoreLoop:
 	ld wa, iz
 	calr DemoMenu_WorkspaceReturn
 	ld bc, hl
@@ -14593,10 +14593,10 @@ LABEL_F83CA7:
 	calr DemoMenu_BuildItemWorkspace
 	inc 1, iz
 	cp iz, 0xE
-	jr ule, LABEL_F83CA7
+	jr ule, MemDraw_RestoreLoop
 	jr DemoMenu_ReturnZero
 
-LABEL_F83CBD:
+MemDraw_CheckVoiceState:
 	ld xwa, (xsp + 2)
 	extz wa
 	call FDemoText_CheckVoiceState
@@ -14734,7 +14734,7 @@ DemoMenu_DescriptorFunc:
 	lda_24 xix, 0xf83de9
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F83DE9:
+DemoDesc_DispatchTable:
 	ld16_24	hl, 149472
 	ret
 	ld16_24	hl, 149474
@@ -14753,7 +14753,7 @@ DemoMenu_DescriptorReturn:
 	lds hl, 0
 	ret
 
-LABEL_F83E10:
+DemoDesc_BuildCompactParams:
 	ld16_24 xbc, 0x0247e6
 	sla bc, 4
 	addda16_24 xbc, 149476
@@ -14788,7 +14788,7 @@ LABEL_F83E10:
 	ld (xwa + 6), c
 	ret
 
-LABEL_F83E7C:
+DemoDesc_DataByte:
 	.byte 0x0e
 
 PsVariBoxProc:
@@ -14798,19 +14798,19 @@ PsVariBoxProc:
 	ld xiz, xbc
 	st_dri3l XWA, 0xFD, 0x18, 0x01
 	cp xiz, 0x1E0003C
-	jrl z, LABEL_F84091
+	jrl z, PsVari_CheckDirty
 	cp xiz, 0x1C0001B
-	jrl z, LABEL_F8404E
+	jrl z, PsVari_Notify
 	cp xiz, 0x1C00007
-	jrl z, LABEL_F84004
+	jrl z, PsVari_OK
 	cp xiz, 0x1E0003A
-	jrl z, LABEL_F83FE3
+	jrl z, PsVari_GetText
 	cp xiz, 0x1C0000F
-	jrl z, LABEL_F83F5C
+	jrl z, PsVari_Confirm
 	cp xiz, 0x1C0000D
-	jr z, LABEL_F83EFF
+	jr z, PsVari_Paint
 	cp xiz, 0x1E0004D
-	jrl nz, LABEL_F840B5
+	jrl nz, PsVari_ForwardToBase
 	ld_sril XWA, (xsp + 0x0118)
 	call GetViewInstance
 	lda xwa, (xhl + 38)
@@ -14827,21 +14827,21 @@ PsVariBoxProc:
 	lds32 xde, 0
 	jrl AudioView_SendEventCall
 
-LABEL_F83EFF:
+PsVari_Paint:
 	ld_sril XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 38)
 	cpw (xwa), 0x0
-	jr z, LABEL_F83F29
+	jr z, PsVari_PaintEmpty
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
 	call InheritedProc
-	jr LABEL_F83F43
+	jr PsVari_DrawEditSw
 
-LABEL_F83F29:
+PsVari_PaintEmpty:
 	st_dri3b A, 0xFD, 0x08, 0x01
 	ld_sril XWA, (xsp + 0x0118)
 	call GetBox
@@ -14849,7 +14849,7 @@ LABEL_F83F29:
 	ldw bc, 0xF5
 	call DrawBox
 
-LABEL_F83F43:
+PsVari_DrawEditSw:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 36)
 	call DrawEditSw
@@ -14858,7 +14858,7 @@ LABEL_F83F43:
 	lds32 xde, 0
 	jrl AudioView_SendEventCall
 
-LABEL_F83F5C:
+PsVari_Confirm:
 	ld_sril XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
@@ -14882,7 +14882,7 @@ LABEL_F83F5C:
 	ldfr_berp A, 0xF0
 	extz ix
 	cpw (xiz), 0x0
-	jr z, LABEL_F83FCC
+	jr z, PsVari_DrawInactive
 	ld xwa, (xiy)
 	push xwa
 	ld xwa, (xsp + 8)
@@ -14891,9 +14891,9 @@ LABEL_F83F5C:
 	pushw ix
 	ld xwa, xde
 	ld xde, xhl
-	jr LABEL_F83FDA
+	jr PsVari_DrawStringCall
 
-LABEL_F83FCC:
+PsVari_DrawInactive:
 	ld xwa, (xiy)
 	push xwa
 	pushw 0xFF
@@ -14902,14 +14902,14 @@ LABEL_F83FCC:
 	ld xwa, xde
 	ld xde, xhl
 
-LABEL_F83FDA:
+PsVari_DrawStringCall:
 	call DrawStringAlignment
 
 AudioView_ReturnZeroJmp:
 	lds32 xhl, 0
-	jrl LABEL_F840C5
+	jrl PsVari_Epilogue
 
-LABEL_F83FE3:
+PsVari_GetText:
 	ld_sril XWA, (xsp + 0x0118)
 	call GetViewInstance
 	pushm (xhl + 36)
@@ -14921,16 +14921,16 @@ LABEL_F83FE3:
 	lda xsp, (xsp + 10)
 	jr AudioView_ReturnZeroJmp
 
-LABEL_F84004:
+PsVari_OK:
 	ld_sril XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld wa, (xhl + 36)
 	extz xwa
 	cp_sril_rm XWA, 0xFD, 0x14, 0x01
-	jr nz, LABEL_F84040
+	jr nz, PsVari_OKForward
 	ld de, (xhl + 26)
 	cp de, 0xFFFF
-	jr z, LABEL_F84040
+	jr z, PsVari_OKForward
 	exts xde
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001B
@@ -14940,13 +14940,13 @@ LABEL_F84004:
 	lds32 xde, 1
 	jr AudioView_SendEventCall
 
-LABEL_F84040:
+PsVari_OKForward:
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
-	jr LABEL_F840C1
+	jr PsVari_CallInherited
 
-LABEL_F8404E:
+PsVari_Notify:
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
@@ -14968,7 +14968,7 @@ AudioView_SendEventCall:
 	call SendEvent
 	jrl AudioView_ReturnZeroJmp
 
-LABEL_F84091:
+PsVari_CheckDirty:
 	ld_sril XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld wa, (xhl + 26)
@@ -14979,17 +14979,17 @@ LABEL_F84091:
 	cpw (xwa), 0x1
 	jrl nz, AudioView_ReturnZeroJmp
 	lds32 xhl, 1
-	jr LABEL_F840C5
+	jr PsVari_Epilogue
 
-LABEL_F840B5:
+PsVari_ForwardToBase:
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0114)
 
-LABEL_F840C1:
+PsVari_CallInherited:
 	call InheritedProc
 
-LABEL_F840C5:
+PsVari_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x18, 0x01
 	ret
@@ -14999,11 +14999,11 @@ VwUserBitmapSpProc:
 	lda xsp, (xsp - 10)
 	push xiz
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F840DE
+	jr z, UserBitmapSp_Paint
 	call InheritedProc
-	jr LABEL_F84144
+	jr UserBitmapSp_Epilogue
 
-LABEL_F840DE:
+UserBitmapSp_Paint:
 	call GetViewInstance
 	ld xiz, xhl
 	lda xbc, (xsp + 10)
@@ -15018,7 +15018,7 @@ LABEL_F840DE:
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 6)
 	or xwa, xwa
-	jr z, LABEL_F84139
+	jr z, UserBitmapSp_DrawEmpty
 	ld xwa, (xiz + 22)
 	ld xbc, 0x1E000A2
 	lds32 xde, 0
@@ -15033,17 +15033,17 @@ LABEL_F840DE:
 	ld xbc, (xsp + 8)
 	ld de, (xsp + 6)
 	call DrawBitmapSP
-	jr LABEL_F84142
+	jr UserBitmapSp_ReturnZero
 
-LABEL_F84139:
+UserBitmapSp_DrawEmpty:
 	lda xwa, (xsp + 10)
 	lds32 xbc, 0
 	call DrawBitmap
 
-LABEL_F84142:
+UserBitmapSp_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F84144:
+UserBitmapSp_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
@@ -15055,7 +15055,7 @@ AcFdemoScreenProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1C00001
-	jr z, LABEL_F84178
+	jr z, FdemoScreen_Init
 	ld xwa, 0x1210028
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -15064,12 +15064,12 @@ AcFdemoScreenProc:
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F841EA
+	jr FdemoScreen_Epilogue
 
-LABEL_F84178:
+FdemoScreen_Init:
 	ld xwa, (xsp + 4)
 	or xwa, xwa
-	jr nz, LABEL_F841A3
+	jr nz, FdemoScreen_InitForward
 	ld xwa, 0x120000B
 	ld xbc, 0x1E000AC
 	lds32 xde, 0
@@ -15080,37 +15080,37 @@ LABEL_F84178:
 	lds32 xde, 0
 	call ApFuncCall
 
-LABEL_F841A3:
+FdemoScreen_InitForward:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 4)
 	or xwa, xwa
-	jr nz, LABEL_F841E8
+	jr nz, FdemoScreen_ReturnZero
 	ld xwa, 0x1210028
 	ld xbc, 0x1E1000B
 	lds32 xde, 0
 	call ApFuncCall
 	or xhl, xhl
-	jr z, LABEL_F841D8
+	jr z, FdemoScreen_StartPanel2
 	ld xwa, 0xE40005
 	ld xbc, 0x1C00001
 	lds32 xde, 5
-	jr LABEL_F841E4
+	jr FdemoScreen_SendStart
 
-LABEL_F841D8:
+FdemoScreen_StartPanel2:
 	ld xwa, 0xE40002
 	ld xbc, 0x1C00001
 	lds32 xde, 5
 
-LABEL_F841E4:
+FdemoScreen_SendStart:
 	call SendEvent
 
-LABEL_F841E8:
+FdemoScreen_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F841EA:
+FdemoScreen_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -15119,33 +15119,33 @@ IvDemofeature1Proc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E0003A
-	jr z, LABEL_F8421E
+	jr z, Demofeat1_GetText
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F84209
+	jr z, Demofeat1_Paint
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F8422D
+	jr Demofeat1_Epilogue
 
-LABEL_F84209:
+Demofeat1_Paint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	call SendEvent
-	jr LABEL_F8422B
+	jr Demofeat1_ReturnZero
 
-LABEL_F8421E:
+Demofeat1_GetText:
 	pushw 0xE9
 	pushw 0xF9A6
 	push xde
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F8422B:
+Demofeat1_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F8422D:
+Demofeat1_Epilogue:
 	pop xiz
 	ret
 
@@ -15153,25 +15153,25 @@ IvDemofeature2Proc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E0003A
-	jr z, LABEL_F842A3
+	jr z, Demofeat2_GetText
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F8428E
+	jr z, Demofeat2_Paint
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F8426A
+	jr z, Demofeat2_ShowHide
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F8426A
+	jr z, Demofeat2_ShowHide
 	cp xbc, 0x1C00001
-	jr z, LABEL_F84262
+	jr z, Demofeat2_Init
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F842B2
+	jr Demofeat2_Epilogue
 
-LABEL_F84262:
+Demofeat2_Init:
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F842B0
+	jr Demofeat2_ReturnZero
 
-LABEL_F8426A:
+Demofeat2_ShowHide:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, 0x1210028
@@ -15181,30 +15181,30 @@ LABEL_F8426A:
 	ld xde, xhl
 	ld xwa, 0xE40008
 	ld xbc, 0x1C0000F
-	jr LABEL_F8429D
+	jr Demofeat2_SendEvent
 
-LABEL_F8428E:
+Demofeat2_Paint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 
-LABEL_F8429D:
+Demofeat2_SendEvent:
 	call SendEvent
-	jr LABEL_F842B0
+	jr Demofeat2_ReturnZero
 
-LABEL_F842A3:
+Demofeat2_GetText:
 	pushw 0xE9
 	pushw 0xF9AC
 	push xde
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F842B0:
+Demofeat2_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F842B2:
+Demofeat2_Epilogue:
 	pop xiz
 	ret
 
@@ -15217,21 +15217,21 @@ AcPresentationBoxProc:
 	cp xiz, 0x1E0003C
 	jrl z, AcPresCtrl_Case0
 	cp xiz, 0x1E0003A
-	jrl z, LABEL_F844C2
+	jrl z, PresBox_GetText
 	cp xiz, 0x1C0001B
-	jrl z, LABEL_F84489
+	jrl z, PresBox_Notify
 	cp xiz, 0x1C10006
-	jrl z, LABEL_F8445A
+	jrl z, PresBox_TimerTick
 	cp xiz, 0x1C10005
-	jrl z, LABEL_F84408
+	jrl z, PresBox_TimerExpired
 	cp xiz, 0x1C00007
-	jrl z, LABEL_F843B5
+	jrl z, PresBox_OK
 	cp xiz, 0x1E0004D
-	jrl z, LABEL_F8438C
+	jrl z, PresBox_HandleWidget
 	cp xiz, 0x1C0000E
-	jr z, LABEL_F8436C
+	jr z, PresBox_Select
 	cp xiz, 0x1C0000D
-	jr z, LABEL_F84337
+	jr z, PresBox_Paint
 	cp xiz, 0x1C00001
 	jrl nz, AcPresCtrl_Case1
 	ld xwa, (xsp + 12)
@@ -15247,7 +15247,7 @@ AudioCtrl_ReturnZeroJmp:
 	lds32 xhl, 0
 	jrl AcPresCtrl_Case3
 
-LABEL_F84337:
+PresBox_Paint:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -15265,7 +15265,7 @@ LABEL_F84337:
 	lds32 xde, 0
 	jrl AcAudio_SendEvent_Continue
 
-LABEL_F8436C:
+PresBox_Select:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	cpw (xhl + 40), 0xFF
@@ -15277,7 +15277,7 @@ LABEL_F8436C:
 	ld xbc, 0x1E0004E
 	jrl AcAudio_SendEvent_Continue
 
-LABEL_F8438C:
+PresBox_HandleWidget:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	lda xwa, (xhl + 42)
@@ -15294,7 +15294,7 @@ LABEL_F8438C:
 	lds32 xde, 0
 	jrl AcAudio_SendEvent_Continue
 
-LABEL_F843B5:
+PresBox_OK:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	ld (xsp + 4), xhl
@@ -15302,7 +15302,7 @@ LABEL_F843B5:
 	ld wa, (xwa + 40)
 	extz xwa
 	cp xwa, (xsp + 8)
-	jr nz, LABEL_F843FD
+	jr nz, PresBox_OKForward
 	ld xwa, 0x120000B
 	ld xbc, 0x1E000AC
 	lds32 xde, 0
@@ -15317,13 +15317,13 @@ LABEL_F843B5:
 	call ApFuncCall
 	jrl AudioCtrl_ReturnZeroJmp
 
-LABEL_F843FD:
+PresBox_OKForward:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
 	jrl AcPresCtrl_Case2
 
-LABEL_F84408:
+PresBox_TimerExpired:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -15349,7 +15349,7 @@ LABEL_F84408:
 	call PostEvent
 	jrl AudioCtrl_ReturnZeroJmp
 
-LABEL_F8445A:
+PresBox_TimerTick:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -15366,7 +15366,7 @@ LABEL_F8445A:
 	ld xbc, 0x1C0001B
 	jr AcAudio_SendEvent_Continue
 
-LABEL_F84489:
+PresBox_Notify:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -15388,7 +15388,7 @@ AcAudio_SendEvent_Continue:
 	call SendEvent
 	jrl AudioCtrl_ReturnZeroJmp
 
-LABEL_F844C2:
+PresBox_GetText:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	ld xwa, (xhl + 36)
@@ -15467,7 +15467,7 @@ AcPresCtrl_EventDispatch:
 	cp xhl, 0x01800013			; check return code
 	jrl z, AcPresent_ReturnZeroJmp			; matched -- exit
 	lds	wa, 2
-	jr LABEL_F845D1				; skip to call FAF2C7
+	jr AcPresCtrl_ChangePalette				; skip to call FAF2C7
 	ld xwa, 0x02600024			; workspace for SendEvent
 	ld xbc, 0x01E00029			; presentation control event
 	ld xde, (xsp + 4)			; event param
@@ -15488,7 +15488,7 @@ AcPresCtrl_EventDispatch:
 	ld xde, 0x01A000E0			; event param
 	call PostEvent				; dispatch event
 	lds	wa, 2
-LABEL_F845D1:
+AcPresCtrl_ChangePalette:
 	call ChangePalette				; presentation helper
 	jrl AcPresent_ReturnZeroJmp			; exit
 
@@ -15520,7 +15520,7 @@ AcPresCtrl_Case5:
 	ld xwa, 0xE40000
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jr LABEL_F8464A
+	jr AcPresCtrl_SendEventReturn
 
 ; Handler for event 0x1C0001C within AcPresentationControlProc.
 ; Checks the workspace type-tag: *(XDE) must equal 0x0000B80A for SSF to start.
@@ -15546,7 +15546,7 @@ AcPresentCtrl_CheckSSFStart:
 	ld xwa, xiz
 	ld xbc, 0x1C00006
 
-LABEL_F8464A:
+AcPresCtrl_SendEventReturn:
 	call SendEvent
 	jr AcPresent_ReturnZeroJmp
 	ld xwa, xiz
@@ -15565,7 +15565,7 @@ LABEL_F8464A:
 
 AcPresent_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F84697
+	jr AcPresCtrl_Epilogue
 
 ; AcPresCtrl default case
 AcPresCtrl_DefaultCase:
@@ -15574,12 +15574,12 @@ AcPresCtrl_DefaultCase:
 	ld xde, (xsp + 4)
 	call InheritedProc
 
-LABEL_F84697:
+AcPresCtrl_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
 
-LABEL_F8469B:
+Seq_DispatchEventType5:
 	ld de, wa
 	exts xde
 	ld xwa, 0xFFFFFFFF
