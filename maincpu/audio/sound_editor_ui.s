@@ -3593,34 +3593,34 @@ SeMenu_ShowPopupDialog:
 
 SeMenu_ShowPopupDialog_Draw:
 	.long SeMenu_WaveformSelect_Data
-	.long LABEL_F100D0
+	.long SeMenu_NameEdit_DataBlock2
 	.long SeMenu_PresetManager_SaveApply
-	.long LABEL_F107AF
-	.long LABEL_F10854
-	.long LABEL_F108AD
+	.long SeMenu_PresetInit_Main
+	.long SeMenu_FxEdit_Init
+	.long SeMenu_FxEdit_DataBlock1
 	.long SeMenu_PresetManager_Data
 	.long SeMenu_PresetBrowser_Init
-	.long LABEL_F108F6
-	.long LABEL_F10915
+	.long SeMenu_FxEdit_DataBlock2
+	.long SeMenu_FxEdit_DataBlock3
 	.long SeMenu_PresetBrowser_Data
 	.long SeMenu_CompareAndApply_Init
 	.long SeMenu_CompareAndApply_Data5
 	.long SeMenu_Utility_CopyBlock
 	.long SeMenu_Utility_FillBlock
-	.long LABEL_F109D1
+	.long SeMenu_FilterEdit_DataBlock2
 	.long SeMenu_Utility_CompareBlock
 	.long SeMenu_Utility_FormatSigned_Data
 	.long SeMenu_Utility_FormatPercent
 	.long SeMenu_Utility_FormatPercent_Data
 	.long SeMenu_Utility_FormatHex
 	.long SeMenu_Utility_FormatHex_Data
-	.long LABEL_F10922
+	.long SeMenu_FxEdit_DataBlock4
 	.long SeMenu_Utility_End
-	.long LABEL_F10969
-	.long LABEL_F109C4
-	.long LABEL_F10020
-	.long LABEL_F10AA9
-	.long LABEL_F10B10
+	.long SeMenu_FilterEdit_Init
+	.long SeMenu_FilterEdit_DataBlock1
+	.long SeMenu_NameEdit_DataBlock1
+	.long SeMenu_FilterEdit_DataBlock5
+	.long SeMenu_EqEdit_Init
 	.long SeMenu_PresetManager_Load
 	.long LABEL_F10512
 	.long LABEL_F105C4
@@ -3670,15 +3670,15 @@ SeMenu_ShowConfirmDialog:
 
 SeMenu_ShowConfirmDialog_Data:
 	.long SeMenu_PresetManager_Init
-	.long LABEL_F100F1
-	.long LABEL_F10183
-	.long LABEL_F109DE
-	.long LABEL_F10A45
-	.long LABEL_F10A6F
-	.long LABEL_F101DF
-	.long LABEL_F1029A
+	.long SeMenu_NameEdit_Dispatch
+	.long SeMenu_PatchEdit_Dispatch
+	.long SeMenu_FilterEdit_Dispatch
+	.long SeMenu_FilterEdit_AltDispatch
+	.long SeMenu_FilterEdit_DataBlock3
+	.long SeMenu_BankEdit_Dispatch
+	.long SeMenu_DrumKit_Dispatch
 	.long LABEL_F104E8
-	.long LABEL_F10A99
+	.long SeMenu_FilterEdit_DataBlock4
 	.long Data_UnknownBlock
 	.long LABEL_F1039E
 	.long LABEL_F1040D
@@ -3693,11 +3693,11 @@ SeMenu_ShowConfirmDialog_Data:
 	.long SeMenu_WaveformSelect_End
 	.long LABEL_F1040D
 	.long LABEL_F104E8
-	.long LABEL_F10A99
+	.long SeMenu_FilterEdit_DataBlock4
 	.long Data_UnknownBlock
-	.long LABEL_F10146
-	.long LABEL_F10B6F
-	.long LABEL_F10BD2
+	.long SeMenu_PatchEdit_DataBlock
+	.long SeMenu_EqEdit_Dispatch
+	.long SeMenu_EqEdit_DrawInit
 	.long SeMenu_WaveformSelect_End
 	.long LABEL_F10676
 	.long LABEL_F10689
@@ -3871,12 +3871,12 @@ SeMenu_ShowConfirmDialog_Data:
 
 
 SeMenu_WaveformSelect_Init:
-	.long LABEL_F10FCE
-	.long LABEL_F10F06
-	.long LABEL_F10CAE
-	.long LABEL_F10E3E
-	.long LABEL_F10D76
-	.long LABEL_F10CAE
+	.long SeBitmap_EnvCurve5
+	.long SeBitmap_EnvCurve4
+	.long SeBitmap_EnvCurve1
+	.long SeBitmap_EnvCurve3
+	.long SeBitmap_EnvCurve2
+	.long SeBitmap_EnvCurve1
 SeMenu_WaveformSelect_End:
 	.byte 0x0e
 
@@ -4411,7 +4411,7 @@ SeMenu_Utility_End:
 	call	15789069
 	call	15793688
 	.byte 0x0e
-LABEL_F10020:
+SeMenu_NameEdit_DataBlock1:
 	.byte 0xc1, 0x60, 0x06, 0x21, 0xc9, 0xcc, 0x0f
 	.byte 0xf1, 0x70, 0x06, 0x41, 0xc9, 0xcf, 0x0a, 0x6e
 	.byte 0x07, 0x45, 0xe1, 0x53, 0xf1, 0x00, 0x68, 0x05
@@ -4435,48 +4435,48 @@ LABEL_F10020:
 	.byte 0x46, 0xa7, 0x58, 0xf1, 0x00, 0xe8, 0x86, 0xa6
 	.byte 0x25, 0xae, 0x04, 0x24, 0x1d, 0x0d, 0xec, 0xf0
 	.byte 0x0e
-LABEL_F100D0:
+SeMenu_NameEdit_DataBlock2:
 	.byte 0x45, 0xa9, 0x5b, 0xf1, 0x00, 0x44, 0x26
 	.byte 0x5d, 0xf1, 0x00, 0x1d, 0x00, 0xec, 0xf0, 0x45
 	.byte 0x9b, 0x64, 0xf1, 0x00, 0x44, 0xf7, 0x64, 0xf1
 	.byte 0x00, 0x1d, 0x0d, 0xec, 0xf0, 0x1d, 0x26, 0x01
 	.byte 0xf1, 0x0e
-LABEL_F100F1:
+SeMenu_NameEdit_Dispatch:
 	; --- Dispatch on A: XIY/XIX setup, 3 paths (53 bytes) ---
 	cps	a, 0
-	jr z, LABEL_F10100
+	jr z, SeMenu_NameEdit_SetupPath
 	cp a, 0x0A
-	jr nz, LABEL_F10116
-	call LABEL_F10126
-	jr t, LABEL_F10125
-LABEL_F10100:
+	jr nz, SeMenu_NameEdit_DefaultPath
+	call SeMenu_NameEdit_CheckBit7
+	jr t, SeMenu_NameEdit_Return
+SeMenu_NameEdit_SetupPath:
 	sti8_24	257960, 1
 	ld xiy, 0x00F1659F
 	ld xix, 0x00F165A9
 	call SeMenu_NameEditor_Setup
 	ldb a, 0x00
-LABEL_F10116:
+SeMenu_NameEdit_DefaultPath:
 	sti8_24	257960, 0
 	ld xiy, 0x00F1652F
 	call 0xF10BE7
-LABEL_F10125:
+SeMenu_NameEdit_Return:
 	ret
-LABEL_F10126:
+SeMenu_NameEdit_CheckBit7:
 	; --- Helper: conditional XIY based on bit 7 of (0x066A) (32 bytes) ---
 	sti8_24	257960, 0
 	ldda8	a, 1642
 	and a, 0x80
-	jr nz, LABEL_F1013C
+	jr nz, SeMenu_NameEdit_Bit7Set
 	ld xiy, 0x00F16506
-	jr t, LABEL_F10141
-LABEL_F1013C:
+	jr t, SeMenu_NameEdit_HandleInput
+SeMenu_NameEdit_Bit7Set:
 	ld xiy, 0x00F164F7
-LABEL_F10141:
+SeMenu_NameEdit_HandleInput:
 	call SeMenu_NameEditor_HandleInput
 	ret
 
 
-LABEL_F10146:
+SeMenu_PatchEdit_DataBlock:
 	.byte 0xc9
 	.byte 0xd8, 0x66, 0x19, 0xc9, 0xdf, 0x6f, 0x25, 0xe9
 	.byte 0xd1, 0x46, 0xa1, 0x5a, 0xf1, 0x00, 0xc1, 0x70
@@ -4486,14 +4486,14 @@ LABEL_F10146:
 	.byte 0xec, 0xf0, 0x68, 0x0f, 0x45, 0x8f, 0x59, 0xf1
 	.byte 0x00, 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00, 0x1d
 	.byte 0xe7, 0x0b, 0xf1, 0x0e
-LABEL_F10183:
+SeMenu_PatchEdit_Dispatch:
 	; --- Dispatch on A: table lookup, 4 paths (92 bytes) ---
 	cps	a, 0
-	jr z, LABEL_F101B1
+	jr z, SeMenu_PatchEdit_SetupPath
 	cps	a, 1
-	jr z, LABEL_F101C9
+	jr z, SeMenu_PatchEdit_CallHelper
 	cp a, 0x0E
-	jr c, LABEL_F101CF
+	jr c, SeMenu_PatchEdit_DefaultPath
 	ld xiy, 0x00F12AFD
 	extz xwa
 	xor w, w
@@ -4504,41 +4504,41 @@ LABEL_F10183:
 	ld xix, (xiz+4)
 	sti8_24	257960, 0
 	call SeMenu_NameEditor_Draw
-	jr t, LABEL_F101DE
-LABEL_F101B1:
+	jr t, SeMenu_PatchEdit_Return
+SeMenu_PatchEdit_SetupPath:
 	sti8_24	257960, 1
 	ld xiy, 0x00F12B49
 	ld xix, 0x00F12B53
 	call SeMenu_NameEditor_Setup
 	ldb a, 0x00
-	jr t, LABEL_F101CF
-LABEL_F101C9:
+	jr t, SeMenu_PatchEdit_DefaultPath
+SeMenu_PatchEdit_CallHelper:
 	call 0xF0F82F
-	jr t, LABEL_F101DE
-LABEL_F101CF:
+	jr t, SeMenu_PatchEdit_Return
+SeMenu_PatchEdit_DefaultPath:
 	ld xiy, 0x00F12AFD
 	sti8_24	257960, 0
 	call 0xF10BE7
-LABEL_F101DE:
+SeMenu_PatchEdit_Return:
 	ret
 
 
-LABEL_F101DF:
+SeMenu_BankEdit_Dispatch:
 	; --- Dispatcher: A==0 path with XIY/XIX setup + loop subroutine (187 bytes) ---
 	cps	a, 0
-	jr z, LABEL_F101E9
-	call LABEL_F10207
-	jr t, LABEL_F10206
-LABEL_F101E9:
+	jr z, SeMenu_BankEdit_SetupPath
+	call SeMenu_BankEdit_LoopHelper
+	jr t, SeMenu_BankEdit_Return
+SeMenu_BankEdit_SetupPath:
 	sti8_24	257960, 1
 	ld xiy, 0x00F12D01
 	ld xix, 0x00F12D0B
 	call SeMenu_NameEditor_Setup
 	ld xiy, 0x00F12B7B
 	call SeMenu_NameEditor_HandleInput
-LABEL_F10206:
+SeMenu_BankEdit_Return:
 	ret
-LABEL_F10207:
+SeMenu_BankEdit_LoopHelper:
 	; --- Loop over 3 entries: indexed XIY/XIX pointer table lookups ---
 	sti8_24	257960, 0
 	ld xiy, 0x00F12C44
@@ -4549,11 +4549,11 @@ LABEL_F10207:
 	call SeMenu_NameEditor_Draw
 	ldb c, 0x00
 	ld xiz, 0x00000664
-LABEL_F10230:
+SeMenu_BankEdit_LoopBody:
 	push c
 	push xiz
 	cp (xiz), 0x00
-	jr z, LABEL_F1026D
+	jr z, SeMenu_BankEdit_EmptyEntry
 	ld xiy, 0x00F12CAB
 	extz xbc
 	xor b, b
@@ -4571,8 +4571,8 @@ LABEL_F10230:
 	ld xix, xiy
 	add xix, 0x00000005
 	call SeMenu_NameEditor_Setup
-	jr t, LABEL_F10289
-LABEL_F1026D:
+	jr t, SeMenu_BankEdit_LoopContinue
+SeMenu_BankEdit_EmptyEntry:
 	ld xiy, 0x00F12CB7
 	extz xbc
 	xor b, b
@@ -4582,17 +4582,17 @@ LABEL_F1026D:
 	ld xix, xiy
 	add xix, 0x00000014
 	call SeMenu_NameEditor_Setup
-LABEL_F10289:
+SeMenu_BankEdit_LoopContinue:
 	pop xiz
 	pop c
 	add c, 0x01
 	add xiz, 0x00000001
 	cps	c, 3
-	jr nz, LABEL_F10230
+	jr nz, SeMenu_BankEdit_LoopBody
 	ret
 
 
-LABEL_F1029A:
+SeMenu_DrumKit_Dispatch:
 	cps	a, 0
 	jr	z, 32
 	cp	a, 13
@@ -4779,7 +4779,7 @@ Data_UnknownBlock:
 	.byte 0xec, 0x01, 0xd3, 0x07, 0xf8, 0xec, 0x24, 0xf1
 	.byte 0xce, 0x06, 0x54, 0xdc, 0xc8, 0x0e, 0x00, 0xf1
 	.byte 0xd2, 0x06, 0x54, 0x1d, 0x69, 0xec, 0xf0, 0x0e
-LABEL_F107AF:
+SeMenu_PresetInit_Main:
 	; --- Main: init, XIY/XIX setup, 2 loops, 9 calls (63 bytes) ---
 	call 0xF0F8F4
 	call SeMenu_PresetManager_Save
@@ -4792,22 +4792,22 @@ LABEL_F107AF:
 	ld xiy, 0x00F144E7
 	ld xix, 0x00F1459C
 	call SeMenu_NameEditor_Draw
-	call LABEL_F107EE
-	call LABEL_F10821
+	call SeMenu_PresetInit_Loop1
+	call SeMenu_PresetInit_Loop2
 	call 0xF0F909
 	ret
-LABEL_F107EE:
+SeMenu_PresetInit_Loop1:
 	; --- Loop 1: iterate A from 2 to 5, call table lookup (15 bytes) ---
 	ldb a, 0x02
-LABEL_F107F0:
+SeMenu_PresetInit_Loop1Body:
 	.byte 0x14					; push a  [compact 1-byte]
-	call LABEL_F107FD
+	call SeMenu_PresetInit_TableLookup1
 	.byte 0x15					; pop a  [compact 1-byte]
 	inc 1, a
 	cps	a, 6
-	jr c, LABEL_F107F0
+	jr c, SeMenu_PresetInit_Loop1Body
 	ret
-LABEL_F107FD:
+SeMenu_PresetInit_TableLookup1:
 	; --- Table lookup 1: index into 0x660, test bit 7 of D (36 bytes) ---
 	xor xbc, xbc
 	xor w, w
@@ -4816,24 +4816,24 @@ LABEL_F107FD:
 	add xbc, xwa
 	ld d, (xbc)
 	and d, 0x80
-	jr z, LABEL_F10820
+	jr z, SeMenu_PresetInit_Lookup1Return
 	ld xiy, 0x00F14640
 	sti8_24	257960, 0
 	call 0xF10BE7
-LABEL_F10820:
+SeMenu_PresetInit_Lookup1Return:
 	ret
-LABEL_F10821:
+SeMenu_PresetInit_Loop2:
 	; --- Loop 2: iterate A from 0x0C to 0x0F, call table lookup (16 bytes) ---
 	ldb a, 0x0C
-LABEL_F10823:
+SeMenu_PresetInit_Loop2Body:
 	.byte 0x14					; push a  [compact 1-byte]
-	call LABEL_F10831
+	call SeMenu_PresetInit_TableLookup2
 	.byte 0x15					; pop a  [compact 1-byte]
 	inc 1, a
 	cp a, 0x10
-	jr c, LABEL_F10823
+	jr c, SeMenu_PresetInit_Loop2Body
 	ret
-LABEL_F10831:
+SeMenu_PresetInit_TableLookup2:
 	; --- Table lookup 2: index into 0x660, test D != 0 (35 bytes) ---
 	xor xbc, xbc
 	xor w, w
@@ -4842,15 +4842,15 @@ LABEL_F10831:
 	add xbc, xwa
 	ld d, (xbc)
 	cps	d, 0
-	jr z, LABEL_F10853
+	jr z, SeMenu_PresetInit_Lookup2Return
 	ld xiy, 0x00F145C4
 	sti8_24	257960, 0
 	call 0xF10BE7
-LABEL_F10853:
+SeMenu_PresetInit_Lookup2Return:
 	ret
 
 
-LABEL_F10854:
+SeMenu_FxEdit_Init:
 	call	15792414
 	sti8_24	257960, 0
 	ld	xiy, 15810809
@@ -4870,7 +4870,7 @@ LABEL_F10854:
 	ld	xix, 15812349
 	call	15789069
 	ret
-LABEL_F108AD:
+SeMenu_FxEdit_DataBlock1:
 	.byte 0x1d, 0x1e
 	.byte 0xf9, 0xf0, 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00
 	.byte 0x45, 0x69, 0x41, 0xf1, 0x00, 0x44, 0x39, 0x42
@@ -4881,17 +4881,17 @@ LABEL_F108AD:
 	.byte 0xf0, 0xf0, 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00
 	.byte 0x45, 0x43, 0x47, 0xf1, 0x00, 0x44, 0x76, 0x47
 	.byte 0xf1, 0x00, 0x1d, 0x0d, 0xec, 0xf0, 0x0e
-LABEL_F108F6:
+SeMenu_FxEdit_DataBlock2:
 	.byte 0x1d
 	.byte 0x6c, 0xf9, 0xf0, 0x45, 0x49, 0x1c, 0xf1, 0x00
 	.byte 0x44, 0x8f, 0x1c, 0xf1, 0x00, 0x1d, 0x00, 0xec
 	.byte 0xf0, 0x1d, 0xf5, 0xf6, 0xf0, 0x1d, 0xd9, 0xff
 	.byte 0xf0, 0x1d, 0x81, 0xf9, 0xf0, 0x0e
-LABEL_F10915:
+SeMenu_FxEdit_DataBlock3:
 	.byte 0x1d, 0x6c
 	.byte 0xf9, 0xf0, 0x1d, 0x6d, 0x09, 0xf1, 0x1d, 0x81
 	.byte 0xf9, 0xf0, 0x0e
-LABEL_F10922:
+SeMenu_FxEdit_DataBlock4:
 	.byte 0x1d, 0xf5, 0xfd, 0xf0, 0x45
 	.byte 0x83, 0x1f, 0xf1, 0x00, 0x44, 0x37, 0x20, 0xf1
 	.byte 0x00, 0x1d, 0x00, 0xec, 0xf0, 0xf2, 0xa8, 0xef
@@ -4902,7 +4902,7 @@ LABEL_F10922:
 	.byte 0x00, 0x1d, 0x00, 0xec, 0xf0, 0x1d, 0xf5, 0xf6
 	.byte 0xf0, 0x1d, 0x31, 0xfc, 0xf0, 0x1d, 0x18, 0xfe
 	.byte 0xf0, 0x0e
-LABEL_F10969:
+SeMenu_FilterEdit_Init:
 	call	15793653
 	ld	xiy, 15804544
 	ld	xix, 15804861
@@ -4923,14 +4923,14 @@ LABEL_F10969:
 	call	15789069
 	call	15793688
 	ret
-LABEL_F109C4:
+SeMenu_FilterEdit_DataBlock1:
 	.byte 0x1d, 0xf5, 0xfd
 	.byte 0xf0, 0x1d, 0x9e, 0xf9, 0xf0, 0x1d, 0x18, 0xfe
 	.byte 0xf0, 0x0e
-LABEL_F109D1:
+SeMenu_FilterEdit_DataBlock2:
 	.byte 0x1d, 0xbd, 0xfb, 0xf0, 0x1d, 0x9e
 	.byte 0xf9, 0xf0, 0x1d, 0xe0, 0xfb, 0xf0, 0x0e
-LABEL_F109DE:
+SeMenu_FilterEdit_Dispatch:
 	.byte 0xc9
 	inc	6, wa
 	push	xiy
@@ -4959,7 +4959,7 @@ LABEL_F109DE:
 	sti8_24	257960, 0
 	call	15797223
 	ret
-LABEL_F10A45:
+SeMenu_FilterEdit_AltDispatch:
 	.byte 0xc9, 0xd8
 	jr	nz, 22
 	sti8_24	257960, 1
@@ -4971,18 +4971,18 @@ LABEL_F10A45:
 	ld	xiy, 15812349
 	call	15797223
 	ret
-LABEL_F10A6F:
+SeMenu_FilterEdit_DataBlock3:
 	.byte 0xc9, 0xd8, 0x6e, 0x16, 0xf2, 0xa8, 0xef, 0x03
 	.byte 0x00, 0x01, 0x45, 0x11, 0x47, 0xf1, 0x00, 0x44
 	.byte 0x1b, 0x47, 0xf1, 0x00, 0x1d, 0x00, 0xec, 0xf0
 	.byte 0x21, 0x00, 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00
 	.byte 0x45, 0x76, 0x47, 0xf1, 0x00, 0x1d, 0xe7, 0x0b
 	.byte 0xf1, 0x0e
-LABEL_F10A99:
+SeMenu_FilterEdit_DataBlock4:
 	.byte 0xf2, 0xa8, 0xef, 0x03, 0x00, 0x00
 	.byte 0x45, 0xe1, 0x47, 0xf1, 0x00, 0x1d, 0xe7, 0x0b
 	.byte 0xf1, 0x0e
-LABEL_F10AA9:
+SeMenu_FilterEdit_DataBlock5:
 	.byte 0x1d, 0x45, 0x0b, 0xf1, 0xc1, 0xae
 	.byte 0x06, 0x3f, 0x01, 0x66, 0x1a, 0xf2, 0xa8, 0xef
 	.byte 0x03, 0x00, 0x00, 0x45, 0x3d, 0x48, 0xf1, 0x00
@@ -4997,9 +4997,9 @@ LABEL_F10AA9:
 	.byte 0x03, 0x00, 0x00, 0x44, 0x66, 0x4a, 0xf1, 0x00
 	.byte 0x1d, 0x0d, 0xec, 0xf0, 0x1d, 0x5a, 0x0b, 0xf1
 	.byte 0x0e
-LABEL_F10B10:
+SeMenu_EqEdit_Init:
 	; --- Main: call helpers, setup XIY/XIX pairs, call F0EC00/F0EC0D (53 bytes) ---
-	call LABEL_F10B45
+	call SeMenu_EqEdit_SetupHelper1
 	call SeMenu_PresetManager_Save
 	sti8_24	257960, 0
 	ld xiy, 0x00F1493C
@@ -5009,16 +5009,16 @@ LABEL_F10B10:
 	ld xiy, 0x00F14E28
 	ld xix, 0x00F14E46
 	call SeMenu_NameEditor_Draw
-	call LABEL_F10B5A
+	call SeMenu_EqEdit_SetupHelper2
 	ret
-LABEL_F10B45:
+SeMenu_EqEdit_SetupHelper1:
 	; --- Helper 1: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	sti8_24	257960, 0
 	ld xiy, 0x00F14809
 	ld xix, 0x00F14838
 	call SeMenu_NameEditor_Setup
 	ret
-LABEL_F10B5A:
+SeMenu_EqEdit_SetupHelper2:
 	; --- Helper 2: clear flag, setup XIY/XIX, call F0EC00 (21 bytes) ---
 	sti8_24	257960, 0
 	ld xiy, 0x00F14838
@@ -5027,43 +5027,43 @@ LABEL_F10B5A:
 	ret
 
 
-LABEL_F10B6F:
+SeMenu_EqEdit_Dispatch:
 	; --- Dispatch on A: 4 paths with language branching (99 bytes) ---
 	cps	a, 0
-	jr z, LABEL_F10BA8
+	jr z, SeMenu_EqEdit_SetupPath
 	cp a, 0x0B
-	jr z, LABEL_F10BC0
+	jr z, SeMenu_EqEdit_SetConstA
 	cp a, 0x0C
-	jr nz, LABEL_F10BC2
+	jr nz, SeMenu_EqEdit_DefaultPath
 	sti8_24	257960, 0
 	.byte 0xc1, 0xae, 0x06, 0x3f, 0x01		; cp (0x06AE), 0x01  [C1 prefix]
-	jr z, LABEL_F10B98
+	jr z, SeMenu_EqEdit_DrawTable
 	ld xiy, 0x00F149D9
 	ld xix, 0x00F149F7
 	call SeMenu_NameEditor_Draw
-LABEL_F10B98:
+SeMenu_EqEdit_DrawTable:
 	ld xiy, 0x00F14A3D
 	ld xix, 0x00F14A5B
 	call SeMenu_NameEditor_Draw
-	jr t, LABEL_F10BD1
-LABEL_F10BA8:
+	jr t, SeMenu_EqEdit_Return
+SeMenu_EqEdit_SetupPath:
 	sti8_24	257960, 1
 	ld xiy, 0x00F14DD2
 	ld xix, 0x00F14DF0
 	call SeMenu_NameEditor_Setup
 	ldb a, 0x00
-	jr t, LABEL_F10BC2
-LABEL_F10BC0:
+	jr t, SeMenu_EqEdit_DefaultPath
+SeMenu_EqEdit_SetConstA:
 	ldb a, 0x07
-LABEL_F10BC2:
+SeMenu_EqEdit_DefaultPath:
 	sti8_24	257960, 0
 	ld xiy, 0x00F14A66
 	call 0xF10BE7
-LABEL_F10BD1:
+SeMenu_EqEdit_Return:
 	ret
 
 
-LABEL_F10BD2:
+SeMenu_EqEdit_DrawInit:
 	sti8_24	257960, 0
 	ld	xiy, 15814184
 	ld	xix, 15814214
@@ -5106,7 +5106,7 @@ LABEL_F10BD2:
 	.ascii "  @@@@  "
 	.byte 0x18, 0x07, 0x80, 0x60, 0x10, 0x10, 0x08
 	.byte 0x08, 0x08, 0x08, 0x10, 0x10, 0x60, 0x80
-LABEL_F10CAE:
+SeBitmap_EnvCurve1:
 	.byte 0xff
 	.fill 8, 1, 0x80
 	.byte 0x80, 0x80, 0x81, 0x81, 0x82, 0x84, 0x84, 0x88
@@ -5128,7 +5128,7 @@ LABEL_F10CAE:
 	.fill 8, 1, 0x03
 	.fill 8, 1, 0x03
 	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0xff, 0xff
-LABEL_F10D76:
+SeBitmap_EnvCurve2:
 	.byte 0xff
 	.fill 8, 1, 0x80
 	.fill 8, 1, 0x80
@@ -5151,7 +5151,7 @@ LABEL_F10D76:
 	.fill 8, 1, 0x03
 	.fill 8, 1, 0x03
 	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0xff, 0xff
-LABEL_F10E3E:
+SeBitmap_EnvCurve3:
 	.byte 0xff
 	.fill 8, 1, 0x80
 	.fill 8, 1, 0x80
@@ -5175,7 +5175,7 @@ LABEL_F10E3E:
 	.fill 8, 1, 0x03
 	.fill 8, 1, 0x03
 	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0xff, 0xff
-LABEL_F10F06:
+SeBitmap_EnvCurve4:
 	.byte 0xff
 	.fill 8, 1, 0x80
 	.fill 8, 1, 0x80
@@ -5199,7 +5199,7 @@ LABEL_F10F06:
 	.fill 8, 1, 0x03
 	.fill 8, 1, 0x03
 	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0xff, 0xff
-LABEL_F10FCE:
+SeBitmap_EnvCurve5:
 	.byte 0xff
 	.fill 8, 1, 0x80
 	.fill 8, 1, 0x80
@@ -6313,7 +6313,7 @@ LABEL_F10FCE:
 	.byte 0x0a, 0x69, 0x06, 0x7f, 0x00, 0x20, 0x7f, 0x22
 	.byte 0x03, 0x03, 0x0b, 0x60, 0x06, 0x01, 0x00, 0x05
 	.byte 0x45, 0x2f, 0xf1, 0x00, 0x2b, 0x2d
-LABEL_F12F45:
+SeMenu_CompareScreen_DataTable:
 	.byte 0x3d, 0x00
 	.byte 0xbd, 0x00, 0x1c, 0x01, 0xca, 0x00, 0x04, 0x00
 	.byte 0xda, 0x00, 0x1c, 0x01, 0xe7, 0x00, 0x1b, 0x0a
@@ -7458,7 +7458,7 @@ S2cGridCheck:
 	lda_24 xix, 0xf1b2ce
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F1B2CE:
+S2c_GridCheck_DataBlock:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xeb, 0x8a, 0xbf, 0x0a, 0x30, 0xea, 0x89
@@ -7487,7 +7487,7 @@ S2c_GridCheck_Dispatch:
 	lda xde, (xsp)
 	ld (xbc + 4), xde
 	cpw (xbc), 0x1
-	jr nz, LABEL_F1B38A
+	jr nz, S2c_GridCheck_GetFocusSendEvt
 	ld wa, (xwa)
 	dec 2, a
 	extz wa
@@ -7504,7 +7504,7 @@ S2c_GridCheck_Dispatch:
 	call Audio_SendCommand
 	inc 8, xsp
 
-LABEL_F1B38A:
+S2c_GridCheck_GetFocusSendEvt:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 10)
@@ -7532,7 +7532,7 @@ CmpClrNoFunc:
 	call MainFuncCall
 	lds32 xhl, 0
 	ret
-LABEL_F1B3C8:
+PsCmpCpFGrpBox_Entry:
 
 PsCmpCpFGrpBoxProc:
 	st_dri3b L, 0xFD, 0xF0, 0xFE
@@ -7540,34 +7540,34 @@ PsCmpCpFGrpBoxProc:
 	st_dri3l XDE, 0xFD, 0x0C, 0x01
 	st_dri3l XWA, 0xFD, 0x10, 0x01
 	cp xbc, 0x1E40004
-	jr z, LABEL_F1B44F
+	jr z, PsCmpCpFGrpBox_HandleEvt4
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F1B42E
+	jr z, PsCmpCpFGrpBox_HandleEvtBC
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F1B42E
+	jr z, PsCmpCpFGrpBox_HandleEvtBC
 	cp xbc, 0x1C00002
-	jr z, LABEL_F1B41D
+	jr z, PsCmpCpFGrpBox_HandleEvt2
 	cp xbc, 0x1C00001
-	jr z, LABEL_F1B411
+	jr z, PsCmpCpFGrpBox_HandleEvt1
 	ld_sril XWA, (xsp + 0x0110)
 	ld_sril XDE, (xsp + 0x010c)
 	call InheritedProc
-	jrl LABEL_F1B4EE
+	jrl PsCmpCpFGrpBox_Epilogue
 
-LABEL_F1B411:
+PsCmpCpFGrpBox_HandleEvt1:
 	ld_sril XWA, (xsp + 0x0110)
 	ld_sril XDE, (xsp + 0x010c)
-	jr LABEL_F1B427
+	jr PsCmpCpFGrpBox_CallInherited
 
-LABEL_F1B41D:
+PsCmpCpFGrpBox_HandleEvt2:
 	ld_sril XWA, (xsp + 0x0110)
 	ld_sril XDE, (xsp + 0x010c)
 
-LABEL_F1B427:
+PsCmpCpFGrpBox_CallInherited:
 	call InheritedProc
-	jrl LABEL_F1B4EC
+	jrl PsCmpCpFGrpBox_ReturnZero
 
-LABEL_F1B42E:
+PsCmpCpFGrpBox_HandleEvtBC:
 	ld_sril XWA, (xsp + 0x0110)
 	ld_sril XDE, (xsp + 0x010c)
 	call InheritedProc
@@ -7575,9 +7575,9 @@ LABEL_F1B42E:
 	ld xbc, 0x1E40002
 	lds32 xde, 0
 	call MainFuncCall
-	jrl LABEL_F1B4EC
+	jrl PsCmpCpFGrpBox_ReturnZero
 
-LABEL_F1B44F:
+PsCmpCpFGrpBox_HandleEvt4:
 	ld_sril XWA, (xsp + 0x0110)
 	call GetViewInstance
 	ld xiz, xhl
@@ -7590,18 +7590,18 @@ LABEL_F1B44F:
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
 	cpdi8 14759, 0
-	jr nz, LABEL_F1B488
+	jr nz, PsCmpCpFGrpBox_SetColorFF
 	cpdi8 14976, 0
-	jr nz, LABEL_F1B488
+	jr nz, PsCmpCpFGrpBox_SetColorFF
 	ldw (xbc), 0x0
 	ldw (xwa), 0xFF
-	jr LABEL_F1B490
+	jr PsCmpCpFGrpBox_SendNotify
 
-LABEL_F1B488:
+PsCmpCpFGrpBox_SetColorFF:
 	ldw (xbc), 0xFF
 	ldw (xwa), 0xF5
 
-LABEL_F1B490:
+PsCmpCpFGrpBox_SendNotify:
 	ld_sril XWA, (xsp + 0x0110)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
@@ -7621,28 +7621,28 @@ LABEL_F1B490:
 	add bc, 0x27
 	ld (xwa + 6), bc
 	cpdi8 14759, 0
-	jr nz, LABEL_F1B4E1
+	jr nz, PsCmpCpFGrpBox_PushF5
 	pushw 0xF2
 	lds bc, 1
 	lds de, 2
-	jr LABEL_F1B4E8
+	jr PsCmpCpFGrpBox_DrawFrame
 
-LABEL_F1B4E1:
+PsCmpCpFGrpBox_PushF5:
 	pushw 0xF5
 	lds bc, 1
 	lds de, 2
 
-LABEL_F1B4E8:
+PsCmpCpFGrpBox_DrawFrame:
 	call DrawDesignFrame
 
-LABEL_F1B4EC:
+PsCmpCpFGrpBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F1B4EE:
+PsCmpCpFGrpBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x10, 0x01
 	ret
-LABEL_F1B4F5:
+PsCmpCpFVariBox_Entry:
 
 PsCmpCpFVariBoxProc:
 	st_dri3b L, 0xFD, 0xF0, 0xFE
@@ -7650,34 +7650,34 @@ PsCmpCpFVariBoxProc:
 	st_dri3l XDE, 0xFD, 0x0C, 0x01
 	st_dri3l XWA, 0xFD, 0x10, 0x01
 	cp xbc, 0x1E40005
-	jr z, LABEL_F1B57C
+	jr z, PsCmpCpFVariBox_HandleEvt5
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F1B55B
+	jr z, PsCmpCpFVariBox_HandleEvtBC
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F1B55B
+	jr z, PsCmpCpFVariBox_HandleEvtBC
 	cp xbc, 0x1C00002
-	jr z, LABEL_F1B54A
+	jr z, PsCmpCpFVariBox_HandleEvt2
 	cp xbc, 0x1C00001
-	jr z, LABEL_F1B53E
+	jr z, PsCmpCpFVariBox_HandleEvt1
 	ld_sril XWA, (xsp + 0x0110)
 	ld_sril XDE, (xsp + 0x010c)
 	call InheritedProc
-	jrl LABEL_F1B634
+	jrl PsCmpCpFVariBox_Epilogue
 
-LABEL_F1B53E:
+PsCmpCpFVariBox_HandleEvt1:
 	ld_sril XWA, (xsp + 0x0110)
 	ld_sril XDE, (xsp + 0x010c)
-	jr LABEL_F1B554
+	jr PsCmpCpFVariBox_CallInherited
 
-LABEL_F1B54A:
+PsCmpCpFVariBox_HandleEvt2:
 	ld_sril XWA, (xsp + 0x0110)
 	ld_sril XDE, (xsp + 0x010c)
 
-LABEL_F1B554:
+PsCmpCpFVariBox_CallInherited:
 	call InheritedProc
 	jrl DesignFrame_Return
 
-LABEL_F1B55B:
+PsCmpCpFVariBox_HandleEvtBC:
 	ld_sril XWA, (xsp + 0x0110)
 	ld_sril XDE, (xsp + 0x010c)
 	call InheritedProc
@@ -7687,7 +7687,7 @@ LABEL_F1B55B:
 	call MainFuncCall
 	jrl DesignFrame_Return
 
-LABEL_F1B57C:
+PsCmpCpFVariBox_HandleEvt5:
 	call GetTitleNow
 	cp xhl, 0x1A000EE
 	jrl z, DesignFrame_Return
@@ -7703,18 +7703,18 @@ LABEL_F1B57C:
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
 	cpdi8 14759, 1
-	jr nz, LABEL_F1B5C2
+	jr nz, PsCmpCpFVariBox_SetColorFF
 	cpdi8 14976, 0
-	jr nz, LABEL_F1B5C2
+	jr nz, PsCmpCpFVariBox_SetColorFF
 	ldw (xbc), 0x0
 	ldw (xwa), 0xFF
-	jr LABEL_F1B5CA
+	jr PsCmpCpFVariBox_SendNotify
 
-LABEL_F1B5C2:
+PsCmpCpFVariBox_SetColorFF:
 	ldw (xbc), 0xFF
 	ldw (xwa), 0xF5
 
-LABEL_F1B5CA:
+PsCmpCpFVariBox_SendNotify:
 	ld_sril XWA, (xsp + 0x0110)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
@@ -7737,57 +7737,57 @@ LABEL_F1B5CA:
 	add bc, 0x27
 	ld (xwa + 6), bc
 	cpdi8 14759, 1
-	jr nz, LABEL_F1B627
+	jr nz, PsCmpCpFVariBox_PushF5
 	pushw 0xF2
 	lds bc, 1
 	lds de, 2
-	jr LABEL_F1B62E
+	jr PsCmpCpFVariBox_DrawFrame
 
-LABEL_F1B627:
+PsCmpCpFVariBox_PushF5:
 	pushw 0xF5
 	lds bc, 1
 	lds de, 2
 
-LABEL_F1B62E:
+PsCmpCpFVariBox_DrawFrame:
 	call DrawDesignFrame
 
 DesignFrame_Return:
 	lds32 xhl, 0
 
-LABEL_F1B634:
+PsCmpCpFVariBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x10, 0x01
 	ret
-LABEL_F1B63B:
+PsCmpCpFPtnBox_Entry:
 
 PsCmpCpFPtnBoxProc:
 	st_dri3b L, 0xFD, 0xF4, 0xFE
 	push xiz
 	st_dri3l XWA, 0xFD, 0x0C, 0x01
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F1B685
+	jr z, PsCmpCpFPtnBox_HandleEvtBC
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F1B685
+	jr z, PsCmpCpFPtnBox_HandleEvtBC
 	cp xbc, 0x1C00002
-	jr z, LABEL_F1B679
+	jr z, PsCmpCpFPtnBox_HandleEvt2
 	cp xbc, 0x1C00001
-	jr z, LABEL_F1B672
+	jr z, PsCmpCpFPtnBox_HandleEvt1
 	ld_sril XWA, (xsp + 0x010c)
 	call InheritedProc
-	jrl LABEL_F1B73B
+	jrl PsCmpCpFPtnBox_Epilogue
 
-LABEL_F1B672:
+PsCmpCpFPtnBox_HandleEvt1:
 	ld_sril XWA, (xsp + 0x010c)
-	jr LABEL_F1B67E
+	jr PsCmpCpFPtnBox_CallInherited
 
-LABEL_F1B679:
+PsCmpCpFPtnBox_HandleEvt2:
 	ld_sril XWA, (xsp + 0x010c)
 
-LABEL_F1B67E:
+PsCmpCpFPtnBox_CallInherited:
 	call InheritedProc
-	jrl LABEL_F1B739
+	jrl PsCmpCpFPtnBox_ReturnZero
 
-LABEL_F1B685:
+PsCmpCpFPtnBox_HandleEvtBC:
 	ld_sril XWA, (xsp + 0x010c)
 	call InheritedProc
 	ld_sril XWA, (xsp + 0x010c)
@@ -7806,18 +7806,18 @@ LABEL_F1B685:
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
 	cpdi8 14759, 2
-	jr nz, LABEL_F1B6D5
+	jr nz, PsCmpCpFPtnBox_SetColorFF
 	cpdi8 14976, 0
-	jr nz, LABEL_F1B6D5
+	jr nz, PsCmpCpFPtnBox_SetColorFF
 	ldw (xbc), 0x0
 	ldw (xwa), 0xFF
-	jr LABEL_F1B6DD
+	jr PsCmpCpFPtnBox_SendNotify
 
-LABEL_F1B6D5:
+PsCmpCpFPtnBox_SetColorFF:
 	ldw (xbc), 0xFF
 	ldw (xwa), 0xF5
 
-LABEL_F1B6DD:
+PsCmpCpFPtnBox_SendNotify:
 	ld_sril XWA, (xsp + 0x010c)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
@@ -7837,24 +7837,24 @@ LABEL_F1B6DD:
 	add bc, 0x26
 	ld (xwa + 6), bc
 	cpdi8 14759, 2
-	jr nz, LABEL_F1B72E
+	jr nz, PsCmpCpFPtnBox_PushF5
 	pushw 0xF2
 	lds bc, 1
 	lds de, 2
-	jr LABEL_F1B735
+	jr PsCmpCpFPtnBox_DrawFrame
 
-LABEL_F1B72E:
+PsCmpCpFPtnBox_PushF5:
 	pushw 0xF5
 	lds bc, 1
 	lds de, 2
 
-LABEL_F1B735:
+PsCmpCpFPtnBox_DrawFrame:
 	call DrawDesignFrame
 
-LABEL_F1B739:
+PsCmpCpFPtnBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F1B73B:
+PsCmpCpFPtnBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x0C, 0x01
 	ret
