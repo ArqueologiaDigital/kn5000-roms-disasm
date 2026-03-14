@@ -2508,9 +2508,9 @@ SeqStep_MainTimerTick:
 	call Seq_HandleModeTransition
 	call SeqNotify_CheckAndClearStart
 	calr SeqStep_PlaybackStateMachine
-	call LABEL_F437CB
+	call SeqPlay_SetupRhythmMode
 	call LABEL_F2057D
-	call LABEL_F43CA9
+	call SeqTimer_SetPlaybackFlags
 	jp BmDrEdit_TempoAnimTimer
 
 SeqStep_TimerDispatchA:

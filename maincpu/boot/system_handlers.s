@@ -55,7 +55,7 @@ LABEL_EF08D4:
 	cpdi8 1024, 128
 	ret nz
 	call Demo_SelectEntry_PreSaveCheck
-	call LABEL_F43734
+	call SeqPlay_JumpCopyVoiceData
 	ld xwa, 0xF180
 	ldw bc, 0x800
 	call Checksum_ComputeComplement
