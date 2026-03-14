@@ -4850,9 +4850,9 @@ Naka_PresentationReg_Table5:
 
 
 Naka_PresentationReg_Table6:
-	.long LABEL_E14810
-	.long LABEL_E14802
-	.long LABEL_E147F8
+	.long NakaInst_ftdemo01
+	.long NakaInst_ftdemobmptop
+	.long NakaInst_ftdemo02
 	.long LABEL_E147F6
 	.long LABEL_E147F4
 	.long LABEL_E147F2
@@ -4915,7 +4915,7 @@ Naka_PresentationReg_Table6:
 	.long LABEL_E14780
 	.long LABEL_E1477E
 	.long LABEL_E1477C
-	.long LABEL_E14772
+	.long NakaInst_ftdemo03
 	.long LABEL_E14770
 	.long LABEL_E1476E
 	.long LABEL_E1476C
@@ -4959,36 +4959,36 @@ Naka_PresentationReg_Table6:
 	.long LABEL_E14720
 	.long LABEL_E1471E
 	.long LABEL_E1471C
-	.long LABEL_E14712
-	.long LABEL_E14706
+	.long NakaInst_ftdemo04
+	.long NakaInst_ftdemobmp3D
 	.long LABEL_E14704
 	.long LABEL_E14702
 	.long LABEL_E14700
 	.long LABEL_E146FE
-	.long LABEL_E146F4
+	.long NakaInst_ftdemo05
 	.long LABEL_E146F2
 	.long LABEL_E146F0
-	.long LABEL_E146E6
+	.long NakaInst_ftdemo06
 	.long LABEL_E146E4
-	.long LABEL_E146D6
-	.long LABEL_E146CC
-	.long LABEL_E146BE
+	.long NakaInst_ftdemobmpsoft
+	.long NakaInst_ftdemo07
+	.long NakaInst_ftdemobmpcnv
 	.long LABEL_E146BC
-	.long LABEL_E146B2
+	.long NakaInst_ftdemo08
 	.long LABEL_E146B0
-	.long LABEL_E146A6
+	.long NakaInst_ftdemo09
 	.long LABEL_E146A4
 	.long LABEL_E146A2
-	.long LABEL_E14698
+	.long NakaInst_ftdemo10
 	.long LABEL_E14696
 	.long LABEL_E14694
-	.long LABEL_E1468A
+	.long NakaInst_ftdemo20
 	.long LABEL_E14688
 	.long LABEL_E14686
-	.long LABEL_E14678
-	.long LABEL_E1466E
+	.long NakaInst_ftdemobmpill
+	.long NakaInst_ftdemo21
 	.long LABEL_E1466C
-	.long LABEL_E14662
+	.long NakaInst_ftdemo22
 	.long LABEL_E14660
 	.long LABEL_E1465E
 	.long LABEL_E1465C
@@ -5012,7 +5012,7 @@ Naka_PresentationReg_Table6:
 	.long LABEL_E14638
 	.long LABEL_E14636
 	.long LABEL_E14634
-	.long LABEL_E1462A
+	.long NakaInst_ftdemo23
 	.long LABEL_E14628
 	.long LABEL_E14626
 	.long LABEL_E14624
@@ -5035,7 +5035,7 @@ Naka_PresentationReg_Table6:
 	.long LABEL_E14602
 	.long LABEL_E14600
 	.long LABEL_E145FE
-	.long LABEL_E145F4
+	.long NakaInst_ftdemo24
 	.long LABEL_E145F2
 	.long LABEL_E145F0
 	.long LABEL_E145EE
@@ -5074,9 +5074,9 @@ Naka_PresentationReg_Table6:
 	.long LABEL_E145AC
 	.long LABEL_E145AA
 	.long LABEL_E145A8
-	.long LABEL_E1459E
-	.long LABEL_E14590
-	.long LABEL_E14586
+	.long NakaInst_ftdemo25
+	.long NakaInst_ftdemobmpend
+	.long NakaInst_ftdemo26
 	.long LABEL_E14584
 	.long LABEL_E14582
 	.long LABEL_E14580
@@ -5096,14 +5096,14 @@ Naka_PresentationReg_Table6:
 	.long LABEL_E14564
 	.long LABEL_E14562
 	.long LABEL_E14560
-	.long LABEL_E14556
+	.long NakaInst_ftdemo40
 	.long LABEL_E14554
 	.long LABEL_E14552
 	.long LABEL_E14550
 	.long LABEL_E1454E
 	.long LABEL_E1454C
 	.long LABEL_E1454A
-	.long LABEL_E14540
+	.long NakaInst_ftdemo41
 	.long LABEL_E1453E
 	.long LABEL_E1453C
 	.long LABEL_E1453A
@@ -5141,7 +5141,7 @@ Naka_PresentationReg_Table6:
 	.long LABEL_E144FA
 	.long LABEL_E144F8
 	.long LABEL_E144F6
-	.long LABEL_E144EC
+	.long NakaInst_ftdemo42
 	.long LABEL_E144EA
 	.long LABEL_E144E8
 	.long LABEL_E144E6
@@ -5179,7 +5179,7 @@ Naka_PresentationReg_Table6:
 	.long LABEL_E144A6
 	.long LABEL_E144A4
 	.long LABEL_E144A2
-	.long LABEL_E14498
+	.long NakaInst_ftdemo44
 	.long LABEL_E14496
 	.long LABEL_E14494
 	.long LABEL_E14492
@@ -5202,7 +5202,7 @@ Naka_PresentationReg_Table6:
 	.long LABEL_E14470
 	.long LABEL_E1446E
 	.long LABEL_E1446C
-	.long LABEL_E14462
+	.long NakaInst_ftdemo45
 	.long LABEL_E14460
 	.long LABEL_E1445E
 	.long LABEL_E1445C
@@ -5469,7 +5469,7 @@ LABEL_E1445A:		aligned_string ""
 LABEL_E1445C:		aligned_string ""
 LABEL_E1445E:		aligned_string ""
 LABEL_E14460:		aligned_string ""
-LABEL_E14462:		aligned_string "ftdemo45"
+NakaInst_ftdemo45:		aligned_string "ftdemo45"
 LABEL_E1446C:		aligned_string ""
 LABEL_E1446E:		aligned_string ""
 LABEL_E14470:		aligned_string ""
@@ -5492,7 +5492,7 @@ LABEL_E14490:		aligned_string ""
 LABEL_E14492:		aligned_string ""
 LABEL_E14494:		aligned_string ""
 LABEL_E14496:		aligned_string ""
-LABEL_E14498:		aligned_string "ftdemo44"
+NakaInst_ftdemo44:		aligned_string "ftdemo44"
 LABEL_E144A2:		aligned_string ""
 LABEL_E144A4:		aligned_string ""
 LABEL_E144A6:		aligned_string ""
@@ -5530,7 +5530,7 @@ LABEL_E144E4:		aligned_string ""
 LABEL_E144E6:		aligned_string ""
 LABEL_E144E8:		aligned_string ""
 LABEL_E144EA:		aligned_string ""
-LABEL_E144EC:		aligned_string "ftdemo42"
+NakaInst_ftdemo42:		aligned_string "ftdemo42"
 LABEL_E144F6:		aligned_string ""
 LABEL_E144F8:		aligned_string ""
 LABEL_E144FA:		aligned_string ""
@@ -5568,14 +5568,14 @@ LABEL_E14538:		aligned_string ""
 LABEL_E1453A:		aligned_string ""
 LABEL_E1453C:		aligned_string ""
 LABEL_E1453E:		aligned_string ""
-LABEL_E14540:		aligned_string "ftdemo41"
+NakaInst_ftdemo41:		aligned_string "ftdemo41"
 LABEL_E1454A:		aligned_string ""
 LABEL_E1454C:		aligned_string ""
 LABEL_E1454E:		aligned_string ""
 LABEL_E14550:		aligned_string ""
 LABEL_E14552:		aligned_string ""
 LABEL_E14554:		aligned_string ""
-LABEL_E14556:		aligned_string "ftdemo40"
+NakaInst_ftdemo40:		aligned_string "ftdemo40"
 LABEL_E14560:		aligned_string ""
 LABEL_E14562:		aligned_string ""
 LABEL_E14564:		aligned_string ""
@@ -5595,9 +5595,9 @@ LABEL_E1457E:		aligned_string ""
 LABEL_E14580:		aligned_string ""
 LABEL_E14582:		aligned_string ""
 LABEL_E14584:		aligned_string ""
-LABEL_E14586:		aligned_string "ftdemo26"
-LABEL_E14590:		aligned_string "ftdemobmpend"
-LABEL_E1459E:		aligned_string "ftdemo25"
+NakaInst_ftdemo26:		aligned_string "ftdemo26"
+NakaInst_ftdemobmpend:		aligned_string "ftdemobmpend"
+NakaInst_ftdemo25:		aligned_string "ftdemo25"
 LABEL_E145A8:		aligned_string ""
 LABEL_E145AA:		aligned_string ""
 LABEL_E145AC:		aligned_string ""
@@ -5636,7 +5636,7 @@ LABEL_E145EC:		aligned_string ""
 LABEL_E145EE:		aligned_string ""
 LABEL_E145F0:		aligned_string ""
 LABEL_E145F2:		aligned_string ""
-LABEL_E145F4:		aligned_string "ftdemo24"
+NakaInst_ftdemo24:		aligned_string "ftdemo24"
 LABEL_E145FE:		aligned_string ""
 LABEL_E14600:		aligned_string ""
 LABEL_E14602:		aligned_string ""
@@ -5659,7 +5659,7 @@ LABEL_E14622:		aligned_string ""
 LABEL_E14624:		aligned_string ""
 LABEL_E14626:		aligned_string ""
 LABEL_E14628:		aligned_string ""
-LABEL_E1462A:		aligned_string "ftdemo23"
+NakaInst_ftdemo23:		aligned_string "ftdemo23"
 LABEL_E14634:		aligned_string ""
 LABEL_E14636:		aligned_string ""
 LABEL_E14638:		aligned_string ""
@@ -5683,36 +5683,36 @@ LABEL_E1465A:		aligned_string ""
 LABEL_E1465C:		aligned_string ""
 LABEL_E1465E:		aligned_string ""
 LABEL_E14660:		aligned_string ""
-LABEL_E14662:		aligned_string "ftdemo22"
+NakaInst_ftdemo22:		aligned_string "ftdemo22"
 LABEL_E1466C:		aligned_string ""
-LABEL_E1466E:		aligned_string "ftdemo21"
-LABEL_E14678:		aligned_string "ftdemobmpill"
+NakaInst_ftdemo21:		aligned_string "ftdemo21"
+NakaInst_ftdemobmpill:		aligned_string "ftdemobmpill"
 LABEL_E14686:		aligned_string ""
 LABEL_E14688:		aligned_string ""
-LABEL_E1468A:		aligned_string "ftdemo20"
+NakaInst_ftdemo20:		aligned_string "ftdemo20"
 LABEL_E14694:		aligned_string ""
 LABEL_E14696:		aligned_string ""
-LABEL_E14698:		aligned_string "ftdemo10"
+NakaInst_ftdemo10:		aligned_string "ftdemo10"
 LABEL_E146A2:		aligned_string ""
 LABEL_E146A4:		aligned_string ""
-LABEL_E146A6:		aligned_string "ftdemo09"
+NakaInst_ftdemo09:		aligned_string "ftdemo09"
 LABEL_E146B0:		aligned_string ""
-LABEL_E146B2:		aligned_string "ftdemo08"
+NakaInst_ftdemo08:		aligned_string "ftdemo08"
 LABEL_E146BC:		aligned_string ""
-LABEL_E146BE:		aligned_string "ftdemobmpcnv"
-LABEL_E146CC:		aligned_string "ftdemo07"
-LABEL_E146D6:		aligned_string "ftdemobmpsoft"
+NakaInst_ftdemobmpcnv:		aligned_string "ftdemobmpcnv"
+NakaInst_ftdemo07:		aligned_string "ftdemo07"
+NakaInst_ftdemobmpsoft:		aligned_string "ftdemobmpsoft"
 LABEL_E146E4:		aligned_string ""
-LABEL_E146E6:		aligned_string "ftdemo06"
+NakaInst_ftdemo06:		aligned_string "ftdemo06"
 LABEL_E146F0:		aligned_string ""
 LABEL_E146F2:		aligned_string ""
-LABEL_E146F4:		aligned_string "ftdemo05"
+NakaInst_ftdemo05:		aligned_string "ftdemo05"
 LABEL_E146FE:		aligned_string ""
 LABEL_E14700:		aligned_string ""
 LABEL_E14702:		aligned_string ""
 LABEL_E14704:		aligned_string ""
-LABEL_E14706:		aligned_string "ftdemobmp3D"
-LABEL_E14712:		aligned_string "ftdemo04"
+NakaInst_ftdemobmp3D:		aligned_string "ftdemobmp3D"
+NakaInst_ftdemo04:		aligned_string "ftdemo04"
 LABEL_E1471C:		aligned_string ""
 LABEL_E1471E:		aligned_string ""
 LABEL_E14720:		aligned_string ""
@@ -5756,7 +5756,7 @@ LABEL_E1476A:		aligned_string ""
 LABEL_E1476C:		aligned_string ""
 LABEL_E1476E:		aligned_string ""
 LABEL_E14770:		aligned_string ""
-LABEL_E14772:		aligned_string "ftdemo03"
+NakaInst_ftdemo03:		aligned_string "ftdemo03"
 LABEL_E1477C:		aligned_string ""
 LABEL_E1477E:		aligned_string ""
 LABEL_E14780:		aligned_string ""
@@ -5820,13 +5820,13 @@ LABEL_E147F2:		aligned_string ""
 LABEL_E147F4:		aligned_string ""
 LABEL_E147F6:		aligned_string ""
 
-LABEL_E147F8:	aligned_string "ftdemo02"
+NakaInst_ftdemo02:	aligned_string "ftdemo02"
 
-LABEL_E14802:	aligned_string "ftdemobmptop"
+NakaInst_ftdemobmptop:	aligned_string "ftdemobmptop"
 
-LABEL_E14810:	aligned_string "ftdemo01"
+NakaInst_ftdemo01:	aligned_string "ftdemo01"
 
-LABEL_E1481A:	aligned_string "TT_FDMSP"
+NakaInst_TT_FDMSP:	aligned_string "TT_FDMSP"
 	.long 0x0
 
 LABEL_E14828:
@@ -5866,232 +5866,232 @@ LABEL_E148DA:	aligned_string ""
 LABEL_E148DC:	aligned_string ""
 LABEL_E148DE:	aligned_string ""
 Str_Feature1_Help:
-	.long LABEL_E14A88
-	.long LABEL_E14A2C
-	.long LABEL_E149BC
-	.long LABEL_E14960
-	.long LABEL_E14958
-	.long LABEL_E148F8
-LABEL_E148F8:
+	.long NakaInst_The_KN5000_s_Special_Woofer_Bass_Port_produce_a
+	.long NakaInst_Der_spezielle_Woofer_Bass_Port_des_SX_KN5000
+	.long NakaInst_Le_syst_me_sp_cial_d_amplification_des_graves_du
+	.long NakaInst_El_port_n_para_bajos_y_graves_especiales_del
+	.long NakaInst_Italian_PerfStyle
+	.long NakaInst_Special_Woofer_dan_Bass_Port_yang_terdapat_pada
+NakaInst_Special_Woofer_dan_Bass_Port_yang_terdapat_pada:
 
 	aligned_string "Special Woofer dan Bass Port yang terdapat pada KN-5000 menghasilkan suara yang kuat dan baik."
-LABEL_E14958:
+NakaInst_Italian_PerfStyle:
 
 	aligned_string "Italian"
-LABEL_E14960:
+NakaInst_El_port_n_para_bajos_y_graves_especiales_del:
 
 	.byte 0xa1
 	aligned_string "El portón para bajos y graves especiales del KN5000 produce un sonido potente y más rico!"
-LABEL_E149BC:	aligned_string "Le système spécial d'amplification des graves du KN-5000 donne encore plus de puissance et de richesse sonore!"
-LABEL_E14A2C:	aligned_string "Der spezielle Woofer & Bass Port des SX-KN5000 erzeugt einen kraft- und druckvollen Klang."
-LABEL_E14A88:	aligned_string "The KN5000's Special Woofer & Bass Port produce a Rich & Powerful sound!"
+NakaInst_Le_syst_me_sp_cial_d_amplification_des_graves_du:	aligned_string "Le système spécial d'amplification des graves du KN-5000 donne encore plus de puissance et de richesse sonore!"
+NakaInst_Der_spezielle_Woofer_Bass_Port_des_SX_KN5000:	aligned_string "Der spezielle Woofer & Bass Port des SX-KN5000 erzeugt einen kraft- und druckvollen Klang."
+NakaInst_The_KN5000_s_Special_Woofer_Bass_Port_produce_a:	aligned_string "The KN5000's Special Woofer & Bass Port produce a Rich & Powerful sound!"
 Str_Feature2_Help:
-	.long LABEL_E14B3E
-	.long LABEL_E14B24
-	.long LABEL_E14B0E
-	.long LABEL_E14AFE
-	.long LABEL_E14AF6
-	.long LABEL_E14AEA
-LABEL_E14AEA:	aligned_string "Huge Styles"
-LABEL_E14AF6:	aligned_string "Italian"
-LABEL_E14AFE:	aligned_string "Estilos enormes"
-LABEL_E14B0E:	aligned_string "Diversité des styles"
-LABEL_E14B24:	aligned_string "Riesige Auswahl an Styles"
-LABEL_E14B3E:	aligned_string "Huge Styles"
+	.long NakaInst_Huge_Styles_E14B3E
+	.long NakaInst_Riesige_Auswahl_an_Styles
+	.long NakaInst_Diversit_des_styles
+	.long NakaInst_Estilos_enormes
+	.long NakaInst_Italian_E14AF6
+	.long NakaInst_Huge_Styles
+NakaInst_Huge_Styles:	aligned_string "Huge Styles"
+NakaInst_Italian_E14AF6:	aligned_string "Italian"
+NakaInst_Estilos_enormes:	aligned_string "Estilos enormes"
+NakaInst_Diversit_des_styles:	aligned_string "Diversité des styles"
+NakaInst_Riesige_Auswahl_an_Styles:	aligned_string "Riesige Auswahl an Styles"
+NakaInst_Huge_Styles_E14B3E:	aligned_string "Huge Styles"
 Str_HugeStyles_Help:
 	.long LABEL_E14C86
 	.long LABEL_E14C32
-	.long LABEL_E14BDC
-	.long LABEL_E14BA2
-	.long LABEL_E14B9A
-	.long LABEL_E14B62
-LABEL_E14B62:	aligned_string "Menghasilkan 1000 gaya permainan dengan Music Stylist."
-LABEL_E14B9A:	aligned_string "Italian"
-LABEL_E14BA2:	aligned_string "Explore los 1000 estilos musicales con el Music Stylist."
-LABEL_E14BDC:
+	.long NakaInst_Gr_ce_au_Music_Stylist_explorez_l_un_apr_s_l
+	.long NakaInst_Explore_los_1000_estilos_musicales_con_el_Music
+	.long NakaInst_Italian_E14B9A
+	.long NakaInst_Menghasilkan_1000_gaya_permainan_dengan_Music
+NakaInst_Menghasilkan_1000_gaya_permainan_dengan_Music:	aligned_string "Menghasilkan 1000 gaya permainan dengan Music Stylist."
+NakaInst_Italian_E14B9A:	aligned_string "Italian"
+NakaInst_Explore_los_1000_estilos_musicales_con_el_Music:	aligned_string "Explore los 1000 estilos musicales con el Music Stylist."
+NakaInst_Gr_ce_au_Music_Stylist_explorez_l_un_apr_s_l:
 	aligned_string "Grâce au « Music Stylist », explorez l'un après l'autre les 1000 styles disponibles."
 	.byte 0x57, 0xe4
 	aligned_string "hlen Sie aus 1000 stilistisch sortierten Gesamtregistrierungen im MUSIC STYLIST."
 	aligned_string "Explore 1000 Musical Styles with the Music Stylist."
 Str_MusicStylist_Help:
-	.long LABEL_E14E0E
+	.long NakaInst_Add_to_your_enjoyment_with_a_wide_range_of
 	.long LABEL_E14DB6
 	.long LABEL_E14D70
-	.long LABEL_E14D28
-	.long LABEL_E14D20
-	.long LABEL_E14CD2
-LABEL_E14CD2:	aligned_string "Tambahkan kesenangan Anda dengan berbagai jenis Software Music dari Technics."
-LABEL_E14D20:	aligned_string "Italian"
-LABEL_E14D28:	aligned_string "Disfrute más con la gran variedad de programas de software de Technics"
+	.long NakaInst_Disfrute_m_s_con_la_gran_variedad_de_programas_de
+	.long NakaInst_Italian_E14D20
+	.long NakaInst_Tambahkan_kesenangan_Anda_dengan_berbagai_jenis
+NakaInst_Tambahkan_kesenangan_Anda_dengan_berbagai_jenis:	aligned_string "Tambahkan kesenangan Anda dengan berbagai jenis Software Music dari Technics."
+NakaInst_Italian_E14D20:	aligned_string "Italian"
+NakaInst_Disfrute_m_s_con_la_gran_variedad_de_programas_de:	aligned_string "Disfrute más con la gran variedad de programas de software de Technics"
 LABEL_E14D70:	.asciz "Encore plus de possibilités grâce à la diversité du software Technics"
 LABEL_E14DB6:	.asciz "Nutzen Sie das große Technics-Softwareangebot zur individuellen Gestaltung Ihrer Musik."
-LABEL_E14E0E:	aligned_string "Add to your enjoyment with a wide range of Technics Software"
+NakaInst_Add_to_your_enjoyment_with_a_wide_range_of:	aligned_string "Add to your enjoyment with a wide range of Technics Software"
 	.byte 0x9e, 0x4f, 0xe1, 0x00
 Str_SoftwareMusic_Help:
-	.long LABEL_E14F4A
-	.long LABEL_E14EF2
+	.long NakaInst_Konvertieren_Sie_Software_vieler_anderer
+	.long NakaInst_Et_vous_pouvez_convertir_les_softwares_de_la
 	.long LABEL_E14EBA
-	.long LABEL_E14EB2
-	.long LABEL_E14E64
-LABEL_E14E64:	aligned_string "Dan dapat mengubah hampir semua software yang dihasilkan oleh pabrik manapun!"
-LABEL_E14EB2:	aligned_string "Italian"
+	.long NakaInst_Italian_E14EB2
+	.long NakaInst_Dan_dapat_mengubah_hampir_semua_software_yang
+NakaInst_Dan_dapat_mengubah_hampir_semua_software_yang:	aligned_string "Dan dapat mengubah hampir semua software yang dihasilkan oleh pabrik manapun!"
+NakaInst_Italian_E14EB2:	aligned_string "Italian"
 LABEL_E14EBA:	.asciz "¡Y convierta el software de casi todos los fabricantes!"
-LABEL_E14EF2:	aligned_string "Et vous pouvez convertir les softwares de la plupart des autres principaux fabricants!"
-LABEL_E14F4A:	aligned_string "Konvertieren Sie Software vieler anderer Hersteller zur Verwendung auf dem KN5000."
+NakaInst_Et_vous_pouvez_convertir_les_softwares_de_la:	aligned_string "Et vous pouvez convertir les softwares de la plupart des autres principaux fabricants!"
+NakaInst_Konvertieren_Sie_Software_vieler_anderer:	aligned_string "Konvertieren Sie Software vieler anderer Hersteller zur Verwendung auf dem KN5000."
 	aligned_string "And convert software from almost any other manufacturer!"
 Str_StyleConvert_Help:
-	.long LABEL_E15168
-	.long LABEL_E15110
-	.long LABEL_E150B0
-	.long LABEL_E15052
-	.long LABEL_E1504A
-	.long LABEL_E14FF0
-LABEL_E14FF0:	aligned_string "Simpan pola-pola software favorit Anda kedalam Custom Rhythm Group ..... secara permanen!"
-LABEL_E1504A:	aligned_string "Italian"
-LABEL_E15052:	aligned_string "¡Memorice sus patrones de software favoritos con el Custom Rhythm Group ... permanentemente!"
-LABEL_E150B0:	aligned_string "Enregistrez vos motifs préférés dans le groupe  « Custom Rhythm Group » ...de façon permanente!"
-LABEL_E15110:	aligned_string "Speichern Sie Ihre Lieblings Software-Rhythmen permanent in der CUSTOM-Rhythmus Gruppe!"
-LABEL_E15168:	aligned_string "Store your favorite software patterns in the Custom Rhythm Group .....permanently!"
+	.long NakaInst_Store_your_favorite_software_patterns_in_the
+	.long NakaInst_Speichern_Sie_Ihre_Lieblings_Software_Rhythmen
+	.long NakaInst_Enregistrez_vos_motifs_pr_f_r_s_dans_le_groupe
+	.long NakaInst_Memorice_sus_patrones_de_software_favoritos_con
+	.long NakaInst_Italian_E1504A
+	.long NakaInst_Simpan_pola_pola_software_favorit_Anda_kedalam
+NakaInst_Simpan_pola_pola_software_favorit_Anda_kedalam:	aligned_string "Simpan pola-pola software favorit Anda kedalam Custom Rhythm Group ..... secara permanen!"
+NakaInst_Italian_E1504A:	aligned_string "Italian"
+NakaInst_Memorice_sus_patrones_de_software_favoritos_con:	aligned_string "¡Memorice sus patrones de software favoritos con el Custom Rhythm Group ... permanentemente!"
+NakaInst_Enregistrez_vos_motifs_pr_f_r_s_dans_le_groupe:	aligned_string "Enregistrez vos motifs préférés dans le groupe  « Custom Rhythm Group » ...de façon permanente!"
+NakaInst_Speichern_Sie_Ihre_Lieblings_Software_Rhythmen:	aligned_string "Speichern Sie Ihre Lieblings Software-Rhythmen permanent in der CUSTOM-Rhythmus Gruppe!"
+NakaInst_Store_your_favorite_software_patterns_in_the:	aligned_string "Store your favorite software patterns in the Custom Rhythm Group .....permanently!"
 
 
 Str_CustomRhythm_Help:
-	.long LABEL_E1522C
-	.long LABEL_E15218
-	.long LABEL_E15204
-	.long LABEL_E151F0
-	.long LABEL_E151E8
-	.long LABEL_E151D4
-LABEL_E151D4:	aligned_string "Accordion Register"
-LABEL_E151E8:	aligned_string "Italian"
-LABEL_E151F0:	aligned_string "Accordion Register"
-LABEL_E15204:	aligned_string "Accordion Register"
-LABEL_E15218:	aligned_string "Accordion Register"
-LABEL_E1522C:	aligned_string "Accordion Register"
+	.long NakaInst_Accordion_Register_E1522C
+	.long NakaInst_Accordion_Register_E15218
+	.long NakaInst_Accordion_Register_E15204
+	.long NakaInst_Accordion_Register_E151F0
+	.long NakaInst_Italian_E151E8
+	.long NakaInst_Accordion_Register
+NakaInst_Accordion_Register:	aligned_string "Accordion Register"
+NakaInst_Italian_E151E8:	aligned_string "Italian"
+NakaInst_Accordion_Register_E151F0:	aligned_string "Accordion Register"
+NakaInst_Accordion_Register_E15204:	aligned_string "Accordion Register"
+NakaInst_Accordion_Register_E15218:	aligned_string "Accordion Register"
+NakaInst_Accordion_Register_E1522C:	aligned_string "Accordion Register"
 
 
 Str_AccordionRegister_Help:
-	.long LABEL_E15396
-	.long LABEL_E15354
-	.long LABEL_E152FE
-	.long LABEL_E152A8
-	.long LABEL_E152A0
-	.long LABEL_E15258
-LABEL_E15258:	aligned_string "Suara-suara akordion pada ujung jari Anda ada pada Accordion Register!"
-LABEL_E152A0:	aligned_string "Italian"
-LABEL_E152A8:	aligned_string "¡Un mundo de sonidos de acordeón en la punta de sus dedos con el Accordion Register!"
-LABEL_E152FE:	aligned_string "Avec la fonction «Accordion Register», tout le monde de l'accordéon sous vos doigts!"
-LABEL_E15354:	aligned_string "ACCORDION REGISTER eröffnet Ihnen die Welt der Akkordeon Klänge!"
-LABEL_E15396:	aligned_string "A World of Accordion Sounds at your fingertips with the Accordion Register!"
+	.long NakaInst_A_World_of_Accordion_Sounds_at_your_fingertips
+	.long NakaInst_ACCORDION_REGISTER_er_ffnet_Ihnen_die_Welt_der
+	.long NakaInst_Avec_la_fonction_Accordion_Register_tout_le_monde
+	.long NakaInst_Un_mundo_de_sonidos_de_acorde_n_en_la_punta_de
+	.long NakaInst_Italian_E152A0
+	.long NakaInst_Suara_suara_akordion_pada_ujung_jari_Anda_ada
+NakaInst_Suara_suara_akordion_pada_ujung_jari_Anda_ada:	aligned_string "Suara-suara akordion pada ujung jari Anda ada pada Accordion Register!"
+NakaInst_Italian_E152A0:	aligned_string "Italian"
+NakaInst_Un_mundo_de_sonidos_de_acorde_n_en_la_punta_de:	aligned_string "¡Un mundo de sonidos de acordeón en la punta de sus dedos con el Accordion Register!"
+NakaInst_Avec_la_fonction_Accordion_Register_tout_le_monde:	aligned_string "Avec la fonction «Accordion Register», tout le monde de l'accordéon sous vos doigts!"
+NakaInst_ACCORDION_REGISTER_er_ffnet_Ihnen_die_Welt_der:	aligned_string "ACCORDION REGISTER eröffnet Ihnen die Welt der Akkordeon Klänge!"
+NakaInst_A_World_of_Accordion_Sounds_at_your_fingertips:	aligned_string "A World of Accordion Sounds at your fingertips with the Accordion Register!"
 
 
 Str_AccordionRegisterDesc_Help:
-	.long LABEL_E15442
-	.long LABEL_E15432
-	.long LABEL_E15422
-	.long LABEL_E15412
-	.long LABEL_E1540A
-	.long LABEL_E153FA
-LABEL_E153FA:	aligned_string "Digital Drawbar"
-LABEL_E1540A:	aligned_string "Italian"
-LABEL_E15412:	aligned_string "Digital Drawbar"
-LABEL_E15422:	aligned_string "Digital Drawbar"
-LABEL_E15432:	aligned_string "Digital Drawbar"
-LABEL_E15442:	aligned_string "Digital Drawbar"
+	.long NakaInst_Digital_Drawbar_E15442
+	.long NakaInst_Digital_Drawbar_E15432
+	.long NakaInst_Digital_Drawbar_E15422
+	.long NakaInst_Digital_Drawbar_E15412
+	.long NakaInst_Italian_E1540A
+	.long NakaInst_Digital_Drawbar
+NakaInst_Digital_Drawbar:	aligned_string "Digital Drawbar"
+NakaInst_Italian_E1540A:	aligned_string "Italian"
+NakaInst_Digital_Drawbar_E15412:	aligned_string "Digital Drawbar"
+NakaInst_Digital_Drawbar_E15422:	aligned_string "Digital Drawbar"
+NakaInst_Digital_Drawbar_E15432:	aligned_string "Digital Drawbar"
+NakaInst_Digital_Drawbar_E15442:	aligned_string "Digital Drawbar"
 
 
 Str_DigitalDrawbar_Help:
-	.long LABEL_E15582
-	.long LABEL_E1553C
-	.long LABEL_E154E6
-	.long LABEL_E154AC
-	.long LABEL_E154A4
-	.long LABEL_E1546A
-LABEL_E1546A:	aligned_string "Suara-suara Organ Classic dengan Jazz dan Rock Drawbars!"
-LABEL_E154A4:	aligned_string "Italian"
-LABEL_E154AC:	aligned_string "¡Sonidos de órgano clásicos con barras para Jazz y Rock!"
-LABEL_E154E6:	aligned_string "Avec les tirettes harmoniques, des sonorités d'Orgues Classiques, de Jazz et de Rock!"
-LABEL_E1553C:	aligned_string "Erzeugen Sie legendäre Orgelsounds mit den Jazz- und Rock-Zugriegeln!"
-LABEL_E15582:	aligned_string "Classic Organ Sounds with Jazz and Rock Drawbars!"
+	.long NakaInst_Classic_Organ_Sounds_with_Jazz_and_Rock_Drawbars
+	.long NakaInst_Erzeugen_Sie_legend_re_Orgelsounds_mit_den_Jazz
+	.long NakaInst_Avec_les_tirettes_harmoniques_des_sonorit_s_d
+	.long NakaInst_Sonidos_de_rgano_cl_sicos_con_barras_para_Jazz_y
+	.long NakaInst_Italian_E154A4
+	.long NakaInst_Suara_suara_Organ_Classic_dengan_Jazz_dan_Rock
+NakaInst_Suara_suara_Organ_Classic_dengan_Jazz_dan_Rock:	aligned_string "Suara-suara Organ Classic dengan Jazz dan Rock Drawbars!"
+NakaInst_Italian_E154A4:	aligned_string "Italian"
+NakaInst_Sonidos_de_rgano_cl_sicos_con_barras_para_Jazz_y:	aligned_string "¡Sonidos de órgano clásicos con barras para Jazz y Rock!"
+NakaInst_Avec_les_tirettes_harmoniques_des_sonorit_s_d:	aligned_string "Avec les tirettes harmoniques, des sonorités d'Orgues Classiques, de Jazz et de Rock!"
+NakaInst_Erzeugen_Sie_legend_re_Orgelsounds_mit_den_Jazz:	aligned_string "Erzeugen Sie legendäre Orgelsounds mit den Jazz- und Rock-Zugriegeln!"
+NakaInst_Classic_Organ_Sounds_with_Jazz_and_Rock_Drawbars:	aligned_string "Classic Organ Sounds with Jazz and Rock Drawbars!"
 
 
 Str_DigitalDrawbarDesc_Help:
-	.long LABEL_E1561C
-	.long LABEL_E1560A
-	.long LABEL_E155F8
-	.long LABEL_E155E6
-	.long LABEL_E155DE
-	.long LABEL_E155CC
-LABEL_E155CC:	aligned_string "Acoustic Illusion"
-LABEL_E155DE:	aligned_string "Italian"
-LABEL_E155E6:	aligned_string "Acoustic Illusion"
-LABEL_E155F8:	aligned_string "Acoustic Illusion"
-LABEL_E1560A:	aligned_string "Acoustic Illusion"
-LABEL_E1561C:	aligned_string "Acoustic Illusion"
+	.long NakaInst_Acoustic_Illusion_E1561C
+	.long NakaInst_Acoustic_Illusion_E1560A
+	.long NakaInst_Acoustic_Illusion_E155F8
+	.long NakaInst_Acoustic_Illusion_E155E6
+	.long NakaInst_Italian_E155DE
+	.long NakaInst_Acoustic_Illusion
+NakaInst_Acoustic_Illusion:	aligned_string "Acoustic Illusion"
+NakaInst_Italian_E155DE:	aligned_string "Italian"
+NakaInst_Acoustic_Illusion_E155E6:	aligned_string "Acoustic Illusion"
+NakaInst_Acoustic_Illusion_E155F8:	aligned_string "Acoustic Illusion"
+NakaInst_Acoustic_Illusion_E1560A:	aligned_string "Acoustic Illusion"
+NakaInst_Acoustic_Illusion_E1561C:	aligned_string "Acoustic Illusion"
 Str_AcousticIllusion_Help:
-	.long LABEL_E15758
-	.long LABEL_E15712
-	.long LABEL_E156C2
+	.long NakaInst_Acoustic_Illusion_broadens_your_music_to_3
+	.long NakaInst_ACCOUSTIC_ILLUSION_verleiht_dem_Klang
+	.long NakaInst_La_fonction_Acoustic_Illusion_apporte_votre
 	.long LABEL_E1568A
-	.long LABEL_E15682
-	.long LABEL_E15646
-LABEL_E15646:	aligned_string "Acoustic Illusion memperluas musik Anda kedalam 3 Dimensi!"
-LABEL_E15682:	aligned_string "Italian"
+	.long NakaInst_Italian_E15682
+	.long NakaInst_Acoustic_Illusion_memperluas_musik_Anda_kedalam_3
+NakaInst_Acoustic_Illusion_memperluas_musik_Anda_kedalam_3:	aligned_string "Acoustic Illusion memperluas musik Anda kedalam 3 Dimensi!"
+NakaInst_Italian_E15682:	aligned_string "Italian"
 LABEL_E1568A:	.asciz "¡El Acoustic Illusion amplia su música a 3 dimensiones!"
-LABEL_E156C2:	aligned_string "La fonction « Acoustic Illusion » apporte à votre musique une 3 ème dimension!"
-LABEL_E15712:	aligned_string "ACCOUSTIC ILLUSION verleiht dem Klang dreidimensionale Räumlichkeit."
-LABEL_E15758:	aligned_string "Acoustic Illusion broadens your music to 3-Dimensions!"
+NakaInst_La_fonction_Acoustic_Illusion_apporte_votre:	aligned_string "La fonction « Acoustic Illusion » apporte à votre musique une 3 ème dimension!"
+NakaInst_ACCOUSTIC_ILLUSION_verleiht_dem_Klang:	aligned_string "ACCOUSTIC ILLUSION verleiht dem Klang dreidimensionale Räumlichkeit."
+NakaInst_Acoustic_Illusion_broadens_your_music_to_3:	aligned_string "Acoustic Illusion broadens your music to 3-Dimensions!"
 Str_AcousticIllusionDesc_Help:
-	.long LABEL_E158CA
-	.long LABEL_E15874
-	.long LABEL_E15840
+	.long NakaInst_A_host_of_features_to_suit_any_style_of
+	.long NakaInst_Viele_weitere_leistungsf_hige_Funktionen_zur
+	.long NakaInst_Une_grande_diversit_de_fonctions_pour_tout_jouer
 	.long LABEL_E157FA
-	.long LABEL_E157F2
-	.long LABEL_E157A8
-LABEL_E157A8:	aligned_string "Satu pilihan daripada gambar-gambar untuk disesuaikan ke gaya permainan!"
-LABEL_E157F2:	aligned_string "Italian"
+	.long NakaInst_Italian_E157F2
+	.long NakaInst_Satu_pilihan_daripada_gambar_gambar_untuk
+NakaInst_Satu_pilihan_daripada_gambar_gambar_untuk:	aligned_string "Satu pilihan daripada gambar-gambar untuk disesuaikan ke gaya permainan!"
+NakaInst_Italian_E157F2:	aligned_string "Italian"
 LABEL_E157FA:	.asciz "¡Una serie de funciones apropiadas para cualquier estilo y ejecución!"
-LABEL_E15840:	aligned_string "Une grande diversité de fonctions pour tout jouer!"
-LABEL_E15874:	aligned_string "Viele weitere leistungsfähige Funktionen zur Darbietung und Bearbeitung Ihrer Musik!"
-LABEL_E158CA:	aligned_string "A host of features to suit any style of performance!"
+NakaInst_Une_grande_diversit_de_fonctions_pour_tout_jouer:	aligned_string "Une grande diversité de fonctions pour tout jouer!"
+NakaInst_Viele_weitere_leistungsf_hige_Funktionen_zur:	aligned_string "Viele weitere leistungsfähige Funktionen zur Darbietung und Bearbeitung Ihrer Musik!"
+NakaInst_A_host_of_features_to_suit_any_style_of:	aligned_string "A host of features to suit any style of performance!"
 Str_StyleImages_Help:
-	.long LABEL_E15954
-	.long LABEL_E15944
-	.long LABEL_E15938
-	.long LABEL_E1592C
-	.long LABEL_E15924
-	.long LABEL_E15918
-LABEL_E15918:	aligned_string "Huge Styles"
-LABEL_E15924:	aligned_string "Italian"
-LABEL_E1592C:	aligned_string "Huge Styles"
-LABEL_E15938:	aligned_string "Huge Styles"
-LABEL_E15944:	aligned_string "Huge Styles(G)"
-LABEL_E15954:	aligned_string "Huge Styles"
+	.long NakaInst_Huge_Styles_E15954
+	.long NakaInst_Huge_Styles_G
+	.long NakaInst_Huge_Styles_E15938
+	.long NakaInst_Huge_Styles_E1592C
+	.long NakaInst_Italian_E15924
+	.long NakaInst_Huge_Styles_E15918
+NakaInst_Huge_Styles_E15918:	aligned_string "Huge Styles"
+NakaInst_Italian_E15924:	aligned_string "Italian"
+NakaInst_Huge_Styles_E1592C:	aligned_string "Huge Styles"
+NakaInst_Huge_Styles_E15938:	aligned_string "Huge Styles"
+NakaInst_Huge_Styles_G:	aligned_string "Huge Styles(G)"
+NakaInst_Huge_Styles_E15954:	aligned_string "Huge Styles"
 Str_HugeStyles2_Help:
-	.long LABEL_E159B4
-	.long LABEL_E159A4
-	.long LABEL_E15998
-	.long LABEL_E1598C
-	.long LABEL_E15984
-	.long LABEL_E15978
-LABEL_E15978:	aligned_string "Huge Styles"
-LABEL_E15984:	aligned_string "Italian"
-LABEL_E1598C:	aligned_string "Huge Styles"
-LABEL_E15998:	aligned_string "Huge Styles"
-LABEL_E159A4:	aligned_string "Huge Styles(G)"
-LABEL_E159B4:	aligned_string "Huge Styles"
+	.long NakaInst_Huge_Styles_E159B4
+	.long NakaInst_Huge_Styles_G_E159A4
+	.long NakaInst_Huge_Styles_E15998
+	.long NakaInst_Huge_Styles_E1598C
+	.long NakaInst_Italian_E15984
+	.long NakaInst_Huge_Styles_E15978
+NakaInst_Huge_Styles_E15978:	aligned_string "Huge Styles"
+NakaInst_Italian_E15984:	aligned_string "Italian"
+NakaInst_Huge_Styles_E1598C:	aligned_string "Huge Styles"
+NakaInst_Huge_Styles_E15998:	aligned_string "Huge Styles"
+NakaInst_Huge_Styles_G_E159A4:	aligned_string "Huge Styles(G)"
+NakaInst_Huge_Styles_E159B4:	aligned_string "Huge Styles"
 Str_HugeStyles3_Help:
-	.long LABEL_E15A14
-	.long LABEL_E15A04
-	.long LABEL_E159F8
-	.long LABEL_E159EC
-	.long LABEL_E159E4
-	.long LABEL_E159D8
-LABEL_E159D8:	aligned_string "Huge Styles"
-LABEL_E159E4:	aligned_string "Italian"
-LABEL_E159EC:	aligned_string "Huge Styles"
-LABEL_E159F8:	aligned_string "Huge Styles"
-LABEL_E15A04:	aligned_string "Huge Styles(G)"
-LABEL_E15A14:	aligned_string "Huge Styles"
+	.long NakaInst_Huge_Styles_E15A14
+	.long NakaInst_Huge_Styles_G_E15A04
+	.long NakaInst_Huge_Styles_E159F8
+	.long NakaInst_Huge_Styles_E159EC
+	.long NakaInst_Italian_E159E4
+	.long NakaInst_Huge_Styles_E159D8
+NakaInst_Huge_Styles_E159D8:	aligned_string "Huge Styles"
+NakaInst_Italian_E159E4:	aligned_string "Italian"
+NakaInst_Huge_Styles_E159EC:	aligned_string "Huge Styles"
+NakaInst_Huge_Styles_E159F8:	aligned_string "Huge Styles"
+NakaInst_Huge_Styles_G_E15A04:	aligned_string "Huge Styles(G)"
+NakaInst_Huge_Styles_E15A14:	aligned_string "Huge Styles"
 
 LABEL_E15A20:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x90, 0x00
