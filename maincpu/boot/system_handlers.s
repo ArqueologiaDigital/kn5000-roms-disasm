@@ -1755,7 +1755,7 @@ SyncTiming_Snapshot_PostSnap:
 	cpda16 xwa, 32254
 	jr c, SyncTiming_Snapshot_CheckFracOverflow
 	push xhl
-	call LABEL_F70B33
+	call SeqEvt_EntryPoint2
 	xor wa, wa
 	stda16 1134, xwa
 	pop xhl
@@ -1763,7 +1763,7 @@ SyncTiming_Snapshot_PostSnap:
 SyncTiming_Snapshot_CheckFracOverflow:
 	cpda8 l, 32252
 	jr c, SyncTiming_Snapshot_Return
-	call LABEL_F70B2F
+	call SeqEvt_EntryPoint1
 
 SyncTiming_Snapshot_Return:
 	ret

@@ -21756,7 +21756,7 @@ SeqAcc_SendParamsAndStart:
 	jrl SeqAccomp_StartHandler
 
 SeqAccomp_DispatchRhythmEvents:
-	call LABEL_F387F4
+	call BmDrEdit_EnterPlayMode
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 3
@@ -22508,7 +22508,7 @@ NoteEditSy_InitCommon:
 	calr NoteEditSy_UpdateNoteDisplay
 	bitda 0, 10591
 	jrl z, NoteEditSy_ReturnZero
-	call LABEL_F38728
+	call BmDrEdit_PrepareSecondaryNoteDisplay
 	jrl NoteEditSy_ReturnZero
 
 NoteEditSy_HandleUpScroll:

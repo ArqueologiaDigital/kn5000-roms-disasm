@@ -6001,7 +6001,7 @@ MidiSysEx_SendCC2ViaCOMM:
 	call sendCOMM
 
 MidiSysEx_CheckDelayAndSend:
-	call LABEL_F7438C
+	call AccPlay_GetCurrentPart
 	cps l, 1
 	jr nz, MidiSysEx_SendAfterDelay
 	ldw wa, 0x32

@@ -6121,7 +6121,7 @@ AccPedal_Sustain_CallReset:
 	pop xwa
 	cpdi8 32523, 0
 	jr z, AccPedal_Sustain_CheckStyle
-	call LABEL_F71E32
+	call AccPlay_ToggleEntry
 	jrl AccPedal_SustainReturn
 
 AccPedal_Sustain_CheckStyle:

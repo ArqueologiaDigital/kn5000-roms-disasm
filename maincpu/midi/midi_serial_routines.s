@@ -237,7 +237,7 @@ SysMsg_NotActiveSense:
 	jr z, SysMsg_ClockTransportDispatch
 	cp a, 0xFA
 	jr nz, SysMsg_CheckStop
-	call LABEL_F71E36
+	call AccPlay_StopEntry
 	ret
 
 SysMsg_CheckStop:

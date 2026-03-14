@@ -22,7 +22,7 @@ LABEL_F6DCB5:
 	bitda 5, 32339
 	jr nz, LABEL_F6DCD0
 	calr AccompSeq_FadeOutTick
-	call LABEL_F71E26
+	call AccPlay_Entry
 	calr LABEL_F6DCF6
 
 LABEL_F6DCD0:
@@ -1050,7 +1050,7 @@ AccompSeq_LookupStyleData:
 	cp l, 0x80
 	jr c, AccompSeq_LookupStyle_Internal
 	and l, 0xF
-	call LABEL_F719B4
+	call Voice_DecodeBankIndex
 	and xhl, 0xFFFF
 	ld xwa, xhl
 	add xwa, 0x1E8800
@@ -1060,7 +1060,7 @@ AccompSeq_LookupStyleData:
 	jr AccompSeq_LookupStyle_Return
 
 AccompSeq_LookupStyle_Internal:
-	call LABEL_F71592
+	call Voice_DecodeNoteChannel2
 	xor xwa, xwa
 	ldw wa, 0x20
 	mul xwa, xhl
