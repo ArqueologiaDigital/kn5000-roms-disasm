@@ -2930,7 +2930,7 @@ SeqStepModeFunc:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_EF5F56
+	call ChannelFilter_InitAndApply
 	pop xiz
 	pop xix
 	pop xhl
@@ -2943,7 +2943,7 @@ DpSmfLyr_CaseD:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_EF5FBE
+	call Display_LoadAndSetIndicator
 	pop xiz
 	pop xix
 	pop xhl
@@ -2991,7 +2991,7 @@ LABEL_F2227B:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_EF5FFC
+	call Display_InitScreenLayout
 	pop xiz
 	pop xix
 	pop xhl
@@ -3002,7 +3002,7 @@ LABEL_F22288:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_EF6038
+	call Display_ConditionalCompare
 	pop xiz
 	pop xix
 	pop xhl
@@ -3013,7 +3013,7 @@ LABEL_F22295:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_EF604C
+	call Display_PollAudioAndUpdate
 	pop xiz
 	pop xix
 	pop xhl
@@ -3025,7 +3025,7 @@ SqTrSel_CaseA:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_EF6084
+	call Display_NullHandler
 	pop xiz
 	pop xix
 	pop xhl

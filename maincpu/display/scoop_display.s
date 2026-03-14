@@ -284,10 +284,10 @@ Display_UpdateRegion10_Done:
 
 UIRender_SingleTable:
 	bitda_24 0, 132582
-	jr nz, LABEL_EF5CF0
+	jr nz, UIRender_SingleTable_Body
 	ret
 
-LABEL_EF5CF0:
+UIRender_SingleTable_Body:
 	ld xwa, xiy
 	ld xbc, xix
 	call LABEL_FB1594
@@ -297,10 +297,10 @@ LABEL_EF5CF0:
 ; Input: XIY = descriptor table 1, XIX = descriptor table 2
 UIRender_TwoTableGeneral:
 	bitda_24 0, 132582
-	jr nz, LABEL_EF5D01
+	jr nz, UIRender_TwoTableGeneral_Body
 	ret
 
-LABEL_EF5D01:
+UIRender_TwoTableGeneral_Body:
 	ld xwa, xiy
 	ld xbc, xix
 	call Scoop_EventLoop_12Entry		; General UI element renderer
@@ -318,10 +318,10 @@ LABEL_EF5D01:
 
 GraphicsRender_TwoTable:
 	bitda_24 0, 132582
-	jr nz, LABEL_EF5D12
+	jr nz, GraphicsRender_TwoTable_Body
 	ret
 
-LABEL_EF5D12:
+GraphicsRender_TwoTable_Body:
 	push xwa
 	push xbc
 	ld xwa, xiy
@@ -331,12 +331,12 @@ LABEL_EF5D12:
 	pop xwa
 	ret
 
-LABEL_EF5D1F:
+GraphicsRender_TwoTable_Alt:
 	bitda_24 0, 132582
-	jr nz, LABEL_EF5D27
+	jr nz, GraphicsRender_TwoTable_Alt_Body
 	ret
 
-LABEL_EF5D27:
+GraphicsRender_TwoTable_Alt_Body:
 	push xwa
 	push xbc
 	ld xwa, xiy
@@ -348,22 +348,22 @@ LABEL_EF5D27:
 
 UIRender_TwoTableEvtCheck:
 	bitda_24 0, 132582
-	jr nz, LABEL_EF5D3C
+	jr nz, UIRender_TwoTableEvtCheck_Body
 	ret
 
-LABEL_EF5D3C:
+UIRender_TwoTableEvtCheck_Body:
 	push xwa
 	ld xwa, xiy
 	call LABEL_FB24CB
 	pop xwa
 	ret
 
-LABEL_EF5D45:
+UIRender_ConditionalDrawInit:
 	bitda_24 0, 132582
-	jr nz, LABEL_EF5D4D
+	jr nz, UIRender_ConditionalDrawInit_Body
 	ret
 
-LABEL_EF5D4D:
+UIRender_ConditionalDrawInit_Body:
 	push xwa
 	ld xwa, xiy
 	call DrawFunc_Init
@@ -372,17 +372,17 @@ LABEL_EF5D4D:
 
 Scoop_ConditionalCurveUpdate:
 	bitda_24 0, 132582
-	jr nz, LABEL_EF5D5E
+	jr nz, Scoop_ConditionalCurveUpdate_Body
 	ret
 
-LABEL_EF5D5E:
+Scoop_ConditionalCurveUpdate_Body:
 	push xwa
 	ld xwa, xiy
 	call Scoop_CurveUpdate_SegmentEnd
 	pop xwa
 	ret
 
-LABEL_EF5D67:
+Scoop_CurveUpdate_Direct:
 	push xwa
 	ld xwa, xiy
 	call Scoop_CurveUpdate_SegmentEnd
@@ -391,22 +391,22 @@ LABEL_EF5D67:
 
 Scoop_ConditionalGlideSetup:
 	bitda_24 0, 132582
-	jr nz, LABEL_EF5D78
+	jr nz, Scoop_ConditionalGlideSetup_Body
 	ret
 
-LABEL_EF5D78:
+Scoop_ConditionalGlideSetup_Body:
 	push xwa
 	ld xwa, xiy
 	call Scoop_GlideParam_Setup
 	pop xwa
 	ret
 
-LABEL_EF5D81:
+UIRender_ConditionalFBCall:
 	bitda_24 0, 132582
-	jr nz, LABEL_EF5D89
+	jr nz, UIRender_ConditionalFBCall_Body
 	ret
 
-LABEL_EF5D89:
+UIRender_ConditionalFBCall_Body:
 	push xwa
 	ld xwa, xiy
 	call LABEL_FB1DFA
@@ -415,17 +415,17 @@ LABEL_EF5D89:
 
 GraphicsRender_EventCheck:
 	bitda_24 0, 132582
-	jr nz, LABEL_EF5D9A
+	jr nz, GraphicsRender_EventCheck_Body
 	ret
 
-LABEL_EF5D9A:
+GraphicsRender_EventCheck_Body:
 	push xwa
 	ld xwa, xiy
 	call Scoop_EventLoop_36Entry
 	pop xwa
 	ret
 
-LABEL_EF5DA3:
+UIRender_LoadTwoDescriptors:
 	ld xiy, 0xEF5DB6
 	ld xix, 0xEF5E37
 	ld xwa, xiy
@@ -433,7 +433,7 @@ LABEL_EF5DA3:
 	call Scoop_EventLoop_12Entry
 	ret
 
-LABEL_EF5DB6:
+UIRender_DescriptorTable1:
 	.byte 0x0e, 0x08, 0x12, 0x06, 0x06, 0x00, 0x13, 0x00
 	.byte 0x0e, 0x08, 0x52, 0x0c, 0x06, 0x00, 0x13, 0x00
 	.byte 0x0e, 0x08, 0x92, 0x12, 0x06, 0x00, 0x13, 0x00
@@ -450,30 +450,30 @@ LABEL_EF5DB6:
 	.byte 0x00, 0x0e, 0x08, 0xe9, 0x20, 0x05, 0x00, 0xec
 	.byte 0x00
 
-LABEL_EF5E37:
+UIRender_DescriptorTable2:
 	.byte 0x1e, 0x4a, 0x00, 0xf1, 0x85, 0x11, 0xc9
 	.byte 0x6e, 0x1b, 0xd1, 0x82, 0x11, 0x20, 0xf1, 0x81
 	.byte 0x11, 0x50, 0xf1, 0x83, 0x11, 0x00, 0x20, 0xf1
 	.byte 0x85, 0x11, 0xc8, 0x6e, 0x08, 0xd1, 0x82, 0x11
 	.byte 0x20, 0xf1, 0x81, 0x11, 0x50, 0x0e
 
-LABEL_EF5E5C:
-	calr LABEL_EF5E84
+ParamDigit_ExtractAndFormat:
+	calr ParamDigit_DivideValue
 	bitda 1, 4485
-	jr nz, LABEL_EF5E75
+	jr nz, ParamDigit_ExtractDone
 	stdi8 4481, 32
 	bitda 0, 4485
-	jr nz, LABEL_EF5E75
+	jr nz, ParamDigit_ExtractDone
 	stdi8 4482, 32
 
-LABEL_EF5E75:
+ParamDigit_ExtractDone:
 	ret
 
-LABEL_EF5E76:
+ParamDigit_CalrData:
 	.byte 0x1e, 0x75, 0x00, 0x1e, 0xe0, 0xff, 0x0e, 0x1e
 	.byte 0x6e, 0x00, 0x1e, 0xb4, 0xff, 0x0e
 
-LABEL_EF5E84:
+ParamDigit_DivideValue:
 	push c
 	anddi8 4485, 252
 	stdi8 4481, 0
@@ -482,32 +482,32 @@ LABEL_EF5E84:
 	jr z, ParamUpdate_AddAndStore
 	xor c, c
 
-LABEL_EF5E9C:
+ParamDigit_Div100Loop:
 	sub wa, 0x64
-	jr c, LABEL_EF5EB3
+	jr c, ParamDigit_Div100Done
 	inc 1, c
 	ordi8 4485, 2
 	cps wa, 0
-	jr nz, LABEL_EF5E9C
+	jr nz, ParamDigit_Div100Loop
 	stda8 4481, c
 	jr ParamUpdate_AddAndStore
 
-LABEL_EF5EB3:
+ParamDigit_Div100Done:
 	stda8 4481, c
 	add wa, 0x64
 	xor c, c
 
-LABEL_EF5EBD:
+ParamDigit_Div10Loop:
 	sub wa, 0xA
-	jr c, LABEL_EF5ED4
+	jr c, ParamDigit_Div10Done
 	inc 1, c
 	ordi8 4485, 1
 	cps wa, 0
-	jr nz, LABEL_EF5EBD
+	jr nz, ParamDigit_Div10Loop
 	stda8 4482, c
 	jr ParamUpdate_AddAndStore
 
-LABEL_EF5ED4:
+ParamDigit_Div10Done:
 	stda8 4482, c
 	add wa, 0xA
 	stda8 4483, a
@@ -526,7 +526,7 @@ ParamUpdate_AddAndStore:
 	pop c
 	ret
 
-LABEL_EF5EEE:
+ScoopDisp_BytecodeBlock1:
 	.byte 0xda, 0xd8, 0x66, 0x0e, 0x6a, 0x0a, 0xda, 0xcd
 	.byte 0xff, 0xff, 0xda, 0x61, 0xda, 0x80, 0x68, 0x02
 	.byte 0xda, 0xa0, 0xd8, 0xd8, 0x66, 0x16, 0x6a, 0x0d
@@ -544,21 +544,21 @@ LABEL_EF5EEE:
 	.ascii "^]\\[ZY"
 	.byte 0x0e
 
-LABEL_EF5F56:
-	call LABEL_EF5F65
-	call LABEL_EF5F6B
+ChannelFilter_InitAndApply:
+	call ChannelFilter_SetMode
+	call ChannelFilter_ApplyWrapper
 	stdi16 4360, 0
 	ret
 
-LABEL_EF5F65:
+ChannelFilter_SetMode:
 	stdi8 3294, 2
 	ret
 
-LABEL_EF5F6B:
-	calr LABEL_EF5F6F
+ChannelFilter_ApplyWrapper:
+	calr ChannelFilter_ApplyMask
 	ret
 
-LABEL_EF5F6F:
+ChannelFilter_ApplyMask:
 	ldda16 xde, 61854
 	push_sr
 	cpl de
@@ -566,22 +566,22 @@ LABEL_EF5F6F:
 	ld xhl, 0xF1A0
 	xor bc, bc
 
-LABEL_EF5F7E:
+ChannelFilter_BitScanLoop:
 	ldfr_berp A, 0x3C
 	ldfr_werp DE, 0x3E
 	ld a, c
 	scf
 	xorcf_a_werp 0x3E
 	ldto_berp A, 0x3C
-	jr c, LABEL_EF5FB2
+	jr c, ChannelFilter_NextBit
 	ld iy, bc
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0xD
-	jr z, LABEL_EF5FA0
+	jr z, ChannelFilter_ClearBit
 	cp a, 0x10
-	jr nz, LABEL_EF5FB2
+	jr nz, ChannelFilter_NextBit
 
-LABEL_EF5FA0:
+ChannelFilter_ClearBit:
 	ldfr_berp A, 0x3C
 	ldfr_werp DE, 0x3E
 	ld a, c
@@ -590,30 +590,30 @@ LABEL_EF5FA0:
 	ldto_berp A, 0x3C
 	ldto_werp DE, 0x3E
 
-LABEL_EF5FB2:
+ChannelFilter_NextBit:
 	inc 1, c
 	cp c, 0x10
-	jr c, LABEL_EF5F7E
+	jr c, ChannelFilter_BitScanLoop
 	ldda16 xwa, 61854
 	ret
 
-LABEL_EF5FBE:
-	call LABEL_EF5FCB
+Display_LoadAndSetIndicator:
+	call Display_LoadChannelMask
 	xor wa, wa
 	ldb a, 0x4C
 	call CtrlPanel_SetIndicatorBit
 	ret
 
-LABEL_EF5FCB:
+Display_LoadChannelMask:
 	ldda16 xwa, 61854
-	calr LABEL_EF5FD7
-	call LABEL_EF5FD8
+	calr Display_LoadChannelMask_Ret
+	call Display_CopyToneTableToRAM
 	ret
 
-LABEL_EF5FD7:
+Display_LoadChannelMask_Ret:
 	ret
 
-LABEL_EF5FD8:
+Display_CopyToneTableToRAM:
 	push xhl
 	push xbc
 	push xix
@@ -632,17 +632,17 @@ LABEL_EF5FD8:
 	pop xhl
 	ret
 
-LABEL_EF5FFC:
+Display_InitScreenLayout:
 	; --- Init/setup function (29 bytes) ---
 	call Display_Data_EF5B79
 	call Display_ResetDirtyFlags
-	calr LABEL_EF6019
-	call LABEL_EF6033
-	calr LABEL_EF602A
+	calr Display_InitParamLoader1
+	call Display_CallMenuInit
+	calr Display_InitParamLoader2
 	call Display_UpdateDirtyRegions
 	stdi16	4360, 0
 	ret
-LABEL_EF6019:
+Display_InitParamLoader1:
 	; --- Param loader 1: C=0, A=0x0C, A=0x10, call FB1536 ---
 	ldb c, 0x00
 	ldb a, 0x0C
@@ -650,62 +650,62 @@ LABEL_EF6019:
 	call Display_DeferOrDrawWall
 	sti8_24	257960, 0
 	ret
-LABEL_EF602A:
+Display_InitParamLoader2:
 	; --- Param loader 2: C=7, A=0x0C, call FB155F ---
 	ldb c, 0x07
 	ldb a, 0x0C
 	call Display_DeferOrUpdateScreen
 	ret
-LABEL_EF6033:
+Display_CallMenuInit:
 	; --- Simple wrapper: call EFA133 ---
 	call 0xEFA133
 	ret
-LABEL_EF6038:
+Display_ConditionalCompare:
 	; --- Conditional handler: call EF6047, compare mem, ret ---
-	call LABEL_EF6047
+	call Display_CallMenuConfig
 	ldda8	a, 36150
 	.byte 0xc1, 0x37, 0x8d, 0xf1			; cp a, (0x8D37)  [C1 prefix]
-	jr z, LABEL_EF6046
-LABEL_EF6046:
+	jr z, Display_ConditionalCompare_Ret
+Display_ConditionalCompare_Ret:
 	ret
-LABEL_EF6047:
+Display_CallMenuConfig:
 	; --- Simple wrapper: call EFA8CE ---
 	call 0xEFA8CE
 	ret
-LABEL_EF604C:
+Display_PollAudioAndUpdate:
 	; --- Polling function with loop ---
 	ld bc, hl
 	pushw bc
 	call Display_ResetDirtyFlags
 	popw bc
-	call LABEL_EF607F
+	call Display_CallSetupRoutine
 	call Display_UpdateDirtyRegions
-LABEL_EF605C:
+Display_PollAudioLoop:
 	ldb a, 0x01
 	call AudioLock_GetCount
 	cps	l, 0
-	jr z, LABEL_EF606E
+	jr z, Display_PollAudioDone
 	ldb a, 0x03
 	call TaskSched_YieldToQueue
-	jr t, LABEL_EF605C
-LABEL_EF606E:
-	call LABEL_EF6073
+	jr t, Display_PollAudioLoop
+Display_PollAudioDone:
+	call Display_DeletePollEvent
 	ret
-LABEL_EF6073:
+Display_DeletePollEvent:
 	; --- XBC/XWA setup and call ---
 	ld xbc, 0x01C00007
 	lds32	xwa, 0
 	call DeleteEvent
 	ret
-LABEL_EF607F:
+Display_CallSetupRoutine:
 	; --- Simple wrapper: call EF61E9 ---
 	call 0xEF61E9
 	ret
-LABEL_EF6084:
+Display_NullHandler:
 	ret
 
 
-LABEL_EF6085:
+MIDI_SendSysExFromW:
 	ld a, w
 	call MIDI_SendSysExCmd
 	ret
@@ -728,7 +728,7 @@ SoundEvt_LongPacketHandler:
 	.byte 0x13, 0xd8, 0xec, 0x02, 0xd8, 0x8d, 0xd1, 0x1a
 	.byte 0x37, 0x20, 0xf1, 0xe8, 0x0e, 0x50, 0xc1, 0x5c
 	.byte 0x0d, 0x21, 0xf1, 0xed, 0x0e, 0x41, 0x3b, 0x43
-	.long LABEL_EF6159
+	.long ScoopDisp_HandlerData2
 	.byte 0xe3, 0x07, 0xec, 0xf4
 	.byte 0x25, 0x5b, 0xb5, 0xe8, 0xd1, 0x1a, 0x37, 0x20
 	.byte 0xd1, 0xe8, 0x0e, 0xf0, 0x7e, 0x30, 0x00, 0xc1
@@ -740,7 +740,7 @@ SoundEvt_LongPacketHandler:
 	.byte 0xec, 0xd5, 0xef, 0x1b, 0x54, 0x61, 0xef, 0xc1
 	.byte 0xd3, 0x0d, 0x3e, 0x01, 0x1d, 0x2e, 0x90, 0xef
 	.byte 0x1d, 0x93, 0x79, 0xef, 0x0e
-LABEL_EF6159:
+ScoopDisp_HandlerData2:
 	.byte 0x97, 0x97, 0xef
 	.byte 0x00, 0x61, 0x7a, 0xef, 0x00, 0x1c, 0x7a, 0xef
 	.byte 0x00, 0xe8, 0x61, 0xef, 0x00, 0xc8, 0xcc, 0x03
@@ -790,13 +790,13 @@ DefaultHandler_Ret:
 	.byte 0x8e, 0x62, 0xef, 0xd9, 0xcf, 0x0f, 0x00, 0x7e
 	.byte 0x08, 0x00, 0x1d, 0x27, 0x63, 0xef, 0x1b, 0x8e
 	.byte 0x62, 0xef, 0x0e
-LABEL_EF628F:
+ScoopDisp_FlagSetAndDispatch:
 	.byte 0xc1, 0xe2, 0xe3, 0x3e, 0x08
 	.byte 0xc8, 0x33, 0x07, 0x76, 0x08, 0x00, 0x1d, 0x36
 	.byte 0xaf, 0xef, 0x1b, 0xa6, 0x62, 0xef, 0x1d, 0xe7
 	.byte 0xaf, 0xef, 0x0e
-LABEL_EF62A7:
-	.long LABEL_EF628F
+ScoopDisp_DispatchTable_Small:
+	.long ScoopDisp_FlagSetAndDispatch
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -813,7 +813,7 @@ LABEL_EF62A7:
 	.long DefaultHandler_Ret
 	.long ToneParam_Evt0F_BytecodeHandler
 	.long DefaultHandler_Ret
-	.long LABEL_EF628F
+	.long ScoopDisp_FlagSetAndDispatch
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -883,7 +883,7 @@ PerfMode_ParamHandler_Table:
 	.ascii ";C#d"
 	.byte 0xef, 0x00, 0xe3, 0x07
 	.byte 0xec, 0xf4, 0x25, 0x5b, 0xb5, 0xe8, 0x0e
-LABEL_EF6423:
+PerfMode_JumpTable_Extended:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -896,10 +896,10 @@ LABEL_EF6423:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long LABEL_EF6E29
+	.long UIState_PerfModeEntry
 	.long LABEL_EF739A
 	.long LABEL_EF739A
-	.long LABEL_EF6E29
+	.long UIState_PerfModeEntry
 	.long LABEL_EF73A4
 	.long LABEL_EF743F
 	.long LABEL_EF74DA
@@ -908,13 +908,13 @@ PerfMode_ParamHandler_0:
 	.byte 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c
 	.byte 0x44, 0x8a, 0x64, 0xef, 0x00, 0xe3, 0x07, 0xf0
 	.byte 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EF648A:
+PerfMode_EventTable_0:
 	.long UIDisp_DefaultInputHandler
 	.long LABEL_EF8B6D
 	.long LABEL_EF8DFB
-	.long LABEL_EF650A
-	.long LABEL_EF6528
-	.long LABEL_EF6546
+	.long PerfMode_Evt03_FlagHandler_A
+	.long PerfMode_Evt03_FlagHandler_B
+	.long PerfMode_Evt03_ClampAndUpdate
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
 	.long PerfMode_VolumeParam_Process
@@ -929,9 +929,9 @@ LABEL_EF648A:
 	.long UIDisp_DefaultInputHandler
 	.long LABEL_EF8B6D
 	.long LABEL_EF8DFB
-	.long LABEL_EF650A
-	.long LABEL_EF6528
-	.long LABEL_EF6546
+	.long PerfMode_Evt03_FlagHandler_A
+	.long PerfMode_Evt03_FlagHandler_B
+	.long PerfMode_Evt03_ClampAndUpdate
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
 	.long DefaultHandler_Ret
@@ -941,39 +941,39 @@ LABEL_EF648A:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-LABEL_EF650A:
+PerfMode_Evt03_FlagHandler_A:
 	.byte 0xc1, 0xe2
 	.byte 0xe3, 0x3e, 0x08, 0xc1, 0x14, 0x37, 0x21, 0x27
 	.byte 0x01, 0x26, 0x0d, 0x1d, 0x64, 0x65, 0xef, 0xf1
 	.byte 0x14, 0x37, 0x41, 0x1d, 0x19, 0xf7, 0xef, 0x1d
 	.byte 0x07, 0x5c, 0xef, 0x0e
-LABEL_EF6528:
+PerfMode_Evt03_FlagHandler_B:
 	.byte 0xc1, 0xe2, 0xe3, 0x3e
 	.byte 0x08, 0xc1, 0x15, 0x37, 0x21, 0x27, 0x00, 0x26
 	.byte 0x0c, 0x1d, 0x64, 0x65, 0xef, 0xf1, 0x15, 0x37
 	.byte 0x41, 0x1d, 0x19, 0xf7, 0xef, 0x1d, 0x07, 0x5c
 	.byte 0xef, 0x0e
-LABEL_EF6546:
+PerfMode_Evt03_ClampAndUpdate:
 	; --- Setup: or flag, load value, clamp, store, calls (30 bytes) ---
 	.byte 0xc1, 0xe2, 0xe3, 0x3e, 0x08		; or (0xE3E2), 0x08  [C1 prefix]
 	ldda8	a, 14102
 	ldb l, 0x00
 	ldb h, 0x03
-	call LABEL_EF6564
+	call PerfMode_ClampValue
 	stda8	14102, a
 	call 0xEFF719
 	call Display_UpdateRegion3
 	ret
-LABEL_EF6564:
+PerfMode_ClampValue:
 	; --- Clamp/adjust: inc or dec A within [L..H] (29 bytes) ---
 	bit 0x07, w
-	jrl nz, LABEL_EF6577
+	jrl nz, PerfMode_ClampValue_Dec
 	inc 1, a
 	cp a, h
 	jrl ule, CompareClamp_ValueReturn
 	ld a, h
 	jp CompareClamp_ValueReturn
-LABEL_EF6577:
+PerfMode_ClampValue_Dec:
 	dec 1, a
 	cp a, l
 	jrl ge, CompareClamp_ValueReturn
@@ -1001,7 +1001,7 @@ UIDisp_DefaultInputHandler:
 	.byte 0x0e
 
 
-LABEL_EF65DD:
+PerfMode_EventTable_1:
 	.long UIDisp_DefaultInputHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -1039,7 +1039,7 @@ PerfMode_ParamHandler_2:
 	.byte 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c, 0x44, 0x78
 	.byte 0x66, 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23
 	.byte 0x5c, 0xb3, 0xe8, 0x0e, 0x9c, 0x65, 0xef, 0x00
-LABEL_EF667C:
+PerfMode_EventTable_2:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -1077,17 +1077,17 @@ PerfMode_ParamHandler_3:
 	.ascii "<D&g"
 	.byte 0xef, 0x00, 0xe3, 0x07
 	.byte 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EF6713:
+PerfMode_ParamHandler_3_Entry:
 	.byte 0xc8
 	.byte 0x33, 0x07, 0x7e, 0x08, 0x00, 0x1d, 0x59, 0x8d
 	.byte 0xef, 0x1b, 0x25, 0x67, 0xef, 0x1d, 0xaa, 0x8d
 	.byte 0xef, 0x0e
-LABEL_EF6726:
+PerfMode_EventTable_3:
 	.long UIDisp_DefaultInputHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long LABEL_EF6713
+	.long PerfMode_ParamHandler_3_Entry
 	.long DefaultHandler_Ret
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
@@ -1104,7 +1104,7 @@ LABEL_EF6726:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long LABEL_EF6713
+	.long PerfMode_ParamHandler_3_Entry
 	.long DefaultHandler_Ret
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
@@ -1122,7 +1122,7 @@ PerfMode_ParamHandler_4:
 	.byte 0xe3, 0x07, 0xf0, 0xec
 	.byte 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 LABEL_EF67C1:	.asciz "œeï"
-LABEL_EF67C5:
+PerfMode_EventTable_4:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -1161,7 +1161,7 @@ PerfMode_ParamHandler_5:
 	.ascii "<D\\h"
 	.byte 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EF685C:
+PerfMode_EventTable_5:
 	.long UIDisp_DefaultInputHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -1204,7 +1204,7 @@ PerfMode_ParamHandler_Data:
 	.byte 0x00, 0x1d, 0x8a, 0x8c, 0xef, 0x1b, 0x09, 0x69
 	.byte 0xef, 0x1d, 0xa7, 0x8c, 0xef, 0x0e, 0x9c, 0x65
 	.byte 0xef, 0x00
-LABEL_EF690E:
+PerfMode_EventTable_6:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long PerfMode_ParamHandler_Data
@@ -1244,7 +1244,7 @@ PerfMode_ParamHandler_8:
 	.byte 0x0e
 
 
-LABEL_EF69A5:
+PerfMode_EventTable_7:
 	.long UIDisp_DefaultInputHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -1288,7 +1288,7 @@ PerfMode_VolumeParam_Process:
 	.byte 0xef, 0xc1, 0x60, 0x0d, 0x27, 0xcf, 0x69, 0xce
 	.byte 0xd6, 0x3c, 0x44, 0xa0, 0xf1, 0x00, 0x00, 0xc3
 	.byte 0x07, 0xf0, 0xec, 0x27, 0xdb, 0xec, 0x02, 0x44
-	.long LABEL_EF6BE7
+	.long PerfMode_VoiceAddressTable
 	.byte 0xe3, 0x07, 0xf0, 0xec
 	.byte 0x23, 0x5c, 0x83, 0x21, 0xf1, 0xf7, 0x0e, 0x41
 	.byte 0x1d, 0x95, 0x6a, 0xef, 0x1b, 0x94, 0x6a, 0xef
@@ -1307,12 +1307,12 @@ PerfMode_ParamHandler_9:
 	.byte 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02, 0x3c
 	.byte 0x44, 0xf2, 0x6a, 0xef, 0x00, 0xe3, 0x07, 0xf0
 	.byte 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EF6AF2:
+PerfMode_EventTable_9:
 	.long UIDisp_DefaultInputHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long LABEL_EF6B72
+	.long PerfMode_Evt04_VolumeHandler
 	.long DefaultHandler_Ret
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
@@ -1329,7 +1329,7 @@ LABEL_EF6AF2:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long LABEL_EF6B72
+	.long PerfMode_Evt04_VolumeHandler
 	.long DefaultHandler_Ret
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
@@ -1340,7 +1340,7 @@ LABEL_EF6AF2:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-LABEL_EF6B72:
+PerfMode_Evt04_VolumeHandler:
 	.byte 0xc1, 0xe2
 	.byte 0xe3, 0x3e, 0x08, 0xc1, 0xf7, 0x0e, 0x21, 0x27
 	.byte 0x00, 0x26, 0x7f, 0x1d, 0x37, 0x6c, 0xef, 0xf1
@@ -1357,7 +1357,7 @@ LABEL_EF6B72:
 	.byte 0x01, 0x02, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04
 	.byte 0x05, 0x06, 0x03, 0x0f, 0xff, 0xff, 0xff, 0xff
 	.byte 0x0c, 0x0d, 0x0e
-LABEL_EF6BE7:
+PerfMode_VoiceAddressTable:
 	.byte 0xb9, 0xf9, 0x00, 0x00, 0xed
 	.byte 0xf9, 0x00, 0x00, 0xd3, 0xf9, 0x00, 0x00, 0x6f
 	.byte 0xfa, 0x00, 0x00, 0x89, 0xfa, 0x00, 0x00, 0xa3
@@ -1378,12 +1378,12 @@ PerfMode_ParamHandler_10:
 	.ascii "<Dkl"
 	.byte 0xef, 0x00, 0xe3, 0x07
 	.byte 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EF6C6B:
+PerfMode_EventTable_10:
 	.long UIDisp_DefaultInputHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long LABEL_EF6CEB
+	.long VoiceParam_MultiDispatch
 	.long DefaultHandler_Ret
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
@@ -1400,7 +1400,7 @@ LABEL_EF6C6B:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long LABEL_EF6CEB
+	.long VoiceParam_MultiDispatch
 	.long DefaultHandler_Ret
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
@@ -1411,19 +1411,19 @@ LABEL_EF6C6B:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-LABEL_EF6CEB:
+VoiceParam_MultiDispatch:
 	; --- Dispatcher: 5-way branch on (0x10F2) value (318 bytes total) ---
 	ldda8	a, 4337
 	ldb l, 0x03
 	ldda8	a, 4338
 	cp a, l
-	jrl z, LABEL_EF6D2D
+	jrl z, VoiceParam_Case03
 	cp a, 0x08
-	jrl z, LABEL_EF6D4E
+	jrl z, VoiceParam_Case08
 	cp a, 0x0A
-	jrl z, LABEL_EF6D6F
+	jrl z, VoiceParam_Case0A
 	cp a, 0x0B
-	jrl z, LABEL_EF6D90
+	jrl z, VoiceParam_Case0B
 	; --- Default handler: H=0x4C, L=0x34 ---
 	ldda8	a, 4339
 	ldb l, 0x34
@@ -1434,7 +1434,7 @@ LABEL_EF6CEB:
 	call VoiceSlot_ReadParamsWithSaveRestore
 	call 0xEFF9EC
 	jp VoiceParam_CommonTail
-LABEL_EF6D2D:
+VoiceParam_Case03:
 	; --- Case 0x03: H=0x7F, L=0x00 ---
 	ldda8	a, 4339
 	ldb l, 0x00
@@ -1445,7 +1445,7 @@ LABEL_EF6D2D:
 	call VoiceSlot_ReadParamsWithSaveRestore
 	call 0xEFF8DA
 	jp VoiceParam_CommonTail
-LABEL_EF6D4E:
+VoiceParam_Case08:
 	; --- Case 0x08: H=0x7F, L=0x00 ---
 	ldda8	a, 4339
 	ldb l, 0x00
@@ -1456,7 +1456,7 @@ LABEL_EF6D4E:
 	call VoiceSlot_ReadParamsWithSaveRestore
 	call 0xEFF98D
 	jp VoiceParam_CommonTail
-LABEL_EF6D6F:
+VoiceParam_Case0A:
 	; --- Case 0x0A: H=0xFF, L=0x00 ---
 	ldda8	a, 4339
 	ldb l, 0x00
@@ -1464,10 +1464,10 @@ LABEL_EF6D6F:
 	call 0xEF6C37
 	stda8	4339, a
 	stdi8	3571, 4
-	call LABEL_EF6DE3
+	call VoiceParam_BitManipHelper
 	call 0xEFFA59
 	jp VoiceParam_CommonTail
-LABEL_EF6D90:
+VoiceParam_Case0B:
 	; --- Case 0x0B: H=0x0C, L=0x00 ---
 	ldda8	a, 4339
 	ldb l, 0x00
@@ -1486,7 +1486,7 @@ VoiceSlot_ReadParamsWithSaveRestore:
 	; --- Helper 1: guard on W, parameter setup + calls (44 bytes) ---
 	call 0xEFD286
 	cps	w, 0
-	jrl z, LABEL_EF6DE2
+	jrl z, VoiceParam_SaveRestore_Ret
 	xor	a, a
 	call VoiceSlot_SaveState
 	ldda8	e, 3571
@@ -1497,13 +1497,13 @@ VoiceSlot_ReadParamsWithSaveRestore:
 	call 0xEFC49D
 	xor	a, a
 	call VoiceSlot_RestoreState
-LABEL_EF6DE2:
+VoiceParam_SaveRestore_Ret:
 	ret
-LABEL_EF6DE3:
+VoiceParam_BitManipHelper:
 	; --- Helper 2: guard on W, bit manipulation + calls (70 bytes) ---
 	call 0xEFD286
 	cps	w, 0
-	jrl z, LABEL_EF6E28
+	jrl z, VoiceParam_BitManip_Ret
 	xor	a, a
 	call VoiceSlot_SaveState
 	call VoiceSlot_ReadCurrentParams
@@ -1522,18 +1522,18 @@ LABEL_EF6DE3:
 	call 0xEFC49D
 	xor	a, a
 	call VoiceSlot_RestoreState
-LABEL_EF6E28:
+VoiceParam_BitManip_Ret:
 	ret
 
 
-LABEL_EF6E29:
+UIState_PerfModeEntry:
 	.byte 0xd9, 0x8b, 0xdb
 	.byte 0xcf, 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec
 	.byte 0x02
 	.ascii "<DDn"
 	.byte 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EF6E44:
+UIState_EventTable:
 	.long UIState_DispatchHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -1574,23 +1574,23 @@ UIState_DispatchHandler:
 	stda16	3816, wa
 	popw wa
 	bit 0x07, w
-	jrl z, LABEL_EF6EE1
+	jrl z, UIState_CallDecHandler
 	call 0xEF9566
-	jp LABEL_EF6EE5
-LABEL_EF6EE1:
+	jp UIState_CheckValueChanged
+UIState_CallDecHandler:
 	call 0xEF959B
-LABEL_EF6EE5:
+UIState_CheckValueChanged:
 	ldda16	wa, 14106
 	.byte 0xd1, 0xe8, 0x0e, 0xf0			; cp wa, (0x0EE8)  [D1 prefix]
-	jrl nz, LABEL_EF6EFC
+	jrl nz, UIState_UpdateAllRegions
 	call Display_UpdateRegion8
 	call Display_UpdateRegion10
-	jp LABEL_EF6F00
-LABEL_EF6EFC:
-	call LABEL_EF6F01
-LABEL_EF6F00:
+	jp UIState_Dispatch_Ret
+UIState_UpdateAllRegions:
+	call UIState_UpdateMultiRegions
+UIState_Dispatch_Ret:
 	ret
-LABEL_EF6F01:
+UIState_UpdateMultiRegions:
 	; --- Multi-call teardown (25 bytes) ---
 	call Display_UpdateRegion7
 	call Display_UpdateRegion8
@@ -1607,14 +1607,14 @@ Display_RedrawParameters:
 	call LABEL_EF736D
 	ldda16 xwa, 14106
 	cps wa, 1
-	jrl z, LABEL_EF6FA2
+	jrl z, Display_RedrawParams_Ret
 	dec 1, wa
 	stda16 10367, xwa
 	cp wa, 0x3E8
-	jrl c, LABEL_EF6F42
+	jrl c, Display_RedrawParams_StoreAndLoad
 	ldw wa, 0x3E8
 
-LABEL_EF6F42:
+Display_RedrawParams_StoreAndLoad:
 	stda16 3660, xwa
 	call VoiceBank_BitsAndLoad
 	ldda8 a, 3424
@@ -1631,13 +1631,13 @@ LABEL_EF6F42:
 	ldda8 a, 3820
 	ld l, a
 	cps a, 4
-	jrl ule, LABEL_EF6F82
+	jrl ule, Display_RedrawParams_StoreDigits
 	ldb a, 0x4
 
-LABEL_EF6F82:
+Display_RedrawParams_StoreDigits:
 	stda8 3666, a
 	cps l, 4
-	jrl ule, LABEL_EF6FA2
+	jrl ule, Display_RedrawParams_Ret
 	add l, 0x30
 	ld xix, 0xF07
 	ld (xix), 0x28
@@ -1645,7 +1645,7 @@ LABEL_EF6F82:
 	ldw (xix + 2), 0x342F
 	ld (xix + 4), 0x29
 
-LABEL_EF6FA2:
+Display_RedrawParams_Ret:
 	ret
 
 Display_RedrawValues:
@@ -1653,10 +1653,10 @@ Display_RedrawValues:
 	call LABEL_EF95BD
 	ldda16 xwa, 14106
 	cp wa, 0x3E8
-	jrl c, LABEL_EF6FBA
+	jrl c, Display_RedrawValues_Store
 	ldw wa, 0x3E8
 
-LABEL_EF6FBA:
+Display_RedrawValues_Store:
 	stda16 3662, xwa
 	call LABEL_EF7377
 	ldda16 xwa, 14106
@@ -1687,13 +1687,13 @@ LABEL_EF6FBA:
 	ldda8 a, 3820
 	ld l, a
 	cps a, 4
-	jrl ule, LABEL_EF702A
+	jrl ule, Display_RedrawValues_StoreDigits
 	ldb a, 0x4
 
-LABEL_EF702A:
+Display_RedrawValues_StoreDigits:
 	stda8 3667, a
 	cps l, 4
-	jrl ule, LABEL_EF704A
+	jrl ule, Display_RedrawValues_Ret
 	add l, 0x30
 	ld xix, 0xF25
 	ld (xix), 0x28
@@ -1701,7 +1701,7 @@ LABEL_EF702A:
 	ldw (xix + 2), 0x342F
 	ld (xix + 4), 0x29
 
-LABEL_EF704A:
+Display_RedrawValues_Ret:
 	ret
 
 Display_RedrawIndicators:
@@ -1711,21 +1711,21 @@ Display_RedrawIndicators:
 	inc 1, wa
 	stda16 10367, xwa
 	cp wa, 0x3E8
-	jrl c, LABEL_EF7068
+	jrl c, Display_RedrawInd_Store
 	ldw wa, 0x3E8
 
-LABEL_EF7068:
+Display_RedrawInd_Store:
 	stda16 3664, xwa
 	call VoiceBank_BitsAndLoad
 	ldda8 a, 3424
 	call SetWall_SlotResolve
 	cpdi8 10362, 0
-	jrl z, LABEL_EF708C
+	jrl z, Display_RedrawInd_LoadDirect
 	ldda8 a, 3421
 	stda8 3820, a
-	jp LABEL_EF70AF
+	jp Display_RedrawInd_CalcSlotCount
 
-LABEL_EF708C:
+Display_RedrawInd_LoadDirect:
 	stda8 3820, a
 	ldda16 xwa, 10415
 	stda16 10431, xwa
@@ -1736,17 +1736,17 @@ LABEL_EF708C:
 	ldb c, 0x4
 	call VoiceBank_StatusDoubleRCF
 
-LABEL_EF70AF:
+Display_RedrawInd_CalcSlotCount:
 	ldda8 a, 3820
 	ld l, a
 	cps a, 4
-	jrl ule, LABEL_EF70BC
+	jrl ule, Display_RedrawInd_StoreDigits
 	ldb a, 0x4
 
-LABEL_EF70BC:
+Display_RedrawInd_StoreDigits:
 	stda8 3668, a
 	cps l, 4
-	jrl ule, LABEL_EF70DC
+	jrl ule, Display_RedrawInd_Ret
 	add l, 0x30
 	ld xix, 0xF43
 	ld (xix), 0x28
@@ -1754,7 +1754,7 @@ LABEL_EF70BC:
 	ldw (xix + 2), 0x342F
 	ld (xix + 4), 0x29
 
-LABEL_EF70DC:
+Display_RedrawInd_Ret:
 	ret
 
 VoiceBank_BitsAndLoad:
@@ -1788,7 +1788,7 @@ VoiceBank_StatusDoubleRCF:
 	stcfa_dd16 0x52, 0x0F
 	ldto_berp A, 0x3C
 
-LABEL_EF7128:
+Display_RedrawFooter_Main:
 	pushw bc
 	call VoiceBank_ProcessCommand
 	popw bc
@@ -1800,13 +1800,13 @@ LABEL_EF7128:
 	cp a, 0x81
 	jrl z, Display_NullRet2
 	cp a, 0x85
-	jrl z, LABEL_EF7158
+	jrl z, Display_RedrawTitleString
 	cp a, 0x86
-	jrl z, LABEL_EF7158
+	jrl z, Display_RedrawTitleString
 	cpdi8 3766, 0
-	jrl nz, LABEL_EF7128
+	jrl nz, Display_RedrawFooter_Main
 
-LABEL_EF7158:
+Display_RedrawTitleString:
 	ldfr_berp A, 0x3C
 	ld a, c
 	rcf
@@ -1824,58 +1824,58 @@ Display_NullRet2:
 
 VoiceBank_CheckCommand:
 	cpdi8 3765, 129
-	jrl nz, LABEL_EF718B
+	jrl nz, Display_TitleString_BuildFromMode
 	push xix
 	call VoiceBank_ProcessCommand
 	pop xix
 	cpdi8 3765, 129
 	jrl z, TitleString_NullRet
 
-LABEL_EF718B:
+Display_TitleString_BuildFromMode:
 	ldda8 a, 3765
 	cp a, 0x80
-	jrl z, LABEL_EF71C0
+	jrl z, Display_TitleString_Mode0
 	cp a, 0x82
-	jrl z, LABEL_EF71CB
+	jrl z, Display_TitleString_Mode1
 	cp a, 0x84
-	jrl z, LABEL_EF71D7
+	jrl z, Display_TitleString_Mode2
 	cp a, 0x85
-	jrl z, LABEL_EF71E2
+	jrl z, Display_TitleString_Mode3
 	cp a, 0x86
-	jrl z, LABEL_EF71ED
+	jrl z, Display_TitleString_Mode4
 	and a, 0xF0
 	cp a, 0xB0
-	jrl z, LABEL_EF71F8
+	jrl z, Display_TitleString_Mode5
 	cp a, 0xC0
 	jrl z, LABEL_EF72A1
 	jp TitleString_NullRet
 
-LABEL_EF71C0:
+Display_TitleString_Mode0:
 	ld xiy, 0xEF72AB
 	lds bc, 5
 	jp String_CopyFromIY
 
-LABEL_EF71CB:
+Display_TitleString_Mode1:
 	ldw (xix), 0x4E45
 	ld (xix + 2), 0x44
 	jp TitleString_NullRet
 
-LABEL_EF71D7:
+Display_TitleString_Mode2:
 	ld xiy, 0xEF72B0
 	lds bc, 6
 	jp String_CopyFromIY
 
-LABEL_EF71E2:
+Display_TitleString_Mode3:
 	ld xiy, 0xEF72B6
 	lds bc, 5
 	jp String_CopyFromIY
 
-LABEL_EF71ED:
+Display_TitleString_Mode4:
 	ld xiy, 0xEF72BB
 	lds bc, 4
 	jp String_CopyFromIY
 
-LABEL_EF71F8:
+Display_TitleString_Mode5:
 	cpdi8 3767, 72
 	jrl nz, TitleString_NullRet
 	ldda8 a, 3768
@@ -3363,7 +3363,7 @@ LABEL_EF9614:
 
 LABEL_EF961D:
 	ldb w, 0x68
-	call LABEL_EF6085
+	call MIDI_SendSysExFromW
 	ldb w, 0xFF
 
 LABEL_EF9625:
@@ -4131,7 +4131,7 @@ PortConfig_Handler_3:
 	call 0xEFEFA9
 	call 0xEFEFAE
 	call 0xEFA63C
-	call LABEL_EF6F01
+	call UIState_UpdateMultiRegions
 	call Display_UpdateRegion3
 	call Display_UpdateRegion2
 	call Display_DeferOrUpdateScreen
@@ -4310,7 +4310,7 @@ SysEx_PeriodicDispatch:
 	pushw wa
 	push xiy
 	ldb w, 0x68
-	call LABEL_EF6085
+	call MIDI_SendSysExFromW
 	pop xiy
 	popw wa
 	stdi8 32578, 15
@@ -7327,7 +7327,7 @@ Display_RedrawMenu:
 	jp LABEL_EFF13F
 
 LABEL_EFF123:
-	call LABEL_EF5E5C
+	call ParamDigit_ExtractAndFormat
 	ld xiy, 0x1181
 	ld xix, 0xECA
 	ld wa, (xiy)
@@ -8067,7 +8067,7 @@ Display_RedrawStatusBar:
 	cpdi8 36152, 138
 	jrl nz, Scoop_Return
 	sti8_24 0x03efa8, 0x00
-	call LABEL_EF5DA3
+	call UIRender_LoadTwoDescriptors
 	ldda8 l, 3567
 	xor h, h
 	cp l, 0x12
@@ -8096,7 +8096,7 @@ Scoop_InitPartDisplay:
 	stda8 4494, a
 	ld xiy, 0xE0BD7F
 	push xhl
-	call LABEL_EF5D45
+	call UIRender_ConditionalDrawInit
 	pop xhl
 	push xhl
 	sla hl, 2
@@ -8227,7 +8227,7 @@ Scoop_InitDisplayFull:
 	ldda8 a, 3424
 	stda8 4494, a
 	ld xiy, 0xE0BD7F
-	call LABEL_EF5D45
+	call UIRender_ConditionalDrawInit
 	ldda8 a, 3424
 	dec 1, a
 	ld xiy, 0xF1A0
@@ -8242,7 +8242,7 @@ Display_RedrawMainContent:
 	jr nz, Scoop_RedrawMainContent_End
 	sti8_24 0x03efa8, 0x00
 	ld xiy, 0xE0BD89
-	call LABEL_EF5D67
+	call Scoop_CurveUpdate_Direct
 
 Scoop_RedrawMainContent_End:
 	ret
@@ -8506,7 +8506,7 @@ Scoop_SidePanel_StoreAndDraw:
 	stda8 4509, a
 	ld xiy, 0xE0C6A9
 	ld xix, 0xE0C6CA
-	call LABEL_EF5D1F
+	call GraphicsRender_TwoTable_Alt
 	call Display_UpdateRegion1_Alt
 
 Scoop_SidePanel_End:
@@ -8593,7 +8593,7 @@ Scoop_AltContent_ClearOneRegion:
 	stda16 4590, xbc
 	stda16 4592, xhl
 	ld xiy, 0x11EA
-	call LABEL_EF5D81
+	call UIRender_ConditionalFBCall
 	ret
 
 Display_RedrawButtonLabels:
