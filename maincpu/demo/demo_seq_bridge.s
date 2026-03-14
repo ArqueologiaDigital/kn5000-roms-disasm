@@ -960,7 +960,7 @@ LABEL_F22E7F:
 	pop xbc
 	pop xhl
 	pop xwa
-	call LABEL_EFBFDC
+	call VoiceSlot_InitAndProcess
 	xor w, w
 	popw bc
 	ret
@@ -1012,7 +1012,7 @@ LABEL_F22EF0:
 	pop xbc
 	pop xhl
 	pop xwa
-	call LABEL_EFBFDC
+	call VoiceSlot_InitAndProcess
 	xor w, w
 	popw bc
 	ret

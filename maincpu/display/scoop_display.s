@@ -919,7 +919,7 @@ PerfMode_EventTable_0:
 	.long SoundEvt_LongPacketHandler
 	.long PerfMode_VolumeParam_Process
 	.long ToneParam_Evt09_BytecodeHandler
-	.long LABEL_EFD9BC
+	.long SubCPU_ToneParamDisplay
 	.long ToneParam_ModeGuardEntry
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -1012,7 +1012,7 @@ PerfMode_EventTable_1:
 	.long SoundEvt_LongPacketHandler
 	.long PerfMode_VolumeParam_Process
 	.long ToneParam_Evt09_BytecodeHandler
-	.long LABEL_EFD9BC
+	.long SubCPU_ToneParamDisplay
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -3118,13 +3118,13 @@ DMA_ChannelHandler_3:
 DMA_Channel3_CallAndInit:
 	call 0xEFEFAE
 	stdi8	14120, 0
-	call LABEL_EFF03F
+	call DisplayStr_StyleSectionInit
 	ret
 DMA_FlagCheckWithCalls:
 	; --- Flag-check with calls (42 bytes) ---
 	xor	a, a
 	call VoiceSlot_SaveState
-	call LABEL_EFC7B2
+	call VoiceSlot_StatusRet
 	xor	a, a
 	call VoiceSlot_RestoreState
 	call VoiceSlot_ReadCurrentParams
@@ -3385,14 +3385,14 @@ AccPedal_ScanVoiceSlots:
 	anddi8 3411, 253
 	xor a, a
 	call VoiceSlot_SaveState
-	call LABEL_EFAD4E
+	call MemConfig_VoiceSlotLookup
 	call VoiceSlot_ReadCurrentParams
 	cp a, 0x81
 	jrl nz, AccPedal_CompareMode85
 	jp AccPedal_ClearBit2Flag
 
 VoiceSlot_ProcessedWordRet:
-	call LABEL_EFC1E6
+	call VoiceSlot_DispatchRet
 	cp w, 0xFF
 	jrl z, AccPedal_RestoreAndReturn
 	call VoiceSlot_ComputeWordIndex
@@ -4305,7 +4305,7 @@ ClockConfig_Handler_0:
 SysEx_PeriodicDispatch:
 	ld xiy, 0xD69
 	cp (xiy), 0x18
-	jrl nz, LABEL_EFAA2E
+	jrl nz, SysEx_CountdownCheck
 	anddi8 58338, 111
 	pushw wa
 	push xiy
@@ -4317,23 +4317,23 @@ SysEx_PeriodicDispatch:
 	xor wa, wa
 	ldb a, 0xEE
 	call SoundCtrl_SendCommand
-	jp LABEL_EFAA34
+	jp SysEx_DecrementAndCheck
 
-LABEL_EFAA2E:
+SysEx_CountdownCheck:
 	cp (xiy), 0x0
-	jrl z, LABEL_EFAA40
+	jrl z, SysEx_ControllerBitCheck
 
-LABEL_EFAA34:
+SysEx_DecrementAndCheck:
 	decm8 1, (xiy)
 	cp (xiy), 0x0
-	jrl nz, LABEL_EFAA40
-	call LABEL_EFB7C9
+	jrl nz, SysEx_ControllerBitCheck
+	call SysInit_SendAllNotesAndReset
 
-LABEL_EFAA40:
+SysEx_ControllerBitCheck:
 	bitda 3, 3411
 	jrl z, ControllerMode_UpdateFlags
 	bitda 0, 3924
-	jrl z, LABEL_EFAA84
+	jrl z, SysEx_ModeChangeCheck
 	ldda8 c, 3925
 	add c, 0x5
 	ld32_24 xwa, 0x02749a
@@ -4347,11 +4347,11 @@ LABEL_EFAA40:
 	xorcf_a_16 de
 	ldto_werp DE, 0x3E
 	ldto_berp A, 0x3C
-	jrl nc, LABEL_EFAA84
+	jrl nc, SysEx_ModeChangeCheck
 	anddi8 3924, 254
 	call VoiceCtrl_SendNoteOffSequence
 
-LABEL_EFAA84:
+SysEx_ModeChangeCheck:
 	ld xiy, 0xD5E
 	cp (xiy), 0x0
 	jrl z, ControllerMode_UpdateFlags
@@ -4364,20 +4364,20 @@ LABEL_EFAA84:
 
 ControllerMode_UpdateFlags:
 	cpdi8 36150, 138
-	jrl nz, LABEL_EFAAB9
+	jrl nz, SysEx_FlagClearAndCompare
 	cpdi8 3429, 3
-	jrl nz, LABEL_EFAAB9
+	jrl nz, SysEx_FlagClearAndCompare
 	ordi8 3926, 2
 	jp SubCPU_CmdCountdownRet
 
-LABEL_EFAAB9:
+SysEx_FlagClearAndCompare:
 	anddi8 3926, 253
 	cpdi8 36150, 129
-	jrl z, LABEL_EFAACE
+	jrl z, SysEx_DecrementCounter
 	cpdi8 36150, 142
 	jrl nz, SubCPU_CmdCountdownRet
 
-LABEL_EFAACE:
+SysEx_DecrementCounter:
 	cpdi8 3393, 0
 	jrl z, SubCPU_CmdCountdownRet
 	decdi8 1, 3393
@@ -4385,14 +4385,14 @@ LABEL_EFAACE:
 SubCPU_CmdCountdownRet:
 	ret
 
-LABEL_EFAADB:
+SysEx_BytecodeDispatcher:
 	.byte 0xd8, 0xd0, 0x45, 0xbf, 0x0d, 0x00, 0x00, 0x85
 	.byte 0xf9, 0x7e, 0x18, 0x00, 0x45, 0xc0, 0x0d, 0x00
 	.byte 0x00, 0x85, 0xf9, 0x7e, 0x67, 0x00, 0x45, 0x08
 	.byte 0x11, 0x00, 0x00, 0x95, 0xf8, 0x7e, 0x82, 0x00
 	.byte 0x1b, 0xe3, 0xab, 0xef, 0x1d, 0xfb, 0x9f, 0xef
 	.byte 0x1d, 0x5d, 0xbd, 0xef, 0xce, 0xd6, 0x3c, 0x44
-	.long LABEL_EFB94A
+	.long SysInit_BytecodeBlock
 	.byte 0xc3, 0x07, 0xf0, 0xec
 	.byte 0x20, 0x5c, 0xc8, 0xce, 0x02, 0x3b, 0x1d, 0x85
 	jr	f, 0xef
@@ -4475,15 +4475,15 @@ MemoryConfig_Handler_Table:
 	.byte 0x1d, 0x04, 0x90, 0xef, 0x1d, 0xb0, 0xb5, 0xef
 	.byte 0x20, 0x00, 0x0e
 
-LABEL_EFAD4E:
-	call LABEL_EFC6C6
+MemConfig_VoiceSlotLookup:
+	call VoiceSlot_ComputeIndex
 	push xde
 	ld xde, 0xF250
 	add xde, xiz
 	ld wa, (xde + 1)
 	pop xde
 	cp wa, 0xFFFF
-	jrl z, LABEL_EFAD8B
+	jrl z, MemConfig_VoiceSlotSkip
 	pushw wa
 	call VoiceSlot_ComputeWordIndex
 	popw wa
@@ -4492,19 +4492,19 @@ LABEL_EFAD4E:
 	st_dri3w WA, 0x07, 0xF0, 0xF8
 	pop xix
 
-LABEL_EFAD77:
+MemConfig_VoiceSlotCompare:
 	srl xiz, 1
 	push xix
 	ld xix, 0xCBE
 	stib_dri 0x07, 0xF0, 0xF8, 0x05
 	pop xix
-	jp LABEL_EFAD93
+	jp MemConfig_VoiceSlotRet
 
-LABEL_EFAD8B:
+MemConfig_VoiceSlotSkip:
 	call VoiceSlot_ComputeWordIndex
-	jp LABEL_EFAD77
+	jp MemConfig_VoiceSlotCompare
 
-LABEL_EFAD93:
+MemConfig_VoiceSlotRet:
 	ret
 
 MemConfig_Handler_0:
@@ -4643,39 +4643,39 @@ MemConfig_Handler_3:
 	.byte 0x02, 0xd8, 0x8b, 0x3c, 0x44, 0xa6, 0xb1, 0xef
 	.byte 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3
 	.byte 0xe8, 0x0e
-LABEL_EFB1A6:
+SndDispatch_JumpTable_Main:
 	.long DefaultHandler_Ret
-	.long LABEL_EFB1D2
-	.long LABEL_EFB20F
+	.long SndDispatch_Handler_1
+	.long SndDispatch_Handler_2
 	.long SndDispatch_TableEntryBegin
-	.long LABEL_EFB289
+	.long SndDispatch_ShortHandler
 	.long SndDispatch_TableEntryBegin
 	.long SndDispatch_TableEntryBegin
-	.long LABEL_EFB28E
-	.long LABEL_EFB289
-	.long LABEL_EFB28E
-	.long LABEL_EFB2CB
-LABEL_EFB1D2:
+	.long SndDispatch_Handler_3
+	.long SndDispatch_ShortHandler
+	.long SndDispatch_Handler_3
+	.long SndDispatch_Handler_4
+SndDispatch_Handler_1:
 	.byte 0x1d, 0x1e
 	.byte 0xb4, 0xef, 0x1d, 0xca, 0xb3, 0xef, 0xc9, 0xd8
 	.byte 0x76, 0x17, 0x00, 0xc9, 0x69, 0xc8, 0xd0, 0xd8
 	.byte 0xec, 0x02, 0xd8, 0x8b, 0x3c, 0x44, 0xf7, 0xb1
 	.byte 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23, 0x5c
 	.byte 0xb3, 0xe8, 0x0e
-LABEL_EFB1F7:
+SndDispatch_SubTable_1:
 	.long SndDispatch_InitHandler
 	.long SndDispatch_ProcessCommand
 	.long SndDispatch_ProcessCommand
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-LABEL_EFB20F:
+SndDispatch_Handler_2:
 	.byte 0x1d, 0x1e, 0xb4, 0xef, 0x1d
 	.byte 0xca, 0xb3, 0xef, 0xc9, 0xd8, 0x76, 0x17, 0x00
 	.byte 0xc9, 0x69, 0xd8, 0x13, 0xd8, 0xec, 0x02, 0xd8
 	.byte 0x8b, 0x3c, 0x44, 0x34, 0xb2, 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EFB234:
+SndDispatch_SubTable_2:
 	.long SndDispatch_InitHandler
 	.long SndDispatch_ProcessCommand
 	.long SndDispatch_ProcessCommand
@@ -4686,53 +4686,53 @@ SndDispatch_TableEntryBegin:
 	.byte 0x1d, 0x1e, 0xb4, 0xef, 0x1d, 0xca, 0xb3, 0xef
 	.byte 0xc9, 0xd8, 0x76, 0x17, 0x00, 0xc9, 0x69, 0xd8
 	.byte 0x13, 0xd8, 0xec, 0x02, 0xd8, 0x8b, 0x3c, 0x44
-	.long LABEL_EFB271
+	.long SndDispatch_BytecodeString
 	.byte 0xe3, 0x07, 0xf0, 0xec
 	.byte 0x23, 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EFB271:	.asciz "èaï"
-LABEL_EFB275:
+SndDispatch_BytecodeString:	.asciz "èaï"
+SndDispatch_SubTable_3:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long SndDispatch_ProcessCommand
 	.long SndDispatch_ProcessCommand
 	.long DefaultHandler_Ret
-LABEL_EFB289:
+SndDispatch_ShortHandler:
 	.byte 0x1d, 0x25, 0xb3
 	.byte 0xef, 0x0e
-LABEL_EFB28E:
+SndDispatch_Handler_3:
 	.byte 0x1d, 0x1e, 0xb4, 0xef, 0x1d, 0xca
 	.byte 0xb3, 0xef, 0xc9, 0xd8, 0x76, 0x17, 0x00, 0xc9
 	.byte 0x69, 0xd8, 0x13, 0xd8, 0xec, 0x02, 0xd8, 0x8b
 	.byte 0x3c, 0x44, 0xb3, 0xb2, 0xef, 0x00, 0xe3, 0x07
 	.byte 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EFB2B3:
-	.long LABEL_EFB308
+SndDispatch_SubTable_4:
+	.long SndDispatch_CallAndInit
 	.long SndDispatch_InitHandler
 	.long SndDispatch_InitHandler
 	.long SndDispatch_ProcessCommand
 	.long SndDispatch_InitHandler
 	.long DefaultHandler_Ret
-LABEL_EFB2CB:
+SndDispatch_Handler_4:
 	.byte 0x1d
 	.byte 0x1e, 0xb4, 0xef, 0x1d, 0xca, 0xb3, 0xef, 0xc9
 	.byte 0xd8, 0x76, 0x17, 0x00, 0xc9, 0x69, 0xd8, 0x13
 	.byte 0xd8, 0xec, 0x02, 0xd8, 0x8b, 0x3c, 0x44, 0xf0
 	.byte 0xb2, 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23
 	.byte 0x5c, 0xb3, 0xe8, 0x0e, 0x08, 0xb3, 0xef, 0x00
-LABEL_EFB2F4:
+SndDispatch_SubTable_5:
 	.long SndDispatch_InitHandler
-	.long LABEL_EFB31F
+	.long SndDispatch_SetFlag30
 	.long SndDispatch_ProcessCommand
-	.long LABEL_EFB31F
+	.long SndDispatch_SetFlag30
 	.long DefaultHandler_Ret
-LABEL_EFB308:
+SndDispatch_CallAndInit:
 	.byte 0x1d, 0x58, 0xc3, 0xef
 	.byte 0x1d, 0x11, 0xb3, 0xef, 0x0e
 SndDispatch_InitHandler:
 	.byte 0xc1, 0x6a, 0x0d
 	.byte 0x3f, 0x00, 0x7e, 0x05, 0x00, 0xf1, 0x57, 0x0d
 	.byte 0x00, 0x00, 0x0e
-LABEL_EFB31F:
+SndDispatch_SetFlag30:
 	.byte 0xf1, 0x57, 0x0d, 0x00, 0x30
 	.byte 0x0e
 SndDispatch_ProcessCommand:
@@ -4889,9 +4889,9 @@ MemConfig_Handler_4:
 	.byte 0x21, 0x48, 0x20, 0x03, 0x25, 0x02, 0x24, 0x02
 	.byte 0x1d, 0x25, 0xbd, 0xef, 0x0e
 
-LABEL_EFB7C9:
+SysInit_SendAllNotesAndReset:
 	stdi8 14120, 0
-	call LABEL_EFF03F
+	call DisplayStr_StyleSectionInit
 	xor wa, wa
 	ldb a, 0xA
 	call UI_PostPartChangeEvent
@@ -4959,7 +4959,7 @@ SystemInit_StepHandler_0:
 	.byte 0x04, 0x60, 0x04, 0x00, 0x03, 0x60, 0x03, 0x00
 	.byte 0x02, 0x60, 0x02, 0x30, 0x01, 0x90, 0x01, 0x00
 	.byte 0x01, 0x60, 0x01, 0x30, 0x00, 0x30, 0x01
-LABEL_EFB94A:
+SysInit_BytecodeBlock:
 	.byte 0x50
 	.byte 0x40, 0x30, 0x20, 0x10, 0x00, 0x01, 0x02, 0x03
 	.byte 0x05, 0x04, 0x06, 0xc1, 0xf1, 0xce, 0x22, 0xca
@@ -5182,12 +5182,12 @@ LABEL_EFB94A:
 	.byte 0x03, 0x02, 0xff, 0xff, 0x1b, 0xf9, 0xbd, 0xef
 	.byte 0x0e
 
-LABEL_EFBFDC:
+VoiceSlot_InitAndProcess:
 	cps bc, 0
-	jrl nz, LABEL_EFBFE5
-	jp LABEL_EFC0C5
+	jrl nz, VoiceSlot_InitLoop
+	jp VoiceSlot_RetNZ
 
-LABEL_EFBFE5:
+VoiceSlot_InitLoop:
 	ld xix, 0xC9E
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
@@ -5199,7 +5199,7 @@ LABEL_EFBFE5:
 	pushw bc
 	add bc, iy
 	cp bc, 0xFF
-	jrl ugt, LABEL_EFC040
+	jrl ugt, VoiceSlot_ProcessEntry
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
 	st_dri3b D, 0x07, 0xF0, 0xF8
@@ -5217,9 +5217,9 @@ LABEL_EFBFE5:
 	ld xix, xhl
 	ldda32 xiy, 4353
 	ldir85
-	jp LABEL_EFC0C5
+	jp VoiceSlot_RetNZ
 
-LABEL_EFC040:
+VoiceSlot_ProcessEntry:
 	ld de, bc
 	ldw wa, 0x100
 	ld_sriw3 IY, 0x07, 0xF0, 0xF8
@@ -5257,16 +5257,16 @@ LABEL_EFC040:
 	add xix, 0x5
 	ldda32 xiy, 4353
 	cps bc, 0
-	jrl z, LABEL_EFC0C4
+	jrl z, VoiceSlot_CheckDone
 	ldir85
 
-LABEL_EFC0C4:
+VoiceSlot_CheckDone:
 	popw bc
 
-LABEL_EFC0C5:
+VoiceSlot_RetNZ:
 	ret
 
-LABEL_EFC0C6:
+VoiceSlot_RetZ:
 	.byte 0xc8, 0x8b, 0x1d, 0xb4, 0xc6, 0xef, 0x44, 0x9e
 	.byte 0x0c, 0x00, 0x00, 0xd3, 0x07, 0xf0, 0xf8, 0x25
 	.byte 0xf1, 0x9f, 0x28, 0x55, 0xde, 0xef, 0x01, 0xe7
@@ -5302,8 +5302,8 @@ LABEL_EFC0C6:
 	.byte 0x03, 0x25, 0xd8, 0xa9, 0x1d, 0xcb, 0xc5, 0xef
 	.byte 0x0e
 
-LABEL_EFC1BF:
-	call LABEL_EFC39F
+VoiceSlot_LoadAndDispatch:
+	call VoiceSlot_FlagCheck
 	cp w, 0xFF
 	jrl z, VoiceSlot_ReadParamsErrExit
 	cp a, 0x82
@@ -5312,27 +5312,27 @@ LABEL_EFC1BF:
 	cp a, 0x84
 	jrl z, VoiceSlot_ReadParamsErrExit
 	ldb w, 0x0
-	call LABEL_EFC207
-	jp LABEL_EFC1E5
+	call VoiceSlot_CompareRet
+	jp VoiceSlot_DispatchDone
 
 VoiceSlot_ReadParamsErrExit:
 	ldb w, 0xFF
 
-LABEL_EFC1E5:
+VoiceSlot_DispatchDone:
 	ret
 
-LABEL_EFC1E6:
+VoiceSlot_DispatchRet:
 	push_sd16w 0x58, 0x0D
-	call LABEL_EFC1BF
+	call VoiceSlot_LoadAndDispatch
 	popw_dd16 0x58, 0x0D
 	ret
 
-LABEL_EFC1F3:
+VoiceSlot_CompareAndBranch:
 	.byte 0x20, 0x01, 0x1d, 0x07, 0xc2, 0xef, 0x0e, 0xd1
 	.byte 0x58, 0x0d, 0x04, 0x1d, 0xf3, 0xc1, 0xef, 0xf1
 	.byte 0x58, 0x0d, 0x06, 0x0e
 
-LABEL_EFC207:
+VoiceSlot_CompareRet:
 	ld h, w
 	call VoiceSlot_ComputeWordIndex
 	pushw bc
@@ -5354,19 +5354,19 @@ LABEL_EFC207:
 	cps b, 0
 	jrl nz, VoiceSlot_DecCountLoop
 
-LABEL_EFC241:
+VoiceSlot_StoreAndAdvance:
 	inc 1, ix
 	cp ix, 0xFF
-	jrl ugt, LABEL_EFC2AE
+	jrl ugt, VoiceSlot_LoadFromTableBody
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, c
 	cp a, 0x81
-	jrl z, LABEL_EFC28A
-	call LABEL_EFC780
+	jrl z, VoiceSlot_CopyBlockDone
+	call VoiceSlot_StatusCheck
 	cp w, 0xFF
-	jrl z, LABEL_EFC241
+	jrl z, VoiceSlot_StoreAndAdvance
 
-LABEL_EFC261:
+VoiceSlot_CopyBlock:
 	ld wa, ix
 	push xde
 	ld xde, 0xC9E
@@ -5379,32 +5379,32 @@ LABEL_EFC261:
 	xor w, w
 	stda8 3532, c
 	popw bc
-	jp LABEL_EFC357
+	jp VoiceSlot_SubrRetNZ
 
-LABEL_EFC28A:
+VoiceSlot_CopyBlockDone:
 	pushw wa
 	pushw bc
 	push xhl
 	push xix
 	push xiy
 	push xiz
-	call LABEL_EFC3AA
+	call VoiceSlot_FlagCheckBody
 	cp w, 0xFF
-	jrl z, LABEL_EFC2A4
+	jrl z, VoiceSlot_LoadFromTable
 	cp a, 0x82
-	jrl z, LABEL_EFC2A4
+	jrl z, VoiceSlot_LoadFromTable
 	incdi16 1, 3416
 
-LABEL_EFC2A4:
+VoiceSlot_LoadFromTable:
 	pop xiz
 	pop xiy
 	pop xix
 	pop xhl
 	popw bc
 	popw wa
-	jp LABEL_EFC261
+	jp VoiceSlot_CopyBlock
 
-LABEL_EFC2AE:
+VoiceSlot_LoadFromTableBody:
 	push xde
 	ld xde, 0xC9E
 	ld_sriw3 IY, 0x07, 0xE8, 0xF8
@@ -5413,25 +5413,25 @@ LABEL_EFC2AE:
 	ldda32 xhl, 4349
 	ld iy, (xhl + 3)
 	cp iy, 0xFFFF
-	jrl z, LABEL_EFC354
+	jrl z, VoiceSlot_SubrDone
 	call VoiceSlot_UpdateCurrentPointer
 	ldda32 xhl, 4349
 	lds ix, 4
-	jp LABEL_EFC241
+	jp VoiceSlot_StoreAndAdvance
 
 VoiceSlot_DecCountLoop:
 	dec 1, ix
 	cps ix, 4
-	jrl le, LABEL_EFC329
+	jrl le, VoiceSlot_SubroutineBody
 	ld_srib3 A, 0x07, 0xEC, 0xF0
 	inc 1, c
 	cp a, 0x81
-	jrl z, LABEL_EFC321
-	call LABEL_EFC780
+	jrl z, VoiceSlot_SubroutineTable
+	call VoiceSlot_StatusCheck
 	cp w, 0xFF
 	jrl z, VoiceSlot_DecCountLoop
 
-LABEL_EFC2F8:
+VoiceSlot_CallSubroutine:
 	ld wa, ix
 	push xde
 	ld xde, 0xC9E
@@ -5444,13 +5444,13 @@ LABEL_EFC2F8:
 	xor w, w
 	stda8 3532, c
 	popw bc
-	jp LABEL_EFC357
+	jp VoiceSlot_SubrRetNZ
 
-LABEL_EFC321:
-	call LABEL_EFC358
-	jp LABEL_EFC2F8
+VoiceSlot_SubroutineTable:
+	call VoiceSlot_SubrRetZ
+	jp VoiceSlot_CallSubroutine
 
-LABEL_EFC329:
+VoiceSlot_SubroutineBody:
 	push xde
 	ld xde, 0xC9E
 	ld_sriw3 IY, 0x07, 0xE8, 0xF8
@@ -5459,27 +5459,27 @@ LABEL_EFC329:
 	ldda32 xhl, 4349
 	ld iy, (xhl + 1)
 	cps iy, 0
-	jrl z, LABEL_EFC354
+	jrl z, VoiceSlot_SubrDone
 	call VoiceSlot_UpdateCurrentPointer
 	ldda32 xhl, 4349
 	ldw ix, 0x100
 	jp VoiceSlot_DecCountLoop
 
-LABEL_EFC354:
+VoiceSlot_SubrDone:
 	ldb w, 0xFF
 	popw bc
 
-LABEL_EFC357:
+VoiceSlot_SubrRetNZ:
 	ret
 
-LABEL_EFC358:
+VoiceSlot_SubrRetZ:
 	push xiy
 	ld xiy, 0xD58
 	cpw (xiy), 0x0
-	jrl z, LABEL_EFC367
+	jrl z, VoiceSlot_AdvancePointer
 	decm 1, (xiy)
 
-LABEL_EFC367:
+VoiceSlot_AdvancePointer:
 	pop xiy
 	ret
 
@@ -5502,17 +5502,17 @@ VoiceSlot_ReadCurrentParams:
 	xor w, w
 	ret
 
-LABEL_EFC39F:
+VoiceSlot_FlagCheck:
 	stdi16 3573, 1
-	call LABEL_EFC3B5
+	call VoiceSlot_FlagCheckDone
 	ret
 
-LABEL_EFC3AA:
+VoiceSlot_FlagCheckBody:
 	stdi16 3573, 2
-	call LABEL_EFC3B5
+	call VoiceSlot_FlagCheckDone
 	ret
 
-LABEL_EFC3B5:
+VoiceSlot_FlagCheckDone:
 	call VoiceSlot_ComputeWordIndex
 	xor w, w
 	push xde
@@ -5530,27 +5530,27 @@ LABEL_EFC3B5:
 	and iy, 0xFF
 	addda16 xiy, 3573
 	cp iy, 0xFF
-	jrl ugt, LABEL_EFC3F9
+	jrl ugt, VoiceSlot_FinalCheck
 	ld_srib3 A, 0x07, 0xEC, 0xF4
-	jp LABEL_EFC418
+	jp VoiceSlot_FinalRetNZ
 
-LABEL_EFC3F9:
+VoiceSlot_FinalCheck:
 	ld iy, (xhl + 3)
 	cp iy, 0xFFFF
-	jrl z, LABEL_EFC416
+	jrl z, VoiceSlot_FinalDone
 	call VoiceSlot_UpdateCurrentPointer
 	ldda32 xhl, 4349
 	lds iy, 5
 	ld_srib3 A, 0x07, 0xEC, 0xF4
-	jp LABEL_EFC418
+	jp VoiceSlot_FinalRetNZ
 
-LABEL_EFC416:
+VoiceSlot_FinalDone:
 	ldb w, 0xFF
 
-LABEL_EFC418:
+VoiceSlot_FinalRetNZ:
 	ret
 
-LABEL_EFC419:
+VoiceSlot_FinalRetZ:
 	.byte 0x1d, 0x69, 0xc3, 0xef, 0x28, 0xda, 0xa9, 0x1d
 	.byte 0xd1, 0xc4, 0xef, 0xc8, 0x8c, 0x48, 0xcc, 0x88
 	.byte 0x0e, 0xcd, 0x89, 0x3d, 0x3e, 0x3b, 0x1d, 0x9f
@@ -5655,7 +5655,7 @@ VoiceSlot_ComputeWordIndex:
 	popw wa
 	ret
 
-LABEL_EFC6C6:
+VoiceSlot_ComputeIndex:
 	pushw wa
 	ldda8 a, 3822
 	dec 1, a
@@ -5668,7 +5668,7 @@ LABEL_EFC6C6:
 	popw wa
 	ret
 
-LABEL_EFC6DC:
+VoiceSlot_IndexDone:
 	.byte 0xd8, 0xd0, 0xf1, 0x64, 0x0d, 0x41, 0xf1, 0x62
 	.byte 0x0d, 0x50, 0x1d, 0x69, 0xc3, 0xef, 0xc9, 0xcf
 	.byte 0x81, 0x7e, 0x0e, 0x00, 0xda, 0xa9, 0x1d, 0xd1
@@ -5692,17 +5692,17 @@ LABEL_EFC6DC:
 	.byte 0x00, 0x7e, 0xd6, 0xff, 0xb4, 0x00, 0x09, 0x1d
 	.byte 0x78, 0xf0, 0xef, 0x0e
 
-LABEL_EFC780:
+VoiceSlot_StatusCheck:
 	bit 7, a
 	jrl z, VoiceSlot_SetFFAndContinue
 	cp a, 0x83
 	jrl z, VoiceSlot_SetFFAndContinue
 	cp a, 0x90
-	jrl nc, LABEL_EFC798
+	jrl nc, VoiceSlot_StatusActive
 	cp a, 0x86
 	jrl ugt, VoiceSlot_SetFFAndContinue
 
-LABEL_EFC798:
+VoiceSlot_StatusActive:
 	cp a, 0xD3
 	jrl ugt, VoiceSlot_SetFFAndContinue
 	ld w, a
@@ -5710,15 +5710,15 @@ LABEL_EFC798:
 	cp w, 0xA0
 	jrl z, VoiceSlot_SetFFAndContinue
 	ldb w, 0x0
-	jp LABEL_EFC7B1
+	jp VoiceSlot_StatusDone
 
 VoiceSlot_SetFFAndContinue:
 	ldb w, 0xFF
 
-LABEL_EFC7B1:
+VoiceSlot_StatusDone:
 	ret
 
-LABEL_EFC7B2:
+VoiceSlot_StatusRet:
 	.byte 0xc1, 0x65, 0x0d, 0x3f, 0x00, 0x7e, 0x1d, 0x00
 	.byte 0x1d, 0x69, 0xc3, 0xef, 0xc9, 0xcf, 0x81, 0x76
 	.byte 0x0b, 0x00, 0x1d, 0x9f, 0xc3, 0xef, 0xc1, 0x57
@@ -6004,13 +6004,13 @@ LABEL_EFC7B2:
 	.byte 0xdb, 0xec, 0x02, 0xeb, 0x12, 0x3c, 0x44, 0x97
 	.byte 0xd0, 0xef, 0x00, 0xe3, 0x07, 0xf0, 0xec, 0x23
 	.byte 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EFD08E:
+VoiceState_SaveAndRestore:
 	.byte 0x1d, 0xae, 0xef, 0xef
 	.byte 0x1d, 0x3f, 0xf0, 0xef, 0x0e, 0x78, 0xf0, 0xef
 	.byte 0x00
-	.long LABEL_EFEE71
-	.long LABEL_EFEE71
-	.long LABEL_EFD08E
+	.long DisplayStr_BytecodeBlock_C
+	.long DisplayStr_BytecodeBlock_C
+	.long VoiceState_SaveAndRestore
 	.byte 0x00, 0x05, 0x05
 	.byte 0x0f, 0x00, 0x06, 0x04, 0x05, 0x03, 0x07, 0x02
 	.byte 0x07, 0x01, 0x07, 0x07, 0x07
@@ -6053,15 +6053,15 @@ VoiceSlot_RestoreState:
 	push xhl
 	push xiz
 	push xiy
-	call LABEL_EFD134
-	call LABEL_EFD16B
+	call VoiceState_RestoreEntry
+	call VoiceState_RestoreDone
 	pop xiy
 	pop xiz
 	pop xhl
 	popw wa
 	ret
 
-LABEL_EFD11C:	.ascii "(;>="
+VoiceState_DataBlock1:	.ascii "(;>="
 	call	15716660
 	ld	a, (xhl+3)
 	stda8	3415, a
@@ -6072,7 +6072,7 @@ LABEL_EFD11C:	.ascii "(;>="
 	popw	wa
 	.byte 0x0e
 
-LABEL_EFD134:
+VoiceState_RestoreEntry:
 	xor w, w
 	and a, 0x7
 	sla a, 3
@@ -6091,14 +6091,14 @@ LABEL_EFD134:
 	ldto_lerp XIY, 0x38
 	ret
 
-LABEL_EFD16B:
+VoiceState_RestoreDone:
 	ld wa, (xhl + 4)
 	stda16 3416, xwa
 	ld wa, (xhl + 6)
 	stda16 3418, xwa
 	ret
 
-LABEL_EFD17A:	.ascii ";>=<"
+VoiceState_DataBlock2:	.ascii ";>=<"
 	.byte 0xc9, 0xcc, 0x07, 0xc9
 	.byte 0xec, 0x03, 0xc8, 0xd0, 0xe8, 0x13, 0xe8, 0xc8
 	.byte 0xff, 0x0d, 0x00, 0x00, 0xe8, 0x8c, 0x1d, 0xb4
@@ -6370,7 +6370,7 @@ LABEL_EFD17A:	.ascii ";>=<"
 	.byte 0xaf, 0xef, 0x49, 0xd1, 0x1a, 0x37, 0x20, 0xd1
 	.byte 0x05, 0x11, 0xf0, 0x72, 0x03, 0x00, 0xd9, 0x1c
 	.byte 0xec, 0x0e
-LABEL_EFD9BC:
+SubCPU_ToneParamDisplay:
 	.byte 0x3c, 0x3d, 0xc8, 0x33, 0x07, 0x7e
 	.byte 0x43, 0x00, 0xc1, 0x65, 0x0d, 0x21, 0xc9, 0xd8
 	.byte 0x76, 0x3a, 0x00, 0xc9, 0xdb, 0x76, 0x35, 0x00
@@ -6394,7 +6394,7 @@ LABEL_EFD9BC:
 	.byte 0x0e, 0x3c, 0xdb, 0xd3, 0xc1, 0x60, 0x0d, 0x27
 	.byte 0xcf, 0x69, 0x44, 0xa0, 0xf1, 0x00, 0x00, 0xc3
 	.byte 0x07, 0xf0, 0xec, 0x27, 0xdb, 0xec, 0x02, 0x44
-	.long LABEL_EFDB40
+	.long SubCPU_ToneDispatch
 	.byte 0xe3, 0x07, 0xf0, 0xec
 	.byte 0x23, 0xeb, 0xcf, 0xff, 0xff, 0xff, 0xff, 0x76
 	.byte 0x19, 0x00, 0xd8, 0xd0, 0xc1, 0x1c, 0x11, 0x21
@@ -6417,7 +6417,7 @@ LABEL_EFD9BC:
 	.byte 0x45, 0x81, 0x11, 0x00, 0x00, 0xd9, 0xab, 0x85
 	.byte 0x11, 0x1d, 0x07, 0x5c, 0xef, 0x0e, 0x50, 0x41
 	.ascii "N      :KEY SHIFT:TUNING   :BEND SENS:"
-LABEL_EFDB40:
+SubCPU_ToneDispatch:
 	ret_cc_ri xiz, 9
 	.byte 0x00, 0x00, 0xea, 0xf9, 0x00, 0x00, 0xd0, 0xf9
 	.byte 0x00, 0x00, 0x6c, 0xfa, 0x00, 0x00, 0x86, 0xfa
@@ -6435,23 +6435,23 @@ LABEL_EFDB40:
 	.byte 0xd7, 0x26, 0x03, 0x1d, 0x08, 0xdc, 0xef, 0xf1
 	.byte 0x1c, 0x11, 0x41, 0x1d, 0x5b, 0xda, 0xef, 0x1d
 	.byte 0x9f, 0xda, 0xef, 0x1d, 0x0a, 0xda, 0xef, 0x0e
-LABEL_EFDBC2:
+SubCPU_ToneHandler_A:
 	; --- Dispatch: set flag, load A, 3-way bounds selection, clamp+calls (70 bytes) ---
 	.byte 0xc1, 0xe2, 0xe3, 0x3e, 0x08		; or (0xE3E2), 0x08  [C1 prefix]
 	ldda8	a, 4381
 	xor l, l
 	ldb h, 0x7F
 	.byte 0xc1, 0x1c, 0x11, 0x3f, 0x01		; cp (0x111C), 0x01  [C1 prefix]
-	jrl nz, LABEL_EFDBDF
+	jrl nz, SubCPU_ToneHandler_B
 	ldb l, 0x34
 	ldb h, 0x4C
 	jp SubCPU_CallRoutine
-LABEL_EFDBDF:
+SubCPU_ToneHandler_B:
 	.byte 0xc1, 0x1c, 0x11, 0x3f, 0x03		; cp (0x111C), 0x03  [C1 prefix]
-	jrl nz, LABEL_EFDBED
+	jrl nz, SubCPU_ToneLoadAndStore
 	ldb h, 0x0C
 	jp SubCPU_CallRoutine
-LABEL_EFDBED:
+SubCPU_ToneLoadAndStore:
 	.byte 0xc1, 0x1c, 0x11, 0x3f, 0x02		; cp (0x111C), 0x02  [C1 prefix]
 	jrl nz, SubCPU_CallRoutine
 	ldb h, 0xFF
@@ -6461,10 +6461,10 @@ SubCPU_CallRoutine:
 	call 0xEFDA9F
 	call 0xEFDA0A
 	ret
-LABEL_EFDC08:
+SubCPU_ToneStoreDigits:
 	; --- Clamp/adjust: inc/dec A within [L..H] based on W bit 7 (34 bytes) ---
 	bit 0x07, w
-	jrl nz, LABEL_EFDC20
+	jrl nz, SubCPU_ToneFormatValue
 	cp a, h
 	jrl nc, PerfMode_NullRet
 	inc 1, a
@@ -6472,7 +6472,7 @@ LABEL_EFDC08:
 	jrl ule, PerfMode_NullRet
 	ld a, h
 	jp PerfMode_NullRet
-LABEL_EFDC20:
+SubCPU_ToneFormatValue:
 	dec 1, a
 	cp a, l
 	jrl ge, PerfMode_NullRet
@@ -6481,12 +6481,12 @@ PerfMode_NullRet:
 	ret
 
 
-LABEL_EFDC2A:
+SubCPU_ToneFormatDone:
 	.byte 0xc8, 0x33, 0x07, 0x76, 0x04, 0x00, 0x1b, 0xa5
 	.byte 0xdc, 0xef, 0xc1, 0xd2, 0x0d, 0x20, 0x20, 0x06
 	.byte 0x45, 0x1e, 0x11, 0x00, 0x00, 0x1d, 0xd0, 0xbd
 	.byte 0xef
-LABEL_EFDC43:
+SubCPU_ToneClearRegion:
 	.byte 0xc1, 0xd3, 0x0d, 0x3e, 0x01, 0xc9, 0xd1
 	.byte 0xf1, 0xd2, 0x0d, 0x41, 0xf1, 0x55, 0x0d, 0x00
 	.byte 0xff, 0x1d, 0x86, 0xd2, 0xef, 0xc8, 0xd8, 0x7e
@@ -6506,19 +6506,19 @@ PerfMode_ParamHandler_11:
 	.byte 0x1f, 0x00, 0x7b, 0x11, 0x00, 0xdb, 0xec, 0x02
 	.byte 0x3c, 0x44, 0xc1, 0xdc, 0xef, 0x00, 0xe3, 0x07
 	.byte 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
-LABEL_EFDCC1:
+SubCPU_ToneParamRet:
 	.long UIDisp_DefaultInputHandler
 	.long LABEL_EFDB94
 	.long DefaultHandler_Ret
-	.long LABEL_EFDBC2
+	.long SubCPU_ToneHandler_A
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long SoundEvt_ShortPacketHandler
 	.long SoundEvt_LongPacketHandler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long LABEL_EFDC2A
-	.long LABEL_EFDC43
+	.long SubCPU_ToneFormatDone
+	.long SubCPU_ToneClearRegion
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -6527,7 +6527,7 @@ LABEL_EFDCC1:
 	.long UIDisp_DefaultInputHandler
 	.long LABEL_EFDB94
 	.long DefaultHandler_Ret
-	.long LABEL_EFDBC2
+	.long SubCPU_ToneHandler_A
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long SoundEvt_ShortPacketHandler
@@ -6868,18 +6868,18 @@ LABEL_EFDCC1:
 	.byte 0xb3, 0xe8, 0x0e
 
 
-LABEL_EFE765:
+OscScope_HandlerTable:
 	.long SndHandler_DefaultRet
 	.long SndHandler_DefaultRet
-	.long LABEL_EFE7A6
-	.long LABEL_EFE7AB
-	.long LABEL_EFE7B0
-	.long LABEL_EFE7B0
-	.long LABEL_EFE7B5
-	.long LABEL_EFE7BA
+	.long OscScope_Handler_2
+	.long OscScope_Handler_3
+	.long OscScope_Handler_4
+	.long OscScope_Handler_4
+	.long OscScope_Handler_6
+	.long OscScope_Handler_7
 	.long SndHandler_DefaultRet
 	.long SndHandler_DefaultRet
-	.long LABEL_EFE7A6
+	.long OscScope_Handler_2
 	.long SndHandler_DefaultRet
 	.long SndHandler_DefaultRet
 	.long SndHandler_DefaultRet
@@ -6888,17 +6888,17 @@ LABEL_EFE765:
 	.byte 0xe7, 0xef, 0x00
 SndHandler_DefaultRet:
 	.byte 0x0e
-LABEL_EFE7A6:
+OscScope_Handler_2:
 	.byte 0x1d, 0xbf, 0xe7, 0xef
 	.byte 0x0e
-LABEL_EFE7AB:
+OscScope_Handler_3:
 	.byte 0x1d, 0xbf, 0xe7, 0xef, 0x0e
-LABEL_EFE7B0:
+OscScope_Handler_4:
 	.byte 0x1d, 0xbf
 	.byte 0xe7, 0xef, 0x0e
-LABEL_EFE7B5:
+OscScope_Handler_6:
 	.byte 0x1d, 0xbf, 0xe7, 0xef, 0x0e
-LABEL_EFE7BA:
+OscScope_Handler_7:
 	.byte 0x1d, 0xbf, 0xe7, 0xef, 0x0e, 0xe1, 0x14, 0x11
 	.byte 0x24, 0xc1, 0xc4, 0x0e, 0x25, 0xcd, 0xec, 0x02
 	.byte 0xcc, 0xd4, 0xea, 0x12, 0xea, 0x84, 0x84, 0x3c
@@ -6909,12 +6909,12 @@ LABEL_EFE7BA:
 	.byte 0x0e, 0x28, 0x3b, 0xc1, 0xba, 0x0e, 0x21, 0x20
 	.byte 0x60, 0xc8, 0x49, 0xc1, 0xb9, 0x0e, 0x27, 0xce
 	.byte 0xd6, 0xdb, 0x80, 0xf1, 0xc2, 0x0e
-LABEL_EFE808:
+OscScope_DrawWaveform:
 	.byte 0x50, 0x5b
 	.byte 0x48, 0x0e, 0xc1, 0x70, 0x0f, 0x3f, 0x30, 0x7e
 	.byte 0x74, 0x00, 0xd1, 0xc2, 0x0e, 0x20, 0xc1, 0x70
 	.byte 0x0f, 0x27, 0xce, 0xd6, 0xdb, 0xa0
-LABEL_EFE820:
+OscScope_UpdateDisplay:
 	.byte 0xd8, 0xcf
 	.byte 0x30, 0x00, 0x76, 0x4e, 0x00, 0x27, 0x60, 0xcf
 	.byte 0x51, 0xc8, 0xcf, 0x30, 0x76, 0x17, 0x00, 0xd8
@@ -6929,7 +6929,7 @@ LABEL_EFE820:
 	.byte 0xd9, 0x1c, 0xf7, 0x1d, 0x26, 0xec, 0xef, 0xf1
 	.byte 0xc2, 0x0e, 0x02, 0x00, 0x00, 0xf1, 0x70, 0x0f
 	.byte 0x00, 0x00, 0x1b, 0xc7, 0xe8, 0xef
-LABEL_EFE888:
+OscScope_RefreshLoop:
 	.byte 0xd1, 0xc2
 	.byte 0x0e, 0x20, 0x27, 0x60, 0xcf, 0x51, 0xc9, 0x8b
 	.byte 0xc8, 0x8d, 0xcb, 0xd8, 0x76, 0x1d, 0x00, 0x21
@@ -6952,7 +6952,7 @@ LABEL_EFE888:
 	.byte 0xd9, 0x61, 0xcb, 0xda
 	.byte 0x7b, 0x12, 0x00, 0xc9, 0xcf, 0x81, 0x76, 0xe3
 	.byte 0xff, 0xc9, 0xcf, 0x82, 0x76, 0x0c, 0x00
-LABEL_EFE921:
+OscScope_RenderBlock:
 	.byte 0xc9
 	.byte 0xcf, 0x84, 0x76, 0x06, 0x00, 0x20, 0xff, 0x1b
 	.byte 0x2f, 0xe9, 0xef, 0x20, 0x00, 0x5b, 0x28, 0x21
@@ -6967,7 +6967,7 @@ LABEL_EFE921:
 	.byte 0x95, 0x0e, 0x00, 0x00, 0x31, 0x10, 0x00, 0xd8
 	.byte 0xd0, 0xf5, 0xf1, 0x50, 0xd9, 0x1c, 0xfa, 0x0e
 	.byte 0x45, 0x55, 0x0e, 0x00, 0x00, 0x44, 0x59
-LABEL_EFE989:
+OscScope_FinalizeRender:
 	.byte 0x0e
 	.byte 0x00, 0x00, 0x23, 0x01, 0xc1, 0x52, 0x0e, 0x25
 	.byte 0xcd, 0xec, 0x01, 0x1d, 0x02, 0xea, 0xef, 0xc1
@@ -6998,31 +6998,31 @@ LABEL_EFE989:
 
 VoiceBank_ProcessCommand:
 	ld xix, 0xEB5
-	call LABEL_EFEA91
+	call VoiceBank_LoadLerpState
 	lda_dpi XBC, 0xF0
 	cp a, 0x81
-	jrl z, LABEL_EFEA73
+	jrl z, VoiceBank_CallAndReturn
 	cp a, 0x82
-	jrl z, LABEL_EFEA73
+	jrl z, VoiceBank_CallAndReturn
 	cp a, 0x84
-	jrl nz, LABEL_EFEA7B
+	jrl nz, VoiceBank_CallAndLoop
 
-LABEL_EFEA73:
-	call LABEL_EFEAC1
-	jp LABEL_EFEA90
+VoiceBank_CallAndReturn:
+	call VoiceBank_UpdateLerpState
+	jp VoiceBank_Ret
 
-LABEL_EFEA7B:
-	call LABEL_EFEAC1
-	call LABEL_EFEA91
+VoiceBank_CallAndLoop:
+	call VoiceBank_UpdateLerpState
+	call VoiceBank_LoadLerpState
 	bit 7, a
-	jrl nz, LABEL_EFEA90
+	jrl nz, VoiceBank_Ret
 	lda_dpi XBC, 0xF0
-	jp LABEL_EFEA7B
+	jp VoiceBank_CallAndLoop
 
-LABEL_EFEA90:
+VoiceBank_Ret:
 	ret
 
-LABEL_EFEA91:
+VoiceBank_LoadLerpState:
 	push xiz
 	ldda32 xiz, 4349
 	ldfr_lerp XIZ, 0x38
@@ -7030,7 +7030,7 @@ LABEL_EFEA91:
 	push_lerp 0x38
 	push xix
 	ldda16 xhl, 10431
-	call LABEL_EFED00
+	call DisplayStr_ComputeTableAddr
 	ldda32 xiy, 4349
 	ldda16 xix, 10433
 	ld_srib3 A, 0x07, 0xF4, 0xF0
@@ -7042,7 +7042,7 @@ LABEL_EFEA91:
 	pop xiz
 	ret
 
-LABEL_EFEAC1:
+VoiceBank_UpdateLerpState:
 	push xiz
 	ldda32 xiz, 4349
 	ldfr_lerp XIZ, 0x38
@@ -7051,19 +7051,19 @@ LABEL_EFEAC1:
 	push xix
 	ldda16 xwa, 10433
 	cp wa, 0xFF
-	jrl nz, LABEL_EFEAF2
+	jrl nz, VoiceBank_IncrementIndex
 	ldda16 xhl, 10431
-	call LABEL_EFED00
+	call DisplayStr_ComputeTableAddr
 	ldda32 xhl, 4349
 	ld hl, (xhl + 3)
 	stda16 10431, xhl
 	lds wa, 5
-	jp LABEL_EFEAF4
+	jp VoiceBank_StoreIndex
 
-LABEL_EFEAF2:
+VoiceBank_IncrementIndex:
 	inc 1, wa
 
-LABEL_EFEAF4:
+VoiceBank_StoreIndex:
 	stda16 10433, xwa
 	pop xix
 	pop_lerp 0x38
@@ -7073,7 +7073,7 @@ LABEL_EFEAF4:
 	pop xiz
 	ret
 
-LABEL_EFEB06:
+DisplayStr_BytecodeBlock_A:
 	.byte 0xf1, 0xf6, 0x0e, 0x00, 0x00, 0xc1, 0xc1, 0x0e
 	.byte 0x23, 0xcb, 0xec, 0x01, 0xdb, 0xd3, 0xc1, 0xc4
 	.byte 0x0e, 0x27, 0xdb, 0xec, 0x02, 0xd8, 0xd0, 0xe1
@@ -7140,7 +7140,7 @@ LABEL_EFEB06:
 	.byte 0x5b, 0xf1, 0xc1, 0x28, 0x06, 0xf1, 0xbf, 0x28
 	.byte 0x06, 0x0e
 
-LABEL_EFED00:
+DisplayStr_ComputeTableAddr:
 	dec 1, hl
 	extz xhl
 	sla xhl, 8
@@ -7149,7 +7149,7 @@ LABEL_EFED00:
 	xor xhl, xhl
 	ret
 
-LABEL_EFED12:
+DisplayStr_BytecodeBlock_B:
 	.byte 0x1d, 0x8b, 0x5b, 0xef, 0x1d, 0x71, 0xf4, 0xef
 	.byte 0x44, 0xca, 0x0e, 0x00, 0x00, 0x30, 0x20, 0x20
 	.byte 0x31, 0x0f, 0x00, 0xf5, 0xf1, 0x50, 0xd9, 0x1c
@@ -7173,7 +7173,7 @@ LABEL_EFED12:
 	.byte 0x00, 0x44, 0xcf, 0x0e, 0x00, 0x00, 0xd9, 0xae
 	.byte 0x85, 0x11, 0x1d, 0x52, 0x5c, 0xef, 0x1d, 0x75
 	.byte 0xed, 0xef, 0x1d, 0x07, 0x5c, 0xef, 0x0e
-LABEL_EFEDC1:
+DisplayStr_RhythmLabel:
 	.byte 0x20
 	.ascii "RHYTHM   )"
 	.byte 0x1d, 0x71, 0xf4, 0xef, 0x45, 0xc1
@@ -7198,10 +7198,10 @@ LABEL_EFEDC1:
 	.byte 0xef, 0x00, 0x44, 0xd8, 0x0e, 0x00, 0x00, 0xe8
 	.byte 0xd0, 0xc1, 0x28, 0x37, 0x21, 0xe8, 0xec, 0x03
 	.byte 0xe8, 0x85, 0xd9, 0xac, 0x95, 0x11, 0x0e
-LABEL_EFEE71:
+DisplayStr_BytecodeBlock_C:
 	.byte 0x1d
 	.byte 0x8b, 0x5b, 0xef, 0x1d, 0x71, 0xf4, 0xef, 0x45
-	.long LABEL_EFEDC1
+	.long DisplayStr_RhythmLabel
 	.byte 0x44, 0xcf, 0x0e, 0x00
 	.byte 0x00, 0x31, 0x09, 0x00, 0x85, 0x11, 0x1d, 0x52
 	.byte 0x5c, 0xef, 0x1d, 0x53, 0xee, 0xef, 0x1d, 0x07
@@ -7218,14 +7218,14 @@ LABEL_EFEE71:
 	.ascii "                TEMPO  “=              "
 	.byte 0x1d
 	.byte 0x8b, 0x5b, 0xef, 0x1d, 0x71, 0xf4, 0xef, 0x45
-	.long LABEL_EFEF3A
+	.long DisplayStr_TempoString
 	.byte 0xc1, 0x5a, 0xfc, 0x3f
 	.byte 0x07, 0x7e, 0x0d, 0x00, 0xc1, 0x5b, 0xfc, 0x3f
 	.byte 0x02, 0x7e, 0x05, 0x00, 0x45, 0x53, 0xef, 0xef
 	.byte 0x00, 0x44, 0xcf, 0x0e, 0x00, 0x00, 0x31, 0x19
 	.byte 0x00, 0x85, 0x11, 0x1d, 0x52, 0x5c, 0xef, 0x1d
 	.byte 0xe6, 0xf3, 0xef, 0x1d, 0x07, 0x5c, 0xef, 0x0e
-LABEL_EFEF3A:	.ascii "  TEMPO  "
+DisplayStr_TempoString:	.ascii "  TEMPO  "
 	.byte 0x15
 	.ascii "=                TEMPO  “=              "
 	.byte 0x1d, 0x8b, 0x5b, 0xef, 0x1d, 0x71
@@ -7251,7 +7251,7 @@ LABEL_EFEF3A:	.ascii "  TEMPO  "
 	ld	(xix+2), a
 	ret
 
-LABEL_EFEFDA:
+DisplayStr_FillDashes:
 	ld xix, 0xECA
 	ldb a, 0x2D
 	ld (xix), a
@@ -7259,7 +7259,7 @@ LABEL_EFEFDA:
 	ld (xix + 2), a
 	ret
 
-LABEL_EFEFEA:
+DisplayStr_BytecodeBlock_D:
 	.byte 0x1d, 0x8b, 0x5b, 0xef, 0x1d, 0xae, 0xef, 0xef
 	.byte 0xc1, 0x23, 0x37, 0x26, 0xc1, 0x22, 0x37, 0x27
 	.byte 0xc1, 0xf5, 0x0e, 0x26, 0xf1, 0xf7, 0x90, 0x00
@@ -7269,7 +7269,7 @@ LABEL_EFEFEA:
 	.byte 0x0d, 0x00, 0x85, 0x11, 0x21, 0x20, 0xf5, 0xf0
 	.byte 0x41, 0x1d, 0x07, 0x5c, 0xef, 0x0e
 
-LABEL_EFF028:
+DisplayStr_ClearRegion:
 	pushw wa
 	pushw bc
 	push xix
@@ -7277,16 +7277,16 @@ LABEL_EFF028:
 	ldw bc, 0x1B
 	ldb a, 0x20
 
-LABEL_EFF035:
+DisplayStr_ClearLoop:
 	lda_dpi XBC, 0xF0
-	djnz xbc, LABEL_EFF035
+	djnz xbc, DisplayStr_ClearLoop
 	pop xix
 	popw bc
 	popw wa
 	ret
 
-LABEL_EFF03F:
-	call LABEL_EFF028
+DisplayStr_StyleSectionInit:
+	call DisplayStr_ClearRegion
 	ld xiy, 0xEFF0A2
 	ld xix, 0xECE
 	xor wa, wa
@@ -7301,32 +7301,32 @@ LABEL_EFF03F:
 	ldb a, 0x20
 	lds bc, 3
 
-LABEL_EFF06C:
+DisplayStr_StyleClearLoop:
 	lda_dpi XBC, 0xF0
-	djnz xbc, LABEL_EFF06C
+	djnz xbc, DisplayStr_StyleClearLoop
 	call Display_UpdateRegion3
 	ret
 
-LABEL_EFF077:
+DisplayStr_BytecodeBlock_E:
 	.byte 0x0e, 0x44, 0xd4, 0x0e, 0x00, 0x00, 0xeb, 0xd3
 	.byte 0xc1, 0x28, 0x37, 0x27, 0xeb, 0xec, 0x03, 0x45
-	.long LABEL_EFF0A2
+	.long DisplayStr_StyleSectionNames
 	.byte 0xf3, 0x07, 0xf4, 0xec
 	.byte 0x35, 0xd9, 0xac, 0x95, 0x11, 0x30, 0x20, 0x20
 	.byte 0xf5, 0xf1, 0x50, 0xf5, 0xf1, 0x50, 0x1d, 0x07
 	.byte 0x5c, 0xef, 0x0e
-LABEL_EFF0A2:	.ascii "        START   STOP    FILL IN1FILL IN2INTRO1  COUNT INENDING1 END     REPEAT  CLEAR   ENDING2 INTRO2  "
+DisplayStr_StyleSectionNames:	.ascii "        START   STOP    FILL IN1FILL IN2INTRO1  COUNT INENDING1 END     REPEAT  CLEAR   ENDING2 INTRO2  "
 	.byte 0x0e, 0x1d, 0x20, 0x5c, 0xef
 	.byte 0x0e
 
 Display_RedrawMenu:
 	ldda16 xwa, 14106
 	cp wa, 0x3E8
-	jrl c, LABEL_EFF123
-	call LABEL_EFEFDA
-	jp LABEL_EFF13F
+	jrl c, Display_RedrawMenu_Extract
+	call DisplayStr_FillDashes
+	jp Display_RedrawMenu_Update
 
-LABEL_EFF123:
+Display_RedrawMenu_Extract:
 	call ParamDigit_ExtractAndFormat
 	ld xiy, 0x1181
 	ld xix, 0xECA
@@ -7336,11 +7336,11 @@ LABEL_EFF123:
 	ldda8 w, 14108
 	ld (xix + 2), wa
 
-LABEL_EFF13F:
+Display_RedrawMenu_Update:
 	call Display_UpdateRegion3
 	ret
 
-LABEL_EFF144:
+Display_BytecodeBlock_F:
 	.byte 0x1d, 0x8b, 0x5b, 0xef, 0x1d, 0x71, 0xf4, 0xef
 	.byte 0x44, 0xca, 0x0e, 0x00, 0x00, 0xbc, 0x09, 0x02
 	.byte 0x20, 0x56, 0x1d, 0x52, 0x5c, 0xef, 0x1d, 0x37
@@ -7452,11 +7452,11 @@ LABEL_EFF144:
 
 SNS_Init_Startup:
 	ld xix, 0xED4
-	call LABEL_EFF526
-	call LABEL_EFF56D
+	call SNS_LoadKeyAndChord
+	call SNS_LoadDurationData
 	ret
 
-LABEL_EFF526:
+SNS_LoadKeyAndChord:
 	xor xhl, xhl
 	ldda8 l, 3437
 	and l, 0xF
@@ -7482,7 +7482,7 @@ LABEL_EFF526:
 	ld (xix + 6), a
 	ret
 
-LABEL_EFF56D:
+SNS_LoadDurationData:
 	ldw wa, 0x2020
 	ld (xix + 7), wa
 	ld (xix + 10), wa
@@ -7498,7 +7498,7 @@ LABEL_EFF56D:
 	ld (xix + 2), wa
 	ret
 
-LABEL_EFF599:	.ascii "  C D"
+StringData_KeyNames:	.ascii "  C D"
 	ld	w, (xwa+68)
 	.byte 0x45, 0x88
 	.ascii "E F FŒG AˆA BˆB                 7    Maj7 aug  min  min7 dim  m7ˆ5 mM7  7sus46    aug7   ˆ5 7 ˆ5 79   7 ˆ9 M79  69   m6   m ˆ5 m79  m69  sus4 7 Œ9 M7ˆ5 M7Œ5 mM7ˆ5   139Œ5  ˆ9 13Œ9 13  ˆ13ˆ9ˆ13Œ9ˆ13   13  ˆ137 Œ11m7 11+7Œ11 add9madd9                                                                                                                  "
@@ -7569,7 +7569,7 @@ LABEL_EFF599:	.ascii "  C D"
 	.byte 0x00, 0xf1, 0xef, 0x0d, 0x00, 0x0a, 0x1d, 0x8b
 	.byte 0x5b, 0xef, 0x1d, 0x28, 0xf0, 0xef, 0xc1, 0xf1
 	.byte 0x10, 0x27, 0xce, 0xd6, 0xdb, 0xec, 0x02, 0x45
-	.long LABEL_EFF939
+	.long StringData_PartNames
 	.byte 0xf3, 0x07, 0xf4, 0xec
 	.byte 0x35, 0x44, 0xd1, 0x0e, 0x00, 0x00, 0xd9, 0xac
 	.byte 0x85, 0x11, 0x45, 0x32, 0xf9, 0xef, 0x00, 0xec
@@ -7579,7 +7579,7 @@ LABEL_EFF599:	.ascii "  C D"
 	.byte 0xd9, 0xab, 0x85, 0x11, 0x1d, 0x07, 0x5c, 0xef
 	.byte 0x0e
 	.ascii "VOLUME="
-LABEL_EFF939:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P13 P14 P15 KBP AC1 AC2 AC3 XXXXDRUM"
+StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P13 P14 P15 KBP AC1 AC2 AC3 XXXXDRUM"
 	.byte 0xc1, 0xef, 0x0d, 0x3f
 	.byte 0x0a, 0x76, 0x09, 0x00, 0xf1, 0xef, 0x0d, 0x00
 	.byte 0x0a, 0x1d, 0x8b, 0x5b, 0xef, 0x1d, 0x28, 0xf0
@@ -7625,7 +7625,7 @@ LABEL_EFF939:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P13 P14 P1
 	.byte 0x00, 0xf1, 0xef, 0x0d, 0x00, 0x0a, 0x1d, 0x8b
 	.byte 0x5b, 0xef, 0x1d, 0x28, 0xf0, 0xef, 0xc1, 0xf1
 	.byte 0x10, 0x27, 0xce, 0xd6, 0xdb, 0xec, 0x02, 0x45
-	.long LABEL_EFF939
+	.long StringData_PartNames
 	.byte 0xf3, 0x07, 0xf4, 0xec
 	.byte 0x35, 0x44, 0xcf, 0x0e, 0x00, 0x00, 0xd9, 0xac
 	.byte 0x85, 0x11, 0x45, 0x5b, 0xfb, 0xef, 0x00, 0xec
@@ -7668,14 +7668,14 @@ LABEL_EFF939:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P13 P14 P1
 	.byte 0xd6, 0xdb, 0xec, 0x02, 0x45, 0x39, 0xf9, 0xef
 	.byte 0x00, 0xf3, 0x07, 0xf4, 0xec, 0x35, 0x44, 0xcf
 	.byte 0x0e, 0x00, 0x00, 0xd9, 0xac, 0x85, 0x11, 0x45
-	.long LABEL_EFFC89
+	.long StringData_EffectLabel
 	.byte 0xec, 0x61, 0xd9, 0xaf
 	.byte 0x85, 0x11, 0xdb
 	and	(xix+4339), iz
 	.byte 0x7e, 0x02, 0x00, 0x27, 0x04, 0x45, 0xc8, 0xfb
 	.byte 0xef, 0x00, 0xf3, 0x07, 0xf4, 0xec, 0x35, 0xd9
 	.byte 0xac, 0x85, 0x11, 0x1d, 0x07, 0x5c, 0xef, 0x0e
-LABEL_EFFC89:	.ascii "EFFECT "
+StringData_EffectLabel:	.ascii "EFFECT "
 	.byte 0xc1
 	.byte 0xef, 0x0d, 0x3f, 0x01, 0x76, 0x09, 0x00, 0xf1
 	.byte 0xef, 0x0d, 0x00, 0x01, 0x1d, 0x8b, 0x5b, 0xef
@@ -7742,11 +7742,11 @@ LABEL_EFFC89:	.ascii "EFFECT "
 	.byte 0x00, 0x01, 0x28, 0x1d, 0x8b, 0x5b, 0xef, 0x48
 	.byte 0xc9, 0xc0, 0x28, 0x1d, 0x28, 0xf0, 0xef, 0x48
 	.byte 0xc8, 0x8f, 0xce, 0xd6, 0xdb, 0xec, 0x04, 0x45
-	.long LABEL_EFFEA1
+	.long StringData_APCModeNames
 	.byte 0xf3, 0x07, 0xf4, 0xec
 	.byte 0x35, 0x44, 0xcf, 0x0e, 0x00, 0x00, 0x31, 0x10
 	.byte 0x00, 0x85, 0x11, 0x1d, 0x07, 0x5c, 0xef, 0x0e
-LABEL_EFFEA1:	.ascii "APC OFF         BASIC           ADVANCED 1      PIANIST         PIANO MODE      ADVANCED 2                                      SPLIT           "
+StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1      PIANIST         PIANO MODE      ADVANCED 2                                      SPLIT           "
 	.byte 0xc1, 0xef, 0x0d, 0x3f, 0x01, 0x76, 0x0b, 0x00
 	.byte 0xf1, 0xef, 0x0d, 0x00, 0x01, 0x28, 0x1d, 0x8b
 	.byte 0x5b, 0xef, 0x48, 0xc9, 0xc0, 0x28, 0x1d, 0x28
