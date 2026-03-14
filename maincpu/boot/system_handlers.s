@@ -1401,7 +1401,7 @@ LABEL_EF14B0:
 	call RhythmBuf_ProcessEvents
 	call SeqEvt_ProcessBuffer
 	call LABEL_FEBF7F
-	call LABEL_FD8D2B
+	call SysEx_ParseAndDispatch
 	cpdi8 1140, 85
 	jr z, LABEL_EF14D7
 

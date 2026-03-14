@@ -5578,7 +5578,7 @@ LABEL_FCA371:
 	jr nz, LABEL_FCA385
 	bitda 4, 37113
 	jr nz, LABEL_FCA385
-	call LABEL_FD8DFD
+	call SeqData_DispatchLoop_Done
 
 LABEL_FCA385:
 	anddi8 37113, 239

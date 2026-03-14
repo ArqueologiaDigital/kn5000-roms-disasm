@@ -2074,7 +2074,7 @@ LABEL_EE2F26:
 	.byte 0x15, 0x00, 0x1b, 0x00, 0x21, 0x00, 0x27, 0x00
 	.byte 0x2d, 0x00, 0x33, 0x00
 LABEL_EE2F8C:
-	.long LABEL_FD8DF9
+	.long SeqData_DispatchLoop_Check
 	.long MidiPkt_ArpChordHandler
 	.long MidiPkt_ArpChordHandler
 	.long MidiPkt_ArpChordHandler
@@ -2083,7 +2083,7 @@ LABEL_EE2F8C:
 	.long MidiPkt_ArpChordHandler
 	.long MidiPkt_ArpChordHandler
 	.long MidiPkt_ArpChordHandler
-	.long LABEL_FD8E82
+	.long SeqData_FormatOutput_Dispatch
 	.long MidiPkt_ArpChordHandler
 	.long MidiPkt_ArpChordHandler
 	.long MidiPkt_ArpChordHandler
@@ -2100,10 +2100,10 @@ LABEL_EE2F8C:
 	.long MidiPkt_ArpChordHandler
 	.long MidiPkt_ArpChordHandler
 	.long MidiPkt_ArpChordHandler
-	.long LABEL_FD8EEC
-	.long LABEL_FD8F2A
-	.long LABEL_FD8EFD
-	.long LABEL_FD9A0C
+	.long SeqData_FormatOutput_CaseC
+	.long SeqData_FormatOutput_Data
+	.long SeqData_FormatOutput_Default
+	.long VoiceParam_AssSwb_MultiBlock_Data
 	.long MidiPkt_DispatchData_Chan4
 	.long MidiPkt_DispatchData_Chan3
 	.long MidiPkt_DispatchData_Chan1
@@ -6524,7 +6524,7 @@ LABEL_EE8448:
 	.long LABEL_FC7B61
 	.long AccWrap_ReplayStop
 	.long LABEL_FDE2A8
-	.long LABEL_F3C8BA
+	.long NotePool_DataBlock_8BA
 	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_RenderE
 	.long DSPCfg_ProcessInput
@@ -6635,7 +6635,7 @@ LABEL_EE8570:
 	.long BitMapOut_ByteData_RenderD
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE858C:
-	.long LABEL_FD8BCC
+	.long MidiCtrl_ModeSwitch_Data
 UIState_EventHandler_Table:
 	.long UIStateEvt_ProcessHandler
 	.long UIStateEvt_StubReturn
@@ -6739,7 +6739,7 @@ UIState_DefaultConfig_B:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x32, 0xb9, 0xfe, 0x00
 	.long AudioInit_ProcessModeChange
 	.byte 0xfd, 0x75, 0xef, 0x00
-	.long LABEL_FD0467
+	.long UIState_DisplayUpdate_BitmapHandler
 	.long BitMapOut_ByteData_RenderC
 	.long FDemoText_ProcessVoiceFlags
 	.byte 0xff, 0xff, 0xff, 0xff

@@ -846,7 +846,7 @@ LABEL_F20B8B:
 	stdi8 4330, 1
 	call LABEL_FC5399
 	call SeqTimer_UpdateTempoReg
-	call LABEL_FD8C93
+	call SwbtWr_ResetAllChannels
 	call SqTrAs_Setup
 	ldda16 xwa, 10357
 	stda16 61854, xwa
