@@ -18792,7 +18792,7 @@ SeqPlay_CheckAndStartPlayback:
 	call AccWrap_PlayModeStart
 	bitda 2, 64848
 	ret z
-	calr SeqTimer_CheckPlaybackCountdown
+	calr SeqTimer_SetPlaybackFlags
 	ret
 
 SeqAcc_SetIndicator_PB:
@@ -20564,7 +20564,7 @@ SeqVoice_DispatchAllEvents:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
 
-LABEL_F44FA2:
+SeqVoice_DispatchLoop:
 	ldto_berp A, 0xFB
 	extz wa
 	calr SeqVoice_DispatchEventToHandler
@@ -20573,7 +20573,7 @@ LABEL_F44FA2:
 	calr SeqVoice_ComputeStatusFlags
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr c, LABEL_F44FA2
+	jr c, SeqVoice_DispatchLoop
 	pop_werp 0xFA
 	ret
 
@@ -20617,32 +20617,32 @@ SeqVoice_ComputeStatusFlags:
 	lds bc, 1
 	ld a, (xsp)
 	and a, 0xF
-	jr z, LABEL_F45025
+	jr z, SeqStatus_CheckState9A
 	slaa bc
 
-LABEL_F45025:
+SeqStatus_CheckState9A:
 	cp e, 0x9A
-	jr z, LABEL_F45097
+	jr z, SeqStatus_Handle9AState
 	ld a, (xsp)
 	inc 1, a
 	extz wa
 	cp e, 0x87
-	jr z, LABEL_F45079
+	jr z, SeqStatus_CheckHighState
 	cp e, 0x85
-	jr z, LABEL_F45079
+	jr z, SeqStatus_CheckHighState
 	cp e, 0x7A
-	jr z, LABEL_F45049
+	jr z, SeqStatus_CheckActiveVoice
 	cp e, 0x78
-	jr z, LABEL_F45049
+	jr z, SeqStatus_CheckActiveVoice
 	cp e, 0x81
 	jr nz, SeqVoice_PostStatusEvent_Inactive
 
-LABEL_F45049:
+SeqStatus_CheckActiveVoice:
 	andda16 xbc, 61854
 	jr z, SeqVoice_PostStatusEvent_Inactive
 	call Part_IsVoiceActive
 	cps hl, 0
-	jr nz, LABEL_F45093
+	jr nz, SeqStatus_SetActiveFlag
 
 SeqVoice_PostStatusEvent_Inactive:
 	ldb c, 0x0
@@ -20661,60 +20661,60 @@ SeqVoice_PostStatus_Loop:
 	inc 2, xsp
 	ret
 
-LABEL_F45079:
+SeqStatus_CheckHighState:
 	ld de, bc
 	andda16 xbc, 10408
-	jr z, LABEL_F45085
+	jr z, SeqStatus_CheckHighFallback
 	ldb c, 0x1
 	jr SeqVoice_PostStatus_Loop
 
-LABEL_F45085:
+SeqStatus_CheckHighFallback:
 	andda16 xde, 61854
 	jr z, SeqVoice_PostStatusEvent_Inactive
 	call Part_IsVoiceActive
 	cps hl, 0
 	jr z, SeqVoice_PostStatusEvent_Inactive
 
-LABEL_F45093:
+SeqStatus_SetActiveFlag:
 	ldb c, 0x2
 	jr SeqVoice_PostStatus_Loop
 
-LABEL_F45097:
+SeqStatus_Handle9AState:
 	andda16 xbc, 9704
 	jr z, SeqVoice_PostStatusEvent_Inactive
 	ldb c, 0x4
 	jr SeqVoice_PostStatus_Loop
 
-LABEL_F450A1:
+AppEvent_HandleChannelEvent:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), a
 	ldda8 e, 36150
 	cp e, 0x9A
-	jrl z, LABEL_F45279
+	jrl z, AppEvent_Handle9AToggle
 	ld c, (xsp + 4)
 	inc 1, c
 	cp e, 0x97
-	jrl z, LABEL_F45231
+	jrl z, AppEvent_HandleRecordState
 	cp e, 0x94
-	jrl z, LABEL_F45231
+	jrl z, AppEvent_HandleRecordState
 	cp e, 0x89
 	jrl z, SeqState_LabelDispatch
 	ldda16 xwa, 61854
 	ldfr_werp WA, 0xFA
 	extz bc
 	cp e, 0x87
-	jr z, LABEL_F45136
+	jr z, AppEvent_HandleStateChange
 	cp e, 0x85
-	jr z, LABEL_F45136
+	jr z, AppEvent_HandleStateChange
 	cp e, 0x7A
-	jr z, LABEL_F450EB
+	jr z, AppEvent_ToggleChannel
 	cp e, 0x78
-	jr z, LABEL_F450EB
+	jr z, AppEvent_ToggleChannel
 	cp e, 0x81
 	jrl nz, AppEvent_PopIzSkip2Ret
 
-LABEL_F450EB:
+AppEvent_ToggleChannel:
 	ld wa, bc
 	call SeqPlay_HandleChannelToggle
 	ldda16 xbc, 61854
@@ -20723,17 +20723,17 @@ LABEL_F450EB:
 	lds de, 1
 	ld a, (xsp + 4)
 	and a, 0xF
-	jr z, LABEL_F45107
+	jr z, AppEvent_ToggleShiftDone
 	slaa de
 
-LABEL_F45107:
+AppEvent_ToggleShiftDone:
 	and de, bc
 	ldb l, 0x0
 	cps de, 0
-	jr z, LABEL_F45111
+	jr z, AppEvent_ToggleSetStatus
 	ldb l, 0x2
 
-LABEL_F45111:
+AppEvent_ToggleSetStatus:
 	ldb h, 0x0
 	extz xhl
 	lds32 xwa, 0
@@ -20748,7 +20748,7 @@ LABEL_F45111:
 	extz wa
 	jr SeqState_Case4
 
-LABEL_F45136:
+AppEvent_HandleStateChange:
 	ldda16 xiz, 10408
 	ld wa, bc
 	call SeqPlay_HandleChannelState
@@ -20846,18 +20846,18 @@ SoundData_HandlerDispatch:
 	call	15861037
 	jrl	140
 
-LABEL_F45231:
+AppEvent_HandleRecordState:
 	extz bc
 	dec 2, bc
 	cps bc, 0
-	jr lt, LABEL_F4523F
+	jr lt, AppEvent_RecordClampLow
 	cp bc, 0xE
-	jr le, LABEL_F45242
+	jr le, AppEvent_RecordDispatch
 
-LABEL_F4523F:
+AppEvent_RecordClampLow:
 	ldw bc, 0xF
 
-LABEL_F45242:
+AppEvent_RecordDispatch:
 	lda_24 xix, 0xe449d2
 	ld_srib3 A, 0x07, 0xF0, 0xE4
 	ld (xsp + 4), a
@@ -20875,28 +20875,28 @@ LABEL_F45242:
 	call BmDrEdit_SaveSequencerState
 	jr AppEvent_PopIzSkip2Ret
 
-LABEL_F45279:
+AppEvent_Handle9AToggle:
 	lds de, 1
 	ld a, (xsp + 4)
 	and a, 0xF
-	jr z, LABEL_F45285
+	jr z, AppEvent_9AShiftDone
 	slaa de
 
-LABEL_F45285:
+AppEvent_9AShiftDone:
 	ld wa, de
 	ldda16 xbc, 9704
 	and wa, bc
-	jr z, LABEL_F45297
+	jr z, AppEvent_9ASetOff
 	ldb l, 0x0
 	cpl de
 	and bc, de
-	jr LABEL_F4529B
+	jr AppEvent_9AStoreAndPost
 
-LABEL_F45297:
+AppEvent_9ASetOff:
 	ldb l, 0x4
 	or bc, de
 
-LABEL_F4529B:
+AppEvent_9AStoreAndPost:
 	stda16 9704, xbc
 	ldb h, 0x0
 	extz xhl
@@ -20920,14 +20920,14 @@ EffEditMain:
 	ld (xsp + 2), xde
 	ldda8 e, 36152
 	cp xbc, 0x1E80012
-	jrl z, LABEL_F45489
+	jrl z, EffEdit_HandleDirectWrite
 	cp xbc, 0x1E80011
-	jrl z, LABEL_F45365
+	jrl z, EffEdit_HandleParamChange
 	cp xbc, 0x1C0000B
 	jrl nz, AppEvent_ReturnZeroEpilogue4
 	ld xwa, (xsp + 2)
 	stda32 10610, xwa
-	calr LABEL_F457CF
+	calr EffEdit_ValidateAndReadParams
 	cps hl, 0
 	jrl nz, AppEvent_ReturnZeroEpilogue4
 	ld xwa, (xsp + 2)
@@ -20936,18 +20936,18 @@ EffEditMain:
 	call ApDeliveryEvent
 	ldda8 a, 36152
 	cp a, 0xD6
-	jr z, LABEL_F4534A
+	jr z, EffEdit_DispatchTypeD6
 	cp a, 0xE
-	jr z, LABEL_F45339
+	jr z, EffEdit_DispatchTypeE
 	cp a, 0xB
-	jr z, LABEL_F4531C
+	jr z, EffEdit_DispatchTypeB
 	cp a, 0xA
 	jrl nz, AppEvent_ReturnZeroEpilogue4
 
-LABEL_F4531C:
+EffEdit_DispatchTypeB:
 	lds iz, 0
 
-LABEL_F4531E:
+EffEdit_TypeBLoop:
 	ld xwa, (xsp + 2)
 	ld de, iz
 	extz xde
@@ -20955,20 +20955,20 @@ LABEL_F4531E:
 	call ApDeliveryEvent
 	inc 1, iz
 	cp iz, 0x8
-	jr c, LABEL_F4531E
+	jr c, EffEdit_TypeBLoop
 	jrl AppEvent_ReturnZeroEpilogue4
 
-LABEL_F45339:
+EffEdit_DispatchTypeE:
 	ld xwa, (xsp + 2)
 	ld xbc, 0x1E8000F
 	lds32 xde, 0
 	call ApDeliveryEvent
 	jrl AppEvent_ReturnZeroEpilogue4
 
-LABEL_F4534A:
+EffEdit_DispatchTypeD6:
 	lds iz, 0
 
-LABEL_F4534C:
+EffEdit_TypeD6Loop:
 	ld xwa, (xsp + 2)
 	ld de, iz
 	extz xde
@@ -20976,29 +20976,29 @@ LABEL_F4534C:
 	call ApDeliveryEvent
 	inc 1, iz
 	cps iz, 4
-	jr c, LABEL_F4534C
+	jr c, EffEdit_TypeD6Loop
 	jrl AppEvent_ReturnZeroEpilogue4
 
-LABEL_F45365:
+EffEdit_HandleParamChange:
 	ld xbc, (xsp + 2)
 	cp e, 0xB
-	jrl z, LABEL_F45410
+	jrl z, EffEdit_ParamChangeB
 	cp e, 0xA
-	jr z, LABEL_F45398
+	jr z, EffEdit_ParamChangeA
 	cp e, 0xD6
-	jr z, LABEL_F4538B
+	jr z, EffEdit_ParamChangeD6
 	cp e, 0xE
 	jrl nz, AppEvent_ReturnZeroEpilogue4
 	stdi8 58252, 1
 	ld xwa, 0x4D00
-	jrl LABEL_F454E7
+	jrl EffEdit_CallWriteParam
 
-LABEL_F4538B:
+EffEdit_ParamChangeD6:
 	stdi8 58252, 1
 	ld xwa, 0x4E00
-	jrl LABEL_F454E7
+	jrl EffEdit_CallWriteParam
 
-LABEL_F45398:
+EffEdit_ParamChangeA:
 	stdi8 58252, 1
 	ldda16 xwa, 10614
 	extz wa
@@ -21006,15 +21006,15 @@ LABEL_F45398:
 	ld_srib3 E, 0x07, 0xE8, 0xE0
 	lda_24 xwa, 0xe4475c
 	cps e, 0
-	jr ge, LABEL_F453C2
+	jr ge, EffEdit_ParamAPositive
 	ld c, (xwa)
 	exts bc
 	ld xwa, 0x4B00
 	jrl EffEdit_WriteDSPAndReturn
 
-LABEL_F453C2:
+EffEdit_ParamAPositive:
 	cps bc, 0
-	jr le, LABEL_F453DB
+	jr le, EffEdit_ParamANegative
 	inc 1, e
 	ld_srib3 C, 0x03, 0xE0, 0xE8
 	cps c, 0
@@ -21023,7 +21023,7 @@ LABEL_F453C2:
 	ld xwa, 0x4B00
 	jrl EffEdit_WriteDSPAndReturn
 
-LABEL_F453DB:
+EffEdit_ParamANegative:
 	cps bc, 0
 	jr ge, AppEvent_DeliveryLoop
 	cps e, 0
@@ -21037,7 +21037,7 @@ LABEL_F453DB:
 AppEvent_DeliveryLoop:
 	lds iz, 0
 
-LABEL_F453F5:
+EffEdit_DeliveryLoopBody:
 	ld xwa, (xsp + 2)
 	ld de, iz
 	extz xde
@@ -21045,10 +21045,10 @@ LABEL_F453F5:
 	call ApDeliveryEvent
 	inc 1, iz
 	cp iz, 0x8
-	jr c, LABEL_F453F5
+	jr c, EffEdit_DeliveryLoopBody
 	jrl AppEvent_ReturnZeroEpilogue4
 
-LABEL_F45410:
+EffEdit_ParamChangeB:
 	stdi8 58252, 1
 	ldda16 xwa, 10614
 	extz wa
@@ -21056,15 +21056,15 @@ LABEL_F45410:
 	ld_srib3 E, 0x07, 0xE8, 0xE0
 	lda_24 xwa, 0xe4465c
 	cps e, 0
-	jr ge, LABEL_F45439
+	jr ge, EffEdit_ParamBPositive
 	ld c, (xwa)
 	exts bc
 	ld xwa, 0x4900
 	jr EffEdit_WriteDSPAndReturn
 
-LABEL_F45439:
+EffEdit_ParamBPositive:
 	cps bc, 0
-	jr le, LABEL_F45451
+	jr le, EffEdit_ParamBNegative
 	inc 1, e
 	ld_srib3 C, 0x03, 0xE0, 0xE8
 	cps c, 0
@@ -21073,7 +21073,7 @@ LABEL_F45439:
 	ld xwa, 0x4900
 	jr EffEdit_WriteDSPAndReturn
 
-LABEL_F45451:
+EffEdit_ParamBNegative:
 	cps bc, 0
 	jr ge, AppEvent_DeliveryNoRet
 	cps e, 0
@@ -21090,7 +21090,7 @@ EffEdit_WriteDSPAndReturn:
 AppEvent_DeliveryNoRet:
 	lds iz, 0
 
-LABEL_F4546F:
+EffEdit_DeliveryNoRetLoop:
 	ld xwa, (xsp + 2)
 	ld de, iz
 	extz xde
@@ -21098,22 +21098,22 @@ LABEL_F4546F:
 	call ApDeliveryEvent
 	inc 1, iz
 	cp iz, 0x8
-	jr c, LABEL_F4546F
+	jr c, EffEdit_DeliveryNoRetLoop
 	jr AppEvent_ReturnZeroEpilogue4
 
-LABEL_F45489:
+EffEdit_HandleDirectWrite:
 	ld xwa, (xsp + 2)
 	and xwa, 0xFF
 	ldb w, 0x0
 	extz xwa
 	cp e, 0xD6
-	jr z, LABEL_F454DF
+	jr z, EffEdit_DirectWriteD6
 	cp e, 0xE
-	jr z, LABEL_F454D8
+	jr z, EffEdit_DirectWriteE
 	cp e, 0xC
-	jr z, LABEL_F454D0
+	jr z, EffEdit_DirectWriteC
 	cp e, 0xB
-	jr z, LABEL_F454C8
+	jr z, EffEdit_DirectWriteB
 	cp e, 0xA
 	jr nz, AppEvent_ReturnZeroEpilogue4
 	add xwa, 0x4B10
@@ -21123,27 +21123,27 @@ Voice_OffsetAndDispatch:
 	srl xbc, 8
 	ldi_werp 0xE6, 0
 	cp e, 0xC
-	jr nz, LABEL_F454E7
-	calr LABEL_F459E9
+	jr nz, EffEdit_CallWriteParam
+	calr EffEdit_ValidateRangeDelta
 	jr AppEvent_ReturnZeroEpilogue4
 
-LABEL_F454C8:
+EffEdit_DirectWriteB:
 	add xwa, 0x4910
 	jr Voice_OffsetAndDispatch
 
-LABEL_F454D0:
+EffEdit_DirectWriteC:
 	add xwa, 0x4C10
 	jr Voice_OffsetAndDispatch
 
-LABEL_F454D8:
+EffEdit_DirectWriteE:
 	ld xwa, 0x4D10
 	jr Voice_OffsetAndDispatch
 
-LABEL_F454DF:
+EffEdit_DirectWriteD6:
 	add xwa, 0x4E10
 	jr Voice_OffsetAndDispatch
 
-LABEL_F454E7:
+EffEdit_CallWriteParam:
 	call DSPCfg_WriteParamDelta
 
 AppEvent_ReturnZeroEpilogue4:
@@ -21152,7 +21152,7 @@ AppEvent_ReturnZeroEpilogue4:
 	inc 4, xsp
 	ret
 
-LABEL_F454F1:
+EffEdit_DSPConfigBlock:
 	.byte 0xef, 0x6c, 0x2e, 0xc1, 0x80, 0xc0, 0x21, 0xd8
 	.byte 0x12, 0xc1, 0x7d, 0xc0, 0x23, 0xd9, 0x12, 0xc1
 	.byte 0x7f, 0xc0, 0x25, 0xda, 0x12, 0xbf, 0x02, 0x33
@@ -21251,29 +21251,29 @@ LABEL_F454F1:
 	.byte 0x12, 0x41, 0x0f, 0x00, 0xe8, 0x01, 0x1d, 0x07
 	.byte 0x9e, 0xfa, 0x4e, 0xef, 0x64, 0x0e
 
-LABEL_F457CF:
+EffEdit_ValidateAndReadParams:
 	push_werp 0xFA
 	ldada xde, 10668
 	ld xwa, xde
 	ldada xbc, 10616
 	lda xde, (xde + 25)
 
-LABEL_F457DF:
+EffEdit_ValidateLoop:
 	stiw_dpi 0xE5, 0x00, 0x00
 	stib_dpi 0xE0, 0x00
 	cp xwa, xde
-	jr c, LABEL_F457DF
+	jr c, EffEdit_ValidateLoop
 	ldda8 a, 36152
 	cp a, 0xD6
-	jrl z, LABEL_F45986
+	jrl z, EffEdit_ReadParamD6
 	cp a, 0xE
-	jrl z, LABEL_F45965
+	jrl z, EffEdit_ReadParamE
 	cp a, 0xC
-	jrl z, LABEL_F45937
+	jrl z, EffEdit_ReadParamC
 	cp a, 0xB
-	jrl z, LABEL_F458A7
+	jrl z, EffEdit_ReadParamB
 	cp a, 0xA
-	jrl nz, LABEL_F459E2
+	jrl nz, EffEdit_ReturnError
 	ld xwa, 0x4B00
 	call DSPCfg_ReadParam_Map0
 	and hl, 0x7F
@@ -21282,9 +21282,9 @@ LABEL_F457DF:
 	call DSPCfg_ReadParam_Map0
 	stda16 10666, xhl
 	ldi_berp 0xFB, 0
-	jr LABEL_F45871
+	jr EffEdit_ReadParamA_Check
 
-LABEL_F45831:
+EffEdit_ReadParamA_Body:
 	lds32 xwa, 0
 	ldto_berp A, 0xFB
 	add xwa, 0x4B10
@@ -21306,16 +21306,16 @@ LABEL_F45831:
 	ld (xbc), l
 	inc1_berp 0xFB
 
-LABEL_F45871:
+EffEdit_ReadParamA_Check:
 	ldto_berp C, 0xFB
 	extz bc
 	ldda16 xwa, 10666
 	cp bc, wa
-	jr nc, LABEL_F45884
+	jr nc, EffEdit_ReadParamA_Fixup
 	cp_erpb 0xFB, 0x19
-	jr c, LABEL_F45831
+	jr c, EffEdit_ReadParamA_Body
 
-LABEL_F45884:
+EffEdit_ReadParamA_Fixup:
 	ld bc, wa
 	lda_24 xwa, 0x0029ab
 	extz xbc
@@ -21330,9 +21330,9 @@ LABEL_F45884:
 
 EffEdit_ReturnZeroJmp:
 	lds hl, 0
-	jrl LABEL_F459E5
+	jrl EffEdit_PopAndReturn
 
-LABEL_F458A7:
+EffEdit_ReadParamB:
 	ld xwa, 0x4900
 	call DSPCfg_ReadParam_Map0
 	and hl, 0x7F
@@ -21341,9 +21341,9 @@ LABEL_F458A7:
 	call DSPCfg_ReadParam_Map0
 	stda16 10666, xhl
 	ldi_berp 0xFB, 0
-	jr LABEL_F4590A
+	jr EffEdit_ReadParamB_Check
 
-LABEL_F458CA:
+EffEdit_ReadParamB_Body:
 	lds32 xwa, 0
 	ldto_berp A, 0xFB
 	add xwa, 0x4910
@@ -21365,16 +21365,16 @@ LABEL_F458CA:
 	ld (xbc), l
 	inc1_berp 0xFB
 
-LABEL_F4590A:
+EffEdit_ReadParamB_Check:
 	ldto_berp C, 0xFB
 	extz bc
 	ldda16 xwa, 10666
 	cp bc, wa
-	jr nc, LABEL_F4591D
+	jr nc, EffEdit_ReadParamB_Fixup
 	cp_erpb 0xFB, 0x19
-	jr c, LABEL_F458CA
+	jr c, EffEdit_ReadParamB_Body
 
-LABEL_F4591D:
+EffEdit_ReadParamB_Fixup:
 	ld de, wa
 	lda_24 xbc, 0x0029ab
 	extz xde
@@ -21385,10 +21385,10 @@ LABEL_F4591D:
 	stda16 10666, xwa
 	jrl EffEdit_ReturnZeroJmp
 
-LABEL_F45937:
+EffEdit_ReadParamC:
 	ldi_berp 0xFB, 0
 
-LABEL_F4593A:
+EffEdit_ReadParamC_Loop:
 	lds32 xwa, 0
 	ldto_berp A, 0xFB
 	add xwa, 0x4C10
@@ -21400,10 +21400,10 @@ LABEL_F4593A:
 	st_dri3w HL, 0x07, 0xE4, 0xE0
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x08
-	jr c, LABEL_F4593A
+	jr c, EffEdit_ReadParamC_Loop
 	jrl EffEdit_ReturnZeroJmp
 
-LABEL_F45965:
+EffEdit_ReadParamE:
 	ld xwa, 0x4D00
 	call DSPCfg_ReadParam_Map0
 	and hl, 0x7F
@@ -21413,14 +21413,14 @@ LABEL_F45965:
 	stda16 10616, xhl
 	jrl EffEdit_ReturnZeroJmp
 
-LABEL_F45986:
+EffEdit_ReadParamD6:
 	ld xwa, 0x4E00
 	call DSPCfg_ReadParam_Map0
 	and hl, 0x7F
 	stda16 10614, xhl
 	ldi_berp 0xFB, 0
 
-LABEL_F4599A:
+EffEdit_ReadParamD6_Loop:
 	lds32 xwa, 0
 	ldto_berp A, 0xFB
 	add xwa, 0x4E10
@@ -21442,17 +21442,17 @@ LABEL_F4599A:
 	ld (xbc), l
 	inc1_berp 0xFB
 	cpi_berp 0xFB, 4
-	jr c, LABEL_F4599A
+	jr c, EffEdit_ReadParamD6_Loop
 	jrl EffEdit_ReturnZeroJmp
 
-LABEL_F459E2:
+EffEdit_ReturnError:
 	ldw hl, 0xFFFF
 
-LABEL_F459E5:
+EffEdit_PopAndReturn:
 	pop_werp 0xFA
 	ret
 
-LABEL_F459E9:
+EffEdit_ValidateRangeDelta:
 	dec 8, xsp
 	push xiz
 	ld (xsp + 6), bc
@@ -21472,42 +21472,42 @@ LABEL_F459E9:
 	sub bc, (xsp + 4)
 	ld xwa, (xsp + 8)
 	cp xwa, 0x4C10
-	jr nz, LABEL_F45A3C
+	jr nz, EffEdit_RangeCheck4C12
 	cpw (xsp + 6), 0x0
 	jr le, EffEdit_WriteValidDelta
 	cps bc, 1
 	jr gt, EffEdit_WriteValidDelta
 	jr EffEdit_PopIzSkip8Ret
 
-LABEL_F45A3C:
+EffEdit_RangeCheck4C12:
 	ld de, iz
 	sub_werp DE, 0xFA
 	ld xwa, (xsp + 8)
 	cp xwa, 0x4C12
-	jr nz, LABEL_F45A5F
+	jr nz, EffEdit_RangeCheck4C14
 	cpw (xsp + 6), 0x0
-	jr ge, LABEL_F45A59
+	jr ge, EffEdit_RangeCheckDE
 	cps bc, 1
 	jr gt, EffEdit_WriteValidDelta
 	jr EffEdit_PopIzSkip8Ret
 
-LABEL_F45A59:
+EffEdit_RangeCheckDE:
 	cps de, 1
 	jr gt, EffEdit_WriteValidDelta
 	jr EffEdit_PopIzSkip8Ret
 
-LABEL_F45A5F:
+EffEdit_RangeCheck4C14:
 	sub hl, iz
 	ld xwa, (xsp + 8)
 	cp xwa, 0x4C14
-	jr nz, LABEL_F45A89
+	jr nz, EffEdit_RangeCheck4C16
 	cpw (xsp + 6), 0x0
-	jr ge, LABEL_F45A79
+	jr ge, EffEdit_RangeCheckHL
 	cps de, 1
 	jr gt, EffEdit_WriteValidDelta
 	jr EffEdit_PopIzSkip8Ret
 
-LABEL_F45A79:
+EffEdit_RangeCheckHL:
 	cps hl, 1
 	jr le, EffEdit_PopIzSkip8Ret
 
@@ -21517,7 +21517,7 @@ EffEdit_WriteValidDelta:
 	call DSPCfg_WriteParamDelta
 	jr EffEdit_PopIzSkip8Ret
 
-LABEL_F45A89:
+EffEdit_RangeCheck4C16:
 	ld xwa, (xsp + 8)
 	cp xwa, 0x4C16
 	jr nz, EffEdit_WriteValidDelta
@@ -21533,13 +21533,13 @@ EffEdit_PopIzSkip8Ret:
 
 MimeSyori:
 	cp xbc, 0x1E0003B
-	jr nz, LABEL_F45AB5
+	jr nz, MimeSyori_ReturnZero
 	or xde, xde
 	scc8 nz, a
 	extz wa
 	call LABEL_FDE01C
 
-LABEL_F45AB5:
+MimeSyori_ReturnZero:
 	lds32 xhl, 0
 	ret
 
@@ -21623,7 +21623,7 @@ SeqAccomp_StartAndPostEvents:
 	lds32 xde, 2
 	call ApDeliveryEvent
 	bitda 1, 10417
-	jr z, LABEL_F45BF7
+	jr z, SeqPlay_AllocHideIndicator
 	lds iz, 1
 	ld xwa, 0x850014
 	lds bc, 1
@@ -21631,9 +21631,9 @@ SeqAccomp_StartAndPostEvents:
 	ld xwa, 0x850013
 	ld xbc, 0x1E0009C
 	lds32 xde, 1
-	jr LABEL_F45C10
+	jr SeqPlay_AllocPostEvent
 
-LABEL_F45BF7:
+SeqPlay_AllocHideIndicator:
 	lds iz, 0
 	ld xwa, 0x850014
 	lds bc, 0
@@ -21642,7 +21642,7 @@ LABEL_F45BF7:
 	ld xbc, 0x1E0009C
 	lds32 xde, 0
 
-LABEL_F45C10:
+SeqPlay_AllocPostEvent:
 	call ApPostEvent
 	ld wa, iz
 	exts xwa
@@ -21653,7 +21653,7 @@ LABEL_F45C10:
 	scc16 nz, iz
 	ld wa, iz
 	exts xwa
-	jrl LABEL_F46301
+	jrl NoteEdit_ScrollCallReset
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	call ApDeliveryEvent
@@ -21678,7 +21678,7 @@ LABEL_F45C10:
 	ld xbc, 0x1E0003B
 	call ApDeliveryEvent
 	lds wa, 0
-	jrl LABEL_F46378
+	jrl NoteEdit_ReturnSendToggle
 	bitda 2, 1057
 	jr nz, SeqAcc_SendParamsAndStart
 	ldda16 xbc, 9832
@@ -21690,13 +21690,13 @@ LABEL_F45C10:
 	jr nz, SeqAcc_SendParamsAndStart
 	ldda16 xwa, 62008
 	cp bc, wa
-	jr ule, LABEL_F45CB7
+	jr ule, SeqPlay_AllocAdjustBar
 	subda16 xwa, 62015
 	stda16 9832, xwa
 	stda16 9964, xwa
 	jr SeqAcc_SendParamsAndStart
 
-LABEL_F45CB7:
+SeqPlay_AllocAdjustBar:
 	dec 1, wa
 	stda16 10435, xwa
 	call SeqAcc_UpdateEndPosition
@@ -21966,33 +21966,33 @@ SeqAccomp_StartHandler:
 ; SeqAccomp start helper
 SeqAccomp_StartHelper:
 	cpdi8 36150, 133
-	jrl nz, LABEL_F46298
+	jrl nz, SeqAccomp_HandleOtherState
 	bitda 2, 1057
-	jr nz, LABEL_F46224
+	jr nz, SeqAccomp_TogglePlayback
 	bitda 2, 10418
-	jr z, LABEL_F46240
+	jr z, SeqAccomp_HandleStartStop
 
-LABEL_F46224:
+SeqAccomp_TogglePlayback:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
-	jr nz, LABEL_F46232
+	jr nz, SeqAccomp_ToggleSetZero
 	lds32 xwa, 1
 	ld (xsp + 2), xwa
-	jr LABEL_F46237
+	jr SeqAccomp_ToggleSendStatus
 
-LABEL_F46232:
+SeqAccomp_ToggleSetZero:
 	lds32 xwa, 0
 	ld (xsp + 2), xwa
 
-LABEL_F46237:
+SeqAccomp_ToggleSendStatus:
 	ld xwa, (xsp + 2)
 	calr AppEvent_SendPlayStatus
 	jrl AppEvent_ReturnZero
 
-LABEL_F46240:
+SeqAccomp_HandleStartStop:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
-	jr nz, LABEL_F46283
+	jr nz, SeqAccomp_ActivateAndAssign
 	resda 1, 10417
 	stdi16 9832, 1
 	ldda16 xwa, 10408
@@ -22010,107 +22010,107 @@ LABEL_F46240:
 	call ApDeliveryEvent
 	jrl SeqAccomp_InitAndReturn
 
-LABEL_F46283:
+SeqAccomp_ActivateAndAssign:
 	call SeqVoice_ScanAndAssignParts
 	setda 1, 10417
 	ldda16 xwa, 9504
 	stda16 9832, xwa
 	ldw wa, 0x86
-	jr LABEL_F462CD
+	jr SeqAccomp_PostModeAndInit
 
-LABEL_F46298:
+SeqAccomp_HandleOtherState:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
-	jr nz, LABEL_F462B8
+	jr nz, SeqAccomp_OtherActivate
 	bitda 2, 1057
-	jr z, LABEL_F462B1
-	calr LABEL_F46381
+	jr z, SeqAccomp_OtherClearBit
+	calr SeqAccomp_ReassignVoiceState
 	cps hl, 0
 	jrl z, AppEvent_ReturnZero
 	lds32 xwa, 1
-	jr LABEL_F462C0
+	jr SeqAccomp_SendVoiceAndReturn
 
-LABEL_F462B1:
+SeqAccomp_OtherClearBit:
 	resda 0, 10417
 	jrl SeqAccomp_InitAndReturn
 
-LABEL_F462B8:
+SeqAccomp_OtherActivate:
 	bitda 2, 1057
-	jr z, LABEL_F462C6
+	jr z, SeqAccomp_OtherSetBit
 	lds32 xwa, 0
 
-LABEL_F462C0:
+SeqAccomp_SendVoiceAndReturn:
 	calr AppEvent_SendVoiceUpdate
 	jrl AppEvent_ReturnZero
 
-LABEL_F462C6:
+SeqAccomp_OtherSetBit:
 	setda 0, 10417
 	ldw wa, 0x82
 
-LABEL_F462CD:
+SeqAccomp_PostModeAndInit:
 	call UI_PostModeChangeEvent
 	jr SeqAccomp_InitAndReturn
 
 ; NoteEditSy mode scroll dispatch
 NoteEditSy_ModeScroll:
 	bitda 2, 1057
-	jr nz, LABEL_F462E2
+	jr nz, NoteEdit_ScrollToggle
 	ldda8 c, 10418
 	bit 2, c
-	jr z, LABEL_F4632D
+	jr z, NoteEdit_ScrollInactive
 
-LABEL_F462E2:
+NoteEdit_ScrollToggle:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
-	jr nz, LABEL_F462F0
+	jr nz, NoteEdit_ScrollSetZero
 	lds32 xwa, 1
 	ld (xsp + 2), xwa
-	jr LABEL_F462F5
+	jr NoteEdit_ScrollDispatchMode
 
-LABEL_F462F0:
+NoteEdit_ScrollSetZero:
 	lds32 xwa, 0
 	ld (xsp + 2), xwa
 
-LABEL_F462F5:
+NoteEdit_ScrollDispatchMode:
 	ldda8 a, 36152
 	cp a, 0x85
-	jr nz, LABEL_F46306
+	jr nz, NoteEdit_ScrollCheck86
 	ld xwa, (xsp + 2)
 
-LABEL_F46301:
+NoteEdit_ScrollCallReset:
 	calr NoteEditSy_ScrollReset
 	jr AppEvent_ReturnZero
 
-LABEL_F46306:
+NoteEdit_ScrollCheck86:
 	cp a, 0x86
-	jr nz, LABEL_F46313
+	jr nz, NoteEdit_ScrollCheck87
 	ld xwa, (xsp + 2)
 	calr AppEvent_SendAccompStatus
 	jr AppEvent_ReturnZero
 
-LABEL_F46313:
+NoteEdit_ScrollCheck87:
 	cp a, 0x87
-	jr nz, LABEL_F46320
+	jr nz, NoteEdit_ScrollCheck88
 	ld xwa, (xsp + 2)
 	calr NoteEditSy_ScrollCase1
 	jr AppEvent_ReturnZero
 
-LABEL_F46320:
+NoteEdit_ScrollCheck88:
 	cp a, 0x88
 	jr nz, AppEvent_ReturnZero
 	ld xwa, (xsp + 2)
 	calr NoteEditSy_ScrollCase2
 	jr AppEvent_ReturnZero
 
-LABEL_F4632D:
+NoteEdit_ScrollInactive:
 	ld xwa, (xsp + 2)
 	or xwa, xwa
-	jr nz, LABEL_F4633D
+	jr nz, NoteEdit_ScrollActivate
 	res 0, c
 	stda8 10418, c
 	jr SeqAccomp_InitAndReturn
 
-LABEL_F4633D:
+NoteEdit_ScrollActivate:
 	set 0, c
 	stda8 10418, c
 	cpdi8 36152, 133
@@ -22129,20 +22129,20 @@ NoteEditSy_ModeScrollReturn:
 	jr z, AppEvent_ReturnZero
 	ld xwa, (xsp + 2)
 	or xwa, xwa
-	jr nz, LABEL_F4636E
+	jr nz, NoteEdit_ReturnSetZero
 	lds32 xwa, 1
 	ld (xsp + 2), xwa
-	jr LABEL_F46373
+	jr NoteEdit_ReturnGetParam
 
-LABEL_F4636E:
+NoteEdit_ReturnSetZero:
 	lds32 xwa, 0
 	ld (xsp + 2), xwa
 
-LABEL_F46373:
+NoteEdit_ReturnGetParam:
 	ld xwa, (xsp + 2)
 	extz wa
 
-LABEL_F46378:
+NoteEdit_ReturnSendToggle:
 	calr AppEvent_SendModeToggle
 
 AppEvent_ReturnZero:
@@ -22151,15 +22151,15 @@ AppEvent_ReturnZero:
 	inc 4, xsp
 	ret
 
-LABEL_F46381:
+SeqAccomp_ReassignVoiceState:
 	lda xsp, (xsp - 18)
 	push xiz
 	cpdi8 7530, 0
-	jr z, LABEL_F46392
+	jr z, SeqAccomp_ReassignClearAndSetup
 	ldw hl, 0xFFFF
-	jrl LABEL_F4646B
+	jrl SeqAccomp_ReassignEpilogue
 
-LABEL_F46392:
+SeqAccomp_ReassignClearAndSetup:
 	resda 0, 10417
 	stdi8 8956, 3
 	stdi8 7570, 0
@@ -22167,7 +22167,7 @@ LABEL_F46392:
 	stda16 8982, xwa
 	ldda8 a, 8988
 	cp a, 0xFF
-	jrl z, LABEL_F46469
+	jrl z, SeqAccomp_ReassignDone
 	extz wa
 	lda xhl, (xsp + 18)
 	ld e, a
@@ -22190,7 +22190,7 @@ LABEL_F46392:
 	ld xix, xbc
 	ldi_berp 0xE2, 0
 
-LABEL_F463EB:
+SeqAccomp_ReassignCopyLoop:
 	ldto_berp E, 0xE2
 	extz de
 	inc 2, de
@@ -22209,11 +22209,11 @@ LABEL_F463EB:
 	lda_dri3 XBC, 0x07, 0xF0, 0xE8
 	inc1_berp 0xE2
 	cpi_berp 0xE2, 6
-	jr c, LABEL_F463EB
+	jr c, SeqAccomp_ReassignCopyLoop
 	ld xix, xbc
 	ldi_berp 0xE2, 0
 
-LABEL_F46424:
+SeqAccomp_ReassignWriteLoop:
 	ldto_berp A, 0xE2
 	extz wa
 	inc 2, wa
@@ -22227,7 +22227,7 @@ LABEL_F46424:
 	ld (xde), a
 	inc1_berp 0xE2
 	cpi_berp 0xE2, 6
-	jr c, LABEL_F46424
+	jr c, SeqAccomp_ReassignWriteLoop
 	lda xde, (xsp + 14)
 	ld wa, (xsp + 4)
 	sla wa, 3
@@ -22239,10 +22239,10 @@ LABEL_F46424:
 	ld wa, (xde)
 	st_dri3w WA, 0xED, 0x98, 0x00
 
-LABEL_F46469:
+SeqAccomp_ReassignDone:
 	lds hl, 0
 
-LABEL_F4646B:
+SeqAccomp_ReassignEpilogue:
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
