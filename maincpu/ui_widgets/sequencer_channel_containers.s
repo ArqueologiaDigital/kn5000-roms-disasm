@@ -778,8 +778,8 @@ Naka_DrawbarDisplay_Table2:
 	.byte 0xd8, 0x00
 	.long NakaInst_Param_Repeat
 	.zero 4
-	.long LABEL_EB2E7E
-	.long LABEL_EB2E7A
+	.long NakaDbg_LowerCaseChars2
+	.long NakaDbg_LowerCaseChars
 	.byte 0xd0, 0xf0, 0x03, 0x00, 0x03, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00
 
@@ -791,18 +791,18 @@ Naka_DrawbarDisplay_Table2:
 	.byte 0xeb, 0x00, 0x82, 0x2e, 0xeb, 0x00, 0xd2, 0xf0
 	.byte 0x03, 0x00, 0x04, 0x00, 0x00, 0x00, 0x02, 0x00
 Naka_DrawbarReg_Table:
-	.long LABEL_EB3FDE
-	.long LABEL_EB3BDE
-	.long LABEL_EB4FDE
-	.long LABEL_EB4BDE
-	.long LABEL_EB47DE
-	.long LABEL_EB43DE
-	.long LABEL_EB5FDE
-	.long LABEL_EB5BDE
-	.long LABEL_EB57DE
-	.long LABEL_EB53DE
-	.long LABEL_EB63DE
-	.long LABEL_EB63DE
+	.long NakaColor_Palette2
+	.long NakaColor_Palette1
+	.long NakaColor_Palette6
+	.long NakaColor_Palette5
+	.long NakaColor_Palette4
+	.long NakaColor_Palette3
+	.long NakaColor_Palette10
+	.long NakaColor_Palette9
+	.long NakaColor_Palette8
+	.long NakaColor_Palette7
+	.long NakaColor_PaletteBlank
+	.long NakaColor_PaletteBlank
 	.long SeqChan_Map_2ch
 	.long SeqChan_Map_4ch
 	.long SeqChan_Map_6ch

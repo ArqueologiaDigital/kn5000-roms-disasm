@@ -58,7 +58,7 @@ LED_patterns_indicating_firmware_version:
 	.byte 0x1a	; v5:  0001 1010
 	.byte 0x16	; v6:  0001 0110
 	.byte 0x1e	; v7:  0001 1110
-LABEL_E00008:
+LED_patterns_firmware_v8_plus:
 	.byte 0x11	; v8:  0001 0001
 	.byte 0x19	; v9:  0001 1001
 	.byte 0x15	; v10: 0001 0101
@@ -68,7 +68,7 @@ LABEL_E00008:
 	.byte 0x17	; v14: 0001 0111
 	.byte 0x1f	; v15: 0001 1111
 
-LABEL_E00010:
+LED_pattern_test_data:
 	.byte 0x10, 0xff
 
 ; DMA ISR event router: dispatches incoming sequencer data to ring buffers
@@ -170,105 +170,105 @@ StrDesc_Empty_3:
 	.long StrVal_Empty_3
 StrVal_Empty_3:	aligned_string ""
 StrDesc_Empty_4:
-	.long LABEL_E169F6
-LABEL_E169F6:	aligned_string ""
-LABEL_E169F8:
-	.long LABEL_E169FC
-LABEL_E169FC:	aligned_string ""
-LABEL_E169FE:
-	.long LABEL_E16A02
-LABEL_E16A02:	aligned_string ""
-LABEL_E16A04:
-	.long LABEL_E16A08
-LABEL_E16A08:	aligned_string ""
-LABEL_E16A0A:
-	.long LABEL_E16A0E
-LABEL_E16A0E:	aligned_string ""
-LABEL_E16A10:
-	.long LABEL_E16A1A
-	.long LABEL_E16A18
-LABEL_E16A18:	aligned_string ""
-LABEL_E16A1A:	aligned_string "bank"
-LABEL_E16A20:
-	.long LABEL_E16A2A
-	.long LABEL_E16A28
-LABEL_E16A28:	aligned_string ""
-LABEL_E16A2A:	aligned_string "bank"
-LABEL_E16A30:
-	.long LABEL_E16A34
-LABEL_E16A34:	aligned_string ""
-LABEL_E16A36:
-	.long LABEL_E16A40
-	.long LABEL_E16A3E
-LABEL_E16A3E:	aligned_string ""
-LABEL_E16A40:	aligned_string "ram"
-LABEL_E16A44:
-	.long LABEL_E16A4E
-	.long LABEL_E16A4C
-LABEL_E16A4C:	aligned_string ""
-LABEL_E16A4E:	aligned_string "apcdata"
-LABEL_E16A56:
+	.long StrVal_Empty_4
+StrVal_Empty_4:	aligned_string ""
+StrDesc_Empty_5:
+	.long StrVal_Empty_5
+StrVal_Empty_5:	aligned_string ""
+StrDesc_Empty_6:
+	.long StrVal_Empty_6
+StrVal_Empty_6:	aligned_string ""
+StrDesc_Empty_7:
+	.long StrVal_Empty_7
+StrVal_Empty_7:	aligned_string ""
+StrDesc_Empty_8:
+	.long StrVal_Empty_8
+StrVal_Empty_8:	aligned_string ""
+StrDesc_BankPair_0:
+	.long StrFld_BankPair_0_Bank
+	.long StrVal_BankPair_0_Empty
+StrVal_BankPair_0_Empty:	aligned_string ""
+StrFld_BankPair_0_Bank:	aligned_string "bank"
+StrDesc_BankPair_1:
+	.long StrFld_BankPair_1_Bank
+	.long StrVal_BankPair_1_Empty
+StrVal_BankPair_1_Empty:	aligned_string ""
+StrFld_BankPair_1_Bank:	aligned_string "bank"
+StrDesc_RamField:
+	.long StrVal_RamField_Empty
+StrVal_RamField_Empty:	aligned_string ""
+StrDesc_RamNamePair:
+	.long StrFld_RamNamePair_Ram
+	.long StrVal_RamNamePair_Empty
+StrVal_RamNamePair_Empty:	aligned_string ""
+StrFld_RamNamePair_Ram:	aligned_string "ram"
+StrDesc_ApcDataPair:
+	.long StrFld_ApcDataPair_ApcData
+	.long StrVal_ApcDataPair_Empty
+StrVal_ApcDataPair_Empty:	aligned_string ""
+StrFld_ApcDataPair_ApcData:	aligned_string "apcdata"
+StrDesc_MspBnkPair_0:
 	jr	f, 0x6a
 	.byte 0xe1, 0x00
-	.long LABEL_E16A5E
-LABEL_E16A5E:	aligned_string ""
-LABEL_E16A60:	aligned_string "mspbnk"
-LABEL_E16A68:
-	.long LABEL_E16A72
-	.long LABEL_E16A70
-LABEL_E16A70:	aligned_string ""
-LABEL_E16A72:	aligned_string "mspbnk"
-LABEL_E16A7A:
-	.long LABEL_E16A7E
-LABEL_E16A7E:	aligned_string ""
-LABEL_E16A80:
-	.long LABEL_E16A84
-LABEL_E16A84:	aligned_string ""
-LABEL_E16A86:
-	.long LABEL_E16A8A
-LABEL_E16A8A:	aligned_string ""
-LABEL_E16A8C:
-	.long LABEL_E16A90
-LABEL_E16A90:	aligned_string ""
-LABEL_E16A92:
-	.long LABEL_E16A96
-LABEL_E16A96:	aligned_string ""
+	.long StrVal_MspBnkPair_0_Empty
+StrVal_MspBnkPair_0_Empty:	aligned_string ""
+StrFld_MspBnkPair_0_MspBnk:	aligned_string "mspbnk"
+StrDesc_MspBnkPair_1:
+	.long StrFld_MspBnkPair_1_MspBnk
+	.long StrVal_MspBnkPair_1_Empty
+StrVal_MspBnkPair_1_Empty:	aligned_string ""
+StrFld_MspBnkPair_1_MspBnk:	aligned_string "mspbnk"
+StrDesc_Empty_9:
+	.long StrVal_Empty_9
+StrVal_Empty_9:	aligned_string ""
+StrDesc_Empty_10:
+	.long StrVal_Empty_10
+StrVal_Empty_10:	aligned_string ""
+StrDesc_Empty_11:
+	.long StrVal_Empty_11
+StrVal_Empty_11:	aligned_string ""
+StrDesc_Empty_12:
+	.long StrVal_Empty_12
+StrVal_Empty_12:	aligned_string ""
+StrDesc_Empty_13:
+	.long StrVal_Empty_13
+StrVal_Empty_13:	aligned_string ""
 GridProperty_Config_Table:
-	.long LABEL_E16ABA
-	.long LABEL_E16AB0
-	.long LABEL_E16AAA
-	.long LABEL_E16AA8
-LABEL_E16AA8:	aligned_string ""
-LABEL_E16AAA:	aligned_string "func"
-LABEL_E16AB0:	aligned_string "fixedrow"
-LABEL_E16ABA:	aligned_string "fixedcol"
-LABEL_E16AC4:
-	.long LABEL_E16AC8
-LABEL_E16AC8:	aligned_string ""
+	.long StrFld_GridConfig_FixedCol
+	.long StrFld_GridConfig_FixedRow
+	.long StrFld_GridConfig_Func
+	.long StrVal_GridConfig_Empty
+StrVal_GridConfig_Empty:	aligned_string ""
+StrFld_GridConfig_Func:	aligned_string "func"
+StrFld_GridConfig_FixedRow:	aligned_string "fixedrow"
+StrFld_GridConfig_FixedCol:	aligned_string "fixedcol"
+StrDesc_Empty_14:
+	.long StrVal_Empty_14
+StrVal_Empty_14:	aligned_string ""
 GridProperty_AltConfig_Table:
-	.long LABEL_E16AEC
-	.long LABEL_E16AE2
-	.long LABEL_E16ADC
-	.long LABEL_E16ADA
-LABEL_E16ADA:	aligned_string ""
-LABEL_E16ADC:	aligned_string "func"
-LABEL_E16AE2:	aligned_string "fixedrow"
-LABEL_E16AEC:	aligned_string "fixedcol"
-LABEL_E16AF6:
-	.long LABEL_E16AFA
-LABEL_E16AFA:	aligned_string ""
-LABEL_E16AFC:
-	.long LABEL_E16B00
-LABEL_E16B00:	aligned_string ""
-LABEL_E16B02:
-	.long LABEL_E16B06
-LABEL_E16B06:	aligned_string ""
-LABEL_E16B08:
-	.long LABEL_E16B0C
-LABEL_E16B0C:	aligned_string ""
-LABEL_E16B0E:
-	.long LABEL_E16B12
-LABEL_E16B12:	aligned_string ""
+	.long StrFld_AltGridConfig_FixedCol
+	.long StrFld_AltGridConfig_FixedRow
+	.long StrFld_AltGridConfig_Func
+	.long StrVal_AltGridConfig_Empty
+StrVal_AltGridConfig_Empty:	aligned_string ""
+StrFld_AltGridConfig_Func:	aligned_string "func"
+StrFld_AltGridConfig_FixedRow:	aligned_string "fixedrow"
+StrFld_AltGridConfig_FixedCol:	aligned_string "fixedcol"
+StrDesc_Empty_15:
+	.long StrVal_Empty_15
+StrVal_Empty_15:	aligned_string ""
+StrDesc_Empty_16:
+	.long StrVal_Empty_16
+StrVal_Empty_16:	aligned_string ""
+StrDesc_Empty_17:
+	.long StrVal_Empty_17
+StrVal_Empty_17:	aligned_string ""
+StrDesc_Empty_18:
+	.long StrVal_Empty_18
+StrVal_Empty_18:	aligned_string ""
+StrDesc_Empty_19:
+	.long StrVal_Empty_19
+StrVal_Empty_19:	aligned_string ""
 StrDesc_CstmCpNameBox:
 	.long StrFld_CstmCpName_CstmNo
 	.long StrVal_Empty_CstmCpName
@@ -406,112 +406,112 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.byte 0x00, 0x00
 	.long StrName_PsS2cFmeasBox
 	.long StrEmpty_PsS2cFmeasBox
-	.long LABEL_E169F8
+	.long StrDesc_Empty_5
 	.long PsS2cLmeasBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsS2cLmeasBox
 	.long StrEmpty_PsS2cLmeasBox
-	.long LABEL_E169FE
+	.long StrDesc_Empty_6
 	.long PsSeqSongNoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsSeqSongNoBox
 	.long StrEmpty_PsSeqSongNoBox
-	.long LABEL_E16A04
+	.long StrDesc_Empty_7
 	.long PsS2cTransBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsS2cTransBox
 	.long StrEmpty_PsS2cTransBox
-	.long LABEL_E16A0A
+	.long StrDesc_Empty_8
 	.long PsCstmCpBnkBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x26, 0x00
 	.byte 0x02, 0x00
 	.long StrName_PsCstmCpBnkBox
 	.long StrPrefix_PsCstmCpBnkBox
-	.long LABEL_E16A10
+	.long StrDesc_BankPair_0
 	.long PsCstmCpSwBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x26, 0x00
 	.byte 0x02, 0x00
 	.long StrName_PsCstmCpSwBox
 	.long StrPrefix_PsCstmCpSwBox
-	.long LABEL_E16A20
+	.long StrDesc_BankPair_1
 	.long PsCtmAttStrBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsCtmAttStrBox
 	.long StrEmpty_PsCtmAttStrBox
-	.long LABEL_E16A30
+	.long StrDesc_RamField
 	.long AcCmpMdBoxProc
 	naka_header NAKA_TYPE_0x15
 	.byte 0x34, 0x00
 	.byte 0x02, 0x00
 	.long StrName_AcCmpMdBox
 	.long StrPrefix_AcCmpMdBox
-	.long LABEL_E16A36
+	.long StrDesc_RamNamePair
 	.long AcApcMdBoxProc
 	naka_header NAKA_TYPE_0x15
 	.byte 0x34, 0x00
 	.byte 0x02, 0x00
 	.long StrName_AcApcMdBox
 	.long StrPrefix_AcApcMdBox
-	.long LABEL_E16A44
+	.long StrDesc_ApcDataPair
 	.long AcMspBnkSlBoxProc
 	naka_header NAKA_TYPE_0x15
 	.byte 0x34, 0x00
 	.byte 0x02, 0x00
 	.long StrName_AcMspBnkSlBox
 	.long StrPrefix_AcMspBnkSlBox
-	.long LABEL_E16A56
+	.long StrDesc_MspBnkPair_0
 	.long PsMspBnkNameBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x26, 0x00
 	.byte 0x02, 0x00
 	.long StrName_PsMspBnkNameBox
 	.long StrPrefix_PsMspBnkNameBox
-	.long LABEL_E16A68
+	.long StrDesc_MspBnkPair_1
 	.long AcCmpTempoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_AcCmpTempoBox
 	.long StrEmpty_AcCmpTempoBox
-	.long LABEL_E16A7A
+	.long StrDesc_Empty_9
 	.long PsCmpCpFGrpBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsCmpCpFGrpBox
 	.long StrEmpty_PsCmpCpFGrpBox
-	.long LABEL_E16A80
+	.long StrDesc_Empty_10
 	.long PsCmpCpFVariBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsCmpCpFVariBox
 	.long StrEmpty_PsCmpCpFVariBox
-	.long LABEL_E16A86
+	.long StrDesc_Empty_11
 	.long PsCmpCpFPtnBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsCmpCpFPtnBox
 	.long StrEmpty_PsCmpCpFPtnBox
-	.long LABEL_E16A8C
+	.long StrDesc_Empty_12
 	.long PsNameMemBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsNameMemBox
 	.long StrEmpty_PsNameMemBox
-	.long LABEL_E16A92
+	.long StrDesc_Empty_13
 	.long AcCmpSetGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00
@@ -525,7 +525,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.byte 0x00, 0x00
 	.long StrName_PsRgpSetBnkBox
 	.long StrEmpty_PsRgpSetBnkBox
-	.long LABEL_E16AC4
+	.long StrDesc_Empty_14
 	.long AcEasyCmpGridBoxProc
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00
@@ -539,35 +539,35 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.byte 0x00, 0x00
 	.long StrName_PsMspMeasBox
 	.long StrEmpty_PsMspMeasBox
-	.long LABEL_E16AF6
+	.long StrDesc_Empty_15
 	.long PsMspMemBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsMspMemBox
 	.long StrEmpty_PsMspMemBox
-	.long LABEL_E16AFC
+	.long StrDesc_Empty_16
 	.long PsMspRecPadBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsMspRecPadBox
 	.long StrEmpty_PsMspRecPadBox
-	.long LABEL_E16B02
+	.long StrDesc_Empty_17
 	.long PsMspRecBnkBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsMspRecBnkBox
 	.long StrEmpty_PsMspRecBnkBox
-	.long LABEL_E16B08
+	.long StrDesc_Empty_18
 	.long PsMspNameBnkProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x24, 0x00
 	.byte 0x00, 0x00
 	.long StrName_PsMspNameBnk
 	.long StrEmpty_PsMspNameBnk
-	.long LABEL_E16B0E
+	.long StrDesc_Empty_19
 	.long PsCstmCpNameBoxProc
 	naka_header NAKA_TYPE_0x12
 	.byte 0x26, 0x00
@@ -746,107 +746,107 @@ StrName_AcMemNoBox:	aligned_string "AcMemNoBox"
 	.byte 0x29, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
 NakaMethodTable_PtrsStart:
-	.long LABEL_E176C4
-	.long LABEL_E176B6
-	.long LABEL_E176A6
-	.long LABEL_E17696
-	.long LABEL_E17688
-	.long LABEL_E17678
-	.long LABEL_E1766A
-	.long LABEL_E1765E
-	.long LABEL_E17654
-	.long LABEL_E1764A
-	.long LABEL_E17640
-	.long LABEL_E17636
-	.long LABEL_E17628
-	.long LABEL_E1761A
-	.long LABEL_E1760C
-	.long LABEL_E175FE
-	.long LABEL_E175F2
-	.long LABEL_E175E6
-	.long LABEL_E175DA
-	.long LABEL_E175CE
-	.long LABEL_E175C2
-	.long LABEL_E175B6
-	.long LABEL_E175AA
-	.long LABEL_E1759A
-	.long LABEL_E1758A
-	.long LABEL_E1757A
-	.long LABEL_E1756A
-	.long LABEL_E17558
-	.long LABEL_E17546
-	.long LABEL_E17534
-	.long LABEL_E17522
-	.long LABEL_E17512
-	.long LABEL_E17502
-	.long LABEL_E174F4
-	.long LABEL_E174E2
-	.long LABEL_E174D4
-	.long LABEL_E174C8
-	.long LABEL_E174B8
-	.long LABEL_E174A8
-	.long LABEL_E17498
-	.long LABEL_E17488
-	.long LABEL_E17478
-	.long LABEL_E17468
-	.long LABEL_E1745A
-	.long LABEL_E1744C
-	.long LABEL_E1743C
-	.long LABEL_E1742C
-	.long LABEL_E17418
-	.long LABEL_E17408
-	.long LABEL_E173F6
+	.long MTStr_CmpNameSet
+	.long MTStr_MspNameSet
+	.long MTStr_RhyGrpNmGet
+	.long MTStr_RhyVariNmGet
+	.long MTStr_APRHYGRPNM
+	.long MTStr_APRHYVARINM
+	.long MTStr_CmpClrYes
+	.long MTStr_CmpClrNo
+	.long MTStr_PanUp
+	.long MTStr_PanDn
+	.long MTStr_RLmtUp
+	.long MTStr_RLmtDn
+	.long MTStr_PanValGet
+	.long MTStr_RLmtValGet
+	.long MTStr_CmpSetP1Up
+	.long MTStr_CmpSetP1Dn
+	.long MTStr_S2cTrUp
+	.long MTStr_S2cTrDn
+	.long MTStr_RgpBnkUp
+	.long MTStr_RgpBnkDn
+	.long MTStr_RgpPadUp
+	.long MTStr_RgpPadDn
+	.long MTStr_CstmCpOk
+	.long MTStr_MspUsr1NmGet
+	.long MTStr_MspUsr2NmGet
+	.long MTStr_MspRgp1NmGet
+	.long MTStr_MspRgp2NmGet
+	.long MTStr_MspUsr1NmDisp
+	.long MTStr_MspUsr2NmDisp
+	.long MTStr_MspRgp1NmDisp
+	.long MTStr_MspRgp2NmDisp
+	.long MTStr_MspPlyMdSet
+	.long MTStr_ArgToneNmGet
+	.long MTStr_ArgChoGet
+	.long MTStr_ArgToneNmDisp
+	.long MTStr_ArgChoDisp
+	.long MTStr_SetPtSel
+	.long MTStr_EsCmpPartUp
+	.long MTStr_EsCmpPartDn
+	.long MTStr_EsCmpStylUp
+	.long MTStr_EsCmpStylDn
+	.long MTStr_EsCmpVariUp
+	.long MTStr_EsCmpVariDn
+	.long MTStr_CstmFNmGet
+	.long MTStr_CstmTNmGet
+	.long MTStr_CstmFNmDisp
+	.long MTStr_CstmTNmDisp
+	.long MTStr_SetSelectedLine
+	.long MTStr_StylCnvStor
+	.long MTStr_ClrGridHanten
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E173F6:	aligned_string "MT_ClrGridHanten"
-LABEL_E17408:	aligned_string "MT_StylCnvStor"
-LABEL_E17418:	aligned_string "MT_SetSelectedLine"
-LABEL_E1742C:	aligned_string "MT_CstmTNmDisp"
-LABEL_E1743C:	aligned_string "MT_CstmFNmDisp"
-LABEL_E1744C:	aligned_string "MT_CstmTNmGet"
-LABEL_E1745A:	aligned_string "MT_CstmFNmGet"
-LABEL_E17468:	aligned_string "MT_EsCmpVariDn"
-LABEL_E17478:	aligned_string "MT_EsCmpVariUp"
-LABEL_E17488:	aligned_string "MT_EsCmpStylDn"
-LABEL_E17498:	aligned_string "MT_EsCmpStylUp"
-LABEL_E174A8:	aligned_string "MT_EsCmpPartDn"
-LABEL_E174B8:	aligned_string "MT_EsCmpPartUp"
-LABEL_E174C8:	aligned_string "MT_SetPtSel"
-LABEL_E174D4:	aligned_string "MT_ArgChoDisp"
-LABEL_E174E2:	aligned_string "MT_ArgToneNmDisp"
-LABEL_E174F4:	aligned_string "MT_ArgChoGet"
-LABEL_E17502:	aligned_string "MT_ArgToneNmGet"
-LABEL_E17512:	aligned_string "MT_MspPlyMdSet"
-LABEL_E17522:	aligned_string "MT_MspRgp2NmDisp"
-LABEL_E17534:	aligned_string "MT_MspRgp1NmDisp"
-LABEL_E17546:	aligned_string "MT_MspUsr2NmDisp"
-LABEL_E17558:	aligned_string "MT_MspUsr1NmDisp"
-LABEL_E1756A:	aligned_string "MT_MspRgp2NmGet"
-LABEL_E1757A:	aligned_string "MT_MspRgp1NmGet"
-LABEL_E1758A:	aligned_string "MT_MspUsr2NmGet"
-LABEL_E1759A:	aligned_string "MT_MspUsr1NmGet"
-LABEL_E175AA:	aligned_string "MT_CstmCpOk"
-LABEL_E175B6:	aligned_string "MT_RgpPadDn"
-LABEL_E175C2:	aligned_string "MT_RgpPadUp"
-LABEL_E175CE:	aligned_string "MT_RgpBnkDn"
-LABEL_E175DA:	aligned_string "MT_RgpBnkUp"
-LABEL_E175E6:	aligned_string "MT_S2cTrDn"
-LABEL_E175F2:	aligned_string "MT_S2cTrUp"
-LABEL_E175FE:	aligned_string "MT_CmpSetP1Dn"
-LABEL_E1760C:	aligned_string "MT_CmpSetP1Up"
-LABEL_E1761A:	aligned_string "MT_RLmtValGet"
-LABEL_E17628:	aligned_string "MT_PanValGet"
-LABEL_E17636:	aligned_string "MT_RLmtDn"
-LABEL_E17640:	aligned_string "MT_RLmtUp"
-LABEL_E1764A:	aligned_string "MT_PanDn"
-LABEL_E17654:	aligned_string "MT_PanUp"
-LABEL_E1765E:	aligned_string "MT_CmpClrNo"
-LABEL_E1766A:	aligned_string "MT_CmpClrYes"
-LABEL_E17678:	aligned_string "MT_APRHYVARINM"
-LABEL_E17688:	aligned_string "MT_APRHYGRPNM"
-LABEL_E17696:	aligned_string "MT_RhyVariNmGet"
-LABEL_E176A6:	aligned_string "MT_RhyGrpNmGet"
-LABEL_E176B6:	aligned_string "MT_MspNameSet"
-LABEL_E176C4:	aligned_string "MT_CmpNameSet"
+MTStr_ClrGridHanten:	aligned_string "MT_ClrGridHanten"
+MTStr_StylCnvStor:	aligned_string "MT_StylCnvStor"
+MTStr_SetSelectedLine:	aligned_string "MT_SetSelectedLine"
+MTStr_CstmTNmDisp:	aligned_string "MT_CstmTNmDisp"
+MTStr_CstmFNmDisp:	aligned_string "MT_CstmFNmDisp"
+MTStr_CstmTNmGet:	aligned_string "MT_CstmTNmGet"
+MTStr_CstmFNmGet:	aligned_string "MT_CstmFNmGet"
+MTStr_EsCmpVariDn:	aligned_string "MT_EsCmpVariDn"
+MTStr_EsCmpVariUp:	aligned_string "MT_EsCmpVariUp"
+MTStr_EsCmpStylDn:	aligned_string "MT_EsCmpStylDn"
+MTStr_EsCmpStylUp:	aligned_string "MT_EsCmpStylUp"
+MTStr_EsCmpPartDn:	aligned_string "MT_EsCmpPartDn"
+MTStr_EsCmpPartUp:	aligned_string "MT_EsCmpPartUp"
+MTStr_SetPtSel:	aligned_string "MT_SetPtSel"
+MTStr_ArgChoDisp:	aligned_string "MT_ArgChoDisp"
+MTStr_ArgToneNmDisp:	aligned_string "MT_ArgToneNmDisp"
+MTStr_ArgChoGet:	aligned_string "MT_ArgChoGet"
+MTStr_ArgToneNmGet:	aligned_string "MT_ArgToneNmGet"
+MTStr_MspPlyMdSet:	aligned_string "MT_MspPlyMdSet"
+MTStr_MspRgp2NmDisp:	aligned_string "MT_MspRgp2NmDisp"
+MTStr_MspRgp1NmDisp:	aligned_string "MT_MspRgp1NmDisp"
+MTStr_MspUsr2NmDisp:	aligned_string "MT_MspUsr2NmDisp"
+MTStr_MspUsr1NmDisp:	aligned_string "MT_MspUsr1NmDisp"
+MTStr_MspRgp2NmGet:	aligned_string "MT_MspRgp2NmGet"
+MTStr_MspRgp1NmGet:	aligned_string "MT_MspRgp1NmGet"
+MTStr_MspUsr2NmGet:	aligned_string "MT_MspUsr2NmGet"
+MTStr_MspUsr1NmGet:	aligned_string "MT_MspUsr1NmGet"
+MTStr_CstmCpOk:	aligned_string "MT_CstmCpOk"
+MTStr_RgpPadDn:	aligned_string "MT_RgpPadDn"
+MTStr_RgpPadUp:	aligned_string "MT_RgpPadUp"
+MTStr_RgpBnkDn:	aligned_string "MT_RgpBnkDn"
+MTStr_RgpBnkUp:	aligned_string "MT_RgpBnkUp"
+MTStr_S2cTrDn:	aligned_string "MT_S2cTrDn"
+MTStr_S2cTrUp:	aligned_string "MT_S2cTrUp"
+MTStr_CmpSetP1Dn:	aligned_string "MT_CmpSetP1Dn"
+MTStr_CmpSetP1Up:	aligned_string "MT_CmpSetP1Up"
+MTStr_RLmtValGet:	aligned_string "MT_RLmtValGet"
+MTStr_PanValGet:	aligned_string "MT_PanValGet"
+MTStr_RLmtDn:	aligned_string "MT_RLmtDn"
+MTStr_RLmtUp:	aligned_string "MT_RLmtUp"
+MTStr_PanDn:	aligned_string "MT_PanDn"
+MTStr_PanUp:	aligned_string "MT_PanUp"
+MTStr_CmpClrNo:	aligned_string "MT_CmpClrNo"
+MTStr_CmpClrYes:	aligned_string "MT_CmpClrYes"
+MTStr_APRHYVARINM:	aligned_string "MT_APRHYVARINM"
+MTStr_APRHYGRPNM:	aligned_string "MT_APRHYGRPNM"
+MTStr_RhyVariNmGet:	aligned_string "MT_RhyVariNmGet"
+MTStr_RhyGrpNmGet:	aligned_string "MT_RhyGrpNmGet"
+MTStr_MspNameSet:	aligned_string "MT_MspNameSet"
+MTStr_CmpNameSet:	aligned_string "MT_CmpNameSet"
 	.byte 0x32, 0x00, 0xb1, 0xdf, 0xf1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xe6, 0x76, 0xe1, 0x00
 	.long NakaStr_PaintArrowProc_Empty
