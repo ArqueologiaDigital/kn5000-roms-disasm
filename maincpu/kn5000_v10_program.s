@@ -4924,30 +4924,30 @@ FIRMWARE_VERSION:
 	.set LABEL_E500CE, 0xE500CE
 	.set LABEL_E500FE, 0xE500FE
 	.set LABEL_E50117, 0xE50117
-	.set LABEL_E56ACC, 0xE56ACC
-	.set LABEL_E56B14, 0xE56B14
-	.set LABEL_E56B5C, 0xE56B5C
-	.set LABEL_E56CBC, 0xE56CBC
-	.set LABEL_E57504, 0xE57504
+	.set NakaHandler_CtrlMessages, 0xE56ACC
+	.set NakaHandler_RealtimeMessages, 0xE56B14
+	.set NakaHandler_CommonSetting, 0xE56B5C
+	.set NakaHandler_ProgChangeMidiOut, 0xE56CBC
+	.set NakaInst_InOutSettingGrid, 0xE57504
 	.set LABEL_E578AA, 0xE578AA
-	.set LABEL_E57982, 0xE57982
-	.set LABEL_E57C8E, 0xE57C8E
-	.set LABEL_E57E6E, 0xE57E6E
-	.set LABEL_E57F36, 0xE57F36
-	.set LABEL_E57FA2, 0xE57FA2
-	.set LABEL_E5804E, 0xE5804E
-	.set LABEL_E580A6, 0xE580A6
-	.set LABEL_E580D2, 0xE580D2
-	.set LABEL_E5821E, 0xE5821E
-	.set LABEL_E58276, 0xE58276
-	.set LABEL_E582A2, 0xE582A2
-	.set LABEL_E582E2, 0xE582E2
-	.set LABEL_E583A6, 0xE583A6
-	.set LABEL_E58742, 0xE58742
-	.set LABEL_E58FDA, 0xE58FDA
+	.set NakaInst_KN5000_MidiPresets, 0xE57982
+	.set NakaInst_UserSettingSelector, 0xE57C8E
+	.set NakaHandler_SplitPointDialog, 0xE57E6E
+	.set NakaInst_SndModVocalistExtSeq, 0xE57F36
+	.set NakaInst_KN5000_SysexBulkDump, 0xE57FA2
+	.set NakaInst_WithAPC_Presets, 0xE5804E
+	.set NakaInst_WithoutAPC_Presets, 0xE580A6
+	.set NakaInst_Value_SysexPresets, 0xE580D2
+	.set NakaInst_WithAPC_GM, 0xE5821E
+	.set NakaInst_WithoutAPC_GM, 0xE58276
+	.set NakaInst_Value_GM, 0xE582A2
+	.set NakaInst_KN5000_GM, 0xE582E2
+	.set NakaInst_BulkDumpCategorySelect, 0xE583A6
+	.set NakaInst_Receiving_Sysex, 0xE58742
+	.set NakaInst_ProgChangeLabel, 0xE58FDA
 	.set NakaInst_P_MEM_ON_OFF_PART, 0xE5904A
-	.set LABEL_E59532, 0xE59532
-	.set LABEL_E5985A, 0xE5985A
+	.set NakaInst_PresetSettingsLabel, 0xE59532
+	.set NakaInst_ItemLabel_RevEqPreset, 0xE5985A
 	.set LABEL_E60000, 0xE60000
 	.set LABEL_E60008, 0xE60008
 	.set LABEL_E6009A, 0xE6009A
@@ -4983,7 +4983,7 @@ FIRMWARE_VERSION:
 	.set LABEL_E900D8, 0xE900D8
 	.set LABEL_E900E1, 0xE900E1
 	.set LABEL_E900EC, 0xE900EC
-	.set LABEL_E90130, 0xE90130
+	.set NakaInst_SequencerComboBox, 0xE90130
 	.set LABEL_E90133, 0xE90133
 	.set LABEL_E9013D, 0xE9013D
 	.set LABEL_E90B3B, 0xE90B3B
@@ -5278,22 +5278,22 @@ FIRMWARE_VERSION:
 	.set LABEL_ECE11C, 0xECE11C
 	.set LABEL_ECE1E4, 0xECE1E4
 	.set LABEL_ECE2AC, 0xECE2AC
-	.set LABEL_ED0072, 0xED0072
-	.set LABEL_ED009C, 0xED009C
+	.set EffSeqScreen_ChordTypePtr_A, 0xED0072
+	.set EffSeqScreen_ChordTypePtr_B, 0xED009C
 	.set NakaInst_WITH_APC, 0xED00D5
 	.set LABEL_ED013B, 0xED013B
-	.set LABEL_ED0212, 0xED0212
-	.set LABEL_ED029C, 0xED029C
-	.set LABEL_ED210E, 0xED210E
-	.set LABEL_ED2116, 0xED2116
-	.set LABEL_ED211C, 0xED211C
-	.set LABEL_ED2122, 0xED2122
-	.set LABEL_ED212C, 0xED212C
-	.set LABEL_ED250C, 0xED250C
-	.set LABEL_ED275C, 0xED275C
-	.set LABEL_ED276E, 0xED276E
-	.set LABEL_ED2774, 0xED2774
-	.set LABEL_ED277E, 0xED277E
+	.set SeqChanContainer_ChordTypeRef_A, 0xED0212
+	.set SeqChanContainer_ChordTypeRef_B, 0xED029C
+	.set ParamStr08_varisupart, 0xED210E
+	.set ParamStr08_page, 0xED2116
+	.set ParamStr08_fontcolor, 0xED211C
+	.set ParamStr08_font, 0xED2122
+	.set ParamStr08_func, 0xED212C
+	.set ParamStr19_fixedcol, 0xED250C
+	.set ParamStr22_nowsongsubctgdtno, 0xED275C
+	.set ParamStr22_func, 0xED276E
+	.set ParamStr22_fixedrow, 0xED2774
+	.set ParamStr22_fixedcol, 0xED277E
 	.set NakaInst_AcMstSugAlpGridBox, 0xED2B9A
 	.set NakaInst_AcFSWAssGridBox, 0xED2BE2
 	.set NakaDesc_AcTchSensGridBox, 0xED2BF4

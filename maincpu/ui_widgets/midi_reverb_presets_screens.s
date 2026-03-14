@@ -526,7 +526,7 @@ String_MIDI_MENU:
 	.byte 0x9c, 0x00, 0x61, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x89, 0x00, 0x5c, 0xe4, 0x03, 0x00
-	.long LABEL_E56ACC
+	.long NakaHandler_CtrlMessages
 	.byte 0x52, 0x00, 0xa0, 0x01
 	.byte 0x86, 0x00, 0x00, 0x00
 	aligned_string "CONTROL MESSAGES"
@@ -538,7 +538,7 @@ String_MIDI_MENU:
 	.byte 0x9c, 0x00, 0x8b, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x8a, 0x00, 0x5e, 0xe4, 0x03, 0x00
-	.long LABEL_E56B14
+	.long NakaHandler_RealtimeMessages
 	.byte 0x53, 0x00, 0xa0, 0x01
 	.byte 0x1b, 0x00, 0x00, 0x00
 	aligned_string "REALTIME MESSAGES"
@@ -550,7 +550,7 @@ String_MIDI_MENU:
 	.byte 0x9c, 0x00, 0xb5, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x8b, 0x00, 0x60, 0xe4, 0x03, 0x00
-	.long LABEL_E56B5C
+	.long NakaHandler_CommonSetting
 	.byte 0x54, 0x00, 0xa0, 0x01
 	.byte 0x1a, 0x00, 0x00, 0x00
 	aligned_string "COMMON SETTING"	; DB "NG", 000h, 0FFh
@@ -606,7 +606,7 @@ String_MIDI_MENU:
 	.byte 0x37, 0x01, 0xb5, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x0b, 0x00, 0x6a, 0xe4, 0x03, 0x00
-	.long LABEL_E56CBC
+	.long NakaHandler_ProgChangeMidiOut
 	.byte 0x59, 0x00, 0xa0, 0x01
 	.byte 0x1d, 0x00, 0x00, 0x00
 	aligned_string "PROG.CHANGE MIDI OUT"
@@ -626,7 +626,7 @@ String_MIDI_MENU:
 	naka_header NAKA_TYPE_0x35
 	.byte 0xff, 0xff, 0x12, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x24, 0x01, 0xe0, 0x00
-	.long LABEL_EB013F
+	.long WidgetCharMap_DataEntry2
 	.byte 0xf7, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x6e, 0xe4, 0x03, 0x00, 0x72, 0xe4
 	.byte 0x03, 0x00
@@ -743,11 +743,11 @@ NakaDesc_CONTROL_MESSAGES:	aligned_string "CONTROL MESSAGES"
 	.byte 0x02, 0x00, 0x01, 0x00, 0x96, 0xe4, 0x03, 0x00
 	.byte 0x98, 0xe4, 0x03, 0x00, 0x9a, 0xe4, 0x03, 0x00
 	.byte 0x9e, 0xe4, 0x03, 0x00, 0xa2, 0xe4, 0x03, 0x00
-	.long LABEL_E57068
+	.long NakaString_CtrlMsg_PipeSeparator
 	.long NakaInst_PRG_CHANGE_BANK_SELECT_PITCH_BEND_VOLUME
 	.byte 0x14, 0x00, 0x23, 0x01, 0xa6, 0xe4, 0x03, 0x00
 NakaInst_PRG_CHANGE_BANK_SELECT_PITCH_BEND_VOLUME:	aligned_string "PRG.CHANGE|BANK SELECT|PITCH BEND|VOLUME|EXPRESSION|PAN|SUSTAIN|EFFECT & REVERB"
-LABEL_E57068:	aligned_string "     |   "
+NakaString_CtrlMsg_PipeSeparator:	aligned_string "     |   "
 
 
 	naka_header NAKA_TYPE_0x22
@@ -915,11 +915,11 @@ NakaDesc_COMMON_SETTING:	aligned_string "COMMON SETTING"
 	.byte 0x02, 0x00, 0x00, 0x00, 0xcc, 0xe4, 0x03, 0x00
 	.byte 0xce, 0xe4, 0x03, 0x00, 0xd0, 0xe4, 0x03, 0x00
 	.byte 0xd4, 0xe4, 0x03, 0x00, 0xd8, 0xe4, 0x03, 0x00
-	.long LABEL_E575C0
-	.long LABEL_E57504
+	.long NakaString_InOut_PipeSeparator
+	.long NakaInst_InOutSettingGrid
 	.byte 0x34, 0x00, 0x23, 0x01
 	aligned_string " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| a|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"
-LABEL_E575C0:	aligned_string "     |  "
+NakaString_InOut_PipeSeparator:	aligned_string "     |  "
 
 
 	naka_header NAKA_TYPE_0x22
@@ -1038,7 +1038,7 @@ LABEL_E575C0:	aligned_string "     |  "
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x06, 0x00
 	.byte 0xea, 0xe4, 0x03, 0x00, 0x12, 0x78, 0xe5, 0x00
 	.byte 0x01, 0x00
-LABEL_E57812:	.ascii "Organ             ~95|Organ Fixed Touch ~95|PX Piano          ~95|Accordion   "
+NakaString_MidiPresets_PartNames:	.ascii "Organ             ~95|Organ Fixed Touch ~95|PX Piano          ~95|Accordion   "
 NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:	aligned_string "      ~95|Bass Pedals       ~95|Ext. Sequencer    ~95"
 
 
@@ -1063,7 +1063,7 @@ NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:	aligned_string "      ~95|Bass Peda
 	naka_header NAKA_TYPE_0x23
 	.byte 0x07, 0x00, 0x10, 0x00
 	.byte 0x11, 0x00, 0x0d, 0x00, 0x08, 0x00, 0x7c, 0x00
-	.long LABEL_EB00D8
+	.long WidgetCharMap_DataEntry1
 	.byte 0xee, 0x00, 0x07, 0x00
 	.byte 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x05, 0x00
@@ -1090,7 +1090,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x11, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
 	.byte 0xc6, 0x00, 0x82, 0x00, 0xf9, 0x00, 0x94, 0x00
-	.long LABEL_E57982
+	.long NakaInst_KN5000_MidiPresets
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
 	aligned_string "KN5000"
@@ -1212,7 +1212,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0xe5, 0x00, 0xbd, 0x00, 0xf5, 0x00, 0xc1, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x03, 0x00, 0xfe, 0xe4, 0x03, 0x00
-	.long LABEL_E57C8E
+	.long NakaInst_UserSettingSelector
 	.byte 0x01, 0x00
 	aligned_string " USER 1 SETTING | USER 2 SETTING | USER 3 SETTING "
 
@@ -1293,7 +1293,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0xff, 0xff, 0x2a, 0x00, 0x27, 0x00, 0x08, 0x00
 	.byte 0x08, 0x00, 0x20, 0x00, 0xe3, 0x00, 0x37, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x86, 0x7e, 0xe5, 0x00
-	.long LABEL_E57E6E
+	.long NakaHandler_SplitPointDialog
 	.byte 0x0a, 0xe5, 0x03, 0x00
 	.byte 0x88, 0x00, 0x00, 0x00, 0x20, 0x01
 	aligned_string "WITH SPLIT POINT ? : NO"
@@ -1329,7 +1329,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x0d, 0x01, 0xc0, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x06, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0x03, 0x00, 0x14, 0xe5, 0x03, 0x00
-	.long LABEL_E57F36
+	.long NakaInst_SndModVocalistExtSeq
 	.byte 0x01, 0x00
 	aligned_string "~95 Sound Module|~95 Vocalist|~95 Ext. Sequencer"
 
@@ -1345,7 +1345,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x2e, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
 	.byte 0x22, 0x00, 0x82, 0x00, 0x55, 0x00, 0x94, 0x00
-	.long LABEL_E57FA2
+	.long NakaInst_KN5000_SysexBulkDump
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
 	aligned_string "KN5000"
@@ -1371,7 +1371,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	naka_header NAKA_TYPE_0x23
 	.byte 0x2b, 0x00, 0x33, 0x00
 	.byte 0x34, 0x00, 0x31, 0x00, 0x08, 0x00, 0x7c, 0x00
-	.long LABEL_EB00D8
+	.long WidgetCharMap_DataEntry1
 	.byte 0xee, 0x00, 0x07, 0x00
 	.byte 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x05, 0x00
@@ -1382,7 +1382,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x32, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x92, 0x00, 0xdb, 0x00
 	.long NakaInst_WITH_APC
-	.long LABEL_E5804E
+	.long NakaInst_WithAPC_Presets
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	aligned_string "WITH APC"
 
@@ -1400,7 +1400,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x34, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x0e, 0x00, 0xdb, 0x00
 	.long ExtData_ChordType_NullByte
-	.long LABEL_E580A6
+	.long NakaInst_WithoutAPC_Presets
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	aligned_string "WITHOUT APC"
 
@@ -1409,7 +1409,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x2b, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x34, 0x00, 0x08, 0x00
 	.byte 0x02, 0x01, 0xc6, 0x00, 0x2d, 0x01, 0xd8, 0x00
-	.long LABEL_E580D2
+	.long NakaInst_Value_SysexPresets
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
 	aligned_string "VALUE"
@@ -1460,7 +1460,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	naka_header NAKA_TYPE_0x23
 	.byte 0x37, 0x00, 0x3d, 0x00
 	.byte 0x3e, 0x00, 0x3b, 0x00, 0x08, 0x00, 0x7c, 0x00
-	.long LABEL_EB00D8
+	.long WidgetCharMap_DataEntry1
 	.byte 0xee, 0x00, 0x09, 0x00
 	.byte 0xc3, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x05, 0x00
@@ -1471,7 +1471,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x3c, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x92, 0x00, 0xdb, 0x00
 	.long NakaInst_WITH_APC
-	.long LABEL_E5821E
+	.long NakaInst_WithAPC_GM
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	aligned_string "WITH APC"
 
@@ -1489,7 +1489,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x3e, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x0e, 0x00, 0xdb, 0x00
 	.long ExtData_ChordType_NullByte
-	.long LABEL_E58276
+	.long NakaInst_WithoutAPC_GM
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	aligned_string "WITHOUT APC"
 
@@ -1498,7 +1498,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x37, 0x00
 	.byte 0xff, 0xff, 0x41, 0x00, 0x3e, 0x00, 0x08, 0x00
 	.byte 0x02, 0x01, 0xc6, 0x00, 0x2d, 0x01, 0xd8, 0x00
-	.long LABEL_E582A2
+	.long NakaInst_Value_GM
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
 	aligned_string "VALUE"
@@ -1515,7 +1515,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x41, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
 	.byte 0x22, 0x00, 0x82, 0x00, 0x55, 0x00, 0x94, 0x00
-	.long LABEL_E582E2
+	.long NakaInst_KN5000_GM
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
 	aligned_string "KN5000"
@@ -1553,7 +1553,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x07, 0x01, 0xd2, 0x00, 0xf5, 0x00, 0xc1, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0x06, 0x00, 0x24, 0xe5, 0x03, 0x00
-	.long LABEL_E583A6
+	.long NakaInst_BulkDumpCategorySelect
 	.byte 0x01, 0x00
 	aligned_string " PERFORMANCE | CURRENT PANEL + PANEL MEMORY | COMPOSER | SEQUENCER | MSP USER | SOUND MEMORY "
 
@@ -1698,7 +1698,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x11, 0x00
 	.byte 0xff, 0xff, 0x14, 0x00, 0x12, 0x00, 0x08, 0x00
 	.byte 0x4e, 0x00, 0x26, 0x00, 0xe1, 0x00, 0x38, 0x00
-	.long LABEL_E58742
+	.long NakaInst_Receiving_Sysex
 	.byte 0x02, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
 	.asciz "RECIEVING"	; DB "ING", 000h
@@ -1755,7 +1755,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	naka_header NAKA_TYPE_0x1B
 	.byte 0x15, 0x00, 0xff, 0xff, 0x1a, 0x00
 	.byte 0x18, 0x00, 0x08, 0x00, 0x10, 0x00, 0xd6, 0x00
-	.long LABEL_E90130
+	.long NakaInst_SequencerComboBox
 	stib_dpi 0x00, 0x00
 	.byte 0xff, 0xff, 0xc0, 0x88, 0xe5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x09, 0x00
@@ -1989,7 +1989,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	naka_header NAKA_TYPE_0x22
 	.byte 0x00, 0x00, 0xff, 0xff
 	.byte 0x04, 0x00, 0x02, 0x00, 0x08, 0x00, 0xa4, 0x00
-	.long LABEL_EB00D8
+	.long WidgetCharMap_DataEntry1
 	.byte 0xee, 0x00, 0x07, 0x00
 	.byte 0xc9, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x05, 0x00
@@ -2095,7 +2095,7 @@ NakaDesc_WITH_APC:	aligned_string "WITH APC"
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x05, 0x00, 0x03, 0x00, 0x08, 0x00
 	.byte 0xbe, 0x00, 0xc5, 0x00, 0xe9, 0x00, 0xd7, 0x00
-	.long LABEL_E58FDA
+	.long NakaInst_ProgChangeLabel
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
 	aligned_string "P.CNG"
@@ -2176,7 +2176,7 @@ NakaDesc_P_MEM_ON_OFF_PART:	aligned_string "P.MEM:|ON/OFF:|-|PART:"
 	naka_header NAKA_TYPE_0x1F
 	.byte 0x00, 0x00, 0xff, 0xff
 	.byte 0x0e, 0x00, 0x0c, 0x00, 0x08, 0x00, 0xcc, 0x00
-	.long LABEL_EB00D8
+	.long WidgetCharMap_DataEntry1
 	.byte 0xee, 0x00, 0x07, 0x00
 	.byte 0xc9, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x03, 0x00
@@ -2327,7 +2327,7 @@ NakaInst_From_Registration_file_From_Sequencer_song_GM:	aligned_string " |-|From
 	.byte 0x05, 0x00
 	.byte 0xff, 0xff, 0x07, 0x00, 0xff, 0xff, 0x08, 0x00
 	.byte 0x06, 0x00, 0x1c, 0x00, 0x81, 0x00, 0x2e, 0x00
-	.long LABEL_E59532
+	.long NakaInst_PresetSettingsLabel
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xfb, 0x00
 	aligned_string "PRESET SETTINGS"
@@ -2404,7 +2404,7 @@ NakaInst_From_Registration_file_From_Sequencer_song_GM:	aligned_string " |-|From
 	.byte 0x0e, 0x00
 	.byte 0xff, 0xff, 0x10, 0x00, 0xff, 0xff, 0x08, 0x00
 	.byte 0x22, 0x00, 0x22, 0x00, 0x45, 0x00, 0x34, 0x00
-	.long LABEL_E5985A
+	.long NakaInst_ItemLabel_RevEqPreset
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xfb, 0x00
 	aligned_string "ITEM"
@@ -2747,22 +2747,22 @@ NakaDesc_SPLIT_POINT:	aligned_string "SPLIT POINT"
 	.byte 0x00, 0x00, 0x3e, 0xa1, 0xe5, 0x00, 0x3c, 0xa1
 	.byte 0xe5, 0x00, 0x3a, 0xa1, 0xe5, 0x00, 0x38, 0xa1
 	.byte 0xe5, 0x00, 0x36, 0xa1, 0xe5, 0x00
-LABEL_E5A136:
+NakaObj_RevEqMenu_Null1:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E5A13A:
+NakaObj_RevEqMenu_Null2:
 	.byte 0x00, 0xff
-LABEL_E5A13C:
+NakaObj_RevEqMenu_Null3:
 	.byte 0x00, 0xff
 NakaInst_ReverbEqualizerMenu:	aligned_string "ReverbEqualizerMenu"
 	.byte 0x68, 0xa1, 0xe5, 0x00, 0x66, 0xa1
 	.byte 0xe5, 0x00, 0x64, 0xa1, 0xe5, 0x00, 0x62, 0xa1
 	.byte 0xe5, 0x00
-LABEL_E5A162:
+NakaObj_R12Octave_Null1:
 	.byte 0x00, 0xff
-LABEL_E5A164:
+NakaObj_R12Octave_Null2:
 	.byte 0x00, 0xff
-LABEL_E5A166:
+NakaObj_R12Octave_Null3:
 	.byte 0x00, 0xff
 NakaInst_R12OctaveSetting:	aligned_string "R12OctaveSetting"
 	.byte 0xc6, 0xa1, 0xe5, 0x00, 0xc4, 0xa1
@@ -2772,54 +2772,54 @@ NakaInst_R12OctaveSetting:	aligned_string "R12OctaveSetting"
 	.byte 0xe5, 0x00, 0xb6, 0xa1, 0xe5, 0x00, 0xb4, 0xa1
 	.byte 0xe5, 0x00, 0xb2, 0xa1, 0xe5, 0x00, 0xb0, 0xa1
 	.byte 0xe5, 0x00, 0xae, 0xa1, 0xe5, 0x00
-LABEL_E5A1AE:
+NakaObj_RevPreset_Null1:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E5A1B2:
+NakaObj_RevPreset_Null2:
 	.byte 0x00, 0xff
-LABEL_E5A1B4:
+NakaObj_RevPreset_Null3:
 	.byte 0x00, 0xff
-LABEL_E5A1B6:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_E5A1BA:
-	.byte 0x00, 0xff
-LABEL_E5A1BC:
-	.byte 0x00, 0xff
-LABEL_E5A1BE:
+NakaObj_RevPreset_Null4:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E5A1C2:
+NakaObj_RevPreset_Null5:
 	.byte 0x00, 0xff
-LABEL_E5A1C4:
+NakaObj_RevPreset_Null6:
+	.byte 0x00, 0xff
+NakaObj_RevPreset_Null7:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaObj_RevPreset_Null8:
+	.byte 0x00, 0xff
+NakaObj_RevPreset_Null9:
 	.byte 0x00, 0xff
 NakaInst_ReverbPreset:	aligned_string "ReverbPreset"
 	.long NakaInst_EqualizerPreset
 Naka_MidiChannel_Table:
-	.long LABEL_E5A228
-	.long LABEL_E5A226
-	.long LABEL_E5A224
-	.long LABEL_E5A222
-	.long LABEL_E5A220
-	.long LABEL_E5A21E
-	.long LABEL_E5A21C
-	.long LABEL_E5A21A
-	.long LABEL_E5A218
-	.long LABEL_E5A216
+	.long Naka_MidiChan_Slot01
+	.long Naka_MidiChan_Slot02
+	.long Naka_MidiChan_Slot03
+	.long Naka_MidiChan_Slot04
+	.long Naka_MidiChan_Slot05
+	.long Naka_MidiChan_Slot06
+	.long Naka_MidiChan_Slot07
+	.long Naka_MidiChan_Slot08
+	.long Naka_MidiChan_Slot09
+	.long Naka_MidiChan_Slot10
 	.long NakaInst_EqOnOffBox
-	.long LABEL_E5A208
-LABEL_E5A208:	aligned_string ""
+	.long Naka_MidiChan_Null1
+Naka_MidiChan_Null1:	aligned_string ""
 NakaInst_EqOnOffBox:	aligned_string "EqOnOffBox"
-LABEL_E5A216:	aligned_string ""
-LABEL_E5A218:	aligned_string ""
-LABEL_E5A21A:	aligned_string ""
-LABEL_E5A21C:	aligned_string ""
-LABEL_E5A21E:	aligned_string ""
-LABEL_E5A220:	aligned_string ""
-LABEL_E5A222:	aligned_string ""
-LABEL_E5A224:	aligned_string ""
-LABEL_E5A226:	aligned_string ""
-LABEL_E5A228:	aligned_string ""
+Naka_MidiChan_Slot10:	aligned_string ""
+Naka_MidiChan_Slot09:	aligned_string ""
+Naka_MidiChan_Slot08:	aligned_string ""
+Naka_MidiChan_Slot07:	aligned_string ""
+Naka_MidiChan_Slot06:	aligned_string ""
+Naka_MidiChan_Slot05:	aligned_string ""
+Naka_MidiChan_Slot04:	aligned_string ""
+Naka_MidiChan_Slot03:	aligned_string ""
+Naka_MidiChan_Slot02:	aligned_string ""
+Naka_MidiChan_Slot01:	aligned_string ""
 NakaInst_EqualizerPreset:	aligned_string "EqualizerPreset"
 	.byte 0x92, 0xa2, 0xe5, 0x00, 0x90, 0xa2
 	.byte 0xe5, 0x00, 0x8e, 0xa2, 0xe5, 0x00, 0x8c, 0xa2
@@ -2828,83 +2828,83 @@ NakaInst_EqualizerPreset:	aligned_string "EqualizerPreset"
 	.byte 0xe5, 0x00, 0x82, 0xa2, 0xe5, 0x00, 0x80, 0xa2
 	.byte 0xe5, 0x00, 0x72, 0xa2, 0xe5, 0x00, 0x70, 0xa2
 	.byte 0xe5, 0x00, 0x6e, 0xa2, 0xe5, 0x00
-LABEL_E5A26E:
+NakaObj_EqPreset_Null1:
 	.byte 0x00, 0xff
-LABEL_E5A270:	aligned_string ""
+NakaObj_EqPreset_Null2:	aligned_string ""
 NakaInst_RevEqOnOffBox:	aligned_string "RevEqOnOffBox"
 	.byte 0x00, 0xff
-LABEL_E5A282:
+NakaObj_RevEqOnOff_Null1:
 	.byte 0x00, 0xff
-LABEL_E5A284:
+NakaObj_RevEqOnOff_Null2:
 	.byte 0x00, 0xff
-LABEL_E5A286:
+NakaObj_RevEqOnOff_Null3:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_E5A28A:
+NakaObj_RevEqOnOff_Null4:
 	.byte 0x00, 0xff
-LABEL_E5A28C:
+NakaObj_RevEqOnOff_Null5:
 	.byte 0x00, 0xff
-LABEL_E5A28E:
+NakaObj_RevEqOnOff_Null6:
 	.byte 0x00, 0xff
-LABEL_E5A290:	aligned_string ""
+NakaObj_RevEqOnOff_Null7:	aligned_string ""
 NakaInst_ReverbEqualizerPreset:	aligned_string "ReverbEqualizerPreset"
 Naka_MidiPart_Table1:
 	.long NakaInst_MidiMenu
 	.long NakaInst_MdmenuPage
-	.long LABEL_E5A338
-	.long LABEL_E5A336
-	.long LABEL_E5A334
-	.long LABEL_E5A332
+	.long Naka_MidiPart1_MdMenu_Null4
+	.long Naka_MidiPart1_MdMenu_Null3
+	.long Naka_MidiPart1_MdMenu_Null2
+	.long Naka_MidiPart1_MdMenu_Null1
 	.long NakaInst_MidiMenuPage1
-	.long LABEL_E5A322
-	.long LABEL_E5A320
-	.long LABEL_E5A31E
-	.long LABEL_E5A31C
-	.long LABEL_E5A31A
-	.long LABEL_E5A318
-	.long LABEL_E5A316
-	.long LABEL_E5A314
-	.long LABEL_E5A312
-	.long LABEL_E5A310
+	.long Naka_MidiPart1_Page1_Null10
+	.long Naka_MidiPart1_Page1_Null9
+	.long Naka_MidiPart1_Page1_Null8
+	.long Naka_MidiPart1_Page1_Null7
+	.long Naka_MidiPart1_Page1_Null6
+	.long Naka_MidiPart1_Page1_Null5
+	.long Naka_MidiPart1_Page1_Null4
+	.long Naka_MidiPart1_Page1_Null3
+	.long Naka_MidiPart1_Page1_Null2
+	.long Naka_MidiPart1_Page1_Null1
 	.long NakaInst_MidiMenuPage2
-	.long LABEL_E5A300
-	.long LABEL_E5A2FE
-	.long LABEL_E5A2FC
-LABEL_E5A2FC:	aligned_string ""
-LABEL_E5A2FE:	aligned_string ""
-LABEL_E5A300:	aligned_string ""
+	.long Naka_MidiPart1_Page2_Null3
+	.long Naka_MidiPart1_Page2_Null2
+	.long Naka_MidiPart1_Page2_Null1
+Naka_MidiPart1_Page2_Null1:	aligned_string ""
+Naka_MidiPart1_Page2_Null2:	aligned_string ""
+Naka_MidiPart1_Page2_Null3:	aligned_string ""
 NakaInst_MidiMenuPage2:	aligned_string "MidiMenuPage2"
-LABEL_E5A310:	aligned_string ""
-LABEL_E5A312:	aligned_string ""
-LABEL_E5A314:	aligned_string ""
-LABEL_E5A316:	aligned_string ""
-LABEL_E5A318:	aligned_string ""
-LABEL_E5A31A:	aligned_string ""
-LABEL_E5A31C:	aligned_string ""
-LABEL_E5A31E:	aligned_string ""
-LABEL_E5A320:	aligned_string ""
-LABEL_E5A322:	aligned_string ""
+Naka_MidiPart1_Page1_Null1:	aligned_string ""
+Naka_MidiPart1_Page1_Null2:	aligned_string ""
+Naka_MidiPart1_Page1_Null3:	aligned_string ""
+Naka_MidiPart1_Page1_Null4:	aligned_string ""
+Naka_MidiPart1_Page1_Null5:	aligned_string ""
+Naka_MidiPart1_Page1_Null6:	aligned_string ""
+Naka_MidiPart1_Page1_Null7:	aligned_string ""
+Naka_MidiPart1_Page1_Null8:	aligned_string ""
+Naka_MidiPart1_Page1_Null9:	aligned_string ""
+Naka_MidiPart1_Page1_Null10:	aligned_string ""
 NakaInst_MidiMenuPage1:	aligned_string "MidiMenuPage1"
-LABEL_E5A332:	aligned_string ""
-LABEL_E5A334:	aligned_string ""
-LABEL_E5A336:	aligned_string ""
-LABEL_E5A338:	aligned_string ""
+Naka_MidiPart1_MdMenu_Null1:	aligned_string ""
+Naka_MidiPart1_MdMenu_Null2:	aligned_string ""
+Naka_MidiPart1_MdMenu_Null3:	aligned_string ""
+Naka_MidiPart1_MdMenu_Null4:	aligned_string ""
 NakaInst_MdmenuPage:	aligned_string "MdmenuPage"
 NakaInst_MidiMenu:	aligned_string "MidiMenu"
 Naka_MIDI_PartEditorTable:
 	.long NakaInst_MidiPartSetting
 	.long NakaInst_MdPartSetGridBox
-	.long LABEL_E5A37A
-	.long LABEL_E5A378
-	.long LABEL_E5A376
-	.long LABEL_E5A374
-	.long LABEL_E5A372
-	.long LABEL_E5A370
-LABEL_E5A370:	aligned_string ""
-LABEL_E5A372:	aligned_string ""
-LABEL_E5A374:	aligned_string ""
-LABEL_E5A376:	aligned_string ""
-LABEL_E5A378:	aligned_string ""
-LABEL_E5A37A:	aligned_string ""
+	.long Naka_MidiPartEditor_Null6
+	.long Naka_MidiPartEditor_Null5
+	.long Naka_MidiPartEditor_Null4
+	.long Naka_MidiPartEditor_Null3
+	.long Naka_MidiPartEditor_Null2
+	.long Naka_MidiPartEditor_Null1
+Naka_MidiPartEditor_Null1:	aligned_string ""
+Naka_MidiPartEditor_Null2:	aligned_string ""
+Naka_MidiPartEditor_Null3:	aligned_string ""
+Naka_MidiPartEditor_Null4:	aligned_string ""
+Naka_MidiPartEditor_Null5:	aligned_string ""
+Naka_MidiPartEditor_Null6:	aligned_string ""
 NakaInst_MdPartSetGridBox:	aligned_string "MdPartSetGridBox"
 NakaInst_MidiPartSetting:	aligned_string "MidiPartSetting"
