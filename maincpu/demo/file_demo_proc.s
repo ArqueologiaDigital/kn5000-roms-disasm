@@ -1605,7 +1605,7 @@ FileIO_ValidateExt_Return:
 ;   4. F88D74: configure memory range (XWA=base, XBC=size)
 ;   5. F88C48: finalize
 ; =============================================================================
-LABEL_F8744F:
+FileIO_LoadRegion0_VRAM:
 	; --- Display region 0: VRAM 0xF980-0xFFC0, 0x1E7800-0x1E8000 ---
 	lda xsp, (xsp - 14)			; allocate 14 bytes
 	pushw iz				; save IZ (2 bytes, total frame=16)
@@ -1617,14 +1617,14 @@ LABEL_F8744F:
 	ld xbc, 0x00EA0194			; resource ID for region 0
 	call FileIO_OpenWithMode				; open display resource
 	cps hl, 0				; check result (negative=error)
-	jr ge, LABEL_F87474			; success, continue
+	jr ge, LoadRegion0_OpenSuccess			; success, continue
 	call FileIO_ReturnError				; close resource (error path)
-	jr LABEL_F874BD				; return
-LABEL_F87474:
+	jr LoadRegion0_Return				; return
+LoadRegion0_OpenSuccess:
 	lds	wa, 0
 	calr FileIO_CheckRegionSignature			; check mode availability
 	cps hl, 0
-	jr z, LABEL_F874B1			; mode not available, alt path
+	jr z, LoadRegion0_AltPath			; mode not available, alt path
 	call PreLswLoad				; primary display setup
 	ldada	xwa, 63872
 	ldada	xbc, 65472
@@ -1640,19 +1640,19 @@ LABEL_F87474:
 	ld iz, hl				; IZ = result handle
 	ld wa, iz
 	call PostLswLoad				; post-setup
-	jr LABEL_F874B7
-LABEL_F874B1:
+	jr LoadRegion0_Finalize
+LoadRegion0_AltPath:
 	call FileData_AllocLoadAndParse				; alternate path setup
 	ld iz, hl				; IZ = result
-LABEL_F874B7:
+LoadRegion0_Finalize:
 	call FileIO_CloseHandle			; finalize display
 	ld hl, iz				; return result in HL
-LABEL_F874BD:
+LoadRegion0_Return:
 	popw iz
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F874C2:
+FileIO_LoadRegion1_VRAM:
 	; --- Display region 1: VRAM 0x1ED350, memory up to 0x200000 ---
 	lda xsp, (xsp - 14)
 	pushw iz
@@ -1664,17 +1664,17 @@ LABEL_F874C2:
 	ld xbc, 0x00EA0198			; resource ID for region 1
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F874E8
+	jr ge, LoadRegion1_OpenSuccess
 	call FileIO_ReturnError
-	jrl LABEL_F8757D
-LABEL_F874E8:
+	jrl LoadRegion1_Return
+LoadRegion1_OpenSuccess:
 	lds	wa, 1
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
-	jrl z, LABEL_F87574
+	jrl z, LoadRegion1_ModeError
 	calr FileIO_ReadHeaderAtF			; check extended mode
 	cps hl, 0
-	jr z, LABEL_F87550
+	jr z, LoadRegion1_AltPmLoad
 	lds	wa, 0
 	call 0xFB62C3
 	ld xwa, 0x00000010
@@ -1698,8 +1698,8 @@ LABEL_F874E8:
 	lds	wa, 0
 	ld bc, iz
 	call 0xFB62C4
-	jr LABEL_F87577
-LABEL_F87550:
+	jr LoadRegion1_Finalize
+LoadRegion1_AltPmLoad:
 	call PrePmLoad				; alternate region setup
 	lda_24 xwa, 0x1ED350
 	ld xde, xwa
@@ -1710,18 +1710,18 @@ LABEL_F87550:
 	ld iz, hl
 	ld wa, iz
 	call PostPmLoad
-	jr LABEL_F87577
-LABEL_F87574:
+	jr LoadRegion1_Finalize
+LoadRegion1_ModeError:
 	ldw iz, 0xFF9A				; error code
-LABEL_F87577:
+LoadRegion1_Finalize:
 	call FileIO_CloseHandle			; finalize
 	ld hl, iz
-LABEL_F8757D:
+LoadRegion1_Return:
 	popw iz
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F87582:
+FileIO_LoadRegion7_Flash:
 	; --- Display region 7: flash/file buffer 0x3D3000, 0x0400 bytes ---
 	lda xsp, (xsp - 14)
 	push xiz				; save XIZ (4 bytes)
@@ -1733,21 +1733,21 @@ LABEL_F87582:
 	ld xbc, 0x00EA019C			; resource ID for region 7
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F875A7
+	jr ge, LoadRegion7_OpenSuccess
 	call FileIO_ReturnError
-	jr LABEL_F8760F
-LABEL_F875A7:
+	jr LoadRegion7_Return
+LoadRegion7_OpenSuccess:
 	lds	wa, 7
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
-	jr z, LABEL_F87606
+	jr z, LoadRegion7_ModeError
 	call PreMidiLoad
 	pushw 0x0400				; buffer size
 	call Malloc				; allocate buffer (Malloc)
 	inc 2, xsp				; clean stack
 	ld xiz, xhl				; XIZ = buffer ptr
 	or xiz, xiz				; check null
-	jr z, LABEL_F875FB			; alloc failed
+	jr z, LoadRegion7_AllocFailed			; alloc failed
 	pushw 0x0000				; fill value
 	pushw 0x0400				; fill size
 	push xiz				; buffer ptr
@@ -1767,24 +1767,24 @@ LABEL_F875A7:
 	inc 4, xsp				; clean stack
 	call FileIO_ReturnError
 	ld iz, hl
-	jr LABEL_F875FE
-LABEL_F875FB:
+	jr LoadRegion7_PostMidi
+LoadRegion7_AllocFailed:
 	ldw iz, 0xFF38				; alloc failure error code
-LABEL_F875FE:
+LoadRegion7_PostMidi:
 	ld wa, iz
 	call PostMidiLoad
-	jr LABEL_F87609
-LABEL_F87606:
+	jr LoadRegion7_Finalize
+LoadRegion7_ModeError:
 	ldw iz, 0xFF9A				; mode unavailable error
-LABEL_F87609:
+LoadRegion7_Finalize:
 	call FileIO_CloseHandle
 	ld hl, iz
-LABEL_F8760F:
+LoadRegion7_Return:
 	pop xiz
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F87614:
+FileIO_LoadRegion2_ExtMem:
 	; --- Display region 2: external memory 0x0AB000-0x0FD800 ---
 	lda xsp, (xsp - 18)
 	pushw iz
@@ -1797,17 +1797,17 @@ LABEL_F87614:
 	ld xbc, 0x00EA01A0			; resource ID for region 2
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F8763E
+	jr ge, LoadRegion2_OpenSuccess
 	call FileIO_ReturnError
-	jrl LABEL_F876C6
-LABEL_F8763E:
+	jrl LoadRegion2_Return
+LoadRegion2_OpenSuccess:
 	lds	wa, 2
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
-	jr z, LABEL_F876B2
+	jr z, LoadRegion2_ModeError
 	calr FileIO_ReadHeaderAt4			; check extended mode (region 2)
 	cps hl, 0
-	jr z, LABEL_F87680
+	jr z, LoadRegion2_AltSeqInit
 	call SeqLoadPre				; primary ext memory init
 	ld xwa, 0x000AB000			; ext memory base
 	ld xbc, 0x00005000			; size = 0x5000
@@ -1821,8 +1821,8 @@ LABEL_F8763E:
 	ld iz, hl
 	ld wa, iz
 	call SeqLoadPost				; post-setup
-	jr LABEL_F876B5
-LABEL_F87680:
+	jr LoadRegion2_Finalize
+LoadRegion2_AltSeqInit:
 	call SeqLoad_JumpInitFromPreset				; alternate ext memory init
 	ld xwa, 0x000AB000
 	ld xbc, 0x00000800			; smaller size
@@ -1836,24 +1836,24 @@ LABEL_F87680:
 	ld iz, hl
 	ld wa, iz
 	call SeqLoad_PostAltEntry				; post-setup (alt)
-	jr LABEL_F876B5
-LABEL_F876B2:
+	jr LoadRegion2_Finalize
+LoadRegion2_ModeError:
 	ldw iz, 0xFF9A				; mode unavailable error
-LABEL_F876B5:
+LoadRegion2_Finalize:
 	call FileIO_CloseHandle
 	cps iz, 0				; check result
-	jr lt, LABEL_F876C4			; error, skip
+	jr lt, LoadRegion2_SkipVoiceCmd			; error, skip
 	ld xwa, (xsp + 16)			; restore caller arg
 	call VoiceSynth_CmdCase0				; additional processing
-LABEL_F876C4:
+LoadRegion2_SkipVoiceCmd:
 	ld hl, iz
-LABEL_F876C6:
+LoadRegion2_Return:
 	popw iz
 	lda xsp, (xsp + 18)
 	ret
 
 
-LABEL_F876CB:
+FileIO_LoadSongRegion8:
 	lda xsp, (xsp - 28)
 	pushw iz
 	ld (xsp + 26), xwa
@@ -1865,24 +1865,24 @@ LABEL_F876CB:
 	ld xbc, 0xEA01A4
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F876F6
+	jr ge, LoadSong8_InitLoop
 	call FileIO_ReturnError
-	jrl LABEL_F87848
+	jrl LoadSong8_Return
 
-LABEL_F876F6:
+LoadSong8_InitLoop:
 	lds iz, 0
 
-LABEL_F876F8:
+LoadSong8_ReadLoop:
 	call FileIO_ReadByte
 	cps hl, 0
-	jr lt, LABEL_F87710
+	jr lt, LoadSong8_ReadDone
 	lda xwa, (xsp + 4)
 	lda_dri3 XSP, 0x07, 0xE0, 0xF8
 	inc 1, iz
 	cp iz, 0x8
-	jr lt, LABEL_F876F8
+	jr lt, LoadSong8_ReadLoop
 
-LABEL_F87710:
+LoadSong8_ReadDone:
 	call FileIO_ReturnError
 	ld (xsp + 2), hl
 	cpw (xsp + 2), 0x0
@@ -1891,7 +1891,7 @@ LABEL_F87710:
 	lda xwa, (xsp + 4)
 	call SeqLoad_ValidateFormat
 	cps hl, 0
-	jrl z, LABEL_F877CC
+	jrl z, LoadSong8_AltPresetPath
 	cps hl, 1
 	jrl nz, FileIO_CloseHandle_Return
 	call SeqLoad_JmpLoadPre
@@ -1901,7 +1901,7 @@ LABEL_F87710:
 	call FileIO_ReturnError
 	ld (xsp + 2), hl
 	cpw (xsp + 2), 0x0
-	jr lt, LABEL_F87798
+	jr lt, LoadSong8_PostProcess
 	call FileIO_CloseHandle
 	lda xwa, (xsp + 12)
 	ld xbc, (xsp + 26)
@@ -1913,7 +1913,7 @@ LABEL_F87710:
 	call FileIO_ReturnError
 	ld (xsp + 2), hl
 	cpw (xsp + 2), 0x0
-	jr lt, LABEL_F87798
+	jr lt, LoadSong8_PostProcess
 	lda_24 xwa, 0x0b0000
 	ld xde, xwa
 	lda_24 xbc, 0x0fd800
@@ -1922,19 +1922,19 @@ LABEL_F87710:
 	call FileIO_ReturnError
 	ld (xsp + 2), hl
 
-LABEL_F87798:
+LoadSong8_PostProcess:
 	lds wa, 0
 	ld bc, (xsp + 2)
 	call SeqScan_ValidateAndDispatch
 	lds iz, 0
 
-LABEL_F877A3:
+LoadSong8_SlotLoop:
 	ldto_berp A, 0xF8
 	extz wa
 	call FileData_LoadFromSlot
 	inc 1, iz
 	cp iz, 0xA
-	jr lt, LABEL_F877A3
+	jr lt, LoadSong8_SlotLoop
 	call SMF_InitSongPlayback
 	ld wa, (xsp + 2)
 	call SeqLoad_JmpLoadPost
@@ -1943,7 +1943,7 @@ LABEL_F877A3:
 	call ResetSlotsIfEmpty
 	jr FileIO_CloseHandle_Return
 
-LABEL_F877CC:
+LoadSong8_AltPresetPath:
 	call SeqLoad_JmpInitPreset
 	ld xwa, 0xAB000
 	ld xbc, 0x800
@@ -1983,7 +1983,7 @@ FileIO_CloseHandle_Return:
 	call FileIO_CloseHandle
 	ld hl, (xsp + 2)
 
-LABEL_F87848:
+LoadSong8_Return:
 	popw iz
 	lda xsp, (xsp + 28)
 	ret
@@ -1994,7 +1994,7 @@ LABEL_F87848:
 ; Four more display region init/validate/configure functions following the
 ; same pattern as F8744F-F876CA.
 ; =============================================================================
-LABEL_F8784D:
+FileIO_LoadRegion3_ExtMem:
 	; --- Display region 3: ext memory 0x094800-0x0AB000 ---
 	lda xsp, (xsp - 14)
 	pushw iz
@@ -2006,14 +2006,14 @@ LABEL_F8784D:
 	ld xbc, 0x00EA01B0			; resource ID for region 3
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F87872
+	jr ge, LoadRegion3_OpenSuccess
 	call FileIO_ReturnError
-	jr LABEL_F878AB
-LABEL_F87872:
+	jr LoadRegion3_Return
+LoadRegion3_OpenSuccess:
 	lds	wa, 3
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
-	jr z, LABEL_F8789F
+	jr z, LoadRegion3_AltPath
 	call cmp_ld_mae
 	lda_24 xwa, 0x094800
 	ld xde, xwa
@@ -2024,19 +2024,19 @@ LABEL_F87872:
 	ld iz, hl
 	ld wa, iz
 	call cmp_ld_ato
-	jr LABEL_F878A5
-LABEL_F8789F:
+	jr LoadRegion3_Finalize
+LoadRegion3_AltPath:
 	call LABEL_F18EC8				; alternate path
 	ld iz, hl
-LABEL_F878A5:
+LoadRegion3_Finalize:
 	call FileIO_CloseHandle
 	ld hl, iz
-LABEL_F878AB:
+LoadRegion3_Return:
 	popw iz
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F878B0:
+FileIO_LoadRegion5_VRAM:
 	; --- Display region 5: VRAM 0x1E8800-0x1EC400 ---
 	lda xsp, (xsp - 14)
 	pushw iz
@@ -2048,14 +2048,14 @@ LABEL_F878B0:
 	ld xbc, 0x00EA01B4			; resource ID for region 5
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F878D5
+	jr ge, LoadRegion5_OpenSuccess
 	call FileIO_ReturnError
-	jr LABEL_F8790E
-LABEL_F878D5:
+	jr LoadRegion5_Return
+LoadRegion5_OpenSuccess:
 	lds	wa, 5
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
-	jr z, LABEL_F87902
+	jr z, LoadRegion5_AltPath
 	call msp_ld_mae
 	lda_24 xwa, 0x1E8800
 	ld xde, xwa
@@ -2066,19 +2066,19 @@ LABEL_F878D5:
 	ld iz, hl
 	ld wa, iz
 	call msp_ld_ato
-	jr LABEL_F87908
-LABEL_F87902:
+	jr LoadRegion5_Finalize
+LoadRegion5_AltPath:
 	call 0xF194C9				; alternate path
 	ld iz, hl
-LABEL_F87908:
+LoadRegion5_Finalize:
 	call FileIO_CloseHandle
 	ld hl, iz
-LABEL_F8790E:
+LoadRegion5_Return:
 	popw iz
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F87913:
+FileIO_LoadRegion6_Simple:
 	; --- Display region 6: simple init ---
 	lda xsp, (xsp - 14)
 	pushw iz
@@ -2090,28 +2090,28 @@ LABEL_F87913:
 	ld xbc, 0x00EA01B8			; resource ID for region 6
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F87938
+	jr ge, LoadRegion6_OpenSuccess
 	call FileIO_ReturnError
-	jr LABEL_F87952
-LABEL_F87938:
+	jr LoadRegion6_Return
+LoadRegion6_OpenSuccess:
 	lds	wa, 6
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
-	jr z, LABEL_F87949
+	jr z, LoadRegion6_ModeError
 	call 0xF186A9
 	ld iz, hl
-	jr LABEL_F8794C
-LABEL_F87949:
+	jr LoadRegion6_Finalize
+LoadRegion6_ModeError:
 	ldw iz, 0xFF9A				; mode unavailable
-LABEL_F8794C:
+LoadRegion6_Finalize:
 	call FileIO_CloseHandle
 	ld hl, iz
-LABEL_F87952:
+LoadRegion6_Return:
 	popw iz
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F87957:
+FileIO_LoadRegion4_VRAM:
 	; --- Display region 4: VRAM 0x1E0000-0x1E7800 (with iteration loop) ---
 	lda xsp, (xsp - 30)
 	pushw iz
@@ -2123,14 +2123,14 @@ LABEL_F87957:
 	ld xbc, 0x00EA01BC			; resource ID for region 4
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F8797D
+	jr ge, LoadRegion4_OpenSuccess
 	call FileIO_ReturnError
-	jrl LABEL_F87A03
-LABEL_F8797D:
+	jrl LoadRegion4_Return
+LoadRegion4_OpenSuccess:
 	lds	wa, 4
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
-	jr z, LABEL_F879AA
+	jr z, LoadRegion4_AltIterLoop
 	call PreTmLoad
 	lda_24 xwa, 0x1E0000
 	ld xde, xwa
@@ -2141,28 +2141,28 @@ LABEL_F8797D:
 	ld iz, hl
 	ld wa, iz
 	call PostTmLoad
-	jr LABEL_F879FD
-LABEL_F879AA:
+	jr LoadRegion4_Finalize
+LoadRegion4_AltIterLoop:
 	lds	iz, 0
-LABEL_F879AC:
+LoadRegion4_ReadByteLoop:
 	call FileIO_ReadByte
 	cps hl, 0
-	jr lt, LABEL_F879C4
+	jr lt, LoadRegion4_ReadDone
 	lda xwa, (xsp + 2)
 	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x47	; ld (xwa + iz), l  [reg+reg indexed, not in LLVM]
 	inc 1, iz
 	cp iz, 0x0010				; loop 16 times
-	jr lt, LABEL_F879AC
-LABEL_F879C4:
+	jr lt, LoadRegion4_ReadByteLoop
+LoadRegion4_ReadDone:
 	call FileIO_ReturnError
 	ld iz, hl
 	cps iz, 0
-	jr lt, LABEL_F879F7
+	jr lt, LoadRegion4_PostSave
 	lda xwa, (xsp + 2)
 	call PostTmSave_ByteBlock
 	ld iz, hl
 	cps iz, 0
-	jr lt, LABEL_F879F7
+	jr lt, LoadRegion4_PostSave
 	call FileIO_SeekRead_ExtReturn
 	lda_24 xwa, 0x1E0000
 	ld xde, xwa
@@ -2171,13 +2171,13 @@ LABEL_F879C4:
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
 	ld iz, hl
-LABEL_F879F7:
+LoadRegion4_PostSave:
 	ld wa, iz
 	call PostTmSave_Success
-LABEL_F879FD:
+LoadRegion4_Finalize:
 	call FileIO_CloseHandle
 	ld hl, iz
-LABEL_F87A03:
+LoadRegion4_Return:
 	popw iz
 	lda xsp, (xsp + 30)
 	ret
@@ -2190,11 +2190,11 @@ FileIO_ParseDirectoryEntry:
 	call GetCurrentFileIndex
 	ld iz, hl
 	cps iz, 0
-	jr ge, LABEL_F87A1F
+	jr ge, ParseDir_ValidIndex
 	ldw hl, 0xFF98
-	jrl LABEL_F87AF1
+	jrl ParseDir_Return
 
-LABEL_F87A1F:
+ParseDir_ValidIndex:
 	ld wa, iz
 	call GetFileEntryPtr
 	ld (xsp + 4), xhl
@@ -2231,13 +2231,13 @@ FileDemo_RecordCallback:
 	ld xix, (xbc)
 	call (xix)
 	cps hl, 0
-	jr ge, LABEL_F87A92
+	jr ge, ParseDir_IncrementCount
 	cpi_werp 0xFA, 0
 	jr lt, FileIO_RecordLoop_Continue
 	ldfr_werp HL, 0xFA
 	jr FileIO_RecordLoop_Continue
 
-LABEL_F87A92:
+ParseDir_IncrementCount:
 	incm 1, (xsp + 8)
 
 FileIO_RecordLoop_Continue:
@@ -2257,33 +2257,33 @@ FileIO_RecordLoop_Continue:
 	cps l, 0
 	jr z, FileIO_FinalizeRecordLookup
 	lda xwa, (xsp + 10)
-	calr LABEL_F876CB
+	calr FileIO_LoadSongRegion8
 	cps hl, 0
-	jr ge, LABEL_F87AD1
+	jr ge, ParseDir_SongIncrCount
 	cpi_werp 0xFA, 0
 	jr lt, FileIO_FinalizeRecordLookup
 	ldfr_werp HL, 0xFA
 	jr FileIO_FinalizeRecordLookup
 
-LABEL_F87AD1:
+ParseDir_SongIncrCount:
 	incm 1, (xsp + 8)
 
 FileIO_FinalizeRecordLookup:
 	cpw (xsp + 8), 0x0
-	jr le, LABEL_F87AE4
+	jr le, ParseDir_NoRecords
 	ld xwa, (xsp + 4)
 	call FileIO_GetRecordByType_Lookup
-	jr LABEL_F87AEE
+	jr ParseDir_GetResult
 
-LABEL_F87AE4:
+ParseDir_NoRecords:
 	cpi_werp 0xFA, 0
-	jr lt, LABEL_F87AEE
+	jr lt, ParseDir_GetResult
 	ldi_erpw 0xFA, 0x98, 0xFF
 
-LABEL_F87AEE:
+ParseDir_GetResult:
 	ldto_werp HL, 0xFA
 
-LABEL_F87AF1:
+ParseDir_Return:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -2298,7 +2298,7 @@ LABEL_F87AF1:
 ; Resource IDs: 0xEA01F0 through 0xEA020C (one per region).
 ; Returns HL=0xFF9B on insufficient space.
 ; =============================================================================
-LABEL_F87AF6:
+FileIO_SaveRegion0_VRAM:
 	; --- Save region 0: VRAM F980-FFC0, ext mem 1E7800-1E8000 ---
 	lda xsp, (xsp - 22)
 	push xiz
@@ -2314,10 +2314,10 @@ LABEL_F87AF6:
 	ld xwa, (xsp + 4)			; total size needed
 	add xwa, xiz
 	cp xhl, xwa				; enough space?
-	jr ge, LABEL_F87B29			; yes
+	jr ge, SaveRegion0_SpaceOk			; yes
 	ldw hl, 0xFF9B				; error: insufficient space
-	jr LABEL_F87B83				; return error
-LABEL_F87B29:
+	jr SaveRegion0_Return				; return error
+SaveRegion0_SpaceOk:
 	lda xwa, (xsp + 8)			; local buffer
 	ld xbc, (xsp + 22)			; saved arg
 	lds	de, 0
@@ -2326,10 +2326,10 @@ LABEL_F87B29:
 	ld xbc, 0x00EA01F0			; resource ID region 0
 	call FileIO_OpenWithMode				; open resource
 	cps hl, 0
-	jr ge, LABEL_F87B4B			; success
+	jr ge, SaveRegion0_OpenSuccess			; success
 	call FileIO_ReturnError				; close/cleanup
-	jr LABEL_F87B83				; return error
-LABEL_F87B4B:
+	jr SaveRegion0_Return				; return error
+SaveRegion0_OpenSuccess:
 	call PreLswSave				; pre-save hook
 	ld xwa, 0x0000F980			; VRAM start
 	ld xbc, (xsp + 4)			; VRAM size
@@ -2343,17 +2343,17 @@ LABEL_F87B4B:
 	call PostLswSave				; post-save hook
 	call FileIO_CloseHandle			; finalize
 	cps iz, 0
-	jr ge, LABEL_F87B81			; success
+	jr ge, SaveRegion0_Done			; success
 	lda xwa, (xsp + 8)
 	call FileIO_OpenDefault				; error cleanup
-LABEL_F87B81:
+SaveRegion0_Done:
 	ld hl, iz				; return status
-LABEL_F87B83:
+SaveRegion0_Return:
 	pop xiz
 	lda xsp, (xsp + 22)
 	ret
 
-LABEL_F87B88:
+FileIO_SaveRegion1_VRAM:
 	; --- Save region 1: VRAM at 1ED350, conditional size ---
 	lda xsp, (xsp - 18)
 	push xiz
@@ -2361,22 +2361,22 @@ LABEL_F87B88:
 	call FileIO_GetRecordAttr_Check				; get display mode
 	lda_24 xbc, 0x1ED350			; base address
 	cps l, 0				; check mode
-	jr z, LABEL_F87BAC			; mode 0 path
+	jr z, SaveRegion1_FullRange			; mode 0 path
 	ld iz, (xbc + 13)			; get size param
 	extz xiz
 	sla xiz, 3				; * 8
 	add xiz, 0x000000B0			; + 0xB0 base size
-	jr LABEL_F87BB3
-LABEL_F87BAC:
+	jr SaveRegion1_CheckSpace
+SaveRegion1_FullRange:
 	lda_24 xiz, 0x200000			; full range
 	sub xiz, xbc				; size = 0x200000 - 0x1ED350
-LABEL_F87BB3:
+SaveRegion1_CheckSpace:
 	call FileIO_GetDiskFreeSpace				; get available space
 	cp xhl, xiz				; enough?
-	jr ge, LABEL_F87BC0
+	jr ge, SaveRegion1_SpaceOk
 	ldw hl, 0xFF9B
-	jr LABEL_F87C3B
-LABEL_F87BC0:
+	jr SaveRegion1_Return
+SaveRegion1_SpaceOk:
 	lda xwa, (xsp + 4)			; buffer
 	ld xbc, (xsp + 18)			; arg
 	lds	de, 1
@@ -2385,13 +2385,13 @@ LABEL_F87BC0:
 	ld xbc, 0x00EA01F4			; resource ID region 1
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F87BE2
+	jr ge, SaveRegion1_OpenSuccess
 	call FileIO_ReturnError
-	jr LABEL_F87C3B
-LABEL_F87BE2:
+	jr SaveRegion1_Return
+SaveRegion1_OpenSuccess:
 	call FileIO_GetRecordAttr_Check				; re-check mode
 	cps l, 0
-	jr z, LABEL_F87C0F			; mode 0 path
+	jr z, SaveRegion1_AltPmSave			; mode 0 path
 	ld xwa, 0x001ED350
 	ld xbc, xiz
 	call FileIO_WriteByte_Impl				; save VRAM range
@@ -2402,8 +2402,8 @@ LABEL_F87BE2:
 	call FileIO_ReadByte_BufferHit				; configure
 	call FileIO_ReturnError
 	ld iz, hl
-	jr LABEL_F87C2A
-LABEL_F87C0F:
+	jr SaveRegion1_Finalize
+SaveRegion1_AltPmSave:
 	call PrePmSave				; alternate pre-save
 	ld xwa, 0x001ED350
 	ld xbc, xiz
@@ -2412,30 +2412,30 @@ LABEL_F87C0F:
 	ld iz, hl
 	ld wa, iz
 	call PostPmSave				; alternate post-save
-LABEL_F87C2A:
+SaveRegion1_Finalize:
 	call FileIO_CloseHandle
 	cps iz, 0
-	jr ge, LABEL_F87C39
+	jr ge, SaveRegion1_Done
 	lda xwa, (xsp + 4)
 	call FileIO_OpenDefault
-LABEL_F87C39:
+SaveRegion1_Done:
 	ld hl, iz
-LABEL_F87C3B:
+SaveRegion1_Return:
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
 
-LABEL_F87C40:
+FileIO_SaveRegion7_Flash:
 	; --- Save region 7: flash 3D3000, fixed 0x400 bytes ---
 	lda xsp, (xsp - 14)
 	push xiz
 	ld xiz, xwa				; XIZ = arg
 	call FileIO_GetDiskFreeSpace
 	cp xhl, 0x00000400			; need 1024 bytes
-	jr ge, LABEL_F87C57
+	jr ge, SaveRegion7_SpaceOk
 	ldw hl, 0xFF9B
-	jr LABEL_F87CA7
-LABEL_F87C57:
+	jr SaveRegion7_Return
+SaveRegion7_SpaceOk:
 	lda xwa, (xsp + 4)
 	ld xbc, xiz
 	lds	de, 7
@@ -2444,10 +2444,10 @@ LABEL_F87C57:
 	ld xbc, Resource_Region7_Start			; resource ID region 7
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F87C78
+	jr ge, SaveRegion7_OpenSuccess
 	call FileIO_ReturnError
-	jr LABEL_F87CA7
-LABEL_F87C78:
+	jr SaveRegion7_Return
+SaveRegion7_OpenSuccess:
 	call PreMidiSave				; pre-save hook
 	ld xwa, 0x003D3000			; flash address
 	ld xbc, 0x00000400			; 1024 bytes
@@ -2458,17 +2458,17 @@ LABEL_F87C78:
 	call PostMidiSave				; post-save hook
 	call FileIO_CloseHandle
 	cps iz, 0
-	jr ge, LABEL_F87CA5
+	jr ge, SaveRegion7_Done
 	lda xwa, (xsp + 4)
 	call FileIO_OpenDefault
-LABEL_F87CA5:
+SaveRegion7_Done:
 	ld hl, iz
-LABEL_F87CA7:
+SaveRegion7_Return:
 	pop xiz
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F87CAC:
+FileIO_SaveRegion2_ExtMem:
 	; --- Save region 2: ext mem 0AB000 + computed size ---
 	lda xsp, (xsp - 18)
 	push xiz
@@ -2479,10 +2479,10 @@ LABEL_F87CAC:
 	ld xwa, (xsp + 4)			; size
 	add xwa, 0x00005000			; add overhead
 	cp xhl, xwa
-	jr ge, LABEL_F87CCF
+	jr ge, SaveRegion2_SpaceOk
 	ldw hl, 0xFF9B
-	jr LABEL_F87D27
-LABEL_F87CCF:
+	jr SaveRegion2_Return
+SaveRegion2_SpaceOk:
 	lda xwa, (xsp + 8)
 	ld xbc, xiz
 	lds	de, 2
@@ -2491,10 +2491,10 @@ LABEL_F87CCF:
 	ld xbc, Resource_Region2_Start			; resource ID region 2
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F87CF0
+	jr ge, SaveRegion2_OpenSuccess
 	call FileIO_ReturnError
-	jr LABEL_F87D27
-LABEL_F87CF0:
+	jr SaveRegion2_Return
+SaveRegion2_OpenSuccess:
 	ld xwa, 0x000AB000			; ext mem base
 	ld xbc, 0x00005000			; fixed range
 	call FileIO_WriteByte_Impl
@@ -2507,17 +2507,17 @@ LABEL_F87CF0:
 	call SeqSavePost				; post-save hook
 	call FileIO_CloseHandle
 	cps iz, 0
-	jr ge, LABEL_F87D25
+	jr ge, SaveRegion2_Done
 	lda xwa, (xsp + 8)
 	call FileIO_OpenDefault
-LABEL_F87D25:
+SaveRegion2_Done:
 	ld hl, iz
-LABEL_F87D27:
+SaveRegion2_Return:
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
 
-LABEL_F87D2C:
+FileIO_SaveRegion3_ExtMem:
 	; --- Save region 3: ext mem 094800, computed size ---
 	lda xsp, (xsp - 18)
 	push xiz
@@ -2526,10 +2526,10 @@ LABEL_F87D2C:
 	ld (xsp + 4), xhl
 	call FileIO_GetDiskFreeSpace
 	cp xhl, (xsp + 4)
-	jr ge, LABEL_F87D47
+	jr ge, SaveRegion3_SpaceOk
 	ldw hl, 0xFF9B
-	jr LABEL_F87D91
-LABEL_F87D47:
+	jr SaveRegion3_Return
+SaveRegion3_SpaceOk:
 	lda xwa, (xsp + 8)
 	ld xbc, xiz
 	lds	de, 3
@@ -2538,10 +2538,10 @@ LABEL_F87D47:
 	ld xbc, Resource_Region3_Start			; resource ID region 3
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F87D68
+	jr ge, SaveRegion3_OpenSuccess
 	call FileIO_ReturnError
-	jr LABEL_F87D91
-LABEL_F87D68:
+	jr SaveRegion3_Return
+SaveRegion3_OpenSuccess:
 	ld xwa, 0x00094800			; ext mem start
 	ld xbc, (xsp + 4)			; computed size
 	call FileIO_WriteByte_Impl
@@ -2551,17 +2551,17 @@ LABEL_F87D68:
 	call cmp_sv_ato				; post-save
 	call FileIO_CloseHandle
 	cps iz, 0
-	jr ge, LABEL_F87D8F
+	jr ge, SaveRegion3_Done
 	lda xwa, (xsp + 8)
 	call FileIO_OpenDefault
-LABEL_F87D8F:
+SaveRegion3_Done:
 	ld hl, iz
-LABEL_F87D91:
+SaveRegion3_Return:
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
 
-LABEL_F87D96:
+FileIO_SaveRegion5_VRAM:
 	; --- Save region 5: VRAM 1E8800, computed size ---
 	lda xsp, (xsp - 18)
 	push xiz
@@ -2570,10 +2570,10 @@ LABEL_F87D96:
 	ld (xsp + 4), xhl
 	call FileIO_GetDiskFreeSpace
 	cp xhl, (xsp + 4)
-	jr ge, LABEL_F87DB1
+	jr ge, SaveRegion5_SpaceOk
 	ldw hl, 0xFF9B
-	jr LABEL_F87DFB
-LABEL_F87DB1:
+	jr SaveRegion5_Return
+SaveRegion5_SpaceOk:
 	lda xwa, (xsp + 8)
 	ld xbc, xiz
 	lds	de, 5
@@ -2582,10 +2582,10 @@ LABEL_F87DB1:
 	ld xbc, 0x00EA0204			; resource ID region 5
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F87DD2
+	jr ge, SaveRegion5_OpenSuccess
 	call FileIO_ReturnError
-	jr LABEL_F87DFB
-LABEL_F87DD2:
+	jr SaveRegion5_Return
+SaveRegion5_OpenSuccess:
 	ld xwa, 0x001E8800			; VRAM start
 	ld xbc, (xsp + 4)			; computed size
 	call FileIO_WriteByte_Impl
@@ -2595,17 +2595,17 @@ LABEL_F87DD2:
 	call msp_sv_ato				; post-save
 	call FileIO_CloseHandle
 	cps iz, 0
-	jr ge, LABEL_F87DF9
+	jr ge, SaveRegion5_Done
 	lda xwa, (xsp + 8)
 	call FileIO_OpenDefault
-LABEL_F87DF9:
+SaveRegion5_Done:
 	ld hl, iz
-LABEL_F87DFB:
+SaveRegion5_Return:
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
 
-LABEL_F87E00:
+FileIO_SaveRegion6_Simple:
 	; --- Save region 6: simple, calls F187F3 ---
 	lda xsp, (xsp - 14)
 	pushw iz
@@ -2617,35 +2617,35 @@ LABEL_F87E00:
 	ld xbc, 0x00EA0208			; resource ID region 6
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F87E25
+	jr ge, SaveRegion6_OpenSuccess
 	call FileIO_ReturnError
-	jr LABEL_F87E3C
-LABEL_F87E25:
+	jr SaveRegion6_Return
+SaveRegion6_OpenSuccess:
 	call 0xF187F3				; region-specific handler
 	ld iz, hl
 	call FileIO_CloseHandle
 	cps iz, 0
-	jr ge, LABEL_F87E3A
+	jr ge, SaveRegion6_Done
 	lda xwa, (xsp + 2)
 	call FileIO_OpenDefault
-LABEL_F87E3A:
+SaveRegion6_Done:
 	ld hl, iz
-LABEL_F87E3C:
+SaveRegion6_Return:
 	popw iz
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F87E41:
+FileIO_SaveRegion4_VRAM:
 	; --- Save region 4: VRAM 1E0000, fixed 0x72AA bytes ---
 	lda xsp, (xsp - 14)
 	push xiz
 	ld xiz, xwa
 	call FileIO_GetDiskFreeSpace
 	cp xhl, 0x000072AA			; need 29,354 bytes
-	jr ge, LABEL_F87E58
+	jr ge, SaveRegion4_SpaceOk
 	ldw hl, 0xFF9B
-	jr LABEL_F87EA8
-LABEL_F87E58:
+	jr SaveRegion4_Return
+SaveRegion4_SpaceOk:
 	lda xwa, (xsp + 4)
 	ld xbc, xiz
 	lds	de, 4
@@ -2654,10 +2654,10 @@ LABEL_F87E58:
 	ld xbc, 0x00EA020C			; resource ID region 4
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr ge, LABEL_F87E79
+	jr ge, SaveRegion4_OpenSuccess
 	call FileIO_ReturnError
-	jr LABEL_F87EA8
-LABEL_F87E79:
+	jr SaveRegion4_Return
+SaveRegion4_OpenSuccess:
 	call PreTmSave				; pre-save hook
 	ld xwa, 0x001E0000			; VRAM base
 	ld xbc, 0x000072AA			; size
@@ -2668,12 +2668,12 @@ LABEL_F87E79:
 	call PostTmSave				; post-save hook
 	call FileIO_CloseHandle
 	cps iz, 0
-	jr ge, LABEL_F87EA6
+	jr ge, SaveRegion4_Done
 	lda xwa, (xsp + 4)
 	call FileIO_OpenDefault
-LABEL_F87EA6:
+SaveRegion4_Done:
 	ld hl, iz
-LABEL_F87EA8:
+SaveRegion4_Return:
 	pop xiz
 	lda xsp, (xsp + 14)
 	ret
