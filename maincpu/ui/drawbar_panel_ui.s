@@ -7141,17 +7141,17 @@ LswPartExp:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7DB27
+	jrl z, LswPartExp_SignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7DB17
+	jrl z, LswPartExp_ToggleState
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7DB0B
+	jr z, LswPartExp_EnabledCheck
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7DB07
+	jr z, LswPartExp_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7DB00
+	jr z, LswPartExp_SubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7DAF1
+	jr z, LswPartExp_PartIdLookup
 	cp xbc, 0x1E00042
 	jrl nz, LswPartExpZeroReturn
 	ld xwa, (xde)
@@ -7163,20 +7163,20 @@ LswPartExp:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit_erpw 0xE2, 0x00
-	jr z, LABEL_F7DAE0
+	jr z, LswPartExp_StrOff
 	cpw (xde + 4), 0x0
-	jr z, LABEL_F7DAD9
+	jr z, LswPartExp_StrDisabled
 	ld xwa, 0xE95644
-	jr LABEL_F7DAE5
+	jr LswPartExp_StrCopyReturn
 
-LABEL_F7DAD9:
+LswPartExp_StrDisabled:
 	ld xwa, 0xE95648
-	jr LABEL_F7DAE5
+	jr LswPartExp_StrCopyReturn
 
-LABEL_F7DAE0:
+LswPartExp_StrOff:
 	ld xwa, 0xE9564C
 
-LABEL_F7DAE5:
+LswPartExp_StrCopyReturn:
 	push xwa
 	push xbc
 	call Strcpy
@@ -7184,7 +7184,7 @@ LABEL_F7DAE5:
 	ld xhl, xiz
 	jr LswPartExp_PopIzRet
 
-LABEL_F7DAF1:
+LswPartExp_PartIdLookup:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -7192,22 +7192,22 @@ LABEL_F7DAF1:
 	exts xhl
 	jr LswPartExp_PopIzRet
 
-LABEL_F7DB00:
+LswPartExp_SubParam:
 	ld xhl, 0x604
 	jr LswPartExp_PopIzRet
 
-LABEL_F7DB07:
+LswPartExp_StepSize:
 	lds32 xhl, 3
 	jr LswPartExp_PopIzRet
 
-LABEL_F7DB0B:
+LswPartExp_EnabledCheck:
 	ld xwa, (xwa)
 	bit_erpw 0xE2, 0x00
 	jr z, LswPartExpZeroReturn
 	lds32 xhl, 4
 	jr LswPartExp_PopIzRet
 
-LABEL_F7DB17:
+LswPartExp_ToggleState:
 	ld xwa, (xwa)
 	and xwa, 0x10000
 	or xwa, xwa
@@ -7215,7 +7215,7 @@ LABEL_F7DB17:
 	extz xhl
 	jr LswPartExp_PopIzRet
 
-LABEL_F7DB27:
+LswPartExp_SignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x10000
 	or xwa, xwa
@@ -7241,17 +7241,17 @@ LswLocalControl:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7DC01
+	jrl z, LswLocal_SignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7DBF3
+	jrl z, LswLocal_ToggleState
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7DBE8
+	jr z, LswLocal_EnabledCheck
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7DBE4
+	jr z, LswLocal_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7DBDD
+	jr z, LswLocal_SubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7DBCE
+	jr z, LswLocal_PartIdLookup
 	cp xbc, 0x1E00042
 	jr nz, LswLocalControlZeroReturn
 	ld xwa, (xde)
@@ -7263,20 +7263,20 @@ LswLocalControl:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 0, wa
-	jr z, LABEL_F7DBBD
+	jr z, LswLocal_StrOff
 	cpw (xde + 4), 0x0
-	jr z, LABEL_F7DBB6
+	jr z, LswLocal_StrDisabled
 	ld xwa, 0xE95650
-	jr LABEL_F7DBC2
+	jr LswLocal_StrCopyReturn
 
-LABEL_F7DBB6:
+LswLocal_StrDisabled:
 	ld xwa, 0xE95654
-	jr LABEL_F7DBC2
+	jr LswLocal_StrCopyReturn
 
-LABEL_F7DBBD:
+LswLocal_StrOff:
 	ld xwa, 0xE95658
 
-LABEL_F7DBC2:
+LswLocal_StrCopyReturn:
 	push xwa
 	push xbc
 	call Strcpy
@@ -7284,7 +7284,7 @@ LABEL_F7DBC2:
 	ld xhl, xiz
 	jr LswLocalControl_PopIzRet
 
-LABEL_F7DBCE:
+LswLocal_PartIdLookup:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -7292,33 +7292,33 @@ LABEL_F7DBCE:
 	exts xhl
 	jr LswLocalControl_PopIzRet
 
-LABEL_F7DBDD:
+LswLocal_SubParam:
 	ld xhl, 0x400
 	jr LswLocalControl_PopIzRet
 
-LABEL_F7DBE4:
+LswLocal_StepSize:
 	lds32 xhl, 3
 	jr LswLocalControl_PopIzRet
 
-LABEL_F7DBE8:
+LswLocal_EnabledCheck:
 	ld xwa, (xwa)
 	bit 0, wa
-	jr nz, LABEL_F7DBFA
+	jr nz, LswLocal_ReturnMinusOne
 
 LswLocalControlZeroReturn:
 	lds32 xhl, 0
 	jr LswLocalControl_PopIzRet
 
-LABEL_F7DBF3:
+LswLocal_ToggleState:
 	ld xwa, (xwa)
 	bit 0, wa
 	jr z, LswLocalControlZeroReturn
 
-LABEL_F7DBFA:
+LswLocal_ReturnMinusOne:
 	ld xhl, 0xFFFFFFFF
 	jr LswLocalControl_PopIzRet
 
-LABEL_F7DC01:
+LswLocal_SignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x1
 	or xwa, xwa
@@ -7343,17 +7343,17 @@ LswMidiChannel:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7DD0D
+	jrl z, LswMidi_SignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7DCFD
+	jrl z, LswMidi_ToggleState
 	cp xbc, 0x1E0003E
-	jrl z, LABEL_F7DCF2
+	jrl z, LswMidi_EnabledCheck
 	cp xbc, 0x1E00041
-	jrl z, LABEL_F7DCEE
+	jrl z, LswMidi_StepSize
 	cp xbc, 0x1E10001
-	jrl z, LABEL_F7DCE7
+	jrl z, LswMidi_SubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7DCDB
+	jr z, LswMidi_PartIdLookup
 	cp xbc, 0x1E00042
 	jrl nz, LswLocalZeroReturn
 	ld xwa, (xiz)
@@ -7364,7 +7364,7 @@ LswMidiChannel:
 	add xhl, xwa
 	ld xwa, (xhl)
 	bit 1, wa
-	jr z, LABEL_F7DCC6
+	jr z, LswMidi_StrOff
 	ld xwa, (xiz)
 	srl xwa, 0
 	ldi_werp 0xE2, 0
@@ -7376,7 +7376,7 @@ LswMidiChannel:
 	call SndParam_LookupViaEncode
 	ld xbc, (xiz + 8)
 	cps hl, 0
-	jr z, LABEL_F7DCBD
+	jr z, LswMidi_StrChannelAlt
 	ld wa, (xiz + 4)
 	inc 1, wa
 	pushw wa
@@ -7385,29 +7385,29 @@ LswMidiChannel:
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	jr LABEL_F7DCD6
+	jr LswMidi_LoadReturnValue
 
-LABEL_F7DCBD:
+LswMidi_StrChannelAlt:
 	pushw 0xE9
 	pushw 0x5662
 	push xbc
-	jr LABEL_F7DCD0
+	jr LswMidi_StrCopyReturn
 
-LABEL_F7DCC6:
+LswMidi_StrOff:
 	pushw 0xE9
 	pushw 0x5668
 	ld xwa, (xiz + 8)
 	push xwa
 
-LABEL_F7DCD0:
+LswMidi_StrCopyReturn:
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7DCD6:
+LswMidi_LoadReturnValue:
 	ld xhl, (xsp + 4)
 	jr LswLocal_PopIzSkip4Ret
 
-LABEL_F7DCDB:
+LswMidi_PartIdLookup:
 	ld xwa, xiz
 	add xwa, xwa
 	add xde, xwa
@@ -7415,22 +7415,22 @@ LABEL_F7DCDB:
 	exts xhl
 	jr LswLocal_PopIzSkip4Ret
 
-LABEL_F7DCE7:
+LswMidi_SubParam:
 	ld xhl, 0x401
 	jr LswLocal_PopIzSkip4Ret
 
-LABEL_F7DCEE:
+LswMidi_StepSize:
 	lds32 xhl, 3
 	jr LswLocal_PopIzSkip4Ret
 
-LABEL_F7DCF2:
+LswMidi_EnabledCheck:
 	ld xwa, (xwa)
 	bit 1, wa
 	jr z, LswLocalZeroReturn
 	lds32 xhl, 4
 	jr LswLocal_PopIzSkip4Ret
 
-LABEL_F7DCFD:
+LswMidi_ToggleState:
 	ld xwa, (xwa)
 	and xwa, 0x2
 	or xwa, xwa
@@ -7438,7 +7438,7 @@ LABEL_F7DCFD:
 	extz xhl
 	jr LswLocal_PopIzSkip4Ret
 
-LABEL_F7DD0D:
+LswMidi_SignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x2
 	or xwa, xwa
@@ -7458,21 +7458,21 @@ IvMesageProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E0003A
-	jrl z, LABEL_F7DE2F
+	jrl z, IvMessage_GetText
 	ldda8 a, 32578
 	extz wa
 	cp xbc, 0x1E000B6
-	jrl z, LABEL_F7DDFF
+	jrl z, IvMessage_SelectionChange
 	cp xbc, 0x1C0000D
-	jrl z, LABEL_F7DDD0
+	jrl z, IvMessage_Paint
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F7DDC8
+	jr z, IvMessage_ShowHide
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F7DDC8
+	jr z, IvMessage_ShowHide
 	cp xbc, 0x1C00002
-	jr z, LABEL_F7DDC4
+	jr z, IvMessage_Close
 	cp xbc, 0x1C00001
-	jrl nz, LABEL_F7DE40
+	jrl nz, IvMessage_ForwardToBase
 	st16_24 0x02478c, xwa
 	ld xwa, xiz
 	call InheritedProc
@@ -7494,20 +7494,20 @@ IvMesageProc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000B3
 	lds32 xde, 1
-	jr LABEL_F7DDF9
+	jr IvMessage_SendEvent
 
-LABEL_F7DDC4:
+IvMessage_Close:
 	ld xwa, xiz
-	jr LABEL_F7DDCA
+	jr IvMessage_CallInherited
 
-LABEL_F7DDC8:
+IvMessage_ShowHide:
 	ld xwa, xiz
 
-LABEL_F7DDCA:
+IvMessage_CallInherited:
 	call InheritedProc
 	jr IvMessageStrcpyReturn
 
-LABEL_F7DDD0:
+IvMessage_Paint:
 	ld xwa, xiz
 	call InheritedProc
 	ld16_24 xwa, 0x02478c
@@ -7519,11 +7519,11 @@ LABEL_F7DDD0:
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 
-LABEL_F7DDF9:
+IvMessage_SendEvent:
 	call SendEvent
 	jr IvMessageStrcpyReturn
 
-LABEL_F7DDFF:
+IvMessage_SelectionChange:
 	st16_24 0x02478c, xwa
 	muls wa, 0xE
 	lda_24 xbc, 0xe9d340
@@ -7534,9 +7534,9 @@ LABEL_F7DDFF:
 	ld xbc, 0x1E000B5
 	ld xde, 0x1E000B6
 	call SendEvent
-	jr LABEL_F7DE46
+	jr IvMessage_Epilogue
 
-LABEL_F7DE2F:
+IvMessage_GetText:
 	pushw 0xE9
 	pushw 0xD7C6
 	push xde
@@ -7545,13 +7545,13 @@ LABEL_F7DE2F:
 
 IvMessageStrcpyReturn:
 	lds32 xhl, 0
-	jr LABEL_F7DE46
+	jr IvMessage_Epilogue
 
-LABEL_F7DE40:
+IvMessage_ForwardToBase:
 	ld xwa, xiz
 	call InheritedProc
 
-LABEL_F7DE46:
+IvMessage_Epilogue:
 	pop xiz
 	ret
 
@@ -7562,29 +7562,29 @@ AcPleaseWaitProc:
 	ld xiz, xbc
 	ld (xsp + 12), xwa
 	cp xiz, 0x1E0003A
-	jrl z, LABEL_F7DF0D
+	jrl z, PleaseWait_GetText
 	cp xiz, 0x1C0000F
-	jr z, LABEL_F7DEE1
+	jr z, PleaseWait_Confirm
 	cp xiz, 0x1C0000D
-	jr z, LABEL_F7DEC4
+	jr z, PleaseWait_Paint
 	cp xiz, 0x1C00002
-	jr z, LABEL_F7DE9D
+	jr z, PleaseWait_Close
 	cp xiz, 0x1C00001
-	jr z, LABEL_F7DE8C
+	jr z, PleaseWait_Init
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
 	call InheritedProc
-	jrl LABEL_F7DF9E
+	jrl PleaseWait_Epilogue
 
-LABEL_F7DE8C:
+PleaseWait_Init:
 	sti16_24 0x02477a, 0x0000
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
-	jr LABEL_F7DEBD
+	jr PleaseWait_InheritedReturn
 
-LABEL_F7DE9D:
+PleaseWait_Close:
 	ld xwa, 0x1C0000F
 	push xwa
 	lds32 xwa, 0
@@ -7597,11 +7597,11 @@ LABEL_F7DE9D:
 	ld xbc, xiz
 	ld xde, (xsp + 8)
 
-LABEL_F7DEBD:
+PleaseWait_InheritedReturn:
 	call InheritedProc
 	jrl LanguageStringcpyReturn
 
-LABEL_F7DEC4:
+PleaseWait_Paint:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -7612,7 +7612,7 @@ LABEL_F7DEC4:
 	call SendEvent
 	jrl LanguageStringcpyReturn
 
-LABEL_F7DEE1:
+PleaseWait_Confirm:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -7628,7 +7628,7 @@ LABEL_F7DEE1:
 	incdi16_24 1, 149370
 	jrl LanguageStringcpyReturn
 
-LABEL_F7DF0D:
+PleaseWait_GetText:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	ld8_24 a, 0x0340e4
@@ -7642,16 +7642,16 @@ LABEL_F7DF0D:
 	ld de, hl
 	lds hl, 0
 	cps de, 0
-	jr le, LABEL_F7DF45
+	jr le, PleaseWait_BuildScrollStr
 
-LABEL_F7DF36:
+PleaseWait_DotFillLoop:
 	ld xwa, (xsp + 8)
 	stib_dri 0x07, 0xE0, 0xEC, 0x2E
 	inc 1, hl
 	cp hl, de
-	jr lt, LABEL_F7DF36
+	jr lt, PleaseWait_DotFillLoop
 
-LABEL_F7DF45:
+PleaseWait_BuildScrollStr:
 	ld xiy, (xsp + 8)
 	stib_dri 0x07, 0xF4, 0xEC, 0x00
 	ld ix, de
@@ -7666,15 +7666,15 @@ LABEL_F7DF45:
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	cp hl, de
-	jr ge, LABEL_F7DF82
+	jr ge, PleaseWait_OverflowPath
 	sub de, hl
 	pushw de
 	st_dri3b W, 0x07, 0xE0, 0xEC
 	push xwa
 	push xiy
-	jr LABEL_F7DF95
+	jr PleaseWait_Strncpy
 
-LABEL_F7DF82:
+PleaseWait_OverflowPath:
 	ld bc, hl
 	sub bc, de
 	pushw bc
@@ -7685,37 +7685,37 @@ LABEL_F7DF82:
 	sub xbc, xhl
 	push xbc
 
-LABEL_F7DF95:
+PleaseWait_Strncpy:
 	call Strncpy
 	lda xsp, (xsp + 10)
 
 LanguageStringcpyReturn:
 	lds32 xhl, 0
 
-LABEL_F7DF9E:
+PleaseWait_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
 
 CheckLanguage:
 	cp xbc, 0x1E00046
-	jrl z, LABEL_F7E045
+	jrl z, CheckLang_ReturnOne
 	cp xbc, 0x1E00045
-	jrl z, LABEL_F7E03F
+	jrl z, CheckLang_ReturnAddress
 	cp xbc, 0x1E00047
-	jr z, LABEL_F7E01D
+	jr z, CheckLang_GetTextStr
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F7E03C
+	jr nz, CheckLang_ReturnZero
 	ld8_24 a, 0x0340e4
 	bit 7, de
-	jr z, LABEL_F7DFEE
+	jr z, CheckLang_Increment
 	ld c, a
 	cps a, 0
-	jr z, LABEL_F7DFDC
+	jr z, CheckLang_SkipLang4
 	dec 1, c
 	st8_24 0x0340e4, c
 
-LABEL_F7DFDC:
+CheckLang_SkipLang4:
 	ld8_24 a, 0x0340e4
 	cps a, 4
 	jr nz, LanguageSelectEventReturn
@@ -7723,14 +7723,14 @@ LABEL_F7DFDC:
 	st8_24 0x0340e4, a
 	jr LanguageSelectEventReturn
 
-LABEL_F7DFEE:
+CheckLang_Increment:
 	ld c, a
 	cps a, 5
-	jr nc, LABEL_F7DFFB
+	jr nc, CheckLang_SkipLang4Up
 	inc 1, c
 	st8_24 0x0340e4, c
 
-LABEL_F7DFFB:
+CheckLang_SkipLang4Up:
 	ld8_24 a, 0x0340e4
 	cps a, 4
 	jr nz, LanguageSelectEventReturn
@@ -7742,9 +7742,9 @@ LanguageSelectEventReturn:
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 	call SendEvent
-	jr LABEL_F7E03C
+	jr CheckLang_ReturnZero
 
-LABEL_F7E01D:
+CheckLang_GetTextStr:
 	ld8_24 a, 0x0340e4
 	extz wa
 	sla wa, 2
@@ -7756,15 +7756,15 @@ LABEL_F7E01D:
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7E03C:
+CheckLang_ReturnZero:
 	lds32 xhl, 0
 	ret
 
-LABEL_F7E03F:
+CheckLang_ReturnAddress:
 	lda_24 xhl, 0x0340e4
 	ret
 
-LABEL_F7E045:
+CheckLang_ReturnOne:
 	lds32 xhl, 1
 	ret
 
@@ -7772,13 +7772,13 @@ CheckMessage:
 	push xiz
 	ld xiz, xde
 	cp xbc, 0x1E00046
-	jrl z, LABEL_F7E120
+	jrl z, CheckMsg_ReturnTwo
 	cp xbc, 0x1E00045
-	jrl z, LABEL_F7E119
+	jrl z, CheckMsg_ReturnAddress
 	cp xbc, 0x1E00047
-	jrl z, LABEL_F7E0FF
+	jrl z, CheckMsg_AudioCommand
 	cp xbc, 0x1C00007
-	jrl nz, LABEL_F7E115
+	jrl nz, CheckMsg_ReturnZero
 	ld16_24 xwa, 0x02478c
 	muls wa, 0xE
 	lda_24 xbc, 0xe9d340
@@ -7791,7 +7791,7 @@ CheckMessage:
 	call SendEvent
 	ld16_24 xwa, 0x02478c
 	bit 7, iz
-	jr z, LABEL_F7E0B3
+	jr z, CheckMsg_IncrementCheck
 	ld bc, wa
 	cps wa, 0
 	jr le, LanguageCheckReturn
@@ -7799,7 +7799,7 @@ CheckMessage:
 	st16_24 0x02478c, xbc
 	jr LanguageCheckReturn
 
-LABEL_F7E0B3:
+CheckMsg_IncrementCheck:
 	ld bc, wa
 	muls wa, 0xE
 	add wa, 0xE
@@ -7821,9 +7821,9 @@ LanguageCheckReturn:
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 	call SendEvent
-	jr LABEL_F7E115
+	jr CheckMsg_ReturnZero
 
-LABEL_F7E0FF:
+CheckMsg_AudioCommand:
 	push_sd24w 0x8C, 0x47, 0x02
 	pushw 0xE9
 	pushw 0xD892
@@ -7832,76 +7832,76 @@ LABEL_F7E0FF:
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
-LABEL_F7E115:
+CheckMsg_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F7E122
+	jr CheckMsg_Epilogue
 
-LABEL_F7E119:
+CheckMsg_ReturnAddress:
 	lda_24 xhl, 0x02478c
-	jr LABEL_F7E122
+	jr CheckMsg_Epilogue
 
-LABEL_F7E120:
+CheckMsg_ReturnTwo:
 	lds32 xhl, 2
 
-LABEL_F7E122:
+CheckMsg_Epilogue:
 	pop xiz
 	ret
 
 MessageText:
 	cp xbc, 0x1E0009F
-	jr z, LABEL_F7E12F
+	jr z, MsgText_LookupMessage
 	lds32 xhl, 0
 	ret
 
-LABEL_F7E12F:
+MsgText_LookupMessage:
 	ld16_24 xwa, 0x02478c
 	cp wa, 0x1A
-	jr z, LABEL_F7E149
+	jr z, MsgText_CheckLanguage
 	muls wa, 0xE
 	lda_24 xbc, 0xe9d34a
 	ld_sril3 XHL, 0x07, 0xE4, 0xE0
 	ret
 
-LABEL_F7E149:
+MsgText_CheckLanguage:
 	ldda8 a, 3298
 	cps a, 3
-	jr z, LABEL_F7E16D
+	jr z, MsgText_Lang3
 	cps a, 2
-	jr z, LABEL_F7E166
+	jr z, MsgText_Lang2
 	cps a, 1
-	jr z, LABEL_F7E15F
+	jr z, MsgText_Lang1
 	lda_24 xhl, 0xe97fec
 	ret
 
-LABEL_F7E15F:
+MsgText_Lang1:
 	ld xhl, 0xE981B8
-	jr LABEL_F7E172
+	jr MsgText_Return
 
-LABEL_F7E166:
+MsgText_Lang2:
 	ld xhl, 0xE98382
-	jr LABEL_F7E172
+	jr MsgText_Return
 
-LABEL_F7E16D:
+MsgText_Lang3:
 	ld xhl, 0xE9855C
 
-LABEL_F7E172:
+MsgText_Return:
 	ret
 
 MessageHeader:
 	dec 6, xsp
 	push xiz
 	cp xbc, 0x1E0009F
-	jr z, LABEL_F7E183
+	jr z, MsgHeader_BuildHeader
 	lds32 xhl, 0
-	jrl LABEL_F7E24C
+	jrl MsgHeader_Epilogue
 
-LABEL_F7E183:
+MsgHeader_BuildHeader:
 	ld16_24 xbc, 0x02478c
 	muls bc, 0xE
 	lda_24 xwa, 0xe9d340
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	cpw (xwa), 0x3
-	jrl nz, LABEL_F7E249
+	jrl nz, MsgHeader_SingleEntry
 	pushw 0x18
 	call Malloc
 	inc 2, xsp
@@ -7912,7 +7912,7 @@ LABEL_F7E183:
 	call PostEvent
 	ldw (xsp + 8), 0x0
 
-LABEL_F7E1BF:
+MsgHeader_BuildLoop:
 	ld16_24 xbc, 0x02478c
 	muls bc, 0xE
 	lda_24 xwa, 0xe9d346
@@ -7954,14 +7954,14 @@ LABEL_F7E1BF:
 	ld (xwa), xiz
 	incm 1, (xsp + 8)
 	cpw (xsp + 8), 0x5
-	jrl ule, LABEL_F7E1BF
+	jrl ule, MsgHeader_BuildLoop
 	ld xhl, (xsp + 4)
-	jr LABEL_F7E24C
+	jr MsgHeader_Epilogue
 
-LABEL_F7E249:
+MsgHeader_SingleEntry:
 	ld xhl, (xwa + 6)
 
-LABEL_F7E24C:
+MsgHeader_Epilogue:
 	pop xiz
 	inc 6, xsp
 	ret
@@ -8297,17 +8297,17 @@ IvAccordionXProc:
 	ld (xsp + 4), xde
 	ld xiz, xwa
 	cp xbc, 0x1E0003A
-	jr z, LABEL_F7E6C0
+	jr z, AccordionX_GetText
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F7E6A8
+	jr z, AccordionX_Paint
 	cp xbc, 0x1C00029
-	jr z, LABEL_F7E67F
+	jr z, AccordionX_PageSelect
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F7E6D2
+	jr AccordionX_Epilogue
 
-LABEL_F7E67F:
+AccordionX_PageSelect:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -8322,7 +8322,7 @@ LABEL_F7E67F:
 	call PostEvent
 	jr StringCopyReturn
 
-LABEL_F7E6A8:
+AccordionX_Paint:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -8332,7 +8332,7 @@ LABEL_F7E6A8:
 	call SendEvent
 	jr StringCopyReturn
 
-LABEL_F7E6C0:
+AccordionX_GetText:
 	pushw 0xE9
 	pushw 0xD9C0
 	ld xwa, (xsp + 8)
@@ -8343,7 +8343,7 @@ LABEL_F7E6C0:
 StringCopyReturn:
 	lds32 xhl, 0
 
-LABEL_F7E6D2:
+AccordionX_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -8353,12 +8353,12 @@ AcAccordionTabProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000F
-	jr z, LABEL_F7E6ED
+	jr z, AccTab_Confirm
 	ld xwa, xiz
 	call InheritedProc
-	jrl LABEL_F7E7D6
+	jrl AccTab_Epilogue
 
-LABEL_F7E6ED:
+AccTab_Confirm:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -8384,22 +8384,22 @@ LABEL_F7E6ED:
 	lda xhl, (xiz + 22)
 	ld xde, (xiz + 44)
 	cpw (xwa), 0x0
-	jr z, LABEL_F7E746
+	jr z, AccTab_DrawInactive
 	lda xwa, (xsp + 8)
 	ld xhl, (xhl)
 	push xhl
 	pushw 0xFF
 	pushw 0xF7
-	jr LABEL_F7E752
+	jr AccTab_DrawCentered
 
-LABEL_F7E746:
+AccTab_DrawInactive:
 	lda xwa, (xsp + 8)
 	ld xhl, (xhl)
 	push xhl
 	pushw 0x0
 	pushw 0xF7
 
-LABEL_F7E752:
+AccTab_DrawCentered:
 	call DrawStringCentered
 	lda xwa, (xsp + 8)
 	ld bc, (xwa + 6)
@@ -8430,20 +8430,20 @@ LABEL_F7E752:
 	lda xbc, (xsp + 4)
 	lda xhl, (xiz + 22)
 	cpw (xix), 0x0
-	jr z, LABEL_F7E7B6
+	jr z, AccTab_DrawSecondInactive
 	ld xhl, (xhl)
 	push xhl
 	pushw 0xFF
 	pushw 0xF7
-	jr LABEL_F7E7BF
+	jr AccTab_DrawSecondCentered
 
-LABEL_F7E7B6:
+AccTab_DrawSecondInactive:
 	ld xhl, (xhl)
 	push xhl
 	pushw 0x0
 	pushw 0xF7
 
-LABEL_F7E7BF:
+AccTab_DrawSecondCentered:
 	call DrawStringCentered
 	lda xwa, (xsp + 8)
 	ld bc, (xwa + 2)
@@ -8453,7 +8453,7 @@ LABEL_F7E7BF:
 	call DrawBox
 	lds32 xhl, 0
 
-LABEL_F7E7D6:
+AccTab_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -8465,23 +8465,23 @@ IvSdtecdProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1E0003A
-	jrl z, LABEL_F7E88B
+	jrl z, Sdtecd_GetText
 	cp xiz, 0x1C0000D
-	jr z, LABEL_F7E86F
+	jr z, Sdtecd_Paint
 	cp xiz, 0x1C00001
-	jr z, LABEL_F7E80E
+	jr z, Sdtecd_Init
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jrl LABEL_F7E89D
+	jrl Sdtecd_Epilogue
 
-LABEL_F7E80E:
+Sdtecd_Init:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x4
 	jr z, Voice_InheritedProcCall
 	cp xwa, 0x3
-	jr z, LABEL_F7E837
+	jr z, Sdtecd_InitCase3
 	or xwa, xwa
 	jr nz, Voice_InheritedProcCall
 	ld xwa, 0xD0001
@@ -8490,7 +8490,7 @@ LABEL_F7E80E:
 	call SendEvent
 	jr Voice_InheritedProcCall
 
-LABEL_F7E837:
+Sdtecd_InitCase3:
 	ld xwa, 0xD0001
 	ld xbc, 0x1E0007F
 	lds32 xde, 1
@@ -8509,9 +8509,9 @@ Voice_InheritedProcCall:
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F7E89B
+	jr Sdtecd_ReturnZero
 
-LABEL_F7E86F:
+Sdtecd_Paint:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -8520,9 +8520,9 @@ LABEL_F7E86F:
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	call SendEvent
-	jr LABEL_F7E89B
+	jr Sdtecd_ReturnZero
 
-LABEL_F7E88B:
+Sdtecd_GetText:
 	pushw 0xE9
 	pushw 0xD9C6
 	ld xwa, (xsp + 8)
@@ -8530,10 +8530,10 @@ LABEL_F7E88B:
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7E89B:
+Sdtecd_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F7E89D:
+Sdtecd_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -8544,21 +8544,21 @@ IvSdtecd1Proc:
 	ld xiz, xde
 	ld (xsp + 4), xwa
 	cp xbc, 0x1E0003A
-	jrl z, LABEL_F7EA9C
+	jrl z, Sdtecd1_GetText
 	cp xbc, 0x1C0000D
-	jrl z, LABEL_F7EA83
+	jrl z, Sdtecd1_Paint
 	cp xbc, 0x1C0001C
-	jrl z, LABEL_F7EA57
+	jrl z, Sdtecd1_Match
 	cp xbc, 0x1C0001A
-	jrl z, LABEL_F7E9CB
+	jrl z, Sdtecd1_ScrollUp
 	cp xbc, 0x1C00018
-	jrl z, LABEL_F7E9CB
+	jrl z, Sdtecd1_ScrollUp
 	cp xbc, 0x1C00019
-	jr z, LABEL_F7E93E
+	jr z, Sdtecd1_ScrollDown
 	cp xbc, 0x1C00017
-	jr z, LABEL_F7E93E
+	jr z, Sdtecd1_ScrollDown
 	cp xbc, 0x1C0000B
-	jrl nz, LABEL_F7EAAD
+	jrl nz, Sdtecd1_ForwardToBase
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
@@ -8582,12 +8582,12 @@ IvSdtecd1Proc:
 	call SetDialEnable
 	jrl IvSdtecd1_ReturnDefault
 
-LABEL_F7E93E:
+Sdtecd1_ScrollDown:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
 	or xiz, xiz
-	jr z, LABEL_F7E995
+	jr z, Sdtecd1_ScrollDown_Lookup
 	cp xiz, 0x1
 	jrl nz, IvSdtecd1_ReturnDefault
 	ld xwa, 0x4202
@@ -8610,7 +8610,7 @@ LABEL_F7E93E:
 	call SetDialEnable
 	jrl IvSdtecd1_ReturnDefault
 
-LABEL_F7E995:
+Sdtecd1_ScrollDown_Lookup:
 	ld xwa, 0x4202
 	call SndParam_LookupReadOnly
 	ld bc, hl
@@ -8626,14 +8626,14 @@ LABEL_F7E995:
 	ld_sriw3 BC, 0x07, 0xE0, 0xEC
 	ld xwa, 0x4202
 	lds de, 3
-	jrl LABEL_F7EA51
+	jrl Sdtecd1_PutAndReturn
 
-LABEL_F7E9CB:
+Sdtecd1_ScrollUp:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
 	or xiz, xiz
-	jr z, LABEL_F7EA21
+	jr z, Sdtecd1_ScrollUp_Lookup
 	cp xiz, 0x1
 	jrl nz, IvSdtecd1_ReturnDefault
 	ld xwa, 0x4202
@@ -8656,7 +8656,7 @@ LABEL_F7E9CB:
 	call SetDialEnable
 	jrl IvSdtecd1_ReturnDefault
 
-LABEL_F7EA21:
+Sdtecd1_ScrollUp_Lookup:
 	ld xwa, 0x4202
 	call SndParam_LookupReadOnly
 	ld bc, hl
@@ -8672,11 +8672,11 @@ LABEL_F7EA21:
 	ld xwa, 0x4202
 	lds de, 3
 
-LABEL_F7EA51:
+Sdtecd1_PutAndReturn:
 	call MainLswPut
 	jr IvSdtecd1_ReturnDefault
 
-LABEL_F7EA57:
+Sdtecd1_Match:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
@@ -8689,9 +8689,9 @@ LABEL_F7EA57:
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld xbc, 0x1E00087
 	lds32 xde, 1
-	jr LABEL_F7EA96
+	jr Sdtecd1_SendEventReturn
 
-LABEL_F7EA83:
+Sdtecd1_Paint:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
@@ -8699,11 +8699,11 @@ LABEL_F7EA83:
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 
-LABEL_F7EA96:
+Sdtecd1_SendEventReturn:
 	call SendEvent
 	jr IvSdtecd1_ReturnDefault
 
-LABEL_F7EA9C:
+Sdtecd1_GetText:
 	pushw 0xE9
 	pushw 0xDA22
 	push xiz
@@ -8712,14 +8712,14 @@ LABEL_F7EA9C:
 
 IvSdtecd1_ReturnDefault:
 	lds32 xhl, 0
-	jr LABEL_F7EAB6
+	jr Sdtecd1_Epilogue
 
-LABEL_F7EAAD:
+Sdtecd1_ForwardToBase:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
 
-LABEL_F7EAB6:
+Sdtecd1_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -8728,51 +8728,51 @@ LswOrchestrator:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E00083
-	jr z, LABEL_F7EB29
+	jr z, LswOrch_ReturnZero
 	cp xbc, 0x1E0003F
-	jr z, LABEL_F7EB25
+	jr z, LswOrch_ReturnOne
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7EB25
+	jr z, LswOrch_ReturnOne
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7EB21
+	jr z, LswOrch_StepSize
 	cp xbc, 0x1E00040
-	jr z, LABEL_F7EB1A
+	jr z, LswOrch_SubParam
 	cp xbc, 0x1E00042
-	jr nz, LABEL_F7EB29
+	jr nz, LswOrch_ReturnZero
 	ld bc, (xde + 4)
 	ld xwa, (xde + 8)
 	cp bc, 0xFF
-	jr z, LABEL_F7EB09
+	jr z, LswOrch_StrDefault
 	sla bc, 2
 	lda_24 xde, 0xe9da28
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	push xbc
-	jr LABEL_F7EB0F
+	jr LswOrch_StrCopyReturn
 
-LABEL_F7EB09:
+LswOrch_StrDefault:
 	pushw 0xE9
 	pushw 0xDB16
 
-LABEL_F7EB0F:
+LswOrch_StrCopyReturn:
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	ld xhl, xiz
 	jr LswOrchestra_PopIzRet
 
-LABEL_F7EB1A:
+LswOrch_SubParam:
 	ld xhl, 0x4201
 	jr LswOrchestra_PopIzRet
 
-LABEL_F7EB21:
+LswOrch_StepSize:
 	lds32 xhl, 3
 	jr LswOrchestra_PopIzRet
 
-LABEL_F7EB25:
+LswOrch_ReturnOne:
 	lds32 xhl, 1
 	jr LswOrchestra_PopIzRet
 
-LABEL_F7EB29:
+LswOrch_ReturnZero:
 	lds32 xhl, 0
 
 LswOrchestra_PopIzRet:
