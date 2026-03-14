@@ -1359,7 +1359,7 @@ AccompSeq_Output_CheckFilter:
 AccompSeq_Output_CheckManual:
 	bitda 1, 32533
 	jr nz, AccompSeq_Output_Return
-	call LABEL_FD5C5A
+	call MidiPkt_SendControlPair
 
 AccompSeq_Output_Return:
 	popw hl

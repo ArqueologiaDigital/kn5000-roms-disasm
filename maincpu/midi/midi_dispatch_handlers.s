@@ -4864,7 +4864,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	ld xwa, 0x4B00
 	call DSPCfg_WriteParamSimple
 	cps hl, 0
-	jrl lt, LABEL_FD4DBD
+	jrl lt, DSPCfg_VoiceSlotB_Epilog
 	ld xbc, (xsp + 6)
 	ld_srib A, (xbc + 0x030d)
 	dec 1, a
@@ -4885,10 +4885,10 @@ DSPCfg_ConfigureVoiceSlotB:
 	call DSPCfg_ReadParam_Map0
 	ldfr_werp HL, 0xFA
 	cpi_werp 0xFA, 0
-	jr lt, LABEL_FD4DB6
+	jr lt, DSPCfg_VoiceSlotB_RestorePort
 	lds iz, 0
 	cpi_werp 0xFA, 0
-	jr le, LABEL_FD4DB6
+	jr le, DSPCfg_VoiceSlotB_RestorePort
 
 DSPCfg_VoiceSlotB_ParamLoop:
 	ld wa, iz
@@ -4899,11 +4899,11 @@ DSPCfg_VoiceSlotB_ParamLoop:
 	exts xwa
 	add xwa, 0x4B10
 	cps hl, 1
-	jr z, LABEL_FD4D6D
+	jr z, DSPCfg_VoiceSlotB_MapAndWrite
 	cps hl, 2
-	jr nz, LABEL_FD4D93
+	jr nz, DSPCfg_VoiceSlotB_ReadAndWrite
 
-LABEL_FD4D6D:
+DSPCfg_VoiceSlotB_MapAndWrite:
 	ld xbc, (xsp + 10)
 	ld_srib C, (xbc + 0x0152)
 	and c, 0xF
@@ -4914,9 +4914,9 @@ LABEL_FD4D6D:
 	extz bc
 	ld xde, (xsp + 6)
 	st_dri3b B, 0xE9, 0x0E, 0x03
-	jr LABEL_FD4DAB
+	jr DSPCfg_VoiceSlotB_WriteAndLoop
 
-LABEL_FD4D93:
+DSPCfg_VoiceSlotB_ReadAndWrite:
 	call DSPCfg_ReadParam_Map1
 	ld bc, hl
 	ld wa, iz
@@ -4925,22 +4925,22 @@ LABEL_FD4D93:
 	ld xde, (xsp + 6)
 	st_dri3b B, 0xE9, 0x0E, 0x03
 
-LABEL_FD4DAB:
+DSPCfg_VoiceSlotB_WriteAndLoop:
 	call DSPCfg_WriteParamSimple
 	inc 1, iz
 	cp_werp IZ, 0xFA
 	jr lt, DSPCfg_VoiceSlotB_ParamLoop
 
-LABEL_FD4DB6:
+DSPCfg_VoiceSlotB_RestorePort:
 	ld a, (xsp + 4)
 	stda8 64654, a
 
-LABEL_FD4DBD:
+DSPCfg_VoiceSlotB_Epilog:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_FD4DC2:
+DSPCfg_VoiceSlotB_ExtractData:
 	.byte 0xe8, 0x8a
 	lda	xhl, (xde+373)
 	.byte 0x83
@@ -5293,7 +5293,7 @@ DataBuf_InitSlotFromPreset:
 	push xbc
 	call Mem_Copy
 	lda xsp, (xsp + 20)
-	jr LABEL_FD543E
+	jr SndParam_PopIzRet
 
 DataBuf_InitSlotFromPreset_Alt:
 	ld bc, iz
@@ -5323,25 +5323,25 @@ DataBuf_InitSlotFromPreset_Alt:
 	call Mem_Copy
 	lda xsp, (xsp + 20)
 
-LABEL_FD543E:
+SndParam_PopIzRet:
 	popw iz
 	ret
 
-LABEL_FD5440:
+SndParam_SaturationClamp:
 	; --- Routine 1: saturation clamp C = max(0, C-0x7F+A), return L (22 bytes) ---
 	cps	a, 0
-	jr z, LABEL_FD5453
+	jr z, SndParam_SaturationClamp_Zero
 	cps	c, 0
-	jr z, LABEL_FD5453
+	jr z, SndParam_SaturationClamp_Zero
 	sub c, 0x7f
 	add	c, a
 	ld l, c
 	cps	l, 0
 	ret ge
-LABEL_FD5453:
+SndParam_SaturationClamp_Zero:
 	ldb l, 0x00
 	ret
-LABEL_FD5456:
+SndParam_TableDispatch_Memset:
 	; --- Routine 2: table dispatch via 0x1ED360 + WA*16 (32 bytes) ---
 	cp wa, 0x0009
 	ret ugt
@@ -5361,26 +5361,26 @@ SndParam_ApplyAndSync:
 	push_werp 0xFA
 	ldda8 a, 47084
 	bit 7, a
-	jr z, LABEL_FD5489
+	jr z, SndParam_CheckBit6
 	stdi8 47088, 1
-	jr LABEL_FD549A
+	jr SndParam_ReadAndApply
 
-LABEL_FD5489:
+SndParam_CheckBit6:
 	bit 6, a
-	jr z, LABEL_FD5495
+	jr z, SndParam_SetMode2
 	stdi8 47088, 0
-	jr LABEL_FD549A
+	jr SndParam_ReadAndApply
 
-LABEL_FD5495:
+SndParam_SetMode2:
 	stdi8 47088, 2
 
-LABEL_FD549A:
+SndParam_ReadAndApply:
 	ldda8 a, 47084
 	and a, 0x3F
 	ldfr_berp A, 0xFB
 	stda8 47084, a
 	cpdi8 47088, 0
-	jr nz, LABEL_FD54D3
+	jr nz, SndParam_CheckRangeForDisplay
 	ld xwa, 0xC0
 	lds bc, 0
 	lds de, 1
@@ -5398,18 +5398,18 @@ LABEL_FD549A:
 	stda8 47084, a
 	stda8 47088, a
 
-LABEL_FD54D3:
+SndParam_CheckRangeForDisplay:
 	ldda8 a, 47084
 	cp a, 0x19
-	jr c, LABEL_FD54E6
+	jr c, SndParam_CallDisplaySync
 	cp a, 0x1B
 	jr c, SoundParam_UpdateCleanupRet
 	cp a, 0x1D
 	jr ugt, SoundParam_UpdateCleanupRet
 
-LABEL_FD54E6:
+SndParam_CallDisplaySync:
 	cps a, 0
-	jr z, LABEL_FD54F6
+	jr z, SndParam_ApplyAllBlocks
 	push xde
 	push xhl
 	push xix
@@ -5420,16 +5420,16 @@ LABEL_FD54E6:
 	pop xhl
 	pop xde
 
-LABEL_FD54F6:
+SndParam_ApplyAllBlocks:
 	ldda8 a, 47084
 	extz wa
-	calr LABEL_FD556B
+	calr SndParam_ApplyBaseBlock
 	ldda8 a, 47084
 	extz wa
-	calr LABEL_FD5539
+	calr SndParam_ApplyMaskBlock
 	ldda8 a, 47084
 	extz wa
-	calr LABEL_FD559A
+	calr SndParam_ApplyModeSpecific
 	bitda 0, 47086
 	jr nz, SoundParam_UpdateCleanupRet
 	lds wa, 3
@@ -5451,7 +5451,7 @@ SoundParam_UpdateCleanupRet:
 	pop_werp 0xFA
 	ret
 
-LABEL_FD5539:
+SndParam_ApplyMaskBlock:
 	extz wa
 	calr SndParam_GetBlockPointer
 	or xhl, xhl
@@ -5460,11 +5460,11 @@ LABEL_FD5539:
 	ld xbc, xwa
 	lda xde, (xwa + 96)
 
-LABEL_FD554C:
+SndParam_ApplyMaskBlock_Loop:
 	ld xhl, xbc
 	ld xix, (xbc)
 	or xix, xix
-	jr z, LABEL_FD5564
+	jr z, SndParam_ApplyMaskBlock_Next
 	ld a, (xhl + 4)
 	cpl a
 	and a, (xix)
@@ -5473,13 +5473,13 @@ LABEL_FD554C:
 	or a, w
 	ld (xix), a
 
-LABEL_FD5564:
+SndParam_ApplyMaskBlock_Next:
 	inc 6, xbc
 	cp xbc, xde
-	jr c, LABEL_FD554C
+	jr c, SndParam_ApplyMaskBlock_Loop
 	ret
 
-LABEL_FD556B:
+SndParam_ApplyBaseBlock:
 	extz wa
 	calr SndParam_GetBlockPointer
 	or xhl, xhl
@@ -5487,11 +5487,11 @@ LABEL_FD556B:
 	ld xbc, xhl
 	st_dri3b B, 0xED, 0x8A, 0x00
 
-LABEL_FD557B:
+SndParam_ApplyBaseBlock_Loop:
 	ld xhl, xbc
 	ld xix, (xbc)
 	or xix, xix
-	jr z, LABEL_FD5593
+	jr z, SndParam_ApplyBaseBlock_Next
 	ld a, (xix)
 	and a, 0xF8
 	or a, (xhl + 4)
@@ -5499,19 +5499,19 @@ LABEL_FD557B:
 	ld a, (xhl + 5)
 	ld (xix), a
 
-LABEL_FD5593:
+SndParam_ApplyBaseBlock_Next:
 	inc 6, xbc
 	cp xbc, xde
-	jr c, LABEL_FD557B
+	jr c, SndParam_ApplyBaseBlock_Loop
 	ret
 
-LABEL_FD559A:
+SndParam_ApplyModeSpecific:
 	ldda8 c, 47088
 	cps c, 2
 	ret z
 	ldada xwa, 64941
 	cps c, 0
-	jr z, LABEL_FD55BB
+	jr z, SndParam_ClearBits
 	cps c, 1
 	ret nz
 	ld c, (xwa)
@@ -5521,11 +5521,11 @@ LABEL_FD559A:
 	ld (xwa), c
 	ret
 
-LABEL_FD55BB:
+SndParam_ClearBits:
 	andmi8 (xwa), 0xF8
 	ret
 
-LABEL_FD55BF:
+SndParam_AllocAndCopyPreset:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), a
@@ -5547,7 +5547,7 @@ LABEL_FD55BF:
 	ld xbc, xwa
 	st_dri3b B, 0xE1, 0x8A, 0x00
 
-LABEL_FD55F7:
+SndParam_CopyPreset_FillLoop:
 	ld xhl, (xbc - 5)
 	ld_spib A, 0xEC
 	and a, 0x7
@@ -5556,30 +5556,30 @@ LABEL_FD55F7:
 	ld (xbc), a
 	inc 6, xbc
 	cp xbc, xde
-	jr c, LABEL_FD55F7
+	jr c, SndParam_CopyPreset_FillLoop
 	st_dri3b W, 0xF9, 0x8F, 0x00
 	ld xbc, xwa
 	lda xde, (xwa + 96)
 
-LABEL_FD5617:
+SndParam_CopyPreset_MaskLoop:
 	ld xhl, (xbc - 5)
 	ld a, (xbc - 1)
 	and a, (xhl)
 	ld (xbc), a
 	inc 6, xbc
 	cp xbc, xde
-	jr c, LABEL_FD5617
+	jr c, SndParam_CopyPreset_MaskLoop
 	call LABEL_F765D0
 	cps l, 0
-	jr nz, LABEL_FD5636
+	jr nz, SndParam_CopyPreset_SelectBank
 	lds32 xwa, 0
 	st_dri3l XWA, 0xF9, 0xD8, 0x00
 
-LABEL_FD5636:
+SndParam_CopyPreset_SelectBank:
 	cp (xsp + 4), 0x2
-	jr z, LABEL_FD5666
+	jr z, SndParam_CopyPreset_Bank2
 	cp (xsp + 4), 0x1
-	jr z, LABEL_FD5657
+	jr z, SndParam_CopyPreset_Bank1
 	cp (xsp + 4), 0x0
 	jr nz, SoundData_FreeSoundPtr
 	ld xwa, 0x3D3010
@@ -5587,24 +5587,24 @@ LABEL_FD5636:
 	lds wa, 1
 	ld xbc, xiz
 	ldw de, 0xEA
-	jr LABEL_FD5673
+	jr SndParam_CopyPreset_CallFlash
 
-LABEL_FD5657:
+SndParam_CopyPreset_Bank1:
 	ld xwa, 0x3D3110
 	push xwa
 	lds wa, 1
 	ld xbc, xiz
 	ldw de, 0xEA
-	jr LABEL_FD5673
+	jr SndParam_CopyPreset_CallFlash
 
-LABEL_FD5666:
+SndParam_CopyPreset_Bank2:
 	ld xwa, 0x3D3210
 	push xwa
 	lds wa, 1
 	ld xbc, xiz
 	ldw de, 0xEA
 
-LABEL_FD5673:
+SndParam_CopyPreset_CallFlash:
 	call FlashWrite_Entry
 
 SoundData_FreeSoundPtr:
@@ -5617,36 +5617,36 @@ SoundData_FreeSoundPtr:
 
 SndParam_GetBlockPointer:
 	cp a, 0x19
-	jr nc, LABEL_FD5698
+	jr nc, SndParam_GetBlockPointer_Extended
 	extz wa
 	muls wa, 0xEA
 	lda_24 xbc, 0xee15fe
 	st_dri3b C, 0x07, 0xE4, 0xE0
 	ret
 
-LABEL_FD5698:
+SndParam_GetBlockPointer_Extended:
 	cp a, 0x1D
-	jr z, LABEL_FD56B6
+	jr z, SndParam_GetBlockPointer_Bank3
 	cp a, 0x1C
-	jr z, LABEL_FD56B0
+	jr z, SndParam_GetBlockPointer_Bank2
 	cp a, 0x1B
-	jr z, LABEL_FD56AA
+	jr z, SndParam_GetBlockPointer_Bank1
 	lds32 xhl, 0
 	ret
 
-LABEL_FD56AA:
+SndParam_GetBlockPointer_Bank1:
 	ld xhl, 0x3D3010
 	ret
 
-LABEL_FD56B0:
+SndParam_GetBlockPointer_Bank2:
 	ld xhl, 0x3D3110
 	ret
 
-LABEL_FD56B6:
+SndParam_GetBlockPointer_Bank3:
 	ld xhl, 0x3D3210
 	ret
 
-LABEL_FD56BC:
+SndParam_RelocateAndApply:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
@@ -5654,16 +5654,16 @@ LABEL_FD56BC:
 	ld wa, bc
 	calr SndParam_GetBlockPointer
 	or xhl, xhl
-	jr z, LABEL_FD5725
+	jr z, SndParam_RelocateApply_Epilog
 	st_dri3b A, 0xED, 0x8A, 0x00
 	ld xde, xbc
 	lda xiy, (xbc + 96)
 
-LABEL_FD56D7:
+SndParam_RelocateApply_MaskLoop:
 	ld xiz, xde
 	ld xix, (xde)
 	or xix, xix
-	jr z, LABEL_FD56F8
+	jr z, SndParam_RelocateApply_NextMask
 	sub xix, 0xF980
 	add xix, (xsp + 4)
 	ld a, (xiz + 4)
@@ -5674,16 +5674,16 @@ LABEL_FD56D7:
 	or a, w
 	ld (xix), a
 
-LABEL_FD56F8:
+SndParam_RelocateApply_NextMask:
 	inc 6, xde
 	cp xde, xiy
-	jr c, LABEL_FD56D7
+	jr c, SndParam_RelocateApply_MaskLoop
 
-LABEL_FD56FE:
+SndParam_RelocateApply_BaseLoop:
 	ld xde, xhl
 	ld xix, (xhl)
 	or xix, xix
-	jr z, LABEL_FD571F
+	jr z, SndParam_RelocateApply_NextBase
 	sub xix, 0xF980
 	add xix, (xsp + 4)
 	ld a, (xix)
@@ -5693,12 +5693,12 @@ LABEL_FD56FE:
 	ld a, (xde + 5)
 	ld (xix), a
 
-LABEL_FD571F:
+SndParam_RelocateApply_NextBase:
 	inc 6, xhl
 	cp xhl, xbc
-	jr c, LABEL_FD56FE
+	jr c, SndParam_RelocateApply_BaseLoop
 
-LABEL_FD5725:
+SndParam_RelocateApply_Epilog:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -5708,34 +5708,34 @@ SndParam_UpdateChannels:
 	pushw iz
 	ld (xsp + 2), c
 	cp a, 0xA
-	jr nc, LABEL_FD5740
+	jr nc, SndParam_UpdateAll_Loop
 	extz wa
 	ld c, (xsp + 2)
 	extz bc
-	calr LABEL_FD5760
-	jr LABEL_FD575C
+	calr SndParam_UpdateSingleChannel
+	jr SndParam_UpdateChannels_Done
 
-LABEL_FD5740:
+SndParam_UpdateAll_Loop:
 	cp a, 0xA
-	jr nz, LABEL_FD575C
+	jr nz, SndParam_UpdateChannels_Done
 	lds iz, 0
 
-LABEL_FD5747:
+SndParam_UpdateAll_Body:
 	ldto_berp A, 0xF8
 	extz wa
 	ld c, (xsp + 2)
 	extz bc
-	calr LABEL_FD5760
+	calr SndParam_UpdateSingleChannel
 	inc 1, iz
 	cp iz, 0xA
-	jr c, LABEL_FD5747
+	jr c, SndParam_UpdateAll_Body
 
-LABEL_FD575C:
+SndParam_UpdateChannels_Done:
 	popw iz
 	inc 2, xsp
 	ret
 
-LABEL_FD5760:
+SndParam_UpdateSingleChannel:
 	dec 8, xsp
 	ld (xsp + 4), c
 	ld (xsp + 6), a
@@ -5750,24 +5750,24 @@ LABEL_FD5760:
 	pop xhl
 	pop xde
 	cp (xsp + 4), 0x3
-	jr z, LABEL_FD5794
+	jr z, SndParam_UpdateChan_Mode3
 	cp (xsp + 4), 0x2
-	jr z, LABEL_FD578A
+	jr z, SndParam_UpdateChan_Mode2
 	ld (xsp + 4), 0x16
-	jr LABEL_FD578E
+	jr SndParam_UpdateChan_CallRender
 
-LABEL_FD578A:
+SndParam_UpdateChan_Mode2:
 	ld (xsp + 4), 0x17
 
-LABEL_FD578E:
+SndParam_UpdateChan_CallRender:
 	call SoundMode_RenderWithNotify
-	jr LABEL_FD579C
+	jr SndParam_UpdateChan_CopyMemory
 
-LABEL_FD5794:
+SndParam_UpdateChan_Mode3:
 	ld (xsp + 4), 0x0
 	call SoundMode_FullRenderUpdate
 
-LABEL_FD579C:
+SndParam_UpdateChan_CopyMemory:
 	lds32 xbc, 0
 	ld c, (xsp + 6)
 	sll xbc, 11
@@ -5797,29 +5797,29 @@ LABEL_FD579C:
 	ld c, (xsp + 4)
 	extz bc
 	ld xwa, (xsp)
-	calr LABEL_FD56BC
+	calr SndParam_RelocateAndApply
 	inc 8, xsp
 	ret
 
-LABEL_FD57F2:
+MidiSysEx_SendAllParams:
 	dec 2, xsp
 	push xiz
 	ld xwa, 0x2203
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jrl nz, LABEL_FD5BD9
+	jrl nz, MidiSysEx_PopIzAndReturn
 	pushw 0xE
 	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	or xiz, xiz
-	jrl z, LABEL_FD5BD9
+	jrl z, MidiSysEx_PopIzAndReturn
 	call GET_COMPUTER_INTERFACE_SELECTION
 	ld (xsp + 4), l
 	ld xwa, 0x2D03
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_FD5869
+	jr z, MidiSysEx_SendReverbParam
 	pushw 0xE
 	pushw 0xEE
 	pushw 0x2CD8
@@ -5832,24 +5832,24 @@ LABEL_FD57F2:
 	ld (xiz + 9), 0x20
 	ld (xiz + 12), 0x3
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD585E
+	jr nz, MidiSysEx_SendParamViaCOMM
 	push xiz
 	pushw 0xE
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD5869
+	jr MidiSysEx_SendReverbParam
 
-LABEL_FD585E:
+MidiSysEx_SendParamViaCOMM:
 	lds wa, 4
 	ldw bc, 0xE
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD5869:
+MidiSysEx_SendReverbParam:
 	ld xwa, 0x2D01
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_FD58DF
+	jr z, MidiSysEx_SendProgramChange
 	pushw 0xE
 	pushw 0xEE
 	pushw 0x2CD8
@@ -5862,43 +5862,43 @@ LABEL_FD5869:
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD58AE
+	jr nz, MidiSysEx_SendReverbViaCOMM
 	push xiz
 	pushw 0xE
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD58B9
+	jr MidiSysEx_SendReverbParam2
 
-LABEL_FD58AE:
+MidiSysEx_SendReverbViaCOMM:
 	lds wa, 4
 	ldw bc, 0xE
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD58B9:
+MidiSysEx_SendReverbParam2:
 	ld (xiz + 9), 0x12
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD58CF
+	jr nz, MidiSysEx_SendReverb2ViaCOMM
 	push xiz
 	pushw 0xE
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD58DA
+	jr MidiSysEx_SendReverbFixup
 
-LABEL_FD58CF:
+MidiSysEx_SendReverb2ViaCOMM:
 	lds wa, 4
 	ldw bc, 0xE
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD58DA:
+MidiSysEx_SendReverbFixup:
 	mrdb5 0x8E, 0x0C, 0x19, 0xF2, 0xB7
 
-LABEL_FD58DF:
+MidiSysEx_SendProgramChange:
 	ld xwa, 0x2D03
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_FD5936
+	jr z, MidiSysEx_SendControlChange1
 	pushw 0x2
 	pushw 0xEE
 	pushw 0x2CEA
@@ -5908,32 +5908,32 @@ LABEL_FD58DF:
 	ld xwa, 0x2D00
 	call SndParam_LookupReadOnly
 	cp hl, 0xF
-	jr gt, LABEL_FD590E
+	jr gt, MidiSysEx_SendPCRegValue
 	or (xiz), l
 
-LABEL_FD590E:
+MidiSysEx_SendPCRegValue:
 	ld xwa, 0x2D02
 	call SndParam_LookupReadOnly
 	ld (xiz + 1), l
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD592C
+	jr nz, MidiSysEx_SendPCViaCOMM
 	push xiz
 	pushw 0x2
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD5936
+	jr MidiSysEx_SendControlChange1
 
-LABEL_FD592C:
+MidiSysEx_SendPCViaCOMM:
 	lds wa, 4
 	lds bc, 2
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD5936:
+MidiSysEx_SendControlChange1:
 	ld xwa, 0x2D05
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_FD598D
+	jr z, MidiSysEx_SendControlChange2
 	pushw 0x3
 	pushw 0xEE
 	pushw 0x2CE6
@@ -5943,32 +5943,32 @@ LABEL_FD5936:
 	ld xwa, 0x2D00
 	call SndParam_LookupReadOnly
 	cp hl, 0xF
-	jr gt, LABEL_FD5965
+	jr gt, MidiSysEx_SendCC1RegValue
 	or (xiz), l
 
-LABEL_FD5965:
+MidiSysEx_SendCC1RegValue:
 	ld xwa, 0x2D04
 	call SndParam_LookupReadOnly
 	ld (xiz + 2), l
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD5983
+	jr nz, MidiSysEx_SendCC1ViaCOMM
 	push xiz
 	pushw 0x3
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD598D
+	jr MidiSysEx_SendControlChange2
 
-LABEL_FD5983:
+MidiSysEx_SendCC1ViaCOMM:
 	lds wa, 4
 	lds bc, 3
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD598D:
+MidiSysEx_SendControlChange2:
 	ld xwa, 0x2D07
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_FD59E8
+	jr z, MidiSysEx_CheckDelayAndSend
 	pushw 0x3
 	pushw 0xEE
 	pushw 0x2CE6
@@ -5978,40 +5978,40 @@ LABEL_FD598D:
 	ld xwa, 0x2D00
 	call SndParam_LookupReadOnly
 	cp hl, 0xF
-	jr gt, LABEL_FD59BC
+	jr gt, MidiSysEx_SendCC2RegValue
 	or (xiz), l
 
-LABEL_FD59BC:
+MidiSysEx_SendCC2RegValue:
 	ld xwa, 0x2D06
 	call SndParam_LookupReadOnly
 	add hl, 0x3C
 	ld (xiz + 2), l
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD59DE
+	jr nz, MidiSysEx_SendCC2ViaCOMM
 	push xiz
 	pushw 0x3
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD59E8
+	jr MidiSysEx_CheckDelayAndSend
 
-LABEL_FD59DE:
+MidiSysEx_SendCC2ViaCOMM:
 	lds wa, 4
 	lds bc, 3
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD59E8:
+MidiSysEx_CheckDelayAndSend:
 	call LABEL_F7438C
 	cps l, 1
-	jr nz, LABEL_FD59F7
+	jr nz, MidiSysEx_SendAfterDelay
 	ldw wa, 0x32
 	call TaskSched_DelayTicks
 
-LABEL_FD59F7:
+MidiSysEx_SendAfterDelay:
 	ld xwa, 0x2D09
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_FD5A4E
+	jr z, MidiSysEx_SendBankData1
 	pushw 0xE
 	pushw 0xEE
 	pushw 0x2CD8
@@ -6026,24 +6026,24 @@ LABEL_FD59F7:
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD5A43
+	jr nz, MidiSysEx_SendAfterDelayViaCOMM
 	push xiz
 	pushw 0xE
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD5A4E
+	jr MidiSysEx_SendBankData1
 
-LABEL_FD5A43:
+MidiSysEx_SendAfterDelayViaCOMM:
 	lds wa, 4
 	ldw bc, 0xE
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD5A4E:
+MidiSysEx_SendBankData1:
 	ld xwa, 0x2D0B
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_FD5ACA
+	jr z, MidiSysEx_SendBankData2
 	pushw 0xE
 	pushw 0xEE
 	pushw 0x2CD8
@@ -6056,43 +6056,43 @@ LABEL_FD5A4E:
 	ld (xiz + 9), 0x16
 	ld (xiz + 12), 0x0
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD5A92
+	jr nz, MidiSysEx_SendBank1ViaCOMM
 	push xiz
 	pushw 0xE
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD5A9D
+	jr MidiSysEx_SendBank1Param2
 
-LABEL_FD5A92:
+MidiSysEx_SendBank1ViaCOMM:
 	lds wa, 4
 	ldw bc, 0xE
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD5A9D:
+MidiSysEx_SendBank1Param2:
 	ld (xiz + 9), 0x17
 	ld xwa, 0x2D0A
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD5ABF
+	jr nz, MidiSysEx_SendBank1P2ViaCOMM
 	push xiz
 	pushw 0xE
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD5ACA
+	jr MidiSysEx_SendBankData2
 
-LABEL_FD5ABF:
+MidiSysEx_SendBank1P2ViaCOMM:
 	lds wa, 4
 	ldw bc, 0xE
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD5ACA:
+MidiSysEx_SendBankData2:
 	ld xwa, 0x2D0F
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_FD5B4E
+	jr z, MidiSysEx_SendBankData3
 	pushw 0xE
 	pushw 0xEE
 	pushw 0x2CD8
@@ -6107,43 +6107,43 @@ LABEL_FD5ACA:
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD5B16
+	jr nz, MidiSysEx_SendBank2ViaCOMM
 	push xiz
 	pushw 0xE
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD5B21
+	jr MidiSysEx_SendBank2Param2
 
-LABEL_FD5B16:
+MidiSysEx_SendBank2ViaCOMM:
 	lds wa, 4
 	ldw bc, 0xE
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD5B21:
+MidiSysEx_SendBank2Param2:
 	ld (xiz + 9), 0x29
 	ld xwa, 0x2D0D
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD5B43
+	jr nz, MidiSysEx_SendBank2P2ViaCOMM
 	push xiz
 	pushw 0xE
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD5B4E
+	jr MidiSysEx_SendBankData3
 
-LABEL_FD5B43:
+MidiSysEx_SendBank2P2ViaCOMM:
 	lds wa, 4
 	ldw bc, 0xE
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD5B4E:
+MidiSysEx_SendBankData3:
 	ld xwa, 0x2D13
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_FD5BD2
+	jr z, MidiSysEx_FreeAndReturn
 	pushw 0xE
 	pushw 0xEE
 	pushw 0x2CD8
@@ -6158,49 +6158,49 @@ LABEL_FD5B4E:
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD5B9A
+	jr nz, MidiSysEx_SendBank3ViaCOMM
 	push xiz
 	pushw 0xE
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD5BA5
+	jr MidiSysEx_SendBank3Param2
 
-LABEL_FD5B9A:
+MidiSysEx_SendBank3ViaCOMM:
 	lds wa, 4
 	ldw bc, 0xE
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD5BA5:
+MidiSysEx_SendBank3Param2:
 	ld (xiz + 9), 0x1C
 	ld xwa, 0x2D11
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_FD5BC7
+	jr nz, MidiSysEx_SendBank3P2ViaCOMM
 	push xiz
 	pushw 0xE
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	jr LABEL_FD5BD2
+	jr MidiSysEx_FreeAndReturn
 
-LABEL_FD5BC7:
+MidiSysEx_SendBank3P2ViaCOMM:
 	lds wa, 4
 	ldw bc, 0xE
 	ld xde, xiz
 	call sendCOMM
 
-LABEL_FD5BD2:
+MidiSysEx_FreeAndReturn:
 	push xiz
 	call Free
 	inc 4, xsp
 
-LABEL_FD5BD9:
+MidiSysEx_PopIzAndReturn:
 	pop xiz
 	inc 2, xsp
 	ret
 
-LABEL_FD5BDD:
+MidiSysEx_SendAllPartChannels:
 	; --- Routine 1: stack-frame loop, XIZ alloc + 16 iterations (93 bytes) ---
 	dec 2, xsp
 	push xiz
@@ -6209,9 +6209,9 @@ LABEL_FD5BDD:
 	inc 2, xsp
 	ld xiz, xhl
 	or xiz, xiz
-	jr z, LABEL_FD5C36
+	jr z, MidiSysEx_SendPartChan_Done
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00		; ld (xsp+4), 0x0000  [5-byte form]
-LABEL_FD5BF4:
+MidiSysEx_SendPartChanLoop:
 	pushw	14
 	pushw	238
 	pushw	11500
@@ -6230,15 +6230,15 @@ LABEL_FD5BF4:
 	inc 6, xsp
 	incm	1, (xsp+4)
 	cpw (xsp+4), 0x0010
-	jr c, LABEL_FD5BF4
+	jr c, MidiSysEx_SendPartChanLoop
 	push xiz
 	call Free
 	inc 4, xsp
-LABEL_FD5C36:
+MidiSysEx_SendPartChan_Done:
 	pop xiz
 	inc 2, xsp
 	ret
-LABEL_FD5C3A:
+MidiSysEx_CopyParamToBuffer:
 	; --- Routine 2: sla+lda helper, push args + call FF0D99 (32 bytes) ---
 	extz wa
 	sla	wa, 3
@@ -6254,7 +6254,7 @@ LABEL_FD5C3A:
 	ret
 
 
-LABEL_FD5C5A:
+MidiPkt_SendControlPair:
 	ld xbc, 0xBD26
 	ld (xbc), a
 	ld (xbc + 1), w
@@ -6262,7 +6262,7 @@ LABEL_FD5C5A:
 	call MidiPkt_EnqueueControl_335E
 	ret
 
-LABEL_FD5C6B:
+MidiStream_RefreshDisplay:
 	push xde
 	push xhl
 	push xix
@@ -6276,7 +6276,7 @@ LABEL_FD5C6B:
 	pop xde
 	ret
 
-LABEL_FD5C80:
+MidiStream_ApplyPendingCC:
 	push xde
 	push xhl
 	push xix
@@ -6292,7 +6292,7 @@ LABEL_FD5C80:
 	pop xde
 	ret
 
-LABEL_FD5C97:
+MidiStream_ReplaySavedExpr:
 	push xde
 	push xhl
 	push xix
@@ -6304,20 +6304,20 @@ LABEL_FD5C97:
 	pop xde
 	ret
 
-LABEL_FD5CA4:
+MidiStream_JumpStubData:
 	.byte 0x3e, 0x1d, 0x5d, 0xa7, 0xfc, 0x5e, 0x0e
 
-LABEL_FD5CAB:
+MidiStream_RetStub2:
 	ret
 
 AccWrap_ReturnZero:
 	lds hl, 0
 	ret
 
-LABEL_FD5CAF:
+MidiStream_RetStub3:
 	ret
 
-LABEL_FD5CB0:
+MidiStream_PrevBankCheck:
 	.byte 0xd7, 0xfa, 0x04, 0xf1, 0x18, 0xbd, 0xcf, 0x66
 	.byte 0x38, 0xc7, 0xfb, 0xa8, 0x1e, 0x3c, 0x00, 0xe1
 	.byte 0xac, 0xbc, 0x20, 0x80, 0x3f, 0x01, 0x66, 0x2f
@@ -6580,7 +6580,7 @@ SeqData_InitPlaybackFromField:
 	cps l, 0
 	ret nz
 	calr LABEL_FD5F57
-	calr LABEL_FD5CAF
+	calr MidiStream_RetStub3
 	calr LABEL_FD67A0
 	calr LABEL_FD67A1
 	calr LABEL_FD68B8
@@ -7813,7 +7813,7 @@ LABEL_FD6BAF:
 	ld (xsp + 4), wa
 	stdi8 1060, 240
 	ld xwa, xiz
-	calr LABEL_FD5CAB
+	calr MidiStream_RetStub2
 	lda xiz, (xiz + 14)
 	cpw (xsp + 4), 0x20
 	jr ule, LABEL_FD6BEA
@@ -7849,7 +7849,7 @@ SeqOut_FlushTimedBuffer:
 	ld (xsp + 4), wa
 	stdi8 1060, 240
 	ld xwa, xiz
-	calr LABEL_FD5CAB
+	calr MidiStream_RetStub2
 	lda xiz, (xiz + 14)
 	cpw (xsp + 4), 0x20
 	jr ule, LABEL_FD6C37
@@ -10797,7 +10797,7 @@ SeqData_FormatOutput_CaseB:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_FD5CA4
+	call MidiStream_JumpStubData
 	call SwbtWr_ReinitOutputBank
 	pop xiz
 	pop xix
@@ -11351,7 +11351,7 @@ SeqAlt_DualNibblePack:
 	setm 7, (xiz - 1)
 
 SeqAlt_DualNibblePack_Dispatch:
-	call LABEL_FD5C6B
+	call MidiStream_RefreshDisplay
 	pop xiz
 	inc 4, xsp
 	ret
@@ -11520,7 +11520,7 @@ VoiceParam_DirectHardwareWrite:
 VoiceParam_DirectHW_NoShift:
 	stda8 13436, l
 	mrdb5 0x8E, 0x08, 0x19, 0x7D, 0x34
-	call LABEL_FD5C97
+	call MidiStream_ReplaySavedExpr
 
 VoiceParam_DirectHW_Ret:
 	pop xiz
@@ -11546,7 +11546,7 @@ VoiceParam_MultiModeDispatch:
 	stdi8 13449, 5
 	stdi8 13436, 0
 	stdi8 13437, 4
-	call LABEL_FD5C97
+	call MidiStream_ReplaySavedExpr
 	stdi8 13449, 6
 	stdi8 13436, 0
 	stdi8 13437, 4
@@ -11578,7 +11578,7 @@ VoiceParam_MultiMode_SetupHW:
 	mrib4 0x81, 0x19, 0x7D, 0x34
 
 VoiceParam_MultiMode_Dispatch:
-	call LABEL_FD5C97
+	call MidiStream_ReplaySavedExpr
 
 VoiceParam_LoopExit:
 	pop xiz

@@ -1846,7 +1846,7 @@ LABEL_F76593:
 	call ApPostEvent
 	ld xwa, (xsp)
 	extz wa
-	call LABEL_FD55BF
+	call SndParam_AllocAndCopyPreset
 	stdi8 32578, 35
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016

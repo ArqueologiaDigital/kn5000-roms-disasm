@@ -3439,7 +3439,7 @@ LABEL_F7428F:
 MainVocalistPage2OKFunc:
 	cp xbc, 0x1E30008
 	jr nz, LABEL_F74389
-	call LABEL_FD57F2
+	call MidiSysEx_SendAllParams
 	stdi8 32578, 35
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
