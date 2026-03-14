@@ -1085,7 +1085,7 @@ AccPlay_MainUpdateLoop:
 	push xiz
 	bitda 2, 32533
 	jr z, LABEL_F71F40
-	call LABEL_F69FFB
+	call AccSeq_PostEvent9E_Enable
 
 LABEL_F71F40:
 	xor wa, wa
@@ -1093,7 +1093,7 @@ LABEL_F71F40:
 	call UI_PostPartChangeEvent
 	bitda 2, 32533
 	jr z, LABEL_F71F52
-	call LABEL_F6A00B
+	call AccSeq_PostEvent9E_Disable
 
 LABEL_F71F52:
 	pop xiz
@@ -1825,7 +1825,7 @@ LABEL_F72587:
 	push xix
 	push xiy
 	push xiz
-	call LABEL_F69D17
+	call AccSeq_DeliverC9_0009
 	pop xiz
 	pop xiy
 	pop xix
@@ -1854,7 +1854,7 @@ LABEL_F725A9:
 	push xix
 	push xiy
 	push xiz
-	call LABEL_F69D2F
+	call AccSeq_DeliverC9_000A
 	pop xiz
 	pop xiy
 	pop xix

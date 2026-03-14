@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rename LABEL_XXXXXX labels in sequencer_engine.s to semantic names (batch 5).
+"""Rename LABEL_XXXXXX labels in sequencer_engine.s to semantic names (batch 11).
 
 Uses binary I/O to preserve Latin-1 bytes.
 Updates all .s files in maincpu/ that reference renamed labels.
@@ -10,105 +10,131 @@ import os
 import glob
 
 RENAMES = {
-    # --- PartCtrl swap/dealloc area (lines ~11384-11549) ---
-    "LABEL_F3F1DA": "PartCtrl_CompareWordValues",
-    "LABEL_F3F1E9": "PartCtrl_SetupLinkedCopy",
-    "LABEL_F3F209": "PartCtrl_CheckValue2",
-    "LABEL_F3F242": "PartCtrl_CopyBlockLoop",
-    "LABEL_F3F270": "PartCtrl_UpdateVoiceWord",
-    "LABEL_F3F299": "PartCtrl_ReadAndRelinkNext",
-    "LABEL_F3F2AF": "PartCtrl_WriteIndexedAndCheck",
-    "LABEL_F3F345": "PartCtrl_CheckUnlinkFlag",
-    "LABEL_F3F352": "PartCtrl_DeallocVoices",
-    "LABEL_F3F355": "PartCtrl_DeallocReturn",
+    # --- SeqVoice_DispatchAllEvents area (lines ~20567-20578) ---
+    "LABEL_F44FA2": "SeqVoice_DispatchLoop",
 
-    # --- Part_ReleaseVoicesForRange area (lines ~11551-11670) ---
-    "LABEL_F3F373": "PartRelRange_SetCurrentMode",
-    "LABEL_F3F37C": "PartRelRange_CheckAllParts",
-    "LABEL_F3F38C": "PartRelRange_SetSinglePart",
-    "LABEL_F3F395": "PartRelRange_CheckInitChain",
-    "LABEL_F3F3AE": "PartRelRange_OuterLoop",
-    "LABEL_F3F3BA": "PartRelRange_InnerLoop",
-    "LABEL_F3F3C6": "PartRelRange_ClearAndWrite",
-    "LABEL_F3F41F": "PartRelRange_StealVoices",
-    "LABEL_F3F424": "PartRelRange_WriteDefaults",
-    "LABEL_F3F44A": "PartRelRange_InnerNext",
-    "LABEL_F3F456": "PartRelRange_OuterNext",
+    # --- SeqVoice_ComputeStatusFlags area (lines ~20613-20686) ---
+    "LABEL_F45025": "SeqStatus_CheckState9A",
+    "LABEL_F45049": "SeqStatus_CheckActiveVoice",
+    "LABEL_F45079": "SeqStatus_CheckHighState",
+    "LABEL_F45085": "SeqStatus_CheckHighFallback",
+    "LABEL_F45093": "SeqStatus_SetActiveFlag",
+    "LABEL_F45097": "SeqStatus_Handle9AState",
 
-    # --- LABEL_F3F469 - Part_ClearAndStealSingleVoice (lines ~11672-11703) ---
-    "LABEL_F3F469": "Part_ClearAndStealSingleVoice",
+    # --- LABEL_F450A1 area - app event handler (lines ~20688-20915) ---
+    "LABEL_F450A1": "AppEvent_HandleChannelEvent",
+    "LABEL_F450EB": "AppEvent_ToggleChannel",
+    "LABEL_F45107": "AppEvent_ToggleShiftDone",
+    "LABEL_F45111": "AppEvent_ToggleSetStatus",
+    "LABEL_F45136": "AppEvent_HandleStateChange",
+    "LABEL_F45231": "AppEvent_HandleRecordState",
+    "LABEL_F4523F": "AppEvent_RecordClampLow",
+    "LABEL_F45242": "AppEvent_RecordDispatch",
+    "LABEL_F45279": "AppEvent_Handle9AToggle",
+    "LABEL_F45285": "AppEvent_9AShiftDone",
+    "LABEL_F45297": "AppEvent_9ASetOff",
+    "LABEL_F4529B": "AppEvent_9AStoreAndPost",
 
-    # --- Seq_ValidatePartNumber / Seq_ValidateTempoValue (lines ~11769-11825) ---
-    "LABEL_F3F60E": "SeqValidate_PartFail",
-    "LABEL_F3F612": "SeqValidate_PartOK",
-    "LABEL_F3F61F": "SeqValidate_TempoFail",
-    "LABEL_F3F623": "SeqValidate_TempoOK",
+    # --- EffEditMain area - DSP param dispatch (lines ~20917-21153) ---
+    "LABEL_F4531C": "EffEdit_DispatchTypeB",
+    "LABEL_F4531E": "EffEdit_TypeBLoop",
+    "LABEL_F45339": "EffEdit_DispatchTypeE",
+    "LABEL_F4534A": "EffEdit_DispatchTypeD6",
+    "LABEL_F4534C": "EffEdit_TypeD6Loop",
+    "LABEL_F45365": "EffEdit_HandleParamChange",
+    "LABEL_F4538B": "EffEdit_ParamChangeD6",
+    "LABEL_F45398": "EffEdit_ParamChangeA",
+    "LABEL_F453C2": "EffEdit_ParamAPositive",
+    "LABEL_F453DB": "EffEdit_ParamANegative",
+    "LABEL_F453F5": "EffEdit_DeliveryLoopBody",
+    "LABEL_F45410": "EffEdit_ParamChangeB",
+    "LABEL_F45439": "EffEdit_ParamBPositive",
+    "LABEL_F45451": "EffEdit_ParamBNegative",
+    "LABEL_F4546F": "EffEdit_DeliveryNoRetLoop",
+    "LABEL_F45489": "EffEdit_HandleDirectWrite",
+    "LABEL_F454C8": "EffEdit_DirectWriteB",
+    "LABEL_F454D0": "EffEdit_DirectWriteC",
+    "LABEL_F454D8": "EffEdit_DirectWriteE",
+    "LABEL_F454DF": "EffEdit_DirectWriteD6",
+    "LABEL_F454E7": "EffEdit_CallWriteParam",
 
-    # --- LABEL_F3F626 - Seq_ValidateAllParams (data block, lines ~11797) ---
-    "LABEL_F3F626": "Seq_ValidateAllParams_DataBlock",
+    # --- LABEL_F454F1 - large .byte DSP config block ---
+    "LABEL_F454F1": "EffEdit_DSPConfigBlock",
 
-    # --- LABEL_F3F66D - Seq_ValidatePartAndTempo (lines ~11827-11861) ---
-    "LABEL_F3F66D": "Seq_ValidatePartAndTempo",
-    "LABEL_F3F68C": "SeqValPT_CheckTempoValues",
-    "LABEL_F3F6B1": "SeqValPT_ReturnOK",
+    # --- EffEdit validation area (lines ~21254-21265) ---
+    "LABEL_F457CF": "EffEdit_ValidateAndReadParams",
+    "LABEL_F457DF": "EffEdit_ValidateLoop",
 
-    # --- LABEL_F3F6B4 - Seq_ValidatePartTempoAndKey (lines ~11863-11895) ---
-    "LABEL_F3F6B4": "Seq_ValidatePartTempoAndKey",
-    "LABEL_F3F6C6": "SeqValPTK_CheckTempo",
-    "LABEL_F3F6EC": "SeqValPTK_ClampKeyValue",
-    "LABEL_F3F6EF": "SeqValPTK_LookupAndReturn",
+    # --- EffEdit DSP read area (lines ~21287-21404) ---
+    "LABEL_F45831": "EffEdit_ReadParamA_Body",
+    "LABEL_F45871": "EffEdit_ReadParamA_Check",
+    "LABEL_F45884": "EffEdit_ReadParamA_Fixup",
+    "LABEL_F458A7": "EffEdit_ReadParamB",
+    "LABEL_F458CA": "EffEdit_ReadParamB_Body",
+    "LABEL_F4590A": "EffEdit_ReadParamB_Check",
+    "LABEL_F4591D": "EffEdit_ReadParamB_Fixup",
+    "LABEL_F45937": "EffEdit_ReadParamC",
+    "LABEL_F4593A": "EffEdit_ReadParamC_Loop",
 
-    # --- LABEL_F3F6FC - Seq_ValidatePartTempoAndMode (lines ~11897-11929) ---
-    "LABEL_F3F6FC": "Seq_ValidatePartTempoAndMode",
-    "LABEL_F3F70E": "SeqValPTM_CheckTempo",
+    # --- EffEdit DSP read continued (lines ~21406-21453) ---
+    "LABEL_F45965": "EffEdit_ReadParamE",
+    "LABEL_F45986": "EffEdit_ReadParamD6",
+    "LABEL_F4599A": "EffEdit_ReadParamD6_Loop",
+    "LABEL_F459E2": "EffEdit_ReturnError",
+    "LABEL_F459E5": "EffEdit_PopAndReturn",
 
-    # --- LABEL_F3F73B - Seq_ValidatePartAndTempoAlt (lines ~11931-11957) ---
-    "LABEL_F3F73B": "Seq_ValidatePartAndTempoAlt",
-    "LABEL_F3F74D": "SeqValPTA_CheckTempo",
-    "LABEL_F3F763": "SeqValPTA_FailReturn",
-    "LABEL_F3F767": "SeqValPTA_OKReturn",
+    # --- EffEdit range validation (lines ~21455-21532) ---
+    "LABEL_F459E9": "EffEdit_ValidateRangeDelta",
+    "LABEL_F45A3C": "EffEdit_RangeCheck4C12",
+    "LABEL_F45A59": "EffEdit_RangeCheckDE",
+    "LABEL_F45A5F": "EffEdit_RangeCheck4C14",
+    "LABEL_F45A79": "EffEdit_RangeCheckHL",
+    "LABEL_F45A89": "EffEdit_RangeCheck4C16",
 
-    # --- LABEL_F3F76A - Seq_ValidateExtended_DataBlock ---
-    "LABEL_F3F76A": "Seq_ValidateExtended_DataBlock",
+    # --- MimeSyori area (lines ~21534-21544) ---
+    "LABEL_F45AB5": "MimeSyori_ReturnZero",
 
-    # --- LABEL_F3F799 - SeqPos_DecrementAndCheck (lines ~11979-12028) ---
-    "LABEL_F3F799": "SeqPos_DecrementAndCheck",
-    "LABEL_F3F7C7": "SeqPosDec_HandleInvalid",
-    "LABEL_F3F7DD": "SeqPosDec_TestBit7",
-    "LABEL_F3F7FA": "SeqPosDec_SetErrorCode",
-    "LABEL_F3F7FF": "SeqPosDec_StorePosition",
-    "LABEL_F3F809": "SeqPosDec_Return",
+    # --- SeqPlay alloc/visible area (lines ~21636-21706) ---
+    "LABEL_F45BF7": "SeqPlay_AllocHideIndicator",
+    "LABEL_F45C10": "SeqPlay_AllocPostEvent",
+    "LABEL_F45CB7": "SeqPlay_AllocAdjustBar",
 
-    # --- LABEL_F3F80D - data block ---
-    "LABEL_F3F80D": "SeqPos_DataBlock",
+    # --- SeqAccomp start helper area (lines ~21975-22052) ---
+    "LABEL_F46224": "SeqAccomp_TogglePlayback",
+    "LABEL_F46232": "SeqAccomp_ToggleSetZero",
+    "LABEL_F46237": "SeqAccomp_ToggleSendStatus",
+    "LABEL_F46240": "SeqAccomp_HandleStartStop",
+    "LABEL_F46283": "SeqAccomp_ActivateAndAssign",
+    "LABEL_F46298": "SeqAccomp_HandleOtherState",
+    "LABEL_F462B1": "SeqAccomp_OtherClearBit",
+    "LABEL_F462B8": "SeqAccomp_OtherActivate",
+    "LABEL_F462C0": "SeqAccomp_SendVoiceAndReturn",
+    "LABEL_F462C6": "SeqAccomp_OtherSetBit",
+    "LABEL_F462CD": "SeqAccomp_PostModeAndInit",
 
-    # --- LABEL_F3F854 - Seq_ValidatePartTempoAndRange (lines ~12041-12058) ---
-    "LABEL_F3F854": "Seq_ValidatePartTempoAndRange",
-    "LABEL_F3F866": "SeqValPTR_CheckTempo",
+    # --- NoteEditSy mode scroll area (lines ~22054-22123) ---
+    "LABEL_F462E2": "NoteEdit_ScrollToggle",
+    "LABEL_F462F0": "NoteEdit_ScrollSetZero",
+    "LABEL_F462F5": "NoteEdit_ScrollDispatchMode",
+    "LABEL_F46301": "NoteEdit_ScrollCallReset",
+    "LABEL_F46306": "NoteEdit_ScrollCheck86",
+    "LABEL_F46313": "NoteEdit_ScrollCheck87",
+    "LABEL_F46320": "NoteEdit_ScrollCheck88",
+    "LABEL_F4632D": "NoteEdit_ScrollInactive",
+    "LABEL_F4633D": "NoteEdit_ScrollActivate",
 
-    # --- Later in file - various validation/dispatch labels ---
-    "LABEL_F3F88E": "SeqValRange_CheckBounds",
-    "LABEL_F3F891": "SeqValRange_ReturnOK",
-    "LABEL_F3F8CF": "SeqDispatch_ValidateParam",
-    "LABEL_F3F8D4": "SeqDispatch_ParamFail",
-    "LABEL_F3F8D7": "SeqDispatch_ParamOK",
+    # --- NoteEditSy mode scroll return area (lines ~22125-22152) ---
+    "LABEL_F4636E": "NoteEdit_ReturnSetZero",
+    "LABEL_F46373": "NoteEdit_ReturnGetParam",
+    "LABEL_F46378": "NoteEdit_ReturnSendToggle",
 
-    # --- Seq tempo/timing area ---
-    "LABEL_F3F900": "SeqTempo_CheckAndClamp",
-    "LABEL_F3F90C": "SeqTempo_ClampedReturn",
-    "LABEL_F3F93D": "SeqTempo_ApplyAndReturn",
-
-    # --- Seq buffer/position area ---
-    "LABEL_F3F9C5": "SeqBufPos_UpdateAndSync",
-    "LABEL_F3F9EA": "SeqBufPos_CheckLimit",
-    "LABEL_F3FA0C": "SeqBufPos_HandleOverflow",
-    "LABEL_F3FA15": "SeqBufPos_WrapAround",
-    "LABEL_F3FA1B": "SeqBufPos_StoreResult",
-    "LABEL_F3FA2B": "SeqBufPos_Return",
-
-    # --- Seq accomp/playback area ---
-    "LABEL_F3FABF": "SeqAccPlay_InitAndDispatch",
-    "LABEL_F3FAF0": "SeqAccPlay_Return",
+    # --- LABEL_F46381 area - voice reassign (lines ~22154-22248) ---
+    "LABEL_F46381": "SeqAccomp_ReassignVoiceState",
+    "LABEL_F46392": "SeqAccomp_ReassignClearAndSetup",
+    "LABEL_F463EB": "SeqAccomp_ReassignCopyLoop",
+    "LABEL_F46424": "SeqAccomp_ReassignWriteLoop",
+    "LABEL_F46469": "SeqAccomp_ReassignDone",
+    "LABEL_F4646B": "SeqAccomp_ReassignEpilogue",
 }
 
 def main():
