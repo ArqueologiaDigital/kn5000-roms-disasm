@@ -51,29 +51,29 @@ NakaInst_TcOpen2:	aligned_string "TcOpen2"
 NakaInst_TcOpen1:	aligned_string "TcOpen1"
 NakaInst_TcClose:	aligned_string "TcClose"
 	.byte 0x00, 0xff
-LABEL_E86066:
+NakaInst_TcClose_Terminator:
 	.byte 0x00, 0xff
-LABEL_E86068:	aligned_string ""
+NakaInst_TcClose_Pad:	aligned_string ""
 NakaInst_Sdtecd1:	aligned_string "Sdtecd1"
 	.byte 0x00, 0xff
-LABEL_E86074:
+NakaInst_Sdtecd1_Terminator:
 	.byte 0x00, 0xff
-LABEL_E86076:
+NakaInst_SdtecdGroup_Term2:
 	.byte 0x00, 0xff
-LABEL_E86078:	aligned_string ""
+NakaInst_SdtecdGroup_Pad:	aligned_string ""
 NakaInst_SdtecdPage:	aligned_string "SdtecdPage"
 NakaInst_Sdtecd:	aligned_string "Sdtecd"
 	.byte 0xaa, 0x60
 	.byte 0xe8, 0x00, 0xa8, 0x60, 0xe8, 0x00, 0xa6, 0x60
 	.byte 0xe8, 0x00, 0xa4, 0x60, 0xe8, 0x00, 0xa2, 0x60
 	.byte 0xe8, 0x00
-LABEL_E860A2:
+NakaInst_Sqmixer_Term1:
 	.byte 0x00, 0xff
-LABEL_E860A4:
+NakaInst_Sqmixer_Term2:
 	.byte 0x00, 0xff
-LABEL_E860A6:
+NakaInst_Sqmixer_Term3:
 	.byte 0x00, 0xff
-LABEL_E860A8:	aligned_string ""
+NakaInst_Sqmixer_Pad:	aligned_string ""
 NakaInst_Sqmixer:	aligned_string "Sqmixer"
 	.byte 0x72, 0x61, 0xe8, 0x00, 0x70, 0x61
 	.byte 0xe8, 0x00, 0x62, 0x61, 0xe8, 0x00, 0x60, 0x61
@@ -84,29 +84,29 @@ NakaInst_Sqmixer:	aligned_string "Sqmixer"
 	.byte 0xe8, 0x00, 0x08, 0x61, 0xe8, 0x00, 0x06, 0x61
 	.byte 0xe8, 0x00, 0xf4, 0x60, 0xe8, 0x00, 0xf2, 0x60
 	.byte 0xe8, 0x00
-LABEL_E860F2:
+NakaInst_Sqmixer_PtrEnd:
 	.byte 0x00, 0xff
 NakaInst_PresentationTitle:	aligned_string "PresentationTitle"
-LABEL_E86106:	aligned_string ""
+NakaInst_PresentationTitle_Pad:	aligned_string ""
 NakaInst_LoadingPresentation:	aligned_string "LoadingPresentation"
-LABEL_E8611C:	aligned_string ""
+NakaInst_LoadingPresentation_Pad:	aligned_string ""
 NakaInst_PresentationControl:	aligned_string "PresentationControl"
 NakaInst_PlainScreen:	aligned_string "PlainScreen"
 NakaInst_FDemoTitleBox:	aligned_string "FDemoTitleBox"
 	.byte 0x00, 0xff
-LABEL_E8614E:
+NakaInst_FDemoTitleBox_Terminator:
 	.byte 0x00, 0xff
 NakaInst_Demofeature2:	aligned_string "Demofeature2"
-LABEL_E8615E:	aligned_string ""
-LABEL_E86160:	aligned_string ""
+NakaInst_Demofeature2_Pad:	aligned_string ""
+NakaInst_Demofeature2_Pad2:	aligned_string ""
 NakaInst_Demofeature1:	aligned_string "Demofeature1"
-LABEL_E86170:	aligned_string ""
+NakaInst_Demofeature1_Pad:	aligned_string ""
 NakaInst_Demofeature:	aligned_string "Demofeature"
 	inc	2, xde
 	.byte 0xe8, 0x00, 0xe8, 0x62, 0xe8, 0x00
 
 
-LABEL_E86186:
+NakaInst_DrawbarPtrTable:
 	.long Str_Drawbar_DrawPerc4
 	.long Str_Drawbar_DrawPerc223
 	.long Str_Drawbar_White23
@@ -1123,9 +1123,9 @@ Str_DiskErr47_German:	aligned_string "Der Sound Arranger kann nicht mit einem Co
 
 
 StrTable_DiskErr48:
-	.long LABEL_E9AF02
-	.long LABEL_E9AE9A
-	.long LABEL_E9AE30
+	.long Str_DiskErr48_English
+	.long Str_DiskErr48_German
+	.long Str_DiskErr48_French
 	.long NakaInst_lo_pueden_usarse_los_disquetes_de_tipo
 	.long NakaInst_ERR0R_48
 	.long NakaInst_Tipe_disket_yang_digunakan
@@ -1134,13 +1134,13 @@ NakaInst_ERR0R_48:	aligned_string "ERR0R 48"
 NakaInst_lo_pueden_usarse_los_disquetes_de_tipo:	.ascii "El disquete insertado es de tipo \"2HD\". En este modo s"
 	.byte 0xf3
 	aligned_string "lo pueden usarse los disquetes de tipo \"2DD\"."
-LABEL_E9AE30:	.ascii "La disquette ins"
+Str_DiskErr48_French:	.ascii "La disquette ins"
 	.byte 0xe9, 0x72, 0xe9
 	.asciz "e est de type\"2HD\". Dans ce mode, vous pouvez utiliser uniquement une disquette \"2DD\"."
-LABEL_E9AE9A:	.ascii "Die eingelegte Diskette ist ein "
+Str_DiskErr48_German:	.ascii "Die eingelegte Diskette ist ein "
 	.byte 0x84
 	.asciz "2HD\" Typ. In diesem Modus können nur „2DD\" Disketten verwendet werden."
-LABEL_E9AF02:	.asciz "The type of inserted DISK is \"2HD\".  It can be used only \"2DD\"  type in this mode."
+Str_DiskErr48_English:	.asciz "The type of inserted DISK is \"2HD\".  It can be used only \"2DD\"  type in this mode."
 	.byte 0xff, 0xea, 0xb1
 	.byte 0xe9, 0x00, 0x36, 0xb1, 0xe9, 0x00, 0x8a, 0xb0
 	.byte 0xe9, 0x00, 0xf0, 0xaf, 0xe9, 0x00, 0xe6, 0xaf
@@ -1153,7 +1153,7 @@ NakaInst_ERROR_49:	aligned_string "ERROR 49"
 	.byte 0x44, 0x69
 	aligned_string "e Größe dieses Songs übersteigt die Kapazität des SX-KN5000. Versuchen Sie es nocheinmal, nachdem Sie den Song verkleinert haben, z.B. durch Löschen von Spuren oder von Takten."
 	aligned_string "The quantity of  this song is over the capacity of GN7/GN9/FN3. Please try again after reducing the quantity like omitting the TRACK or MEASURE."
-LABEL_E9B27C:
+StrTable_DiskErr49_PtrEnd:
 	.byte 0xf6, 0xb4, 0xe9, 0x00
 Str_SongCapacityExceeded_Multilingual:
 	.long NakaInst_It_is_not_possible_to_record_using_preset_banks
@@ -1289,7 +1289,7 @@ LABEL_E9CFB8:	.asciz "Este mapa de bits tiene en un formato incorrecto para el K
 NakaInst_Cette_configuration_Bitmap_n_est_pas_au_bon:	aligned_string "Cette configuration Bitmap n'est pas au bon format pour le KN5000 et ne peut pas être chargée. Reportez-vous au mode d'emploi pour plus de détails. "
 NakaInst_This_Bitmap_is_in_the_wrong_format_for_the_KN5000:	.asciz "Das Format dieses Bitmaps kann vom SX-KN5000 nicht geladen werden. Lesen Sie die Bedienungsanleitung für weitere Informationen."
 	aligned_string "This Bitmap is in the wrong format for the KN5000 and cannot be loaded. See the Owners Manual for more details. "
-LABEL_E9D1D2:
+StrTable_DiskErr64_PtrEnd:
 	.byte 0x0a
 	xor	de, (xde-18944)
 	.byte 0xe9, 0x00, 0x66, 0xd2, 0xe9, 0x00, 0x28, 0xd2
@@ -1432,7 +1432,7 @@ NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea:	aligned_string "Por 
 	.byte 0x03, 0x00, 0xff, 0xff, 0x31, 0x00, 0x4e, 0x57
 	.byte 0xe9, 0x00, 0x56, 0xaf, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x36, 0x00, 0x4e, 0x57, 0xe9, 0x00
-	.long LABEL_E9B27C
+	.long StrTable_DiskErr49_PtrEnd
 	.byte 0x03, 0x00, 0xff, 0xff
 	.byte 0x37, 0x00, 0x4e, 0x57, 0xe9, 0x00, 0x6e, 0xb5
 	.byte 0xe9, 0x00, 0x03, 0x00, 0xff, 0xff, 0x38, 0x00
@@ -1468,7 +1468,7 @@ NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea:	aligned_string "Por 
 	.byte 0x02, 0x00, 0xff, 0xff, 0xff, 0xff, 0x8c, 0x57
 	.byte 0xe9, 0x00, 0x88, 0x5b, 0xe9, 0x00, 0x03, 0x00
 	.byte 0xff, 0xff, 0x40, 0x00, 0x4e, 0x57, 0xe9, 0x00
-	.long LABEL_E9D1D2
+	.long StrTable_DiskErr64_PtrEnd
 	.byte 0x04, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x6e, 0x56, 0xe9, 0x00, 0xfa, 0x5e
 	.byte 0xe9, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
@@ -1654,41 +1654,41 @@ NakaInst_RANDOM:	aligned_string "   RANDOM   "
 NakaInst_OFF_E9DCFA:	aligned_string "    OFF     "
 	aligned_string " NO TYPE !! "
 Scale_Arabic2_NameTable:
-	.long LABEL_E9DD72
-	.long LABEL_E9DD6E
-	.long LABEL_E9DD6A
-	.long LABEL_E9DD66
-	.long LABEL_E9DD62
-	.long LABEL_E9DD5E
-	.long LABEL_E9DD5A
-	.long LABEL_E9DD56
-	.long LABEL_E9DD52
-	.long LABEL_E9DD4E
-	.long LABEL_E9DD4A
-	.long LABEL_E9DD46
-LABEL_E9DD46:
+	.long Scale_Arabic2_Zero
+	.long Scale_Arabic2_Plus1
+	.long Scale_Arabic2_Plus2
+	.long Scale_Arabic2_Plus3
+	.long Scale_Arabic2_Plus4
+	.long Scale_Arabic2_Plus5
+	.long Scale_Arabic2_Plus6
+	.long Scale_Arabic2_Plus7
+	.long Scale_Arabic2_Plus8
+	.long Scale_Arabic2_Plus9
+	.long Scale_Arabic2_Plus10
+	.long Scale_Arabic2_Plus11
+Scale_Arabic2_Plus11:
 	.byte 0x2b, 0x31, 0x31, 0x00
-LABEL_E9DD4A:
+Scale_Arabic2_Plus10:
 	.byte 0x2b, 0x31, 0x30, 0x00
-LABEL_E9DD4E:
+Scale_Arabic2_Plus9:
 	.byte 0x2b, 0x20, 0x39, 0x00
-LABEL_E9DD52:
+Scale_Arabic2_Plus8:
 	.byte 0x2b, 0x20, 0x38, 0x00
-LABEL_E9DD56:
+Scale_Arabic2_Plus7:
 	.byte 0x2b, 0x20, 0x37, 0x00
-LABEL_E9DD5A:
+Scale_Arabic2_Plus6:
 	.byte 0x2b, 0x20, 0x36, 0x00
-LABEL_E9DD5E:
+Scale_Arabic2_Plus5:
 	.byte 0x2b, 0x20, 0x35, 0x00
-LABEL_E9DD62:
+Scale_Arabic2_Plus4:
 	.byte 0x2b, 0x20, 0x34, 0x00
-LABEL_E9DD66:
+Scale_Arabic2_Plus3:
 	.byte 0x2b, 0x20, 0x33, 0x00
-LABEL_E9DD6A:
+Scale_Arabic2_Plus2:
 	.byte 0x2b, 0x20, 0x32, 0x00
-LABEL_E9DD6E:
+Scale_Arabic2_Plus1:
 	.byte 0x2b, 0x20, 0x31, 0x00
-LABEL_E9DD72:
+Scale_Arabic2_Zero:
 	.byte 0x20, 0x20, 0x30, 0x00
 Scale_Names_Table:
 	.long NakaInst_KEY_C_E9DE14
@@ -1717,7 +1717,7 @@ NakaInst_KEY_C:	aligned_string "[KEY=C#]"
 NakaInst_KEY_C_E9DE14:	aligned_string "[KEY=C ]"
 	.byte 0x2c, 0xde
 	.byte 0xe9, 0x00, 0x26, 0xde, 0xe9, 0x00
-LABEL_E9DE26:	.asciz "SOUND"
+Str_SOUND:	.asciz "SOUND"
 NakaInst_TOTAL:	aligned_string "TOTAL"
 	aligned_string "%+4d"
 	aligned_string "   0"
@@ -1732,13 +1732,13 @@ NakaInst_TOTAL:	aligned_string "TOTAL"
 	.byte 0x70, 0x00, 0x70, 0x00, 0x70, 0x00, 0x70, 0x0e
 	.byte 0x78, 0x1e, 0x3c, 0x3c, 0x3f, 0xfc, 0x1f, 0xf8
 	.byte 0x07, 0xe0
-LABEL_E9DE82:
+Bitmap_Digit1:
 	.byte 0x01, 0xc0, 0x01, 0xc0, 0x01, 0xc0
 	.byte 0x01, 0xc0, 0x01, 0xc0, 0x01, 0xc0, 0x01, 0xc0
 	.byte 0x01, 0xc0, 0x01, 0xc0, 0x01, 0xc0, 0x01, 0xc0
 	.byte 0x01, 0xc0, 0x01, 0xc0, 0x01, 0xc0, 0x01, 0xc0
 	.byte 0x01, 0xc0, 0x01, 0xc0
-LABEL_E9DEA4:
+Bitmap_DigitL:
 	.byte 0x3f, 0xfe, 0x3f, 0xfe
 	.byte 0x3f, 0xfe, 0x38, 0x00, 0x38, 0x00, 0x38, 0x00
 	.byte 0x38, 0x00, 0x38, 0x00, 0x38, 0x00, 0x38, 0x00
@@ -1753,13 +1753,13 @@ LABEL_E9DEA4:
 	.byte 0x70, 0x07, 0x70, 0x07, 0x70, 0x07, 0x70, 0x07
 	.byte 0x78, 0x0f, 0x3c, 0x1e, 0x3f, 0xfe, 0x1f, 0xfc
 	.byte 0x07, 0xf0
-LABEL_E9DF0A:
+Bitmap_DigitR:
 	.byte 0x38, 0x07, 0x38, 0x0f, 0x38, 0x1e
 	.byte 0x38, 0x1c, 0x38, 0x1c, 0x38, 0x3c, 0x3f, 0xf8
 	.byte 0x3f, 0xf8, 0x3f, 0xfc, 0x38, 0x1e, 0x38, 0x0e
 	.byte 0x38, 0x0e, 0x38, 0x0e, 0x38, 0x1e, 0x3f, 0xfc
 	.byte 0x3f, 0xf8, 0x3f, 0xf0
-LABEL_E9DF2C:
+Bitmap_DigitD:
 	.byte 0x03, 0xf0, 0x0f, 0xfc
 	.byte 0x1f, 0xfe, 0x1e, 0x1e, 0x3c, 0x0f, 0x38, 0x07
 	.byte 0x38, 0x07, 0x38, 0x07, 0x38, 0x07, 0x38, 0x07
