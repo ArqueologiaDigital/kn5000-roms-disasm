@@ -97,6 +97,7 @@ rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom: rebuilt_ROMs/kn5000_subprogram_v14
 	$(LLVM_OBJCOPY) -O binary $< $@.full
 	dd if=$@.full of=$@.part_a bs=1 count=256 2>/dev/null
 	dd if=$@.full of=$@.part_b bs=1 skip=60416 2>/dev/null
+	sync
 	cat $@.part_a $@.part_b > $@
 	rm -f $@.full $@.part_a $@.part_b
 
