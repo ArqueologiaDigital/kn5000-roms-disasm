@@ -2064,25 +2064,25 @@ AcLswBoxProc:
 	ld (xsp + 16), xde
 	ld (xsp + 20), xwa
 	cp xbc, 0x1C00018
-	jrl z, LABEL_F9D028
+	jrl z, AcLswBox_HandlePageDown
 	cp xbc, 0x1C0001A
-	jrl z, LABEL_F9CFF7
+	jrl z, AcLswBox_HandlePageUp
 	cp xbc, 0x1C00017
-	jrl z, LABEL_F9CFCD
+	jrl z, AcLswBox_HandleScrollDown
 	cp xbc, 0x1C00019
-	jrl z, LABEL_F9CFA2
+	jrl z, AcLswBox_HandleScrollUp
 	cp xbc, 0x1C0001C
-	jrl z, LABEL_F9CF51
+	jrl z, AcLswBox_HandleWriteBack
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F9CF2B
+	jr z, AcLswBox_HandleShowHide
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F9CF2B
+	jr z, AcLswBox_HandleShowHide
 	cp xbc, 0x1C00002
-	jr z, LABEL_F9CF1F
+	jr z, AcLswBox_HandleClose
 	cp xbc, 0x1C00001
-	jr z, LABEL_F9CF17
+	jr z, AcLswBox_HandleCreate
 	cp xbc, 0x1E0003A
-	jrl nz, LABEL_F9D05F
+	jrl nz, AcLswBox_DefaultHandler
 	ld xwa, (xsp + 20)
 	call GetViewInstance
 	ld xiz, xhl
@@ -2102,20 +2102,20 @@ AcLswBoxProc:
 	call ApFuncCall
 	jrl AcLswBox_ReturnZeroJmp
 
-LABEL_F9CF17:
+AcLswBox_HandleCreate:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
-	jr LABEL_F9CF25
+	jr AcLswBox_CallPsParaBox
 
-LABEL_F9CF1F:
+AcLswBox_HandleClose:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 
-LABEL_F9CF25:
+AcLswBox_CallPsParaBox:
 	calr PsParaBoxProc
 	jrl AcLswBox_ReturnZeroJmp
 
-LABEL_F9CF2B:
+AcLswBox_HandleShowHide:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr PsParaBoxProc
@@ -2129,7 +2129,7 @@ LABEL_F9CF2B:
 	calr MainLswGet
 	jrl AcLswBox_ReturnZeroJmp
 
-LABEL_F9CF51:
+AcLswBox_HandleWriteBack:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr PsParaBoxProc
@@ -2158,7 +2158,7 @@ LABEL_F9CF51:
 	lds32 xde, 0
 	jrl Ac_SendUIEvent_Common
 
-LABEL_F9CFA2:
+AcLswBox_HandleScrollUp:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr PsParaBoxProc
@@ -2173,7 +2173,7 @@ LABEL_F9CFA2:
 	ld xbc, 0x1E0003D
 	jrl Ac_SendUIEvent_Common
 
-LABEL_F9CFCD:
+AcLswBox_HandleScrollDown:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr PsParaBoxProc
@@ -2188,7 +2188,7 @@ LABEL_F9CFCD:
 	ld xbc, 0x1E0003D
 	jr Ac_SendUIEvent_Common
 
-LABEL_F9CFF7:
+AcLswBox_HandlePageUp:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr PsParaBoxProc
@@ -2206,7 +2206,7 @@ LABEL_F9CFF7:
 	ld xde, xhl
 	jr Ac_SendUIEvent_Common
 
-LABEL_F9D028:
+AcLswBox_HandlePageDown:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr PsParaBoxProc
@@ -2228,14 +2228,14 @@ Ac_SendUIEvent_Common:
 
 AcLswBox_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F9D068
+	jr AcLswBox_Epilogue
 
-LABEL_F9D05F:
+AcLswBox_DefaultHandler:
 	ld xwa, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr PsParaBoxProc
 
-LABEL_F9D068:
+AcLswBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 20)
 	ret
@@ -2246,23 +2246,23 @@ AcRamBoxProc:
 	ld (xsp + 30), xde
 	ld (xsp + 34), xwa
 	cp xbc, 0x1C00018
-	jrl z, LABEL_F9D211
+	jrl z, AcRamBox_HandlePageDown
 	cp xbc, 0x1C0001A
-	jrl z, LABEL_F9D1E0
+	jrl z, AcRamBox_HandlePageUp
 	cp xbc, 0x1C00017
-	jrl z, LABEL_F9D1B6
+	jrl z, AcRamBox_HandleScrollDown
 	cp xbc, 0x1C00019
-	jrl z, LABEL_F9D18B
+	jrl z, AcRamBox_HandleScrollUp
 	cp xbc, 0x1C0001D
-	jrl z, LABEL_F9D13A
+	jrl z, AcRamBox_HandleWriteBack
 	cp xbc, 0x1E000A7
-	jr z, LABEL_F9D107
+	jr z, AcRamBox_HandleDataRefresh
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F9D0FE
+	jr z, AcRamBox_HandleShowHide
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F9D0FE
+	jr z, AcRamBox_HandleShowHide
 	cp xbc, 0x1E0003A
-	jrl nz, LABEL_F9D248
+	jrl nz, AcRamBox_DefaultHandler
 	ld xwa, (xsp + 34)
 	call GetViewInstance
 	ld xiz, xhl
@@ -2282,12 +2282,12 @@ AcRamBoxProc:
 	call ApFuncCall
 	jrl AcRamBox_EventReturn
 
-LABEL_F9D0FE:
+AcRamBox_HandleShowHide:
 	ld xwa, (xsp + 34)
 	ld xde, (xsp + 30)
 	calr PsParaBoxProc
 
-LABEL_F9D107:
+AcRamBox_HandleDataRefresh:
 	ld xwa, (xsp + 34)
 	call GetViewInstance
 	ld xiz, xhl
@@ -2305,7 +2305,7 @@ LABEL_F9D107:
 	calr MainRamGet
 	jrl AcRamBox_EventReturn
 
-LABEL_F9D13A:
+AcRamBox_HandleWriteBack:
 	ld xwa, (xsp + 34)
 	ld xde, (xsp + 30)
 	calr PsParaBoxProc
@@ -2334,7 +2334,7 @@ LABEL_F9D13A:
 	lds32 xde, 0
 	jrl AcRamBox_SendUIEvent_Common
 
-LABEL_F9D18B:
+AcRamBox_HandleScrollUp:
 	ld xwa, (xsp + 34)
 	ld xde, (xsp + 30)
 	calr PsParaBoxProc
@@ -2349,7 +2349,7 @@ LABEL_F9D18B:
 	ld xbc, 0x1E0003D
 	jrl AcRamBox_SendUIEvent_Common
 
-LABEL_F9D1B6:
+AcRamBox_HandleScrollDown:
 	ld xwa, (xsp + 34)
 	ld xde, (xsp + 30)
 	calr PsParaBoxProc
@@ -2364,7 +2364,7 @@ LABEL_F9D1B6:
 	ld xbc, 0x1E0003D
 	jr AcRamBox_SendUIEvent_Common
 
-LABEL_F9D1E0:
+AcRamBox_HandlePageUp:
 	ld xwa, (xsp + 34)
 	ld xde, (xsp + 30)
 	calr PsParaBoxProc
@@ -2382,7 +2382,7 @@ LABEL_F9D1E0:
 	ld xde, xhl
 	jr AcRamBox_SendUIEvent_Common
 
-LABEL_F9D211:
+AcRamBox_HandlePageDown:
 	ld xwa, (xsp + 34)
 	ld xde, (xsp + 30)
 	calr PsParaBoxProc
@@ -2404,14 +2404,14 @@ AcRamBox_SendUIEvent_Common:
 
 AcRamBox_EventReturn:
 	lds32 xhl, 0
-	jr LABEL_F9D251
+	jr AcRamBox_Epilogue
 
-LABEL_F9D248:
+AcRamBox_DefaultHandler:
 	ld xwa, (xsp + 34)
 	ld xde, (xsp + 30)
 	calr PsParaBoxProc
 
-LABEL_F9D251:
+AcRamBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 34)
 	ret
@@ -2422,34 +2422,34 @@ AcTempoBoxProc:
 	ld xiz, xde
 	st_dri3l XWA, 0xFD, 0x04, 0x01
 	cp xbc, 0x1C0001C
-	jr z, LABEL_F9D2BE
+	jr z, AcTempoBox_HandleConfirm
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F9D2AD
+	jr z, AcTempoBox_HandleShowHide
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F9D2AD
+	jr z, AcTempoBox_HandleShowHide
 	cp xbc, 0x1C00002
-	jr z, LABEL_F9D2A1
+	jr z, AcTempoBox_HandleClose
 	cp xbc, 0x1C00001
-	jr z, LABEL_F9D298
+	jr z, AcTempoBox_HandleCreate
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	calr PsParaBoxProc
-	jrl LABEL_F9D326
+	jrl AcTempoBox_Epilogue
 
-LABEL_F9D298:
+AcTempoBox_HandleCreate:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
-	jr LABEL_F9D2A8
+	jr AcTempoBox_CallPsParaBox
 
-LABEL_F9D2A1:
+AcTempoBox_HandleClose:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 
-LABEL_F9D2A8:
+AcTempoBox_CallPsParaBox:
 	calr PsParaBoxProc
 	jr PsRadioBox_EventReturn
 
-LABEL_F9D2AD:
+AcTempoBox_HandleShowHide:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	calr PsParaBoxProc
@@ -2457,22 +2457,22 @@ LABEL_F9D2AD:
 	calr MainLswGet
 	jr PsRadioBox_EventReturn
 
-LABEL_F9D2BE:
+AcTempoBox_HandleConfirm:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	calr PsParaBoxProc
 	ld xwa, (xiz)
 	cp xwa, 0x4
-	jr z, LABEL_F9D2DC
+	jr z, AcTempoBox_MatchTempoID
 	ld xwa, (xiz)
 	cp xwa, 0x2200
 	jr nz, PsRadioBox_EventReturn
 
-LABEL_F9D2DC:
+AcTempoBox_MatchTempoID:
 	ld xwa, 0x2200
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr nz, LABEL_F9D303
+	jr nz, AcTempoBox_CopyTempoString
 	lds32 xwa, 4
 	call SndParam_LookupReadOnly
 	pushw hl
@@ -2482,9 +2482,9 @@ LABEL_F9D2DC:
 	push xwa
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	jr LABEL_F9D313
+	jr AcTempoBox_SendConfirmEvent
 
-LABEL_F9D303:
+AcTempoBox_CopyTempoString:
 	pushw 0xEA
 	pushw 0xA188
 	lda xwa, (xsp + 8)
@@ -2492,7 +2492,7 @@ LABEL_F9D303:
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F9D313:
+AcTempoBox_SendConfirmEvent:
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
 	ld xbc, 0x1C0000F
@@ -2501,7 +2501,7 @@ LABEL_F9D313:
 PsRadioBox_EventReturn:
 	lds32 xhl, 0
 
-LABEL_F9D326:
+AcTempoBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
