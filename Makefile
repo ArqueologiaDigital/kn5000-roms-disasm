@@ -26,7 +26,10 @@ SCREENDATA_BINS = $(patsubst %,maincpu/includes/generated/style_ui_screendata_%.
 ACCOMP_NAMES = accomp_section_widget accomp_part_widget accomp_display_full
 ACCOMP_BINS = $(patsubst %,maincpu/includes/generated/%.bin,$(ACCOMP_NAMES))
 
-C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS)
+SE_NAMES = se_drumkit_display
+SE_BINS = $(patsubst %,maincpu/includes/generated/%.bin,$(SE_NAMES))
+
+C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS)
 
 maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/paramblock/%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
@@ -35,6 +38,12 @@ maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/parambloc
 	@rm -f $@.o
 
 maincpu/includes/generated/style_ui_screendata_%.bin: maincpu/style_ui/%.c maincpu/style_ui/screendata_types.h
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/style_ui -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+maincpu/includes/generated/se_%.bin: maincpu/audio/sound_editor_screens/se_%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/style_ui -o $@.o $<
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
