@@ -33,7 +33,7 @@ SeqPlay_ResetAndStop:
 	pop xhl
 	jrl SeqPlay_ReadyStateTransition
 
-LABEL_F2366B:
+SeqPlay_SetState48AndFloppyReady:
 	stdi16 6699, 48
 
 SeqPlay_FloppyReady:
@@ -43,13 +43,13 @@ SeqPlay_FloppyReady:
 SeqPlay_FinishFloppyLoadAndStart:
 	call VoiceChannels_LoadPartMapAndInitPan
 	stdi16 6699, 1
-	call LABEL_F23E38
+	call SeqPlay_DelayLoop_Outer
 	call BitMapOut_RenderDisplay
 	ld16_24 xwa, 0x00ffec
 	stda16 61854, xwa
 	anddi8 10407, 247
 	call SeqPlay_CheckStartConditions
-	call LABEL_F23E45
+	call SeqPlay_InitChannelParams
 	stdi16 61852, 0
 	call Audio_CheckSubsystemReady
 
@@ -57,22 +57,22 @@ SeqPlay_ReadyStateTransition:
 	call SeqStep_PlaybackNop
 	ret
 
-LABEL_F236AF:	.ascii "MThdMTrk"
+SMF_HeaderMagic_MThdMTrk:	.ascii "MThdMTrk"
 
-LABEL_F236B7:
+SeqTrack_ResetAllChannelSlots:
 	ldw wa, 0xFFFF
 	ld xix, 0x10B3
 	ldw bc, 0x8
 
-LABEL_F236C2:
+SeqTrack_ResetChannelSlots_Loop:
 	st_dpiw WA, 0xF1
-	djnz xbc, LABEL_F236C2
+	djnz xbc, SeqTrack_ResetChannelSlots_Loop
 	xor wa, wa
 	ldw bc, 0x28
 
-LABEL_F236CD:
+SeqTrack_ClearRemaining_Loop:
 	st_dpiw WA, 0xF1
-	djnz xbc, LABEL_F236CD
+	djnz xbc, SeqTrack_ClearRemaining_Loop
 	ret
 
 SeqTrack_ScanActiveChannels:
@@ -80,11 +80,11 @@ SeqTrack_ScanActiveChannels:
 	xor iy, iy
 	xor a, a
 
-LABEL_F236DD:
+SeqTrack_ScanActiveChannels_Loop:
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	add iy, 0x7
 	cp iy, 0xE0
-	jrl ule, LABEL_F236DD
+	jrl ule, SeqTrack_ScanActiveChannels_Loop
 	ret
 
 SeqTrack_ClearPlaybackBuffers:
@@ -95,15 +95,15 @@ SeqTrack_ClearPlaybackBuffers:
 	ld xix, 0xF72
 	ldw bc, 0x8
 
-LABEL_F236FB:
+SeqTrack_ClearPlaybackBuf1_Loop:
 	st_dpiw WA, 0xF1
-	djnz xbc, LABEL_F236FB
+	djnz xbc, SeqTrack_ClearPlaybackBuf1_Loop
 	ld xix, 0xF82
 	ldw bc, 0x8
 
-LABEL_F23709:
+SeqTrack_ClearPlaybackBuf2_Loop:
 	st_dpiw WA, 0xF1
-	djnz xbc, LABEL_F23709
+	djnz xbc, SeqTrack_ClearPlaybackBuf2_Loop
 	pop xix
 	pop xbc
 	pop xwa
@@ -122,7 +122,7 @@ FloppyIO_ReadNextByte:
 	ldda32 xix, 4376
 	ld_spib A, 0xF0
 	cp xix, 0x17F9
-	jrl ule, LABEL_F23752
+	jrl ule, FloppyIO_ReadNextByte_StorePtr
 	ld l, a
 	pushw hl
 	call FileIO_ReadBlockToFilePos
@@ -139,15 +139,15 @@ FloppyIO_ReadNextByte:
 	div xwa, xhl
 	ldto_werp DE, 0xE2
 	cps de, 0
-	jrl nz, LABEL_F2374A
+	jrl nz, FloppyIO_ReadNextByte_DivDone
 
-LABEL_F2374A:
+FloppyIO_ReadNextByte_DivDone:
 	popw de
 	pop xhl
 	popw wa
 	ld xix, 0x13FA
 
-LABEL_F23752:
+FloppyIO_ReadNextByte_StorePtr:
 	stda32 4376, xix
 	push xwa
 	push xbc
@@ -159,14 +159,14 @@ LABEL_F23752:
 	jp_24 z, 0xF23771
 	dec 1, xwa
 
-LABEL_F23771:
+FloppyIO_ReadNextByte_UpdateRemaining:
 	stda32 6883, xwa
 	pop xbc
 	pop xwa
 	pop xix
 	ret
 
-LABEL_F23779:
+SeqTrack_ClearPartParamBuffers:
 	pushw wa
 	pushw bc
 	push xix
@@ -174,9 +174,9 @@ LABEL_F23779:
 	ldw bc, 0x10
 	ld xix, 0xFAE
 
-LABEL_F23786:
+SeqTrack_ClearPartParams_Loop:
 	st_dpiw WA, 0xF1
-	djnz xbc, LABEL_F23786
+	djnz xbc, SeqTrack_ClearPartParams_Loop
 	pop xix
 	popw bc
 	popw wa
@@ -192,20 +192,20 @@ FloppyIO_SelectReadMode:
 	push xiz
 	xor wa, wa
 	cpdi8 4600, 0
-	jr z, LABEL_F237B3
+	jr z, FloppyIO_SelectReadMode_ModeDefault
 	cpdi8 4600, 1
-	jr z, LABEL_F237AD
+	jr z, FloppyIO_SelectReadMode_Mode0
 	ldb a, 0x2
-	jp LABEL_F237B5
+	jp FloppyIO_SelectReadMode_Dispatch
 
-LABEL_F237AD:
+FloppyIO_SelectReadMode_Mode0:
 	ldb a, 0x0
-	jp LABEL_F237B5
+	jp FloppyIO_SelectReadMode_Dispatch
 
-LABEL_F237B3:
+FloppyIO_SelectReadMode_ModeDefault:
 	ldb a, 0x1
 
-LABEL_F237B5:
+FloppyIO_SelectReadMode_Dispatch:
 	call LABEL_FD857A
 	pop xiz
 	pop xiy
@@ -216,7 +216,7 @@ LABEL_F237B5:
 	pop xwa
 	ret
 
-LABEL_F237C1:
+FloppyIO_SwitchboardChannelPtrs:
 	.byte 0x96, 0xf4, 0x00, 0x00, 0xb0, 0xf4, 0x00, 0x00
 	.byte 0xca, 0xf4, 0x00, 0x00, 0xe4, 0xf4, 0x00, 0x00
 	.byte 0xfe, 0xf4, 0x00, 0x00, 0x18, 0xf5, 0x00, 0x00
@@ -228,39 +228,39 @@ LABEL_F237C1:
 
 FloppyIO_ConfigureSwitchboard:
 	cpdi8 4600, 0
-	jrl z, LABEL_F23818
+	jrl z, FloppyIO_ConfigSwb_Mode0
 	ldb c, 0x0
 	anddi8 64941, 251
 	stdi8 62013, 0
-	jrl LABEL_F23827
+	jrl FloppyIO_ConfigSwb_QueueEvent
 
-LABEL_F23818:
+FloppyIO_ConfigSwb_Mode0:
 	or a, 0x4
 	ldb c, 0xFF
 	ordi8 64941, 4
 	stdi8 62013, 255
 
-LABEL_F23827:
-	call LABEL_F23E71
+FloppyIO_ConfigSwb_QueueEvent:
+	call FloppyIO_ComputeSwitchboardAddr
 	stdi8 4330, 1
 	ldb e, 0x91
 	ldb d, 0x3
 	ldb w, 0x4
 	xor a, a
 	cpdi8 4600, 0
-	jrl nz, LABEL_F2384C
+	jrl nz, FloppyIO_ConfigSwb_DispatchAndReinit
 	ldb a, 0x4
 	push xhl
 	ld xhl, 0xF73D
 	andmi8 (xhl), 0xF8
 	pop xhl
 
-LABEL_F2384C:
+FloppyIO_ConfigSwb_DispatchAndReinit:
 	call SwbtWr_QueueMainEvent
 	call SwbtWr_ReinitBothBanks
 	ret
 
-LABEL_F23855:
+SeqPlay_PrepareAndScanChannels:
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
@@ -268,24 +268,24 @@ LABEL_F23855:
 	st16_24 0x00ffec, xwa
 	stda16 4237, xwa
 
-LABEL_F2386C:
+SeqPlay_InitTrackLoop:
 	stdi8 4009, 0
-	call LABEL_F23E8D
+	call SMF_VoiceSetup_AssignToTrack
 	call SeqTrack_ScanActiveChannels
 	call LABEL_F23F13
 	call SeqTrack_ClearPlaybackBuffers
 	call LABEL_F23F2A
 	cpdi8 3830, 0
-	jrl z, LABEL_F23894
+	jrl z, SeqPlay_InitTrackLoop_Continue
 	call FloppyIO_ReturnReady
 	jrl SeqPlay_CheckLoadStatus
 
-LABEL_F23894:
+SeqPlay_InitTrackLoop_Continue:
 	call LABEL_F24112
 	incdi16 1, 4237
 	ldda16 xwa, 4237
 	cpda16 xwa, 3934
-	jrl c, LABEL_F2386C
+	jrl c, SeqPlay_InitTrackLoop
 	call FloppyIO_ReturnReady
 	cpdi8 3830, 0
 	jrl nz, SeqPlay_CheckLoadStatus
@@ -302,7 +302,7 @@ SeqTrack_AssignFloppyChannels:
 	xor ix, ix
 	stdi8 5113, 0
 
-LABEL_F238CD:
+SeqTrack_AssignChannel_Loop:
 	cpdi16 62001, 16
 	jrl c, SeqTrack_ErrorMark
 	push xiy
@@ -344,20 +344,20 @@ LABEL_F238CD:
 	add ix, 0x2
 	incdi8 1, 5113
 	cpdi8 5113, 16
-	jrl c, LABEL_F238CD
-	jrl LABEL_F23962
+	jrl c, SeqTrack_AssignChannel_Loop
+	jrl SeqTrack_AssignChannels_Done
 
 SeqTrack_ErrorMark:
 	stdi8 3830, 255
 	stdi8 4323, 255
 
-LABEL_F23962:
+SeqTrack_AssignChannels_Done:
 	ret
 
 FloppyIO_ReadToTrackBuffer:
 	ld xix, 0x106E
 
-LABEL_F23968:
+FloppyIO_ReadTrackBuf_ReadLoop:
 	push xix
 	call FloppyIO_ReadNextByte
 	pop xix
@@ -366,40 +366,40 @@ LABEL_F23968:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23980
+	jr lt, FloppyIO_ReadTrackBuf_EarlyExit
 	pop xbc
 	pop xwa
-	jp LABEL_F23986
+	jp FloppyIO_ReadTrackBuf_StoreByte
 
-LABEL_F23980:
+FloppyIO_ReadTrackBuf_EarlyExit:
 	pop xbc
 	pop xwa
-	jp LABEL_F23995
+	jp FloppyIO_ReadTrackBuf_Done
 
-LABEL_F23986:
+FloppyIO_ReadTrackBuf_StoreByte:
 	lda_dpi XBC, 0xF0
 	bit 7, a
-	jrl nz, LABEL_F23968
+	jrl nz, FloppyIO_ReadTrackBuf_ReadLoop
 	sub xix, 0x106E
 
-LABEL_F23995:
+FloppyIO_ReadTrackBuf_Done:
 	ret
 
 SeqTrack_DispatchPartEvt:
 	call LABEL_F24391
 	cps ix, 1
-	jrl z, LABEL_F239A7
+	jrl z, SeqTrack_DispatchPart_Mode1
 	cps ix, 2
-	jrl z, LABEL_F239B5
-	jrl LABEL_F239DB
+	jrl z, SeqTrack_DispatchPart_Mode2
+	jrl SeqTrack_DispatchPart_Mode3
 
-LABEL_F239A7:
+SeqTrack_DispatchPart_Mode1:
 	ldda8 a, 4206
 	and a, 0x7F
 	stda8 4211, a
-	jrl LABEL_F23A16
+	jrl SeqTrack_DispatchPart_Done
 
-LABEL_F239B5:
+SeqTrack_DispatchPart_Mode2:
 	ldda8 a, 4206
 	and a, 0x7F
 	rrc a
@@ -411,9 +411,9 @@ LABEL_F239B5:
 	or l, w
 	stda8 4212, a
 	stda8 4211, l
-	jrl LABEL_F23A16
+	jrl SeqTrack_DispatchPart_Done
 
-LABEL_F239DB:
+SeqTrack_DispatchPart_Mode3:
 	ldda8 a, 4206
 	and a, 0x7F
 	rrc_i_8 a, 2
@@ -434,7 +434,7 @@ LABEL_F239DB:
 	stda8 4212, l
 	stda8 4211, c
 
-LABEL_F23A16:
+SeqTrack_DispatchPart_Done:
 	ret
 
 SeqTrack_ComputeTempoScaling:
@@ -449,7 +449,7 @@ SeqTrack_ComputeTempoScaling:
 	ldda8 e, 4213
 	xor d, d
 	cps de, 0
-	jrl z, LABEL_F23AE7
+	jrl z, SeqTrack_ComputeTempo_NoDelta
 	pushw wa
 	xor wa, wa
 	ldda16 xhl, 3936
@@ -462,7 +462,7 @@ SeqTrack_ComputeTempoScaling:
 	ldi_werp 0xE6, 0
 	add xde, xbc
 	cpi_werp 0xEA, 0
-	jrl ule, LABEL_F23A76
+	jrl ule, SeqTrack_ComputeTempo_Phase2
 	pushw wa
 	ld wa, de
 	lds de, 1
@@ -473,12 +473,12 @@ SeqTrack_ComputeTempoScaling:
 	adddm16 3946, xwa
 	popw wa
 
-LABEL_F23A76:
+SeqTrack_ComputeTempo_Phase2:
 	ldi_werp 0xE2, 0
 	ldi_werp 0xEA, 0
 	add xwa, xde
 	cpi_werp 0xE2, 0
-	jrl ule, LABEL_F23AB1
+	jrl ule, SeqTrack_ComputeTempo_Phase3
 	lds de, 1
 	ldfr_werp DE, 0xE2
 	div xwa, xhl
@@ -499,9 +499,9 @@ LABEL_F23A76:
 	srl xiy, 1
 	jrl SeqTrack_UpdateVolumesExit
 
-LABEL_F23AB1:
+SeqTrack_ComputeTempo_Phase3:
 	cpda16 xwa, 3936
-	jrl c, LABEL_F23AC8
+	jrl c, SeqTrack_ComputeTempo_Phase3Store
 	xor de, de
 	ldfr_werp DE, 0xE2
 	div xwa, xhl
@@ -509,7 +509,7 @@ LABEL_F23AB1:
 	adddm16 3946, xwa
 	ld wa, de
 
-LABEL_F23AC8:
+SeqTrack_ComputeTempo_Phase3Store:
 	pushw wa
 	pushw de
 	push xiy
@@ -525,12 +525,12 @@ LABEL_F23AC8:
 	srl xiy, 1
 	jrl SeqTrack_UpdateVolumesExit
 
-LABEL_F23AE7:
+SeqTrack_ComputeTempo_NoDelta:
 	ldi_werp 0xE2, 0
 	ldi_werp 0xE6, 0
 	add xwa, xbc
 	cpi_werp 0xE2, 0
-	jrl ule, LABEL_F23B20
+	jrl ule, SeqTrack_ComputeTempo_NoDeltaDirect
 	lds de, 1
 	ldda16 xhl, 3936
 	ldfr_werp DE, 0xE2
@@ -550,10 +550,10 @@ LABEL_F23AE7:
 	pop xix
 	jrl SeqTrack_UpdateVolumesExit
 
-LABEL_F23B20:
+SeqTrack_ComputeTempo_NoDeltaDirect:
 	ldda16 xhl, 3936
 	cp wa, hl
-	jrl c, LABEL_F23B43
+	jrl c, SeqTrack_ComputeTempo_NoDeltaStore
 	xor de, de
 	ldfr_werp DE, 0xE2
 	div xwa, xhl
@@ -568,7 +568,7 @@ LABEL_F23B20:
 	popw wa
 	ld wa, de
 
-LABEL_F23B43:
+SeqTrack_ComputeTempo_NoDeltaStore:
 	sla iy, 1
 	push xix
 	ld xix, 0xFAE
@@ -582,36 +582,36 @@ SeqTrack_UpdateVolumesExit:
 SeqTrack_UpdateChannelVolumes:
 	xor xiy, xiy
 
-LABEL_F23B58:
+SeqTrack_UpdateVolumes_Loop:
 	push xix
 	ld xix, 0x11F9
 	bit_dri 7, 0x07, 0xF0, 0xF4
 	pop xix
-	jrl z, LABEL_F23B90
+	jrl z, SeqTrack_UpdateVolumes_Next
 	call LABEL_F243CC
 	push xix
 	ld xix, 0x11F9
 	add xix, xiy
 	add wa, (xix + 5)
 	pop xix
-	jrl ov, LABEL_F23B81
+	jrl ov, SeqTrack_UpdateVolumes_Clamp
 	cp wa, 0x2FFF
-	jrl c, LABEL_F23B84
+	jrl c, SeqTrack_UpdateVolumes_Store
 
-LABEL_F23B81:
+SeqTrack_UpdateVolumes_Clamp:
 	ldw wa, 0x2FFF
 
-LABEL_F23B84:
+SeqTrack_UpdateVolumes_Store:
 	push xix
 	ld xix, 0x11F9
 	add xix, xiy
 	ld (xix + 5), wa
 	pop xix
 
-LABEL_F23B90:
+SeqTrack_UpdateVolumes_Next:
 	add xiy, 0x7
 	cp xiy, 0xE0
-	jrl ule, LABEL_F23B58
+	jrl ule, SeqTrack_UpdateVolumes_Loop
 	ret
 
 SMF_ParseTrackEvent:
@@ -621,176 +621,176 @@ SMF_ParseTrackEvent:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23BB6
+	jr lt, SMF_ParseTrack_EarlyExit
 	pop xbc
 	pop xwa
-	jp LABEL_F23BBC
+	jp SMF_ParseTrack_Dispatch
 
-LABEL_F23BB6:
+SMF_ParseTrack_EarlyExit:
 	pop xbc
 	pop xwa
 	jp Voice_NullRet
 
-LABEL_F23BBC:
+SMF_ParseTrack_Dispatch:
 	stdi8 4009, 0
 	cps a, 2
-	jrl z, LABEL_F23C00
+	jrl z, SMF_ParseTrack_MetaEvt02
 	cps a, 3
-	jrl z, LABEL_F23C23
+	jrl z, SMF_ParseTrack_MetaEvt03
 	cp a, 0x2F
-	jrl z, LABEL_F23C46
+	jrl z, SMF_ParseTrack_MetaEvt2F
 	cp a, 0x51
-	jrl z, LABEL_F23C6A
+	jrl z, SMF_ParseTrack_MetaEvt51
 	cp a, 0x58
-	jrl z, LABEL_F23CA9
+	jrl z, SMF_ParseTrack_MetaEvt58
 	call Sequencer_ValidateFileData
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23BF3
+	jr lt, SMF_ParseTrack_ValidateExit
 	pop xbc
 	pop xwa
-	jp LABEL_F23BF9
+	jp SMF_ParseTrack_AdvanceAndReturn
 
-LABEL_F23BF3:
+SMF_ParseTrack_ValidateExit:
 	pop xbc
 	pop xwa
 	jp Voice_NullRet
 
-LABEL_F23BF9:
+SMF_ParseTrack_AdvanceAndReturn:
 	call Sequencer_AdvanceBlockPosition
 	jrl Voice_NullRet
 
-LABEL_F23C00:
+SMF_ParseTrack_MetaEvt02:
 	call Sequencer_ValidateFileData
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23C16
+	jr lt, SMF_ParseTrack_Meta02_EarlyExit
 	pop xbc
 	pop xwa
-	jp LABEL_F23C1C
+	jp SMF_ParseTrack_Meta02_Advance
 
-LABEL_F23C16:
+SMF_ParseTrack_Meta02_EarlyExit:
 	pop xbc
 	pop xwa
 	jp Voice_NullRet
 
-LABEL_F23C1C:
+SMF_ParseTrack_Meta02_Advance:
 	call Sequencer_AdvanceBlockPosition
 	jrl Voice_NullRet
 
-LABEL_F23C23:
+SMF_ParseTrack_MetaEvt03:
 	call Sequencer_ValidateFileData
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23C39
+	jr lt, SMF_ParseTrack_Meta03_EarlyExit
 	pop xbc
 	pop xwa
-	jp LABEL_F23C3F
+	jp SMF_ParseTrack_Meta03_Advance
 
-LABEL_F23C39:
+SMF_ParseTrack_Meta03_EarlyExit:
 	pop xbc
 	pop xwa
 	jp Voice_NullRet
 
-LABEL_F23C3F:
+SMF_ParseTrack_Meta03_Advance:
 	call Sequencer_AdvanceBlockPosition
 	jrl Voice_NullRet
 
-LABEL_F23C46:
+SMF_ParseTrack_MetaEvt2F:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23C5C
+	jr lt, SMF_ParseTrack_Meta2F_EarlyExit
 	pop xbc
 	pop xwa
-	jp LABEL_F23C62
+	jp SMF_ParseTrack_Meta2F_EndOfTrack
 
-LABEL_F23C5C:
+SMF_ParseTrack_Meta2F_EarlyExit:
 	pop xbc
 	pop xwa
 	jp Voice_NullRet
 
-LABEL_F23C62:
+SMF_ParseTrack_Meta2F_EndOfTrack:
 	stdi8 4009, 255
 	jrl Voice_NullRet
 
-LABEL_F23C6A:
+SMF_ParseTrack_MetaEvt51:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23C80
+	jr lt, SMF_ParseTrack_Meta51_Read1_EarlyExit
 	pop xbc
 	pop xwa
-	jp LABEL_F23C86
+	jp SMF_ParseTrack_Meta51_ReadByte2
 
-LABEL_F23C80:
+SMF_ParseTrack_Meta51_Read1_EarlyExit:
 	pop xbc
 	pop xwa
 	jp Voice_NullRet
 
-LABEL_F23C86:
+SMF_ParseTrack_Meta51_ReadByte2:
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23C9C
+	jr lt, SMF_ParseTrack_Meta51_Read2_EarlyExit
 	pop xbc
 	pop xwa
-	jp LABEL_F23CA2
+	jp SMF_ParseTrack_Meta51_SetTempo
 
-LABEL_F23C9C:
+SMF_ParseTrack_Meta51_Read2_EarlyExit:
 	pop xbc
 	pop xwa
 	jp Voice_NullRet
 
-LABEL_F23CA2:
+SMF_ParseTrack_Meta51_SetTempo:
 	call LABEL_F244CC
 	jrl Voice_NullRet
 
-LABEL_F23CA9:
+SMF_ParseTrack_MetaEvt58:
 	call Sequencer_ValidateFileData
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23CBF
+	jr lt, SMF_ParseTrack_Meta58_EarlyExit
 	pop xbc
 	pop xwa
-	jp LABEL_F23CC5
+	jp SMF_ParseTrack_Meta58_Advance
 
-LABEL_F23CBF:
+SMF_ParseTrack_Meta58_EarlyExit:
 	pop xbc
 	pop xwa
 	jp Voice_NullRet
 
-LABEL_F23CC5:
+SMF_ParseTrack_Meta58_Advance:
 	call Sequencer_AdvanceBlockPosition
 
 Voice_NullRet:
 	ret
 
-LABEL_F23CCA:
+Voice_ActivateAllChannels:
 	xor hl, hl
 
-LABEL_F23CCC:
+Voice_ActivateChannels_Loop:
 	ld iy, hl
 	extz xiy
 	sla iy, 1
@@ -799,7 +799,7 @@ LABEL_F23CCC:
 	ld xde, 0xF250
 	bit_dri 7, 0x07, 0xE8, 0xF4
 	pop xde
-	jrl z, LABEL_F23CF6
+	jrl z, Voice_ActivateChannels_Next
 	ld iy, hl
 	pushw hl
 	call SoundGen_CaptureVoiceParams
@@ -808,45 +808,45 @@ LABEL_F23CCC:
 	call SoundGen_StoreVoiceParamsToTables
 	popw hl
 
-LABEL_F23CF6:
+Voice_ActivateChannels_Next:
 	inc 1, hl
 	cp hl, 0xF
-	jrl ule, LABEL_F23CCC
+	jrl ule, Voice_ActivateChannels_Loop
 	ret
 
 SoundGen_ScanActiveVoiceBitmap:
 	xor c, c
 
-LABEL_F23D02:
+SoundGen_ScanBitmap_Loop:
 	ld16_24 xde, 0x00ffec
 	ld a, c
 	scf
 	xorcf_a_16 de
-	jrl nc, LABEL_F23D1D
+	jrl nc, SoundGen_ScanBitmap_Next
 	stda8 10359, c
 	incdi8 1, 10359
 	pushw bc
 	call Scoop_SpecialMode_ParamCheckBound
 	popw bc
 
-LABEL_F23D1D:
+SoundGen_ScanBitmap_Next:
 	inc 1, c
 	cp c, 0xF
-	jrl ule, LABEL_F23D02
+	jrl ule, SoundGen_ScanBitmap_Loop
 	ret
 
 FloppyIO_ReturnReady:
 	ldb w, 0x1
 	ret
 
-LABEL_F23D29:
+SMF_ReadMidiEventToBuffer:
 	stda8 4010, a
 	xor bc, bc
 	ld xix, 0xFAB
 	lda_dpi XBC, 0xF0
 	inc 1, c
 
-LABEL_F23D39:
+SMF_ReadMidiEvt_ReadLoop:
 	pushw bc
 	push xix
 	call FloppyIO_ReadNextByte
@@ -857,36 +857,36 @@ LABEL_F23D39:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23D53
+	jr lt, SMF_ReadMidiEvt_ReadFailed
 	pop xbc
 	pop xwa
-	jp LABEL_F23D59
+	jp SMF_ReadMidiEvt_CheckSize
 
-LABEL_F23D53:
+SMF_ReadMidiEvt_ReadFailed:
 	pop xbc
 	pop xwa
-	jp LABEL_F23D7E
+	jp SMF_ReadMidiEvt_Done
 
-LABEL_F23D59:
+SMF_ReadMidiEvt_CheckSize:
 	lda_dpi XBC, 0xF0
 	inc 1, c
 	ldda8 a, 4010
 	and a, 0xF0
 	ldb w, 0x2
 	cp a, 0xD0
-	jrl z, LABEL_F23D73
+	jrl z, SMF_ReadMidiEvt_OneByteMsg
 	cp a, 0xC0
-	jrl nz, LABEL_F23D75
+	jrl nz, SMF_ReadMidiEvt_CheckComplete
 
-LABEL_F23D73:
+SMF_ReadMidiEvt_OneByteMsg:
 	ldb w, 0x1
 
-LABEL_F23D75:
+SMF_ReadMidiEvt_CheckComplete:
 	cp c, w
-	jrl ule, LABEL_F23D39
+	jrl ule, SMF_ReadMidiEvt_ReadLoop
 	call MidiEvent_DispatchSetA
 
-LABEL_F23D7E:
+SMF_ReadMidiEvt_Done:
 	ret
 
 FloppyIO_ReadMidiEventBytes:
@@ -899,21 +899,21 @@ FloppyIO_ReadMidiEventBytes:
 	xor h, h
 	ld a, c
 
-LABEL_F23D96:
+FloppyIO_ReadMidiEvtBytes_Loop:
 	lda_dpi XBC, 0xF0
 	inc 1, h
 	ldb c, 0x1
 	cp l, 0xD0
-	jrl z, LABEL_F23DA9
+	jrl z, FloppyIO_ReadMidiEvtBytes_OneByteMsg
 	cp l, 0xC0
-	jrl nz, LABEL_F23DAB
+	jrl nz, FloppyIO_ReadMidiEvtBytes_CheckDone
 
-LABEL_F23DA9:
+FloppyIO_ReadMidiEvtBytes_OneByteMsg:
 	ldb c, 0x0
 
-LABEL_F23DAB:
+FloppyIO_ReadMidiEvtBytes_CheckDone:
 	cp h, c
-	jrl ugt, LABEL_F23DD3
+	jrl ugt, FloppyIO_ReadMidiEvtBytes_DispatchCheck
 	pushw hl
 	push xix
 	call FloppyIO_ReadNextByte
@@ -924,39 +924,39 @@ LABEL_F23DAB:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23DCA
+	jr lt, FloppyIO_ReadMidiEvtBytes_ReadFailed
 	pop xbc
 	pop xwa
-	jp LABEL_F23D96
+	jp FloppyIO_ReadMidiEvtBytes_Loop
 
-LABEL_F23DCA:
+FloppyIO_ReadMidiEvtBytes_ReadFailed:
 	pop xbc
 	pop xwa
-	jp LABEL_F23DF0
-LABEL_F23DD0:
+	jp FloppyIO_ReadMidiEvtBytes_Exit
+FloppyIO_ReadMidiEvtBytes_Trap:
 	jrl	t, 0xffc3
 
-LABEL_F23DD3:
+FloppyIO_ReadMidiEvtBytes_DispatchCheck:
 	cpdi16 3932, 0
 	jrl z, FloppyIO_DispatchMidiEvent
 	cpdi16 3934, 1
 	jrl z, FloppyIO_DispatchMidiEvent
 	call MidiEvent_DispatchSetB
-	jrl LABEL_F23DF0
+	jrl FloppyIO_ReadMidiEvtBytes_Exit
 
 FloppyIO_DispatchMidiEvent:
 	call MidiEvent_DispatchSetA
 
-LABEL_F23DF0:
+FloppyIO_ReadMidiEvtBytes_Exit:
 	ret
 
 VoiceChannels_LoadPartMapAndInitPan:
 	ld xiy, 0xF23E18
 	cpdi8 4600, 1
-	jrl z, LABEL_F23E03
+	jrl z, VoiceChannels_LoadPartMap_Mode1
 	ld xiy, 0xF23E28
 
-LABEL_F23E03:
+VoiceChannels_LoadPartMap_Mode1:
 	ld xix, 0xF1A0
 	ldw bc, 0x10
 	ldir85
@@ -964,24 +964,24 @@ LABEL_F23E03:
 	call VoiceChannels_InitPanFromPreset
 	ret
 
-LABEL_F23E18:
+VoiceChannels_PartMapTable:
 	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03
 	.byte 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x13, 0x0c
 	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03
 	.byte 0x04, 0x0c, 0x06, 0x07, 0x11, 0x12, 0x13, 0x05
 
-LABEL_F23E38:
+SeqPlay_DelayLoop_Outer:
 	ldw bc, 0xC00
 
-LABEL_F23E3B:
+SeqPlay_DelayLoop_InnerInit:
 	ldw hl, 0x3C0
 
-LABEL_F23E3E:
-	djnz xhl, LABEL_F23E3E
-	djnz xbc, LABEL_F23E3B
+SeqPlay_DelayLoop_Inner:
+	djnz xhl, SeqPlay_DelayLoop_Inner
+	djnz xbc, SeqPlay_DelayLoop_InnerInit
 	ret
 
-LABEL_F23E45:
+SeqPlay_InitChannelParams:
 	push xiy
 	push xde
 	push xhl
@@ -991,7 +991,7 @@ LABEL_F23E45:
 	ldb w, 0x80
 	ldw bc, 0x10
 
-LABEL_F23E53:
+SeqPlay_InitChannelParams_Loop:
 	ld hl, de
 	ld xix, 0xF237C1
 	sla hl, 2
@@ -999,13 +999,13 @@ LABEL_F23E53:
 	ld (xiy + 11), a
 	ld (xiy + 10), w
 	inc 1, de
-	djnz xbc, LABEL_F23E53
+	djnz xbc, SeqPlay_InitChannelParams_Loop
 	pop xhl
 	pop xde
 	pop xiy
 	ret
 
-LABEL_F23E71:
+FloppyIO_ComputeSwitchboardAddr:
 	ld xhl, 0xAB000
 	xor xwa, xwa
 	ld8_24 a, 0x00ffe3
@@ -1016,7 +1016,7 @@ LABEL_F23E71:
 	ld (xix), c
 	ret
 
-LABEL_F23E8D:
+SMF_VoiceSetup_AssignToTrack:
 	ldda16 xiy, 4237
 	call SoundGen_ClampVoiceIndexMin1
 	ld ix, iy

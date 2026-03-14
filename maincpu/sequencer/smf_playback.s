@@ -396,7 +396,7 @@ LABEL_F23324:
 	stda8 4330, a
 	stda8 3830, a
 	stda8 4343, a
-	call LABEL_F236B7
+	call SeqTrack_ResetAllChannelSlots
 	call SeqTrack_ScanActiveChannels
 	call SeqTrack_ClearPlaybackBuffers
 	call FileIO_ReadBlockToBuffer
@@ -460,7 +460,7 @@ LABEL_F233A9:
 	call FloppyIO_ReadNextByte
 	stda8 3937, a
 	bit 7, a
-	jrl nz, LABEL_F2366B
+	jrl nz, SeqPlay_SetState48AndFloppyReady
 	call FloppyIO_ReadNextByte
 	stda8 3936, a
 	cpdi16 3936, 0
@@ -481,16 +481,16 @@ FloppyIO_WaitReadComplete:
 
 LABEL_F23436:
 	ldda8 a, 4600
-	call LABEL_F23779
+	call SeqTrack_ClearPartParamBuffers
 	cpdi16 3932, 0
 	jrl z, FloppyIO_ReadAndValidateHeader
 	cpdi16 3932, 1
-	jrl nz, LABEL_F2366B
+	jrl nz, SeqPlay_SetState48AndFloppyReady
 	cpdi16 3934, 1
 	jrl z, FloppyIO_ReadAndValidateHeader
 	call FloppyIO_SelectReadMode
 	call FloppyIO_ConfigureSwitchboard
-	call LABEL_F23855
+	call SeqPlay_PrepareAndScanChannels
 	cpdi8 4323, 0
 	jrl nz, Sequencer_ResetAfterFloppyIO
 	cpdi8 3830, 0
@@ -629,7 +629,7 @@ LABEL_F23579:
 	jrl Sequencer_ResetAfterFloppyIO
 
 LABEL_F2358C:
-	call LABEL_F23CCA
+	call Voice_ActivateAllChannels
 	call SoundGen_ScanActiveVoiceBitmap
 	call FloppyIO_ReturnReady
 	jrl SeqPlay_FinishFloppyLoadAndStart
@@ -663,7 +663,7 @@ LABEL_F235C3:
 LABEL_F235C6:
 	bit 7, a
 	jrl z, LABEL_F235F3
-	call LABEL_F23D29
+	call SMF_ReadMidiEventToBuffer
 	push xwa
 	push xbc
 	lds32 xbc, 0
