@@ -3135,7 +3135,7 @@ NakaInst_Digital_Swing_92:	aligned_string "Digital Swing                 92"
 	.byte 0xe0, 0x00, 0x86, 0x65, 0xec, 0x00, 0xe1, 0x00
 	.long NakaInst_Blues_Harp_Swing_62
 	.byte 0xe2, 0x00, 0x42, 0x65
-	.long LABEL_E300EC
+	.long Naka_Help_567_E300EC
 	.zero 6
 	aligned_string "Take It Easy!                 62"
 NakaInst_Blues_Harp_Swing_62:	aligned_string "Blues Harp Swing              62"
