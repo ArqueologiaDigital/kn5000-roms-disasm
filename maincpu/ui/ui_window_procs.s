@@ -748,15 +748,15 @@ ModeEditProc:
 	st_dri3l XDE, 0xFD, 0x10, 0x01
 	st_dri3l XWA, 0xFD, 0x14, 0x01
 	cp xbc, 0x1C00011
-	jrl z, LABEL_F9C1CA
+	jrl z, ModeEdit_HandleViewUpdate
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F9C15B
+	jr z, ModeEdit_HandlePaint
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	calr BoxProc
-	jrl LABEL_F9C2B5
+	jrl ModeEdit_Epilogue
 
-LABEL_F9C15B:
+ModeEdit_HandlePaint:
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	calr BoxProc
@@ -791,7 +791,7 @@ LABEL_F9C15B:
 	call DrawStringCentered
 	jrl TitleEdit_ReturnZero
 
-LABEL_F9C1CA:
+ModeEdit_HandleViewUpdate:
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	calr BoxProc
@@ -804,14 +804,14 @@ LABEL_F9C1CA:
 	call SendEvent
 	lda xwa, (xiz + 26)
 	cp xhl, 0x58
-	jrl z, LABEL_F9C2A0
+	jrl z, ModeEdit_StoreField3
 	ld xwa, (xwa)
 	cp xhl, 0x6C
-	jrl z, LABEL_F9C28D
+	jrl z, ModeEdit_StoreField2
 	cp xhl, 0x61
-	jr z, LABEL_F9C27A
+	jr z, ModeEdit_StoreField1
 	cp xhl, 0x6A
-	jr z, LABEL_F9C268
+	jr z, ModeEdit_StoreField0
 	cp xhl, 0x60
 	jrl nz, TitleEdit_ReturnZero
 	ld xbc, 0x1E0002C
@@ -835,7 +835,7 @@ LABEL_F9C1CA:
 	ld (xiz + 40), xhl
 	jr TitleEdit_ReturnZero
 
-LABEL_F9C268:
+ModeEdit_StoreField0:
 	ld xbc, 0x1E0000F
 	lds32 xde, 0
 	call SendEvent
@@ -843,7 +843,7 @@ LABEL_F9C268:
 	ld (xhl), xwa
 	jr TitleEdit_ReturnZero
 
-LABEL_F9C27A:
+ModeEdit_StoreField1:
 	ld xbc, 0x1E0000F
 	lds32 xde, 0
 	call SendEvent
@@ -851,7 +851,7 @@ LABEL_F9C27A:
 	ld (xhl + 4), xwa
 	jr TitleEdit_ReturnZero
 
-LABEL_F9C28D:
+ModeEdit_StoreField2:
 	ld xbc, 0x1E0000F
 	lds32 xde, 0
 	call SendEvent
@@ -859,7 +859,7 @@ LABEL_F9C28D:
 	ld (xhl + 8), wa
 	jr TitleEdit_ReturnZero
 
-LABEL_F9C2A0:
+ModeEdit_StoreField3:
 	ld xwa, (xwa)
 	ld xbc, 0x1E0000F
 	lds32 xde, 0
@@ -870,7 +870,7 @@ LABEL_F9C2A0:
 TitleEdit_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F9C2B5:
+ModeEdit_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x14, 0x01
 	ret
@@ -881,15 +881,15 @@ TitleEditProc:
 	st_dri3l XDE, 0xFD, 0x10, 0x01
 	st_dri3l XWA, 0xFD, 0x14, 0x01
 	cp xbc, 0x1C00011
-	jrl z, LABEL_F9C35C
+	jrl z, TitleEdit_HandleViewUpdate
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F9C2ED
+	jr z, TitleEdit_HandlePaint
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	calr BoxProc
-	jrl LABEL_F9C447
+	jrl TitleEdit_Epilogue
 
-LABEL_F9C2ED:
+TitleEdit_HandlePaint:
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	calr BoxProc
@@ -924,7 +924,7 @@ LABEL_F9C2ED:
 	call DrawStringCentered
 	jrl StringBox_ReturnZero
 
-LABEL_F9C35C:
+TitleEdit_HandleViewUpdate:
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	calr BoxProc
@@ -937,14 +937,14 @@ LABEL_F9C35C:
 	call SendEvent
 	lda xwa, (xiz + 26)
 	cp xhl, 0x58
-	jrl z, LABEL_F9C432
+	jrl z, TitleEdit_StoreFieldX
 	ld xwa, (xwa)
 	cp xhl, 0x6C
-	jrl z, LABEL_F9C41F
+	jrl z, TitleEdit_StoreFieldLC
 	cp xhl, 0x4E
-	jr z, LABEL_F9C40C
+	jr z, TitleEdit_StoreFieldNE
 	cp xhl, 0x6A
-	jr z, LABEL_F9C3FA
+	jr z, TitleEdit_StoreFieldJA
 	cp xhl, 0x61
 	jrl nz, StringBox_ReturnZero
 	ld xbc, 0x1E00032
@@ -968,7 +968,7 @@ LABEL_F9C35C:
 	ld (xiz + 40), xhl
 	jr StringBox_ReturnZero
 
-LABEL_F9C3FA:
+TitleEdit_StoreFieldJA:
 	ld xbc, 0x1E0000F
 	lds32 xde, 0
 	call SendEvent
@@ -976,7 +976,7 @@ LABEL_F9C3FA:
 	ld (xhl), xwa
 	jr StringBox_ReturnZero
 
-LABEL_F9C40C:
+TitleEdit_StoreFieldNE:
 	ld xbc, 0x1E0000F
 	lds32 xde, 0
 	call SendEvent
@@ -984,7 +984,7 @@ LABEL_F9C40C:
 	ld (xhl + 4), xwa
 	jr StringBox_ReturnZero
 
-LABEL_F9C41F:
+TitleEdit_StoreFieldLC:
 	ld xbc, 0x1E0000F
 	lds32 xde, 0
 	call SendEvent
@@ -992,7 +992,7 @@ LABEL_F9C41F:
 	ld (xhl + 8), wa
 	jr StringBox_ReturnZero
 
-LABEL_F9C432:
+TitleEdit_StoreFieldX:
 	ld xwa, (xwa)
 	ld xbc, 0x1E0000F
 	lds32 xde, 0
@@ -1003,7 +1003,7 @@ LABEL_F9C432:
 StringBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F9C447:
+TitleEdit_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x14, 0x01
 	ret
@@ -1013,12 +1013,12 @@ StringBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F9C463
+	jr z, StringBox_HandlePaint
 	ld xwa, xiz
 	calr BoxProc
-	jr LABEL_F9C4B1
+	jr StringBox_Epilogue
 
-LABEL_F9C463:
+StringBox_HandlePaint:
 	ld xwa, xiz
 	calr BoxProc
 	ld xwa, xiz
@@ -1049,7 +1049,7 @@ LABEL_F9C463:
 	call DrawStringAlignment
 	lds32 xhl, 0
 
-LABEL_F9C4B1:
+StringBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 20)
 	ret
