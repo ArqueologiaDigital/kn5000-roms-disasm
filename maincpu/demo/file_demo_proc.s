@@ -898,7 +898,7 @@ __jrt_nop_F86E7B:
 Demo_PreSetup:
 	call AccWrap_PlayModeDispatch
 	call SeqBuf_Init
-	call LABEL_F3CA4E
+	call SeqPlay_EmergencyStopAll
 	stdi8 1073, 0
 	ret
 

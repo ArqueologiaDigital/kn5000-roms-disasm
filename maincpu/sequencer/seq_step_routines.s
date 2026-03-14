@@ -2567,7 +2567,7 @@ SeqStep_PlaybackCheckFill:
 	jr z, SeqStep_PlaybackCheckBeat
 
 SeqStep_PlaybackCallFill:
-	call LABEL_F3A125
+	call SeqPlay_HandlePlaybackEvent
 	jr SeqStep_PlaybackResultDispatch
 
 SeqStep_PlaybackCheckBeat:
