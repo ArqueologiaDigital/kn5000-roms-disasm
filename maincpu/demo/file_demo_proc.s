@@ -3611,7 +3611,7 @@ LoadSecondary_OpenFile:
 	jr LoadSecondary_Return
 
 LoadSecondary_Process:
-	call LABEL_FAE86D
+	call Gfx_LoadSplashBMP
 	ld iz, hl
 	call FileIO_CloseHandle
 	ld hl, iz

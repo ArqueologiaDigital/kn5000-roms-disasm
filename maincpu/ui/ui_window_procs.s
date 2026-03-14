@@ -5409,7 +5409,7 @@ DrawFunc_Epilogue74:
 	lda xsp, (xsp + 74)
 	ret
 
-LABEL_FAE7DE:
+Gfx_ImageDecodeByteData:
 	.byte 0xef, 0x6c, 0x3e, 0xe2, 0x52, 0x04, 0x03, 0x21
 	.byte 0xbf, 0x04, 0x61, 0x98, 0x02, 0x24, 0x68, 0x3b
 	.byte 0xdc, 0x89, 0xe9, 0x12, 0xe9, 0x8a, 0xea, 0xee
@@ -5442,7 +5442,7 @@ Gfx_ClearFrameBuffers:
 	lda xsp, (xsp + 24)
 	jrl Flash_SaveSplashScreen
 
-LABEL_FAE86D:
+Gfx_LoadSplashBMP:
 	st_dri3b L, 0xFD, 0xAA, 0xFB
 	pushw iz
 	st_dri3b W, 0xFD, 0x4A, 0x04
@@ -5483,13 +5483,13 @@ LABEL_FAE86D:
 	sub (xsp + 30), xwa
 	ld xwa, (xsp + 30)
 	cp xwa, 0x400
-	jr ule, LABEL_FAE907
+	jr ule, SplashBMP_ValidateSize
 
 FileIO_ControllerValidationFailed:
 	ldw hl, 0x8047
-	jrl LABEL_FAEBA0
+	jrl SplashBMP_Return
 
-LABEL_FAE907:
+SplashBMP_ValidateSize:
 	lda xwa, (xsp + 34)
 	ld xbc, (xsp + 30)
 	call FileIO_ReadBlock
@@ -5505,19 +5505,19 @@ LABEL_FAE907:
 	ld xbc, 0x69400
 	ld xhl, 0x69800
 
-LABEL_FAE935:
+SplashBMP_ClearPalette:
 	ld xwa, 0xFF000000
 	st_dpil XWA, 0xE6
 	cp xbc, xhl
-	jr c, LABEL_FAE935
+	jr c, SplashBMP_ClearPalette
 	lds32 xwa, 0
 	ld (xsp + 6), xwa
 	ld xwa, (xsp + 30)
 	cp xwa, 0x0
-	jr ule, LABEL_FAE997
+	jr ule, SplashBMP_ReadInfoHeader
 	lda xhl, (xsp + 34)
 
-LABEL_FAE954:
+SplashBMP_DecodePalette:
 	ld xbc, (xsp + 6)
 	sll xbc, 2
 	ld xwa, xbc
@@ -5545,9 +5545,9 @@ LABEL_FAE954:
 	add (xsp + 6), xwa
 	ld xbc, (xsp + 6)
 	cp xbc, (xsp + 30)
-	jr c, LABEL_FAE954
+	jr c, SplashBMP_DecodePalette
 
-LABEL_FAE997:
+SplashBMP_ReadInfoHeader:
 	st_dri3b A, 0xFD, 0x22, 0x04
 	ld xwa, (xbc + 4)
 	ld (xsp + 14), xwa
@@ -5576,14 +5576,14 @@ LABEL_FAE997:
 	ld (xsp + 26), xwa
 	ld xwa, (xsp + 2)
 	cp xwa, 0xF0
-	jr le, LABEL_FAEA36
+	jr le, SplashBMP_PrepareRowBuffer
 	lds32 xwa, 0
 	ld (xsp + 6), xwa
 	ld xwa, (xsp + 2)
 	sub xwa, 0xF0
-	jr le, LABEL_FAEA2E
+	jr le, SplashBMP_ClampHeight
 
-LABEL_FAEA00:
+SplashBMP_SkipExcessRows:
 	ld xwa, (xsp + 30)
 	ld xbc, (xsp + 18)
 	call FileIO_ReadBlock
@@ -5591,24 +5591,24 @@ LABEL_FAEA00:
 	ld wa, iz
 	exts xwa
 	cp xwa, (xsp + 18)
-	jr z, LABEL_FAEA1B
+	jr z, SplashBMP_CheckSkipCount
 	ld xwa, (xsp + 30)
 	push xwa
-	jr LABEL_FAEA80
+	jr SplashBMP_FreeOnError
 
-LABEL_FAEA1B:
+SplashBMP_CheckSkipCount:
 	lds32 xwa, 1
 	add (xsp + 6), xwa
 	ld xwa, (xsp + 2)
 	sub xwa, 0xF0
 	cp (xsp + 6), xwa
-	jr lt, LABEL_FAEA00
+	jr lt, SplashBMP_SkipExcessRows
 
-LABEL_FAEA2E:
+SplashBMP_ClampHeight:
 	ld xwa, 0xF0
 	ld (xsp + 2), xwa
 
-LABEL_FAEA36:
+SplashBMP_PrepareRowBuffer:
 	ld xwa, 0x140
 	ld (xsp + 30), xwa
 	ld xbc, (xsp + 2)
@@ -5622,9 +5622,9 @@ LABEL_FAEA36:
 	ld (xsp + 6), xwa
 	ld xwa, (xsp + 2)
 	cp xwa, 0x0
-	jrl le, LABEL_FAEB34
+	jrl le, SplashBMP_PadRows
 
-LABEL_FAEA67:
+SplashBMP_ReadRowLoop:
 	ld xwa, (xsp + 26)
 	ld xbc, (xsp + 18)
 	call FileIO_ReadBlock
@@ -5632,43 +5632,43 @@ LABEL_FAEA67:
 	ld wa, iz
 	exts xwa
 	cp xwa, (xsp + 18)
-	jr z, LABEL_FAEA8B
+	jr z, SplashBMP_ProcessRow
 	ld xwa, (xsp + 26)
 	push xwa
 
-LABEL_FAEA80:
+SplashBMP_FreeOnError:
 	call Free
 	inc 4, xsp
 
 SplashScreen_Return:
 	ld hl, iz
-	jrl LABEL_FAEBA0
+	jrl SplashBMP_Return
 
-LABEL_FAEA8B:
+SplashBMP_ProcessRow:
 	ld_sriw DE, (xsp + 0x0430)
 	ld xwa, (xsp + 26)
 	ld xbc, (xsp + 18)
 	calr Gfx_ProcessSplashData
 	ld xwa, (xsp + 14)
 	cp xwa, 0x140
-	jr lt, LABEL_FAEAB1
+	jr lt, SplashBMP_WideImage
 	pushw 0x140
 	ld xwa, (xsp + 28)
 	push xwa
 	ld xwa, (xsp + 28)
 	push xwa
-	jr LABEL_FAEB17
+	jr SplashBMP_CopyToFramebuffer
 
-LABEL_FAEAB1:
+SplashBMP_WideImage:
 	lds32 xwa, 0
 	ld (xsp + 10), xwa
 	ld xbc, (xsp + 14)
 	ld xwa, 0x140
 	call Math_DivideSigned32
 	cp xhl, 0x0
-	jr le, LABEL_FAEAFD
+	jr le, SplashBMP_CopyRemainder
 
-LABEL_FAEACA:
+SplashBMP_TileNarrow:
 	ld xwa, (xsp + 14)
 	pushw wa
 	ld xwa, (xsp + 28)
@@ -5686,9 +5686,9 @@ LABEL_FAEACA:
 	ld xwa, 0x140
 	call Math_DivideSigned32
 	cp (xsp + 10), xhl
-	jr lt, LABEL_FAEACA
+	jr lt, SplashBMP_TileNarrow
 
-LABEL_FAEAFD:
+SplashBMP_CopyRemainder:
 	ld xwa, (xsp + 10)
 	ld xbc, (xsp + 14)
 	call Math_MultiplyAccumulate
@@ -5700,7 +5700,7 @@ LABEL_FAEAFD:
 	add xhl, (xsp + 28)
 	push xhl
 
-LABEL_FAEB17:
+SplashBMP_CopyToFramebuffer:
 	call Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x140
@@ -5709,12 +5709,12 @@ LABEL_FAEB17:
 	add (xsp + 6), xwa
 	ld xwa, (xsp + 6)
 	cp xwa, (xsp + 2)
-	jrl lt, LABEL_FAEA67
+	jrl lt, SplashBMP_ReadRowLoop
 
-LABEL_FAEB34:
+SplashBMP_PadRows:
 	ld xbc, (xsp + 2)
 	cp xbc, 0xF0
-	jr ge, LABEL_FAEB93
+	jr ge, SplashBMP_Finish
 	ld xwa, 0x140
 	add (xsp + 30), xwa
 	ld xwa, 0x56800
@@ -5724,9 +5724,9 @@ LABEL_FAEB34:
 	ld (xsp + 22), xwa
 	ld (xsp + 6), xbc
 	cp xbc, 0xF0
-	jr ge, LABEL_FAEB93
+	jr ge, SplashBMP_Finish
 
-LABEL_FAEB66:
+SplashBMP_PadCopyLoop:
 	pushw 0x140
 	ld xwa, (xsp + 28)
 	push xwa
@@ -5741,16 +5741,16 @@ LABEL_FAEB66:
 	add (xsp + 6), xwa
 	ld xwa, (xsp + 6)
 	cp xwa, 0xF0
-	jr lt, LABEL_FAEB66
+	jr lt, SplashBMP_PadCopyLoop
 
-LABEL_FAEB93:
+SplashBMP_Finish:
 	calr Gfx_DecodeImageToBuffer
 	calr Flash_SaveSplashScreen
 	lds wa, 2
 	calr ChangePalette
 	lds hl, 1
 
-LABEL_FAEBA0:
+SplashBMP_Return:
 	popw iz
 	st_dri3b L, 0xFD, 0x56, 0x04
 	ret
@@ -5762,7 +5762,7 @@ Gfx_ProcessSplashData:
 	ld (xsp + 24), xbc
 	ld (xsp + 28), xwa
 	cpw (xsp + 22), 0x18
-	jrl z, LABEL_FAED22
+	jrl z, SplashData_Epilogue
 	ld xiz, 0x8
 	mrdw3 0x9F, 0x16, 0x56
 	ld wa, iz
@@ -5771,9 +5771,9 @@ Gfx_ProcessSplashData:
 	call Math_MultiplyAccumulate
 	ld (xsp + 18), xhl
 	cpw (xsp + 22), 0x1
-	jr z, LABEL_FAEC4C
+	jr z, SplashData_1bppSetup
 	cpw (xsp + 22), 0x4
-	jrl nz, LABEL_FAED22
+	jrl nz, SplashData_Epilogue
 	ld (xsp + 8), iz
 	ld xwa, (xsp + 18)
 	ld (xsp + 4), xwa
@@ -5792,9 +5792,9 @@ Gfx_ProcessSplashData:
 	lds32 xbc, 0
 	ld xwa, (xsp + 18)
 	cp xwa, 0x0
-	jr le, LABEL_FAEC45
+	jr le, SplashData_4bppFree
 
-LABEL_FAEC15:
+SplashData_4bppLoop:
 	ld xde, xbc
 	add xde, (xsp + 28)
 	ld xix, (xsp + 10)
@@ -5813,14 +5813,14 @@ LABEL_FAEC15:
 	extz xwa
 	add xbc, xwa
 	cp xbc, (xsp + 4)
-	jr lt, LABEL_FAEC15
+	jr lt, SplashData_4bppLoop
 
-LABEL_FAEC45:
+SplashData_4bppFree:
 	ld xwa, (xsp + 14)
 	push xwa
-	jrl LABEL_FAED1C
+	jrl SplashData_FreeTempBuffer
 
-LABEL_FAEC4C:
+SplashData_1bppSetup:
 	ld (xsp + 8), iz
 	ld xwa, (xsp + 18)
 	ld (xsp + 4), xwa
@@ -5839,9 +5839,9 @@ LABEL_FAEC4C:
 	lds32 xbc, 0
 	ld xwa, (xsp + 18)
 	cp xwa, 0x0
-	jrl le, LABEL_FAED18
+	jrl le, SplashData_1bppFree
 
-LABEL_FAEC81:
+SplashData_1bppLoop:
 	ld xde, xbc
 	add xde, (xsp + 28)
 	ld xix, (xsp + 10)
@@ -5902,17 +5902,17 @@ LABEL_FAEC81:
 	extz xwa
 	add xbc, xwa
 	cp xbc, (xsp + 4)
-	jrl lt, LABEL_FAEC81
+	jrl lt, SplashData_1bppLoop
 
-LABEL_FAED18:
+SplashData_1bppFree:
 	ld xwa, (xsp + 14)
 	push xwa
 
-LABEL_FAED1C:
+SplashData_FreeTempBuffer:
 	call Free
 	inc 4, xsp
 
-LABEL_FAED22:
+SplashData_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 28)
 	ret
@@ -5926,17 +5926,17 @@ Gfx_DecodeImageToBuffer:
 	st_dri3b W, 0xE1, 0x00, 0x02
 	ld (xsp + 40), xwa
 
-LABEL_FAED40:
+ImageDecode_ClearPaletteLoop:
 	stiw_dpi 0xE5, 0x00, 0x00
 	cp xbc, xwa
-	jr c, LABEL_FAED40
+	jr c, ImageDecode_ClearPaletteLoop
 	ld xhl, 0x56800
 	lds ix, 0
 
-LABEL_FAED50:
+ImageDecode_RowLoop:
 	lds iy, 0
 
-LABEL_FAED52:
+ImageDecode_PixelLoop:
 	ld_spib C, 0xEC
 	extz bc
 	add bc, bc
@@ -5944,10 +5944,10 @@ LABEL_FAED52:
 	inc_sriw 1, 0x07, 0xE0, 0xE4
 	inc 1, iy
 	cp iy, 0x140
-	jr lt, LABEL_FAED52
+	jr lt, ImageDecode_PixelLoop
 	inc 1, ix
 	cp ix, 0xF0
-	jr lt, LABEL_FAED50
+	jr lt, ImageDecode_RowLoop
 	st_dri3b W, 0xFD, 0x30, 0x01
 	ld (xsp + 28), xwa
 	ldb c, 0x0
@@ -5956,27 +5956,27 @@ LABEL_FAED52:
 	st_dri3b W, 0xE1, 0x00, 0x01
 	ld (xsp + 44), xwa
 
-LABEL_FAED88:
+ImageDecode_SecondPassSetup:
 	lda_dpi XHL, 0xE8
 	inc 1, c
 	cp xde, xwa
-	jr c, LABEL_FAED88
+	jr c, ImageDecode_SecondPassSetup
 	ldw (xsp + 18), 0x0
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 40)
 
-LABEL_FAED9C:
+ImageDecode_CountNonZero:
 	cpw (xwa), 0x0
-	jr z, LABEL_FAEDA5
+	jr z, ImageDecode_CheckNextEntry
 	incm 1, (xsp + 18)
 
-LABEL_FAEDA5:
+ImageDecode_CheckNextEntry:
 	inc 2, xwa
 	cp xwa, xbc
-	jr c, LABEL_FAED9C
+	jr c, ImageDecode_CountNonZero
 	ld xbc, 0x100
 
-LABEL_FAEDB0:
+ImageDecode_PaletteReduceLoop:
 	ld xwa, xbc
 	ld xbc, 0xF4240
 	call Math_MultiplyAccumulate
@@ -5987,18 +5987,18 @@ LABEL_FAEDB0:
 	exts xbc
 	ld xwa, xbc
 	cp xbc, 0xA
-	jr z, LABEL_FAEDE4
+	jr z, PaletteReduce_SpecialCase
 	cp xwa, 0x9
-	jr z, LABEL_FAEDE4
+	jr z, PaletteReduce_SpecialCase
 	or xwa, xwa
-	jr nz, LABEL_FAEDE9
+	jr nz, PaletteReduce_StartSortPass
 	lds32 xbc, 1
-	jr LABEL_FAEDE9
+	jr PaletteReduce_StartSortPass
 
-LABEL_FAEDE4:
+PaletteReduce_SpecialCase:
 	ld xbc, 0xB
 
-LABEL_FAEDE9:
+PaletteReduce_StartSortPass:
 	lds32 xwa, 0
 	ld (xsp + 20), xwa
 	ld xwa, 0x100
@@ -6007,9 +6007,9 @@ LABEL_FAEDE9:
 	lds32 xhl, 0
 	ld xwa, (xsp + 24)
 	cp xwa, 0x0
-	jr le, LABEL_FAEE69
+	jr le, PaletteReduce_CheckDone
 
-LABEL_FAEE05:
+PaletteReduce_SortCompare:
 	ld xiz, xhl
 	add xiz, xbc
 	ld (xsp + 40), xhl
@@ -6025,7 +6025,7 @@ LABEL_FAEE05:
 	ld wa, (xiy)
 	ld de, (xix)
 	cp de, wa
-	jr nc, LABEL_FAEE62
+	jr nc, PaletteReduce_NoSwap
 	ld (xix), wa
 	ld (xiy), de
 	ld xix, xhl
@@ -6048,24 +6048,24 @@ LABEL_FAEE05:
 	lds32 xwa, 1
 	add (xsp + 20), xwa
 
-LABEL_FAEE62:
+PaletteReduce_NoSwap:
 	inc 1, xhl
 	cp xhl, (xsp + 24)
-	jr lt, LABEL_FAEE05
+	jr lt, PaletteReduce_SortCompare
 
-LABEL_FAEE69:
+PaletteReduce_CheckDone:
 	ld xwa, (xsp + 20)
 	or xwa, xwa
-	jrl nz, LABEL_FAEDB0
+	jrl nz, ImageDecode_PaletteReduceLoop
 	cp xbc, 0x1
-	jrl gt, LABEL_FAEDB0
+	jrl gt, ImageDecode_PaletteReduceLoop
 	lda xwa, (xsp + 48)
 	ld (xsp + 32), xwa
 	ldb c, 0x0
 	ld xde, (xsp + 28)
 	ld xhl, (xsp + 44)
 
-LABEL_FAEE88:
+PaletteReduce_RemapPixels:
 	ld_spib A, 0xE8
 	ldfr_berp A, 0xF0
 	extz ix
@@ -6074,25 +6074,25 @@ LABEL_FAEE88:
 	lda_dri3 XDE, 0x07, 0xE0, 0xF0
 	inc 1, c
 	cp xde, xhl
-	jr c, LABEL_FAEE88
+	jr c, PaletteReduce_RemapPixels
 	cpw (xsp + 18), 0xC0
-	jrl le, LABEL_FAEF9E
+	jrl le, ImageDecode_CopyPaletteToDAC
 	ld xwa, 0xC0
 	ld (xsp + 4), xwa
 	ld wa, (xsp + 18)
 	exts xwa
 	ld (xsp + 36), xwa
 	cp xwa, 0xC0
-	jrl le, LABEL_FAEF9E
+	jrl le, ImageDecode_CopyPaletteToDAC
 
-LABEL_FAEEC1:
+PaletteReduce_HighColorReduce:
 	ld xwa, 0x7FFFFFFF
 	ld (xsp + 12), xwa
 	lds32 xwa, 0
 	ld (xsp + 16), xwa
 	ld (xsp + 8), xwa
 
-LABEL_FAEED1:
+PaletteReduce_FindClosest:
 	ld xwa, (xsp + 8)
 	sll xwa, 2
 	add xwa, 0x69400
@@ -6134,17 +6134,17 @@ LABEL_FAEED1:
 	call Math_MultiplyAccumulate
 	add xhl, (xsp + 20)
 	cp (xsp + 12), xhl
-	jr le, LABEL_FAEF68
+	jr le, PaletteReduce_UpdateMinDist
 	ld (xsp + 12), xhl
 	ld xwa, (xsp + 8)
 	ld (xsp + 16), xwa
 
-LABEL_FAEF68:
+PaletteReduce_UpdateMinDist:
 	lds32 xwa, 1
 	add (xsp + 8), xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0xC0
-	jrl lt, LABEL_FAEED1
+	jrl lt, PaletteReduce_FindClosest
 	ld xwa, (xsp + 4)
 	add xwa, (xsp + 28)
 	ld c, (xwa)
@@ -6157,15 +6157,15 @@ LABEL_FAEF68:
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	cp xwa, (xsp + 36)
-	jrl lt, LABEL_FAEEC1
+	jrl lt, PaletteReduce_HighColorReduce
 
-LABEL_FAEF9E:
+ImageDecode_CopyPaletteToDAC:
 	ld xde, 0x696FC
 	ld xbc, 0x6977C
 	lds32 xwa, 0
 	ld (xsp + 4), xwa
 
-LABEL_FAEFAD:
+ImageDecode_PaletteCopyLoop:
 	ld xwa, (xde)
 	ld (xbc), xwa
 	dec 4, xde
@@ -6174,39 +6174,39 @@ LABEL_FAEFAD:
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	cp xwa, 0xC0
-	jr lt, LABEL_FAEFAD
+	jr lt, ImageDecode_PaletteCopyLoop
 	ld xhl, 0x56800
 	lds ix, 0
 
-LABEL_FAEFCC:
+ImageDecode_ProcessRowsOuter:
 	lds iy, 0
 	ld xbc, xhl
 
-LABEL_FAEFD0:
+ImageDecode_ProcessPixels:
 	ld e, (xbc)
 	extz de
 	ld xwa, (xsp + 32)
 	ld_srib3 A, 0x07, 0xE0, 0xE8
 	ld (xbc), a
 	cp (xbc), 0xC0
-	jr nc, LABEL_FAEFE8
+	jr nc, ImageDecode_PixelHighBank
 	addmi8 (xhl), 0x20
-	jr LABEL_FAEFF0
+	jr ImageDecode_PixelNext
 
-LABEL_FAEFE8:
+ImageDecode_PixelHighBank:
 	cp (xhl), 0xE0
-	jr nc, LABEL_FAEFF0
+	jr nc, ImageDecode_PixelNext
 	ld (xhl), 0x0
 
-LABEL_FAEFF0:
+ImageDecode_PixelNext:
 	inc 1, xhl
 	inc 1, xbc
 	inc 1, iy
 	cp iy, 0x140
-	jr lt, LABEL_FAEFD0
+	jr lt, ImageDecode_ProcessPixels
 	inc 1, ix
 	cp ix, 0xF0
-	jr lt, LABEL_FAEFCC
+	jr lt, ImageDecode_ProcessRowsOuter
 	pop xiz
 	st_dri3b L, 0xFD, 0x2C, 0x04
 	ret
@@ -6274,7 +6274,7 @@ CaptureLcd:
 	ld xbc, 0xEAAE5E
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jrl nz, LABEL_FAF1F4
+	jrl nz, CaptureLcd_WriteFailed
 	st_dri3b W, 0xFD, 0x3A, 0x04
 	ld xbc, 0xE
 	call FileIO_WriteByte_Impl
@@ -6288,9 +6288,9 @@ CaptureLcd:
 	lds iz, 0
 	ld32_24 xwa, 0x03ef94
 	or xwa, xwa
-	jr z, LABEL_FAF168
+	jr z, CaptureLcd_WritePaletteNoOr94
 
-LABEL_FAF11B:
+CaptureLcd_WritePaletteOr94:
 	ld wa, iz
 	call Table_LookupDword
 	ld de, iz
@@ -6312,10 +6312,10 @@ LABEL_FAF11B:
 	ld (xwa + 3), 0x0
 	inc 1, iz
 	cp iz, 0x100
-	jr lt, LABEL_FAF11B
-	jr LABEL_FAF1B3
+	jr lt, CaptureLcd_WritePaletteOr94
+	jr CaptureLcd_WritePixelData
 
-LABEL_FAF168:
+CaptureLcd_WritePaletteNoOr94:
 	ld wa, iz
 	call Table_LookupDword
 	ld de, iz
@@ -6337,9 +6337,9 @@ LABEL_FAF168:
 	ld (xwa + 3), 0x0
 	inc 1, iz
 	cp iz, 0x100
-	jr lt, LABEL_FAF168
+	jr lt, CaptureLcd_WritePaletteNoOr94
 
-LABEL_FAF1B3:
+CaptureLcd_WritePixelData:
 	lda xwa, (xsp + 18)
 	ld xbc, 0x400
 	call FileIO_WriteByte_Impl
@@ -6347,7 +6347,7 @@ LABEL_FAF1B3:
 	jr nz, FileIO_ClosePath
 	ldw iz, 0xEF
 
-LABEL_FAF1CA:
+CaptureLcd_WriteRowLoop:
 	ld wa, iz
 	exts xwa
 	ld xbc, xwa
@@ -6359,22 +6359,22 @@ LABEL_FAF1CA:
 	ld xbc, 0x140
 	call FileIO_WriteByte_Impl
 	cp xhl, 0x140
-	jr z, LABEL_FAF1F8
+	jr z, CaptureLcd_NextRow
 
 FileIO_ClosePath:
 	call FileIO_CloseHandle
 
-LABEL_FAF1F4:
+CaptureLcd_WriteFailed:
 	lds hl, 0
-	jr LABEL_FAF204
+	jr CaptureLcd_Epilogue
 
-LABEL_FAF1F8:
+CaptureLcd_NextRow:
 	sub iz, 0x1
-	jr ge, LABEL_FAF1CA
+	jr ge, CaptureLcd_WriteRowLoop
 	call FileIO_CloseHandle
 	lds hl, 1
 
-LABEL_FAF204:
+CaptureLcd_Epilogue:
 	popw iz
 	st_dri3b L, 0xFD, 0x46, 0x04
 	ret
@@ -6384,12 +6384,12 @@ ChangeWall:
 	ld iz, wa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
-	jr z, LABEL_FAF21C
+	jr z, ChangeWall_QueuedPath
 	ld wa, iz
-	calr LABEL_FAF237
-	jr LABEL_FAF230
+	calr ChangeWall_Impl
+	jr ChangeWall_Epilogue
 
-LABEL_FAF21C:
+ChangeWall_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
@@ -6398,14 +6398,14 @@ LABEL_FAF21C:
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
 
-LABEL_FAF230:
+ChangeWall_Epilogue:
 	popw iz
 	ret
 
-LABEL_FAF232:
+ChangeWall_QueueCallback:
 	.byte 0x98, 0x04, 0x20, 0x68, 0x00
 
-LABEL_FAF237:
+ChangeWall_Impl:
 	st16_24 0x03ef9c, xwa
 	extz xwa
 	ld xbc, xwa
@@ -6424,12 +6424,12 @@ ChangeWallPalette:
 	ld iz, wa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
-	jr z, LABEL_FAF26C
+	jr z, ChangeWallPalette_QueuedPath
 	ld wa, iz
-	calr LABEL_FAF287
-	jr LABEL_FAF280
+	calr ChangeWallPalette_Impl
+	jr ChangeWallPalette_Epilogue
 
-LABEL_FAF26C:
+ChangeWallPalette_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
@@ -6438,27 +6438,27 @@ LABEL_FAF26C:
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
 
-LABEL_FAF280:
+ChangeWallPalette_Epilogue:
 	popw iz
 	ret
 
-LABEL_FAF282:
+ChangeWallPalette_QueueCallback:
 	.byte 0x98, 0x04, 0x20, 0x68, 0x00
 
-LABEL_FAF287:
+ChangeWallPalette_Impl:
 	push xiz
 	ld iz, wa
 	ld16_24 xwa, 0x03ef9c
 	cps wa, 2
-	jr z, LABEL_FAF2C5
+	jr z, WallPalette_Done
 	cps wa, 0
-	jr nz, LABEL_FAF299
+	jr nz, WallPalette_SetupLoop
 	inc 1, iz
 
-LABEL_FAF299:
+WallPalette_SetupLoop:
 	ldi_erpw 0xFA, 0xE0, 0x00
 
-LABEL_FAF29E:
+WallPalette_IterateEntries:
 	ldto_werp BC, 0xFA
 	sub bc, 0xE0
 	ld wa, iz
@@ -6468,10 +6468,10 @@ LABEL_FAF29E:
 	call SetPaletteRGB
 	inc1_werp 0xFA
 	cp_erpw 0xFA, 0xF0, 0x00
-	jr c, LABEL_FAF29E
+	jr c, WallPalette_IterateEntries
 	sti16_24 0x030462, 0x0001
 
-LABEL_FAF2C5:
+WallPalette_Done:
 	pop xiz
 	ret
 
@@ -6500,12 +6500,12 @@ ChangePalette:
 	ld iz, wa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
-	jr z, LABEL_FAF2D8
+	jr z, ChangePalette_QueuedPath
 	ld wa, iz
-	calr LABEL_FAF2F3
-	jr LABEL_FAF2EC
+	calr ChangePalette_Impl
+	jr ChangePalette_Epilogue
 
-LABEL_FAF2D8:
+ChangePalette_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
@@ -6514,14 +6514,14 @@ LABEL_FAF2D8:
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
 
-LABEL_FAF2EC:
+ChangePalette_Epilogue:
 	popw iz
 	ret
 
-LABEL_FAF2EE:
+ChangePalette_QueueCallback:
 	.byte 0x98, 0x04, 0x20, 0x68, 0x00
 
-LABEL_FAF2F3:
+ChangePalette_Impl:
 	push xiz
 	ld iz, wa
 	ld wa, iz

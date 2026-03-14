@@ -3732,7 +3732,7 @@ DrawBitmapFile_Impl_BuildDirtyRect:
 	ld (xwa + 6), bc
 	calr SetChangeRect
 	lds wa, 3
-	calr LABEL_FAF2F3
+	calr ChangePalette_Impl
 
 DrawBitmapFile_Impl_Return:
 	pop xiz
