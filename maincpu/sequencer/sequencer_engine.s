@@ -27418,7 +27418,7 @@ SeqData_ReadParamBlock:
 
 SeqData_ReadParamTerminator:
 	lds hl, 0
-	jr SeqData_ReadParamReturn
+	jr SeqData_ReadParamReturn2
 
 SeqVoice_ReadByteLoop:
 	call PartCtrl_RefreshWordPeriodic
@@ -27442,7 +27442,7 @@ SeqVoice_ReadByteLoop:
 SeqData_ReadParamDone:
 	ld hl, iz
 
-SeqData_ReadParamReturn:
+SeqData_ReadParamReturn2:
 	popw iz
 	ret
 
