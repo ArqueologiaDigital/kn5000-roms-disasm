@@ -3371,7 +3371,7 @@ FileClose:
 	push xwa
 	calr SeqStep_FileCloseInner
 	inc 4, xsp
-	jp LABEL_F519DB
+	jp SeqStep_ParseHeaderContinue
 
 SeqStep_FileCloseInner:
 	dec 4, xsp
@@ -4588,34 +4588,34 @@ SeqStep_FileSectorPopReturn:
 	.byte 0x00, 0x0b, 0x20, 0x00, 0xaf, 0x0c, 0x20, 0x38
 	.byte 0x1d, 0xfa, 0x0f, 0xff, 0xef, 0x60, 0xaf, 0x08
 	.byte 0x20, 0xb8, 0x0b, 0x00, 0x00, 0xdb, 0xa8, 0xa6
-LABEL_F50085:
+SeqByteBlock_MedleyPlayback:
 	.byte 0x20, 0x80, 0x3f, 0x2f, 0x66, 0x07
-LABEL_F5008B:
+SeqByteBlock_EffectsSeqData:
 	.byte 0xa6, 0x20
 	.byte 0x80, 0x3f
-LABEL_F5008F:
+SeqByteBlock_EffectsSeqEntry:
 	.byte 0x5c, 0x6e, 0x04, 0xe8
-LABEL_F50093:
+SeqByteBlock_MedleyPlaybackB:
 	.byte 0xa9, 0xa6
 	.byte 0x88, 0xda, 0xa8, 0xda, 0xcf, 0x0b, 0x00, 0x69
 	.byte 0x50, 0xa6, 0x20, 0x80, 0x3f, 0x00, 0x66, 0x49
 	.byte 0xa6, 0x20, 0x80, 0x3f, 0x2f, 0x66, 0x07, 0xa6
 	.byte 0x20, 0x80, 0x3f, 0x5c, 0x6e, 0x04, 0xdb, 0xa9
-LABEL_F500B5:
+SeqByteBlock_EffectsSeqDotExt:
 	.byte 0x68, 0x37, 0xa6, 0x20, 0x80, 0x3f, 0x2e, 0x6e
 	.byte 0x18, 0xda, 0xd9, 0x6a, 0x0c, 0xda, 0xd9, 0x6e
 	.byte 0x10, 0xaf, 0x08, 0x20, 0x80, 0x3f, 0x2e, 0x66
 	.byte 0x08, 0xda, 0xaf, 0xe8, 0xa9, 0xa6, 0x88, 0x68
 	.byte 0x10
-LABEL_F500D6:
+SeqByteBlock_TechnichordCfgA:
 	.byte 0xa6
 SeqByteBlock_PathNormalize:
 	.byte 0x21, 0xaf, 0x08, 0x20, 0x81, 0x23
 	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x43, 0xe8, 0xa9, 0xa6
 	.byte 0x88, 0xda, 0x61, 0xda
-LABEL_F500E9:
+SeqByteBlock_TechnichordCfgB:
 	.byte 0xcf, 0x0b, 0x00
-LABEL_F500EC:
+SeqByteBlock_StyleBitmapRef:
 	.byte 0x61
 	.byte 0xb0, 0xa6, 0x20, 0x80, 0x3f, 0x2f, 0x66, 0x07
 	.byte 0xa6, 0x20, 0x80, 0x3f, 0x5c, 0x6e, 0x04, 0xdb
@@ -4994,7 +4994,7 @@ LABEL_F500EC:
 	.byte 0x2a, 0x20, 0xb8, 0x02, 0xb8, 0xaf, 0x08, 0x20
 	.byte 0x38, 0x1d, 0x07, 0xf2, 0xf4, 0xef, 0x64, 0xdb
 	.byte 0xa8, 0x5e, 0xbf, 0x22, 0x37, 0x0e
-LABEL_F50C83:
+SeqByteBlock_ChannelContainer:
 	.byte 0xef, 0x68
 	.byte 0x2e, 0xaf, 0x0e, 0x20, 0xa8, 0x12, 0x20, 0xbf
 	.byte 0x02, 0x60, 0xa8, 0x1a, 0x20, 0xbf, 0x06, 0x60
@@ -5213,7 +5213,7 @@ LABEL_F50C83:
 	.byte 0x9f, 0x02, 0x20, 0x9f, 0x04, 0xf0, 0x6f, 0x08
 	.byte 0xaf, 0x0a, 0x20, 0x98, 0x06, 0x3e, 0x00, 0x80
 	.byte 0x9f, 0x02, 0x23, 0x4e, 0xef, 0x64, 0x0e
-LABEL_F5133C:
+SeqChan_SetupAndCallHelper:
 	.byte 0x0b
 	nop
 	nop
@@ -5226,7 +5226,7 @@ LABEL_F5133C:
 	calr	64966
 	lda	xsp, (xsp+12)
 	ret
-LABEL_F51352:
+SeqChan_InitChannelState:
 	.byte 0x0b, 0x01, 0x00
 	.byte 0x9f, 0x0e, 0x20, 0x28, 0xaf, 0x0c, 0x20, 0x38
 	.byte 0xaf, 0x0c, 0x20, 0x38, 0x1e, 0xb0, 0xfd, 0xbf
@@ -5310,16 +5310,16 @@ LABEL_F51352:
 	.byte 0xb8, 0x22, 0x61, 0x9f, 0x14, 0x3f, 0x00, 0x00
 	.byte 0x7e, 0xb8, 0xfd, 0x9f, 0x02, 0x23, 0x4e, 0xef
 	.byte 0x66, 0x0e
-LABEL_F515DF:
+SeqChan_ProcessEventArg0:
 	.byte 0x0b, 0x00, 0x00, 0x9f, 0x0e, 0x04
 	.byte 0xaf, 0x0c, 0x20, 0x38, 0xaf, 0x0c, 0x20, 0x38
 	.byte 0x1e, 0x78, 0xfd, 0xbf, 0x0c, 0x37, 0x0e
-LABEL_F515F4:
+SeqChan_ProcessEventArg1:
 	.byte 0x0b
 	.byte 0x01, 0x00, 0x9f, 0x0e, 0x04, 0xaf, 0x0c, 0x20
 	.byte 0x38, 0xaf, 0x0c, 0x20, 0x38, 0x1e, 0x63, 0xfd
 	.byte 0xbf, 0x0c, 0x37, 0x0e
-LABEL_F51609:
+SeqChan_ValidateAndDispatch:
 	.byte 0x3e, 0xaf, 0x08, 0x26
 	.byte 0xae, 0x22, 0x20, 0xe8, 0xe0, 0x66, 0x06, 0xae
 	.byte 0x22, 0x20, 0xb8, 0x16, 0xb3, 0xc2, 0xe2, 0xe2
@@ -5329,7 +5329,7 @@ LABEL_F51609:
 	.byte 0xae, 0x12, 0x20, 0x88, 0x03, 0x69, 0xbe, 0x04
 	.byte 0x00, 0x00, 0x3e, 0x1e, 0xd7, 0xe2, 0xef, 0x64
 	.byte 0x5e, 0x0e
-LABEL_F51647:
+SeqChan_TraverseAndProcess:
 	.byte 0xef, 0x6c, 0x3e, 0xbf, 0x06, 0x02
 	.byte 0x00, 0x00, 0xaf, 0x0c, 0x20, 0xa8, 0x47, 0x20
 	.byte 0xaf, 0x10, 0xf0, 0x6f, 0x74, 0xaf, 0x0c, 0x20
@@ -5362,7 +5362,7 @@ LABEL_F51647:
 	.byte 0x1a, 0x02, 0x36, 0x9f, 0x04, 0x3f, 0x0a, 0x00
 	.byte 0x61, 0xcf, 0x9f, 0x06, 0x23, 0x5e, 0xef, 0x64
 	.byte 0x0e
-LABEL_F5173E:
+SeqChan_ReadNextFromLoop:
 	.byte 0xbf, 0xe2, 0x37, 0x3e, 0xaf, 0x26, 0x26
 	.byte 0x0b, 0x01, 0x00, 0x0b, 0x01, 0x00, 0x3e, 0x1e
 	.byte 0x8a, 0xe7, 0xef, 0x60, 0xbf, 0x04, 0x53, 0x9f
@@ -5385,7 +5385,7 @@ LABEL_F5173E:
 	.byte 0xb8, 0x16, 0xb3, 0xe8, 0xa8, 0xbe, 0x47, 0x60
 	.byte 0xbe, 0x40, 0x00, 0x10, 0xbe, 0x03, 0xbf, 0x9f
 	.byte 0x04, 0x23, 0x5e, 0xbf, 0x1e, 0x37, 0x0e
-LABEL_F517EC:
+SeqChan_WritePatchData:
 	.byte 0xef
 	.byte 0x6a, 0x3e, 0xaf, 0x0a, 0x26, 0xbe, 0x34, 0x00
 	.byte 0xe5, 0x3e, 0x1e, 0x68, 0xef, 0xbf, 0x08, 0x53
@@ -5395,7 +5395,7 @@ LABEL_F517EC:
 	.byte 0xf3, 0x07, 0xe8, 0xe4, 0x60, 0xee, 0x88, 0x38
 	.byte 0x1d, 0x07, 0xf2, 0xf4, 0xbf, 0x0c, 0x37, 0x9f
 	.byte 0x04, 0x23, 0x5e, 0xef, 0x62, 0x0e
-LABEL_F5182B:
+SeqChan_WriteExtendedPatch:
 	.byte 0x3e, 0xaf
 	.byte 0x08, 0x26, 0x9f, 0x0c, 0x20, 0xd8, 0xcf, 0x15
 	.byte 0x00, 0x66, 0x50, 0xd8, 0xcf, 0x14, 0x00, 0x66
@@ -5413,52 +5413,52 @@ LABEL_F5182B:
 	.byte 0x68, 0xed, 0xf2, 0x3c, 0xe5, 0x01, 0x02, 0x12
 	.byte 0x00, 0x33, 0xff, 0xff, 0x5e, 0x0e
 
-LABEL_F518A3:
+SeqStep_CountValidSectors:
 	push xiz
 	ldi_werp 0xFA, 0
 	sti16_24 0x01e53c, 0x0000
 	lds iz, 0
-	jr LABEL_F518DD
+	jr SeqStep_CountLoop_Compare
 
-LABEL_F518B2:
+SeqStep_CountLoop_Body:
 	pushw iz
 	ld xwa, (xsp + 10)
 	push xwa
 	calr SeqStep_FileSectorError
 	inc 6, xsp
 	cps hl, 0
-	jr nz, LABEL_F518C3
+	jr nz, SeqStep_CountLoop_CheckEnd
 	inc1_werp 0xFA
 
-LABEL_F518C3:
+SeqStep_CountLoop_CheckEnd:
 	cpdi16_24 124220, 0
-	jr nz, LABEL_F518D6
+	jr nz, SeqStep_CountLoop_ResetWerp
 	ld xwa, (xsp + 8)
 	cpw (xwa + 6), 0x0
-	jr z, LABEL_F518DB
+	jr z, SeqStep_CountLoop_IncIz
 
-LABEL_F518D6:
+SeqStep_CountLoop_ResetWerp:
 	ldi_werp 0xFA, 0
-	jr LABEL_F518E8
+	jr SeqStep_CountLoop_Done
 
-LABEL_F518DB:
+SeqStep_CountLoop_IncIz:
 	inc 1, iz
 
-LABEL_F518DD:
+SeqStep_CountLoop_Compare:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 30)
 	cp iz, (xwa + 54)
-	jr ule, LABEL_F518B2
+	jr ule, SeqStep_CountLoop_Body
 
-LABEL_F518E8:
+SeqStep_CountLoop_Done:
 	ldto_werp HL, 0xFA
 	pop xiz
 	ret
 
-LABEL_F518ED:
+SeqStep_CalcTotalSectors:
 	ld xwa, (xsp + 4)
 	push xwa
-	calr LABEL_F518A3
+	calr SeqStep_CountValidSectors
 	inc 4, xsp
 	ld bc, hl
 	extz xbc
@@ -5469,7 +5469,7 @@ LABEL_F518ED:
 	call Math_MultiplyAccumulate
 	ret
 
-LABEL_F5190A:
+SeqStep_SectorCompareBlock:
 	.byte 0xaf, 0x04, 0x22, 0x9f, 0x08, 0x3f, 0x00, 0x00
 	.byte 0x66, 0x28, 0x9f, 0x0a, 0x21, 0xd9, 0xcc, 0x18
 	.byte 0x00, 0x8a, 0x40, 0x21, 0xd8, 0x12, 0xd8, 0xcc
@@ -5490,7 +5490,7 @@ LABEL_F5190A:
 	.byte 0xd8, 0x66, 0x08, 0x2b, 0x39, 0x1e, 0x0b, 0xe2
 	.byte 0xef, 0x66, 0x0e, 0x99, 0x45, 0x23, 0x0e
 
-LABEL_F519A1:
+SeqStep_ParseVariableHeader:
 	lda xsp, (xsp - 16)
 	ld wa, (xsp + 20)
 	ld (xsp + 256), wa
@@ -5513,7 +5513,7 @@ LABEL_F519A1:
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F519DB:
+SeqStep_ParseHeaderContinue:
 	lds32 xwa, 0
 	push xwa
 	pushw 0x0
@@ -5522,15 +5522,15 @@ LABEL_F519DB:
 	pushw 0x0
 	pushw 0x0
 	pushw 0x7
-	calr LABEL_F519A1
+	calr SeqStep_ParseVariableHeader
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F519F7:
+SeqChan_ByteBlockA:
 	.byte 0xdb, 0xa8, 0x0e
-LABEL_F519FA:
+SeqChan_ByteBlockB:
 	.byte 0xdb, 0xa8, 0x0e
-LABEL_F519FD:
+SeqChan_ByteBlockC:
 	.byte 0x3e, 0xaf
 	.byte 0x14, 0x26, 0x1d, 0x43, 0x1e, 0xf5, 0xdb, 0xd8
 	.byte 0x66, 0x09, 0x1d, 0x31, 0x1e, 0xf5, 0xdb, 0xae
@@ -5552,7 +5552,7 @@ LABEL_F519FD:
 	.byte 0x04, 0xaf, 0x14, 0x20, 0x88, 0x04, 0x21, 0xd8
 	.byte 0x12, 0x28, 0x0b, 0x03, 0x00, 0x1e, 0x0a, 0xff
 	.byte 0xbf, 0x10, 0x37, 0x5e, 0x0e
-LABEL_F51A9C:
+SeqChan_ByteBlockD:
 	.byte 0xaf, 0x10, 0x20
 	.byte 0x38, 0x9f, 0x12, 0x04, 0x9f, 0x12, 0x04, 0x9f
 	.byte 0x10, 0x04, 0x9f, 0x14, 0x04, 0xaf, 0x10, 0x20
@@ -5590,7 +5590,7 @@ LABEL_F51A9C:
 	.byte 0x02, 0x3f, 0x01, 0x00, 0x61, 0x04, 0xdb, 0xa8
 	.byte 0x68, 0x03, 0x9f, 0x04, 0x23, 0x5e, 0xef, 0x62
 	.byte 0x0e
-LABEL_F51BB8:
+SeqChan_ByteBlockE:
 	.byte 0xbf, 0xf4, 0x37, 0x2e, 0xf2, 0x1e, 0x27
 	.byte 0x02, 0x02, 0x00, 0x00, 0xaf, 0x16, 0x20, 0xa0
 	.byte 0x20, 0xa8, 0x1a, 0x20, 0xbf, 0x02, 0x60, 0xaf
@@ -5629,7 +5629,7 @@ LABEL_F51BB8:
 	.byte 0x10, 0x30, 0x38, 0x1e, 0xea, 0xfd, 0xef, 0x60
 	.byte 0xdb, 0xd8, 0x7e, 0x28, 0xff, 0x9f, 0x0c, 0x23
 	.byte 0x4e, 0xbf, 0x0c, 0x37, 0x0e
-LABEL_F51CE4:
+SeqChan_ByteBlockF:
 	.byte 0xbf, 0xf4, 0x37
 	.byte 0x2e, 0xf2, 0x1e, 0x27, 0x02, 0x02, 0x00, 0x00
 	.byte 0xaf, 0x16, 0x20, 0xa0, 0x20, 0xa8, 0x1a, 0x20
@@ -5669,10 +5669,10 @@ LABEL_F51CE4:
 	.byte 0xbe, 0xfc, 0xef, 0x60, 0xdb, 0xd8, 0x7e, 0x28
 	.byte 0xff, 0x9f, 0x0c, 0x23, 0x4e, 0xbf, 0x0c, 0x37
 	.byte 0x0e
-LABEL_F51E10:
+FDC_ReturnZeroLong:
 	.byte 0xaf, 0x04, 0x20, 0xb0, 0x02, 0x00, 0x00
 	.byte 0x0e
-LABEL_F51E18:
+FDC_ReturnAndPop:
 	.byte 0xdb, 0xa9, 0x0e
 
 FDC_StoreDiskType:
@@ -5682,7 +5682,7 @@ FDC_StoreDiskType:
 	sti8_24 0x03e3be, 0x00
 	ret
 
-LABEL_F51E31:
+FDC_ClearDiskChangeStatus:
 	sti16_24	254950, 0
 	ld8_24	a, 254948
 	st8_24	254946, a
@@ -5697,12 +5697,12 @@ FDC_ReadDiskType:
 format_FD:
 	extz wa
 	cps wa, 3
-	jrl z, LABEL_F52291
+	jrl z, FDC_Format2HD_Start
 	cps wa, 2
-	jr nz, LABEL_F51E5C
-	jr LABEL_F51EAB
+	jr nz, FDC_Format_InvalidType
+	jr FDC_Format2DD_Start
 
-LABEL_F51E5C:
+FDC_Format_InvalidType:
 	lds hl, 0
 	ret
 
@@ -5717,37 +5717,37 @@ LABEL_F51E5C:
 FDC_SetSectorLength:
 	extz wa
 	cp wa, 0x31
-	jr z, LABEL_F51E9B
+	jr z, FDC_SectorLen_0x20
 	cp wa, 0x30
-	jr z, LABEL_F51E9B
+	jr z, FDC_SectorLen_0x20
 	cps wa, 6
-	jr z, LABEL_F51E93
+	jr z, FDC_SectorLen_0x06
 	cp wa, 0x33
-	jr z, LABEL_F51E8B
+	jr z, FDC_SectorLen_0x21
 	cp wa, 0x35
-	jr z, LABEL_F51E8B
+	jr z, FDC_SectorLen_0x21
 	cp wa, 0x2F
-	jr nz, LABEL_F51EA3
+	jr nz, FDC_SectorLen_0x24
 	sti16_24 0x01e53c, 0x001f
 	ret
 
-LABEL_F51E8B:
+FDC_SectorLen_0x21:
 	sti16_24 0x01e53c, 0x0021
 	ret
 
-LABEL_F51E93:
+FDC_SectorLen_0x06:
 	sti16_24 0x01e53c, 0x0006
 	ret
 
-LABEL_F51E9B:
+FDC_SectorLen_0x20:
 	sti16_24 0x01e53c, 0x0020
 	ret
 
-LABEL_F51EA3:
+FDC_SectorLen_0x24:
 	sti16_24 0x01e53c, 0x0024
 	ret
 
-LABEL_F51EAB:
+FDC_Format2DD_Start:
 	lda xsp, (xsp - 20)
 	push_werp 0xFA
 	lds wa, 0
@@ -5758,39 +5758,39 @@ LABEL_F51EAB:
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F51ED7
+	jr z, FDC_Format2DD_Step2
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F51ED7:
+FDC_Format2DD_Step2:
 	lda_24 xwa, 0xe45056
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F51EF8
+	jr z, FDC_Format2DD_AllocBuf
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F51EF8:
+FDC_Format2DD_AllocBuf:
 	pushw 0x200
 	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld xwa, xhl
 	or xwa, xwa
-	jr nz, LABEL_F51F0F
+	jr nz, FDC_Format2DD_WriteBoot
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F51F0F:
+FDC_Format2DD_WriteBoot:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -5816,7 +5816,7 @@ LABEL_F51F0F:
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F51F7C
+	jr z, FDC_Format2DD_WriteFAT1
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -5827,7 +5827,7 @@ LABEL_F51F0F:
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F51F7C:
+FDC_Format2DD_WriteFAT1:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -5853,7 +5853,7 @@ LABEL_F51F7C:
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F51FE9
+	jr z, FDC_Format2DD_WriteFAT2
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -5864,7 +5864,7 @@ LABEL_F51F7C:
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F51FE9:
+FDC_Format2DD_WriteFAT2:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -5877,7 +5877,7 @@ LABEL_F51FE9:
 	lda xsp, (xsp + 12)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F52026
+	jr z, FDC_Format2DD_WriteRoot
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -5888,7 +5888,7 @@ LABEL_F51FE9:
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F52026:
+FDC_Format2DD_WriteRoot:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -5901,7 +5901,7 @@ LABEL_F52026:
 	lda xsp, (xsp + 12)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F52063
+	jr z, FDC_Format2DD_WriteDataSec1
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -5912,7 +5912,7 @@ LABEL_F52026:
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F52063:
+FDC_Format2DD_WriteDataSec1:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -5938,7 +5938,7 @@ LABEL_F52063:
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F520D0
+	jr z, FDC_Format2DD_WriteDataSec2
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -5949,7 +5949,7 @@ LABEL_F52063:
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F520D0:
+FDC_Format2DD_WriteDataSec2:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -5962,7 +5962,7 @@ LABEL_F520D0:
 	lda xsp, (xsp + 12)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F5210D
+	jr z, FDC_Format2DD_WriteDataSec3
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -5973,7 +5973,7 @@ LABEL_F520D0:
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F5210D:
+FDC_Format2DD_WriteDataSec3:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -5986,7 +5986,7 @@ LABEL_F5210D:
 	lda xsp, (xsp + 12)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F5214A
+	jr z, FDC_Format2DD_InitTrackLoop
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -5997,7 +5997,7 @@ LABEL_F5210D:
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F5214A:
+FDC_Format2DD_InitTrackLoop:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -6012,16 +6012,16 @@ LABEL_F5214A:
 	ld xwa, (xsp + 2)
 	ld (xsp + 18), xwa
 	ldw (xsp + 14), 0x8
-	jr LABEL_F521AC
+	jr FDC_Format2DD_TrackTest
 
-LABEL_F52180:
+FDC_Format2DD_TrackBody:
 	lda xwa, (xsp + 6)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F521A9
+	jr z, FDC_Format2DD_TrackInc
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6032,24 +6032,24 @@ LABEL_F52180:
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F521A9:
+FDC_Format2DD_TrackInc:
 	incm 1, (xsp + 14)
 
-LABEL_F521AC:
+FDC_Format2DD_TrackTest:
 	cpw (xsp + 14), 0x9
-	jr ule, LABEL_F52180
+	jr ule, FDC_Format2DD_TrackBody
 	ldw (xsp + 10), 0x1
 	ldw (xsp + 14), 0x1
-	jr LABEL_F521EB
+	jr FDC_Format2DD_Side1Test
 
-LABEL_F521BF:
+FDC_Format2DD_Side1Body:
 	lda xwa, (xsp + 6)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F521E8
+	jr z, FDC_Format2DD_Side1Inc
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6060,12 +6060,12 @@ LABEL_F521BF:
 	lds hl, 0
 	jrl FDC_CmdFrame_Epilogue
 
-LABEL_F521E8:
+FDC_Format2DD_Side1Inc:
 	incm 1, (xsp + 14)
 
-LABEL_F521EB:
+FDC_Format2DD_Side1Test:
 	cpw (xsp + 14), 0x5
-	jr ule, LABEL_F521BF
+	jr ule, FDC_Format2DD_Side1Body
 	ldw (xsp + 6), 0x3
 	ldw (xsp + 8), 0x0
 	ldw (xsp + 10), 0x0
@@ -6080,7 +6080,7 @@ LABEL_F521EB:
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F5223E
+	jr z, FDC_Format2DD_FinalTrack
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6091,7 +6091,7 @@ LABEL_F521EB:
 	lds hl, 0
 	jr FDC_CmdFrame_Epilogue
 
-LABEL_F5223E:
+FDC_Format2DD_FinalTrack:
 	ldw (xsp + 6), 0x3
 	ldw (xsp + 8), 0x0
 	ldw (xsp + 10), 0x0
@@ -6109,11 +6109,11 @@ LABEL_F5223E:
 	call Free
 	inc 8, xsp
 	cpi_berp 0xFB, 0
-	jr nz, LABEL_F52280
+	jr nz, FDC_Format2DD_SetSectorAndRet
 	lds hl, 1
 	jr FDC_CmdFrame_Epilogue
 
-LABEL_F52280:
+FDC_Format2DD_SetSectorAndRet:
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6124,7 +6124,7 @@ FDC_CmdFrame_Epilogue:
 	lda xsp, (xsp + 20)
 	ret
 
-LABEL_F52291:
+FDC_Format2HD_Start:
 	lda xsp, (xsp - 20)
 	push_werp 0xFA
 	lds wa, 0
@@ -6135,39 +6135,39 @@ LABEL_F52291:
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F522BD
+	jr z, FDC_Format2HD_Step2
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
 	lds hl, 0
 	jrl FdcOp_Epilogue20
 
-LABEL_F522BD:
+FDC_Format2HD_Step2:
 	lda_24 xwa, 0xe45056
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F522DE
+	jr z, FDC_Format2HD_AllocBuf
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
 	lds hl, 0
 	jrl FdcOp_Epilogue20
 
-LABEL_F522DE:
+FDC_Format2HD_AllocBuf:
 	pushw 0x200
 	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
 	ld xwa, xhl
 	or xwa, xwa
-	jr nz, LABEL_F522F5
+	jr nz, FDC_Format2HD_WriteBoot
 	lds hl, 0
 	jrl FdcOp_Epilogue20
 
-LABEL_F522F5:
+FDC_Format2HD_WriteBoot:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -6193,7 +6193,7 @@ LABEL_F522F5:
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F52362
+	jr z, FDC_Format2HD_WriteFAT1
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6204,7 +6204,7 @@ LABEL_F522F5:
 	lds hl, 0
 	jrl FdcOp_Epilogue20
 
-LABEL_F52362:
+FDC_Format2HD_WriteFAT1:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -6230,7 +6230,7 @@ LABEL_F52362:
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F523CF
+	jr z, FDC_Format2HD_InitTrackLoop
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6241,7 +6241,7 @@ LABEL_F52362:
 	lds hl, 0
 	jrl FdcOp_Epilogue20
 
-LABEL_F523CF:
+FDC_Format2HD_InitTrackLoop:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -6249,16 +6249,16 @@ LABEL_F523CF:
 	call Memset
 	inc 8, xsp
 	ldw (xsp + 14), 0x3
-	jr LABEL_F52412
+	jr FDC_Format2HD_TrackTest
 
-LABEL_F523E6:
+FDC_Format2HD_TrackBody:
 	lda xwa, (xsp + 6)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F5240F
+	jr z, FDC_Format2HD_TrackInc
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6269,12 +6269,12 @@ LABEL_F523E6:
 	lds hl, 0
 	jrl FdcOp_Epilogue20
 
-LABEL_F5240F:
+FDC_Format2HD_TrackInc:
 	incm 1, (xsp + 14)
 
-LABEL_F52412:
+FDC_Format2HD_TrackTest:
 	cpw (xsp + 14), 0xA
-	jr ule, LABEL_F523E6
+	jr ule, FDC_Format2HD_TrackBody
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -6300,7 +6300,7 @@ LABEL_F52412:
 	lda xsp, (xsp + 22)
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F52486
+	jr z, FDC_Format2HD_WriteFAT2
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6311,7 +6311,7 @@ LABEL_F52412:
 	lds hl, 0
 	jrl FdcOp_Epilogue20
 
-LABEL_F52486:
+FDC_Format2HD_WriteFAT2:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -6319,16 +6319,16 @@ LABEL_F52486:
 	call Memset
 	inc 8, xsp
 	ldw (xsp + 14), 0xC
-	jr LABEL_F524C9
+	jr FDC_Format2HD_Side2Test
 
-LABEL_F5249D:
+FDC_Format2HD_Side2Body:
 	lda xwa, (xsp + 6)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F524C6
+	jr z, FDC_Format2HD_Side2Inc
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6339,12 +6339,12 @@ LABEL_F5249D:
 	lds hl, 0
 	jrl FdcOp_Epilogue20
 
-LABEL_F524C6:
+FDC_Format2HD_Side2Inc:
 	incm 1, (xsp + 14)
 
-LABEL_F524C9:
+FDC_Format2HD_Side2Test:
 	cpw (xsp + 14), 0x12
-	jr ule, LABEL_F5249D
+	jr ule, FDC_Format2HD_Side2Body
 	ldw (xsp + 10), 0x1
 	ldw (xsp + 14), 0x1
 	lda xwa, (xsp + 6)
@@ -6353,7 +6353,7 @@ LABEL_F524C9:
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F52503
+	jr z, FDC_Format2HD_InitSide1Loop
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6364,7 +6364,7 @@ LABEL_F524C9:
 	lds hl, 0
 	jrl FdcOp_Epilogue20
 
-LABEL_F52503:
+FDC_Format2HD_InitSide1Loop:
 	pushw 0x200
 	pushw 0x0
 	ld xwa, (xsp + 6)
@@ -6372,16 +6372,16 @@ LABEL_F52503:
 	call Memset
 	inc 8, xsp
 	ldw (xsp + 14), 0x2
-	jr LABEL_F52546
+	jr FDC_Format2HD_Side1Test
 
-LABEL_F5251A:
+FDC_Format2HD_Side1Body:
 	lda xwa, (xsp + 6)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F52543
+	jr z, FDC_Format2HD_Side1Inc
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6392,12 +6392,12 @@ LABEL_F5251A:
 	lds hl, 0
 	jrl FdcOp_Epilogue20
 
-LABEL_F52543:
+FDC_Format2HD_Side1Inc:
 	incm 1, (xsp + 14)
 
-LABEL_F52546:
+FDC_Format2HD_Side1Test:
 	cpw (xsp + 14), 0xF
-	jr ule, LABEL_F5251A
+	jr ule, FDC_Format2HD_Side1Body
 	ldw (xsp + 6), 0x3
 	ldw (xsp + 8), 0x0
 	ldw (xsp + 10), 0x0
@@ -6412,7 +6412,7 @@ LABEL_F52546:
 	inc 4, xsp
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F52599
+	jr z, FDC_Format2HD_FinalTrack
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6423,7 +6423,7 @@ LABEL_F52546:
 	lds hl, 0
 	jr FdcOp_Epilogue20
 
-LABEL_F52599:
+FDC_Format2HD_FinalTrack:
 	ldw (xsp + 6), 0x3
 	ldw (xsp + 8), 0x0
 	ldw (xsp + 10), 0x0
@@ -6441,11 +6441,11 @@ LABEL_F52599:
 	call Free
 	inc 8, xsp
 	cpi_berp 0xFB, 0
-	jr nz, LABEL_F525DB
+	jr nz, FDC_Format2HD_SetSectorAndRet
 	lds hl, 1
 	jr FdcOp_Epilogue20
 
-LABEL_F525DB:
+FDC_Format2HD_SetSectorAndRet:
 	ldto_berp A, 0xFB
 	extz wa
 	calr FDC_SetSectorLength
@@ -6466,7 +6466,7 @@ GetMediaType:
 	ld (xsp + 2), xhl
 	ld xwa, xhl
 	or xwa, xwa
-	jr nz, LABEL_F5261C
+	jr nz, GetMediaType_SetupReadCmd
 	ldi_berp 0xFB, 0
 	ldto_berp A, 0xFB
 	extz wa
@@ -6474,9 +6474,9 @@ GetMediaType:
 	calr FDC_StoreDiskType
 	inc 2, xsp
 	ldto_berp L, 0xFB
-	jrl LABEL_F5274A
+	jrl GetMediaType_ReturnAndCleanup
 
-LABEL_F5261C:
+GetMediaType_SetupReadCmd:
 	ldw (xsp + 6), 0x3
 	ldw (xsp + 8), 0x0
 	ldw (xsp + 10), 0x0
@@ -6489,37 +6489,37 @@ LABEL_F5261C:
 	ldi_berp 0xFB, 0
 	call Check_for_Floppy_Disk_Change
 	cps l, 0
-	jr nz, LABEL_F52657
+	jr nz, GetMediaType_TryRecalib
 	ldi_berp 0xFB, 1
 	jrl GetMediaType_Epilogue
 
-LABEL_F52657:
+GetMediaType_TryRecalib:
 	lda_24 xwa, 0xe450a6
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
 	cps hl, 0
-	jr z, LABEL_F5266D
+	jr z, GetMediaType_TryFormat2HD
 	ldi_berp 0xFB, 0
 	jrl GetMediaType_Epilogue
 
-LABEL_F5266D:
+GetMediaType_TryFormat2HD:
 	lda_24 xwa, 0xe45096
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
 	cps hl, 0
-	jr z, LABEL_F52683
+	jr z, GetMediaType_ReadSector
 	ldi_berp 0xFB, 0
 	jrl GetMediaType_Epilogue
 
-LABEL_F52683:
+GetMediaType_ReadSector:
 	lda xwa, (xsp + 6)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
 	cps hl, 0
-	jr nz, LABEL_F526D4
+	jr nz, GetMediaType_Try2DDHeader
 	ld xwa, (xsp + 2)
 	cp (xwa), 0xF0
 	jr nz, GetMediaType_Type3Check
@@ -6549,17 +6549,17 @@ GetMediaType_Invalid:
 	ldi_berp 0xFB, 0
 	jr GetMediaType_Epilogue
 
-LABEL_F526D4:
+GetMediaType_Try2DDHeader:
 	lda_24 xwa, 0xe45076
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
 	cps hl, 0
-	jr z, LABEL_F526E9
+	jr z, GetMediaType_Read2DDSector
 	ldi_berp 0xFB, 0
 	jr GetMediaType_Epilogue
 
-LABEL_F526E9:
+GetMediaType_Read2DDSector:
 	lda xwa, (xsp + 6)
 	push xwa
 	call FDC_CommandEntry
@@ -6581,12 +6581,12 @@ LABEL_F526E9:
 GetMediaType_F9Check:
 	ld xwa, (xsp + 2)
 	cp (xwa), 0xF9
-	jr nz, LABEL_F52723
+	jr nz, GetMediaType_CheckExtraFormat
 	ldi_berp 0xFB, 2
 	jr GetMediaType_Epilogue
 
-LABEL_F52723:
-	call LABEL_F53136
+GetMediaType_CheckExtraFormat:
+	call FDC_DetectDiskFormat
 	cps hl, 0
 	jr nz, GetMediaType_Epilogue
 	ldi_berp 0xFB, 5
@@ -6603,7 +6603,7 @@ GetMediaType_Epilogue:
 	inc 6, xsp
 	ldto_berp L, 0xFB
 
-LABEL_F5274A:
+GetMediaType_ReturnAndCleanup:
 	pop_werp 0xFA
 	lda xsp, (xsp + 20)
 	ret
@@ -6626,7 +6626,7 @@ GetDiskFreeSpace:
 	lda_24 xix, 0xf5277e
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F5277E:
+GetDiskFreeSpace_JumpTable:
 	.byte 0xdb, 0xa8, 0x68, 0x48, 0x40, 0x00, 0x24, 0x0b
 	.byte 0x00, 0xb6, 0x60, 0x68, 0x10, 0x40, 0x00, 0x3e
 	.byte 0x16, 0x00, 0xb6, 0x60, 0x68, 0x07, 0x40, 0x00
@@ -6641,13 +6641,13 @@ FileIO_ReadFreeSpaceViaFAT:
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, LABEL_F527B7
+	jr nz, GetDiskFreeSpace_ReadFAT
 	lds hl, 0
-	jr LABEL_F527CA
+	jr GetDiskFreeSpace_Epilogue
 
-LABEL_F527B7:
+GetDiskFreeSpace_ReadFAT:
 	push xiz
-	call LABEL_F518ED
+	call SeqStep_CalcTotalSectors
 	ld xwa, (xsp + 8)
 	ld (xwa), xhl
 	push xiz
@@ -6655,7 +6655,7 @@ LABEL_F527B7:
 	inc 8, xsp
 	lds hl, 1
 
-LABEL_F527CA:
+GetDiskFreeSpace_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -6676,7 +6676,7 @@ GetVolumeLabel:
 	lda_24 xix, 0xf527f7
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F527F7:
+GetVolumeLabel_JumpTable:
 	.byte 0xeb, 0xa8, 0x78, 0x9b, 0x00
 
 FileIO_ReadVolumeLabelEntry:
@@ -6688,11 +6688,11 @@ FileIO_ReadVolumeLabelEntry:
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, LABEL_F52818
+	jr nz, GetVolumeLabel_ReadDir
 	lds32 xhl, 0
-	jr LABEL_F52897
+	jr GetVolumeLabel_Return
 
-LABEL_F52818:
+GetVolumeLabel_ReadDir:
 	push xiz
 	pushw 0x1
 	pushw 0x20
@@ -6701,9 +6701,9 @@ LABEL_F52818:
 	call FileRead
 	lda xsp, (xsp + 12)
 	cps hl, 1
-	jr nz, LABEL_F5288E
+	jr nz, GetVolumeLabel_NotFound
 
-LABEL_F5282E:
+GetVolumeLabel_ScanEntry:
 	lda xwa, (xsp + 4)
 	push xwa
 	lda xwa, (xsp + 40)
@@ -6715,7 +6715,7 @@ LABEL_F5282E:
 	cp (xsp + 36), 0xE5
 	jr z, GetDiskSpace_ReadLoop
 	cp (xsp + 36), 0x0
-	jr z, LABEL_F5288E
+	jr z, GetVolumeLabel_NotFound
 	bitm 3, (xsp + 48)
 	jr z, GetDiskSpace_ReadLoop
 	pushw 0xB
@@ -6729,7 +6729,7 @@ LABEL_F5282E:
 	call FileClose
 	lda xsp, (xsp + 14)
 	lda_24 xhl, 0x022720
-	jr LABEL_F52897
+	jr GetVolumeLabel_Return
 
 GetDiskSpace_ReadLoop:
 	push xiz
@@ -6740,15 +6740,15 @@ GetDiskSpace_ReadLoop:
 	call FileRead
 	lda xsp, (xsp + 12)
 	cps hl, 1
-	jr z, LABEL_F5282E
+	jr z, GetVolumeLabel_ScanEntry
 
-LABEL_F5288E:
+GetVolumeLabel_NotFound:
 	push xiz
 	call FileClose
 	inc 4, xsp
 	lds32 xhl, 0
 
-LABEL_F52897:
+GetVolumeLabel_Return:
 	pop xiz
 	lda xsp, (xsp + 56)
 	ret
@@ -6759,11 +6759,11 @@ FileIO_CheckPathAndVolumeLabel:
 	ld xiz, xwa
 	calr GetVolumeLabel
 	or xhl, xhl
-	jr z, LABEL_F528AD
+	jr z, PathInfo_BuildAndOpen
 	lds hl, 0
 	jr PathInfo_RetVal
 
-LABEL_F528AD:
+PathInfo_BuildAndOpen:
 	ld (xsp + 6), 0x0
 	pushw 0xE4
 	pushw 0x5126
@@ -6782,11 +6782,11 @@ LABEL_F528AD:
 	call FileOpen
 	add xsp, 0x18
 	or xhl, xhl
-	jr nz, LABEL_F528E6
+	jr nz, PathInfo_CheckAttrib
 	lds hl, 0
 	jr PathInfo_RetVal
 
-LABEL_F528E6:
+PathInfo_CheckAttrib:
 	ld (xhl + 64), 0x28
 	setm 7, (xhl + 3)
 	push xhl
@@ -6795,11 +6795,11 @@ LABEL_F528E6:
 	ld wa, (xsp + 4)
 	and a, 0x8
 	cp a, 0x8
-	jr z, LABEL_F52903
+	jr z, PathInfo_FoundSubdir
 	lds hl, 0
 	jr PathInfo_RetVal
 
-LABEL_F52903:
+PathInfo_FoundSubdir:
 	lds hl, 1
 
 PathInfo_RetVal:
@@ -6807,7 +6807,7 @@ PathInfo_RetVal:
 	lda xsp, (xsp + 18)
 	ret
 
-LABEL_F5290A:
+FileIO_ParsePathComponents:
 	lda xsp, (xsp - 18)
 	push xiz
 	ld xiz, xbc
@@ -6816,17 +6816,17 @@ LABEL_F5290A:
 	ld xwa, (xsp + 18)
 	ld (xwa), 0x0
 	ld xhl, (xiz)
-	jr LABEL_F52961
+	jr FileIO_ParseLoop_Test
 
-LABEL_F5291F:
+FileIO_ParseLoop_CheckChar:
 	ld xwa, (xiz)
 	cp (xwa), 0x5C
-	jr nz, LABEL_F5296E
+	jr nz, FileIO_ParseLoop_CopyChar
 	lda xwa, (xsp + 4)
 	stib_dri 0x07, 0xE0, 0xE8, 0x00
 	ld xwa, (xsp + 18)
 	cp (xwa), 0x0
-	jr z, LABEL_F52947
+	jr z, FileIO_ParseLoop_AppendSlash
 	pushw 0xE4
 	pushw 0x512E
 	ld xwa, (xsp + 22)
@@ -6834,7 +6834,7 @@ LABEL_F5291F:
 	call Strcat
 	inc 8, xsp
 
-LABEL_F52947:
+FileIO_ParseLoop_AppendSlash:
 	lda xwa, (xsp + 4)
 	push xwa
 	ld xwa, (xsp + 22)
@@ -6846,29 +6846,29 @@ LABEL_F52947:
 	inc 1, xwa
 	ld xhl, xwa
 
-LABEL_F5295D:
+FileIO_ParseLoop_Advance:
 	lds32 xwa, 1
 	add (xiz), xwa
 
-LABEL_F52961:
+FileIO_ParseLoop_Test:
 	ld xwa, (xiz)
 	cp (xwa), 0x0
-	jr nz, LABEL_F5291F
+	jr nz, FileIO_ParseLoop_CheckChar
 	ld (xiz), xhl
 	lds hl, 0
-	jr LABEL_F52985
+	jr FileIO_ParsePath_Return
 
-LABEL_F5296E:
+FileIO_ParseLoop_CopyChar:
 	lda xbc, (xsp + 4)
 	ld xwa, (xiz)
 	ld a, (xwa)
 	lda_dri3 XBC, 0x07, 0xE4, 0xE8
 	inc 1, de
 	cp de, 0xC
-	jr le, LABEL_F5295D
+	jr le, FileIO_ParseLoop_Advance
 	ldw hl, 0xFFFF
 
-LABEL_F52985:
+FileIO_ParsePath_Return:
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
@@ -6879,30 +6879,30 @@ _findfirst:
 	ld (xsp + 16), xbc
 	ld (xsp + 20), xwa
 	cpi8_24 0x03e3e4, 0x05
-	jr nz, LABEL_F529A8
+	jr nz, FindFirst_AllocHandle
 	ld xwa, (xsp + 20)
 	ld xbc, (xsp + 16)
-	calr LABEL_F52C8E
+	calr FindFirst_SndTable
 	jrl FdcFile_Epilogue20
 
-LABEL_F529A8:
+FindFirst_AllocHandle:
 	pushw 0x8
 	call Malloc
 	inc 2, xsp
 	ld (xsp + 8), xhl
 	ld xwa, xhl
 	or xwa, xwa
-	jr nz, LABEL_F529C2
+	jr nz, FindFirst_AllocPathBuf
 	ld xhl, 0xFFFFFFFF
 	jrl FdcFile_Epilogue20
 
-LABEL_F529C2:
+FindFirst_AllocPathBuf:
 	pushw 0x104
 	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, LABEL_F529E3
+	jr nz, FindFirst_ParseAndOpen
 	ld xwa, (xsp + 8)
 	push xwa
 	call Free
@@ -6910,14 +6910,14 @@ LABEL_F529C2:
 	ld xhl, 0xFFFFFFFF
 	jrl FdcFile_Epilogue20
 
-LABEL_F529E3:
+FindFirst_ParseAndOpen:
 	ld xwa, (xsp + 20)
 	ld (xsp + 12), xwa
 	ld xwa, xiz
 	lda xbc, (xsp + 12)
-	calr LABEL_F5290A
+	calr FileIO_ParsePathComponents
 	cps hl, 0
-	jr z, LABEL_F52A0E
+	jr z, FindFirst_OpenDir
 	ld xwa, (xsp + 8)
 	push xwa
 	call Free
@@ -6928,7 +6928,7 @@ LABEL_F529E3:
 	ld xhl, 0xFFFFFFFF
 	jrl FdcFile_Epilogue20
 
-LABEL_F52A0E:
+FindFirst_OpenDir:
 	pushw 0xE4
 	pushw 0x5130
 	ld xwa, xiz
@@ -6938,7 +6938,7 @@ LABEL_F52A0E:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	or xwa, xwa
-	jr nz, LABEL_F52A3F
+	jr nz, FindFirst_AllocPattern
 	ld xwa, (xsp + 8)
 	push xwa
 	call Free
@@ -6949,7 +6949,7 @@ LABEL_F52A0E:
 	ld xhl, 0xFFFFFFFF
 	jr FdcFile_Epilogue20
 
-LABEL_F52A3F:
+FindFirst_AllocPattern:
 	ld xwa, xiz
 	push xwa
 	call Free
@@ -6962,7 +6962,7 @@ LABEL_F52A3F:
 	lda xsp, (xsp + 10)
 	ld xiz, xhl
 	or xiz, xiz
-	jr nz, LABEL_F52A6F
+	jr nz, FindFirst_CopyAndSearch
 	ld xwa, (xsp + 8)
 	push xwa
 	call Free
@@ -6970,7 +6970,7 @@ LABEL_F52A3F:
 	ld xhl, 0xFFFFFFFF
 	jr FdcFile_Epilogue20
 
-LABEL_F52A6F:
+FindFirst_CopyAndSearch:
 	ld xwa, (xsp + 12)
 	push xwa
 	push xiz
@@ -6985,11 +6985,11 @@ LABEL_F52A6F:
 	ld xbc, (xsp + 16)
 	calr _findnext
 	cps hl, 0
-	jr nz, LABEL_F52A9A
+	jr nz, FindFirst_FailAndClose
 	ld xhl, (xsp + 8)
 	jr FdcFile_Epilogue20
 
-LABEL_F52A9A:
+FindFirst_FailAndClose:
 	ld xwa, (xsp + 8)
 	calr _findclose
 	ld xhl, 0xFFFFFFFF
@@ -7003,19 +7003,19 @@ _findclose:
 	push xiz
 	ld xiz, xwa
 	cpi8_24 0x03e3e4, 0x05
-	jr nz, LABEL_F52ABC
+	jr nz, FindClose_CheckNull
 	ld xwa, xiz
 	calr FileIO_ValidateHandle
-	jr LABEL_F52AE6
+	jr FindClose_Return
 
-LABEL_F52ABC:
+FindClose_CheckNull:
 	ld xwa, xiz
 	or xwa, xwa
-	jr nz, LABEL_F52AC7
+	jr nz, FindClose_FreeResources
 	ldw hl, 0xFFFF
-	jr LABEL_F52AE6
+	jr FindClose_Return
 
-LABEL_F52AC7:
+FindClose_FreeResources:
 	ld xwa, xiz
 	ld xwa, (xwa)
 	push xwa
@@ -7030,7 +7030,7 @@ LABEL_F52AC7:
 	lda xsp, (xsp + 12)
 	lds hl, 0
 
-LABEL_F52AE6:
+FindClose_Return:
 	pop xiz
 	ret
 
@@ -7039,19 +7039,19 @@ _findnext:
 	push xiz
 	ld xiz, xbc
 	cpi8_24 0x03e3e4, 0x05
-	jr nz, LABEL_F52AFE
+	jr nz, FindNext_CheckNull
 	ld xbc, xiz
 	calr FileIO_ReadNextDirEntry
 	jrl FindNext_Epilogue
 
-LABEL_F52AFE:
+FindNext_CheckNull:
 	ld xbc, xwa
 	or xbc, xbc
-	jr nz, LABEL_F52B0A
+	jr nz, FindNext_ReadFirstEntry
 	ldw hl, 0xFFFF
 	jrl FindNext_Epilogue
 
-LABEL_F52B0A:
+FindNext_ReadFirstEntry:
 	ld (xsp + 8), xwa
 	ld xwa, (xwa)
 	ld (xsp + 4), xwa
@@ -7063,9 +7063,9 @@ LABEL_F52B0A:
 	call FileRead
 	lda xsp, (xsp + 12)
 	cps hl, 1
-	jrl nz, LABEL_F52BA9
+	jrl nz, FindNext_NoMoreEntries
 
-LABEL_F52B29:
+FindNext_MatchEntry:
 	lda xwa, (xsp + 12)
 	push xwa
 	lda xwa, (xsp + 48)
@@ -7075,13 +7075,13 @@ LABEL_F52B29:
 	cp (xsp + 44), 0xE5
 	jr z, FindNext_ReadFile
 	cp (xsp + 44), 0x0
-	jr z, LABEL_F52BA9
+	jr z, FindNext_NoMoreEntries
 	bitm 3, (xsp + 56)
 	jr nz, FindNext_ReadFile
 	lda xwa, (xsp + 44)
 	ld xbc, (xsp + 8)
 	ld xbc, (xbc + 4)
-	calr LABEL_F52BB1
+	calr FileIO_MatchWildcard
 	cps hl, 1
 	jr nz, FindNext_ReadFile
 	pushw 0x8
@@ -7116,9 +7116,9 @@ FindNext_ReadFile:
 	call FileRead
 	lda xsp, (xsp + 12)
 	cps hl, 1
-	jr z, LABEL_F52B29
+	jr z, FindNext_MatchEntry
 
-LABEL_F52BA9:
+FindNext_NoMoreEntries:
 	ldw hl, 0xFFFF
 
 FindNext_Epilogue:
@@ -7126,18 +7126,18 @@ FindNext_Epilogue:
 	lda xsp, (xsp + 64)
 	ret
 
-LABEL_F52BB1:
+FileIO_MatchWildcard:
 	lda xsp, (xsp - 16)
 	push xiz
 	ld xiz, xbc
 	ld (xsp + 16), xwa
 	lds wa, 0
 	cp (xiz), 0x0
-	jr nz, LABEL_F52BC6
+	jr nz, WildMatch_InitBuffer
 	lds hl, 0
-	jrl LABEL_F52C89
+	jrl WildMatch_Return
 
-LABEL_F52BC6:
+WildMatch_InitBuffer:
 	pushw 0xB
 	pushw 0x3F
 	lda xwa, (xsp + 8)
@@ -7148,133 +7148,133 @@ LABEL_F52BC6:
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	cp (xiz), 0x0
-	jr z, LABEL_F52BFD
+	jr z, WildMatch_FillName
 
-LABEL_F52BE4:
+WildMatch_ScanLoop:
 	cp (xiz), 0x2E
-	jr nz, LABEL_F52BF2
+	jr nz, WildMatch_CopyChar
 	lda xwa, (xsp + 12)
 	ld xbc, xwa
 	inc 1, xiz
-	jr LABEL_F52BF8
+	jr WildMatch_CheckEnd
 
-LABEL_F52BF2:
+WildMatch_CopyChar:
 	ld_spib A, 0xF8
 	lda_dpi XBC, 0xE4
 
-LABEL_F52BF8:
+WildMatch_CheckEnd:
 	cp (xiz), 0x0
-	jr nz, LABEL_F52BE4
+	jr nz, WildMatch_ScanLoop
 
-LABEL_F52BFD:
+WildMatch_FillName:
 	lds bc, 0
 	cp bc, 0x8
-	jr ge, LABEL_F52C2F
+	jr ge, WildMatch_FillExt
 
-LABEL_F52C05:
+WildMatch_NameLoop:
 	lda xwa, (xsp + 4)
 	cp_srib_im 0x07, 0xE0, 0xE4, 0x2A
-	jr nz, LABEL_F52C27
+	jr nz, WildMatch_NameNext
 	cp bc, 0x8
-	jr ge, LABEL_F52C27
+	jr ge, WildMatch_NameNext
 
-LABEL_F52C16:
+WildMatch_StarFillName:
 	lda xwa, (xsp + 4)
 	stib_dri 0x07, 0xE0, 0xE4, 0x3F
 	inc 1, bc
 	cp bc, 0x8
-	jr lt, LABEL_F52C16
+	jr lt, WildMatch_StarFillName
 
-LABEL_F52C27:
+WildMatch_NameNext:
 	inc 1, bc
 	cp bc, 0x8
-	jr lt, LABEL_F52C05
+	jr lt, WildMatch_NameLoop
 
-LABEL_F52C2F:
+WildMatch_FillExt:
 	ldw bc, 0x8
 	cp bc, 0xB
-	jr ge, LABEL_F52C62
+	jr ge, WildMatch_Compare
 
-LABEL_F52C38:
+WildMatch_ExtLoop:
 	lda xwa, (xsp + 4)
 	cp_srib_im 0x07, 0xE0, 0xE4, 0x2A
-	jr nz, LABEL_F52C5A
+	jr nz, WildMatch_ExtNext
 	cp bc, 0xB
-	jr ge, LABEL_F52C5A
+	jr ge, WildMatch_ExtNext
 
-LABEL_F52C49:
+WildMatch_StarFillExt:
 	lda xwa, (xsp + 4)
 	stib_dri 0x07, 0xE0, 0xE4, 0x3F
 	inc 1, bc
 	cp bc, 0xB
-	jr lt, LABEL_F52C49
+	jr lt, WildMatch_StarFillExt
 
-LABEL_F52C5A:
+WildMatch_ExtNext:
 	inc 1, bc
 	cp bc, 0xB
-	jr lt, LABEL_F52C38
+	jr lt, WildMatch_ExtLoop
 
-LABEL_F52C62:
+WildMatch_Compare:
 	lds hl, 1
 	ld xde, (xsp + 16)
 	lda xwa, (xsp + 4)
 	ld xbc, xwa
 	cp (xde), 0x0
-	jr z, LABEL_F52C89
+	jr z, WildMatch_Return
 
-LABEL_F52C71:
+WildMatch_CompareLoop:
 	cp (xbc), 0x3F
-	jr z, LABEL_F52C80
+	jr z, WildMatch_CompareAdvance
 	ld a, (xbc)
 	cp a, (xde)
-	jr z, LABEL_F52C80
+	jr z, WildMatch_CompareAdvance
 	lds hl, 0
-	jr LABEL_F52C89
+	jr WildMatch_Return
 
-LABEL_F52C80:
+WildMatch_CompareAdvance:
 	inc 1, xde
 	inc 1, xbc
 	cp (xde), 0x0
-	jr nz, LABEL_F52C71
+	jr nz, WildMatch_CompareLoop
 
-LABEL_F52C89:
+WildMatch_Return:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F52C8E:
+FindFirst_SndTable:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xbc
 	sti16_24 0x02272c, 0x0000
 	lda_24 xwa, 0x02272c
 	ld xiz, xwa
-	call LABEL_F531E2
+	call FileIO_ReadAllDirEntries
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
 	calr FileIO_ReadNextDirEntry
 	cps hl, 0
-	jr nz, LABEL_F52CB6
+	jr nz, FindFirst_SndTable_Fail
 	ld xhl, xiz
-	jr LABEL_F52CC0
+	jr FindFirst_SndTable_Return
 
-LABEL_F52CB6:
+FindFirst_SndTable_Fail:
 	ld xwa, xiz
 	calr FileIO_ValidateHandle
 	ld xhl, 0xFFFFFFFF
 
-LABEL_F52CC0:
+FindFirst_SndTable_Return:
 	pop xiz
 	inc 4, xsp
 	ret
 
 FileIO_ValidateHandle:
 	or xwa, xwa
-	jr nz, LABEL_F52CCC
+	jr nz, FileIO_ValidateHandle_Ok
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F52CCC:
+FileIO_ValidateHandle_Ok:
 	lds hl, 0
 	ret
 
@@ -7284,19 +7284,19 @@ FileIO_ReadNextDirEntry:
 	ld (xsp + 4), xbc
 	ld xbc, xwa
 	or xbc, xbc
-	jr nz, LABEL_F52CE0
+	jr nz, FileIO_ReadDirEntry_Body
 	ldw hl, 0xFFFF
-	jr LABEL_F52D44
+	jr FileIO_ReadDirEntry_Return
 
-LABEL_F52CE0:
+FileIO_ReadDirEntry_Body:
 	ld xiz, xwa
 	cpw (xiz), 0x50
-	jr ge, LABEL_F52D41
+	jr ge, FileIO_ReadDirEntry_End
 	ld wa, (xiz)
 	muls wa, 0x2C
 	lda_24 xbc, 0x0235a8
 	cp_sriw_im 0x07, 0xE4, 0xE0, 0xFE, 0xFE
-	jr z, LABEL_F52D41
+	jr z, FileIO_ReadDirEntry_End
 	pushw 0x14
 	ld wa, (xiz)
 	muls wa, 0x2C
@@ -7320,17 +7320,17 @@ LABEL_F52CE0:
 	ld (xwa + 2), xbc
 	incm 1, (xiz)
 	lds hl, 0
-	jr LABEL_F52D44
+	jr FileIO_ReadDirEntry_Return
 
-LABEL_F52D41:
+FileIO_ReadDirEntry_End:
 	ldw hl, 0xFFFF
 
-LABEL_F52D44:
+FileIO_ReadDirEntry_Return:
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_F52D48:
+SndTable_ByteBlock_ReadOps:
 	.byte 0xc2, 0xec, 0xe3, 0x03, 0x3f, 0x00, 0x6e, 0x30
 	.byte 0xe2, 0x7a, 0x35, 0x02, 0x21, 0x39, 0x0b, 0x00
 	.byte 0x04, 0x0b, 0x01, 0x00, 0x38, 0x1d, 0x70, 0xee
@@ -7377,9 +7377,9 @@ LABEL_F52D48:
 TaskBuf_ReadNextByte:
 	pushw iz
 	cpi8_24 0x02358a, 0x01
-	jrl nz, LABEL_F52F30
+	jrl nz, TaskBuf_Error
 	cpdi16_24 144768, 0
-	jr nz, LABEL_F52EC0
+	jr nz, TaskBuf_CheckPendingData
 	lds wa, 3
 	call TaskMsg_Receive
 	st32_24 0x023582, xhl
@@ -7389,23 +7389,23 @@ TaskBuf_ReadNextByte:
 	inc 4, xwa
 	st32_24 0x023586, xwa
 
-LABEL_F52EC0:
+TaskBuf_CheckPendingData:
 	ld32_24 xwa, 0x023582
 	cpw (xwa + 2), 0x0
-	jr z, LABEL_F52EDC
+	jr z, TaskBuf_EmptyAndReturn
 	sti8_24 0x02358a, 0x02
 	ld32_24 xwa, 0x023582
 	ld hl, (xwa + 2)
 	jr TaskBuf_PopIzRet
 
-LABEL_F52EDC:
+TaskBuf_EmptyAndReturn:
 	cpdi16_24 144768, 0
-	jr nz, LABEL_F52EF0
+	jr nz, TaskBuf_ReadAndDecrement
 	sti8_24 0x02358a, 0x02
 	ldw hl, 0xFFFF
 	jr TaskBuf_PopIzRet
 
-LABEL_F52EF0:
+TaskBuf_ReadAndDecrement:
 	ld32_24 xbc, 0x023586
 	lds32 xwa, 1
 	addm32_24 0x023586, xwa
@@ -7413,24 +7413,24 @@ LABEL_F52EF0:
 	ldfr_berp A, 0xF8
 	extz iz
 	subdi16_24 144768, 1
-	jr nz, LABEL_F52F2C
+	jr nz, TaskBuf_ReturnByte
 	ld32_24 xwa, 0x023582
 	cpw (xwa), 0x400
-	jr z, LABEL_F52F21
+	jr z, TaskBuf_SendBufferFull
 	sti8_24 0x02358a, 0x02
 	ld hl, iz
 	jr TaskBuf_PopIzRet
 
-LABEL_F52F21:
+TaskBuf_SendBufferFull:
 	ld32_24 xbc, 0x023582
 	lds wa, 2
 	call TaskMsg_Send
 
-LABEL_F52F2C:
+TaskBuf_ReturnByte:
 	ld hl, iz
 	jr TaskBuf_PopIzRet
 
-LABEL_F52F30:
+TaskBuf_Error:
 	ldw hl, 0xFFFF
 
 TaskBuf_PopIzRet:
@@ -7441,53 +7441,53 @@ FDC_DrainQueuesAndReset:
 	lds wa, 2
 	call TaskMsg_TryReceive
 	or xhl, xhl
-	jr z, LABEL_F52F49
+	jr z, FDC_DrainQueue2_Done
 
-LABEL_F52F3F:
+FDC_DrainQueue2_Loop:
 	lds wa, 2
 	call TaskMsg_TryReceive
 	or xhl, xhl
-	jr nz, LABEL_F52F3F
+	jr nz, FDC_DrainQueue2_Loop
 
-LABEL_F52F49:
+FDC_DrainQueue2_Done:
 	ld32_24 xwa, 0x023582
 	ldw (xwa + 2), 0xFFFF
 	ld32_24 xbc, 0x023582
 	lds wa, 2
 	call TaskMsg_Send
 	cpi8_24 0x02357e, 0x00
-	jr z, LABEL_F52F6E
+	jr z, FDC_DrainQueue3_Start
 
-LABEL_F52F66:
+FDC_WaitQueueEmpty_Loop:
 	cpi8_24 0x02357e, 0x00
-	jr nz, LABEL_F52F66
+	jr nz, FDC_WaitQueueEmpty_Loop
 
-LABEL_F52F6E:
+FDC_DrainQueue3_Start:
 	sti8_24 0x02358a, 0x02
 	lds wa, 3
 	call TaskMsg_TryReceive
 	or xhl, xhl
-	jr z, LABEL_F52F88
+	jr z, FDC_DrainQueue2B_Start
 
-LABEL_F52F7E:
+FDC_DrainQueue3_Loop:
 	lds wa, 3
 	call TaskMsg_TryReceive
 	or xhl, xhl
-	jr nz, LABEL_F52F7E
+	jr nz, FDC_DrainQueue3_Loop
 
-LABEL_F52F88:
+FDC_DrainQueue2B_Start:
 	lds wa, 2
 	call TaskMsg_TryReceive
 	or xhl, xhl
-	jr z, LABEL_F52F9C
+	jr z, FDC_DrainCloseFile
 
-LABEL_F52F92:
+FDC_DrainQueue2B_Loop:
 	lds wa, 2
 	call TaskMsg_TryReceive
 	or xhl, xhl
-	jr nz, LABEL_F52F92
+	jr nz, FDC_DrainQueue2B_Loop
 
-LABEL_F52F9C:
+FDC_DrainCloseFile:
 	cpi8_24 0x03e3ec, 0x00
 	ret nz
 	ld32_24 xwa, 0x02357a
@@ -7510,12 +7510,12 @@ SndTable_LookupA:
 	st32_24 0x02357a, xhl
 	ld32_24 xwa, 0x02357a
 	or xwa, xwa
-	jr nz, LABEL_F52FF3
+	jr nz, SndTable_LookupA_GotFile
 	sti8_24 0x02358a, 0x02
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F52FF3:
+SndTable_LookupA_GotFile:
 	ld32_24 xwa, 0x02357a
 	ld xwa, (xwa + 71)
 	st32_24 0x03e3e8, xwa
@@ -7524,7 +7524,7 @@ LABEL_F52FF3:
 	lds hl, 0
 	ret
 
-LABEL_F53009:
+SndTable_CalcSectorPosition:
 	ld hl, wa
 	extz xhl
 	div hl, 0x9
@@ -7553,7 +7553,7 @@ FDC_ExecuteSectorCommand:
 	lda xbc, (xsp + 20)
 	push xbc
 	ld xbc, xhl
-	calr LABEL_F53009
+	calr SndTable_CalcSectorPosition
 	ldw (xsp + 4), 0x3
 	ldw (xsp + 6), 0x0
 	ld wa, (xsp + 22)
@@ -7573,7 +7573,7 @@ FDC_ExecuteSectorCommand:
 	lda xsp, (xsp + 22)
 	ret
 
-LABEL_F53082:
+FDC_SectorCmd_ByteBlock:
 	.byte 0x3e, 0xe8, 0x8e, 0xd2, 0x8c, 0x35, 0x02, 0x20
 	.byte 0xee, 0x89, 0x1e, 0xa5, 0xff, 0xd2, 0x8c, 0x35
 	.byte 0x02, 0x61, 0xdb, 0xd8, 0x6e, 0x16, 0xd2, 0x8c
@@ -7590,7 +7590,7 @@ SndTable_LookupC:
 	sti8_24 0x03e3ec, 0x00
 	jrl FDC_RecalibrateCommand
 
-LABEL_F530BF:
+SndTable_LookupD_CalcAddr:
 	ld bc, wa
 	muls bc, 0x2C
 	lda_24 xde, 0x0235a8
@@ -7613,74 +7613,74 @@ SndTable_LookupD:
 	sti8_24 0x02358a, 0x01
 	lda_24 xbc, 0x022d72
 	st32_24 0x03e3ee, xbc
-	calr LABEL_F530BF
+	calr SndTable_LookupD_CalcAddr
 	cps l, 0
-	jr z, LABEL_F5312D
+	jr z, SndTable_LookupD_ShowScreen
 	sti8_24 0x02358a, 0x02
 	sti8_24 0x03e3ec, 0x00
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F5312D:
+SndTable_LookupD_ShowScreen:
 	lds wa, 2
 	call Show_ScreenGroup
 	lds hl, 0
 	ret
 
-LABEL_F53136:
-	calr LABEL_F531B0
+FDC_DetectDiskFormat:
+	calr FDC_ResetHeadCommand
 	cps hl, 0
-	jr z, LABEL_F53158
+	jr z, FDC_DetectFormat_ReadSector
 	cp hl, 0x31
-	jr z, LABEL_F53155
+	jr z, FDC_DetectFormat_ReturnOneB
 	cp hl, 0x30
-	jr z, LABEL_F53155
+	jr z, FDC_DetectFormat_ReturnOneB
 	cp hl, 0xFC
-	jr nz, LABEL_F53152
+	jr nz, FDC_DetectFormat_ReturnOne
 	lds hl, 2
 	ret
 
-LABEL_F53152:
+FDC_DetectFormat_ReturnOne:
 	lds hl, 1
 	ret
 
-LABEL_F53155:
+FDC_DetectFormat_ReturnOneB:
 	lds hl, 1
 	ret
 
-LABEL_F53158:
+FDC_DetectFormat_ReadSector:
 	lda_24 xwa, 0x02434e
 	ld xbc, xwa
 	ldw wa, 0x9
 	calr FDC_ExecuteSectorCommand
 	cp hl, 0x10
-	jr z, LABEL_F53187
+	jr z, FDC_DetectSector_Return3
 	cp hl, 0xFC
-	jr z, LABEL_F53184
+	jr z, FDC_DetectSector_Return2
 	cps hl, 0
-	jr z, LABEL_F5318D
+	jr z, FDC_DetectSector_CheckPianoDisc
 	cp hl, 0x31
-	jr z, LABEL_F53181
+	jr z, FDC_DetectSector_Return1
 	cp hl, 0x30
-	jr nz, LABEL_F5318A
+	jr nz, FDC_DetectSector_Return1B
 
-LABEL_F53181:
+FDC_DetectSector_Return1:
 	lds hl, 1
 	ret
 
-LABEL_F53184:
+FDC_DetectSector_Return2:
 	lds hl, 2
 	ret
 
-LABEL_F53187:
+FDC_DetectSector_Return3:
 	lds hl, 3
 	ret
 
-LABEL_F5318A:
+FDC_DetectSector_Return1B:
 	lds hl, 1
 	ret
 
-LABEL_F5318D:
+FDC_DetectSector_CheckPianoDisc:
 	pushw 0xB	; 11 bytes
 	pushw 0xE4
 	pushw 0x5136	; "1 PianoDisc"
@@ -7689,15 +7689,15 @@ LABEL_F5318D:
 	call String_Compare
 	add xsp, 0xA
 	cps hl, 0
-	jr nz, LABEL_F531AD
+	jr nz, FDC_DetectSector_ReturnPD3
 	lds hl, 0
 	ret
 
-LABEL_F531AD:
+FDC_DetectSector_ReturnPD3:
 	lds hl, 3
 	ret
 
-LABEL_F531B0:
+FDC_ResetHeadCommand:
 	lda xsp, (xsp - 16)
 	ldw (xsp + 256), 0x0
 	ldw (xsp + 2), 0x0
@@ -7718,13 +7718,13 @@ FDC_RecalibrateCommand:
 	lda xsp, (xsp + 20)
 	ret
 
-LABEL_F531E2:
+FileIO_ReadAllDirEntries:
 	push xiz
 	lds iz, 0
 	cps iz, 7
-	jr ge, LABEL_F5321F
+	jr ge, FileIO_ReadDir_CopyEntries
 
-LABEL_F531E9:
+FileIO_ReadDir_SectorLoop:
 	ld wa, iz
 	add wa, 0xA
 	ld de, wa
@@ -7740,21 +7740,21 @@ LABEL_F531E9:
 	ldfr_werp HL, 0xFA
 	calr FDC_RecalibrateCommand
 	cpi_werp 0xFA, 0
-	jr z, LABEL_F53219
+	jr z, FileIO_ReadDir_NextSector
 	ldto_werp HL, 0xFA
-	jrl LABEL_F5329F
+	jrl FileIO_ReadDir_Return
 
-LABEL_F53219:
+FileIO_ReadDir_NextSector:
 	inc 1, iz
 	cps iz, 7
-	jr lt, LABEL_F531E9
+	jr lt, FileIO_ReadDir_SectorLoop
 
-LABEL_F5321F:
+FileIO_ReadDir_CopyEntries:
 	lds iz, 0
 	cp iz, 0x50
 	jr ge, FileIO_FillRemainingEntries
 
-LABEL_F53227:
+FileIO_ReadDir_CopyLoop:
 	ld wa, iz
 	muls wa, 0x2C
 	lda_24 xbc, 0x0235a8
@@ -7777,14 +7777,14 @@ LABEL_F53227:
 	lda xsp, (xsp + 10)
 	inc 1, iz
 	cp iz, 0x50
-	jr lt, LABEL_F53227
+	jr lt, FileIO_ReadDir_CopyLoop
 
 FileIO_FillRemainingEntries:
 	st16_24 0x024750, xiz
 	cp iz, 0x50
-	jr ge, LABEL_F5329C
+	jr ge, FileIO_ReadDir_GetRetVal
 
-LABEL_F53278:
+FileIO_FillRemaining_Loop:
 	pushw 0x14
 	pushw 0x20
 	ld wa, iz
@@ -7797,12 +7797,12 @@ LABEL_F53278:
 	inc 8, xsp
 	inc 1, iz
 	cp iz, 0x50
-	jr lt, LABEL_F53278
+	jr lt, FileIO_FillRemaining_Loop
 
-LABEL_F5329C:
+FileIO_ReadDir_GetRetVal:
 	ldto_werp HL, 0xFA
 
-LABEL_F5329F:
+FileIO_ReadDir_Return:
 	pop xiz
 	ret
 
@@ -7810,26 +7810,26 @@ SeqByteBlock_DispatchJumpTable:
 	.byte 0xb2, 0x32, 0xf5, 0x00, 0xb1, 0x32, 0xf5, 0x00
 	.byte 0xbb, 0x32, 0xf5, 0x00, 0xb1, 0x32, 0xf5, 0x00
 
-LABEL_F532B1:
+SeqDispatch_ReturnNop:
 	ret
 
-LABEL_F532B2:
+SeqDispatch_ResetAndValidate:
 	call AccBuf_ResetAllPositions
 	call RhythmROM_ValidateHeader
 	ret
 
-LABEL_F532BB:
+SeqDispatch_InitWithPayload:
 	call LABEL_F54422
 	call SubCPU_Payload_GetErrorFlag
 	cps hl, 0
-	jr z, LABEL_F532CB
+	jr z, SeqDispatch_PostInit
 	call AccDemo_Init_Wrap
 
-LABEL_F532CB:
+SeqDispatch_PostInit:
 	anddi8 13043, 254
 	ret
 
-LABEL_F532D1:
+SeqDispatch_TrampolineBlock:
 	.byte 0x1b, 0xdc, 0x32, 0xf5, 0x0e, 0x1b, 0xdd, 0x32
 	.byte 0xf5, 0x0e, 0x0e, 0x0e, 0x1e, 0x42, 0x11, 0x0e
 
@@ -7838,7 +7838,7 @@ Seq_DispatcherEntry:
 
 VoiceParam_ClampAndValidate_Tramp:
 	jp VoiceParam_ClampAndValidate
-LABEL_F532E9:
+SeqDispatch_TrampolineB:
 	.byte 0x1b, 0xae, 0x5b, 0xf5
 
 Rhythm_DispatchNote_Tramp:
@@ -7856,7 +7856,7 @@ Rhythm_NoteDispatchWrapper:
 RhythmPart_CopyData_Tramp:
 	jp RhythmPart_CopyData
 
-LABEL_F53302:
+Rhythm_LookupTempoVelocity_Wrap:
 	push xiz
 	call AccStyle_LookupTempoAndVelocity
 	pop xiz
@@ -7870,7 +7870,7 @@ Rhythm_DispatchNote_Finalize:
 
 Rhythm_TransposeWithMod_Tramp:
 	jp Rhythm_TransposeWithMod
-LABEL_F53314:
+Rhythm_TransposeTrampBlock:
 	.byte 0x1b, 0xe9, 0x5b, 0xf5
 
 Seq_DispatcherTick:
@@ -7878,15 +7878,15 @@ Seq_DispatcherTick:
 	jr c, Seq_DispatcherTick_Process
 	cpdi8 36150, 22
 	jr ugt, Seq_DispatcherTick_Process
-	jr LABEL_F53366
+	jr Seq_DispatcherTickReturn
 
 Seq_DispatcherTick_Process:
 	call RhythmROM_CheckValid
 	cps c, 0
-	jr nz, LABEL_F53366
-	calr LABEL_F53367
-	call LABEL_F534F4
-	calr LABEL_F53509
+	jr nz, Seq_DispatcherTickReturn
+	calr SeqTick_ReadControlState
+	call Seq_ReadTempoLookup
+	calr Seq_ProcessAllInputState
 	call Rhythm_CompareAndTrigger
 	anddi8 13044, 159
 	call AccTick_Main
@@ -7899,17 +7899,17 @@ Seq_DispatcherTick_Process:
 	call AccStyle_Entry
 	call AccProcess_Entry
 
-LABEL_F53366:
+Seq_DispatcherTickReturn:
 	ret
 
-LABEL_F53367:
+SeqTick_ReadControlState:
 	ldda8 a, 64602
 	stda8 13045, a
 	ldda8 a, 64603
 	and a, 0x7F
 	and a, 0x7
 	stda8 13047, a
-	calr LABEL_F5341D
+	calr VoiceParam_ClampAndStore
 	nop
 	nop
 	nop
@@ -7921,45 +7921,45 @@ LABEL_F53367:
 	ldda8 w, 64607
 	xor a, a
 	bit 6, w
-	jr z, LABEL_F533A0
+	jr z, SeqCtl_CheckBit6
 	or a, 0x1
 
-LABEL_F533A0:
+SeqCtl_CheckBit6:
 	bit 7, w
-	jr z, LABEL_F533A8
+	jr z, SeqCtl_CheckBit7
 	or a, 0x2
 
-LABEL_F533A8:
+SeqCtl_CheckBit7:
 	stda8 13051, a
 	xor a, a
 	bit 4, w
-	jr z, LABEL_F533B6
+	jr z, SeqCtl_CheckBit4
 	or a, 0x1
 
-LABEL_F533B6:
+SeqCtl_CheckBit4:
 	bit 5, w
-	jr z, LABEL_F533BE
+	jr z, SeqCtl_CheckBit5
 	or a, 0x2
 
-LABEL_F533BE:
+SeqCtl_CheckBit5:
 	stda8 13053, a
 	xor a, a
 	bit 2, w
-	jr z, LABEL_F533CC
+	jr z, SeqCtl_CheckBit2
 	or a, 0x1
 
-LABEL_F533CC:
+SeqCtl_CheckBit2:
 	bit 3, w
-	jr z, LABEL_F533D4
+	jr z, SeqCtl_CheckBit3
 	or a, 0x2
 
-LABEL_F533D4:
+SeqCtl_CheckBit3:
 	ldda8 w, 64608
 	bit 2, w
-	jr z, LABEL_F533E0
+	jr z, SeqCtl_StorePedalFlags
 	or a, 0x4
 
-LABEL_F533E0:
+SeqCtl_StorePedalFlags:
 	stda8 13055, a
 	ldda8 a, 64921
 	and a, 0x1
@@ -7975,14 +7975,14 @@ LABEL_F533E0:
 	stda8 13061, a
 	xor a, a
 	bitda 2, 64941
-	jr nz, LABEL_F53418
+	jr nz, SeqCtl_StoreKeyMask
 	or a, 0x3F
 
-LABEL_F53418:
+SeqCtl_StoreKeyMask:
 	stda8 13063, a
 	ret
 
-LABEL_F5341D:
+VoiceParam_ClampAndStore:
 	ldda8 l, 13045
 	ldda8 h, 13047
 	calr VoiceParam_ClampAndValidate
@@ -7994,26 +7994,26 @@ LABEL_F5341D:
 
 VoiceParam_ClampAndValidate:
 	cp l, 0x80
-	jr c, LABEL_F5345A
+	jr c, VoiceParam_Clamp_LookupTable
 	cp l, 0xF0
-	jr c, LABEL_F5344B
+	jr c, VoiceParam_Clamp_CheckBank
 	ldb h, 0x0
 	and l, 0xF
 	or l, 0x80
 	jr TableLoad_Return
 
-LABEL_F5344B:
+VoiceParam_Clamp_CheckBank:
 	cps h, 7
-	jr ule, LABEL_F53451
+	jr ule, VoiceParam_Clamp_CheckRange
 	xor h, h
 
-LABEL_F53451:
+VoiceParam_Clamp_CheckRange:
 	cp l, 0x9D
 	jr ule, TableLoad_Return
 	xor l, l
 	jr TableLoad_Return
 
-LABEL_F5345A:
+VoiceParam_Clamp_LookupTable:
 	ld xwa, 0xE4638A
 	sla l, 1
 	and h, 0x7F
@@ -8023,7 +8023,7 @@ LABEL_F5345A:
 TableLoad_Return:
 	ret
 
-LABEL_F5346E:
+Rhythm_InitDataBlock:
 	.byte 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 121
 
@@ -8031,7 +8031,7 @@ Rhythm_QueuePartChangeEvent:
 	call SwbtWr_QueuePostEvent
 	ret
 
-LABEL_F534F4:
+Seq_ReadTempoLookup:
 	xor xhl, xhl
 	ldda16 xwa, 1033
 	ld l, a
@@ -8040,17 +8040,17 @@ LABEL_F534F4:
 	stda16 13131, xwa
 	ret
 
-LABEL_F53509:
+Seq_ProcessAllInputState:
 	ldda8 a, 12931
 	and a, 0xFE
 	bitda 2, 1054
-	jr z, LABEL_F53519
+	jr z, Seq_InputState_StoreFlag
 	or a, 0x1
 
-LABEL_F53519:
+Seq_InputState_StoreFlag:
 	stda8 12931, a
-	calr LABEL_F53597
-	calr LABEL_F53733
+	calr AccKey_ScanAndSetDirty
+	calr AccState_ReadAccompParams
 	calr LABEL_F5375E
 	calr AccChord_ReadAndStoreKeys
 	calr LABEL_F5377C
@@ -8068,58 +8068,58 @@ LABEL_F53519:
 	stda16 12925, xbc
 	stdi8 13033, 24
 	bitda 0, 12931
-	jr z, LABEL_F5358E
+	jr z, AccInput_CheckRecordMode
 	call AccTuning_DisableIfNoStyle
 	bitda 0, 13155
-	jr nz, LABEL_F5356A
+	jr nz, AccInput_ProcessWithPedal
 	calr AccPedal_ProcessAllChanges
 
-LABEL_F5356A:
+AccInput_ProcessWithPedal:
 	calr LABEL_F53898
 	calr LABEL_F5396F
 	calr LABEL_F53A12
 	calr LABEL_F53AA7
 	calr LABEL_F53AE2
 	bitda 0, 13155
-	jr z, LABEL_F53582
+	jr z, AccInput_CompareAndCheck
 	calr LABEL_F53B3D
 
-LABEL_F53582:
+AccInput_CompareAndCheck:
 	calr AccChord_CompareAndSetDirty
 	calr LABEL_F53CCA
 	call AccTuning_CheckChange
-	jr LABEL_F53596
+	jr AccInput_Return
 
-LABEL_F5358E:
+AccInput_CheckRecordMode:
 	call AccStyle_CheckRecordMode
 	call AccStyle_DetectChanges
 
-LABEL_F53596:
+AccInput_Return:
 	ret
 
-LABEL_F53597:
+AccKey_ScanAndSetDirty:
 	push xbc
 	anddi8 12932, 253
 	ldb a, 0x1
 	ld xhl, 0xF1A0
 	xor c, c
 
-LABEL_F535A6:
+AccKey_ScanLoop:
 	cp c, 0x10
-	jr z, LABEL_F535C4
+	jr z, AccKey_ScanDone
 	cp (xhl), 0xD
-	jr z, LABEL_F535B9
+	jr z, AccKey_FoundActiveKey
 	sla wa, 1
 	inc 1, xhl
 	inc 1, c
-	jr LABEL_F535A6
+	jr AccKey_ScanLoop
 
-LABEL_F535B9:
+AccKey_FoundActiveKey:
 	andda16 xwa, 61854
-	jr z, LABEL_F535C4
+	jr z, AccKey_ScanDone
 	ordi8 12932, 2
 
-LABEL_F535C4:
+AccKey_ScanDone:
 	pop xbc
 	ret
 
@@ -8133,7 +8133,7 @@ AccChord_ReadAndStoreKeys:
 	ldda8 a, 52958
 	stda8 13015, a
 	cpdi8 8968, 0
-	jr z, LABEL_F5360D
+	jr z, AccChord_CheckKeyOverride
 	ldda8 a, 8962
 	stda8 13017, a
 	ldda8 a, 8960
@@ -8143,35 +8143,35 @@ AccChord_ReadAndStoreKeys:
 	ldda8 a, 8966
 	stda8 13015, a
 
-LABEL_F5360D:
+AccChord_CheckKeyOverride:
 	bitda 1, 13015
-	jr nz, LABEL_F5361B
+	jr nz, AccChord_CheckUIState
 	ldda8 a, 13017
 	stda8 13018, a
 
-LABEL_F5361B:
+AccChord_CheckUIState:
 	cpdi8 36148, 14
-	jr nz, LABEL_F5366D
+	jr nz, AccChord_CheckUIStateExit
 	cpdi8 36150, 177
-	jr z, LABEL_F53630
+	jr z, AccChord_CheckKeyFlags
 	cpdi8 36150, 176
-	jr nz, LABEL_F53639
+	jr nz, AccChord_SetDefaultKeys
 
-LABEL_F53630:
+AccChord_CheckKeyFlags:
 	ldda8 a, 1054
 	and a, 0x18
-	jr nz, LABEL_F5366D
+	jr nz, AccChord_CheckUIStateExit
 
-LABEL_F53639:
+AccChord_SetDefaultKeys:
 	stdi8 13015, 0
 	stdi8 13016, 1
 	stdi8 36162, 1
 	bitda 4, 13546
-	jr z, LABEL_F53658
+	jr z, AccChord_ReadChannelKeys
 	stdi8 13016, 5
 	stdi8 36162, 5
 
-LABEL_F53658:
+AccChord_ReadChannelKeys:
 	ldda8 a, 13545
 	and a, 0xF
 	inc 1, a
@@ -8179,18 +8179,18 @@ LABEL_F53658:
 	stda8 36160, a
 	stda8 13018, a
 
-LABEL_F5366D:
+AccChord_CheckUIStateExit:
 	cpdi8 36148, 14
-	jr z, LABEL_F5368E
+	jr z, AccChord_CheckModeAndUpdate
 	cpdi8 13041, 14
-	jr nz, LABEL_F5368E
+	jr nz, AccChord_CheckModeAndUpdate
 	ldda8 a, 52959
 	stda8 36162, a
 	ldda8 a, 52960
 	stda8 36160, a
 	calr AccDisplay_RefreshIfDiskActive
 
-LABEL_F5368E:
+AccChord_CheckModeAndUpdate:
 	ldda8 a, 13076
 	orda8 a, 13077
 	and a, 0x3F
@@ -8216,10 +8216,10 @@ LABEL_F5368E:
 	stda8 36164, a
 	stda8 8964, a
 	cpda8 a, 13021
-	jr nz, LABEL_F536F1
+	jr nz, AccChord_CompareNoteC
 	stdi8 36164, 0
 
-LABEL_F536F1:
+AccChord_CompareNoteC:
 	ldda8 a, 13019
 	stda8 13015, a
 	stda8 52958, a
@@ -8244,14 +8244,14 @@ AccDisplay_RefreshIfDiskActive:
 	ldda8 a, 64605
 	and a, 0x7
 	cps a, 0
-	jr z, LABEL_F53731
+	jr z, AccDisplay_RefreshDone
 	call BitMapOut_CheckDiskAndApply
 
-LABEL_F53731:
+AccDisplay_RefreshDone:
 	pop xwa
 	ret
 
-LABEL_F53733:
+AccState_ReadAccompParams:
 	ldb a, 0x0
 	ei 6
 	stda8 1124, a

@@ -227,24 +227,24 @@
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 64
 Naka_DrawbarOrgan_Screens:
-	.long LABEL_F50C83
-	.long LABEL_F5133C
-	.long LABEL_F51352
-	.long LABEL_F515DF
-	.long LABEL_F515F4
-	.long LABEL_F51609
-	.long LABEL_F51647
-	.long LABEL_F5173E
-	.long LABEL_F517EC
-	.long LABEL_F5182B
-	.long LABEL_F519F7
-	.long LABEL_F519FD
-	.long LABEL_F51A9C
-	.long LABEL_F519FA
-	.long LABEL_F51BB8
-	.long LABEL_F51CE4
-	.long LABEL_F51E10
-	.long LABEL_F51E18
+	.long SeqByteBlock_ChannelContainer
+	.long SeqChan_SetupAndCallHelper
+	.long SeqChan_InitChannelState
+	.long SeqChan_ProcessEventArg0
+	.long SeqChan_ProcessEventArg1
+	.long SeqChan_ValidateAndDispatch
+	.long SeqChan_TraverseAndProcess
+	.long SeqChan_ReadNextFromLoop
+	.long SeqChan_WritePatchData
+	.long SeqChan_WriteExtendedPatch
+	.long SeqChan_ByteBlockA
+	.long SeqChan_ByteBlockC
+	.long SeqChan_ByteBlockD
+	.long SeqChan_ByteBlockB
+	.long SeqChan_ByteBlockE
+	.long SeqChan_ByteBlockF
+	.long FDC_ReturnZeroLong
+	.long FDC_ReturnAndPop
 	.byte 0x01, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x9c, 0xe3
 	.byte 0x03, 0x00, 0x74, 0xe3, 0x03, 0x00, 0x14, 0x50
