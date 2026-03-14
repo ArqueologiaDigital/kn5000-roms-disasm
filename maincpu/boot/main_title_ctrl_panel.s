@@ -70,7 +70,7 @@ LABEL_F980A0:
 	cps l, 0
 	jr z, LABEL_F980A0
 
-	call LABEL_FA9F45
+	call RootContext_InitEventQueue
 	call DispatchEvent
 	call PostTitle_Function
 	cps hl, 0

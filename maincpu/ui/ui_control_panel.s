@@ -1988,7 +1988,7 @@ LABEL_F9870A:
 	ld xwa, 0xFFFFFFFF			; broadcast target
 	ld xbc, 0x01C00038			; key press event code
 LABEL_F9873B:
-	jp LABEL_FA9945				; tail-call EventDispatch_Direct
+	jp EventDispatch_Direct				; tail-call EventDispatch_Direct
 LABEL_F9873F:
 	inc 2, xix				; advance to next 16-bit entry
 	cpw (xix), 0xFFFF			; check for end-of-list
