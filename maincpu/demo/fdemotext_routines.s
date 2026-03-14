@@ -2154,23 +2154,23 @@ Seq_InitVoiceLoop:
 	pop xiz
 	ret
 
-LABEL_F862AE:
+Seq_PostProcessDisplay:
 	.byte 0xd2, 0x82, 0x5b, 0x02, 0x20, 0x68, 0x00
 
-LABEL_F862B5:
+Seq_CopyResourcePtrs:
 	lda_24 xde, 0x024fd8
 	lda_24 xhl, 0xea0006
 	ld xbc, xde
 	st_dri3b B, 0xE9, 0xFC, 0x01
 
-LABEL_F862C6:
+Seq_CopyPtrLoop:
 	st_dpil XHL, 0xE6
 	cp xbc, xde
-	jr ule, LABEL_F862C6
+	jr ule, Seq_CopyPtrLoop
 	cp wa, 0x12
-	jr lt, LABEL_F862F8
+	jr lt, Seq_UseFallbackAddr
 	cp wa, 0x12
-	jr gt, LABEL_F862F8
+	jr gt, Seq_UseFallbackAddr
 	sub wa, 0x12
 	exts xwa
 	ld xbc, xwa
@@ -2180,13 +2180,13 @@ LABEL_F862C6:
 	add xbc, 0x880000
 	ld xwa, (xbc + 4)
 	st32_24 0x0249cc, xwa
-	jr LABEL_F86302
+	jr Seq_StoreResultAddr
 
-LABEL_F862F8:
+Seq_UseFallbackAddr:
 	ld32_24 xwa, 0x0249d0
 	st32_24 0x0249cc, xwa
 
-LABEL_F86302:
+Seq_StoreResultAddr:
 	ld32_24 xwa, 0x0249cc
 	st32_24 0x0249d4, xwa
 	ret
@@ -2233,7 +2233,7 @@ Seq_InitializeAndStart:
 ;   Fills buffer with spaces (0x20), calls FF0FA0 for name lookup,
 ;   FF0CF3 for format, configures via F88BC7, calls F88EE0/F88F39/F88F10.
 ; =============================================================================
-LABEL_F86360:
+Seq_LoadDisplayResource:
 	lda xsp, (xsp - 32)
 	push xiz				; 4 bytes, frame = 36
 	ld xiz, xwa				; XIZ = caller arg
@@ -2244,22 +2244,22 @@ LABEL_F86360:
 	call GetDiskSizeInfo				; get display state
 	extz hl					; zero-extend result
 	cps hl, 1				; state == 1?
-	jr z, LABEL_F86394			; special case
+	jr z, Seq_LoadResource_SpecialCase			; special case
 	cps hl, 5				; state == 5?
-	jr z, LABEL_F8638F			; error
+	jr z, Seq_LoadResource_Error			; error
 	cps hl, 0				; state == 0?
-	jr z, LABEL_F8638F			; error
+	jr z, Seq_LoadResource_Error			; error
 	call GetEncodedFileSizeData				; validate resource
 	cps hl, 0
-	jr ge, LABEL_F86399			; valid, proceed
+	jr ge, Seq_LoadResource_Proceed			; valid, proceed
 	jr Seq_Epilogue32				; error, cleanup
-LABEL_F8638F:
+Seq_LoadResource_Error:
 	ldw hl, 0xFFF9				; error code -7
 	jr Seq_Epilogue32
-LABEL_F86394:
+Seq_LoadResource_SpecialCase:
 	ldw hl, 0xFFF8				; error code -8
 	jr Seq_Epilogue32
-LABEL_F86399:
+Seq_LoadResource_Proceed:
 	push xiz				; push resource arg
 	lda xwa, (xsp + 8)			; buffer (adjusted for push)
 	push xwa
@@ -2287,7 +2287,7 @@ Seq_Epilogue32:
 	lda xsp, (xsp + 32)
 	ret
 
-LABEL_F863E4:
+Seq_LoadNamedResource:
 	; --- Load named display resource with string fill ---
 	lda xsp, (xsp - 32)
 	push xiz
@@ -2295,10 +2295,10 @@ LABEL_F863E4:
 	lda xbc, (xsp + 4)			; XBC = local buffer
 	ld xwa, xbc				; XWA = buffer pointer
 	lda xbc, (xbc + 32)			; XBC = end of buffer
-LABEL_F863F2:
+Seq_FillBufferLoop:
 	.byte 0xf5, 0xe0, 0x00, 0x20		; ld (xwa+), 0x20  [auto-inc store, not in LLVM]
 	cp xwa, xbc				; reached end?
-	jr c, LABEL_F863F2			; no, continue filling
+	jr c, Seq_FillBufferLoop			; no, continue filling
 	push xiz				; push name arg
 	call Strlen				; name lookup (strlen?)
 	pushw hl				; push length
@@ -2317,7 +2317,7 @@ LABEL_F863F2:
 	ld xbc, 0x00EA006C			; resource descriptor
 	call FileIO_OpenWithMode				; open display resource
 	cps hl, 0
-	jr lt, LABEL_F8646C			; failed
+	jr lt, Seq_NamedResource_Epilogue			; failed
 	lds32	xwa, 0
 	lds	bc, 2
 	call FileIO_SeekAndReadBlock				; set region param
@@ -2335,11 +2335,11 @@ LABEL_F863F2:
 	calr	61108
 	call FileIO_CloseHandle			; finalize
 	cps hl, 0
-	jr nz, LABEL_F8646C			; finalize failed
-	calr LABEL_F862AE			; post-processing
+	jr nz, Seq_NamedResource_Epilogue			; finalize failed
+	calr Seq_PostProcessDisplay			; post-processing
 	lds	wa, 1
 	calr FDemoText_ProcessMarkupLoop			; additional display update
-LABEL_F8646C:
+Seq_NamedResource_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 32)
 	ret
@@ -2351,18 +2351,18 @@ FDemoText_ProcessMarkupLoop:
 	ld32_24 xwa, 0x0249cc
 	st32_24 0x0249d4, xwa
 	cp (xwa), 0x0
-	jr z, LABEL_F8649C
+	jr z, FDemoText_MarkupDone
 
-LABEL_F86483:
+FDemoText_MarkupLoop:
 	ld32_24 xwa, 0x0249d4
 	ld bc, iz
 	calr FDemoText_ProcessTextMarkup
 	st32_24 0x0249d4, xhl
 	ld32_24 xwa, 0x0249d4
 	cp (xwa), 0x0
-	jr nz, LABEL_F86483
+	jr nz, FDemoText_MarkupLoop
 
-LABEL_F8649C:
+FDemoText_MarkupDone:
 	lds hl, 0
 	popw iz
 	ret
