@@ -23,7 +23,10 @@ PARAMBLOCK_BINS = $(patsubst %,maincpu/includes/generated/style_ui_paramblock_%.
 SCREENDATA_NAMES = ctlonly main meascursor yesctl
 SCREENDATA_BINS = $(patsubst %,maincpu/includes/generated/style_ui_screendata_%.bin,$(SCREENDATA_NAMES))
 
-C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS)
+ACCOMP_NAMES = accomp_section_widget accomp_part_widget accomp_display_full
+ACCOMP_BINS = $(patsubst %,maincpu/includes/generated/%.bin,$(ACCOMP_NAMES))
+
+C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS)
 
 maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/paramblock/%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
@@ -32,6 +35,12 @@ maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/parambloc
 	@rm -f $@.o
 
 maincpu/includes/generated/style_ui_screendata_%.bin: maincpu/style_ui/%.c maincpu/style_ui/screendata_types.h
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/style_ui -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+maincpu/includes/generated/accomp_%.bin: maincpu/sequencer/accomp_screens/accomp_%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/style_ui -o $@.o $<
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
