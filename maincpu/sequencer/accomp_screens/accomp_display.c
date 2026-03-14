@@ -34,13 +34,13 @@ _Static_assert(sizeof(screendata_accomp_display_t) == 277,
 
 const screendata_accomp_display_t accomp_display
 	__attribute__((section(".text"), used)) = {
-	.widget_0 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39b8, .flags = 0x000f, .ref_tag = 0x06, .handler = 0x00f6ad9e, .param = 2, .x = 134, .y = 27 },
-	.widget_1 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39ba, .flags = 0x000f, .ref_tag = 0x06, .handler = 0x00f6adb6, .param = 2, .x = 136, .y = 27 },
+	.widget_0 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39b8, .flags = 0x000f, .ref_tag = 0x06, .handler = SD_PTR(string_0), .param = 2, .x = 134, .y = 27 },
+	.widget_1 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39ba, .flags = 0x000f, .ref_tag = 0x06, .handler = SD_PTR(string_0) + 24, .param = 2, .x = 136, .y = 27 },
 	.labeled_ref_0 = { .opcode = SD_OP_LABELED_REF, .length = 8, .addr = 0x1b8b, .label = { 'V', ' ', ' ', ' ' } },
 	.nop_0 = { .opcode = 0x00, .length = 0x0a, .data = { 0xbb, 0x39, 0x7f, 0x00, 0x06, 0x8c, 0x1b, 0x02 } },
 	.nop_1 = { .opcode = 0x00, .length = 0x0a, .data = { 0xbb, 0x39, 0x7f, 0x00, 0x06, 0x8c, 0x1b, 0x03 } },
-	.widget_2 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39bb, .flags = 0x000f, .ref_tag = 0x06, .handler = 0x00f6adcc, .param = 3, .x = 144, .y = 27 },
-	.widget_3 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39bc, .flags = 0x000f, .ref_tag = 0x06, .handler = 0x00f6adfc, .param = 5, .x = 148, .y = 27 },
+	.widget_2 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39bb, .flags = 0x000f, .ref_tag = 0x06, .handler = SD_PTR(string_0) + 46, .param = 3, .x = 144, .y = 27 },
+	.widget_3 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39bc, .flags = 0x000f, .ref_tag = 0x06, .handler = SD_PTR(string_2) + 6, .param = 5, .x = 148, .y = 27 },
 	.widget_4 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39bb, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00f6ae4c, .param = 4, .x = 154, .y = 27 },
 	.string_0 = { .opcode = SD_OP_STRING, .length = 67, .x = 67, .y = 140, .text = { ' ', 'D', 'D', LCD_CHAR_SHARP, ' ', 'E', ' ', 'F', 'F', LCD_CHAR_SHARP, ' ', 'G', 'G', LCD_CHAR_SHARP, ' ', 'A', 'A', LCD_CHAR_SHARP, ' ', 'B', '-', '2', '-', '1', '0', ' ', '1', ' ', '2', ' ', '3', ' ', '4', ' ', '5', ' ', '6', ' ', '7', ' ', '8', ' ', ' ', ' ', ' ', ' ', 0x18, 0x1f, ' ', 0x18, ' ', ' ', 0x17, 0x1f, ' ', 0x17, ' ', ' ', 0x16, 0x1f, ' ', 0x16, ' ' } },
 	.string_1 = { .opcode = SD_OP_STRING, .length = 21, .x = 31, .y = 32, .text = { 0x15, ' ', ' ', 0x14, ' ', ' ', 0x13, ' ', 0x13, 0x8b, '2', 0x13, 0x8b, '3', 0x13, 0x8b, '4' } },

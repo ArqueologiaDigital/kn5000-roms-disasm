@@ -311,6 +311,34 @@ class ScreenDataCGenerator:
         self.base_addr = base_addr
         self.struct_name = struct_name or f"screendata_{block_name}_t"
         self.total_size = sum(c.size for c in commands)
+        # Build offset→field_name map for SD_PTR resolution
+        self._offset_to_field = {}
+        counters = {}
+        for cmd in commands:
+            name = cmd.name.lower()
+            idx = counters.get(name, 0)
+            counters[name] = idx + 1
+            self._offset_to_field[cmd.offset] = self._field_name(cmd, idx)
+
+    def _resolve_handler(self, handler_addr):
+        """Resolve a handler address to SD_PTR expression if self-referential."""
+        offset = handler_addr - self.base_addr
+        if 0 <= offset < self.total_size:
+            # Find the field containing this offset
+            best_field = None
+            best_off = -1
+            for cmd in self.commands:
+                if cmd.offset <= offset < cmd.offset + cmd.size:
+                    fname = self._offset_to_field.get(cmd.offset)
+                    if fname:
+                        delta = offset - cmd.offset
+                        if delta == 0:
+                            return f'SD_PTR({fname})'
+                        else:
+                            return f'SD_PTR({fname}) + {delta}'
+            # Exact field not found, use raw offset
+            return f'SD_PTR({list(self._offset_to_field.values())[0]}) + {offset}'
+        return None
 
     def generate_c(self):
         """Generate complete C source with struct definition and initializer."""
@@ -503,7 +531,8 @@ class ScreenDataCGenerator:
                     f'.bottom_right = {{ .x = {br[0]}, .y = {br[1]} }} }},')
 
         elif cmd.name == 'WIDGET':
-            handler_str = f'0x{f["handler"]:08x}'
+            sd_ptr = self._resolve_handler(f['handler'])
+            handler_str = sd_ptr if sd_ptr else f'0x{f["handler"]:08x}'
             return (f'{{ .opcode = 0x02, .subtype = 0x{f["subtype"]:02x}, '
                     f'.id = 0x{f["id"]:04x}, .flags = 0x{f["flags"]:04x}, '
                     f'.ref_tag = 0x{f["ref_tag"]:02x}, .handler = {handler_str}, '
