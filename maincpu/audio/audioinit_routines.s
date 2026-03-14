@@ -14,7 +14,7 @@ AudioInit_ConfigStereoVoice:
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x3
-	jrl c, LABEL_FDEA45
+	jrl c, AudioInit_VoiceNotConfigured
 	ldda8 a, 36154
 	extz wa
 	lda_24 xbc, 0xee8e62
@@ -23,78 +23,78 @@ AudioInit_ConfigStereoVoice:
 	ld a, (xwa)
 	stda8 49663, a
 	cp a, 0xFF
-	jr z, LABEL_FDEA45
+	jr z, AudioInit_VoiceNotConfigured
 	ordi16 50588, 2
 	ldda16 xwa, 50584
 	and wa, 0x6
-	jr nz, LABEL_FDE9F7
+	jr nz, AudioInit_CheckVoiceMixFlags
 	ldda16 xwa, 50584
 	and wa, 0x60
-	jr nz, LABEL_FDEA1B
+	jr nz, AudioInit_SetDefaultLevels
 
-LABEL_FDE9F7:
+AudioInit_CheckVoiceMixFlags:
 	ldda16 xwa, 50582
 	and wa, 0x7
-	jr z, LABEL_FDEA1B
+	jr z, AudioInit_SetDefaultLevels
 	ldda16 xwa, 50580
 	bit 4, wa
-	jr nz, LABEL_FDEA10
+	jr nz, AudioInit_ClearModeRegister
 	setda 3, 49662
-	jr LABEL_FDEA15
+	jr AudioInit_AfterModeSet
 
-LABEL_FDEA10:
+AudioInit_ClearModeRegister:
 	stdi8 49662, 0
 
-LABEL_FDEA15:
+AudioInit_AfterModeSet:
 	ordi16 50588, 1
 
-LABEL_FDEA1B:
+AudioInit_SetDefaultLevels:
 	stdi8 49850, 255
 	stdi8 49851, 255
 	bitda 5, 63991
-	jr nz, LABEL_FDEA30
+	jr nz, AudioInit_CheckBit5_FD07
 	stdi8 49668, 2
 
-LABEL_FDEA30:
+AudioInit_CheckBit5_FD07:
 	bitda 5, 64433
-	jr nz, LABEL_FDEA3B
+	jr nz, AudioInit_CheckBit5_FBF1
 	stdi8 49688, 22
 
-LABEL_FDEA3B:
+AudioInit_CheckBit5_FBF1:
 	ordi16 50588, 260
 	jp AudioInit_ConfigurePanning
 
-LABEL_FDEA45:
+AudioInit_VoiceNotConfigured:
 	stdi8 49663, 255
 	ordi16 50588, 3
 	ldda16 xwa, 50584
 	and wa, 0x6
-	jr nz, LABEL_FDEA64
+	jr nz, AudioInit_CheckMixFlagsAlt
 	ldda16 xwa, 50584
 	and wa, 0x60
-	jr nz, LABEL_FDEA8E
+	jr nz, AudioInit_RouteAndPan
 
-LABEL_FDEA64:
+AudioInit_CheckMixFlagsAlt:
 	ldda16 xwa, 50582
 	and wa, 0x7
-	jr nz, LABEL_FDEA74
+	jr nz, AudioInit_CheckBit2Mode
 	bitda 2, 49662
-	jr z, LABEL_FDEA8E
+	jr z, AudioInit_RouteAndPan
 
-LABEL_FDEA74:
+AudioInit_CheckBit2Mode:
 	ldda16 xwa, 50580
 	bit 4, wa
-	jr nz, LABEL_FDEA83
+	jr nz, AudioInit_ClearModeAlt
 	setda 3, 49662
-	jr LABEL_FDEA88
+	jr AudioInit_AfterModeSetAlt
 
-LABEL_FDEA83:
+AudioInit_ClearModeAlt:
 	stdi8 49662, 0
 
-LABEL_FDEA88:
+AudioInit_AfterModeSetAlt:
 	ordi16 50588, 1
 
-LABEL_FDEA8E:
+AudioInit_RouteAndPan:
 	call AudioInit_ConfigureVoiceRouting
 	call AudioInit_ConfigurePanning
 	jp AudioInit_CheckStereoMode
@@ -102,7 +102,7 @@ LABEL_FDEA8E:
 AudioInit_ConfigureVoiceFromFlags:
 	ldda16 xbc, 50584
 	bit 0, bc
-	jr z, LABEL_FDEADF
+	jr z, AudioInit_FallbackToStereo
 	ldmm8 49663, 50590
 	ordi16 50588, 2
 	ldda16 xwa, 50584
@@ -113,50 +113,50 @@ AudioInit_ConfigureVoiceFromFlags:
 	jr z, AudioInit_VoiceRouteJump
 	ldda16 xwa, 50580
 	bit 4, wa
-	jr nz, LABEL_FDEAD2
+	jr nz, AudioInit_ClearModeFromFlags
 	setda 3, 49662
 	jr AudioInit_VoiceRouteJump
 
-LABEL_FDEAD2:
+AudioInit_ClearModeFromFlags:
 	stdi8 49662, 0
 
 AudioInit_VoiceRouteJump:
 	call AudioInit_ConfigureVoiceRouting
 	jp AudioInit_ConfigurePanning
 
-LABEL_FDEADF:
+AudioInit_FallbackToStereo:
 	extz wa
 	jrl AudioInit_ConfigStereoVoice
 
-LABEL_FDEAE4:
+AudioInit_SelectVoiceByType:
 	ldda8 a, 14235
 	cp a, 0x60
 	jr z, AudioInit_StereoVoiceCfg
 	cp a, 0x10
 	jr z, AudioInit_StereoVoiceCfg
 	cp a, 0x8
-	jr z, LABEL_FDEB27
+	jr z, AudioInit_SetVoice19
 	cps a, 4
-	jr z, LABEL_FDEB1B
+	jr z, AudioInit_SetVoice18
 	cps a, 2
-	jr z, LABEL_FDEB0F
+	jr z, AudioInit_SetVoice17
 	cps a, 1
 	jr nz, AudioInit_StereoVoiceCfg
 	stdi8 49663, 16
 	ordi16 50588, 2
 	ret
 
-LABEL_FDEB0F:
+AudioInit_SetVoice17:
 	stdi8 49663, 17
 	ordi16 50588, 2
 	ret
 
-LABEL_FDEB1B:
+AudioInit_SetVoice18:
 	stdi8 49663, 18
 	ordi16 50588, 2
 	ret
 
-LABEL_FDEB27:
+AudioInit_SetVoice19:
 	stdi8 49663, 19
 	ordi16 50588, 2
 	ret
@@ -166,7 +166,7 @@ AudioInit_StereoVoiceCfg:
 	ordi16 50588, 2
 	ret
 
-LABEL_FDEB3F:
+AudioInit_PushAndConfigVoice:
 	dec 2, xsp
 	ld (xsp), a
 	cp (xsp), 0x1
@@ -178,138 +178,138 @@ LABEL_FDEB3F:
 	inc 2, xsp
 	ret
 
-LABEL_FDEB5B:
+AudioInit_PushAndConfigVoiceAlt:
 	dec 2, xsp
 	ld (xsp), a
 	cp (xsp), 0x1
 	call_24 z, 0xFDF5F5
 	ldda8 a, 36150
 	cp a, 0xC9
-	jr nz, LABEL_FDEB7D
+	jr nz, AudioInit_LoadStackAndConfig
 	stdi8 49663, 23
 	ordi16 50588, 2
-	jr LABEL_FDEB84
+	jr AudioInit_RestoreStack
 
-LABEL_FDEB7D:
+AudioInit_LoadStackAndConfig:
 	ld a, (xsp)
 	extz wa
 	calr AudioInit_ConfigStereoVoice
 
-LABEL_FDEB84:
+AudioInit_RestoreStack:
 	inc 2, xsp
 	ret
 
-LABEL_FDEB87:
+AudioInit_CheckSoundGroup:
 	cpdi8 36150, 3
-	jr z, LABEL_FDEB95
+	jr z, AudioInit_LoadGroupVoice
 	cpdi8 36150, 8
-	jr nz, LABEL_FDEC11
+	jr nz, AudioInit_GroupFallbackDefault
 
-LABEL_FDEB95:
+AudioInit_LoadGroupVoice:
 	ldda8 c, 36154
 	extz bc
 	lda_24 xde, 0xee8e62
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	stda8 49663, c
 	cp c, 0xFF
-	jr z, LABEL_FDEC0C
+	jr z, AudioInit_GroupFallbackStereo
 	ordi16 50588, 2
 	ldda16 xwa, 50584
 	and wa, 0x60
-	jr nz, LABEL_FDEBE2
+	jr nz, AudioInit_SetGroupLevels
 	ldda16 xwa, 50582
 	and wa, 0x7
-	jr z, LABEL_FDEBE2
+	jr z, AudioInit_SetGroupLevels
 	ldda16 xwa, 50580
 	bit 4, wa
-	jr nz, LABEL_FDEBD7
+	jr nz, AudioInit_ClearGroupMode
 	setda 3, 49662
-	jr LABEL_FDEBDC
+	jr AudioInit_AfterGroupModeSet
 
-LABEL_FDEBD7:
+AudioInit_ClearGroupMode:
 	stdi8 49662, 0
 
-LABEL_FDEBDC:
+AudioInit_AfterGroupModeSet:
 	ordi16 50588, 1
 
-LABEL_FDEBE2:
+AudioInit_SetGroupLevels:
 	stdi8 49850, 255
 	stdi8 49851, 255
 	bitda 5, 63991
-	jr nz, LABEL_FDEBF7
+	jr nz, AudioInit_CheckGroupBit5_FD07
 	stdi8 49668, 2
 
-LABEL_FDEBF7:
+AudioInit_CheckGroupBit5_FD07:
 	bitda 5, 64433
-	jr nz, LABEL_FDEC02
+	jr nz, AudioInit_CheckGroupBit5_FBF1
 	stdi8 49688, 22
 
-LABEL_FDEC02:
+AudioInit_CheckGroupBit5_FBF1:
 	ordi16 50588, 260
 	jp AudioInit_ConfigurePanning
 
-LABEL_FDEC0C:
+AudioInit_GroupFallbackStereo:
 	extz wa
 	jrl AudioInit_ConfigStereoVoice
 
-LABEL_FDEC11:
+AudioInit_GroupFallbackDefault:
 	extz wa
 	jrl AudioInit_ConfigStereoVoice
 
-LABEL_FDEC16:
+AudioInit_CheckSoundGroup51:
 	cpdi8 36150, 81
-	jr nz, LABEL_FDEC99
+	jr nz, AudioInit_G51FallbackDefault
 	ldda8 c, 36154
 	extz bc
 	lda_24 xde, 0xee8e82
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	stda8 49663, c
 	cp c, 0xFF
-	jr z, LABEL_FDEC94
+	jr z, AudioInit_G51FallbackStereo
 	ordi16 50588, 2
 	ldda16 xwa, 50584
 	and wa, 0x60
-	jr nz, LABEL_FDEC6A
+	jr nz, AudioInit_SetGroup51Levels
 	ldda16 xwa, 50582
 	and wa, 0x7
-	jr z, LABEL_FDEC6A
+	jr z, AudioInit_SetGroup51Levels
 	ldda16 xwa, 50580
 	bit 4, wa
-	jr nz, LABEL_FDEC5F
+	jr nz, AudioInit_ClearGroup51Mode
 	setda 3, 49662
-	jr LABEL_FDEC64
+	jr AudioInit_AfterGroup51ModeSet
 
-LABEL_FDEC5F:
+AudioInit_ClearGroup51Mode:
 	stdi8 49662, 0
 
-LABEL_FDEC64:
+AudioInit_AfterGroup51ModeSet:
 	ordi16 50588, 1
 
-LABEL_FDEC6A:
+AudioInit_SetGroup51Levels:
 	stdi8 49850, 255
 	stdi8 49851, 255
 	bitda 5, 63991
-	jr nz, LABEL_FDEC7F
+	jr nz, AudioInit_CheckG51Bit5_FD07
 	stdi8 49668, 2
 
-LABEL_FDEC7F:
+AudioInit_CheckG51Bit5_FD07:
 	bitda 5, 64433
-	jr nz, LABEL_FDEC8A
+	jr nz, AudioInit_CheckG51Bit5_FBF1
 	stdi8 49688, 22
 
-LABEL_FDEC8A:
+AudioInit_CheckG51Bit5_FBF1:
 	ordi16 50588, 260
 	jp AudioInit_ConfigurePanning
 
-LABEL_FDEC94:
+AudioInit_G51FallbackStereo:
 	extz wa
 	jrl AudioInit_ConfigStereoVoice
 
-LABEL_FDEC99:
+AudioInit_G51FallbackDefault:
 	extz wa
 	jrl AudioInit_ConfigStereoVoice
 
-LABEL_FDEC9E:
+AudioInit_CheckMixMode:
 	ldda8 c, 36150
 	cp c, 0x76
 	jr z, AudioInit_LoadAndConfigure
@@ -318,7 +318,7 @@ LABEL_FDEC9E:
 	cp c, 0x72
 	jr z, AudioInit_LoadAndConfigure
 	cp c, 0x6F
-	jr nz, LABEL_FDECEA
+	jr nz, AudioInit_MixFallbackDefault
 
 AudioInit_LoadAndConfigure:
 	ldda8 c, 36154	; LD C, (238D3Ah) - 24-bit addressing mode
@@ -327,7 +327,7 @@ AudioInit_LoadAndConfigure:
 	ld_srib3 C, 0x07, 0xE8, 0xE4
 	stda8 49663, c
 	cp c, 0xFF
-	jr z, LABEL_FDECE4
+	jr z, AudioInit_MixFallbackConfig
 	ordi16 50588, 2
 	ldda16 xwa, 50580
 	bit 4, wa
@@ -335,12 +335,12 @@ AudioInit_LoadAndConfigure:
 	stdi8 49663, 255
 	ret
 
-LABEL_FDECE4:
+AudioInit_MixFallbackConfig:
 	extz wa
 	calr AudioInit_ConfigStereoVoice
 	ret
 
-LABEL_FDECEA:
+AudioInit_MixFallbackDefault:
 	extz wa
 	jrl AudioInit_ConfigStereoVoice
 	extz wa
@@ -365,34 +365,34 @@ AudioInit_VoiceParamCtrl:
 	dec 6, xsp
 	ldb c, 0x0
 	bitda 0, 64851
-	jr z, LABEL_FDED1E
+	jr z, AudioInit_CheckVoiceParamState
 	set 1, c
 
-LABEL_FDED1E:
+AudioInit_CheckVoiceParamState:
 	cpdi8 49663, 255
-	jr nz, LABEL_FDED58
+	jr nz, AudioInit_CompareAndSendMIDI
 	cpdi8 50632, 255
-	jr z, LABEL_FDED4C
+	jr z, AudioInit_CheckBit2VoiceParam
 	set 0, c
 	ldda16 xwa, 50582
 	and wa, 0x80
 	cp wa, 0x80
-	jr nz, LABEL_FDED58
+	jr nz, AudioInit_CompareAndSendMIDI
 	ldda16 xwa, 50582
 	and wa, 0x3
-	jr z, LABEL_FDED58
+	jr z, AudioInit_CompareAndSendMIDI
 	set 4, c
-	jr LABEL_FDED58
+	jr AudioInit_CompareAndSendMIDI
 
-LABEL_FDED4C:
+AudioInit_CheckBit2VoiceParam:
 	ldda16 xwa, 50582
 	bit 2, wa
-	jr z, LABEL_FDED58
+	jr z, AudioInit_CompareAndSendMIDI
 	or c, 0x18
 
-LABEL_FDED58:
+AudioInit_CompareAndSendMIDI:
 	cpdm8 50600, c
-	jr z, LABEL_FDED94
+	jr z, AudioInit_VoiceParamDone
 	stda8 50600, c
 	ld (xsp + 256), 0x4	; LD (XSP + 000h), 004h - explicit displacement encoding
 	ld (xsp + 1), 0xF0
@@ -403,7 +403,7 @@ LABEL_FDED58:
 	call MIDI_SendCmdPacket
 	call MIDI_PostSendStub
 	cpdi8 36148, 13
-	jr z, LABEL_FDED94
+	jr z, AudioInit_VoiceParamDone
 	push xde
 	push xhl
 	push xix
@@ -414,52 +414,52 @@ LABEL_FDED58:
 	pop xhl
 	pop xde
 
-LABEL_FDED94:
+AudioInit_VoiceParamDone:
 	inc 6, xsp
 	ret
 
 AudioInit_DrumRoutingCheck:
 	lds de, 0
 	bitda 2, 49662
-	jr nz, LABEL_FDEDD2
+	jr nz, AudioInit_ProcessVoiceAssign
 	ldda16 xwa, 50584
 	and wa, 0x6
-	jr z, LABEL_FDEDBC
+	jr z, AudioInit_CheckOutputFlags
 	ldda16 xwa, 50584
 	bit 0, wa
-	jr nz, LABEL_FDEDBC
+	jr nz, AudioInit_CheckOutputFlags
 	ldda16 xwa, 50582
 	and wa, 0x3
-	jr nz, LABEL_FDEDD2
+	jr nz, AudioInit_ProcessVoiceAssign
 
-LABEL_FDEDBC:
+AudioInit_CheckOutputFlags:
 	ldda16 xwa, 50584
 	and wa, 0x60
-	jrl nz, LABEL_FDEEF1
+	jrl nz, AudioInit_NoRoutingActive
 	ldda16 xwa, 50582
 	and wa, 0x3
-	jrl z, LABEL_FDEEF1
+	jrl z, AudioInit_NoRoutingActive
 
-LABEL_FDEDD2:
+AudioInit_ProcessVoiceAssign:
 	cpdi8 49663, 255
-	jr nz, LABEL_FDEDE4
+	jr nz, AudioInit_CheckStoredVoice
 	set 3, de
 	ldmm8 50632, 50594
-	jr LABEL_FDEDF3
+	jr AudioInit_UpdateVoiceBank0
 
-LABEL_FDEDE4:
+AudioInit_CheckStoredVoice:
 	cpdi8 50632, 255
-	jr z, LABEL_FDEDEE
+	jr z, AudioInit_ClearStoredVoice
 	set 3, de
 
-LABEL_FDEDEE:
+AudioInit_ClearStoredVoice:
 	stdi8 50632, 255
 
-LABEL_FDEDF3:
+AudioInit_UpdateVoiceBank0:
 	ldda8 a, 49859
 	srl a, 1
 	cpda8 a, 50594
-	jr z, LABEL_FDEE1D
+	jr z, AudioInit_UpdateVoiceBank1
 	setda 7, 49858
 	ldda8 a, 50594
 	res 7, a
@@ -468,11 +468,11 @@ LABEL_FDEDF3:
 	orddm8 49859, a
 	ordi16 50586, 512
 
-LABEL_FDEE1D:
+AudioInit_UpdateVoiceBank1:
 	ldda8 a, 49863
 	srl a, 1
 	cpda8 a, 50594
-	jr z, LABEL_FDEE47
+	jr z, AudioInit_UpdateVoiceBank2
 	setda 7, 49862
 	ldda8 a, 50594
 	res 7, a
@@ -481,13 +481,13 @@ LABEL_FDEE1D:
 	orddm8 49863, a
 	ordi16 50586, 512
 
-LABEL_FDEE47:
+AudioInit_UpdateVoiceBank2:
 	ldda8 a, 50594
 	dec 1, a
 	ldda8 c, 49866
 	res 7, c
 	cp c, a
-	jr z, LABEL_FDEE74
+	jr z, AudioInit_CheckStereoRouting
 	setda 7, 49866
 	ldda8 a, 50594
 	dec 1, a
@@ -496,9 +496,9 @@ LABEL_FDEE47:
 	orddm8 49866, a
 	ordi16 50586, 512
 
-LABEL_FDEE74:
+AudioInit_CheckStereoRouting:
 	bitda 3, 49662
-	jr z, LABEL_FDEEA9
+	jr z, AudioInit_ClearStereoRouting
 	ldda8 a, 50594
 	dec 1, a
 	ldda8 c, 49870
@@ -514,7 +514,7 @@ LABEL_FDEE74:
 	ordi16 50586, 512
 	jr AudioInit_VoiceStereoCheck
 
-LABEL_FDEEA9:
+AudioInit_ClearStereoRouting:
 	ldda8 a, 49870
 	res 7, a
 	cps a, 0
@@ -527,7 +527,7 @@ AudioInit_VoiceStereoCheck:
 	ldda8 a, 49875
 	srl a, 1
 	cpda8 a, 50594
-	jrl z, LABEL_FDEF8E
+	jrl z, AudioInit_UpdateIndicators
 	setda 7, 49874
 	ldda8 a, 50594
 	res 7, a
@@ -535,96 +535,96 @@ AudioInit_VoiceStereoCheck:
 	anddi8 49875, 1
 	orddm8 49875, a
 	ordi16 50586, 512
-	jrl LABEL_FDEF8E
+	jrl AudioInit_UpdateIndicators
 
-LABEL_FDEEF1:
+AudioInit_NoRoutingActive:
 	cpdi8 50632, 255
-	jr z, LABEL_FDEEFB
+	jr z, AudioInit_ClearAllVoiceBanks
 	set 3, de
 
-LABEL_FDEEFB:
+AudioInit_ClearAllVoiceBanks:
 	stdi8 50632, 255
 	ldda8 a, 49859
 	res 0, a
 	cps a, 0
-	jr z, LABEL_FDEF1A
+	jr z, AudioInit_ClearBank1Routing
 	setda 7, 49858
 	anddi8 49859, 1
 	ordi16 50586, 512
 
-LABEL_FDEF1A:
+AudioInit_ClearBank1Routing:
 	ldda8 a, 49863
 	res 0, a
 	cps a, 0
-	jr z, LABEL_FDEF34
+	jr z, AudioInit_ClearBank2Routing
 	setda 7, 49862
 	anddi8 49863, 1
 	ordi16 50586, 512
 
-LABEL_FDEF34:
+AudioInit_ClearBank2Routing:
 	ldda8 a, 49866
 	res 7, a
 	cps a, 0
-	jr z, LABEL_FDEF4E
+	jr z, AudioInit_CheckBit2Routing
 	setda 7, 49866
 	anddi8 49866, 128
 	ordi16 50586, 512
 
-LABEL_FDEF4E:
+AudioInit_CheckBit2Routing:
 	ldda16 xwa, 50582
 	bit 2, wa
-	jr z, LABEL_FDEF74
+	jr z, AudioInit_ClearBank3Routing
 	ldda8 a, 49870
 	res 7, a
 	cp a, 0x7F
-	jr z, LABEL_FDEF8E
+	jr z, AudioInit_UpdateIndicators
 	setda 7, 49870
 	ordi8 49870, 127
 	ordi16 50586, 512
-	jr LABEL_FDEF8E
+	jr AudioInit_UpdateIndicators
 
-LABEL_FDEF74:
+AudioInit_ClearBank3Routing:
 	ldda8 a, 49870
 	res 7, a
 	cps a, 0
-	jr z, LABEL_FDEF8E
+	jr z, AudioInit_UpdateIndicators
 	setda 7, 49870
 	anddi8 49870, 128
 	ordi16 50586, 512
 
-LABEL_FDEF8E:
+AudioInit_UpdateIndicators:
 	bit 3, de
 	ret z
 	ldw wa, 0x45
 	call CtrlPanel_SetIndicatorBit
 	cpdi8 50632, 255
-	jr z, LABEL_FDEFD5
+	jr z, AudioInit_ClearDrumModeAlt
 	ldda8 a, 64770
 	and a, 0x3
-	jr z, LABEL_FDEFCF
+	jr z, AudioInit_ClearDrumMode
 	ldda8 a, 50594
 	cp a, 0x43
-	jr z, LABEL_FDEFC9
+	jr z, AudioInit_SetDrumMode4
 	cp a, 0x3C
-	jr z, LABEL_FDEFC3
+	jr z, AudioInit_SetDrumMode2
 	cp a, 0x37
 	ret nz
 	stdi8 36696, 1
 	ret
 
-LABEL_FDEFC3:
+AudioInit_SetDrumMode2:
 	stdi8 36696, 2
 	ret
 
-LABEL_FDEFC9:
+AudioInit_SetDrumMode4:
 	stdi8 36696, 4
 	ret
 
-LABEL_FDEFCF:
+AudioInit_ClearDrumMode:
 	anddi8 36696, 248
 	ret
 
-LABEL_FDEFD5:
+AudioInit_ClearDrumModeAlt:
 	anddi8 36696, 248
 	ret
 
@@ -636,7 +636,7 @@ AudioInit_ClearPartFlags_ByMode:
 	cp de, 0x1A
 	ret nc
 
-LABEL_FDEFED:
+AudioInit_ClearPartFlags_Loop:
 	ld wa, de
 	add wa, wa
 	ldada xbc, 49954
@@ -646,7 +646,7 @@ LABEL_FDEFED:
 	ordi16 50588, 8
 	inc 1, de
 	cp de, 0x1A
-	jr c, LABEL_FDEFED
+	jr c, AudioInit_ClearPartFlags_Loop
 	ret
 
 AudioInit_SetPartMasks:
