@@ -585,9 +585,9 @@ MidiPart_ConfigNameTable:
 	.byte 0x13, 0x00, 0x12, 0x00, 0x15, 0x00, 0x17, 0x00
 	.byte 0x11, 0x00, 0x10, 0x00, 0xff, 0x00, 0xff, 0x00
 Naka_DrawbarSlider_Resources:
-	.long LABEL_FF00FF
-	.long LABEL_FF00FF
-	.long LABEL_FF00FF
+	.long SendPartDataBlock_Data5
+	.long SendPartDataBlock_Data5
+	.long SendPartDataBlock_Data5
 	.long BitmapBound_DrawbarSlider1_Start
 	.long Bitmap_DrawbarNumberedSlider_1
 	.long Bitmap_DrawbarNumberedSlider_2

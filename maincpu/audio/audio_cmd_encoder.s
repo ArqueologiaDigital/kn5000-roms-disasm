@@ -2892,7 +2892,7 @@ AudioCmd_DecExp_ComputeQuotient:
 	ld xiz, (xsp + 4)
 	ld xwa, xiz
 	ldada xbc, 1000
-	call LABEL_FF0C0A
+	call Free_ClearByte2
 	ld (xsp + 8), xhl
 	ld xwa, xiz
 	ldada xbc, 1000

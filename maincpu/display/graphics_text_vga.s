@@ -3571,7 +3571,7 @@ MainSvariIni:
 	call SndParam_FetchOscTableEntry
 	ld a, (xiz)
 	extz wa
-	call LABEL_FEE4A7
+	call CharMap_ActivePreamb_Prologue2
 	ld (xiz + 3), l
 	ldmi16 (xiz + 4), 0x8D3A
 	ld xwa, 0xFFFFFFFF
@@ -3648,7 +3648,7 @@ MainGetSndGrpName:
 	ld a, (xsp + 4)
 	extz wa
 	ld xbc, xiz
-	call LABEL_FEE608
+	call StoreDRAMInit_LoadDRAM
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E20006
 	ld xde, xiz
@@ -3927,7 +3927,7 @@ MainSysCtrl_Entry2_PartInit:
 	call Part_InitFromPreset
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry3_Misc:
-	call LABEL_FEF99E
+	call SendPartDataBlock_DoGetError
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry4_CopyBitmaps:
 	call Display_CopyAndRenderBitmaps

@@ -17149,7 +17149,7 @@ CommonIDProc_CheckAvail:
 	push xwa
 	ld xwa, (xbc)
 	push xwa
-	call LABEL_FF0FBE
+	call Strlen_LoadParam
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 12)
 	cpw (xwa + 4), 0x0

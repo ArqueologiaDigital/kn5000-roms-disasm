@@ -10680,7 +10680,7 @@ VariScreen_HandleShow:
 	ld (xde), wa
 	ld a, (xbc)
 	extz wa
-	call LABEL_FEE4A7
+	call CharMap_ActivePreamb_Prologue2
 	ld xde, (xsp + 24)
 	ld xbc, (xde + 52)
 	extz hl
@@ -10773,7 +10773,7 @@ VariScreen_HandlePaint:
 	ld a, (xsp + 28)
 	extz wa
 	st_dri3b A, 0xFD, 0x22, 0x01
-	call LABEL_FEE608
+	call StoreDRAMInit_LoadDRAM
 	st_dri3b A, 0xFD, 0x22, 0x02
 	ldw (xbc), 0x68
 	lda xhl, (xbc + 2)

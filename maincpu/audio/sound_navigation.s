@@ -344,7 +344,7 @@ GetSoundBankCount_CheckSpecial:
 	jr z, GetSoundBankCount_Invalid
 
 GetSoundBankCount_DoLookup:
-	call LABEL_FEE43F
+	call CharMap_ActivePreamb_Prologue
 	exts hl
 	jr GetSoundBankCount_Return
 

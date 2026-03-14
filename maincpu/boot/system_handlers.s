@@ -1546,7 +1546,7 @@ SeqEvt_ProcessLoop:
 	jr SeqEvt_UpdateReadPos
 
 SeqEvt_Dispatch_NonNoteOn:
-	call LABEL_FE87C2
+	call ProcessEventDispatch_Prologue
 
 SeqEvt_UpdateReadPos:
 	lda_24 xhl, 0x01f271

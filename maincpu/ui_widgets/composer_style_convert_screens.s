@@ -1675,7 +1675,7 @@ NakaValue_PatternCopy_ToVal2:
 	.byte 0xff, 0xff, 0x0f, 0x00, 0x0d, 0x00, 0x08, 0x00
 	.byte 0xa8, 0x00
 	.long Naka_Help_563_E300C0
-	.long LABEL_FF00C0
+	.long SendPartDataBlock_Data4
 	.byte 0x01, 0x00
 NakaValue_PatternCopy_ToVal3:
 

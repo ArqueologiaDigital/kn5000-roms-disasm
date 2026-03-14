@@ -4716,7 +4716,7 @@ SndParam_UpdateVoiceEntry:
 	extz wa
 	ld c, (xsp + 4)
 	extz bc
-	call LABEL_FEE6B1
+	call ApplyProgramChangeAs_Prologue
 	ldi_berp 0xFB, 0
 	cps l, 0
 	jr z, SndParamUpdate_SetResBit6
@@ -4762,7 +4762,7 @@ MIDI_DistributeParamToChannels:
 	ld (xsp + 6), a
 	cp (xsp + 6), 0x1F
 	jr ugt, MidiDistribute_CheckRhythm
-	call LABEL_FEE770
+	call ApplyProgramChangeAs_DoLookupRe
 	ld (xsp), l
 
 MidiDistribute_LookupAndWrite:

@@ -37,7 +37,7 @@ NoteEditSy_ScanLoop:
 	ldto_berp C, 0xF8
 	extz bc
 	lda xde, (xsp + 4)
-	call LABEL_FEE712
+	call ApplyProgramChangeAs_Prologue2
 	ld de, iz
 	mul de, 0xD
 	lda xhl, (xsp + 4)
