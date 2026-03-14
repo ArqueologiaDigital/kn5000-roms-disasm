@@ -960,7 +960,7 @@ MidiCC_StoreAndDispatch:
 
 MidiCC_CheckOverflow:
 	ld xwa, xiz
-	call LABEL_FB7CEE
+	call EffectMode_MidiSetLEDs
 	jr MIDI_PopIzRet
 
 MidiCC_Finalize:

@@ -6062,7 +6062,7 @@ UIState_HandlerTable_WithProbe:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeA
-	.long LABEL_FB7E14
+	.long BitmapFinpic_ByteData
 	.long 0xFFFFFFFF
 
 
@@ -6686,7 +6686,7 @@ UIState_ConfigB_081:
 	.long LABEL_F69CC2
 	.long LABEL_F7AD49
 	.long LABEL_F6D84D
-	.long LABEL_F47667
+	.long HelpLang_DispatchDataBlock
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_082:
 	.fill 4, 1, 0xff

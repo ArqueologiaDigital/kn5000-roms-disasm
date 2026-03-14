@@ -2597,7 +2597,7 @@ User_didnt_request_flash_mem_update:
 	lds wa, 0
 	call ScreenGroup_Dispatch	; Display initial boot screen (group 0)
 	ei 0
-	call LABEL_FB76D8
+	call SelfTest_FirmwareVersionCheck
 	calr SubCPU_Payload_GetErrorFlag	; Check if payload transfer failed
 	cps hl, 0	; HL=0: success, HL!=0: error
 	jr nz, Boot_PayloadError	; Branch if error occurred

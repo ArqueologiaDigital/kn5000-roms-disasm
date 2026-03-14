@@ -1412,41 +1412,41 @@ VramTest_Done:
 	inc 2, xsp
 	ret
 
-LABEL_FB76D8:
+SelfTest_FirmwareVersionCheck:
 	push_werp 0xFA
 	call Get_Firmware_Version
 	cp l, 0x77
-	jr nz, LABEL_FB76F7
+	jr nz, SelfTest_InterCPU_Send
 	ldw wa, 0xFB
 	call UI_PostModeChangeEvent
 	call SubCPU_PayloadErrorStore
 	stdi8 36226, 2
 	jrl EffectMode_PopRetFA
 
-LABEL_FB76F7:
+SelfTest_InterCPU_Send:
 	ld xwa, 0xF002
 	ldw bc, 0x8
 	ld xde, 0x8D64
 	call InterCPU_E2_Send
 	ld xwa, 0x3FFFFF
-	jr LABEL_FB7723
+	jr SelfTest_WaitBitLoop_Check
 
-LABEL_FB770F:
+SelfTest_WaitBitLoop_Copy:
 	ld xiy, 0x620
 	ld xix, 0x620
 	ldiw
 	sub xwa, 0x1
-	jr z, LABEL_FB7729
+	jr z, SelfTest_WaitDone_CountBits
 
-LABEL_FB7723:
+SelfTest_WaitBitLoop_Check:
 	bitda 7, 1568
-	jr nz, LABEL_FB770F
+	jr nz, SelfTest_WaitBitLoop_Copy
 
-LABEL_FB7729:
+SelfTest_WaitDone_CountBits:
 	ldi_berp 0xFA, 0
 	ldi_berp 0xFB, 0
 
-LABEL_FB772F:
+SelfTest_CountBits_Loop:
 	ldto_berp C, 0xFB
 	extz bc
 	ldada xwa, 36196
@@ -1454,68 +1454,68 @@ LABEL_FB772F:
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
-	calr LABEL_FB788F
+	calr SelfTest_PopCount
 	ldto_berp A, 0xFA
 	add a, l
 	ldfr_berp A, 0xFA
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x08
-	jr c, LABEL_FB772F
+	jr c, SelfTest_CountBits_Loop
 	cpi_berp 0xFA, 2
-	jr nz, LABEL_FB77D4
+	jr nz, SelfTest_SramAndRom
 	ldada xde, 36196
 	ld c, (xde + 3)
 	lda xwa, (xde + 4)
 	bit 0, c
-	jr z, LABEL_FB776C
+	jr z, SelfTest_CheckBit2
 	bitm 4, (xwa)
-	jr nz, LABEL_FB77D1
+	jr nz, SelfTest_Diagnostic_Skip
 
-LABEL_FB776C:
+SelfTest_CheckBit2:
 	bit 2, c
-	jr z, LABEL_FB777A
+	jr z, SelfTest_CheckBit4
 	bitm 6, (xwa)
-	jr z, LABEL_FB777A
+	jr z, SelfTest_CheckBit4
 	ldw wa, 0xF5
 	jr EffectMode_UIPostModeChangeEvent
 
-LABEL_FB777A:
+SelfTest_CheckBit4:
 	inc 5, xde
 	bit 4, c
-	jr z, LABEL_FB7793
+	jr z, SelfTest_CheckBit5
 	bitm 0, (xde)
-	jr z, LABEL_FB7793
+	jr z, SelfTest_CheckBit5
 	ldw wa, 0xF6
 	call UI_PostModeChangeEvent
 	call SubCPU_PayloadErrorStore
 	jrl EffectMode_PopRetFA
 
-LABEL_FB7793:
+SelfTest_CheckBit5:
 	bit 5, c
-	jr z, LABEL_FB77A1
+	jr z, SelfTest_CheckBit7
 	bitm 1, (xde)
-	jr z, LABEL_FB77A1
+	jr z, SelfTest_CheckBit7
 	ldw wa, 0xF7
 	jr EffectMode_UIPostModeChangeEvent
 
-LABEL_FB77A1:
+SelfTest_CheckBit7:
 	bit 7, c
-	jr z, LABEL_FB77AF
+	jr z, SelfTest_CheckBitA1
 	bitm 3, (xde)
-	jr z, LABEL_FB77AF
+	jr z, SelfTest_CheckBitA1
 	ldw wa, 0xF8
 	jr EffectMode_UIPostModeChangeEvent
 
-LABEL_FB77AF:
+SelfTest_CheckBitA1:
 	ld a, (xwa)
 	bit 1, a
-	jr z, LABEL_FB77BF
+	jr z, SelfTest_CheckBitA3
 	bitm 5, (xde)
-	jr z, LABEL_FB77BF
+	jr z, SelfTest_CheckBitA3
 	ldw wa, 0xF9
 	jr EffectMode_UIPostModeChangeEvent
 
-LABEL_FB77BF:
+SelfTest_CheckBitA3:
 	bit 3, a
 	jrl z, EffectMode_PopRetFA
 	bitm 7, (xde)
@@ -1525,15 +1525,15 @@ LABEL_FB77BF:
 EffectMode_UIPostModeChangeEvent:
 	call UI_PostModeChangeEvent
 
-LABEL_FB77D1:
+SelfTest_Diagnostic_Skip:
 	jrl EffectMode_PopRetFA
 
-LABEL_FB77D4:
+SelfTest_SramAndRom:
 	ldi_berp 0xFA, 0
 	lds wa, 0
 	calr Test_SRAM_IC21
 	cps hl, 0
-	jr z, LABEL_FB7824
+	jr z, SelfTest_SramAndRom_CheckROM
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	call DeleteEvent
@@ -1551,7 +1551,7 @@ LABEL_FB77D4:
 	call ApPostEvent
 	ldi_berp 0xFA, 1
 
-LABEL_FB7824:
+SelfTest_SramAndRom_CheckROM:
 	push xde
 	push xhl
 	push xix
@@ -1569,7 +1569,7 @@ LABEL_FB7824:
 	cps a, 0
 	jr z, EffectMode_PopRetFA
 	cpi_berp 0xFA, 0
-	jr nz, LABEL_FB786B
+	jr nz, SelfTest_PostRomError
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	call DeleteEvent
@@ -1578,7 +1578,7 @@ LABEL_FB7824:
 	ld xde, 0x1A000F4
 	call ApPostEvent
 
-LABEL_FB786B:
+SelfTest_PostRomError:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 1
@@ -1592,20 +1592,20 @@ EffectMode_PopRetFA:
 	pop_werp 0xFA
 	ret
 
-LABEL_FB788F:
+SelfTest_PopCount:
 	ldb l, 0x0
 	ldb c, 0x0
 
-LABEL_FB7893:
+SelfTest_PopCount_Loop:
 	bit 0, a
-	jr z, LABEL_FB789A
+	jr z, SelfTest_PopCount_ShiftNext
 	inc 1, l
 
-LABEL_FB789A:
+SelfTest_PopCount_ShiftNext:
 	srl a, 1
 	inc 1, c
 	cp c, 0x8
-	jr c, LABEL_FB7893
+	jr c, SelfTest_PopCount_Loop
 	ret
 
 EffectMode_CheckAndDispatch:
@@ -1613,10 +1613,10 @@ EffectMode_CheckAndDispatch:
 	jr nz, EffectMode_DispatchUpdate
 	ldda8 a, 36226
 	cps a, 2
-	jr z, LABEL_FB7904
+	jr z, EffectMode_ResetDiagMode
 	ldda8 a, 36224
 	bit 0, a
-	jr z, LABEL_FB78DE
+	jr z, EffectMode_CheckAndDispatch_Bit4Clear
 	bit 4, a
 	jr nz, EffectMode_DispatchUpdate
 	set 4, a
@@ -1625,11 +1625,11 @@ EffectMode_CheckAndDispatch:
 	cps a, 1
 	jr z, EffectMode_DispatchUpdate
 	stdi8 36226, 1
-	calr LABEL_FB792E
-	calr LABEL_FB7C31
+	calr EffectMode_InitSwbWr_DiagMode
+	calr EffectMode_SetAllLEDs
 	jr EffectMode_DispatchUpdate
 
-LABEL_FB78DE:
+EffectMode_CheckAndDispatch_Bit4Clear:
 	bit 4, a
 	jr z, EffectMode_DispatchUpdate
 	res 4, a
@@ -1638,15 +1638,15 @@ LABEL_FB78DE:
 	cps a, 0
 	jr z, EffectMode_DispatchUpdate
 	stdi8 36226, 0
-	calr LABEL_FB796E
+	calr EffectMode_RestoreSwbWr_NormalMode
 	calr LED_SetAll_WithBlank
 	stdi8 58334, 16
 	jr EffectMode_DispatchUpdate
 
-LABEL_FB7904:
+EffectMode_ResetDiagMode:
 	stdi8 36226, 0
 	calr LED_SetAll_WithBlank
-	calr LABEL_FB796E
+	calr EffectMode_RestoreSwbWr_NormalMode
 
 EffectMode_DispatchUpdate:
 	cpdi8 36150, 248
@@ -1655,10 +1655,10 @@ EffectMode_DispatchUpdate:
 	call_24 z, 0xFB7BFF
 	cpdi8 36150, 251
 	ret nz
-	calr LABEL_FB7A86
+	calr EffectMode_RunDiagSequence
 	ret
 
-LABEL_FB792E:
+EffectMode_InitSwbWr_DiagMode:
 	ldada xwa, 63926
 	stib_dpi 0xE0, 0x00
 	andmi8 (xwa), 0x80
@@ -1683,7 +1683,7 @@ LABEL_FB792E:
 	call AddswbWr
 	ret
 
-LABEL_FB796E:
+EffectMode_RestoreSwbWr_NormalMode:
 	ldada xwa, 63926
 	stib_dpi 0xE0, 0x40
 	andmi8 (xwa), 0x80
@@ -1706,23 +1706,23 @@ LABEL_FB796E:
 	call AddswbWr
 	ret
 
-LABEL_FB79AA:
+EffectMode_HandleTimerEvents:
 	call CtrlPanel_GetSelectionState
 	cps hl, 0
 	ret nz
 	ldda8 a, 36218
 	cp a, 0x96
-	jrl z, LABEL_FB7A67
+	jrl z, EffectMode_TimerEvent_Step96
 	cp a, 0x78
-	jrl z, LABEL_FB7A4A
+	jrl z, EffectMode_TimerEvent_Step78
 	cp a, 0x5A
-	jr z, LABEL_FB7A2D
+	jr z, EffectMode_TimerEvent_Step5A
 	cp a, 0x3C
-	jr z, LABEL_FB7A10
+	jr z, EffectMode_TimerEvent_Step3C
 	cp a, 0x1E
-	jr z, LABEL_FB79F3
+	jr z, EffectMode_TimerEvent_Step1E
 	cps a, 0
-	jrl nz, LABEL_FB7A7D
+	jrl nz, EffectMode_TimerEvent_Default
 	ld xwa, 0xF8000C
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -1733,7 +1733,7 @@ LABEL_FB79AA:
 	stda8 36218, a
 	ret
 
-LABEL_FB79F3:
+EffectMode_TimerEvent_Step1E:
 	ld xwa, 0xF8000E
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -1744,7 +1744,7 @@ LABEL_FB79F3:
 	stda8 36218, a
 	ret
 
-LABEL_FB7A10:
+EffectMode_TimerEvent_Step3C:
 	ld xwa, 0xF80010
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -1755,7 +1755,7 @@ LABEL_FB7A10:
 	stda8 36218, a
 	ret
 
-LABEL_FB7A2D:
+EffectMode_TimerEvent_Step5A:
 	ld xwa, 0xF80006
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -1766,7 +1766,7 @@ LABEL_FB7A2D:
 	stda8 36218, a
 	ret
 
-LABEL_FB7A4A:
+EffectMode_TimerEvent_Step78:
 	ld xwa, 0xF80008
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -1777,7 +1777,7 @@ LABEL_FB7A4A:
 	stda8 36218, a
 	ret
 
-LABEL_FB7A67:
+EffectMode_TimerEvent_Step96:
 	ld xwa, 0xF8000A
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -1785,16 +1785,16 @@ LABEL_FB7A67:
 	stdi8 36218, 220
 	ret
 
-LABEL_FB7A7D:
+EffectMode_TimerEvent_Default:
 	inc 1, a
 	inc 1, a
 	stda8 36218, a
 	ret
 
-LABEL_FB7A86:
+EffectMode_RunDiagSequence:
 	ldda8 a, 36218
 	cps a, 0
-	jr nz, LABEL_FB7B01
+	jr nz, EffectMode_DiagSeq_AnimFrame
 	ld xwa, 0xF80006
 	ld xbc, 0x1C00001
 	lds32 xde, 0
@@ -1828,10 +1828,10 @@ LABEL_FB7A86:
 	incdi8 1, 36218
 	ret
 
-LABEL_FB7B01:
+EffectMode_DiagSeq_AnimFrame:
 	ldda8 c, 36216
 	cps c, 0
-	jr nz, LABEL_FB7B46
+	jr nz, EffectMode_DiagSeq_DecrementDelay
 	extz wa
 	lda_24 xbc, 0xeb7e86
 	lds32 xde, 0
@@ -1842,24 +1842,24 @@ LABEL_FB7B01:
 	call ApPostEvent
 	ldda8 a, 36218
 	cps a, 5
-	jr nz, LABEL_FB7B3A
+	jr nz, EffectMode_DiagSeq_IncFrame
 	stdi8 36218, 1
-	jr LABEL_FB7B40
+	jr EffectMode_DiagSeq_SetDelay
 
-LABEL_FB7B3A:
+EffectMode_DiagSeq_IncFrame:
 	inc 1, a
 	stda8 36218, a
 
-LABEL_FB7B40:
+EffectMode_DiagSeq_SetDelay:
 	stdi8 36216, 30
 	ret
 
-LABEL_FB7B46:
+EffectMode_DiagSeq_DecrementDelay:
 	dec 1, c
 	stda8 36216, c
 	ret
 
-LABEL_FB7B4D:
+EffectMode_ByteData_DiagEvents:
 	push	qiz
 	.byte 0x3a, 0x3b, 0x3c, 0x3e
 	.byte 0x1d
@@ -1893,11 +1893,11 @@ Voice_EmitNoteWithVelocity:
 	call ApPostEvent
 	ret
 
-LABEL_FB7BFF:
+EffectMode_ModeChangeTransition:
 	ldda8 a, 36151
 	cpda8 a, 36150
-	jrl z, LABEL_FB7CCA
-	calr LABEL_FB7C31
+	jrl z, EffectMode_MidiParseLoop
+	calr EffectMode_SetAllLEDs
 	push xde
 	push xhl
 	push xix
@@ -1916,52 +1916,52 @@ LABEL_FB7BFF:
 	calr A_Short_Pause
 	jr LED_SetAll_WithBlank
 
-LABEL_FB7C31:
+EffectMode_SetAllLEDs:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
-	jr LABEL_FB7C45
+	jr EffectMode_SetAllLEDs_Loop
 
-LABEL_FB7C39:
+EffectMode_SetAllLEDs_SetOne:
 	ld wa, bc
 	srl wa, 8
 	call Set_LEDs
 	inc1_berp 0xFB
 
-LABEL_FB7C45:
+EffectMode_SetAllLEDs_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0xeb7fec
 	ld_sriw3 BC, 0x07, 0xE4, 0xE0
 	cp bc, 0xFFFF
-	jr nz, LABEL_FB7C39
+	jr nz, EffectMode_SetAllLEDs_SetOne
 	pop_werp 0xFA
 	ret
 
 LED_SetAll_WithBlank:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
-	jr LABEL_FB7C74
+	jr LED_SetAll_BlankLoop
 
-LABEL_FB7C68:
+LED_SetAll_BlankOne:
 	srl wa, 8
 	lds bc, 0
 	call Set_LEDs
 	inc1_berp 0xFB
 
-LABEL_FB7C74:
+LED_SetAll_BlankLoop:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0xeb7fec
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	cp wa, 0xFFFF
-	jr nz, LABEL_FB7C68
+	jr nz, LED_SetAll_BlankOne
 	pop_werp 0xFA
 	ret
 
 
-LABEL_FB7C8F:
+FDC_CommandAndPostEvent:
 	; --- Stack-frame: alloc 16, conditional XDE setup, call dispatch (59 bytes) ---
 	lda	xsp, (xsp-16)
 	lda	xwa, (xsp)
@@ -1971,46 +1971,46 @@ LABEL_FB7C8F:
 	inc 4, xsp
 	ldda8	a, 35364
 	cp a, 0xfc
-	jr nz, LABEL_FB7CB6
+	jr nz, FDC_PostEvent_Error
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x01C0001E
 	lds32	xde, 2
-	jr t, LABEL_FB7CC2
-LABEL_FB7CB6:
+	jr t, FDC_PostEvent_Send
+FDC_PostEvent_Error:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x01C0001E
 	lds32	xde, 1
-LABEL_FB7CC2:
+FDC_PostEvent_Send:
 	call ApPostEvent
 	lda	xsp, (xsp+16)
 	ret
 
 
-LABEL_FB7CCA:
+EffectMode_MidiParseLoop:
 	push xiz
 	ldada xiz, 36204
 	ld xwa, xiz
 	call MIDI_ParseThreeByteParams
 	cp hl, 0xFFFF
-	jr z, LABEL_FB7CEC
+	jr z, EffectMode_MidiParse_Done
 
-LABEL_FB7CDB:
+EffectMode_MidiParse_Continue:
 	ld xwa, xiz
-	calr LABEL_FB7CEE
+	calr EffectMode_MidiSetLEDs
 	ld xwa, xiz
 	call MIDI_ParseThreeByteParams
 	cp hl, 0xFFFF
-	jr nz, LABEL_FB7CDB
+	jr nz, EffectMode_MidiParse_Continue
 
-LABEL_FB7CEC:
+EffectMode_MidiParse_Done:
 	pop xiz
 	ret
 
-LABEL_FB7CEE:
+EffectMode_MidiSetLEDs:
 	push xiz
 	ld xiz, xwa
 	cp (xiz), 0x15
-	jr ugt, LABEL_FB7D42
+	jr ugt, EffectMode_MidiLED_Done
 	lds32 xwa, 0
 	ld a, (xiz + 2)
 	call Util_FindLowestSetBit
@@ -2037,16 +2037,16 @@ LABEL_FB7CEE:
 	ld c, (xde)
 	ld a, (xiz + 2)
 	and a, (xiz + 1)
-	jr nz, LABEL_FB7D38
+	jr nz, EffectMode_MidiLED_HasMask
 	ldb c, 0x0
 
-LABEL_FB7D38:
+EffectMode_MidiLED_HasMask:
 	extz hl
 	extz bc
 	ld wa, hl
 	call Set_LEDs
 
-LABEL_FB7D42:
+EffectMode_MidiLED_Done:
 	pop xiz
 	ret
 
@@ -2134,7 +2134,7 @@ TableDispatch_Return:
 	lds32 xhl, 0
 	ret
 
-LABEL_FB7E14:
+BitmapFinpic_ByteData:
 	.byte 0x1d, 0x97, 0x07, 0xef, 0xdb, 0xd8, 0xb0, 0xf6
 	.byte 0xc1, 0x80, 0xc0, 0x21, 0xc1, 0x3a, 0x8d, 0xf1
 	.byte 0xb0, 0xfe, 0xc1, 0x7d, 0xc0, 0x3f, 0x00, 0xb0
@@ -2145,98 +2145,98 @@ LABEL_FB7E14:
 
 BitmapFinpic:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_FB7E71
+	jr z, BitmapFinpic_GetHeight
 	cp xbc, 0x1E000A2
-	jr z, LABEL_FB7E6B
+	jr z, BitmapFinpic_GetWidth
 	cp xbc, 0x1E000A1
-	jr z, LABEL_FB7E65
+	jr z, BitmapFinpic_GetDataPtr
 	lds32 xhl, 0
 	ret
 
-LABEL_FB7E65:
+BitmapFinpic_GetDataPtr:
 	lda_24 xhl, 0xeb8072
 	ret
 
-LABEL_FB7E6B:
+BitmapFinpic_GetWidth:
 	ld xhl, 0x70
 	ret
 
-LABEL_FB7E71:
+BitmapFinpic_GetHeight:
 	ld xhl, 0x19
 	ret
 
 BitmapFinst:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_FB7E9E
+	jr z, BitmapFinst_GetHeight
 	cp xbc, 0x1E000A2
-	jr z, LABEL_FB7E98
+	jr z, BitmapFinst_GetWidth
 	cp xbc, 0x1E000A1
-	jr z, LABEL_FB7E92
+	jr z, BitmapFinst_GetDataPtr
 	lds32 xhl, 0
 	ret
 
-LABEL_FB7E92:
+BitmapFinst_GetDataPtr:
 	lda_24 xhl, 0xeb8b62
 	ret
 
-LABEL_FB7E98:
+BitmapFinst_GetWidth:
 	ld xhl, 0x50
 	ret
 
-LABEL_FB7E9E:
+BitmapFinst_GetHeight:
 	ld xhl, 0x12
 	ret
 
 BitmapFoutpic:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_FB7ECB
+	jr z, BitmapFoutpic_GetHeight
 	cp xbc, 0x1E000A2
-	jr z, LABEL_FB7EC5
+	jr z, BitmapFoutpic_GetWidth
 	cp xbc, 0x1E000A1
-	jr z, LABEL_FB7EBF
+	jr z, BitmapFoutpic_GetDataPtr
 	lds32 xhl, 0
 	ret
 
-LABEL_FB7EBF:
+BitmapFoutpic_GetDataPtr:
 	lda_24 xhl, 0xeb9102
 	ret
 
-LABEL_FB7EC5:
+BitmapFoutpic_GetWidth:
 	ld xhl, 0x71
 	ret
 
-LABEL_FB7ECB:
+BitmapFoutpic_GetHeight:
 	ld xhl, 0x19
 	ret
 
 BitmapFoutst:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_FB7EF8
+	jr z, BitmapFoutst_GetHeight
 	cp xbc, 0x1E000A2
-	jr z, LABEL_FB7EF2
+	jr z, BitmapFoutst_GetWidth
 	cp xbc, 0x1E000A1
-	jr z, LABEL_FB7EEC
+	jr z, BitmapFoutst_GetDataPtr
 	lds32 xhl, 0
 	ret
 
-LABEL_FB7EEC:
+BitmapFoutst_GetDataPtr:
 	lda_24 xhl, 0xeb9c24
 	ret
 
-LABEL_FB7EF2:
+BitmapFoutst_GetWidth:
 	ld xhl, 0x6C
 	ret
 
-LABEL_FB7EF8:
+BitmapFoutst_GetHeight:
 	ld xhl, 0x14
 	ret
 
 SystemInitMDFunc:
 	cp xbc, 0x1C00001
-	jr nz, LABEL_FB7F45
+	jr nz, SystemInitMD_ReturnZero
 	call GetTitleOld
 	cp xhl, 0x1A000EE
-	jr nz, LABEL_FB7F45
+	jr nz, SystemInitMD_ReturnZero
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
@@ -2250,7 +2250,7 @@ SystemInitMDFunc:
 	ld xde, 0x1800001
 	call PostEvent
 
-LABEL_FB7F45:
+SystemInitMD_ReturnZero:
 	lds32 xhl, 0
 	ret
 
@@ -2262,20 +2262,20 @@ SystemInitOkFunc:
 	exts xhl
 	st32_24 0x0340de, xhl
 	cpi8_24 0x0340ea, 0x00
-	jr nz, LABEL_FB7F79
+	jr nz, SystemInitOk_PostEvent
 	ld xwa, 0x142000A
 	ld xbc, 0x1E20013
 	ld xde, xhl
 	call MainFuncCall
-	jr LABEL_FB7F89
+	jr SystemInitOk_ReturnZero
 
-LABEL_FB7F79:
+SystemInitOk_PostEvent:
 	ld xwa, 0x410007
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 	call PostEvent
 
-LABEL_FB7F89:
+SystemInitOk_ReturnZero:
 	lds32 xhl, 0
 	ret
 
@@ -2301,64 +2301,64 @@ SysSureShowHideFunc:
 
 AttnLngCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_FB7FC9
+	jr nz, AttnLngCheck_ReturnZero
 	lda_24 xhl, 0xed04c4
 	ret
 
-LABEL_FB7FC9:
+AttnLngCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 SysSureLngCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_FB7FDA
+	jr nz, SysSureLngCheck_ReturnZero
 	lda_24 xhl, 0xed051e
 	ret
 
-LABEL_FB7FDA:
+SysSureLngCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 SureLngCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_FB7FEB
+	jr nz, SureLngCheck_ReturnZero
 	lda_24 xhl, 0xed073e
 	ret
 
-LABEL_FB7FEB:
+SureLngCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 CtlIniLngCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_FB7FFC
+	jr nz, CtlIniLngCheck_ReturnZero
 	lda_24 xhl, 0xed07b6
 	ret
 
-LABEL_FB7FFC:
+CtlIniLngCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 PmemNormLngCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_FB800D
+	jr nz, PmemNormLngCheck_ReturnZero
 	lda_24 xhl, 0xed0a74
 	ret
 
-LABEL_FB800D:
+PmemNormLngCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 PmemExpLngCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_FB801E
+	jr nz, PmemExpLngCheck_ReturnZero
 	lda_24 xhl, 0xed0b7c
 	ret
 
-LABEL_FB801E:
+PmemExpLngCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
-LABEL_FB8021:
+PmemExpLng_Boundary:
 
 AcMstSugAlpGridBoxProc:
 	jp InheritedProc
@@ -2366,7 +2366,7 @@ AcMstSugAlpGridBoxProc:
 MstSugAlpGridCheck:
 	lds32 xhl, 0
 	ret
-LABEL_FB8028:
+AcMstStyleAlp_Boundary:
 
 AcMstStyleAlpGridBoxProc:
 	lda xsp, (xsp - 74)
@@ -2383,9 +2383,9 @@ AcMstStyleAlpGridBoxProc:
 	cp xwa, 0x1E0008A
 	jrl z, LABEL_FB8808
 	cp xwa, 0x1C00007
-	jrl z, LABEL_FB816B
+	jrl z, MasterSetup_HandleDialTurn
 	cp xwa, 0x1C00002
-	jrl z, LABEL_FB814B
+	jrl z, MasterSetup_HandleDialStop
 	cp xwa, 0x1C00001
 	jr z, MasterSetup_EventDispatch
 	sub xbc, 0x1C00017
@@ -2457,9 +2457,9 @@ MasterSetup_EventDispatch:
 	extz xde
 	ld xwa, 0x142000D
 	ld xbc, 0x1E20018
-	jr LABEL_FB8164
+	jr MasterSetup_CallMainFunc
 
-LABEL_FB814B:
+MasterSetup_HandleDialStop:
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
@@ -2468,11 +2468,11 @@ LABEL_FB814B:
 	ld xbc, 0x1E20019
 	lds32 xde, 0
 
-LABEL_FB8164:
+MasterSetup_CallMainFunc:
 	call MainFuncCall
 	jrl SeqFile_ReturnZeroJmp2
 
-LABEL_FB816B:
+MasterSetup_HandleDialTurn:
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
@@ -2485,12 +2485,12 @@ LABEL_FB816B:
 	lda xbc, (xwa + 78)
 	ld xwa, (xsp + 66)
 	cp xwa, 0x80
-	jrl z, LABEL_FB828B
+	jrl z, MasterSetup_DialTurn_ScrollUp
 	or xwa, xwa
 	jrl nz, SeqFile_ReturnZeroJmp2
 	ld xbc, (xbc)
 	cpw (xbc), 0x0
-	jr z, LABEL_FB81C5
+	jr z, MasterSetup_DialTurn_Underflow
 	ld wa, (xbc)
 	dec 1, wa
 	ld (xbc), wa
@@ -2502,9 +2502,9 @@ LABEL_FB816B:
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_FB81DF
+	jr MasterSetup_DialTurn_UpdateView
 
-LABEL_FB81C5:
+MasterSetup_DialTurn_Underflow:
 	ld32_24 xwa, 0xebbbfe
 	push xwa
 	lda xwa, (xsp + 16)
@@ -2515,7 +2515,7 @@ LABEL_FB81C5:
 	ld xwa, (xwa + 78)
 	ldw (xwa), 0x3E7
 
-LABEL_FB81DF:
+MasterSetup_DialTurn_UpdateView:
 	ld xde, (xsp + 8)
 	ld xbc, (xde + 74)
 	ld a, (xsp + 12)
@@ -2524,9 +2524,9 @@ LABEL_FB81DF:
 	ld xwa, (xde + 78)
 	ld iz, (xwa)
 	cps iz, 0
-	jr z, LABEL_FB8223
+	jr z, MasterSetup_StringSearch_Done
 
-LABEL_FB81F5:
+MasterSetup_StringSearch_Loop:
 	pushw 0x1
 	ld wa, iz
 	extz xwa
@@ -2543,15 +2543,15 @@ LABEL_FB81F5:
 	call String_Compare
 	add xsp, 0xA
 	cps hl, 0
-	jr nz, LABEL_FB8223
-	djnz xiz, LABEL_FB81F5
+	jr nz, MasterSetup_StringSearch_Done
+	djnz xiz, MasterSetup_StringSearch_Loop
 
-LABEL_FB8223:
+MasterSetup_StringSearch_Done:
 	cps iz, 0
-	jr z, LABEL_FB8229
+	jr z, MasterSetup_StringSearch_Adjust
 	inc 1, iz
 
-LABEL_FB8229:
+MasterSetup_StringSearch_Adjust:
 	ld xwa, (xsp + 8)
 	lda xhl, (xwa + 82)
 	ld xbc, (xhl)
@@ -2586,7 +2586,7 @@ LABEL_FB8229:
 	ld xde, (xsp + 66)
 	jrl SeqFile_CallApFunc
 
-LABEL_FB828B:
+MasterSetup_DialTurn_ScrollUp:
 	ld xix, xbc
 	ld xde, (xbc)
 	ld xwa, (xsp + 8)
@@ -2597,7 +2597,7 @@ LABEL_FB828B:
 	ld hl, bc
 	lda xbc, (xsp + 12)
 	cp hl, 0x3E8
-	jr nc, LABEL_FB82CC
+	jr nc, MasterSetup_ScrollUp_Overflow
 	ld hl, (xde)
 	ld wa, (xwa)
 	add wa, hl
@@ -2612,9 +2612,9 @@ LABEL_FB828B:
 	push xbc
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_FB82E3
+	jr MasterSetup_ScrollUp_UpdateView
 
-LABEL_FB82CC:
+MasterSetup_ScrollUp_Overflow:
 	ld32_24 xwa, 0xeba494
 	push xwa
 	push xbc
@@ -2624,16 +2624,16 @@ LABEL_FB82CC:
 	ld xwa, (xwa + 78)
 	ldw (xwa), 0x0
 
-LABEL_FB82E3:
+MasterSetup_ScrollUp_UpdateView:
 	ld xwa, (xsp + 8)
 	ld xbc, (xwa + 74)
 	ld a, (xsp + 12)
 	extz wa
 	ld (xbc), wa
 	lds iz, 0
-	jr LABEL_FB8321
+	jr MasterSetup_ScrollUp_Search_Check
 
-LABEL_FB82F4:
+MasterSetup_ScrollUp_Search_Loop:
 	pushw 0x1
 	add wa, iz
 	extz xwa
@@ -2650,19 +2650,19 @@ LABEL_FB82F4:
 	call String_Compare
 	add xsp, 0xA
 	cps hl, 0
-	jr nz, LABEL_FB8332
+	jr nz, MasterSetup_ScrollUp_Search_Done
 	inc 1, iz
 
-LABEL_FB8321:
+MasterSetup_ScrollUp_Search_Check:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 78)
 	ld wa, (xwa)
 	ldw bc, 0x3E8
 	sub bc, wa
 	cp iz, bc
-	jr c, LABEL_FB82F4
+	jr c, MasterSetup_ScrollUp_Search_Loop
 
-LABEL_FB8332:
+MasterSetup_ScrollUp_Search_Done:
 	ld xhl, (xsp + 8)
 	lda xbc, (xhl + 82)
 	ld xwa, (xbc)
@@ -2706,22 +2706,22 @@ LABEL_FB8332:
 	ld xde, (xsp + 66)
 	call SendEvent
 	or xhl, xhl
-	jrl z, LABEL_FB8561
+	jrl z, MasterSetup_FallbackEvent
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
 	call SendEvent
 	cps hl, 0
-	jrl nz, LABEL_FB8529
+	jrl nz, MasterSetup_DialDown_SendPageEvent
 	ld xbc, (xsp + 8)
 	ld xwa, (xbc + 90)
 	cpw (xwa), 0x1
-	jrl nz, LABEL_FB84EC
+	jrl nz, MasterSetup_DialDown_DecPage
 	ld xbc, (xbc + 78)
 	lda xde, (xsp + 12)
 	lda_24 xhl, 0xeba494
 	cpw (xbc), 0x0
-	jr z, LABEL_FB8406
+	jr z, MasterSetup_DialDown_Underflow
 	ld wa, (xbc)
 	dec 1, wa
 	ld (xbc), wa
@@ -2731,9 +2731,9 @@ LABEL_FB8332:
 	push xde
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_FB841D
+	jr MasterSetup_DialDown_UpdateView
 
-LABEL_FB8406:
+MasterSetup_DialDown_Underflow:
 	ld_sril XWA, (xhl + 0x176a)
 	push xwa
 	push xde
@@ -2743,7 +2743,7 @@ LABEL_FB8406:
 	ld xwa, (xwa + 78)
 	ldw (xwa), 0x3E7
 
-LABEL_FB841D:
+MasterSetup_DialDown_UpdateView:
 	ld xde, (xsp + 8)
 	ld xbc, (xde + 74)
 	ld a, (xsp + 12)
@@ -2752,9 +2752,9 @@ LABEL_FB841D:
 	ld xwa, (xde + 78)
 	ld iz, (xwa)
 	cps iz, 0
-	jr z, LABEL_FB8461
+	jr z, MasterSetup_DialDown_Search_Done
 
-LABEL_FB8433:
+MasterSetup_DialDown_Search_Loop:
 	pushw 0x1
 	ld wa, iz
 	extz xwa
@@ -2771,15 +2771,15 @@ LABEL_FB8433:
 	call String_Compare
 	add xsp, 0xA
 	cps hl, 0
-	jr nz, LABEL_FB8461
-	djnz xiz, LABEL_FB8433
+	jr nz, MasterSetup_DialDown_Search_Done
+	djnz xiz, MasterSetup_DialDown_Search_Loop
 
-LABEL_FB8461:
+MasterSetup_DialDown_Search_Done:
 	cps iz, 0
-	jr z, LABEL_FB8467
+	jr z, MasterSetup_DialDown_AdjustView
 	inc 1, iz
 
-LABEL_FB8467:
+MasterSetup_DialDown_AdjustView:
 	ld xwa, (xsp + 8)
 	lda xhl, (xwa + 82)
 	ld xbc, (xhl)
@@ -2828,7 +2828,7 @@ LABEL_FB8467:
 	ld xde, (xsp + 66)
 	jrl SeqFile_CallApFunc
 
-LABEL_FB84EC:
+MasterSetup_DialDown_DecPage:
 	decm 1, (xwa)
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
@@ -2848,7 +2848,7 @@ LABEL_FB84EC:
 	ld xde, (xsp + 66)
 	jrl SeqFile_CallApFunc
 
-LABEL_FB8529:
+MasterSetup_DialDown_SendPageEvent:
 	dec 1, hl
 	extz xhl
 	add xhl, 0xFFFF0000
@@ -2867,7 +2867,7 @@ LABEL_FB8529:
 	call ApFuncCall
 	jrl SeqFile_ReturnZeroJmp2
 
-LABEL_FB8561:
+MasterSetup_FallbackEvent:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 66)
