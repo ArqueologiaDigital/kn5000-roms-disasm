@@ -472,140 +472,140 @@ LABEL_E1B496:
 	.byte 0x24, 0x01, 0x01, 0x00, 0x00, 0x00
 NakaInst_ON_BASS_OFF:			aligned_string "ON BASS : OFF"
 Naka_AccOnBass_Handlers:	aligned_string "ON BASS : ON"
-	.long LABEL_E176F6
-	.long LABEL_E1772E
-	.long LABEL_E1774A
+	.long NakaContainer_StyleTypeSelect_Root
+	.long Naka0x11_StyleTypeSelect_ListFrame
+	.long NakaList_StyleTypeSelect_Items
 	.zero 4
 Naka_Accomp1_Screens:
-	.long LABEL_E17774
-	.long LABEL_E177B0
-	.long LABEL_E177CA
-	.long LABEL_E177F4
-	.long LABEL_E17826
-	.long LABEL_E17856
-	.long LABEL_E17888
-	.long LABEL_E178B6
+	.long NakaContainer_StyleTypeSelect_Inner
+	.long Naka0x29_StyleTypeSelect_Scrollbar
+	.long NakaNode_StyleTypeSelect_ListContent
+	.long Naka0x3E_StyleTypeSelect_PrevBtn
+	.long Naka0x3F_StyleTypeSelect_RepeatBtn
+	.long Naka0x3E_StyleTypeSelect_NextBtn
+	.long Naka0x3E_StyleTypeSelect_InfoBtn
+	.long NakaNode_StyleTypeSelect_SubList
 	.byte 0x00, 0x00, 0x00, 0x00
 Naka_Accomp2_Screens:
-	.long LABEL_E178DA
-	.long LABEL_E17912
-	.long LABEL_E1792C
-	.long LABEL_E17956
-	.long LABEL_E17988
-	.long LABEL_E179B8
-	.long LABEL_E179EA
+	.long NakaContainer_StyleConvert_Root
+	.long Naka0x29_StyleConvert_Scrollbar
+	.long NakaNode_StyleConvert_ListContent
+	.long Naka0x3E_StyleConvert_PrevBtn
+	.long Naka0x3F_StyleConvert_RepeatBtn
+	.long Naka0x3E_StyleConvert_NextBtn
+	.long Naka0x3E_StyleConvert_InfoBtn
 	.byte 0x00, 0x00, 0x00, 0x00
 Naka_Accomp3_Screens:
-	.long LABEL_E17A18
-	.long LABEL_E17A50
-	.long LABEL_E17A9E
-	.long LABEL_E17AC8
+	.long NakaContainer_StorageData_Root
+	.long Naka0x1B_StorageData_DataList
+	.long Naka0x22_StorageData_EndSelector
+	.long Naka0x20_StorageData_InfoBtn
 	.zero 4
 Naka_Accomp4_Screens:
-	.long LABEL_E17AF4
-	.long LABEL_E17B2C
-	.long LABEL_E17B48
-	.long LABEL_E17B6E
+	.long NakaContainer_StorageData_ConvertInner
+	.long Naka0x11_StorageData_ConvertFrame
+	.long NakaNode_StorageData_SubList
+	.long Naka0x29_StorageData_Scrollbar
 	.byte 0x00, 0x00, 0x00, 0x00
 Naka_Accomp5_Screens:
-	.long LABEL_E17B88
-	.long LABEL_E17BC0
-	.long LABEL_E17BDA
-	.long LABEL_E17C04
-	.long LABEL_E17C36
-	.long LABEL_E17C66
-	.long LABEL_E17C98
-	.long LABEL_E17CC6
+	.long NakaContainer_StyleConvertMem_Root
+	.long Naka0x29_StyleConvertMem_Scrollbar
+	.long NakaNode_StyleConvertMem_ListContent
+	.long Naka0x3E_StyleConvertMem_PrevBtn
+	.long Naka0x3F_StyleConvertMem_RepeatBtn
+	.long Naka0x3E_StyleConvertMem_NextBtn
+	.long Naka0x3E_StyleConvertMem_InfoBtn
+	.long NakaNode_StyleConvertMem_PatternList
 	.zero 4
 Naka_Accomp6_Screens:
-	.long LABEL_E17CEA
-	.long LABEL_E17D22
-	.long LABEL_E17D3C
-	.long LABEL_E17D58
-	.long LABEL_E17D82
-	.long LABEL_E17DAA
-	.long LABEL_E17DD8
+	.long NakaContainer_StyleConvertConfirm_Root
+	.long Naka0x29_StyleConvertConfirm_Scrollbar
+	.long Naka0x11_StyleConvertConfirm_Frame
+	.long NakaLabel_StyleConvertConfirm_Continue
+	.long NakaLabel_StyleConvertConfirm_NextQ
+	.long Naka0x3E_StyleConvertConfirm_InfoBtn
+	.long Naka0x3E_StyleConvertConfirm_StatusBtn
 	.zero 4
 Naka_Accomp15_Screens:
-	.long LABEL_E17E06
-	.long LABEL_E17E3E
-	.long LABEL_E17E84
-	.long LABEL_E17EC8
-	.long LABEL_E17F0C
-	.long LABEL_E17F4E
-	.long LABEL_E17F9A
-	.long LABEL_E17FE6
-	.long LABEL_E18000
-	.long LABEL_E1801A
-	.long LABEL_E18034
-	.long LABEL_E1804E
-	.long LABEL_E18078
-	.long LABEL_E180A0
-	.long LABEL_E180BA
-	.long LABEL_E180EE
-	.long LABEL_E18122
-	.long LABEL_E18156
+	.long NakaContainer_ComposerMenu_Root
+	.long NakaNode_ComposerMenu_BendRangeSet
+	.long NakaMenuItem_ComposerMenu_EasyComposer
+	.long NakaMenuItem_ComposerMenu_PatternCopy
+	.long NakaMenuItem_ComposerMenu_CustomCopy
+	.long NakaMenuItem_ComposerMenu_SeqToComposer
+	.long NakaMenuItem_ComposerMenu_LoadSingleComp
+	.long NakaValue_ComposerMenu_RecordingVal
+	.long NakaValue_ComposerMenu_MemoryVal
+	.long NakaValue_ComposerMenu_Value3
+	.long NakaValue_ComposerMenu_Value4
+	.long NakaLabel_ComposerMenu_Recording
+	.long NakaLabel_ComposerMenu_Memory
+	.long Naka0x29_ComposerMenu_Scrollbar
+	.long Naka0x3D_ComposerMenu_MenuItem1
+	.long Naka0x3D_ComposerMenu_MenuItem2
+	.long Naka0x3D_ComposerMenu_MenuItem3
+	.long Naka0x48_ComposerMenu_TabControl
 	.byte 0x00, 0x00, 0x00, 0x00
 Naka_Accomp16_Screens:
-	.long LABEL_E18170
-	.long LABEL_E181A8
-	.long LABEL_E181C2
-	.long LABEL_E18200
-	.long LABEL_E1823E
-	.long LABEL_E18278
-	.long LABEL_E182B4
-	.long LABEL_E182F0
-	.long LABEL_E18334
-	.long LABEL_E18378
-	.long LABEL_E183B2
-	.long LABEL_E183EE
+	.long NakaContainer_RecordMemory_Root
+	.long Naka0x29_RecordMemory_Scrollbar
+	.long Naka0x3D_RecordMemory_Variation1
+	.long Naka0x3D_RecordMemory_Variation3
+	.long Naka0x3D_RecordMemory_Intro1
+	.long Naka0x3D_RecordMemory_FillIn1
+	.long Naka0x3D_RecordMemory_Ending1
+	.long Naka0x3D_RecordMemory_Variation2
+	.long Naka0x3D_RecordMemory_Variation4
+	.long Naka0x3D_RecordMemory_Intro2
+	.long Naka0x3D_RecordMemory_FillIn2
+	.long Naka0x3D_RecordMemory_Ending2
 	.zero 4
 Naka_Accomp17_Screens:
-	.long LABEL_E1842A
-	.long LABEL_E1845E
-	.long LABEL_E18478
-	.long LABEL_E184A0
-	.long LABEL_E184BA
-	.long LABEL_E184FC
-	.long LABEL_E1852C
-	.long LABEL_E1855C
-	.long LABEL_E1858C
-	.long LABEL_E185BC
-	.long LABEL_E185EC
-	.long LABEL_E18610
-	.long LABEL_E18640
-	.long LABEL_E1865A
-	.long LABEL_E18674
-	.long LABEL_E1868E
-	.long LABEL_E186A8
-	.long LABEL_E186EC
-	.long LABEL_E18738
-	.long LABEL_E1875C
-	.long LABEL_E18788
-	.long LABEL_E187B4
+	.long NakaContainer_Recording_Root
+	.long NakaGroup_Recording_Controls
+	.long NakaLabel_Recording_MemoryLabel
+	.long Naka0x29_Recording_Scrollbar
+	.long Naka0x3D_Recording_RecordSetting
+	.long Naka0x3E_Recording_DrmBtn
+	.long Naka0x3E_Recording_Ac3Btn
+	.long Naka0x3E_Recording_Ac2Btn
+	.long Naka0x3E_Recording_Ac1Btn
+	.long Naka0x3E_Recording_BasBtn
+	.long NakaNode_Recording_StatusPanel
+	.long NakaLabel_Recording_StartRecording
+	.long NakaValue_Recording_RecValue1
+	.long NakaValue_Recording_RecValue2
+	.long NakaValue_Recording_RecValue3
+	.long NakaValue_Recording_RecValue4
+	.long NakaNode_Recording_VariNamingLink
+	.long Naka0x3D_Recording_ClearPattern
+	.long Naka0x35_Recording_SongBar
+	.long Naka0x20_Recording_InfoBtn1
+	.long Naka0x20_Recording_InfoBtn2
+	.long NakaList_Recording_TrackList
 	.byte 0x00, 0x00, 0x00, 0x00
 Naka_VariationNaming_Screens:
-	.long LABEL_E187DE
-	.long LABEL_E1881A
-	.long LABEL_E18834
-	.long LABEL_E18860
-	.long LABEL_E1888A
+	.long NakaContainer_VariationNaming_Root
+	.long Naka0x4D_VariationNaming_Editor
+	.long Naka0x20_VariationNaming_InfoBtn
+	.long NakaLabel_VariationNaming_MemLabel
+	.long NakaNode_VariationNaming_NameField
 	.byte 0x00, 0x00, 0x00, 0x00
 Naka_Accomp18_Screens:
-	.long LABEL_E188AE
-	.long LABEL_E188E8
-	.long LABEL_E18902
-	.long LABEL_E18926
-	.long LABEL_E18942
-	.long LABEL_E1895E
-	.long LABEL_E18978
-	.long LABEL_E1899C
-	.long LABEL_E18A6A
-	.long LABEL_E18A9A
-	.long LABEL_E18AC4
-	.long LABEL_E18AEE
-	.long LABEL_E18B14
-	.long LABEL_E18B3A
+	.long NakaContainer_RecordSetting_Root
+	.long Naka0x29_RecordSetting_Scrollbar
+	.long Naka0x25_RecordSetting_TabSelector
+	.long Naka0x28_RecordSetting_Tab1
+	.long Naka0x28_RecordSetting_Tab2
+	.long Naka0x64_RecordSetting_TabContent
+	.long Naka0x35_RecordSetting_SongBar
+	.long NakaNode_RecordSetting_MeasureTimeSig
+	.long NakaLabel_RecordSetting_Title
+	.long Naka0x22_RecordSetting_PartSel1
+	.long Naka0x22_RecordSetting_PartSel2
+	.long NakaLabel_RecordSetting_ItemLabel
+	.long NakaLabel_RecordSetting_ValueLabel
+	.long Naka0x35_RecordSetting_PartListBar
 	.long LABEL_E18B5E
 	.long LABEL_E18BE6
 	.long LABEL_E18C10

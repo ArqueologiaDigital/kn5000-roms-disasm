@@ -849,7 +849,7 @@ LABEL_E176B6:	aligned_string "MT_MspNameSet"
 LABEL_E176C4:	aligned_string "MT_CmpNameSet"
 	.byte 0x32, 0x00, 0xb1, 0xdf, 0xf1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xe6, 0x76, 0xe1, 0x00
-	.long LABEL_E176E4
+	.long NakaStr_PaintArrowProc_Empty
 .include "ui_widgets/composer_style_convert_screens.s"
 	.short 0x0
 	.long Naka_PresentationRootState
