@@ -11166,7 +11166,7 @@ PsMixer_ControlCommon:
 
 AudioCtrl_ReturnZero:
 	lds32 xhl, 0
-	jr AudioCtrl_Epilogue
+	jr AudioCtrl_MixerEpilogue
 
 ; PsMixer control return
 PsMixer_ControlReturn:
@@ -11177,7 +11177,7 @@ PsMixer_ControlReturn:
 AudioCtrl_ProcessParamsAndReturn:
 	call InheritedProc
 
-AudioCtrl_Epilogue:
+AudioCtrl_MixerEpilogue:
 	pop xiz
 	lda xsp, (xsp + 90)
 	ret

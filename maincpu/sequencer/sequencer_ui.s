@@ -3247,9 +3247,9 @@ AcCurSongNameBoxProc:
 	cp xbc, 0x1C70000
 	jr z, AcCurSongName_HandleEventF
 	cp xbc, 0x1C0000C
-	jr z, AcCurSongName_HandleFocusGained
+	jr z, AcCurSongName_HandleFocusAndInit
 	cp xbc, 0x1C0000B
-	jr z, AcCurSongName_HandleFocusGained
+	jr z, AcCurSongName_HandleFocusAndInit
 	cp xbc, 0x1C00002
 	jr z, AcCurSongName_HandleEvent1
 	cp xbc, 0x1C00001
