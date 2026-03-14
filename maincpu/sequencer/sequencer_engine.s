@@ -18792,7 +18792,7 @@ SeqPlay_CheckAndStartPlayback:
 	call AccWrap_PlayModeStart
 	bitda 2, 64848
 	ret z
-	calr SeqTimer_SetPlaybackFlags
+	calr SeqTimer_CheckPlaybackCountdown
 	ret
 
 SeqAcc_SetIndicator_PB:
@@ -19355,7 +19355,7 @@ SeqTimer_BarChangeCleanup:
 	inc 4, xsp
 	ret
 
-SeqTimer_SetPlaybackFlags:
+SeqTimer_CheckPlaybackCountdown:
 	cpdi8 36148, 19
 	jr nz, SeqTimer_FlagsReturn
 	ldda8 a, 10598

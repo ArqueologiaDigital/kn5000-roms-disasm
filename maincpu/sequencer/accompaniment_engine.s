@@ -11052,7 +11052,7 @@ AccDemo_Init:
 	anddi8 13043, 254
 	bitda 7, 13521
 	jr nz, AccDemo_Init_ConfigTimers
-	call LABEL_F6413A
+	call AccWidget_DispatchTable
 
 AccDemo_Init_ConfigTimers:
 	anddi8 13521, 127
@@ -13314,7 +13314,7 @@ RhythmProc_CheckStyleSwitch:
 	jr RhythmProc_StyleSwitch_Ret
 
 RhythmProc_StyleSwitch_Call:
-	call LABEL_F6314F
+	call AccPat_DispatchNoteChange
 
 RhythmProc_StyleSwitch_Ret:
 	ret
@@ -16952,7 +16952,7 @@ AccVoice_InitPatternBuffer:
 	ld (xhl + 10), wa
 	ld (xhl + 12), wa
 	ld (xhl + 14), wa
-	calr LABEL_F62F34
+	calr AccPlayback_InitPartAssignment
 	ldda8 a, 14150
 	ldda8 w, 13529
 	muls8rr a, w
@@ -19555,9 +19555,9 @@ ToneGen_StepFwd_Alternate:
 
 ToneGen_StepAlt_CheckBeat:
 	calr __pad_F62E01
-	calr LABEL_F62E1D
-	calr LABEL_F62E3F
-	calr LABEL_F62E59
+	calr ChordDetect_CheckDescending
+	calr ChordDetect_CheckRoot1
+	calr ChordDetect_CheckInversion1
 
 ToneGen_StepAlt_Return:
 	jr ToneGen_StepAlt_StoreResult
@@ -19569,16 +19569,16 @@ ToneGen_StepAlt_Overflow:
 	jr ToneGen_StepAlt_StoreResult
 
 ToneGen_StepAlt_OverflowDone:
-	calr LABEL_F62E73
-	calr LABEL_F62E8F
-	calr LABEL_F62EAE
-	calr LABEL_F62EC7
+	calr ChordDetect_CheckAscending
+	calr ChordDetect_CheckMirror
+	calr ChordDetect_CheckRoot2
+	calr ChordDetect_CheckInversion2
 
 ToneGen_StepAlt_StoreResult:
 	stda8 14150, c
 	xor d, d
 	stda16 14151, xde
-	calr LABEL_F62EE0
+	calr AccPlayback_DetectMeasurePos
 	ret
 
 ToneGen_StepAlt_Done:
@@ -19601,10 +19601,10 @@ __pad_F62E01:
 RhythmParam_CheckExit6:
 	ret
 
-LABEL_F62E1B:
+__pad_F62E1B:
 	.byte 0x00, 0x00
 
-LABEL_F62E1D:
+ChordDetect_CheckDescending:
 	cps c, 0
 	jr z, ToneGen_NullRet2
 	ld a, c
@@ -19624,10 +19624,10 @@ LABEL_F62E1D:
 ToneGen_NullRet2:
 	ret
 
-LABEL_F62E3D:
+__pad_F62E3D:
 	.byte 0x00, 0x00
 
-LABEL_F62E3F:
+ChordDetect_CheckRoot1:
 	cps c, 0
 	jr nz, RhythmParam_CheckExit5
 	cps d, 1
@@ -19643,10 +19643,10 @@ LABEL_F62E3F:
 RhythmParam_CheckExit5:
 	ret
 
-LABEL_F62E57:
+__pad_F62E57:
 	.byte 0x00, 0x00
 
-LABEL_F62E59:
+ChordDetect_CheckInversion1:
 	ld a, b
 	sub a, 0x3
 	cp c, a
@@ -19662,10 +19662,10 @@ LABEL_F62E59:
 RhythmParam_CheckExit4:
 	ret
 
-LABEL_F62E71:
+__pad_F62E71:
 	.byte 0x00, 0x00
 
-LABEL_F62E73:
+ChordDetect_CheckAscending:
 	ld a, c
 	add a, 0x1
 	cp b, a
@@ -19682,10 +19682,10 @@ LABEL_F62E73:
 RhythmParam_CheckExit3:
 	ret
 
-LABEL_F62E8D:
+__pad_F62E8D:
 	.byte 0x00, 0x00
 
-LABEL_F62E8F:
+ChordDetect_CheckMirror:
 	cps c, 0
 	jr z, Rhythm_NullRet
 	ld a, c
@@ -19704,10 +19704,10 @@ LABEL_F62E8F:
 Rhythm_NullRet:
 	ret
 
-LABEL_F62EAC:
+__pad_F62EAC:
 	.byte 0x00, 0x00
 
-LABEL_F62EAE:
+ChordDetect_CheckRoot2:
 	cps c, 0
 	jr nz, RhythmParam_CheckExit2
 	cps d, 1
@@ -19723,10 +19723,10 @@ LABEL_F62EAE:
 RhythmParam_CheckExit2:
 	ret
 
-LABEL_F62EC5:
+__pad_F62EC5:
 	.byte 0x00, 0x00
 
-LABEL_F62EC7:
+ChordDetect_CheckInversion2:
 	ld a, b
 	dec 1, a
 	cp c, a
@@ -19742,49 +19742,49 @@ LABEL_F62EC7:
 RhythmParam_ValidExit:
 	ret
 
-LABEL_F62EDE:
+__pad_F62EDE:
 	.byte 0x00, 0x00
 
-LABEL_F62EE0:
+AccPlayback_DetectMeasurePos:
 	ld a, c
 	inc 1, a
 	cpdi8 13529, 4
-	jr ugt, LABEL_F62F0F
+	jr ugt, AccPlayback_MeasPos_SmallBeat
 	cp e, a
-	jr c, LABEL_F62EF8
+	jr c, AccPlayback_MeasPos_SetLower
 	add a, 0x3
 	cp e, a
-	jr ugt, LABEL_F62F02
+	jr ugt, AccPlayback_MeasPos_SetUpper
 	jr RhythmChannel_NullRet
 
-LABEL_F62EF8:
+AccPlayback_MeasPos_SetLower:
 	ld c, e
 	dec 1, c
 	stda8 14150, c
 	jr RhythmChannel_NullRet
 
-LABEL_F62F02:
+AccPlayback_MeasPos_SetUpper:
 	ld c, e
 	sub c, 0x3
 	dec 1, c
 	stda8 14150, c
 	jr RhythmChannel_NullRet
 
-LABEL_F62F0F:
+AccPlayback_MeasPos_SmallBeat:
 	cp e, a
-	jr c, LABEL_F62F1C
+	jr c, AccPlayback_MeasPos_SmallLower
 	add a, 0x1
 	cp e, a
-	jr ugt, LABEL_F62F26
+	jr ugt, AccPlayback_MeasPos_SmallUpper
 	jr RhythmChannel_NullRet
 
-LABEL_F62F1C:
+AccPlayback_MeasPos_SmallLower:
 	ld c, e
 	dec 1, c
 	stda8 14150, c
 	jr RhythmChannel_NullRet
 
-LABEL_F62F26:
+AccPlayback_MeasPos_SmallUpper:
 	ld c, e
 	sub c, 0x1
 	dec 1, c
@@ -19793,66 +19793,66 @@ LABEL_F62F26:
 RhythmChannel_NullRet:
 	ret
 
-LABEL_F62F32:
+__pad_F62F32:
 	.byte 0x00, 0x00
 
-LABEL_F62F34:
+AccPlayback_InitPartAssignment:
 	xor wa, wa
 	stda16 14142, xwa
 	stda16 14144, xwa
 	stda16 14146, xwa
 	stda16 14148, xwa
-	jr LABEL_F62F65
+	jr AccPlayback_PartAssign_Check4
 	ldda8 a, 13529
 	cps a, 4
-	jr ule, LABEL_F62F5E
+	jr ule, AccPlayback_PartAssign_Store
 	cpdi8 13563, 4
-	jr nc, LABEL_F62F5B
+	jr nc, AccPlayback_PartAssign_Sub4
 	ldb a, 0x4
-	jr LABEL_F62F5E
+	jr AccPlayback_PartAssign_Store
 
-LABEL_F62F5B:
+AccPlayback_PartAssign_Sub4:
 	sub a, 0x4
 
-LABEL_F62F5E:
+AccPlayback_PartAssign_Store:
 	stda8 14142, a
 	jrl RhythmFunc_NullRet
 
-LABEL_F62F65:
+AccPlayback_PartAssign_Check4:
 	cpdi8 13529, 4
-	jrl ugt, LABEL_F62FEF
+	jrl ugt, AccPlayback_PartAssign_LargeBeat
 	cpdi8 13527, 2
-	jr ugt, LABEL_F62FAE
+	jr ugt, AccPlayback_PartAssign_LargeMeasure
 	cpdi8 14150, 0
-	jr z, LABEL_F62F7E
+	jr z, AccPlayback_PartAssign_SmallPart
 	jrl RhythmFunc_NullRet
 
-LABEL_F62F7E:
+AccPlayback_PartAssign_SmallPart:
 	ldda8 a, 13529
 	stda8 14142, a
 	stdi8 14146, 1
 	cpdi8 13527, 1
-	jr c, LABEL_F62F9B
+	jr c, AccPlayback_PartAssign_Check2
 	stda8 14143, a
 	stdi8 14147, 2
 
-LABEL_F62F9B:
+AccPlayback_PartAssign_Check2:
 	cpdi8 13527, 2
-	jr c, LABEL_F62FAB
+	jr c, AccPlayback_PartAssign_Check3
 	stda8 14144, a
 	stdi8 14148, 3
 
-LABEL_F62FAB:
+AccPlayback_PartAssign_Check3:
 	jrl RhythmFunc_NullRet
 
-LABEL_F62FAE:
+AccPlayback_PartAssign_LargeMeasure:
 	ldda8 a, 13527
 	subda8 a, 14150
 	cps a, 2
-	jr gt, LABEL_F62FBD
+	jr gt, AccPlayback_PartAssign_FullSetup
 	jrl RhythmFunc_NullRet
 
-LABEL_F62FBD:
+AccPlayback_PartAssign_FullSetup:
 	ldda8 a, 13529
 	stda8 14142, a
 	stda8 14143, a
@@ -19869,9 +19869,9 @@ LABEL_F62FBD:
 	stda8 14149, a
 	jr RhythmFunc_NullRet
 
-LABEL_F62FEF:
+AccPlayback_PartAssign_LargeBeat:
 	cpdi8 13527, 0
-	jr nz, LABEL_F63014
+	jr nz, AccPlayback_PartAssign_LargeBeat2
 	cpdi8 14150, 0
 	jr nz, RhythmFunc_NullRet
 	stdi8 14142, 4
@@ -19881,7 +19881,7 @@ LABEL_F62FEF:
 	stdi8 14146, 1
 	jr RhythmFunc_NullRet
 
-LABEL_F63014:
+AccPlayback_PartAssign_LargeBeat2:
 	ldda8 a, 13527
 	subda8 a, 14150
 	cps a, 0
@@ -19901,7 +19901,7 @@ LABEL_F63014:
 RhythmFunc_NullRet:
 	ret
 
-LABEL_F6304A:
+AccPlayback_PartAssign_DataBlock:
 	.byte 0x00, 0x00, 0xc1, 0x38, 0x8d, 0x3f, 0xb6, 0x66
 	.byte 0x02, 0x68, 0x3c, 0xc1, 0x0f, 0x37, 0x21, 0x34
 	.byte 0xe0, 0x01, 0x1e, 0x35, 0x00, 0xc1, 0x1a, 0x37
@@ -19950,14 +19950,14 @@ LABEL_F6304A:
 	.ascii "0123456789ABCDEF"
 	.byte 0x0e
 
-LABEL_F630D4:
+AccPat_ShiftAndMask:
 	pushw hl
 	and hl, 0xFFF
 	sla hl, 4
 	popw hl
 	ret
 
-LABEL_F630DE:
+__pad_F630DE:
 	.byte 0x00, 0x00
 
 AccPat_IndexToAddress:
@@ -19966,7 +19966,7 @@ AccPat_IndexToAddress:
 	add xhl, 0x95C00
 	ret
 
-LABEL_F630F0:
+AccPat_InlineFunctions_DataBlock:
 	.byte 0x00, 0x00, 0xeb, 0xcc, 0xff, 0xff, 0x00, 0x00
 	.byte 0xeb, 0xec, 0x08, 0xeb, 0xc8, 0x00, 0x5c, 0x09
 	.byte 0x00, 0x0e, 0x38, 0x3c, 0xdb, 0x88, 0xeb, 0xcc
@@ -19980,12 +19980,12 @@ LABEL_F630F0:
 	.byte 0x00, 0x00, 0x5c, 0x09, 0x00, 0x00, 0x5c, 0x09
 	.byte 0x00, 0x3e, 0x1e, 0x02, 0x00, 0x5e, 0x0e
 
-LABEL_F6314F:
+AccPat_DispatchNoteChange:
 	bitda 0, 13521
-	jr nz, LABEL_F63159
-	jp LABEL_F6323C
+	jr nz, AccPat_Dispatch_AllocAndProcess
+	jp AccPat_Dispatch_Return
 
-LABEL_F63159:
+AccPat_Dispatch_AllocAndProcess:
 	ld xwa, 0x800
 	push xwa
 	call Malloc
@@ -19998,15 +19998,15 @@ LABEL_F63159:
 	anddi8 13744, 254
 	ldda8 a, 13549
 	cp a, 0x80
-	jr c, LABEL_F631E1
+	jr c, AccPat_Dispatch_LowRange
 	cp a, 0xA0
 	jrl nc, AccPat_CleanupAndFree
 	cpdi8 13551, 26
-	jr nz, LABEL_F6319C
-	calr LABEL_F64150
+	jr nz, AccPat_Dispatch_CalcAccent
+	calr AccWidget_ProcessSpecialCmd
 	jrl AccPat_CleanupAndFree
 
-LABEL_F6319C:
+AccPat_Dispatch_CalcAccent:
 	calr AccPat_CalcAccentVelocity
 	ldda8 a, 13549
 	and a, 0x7F
@@ -20027,29 +20027,29 @@ LABEL_F6319C:
 	stda32 14770, xix
 	pop xix
 	calr AccPatch_LoadDualVoiceParams
-	jr LABEL_F631F9
+	jr AccPat_Dispatch_CheckBit0
 
-LABEL_F631E1:
+AccPat_Dispatch_LowRange:
 	ordi8 13517, 128
 	cpdi8 13551, 26
-	jr nz, LABEL_F631F2
+	jr nz, AccPat_Dispatch_InitWorkArea
 	calr RhythmROM_LoadDrumKit
 	jr AccPat_CleanupAndFree
 
-LABEL_F631F2:
+AccPat_Dispatch_InitWorkArea:
 	call AccPat_InitWorkAreaFromSlot
 	calr RhythmROM_PatternDispatcher
 
-LABEL_F631F9:
+AccPat_Dispatch_CheckBit0:
 	bitda 0, 13744
-	jr nz, LABEL_F63211
+	jr nz, AccPat_Dispatch_InitSlot
 	cpdi8 36150, 184
 	jr nz, AccPat_CleanupAndFree
 	stdi8 32578, 20
 	call DrumVoice_NotifyEE
 	jr AccPat_CleanupAndFree
 
-LABEL_F63211:
+AccPat_Dispatch_InitSlot:
 	call AccPatch_InitCurrentSlot
 	stdi8 32578, 23
 	call DrumVoice_NotifyEE
@@ -20065,10 +20065,10 @@ AccPat_CleanupAndFree:
 	call Free
 	add xsp, 0x4
 
-LABEL_F6323C:
+AccPat_Dispatch_Return:
 	ret
 
-LABEL_F6323D:
+__pad_F6323D:
 	.byte 0x00, 0x00
 
 DualVoice_ParamLoadDone:
@@ -20080,10 +20080,10 @@ DualVoice_ParamLoadDone:
 AccPatch_LoadDualVoiceParams:
 	ldda8 l, 14764
 	cp l, 0x1E
-	jr c, LABEL_F63250
+	jr c, AccPat_DualVoice_ClampIndex
 	xor l, l
 
-LABEL_F63250:
+AccPat_DualVoice_ClampIndex:
 	sla l, 2
 	xor h, h
 	ld xix, 0xE46312
@@ -20093,10 +20093,10 @@ LABEL_F63250:
 	stda32 13660, xiy
 	ldda8 l, 14765
 	cp l, 0x1E
-	jr c, LABEL_F63278
+	jr c, AccPat_DualVoice_ClampIndex2
 	xor l, l
 
-LABEL_F63278:
+AccPat_DualVoice_ClampIndex2:
 	sla l, 2
 	xor h, h
 	ld xix, 0xE46312
@@ -20110,12 +20110,12 @@ LABEL_F63278:
 	add xix, 0xC
 	ldw bc, 0x54
 	ldir85
-	calr LABEL_F63312
+	calr AccPat_DualVoice_ReadParamsA
 	calr AccPatch_LoadDualVoiceParamsB
-	calr LABEL_F63366
+	calr AccPat_DualVoice_CopyAllBanks
 	ret
 
-LABEL_F632B8:
+AccPat_DualVoice_DataBlock:
 	.byte 0x00, 0x00, 0xc1, 0xed, 0x34, 0x27, 0xcf, 0xcc
 	.byte 0x7f, 0xcf, 0xcf, 0x1e, 0x67, 0x02, 0xcf, 0xd7
 	.byte 0xcf, 0xec, 0x02, 0xce, 0xd6, 0x44, 0x12, 0x63
@@ -20130,7 +20130,7 @@ LABEL_F632B8:
 	.byte 0xc8, 0x60, 0x00, 0x00, 0x00, 0xf1, 0x60, 0x35
 	jr	mi, 0x0e
 
-LABEL_F63312:
+AccPat_DualVoice_ReadParamsA:
 	ldda32 xiy, 13660
 	ld hl, (xiy + 256)
 	stda16 13732, xhl
@@ -20144,7 +20144,7 @@ LABEL_F63312:
 	stda16 13740, xhl
 	ret
 
-LABEL_F6333A:
+__pad_F6333A:
 	.byte 0x00, 0x00
 
 AccPatch_LoadDualVoiceParamsB:
@@ -20161,10 +20161,10 @@ AccPatch_LoadDualVoiceParamsB:
 	stda16 13728, xhl
 	ret
 
-LABEL_F63364:
+__pad_F63364:
 	.byte 0x00, 0x00
 
-LABEL_F63366:
+AccPat_DualVoice_CopyAllBanks:
 	ldda16 xiy, 13732
 	ldda16 xix, 13720
 	calr ToneBank_CopyEntry
@@ -20182,7 +20182,7 @@ LABEL_F63366:
 	calr ToneBank_CopyEntry
 	ret
 
-LABEL_F6339E:
+__pad_F6339E:
 	.byte 0x00, 0x00
 
 ToneBank_CopyEntry:
@@ -20206,12 +20206,12 @@ ToneBank_CopyEntry:
 	ldw bc, 0xF9
 	ldir85
 
-LABEL_F633E3:
+__pad_F633E3:
 	cpdi16 13742, 65535
-	jrl z, LABEL_F63470
-	calr LABEL_F63495
+	jrl z, ToneBank_CopyComplete_Return
+	calr ToneBank_CopyChunk_Return
 	bitda 0, 13744
-	jr nz, LABEL_F63470
+	jr nz, ToneBank_CopyComplete_Return
 	decdi16 1, 13524
 	ld hl, de
 	ldda32 xwa, 14770
@@ -20234,7 +20234,7 @@ LABEL_F633E3:
 	calr ToneBank_ComputeEntryAddress
 	ld wa, (xhl + 3)
 	stda16 13742, xwa
-	calr LABEL_F630D4
+	calr AccPat_ShiftAndMask
 	ldda16 xhl, 13718
 	ldda32 xwa, 14770
 	calr ToneBank_ComputeEntryAddress
@@ -20247,9 +20247,9 @@ LABEL_F633E3:
 	add xix, 0x6
 	ldw bc, 0xF9
 	ldir85
-	jrl LABEL_F633E3
+	jrl __pad_F633E3
 
-LABEL_F63470:
+ToneBank_CopyComplete_Return:
 	ldda16 xhl, 13718
 	ldda32 xwa, 14770
 	calr ToneBank_ComputeEntryAddress
@@ -20257,7 +20257,7 @@ LABEL_F63470:
 	ld (xhl + 3), wa
 	ret
 
-LABEL_F63482:
+ToneBank_CopyChunk:
 	.byte 0x00
 
 ToneBank_ComputeEntryAddress:
@@ -20267,46 +20267,46 @@ ToneBank_ComputeEntryAddress:
 	add xhl, 0x1400
 	ret
 
-LABEL_F63495:
+ToneBank_CopyChunk_Return:
 	ldw de, 0x96
 
-LABEL_F63498:
+__pad_F63498:
 	cp de, 0x154
-	jr nc, LABEL_F634AF
+	jr nc, ToneBank_ComputeAddr_CheckRange
 	ld hl, de
 	ldda32 xwa, 14770
 	calr ToneBank_ComputeEntryAddress
 	bitm 7, (xhl)
-	jr z, LABEL_F634B4
+	jr z, ToneBank_ComputeAddr_Return
 	inc 1, de
-	jr LABEL_F63498
+	jr __pad_F63498
 
-LABEL_F634AF:
+ToneBank_ComputeAddr_CheckRange:
 	ordi8 13744, 1
 
-LABEL_F634B4:
+ToneBank_ComputeAddr_Return:
 	ret
 
-LABEL_F634B5:
+__pad_F634B5:
 	ldw de, 0x96
 
-LABEL_F634B8:
+ToneBank_CopyChunkWithSwap:
 	cp de, 0x154
-	jr nc, LABEL_F634CB
+	jr nc, ToneBank_SwapCopy_Return
 	ld hl, de
 	calr AccPat_IndexToAddress
 	bitm 7, (xhl)
-	jr z, LABEL_F634D0
+	jr z, ToneBank_SwapCopy_Pad
 	inc 1, de
-	jr LABEL_F634B8
+	jr ToneBank_CopyChunkWithSwap
 
-LABEL_F634CB:
+ToneBank_SwapCopy_Return:
 	ordi8 13744, 1
 
-LABEL_F634D0:
+ToneBank_SwapCopy_Pad:
 	ret
 
-LABEL_F634D1:
+__pad_F634D1:
 	.byte 0x00, 0x00, 0x32, 0x96, 0x00, 0xda, 0xcf, 0x54
 	.byte 0x01, 0x6f, 0x0d, 0xda, 0x8b, 0x1e, 0x11, 0xfc
 	.byte 0xb3, 0xcf, 0x66, 0x09, 0xda, 0x61, 0x68, 0xed
@@ -20330,10 +20330,10 @@ RhythmROM_PatternDispatcher:
 	stda16 13660, xwa
 	ldda8 l, 13526
 	cp l, 0x1E
-	jr c, LABEL_F63538
+	jr c, AccPat_CalcAccentVelocity_Body
 	xor l, l
 
-LABEL_F63538:
+AccPat_CalcAccentVelocity_Body:
 	sla l, 2
 	xor h, h
 	ld xix, 0xE46312
@@ -20350,20 +20350,20 @@ LABEL_F63538:
 	jr z, RhythmROM_LoadAndInit
 	cpdi8 13551, 3
 	jr z, RhythmROM_LoadAndInit
-	calr LABEL_F63A6C
+	calr __pad_F63A6C
 	calr AccPatch_LoadDualVoiceParamsB
-	calr LABEL_F63B27
-	jr LABEL_F6358A
+	calr VoiceSlot_Resolve_Loop
+	jr AccPat_CalcAccent_Return
 
 RhythmROM_LoadAndInit:
-	calr LABEL_F6382E
+	calr DrumKit_DataTable_Entry0
 	calr AccPatch_LoadDualVoiceParamsB
-	calr LABEL_F63CAC
+	calr AccSection_ProcessEntry
 
-LABEL_F6358A:
+AccPat_CalcAccent_Return:
 	ret
 
-LABEL_F6358B:
+__pad_F6358B:
 	.byte 0x00, 0x00
 
 RhythmROM_LoadPattern:
@@ -20383,16 +20383,16 @@ RhythmROM_LoadPattern:
 	ld xix, 0xF635C1
 	xor xwa, xwa
 	ld_sriw3 WA, 0x07, 0xF0, 0xEC
-	jr LABEL_F635E1
+	jr RhythmROM_PatternDisp_ReadByte
 	xorda16_24 xde, 251907
 	reti
-LABEL_F635C7:
+RhythmROM_PatternDisp_InitLoop:
 	.byte 0xd8, 0x07, 0xd3, 0x03, 0xd3, 0x07, 0xd3, 0x03
 	.byte 0xd3, 0x07, 0xd2, 0x03, 0xd2, 0x03, 0xd8, 0x03
 	.byte 0xd8, 0x03, 0xd2, 0x07, 0xd2, 0x07, 0xd8, 0x07
 	neg	wa
 
-LABEL_F635E1:
+RhythmROM_PatternDisp_ReadByte:
 	ldda32 xiy, 13668
 	add xiy, xwa
 	ld a, (xiy)
@@ -20404,7 +20404,7 @@ LABEL_F635E1:
 	ld (xix), a
 	inc 1, xix
 	push xix
-	calr LABEL_F636FB
+	calr __pad_F636FB
 	pop xix
 	ld (xix), a
 	inc 1, xix
@@ -20427,28 +20427,28 @@ LABEL_F635E1:
 	ld xix, 0xF63643
 	xor xwa, xwa
 	ld_sriw3 WA, 0x07, 0xF0, 0xEC
-	jr LABEL_F63663
+	jr RhythmROM_PatternDisp_Handle90
 
-LABEL_F63643:
+RhythmROM_PatternDisp_CheckCmd:
 	.byte 0x48, 0x02, 0x79, 0x02, 0x48, 0x06, 0x79, 0x06
 	.byte 0x6e, 0x03, 0x6e, 0x07, 0x9f, 0x03, 0x9f, 0x07
 	.byte 0x0c, 0x03, 0x0c, 0x03, 0x3d, 0x03, 0x3d, 0x03
 	.byte 0x0c, 0x07, 0x0c, 0x07, 0x3d, 0x07, 0x3d, 0x07
 
-LABEL_F63663:
+RhythmROM_PatternDisp_Handle90:
 	ldda32 xiy, 13668
 	add xiy, xwa
 	ldda32 xix, 13664
 	add xix, 0x18
 	ldb a, 0x5
 
-LABEL_F63675:
+RhythmROM_PatternDisp_Check91:
 	lds bc, 7
 	ldir85
 	inc 1, xix
 	dec 1, a
 	cps a, 0
-	jr nz, LABEL_F63675
+	jr nz, RhythmROM_PatternDisp_Check91
 	ldda32 xix, 13664
 	ld xiy, 0x22
 	add xiy, xix
@@ -20477,7 +20477,7 @@ LABEL_F63675:
 	ldir85
 	ret
 
-LABEL_F636E2:
+RhythmROM_PatternDisp_Handle91:
 	.byte 0x00, 0x00
 
 RhythmROM_CalcPatternAddr:
@@ -20488,10 +20488,10 @@ RhythmROM_CalcPatternAddr:
 	add xix, xwa
 	ret
 
-LABEL_F636F9:
+RhythmROM_PatternDisp_Return:
 	.byte 0x00, 0x00
 
-LABEL_F636FB:
+__pad_F636FB:
 	ldda32 xhl, 13668
 	add xhl, 0x118
 	calr RhythmROM_CountEntries
@@ -20505,7 +20505,7 @@ LABEL_F636FB:
 	jr z, RhythmROM_InitPattern
 	cps a, 3
 	jr z, RhythmROM_InitPattern
-	jr LABEL_F63748
+	jr __pad_F63748
 
 RhythmROM_InitPattern:
 	ldda32 xhl, 13664
@@ -20515,14 +20515,14 @@ RhythmROM_InitPattern:
 	ld_srib3 L, 0x07, 0xEC, 0xE0
 	ldb a, 0x7
 	cpda8 l, 13747
-	jr nz, LABEL_F63744
+	jr nz, RhythmVoice_WriteParam_Return
 	ordi8 13744, 2
 	ldb a, 0x3
 
-LABEL_F63744:
+RhythmVoice_WriteParam_Return:
 	jp RhythmROM_NullRet
 
-LABEL_F63748:
+__pad_F63748:
 	ldda32 xhl, 13668
 	add xhl, 0x138
 	cps a, 4
@@ -20539,7 +20539,7 @@ LABEL_F63748:
 	add xhl, 0x53C
 	cps a, 7
 	jr z, RhythmROM_ProcessPattern
-	jr LABEL_F637AC
+	jr RhythmVoice_SetupChannels
 
 RhythmROM_ProcessPattern:
 	calr RhythmROM_CountEntries
@@ -20558,7 +20558,7 @@ RhythmROM_ProcessPattern:
 	call MIDI_SendSysExCmd
 	jr RhythmROM_NullRet
 
-LABEL_F637AC:
+RhythmVoice_SetupChannels:
 	cp a, 0x8
 	jr z, RhythmROM_ReturnZero
 	cp a, 0x9
@@ -20583,7 +20583,7 @@ RhythmROM_ReturnZero:
 RhythmROM_NullRet:
 	ret
 
-LABEL_F637D9:
+RhythmVoice_SetupChan_Finalize:
 	.byte 0x00, 0x00
 
 RhythmROM_CountEntries:
@@ -20601,22 +20601,22 @@ RhythmROM_CountEntries:
 	ld a, (xhl)
 	inc 1, xhl
 
-LABEL_F63800:
+RhythmVoice_WriteToBuffer:
 	cp a, 0x83
-	jr z, LABEL_F63812
+	jr z, RhythmVoice_WriteBuf_Done
 	cp a, 0x81
-	jr nz, LABEL_F6380C
+	jr nz, RhythmVoice_WriteBuf_Clamp
 	inc 1, e
 
-LABEL_F6380C:
+RhythmVoice_WriteBuf_Clamp:
 	ld a, (xhl)
 	inc 1, xhl
-	jr LABEL_F63800
+	jr RhythmVoice_WriteToBuffer
 
-LABEL_F63812:
+RhythmVoice_WriteBuf_Done:
 	ret
 
-LABEL_F63813:
+__pad_F63813:
 	nop
 	nop
 	ldb	c, 16
@@ -20633,39 +20633,39 @@ LABEL_F63813:
 	nop
 	nop
 
-LABEL_F6382E:
+DrumKit_DataTable_Entry0:
 	ldda32 xix, 13668
 	ldda32 xiy, 13668
 	cpdi8 13551, 0
-	jr nz, LABEL_F63849
+	jr nz, DrumKit_DataTable_Entry1
 	add xix, 0x0
 	add xiy, 0x118
 
-LABEL_F63849:
+DrumKit_DataTable_Entry1:
 	cpdi8 13551, 1
-	jr nz, LABEL_F6385C
+	jr nz, DrumKit_DataTable_Entry2
 	add xix, 0xF
 	add xiy, 0x118
 
-LABEL_F6385C:
+DrumKit_DataTable_Entry2:
 	cpdi8 13551, 2
-	jr nz, LABEL_F6386F
+	jr nz, DrumKit_DataTable_Entry3
 	add xix, 0x400
 	add xiy, 0x518
 
-LABEL_F6386F:
+DrumKit_DataTable_Entry3:
 	cpdi8 13551, 3
-	jr nz, LABEL_F63882
+	jr nz, DrumKit_DataTable_Entry4
 	add xix, 0x40F
 	add xiy, 0x518
 
-LABEL_F63882:
+DrumKit_DataTable_Entry4:
 	lds32 xhl, 0
 	bitda 0, 13745
-	jr nz, LABEL_F6388F
+	jr nz, DrumKit_DataTable_Entry5
 	ld xhl, 0x26
 
-LABEL_F6388F:
+DrumKit_DataTable_Entry5:
 	add xhl, xiy
 	ld a, (xix + 256)
 	calr ToneData_LookupEffectParam
@@ -20697,10 +20697,10 @@ LABEL_F6388F:
 	stda16 13682, xhl
 	lds32 xhl, 0
 	bitda 0, 13745
-	jr nz, LABEL_F63902
+	jr nz, DrumKit_DataTable_Entry6
 	ld xhl, 0x26
 
-LABEL_F63902:
+DrumKit_DataTable_Entry6:
 	add xhl, xiy
 	ld a, (xix + 1)
 	calr ToneData_LookupEffectParam
@@ -20732,10 +20732,10 @@ LABEL_F63902:
 	stda16 13692, xhl
 	lds32 xhl, 0
 	bitda 0, 13745
-	jr nz, LABEL_F63975
+	jr nz, DrumKit_DataTable_Entry7
 	ld xhl, 0x26
 
-LABEL_F63975:
+DrumKit_DataTable_Entry7:
 	add xhl, xiy
 	ld a, (xix + 2)
 	calr ToneData_LookupEffectParam
@@ -20767,10 +20767,10 @@ LABEL_F63975:
 	stda16 13758, xhl
 	lds32 xhl, 0
 	bitda 0, 13745
-	jr nz, LABEL_F639E8
+	jr nz, DrumKit_DataTable_Entry8
 	ld xhl, 0x26
 
-LABEL_F639E8:
+DrumKit_DataTable_Entry8:
 	add xhl, xiy
 	ld a, (xix + 3)
 	calr ToneData_LookupEffectParam
@@ -20802,7 +20802,7 @@ LABEL_F639E8:
 	stda16 13774, xhl
 	ret
 
-LABEL_F63A4F:
+RhythmROM_LoadKit_InitLDA:
 	.byte 0x00, 0x00
 
 ToneData_LookupEffectParam:
@@ -20816,10 +20816,10 @@ ToneData_LookupEffectParam:
 	pop xix
 	ret
 
-LABEL_F63A6A:
+RhythmROM_LoadKit_Return:
 	.byte 0x00, 0x00
 
-LABEL_F63A6C:
+__pad_F63A6C:
 	ldda32 xix, 13668
 	add xix, 0x3D1
 	ld a, (xix)
@@ -20828,17 +20828,17 @@ LABEL_F63A6C:
 	stda8 13710, a
 	stda8 13711, a
 	stda8 13712, a
-	calr LABEL_F63AE7
+	calr __pad_F63AE7
 	ldda32 xiy, 13668
 	xor xhl, xhl
 	ldda16 xhl, 13748
 	add xiy, xhl
 	lds32 xhl, 0
 	bitda 0, 13745
-	jr nz, LABEL_F63AA8
+	jr nz, RhythmROM_LoadKit_CopyLoop
 	ld xhl, 0x26
 
-LABEL_F63AA8:
+RhythmROM_LoadKit_CopyLoop:
 	add xhl, xiy
 	ld hl, (xhl)
 	stda16 13674, xhl
@@ -20860,10 +20860,10 @@ LABEL_F63AA8:
 	stda16 13682, xhl
 	ret
 
-LABEL_F63AE5:
+RhythmROM_LoadKit_CopyReturn:
 	.byte 0x00, 0x00
 
-LABEL_F63AE7:
+__pad_F63AE7:
 	ldda8 l, 13551
 	and l, 0xF
 	xor h, h
@@ -20873,92 +20873,92 @@ LABEL_F63AE7:
 	stda16 13748, xwa
 	ret
 
-LABEL_F63B02:
+VoiceSlot_ResolveIndex:
 	.zero 8
 	.byte 0x00, 0x00, 0x38, 0x01, 0x38, 0x05, 0x3c, 0x01
 	.byte 0x3c, 0x05, 0x30, 0x01, 0x32, 0x01, 0x34, 0x01
 	.byte 0x36, 0x01, 0x30, 0x05, 0x32, 0x05, 0x34, 0x05
 	.byte 0x36, 0x05, 0x0e, 0x00, 0x00
 
-LABEL_F63B27:
+VoiceSlot_Resolve_Loop:
 	ldda8 w, 13708
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13674
 	ldda16 xde, 13720
 	bitda 0, 13745
-	jr nz, LABEL_F63B44
+	jr nz, VoiceSlot_Resolve_CheckA
 	bitda 1, 13745
-	jr nz, LABEL_F63B44
-	jr LABEL_F63B49
+	jr nz, VoiceSlot_Resolve_CheckA
+	jr VoiceSlot_Resolve_CheckB
 
-LABEL_F63B44:
+VoiceSlot_Resolve_CheckA:
 	calr RhythmBuf_LoadPattern
-	jr LABEL_F63B4C
+	jr VoiceSlot_Resolve_StoreA
 
-LABEL_F63B49:
+VoiceSlot_Resolve_CheckB:
 	calr RhythmBuf_FillEmptyPattern
 
-LABEL_F63B4C:
+VoiceSlot_Resolve_StoreA:
 	anddi8 13744, 251
 	ldda8 w, 13709
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13676
 	ldda16 xde, 13722
 	bitda 2, 13745
-	jr z, LABEL_F63B6B
+	jr z, VoiceSlot_Resolve_CheckC
 	calr RhythmBuf_LoadPattern
-	jr LABEL_F63B6E
+	jr VoiceSlot_Resolve_StoreB
 
-LABEL_F63B6B:
+VoiceSlot_Resolve_CheckC:
 	calr RhythmBuf_FillEmptyPattern
 
-LABEL_F63B6E:
+VoiceSlot_Resolve_StoreB:
 	anddi8 13744, 251
 	ldda8 w, 13710
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13678
 	ldda16 xde, 13724
 	bitda 3, 13745
-	jr z, LABEL_F63B8D
+	jr z, VoiceSlot_Resolve_CheckD
 	calr RhythmBuf_LoadPattern
-	jr LABEL_F63B90
+	jr VoiceSlot_Resolve_StoreC
 
-LABEL_F63B8D:
+VoiceSlot_Resolve_CheckD:
 	calr RhythmBuf_FillEmptyPattern
 
-LABEL_F63B90:
+VoiceSlot_Resolve_StoreC:
 	anddi8 13744, 251
 	ldda8 w, 13711
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13680
 	ldda16 xde, 13726
 	bitda 4, 13745
-	jr z, LABEL_F63BAF
+	jr z, VoiceSlot_Resolve_CheckE
 	calr RhythmBuf_LoadPattern
-	jr LABEL_F63BB2
+	jr VoiceSlot_Resolve_StoreD
 
-LABEL_F63BAF:
+VoiceSlot_Resolve_CheckE:
 	calr RhythmBuf_FillEmptyPattern
 
-LABEL_F63BB2:
+VoiceSlot_Resolve_StoreD:
 	anddi8 13744, 251
 	ldda8 w, 13712
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13682
 	ldda16 xde, 13728
 	bitda 5, 13745
-	jr z, LABEL_F63BD1
+	jr z, VoiceSlot_Resolve_StoreE
 	calr RhythmBuf_LoadPattern
-	jr LABEL_F63BD4
+	jr VoiceSlot_Resolve_Done
 
-LABEL_F63BD1:
+VoiceSlot_Resolve_StoreE:
 	calr RhythmBuf_FillEmptyPattern
 
-LABEL_F63BD4:
+VoiceSlot_Resolve_Done:
 	anddi8 13744, 251
 	ret
 
-LABEL_F63BDA:
+__pad_F63BDA:
 	.byte 0x00, 0x00, 0xc1, 0x8c, 0x35, 0x20, 0x1e, 0x01
 	.byte 0xfb, 0xd1, 0x6a, 0x35, 0x25, 0xd1, 0x80, 0x35
 	.byte 0x24, 0xd1, 0x98, 0x35, 0x22, 0x1e, 0x41, 0x02
@@ -20987,18 +20987,18 @@ LABEL_F63BDA:
 	.byte 0x8f, 0x01, 0xc1, 0xb0, 0x35, 0x3c, 0xfb, 0x0e
 	.byte 0x00, 0x00
 
-LABEL_F63CAC:
+AccSection_ProcessEntry:
 	ldda8 w, 13708
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13674
 	ldda16 xde, 13720
 	bitda 0, 13745
-	jr nz, LABEL_F63CC9
+	jr nz, AccSection_Process_Loop
 	bitda 1, 13745
-	jr nz, LABEL_F63CC9
-	jr LABEL_F63CF8
+	jr nz, AccSection_Process_Loop
+	jr AccSection_Process_Return
 
-LABEL_F63CC9:
+AccSection_Process_Loop:
 	calr RhythmBuf_LoadPattern
 	ldda8 w, 13713
 	calr RhythmROM_CalcPatternAddr
@@ -21012,19 +21012,19 @@ LABEL_F63CC9:
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13766
 	calr RhythmBuf_LoadPattern
-	jr LABEL_F63CFB
+	jr __pad_F63CFB
 
-LABEL_F63CF8:
+AccSection_Process_Return:
 	calr RhythmBuf_FillEmptyPattern
 
-LABEL_F63CFB:
+__pad_F63CFB:
 	anddi8 13744, 251
 	ldda8 w, 13709
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13676
 	ldda16 xde, 13722
 	bitda 2, 13745
-	jr z, LABEL_F63D44
+	jr z, AccSection_Process2_Return
 	calr RhythmBuf_LoadPattern
 	ldda8 w, 13714
 	calr RhythmROM_CalcPatternAddr
@@ -21038,19 +21038,19 @@ LABEL_F63CFB:
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13768
 	calr RhythmBuf_LoadPattern
-	jr LABEL_F63D47
+	jr __pad_F63D47
 
-LABEL_F63D44:
+AccSection_Process2_Return:
 	calr RhythmBuf_FillEmptyPattern
 
-LABEL_F63D47:
+__pad_F63D47:
 	anddi8 13744, 251
 	ldda8 w, 13710
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13678
 	ldda16 xde, 13724
 	bitda 3, 13745
-	jr z, LABEL_F63D90
+	jr z, AccSection_Process3_Return
 	calr RhythmBuf_LoadPattern
 	ldda8 w, 13715
 	calr RhythmROM_CalcPatternAddr
@@ -21064,19 +21064,19 @@ LABEL_F63D47:
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13770
 	calr RhythmBuf_LoadPattern
-	jr LABEL_F63D93
+	jr __pad_F63D93
 
-LABEL_F63D90:
+AccSection_Process3_Return:
 	calr RhythmBuf_FillEmptyPattern
 
-LABEL_F63D93:
+__pad_F63D93:
 	anddi8 13744, 251
 	ldda8 w, 13711
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13680
 	ldda16 xde, 13726
 	bitda 4, 13745
-	jr z, LABEL_F63DDC
+	jr z, AccSection_Process4_Return
 	calr RhythmBuf_LoadPattern
 	ldda8 w, 13716
 	calr RhythmROM_CalcPatternAddr
@@ -21090,19 +21090,19 @@ LABEL_F63D93:
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13772
 	calr RhythmBuf_LoadPattern
-	jr LABEL_F63DDF
+	jr __pad_F63DDF
 
-LABEL_F63DDC:
+AccSection_Process4_Return:
 	calr RhythmBuf_FillEmptyPattern
 
-LABEL_F63DDF:
+__pad_F63DDF:
 	anddi8 13744, 251
 	ldda8 w, 13712
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13682
 	ldda16 xde, 13728
 	bitda 5, 13745
-	jr z, LABEL_F63E28
+	jr z, AccSection_Process5_Return
 	calr RhythmBuf_LoadPattern
 	ldda8 w, 13717
 	calr RhythmROM_CalcPatternAddr
@@ -21116,16 +21116,16 @@ LABEL_F63DDF:
 	calr RhythmROM_CalcPatternAddr
 	ldda16 xiy, 13774
 	calr RhythmBuf_LoadPattern
-	jr LABEL_F63E2B
+	jr __pad_F63E2B
 
-LABEL_F63E28:
+AccSection_Process5_Return:
 	calr RhythmBuf_FillEmptyPattern
 
-LABEL_F63E2B:
+__pad_F63E2B:
 	anddi8 13744, 251
 	ret
 
-LABEL_F63E31:
+AccSection_Finalize:
 	.byte 0x00, 0x00
 
 ; ============================================================================
@@ -21137,39 +21137,39 @@ LABEL_F63E31:
 ; ============================================================================
 RhythmBuf_LoadPattern:
 	bitda 0, 13744
-	jr z, LABEL_F63E3D
-	jp LABEL_F63EC5
+	jr z, AccFill_CheckPattern
+	jp AccFill_AdvCheck_Done
 
-LABEL_F63E3D:
+AccFill_CheckPattern:
 	add iy, 0x6
 	and xiy, 0xFFFF
 	add xiy, xix
 	bitda 2, 13744
-	jr z, LABEL_F63E51
-	jr LABEL_F63E5C
+	jr z, AccFill_ProcessEntry
+	jr AccFill_ProcessDone
 
-LABEL_F63E51:
+AccFill_ProcessEntry:
 	ordi8 13744, 4
 	stda16 13718, xde
 	lds32 xiz, 6
 
-LABEL_F63E5C:
+AccFill_ProcessDone:
 	ld a, (xiy)
 	ldda16 xhl, 13718
 	calr AccPat_IndexToAddress
 	add xhl, xiz
 	ld (xhl), a
 
-LABEL_F63E69:
+__pad_F63E69:
 	cp a, 0x83
-	jr z, LABEL_F63EBB
+	jr z, AccFill_AdvCheck_Return
 	inc 1, xiy
 	inc 1, xiz
 	cp xiz, 0xFE
-	jr ule, LABEL_F63EAE
-	calr LABEL_F634B5
+	jr ule, AccFill_AdvanceAndCheck
+	calr __pad_F634B5
 	bitda 0, 13744
-	jr nz, LABEL_F63EBB
+	jr nz, AccFill_AdvCheck_Return
 	push xiy
 	ldda16 xhl, 13718
 	calr AccPat_IndexToAddress
@@ -21188,24 +21188,24 @@ LABEL_F63E69:
 	lds32 xiz, 6
 	pop xiy
 
-LABEL_F63EAE:
+AccFill_AdvanceAndCheck:
 	ld a, (xiy)
 	ld hl, de
 	calr AccPat_IndexToAddress
 	add xhl, xiz
 	ld (xhl), a
-	jr LABEL_F63E69
+	jr __pad_F63E69
 
-LABEL_F63EBB:
+AccFill_AdvCheck_Return:
 	ldw wa, 0xFFFF
 	ld hl, de
 	calr AccPat_IndexToAddress
 	lds32 xiy, 3
 
-LABEL_F63EC5:
+AccFill_AdvCheck_Done:
 	ret
 
-LABEL_F63EC6:
+__pad_F63EC6:
 	.byte 0x00, 0x00, 0x02, 0x04, 0x06, 0x08, 0x01, 0x02
 	.byte 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x01, 0x02
 	.byte 0x03, 0x04, 0x05, 0x06, 0x07, 0x08
@@ -21228,16 +21228,16 @@ RhythmBuf_FillEmptyPattern:
 	ld e, a
 	ldb a, 0x81
 
-LABEL_F63F0A:
+StyleConvert_ReloadParams:
 	ld (xhl), a
 	inc 1, xhl
 	dec 1, e
 	cps e, 0
-	jr nz, LABEL_F63F0A
+	jr nz, StyleConvert_ReloadParams
 	ld (xhl), 0x83
 	ret
 
-LABEL_F63F18:
+StyleConvert_Reload_Loop:
 	.byte 0x00, 0x00, 0xc1, 0xef, 0x34, 0x3f, 0x10, 0x63
 	.byte 0x1e, 0x21, 0x7b, 0xc1, 0xed, 0x34, 0x3f, 0x84
 	.byte 0x67, 0x0d, 0xc9, 0xc8, 0x06, 0xc1, 0xed, 0x34
@@ -21247,39 +21247,39 @@ LABEL_F63F18:
 
 AccPat_CalcAccentVelocity:
 	cpdi8 13551, 19
-	jr ule, LABEL_F63F69
+	jr ule, StyleConvert_Reload_Return
 	ldb a, 0x78
 	cpdi8 13549, 132
-	jr c, LABEL_F63F5F
+	jr c, StyleConvert_Reload_CheckEnd
 	add a, 0x6
 	cpdi8 13549, 136
-	jr c, LABEL_F63F5F
+	jr c, StyleConvert_Reload_CheckEnd
 	add a, 0x6
 
-LABEL_F63F5F:
+StyleConvert_Reload_CheckEnd:
 	addda8 a, 13551
 	stda8 13549, a
-	jr LABEL_F63F8E
+	jr StyleConvert_Reload_Done
 
-LABEL_F63F69:
+StyleConvert_Reload_Return:
 	cpdi8 13551, 16
-	jr c, LABEL_F63F8E
+	jr c, StyleConvert_Reload_Done
 	ldb a, 0x70
 	cpdi8 13549, 132
-	jr c, LABEL_F63F86
+	jr c, StyleConvert_Reload_Fallback
 	add a, 0x4
 	cpdi8 13549, 136
-	jr c, LABEL_F63F86
+	jr c, StyleConvert_Reload_Fallback
 	add a, 0x4
 
-LABEL_F63F86:
+StyleConvert_Reload_Fallback:
 	addda8 a, 13551
 	stda8 13549, a
 
-LABEL_F63F8E:
+StyleConvert_Reload_Done:
 	ret
 
-LABEL_F63F8F:
+__pad_F63F8F:
 	.byte 0xc1, 0xed, 0x34, 0x27, 0xc1, 0xee, 0x34, 0x26
 	.byte 0x1d, 0xe5, 0x32, 0xf5, 0xdb, 0x8a, 0x45, 0xc2
 	.byte 0x3f, 0xf6, 0x00, 0xdb, 0xd3, 0xd3, 0x07, 0xf4
@@ -21335,22 +21335,22 @@ LABEL_F63F8F:
 	.byte 0xf1, 0xed, 0x34, 0x41, 0xf1, 0xd6, 0x34, 0x47
 	.byte 0x0e, 0x00, 0x00
 
-LABEL_F6413A:
+AccWidget_DispatchTable:
 	ld xiy, 0x9B4000
 	ld xix, 0x94800
 	ldw bc, 0x8000
 	ldirw
-	jp LABEL_F6414D
+	jp AccWidget_Dispatch_Return
 
-LABEL_F6414D:
+AccWidget_Dispatch_Return:
 	ret
 
-LABEL_F6414E:
+__pad_F6414E:
 	.byte 0x00, 0x00
 
-LABEL_F64150:
+AccWidget_ProcessSpecialCmd:
 	cpdi8 13550, 0
-	jr nz, LABEL_F64174
+	jr nz, __pad_F64174
 	ldda8 a, 13549
 	and a, 0x7F
 	ld xix, 0xF644FF
@@ -21360,7 +21360,7 @@ LABEL_F64150:
 	cp a, w
 	jrl z, DrumKit_Return
 
-LABEL_F64174:
+__pad_F64174:
 	ldda8 a, 13549
 	ldda8 w, 13550
 	ldda8 l, 13551
