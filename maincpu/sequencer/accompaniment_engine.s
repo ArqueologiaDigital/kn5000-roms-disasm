@@ -9982,7 +9982,7 @@ AccDir_DispatchEvent:
 	and a, 0x30
 	srl a, 4
 	stda8 36180, a
-	call LABEL_FB71D6
+	call EffectMode_ReinitWithFlag
 
 AccDir_DispatchEvent_Ret:
 	ret

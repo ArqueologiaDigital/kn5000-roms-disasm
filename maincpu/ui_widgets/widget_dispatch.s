@@ -5705,7 +5705,7 @@ UIState_ConfigA_070:
 UIState_ConfigA_071:
 	.fill 4, 1, 0xff
 UIState_ConfigA_072:
-	.long LABEL_FB6B2D
+	.long EffectMode_ByteData_Block3
 	.fill 4, 1, 0xff
 UIState_ConfigA_073:
 	.fill 1, 1, 0xff
@@ -5791,7 +5791,7 @@ UIState_ConfigA_104:
 	.byte 0xff, 0xff, 0xff
 UIState_ConfigA_105:
 	.long BitMapOut_ByteData_PresetCopy
-	.long LABEL_FB6BD9
+	.long EffectMode_ByteData_Block4
 	.long FDemoText_ByteData_VoiceProbeB
 	.fill 4, 1, 0xff
 UIState_ConfigA_106:
@@ -5800,7 +5800,7 @@ UIState_ConfigA_107:
 	.fill 1, 1, 0xff
 	.byte 0xff, 0xff, 0xff
 UIState_ConfigA_108:
-	.long LABEL_FB6A63
+	.long EffectMode_ByteData_Block2
 	.fill 4, 1, 0xff
 UIState_ConfigA_109:
 	.fill 4, 1, 0xff

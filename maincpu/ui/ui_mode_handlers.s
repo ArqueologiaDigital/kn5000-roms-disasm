@@ -7,7 +7,7 @@
 ; editing modes.
 ; =============================================================================
 
-LABEL_FB69EA:
+EffectMode_CopyVoiceParams:
 	pushw iz
 	ldada xbc, 64773
 	ldada xhl, 63904
@@ -15,7 +15,7 @@ LABEL_FB69EA:
 	lda_24 xde, 0x03c2c4
 	add xbc, xde
 	cp (xbc), 0x3
-	jr nz, LABEL_FB6A58
+	jr nz, EffectMode_CopyVoiceParams_Done
 	ldada xix, 64004
 	ld xbc, xix
 	sub xbc, xhl
@@ -53,15 +53,15 @@ LABEL_FB69EA:
 	ld a, (xwa + 33)
 	ld (xbc), a
 
-LABEL_FB6A58:
+EffectMode_CopyVoiceParams_Done:
 	popw iz
 	ret
 
 
-LABEL_FB6A5A:
+EffectMode_ByteData_Block1:
 	.byte 0xf1, 0x58, 0x8d, 0x02, 0xff, 0xff, 0x78, 0x88
 	.byte 0x02
-LABEL_FB6A63:
+EffectMode_ByteData_Block2:
 	.byte 0xc1, 0x7d, 0xc0, 0x3f, 0x02, 0xb0, 0xfe
 	.byte 0xc1, 0x7e, 0xc0, 0x21, 0xc1, 0x7f, 0xc0, 0xc1
 	.byte 0xc9, 0x33, 0x00, 0x76, 0x91, 0x00, 0xc1, 0x34
@@ -88,7 +88,7 @@ LABEL_FB6A63:
 	.byte 0xea, 0xa8, 0x1d, 0x58, 0x9d, 0xfa, 0x30, 0xc1
 	.byte 0x00, 0x1d, 0x90, 0x94, 0xf9, 0xf1, 0x4e, 0x8d
 	.byte 0x00, 0x00, 0x0e
-LABEL_FB6B2D:
+EffectMode_ByteData_Block3:
 	.byte 0xc1, 0x7d, 0xc0, 0x21, 0xc9
 	.byte 0xd8, 0x6e, 0x5f, 0xc1, 0x7f, 0xc0, 0x3f, 0x00
 	.byte 0x66, 0x53, 0xf1, 0x7e, 0xc0, 0xcf, 0x6e, 0x4d
@@ -112,7 +112,7 @@ LABEL_FB6B2D:
 	.byte 0x02, 0x00, 0x1d, 0x37, 0xd4, 0xfc, 0xf1, 0x54
 	.byte 0x8d, 0x47, 0xf1, 0xe2, 0xb7, 0xbf, 0x1e, 0x0f
 	.byte 0x06, 0xc1, 0x52, 0x8d, 0x3c, 0xd7, 0x0e
-LABEL_FB6BD9:
+EffectMode_ByteData_Block4:
 	.byte 0xc1
 	.byte 0x7d, 0xc0, 0x3f, 0x03, 0x6e, 0x44, 0xc1, 0x7e
 	.byte 0xc0, 0x21, 0xc9, 0xcc, 0x07, 0x66, 0x3b, 0xc1
@@ -126,10 +126,10 @@ LABEL_FB6BD9:
 	.byte 0xbe, 0x05, 0xc1, 0x52, 0x8d, 0x3c, 0xd7, 0x0e
 
 
-LABEL_FB6C2A:
-	calr LABEL_FB6D16
+EffectMode_ApplyTranspose:
+	calr EffectMode_ProcessPresetChange
 	cpdi8 36150, 192
-	jr nz, LABEL_FB6C4A
+	jr nz, EffectMode_ApplyTranspose_StoreTimer
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 0
@@ -137,12 +137,12 @@ LABEL_FB6C2A:
 	lds wa, 1
 	call UI_PostPartChangeEvent
 
-LABEL_FB6C4A:
+EffectMode_ApplyTranspose_StoreTimer:
 	stdi8 36174, 0
 	jr __jrt_nop_FB6C51
 __jrt_nop_FB6C51:
 
-LABEL_FB6C51:
+EffectMode_CheckTransposeAndLookup:
 	ld xwa, 0x28000
 	call SndParam_LookupReadOnly
 	bit 7, hl
@@ -188,69 +188,69 @@ EffectMode_TimerCountdown:
 	cps a, 0
 	ret nz
 	cpdi16 36182, 0
-	jr z, LABEL_FB6CCE
+	jr z, EffectMode_TimerCountdown_CheckMode
 	push xde
 	push xhl
 	push xix
 	push xiz
-	calr LABEL_FB6C2A
+	calr EffectMode_ApplyTranspose
 	pop xiz
 	pop xix
 	pop xhl
 	pop xde
 
-LABEL_FB6CCE:
+EffectMode_TimerCountdown_CheckMode:
 	ldda8 a, 36150
 	cp a, 0xC5
-	jr z, LABEL_FB6CE1
+	jr z, EffectMode_TimerCountdown_ResBit7
 	cp a, 0xC2
-	jr z, LABEL_FB6CE1
+	jr z, EffectMode_TimerCountdown_ResBit7
 	cp a, 0xC1
-	jr nz, LABEL_FB6CE6
+	jr nz, EffectMode_TimerCountdown_SetBit7
 
-LABEL_FB6CE1:
+EffectMode_TimerCountdown_ResBit7:
 	resda 7, 47074
 	ret
 
-LABEL_FB6CE6:
+EffectMode_TimerCountdown_SetBit7:
 	setda 7, 47074
 	ret
 
-LABEL_FB6CEB:
+EffectMode_CheckTransposeChanged:
 	ld xwa, 0x28000
 	call SndParam_LookupReadOnly
 	bit 7, hl
-	jr nz, LABEL_FB6D09
+	jr nz, EffectMode_TransposeInvalid
 	calr SndParam_LoadTransposeValues
 	cpda16 xhl, 36184
 	ret z
 	stda16 36184, xhl
 	jrl BitMapOut_ApplyPatch_SkipHeader
 
-LABEL_FB6D09:
+EffectMode_TransposeInvalid:
 	stdi16 36184, 65535
 	stdi16 36182, 0
 	ret
 
-LABEL_FB6D16:
+EffectMode_ProcessPresetChange:
 	dec 4, xsp
 	push xiz
 	ldda16 xbc, 36182
 	ld wa, bc
 	cps bc, 0
-	jr z, LABEL_FB6D27
+	jr z, EffectMode_ProcessPresetChange_CheckBit7
 	dec 1, wa
-	jr LABEL_FB6D2D
+	jr EffectMode_ProcessPresetChange_Apply
 
-LABEL_FB6D27:
+EffectMode_ProcessPresetChange_CheckBit7:
 	bitda 7, 47074
-	jr nz, LABEL_FB6D83
+	jr nz, EffectMode_ProcessPresetChange_Done
 
-LABEL_FB6D2D:
-	calr LABEL_FB6DAB
+EffectMode_ProcessPresetChange_Apply:
+	calr EffectMode_ClampAndLookupPreset
 	ld xwa, xhl
 	stda32 36192, xwa
-	calr LABEL_FB6EC3
+	calr EffectMode_UpdateDisplay
 	ldada xwa, 64602
 	ld (xsp + 4), xwa
 	sub xwa, 0xF9A0
@@ -259,12 +259,12 @@ LABEL_FB6D2D:
 	add xiz, xbc
 	ld xwa, (xsp + 4)
 	ld xbc, xiz
-	calr LABEL_FB706A
+	calr EffectMode_CopyHoldPedalBits
 	ld xwa, (xsp + 4)
 	ld xbc, xiz
-	calr LABEL_FB709F
+	calr EffectMode_SetRegionAndHold
 	ld xwa, xiz
-	calr LABEL_FB7141
+	calr EffectMode_Nop
 	ldada xwa, 63983
 	sub xwa, 0xF9A0
 	lda_24 xbc, 0x03c2c4
@@ -272,16 +272,16 @@ LABEL_FB6D2D:
 	andmi8 (xwa), 0x80
 	ld xwa, (xsp + 4)
 	ld xbc, xiz
-	calr LABEL_FB7142
-	calr LABEL_FB717F
+	calr EffectMode_CopyPresetBits
+	calr EffectMode_ReinitSoundOutput
 
-LABEL_FB6D83:
+EffectMode_ProcessPresetChange_Done:
 	resda 7, 47074
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_FB6D8B:
+EffectMode_CopyParamByte:
 	ldada	xwa, 64007
 	ldada	xde, 63904
 	sub	xwa, xde
@@ -295,26 +295,26 @@ LABEL_FB6D8B:
 	ld	(xhl), a
 	ret
 
-LABEL_FB6DAB:
+EffectMode_ClampAndLookupPreset:
 	cp wa, 0x3E8
-	jr ule, LABEL_FB6DB3
+	jr ule, EffectMode_ClampAndLookup_Clamped
 	lds wa, 1
 
-LABEL_FB6DB3:
+EffectMode_ClampAndLookup_Clamped:
 	ldda8 c, 36152
 	cp c, 0xC2
-	jr z, LABEL_FB6DC1
+	jr z, EffectMode_LookupPreset_BankC2C5
 	cp c, 0xC5
-	jr nz, LABEL_FB6DC8
+	jr nz, EffectMode_LookupPreset_Bank7000
 
-LABEL_FB6DC1:
+EffectMode_LookupPreset_BankC2C5:
 	ld xbc, 0x986000
-	jr LABEL_FB6DCD
+	jr EffectMode_LookupPreset_Compute
 
-LABEL_FB6DC8:
+EffectMode_LookupPreset_Bank7000:
 	ld xbc, 0x987000
 
-LABEL_FB6DCD:
+EffectMode_LookupPreset_Compute:
 	extz xwa
 	sll xwa, 2
 	add xwa, xbc
@@ -323,59 +323,59 @@ LABEL_FB6DCD:
 	add xhl, (xwa + 4)
 	ret
 
-LABEL_FB6DDC:
+EffectMode_DisplayPresetName:
 	pushw iz
 	ldda8 c, 36152
 	cp c, 0xC0
-	jr z, LABEL_FB6DF0
+	jr z, EffectMode_DisplayName_ValidMode
 	cp c, 0xC2
-	jr z, LABEL_FB6DF0
+	jr z, EffectMode_DisplayName_ValidMode
 	cp c, 0xC5
-	jr nz, LABEL_FB6E67
+	jr nz, EffectMode_DisplayName_Done
 
-LABEL_FB6DF0:
+EffectMode_DisplayName_ValidMode:
 	ldda16 xwa, 36182
 	ld iz, wa
 	cps wa, 0
-	jr z, LABEL_FB6DFC
+	jr z, EffectMode_DisplayName_CheckC2C5
 	dec 1, iz
 
-LABEL_FB6DFC:
+EffectMode_DisplayName_CheckC2C5:
 	cp c, 0xC2
-	jr z, LABEL_FB6E06
+	jr z, EffectMode_DisplayName_LookupC2C5
 	cp c, 0xC5
-	jr nz, LABEL_FB6E25
+	jr nz, EffectMode_DisplayName_LookupC0
 
-LABEL_FB6E06:
+EffectMode_DisplayName_LookupC2C5:
 	ld wa, iz
-	calr LABEL_FB6E69
+	calr EffectMode_SearchPresetTableC2C5
 	cp xhl, 0xFFFFFFFF
-	jr z, LABEL_FB6E1E
+	jr z, EffectMode_DisplayName_FallbackC2C5
 	pushw 0x10
 	ld wa, iz
-	calr LABEL_FB6E69
+	calr EffectMode_SearchPresetTableC2C5
 	push xhl
-	jr LABEL_FB6E54
+	jr EffectMode_DisplayName_Render
 
-LABEL_FB6E1E:
+EffectMode_DisplayName_FallbackC2C5:
 	ld xwa, 0x986000
-	jr LABEL_FB6E42
+	jr EffectMode_DisplayName_DefaultLookup
 
-LABEL_FB6E25:
+EffectMode_DisplayName_LookupC0:
 	ld wa, iz
-	calr LABEL_FB6E97
+	calr EffectMode_SearchPresetTableC0
 	cp xhl, 0xFFFFFFFF
-	jr z, LABEL_FB6E3D
+	jr z, EffectMode_DisplayName_FallbackC0
 	pushw 0x10
 	ld wa, iz
-	calr LABEL_FB6E97
+	calr EffectMode_SearchPresetTableC0
 	push xhl
-	jr LABEL_FB6E54
+	jr EffectMode_DisplayName_Render
 
-LABEL_FB6E3D:
+EffectMode_DisplayName_FallbackC0:
 	ld xwa, 0x987000
 
-LABEL_FB6E42:
+EffectMode_DisplayName_DefaultLookup:
 	ld bc, iz
 	extz xbc
 	sll xbc, 2
@@ -385,7 +385,7 @@ LABEL_FB6E42:
 	lda xwa, (xwa + 43)
 	push xwa
 
-LABEL_FB6E54:
+EffectMode_DisplayName_Render:
 	ldada xwa, 63906
 	push xwa
 	call Strncpy
@@ -393,15 +393,15 @@ LABEL_FB6E54:
 	ldw wa, 0x80
 	call BitMapOut_GetRenderMode_CheckBit3
 
-LABEL_FB6E67:
+EffectMode_DisplayName_Done:
 	popw iz
 	ret
 
-LABEL_FB6E69:
+EffectMode_SearchPresetTableC2C5:
 	lds ix, 0
 	lda_24 xhl, 0xeb7ca0
 
-LABEL_FB6E70:
+EffectMode_SearchPresetTableC2C5_Loop:
 	ld bc, ix
 	extz xbc
 	ld xde, xbc
@@ -411,22 +411,22 @@ LABEL_FB6E70:
 	ld xbc, xhl
 	add xbc, xde
 	cp wa, (xbc)
-	jr nz, LABEL_FB6E89
+	jr nz, EffectMode_SearchPresetTableC2C5_Next
 	lda xhl, (xbc + 2)
 	ret
 
-LABEL_FB6E89:
+EffectMode_SearchPresetTableC2C5_Next:
 	inc 1, ix
 	cp ix, 0x16
-	jr c, LABEL_FB6E70
+	jr c, EffectMode_SearchPresetTableC2C5_Loop
 	ld xhl, 0xFFFFFFFF
 	ret
 
-LABEL_FB6E97:
+EffectMode_SearchPresetTableC0:
 	lds ix, 0
 	lda_24 xhl, 0xeb7e2c
 
-LABEL_FB6E9E:
+EffectMode_SearchPresetTableC0_Loop:
 	ld bc, ix
 	extz xbc
 	ld xde, xbc
@@ -436,40 +436,40 @@ LABEL_FB6E9E:
 	ld xbc, xhl
 	add xbc, xde
 	cp wa, (xbc)
-	jr nz, LABEL_FB6EB7
+	jr nz, EffectMode_SearchPresetTableC0_Next
 	lda xhl, (xbc + 2)
 	ret
 
-LABEL_FB6EB7:
+EffectMode_SearchPresetTableC0_Next:
 	inc 1, ix
 	cps ix, 5
-	jr c, LABEL_FB6E9E
+	jr c, EffectMode_SearchPresetTableC0_Loop
 	ld xhl, 0xFFFFFFFF
 	ret
 
-LABEL_FB6EC3:
+EffectMode_UpdateDisplay:
 	push xiz
 	ld xiz, xwa
-	calr LABEL_FB704E
+	calr EffectMode_BackupParamBlock
 	ldda8 a, 36178
 	bit 5, a
-	jr z, LABEL_FB6EE0
+	jr z, EffectMode_UpdateDisplay_NoPatch
 	res 5, a
 	stda8 36178, a
 	ld xwa, xiz
 	calr BitMapOut_ByteData_PatchTable
-	jr LABEL_FB6EE3
+	jr EffectMode_UpdateDisplay_CopyVoice
 
-LABEL_FB6EE0:
-	calr LABEL_FB6EEA
+EffectMode_UpdateDisplay_NoPatch:
+	calr EffectMode_UpdateBitFlags
 
-LABEL_FB6EE3:
+EffectMode_UpdateDisplay_CopyVoice:
 	ld xwa, xiz
-	calr LABEL_FB69EA
+	calr EffectMode_CopyVoiceParams
 	pop xiz
 	ret
 
-LABEL_FB6EEA:
+EffectMode_UpdateBitFlags:
 	lda xsp, (xsp - 48)
 	push xiz
 	lda xwa, (xsp + 48)
@@ -535,9 +535,9 @@ LABEL_FB6EEA:
 	ldda32 xwa, 36192
 	ld (xsp + 8), xwa
 	lds iy, 0
-	jr LABEL_FB6FCD
+	jr EffectMode_UpdateBitFlags_Loop
 
-LABEL_FB6FA5:
+EffectMode_UpdateBitFlags_ProcessEntry:
 	ld a, (xix + 4)
 	extz wa
 	ld xde, (xix)
@@ -546,21 +546,21 @@ LABEL_FB6FA5:
 	ld xiz, xbc
 	add xiz, xwa
 	ldb w, 0x0
-	jr LABEL_FB6FC6
+	jr EffectMode_UpdateBitFlags_CheckCount
 
-LABEL_FB6FB8:
+EffectMode_UpdateBitFlags_CopyByte:
 	ld xde, (xsp + 8)
 	ld_spib A, 0xE8
 	lda_dpi XBC, 0xF8
 	ld (xsp + 8), xde
 	inc 1, w
 
-LABEL_FB6FC6:
+EffectMode_UpdateBitFlags_CheckCount:
 	cp (xix + 5), w
-	jr ugt, LABEL_FB6FB8
+	jr ugt, EffectMode_UpdateBitFlags_CopyByte
 	inc 1, iy
 
-LABEL_FB6FCD:
+EffectMode_UpdateBitFlags_Loop:
 	ld de, iy
 	extz xde
 	ld xwa, xde
@@ -571,7 +571,7 @@ LABEL_FB6FCD:
 	add xix, xwa
 	ld xwa, (xix)
 	cp xwa, 0xFF
-	jr nz, LABEL_FB6FA5
+	jr nz, EffectMode_UpdateBitFlags_ProcessEntry
 	ld xde, (xsp + 32)
 	ld c, (xde)
 	res 5, c
@@ -615,7 +615,7 @@ LABEL_FB6FCD:
 	lda xsp, (xsp + 48)
 	ret
 
-LABEL_FB704E:
+EffectMode_BackupParamBlock:
 	ldada xbc, 63904
 	ldada xwa, 64862
 	sub xwa, xbc
@@ -628,7 +628,7 @@ LABEL_FB704E:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_FB706A:
+EffectMode_CopyHoldPedalBits:
 	ldda8 e, 36152
 	cp e, 0xC0
 	ret z
@@ -650,20 +650,20 @@ LABEL_FB706A:
 	or (xbc), e
 	ret
 
-LABEL_FB709F:
+EffectMode_SetRegionAndHold:
 	push xiz
 	ld xiz, xbc
 	ld h, (xwa + 3)
 	ld a, h
 	and a, 0x7
-	jr nz, LABEL_FB70B8
+	jr nz, EffectMode_SetRegion_Apply
 	call Get_Region_Code
 	ldb h, 0xA
 	cps l, 2
-	jr nz, LABEL_FB70B8
+	jr nz, EffectMode_SetRegion_Apply
 	ldb h, 0x9
 
-LABEL_FB70B8:
+EffectMode_SetRegion_Apply:
 	lda xbc, (xiz + 3)
 	ld a, (xbc)
 	and a, 0xF8
@@ -684,16 +684,16 @@ LABEL_FB70B8:
 	ld (xbc), a
 	ldda8 a, 36152
 	cp a, 0xC2
-	jr z, LABEL_FB70F8
+	jr z, EffectMode_CheckPedalType
 	cp a, 0xC5
 	jr nz, EffectMode_PopIzRet
 
-LABEL_FB70F8:
+EffectMode_CheckPedalType:
 	bitda 2, 1054
 	jr nz, EffectMode_PopIzRet
 	ldda16 xwa, 36182
 	bit 0, wa
-	jr z, LABEL_FB7124
+	jr z, EffectMode_SendPedalType_Bank1
 	ld xwa, 0x28101
 	call SndParam_LookupReadOnly
 	cps hl, 2
@@ -710,7 +710,7 @@ LABEL_FB70F8:
 	pop xde
 	jr EffectMode_PopIzRet
 
-LABEL_FB7124:
+EffectMode_SendPedalType_Bank1:
 	ld xwa, 0x28101
 	call SndParam_LookupReadOnly
 	cps hl, 3
@@ -730,10 +730,10 @@ EffectMode_PopIzRet:
 	pop xiz
 	ret
 
-LABEL_FB7141:
+EffectMode_Nop:
 	ret
 
-LABEL_FB7142:
+EffectMode_CopyPresetBits:
 	ld xde, xbc
 	bitda 7, 47074
 	ret z
@@ -759,7 +759,7 @@ LABEL_FB7142:
 	ld (xbc), a
 	ret
 
-LABEL_FB717F:
+EffectMode_ReinitSoundOutput:
 	ld xwa, 0x302
 	call SndParam_LookupReadOnly
 	stda8 36176, l
@@ -772,31 +772,31 @@ LABEL_FB717F:
 	call BitMapOut_CopyVoicePreset9
 	ldw wa, 0x80
 	call BitMapOut_SnapshotFromROM
-	calr LABEL_FB6DDC
+	calr EffectMode_DisplayPresetName
 	resda 4, 36178
 	cpdi8 36176, 1
-	jr z, LABEL_FB71C5
+	jr z, EffectMode_ReinitSound_NotifyBank1
 	ld xwa, 0x302
 	lds bc, 0
 	lds de, 0
-	jr LABEL_FB71CE
+	jr EffectMode_ReinitSound_CallNotify
 
-LABEL_FB71C5:
+EffectMode_ReinitSound_NotifyBank1:
 	ld xwa, 0x302
 	lds bc, 1
 	lds de, 0
 
-LABEL_FB71CE:
+EffectMode_ReinitSound_CallNotify:
 	call SoundParam_NotifyChange
 	jp SwbtWr_ReinitOutputBank
 
-LABEL_FB71D6:
+EffectMode_ReinitWithFlag:
 	setda 5, 36178
-	calr LABEL_FB71E2
+	calr EffectMode_CheckModeAndReinit
 	resda 5, 36178
 	ret
 
-LABEL_FB71E2:
+EffectMode_CheckModeAndReinit:
 	ldda8 c, 36150
 	cp c, 0x78
 	jr z, SndOutput_ReinitByMode
@@ -822,41 +822,41 @@ SndOutput_ReinitByMode:
 	ld xwa, 0x401
 	call SndParam_LookupReadOnly
 	cps hl, 3
-	jr z, LABEL_FB7227
+	jr z, SndOutput_ReinitByMode_TypeA
 	cps hl, 2
 	ret nz
-	jr LABEL_FB722B
+	jr SndOutput_ReinitByMode_TypeB
 
-LABEL_FB7227:
-	calr LABEL_FB726A
+SndOutput_ReinitByMode_TypeA:
+	calr SndOutput_ReinitByMode_NotifyParam
 	ret
 
-LABEL_FB722B:
+SndOutput_ReinitByMode_TypeB:
 	push xiz
 	ldda16 xiz, 36184
 	ldda16 xwa, 36182
 	ldfr_werp WA, 0xFA
 	stdi16 36184, 65535
-	calr LABEL_FB6CEB
+	calr EffectMode_CheckTransposeChanged
 	ldda16 xbc, 36182
 	cps bc, 0
-	jr z, LABEL_FB725D
+	jr z, SndOutput_ReinitByMode_Restore
 	dec 1, bc
 	ldda8 a, 36180
 	extz wa
 	add bc, wa
 	stda16 36182, xbc
-	calr LABEL_FB6D16
+	calr EffectMode_ProcessPresetChange
 	call SwbtWr_ReinitOutputBank
 
-LABEL_FB725D:
+SndOutput_ReinitByMode_Restore:
 	ldto_werp WA, 0xFA
 	stda16 36182, xwa
 	stda16 36184, xiz
 	pop xiz
 	ret
 
-LABEL_FB726A:
+SndOutput_ReinitByMode_NotifyParam:
 	ldda8 c, 36180
 	inc 1, c
 	extz bc
@@ -865,11 +865,11 @@ LABEL_FB726A:
 	call SoundParam_NotifyChange
 	ldda8 a, 36178
 	bit 5, a
-	jr z, LABEL_FB728D
+	jr z, SndOutput_ReinitByMode_CheckBit3
 	set 2, a
 	stda8 36178, a
 
-LABEL_FB728D:
+SndOutput_ReinitByMode_CheckBit3:
 	ldda8 a, 36178
 	bit 3, a
 	ret z
@@ -916,68 +916,68 @@ MainCPU_self_test_routines:
 Report_test_result_by_blinking_LED:
 	ldb l, 0x0
 
-LABEL_FB72EC:
+Report_BlinkLoop:
 	res_dd8 1, 0x30
 	ldw bc, 0x4000
 	bit 0, a
-	jr z, LABEL_FB72FC
+	jr z, Report_BlinkLoop_ShortFlash
 	ldw bc, 0xC000
-	jr LABEL_FB7300
+	jr Report_BlinkLoop_FlashOn
 
-LABEL_FB72FC:
+Report_BlinkLoop_ShortFlash:
 	cps bc, 0
-	jr z, LABEL_FB730C
+	jr z, Report_BlinkLoop_FlashOff
 
-LABEL_FB7300:
+Report_BlinkLoop_FlashOn:
 	ldb e, 0x0
 
-LABEL_FB7302:
+Report_BlinkLoop_FlashDelay:
 	inc 1, e
 	cp e, 0x20
-	jr c, LABEL_FB7302
-	djnz xbc, LABEL_FB7300
+	jr c, Report_BlinkLoop_FlashDelay
+	djnz xbc, Report_BlinkLoop_FlashOn
 
-LABEL_FB730C:
+Report_BlinkLoop_FlashOff:
 	set_dd8 1, 0x30
 	ldw bc, 0x4000
 
-LABEL_FB7312:
+Report_BlinkLoop_OffDelay:
 	ldb e, 0x0
 
-LABEL_FB7314:
+Report_BlinkLoop_OffDelayInner:
 	inc 1, e
 	cp e, 0x20
-	jr c, LABEL_FB7314
-	djnz xbc, LABEL_FB7312
+	jr c, Report_BlinkLoop_OffDelayInner
+	djnz xbc, Report_BlinkLoop_OffDelay
 	srl a, 1
 	inc 1, l
 	cps l, 3
-	jr ule, LABEL_FB72EC
+	jr ule, Report_BlinkLoop
 	ret
 
 
 A_Short_Pause:
 	lds bc, 0
 
-LABEL_FB732A:
+ShortPause_OuterLoop:
 	lds wa, 0
 
-LABEL_FB732C:
+ShortPause_InnerLoop:
 	inc 1, wa
 	cp wa, 0x100
-	jr c, LABEL_FB732C
+	jr c, ShortPause_InnerLoop
 	inc 1, bc
 	cp bc, 0x1000
-	jr c, LABEL_FB732A
+	jr c, ShortPause_OuterLoop
 	ret
 
 DramTest_Loop:
 	lds wa, 0
 
-LABEL_FB733F:
+DramTest_DelayLoop:
 	inc 1, wa
 	cp wa, 0x10
-	jr c, LABEL_FB733F
+	jr c, DramTest_DelayLoop
 	ret
 
 
@@ -987,7 +987,7 @@ Test_DRAM_IC10_and_IC9:
 	ld (xsp + 14), a
 	ld (xsp + 4), 0x0
 
-LABEL_FB7353:
+DramTest_IC10IC9_NextChip:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0xA
@@ -997,9 +997,9 @@ LABEL_FB7353:
 	ld xiz, (xde + 4)
 	srl xiz, 3
 	or xiz, xiz
-	jr z, LABEL_FB73EC
+	jr z, DramTest_IC10IC9_LoopEnd
 
-LABEL_FB7372:
+DramTest_IC10IC9_WriteLoop:
 	ld xwa, (xhl)
 	ld (xsp + 6), xwa
 	ld xwa, 0x5A5A5A5A
@@ -1011,17 +1011,17 @@ LABEL_FB7372:
 	lda xwa, (xsp + 10)
 	ld xbc, xwa
 	cpw (xwa), 0x5A5A
-	jr z, LABEL_FB7398
+	jr z, DramTest_IC10IC9_Check5A_High
 	ld a, (xde + 8)
 	or (xsp + 14), a
 
-LABEL_FB7398:
+DramTest_IC10IC9_Check5A_High:
 	cpw (xbc + 2), 0x5A5A
-	jr z, LABEL_FB73A5
+	jr z, DramTest_IC10IC9_WriteA5
 	ld a, (xde + 9)
 	or (xsp + 14), a
 
-LABEL_FB73A5:
+DramTest_IC10IC9_WriteA5:
 	ld xwa, (xsp + 6)
 	st_dpil XWA, 0xEE
 	ld xwa, (xhl)
@@ -1035,26 +1035,26 @@ LABEL_FB73A5:
 	lda xwa, (xsp + 10)
 	ld xbc, xwa
 	cpw (xwa), 0xA5A5
-	jr z, LABEL_FB73D1
+	jr z, DramTest_IC10IC9_CheckA5_High
 	ld a, (xde + 8)
 	or (xsp + 14), a
 
-LABEL_FB73D1:
+DramTest_IC10IC9_CheckA5_High:
 	cpw (xbc + 2), 0xA5A5
-	jr z, LABEL_FB73DE
+	jr z, DramTest_IC10IC9_RestoreAndNext
 	ld a, (xde + 9)
 	or (xsp + 14), a
 
-LABEL_FB73DE:
+DramTest_IC10IC9_RestoreAndNext:
 	ld xwa, (xsp + 6)
 	st_dpil XWA, 0xEE
 	sub xiz, 0x1
-	jr nz, LABEL_FB7372
+	jr nz, DramTest_IC10IC9_WriteLoop
 
-LABEL_FB73EC:
+DramTest_IC10IC9_LoopEnd:
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x1
-	jrl nz, LABEL_FB7353
+	jrl nz, DramTest_IC10IC9_NextChip
 	ld l, (xsp + 14)
 	extz hl
 	pop xiz
@@ -1065,7 +1065,7 @@ LABEL_FB73EC:
 Test_SRAM_IC21:
 	ldb l, 0x0
 
-LABEL_FB7402:
+SramTest_IC21_Loop:
 	ld c, l
 	extz bc
 	muls bc, 0xA
@@ -1076,33 +1076,33 @@ LABEL_FB7402:
 	srl xbc, 1
 	ld xix, xbc
 	or xix, xix
-	jr z, LABEL_FB744B
+	jr z, SramTest_IC21_LoopEnd
 
-LABEL_FB7422:
+SramTest_IC21_Write5A:
 	ld w, (xiy)
 	ld (xiy), 0x5A
 	lda xbc, (xde + 8)
 	cp (xiy), 0x5A
-	jr z, LABEL_FB7431
+	jr z, SramTest_IC21_Verify5A
 	or a, (xbc)
 
-LABEL_FB7431:
+SramTest_IC21_Verify5A:
 	lda_dpi XWA, 0xF4
 	ld w, (xiy)
 	ld (xiy), 0xA5
 	cp (xiy), 0xA5
-	jr z, LABEL_FB7440
+	jr z, SramTest_IC21_WriteA5
 	or a, (xbc)
 
-LABEL_FB7440:
+SramTest_IC21_WriteA5:
 	lda_dpi XWA, 0xF4
 	sub xix, 0x1
-	jr nz, LABEL_FB7422
+	jr nz, SramTest_IC21_Write5A
 
-LABEL_FB744B:
+SramTest_IC21_LoopEnd:
 	inc 1, l
 	cps l, 1
-	jr nz, LABEL_FB7402
+	jr nz, SramTest_IC21_Loop
 	ld l, a
 	extz hl
 	ret
@@ -1123,11 +1123,11 @@ Test_PROGRAM_and_TABLE_DATA_ROMs:
 	ldw (xwa), 0x0
 	ldi_berp 0xE2, 0
 
-LABEL_FB7482:
+RomTest_ProgramTableData_OuterLoop:
 	ld xhl, 0xE00000
 	lds32 xix, 0
 
-LABEL_FB7489:
+RomTest_ProgramTableData_SumLoop:
 	ldto_berp A, 0xE2
 	extz wa
 	sla wa, 1
@@ -1148,25 +1148,25 @@ LABEL_FB7489:
 	ld (xiy), iz
 	inc 1, xix
 	cp xix, 0x40000
-	jr c, LABEL_FB7489
+	jr c, RomTest_ProgramTableData_SumLoop
 	inc1_berp 0xE2
 	cpi_berp 0xE2, 2
-	jr c, LABEL_FB7482
+	jr c, RomTest_ProgramTableData_OuterLoop
 	ld hl, (xbc)
 	ld xwa, (xsp + 4)
 	ld wa, (xwa)
 	cp wa, hl
-	jr z, LABEL_FB74D5
+	jr z, RomTest_ProgramROM_Verify
 	setm 0, (xsp + 20)
 
-LABEL_FB74D5:
+RomTest_ProgramROM_Verify:
 	ld hl, (xde)
 	ld xwa, (xsp + 8)
 	cp (xwa), hl
-	jr z, LABEL_FB74E1
+	jr z, RomTest_PrepareTableDataTest
 	setm 1, (xsp + 20)
 
-LABEL_FB74E1:
+RomTest_PrepareTableDataTest:
 	ldw (xbc), 0x0
 	ld xwa, (xsp + 4)
 	ldw (xwa), 0x0
@@ -1175,11 +1175,11 @@ LABEL_FB74E1:
 	ldw (xwa), 0x0
 	ldi_berp 0xE2, 0
 
-LABEL_FB74FA:
+RomTest_TableData_OuterLoop:
 	ld xhl, 0x800000
 	lds32 xix, 0
 
-LABEL_FB7501:
+RomTest_TableData_SumLoop:
 	ldto_berp A, 0xE2
 	extz wa
 	sla wa, 1
@@ -1200,24 +1200,24 @@ LABEL_FB7501:
 	ld (xiy), iz
 	inc 1, xix
 	cp xix, 0x40000
-	jr c, LABEL_FB7501
+	jr c, RomTest_TableData_SumLoop
 	inc1_berp 0xE2
 	cpi_berp 0xE2, 2
-	jr c, LABEL_FB74FA
+	jr c, RomTest_TableData_OuterLoop
 	ld xwa, (xsp + 4)
 	ld wa, (xwa)
 	cp wa, (xbc)
-	jr z, LABEL_FB754B
+	jr z, RomTest_TableData_Verify
 	setm 2, (xsp + 20)
 
-LABEL_FB754B:
+RomTest_TableData_Verify:
 	ld xwa, (xsp + 8)
 	ld wa, (xwa)
 	cp wa, (xde)
-	jr z, LABEL_FB7557
+	jr z, RomTest_Done
 	setm 3, (xsp + 20)
 
-LABEL_FB7557:
+RomTest_Done:
 	ld l, (xsp + 20)
 	extz hl
 	pop xiz
@@ -1233,11 +1233,11 @@ Test_Rhythm_data_ROM_IC14:
 	ldw (xhl), 0x0
 	ldb w, 0x0
 
-LABEL_FB7574:
+RhythmRomTest_OuterLoop:
 	ld xiy, 0x400000
 	lds32 xiz, 0
 
-LABEL_FB757B:
+RhythmRomTest_SumLoop:
 	ld c, w
 	extz bc
 	add bc, bc
@@ -1249,33 +1249,33 @@ LABEL_FB757B:
 	ld (xde), bc
 	inc 1, xiz
 	cp xiz, 0x100000
-	jr c, LABEL_FB757B
+	jr c, RhythmRomTest_SumLoop
 	inc 1, w
 	cps w, 2
-	jr c, LABEL_FB7574
+	jr c, RhythmRomTest_OuterLoop
 	ld bc, (xhl)
 	cp bc, (xix)
-	jr z, LABEL_FB75AC
+	jr z, RhythmRomTest_Compare
 	set 0, a
 
-LABEL_FB75AC:
+RhythmRomTest_Compare:
 	lda_24 xix, 0xeb800c
 	ld xiy, (xix)
 	lda xbc, (xix + 4)
 	ld xde, xbc
 	lda xhl, (xbc + 4)
 
-LABEL_FB75BB:
+RhythmRomTest_ByteCompareLoop:
 	ld c, (xiy)
 	cp c, (xde)
-	jr z, LABEL_FB75C4
+	jr z, RhythmRomTest_ByteCompareNext
 	or a, (xix + 8)
 
-LABEL_FB75C4:
+RhythmRomTest_ByteCompareNext:
 	inc 1, xiy
 	inc 1, xde
 	cp xde, xhl
-	jr c, LABEL_FB75BB
+	jr c, RhythmRomTest_ByteCompareLoop
 	ld l, a
 	extz hl
 	pop xiz
@@ -1289,21 +1289,21 @@ Test_Custom_data_ROM_IC19:
 	lds wa, 1
 	call Flash_IdentifyAndValidateChip
 	cp hl, 0xFFFF
-	jr nz, LABEL_FB75E9
+	jr nz, CustomRomTest_PrepareChecksum
 	setm 1, (xsp + 6)
 
-LABEL_FB75E9:
+CustomRomTest_PrepareChecksum:
 	lda xhl, (xsp + 2)
 	ldw (xhl), 0x0
 	lda xde, (xhl + 2)
 	ldw (xde), 0x0
 	ldi_berp 0xE2, 0
 
-LABEL_FB75FA:
+CustomRomTest_OuterLoop:
 	ld xix, 0x300000
 	lds32 xiy, 0
 
-LABEL_FB7601:
+CustomRomTest_SumLoop:
 	ldto_berp A, 0xE2
 	extz wa
 	add wa, wa
@@ -1314,16 +1314,16 @@ LABEL_FB7601:
 	ld (xbc), iz
 	inc 1, xiy
 	cp xiy, 0x40000
-	jr c, LABEL_FB7601
+	jr c, CustomRomTest_SumLoop
 	inc1_berp 0xE2
 	cpi_berp 0xE2, 2
-	jr c, LABEL_FB75FA
+	jr c, CustomRomTest_OuterLoop
 	ld wa, (xde)
 	cp wa, (xhl)
-	jr z, LABEL_FB7631
+	jr z, CustomRomTest_Done
 	setm 1, (xsp + 6)
 
-LABEL_FB7631:
+CustomRomTest_Done:
 	ld l, (xsp + 6)
 	extz hl
 	popw iz
@@ -1344,10 +1344,10 @@ Test_LCD_Controller_IC206:
 	call _Read_VGA_Register
 
 	cps l, 0
-	jr z, LABEL_FB7654
+	jr z, LcdTest_WriteOneVerify
 	setm 2, (xsp)
 
-LABEL_FB7654:
+LcdTest_WriteOneVerify:
 	; equivalent to "_VGA_WRITE 3c3h, 1" but with CALL instead of CALR
 	ldw wa, 0x3C3
 	lds bc, 1
@@ -1358,10 +1358,10 @@ LABEL_FB7654:
 	call _Read_VGA_Register
 
 	cps l, 1
-	jr z, LABEL_FB766A
+	jr z, LcdTest_WriteZeroVerify
 	setm 2, (xsp)
 
-LABEL_FB766A:
+LcdTest_WriteZeroVerify:
 	; equivalent to "_VGA_WRITE 3c3h, 0" but with CALL instead of CALR
 	ldw wa, 0x3C3
 	lds bc, 0
@@ -1372,10 +1372,10 @@ LABEL_FB766A:
 	call _Read_VGA_Register
 
 	cps l, 0
-	jr z, LABEL_FB7680
+	jr z, LcdTest_Done
 	setm 2, (xsp)
 
-LABEL_FB7680:
+LcdTest_Done:
 	ld l, (xsp)
 	extz hl
 	inc 2, xsp
@@ -1389,24 +1389,24 @@ Test_Video_RAM_IC207:
 	sti16_24 0x1a0000, 0x5a5a              ; VRAM self-test pattern 1
 	calr DramTest_Loop
 	cpdi16_24 1703936, 23130
-	jr z, LABEL_FB76A7
+	jr z, VramTest_Pattern2
 	setm 3, (xsp)
 
-LABEL_FB76A7:
+VramTest_Pattern2:
 	sti16_24 0x1a0004, 0xa5a5              ; VRAM self-test pattern 2
 	calr DramTest_Loop
 	cpdi16_24 1703940, 42405
-	jr z, LABEL_FB76BC
+	jr z, VramTest_Pattern3
 	setm 3, (xsp)
 
-LABEL_FB76BC:
+VramTest_Pattern3:
 	sti16_24 0x1a0008, 0x5a5a
 	calr DramTest_Loop
 	cpdi16_24 1703944, 23130
-	jr z, LABEL_FB76D1
+	jr z, VramTest_Done
 	setm 3, (xsp)
 
-LABEL_FB76D1:
+VramTest_Done:
 	ld l, (xsp)
 	extz hl
 	inc 2, xsp
