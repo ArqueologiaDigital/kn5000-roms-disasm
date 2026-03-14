@@ -2505,8 +2505,8 @@ SeqStep_MainTimerTick:
 	calr SeqStep_TimerDispatchA
 	call SeqPlay_SyncPlaybackPosition
 	calr SeqStep_TimerDispatchB
-	call LABEL_F3ECD4
-	call LABEL_F3ECB8
+	call Seq_HandleModeTransition
+	call SeqNotify_CheckAndClearStart
 	calr SeqStep_PlaybackStateMachine
 	call LABEL_F437CB
 	call LABEL_F2057D
