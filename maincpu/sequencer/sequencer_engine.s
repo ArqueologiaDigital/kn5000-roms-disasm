@@ -23633,7 +23633,7 @@ MainExe_SongMemShiftMask:
 	jr z, MainExe_SongMemNextPart
 	stdi8 32578, 255
 	stdi8 10362, 0
-	call LABEL_F49B2F
+	call SeqVoice_InitJmpNop
 
 MainExe_SongMemNextPart:
 	ldda8 a, 10359
@@ -25638,8 +25638,8 @@ VoiceAlloc_TestBitCalcAddr:
 
 VoiceAlloc_TestBitRead:
 	calr SeqStep_PostEventAndUpdate
-	calr LABEL_F498D9
-	calr LABEL_F4957B
+	calr SeqScan_CheckBarBitAndProcess
+	calr Portamento_ScanInitAndLoop
 	jrl SeqTick_InitAndScanParts
 
 VoiceAlloc_TestBitHigh:
@@ -26803,83 +26803,83 @@ __jrt_nop_F492B6:
 SeqEvt_SelectNearestTiming:
 	ldda16 xbc, 9636
 	cp bc, 0xFFFF
-	jr nz, LABEL_F492D4
+	jr nz, SeqEvt_CompareBothTracks
 	cpdi16 9640, 65535
-	jr nz, LABEL_F492D4
+	jr nz, SeqEvt_CompareBothTracks
 	ldda8 a, 9666
 	extz wa
 	calr SeqStep_HandleNoteOverflow
 	ldb l, 0xFF
 	ret
 
-LABEL_F492D4:
+SeqEvt_CompareBothTracks:
 	ldda16 xde, 9640
 	cp bc, de
-	jr nz, LABEL_F492E6
+	jr nz, SeqEvt_CompareTrackOrder
 	ldda8 a, 9638
 	cpda8 a, 9642
-	jr z, LABEL_F49328
+	jr z, SeqEvt_BothTracksEqual
 
-LABEL_F492E6:
+SeqEvt_CompareTrackOrder:
 	cp bc, de
-	jr c, LABEL_F492F8
+	jr c, SeqEvt_SelectTrackA
 	cp bc, de
-	jr nz, LABEL_F49310
+	jr nz, SeqEvt_SelectTrackB
 	ldda8 a, 9638
 	cpda8 a, 9642
-	jr nc, LABEL_F49310
+	jr nc, SeqEvt_SelectTrackB
 
-LABEL_F492F8:
+SeqEvt_SelectTrackA:
 	stda16 9632, xbc
 	ldmm8 9634, 9638
 	ldmm16 9658, 9656
 	ldmm16 9656, 9660
-	jr LABEL_F49350
+	jr SeqEvt_ApplyTrackAAndReturn
 
-LABEL_F49310:
+SeqEvt_SelectTrackB:
 	stda16 9632, xde
 	ldmm8 9634, 9642
 	ldmm16 9658, 9656
 	ldmm16 9656, 9662
-	jr LABEL_F4937B
+	jr SeqEvt_ApplyTrackBAndReturn
 
-LABEL_F49328:
+SeqEvt_BothTracksEqual:
 	cps bc, 0
-	jr nz, LABEL_F49330
+	jr nz, SeqEvt_TestBitAndSelect
 	cps a, 0
-	jr z, LABEL_F49338
+	jr z, SeqEvt_SelectTrackBDefault
 
-LABEL_F49330:
+SeqEvt_TestBitAndSelect:
 	calr VoiceAlloc_TestBitHigh
 	cp l, 0xF
-	jr nz, LABEL_F49363
+	jr nz, SeqEvt_ApplyTrackAFromBit
 
-LABEL_F49338:
+SeqEvt_SelectTrackBDefault:
 	ldmm16 9632, 9640
 	ldmm8 9634, 9642
 	ldmm16 9658, 9656
 	ldmm16 9656, 9662
 
-LABEL_F49350:
+SeqEvt_ApplyTrackAAndReturn:
 	calr SeqTiming_CompareAndUpdateState
 	ldmm16 10415, 9624
 	ldmm16 9830, 9628
 	ldb l, 0x0
-	jr LABEL_F4938C
+	jr SeqEvt_SelectionReturn
 
-LABEL_F49363:
+SeqEvt_ApplyTrackAFromBit:
 	ldmm16 9632, 9636
 	ldmm8 9634, 9638
 	ldmm16 9658, 9656
 	ldmm16 9656, 9660
 
-LABEL_F4937B:
+SeqEvt_ApplyTrackBAndReturn:
 	calr SeqTiming_CompareAndUpdateState
 	ldmm16 10415, 9626
 	ldmm16 9830, 9630
 	ldb l, 0x1
 
-LABEL_F4938C:
+SeqEvt_SelectionReturn:
 	ret
 
 Portamento_NotifyParams:
@@ -26920,7 +26920,7 @@ Portamento_CheckPos:
 	ldda8 a, 9634
 	ldda8 c, 9650
 	cp a, c
-	jr nc, LABEL_F49416
+	jr nc, Portamento_SubtractDirect
 	ldda16 xwa, 9632
 	dec 1, wa
 	subda16 xwa, 9648
@@ -26929,44 +26929,44 @@ Portamento_CheckPos:
 	add a, 0x5F
 	subda8 a, 9650
 	stda8 9634, a
-	jr LABEL_F4942A
+	jr Portamento_CheckZeroPosition
 
-LABEL_F49416:
+Portamento_SubtractDirect:
 	ldda16 xwa, 9648
 	subdm16 9632, xwa
 	ldda8 a, 9634
 	subda8 a, 9650
 	stda8 9634, a
 
-LABEL_F4942A:
+Portamento_CheckZeroPosition:
 	ldda16 xbc, 9632
 	cps bc, 0
-	jr z, LABEL_F49453
+	jr z, Portamento_CheckSmallOffset
 	ldda8 a, 9634
 	cp a, 0x28
-	jr ugt, LABEL_F4944C
+	jr ugt, Portamento_SubtractOffset
 	dec 1, bc
 	stda16 9632, xbc
 	ldda8 a, 9634
 	add a, 0x5F
 	stda8 9634, a
 
-LABEL_F4944C:
+Portamento_SubtractOffset:
 	subdi8 9634, 40
-	jr LABEL_F4946A
+	jr Portamento_DispatchAndCompute
 
-LABEL_F49453:
+Portamento_CheckSmallOffset:
 	ldda8 a, 9634
 	cp a, 0x28
-	jr ule, LABEL_F49465
+	jr ule, Portamento_ClearOffset
 	sub a, 0x28
 	stda8 9634, a
-	jr LABEL_F4946A
+	jr Portamento_DispatchAndCompute
 
-LABEL_F49465:
+Portamento_ClearOffset:
 	stdi8 9634, 0
 
-LABEL_F4946A:
+Portamento_DispatchAndCompute:
 	ldda16 xbc, 9654
 	ld wa, bc
 	ldb w, 0x0
@@ -26986,17 +26986,17 @@ LABEL_F4946A:
 	ldda8 e, 9650
 	stda8 9646, e
 	cps l, 1
-	jr z, LABEL_F494B5
+	jr z, Portamento_IncrementAndWrap
 	cps wa, 1
-	jr nc, LABEL_F494B5
+	jr nc, Portamento_IncrementAndWrap
 	mul xiy, xix
 	ldda16 xwa, 9648
 	add wa, iy
 	stda16 9648, xwa
 	stda16 9644, xwa
-	jr LABEL_F4951F
+	jr Portamento_ComputeStepSize
 
-LABEL_F494B5:
+Portamento_IncrementAndWrap:
 	inc 1, iy
 	mul xix, xiy
 	ldda16 xbc, 9648
@@ -27005,13 +27005,13 @@ LABEL_F494B5:
 	stda16 9644, xbc
 	ldda16 xwa, 1052
 	cp bc, wa
-	jr ugt, LABEL_F494D9
+	jr ugt, Portamento_WrapOverBoundary
 	cp bc, wa
-	jr nz, LABEL_F4951F
+	jr nz, Portamento_ComputeStepSize
 	cpda8 e, 1051
-	jr ule, LABEL_F4951F
+	jr ule, Portamento_ComputeStepSize
 
-LABEL_F494D9:
+Portamento_WrapOverBoundary:
 	ldda16 xbc, 9656
 	ld wa, bc
 	ldb w, 0x0
@@ -27024,45 +27024,45 @@ LABEL_F494D9:
 	ldda8 a, 9646
 	ldfr_berp A, 0xFB
 	cpda8 a, 1051
-	jr nc, LABEL_F49501
+	jr nc, Portamento_DecrementPosition
 	dec 1, iz
 
-LABEL_F49501:
+Portamento_DecrementPosition:
 	subda16 xiz, 1052
 	extz hl
 	cp iz, hl
-	jr ule, LABEL_F49519
+	jr ule, Portamento_SubtractDirect2
 	ld iy, iz
 	extz xiy
 	div xiy, xhl
 	inc 1, iy
 	mul xhl, xiy
 	sub bc, hl
-	jr LABEL_F4951B
+	jr Portamento_StoreFinalPosition
 
-LABEL_F49519:
+Portamento_SubtractDirect2:
 	sub bc, hl
 
-LABEL_F4951B:
+Portamento_StoreFinalPosition:
 	stda16 9644, xbc
 
-LABEL_F4951F:
+Portamento_ComputeStepSize:
 	ldda16 xiz, 1052
 	ldda8 a, 1051
 	ldfr_berp A, 0xFB
 	ldda8 c, 9646
 	ldto_berp A, 0xFB
 	cp a, c
-	jr nc, LABEL_F49541
+	jr nc, Portamento_SubtractPosition
 	dec 1, iz
 	subda16 xiz, 9644
 	add_erpb 0xFB, 0x5F
-	jr LABEL_F49545
+	jr Portamento_ComputeAndStore
 
-LABEL_F49541:
+Portamento_SubtractPosition:
 	subda16 xiz, 9644
 
-LABEL_F49545:
+Portamento_ComputeAndStore:
 	ldto_berp A, 0xFB
 	sub a, c
 	ldfr_berp A, 0xFB
@@ -27083,7 +27083,7 @@ LABEL_F49545:
 	pop xiz
 	ret
 
-LABEL_F4957B:
+Portamento_ScanInitAndLoop:
 	push xiz
 	stdi16 9614, 0
 	stdi8 9696, 0
@@ -27113,23 +27113,23 @@ LABEL_F4957B:
 	adddm16 9652, xwa
 	stdi8 9696, 0
 
-LABEL_F495DE:
+Portamento_ScanPartLoop:
 	ldda8 c, 9696
 	lds de, 1
 	ld a, c
 	and a, 0xF
-	jr z, LABEL_F495ED
+	jr z, Portamento_ScanCheckPartMask
 	slaa de
 
-LABEL_F495ED:
+Portamento_ScanCheckPartMask:
 	andda16 xde, 61854
-	jr z, LABEL_F49631
+	jr z, Portamento_ScanNextPart
 	inc 1, c
 	extz bc
 	lds wa, 0
 	call Part_ReadVoiceBit7
 	cps l, 0
-	jr z, LABEL_F49631
+	jr z, Portamento_ScanNextPart
 	call SeqData_SeekToPartStart
 	ldda8 a, 9696
 	extz wa
@@ -27146,38 +27146,38 @@ LABEL_F495ED:
 	cp (xwa), 0x10
 	call_24 z, 0xF49642
 
-LABEL_F49631:
+Portamento_ScanNextPart:
 	ldda8 a, 9696
 	inc 1, a
 	stda8 9696, a
 	cp a, 0x10
-	jr c, LABEL_F495DE
+	jr c, Portamento_ScanPartLoop
 	pop xiz
 	ret
 
-LABEL_F49642:
+Portamento_ScanInitPosition:
 	stdi16 9614, 0
 
 Portamento_ScanSeqEvents:
 	stdi8 9672, 1
 	calr SeqData_ReadParamBlock
 	cps hl, 7
-	jr c, LABEL_F4965D
+	jr c, Portamento_ScanCheckEventType
 	ldda8 a, 9696
 	extz wa
 	jrl Portamento_NotifyParams
 
-LABEL_F4965D:
+Portamento_ScanCheckEventType:
 	ldada xiy, 9606
 	ld l, (xiy)
 	cp l, 0x82
 	ret z
 	cp l, 0x84
-	jr nz, LABEL_F49673
+	jr nz, Portamento_ScanCheckBoundary
 	call SeqData_SeekToPartStart
 	jr Portamento_ScanSeqEvents
 
-LABEL_F49673:
+Portamento_ScanCheckBoundary:
 	ldda16 xde, 9616
 	ld wa, de
 	inc 1, wa
@@ -27185,12 +27185,12 @@ LABEL_F49673:
 	cp wa, bc
 	ret ule
 	cp l, 0x81
-	jr nz, LABEL_F49690
+	jr nz, Portamento_ScanCheckC0Type
 	inc 1, bc
 	stda16 9614, xbc
 	jr Portamento_ScanSeqEvents
 
-LABEL_F49690:
+Portamento_ScanCheckC0Type:
 	ld h, l
 	and h, 0xF0
 	lda xix, (xiy + 1)
@@ -27204,27 +27204,27 @@ LABEL_F49690:
 	cp wa, bc
 	jr ugt, Portamento_ScanSeqEvents
 	cp wa, bc
-	jr nz, LABEL_F496BD
+	jr nz, Portamento_ScanComparePosition
 	ldda8 a, 9670
 	cp a, (xix)
 	jr ugt, Portamento_ScanSeqEvents
 
-LABEL_F496BD:
+Portamento_ScanComparePosition:
 	cp bc, de
 	ret ugt
 	cp bc, de
-	jr nz, LABEL_F496CD
+	jr nz, Portamento_ScanExtractNote
 	ld a, (xix)
 	cpda8 a, 9618
 	ret ugt
 
-LABEL_F496CD:
+Portamento_ScanExtractNote:
 	ld h, (xiy + 4)
 	bit 0, l
-	jr z, LABEL_F496D8
+	jr z, Portamento_ScanSetBit7Note
 	set 7, h
 
-LABEL_F496D8:
+Portamento_ScanSetBit7Note:
 	ld a, (xiy + 5)
 	extz wa
 	sll wa, 8
@@ -27236,28 +27236,28 @@ LABEL_F496D8:
 	mrib4 0x84, 0x19, 0xC6, 0x25
 	jrl Portamento_ScanSeqEvents
 
-LABEL_F496F9:
+SeqSearch_InitAndAdvance:
 	stdi16 9614, 0
 
 SeqSearch_AdvanceToPosition:
 	calr SeqData_ReadParamBlock
 	cps hl, 7
-	jr c, LABEL_F4970F
+	jr c, SeqSearch_CheckEventType
 	ldda8 a, 9696
 	extz wa
 	jrl Portamento_NotifyParams
 
-LABEL_F4970F:
+SeqSearch_CheckEventType:
 	ldada xiy, 9606
 	ld d, (xiy)
 	cp d, 0x82
 	ret z
 	cp d, 0x84
-	jr nz, LABEL_F49725
+	jr nz, SeqSearch_CheckBoundary
 	call SeqData_SeekToPartStart
 	jr SeqSearch_AdvanceToPosition
 
-LABEL_F49725:
+SeqSearch_CheckBoundary:
 	ldda16 xix, 9616
 	ld wa, ix
 	inc 1, wa
@@ -27265,17 +27265,17 @@ LABEL_F49725:
 	cp wa, bc
 	ret ule
 	cp d, 0x81
-	jr nz, LABEL_F49742
+	jr nz, SeqSearch_CheckTypeC0
 	inc 1, bc
 	stda16 9614, xbc
 	jr SeqSearch_AdvanceToPosition
 
-LABEL_F49742:
+SeqSearch_CheckTypeC0:
 	ld e, d
 	and e, 0xF0
 	lda xwa, (xiy + 2)
 	cp e, 0xC0
-	jr nz, LABEL_F497C7
+	jr nz, SeqSearch_CheckTypeB0
 	cp (xwa), 0x48
 	jr nz, SeqSearch_AdvanceToPosition
 	cp (xiy + 3), 0x0
@@ -27284,12 +27284,12 @@ LABEL_F49742:
 	cp hl, bc
 	jr ugt, SeqSearch_AdvanceToPosition
 	cp hl, bc
-	jr nz, LABEL_F4976F
+	jr nz, SeqSearch_CheckExactMatch
 	ldda8 a, 9670
 	cp a, (xiy + 1)
 	jr ugt, SeqSearch_AdvanceToPosition
 
-LABEL_F4976F:
+SeqSearch_CheckExactMatch:
 	lda xwa, (xiy + 1)
 	cp hl, bc
 	jr nz, SeqSearch_ComparePosition
@@ -27307,18 +27307,18 @@ SeqSearch_ComparePosition:
 	cp bc, ix
 	ret ugt
 	cp bc, ix
-	jr nz, LABEL_F4979E
+	jr nz, SeqSearch_ExtractNote
 	ld a, (xwa)
 	cpda8 a, 9618
 	ret ugt
 
-LABEL_F4979E:
+SeqSearch_ExtractNote:
 	ld e, (xiy + 4)
 	bit 0, d
-	jr z, LABEL_F497A9
+	jr z, SeqSearch_SetBit7Note
 	set 7, e
 
-LABEL_F497A9:
+SeqSearch_SetBit7Note:
 	ld a, (xiy + 5)
 	extz wa
 	sll wa, 8
@@ -27329,17 +27329,17 @@ LABEL_F497A9:
 	mrdb5 0x8D, 0x01, 0x19, 0xC6, 0x25
 	jrl SeqSearch_AdvanceToPosition
 
-LABEL_F497C7:
+SeqSearch_CheckTypeB0:
 	ld e, d
 	and e, 0xF0
 	cp e, 0xB0
 	jrl nz, SeqSearch_AdvanceToPosition
 	ld e, (xwa)
 	bit 2, d
-	jr z, LABEL_F497DC
+	jr z, SeqSearch_ValidateB0Params
 	set 7, e
 
-LABEL_F497DC:
+SeqSearch_ValidateB0Params:
 	cp e, 0x98
 	jrl nz, SeqSearch_AdvanceToPosition
 	ld e, (xiy + 3)
@@ -27380,22 +27380,22 @@ LABEL_F497DC:
 	jrl ugt, SeqSearch_AdvanceToPosition
 	lda xhl, (xiy + 1)
 	cp wa, bc
-	jr nz, LABEL_F49859
+	jr nz, SeqSearch_CompareOverflow
 	ldda8 a, 9670
 	cp a, (xhl)
 	jrl ugt, SeqSearch_AdvanceToPosition
 
-LABEL_F49859:
+SeqSearch_CompareOverflow:
 	ldda16 xwa, 9616
 	cp bc, wa
 	ret ugt
 	cp bc, wa
-	jr nz, LABEL_F4986D
+	jr nz, SeqSearch_StorePortamento
 	ld a, (xhl)
 	cpda8 a, 9618
 	ret ugt
 
-LABEL_F4986D:
+SeqSearch_StorePortamento:
 	extz de
 	sll de, 8
 	ldda8 a, 9674
@@ -27412,19 +27412,19 @@ SeqData_ReadParamBlock:
 	call SeqData_ReadNextByte
 	stda8 9606, l
 	cp l, 0x82
-	jr z, LABEL_F498A0
+	jr z, SeqData_ReadParamTerminator
 	cp l, 0x84
 	jr nz, SeqVoice_ReadByteLoop
 
-LABEL_F498A0:
+SeqData_ReadParamTerminator:
 	lds hl, 0
-	jr LABEL_F498D7
+	jr SeqData_ReadParamReturn
 
 SeqVoice_ReadByteLoop:
 	call PartCtrl_RefreshWordPeriodic
 	call SeqData_ReadNextByte
 	bit 7, l
-	jr nz, LABEL_F498D5
+	jr nz, SeqData_ReadParamDone
 	cps iz, 5
 	jr nc, SeqVoice_ReadByteLoop
 	ld bc, iz
@@ -27439,83 +27439,83 @@ SeqVoice_ReadByteLoop:
 	stdi8 1079, 0
 	stdi8 1078, 0
 
-LABEL_F498D5:
+SeqData_ReadParamDone:
 	ld hl, iz
 
-LABEL_F498D7:
+SeqData_ReadParamReturn:
 	popw iz
 	ret
 
-LABEL_F498D9:
+SeqScan_CheckBarBitAndProcess:
 	bitda 0, 10406
-	jr nz, LABEL_F498FD
+	jr nz, SeqScan_CheckBarNonZero
 	ret
 
-LABEL_F498E0:
-	calr LABEL_F49A14
+SeqScan_CompareBarPositions:
+	calr SeqScan_SortSecondBar
 	ldda16 xde, 9678
 	ldda16 xwa, 9684
 	cp wa, de
 	ret ugt
 	cp wa, de
-	jr nc, LABEL_F49971
+	jr nc, SeqScan_CompareBarBytes
 
 SeqScan_SaveBarPosition:
 	stda16 9616, xde
 
-LABEL_F498F7:
+SeqScan_StoreBarTickByte:
 	ldmm8 9618, 9680
 
-LABEL_F498FD:
+SeqScan_CheckBarNonZero:
 	cpdi16 9616, 0
-	jr nz, LABEL_F4990C
+	jr nz, SeqScan_ProcessBarSlots
 	cpdi8 9618, 0
 	ret z
 
-LABEL_F4990C:
-	calr LABEL_F4998E
+SeqScan_ProcessBarSlots:
+	calr SeqScan_ClearMatchingBarSlots
 	lds de, 0
 	ldada xbc, 9510
 
-LABEL_F49915:
+SeqScan_FindActiveBarSlot:
 	ld wa, de
 	add wa, wa
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0xFFFF
-	jr nz, LABEL_F4992B
+	jr nz, SeqScan_CheckBarSlotValid
 	inc 1, de
 	cp de, 0x10
-	jr c, LABEL_F49915
+	jr c, SeqScan_FindActiveBarSlot
 
-LABEL_F4992B:
+SeqScan_CheckBarSlotValid:
 	cp de, 0x10
 	ret nc
-	calr LABEL_F499C2
+	calr SeqScan_SortBarSlots
 	ldmm16 9678, 9684
 	ldmm8 9680, 9686
 	ldmm8 9682, 9688
 	lds de, 0
 	ldada xbc, 9558
 
-LABEL_F4994C:
+SeqScan_FindSecondBarSlot:
 	ld wa, de
 	add wa, wa
 	extz xwa
 	add xwa, xbc
 	cpw (xwa), 0xFFFF
-	jr nz, LABEL_F49962
+	jr nz, SeqScan_CheckSecondBarValid
 	inc 1, de
 	cp de, 0x10
-	jr c, LABEL_F4994C
+	jr c, SeqScan_FindSecondBarSlot
 
-LABEL_F49962:
+SeqScan_CheckSecondBarValid:
 	cp de, 0x10
-	jrl c, LABEL_F498E0
+	jrl c, SeqScan_CompareBarPositions
 	ldmm16 9616, 9678
-	jr LABEL_F498F7
+	jr SeqScan_StoreBarTickByte
 
-LABEL_F49971:
+SeqScan_CompareBarBytes:
 	ldda8 a, 9680
 	ldda8 c, 9686
 	cp c, a
@@ -27527,14 +27527,14 @@ LABEL_F49971:
 	jrl nc, SeqScan_SaveBarPosition
 	ret
 
-LABEL_F4998E:
+SeqScan_ClearMatchingBarSlots:
 	lds hl, 0
 	ldada xbc, 9542
 
-LABEL_F49994:
+SeqScan_ClearBarLoop:
 	ld a, (xbc)
 	cpda8 a, 9618
-	jr nz, LABEL_F499B7
+	jr nz, SeqScan_ClearBarNext
 	ld de, hl
 	add de, de
 	ldada xwa, 9510
@@ -27542,18 +27542,18 @@ LABEL_F49994:
 	add xde, xwa
 	ld wa, (xde)
 	cpda16 xwa, 9616
-	jr nz, LABEL_F499B7
+	jr nz, SeqScan_ClearBarNext
 	ldw (xde), 0xFFFF
 	ld (xbc), 0xFF
 
-LABEL_F499B7:
+SeqScan_ClearBarNext:
 	inc 1, hl
 	inc 1, xbc
 	cp hl, 0x10
-	jr c, LABEL_F49994
+	jr c, SeqScan_ClearBarLoop
 	ret
 
-LABEL_F499C2:
+SeqScan_SortBarSlots:
 	pushw iz
 	ldada xix, 9510
 	ld iy, (xix)
@@ -27562,7 +27562,7 @@ LABEL_F499C2:
 	ldfr_berp A, 0xE6
 	lds iz, 1
 
-LABEL_F499D4:
+SeqScan_SortBarLoop:
 	ld de, iz
 	extz xde
 	add xde, xhl
@@ -27571,37 +27571,37 @@ LABEL_F499D4:
 	extz xwa
 	add xwa, xix
 	cp iy, 0xFFFF
-	jr nz, LABEL_F499EC
+	jr nz, SeqScan_SortBarCompare
 	ld iy, (xwa)
-	jr LABEL_F49A05
+	jr SeqScan_SortBarUpdateBest
 
-LABEL_F499EC:
+SeqScan_SortBarCompare:
 	ld bc, (xwa)
 	cp bc, iy
-	jr ugt, LABEL_F499FD
+	jr ugt, SeqScan_SortBarCheckFFFF
 	cp bc, iy
 	jr c, SeqScan_PartLoopEnd
 	ld a, (xde)
 	cp_berp A, 0xE6
 	jr ule, SeqScan_PartLoopEnd
 
-LABEL_F499FD:
+SeqScan_SortBarCheckFFFF:
 	cp bc, 0xFFFF
 	jr z, SeqScan_PartLoopEnd
 	ld iy, bc
 
-LABEL_F49A05:
+SeqScan_SortBarUpdateBest:
 	ld a, (xde)
 	ldfr_berp A, 0xE6
 
 SeqScan_PartLoopEnd:
 	inc 1, iz
 	cp iz, 0x10
-	jr c, LABEL_F499D4
+	jr c, SeqScan_SortBarLoop
 	popw iz
 	ret
 
-LABEL_F49A14:
+SeqScan_SortSecondBar:
 	pushw iz
 	ldada xix, 9558
 	ld iy, (xix)
@@ -27610,7 +27610,7 @@ LABEL_F49A14:
 	ldfr_berp A, 0xE6
 	lds iz, 1
 
-LABEL_F49A26:
+SeqScan_SortSecondBarLoop:
 	ld de, iz
 	extz xde
 	add xde, xhl
@@ -27619,33 +27619,33 @@ LABEL_F49A26:
 	extz xwa
 	add xwa, xix
 	cp iy, 0xFFFF
-	jr nz, LABEL_F49A3E
+	jr nz, SeqScan_SortSecondBarCompare
 	ld iy, (xwa)
-	jr LABEL_F49A57
+	jr SeqScan_SortSecondBarUpdate
 
-LABEL_F49A3E:
+SeqScan_SortSecondBarCompare:
 	ld bc, (xwa)
 	cp bc, iy
-	jr ugt, LABEL_F49A4F
+	jr ugt, SeqScan_SortSecondBarCheckFFFF
 	cp bc, iy
 	jr c, SeqScan_PartSearchEnd
 	ld a, (xde)
 	cp_berp A, 0xE6
 	jr ule, SeqScan_PartSearchEnd
 
-LABEL_F49A4F:
+SeqScan_SortSecondBarCheckFFFF:
 	cp bc, 0xFFFF
 	jr z, SeqScan_PartSearchEnd
 	ld iy, bc
 
-LABEL_F49A57:
+SeqScan_SortSecondBarUpdate:
 	ld a, (xde)
 	ldfr_berp A, 0xE6
 
 SeqScan_PartSearchEnd:
 	inc 1, iz
 	cp iz, 0x10
-	jr c, LABEL_F49A26
+	jr c, SeqScan_SortSecondBarLoop
 	popw iz
 	ret
 
@@ -27653,13 +27653,13 @@ SeqVoice_InitEntry:
 	push_werp 0xFA
 	call SeqVoice_SetDefaultParams
 	cpdi8 10360, 10
-	jr nz, LABEL_F49A85
+	jr nz, SeqVoice_InitChannelLoop
 	call SeqBufPos_WrapAround
 	stdi16 61852, 0
 	call Part_ClearAllVoiceChannels
-	jrl LABEL_F49B23
+	jrl SeqVoice_InitDefaultsAndReturn
 
-LABEL_F49A85:
+SeqVoice_InitChannelLoop:
 	call SeqVoice_InitAllChannelParams
 	ldda8 a, 10360
 	inc 1, a
@@ -27675,7 +27675,7 @@ LABEL_F49A85:
 	call Part_WriteByte
 	ldi_berp 0xFB, 1
 
-LABEL_F49AAE:
+SeqVoice_InitPartVoiceLoop:
 	ldda8 a, 10360
 	inc 1, a
 	extz wa
@@ -27692,16 +27692,16 @@ LABEL_F49AAE:
 	call Part_WriteVoiceWord
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr ule, LABEL_F49AAE
+	jr ule, SeqVoice_InitPartVoiceLoop
 	ld8_24 a, 0x00ffe3
 	cpda8 a, 10360
-	jr nz, LABEL_F49B1F
+	jr nz, SeqVoice_InitChannelAndParams
 	stdi8 62027, 0
 	call SeqStatus_ResetAndSendCmd
 	stdi16 61852, 0
 	ldi_berp 0xFB, 1
 
-LABEL_F49AFB:
+SeqVoice_InitSecondPartLoop:
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
@@ -27714,18 +27714,18 @@ LABEL_F49AFB:
 	call Part_WriteVoiceWord
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr ule, LABEL_F49AFB
+	jr ule, SeqVoice_InitSecondPartLoop
 
-LABEL_F49B1F:
+SeqVoice_InitChannelAndParams:
 	call SeqVoice_InitAllChannelParams
 
-LABEL_F49B23:
+SeqVoice_InitDefaultsAndReturn:
 	call SeqParams_InitDefaults
 	call SeqVoice_InitReturnZero
 	pop_werp 0xFA
 	ret
 
-LABEL_F49B2F:
+SeqVoice_InitJmpNop:
 	jr __jrt_nop_F49B31
 __jrt_nop_F49B31:
 
