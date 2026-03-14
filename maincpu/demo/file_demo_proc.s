@@ -2870,7 +2870,7 @@ LoadVariant_OpenAndProcess:
 	extz bc
 	ld e, (xsp + 6)
 	extz de
-	call LABEL_F26FCE
+	call SMF_LoadSoundBankAndPlay
 	ld iz, hl
 	call FileIO_CloseHandle
 	cps iz, 0

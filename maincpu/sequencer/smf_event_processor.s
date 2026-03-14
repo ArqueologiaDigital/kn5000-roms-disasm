@@ -10,10 +10,10 @@
 	and ix, 0xFF
 	inc 1, ix
 	cp ix, 0xFF
-	jr ugt, LABEL_F268FB
-	jr LABEL_F2694B
+	jr ugt, ToneGen_DispatchSubHandler
+	jr ToneGen_DispatchReturn
 
-LABEL_F268FB:
+ToneGen_DispatchSubHandler:
 	push xiz
 	ldda32 xiz, 4349
 	ldfr_lerp XIZ, 0x38
@@ -30,11 +30,11 @@ LABEL_F268FB:
 	stda32 4349, xiz
 	pop xiz
 	cpda16 xix, 10349
-	jr ule, LABEL_F26928
+	jr ule, ToneGen_StoreBlockAndLink
 	stdi8 10362, 5
-	jr LABEL_F2694B
+	jr ToneGen_DispatchReturn
 
-LABEL_F26928:
+ToneGen_StoreBlockAndLink:
 	ldda32 xhl, 4349
 	ld (xhl + 3), ix
 	ld hl, ix
@@ -46,7 +46,7 @@ LABEL_F26928:
 	stda16 3308, xix
 	lds ix, 5
 
-LABEL_F2694B:
+ToneGen_DispatchReturn:
 	ret
 
 ToneGen_DispatchAndLinkBlock:
@@ -72,7 +72,7 @@ ToneGen_DispatchAndLinkBlock:
 
 VoiceChannel_GetCombinedStatus:
 	cpdi8 4012, 6
-	jr z, LABEL_F269A9
+	jr z, VoiceChannel_GetStatusBank2First
 	push xix
 	ld xix, 0x10D3
 	lda_dri3 XBC, 0x07, 0xF0, 0xF4
@@ -82,9 +82,9 @@ VoiceChannel_GetCombinedStatus:
 	ld xix, 0x10C3
 	ld_srib3 A, 0x07, 0xF0, 0xF4
 	pop xix
-	jr LABEL_F269BF
+	jr VoiceChannel_CombineStatusBits
 
-LABEL_F269A9:
+VoiceChannel_GetStatusBank2First:
 	push xix
 	ld xix, 0x10C3
 	lda_dri3 XBC, 0x07, 0xF0, 0xF4
@@ -92,7 +92,7 @@ LABEL_F269A9:
 	ld_srib3 L, 0x07, 0xF0, 0xF4
 	pop xix
 
-LABEL_F269BF:
+VoiceChannel_CombineStatusBits:
 	rlc_i_8 l, 2
 	and l, 0x1
 	sla a, 1
@@ -108,7 +108,7 @@ VoiceChannel_LookupParams:
 	pop xix
 	xor h, h
 	cp l, 0xFF
-	jr z, LABEL_F26A04
+	jr z, VoiceChannel_LookupReturn
 	ld c, l
 	sla hl, 2
 	push xix
@@ -117,9 +117,9 @@ VoiceChannel_LookupParams:
 	pop xix
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	stda8 4234, a
-	call LABEL_F26CAA
+	call SoundGen_PrepareAndBuildVoice
 
-LABEL_F26A04:
+VoiceChannel_LookupReturn:
 	ret
 
 VoiceChannel_SetPanDirection:
@@ -128,10 +128,10 @@ VoiceChannel_SetPanDirection:
 	and w, 0xF7
 	xor a, a
 	cpdi8 4013, 64
-	jr c, LABEL_F26A1B
+	jr c, VoiceChannel_MergePanBit
 	or a, 0x8
 
-LABEL_F26A1B:
+VoiceChannel_MergePanBit:
 	or w, a
 	or w, 0x10
 	ld (xiy + 4), w
@@ -145,13 +145,13 @@ VoiceChannel_UpdateWithPitch:
 	call SoundGen_CaptureVoiceParams
 	ldb a, 0xB0
 	bitda 7, 4235
-	jr z, LABEL_F26A47
+	jr z, VoiceChannel_ApplyPitchFlags
 	or a, 0x2
 	bitda 7, 4234
-	jr z, LABEL_F26A47
+	jr z, VoiceChannel_ApplyPitchFlags
 	or a, 0x1
 
-LABEL_F26A47:
+VoiceChannel_ApplyPitchFlags:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 4323, 0
@@ -173,10 +173,10 @@ LABEL_F26A47:
 	push xix
 	ld xix, 0xF2435B
 	cpdi8 4600, 1
-	jr z, LABEL_F26A8C
+	jr z, VoiceChannel_SelectChannelBank
 	ld xix, 0xF2436B
 
-LABEL_F26A8C:
+VoiceChannel_SelectChannelBank:
 	ld_srib3 A, 0x07, 0xF0, 0xF4
 	pop xix
 	push xiy
@@ -305,7 +305,7 @@ SoundGen_LookupChannelBankParams:
 	ld xix, 0x10B3
 	lda_dri3 XWA, 0x07, 0xF0, 0xF4
 	pop xix
-	jr LABEL_F26BED
+	jr SoundGen_LookupReturn
 
 ToneGen_StoreBadValue:
 	ldb a, 0xFF
@@ -314,7 +314,7 @@ ToneGen_StoreBadValue:
 	lda_dri3 XBC, 0x07, 0xF0, 0xF4
 	pop xix
 
-LABEL_F26BED:
+SoundGen_LookupReturn:
 	ret
 
 VoiceChannel_GetParamBlock:
@@ -323,24 +323,24 @@ VoiceChannel_GetParamBlock:
 	and l, 0xF
 	sla hl, 2
 	cpdi8 4600, 1
-	jr nz, LABEL_F26C0F
+	jr nz, VoiceChannel_GetParamBlockAlt
 	push xix
 	ld xix, 0xF26C1E
 	ld_sril3 XHL, 0x07, 0xF0, 0xEC
 	pop xix
-	jr LABEL_F26C1B
+	jr VoiceChannel_StoreParamPtr
 
-LABEL_F26C0F:
+VoiceChannel_GetParamBlockAlt:
 	push xix
 	ld xix, 0xF26C5E
 	ld_sril3 XHL, 0x07, 0xF0, 0xEC
 	pop xix
 
-LABEL_F26C1B:
+VoiceChannel_StoreParamPtr:
 	ld xiy, xhl
 	ret
 
-LABEL_F26C1E:
+VoiceChannel_ParamTable1:
 	.byte 0x96, 0xf4, 0x00, 0x00, 0xb0, 0xf4, 0x00, 0x00
 	.byte 0xca, 0xf4, 0x00, 0x00, 0xe4, 0xf4, 0x00, 0x00
 	.byte 0xfe, 0xf4, 0x00, 0x00, 0x18, 0xf5, 0x00, 0x00
@@ -360,7 +360,7 @@ LABEL_F26C1E:
 	.byte 0x1d, 0xee, 0x6b, 0xf2, 0xc1, 0xad, 0x0f, 0x21
 	.byte 0xbd, 0x03, 0x41, 0x0e
 
-LABEL_F26CAA:
+SoundGen_PrepareAndBuildVoice:
 	push xiy
 	cpdi16 3932, 0
 	jr z, SoundGen_CaptureAndBuildParams
@@ -416,18 +416,18 @@ SoundGen_UpdateAndWriteChannel:
 	cpdi16 3934, 2
 	jr c, SoundGen_SelectChannelTable
 	ld a, l
-	jr LABEL_F26D4C
+	jr SoundGen_ApplyChannelParam
 
 SoundGen_SelectChannelTable:
 	ld xix, 0xF2436B
 	cpdi8 4600, 1
-	jr nz, LABEL_F26D47
+	jr nz, SoundGen_SelectAltChannelTable
 	ld xix, 0xF2435B
 
-LABEL_F26D47:
+SoundGen_SelectAltChannelTable:
 	ld_srib3 A, 0x07, 0xF0, 0xEC
 
-LABEL_F26D4C:
+SoundGen_ApplyChannelParam:
 	pushw bc
 	push xiy
 	call SoundGen_UpdateAndRefresh
@@ -479,10 +479,10 @@ SoundGen_PopIyRet:
 	pop xiy
 	ret
 
-LABEL_F26DD0:
+SoundGen_VoiceParamData:
 	pushw 0x090a
 
-LABEL_F26DD3:
+FileIO_ReadBlockToBuffer:
 	push xwa
 	push xbc
 	push xhl
@@ -518,17 +518,17 @@ SoundGen_InitAllVoiceChannels:
 	stdi8 6749, 176
 	stdi8 6750, 154
 	bitda 7, 6750
-	jr nz, LABEL_F26E1F
-	jp LABEL_F26E27
+	jr nz, SoundGen_SetInitFlags
+	jp SoundGen_InitLoopStart
 
-LABEL_F26E1F:
+SoundGen_SetInitFlags:
 	setda 2, 6749
 	resda 7, 6750
 
-LABEL_F26E27:
+SoundGen_InitLoopStart:
 	xor iy, iy
 
-LABEL_F26E29:
+SoundGen_InitVoiceLoop:
 	push xiy
 	call SoundGen_CaptureVoiceParams
 	pop xiy
@@ -562,7 +562,7 @@ LABEL_F26E29:
 	pop xiy
 	inc 1, iy
 	cps iy, 2
-	jr ule, LABEL_F26E29
+	jr ule, SoundGen_InitVoiceLoop
 	pop xiy
 	pop xix
 	pop xhl
@@ -571,17 +571,17 @@ LABEL_F26E29:
 	pop xwa
 	ret
 
-LABEL_F26E7E:
+SoundGen_InitVoiceData:
 	.byte 0x04, 0x05, 0x06
 
 SndParam_LookupChannelVoice:
 	push xhl
 	cpdi8 4600, 2
-	jr nz, LABEL_F26EC8
+	jr nz, SndParam_LookupDefault
 	ldda8 a, 4011
 	and a, 0xF
 	cp a, 0x9
-	jr nz, LABEL_F26EC8
+	jr nz, SndParam_LookupDefault
 	push xix
 	push xbc
 	push xde
@@ -604,12 +604,12 @@ SndParam_LookupChannelVoice:
 	pop xbc
 	pop xix
 	cp a, 0xFF
-	jr z, LABEL_F26ECA
+	jr z, SndParam_LookupReturn
 
-LABEL_F26EC8:
+SndParam_LookupDefault:
 	ldb a, 0x0
 
-LABEL_F26ECA:
+SndParam_LookupReturn:
 	pop xhl
 	ret
 
@@ -621,7 +621,7 @@ VoiceChannel_StoreVoiceIdx:
 	stda16 6751, xde
 	pop xde
 	cpdi16 6751, 9
-	jr nz, LABEL_F26F07
+	jr nz, VoiceChannel_StoreVoiceReturn
 	ld xwa, 0x1A57
 	call SndParam_ApplyVoiceValue
 	ld xhl, 0x1A37
@@ -633,11 +633,11 @@ VoiceChannel_StoreVoiceIdx:
 	ldda8 a, 6747
 	ld (xhl + 1), a
 
-LABEL_F26F07:
+VoiceChannel_StoreVoiceReturn:
 	ret
 
 SMF_ProcessSysExBlock:
-	call LABEL_F26FB7
+	call SysEx_ClearBuffer
 	xor xiy, xiy
 	ld xiy, 0x1A61
 	ld (xiy), a
@@ -650,17 +650,17 @@ SMF_ProcessSysExBlock:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F26F2F
+	jr lt, SMF_SysEx_FileUnderflow
 	pop xbc
 	pop xwa
-	jp LABEL_F26F35
+	jp SMF_SysEx_CheckBlockLimit
 
-LABEL_F26F2F:
+SMF_SysEx_FileUnderflow:
 	pop xbc
 	pop xwa
 	jp Seq_ReturnToDispatcher
 
-LABEL_F26F35:
+SMF_SysEx_CheckBlockLimit:
 	cpdi8 4600, 1
 	jr z, Seq_AdvanceBlock
 	ldb a, 0x7F
@@ -675,7 +675,7 @@ LABEL_F26F35:
 	ld xix, xiy
 	ld xiy, 0x106E
 	ldir85
-	call LABEL_F26F7D
+	call SysEx_ReadBytesLoop_Init
 	cpdi8 6880, 255
 	jr z, Seq_ReturnToDispatcher
 	ld xwa, 0x1A61
@@ -689,56 +689,56 @@ Seq_AdvanceBlock:
 Seq_ReturnToDispatcher:
 	ret
 
-LABEL_F26F7D:
+SysEx_ReadBytesLoop_Init:
 	stdi8 6880, 0
 
-LABEL_F26F82:
+SysEx_ReadBytesLoop:
 	cpdi8 4211, 0
-	jr ule, LABEL_F26FB6
+	jr ule, SysEx_ReadBytesReturn
 	call FloppyIO_ReadNextByte
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F26F9F
+	jr lt, SysEx_ReadBytes_FileUnderflow
 	pop xbc
 	pop xwa
-	jp LABEL_F26FA5
+	jp SysEx_ReadBytes_StoreByte
 
-LABEL_F26F9F:
+SysEx_ReadBytes_FileUnderflow:
 	pop xbc
 	pop xwa
-	jp LABEL_F26FB1
+	jp SysEx_ReadBytes_SetOverflow
 
-LABEL_F26FA5:
+SysEx_ReadBytes_StoreByte:
 	ld (xix), a
 	decdi8 1, 4211
 	inc 1, xix
-	jp LABEL_F26F82
+	jp SysEx_ReadBytesLoop
 
-LABEL_F26FB1:
+SysEx_ReadBytes_SetOverflow:
 	stdi8 6880, 255
 
-LABEL_F26FB6:
+SysEx_ReadBytesReturn:
 	ret
 
-LABEL_F26FB7:
+SysEx_ClearBuffer:
 	ldb c, 0x7F
 	ld xiy, 0x1A61
 
-LABEL_F26FBE:
+SysEx_ClearLoop:
 	cps c, 0
-	jr ule, LABEL_F26FCD
+	jr ule, SysEx_ClearReturn
 	ld (xiy), 0x0
 	dec 1, c
 	inc 1, xiy
-	jp LABEL_F26FBE
+	jp SysEx_ClearLoop
 
-LABEL_F26FCD:
+SysEx_ClearReturn:
 	ret
 
-LABEL_F26FCE:
+SMF_LoadSoundBankAndPlay:
 	stda8 4599, a
 	stda8 6709, c
 	stda8 6710, e
@@ -748,15 +748,15 @@ LABEL_F26FCE:
 	call SetWall_LoadBankToToneGen
 	ldda8 a, 4599
 	cpda8_24 a, 65507
-	jr z, LABEL_F26FFD
+	jr z, SMF_LoadBank_ClearAndPrepare
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
 
-LABEL_F26FFD:
+SMF_LoadBank_ClearAndPrepare:
 	call SMF_ClearFileBuffer
-	call LABEL_F270A0
+	call SMF_InitPlaybackState
 	pop xde
 	pop xix
 	pop xiz
@@ -780,15 +780,15 @@ SMF_SeekAndPreparePlayback:
 	lds32 xbc, 0
 	call FileIO_SeekAndReadBlock
 	cp xhl, 0x0
-	jr lt, LABEL_F27046
-	jp LABEL_F2704A
+	jr lt, SMF_Seek_FileError
+	jp SMF_Seek_WritePosition
 
-LABEL_F27046:
+SMF_Seek_FileError:
 	pop xbc
 	pop xwa
 	jr SMF_RestoreTimerState
 
-LABEL_F2704A:
+SMF_Seek_WritePosition:
 	ld xwa, 0xFA2
 	lds32 xbc, 4
 	call FileIO_WriteByte_Impl
@@ -797,29 +797,29 @@ LABEL_F2704A:
 
 SMF_RestoreTimerState:
 	bitda 0, 10405
-	jr z, LABEL_F2706C
+	jr z, SMF_SeekReturn
 	ld16_24 xwa, 0x00ffec
 	stda16 61854, xwa
 	push xhl
 	call Audio_CheckSubsystemReady
 	pop xhl
 
-LABEL_F2706C:
+SMF_SeekReturn:
 	ret
 
 SeqPlay_StartWithDisplay:
 	call SeqPlay_CheckStartConditions
 	cpdi8 62013, 255
-	jr z, LABEL_F27081
+	jr z, SeqPlay_SetFlagAndMode
 	anddi8 64941, 251
 	xor a, a
-	jr LABEL_F27088
+	jr SeqPlay_QueueDisplayEvent
 
-LABEL_F27081:
+SeqPlay_SetFlagAndMode:
 	ordi8 64941, 4
 	ldb a, 0x4
 
-LABEL_F27088:
+SeqPlay_QueueDisplayEvent:
 	stdi8 4330, 1
 	ldb e, 0x91
 	ldb d, 0x3
@@ -829,23 +829,23 @@ LABEL_F27088:
 	call BitMapOut_RenderDisplay
 	ret
 
-LABEL_F270A0:
+SMF_InitPlaybackState:
 	pushw wa
 	cpdi16 61852, 0
-	jr z, LABEL_F270B2
+	jr z, SMF_InitChannelState
 	stdi16 6699, 9
 	jrl SMF_PopReturn
 
-LABEL_F270B2:
+SMF_InitChannelState:
 	xor wa, wa
 	stda8 4236, a
 	stda16 4347, xwa
 	stda8 4344, a
 	cpdi16_24 65516, 0
-	jr z, LABEL_F27106
+	jr z, SMF_SetStatusAndJump
 	xor c, c
 
-LABEL_F270CB:
+SMF_ScanChannelLoop:
 	ld16_24 xde, 0x00ffec
 	ld a, c
 	scf
@@ -865,27 +865,27 @@ LABEL_F270CB:
 	ld xde, 0xF250
 	bit_dri 7, 0x07, 0xE8, 0xEC
 	pop xde
-	jr nz, LABEL_F2710F
+	jr nz, SMF_FoundActiveChannel
 
 SMF_LoopNextChannel:
 	inc 1, c
 	cp c, 0xF
-	jr ule, LABEL_F270CB
+	jr ule, SMF_ScanChannelLoop
 
-LABEL_F27106:
+SMF_SetStatusAndJump:
 	stdi16 6699, 47
 	jrl LABEL_F281FE
 
-LABEL_F2710F:
+SMF_FoundActiveChannel:
 	call Vga_SetupMultiPlaneDisplay
 	ld16_24 xwa, 0x00ffec
 	stda16 4325, xwa
 	stdi8 4324, 255
 	bitda 2, 64941
-	jr nz, LABEL_F2712C
+	jr nz, SMF_InitChannelScan
 	stdi8 4324, 0
 
-LABEL_F2712C:
+SMF_InitChannelScan:
 	call SMF_ScanChannels
 	call SMF_CountActiveChannels
 	call SMF_ClearWorkArea
@@ -897,20 +897,20 @@ LABEL_F2712C:
 	xor hl, hl
 	xor bc, bc
 
-LABEL_F2714E:
+SMF_FindFirstActiveChannel:
 	push xde
 	ld xde, 0xF250
 	bit_dri 7, 0x07, 0xE8, 0xEC
 	pop xde
-	jr nz, LABEL_F27170
+	jr nz, SMF_SetupActiveChannel
 	add hl, 0x3
 	inc 1, c
 	cp c, 0xF
-	jr ule, LABEL_F2714E
+	jr ule, SMF_FindFirstActiveChannel
 	stdi16 6699, 3
 	jrl LABEL_F28200
 
-LABEL_F27170:
+SMF_SetupActiveChannel:
 	stda8 10359, c
 	inc 1, hl
 	push xde
@@ -948,11 +948,11 @@ LABEL_F27170:
 	ld xiy, 0x106E
 	ldda32 xix, 4376
 
-LABEL_F271F2:
+SMF_WaitForReady:
 	ld_spib A, 0xF4
 	lda_dpi XBC, 0xF0
 	bit 7, a
-	jr nz, LABEL_F271F2
+	jr nz, SMF_WaitForReady
 	ldw wa, 0x58FF
 	st_dpiw WA, 0xF1
 	ldb a, 0x4
@@ -978,17 +978,17 @@ LABEL_F271F2:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27248
+	jr lt, SMF_Setup_FileUnderflow
 	pop xbc
 	pop xwa
-	jp LABEL_F2724E
+	jp SMF_Setup_WriteLoop
 
-LABEL_F27248:
+SMF_Setup_FileUnderflow:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F2724E:
+SMF_Setup_WriteLoop:
 	ld xiy, 0xF2827C
 	cpdi8 4324, 0
 	jr nz, LABEL_F2725F
@@ -998,7 +998,7 @@ LABEL_F2725F:
 	ldda32 xix, 4376
 	ldw bc, 0x8
 
-LABEL_F27266:
+SMF_WriteChannelDataLoop:
 	ld_spib A, 0xF4
 	lda_dpi XBC, 0xF0
 	pushw bc
@@ -1014,25 +1014,25 @@ LABEL_F27266:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F2728C
+	jr lt, SMF_WriteChannel_FileUnderflow
 	pop xbc
 	pop xwa
-	jp LABEL_F27291
+	jp SMF_WriteChannel_Continue
 
-LABEL_F2728C:
+SMF_WriteChannel_FileUnderflow:
 	pop xbc
 	pop xwa
 	jrl SMF_FlushAndFinalize
 
-LABEL_F27291:
-	djnz xbc, LABEL_F27266
+SMF_WriteChannel_Continue:
+	djnz xbc, SMF_WriteChannelDataLoop
 	stda32 4376, xix
 	cpdi8 6709, 0
 	jrl z, SMF_FinishChannelAndGetNextEvent
 	call BitMapOut_ComputeRegionDelta
 	stdi8 10359, 0
 
-LABEL_F272A9:
+SMF_ScanAndProcessChannel:
 	ld xiy, 0xF460
 	xor hl, hl
 	ldda8 l, 10359
@@ -1059,11 +1059,11 @@ LABEL_F272A9:
 	push xhl
 	xor hl, hl
 
-LABEL_F272ED:
+SMF_ScanChannel_PopAndWrite:
 	pop xhl
 	jr SMF_WriteChannelNoteData
 	cp l, c
-	jr z, LABEL_F272ED
+	jr z, SMF_ScanChannel_PopAndWrite
 	pop xhl
 	jrl SMF_FinishChannelAndGetNextEvent
 
@@ -1085,7 +1085,7 @@ SMF_WriteChannelNoteData:
 	ld_srib3 L, 0x07, 0xF0, 0xEC
 	pop xix
 	cpdi8 4324, 255
-	jrl nz, LABEL_F273E2
+	jrl nz, SMF_WriteNote_AltPath
 	call SMF_ResolveGlobalChannel
 	ldda8 a, 6881
 	or a, 0xC0
@@ -1116,17 +1116,17 @@ SMF_WriteChannelNoteData:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27388
+	jr lt, SMF_WriteNote_FileUnderflow1
 	pop xbc
 	pop xwa
-	jp LABEL_F2738E
+	jp SMF_WriteNote_BankSelect
 
-LABEL_F27388:
+SMF_WriteNote_FileUnderflow1:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F2738E:
+SMF_WriteNote_BankSelect:
 	ldb w, 0x20
 	ldda8 l, 6743
 	pushw bc
@@ -1139,17 +1139,17 @@ LABEL_F2738E:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F273AE
+	jr lt, SMF_WriteNote_FileUnderflow2
 	pop xbc
 	pop xwa
-	jp LABEL_F273B4
+	jp SMF_WriteNote_ProgramChange
 
-LABEL_F273AE:
+SMF_WriteNote_FileUnderflow2:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F273B4:
+SMF_WriteNote_ProgramChange:
 	ldda8 a, 6881
 	or a, 0xC0
 	ldda8 w, 6745
@@ -1164,17 +1164,17 @@ LABEL_F273B4:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F273DC
+	jr lt, SMF_WriteNote_FileUnderflow3
 	pop xbc
 	pop xwa
 	jp SMF_WriteChannelVolume
 
-LABEL_F273DC:
+SMF_WriteNote_FileUnderflow3:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F273E2:
+SMF_WriteNote_AltPath:
 	call SMF_ResolveGlobalChannel
 	ldda8 a, 6881
 	or a, 0xB0
@@ -1192,17 +1192,17 @@ LABEL_F273E2:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27411
+	jr lt, SMF_WriteNote_FileUnderflow4
 	pop xbc
 	pop xwa
-	jp LABEL_F27417
+	jp SMF_WriteNote_BankSelectLSB
 
-LABEL_F27411:
+SMF_WriteNote_FileUnderflow4:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27417:
+SMF_WriteNote_BankSelectLSB:
 	ldda8 a, 6881
 	or a, 0xB0
 	ldb w, 0x20
@@ -1219,17 +1219,17 @@ LABEL_F27417:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27442
+	jr lt, SMF_WriteNote_FileUnderflow5
 	pop xbc
 	pop xwa
-	jp LABEL_F27448
+	jp SMF_WriteNote_ProgramNumber
 
-LABEL_F27442:
+SMF_WriteNote_FileUnderflow5:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27448:
+SMF_WriteNote_ProgramNumber:
 	ldda8 a, 6881
 	or a, 0xC0
 	ld w, c
@@ -1244,12 +1244,12 @@ LABEL_F27448:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F2746E
+	jr lt, SMF_WriteNote_FileUnderflow6
 	pop xbc
 	pop xwa
 	jp SMF_WriteChannelVolume
 
-LABEL_F2746E:
+SMF_WriteNote_FileUnderflow6:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
@@ -1269,17 +1269,17 @@ SMF_WriteChannelVolume:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27499
+	jr lt, SMF_WriteVol_FileUnderflow1
 	pop xbc
 	pop xwa
-	jp LABEL_F2749F
+	jp SMF_WriteVol_Chorus
 
-LABEL_F27499:
+SMF_WriteVol_FileUnderflow1:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F2749F:
+SMF_WriteVol_Chorus:
 	ldb w, 0x5D
 	ldda8 l, 4359
 	pushw wa
@@ -1292,24 +1292,24 @@ LABEL_F2749F:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F274BF
+	jr lt, SMF_WriteVol_FileUnderflow2
 	pop xbc
 	pop xwa
-	jp LABEL_F274C5
+	jp SMF_WriteVol_SustainPedal
 
-LABEL_F274BF:
+SMF_WriteVol_FileUnderflow2:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F274C5:
+SMF_WriteVol_SustainPedal:
 	ldb w, 0x40
 	ldb l, 0x7F
 	bit 3, e
-	jr nz, LABEL_F274D0
+	jr nz, SMF_WriteVol_SustainValue
 	ldb l, 0x0
 
-LABEL_F274D0:
+SMF_WriteVol_SustainValue:
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -1318,17 +1318,17 @@ LABEL_F274D0:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F274E8
+	jr lt, SMF_WriteVol_FileUnderflow3
 	pop xbc
 	pop xwa
-	jp LABEL_F274EE
+	jp SMF_WriteVol_Reverb
 
-LABEL_F274E8:
+SMF_WriteVol_FileUnderflow3:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F274EE:
+SMF_WriteVol_Reverb:
 	ldb w, 0x5B
 	ldda8 l, 4332
 	and l, 0x7F
@@ -1340,17 +1340,17 @@ LABEL_F274EE:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F2750F
+	jr lt, SMF_WriteVol_FileUnderflow4
 	pop xbc
 	pop xwa
-	jp LABEL_F27515
+	jp SMF_WriteVol_PanAndPitch
 
-LABEL_F2750F:
+SMF_WriteVol_FileUnderflow4:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27515:
+SMF_WriteVol_PanAndPitch:
 	ldda8 l, 10359
 	xor h, h
 	push xix
@@ -1387,17 +1387,17 @@ LABEL_F27515:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F2757F
+	jr lt, SMF_WriteRPN_FileUnderflow1
 	pop xbc
 	pop xwa
-	jp LABEL_F27585
+	jp SMF_WriteRPN_MSBZero
 
-LABEL_F2757F:
+SMF_WriteRPN_FileUnderflow1:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27585:
+SMF_WriteRPN_MSBZero:
 	ldb w, 0x65
 	ldb l, 0x0
 	pushw wa
@@ -1408,17 +1408,17 @@ LABEL_F27585:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F275A1
+	jr lt, SMF_WriteRPN_FileUnderflow2
 	pop xbc
 	pop xwa
-	jp LABEL_F275A7
+	jp SMF_WriteRPN_LSBOne
 
-LABEL_F275A1:
+SMF_WriteRPN_FileUnderflow2:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F275A7:
+SMF_WriteRPN_LSBOne:
 	ldb w, 0x64
 	ldb l, 0x1
 	pushw wa
@@ -1429,17 +1429,17 @@ LABEL_F275A7:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F275C3
+	jr lt, SMF_WriteRPN_FileUnderflow3
 	pop xbc
 	pop xwa
-	jp LABEL_F275C9
+	jp SMF_WriteRPN_FineTune
 
-LABEL_F275C3:
+SMF_WriteRPN_FileUnderflow3:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F275C9:
+SMF_WriteRPN_FineTune:
 	ldda8 l, 10359
 	xor h, h
 	push xix
@@ -1466,17 +1466,17 @@ LABEL_F275C9:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27619
+	jr lt, SMF_WriteRPN_FileUnderflow4
 	pop xbc
 	pop xwa
-	jp LABEL_F2761F
+	jp SMF_WriteRPN_FineTuneLSB
 
-LABEL_F27619:
+SMF_WriteRPN_FileUnderflow4:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F2761F:
+SMF_WriteRPN_FineTuneLSB:
 	ld l, c
 	and l, 0x1
 	rrc_i_8 l, 2
@@ -1489,17 +1489,17 @@ LABEL_F2761F:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27641
+	jr lt, SMF_WriteRPN_FileUnderflow5
 	pop xbc
 	pop xwa
-	jp LABEL_F27647
+	jp SMF_WriteRPN_MSBZero2
 
-LABEL_F27641:
+SMF_WriteRPN_FileUnderflow5:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27647:
+SMF_WriteRPN_MSBZero2:
 	ldb w, 0x65
 	ldb l, 0x0
 	pushw wa
@@ -1510,17 +1510,17 @@ LABEL_F27647:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27663
+	jr lt, SMF_WriteRPN_FileUnderflow6
 	pop xbc
 	pop xwa
-	jp LABEL_F27669
+	jp SMF_WriteRPN_LSBTwo
 
-LABEL_F27663:
+SMF_WriteRPN_FileUnderflow6:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27669:
+SMF_WriteRPN_LSBTwo:
 	ldb w, 0x64
 	ldb l, 0x2
 	pushw wa
@@ -1531,17 +1531,17 @@ LABEL_F27669:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27685
+	jr lt, SMF_WriteRPN_FileUnderflow7
 	pop xbc
 	pop xwa
-	jp LABEL_F2768B
+	jp SMF_WriteRPN_CoarseTune
 
-LABEL_F27685:
+SMF_WriteRPN_FileUnderflow7:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F2768B:
+SMF_WriteRPN_CoarseTune:
 	ldda8 l, 10359
 	xor h, h
 	push xix
@@ -1565,17 +1565,17 @@ LABEL_F2768B:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F276D7
+	jr lt, SMF_WriteRPN_FileUnderflow8
 	pop xbc
 	pop xwa
-	jp LABEL_F276DD
+	jp SMF_WriteRPN_CoarseTuneLSB
 
-LABEL_F276D7:
+SMF_WriteRPN_FileUnderflow8:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F276DD:
+SMF_WriteRPN_CoarseTuneLSB:
 	ldb w, 0x26
 	xor l, l
 	pushw wa
@@ -1586,17 +1586,17 @@ LABEL_F276DD:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F276F9
+	jr lt, SMF_WriteRPN_FileUnderflow9
 	pop xbc
 	pop xwa
-	jp LABEL_F276FF
+	jp SMF_WriteRPN_MSBZero3
 
-LABEL_F276F9:
+SMF_WriteRPN_FileUnderflow9:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F276FF:
+SMF_WriteRPN_MSBZero3:
 	ldb w, 0x65
 	ldb l, 0x0
 	pushw wa
@@ -1607,17 +1607,17 @@ LABEL_F276FF:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F2771B
+	jr lt, SMF_WriteRPN_FileUnderflow10
 	pop xbc
 	pop xwa
-	jp LABEL_F27721
+	jp SMF_WriteRPN_LSBZero
 
-LABEL_F2771B:
+SMF_WriteRPN_FileUnderflow10:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27721:
+SMF_WriteRPN_LSBZero:
 	ldb w, 0x64
 	ldb l, 0x0
 	pushw wa
@@ -1628,17 +1628,17 @@ LABEL_F27721:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F2773D
+	jr lt, SMF_WriteRPN_FileUnderflow11
 	pop xbc
 	pop xwa
-	jp LABEL_F27743
+	jp SMF_WriteRPN_Transpose
 
-LABEL_F2773D:
+SMF_WriteRPN_FileUnderflow11:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F27743:
+SMF_WriteRPN_Transpose:
 	ldda8 l, 10359
 	xor h, h
 	push xix
@@ -1660,17 +1660,17 @@ LABEL_F27743:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F27789
+	jr lt, SMF_WriteRPN_FileUnderflow12
 	pop xbc
 	pop xwa
-	jp LABEL_F2778F
+	jp SMF_WriteRPN_TransposeLSB
 
-LABEL_F27789:
+SMF_WriteRPN_FileUnderflow12:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F2778F:
+SMF_WriteRPN_TransposeLSB:
 	ldb w, 0x26
 	xor l, l
 	pushw wa
@@ -1681,12 +1681,12 @@ LABEL_F2778F:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F277AB
+	jr lt, SMF_WriteRPN_FileUnderflow13
 	pop xbc
 	pop xwa
 	jp SMF_AdvanceChannelScan
 
-LABEL_F277AB:
+SMF_WriteRPN_FileUnderflow13:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
@@ -1694,7 +1694,7 @@ LABEL_F277AB:
 SMF_AdvanceChannelScan:
 	incdi8 1, 10359
 	cpdi8 10359, 15
-	jrl ule, LABEL_F272A9
+	jrl ule, SMF_ScanAndProcessChannel
 
 SMF_FinishChannelAndGetNextEvent:
 	call SMF_ChannelHelperReturn

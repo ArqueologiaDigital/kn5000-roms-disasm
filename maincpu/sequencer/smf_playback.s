@@ -399,7 +399,7 @@ LABEL_F23324:
 	call LABEL_F236B7
 	call SeqTrack_ScanActiveChannels
 	call SeqTrack_ClearPlaybackBuffers
-	call LABEL_F26DD3
+	call FileIO_ReadBlockToBuffer
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
