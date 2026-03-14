@@ -4425,29 +4425,29 @@ AcVolPartEditBoxProc:
 	ld (xsp + 38), xwa
 	ld xwa, (xsp + 34)
 	cp xwa, 0x1C00031
-	jrl z, LABEL_F7C7BB
+	jrl z, AudioCtrl_GetToggleState
 	cp xwa, 0x1C00018
-	jrl z, LABEL_F7C76E
+	jrl z, AudioCtrl_GetNegMax
 	cp xwa, 0x1C0001A
-	jrl z, LABEL_F7C71F
+	jrl z, AudioCtrl_GetNegMin
 	cp xwa, 0x1C00017
-	jrl z, LABEL_F7C6D7
+	jrl z, AudioCtrl_GetMaxLimit
 	cp xwa, 0x1C00019
-	jrl z, LABEL_F7C68F
+	jrl z, AudioCtrl_GetMinLimit
 	cp xwa, 0x1C0001C
-	jrl z, LABEL_F7C527
+	jrl z, AudioCtrl_MidiMatchHandler
 	cp xwa, 0x1C0000D
-	jrl z, LABEL_F7C50D
+	jrl z, AudioCtrl_InheritAndConfirm
 	cp xwa, 0x1C0000C
-	jrl z, LABEL_F7C43B
+	jrl z, AudioCtrl_InitPartSelection
 	cp xwa, 0x1C0000B
-	jrl z, LABEL_F7C43B
+	jrl z, AudioCtrl_InitPartSelection
 	cp xwa, 0x1E0003D
-	jrl z, LABEL_F7C2F9
+	jrl z, AudioCtrl_DualPartNavigate
 	cp xwa, 0x1E0003B
-	jr z, LABEL_F7C18B
+	jr z, AudioCtrl_InitPartPanDisplay
 	cp xwa, 0x1E0003A
-	jrl nz, LABEL_F7C7FC
+	jrl nz, AudioCtrl_ForwardInherited
 	ld xwa, (xsp + 38)
 	call GetViewInstance
 	ld (xsp + 10), xhl
@@ -4484,7 +4484,7 @@ AcVolPartEditBoxProc:
 	call ApFuncCall
 	jrl AudioCtrl_ReturnZeroEpilogue
 
-LABEL_F7C18B:
+AudioCtrl_InitPartPanDisplay:
 	ld xwa, (xsp + 38)
 	call GetViewInstance
 	ld (xsp + 8), xhl
@@ -4508,9 +4508,9 @@ LABEL_F7C18B:
 	ld xwa, (xsp + 8)
 	lda xbc, (xwa + 50)
 	cp xhl, 0x80
-	jr nc, LABEL_F7C227
+	jr nc, AudioCtrl_HighPartOffset
 	cp de, 0xFFFF
-	jr z, LABEL_F7C208
+	jr z, AudioCtrl_UnboundedPart
 	ld16_24 xde, 0x03e99e
 	exts xde
 	ld xwa, (xbc)
@@ -4521,9 +4521,9 @@ LABEL_F7C18B:
 	ld wa, (xsp + 30)
 	ld bc, (xsp + 28)
 	ld de, (xsp + 14)
-	jrl LABEL_F7C299
+	jrl AudioCtrl_CallMainLswPartPut
 
-LABEL_F7C208:
+AudioCtrl_UnboundedPart:
 	ld16_24 xde, 0x03e99e
 	exts xde
 	ld xwa, (xbc)
@@ -4533,15 +4533,15 @@ LABEL_F7C208:
 	ld xwa, xiz
 	ld bc, (xsp + 12)
 	ld de, (xsp + 6)
-	jrl LABEL_F7C434
+	jrl AudioCtrl_CallMainLswPut
 
-LABEL_F7C227:
+AudioCtrl_HighPartOffset:
 	ld wa, (xsp + 12)
 	sub wa, 0x80
 	ld (xsp + 4), wa
 	ld xwa, (xbc)
 	cp de, 0xFFFF
-	jr z, LABEL_F7C2A0
+	jr z, AudioCtrl_HighPartUnbounded
 	ld16_24 xde, 0x03e99e
 	exts xde
 	ld xbc, 0x1E10001
@@ -4571,11 +4571,11 @@ LABEL_F7C227:
 	ld bc, (xsp + 28)
 	lds de, 1
 
-LABEL_F7C299:
+AudioCtrl_CallMainLswPartPut:
 	call MainLswPartPut
 	jrl AudioCtrl_ReturnZeroEpilogue
 
-LABEL_F7C2A0:
+AudioCtrl_HighPartUnbounded:
 	ld16_24 xde, 0x03e99e
 	exts xde
 	ld xbc, 0x1E10001
@@ -4602,9 +4602,9 @@ LABEL_F7C2A0:
 	ld xwa, xiz
 	lds bc, 1
 	ld de, (xsp + 6)
-	jrl LABEL_F7C434
+	jrl AudioCtrl_CallMainLswPut
 
-LABEL_F7C2F9:
+AudioCtrl_DualPartNavigate:
 	ld xwa, (xsp + 38)
 	call GetViewInstance
 	ld (xsp + 10), xhl
@@ -4621,10 +4621,10 @@ LABEL_F7C2F9:
 	lda xhl, (xbc + 50)
 	lda xbc, (xbc + 58)
 	cp de, 0xFFFF
-	jrl z, LABEL_F7C3BF
+	jrl z, AudioCtrl_DualPartUnbounded
 	ld xbc, (xbc)
 	cpw (xbc), 0x80
-	jr ge, LABEL_F7C381
+	jr ge, AudioCtrl_DualPartHighOffset
 	ld16_24 xde, 0x03e99e
 	exts xde
 	ld xwa, (xhl)
@@ -4647,7 +4647,7 @@ LABEL_F7C2F9:
 	call MainLswPartAdd
 	jrl AudioCtrl_ReturnZeroEpilogue
 
-LABEL_F7C381:
+AudioCtrl_DualPartHighOffset:
 	ld16_24 xde, 0x03e99e
 	exts xde
 	ld xbc, 0x1E10001
@@ -4667,12 +4667,12 @@ LABEL_F7C381:
 	call MainLswPartPut
 	jrl AudioCtrl_ReturnZeroEpilogue
 
-LABEL_F7C3BF:
+AudioCtrl_DualPartUnbounded:
 	ld xbc, (xbc)
 	ld16_24 xde, 0x03e99e
 	exts xde
 	cpw (xbc), 0x80
-	jr ge, LABEL_F7C409
+	jr ge, AudioCtrl_DualPartResolve
 	ld xwa, (xhl)
 	ld xbc, 0x1E10001
 	call ApFuncCall
@@ -4692,7 +4692,7 @@ LABEL_F7C3BF:
 	call MainLswAdd
 	jrl AudioCtrl_ReturnZeroEpilogue
 
-LABEL_F7C409:
+AudioCtrl_DualPartResolve:
 	ld xbc, 0x1E10001
 	call ApFuncCall
 	ld xiz, xhl
@@ -4707,11 +4707,11 @@ LABEL_F7C409:
 	lds bc, 0
 	ld de, (xsp + 6)
 
-LABEL_F7C434:
+AudioCtrl_CallMainLswPut:
 	call MainLswPut
 	jrl AudioCtrl_ReturnZeroEpilogue
 
-LABEL_F7C43B:
+AudioCtrl_InitPartSelection:
 	ld xwa, (xsp + 38)
 	call GetViewInstance
 	ld (xsp + 10), xhl
@@ -4729,7 +4729,7 @@ LABEL_F7C43B:
 	ld xwa, (xsp + 10)
 	lda xwa, (xwa + 50)
 	cp bc, 0xFFFF
-	jr z, LABEL_F7C4B9
+	jr z, AudioCtrl_UnboundedPartSel
 	ld xwa, (xwa)
 	ld xbc, 0x1E10001
 	call ApFuncCall
@@ -4749,9 +4749,9 @@ LABEL_F7C43B:
 	ld wa, (xsp + 28)
 	ld bc, (xsp + 26)
 	call SndParam_LookupViaEncode
-	jr LABEL_F7C4F2
+	jr AudioCtrl_MergeAndForward
 
-LABEL_F7C4B9:
+AudioCtrl_UnboundedPartSel:
 	ld xwa, (xwa)
 	ld xbc, 0x1E10001
 	call ApFuncCall
@@ -4771,7 +4771,7 @@ LABEL_F7C4B9:
 	ld xwa, xiz
 	call SndParam_LookupReadOnly
 
-LABEL_F7C4F2:
+AudioCtrl_MergeAndForward:
 	sla hl, 7
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 58)
@@ -4782,7 +4782,7 @@ LABEL_F7C4F2:
 	call InheritedProc
 	jrl AudioCtrl_ReturnZeroEpilogue
 
-LABEL_F7C50D:
+AudioCtrl_InheritAndConfirm:
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
 	ld xde, (xsp + 30)
@@ -4792,7 +4792,7 @@ LABEL_F7C50D:
 	lds32 xde, 0
 	jrl AudioCtrl_SendEventThenReturn
 
-LABEL_F7C527:
+AudioCtrl_MidiMatchHandler:
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
 	ld xde, (xsp + 30)
@@ -4807,7 +4807,7 @@ LABEL_F7C527:
 	ld xwa, (xsp + 10)
 	lda xwa, (xwa + 50)
 	cp hl, 0xFFFF
-	jrl z, LABEL_F7C606
+	jrl z, AudioCtrl_UnboundedMatch
 	ld16_24 xde, 0x03e99e
 	exts xde
 	ld xwa, (xwa)
@@ -4824,30 +4824,30 @@ LABEL_F7C527:
 	ld xbc, 0x1E10001
 	call ApFuncCall
 	cp hl, (xsp + 26)
-	jr nz, LABEL_F7C5BD
+	jr nz, AudioCtrl_CheckSecondPart
 	ld xwa, (xsp + 10)
 	ld xbc, (xwa + 58)
 	ld xwa, (xsp + 30)
 	lda xde, (xwa + 4)
 	ld wa, (xbc)
 	bit 7, wa
-	jr z, LABEL_F7C5AC
+	jr z, AudioCtrl_StoreValue
 	ld wa, (xde)
 	add wa, 0x80
 	ld (xbc), wa
-	jr LABEL_F7C5B0
+	jr AudioCtrl_ConfirmAndReturn
 
-LABEL_F7C5AC:
+AudioCtrl_StoreValue:
 	ld wa, (xde)
 	ld (xbc), wa
 
-LABEL_F7C5B0:
+AudioCtrl_ConfirmAndReturn:
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	jrl AudioCtrl_SendEventThenReturn
 
-LABEL_F7C5BD:
+AudioCtrl_CheckSecondPart:
 	ld16_24 xde, 0x03e99e
 	exts xde
 	ld xwa, (xsp + 10)
@@ -4858,24 +4858,24 @@ LABEL_F7C5BD:
 	jrl nz, AudioCtrl_ReturnZeroEpilogue
 	ld xwa, (xsp + 30)
 	cpw (xwa + 4), 0x0
-	jr z, LABEL_F7C5EF
+	jr z, AudioCtrl_ClearHighBit
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 58)
 	ormi16 (xwa), 0x80
-	jr LABEL_F7C5F9
+	jr AudioCtrl_ConfirmAndReturn2
 
-LABEL_F7C5EF:
+AudioCtrl_ClearHighBit:
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 58)
 	andmi16 (xwa), 0xFF7F
 
-LABEL_F7C5F9:
+AudioCtrl_ConfirmAndReturn2:
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	jrl AudioCtrl_SendEventThenReturn
 
-LABEL_F7C606:
+AudioCtrl_UnboundedMatch:
 	ld16_24 xde, 0x03e99e
 	exts xde
 	ld xwa, (xwa)
@@ -4883,29 +4883,29 @@ LABEL_F7C606:
 	call ApFuncCall
 	ld xbc, (xsp + 30)
 	cp (xbc), xhl
-	jr nz, LABEL_F7C649
+	jr nz, AudioCtrl_CheckSecondUnbounded
 	ld xwa, (xsp + 10)
 	ld xde, (xwa + 58)
 	inc 4, xbc
 	ld wa, (xde)
 	bit 7, wa
-	jr z, LABEL_F7C638
+	jr z, AudioCtrl_StoreUnbounded
 	ld wa, (xbc)
 	add wa, 0x80
 	ld (xde), wa
-	jr LABEL_F7C63C
+	jr AudioCtrl_ConfirmAndReturn3
 
-LABEL_F7C638:
+AudioCtrl_StoreUnbounded:
 	ld wa, (xbc)
 	ld (xde), wa
 
-LABEL_F7C63C:
+AudioCtrl_ConfirmAndReturn3:
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	jrl AudioCtrl_SendEventThenReturn
 
-LABEL_F7C649:
+AudioCtrl_CheckSecondUnbounded:
 	ld16_24 xde, 0x03e99e
 	exts xde
 	ld xwa, (xsp + 10)
@@ -4918,22 +4918,22 @@ LABEL_F7C649:
 	ld xwa, (xsp + 10)
 	lda xbc, (xwa + 58)
 	cpw (xde + 4), 0x0
-	jr z, LABEL_F7C67C
+	jr z, AudioCtrl_ClearHighBitUnbd
 	ld xwa, (xbc)
 	ormi16 (xwa), 0x80
-	jr LABEL_F7C682
+	jr AudioCtrl_ConfirmAndReturn4
 
-LABEL_F7C67C:
+AudioCtrl_ClearHighBitUnbd:
 	ld xwa, (xbc)
 	andmi16 (xwa), 0xFF7F
 
-LABEL_F7C682:
+AudioCtrl_ConfirmAndReturn4:
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	jrl AudioCtrl_SendEventThenReturn
 
-LABEL_F7C68F:
+AudioCtrl_GetMinLimit:
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
 	ld xde, (xsp + 30)
@@ -4956,7 +4956,7 @@ LABEL_F7C68F:
 	ld xbc, 0x1E0003D
 	jrl AudioCtrl_SendEventThenReturn
 
-LABEL_F7C6D7:
+AudioCtrl_GetMaxLimit:
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
 	ld xde, (xsp + 30)
@@ -4979,7 +4979,7 @@ LABEL_F7C6D7:
 	ld xbc, 0x1E0003D
 	jrl AudioCtrl_SendEventThenReturn
 
-LABEL_F7C71F:
+AudioCtrl_GetNegMin:
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
 	ld xde, (xsp + 30)
@@ -5005,7 +5005,7 @@ LABEL_F7C71F:
 	ld xde, xhl
 	jrl AudioCtrl_SendEventThenReturn
 
-LABEL_F7C76E:
+AudioCtrl_GetNegMax:
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
 	ld xde, (xsp + 30)
@@ -5031,7 +5031,7 @@ LABEL_F7C76E:
 	ld xde, xhl
 	jr AudioCtrl_SendEventThenReturn
 
-LABEL_F7C7BB:
+AudioCtrl_GetToggleState:
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
 	ld xde, (xsp + 30)
@@ -5056,15 +5056,15 @@ AudioCtrl_SendEventThenReturn:
 
 AudioCtrl_ReturnZeroEpilogue:
 	lds32 xhl, 0
-	jr LABEL_F7C809
+	jr AudioCtrl_Epilogue
 
-LABEL_F7C7FC:
+AudioCtrl_ForwardInherited:
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
 	ld xde, (xsp + 30)
 	call InheritedProc
 
-LABEL_F7C809:
+AudioCtrl_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 38)
 	ret
@@ -5435,17 +5435,17 @@ LswSound:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7CC66
+	jrl z, LswSound_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jr z, LABEL_F7CC56
+	jr z, LswSound_GetToggle
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7CC4A
+	jr z, LswSound_CheckActive
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7CC52
+	jr z, LswSound_StepReturn
 	cp xbc, 0x1E10001
 	jrl z, LswSound_ReturnZero
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7CC2C
+	jr z, LswSound_GetPartId
 	cp xbc, 0x1E00042
 	jr nz, LswSound_ReturnZero
 	ld xwa, (xde)
@@ -5456,7 +5456,7 @@ LswSound:
 	add xhl, xwa
 	ld xwa, (xhl)
 	bit_erpw 0xE2, 0x0F
-	jr nz, LABEL_F7CC28
+	jr nz, LswSound_ReturnThis
 	pushw 0xE9
 	pushw 0x5576
 	ld xwa, (xde + 8)
@@ -5464,18 +5464,18 @@ LswSound:
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7CC28:
+LswSound_ReturnThis:
 	ld xhl, xiz
 	jr LswSound_PopIzRet
 
-LABEL_F7CC2C:
+LswSound_GetPartId:
 	ld xwa, (xwa)
 	bit_erpw 0xE2, 0x0E
-	jr z, LABEL_F7CC3B
+	jr z, LswSound_LookupPartOffset
 	ld xhl, 0xFFFFFFFF
 	jr LswSound_PopIzRet
 
-LABEL_F7CC3B:
+LswSound_LookupPartOffset:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -5483,16 +5483,16 @@ LABEL_F7CC3B:
 	exts xhl
 	jr LswSound_PopIzRet
 
-LABEL_F7CC4A:
+LswSound_CheckActive:
 	ld xwa, (xwa)
 	bit_erpw 0xE2, 0x0F
 	jr z, LswSound_ReturnZero
 
-LABEL_F7CC52:
+LswSound_StepReturn:
 	lds32 xhl, 4
 	jr LswSound_PopIzRet
 
-LABEL_F7CC56:
+LswSound_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x80000000
 	or xwa, xwa
@@ -5500,7 +5500,7 @@ LABEL_F7CC56:
 	extz xhl
 	jr LswSound_PopIzRet
 
-LABEL_F7CC66:
+LswSound_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x80000000
 	or xwa, xwa
@@ -5526,17 +5526,17 @@ LswVolume:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7CD74
+	jrl z, LswVolume_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7CD64
+	jrl z, LswVolume_GetToggle
 	cp xbc, 0x1E0003E
-	jrl z, LABEL_F7CD59
+	jrl z, LswVolume_CheckEnabled
 	cp xbc, 0x1E00041
-	jrl z, LABEL_F7CD4D
+	jrl z, LswVolume_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7CD3A
+	jr z, LswVolume_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7CD1C
+	jr z, LswVolume_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, AudioCtrlMuteZeroReturn
 	ld xwa, (xde)
@@ -5548,43 +5548,43 @@ LswVolume:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 15, wa
-	jr z, LABEL_F7CD0B
+	jr z, LswVolume_InactiveStr
 	ld wa, (xde + 4)
 	cp wa, 0x80
-	jr ge, LABEL_F7CD04
+	jr ge, LswVolume_OverflowStr
 	pushw wa
 	pushw 0xE9
 	pushw 0x5588
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	jr LABEL_F7CD18
+	jr LswVolume_ReturnThis
 
-LABEL_F7CD04:
+LswVolume_OverflowStr:
 	ld xwa, 0xE9558C
-	jr LABEL_F7CD10
+	jr LswVolume_CopyStr
 
-LABEL_F7CD0B:
+LswVolume_InactiveStr:
 	ld xwa, 0xE95592
 
-LABEL_F7CD10:
+LswVolume_CopyStr:
 	push xwa
 	push xbc
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7CD18:
+LswVolume_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet3
 
-LABEL_F7CD1C:
+LswVolume_GetPartId:
 	ld xwa, (xwa)
 	bit_erpw 0xE2, 0x0E
-	jr z, LABEL_F7CD2B
+	jr z, LswVolume_LookupPartOffset
 	ld xhl, 0xFFFFFFFF
 	jr AudioCtrl_PopIzRet3
 
-LABEL_F7CD2B:
+LswVolume_LookupPartOffset:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -5592,32 +5592,32 @@ LABEL_F7CD2B:
 	exts xhl
 	jr AudioCtrl_PopIzRet3
 
-LABEL_F7CD3A:
+LswVolume_GetSubParam:
 	cp xde, 0x17
-	jr nz, LABEL_F7CD49
+	jr nz, LswVolume_DefaultSubParam
 	ld xhl, 0x28801
 	jr AudioCtrl_PopIzRet3
 
-LABEL_F7CD49:
+LswVolume_DefaultSubParam:
 	lds32 xhl, 7
 	jr AudioCtrl_PopIzRet3
 
-LABEL_F7CD4D:
+LswVolume_StepSize:
 	cp xde, 0x18
-	jr nz, LABEL_F7CD60
+	jr nz, LswVolume_StepReturn
 	lds32 xhl, 3
 	jr AudioCtrl_PopIzRet3
 
-LABEL_F7CD59:
+LswVolume_CheckEnabled:
 	ld xwa, (xwa)
 	bit 15, wa
 	jr z, AudioCtrlMuteZeroReturn
 
-LABEL_F7CD60:
+LswVolume_StepReturn:
 	lds32 xhl, 4
 	jr AudioCtrl_PopIzRet3
 
-LABEL_F7CD64:
+LswVolume_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x8000
 	or xwa, xwa
@@ -5625,7 +5625,7 @@ LABEL_F7CD64:
 	extz xhl
 	jr AudioCtrl_PopIzRet3
 
-LABEL_F7CD74:
+LswVolume_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x8000
 	or xwa, xwa
@@ -5651,17 +5651,17 @@ LswMute:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7CE7D
+	jrl z, LswMute_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7CE6D
+	jrl z, LswMute_GetToggle
 	cp xbc, 0x1E0003E
-	jrl z, LABEL_F7CE62
+	jrl z, LswMute_CheckEnabled
 	cp xbc, 0x1E00041
-	jrl z, LABEL_F7CE5E
+	jrl z, LswMute_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7CE48
+	jr z, LswMute_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7CE2A
+	jr z, LswMute_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, AudioCtrlMutePitchReturn
 	ld xwa, (xde)
@@ -5673,43 +5673,43 @@ LswMute:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 15, wa
-	jr z, LABEL_F7CE19
+	jr z, LswMute_InactiveStr
 	ld wa, (xde + 4)
 	cp wa, 0x80
-	jr ge, LABEL_F7CE12
+	jr ge, LswMute_OverflowStr
 	pushw wa
 	pushw 0xE9
 	pushw 0x5598
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	jr LABEL_F7CE26
+	jr LswMute_ReturnThis
 
-LABEL_F7CE12:
+LswMute_OverflowStr:
 	ld xwa, 0xE9559C
-	jr LABEL_F7CE1E
+	jr LswMute_CopyStr
 
-LABEL_F7CE19:
+LswMute_InactiveStr:
 	ld xwa, 0xE955A2
 
-LABEL_F7CE1E:
+LswMute_CopyStr:
 	push xwa
 	push xbc
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7CE26:
+LswMute_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet2
 
-LABEL_F7CE2A:
+LswMute_GetPartId:
 	ld xwa, (xwa)
 	bit_erpw 0xE2, 0x0E
-	jr z, LABEL_F7CE39
+	jr z, LswMute_LookupPartOffset
 	ld xhl, 0xFFFFFFFF
 	jr AudioCtrl_PopIzRet2
 
-LABEL_F7CE39:
+LswMute_LookupPartOffset:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -5717,28 +5717,28 @@ LABEL_F7CE39:
 	exts xhl
 	jr AudioCtrl_PopIzRet2
 
-LABEL_F7CE48:
+LswMute_GetSubParam:
 	cp xde, 0x17
-	jr nz, LABEL_F7CE57
+	jr nz, LswMute_DefaultSubParam
 	ld xhl, 0x2880B
 	jr AudioCtrl_PopIzRet2
 
-LABEL_F7CE57:
+LswMute_DefaultSubParam:
 	ld xhl, 0x8
 	jr AudioCtrl_PopIzRet2
 
-LABEL_F7CE5E:
+LswMute_StepSize:
 	lds32 xhl, 3
 	jr AudioCtrl_PopIzRet2
 
-LABEL_F7CE62:
+LswMute_CheckEnabled:
 	ld xwa, (xwa)
 	bit 15, wa
 	jr z, AudioCtrlMutePitchReturn
 	lds32 xhl, 4
 	jr AudioCtrl_PopIzRet2
 
-LABEL_F7CE6D:
+LswMute_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x8000
 	or xwa, xwa
@@ -5746,7 +5746,7 @@ LABEL_F7CE6D:
 	extz xhl
 	jr AudioCtrl_PopIzRet2
 
-LABEL_F7CE7D:
+LswMute_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x8000
 	or xwa, xwa
@@ -5766,9 +5766,9 @@ LswPan:
 	ld xiz, xwa
 	lda_24 xix, 0xe952aa
 	cp xbc, 0x1E000B9
-	jrl z, LABEL_F7CF9E
+	jrl z, LswPan_ReturnCenter
 	cp xbc, 0x1E000B8
-	jrl z, LABEL_F7CF9A
+	jrl z, LswPan_ReturnOne
 	cp xbc, 0x1E00083
 	jrl z, AudioCtrlTremoloZeroReturn
 	ld xhl, xde
@@ -5779,17 +5779,17 @@ LswPan:
 	ld xhl, xwa
 	and xhl, 0x4000
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7CF8E
+	jrl z, LswPan_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7CF86
+	jrl z, LswPan_GetToggle
 	cp xbc, 0x1E0003E
-	jrl z, LABEL_F7CF7D
+	jrl z, LswPan_CheckEnabled
 	cp xbc, 0x1E00041
-	jrl z, LABEL_F7CF82
+	jrl z, LswPan_StepReturn
 	cp xbc, 0x1E10001
-	jrl z, LABEL_F7CF76
+	jrl z, LswPan_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7CF67
+	jr z, LswPan_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, AudioCtrlTremoloZeroReturn
 	ld xwa, (xde)
@@ -5801,48 +5801,48 @@ LswPan:
 	ld xbc, (xde + 8)
 	ld xwa, (xix)
 	bit 14, wa
-	jr z, LABEL_F7CF56
+	jr z, LswPan_InactiveStr
 	ld wa, (xde + 4)
 	cp wa, 0x40
-	jr nz, LABEL_F7CF2E
+	jr nz, LswPan_FormatOffset
 	ld xwa, 0xE955A8
-	jr LABEL_F7CF5B
+	jr LswPan_CopyStr
 
-LABEL_F7CF2E:
+LswPan_FormatOffset:
 	cp wa, 0x40
-	jr ge, LABEL_F7CF41
+	jr ge, LswPan_FormatRight
 	ldw de, 0x40
 	sub de, wa
 	pushw de
 	ld xwa, 0xE955AC
-	jr LABEL_F7CF4B
+	jr LswPan_SendCommand
 
-LABEL_F7CF41:
+LswPan_FormatRight:
 	sub wa, 0x40
 	pushw wa
 	ld xwa, 0xE955B2
 
-LABEL_F7CF4B:
+LswPan_SendCommand:
 	push xwa
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	jr LABEL_F7CF63
+	jr LswPan_ReturnThis
 
-LABEL_F7CF56:
+LswPan_InactiveStr:
 	ld xwa, 0xE955B8
 
-LABEL_F7CF5B:
+LswPan_CopyStr:
 	push xwa
 	push xbc
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7CF63:
+LswPan_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet6
 
-LABEL_F7CF67:
+LswPan_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -5850,25 +5850,25 @@ LABEL_F7CF67:
 	exts xhl
 	jr AudioCtrl_PopIzRet6
 
-LABEL_F7CF76:
+LswPan_GetSubParam:
 	ld xhl, 0xA
 	jr AudioCtrl_PopIzRet6
 
-LABEL_F7CF7D:
+LswPan_CheckEnabled:
 	bit 14, wa
 	jr z, AudioCtrlTremoloZeroReturn
 
-LABEL_F7CF82:
+LswPan_StepReturn:
 	lds32 xhl, 4
 	jr AudioCtrl_PopIzRet6
 
-LABEL_F7CF86:
+LswPan_GetToggle:
 	or xhl, xhl
 	scc16 nz, hl
 	extz xhl
 	jr AudioCtrl_PopIzRet6
 
-LABEL_F7CF8E:
+LswPan_GetSignedToggle:
 	or xhl, xhl
 	scc16 nz, hl
 	exts xhl
@@ -5878,11 +5878,11 @@ AudioCtrlTremoloZeroReturn:
 	lds32 xhl, 0
 	jr AudioCtrl_PopIzRet6
 
-LABEL_F7CF9A:
+LswPan_ReturnOne:
 	lds32 xhl, 1
 	jr AudioCtrl_PopIzRet6
 
-LABEL_F7CF9E:
+LswPan_ReturnCenter:
 	ld xhl, 0x40
 
 AudioCtrl_PopIzRet6:
@@ -5900,17 +5900,17 @@ LswReverb:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7D094
+	jrl z, LswReverb_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7D084
+	jrl z, LswReverb_GetToggle
 	cp xbc, 0x1E0003E
-	jrl z, LABEL_F7D079
+	jrl z, LswReverb_CheckEnabled
 	cp xbc, 0x1E00041
-	jrl z, LABEL_F7D06D
+	jrl z, LswReverb_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7D057
+	jr z, LswReverb_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7D039
+	jr z, LswReverb_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, AudioCtrlVibratoZeroReturn
 	ld xwa, (xde)
@@ -5922,34 +5922,34 @@ LswReverb:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 13, wa
-	jr z, LABEL_F7D028
+	jr z, LswReverb_InactiveStr
 	pushm (xde + 4)
 	pushw 0xE9
 	pushw 0x55BC
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	jr LABEL_F7D035
+	jr LswReverb_ReturnThis
 
-LABEL_F7D028:
+LswReverb_InactiveStr:
 	pushw 0xE9
 	pushw 0x55C0
 	push xbc
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7D035:
+LswReverb_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet1
 
-LABEL_F7D039:
+LswReverb_GetPartId:
 	ld xwa, (xwa)
 	bit_erpw 0xE2, 0x0E
-	jr z, LABEL_F7D048
+	jr z, LswReverb_LookupPartOffset
 	ld xhl, 0xFFFFFFFF
 	jr AudioCtrl_PopIzRet1
 
-LABEL_F7D048:
+LswReverb_LookupPartOffset:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -5957,32 +5957,32 @@ LABEL_F7D048:
 	exts xhl
 	jr AudioCtrl_PopIzRet1
 
-LABEL_F7D057:
+LswReverb_GetSubParam:
 	cp xde, 0x17
-	jr nz, LABEL_F7D066
+	jr nz, LswReverb_DefaultSubParam
 	ld xhl, 0x28802
 	jr AudioCtrl_PopIzRet1
 
-LABEL_F7D066:
+LswReverb_DefaultSubParam:
 	ld xhl, 0x5B
 	jr AudioCtrl_PopIzRet1
 
-LABEL_F7D06D:
+LswReverb_StepSize:
 	cp xde, 0x17
-	jr nz, LABEL_F7D080
+	jr nz, LswReverb_StepReturn
 	lds32 xhl, 3
 	jr AudioCtrl_PopIzRet1
 
-LABEL_F7D079:
+LswReverb_CheckEnabled:
 	ld xwa, (xwa)
 	bit 13, wa
 	jr z, AudioCtrlVibratoZeroReturn
 
-LABEL_F7D080:
+LswReverb_StepReturn:
 	lds32 xhl, 4
 	jr AudioCtrl_PopIzRet1
 
-LABEL_F7D084:
+LswReverb_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x2000
 	or xwa, xwa
@@ -5990,7 +5990,7 @@ LABEL_F7D084:
 	extz xhl
 	jr AudioCtrl_PopIzRet1
 
-LABEL_F7D094:
+LswReverb_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x2000
 	or xwa, xwa
@@ -6016,17 +6016,17 @@ LswDSPEffect:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7D16A
+	jrl z, LswDSPEff_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7D15A
+	jrl z, LswDSPEff_GetToggle
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7D14F
+	jr z, LswDSPEff_CheckEnabled
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7D156
+	jr z, LswDSPEff_StepReturn
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7D148
+	jr z, LswDSPEff_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7D139
+	jr z, LswDSPEff_GetPartId
 	cp xbc, 0x1E00042
 	jr nz, LswDSPEffZeroReturn
 	ld xwa, (xde)
@@ -6038,27 +6038,27 @@ LswDSPEffect:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 12, wa
-	jr z, LABEL_F7D128
+	jr z, LswDSPEff_InactiveStr
 	pushm (xde + 4)
 	pushw 0xE9
 	pushw 0x55C4
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	jr LABEL_F7D135
+	jr LswDSPEff_ReturnThis
 
-LABEL_F7D128:
+LswDSPEff_InactiveStr:
 	pushw 0xE9
 	pushw 0x55C8
 	push xbc
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7D135:
+LswDSPEff_ReturnThis:
 	ld xhl, xiz
 	jr LswDSPEffect_PopIzRet
 
-LABEL_F7D139:
+LswDSPEff_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -6066,20 +6066,20 @@ LABEL_F7D139:
 	exts xhl
 	jr LswDSPEffect_PopIzRet
 
-LABEL_F7D148:
+LswDSPEff_GetSubParam:
 	ld xhl, 0x5D
 	jr LswDSPEffect_PopIzRet
 
-LABEL_F7D14F:
+LswDSPEff_CheckEnabled:
 	ld xwa, (xwa)
 	bit 12, wa
 	jr z, LswDSPEffZeroReturn
 
-LABEL_F7D156:
+LswDSPEff_StepReturn:
 	lds32 xhl, 4
 	jr LswDSPEffect_PopIzRet
 
-LABEL_F7D15A:
+LswDSPEff_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x1000
 	or xwa, xwa
@@ -6087,7 +6087,7 @@ LABEL_F7D15A:
 	extz xhl
 	jr LswDSPEffect_PopIzRet
 
-LABEL_F7D16A:
+LswDSPEff_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x1000
 	or xwa, xwa
@@ -6113,17 +6113,17 @@ LswDigitalEffect:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7D243
+	jrl z, LswDigEff_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7D233
+	jrl z, LswDigEff_GetToggle
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7D228
+	jr z, LswDigEff_CheckEnabled
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7D22F
+	jr z, LswDigEff_StepReturn
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7D221
+	jr z, LswDigEff_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7D212
+	jr z, LswDigEff_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, LswDigitalEffZeroReturn
 	ld xwa, (xde)
@@ -6135,20 +6135,20 @@ LswDigitalEffect:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 3, wa
-	jr z, LABEL_F7D201
+	jr z, LswDigEff_InactiveStr
 	cpw (xde + 4), 0x0
-	jr z, LABEL_F7D1FA
+	jr z, LswDigEff_StrOff
 	ld xwa, 0xE955CC
-	jr LABEL_F7D206
+	jr LswDigEff_CopyStr
 
-LABEL_F7D1FA:
+LswDigEff_StrOff:
 	ld xwa, 0xE955D0
-	jr LABEL_F7D206
+	jr LswDigEff_CopyStr
 
-LABEL_F7D201:
+LswDigEff_InactiveStr:
 	ld xwa, 0xE955D4
 
-LABEL_F7D206:
+LswDigEff_CopyStr:
 	push xwa
 	push xbc
 	call Strcpy
@@ -6156,7 +6156,7 @@ LABEL_F7D206:
 	ld xhl, xiz
 	jr LswDigitalEffect_PopIzRet
 
-LABEL_F7D212:
+LswDigEff_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -6164,20 +6164,20 @@ LABEL_F7D212:
 	exts xhl
 	jr LswDigitalEffect_PopIzRet
 
-LABEL_F7D221:
+LswDigEff_GetSubParam:
 	ld xhl, 0x5E
 	jr LswDigitalEffect_PopIzRet
 
-LABEL_F7D228:
+LswDigEff_CheckEnabled:
 	ld xwa, (xwa)
 	bit 3, wa
 	jr z, LswDigitalEffZeroReturn
 
-LABEL_F7D22F:
+LswDigEff_StepReturn:
 	lds32 xhl, 4
 	jr LswDigitalEffect_PopIzRet
 
-LABEL_F7D233:
+LswDigEff_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x8
 	or xwa, xwa
@@ -6185,7 +6185,7 @@ LABEL_F7D233:
 	extz xhl
 	jr LswDigitalEffect_PopIzRet
 
-LABEL_F7D243:
+LswDigEff_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x8
 	or xwa, xwa
@@ -6211,17 +6211,17 @@ LswSustain:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7D31C
+	jrl z, LswSust_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7D30C
+	jrl z, LswSust_GetToggle
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7D301
+	jr z, LswSust_CheckEnabled
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7D308
+	jr z, LswSust_StepReturn
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7D2FA
+	jr z, LswSust_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7D2EB
+	jr z, LswSust_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, LswSustainZeroReturn2
 	ld xwa, (xde)
@@ -6233,20 +6233,20 @@ LswSustain:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 11, wa
-	jr z, LABEL_F7D2DA
+	jr z, LswSust_InactiveStr
 	cpw (xde + 4), 0x0
-	jr z, LABEL_F7D2D3
+	jr z, LswSust_StrOff
 	ld xwa, 0xE955D8
-	jr LABEL_F7D2DF
+	jr LswSust_CopyStr
 
-LABEL_F7D2D3:
+LswSust_StrOff:
 	ld xwa, 0xE955DC
-	jr LABEL_F7D2DF
+	jr LswSust_CopyStr
 
-LABEL_F7D2DA:
+LswSust_InactiveStr:
 	ld xwa, 0xE955E0
 
-LABEL_F7D2DF:
+LswSust_CopyStr:
 	push xwa
 	push xbc
 	call Strcpy
@@ -6254,7 +6254,7 @@ LABEL_F7D2DF:
 	ld xhl, xiz
 	jr LswSustain_PopIzRet2
 
-LABEL_F7D2EB:
+LswSust_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -6262,20 +6262,20 @@ LABEL_F7D2EB:
 	exts xhl
 	jr LswSustain_PopIzRet2
 
-LABEL_F7D2FA:
+LswSust_GetSubParam:
 	ld xhl, 0x40
 	jr LswSustain_PopIzRet2
 
-LABEL_F7D301:
+LswSust_CheckEnabled:
 	ld xwa, (xwa)
 	bit 11, wa
 	jr z, LswSustainZeroReturn2
 
-LABEL_F7D308:
+LswSust_StepReturn:
 	lds32 xhl, 4
 	jr LswSustain_PopIzRet2
 
-LABEL_F7D30C:
+LswSust_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x800
 	or xwa, xwa
@@ -6283,7 +6283,7 @@ LABEL_F7D30C:
 	extz xhl
 	jr LswSustain_PopIzRet2
 
-LABEL_F7D31C:
+LswSust_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x800
 	or xwa, xwa
@@ -6309,17 +6309,17 @@ LswSustainLength:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7D3F6
+	jrl z, LswSustLen_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7D3E6
+	jrl z, LswSustLen_GetToggle
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7D3DB
+	jr z, LswSustLen_CheckEnabled
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7D3E2
+	jr z, LswSustLen_StepReturn
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7D3D4
+	jr z, LswSustLen_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7D3C5
+	jr z, LswSustLen_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, LswSustainLenZeroReturn
 	ld xwa, (xde)
@@ -6331,7 +6331,7 @@ LswSustainLength:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 10, wa
-	jr z, LABEL_F7D3B4
+	jr z, LswSustLen_InactiveStr
 	ld wa, (xde + 4)
 	inc 1, wa
 	pushw wa
@@ -6340,20 +6340,20 @@ LswSustainLength:
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	jr LABEL_F7D3C1
+	jr LswSustLen_ReturnThis
 
-LABEL_F7D3B4:
+LswSustLen_InactiveStr:
 	pushw 0xE9
 	pushw 0x55E8
 	push xbc
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7D3C1:
+LswSustLen_ReturnThis:
 	ld xhl, xiz
 	jr LswSustainLength_PopIzRet
 
-LABEL_F7D3C5:
+LswSustLen_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -6361,20 +6361,20 @@ LABEL_F7D3C5:
 	exts xhl
 	jr LswSustainLength_PopIzRet
 
-LABEL_F7D3D4:
+LswSustLen_GetSubParam:
 	ld xhl, 0x600
 	jr LswSustainLength_PopIzRet
 
-LABEL_F7D3DB:
+LswSustLen_CheckEnabled:
 	ld xwa, (xwa)
 	bit 10, wa
 	jr z, LswSustainLenZeroReturn
 
-LABEL_F7D3E2:
+LswSustLen_StepReturn:
 	lds32 xhl, 4
 	jr LswSustainLength_PopIzRet
 
-LABEL_F7D3E6:
+LswSustLen_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x400
 	or xwa, xwa
@@ -6382,7 +6382,7 @@ LABEL_F7D3E6:
 	extz xhl
 	jr LswSustainLength_PopIzRet
 
-LABEL_F7D3F6:
+LswSustLen_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x400
 	or xwa, xwa
@@ -6402,9 +6402,9 @@ LswKeyShift:
 	ld xiz, xwa
 	lda_24 xhl, 0xe952aa
 	cp xbc, 0x1E000B9
-	jrl z, LABEL_F7D507
+	jrl z, LswKeyShift_ReturnCenter
 	cp xbc, 0x1E000B8
-	jrl z, LABEL_F7D503
+	jrl z, LswKeyShift_ReturnOne
 	cp xbc, 0x1E00083
 	jrl z, AudioCtrlChorusZeroReturn
 	ld xix, xde
@@ -6412,17 +6412,17 @@ LswKeyShift:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7D4EF
+	jrl z, LswKeyShift_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7D4DF
+	jrl z, LswKeyShift_GetToggle
 	cp xbc, 0x1E0003E
-	jrl z, LABEL_F7D4D4
+	jrl z, LswKeyShift_CheckEnabled
 	cp xbc, 0x1E00041
-	jrl z, LABEL_F7D4DB
+	jrl z, LswKeyShift_StepReturn
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7D4CD
+	jr z, LswKeyShift_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7D4BE
+	jr z, LswKeyShift_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, AudioCtrlChorusZeroReturn
 	ld xwa, (xde)
@@ -6434,36 +6434,36 @@ LswKeyShift:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 9, wa
-	jr z, LABEL_F7D4AD
+	jr z, LswKeyShift_InactiveStr
 	ld wa, (xde + 4)
 	sub wa, 0x40
-	jr z, LABEL_F7D4A6
+	jr z, LswKeyShift_ZeroStr
 	pushw wa
 	pushw 0xE9
 	pushw 0x55EC
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	jr LABEL_F7D4BA
+	jr LswKeyShift_ReturnThis
 
-LABEL_F7D4A6:
+LswKeyShift_ZeroStr:
 	ld xwa, 0xE955F2
-	jr LABEL_F7D4B2
+	jr LswKeyShift_CopyStr
 
-LABEL_F7D4AD:
+LswKeyShift_InactiveStr:
 	ld xwa, 0xE955F6
 
-LABEL_F7D4B2:
+LswKeyShift_CopyStr:
 	push xwa
 	push xbc
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7D4BA:
+LswKeyShift_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet5
 
-LABEL_F7D4BE:
+LswKeyShift_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -6471,20 +6471,20 @@ LABEL_F7D4BE:
 	exts xhl
 	jr AudioCtrl_PopIzRet5
 
-LABEL_F7D4CD:
+LswKeyShift_GetSubParam:
 	ld xhl, 0x82
 	jr AudioCtrl_PopIzRet5
 
-LABEL_F7D4D4:
+LswKeyShift_CheckEnabled:
 	ld xwa, (xwa)
 	bit 9, wa
 	jr z, AudioCtrlChorusZeroReturn
 
-LABEL_F7D4DB:
+LswKeyShift_StepReturn:
 	lds32 xhl, 4
 	jr AudioCtrl_PopIzRet5
 
-LABEL_F7D4DF:
+LswKeyShift_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x200
 	or xwa, xwa
@@ -6492,7 +6492,7 @@ LABEL_F7D4DF:
 	extz xhl
 	jr AudioCtrl_PopIzRet5
 
-LABEL_F7D4EF:
+LswKeyShift_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x200
 	or xwa, xwa
@@ -6504,11 +6504,11 @@ AudioCtrlChorusZeroReturn:
 	lds32 xhl, 0
 	jr AudioCtrl_PopIzRet5
 
-LABEL_F7D503:
+LswKeyShift_ReturnOne:
 	lds32 xhl, 1
 	jr AudioCtrl_PopIzRet5
 
-LABEL_F7D507:
+LswKeyShift_ReturnCenter:
 	ld xhl, 0x40
 
 AudioCtrl_PopIzRet5:
@@ -6520,9 +6520,9 @@ LswTuning:
 	ld xiz, xwa
 	lda_24 xhl, 0xe952aa
 	cp xbc, 0x1E000B9
-	jrl z, LABEL_F7D60B
+	jrl z, LswTuning_ReturnCenter
 	cp xbc, 0x1E000B8
-	jrl z, LABEL_F7D607
+	jrl z, LswTuning_ReturnOne
 	cp xbc, 0x1E00083
 	jrl z, AudioCtrlReverbZeroReturn
 	ld xix, xde
@@ -6530,17 +6530,17 @@ LswTuning:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7D5F3
+	jrl z, LswTuning_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7D5E3
+	jrl z, LswTuning_GetToggle
 	cp xbc, 0x1E0003E
-	jrl z, LABEL_F7D5D8
+	jrl z, LswTuning_CheckEnabled
 	cp xbc, 0x1E00041
-	jrl z, LABEL_F7D5DF
+	jrl z, LswTuning_StepReturn
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7D5D1
+	jr z, LswTuning_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7D5C2
+	jr z, LswTuning_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, AudioCtrlReverbZeroReturn
 	ld xwa, (xde)
@@ -6552,36 +6552,36 @@ LswTuning:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 8, wa
-	jr z, LABEL_F7D5B1
+	jr z, LswTuning_InactiveStr
 	ld wa, (xde + 4)
 	sub wa, 0x80
-	jr z, LABEL_F7D5AA
+	jr z, LswTuning_ZeroStr
 	pushw wa
 	pushw 0xE9
 	pushw 0x55FA
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	jr LABEL_F7D5BE
+	jr LswTuning_ReturnThis
 
-LABEL_F7D5AA:
+LswTuning_ZeroStr:
 	ld xwa, 0xE95600
-	jr LABEL_F7D5B6
+	jr LswTuning_CopyStr
 
-LABEL_F7D5B1:
+LswTuning_InactiveStr:
 	ld xwa, 0xE95606
 
-LABEL_F7D5B6:
+LswTuning_CopyStr:
 	push xwa
 	push xbc
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7D5BE:
+LswTuning_ReturnThis:
 	ld xhl, xiz
 	jr AudioCtrl_PopIzRet4
 
-LABEL_F7D5C2:
+LswTuning_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -6589,20 +6589,20 @@ LABEL_F7D5C2:
 	exts xhl
 	jr AudioCtrl_PopIzRet4
 
-LABEL_F7D5D1:
+LswTuning_GetSubParam:
 	ld xhl, 0x81
 	jr AudioCtrl_PopIzRet4
 
-LABEL_F7D5D8:
+LswTuning_CheckEnabled:
 	ld xwa, (xwa)
 	bit 8, wa
 	jr z, AudioCtrlReverbZeroReturn
 
-LABEL_F7D5DF:
+LswTuning_StepReturn:
 	lds32 xhl, 4
 	jr AudioCtrl_PopIzRet4
 
-LABEL_F7D5E3:
+LswTuning_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x100
 	or xwa, xwa
@@ -6610,7 +6610,7 @@ LABEL_F7D5E3:
 	extz xhl
 	jr AudioCtrl_PopIzRet4
 
-LABEL_F7D5F3:
+LswTuning_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x100
 	or xwa, xwa
@@ -6622,11 +6622,11 @@ AudioCtrlReverbZeroReturn:
 	lds32 xhl, 0
 	jr AudioCtrl_PopIzRet4
 
-LABEL_F7D607:
+LswTuning_ReturnOne:
 	lds32 xhl, 1
 	jr AudioCtrl_PopIzRet4
 
-LABEL_F7D60B:
+LswTuning_ReturnCenter:
 	ld xhl, 0x80
 
 AudioCtrl_PopIzRet4:
@@ -6644,17 +6644,17 @@ LswBendRange:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7D6D4
+	jrl z, LswBendRng_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7D6C4
+	jrl z, LswBendRng_GetToggle
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7D6B9
+	jr z, LswBendRng_CheckEnabled
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7D6C0
+	jr z, LswBendRng_StepReturn
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7D6B2
+	jr z, LswBendRng_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7D6A3
+	jr z, LswBendRng_GetPartId
 	cp xbc, 0x1E00042
 	jr nz, LswBendRangeZeroReturn
 	ld xwa, (xde)
@@ -6666,27 +6666,27 @@ LswBendRange:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 7, wa
-	jr z, LABEL_F7D692
+	jr z, LswBendRng_InactiveStr
 	pushm (xde + 4)
 	pushw 0xE9
 	pushw 0x560C
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	jr LABEL_F7D69F
+	jr LswBendRng_ReturnThis
 
-LABEL_F7D692:
+LswBendRng_InactiveStr:
 	pushw 0xE9
 	pushw 0x5610
 	push xbc
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7D69F:
+LswBendRng_ReturnThis:
 	ld xhl, xiz
 	jr LswBendRange_PopIzRet
 
-LABEL_F7D6A3:
+LswBendRng_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -6694,20 +6694,20 @@ LABEL_F7D6A3:
 	exts xhl
 	jr LswBendRange_PopIzRet
 
-LABEL_F7D6B2:
+LswBendRng_GetSubParam:
 	ld xhl, 0x80
 	jr LswBendRange_PopIzRet
 
-LABEL_F7D6B9:
+LswBendRng_CheckEnabled:
 	ld xwa, (xwa)
 	bit 7, wa
 	jr z, LswBendRangeZeroReturn
 
-LABEL_F7D6C0:
+LswBendRng_StepReturn:
 	lds32 xhl, 4
 	jr LswBendRange_PopIzRet
 
-LABEL_F7D6C4:
+LswBendRng_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x80
 	or xwa, xwa
@@ -6715,7 +6715,7 @@ LABEL_F7D6C4:
 	extz xhl
 	jr LswBendRange_PopIzRet
 
-LABEL_F7D6D4:
+LswBendRng_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x80
 	or xwa, xwa
@@ -6741,17 +6741,17 @@ LswGlidePedal:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7D7B1
+	jrl z, LswGlide_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7D7A1
+	jrl z, LswGlide_GetToggle
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7D796
+	jr z, LswGlide_CheckEnabled
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7D792
+	jr z, LswGlide_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7D78B
+	jr z, LswGlide_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7D77C
+	jr z, LswGlide_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, LswGlideZeroReturn
 	ld xwa, (xde)
@@ -6763,20 +6763,20 @@ LswGlidePedal:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 6, wa
-	jr z, LABEL_F7D76B
+	jr z, LswGlide_InactiveStr
 	cpw (xde + 4), 0x0
-	jr z, LABEL_F7D764
+	jr z, LswGlide_StrOff
 	ld xwa, 0xE95614
-	jr LABEL_F7D770
+	jr LswGlide_CopyStr
 
-LABEL_F7D764:
+LswGlide_StrOff:
 	ld xwa, 0xE95618
-	jr LABEL_F7D770
+	jr LswGlide_CopyStr
 
-LABEL_F7D76B:
+LswGlide_InactiveStr:
 	ld xwa, 0xE9561C
 
-LABEL_F7D770:
+LswGlide_CopyStr:
 	push xwa
 	push xbc
 	call Strcpy
@@ -6784,7 +6784,7 @@ LABEL_F7D770:
 	ld xhl, xiz
 	jr LswGlide_PopIzRet
 
-LABEL_F7D77C:
+LswGlide_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -6792,22 +6792,22 @@ LABEL_F7D77C:
 	exts xhl
 	jr LswGlide_PopIzRet
 
-LABEL_F7D78B:
+LswGlide_GetSubParam:
 	ld xhl, 0x603
 	jr LswGlide_PopIzRet
 
-LABEL_F7D792:
+LswGlide_StepSize:
 	lds32 xhl, 3
 	jr LswGlide_PopIzRet
 
-LABEL_F7D796:
+LswGlide_CheckEnabled:
 	ld xwa, (xwa)
 	bit 6, wa
 	jr z, LswGlideZeroReturn
 	lds32 xhl, 4
 	jr LswGlide_PopIzRet
 
-LABEL_F7D7A1:
+LswGlide_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x40
 	or xwa, xwa
@@ -6815,7 +6815,7 @@ LABEL_F7D7A1:
 	extz xhl
 	jr LswGlide_PopIzRet
 
-LABEL_F7D7B1:
+LswGlide_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x40
 	or xwa, xwa
@@ -6841,17 +6841,17 @@ LswSustainPedal:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7D88E
+	jrl z, LswSustPedal_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7D87E
+	jrl z, LswSustPedal_GetToggle
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7D873
+	jr z, LswSustPedal_CheckEnabled
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7D86F
+	jr z, LswSustPedal_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7D868
+	jr z, LswSustPedal_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7D859
+	jr z, LswSustPedal_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, LswSustainZeroReturn
 	ld xwa, (xde)
@@ -6863,20 +6863,20 @@ LswSustainPedal:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 5, wa
-	jr z, LABEL_F7D848
+	jr z, LswSustPedal_InactiveStr
 	cpw (xde + 4), 0x0
-	jr z, LABEL_F7D841
+	jr z, LswSustPedal_StrOff
 	ld xwa, 0xE95620
-	jr LABEL_F7D84D
+	jr LswSustPedal_CopyStr
 
-LABEL_F7D841:
+LswSustPedal_StrOff:
 	ld xwa, 0xE95624
-	jr LABEL_F7D84D
+	jr LswSustPedal_CopyStr
 
-LABEL_F7D848:
+LswSustPedal_InactiveStr:
 	ld xwa, 0xE95628
 
-LABEL_F7D84D:
+LswSustPedal_CopyStr:
 	push xwa
 	push xbc
 	call Strcpy
@@ -6884,7 +6884,7 @@ LABEL_F7D84D:
 	ld xhl, xiz
 	jr LswSustain_PopIzRet
 
-LABEL_F7D859:
+LswSustPedal_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -6892,22 +6892,22 @@ LABEL_F7D859:
 	exts xhl
 	jr LswSustain_PopIzRet
 
-LABEL_F7D868:
+LswSustPedal_GetSubParam:
 	ld xhl, 0x601
 	jr LswSustain_PopIzRet
 
-LABEL_F7D86F:
+LswSustPedal_StepSize:
 	lds32 xhl, 3
 	jr LswSustain_PopIzRet
 
-LABEL_F7D873:
+LswSustPedal_CheckEnabled:
 	ld xwa, (xwa)
 	bit 5, wa
 	jr z, LswSustainZeroReturn
 	lds32 xhl, 4
 	jr LswSustain_PopIzRet
 
-LABEL_F7D87E:
+LswSustPedal_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x20
 	or xwa, xwa
@@ -6915,7 +6915,7 @@ LABEL_F7D87E:
 	extz xhl
 	jr LswSustain_PopIzRet
 
-LABEL_F7D88E:
+LswSustPedal_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x20
 	or xwa, xwa
@@ -6941,17 +6941,17 @@ LswKeyScaling:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7D96B
+	jrl z, LswKeyScale_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7D95B
+	jrl z, LswKeyScale_GetToggle
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7D950
+	jr z, LswKeyScale_CheckEnabled
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7D94C
+	jr z, LswKeyScale_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7D945
+	jr z, LswKeyScale_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7D936
+	jr z, LswKeyScale_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, LswKeyScaleZeroReturn
 	ld xwa, (xde)
@@ -6963,20 +6963,20 @@ LswKeyScaling:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 4, wa
-	jr z, LABEL_F7D925
+	jr z, LswKeyScale_InactiveStr
 	cpw (xde + 4), 0x0
-	jr z, LABEL_F7D91E
+	jr z, LswKeyScale_StrOff
 	ld xwa, 0xE9562C
-	jr LABEL_F7D92A
+	jr LswKeyScale_CopyStr
 
-LABEL_F7D91E:
+LswKeyScale_StrOff:
 	ld xwa, 0xE95630
-	jr LABEL_F7D92A
+	jr LswKeyScale_CopyStr
 
-LABEL_F7D925:
+LswKeyScale_InactiveStr:
 	ld xwa, 0xE95634
 
-LABEL_F7D92A:
+LswKeyScale_CopyStr:
 	push xwa
 	push xbc
 	call Strcpy
@@ -6984,7 +6984,7 @@ LABEL_F7D92A:
 	ld xhl, xiz
 	jr LswKeyScale_PopIzRet
 
-LABEL_F7D936:
+LswKeyScale_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -6992,22 +6992,22 @@ LABEL_F7D936:
 	exts xhl
 	jr LswKeyScale_PopIzRet
 
-LABEL_F7D945:
+LswKeyScale_GetSubParam:
 	ld xhl, 0x602
 	jr LswKeyScale_PopIzRet
 
-LABEL_F7D94C:
+LswKeyScale_StepSize:
 	lds32 xhl, 3
 	jr LswKeyScale_PopIzRet
 
-LABEL_F7D950:
+LswKeyScale_CheckEnabled:
 	ld xwa, (xwa)
 	bit 4, wa
 	jr z, LswKeyScaleZeroReturn
 	lds32 xhl, 4
 	jr LswKeyScale_PopIzRet
 
-LABEL_F7D95B:
+LswKeyScale_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x10
 	or xwa, xwa
@@ -7015,7 +7015,7 @@ LABEL_F7D95B:
 	extz xhl
 	jr LswKeyScale_PopIzRet
 
-LABEL_F7D96B:
+LswKeyScale_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x10
 	or xwa, xwa
@@ -7041,17 +7041,17 @@ LswAfterTouch:
 	ld xwa, xhl
 	add xwa, xix
 	cp xbc, 0x1E10002
-	jrl z, LABEL_F7DA48
+	jrl z, LswAfterTouch_GetSignedToggle
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7DA38
+	jrl z, LswAfterTouch_GetToggle
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7DA2D
+	jr z, LswAfterTouch_CheckEnabled
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7DA29
+	jr z, LswAfterTouch_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F7DA22
+	jr z, LswAfterTouch_GetSubParam
 	cp xbc, 0x1E10000
-	jr z, LABEL_F7DA13
+	jr z, LswAfterTouch_GetPartId
 	cp xbc, 0x1E00042
 	jrl nz, LswAfterTouchZeroReturn
 	ld xwa, (xde)
@@ -7063,20 +7063,20 @@ LswAfterTouch:
 	ld xbc, (xde + 8)
 	ld xwa, (xhl)
 	bit 2, wa
-	jr z, LABEL_F7DA02
+	jr z, LswAfterTouch_InactiveStr
 	cpw (xde + 4), 0x0
-	jr z, LABEL_F7D9FB
+	jr z, LswAfterTouch_StrOff
 	ld xwa, 0xE95638
-	jr LABEL_F7DA07
+	jr LswAfterTouch_CopyStr
 
-LABEL_F7D9FB:
+LswAfterTouch_StrOff:
 	ld xwa, 0xE9563C
-	jr LABEL_F7DA07
+	jr LswAfterTouch_CopyStr
 
-LABEL_F7DA02:
+LswAfterTouch_InactiveStr:
 	ld xwa, 0xE95640
 
-LABEL_F7DA07:
+LswAfterTouch_CopyStr:
 	push xwa
 	push xbc
 	call Strcpy
@@ -7084,7 +7084,7 @@ LABEL_F7DA07:
 	ld xhl, xiz
 	jr LswAfterTouch_PopIzRet
 
-LABEL_F7DA13:
+LswAfterTouch_GetPartId:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -7092,22 +7092,22 @@ LABEL_F7DA13:
 	exts xhl
 	jr LswAfterTouch_PopIzRet
 
-LABEL_F7DA22:
+LswAfterTouch_GetSubParam:
 	ld xhl, 0x606
 	jr LswAfterTouch_PopIzRet
 
-LABEL_F7DA29:
+LswAfterTouch_StepSize:
 	lds32 xhl, 3
 	jr LswAfterTouch_PopIzRet
 
-LABEL_F7DA2D:
+LswAfterTouch_CheckEnabled:
 	ld xwa, (xwa)
 	bit 2, wa
 	jr z, LswAfterTouchZeroReturn
 	lds32 xhl, 4
 	jr LswAfterTouch_PopIzRet
 
-LABEL_F7DA38:
+LswAfterTouch_GetToggle:
 	ld xwa, (xwa)
 	and xwa, 0x4
 	or xwa, xwa
@@ -7115,7 +7115,7 @@ LABEL_F7DA38:
 	extz xhl
 	jr LswAfterTouch_PopIzRet
 
-LABEL_F7DA48:
+LswAfterTouch_GetSignedToggle:
 	ld xwa, (xwa)
 	and xwa, 0x4
 	or xwa, xwa

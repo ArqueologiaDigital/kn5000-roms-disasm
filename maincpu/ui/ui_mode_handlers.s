@@ -4582,12 +4582,12 @@ AcMstStyle2GridBoxProc:
 	ld (xsp + 56), xwa
 	ld xbc, (xsp + 52)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FBA397
+	jrl z, MstStyle2_ForwardToChild
 	ld xwa, (xsp + 52)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_FBA1B2
+	jrl z, MstStyle2_GetNameB_DrawString
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_FBA19A
+	jrl z, MstStyle2_GetNameA
 	cp xwa, 0x1C00007
 	jrl z, MstStyle2_HandleDialTurn
 	cp xwa, 0x1C00002
@@ -4596,9 +4596,9 @@ AcMstStyle2GridBoxProc:
 	jr z, MstStyle1Page_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_FBA3AF
+	jrl lt, MstStyle2_InheritedFallback
 	cp xbc, 0x6
-	jrl gt, LABEL_FBA3AF
+	jrl gt, MstStyle2_InheritedFallback
 	add xbc, xbc
 	add xbc, 0xED0E04
 	ld bc, (xbc)
@@ -4892,7 +4892,7 @@ MstStyle2_HandleDialTurn:
 	lda xix, (xwa + 86)
 	ld xwa, (xsp + 48)
 	cp xwa, 0x80
-	jrl z, LABEL_FB9C12
+	jrl z, MstStyle2_DialUp_Scroll
 	or xwa, xwa
 	jrl nz, SeqData_ReturnZero
 	ld xde, xix
@@ -5020,7 +5020,7 @@ MstStyle2_DialDown_UpdateAndPost:
 	ld xde, (xsp + 48)
 	jrl Seq_ApplyFunctionAndReturn
 
-LABEL_FB9C12:
+MstStyle2_DialUp_Scroll:
 	ld xde, xix
 	ld xiy, (xix)
 	ld xwa, (xsp + 8)
@@ -5034,7 +5034,7 @@ LABEL_FB9C12:
 	divs wa, 0x2
 	ldto_werp WA, 0xE2
 	cps wa, 0
-	jr nz, LABEL_FB9C67
+	jr nz, MstStyle2_DialUp_PageInc
 	incm 1, (xiy)
 	ld16_24 xwa, 0x0340c4
 	extz xwa
@@ -5052,7 +5052,7 @@ LABEL_FB9C12:
 	ld xde, (xsp + 48)
 	jrl Seq_ApplyFunctionAndReturn
 
-LABEL_FB9C67:
+MstStyle2_DialUp_PageInc:
 	ld xiy, xhl
 	ld xwa, (xhl)
 	incm 1, (xwa)
@@ -5067,23 +5067,23 @@ LABEL_FB9C67:
 	st32_24 0x0340d6, xhl
 	ldb c, 0x0
 
-LABEL_FB9C8A:
+MstStyle2_PageInc_CountLoop:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xEC, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB9CA1
+	jr z, MstStyle2_PageInc_CountDone
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FB9C8A
+	jr c, MstStyle2_PageInc_CountLoop
 
-LABEL_FB9CA1:
+MstStyle2_PageInc_CountDone:
 	cps c, 0
-	jr z, LABEL_FB9CA7
+	jr z, MstStyle2_PageInc_CountAdj
 	dec 1, c
 
-LABEL_FB9CA7:
+MstStyle2_PageInc_CountAdj:
 	ld xwa, (xsp + 4)
 	ld xhl, (xwa + 94)
 	extz bc
@@ -5097,7 +5097,7 @@ LABEL_FB9CA7:
 	dec 2, wa
 	st16_24 0x0340be, xwa
 	cpdm16_24 213180, xwa
-	jr le, LABEL_FB9D13
+	jr le, MstStyle2_DialUp_UpdateAndPost
 	ld xwa, (xiy)
 	ld wa, (xwa)
 	sla wa, 1
@@ -5109,29 +5109,29 @@ LABEL_FB9CA7:
 	st32_24 0x0340da, xhl
 	ldb c, 0x0
 
-LABEL_FB9CEC:
+MstStyle2_PageInc_CountLoop2:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xEC, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB9D03
+	jr z, MstStyle2_PageInc_CountDone2
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FB9CEC
+	jr c, MstStyle2_PageInc_CountLoop2
 
-LABEL_FB9D03:
+MstStyle2_PageInc_CountDone2:
 	cps c, 0
-	jr z, LABEL_FB9D09
+	jr z, MstStyle2_PageInc_CountAdj2
 	dec 1, c
 
-LABEL_FB9D09:
+MstStyle2_PageInc_CountAdj2:
 	ld xwa, (xsp + 8)
 	ld xhl, (xwa + 98)
 	extz bc
 	ld (xhl), bc
 
-LABEL_FB9D13:
+MstStyle2_DialUp_UpdateAndPost:
 	ld xwa, (xde)
 	incm 1, (xwa)
 	ld16_24 xwa, 0x0340c4
@@ -5168,7 +5168,7 @@ LABEL_FB9D13:
 	ld xde, (xsp + 48)
 	call SendEvent
 	or xhl, xhl
-	jrl z, LABEL_FB9F13
+	jrl z, MstStyle2_FallbackEvent
 	ld xwa, (xsp + 56)
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -5176,14 +5176,14 @@ LABEL_FB9D13:
 	ld ix, hl
 	lda_24 xbc, 0x0340c8
 	cps ix, 0
-	jrl nz, LABEL_FB9EA5
+	jrl nz, MstStyle2_DialScrollUp_Middle
 	ld xhl, (xsp + 8)
 	lda xde, (xhl + 82)
 	ld xwa, (xde)
 	ld wa, (xwa)
 	st16_24 0x0340bc, xwa
 	cps wa, 1
-	jrl le, LABEL_FB9F03
+	jrl le, MstStyle2_DialScroll_SetAutoInc
 	lda xhl, (xhl + 86)
 	ld xwa, (xhl)
 	decm 1, (xwa)
@@ -5206,23 +5206,23 @@ LABEL_FB9D13:
 	st32_24 0x0340d6, xhl
 	ldb c, 0x0
 
-LABEL_FB9DF1:
+MstStyle2_DialScrollDown_CountLoop:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xEC, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB9E08
+	jr z, MstStyle2_DialScrollDown_CountDone
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FB9DF1
+	jr c, MstStyle2_DialScrollDown_CountLoop
 
-LABEL_FB9E08:
+MstStyle2_DialScrollDown_CountDone:
 	cps c, 0
-	jr z, LABEL_FB9E0E
+	jr z, MstStyle2_DialScrollDown_CountAdj
 	dec 1, c
 
-LABEL_FB9E0E:
+MstStyle2_DialScrollDown_CountAdj:
 	ld xwa, (xsp + 4)
 	ld xhl, (xwa + 94)
 	extz bc
@@ -5234,7 +5234,7 @@ LABEL_FB9E0E:
 	ld bc, wa
 	dec 2, bc
 	cp (xhl), bc
-	jr le, LABEL_FB9E67
+	jr le, MstStyle2_DialScrollDown_PostEvent
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
@@ -5243,29 +5243,29 @@ LABEL_FB9E0E:
 	st32_24 0x0340da, xde
 	ldb c, 0x0
 
-LABEL_FB9E40:
+MstStyle2_DialScrollDown_Count2Loop:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB9E57
+	jr z, MstStyle2_DialScrollDown_Count2Done
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FB9E40
+	jr c, MstStyle2_DialScrollDown_Count2Loop
 
-LABEL_FB9E57:
+MstStyle2_DialScrollDown_Count2Done:
 	cps c, 0
-	jr z, LABEL_FB9E5D
+	jr z, MstStyle2_DialScrollDown_Count2Adj
 	dec 1, c
 
-LABEL_FB9E5D:
+MstStyle2_DialScrollDown_Count2Adj:
 	ld xwa, (xsp + 8)
 	ld xde, (xwa + 98)
 	extz bc
 	ld (xde), bc
 
-LABEL_FB9E67:
+MstStyle2_DialScrollDown_PostEvent:
 	ld xwa, (xsp + 56)
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
@@ -5284,11 +5284,11 @@ LABEL_FB9E67:
 	ld xwa, (xwa + 70)
 	ld xbc, 0x1C00017
 	ld xde, (xsp + 48)
-	jr LABEL_FB9EFF
+	jr MstStyle2_DialScroll_CallFunc
 
-LABEL_FB9EA5:
+MstStyle2_DialScrollUp_Middle:
 	cps ix, 5
-	jr nz, LABEL_FB9ED9
+	jr nz, MstStyle2_DialScrollUp_Simple
 	ld xhl, (xsp + 4)
 	lda xde, (xhl + 86)
 	ld xwa, (xde)
@@ -5305,9 +5305,9 @@ LABEL_FB9EA5:
 	add xde, 0xFFFF0000
 	ld xwa, (xsp + 56)
 	ld xbc, 0x1C0000E
-	jr LABEL_FB9EED
+	jr MstStyle2_DialScrollUp_SendEvent
 
-LABEL_FB9ED9:
+MstStyle2_DialScrollUp_Simple:
 	dec 1, ix
 	ld de, ix
 	extz xde
@@ -5315,24 +5315,24 @@ LABEL_FB9ED9:
 	ld xwa, (xsp + 56)
 	ld xbc, 0x1C0000E
 
-LABEL_FB9EED:
+MstStyle2_DialScrollUp_SendEvent:
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 70)
 	ld xbc, 0x1C00018
 	ld xde, (xsp + 48)
 
-LABEL_FB9EFF:
+MstStyle2_DialScroll_CallFunc:
 	call ApFuncCall
 
-LABEL_FB9F03:
+MstStyle2_DialScroll_SetAutoInc:
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
 	call SetAutoInc
 	jrl SeqData_ReturnZero
 
-LABEL_FB9F13:
+MstStyle2_FallbackEvent:
 	ld xwa, (xsp + 56)
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 48)
@@ -5358,7 +5358,7 @@ LABEL_FB9F13:
 	ld xde, (xsp + 48)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_FBA193
+	jrl MstStyle2_SetDialEnable
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
@@ -5372,7 +5372,7 @@ LABEL_FB9F13:
 	ld xde, (xsp + 48)
 	call SendEvent
 	or xhl, xhl
-	jrl z, LABEL_FBA13E
+	jrl z, MstStyle2_DialScroll_FallbackUp
 	ld xwa, (xsp + 56)
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -5381,14 +5381,14 @@ LABEL_FB9F13:
 	lda xhl, (xiz + 94)
 	ld xwa, (xhl)
 	cp ix, (xwa)
-	jr nz, LABEL_FB9FFD
+	jr nz, MstStyle2_DialScrollUp_NextPage
 	ld xbc, (xiz + 74)
 	ld xwa, (xiz + 82)
 	ld wa, (xwa)
 	sla wa, 1
 	dec 2, wa
 	cp (xbc), wa
-	jrl le, LABEL_FBA12E
+	jrl le, MstStyle2_DialScroll_AutoInc
 	lda xbc, (xiz + 86)
 	ld xwa, (xbc)
 	incm 1, (xwa)
@@ -5406,16 +5406,16 @@ LABEL_FB9F13:
 	ld xwa, (xiz + 70)
 	ld xbc, 0x1C00018
 	ld xde, (xsp + 48)
-	jrl LABEL_FBA12A
+	jrl MstStyle2_DialScroll_CallApFunc
 
-LABEL_FB9FFD:
+MstStyle2_DialScrollUp_NextPage:
 	ld xbc, (xsp + 4)
 	lda xde, (xbc + 98)
 	ld xwa, (xde)
 	ld wa, (xwa)
 	inc 5, wa
 	cp wa, ix
-	jrl nz, LABEL_FBA105
+	jrl nz, MstStyle2_DialScrollUp_SendSimple
 	lda xix, (xbc + 82)
 	ld xwa, (xix)
 	ld wa, (xwa)
@@ -5424,7 +5424,7 @@ LABEL_FB9FFD:
 	ld wa, (xwa)
 	st16_24 0x0340be, xwa
 	cpdm16_24 213180, xwa
-	jrl ge, LABEL_FBA12E
+	jrl ge, MstStyle2_DialScroll_AutoInc
 	ld xwa, (xix)
 	incm 1, (xwa)
 	ld xwa, (xix)
@@ -5438,23 +5438,23 @@ LABEL_FB9FFD:
 	st32_24 0x0340d6, xiy
 	ldb c, 0x0
 
-LABEL_FBA04D:
+MstStyle2_DialScroll_CountLoopD:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xF4, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FBA064
+	jr z, MstStyle2_DialScroll_CountDoneD
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FBA04D
+	jr c, MstStyle2_DialScroll_CountLoopD
 
-LABEL_FBA064:
+MstStyle2_DialScroll_CountDoneD:
 	cps c, 0
-	jr z, LABEL_FBA06A
+	jr z, MstStyle2_DialScroll_CountAdjD
 	dec 1, c
 
-LABEL_FBA06A:
+MstStyle2_DialScroll_CountAdjD:
 	ld xhl, (xhl)
 	extz bc
 	ld (xhl), bc
@@ -5466,7 +5466,7 @@ LABEL_FBA06A:
 	ld bc, wa
 	dec 2, bc
 	cp (xhl), bc
-	jr le, LABEL_FBA0BE
+	jr le, MstStyle2_DialScroll_IncAndPost
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
@@ -5475,28 +5475,28 @@ LABEL_FBA06A:
 	st32_24 0x0340da, xhl
 	ldb c, 0x0
 
-LABEL_FBA09B:
+MstStyle2_DialScroll_CountLoopE:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xEC, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FBA0B2
+	jr z, MstStyle2_DialScroll_CountDoneE
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FBA09B
+	jr c, MstStyle2_DialScroll_CountLoopE
 
-LABEL_FBA0B2:
+MstStyle2_DialScroll_CountDoneE:
 	cps c, 0
-	jr z, LABEL_FBA0B8
+	jr z, MstStyle2_DialScroll_CountAdjE
 	dec 1, c
 
-LABEL_FBA0B8:
+MstStyle2_DialScroll_CountAdjE:
 	ld xde, (xde)
 	extz bc
 	ld (xde), bc
 
-LABEL_FBA0BE:
+MstStyle2_DialScroll_IncAndPost:
 	lda xbc, (xiz + 86)
 	ld xwa, (xbc)
 	incm 1, (xwa)
@@ -5518,9 +5518,9 @@ LABEL_FBA0BE:
 	ld xwa, (xiz + 70)
 	ld xbc, 0x1C00018
 	ld xde, (xsp + 48)
-	jr LABEL_FBA12A
+	jr MstStyle2_DialScroll_CallApFunc
 
-LABEL_FBA105:
+MstStyle2_DialScrollUp_SendSimple:
 	ld wa, ix
 	inc 1, wa
 	ld de, wa
@@ -5533,17 +5533,17 @@ LABEL_FBA105:
 	ld xbc, 0x1C00018
 	ld xde, (xsp + 48)
 
-LABEL_FBA12A:
+MstStyle2_DialScroll_CallApFunc:
 	call ApFuncCall
 
-LABEL_FBA12E:
+MstStyle2_DialScroll_AutoInc:
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
 	call SetAutoInc
 	jrl SeqData_ReturnZero
 
-LABEL_FBA13E:
+MstStyle2_DialScroll_FallbackUp:
 	ld xwa, (xsp + 56)
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 48)
@@ -5570,11 +5570,11 @@ LABEL_FBA13E:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_FBA193:
+MstStyle2_SetDialEnable:
 	call SetDialEnable
 	jrl SeqData_ReturnZero
 
-LABEL_FBA19A:
+MstStyle2_GetNameA:
 	ld xwa, (xsp + 56)
 	call GetViewInstance
 	ld xwa, (xhl + 62)
@@ -5585,7 +5585,7 @@ LABEL_FBA19A:
 	inc 8, xsp
 	jrl SeqData_ReturnZero
 
-LABEL_FBA1B2:
+MstStyle2_GetNameB_DrawString:
 	ld xwa, (xsp + 56)
 	call GetViewInstance
 	ld xiz, xhl
@@ -5637,22 +5637,22 @@ LABEL_FBA1B2:
 	lda xde, (xsp + 18)
 	ld wa, (xwa)
 	cp wa, (xbc)
-	jr nz, LABEL_FBA284
+	jr nz, MstStyle2_NameB_DrawLower
 	ld xhl, (xiz + 74)
 	ld wa, (xbc)
 	sla wa, 1
 	dec 1, wa
 	cp wa, (xhl)
-	jr le, LABEL_FBA262
+	jr le, MstStyle2_NameB_DrawCurrent
 	pushw 0xED
 	pushw 0xDD4
 	push xde
 	call Strcpy
 	inc 8, xsp
 	ld xwa, 0xED0DE6
-	jr LABEL_FBA2AB
+	jr MstStyle2_NameB_Render
 
-LABEL_FBA262:
+MstStyle2_NameB_DrawCurrent:
 	exts xwa
 	sll xwa, 3
 	addda32_24 xwa, 213202
@@ -5664,9 +5664,9 @@ LABEL_FBA262:
 	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 	ld xwa, 0xED0DF0
-	jr LABEL_FBA2AB
+	jr MstStyle2_NameB_Render
 
-LABEL_FBA284:
+MstStyle2_NameB_DrawLower:
 	ld wa, (xbc)
 	sla wa, 1
 	dec 1, wa
@@ -5682,7 +5682,7 @@ LABEL_FBA284:
 	lda xsp, (xsp + 12)
 	ld xwa, 0xED0DFA
 
-LABEL_FBA2AB:
+MstStyle2_NameB_Render:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
@@ -5768,7 +5768,7 @@ LABEL_FBA2AB:
 	call DrawString
 	jr SeqData_ReturnZero
 
-LABEL_FBA397:
+MstStyle2_ForwardToChild:
 	ld xwa, (xsp + 56)
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -5780,15 +5780,15 @@ Seq_ApplyFunctionAndReturn:
 
 SeqData_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_FBA3BC
+	jr MstStyle2_Epilogue
 
-LABEL_FBA3AF:
+MstStyle2_InheritedFallback:
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
 	call InheritedProc
 
-LABEL_FBA3BC:
+MstStyle2_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 56)
 	ret
@@ -6111,7 +6111,7 @@ AcMstSong1GridBoxProc:
 MstSong1GridCheck:
 	lds32 xhl, 0
 	ret
-LABEL_FBA6E8:
+MstSong1Grid_Boundary:
 
 AcMstSong2GridBoxProc:
 	jp InheritedProc
@@ -6119,7 +6119,7 @@ AcMstSong2GridBoxProc:
 MstSong2GridCheck:
 	lds32 xhl, 0
 	ret
-LABEL_FBA6EF:
+MstSong2Grid_Boundary:
 
 IvMstStyleWindowPgCtlProc:
 	dec 4, xsp
@@ -6127,21 +6127,21 @@ IvMstStyleWindowPgCtlProc:
 	ld (xsp + 4), xde
 	ld xiz, xwa
 	cp xbc, 0x1C00007
-	jr z, LABEL_FBA743
+	jr z, MstStylePgCtl_HandleScroll
 	cp xbc, 0x1C00001
-	jr z, LABEL_FBA713
+	jr z, MstStylePgCtl_HandleInit
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jrl LABEL_FBA7B7
+	jrl MstStylePgCtl_Epilogue
 
-LABEL_FBA713:
+MstStylePgCtl_HandleInit:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 4)
 	or xwa, xwa
-	jrl nz, LABEL_FBA7B5
+	jrl nz, MstStylePgCtl_ReturnZero
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 22)
@@ -6150,35 +6150,35 @@ LABEL_FBA713:
 	ld xbc, 0x1C0001E
 	lds32 xde, 1
 	call SendEvent
-	jr LABEL_FBA7B5
+	jr MstStylePgCtl_ReturnZero
 
-LABEL_FBA743:
+MstStylePgCtl_HandleScroll:
 	ld xwa, xiz
 	call GetViewInstance
 	lda xbc, (xhl + 22)
 	ld xwa, (xsp + 4)
 	cp xwa, 0xB
-	jr nz, LABEL_FBA775
+	jr nz, MstStylePgCtl_HandleScrollDown
 	ld xde, xbc
 	ld xwa, (xbc)
 	cpw (xwa), 0x1
-	jr nz, LABEL_FBA7B5
+	jr nz, MstStylePgCtl_ReturnZero
 	incm 1, (xwa)
 	ld xwa, (xde)
 	ld de, (xwa)
 	exts xde
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001E
-	jr LABEL_FBA79C
+	jr MstStylePgCtl_SendPageEvent
 
-LABEL_FBA775:
+MstStylePgCtl_HandleScrollDown:
 	ld xwa, (xsp + 4)
 	cp xwa, 0xF
-	jr nz, LABEL_FBA7B5
+	jr nz, MstStylePgCtl_ReturnZero
 	ld xde, xbc
 	ld xwa, (xbc)
 	cpw (xwa), 0x1
-	jr z, LABEL_FBA7A2
+	jr z, MstStylePgCtl_ScrollDown_Exit
 	decm 1, (xwa)
 	ld xwa, (xde)
 	ld de, (xwa)
@@ -6186,24 +6186,24 @@ LABEL_FBA775:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001E
 
-LABEL_FBA79C:
+MstStylePgCtl_SendPageEvent:
 	call SendEvent
-	jr LABEL_FBA7B5
+	jr MstStylePgCtl_ReturnZero
 
-LABEL_FBA7A2:
+MstStylePgCtl_ScrollDown_Exit:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A000C1
 	call PostEvent
 
-LABEL_FBA7B5:
+MstStylePgCtl_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_FBA7B7:
+MstStylePgCtl_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
-LABEL_FBA7BB:
+TchSensGrid_Boundary:
 
 AcTchSensGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -6213,19 +6213,19 @@ AcTchSensGridBoxProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FBAA39
+	jrl z, TchSens_ForwardToChild
 	ld xwa, (xsp + 16)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_FBAA0C
+	jrl z, TchSens_GetNameB
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_FBAA03
+	jrl z, TchSens_GetNameA
 	cp xwa, 0x1C00001
 	jr z, MstStyle2_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_FBAA50
+	jrl lt, TchSens_InheritedFallback
 	cp xbc, 0x6
-	jrl gt, LABEL_FBAA50
+	jrl gt, TchSens_InheritedFallback
 	add xbc, xbc
 	add xbc, 0xED0ED2
 	ld bc, (xbc)
@@ -6269,7 +6269,7 @@ MstStyle2_EventDispatch:
 	ld xbc, 0x1C00018
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_FBA9FD
+	jrl TchSens_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6279,22 +6279,22 @@ MstStyle2_EventDispatch:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_FBA8F0
+	jr z, TchSens_DialDown_Fallback
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
 	call SendEvent
 	cps hl, 4
-	jr nz, LABEL_FBA8CA
+	jr nz, TchSens_DialDown_Dec1
 	dec 3, hl
 	extz xhl
 	add xhl, 0xFFFF0000
 	ld xwa, xiz
 	ld xbc, 0x1C0000E
 	ld xde, xhl
-	jr LABEL_FBA8DD
+	jr TchSens_DialDown_SendEvent
 
-LABEL_FBA8CA:
+TchSens_DialDown_Dec1:
 	dec 1, hl
 	extz xhl
 	add xhl, 0xFFFF0000
@@ -6302,7 +6302,7 @@ LABEL_FBA8CA:
 	ld xbc, 0x1C0000E
 	ld xde, xhl
 
-LABEL_FBA8DD:
+TchSens_DialDown_SendEvent:
 	call SendEvent
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -6310,7 +6310,7 @@ LABEL_FBA8DD:
 	call SetAutoInc
 	jrl TchSens_ReturnZeroJmp
 
-LABEL_FBA8F0:
+TchSens_DialDown_Fallback:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -6336,7 +6336,7 @@ LABEL_FBA8F0:
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_FBA9FD
+	jrl TchSens_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6346,22 +6346,22 @@ LABEL_FBA8F0:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_FBA9AD
+	jr z, TchSens_DialUp_Fallback
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
 	call SendEvent
 	cps hl, 1
-	jr nz, LABEL_FBA987
+	jr nz, TchSens_DialUp_Inc1
 	inc 3, hl
 	extz xhl
 	add xhl, 0xFFFF0000
 	ld xwa, xiz
 	ld xbc, 0x1C0000E
 	ld xde, xhl
-	jr LABEL_FBA99A
+	jr TchSens_DialUp_SendEvent
 
-LABEL_FBA987:
+TchSens_DialUp_Inc1:
 	inc 1, hl
 	extz xhl
 	add xhl, 0xFFFF0000
@@ -6369,7 +6369,7 @@ LABEL_FBA987:
 	ld xbc, 0x1C0000E
 	ld xde, xhl
 
-LABEL_FBA99A:
+TchSens_DialUp_SendEvent:
 	call SendEvent
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -6377,7 +6377,7 @@ LABEL_FBA99A:
 	call SetAutoInc
 	jrl TchSens_ReturnZeroJmp
 
-LABEL_FBA9AD:
+TchSens_DialUp_Fallback:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -6404,20 +6404,20 @@ LABEL_FBA9AD:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_FBA9FD:
+TchSens_SetDialEnable:
 	call SetDialEnable
 	jr TchSens_ReturnZeroJmp
 
-LABEL_FBAA03:
+TchSens_GetNameA:
 	ld xwa, xiz
 	ld xiz, 0x3E
-	jr LABEL_FBAA13
+	jr TchSens_GetName_Load
 
-LABEL_FBAA0C:
+TchSens_GetNameB:
 	ld xwa, xiz
 	ld xiz, 0x42
 
-LABEL_FBAA13:
+TchSens_GetName_Load:
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -6432,29 +6432,29 @@ LABEL_FBAA13:
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
-	jr LABEL_FBAA48
+	jr TchSens_CallApFunc
 
-LABEL_FBAA39:
+TchSens_ForwardToChild:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 
-LABEL_FBAA48:
+TchSens_CallApFunc:
 	call ApFuncCall
 
 TchSens_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_FBAA5C
+	jr TchSens_Epilogue
 
-LABEL_FBAA50:
+TchSens_InheritedFallback:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
-LABEL_FBAA5C:
+TchSens_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -6464,7 +6464,7 @@ TchSensGridCheck:
 	push xiz
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FBAC96
+	jrl z, TchSensGrid_CellSelect
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
 	jrl lt, TchSensGrid_ReturnZero
@@ -6543,7 +6543,7 @@ TchSensGrid_EventDispatch:
 	.byte 0x0e, 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78
 	.byte 0xfa, 0x00
 
-LABEL_FBAC96:
+TchSensGrid_CellSelect:
 	lda xbc, (xsp + 14)
 	ld xwa, xde
 	srl xwa, 0
@@ -6554,9 +6554,9 @@ LABEL_FBAC96:
 	lda xde, (xsp + 4)
 	ld (xbc + 4), xde
 	cpw (xbc), 0x1
-	jr nz, LABEL_FBACE6
+	jr nz, TchSensGrid_CheckCell_1_4
 	cpw (xwa), 0x1
-	jr nz, LABEL_FBACE6
+	jr nz, TchSensGrid_CheckCell_1_4
 	ld xwa, 0x100
 	call SndParam_LookupReadOnly
 	pushw hl
@@ -6572,19 +6572,19 @@ LABEL_FBAC96:
 	ld xbc, 0x1E0008C
 	jrl TchSensGrid_SendEvent
 
-LABEL_FBACE6:
+TchSensGrid_CheckCell_1_4:
 	cpw (xbc), 0x1
-	jr nz, LABEL_FBAD24
+	jr nz, TchSensGrid_CheckCell_1_5
 	cpw (xwa), 0x4
-	jr nz, LABEL_FBAD24
+	jr nz, TchSensGrid_CheckCell_1_5
 	ld xwa, 0x104
 	call SndParam_LookupReadOnly
 	ld xwa, 0xED0EFC
 	cps hl, 0
-	jr nz, LABEL_FBAD09
+	jr nz, TchSensGrid_Cell_1_4_Render
 	ld xwa, 0xED0EF8
 
-LABEL_FBAD09:
+TchSensGrid_Cell_1_4_Render:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
@@ -6596,11 +6596,11 @@ LABEL_FBAD09:
 	ld xbc, 0x1E0008C
 	jr TchSensGrid_SendEvent
 
-LABEL_FBAD24:
+TchSensGrid_CheckCell_1_5:
 	cpw (xbc), 0x1
-	jr nz, LABEL_FBAD5B
+	jr nz, TchSensGrid_CheckCell_1_6
 	cpw (xwa), 0x5
-	jr nz, LABEL_FBAD5B
+	jr nz, TchSensGrid_CheckCell_1_6
 	ld xwa, 0x102
 	call SndParam_LookupReadOnly
 	pushw hl
@@ -6616,7 +6616,7 @@ LABEL_FBAD24:
 	ld xbc, 0x1E0008C
 	jr TchSensGrid_SendEvent
 
-LABEL_FBAD5B:
+TchSensGrid_CheckCell_1_6:
 	cpw (xbc), 0x1
 	jr nz, TchSensGrid_ReturnZero
 	cpw (xwa), 0x6
@@ -6643,7 +6643,7 @@ TchSensGrid_ReturnZero:
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
-LABEL_FBAD9B:
+FSWAssGrid_Boundary:
 
 AcFSWAssGridBoxProc:
 	lda xsp, (xsp - 16)
@@ -6653,19 +6653,19 @@ AcFSWAssGridBoxProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FBAFE7
+	jrl z, FSWAss_ForwardToChild
 	ld xwa, (xsp + 16)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_FBAFBA
+	jrl z, FSWAss_GetNameB
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_FBAFB1
+	jrl z, FSWAss_GetNameA
 	cp xwa, 0x1C00001
 	jr z, TchSens_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_FBAFFE
+	jrl lt, FSWAss_InheritedFallback
 	cp xbc, 0x6
-	jrl gt, LABEL_FBAFFE
+	jrl gt, FSWAss_InheritedFallback
 	add xbc, xbc
 	add xbc, 0xED0F16
 	ld bc, (xbc)
@@ -6709,7 +6709,7 @@ TchSens_EventDispatch:
 	ld xbc, 0x1C00018
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_FBAFAB
+	jrl FSWAss_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6719,7 +6719,7 @@ TchSens_EventDispatch:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_FBAEB7
+	jr z, FSWAss_DialDown_Fallback
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -6737,7 +6737,7 @@ TchSens_EventDispatch:
 	call SetAutoInc
 	jrl FSWAss_ReturnZeroJmp
 
-LABEL_FBAEB7:
+FSWAss_DialDown_Fallback:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -6763,7 +6763,7 @@ LABEL_FBAEB7:
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_FBAFAB
+	jrl FSWAss_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6773,7 +6773,7 @@ LABEL_FBAEB7:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_FBAF5B
+	jr z, FSWAss_DialUp_Fallback
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -6791,7 +6791,7 @@ LABEL_FBAEB7:
 	call SetAutoInc
 	jrl FSWAss_ReturnZeroJmp
 
-LABEL_FBAF5B:
+FSWAss_DialUp_Fallback:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -6818,20 +6818,20 @@ LABEL_FBAF5B:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_FBAFAB:
+FSWAss_SetDialEnable:
 	call SetDialEnable
 	jr FSWAss_ReturnZeroJmp
 
-LABEL_FBAFB1:
+FSWAss_GetNameA:
 	ld xwa, xiz
 	ld xiz, 0x3E
-	jr LABEL_FBAFC1
+	jr FSWAss_GetName_Load
 
-LABEL_FBAFBA:
+FSWAss_GetNameB:
 	ld xwa, xiz
 	ld xiz, 0x42
 
-LABEL_FBAFC1:
+FSWAss_GetName_Load:
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -6846,29 +6846,29 @@ LABEL_FBAFC1:
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
-	jr LABEL_FBAFF6
+	jr FSWAss_CallApFunc
 
-LABEL_FBAFE7:
+FSWAss_ForwardToChild:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 
-LABEL_FBAFF6:
+FSWAss_CallApFunc:
 	call ApFuncCall
 
 FSWAss_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_FBB00A
+	jr FSWAss_Epilogue
 
-LABEL_FBAFFE:
+FSWAss_InheritedFallback:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 	call InheritedProc
 
-LABEL_FBB00A:
+FSWAss_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -6878,7 +6878,7 @@ FSWAssGridCheck:
 	push xiz
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FBB6EC
+	jrl z, FSWAssGrid_CellSelect
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
 	jrl lt, AudioTable_ReturnZero
@@ -7120,7 +7120,7 @@ FSWAssGrid_EventDispatch:
 	lda	xde, (xsp+260)
 	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x46, 0x02
 
-LABEL_FBB6EC:
+FSWAssGrid_CellSelect:
 	st_dri3b A, 0xFD, 0x04, 0x01
 	ld xwa, xde
 	srl xwa, 0
@@ -7131,9 +7131,9 @@ LABEL_FBB6EC:
 	lda xde, (xsp + 4)
 	ld (xbc + 4), xde
 	cpw (xbc), 0x1
-	jr nz, LABEL_FBB756
+	jr nz, FSWAssGrid_CheckCell_1_3
 	cpw (xwa), 0x2
-	jr nz, LABEL_FBB756
+	jr nz, FSWAssGrid_CheckCell_1_3
 	ld xwa, 0x2886
 	call SndParam_LookupReadOnly
 	extz hl
@@ -7156,11 +7156,11 @@ LABEL_FBB6EC:
 	ld xbc, 0x1E0008C
 	jrl AudioTable_SendEventAndContinue
 
-LABEL_FBB756:
+FSWAssGrid_CheckCell_1_3:
 	cpw (xbc), 0x1
-	jr nz, LABEL_FBB7A6
+	jr nz, FSWAssGrid_CheckCell_1_4
 	cpw (xwa), 0x3
-	jr nz, LABEL_FBB7A6
+	jr nz, FSWAssGrid_CheckCell_1_4
 	ld xwa, 0x2888
 	call SndParam_LookupReadOnly
 	extz hl
@@ -7183,11 +7183,11 @@ LABEL_FBB756:
 	ld xbc, 0x1E0008C
 	jrl AudioTable_SendEventAndContinue
 
-LABEL_FBB7A6:
+FSWAssGrid_CheckCell_1_4:
 	cpw (xbc), 0x1
-	jr nz, LABEL_FBB7F6
+	jr nz, FSWAssGrid_CheckCell_1_5
 	cpw (xwa), 0x4
-	jr nz, LABEL_FBB7F6
+	jr nz, FSWAssGrid_CheckCell_1_5
 	ld xwa, 0x288A
 	call SndParam_LookupReadOnly
 	extz hl
@@ -7210,11 +7210,11 @@ LABEL_FBB7A6:
 	ld xbc, 0x1E0008C
 	jrl AudioTable_SendEventAndContinue
 
-LABEL_FBB7F6:
+FSWAssGrid_CheckCell_1_5:
 	cpw (xbc), 0x1
-	jr nz, LABEL_FBB846
+	jr nz, FSWAssGrid_CheckCell_1_6
 	cpw (xwa), 0x5
-	jr nz, LABEL_FBB846
+	jr nz, FSWAssGrid_CheckCell_1_6
 	ld xwa, 0x288C
 	call SndParam_LookupReadOnly
 	extz hl
@@ -7237,11 +7237,11 @@ LABEL_FBB7F6:
 	ld xbc, 0x1E0008C
 	jrl AudioTable_SendEventAndContinue
 
-LABEL_FBB846:
+FSWAssGrid_CheckCell_1_6:
 	cpw (xbc), 0x1
-	jr nz, LABEL_FBB896
+	jr nz, FSWAssGrid_CheckCell_1_7
 	cpw (xwa), 0x6
-	jr nz, LABEL_FBB896
+	jr nz, FSWAssGrid_CheckCell_1_7
 	ld xwa, 0x288E
 	call SndParam_LookupReadOnly
 	extz hl
@@ -7264,11 +7264,11 @@ LABEL_FBB846:
 	ld xbc, 0x1E0008C
 	jrl AudioTable_SendEventAndContinue
 
-LABEL_FBB896:
+FSWAssGrid_CheckCell_1_7:
 	cpw (xbc), 0x1
-	jr nz, LABEL_FBB8E5
+	jr nz, FSWAssGrid_CheckCell_1_8
 	cpw (xwa), 0x7
-	jr nz, LABEL_FBB8E5
+	jr nz, FSWAssGrid_CheckCell_1_8
 	ld xwa, 0x2890
 	call SndParam_LookupReadOnly
 	extz hl
@@ -7291,7 +7291,7 @@ LABEL_FBB896:
 	ld xbc, 0x1E0008C
 	jr AudioTable_SendEventAndContinue
 
-LABEL_FBB8E5:
+FSWAssGrid_CheckCell_1_8:
 	cpw (xbc), 0x1
 	jr nz, AudioTable_ReturnZero
 	cpw (xwa), 0x8
@@ -7330,14 +7330,14 @@ AudioTable_FindMatchIndex:
 	ldb l, 0x0
 	lda_24 xde, 0xed0f24
 
-LABEL_FBB946:
+AudioTable_FindMatch_Loop:
 	ld c, l
 	extz bc
 	cp_srib_rm A, 0x07, 0xE8, 0xE4
 	ret z
 	inc 1, l
 	cp l, 0x1E
-	jr c, LABEL_FBB946
+	jr c, AudioTable_FindMatch_Loop
 	ret
 
 FswAsIniFunc:
@@ -7361,7 +7361,7 @@ SeqLoadFunc_ReturnZero:
 	lds32 xhl, 0
 	ret
 
-LABEL_FBB990:
+FSWAss_CheckAndNotify:
 	; --- Init/check function (27 bytes) ---
 	ld xwa, 0x00004080
 	call SndParam_LookupReadOnly
@@ -7372,7 +7372,7 @@ LABEL_FBB990:
 	lds	de, 4
 	call SoundParam_NotifyChange
 	ret
-LABEL_FBB9AB:
+FSWAss_RefreshAllVoices:
 	; --- Multi-call setup function (37 bytes) ---
 	push xde
 	push xhl
@@ -7392,7 +7392,7 @@ LABEL_FBB9AB:
 	ret
 
 
-LABEL_FBB9D0:
+IvPmemWindow_Boundary:
 
 IvPmemWindowPageCtlProc:
 	dec 4, xsp
