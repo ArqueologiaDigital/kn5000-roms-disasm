@@ -7858,49 +7858,49 @@ PsCmpCpFPtnBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x0C, 0x01
 	ret
-LABEL_F1B742:
+PsCstmCpBnkBox_Entry:
 
 PsCstmCpBnkBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F1B77E
+	jr z, PsCstmCpBnkBox_HandleEvtBC
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F1B77E
+	jr z, PsCstmCpBnkBox_HandleEvtBC
 	cp xbc, 0x1C00002
-	jr z, LABEL_F1B776
+	jr z, PsCstmCpBnkBox_HandleEvt2
 	cp xbc, 0x1C00001
-	jr z, LABEL_F1B772
+	jr z, PsCstmCpBnkBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F1B7C4
+	jr PsCstmCpBnkBox_Epilogue
 
-LABEL_F1B772:
+PsCstmCpBnkBox_HandleEvt1:
 	ld xwa, xiz
-	jr LABEL_F1B778
+	jr PsCstmCpBnkBox_CallInherited
 
-LABEL_F1B776:
+PsCstmCpBnkBox_HandleEvt2:
 	ld xwa, xiz
 
-LABEL_F1B778:
+PsCstmCpBnkBox_CallInherited:
 	call InheritedProc
-	jr LABEL_F1B7C2
+	jr PsCstmCpBnkBox_ReturnZero
 
-LABEL_F1B77E:
+PsCstmCpBnkBox_HandleEvtBC:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
 	call GetViewInstance
 	cp (xhl + 36), 0x0
-	jr nz, LABEL_F1B796
+	jr nz, PsCstmCpBnkBox_ReadParam2
 	ldda8 a, 14774
-	jr LABEL_F1B79A
+	jr PsCstmCpBnkBox_LookupAndSend
 
-LABEL_F1B796:
+PsCstmCpBnkBox_ReadParam2:
 	ldda8 a, 14775
 
-LABEL_F1B79A:
+PsCstmCpBnkBox_LookupAndSend:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xe1d9b8
@@ -7915,71 +7915,71 @@ LABEL_F1B79A:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F1B7C2:
+PsCstmCpBnkBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F1B7C4:
+PsCstmCpBnkBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
-LABEL_F1B7CB:
+PsCstmCpSwBox_Entry:
 
 PsCstmCpSwBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F1B807
+	jr z, PsCstmCpSwBox_HandleEvtBC
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F1B807
+	jr z, PsCstmCpSwBox_HandleEvtBC
 	cp xbc, 0x1C00002
-	jr z, LABEL_F1B7FF
+	jr z, PsCstmCpSwBox_HandleEvt2
 	cp xbc, 0x1C00001
-	jr z, LABEL_F1B7FB
+	jr z, PsCstmCpSwBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F1B85A
+	jr PsCstmCpSwBox_Epilogue
 
-LABEL_F1B7FB:
+PsCstmCpSwBox_HandleEvt1:
 	ld xwa, xiz
-	jr LABEL_F1B801
+	jr PsCstmCpSwBox_CallInherited
 
-LABEL_F1B7FF:
+PsCstmCpSwBox_HandleEvt2:
 	ld xwa, xiz
 
-LABEL_F1B801:
+PsCstmCpSwBox_CallInherited:
 	call InheritedProc
-	jr LABEL_F1B858
+	jr PsCstmCpSwBox_ReturnZero
 
-LABEL_F1B807:
+PsCstmCpSwBox_HandleEvtBC:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
 	call GetViewInstance
 	lda xbc, (xsp + 4)
 	cp (xhl + 36), 0x0
-	jr nz, LABEL_F1B831
+	jr nz, PsCstmCpSwBox_ReadParam2
 	ld xwa, 0xE1DB64
 	cpdi8 14774, 10
-	jr nc, LABEL_F1B82D
+	jr nc, PsCstmCpSwBox_PushTableAddr0
 	ld xwa, 0xE1DB5C
 
-LABEL_F1B82D:
+PsCstmCpSwBox_PushTableAddr0:
 	push xwa
 	push xbc
-	jr LABEL_F1B844
+	jr PsCstmCpSwBox_SendCommand
 
-LABEL_F1B831:
+PsCstmCpSwBox_ReadParam2:
 	ld xwa, 0xE1DB74
 	cpdi8 14775, 10
-	jr nc, LABEL_F1B842
+	jr nc, PsCstmCpSwBox_PushTableAddr1
 	ld xwa, 0xE1DB6C
 
-LABEL_F1B842:
+PsCstmCpSwBox_PushTableAddr1:
 	push xwa
 	push xbc
 
-LABEL_F1B844:
+PsCstmCpSwBox_SendCommand:
 	call Audio_SendCommand
 	inc 8, xsp
 	lda xde, (xsp + 4)
@@ -7987,14 +7987,14 @@ LABEL_F1B844:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F1B858:
+PsCstmCpSwBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F1B85A:
+PsCstmCpSwBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
-LABEL_F1B861:
+PsCstmCpNameBox_Entry:
 
 PsCstmCpNameBoxProc:
 	st_dri3b L, 0xFD, 0xFC, 0xFE
@@ -8002,34 +8002,34 @@ PsCstmCpNameBoxProc:
 	st_dri3l XDE, 0xFD, 0x04, 0x01
 	ld xiz, xwa
 	cp xbc, 0x1E4002E
-	jrl z, LABEL_F1B92A
+	jrl z, PsCstmCpNameBox_HandleEvt2E
 	cp xbc, 0x1E4002D
-	jrl z, LABEL_F1B901
+	jrl z, PsCstmCpNameBox_HandleEvt2D
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F1B8BD
+	jr z, PsCstmCpNameBox_HandleEvtD
 	cp xbc, 0x1C00002
-	jr z, LABEL_F1B8AF
+	jr z, PsCstmCpNameBox_HandleEvt2
 	cp xbc, 0x1C00001
-	jr z, LABEL_F1B8A6
+	jr z, PsCstmCpNameBox_HandleEvt1
 	ld xwa, xiz
 	ld_sril XDE, (xsp + 0x0104)
 	call InheritedProc
-	jrl LABEL_F1B957
+	jrl PsCstmCpNameBox_Epilogue
 
-LABEL_F1B8A6:
+PsCstmCpNameBox_HandleEvt1:
 	ld xwa, xiz
 	ld_sril XDE, (xsp + 0x0104)
-	jr LABEL_F1B8B6
+	jr PsCstmCpNameBox_CallInherited
 
-LABEL_F1B8AF:
+PsCstmCpNameBox_HandleEvt2:
 	ld xwa, xiz
 	ld_sril XDE, (xsp + 0x0104)
 
-LABEL_F1B8B6:
+PsCstmCpNameBox_CallInherited:
 	call InheritedProc
 	jrl PsCtmAtt_ReturnZero
 
-LABEL_F1B8BD:
+PsCstmCpNameBox_HandleEvtD:
 	cpdi8 14974, 0
 	jrl nz, PsCtmAtt_ReturnZero
 	ld xwa, xiz
@@ -8039,24 +8039,24 @@ LABEL_F1B8BD:
 	call GetViewInstance
 	ld a, (xhl + 36)
 	cps a, 1
-	jr z, LABEL_F1B8EF
+	jr z, PsCstmCpNameBox_FuncCall2C
 	cps a, 0
 	jr nz, PsCtmAtt_ReturnZero
 	ld xwa, 0x144001A
 	ld xbc, 0x1E4002B
 	lds32 xde, 0
-	jr LABEL_F1B8FB
+	jr PsCstmCpNameBox_MainFuncCall
 
-LABEL_F1B8EF:
+PsCstmCpNameBox_FuncCall2C:
 	ld xwa, 0x144001A
 	ld xbc, 0x1E4002C
 	lds32 xde, 0
 
-LABEL_F1B8FB:
+PsCstmCpNameBox_MainFuncCall:
 	call MainFuncCall
 	jr PsCtmAtt_ReturnZero
 
-LABEL_F1B901:
+PsCstmCpNameBox_HandleEvt2D:
 	cpdi8 14974, 0
 	jr nz, PsCtmAtt_ReturnZero
 	ld xwa, xiz
@@ -8070,9 +8070,9 @@ LABEL_F1B901:
 	lda xde, (xsp + 4)
 	ld xwa, xiz
 	ld xbc, 0x1C0000F
-	jr LABEL_F1B951
+	jr PsCstmCpNameBox_SendEventJoin
 
-LABEL_F1B92A:
+PsCstmCpNameBox_HandleEvt2E:
 	cpdi8 14974, 0
 	jr nz, PsCtmAtt_ReturnZero
 	ld xwa, xiz
@@ -8087,46 +8087,46 @@ LABEL_F1B92A:
 	ld xwa, xiz
 	ld xbc, 0x1C0000F
 
-LABEL_F1B951:
+PsCstmCpNameBox_SendEventJoin:
 	call SendEvent
 
 PsCtmAtt_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F1B957:
+PsCstmCpNameBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
-LABEL_F1B95E:
+PsCtmAttStrBox_Entry:
 
 PsCtmAttStrBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F1B99A
+	jr z, PsCtmAttStrBox_HandleEvtBC
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F1B99A
+	jr z, PsCtmAttStrBox_HandleEvtBC
 	cp xbc, 0x1C00002
-	jr z, LABEL_F1B992
+	jr z, PsCtmAttStrBox_HandleEvt2
 	cp xbc, 0x1C00001
-	jr z, LABEL_F1B98E
+	jr z, PsCtmAttStrBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F1B9C0
+	jr PsCtmAttStrBox_Epilogue
 
-LABEL_F1B98E:
+PsCtmAttStrBox_HandleEvt1:
 	ld xwa, xiz
-	jr LABEL_F1B994
+	jr PsCtmAttStrBox_CallInherited
 
-LABEL_F1B992:
+PsCtmAttStrBox_HandleEvt2:
 	ld xwa, xiz
 
-LABEL_F1B994:
+PsCtmAttStrBox_CallInherited:
 	call InheritedProc
-	jr LABEL_F1B9BE
+	jr PsCtmAttStrBox_ReturnZero
 
-LABEL_F1B99A:
+PsCtmAttStrBox_HandleEvtBC:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0x0
@@ -8140,43 +8140,43 @@ LABEL_F1B99A:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F1B9BE:
+PsCtmAttStrBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F1B9C0:
+PsCtmAttStrBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
-LABEL_F1B9C7:
+AcMemNoBox_Entry:
 
 AcMemNoBoxProc:
 	st_dri3b L, 0xFD, 0xF4, 0xFE
 	push xiz
 	st_dri3l XWA, 0xFD, 0x0C, 0x01
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F1BA11
+	jr z, AcMemNoBox_HandleEvtBC
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F1BA11
+	jr z, AcMemNoBox_HandleEvtBC
 	cp xbc, 0x1C00002
-	jr z, LABEL_F1BA05
+	jr z, AcMemNoBox_HandleEvt2
 	cp xbc, 0x1C00001
-	jr z, LABEL_F1B9FE
+	jr z, AcMemNoBox_HandleEvt1
 	ld_sril XWA, (xsp + 0x010c)
 	call InheritedProc
-	jrl LABEL_F1BAD3
+	jrl AcMemNoBox_Epilogue
 
-LABEL_F1B9FE:
+AcMemNoBox_HandleEvt1:
 	ld_sril XWA, (xsp + 0x010c)
-	jr LABEL_F1BA0A
+	jr AcMemNoBox_CallInherited
 
-LABEL_F1BA05:
+AcMemNoBox_HandleEvt2:
 	ld_sril XWA, (xsp + 0x010c)
 
-LABEL_F1BA0A:
+AcMemNoBox_CallInherited:
 	call InheritedProc
-	jrl LABEL_F1BAD1
+	jrl AcMemNoBox_ReturnZero
 
-LABEL_F1BA11:
+AcMemNoBox_HandleEvtBC:
 	ld_sril XWA, (xsp + 0x010c)
 	call InheritedProc
 	ld_sril XWA, (xsp + 0x010c)
@@ -8195,18 +8195,18 @@ LABEL_F1BA11:
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
 	cpdi8 14760, 1
-	jr nz, LABEL_F1BA61
+	jr nz, AcMemNoBox_SetColorFF
 	cpdi8 14976, 1
-	jr nz, LABEL_F1BA61
+	jr nz, AcMemNoBox_SetColorFF
 	ldw (xbc), 0x0
 	ldw (xwa), 0xFF
-	jr LABEL_F1BA69
+	jr AcMemNoBox_SendNotify
 
-LABEL_F1BA61:
+AcMemNoBox_SetColorFF:
 	ldw (xbc), 0xFF
 	ldw (xwa), 0xF5
 
-LABEL_F1BA69:
+AcMemNoBox_SendNotify:
 	ld_sril XWA, (xsp + 0x010c)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
@@ -8217,7 +8217,7 @@ LABEL_F1BA69:
 	call SendEvent
 	call GetTitleNow
 	cp xhl, 0x1A000B8
-	jr nz, LABEL_F1BAD1
+	jr nz, AcMemNoBox_ReturnZero
 	lda xwa, (xsp + 4)
 	ldw (xwa), 0xC5
 	lda xde, (xwa + 2)
@@ -8229,28 +8229,28 @@ LABEL_F1BA69:
 	add bc, 0x2E
 	ld (xwa + 6), bc
 	cpdi8 14760, 1
-	jr nz, LABEL_F1BAC6
+	jr nz, AcMemNoBox_PushF5
 	pushw 0xF2
 	lds bc, 1
 	lds de, 2
-	jr LABEL_F1BACD
+	jr AcMemNoBox_DrawFrame
 
-LABEL_F1BAC6:
+AcMemNoBox_PushF5:
 	pushw 0xF5
 	lds bc, 1
 	lds de, 2
 
-LABEL_F1BACD:
+AcMemNoBox_DrawFrame:
 	call DrawDesignFrame
 
-LABEL_F1BAD1:
+AcMemNoBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F1BAD3:
+AcMemNoBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x0C, 0x01
 	ret
-LABEL_F1BADA:
+AcCmpRecBox_Entry:
 
 AcCmpRecBoxProc:
 	st_dri3b L, 0xFD, 0xE8, 0xFE
@@ -8260,35 +8260,35 @@ AcCmpRecBoxProc:
 	st_dri3l XWA, 0xFD, 0x18, 0x01
 	ld_sril XWA, (xsp + 0x0114)
 	cp xwa, 0x1C0000C
-	jr z, LABEL_F1BB51
+	jr z, AcCmpRecBox_HandleEvtBC
 	cp xwa, 0x1C0000B
-	jr z, LABEL_F1BB51
+	jr z, AcCmpRecBox_HandleEvtBC
 	cp xwa, 0x1C00002
-	jr z, LABEL_F1BB3B
+	jr z, AcCmpRecBox_HandleEvt2
 	cp xwa, 0x1C00001
-	jr z, LABEL_F1BB2A
+	jr z, AcCmpRecBox_HandleEvt1
 	ld_sril XWA, (xsp + 0x0118)
 	ld_sril XBC, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	call InheritedProc
-	jrl LABEL_F1BBE5
+	jrl AcCmpRecBox_Epilogue
 
-LABEL_F1BB2A:
+AcCmpRecBox_HandleEvt1:
 	ld_sril XWA, (xsp + 0x0118)
 	ld_sril XBC, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
-	jr LABEL_F1BB4A
+	jr AcCmpRecBox_CallInherited
 
-LABEL_F1BB3B:
+AcCmpRecBox_HandleEvt2:
 	ld_sril XWA, (xsp + 0x0118)
 	ld_sril XBC, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 
-LABEL_F1BB4A:
+AcCmpRecBox_CallInherited:
 	call InheritedProc
-	jrl LABEL_F1BBE3
+	jrl AcCmpRecBox_ReturnZero
 
-LABEL_F1BB51:
+AcCmpRecBox_HandleEvtBC:
 	ld_sril XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld xiz, xhl
@@ -8304,7 +8304,7 @@ LABEL_F1BB51:
 	lda_24 xhl, 0xe1dd08
 	lda xbc, (xsp + 16)
 	cp a, e
-	jr nz, LABEL_F1BB9B
+	jr nz, AcCmpRecBox_CheckParam2
 	ld xwa, (xhl + 4)
 	push xwa
 	push xbc
@@ -8312,18 +8312,18 @@ LABEL_F1BB51:
 	inc 8, xsp
 	ld xwa, (xsp + 12)
 	ldw (xwa + 22), 0xF2
-	jr LABEL_F1BBBF
+	jr AcCmpRecBox_InheritAndSend
 
-LABEL_F1BB9B:
+AcCmpRecBox_CheckParam2:
 	ld xwa, (xsp + 4)
 	ld e, (xwa + 37)
 	ldda8 a, 13553
 	and a, e
 	cp a, e
-	jr nz, LABEL_F1BBAD
+	jr nz, AcCmpRecBox_AdjustTable
 	inc 8, xhl
 
-LABEL_F1BBAD:
+AcCmpRecBox_AdjustTable:
 	ld xwa, (xhl)
 	push xwa
 	push xbc
@@ -8332,7 +8332,7 @@ LABEL_F1BBAD:
 	ld xwa, (xsp + 8)
 	ldw (xwa + 22), 0xF5
 
-LABEL_F1BBBF:
+AcCmpRecBox_InheritAndSend:
 	ld_sril XWA, (xsp + 0x0118)
 	ld_sril XBC, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
@@ -8342,43 +8342,43 @@ LABEL_F1BBBF:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F1BBE3:
+AcCmpRecBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F1BBE5:
+AcCmpRecBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x18, 0x01
 	ret
-LABEL_F1BBEC:
+PsCmpQtzBox_Entry:
 
 PsCmpQtzBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F1BC28
+	jr z, PsCmpQtzBox_HandleEvtBC
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F1BC28
+	jr z, PsCmpQtzBox_HandleEvtBC
 	cp xbc, 0x1C00002
-	jr z, LABEL_F1BC20
+	jr z, PsCmpQtzBox_HandleEvt2
 	cp xbc, 0x1C00001
-	jr z, LABEL_F1BC1C
+	jr z, PsCmpQtzBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F1BC62
+	jr PsCmpQtzBox_Epilogue
 
-LABEL_F1BC1C:
+PsCmpQtzBox_HandleEvt1:
 	ld xwa, xiz
-	jr LABEL_F1BC22
+	jr PsCmpQtzBox_CallInherited
 
-LABEL_F1BC20:
+PsCmpQtzBox_HandleEvt2:
 	ld xwa, xiz
 
-LABEL_F1BC22:
+PsCmpQtzBox_CallInherited:
 	call InheritedProc
-	jr LABEL_F1BC60
+	jr PsCmpQtzBox_ReturnZero
 
-LABEL_F1BC28:
+PsCmpQtzBox_HandleEvtBC:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -8398,14 +8398,14 @@ LABEL_F1BC28:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F1BC60:
+PsCmpQtzBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F1BC62:
+PsCmpQtzBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
-LABEL_F1BC69:
+PsCmpMeasBox_Entry:
 
 PsCmpMeasBoxProc:
 	st_dri3b L, 0xFD, 0xF8, 0xFE
@@ -8414,38 +8414,38 @@ PsCmpMeasBoxProc:
 	ld xiz, xbc
 	st_dri3l XWA, 0xFD, 0x08, 0x01
 	cp xiz, 0x1C0000C
-	jr z, LABEL_F1BCCD
+	jr z, PsCmpMeasBox_HandleEvtBC
 	cp xiz, 0x1C0000B
-	jr z, LABEL_F1BCCD
+	jr z, PsCmpMeasBox_HandleEvtBC
 	cp xiz, 0x1C00002
-	jr z, LABEL_F1BCBB
+	jr z, PsCmpMeasBox_HandleEvt2
 	cp xiz, 0x1C00001
-	jr z, LABEL_F1BCAD
+	jr z, PsCmpMeasBox_HandleEvt1
 	ld_sril XWA, (xsp + 0x0108)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0104)
 	call InheritedProc
-	jr LABEL_F1BD1F
+	jr PsCmpMeasBox_Epilogue
 
-LABEL_F1BCAD:
+PsCmpMeasBox_HandleEvt1:
 	ld_sril XWA, (xsp + 0x0108)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0104)
-	jr LABEL_F1BCC7
+	jr PsCmpMeasBox_CallInherited
 
-LABEL_F1BCBB:
+PsCmpMeasBox_HandleEvt2:
 	ld_sril XWA, (xsp + 0x0108)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0104)
 
-LABEL_F1BCC7:
+PsCmpMeasBox_CallInherited:
 	call InheritedProc
-	jr LABEL_F1BD1D
+	jr PsCmpMeasBox_ReturnZero
 
-LABEL_F1BCCD:
+PsCmpMeasBox_HandleEvtBC:
 	call GetTitleNow
 	cp xhl, 0x1A000B5
-	jr nz, LABEL_F1BD1D
+	jr nz, PsCmpMeasBox_ReturnZero
 	ld_sril XWA, (xsp + 0x0108)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0104)
@@ -8467,14 +8467,14 @@ LABEL_F1BCCD:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F1BD1D:
+PsCmpMeasBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F1BD1F:
+PsCmpMeasBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x08, 0x01
 	ret
-LABEL_F1BD26:
+PsCmpMemBox_Entry:
 
 PsCmpMemBoxProc:
 	st_dri3b L, 0xFD, 0xF8, 0xFE
@@ -8483,38 +8483,38 @@ PsCmpMemBoxProc:
 	ld xiz, xbc
 	st_dri3l XWA, 0xFD, 0x08, 0x01
 	cp xiz, 0x1C0000C
-	jr z, LABEL_F1BD8A
+	jr z, PsCmpMemBox_HandleEvtBC
 	cp xiz, 0x1C0000B
-	jr z, LABEL_F1BD8A
+	jr z, PsCmpMemBox_HandleEvtBC
 	cp xiz, 0x1C00002
-	jr z, LABEL_F1BD78
+	jr z, PsCmpMemBox_HandleEvt2
 	cp xiz, 0x1C00001
-	jr z, LABEL_F1BD6A
+	jr z, PsCmpMemBox_HandleEvt1
 	ld_sril XWA, (xsp + 0x0108)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0104)
 	call InheritedProc
-	jr LABEL_F1BDDA
+	jr PsCmpMemBox_Epilogue
 
-LABEL_F1BD6A:
+PsCmpMemBox_HandleEvt1:
 	ld_sril XWA, (xsp + 0x0108)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0104)
-	jr LABEL_F1BD84
+	jr PsCmpMemBox_CallInherited
 
-LABEL_F1BD78:
+PsCmpMemBox_HandleEvt2:
 	ld_sril XWA, (xsp + 0x0108)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0104)
 
-LABEL_F1BD84:
+PsCmpMemBox_CallInherited:
 	call InheritedProc
-	jr LABEL_F1BDD8
+	jr PsCmpMemBox_ReturnZero
 
-LABEL_F1BD8A:
+PsCmpMemBox_HandleEvtBC:
 	call GetTitleNow
 	cp xhl, 0x1A000B5
-	jr nz, LABEL_F1BDD8
+	jr nz, PsCmpMemBox_ReturnZero
 	ld_sril XWA, (xsp + 0x0108)
 	ld xbc, xiz
 	ld_sril XDE, (xsp + 0x0104)
@@ -8535,14 +8535,14 @@ LABEL_F1BD8A:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F1BDD8:
+PsCmpMemBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F1BDDA:
+PsCmpMemBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x08, 0x01
 	ret
-LABEL_F1BDE1:
+AcCmpTempoBox_Entry:
 
 AcCmpTempoBoxProc:
 	st_dri3b L, 0xFD, 0xFC, 0xFE
@@ -8550,21 +8550,21 @@ AcCmpTempoBoxProc:
 	ld xiz, xde
 	st_dri3l XWA, 0xFD, 0x04, 0x01
 	cp xbc, 0x1C0001C
-	jr z, LABEL_F1BE66
+	jr z, AcCmpTempoBox_HandleEvt1C
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F1BE53
+	jr z, AcCmpTempoBox_HandleEvtBC
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F1BE53
+	jr z, AcCmpTempoBox_HandleEvtBC
 	cp xbc, 0x1C00002
-	jr z, LABEL_F1BE3B
+	jr z, AcCmpTempoBox_HandleEvt2
 	cp xbc, 0x1C00001
-	jr z, LABEL_F1BE23
+	jr z, AcCmpTempoBox_HandleEvt1
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	jr LABEL_F1BEA2
+	jr AcCmpTempoBox_Epilogue
 
-LABEL_F1BE23:
+AcCmpTempoBox_HandleEvt1:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -8573,7 +8573,7 @@ LABEL_F1BE23:
 	call SetLswFilter
 	jr CmpFunc_Return
 
-LABEL_F1BE3B:
+AcCmpTempoBox_HandleEvt2:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -8582,7 +8582,7 @@ LABEL_F1BE3B:
 	call ResetLswFilter
 	jr CmpFunc_Return
 
-LABEL_F1BE53:
+AcCmpTempoBox_HandleEvtBC:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -8590,7 +8590,7 @@ LABEL_F1BE53:
 	call MainLswGet
 	jr CmpFunc_Return
 
-LABEL_F1BE66:
+AcCmpTempoBox_HandleEvt1C:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -8612,7 +8612,7 @@ LABEL_F1BE66:
 CmpFunc_Return:
 	lds32 xhl, 0
 
-LABEL_F1BEA2:
+AcCmpTempoBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
@@ -8621,11 +8621,11 @@ CmpNamingCheck:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E0007C
-	jr z, LABEL_F1BEF3
+	jr z, CmpNamingCheck_Return0xD
 	cp xbc, 0x1E00084
-	jr z, LABEL_F1BEEF
+	jr z, CmpNamingCheck_ReturnZero
 	cp xbc, 0x1E0003A
-	jr nz, LABEL_F1BEEF
+	jr nz, CmpNamingCheck_ReturnZero
 	pushw 0x0
 	pushw 0x34BC
 	push xde
@@ -8639,22 +8639,22 @@ CmpNamingCheck:
 	lda xsp, (xsp + 18)
 	sti8_24 0x020c61, 0x00
 	ld xhl, xiz
-	jr LABEL_F1BEF8
+	jr CmpNamingCheck_Epilogue
 
-LABEL_F1BEEF:
+CmpNamingCheck_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F1BEF8
+	jr CmpNamingCheck_Epilogue
 
-LABEL_F1BEF3:
+CmpNamingCheck_Return0xD:
 	ld xhl, 0xD
 
-LABEL_F1BEF8:
+CmpNamingCheck_Epilogue:
 	pop xiz
 	ret
 
 CmpNameOkFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F1BF29
+	jr nz, CmpNameOkFunc_ReturnZero
 	call GetNamingWindowID
 	ld xwa, xhl
 	ld xbc, 0x1E0003A
@@ -8665,39 +8665,39 @@ CmpNameOkFunc:
 	ld xde, 0x20C62
 	call MainFuncCall
 
-LABEL_F1BF29:
+CmpNameOkFunc_ReturnZero:
 	lds32 xhl, 0
 	ret
-LABEL_F1BF2C:
+PsNameMemBox_Entry:
 
 PsNameMemBoxProc:
 	st_dri3b L, 0xFD, 0xF4, 0xFE
 	push xiz
 	st_dri3l XWA, 0xFD, 0x0C, 0x01
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F1BF76
+	jr z, PsNameMemBox_HandleEvtBC
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F1BF76
+	jr z, PsNameMemBox_HandleEvtBC
 	cp xbc, 0x1C00002
-	jr z, LABEL_F1BF6A
+	jr z, PsNameMemBox_HandleEvt2
 	cp xbc, 0x1C00001
-	jr z, LABEL_F1BF63
+	jr z, PsNameMemBox_HandleEvt1
 	ld_sril XWA, (xsp + 0x010c)
 	call InheritedProc
 	jrl EasyCmp_TtlCase3
 
-LABEL_F1BF63:
+PsNameMemBox_HandleEvt1:
 	ld_sril XWA, (xsp + 0x010c)
-	jr LABEL_F1BF6F
+	jr PsNameMemBox_CallInherited
 
-LABEL_F1BF6A:
+PsNameMemBox_HandleEvt2:
 	ld_sril XWA, (xsp + 0x010c)
 
-LABEL_F1BF6F:
+PsNameMemBox_CallInherited:
 	call InheritedProc
 	jrl EasyCmp_TtlCase2
 
-LABEL_F1BF76:
+PsNameMemBox_HandleEvtBC:
 	ld_sril XWA, (xsp + 0x010c)
 	call InheritedProc
 	ld_sril XWA, (xsp + 0x010c)
@@ -8716,18 +8716,18 @@ LABEL_F1BF76:
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
 	cpdi8 14760, 0
-	jr nz, LABEL_F1BFC6
+	jr nz, PsNameMemBox_SetColorFF
 	cpdi8 14976, 1
-	jr nz, LABEL_F1BFC6
+	jr nz, PsNameMemBox_SetColorFF
 	ldw (xbc), 0x0
 	ldw (xwa), 0xFF
-	jr LABEL_F1BFCE
+	jr PsNameMemBox_SendNotify
 
-LABEL_F1BFC6:
+PsNameMemBox_SetColorFF:
 	ldw (xbc), 0xFF
 	ldw (xwa), 0xF5
 
-LABEL_F1BFCE:
+PsNameMemBox_SendNotify:
 	ld_sril XWA, (xsp + 0x010c)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
@@ -8841,7 +8841,7 @@ EasyCmp_DialGrid:
 	ld xbc, 0x1C00018
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_F1C250
+	jrl EasyCmp_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -8851,7 +8851,7 @@ EasyCmp_DialGrid:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F1C15D
+	jr z, EasyCmp_SendEvt091
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -8869,7 +8869,7 @@ EasyCmp_DialGrid:
 	call SetAutoInc
 	jrl EasyCmp_ReturnZeroJmp
 
-LABEL_F1C15D:
+EasyCmp_SendEvt091:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -8895,7 +8895,7 @@ LABEL_F1C15D:
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_F1C250
+	jrl EasyCmp_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -8905,7 +8905,7 @@ LABEL_F1C15D:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F1C201
+	jr z, EasyCmp_IncSendEvt091
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -8923,7 +8923,7 @@ LABEL_F1C15D:
 	call SetAutoInc
 	jrl EasyCmp_ReturnZeroJmp
 
-LABEL_F1C201:
+EasyCmp_IncSendEvt091:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -8950,7 +8950,7 @@ LABEL_F1C201:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_F1C250:
+EasyCmp_SetDialEnable:
 	call SetDialEnable
 	jr EasyCmp_ReturnZeroJmp
 
@@ -9019,7 +9019,7 @@ EasyCmpGridCheck:
 	lda_24 xix, 0xf1c2dd
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F1C2DD:
+EasyCmp_GridCheck_DataBlock:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xeb, 0x8a, 0xbf, 0x14, 0x30, 0xea, 0x89
@@ -9056,7 +9056,7 @@ EasyCmp_GridCheck_EventEnc:
 	dec 2, a
 	extz wa
 	cps bc, 2
-	jr z, LABEL_F1C3B5
+	jr z, EasyCmp_GridEvtEnc_Case2
 	cps bc, 1
 	jr nz, EasyCmp_GridCheck_EventCase3
 	ldada xbc, 14251
@@ -9070,7 +9070,7 @@ EasyCmp_GridCheck_EventEnc:
 	push xwa
 	jr EasyCmp_GridCheck_EventCase1
 
-LABEL_F1C3B5:
+EasyCmp_GridEvtEnc_Case2:
 	ldada xbc, 14258
 	extz xwa
 	add xwa, xbc
@@ -9134,7 +9134,7 @@ MspNameBnkFunc:
 	lda_24 xix, 0xf1c445
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F1C445:
+EasyCmp_GridEvtCase_Default:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
 	lda	xbc, (xsp+4)
@@ -9161,15 +9161,15 @@ MspNameBnk_Dispatch:
 	ld xwa, xde
 	sll xwa, 4
 	cp xde, 0x2
-	jr nc, LABEL_F1C48C
+	jr nc, EasyCmp_GridEvtCase_Scroll
 	add xwa, 0x1E8A80
-	jr LABEL_F1C498
+	jr EasyCmp_GridEvtCase_Epilogue
 
-LABEL_F1C48C:
+EasyCmp_GridEvtCase_Scroll:
 	sub xwa, 0x20
 	add xwa, 0x1E8A40
 
-LABEL_F1C498:
+EasyCmp_GridEvtCase_Epilogue:
 	pushw 0x10
 	push xwa
 	pushw 0x0
@@ -9663,7 +9663,7 @@ MspBnkShow:
 	ld xwa, 0x28800
 	call SndParam_LookupReadOnly
 	cp hl, 0xA
-	jr ge, LABEL_F1CA10
+	jr ge, MspBnk_SendEvt56_Case2
 	ld xwa, 0xC80001
 	ld xbc, 0x1E00056
 	lds32 xde, 0
@@ -9673,9 +9673,9 @@ MspBnkShow:
 	ld xwa, 0xC80001
 	ld xbc, 0x1E0007F
 	lds32 xde, 1
-	jr LABEL_F1CA34
+	jr MspBnk_SendEvt7F
 
-LABEL_F1CA10:
+MspBnk_SendEvt56_Case2:
 	ld xwa, 0xC80001
 	ld xbc, 0x1E00056
 	lds32 xde, 0
@@ -9686,14 +9686,14 @@ LABEL_F1CA10:
 	ld xbc, 0x1E0007F
 	lds32 xde, 2
 
-LABEL_F1CA34:
+MspBnk_SendEvt7F:
 	call SendEvent
 
 MspBnk_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	ret
-LABEL_F1CA3C:
+AcMspBnkSlBox_Entry:
 
 AcMspBnkSlBoxProc:
 	lda xsp, (xsp - 12)
