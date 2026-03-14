@@ -1284,7 +1284,7 @@ LABEL_ED27DE:	aligned_string "page"
 
 LABEL_ED27E4:
 	.long NormScreenProc
-.include "ui_widgets/ed2a9c_ed2b96.s"
+.include "ui_widgets/master_style_grid_screens.s"
 	jr	gt, 0x00
 	aligned_string "AcDispTimeSetGridBox"
 LABEL_ED2BB0:
@@ -1512,7 +1512,7 @@ NoteNameStr_Table_8:
 	.long LABEL_ED333A
 LABEL_ED333A:
 	.byte 0x00, 0xff
-.include "ui_widgets/ed333c_ed35e4.s"
+.include "ui_widgets/normal_mode_layout.s"
 	stib_dpi 0x00, 0x00
 	.byte 0x00, 0x00, 0x04, 0xf4, 0x03, 0x00, 0x08, 0xf4
 	.byte 0x03, 0x00
@@ -1781,7 +1781,7 @@ LABEL_ED333A:
 	.byte 0x3c, 0x00, 0xff, 0xff, 0xff, 0xff, 0x3d, 0x00
 	.byte 0x08, 0x00, 0xa0, 0x00, 0xc8, 0x00, 0x10, 0x01
 	.byte 0xe0, 0x00, 0x18, 0x00, 0x22, 0x01
-.include "ui_widgets/ed3cc0_ed665a.s"
+.include "ui_widgets/control_menu_screens.s"
 	jr	f, 0x01
 	.byte 0x07, 0x00	; Screen group: 7 (error dialogs)
 	.byte 0xff, 0xff	; Flags: default
@@ -1887,7 +1887,7 @@ ErrorDialog_RecoveryLine3:
 	.byte 0x03, 0x00, 0x00, 0x00	; String flags
 	.byte 0x00, 0x00	; Text attributes
 	aligned_string "this unit needs repairing."
-.include "ui_widgets/ed803c_eda02c.s"
+.include "ui_widgets/extension_device_screens.s"
 	.ascii "!\"#$%%&'()*+,,-./01234456789:;;<=>?@ABCCDEFGHIJKKLMNOPQRRSTUVWXYZZ[\\]^_`abbcdefghiijklmqtx{"
 	.byte 0x7f, 0x00, 0x01, 0x01, 0x02
 	.byte 0x02, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x06

@@ -145,7 +145,7 @@ ToneGen_ParamTable:		.include "audio/tonegen_param_table.s"
 ; Screen layouts, style selection, sequencer UI, effect editors,
 ; chord recognition, MIDI control, language dialogs, style bitmaps
 ; =============================================================================
-.include "ui_widgets/e0e974_e15b20.s"
+.include "ui_widgets/performance_style_screens.s"
 	.ascii "     Init       "
 	.zero 16
 
@@ -850,7 +850,7 @@ LABEL_E176C4:	aligned_string "MT_CmpNameSet"
 	.byte 0x32, 0x00, 0xb1, 0xdf, 0xf1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xe6, 0x76, 0xe1, 0x00
 	.long LABEL_E176E4
-.include "ui_widgets/e176e4_e1a704.s"
+.include "ui_widgets/composer_style_convert_screens.s"
 	.short 0x0
 	.long Naka_PresentationRootState
 	.byte 0xff, 0x00, 0x00, 0x00, 0x01, 0x00, 0xa0, 0x01, 0x26, 0xd7, 0x03, 0x00
@@ -1050,7 +1050,7 @@ LABEL_E1AB2C:
 	.byte 0xb5, 0x00, 0x07, 0x00, 0xc1, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x0b, 0x00, 0x60, 0xd7, 0x03, 0x00, 0x12, 0x00
-.include "ui_widgets/e1ab58_e1b7d2.s"
+.include "ui_widgets/msp_recording_screens.s"
 .include "ui_widgets/naka_screen_dispatch.s"
 .include "factory_test/test_data.s"
 .include "factory_test/fd_test_data.s"
@@ -1721,9 +1721,9 @@ MtName_SongNameSet:		aligned_string "MT_SongNameSet"
 	.byte 0x1b, 0x00, 0xf9, 0xbb, 0xf2, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x7e, 0x10, 0xe2, 0x00
 	.long NakaBoxData_PsSongSelBox
-.include "ui_widgets/e2107c_e24034.s"
+.include "ui_widgets/direct_play_medley_screens.s"
 .include "ui_widgets/naka_widget_tables_1.s"
-.include "ui_widgets/e27408_e27556.s"
+.include "ui_widgets/sequencer_exit_widgets.s"
 	jr	gt, 0x00
 	aligned_string "SqedtVal2"
 	aligned_string "^^jC"
@@ -1994,7 +1994,7 @@ MT_GetEffFixString_Name:	aligned_string "MT_GetEffFixString"
 
 LABEL_E27FA2:
 	.byte 0x77, 0x00
-.include "ui_widgets/e27fa4_e30932.s"
+.include "ui_widgets/effects_sequencer_screens.s"
 	.include "ui_widgets/widget_descriptors.s"
 	jr	gt, 0x00
 	aligned_string "AcPmemOutLGridBox"
@@ -2081,9 +2081,9 @@ MidiMenu_NakaProcName_Table:
 	.long NakaProc_NullEntry
 NakaProc_NullEntry:
 	.byte 0x00, 0xff
-.include "ui_widgets/e55e38_e5a38e.s"
+.include "ui_widgets/midi_reverb_presets_screens.s"
 .include "ui_widgets/naka_widget_tables_2.s"
-.include "ui_widgets/e812e8_e818e6.s"
+.include "ui_widgets/sound_menu_drawbar_screens.s"
 	.short 0xFFFF, 0x2
 	.short 0xFFFF, 0x8
 	.short 0xF5	; X-left coord of the button
@@ -2348,13 +2348,13 @@ LABEL_E81C98:
 	.long LABEL_E81CCE
 	.byte 0x0d, 0x00
 	.byte 0xa0, 0x01, 0x18, 0x00, 0x00, 0x00
-.include "ui_widgets/e81cce_e85f46.s"
+.include "ui_widgets/technichord_part_settings.s"
 .include "ui_widgets/technichord_string_data.s"
-.include "ui_widgets/ea13cc_ea8c9e.s"
+.include "ui_widgets/disk_menu_file_io_screens.s"
 .include "ui_widgets/disk_warning_strings.s"
 .include "ui_widgets/block_012.s"
 .include "ui_widgets/widget_names_charmap.s"
-.include "ui_widgets/eb2afe_eb71be.s"
+.include "ui_widgets/debug_naming_panel_sim.s"
 
 ; =============================================================================
 ; UI Widget Style Bitmaps & Dispatch (end of NAKA widget section)
