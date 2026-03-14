@@ -61,6 +61,9 @@ SOUND_EDITOR_BLOCKS = [
 ]
 
 ACCOMP_BLOCKS = [
+    ('accomp_section_widget', 0xF6AC91, 500),
+    ('accomp_part_widget', 0xF6AD18, 500),
+    ('accomp_display_full', 0xF6AD2D, 500),
     ('accomp_display', 0xF6AD37, 500),
 ]
 
