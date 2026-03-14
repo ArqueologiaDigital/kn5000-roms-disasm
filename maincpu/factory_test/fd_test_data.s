@@ -1,16 +1,16 @@
-LABEL_E1F794:
+FDTest_DiagList_Total:
 
 
 	naka_header NAKA_TYPE_DIAGLIST
 	.byte 0x00, 0x00, 0xff, 0xff, 0x02, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x08, 0x00, 0x23, 0x00, 0x9c, 0x00
 	.byte 0x42, 0x00, 0x07, 0x00, 0xc1, 0x00, 0xff, 0xff
-	.long LABEL_E1F7C8
+	.long FDTest_String_Total
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x04, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0xbe, 0xdc, 0x03, 0x00, 0x04, 0x00
-LABEL_E1F7C8:	aligned_string " TOTAL :"
-LABEL_E1F7D2:
+FDTest_String_Total:	aligned_string " TOTAL :"
+FDTest_DiagList_NG:
 
 
 	naka_header NAKA_TYPE_DIAGLIST
@@ -22,7 +22,7 @@ LABEL_E1F7D2:
 	.byte 0x01, 0x00, 0x03, 0x00, 0xff, 0x00, 0x01, 0x00
 	.byte 0xc0, 0xdc, 0x03, 0x00, 0x03, 0x00
 	aligned_string "    NG :"
-LABEL_E1F810:
+FDTest_DiagList_OK:
 
 
 	naka_header NAKA_TYPE_DIAGLIST
@@ -34,13 +34,13 @@ LABEL_E1F810:
 	.byte 0x03, 0x00, 0xff, 0x00, 0x01, 0x00, 0xc2, 0xdc
 	.byte 0x03, 0x00, 0x03, 0x00
 	aligned_string "    OK :"
-LABEL_E1F84E:
+FDTest_Separator1:
 
 
 	.byte 0x29, 0x00, 0x60, 0x01, 0x00, 0x00, 0xff, 0xff, 0x05, 0x00
 	.byte 0x03, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x1f, 0x00, 0x1f, 0x00, 0x00, 0x00, 0x49, 0x01
-LABEL_E1F868:
+FDTest_Panel_Param:
 
 
 	naka_header NAKA_TYPE_PANEL
@@ -51,16 +51,16 @@ LABEL_E1F868:
 	.byte 0x07, 0x00
 	.byte 0xc9, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
-LABEL_E1F88E:
+FDTest_Label_Tilde80:
 
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x05, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x5e, 0x00, 0xdd, 0x00
 	.long CharEncoding_ExtendedHi
-	.long LABEL_E1F8AE
+	.long FDTest_String_Tilde80
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
-LABEL_E1F8AE:	.asciz "~80"
-LABEL_E1F8B2:
+FDTest_String_Tilde80:	.asciz "~80"
+FDTest_Panel_SubElements:
 
 
 	naka_header NAKA_TYPE_PANEL
@@ -69,26 +69,26 @@ LABEL_E1F8B2:
 	.byte 0x2c, 0x00, 0xd8, 0x00, 0x4b, 0x00, 0xee, 0x00
 	.byte 0x07, 0x00, 0xc9, 0x00, 0xff, 0xff, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
-LABEL_E1F8D8:
+FDTest_Group_OnOff:
 
 
 	naka_header NAKA_TYPE_GROUP
 	.byte 0x07, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x36, 0x00
 	.byte 0xde, 0x00
-	.long LABEL_E80040
+	.long NakaToggle_OnOff_Data
 	.zero 4
-LABEL_E1F8F2:
+FDTest_Label_RunningTest:
 
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x07, 0x00, 0x08, 0x00
 	.byte 0x1e, 0x00, 0xc5, 0x00, 0x81, 0x00, 0xd7, 0x00
-	.long LABEL_E1F912
+	.long FDTest_String_RunningTest
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E1F912:	aligned_string "RUNNING TEST"
-LABEL_E1F920:
+FDTest_String_RunningTest:	aligned_string "RUNNING TEST"
+FDTest_Container_DebugHDAE1:
 
 
 	naka_header NAKA_TYPE_CONTAINER
@@ -99,11 +99,11 @@ LABEL_E1F920:
 	.byte 0xff, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa0, 0x01, 0xc4, 0xdc
 	.byte 0x03, 0x00
-	.long LABEL_E1F94A
+	.long FDTest_Desc_DebugHDAE1
 	.byte 0x83, 0x00
 	.byte 0x00, 0x00
-LABEL_E1F94A:	aligned_string "DEBUG SCREEN for HD-AE"
-LABEL_E1F962:
+FDTest_Desc_DebugHDAE1:	aligned_string "DEBUG SCREEN for HD-AE"
+FDTest_MenuItem_Load1:
 
 
 	.byte 0x3e, 0x00, 0x60, 0x01, 0x0a, 0x00
@@ -112,9 +112,9 @@ LABEL_E1F962:
 	.byte 0x07, 0x00, 0xc1, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x8a, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E1F98E
-LABEL_E1F98E:	aligned_string "LOAD"
-LABEL_E1F994:
+	.long FDTest_String_Load1
+FDTest_String_Load1:	aligned_string "LOAD"
+FDTest_MenuItem_Go1:
 
 
 	.byte 0x3e, 0x00, 0x60, 0x01
@@ -123,21 +123,21 @@ LABEL_E1F994:
 	.byte 0xb9, 0x00, 0x07, 0x00, 0xc1, 0x00, 0x02, 0x00
 	.zero 8
 	.byte 0x8b, 0x00, 0x00, 0x00, 0xc0, 0xf9, 0xe1, 0x00
-LABEL_E1F9C0:	aligned_string "GO"
-LABEL_E1F9C4:
+FDTest_String_Go1:	aligned_string "GO"
+FDTest_NavWidget1:
 
 
 	.byte 0x52, 0x00, 0x60, 0x01
 	.byte 0x0a, 0x00, 0x0e, 0x00, 0x0f, 0x00, 0x0c, 0x00
 	.byte 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0x00
 	.byte 0x1f, 0x00, 0x01, 0x00, 0x29, 0x01
-LABEL_E1F9DE:
+FDTest_Divider1:
 
 
 	.byte 0x49, 0x00, 0x60, 0x01, 0x0d, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x18, 0x00, 0x08, 0x00, 0x08, 0x00
 	.byte 0x27, 0x00, 0x27, 0x00, 0x00, 0x00, 0xfc, 0x00
-LABEL_E1F9F8:
+FDTest_ConsoleArea1:
 
 
 	.byte 0x41, 0x00, 0x60, 0x01, 0x0a, 0x00, 0x10, 0x00
@@ -146,11 +146,11 @@ LABEL_E1F9F8:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x88, 0x00, 0xc8, 0xdc
 	.byte 0x03, 0x00
-	.long LABEL_E1FA2E
+	.long FDTest_String_Console1
 	.long LABEL_FC0012
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E1FA2E:	aligned_string "CONSOLE"
-LABEL_E1FA36:
+FDTest_String_Console1:	aligned_string "CONSOLE"
+FDTest_Label_MemoryDump:
 
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x0f, 0x00, 0xff, 0xff, 0xff, 0xff
@@ -158,14 +158,14 @@ LABEL_E1FA36:
 	.byte 0xe1, 0x00, 0x3c, 0x00, 0x56, 0xfa, 0xe1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	aligned_string "MEMORY DUMP"
-LABEL_E1FA62:
+FDTest_StatusBar1:
 
 
 	.byte 0x5d, 0x00, 0x60, 0x01, 0x0a, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x0f, 0x00, 0x08, 0x00
 	.byte 0x39, 0x00, 0x3d, 0x00, 0x3f, 0x01, 0xef, 0x00
 	.byte 0xca, 0xdc, 0x03, 0x00
-LABEL_E1FA7C:
+FDTest_Container_DebugHDAE2:
 
 
 	naka_header NAKA_TYPE_CONTAINER
@@ -175,7 +175,7 @@ LABEL_E1FA7C:
 	.byte 0xa0, 0x01, 0xce, 0xdc, 0x03, 0x00, 0xa6, 0xfa
 	.byte 0xe1, 0x00, 0x83, 0x00, 0x00, 0x00
 	aligned_string "DEBUG SCREEN for HD-AE"
-LABEL_E1FABE:
+FDTest_MenuItem_Load2:
 
 
 	.byte 0x3e, 0x00, 0x60, 0x01, 0x12, 0x00, 0xff, 0xff, 0x14, 0x00
@@ -184,8 +184,8 @@ LABEL_E1FABE:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x8a, 0x00, 0x00, 0x00, 0xea, 0xfa
 	.byte 0xe1, 0x00
-LABEL_E1FAEA:	aligned_string "LOAD"
-LABEL_E1FAF0:
+FDTest_String_Load2:	aligned_string "LOAD"
+FDTest_MenuItem_Go2:
 
 
 	.byte 0x3e, 0x00, 0x60, 0x01, 0x12, 0x00, 0xff, 0xff
@@ -193,24 +193,24 @@ LABEL_E1FAF0:
 	.byte 0xa8, 0x00, 0x26, 0x00, 0xb9, 0x00, 0x07, 0x00
 	.byte 0xc1, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x8b, 0x00, 0x00, 0x00
-	.long LABEL_E1FB1C
-LABEL_E1FB1C:
+	.long FDTest_String_Go2
+FDTest_String_Go2:
 	.byte 0x47, 0x4f, 0x00, 0xff
-LABEL_E1FB20:
+FDTest_NavWidget2:
 
 
 	.byte 0x52, 0x00, 0x60, 0x01, 0x12, 0x00, 0x16, 0x00
 	.byte 0x17, 0x00, 0x14, 0x00, 0x18, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x1f, 0x00, 0x1f, 0x00, 0x01, 0x00
 	.byte 0x29, 0x01
-LABEL_E1FB3A:
+FDTest_Divider2:
 
 
 	.byte 0x49, 0x00, 0x60, 0x01, 0x15, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x18, 0x00
 	.byte 0x08, 0x00, 0x04, 0x00, 0x27, 0x00, 0x23, 0x00
 	.byte 0x00, 0x00, 0xfc, 0x00
-LABEL_E1FB54:
+FDTest_ConsoleArea2:
 
 
 	.byte 0x41, 0x00, 0x60, 0x01
@@ -222,12 +222,12 @@ LABEL_E1FB54:
 	.byte 0xe1, 0x00, 0x0a, 0x00, 0xfc, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
 	aligned_string "MEMORY"
-LABEL_E1FB92:
+FDTest_StatusBar_Memory:
 
 	.byte 0x46, 0x00, 0x60, 0x01, 0x12, 0x00
 	.byte 0xff, 0xff, 0x19, 0x00, 0x17, 0x00, 0x08, 0x00
 	.byte 0x39, 0x00, 0x3d, 0x00, 0x3f, 0x01, 0xef, 0x00
-LABEL_E1FBA8:
+FDTest_Label_Console2:
 
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x12, 0x00, 0xff, 0xff
@@ -242,98 +242,98 @@ String_CONSOLE:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xd4, 0xdc, 0x03, 0x00
 
 FDTest_DataBlock_Table:
-	.long LABEL_E1F794
-	.long LABEL_E1F7D2
-	.long LABEL_E1F810
-	.long LABEL_E1F84E
-	.long LABEL_E1F868
-	.long LABEL_E1F88E
-	.long LABEL_E1F8B2
-	.long LABEL_E1F8D8
-	.long LABEL_E1F8F2
-	.long LABEL_E1F920
-	.long LABEL_E1F962
-	.long LABEL_E1F994
-	.long LABEL_E1F9C4
-	.long LABEL_E1F9DE
-	.long LABEL_E1F9F8
-	.long LABEL_E1FA36
-	.long LABEL_E1FA62
-	.long LABEL_E1FA7C
-	.long LABEL_E1FABE
-	.long LABEL_E1FAF0
-	.long LABEL_E1FB20
-	.long LABEL_E1FB3A
-	.long LABEL_E1FB54
-	.long LABEL_E1FB92
-	.long LABEL_E1FBA8
+	.long FDTest_DiagList_Total
+	.long FDTest_DiagList_NG
+	.long FDTest_DiagList_OK
+	.long FDTest_Separator1
+	.long FDTest_Panel_Param
+	.long FDTest_Label_Tilde80
+	.long FDTest_Panel_SubElements
+	.long FDTest_Group_OnOff
+	.long FDTest_Label_RunningTest
+	.long FDTest_Container_DebugHDAE1
+	.long FDTest_MenuItem_Load1
+	.long FDTest_MenuItem_Go1
+	.long FDTest_NavWidget1
+	.long FDTest_Divider1
+	.long FDTest_ConsoleArea1
+	.long FDTest_Label_MemoryDump
+	.long FDTest_StatusBar1
+	.long FDTest_Container_DebugHDAE2
+	.long FDTest_MenuItem_Load2
+	.long FDTest_MenuItem_Go2
+	.long FDTest_NavWidget2
+	.long FDTest_Divider2
+	.long FDTest_ConsoleArea2
+	.long FDTest_StatusBar_Memory
+	.long FDTest_Label_Console2
 	.byte 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E1FC44
-LABEL_E1FC44:	aligned_string ""
+	.long FDTest_DataBlock_Terminator
+FDTest_DataBlock_Terminator:	aligned_string ""
 FDTest_Config_Table:
-	.long LABEL_E1FD0E
-	.long LABEL_E1FD08
-	.long LABEL_E1FD04
-	.long LABEL_E1FD00
-	.long LABEL_E1FCFE
-	.long LABEL_E1FCF8
-	.long LABEL_E1FCF6
-	.long LABEL_E1FCF0
-	.long LABEL_E1FCEE
-	.long LABEL_E1FCEC
-	.long LABEL_E1FCDE
-	.long LABEL_E1FCDC
-	.long LABEL_E1FCDA
-	.long LABEL_E1FCD8
-	.long LABEL_E1FCD6
-	.long LABEL_E1FCD4
-	.long LABEL_E1FCD2
-	.long LABEL_E1FCD0
-	.long LABEL_E1FCC2
-	.long LABEL_E1FCC0
-	.long LABEL_E1FCBE
-	.long LABEL_E1FCBC
-	.long LABEL_E1FCBA
-	.long LABEL_E1FCB8
-	.long LABEL_E1FCB6
-	.long LABEL_E1FCB4
-	.long LABEL_E1FCB2
-LABEL_E1FCB2:	aligned_string ""
-LABEL_E1FCB4:	aligned_string ""
-LABEL_E1FCB6:	aligned_string ""
-LABEL_E1FCB8:	aligned_string ""
-LABEL_E1FCBA:	aligned_string ""
-LABEL_E1FCBC:	aligned_string ""
-LABEL_E1FCBE:	aligned_string ""
-LABEL_E1FCC0:	aligned_string ""
-LABEL_E1FCC2:	aligned_string "DebugForHDAE2"
-LABEL_E1FCD0:	aligned_string ""
-LABEL_E1FCD2:	aligned_string ""
-LABEL_E1FCD4:	aligned_string ""
-LABEL_E1FCD6:	aligned_string ""
-LABEL_E1FCD8:	aligned_string ""
-LABEL_E1FCDA:	aligned_string ""
-LABEL_E1FCDC:	aligned_string ""
-LABEL_E1FCDE:	aligned_string "DebugForHDAE"
-LABEL_E1FCEC:	aligned_string ""
-LABEL_E1FCEE:	aligned_string ""
-LABEL_E1FCF0:	aligned_string "STOP"
-LABEL_E1FCF6:	aligned_string ""
-LABEL_E1FCF8:	aligned_string "START"
-LABEL_E1FCFE:	aligned_string ""
-LABEL_E1FD00:
+	.long FDTest_CfgName_FDDTest
+	.long FDTest_CfgName_Total
+	.long FDTest_CfgName_NG
+	.long FDTest_CfgName_OK
+	.long FDTest_CfgName_Slot04
+	.long FDTest_CfgName_Start
+	.long FDTest_CfgName_Slot06
+	.long FDTest_CfgName_Stop
+	.long FDTest_CfgName_Slot08
+	.long FDTest_CfgName_Slot09
+	.long FDTest_CfgName_DebugHDAE
+	.long FDTest_CfgName_Slot11
+	.long FDTest_CfgName_Slot12
+	.long FDTest_CfgName_Slot13
+	.long FDTest_CfgName_Slot14
+	.long FDTest_CfgName_Slot15
+	.long FDTest_CfgName_Slot16
+	.long FDTest_CfgName_Slot17
+	.long FDTest_CfgName_DebugHDAE2
+	.long FDTest_CfgName_Slot19
+	.long FDTest_CfgName_Slot20
+	.long FDTest_CfgName_Slot21
+	.long FDTest_CfgName_Slot22
+	.long FDTest_CfgName_Slot23
+	.long FDTest_CfgName_Slot24
+	.long FDTest_CfgName_Slot25
+	.long FDTest_CfgName_Slot26
+FDTest_CfgName_Slot26:	aligned_string ""
+FDTest_CfgName_Slot25:	aligned_string ""
+FDTest_CfgName_Slot24:	aligned_string ""
+FDTest_CfgName_Slot23:	aligned_string ""
+FDTest_CfgName_Slot22:	aligned_string ""
+FDTest_CfgName_Slot21:	aligned_string ""
+FDTest_CfgName_Slot20:	aligned_string ""
+FDTest_CfgName_Slot19:	aligned_string ""
+FDTest_CfgName_DebugHDAE2:	aligned_string "DebugForHDAE2"
+FDTest_CfgName_Slot17:	aligned_string ""
+FDTest_CfgName_Slot16:	aligned_string ""
+FDTest_CfgName_Slot15:	aligned_string ""
+FDTest_CfgName_Slot14:	aligned_string ""
+FDTest_CfgName_Slot13:	aligned_string ""
+FDTest_CfgName_Slot12:	aligned_string ""
+FDTest_CfgName_Slot11:	aligned_string ""
+FDTest_CfgName_DebugHDAE:	aligned_string "DebugForHDAE"
+FDTest_CfgName_Slot09:	aligned_string ""
+FDTest_CfgName_Slot08:	aligned_string ""
+FDTest_CfgName_Stop:	aligned_string "STOP"
+FDTest_CfgName_Slot06:	aligned_string ""
+FDTest_CfgName_Start:	aligned_string "START"
+FDTest_CfgName_Slot04:	aligned_string ""
+FDTest_CfgName_OK:
 	.byte 0x4f, 0x4b, 0x00, 0xff
-LABEL_E1FD04:
+FDTest_CfgName_NG:
 	.byte 0x4e, 0x47, 0x00, 0xff
-LABEL_E1FD08:	aligned_string "TOTAL"
-LABEL_E1FD0E:	aligned_string "FDD_TEST"
+FDTest_CfgName_Total:	aligned_string "TOTAL"
+FDTest_CfgName_FDDTest:	aligned_string "FDD_TEST"
 	aligned_string "TT_HDDEXT"
 	aligned_string "TT_EXTAPR"
 	.byte 0x9a, 0xe3, 0xf1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3e, 0xfd, 0xe1, 0x00
-	.long LABEL_E1FD3C
-LABEL_E1FD3C:	aligned_string ""
-LABEL_E1FD3E:	aligned_string "TestTitleFunc"
+	.long FDTest_TestTitle_Terminator
+FDTest_TestTitle_Terminator:	aligned_string ""
+FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	.byte 0x0a
 	aligned_string "Title new"
 	.byte 0x0a
