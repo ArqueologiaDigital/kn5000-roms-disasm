@@ -12289,7 +12289,7 @@ AccPatch_CountSlotsAlt:
 AccPatch_InitAndCountSlots:
 	calr AccPatch_CheckAndInitDemo
 	calr AccPatch_CountAvailableSlots
-	call LABEL_F66EFD
+	call VoiceSlot_Dispatch_Type81
 	stdi8 14775, 10
 	ret
 
@@ -17148,7 +17148,7 @@ AccPartChange_Bit1:
 	bitda 0, 14099
 	jr nz, AccPartChange_CheckBit2
 	calr ToneGen_ProcessWithRestore
-	jrl LABEL_F61803
+	jrl ToneGen_UpdateAndInitPattern
 
 AccPartChange_CheckBit2:
 	bitda 5, 13520
@@ -17171,7 +17171,7 @@ AccPartChange_StoreResult:
 
 ToneGen_CalcAndRestart:
 	calr ToneGen_RecalcAndRestart
-	jrl LABEL_F61803
+	jrl ToneGen_UpdateAndInitPattern
 
 __pad_F61760:
 	ldda16 xwa, 13419
@@ -17184,7 +17184,7 @@ __pad_F61760:
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x81
-	jr nz, LABEL_F617F5
+	jr nz, ToneGen_PushAndReadType
 	calr ToneGen_StepToNextVoiceSlot
 	ldda16 xhl, 13419
 	calr ToneGen_CalcBufferAddr
@@ -17226,7 +17226,7 @@ ToneGen_ProcessVoiceEvent:
 	pop xhl
 	popw wa
 
-LABEL_F617F5:
+ToneGen_PushAndReadType:
 	pushw wa
 	calr AccVoice_ReadCurrentToneType
 	ld w, a
@@ -17234,7 +17234,7 @@ LABEL_F617F5:
 	popw wa
 	calr ToneGen_ClassifyAndDispatch
 
-LABEL_F61803:
+ToneGen_UpdateAndInitPattern:
 	anddi8 13519, 127
 	calr AccPlayback_CalcTimingPosition
 	call AccPatch_GetCurrentSlotAddr
@@ -23422,8 +23422,8 @@ Tempo_DisplayParamFormat:
 Tempo_DisplayParamReturn:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
-	calr LABEL_F66A8B
-	calr LABEL_F66AB0
+	calr MIDIChan_ScanForFree
+	calr VoiceSlot_UpdateState
 	calr Tempo_DisplayBPMReturn
 	lds wa, 0
 	calr SeqRec_ValidateDone
@@ -23932,11 +23932,11 @@ SeqRec_ValidateDone:
 	ldda8 c, 14235
 	ldfr_berp C, 0xFB
 	cps a, 4
-	jr z, LABEL_F66A14
+	jr z, Part_SetVoiceType4
 	cps a, 3
-	jr z, LABEL_F66A0D
+	jr z, Part_SetVoiceType2
 	cps a, 2
-	jr z, LABEL_F66A06
+	jr z, Part_SetVoiceType1
 	cps a, 1
 	jr z, SeqRec_Cleanup
 	cps a, 0
@@ -23948,15 +23948,15 @@ SeqRec_Cleanup:
 	stdi8 14235, 8
 	jr Part_LoadAndIndexVoiceTable
 
-LABEL_F66A06:
+Part_SetVoiceType1:
 	stdi8 14235, 1
 	jr Part_LoadAndIndexVoiceTable
 
-LABEL_F66A0D:
+Part_SetVoiceType2:
 	stdi8 14235, 2
 	jr Part_LoadAndIndexVoiceTable
 
-LABEL_F66A14:
+Part_SetVoiceType4:
 	stdi8 14235, 4
 
 Part_LoadAndIndexVoiceTable:
@@ -23978,7 +23978,7 @@ Part_LoadAndIndexVoiceTable:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F67CD5
+	call VoiceSlot_InitFromTable
 	pop xiz
 	pop xix
 	pop xhl
@@ -24007,79 +24007,79 @@ SetWall_StoreAndResolve:
 	ld wa, bc
 	jp Voice_ResolveSlotAddr
 
-LABEL_F66A8B:
+MIDIChan_ScanForFree:
 	ld xbc, 0xF1A0
 	ldb a, 0x1
 
-LABEL_F66A92:
+MIDIChan_ScanLoop:
 	cp (xbc), 0x10
-	jr z, LABEL_F66AA0
+	jr z, MIDIChan_Found
 	inc 1, xbc
 	inc 1, a
 	cp a, 0x11
-	jr ule, LABEL_F66A92
+	jr ule, MIDIChan_ScanLoop
 
-LABEL_F66AA0:
+MIDIChan_Found:
 	cp a, 0x10
-	jr ule, LABEL_F66AAB
+	jr ule, MIDIChan_StoreResult
 	stdi8 14742, 0
 	ret
 
-LABEL_F66AAB:
+MIDIChan_StoreResult:
 	stda8 14742, a
 	ret
 
-LABEL_F66AB0:
+VoiceSlot_UpdateState:
 	ldda8 a, 14742
 	stda8 10381, a
 	cpdi8 14742, 0
-	jr nz, LABEL_F66AC5
+	jr nz, VoiceSlot_SetBit2
 	resda 2, 10363
-	jr LABEL_F66AC9
+	jr VoiceSlot_ValidateAndResolve
 
-LABEL_F66AC5:
+VoiceSlot_SetBit2:
 	setda 2, 10363
 
-LABEL_F66AC9:
+VoiceSlot_ValidateAndResolve:
 	call SeqVoice_ValidateAndProcessState
 	ldmm16 10367, 14730
 	ldda8 a, 14739
 	cps a, 0
-	jr z, LABEL_F66ADF
+	jr z, VoiceSlot_CheckSlot2
 	extz wa
-	jr LABEL_F66B0D
+	jr VoiceSlot_ResolveAddr
 
-LABEL_F66ADF:
+VoiceSlot_CheckSlot2:
 	ldda8 a, 14740
 	cps a, 0
-	jr z, LABEL_F66AEB
+	jr z, VoiceSlot_CheckSlot3
 	extz wa
-	jr LABEL_F66B0D
+	jr VoiceSlot_ResolveAddr
 
-LABEL_F66AEB:
+VoiceSlot_CheckSlot3:
 	ldda8 a, 14741
 	cps a, 0
-	jr z, LABEL_F66AF7
+	jr z, VoiceSlot_CheckSlot4
 	extz wa
-	jr LABEL_F66B0D
+	jr VoiceSlot_ResolveAddr
 
-LABEL_F66AF7:
+VoiceSlot_CheckSlot4:
 	ldda8 a, 14738
 	cps a, 0
-	jr z, LABEL_F66B03
+	jr z, VoiceSlot_CheckSlot5
 	extz wa
-	jr LABEL_F66B0D
+	jr VoiceSlot_ResolveAddr
 
-LABEL_F66B03:
+VoiceSlot_CheckSlot5:
 	ldda8 a, 14737
 	cps a, 0
-	jr z, LABEL_F66B11
+	jr z, VoiceSlot_StoreAndReturn
 	extz wa
 
-LABEL_F66B0D:
+VoiceSlot_ResolveAddr:
 	call Voice_ResolveSlotAddr
 
-LABEL_F66B11:
+VoiceSlot_StoreAndReturn:
 	ldmm8 14726, 10382
 	ret
 
@@ -24096,71 +24096,71 @@ Part_IsPercussionType:
 	cp a, 0xF
 	jr z, EventCode_CheckExit
 	cp a, 0x10
-	jr nz, LABEL_F66B3E
+	jr nz, PartType_NotPercussion
 
 EventCode_CheckExit:
 	ldb l, 0x1
-	jr LABEL_F66B40
+	jr PartType_Return
 
-LABEL_F66B3E:
+PartType_NotPercussion:
 	ldb l, 0x0
 
-LABEL_F66B40:
+PartType_Return:
 	ret
 
 Voice_ReadEventBytes:
 	push xiz
-	calr LABEL_F66C60
+	calr VoiceTable_ResolveReadAddr
 	ld xwa, xhl
 	ld c, (xwa)
 	and c, 0xF0
 	cp c, 0x80
-	jr z, LABEL_F66B79
+	jr z, VoiceEvt_Size1
 	cp c, 0xD0
-	jr z, LABEL_F66B6A
+	jr z, VoiceEvt_CheckD2
 	cp c, 0xC0
-	jr z, LABEL_F66B65
+	jr z, VoiceEvt_Size6
 	cp c, 0xB0
-	jr z, LABEL_F66B65
+	jr z, VoiceEvt_Size6
 	cp c, 0x90
-	jr nz, LABEL_F66B79
+	jr nz, VoiceEvt_Size1
 
-LABEL_F66B65:
+VoiceEvt_Size6:
 	ldi_werp 0xFA, 6
 	jr VoiceBuffer_CopyLoop
 
-LABEL_F66B6A:
+VoiceEvt_CheckD2:
 	cp (xwa), 0xD2
-	jr nz, LABEL_F66B74
+	jr nz, VoiceEvt_Size3
 	ldi_werp 0xFA, 4
 	jr VoiceBuffer_CopyLoop
 
-LABEL_F66B74:
+VoiceEvt_Size3:
 	ldi_werp 0xFA, 3
 	jr VoiceBuffer_CopyLoop
 
-LABEL_F66B79:
+VoiceEvt_Size1:
 	ldi_werp 0xFA, 1
 
 VoiceBuffer_CopyLoop:
 	lds iz, 0
 	cpi_werp 0xFA, 0
-	jr ule, LABEL_F66B9D
+	jr ule, VoiceBuf_CopyDone
 
-LABEL_F66B83:
+VoiceBuf_CopyLoop:
 	ldada xbc, 14744
 	ld de, iz
 	extz xde
 	add xde, xbc
 	ld c, (xwa)
 	ld (xde), c
-	calr LABEL_F66C20
+	calr VoiceTable_AdvanceReadPos
 	ld xwa, xhl
 	inc 1, iz
 	cp_werp IZ, 0xFA
-	jr c, LABEL_F66B83
+	jr c, VoiceBuf_CopyLoop
 
-LABEL_F66B9D:
+VoiceBuf_CopyDone:
 	pop xiz
 	ret
 
@@ -24170,9 +24170,9 @@ Voice_ScanTableByType:
 	ld xwa, xhl
 	ldda8 c, 14744
 	cp c, 0x83
-	jr z, LABEL_F66BE7
+	jr z, VoiceScan_Size1
 	cp c, 0x81
-	jr z, LABEL_F66BE7
+	jr z, VoiceScan_Size1
 	cp c, 0xD5
 	jr z, Voice_SetScanType3
 	cp c, 0xD4
@@ -24184,13 +24184,13 @@ Voice_ScanTableByType:
 	cp c, 0xD1
 	jr z, Voice_SetScanType3
 	cp c, 0x91
-	jr z, LABEL_F66BDB
+	jr z, VoiceScan_Size8
 	cp c, 0x90
-	jr nz, LABEL_F66BEC
+	jr nz, VoiceScan_Size0
 	ldi_werp 0xFA, 6
 	jr Voice_ScanTableEntries
 
-LABEL_F66BDB:
+VoiceScan_Size8:
 	ldi_erpw 0xFA, 0x08, 0x00
 	jr Voice_ScanTableEntries
 
@@ -24198,51 +24198,51 @@ Voice_SetScanType3:
 	ldi_werp 0xFA, 3
 	jr Voice_ScanTableEntries
 
-LABEL_F66BE7:
+VoiceScan_Size1:
 	ldi_werp 0xFA, 1
 	jr Voice_ScanTableEntries
 
-LABEL_F66BEC:
+VoiceScan_Size0:
 	ldi_werp 0xFA, 0
 
 Voice_ScanTableEntries:
 	lds iz, 0
 	cpi_werp 0xFA, 0
-	jr ule, LABEL_F66C1C
+	jr ule, VoiceScan_NotFound
 
-LABEL_F66BF6:
+VoiceScan_WriteLoop:
 	ldada xbc, 14744
 	ld de, iz
 	extz xde
 	add xde, xbc
 	ld c, (xde)
 	ld (xwa), c
-	calr LABEL_F66C7C
+	calr VoiceTable_AdvanceWritePos
 	ld xwa, xhl
 	cp xwa, 0xFFFFFFFF
-	jr nz, LABEL_F66C15
+	jr nz, VoiceScan_NextEntry
 	ldb l, 0x1
-	jr LABEL_F66C1E
+	jr VoiceScan_Return
 
-LABEL_F66C15:
+VoiceScan_NextEntry:
 	inc 1, iz
 	cp_werp IZ, 0xFA
-	jr c, LABEL_F66BF6
+	jr c, VoiceScan_WriteLoop
 
-LABEL_F66C1C:
+VoiceScan_NotFound:
 	ldb l, 0x0
 
-LABEL_F66C1E:
+VoiceScan_Return:
 	pop xiz
 	ret
 
-LABEL_F66C20:
+VoiceTable_AdvanceReadPos:
 	ld xhl, xwa
 	ldda16 xwa, 14722
 	inc 1, wa
 	stda16 14722, xwa
 	cp wa, 0x100
-	jr c, LABEL_F66C5E
+	jr c, VoiceTable_AdvRead_Done
 	ldda16 xwa, 14718
 	dec 1, wa
 	extz xwa
@@ -24258,11 +24258,11 @@ LABEL_F66C20:
 	stda16 14718, xwa
 	stdi16 14722, 5
 
-LABEL_F66C5E:
+VoiceTable_AdvRead_Done:
 	jr __jrt_nop_F66C60
 __jrt_nop_F66C60:
 
-LABEL_F66C60:
+VoiceTable_ResolveReadAddr:
 	ldda16 xbc, 14722
 	extz xbc
 	ldda16 xwa, 14718
@@ -24274,7 +24274,7 @@ LABEL_F66C60:
 	ld xhl, xwa
 	ret
 
-LABEL_F66C7C:
+VoiceTable_AdvanceWritePos:
 	ld xhl, xwa
 	ldda16 xwa, 14724
 	inc 1, wa
@@ -24283,25 +24283,25 @@ LABEL_F66C7C:
 	jr c, RhythmParam_Setup
 	ldda16 xwa, 13524
 	cps wa, 0
-	jr nz, LABEL_F66C9D
+	jr nz, VoiceTable_AdvWrite_AllocSlot
 	ld xhl, 0xFFFFFFFF
 	jr RhythmParam_Entry
 
-LABEL_F66C9D:
+VoiceTable_AdvWrite_AllocSlot:
 	dec 1, wa
 	stda16 13524, xwa
 	ldw bc, 0x96
 	ld xde, 0x9F200
 
-LABEL_F66CAB:
+VoiceTable_AdvWrite_ScanLoop:
 	bitm 7, (xde)
-	jr z, LABEL_F66CBC
+	jr z, VoiceTable_AdvWrite_LinkEntry
 	inc 1, bc
 	st_dri3b B, 0xE9, 0x00, 0x01
 	cp bc, 0x153
-	jr ule, LABEL_F66CAB
+	jr ule, VoiceTable_AdvWrite_ScanLoop
 
-LABEL_F66CBC:
+VoiceTable_AdvWrite_LinkEntry:
 	ldda16 xwa, 14720
 	extz xwa
 	sll xwa, 8
@@ -24374,7 +24374,7 @@ RhythmParam_CheckExit:
 	ld (xde), 0x0
 	ret
 
-LABEL_F66D5E:
+RhythmParam_DispatchTableData:
 	.byte 0xb2, 0x00, 0x83, 0x0e
 
 ; Rhythm parameter processing
@@ -24390,12 +24390,12 @@ RhythmParam_Process:
 	cp d, 0xD0
 	jrl z, VoiceParam_D0Handler
 	cp d, 0xB0
-	jrl z, LABEL_F66E17
+	jrl z, VoiceParam_B0_Handler
 	cp d, 0x90
 	jrl nz, Voice_ClearSlotAndRet
 	ldda8 e, 14734
 	cp e, 0x19
-	jr ule, LABEL_F66DA7
+	jr ule, VoiceNote_SubtractOffset
 	ld xix, xbc
 	sub e, 0x19
 	ld a, (xbc)
@@ -24406,7 +24406,7 @@ RhythmParam_Process:
 	ld (xix), 0x7F
 	jr Voice_BoundaryCheck
 
-LABEL_F66DA7:
+VoiceNote_SubtractOffset:
 	cp e, 0x19
 	jr nc, Voice_BoundaryCheck
 	ld xix, xbc
@@ -24422,15 +24422,15 @@ LABEL_F66DA7:
 
 Voice_BoundaryCheck:
 	bitda 1, 14743
-	jr z, LABEL_F66DD6
+	jr z, VoiceBound_CalcOctave
 	lda xbc, (xhl + 2)
 	ld a, (xbc)
 	cp a, 0xC
-	jr c, LABEL_F66DD6
+	jr c, VoiceBound_CalcOctave
 	sub a, 0xC
 	ld (xbc), a
 
-LABEL_F66DD6:
+VoiceBound_CalcOctave:
 	ld a, (xhl + 2)
 	extz wa
 	div a, 0xC
@@ -24438,66 +24438,66 @@ LABEL_F66DD6:
 	lda xwa, (xhl + 6)
 	lda xbc, (xhl + 7)
 	cp e, 0xB
-	jr z, LABEL_F66E09
+	jr z, VoiceParam_D0_CheckD4
 	cps e, 7
-	jr z, LABEL_F66DFF
+	jr z, VoiceParam_D0_Skip
 	cps e, 4
-	jr z, LABEL_F66DF7
+	jr z, VoiceParam_D0_Process
 	cps e, 3
-	jr nz, LABEL_F66E13
+	jr nz, VoiceParam_D0_StoreD5
 
-LABEL_F66DF7:
+VoiceParam_D0_Process:
 	ld (xhl), 0x91
 	ld (xwa), 0x0
-	jr LABEL_F66E0F
+	jr VoiceParam_D0_CheckD5
 
-LABEL_F66DFF:
+VoiceParam_D0_Skip:
 	ld (xhl), 0x91
 	ld (xwa), 0x3
 	ld (xbc), 0x0
 	ret
 
-LABEL_F66E09:
+VoiceParam_D0_CheckD4:
 	ld (xhl), 0x91
 	ld (xwa), 0x11
 
-LABEL_F66E0F:
+VoiceParam_D0_CheckD5:
 	ld (xbc), 0x11
 	ret
 
-LABEL_F66E13:
+VoiceParam_D0_StoreD5:
 	ld (xhl), 0x90
 	ret
 
-LABEL_F66E17:
+VoiceParam_B0_Handler:
 	ld xde, xbc
 	ld c, (xbc)
 	res 7, c
 	cp c, 0x16
-	jr ule, LABEL_F66E29
+	jr ule, VoiceParam_B0_CheckType
 	cp c, 0x19
 	jrl nz, Voice_ClearSlotAndRet
 
-LABEL_F66E29:
+VoiceParam_B0_CheckType:
 	ld a, (xwa)
 	and a, 0x1F
 	lda xbc, (xhl + 4)
 	lda xix, (xhl + 5)
 	cps a, 4
-	jr nz, LABEL_F66E4B
+	jr nz, __pad_F66E4B
 	bitm 3, (xix)
-	jr z, LABEL_F66E4B
+	jr z, __pad_F66E4B
 	ld (xhl), 0xD3
 	bitm 3, (xbc)
-	jr nz, LABEL_F66E47
+	jr nz, VoiceParam_B0_Process
 	ld (xde), 0x0
 	ret
 
-LABEL_F66E47:
+VoiceParam_B0_Process:
 	ld (xde), 0x7F
 	ret
 
-LABEL_F66E4B:
+__pad_F66E4B:
 	cp a, 0x8
 	jr nz, Voice_ClearSlotAndRet
 	ld a, (xix)
@@ -24561,7 +24561,7 @@ Voice_ClearSlotAndRet:
 	ld (xhl), 0x0
 	ret
 
-LABEL_F66EC1:
+VoiceSlot_DispatchByType:
 	.byte 0xb3, 0x00, 0x83, 0x0e, 0x0e, 0x00, 0x00, 0x00
 	.byte 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00
 	.byte 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00
@@ -24578,16 +24578,16 @@ Voice_ResolveSlotAddr:
 	pop xiz
 	ret
 
-LABEL_F66EFD:
+VoiceSlot_Dispatch_Type81:
 	ldb a, 0x7F
 	stda8 14280, a
 	ldb a, 0xFF
 	stda8 14279, a
 	ldb c, 0x0
 
-LABEL_F66F0B:
+VoiceSlot_Dispatch_Type90:
 	cps c, 7
-	jr z, LABEL_F66F43
+	jr z, VoiceSlot_Dispatch_D0Type
 	ld xwa, 0x37AB
 	ldb e, 0x0
 	lda_dri3 XIY, 0x03, 0xE0, 0xE4
@@ -24601,9 +24601,9 @@ LABEL_F66F0B:
 	ldb e, 0xFF
 	lda_dri3 XIY, 0x03, 0xE0, 0xE4
 	inc 1, c
-	jr LABEL_F66F0B
+	jr VoiceSlot_Dispatch_Type90
 
-LABEL_F66F43:
+VoiceSlot_Dispatch_D0Type:
 	stdi8 14281, 64
 	calr RhythmDrum_LoadVoiceParams
 	stdi8 14281, 32
@@ -24620,7 +24620,7 @@ LABEL_F66F43:
 	calr RhythmDrum_LoadVoiceParams
 	ret
 
-LABEL_F66F7C:
+VoiceSlot_Dispatch_Return:
 	.byte 0x3e, 0x1d, 0x83, 0x6f, 0xf6, 0x5e, 0x0e, 0xc9
 	.byte 0x33, 0x07, 0x6e, 0x14, 0xc1, 0xd6, 0x34, 0x3f
 	.byte 0x0b, 0x69, 0x06, 0xc1, 0xd6, 0x34, 0x61, 0x68
@@ -24639,7 +24639,7 @@ LABEL_F66F7C:
 DrumParam_ProcessChannel:
 	push xiz
 	calr DrumParam_LookupChannelBit
-	call LABEL_F67013
+	call __pad_F67013
 	pop xiz
 	ret
 
@@ -24654,10 +24654,10 @@ DrumParam_LookupChannelBit:
 	pop xwa
 	ret
 
-LABEL_F6700C:
+PatIdx_Lookup_Return:
 	.byte 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40
 
-LABEL_F67013:
+__pad_F67013:
 	push_a
 	calr DrumParam_ReadVoiceCount
 	ld l, a
@@ -24669,17 +24669,17 @@ LABEL_F67013:
 	ld xiy, 0x37AB
 	add xiy, xbc
 	bit 7, a
-	jr nz, LABEL_F6703B
+	jr nz, VoiceTable_InitEntry_Loop
 	cp (xiy), 0x9
-	jr ge, LABEL_F67036
+	jr ge, VoiceTable_InitEntry
 	incm8 1, (xiy)
 	jr RhythmVoice_LoadParams
 
-LABEL_F67036:
+VoiceTable_InitEntry:
 	ld (xiy), 0x9
 	jr RhythmVoice_LoadParams
 
-LABEL_F6703B:
+VoiceTable_InitEntry_Loop:
 	cp (xiy), 0x0
 	jr z, RhythmVoice_LoadParams
 	decm8 1, (xiy)
@@ -24690,15 +24690,15 @@ RhythmVoice_LoadParams:
 	calr DrumParam_ReadMaxCount
 	pop l
 	cp l, w
-	jr ule, LABEL_F67058
+	jr ule, VoiceTable_InitEntry_Done
 	push w
 	calr DrumParam_ReadVoiceCount
 	pop w
 	ld (xix), w
 
-LABEL_F67058:
+VoiceTable_InitEntry_Done:
 	calr RhythmDrum_LoadVoiceParams
-	calr LABEL_F67459
+	calr __pad_F67459
 	calr DrumParam_BuildActiveMask
 	ret
 
@@ -24710,40 +24710,40 @@ DrumParam_BuildActiveMask:
 	ld xix, 0x37AB
 	ld xiy, 0x37B9
 
-LABEL_F67076:
+VoiceTable_InitEntry_Store:
 	ld_spib A, 0xF0
 	cp_spib A, 0xF4
-	jr z, LABEL_F67082
+	jr z, VoiceTable_InitEntry_Return
 	orddm8 14280, w
 
-LABEL_F67082:
+VoiceTable_InitEntry_Return:
 	sll w, 1
 	inc 1, bc
 	cps bc, 7
-	jr lt, LABEL_F67076
+	jr lt, VoiceTable_InitEntry_Store
 	xor bc, bc
 	ldb w, 0x1
 	ld xix, 0x37B2
 	ld xiy, 0x37C0
 
-LABEL_F67099:
+MultiVoice_SetupChannel:
 	ld_spib A, 0xF0
 	cp_spib A, 0xF4
-	jr z, LABEL_F670A5
+	jr z, MultiVoice_Setup_Loop
 	orddm8 14280, w
 
-LABEL_F670A5:
+MultiVoice_Setup_Loop:
 	sll w, 1
 	inc 1, bc
 	cps bc, 7
-	jr lt, LABEL_F67099
+	jr lt, MultiVoice_SetupChannel
 	ldda8 a, 13526
 	cpda8 a, 14279
-	jr z, LABEL_F670BE
+	jr z, MultiVoice_Setup_WriteParam
 	ldb b, 0x7F
 	stda8 14280, b
 
-LABEL_F670BE:
+MultiVoice_Setup_WriteParam:
 	ret
 
 Rhythm_MapChannelToDrumIndex:
@@ -24753,16 +24753,16 @@ Rhythm_MapChannelToDrumIndex:
 	add xbc, 0xF670DD
 	ld c, (xbc)
 	cps c, 6
-	jr le, LABEL_F670D6
+	jr le, MultiVoice_Setup_NextChan
 	ldb c, 0x0
 
-LABEL_F670D6:
+MultiVoice_Setup_NextChan:
 	push c
 	lds32 xbc, 0
 	pop c
 	ret
 
-LABEL_F670DD:
+MultiVoice_Setup_Done:
 	.byte 0x00, 0x01, 0x02, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -24788,18 +24788,18 @@ RhythmDrum_LoadVoiceParams:
 	lds32 xhl, 0
 	ld xwa, 0xE4A1D4
 
-LABEL_F67128:
+VoiceAssign_ProcessRequest:
 	cp hl, bc
-	jr z, LABEL_F6713F
+	jr z, VoiceAssign_Process_Loop
 	push xbc
 	ld_srib3 C, 0x07, 0xE0, 0xEC
 	and xbc, 0xFF
 	add xde, xbc
 	pop xbc
 	inc 1, hl
-	jr LABEL_F67128
+	jr VoiceAssign_ProcessRequest
 
-LABEL_F6713F:
+VoiceAssign_Process_Loop:
 	push xde
 	calr Rhythm_MapChannelToDrumIndex
 	ld xix, 0x37B2
@@ -24823,17 +24823,17 @@ LABEL_F6713F:
 	add xwa, xbc
 	ld (xwa), e
 	push xhl
-	calr LABEL_F6718B
+	calr VoiceAssign_Process_Return
 	pop xhl
 	srl xhl, 8
 	srl xhl, 8
 	push l
 	lds32 xhl, 0
 	pop l
-	calr LABEL_F671E7
+	calr __pad_F671E7
 	ret
 
-LABEL_F6718B:
+VoiceAssign_Process_Return:
 	stdi8 37110, 72
 	call SndParam_ApplyProgramChange_Safe
 	call VoiceParam_ClampAndValidate_Tramp
@@ -24861,10 +24861,10 @@ LABEL_F6718B:
 	jr __jrt_nop_F671E6
 __jrt_nop_F671E6:
 
-LABEL_F671E6:
+VoiceAssign_StoreFinal:
 	ret
 
-LABEL_F671E7:
+__pad_F671E7:
 	pushw hl
 	push xix
 	calr Rhythm_MapChannelToDrumIndex
@@ -24880,7 +24880,7 @@ LABEL_F671E7:
 	lds32 xde, 0
 	ld de, (xbc)
 	push xix
-	calr LABEL_F67278
+	calr RegPreset_Load_Loop
 	pop xix
 	pop xwa
 	push xwa
@@ -24890,7 +24890,7 @@ LABEL_F671E7:
 	lds32 xde, 0
 	ld de, (xbc)
 	push xix
-	calr LABEL_F673AD
+	calr MIDIChan_DispatchDone
 	pop xix
 	pop xwa
 	push xwa
@@ -24899,15 +24899,15 @@ LABEL_F671E7:
 	add xbc, 0xF67268
 	ld de, (xbc)
 	push xix
-	calr LABEL_F673DA
+	calr VoiceResolve_CheckAndStore
 	pop xix
 	pop xwa
 	push xix
-	calr LABEL_F6742B
+	calr __pad_F6742B
 	pop xix
 	ret
 
-LABEL_F67244:
+RegPreset_LoadVoiceData:
 	.byte 0x00, 0x03, 0x04, 0x07, 0x00, 0x00, 0x0f, 0x04
 	.byte 0x0f, 0x04, 0x0f, 0x00, 0x00, 0x04, 0x0f, 0x04
 	.byte 0x0f, 0x04, 0x0f, 0x04, 0x00, 0x00, 0x31, 0x04
@@ -24916,7 +24916,7 @@ LABEL_F67244:
 	.byte 0x06, 0x04, 0x06, 0x00, 0x00, 0x04, 0x06, 0x04
 	.byte 0x06, 0x04, 0x06, 0x04
 
-LABEL_F67278:
+RegPreset_Load_Loop:
 	push xix
 	push xde
 	calr DrumChannel_MapToIndexA
@@ -24927,35 +24927,35 @@ LABEL_F67278:
 	mul a, 0x14
 	add wa, de
 	push xwa
-	call LABEL_F67304
+	call MIDIChan_DispatchTable
 	pop xwa
 	lds hl, 1
 	cp wa, 0x400
-	jr nc, LABEL_F67299
+	jr nc, RegPreset_Load_Return
 	lds hl, 0
 
-LABEL_F67299:
+RegPreset_Load_Return:
 	lds32 xbc, 0
 
-LABEL_F6729B:
+__pad_F6729B:
 	cps c, 4
-	jr z, LABEL_F672B1
+	jr z, ChanAssign_StoreResult
 	push xbc
 	pushw wa
 	push xbc
-	calr LABEL_F672B2
+	calr __pad_F672B2
 	pop xbc
-	calr LABEL_F672E4
+	calr ChanAssign_Lookup_Found
 	popw wa
 	pop xbc
 	inc 1, wa
 	inc 1, c
-	jr LABEL_F6729B
+	jr __pad_F6729B
 
-LABEL_F672B1:
+ChanAssign_StoreResult:
 	ret
 
-LABEL_F672B2:
+__pad_F672B2:
 	lds32 xde, 0
 	ld_srib3 E, 0x07, 0xF0, 0xE0
 	sll e, 1
@@ -24969,21 +24969,21 @@ LABEL_F672B2:
 	mul c, 0x26
 	add bc, de
 	cps hl, 0
-	jr nz, LABEL_F672D4
+	jr nz, ChanAssign_Lookup
 	add bc, 0x118
-	jr LABEL_F672D8
+	jr ChanAssign_Lookup_Loop
 
-LABEL_F672D4:
+ChanAssign_Lookup:
 	add bc, 0x518
 
-LABEL_F672D8:
+ChanAssign_Lookup_Loop:
 	lds32 xwa, 0
 	ld_sriw3 WA, 0x07, 0xF0, 0xE4
 	ld xde, xiy
 	add xde, xwa
 	ret
 
-LABEL_F672E4:
+ChanAssign_Lookup_Found:
 	push xde
 	push xbc
 	calr Rhythm_MapChannelToDrumIndex
@@ -24998,7 +24998,7 @@ LABEL_F672E4:
 	ld (xwa), xde
 	ret
 
-LABEL_F67304:
+MIDIChan_DispatchTable:
 	ldw bc, 0x3D1
 	lds32 xwa, 0
 	ld_srib3 W, 0x07, 0xF0, 0xE4
@@ -25011,41 +25011,41 @@ LABEL_F67304:
 
 DrumChannel_MapToIndexA:
 	cpdi8 14281, 1
-	jr nz, LABEL_F6732E
+	jr nz, MIDIChan_Dispatch_Ch1
 	lds32 xbc, 0
 	jr DrumChannel_MapA_NullRet
 
-LABEL_F6732E:
+MIDIChan_Dispatch_Ch1:
 	cpdi8 14281, 2
-	jr nz, LABEL_F67339
+	jr nz, MIDIChan_Dispatch_Ch2
 	lds32 xbc, 0
 	jr DrumChannel_MapA_NullRet
 
-LABEL_F67339:
+MIDIChan_Dispatch_Ch2:
 	cpdi8 14281, 4
-	jr nz, LABEL_F67344
+	jr nz, MIDIChan_Dispatch_Ch3
 	lds32 xbc, 0
 	jr DrumChannel_MapA_NullRet
 
-LABEL_F67344:
+MIDIChan_Dispatch_Ch3:
 	cpdi8 14281, 8
-	jr nz, LABEL_F6734F
+	jr nz, MIDIChan_Dispatch_Ch4
 	lds32 xbc, 1
 	jr DrumChannel_MapA_NullRet
 
-LABEL_F6734F:
+MIDIChan_Dispatch_Ch4:
 	cpdi8 14281, 16
-	jr nz, LABEL_F6735A
+	jr nz, MIDIChan_Dispatch_Ch5
 	lds32 xbc, 2
 	jr DrumChannel_MapA_NullRet
 
-LABEL_F6735A:
+MIDIChan_Dispatch_Ch5:
 	cpdi8 14281, 32
-	jr nz, LABEL_F67365
+	jr nz, MIDIChan_Dispatch_Ch6
 	lds32 xbc, 3
 	jr DrumChannel_MapA_NullRet
 
-LABEL_F67365:
+MIDIChan_Dispatch_Ch6:
 	lds32 xbc, 4
 
 DrumChannel_MapA_NullRet:
@@ -25053,47 +25053,47 @@ DrumChannel_MapA_NullRet:
 
 DrumChannel_MapToIndexB:
 	cpdi8 14281, 1
-	jr nz, LABEL_F67373
+	jr nz, MIDIChan_Dispatch_Ch7
 	lds32 xbc, 0
 	jr DrumChannel_MapB_NullRet
 
-LABEL_F67373:
+MIDIChan_Dispatch_Ch7:
 	cpdi8 14281, 2
-	jr nz, LABEL_F6737E
+	jr nz, MIDIChan_Dispatch_Ch8
 	lds32 xbc, 0
 	jr DrumChannel_MapB_NullRet
 
-LABEL_F6737E:
+MIDIChan_Dispatch_Ch8:
 	cpdi8 14281, 4
-	jr nz, LABEL_F67389
+	jr nz, MIDIChan_Dispatch_Ch9
 	lds32 xbc, 0
 	jr DrumChannel_MapB_NullRet
 
-LABEL_F67389:
+MIDIChan_Dispatch_Ch9:
 	cpdi8 14281, 8
-	jr nz, LABEL_F67394
+	jr nz, MIDIChan_Dispatch_Ch10
 	lds32 xbc, 2
 	jr DrumChannel_MapB_NullRet
 
-LABEL_F67394:
+MIDIChan_Dispatch_Ch10:
 	cpdi8 14281, 16
-	jr nz, LABEL_F6739F
+	jr nz, MIDIChan_Dispatch_Ch11
 	lds32 xbc, 3
 	jr DrumChannel_MapB_NullRet
 
-LABEL_F6739F:
+MIDIChan_Dispatch_Ch11:
 	cpdi8 14281, 32
-	jr nz, LABEL_F673AA
+	jr nz, MIDIChan_Dispatch_Ch12
 	lds32 xbc, 4
 	jr DrumChannel_MapB_NullRet
 
-LABEL_F673AA:
+MIDIChan_Dispatch_Ch12:
 	lds32 xbc, 5
 
 DrumChannel_MapB_NullRet:
 	ret
 
-LABEL_F673AD:
+MIDIChan_DispatchDone:
 	push xix
 	push xde
 	calr DrumChannel_MapToIndexA
@@ -25115,7 +25115,7 @@ LABEL_F673AD:
 	ldir85
 	ret
 
-LABEL_F673DA:
+VoiceResolve_CheckAndStore:
 	bitda 0, 14281
 	jr nz, Rhythm_ClearChannelDrumIndex
 	bitda 1, 14281
@@ -25131,20 +25131,20 @@ LABEL_F673DA:
 	ld c, (xbc)
 	and a, c
 	cp a, c
-	jr nz, LABEL_F67410
+	jr nz, VoiceResolve_Return
 	ldb a, 0x0
-	jr LABEL_F67412
+	jr __pad_F67412
 
-LABEL_F67410:
+VoiceResolve_Return:
 	ldb a, 0x1
 
-LABEL_F67412:
-	jr LABEL_F67416
+__pad_F67412:
+	jr VoiceResolve_InitSearch
 
 Rhythm_ClearChannelDrumIndex:
 	ldb a, 0x0
 
-LABEL_F67416:
+VoiceResolve_InitSearch:
 	push_a
 	calr Rhythm_MapChannelToDrumIndex
 	pop_a
@@ -25152,14 +25152,14 @@ LABEL_F67416:
 	ld (xbc), a
 	ret
 
-LABEL_F67424:
+VoiceResolve_SearchDone:
 	.byte 0x08, 0x08, 0x08, 0x08, 0x08, 0x10, 0x20
 
-LABEL_F6742B:
+__pad_F6742B:
 	ldw bc, 0x3D0
 	ld_srib3 A, 0x07, 0xF0, 0xE4
 	push xix
-	calr LABEL_F67448
+	calr VoiceResolve_FindSlot
 	pop xix
 	push_a
 	push xix
@@ -25170,17 +25170,17 @@ LABEL_F6742B:
 	ld (xbc), a
 	ret
 
-LABEL_F67448:
+VoiceResolve_FindSlot:
 	push xbc
 	ld xbc, 0xE46B8A
 	ld_srib3 A, 0x03, 0xE4, 0xE0
 	pop xbc
 	ret
 
-LABEL_F67455:
+VoiceResolve_FindSlot_Return:
 	.byte 0xc9, 0xc8, 0x03, 0x0e
 
-LABEL_F67459:
+__pad_F67459:
 	calr Rhythm_MapChannelToDrumIndex
 	add xbc, 0x37AB
 	lds32 xwa, 0
@@ -25199,11 +25199,11 @@ LABEL_F67459:
 DrumParam_ProcessChannelAlt:
 	push xiz
 	calr DrumParam_LookupChannelBit
-	call LABEL_F6748C
+	call PartVoice_UpdateParams
 	pop xiz
 	ret
 
-LABEL_F6748C:
+PartVoice_UpdateParams:
 	push_a
 	calr DrumParam_ReadMaxCount
 	pop_a
@@ -25212,13 +25212,13 @@ LABEL_F6748C:
 	add xix, xbc
 	ld c, (xix)
 	cps a, 0
-	jr nz, LABEL_F674A9
+	jr nz, PartVoice_Update_Loop
 	cp c, w
 	jr ge, DrumParam_ClampVoiceCount
 	inc 1, c
 	jr DrumParam_ClampVoiceCount
 
-LABEL_F674A9:
+PartVoice_Update_Loop:
 	cps c, 0
 	jr z, DrumParam_ClampVoiceCount
 	dec 1, c
@@ -25230,19 +25230,19 @@ LABEL_F674A9:
 
 DrumParam_ClampVoiceCount:
 	cp c, w
-	jr gt, LABEL_F674C5
+	jr gt, PartVoice_Update_Return
 	cps c, 0
-	jr lt, LABEL_F674C9
-	jr LABEL_F674CB
+	jr lt, PartVoice_Update_Done
+	jr __pad_F674CB
 
-LABEL_F674C5:
+PartVoice_Update_Return:
 	ld c, w
-	jr LABEL_F674CB
+	jr __pad_F674CB
 
-LABEL_F674C9:
+PartVoice_Update_Done:
 	ldb c, 0x0
 
-LABEL_F674CB:
+__pad_F674CB:
 	ld (xix), c
 	calr RhythmDrum_LoadVoiceParams
 	calr DrumParam_BuildActiveMask
@@ -25260,7 +25260,7 @@ DrumParam_ReadMaxCount:
 	dec 1, w
 	ret
 
-LABEL_F674F4:
+ExtVoice_ProcessList:
 	.byte 0x0e, 0x3e, 0x1d, 0xfc, 0x74, 0xf6, 0x5e, 0x0e
 	.byte 0xf1, 0x1e, 0x04, 0xca, 0x6e, 0x0d, 0xc1, 0xcd
 	.byte 0x34, 0x3e, 0x80, 0x1d, 0xe1, 0x32, 0xf5, 0x1d
@@ -25306,8 +25306,8 @@ LABEL_F674F4:
 	.byte 0x0b, 0xf1, 0xc9, 0x37, 0x00, 0x01, 0x1e, 0x04
 	.byte 0x00, 0x1e, 0x3c, 0x03, 0x0e
 
-LABEL_F67649:
-	calr LABEL_F676E6
+AccVoice_SetupStyleSlots:
+	calr __pad_F676E6
 	calr DrumChannel_MapToIndexB
 	sll xbc, 1
 	add xix, xbc
@@ -25321,12 +25321,12 @@ LABEL_F67649:
 	pop xwa
 	pushw hl
 	calr Voice_ClearSlotBuffer
-	calr LABEL_F676C1
+	calr __pad_F676C1
 	popw hl
 
-LABEL_F67670:
+AccVoice_SetupSlots_Loop:
 	cp hl, 0xFFFF
-	jr z, LABEL_F676A3
+	jr z, AccVoice_SetupSlots_InitEntry
 	calr AccPatch_ResolveEntryAddr
 	push xwa
 	add xwa, 0x3
@@ -25344,9 +25344,9 @@ LABEL_F67670:
 	calr Voice_ClearSlotBuffer
 	popw hl
 	incdi16 1, 13524
-	jr LABEL_F67670
+	jr AccVoice_SetupSlots_Loop
 
-LABEL_F676A3:
+AccVoice_SetupSlots_InitEntry:
 	popw hl
 	ret
 
@@ -25355,54 +25355,54 @@ Voice_ClearSlotBuffer:
 	ld xix, xwa
 	ld xbc, 0xF9
 
-LABEL_F676B2:
+AccVoice_SetupSlots_StoreEntry:
 	cps bc, 0
-	jr z, LABEL_F676C0
+	jr z, AccVoice_SetupSlots_Return
 	ldb a, 0x0
 	ld (xix), a
 	inc 1, xix
 	dec 1, bc
-	jr LABEL_F676B2
+	jr AccVoice_SetupSlots_StoreEntry
 
-LABEL_F676C0:
+AccVoice_SetupSlots_Return:
 	ret
 
-LABEL_F676C1:
+__pad_F676C1:
 	add xwa, 0x6
 	lds32 xbc, 0
 	ldda8 c, 13527
 	inc 1, c
 	mul_sd16b 3, 0xD9, 0x34
 
-LABEL_F676D3:
+AccVoice_SetupSlots_CheckType:
 	cps bc, 0
-	jr z, LABEL_F676E1
+	jr z, AccVoice_SetupSlots_Done
 	ldb e, 0x81
 	ld (xwa), e
 	inc 1, xwa
 	dec 1, bc
-	jr LABEL_F676D3
+	jr AccVoice_SetupSlots_CheckType
 
-LABEL_F676E1:
+AccVoice_SetupSlots_Done:
 	ldb c, 0x83
 	ld (xwa), c
 	ret
 
-LABEL_F676E6:
+__pad_F676E6:
 	lds32 xhl, 0
 	ldda8 l, 13526
 	cp l, 0x1E
-	jr lt, LABEL_F676F3
+	jr lt, AccVoice_SetupSlots_Write
 	ldb l, 0x0
 
-LABEL_F676F3:
+AccVoice_SetupSlots_Write:
 	mul l, 0x60
 	add hl, 0x60
 	ld xix, 0x94800
 	add xix, xhl
 	ret
 
-LABEL_F67702:
+AccVoice_SetupSlots_WriteDone:
 	.byte 0x00, 0x00
 
 AccPatch_ResolveEntryAddr:
@@ -25418,7 +25418,7 @@ AccPatch_ResolveEntryAddr:
 	pop xix
 	ret
 
-LABEL_F67717:
+AccVoice_SetupSlots_DataBlock:
 	.byte 0x1e, 0xa5, 0xf9, 0xe9, 0xc8, 0xb2, 0x37, 0x00
 	.byte 0x00, 0x81, 0x21, 0xc9, 0xd8, 0x66, 0x09, 0x1e
 	.byte 0x07, 0x00, 0x1e, 0x2b, 0x00, 0x1e, 0x41, 0x00
@@ -25605,18 +25605,18 @@ LABEL_F67717:
 	.byte 0x84, 0x21, 0x1e, 0x73, 0xfb, 0xcb, 0x04, 0xe9
 	.byte 0xa8, 0xcb, 0x05, 0xe9, 0x84, 0x0e
 
-LABEL_F67CD5:
+VoiceSlot_InitFromTable:
 	push xiz
-	call LABEL_F67CDC
+	call VoiceSlot_Init_CheckType
 	pop xiz
 	ret
 
-LABEL_F67CDC:
-	calr LABEL_F67CE3
-	calr LABEL_F67649
+VoiceSlot_Init_CheckType:
+	calr VoiceSlot_Init_Process
+	calr AccVoice_SetupStyleSlots
 	ret
 
-LABEL_F67CE3:
+VoiceSlot_Init_Process:
 	stdi8 14281, 16
 	bitda 0, 14235
 	jr nz, CmpMode_NullRet
@@ -25634,7 +25634,7 @@ LABEL_F67CE3:
 CmpMode_NullRet:
 	ret
 
-LABEL_F67D15:
+__pad_F67D15:
 	.byte 0x3e, 0x1d, 0x1c, 0x7d, 0xf6, 0x5e, 0x0e, 0xc1
 	.byte 0xc9, 0x37, 0x25, 0xcd, 0xcc, 0x01, 0xcd, 0xd9
 	.byte 0x66, 0x46, 0xc1, 0xc9, 0x37, 0x25, 0xcd, 0xcc
@@ -25785,15 +25785,15 @@ CmpSetTtl_ModeSwitch:
 	cp xde, 0x4
 	jr z, CmpSetTtl_DrumVoice0
 	cp xde, 0x82
-	jr z, LABEL_F67F1D
+	jr z, VoiceSlot_Resolve_StoreMap
 	cp xde, 0x81
-	jr z, LABEL_F67F1D
+	jr z, VoiceSlot_Resolve_StoreMap
 	cp xde, 0x2
-	jr z, LABEL_F67F0C
+	jr z, VoiceSlot_ResolveFromMap
 	cp xde, 0x1
 	jrl nz, CmpReal_ReturnZero
 
-LABEL_F67F0C:
+VoiceSlot_ResolveFromMap:
 	push xde
 	push xhl
 	push xix
@@ -25806,7 +25806,7 @@ LABEL_F67F0C:
 	pop xde
 	jrl CmpReal_ReturnZero
 
-LABEL_F67F1D:
+VoiceSlot_Resolve_StoreMap:
 	push xde
 	push xhl
 	push xix
@@ -26886,7 +26886,7 @@ CmEsyTtl_Dispatch2:
 	push xix
 	push xiz
 	ldb a, 0x00
-	call LABEL_F66F7C
+	call VoiceSlot_Dispatch_Return
 	pop xiz
 	pop xix
 	pop xhl
@@ -26902,7 +26902,7 @@ CmEsyTtl_Dispatch2:
 	push xix
 	push xiz
 	ldb a, 0x80
-	call LABEL_F66F7C
+	call VoiceSlot_Dispatch_Return
 	pop xiz
 	pop xix
 	pop xhl
