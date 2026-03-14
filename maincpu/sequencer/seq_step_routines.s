@@ -2503,7 +2503,7 @@ SeqStep_ProcessB0ExtCleanup:
 
 SeqStep_MainTimerTick:
 	calr SeqStep_TimerDispatchA
-	call LABEL_F39290
+	call SeqPlay_SyncPlaybackPosition
 	calr SeqStep_TimerDispatchB
 	call LABEL_F3ECD4
 	call LABEL_F3ECB8
@@ -2615,7 +2615,7 @@ SeqStep_PlaybackResultDispatch:
 SeqStep_PlaybackCheckBeat2:
 	bit_erpb 0xFB, 0x01
 	jr z, SeqStep_PlaybackCheckTiming
-	call LABEL_F39F39
+	call SeqPlay_SaveAndPrepareState
 	jr SeqStep_PlaybackResultDispatch
 
 SeqStep_PlaybackCheckTiming:
@@ -2627,7 +2627,7 @@ SeqStep_PlaybackCheckTiming:
 	jr z, SeqStep_PlaybackNoAction
 
 SeqStep_PlaybackCallPattern:
-	call LABEL_F3A342
+	call SeqPlay_ProcessNoteAndTempo
 	jr SeqStep_PlaybackResultDispatch
 
 SeqStep_PlaybackResult1:
@@ -2635,7 +2635,7 @@ SeqStep_PlaybackResult1:
 	jr SeqStep_PlaybackReturn
 
 SeqStep_PlaybackResult4:
-	call LABEL_F4384C
+	call SeqPlay_StopAndClearSequence
 	jr SeqStep_PlaybackReturn
 
 SeqStep_PlaybackResult2:
@@ -2643,7 +2643,7 @@ SeqStep_PlaybackResult2:
 	jr SeqStep_PlaybackReturn
 
 SeqStep_PlaybackResult3:
-	call LABEL_F437FA
+	call SeqPlay_DispatchAndResetAll
 
 SeqStep_PlaybackReturn:
 	pop_werp 0xFA

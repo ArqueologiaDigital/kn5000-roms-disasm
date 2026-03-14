@@ -13,7 +13,7 @@ NoteEditSy_SendCompoundWidgetUpdate:
 	call NoteEditSy_SendWidgetCmd2
 	jp NoteEditSy_SendModeWidgetCmd
 
-LABEL_F3888B:
+NoteEditSy_UpdateAllWidgets:
 	call NoteEditSy_SendWidgetCmd1
 	call NoteEditSy_UpdateGridPosition
 	call NoteEditSy_SendWidgetCmd3or4
@@ -22,16 +22,16 @@ LABEL_F3888B:
 	call_24 nz, 0xF38728
 	jp NoteEditSy_UpdateEditModeGrid
 
-LABEL_F388A8:
+NoteEditSy_ScanAndSortEntries:
 	lda xsp, (xsp - 16)
 	push xiz
 	ldda8 a, 7512
 	ldfr_berp A, 0xFB
 	cp_erpb 0xFB, 0x0F
-	jr nz, LABEL_F388F4
+	jr nz, NoteEditSy_DirectCopy
 	lds iz, 0
 
-LABEL_F388BB:
+NoteEditSy_ScanLoop:
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xF8
@@ -46,37 +46,37 @@ LABEL_F388BB:
 	add xde, xwa
 	lda xhl, (xhl + 13)
 
-LABEL_F388E0:
+NoteEditSy_CopyEntryLoop:
 	ld_spib A, 0xE4
 	lda_dpi XBC, 0xE8
 	cp xbc, xhl
-	jr c, LABEL_F388E0
+	jr c, NoteEditSy_CopyEntryLoop
 	inc 1, iz
 	cp iz, 0x80
-	jr c, LABEL_F388BB
-	jr LABEL_F38907
+	jr c, NoteEditSy_ScanLoop
+	jr NoteEditSy_ScanReturn
 
-LABEL_F388F4:
+NoteEditSy_DirectCopy:
 	ldda32 xbc, 7504
 	ld xwa, xbc
 	st_dri3b A, 0xE5, 0xA4, 0x06
 
-LABEL_F388FF:
+NoteEditSy_DirectCopyLoop:
 	stib_dpi 0xE0, 0x20
 	cp xwa, xbc
-	jr c, LABEL_F388FF
+	jr c, NoteEditSy_DirectCopyLoop
 
-LABEL_F38907:
+NoteEditSy_ScanReturn:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F3890C:
+SeqAcc_UpdateAndDispatch:
 	call Accomp_UpdateModeFlag
 	jr __jrt_nop_F38912
 __jrt_nop_F38912:
 
-LABEL_F38912:
+SeqAcc_InitAndDispatch:
 	stdi16 9832, 1
 	setda 1, 8970
 	resda 3, 10407
@@ -94,25 +94,25 @@ LABEL_F38912:
 
 SeqAcc_HandlePlaybackTick:
 	cpdi8 36150, 136
-	jr z, LABEL_F3894C
+	jr z, SeqAcc_HandlePlaybackTick_ClearBit2
 	bitda 1, 8970
-	jr z, LABEL_F38948
+	jr z, SeqAcc_HandlePlaybackTick_ClearBit1
 	call PartSelect_UpdateDisplayState
 	calr SeqAcc_ProcessTempoEvents
 	call AccWrap_PlayModeDispatch
 	resda 0, 9954
 
-LABEL_F38948:
+SeqAcc_HandlePlaybackTick_ClearBit1:
 	resda 1, 8970
 
-LABEL_F3894C:
+SeqAcc_HandlePlaybackTick_ClearBit2:
 	resda 2, 10407
 	ret
 
-LABEL_F38951:
+SeqAcc_HandlePlaybackTick_Data:
 	.byte 0xf1, 0xc5, 0x28, 0xbb, 0x0e
 
-LABEL_F38956:
+SeqAcc_StartPlaybackFromPosition:
 	call Accomp_UpdateModeFlag
 	ldda16 xbc, 9832
 	stda16 9964, xbc
@@ -123,13 +123,13 @@ LABEL_F38956:
 	jr nz, SeqAcc_StartPlayback
 	ldda16 xwa, 62008
 	cp bc, wa
-	jr ule, LABEL_F38985
+	jr ule, SeqAcc_AdjustEndAndStart
 	subda16 xwa, 62015
 	stda16 9832, xwa
 	stda16 9964, xwa
 	jr SeqAcc_StartPlayback
 
-LABEL_F38985:
+SeqAcc_AdjustEndAndStart:
 	dec 1, wa
 	stda16 10435, xwa
 	calr SeqAcc_UpdateEndPosition
@@ -144,13 +144,13 @@ SeqAcc_StartPlayback:
 	call SeqPlay_InitStartState
 	jp SeqBuf_Init
 
-LABEL_F389AD:
+SeqAcc_StopPlayback:
 	cpdi8 36150, 136
-	jr z, LABEL_F389BB
+	jr z, SeqAcc_StopPlayback_HandleTick
 	resda 0, 62012
 	calr SeqAcc_SetupRepeatCount
 
-LABEL_F389BB:
+SeqAcc_StopPlayback_HandleTick:
 	calr SeqAcc_HandlePlaybackTick
 	ldw wa, 0x4C
 	call CtrlPanel_SetIndicatorBit
@@ -197,23 +197,23 @@ SeqAcc_UpdatePlaybackFlags:
 SeqPlay_CheckFlagsAndInit:
 	jp SeqPlay_InitStartState
 
-LABEL_F38A32:
+SeqPlay_CheckAndActivateParts:
 	dec 4, xsp
 	ldda8 a, 10437
 	bit 5, a
-	jr nz, LABEL_F38A4B
+	jr nz, SeqPlay_CheckAndActivateParts_RetFFFF
 	bitda 2, 1057
-	jr z, LABEL_F38A4B
+	jr z, SeqPlay_CheckAndActivateParts_RetFFFF
 	cpdi16 10408, 0
-	jr nz, LABEL_F38A50
+	jr nz, SeqPlay_CheckAndActivateParts_Bit6
 
-LABEL_F38A4B:
+SeqPlay_CheckAndActivateParts_RetFFFF:
 	ldw hl, 0xFFFF
-	jr LABEL_F38A87
+	jr SeqPlay_CheckAndActivateParts_Return
 
-LABEL_F38A50:
+SeqPlay_CheckAndActivateParts_Bit6:
 	bit 6, a
-	jr nz, LABEL_F38A75
+	jr nz, SeqPlay_CheckAndActivateParts_Deactivate
 	ei 6
 	ldmm8 10440, 1051
 	ldmm16 10441, 1052
@@ -222,18 +222,18 @@ LABEL_F38A50:
 	lda xwa, (xsp)
 	ld (xwa), 0x0
 	calr SeqPlay_ActivatePartsAndSendOff
-	jr LABEL_F38A85
+	jr SeqPlay_CheckAndActivateParts_SetHL0
 
-LABEL_F38A75:
-	calr LABEL_F38AE5
+SeqPlay_CheckAndActivateParts_Deactivate:
+	calr SeqPlay_DeactivateAndSendOff
 	cpdi16 10420, 0
-	jr nz, LABEL_F38A85
+	jr nz, SeqPlay_CheckAndActivateParts_SetHL0
 	stdi8 8956, 0
 
-LABEL_F38A85:
+SeqPlay_CheckAndActivateParts_SetHL0:
 	lds hl, 0
 
-LABEL_F38A87:
+SeqPlay_CheckAndActivateParts_Return:
 	inc 4, xsp
 	ret
 
@@ -251,56 +251,56 @@ SeqPlay_ActivatePartsAndSendOff:
 	call Audio_CheckSubsystemReady
 	ldi_berp 0xFB, 1
 
-LABEL_F38AB3:
+SeqPlay_ActivateParts_PartLoop:
 	ldto_berp A, 0xFB
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F38AC1
+	jr z, SeqPlay_ActivateParts_ShiftDone
 	slaa bc
 
-LABEL_F38AC1:
+SeqPlay_ActivateParts_ShiftDone:
 	andda16 xbc, 10438
-	jr z, LABEL_F38AD0
+	jr z, SeqPlay_ActivateParts_LoopNext
 	ldto_berp A, 0xFB
 	extz wa
 	call Part_SendVoiceOffAndCCEvents
 
-LABEL_F38AD0:
+SeqPlay_ActivateParts_LoopNext:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr ule, LABEL_F38AB3
+	jr ule, SeqPlay_ActivateParts_PartLoop
 	ld xwa, (xsp + 2)
 	calr SeqPlay_ProcessPartVoices
 	pop_werp 0xFA
 	inc 4, xsp
 	ret
 
-LABEL_F38AE5:
+SeqPlay_DeactivateAndSendOff:
 	push_werp 0xFA
 	resda 6, 10437
 	setda 5, 10437
 	ldi_berp 0xFB, 1
 
-LABEL_F38AF3:
+SeqPlay_DeactivateParts_PartLoop:
 	ldto_berp A, 0xFB
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F38B01
+	jr z, SeqPlay_DeactivateParts_ShiftDone
 	slaa bc
 
-LABEL_F38B01:
+SeqPlay_DeactivateParts_ShiftDone:
 	andda16 xbc, 10438
-	jr z, LABEL_F38B10
+	jr z, SeqPlay_DeactivateParts_LoopNext
 	ldto_berp A, 0xFB
 	extz wa
 	call SeqBuf_WriteNoteOffEntry
 
-LABEL_F38B10:
+SeqPlay_DeactivateParts_LoopNext:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr c, LABEL_F38AF3
+	jr c, SeqPlay_DeactivateParts_PartLoop
 	ei 6
 	ldmm8 10443, 1051
 	ldmm16 10444, 1052
@@ -313,7 +313,7 @@ LABEL_F38B10:
 	pop_werp 0xFA
 	ret
 
-LABEL_F38B45:
+SeqPlay_ResetPlaybackState:
 	stdi8 10437, 0
 	stdi16 10438, 0
 	ldda8 a, 10418
@@ -348,15 +348,15 @@ SeqPlay_InitAccAndSetMode:
 	call SeqAcc_InitPlaybackState
 	ldb a, 0xC
 	bitda 0, 10418
-	jr nz, LABEL_F38BB7
+	jr nz, SeqPlay_InitAccAndSetMode_StoreState
 	ldb a, 0xB
 
-LABEL_F38BB7:
+SeqPlay_InitAccAndSetMode_StoreState:
 	stda8 8956, a
 	lds hl, 0
 	ret
 
-LABEL_F38BBE:
+SeqPlay_DataBlock_BBE:
 	.byte 0xd1, 0x38, 0xf2, 0x20, 0xd8, 0x61, 0xf1, 0x38
 	.byte 0xf2, 0x50, 0xd8, 0xcf, 0xe6, 0x03, 0x63, 0x06
 	.byte 0xf1, 0x38, 0xf2, 0x02, 0xe6, 0x03, 0x1e, 0x27
@@ -433,30 +433,30 @@ SeqPlay_ProcessPartVoices:
 	ldmm16 10574, 10408
 	ldi_berp 0xFB, 1
 
-LABEL_F38DA4:
+SeqPlay_ProcessParts_PartLoop:
 	ldto_berp A, 0xFB
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F38DB2
+	jr z, SeqPlay_ProcessParts_ShiftDone
 	slaa bc
 
-LABEL_F38DB2:
+SeqPlay_ProcessParts_ShiftDone:
 	andda16 xbc, 10574
-	jr z, LABEL_F38E25
+	jr z, SeqPlay_ProcessParts_LoopNext
 	call Part_ProcessAndDecrementVoice
 	ld iz, hl
 	cp iz, 0xFFFF
-	jr nz, LABEL_F38DE4
+	jr nz, SeqPlay_ProcessParts_HandleResult
 	stdi16 10408, 0
 	stdi16 61854, 0
 	stdi16 10410, 0
 	stdi16 10420, 0
 	call Audio_CheckSubsystemReady
 	ldb l, 0x2
-	jr LABEL_F38E40
+	jr SeqPlay_ProcessParts_Return
 
-LABEL_F38DE4:
+SeqPlay_ProcessParts_HandleResult:
 	setda 0, 9834
 	ld wa, iz
 	lds bc, 0
@@ -480,20 +480,20 @@ LABEL_F38DE4:
 	add xwa, xbc
 	ld (xwa), 0x5
 
-LABEL_F38E25:
+SeqPlay_ProcessParts_LoopNext:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jrl ule, LABEL_F38DA4
+	jrl ule, SeqPlay_ProcessParts_PartLoop
 	ld xwa, (xsp + 4)
 	cp (xwa), 0x0
-	jr z, LABEL_F38E3E
+	jr z, SeqPlay_ProcessParts_Dispatch
 	ld xwa, (xsp + 4)
 	call Seq_DispatchVoiceConfigEvent
 
-LABEL_F38E3E:
+SeqPlay_ProcessParts_Dispatch:
 	ldb l, 0x0
 
-LABEL_F38E40:
+SeqPlay_ProcessParts_Return:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -503,21 +503,21 @@ SeqAcc_ProcessTempoEvents:
 	push_werp 0xFA
 	ldda8 a, 10437
 	and a, 0x60
-	jrl z, LABEL_F38F7E
+	jrl z, SeqAcc_ProcessTempo_NoActiveParts
 	lda xwa, (xsp + 2)
 	call TempoRingBuf_ReadEventBytes
 	cps l, 0
-	jr z, LABEL_F38E71
+	jr z, SeqAcc_ProcessTempo_ReadComplete
 
-LABEL_F38E5F:
+SeqAcc_ProcessTempo_DispatchLoop:
 	lda xwa, (xsp + 2)
 	call Seq_DispatchVoiceConfigEvent
 	lda xwa, (xsp + 2)
 	call TempoRingBuf_ReadEventBytes
 	cps l, 0
-	jr nz, LABEL_F38E5F
+	jr nz, SeqAcc_ProcessTempo_DispatchLoop
 
-LABEL_F38E71:
+SeqAcc_ProcessTempo_ReadComplete:
 	ldda8 e, 10443
 	extz de
 	ldda16 xbc, 10444
@@ -533,13 +533,13 @@ LABEL_F38E71:
 	ldada xix, 10478
 	lda xiy, (xwa + 16)
 
-LABEL_F38EA2:
+SeqAcc_ProcessTempo_CopyLoop:
 	ld_spiw WA, 0xED
 	st_dpiw WA, 0xF1
 	ld_spib A, 0xE4
 	lda_dpi XBC, 0xE8
 	cp xbc, xiy
-	jr c, LABEL_F38EA2
+	jr c, SeqAcc_ProcessTempo_CopyLoop
 	ldda8 c, 10437
 	ld a, c
 	and a, 0x90
@@ -548,33 +548,33 @@ LABEL_F38EA2:
 	jr z, SeqPlay_AbortAndCleanup
 	stdi8 9696, 0
 
-LABEL_F38EC7:
+SeqAcc_ProcessTempo_PartScanLoop:
 	ldmm16 10576, 10574
 	lds bc, 1
 	ldda8 a, 9696
 	and a, 0xF
-	jr z, LABEL_F38EDA
+	jr z, SeqAcc_ProcessTempo_ShiftDone
 	slaa bc
 
-LABEL_F38EDA:
+SeqAcc_ProcessTempo_ShiftDone:
 	andda16 xbc, 10574
-	jr z, LABEL_F38F3F
-	calr LABEL_F39067
+	jr z, SeqAcc_ProcessTempo_NextPart
+	calr SeqPlay_ProcessCurrentPart
 	bitda 7, 10437
-	jr z, LABEL_F38EEF
+	jr z, SeqAcc_ProcessTempo_ClearPartBit
 
 SeqPlay_AbortAndCleanup:
-	calr LABEL_F38FB1
+	calr SeqPlay_SelectStopCommand
 	jrl SeqPlay_FinalizeAndReturn
 
-LABEL_F38EEF:
+SeqAcc_ProcessTempo_ClearPartBit:
 	lds bc, 1
 	ldda8 a, 9696
 	and a, 0xF
-	jr z, LABEL_F38EFC
+	jr z, SeqAcc_ProcessTempo_ClearShiftDone
 	slaa bc
 
-LABEL_F38EFC:
+SeqAcc_ProcessTempo_ClearShiftDone:
 	cpl bc
 	anddm16 10574, xbc
 	ldda8 a, 9696
@@ -596,12 +596,12 @@ LABEL_F38EFC:
 	ldto_berp A, 0xFB
 	stda8 9780, a
 
-LABEL_F38F3F:
+SeqAcc_ProcessTempo_NextPart:
 	ldda8 a, 9696
 	inc 1, a
 	stda8 9696, a
 	cp a, 0x10
-	jrl c, LABEL_F38EC7
+	jrl c, SeqAcc_ProcessTempo_PartScanLoop
 	stdi16 10410, 0
 	stdi16 10420, 0
 	stdi16 10408, 0
@@ -614,7 +614,7 @@ LABEL_F38F3F:
 	call SoundCtrl_SaveAndSendCmd_EE
 	jr SeqPlay_FinalizeAndReturn
 
-LABEL_F38F7E:
+SeqAcc_ProcessTempo_NoActiveParts:
 	stdi16 10410, 0
 	stdi16 10420, 0
 	stdi16 10408, 0
@@ -626,24 +626,24 @@ LABEL_F38F7E:
 	call Part_ReinitAllActive
 
 SeqPlay_FinalizeAndReturn:
-	calr LABEL_F38FF2
+	calr SeqPlay_FinalCleanupAndReset
 	pop_werp 0xFA
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_F38FB1:
+SeqPlay_SelectStopCommand:
 	bitda 4, 10437
-	jr z, LABEL_F38FBC
+	jr z, SeqPlay_SelectStopCommand_Check88
 	ldw wa, 0xF
 	jr SeqPlay_SendStopAndClearParts
 
-LABEL_F38FBC:
+SeqPlay_SelectStopCommand_Check88:
 	cpdi8 36153, 136
-	jr nz, LABEL_F38FC8
+	jr nz, SeqPlay_SelectStopCommand_Default18
 	ldw wa, 0x3B
 	jr SeqPlay_SendStopAndClearParts
 
-LABEL_F38FC8:
+SeqPlay_SelectStopCommand_Default18:
 	ldw wa, 0x18
 
 SeqPlay_SendStopAndClearParts:
@@ -657,16 +657,16 @@ SeqPlay_SendStopAndClearParts:
 	resda 3, 10407
 	ret
 
-LABEL_F38FF2:
-	calr LABEL_F3902B
+SeqPlay_FinalCleanupAndReset:
+	calr SeqPlay_CopyVoicePositionsToParts
 	call SeqBuf_Init
 	cpdi16 61854, 0
-	jr z, LABEL_F3900C
+	jr z, SeqPlay_FinalCleanup_ClearFlags
 	stdi8 4596, 0
 	lds wa, 0
 	call BitMapOut_PrepareAndRender
 
-LABEL_F3900C:
+SeqPlay_FinalCleanup_ClearFlags:
 	resda 3, 10419
 	call Audio_CheckSubsystemReady
 	stdi8 10437, 0
@@ -677,22 +677,22 @@ LABEL_F3900C:
 	stda8 10418, a
 	ret
 
-LABEL_F3902B:
+SeqPlay_CopyVoicePositionsToParts:
 	push_werp 0xFA
 	ldi_berp 0xFB, 1
 
-LABEL_F39031:
+SeqPlay_CopyVoicePos_PartLoop:
 	ldto_berp C, 0xFB
 	dec 1, c
 	lds de, 1
 	ld a, c
 	and a, 0xF
-	jr z, LABEL_F39041
+	jr z, SeqPlay_CopyVoicePos_ShiftDone
 	slaa de
 
-LABEL_F39041:
+SeqPlay_CopyVoicePos_ShiftDone:
 	andda16 xde, 10574
-	jr z, LABEL_F3905A
+	jr z, SeqPlay_CopyVoicePos_LoopNext
 	ld a, c
 	extz wa
 	add wa, wa
@@ -700,14 +700,14 @@ LABEL_F39041:
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	call Part_StealAndReallocVoices
 
-LABEL_F3905A:
+SeqPlay_CopyVoicePos_LoopNext:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr ule, LABEL_F39031
+	jr ule, SeqPlay_CopyVoicePos_PartLoop
 	pop_werp 0xFA
 	ret
 
-LABEL_F39067:
+SeqPlay_ProcessCurrentPart:
 	resda 2, 10363
 	ldmm8 10584, 10440
 	ldmm16 3299, 10441
@@ -716,16 +716,16 @@ LABEL_F39067:
 	extz wa
 	call SeqVoice_CountEventsInBar
 	cpdi8 10362, 0
-	jr nz, LABEL_F39094
-	calr LABEL_F390D8
+	jr nz, SeqPlay_ProcessCurrentPart_Done
+	calr SeqPlay_ProcessCurrentPart_Loop
 	cpdi8 10362, 0
-	jr z, LABEL_F39099
+	jr z, SeqPlay_ProcessCurrentPart_Return
 
-LABEL_F39094:
+SeqPlay_ProcessCurrentPart_Done:
 	setda 7, 10437
 	ret
 
-LABEL_F39099:
+SeqPlay_ProcessCurrentPart_Return:
 	ldmm16 10578, 10415
 	ldda16 xwa, 9830
 	stda8 10580, a
@@ -742,25 +742,25 @@ LABEL_F39099:
 	stda8 10583, a
 	ret
 
-LABEL_F390D8:
+SeqPlay_ProcessCurrentPart_Loop:
 	push xiz
 	stdi8 10362, 0
 	call SeqData_ReadNextByte
 	cpdi8 10584, 0
-	jr nz, LABEL_F390F0
+	jr nz, SeqPlay_ProcessCurrentPart_NextTick
 	cp l, 0x82
 	jr nz, SeqData_HandleEndMark
-	jr LABEL_F39154
+	jr SeqData_HandleEndMark_SetError1
 
-LABEL_F390F0:
+SeqPlay_ProcessCurrentPart_NextTick:
 	cp l, 0x81
 	jr z, SeqData_HandleEndMark
 
-LABEL_F390F5:
+SeqData_SkipCommand_CheckType:
 	cp l, 0x82
-	jr z, LABEL_F39154
+	jr z, SeqData_HandleEndMark_SetError1
 	cp l, 0x84
-	jr z, LABEL_F39154
+	jr z, SeqData_HandleEndMark_SetError1
 	ldda16 xwa, 10415
 	ldfr_werp WA, 0xFA
 	ldda16 xiz, 9830
@@ -769,13 +769,13 @@ LABEL_F390F5:
 	cpda8 l, 10584
 	jr c, SeqData_SkipToNextCommand
 
-LABEL_F39118:
+SeqData_HandleEndMark_NotBarEnd:
 	ldto_werp WA, 0xFA
 	stda16 10415, xwa
 	stda16 9830, xiz
 
-LABEL_F39123:
-	jr LABEL_F39159
+SeqData_HandleEndMark_NotEndMark:
+	jr SeqData_HandleEndMark_Return
 
 SeqData_SkipToNextCommand:
 	call SeqData_AdvancePosition
@@ -783,27 +783,27 @@ SeqData_SkipToNextCommand:
 	bit 7, l
 	jr z, SeqData_SkipToNextCommand
 	cp l, 0x81
-	jr nz, LABEL_F390F5
+	jr nz, SeqData_SkipCommand_CheckType
 
 SeqData_HandleEndMark:
 	cp l, 0x81
-	jr nz, LABEL_F39123
+	jr nz, SeqData_HandleEndMark_NotEndMark
 	ldda16 xwa, 10415
 	ldfr_werp WA, 0xFA
 	ldda16 xiz, 9830
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	cp l, 0x82
-	jr nz, LABEL_F39118
+	jr nz, SeqData_HandleEndMark_NotBarEnd
 
-LABEL_F39154:
+SeqData_HandleEndMark_SetError1:
 	stdi8 10362, 1
 
-LABEL_F39159:
+SeqData_HandleEndMark_Return:
 	pop xiz
 	ret
 
-LABEL_F3915B:
+SeqData_ScanForBarPosition:
 	push xiz
 	stdi8 10362, 0
 	cpdi8 10584, 0
@@ -812,7 +812,7 @@ LABEL_F3915B:
 	cp l, 0x81
 	jr z, Seq_HandleBarMarkEvent
 
-LABEL_F39171:
+SeqData_ScanForBar_CheckMarkers:
 	cp l, 0x82
 	jr z, Seq_HandleBarMarkEvent
 	cp l, 0x84
@@ -827,7 +827,7 @@ LABEL_F39171:
 	ldto_werp WA, 0xFA
 	stda16 10415, xwa
 	stda16 9830, xiz
-	jr LABEL_F391DA
+	jr Seq_HandleBarMark_Return
 
 SeqData_SkipToNextCommand_Fwd:
 	call SeqData_AdvancePosition
@@ -835,69 +835,69 @@ SeqData_SkipToNextCommand_Fwd:
 	bit 7, l
 	jr z, SeqData_SkipToNextCommand_Fwd
 	cp l, 0x81
-	jr nz, LABEL_F39171
+	jr nz, SeqData_ScanForBar_CheckMarkers
 
 Seq_HandleBarMarkEvent:
 	cp l, 0x82
-	jr nz, LABEL_F391DA
+	jr nz, Seq_HandleBarMark_Return
 	ldda16 xwa, 9830
 	cps wa, 5
-	jr z, LABEL_F391C8
+	jr z, Seq_HandleBarMark_AdvanceBlock
 	dec 1, wa
 	stda16 9830, xwa
-	jr LABEL_F391DA
+	jr Seq_HandleBarMark_Return
 
-LABEL_F391C8:
+Seq_HandleBarMark_AdvanceBlock:
 	ldda16 xwa, 10415
 	call PartCtrl_ReadWord_Off1
 	stda16 10415, xhl
 	stdi16 9830, 255
 
-LABEL_F391DA:
+Seq_HandleBarMark_Return:
 	pop xiz
 	ret
 
-LABEL_F391DC:
+SeqPlay_CheckAndReactivate:
 	lda xsp, (xsp - 10)
 	ldda8 a, 10437
 	bit 5, a
-	jr nz, LABEL_F3923A
+	jr nz, SeqPlay_CheckAndReactivate_Return
 	bit 6, a
-	jr nz, LABEL_F3923A
+	jr nz, SeqPlay_CheckAndReactivate_Return
 	bitda 2, 1057
-	jr z, LABEL_F3923A
+	jr z, SeqPlay_CheckAndReactivate_Return
 	lda xwa, (xsp)
 	call TempoRingBuf_ReadEventBytes
 	bitm 7, (xsp + 256)
-	jr nz, LABEL_F39205
+	jr nz, SeqPlay_CheckAndReactivate_CopyPos
 	ldw wa, 0x68
 	call SeqData_SetErrorCode
 
-LABEL_F39205:
+SeqPlay_CheckAndReactivate_CopyPos:
 	lda xbc, (xsp + 1)
 	ld a, (xbc)
 	stda8 10440, a
 	ldmm16 10441, 1052
 	ld a, (xbc)
 	cpda8 a, 1051
-	jr ule, LABEL_F39229
+	jr ule, SeqPlay_CheckAndReactivate_Activate
 	pushw 0x81
 	call TempoRingBuf_WriteByte_Ext
 	inc 2, xsp
 	decdi16 1, 10441
 
-LABEL_F39229:
+SeqPlay_CheckAndReactivate_Activate:
 	ldmm16 8998, 10441
 	lds wa, 1
 	call AppEvent_SendModeToggle
 	lda xwa, (xsp)
 	calr SeqPlay_ActivatePartsAndSendOff
 
-LABEL_F3923A:
+SeqPlay_CheckAndReactivate_Return:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_F3923E:
+SeqPlay_CheckRepeatAndReactivate:
 	bitda 0, 10437
 	ret z
 	bitda 0, 62012
@@ -906,14 +906,14 @@ LABEL_F3923E:
 	ldda16 xwa, 62008
 	ldda16 xbc, 9832
 	cp bc, wa
-	jr nz, LABEL_F3926C
+	jr nz, SeqPlay_CheckRepeat_AltPath
 	stda16 10585, xde
 	ldda16 xwa, 10408
 	andda16 xwa, 10420
 	stda16 10438, xwa
-	jr LABEL_F39287
+	jr SeqPlay_CheckRepeat_ApplyMask
 
-LABEL_F3926C:
+SeqPlay_CheckRepeat_AltPath:
 	cps wa, 1
 	ret nz
 	extz xbc
@@ -924,12 +924,12 @@ LABEL_F3926C:
 	andda16 xwa, 10420
 	stda16 10438, xwa
 
-LABEL_F39287:
+SeqPlay_CheckRepeat_ApplyMask:
 	cpl wa
 	anddm16 61854, xwa
 	jrl SeqPlay_ReactivatePartsAndResume
 
-LABEL_F39290:
+SeqPlay_SyncPlaybackPosition:
 	pushw iz
 	bitda 2, 1057
 	jrl z, SeqPlay_PopIzRet
@@ -957,16 +957,16 @@ LABEL_F39290:
 	ldto_werp DE, 0xE6
 	cpl de
 	bit 6, l
-	jr nz, LABEL_F39327
+	jr nz, SeqPlay_SyncPosition_AltMode
 	ldda16 xwa, 62008
 	ld hl, bc
 	cp bc, wa
-	jr nz, LABEL_F392FA
+	jr nz, SeqPlay_SyncPosition_CheckPrev
 	cp iy, ix
-	jr z, LABEL_F3930C
+	jr z, SeqPlay_SyncPosition_ApplyParts
 	jrl SeqPlay_PopIzRet
 
-LABEL_F392FA:
+SeqPlay_SyncPosition_CheckPrev:
 	cp iy, ix
 	jrl c, SeqPlay_PopIzRet
 	cp_werp IZ, 0xE2
@@ -975,7 +975,7 @@ LABEL_F392FA:
 	cp wa, hl
 	jrl nz, SeqPlay_PopIzRet
 
-LABEL_F3930C:
+SeqPlay_SyncPosition_ApplyParts:
 	ldto_werp WA, 0xE6
 	stda16 10410, xwa
 	ldto_werp WA, 0xE6
@@ -985,25 +985,25 @@ LABEL_F3930C:
 	calr SeqPlay_ReactivatePartsAndResume
 	jr SeqPlay_PopIzRet
 
-LABEL_F39327:
+SeqPlay_SyncPosition_AltMode:
 	ldda16 xwa, 62010
 	ld de, bc
 	cp bc, wa
-	jr z, LABEL_F39342
+	jr z, SeqPlay_SyncPosition_MatchCheck
 	cp iy, ix
 	jr c, SeqPlay_PopIzRet
 	cp_werp IZ, 0xE2
 	jr ugt, SeqPlay_PopIzRet
 	inc 1, de
 	cp de, wa
-	jr z, LABEL_F39346
+	jr z, SeqPlay_SyncPosition_StopAndReset
 	jr SeqPlay_PopIzRet
 
-LABEL_F39342:
+SeqPlay_SyncPosition_MatchCheck:
 	cp iy, ix
 	jr nz, SeqPlay_PopIzRet
 
-LABEL_F39346:
+SeqPlay_SyncPosition_StopAndReset:
 	res 6, l
 	set 5, l
 	stda8 10437, l
@@ -1035,25 +1035,25 @@ SeqPlay_ReactivatePartsAndResume:
 	setda 6, 10437
 	ldi_berp 0xFB, 1
 
-LABEL_F393AA:
+SeqPlay_Reactivate_PartLoop:
 	ldto_berp A, 0xFB
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F393B8
+	jr z, SeqPlay_Reactivate_ShiftDone
 	slaa bc
 
-LABEL_F393B8:
+SeqPlay_Reactivate_ShiftDone:
 	andda16 xbc, 10438
-	jr z, LABEL_F393C7
+	jr z, SeqPlay_Reactivate_LoopNext
 	ldto_berp A, 0xFB
 	extz wa
 	call Part_SendVoiceOffAndCCEvents
 
-LABEL_F393C7:
+SeqPlay_Reactivate_LoopNext:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr ule, LABEL_F393AA
+	jr ule, SeqPlay_Reactivate_PartLoop
 	ldda16 xwa, 10408
 	andda16 xwa, 10420
 	stda16 10410, xwa
@@ -1075,22 +1075,22 @@ SeqAcc_InitPlaybackState:
 	call SeqPlay_CheckRepeatActive
 	stda8 7570, l
 	cpdi16 61854, 0
-	jr nz, LABEL_F39434
+	jr nz, SeqAcc_InitPlayback_HasActiveVoices
 	cpdi16 10408, 0
 	jrl nz, SeqAcc_ClearStepCounter
 	ldda8 a, 10407
 	res 0, a
 	set 1, a
 	stda8 10407, a
-	jr LABEL_F394B0
+	jr SeqAcc_InitPlayback_SetState0
 
-LABEL_F39434:
+SeqAcc_InitPlayback_HasActiveVoices:
 	bitda 1, 12931
-	jr z, LABEL_F39441
+	jr z, SeqAcc_InitPlayback_FindVoices
 	setda 4, 10419
-	jrl LABEL_F394DE
+	jrl SeqAcc_InitPlayback_ReturnZero
 
-LABEL_F39441:
+SeqAcc_InitPlayback_FindVoices:
 	lds wa, 0
 	ldw bc, 0xD
 	call Part_FindVoiceByByte
@@ -1115,47 +1115,47 @@ LABEL_F39441:
 	call BitMapOut_PrepareAndDisplaySimple
 	setda 4, 10412
 	bitda 3, 10407
-	jr nz, LABEL_F39499
-	calr LABEL_F394E1
-	jr LABEL_F3949C
+	jr nz, SeqAcc_InitPlayback_RestartPath
+	calr SeqAcc_InitPlayback_FreshStart
+	jr SeqAcc_InitPlayback_CheckDrum
 
-LABEL_F39499:
-	calr LABEL_F395AF
+SeqAcc_InitPlayback_RestartPath:
+	calr SeqPlay_RestartWithVoiceConfig
 
-LABEL_F3949C:
+SeqAcc_InitPlayback_CheckDrum:
 	resda 4, 10412
 	cpdi16 8982, 0
-	jr nz, LABEL_F394BC
+	jr nz, SeqAcc_InitPlayback_DrumActive
 	cpdi16 10408, 0
 	jr nz, SeqAcc_ClearStepCounter
 
-LABEL_F394B0:
+SeqAcc_InitPlayback_SetState0:
 	stdi8 8956, 0
 
 SeqAcc_ClearStepCounter:
 	stdi8 8968, 0
 	jr SeqPlay_StateSetExit
 
-LABEL_F394BC:
+SeqAcc_InitPlayback_DrumActive:
 	calr SeqPlay_CheckDrumPartAndClearCounters
 	cpdi16 10408, 0
 	jr nz, SeqPlay_StateSetExit
 	cpdi8 7570, 0
-	jr nz, LABEL_F394D5
+	jr nz, SeqAcc_InitPlayback_SetState4
 	stdi8 8956, 1
 	jr SeqPlay_StateSetExit
 
-LABEL_F394D5:
+SeqAcc_InitPlayback_SetState4:
 	stdi8 8956, 4
 
 SeqPlay_StateSetExit:
 	call SeqPlay_ResetStartState
 
-LABEL_F394DE:
+SeqAcc_InitPlayback_ReturnZero:
 	ldb l, 0x0
 	ret
 
-LABEL_F394E1:
+SeqAcc_InitPlayback_FreshStart:
 	resda 0, 10406
 	call AccWrap_PositionClear
 	resda 1, 8974
@@ -1178,13 +1178,13 @@ LABEL_F394E1:
 	res 1, a
 	stda8 10407, a
 	cpdi8 7570, 1
-	jr nz, LABEL_F39552
+	jr nz, SeqAcc_InitPlayback_ScanParts
 	ldda16 xwa, 9000
 	lds bc, 0
 	call Voice_ScanAvailableChannel
 	call SeqPart_InitVoiceChannelConfig
 
-LABEL_F39552:
+SeqAcc_InitPlayback_ScanParts:
 	lds wa, 0
 	lds bc, 0
 	call Voice_ScanAvailableChannel
@@ -1209,10 +1209,10 @@ LABEL_F39552:
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F39593
+	jr z, SeqAcc_InitPlayback_DrumShiftDone
 	slaa bc
 
-LABEL_F39593:
+SeqAcc_InitPlayback_DrumShiftDone:
 	andda16 xbc, 61854
 	jr z, SeqPlay_MidiTimingJP
 	extz hl
@@ -1226,7 +1226,7 @@ LABEL_F39593:
 SeqPlay_MidiTimingJP:
 	jp Seq_SyncPositionAndOutputMIDITiming
 
-LABEL_F395AF:
+SeqPlay_RestartWithVoiceConfig:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
 	stdi8 1073, 0
@@ -1276,10 +1276,10 @@ SeqPlay_ConfigureVoiceChannels:
 	calr SeqPlay_AssignChordVoices
 	call LABEL_F487DF
 	bitda 0, 10406
-	jr z, LABEL_F39651
+	jr z, SeqPlay_ConfigVoice_CheckActive
 	setda 1, 10407
 
-LABEL_F39651:
+SeqPlay_ConfigVoice_CheckActive:
 	ldmm8 9010, 1075
 	call SeqMode_SendStatusUpdate
 	ldmm16 9008, 1052
@@ -1316,7 +1316,7 @@ SeqPlay_MidiTimingSync:
 	pop_werp 0xFA
 	ret
 
-LABEL_F396A8:
+SeqPlay_ProcessChannelsAndDrum:
 	dec 6, xsp
 	push xiz
 	resda 0, 1115
@@ -1593,17 +1593,17 @@ SeqPlay_CheckDrumPartAndClearCounters:
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F3994F
+	jr z, SeqPlay_DrumPart_ShiftDone
 	slaa bc
 
-LABEL_F3994F:
+SeqPlay_DrumPart_ShiftDone:
 	ld wa, bc
 	andda16 xbc, 61854
-	jr nz, LABEL_F3995D
+	jr nz, SeqPlay_DrumPart_SetActiveFlag
 	andda16 xwa, 8980
 	jr z, SeqPlay_ClearCountersAndProcess
 
-LABEL_F3995D:
+SeqPlay_DrumPart_SetActiveFlag:
 	setda 6, 10412
 
 SeqPlay_ClearCountersAndProcess:
@@ -1611,7 +1611,7 @@ SeqPlay_ClearCountersAndProcess:
 	stdi8 10338, 0
 	stdi8 10340, 0
 	stdi8 10342, 0
-	jrl LABEL_F396A8
+	jrl SeqPlay_ProcessChannelsAndDrum
 
 SeqPlay_IterateAllChannels:
 	lda xsp, (xsp - 22)
@@ -1621,20 +1621,20 @@ SeqPlay_IterateAllChannels:
 	call LABEL_F3DAD7
 	ld (xsp + 2), 0x1
 
-LABEL_F39990:
+SeqPlay_IterateCh_PartLoop:
 	ld a, (xsp + 2)
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F3999E
+	jr z, SeqPlay_IterateCh_ShiftDone
 	slaa bc
 
-LABEL_F3999E:
+SeqPlay_IterateCh_ShiftDone:
 	andda16 xbc, 61854
 	jrl nz, SeqPlay_CheckChannelContinue
 	jrl SeqPlay_IncrLoopCounter
 
-LABEL_F399A8:
+SeqPlay_IterateCh_ProcessChannel:
 	ld a, (xsp + 2)
 	extz wa
 	lda xix, (xsp + 12)
@@ -1661,7 +1661,7 @@ LABEL_F399A8:
 	ld xiy, xix
 	ldi_berp 0xE2, 0
 
-LABEL_F399EA:
+SeqPlay_IterateCh_CopyDataLoop:
 	ldto_berp L, 0xE2
 	extz hl
 	inc 2, hl
@@ -1679,26 +1679,26 @@ LABEL_F399EA:
 	lda_dri3 XHL, 0x07, 0xF4, 0xE8
 	inc1_berp 0xE2
 	cpi_berp 0xE2, 6
-	jr c, LABEL_F399EA
+	jr c, SeqPlay_IterateCh_CopyDataLoop
 	ld e, (xix)
 	ld c, e
 	and c, 0xF0
 	ldfr_berp C, 0xFB
 	cp e, 0x82
-	jr nz, LABEL_F39A43
+	jr nz, SeqPlay_IterateCh_CheckEventType
 	lds bc, 1
 	ld a, (xsp + 10)
 	and a, 0xF
-	jr z, LABEL_F39A36
+	jr z, SeqPlay_IterateCh_ClearPartBit
 	slaa bc
 
-LABEL_F39A36:
+SeqPlay_IterateCh_ClearPartBit:
 	cpl bc
 	anddm16 8982, xbc
 	anddm16 8980, xbc
 	jrl SeqPlay_IncrLoopCounter
 
-LABEL_F39A43:
+SeqPlay_IterateCh_CheckEventType:
 	cp e, 0x81
 	jrl z, SeqPlay_IncrLoopCounter
 	cp e, 0x84
@@ -1706,25 +1706,25 @@ LABEL_F39A43:
 	cp_erpb 0xFB, 0x90
 	jrl z, SeqPlay_IncrLoopCounter
 	cp e, 0x85
-	jr nz, LABEL_F39A6A
+	jr nz, SeqPlay_IterateCh_CheckEvent86
 	setda 1, 10407
 	cpdi8 7572, 0
-	jrl z, LABEL_F39B6B
-	jrl LABEL_F39B76
+	jrl z, SeqPlay_IterateCh_TempoFlag0
+	jrl SeqPlay_IterateCh_TempoFlag1
 
-LABEL_F39A6A:
+SeqPlay_IterateCh_CheckEvent86:
 	cp e, 0x86
-	jr nz, LABEL_F39A7E
+	jr nz, SeqPlay_IterateCh_CheckControlChange
 	resda 1, 10407
 	cpdi8 7572, 0
-	jrl z, LABEL_F39B6B
-	jrl LABEL_F39B76
+	jrl z, SeqPlay_IterateCh_TempoFlag0
+	jrl SeqPlay_IterateCh_TempoFlag1
 
-LABEL_F39A7E:
+SeqPlay_IterateCh_CheckControlChange:
 	lda xhl, (xix + 4)
 	lda xbc, (xix + 5)
 	cp_erpb 0xFB, 0xB0
-	jrl nz, LABEL_F39B0C
+	jrl nz, SeqPlay_IterateCh_NotControlChange
 	ld a, (xsp + 2)
 	cpda8 a, 8988
 	jrl nz, SeqCh_DispatchMidiEvent
@@ -1732,7 +1732,7 @@ LABEL_F39A7E:
 	jr nz, SeqCh_DispatchMidiEvent
 	ld a, (xix + 3)
 	cps a, 6
-	jr nz, LABEL_F39AC0
+	jr nz, SeqPlay_IterateCh_CtrlChange5
 	bitm 2, (xbc)
 	jr z, SeqCh_DispatchMidiEvent
 	bitm 2, (xhl)
@@ -1745,12 +1745,12 @@ LABEL_F39A7E:
 	ld wa, hl
 	jr SeqCh_AllocSlotAndDispatch
 
-LABEL_F39AC0:
+SeqPlay_IterateCh_CtrlChange5:
 	cps a, 5
 	jr nz, SeqCh_DispatchMidiEvent
 	ld a, (xbc)
 	bit 2, a
-	jr z, LABEL_F39AE5
+	jr z, SeqPlay_IterateCh_CtrlChangeBit3
 	bitm 2, (xhl)
 	jr z, SeqCh_DispatchMidiEvent
 	setda 1, 8974
@@ -1761,7 +1761,7 @@ LABEL_F39AC0:
 	ld wa, hl
 	jr SeqCh_AllocSlotAndDispatch
 
-LABEL_F39AE5:
+SeqPlay_IterateCh_CtrlChangeBit3:
 	bit 3, a
 	jr z, SeqCh_DispatchMidiEvent
 	bitm 3, (xhl)
@@ -1778,7 +1778,7 @@ SeqCh_AllocSlotAndDispatch:
 	stda8 8972, l
 	jr SeqCh_DispatchMidiEvent
 
-LABEL_F39B0C:
+SeqPlay_IterateCh_NotControlChange:
 	cp e, 0xD3
 	jr nz, SeqCh_DispatchMidiEvent
 	setda 6, 10413
@@ -1820,7 +1820,7 @@ SeqCh_DispatchChannelConfigLoad:
 	ld a, (xsp + 2)
 	extz wa
 
-LABEL_F39B6B:
+SeqPlay_IterateCh_TempoFlag0:
 	call SeqCh_LoadChannelConfig
 	jr SeqPlay_CheckChannelContinue
 
@@ -1828,7 +1828,7 @@ LABEL_F39B71:
 	ld a, (xsp + 2)
 	extz wa
 
-LABEL_F39B76:
+SeqPlay_IterateCh_TempoFlag1:
 	call SeqData_ParseSequenceStream
 
 SeqPlay_CheckChannelContinue:
@@ -1841,12 +1841,12 @@ SeqPlay_CheckChannelContinue:
 
 LABEL_F39B88:
 	andda16 xbc, 8982
-	jrl nz, LABEL_F399A8
+	jrl nz, SeqPlay_IterateCh_ProcessChannel
 
 SeqPlay_IncrLoopCounter:
 	incm8 1, (xsp + 2)
 	cp (xsp + 2), 0x10
-	jrl ule, LABEL_F39990
+	jrl ule, SeqPlay_IterateCh_PartLoop
 	pop_werp 0xFA
 	lda xsp, (xsp + 22)
 	ret
@@ -1966,33 +1966,33 @@ SeqPlay_InitializePlayback:
 	stdi8 7572, 0
 	ldda8 a, 36150
 	cp a, 0x87
-	jr z, LABEL_F39CCC
+	jr z, SeqPlay_Init_AccMode87_88
 	cp a, 0x88
-	jr nz, LABEL_F39CD5
+	jr nz, SeqPlay_Init_CheckRepeatMode
 
-LABEL_F39CCC:
-	call LABEL_F38B45
+SeqPlay_Init_AccMode87_88:
+	call SeqPlay_ResetPlaybackState
 	ldfr_berp L, 0xFB
 	jr SeqPlay_FindVoicesAndReturn
 
-LABEL_F39CD5:
+SeqPlay_Init_CheckRepeatMode:
 	bitda 1, 10417
-	jr nz, LABEL_F39CE3
-	calr LABEL_F39CF3
+	jr nz, SeqPlay_Init_RepeatMode
+	calr SeqPlay_InitFreshPlayback
 	ldfr_berp L, 0xFB
 	jr SeqPlay_FindVoicesAndReturn
 
-LABEL_F39CE3:
-	calr LABEL_F39DFF
+SeqPlay_Init_RepeatMode:
+	calr SeqPlay_InitResumePlayback
 	ldfr_berp L, 0xFB
 
 SeqPlay_FindVoicesAndReturn:
-	calr LABEL_F39EF0
+	calr SeqPlay_FindSpecialVoices
 	ldto_berp L, 0xFB
 	pop_werp 0xFA
 	ret
 
-LABEL_F39CF3:
+SeqPlay_InitFreshPlayback:
 	calr SeqAcc_InitPlaybackState
 	ldda8 a, 10418
 	res 2, a
@@ -2003,42 +2003,42 @@ LABEL_F39CF3:
 	call Audio_CheckSubsystemReady
 	resda 3, 10407
 	cpdi16 10408, 0
-	jrl z, LABEL_F39DFC
+	jrl z, SeqPlay_InitFresh_Return
 	stdi16 8998, 0
 	stdi16 8954, 65535
 	ldb l, 0x1
 	ldb c, 0x0
 
-LABEL_F39D2C:
+SeqPlay_InitFresh_PartClearLoop:
 	lds de, 1
 	ld a, c
 	and a, 0xF
-	jr z, LABEL_F39D37
+	jr z, SeqPlay_InitFresh_PartShiftDone
 	slaa de
 
-LABEL_F39D37:
+SeqPlay_InitFresh_PartShiftDone:
 	andda16 xde, 10408
-	jr z, LABEL_F39D52
+	jr z, SeqPlay_InitFresh_PartLoopNext
 	ld a, l
 	extz wa
 	dec 1, a
 	lds de, 1
 	and a, 0xF
-	jr z, LABEL_F39D4C
+	jr z, SeqPlay_InitFresh_ClearBit
 	slaa de
 
-LABEL_F39D4C:
+SeqPlay_InitFresh_ClearBit:
 	cpl de
 	anddm16 8980, xde
 
-LABEL_F39D52:
+SeqPlay_InitFresh_PartLoopNext:
 	inc 1, l
 	inc 1, c
 	cp l, 0x10
-	jr ule, LABEL_F39D2C
+	jr ule, SeqPlay_InitFresh_PartClearLoop
 	ldda8 a, 10418
 	bit 0, a
-	jr z, LABEL_F39D7B
+	jr z, SeqPlay_InitFresh_SetPosition
 	set 1, a
 	stda8 10418, a
 	ldda16 xwa, 9832
@@ -2046,7 +2046,7 @@ LABEL_F39D52:
 	setda 3, 10419
 	call Audio_CheckSubsystemReady
 
-LABEL_F39D7B:
+SeqPlay_InitFresh_SetPosition:
 	stdi16 9008, 0
 	call NoteEditSy_SendModeScrollReset
 	ei 6
@@ -2057,12 +2057,12 @@ LABEL_F39D7B:
 	stda8 9010, a
 	call SeqMode_SendStatusUpdate
 	cpdi16 61854, 0
-	jr z, LABEL_F39DB2
+	jr z, SeqPlay_InitFresh_NoVoices
 	setda 3, 10419
 	call Audio_CheckSubsystemReady
-	jr LABEL_F39DCA
+	jr SeqPlay_InitFresh_TempoInit
 
-LABEL_F39DB2:
+SeqPlay_InitFresh_NoVoices:
 	stdi16 8980, 0
 	ldda8 a, 10407
 	set 0, a
@@ -2070,22 +2070,22 @@ LABEL_F39DB2:
 	stda8 10407, a
 	call SeqBuf_Init
 
-LABEL_F39DCA:
+SeqPlay_InitFresh_TempoInit:
 	call Audio_CheckSubsystemReady
 	call TempoRingBuf_Init
 	call BitMapOut_ComputeRegionDelta
 	bitda 0, 10418
-	jr nz, LABEL_F39DEC
+	jr nz, SeqPlay_InitFresh_State8orC
 	cpdi16 61854, 0
-	jr z, LABEL_F39DE8
+	jr z, SeqPlay_InitFresh_StateB
 	ldb a, 0xB
 	jr SeqPlay_StoreChannelVal
 
-LABEL_F39DE8:
+SeqPlay_InitFresh_StateB:
 	ldb a, 0x7
 	jr SeqPlay_StoreChannelVal
 
-LABEL_F39DEC:
+SeqPlay_InitFresh_State8orC:
 	ldb a, 0x8
 	cpdi16 61854, 0
 	jr z, SeqPlay_StoreChannelVal
@@ -2094,11 +2094,11 @@ LABEL_F39DEC:
 SeqPlay_StoreChannelVal:
 	stda8 8956, a
 
-LABEL_F39DFC:
+SeqPlay_InitFresh_Return:
 	ldb l, 0x0
 	ret
 
-LABEL_F39DFF:
+SeqPlay_InitResumePlayback:
 	push xiz
 	calr SeqAcc_InitPlaybackState
 	ldda8 a, 10418
@@ -2107,23 +2107,23 @@ LABEL_F39DFF:
 	res 7, a
 	stda8 10418, a
 	cpdi16 10408, 0
-	jrl z, LABEL_F39EEC
+	jrl z, SeqPlay_InitResume_Return
 	ldmm16 8998, 1052
 	stdi16 8954, 65535
 	call LABEL_F3EFC5
 	ldi_berp 0xFB, 1
 
-LABEL_F39E30:
+SeqPlay_InitResume_PartLoop:
 	ldto_berp A, 0xFB
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F39E3E
+	jr z, SeqPlay_InitResume_ShiftDone
 	slaa bc
 
-LABEL_F39E3E:
+SeqPlay_InitResume_ShiftDone:
 	andda16 xbc, 10408
-	jr z, LABEL_F39E56
+	jr z, SeqPlay_InitResume_LoopNext
 	ldto_berp A, 0xFB
 	stda8 8986, a
 	ldto_berp A, 0xFB
@@ -2131,23 +2131,23 @@ LABEL_F39E3E:
 	lds bc, 1
 	call Chan_SetActiveBit
 
-LABEL_F39E56:
+SeqPlay_InitResume_LoopNext:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr ule, LABEL_F39E30
+	jr ule, SeqPlay_InitResume_PartLoop
 	ldda8 a, 10418
 	ld c, a
 	res 1, c
 	ld a, c
 	stda8 10418, c
 	bit 0, c
-	jr z, LABEL_F39E82
+	jr z, SeqPlay_InitResume_SetFlags
 	set 1, a
 	stda8 10418, a
 	ldda16 xwa, 9832
 	stda16 9014, xwa
 
-LABEL_F39E82:
+SeqPlay_InitResume_SetFlags:
 	setda 3, 10419
 	call Audio_CheckSubsystemReady
 	ldmm16 9008, 1052
@@ -2170,17 +2170,17 @@ LABEL_F39E82:
 	lds bc, 1
 	call Chan_SetActiveBit
 	bitda 0, 10418
-	jr nz, LABEL_F39EE0
+	jr nz, SeqPlay_InitResume_State10or14
 	cps iz, 0
-	jr z, LABEL_F39EDC
+	jr z, SeqPlay_InitResume_State0F
 	ldb a, 0x13
 	jr SeqPlay_StoreCheckValue
 
-LABEL_F39EDC:
+SeqPlay_InitResume_State0F:
 	ldb a, 0xF
 	jr SeqPlay_StoreCheckValue
 
-LABEL_F39EE0:
+SeqPlay_InitResume_State10or14:
 	ldb a, 0x10
 	cps iz, 0
 	jr z, SeqPlay_StoreCheckValue
@@ -2189,12 +2189,12 @@ LABEL_F39EE0:
 SeqPlay_StoreCheckValue:
 	stda8 8956, a
 
-LABEL_F39EEC:
+SeqPlay_InitResume_Return:
 	ldb l, 0x0
 	pop xiz
 	ret
 
-LABEL_F39EF0:
+SeqPlay_FindSpecialVoices:
 	lds wa, 0
 	ldw bc, 0xC
 	call Part_FindVoiceByByte
@@ -2220,18 +2220,18 @@ SeqPlay_ClearPositionAndFlags:
 	resda 1, 10419
 	ret
 
-LABEL_F39F39:
+SeqPlay_SaveAndPrepareState:
 	push_werp 0xFA
 	calr SeqPlay_PreparePlaybackState
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F39F4D
+	jr z, SeqPlay_SaveState_CheckActive
 	resda 1, 10419
 	jr SeqPlay_ReassignVoicesAlt
 
-LABEL_F39F4D:
+SeqPlay_SaveState_CheckActive:
 	bitda 0, 10437
-	jr z, LABEL_F39F79
+	jr z, SeqPlay_SaveState_NoActiveParts
 	resda 1, 10419
 	ldda8 a, 8956
 	extz wa
@@ -2243,7 +2243,7 @@ LABEL_F39F4D:
 	call Audio_CheckSubsystemReady
 	jr SeqPlay_ReassignVoicesAlt
 
-LABEL_F39F79:
+SeqPlay_SaveState_NoActiveParts:
 	resda 3, 10419
 	call Audio_CheckSubsystemReady
 	bitda 1, 10419
@@ -2385,7 +2385,7 @@ SeqPlay_PreparePlaybackState:
 	call NoteEditSy_SendModeScrollReset
 
 LABEL_F3A0D5:
-	call LABEL_F3923E
+	call SeqPlay_CheckRepeatAndReactivate
 	call LABEL_F3E250
 	cpdi8 36148, 19
 	jr z, LABEL_F3A0E8
@@ -2511,17 +2511,17 @@ SeqPlay_ProcessVoiceAndNotes:
 	push xiz
 	ldda8 a, 36150
 	cp a, 0x87
-	jr z, LABEL_F3A20C
+	jr z, SeqPlay_ProcessVoice_AccMode
 	cp a, 0x88
-	jr nz, LABEL_F3A213
+	jr nz, SeqPlay_ProcessVoice_CheckActive
 
-LABEL_F3A20C:
+SeqPlay_ProcessVoice_AccMode:
 	call SeqAcc_ProcessTempoEvents
-	jrl LABEL_F3A33B
+	jrl SeqPlay_ProcessVoice_Return
 
-LABEL_F3A213:
+SeqPlay_ProcessVoice_CheckActive:
 	cpdi16 10410, 0
-	jr nz, LABEL_F3A289
+	jr nz, SeqPlay_ProcessVoice_ReadTempo
 	ldda8 a, 10430
 	cp a, 0xFF
 	jr z, SeqPlay_StopAndCleanup
@@ -2554,25 +2554,25 @@ SeqPlay_StopAndCleanup:
 	call Audio_CheckSubsystemReady
 	call SeqBuffer_ClearAndInitIteration
 	call Audio_CheckSubsystemReady
-	jrl LABEL_F3A33B
+	jrl SeqPlay_ProcessVoice_Return
 
-LABEL_F3A289:
+SeqPlay_ProcessVoice_ReadTempo:
 	ldda16 xwa, 9012
 	stda16 9832, xwa
 	lda xwa, (xsp + 8)
 	calr TempoRingBuf_ReadEventBytes
 	cps l, 0
-	jr z, LABEL_F3A2AB
+	jr z, SeqPlay_ProcessVoice_ValidateData
 
-LABEL_F3A29B:
+SeqPlay_ProcessVoice_TempoLoop:
 	lda xwa, (xsp + 8)
 	calr Seq_DispatchVoiceConfigEvent
 	lda xwa, (xsp + 8)
 	calr TempoRingBuf_ReadEventBytes
 	cps l, 0
-	jr nz, LABEL_F3A29B
+	jr nz, SeqPlay_ProcessVoice_TempoLoop
 
-LABEL_F3A2AB:
+SeqPlay_ProcessVoice_ValidateData:
 	lda xiz, (xsp + 4)
 	ei 6
 	ldmw2 (xiz), 0x41C
@@ -2585,15 +2585,15 @@ LABEL_F3A2AB:
 	ldw wa, 0x32
 	calr SeqData_ValidateProcess
 	bitda 1, 10417
-	jr z, LABEL_F3A2D6
+	jr z, SeqPlay_ProcessVoice_RepeatPath
 	calr LABEL_F3D2A6
-	jr LABEL_F3A2DD
+	jr SeqPlay_ProcessVoice_Cleanup
 
-LABEL_F3A2D6:
+SeqPlay_ProcessVoice_RepeatPath:
 	call Part_CopyVoiceDataToAllChannels
 	calr SeqPlay_ActivateAllChannels
 
-LABEL_F3A2DD:
+SeqPlay_ProcessVoice_Cleanup:
 	stdi8 7522, 0
 	stdi16 10420, 0
 	ldda8 a, 10418
@@ -2610,32 +2610,32 @@ LABEL_F3A2DD:
 	call SeqBuffer_ClearAndInitIteration
 	stdi8 10430, 255
 	bitda 1, 9834
-	jr nz, LABEL_F3A333
+	jr nz, SeqPlay_ProcessVoice_PartChange
 	cpdi8 36148, 10
-	jr z, LABEL_F3A337
+	jr z, SeqPlay_ProcessVoice_ClearBit
 	ldw wa, 0xA
 	call UI_PostPartChangeEvent
-	jr LABEL_F3A337
+	jr SeqPlay_ProcessVoice_ClearBit
 
-LABEL_F3A333:
+SeqPlay_ProcessVoice_PartChange:
 	call LABEL_F994EA
 
-LABEL_F3A337:
+SeqPlay_ProcessVoice_ClearBit:
 	resda 1, 9834
 
-LABEL_F3A33B:
+SeqPlay_ProcessVoice_Return:
 	ldb l, 0x0
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
 
-LABEL_F3A342:
+SeqPlay_ProcessNoteAndTempo:
 	lda xsp, (xsp - 10)
 	push xiz
 	ldw (xsp + 4), 0x0
 	calr SeqNote_ProcessNoteOn
 	cps l, 0
-	jr nz, LABEL_F3A3CC
+	jr nz, SeqPlay_ReadTempo_Return
 	cpdi16 10408, 0
 	jr z, SeqPlay_ReadTempoEvents_ReturnZero
 	ldda8 a, 10437
@@ -2648,7 +2648,7 @@ SeqPlay_ReadTempoEvents:
 	lda xwa, (xsp + 6)
 	calr TempoRingBuf_ReadEventBytes
 	cps l, 0
-	jr nz, LABEL_F3A384
+	jr nz, SeqPlay_ReadTempo_HasData
 	cpdi8 7570, 1
 	jr nz, SeqPlay_ReadTempoEvents_ReturnZero
 	bitda 1, 10417
@@ -2656,7 +2656,7 @@ SeqPlay_ReadTempoEvents:
 	calr LABEL_F3A56B
 	jr SeqPlay_ReadTempoEvents_ReturnZero
 
-LABEL_F3A384:
+SeqPlay_ReadTempo_HasData:
 	cpdi8 7570, 1
 	jr nz, SeqPlay_DispatchVoiceEvt
 	ei 6
@@ -2668,22 +2668,22 @@ LABEL_F3A384:
 	cp wa, iz
 	jr ugt, SeqPlay_DispatchVoiceEvt
 	cp wa, iz
-	jr nz, LABEL_F3A3AC
+	jr nz, SeqPlay_ReadTempo_Reconfigure
 	cp_erpb 0xFB, 0x5F
 	jr nz, SeqPlay_DispatchVoiceEvt
 
-LABEL_F3A3AC:
+SeqPlay_ReadTempo_Reconfigure:
 	calr SeqPlay_ReconfigureVoices
 
 SeqPlay_DispatchVoiceEvt:
 	lda xwa, (xsp + 6)
 	calr Seq_DispatchVoiceConfigEvent
 	cpdi8 7528, 0
-	jr nz, LABEL_F3A3C0
+	jr nz, SeqPlay_ReadTempo_CheckLoop
 	ldb l, 0x3
-	jr LABEL_F3A3CC
+	jr SeqPlay_ReadTempo_Return
 
-LABEL_F3A3C0:
+SeqPlay_ReadTempo_CheckLoop:
 	incm 1, (xsp + 4)
 	cpw (xsp + 4), 0xA
 	jr c, SeqPlay_ReadTempoEvents
@@ -2691,7 +2691,7 @@ LABEL_F3A3C0:
 SeqPlay_ReadTempoEvents_ReturnZero:
 	ldb l, 0x0
 
-LABEL_F3A3CC:
+SeqPlay_ReadTempo_Return:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
@@ -2701,9 +2701,9 @@ TempoRingBuf_ReadEventBytes:
 	push xiz
 	ld (xsp + 4), xwa
 	ldi_berp 0xFB, 0
-	jr LABEL_F3A3FA
+	jr TempoRingBuf_Read_NextByte
 
-LABEL_F3A3DC:
+TempoRingBuf_Read_ProcessByte:
 	ldto_berp C, 0xF8
 	ld xwa, (xsp + 4)
 	ld (xwa), c
@@ -2712,30 +2712,30 @@ LABEL_F3A3DC:
 	call LABEL_F3EAF0
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr nz, LABEL_F3A404
+	jr nz, TempoRingBuf_Read_CheckCount
 	lds wa, 1
 	call SeqData_SetErrorCode
 
-LABEL_F3A3FA:
+TempoRingBuf_Read_NextByte:
 	call TempoRingBuf_ReadByte
 	ld iz, hl
 	cps iz, 0
-	jr ge, LABEL_F3A3DC
+	jr ge, TempoRingBuf_Read_ProcessByte
 
-LABEL_F3A404:
+TempoRingBuf_Read_CheckCount:
 	ldi_berp 0xFA, 1
 	cpi_berp 0xFB, 1
-	jr ule, LABEL_F3A437
+	jr ule, TempoRingBuf_Read_Return
 
-LABEL_F3A40C:
+TempoRingBuf_Read_ExtLoop:
 	call TempoRingBuf_ReadByte
 	ld iz, hl
 	cps iz, 0
-	jr ge, LABEL_F3A41C
+	jr ge, TempoRingBuf_Read_StoreByte
 	lds wa, 2
 	call SeqData_SetErrorCode
 
-LABEL_F3A41C:
+TempoRingBuf_Read_StoreByte:
 	ldto_berp C, 0xFA
 	extz bc
 	ldto_berp E, 0xF8
@@ -2744,9 +2744,9 @@ LABEL_F3A41C:
 	inc1_berp 0xFA
 	ldto_berp A, 0xFA
 	cp_berp A, 0xFB
-	jr c, LABEL_F3A40C
+	jr c, TempoRingBuf_Read_ExtLoop
 
-LABEL_F3A437:
+TempoRingBuf_Read_Return:
 	ldto_berp L, 0xFB
 	pop xiz
 	inc 4, xsp
@@ -2759,14 +2759,14 @@ Seq_DispatchVoiceConfigEvent:
 	ldmi16 (xsp + 6), 0x1D92
 	ldmw2 (xsp + 8), 0x2326
 	cp (xiz), 0x81
-	jr nz, LABEL_F3A45F
+	jr nz, SeqVoice_Dispatch_CheckTiming
 	ld a, (xsp + 6)
 	extz wa
 	ld xbc, xiz
 	calr LABEL_F3B8AA
 	jrl SeqVoice_ReturnFalse
 
-LABEL_F3A45F:
+SeqVoice_Dispatch_CheckTiming:
 	cp (xsp + 6), 0x1
 	jr nz, SeqVoice_DispatchByEventType
 	ldda16 xwa, 9006
@@ -2780,24 +2780,24 @@ SeqVoice_DispatchByEventType:
 	ld c, (xiz + 1)
 	extz bc
 	cp (xiz), 0x80
-	jr z, LABEL_F3A48C
+	jr z, SeqVoice_Dispatch_ProcessVoice
 	cp (xiz), 0x85
-	jr z, LABEL_F3A48C
+	jr z, SeqVoice_Dispatch_ProcessVoice
 	cp (xiz), 0x86
-	jr nz, LABEL_F3A4A0
+	jr nz, SeqVoice_Dispatch_CheckOtherTypes
 
-LABEL_F3A48C:
+SeqVoice_Dispatch_ProcessVoice:
 	cp (xsp + 6), 0x1
-	jr nz, LABEL_F3A498
+	jr nz, SeqVoice_Dispatch_CallBBE1
 	ld wa, (xsp + 8)
 	calr VoiceConfig_FindChannelMatch
 
-LABEL_F3A498:
+SeqVoice_Dispatch_CallBBE1:
 	ld xwa, xiz
 	calr LABEL_F3BBE1
 	jrl SeqVoice_ReturnFalse
 
-LABEL_F3A4A0:
+SeqVoice_Dispatch_CheckOtherTypes:
 	ld a, (xiz)
 	and a, 0xF0
 	cp a, 0xB0
@@ -3240,33 +3240,33 @@ SeqNote_ProcessNoteOn:
 	push xiz
 	ld (xsp + 6), 0x0
 	cpdi16 10420, 0
-	jr nz, LABEL_F3A87C
+	jr nz, SeqNote_NoteOn_HasParts
 	ldb l, 0x0
-	jrl LABEL_F3AD25
+	jrl SeqNote_ProcessNoteOn_Return
 
-LABEL_F3A87C:
+SeqNote_NoteOn_HasParts:
 	bitda 5, 10419
-	jr z, LABEL_F3A89E
+	jr z, SeqNote_NoteOn_CheckRepeat
 	ei 6
 	ldda8 a, 1051
 	inc 1, a
 	stda8 1051, a
 	cp a, 0x60
-	jr c, LABEL_F3A89C
+	jr c, SeqNote_NoteOn_TickDone
 	stdi8 1051, 0
 	incdi16 1, 1052
 
-LABEL_F3A89C:
+SeqNote_NoteOn_TickDone:
 	ei 0
 
-LABEL_F3A89E:
+SeqNote_NoteOn_CheckRepeat:
 	cpdi8 7572, 1
-	jr nz, LABEL_F3A8AE
-	calr LABEL_F3AD2A
+	jr nz, SeqNote_NoteOn_ReadPosition
+	calr SeqNote_ProcessRepeatNote
 	ld (xsp + 6), l
 	jrl SeqNote_LoadNoteParam_Return
 
-LABEL_F3A8AE:
+SeqNote_NoteOn_ReadPosition:
 	ei 6
 	ldmw2 (xsp + 4), 0x41C
 	ldmi16 (xsp + 8), 0x41B
@@ -3277,11 +3277,11 @@ LABEL_F3A8AE:
 	cp wa, (xsp + 4)
 	jr ugt, SeqNote_FindExtraChannel
 	cp wa, (xsp + 4)
-	jr nz, LABEL_F3A8D8
+	jr nz, SeqNote_NoteOn_Reconfigure
 	cp (xsp + 8), 0x5F
 	jr nz, SeqNote_FindExtraChannel
 
-LABEL_F3A8D8:
+SeqNote_NoteOn_Reconfigure:
 	calr SeqPlay_ReconfigureVoices
 	stdi8 7530, 0
 	stdi8 10338, 0
@@ -3292,18 +3292,18 @@ SeqNote_FindExtraChannel:
 	cpdi16 10408, 0
 	jr z, SeqNote_AllocateMainChannel
 
-LABEL_F3A8F7:
+SeqNote_FindExtra_CheckPosition:
 	ldada xbc, 9016
 	ld_sriw WA, (xbc + 0x0080)
 	cp (xsp + 4), wa
 	jr c, SeqNote_AllocateMainChannel
 	cp (xsp + 4), wa
-	jr nz, LABEL_F3A914
+	jr nz, SeqNote_FindExtra_ProcessChannel
 	ld a, (xsp + 8)
 	cp_srib_rm A, 0xE5, 0x83, 0x00
 	jr c, SeqNote_AllocateMainChannel
 
-LABEL_F3A914:
+SeqNote_FindExtra_ProcessChannel:
 	ldw wa, 0x11
 	calr SeqNote_ProcessForChannel
 	ld (xsp + 6), l
@@ -3312,7 +3312,7 @@ LABEL_F3A914:
 	ldw wa, 0x11
 	call SeqCh_LoadChannelConfig
 	cpdi16 10408, 0
-	jr nz, LABEL_F3A8F7
+	jr nz, SeqNote_FindExtra_CheckPosition
 
 SeqNote_AllocateMainChannel:
 	ldda16 xwa, 7542
@@ -3399,10 +3399,10 @@ SeqNote_AllocateBassChannel:
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F3AA2F
+	jr z, SeqNote_AllocBass_SetBitAndFlags
 	slaa bc
 
-LABEL_F3AA2F:
+SeqNote_AllocBass_SetBitAndFlags:
 	orddm16 8982, xbc
 	stdi8 7530, 1
 	stdi8 10340, 1
@@ -3442,44 +3442,44 @@ SeqNote_AllocateSubChannel:
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F3AAA5
+	jr z, SeqNote_AllocSub_SetBitAndFlags
 	slaa bc
 
-LABEL_F3AAA5:
+SeqNote_AllocSub_SetBitAndFlags:
 	orddm16 8982, xbc
 	stdi8 7530, 1
 	stdi8 10342, 1
 
 SeqNote_ProcessCurrentChannel:
 	cpdi8 8988, 255
-	jr nz, LABEL_F3AAF3
+	jr nz, SeqNote_ProcessCurrent_DrumCheck
 	jr VoiceConfig_SlotCheck
 
-LABEL_F3AABC:
+SeqNote_ProcessCurrent_ComparePos:
 	ldada xwa, 9016
 	ld_sriw DE, (xwa + 0x0098)
 	ld_srib A, (xwa + 0x009b)
 	cp a, 0x1A
-	jr nc, LABEL_F3AAD4
+	jr nc, SeqNote_ProcessCurrent_AdjustOfs
 	dec 1, de
 	add a, 0x60
 
-LABEL_F3AAD4:
+SeqNote_ProcessCurrent_AdjustOfs:
 	sub a, 0x1A
 	cp (xsp + 4), de
 	jr c, SeqNote_UpdateScoreDisplay
 	cp (xsp + 4), de
-	jr nz, LABEL_F3AAE6
+	jr nz, SeqNote_ProcessCurrent_Dispatch
 	cp (xsp + 8), a
 	jr c, SeqNote_UpdateScoreDisplay
 
-LABEL_F3AAE6:
+SeqNote_ProcessCurrent_Dispatch:
 	ldw wa, 0x14
 	calr SeqNote_ProcessForChannel
 	ldw wa, 0x14
 	call SeqCh_LoadChannelConfig
 
-LABEL_F3AAF3:
+SeqNote_ProcessCurrent_DrumCheck:
 	ldda8 a, 8988
 	dec 1, a
 	extz wa
@@ -3487,14 +3487,14 @@ LABEL_F3AAF3:
 	lda_24 xbc, 0xe444fe
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	andda16 xwa, 8982
-	jr nz, LABEL_F3AABC
+	jr nz, SeqNote_ProcessCurrent_ComparePos
 
 SeqNote_UpdateScoreDisplay:
 	cpdi16 7578, 65535
-	jr nz, LABEL_F3AB30
+	jr nz, SeqNote_ScoreDisplay_HasTarget
 	jr VoiceConfig_SlotCheck
 
-LABEL_F3AB17:
+SeqNote_ScoreDisplay_Compare:
 	ld wa, (xsp + 4)
 	cp wa, (xbc)
 	jr nz, LABEL_F3AB26
@@ -3506,11 +3506,11 @@ LABEL_F3AB26:
 	call BitMapOut_PrepareAndDisplaySimple
 	stdi16 7578, 65535
 
-LABEL_F3AB30:
+SeqNote_ScoreDisplay_HasTarget:
 	ldada xbc, 7578
 	ld wa, (xsp + 4)
 	cp wa, (xbc)
-	jr nc, LABEL_F3AB17
+	jr nc, SeqNote_ScoreDisplay_Compare
 
 VoiceConfig_SlotCheck:
 	cpdi8 8996, 255
@@ -3734,12 +3734,12 @@ SeqNote_ProcessSpecialChannels:
 SeqNote_LoadNoteParam_Return:
 	ld l, (xsp + 6)
 
-LABEL_F3AD25:
+SeqNote_ProcessNoteOn_Return:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_F3AD2A:
+SeqNote_ProcessRepeatNote:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 8), 0x0
@@ -3868,7 +3868,7 @@ SeqNote_FlushPartEventToBuffer:
 	ld (xsp), a
 	ld a, (xsp)
 	extz wa
-	call LABEL_F3E6FD
+	call NoteMap_RemoveAndRelink
 	cpdi8 7558, 1
 	call_24 z, 0xF3DA8E
 	call SeqBuf_GetWritePos
@@ -4135,7 +4135,7 @@ SeqNote_HandleAccompChannel:
 LABEL_F3B0A5:
 	ld a, (xsp + 20)
 	extz wa
-	calr LABEL_F3B2AE
+	calr VoiceType_CheckDrumOrControl
 	cps hl, 0
 	jr nz, SeqNote_ReturnNotProcessed
 	cp (xsp + 20), 0x15
@@ -4151,7 +4151,7 @@ LABEL_F3B0A5:
 
 SeqNote_ReturnNotProcessed:
 	ldb l, 0x0
-	jrl LABEL_F3B2A9
+	jrl SeqNote_WriteEvent_Return
 
 SeqNote_SetDrumChannelPair:
 	ldmi16 (xsp + 20), 0x2324
@@ -4178,12 +4178,12 @@ LABEL_F3B0DC:
 	extz wa
 	calr Chan_IsActive
 	cps l, 1
-	jrl z, LABEL_F3B225
+	jrl z, SeqNote_NoteOff_WritePart
 	jrl SeqNote_ConditionalWriteToBuffer
 
 LABEL_F3B11B:
 	ld (xsp + 4), 0x0
-	jrl LABEL_F3B2A6
+	jrl SeqNote_WriteEvent_RetStatus
 
 LABEL_F3B122:
 	ld a, (xsp + 20)
@@ -4213,15 +4213,15 @@ LABEL_F3B140:
 
 LABEL_F3B15E:
 	cp e, 0x86
-	jrl z, LABEL_F3B24C
+	jrl z, SeqNote_UpdatePositionB_Entry
 	cp e, 0x85
-	jrl z, LABEL_F3B233
+	jrl z, SeqNote_UpdatePositionA_Entry
 	ld c, (xsp + 20)
 	extz bc
 	cp e, 0xD2
-	jrl z, LABEL_F3B21C
+	jrl z, SeqNote_NoteOff_CheckActive2
 	cp e, 0x80
-	jrl z, LABEL_F3B202
+	jrl z, SeqNote_NoteOff_CheckActive
 	cp e, 0xD3
 	jr z, LABEL_F3B1E9
 	cp e, 0xD1
@@ -4229,7 +4229,7 @@ LABEL_F3B15E:
 	cp e, 0xD0
 	jr z, LABEL_F3B1D1
 	cp e, 0x82
-	jrl nz, LABEL_F3B265
+	jrl nz, SeqNote_ScanNextEvent_Entry
 	ld a, c
 	dec 1, a
 	lds de, 1
@@ -4284,7 +4284,7 @@ SeqNote_SendNoteOff:
 	ld (xsp + 4), 0x4
 	jrl SeqNote_WriteEventToBuffer
 
-LABEL_F3B202:
+SeqNote_NoteOff_CheckActive:
 	ld wa, bc
 	calr Chan_IsActive
 	cps l, 1
@@ -4296,20 +4296,20 @@ LABEL_F3B202:
 	ld (xsp + 4), l
 	jr SeqNote_ConditionalWriteToBuffer
 
-LABEL_F3B21C:
+SeqNote_NoteOff_CheckActive2:
 	ld wa, bc
 	calr Chan_IsActive
 	cps l, 1
 	jr nz, SeqNote_ConditionalWriteToBuffer
 
-LABEL_F3B225:
+SeqNote_NoteOff_WritePart:
 	ld a, (xsp + 20)
 	dec 1, a
 	ld (xsp + 14), a
 	ld (xsp + 4), 0x5
 	jr SeqNote_WriteEventToBuffer
 
-LABEL_F3B233:
+SeqNote_UpdatePositionA_Entry:
 	ld a, (xsp + 20)
 	extz wa
 	calr Chan_IsActive
@@ -4321,7 +4321,7 @@ LABEL_F3B233:
 	calr SeqNote_UpdatePlayPosition_A
 	jr SeqNote_ConditionalWriteToBuffer
 
-LABEL_F3B24C:
+SeqNote_UpdatePositionB_Entry:
 	ld a, (xsp + 20)
 	extz wa
 	calr Chan_IsActive
@@ -4333,35 +4333,35 @@ LABEL_F3B24C:
 	calr SeqNote_UpdatePlayPosition_B
 	jr SeqNote_ConditionalWriteToBuffer
 
-LABEL_F3B265:
+SeqNote_ScanNextEvent_Entry:
 	ld wa, bc
 	calr Chan_IsActive
 	cps l, 1
-	jr nz, LABEL_F3B27E
+	jr nz, SeqNote_ScanNextEvent_ClearBit
 	ld a, (xsp + 20)
 	extz wa
 	calr SeqPart_ScanNextEvent
 	cps l, 0
 	jr z, SeqNote_ConditionalWriteToBuffer
 	ldb l, 0x4
-	jr LABEL_F3B2A9
+	jr SeqNote_WriteEvent_Return
 
-LABEL_F3B27E:
+SeqNote_ScanNextEvent_ClearBit:
 	ld a, (xsp + 20)
 	extz wa
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F3B28E
+	jr z, SeqNote_ScanNextEvent_ShiftDone
 	slaa bc
 
-LABEL_F3B28E:
+SeqNote_ScanNextEvent_ShiftDone:
 	cpl bc
 	anddm16 10420, xbc
 
 SeqNote_ConditionalWriteToBuffer:
 	cp (xsp + 4), 0x0
-	jr z, LABEL_F3B2A6
+	jr z, SeqNote_WriteEvent_RetStatus
 
 SeqNote_WriteEventToBuffer:
 	lda xwa, (xsp + 10)
@@ -4369,31 +4369,31 @@ SeqNote_WriteEventToBuffer:
 	extz bc
 	call SeqBuf_WriteMidiEvent
 
-LABEL_F3B2A6:
+SeqNote_WriteEvent_RetStatus:
 	ld l, (xsp + 6)
 
-LABEL_F3B2A9:
+SeqNote_WriteEvent_Return:
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
 
-LABEL_F3B2AE:
+VoiceType_CheckDrumOrControl:
 	ldi_berp 0xE2, 0
 	cp (xbc), 0x82
-	jr z, LABEL_F3B2F3
+	jr z, VoiceType_ReturnZero
 	ld w, (xbc)
 	and w, 0xF0
 	lda xde, (xbc + 2)
 	lda xhl, (xbc + 3)
 	cp w, 0xC0
-	jr nz, LABEL_F3B2D2
+	jr nz, VoiceType_CheckControlB0
 	cp (xde), 0x48
 	jr nz, VoiceType_ValidateCode
 	cp (xhl), 0x0
-	jr z, LABEL_F3B2E6
+	jr z, VoiceType_SetMatchFlag
 	jr VoiceType_ValidateCode
 
-LABEL_F3B2D2:
+VoiceType_CheckControlB0:
 	ld c, (xbc)
 	and c, 0xF0
 	cp c, 0xB0
@@ -4403,24 +4403,24 @@ LABEL_F3B2D2:
 	cp (xhl), 0x7
 	jr nz, VoiceType_ValidateCode
 
-LABEL_F3B2E6:
+VoiceType_SetMatchFlag:
 	ldi_berp 0xE2, 1
 
 VoiceType_ValidateCode:
 	cp a, 0x15
-	jr nz, LABEL_F3B2F6
+	jr nz, VoiceType_CheckMatchFlag
 	cpi_berp 0xE2, 1
-	jr nz, LABEL_F3B2FB
+	jr nz, VoiceType_ReturnFFFF
 
-LABEL_F3B2F3:
+VoiceType_ReturnZero:
 	lds hl, 0
 	ret
 
-LABEL_F3B2F6:
+VoiceType_CheckMatchFlag:
 	cpi_berp 0xE2, 0
-	jr z, LABEL_F3B2F3
+	jr z, VoiceType_ReturnZero
 
-LABEL_F3B2FB:
+VoiceType_ReturnFFFF:
 	ldw hl, 0xFFFF
 	ret
 
@@ -4437,7 +4437,7 @@ SeqNote_ProcessForChannelAlt:
 	ld xiy, xde
 	ldi_berp 0xE2, 0
 
-LABEL_F3B31C:
+SeqNote_ProcessAlt_CopyDataLoop:
 	ldto_berp L, 0xE2
 	extz hl
 	ld iz, hl
@@ -4458,18 +4458,18 @@ LABEL_F3B31C:
 	lda_dri3 XBC, 0x07, 0xF4, 0xEC
 	inc1_berp 0xE2
 	cpi_berp 0xE2, 6
-	jr c, LABEL_F3B31C
+	jr c, SeqNote_ProcessAlt_CopyDataLoop
 	ld l, (xde)
 	ld h, l
 	and h, 0xF0
 	ldi_berp 0xFB, 0
 	ld a, h
 	cp h, 0xC0
-	jr z, LABEL_F3B3A5
+	jr z, SeqNote_ProcessAlt_ProgramChange
 	cp a, 0xB0
-	jr z, LABEL_F3B384
+	jr z, SeqNote_ProcessAlt_ControlChange
 	cp a, 0x90
-	jr nz, LABEL_F3B3B1
+	jr nz, SeqNote_ProcessAlt_CheckSpecial
 	ld wa, bc
 	ld xbc, xde
 	calr SeqNote_SetupVoice
@@ -4479,11 +4479,11 @@ LABEL_F3B31C:
 	dec 1, a
 	ld (xsp + 10), a
 
-LABEL_F3B37F:
+SeqNote_ProcessAlt_WriteBuffer5:
 	ldi_berp 0xFB, 5
 	jr SeqNote_WriteChannelToBuffer
 
-LABEL_F3B384:
+SeqNote_ProcessAlt_ControlChange:
 	ld wa, bc
 	ld xbc, xde
 	calr AccPedalConfig_ApplyChannel0
@@ -4491,7 +4491,7 @@ LABEL_F3B384:
 
 SeqMidi_EmitEventToBuffer:
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F3B39F
+	jr z, SeqNote_ProcessAlt_RetStatus
 
 SeqNote_WriteChannelToBuffer:
 	lda xwa, (xsp + 6)
@@ -4499,29 +4499,29 @@ SeqNote_WriteChannelToBuffer:
 	extz bc
 	call SeqBuf_WriteMidiEvent
 
-LABEL_F3B39F:
+SeqNote_ProcessAlt_RetStatus:
 	ld l, (xsp + 4)
-	jrl LABEL_F3B453
+	jrl SeqNote_ProcessAlt_Return
 
-LABEL_F3B3A5:
+SeqNote_ProcessAlt_ProgramChange:
 	ld wa, bc
 	ld xbc, xde
 	calr AccPedalConfig_ApplyChannelDirect
 	ldfr_berp L, 0xFB
 	jr SeqMidi_EmitEventToBuffer
 
-LABEL_F3B3B1:
+SeqNote_ProcessAlt_CheckSpecial:
 	ld h, l
 	cp l, 0x86
-	jr z, LABEL_F3B436
+	jr z, SeqNote_ProcessAlt_86UpdateB
 	cp h, 0x85
-	jr z, LABEL_F3B42E
+	jr z, SeqNote_ProcessAlt_85UpdateA
 	ld a, (xsp + 14)
 	dec 1, a
 	cp h, 0xD2
-	jr z, LABEL_F3B428
+	jr z, SeqNote_ProcessAlt_D2Store
 	cp h, 0x80
-	jr z, LABEL_F3B41B
+	jr z, SeqNote_ProcessAlt_80Tempo
 	inc 3, xde
 	cp h, 0xD3
 	jr z, SeqNote_WriteChannelEvt
@@ -4530,15 +4530,15 @@ LABEL_F3B3B1:
 	cp h, 0xD0
 	jr z, SeqNote_WriteChannelEvt
 	cp h, 0x82
-	jr nz, LABEL_F3B43E
+	jr nz, SeqNote_ProcessAlt_ErrorUnknown
 	dec 1, w
 	lds de, 1
 	ld a, w
 	and a, 0xF
-	jr z, LABEL_F3B3EF
+	jr z, SeqNote_ProcessAlt_82ShiftDone
 	slaa de
 
-LABEL_F3B3EF:
+SeqNote_ProcessAlt_82ShiftDone:
 	cpl de
 	anddm16 8982, xde
 	ld wa, bc
@@ -4546,11 +4546,11 @@ LABEL_F3B3EF:
 	ldda16 xwa, 61854
 	ldda16 xbc, 10420
 	and wa, bc
-	jr nz, LABEL_F3B40C
+	jr nz, SeqNote_ProcessAlt_82AllDone
 	ld (xsp + 4), 0x1
 	jr SeqMidi_EmitEventToBuffer
 
-LABEL_F3B40C:
+SeqNote_ProcessAlt_82AllDone:
 	ld (xsp + 4), 0x5
 	jrl SeqMidi_EmitEventToBuffer
 
@@ -4559,28 +4559,28 @@ SeqNote_WriteChannelEvt:
 	ldi_berp 0xFB, 4
 	jrl SeqNote_WriteChannelToBuffer
 
-LABEL_F3B41B:
+SeqNote_ProcessAlt_80Tempo:
 	ld wa, bc
 	ld xbc, xde
 	calr AccPedalConfig_ApplyTempo
 	ldfr_berp L, 0xFB
 	jrl SeqMidi_EmitEventToBuffer
 
-LABEL_F3B428:
+SeqNote_ProcessAlt_D2Store:
 	ld (xde + 4), a
-	jrl LABEL_F3B37F
+	jrl SeqNote_ProcessAlt_WriteBuffer5
 
-LABEL_F3B42E:
+SeqNote_ProcessAlt_85UpdateA:
 	ld xwa, xde
 	calr SeqNote_UpdatePlayPosition_A
 	jrl SeqMidi_EmitEventToBuffer
 
-LABEL_F3B436:
+SeqNote_ProcessAlt_86UpdateB:
 	ld xwa, xde
 	calr SeqNote_UpdatePlayPosition_B
 	jrl SeqMidi_EmitEventToBuffer
 
-LABEL_F3B43E:
+SeqNote_ProcessAlt_ErrorUnknown:
 	lds wa, 5
 	call SeqData_SetErrorCode
 	ld a, (xsp + 14)
@@ -4590,7 +4590,7 @@ LABEL_F3B43E:
 	jrl z, SeqMidi_EmitEventToBuffer
 	ldb l, 0x4
 
-LABEL_F3B453:
+SeqNote_ProcessAlt_Return:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -4603,10 +4603,10 @@ Chan_IsActive:
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F3B46C
+	jr z, Chan_IsActive_ShiftDone
 	slaa bc
 
-LABEL_F3B46C:
+Chan_IsActive_ShiftDone:
 	ldda16 xwa, 61854
 	and wa, bc
 	jr nz, Chan_IsActive_RetTrue
@@ -4628,29 +4628,29 @@ AccPedalConfig_ApplyChannel0:
 	jrl nz, AccPedalConfig_ReturnError7
 	ld d, (xbc + 3)
 	cps d, 5
-	jr z, LABEL_F3B4A1
+	jr z, AccPedalConfig_ValidCtrl5_6_7
 	cps d, 6
-	jr z, LABEL_F3B4A1
+	jr z, AccPedalConfig_ValidCtrl5_6_7
 	cps d, 7
 	jrl nz, AccPedalConfig_ReturnError7
 
-LABEL_F3B4A1:
+AccPedalConfig_ValidCtrl5_6_7:
 	ld a, (xbc + 4)
 	ldfr_berp A, 0xFA
 	ld a, (xbc + 5)
 	ldfr_berp A, 0xFB
 	bitm 0, (xbc)
-	jr z, LABEL_F3B4B5
+	jr z, AccPedalConfig_CheckBit1
 	set_erpb 0xFA, 0x07
 
-LABEL_F3B4B5:
+AccPedalConfig_CheckBit1:
 	bitm 1, (xbc)
-	jr z, LABEL_F3B4BD
+	jr z, AccPedalConfig_CheckCtrl7
 	set_erpb 0xFB, 0x07
 
-LABEL_F3B4BD:
+AccPedalConfig_CheckCtrl7:
 	cps d, 7
-	jr nz, LABEL_F3B513
+	jr nz, AccPedalConfig_NotCtrl7
 	ldto_berp E, 0xFA
 	extz de
 	ldto_berp A, 0xFB
@@ -4679,7 +4679,7 @@ Chan_IsActive_RetFalse:
 	ldb l, 0x0
 	jrl LABEL_F3B6E5
 
-LABEL_F3B513:
+AccPedalConfig_NotCtrl7:
 	ldfr_berp D, 0xF0
 	extz ix
 	ld iy, ix
@@ -4690,18 +4690,18 @@ LABEL_F3B513:
 	jrl z, LABEL_F3B679
 	ldto_berp E, 0xF4
 	cps d, 6
-	jr nz, LABEL_F3B575
+	jr nz, AccPedalConfig_Ctrl5Path
 	bit_erpb 0xFB, 0x02
-	jr z, LABEL_F3B561
+	jr z, AccPedalConfig_StoreCtrl6ValsAlt
 	bit_erpb 0xFA, 0x02
 	jrl z, AccPedalConfig_ReturnError7
 	ld a, (xsp + 2)
 	cpda8 a, 8990
-	jr nz, LABEL_F3B54D
+	jr nz, AccPedalConfig_StoreCtrl6Vals
 	cpdi8 7560, 0
 	jrl nz, AccPedalConfig_ClearFlag7560
 
-LABEL_F3B54D:
+AccPedalConfig_StoreCtrl6Vals:
 	ldto_berp A, 0xFB
 	extz wa
 	stda8 13448, e
@@ -4709,7 +4709,7 @@ LABEL_F3B54D:
 	stda8 13430, a
 	jrl AccPedalConfig_ReplayAndReturnOK
 
-LABEL_F3B561:
+AccPedalConfig_StoreCtrl6ValsAlt:
 	ldto_berp A, 0xFB
 	extz wa
 	stda8 13448, e
@@ -4717,17 +4717,17 @@ LABEL_F3B561:
 	stda8 13430, a
 	jrl AccPedalConfig_ReplayAndReturnOK
 
-LABEL_F3B575:
+AccPedalConfig_Ctrl5Path:
 	ldda8 a, 8988
 	bit_erpb 0xFB, 0x04
-	jr z, LABEL_F3B5A7
+	jr z, AccPedalConfig_Ctrl5Bit5
 	bit_erpb 0xFA, 0x04
 	jrl z, AccPedalConfig_ReturnError7
 	cp (xsp + 2), a
-	jr nz, LABEL_F3B590
+	jr nz, AccPedalConfig_Ctrl5Store
 	stdi8 13026, 1
 
-LABEL_F3B590:
+AccPedalConfig_Ctrl5Store:
 	ldto_berp C, 0xFB
 	extz bc
 	ldto_berp A, 0xF0
@@ -4736,16 +4736,16 @@ LABEL_F3B590:
 	stda8 13430, c
 	jrl AccPedalConfig_ReplayAndReturnOK
 
-LABEL_F3B5A7:
+AccPedalConfig_Ctrl5Bit5:
 	bit_erpb 0xFB, 0x05
-	jr z, LABEL_F3B5D5
+	jr z, AccPedalConfig_Ctrl5Bit2
 	bit_erpb 0xFA, 0x05
 	jrl z, AccPedalConfig_ReturnError7
 	cp (xsp + 2), a
-	jr nz, LABEL_F3B5BE
+	jr nz, AccPedalConfig_Ctrl5Bit5Store
 	stdi8 13026, 1
 
-LABEL_F3B5BE:
+AccPedalConfig_Ctrl5Bit5Store:
 	ldto_berp C, 0xFB
 	extz bc
 	ldto_berp A, 0xF0
@@ -4754,18 +4754,18 @@ LABEL_F3B5BE:
 	stda8 13430, c
 	jrl AccPedalConfig_ReplayAndReturnOK
 
-LABEL_F3B5D5:
+AccPedalConfig_Ctrl5Bit2:
 	bit_erpb 0xFB, 0x02
-	jr z, LABEL_F3B606
+	jr z, AccPedalConfig_Ctrl5Bit3
 	bit_erpb 0xFA, 0x02
 	jrl z, AccPedalConfig_ReturnError7
 	ld a, (xsp + 2)
 	cpda8 a, 8990
-	jr nz, LABEL_F3B5F2
+	jr nz, AccPedalConfig_Ctrl5Bit2Store
 	cpdi8 7560, 0
 	jr nz, AccPedalConfig_ClearFlag7560
 
-LABEL_F3B5F2:
+AccPedalConfig_Ctrl5Bit2Store:
 	ldto_berp A, 0xFB
 	extz wa
 	stda8 13448, e
@@ -4773,7 +4773,7 @@ LABEL_F3B5F2:
 	stda8 13430, a
 	jrl AccPedalConfig_ReplayAndReturnOK
 
-LABEL_F3B606:
+AccPedalConfig_Ctrl5Bit3:
 	bit_erpb 0xFB, 0x03
 	jr z, LABEL_F3B63F
 	bit_erpb 0xFA, 0x03
@@ -5081,7 +5081,7 @@ LABEL_F3B8AA:
 	sub wa, hl
 	cp wa, 0x78
 	jrl ule, VoiceConfig_CounterIncr
-	call LABEL_F3E69F
+	call SeqBuffer_FindMinPosition
 	ld wa, (xsp + 4)
 	sub wa, hl
 	cp wa, 0x78
@@ -5526,7 +5526,7 @@ LABEL_F3BC97:
 	ld (xsp + 14), a
 	cp (xiz + 3), 0x0
 	jrl z, LABEL_F3BE6A
-	call LABEL_F3E7AC
+	call SeqBuffer_RemoveLastEntry
 	ld (xsp + 6), l
 	cp (xsp + 6), 0xFF
 	jrl z, SeqNote_VoiceConfigExit
@@ -5876,7 +5876,7 @@ LABEL_F3BFAC:
 LABEL_F3BFB9:
 	ldto_berp A, 0xFA
 	extz wa
-	call LABEL_F3E6CF
+	call NoteMap_RemoveHeadEntry
 	ld a, (xsp + 8)
 	dec 1, a
 	extz wa
@@ -5930,7 +5930,7 @@ LABEL_F3C016:
 	dec 1, c
 	ld (xde + 8), c
 	ld (xde + 2), iz
-	calr LABEL_F3C7A7
+	calr NotePool_InsertEntry
 	ldb l, 0x0
 
 LABEL_F3C052:
@@ -5959,17 +5959,17 @@ ToneVoice_AssignChannel:
 	ld l, d
 	extz hl
 	cp_erpb 0xE2, 0x41
-	jr nz, LABEL_F3C0B0
+	jr nz, ToneVoice_Assign_FromTable
 	ld a, (xsp + 4)
 	dec 1, a
 	lds ix, 1
 	and a, 0xF
-	jr z, LABEL_F3C086
+	jr z, ToneVoice_Assign_ShiftDone
 	slaa ix
 
-LABEL_F3C086:
+ToneVoice_Assign_ShiftDone:
 	andda16 xix, 10408
-	jr z, LABEL_F3C0B0
+	jr z, ToneVoice_Assign_FromTable
 	lda xix, (xsp)
 	add hl, hl
 	ldada xwa, 10526
@@ -5983,9 +5983,9 @@ LABEL_F3C086:
 	ld a, (xwa)
 	extz wa
 	ld (xix + 2), wa
-	jr LABEL_F3C0C7
+	jr ToneVoice_Assign_CopyToVoice
 
-LABEL_F3C0B0:
+ToneVoice_Assign_FromTable:
 	lda xix, (xsp)
 	sla hl, 2
 	ldada xwa, 9184
@@ -5996,7 +5996,7 @@ LABEL_F3C0B0:
 	ld wa, (xhl + 2)
 	ld (xix + 2), wa
 
-LABEL_F3C0C7:
+ToneVoice_Assign_CopyToVoice:
 	lda xwa, (xsp)
 	extz de
 	call Part_CopyBytesToVoiceBlock
@@ -6012,17 +6012,17 @@ LABEL_F3C0C7:
 	lda xde, (xsp)
 	lda xbc, (xde + 2)
 	cp_erpb 0xE2, 0x41
-	jr nz, LABEL_F3C127
+	jr nz, ToneVoice_Assign_WriteFromTable
 	ld a, (xsp + 4)
 	dec 1, a
 	lds ix, 1
 	and a, 0xF
-	jr z, LABEL_F3C101
+	jr z, ToneVoice_Assign_WriteShiftDone
 	slaa ix
 
-LABEL_F3C101:
+ToneVoice_Assign_WriteShiftDone:
 	andda16 xix, 10408
-	jr z, LABEL_F3C127
+	jr z, ToneVoice_Assign_WriteFromTable
 	ld ix, (xde)
 	ld de, (xbc)
 	add hl, hl
@@ -6034,9 +6034,9 @@ LABEL_F3C101:
 	extz xwa
 	add xwa, xbc
 	ld (xwa), e
-	jr LABEL_F3C13C
+	jr ToneVoice_Assign_Return
 
-LABEL_F3C127:
+ToneVoice_Assign_WriteFromTable:
 	ld de, (xde)
 	ld bc, (xbc)
 	sla hl, 2
@@ -6045,7 +6045,7 @@ LABEL_F3C127:
 	ld (xwa), de
 	ld (xwa + 2), bc
 
-LABEL_F3C13C:
+ToneVoice_Assign_Return:
 	inc 6, xsp
 	ret
 
@@ -6066,7 +6066,7 @@ SeqPart_ReadEventStream:
 	ld wa, (xbc + 2)
 	ld (xde + 2), wa
 
-LABEL_F3C169:
+SeqPart_ReadEvent_MainLoop:
 	lda xwa, (xsp)
 	lda xbc, (xsp + 4)
 	call SeqPart_ReadNextEventByte
@@ -6074,13 +6074,13 @@ LABEL_F3C169:
 	lda xbc, (xhl + 1)
 	ld a, (xhl)
 	cp a, 0x81
-	jr nz, LABEL_F3C1C7
+	jr nz, SeqPart_ReadEvent_NotEndMark
 	incdi16 1, 9152
 	ld (xbc), 0x0
 	cp (xsp + 12), 0x0
-	jr nz, LABEL_F3C169
+	jr nz, SeqPart_ReadEvent_MainLoop
 
-LABEL_F3C18C:
+SeqPart_ReadEvent_SavePos:
 	ld c, (xsp + 14)
 	extz bc
 	lda xwa, (xsp)
@@ -6108,11 +6108,11 @@ LABEL_F3C1B9:
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F3C1C7:
+SeqPart_ReadEvent_NotEndMark:
 	cp a, 0x82
-	jr nz, LABEL_F3C18C
+	jr nz, SeqPart_ReadEvent_SavePos
 	ld (xbc), 0x0
-	jr LABEL_F3C18C
+	jr SeqPart_ReadEvent_SavePos
 
 SeqPlay_ReassignVoiceChannels:
 	dec 2, xsp
@@ -6523,10 +6523,10 @@ LABEL_F3C58C:
 	jrl z, SeqPlay_BassEpilogue18
 	addmi8 (xsp + 14), 0x28
 	cp (xsp + 14), 0x60
-	jrl c, LABEL_F3C650
+	jrl c, SeqPlay_BassCheck_ShiftDone
 	submi8 (xsp + 14), 0x60
 	incm 1, (xsp + 16)
-	jrl LABEL_F3C650
+	jrl SeqPlay_BassCheck_ShiftDone
 
 LABEL_F3C5A8:
 	extz bc
@@ -6597,16 +6597,16 @@ SeqPlay_DispatchRhythm:
 	extz wa
 	call SeqCh_LoadChannelConfig
 
-LABEL_F3C650:
+SeqPlay_BassCheck_ShiftDone:
 	ld c, (xsp)
 	dec 1, c
 	lds de, 1
 	ld a, c
 	and a, 0xF
-	jr z, LABEL_F3C65F
+	jr z, SeqPlay_BassCheck_TestBit
 	slaa de
 
-LABEL_F3C65F:
+SeqPlay_BassCheck_TestBit:
 	andda16 xde, 8982
 	jrl nz, LABEL_F3C5A8
 
@@ -6632,36 +6632,36 @@ SeqPlay_AssignChordVoices:
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F3C69D
+	jr z, SeqPlay_Chord_ShiftDone
 	slaa bc
 
-LABEL_F3C69D:
+SeqPlay_Chord_ShiftDone:
 	andda16 xbc, 8982
 	jrl z, SeqPlay_ChordEpilogue14
 	addmi8 (xsp + 10), 0x28
 	cp (xsp + 10), 0x60
-	jrl c, LABEL_F3C744
+	jrl c, SeqPlay_Chord_NextPart
 	submi8 (xsp + 10), 0x60
 	incm 1, (xsp + 12)
-	jrl LABEL_F3C744
+	jrl SeqPlay_Chord_NextPart
 
-LABEL_F3C6B9:
+SeqPlay_Chord_CompareLoop:
 	ldada xde, 9016
 	ld_sriw WA, (xde + 0x00a0)
 	cp wa, (xsp + 12)
 	jrl ugt, SeqPlay_ChordEpilogue14
 	cp wa, (xsp + 12)
-	jr nz, LABEL_F3C6D8
+	jr nz, SeqPlay_Chord_CheckMatch
 	ld_srib A, (xde + 0x00a3)
 	cp a, (xsp + 10)
 	jrl ugt, SeqPlay_ChordEpilogue14
 
-LABEL_F3C6D8:
+SeqPlay_Chord_CheckMatch:
 	lda xbc, (xsp + 2)
 	ld xiy, xbc
 	ldi_berp 0xE2, 0
 
-LABEL_F3C6E0:
+SeqPlay_Chord_CopyDataLoop:
 	ldto_berp A, 0xE2
 	extz wa
 	inc 2, wa
@@ -6675,7 +6675,7 @@ LABEL_F3C6E0:
 	lda_dri3 XBC, 0x07, 0xF4, 0xEC
 	inc1_berp 0xE2
 	cpi_berp 0xE2, 6
-	jr c, LABEL_F3C6E0
+	jr c, SeqPlay_Chord_CopyDataLoop
 	cp (xbc), 0x82
 	jr z, SeqPlay_ChordEpilogue14
 	ldw wa, 0x15
@@ -6699,17 +6699,17 @@ SeqPlay_LoadChannelRet:
 	ldw wa, 0x15
 	call SeqCh_LoadChannelConfig
 
-LABEL_F3C744:
+SeqPlay_Chord_NextPart:
 	ld a, (xsp)
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F3C751
+	jr z, SeqPlay_Chord_NextShiftDone
 	slaa bc
 
-LABEL_F3C751:
+SeqPlay_Chord_NextShiftDone:
 	andda16 xbc, 8982
-	jrl nz, LABEL_F3C6B9
+	jrl nz, SeqPlay_Chord_CompareLoop
 
 SeqPlay_ChordEpilogue14:
 	lda xsp, (xsp + 14)
@@ -6722,10 +6722,10 @@ SeqCh_ClearActivePartBit:
 	dec 1, a
 	lds de, 1
 	and a, 0xF
-	jr z, LABEL_F3C76D
+	jr z, SeqCh_ClearActive_ShiftDone
 	slaa de
 
-LABEL_F3C76D:
+SeqCh_ClearActive_ShiftDone:
 	cpl de
 	anddm16 10420, xde
 	anddm16 8980, xde
@@ -6739,10 +6739,10 @@ LABEL_F3C76D:
 	lds de, 1
 	ld a, c
 	and a, 0xF
-	jr z, LABEL_F3C795
+	jr z, SeqCh_ClearActive_DrumShiftDone
 	slaa de
 
-LABEL_F3C795:
+SeqCh_ClearActive_DrumShiftDone:
 	ldda16 xwa, 61854
 	and wa, de
 	ret z
@@ -6750,16 +6750,16 @@ LABEL_F3C795:
 	ret z
 	jp AccWrap_PlayModeStartPlay
 
-LABEL_F3C7A7:
+NotePool_InsertEntry:
 	dec 8, xsp
 	push xiz
 	ld (xsp + 10), a
 	cp (xsp + 10), 0x40
-	jr c, LABEL_F3C7BA
+	jr c, NotePool_Insert_CheckMax
 	ldw wa, 0x10
 	call SeqData_SetErrorCode
 
-LABEL_F3C7BA:
+NotePool_Insert_CheckMax:
 	ld a, (xsp + 10)
 	extz wa
 	muls wa, 0x9
@@ -6774,16 +6774,16 @@ LABEL_F3C7BA:
 	ld a, (xwa)
 	ldfr_berp A, 0xE2
 
-LABEL_F3C7E4:
+NotePool_Insert_ScanLoop:
 	lda xbc, (xde + 1)
 	cp_erpb 0xE2, 0xFF
-	jr nz, LABEL_F3C825
+	jr nz, NotePool_Insert_CompareAndLink
 	ld (xde), 0xFF
 	ld a, (xix)
 	ldfr_berp A, 0xE2
 	ld (xbc), a
 	cp_erpb 0xE2, 0xFF
-	jr z, LABEL_F3C810
+	jr z, NotePool_Insert_UpdateHead
 	ldto_berp A, 0xE2
 	extz wa
 	muls wa, 0x9
@@ -6791,17 +6791,17 @@ LABEL_F3C7E4:
 	ld a, (xsp + 10)
 	lda_dri3 XBC, 0x07, 0xEC, 0xE4
 
-LABEL_F3C810:
+NotePool_Insert_UpdateHead:
 	ld a, (xsp + 10)
 	ld (xix), a
 	ld xwa, (xsp + 4)
 	ld a, (xwa)
 	ldfr_berp A, 0xE2
 	cp_erpb 0xE2, 0xFF
-	jr z, LABEL_F3C874
-	jr LABEL_F3C88C
+	jr z, NotePool_Insert_SetHead
+	jr NotePool_Insert_Return
 
-LABEL_F3C825:
+NotePool_Insert_CompareAndLink:
 	ldto_berp A, 0xE2
 	ldfr_berp A, 0xF8
 	extz iz
@@ -6814,20 +6814,20 @@ LABEL_F3C825:
 	ldfr_berp A, 0xE3
 	ldto_werp WA, 0xF6
 	cp wa, iy
-	jr ugt, LABEL_F3C857
+	jr ugt, NotePool_Insert_AdvanceScan
 	ldto_werp WA, 0xF6
 	cp wa, iy
-	jr nz, LABEL_F3C85E
+	jr nz, NotePool_Insert_LinkBefore
 	ldto_berp A, 0xE3
 	cp a, (xsp + 8)
-	jr ule, LABEL_F3C85E
+	jr ule, NotePool_Insert_LinkBefore
 
-LABEL_F3C857:
+NotePool_Insert_AdvanceScan:
 	ld a, (xiz)
 	ldfr_berp A, 0xE2
-	jr LABEL_F3C7E4
+	jr NotePool_Insert_ScanLoop
 
-LABEL_F3C85E:
+NotePool_Insert_LinkBefore:
 	ldto_berp A, 0xE2
 	ld (xde), a
 	lda xix, (xiz + 1)
@@ -6836,33 +6836,33 @@ LABEL_F3C85E:
 	ld a, (xsp + 10)
 	ld (xix), a
 	cp e, 0xFF
-	jr nz, LABEL_F3C87E
+	jr nz, NotePool_Insert_RelinkPrev
 
-LABEL_F3C874:
+NotePool_Insert_SetHead:
 	ld xwa, (xsp + 4)
 	ld c, (xsp + 10)
 	ld (xwa), c
-	jr LABEL_F3C88C
+	jr NotePool_Insert_Return
 
-LABEL_F3C87E:
+NotePool_Insert_RelinkPrev:
 	extz de
 	muls de, 0x9
 	ld a, (xsp + 10)
 	lda_dri3 XBC, 0x07, 0xEC, 0xE8
 
-LABEL_F3C88C:
+NotePool_Insert_Return:
 	pop xiz
 	inc 8, xsp
 	ret
 
-LABEL_F3C890:
+NotePool_DataBlock_890:
 	.byte 0xc1, 0x7f, 0xc0, 0x21, 0xc9, 0xd8, 0xb0, 0xf6
 	.byte 0xc1, 0x7e, 0xc0, 0x21, 0xc9, 0xd8, 0xb0, 0xfe
 	.byte 0xc1, 0x7d, 0xc0, 0x21, 0xf1, 0xb3, 0x28, 0xcd
 	.byte 0xb0, 0xf6, 0xc9, 0xdc, 0xb0, 0xfe, 0x1e, 0x74
 	.byte 0xd8, 0x1d, 0xdf, 0x87, 0xf4, 0xf1, 0xb3, 0x28
 	.byte 0xb5, 0x0e
-LABEL_F3C8BA:
+NotePool_DataBlock_8BA:
 	.byte 0xf1, 0xfe, 0x22, 0xcf, 0xb0, 0xfe
 	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x0e, 0xb0, 0xf6, 0xc1
 	.byte 0x7d, 0xc0, 0x21, 0xc9, 0xdd, 0xb0, 0xfe, 0xc1
@@ -6881,21 +6881,21 @@ SeqPlay_CheckStartConditions:
 	set 7, a
 	stda8 8958, a
 	cpdi16 61854, 0
-	jr nz, LABEL_F3C927
+	jr nz, SeqPlay_CheckStart_TestSysFlag
 	ldda8 a, 8958
 	res 7, a
 	stda8 8958, a
 	ret
 
-LABEL_F3C927:
+SeqPlay_CheckStart_TestSysFlag:
 	ldda8 a, 8958
 	bitda 2, 1057
-	jr z, LABEL_F3C939
+	jr z, SeqPlay_CheckStart_TestBit5
 	res 7, a
 	stda8 8958, a
 	ret
 
-LABEL_F3C939:
+SeqPlay_CheckStart_TestBit5:
 	bitda 5, 10419
 	jr z, LABEL_F3C947
 	res 7, a
@@ -7915,9 +7915,9 @@ LABEL_F3D2A6:
 	call BitMapOut_PrepareAndDisplay
 	call Audio_CheckSubsystemReady
 	cpdi16 10408, 0
-	jrl z, LABEL_F3D53E
+	jrl z, SeqPlay_PendingCh_Return
 	calr LABEL_F3CE53
-	call LABEL_F41DB9
+	call PartCtrl_DeallocAndWriteEnd
 	cpdi8 7522, 1
 	call_24 z, 0xF3D840
 	call LABEL_F3E91B
@@ -7927,7 +7927,7 @@ LABEL_F3D2A6:
 	cpw (xde), 0x0
 	jr nz, LABEL_F3D2FA
 	cpw (xde + 2), 0x0
-	jrl z, LABEL_F3D52E
+	jrl z, SeqPlay_PendingCh_ClearAndDealloc
 
 LABEL_F3D2FA:
 	ldmi16 (xsp + 4), 0x231A
@@ -8016,7 +8016,7 @@ LABEL_F3D2FA:
 	ldw wa, 0x12
 	lds bc, 0
 
-LABEL_F3D3ED:
+SeqPlay_ReadAndProcessEvents:
 	calr SeqPart_ReadEventStream
 
 SeqPlay_CheckEventTiming:
@@ -8026,19 +8026,19 @@ SeqPlay_CheckEventTiming:
 	ld de, (xhl)
 	lda xbc, (xsp + 24)
 	cp de, wa
-	jr c, LABEL_F3D417
+	jr c, SeqPlay_ReadEvents_TimingMatch
 	cp wa, de
 	jr nz, SeqPlay_ProcessPendingChannels
 	ld_srib A, (xix + 0x0083)
 	cp_srib_rm A, 0xF1, 0x8B, 0x00
 	jr nc, SeqPlay_ProcessPendingChannels
 
-LABEL_F3D417:
+SeqPlay_ReadEvents_TimingMatch:
 	ld xde, xbc
 	ld xiy, xbc
 	ldi_berp 0xE2, 0
 
-LABEL_F3D41E:
+SeqPlay_ReadEvents_CopyDataLoop:
 	ldto_berp A, 0xE2
 	extz wa
 	inc 2, wa
@@ -8052,31 +8052,31 @@ LABEL_F3D41E:
 	lda_dri3 XBC, 0x07, 0xF4, 0xE4
 	inc1_berp 0xE2
 	cpi_berp 0xE2, 6
-	jr c, LABEL_F3D41E
+	jr c, SeqPlay_ReadEvents_CopyDataLoop
 	ld a, (xde)
 	cp a, 0x82
-	jr nz, LABEL_F3D451
+	jr nz, SeqPlay_ReadEvents_NotEndMark
 	ldw (xhl), 0xFFF0
 	jr SeqPlay_CheckEventTiming
 
-LABEL_F3D451:
+SeqPlay_ReadEvents_NotEndMark:
 	extz wa
 	call SeqEvent_GetParamLength
 	cps hl, 0
-	jr le, LABEL_F3D46C
+	jr le, SeqPlay_ReadEvents_ErrorBadParam
 	ld a, (xsp + 4)
 	extz wa
 	lda xbc, (xsp + 24)
 	extz hl
 	ld de, hl
 	calr ToneVoice_AssignChannel
-	jr LABEL_F3D473
+	jr SeqPlay_ReadEvents_ReloadCfg
 
-LABEL_F3D46C:
+SeqPlay_ReadEvents_ErrorBadParam:
 	ldw wa, 0xA
 	call SeqData_SetErrorCode
 
-LABEL_F3D473:
+SeqPlay_ReadEvents_ReloadCfg:
 	ldw wa, 0x11
 	call SeqCh_LoadChannelConfig
 	jrl SeqPlay_CheckEventTiming
@@ -8086,7 +8086,7 @@ SeqPlay_ProcessPendingChannels:
 	ld xiy, xbc
 	ldi_berp 0xE2, 0
 
-LABEL_F3D484:
+SeqPlay_PendingCh_CopyDataLoop:
 	ldto_berp A, 0xE2
 	extz wa
 	inc 2, wa
@@ -8100,12 +8100,12 @@ LABEL_F3D484:
 	lda_dri3 XBC, 0x07, 0xF4, 0xE4
 	inc1_berp 0xE2
 	cpi_berp 0xE2, 6
-	jr c, LABEL_F3D484
+	jr c, SeqPlay_PendingCh_CopyDataLoop
 	ld a, (xde)
 	cp a, 0x82
-	jrl nz, LABEL_F3D547
+	jrl nz, SeqPlay_PendingCh_AssignVoice
 	cpw (xhl), 0xFFF0
-	jr nz, LABEL_F3D502
+	jr nz, SeqPlay_PendingCh_SetPart1
 	ld c, (xsp + 4)
 	extz bc
 	lda xhl, (xsp + 20)
@@ -8134,62 +8134,62 @@ LABEL_F3D484:
 	lds de, 1
 	calr ToneVoice_AssignChannel
 
-LABEL_F3D502:
+SeqPlay_PendingCh_SetPart1:
 	ld (xsp + 4), 0x1
 
-LABEL_F3D506:
+SeqPlay_PendingCh_ActivateLoop:
 	ld a, (xsp + 4)
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F3D514
+	jr z, SeqPlay_PendingCh_ActivateShift
 	slaa bc
 
-LABEL_F3D514:
+SeqPlay_PendingCh_ActivateShift:
 	andda16 xbc, 10408
-	jr z, LABEL_F3D525
+	jr z, SeqPlay_PendingCh_ActivateNext
 	ld a, (xsp + 4)
 	extz wa
 	lds bc, 1
 	call Chan_SetActiveBit
 
-LABEL_F3D525:
+SeqPlay_PendingCh_ActivateNext:
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x10
-	jr ule, LABEL_F3D506
+	jr ule, SeqPlay_PendingCh_ActivateLoop
 
-LABEL_F3D52E:
+SeqPlay_PendingCh_ClearAndDealloc:
 	stdi16 10408, 0
 	call Audio_CheckSubsystemReady
 	stdi16 10410, 0
 
-LABEL_F3D53E:
+SeqPlay_PendingCh_Return:
 	call Part_DeallocVoices1And2
 	pop xiz
 	lda xsp, (xsp + 28)
 	ret
 
-LABEL_F3D547:
+SeqPlay_PendingCh_AssignVoice:
 	extz wa
 	call SeqEvent_GetParamLength
 	cps hl, 0
-	jr le, LABEL_F3D562
+	jr le, SeqPlay_PendingCh_ErrorBadParam
 	ld a, (xsp + 4)
 	extz wa
 	lda xbc, (xsp + 24)
 	extz hl
 	ld de, hl
 	calr ToneVoice_AssignChannel
-	jr LABEL_F3D569
+	jr SeqPlay_PendingCh_ReadMore
 
-LABEL_F3D562:
+SeqPlay_PendingCh_ErrorBadParam:
 	ldw wa, 0xB
 	call SeqData_SetErrorCode
 
-LABEL_F3D569:
+SeqPlay_PendingCh_ReadMore:
 	ldw wa, 0x12
 	lds bc, 0
-	jrl LABEL_F3D3ED
+	jrl SeqPlay_ReadAndProcessEvents
 
 SeqData_ValidateProcess:
 	lda xsp, (xsp - 10)
@@ -8200,9 +8200,9 @@ SeqData_ValidateProcess:
 	ldda8 a, 8182
 	ldfr_berp A, 0xFB
 	cp_erpb 0xFB, 0xFF
-	jrl z, LABEL_F3D618
+	jrl z, SeqData_Validate_Return
 
-LABEL_F3D58E:
+SeqData_Validate_SlotLoop:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0xC
@@ -8212,23 +8212,23 @@ LABEL_F3D58E:
 	ld c, a
 	extz bc
 	cp (xsp + 10), 0x32
-	jr z, LABEL_F3D5B8
+	jr z, SeqData_Validate_MatchFound
 	inc 1, bc
 	ld a, (xsp + 10)
 	extz wa
 	cp wa, bc
-	jr nz, LABEL_F3D5F3
+	jr nz, SeqData_Validate_ErrorCode9
 
-LABEL_F3D5B8:
+SeqData_Validate_MatchFound:
 	ld ix, (xsp + 8)
 	ld a, (xsp + 6)
 	ld c, (xhl + 1)
 	cp c, a
-	jr ule, LABEL_F3D5CA
+	jr ule, SeqData_Validate_ComputeOffset
 	dec 1, ix
 	add a, 0x60
 
-LABEL_F3D5CA:
+SeqData_Validate_ComputeOffset:
 	sub a, c
 	lda xde, (xsp + 2)
 	ld (xde), a
@@ -8246,13 +8246,13 @@ SeqPlay_DispatchNoteParams:
 	extz bc
 	ld wa, (xhl + 6)
 	call PartCtrl_WriteBytePair
-	jr LABEL_F3D5FA
+	jr SeqData_Validate_NextSlot
 
-LABEL_F3D5F3:
+SeqData_Validate_ErrorCode9:
 	ldw wa, 0x9
 	call SeqData_SetErrorCode
 
-LABEL_F3D5FA:
+SeqData_Validate_NextSlot:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0xC
@@ -8261,14 +8261,14 @@ LABEL_F3D5FA:
 	ld_srib3 A, 0x07, 0xE0, 0xE4
 	ldfr_berp A, 0xFB
 	cp_erpb 0xFB, 0xFF
-	jrl nz, LABEL_F3D58E
+	jrl nz, SeqData_Validate_SlotLoop
 
-LABEL_F3D618:
+SeqData_Validate_Return:
 	pop_werp 0xFA
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_F3D61F:
+SeqPlay_PrepareDrumVoice:
 	dec 8, xsp
 	push_werp 0xFA
 	lds wa, 0
@@ -8281,10 +8281,10 @@ LABEL_F3D61F:
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F3D644
+	jr z, SeqPlay_PrepareDrum_ShiftDone
 	slaa bc
 
-LABEL_F3D644:
+SeqPlay_PrepareDrum_ShiftDone:
 	andda16 xbc, 10410
 	jr z, Part_FindAndAssignDrumVoice
 	lda xwa, (xsp + 2)
@@ -9579,7 +9579,7 @@ LABEL_F3E1E6:
 	bitda 0, 47079
 	jr nz, Seq_PopIzSkip8Ret
 	lds wa, 4
-	calr LABEL_F439BF
+	calr SeqStatus_CheckMaskedBit
 	cps l, 0
 	jr z, Seq_PopIzSkip8Ret
 	stdi8 1060, 242
@@ -10035,10 +10035,10 @@ SeqBuffer_ClearAndInitIteration:
 	ld xwa, xde
 	lda xbc, (xde + 6)
 
-LABEL_F3E61C:
+SeqBuffer_ClearLoop:
 	stib_dpi 0xE0, 0xFF
 	cp xwa, xbc
-	jr c, LABEL_F3E61C
+	jr c, SeqBuffer_ClearLoop
 	ldada xwa, 8182
 	ld (xwa), 0xFF
 	ld (xwa + 1), 0xFF
@@ -10047,7 +10047,7 @@ LABEL_F3E61C:
 	ld (xwa + 1), 0x3F
 	ldb l, 0x0
 
-LABEL_F3E63C:
+SeqBuffer_InitSlotLoop:
 	ld c, l
 	extz bc
 	ld a, c
@@ -10055,7 +10055,7 @@ LABEL_F3E63C:
 	ld xiy, xde
 	ldb h, 0x0
 
-LABEL_F3E649:
+SeqBuffer_InitSlot_CopyFields:
 	ldfr_berp H, 0xF8
 	extz iz
 	ldto_berp A, 0xE6
@@ -10072,7 +10072,7 @@ LABEL_F3E649:
 	ld (xiz), a
 	inc 1, h
 	cps h, 4
-	jr c, LABEL_F3E649
+	jr c, SeqBuffer_InitSlot_CopyFields
 	muls bc, 0xC
 	exts xbc
 	add xbc, xix
@@ -10084,40 +10084,40 @@ LABEL_F3E649:
 	ld (xbc + 11), a
 	inc 1, l
 	cp l, 0x3F
-	jr ule, LABEL_F3E63C
+	jr ule, SeqBuffer_InitSlotLoop
 	ld (xix + 10), 0xFF
 	stib_dri 0xF1, 0xFF, 0x02, 0xFF
 	pop xiz
 	inc 6, xsp
 	ret
 
-LABEL_F3E69F:
+SeqBuffer_FindMinPosition:
 	ldda8 a, 8182
 	ldw hl, 0xFFFF
 	cp a, 0xFF
-	jr z, LABEL_F3E6CA
+	jr z, SeqBuffer_FindMin_Store
 	ldada xbc, 8186
 
-LABEL_F3E6AF:
+SeqBuffer_FindMin_ScanLoop:
 	extz wa
 	muls wa, 0xC
 	exts xwa
 	add xwa, xbc
 	ld de, (xwa + 4)
 	cp de, hl
-	jr nc, LABEL_F3E6C2
+	jr nc, SeqBuffer_FindMin_NextEntry
 	ld hl, de
 
-LABEL_F3E6C2:
+SeqBuffer_FindMin_NextEntry:
 	ld a, (xwa + 11)
 	cp a, 0xFF
-	jr nz, LABEL_F3E6AF
+	jr nz, SeqBuffer_FindMin_ScanLoop
 
-LABEL_F3E6CA:
+SeqBuffer_FindMin_Store:
 	stda16 8954, xhl
 	ret
 
-LABEL_F3E6CF:
+NoteMap_RemoveHeadEntry:
 	extz wa
 	muls wa, 0x9
 	ldada xbc, 7606
@@ -10127,17 +10127,17 @@ LABEL_F3E6CF:
 	ldada xwa, 7602
 	ld (xwa + 2), e
 	cp e, 0xFF
-	jr z, LABEL_F3E6F9
+	jr z, NoteMap_RemoveHead_ClearTail
 	extz de
 	muls de, 0x9
 	stib_dri 0x07, 0xE4, 0xE8, 0xFF
 	ret
 
-LABEL_F3E6F9:
+NoteMap_RemoveHead_ClearTail:
 	ld (xwa + 3), e
 	ret
 
-LABEL_F3E6FD:
+NoteMap_RemoveAndRelink:
 	dec 4, xsp
 	push xiz
 	ld c, a
@@ -10166,13 +10166,13 @@ NoteMap_RelinkEntry:
 	st_dri3b H, 0x07, 0xEC, 0xE4
 	ldada xix, 7602
 	cp w, 0xFF
-	jr nz, LABEL_F3E756
+	jr nz, NoteMap_Relink_HasPrev
 	ldto_berp C, 0xE2
 	ld (xix), c
 	ldb w, 0xFF
-	jr LABEL_F3E778
+	jr NoteMap_Relink_SetPrev
 
-LABEL_F3E756:
+NoteMap_Relink_HasPrev:
 	ld c, w
 	extz bc
 	muls bc, 0x9
@@ -10180,16 +10180,16 @@ LABEL_F3E756:
 	add xbc, xhl
 	lda xiy, (xbc + 1)
 	cp_erpb 0xE2, 0xFF
-	jr nz, LABEL_F3E773
+	jr nz, NoteMap_Relink_ConnectPrevNext
 	ld (xix + 1), w
 	ld (xiy), 0xFF
 	jr NoteMap_UpdateTailPointer
 
-LABEL_F3E773:
+NoteMap_Relink_ConnectPrevNext:
 	ldto_berp C, 0xE2
 	ld (xiy), c
 
-LABEL_F3E778:
+NoteMap_Relink_SetPrev:
 	ld (xiz), w
 
 NoteMap_UpdateTailPointer:
@@ -10197,12 +10197,12 @@ NoteMap_UpdateTailPointer:
 	lda xix, (xbc + 3)
 	ld w, (xix)
 	cp w, 0xFF
-	jr nz, LABEL_F3E78F
+	jr nz, NoteMap_UpdateTail_HasPrev
 	ld (xbc + 2), a
 	ldb w, 0xFF
-	jr LABEL_F3E79E
+	jr NoteMap_UpdateTail_LinkEntry
 
-LABEL_F3E78F:
+NoteMap_UpdateTail_HasPrev:
 	ld c, w
 	extz bc
 	muls bc, 0x9
@@ -10210,7 +10210,7 @@ LABEL_F3E78F:
 	add xbc, xhl
 	ld (xbc + 1), a
 
-LABEL_F3E79E:
+NoteMap_UpdateTail_LinkEntry:
 	ld (xde), w
 	ld (xix), a
 	ld xwa, (xsp + 4)
@@ -10219,7 +10219,7 @@ LABEL_F3E79E:
 	inc 4, xsp
 	ret
 
-LABEL_F3E7AC:
+SeqBuffer_RemoveLastEntry:
 	ldada xde, 8184
 	ld l, (xde)
 	cp l, 0xFF
@@ -10232,7 +10232,7 @@ LABEL_F3E7AC:
 	add xwa, xbc
 	ld h, (xwa + 11)
 	cp h, 0xFF
-	jr z, LABEL_F3E7DF
+	jr z, SeqBuffer_RemoveLast_Fixup
 	ld a, h
 	extz wa
 	muls wa, 0xC
@@ -10240,7 +10240,7 @@ LABEL_F3E7AC:
 	add xwa, xbc
 	ld (xwa + 10), 0xFF
 
-LABEL_F3E7DF:
+SeqBuffer_RemoveLast_Fixup:
 	ld (xde), h
 	cp h, 0xFF
 	ret nz
@@ -10250,52 +10250,52 @@ LABEL_F3E7DF:
 SeqPlay_AllocBuffersAndInit:
 	ldda8 c, 36150
 	cp c, 0x85
-	jr z, LABEL_F3E7F9
+	jr z, SeqPlay_AllocBuf_Mode85_86
 	cp c, 0x86
-	jr nz, LABEL_F3E845
+	jr nz, SeqPlay_AllocBuf_Mode87_88
 
-LABEL_F3E7F9:
+SeqPlay_AllocBuf_Mode85_86:
 	bitda 1, 10417
-	jr nz, LABEL_F3E816
+	jr nz, SeqPlay_AllocBuf_HasRepeat
 	stdi16 9000, 0
 	stdi16 1052, 0
 	stdi8 1051, 0
 	resda 3, 10407
-	jr LABEL_F3E85F
+	jr SeqPlay_AllocBuf_InitPlayback
 
-LABEL_F3E816:
+SeqPlay_AllocBuf_HasRepeat:
 	ldda16 xwa, 9504
 	calr SeqBuf_AllocNextSlot
 	stda16 9000, xhl
 	stda16 1052, xhl
 	stdi8 1051, 0
 	cps hl, 0
-	jr nz, LABEL_F3E834
+	jr nz, SeqPlay_AllocBuf_SetRepeatBit
 	resda 3, 10407
-	jr LABEL_F3E838
+	jr SeqPlay_AllocBuf_AllocSecond
 
-LABEL_F3E834:
+SeqPlay_AllocBuf_SetRepeatBit:
 	setda 3, 10407
 
-LABEL_F3E838:
+SeqPlay_AllocBuf_AllocSecond:
 	ldda16 xwa, 9506
 	calr SeqBuf_AllocNextSlotAdjusted
 	stda16 9002, xhl
-	jr LABEL_F3E85F
+	jr SeqPlay_AllocBuf_InitPlayback
 
-LABEL_F3E845:
+SeqPlay_AllocBuf_Mode87_88:
 	ldda16 xwa, 9832
 	cp c, 0x87
-	jr z, LABEL_F3E853
+	jr z, SeqPlay_AllocBuf_Mode87_88_Alloc
 	cp c, 0x88
 	jr nz, LABEL_F3E865
 
-LABEL_F3E853:
+SeqPlay_AllocBuf_Mode87_88_Alloc:
 	calr SeqBuf_AllocNextSlot
 	stda16 1052, xhl
 	stdi8 1051, 0
 
-LABEL_F3E85F:
+SeqPlay_AllocBuf_InitPlayback:
 	call SeqPlay_InitializePlayback
 	jr LABEL_F3E897
 
@@ -12321,27 +12321,27 @@ PartCtrl_AdvanceReadPos:
 	pushw iz
 	ldda16 xwa, 10377
 	cp wa, 0xFF
-	jr z, LABEL_F3FB06
+	jr z, PartCtrl_AdvancePos_AtMax
 	inc 1, wa
 	stda16 10377, xwa
-	jr LABEL_F3FB29
+	jr PartCtrl_AdvancePos_Return
 
-LABEL_F3FB06:
+PartCtrl_AdvancePos_AtMax:
 	ldda16 xwa, 10379
 	calr PartCtrl_ReadWord
 	ld iz, hl
 	ld wa, iz
 	calr PartCtrl_TestBit7
 	cps l, 0
-	jr nz, LABEL_F3FB1F
+	jr nz, PartCtrl_AdvancePos_SaveNew
 	stdi8 10362, 2
-	jr LABEL_F3FB29
+	jr PartCtrl_AdvancePos_Return
 
-LABEL_F3FB1F:
+PartCtrl_AdvancePos_SaveNew:
 	stda16 10379, xiz
 	stdi16 10377, 5
 
-LABEL_F3FB29:
+PartCtrl_AdvancePos_Return:
 	popw iz
 	ret
 
@@ -12349,35 +12349,35 @@ PartCtrl_NavigateBackward:
 	pushw iz
 	ldda16 xwa, 10377
 	cps wa, 5
-	jr z, LABEL_F3FB3C
+	jr z, PartCtrl_NavBack_AtMin
 	dec 1, wa
 	stda16 10377, xwa
 	jr SeqPart_RestoreReturn3
 
-LABEL_F3FB3C:
+PartCtrl_NavBack_AtMin:
 	ldda16 xwa, 10379
 	calr PartCtrl_ReadWord_Off1
 	ld iz, hl
 	ld wa, iz
 	calr PartCtrl_TestBit7
 	cps l, 0
-	jr nz, LABEL_F3FB5B
+	jr nz, PartCtrl_NavBack_CheckZero
 	ldw wa, 0x47
 	calr SeqData_SetErrorCode
 	stdi8 10362, 2
 	jr SeqPart_RestoreReturn3
 
-LABEL_F3FB5B:
+PartCtrl_NavBack_CheckZero:
 	cps iz, 0
-	jr z, LABEL_F3FB65
+	jr z, PartCtrl_NavBack_ErrorEnd
 	cp iz, 0xFFFF
-	jr nz, LABEL_F3FB6C
+	jr nz, PartCtrl_NavBack_SaveNew
 
-LABEL_F3FB65:
+PartCtrl_NavBack_ErrorEnd:
 	stdi8 10362, 11
 	jr SeqPart_RestoreReturn3
 
-LABEL_F3FB6C:
+PartCtrl_NavBack_SaveNew:
 	stda16 10379, xiz
 	stdi16 10377, 255
 
@@ -12389,18 +12389,18 @@ PartCtrl_AdvanceToNextEntry:
 	pushw iz
 	ldda16 xwa, 10373
 	cp wa, 0xFF
-	jr z, LABEL_F3FB8B
+	jr z, PartCtrl_AdvanceEntry_AtMax
 	inc 1, wa
 	stda16 10373, xwa
 	jr PartCtrl_RestoreReturn
 
-LABEL_F3FB8B:
+PartCtrl_AdvanceEntry_AtMax:
 	ldda16 xwa, 10375
 	calr PartCtrl_ReadWord
 	ld iz, hl
 	ld wa, iz
 	cp wa, 0xFFFF
-	jr nz, LABEL_F3FBB0
+	jr nz, PartCtrl_AdvanceEntry_TestBit7
 	ldda16 xwa, 10375
 	calr Part_LinkVoiceToChain
 	ld iz, hl
@@ -12409,7 +12409,7 @@ LABEL_F3FB8B:
 	stdi8 10362, 5
 	jr PartCtrl_RestoreReturn
 
-LABEL_F3FBB0:
+PartCtrl_AdvanceEntry_TestBit7:
 	calr PartCtrl_TestBit7
 	cps l, 0
 	jr nz, PartCtrl_SaveChainPosition
@@ -12428,35 +12428,35 @@ PartCtrl_NavigateBackwardAlt:
 	pushw iz
 	ldda16 xwa, 10373
 	cps wa, 5
-	jr z, LABEL_F3FBDB
+	jr z, PartCtrl_NavBackAlt_AtMin
 	dec 1, wa
 	stda16 10373, xwa
 	jr SeqPart_RestoreReturn2
 
-LABEL_F3FBDB:
+PartCtrl_NavBackAlt_AtMin:
 	ldda16 xwa, 10375
 	calr PartCtrl_ReadWord_Off1
 	ld iz, hl
 	ld wa, iz
 	calr PartCtrl_TestBit7
 	cps l, 0
-	jr nz, LABEL_F3FBFA
+	jr nz, PartCtrl_NavBackAlt_CheckZero
 	ldw wa, 0x48
 	calr SeqData_SetErrorCode
 	stdi8 10362, 2
 	jr SeqPart_RestoreReturn2
 
-LABEL_F3FBFA:
+PartCtrl_NavBackAlt_CheckZero:
 	cps iz, 0
-	jr z, LABEL_F3FC04
+	jr z, PartCtrl_NavBackAlt_ErrorEnd
 	cp iz, 0xFFFF
-	jr nz, LABEL_F3FC0B
+	jr nz, PartCtrl_NavBackAlt_SaveNew
 
-LABEL_F3FC04:
+PartCtrl_NavBackAlt_ErrorEnd:
 	stdi8 10362, 11
 	jr SeqPart_RestoreReturn2
 
-LABEL_F3FC0B:
+PartCtrl_NavBackAlt_SaveNew:
 	stda16 10375, xiz
 	stdi16 10373, 255
 
@@ -12478,14 +12478,14 @@ SeqPart_ReadByte_Secondary:
 	ldda16 xwa, 10379
 	jrl PartCtrl_ReadByte
 
-LABEL_F3FC26:
+SeqPart_ReadByte_Primary:
 	ldda16 xwa, 10373
 	ld c, a
 	extz bc
 	ldda16 xwa, 10375
 	jrl PartCtrl_ReadByte
 
-LABEL_F3FC35:
+SeqPart_WriteByte_Secondary:
 	ld e, a
 	ldda16 xbc, 10377
 	extz bc
@@ -12517,36 +12517,36 @@ Part_ValidateVoiceChannel:
 	lds wa, 0
 	calr Part_ReadVoiceBit7
 	cps l, 0
-	jr nz, LABEL_F3FC72
+	jr nz, Part_ValidateVoice_ReadWord
 	stdi8 10362, 1
 	jr PartCtrl_ConfigureAndReturn
 
-LABEL_F3FC72:
+Part_ValidateVoice_ReadWord:
 	ld c, (xsp + 2)
 	extz bc
 	lds wa, 0
 	calr Part_ReadVoiceWord
 	ld iz, hl
 	cp iz, 0xFFFF
-	jr nz, LABEL_F3FC8B
+	jr nz, Part_ValidateVoice_CheckFFFF
 	stdi8 10362, 2
 	jr PartCtrl_ConfigureAndReturn
 
-LABEL_F3FC8B:
+Part_ValidateVoice_CheckFFFF:
 	cp iz, 0x4D8
-	jr ule, LABEL_F3FC98
+	jr ule, Part_ValidateVoice_CheckOverflow
 	stdi8 10362, 10
 	jr PartCtrl_ConfigureAndReturn
 
-LABEL_F3FC98:
+Part_ValidateVoice_CheckOverflow:
 	ld wa, iz
 	calr PartCtrl_TestBit7
 	cps l, 0
-	jr nz, LABEL_F3FCA8
+	jr nz, Part_ValidateVoice_SetPosition
 	stdi8 10362, 11
 	jr PartCtrl_ConfigureAndReturn
 
-LABEL_F3FCA8:
+Part_ValidateVoice_SetPosition:
 	stda16 10415, xiz
 	stdi16 9830, 5
 	stdi8 10362, 0
@@ -12574,33 +12574,33 @@ Part_ValidateVoiceAndSetupSeq:
 	ld e, (xde)
 	extz de
 	cps de, 5
-	jr c, LABEL_F3FD19
+	jr c, Part_ValidateSetup_ErrorEnd
 	cp de, 0xFF
-	jr ugt, LABEL_F3FD19
+	jr ugt, Part_ValidateSetup_ErrorEnd
 	add bc, bc
 	ldada xwa, 61944
 	extz xbc
 	add xbc, xwa
 	ld wa, (xbc)
 	cp wa, 0x4D8
-	jr ule, LABEL_F3FD04
+	jr ule, Part_ValidateSetup_StorePos
 	stdi8 10362, 10
 	jr SeqPart_DecisionReturn
 
-LABEL_F3FD04:
+Part_ValidateSetup_StorePos:
 	stda16 10415, xwa
 	stda16 9830, xde
 	calr SeqData_ReadNextByte
 	cp l, 0x82
-	jr z, LABEL_F3FD20
+	jr z, Part_ValidateSetup_CheckBarMark
 	cp l, 0x84
-	jr z, LABEL_F3FD20
+	jr z, Part_ValidateSetup_CheckBarMark
 
-LABEL_F3FD19:
+Part_ValidateSetup_ErrorEnd:
 	stdi8 10362, 11
 	jr SeqPart_DecisionReturn
 
-LABEL_F3FD20:
+Part_ValidateSetup_CheckBarMark:
 	stdi8 10362, 0
 
 SeqPart_DecisionReturn:
@@ -12793,7 +12793,7 @@ AppEvent_ExtendedHandler:
 	ld xwa, 0xE445B2
 	jr Part_LoadAndApplyVoiceTable
 
-LABEL_F3FF2D:
+Part_ApplyVoiceTableB:
 	ld xwa, 0xE445BE
 	jr Part_LoadAndApplyVoiceTable
 
@@ -12801,7 +12801,7 @@ Part_ApplyVoiceTableA:
 	ld xwa, 0xE445CA
 	jr Part_LoadAndApplyVoiceTable
 
-LABEL_F3FF3B:
+Part_ApplyVoiceTableC:
 	ld xwa, 0xE445D6
 	jr Part_LoadAndApplyVoiceTable
 
@@ -12825,15 +12825,15 @@ Part_ValidateAndSetupVoiceChannel:
 	calr Part_ValidateVoiceChannel
 	ldda8 a, 10362
 	cps a, 0
-	jr z, LABEL_F3FF78
+	jr z, Part_ValidateSetup_ClearAndProcess
 	cps a, 1
-	jr nz, LABEL_F3FF76
+	jr nz, Part_ValidateSetup_ErrorReturn
 	stdi8 10362, 0
 
-LABEL_F3FF76:
+Part_ValidateSetup_ErrorReturn:
 	jr SeqData_TrackProcessComplete
 
-LABEL_F3FF78:
+Part_ValidateSetup_ClearAndProcess:
 	stdi8 10362, 0
 	ld c, (xsp + 4)
 	dec 1, c
@@ -12845,28 +12845,28 @@ LABEL_F3FF78:
 	ld a, (xde)
 	ld (xsp + 2), a
 	cp (xsp + 2), 0x5
-	jr c, LABEL_F3FFBB
+	jr c, Part_ValidateSetup_NoData
 	add bc, bc
 	ldada xwa, 61944
 	extz xbc
 	add xbc, xwa
 	ld iz, (xbc)
 	cp iz, 0x4D8
-	jr ule, LABEL_F3FFB2
+	jr ule, Part_ValidateSetup_TestBit7
 	stdi8 10362, 10
 	jr SeqData_TrackProcessComplete
 
-LABEL_F3FFB2:
+Part_ValidateSetup_TestBit7:
 	ld wa, iz
 	calr PartCtrl_TestBit7
 	cps l, 0
-	jr nz, LABEL_F3FFC2
+	jr nz, Part_ValidateSetup_StoreAndRead
 
-LABEL_F3FFBB:
+Part_ValidateSetup_NoData:
 	stdi8 10362, 11
 	jr SeqData_TrackProcessComplete
 
-LABEL_F3FFC2:
+Part_ValidateSetup_StoreAndRead:
 	stda16 10415, xiz
 	ld a, (xsp + 2)
 	extz wa
@@ -12890,48 +12890,48 @@ SeqData_ScanAllTracks:
 	cpdi16 9694, 0
 	jr z, SeqData_PopIzRet
 
-LABEL_F3FFF5:
+SeqData_ScanTracks_OuterLoop:
 	ldi_werp 0xFA, 0
 	ldda8 a, 10382
 	extz wa
 	cps wa, 0
-	jr z, LABEL_F4003E
+	jr z, SeqData_ScanTracks_NextTrack
 
-LABEL_F40002:
+SeqData_ScanTracks_InnerLoop:
 	bitda 1, 10363
-	jr z, LABEL_F40018
+	jr z, SeqData_ScanTracks_SetFlag
 	lds32 xwa, 1
 	adddm32 9690, xwa
 	calr SeqData_AdvancePosition
 	cpdi8 10362, 0
 	jr nz, SeqData_PopIzRet
 
-LABEL_F40018:
+SeqData_ScanTracks_SetFlag:
 	setda 1, 10363
 	calr SeqData_ReadNextByte
 	cp l, 0x82
-	jr nz, LABEL_F4002B
+	jr nz, SeqData_ScanTracks_Check81
 	stdi8 10362, 7
 	jr SeqData_PopIzRet
 
-LABEL_F4002B:
+SeqData_ScanTracks_Check81:
 	cp l, 0x81
-	jr nz, LABEL_F40033
+	jr nz, SeqData_ScanTracks_CheckCount
 	inc1_werp 0xFA
 
-LABEL_F40033:
+SeqData_ScanTracks_CheckCount:
 	ldda8 a, 10382
 	extz wa
 	cp_werp WA, 0xFA
-	jr nz, LABEL_F40002
+	jr nz, SeqData_ScanTracks_InnerLoop
 
-LABEL_F4003E:
+SeqData_ScanTracks_NextTrack:
 	inc 1, iz
 	calr SeqTrack_ProcessControlBytes
 	cpdi8 10362, 0
 	jr nz, SeqData_PopIzRet
 	cpda16 xiz, 9694
-	jr nz, LABEL_F3FFF5
+	jr nz, SeqData_ScanTracks_OuterLoop
 
 SeqData_PopIzRet:
 	pop xiz
@@ -14658,7 +14658,7 @@ LABEL_F410B3:
 	ld xwa, (xsp + 2)
 	ld_srib3 A, 0x07, 0xE0, 0xE4
 	extz wa
-	calr LABEL_F3FC35
+	calr SeqPart_WriteByte_Secondary
 	calr PartCtrl_AdvanceReadPos
 	cpdi8 10362, 0
 	jr nz, LABEL_F410D7
@@ -15126,13 +15126,13 @@ LABEL_F4150F:
 ; ============================================================================
 Part_WriteByte:
 	cps a, 0
-	jr nz, LABEL_F4152C
+	jr nz, Part_WriteByte_ComputeAddr
 	ldada xwa, 61824
 	extz xbc
 	add xbc, xwa
-	jr LABEL_F41540
+	jr Part_WriteByte_DoWrite
 
-LABEL_F4152C:
+Part_WriteByte_ComputeAddr:
 	extz xbc
 	dec 1, a
 	ldb w, 0x0
@@ -15142,7 +15142,7 @@ LABEL_F4152C:
 	lda_24 xbc, 0x0ab000
 	add xbc, xwa
 
-LABEL_F41540:
+Part_WriteByte_DoWrite:
 	ld (xbc), e
 	ret
 
@@ -15157,13 +15157,13 @@ LABEL_F41540:
 ; ============================================================================
 Part_WriteWord:
 	cps a, 0
-	jr nz, LABEL_F41551
+	jr nz, Part_WriteWord_ComputeAddr
 	ldada xwa, 61824
 	extz xbc
 	add xbc, xwa
-	jr LABEL_F41565
+	jr Part_WriteWord_DoWrite
 
-LABEL_F41551:
+Part_WriteWord_ComputeAddr:
 	extz xbc
 	dec 1, a
 	ldb w, 0x0
@@ -15173,19 +15173,19 @@ LABEL_F41551:
 	ld xbc, 0xAB000
 	add xbc, xwa
 
-LABEL_F41565:
+Part_WriteWord_DoWrite:
 	ld (xbc), de
 	ret
 
 Part_ReadByteDirect:
 	cps a, 0
-	jr nz, LABEL_F41576
+	jr nz, Part_ReadByteDirect_ComputeAddr
 	ldada xwa, 61824
 	extz xbc
 	add xbc, xwa
-	jr LABEL_F4158A
+	jr Part_ReadByteDirect_DoRead
 
-LABEL_F41576:
+Part_ReadByteDirect_ComputeAddr:
 	extz xbc
 	dec 1, a
 	ldb w, 0x0
@@ -15195,19 +15195,19 @@ LABEL_F41576:
 	lda_24 xbc, 0x0ab000
 	add xbc, xwa
 
-LABEL_F4158A:
+Part_ReadByteDirect_DoRead:
 	ld l, (xbc)
 	ret
 
 Part_ReadWord:
 	cps a, 0
-	jr nz, LABEL_F4159B
+	jr nz, Part_ReadWord_ComputeAddr
 	ldada xwa, 61824
 	extz xbc
 	add xbc, xwa
-	jr LABEL_F415AF
+	jr Part_ReadWord_DoRead
 
-LABEL_F4159B:
+Part_ReadWord_ComputeAddr:
 	extz xbc
 	dec 1, a
 	ldb w, 0x0
@@ -15217,7 +15217,7 @@ LABEL_F4159B:
 	ld xbc, 0xAB000
 	add xbc, xwa
 
-LABEL_F415AF:
+Part_ReadWord_DoRead:
 	ld hl, (xbc)
 	ret
 
@@ -15270,7 +15270,7 @@ Part_SetAllVoicePos:
 	ld iz, wa
 	ldi_berp 0xFB, 0
 
-LABEL_F41606:
+Part_SetAllVoicePos_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xB1
@@ -15278,7 +15278,7 @@ LABEL_F41606:
 	calr Part_WriteWord
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
-	jr ule, LABEL_F41606
+	jr ule, Part_SetAllVoicePos_Loop
 	calr Seq_ComputePercentClamped99
 	stda8 7528, l
 	call SeqAccomp_SendStopNotify
@@ -15292,11 +15292,11 @@ Part_IncrementVoicePos:
 	calr Part_ReadWord
 	ld iz, hl
 	cp iz, 0x4D8
-	jr c, LABEL_F4163F
+	jr c, Part_IncrVoicePos_ValidRange
 	ldw hl, 0xFFFF
 	jr LABEL_F41667
 
-LABEL_F4163F:
+Part_IncrVoicePos_ValidRange:
 	inc 1, iz
 	ldi_berp 0xFB, 0
 
@@ -16075,11 +16075,11 @@ PartCtrl_SetClearBit7:
 	lda_24 xde, 0x0b0000
 	add xde, xwa
 	cps c, 0
-	jr z, LABEL_F41CAE
+	jr z, PartCtrl_SetClearBit7_ClearPath
 	setm 7, (xde)
 	ret
 
-LABEL_F41CAE:
+PartCtrl_SetClearBit7_ClearPath:
 	resm 7, (xde)
 	ret
 
@@ -16105,7 +16105,7 @@ PartCtrl_WriteByteToBuf:
 	ld (xbc), e
 	ret
 
-LABEL_F41CE1:
+PartCtrl_DataBlock_CE1:
 	.byte 0x3e, 0xe8, 0x8e, 0xbe, 0x02, 0x32, 0x92, 0x23
 	.byte 0xeb, 0x12, 0x96, 0x20, 0xd8, 0x69, 0xe8, 0x12
 	.byte 0xe8, 0xee, 0x08, 0xeb, 0x80, 0xf2, 0x00, 0x00
@@ -16139,36 +16139,36 @@ PartCtrl_WriteBytePair:
 	ld e, (xiz)
 	ld (xhl), e
 	cp bc, 0xFF
-	jr nz, LABEL_F41DAE
+	jr nz, PartCtrl_WritePair_NotFF
 	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
-	jr nz, LABEL_F41D9C
+	jr nz, PartCtrl_WritePair_ReadNext
 	ldw hl, 0xFFFF
-	jr LABEL_F41DB7
+	jr PartCtrl_WritePair_Return
 
-LABEL_F41D9C:
+PartCtrl_WritePair_ReadNext:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
 	inc 5, xwa
 	lda_24 xhl, 0x0b0000
 	add xhl, xwa
-	jr LABEL_F41DB0
+	jr PartCtrl_WritePair_WriteSecond
 
-LABEL_F41DAE:
+PartCtrl_WritePair_NotFF:
 	inc 1, xhl
 
-LABEL_F41DB0:
+PartCtrl_WritePair_WriteSecond:
 	ld a, (xiz + 1)
 	ld (xhl), a
 	lds hl, 0
 
-LABEL_F41DB7:
+PartCtrl_WritePair_Return:
 	pop xiz
 	ret
 
-LABEL_F41DB9:
+PartCtrl_DeallocAndWriteEnd:
 	dec 4, xsp
 	lda xde, (xsp)
 	ldada xbc, 9460
@@ -16180,13 +16180,13 @@ LABEL_F41DB9:
 	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
-	jr z, LABEL_F41DE4
+	jr z, PartCtrl_DeallocAndWrite_WriteByte
 	calr Part_StealAndReallocVoices
 	ld wa, (xsp + 256)
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
 
-LABEL_F41DE4:
+PartCtrl_DeallocAndWrite_WriteByte:
 	ld wa, (xsp + 256)
 	lds bc, 5
 	ldw de, 0x82
@@ -16199,13 +16199,13 @@ Part_DeallocVoices1And2:
 	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
-	jr z, LABEL_F41E0A
+	jr z, Part_DeallocVoices_Voice2
 	calr Part_StealAndReallocVoices
 	lds wa, 1
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
 
-LABEL_F41E0A:
+Part_DeallocVoices_Voice2:
 	lds wa, 1
 	lds bc, 5
 	ldw de, 0x82
@@ -16214,13 +16214,13 @@ LABEL_F41E0A:
 	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
-	jr z, LABEL_F41E2C
+	jr z, Part_DeallocVoices_Voice2Write
 	calr Part_StealAndReallocVoices
 	lds wa, 2
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
 
-LABEL_F41E2C:
+Part_DeallocVoices_Voice2Write:
 	lds wa, 2
 	lds bc, 5
 	ldw de, 0x82
@@ -16231,7 +16231,7 @@ Part_UnlinkVoiceFromChain:
 	lds wa, 1
 	calr PartCtrl_TestBit7
 	cps l, 0
-	jr nz, LABEL_F41E9F
+	jr nz, Part_UnlinkVoice_CheckVoice2
 	lds wa, 1
 	lds bc, 1
 	calr PartCtrl_SetClearBit7
@@ -16243,34 +16243,34 @@ Part_UnlinkVoiceFromChain:
 	calr PartCtrl_ReadWord
 	ld iz, hl
 	cpi_werp 0xFA, 0
-	jr nz, LABEL_F41E6F
+	jr nz, Part_UnlinkVoice1_HasNext
 	cp iz, 0xFFFF
-	jr z, LABEL_F41E90
+	jr z, Part_UnlinkVoice1_Clear
 	ld wa, iz
 	calr Part_WriteWordBlock_OffsetAF
 	ld wa, iz
 	lds bc, 0
-	jr LABEL_F41E8D
+	jr Part_UnlinkVoice1_WriteOff1
 
-LABEL_F41E6F:
+Part_UnlinkVoice1_HasNext:
 	cp iz, 0xFFFF
-	jr nz, LABEL_F41E80
+	jr nz, Part_UnlinkVoice1_LinkPrevNext
 	ldto_werp WA, 0xFA
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
-	jr LABEL_F41E90
+	jr Part_UnlinkVoice1_Clear
 
-LABEL_F41E80:
+Part_UnlinkVoice1_LinkPrevNext:
 	ldto_werp WA, 0xFA
 	ld bc, iz
 	calr PartCtrl_WriteWord
 	ld wa, iz
 	ldto_werp BC, 0xFA
 
-LABEL_F41E8D:
+Part_UnlinkVoice1_WriteOff1:
 	calr PartCtrl_WriteWord_Off1
 
-LABEL_F41E90:
+Part_UnlinkVoice1_Clear:
 	lds wa, 1
 	lds bc, 0
 	calr PartCtrl_WriteWord_Off1
@@ -16278,7 +16278,7 @@ LABEL_F41E90:
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
 
-LABEL_F41E9F:
+Part_UnlinkVoice_CheckVoice2:
 	lds wa, 2
 	calr PartCtrl_TestBit7
 	cps l, 0
@@ -16294,7 +16294,7 @@ LABEL_F41E9F:
 	calr PartCtrl_ReadWord
 	ld iz, hl
 	cpi_werp 0xFA, 0
-	jr nz, LABEL_F41ED7
+	jr nz, Part_UnlinkVoice2_HasNext
 	cp iz, 0xFFFF
 	jr z, LABEL_F41EF8
 	ld wa, iz
@@ -16303,7 +16303,7 @@ LABEL_F41E9F:
 	lds bc, 0
 	jr LABEL_F41EF5
 
-LABEL_F41ED7:
+Part_UnlinkVoice2_HasNext:
 	cp iz, 0xFFFF
 	jr nz, LABEL_F41EE8
 	ldto_werp WA, 0xFA
@@ -18893,18 +18893,18 @@ LABEL_F437CB:
 
 LABEL_F437E1:
 	setda 3, 10407
-	jr LABEL_F437EB
+	jr SeqAcc_ReInitWithGuard
 
 LABEL_F437E7:
 	resda 3, 10407
 
-LABEL_F437EB:
+SeqAcc_ReInitWithGuard:
 	stdi8 58248, 1
 	call SeqAcc_InitPlaybackState
 	stdi8 58248, 0
 	ret
 
-LABEL_F437FA:
+SeqPlay_DispatchAndResetAll:
 	call AccWrap_PlayModeDispatch
 	calr Part_CopyVoiceDataToAllChannels
 	call SeqPlay_ActivateAllChannels
@@ -18929,7 +18929,7 @@ SeqPlay_StopAndClearChannels:
 	ldw wa, 0x8
 	jp MIDI_SendSysExCmd
 
-LABEL_F4384C:
+SeqPlay_StopAndClearSequence:
 	call AccWrap_PlayModeDispatch
 	stdi16 10420, 0
 	ldw wa, 0x32
@@ -18986,11 +18986,11 @@ AccWrap_DispatchAndWaitSync:
 	bit 2, a
 	ret z
 
-LABEL_F4399F:
+AccWrap_WaitSync_Loop:
 	sub bc, 0x1
 	ret z
 	bit 2, a
-	jr nz, LABEL_F4399F
+	jr nz, AccWrap_WaitSync_Loop
 	ret
 
 ; ============================================================================
@@ -19011,7 +19011,7 @@ SeqStatus_CheckBit2:
 	and l, 0x4
 	ret
 
-LABEL_F439BF:
+SeqStatus_CheckMaskedBit:
 	ldda8 l, 64850
 	and l, a
 	ret
@@ -19020,15 +19020,15 @@ Seq_ComputePercentClamped99:
 	ldw bc, 0x4D8
 	ldda16 xwa, 62001
 	cp wa, 0x258
-	jr ule, LABEL_F439DF
+	jr ule, Seq_ComputePercent_Compute
 
-LABEL_F439D3:
+Seq_ComputePercent_NormalizeLoop:
 	srl bc, 1
 	srl wa, 1
 	cp wa, 0x258
-	jr ugt, LABEL_F439D3
+	jr ugt, Seq_ComputePercent_NormalizeLoop
 
-LABEL_F439DF:
+Seq_ComputePercent_Compute:
 	mul wa, 0x64
 	extz xwa
 	div xwa, xbc
@@ -19041,11 +19041,11 @@ LABEL_F439DF:
 SeqStatus_SetOrClearBit:
 	ldada xde, 64941
 	cps c, 0
-	jr z, LABEL_F439FC
+	jr z, SeqStatus_SetOrClear_ClearPath
 	or (xde), a
 	ret
 
-LABEL_F439FC:
+SeqStatus_SetOrClear_ClearPath:
 	cpl a
 	and (xde), a
 	ret
@@ -19070,12 +19070,12 @@ Part_IsVoiceActive:
 	cps l, 0
 	jr z, SeqStatus_Exit
 	lds hl, 1
-	jr LABEL_F43A30
+	jr Part_IsVoiceActive_Return
 
 SeqStatus_Exit:
 	lds hl, 0
 
-LABEL_F43A30:
+Part_IsVoiceActive_Return:
 	inc 2, xsp
 	ret
 
@@ -22124,7 +22124,7 @@ SeqAccomp_InitAndReturn:
 
 ; NoteEditSy mode scroll return
 NoteEditSy_ModeScrollReturn:
-	call LABEL_F38A32
+	call SeqPlay_CheckAndActivateParts
 	cps hl, 0
 	jr z, AppEvent_ReturnZero
 	ld xwa, (xsp + 2)
@@ -23300,7 +23300,7 @@ SqPunchTitleFunc:
 	jr z, LABEL_F46EB6
 	cp xde, 0x2
 	jr nz, SqPunch_HandleReturn
-	call LABEL_F3890C
+	call SeqAcc_UpdateAndDispatch
 	jr SqPunch_HandleReturn
 
 LABEL_F46EB6:
@@ -23317,11 +23317,11 @@ SqPunchmTitleFunc:
 	jr z, LABEL_F46EDB
 	cp xde, 0x2
 	jr nz, SqPunchm_HandleReturn
-	call LABEL_F38956
+	call SeqAcc_StartPlaybackFromPosition
 	jr SqPunchm_HandleReturn
 
 LABEL_F46EDB:
-	call LABEL_F389AD
+	call SeqAcc_StopPlayback
 
 SqPunchm_HandleReturn:
 	lds32 xhl, 0
@@ -29708,7 +29708,7 @@ SeqPart_DualLoadNavigate:
 	calr SeqPart_MainNavigate
 
 SeqPart_DualLoadExit:
-	call LABEL_F3FF2D
+	call Part_ApplyVoiceTableB
 	call SeqVoice_InitReturnZero
 	pop_werp 0xFA
 	ret
@@ -30910,7 +30910,7 @@ SeqPart_TransposeReturn:
 	ldmm8 10362, 9782
 
 SeqPart_TransposeExit:
-	call LABEL_F3FF3B
+	call Part_ApplyVoiceTableC
 	call SeqVoice_InitReturnZero
 	pop_werp 0xFA
 	ret
@@ -31529,7 +31529,7 @@ SeqPart_BufferSwap:
 	ldmm16 10375, 10415
 	ldmm16 10373, 9830
 	call PartCtrl_NavigateBackwardAlt
-	call LABEL_F3FC26
+	call SeqPart_ReadByte_Primary
 	cp l, 0x81
 	jr z, SeqPart_BufferSwapReturn
 	call PartCtrl_AdvanceToNextEntry

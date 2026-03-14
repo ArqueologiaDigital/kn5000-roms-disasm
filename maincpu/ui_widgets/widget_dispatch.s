@@ -6521,7 +6521,7 @@ LABEL_EE8440:
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8448:
-	.long LABEL_FC7B61
+	.long UIState_ProcessExtendedMode
 	.long AccWrap_ReplayStop
 	.long LABEL_FDE2A8
 	.long NotePool_DataBlock_8BA
@@ -6543,7 +6543,7 @@ LABEL_EE847C:
 	.fill 4, 1, 0xff
 LABEL_EE8480:
 	.long LABEL_FEAA18
-	.long LABEL_FC7C14
+	.long UIState_ProcessSimpleMode
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8490:
@@ -6627,7 +6627,7 @@ LABEL_EE856C:
 
 
 LABEL_EE8570:
-	.long LABEL_FC7B2C
+	.long UIState_SwitchOnDisplayMode
 	.long LABEL_FDE514
 	.long AccStyle_JumpTable2
 	.long UIState_KeyScan_Dispatch
@@ -6654,7 +6654,7 @@ LABEL_EE85B4:
 	.long Encoder_ApplySystemModeSettings
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE85C8:
-	.long LABEL_FC7BEE
+	.long UIState_ProcessAltMode
 	.long LABEL_FDE7B5
 	.long AccWrap_ReplayStopAlt
 	.long LABEL_FEADC7
@@ -6673,7 +6673,7 @@ LABEL_EE85FC:
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8608:
-	.long LABEL_FC7BBB
+	.long UIState_SwitchForMidiFlags
 	.long AccompSeq_JumpTable
 	.long AccStyle_JumpTable
 	.byte 0x8b, 0x75, 0xef, 0x00

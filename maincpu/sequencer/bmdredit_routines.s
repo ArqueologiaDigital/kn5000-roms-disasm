@@ -1757,7 +1757,7 @@ BmDrEdit_InitDrumMode:
 	inc 2, xsp
 	stda32 7504, xhl
 	stda32 7508, xhl
-	calr LABEL_F388A8
+	calr NoteEditSy_ScanAndSortEntries
 	stdi16 10126, 10
 	ldmm16 10130, 10134
 	setda 0, 10050
@@ -3894,7 +3894,7 @@ NoteEdit_UpdateScrollAndDisplay:
 	mul a, 0x60
 	cpdm16 10138, xwa
 	ret nc
-	jrl LABEL_F3888B
+	jrl NoteEditSy_UpdateAllWidgets
 	sub a, c
 	bitda 0, 10050
 	jr z, LABEL_F382F5
