@@ -2424,42 +2424,42 @@ LABEL_EF0319:
 	.long CharMap_DefaultIdentity
 	.long CharMap_DefaultIdentity
 	.long CharMap_DefaultIdentity
-	.long LABEL_EEC618
-	.long LABEL_EEC918
+	.long CharMap_Mode6Forward
+	.long CharMap_Mode7
 	.long CharMap_Mode1Forward
 	.long CharMap_Mode6Reverse
-	.long LABEL_EECE18
-	.long LABEL_EED118
+	.long CharMap_Mode17
+	.long CharMap_FullPermutation
 	.long CharMap_Mode1Forward
 	.long CharMap_Mode6Reverse
 	.long CharMap_Mode1Forward
 	.long CharMap_Mode6Reverse
-	.long LABEL_EECB98
-	.long LABEL_EECE98
-	.long LABEL_EEC418
-	.long LABEL_EEC718
-	.long LABEL_EEC418
-	.long LABEL_EEC718
-	.long LABEL_EECC18
-	.long LABEL_EECF18
-	.long LABEL_EEC498
-	.long LABEL_EEC798
-	.long LABEL_EEC498
-	.long LABEL_EEC798
-	.long LABEL_EECC98
-	.long LABEL_EECF98
-	.long LABEL_EEC598
-	.long LABEL_EEC898
-	.long LABEL_EECA18
-	.long LABEL_EECB18
-	.long LABEL_EECD98
-	.long LABEL_EED098
-	.long LABEL_EEC518
-	.long LABEL_EEC818
-	.long LABEL_EEC998
-	.long LABEL_EECA98
-	.long LABEL_EECD18
-	.long LABEL_EED018
+	.long CharMap_Mode12
+	.long CharMap_Mode18
+	.long CharMap_Mode2Forward
+	.long CharMap_Mode2Reverse
+	.long CharMap_Mode2Forward
+	.long CharMap_Mode2Reverse
+	.long CharMap_Mode13
+	.long CharMap_Mode19
+	.long CharMap_Mode3Forward
+	.long CharMap_Mode3Reverse
+	.long CharMap_Mode3Forward
+	.long CharMap_Mode3Reverse
+	.long CharMap_Mode14
+	.long CharMap_Mode20
+	.long CharMap_Mode5Forward
+	.long CharMap_Mode5Reverse
+	.long CharMap_Mode9
+	.long CharMap_Mode11
+	.long CharMap_Mode16
+	.long CharMap_Mode22
+	.long CharMap_Mode4Forward
+	.long CharMap_Mode4Reverse
+	.long CharMap_Mode8
+	.long CharMap_Mode10
+	.long CharMap_Mode15
+	.long CharMap_Mode21
 
 LABEL_EF03C1:
 	halt

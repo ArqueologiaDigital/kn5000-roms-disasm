@@ -1878,7 +1878,7 @@ EditControlProc:
 ; Sends event 0x1C00038 to trigger GroupBoxProc_StartSSFPresentation.
 ;
 ; This function appears as a function-pointer entry in many widget handler
-; chains (tables at LABEL_EE7FA8, LABEL_EE7FD4, LABEL_EE7FFC, etc.).
+; chains (tables at UIState_HandlerTable_WithProbe, UIState_HandlerTable_Standard, UIState_HandlerTable_Compact, etc.).
 ; It fires when a widget in one of those chains processes user-interaction events.
 ;
 ; Logic (decoded via unidasm):
