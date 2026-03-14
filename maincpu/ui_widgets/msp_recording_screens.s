@@ -606,78 +606,78 @@ Naka_Accomp18_Screens:
 	.long NakaLabel_RecordSetting_ItemLabel
 	.long NakaLabel_RecordSetting_ValueLabel
 	.long Naka0x35_RecordSetting_PartListBar
-	.long LABEL_E18B5E
-	.long LABEL_E18BE6
-	.long LABEL_E18C10
-	.long LABEL_E18C3A
+	.long Naka0x56_RecordSetting_PartDisplay
+	.long Naka0x22_RecordSetting_TrackSel1
+	.long Naka0x22_RecordSetting_TrackSel2
+	.long Naka0x22_RecordSetting_TrackSel3
 	.zero 4
 Naka_Accomp19_Screens:
-	.long LABEL_E18C64
-	.long LABEL_E18CA2
-	.long LABEL_E18CBC
-	.long LABEL_E18CE0
-	.long LABEL_E18D02
-	.long LABEL_E18D2C
-	.long LABEL_E18D56
-	.long LABEL_E18D80
-	.long LABEL_E18DAA
-	.long LABEL_E18DD4
-	.long LABEL_E18DEE
-	.long LABEL_E18E1E
-	.long LABEL_E18E4E
-	.long LABEL_E18E7E
-	.long LABEL_E18EAE
-	.long LABEL_E18EDE
-	.long LABEL_E18F02
-	.long LABEL_E18F3C
-	.long LABEL_E18F78
-	.long LABEL_E18F9C
-	.long LABEL_E18FD8
-	.long LABEL_E19014
-	.long LABEL_E19050
-	.long LABEL_E1908C
+	.long NakaContainer_RealtimeRecording_Root
+	.long NakaGroup_RealtimeRecording_Controls
+	.long NakaNode_RealtimeRecording_StatusLine
+	.long NakaLabel_RealtimeRecording_Indicator
+	.long NakaLabel_RealtimeRecording_PatternEq
+	.long NakaLabel_RealtimeRecording_TempoEq
+	.long NakaLabel_RealtimeRecording_QuantizeEq
+	.long NakaLabel_RealtimeRecording_MeasureEq
+	.long NakaLabel_RealtimeRecording_MemoryEq
+	.long Naka0x29_RealtimeRecording_Scrollbar
+	.long Naka0x3E_RealtimeRecording_DrmBtn
+	.long Naka0x3E_RealtimeRecording_Ac3Btn
+	.long Naka0x3E_RealtimeRecording_Ac2Btn
+	.long Naka0x3E_RealtimeRecording_Ac1Btn
+	.long Naka0x3E_RealtimeRecording_BasBtn
+	.long NakaNode_RealtimeRecording_StatusPanel
+	.long NakaMenuItem_RealtimeRec_Balance
+	.long NakaMenuItem_RealtimeRec_Step
+	.long NakaNode_RealtimeRec_StatusField
+	.long Naka0x3D_RealtimeRec_PartClear
+	.long Naka0x3D_RealtimeRec_AllErase
+	.long Naka0x3D_RealtimeRec_InstErase
+	.long Naka0x3D_RealtimeRec_Quantize
+	.long Naka0x3D_RealtimeRec_Solo
 	.byte 0xb4, 0xd7, 0x03, 0x00, 0xda, 0xd7
 	.byte 0x03, 0x00, 0x00, 0xd8, 0x03, 0x00, 0x26, 0xd8
 	.byte 0x03, 0x00, 0x4c, 0xd8, 0x03, 0x00
-	.long LABEL_E190C6
-	.long LABEL_E190EA
+	.long NakaNode_RealtimeRec_SoloStatus
+	.long NakaNode_RealtimeRec_SubStatus
 	.zero 4
-	.long LABEL_E1910E
+	.long Naka0x5A_RealtimeRec_PresentRoot
 	.zero 4
 Naka_PartBalance_Screens:
-	.long LABEL_E19130
-	.long LABEL_E19168
-	.long LABEL_E19188
-	.long LABEL_E191A8
-	.long LABEL_E191C8
-	.long LABEL_E191E8
+	.long NakaContainer_PartBalance_Root
+	.long Naka0x3C_PartBalance_Slider1
+	.long Naka0x3C_PartBalance_Slider2
+	.long Naka0x3C_PartBalance_Slider3
+	.long Naka0x3C_PartBalance_Slider4
+	.long Naka0x3C_PartBalance_Slider5
 	.byte 0x00, 0x00, 0x00, 0x00
 Naka_Accomp20_Screens:
-	.long LABEL_E19208
-	.long LABEL_E19240
-	.long LABEL_E1925A
-	.long LABEL_E1928A
-	.long LABEL_E192BA
-	.long LABEL_E192EA
-	.long LABEL_E1931A
-	.long LABEL_E1935E
-	.long LABEL_E19384
-	.long LABEL_E1939E
-	.long LABEL_E193B8
-	.long LABEL_E193D2
-	.long LABEL_E193EC
-	.long LABEL_E19410
-	.long LABEL_E1942A
-	.long LABEL_E19444
-	.long LABEL_E1945E
-	.long LABEL_E19478
+	.long NakaContainer_PatternCopy_Root
+	.long Naka0x29_PatternCopy_Scrollbar
+	.long Naka0x3F_PatternCopy_Selector1
+	.long Naka0x3F_PatternCopy_Selector2
+	.long Naka0x3F_PatternCopy_Selector3
+	.long Naka0x3F_PatternCopy_Selector4
+	.long NakaLabel_PatternCopy_ItemValueHeader
+	.long NakaLabel_PatternCopy_FromLabel
+	.long NakaValue_PatternCopy_FromVal1
+	.long NakaValue_PatternCopy_FromVal2
+	.long NakaValue_PatternCopy_FromVal3
+	.long NakaValue_PatternCopy_FromVal4
+	.long NakaLabel_PatternCopy_ToLabel
+	.long NakaValue_PatternCopy_ToVal1
+	.long NakaValue_PatternCopy_ToVal2
+	.long NakaValue_PatternCopy_ToVal3
+	.long NakaValue_PatternCopy_ToVal4
+	.long NakaGroup_PatternCopy_GroupFrame
 	.byte 0x72, 0xd8
 	.byte 0x03, 0x00
 Naka_ComposerMenu_Screens:
-	.long LABEL_E19492
-	.long LABEL_E194BA
-	.long LABEL_E194E2
-	.long LABEL_E1950C
-	.long LABEL_E19532
-	.long LABEL_E19556
-	.long LABEL_E19584
+	.long NakaLabel_PatternCopy_GroupLabel
+	.long NakaLabel_PatternCopy_RhythmLabel
+	.long NakaLabel_PatternCopy_PatternLabel
+	.long NakaLabel_PatternCopy_FromDir
+	.long NakaLabel_PatternCopy_ToDir
+	.long Naka0x3E_PatternCopy_InfoBtn
+	.long NakaGroup_PatternCopy_MemoryGroup

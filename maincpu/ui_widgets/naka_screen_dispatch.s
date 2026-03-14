@@ -9,50 +9,50 @@
 
 	xor	(xiz), wa
 	.byte 0x03, 0x00, 0xba, 0xd8, 0x03, 0x00
-	.long LABEL_E1959E
-	.long LABEL_E195C6
+	.long NakaLabel_PatternCopy_MemoryLabel
+	.long NakaLabel_PatternCopy_PatMemLabel
 	cps	iz, 0
 	.byte 0x03, 0x00, 0x02, 0xd9, 0x03, 0x00
-	.long LABEL_E195F0
+	.long NakaNode_PatternCopy_ProgressBar
 	.byte 0x00, 0x00, 0x00, 0x00
 Naka_SeqToComposer_Screens:
-	.long LABEL_E19610
-	.long LABEL_E19650
-	.long LABEL_E1967E
-	.long LABEL_E196AC
-	.long LABEL_E196DA
-	.long LABEL_E196F4
-	.long LABEL_E19722
-	.long LABEL_E19750
-	.long LABEL_E1977E
-	.long LABEL_E197AA
-	.long LABEL_E197D2
-	.long LABEL_E197EC
-	.long LABEL_E19806
-	.long LABEL_E19820
-	.long LABEL_E1983A
-	.long LABEL_E19860
-	.long LABEL_E19886
-	.long LABEL_E198B0
-	.long LABEL_E198CA
-	.long LABEL_E198E4
-	.long LABEL_E1990A
-	.long LABEL_E19930
-	.long LABEL_E19956
-	.long LABEL_E1997C
+	.long NakaContainer_SeqToComposer_Root
+	.long Naka0x3E_SeqToComposer_DrmBtn
+	.long Naka0x3E_SeqToComposer_Ac3Btn
+	.long Naka0x3E_SeqToComposer_Ac2Btn
+	.long Naka0x29_SeqToComposer_Scrollbar
+	.long Naka0x3E_SeqToComposer_SourceBtn
+	.long Naka0x3E_SeqToComposer_DestBtn
+	.long Naka0x3E_SeqToComposer_InfoBtn
+	.long NakaLabel_SeqToComposer_FirstLast
+	.long NakaLabel_SeqToComposer_MeasureLabel
+	.long NakaValue_SeqToComposer_MeasVal1
+	.long NakaValue_SeqToComposer_MeasVal2
+	.long NakaValue_SeqToComposer_MeasVal3
+	.long NakaValue_SeqToComposer_MeasVal4
+	.long NakaLabel_SeqToComposer_TransLabel
+	.long NakaLabel_SeqToComposer_TransPose
+	.long NakaLabel_SeqToComposer_SequencerLabel
+	.long NakaGroup_SeqToComposer_SeqGroup
+	.long NakaValue_SeqToComposer_SeqValue
+	.long NakaLabel_SeqToComposer_FirstLabel
+	.long NakaLabel_SeqToComposer_MeasFirstLabel
+	.long NakaLabel_SeqToComposer_LastLabel
+	.long NakaLabel_SeqToComposer_MeasLastLabel
+	.long NakaGroup_SeqToComposer_TransGroup
 	ldb	h, 0xd9
 	.byte 0x03, 0x00
-	.long LABEL_E19996
-	.long LABEL_E199BA
-	.long LABEL_E199DE
+	.long NakaLabel_SeqToComposer_TrnLabel
+	.long NakaLabel_SeqToComposer_MemLabel
+	.long NakaLabel_SeqToComposer_ComposerMemory
 	.byte 0x4a, 0xd9
 	.byte 0x03, 0x00
-	.long LABEL_E19A0E
-	.long LABEL_E19A32
+	.long NakaNode_SeqToComposer_ControlField
+	.long NakaNode_SeqToComposer_StyleField
 	.byte 0x6e, 0xd9, 0x03, 0x00
 Naka_SeqCopy_Screens:
-	.long LABEL_E19A56
-	.long LABEL_E19A76
+	.long NakaNode_SeqToComposer_ProgressBar
+	.long NakaNode_SeqToComposer_PartDisplay
 	.long LABEL_E19AF4
 	.long LABEL_E19B1C
 	.long LABEL_E19B44
