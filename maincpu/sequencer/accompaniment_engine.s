@@ -16811,16 +16811,16 @@ AccPlayback_ProcessMiscFlags:
 	and a, 0x3F
 	cps a, 0
 	jr z, AccPlayback_RunPeriodicTasks
-	calr LABEL_F62661
+	calr AccPlayback_ProcessVoiceType5
 	anddi8 14125, 192
 
 AccPlayback_RunPeriodicTasks:
 	calr AccPlayback_ReadEventLoop
-	calr LABEL_F622FF
-	calr LABEL_F62504
+	calr AccPlayback_ProcessBit5Change
+	calr AccPlayback_ProcessTempoAdvance
 
 AccPlayback_Finalize:
-	calr LABEL_F62629
+	calr AccPlayback_UpdateRhythmSustain
 	ret
 
 __pad_F614A3:
@@ -16849,7 +16849,7 @@ AccPlayback_CalcTimingPosition:
 	inc 1, a
 	xor w, w
 	stda16 14106, xwa
-	calr LABEL_F62DB0
+	calr ToneGen_StepFwd_Alternate
 	jr AccTiming_ComputeOffset
 	ldb a, 0x20
 	cpdi8 13563, 4
@@ -17366,7 +17366,7 @@ ToneGen_RestoreFromSavedPos:
 	anddi8 13602, 251
 
 ToneGen_EventDispatchLoop:
-	calr LABEL_F62D59
+	calr ToneGen_StepVoiceForward
 	ldda16 xhl, 13419
 	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
@@ -18345,7 +18345,7 @@ ToneGen_AdvanceSeqList:
 	cpda16 xwa, 13383
 	jr z, AccPlayback_VoiceState_NoChange
 	ldda16 xde, 13377
-	calr LABEL_F622BA
+	calr ToneGen_SearchVoiceBuffer
 	jr AccPlayback_VoiceState_Changed
 
 AccPlayback_VoiceState_NoChange:
@@ -18399,55 +18399,55 @@ __pad_F62230:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x87, 0x32
 	.byte 0x00, 0x00
 
-LABEL_F622BA:
+ToneGen_SearchVoiceBuffer:
 	call AccPatch_GetCurrentSlotAddr
 	ldda8 a, 14235
 	and a, 0x1F
 	cps a, 0
-	jr nz, LABEL_F622D0
+	jr nz, ToneGen_SearchBuf_MapChannel
 	or a, 0x10
 	stda8 14235, a
 
-LABEL_F622D0:
+ToneGen_SearchBuf_MapChannel:
 	call MapBitFlagsToChannelOffset
 	ld l, w
 	xor h, h
 	ld_sriw3 WA, 0x07, 0xF4, 0xEC
 
-LABEL_F622DD:
+ToneGen_SearchBuf_CompareLoop:
 	cpda16 xwa, 13383
-	jr nz, LABEL_F622EA
+	jr nz, ToneGen_SearchBuf_CheckEnd
 	ordi8 13520, 64
-	jr LABEL_F622FC
+	jr ToneGen_SearchBuf_Return
 
-LABEL_F622EA:
+ToneGen_SearchBuf_CheckEnd:
 	cpda16 xwa, 13620
-	jr nz, LABEL_F622F2
-	jr LABEL_F622FC
+	jr nz, ToneGen_SearchBuf_FollowChain
+	jr ToneGen_SearchBuf_Return
 
-LABEL_F622F2:
+ToneGen_SearchBuf_FollowChain:
 	ld hl, wa
 	calr ToneGen_CalcBufferAddr
 	ld wa, (xhl + 3)
-	jr LABEL_F622DD
+	jr ToneGen_SearchBuf_CompareLoop
 
-LABEL_F622FC:
+ToneGen_SearchBuf_Return:
 	ret
 
-LABEL_F622FD:
+__pad_F622FD:
 	.byte 0x00, 0x00
 
-LABEL_F622FF:
+AccPlayback_ProcessBit5Change:
 	bitda 5, 14099
-	jr nz, LABEL_F62308
-	jrl LABEL_F623D7
+	jr nz, AccBit5_CheckBit5Active
+	jrl AccBit5_Return
 
-LABEL_F62308:
+AccBit5_CheckBit5Active:
 	bitda 5, 13520
-	jr nz, LABEL_F62311
+	jr nz, AccBit5_InitAndScan
 	jrl FlagClear_Exit
 
-LABEL_F62311:
+AccBit5_InitAndScan:
 	anddi8 13520, 223
 	anddi8 13519, 127
 	ldda16 xwa, 13588
@@ -18468,10 +18468,10 @@ LABEL_F62311:
 	jrl z, FlagClear_Exit
 	stdi8 13389, 6
 	cp a, 0x90
-	jr z, LABEL_F62393
+	jr z, AccBit5_StepTwice
 	stdi8 13389, 8
 	cp a, 0x91
-	jr z, LABEL_F62390
+	jr z, AccBit5_StepOnce
 	stdi8 13389, 3
 	cp a, 0xD1
 	jr z, AccVoice_InitPlaybackState
@@ -18487,10 +18487,10 @@ LABEL_F62311:
 	jr z, AccVoice_InitPlaybackState
 	jr FlagClear_Exit
 
-LABEL_F62390:
+AccBit5_StepOnce:
 	calr ToneGen_StepToNextStereoSlot
 
-LABEL_F62393:
+AccBit5_StepTwice:
 	calr ToneGen_StepToNextStereoSlot
 	calr ToneGen_StepToNextVoiceSlot
 
@@ -18514,10 +18514,10 @@ AccVoice_InitPlaybackState:
 FlagClear_Exit:
 	anddi8 14099, 223
 
-LABEL_F623D7:
+AccBit5_Return:
 	ret
 
-LABEL_F623D8:
+__pad_F623D8:
 	.byte 0x00, 0x00
 
 ToneGen_ScanVoicePosition:
@@ -18530,15 +18530,15 @@ ToneGen_ScanVoicePosition:
 	lds iy, 3
 	stdi8 13603, 0
 
-LABEL_F623F2:
+ToneGen_ScanPos_CompareLoop:
 	cpda16 xiy, 13387
-	jr nz, LABEL_F62405
+	jr nz, ToneGen_ScanPos_CheckEnd
 	cpda16 xde, 13616
-	jr nz, LABEL_F62405
+	jr nz, ToneGen_ScanPos_CheckEnd
 	ordi8 13603, 1
 	jr VoiceState_CheckExit
 
-LABEL_F62405:
+ToneGen_ScanPos_CheckEnd:
 	cpda16 xiy, 13385
 	jr nz, VoiceState_CheckExit
 	cpda16 xde, 13618
@@ -18547,22 +18547,22 @@ LABEL_F62405:
 
 VoiceState_CheckExit:
 	cpda16 xiy, 13377
-	jr nz, LABEL_F62424
+	jr nz, ToneGen_ScanPos_AdvanceStep
 	cpda16 xde, 13620
-	jr nz, LABEL_F62424
-	jr LABEL_F62429
+	jr nz, ToneGen_ScanPos_AdvanceStep
+	jr ToneGen_ScanPos_ProcessFlags
 
-LABEL_F62424:
-	calr LABEL_F624E7
-	jr LABEL_F623F2
+ToneGen_ScanPos_AdvanceStep:
+	calr ToneGen_AdvanceVoiceStep
+	jr ToneGen_ScanPos_CompareLoop
 
-LABEL_F62429:
+ToneGen_ScanPos_ProcessFlags:
 	ldda8 a, 13603
 	and a, 0x3
 	cps a, 0
 	jr z, PlaybackState_InitDone
 	bitda 1, 13603
-	jr nz, LABEL_F62450
+	jr nz, ToneGen_ScanPos_AdjustBit1
 	ldda16 xiy, 13387
 	ldda32 xix, 13644
 	ld (xix), iy
@@ -18571,14 +18571,14 @@ LABEL_F62429:
 	stda8 13365, c
 	jr PlaybackState_InitDone
 
-LABEL_F62450:
+ToneGen_ScanPos_AdjustBit1:
 	ldda16 xiy, 13389
 	and iy, 0xFF
 	ld wa, iy
 	sub c, a
-	jr c, LABEL_F62478
+	jr c, ToneGen_ScanPos_WrapBlock
 	cps c, 6
-	jr c, LABEL_F62478
+	jr c, ToneGen_ScanPos_WrapBlock
 	stda8 13365, c
 	ldda32 xix, 13644
 	ld wa, (xix)
@@ -18588,7 +18588,7 @@ LABEL_F62450:
 	ld (xix), de
 	jr PlaybackState_InitDone
 
-LABEL_F62478:
+ToneGen_ScanPos_WrapBlock:
 	sub c, 0x7
 	stda8 13365, c
 	ld hl, de
@@ -18604,7 +18604,7 @@ LABEL_F62478:
 PlaybackState_InitDone:
 	ret
 
-LABEL_F62498:
+__pad_F62498:
 	.byte 0x00, 0x00
 
 ToneGen_InitPlaybackState:
@@ -18612,11 +18612,11 @@ ToneGen_InitPlaybackState:
 	ldda8 a, 14235
 	and a, 0x1F
 	cps a, 0
-	jr nz, LABEL_F624B1
+	jr nz, ToneGen_InitPlay_SetupTables
 	or a, 0x10
 	stda8 14235, a
 
-LABEL_F624B1:
+ToneGen_InitPlay_SetupTables:
 	sla a, 2
 	ld l, a
 	xor h, h
@@ -18633,14 +18633,14 @@ LABEL_F624B1:
 	stda16 13620, xhl
 	ret
 
-LABEL_F624E5:
+__pad_F624E5:
 	.byte 0x00, 0x00
 
-LABEL_F624E7:
+ToneGen_AdvanceVoiceStep:
 	inc 1, iy
 	inc 1, c
 	cp c, 0xFF
-	jr nz, LABEL_F62501
+	jr nz, ToneGen_AdvVoiceStep_Return
 	ld hl, de
 	calr ToneGen_CalcBufferAddr
 	ld hl, (xhl + 3)
@@ -18649,15 +18649,15 @@ LABEL_F624E7:
 	lds iy, 6
 	ldb c, 0x6
 
-LABEL_F62501:
+ToneGen_AdvVoiceStep_Return:
 	ret
 
-LABEL_F62502:
+__pad_F62502:
 	.byte 0x00, 0x00
 
-LABEL_F62504:
+AccPlayback_ProcessTempoAdvance:
 	bitda 2, 14099
-	jr z, LABEL_F62533
+	jr z, AccPlayback_TempoAdv_Return
 	anddi8 13520, 223
 	calr ToneGen_CalcTempo
 	calr ToneGen_AdvanceByTempo
@@ -18669,19 +18669,19 @@ LABEL_F62504:
 	stdi8 58336, 16
 	anddi8 14099, 251
 
-LABEL_F62533:
+AccPlayback_TempoAdv_Return:
 	ret
 
-LABEL_F62534:
+__pad_F62534:
 	.byte 0x00, 0x00
 
 ToneGen_CalcTempo:
 	ldda8 l, 14100
 	cps l, 0
-	jr nz, LABEL_F62540
+	jr nz, ToneGen_CalcTempo_Lookup
 	ldb l, 0x6
 
-LABEL_F62540:
+ToneGen_CalcTempo_Lookup:
 	sla l, 1
 	xor h, h
 	push xix
@@ -18699,7 +18699,7 @@ LABEL_F62540:
 	stda8 13360, a
 	ldda8 a, 14102
 	cps a, 1
-	jr nz, LABEL_F62585
+	jr nz, ToneGen_CalcTempo_Mode0
 	sla de, 2
 	ld wa, de
 	xor de, de
@@ -18708,9 +18708,9 @@ LABEL_F62540:
 	div xwa, xhl
 	jr ToneGen_CalcTempoBeatsAndTicks
 
-LABEL_F62585:
+ToneGen_CalcTempo_Mode0:
 	cps a, 0
-	jr nz, LABEL_F625A0
+	jr nz, ToneGen_CalcTempo_Mode2
 	ld wa, de
 	sla wa, 4
 	add wa, de
@@ -18722,14 +18722,14 @@ LABEL_F62585:
 	div xwa, xhl
 	jr ToneGen_CalcTempoBeatsAndTicks
 
-LABEL_F625A0:
+ToneGen_CalcTempo_Mode2:
 	cps a, 2
-	jr nz, LABEL_F625AB
+	jr nz, ToneGen_CalcTempo_Mode3
 	srl de, 1
 	ld wa, de
 	jr ToneGen_CalcTempoBeatsAndTicks
 
-LABEL_F625AB:
+ToneGen_CalcTempo_Mode3:
 	srl de, 2
 	ld wa, de
 
@@ -18741,7 +18741,7 @@ ToneGen_CalcTempoBeatsAndTicks:
 	ordi8 13519, 128
 	ret
 
-LABEL_F625C2:
+ToneGen_CalcTempo_DataTable:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x0c, 0x00
 	.byte 0x10, 0x00, 0x18, 0x00, 0x20, 0x00, 0x30, 0x00
 	.byte 0x40, 0x00, 0x60, 0x00, 0xc0, 0x00, 0x80, 0x01
@@ -18752,11 +18752,11 @@ ToneGen_AdvanceByTempo:
 	ldda8 w, 13360
 	addda8 a, 13564
 	cp a, 0x60
-	jr c, LABEL_F625F6
+	jr c, ToneGen_AdvTempo_StoreNote
 	sub a, 0x60
 	inc 1, w
 
-LABEL_F625F6:
+ToneGen_AdvTempo_StoreNote:
 	stda8 13564, a
 	addda8 w, 13563
 	ldda8 l, 13529
@@ -18764,33 +18764,33 @@ LABEL_F625F6:
 	and h, 0x7
 	inc 1, h
 
-LABEL_F6260B:
+ToneGen_AdvTempo_WrapLoop:
 	cp w, l
-	jr c, LABEL_F62622
+	jr c, ToneGen_AdvTempo_StoreBeat
 	sub w, l
 	incdi8 1, 13562
 	cpda8 h, 13562
-	jr nz, LABEL_F62620
+	jr nz, ToneGen_AdvTempo_Continue
 	stdi8 13562, 0
 
-LABEL_F62620:
-	jr LABEL_F6260B
+ToneGen_AdvTempo_Continue:
+	jr ToneGen_AdvTempo_WrapLoop
 
-LABEL_F62622:
+ToneGen_AdvTempo_StoreBeat:
 	stda8 13563, w
 	ret
 
-LABEL_F62627:
+__pad_F62627:
 	.byte 0x00, 0x00
 
-LABEL_F62629:
+AccPlayback_UpdateRhythmSustain:
 	ldda8 a, 13592
 	cps a, 0
-	jr z, LABEL_F6265E
+	jr z, AccPlayback_RhythmSust_Return
 	dec 1, a
 	stda8 13592, a
 	cps a, 0
-	jr nz, LABEL_F6265E
+	jr nz, AccPlayback_RhythmSust_Return
 	ldda8 a, 13590
 	ldda8 e, 13591
 	ldb d, 0x0
@@ -18806,13 +18806,13 @@ LABEL_F62629:
 	call RhythmBuf_WriteByte
 	inc 2, xsp
 
-LABEL_F6265E:
+AccPlayback_RhythmSust_Return:
 	ret
 
-LABEL_F6265F:
+__pad_F6265F:
 	.byte 0x00, 0x00
 
-LABEL_F62661:
+AccPlayback_ProcessVoiceType5:
 	bitda 5, 13520
 	jr z, AccVoice_DispatchType5Handler
 	cpdi8 14098, 4
@@ -18820,15 +18820,15 @@ LABEL_F62661:
 	ldda8 a, 14125
 	and a, 0xC
 	cps a, 0
-	jr z, LABEL_F6267C
-	calr LABEL_F626A8
+	jr z, AccVoiceType5_CheckBit01
+	calr ToneGen_AdjustVoiceVelocity
 
-LABEL_F6267C:
+AccVoiceType5_CheckBit01:
 	ldda8 a, 14125
 	and a, 0x3
 	cps a, 0
 	jr z, AccVoice_DispatchType5Handler
-	calr LABEL_F62778
+	calr ToneGen_AdjustVolumePan
 
 AccVoice_DispatchType5Handler:
 	bitda 5, 13520
@@ -18839,15 +18839,15 @@ AccVoice_DispatchType5Handler:
 	and a, 0x30
 	cps a, 0
 	jr z, TempoCheck_Exit
-	calr LABEL_F627F6
+	calr ToneGen_ProcessStereoType
 
 TempoCheck_Exit:
 	ret
 
-LABEL_F626A6:
+__pad_F626A6:
 	.byte 0x00, 0x00
 
-LABEL_F626A8:
+ToneGen_AdjustVoiceVelocity:
 	ldda16 xwa, 13586
 	stda16 13385, xwa
 	ldda16 xwa, 13588
@@ -18858,7 +18858,7 @@ LABEL_F626A8:
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x81
-	jrl z, LABEL_F62775
+	jrl z, ToneGen_AdjVel_Return
 	calr ToneGen_StepToNextVoiceSlot
 	calr ToneGen_StepToNextVoiceSlot
 	ldda16 xhl, 13419
@@ -18866,7 +18866,7 @@ LABEL_F626A8:
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	bitda 4, 14235
-	jr z, LABEL_F6270D
+	jr z, ToneGen_AdjVel_CheckBit2
 	ldda8 w, 64446
 	push xwa
 	push xbc
@@ -18886,27 +18886,27 @@ LABEL_F626A8:
 	pop xwa
 	ld a, l
 
-LABEL_F6270D:
+ToneGen_AdjVel_CheckBit2:
 	bitda 2, 14125
-	jr z, LABEL_F6271E
+	jr z, ToneGen_AdjVel_Decrement
 	inc 1, a
 	cp a, 0x80
-	jr c, LABEL_F6271C
+	jr c, ToneGen_AdjVel_ClampHigh
 	ldb a, 0x7F
 
-LABEL_F6271C:
-	jr LABEL_F62727
+ToneGen_AdjVel_ClampHigh:
+	jr ToneGen_AdjVel_StoreAndParam
 
-LABEL_F6271E:
+ToneGen_AdjVel_Decrement:
 	dec 1, a
 	cp a, 0xFF
-	jr nz, LABEL_F62727
+	jr nz, ToneGen_AdjVel_StoreAndParam
 	ldb a, 0x0
 
-LABEL_F62727:
+ToneGen_AdjVel_StoreAndParam:
 	ld e, a
 	bitda 4, 14235
-	jr z, LABEL_F6274B
+	jr z, ToneGen_AdjVel_WriteToBuffer
 	ldda8 w, 64446
 	push xwa
 	push xbc
@@ -18925,7 +18925,7 @@ LABEL_F62727:
 	pop xwa
 	ld a, l
 
-LABEL_F6274B:
+ToneGen_AdjVel_WriteToBuffer:
 	ldda16 xhl, 13419
 	calr ToneGen_CalcBufferAddr
 	pushw ix
@@ -18939,16 +18939,16 @@ LABEL_F6274B:
 	ldda8 a, 14235
 	and a, 0xF
 	cps a, 0
-	jr z, LABEL_F62775
-	calr LABEL_F62986
+	jr z, ToneGen_AdjVel_Return
+	calr ToneGen_WriteMultiChanParam
 
-LABEL_F62775:
+ToneGen_AdjVel_Return:
 	ret
 
-LABEL_F62776:
+__pad_F62776:
 	.byte 0x00, 0x00
 
-LABEL_F62778:
+ToneGen_AdjustVolumePan:
 	ldda16 xwa, 13586
 	stda16 13385, xwa
 	ldda16 xwa, 13588
@@ -18959,7 +18959,7 @@ LABEL_F62778:
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x81
-	jr z, LABEL_F627F3
+	jr z, ToneGen_AdjVol_Return
 	calr ToneGen_StepToNextVoiceSlot
 	calr ToneGen_StepToNextVoiceSlot
 	calr ToneGen_StepToNextVoiceSlot
@@ -18968,26 +18968,26 @@ LABEL_F62778:
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	bitda 0, 14125
-	jr z, LABEL_F627CC
+	jr z, ToneGen_AdjVol_Decrement
 	inc 1, a
 	cp a, 0x80
-	jr c, LABEL_F627CA
+	jr c, ToneGen_AdjVol_ClampHigh
 	ldb a, 0x7F
 
-LABEL_F627CA:
-	jr LABEL_F627D9
+ToneGen_AdjVol_ClampHigh:
+	jr ToneGen_AdjVol_WriteToBuffer
 
-LABEL_F627CC:
+ToneGen_AdjVol_Decrement:
 	dec 1, a
 	cps a, 0
-	jr z, LABEL_F627D7
+	jr z, ToneGen_AdjVol_ClampLow
 	cp a, 0xFF
-	jr nz, LABEL_F627D9
+	jr nz, ToneGen_AdjVol_WriteToBuffer
 
-LABEL_F627D7:
+ToneGen_AdjVol_ClampLow:
 	ldb a, 0x1
 
-LABEL_F627D9:
+ToneGen_AdjVol_WriteToBuffer:
 	ldda16 xhl, 13419
 	calr ToneGen_CalcBufferAddr
 	pushw ix
@@ -18997,13 +18997,13 @@ LABEL_F627D9:
 	popw ix
 	call LABEL_F6A968
 
-LABEL_F627F3:
+ToneGen_AdjVol_Return:
 	ret
 
-LABEL_F627F4:
+__pad_F627F4:
 	.byte 0x00, 0x00
 
-LABEL_F627F6:
+ToneGen_ProcessStereoType:
 	ldda16 xwa, 13586
 	stda16 13385, xwa
 	ldda16 xwa, 13588
@@ -19014,7 +19014,7 @@ LABEL_F627F6:
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp a, 0x81
-	jr z, LABEL_F6288D
+	jr z, ToneGen_Stereo_Return
 	ldda16 xhl, 13419
 	calr ToneGen_CalcBufferAddr
 	ldda16 xwa, 13385
@@ -19026,36 +19026,36 @@ LABEL_F627F6:
 	ldda16 xwa, 13385
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	cp c, 0xD3
-	jr z, LABEL_F62867
+	jr z, ToneGen_Stereo_ClampLow
 	bitda 4, 14125
-	jr z, LABEL_F6285C
+	jr z, ToneGen_Stereo_Increment
 	inc 1, a
 	cp a, 0x80
-	jr c, LABEL_F6285A
+	jr c, ToneGen_Stereo_CheckInc
 	ldb a, 0x7F
 
-LABEL_F6285A:
-	jr LABEL_F62865
+ToneGen_Stereo_CheckInc:
+	jr ToneGen_Stereo_Decrement
 
-LABEL_F6285C:
+ToneGen_Stereo_Increment:
 	dec 1, a
 	cp a, 0xFF
-	jr nz, LABEL_F62865
+	jr nz, ToneGen_Stereo_Decrement
 	ldb a, 0x0
 
-LABEL_F62865:
-	jr LABEL_F62873
+ToneGen_Stereo_Decrement:
+	jr ToneGen_Stereo_WriteParam
 
-LABEL_F62867:
+ToneGen_Stereo_ClampLow:
 	bitda 4, 14125
-	jr z, LABEL_F62871
+	jr z, ToneGen_Stereo_Store
 	ldb a, 0x7F
-	jr LABEL_F62873
+	jr ToneGen_Stereo_WriteParam
 
-LABEL_F62871:
+ToneGen_Stereo_Store:
 	ldb a, 0x0
 
-LABEL_F62873:
+ToneGen_Stereo_WriteParam:
 	ldda16 xhl, 13419
 	calr ToneGen_CalcBufferAddr
 	pushw ix
@@ -19065,10 +19065,10 @@ LABEL_F62873:
 	popw ix
 	call LABEL_F6A97F
 
-LABEL_F6288D:
+ToneGen_Stereo_Return:
 	ret
 
-LABEL_F6288E:
+__pad_F6288E:
 	.byte 0x00, 0x00, 0x0e, 0x00, 0x00, 0x02, 0x53, 0x54
 	.ascii "UVWX_`aR"
 	.byte 0x03
@@ -19095,7 +19095,7 @@ LABEL_F6288E:
 	.ascii "FGmnopqrstuvwxyz{|}~"
 	.byte 0x7f
 
-LABEL_F62986:
+ToneGen_WriteMultiChanParam:
 	ldda16 xhl, 13419
 	calr ToneGen_CalcBufferAddr
 	ldda16 xiy, 13586
@@ -19108,22 +19108,22 @@ LABEL_F62986:
 	pop xix
 	ldb e, 0x90
 	bitda 6, 13546
-	jr z, LABEL_F629B6
+	jr z, ToneGen_MultiChan_Compare
 	bitda 3, 14235
-	jr z, LABEL_F629B6
-	jr LABEL_F629C2
+	jr z, ToneGen_MultiChan_Compare
+	jr ToneGen_MultiChan_AdjustVel
 
-LABEL_F629B6:
+ToneGen_MultiChan_Compare:
 	bitda 5, 13546
 	jr z, AccVoice_ResolveNoteOnOffType
 	bitda 3, 14235
 	jr nz, AccVoice_ResolveNoteOnOffType
 
-LABEL_F629C2:
+ToneGen_MultiChan_AdjustVel:
 	cps a, 7
 	jr nz, AccVoice_ResolveNoteOnOffType
 	ldb e, 0x91
-	jr LABEL_F629E4
+	jr ToneGen_MultiChan_CheckBit4
 
 AccVoice_ResolveNoteOnOffType:
 	xor xhl, xhl
@@ -19136,18 +19136,18 @@ AccVoice_ResolveNoteOnOffType:
 	ld a, (xix)
 	pop xix
 	cps a, 0
-	jr z, LABEL_F629E4
+	jr z, ToneGen_MultiChan_CheckBit4
 	ldb e, 0x91
 
-LABEL_F629E4:
+ToneGen_MultiChan_CheckBit4:
 	cp d, 0x90
-	jr nz, LABEL_F629F3
+	jr nz, ToneGen_MultiChan_WriteNoteOff
 	cp e, 0x90
 	jr z, VoiceCompare_Done
 	calr ToneGen_CompareVoiceBlocks
 	jr VoiceCompare_Done
 
-LABEL_F629F3:
+ToneGen_MultiChan_WriteNoteOff:
 	cp e, 0x90
 	jr nz, VoiceCompare_Done
 	calr ToneGen_CompareVoiceBlocks
@@ -19155,20 +19155,20 @@ LABEL_F629F3:
 VoiceCompare_Done:
 	ret
 
-LABEL_F629FC:
+ToneGen_MultiChan_WriteFinalNote:
 	.byte 0x00, 0x00
 
 ToneGen_CompareVoiceBlocks:
-	calr LABEL_F62A0D
-	calr LABEL_F62AAC
-	calr LABEL_F62B29
-	calr LABEL_F62BC3
+	calr __pad_F62A0D
+	calr __pad_F62AAC
+	calr __pad_F62B29
+	calr ToneGen_StepWithBoundsCheck
 	ret
 
-LABEL_F62A0B:
+ToneGen_MultiChan_Return:
 	.byte 0x00, 0x00
 
-LABEL_F62A0D:
+__pad_F62A0D:
 	ldda16 xwa, 13586
 	stda16 13385, xwa
 	ldda16 xwa, 13588
@@ -19211,10 +19211,10 @@ LABEL_F62A0D:
 	stda8 13371, a
 	ret
 
-LABEL_F62AAA:
+ToneGen_VoiceParamDisp_Return:
 	.byte 0x00, 0x00
 
-LABEL_F62AAC:
+__pad_F62AAC:
 	ldda16 xwa, 13588
 	stda16 13419, xwa
 	stda16 13914, xwa
@@ -19231,12 +19231,12 @@ LABEL_F62AAC:
 	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x90
-	jr z, LABEL_F62AF7
+	jr z, ToneGen_CalcBeatSubdivision
 	stdi8 13389, 8
 	calr ToneGen_StepToNextVoiceSlot
 	calr ToneGen_StepToNextVoiceSlot
 
-LABEL_F62AF7:
+ToneGen_CalcBeatSubdivision:
 	calr ToneGen_StepToNextVoiceSlot
 	calr ToneGen_StepToNextVoiceSlot
 	calr ToneGen_StepToNextVoiceSlot
@@ -19253,10 +19253,10 @@ LABEL_F62AF7:
 	call AccPatch_CopySequenceEntry
 	ret
 
-LABEL_F62B27:
+ToneGen_CalcBeat_Return:
 	.byte 0x00, 0x00
 
-LABEL_F62B29:
+__pad_F62B29:
 	ld xiy, 0x366A
 	ldda8 a, 13366
 	ld (xiy), a
@@ -19278,24 +19278,24 @@ LABEL_F62B29:
 	ld_srib3 A, 0x07, 0xF0, 0xEC
 	pop xix
 	bitda 6, 13546
-	jr z, LABEL_F62B79
+	jr z, ToneGen_ReadBufferUtility
 	bitda 3, 14235
-	jr z, LABEL_F62B79
-	jr LABEL_F62B85
+	jr z, ToneGen_ReadBufferUtility
+	jr ToneGen_ReadBufUtil_Loop
 
-LABEL_F62B79:
+ToneGen_ReadBufferUtility:
 	bitda 5, 13546
 	jr z, AccVoice_WriteNoteEventToBuffer
 	bitda 3, 14235
 	jr nz, AccVoice_WriteNoteEventToBuffer
 
-LABEL_F62B85:
+ToneGen_ReadBufUtil_Loop:
 	cps a, 7
 	jr nz, AccVoice_WriteNoteEventToBuffer
 	ld (xiy), 0x91
 	ld (xiy + 6), 0x3
 	ld (xiy + 7), 0x0
-	jr LABEL_F62BC0
+	jr __pad_F62BC0
 
 AccVoice_WriteNoteEventToBuffer:
 	xor xhl, xhl
@@ -19308,33 +19308,33 @@ AccVoice_WriteNoteEventToBuffer:
 	ld a, (xix)
 	ld (xiy), 0x90
 	cps a, 0
-	jr z, LABEL_F62BBF
+	jr z, ToneGen_ReadBufUtil_Return
 	ld (xiy), 0x91
 	ld a, (xix + 1)
 	ld (xiy + 6), a
 	ld a, (xix + 2)
 	ld (xiy + 7), a
 
-LABEL_F62BBF:
+ToneGen_ReadBufUtil_Return:
 	pop xix
 
-LABEL_F62BC0:
+__pad_F62BC0:
 	ret
 
-LABEL_F62BC1:
+__pad_F62BC1_2:
 	.byte 0x00, 0x00
 
-LABEL_F62BC3:
+ToneGen_StepWithBoundsCheck:
 	cpdi16 13524, 0
-	jr z, LABEL_F62C28
+	jr z, ToneGen_SeqAdvanceMain
 	ld xiy, 0x366A
 	ld a, (xiy)
 	stdi16 13834, 6
 	cp a, 0x90
-	jr z, LABEL_F62BE3
+	jr z, ToneGen_StepBounds_Return
 	stdi16 13834, 8
 
-LABEL_F62BE3:
+ToneGen_StepBounds_Return:
 	ldda16 xwa, 13588
 	stda16 13419, xwa
 	ldda16 xiy, 13586
@@ -19353,19 +19353,19 @@ LABEL_F62BE3:
 	stda16 13387, xwa
 	call AccPatch_InitSlotAndCopyData
 	calr ToneGen_AdvanceSeqList
-	jr LABEL_F62C3D
+	jr ToneGen_SeqAdv_Return
 
-LABEL_F62C28:
+ToneGen_SeqAdvanceMain:
 	stdi8 32578, 15
 	stdi8 58332, 238
 	stdi8 58334, 64
 	ldb a, 0x8
 	call MIDI_SendSysExCmd
 
-LABEL_F62C3D:
+ToneGen_SeqAdv_Return:
 	ret
 
-LABEL_F62C3E:
+__pad_F62C3E:
 	.byte 0x00, 0x00
 
 AccVoice_ReadCurrentToneType:
@@ -19378,19 +19378,19 @@ AccVoice_ReadCurrentToneType:
 	add xhl, xiy
 	ld a, (xhl + 1)
 	cp a, 0x87
-	jr nz, LABEL_F62C69
+	jr nz, ToneGen_InterpolateParam
 	ldda16 xhl, 13419
 	calr ToneGen_CalcBufferAddr
 	ld hl, (xhl + 3)
 	calr ToneGen_CalcBufferAddr
 	ld a, (xhl + 6)
 
-LABEL_F62C69:
+ToneGen_InterpolateParam:
 	pop xhl
 	pop xiy
 	ret
 
-LABEL_F62C6C:
+ToneGen_Interp_Loop:
 	.byte 0x00, 0x00
 
 ToneGen_StepToNextVoiceSlot:
@@ -19403,12 +19403,12 @@ ToneGen_StepToNextVoiceSlot:
 	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x87
-	jr z, LABEL_F62C92
+	jr z, ToneGen_Interp_StoreResult
 	cp a, 0x83
-	jr nz, LABEL_F62CC1
-	jr LABEL_F62CAC
+	jr nz, ToneGen_Interp_WrapPoint
+	jr ToneGen_Interp_CheckExit
 
-LABEL_F62C92:
+ToneGen_Interp_StoreResult:
 	ldda16 xhl, 13419
 	calr ToneGen_CalcBufferAddr
 	ld hl, (xhl + 3)
@@ -19416,9 +19416,9 @@ LABEL_F62C92:
 	calr ToneGen_CalcBufferAddr
 	lds iy, 6
 	stdi8 13365, 6
-	jr LABEL_F62CC1
+	jr ToneGen_Interp_WrapPoint
 
-LABEL_F62CAC:
+ToneGen_Interp_CheckExit:
 	call AccPatch_GetCurrentSlotAddr
 	calr ToneGen_GetSlotIndex
 	stda16 13419, xhl
@@ -19426,13 +19426,13 @@ LABEL_F62CAC:
 	lds iy, 6
 	stdi8 13365, 6
 
-LABEL_F62CC1:
+ToneGen_Interp_WrapPoint:
 	stda16 13385, xiy
 	pop xhl
 	pop xiy
 	ret
 
-LABEL_F62CC8:
+ToneGen_Interp_Done:
 	.byte 0x00, 0x00
 
 ToneGen_StepToNextStereoSlot:
@@ -19445,26 +19445,26 @@ ToneGen_StepToNextStereoSlot:
 	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x87
-	jr nz, LABEL_F62CEA
+	jr nz, ToneGen_Interp_Return
 	calr ToneGen_StepToNextBuffer
 
-LABEL_F62CEA:
+ToneGen_Interp_Return:
 	inc 1, iy
 	incdi8 1, 13365
 	ldda16 xhl, 13419
 	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x87
-	jr nz, LABEL_F62D04
+	jr nz, ToneGen_Interp_OverflowCheck
 	calr ToneGen_StepToNextBuffer
 
-LABEL_F62D04:
+ToneGen_Interp_OverflowCheck:
 	stda16 13385, xiy
 	pop xhl
 	pop xiy
 	ret
 
-LABEL_F62D0B:
+ToneGen_Interp_OverflowDone:
 	.byte 0x00, 0x00
 
 ToneGen_StepToNextBuffer:
@@ -19478,7 +19478,7 @@ ToneGen_StepToNextBuffer:
 	stdi8 13365, 6
 	ret
 
-LABEL_F62D28:
+ToneGen_AdvanceBeatCounter:
 	.byte 0x00, 0x00, 0xdd, 0x61, 0xd9, 0xf5, 0x63, 0x03
 	.byte 0x9b, 0x00, 0x25, 0x0e, 0x00, 0x00
 
@@ -19489,21 +19489,21 @@ ToneGen_ReadBufferWithIndirection:
 	calr ToneGen_CalcBufferAddr
 	ld a, (xix)
 	cp a, 0x87
-	jr nz, LABEL_F62D55
+	jr nz, ToneGen_AdvBeat_Return
 	ld hl, (xhl + 3)
 	ld de, hl
 	calr ToneGen_CalcBufferAddr
 	ld xix, xhl
 	add xix, 0x6
 
-LABEL_F62D55:
+ToneGen_AdvBeat_Return:
 	pop xhl
 	ret
 
-LABEL_F62D57:
+__pad_F62D57:
 	.byte 0x00, 0x00
 
-LABEL_F62D59:
+ToneGen_StepVoiceForward:
 	push xiy
 	push xhl
 	ldda16 xiy, 13385
@@ -19513,17 +19513,17 @@ LABEL_F62D59:
 	calr ToneGen_CalcBufferAddr
 	ld_srib3 A, 0x07, 0xEC, 0xF4
 	cp a, 0x87
-	jr nz, LABEL_F62DA7
+	jr nz, ToneGen_StepFwd_WrapDone
 	ld hl, (xhl + 1)
 	cp hl, 0xFFFF
-	jr z, LABEL_F62D90
+	jr z, ToneGen_StepFwd_CheckWrap
 	stda16 13419, xhl
 	calr ToneGen_CalcBufferAddr
 	ldw iy, 0xFE
 	stdi8 13365, 254
-	jr LABEL_F62DA7
+	jr ToneGen_StepFwd_WrapDone
 
-LABEL_F62D90:
+ToneGen_StepFwd_CheckWrap:
 	ldda16 xhl, 13830
 	stda16 13419, xhl
 	calr ToneGen_CalcBufferAddr
@@ -19532,59 +19532,59 @@ LABEL_F62D90:
 	ld iy, hl
 	stda8 13365, l
 
-LABEL_F62DA7:
+ToneGen_StepFwd_WrapDone:
 	stda16 13385, xiy
 	pop xhl
 	pop xiy
 	ret
 
-LABEL_F62DAE:
+ToneGen_StepFwd_Exit:
 	.byte 0x00, 0x00
 
-LABEL_F62DB0:
+ToneGen_StepFwd_Alternate:
 	ldda8 e, 14106
 	ldda8 d, 14151
 	ldda8 c, 14150
 	ldda8 b, 13527
 	cpdi8 13529, 4
-	jr ugt, LABEL_F62DDD
+	jr ugt, ToneGen_StepAlt_Overflow
 	cps b, 3
-	jr ugt, LABEL_F62DCF
+	jr ugt, ToneGen_StepAlt_CheckBeat
 	ldb c, 0x0
-	jr LABEL_F62DDB
+	jr ToneGen_StepAlt_Return
 
-LABEL_F62DCF:
-	calr LABEL_F62E01
+ToneGen_StepAlt_CheckBeat:
+	calr __pad_F62E01
 	calr LABEL_F62E1D
 	calr LABEL_F62E3F
 	calr LABEL_F62E59
 
-LABEL_F62DDB:
-	jr LABEL_F62DF1
+ToneGen_StepAlt_Return:
+	jr ToneGen_StepAlt_StoreResult
 
-LABEL_F62DDD:
+ToneGen_StepAlt_Overflow:
 	cps b, 1
-	jr ugt, LABEL_F62DE5
+	jr ugt, ToneGen_StepAlt_OverflowDone
 	ldb c, 0x0
-	jr LABEL_F62DF1
+	jr ToneGen_StepAlt_StoreResult
 
-LABEL_F62DE5:
+ToneGen_StepAlt_OverflowDone:
 	calr LABEL_F62E73
 	calr LABEL_F62E8F
 	calr LABEL_F62EAE
 	calr LABEL_F62EC7
 
-LABEL_F62DF1:
+ToneGen_StepAlt_StoreResult:
 	stda8 14150, c
 	xor d, d
 	stda16 14151, xde
 	calr LABEL_F62EE0
 	ret
 
-LABEL_F62DFF:
+ToneGen_StepAlt_Done:
 	.byte 0x00, 0x00
 
-LABEL_F62E01:
+__pad_F62E01:
 	ld a, c
 	add a, 0x3
 	cp b, a
