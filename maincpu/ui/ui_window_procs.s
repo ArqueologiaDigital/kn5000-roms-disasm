@@ -2833,12 +2833,12 @@ AcStrRadioBoxProc:
 	push xiz
 	ld xiz, xde
 	cp xbc, 0x1E0003A
-	jr z, LABEL_F9D71B
+	jr z, AcStrRadioBox_GetText
 	ld xde, xiz
 	calr PsRadioBoxProc
-	jr LABEL_F9D72C
+	jr AcStrRadioBox_Epilogue
 
-LABEL_F9D71B:
+AcStrRadioBox_GetText:
 	call GetViewInstance
 	ld xwa, (xhl + 44)
 	push xwa
@@ -2847,7 +2847,7 @@ LABEL_F9D71B:
 	inc 8, xsp
 	lds32 xhl, 0
 
-LABEL_F9D72C:
+AcStrRadioBox_Epilogue:
 	pop xiz
 	ret
 
@@ -3549,7 +3549,7 @@ ClampColorToRange:
 	ret gt
 	ret
 
-LABEL_FAD220:
+DrawDesignBox_ByteData:
 	.byte 0xef, 0x6e, 0x3e, 0xbf, 0x04, 0x52, 0xbf, 0x06
 	.byte 0x61, 0xe8, 0x8e, 0x1e, 0x04, 0xd3, 0xdb, 0xd8
 	.byte 0x66, 0x16, 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00
@@ -3663,16 +3663,16 @@ DrawDesignBox:	; LABEL_FAD559
 	ld xiz, xwa
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
-	jr z, LABEL_FAD581
+	jr z, DrawDesignBox_QueuedPath
 	cpdi16_24 197710, 0
-	jr z, LABEL_FAD5A8
+	jr z, DrawDesignBox_DirectEpilogue
 	ld xwa, xiz
 	ld bc, (xsp + 6)
 	ld de, (xsp + 4)
-	calr LABEL_FAD5C4
-	jr LABEL_FAD5A8
+	calr DrawDesignBox_Impl
+	jr DrawDesignBox_DirectEpilogue
 
-LABEL_FAD581:
+DrawDesignBox_QueuedPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
@@ -3688,17 +3688,17 @@ LABEL_FAD581:
 	ld (xwa + 14), bc
 	calr DisplayCmd_DequeueAndExecute
 
-LABEL_FAD5A8:
+DrawDesignBox_DirectEpilogue:
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_FAD5AC:
+DrawDesignBox_QueueCallback:
 	.byte 0xb8, 0x04, 0x33, 0x98, 0x0c, 0x21, 0x98, 0x0e
 	.byte 0x22, 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
 	.byte 0xb0, 0xf6, 0xeb, 0x88, 0x1e, 0x01, 0x00, 0x0e
 
-LABEL_FAD5C4:
+DrawDesignBox_Impl:
 	lda xsp, (xsp - 74)
 	push xiz
 	ld (xsp + 70), de
@@ -3713,19 +3713,19 @@ LABEL_FAD5C4:
 	ldirw
 	ld wa, (xsp + 72)
 	cpw (xsp + 72), 0xA8
-	jr gt, LABEL_FAD5F4
+	jr gt, DrawDesignBox_CheckStyleA0
 	cpw (xsp + 72), 0xA1
 	jrl ge, LABEL_FADAD6
 
-LABEL_FAD5F4:
+DrawDesignBox_CheckStyleA0:
 	cp wa, 0xA0
 	jrl z, LABEL_FAD94C
 	cp wa, 0x88
-	jr gt, LABEL_FAD608
+	jr gt, DrawDesignBox_CheckStyle80
 	cp wa, 0x81
 	jrl ge, LABEL_FADAD6
 
-LABEL_FAD608:
+DrawDesignBox_CheckStyle80:
 	cp wa, 0x80
 	jrl z, LABEL_FAD94C
 	lda xbc, (xsp + 36)
@@ -3768,7 +3768,7 @@ Draw_StyledBoxWithFrame:
 	lds bc, 0
 	calr DrawFrame_Impl
 	cpw (xsp + 72), 0x2
-	jr nz, LABEL_FAD692
+	jr nz, DrawDesignBox_After2Frame
 	lda xwa, (xsp + 62)
 	incm 1, (xwa + 2)
 	decm 1, (xwa + 6)
@@ -3777,9 +3777,9 @@ Draw_StyledBoxWithFrame:
 	lds bc, 0
 	calr DrawFrame_Impl
 
-LABEL_FAD692:
+DrawDesignBox_After2Frame:
 	cpw (xsp + 72), 0x3
-	jr nz, LABEL_FAD6AC
+	jr nz, DrawDesignBox_After3Frame
 	lda xwa, (xsp + 62)
 	incm 2, (xwa + 2)
 	decm 2, (xwa + 6)
@@ -3788,9 +3788,9 @@ LABEL_FAD692:
 	lds bc, 0
 	calr DrawFrame_Impl
 
-LABEL_FAD6AC:
+DrawDesignBox_After3Frame:
 	cpw (xsp + 72), 0x4
-	jr nz, LABEL_FAD6FC
+	jr nz, DrawDesignBox_4FrameCross
 	lda xwa, (xsp + 50)
 	lda xhl, (xsp + 62)
 	lda xde, (xhl + 4)
@@ -3821,7 +3821,7 @@ LABEL_FAD6AC:
 	lds de, 0
 	calr DrawLine_Impl
 
-LABEL_FAD6FC:
+DrawDesignBox_4FrameCross:
 	cpw (xsp + 72), 0x5
 	jrl nz, DrawFunc_Epilogue74
 	lda xiy, (xsp + 62)
@@ -3861,20 +3861,20 @@ LABEL_FAD6FC:
 	lds32 xwa, 1
 	add (xsp + 14), xwa
 	cpw (xsp + 72), 0xC0
-	jr z, LABEL_FAD76D
+	jr z, DrawDesignBox_ColorsC0C1
 	cpw (xsp + 72), 0xC1
-	jr nz, LABEL_FAD779
+	jr nz, DrawDesignBox_ColorsDefault
 
-LABEL_FAD76D:
+DrawDesignBox_ColorsC0C1:
 	ldw (xsp + 4), 0xFF
 	ldw (xsp + 6), 0xF8
-	jr LABEL_FAD783
+	jr DrawDesignBox_ApplyColors
 
-LABEL_FAD779:
+DrawDesignBox_ColorsDefault:
 	ldw (xsp + 4), 0xF8
 	ldw (xsp + 6), 0xFF
 
-LABEL_FAD783:
+DrawDesignBox_ApplyColors:
 	lda xwa, (xsp + 62)
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
@@ -3884,7 +3884,7 @@ LABEL_FAD783:
 	cp xwa, 0x0
 	jrl le, DrawFunc_Epilogue74
 
-LABEL_FAD79D:
+DrawDesignBox_BorderLoop:
 	lda xwa, (xsp + 50)
 	lda xde, (xsp + 62)
 	ld bc, (xde)
@@ -3936,7 +3936,7 @@ LABEL_FAD79D:
 	add (xsp + 10), xwa
 	ld xwa, (xsp + 10)
 	cp xwa, (xsp + 14)
-	jrl lt, LABEL_FAD79D
+	jrl lt, DrawDesignBox_BorderLoop
 	jrl DrawFunc_Epilogue74
 	lds32 xwa, 1
 	ld (xsp + 14), xwa
@@ -3951,46 +3951,46 @@ LABEL_FAD79D:
 	cp xwa, 0x0
 	jrl le, DrawFunc_Epilogue74
 
-LABEL_FAD854:
+DrawDesignBox_BorderC4C5Check:
 	cpw (xsp + 72), 0xC4
-	jr z, LABEL_FAD862
+	jr z, DrawDesignBox_C4C5FirstPass
 	cpw (xsp + 72), 0xC5
-	jr nz, LABEL_FAD891
+	jr nz, DrawDesignBox_C6C7Style
 
-LABEL_FAD862:
+DrawDesignBox_C4C5FirstPass:
 	ld xwa, (xsp + 10)
 	or xwa, xwa
-	jr nz, LABEL_FAD885
+	jr nz, DrawDesignBox_C4C5Highlight
 	ldw (xsp + 4), 0x7
 	ld xwa, (xsp + 14)
 	cp xwa, 0x1
-	jr nz, LABEL_FAD87E
+	jr nz, DrawDesignBox_C4C5SingleWidth
 	ldw (xsp + 4), 0xFF
 
-LABEL_FAD87E:
+DrawDesignBox_C4C5SingleWidth:
 	ldw (xsp + 6), 0x0
 	jr ColorAttribute_SetupReturn
 
-LABEL_FAD885:
+DrawDesignBox_C4C5Highlight:
 	ldw (xsp + 4), 0xFF
 	ldw (xsp + 6), 0xF8
 	jr ColorAttribute_SetupReturn
 
-LABEL_FAD891:
+DrawDesignBox_C6C7Style:
 	ld xwa, (xsp + 10)
 	or xwa, xwa
-	jr nz, LABEL_FAD8AF
+	jr nz, DrawDesignBox_C6C7NonFirst
 	ldw (xsp + 4), 0x0
 	ld xwa, (xsp + 14)
 	cp xwa, 0x1
-	jr z, LABEL_FAD8B4
+	jr z, DrawDesignBox_C6C7Shadow
 	ldw (xsp + 6), 0x7
 	jr ColorAttribute_SetupReturn
 
-LABEL_FAD8AF:
+DrawDesignBox_C6C7NonFirst:
 	ldw (xsp + 4), 0xF8
 
-LABEL_FAD8B4:
+DrawDesignBox_C6C7Shadow:
 	ldw (xsp + 6), 0xFF
 
 ColorAttribute_SetupReturn:
@@ -4045,7 +4045,7 @@ ColorAttribute_SetupReturn:
 	add (xsp + 10), xwa
 	ld xwa, (xsp + 10)
 	cp xwa, (xsp + 14)
-	jrl lt, LABEL_FAD854
+	jrl lt, DrawDesignBox_BorderC4C5Check
 	jrl DrawFunc_Epilogue74
 
 LABEL_FAD94C:
