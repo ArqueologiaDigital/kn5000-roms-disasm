@@ -348,7 +348,7 @@ SetDialEnable:
 	st16_24 0x03ef50, xwa
 	ret
 
-LABEL_F9A541:
+GetDialEnableState:
 	ld16_24 xhl, 0x03ef50
 	ret
 
@@ -364,11 +364,11 @@ SetDialFocus:
 
 GetDialFocus:
 	cpdi16_24 257872, 0
-	jr nz, LABEL_F9A573
+	jr nz, GetDialFocus_Active
 	ld xhl, 0xFFFFFFFF
 	ret
 
-LABEL_F9A573:
+GetDialFocus_Active:
 	ld32_24 xhl, 0x03ef6a
 	ret
 
@@ -675,7 +675,7 @@ Screen_OK:
 	jr z, Screen_OK_Forward
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
-	jr LABEL_F9A8FB
+	jr Screen_OK_PostAndDispatch
 
 Screen_OK_NavUp:
 	call GetTitleNow
@@ -688,7 +688,7 @@ Screen_OK_NavUp:
 	ld xbc, 0x1E0009A
 	lds32 xde, 0
 
-LABEL_F9A8FB:
+Screen_OK_PostAndDispatch:
 	call SendEvent
 
 Screen_OK_Forward:
@@ -746,10 +746,10 @@ GetEditSwPoint:
 ; GetEditSwPoint handler: mode 0 (value=0x2B)
 EditSwParam_Mode0:
 	lds wa, 0
-	jr LABEL_F9A97A
+	jr EditSwParam_StoreMode0
 	ldw wa, 0x13F
 
-LABEL_F9A97A:
+EditSwParam_StoreMode0:
 	ld (xbc), wa
 	ldw (xde), 0x2B
 	ret
@@ -757,10 +757,10 @@ LABEL_F9A97A:
 ; GetEditSwPoint handler: mode 1 (value=0x55)
 EditSwParam_Mode1:
 	lds wa, 0
-	jr LABEL_F9A988
+	jr EditSwParam_StoreMode1
 	ldw wa, 0x13F
 
-LABEL_F9A988:
+EditSwParam_StoreMode1:
 	ld (xbc), wa
 	ldw (xde), 0x55
 	ret
@@ -768,10 +768,10 @@ LABEL_F9A988:
 ; GetEditSwPoint handler: mode 2 (value=0x7F)
 EditSwParam_Mode2:
 	lds wa, 0
-	jr LABEL_F9A996
+	jr EditSwParam_StoreMode2
 	ldw wa, 0x13F
 
-LABEL_F9A996:
+EditSwParam_StoreMode2:
 	ld (xbc), wa
 	ldw (xde), 0x7F
 	ret
@@ -828,23 +828,23 @@ EditSwParam_Default:
 
 SetWallPaper:
 	cps wa, 0
-	jr mi, LABEL_F9AA16
+	jr mi, SetWallPaper_Default
 	cps wa, 5
-	jr gt, LABEL_F9AA16
+	jr gt, SetWallPaper_Default
 	add wa, wa
 	lda_24 xix, 0xea9b36
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
 	lda_24 xix, 0xf9aa0d
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F9AA0D:
+SetWallPaper_DispatchData:
 	.byte 0xd2, 0xfe, 0x40, 0x03, 0x3f, 0x00, 0x00, 0x6e
 	.byte 0x1c
 
-LABEL_F9AA16:
+SetWallPaper_Default:
 	lds wa, 0
 	jp ChangeWall
-LABEL_F9AA1C:
+SetWallPaper_CaseData:
 	.byte 0xd2, 0xfa, 0x40, 0x03, 0x3f, 0x00, 0x00, 0x6e
 	.byte 0x0d, 0xd8, 0xa9, 0x68, 0xef, 0xd2, 0xfc, 0x40
 	.byte 0x03, 0x3f, 0x00, 0x00, 0x66, 0xf3, 0xd8, 0xaa
@@ -852,29 +852,29 @@ LABEL_F9AA1C:
 
 SetWallColor:
 	cps wa, 1
-	jr z, LABEL_F9AA5A
+	jr z, SetWallColor_01
 	cp wa, 0xF9
-	jr z, LABEL_F9AA56
+	jr z, SetWallColor_F9
 	cps wa, 2
-	jr z, LABEL_F9AA52
+	jr z, SetWallColor_02
 	cp wa, 0xF8
-	jr z, LABEL_F9AA4E
+	jr z, SetWallColor_F8
 	lds wa, 0
 	jr UI_ChangeWallPalette_Jump
 
-LABEL_F9AA4E:
+SetWallColor_F8:
 	lds wa, 2
 	jr UI_ChangeWallPalette_Jump
 
-LABEL_F9AA52:
+SetWallColor_02:
 	lds wa, 4
 	jr UI_ChangeWallPalette_Jump
 
-LABEL_F9AA56:
+SetWallColor_F9:
 	lds wa, 6
 	jr UI_ChangeWallPalette_Jump
 
-LABEL_F9AA5A:
+SetWallColor_01:
 	ldw wa, 0x8
 
 UI_ChangeWallPalette_Jump:
@@ -891,12 +891,12 @@ TtlScreenProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F9AA82
+	jr z, TtlScreen_PaintHandler
 	ld xwa, xiz
 	calr ScreenProc
-	jr LABEL_F9AAC6
+	jr TtlScreen_Return
 
-LABEL_F9AA82:
+TtlScreen_PaintHandler:
 	ld xwa, xiz
 	calr ScreenProc
 	ld xwa, xiz
@@ -923,7 +923,7 @@ LABEL_F9AA82:
 	calr DrawTitleBar
 	lds32 xhl, 0
 
-LABEL_F9AAC6:
+TtlScreen_Return:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -946,17 +946,17 @@ DrawTitleBar:
 	ld (xbc + 4), wa
 	ldw (xsp + 10), 0x0
 	cpw (xsp + 50), 0x0
-	jr z, LABEL_F9AB04
+	jr z, DrawTitleBar_SetActiveOffset
 	ldw (xsp + 10), 0x40
 
-LABEL_F9AB04:
+DrawTitleBar_SetActiveOffset:
 	ldw iz, 0x18
 	ld xwa, (xsp + 42)
 	or xwa, xwa
-	jr nz, LABEL_F9AB10
+	jr nz, DrawTitleBar_CalcLayout
 	lds iz, 0
 
-LABEL_F9AB10:
+DrawTitleBar_CalcLayout:
 	lda xde, (xsp + 24)
 	lds wa, 7
 	calr GetClientBox2
@@ -975,9 +975,9 @@ LABEL_F9AB10:
 	lda xwa, (xsp + 24)
 	lda xbc, (xsp + 12)
 	cp (xsp + 40), 0x2
-	jrl z, LABEL_F9ABF6
+	jrl z, DrawTitleBar_RightJustify
 	cps e, 1
-	jrl z, LABEL_F9ABE5
+	jrl z, DrawTitleBar_LeftJustify
 	cps e, 0
 	jrl nz, StringDraw_JoinPoint
 	ld xhl, xbc
@@ -992,7 +992,7 @@ LABEL_F9AB10:
 	cp ix, wa
 	jr le, StringCenter_Entry
 	cpw (xsp + 50), 0x0
-	jr z, LABEL_F9ABBD
+	jr z, DrawTitleBar_ShrinkFont
 	add de, (xhl)
 	sub de, wa
 	inc 4, de
@@ -1000,7 +1000,7 @@ LABEL_F9AB10:
 	exts xwa
 	divs wa, 0x2
 	cp de, wa
-	jr le, LABEL_F9ABB9
+	jr le, DrawTitleBar_AdjustLeft
 	lds32 xwa, 1
 	ld (xsp + 4), xwa
 	ld xwa, xiz
@@ -1023,11 +1023,11 @@ LABEL_F9AB10:
 	inc 4, de
 	ld xhl, xbc
 
-LABEL_F9ABB9:
+DrawTitleBar_AdjustLeft:
 	sub (xhl), de
 	jr StringCenter_Entry
 
-LABEL_F9ABBD:
+DrawTitleBar_ShrinkFont:
 	lds32 xwa, 1
 	ld (xsp + 4), xwa
 	ld xwa, xiz
@@ -1046,7 +1046,7 @@ StringCenter_Entry:
 	call DrawStringCentered
 	jr StringDraw_JoinPoint
 
-LABEL_F9ABE5:
+DrawTitleBar_LeftJustify:
 	lds32 xde, 4
 	push xde
 	pushw 0xFF
@@ -1055,7 +1055,7 @@ LABEL_F9ABE5:
 	call DrawStringLeftJustify
 	jr StringDraw_JoinPoint
 
-LABEL_F9ABF6:
+DrawTitleBar_RightJustify:
 	lds32 xde, 4
 	push xde
 	pushw 0xFF
@@ -1131,7 +1131,7 @@ DirmdEmu_CaseB:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
-	jrl LABEL_F9AD62
+	jrl IvDirmd_ForwardToScreen
 
 ; DirmdEmulator dispatch case C
 DirmdEmu_CaseC:
@@ -1157,7 +1157,7 @@ DirmdEmu_CaseC:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
-	jr LABEL_F9AD62
+	jr IvDirmd_ForwardToScreen
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1182,7 +1182,7 @@ DirmdEmu_CaseC:
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 
-LABEL_F9AD62:
+IvDirmd_ForwardToScreen:
 	calr ScreenProc
 	jr TaskWake_ZeroReturn
 	call GetTitleNow
@@ -1200,10 +1200,10 @@ LABEL_F9AD62:
 
 TaskWake_ZeroReturn:
 	lds32 xhl, 0
-	jr LABEL_F9ADEB
+	jr IvDirmd_Epilogue
 	ld xwa, (xsp + 4)
 	cp xwa, 0xFF
-	jr ugt, LABEL_F9ADC4
+	jr ugt, IvDirmd_ForwardAndReturn
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E00032
@@ -1217,11 +1217,11 @@ TaskWake_ZeroReturn:
 	call FuncCall
 	call WakeUpMainTask
 
-LABEL_F9ADC4:
+IvDirmd_ForwardAndReturn:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
-	jr LABEL_F9ADE8
+	jr IvDirmd_ScreenForward
 
 ; DirmdEmulator dispatch case D
 DirmdEmu_CaseD:
@@ -1230,7 +1230,7 @@ DirmdEmu_CaseD:
 	ld xde, (xsp + 4)
 	calr ScreenProc
 	inc 3, xhl
-	jr LABEL_F9ADEB
+	jr IvDirmd_Epilogue
 
 ; DirmdEmulator dispatch case E
 DirmdEmu_CaseE:
@@ -1238,10 +1238,10 @@ DirmdEmu_CaseE:
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 
-LABEL_F9ADE8:
+IvDirmd_ScreenForward:
 	calr ScreenProc
 
-LABEL_F9ADEB:
+IvDirmd_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -1326,36 +1326,36 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 ; DirmdEmulator default/fallthrough case
 DirmdEmu_DefaultCase:
 	bitda 1, 58334
-	jr z, LABEL_F9AF56
+	jr z, DirmdEmu_CheckModeChange
 	ldda8 a, 58332
 	extz wa
 	call UI_PostPartChangeEvent
 
-LABEL_F9AF56:
+DirmdEmu_CheckModeChange:
 	bitda 7, 58334
-	jr z, LABEL_F9AF66
+	jr z, DirmdEmu_CheckSoundCtrl
 	ldda8 a, 58332
 	extz wa
 	call UI_PostModeChangeEvent
 
-LABEL_F9AF66:
+DirmdEmu_CheckSoundCtrl:
 	bitda 6, 58334
-	jr z, LABEL_F9AF76
+	jr z, DirmdEmu_CheckBit4
 	ldda8 a, 58332
 	extz wa
 	call SoundCtrl_SendCommand
 
-LABEL_F9AF76:
+DirmdEmu_CheckBit4:
 	bitda 4, 58334
 	call_24 nz, 0xF994EA
 	bitda 4, 58336
 	call_24 nz, 0xF994FA
 	bitda 3, 58338
-	jr z, LABEL_F9AF94
+	jr z, DirmdEmu_ClearAllFlags
 	lds wa, 1
 	call UI_PostEvent_0x6E
 
-LABEL_F9AF94:
+DirmdEmu_ClearAllFlags:
 	stdi8 58334, 0
 	stdi8 58332, 0
 	stdi8 58336, 0
@@ -1465,20 +1465,20 @@ WindowProc_EventDispatch:
 WindowField_SetValue:
 	ld xwa, (xsp + 24)
 	ld xiz, 0x1C
-	jr LABEL_F9B20B
+	jr WindowField_StoreToView
 
 ; WindowProc field get value handler (event 0x1C0004A)
 WindowField_GetValue:
 	ld xwa, (xsp + 24)
 	ld xiz, 0x1C
-	jr LABEL_F9B223
+	jr WindowField_ReadFromView
 
 ; WindowProc field focus handler (event 0x1C00049)
 WindowField_Focus:
 	ld xwa, (xsp + 24)
 	ld xiz, 0x20
 
-LABEL_F9B20B:
+WindowField_StoreToView:
 	call GetViewInstance
 	add xhl, xiz
 	ld xbc, (xhl)
@@ -1491,12 +1491,12 @@ WindowField_ReadValue:
 	ld xwa, (xsp + 24)
 	ld xiz, 0x20
 
-LABEL_F9B223:
+WindowField_ReadFromView:
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
 	ld xhl, (xwa)
-	jrl LABEL_F9B3DE
+	jrl WindowProc_Epilogue
 
 ; WindowProc get child count handler (event 0x1E00094)
 WindowField_GetChildCount:
@@ -1507,7 +1507,7 @@ WindowField_GetChildCount:
 	cp xwa, 0xFFFFFFFF
 	scc16 nz, hl
 	extz xhl
-	jrl LABEL_F9B3DE
+	jrl WindowProc_Epilogue
 	ld xwa, (xsp + 24)
 	call GetViewInstance
 	ld (xsp + 12), xhl
@@ -1524,27 +1524,27 @@ WindowField_GetChildCount:
 	call SendEvent
 	call GetCurrentTarget
 	cp xhl, xiz
-	jr nz, LABEL_F9B296
+	jr nz, WindowField_ForwardAfterChild
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 28)
 	ld xwa, (xwa)
 	cp xwa, 0xFFFFFFFF
-	jr z, LABEL_F9B296
+	jr z, WindowField_ForwardAfterChild
 	ld xwa, (xsp + 4)
 	call SetCurrentTarget
 
-LABEL_F9B296:
+WindowField_ForwardAfterChild:
 	ld xwa, (xsp + 24)
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
-	jr LABEL_F9B2AA
+	jr WindowProc_GroupBoxForward
 
 WindowProc_ForwardToGroupBoxes:
 	ld xwa, (xsp + 24)
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
 
-LABEL_F9B2AA:
+WindowProc_GroupBoxForward:
 	calr GroupBoxProc
 	jrl AcNaming_ReturnZero
 	ld xwa, (xsp + 24)
@@ -1581,7 +1581,7 @@ LABEL_F9B2AA:
 	cp xwa, 0xFFFFFFFF
 	jrl z, AcNaming_ReturnZero
 	ld xwa, (xsp + 4)
-	jrl LABEL_F9B3D8
+	jrl WindowProc_RestoreTarget
 
 ; WindowProc default handler (returns 0)
 WindowProc_DefaultHandler:
@@ -1589,16 +1589,16 @@ WindowProc_DefaultHandler:
 	srl xwa, 0
 	and xwa, 0xFFF
 	cp wa, 0x1E0
-	jr c, LABEL_F9B347
+	jr c, WindowProc_GroupBoxAndChild
 	cp wa, 0x1FF
-	jr ugt, LABEL_F9B347
+	jr ugt, WindowProc_GroupBoxAndChild
 	ld xwa, (xsp + 24)
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
 	calr GroupBoxProc
-	jrl LABEL_F9B3DE
+	jrl WindowProc_Epilogue
 
-LABEL_F9B347:
+WindowProc_GroupBoxAndChild:
 	ld xwa, (xsp + 24)
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
@@ -1647,13 +1647,13 @@ LABEL_F9B347:
 	call SetRootObject
 	ld xwa, (xsp + 4)
 
-LABEL_F9B3D8:
+WindowProc_RestoreTarget:
 	call SetCurrentTarget
 
 AcNaming_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F9B3DE:
+WindowProc_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 24)
 	ret
@@ -1703,21 +1703,21 @@ AcNamingWindowProc:
 	cp xwa, 0x1C00001
 	jrl nz, WndScroll_ForwardToWindowProc
 	or xhl, xhl
-	jr z, LABEL_F9B4AB
+	jr z, AcNaming_CheckDefaultWidget
 	ld xwa, xhl
 	cp xwa, 0x3
-	jr z, LABEL_F9B4AB
+	jr z, AcNaming_CheckDefaultWidget
 	cp xwa, 0x5
 	jrl nz, WndScroll_InitWindowProc
 
-LABEL_F9B4AB:
+AcNaming_CheckDefaultWidget:
 	ld32_24 xwa, 0x0274d2
 	or xwa, xwa
-	jr nz, LABEL_F9B4BE
+	jr nz, AcNaming_InitScrollState
 	ld xwa, 0x1200005
 	st32_24 0x0274d2, xwa
 
-LABEL_F9B4BE:
+AcNaming_InitScrollState:
 	sti16_24 0x0274d8, 0x0000
 	sti16_24 0x0274da, 0x0000
 	ld32_24 xwa, 0x0274d2
@@ -1726,10 +1726,10 @@ LABEL_F9B4BE:
 	call ApFuncCall
 	st16_24 0x0274d6, xhl
 	cp hl, 0x20
-	jr ule, LABEL_F9B4EE
+	jr ule, AcNaming_QueryCharSet
 	sti16_24 0x0274d6, 0x0020
 
-LABEL_F9B4EE:
+AcNaming_QueryCharSet:
 	ld32_24 xwa, 0x0274d2
 	ld xbc, 0x1E00084
 	lds32 xde, 0
@@ -1743,7 +1743,7 @@ LABEL_F9B4EE:
 	ld xwa, (xbc)
 	st32_24 0x0274e4, xwa
 	cps hl, 0
-	jr z, LABEL_F9B53B
+	jr z, AcNaming_ShowNavButtons
 	ld xwa, 0x17
 	lds bc, 0
 	call SetVisible
@@ -1752,9 +1752,9 @@ LABEL_F9B4EE:
 	call SetVisible
 	ld xwa, 0x19
 	lds bc, 0
-	jr LABEL_F9B558
+	jr AcNaming_SetVisibleAndInit
 
-LABEL_F9B53B:
+AcNaming_ShowNavButtons:
 	ld xwa, 0x17
 	lds bc, 1
 	call SetVisible
@@ -1764,7 +1764,7 @@ LABEL_F9B53B:
 	ld xwa, 0x19
 	lds bc, 1
 
-LABEL_F9B558:
+AcNaming_SetVisibleAndInit:
 	call SetVisible
 	lds iz, 0
 	cpdi16_24 160982, 0

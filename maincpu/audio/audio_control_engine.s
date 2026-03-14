@@ -1304,7 +1304,7 @@ Audio_IncrementUpdateCounter:
 	ret
 
 Audio_CheckAndFlagChanges:
-	call LABEL_F9A541
+	call GetDialEnableState
 	cpda8 l, 36702
 	jr z, AudioChange_CheckSelectionState
 	ordi16 36674, 64
@@ -1836,7 +1836,7 @@ SndParam_SetResBit7_ViaF9A541:
 	; --- Routine 3: call F9A541, set/res bit 7 based on HL (24 bytes) ---
 	push xiz
 	ldada	xiz, 36632
-	call LABEL_F9A541
+	call GetDialEnableState
 	lda	xwa, (xiz+4)
 	cps	hl, 0
 	jr z, SndParamF9A541_ResBit7
