@@ -2561,7 +2561,7 @@ Audio_ResetAfterPayloadError:
 Audio_ReinitDisplay:
 	calr Display_SetupAndPrepareRender
 	calr Display_CopyAndRenderBitmaps
-	call LABEL_F98066
+	call MainTitle_SetBootFlag
 
 Audio_ReinitToneGen:
 	push xde

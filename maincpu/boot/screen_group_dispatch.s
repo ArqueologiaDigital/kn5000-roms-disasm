@@ -12,7 +12,7 @@ ScreenGroup_ReInit:
 	call Audio_UpdateLEDsAndChannels
 	call Reset_Floppy_Disk_Controller
 	call SndParam_Init
-	call LABEL_F9800F
+	call MainTitle_InitGraphicsAndEvents
 	jp LoadAndRunXapr_Entry
 
 ; ===========================================================================

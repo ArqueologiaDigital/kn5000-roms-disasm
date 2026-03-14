@@ -14,7 +14,7 @@ CheckTitleFunc:
 	lds32 xhl, 0
 	ret
 
-LABEL_F9800F:
+MainTitle_InitGraphicsAndEvents:
 	call InitializeGraphics
 	call InitializeEventQueue
 	call InitializeTimer
@@ -37,11 +37,11 @@ LABEL_F9800F:
 	ld xde, 0x1A000EF
 	jp PostEvent
 
-LABEL_F98066:
+MainTitle_SetBootFlag:
 	stdi8 32578, 35
 	ret
 
-LABEL_F9806C:
+MainTitle_TeardownAndLoop:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
@@ -55,11 +55,11 @@ LABEL_F9806C:
 	call DispatchEvent
 	lds wa, 1
 
-LABEL_F98098:
+MainTitle_UpdateAndRefresh:
 	call SetNeedUpdate
 	call UpdateScreen
 
-LABEL_F980A0:
+MainTitle_EventLoop:
 	lds32 xwa, 1
 	addm32_24 0x027496, xwa
 	lds wa, 2
@@ -68,13 +68,13 @@ LABEL_F980A0:
 	call SetNeedUpdate
 	call INTTR4_BytecodeSnippet
 	cps l, 0
-	jr z, LABEL_F980A0
+	jr z, MainTitle_EventLoop
 
 	call RootContext_InitEventQueue
 	call DispatchEvent
 	call PostTitle_Function
 	cps hl, 0
-	jr z, LABEL_F980EA
+	jr z, MainTitle_EventLoopSkipInit
 
 	calr SleepMainTask
 	lds32 xwa, 0
@@ -85,11 +85,11 @@ LABEL_F980A0:
 	call SetNeedUpdate
 	call UpdateScreen
 	calr WakeUpMainTask
-	jr LABEL_F980A0
+	jr MainTitle_EventLoop
 
-LABEL_F980EA:
+MainTitle_EventLoopSkipInit:
 	lds wa, 1
-	jr LABEL_F98098
+	jr MainTitle_UpdateAndRefresh
 
 MainTitle_PrepareAndDispatch:
 	call MainDispatchEvent
@@ -101,9 +101,9 @@ MainTitle_PrepareAndDispatch:
 	ldda8 a, 49280
 	ldda8 e, 49277
 	cp a, 0xAA
-	jrl z, LABEL_F983C1
+	jrl z, CtrlPanel_EventType_AA
 	cp a, 0xA8
-	jrl z, LABEL_F9838B
+	jrl z, CtrlPanel_EventType_A8
 	cp a, 0xA9
 	jrl nz, UIEvent_Epilogue
 	cp e, 0x10
@@ -120,30 +120,30 @@ MainTitle_PrepareAndDispatch:
 	ld a, c
 	and a, 0x3
 	cps a, 3
-	jr nz, LABEL_F98150
+	jr nz, CtrlPanel_HandleSingleBit
 	lds32 xwa, 3
 	lds bc, 5
 	lds de, 4
 	call SoundParam_NotifyChange
 	jr SndParam_SendDiskMenuEvents
 
-LABEL_F98150:
+CtrlPanel_HandleSingleBit:
 	and e, c
 	bit 1, e
-	jr z, LABEL_F9815F
+	jr z, CtrlPanel_HandleBit1SndParam
 	lds32 xwa, 3
 	lds bc, 1
 	lds de, 4
-	jr LABEL_F9816B
+	jr CtrlPanel_DispatchSndParamLookup
 
-LABEL_F9815F:
+CtrlPanel_HandleBit1SndParam:
 	bit 0, e
 	jr z, SndParam_SendDiskMenuEvents
 	lds32 xwa, 3
 	ldw bc, 0xFFFF
 	lds de, 4
 
-LABEL_F9816B:
+CtrlPanel_DispatchSndParamLookup:
 	call SndParam_LookupByKey
 
 SndParam_SendDiskMenuEvents:
@@ -152,7 +152,7 @@ SndParam_SendDiskMenuEvents:
 	and a, c
 	ld xde, xiz
 	bit 1, a
-	jr z, LABEL_F981DC
+	jr z, CtrlPanel_CheckDiskMenuRelease
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00008
 	call ApPostEvent
@@ -179,7 +179,7 @@ SndParam_SendDiskMenuEvents:
 	call ApPostEvent
 	jr CtrlPanel_ProcessButtonPress
 
-LABEL_F981DC:
+CtrlPanel_CheckDiskMenuRelease:
 	bit 1, c
 	jr z, CtrlPanel_ProcessButtonPress
 	ld xwa, 0xFFFFFFFF
@@ -201,7 +201,7 @@ CtrlPanel_ProcessButtonPress:
 	ld xde, xiz
 	set 7, de
 	bit 0, a
-	jr z, LABEL_F9827D
+	jr z, CtrlPanel_CheckButtonRelease
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00008
 	call ApPostEvent
@@ -230,7 +230,7 @@ CtrlPanel_ProcessButtonPress:
 	call ApPostEvent
 	jr CtrlPanel_DispatchCombinedState
 
-LABEL_F9827D:
+CtrlPanel_CheckButtonRelease:
 	bit 0, c
 	jr z, CtrlPanel_DispatchCombinedState
 	ld xwa, 0xFFFFFFFF
@@ -250,43 +250,43 @@ CtrlPanel_DispatchCombinedState:
 	andda32_24 xwa, 160922
 	st32_24 0x0274a2, xwa
 	cp xwa, 0x1100
-	jr z, LABEL_F98308
+	jr z, CtrlPanel_HandleFirmwareCheck
 	cp xwa, 0xA1
-	jr z, LABEL_F982F3
+	jr z, CtrlPanel_PostScrollEvent
 	cp xwa, 0x91
-	jr z, LABEL_F982E2
+	jr z, CtrlPanel_PostDisplayEvent
 	cp xwa, 0x89
 	jr nz, CtrlPanel_HandlePortCommands
 	lds32 xwa, 7
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jr LABEL_F98302
+	jr CtrlPanel_PostCombinedEvent
 
-LABEL_F982E2:
+CtrlPanel_PostDisplayEvent:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00000
-	jr LABEL_F98302
+	jr CtrlPanel_PostCombinedEvent
 
-LABEL_F982F3:
+CtrlPanel_PostScrollEvent:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000F0
 
-LABEL_F98302:
+CtrlPanel_PostCombinedEvent:
 	call ApPostEvent
 	jr CtrlPanel_HandlePortCommands
 
-LABEL_F98308:
+CtrlPanel_HandleFirmwareCheck:
 	call Get_Firmware_Version
 	cp l, 0xFF
 	call_24 z, 0xFAF030
 
 CtrlPanel_HandlePortCommands:
 	cpdi8 49277, 32
-	jr nz, LABEL_F9834A
+	jr nz, CtrlPanel_HandleSerialPort
 	cpdi8 49278, 0
-	jr z, LABEL_F9834A
+	jr z, CtrlPanel_HandleSerialPort
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0003B
 	call DeleteEvent
@@ -297,7 +297,7 @@ CtrlPanel_HandlePortCommands:
 	ld xbc, 0x1C0003B
 	call ApPostEvent
 
-LABEL_F9834A:
+CtrlPanel_HandleSerialPort:
 	cpdi8 49277, 33
 	jrl nz, UIEvent_Epilogue
 	cpdi8 49278, 0
@@ -315,14 +315,14 @@ LABEL_F9834A:
 	ld xbc, 0x1C0001F
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F9838B:
+CtrlPanel_EventType_A8:
 	cps e, 3
-	jrl nz, LABEL_F9842B
+	jrl nz, CtrlPanel_AA_Epilogue
 	ldda8 c, 49279
 	ld a, c
 	andda8 a, 49278
 	bit 0, a
-	jr z, LABEL_F983B9
+	jr z, CtrlPanel_A8_CheckRelease
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009B
 	lds32 xde, 0
@@ -331,29 +331,29 @@ LABEL_F9838B:
 	ordm32_24 160912, xwa
 	jrl UIEvent_Epilogue
 
-LABEL_F983B9:
+CtrlPanel_A8_CheckRelease:
 	bit 0, c
-	jr nz, LABEL_F98424
+	jr nz, CtrlPanel_ClearStateVar
 	jrl UIEvent_Epilogue
 
-LABEL_F983C1:
+CtrlPanel_EventType_AA:
 	cp e, 0x11
-	jrl z, LABEL_F98661
+	jrl z, CtrlPanel_AA_PanelEvent_11
 	ldda8 c, 49279
 	ld a, c
 	andda8 a, 49278
 	cps e, 1
-	jrl z, LABEL_F985CB
+	jrl z, CtrlPanel_AA_PanelEvent_01_Bit1
 	cp e, 0x15
-	jrl z, LABEL_F9856E
+	jrl z, CtrlPanel_AA_PanelEvent_15
 	cps e, 4
-	jrl z, LABEL_F98513
+	jrl z, CtrlPanel_AA_PanelEvent_04_Bit4
 	cp e, 0xE
-	jrl z, LABEL_F98480
+	jrl z, CtrlPanel_AA_PanelEvent_0E_Bit3
 	cp e, 0x12
-	jr z, LABEL_F98457
+	jr z, CtrlPanel_AA_PanelEvent_12
 	cp e, 0xF
-	jr z, LABEL_F9842E
+	jr z, CtrlPanel_AA_PanelEvent_0F
 	cps e, 5
 	jrl nz, UIEvent_Epilogue
 	ldda8 a, 49279
@@ -369,22 +369,22 @@ LABEL_F983C1:
 	cp l, 0xFF
 	call_24 z, 0xFAF030
 
-LABEL_F98424:
+CtrlPanel_ClearStateVar:
 	lds32 xwa, 0
 	st32_24 0x027490, xwa
 
-LABEL_F9842B:
+CtrlPanel_AA_Epilogue:
 	jrl UIEvent_Epilogue
 
-LABEL_F9842E:
+CtrlPanel_AA_PanelEvent_0F:
 	bit 7, a
-	jr z, LABEL_F98442
+	jr z, CtrlPanel_AA_0F_Release
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	lds32 xde, 0
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F98442:
+CtrlPanel_AA_0F_Release:
 	bit 7, c
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xFFFFFFFF
@@ -392,15 +392,15 @@ LABEL_F98442:
 	lds32 xde, 0
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F98457:
+CtrlPanel_AA_PanelEvent_12:
 	bit 0, a
-	jr z, LABEL_F9846B
+	jr z, CtrlPanel_AA_12_Release
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	lds32 xde, 1
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F9846B:
+CtrlPanel_AA_12_Release:
 	bit 0, c
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xFFFFFFFF
@@ -408,57 +408,57 @@ LABEL_F9846B:
 	lds32 xde, 1
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F98480:
+CtrlPanel_AA_PanelEvent_0E_Bit3:
 	bit 3, a
-	jr z, LABEL_F98493
+	jr z, CtrlPanel_AA_0E_Bit3Release
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	lds32 xde, 2
-	jr LABEL_F984A4
+	jr CtrlPanel_AA_0E_PostAndContinue
 
-LABEL_F98493:
+CtrlPanel_AA_0E_Bit3Release:
 	bit 3, c
-	jr z, LABEL_F984A8
+	jr z, CtrlPanel_AA_PanelEvent_0E_Bit2
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
 	lds32 xde, 2
 
-LABEL_F984A4:
+CtrlPanel_AA_0E_PostAndContinue:
 	call ApPostEvent
 
-LABEL_F984A8:
+CtrlPanel_AA_PanelEvent_0E_Bit2:
 	ldda8 c, 49279
 	ld a, c
 	andda8 a, 49278
 	bit 2, a
-	jr z, LABEL_F984C5
+	jr z, CtrlPanel_AA_0E_Bit2Release
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	lds32 xde, 3
-	jr LABEL_F984D6
+	jr CtrlPanel_AA_0E_Bit2Post
 
-LABEL_F984C5:
+CtrlPanel_AA_0E_Bit2Release:
 	bit 2, c
-	jr z, LABEL_F984DA
+	jr z, CtrlPanel_AA_PanelEvent_0E_Bit4
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
 	lds32 xde, 3
 
-LABEL_F984D6:
+CtrlPanel_AA_0E_Bit2Post:
 	call ApPostEvent
 
-LABEL_F984DA:
+CtrlPanel_AA_PanelEvent_0E_Bit4:
 	ldda8 c, 49279
 	ld a, c
 	andda8 a, 49278
 	bit 4, a
-	jr z, LABEL_F984FB
+	jr z, CtrlPanel_AA_0E_Bit4Release
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	ld xde, 0x9
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F984FB:
+CtrlPanel_AA_0E_Bit4Release:
 	bit 4, c
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xFFFFFFFF
@@ -466,36 +466,36 @@ LABEL_F984FB:
 	ld xde, 0x9
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F98513:
+CtrlPanel_AA_PanelEvent_04_Bit4:
 	bit 4, a
-	jr z, LABEL_F98526
+	jr z, CtrlPanel_AA_04_Bit4Release
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	lds32 xde, 4
-	jr LABEL_F98537
+	jr CtrlPanel_AA_04_PostAndContinue
 
-LABEL_F98526:
+CtrlPanel_AA_04_Bit4Release:
 	bit 4, c
-	jr z, LABEL_F9853B
+	jr z, CtrlPanel_AA_PanelEvent_04_Bit5
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
 	lds32 xde, 4
 
-LABEL_F98537:
+CtrlPanel_AA_04_PostAndContinue:
 	call ApPostEvent
 
-LABEL_F9853B:
+CtrlPanel_AA_PanelEvent_04_Bit5:
 	ldda8 c, 49279
 	ld a, c
 	andda8 a, 49278
 	bit 5, a
-	jr z, LABEL_F98559
+	jr z, CtrlPanel_AA_04_Bit5Release
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	lds32 xde, 5
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F98559:
+CtrlPanel_AA_04_Bit5Release:
 	bit 5, c
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xFFFFFFFF
@@ -503,91 +503,91 @@ LABEL_F98559:
 	lds32 xde, 5
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F9856E:
+CtrlPanel_AA_PanelEvent_15:
 	bit 5, a
-	jr z, LABEL_F9859C
+	jr z, CtrlPanel_AA_15_Release
 	call GetAprStatus_Entry
 	cps l, 0
-	jr z, LABEL_F9858D
+	jr z, CtrlPanel_AA_15_AprInactive
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	ld xde, 0xB
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F9858D:
+CtrlPanel_AA_15_AprInactive:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	lds32 xde, 6
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F9859C:
+CtrlPanel_AA_15_Release:
 	bit 5, c
 	jrl z, UIEvent_Epilogue
 	call GetAprStatus_Entry
 	cps l, 0
-	jr z, LABEL_F985BC
+	jr z, CtrlPanel_AA_15_ReleaseAprInactive
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
 	ld xde, 0xB
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F985BC:
+CtrlPanel_AA_15_ReleaseAprInactive:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
 	lds32 xde, 6
 	jrl UIEvent_DispatchAndReturn
 
-LABEL_F985CB:
+CtrlPanel_AA_PanelEvent_01_Bit1:
 	bit 1, a
-	jr z, LABEL_F985DE
+	jr z, CtrlPanel_AA_01_Bit1Release
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	lds32 xde, 7
-	jr LABEL_F985EF
+	jr CtrlPanel_AA_01_PostAndContinue
 
-LABEL_F985DE:
+CtrlPanel_AA_01_Bit1Release:
 	bit 1, c
-	jr z, LABEL_F985F3
+	jr z, CtrlPanel_AA_PanelEvent_01_Bit5
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
 	lds32 xde, 7
 
-LABEL_F985EF:
+CtrlPanel_AA_01_PostAndContinue:
 	call ApPostEvent
 
-LABEL_F985F3:
+CtrlPanel_AA_PanelEvent_01_Bit5:
 	ldda8 c, 49279
 	ld a, c
 	andda8 a, 49278
 	bit 5, a
-	jr z, LABEL_F98613
+	jr z, CtrlPanel_AA_01_Bit5Release
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	ld xde, 0x8
-	jr LABEL_F98627
+	jr CtrlPanel_AA_01_Bit5Post
 
-LABEL_F98613:
+CtrlPanel_AA_01_Bit5Release:
 	bit 5, c
-	jr z, LABEL_F9862B
+	jr z, CtrlPanel_AA_PanelEvent_01_Bit6
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A6
 	ld xde, 0x8
 
-LABEL_F98627:
+CtrlPanel_AA_01_Bit5Post:
 	call ApPostEvent
 
-LABEL_F9862B:
+CtrlPanel_AA_PanelEvent_01_Bit6:
 	ldda8 c, 49279
 	ld a, c
 	andda8 a, 49278
 	bit 6, a
-	jr z, LABEL_F9864B
+	jr z, CtrlPanel_AA_01_Bit6Release
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	ld xde, 0x8
 	jr UIEvent_DispatchAndReturn
 
-LABEL_F9864B:
+CtrlPanel_AA_01_Bit6Release:
 	bit 6, c
 	jr z, UIEvent_Epilogue
 	ld xwa, 0xFFFFFFFF
@@ -595,17 +595,17 @@ LABEL_F9864B:
 	ld xde, 0x8
 	jr UIEvent_DispatchAndReturn
 
-LABEL_F98661:
+CtrlPanel_AA_PanelEvent_11:
 	ldda8 c, 49279
 	ld a, c
 	andda8 a, 49278
-	jr z, LABEL_F9867E
+	jr z, CtrlPanel_AA_11_Release
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000A5
 	ld xde, 0xA
 	jr UIEvent_DispatchAndReturn
 
-LABEL_F9867E:
+CtrlPanel_AA_11_Release:
 	cps c, 0
 	jr z, UIEvent_Epilogue
 	ld xwa, 0xFFFFFFFF
