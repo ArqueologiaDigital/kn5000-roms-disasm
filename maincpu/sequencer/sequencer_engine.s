@@ -1274,7 +1274,7 @@ SeqPlay_ConfigureVoiceChannels:
 	extz bc
 	ldda16 xwa, 1052
 	calr SeqPlay_AssignChordVoices
-	call LABEL_F487DF
+	call VoiceAlloc_TestBitRead
 	bitda 0, 10406
 	jr z, SeqPlay_ConfigVoice_CheckActive
 	setda 1, 10407
@@ -24990,7 +24990,7 @@ VoiceData_ProcessLoop:
 	call Part_ProcessAndDecrementVoice
 	ld (xsp + 10), hl
 	cpw (xsp + 10), 0x4D8
-	jrl ugt, LABEL_F483AB
+	jrl ugt, SeqLoad_ProcessEpilogue
 	cpw (xsp + 10), 0x1
 	jr z, VoiceData_ProcessLoop
 	cpw (xsp + 10), 0x2
@@ -25115,7 +25115,7 @@ VoiceData_LoopEnd:
 	ldw de, 0x82
 	call PartCtrl_WriteByteToBuf
 
-LABEL_F483AB:
+SeqLoad_ProcessEpilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -25124,13 +25124,13 @@ SeqLoad_InitPartPanPresets:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
 
-LABEL_F483B5:
+SeqLoad_PanPresetLoop:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x112
 	call Part_ReadByteDirect
 	cps l, 1
-	jr z, LABEL_F483F6
+	jr z, SeqLoad_PanPresetNext
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x112
@@ -25141,7 +25141,7 @@ LABEL_F483B5:
 	ldw bc, 0x110
 	call Part_ReadWord
 	cps hl, 0
-	jr nz, LABEL_F483F6
+	jr nz, SeqLoad_PanPresetNext
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x110
@@ -25149,48 +25149,48 @@ LABEL_F483B5:
 	call Part_WriteWord
 	call VoiceChannels_InitPanFromPreset
 
-LABEL_F483F6:
+SeqLoad_PanPresetNext:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
-	jr ule, LABEL_F483B5
+	jr ule, SeqLoad_PanPresetLoop
 	pop_werp 0xFA
 	ret
 
-LABEL_F48403:
+SeqScan_ValidateAndDispatch:
 	cps bc, 0
 	ret lt
 	cps a, 2
-	jr z, LABEL_F4840D
-	jr LABEL_F4840E
+	jr z, SeqScan_ValidateReturn2
+	jr SeqScan_ProcessAllParts
 
-LABEL_F4840D:
+SeqScan_ValidateReturn2:
 	ret
 
-LABEL_F4840E:
+SeqScan_ProcessAllParts:
 	push_werp 0xFA
-	calr LABEL_F4878B
+	calr VoiceAlloc_InitBitMap
 	ldi_berp 0xFA, 1
 
-LABEL_F48417:
+SeqScan_OuterPartLoop:
 	ldi_berp 0xFB, 1
 
-LABEL_F4841A:
+SeqScan_InnerVoiceLoop:
 	ldto_berp A, 0xFA
 	extz wa
 	ldto_berp C, 0xFB
 	extz bc
-	calr LABEL_F48440
+	calr SeqScan_ProcessVoiceSlot
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr ule, LABEL_F4841A
+	jr ule, SeqScan_InnerVoiceLoop
 	inc1_berp 0xFA
 	cp_erpb 0xFA, 0x0A
-	jr ule, LABEL_F48417
-	calr LABEL_F485B5
+	jr ule, SeqScan_OuterPartLoop
+	calr VoiceMap_RebuildFromParts
 	pop_werp 0xFA
 	ret
 
-LABEL_F48440:
+SeqScan_ProcessVoiceSlot:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 10), c
@@ -25206,17 +25206,17 @@ LABEL_F48440:
 	ld c, (xsp + 10)
 	extz bc
 	cps l, 0
-	jr nz, LABEL_F48471
+	jr nz, SeqScan_VoiceHasBit7
 	calr Part_ClearVoiceSlot
-	jrl LABEL_F48563
+	jrl SeqScan_ReturnZero
 
-LABEL_F48471:
+SeqScan_VoiceHasBit7:
 	call Part_ReadVoiceWord
 	ld (xsp + 4), hl
 	ld wa, (xsp + 4)
-	calr LABEL_F4868A
+	calr VoiceAlloc_CheckRangeAndBit7
 	cps hl, 0
-	jr z, LABEL_F48492
+	jr z, SeqScan_CheckChainOwner
 	ld c, (xsp + 12)
 	extz bc
 	ld e, (xsp + 10)
@@ -25224,36 +25224,36 @@ LABEL_F48471:
 	ldw wa, 0x10
 	jrl SeqScan_CallCompare
 
-LABEL_F48492:
+SeqScan_CheckChainOwner:
 	ldi_werp 0xFA, 0
 	ld iz, (xsp + 4)
 	ld wa, iz
 
-LABEL_F4849A:
+SeqScan_ChainWalkLoop:
 	call PartCtrl_ReadWord
 	ld (xsp + 4), hl
 	cpi_werp 0xFA, 0
-	jr nz, LABEL_F484B4
+	jr nz, SeqScan_TestOwnerBit
 	ld wa, iz
 	calr VoiceAlloc_TestBitInMap
 	cps l, 0
-	jr z, LABEL_F484B4
+	jr z, SeqScan_TestOwnerBit
 	setm 4, (xsp + 6)
-	jr LABEL_F484C1
+	jr SeqScan_CheckFlags
 
-LABEL_F484B4:
+SeqScan_TestOwnerBit:
 	ld wa, iz
 	ldto_werp BC, 0xFA
 	lds de, 1
 	calr PartCtrl_CheckOwnerAndToggle
 	ld (xsp + 6), hl
 
-LABEL_F484C1:
+SeqScan_CheckFlags:
 	cpw (xsp + 6), 0x0
-	jr z, LABEL_F484EA
+	jr z, SeqScan_ReadCounterAndCheck
 	ld wa, (xsp + 6)
 	bit 4, wa
-	jr z, LABEL_F484E0
+	jr z, SeqScan_AppendToQueue
 	ld c, (xsp + 12)
 	extz bc
 	ld e, (xsp + 10)
@@ -25261,20 +25261,20 @@ LABEL_F484C1:
 	ldw wa, 0x10
 	jrl SeqScan_CallCompare
 
-LABEL_F484E0:
+SeqScan_AppendToQueue:
 	ld wa, (xsp + 6)
 	ld bc, iz
 	lds de, 0
 	calr PartCtrl_AppendToEventQueue
 
-LABEL_F484EA:
+SeqScan_ReadCounterAndCheck:
 	ld wa, iz
-	calr LABEL_F486A3
+	calr VoiceAlloc_ReadCounterByte
 	ld (xsp + 8), hl
 	cpw (xsp + 8), 0x100
-	jr nc, LABEL_F48567
+	jr nc, SeqScan_HandleOverflow
 	cpw (xsp + 4), 0xFFFF
-	jr z, LABEL_F48519
+	jr z, SeqScan_WriteNewVoiceWord
 	ld c, (xsp + 12)
 	extz bc
 	ld e, (xsp + 10)
@@ -25285,7 +25285,7 @@ LABEL_F484EA:
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
 
-LABEL_F48519:
+SeqScan_WriteNewVoiceWord:
 	ld a, (xsp + 12)
 	extz wa
 	ld c, (xsp + 10)
@@ -25305,24 +25305,24 @@ LABEL_F48519:
 	call Part_ReadVoiceWord
 	ld iz, hl
 	cp iz, 0xFFFF
-	jr z, LABEL_F48563
+	jr z, SeqScan_ReturnZero
 
-LABEL_F48550:
+SeqScan_ClearChainLoop:
 	ld wa, iz
-	calr LABEL_F4879F
+	calr VoiceAlloc_SetBitInMap
 	ld wa, iz
 	call PartCtrl_ReadWord
 	ld iz, hl
 	cp iz, 0xFFFF
-	jr nz, LABEL_F48550
+	jr nz, SeqScan_ClearChainLoop
 
-LABEL_F48563:
+SeqScan_ReturnZero:
 	lds hl, 0
-	jr LABEL_F485A5
+	jr SeqScan_PopEpilogue
 
-LABEL_F48567:
+SeqScan_HandleOverflow:
 	cpw (xsp + 4), 0xFFFF
-	jr nz, LABEL_F4857D
+	jr nz, SeqScan_CheckEndCondition
 	ld c, (xsp + 12)
 	extz bc
 	ld e, (xsp + 10)
@@ -25330,17 +25330,17 @@ LABEL_F48567:
 	ldw wa, 0x80
 	jr SeqScan_CallCompare
 
-LABEL_F4857D:
+SeqScan_CheckEndCondition:
 	cpw (xsp + 4), 0xFFFF
-	jr z, LABEL_F4858B
+	jr z, SeqScan_CheckZeroDefault
 	cpw (xsp + 4), 0x4D8
-	jr ugt, LABEL_F48592
+	jr ugt, SeqScan_CallCompareAndFail
 
-LABEL_F4858B:
+SeqScan_CheckZeroDefault:
 	cpw (xsp + 4), 0x0
-	jr nz, LABEL_F485AA
+	jr nz, SeqScan_ContinueChain
 
-LABEL_F48592:
+SeqScan_CallCompareAndFail:
 	ld c, (xsp + 12)
 	extz bc
 	ld e, (xsp + 10)
@@ -25348,69 +25348,69 @@ LABEL_F48592:
 	ldw wa, 0x10
 
 SeqScan_CallCompare:
-	calr LABEL_F486CF
+	calr SeqScan_CompareAndAppend
 	ldw hl, 0xFFFF
 
-LABEL_F485A5:
+SeqScan_PopEpilogue:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_F485AA:
+SeqScan_ContinueChain:
 	ldfr_werp IZ, 0xFA
 	ld iz, (xsp + 4)
 	ld wa, iz
-	jrl LABEL_F4849A
+	jrl SeqScan_ChainWalkLoop
 
-LABEL_F485B5:
+VoiceMap_RebuildFromParts:
 	push xiz
 	ldi_werp 0xFA, 0
 	lds wa, 0
 	call Part_WriteWordBlock_OffsetAF
 	ldw iz, 0x4D8
 
-LABEL_F485C2:
+VoiceMap_RebuildLoop:
 	ld wa, iz
 	calr VoiceAlloc_TestBitInMap
 	cps l, 0
-	jr nz, LABEL_F485DC
+	jr nz, VoiceMap_RebuildNext
 	ld wa, iz
-	calr LABEL_F485EB
+	calr VoiceChain_LinkAtEnd
 	ld wa, iz
 	lds bc, 0
 	lds de, 0
 	calr PartCtrl_CheckOwnerAndToggle
 	inc1_werp 0xFA
 
-LABEL_F485DC:
+VoiceMap_RebuildNext:
 	dec 1, iz
 	cps iz, 2
-	jr ugt, LABEL_F485C2
+	jr ugt, VoiceMap_RebuildLoop
 	ldto_werp WA, 0xFA
 	call Part_SetAllVoicePos
 	pop xiz
 	ret
 
-LABEL_F485EB:
+VoiceChain_LinkAtEnd:
 	dec 2, xsp
 	pushw iz
 	ld iz, wa
 	ldda16 xwa, 61999
 	ld (xsp + 2), wa
 	cpw (xsp + 2), 0x0
-	jr nz, LABEL_F48605
+	jr nz, VoiceChain_LinkWritePrev
 	ld wa, iz
 	ldw bc, 0xFFFF
-	jr LABEL_F48613
+	jr VoiceChain_LinkWriteNext
 
-LABEL_F48605:
+VoiceChain_LinkWritePrev:
 	ld wa, (xsp + 2)
 	ld bc, iz
 	call PartCtrl_WriteWord_Off1
 	ld wa, iz
 	ld bc, (xsp + 2)
 
-LABEL_F48613:
+VoiceChain_LinkWriteNext:
 	call PartCtrl_WriteWord
 	ld wa, iz
 	lds bc, 0
@@ -25431,24 +25431,24 @@ PartCtrl_CheckOwnerAndToggle:
 	ld wa, iz
 	call PartCtrl_ReadWord_Off1
 	cp hl, (xsp + 6)
-	jr z, LABEL_F48649
+	jr z, PartCtrl_ToggleCheckDE
 	setm 4, (xsp + 2)
 	jr PartCtrl_AdjustAndReturn
 
-LABEL_F48649:
+PartCtrl_ToggleCheckDE:
 	cpw (xsp + 4), 0x0
-	jr nz, LABEL_F48667
+	jr nz, PartCtrl_ToggleCheckSet
 	ld wa, iz
 	call PartCtrl_TestBit7
 	cps l, 0
-	jr z, LABEL_F48667
+	jr z, PartCtrl_ToggleCheckSet
 	ld wa, iz
 	lds bc, 0
 	call PartCtrl_SetClearBit7
 	setm 1, (xsp + 2)
 	jr PartCtrl_AdjustAndReturn
 
-LABEL_F48667:
+PartCtrl_ToggleCheckSet:
 	cpw (xsp + 4), 0x1
 	jr nz, PartCtrl_AdjustAndReturn
 	ld wa, iz
@@ -25466,49 +25466,49 @@ PartCtrl_AdjustAndReturn:
 	inc 6, xsp
 	ret
 
-LABEL_F4868A:
+VoiceAlloc_CheckRangeAndBit7:
 	cp wa, 0x4D8
-	jr ugt, LABEL_F4869C
+	jr ugt, VoiceAlloc_RangeInvalid
 	cps wa, 0
-	jr z, LABEL_F4869C
+	jr z, VoiceAlloc_RangeInvalid
 	call PartCtrl_TestBit7
 	cps l, 0
-	jr nz, LABEL_F486A0
+	jr nz, VoiceAlloc_RangeValid
 
-LABEL_F4869C:
+VoiceAlloc_RangeInvalid:
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F486A0:
+VoiceAlloc_RangeValid:
 	lds hl, 0
 	ret
 
-LABEL_F486A3:
+VoiceAlloc_ReadCounterByte:
 	dec 2, xsp
 	pushw iz
 	ld (xsp + 2), wa
 	lds iz, 5
 
-LABEL_F486AB:
+VoiceAlloc_CounterLoop:
 	ldto_berp C, 0xF8
 	extz bc
 	ld wa, (xsp + 2)
 	call PartCtrl_ReadByte
 	cp l, 0x82
-	jr z, LABEL_F486C9
+	jr z, VoiceAlloc_CounterFound
 	cp l, 0x84
-	jr z, LABEL_F486C9
+	jr z, VoiceAlloc_CounterFound
 	inc 1, iz
 	cp iz, 0xFF
-	jr ule, LABEL_F486AB
+	jr ule, VoiceAlloc_CounterLoop
 
-LABEL_F486C9:
+VoiceAlloc_CounterFound:
 	ld hl, iz
 	popw iz
 	inc 2, xsp
 	ret
 
-LABEL_F486CF:
+SeqScan_CompareAndAppend:
 	dec 4, xsp
 	ld (xsp), e
 	ld (xsp + 2), c
@@ -25554,13 +25554,13 @@ Part_ClearVoiceSlot:
 	ldw de, 0xFFFF
 	call Part_WriteVoiceWord
 	cp (xsp + 2), 0x0
-	jr nz, LABEL_F48746
+	jr nz, VoiceScan_EventQueueBlock
 	ld a, (xsp)
 	extz wa
 	lds bc, 0
 	call Chan_SetActiveBit
 
-LABEL_F48746:
+VoiceScan_EventQueueBlock:
 	inc 4, xsp
 	ret
 
@@ -25590,28 +25590,28 @@ PartCtrl_AppendToEventQueue:
 	stda16 58296, xwa
 	ret
 
-LABEL_F4878B:
+VoiceAlloc_InitBitMap:
 	ldada xbc, 10744
 	ld xwa, xbc
 	st_dri3b A, 0xE5, 0x9B, 0x00
 
-LABEL_F48796:
+VoiceAlloc_InitBitMapLoop:
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F48796
+	jr c, VoiceAlloc_InitBitMapLoop
 	ret
 
-LABEL_F4879F:
+VoiceAlloc_SetBitInMap:
 	dec 1, wa
 	ld hl, wa
 	srl hl, 3
 	and wa, 0x7
 	lds de, 1
 	and a, 0xF
-	jr z, LABEL_F487B3
+	jr z, VoiceAlloc_SetBitReturn
 	slaa de
 
-LABEL_F487B3:
+VoiceAlloc_SetBitReturn:
 	ldada xwa, 10744
 	extz xhl
 	add xhl, xwa
@@ -25625,10 +25625,10 @@ VoiceAlloc_TestBitInMap:
 	and wa, 0x7
 	lds de, 1
 	and a, 0xF
-	jr z, LABEL_F487D2
+	jr z, VoiceAlloc_TestBitCalcAddr
 	slaa de
 
-LABEL_F487D2:
+VoiceAlloc_TestBitCalcAddr:
 	ldada xwa, 10744
 	extz xhl
 	add xhl, xwa
@@ -25636,25 +25636,25 @@ LABEL_F487D2:
 	and l, e
 	ret
 
-LABEL_F487DF:
-	calr LABEL_F48878
+VoiceAlloc_TestBitRead:
+	calr SeqStep_PostEventAndUpdate
 	calr LABEL_F498D9
 	calr LABEL_F4957B
 	jrl LABEL_F48C1C
 
-LABEL_F487EB:
+VoiceAlloc_TestBitHigh:
 	ldb l, 0x0
 
-LABEL_F487ED:
+VoiceAlloc_TestBitResult:
 	lds bc, 1
 	ld a, l
 	and a, 0xF
-	jr z, LABEL_F487F8
+	jr z, VoiceAlloc_ComputeBitmaskAddr
 	slaa bc
 
-LABEL_F487F8:
+VoiceAlloc_ComputeBitmaskAddr:
 	andda16 xbc, 61854
-	jr z, LABEL_F4881C
+	jr z, VoiceChan_StatusCheckReturn
 	ld a, l
 	extz wa
 	ldada xbc, 61856
@@ -25662,23 +25662,23 @@ LABEL_F487F8:
 	add xwa, xbc
 	ld a, (xwa)
 	cp a, 0xF
-	jr nz, LABEL_F48814
+	jr nz, VoiceChan_CheckStatusReady
 	ldb l, 0xF
 	ret
 
-LABEL_F48814:
+VoiceChan_CheckStatusReady:
 	cp a, 0x10
-	jr nz, LABEL_F4881C
+	jr nz, VoiceChan_StatusCheckReturn
 	ldb l, 0x10
 	ret
 
-LABEL_F4881C:
+VoiceChan_StatusCheckReturn:
 	inc 1, l
 	cp l, 0x10
-	jr c, LABEL_F487ED
+	jr c, VoiceAlloc_TestBitResult
 	ret
 
-LABEL_F48824:
+VoiceChan_PostStatusEvent:
 	ldda8 a, 9696
 	extz wa
 	ldada xbc, 9542
@@ -25710,7 +25710,7 @@ SeqScan_StoreResultB:
 	ldmmw_dri 0x07, 0xE4, 0xE0, 0x8E, 0x25
 	ret
 
-LABEL_F48878:
+SeqStep_PostEventAndUpdate:
 	stdi16 9616, 0
 	stdi8 9618, 0
 	resda 0, 10406
@@ -25720,7 +25720,7 @@ LABEL_F48878:
 	ldada xde, 9542
 	ldada xbc, 9590
 
-LABEL_F4889C:
+SeqStep_PostEventReturn:
 	ldda8 a, 9696
 	extz wa
 	add wa, wa
@@ -25743,18 +25743,18 @@ LABEL_F4889C:
 	inc 1, a
 	stda8 9696, a
 	cp a, 0x10
-	jr c, LABEL_F4889C
+	jr c, SeqStep_PostEventReturn
 	stdi8 9696, 0
 
-LABEL_F488E8:
+SeqNote_FormatAndPost:
 	ldda8 c, 9696
 	lds de, 1
 	ld a, c
 	and a, 0xF
-	jr z, LABEL_F488F7
+	jr z, SeqNote_FormatReturn
 	slaa de
 
-LABEL_F488F7:
+SeqNote_FormatReturn:
 	andda16 xde, 61854
 	jr z, SeqScan_AdvanceToNextPart
 	inc 1, c
@@ -25783,14 +25783,14 @@ SeqScan_ParsePartEvents:
 	ld a, l
 	and a, 0xF0
 	cp a, 0x90
-	jr nz, LABEL_F4894D
-	calr LABEL_F489B9
+	jr nz, SeqNote_QueueDispatch
+	calr SeqNote_QueueReturn
 	jr SeqScan_ParsePartEvents
 
-LABEL_F4894D:
+SeqNote_QueueDispatch:
 	cp l, 0x81
-	jr nz, LABEL_F48969
-	calr LABEL_F489E0
+	jr nz, SeqNote_QueueCase1
+	calr SeqEvent_AccumulateQueue
 	cps l, 1
 	jr nz, SeqScan_ParsePartEvents
 
@@ -25799,56 +25799,56 @@ SeqScan_AdvanceToNextPart:
 	inc 1, a
 	stda8 9696, a
 	cp a, 0x10
-	jr c, LABEL_F488E8
+	jr c, SeqNote_FormatAndPost
 	ret
 
-LABEL_F48969:
+SeqNote_QueueCase1:
 	cp a, 0xB0
-	jr nz, LABEL_F48977
-	calr LABEL_F489F3
+	jr nz, SeqNote_QueueCase2
+	calr SeqEvent_AccLoop
 	cps l, 1
 	jr z, SeqScan_AdvanceToNextPart
 	jr SeqScan_ParsePartEvents
 
-LABEL_F48977:
+SeqNote_QueueCase2:
 	cp l, 0x85
-	jr nz, LABEL_F48985
+	jr nz, SeqNote_QueueCase3
 	calr LABEL_F48A97
 	cps l, 1
 	jr z, SeqScan_AdvanceToNextPart
 	jr SeqScan_ParsePartEvents
 
-LABEL_F48985:
+SeqNote_QueueCase3:
 	cp l, 0x86
-	jr nz, LABEL_F48993
+	jr nz, SeqNote_QueueCase4
 	calr LABEL_F48AD1
 	cps l, 1
 	jr z, SeqScan_AdvanceToNextPart
 	jr SeqScan_ParsePartEvents
 
-LABEL_F48993:
+SeqNote_QueueCase4:
 	cp l, 0x82
 	jr z, SeqScan_AdvanceToNextPart
 	cp l, 0x84
-	jr nz, LABEL_F489A6
+	jr nz, SeqNote_QueueDefault
 	calr LABEL_F48B07
 	cps l, 1
 	jr z, SeqScan_AdvanceToNextPart
 	jr SeqScan_ParsePartEvents
 
-LABEL_F489A6:
+SeqNote_QueueDefault:
 	bit 7, l
-	jr nz, LABEL_F489B0
+	jr nz, SeqNote_QueueFallthrough
 	calr SeqData_ReadParamBlock
 	jr SeqScan_ParsePartEvents
 
-LABEL_F489B0:
+SeqNote_QueueFallthrough:
 	calr LABEL_F48B24
 	cps l, 1
 	jr z, SeqScan_AdvanceToNextPart
 	jr SeqScan_ParsePartEvents
 
-LABEL_F489B9:
+SeqNote_QueueReturn:
 	ldda16 xwa, 9830
 	inc 6, wa
 	stda16 9830, xwa
@@ -25862,7 +25862,7 @@ LABEL_F489B9:
 	stda16 10415, xhl
 	ret
 
-LABEL_F489E0:
+SeqEvent_AccumulateQueue:
 	call PartCtrl_RefreshWordPeriodic
 	incdi16 1, 9614
 	ldda16 xwa, 9614
@@ -25870,15 +25870,15 @@ LABEL_F489E0:
 	scc8 ugt, l
 	ret
 
-LABEL_F489F3:
+SeqEvent_AccLoop:
 	pushw iz
 	calr SeqData_ReadParamBlock
 	ldada xhl, 9606
 	bitm 2, (xhl)
-	jr z, LABEL_F48A02
+	jr z, SeqEvent_AccReturn
 	setm 7, (xhl + 2)
 
-LABEL_F48A02:
+SeqEvent_AccReturn:
 	cp (xhl + 2), 0x48
 	jrl nz, SeqScan_StoreAndReturn
 	ld a, (xhl + 3)
@@ -25887,15 +25887,15 @@ LABEL_F48A02:
 	jr nz, SeqScan_StoreAndReturn
 	lda xbc, (xhl + 4)
 	bitm 0, (xhl)
-	jr z, LABEL_F48A1C
+	jr z, SeqScan_PartVoiceInit
 	setm 7, (xbc)
 
-LABEL_F48A1C:
+SeqScan_PartVoiceInit:
 	bitm 1, (xhl)
-	jr z, LABEL_F48A23
+	jr z, SeqScan_PartVoiceEntry
 	setm 7, (xhl + 5)
 
-LABEL_F48A23:
+SeqScan_PartVoiceEntry:
 	ld a, (xhl + 5)
 	and a, (xbc)
 	and a, 0x30
@@ -25904,34 +25904,34 @@ LABEL_F48A23:
 	ld iz, bc
 	lda xwa, (xhl + 1)
 	cps bc, 0
-	jr z, LABEL_F48A55
+	jr z, SeqScan_PartVoiceAccum
 	ld xde, xwa
 	ld a, (xwa)
 	cp a, 0x28
-	jr nc, LABEL_F48A50
+	jr nc, SeqScan_PartVoiceCheck
 	dec 1, bc
 	stda16 9614, xbc
 	ld a, (xde)
 	add a, 0x5F
 	ld (xde), a
 
-LABEL_F48A50:
+SeqScan_PartVoiceCheck:
 	submi8 (xde), 0x28
-	jr LABEL_F48A68
+	jr SeqScan_PartVoiceNextPart
 
-LABEL_F48A55:
+SeqScan_PartVoiceAccum:
 	ld xbc, xwa
 	ld a, (xwa)
 	cp a, 0x28
-	jr ule, LABEL_F48A65
+	jr ule, SeqScan_PartVoiceReturn
 	sub a, 0x28
 	ld (xbc), a
-	jr LABEL_F48A68
+	jr SeqScan_PartVoiceNextPart
 
-LABEL_F48A65:
+SeqScan_PartVoiceReturn:
 	ld (xbc), 0x0
 
-LABEL_F48A68:
+SeqScan_PartVoiceNextPart:
 	ldda16 xwa, 9614
 	ldda16 xbc, 1052
 	cp wa, bc
@@ -25973,7 +25973,7 @@ LABEL_F48AA9:
 	jr nc, LABEL_F48ABC
 
 LABEL_F48AB3:
-	calr LABEL_F48824
+	calr VoiceChan_PostStatusEvent
 	calr LABEL_F48B48
 	ldb l, 0x0
 	ret
@@ -26850,7 +26850,7 @@ LABEL_F49328:
 	jr z, LABEL_F49338
 
 LABEL_F49330:
-	calr LABEL_F487EB
+	calr VoiceAlloc_TestBitHigh
 	cp l, 0xF
 	jr nz, LABEL_F49363
 

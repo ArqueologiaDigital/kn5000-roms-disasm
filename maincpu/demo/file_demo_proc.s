@@ -1925,7 +1925,7 @@ LABEL_F87710:
 LABEL_F87798:
 	lds wa, 0
 	ld bc, (xsp + 2)
-	call LABEL_F48403
+	call SeqScan_ValidateAndDispatch
 	lds iz, 0
 
 LABEL_F877A3:
