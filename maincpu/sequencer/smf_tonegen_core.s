@@ -2695,7 +2695,7 @@ LABEL_F24D8C:
 	ld xix, 0x1A37
 	ld_sriw3 WA, 0x07, 0xF0, 0xEC
 	ld c, w
-	call LABEL_FEE9EA
+	call SndParam_LookupByPartAndNote
 	ldda8 a, 4012
 	add a, l
 	pop xde
@@ -3405,7 +3405,7 @@ LABEL_F254A9:
 	ld xix, 0x1A37
 	ld_sriw3 WA, 0x07, 0xF0, 0xEC
 	ld c, w
-	call LABEL_FEE9EA
+	call SndParam_LookupByPartAndNote
 	ldda8 a, 4012
 	add a, l
 	pop xde
@@ -5000,7 +5000,7 @@ VoiceSynth_ConditionalUpdate_StoreAndCall:
 	ret
 VoiceSynth_ConditionalUpdate_Helper:
 	; --- Helper: call FEEA13, copy L to A (7 bytes) ---
-	call LABEL_FEEA13
+	call SndParam_CompactLookupStub
 	ld a, l
 	ret
 
