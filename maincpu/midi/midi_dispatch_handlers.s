@@ -6331,41 +6331,41 @@ MidiStream_PrevBankCheck:
 
 SeqAlt_ProcessAndFinalize:
 	call LABEL_FD83F4
-	calr LABEL_FD5D0C
-	calr LABEL_FD5D22
+	calr SeqBuf_WaitForEmpty
+	calr MidiChan_ParseVoiceData
 	calr SeqData_InitPlaybackFromField
 	jp SeqAlt_CheckInitBuffer
 
-LABEL_FD5D0C:
+SeqBuf_WaitForEmpty:
 	pushw iz
 	ldw iz, 0xFFFE
 
-LABEL_FD5D10:
+SeqBuf_WaitLoop:
 	call SeqBuf_MidiOut_CheckEmpty
 	cps hl, 0
-	jr z, LABEL_FD5D20
+	jr z, SeqBuf_WaitDone
 	ld wa, iz
 	dec 1, iz
 	cps wa, 0
-	jr nz, LABEL_FD5D10
+	jr nz, SeqBuf_WaitLoop
 
-LABEL_FD5D20:
+SeqBuf_WaitDone:
 	popw iz
 	ret
 
-LABEL_FD5D22:
+MidiChan_ParseVoiceData:
 	push xiz
 	ldi_berp 0xFB, 0
 	resda 5, 48408
 	ldda16 xiz, 1033
-	jrl LABEL_FD5DC8
+	jrl MidiChan_CheckSysExFlag
 
-LABEL_FD5D31:
+MidiChan_ReadNextByte:
 	ldda32 xwa, 48300
 	lds bc, 4
 	calr SeqData_ReadFieldByIndex
 	cps l, 0
-	jrl nz, LABEL_FD5DCF
+	jrl nz, MidiChan_ParseVoiceDone
 	call SeqBuf2_ReadByte
 	cp hl, 0xFFFF
 	jr z, MIDI_ProcessChannelPair
@@ -6374,64 +6374,64 @@ LABEL_FD5D31:
 	extz bc
 	ldda32 xwa, 48300
 	cpi_berp 0xFB, 1
-	jr z, LABEL_FD5D71
+	jr z, MidiChan_CheckSysExData
 	cpi_berp 0xFB, 0
-	jr nz, LABEL_FD5D83
+	jr nz, MidiChan_CheckHighBit
 	cp l, 0xF0
-	jr nz, LABEL_FD5D6B
+	jr nz, MidiChan_SendFieldParam4
 	ldi_berp 0xFB, 1
 	ld wa, bc
-	jr LABEL_FD5D94
+	jr MidiChan_AppendAndContinue
 
-LABEL_FD5D6B:
+MidiChan_SendFieldParam4:
 	lds bc, 4
 	lds de, 1
-	jr LABEL_FD5DB9
+	jr MidiChan_WriteAndSetFlag
 
-LABEL_FD5D71:
+MidiChan_CheckSysExData:
 	cp l, 0x50
-	jr nz, LABEL_FD5D7D
+	jr nz, MidiChan_SendFieldParam4_2
 	ldi_berp 0xFB, 2
 	ld wa, bc
-	jr LABEL_FD5D94
+	jr MidiChan_AppendAndContinue
 
-LABEL_FD5D7D:
+MidiChan_SendFieldParam4_2:
 	lds bc, 4
 	lds de, 2
-	jr LABEL_FD5DB9
+	jr MidiChan_WriteAndSetFlag
 
-LABEL_FD5D83:
+MidiChan_CheckHighBit:
 	bit 7, l
-	jr nz, LABEL_FD5DA2
+	jr nz, MidiChan_CheckSysExEnd
 	ldda32 xde, 48212
 	cpw (xde), 0xFF
-	jr nc, LABEL_FD5D99
+	jr nc, MidiChan_SendFieldParam6
 	ld wa, bc
 
-LABEL_FD5D94:
+MidiChan_AppendAndContinue:
 	calr VoiceQueue_Append
 	jr MIDI_ProcessChannelPair
 
-LABEL_FD5D99:
+MidiChan_SendFieldParam6:
 	lds bc, 4
 	lds de, 6
 	calr MIDI_ReadChannelParam
 	jr MIDI_ProcessChannelPair
 
-LABEL_FD5DA2:
+MidiChan_CheckSysExEnd:
 	cp l, 0xF7
-	jr nz, LABEL_FD5DB5
+	jr nz, MidiChan_SendFieldParam3
 	ldi_berp 0xFB, 0
 	ld wa, bc
 	calr VoiceQueue_Append
 	setda 5, 48408
 	jr MIDI_ProcessChannelPair
 
-LABEL_FD5DB5:
+MidiChan_SendFieldParam3:
 	lds bc, 4
 	lds de, 3
 
-LABEL_FD5DB9:
+MidiChan_WriteAndSetFlag:
 	calr MIDI_ReadChannelParam
 	setda 5, 1074
 
@@ -6440,11 +6440,11 @@ MIDI_ProcessChannelPair:
 	ld wa, iz
 	calr LABEL_FD70C1
 
-LABEL_FD5DC8:
+MidiChan_CheckSysExFlag:
 	bitda 5, 48408
-	jrl z, LABEL_FD5D31
+	jrl z, MidiChan_ReadNextByte
 
-LABEL_FD5DCF:
+MidiChan_ParseVoiceDone:
 	pop xiz
 	ret
 
@@ -6460,11 +6460,11 @@ VoiceQueue_Append:
 	ld (xbc), 0xFF
 	ldda32 xbc, 48212
 	cp a, 0xF0
-	jr nz, LABEL_FD5DF9
+	jr nz, VoiceQueue_IncrementCount
 	ldw (xbc), 0x1
 	ret
 
-LABEL_FD5DF9:
+VoiceQueue_IncrementCount:
 	incm 1, (xbc)
 	ret
 
@@ -6479,7 +6479,7 @@ MidiChan_DequeueVoiceEntry:
 	ld l, (xde)
 	ret
 
-LABEL_FD5E10:
+MidiChan_NibbleLookup_Data:
 	.byte 0xda, 0x8b, 0xe8, 0x8a, 0xdb, 0x88, 0xdb, 0x69
 	.byte 0xd8, 0xd8, 0x66, 0x17, 0xba, 0x0a, 0x34, 0xa4
 	.byte 0x20, 0xf5, 0xe0, 0x35, 0xb4, 0x60, 0xc5, 0xe4
@@ -6524,9 +6524,9 @@ MidiChan_ParamDispatch:
 SeqData_ReadFieldByIndex:
 	extz bc
 	cps bc, 0
-	jr mi, LABEL_FD5F34
+	jr mi, SeqData_ReturnZeroField
 	cp bc, 0xF
-	jr gt, LABEL_FD5F34
+	jr gt, SeqData_ReturnZeroField
 	add bc, bc
 	lda_24 xix, 0xee2d4a
 	ld_sriw3 BC, 0x07, 0xF0, 0xE4
@@ -6569,7 +6569,7 @@ SeqData_FieldDispatch:
 	ld	l, (xwa)
 	jr	2
 
-LABEL_FD5F34:
+SeqData_ReturnZeroField:
 	ldb l, 0x0
 	ret
 
@@ -6579,7 +6579,7 @@ SeqData_InitPlaybackFromField:
 	calr SeqData_ReadFieldByIndex
 	cps l, 0
 	ret nz
-	calr LABEL_FD5F57
+	calr MidiSeq_AssignVoiceSlots
 	calr MidiStream_RetStub3
 	calr LABEL_FD67A0
 	calr LABEL_FD67A1
@@ -6587,7 +6587,7 @@ SeqData_InitPlaybackFromField:
 	calr LABEL_FD6959
 	ret
 
-LABEL_FD5F57:
+MidiSeq_AssignVoiceSlots:
 	dec 4, xsp
 	push_werp 0xFA
 	ldda32 xbc, 48212
@@ -6598,26 +6598,26 @@ LABEL_FD5F57:
 	ldi_berp 0xFB, 0
 	lda_24 xbc, 0xee493e
 
-LABEL_FD5F74:
+MidiSeq_ScanSlot0_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
 	exts xwa
 	add xwa, xbc
 	cp (xwa), 0xFF
-	jr nz, LABEL_FD5F91
+	jr nz, MidiSeq_Slot0_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
 	lds de, 7
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD5F91:
+MidiSeq_Slot0_CheckMatch:
 	cp (xwa), l
-	jr z, LABEL_FD5F9A
+	jr z, MidiSeq_Slot0_WriteParams
 	cp (xwa), 0xFE
-	jr nz, LABEL_FD6012
+	jr nz, MidiSeq_Slot0_NextEntry
 
-LABEL_FD5F9A:
+MidiSeq_Slot0_WriteParams:
 	extz hl
 	ldda32 xwa, 48300
 	lds bc, 5
@@ -6631,7 +6631,7 @@ LABEL_FD5F9A:
 	add xwa, xbc
 	ld e, (xwa + 1)
 	cps e, 0
-	jr z, LABEL_FD600A
+	jr z, MidiSeq_Slot0_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
@@ -6656,22 +6656,22 @@ LABEL_FD5F9A:
 	lds bc, 2
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD600A:
+MidiSeq_Slot0_StorePtr:
 	ld xwa, (xwa + 2)
 	ld (xsp + 2), xwa
-	jr LABEL_FD601C
+	jr MidiSeq_PrepSlot1
 
-LABEL_FD6012:
+MidiSeq_Slot0_NextEntry:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jrl c, LABEL_FD5F74
+	jrl c, MidiSeq_ScanSlot0_Loop
 
-LABEL_FD601C:
+MidiSeq_PrepSlot1:
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
 	ldi_berp 0xFB, 0
 
-LABEL_FD6026:
+MidiSeq_ScanSlot1_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -6679,19 +6679,19 @@ LABEL_FD6026:
 	ld xwa, (xsp + 2)
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	cp (xwa), 0xFF
-	jr nz, LABEL_FD604A
+	jr nz, MidiSeq_Slot1_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
 	ldw de, 0x8
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD604A:
+MidiSeq_Slot1_CheckMatch:
 	cp l, (xwa)
-	jr z, LABEL_FD6054
+	jr z, MidiSeq_Slot1_WriteParams
 	cp (xwa), 0xFE
-	jrl nz, LABEL_FD611A
+	jrl nz, MidiSeq_Slot1_NextEntry
 
-LABEL_FD6054:
+MidiSeq_Slot1_WriteParams:
 	extz hl
 	ldda32 xwa, 48300
 	lds bc, 6
@@ -6715,7 +6715,7 @@ LABEL_FD6054:
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	ld e, (xwa + 1)
 	cps e, 0
-	jr z, LABEL_FD60E6
+	jr z, MidiSeq_Slot1_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
@@ -6742,14 +6742,14 @@ LABEL_FD6054:
 	lds bc, 2
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD60E6:
+MidiSeq_Slot1_StorePtr:
 	ld xwa, (xwa + 2)
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
 	ldi_berp 0xFB, 0
 
-LABEL_FD60F6:
+MidiSeq_ScanSlot2_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -6757,23 +6757,23 @@ LABEL_FD60F6:
 	ld xwa, (xsp + 2)
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	cp (xwa), 0xFF
-	jr nz, LABEL_FD6120
+	jr nz, MidiSeq_Slot2_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
 	ldw de, 0x9
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD611A:
+MidiSeq_Slot1_NextEntry:
 	inc1_berp 0xFB
-	jrl LABEL_FD6026
+	jrl MidiSeq_ScanSlot1_Loop
 
-LABEL_FD6120:
+MidiSeq_Slot2_CheckMatch:
 	cp l, (xwa)
-	jr z, LABEL_FD612A
+	jr z, MidiSeq_Slot2_WriteParams
 	cp (xwa), 0xFE
-	jrl nz, LABEL_FD61F0
+	jrl nz, MidiSeq_Slot2_NextEntry
 
-LABEL_FD612A:
+MidiSeq_Slot2_WriteParams:
 	extz hl
 	ldda32 xwa, 48300
 	lds bc, 7
@@ -6797,7 +6797,7 @@ LABEL_FD612A:
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	ld e, (xwa + 1)
 	cps e, 0
-	jr z, LABEL_FD61BC
+	jr z, MidiSeq_Slot2_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
@@ -6824,14 +6824,14 @@ LABEL_FD612A:
 	lds bc, 2
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD61BC:
+MidiSeq_Slot2_StorePtr:
 	ld xwa, (xwa + 2)
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
 	ldi_berp 0xFB, 0
 
-LABEL_FD61CC:
+MidiSeq_ScanSlot3_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -6839,23 +6839,23 @@ LABEL_FD61CC:
 	ld xwa, (xsp + 2)
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	cp (xwa), 0xFF
-	jr nz, LABEL_FD61F6
+	jr nz, MidiSeq_Slot3_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
 	ldw de, 0xA
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD61F0:
+MidiSeq_Slot2_NextEntry:
 	inc1_berp 0xFB
-	jrl LABEL_FD60F6
+	jrl MidiSeq_ScanSlot2_Loop
 
-LABEL_FD61F6:
+MidiSeq_Slot3_CheckMatch:
 	cp l, (xwa)
-	jr z, LABEL_FD6200
+	jr z, MidiSeq_Slot3_WriteParams
 	cp (xwa), 0xFE
-	jrl nz, LABEL_FD62C7
+	jrl nz, MidiSeq_Slot3_NextEntry
 
-LABEL_FD6200:
+MidiSeq_Slot3_WriteParams:
 	extz hl
 	ldda32 xwa, 48300
 	ldw bc, 0x8
@@ -6879,7 +6879,7 @@ LABEL_FD6200:
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	ld e, (xwa + 1)
 	cps e, 0
-	jr z, LABEL_FD6293
+	jr z, MidiSeq_Slot3_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
@@ -6906,14 +6906,14 @@ LABEL_FD6200:
 	lds bc, 2
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD6293:
+MidiSeq_Slot3_StorePtr:
 	ld xwa, (xwa + 2)
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
 	ldi_berp 0xFB, 0
 
-LABEL_FD62A3:
+MidiSeq_ScanSlot4_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -6921,23 +6921,23 @@ LABEL_FD62A3:
 	ld xwa, (xsp + 2)
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	cp (xwa), 0xFF
-	jr nz, LABEL_FD62CD
+	jr nz, MidiSeq_Slot4_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
 	ldw de, 0xB
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD62C7:
+MidiSeq_Slot3_NextEntry:
 	inc1_berp 0xFB
-	jrl LABEL_FD61CC
+	jrl MidiSeq_ScanSlot3_Loop
 
-LABEL_FD62CD:
+MidiSeq_Slot4_CheckMatch:
 	cp l, (xwa)
-	jr z, LABEL_FD62D7
+	jr z, MidiSeq_Slot4_WriteParams
 	cp (xwa), 0xFE
-	jrl nz, LABEL_FD639E
+	jrl nz, MidiSeq_Slot4_NextEntry
 
-LABEL_FD62D7:
+MidiSeq_Slot4_WriteParams:
 	extz hl
 	ldda32 xwa, 48300
 	ldw bc, 0x9
@@ -6961,7 +6961,7 @@ LABEL_FD62D7:
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	ld e, (xwa + 1)
 	cps e, 0
-	jr z, LABEL_FD636A
+	jr z, MidiSeq_Slot4_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
@@ -6988,14 +6988,14 @@ LABEL_FD62D7:
 	lds bc, 2
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD636A:
+MidiSeq_Slot4_StorePtr:
 	ld xwa, (xwa + 2)
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
 	ldi_berp 0xFB, 0
 
-LABEL_FD637A:
+MidiSeq_ScanSlot5_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -7003,23 +7003,23 @@ LABEL_FD637A:
 	ld xwa, (xsp + 2)
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	cp (xwa), 0xFF
-	jr nz, LABEL_FD63A4
+	jr nz, MidiSeq_Slot5_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
 	ldw de, 0xC
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD639E:
+MidiSeq_Slot4_NextEntry:
 	inc1_berp 0xFB
-	jrl LABEL_FD62A3
+	jrl MidiSeq_ScanSlot4_Loop
 
-LABEL_FD63A4:
+MidiSeq_Slot5_CheckMatch:
 	cp l, (xwa)
-	jr z, LABEL_FD63AE
+	jr z, MidiSeq_Slot5_WriteParams
 	cp (xwa), 0xFE
-	jrl nz, LABEL_FD6475
+	jrl nz, MidiSeq_Slot5_NextEntry
 
-LABEL_FD63AE:
+MidiSeq_Slot5_WriteParams:
 	extz hl
 	ldda32 xwa, 48300
 	ldw bc, 0xA
@@ -7043,7 +7043,7 @@ LABEL_FD63AE:
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	ld e, (xwa + 1)
 	cps e, 0
-	jr z, LABEL_FD6441
+	jr z, MidiSeq_Slot5_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
@@ -7070,14 +7070,14 @@ LABEL_FD63AE:
 	lds bc, 2
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD6441:
+MidiSeq_Slot5_StorePtr:
 	ld xwa, (xwa + 2)
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
 	ldi_berp 0xFB, 0
 
-LABEL_FD6451:
+MidiSeq_ScanSlot6_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -7085,23 +7085,23 @@ LABEL_FD6451:
 	ld xwa, (xsp + 2)
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	cp (xwa), 0xFF
-	jr nz, LABEL_FD647B
+	jr nz, MidiSeq_Slot6_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
 	ldw de, 0xD
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD6475:
+MidiSeq_Slot5_NextEntry:
 	inc1_berp 0xFB
-	jrl LABEL_FD637A
+	jrl MidiSeq_ScanSlot5_Loop
 
-LABEL_FD647B:
+MidiSeq_Slot6_CheckMatch:
 	cp l, (xwa)
-	jr z, LABEL_FD6485
+	jr z, MidiSeq_Slot6_WriteParams
 	cp (xwa), 0xFE
-	jrl nz, LABEL_FD654C
+	jrl nz, MidiSeq_Slot6_NextEntry
 
-LABEL_FD6485:
+MidiSeq_Slot6_WriteParams:
 	extz hl
 	ldda32 xwa, 48300
 	ldw bc, 0xB
@@ -7125,7 +7125,7 @@ LABEL_FD6485:
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	ld e, (xwa + 1)
 	cps e, 0
-	jr z, LABEL_FD6518
+	jr z, MidiSeq_Slot6_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
@@ -7152,14 +7152,14 @@ LABEL_FD6485:
 	lds bc, 2
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD6518:
+MidiSeq_Slot6_StorePtr:
 	ld xwa, (xwa + 2)
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
 	ldi_berp 0xFB, 0
 
-LABEL_FD6528:
+MidiSeq_ScanSlot7_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -7167,23 +7167,23 @@ LABEL_FD6528:
 	ld xwa, (xsp + 2)
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	cp (xwa), 0xFF
-	jr nz, LABEL_FD6552
+	jr nz, MidiSeq_Slot7_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
 	ldw de, 0xE
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD654C:
+MidiSeq_Slot6_NextEntry:
 	inc1_berp 0xFB
-	jrl LABEL_FD6451
+	jrl MidiSeq_ScanSlot6_Loop
 
-LABEL_FD6552:
+MidiSeq_Slot7_CheckMatch:
 	cp l, (xwa)
-	jr z, LABEL_FD655C
+	jr z, MidiSeq_Slot7_WriteParams
 	cp (xwa), 0xFE
-	jrl nz, LABEL_FD6622
+	jrl nz, MidiSeq_Slot7_NextEntry
 
-LABEL_FD655C:
+MidiSeq_Slot7_WriteParams:
 	extz hl
 	ldda32 xwa, 48300
 	ldw bc, 0xC
@@ -7207,7 +7207,7 @@ LABEL_FD655C:
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	ld e, (xwa + 1)
 	cps e, 0
-	jr z, LABEL_FD65EF
+	jr z, MidiSeq_Slot7_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
@@ -7234,14 +7234,14 @@ LABEL_FD655C:
 	lds bc, 2
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD65EF:
+MidiSeq_Slot7_StorePtr:
 	ld xwa, (xwa + 2)
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
 	ldi_berp 0xFB, 0
 
-LABEL_FD65FF:
+MidiSeq_ScanSlot8_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x6
@@ -7251,22 +7251,22 @@ LABEL_FD65FF:
 	add xbc, xwa
 	ldda32 xwa, 48300
 	cp (xbc), 0xFF
-	jr nz, LABEL_FD6628
+	jr nz, MidiSeq_Slot8_CheckMatch
 	lds bc, 4
 	ldw de, 0xF
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD6622:
+MidiSeq_Slot7_NextEntry:
 	inc1_berp 0xFB
-	jrl LABEL_FD6528
+	jrl MidiSeq_ScanSlot7_Loop
 
-LABEL_FD6628:
+MidiSeq_Slot8_CheckMatch:
 	cp l, (xbc)
-	jr z, LABEL_FD6632
+	jr z, MidiSeq_Slot8_WriteParams
 	cp (xbc), 0xFE
 	jrl nz, LABEL_FD66F5
 
-LABEL_FD6632:
+MidiSeq_Slot8_WriteParams:
 	extz hl
 	ldw bc, 0xD
 	ld de, hl
@@ -7289,7 +7289,7 @@ LABEL_FD6632:
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	ld e, (xwa + 1)
 	cps e, 0
-	jr z, LABEL_FD66C1
+	jr z, MidiSeq_Slot8_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
@@ -7316,7 +7316,7 @@ LABEL_FD6632:
 	lds bc, 2
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD66C1:
+MidiSeq_Slot8_StorePtr:
 	ld xwa, (xwa + 2)
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
@@ -7324,7 +7324,7 @@ LABEL_FD66C1:
 	ldi_berp 0xFB, 0
 	ldda32 xwa, 48300
 
-LABEL_FD66D5:
+MidiSeq_ScanSlot9_Loop:
 	ldto_berp C, 0xFB
 	extz bc
 	muls bc, 0x6
@@ -7339,7 +7339,7 @@ LABEL_FD66D5:
 
 LABEL_FD66F5:
 	inc1_berp 0xFB
-	jrl LABEL_FD65FF
+	jrl MidiSeq_ScanSlot8_Loop
 
 LABEL_FD66FB:
 	cp l, (xbc)
@@ -7406,7 +7406,7 @@ LABEL_FD6794:
 
 LABEL_FD679A:
 	inc1_berp 0xFB
-	jrl LABEL_FD66D5
+	jrl MidiSeq_ScanSlot9_Loop
 
 LABEL_FD67A0:
 	ret
