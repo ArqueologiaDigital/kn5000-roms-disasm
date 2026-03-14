@@ -21,17 +21,17 @@ AcSendEditSwProc:
 	ldirw
 	ld xwa, (xsp + 18)
 	cp xwa, 0x1C00009
-	jrl z, LABEL_F77EE4
+	jrl z, AcSendEditSw_Event9
 	cp xwa, 0x1C00008
-	jr z, LABEL_F77E98
+	jr z, AcSendEditSw_Event8
 	cp xwa, 0x1C0000D
-	jr z, LABEL_F77E36
+	jr z, AcSendEditSw_EventD
 	ld xwa, (xsp + 22)
 	ld xbc, (xsp + 18)
 	ld xde, (xsp + 14)
-	jrl LABEL_F77F25
+	jrl AcSendEditSw_CallInherited
 
-LABEL_F77E36:
+AcSendEditSw_EventD:
 	ld xwa, (xsp + 22)
 	call GetViewInstance
 	ld xiz, xhl
@@ -52,26 +52,26 @@ LABEL_F77E36:
 	lda xde, (xsp + 4)
 	lda_24 xwa, 0xe7fffc
 	cpw (xbc), 0xC1
-	jr nz, LABEL_F77E83
+	jr nz, AcSendEditSw_DrawAlt
 	lds32 xbc, 0
 	push xbc
 	pushw 0x0
 	pushw 0xF7
 	ld xbc, 0xE80008
-	jr LABEL_F77E91
+	jr AcSendEditSw_DrawString
 
-LABEL_F77E83:
+AcSendEditSw_DrawAlt:
 	lds32 xbc, 0
 	push xbc
 	pushw 0x0
 	pushw 0xF7
 	ld xbc, 0xE80004
 
-LABEL_F77E91:
+AcSendEditSw_DrawString:
 	call DrawStringCentered
-	jrl LABEL_F77F18
+	jrl AcSendEditSw_ReturnZero
 
-LABEL_F77E98:
+AcSendEditSw_Event8:
 	ld xwa, (xsp + 22)
 	ld xbc, (xsp + 18)
 	ld xde, (xsp + 14)
@@ -81,7 +81,7 @@ LABEL_F77E98:
 	ld xiz, xhl
 	ld xwa, (xsp + 14)
 	cp xwa, 0xB
-	jr nz, LABEL_F77ED9
+	jr nz, AcSendEditSw_FwdInherited
 	ld xwa, (xiz + 40)
 	ld xbc, (xsp + 18)
 	ld xde, (xsp + 14)
@@ -91,15 +91,15 @@ LABEL_F77E98:
 	ld xwa, (xsp + 22)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
-	jr LABEL_F77F14
+	jr AcSendEditSw_SendEvent
 
-LABEL_F77ED9:
+AcSendEditSw_FwdInherited:
 	ld xwa, (xsp + 22)
 	ld xbc, (xsp + 18)
 	ld xde, (xsp + 14)
-	jr LABEL_F77F25
+	jr AcSendEditSw_CallInherited
 
-LABEL_F77EE4:
+AcSendEditSw_Event9:
 	ld xwa, (xsp + 22)
 	ld xbc, (xsp + 18)
 	ld xde, (xsp + 14)
@@ -108,29 +108,29 @@ LABEL_F77EE4:
 	call GetViewInstance
 	ld xwa, (xsp + 14)
 	cp xwa, 0xB
-	jr nz, LABEL_F77F1C
+	jr nz, AcSendEditSw_FwdInherited2
 	ld xwa, (xhl + 48)
 	ldw (xwa), 0xC1
 	ld xwa, (xsp + 22)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
 
-LABEL_F77F14:
+AcSendEditSw_SendEvent:
 	call SendEvent
 
-LABEL_F77F18:
+AcSendEditSw_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F77F29
+	jr AcSendEditSw_Epilogue
 
-LABEL_F77F1C:
+AcSendEditSw_FwdInherited2:
 	ld xwa, (xsp + 22)
 	ld xbc, (xsp + 18)
 	ld xde, (xsp + 14)
 
-LABEL_F77F25:
+AcSendEditSw_CallInherited:
 	call InheritedProc
 
-LABEL_F77F29:
+AcSendEditSw_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 22)
 	ret
@@ -184,7 +184,7 @@ ComSetGridCheck:
 	lda_24 xix, 0xf77fc4
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F77FC4:
+ComSetGridCheck_JumpTable:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xbf, 0x16, 0x63, 0xbf, 0x04, 0x31, 0xaf
@@ -279,9 +279,9 @@ ComSetGrid_EventHandler:
 	lda_24 xbc, 0xe80016
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	cp xwa, 0x2205
-	jr z, LABEL_F78269
+	jr z, ComSetGrid_CheckC0Param
 	cp xwa, 0x2201
-	jr z, LABEL_F78269
+	jr z, ComSetGrid_CheckC0Param
 	cp xwa, 0x2280
 	jr z, ComSetGridCheck_ParamDisplay
 	cp xwa, 0x229A
@@ -302,10 +302,10 @@ ComSetGridCheck_ParamDisplay:
 	lda xbc, (xsp + 12)
 	ld xwa, 0xE80088
 	cps hl, 0
-	jr z, LABEL_F78251
+	jr z, ComSetGrid_CopyStrAndDispatch
 	ld xwa, 0xE80082
 
-LABEL_F78251:
+ComSetGrid_CopyStrAndDispatch:
 	push xwa
 	push xbc
 	call Strcpy
@@ -314,40 +314,40 @@ LABEL_F78251:
 	ld xwa, xhl
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
-	jr LABEL_F782D0
+	jr ComSetGrid_SendEventReturn
 
-LABEL_F78269:
+ComSetGrid_CheckC0Param:
 	ld xwa, 0xC0
 	call SndParam_LookupReadOnly
 	cps hl, 1
-	jr nz, LABEL_F7827D
+	jr nz, ComSetGrid_LookupByColumn
 	ld xwa, 0xE8008E
 	jr UI_DisplayStringAndDispatchEvent
 
-LABEL_F7827D:
+ComSetGrid_LookupByColumn:
 	ld bc, (xsp + 6)
 	sla bc, 2
 	lda_24 xwa, 0xe80016
 	ld_sril3 XWA, 0x07, 0xE0, 0xE4
 	call SndParam_LookupReadOnly
 	cps hl, 3
-	jr z, LABEL_F782AB
+	jr z, ComSetGrid_ParamStr3
 	cps hl, 1
-	jr z, LABEL_F782A4
+	jr z, ComSetGrid_ParamStr1
 	cps hl, 0
-	jr nz, LABEL_F782B2
+	jr nz, ComSetGrid_ParamStrDefault
 	ld xwa, 0xE80098
 	jr UI_DisplayStringAndDispatchEvent
 
-LABEL_F782A4:
+ComSetGrid_ParamStr1:
 	ld xwa, 0xE800A2
 	jr UI_DisplayStringAndDispatchEvent
 
-LABEL_F782AB:
+ComSetGrid_ParamStr3:
 	ld xwa, 0xE800AC
 	jr UI_DisplayStringAndDispatchEvent
 
-LABEL_F782B2:
+ComSetGrid_ParamStrDefault:
 	ld xwa, 0xE800B6
 
 UI_DisplayStringAndDispatchEvent:
@@ -361,7 +361,7 @@ UI_DisplayStringAndDispatchEvent:
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
 
-LABEL_F782D0:
+ComSetGrid_SendEventReturn:
 	call SendEvent
 
 UI_ReturnZero:
@@ -1045,7 +1045,7 @@ PmemOutLGridCheck:
 	lda_24 xix, 0xf78a11
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F78A11:
+PmemOutLGridCheck_JumpTable:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xbf, 0x24, 0x30, 0xeb, 0x89, 0xe9, 0xef
@@ -1295,9 +1295,9 @@ PmemOutL_GridCheck:
 	jrl nz, PmemOutGrid_ReturnZero
 	ld wa, (xix)
 	cps wa, 3
-	jrl z, LABEL_F791AE
+	jrl z, PmemOutL_ColumnParamDisplay
 	cps wa, 1
-	jr z, LABEL_F7916A
+	jr z, PmemOutL_BitCheckDisplay
 	cps wa, 0
 	jrl nz, PmemOutGrid_ReturnZero
 	ld8_24 c, 0x024772
@@ -1321,7 +1321,7 @@ PmemOutL_GridCheck:
 	ld xbc, 0x1E0008C
 	jr PmemOutL_GridCheck_Return
 
-LABEL_F7916A:
+PmemOutL_BitCheckDisplay:
 	lds32 xwa, 0
 	ld8_24 a, 0x024772
 	ld xbc, xwa
@@ -1332,14 +1332,14 @@ LABEL_F7916A:
 	add xwa, xbc
 	add xwa, (xsp + 32)
 	bitm 1, (xwa)
-	jr z, LABEL_F7918E
+	jr z, PmemOutL_LoadOffStr
 	ld xwa, 0xE801BA
-	jr LABEL_F79193
+	jr PmemOutL_StrCopyAndDispatch
 
-LABEL_F7918E:
+PmemOutL_LoadOffStr:
 	ld xwa, 0xE801C0
 
-LABEL_F79193:
+PmemOutL_StrCopyAndDispatch:
 	push xwa
 	ld xwa, (xsp + 24)
 	push xwa
@@ -1351,7 +1351,7 @@ LABEL_F79193:
 	ld xbc, 0x1E0008C
 	jr PmemOutL_GridCheck_Return
 
-LABEL_F791AE:
+PmemOutL_ColumnParamDisplay:
 	ld8_24 c, 0x024774
 	extz bc
 	sla bc, 2
@@ -1676,7 +1676,7 @@ CtlMsgGrid_EventHandler:
 	ld xbc, 0x1A
 	call Math_MultiplyAccumulate
 	cps iz, 2
-	jrl z, LABEL_F79A2D
+	jrl z, CtlMsg_ComputeAndCheck
 	lds32 xbc, 0
 	ld8_24 c, 0x024772
 	ld xwa, xbc
@@ -1687,23 +1687,23 @@ CtlMsgGrid_EventHandler:
 	add xbc, xwa
 	add xbc, xhl
 	cps iz, 1
-	jr z, LABEL_F799F9
+	jr z, CtlMsg_ReadOffsetAndSend
 	cps iz, 0
 	jrl nz, TtMdCtlMsg_ReturnZero2
 	ld xwa, (xsp + 28)
 	sub xwa, 0xF9A0
 	add xbc, xwa
 	bitm 7, (xbc)
-	jr z, LABEL_F799D2
+	jr z, CtlMsg_SendAudioCommand
 	pushw 0xE8
 	pushw 0x254
 	ld xwa, (xsp + 16)
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_F799E8
+	jr CtlMsg_GetFocusAndDispatch
 
-LABEL_F799D2:
+CtlMsg_SendAudioCommand:
 	ld a, (xbc)
 	extz wa
 	pushw wa
@@ -1714,14 +1714,14 @@ LABEL_F799D2:
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
-LABEL_F799E8:
+CtlMsg_GetFocusAndDispatch:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 32)
 	ld xbc, 0x1E0008C
-	jrl LABEL_F79A8D
+	jrl CtlMsg_SendEventReturn
 
-LABEL_F799F9:
+CtlMsg_ReadOffsetAndSend:
 	ld xwa, (xsp + 20)
 	lda xwa, (xwa + 15)
 	sub xwa, 0xF9A0
@@ -1739,9 +1739,9 @@ LABEL_F799F9:
 	ld xwa, xhl
 	lda xde, (xsp + 32)
 	ld xbc, 0x1E0008C
-	jr LABEL_F79A8D
+	jr CtlMsg_SendEventReturn
 
-LABEL_F79A2D:
+CtlMsg_ComputeAndCheck:
 	ld xwa, (xsp + 20)
 	lda xbc, (xwa + 17)
 	sub xbc, 0xF9A0
@@ -1756,16 +1756,16 @@ LABEL_F79A2D:
 	add xwa, xhl
 	add xwa, xbc
 	bitm 7, (xwa)
-	jr z, LABEL_F79A69
+	jr z, CtlMsg_SendParamValue
 	pushw 0xE8
 	pushw 0x266
 	ld xwa, (xsp + 16)
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_F79A7F
+	jr CtlMsg_DispatchFocusEvent
 
-LABEL_F79A69:
+CtlMsg_SendParamValue:
 	ld a, (xwa)
 	extz wa
 	pushw wa
@@ -1776,13 +1776,13 @@ LABEL_F79A69:
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
-LABEL_F79A7F:
+CtlMsg_DispatchFocusEvent:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 32)
 	ld xbc, 0x1E0008C
 
-LABEL_F79A8D:
+CtlMsg_SendEventReturn:
 	call SendEvent
 
 TtMdCtlMsg_ReturnZero2:
@@ -2276,7 +2276,7 @@ CtlMsgGridCheck:
 	lda_24 xix, 0xf79ff0
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F79FF0:
+CtlMsgGridCheck_JumpTable:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xbf, 0x1e, 0x63, 0xbf, 0x0c, 0x31, 0xaf
@@ -2344,10 +2344,10 @@ MidiSetup_TtlDispatch:
 	lda xbc, (xsp + 20)
 	ld xwa, 0xE803EA
 	cps hl, 0
-	jr z, LABEL_F7A16A
+	jr z, MidiSetup_CopyStrAndDispatch
 	ld xwa, 0xE803E4
 
-LABEL_F7A16A:
+MidiSetup_CopyStrAndDispatch:
 	push xwa
 	push xbc
 	call Strcpy
@@ -2480,7 +2480,7 @@ MidiSetup_TtlCase3:
 	ld xbc, 0x1C00018
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_F7A7E2
+	jrl MidiPart_SetDialEnable
 
 ; MidiSetup title case 4
 MidiSetup_TtlCase4:
@@ -2526,7 +2526,7 @@ MidiSetup_TtlCase5:
 	lda xbc, (xhl + 74)
 	ld xwa, (xsp + 24)
 	cp xwa, 0x90
-	jr z, LABEL_F7A3D9
+	jr z, MidiPart_DecrementPart
 	cp xwa, 0x10
 	jrl nz, MidiPart_ReturnZeroJmp
 	ld xde, xbc
@@ -2535,11 +2535,11 @@ MidiSetup_TtlCase5:
 	inc 1, wa
 	ld (xbc), wa
 	cps wa, 2
-	jr le, LABEL_F7A38E
+	jr le, MidiPart_StorePartIndex
 	ld xwa, (xde)
 	ldw (xwa), 0x0
 
-LABEL_F7A38E:
+MidiPart_StorePartIndex:
 	ld xwa, (xde)
 	ld wa, (xwa)
 	st8_24 0x024778, a
@@ -2559,20 +2559,20 @@ LABEL_F7A38E:
 	ld_srib3 E, 0x07, 0xE4, 0xE0
 	ld xwa, 0x1400002
 	ld xbc, 0x1E000A0
-	jr LABEL_F7A436
+	jr MidiPart_CallMainFunc
 
-LABEL_F7A3D9:
+MidiPart_DecrementPart:
 	ld xde, xbc
 	ld xbc, (xbc)
 	ld wa, (xbc)
 	dec 1, wa
 	ld (xbc), wa
 	cps wa, 0
-	jr ge, LABEL_F7A3ED
+	jr ge, MidiPart_StoreAndNotify
 	ld xwa, (xde)
 	ldw (xwa), 0x2
 
-LABEL_F7A3ED:
+MidiPart_StoreAndNotify:
 	ld xwa, (xde)
 	ld wa, (xwa)
 	st8_24 0x024778, a
@@ -2593,7 +2593,7 @@ LABEL_F7A3ED:
 	ld xwa, 0x1400002
 	ld xbc, 0x1E000A0
 
-LABEL_F7A436:
+MidiPart_CallMainFunc:
 	call MainFuncCall
 	jrl MidiPart_ReturnZeroJmp
 	ld xwa, (xsp + 32)
@@ -2608,14 +2608,14 @@ LABEL_F7A436:
 	ld xde, (xsp + 24)
 	call SendEvent
 	or xhl, xhl
-	jrl z, LABEL_F7A5D5
+	jrl z, MidiPart_SendShowQuery
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
 	call SendEvent
 	ld iz, hl
 	cps iz, 2
-	jrl nz, LABEL_F7A51D
+	jrl nz, MidiPart_Part2ColumnNav
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 74)
 	ld xde, (xbc)
@@ -2623,11 +2623,11 @@ LABEL_F7A436:
 	dec 1, wa
 	ld (xde), wa
 	cps wa, 0
-	jr ge, LABEL_F7A495
+	jr ge, MidiPart_AutoDec_StorePart
 	ld xwa, (xbc)
 	ldw (xwa), 0x2
 
-LABEL_F7A495:
+MidiPart_AutoDec_StorePart:
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	st8_24 0x024778, a
@@ -2668,9 +2668,9 @@ LABEL_F7A495:
 	ld xde, (xsp + 24)
 	jrl MidiPartAutoIncReturn
 
-LABEL_F7A51D:
+MidiPart_Part2ColumnNav:
 	cpi8_24 0x024778, 0x02
-	jr nz, LABEL_F7A584
+	jr nz, MidiPart_GenericColumnNav
 	ld wa, iz
 	add wa, wa
 	lda_24 xbc, 0xe8041c
@@ -2698,9 +2698,9 @@ LABEL_F7A51D:
 	ld_srib3 E, 0x07, 0xE4, 0xE0
 	ld xwa, 0x1400002
 	ld xbc, 0x1E000A0
-	jr LABEL_F7A5C5
+	jr MidiPart_CallMainFuncSetAuto
 
-LABEL_F7A584:
+MidiPart_GenericColumnNav:
 	ld wa, iz
 	dec 1, wa
 	ld de, wa
@@ -2721,20 +2721,20 @@ LABEL_F7A584:
 	ld xwa, 0x1400002
 	ld xbc, 0x1E000A0
 
-LABEL_F7A5C5:
+MidiPart_CallMainFuncSetAuto:
 	call MainFuncCall
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
 	jrl MidiPartAutoIncReturn
 
-LABEL_F7A5D5:
+MidiPart_SendShowQuery:
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 24)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F7A628
+	jr z, MidiPart_InitGridBox
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 70)
 	ld xbc, (xsp + 28)
@@ -2753,9 +2753,9 @@ LABEL_F7A5D5:
 	ld xde, (xsp + 24)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_F7A7E2
+	jrl MidiPart_SetDialEnable
 
-LABEL_F7A628:
+MidiPart_InitGridBox:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
@@ -2768,14 +2768,14 @@ LABEL_F7A628:
 	ld xde, (xsp + 24)
 	call SendEvent
 	or xhl, xhl
-	jrl z, LABEL_F7A792
+	jrl z, MidiPart_SendShowQueryUp
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
 	call SendEvent
 	ld iz, hl
 	cp iz, 0x9
-	jr nz, LABEL_F7A6DA
+	jr nz, MidiPart_Part2ColumnNavUp
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 74)
 	ld xde, (xbc)
@@ -2783,11 +2783,11 @@ LABEL_F7A628:
 	inc 1, wa
 	ld (xde), wa
 	cps wa, 2
-	jr le, LABEL_F7A681
+	jr le, MidiPart_AutoInc_StorePart
 	ld xwa, (xbc)
 	ldw (xwa), 0x0
 
-LABEL_F7A681:
+MidiPart_AutoInc_StorePart:
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	st8_24 0x024778, a
@@ -2813,9 +2813,9 @@ LABEL_F7A681:
 	ld xde, (xsp + 24)
 	jrl MidiPartAutoIncReturn
 
-LABEL_F7A6DA:
+MidiPart_Part2ColumnNavUp:
 	cpi8_24 0x024778, 0x02
-	jr nz, LABEL_F7A73D
+	jr nz, MidiPart_GenericColumnNavUp
 	ld wa, iz
 	add wa, wa
 	lda_24 xbc, 0xe8042e
@@ -2841,9 +2841,9 @@ LABEL_F7A6DA:
 	ld_srib3 E, 0x07, 0xE4, 0xE0
 	ld xwa, 0x1400002
 	ld xbc, 0x1E000A0
-	jr LABEL_F7A77E
+	jr MidiPart_CallMainFuncAutoUp
 
-LABEL_F7A73D:
+MidiPart_GenericColumnNavUp:
 	ld wa, iz
 	inc 1, wa
 	ld de, wa
@@ -2864,7 +2864,7 @@ LABEL_F7A73D:
 	ld xwa, 0x1400002
 	ld xbc, 0x1E000A0
 
-LABEL_F7A77E:
+MidiPart_CallMainFuncAutoUp:
 	call MainFuncCall
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
@@ -2874,7 +2874,7 @@ MidiPartAutoIncReturn:
 	call SetAutoInc
 	jrl MidiPart_ReturnZeroJmp
 
-LABEL_F7A792:
+MidiPart_SendShowQueryUp:
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 24)
@@ -2900,7 +2900,7 @@ LABEL_F7A792:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_F7A7E2:
+MidiPart_SetDialEnable:
 	call SetDialEnable
 	jr MidiPart_ReturnZeroJmp
 
@@ -2910,7 +2910,7 @@ MidiSetup_GridBoxDispatch:
 	call GetViewInstance
 	ld xwa, (xhl + 62)
 	push xwa
-	jr LABEL_F7A821
+	jr MidiSetup_CopyStrAndReturn
 
 ; MidiSetup grid box case 1
 MidiSetup_GridBoxCase1:
@@ -2919,25 +2919,25 @@ MidiSetup_GridBoxCase1:
 	ld xwa, (xhl + 74)
 	ld wa, (xwa)
 	cps wa, 2
-	jr z, LABEL_F7A81B
+	jr z, MidiSetup_GridStr2
 	cps wa, 1
-	jr z, LABEL_F7A814
+	jr z, MidiSetup_GridStr1
 	cps wa, 0
 	jr nz, MidiPart_ReturnZeroJmp
 	ld xwa, 0xE80456
-	jr LABEL_F7A820
+	jr MidiSetup_PushGridStr
 
-LABEL_F7A814:
+MidiSetup_GridStr1:
 	ld xwa, 0xE80492
-	jr LABEL_F7A820
+	jr MidiSetup_PushGridStr
 
-LABEL_F7A81B:
+MidiSetup_GridStr2:
 	ld xwa, 0xE804D4
 
-LABEL_F7A820:
+MidiSetup_PushGridStr:
 	push xwa
 
-LABEL_F7A821:
+MidiSetup_CopyStrAndReturn:
 	ld xwa, (xsp + 28)
 	push xwa
 	call Strcpy
@@ -3012,7 +3012,7 @@ MidiPartGridCheck:
 	lda_24 xix, 0xf7a8d4
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F7A8D4:
+MidiPartGridCheck_JumpTable:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xbf, 0x22, 0x63, 0xbf, 0x10, 0x31, 0xaf
@@ -3139,10 +3139,10 @@ MidiSetup_EventHandler:
 	muls wa, 0x60
 	add wa, bc
 	cps de, 3
-	jrl z, LABEL_F7ACFB
+	jrl z, MidiPart_LookupFromTable
 	lda_24 xbc, 0xe80520
 	cps de, 2
-	jr z, LABEL_F7ACBA
+	jr z, MidiPart_LookupColumnParam
 	cps de, 1
 	jrl nz, MidiSetup_ReturnZero
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
@@ -3153,16 +3153,16 @@ MidiSetup_EventHandler:
 	inc 1, xwa
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr nz, LABEL_F7AC8E
+	jr nz, MidiPart_AudioCmdDisplay
 	pushw 0xE8
 	pushw 0x6E2
 	lda xwa, (xsp + 28)
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_F7ACA9
+	jr MidiPart_GridDispatchEvent
 
-LABEL_F7AC8E:
+MidiPart_AudioCmdDisplay:
 	ld xwa, (xsp + 12)
 	call SndParam_LookupReadOnly
 	inc 1, hl
@@ -3174,14 +3174,14 @@ LABEL_F7AC8E:
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 
-LABEL_F7ACA9:
+MidiPart_GridDispatchEvent:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 16)
 	ld xbc, 0x1E0008C
-	jrl LABEL_F7AD3E
+	jrl MidiPart_SendEventReturn
 
-LABEL_F7ACBA:
+MidiPart_LookupColumnParam:
 	inc 4, wa
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld (xsp + 12), xwa
@@ -3201,9 +3201,9 @@ LABEL_F7ACBA:
 	ld xwa, xhl
 	lda xde, (xsp + 16)
 	ld xbc, 0x1E0008C
-	jr LABEL_F7AD3E
+	jr MidiPart_SendEventReturn
 
-LABEL_F7ACFB:
+MidiPart_LookupFromTable:
 	lda_24 xbc, 0xe80528
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld (xsp + 12), xwa
@@ -3213,10 +3213,10 @@ LABEL_F7ACFB:
 	call SndParam_LookupReadOnly
 	ld xwa, 0xE806F6
 	cps hl, 0
-	jr z, LABEL_F7AD25
+	jr z, MidiPart_CopyParamStr
 	ld xwa, 0xE806F0
 
-LABEL_F7AD25:
+MidiPart_CopyParamStr:
 	push xwa
 	lda xwa, (xsp + 28)
 	push xwa
@@ -3227,7 +3227,7 @@ LABEL_F7AD25:
 	lda xde, (xsp + 16)
 	ld xbc, 0x1E0008C
 
-LABEL_F7AD3E:
+MidiPart_SendEventReturn:
 	call SendEvent
 
 MidiSetup_ReturnZero:
@@ -3236,7 +3236,7 @@ MidiSetup_ReturnZero:
 	lda xsp, (xsp + 38)
 	ret
 
-LABEL_F7AD49:
+MidiPart_DataBlock:
 	.byte 0xc1, 0x80, 0xc0, 0x3f, 0xa8, 0xb0, 0xfe, 0xc1
 	.byte 0x7d, 0xc0, 0x3f, 0x05, 0xb0, 0xfe, 0xc1, 0x7f
 	.byte 0xc0, 0x23, 0xcb, 0x33, 0x06, 0xb0, 0xf6, 0xc1
@@ -3307,67 +3307,67 @@ InitializeMurai:
 
 BitmapAccita16:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_F7B494
+	jr z, BitmapAccita16_Height
 	cp xbc, 0x1E000A2
-	jr z, LABEL_F7B48E
+	jr z, BitmapAccita16_Width
 	cp xbc, 0x1E000A1
-	jr z, LABEL_F7B488
+	jr z, BitmapAccita16_DataPtr
 	lds32 xhl, 0
 	ret
 
-LABEL_F7B488:
+BitmapAccita16_DataPtr:
 	lda_24 xhl, 0xe86676
 	ret
 
-LABEL_F7B48E:
+BitmapAccita16_Width:
 	ld xhl, 0x78
 	ret
 
-LABEL_F7B494:
+BitmapAccita16_Height:
 	ld xhl, 0x5F
 	ret
 
 BitmapAccger16:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_F7B4C1
+	jr z, BitmapAccger16_Height
 	cp xbc, 0x1E000A2
-	jr z, LABEL_F7B4BB
+	jr z, BitmapAccger16_Width
 	cp xbc, 0x1E000A1
-	jr z, LABEL_F7B4B5
+	jr z, BitmapAccger16_DataPtr
 	lds32 xhl, 0
 	ret
 
-LABEL_F7B4B5:
+BitmapAccger16_DataPtr:
 	lda_24 xhl, 0xe892fe
 	ret
 
-LABEL_F7B4BB:
+BitmapAccger16_Width:
 	ld xhl, 0x78
 	ret
 
-LABEL_F7B4C1:
+BitmapAccger16_Height:
 	ld xhl, 0x5F
 	ret
 
 BitmapDrawsw:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_F7B4EE
+	jr z, BitmapDrawsw_Height
 	cp xbc, 0x1E000A2
-	jr z, LABEL_F7B4E8
+	jr z, BitmapDrawsw_Width
 	cp xbc, 0x1E000A1
-	jr z, LABEL_F7B4E2
+	jr z, BitmapDrawsw_DataPtr
 	lds32 xhl, 0
 	ret
 
-LABEL_F7B4E2:
+BitmapDrawsw_DataPtr:
 	lda_24 xhl, 0xe8bf86
 	ret
 
-LABEL_F7B4E8:
+BitmapDrawsw_Width:
 	ld xhl, 0x126
 	ret
 
-LABEL_F7B4EE:
+BitmapDrawsw_Height:
 	lds32 xhl, 6
 	ret
 
@@ -3379,7 +3379,7 @@ LABEL_F7B4EE:
 ;   other     -> return 0 (not handled)
 ; The three copies reference different bitmap data addresses:
 ;   0xE8E66A, 0xE8F97E, 0xE90C92 (in Table Data ROM).
-LABEL_F7B4F1:
+Bitmap_QueryProperties3x:
 	cp	xbc, 31457443
 	jr	z, 31
 	cp	xbc, 31457442
@@ -3426,50 +3426,50 @@ LABEL_F7B4F1:
 
 BitmapTechnics:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_F7B59F
+	jr z, BitmapTechnics_Height
 	cp xbc, 0x1E000A2
-	jr z, LABEL_F7B599
+	jr z, BitmapTechnics_Width
 	cp xbc, 0x1E000A1
-	jr z, LABEL_F7B593
+	jr z, BitmapTechnics_DataPtr
 	lds32 xhl, 0
 	ret
 
-LABEL_F7B593:
+BitmapTechnics_DataPtr:
 	lda_24 xhl, 0xe8ffa6
 	ret
 
-LABEL_F7B599:
+BitmapTechnics_Width:
 	ld xhl, 0x138
 	ret
 
-LABEL_F7B59F:
+BitmapTechnics_Height:
 	ld xhl, 0x2D
 	ret
 
 
 BitmapKn5000:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_F7B5CC
+	jr z, BitmapKn5000_Height
 	cp xbc, 0x1E000A2
-	jr z, LABEL_F7B5C6
+	jr z, BitmapKn5000_Width
 	cp xbc, 0x1E000A1
-	jr z, LABEL_F7B5C0
+	jr z, BitmapKn5000_DataPtr
 	lds32 xhl, 0
 	ret
 
-LABEL_F7B5C0:
+BitmapKn5000_DataPtr:
 	lda_24 xhl, 0xe9367e
 	ret
 
-LABEL_F7B5C6:
+BitmapKn5000_Width:
 	ld xhl, 0xC7
 	ret
 
-LABEL_F7B5CC:
+BitmapKn5000_Height:
 	ld xhl, 0x24
 	ret
 
-LABEL_F7B5D2:
+BitmapKn5000_Tail:
 	.byte 0x0e
 
 SndParam_ResolveOscEntry:
@@ -3540,35 +3540,35 @@ AcSndEMenuProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C00007
-	jr z, LABEL_F7B685
+	jr z, AcSndEMenu_CheckModified
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
-	jr LABEL_F7B6B0
+	jr AcSndEMenu_CallInherited
 
-LABEL_F7B685:
+AcSndEMenu_CheckModified:
 	ld xwa, xiz
 	ld xbc, 0x1E00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	cps hl, 0
-	jr z, LABEL_F7B6A8
+	jr z, AcSndEMenu_ForwardInherited
 	ld xwa, 0xC0
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_F7B6A8
+	jr z, AcSndEMenu_ForwardInherited
 	lds32 xhl, 0
-	jr LABEL_F7B6B4
+	jr AcSndEMenu_Epilogue
 
-LABEL_F7B6A8:
+AcSndEMenu_ForwardInherited:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 
-LABEL_F7B6B0:
+AcSndEMenu_CallInherited:
 	call InheritedProc
 
-LABEL_F7B6B4:
+AcSndEMenu_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -3585,28 +3585,28 @@ LswLeftHold:
 	cp xbc, 0x1E00040
 	jr z, IvSdpart_TtlCase0
 	cp xbc, 0x1E00042
-	jr z, LABEL_F7B6E7
+	jr z, LswLeftHold_Case42
 	lds32 xhl, 0
 	jr LswLeftHold_PopIzRet
 
-LABEL_F7B6E7:
+LswLeftHold_Case42:
 	ld bc, (xde + 4)
 	ld xwa, (xde + 8)
 	cps bc, 0
-	jr lt, LABEL_F7B705
+	jr lt, LswLeftHold_DefaultStr
 	cps bc, 1
-	jr gt, LABEL_F7B705
+	jr gt, LswLeftHold_DefaultStr
 	sla bc, 2
 	lda_24 xde, 0x03e91c
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4
 	push xbc
-	jr LABEL_F7B70B
+	jr LswLeftHold_CopyAndReturn
 
-LABEL_F7B705:
+LswLeftHold_DefaultStr:
 	pushw 0xE9
 	pushw 0x52A6
 
-LABEL_F7B70B:
+LswLeftHold_CopyAndReturn:
 	push xwa
 	call Strcpy
 	inc 8, xsp
