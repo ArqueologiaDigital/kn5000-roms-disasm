@@ -1252,7 +1252,7 @@ SLDst_ShowHide_Dispatch:
 	call ApPostEvent
 	cpdi8 35320, 0
 	jr nz, SLDst_ClearFloppyFlag
-	call LABEL_F873ED
+	call FileIO_ValidateWithExtHeader
 	cps hl, 0
 	jr z, SLDst_ClearFloppyFlag
 	stdi8 35338, 1
@@ -2102,7 +2102,7 @@ CmpFile_ScrollRedraw:
 	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, CmpFile_RedrawDispatch
-	call LABEL_F872E5
+	call FileIO_ValidateAndOpenFile
 	cps hl, 0
 	jr z, CmpFile_RedrawDispatch
 	stdi8 35320, 2
@@ -2183,7 +2183,7 @@ FmmCmpLoad_ContinueLoad:
 	call FileIO_CheckRecordValid
 	cps l, 0
 	jr z, FmmCmpLoad_CloseProgress
-	call LABEL_F872E5
+	call FileIO_ValidateAndOpenFile
 	cps hl, 0
 	jr z, FmmCmpLoad_SignalProgress
 	stdi8 35320, 2

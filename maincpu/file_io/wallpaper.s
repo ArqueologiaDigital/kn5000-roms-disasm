@@ -345,7 +345,7 @@ WPScan_CheckAvail:
 	jrl z, WPScan_LoopContinue
 	cps c, 3
 	jr nz, WPScan_TypeNotThree
-	call LABEL_F872E5
+	call FileIO_ValidateAndOpenFile
 	cps hl, 0
 	jrl z, WPScan_LoopContinue
 	ld wa, iz
@@ -371,7 +371,7 @@ WPScan_TypeNotThree:
 	call LABEL_F87218
 	cps hl, 0
 	jr z, WPScan_LoopContinue
-	call LABEL_F87366
+	call FileIO_ValidateFileWithRegion
 	cps hl, 0
 	jr nz, WPScan_LoopContinue
 	ld wa, iz

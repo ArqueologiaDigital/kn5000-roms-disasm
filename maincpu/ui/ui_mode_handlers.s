@@ -9181,9 +9181,9 @@ PmNamingCheck:
 	ld (xsp + 22), xde
 	ld xiz, xwa
 	cp xbc, 0x1C00007
-	jr z, LABEL_FBD17D
+	jr z, PmNaming_HandleKeyPress
 	cp xbc, 0x1E0007C
-	jr z, LABEL_FBD175
+	jr z, PmNaming_GetKeyLayout
 	cp xbc, 0x1E00084
 	jrl z, PmBankNamingCheck_Ret
 	cp xbc, 0x1E0003A
@@ -9195,20 +9195,20 @@ PmNamingCheck:
 	ld xbc, (xsp + 22)
 	call BitMapOut_UpdateDisplayWidget
 	ld xhl, xiz
-	jrl LABEL_FBD230
+	jrl PmNaming_Epilogue
 
-LABEL_FBD175:
+PmNaming_GetKeyLayout:
 	ld xhl, 0x10
-	jrl LABEL_FBD230
+	jrl PmNaming_Epilogue
 
-LABEL_FBD17D:
+PmNaming_HandleKeyPress:
 	ld xwa, (xsp + 22)
 	cp xwa, 0xB
-	jr nz, LABEL_FBD200
+	jr nz, PmNaming_HandleF_Confirm
 	ld xwa, 0x300
 	call SndParam_LookupReadOnly
 	cps l, 0
-	jr z, LABEL_FBD200
+	jr z, PmNaming_HandleF_Confirm
 	call GetNamingWindowID
 	ld xwa, xhl
 	lda xde, (xsp + 4)
@@ -9240,7 +9240,7 @@ LABEL_FBD17D:
 	lds32 xde, 1
 	call PostEvent
 
-LABEL_FBD200:
+PmNaming_HandleF_Confirm:
 	ld xwa, (xsp + 22)
 	cp xwa, 0xF
 	jr nz, PmBankNamingCheck_Ret
@@ -9256,7 +9256,7 @@ LABEL_FBD200:
 PmBankNamingCheck_Ret:
 	lds32 xhl, 0
 
-LABEL_FBD230:
+PmNaming_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 22)
 	ret
@@ -9267,9 +9267,9 @@ PmBankNamingCheck:
 	ld (xsp + 22), xde
 	ld xiz, xwa
 	cp xbc, 0x1C00007
-	jr z, LABEL_FBD279
+	jr z, PmBankNaming_HandleKeyPress
 	cp xbc, 0x1E0007C
-	jr z, LABEL_FBD272
+	jr z, PmBankNaming_GetKeyLayout
 	cp xbc, 0x1E00084
 	jrl z, MssNameFunc_CleanupRet
 	cp xbc, 0x1E0003A
@@ -9279,16 +9279,16 @@ PmBankNamingCheck:
 	ld xbc, (xsp + 22)
 	call BitMapOut_UpdateWidget_PostDraw
 	ld xhl, xiz
-	jrl LABEL_FBD2F6
+	jrl PmBankNaming_Epilogue
 
-LABEL_FBD272:
+PmBankNaming_GetKeyLayout:
 	ld xhl, 0x10
-	jr LABEL_FBD2F6
+	jr PmBankNaming_Epilogue
 
-LABEL_FBD279:
+PmBankNaming_HandleKeyPress:
 	ld xwa, (xsp + 22)
 	cp xwa, 0xB
-	jr nz, LABEL_FBD2C6
+	jr nz, PmBankNaming_HandleF_Confirm
 	call GetNamingWindowID
 	ld xwa, xhl
 	lda xde, (xsp + 4)
@@ -9307,7 +9307,7 @@ LABEL_FBD279:
 	lds32 xde, 1
 	call PostEvent
 
-LABEL_FBD2C6:
+PmBankNaming_HandleF_Confirm:
 	ld xwa, (xsp + 22)
 	cp xwa, 0xF
 	jr nz, MssNameFunc_CleanupRet
@@ -9323,7 +9323,7 @@ LABEL_FBD2C6:
 MssNameFunc_CleanupRet:
 	lds32 xhl, 0
 
-LABEL_FBD2F6:
+PmBankNaming_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 22)
 	ret
@@ -9334,9 +9334,9 @@ MssNameFunc:
 	ld (xsp + 4), xwa
 	sub xbc, 0x1E0003E
 	cp xbc, 0x0
-	jrl lt, LABEL_FBD3E6
+	jrl lt, MssName_ReturnZero
 	cp xbc, 0x9
-	jrl gt, LABEL_FBD3E6
+	jrl gt, MssName_ReturnZero
 	add xbc, xbc
 	add xbc, 0xED15AC
 	ld bc, (xbc)
@@ -9369,12 +9369,12 @@ MssName_EventDispatch:
 	.byte 0x56, 0x8d, 0x33, 0x68, 0x06, 0xeb, 0xaa, 0x68
 	.byte 0x02
 
-LABEL_FBD3E6:
+MssName_ReturnZero:
 	lds32 xhl, 0
 	pop xiz
 	inc 4, xsp
 	ret
-LABEL_FBD3EC:
+MssName_Boundary:
 
 AcPmBkNoBoxProc:
 	st_dri3b L, 0xFD, 0xFC, 0xFE
@@ -9382,21 +9382,21 @@ AcPmBkNoBoxProc:
 	ld xiz, xde
 	st_dri3l XWA, 0xFD, 0x04, 0x01
 	cp xbc, 0x1C0001C
-	jr z, LABEL_FBD47C
+	jr z, AcPmBkNoBox_Match
 	cp xbc, 0x1C0000C
-	jr z, LABEL_FBD466
+	jr z, AcPmBkNoBox_ShowHide
 	cp xbc, 0x1C0000B
-	jr z, LABEL_FBD466
+	jr z, AcPmBkNoBox_ShowHide
 	cp xbc, 0x1C00002
-	jr z, LABEL_FBD44B
+	jr z, AcPmBkNoBox_Focus
 	cp xbc, 0x1C00001
-	jr z, LABEL_FBD42F
+	jr z, AcPmBkNoBox_Init
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	jrl LABEL_FBD4E4
+	jrl AcPmBkNoBox_Epilogue
 
-LABEL_FBD42F:
+AcPmBkNoBox_Init:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -9405,7 +9405,7 @@ LABEL_FBD42F:
 	call SetLswFilter
 	jrl UI_AcPmBkNoBoxProc_Return
 
-LABEL_FBD44B:
+AcPmBkNoBox_Focus:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -9414,7 +9414,7 @@ LABEL_FBD44B:
 	call ResetLswFilter
 	jr UI_AcPmBkNoBoxProc_Return
 
-LABEL_FBD466:
+AcPmBkNoBox_ShowHide:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -9422,7 +9422,7 @@ LABEL_FBD466:
 	call MainLswGet
 	jr UI_AcPmBkNoBoxProc_Return
 
-LABEL_FBD47C:
+AcPmBkNoBox_Match:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -9432,15 +9432,15 @@ LABEL_FBD47C:
 	lda xde, (xsp + 4)
 	ld bc, (xiz + 4)
 	cps bc, 0
-	jr nz, LABEL_FBD4AA
+	jr nz, AcPmBkNoBox_FormatBankNo
 	pushw 0xED
 	pushw 0x15C0
 	push xde
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_FBD4D1
+	jr AcPmBkNoBox_SendConfirm
 
-LABEL_FBD4AA:
+AcPmBkNoBox_FormatBankNo:
 	dec 1, bc
 	ld wa, bc
 	exts xwa
@@ -9458,7 +9458,7 @@ LABEL_FBD4AA:
 	call Audio_SendCommand
 	lda xsp, (xsp + 12)
 
-LABEL_FBD4D1:
+AcPmBkNoBox_SendConfirm:
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
 	ld xbc, 0x1C0000F
@@ -9467,11 +9467,11 @@ LABEL_FBD4D1:
 UI_AcPmBkNoBoxProc_Return:
 	lds32 xhl, 0
 
-LABEL_FBD4E4:
+AcPmBkNoBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
-LABEL_FBD4EB:
+AcPmBkNoBox_Boundary:
 
 AcBkNoBoxProc:
 	st_dri3b L, 0xFD, 0xFC, 0xFE
@@ -9479,21 +9479,21 @@ AcBkNoBoxProc:
 	ld xiz, xde
 	st_dri3l XWA, 0xFD, 0x04, 0x01
 	cp xbc, 0x1C0001C
-	jr z, LABEL_FBD57A
+	jr z, AcBkNoBox_Match
 	cp xbc, 0x1C0000C
-	jr z, LABEL_FBD564
+	jr z, AcBkNoBox_ShowHide
 	cp xbc, 0x1C0000B
-	jr z, LABEL_FBD564
+	jr z, AcBkNoBox_ShowHide
 	cp xbc, 0x1C00002
-	jr z, LABEL_FBD549
+	jr z, AcBkNoBox_Focus
 	cp xbc, 0x1C00001
-	jr z, LABEL_FBD52E
+	jr z, AcBkNoBox_Init
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	jrl LABEL_FBD5BC
+	jrl AcBkNoBox_Epilogue
 
-LABEL_FBD52E:
+AcBkNoBox_Init:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -9502,7 +9502,7 @@ LABEL_FBD52E:
 	call SetLswFilter
 	jr UI_AcBkNoBoxProc_Return
 
-LABEL_FBD549:
+AcBkNoBox_Focus:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -9511,7 +9511,7 @@ LABEL_FBD549:
 	call ResetLswFilter
 	jr UI_AcBkNoBoxProc_Return
 
-LABEL_FBD564:
+AcBkNoBox_ShowHide:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -9519,7 +9519,7 @@ LABEL_FBD564:
 	call MainLswGet
 	jr UI_AcBkNoBoxProc_Return
 
-LABEL_FBD57A:
+AcBkNoBox_Match:
 	ld_sril XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -9544,11 +9544,11 @@ LABEL_FBD57A:
 UI_AcBkNoBoxProc_Return:
 	lds32 xhl, 0
 
-LABEL_FBD5BC:
+AcBkNoBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x04, 0x01
 	ret
-LABEL_FBD5C3:
+AcBkNoBox_Boundary:
 
 MsaModeScreenProc:
 	lda xsp, (xsp - 24)
@@ -10499,9 +10499,9 @@ PmBkNameFunc:
 	ld xhl, xwa
 	sub xbc, 0x1E0003E
 	cp xbc, 0x0
-	jr lt, LABEL_FBE0F9
+	jr lt, PmBkName_ReturnZero
 	cp xbc, 0x9
-	jr gt, LABEL_FBE0F9
+	jr gt, PmBkName_ReturnZero
 	add xbc, xbc
 	add xbc, 0xED15EE
 	ld bc, (xbc)
@@ -10512,11 +10512,11 @@ PmBkName_EventDispatch:
 	.byte 0x0e, 0xeb, 0xa9, 0x0e, 0x43, 0x09, 0x00, 0x00
 	.byte 0x00, 0x0e
 
-LABEL_FBE0F9:
+PmBkName_ReturnZero:
 	lds32 xhl, 0
 	ret
 
-LABEL_FBE0FC:
+PmBkName_DataBytes:
 	.byte 0xf1, 0x48, 0x8d, 0x33, 0x0e
 
 GmOnOffFunc:
@@ -10524,17 +10524,17 @@ GmOnOffFunc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E00083
-	jr z, LABEL_FBE15F
+	jr z, GmOnOff_GetBoundsRect
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_FBE1E0
+	jrl z, GmOnOff_DefaultReturn
 	cp xbc, 0x1E0003E
-	jr z, LABEL_FBE15A
+	jr z, GmOnOff_Return1
 	cp xbc, 0x1E00041
-	jr z, LABEL_FBE15A
+	jr z, GmOnOff_Return1
 	cp xbc, 0x1E00040
-	jr z, LABEL_FBE152
+	jr z, GmOnOff_Return0xC0
 	cp xbc, 0x1E00042
-	jrl nz, LABEL_FBE1E0
+	jrl nz, GmOnOff_DefaultReturn
 	pushm (xde + 4)
 	pushw 0xED
 	pushw 0x1602
@@ -10545,15 +10545,15 @@ GmOnOffFunc:
 	ld xhl, xiz
 	jrl VariScreen_CleanupRet
 
-LABEL_FBE152:
+GmOnOff_Return0xC0:
 	ld xhl, 0xC0
 	jrl VariScreen_CleanupRet
 
-LABEL_FBE15A:
+GmOnOff_Return1:
 	lds32 xhl, 1
 	jrl VariScreen_CleanupRet
 
-LABEL_FBE15F:
+GmOnOff_GetBoundsRect:
 	lda xix, (xsp + 4)
 	ldw (xix), 0x10
 	lda xhl, (xix + 2)
@@ -10572,7 +10572,7 @@ LABEL_FBE15F:
 	add bc, 0x19
 	ld (xwa + 6), bc
 	cp xde, 0x1
-	jr nz, LABEL_FBE1BB
+	jr nz, GmOnOff_CheckDesign
 	ldw bc, 0xC4
 	ldw de, 0xF0
 	call DrawDesignBox
@@ -10582,32 +10582,32 @@ LABEL_FBE15F:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C20006
 	lds32 xde, 3
-	jr LABEL_FBE1DC
+	jr GmOnOff_SendAndReturn
 
-LABEL_FBE1BB:
+GmOnOff_CheckDesign:
 	ldda8 c, 36160
 	orda8 c, 36162
 	orda8 c, 36164
-	jr nz, LABEL_FBE1D0
+	jr nz, GmOnOff_SendHideEvent
 	ldw bc, 0xF5
 	call DrawBox
 
-LABEL_FBE1D0:
+GmOnOff_SendHideEvent:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C20006
 	lds32 xde, 1
 
-LABEL_FBE1DC:
+GmOnOff_SendAndReturn:
 	call SendEvent
 
-LABEL_FBE1E0:
+GmOnOff_DefaultReturn:
 	lds32 xhl, 0
 
 VariScreen_CleanupRet:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
-LABEL_FBE1E7:
+GmOnOff_Boundary:
 
 VariScreenProc:
 	st_dri3b L, 0xFD, 0xCA, 0xFD
@@ -10617,27 +10617,27 @@ VariScreenProc:
 	st_dri3l XWA, 0xFD, 0x36, 0x02
 	ld_sril XWA, (xsp + 0x0232)
 	cp xwa, 0x1C00007
-	jrl z, LABEL_FBF06A
+	jrl z, VariScreen_HandleOK
 	cp xwa, 0x1E20005
-	jrl z, LABEL_FBEE34
+	jrl z, VariScreen_HandleEnumNotify
 	cp xwa, 0x1C0000F
-	jrl z, LABEL_FBEAFA
+	jrl z, VariScreen_HandleConfirm
 	cp xwa, 0x1C0000E
-	jrl z, LABEL_FBE4BE
+	jrl z, VariScreen_HandleSelect
 	cp xwa, 0x1C0000D
-	jrl z, LABEL_FBE321
+	jrl z, VariScreen_HandlePaint
 	cp xwa, 0x1C0000B
-	jr z, LABEL_FBE284
+	jr z, VariScreen_HandleShow
 	cp xwa, 0x1C20007
-	jr z, LABEL_FBE259
+	jr z, VariScreen_RefreshAfterInit
 	cp xwa, 0x1C00001
-	jrl nz, LABEL_FBF4DF
+	jrl nz, VariScreen_DefaultHandler
 	ld_sril XWA, (xsp + 0x0236)
 	ld_sril XBC, (xsp + 0x0232)
 	ld_sril XDE, (xsp + 0x022e)
-	jrl LABEL_FBE31A
+	jrl VariScreen_CallInherited
 
-LABEL_FBE259:
+VariScreen_RefreshAfterInit:
 	ld_sril XWA, (xsp + 0x0236)
 	ld_sril XBC, (xsp + 0x0232)
 	ld_sril XDE, (xsp + 0x022e)
@@ -10647,9 +10647,9 @@ LABEL_FBE259:
 	ld_sril XWA, (xsp + 0x0236)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
-	jrl LABEL_FBE4B7
+	jrl VariScreen_SendAndReturn
 
-LABEL_FBE284:
+VariScreen_HandleShow:
 	ld_sril XWA, (xsp + 0x0236)
 	call GetViewInstance
 	ld (xsp + 24), xhl
@@ -10701,11 +10701,11 @@ LABEL_FBE284:
 	ld_sril XBC, (xsp + 0x0232)
 	ld_sril XDE, (xsp + 0x022e)
 
-LABEL_FBE31A:
+VariScreen_CallInherited:
 	call InheritedProc
 	jrl FileBrowser_ReturnZero
 
-LABEL_FBE321:
+VariScreen_HandlePaint:
 	ld_sril XWA, (xsp + 0x0236)
 	ld_sril XBC, (xsp + 0x0232)
 	ld_sril XDE, (xsp + 0x022e)
@@ -10830,11 +10830,11 @@ LABEL_FBE321:
 	ld xbc, 0x1C0000E
 	lds32 xde, 0
 
-LABEL_FBE4B7:
+VariScreen_SendAndReturn:
 	call SendEvent
 	jrl FileBrowser_ReturnZero
 
-LABEL_FBE4BE:
+VariScreen_HandleSelect:
 	ld_sril XWA, (xsp + 0x0236)
 	ld_sril XBC, (xsp + 0x0232)
 	ld_sril XDE, (xsp + 0x022e)
@@ -10854,7 +10854,7 @@ LABEL_FBE4BE:
 	dec 1, wa
 	ld hl, (xhl)
 	sub hl, wa
-	jr ge, LABEL_FBE515
+	jr ge, VariScreen_CalcRowOffset
 	ld xde, (xde)
 	ld xwa, (xbc)
 	ld wa, (xwa)
@@ -10865,7 +10865,7 @@ LABEL_FBE4BE:
 	sub de, wa
 	ld (xsp + 8), e
 
-LABEL_FBE515:
+VariScreen_CalcRowOffset:
 	ld xde, (xbc)
 	ld xwa, (xsp + 24)
 	ld xbc, (xwa + 64)
@@ -10874,7 +10874,7 @@ LABEL_FBE515:
 	divs wa, 0xA
 	inc 1, wa
 	cp wa, (xde)
-	jrl nz, LABEL_FBE80A
+	jrl nz, VariScreen_DrawRightPanel
 	ld e, (xsp + 8)
 	srl e, 1
 	extz de
@@ -10900,16 +10900,16 @@ LABEL_FBE515:
 	ld (xwa + 6), bc
 	lda xbc, (xwa + 4)
 	cpw (xhl), 0x0
-	jr nz, LABEL_FBE58E
+	jr nz, VariScreen_SetRightBounds
 	ldw (xwa), 0x8
 	ldw (xbc), 0x9C
-	jr LABEL_FBE596
+	jr VariScreen_DrawDesignArea
 
-LABEL_FBE58E:
+VariScreen_SetRightBounds:
 	ldw (xwa), 0xA3
 	ldw (xbc), 0x137
 
-LABEL_FBE596:
+VariScreen_DrawDesignArea:
 	lds bc, 0
 	ldw de, 0xF5
 	call DrawDesignBox
@@ -10950,13 +10950,13 @@ LABEL_FBE596:
 	dec 1, wa
 	ld ix, (xde)
 	sub ix, wa
-	jr ge, LABEL_FBE613
+	jr ge, VariScreen_SetHighlightColors
 	sub wa, (xde)
 	ldw de, 0x9
 	sub de, wa
 	ld (xsp + 8), e
 
-LABEL_FBE613:
+VariScreen_SetHighlightColors:
 	ld (xsp + 12), 0xFF
 	ld (xsp + 14), 0xF5
 	ld xix, (xsp + 24)
@@ -10966,7 +10966,7 @@ LABEL_FBE613:
 	divs wa, 0xA
 	inc 1, wa
 	cp wa, (xhl)
-	jr nz, LABEL_FBE64F
+	jr nz, VariScreen_DrawEditSwitch
 	sub bc, 0xA
 	ld xwa, (xix + 64)
 	ld wa, (xwa)
@@ -10976,11 +10976,11 @@ LABEL_FBE613:
 	extz wa
 	add wa, bc
 	cp (xde), wa
-	jr nz, LABEL_FBE64F
+	jr nz, VariScreen_DrawEditSwitch
 	ld (xsp + 12), 0x0
 	ld (xsp + 14), 0x7
 
-LABEL_FBE64F:
+VariScreen_DrawEditSwitch:
 	ld c, (xsp + 8)
 	srl c, 1
 	extz bc
@@ -11017,11 +11017,11 @@ LABEL_FBE64F:
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa + 56)
 	cpw (xwa), 0x10
-	jr z, LABEL_FBE6C9
+	jr z, VariScreen_DrawNameLabel
 	cpw (xwa), 0x11
-	jrl nz, LABEL_FBE7B6
+	jrl nz, VariScreen_DrawDefaultVoice
 
-LABEL_FBE6C9:
+VariScreen_DrawNameLabel:
 	st_dri3b B, 0xFD, 0x26, 0x02
 	st_dri3b C, 0xFD, 0x22, 0x02
 	lda xbc, (xhl + 2)
@@ -11033,16 +11033,16 @@ LABEL_FBE6C9:
 	ld (xde + 6), wa
 	lda xwa, (xde + 4)
 	cpw (xhl), 0x0
-	jr nz, LABEL_FBE6FB
+	jr nz, VariScreen_SetRightNameBounds
 	ldw (xde), 0x8
 	ldw (xwa), 0x1E
-	jr LABEL_FBE703
+	jr VariScreen_DrawNameString
 
-LABEL_FBE6FB:
+VariScreen_SetRightNameBounds:
 	ldw (xde), 0xA3
 	ldw (xwa), 0xBE
 
-LABEL_FBE703:
+VariScreen_DrawNameString:
 	decm 8, (xbc)
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa + 44)
@@ -11091,16 +11091,16 @@ LABEL_FBE703:
 	ld (xhl + 6), wa
 	lda xwa, (xhl + 4)
 	cpw (xbc), 0x0
-	jr nz, LABEL_FBE796
+	jr nz, VariScreen_SetRightVoiceBounds
 	ldw (xhl), 0x10
 	ldw (xwa), 0x9C
-	jr LABEL_FBE79E
+	jr VariScreen_DrawVoiceString
 
-LABEL_FBE796:
+VariScreen_SetRightVoiceBounds:
 	ldw (xhl), 0xAB
 	ldw (xwa), 0x137
 
-LABEL_FBE79E:
+VariScreen_DrawVoiceString:
 	st_dri3b B, 0xFD, 0x22, 0x01
 	lds32 xwa, 1
 	push xwa
@@ -11111,9 +11111,9 @@ LABEL_FBE79E:
 	extz wa
 	pushw wa
 	ld xwa, xhl
-	jr LABEL_FBE806
+	jr VariScreen_CallDrawLeftJustify
 
-LABEL_FBE7B6:
+VariScreen_DrawDefaultVoice:
 	st_dri3b C, 0xFD, 0x26, 0x02
 	st_dri3b A, 0xFD, 0x22, 0x02
 	lda xde, (xbc + 2)
@@ -11125,16 +11125,16 @@ LABEL_FBE7B6:
 	ld (xhl + 6), wa
 	lda xwa, (xhl + 4)
 	cpw (xbc), 0x0
-	jr nz, LABEL_FBE7E8
+	jr nz, VariScreen_SetDefVoiceRightBounds
 	ldw (xhl), 0x10
 	ldw (xwa), 0x9C
-	jr LABEL_FBE7F0
+	jr VariScreen_DrawDefVoiceString
 
-LABEL_FBE7E8:
+VariScreen_SetDefVoiceRightBounds:
 	ldw (xhl), 0xAB
 	ldw (xwa), 0x137
 
-LABEL_FBE7F0:
+VariScreen_DrawDefVoiceString:
 	st_dri3b B, 0xFD, 0x22, 0x01
 	lds32 xwa, 1
 	push xwa
@@ -11146,10 +11146,10 @@ LABEL_FBE7F0:
 	pushw wa
 	ld xwa, xhl
 
-LABEL_FBE806:
+VariScreen_CallDrawLeftJustify:
 	call DrawStringLeftJustify
 
-LABEL_FBE80A:
+VariScreen_DrawRightPanel:
 	ld xwa, (xsp + 24)
 	ld xde, (xwa + 44)
 	ld xbc, (xwa + 60)
@@ -11184,16 +11184,16 @@ LABEL_FBE80A:
 	ld (xwa + 6), bc
 	lda xbc, (xwa + 4)
 	cpw (xhl), 0x0
-	jr nz, LABEL_FBE884
+	jr nz, VariScreen_SetRightPanelRightBounds
 	ldw (xwa), 0x8
 	ldw (xbc), 0x9C
-	jr LABEL_FBE88C
+	jr VariScreen_DrawRightDesignBox
 
-LABEL_FBE884:
+VariScreen_SetRightPanelRightBounds:
 	ldw (xwa), 0xA3
 	ldw (xbc), 0x137
 
-LABEL_FBE88C:
+VariScreen_DrawRightDesignBox:
 	ldw bc, 0xC1
 	lds de, 7
 	call DrawDesignBox
@@ -11234,13 +11234,13 @@ LABEL_FBE88C:
 	dec 1, wa
 	ld ix, (xde)
 	sub ix, wa
-	jr ge, LABEL_FBE909
+	jr ge, VariScreen_SetRightHighlightColors
 	sub wa, (xde)
 	ldw de, 0x9
 	sub de, wa
 	ld (xsp + 8), e
 
-LABEL_FBE909:
+VariScreen_SetRightHighlightColors:
 	ld (xsp + 12), 0xFF
 	ld (xsp + 14), 0xF5
 	ld xwa, (xsp + 24)
@@ -11250,7 +11250,7 @@ LABEL_FBE909:
 	divs wa, 0xA
 	inc 1, wa
 	cp wa, (xhl)
-	jr nz, LABEL_FBE946
+	jr nz, VariScreen_DrawRightEditSw
 	ld hl, bc
 	sub hl, 0xA
 	ld bc, (xde)
@@ -11261,11 +11261,11 @@ LABEL_FBE909:
 	extz wa
 	add wa, hl
 	cp bc, wa
-	jr nz, LABEL_FBE946
+	jr nz, VariScreen_DrawRightEditSw
 	ld (xsp + 12), 0x0
 	ld (xsp + 14), 0x7
 
-LABEL_FBE946:
+VariScreen_DrawRightEditSw:
 	ld c, (xsp + 8)
 	srl c, 1
 	extz bc
@@ -11300,11 +11300,11 @@ LABEL_FBE946:
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa + 56)
 	cpw (xwa), 0x10
-	jr z, LABEL_FBE9BA
+	jr z, VariScreen_DrawRightNameLabel
 	cpw (xwa), 0x11
-	jrl nz, LABEL_FBEAA5
+	jrl nz, VariScreen_DrawRightDefaultVoice
 
-LABEL_FBE9BA:
+VariScreen_DrawRightNameLabel:
 	st_dri3b B, 0xFD, 0x26, 0x02
 	st_dri3b C, 0xFD, 0x22, 0x02
 	lda xbc, (xhl + 2)
@@ -11316,16 +11316,16 @@ LABEL_FBE9BA:
 	ld (xde + 6), wa
 	lda xwa, (xde + 4)
 	cpw (xhl), 0x0
-	jr nz, LABEL_FBE9EC
+	jr nz, VariScreen_SetRightNameRightBounds
 	ldw (xde), 0x8
 	ldw (xwa), 0x1E
-	jr LABEL_FBE9F4
+	jr VariScreen_DrawRightNameString
 
-LABEL_FBE9EC:
+VariScreen_SetRightNameRightBounds:
 	ldw (xde), 0xA3
 	ldw (xwa), 0xBE
 
-LABEL_FBE9F4:
+VariScreen_DrawRightNameString:
 	decm 8, (xbc)
 	ld xde, (xsp + 24)
 	ld xwa, (xde + 44)
@@ -11373,16 +11373,16 @@ LABEL_FBE9F4:
 	ld (xhl + 6), wa
 	lda xwa, (xhl + 4)
 	cpw (xbc), 0x0
-	jr nz, LABEL_FBEA84
+	jr nz, VariScreen_SetRightVoiceRightBounds
 	ldw (xhl), 0x10
 	ldw (xwa), 0x9C
-	jr LABEL_FBEA8C
+	jr VariScreen_DrawRightVoiceString
 
-LABEL_FBEA84:
+VariScreen_SetRightVoiceRightBounds:
 	ldw (xhl), 0xAB
 	ldw (xwa), 0x137
 
-LABEL_FBEA8C:
+VariScreen_DrawRightVoiceString:
 	st_dri3b B, 0xFD, 0x22, 0x01
 	lds32 xwa, 1
 	push xwa
@@ -11395,7 +11395,7 @@ LABEL_FBEA8C:
 	ld xwa, xhl
 	jrl FileBrowser_DrawString
 
-LABEL_FBEAA5:
+VariScreen_DrawRightDefaultVoice:
 	st_dri3b B, 0xFD, 0x26, 0x02
 	st_dri3b A, 0xFD, 0x22, 0x02
 	lda xhl, (xbc + 2)
@@ -11407,16 +11407,16 @@ LABEL_FBEAA5:
 	ld (xde + 6), wa
 	lda xwa, (xde + 4)
 	cpw (xbc), 0x0
-	jr nz, LABEL_FBEAD7
+	jr nz, VariScreen_SetRightDefVoiceRightBounds
 	ldw (xde), 0x10
 	ldw (xwa), 0x9C
-	jr LABEL_FBEADF
+	jr VariScreen_DrawRightDefVoiceString
 
-LABEL_FBEAD7:
+VariScreen_SetRightDefVoiceRightBounds:
 	ldw (xde), 0xAB
 	ldw (xwa), 0x137
 
-LABEL_FBEADF:
+VariScreen_DrawRightDefVoiceString:
 	st_dri3b C, 0xFD, 0x22, 0x01
 	lds32 xwa, 1
 	push xwa
@@ -11430,7 +11430,7 @@ LABEL_FBEADF:
 	ld xde, xhl
 	jrl FileBrowser_DrawString
 
-LABEL_FBEAFA:
+VariScreen_HandleConfirm:
 	ld_sril XWA, (xsp + 0x0236)
 	ld_sril XBC, (xsp + 0x0232)
 	ld_sril XDE, (xsp + 0x022e)
@@ -11497,18 +11497,18 @@ LABEL_FBEAFA:
 	dec 1, wa
 	ld de, (xbc)
 	sub de, wa
-	jr ge, LABEL_FBEBDB
+	jr ge, VariScreen_ConfirmRowReady
 	sub wa, (xbc)
 	ldw bc, 0x9
 	sub bc, wa
 	ld (xsp + 8), c
 
-LABEL_FBEBDB:
+VariScreen_ConfirmRowReady:
 	ld (xsp + 10), 0x0
 	cp (xsp + 8), 0x0
 	jrl c, FileBrowser_ReturnZero
 
-LABEL_FBEBE6:
+VariScreen_ConfirmLoopBody:
 	lda xwa, (xsp + 28)
 	ld xde, (xsp + 16)
 	ld xbc, (xde + 56)
@@ -11542,13 +11542,13 @@ LABEL_FBEBE6:
 	dec 1, wa
 	ld ix, (xde)
 	sub ix, wa
-	jr ge, LABEL_FBEC52
+	jr ge, VariScreen_ConfirmHighlightColors
 	sub wa, (xde)
 	ldw de, 0x9
 	sub de, wa
 	ld (xsp + 8), e
 
-LABEL_FBEC52:
+VariScreen_ConfirmHighlightColors:
 	ld (xsp + 12), 0xFF
 	ld (xsp + 14), 0xF5
 	ld xwa, (xsp + 16)
@@ -11558,17 +11558,17 @@ LABEL_FBEC52:
 	divs wa, 0xA
 	inc 1, wa
 	cp wa, (xhl)
-	jr nz, LABEL_FBEC85
+	jr nz, VariScreen_ConfirmDrawEditSw
 	sub bc, 0xA
 	ld a, (xsp + 10)
 	extz wa
 	add wa, bc
 	cp (xde), wa
-	jr nz, LABEL_FBEC85
+	jr nz, VariScreen_ConfirmDrawEditSw
 	ld (xsp + 12), 0x0
 	ld (xsp + 14), 0x7
 
-LABEL_FBEC85:
+VariScreen_ConfirmDrawEditSw:
 	ld c, (xsp + 8)
 	srl c, 1
 	extz bc
@@ -11602,11 +11602,11 @@ LABEL_FBEC85:
 	ld (xsp + 24), xwa
 	lda xhl, (xiy + 6)
 	cpw (xiz), 0x10
-	jr z, LABEL_FBED00
+	jr z, VariScreen_ConfirmDrawNameLabel
 	cpw (xiz), 0x11
-	jrl nz, LABEL_FBEDDA
+	jrl nz, VariScreen_ConfirmDrawDefaultVoice
 
-LABEL_FBED00:
+VariScreen_ConfirmDrawNameLabel:
 	ld xiz, xiy
 	ld xiy, xbc
 	ld wa, (xbc)
@@ -11617,16 +11617,16 @@ LABEL_FBED00:
 	ld (xhl), wa
 	ld xwa, (xsp + 24)
 	cpw (xix), 0x0
-	jr nz, LABEL_FBED27
+	jr nz, VariScreen_ConfirmSetNameRightBounds
 	ldw (xiz), 0x8
 	ldw (xwa), 0x1E
-	jr LABEL_FBED2F
+	jr VariScreen_ConfirmDrawNameAudio
 
-LABEL_FBED27:
+VariScreen_ConfirmSetNameRightBounds:
 	ldw (xiz), 0xA3
 	ldw (xwa), 0xBE
 
-LABEL_FBED2F:
+VariScreen_ConfirmDrawNameAudio:
 	decm 8, (xiy)
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 44)
@@ -11671,16 +11671,16 @@ LABEL_FBED2F:
 	ld (xwa + 6), bc
 	lda xbc, (xwa + 4)
 	cpw (xde), 0x0
-	jr nz, LABEL_FBEDB8
+	jr nz, VariScreen_ConfirmSetVoiceRightBounds
 	ldw (xwa), 0x10
 	ldw (xbc), 0x9C
-	jr LABEL_FBEDC0
+	jr VariScreen_ConfirmDrawVoiceString
 
-LABEL_FBEDB8:
+VariScreen_ConfirmSetVoiceRightBounds:
 	ldw (xwa), 0xAB
 	ldw (xbc), 0x137
 
-LABEL_FBEDC0:
+VariScreen_ConfirmDrawVoiceString:
 	st_dri3b C, 0xFD, 0x22, 0x01
 	lds32 xbc, 1
 	push xbc
@@ -11692,9 +11692,9 @@ LABEL_FBEDC0:
 	pushw bc
 	ld xbc, xde
 	ld xde, xhl
-	jr LABEL_FBEE21
+	jr VariScreen_ConfirmDrawStringAndLoop
 
-LABEL_FBEDDA:
+VariScreen_ConfirmDrawDefaultVoice:
 	ld xwa, xiy
 	ld (xsp + 20), xix
 	ld iy, (xbc)
@@ -11705,16 +11705,16 @@ LABEL_FBEDDA:
 	ld (xhl), bc
 	ld xbc, (xsp + 24)
 	cpw (xix), 0x0
-	jr nz, LABEL_FBEE02
+	jr nz, VariScreen_ConfirmSetDefVoiceRightBounds
 	ldw (xwa), 0x10
 	ldw (xbc), 0x9C
-	jr LABEL_FBEE0A
+	jr VariScreen_ConfirmDrawDefVoiceString
 
-LABEL_FBEE02:
+VariScreen_ConfirmSetDefVoiceRightBounds:
 	ldw (xwa), 0xAB
 	ldw (xbc), 0x137
 
-LABEL_FBEE0A:
+VariScreen_ConfirmDrawDefVoiceString:
 	st_dri3b B, 0xFD, 0x22, 0x01
 	lds32 xbc, 1
 	push xbc
@@ -11726,15 +11726,15 @@ LABEL_FBEE0A:
 	pushw bc
 	ld xbc, (xsp + 28)
 
-LABEL_FBEE21:
+VariScreen_ConfirmDrawStringAndLoop:
 	call DrawStringLeftJustify
 	incm8 1, (xsp + 10)
 	ld a, (xsp + 10)
 	cp a, (xsp + 8)
-	jrl ule, LABEL_FBEBE6
+	jrl ule, VariScreen_ConfirmLoopBody
 	jrl FileBrowser_ReturnZero
 
-LABEL_FBEE34:
+VariScreen_HandleEnumNotify:
 	ld_sril XWA, (xsp + 0x0236)
 	call GetViewInstance
 	ld (xsp + 24), xhl
@@ -11751,7 +11751,7 @@ LABEL_FBEE34:
 	dec 1, wa
 	ld hl, (xhl)
 	sub hl, wa
-	jr ge, LABEL_FBEE7D
+	jr ge, VariScreen_EnumRowReady
 	ld xde, (xde)
 	ld xwa, (xbc)
 	ld wa, (xwa)
@@ -11762,7 +11762,7 @@ LABEL_FBEE34:
 	sub de, wa
 	ld (xsp + 8), e
 
-LABEL_FBEE7D:
+VariScreen_EnumRowReady:
 	ld (xsp + 12), 0xFF
 	ld (xsp + 14), 0xF5
 	ld xde, (xbc)
@@ -11773,7 +11773,7 @@ LABEL_FBEE7D:
 	divs wa, 0xA
 	inc 1, wa
 	cp wa, (xde)
-	jr nz, LABEL_FBEEBC
+	jr nz, VariScreen_EnumHighlightColors
 	ld de, (xde)
 	muls de, 0xA
 	sub de, 0xA
@@ -11782,11 +11782,11 @@ LABEL_FBEE7D:
 	extz wa
 	add wa, de
 	cp (xbc), wa
-	jr nz, LABEL_FBEEBC
+	jr nz, VariScreen_EnumHighlightColors
 	ld (xsp + 12), 0x0
 	ld (xsp + 14), 0x7
 
-LABEL_FBEEBC:
+VariScreen_EnumHighlightColors:
 	ld c, (xsp + 8)
 	srl c, 1
 	extz bc
@@ -11815,11 +11815,11 @@ LABEL_FBEEBC:
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa + 56)
 	cpw (xwa), 0x10
-	jr z, LABEL_FBEF26
+	jr z, VariScreen_EnumDrawNameLabel
 	cpw (xwa), 0x11
-	jrl nz, LABEL_FBF00E
+	jrl nz, VariScreen_EnumDrawDefaultVoice
 
-LABEL_FBEF26:
+VariScreen_EnumDrawNameLabel:
 	st_dri3b B, 0xFD, 0x26, 0x02
 	st_dri3b C, 0xFD, 0x22, 0x02
 	lda xbc, (xhl + 2)
@@ -11831,16 +11831,16 @@ LABEL_FBEF26:
 	ld (xde + 6), wa
 	lda xwa, (xde + 4)
 	cpw (xhl), 0x0
-	jr nz, LABEL_FBEF58
+	jr nz, VariScreen_EnumSetNameRightBounds
 	ldw (xde), 0x8
 	ldw (xwa), 0x1E
-	jr LABEL_FBEF60
+	jr VariScreen_EnumDrawNameAudio
 
-LABEL_FBEF58:
+VariScreen_EnumSetNameRightBounds:
 	ldw (xde), 0xA3
 	ldw (xwa), 0xBE
 
-LABEL_FBEF60:
+VariScreen_EnumDrawNameAudio:
 	decm 8, (xbc)
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa + 44)
@@ -11886,16 +11886,16 @@ LABEL_FBEF60:
 	ld (xwa + 6), bc
 	lda xbc, (xwa + 4)
 	cpw (xhl), 0x0
-	jr nz, LABEL_FBEFEB
+	jr nz, VariScreen_EnumSetVoiceRightBounds
 	ldw (xwa), 0x10
 	ldw (xbc), 0x9C
-	jr LABEL_FBEFF3
+	jr VariScreen_EnumDrawVoiceString
 
-LABEL_FBEFEB:
+VariScreen_EnumSetVoiceRightBounds:
 	ldw (xwa), 0xAB
 	ldw (xbc), 0x137
 
-LABEL_FBEFF3:
+VariScreen_EnumDrawVoiceString:
 	ld_sril XBC, (xsp + 0x022e)
 	lda xde, (xbc + 1)
 	lds32 xbc, 1
@@ -11909,7 +11909,7 @@ LABEL_FBEFF3:
 	ld xbc, xhl
 	jr FileBrowser_DrawString
 
-LABEL_FBF00E:
+VariScreen_EnumDrawDefaultVoice:
 	st_dri3b W, 0xFD, 0x26, 0x02
 	st_dri3b B, 0xFD, 0x22, 0x02
 	lda xhl, (xde + 2)
@@ -11921,16 +11921,16 @@ LABEL_FBF00E:
 	ld (xwa + 6), bc
 	lda xbc, (xwa + 4)
 	cpw (xde), 0x0
-	jr nz, LABEL_FBF040
+	jr nz, VariScreen_EnumSetDefVoiceRightBounds
 	ldw (xwa), 0x10
 	ldw (xbc), 0x9C
-	jr LABEL_FBF048
+	jr VariScreen_EnumDrawDefVoiceString
 
-LABEL_FBF040:
+VariScreen_EnumSetDefVoiceRightBounds:
 	ldw (xwa), 0xAB
 	ldw (xbc), 0x137
 
-LABEL_FBF048:
+VariScreen_EnumDrawDefVoiceString:
 	ld_sril XBC, (xsp + 0x022e)
 	lda xhl, (xbc + 1)
 	lds32 xbc, 1
@@ -11948,7 +11948,7 @@ FileBrowser_DrawString:
 	call DrawStringLeftJustify
 	jrl FileBrowser_ReturnZero
 
-LABEL_FBF06A:
+VariScreen_HandleOK:
 	ld_sril XWA, (xsp + 0x0236)
 	ld_sril XBC, (xsp + 0x0232)
 	ld_sril XDE, (xsp + 0x022e)
@@ -11970,7 +11970,7 @@ LABEL_FBF06A:
 	dec 1, wa
 	ld bc, (xbc)
 	sub bc, wa
-	jr ge, LABEL_FBF0CD
+	jr ge, VariScreen_OK_Dispatch
 	ld xwa, (xsp + 20)
 	ld xbc, (xwa)
 	ld xwa, (xsp + 24)
@@ -11983,30 +11983,30 @@ LABEL_FBF06A:
 	sub bc, wa
 	ld (xsp + 8), c
 
-LABEL_FBF0CD:
+VariScreen_OK_Dispatch:
 	ld_sril XBC, (xsp + 0x022e)
 	cp xbc, 0xC
-	jrl z, LABEL_FBF3D5
+	jrl z, VariScreen_OK_CalcRow4
 	cp xbc, 0xB
-	jrl z, LABEL_FBF37D
+	jrl z, VariScreen_OK_CalcRow3
 	cp xbc, 0xA
-	jrl z, LABEL_FBF324
+	jrl z, VariScreen_OK_CalcRow2
 	cp xbc, 0x9
-	jrl z, LABEL_FBF2CB
+	jrl z, VariScreen_OK_CalcRow1
 	ld a, (xsp + 8)
 	extz wa
 	cp xbc, 0x8
-	jrl z, LABEL_FBF277
+	jrl z, VariScreen_OK_CalcRow0
 	cp xbc, 0x8C
-	jrl z, LABEL_FBF237
+	jrl z, VariScreen_OK_HalfRange4
 	cp xbc, 0x8B
-	jrl z, LABEL_FBF1F7
+	jrl z, VariScreen_OK_HalfRange3
 	cp xbc, 0x8A
-	jrl z, LABEL_FBF1B7
+	jrl z, VariScreen_OK_HalfRange2
 	cp xbc, 0x89
-	jr z, LABEL_FBF175
+	jr z, VariScreen_OK_HalfRange1
 	cp xbc, 0x88
-	jrl nz, LABEL_FBF432
+	jrl nz, VariScreen_OK_PageScroll
 	lds bc, 0
 	calr VariScreen_IsHalfRangeAbove
 	cps l, 0
@@ -12031,7 +12031,7 @@ LABEL_FBF0CD:
 	ld_sril XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
-LABEL_FBF175:
+VariScreen_OK_HalfRange1:
 	lds bc, 1
 	calr VariScreen_IsHalfRangeAbove
 	cps l, 0
@@ -12055,7 +12055,7 @@ LABEL_FBF175:
 	ld_sril XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
-LABEL_FBF1B7:
+VariScreen_OK_HalfRange2:
 	lds bc, 2
 	calr VariScreen_IsHalfRangeAbove
 	cps l, 0
@@ -12079,7 +12079,7 @@ LABEL_FBF1B7:
 	ld_sril XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
-LABEL_FBF1F7:
+VariScreen_OK_HalfRange3:
 	lds bc, 3
 	calr VariScreen_IsHalfRangeAbove
 	cps l, 0
@@ -12103,7 +12103,7 @@ LABEL_FBF1F7:
 	ld_sril XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
-LABEL_FBF237:
+VariScreen_OK_HalfRange4:
 	lds bc, 4
 	calr VariScreen_IsHalfRangeAbove
 	cps l, 0
@@ -12127,7 +12127,7 @@ LABEL_FBF237:
 	ld_sril XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
-LABEL_FBF277:
+VariScreen_OK_CalcRow0:
 	lds bc, 0
 	calr VariScreen_CalcValidNoteRow
 	cps l, 0
@@ -12158,7 +12158,7 @@ LABEL_FBF277:
 	ld_sril XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
-LABEL_FBF2CB:
+VariScreen_OK_CalcRow1:
 	ld a, (xsp + 8)
 	extz wa
 	lds bc, 1
@@ -12191,7 +12191,7 @@ LABEL_FBF2CB:
 	ld_sril XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
-LABEL_FBF324:
+VariScreen_OK_CalcRow2:
 	ld a, (xsp + 8)
 	extz wa
 	lds bc, 2
@@ -12224,7 +12224,7 @@ LABEL_FBF324:
 	ld_sril XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
-LABEL_FBF37D:
+VariScreen_OK_CalcRow3:
 	ld a, (xsp + 8)
 	extz wa
 	lds bc, 3
@@ -12257,7 +12257,7 @@ LABEL_FBF37D:
 	ld_sril XWA, (xsp + 0x0236)
 	jr RVari_NotifyAndReturn
 
-LABEL_FBF3D5:
+VariScreen_OK_CalcRow4:
 	ld a, (xsp + 8)
 	extz wa
 	lds bc, 4
@@ -12294,12 +12294,12 @@ RVari_NotifyAndReturn:
 
 FileBrowser_ReturnZero:
 	lds32 xhl, 0
-	jrl LABEL_FBF4F2
+	jrl VariScreen_Epilogue
 
-LABEL_FBF432:
+VariScreen_OK_PageScroll:
 	ld_sril XWA, (xsp + 0x022e)
 	cp xwa, 0x10
-	jr nz, LABEL_FBF47F
+	jr nz, VariScreen_OK_PageScrollDown
 	ld xwa, (xsp + 24)
 	ld xbc, (xwa)
 	ld xwa, (xsp + 20)
@@ -12309,39 +12309,39 @@ LABEL_FBF432:
 	divs wa, 0xA
 	inc 1, wa
 	cp (xbc), wa
-	jr ge, LABEL_FBF467
+	jr ge, VariScreen_OK_PageScrollWrap
 	incm 1, (xbc)
 	ld_sril XWA, (xsp + 0x0236)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
-	jr LABEL_FBF47B
+	jr VariScreen_OK_PageSendEvent
 
-LABEL_FBF467:
+VariScreen_OK_PageScrollWrap:
 	cps wa, 1
-	jr le, LABEL_FBF47F
+	jr le, VariScreen_OK_PageScrollDown
 	ldw (xbc), 0x1
 	ld_sril XWA, (xsp + 0x0236)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
 
-LABEL_FBF47B:
+VariScreen_OK_PageSendEvent:
 	call SendEvent
 
-LABEL_FBF47F:
+VariScreen_OK_PageScrollDown:
 	ld_sril XWA, (xsp + 0x022e)
 	cp xwa, 0x90
-	jr nz, LABEL_FBF4CE
+	jr nz, VariScreen_OK_ForwardToInherited
 	ld xwa, (xsp + 16)
 	ld xbc, (xwa + 44)
 	cpw (xbc), 0x1
-	jr le, LABEL_FBF4A8
+	jr le, VariScreen_OK_PageScrollDownWrap
 	decm 1, (xbc)
 	ld_sril XWA, (xsp + 0x0236)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
-	jr LABEL_FBF4CA
+	jr VariScreen_OK_PageDownSendEvent
 
-LABEL_FBF4A8:
+VariScreen_OK_PageScrollDownWrap:
 	ld xwa, (xsp + 16)
 	ld xwa, (xwa + 52)
 	ld wa, (xwa)
@@ -12349,30 +12349,30 @@ LABEL_FBF4A8:
 	divs wa, 0xA
 	inc 1, wa
 	cps wa, 1
-	jr le, LABEL_FBF4CE
+	jr le, VariScreen_OK_ForwardToInherited
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0236)
 	ld xbc, 0x1C0000D
 	lds32 xde, 0
 
-LABEL_FBF4CA:
+VariScreen_OK_PageDownSendEvent:
 	call SendEvent
 
-LABEL_FBF4CE:
+VariScreen_OK_ForwardToInherited:
 	ld_sril XWA, (xsp + 0x0236)
 	ld_sril XBC, (xsp + 0x0232)
 	ld_sril XDE, (xsp + 0x022e)
-	jr LABEL_FBF4EE
+	jr VariScreen_CallInheritedAndReturn
 
-LABEL_FBF4DF:
+VariScreen_DefaultHandler:
 	ld_sril XWA, (xsp + 0x0236)
 	ld_sril XBC, (xsp + 0x0232)
 	ld_sril XDE, (xsp + 0x022e)
 
-LABEL_FBF4EE:
+VariScreen_CallInheritedAndReturn:
 	call InheritedProc
 
-LABEL_FBF4F2:
+VariScreen_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x36, 0x02
 	ret
@@ -12384,12 +12384,12 @@ VariScreen_CalcValidNoteRow:
 	ld c, e
 	inc 1, c
 	cp a, c
-	jr c, LABEL_FBF50D
+	jr c, CalcValidNoteRow_Invalid
 	inc 1, e
 	ld l, e
 	ret
 
-LABEL_FBF50D:
+CalcValidNoteRow_Invalid:
 	ldb l, 0x0
 	ret
 
@@ -12398,7 +12398,7 @@ VariScreen_IsHalfRangeAbove:
 	cp a, c
 	scc8 nc, l
 	ret
-LABEL_FBF518:
+IsHalfRangeAbove_End:
 
 RVariScreenProc:
 	st_dri3b L, 0xFD, 0xD8, 0xFD
