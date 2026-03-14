@@ -2529,7 +2529,7 @@ LABEL_EF0563:
 	call Copy_DE_words_from_XBC_to_XWA
 
 LABEL_EF05A2:
-	call LABEL_EF3B05
+	call Flash_InitAllBanks
 	bit_dd8 0, 0x38	;  Is the optional HD-AE5000 board present?
 	jr nz, BootInit_SeqAndPanel
 	calr Get_Region_Code

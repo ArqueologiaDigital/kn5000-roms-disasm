@@ -921,7 +921,7 @@ FDemoText_ScanMIDI_WaitLoop:
 	jr z, FDemoText_ScanMIDI_WaitLoop
 
 FDemoText_ScanMIDI_ReadResponse:
-	call LABEL_EF2E97
+	call SeqBuf_NoteEvent_CopyPointers
 	ld (xsp + 4), 0x0
 
 FDemoText_ScanMIDI_ProcessChannel:

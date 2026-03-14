@@ -1784,7 +1784,7 @@ Seq_FullInit:
 	call AltEvtBuf_Init
 	call SeqBuf_NoteEvent_Flush
 	call SeqBuf_VoiceMap_Flush
-	call LABEL_EF2E89
+	call SeqBuf_NoteEvent_InitBuffer
 	call SeqBuf_SoundEdit_Flush
 	call SeqBuf3_Init
 	call SeqBuf_DspSysEx_InitBuffer
@@ -3973,7 +3973,7 @@ SeqBuf2_ReadAlternate2:
 	pushw ix
 	push xde
 	lda_24	xde, 129167
-	call LABEL_EF304B
+	call RingBuf512_ReadAlt_ByteBlock
 	pop xde
 	popw ix
 	ret
@@ -4114,11 +4114,11 @@ SeqBuf_DspSysEx_WriteBytes:
 	ld xiy, (xiz + 10)
 	lda_24 xde, 0x01fca3
 
-LABEL_EF2A4D:
+SeqBuf_DspSysEx_WriteBytes_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte
 	inc 1, xiy
-	djnz xbc, LABEL_EF2A4D
+	djnz xbc, SeqBuf_DspSysEx_WriteBytes_Loop
 	pop xde
 	pop xix
 	pop xiy
@@ -4130,13 +4130,13 @@ SeqBuf_DspSysEx_CheckSongEnd:
 	ld16_24 xhl, 0x01fc9f
 	cpda16_24 xhl, 130203
 	lds hl, 0
-	jr z, LABEL_EF2A6E
+	jr z, SeqBuf_DspSysEx_CheckSongEnd_Return
 	ldw hl, 0xFFFF
 
-LABEL_EF2A6E:
+SeqBuf_DspSysEx_CheckSongEnd_Return:
 	ret
 
-LABEL_EF2A6F:
+SeqBuf_DspSysEx_OrphanData:
 	.byte 0xd2, 0xa1, 0xfc, 0x01, 0x23, 0x0e
 
 SeqBuf_DspSysEx_InitBuffer:
@@ -4148,7 +4148,7 @@ SeqBuf_DspSysEx_InitBuffer:
 	popw ix
 	ret
 
-LABEL_EF2A83:
+SeqBuf_DspSysEx_CopyPointers:
 	pushw	hl
 	ld16_24	hl, 130203
 	st16_24	130201, hl
@@ -4184,13 +4184,13 @@ Seq_DataHandler:
 	pushw ix
 	push xde
 	lda_24 xde, 0x0200ad
-	calr LABEL_EF2EF4
+	calr RingBuf128_CheckEmpty
 	pop xde
 	popw ix
 	ret
 
 
-LABEL_EF2AD3:
+SeqBuf_TimerEvent_BytecodeBlock:
 	.byte 0xee, 0x0c, 0x00, 0x00, 0x2c, 0x3a, 0x8e, 0x08
 	.byte 0x21, 0xf2, 0xad, 0x00, 0x02, 0x32, 0x1e, 0x64
 	.byte 0x04, 0x5a, 0x4c, 0xee, 0x0d, 0x0e, 0xee, 0x0c
@@ -4221,14 +4221,14 @@ Seq_TimerEventLoop:
 	push xde
 	ld a, (xiz + 8)
 	lda_24 xde, 0x020137
-	calr LABEL_EF2F48
+	calr RingBuf128_WriteByte_CheckFull
 	pop xde
 	popw ix
 	unlk32 xiz
 	ret
 
 
-LABEL_EF2B97:
+SeqBuf_TimerEvent_BytecodeBlock2:
 	.byte 0xee, 0x0c, 0x00, 0x00, 0x3d, 0x3c, 0x3a, 0x9e
 	.byte 0x08, 0x21, 0xae, 0x0a, 0x25, 0xf2, 0x37, 0x01
 	.byte 0x02, 0x32, 0x85, 0x21, 0x1e, 0x9a, 0x03, 0xed
@@ -4498,7 +4498,7 @@ SeqBuf_SoundEdit_ReadByte:
 	popw ix
 	ret
 
-LABEL_EF2E39:
+SeqBuf_SoundEdit_BytecodeBlock:
 	.byte 0xee, 0x0c, 0x00, 0x00, 0x2c, 0x3a, 0x8e, 0x08
 	.byte 0x21, 0xf2, 0xdf, 0x04, 0x02, 0x32, 0x1e, 0x8d
 	.byte 0x01, 0x5a, 0x4c, 0xee, 0x0d, 0x0e, 0xee, 0x0c
@@ -4511,16 +4511,16 @@ SeqBuf_NoteEvent_CheckSongEnd:
 	ld16_24 xhl, 0x0204db
 	cpda16_24 xhl, 132311
 	lds hl, 0
-	jr z, LABEL_EF2E82
+	jr z, SeqBuf_NoteEvent_CheckSongEnd_Return
 	ldw hl, 0xFFFF
 
-LABEL_EF2E82:
+SeqBuf_NoteEvent_CheckSongEnd_Return:
 	ret
 
-LABEL_EF2E83:
+SeqBuf_NoteEvent_OrphanData:
 	.byte 0xd2, 0xdd, 0x04, 0x02, 0x23, 0x0e
 
-LABEL_EF2E89:
+SeqBuf_NoteEvent_InitBuffer:
 	pushw ix
 	push xde
 	lda_24 xde, 0x0204df
@@ -4529,14 +4529,14 @@ LABEL_EF2E89:
 	popw ix
 	ret
 
-LABEL_EF2E97:
+SeqBuf_NoteEvent_CopyPointers:
 	pushw hl
 	ld16_24 xhl, 0x0204d7
 	st16_24 0x0204d5, xhl
 	popw hl
 	ret
 
-LABEL_EF2EA4:
+SeqBuf_NoteEvent_AlternateRead:
 	.byte 0x2c, 0x3a, 0xf2, 0xdf, 0x04, 0x02, 0x32, 0x1d
 	.byte 0xa1, 0x2f, 0xef, 0x5a, 0x4c, 0x0e
 
@@ -4550,21 +4550,21 @@ Seq_RingBuf_ReadSmall:
 	ret
 
 
-LABEL_EF2EC0:
+RingBuf_CopyPtr_Sub1:
 	; --- Sub 1: copy (0x0204D9)->HL->(0x0204D7) (13 bytes) ---
 	pushw hl
 	ld16_24	hl, 132313
 	st16_24	132311, hl
 	popw hl
 	ret
-LABEL_EF2ECD:
+RingBuf_CopyPtr_Sub2:
 	; --- Sub 2: copy (0x0204DB)->HL->(0x0204D9) (13 bytes) ---
 	pushw hl
 	ld16_24	hl, 132315
 	st16_24	132313, hl
 	popw hl
 	ret
-LABEL_EF2EDA:
+RingBuf_InitStructFields:
 	; --- Sub 3: init XDE struct fields at offsets -10..-2 (26 bytes) ---
 	.byte 0xba, 0xf6, 0x02, 0x00, 0x00		; ld (xde+0xF6), 0x0000  [16-bit store]
 	.byte 0xba, 0xf8, 0x02, 0x00, 0x00		; ld (xde+0xF8), 0x0000
@@ -4574,14 +4574,14 @@ LABEL_EF2EDA:
 	ret
 
 
-LABEL_EF2EF4:
+RingBuf128_CheckEmpty:
 	ld ix, (xde - 8)
 	cp ix, (xde - 4)
-	jr nz, LABEL_EF2F00
+	jr nz, RingBuf128_ReadByte
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF2F00:
+RingBuf128_ReadByte:
 	xor hl, hl
 	ld_srib3 L, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0x7F
@@ -4590,27 +4590,27 @@ LABEL_EF2F00:
 	ret
 
 
-LABEL_EF2F12:
+RingBuf128_ReadAlt_CheckEmpty:
 	; --- Ring buffer read 1: ix=(xde-10), check vs (xde-6), read (xde+ix) (27 bytes) ---
 	ld ix, (xde-10)
 	.byte 0x9a, 0xfa, 0xf4				; cp ix, (xde-6)  [16-bit indirect cp]
-	jr nz, LABEL_EF2F1E
+	jr nz, RingBuf128_ReadAlt_Dequeue
 	ldw hl, 0xFFFF
 	ret
-LABEL_EF2F1E:
+RingBuf128_ReadAlt_Dequeue:
 	xor hl, hl
 	.byte 0xc3, 0x07, 0xe8, 0xf0, 0x27		; ld l, (xde+ix)  [register-indexed]
 	.byte 0xdc, 0x38, 0x7f, 0x00			; minc1 0x007F, ix  [modular inc]
 	ld (xde-10), ix
 	ret
-LABEL_EF2F2D:
+RingBuf128_ReadAlt2_CheckEmpty:
 	; --- Ring buffer read 2: same structure, check vs (xde-4) (27 bytes) ---
 	ld ix, (xde-10)
 	.byte 0x9a, 0xfc, 0xf4				; cp ix, (xde-4)  [16-bit indirect cp]
-	jr nz, LABEL_EF2F39
+	jr nz, RingBuf128_ReadAlt2_Dequeue
 	ldw hl, 0xFFFF
 	ret
-LABEL_EF2F39:
+RingBuf128_ReadAlt2_Dequeue:
 	xor hl, hl
 	.byte 0xc3, 0x07, 0xe8, 0xf0, 0x27		; ld l, (xde+ix)  [register-indexed]
 	.byte 0xdc, 0x38, 0x7f, 0x00			; minc1 0x007F, ix  [modular inc]
@@ -4618,13 +4618,13 @@ LABEL_EF2F39:
 	ret
 
 
-LABEL_EF2F48:
+RingBuf128_WriteByte_CheckFull:
 	cpw (xde - 2), 0x0
-	jr nz, LABEL_EF2F53
+	jr nz, RingBuf128_WriteByte_Store
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF2F53:
+RingBuf128_WriteByte_Store:
 	ld ix, (xde - 4)
 	lda_dri3 XBC, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0x7F
@@ -4645,11 +4645,11 @@ Seq_RingBuf_Init_256:
 Seq_RingBuf_ReadByte:
 	ld ix, (xde - 8)
 	cp ix, (xde - 4)
-	jr nz, LABEL_EF2F8F
+	jr nz, Seq_RingBuf_ReadByte_Dequeue
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF2F8F:
+Seq_RingBuf_ReadByte_Dequeue:
 	xor hl, hl
 	ld_srib3 L, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0xFF
@@ -4660,11 +4660,11 @@ LABEL_EF2F8F:
 Seq_RingBuf_ReadByte_Large:
 	ld ix, (xde - 10)
 	cp ix, (xde - 6)
-	jr nz, LABEL_EF2FAD
+	jr nz, Seq_RingBuf_ReadByte_Large_Dequeue
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF2FAD:
+Seq_RingBuf_ReadByte_Large_Dequeue:
 	xor hl, hl
 	ld_srib3 L, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0xFF
@@ -4674,11 +4674,11 @@ LABEL_EF2FAD:
 Seq_RingBuf_ReadByte_Small:
 	ld ix, (xde - 10)
 	cp ix, (xde - 4)
-	jr nz, LABEL_EF2FC8
+	jr nz, Seq_RingBuf_ReadByte_Small_Dequeue
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF2FC8:
+Seq_RingBuf_ReadByte_Small_Dequeue:
 	xor hl, hl
 	ld_srib3 L, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0xFF
@@ -4687,11 +4687,11 @@ LABEL_EF2FC8:
 
 Seq_RingBuf_WriteByte_Small:
 	cpw (xde - 2), 0x0
-	jr nz, LABEL_EF2FE2
+	jr nz, Seq_RingBuf_WriteByte_Small_Store
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF2FE2:
+Seq_RingBuf_WriteByte_Small_Store:
 	ld ix, (xde - 4)
 	lda_dri3 XBC, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0xFF
@@ -4711,11 +4711,11 @@ Seq_RingBuf_Init_512:
 RingBuf_CheckFull_512:
 	ld ix, (xde - 8)
 	cp ix, (xde - 4)
-	jr nz, LABEL_EF301E
+	jr nz, RingBuf512_CheckFull_Read
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF301E:
+RingBuf512_CheckFull_Read:
 	xor hl, hl
 	ld_srib3 L, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0x1FF
@@ -4726,18 +4726,18 @@ LABEL_EF301E:
 RingBuf_CheckFull_256:
 	ld ix, (xde - 10)
 	cp ix, (xde - 6)
-	jr nz, LABEL_EF303C
+	jr nz, RingBuf256_CheckFull_Read
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF303C:
+RingBuf256_CheckFull_Read:
 	xor hl, hl
 	ld_srib3 L, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0x1FF
 	ld (xde - 10), ix
 	ret
 
-LABEL_EF304B:
+RingBuf512_ReadAlt_ByteBlock:
 	.byte 0x9a, 0xf6, 0x24, 0x9a, 0xfc, 0xf4, 0x6e, 0x04
 	.byte 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07
 	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x01, 0xba
@@ -4745,11 +4745,11 @@ LABEL_EF304B:
 
 Seq_RingBuf_WriteByte_512:
 	cpw (xde - 2), 0x0
-	jr nz, LABEL_EF3071
+	jr nz, Seq_RingBuf_WriteByte_512_Store
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF3071:
+Seq_RingBuf_WriteByte_512_Store:
 	ld ix, (xde - 4)
 	lda_dri3 XBC, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0x1FF
@@ -4769,11 +4769,11 @@ Seq_RingBuf_Init_1024:
 Seq_RingBuf_Dequeue_1024:
 	ld ix, (xde - 8)
 	cp ix, (xde - 4)
-	jr nz, LABEL_EF30AD
+	jr nz, Seq_RingBuf_Dequeue_1024_Read
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF30AD:
+Seq_RingBuf_Dequeue_1024_Read:
 	xor hl, hl
 	ld_srib3 L, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0x3FF
@@ -4784,18 +4784,18 @@ LABEL_EF30AD:
 Seq_RingBuf_ReadData:
 	ld ix, (xde - 10)
 	cp ix, (xde - 6)
-	jr nz, LABEL_EF30CB
+	jr nz, Seq_RingBuf_ReadData_Dequeue
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF30CB:
+Seq_RingBuf_ReadData_Dequeue:
 	xor hl, hl
 	ld_srib3 L, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0x3FF
 	ld (xde - 10), ix
 	ret
 
-LABEL_EF30DA:
+RingBuf1024_ReadAlt_ByteBlock:
 	.byte 0x9a, 0xf6, 0x24, 0x9a, 0xfc, 0xf4, 0x6e, 0x04
 	.byte 0x33, 0xff, 0xff, 0x0e, 0xdb, 0xd3, 0xc3, 0x07
 	.byte 0xe8, 0xf0, 0x27, 0xdc, 0x38, 0xff, 0x03, 0xba
@@ -4803,11 +4803,11 @@ LABEL_EF30DA:
 
 Seq_RingBuf_WriteByte:
 	cpw (xde - 2), 0x0
-	jr nz, LABEL_EF3100
+	jr nz, Seq_RingBuf_WriteByte_1024_Store
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_EF3100:
+Seq_RingBuf_WriteByte_1024_Store:
 	ld ix, (xde - 4)
 	lda_dri3 XBC, 0x07, 0xE8, 0xF0
 	minc1_16 ix, 0x3FF
@@ -4988,7 +4988,7 @@ SeqDMA_MultiWrite_SoundEdit_Loop:
 	ld (xsp + 2), xwa
 	extz bc
 	pushw bc
-	call LABEL_EF2E39
+	call SeqBuf_SoundEdit_BytecodeBlock
 	inc 2, xsp
 	inc 1, iz
 	ld a, (xsp + 6)
@@ -5067,7 +5067,7 @@ SubCPU_Init_DMA_Channels:
 	stdi8 1504, 0
 	stdi8 1506, 0
 	ret
-LABEL_EF32F4:
+Audio_InitDMAChannels_Done:
 
 sendCOMM:
 	dec 6, xsp
@@ -5078,9 +5078,9 @@ sendCOMM:
 	lds wa, 2
 	call Audio_Lock_Acquire
 	cp iz, 0x20
-	jr ule, LABEL_EF332B
+	jr ule, sendCOMM_FinalChunk
 
-LABEL_EF330B:
+sendCOMM_ChunkLoop:
 	ld a, (xsp + 6)
 	extz wa
 	ldw bc, 0x20
@@ -5090,9 +5090,9 @@ LABEL_EF330B:
 	add (xsp + 2), xwa
 	sub iz, 0x20
 	cp iz, 0x20
-	jr ugt, LABEL_EF330B
+	jr ugt, sendCOMM_ChunkLoop
 
-LABEL_EF332B:
+sendCOMM_FinalChunk:
 	ld a, (xsp + 6)
 	extz wa
 	ldto_berp C, 0xF8
@@ -5130,9 +5130,9 @@ InterCPU_Send_Data_Block:
 	ret z
 	lds ix, 0
 
-LABEL_EF334B:
+InterCPU_Send_WaitReady:
 	bit_dd8 3, 0x68	; SSTAT1 - test if Sub CPU is ready
-	jr z, LABEL_EF3391
+	jr z, InterCPU_Send_TimeoutLoop
 	res_dd8 0, 0x68	; MSTAT0 - clear to initiate handshake with Sub CPU
 	stdi8 1504, 1
 	ld l, c
@@ -5142,9 +5142,9 @@ LABEL_EF334B:
 	st8_24 0x140000, a
 	lds ix, 0
 
-LABEL_EF3368:
+InterCPU_Send_WaitAck:
 	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
-	jr nz, LABEL_EF339C
+	jr nz, InterCPU_Send_AckTimeoutLoop
 	set_dd8 0, 0x68	; MSTAT0 - set to signal DMA data transfer starting
 	stda32 1498, xde
 	extz bc
@@ -5154,23 +5154,23 @@ LABEL_EF3368:
 	cpdi8 1504, 0
 	ret z
 
-LABEL_EF3389:
+InterCPU_Send_WaitComplete:
 	cpdi8 1504, 0
-	jr nz, LABEL_EF3389
+	jr nz, InterCPU_Send_WaitComplete
 	ret
 
-LABEL_EF3391:
+InterCPU_Send_TimeoutLoop:
 	ld hl, ix
 	inc 1, ix
 	cp hl, 0xEA60
-	jr ule, LABEL_EF334B
+	jr ule, InterCPU_Send_WaitReady
 	ret
 
-LABEL_EF339C:
+InterCPU_Send_AckTimeoutLoop:
 	ld wa, ix
 	inc 1, ix
 	cp wa, 0xEA60
-	jr ule, LABEL_EF3368
+	jr ule, InterCPU_Send_WaitAck
 	set_dd8 0, 0x68	; MSTAT0 - timeout recovery: force ready state
 	ret
 
@@ -5191,25 +5191,25 @@ LABEL_EF339C:
 InterCPU_E2_Send:
 	lds ix, 0
 	cpdi8 1504, 0
-	jr z, LABEL_EF33C4
+	jr z, InterCPU_E2_ClearAndSend
 
-LABEL_EF33B3:
+InterCPU_E2_WaitIdle:
 	ld hl, ix
 	inc 1, ix
 	cp hl, 0xEA60
 	ret ugt
 	cpdi8 1504, 0
-	jr nz, LABEL_EF33B3
+	jr nz, InterCPU_E2_WaitIdle
 
-LABEL_EF33C4:
+InterCPU_E2_ClearAndSend:
 	res_dd8 0, 0x68	; MSTAT0 - clear to initiate E2 command handshake
 	stdi8 1504, 1
 	sti8_24 0x140000, 0xe2
 	lds ix, 0
 
-LABEL_EF33D4:
+InterCPU_E2_WaitAck:
 	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
-	jr nz, LABEL_EF340D
+	jr nz, InterCPU_E2_TimeoutLoop
 	set_dd8 0, 0x68	; MSTAT0 - set to signal E2 header data ready
 	ldada xhl, 1478
 	ld (xhl), xwa
@@ -5223,16 +5223,16 @@ LABEL_EF33D4:
 	cpdi8 1504, 0
 	ret z
 
-LABEL_EF3405:
+InterCPU_E2_WaitComplete:
 	cpdi8 1504, 0
-	jr nz, LABEL_EF3405
+	jr nz, InterCPU_E2_WaitComplete
 	ret
 
-LABEL_EF340D:
+InterCPU_E2_TimeoutLoop:
 	ld hl, ix
 	inc 1, ix
 	cp hl, 0xEA60
-	jr ule, LABEL_EF33D4
+	jr ule, InterCPU_E2_WaitAck
 	set_dd8 0, 0x68	; MSTAT0 - timeout recovery: force ready state
 	ret
 
@@ -5250,15 +5250,15 @@ Audio_DMA_Transfer:
 	ld de, wa
 	extz xde
 	cps wa, 0
-	jr nz, LABEL_EF342C
+	jr nz, Audio_DMA_Transfer_CheckSize
 	ld xde, 0x10000
 
-LABEL_EF342C:
+Audio_DMA_Transfer_CheckSize:
 	lds32 xhl, 0
 	cp xde, 0x0
 	ret ule
 
-LABEL_EF3436:
+Audio_DMA_Transfer_ByteLoop:
 	ldda32 xwa, 1498
 	st_dpib A, 0xE0
 	stda32 1498, xwa
@@ -5266,13 +5266,13 @@ LABEL_EF3436:
 	st8_24 0x140000, a
 	ldb a, 0x0
 
-LABEL_EF344A:
+Audio_DMA_Transfer_DelayLoop:
 	inc 1, a
 	cps a, 3
-	jr c, LABEL_EF344A
+	jr c, Audio_DMA_Transfer_DelayLoop
 	inc 1, xhl
 	cp xhl, xde
-	jr c, LABEL_EF3436
+	jr c, Audio_DMA_Transfer_ByteLoop
 	ret
 
 ; ===========================================================================
@@ -5300,30 +5300,30 @@ InterCPU_E1_Bulk_Transfer:
 	pushw iz
 	lds iz, 0
 	cpdi8 1504, 0
-	jr z, LABEL_EF3473
+	jr z, E1Bulk_ReadyCheck
 
-LABEL_EF3461:
+E1Bulk_WaitIdle_Loop:
 	ld hl, iz
 	inc 1, iz
 	cp hl, 0xEA60
 	jrl ugt, FlashBufferIO_Exit
 	cpdi8 1504, 0
-	jr nz, LABEL_EF3461
+	jr nz, E1Bulk_WaitIdle_Loop
 
-LABEL_EF3473:
+E1Bulk_ReadyCheck:
 	lds iz, 0
 
-LABEL_EF3475:
+E1Bulk_WaitSubCPU_Ready:
 	bit_dd8 3, 0x68	; SSTAT1 - test if Sub CPU is ready for E1 transfer
-	jrl z, LABEL_EF3508
+	jrl z, E1Bulk_ReadyTimeout_Loop
 	res_dd8 0, 0x68	; MSTAT0 - clear to initiate E1 bulk transfer
 	stdi8 1504, 2
 	sti8_24 0x140000, 0xe1
 	lds iz, 0
 
-LABEL_EF348B:
+E1Bulk_WaitAck:
 	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge E1 (goes low)
-	jrl nz, LABEL_EF3515
+	jrl nz, E1Bulk_AckTimeout_Loop
 	set_dd8 0, 0x68	; MSTAT0 - set to signal 6-byte header data ready
 	ldada xhl, 1544
 	ld (xhl), xwa
@@ -5336,19 +5336,19 @@ LABEL_EF348B:
 	calr Audio_DMA_Transfer
 	stdi8 1504, 1
 	cpdi8 1504, 1
-	jr z, LABEL_EF34C6
+	jr z, E1Bulk_Phase2_Init
 
-LABEL_EF34BF:
+E1Bulk_WaitPhase1_Loop:
 	cpdi8 1504, 1
-	jr nz, LABEL_EF34BF
+	jr nz, E1Bulk_WaitPhase1_Loop
 
-LABEL_EF34C6:
+E1Bulk_Phase2_Init:
 	lds wa, 0
 
-LABEL_EF34C8:
+E1Bulk_Phase2_Delay:
 	inc 1, wa
 	cp wa, 0xC8
-	jr c, LABEL_EF34C8
+	jr c, E1Bulk_Phase2_Delay
 	ldada xbc, 1544
 	ld xwa, (xbc)
 	stda32 1498, xwa
@@ -5356,38 +5356,38 @@ LABEL_EF34C8:
 	calr Audio_DMA_Transfer
 	stdi8 1504, 0
 	cpdi8 1504, 0
-	jr z, LABEL_EF34F5
+	jr z, E1Bulk_PostTransfer_Delay_Init
 
-LABEL_EF34EE:
+E1Bulk_WaitPhase2_Loop:
 	cpdi8 1504, 0
-	jr nz, LABEL_EF34EE
+	jr nz, E1Bulk_WaitPhase2_Loop
 
-LABEL_EF34F5:
+E1Bulk_PostTransfer_Delay_Init:
 	lds iz, 0
 	cp iz, 0xC8
-	jr nc, LABEL_EF3506
+	jr nc, E1Bulk_PostTransfer_Exit
 
-LABEL_EF34FD:
+E1Bulk_PostTransfer_Delay_Loop:
 	nop
 	inc 1, iz
 	cp iz, 0xC8
-	jr c, LABEL_EF34FD
+	jr c, E1Bulk_PostTransfer_Delay_Loop
 
-LABEL_EF3506:
+E1Bulk_PostTransfer_Exit:
 	jr FlashBufferIO_Exit
 
-LABEL_EF3508:
+E1Bulk_ReadyTimeout_Loop:
 	ld hl, iz
 	inc 1, iz
 	cp hl, 0xEA60
-	jrl ule, LABEL_EF3475
+	jrl ule, E1Bulk_WaitSubCPU_Ready
 	jr FlashBufferIO_Exit
 
-LABEL_EF3515:
+E1Bulk_AckTimeout_Loop:
 	ld hl, iz
 	inc 1, iz
 	cp hl, 0xEA60
-	jrl ule, LABEL_EF348B
+	jrl ule, E1Bulk_WaitAck
 	set_dd8 0, 0x68	; MSTAT0 - timeout recovery: force ready state
 
 FlashBufferIO_Exit:
@@ -5396,17 +5396,17 @@ FlashBufferIO_Exit:
 
 INT0_HANDLER:
 	bit_dd8 1, 0x68	; MSTAT1 - test own status (check if transfer in progress)
-	jr nz, LABEL_EF3532
+	jr nz, INT0_ProcessCommand
 	stdi8 265, 1
 	reti
-LABEL_EF3530:
+INT0_UnusedBranch:
 	jr	t, 0x03
 
-LABEL_EF3532:
-	calr LABEL_EF3536
+INT0_ProcessCommand:
+	calr INT0_ReadLatch
 	reti
 
-LABEL_EF3536:
+INT0_ReadLatch:
 	bit_dd8 2, 0x68	; SSTAT0 - test Sub CPU handshake status
 	ret nz
 	push xwa
@@ -5414,7 +5414,7 @@ LABEL_EF3536:
 	ld8_24 a, 0x140000
 	stda8 1508, a
 	cp a, 0xE1
-	jr nz, LABEL_EF356F
+	jr nz, INT0_CheckE2Command
 	stdi8 1506, 2
 	ldada xwa, 1550
 	stda32 1494, xwa
@@ -5426,11 +5426,11 @@ LABEL_EF3536:
 	and a, 0xF8
 	or a, 0x6
 	ld (xbc), a
-	jr LABEL_EF35C4
+	jr INT0_AckAndReturn
 
-LABEL_EF356F:
+INT0_CheckE2Command:
 	cp a, 0xE2
-	jr nz, LABEL_EF3599
+	jr nz, INT0_HandleDataCommand
 	stdi8 1506, 3
 	ldada xwa, 1556
 	stda32 1494, xwa
@@ -5442,9 +5442,9 @@ LABEL_EF356F:
 	and a, 0xF8
 	or a, 0x6
 	ld (xbc), a
-	jr LABEL_EF35C4
+	jr INT0_AckAndReturn
 
-LABEL_EF3599:
+INT0_HandleDataCommand:
 	stdi8 1506, 1
 	ldada xwa, 1512
 	stda32 1494, xwa
@@ -5460,7 +5460,7 @@ LABEL_EF3599:
 	or a, 0x6
 	ld (xbc), a
 
-LABEL_EF35C4:
+INT0_AckAndReturn:
 	res_dd8 1, 0x68	; MSTAT1 - clear to acknowledge command from Sub CPU
 	pop xbc
 	pop xwa
@@ -5469,16 +5469,16 @@ LABEL_EF35C4:
 INTTC2_HANDLER:
 	res_dd8 2, 0x80
 	cpdi8 1504, 1
-	jr nz, LABEL_EF35DB
+	jr nz, INTTC2_CheckPhase2
 	stdi8 1504, 0
-	jr LABEL_EF35E7
+	jr INTTC2_Exit
 
-LABEL_EF35DB:
+INTTC2_CheckPhase2:
 	cpdi8 1504, 2
-	jr nz, LABEL_EF35E7
+	jr nz, INTTC2_Exit
 	stdi8 1504, 1
 
-LABEL_EF35E7:
+INTTC2_Exit:
 	reti
 
 INTTC0_HANDLER:
@@ -5496,9 +5496,9 @@ INTTC0_HANDLER:
 	ld (xbc), a
 	ldda8 a, 1506
 	cps a, 4
-	jr z, LABEL_EF3675
+	jr z, INTTC0_E1_Phase2_Complete
 	cps a, 3
-	jr z, LABEL_EF3662
+	jr z, INTTC0_E2_Complete
 	cps a, 2
 	jr z, E1DMA_TransferSetup
 	cps a, 1
@@ -5517,7 +5517,7 @@ INTTC0_HANDLER:
 	ld xhl, (xde)
 	call (xhl)
 	stdi8 1506, 0
-	jr LABEL_EF367E
+	jr INTTC0_SetTransferDone
 
 ; E1DMA ISR - DMA transfer setup (after SeqRingBuf dispatch)
 E1DMA_TransferSetup:
@@ -5534,18 +5534,18 @@ E1DMA_TransferSetup:
 	stdi8 1506, 4
 	jr E1DMA_ISR_Epilogue
 
-LABEL_EF3662:
+INTTC0_E2_Complete:
 	stdi8 1510, 255
 	stdi8 1506, 0
 	set_dd8 1, 0x68	; MSTAT1 - set to signal E2 command complete
 	setda 7, 1566
 	jr E1DMA_ISR_Epilogue
 
-LABEL_EF3675:
+INTTC0_E1_Phase2_Complete:
 	stdi8 1506, 0
 	resda 7, 1568
 
-LABEL_EF367E:
+INTTC0_SetTransferDone:
 	set_dd8 1, 0x68	; MSTAT1 - set to signal E1 transfer complete
 
 E1DMA_ISR_Epilogue:
@@ -5557,7 +5557,7 @@ E1DMA_ISR_Epilogue:
 	pop xiy
 	pop xiz
 	reti
-LABEL_EF3689:
+E1DMA_ISR_BytecodeBlock:
 	.byte 0x06, 0x06, 0xf1, 0x1e, 0x06, 0x30, 0xb0, 0xcf
 	.byte 0x66, 0x13, 0xb0, 0xb7, 0x06, 0x00, 0xf1, 0x14
 	.byte 0x06, 0x32, 0xa2, 0x20, 0x9a, 0x08, 0x21, 0xaa
@@ -5583,15 +5583,15 @@ Flash_IdentifyChip:
 	push xiz
 	ld xbc, 0x280000
 	cps a, 1
-	jr nz, LABEL_EF3733
+	jr nz, Flash_IdentifyChip_UseBank1
 	ld xbc, 0x300000
 
-LABEL_EF3733:
+Flash_IdentifyChip_UseBank1:
 	ld xiz, xbc
 
-LABEL_EF3735:
+Flash_IdentifyChip_WaitReady:
 	bit_dd8 5, 0x1C
-	jr z, LABEL_EF3735
+	jr z, Flash_IdentifyChip_WaitReady
 	ei 6
 	ld xwa, xiz
 	add xwa, 0xAAAA
@@ -5604,7 +5604,7 @@ LABEL_EF3735:
 	ei 0
 	call Get_Region_Code
 	cps l, 4
-	jr nz, LABEL_EF3798
+	jr nz, Flash_IdentifyChip_Done
 	add xiz, 0x80000
 	ei 6
 	ld xwa, xiz
@@ -5617,7 +5617,7 @@ LABEL_EF3735:
 	ld_sriw WA, (xiz + 0x3232)
 	ei 0
 
-LABEL_EF3798:
+Flash_IdentifyChip_Done:
 	pop xiz
 	ret
 
@@ -5628,10 +5628,10 @@ Flash_IdentifyAndValidateChip:
 	ldw (xsp + 8), 0xFFFF
 	ld xwa, 0x280000
 	cp (xsp + 10), 0x1
-	jr nz, LABEL_EF37B5
+	jr nz, Flash_IdentifyValidate_UseBank1
 	ld xwa, 0x300000
 
-LABEL_EF37B5:
+Flash_IdentifyValidate_UseBank1:
 	ld (xsp + 4), xwa
 	ei 6
 	ld xbc, (xsp + 4)
@@ -5646,11 +5646,11 @@ LABEL_EF37B5:
 	ld iz, (xbc + 2)
 	ei 0
 	cpi_werp 0xFA, 1
-	jr z, LABEL_EF37EB
+	jr z, Flash_IdentifyValidate_CheckDeviceId
 	cpi_werp 0xFA, 4
-	jr nz, LABEL_EF380E
+	jr nz, Flash_IdentifyValidate_Return
 
-LABEL_EF37EB:
+Flash_IdentifyValidate_CheckDeviceId:
 	cp iz, 0x2223
 	jr z, Flash_BufferAddressStore
 	cp iz, 0x22AB
@@ -5658,17 +5658,17 @@ LABEL_EF37EB:
 	cp iz, 0x22D6
 	jr z, Flash_BufferAddressStore
 	cp iz, 0x2258
-	jr nz, LABEL_EF3806
+	jr nz, Flash_IdentifyValidate_PostStore
 
 Flash_BufferAddressStore:
 	ld (xsp + 8), iz
 
-LABEL_EF3806:
+Flash_IdentifyValidate_PostStore:
 	ld a, (xsp + 10)
 	extz wa
 	calr Flash_IdentifyChip
 
-LABEL_EF380E:
+Flash_IdentifyValidate_Return:
 	ld hl, (xsp + 8)
 	pop xiz
 	inc 8, xsp
@@ -5680,13 +5680,13 @@ Flash_ProgramWord:
 	ld (xsp + 4), de
 	ld (xsp + 6), xbc
 	cpw (xsp + 4), 0xFFFF
-	jr z, LABEL_EF3876
+	jr z, Flash_ProgramWord_Done
 
-LABEL_EF3825:
+Flash_ProgramWord_WaitReady:
 	bit_dd8 5, 0x1C
-	jr z, LABEL_EF3825
+	jr z, Flash_ProgramWord_WaitReady
 	cps a, 1
-	jr nz, LABEL_EF384E
+	jr nz, Flash_ProgramWord_UseBank1
 	lda_24 xiz, 0x300000
 	call Get_Region_Code
 	cps l, 4
@@ -5697,7 +5697,7 @@ LABEL_EF3825:
 	add xiz, 0x80000
 	jr Flash_WriteWordSeq
 
-LABEL_EF384E:
+Flash_ProgramWord_UseBank1:
 	lda_24 xiz, 0x280000
 
 Flash_WriteWordSeq:
@@ -5712,21 +5712,21 @@ Flash_WriteWordSeq:
 	ld (xwa), bc
 	ei 0
 
-LABEL_EF3876:
+Flash_ProgramWord_Done:
 	pop xiz
 	inc 6, xsp
 	ret
 
-LABEL_EF387A:
+Flash_ChipErase:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), a
 	ld xwa, 0x280000
 	cp (xsp + 4), 0x1
-	jr nz, LABEL_EF3890
+	jr nz, Flash_ChipErase_UseBank1
 	ld xwa, 0x300000
 
-LABEL_EF3890:
+Flash_ChipErase_UseBank1:
 	ld xiz, xwa
 	ei 6
 	ld xwa, xiz
@@ -5745,9 +5745,9 @@ LABEL_EF3890:
 	ldw (xwa), 0x10
 	call Get_Region_Code
 	cps l, 4
-	jr nz, LABEL_EF3923
+	jr nz, Flash_ChipErase_Done
 	cp (xsp + 4), 0x1
-	jr nz, LABEL_EF3923
+	jr nz, Flash_ChipErase_Done
 	lda_24 xiz, 0x380000
 	ld xwa, xiz
 	add xwa, 0xAAAA
@@ -5764,7 +5764,7 @@ LABEL_EF3890:
 	add xwa, 0xAAAA
 	ldw (xwa), 0x10
 
-LABEL_EF3923:
+Flash_ChipErase_Done:
 	ei 0
 	pop xiz
 	inc 2, xsp
@@ -5777,10 +5777,10 @@ Flash_EraseSectorWithBankSelect:
 	ld (xsp + 12), a
 	ld xwa, 0x280000
 	cp (xsp + 12), 0x1
-	jr nz, LABEL_EF3943
+	jr nz, Flash_EraseSector_UseBank1
 	ld xwa, 0x300000
 
-LABEL_EF3943:
+Flash_EraseSector_UseBank1:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
@@ -5788,13 +5788,13 @@ LABEL_EF3943:
 	and (xsp + 4), xwa
 	call Get_Region_Code
 	cps l, 4
-	jr nz, LABEL_EF396C
+	jr nz, Flash_EraseSector_WriteSequence
 	ld xwa, (xsp + 4)
 	cp xwa, 0x380000
-	jr c, LABEL_EF396C
+	jr c, Flash_EraseSector_WriteSequence
 	add xiz, 0x80000
 
-LABEL_EF396C:
+Flash_EraseSector_WriteSequence:
 	ei 6
 	ld xwa, xiz
 	add xwa, 0xAAAA
@@ -5811,20 +5811,20 @@ LABEL_EF396C:
 	ldw (xwa), 0x30
 	call Get_Region_Code
 	cps l, 4
-	jr nz, LABEL_EF3A0E
+	jr nz, Flash_EraseSector_CheckRegion
 	cp (xsp + 12), 0x1
 	jrl nz, FlashOp_Epilogue10
 	lda_24 xwa, 0x300000
 	ld xbc, xwa
 	add xbc, 0x70000
 	cp xbc, (xsp + 4)
-	jr z, LABEL_EF39D6
+	jr z, Flash_EraseSector_BootBlock_HighBank
 	ld xbc, xwa
 	add xbc, 0xF0000
 	cp xbc, (xsp + 4)
 	jrl nz, FlashOp_Epilogue10
 
-LABEL_EF39D6:
+Flash_EraseSector_BootBlock_HighBank:
 	ld xbc, xiz
 	add xbc, 0x78000
 	ldw (xbc), 0x30
@@ -5838,22 +5838,22 @@ LABEL_EF39D6:
 	cp (xsp + 8), xwa
 	jrl nz, FlashOp_Epilogue10
 	ld xwa, 0x60000
-	jrl LABEL_EF3AD2
+	jrl Flash_EraseSector_FinalWrite
 
-LABEL_EF3A0E:
+Flash_EraseSector_CheckRegion:
 	cp (xsp + 12), 0x1
-	jr nz, LABEL_EF3A82
+	jr nz, Flash_EraseSector_Bank2Check
 	lda_24 xwa, 0x300000
 	cpdi16_24 132576, 8792
-	jr nz, LABEL_EF3A3E
+	jr nz, Flash_EraseSector_TopSector
 	cp xwa, (xsp + 4)
 	jrl nz, FlashOp_Epilogue10
 	stiw_dri 0xF9, 0x00, 0x40, 0x30, 0x00
 	stiw_dri 0xF9, 0x00, 0x60, 0x30, 0x00
 	ld xwa, 0x8000
-	jrl LABEL_EF3AD2
+	jrl Flash_EraseSector_FinalWrite
 
-LABEL_EF3A3E:
+Flash_EraseSector_TopSector:
 	ld xbc, xwa
 	add xwa, 0xF0000
 	cp xwa, (xsp + 4)
@@ -5871,20 +5871,20 @@ LABEL_EF3A3E:
 	cp (xsp + 8), xbc
 	jr nz, FlashOp_Epilogue10
 	ld xwa, 0xE0000
-	jr LABEL_EF3AD2
+	jr Flash_EraseSector_FinalWrite
 
-LABEL_EF3A82:
+Flash_EraseSector_Bank2Check:
 	lda_24 xwa, 0x280000
 	cpdi16_24 132578, 8875
-	jr nz, LABEL_EF3AAA
+	jr nz, Flash_EraseSector_Bank2TopSector
 	cp xwa, (xsp + 4)
 	jr nz, FlashOp_Epilogue10
 	stiw_dri 0xF9, 0x00, 0x40, 0x30, 0x00
 	stiw_dri 0xF9, 0x00, 0x60, 0x30, 0x00
 	ld xwa, 0x8000
-	jr LABEL_EF3AD2
+	jr Flash_EraseSector_FinalWrite
 
-LABEL_EF3AAA:
+Flash_EraseSector_Bank2TopSector:
 	add xwa, 0x70000
 	cp xwa, (xsp + 4)
 	jr nz, FlashOp_Epilogue10
@@ -5896,7 +5896,7 @@ LABEL_EF3AAA:
 	ldw (xwa), 0x30
 	ld xwa, 0x7C000
 
-LABEL_EF3AD2:
+Flash_EraseSector_FinalWrite:
 	ld xbc, xiz
 	add xbc, xwa
 	ldw (xbc), 0x30
@@ -5909,28 +5909,28 @@ FlashOp_Epilogue10:
 
 Flash_CheckReady:
 	bit_dd8 5, 0x1C
-	jr z, LABEL_EF3AE9
+	jr z, Flash_CheckReady_NotReady
 	lds hl, 0
 	ret
 
-LABEL_EF3AE9:
+Flash_CheckReady_NotReady:
 	ldw hl, 0xFFFF
 	ret
 
 Flash_WaitUntilReady:
 	extz wa
-	calr LABEL_EF387A
+	calr Flash_ChipErase
 	calr Flash_CheckReady
 	cp hl, 0xFFFF
 	ret nz
 
-LABEL_EF3AFB:
+Flash_WaitUntilReady_Loop:
 	calr Flash_CheckReady
 	cp hl, 0xFFFF
-	jr z, LABEL_EF3AFB
+	jr z, Flash_WaitUntilReady_Loop
 	ret
 
-LABEL_EF3B05:
+Flash_InitAllBanks:
 	lds wa, 1
 	calr Flash_IdentifyChip
 	lds wa, 2
@@ -5946,26 +5946,26 @@ LABEL_EF3B05:
 	st16_24 0x0205e2, xhl
 	ret
 
-LABEL_EF3B2F:
+Flash_FillBuffer:
 	lds de, 0
 	cps bc, 0
 	ret ule
 
-LABEL_EF3B35:
+Flash_FillBuffer_Loop:
 	st_dpiw DE, 0xE1
 	inc 1, de
 	cp de, bc
-	jr c, LABEL_EF3B35
+	jr c, Flash_FillBuffer_Loop
 	ret
 
-LABEL_EF3B3F:
+Flash_CopyROMToBuffer:
 	ld xbc, xwa
 	and xbc, 0xFF0000
 	ld xwa, 0x69800
 	ld xde, 0x8000
 	jp Copy_DE_words_from_XBC_to_XWA
 
-LABEL_EF3B55:
+Flash_WriteBufferToChip:
 	lda xsp, (xsp - 10)
 	pushw iz
 	ld (xsp + 10), a
@@ -5975,7 +5975,7 @@ LABEL_EF3B55:
 	ld (xsp + 6), xbc
 	lds iz, 0
 
-LABEL_EF3B6F:
+Flash_WriteBufferToChip_Loop:
 	ld a, (xsp + 10)
 	extz wa
 	ld xbc, (xsp + 6)
@@ -5988,13 +5988,13 @@ LABEL_EF3B6F:
 	calr Flash_ProgramWord
 	inc 1, iz
 	cp iz, 0x8000
-	jr c, LABEL_EF3B6F
+	jr c, Flash_WriteBufferToChip_Loop
 	lds iz, 0
 
-LABEL_EF3B95:
+Flash_WriteBufferToChip_Delay:
 	inc 1, iz
 	cp iz, 0x1000
-	jr c, LABEL_EF3B95
+	jr c, Flash_WriteBufferToChip_Delay
 	ld a, (xsp + 10)
 	extz wa
 	calr Flash_IdentifyChip
@@ -6002,7 +6002,7 @@ LABEL_EF3B95:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_EF3BAA:
+Flash_WriteFromMemory:
 	lda xsp, (xsp - 10)
 	pushw iz
 	ld (xsp + 2), xde
@@ -6012,7 +6012,7 @@ LABEL_EF3BAA:
 	and (xsp + 2), xwa
 	lds iz, 0
 
-LABEL_EF3BC1:
+Flash_WriteFromMemory_Loop:
 	ld a, (xsp + 10)
 	extz wa
 	ld xbc, (xsp + 2)
@@ -6025,13 +6025,13 @@ LABEL_EF3BC1:
 	calr Flash_ProgramWord
 	inc 1, iz
 	cp iz, 0x8000
-	jr c, LABEL_EF3BC1
+	jr c, Flash_WriteFromMemory_Loop
 	lds iz, 0
 
-LABEL_EF3BE7:
+Flash_WriteFromMemory_Delay:
 	inc 1, iz
 	cp iz, 0x1000
-	jr c, LABEL_EF3BE7
+	jr c, Flash_WriteFromMemory_Delay
 	ld a, (xsp + 10)
 	extz wa
 	calr Flash_IdentifyChip
@@ -6053,19 +6053,19 @@ Flash_EraseSectorAndWrite:
 	calr Flash_EraseSectorWithBankSelect
 	calr Flash_CheckReady
 	cp hl, 0xFFFF
-	jr nz, LABEL_EF3C2B
+	jr nz, Flash_EraseSectorAndWrite_Write
 
-LABEL_EF3C22:
+Flash_EraseSectorAndWrite_WaitLoop:
 	calr Flash_CheckReady
 	cp hl, 0xFFFF
-	jr z, LABEL_EF3C22
+	jr z, Flash_EraseSectorAndWrite_WaitLoop
 
-LABEL_EF3C2B:
+Flash_EraseSectorAndWrite_Write:
 	ld a, (xsp + 8)
 	extz wa
 	ld xbc, (xsp + 4)
 	ld xde, (xsp)
-	calr LABEL_EF3BAA
+	calr Flash_WriteFromMemory
 	lda xsp, (xsp + 10)
 	ret
 FlashWrite_Entry:
@@ -6081,7 +6081,7 @@ FlashWrite:
 	calr Flash_IdentifyChip
 	ld xiz, (xsp + 16)
 	ld xwa, xiz
-	calr LABEL_EF3B3F
+	calr Flash_CopyROMToBuffer
 	ld a, (xsp + 10)
 	extz wa
 	ld xbc, xiz
@@ -6098,24 +6098,24 @@ FlashWrite:
 	lda xsp, (xsp + 10)
 	calr Flash_CheckReady
 	cp hl, 0xFFFF
-	jr nz, LABEL_EF3C8F
+	jr nz, FlashWrite_DoWrite
 
-LABEL_EF3C86:
+FlashWrite_WaitEraseLoop:
 	calr Flash_CheckReady
 	cp hl, 0xFFFF
-	jr z, LABEL_EF3C86
+	jr z, FlashWrite_WaitEraseLoop
 
-LABEL_EF3C8F:
+FlashWrite_DoWrite:
 	ld a, (xsp + 10)
 	extz wa
 	ld xbc, xiz
-	calr LABEL_EF3B55
+	calr Flash_WriteBufferToChip
 	pop xiz
 	inc 8, xsp
 	retd 0x4
 	ld xwa, 0x69800
 	ldw bc, 0x8000
-	calr LABEL_EF3B2F
+	calr Flash_FillBuffer
 	lds wa, 1
 	ld xbc, 0x69800
 	ld xde, 0x378700
@@ -6129,12 +6129,12 @@ LABEL_EF3C8F:
 	lds wa, 1
 	jrl Flash_IdentifyChip
 
-LABEL_EF3CD1:
+TableDataROM_IdentifyChip:
 	ld xde, 0x800000
 
-LABEL_EF3CD6:
+TableDataROM_IdentifyChip_WaitReady:
 	bit_dd8 5, 0x1C
-	jr z, LABEL_EF3CD6
+	jr z, TableDataROM_IdentifyChip_WaitReady
 	ld xbc, xde
 	add xbc, 0x15554
 	ld xwa, 0xAA00AA
@@ -6178,23 +6178,23 @@ HDAE5000_Detect:
 	ei 0
 	ld xwa, (xsp + 4)
 	cp xwa, 0x10001
-	jr z, LABEL_EF3D5E
+	jr z, HDAE5000_Detect_CheckManufId
 	cp xwa, 0x40004
-	jr nz, LABEL_EF3D74
+	jr nz, HDAE5000_Detect_Return
 
-LABEL_EF3D5E:
+HDAE5000_Detect_CheckManufId:
 	cp xiz, 0x22D622D6
-	jr z, LABEL_EF3D6E
+	jr z, HDAE5000_Detect_StoreDeviceId
 	cp xiz, 0x22582258
-	jr nz, LABEL_EF3D71
+	jr nz, HDAE5000_Detect_ResetChip
 
-LABEL_EF3D6E:
+HDAE5000_Detect_StoreDeviceId:
 	ld (xsp + 8), xiz
 
-LABEL_EF3D71:
-	calr LABEL_EF3CD1
+HDAE5000_Detect_ResetChip:
+	calr TableDataROM_IdentifyChip
 
-LABEL_EF3D74:
+HDAE5000_Detect_Return:
 	ld xhl, (xsp + 8)
 	pop xiz
 	inc 8, xsp
@@ -6206,11 +6206,11 @@ Flash_ProgramByte:
 	ld xiz, xbc
 	ld (xsp + 4), xwa
 	cp xiz, 0xFFFFFFFF
-	jr z, LABEL_EF3DB7
+	jr z, Flash_ProgramByte_Done
 
-LABEL_EF3D8B:
+Flash_ProgramByte_WaitReady:
 	bit_dd8 5, 0x1C
-	jr z, LABEL_EF3D8B
+	jr z, Flash_ProgramByte_WaitReady
 	ei 6
 	ld xwa, 0xAA00AA
 	st32_24 0x815554, xwa
@@ -6222,7 +6222,7 @@ LABEL_EF3D8B:
 	ld (xwa), xiz
 	ei 0
 
-LABEL_EF3DB7:
+Flash_ProgramByte_Done:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -6300,7 +6300,7 @@ HDAE5000_Flash_Verify:
 	pop xiz
 	ret
 
-LABEL_EF3E21:
+HDAE5000_Flash_Erase_AllSectors:
 	push	xiz
 	ld	xiz, 8388608
 	ei	6
@@ -7166,7 +7166,7 @@ SHOW_FD_TO_FLASH_MEMORY_MESSAGE:
 	call Draw_FlashMemUpdate_message_bitmap
 	ret
 
-LABEL_EF46A4:
+FirmwareUpdate_SaveDiskType:
 	dec 2, xsp
 	ld (xsp), a
 
@@ -7179,36 +7179,36 @@ SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE:
 	call Draw_FlashMemUpdate_message_bitmap
 	call Check_for_Floppy_Disk_Change
 	cps l, 0
-	jr z, LABEL_EF46CD
+	jr z, FloppyChange_DiskRemoved
 
-LABEL_EF46C5:
+FloppyChange_WaitDiskRemove_Loop:
 	call Check_for_Floppy_Disk_Change
 	cps l, 0
-	jr nz, LABEL_EF46C5
+	jr nz, FloppyChange_WaitDiskRemove_Loop
 
-LABEL_EF46CD:
+FloppyChange_DiskRemoved:
 	lds32 xwa, 0
 
-LABEL_EF46CF:
+FloppyChange_Debounce1_Loop:
 	inc 1, xwa
 	cp xwa, 0x40000
-	jr c, LABEL_EF46CF
+	jr c, FloppyChange_Debounce1_Loop
 	call Check_for_Floppy_Disk_Change
 	cps l, 0
-	jr nz, LABEL_EF46E9
+	jr nz, FloppyChange_DiskInserted
 
-LABEL_EF46E1:
+FloppyChange_WaitDiskInsert_Loop:
 	call Check_for_Floppy_Disk_Change
 	cps l, 0
-	jr z, LABEL_EF46E1
+	jr z, FloppyChange_WaitDiskInsert_Loop
 
-LABEL_EF46E9:
+FloppyChange_DiskInserted:
 	lds32 xwa, 0
 
-LABEL_EF46EB:
+FloppyChange_Debounce2_Loop:
 	inc 1, xwa
 	cp xwa, 0x200000
-	jr c, LABEL_EF46EB
+	jr c, FloppyChange_Debounce2_Loop
 	calr Detect_Disk_Type
 	cp l, (xsp)
 	jr nz, SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE
@@ -7224,12 +7224,12 @@ Flash_BurnWithProgress:
 	call HDAE5000_Flash_Verify
 	call HDAE5000_Status_Check
 	cp hl, 0xFFFF
-	jr nz, LABEL_EF4743
+	jr nz, FlashBurn_Done
 
-LABEL_EF471A:
+FlashBurn_ProgressLoop:
 	ldda32 xwa, 1033
 	cp xwa, 0x1F4
-	jr ule, LABEL_EF4739
+	jr ule, FlashBurn_CheckDone
 	inc 8, iz
 	ld wa, iz
 	ldw bc, 0xB4
@@ -7238,12 +7238,12 @@ LABEL_EF471A:
 	lds32 xwa, 0
 	stda32 1033, xwa
 
-LABEL_EF4739:
+FlashBurn_CheckDone:
 	call HDAE5000_Status_Check
 	cp hl, 0xFFFF
-	jr z, LABEL_EF471A
+	jr z, FlashBurn_ProgressLoop
 
-LABEL_EF4743:
+FlashBurn_Done:
 	popw iz
 	ret
 
@@ -7278,10 +7278,10 @@ HANDLE_UPDATE_FILE_TYPE_ID_001h:
 	ld xbc, 0x800000
 	calr FDC_WriteSectors
 	lds wa, 2
-	calr LABEL_EF46A4
+	calr FirmwareUpdate_SaveDiskType
 	ldw wa, 0x24
 	ld xbc, 0x900000
-	jr LABEL_EF47C2
+	jr UpdateFile_WriteSectors_AndCleanup
 
 
 ; "Technics KN5000 Table DATA FILE 1/2"
@@ -7292,11 +7292,11 @@ HANDLE_UPDATE_FILE_TYPE_ID_003h:
 	ld xbc, 0x800000
 	calr FDC_WriteSectors
 	lds wa, 4
-	calr LABEL_EF46A4
+	calr FirmwareUpdate_SaveDiskType
 	ldw wa, 0x24
 	ld xbc, 0x900000
 
-LABEL_EF47C2:
+UpdateFile_WriteSectors_AndCleanup:
 	calr FDC_WriteSectors
 	jr UpdateFile_StackCleanup
 
@@ -7310,7 +7310,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_005h:
 	lds wa, 1
 	ldw bc, 0x24
 	ld xde, 0x300000	; "custom_data" 8MBit FLASH ROM @ IC19
-	jr LABEL_EF47F5
+	jr UpdateFile_WriteCompressed_AndCleanup
 
 
 ; "Technics KN5000 HD-AEPRG DATA FILE"
@@ -7323,7 +7323,7 @@ HANDLE_UPDATE_FILE_TYPE_ID_006h:
 	ldw bc, 0x24
 	ld xde, 0x280000
 
-LABEL_EF47F5:
+UpdateFile_WriteCompressed_AndCleanup:
 	calr FDC_WriteSectors_Compressed
 	jr UpdateFile_StackCleanup
 
@@ -7364,61 +7364,61 @@ SHOW_ILLEGAL_DISK_MESSAGE:
 	call Draw_FlashMemUpdate_message_bitmap
 	inc 2, xsp
 
-LABEL_EF4841:
-	jr LABEL_EF4841
+IllegalDisk_HaltLoop:
+	jr IllegalDisk_HaltLoop
 
 BusyWait_XWA_Cycles:
 	lds32 xbc, 0
 	cp xbc, xwa
 	ret nc
 
-LABEL_EF4849:
+BusyWait_Loop:
 	inc 1, xbc
 	cp xbc, xwa
-	jr c, LABEL_EF4849
+	jr c, BusyWait_Loop
 	ret
 
-LABEL_EF4850:
+LED_CyclePattern:
 	incdi8 1, 1574
 	ldda8 a, 1574
 	and a, 0x3
 	cps a, 3
-	jr z, LABEL_EF4883
+	jr z, LED_CyclePattern_Phase3
 	cps a, 2
-	jr z, LABEL_EF487B
+	jr z, LED_CyclePattern_Phase2
 	cps a, 1
-	jr z, LABEL_EF4873
+	jr z, LED_CyclePattern_Phase1
 	cps a, 0
 	jr nz, PortWrite_BusyWait
 	sti8_24 0x160004, 0x01
 	jr PortWrite_BusyWait
 
-LABEL_EF4873:
+LED_CyclePattern_Phase1:
 	sti8_24 0x160004, 0x02
 	jr PortWrite_BusyWait
 
-LABEL_EF487B:
+LED_CyclePattern_Phase2:
 	sti8_24 0x160004, 0x04
 	jr PortWrite_BusyWait
 
-LABEL_EF4883:
+LED_CyclePattern_Phase3:
 	sti8_24 0x160004, 0x08
 
 PortWrite_BusyWait:
 	ld xwa, 0x186A0
 	jr BusyWait_XWA_Cycles
 
-LABEL_EF4890:
+LED_Toggle_Bit2_Loop:
 	chgda_24 2, 1441796
 	ld xwa, 0x249F0
 	calr BusyWait_XWA_Cycles
-	jr LABEL_EF4890
+	jr LED_Toggle_Bit2_Loop
 
-LABEL_EF489F:
+LED_Toggle_Bit3_Loop:
 	chgda_24 3, 1441796
 	ld xwa, 0x249F0
 	calr BusyWait_XWA_Cycles
-	jr LABEL_EF489F
+	jr LED_Toggle_Bit3_Loop
 
 ; ===========================================================================
 ; TableData_ROM_Verify - Verify Table Data ROM integrity via checksum
@@ -7434,17 +7434,17 @@ TableData_ROM_Verify:
 	cp xde, 0xFFFFFFFF
 	ret nz
 
-LABEL_EF48BA:
+TableData_ROM_Verify_NextBlock:
 	lda xhl, (xhl + 64)
 	cp xhl, xbc
-	jr nz, LABEL_EF48C4
+	jr nz, TableData_ROM_Verify_CheckBlock
 	lds32 xhl, 0
 	ret
 
-LABEL_EF48C4:
+TableData_ROM_Verify_CheckBlock:
 	ld xde, (xhl)
 	cp xde, 0xFFFFFFFF
-	jr z, LABEL_EF48BA
+	jr z, TableData_ROM_Verify_NextBlock
 	ret
 
 ; ===========================================================================
@@ -7464,29 +7464,29 @@ HDAE5000_ROM_Transfer:
 	ld w, e
 	ld a, (xsp + 4)
 	cp w, a
-	jr ugt, LABEL_EF48FC
+	jr ugt, HDAE5000_ROM_Transfer_Success
 
-LABEL_EF48DA:
+HDAE5000_ROM_Transfer_BlockLoop:
 	st8_24 0x160000, w
 	ld xix, xbc
 	ld xiy, 0x3FFFF
 
-LABEL_EF48E6:
+HDAE5000_ROM_Transfer_WordLoop:
 	ld_spiw DE, 0xF1
 	cp_spiw DE, 0xED
-	jr nz, LABEL_EF48FE
+	jr nz, HDAE5000_ROM_Transfer_Return
 	ld xde, xiy
 	dec 1, xiy
 	or xde, xde
-	jr nz, LABEL_EF48E6
+	jr nz, HDAE5000_ROM_Transfer_WordLoop
 	inc 1, w
 	cp w, a
-	jr ule, LABEL_EF48DA
+	jr ule, HDAE5000_ROM_Transfer_BlockLoop
 
-LABEL_EF48FC:
+HDAE5000_ROM_Transfer_Success:
 	lds32 xhl, 0
 
-LABEL_EF48FE:
+HDAE5000_ROM_Transfer_Return:
 	retd 0x2
 	lda xsp, (xsp - 10)
 	push xiz
@@ -7494,14 +7494,14 @@ LABEL_EF48FE:
 	ld (xsp + 8), xwa
 	ld (xsp + 12), 0x0
 
-LABEL_EF4911:
+HDAE5000_FlashWrite_BankLoop:
 	ld a, (xsp + 12)
 	st8_24 0x160000, a
 	lda_24 xwa, 0x200000
 	ld (xsp + 4), xwa
 	lds32 xiz, 0
 
-LABEL_EF4923:
+HDAE5000_FlashWrite_WordLoop:
 	ld xwa, (xsp + 8)
 	st_dpib A, 0xE1
 	ld (xsp + 8), xwa
@@ -7512,15 +7512,15 @@ LABEL_EF4923:
 	call Flash_ProgramWord
 	inc 1, xiz
 	cp xiz, 0x40000
-	jr c, LABEL_EF4923
+	jr c, HDAE5000_FlashWrite_WordLoop
 	incm8 1, (xsp + 12)
 	cp (xsp + 12), 0x2
-	jr c, LABEL_EF4911
+	jr c, HDAE5000_FlashWrite_BankLoop
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_EF4953:
+HDAE5000_FlashVerify_BytecodeBlock:
 	.byte 0xbf, 0xf6, 0x37, 0x3e, 0x40, 0x00, 0x00, 0x80
 	.byte 0x00, 0xbf, 0x08, 0x60, 0xbf, 0x0c, 0x00, 0x00
 	.byte 0x8f, 0x0c, 0x21, 0xf2, 0x00, 0x00, 0x16, 0x41
@@ -7533,21 +7533,21 @@ LABEL_EF4953:
 	.byte 0x0c, 0x3f, 0x04, 0x67, 0xc3, 0x5e, 0xbf, 0x0a
 	.byte 0x37, 0x0e
 
-LABEL_EF49A5:
+HDAE5000_TableData_Write:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld xwa, 0x800000
 	ld (xsp + 8), xwa
 	ld (xsp + 12), 0x4
 
-LABEL_EF49B5:
+HDAE5000_TableData_BankLoop:
 	ld a, (xsp + 12)
 	st8_24 0x160000, a
 	lda_24 xwa, 0x280000
 	ld (xsp + 4), xwa
 	lds32 xiz, 0
 
-LABEL_EF49C7:
+HDAE5000_TableData_WordLoop:
 	ld xwa, (xsp + 8)
 	st_dpib A, 0xE2
 	ld (xsp + 8), xwa
@@ -7558,15 +7558,15 @@ LABEL_EF49C7:
 	call Flash_ProgramByte
 	inc 1, xiz
 	cp xiz, 0x20000
-	jr c, LABEL_EF49C7
+	jr c, HDAE5000_TableData_WordLoop
 	incm8 1, (xsp + 12)
 	cp (xsp + 12), 0x8
-	jr c, LABEL_EF49B5
+	jr c, HDAE5000_TableData_BankLoop
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_EF49F7:
+HDAE5000_Init_BytecodeBlock:
 	.byte 0xd7, 0xfa, 0x04, 0xc7, 0xfb, 0xa8, 0x08, 0xe4
 	.long LABEL_E00800
 	.byte 0x08, 0xed, 0x00, 0x08
@@ -7615,37 +7615,37 @@ LABEL_EF49F7:
 	.byte 0xb4, 0x00, 0x80, 0xb0
 	.byte 0xd8, 0xd7, 0xfa, 0x05, 0x0e
 
-LABEL_EF4B54:
+HDAE5000_Init_DetectAndVerify:
 	sti8_24 0x160004, 0x00
 	call HDAE5000_Detect
 	cp xhl, 0xFFFFFFFF
-	jr nz, LABEL_EF4B6D
+	jr nz, HDAE5000_Init_VerifyROM
 	setda_24 2, 1441796
 
 Infinite_Loop_at_EF4B6B:
 	jr Infinite_Loop_at_EF4B6B
 
-LABEL_EF4B6D:
+HDAE5000_Init_VerifyROM:
 	ld xwa, 0x800000
 	ld xbc, 0xA00000
 	calr TableData_ROM_Verify
 	or xhl, xhl
-	jr z, LABEL_EF4B9F
+	jr z, HDAE5000_Init_TransferData
 	call HDAE5000_Flash_Verify
 	call HDAE5000_Status_Check
 	cp hl, 0xFFFF
-	jr nz, LABEL_EF4B9F
+	jr nz, HDAE5000_Init_TransferData
 
-LABEL_EF4B8C:
-	calr LABEL_EF4850
+HDAE5000_Init_WaitFlashReady:
+	calr LED_CyclePattern
 	sti8_24 0x160004, 0x00
 	call HDAE5000_Status_Check
 	cp hl, 0xFFFF
-	jr z, LABEL_EF4B8C
+	jr z, HDAE5000_Init_WaitFlashReady
 
-LABEL_EF4B9F:
+HDAE5000_Init_TransferData:
 	setda_24 0, 1441796
-	calr LABEL_EF49A5
+	calr HDAE5000_TableData_Write
 	resda_24 0, 1441796
 	setda_24 1, 1441796
 	pushw 0x7
@@ -7656,8 +7656,8 @@ LABEL_EF4B9F:
 	or xhl, xhl
 	call_24 nz, 0xEF4890
 
-LABEL_EF4BCA:
-	jr LABEL_EF4BCA
+HDAE5000_Init_HaltLoop:
+	jr HDAE5000_Init_HaltLoop
 
 HDAE5000_Parport_Setup:
 	stdi8 340, 102
@@ -7674,7 +7674,7 @@ Parport_WaitDataReady:
 	extz wa
 	bit 0, wa
 	jr nz, Parport_WaitDataReady
-	jrl LABEL_EF4B54
+	jrl HDAE5000_Init_DetectAndVerify
 	ret
 
 Parport_ReadNextByte:
@@ -8115,20 +8115,20 @@ Draw_FlashMemUpdate_message_bitmap:
 	inc 1, ix
 	lds iz, 0
 
-LABEL_EF5050:
+DrawBitmap_RowLoop:
 	ld wa, iz
 	extz xwa
 	div wa, 0x1C	; 28 bytes = 224 pixels de largura da imagem a ser desenhada
 	ldto_werp WA, 0xE2
 	cps wa, 0
-	jr nz, LABEL_EF5063
+	jr nz, DrawBitmap_CheckNewRow
 	ld iy, hl	; IY = coordanada X do canto esquerdo da imagem a ser desenhada
 	dec 1, ix
 
-LABEL_EF5063:
+DrawBitmap_CheckNewRow:
 	ldi_werp 0xEE, 0
 
-LABEL_EF5066:
+DrawBitmap_BitLoop:
 	ld de, iz
 	extz xde
 	add xde, (xsp + 2)
@@ -8151,7 +8151,7 @@ Set_XWA_to_320_times_XDE:
 	add xwa, xde		; XWA = Y * 5
 	sll xwa, 6		; XWA = Y * 320
 	cpi_berp 0xF2, 0
-	jr z, LABEL_EF50AA
+	jr z, DrawBitmap_BackgroundPixel
 	ld de, iy
 	inc 1, iy
 	extz xde
@@ -8160,9 +8160,9 @@ Set_XWA_to_320_times_XDE:
 	add xde, xwa
 	ld a, (xsp + 10)
 	ld (xde), a
-	jr LABEL_EF50BB
+	jr DrawBitmap_NextBit
 
-LABEL_EF50AA:
+DrawBitmap_BackgroundPixel:
 	ld de, iy
 	inc 1, iy
 	extz xde
@@ -8172,13 +8172,13 @@ LABEL_EF50AA:
 	ld a, (xsp + 12)
 	ld (xde), a
 
-LABEL_EF50BB:
+DrawBitmap_NextBit:
 	inc1_werp 0xEE
 	cp_erpw 0xEE, 0x08, 0x00
-	jr c, LABEL_EF5066
+	jr c, DrawBitmap_BitLoop
 	inc 1, iz
 	cp iz, 0x268	; 28 bytes (224 pixels/line) * 22 lines = 0268h bytes
-	jr c, LABEL_EF5050
+	jr c, DrawBitmap_RowLoop
 	lda_24 xwa, 0x1a0000
 	ldw de, 0x9600	; 2 pixels per word
 	call Copy_DE_words_from_XBC_to_XWA	; <-- "blit-screen"
