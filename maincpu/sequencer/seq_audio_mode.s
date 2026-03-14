@@ -11,23 +11,23 @@
 	stda8 12927, a
 	ret
 
-LABEL_F5375E:
+AudioMode_CheckAndUpdateStereo:
 	bitda 3, 12932
-	jr z, LABEL_F5377B
+	jr z, AudioMode_CheckDone
 	ldda8 a, 12927
 	cp a, 0x5D
-	jr nc, LABEL_F53772
+	jr nc, AudioMode_ApplyStereoUpdate
 	cp a, 0x30
-	jr ugt, LABEL_F5377B
+	jr ugt, AudioMode_CheckDone
 
-LABEL_F53772:
+AudioMode_ApplyStereoUpdate:
 	call AudioMode_SetStereoFlags
 	anddi8 12932, 247
 
-LABEL_F5377B:
+AudioMode_CheckDone:
 	ret
 
-LABEL_F5377C:
+AudioMode_MergeOutputBits:
 	ldda8 a, 13072
 	and a, 0xF8
 	ldda8 w, 13049
@@ -36,26 +36,26 @@ LABEL_F5377C:
 	stda8 13072, a
 	ret
 
-LABEL_F53791:
+AudioMode_CopyChannelMode:
 	ldda8 a, 10418
 	and a, 0x3
 	stda8 13109, a
 	ret
 
-LABEL_F5379D:
+AudioMode_CopyAccentFlags:
 	ldda8 a, 13553
 	and a, 0x3D
 	stda8 13154, a
 	ret
 
-LABEL_F537A9:
+AccPedal_BytecodeBlock1:
 	.byte 0x28, 0x3d, 0xc1, 0x63, 0x33, 0x3c, 0xfe, 0x45
 	.byte 0x00, 0x48, 0x09, 0x00, 0xed, 0xc8, 0x10, 0x00
 	.byte 0x00, 0x00, 0x85, 0x21, 0xc9, 0x33, 0x00, 0x66
 	.byte 0x05, 0xc1, 0x63, 0x33, 0x3e, 0x01, 0x5d, 0x48
 	.byte 0x0e
 
-LABEL_F537CA:
+AccPedal_SetFlag13155:
 	pushw wa
 	push xiy
 	ordi8 13155, 1
@@ -63,7 +63,7 @@ LABEL_F537CA:
 	popw wa
 	ret
 
-LABEL_F537D4:
+AccPedal_PartOffsetTable:
 	.byte 0x00, 0x00, 0x30, 0x00, 0x00, 0x98, 0x31, 0x00
 	.byte 0x00, 0x00, 0x33, 0x00, 0x00, 0x98, 0x34, 0x00
 	.byte 0x00, 0x00, 0x36, 0x00, 0x00, 0x98, 0x37, 0x00
@@ -74,40 +74,40 @@ AccPedal_ProcessAllChanges:
 	ld xhl, 0xE46BB0
 	ldda8 a, 1075
 	bit_dri 0, 0x07, 0xEC, 0xE0
-	jrl z, LABEL_F53877
+	jrl z, AccPedal_ReadBankAndReturn
 	xor a, a
 	bitda 0, 13051
-	jr z, LABEL_F5380E
+	jr z, AccPedal_CheckBit1Left
 	or a, 0x40
 
-LABEL_F5380E:
+AccPedal_CheckBit1Left:
 	bitda 1, 13051
-	jr z, LABEL_F53817
+	jr z, AccPedal_CheckBit0Right
 	or a, 0x80
 
-LABEL_F53817:
+AccPedal_CheckBit0Right:
 	bitda 0, 13053
-	jr z, LABEL_F53820
+	jr z, AccPedal_CheckBit1Right
 	or a, 0x10
 
-LABEL_F53820:
+AccPedal_CheckBit1Right:
 	bitda 1, 13053
-	jr z, LABEL_F53829
+	jr z, AccPedal_CheckBit0Aux
 	or a, 0x20
 
-LABEL_F53829:
+AccPedal_CheckBit0Aux:
 	bitda 0, 13055
-	jr z, LABEL_F53832
+	jr z, AccPedal_CheckBit1Aux
 	or a, 0x4
 
-LABEL_F53832:
+AccPedal_CheckBit1Aux:
 	bitda 1, 13055
-	jr z, LABEL_F5383B
+	jr z, AccPedal_ApplyChangeMask
 	or a, 0x8
 
-LABEL_F5383B:
+AccPedal_ApplyChangeMask:
 	cps a, 0
-	jr z, LABEL_F53853
+	jr z, AccPedal_CheckAuxBit2
 	ld w, a
 	xor w, 0xFF
 	anddm8 64607, w
@@ -117,9 +117,9 @@ LABEL_F5383B:
 	ldb a, 0x0
 	calr Rhythm_QueuePartChangeEvent
 
-LABEL_F53853:
+AccPedal_CheckAuxBit2:
 	bitda 2, 13055
-	jr z, LABEL_F53869
+	jr z, AccPedal_ClearAllPedalFlags
 	anddi8 64608, 251
 	ldb e, 0x48
 	ldb d, 0x5
@@ -127,13 +127,13 @@ LABEL_F53853:
 	ldb a, 0x0
 	calr Rhythm_QueuePartChangeEvent
 
-LABEL_F53869:
+AccPedal_ClearAllPedalFlags:
 	xor a, a
 	stda8 13051, a
 	stda8 13053, a
 	stda8 13055, a
 
-LABEL_F53877:
+AccPedal_ReadBankAndReturn:
 	calr AccVoice_ReadBankAssign
 	ret
 
@@ -143,21 +143,21 @@ AccVoice_ReadBankAssign:
 	ldda8 a, 1075
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	bitda 0, 12931
-	jr nz, LABEL_F53893
+	jr nz, AccVoice_StoreBankAssign
 	ldb a, 0x0
 
-LABEL_F53893:
+AccVoice_StoreBankAssign:
 	stda8 12930, a
 	ret
 
-LABEL_F53898:
+AccChannel_CompareAndMarkDirty:
 	ldda8 a, 13076
 	orda8 a, 13077
 	and a, 0x3F
-	jr nz, LABEL_F538D5
+	jr nz, AccChannel_StoreCurrentState
 	ldda8 a, 13045
 	cpda8 a, 13046
-	jr nz, LABEL_F538C7
+	jr nz, AccChannel_MarkDirtyAndSync
 	ldda8 a, 13047
 	and a, 0x7F
 	and a, 0x7
@@ -165,15 +165,15 @@ LABEL_F53898:
 	and w, 0x7F
 	and w, 0x7
 	cp a, w
-	jr z, LABEL_F538D5
+	jr z, AccChannel_StoreCurrentState
 
-LABEL_F538C7:
+AccChannel_MarkDirtyAndSync:
 	calr AccChannel_SetDirtyIfActive
-	calr LABEL_F5393B
-	calr LABEL_F53961
+	calr AccChannel_CheckActivitySetDirty
+	calr AccChannel_CheckPartIndexDirty
 	ordi8 13068, 1
 
-LABEL_F538D5:
+AccChannel_StoreCurrentState:
 	ldda8 a, 13045
 	stda8 13031, a
 	ldda8 a, 13047
@@ -182,7 +182,7 @@ LABEL_F538D5:
 	stda8 13032, a
 	ret
 
-LABEL_F538EC:
+AccChannel_BytecodeBlock2:
 	.byte 0xc1, 0xf5, 0x32, 0x21, 0xc1, 0xf6, 0x32, 0xf1
 	.byte 0x6e, 0x1d, 0xc9, 0xcf, 0x80, 0x6f, 0x2e, 0xc1
 	.byte 0xf7, 0x32, 0x21, 0xc9, 0xcc, 0x7f, 0xc9, 0xcc
@@ -196,145 +196,145 @@ AccChannel_SetDirtyIfActive:
 	ldda16 xwa, 13027
 	and w, 0x7
 	cps w, 0
-	jr z, LABEL_F5393A
+	jr z, AccChannel_SetDirtyDone
 	ordi8 13094, 63
 
-LABEL_F5393A:
+AccChannel_SetDirtyDone:
 	ret
 
-LABEL_F5393B:
+AccChannel_CheckActivitySetDirty:
 	ldda8 a, 13074
 	orda8 a, 13075
 	orda8 a, 13078
 	orda8 a, 13079
 	orda8 a, 13080
 	and a, 0x3F
-	jr z, LABEL_F53960
+	jr z, AccChannel_ActivityCheckDone
 	cpdi8 13045, 128
-	jr c, LABEL_F53960
+	jr c, AccChannel_ActivityCheckDone
 	ordi8 13094, 63
 
-LABEL_F53960:
+AccChannel_ActivityCheckDone:
 	ret
 
-LABEL_F53961:
+AccChannel_CheckPartIndexDirty:
 	ldda8 a, 1075
 	cps a, 1
-	jr nz, LABEL_F5396E
+	jr nz, AccChannel_PartIndexDone
 	ordi8 13094, 63
 
-LABEL_F5396E:
+AccChannel_PartIndexDone:
 	ret
 
-LABEL_F5396F:
+AccVoice_ProcessPedalChanges:
 	bitda 0, 13055
-	jr z, LABEL_F539A5
+	jr z, AccVoice_Pedal0_Done
 	bitda 0, 13056
-	jr nz, LABEL_F539A5
+	jr nz, AccVoice_Pedal0_Done
 	xor a, a
 	stda8 13065, a
 	stda8 13067, a
 	anddi8 13066, 243
 	anddi8 13095, 192
 	bitda 0, 13068
-	jr nz, LABEL_F5399A
+	jr nz, AccVoice_Pedal0_SetAndCheck
 	anddi8 13094, 192
 
-LABEL_F5399A:
+AccVoice_Pedal0_SetAndCheck:
 	ordi8 13066, 1
 	calr AccVoice_CheckBitsAndSetFlags
 	calr AccVoice_CheckChannelSetActive
 
-LABEL_F539A5:
+AccVoice_Pedal0_Done:
 	bitda 1, 13055
-	jr z, LABEL_F539DB
+	jr z, AccVoice_Pedal1_Done
 	bitda 1, 13056
-	jr nz, LABEL_F539DB
+	jr nz, AccVoice_Pedal1_Done
 	xor a, a
 	stda8 13065, a
 	stda8 13067, a
 	anddi8 13066, 246
 	anddi8 13095, 192
 	bitda 0, 13068
-	jr nz, LABEL_F539D0
+	jr nz, AccVoice_Pedal1_SetAndCheck
 	anddi8 13094, 192
 
-LABEL_F539D0:
+AccVoice_Pedal1_SetAndCheck:
 	ordi8 13066, 4
 	calr AccVoice_CheckBitsAndSetFlags
 	calr AccVoice_CheckChannelSetActive
 
-LABEL_F539DB:
+AccVoice_Pedal1_Done:
 	bitda 2, 13055
-	jr z, LABEL_F53A11
+	jr z, AccVoice_Pedal2_Done
 	bitda 2, 13056
-	jr nz, LABEL_F53A11
+	jr nz, AccVoice_Pedal2_Done
 	xor a, a
 	stda8 13065, a
 	stda8 13067, a
 	anddi8 13066, 250
 	anddi8 13095, 192
 	bitda 0, 13068
-	jr nz, LABEL_F53A06
+	jr nz, AccVoice_Pedal2_SetAndCheck
 	anddi8 13094, 192
 
-LABEL_F53A06:
+AccVoice_Pedal2_SetAndCheck:
 	ordi8 13066, 8
 	calr AccVoice_CheckBitsAndSetFlags
 	calr AccVoice_CheckChannelSetActive
 
-LABEL_F53A11:
+AccVoice_Pedal2_Done:
 	ret
 
-LABEL_F53A12:
+AccVoice_ProcessLeftPedalChanges:
 	bitda 0, 13051
-	jr z, LABEL_F53A48
+	jr z, AccVoice_LeftPedal0_Done
 	bitda 0, 13052
-	jr nz, LABEL_F53A48
+	jr nz, AccVoice_LeftPedal0_Done
 	xor a, a
 	stda8 13066, a
 	stda8 13067, a
 	anddi8 13065, 253
 	anddi8 13095, 192
 	bitda 0, 13068
-	jr nz, LABEL_F53A3D
+	jr nz, AccVoice_LeftPedal0_SetAndCheck
 	anddi8 13094, 192
 
-LABEL_F53A3D:
+AccVoice_LeftPedal0_SetAndCheck:
 	ordi8 13065, 1
 	calr AccVoice_CheckBitsAndSetFlags
 	calr AccVoice_CheckChannelSetActive
 
-LABEL_F53A48:
+AccVoice_LeftPedal0_Done:
 	bitda 1, 13051
-	jr z, LABEL_F53A7E
+	jr z, AccVoice_LeftPedal1_Done
 	bitda 1, 13052
-	jr nz, LABEL_F53A7E
+	jr nz, AccVoice_LeftPedal1_Done
 	xor a, a
 	stda8 13066, a
 	stda8 13067, a
 	anddi8 13065, 254
 	anddi8 13095, 192
 	bitda 0, 13068
-	jr nz, LABEL_F53A73
+	jr nz, AccVoice_LeftPedal1_SetAndCheck
 	anddi8 13094, 192
 
-LABEL_F53A73:
+AccVoice_LeftPedal1_SetAndCheck:
 	ordi8 13065, 2
 	calr AccVoice_CheckBitsAndSetFlags
 	calr AccVoice_CheckChannelSetActive
 
-LABEL_F53A7E:
+AccVoice_LeftPedal1_Done:
 	ret
 
 AccVoice_CheckChannelSetActive:
 	ldda8 a, 13076
 	orda8 a, 13077
 	and a, 0x3F
-	jr z, LABEL_F53A91
+	jr z, AccVoice_ChannelActiveDone
 	ordi8 13071, 1
 
-LABEL_F53A91:
+AccVoice_ChannelActiveDone:
 	ret
 
 AccVoice_CheckBitsAndSetFlags:
@@ -342,13 +342,13 @@ AccVoice_CheckBitsAndSetFlags:
 	and d, 0x7
 	inc 1, d
 	cpda8 d, 1075
-	jr nz, LABEL_F53AA6
+	jr nz, AccVoice_BitsCheckDone
 	ordi8 13095, 63
 
-LABEL_F53AA6:
+AccVoice_BitsCheckDone:
 	ret
 
-LABEL_F53AA7:
+AccPitch_CheckTransposeFlags:
 	bitda 6, 13424
 	jr nz, AccPitch_UpdateCheck
 	bitda 6, 12929
@@ -373,11 +373,11 @@ AccPitch_UpdateCheck:
 AccPitch_FinalReturn:
 	ret
 
-LABEL_F53AE2:
+AccChord_ProcessKeyChanges:
 	bitda 0, 13053
-	jr z, LABEL_F53B0F
+	jr z, AccChord_KeyChange0_Done
 	bitda 0, 13054
-	jr nz, LABEL_F53B0F
+	jr nz, AccChord_KeyChange0_Done
 	xor a, a
 	stda8 13066, a
 	stda8 13065, a
@@ -387,11 +387,11 @@ LABEL_F53AE2:
 	ordi8 13067, 1
 	calr AccChannel_SetDirtyIfActive
 
-LABEL_F53B0F:
+AccChord_KeyChange0_Done:
 	bitda 1, 13053
-	jr z, LABEL_F53B3C
+	jr z, AccChord_KeyChange1_Done
 	bitda 1, 13054
-	jr nz, LABEL_F53B3C
+	jr nz, AccChord_KeyChange1_Done
 	xor a, a
 	stda8 13066, a
 	stda8 13065, a
@@ -401,72 +401,72 @@ LABEL_F53B0F:
 	ordi8 13067, 2
 	calr AccChannel_SetDirtyIfActive
 
-LABEL_F53B3C:
+AccChord_KeyChange1_Done:
 	ret
 
-LABEL_F53B3D:
+AccChord_ResolveVoiceAndDispatch:
 	ldda8 a, 13029
 	ldda8 w, 13095
 	and w, 0x3F
-	jr z, LABEL_F53B4E
+	jr z, AccChord_CheckRange
 	ldda8 a, 13031
 
-LABEL_F53B4E:
+AccChord_CheckRange:
 	cp a, 0x80
 	jrl c, AccChord_NullRet
 	cp a, 0xF0
-	jr c, LABEL_F53B5F
+	jr c, AccChord_MaskAndContinue
 	ldda8 a, 13297
-	jr LABEL_F53B62
+	jr AccChord_DispatchVoiceChange
 
-LABEL_F53B5F:
+AccChord_MaskAndContinue:
 	and a, 0x7F
 
-LABEL_F53B62:
+AccChord_DispatchVoiceChange:
 	calr AccPatch_SetVoiceParam
 	ld c, a
 	xor a, a
 	bitda 0, 13066
-	jr z, LABEL_F53B87
+	jr z, AccChord_CheckVoiceBit2
 	cpda8 c, 13156
-	jr z, LABEL_F53B87
+	jr z, AccChord_CheckVoiceBit2
 	anddi8 13066, 254
 	anddi8 13095, 192
 	anddi8 13055, 254
 	or a, 0x4
 
-LABEL_F53B87:
+AccChord_CheckVoiceBit2:
 	bitda 2, 13066
-	jr z, LABEL_F53BAB
+	jr z, AccChord_CheckLeftPedal0
 	ld xhl, 0xE46BB0
 	bit_dri 0, 0x03, 0xEC, 0xE4
-	jr z, LABEL_F53BAB
+	jr z, AccChord_CheckLeftPedal0
 	anddi8 13066, 251
 	anddi8 13095, 192
 	anddi8 13055, 253
 	or a, 0x8
 
-LABEL_F53BAB:
+AccChord_CheckLeftPedal0:
 	bitda 0, 13065
-	jr z, LABEL_F53BC9
+	jr z, AccChord_CheckLeftPedal1
 	cpda8 c, 13160
-	jr z, LABEL_F53BC9
+	jr z, AccChord_CheckLeftPedal1
 	anddi8 13065, 254
 	anddi8 13095, 192
 	anddi8 13051, 254
 	or a, 0x40
 
-LABEL_F53BC9:
+AccChord_CheckLeftPedal1:
 	bitda 1, 13065
-	jr z, LABEL_F53BE7
+	jr z, AccChord_CheckKeyChange0
 	cpda8 c, 13162
-	jr z, LABEL_F53BE7
+	jr z, AccChord_CheckKeyChange0
 	anddi8 13065, 253
 	anddi8 13095, 192
 	anddi8 13051, 253
 	or a, 0x80
 
-LABEL_F53BE7:
+AccChord_CheckKeyChange0:
 	bitda 0, 13067
 	jr z, RhythmPart_ProcessBit0
 	cpda8 c, 13164
@@ -492,7 +492,7 @@ RhythmPart_ProcessBit0:
 
 RhythmPart_ProcessBit1:
 	cps a, 0
-	jr z, LABEL_F53C45
+	jr z, AccChord_CheckExtraDirtyBit3
 	ldb w, 0x0
 	xor a, 0xFF
 	anddm8 64607, a
@@ -501,11 +501,11 @@ RhythmPart_ProcessBit1:
 	ldb d, 0x5
 	calr Rhythm_QueuePartChangeEvent
 
-LABEL_F53C45:
+AccChord_CheckExtraDirtyBit3:
 	bitda 3, 13066
-	jr z, LABEL_F53C70
+	jr z, AccChord_CheckPitchDirty
 	cpda8 c, 13158
-	jr z, LABEL_F53C70
+	jr z, AccChord_CheckPitchDirty
 	anddi8 13066, 247
 	anddi8 13095, 192
 	anddi8 13055, 251
@@ -516,18 +516,18 @@ LABEL_F53C45:
 	ldb d, 0x5
 	calr Rhythm_QueuePartChangeEvent
 
-LABEL_F53C70:
+AccChord_CheckPitchDirty:
 	ldda8 a, 13097
 	and a, 0x3F
 	jr z, AccChord_NullRet
 	bitda 0, 13051
-	jr z, LABEL_F53C8C
+	jr z, AccChord_CheckPitchLeftPedal1
 	cpda8 c, 13160
 	jr z, AccChord_NullRet
 	anddi8 13097, 192
 	jr AccChord_NullRet
 
-LABEL_F53C8C:
+AccChord_CheckPitchLeftPedal1:
 	bitda 1, 13051
 	jr z, AccChord_NullRet
 	ld xhl, 0xE46BB0
@@ -541,23 +541,23 @@ AccChord_NullRet:
 AccChord_CompareAndSetDirty:
 	ldda8 a, 13016
 	cpda8 a, 13020
-	jr nz, LABEL_F53CB8
+	jr nz, AccChord_SetDirtyBit5
 	ldda8 a, 13018
 	cpda8 a, 13022
-	jr z, LABEL_F53CBD
+	jr z, AccChord_CheckZeroChord
 
-LABEL_F53CB8:
+AccChord_SetDirtyBit5:
 	ordi8 13043, 32
 
-LABEL_F53CBD:
+AccChord_CheckZeroChord:
 	cpdi8 13020, 0
-	jr nz, LABEL_F53CC9
+	jr nz, AccChord_CompareDone
 	anddi8 13043, 223
 
-LABEL_F53CC9:
+AccChord_CompareDone:
 	ret
 
-LABEL_F53CCA:
+AccentVoice_DetectAndMarkChange:
 	ldda8 a, 13061
 	cpda8 a, 13062
 	jr z, AccentVoice_UpdateParamIndex
@@ -570,13 +570,13 @@ LABEL_F53CCA:
 	cpdi8 13029, 128
 	jr nc, AccentVoice_UpdateParamIndex
 	bitda 0, 13057
-	jr z, LABEL_F53D02
+	jr z, AccentVoice_CheckModeChange
 	ldda8 a, 13074
 	orda8 a, 13075
 	and a, 0x3F
 	jr nz, AccentVoice_UpdateParamIndex
 
-LABEL_F53D02:
+AccentVoice_CheckModeChange:
 	ldda8 a, 13061
 	and a, 0x3
 	cpda8 a, 13112
@@ -594,10 +594,10 @@ AccVoice_ResolveParamAddr:
 	push xix
 	ld xiy, 0xE46312
 	cp a, 0x1D
-	jr ule, LABEL_F53D2E
+	jr ule, AccVoice_ComputeParamOffset
 	xor a, a
 
-LABEL_F53D2E:
+AccVoice_ComputeParamOffset:
 	extz wa
 	sla wa, 2
 	extz xwa
@@ -614,13 +614,13 @@ LABEL_F53D2E:
 	pop xwa
 	ret
 
-LABEL_F53D57:
+AccVoice_PartOffsetTable2:
 	.byte 0x00, 0x48, 0x09, 0x00, 0x00, 0x00, 0x30, 0x00
 	.byte 0x00, 0x98, 0x31, 0x00, 0x00, 0x00, 0x33, 0x00
 	.byte 0x00, 0x98, 0x34, 0x00, 0x00, 0x00, 0x36, 0x00
 	.byte 0x00, 0x98, 0x37, 0x00, 0x00, 0x00, 0x39, 0x00
 
-LABEL_F53D77:
+AccVoice_ComputeChannelIndex:
 	and h, 0x7
 	sla h, 1
 	xor w, w
@@ -634,7 +634,7 @@ LABEL_F53D77:
 	ret
 
 AccVoice_LookupWithOffset:
-	calr LABEL_F53D77
+	calr AccVoice_ComputeChannelIndex
 	call AccVoice_TableLookup_Inner
 	extz xiy
 	add xhl, xiy
@@ -643,18 +643,18 @@ AccVoice_LookupWithOffset:
 
 AccVoice_SelectAndApplyPatch:
 	cpdi8 13029, 128
-	jr nc, LABEL_F53DBC
+	jr nc, AccVoice_PatchFromDirect
 	ldda32 xiy, 13006
 	calr AccStyle_ReadVoiceParam
 	stda8 13039, w
-	jr LABEL_F53DC6
+	jr AccVoice_StorePatchAndLookup
 
-LABEL_F53DBC:
+AccVoice_PatchFromDirect:
 	ldda8 a, 13029
 	and a, 0x7F
 	calr AccPatch_SetVoiceParam
 
-LABEL_F53DC6:
+AccVoice_StorePatchAndLookup:
 	stda8 1075, a
 	ld xhl, 0xE46B9E
 	sla a, 1
@@ -678,10 +678,10 @@ AccStyle_ReadVoiceParam:
 ; ============================================================================
 AccPatch_SetVoiceParam:
 	cp a, 0x1D
-	jr ule, LABEL_F53DF8
+	jr ule, AccPatch_ClampedSetParam
 	xor a, a
 
-LABEL_F53DF8:
+AccPatch_ClampedSetParam:
 	ld w, a
 	calr AccVoice_ResolveParamAddr
 	ld a, (xiy + 12)
@@ -762,7 +762,7 @@ AccTuning_LoadAndApplyMaster:
 	nop
 	ret
 
-LABEL_F53EC9:
+AccTuning_LoadCoarseFromStyle:
 	push xiy
 	add xhl, 0x24F
 	add xiy, xhl
@@ -779,7 +779,7 @@ LABEL_F53EC9:
 	nop
 	ret
 
-LABEL_F53EED:
+AccTuning_LoadFineFromStyle:
 	push xiy
 	add xhl, 0x256
 	add xiy, xhl
@@ -796,7 +796,7 @@ LABEL_F53EED:
 	nop
 	ret
 
-LABEL_F53F11:
+AccTuning_LoadOctaveFromStyle:
 	push xiy
 	add xhl, 0x25D
 	add xiy, xhl
@@ -813,7 +813,7 @@ LABEL_F53F11:
 	nop
 	ret
 
-LABEL_F53F35:
+AccTuning_LoadTransposeFromStyle:
 	push xiy
 	add xhl, 0x264
 	add xiy, xhl
@@ -838,10 +838,10 @@ Rhythm_ProcessAllPartsAndLoad:
 	calr AccVoice_LoadRhythmParams_Part4
 	calr AccVoice_LoadRhythmParams_Part5
 	bitda 0, 12931
-	jr nz, LABEL_F53F75
+	jr nz, Rhythm_ProcessAllDone
 	call AccVoice_LoadAllChannelParams
 
-LABEL_F53F75:
+Rhythm_ProcessAllDone:
 	ret
 
 RhythmPart_CopyData:
@@ -853,23 +853,23 @@ RhythmPart_CopyData:
 
 RhythmPart1_ProcessAccentData:
 	bitda 0, 12931
-	jr z, LABEL_F53F90
-	call LABEL_F5459F
+	jr z, RhythmPart1_CheckAccentData
+	call AccentData_ComparePart1
 
-LABEL_F53F90:
+RhythmPart1_CheckAccentData:
 	ldda8 a, 13100
 	and a, 0x3
-	jr z, LABEL_F54001
+	jr z, RhythmPart1_WriteDone
 	ldda8 e, 12870
 	ldda8 d, 12871
 	bitda 0, 12931
-	jr nz, LABEL_F53FB3
+	jr nz, RhythmPart1_ProcessRingBuf
 	ld xhl, 0x3214
 	ld (xhl), e
 	ld (xhl + 1), d
-	jr LABEL_F54001
+	jr RhythmPart1_WriteDone
 
-LABEL_F53FB3:
+RhythmPart1_ProcessRingBuf:
 	ld xhl, 0x2A94
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
@@ -892,7 +892,7 @@ LABEL_F53FB3:
 	ld (xhl), e
 	ld (xhl + 1), d
 
-LABEL_F54001:
+RhythmPart1_WriteDone:
 	anddi8 13100, 252
 	call AccVoiceReg_WritePart1
 	ret
@@ -911,28 +911,28 @@ RhythmAccent_UpdateRingBufPosition:
 	ldda8 a, 13358
 	ei 6
 	subda8 a, 1124
-	jr ugt, LABEL_F54038
+	jr ugt, RhythmAccent_StorePosition
 	ldb a, 0x1
 	stda8 13358, a
 	cpdi8 1122, 0
-	jr z, LABEL_F5403C
+	jr z, RhythmAccent_AddAndCompare
 	xor a, a
-	jr LABEL_F5403C
+	jr RhythmAccent_AddAndCompare
 
-LABEL_F54038:
+RhythmAccent_StorePosition:
 	stda8 13358, a
 
-LABEL_F5403C:
+RhythmAccent_AddAndCompare:
 	ldda8 w, 1122
 	add a, w
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	calr RingBuf_AdvanceIndex
 	ldda8 w, 13174
 	cp a, w
-	jr nc, LABEL_F54056
+	jr nc, RhythmAccent_UpdateDone
 	stda8 13174, a
 
-LABEL_F54056:
+RhythmAccent_UpdateDone:
 	ei 0
 	ret
 
@@ -947,18 +947,18 @@ LABEL_F54056:
 RingBuf_AdvanceIndex:
 	add iy, 0x1
 	cp iy, bc
-	jr ule, LABEL_F54064
+	jr ule, RingBuf_IndexOK
 	ld iy, (xhl + 256)
 
-LABEL_F54064:
+RingBuf_IndexOK:
 	ret
 
 RhythmPart2_ProcessAccentData:
 	bitda 0, 12931
-	jr z, LABEL_F5406F
-	call LABEL_F545C1
+	jr z, RhythmPart2_LoadAndStore
+	call AccentData_ComparePart2
 
-LABEL_F5406F:
+RhythmPart2_LoadAndStore:
 	bitda 2, 13100
 	ldda8 e, 12877
 	ldda8 d, 12878
@@ -974,12 +974,12 @@ LABEL_F5406F:
 	stda8 12999, a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, 12931
-	jr nz, LABEL_F540B6
+	jr nz, RhythmPart2_ProcessRingBuf
 	ld xhl, 0x3219
 	calr AccVoiceReg_StoreParamRecord
-	jr LABEL_F5410C
+	jr RhythmPart2_WriteDone
 
-LABEL_F540B6:
+RhythmPart2_ProcessRingBuf:
 	ld xhl, 0x2C94
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
@@ -1003,7 +1003,7 @@ LABEL_F540B6:
 	ld xhl, 0x3219
 	calr AccVoiceReg_StoreParamRecord
 
-LABEL_F5410C:
+RhythmPart2_WriteDone:
 	anddi8 13100, 251
 	call AccVoiceReg_WritePart2
 	ret
@@ -1021,19 +1021,19 @@ AccVoiceReg_StoreParamRecord:
 
 Rhythm_PackVelocityHighBit:
 	bit 7, e
-	jr z, LABEL_F5413C
+	jr z, Rhythm_VelocityPackDone
 	or d, 0x10
 	and e, 0x7F
 
-LABEL_F5413C:
+Rhythm_VelocityPackDone:
 	ret
 
 AccVoice_LoadRhythmParams_Part3:
 	bitda 0, 12931
-	jr z, LABEL_F54147
-	call LABEL_F545E5
+	jr z, RhythmPart3_LoadAndStore
+	call AccentData_ComparePart3
 
-LABEL_F54147:
+RhythmPart3_LoadAndStore:
 	bitda 3, 13100
 	ldda8 e, 12884
 	ldda8 d, 12885
@@ -1049,12 +1049,12 @@ LABEL_F54147:
 	stda8 13000, a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, 12931
-	jr nz, LABEL_F5418E
+	jr nz, RhythmPart3_ProcessRingBuf
 	ld xhl, 0x321E
 	calr AccVoiceReg_StoreParamRecord
-	jr LABEL_F541E4
+	jr RhythmPart3_WriteDone
 
-LABEL_F5418E:
+RhythmPart3_ProcessRingBuf:
 	ld xhl, 0x2D94
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
@@ -1078,17 +1078,17 @@ LABEL_F5418E:
 	ld xhl, 0x321E
 	calr AccVoiceReg_StoreParamRecord
 
-LABEL_F541E4:
+RhythmPart3_WriteDone:
 	anddi8 13100, 247
 	call AccVoiceReg_WritePart3
 	ret
 
 AccVoice_LoadRhythmParams_Part4:
 	bitda 0, 12931
-	jr z, LABEL_F541F8
-	call LABEL_F54609
+	jr z, RhythmPart4_LoadAndStore
+	call AccentData_ComparePart4
 
-LABEL_F541F8:
+RhythmPart4_LoadAndStore:
 	bitda 4, 13100
 	ldda8 e, 12891
 	ldda8 d, 12892
@@ -1104,12 +1104,12 @@ LABEL_F541F8:
 	stda8 13001, a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, 12931
-	jr nz, LABEL_F5423F
+	jr nz, RhythmPart4_ProcessRingBuf
 	ld xhl, 0x3223
 	calr AccVoiceReg_StoreParamRecord
-	jr LABEL_F54295
+	jr RhythmPart4_WriteDone
 
-LABEL_F5423F:
+RhythmPart4_ProcessRingBuf:
 	ld xhl, 0x2E94
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
@@ -1133,17 +1133,17 @@ LABEL_F5423F:
 	ld xhl, 0x3223
 	calr AccVoiceReg_StoreParamRecord
 
-LABEL_F54295:
+RhythmPart4_WriteDone:
 	anddi8 13100, 239
 	call AccVoiceReg_WritePart4
 	ret
 
 AccVoice_LoadRhythmParams_Part5:
 	bitda 0, 12931
-	jr z, LABEL_F542A9
-	call LABEL_F5462D
+	jr z, RhythmPart5_LoadAndStore
+	call AccentData_ComparePart5
 
-LABEL_F542A9:
+RhythmPart5_LoadAndStore:
 	bitda 5, 13100
 	ldda8 e, 12898
 	ldda8 d, 12899
@@ -1159,12 +1159,12 @@ LABEL_F542A9:
 	stda8 13002, a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, 12931
-	jr nz, LABEL_F542F0
+	jr nz, RhythmPart5_ProcessRingBuf
 	ld xhl, 0x3228
 	calr AccVoiceReg_StoreParamRecord
-	jr LABEL_F54346
+	jr RhythmPart5_WriteDone
 
-LABEL_F542F0:
+RhythmPart5_ProcessRingBuf:
 	ld xhl, 0x2F94
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
@@ -1188,7 +1188,7 @@ LABEL_F542F0:
 	ld xhl, 0x3228
 	calr AccVoiceReg_StoreParamRecord
 
-LABEL_F54346:
+RhythmPart5_WriteDone:
 	anddi8 13100, 223
 	call AccVoiceReg_WritePart5
 	ret
@@ -1198,51 +1198,51 @@ AccompVoice_BulkReadRegisters:
 	ld xhl, 0x3094
 	xor iy, iy
 
-LABEL_F54359:
+BulkRead_Loop1_6Byte:
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	add iy, 0x6
 	cp iy, 0x30
-	jr c, LABEL_F54359
+	jr c, BulkRead_Loop1_6Byte
 	ld xhl, 0x30C4
 	xor iy, iy
 
-LABEL_F5436F:
+BulkRead_Loop2_6Byte:
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	add iy, 0x6
 	cp iy, 0x30
-	jr c, LABEL_F5436F
+	jr c, BulkRead_Loop2_6Byte
 	ld xhl, 0x30F4
 	xor iy, iy
 
-LABEL_F54385:
+BulkRead_Loop3_9Byte:
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	add iy, 0x9
 	cp iy, 0x48
-	jr c, LABEL_F54385
+	jr c, BulkRead_Loop3_9Byte
 	ld xhl, 0x313C
 	xor iy, iy
 
-LABEL_F5439B:
+BulkRead_Loop4_9Byte:
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	add iy, 0x9
 	cp iy, 0x48
-	jr c, LABEL_F5439B
+	jr c, BulkRead_Loop4_9Byte
 	ld xhl, 0x3184
 	xor iy, iy
 
-LABEL_F543B1:
+BulkRead_Loop5_9Byte:
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	add iy, 0x9
 	cp iy, 0x48
-	jr c, LABEL_F543B1
+	jr c, BulkRead_Loop5_9Byte
 	ld xhl, 0x31CC
 	xor iy, iy
 
-LABEL_F543C7:
+BulkRead_Loop6_9Byte:
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	add iy, 0x9
 	cp iy, 0x48
-	jr c, LABEL_F543C7
+	jr c, BulkRead_Loop6_9Byte
 	ret
 
 Rhythm_SendNoteOnMax:
@@ -1276,7 +1276,7 @@ Rhythm_SendChanPressure:
 	stda8 13106, a
 	ret
 
-LABEL_F54422:
+AccBuf_ResetAndReload:
 	call AccBuf_ResetAllPositions
 	call AccompVoice_BulkReadRegisters
 	call AccStyle_InitVRAM_Wrap
@@ -1328,7 +1328,7 @@ VoiceParams_LoadFiveSequential:
 	call Rhythm_SendByte
 	ret
 
-LABEL_F544BD:
+AccVoice_BytecodeBlock3:
 	.byte 0x1e, 0x0d, 0x00, 0x1e, 0x15, 0x00, 0x1e, 0x1d
 	.byte 0x00, 0x1e, 0x25, 0x00, 0x1e, 0x2d, 0x00, 0x0e
 	.byte 0xf1, 0x46, 0x32, 0x00, 0x06, 0xf1, 0x47, 0x32
@@ -1349,24 +1349,24 @@ RhythmROM_CheckValid:
 	ldb c, 0x0
 	ld xwa, 0xFFFFFFFF
 	cpda32 xwa, 12919
-	jr z, LABEL_F5453E
-	jr LABEL_F5455B
+	jr z, RhythmROM_InvalidIncrement
+	jr RhythmROM_CheckDone
 
-LABEL_F5453E:
+RhythmROM_InvalidIncrement:
 	ldb c, 0x1
 	ldda16 xwa, 13396
 	add wa, 0x1
 	stda16 13396, xwa
 	cps wa, 0
-	jr nz, LABEL_F5455B
+	jr nz, RhythmROM_CheckDone
 	ldb a, 0xEE
 	stda8 58332, a
 	stdi8 58334, 64
 
-LABEL_F5455B:
+RhythmROM_CheckDone:
 	ret
 
-LABEL_F5455C:
+RhythmROM_BytecodeBlock4:
 	.byte 0x40, 0x00, 0x04, 0x00, 0x00, 0x38, 0x1d, 0x80
 	.byte 0x0e, 0xff, 0xef, 0xc8, 0x04, 0x00, 0x00, 0x00
 	.byte 0xf1
@@ -1380,7 +1380,7 @@ LABEL_F5455C:
 	.byte 0x1d, 0xf2, 0x0a, 0xff, 0xef, 0xc8, 0x04, 0x00
 	.byte 0x00, 0x00, 0x0e
 
-LABEL_F5459F:
+AccentData_ComparePart1:
 	ld xix, 0x3214
 	ld xiy, 0x3246
 	ld xwa, (xix)
@@ -1388,15 +1388,15 @@ LABEL_F5459F:
 	ld l, (xix + 1)
 	ld h, (xiy + 1)
 	cp xwa, xbc
-	jr nz, LABEL_F545C0
+	jr nz, AccentData_Part1_Done
 	cp l, h
-	jr nz, LABEL_F545C0
+	jr nz, AccentData_Part1_Done
 	anddi8 13100, 252
 
-LABEL_F545C0:
+AccentData_Part1_Done:
 	ret
 
-LABEL_F545C1:
+AccentData_ComparePart2:
 	ld xix, 0x3214
 	ld xiy, 0x3246
 	ld xwa, (xix + 5)
@@ -1404,15 +1404,15 @@ LABEL_F545C1:
 	ld l, (xix + 1)
 	ld h, (xiy + 1)
 	cp xwa, xbc
-	jr nz, LABEL_F545E4
+	jr nz, AccentData_Part2_Done
 	cp l, h
-	jr nz, LABEL_F545E4
+	jr nz, AccentData_Part2_Done
 	anddi8 13100, 251
 
-LABEL_F545E4:
+AccentData_Part2_Done:
 	ret
 
-LABEL_F545E5:
+AccentData_ComparePart3:
 	ld xix, 0x3214
 	ld xiy, 0x3246
 	ld xwa, (xix + 10)
@@ -1420,15 +1420,15 @@ LABEL_F545E5:
 	ld l, (xix + 1)
 	ld h, (xiy + 1)
 	cp xwa, xbc
-	jr nz, LABEL_F54608
+	jr nz, AccentData_Part3_Done
 	cp l, h
-	jr nz, LABEL_F54608
+	jr nz, AccentData_Part3_Done
 	anddi8 13100, 247
 
-LABEL_F54608:
+AccentData_Part3_Done:
 	ret
 
-LABEL_F54609:
+AccentData_ComparePart4:
 	ld xix, 0x3214
 	ld xiy, 0x3246
 	ld xwa, (xix + 15)
@@ -1436,15 +1436,15 @@ LABEL_F54609:
 	ld l, (xix + 1)
 	ld h, (xiy + 1)
 	cp xwa, xbc
-	jr nz, LABEL_F5462C
+	jr nz, AccentData_Part4_Done
 	cp l, h
-	jr nz, LABEL_F5462C
+	jr nz, AccentData_Part4_Done
 	anddi8 13100, 239
 
-LABEL_F5462C:
+AccentData_Part4_Done:
 	ret
 
-LABEL_F5462D:
+AccentData_ComparePart5:
 	ld xix, 0x3214
 	ld xiy, 0x3246
 	ld xwa, (xix + 20)
@@ -1452,12 +1452,12 @@ LABEL_F5462D:
 	ld l, (xix + 1)
 	ld h, (xiy + 1)
 	cp xwa, xbc
-	jr nz, LABEL_F54650
+	jr nz, AccentData_Part5_Done
 	cp l, h
-	jr nz, LABEL_F54650
+	jr nz, AccentData_Part5_Done
 	anddi8 13100, 223
 
-LABEL_F54650:
+AccentData_Part5_Done:
 	ret
 
 RhythmROM_ValidateHeader:
@@ -1473,13 +1473,13 @@ RhythmROM_ValidateHeader:
 	ld xwa, (xix + 8)
 	cp xwa, 0x1008305
 	jr nz, AccChord_CheckFailed
-	jr LABEL_F54687
+	jr RhythmROM_HeaderValid
 
 AccChord_CheckFailed:
 	ld xwa, 0xFFFFFFFF
 	stda32 12919, xwa
 
-LABEL_F54687:
+RhythmROM_HeaderValid:
 	ret
 
 AccPatch_SetByChordIndex:
@@ -1488,9 +1488,9 @@ AccPatch_SetByChordIndex:
 	and l, 0x7F
 	srl l, 2
 	cpdi8 13030, 0
-	jrl nz, LABEL_F5474D
+	jrl nz, AccPatch_ChIdx1_Entry
 	cps l, 0
-	jr nz, LABEL_F546D7
+	jr nz, AccPatch_ChIdx0_Bank1
 	ldb a, 0xC
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1511,9 +1511,9 @@ AccPatch_SetByChordIndex:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F546D7:
+AccPatch_ChIdx0_Bank1:
 	cps l, 1
-	jr nz, LABEL_F54714
+	jr nz, AccPatch_ChIdx0_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1534,7 +1534,7 @@ LABEL_F546D7:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54714:
+AccPatch_ChIdx0_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1555,11 +1555,11 @@ LABEL_F54714:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F5474D:
+AccPatch_ChIdx1_Entry:
 	cpdi8 13030, 1
-	jrl nz, LABEL_F54808
+	jrl nz, AccPatch_ChIdx2_Entry
 	cps l, 0
-	jr nz, LABEL_F54792
+	jr nz, AccPatch_ChIdx1_Bank1
 	ldb a, 0xC
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1580,9 +1580,9 @@ LABEL_F5474D:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54792:
+AccPatch_ChIdx1_Bank1:
 	cps l, 1
-	jr nz, LABEL_F547CF
+	jr nz, AccPatch_ChIdx1_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1603,7 +1603,7 @@ LABEL_F54792:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F547CF:
+AccPatch_ChIdx1_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1624,11 +1624,11 @@ LABEL_F547CF:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54808:
+AccPatch_ChIdx2_Entry:
 	cpdi8 13030, 2
-	jrl nz, LABEL_F548C3
+	jrl nz, AccPatch_ChIdx3_Entry
 	cps l, 0
-	jr nz, LABEL_F5484D
+	jr nz, AccPatch_ChIdx2_Bank1
 	ldb a, 0xC
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1649,9 +1649,9 @@ LABEL_F54808:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F5484D:
+AccPatch_ChIdx2_Bank1:
 	cps l, 1
-	jr nz, LABEL_F5488A
+	jr nz, AccPatch_ChIdx2_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1672,7 +1672,7 @@ LABEL_F5484D:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F5488A:
+AccPatch_ChIdx2_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1693,11 +1693,11 @@ LABEL_F5488A:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F548C3:
+AccPatch_ChIdx3_Entry:
 	cpdi8 13030, 3
-	jrl nz, LABEL_F5497E
+	jrl nz, AccPatch_ChIdx4_Entry
 	cps l, 0
-	jr nz, LABEL_F54908
+	jr nz, AccPatch_ChIdx3_Bank1
 	ldb a, 0xC
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1718,9 +1718,9 @@ LABEL_F548C3:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54908:
+AccPatch_ChIdx3_Bank1:
 	cps l, 1
-	jr nz, LABEL_F54945
+	jr nz, AccPatch_ChIdx3_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1741,7 +1741,7 @@ LABEL_F54908:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54945:
+AccPatch_ChIdx3_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1762,11 +1762,11 @@ LABEL_F54945:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F5497E:
+AccPatch_ChIdx4_Entry:
 	cpdi8 13030, 4
-	jrl nz, LABEL_F54A39
+	jrl nz, AccPatch_ChIdx5_Entry
 	cps l, 0
-	jr nz, LABEL_F549C3
+	jr nz, AccPatch_ChIdx4_Bank1
 	ldb a, 0xC
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1787,9 +1787,9 @@ LABEL_F5497E:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F549C3:
+AccPatch_ChIdx4_Bank1:
 	cps l, 1
-	jr nz, LABEL_F54A00
+	jr nz, AccPatch_ChIdx4_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1810,7 +1810,7 @@ LABEL_F549C3:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54A00:
+AccPatch_ChIdx4_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1831,11 +1831,11 @@ LABEL_F54A00:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54A39:
+AccPatch_ChIdx5_Entry:
 	cpdi8 13030, 5
-	jrl nz, LABEL_F54AF4
+	jrl nz, AccPatch_ChIdx6_Entry
 	cps l, 0
-	jr nz, LABEL_F54A7E
+	jr nz, AccPatch_ChIdx5_Bank1
 	ldb a, 0xC
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1856,9 +1856,9 @@ LABEL_F54A39:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54A7E:
+AccPatch_ChIdx5_Bank1:
 	cps l, 1
-	jr nz, LABEL_F54ABB
+	jr nz, AccPatch_ChIdx5_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1879,7 +1879,7 @@ LABEL_F54A7E:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54ABB:
+AccPatch_ChIdx5_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1900,11 +1900,11 @@ LABEL_F54ABB:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54AF4:
+AccPatch_ChIdx6_Entry:
 	cpdi8 13030, 6
-	jrl nz, LABEL_F54BAF
+	jrl nz, AccPatch_ChIdxDefault_Bank0
 	cps l, 0
-	jr nz, LABEL_F54B39
+	jr nz, AccPatch_ChIdx6_Bank1
 	ldb a, 0xC
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1925,9 +1925,9 @@ LABEL_F54AF4:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54B39:
+AccPatch_ChIdx6_Bank1:
 	cps l, 1
-	jr nz, LABEL_F54B76
+	jr nz, AccPatch_ChIdx6_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1948,7 +1948,7 @@ LABEL_F54B39:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54B76:
+AccPatch_ChIdx6_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1969,9 +1969,9 @@ LABEL_F54B76:
 	stda16 13166, xwa
 	jrl AccPatch_NullReturn
 
-LABEL_F54BAF:
+AccPatch_ChIdxDefault_Bank0:
 	cps l, 0
-	jr nz, LABEL_F54BEB
+	jr nz, AccPatch_ChIdxDefault_Bank1
 	ldb a, 0xC
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa
@@ -1992,7 +1992,7 @@ LABEL_F54BAF:
 	stda16 13166, xwa
 	jr AccPatch_NullReturn
 
-LABEL_F54BEB:
+AccPatch_ChIdxDefault_Bank1:
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
 	stda16 13156, xwa

@@ -7819,7 +7819,7 @@ SeqDispatch_ResetAndValidate:
 	ret
 
 SeqDispatch_InitWithPayload:
-	call LABEL_F54422
+	call AccBuf_ResetAndReload
 	call SubCPU_Payload_GetErrorFlag
 	cps hl, 0
 	jr z, SeqDispatch_PostInit
@@ -8051,12 +8051,12 @@ Seq_InputState_StoreFlag:
 	stda8 12931, a
 	calr AccKey_ScanAndSetDirty
 	calr AccState_ReadAccompParams
-	calr LABEL_F5375E
+	calr AudioMode_CheckAndUpdateStereo
 	calr AccChord_ReadAndStoreKeys
-	calr LABEL_F5377C
-	calr LABEL_F53791
-	calr LABEL_F5379D
-	calr LABEL_F537CA
+	calr AudioMode_MergeOutputBits
+	calr AudioMode_CopyChannelMode
+	calr AudioMode_CopyAccentFlags
+	calr AccPedal_SetFlag13155
 	xor xhl, xhl
 	ldda8 l, 12928
 	sla l, 1
@@ -8075,18 +8075,18 @@ Seq_InputState_StoreFlag:
 	calr AccPedal_ProcessAllChanges
 
 AccInput_ProcessWithPedal:
-	calr LABEL_F53898
-	calr LABEL_F5396F
-	calr LABEL_F53A12
-	calr LABEL_F53AA7
-	calr LABEL_F53AE2
+	calr AccChannel_CompareAndMarkDirty
+	calr AccVoice_ProcessPedalChanges
+	calr AccVoice_ProcessLeftPedalChanges
+	calr AccPitch_CheckTransposeFlags
+	calr AccChord_ProcessKeyChanges
 	bitda 0, 13155
 	jr z, AccInput_CompareAndCheck
-	calr LABEL_F53B3D
+	calr AccChord_ResolveVoiceAndDispatch
 
 AccInput_CompareAndCheck:
 	calr AccChord_CompareAndSetDirty
-	calr LABEL_F53CCA
+	calr AccentVoice_DetectAndMarkChange
 	call AccTuning_CheckChange
 	jr AccInput_Return
 

@@ -1517,28 +1517,28 @@ AccPart_LoadTuning_Kbd2:
 AccPart_LoadTuning_Acc1:
 	cpdi8 13268, 4
 	jr nz, AccPart_LoadTuning_Acc2
-	call LABEL_F53EC9
+	call AccTuning_LoadCoarseFromStyle
 	ordi8 13100, 4
 	jr AccPart_NullRet
 
 AccPart_LoadTuning_Acc2:
 	cpdi8 13268, 8
 	jr nz, AccPart_LoadTuning_Acc3
-	call LABEL_F53EED
+	call AccTuning_LoadFineFromStyle
 	ordi8 13100, 8
 	jr AccPart_NullRet
 
 AccPart_LoadTuning_Acc3:
 	cpdi8 13268, 16
 	jr nz, AccPart_LoadTuning_Acc4
-	call LABEL_F53F11
+	call AccTuning_LoadOctaveFromStyle
 	ordi8 13100, 16
 	jr AccPart_NullRet
 
 AccPart_LoadTuning_Acc4:
 	cpdi8 13268, 32
 	jr nz, AccPart_NullRet
-	call LABEL_F53F35
+	call AccTuning_LoadTransposeFromStyle
 	ordi8 13100, 32
 
 AccPart_NullRet:
@@ -28670,7 +28670,7 @@ AccDraw_Init:
 AccDraw_Secondary:
 	push xwa
 	ld xwa, xiy
-	call LABEL_FB1E6A
+	call DrawText_ExtendedLayout
 	pop xwa
 	ret
 
@@ -28876,7 +28876,7 @@ AccScreen_UpdateBeatDisplay:
 	ld xiy, 0xF6AD55
 	push xwa
 	ld xwa, xiy
-	call LABEL_FB164E
+	call DrawText_LayoutAndRender
 	pop xwa
 	cpdi8 14103, 99
 	jr ugt, AccScreen_BeatDisplay_Large
