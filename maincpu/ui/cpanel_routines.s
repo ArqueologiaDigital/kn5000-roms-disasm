@@ -1471,11 +1471,11 @@ CPanel_LED_HandlePacket2:	; FC4B95 — LED handler for packet types 0, 1, 2
 	; Transfers 2 bytes from LED event queue to LED TX buffer.
 	; Event byte 1 = row select, event byte 2 = LED pattern.
 	ld_srib3 A, 0x07, 0xF8, 0xF0	; A = event queue byte 1 at (XIZ + IX)
-	calr LABEL_FC4C34		; process byte + increment event read ptr
+	calr ToneGen_IncrementWrap128		; process byte + increment event read ptr
 	lda_dri3 XBC, 0x07, 0xE8, 0xF4	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
 	ld_srib3 W, 0x07, 0xF8, 0xF0	; W = event queue byte 2 at (XIZ + IX)
-	calr LABEL_FC4C34		; process byte + increment event read ptr
+	calr ToneGen_IncrementWrap128		; process byte + increment event read ptr
 	lda_dri3 XWA, 0x07, 0xE8, 0xF4	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX — store updated event read ptr
@@ -1489,7 +1489,7 @@ CPanel_LED_HandlePacketN:	; FC4BC5 — LED handler for packet type 3
 	; Event byte 1 encodes: upper bits = row/command, lower nibble = data count.
 	; Total bytes transferred = (byte1 & 0x0F) + 2 (including the header bytes).
 	ld_srib3 A, 0x07, 0xF8, 0xF0	; A = event queue byte 1 at (XIZ + IX)
-	calr LABEL_FC4C34		; process byte + increment event read ptr
+	calr ToneGen_IncrementWrap128		; process byte + increment event read ptr
 	ld c, a				; C = save event byte 1
 	and a, 0x0F			; A = lower nibble (data byte count)
 	add a, 2			; A = total byte count (nibble + 2)
@@ -1501,7 +1501,7 @@ CPanel_LED_HandlePacketN:	; FC4BC5 — LED handler for packet type 3
 
 CPanel_LED_HandlePacketN__loop:	; FC4BE4 — loop: transfer remaining bytes
 	ld_srib3 A, 0x07, 0xF8, 0xF0	; A = next event queue byte at (XIZ + IX)
-	calr LABEL_FC4C34		; process byte + increment event read ptr
+	calr ToneGen_IncrementWrap128		; process byte + increment event read ptr
 	lda_dri3 XBC, 0x07, 0xE8, 0xF4	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX — store updated event read ptr

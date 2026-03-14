@@ -38,7 +38,7 @@ FileIO_MainLoop:
 	ld a, (xiz)
 	ld (xbc), a
 	cp a, 0xFF
-	jr nz, LABEL_FC580A
+	jr nz, FileIO_ProcessMaskAndShift
 	pop xiz
 	ret
 
@@ -2531,7 +2531,7 @@ AudioInit_FillLoop:
 	stib_dpi 0xE0, 0x50
 	cp xwa, xbc
 	jr ule, AudioInit_FillLoop
-	call LABEL_FC53CE
+	call ToneGen_FlashVerify
 	jp DSPCfg_Param_CaseB
 
 Audio_ResetAfterPayloadError:
@@ -2568,8 +2568,8 @@ Audio_ReinitToneGen:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_FC4CAA
-	call LABEL_FC4CA5
+	call ToneGen_ApplyMaskTable
+	call ToneGen_Config_InitAndChannels
 	call ToneGen_InitAllChannelEntries_Skip
 	call ToneGen_DSPCfg_Initialize
 	pop xiz
@@ -2601,8 +2601,8 @@ Audio_ReinitToneGenAndOutput:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_FC4CAA
-	call LABEL_FC4CA5
+	call ToneGen_ApplyMaskTable
+	call ToneGen_Config_InitAndChannels
 	call ToneGen_InitAllChannelEntries_Skip
 	call ToneGen_DSPCfg_Initialize
 	pop xiz

@@ -7,7 +7,7 @@
 ; routines before the main audio control engine.
 ; =============================================================================
 
-LABEL_FC4C34:
+ToneGen_IncrementWrap128:
 	inc	1, ix
 	cp	ix, 128
 	jr	c, 2
@@ -19,35 +19,35 @@ LABEL_FC4C34:
 	ret
 	dec	1, ix
 	ret
-LABEL_FC4C4A:
+ToneGen_Config_AlignByte:
 	.byte 0x0e
 
 ToneGen_Config_InitAllEntries:
 	ld xwa, 0xF9A0
 	calr DSPCfg_InitAllEntries
 	ld xwa, 0xFD60
-	calr LABEL_FC4E6E
+	calr DSPCfg_InitAuxEntries
 	call ToneGen_DispatchByMode
 	jp SwbtWr_NullRet
 
-LABEL_FC4C63:
+ToneGen_Config_InitAllChannels:
 	dec 2, xsp
 	push xiz
 	ldw (xsp + 4), 0x0
 	lda_24 xiz, 0x1ed400
 
-LABEL_FC4C70:
+ToneGen_Config_InitChannelLoop:
 	ld xwa, xiz
 	calr DSPCfg_InitAllEntries
 	incm 1, (xsp + 4)
 	st_dri3b H, 0xF9, 0xC0, 0x03
 	cpw (xsp + 4), 0x50
-	jr c, LABEL_FC4C70
+	jr c, ToneGen_Config_InitChannelLoop
 	pop xiz
 	inc 2, xsp
 	ret
 
-LABEL_FC4C88:
+ToneGen_LookupByVoiceIndex:
 	cp	wa, 80
 	ret	nc
 	extz	xwa
@@ -60,24 +60,24 @@ LABEL_FC4C88:
 	calr	317
 	ret
 
-LABEL_FC4CA5:
+ToneGen_Config_InitAndChannels:
 	calr ToneGen_Config_InitAllEntries
-	jr LABEL_FC4C63
+	jr ToneGen_Config_InitAllChannels
 
-LABEL_FC4CAA:
+ToneGen_ApplyMaskTable:
 	lda_24 xwa, 0xed92d8
 	lda xbc, (xwa + 4)
 	ld xde, xwa
 	lda xhl, (xwa + 25)
 
-LABEL_FC4CB7:
+ToneGen_ApplyMaskLoop:
 	ld xix, (xde)
 	ld a, (xbc)
 	and (xix), a
 	inc 5, xde
 	inc 5, xbc
 	cp xde, xhl
-	jr c, LABEL_FC4CB7
+	jr c, ToneGen_ApplyMaskLoop
 	lds wa, 0
 	call BitMapOut_PrepareRender_CheckBit2
 	pushw 0x10
@@ -89,8 +89,8 @@ LABEL_FC4CB7:
 	ret
 
 ToneGen_DSPCfg_Initialize:
-	calr LABEL_FC4D7E
-	jrl LABEL_FC4D8E
+	calr ToneGen_DSPCfg_ResetAll
+	jrl ToneGen_DSPCfg_ResetAllChannels
 	ldada xwa, 62592
 	jrl DSPCfg_InitAllEntries
 
@@ -103,7 +103,7 @@ Voice_InitAllChannelEntries:
 	push xiz
 	ldw (xsp + 10), 0x0
 
-LABEL_FC4CF6:
+Voice_InitChannelLoop:
 	ld wa, (xsp + 10)
 	extz xwa
 	ld xbc, 0xED92F2
@@ -114,14 +114,14 @@ LABEL_FC4CF6:
 	call VoiceData_LookupPtrByIndex
 	ld xiz, xhl
 	cp xiz, 0xFFFFFFFF
-	jr z, LABEL_FC4D58
+	jr z, Voice_InitChannelNext
 	ld a, (xsp + 8)
 	extz wa
 	call VoiceData_LookupPtrByChannel
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	cp xwa, 0xFFFFFFFF
-	jr z, LABEL_FC4D58
+	jr z, Voice_InitChannelNext
 	lda xwa, (xsp + 12)
 	ld c, (xiz)
 	ld (xwa + 3), c
@@ -137,15 +137,15 @@ LABEL_FC4CF6:
 	ld c, (xbc + 1)
 	lda_dri3 XHL, 0x07, 0xE0, 0xE8
 
-LABEL_FC4D58:
+Voice_InitChannelNext:
 	incm 1, (xsp + 10)
 	cpw (xsp + 10), 0x17
-	jr c, LABEL_FC4CF6
+	jr c, Voice_InitChannelLoop
 	pop xiz
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_FC4D67:
+Voice_CopyFromScratch:
 	pushw 0x620
 	pushw 0x3
 	pushw 0xC8E4
@@ -155,36 +155,36 @@ LABEL_FC4D67:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_FC4D7E:
+ToneGen_DSPCfg_ResetAll:
 	ld xwa, 0xF9A0
-	calr LABEL_FC4DB3
+	calr DSPCfg_ResetEntryByTable
 	ld xwa, 0xFD60
-	jrl LABEL_FC5081
+	jrl DSPCfg_ResetAuxEntries
 
-LABEL_FC4D8E:
+ToneGen_DSPCfg_ResetAllChannels:
 	dec 2, xsp
 	push xiz
 	ldw (xsp + 4), 0x0
 	lda_24 xiz, 0x1ed400
 
-LABEL_FC4D9B:
+ToneGen_DSPCfg_ResetChannelLoop:
 	ld xwa, xiz
-	calr LABEL_FC4DB3
+	calr DSPCfg_ResetEntryByTable
 	incm 1, (xsp + 4)
 	st_dri3b H, 0xF9, 0xC0, 0x03
 	cpw (xsp + 4), 0x50
-	jr c, LABEL_FC4D9B
+	jr c, ToneGen_DSPCfg_ResetChannelLoop
 	pop xiz
 	inc 2, xsp
 	ret
 
-LABEL_FC4DB3:
+DSPCfg_ResetEntryByTable:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
 	lds iz, 0
 
-LABEL_FC4DBB:
+DSPCfg_ResetEntryLoop:
 	ld bc, iz
 	extz xbc
 	ld xwa, xbc
@@ -194,10 +194,10 @@ LABEL_FC4DBB:
 	ld xbc, 0xED8FE0
 	add xbc, xwa
 	ld xwa, (xsp + 2)
-	calr LABEL_FC50AF
+	calr DSPCfg_CopyEntryValues
 	inc 1, iz
 	cp iz, 0x2E
-	jr c, LABEL_FC4DBB
+	jr c, DSPCfg_ResetEntryLoop
 	popw iz
 	inc 4, xsp
 	ret
@@ -208,7 +208,7 @@ DSPCfg_InitAllEntries:
 	ld (xsp + 2), xwa
 	lds iz, 0
 
-LABEL_FC4DE9:
+DSPCfg_InitEntryLoop:
 	ld wa, iz
 	extz xwa
 	ld xde, xwa
@@ -221,7 +221,7 @@ LABEL_FC4DE9:
 	calr DSPCfg_Init_Entry1
 	inc 1, iz
 	cp iz, 0x2E
-	jr c, LABEL_FC4DE9
+	jr c, DSPCfg_InitEntryLoop
 	ldada xbc, 64628
 	sub xbc, 0xF9A0
 	add xbc, (xsp + 2)
@@ -251,7 +251,7 @@ LABEL_FC4DE9:
 	inc 4, xsp
 	ret
 
-LABEL_FC4E6E:
+DSPCfg_InitAuxEntries:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
@@ -343,7 +343,7 @@ DSPCfg_Init_Finalize:
 	lds hl, 1
 	ret
 
-LABEL_FC4F1A:
+DSPCfg_InitDispatchData:
 	.byte 0xe9, 0x8a, 0x8a, 0x01, 0x27, 0xdb, 0x12, 0x8a
 	.byte 0x02, 0x23, 0xc3, 0x07, 0xe0, 0xec, 0xcb, 0xdb
 	.byte 0xab, 0x0e, 0xe8, 0x8a, 0x89, 0x01, 0x27, 0xdb
@@ -391,13 +391,13 @@ LABEL_FC4F1A:
 	.byte 0x00, 0xdb, 0xaa, 0x0e
 	.byte 0xf1, 0x80, 0xf4, 0x30, 0x78, 0x32, 0xfd
 
-LABEL_FC5081:
+DSPCfg_ResetAuxEntries:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xwa
 	lds iz, 0
 
-LABEL_FC5089:
+DSPCfg_ResetAuxEntryLoop:
 	ld bc, iz
 	extz xbc
 	ld xwa, xbc
@@ -407,15 +407,15 @@ LABEL_FC5089:
 	ld xbc, 0xED91AC
 	add xbc, xwa
 	ld xwa, (xsp + 2)
-	calr LABEL_FC50AF
+	calr DSPCfg_CopyEntryValues
 	inc 1, iz
 	cp iz, 0x1E
-	jr c, LABEL_FC5089
+	jr c, DSPCfg_ResetAuxEntryLoop
 	popw iz
 	inc 4, xsp
 	ret
 
-LABEL_FC50AF:
+DSPCfg_CopyEntryValues:
 	ld xde, xbc
 	ld xbc, (xde)
 	add xwa, xbc
@@ -425,7 +425,7 @@ LABEL_FC50AF:
 	ld (xwa + 1), c
 	ret
 
-LABEL_FC50C1:
+DSPCfg_SyncBitmapData:
 	.byte 0xbf, 0xee, 0x37, 0x3e, 0xbf, 0x12, 0x61, 0xe8
 	.byte 0x8e, 0xf1, 0x3c, 0xbd, 0x30, 0xbf, 0x0e, 0x60
 	.byte 0xbf, 0x0a, 0x60, 0xd1, 0xde, 0x90, 0x21, 0x78
@@ -515,7 +515,7 @@ SoundParam_NotifyMultipleChanges:
 	jr __jrt_nop_FC5245
 __jrt_nop_FC5245:
 
-LABEL_FC5245:
+ToneGen_DiffScanAndUpdate:
 	lda xsp, (xsp - 14)
 	pushw iz
 	ldda16 xbc, 37086
@@ -523,9 +523,9 @@ LABEL_FC5245:
 	ld (xsp + 12), xwa
 	ld (xsp + 8), xwa
 	lds iz, 0
-	jrl LABEL_FC5326
+	jrl ToneGen_DiffScanCheckEnd
 
-LABEL_FC525C:
+ToneGen_DiffScanOuter:
 	ld wa, iz
 	extz xwa
 	add xwa, xde
@@ -539,9 +539,9 @@ LABEL_FC525C:
 	ld a, (xwa)
 	ld (xsp + 4), a
 	cp (xsp + 4), 0x0
-	jrl z, LABEL_FC5324
+	jrl z, ToneGen_DiffOuterNext
 
-LABEL_FC527F:
+ToneGen_DiffScanInner:
 	inc 1, iz
 	ldada xde, 64864
 	ld xwa, xde
@@ -556,9 +556,9 @@ LABEL_FC527F:
 	add xwa, xde
 	ld a, (xwa)
 	cp a, (xhl)
-	jr z, LABEL_FC531B
+	jr z, ToneGen_DiffInnerNext
 	cp bc, 0x1F4
-	jr c, LABEL_FC52C2
+	jr c, ToneGen_DiffRecordChange
 	extz xbc
 	add xbc, (xsp + 8)
 	ld (xbc), 0xFF
@@ -573,7 +573,7 @@ LABEL_FC527F:
 	pop xde
 	lds bc, 0
 
-LABEL_FC52C2:
+ToneGen_DiffRecordChange:
 	ld de, bc
 	inc 1, bc
 	extz xde
@@ -612,22 +612,22 @@ LABEL_FC52C2:
 	add xwa, (xsp + 8)
 	ld (xwa), e
 
-LABEL_FC531B:
+ToneGen_DiffInnerNext:
 	incm8 1, (xsp + 6)
 	decm8 1, (xsp + 4)
-	jrl nz, LABEL_FC527F
+	jrl nz, ToneGen_DiffScanInner
 
-LABEL_FC5324:
+ToneGen_DiffOuterNext:
 	inc 1, iz
 
-LABEL_FC5326:
+ToneGen_DiffScanCheckEnd:
 	ldada xde, 64864
 	ldada xwa, 65470
 	sub xwa, xde
 	ld hl, iz
 	extz xhl
 	cp xhl, xwa
-	jrl lt, LABEL_FC525C
+	jrl lt, ToneGen_DiffScanOuter
 	ld wa, bc
 	extz xwa
 	add xwa, (xsp + 12)
@@ -637,7 +637,7 @@ LABEL_FC5326:
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_FC534C:
+ToneGen_FileIO_SaveAndSync:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
@@ -665,7 +665,7 @@ LABEL_FC534C:
 	inc 4, xsp
 	ret
 
-LABEL_FC5399:
+ToneGen_FileIO_RestoreFromBackup:
 	calr SndParam_SyncDisplayBitmap
 	pushw 0x620
 	pushw 0x3
@@ -683,21 +683,21 @@ LABEL_FC5399:
 	resda 5, 36470
 	ret
 
-LABEL_FC53CE:
+ToneGen_FlashVerify:
 	lda_24 xhl, 0xed933a
 	ld xde, 0x3D3000
 	lds bc, 0
 
-LABEL_FC53DA:
+ToneGen_FlashVerifyLoop:
 	ld_spib A, 0xEC
 	cp_spib A, 0xE8
-	jr nz, LABEL_FC53E9
+	jr nz, ToneGen_FlashWriteAll
 	inc 1, bc
 	cps bc, 3
-	jr c, LABEL_FC53DA
+	jr c, ToneGen_FlashVerifyLoop
 	ret
 
-LABEL_FC53E9:
+ToneGen_FlashWriteAll:
 	push xiz
 	ld xwa, 0x3D3000
 	push xwa
@@ -722,7 +722,7 @@ LABEL_FC53E9:
 	inc 2, xsp
 	ld xiz, xhl
 	or xiz, xiz
-	jr z, LABEL_FC54B0
+	jr z, ToneGen_FlashWriteDone
 	pushw 0x0
 	pushw 0x50
 	push xiz
@@ -768,11 +768,11 @@ LABEL_FC53E9:
 	call Free
 	inc 4, xsp
 
-LABEL_FC54B0:
+ToneGen_FlashWriteDone:
 	pop xiz
 	ret
 
-LABEL_FC54B2:
+ToneGen_FlashReadAndRestore:
 	push xiz
 	pushw 0x50
 	call Malloc
@@ -943,7 +943,7 @@ PanelDisplay_DispatchByMode:
 	lda_24 xix, 0xfc56c5
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_FC56C5:
+PanelDisplay_DispatchData:
 	.byte 0x42, 0x00, 0x34, 0x3d, 0x00, 0xf2, 0xe4, 0x40
 	.byte 0x03, 0x33, 0xd9, 0xa8, 0xc5, 0xec, 0x21, 0xc5
 	.byte 0xe8, 0xf1, 0x6e, 0x72, 0xd9, 0x61, 0xd9, 0xda
@@ -972,32 +972,32 @@ DSPCfg_Param_Default:
 	lds hl, 0
 	ret
 
-LABEL_FC5757:
+Encoder_MarkInvalid:
 	stdi8 49209, 255
 	ret
 
-LABEL_FC575D:
+Encoder_Stub1:
 	ret
 
-LABEL_FC575E:
+Encoder_Stub2:
 	ret
 
-LABEL_FC575F:
+Encoder_Stub3:
 	ret
 
-LABEL_FC5760:
+Encoder_AlignByte:
 	.byte 0x0e
 
 Encoder_ValueScanAndSync:
 	stdi8 36492, 0
 	stdi8 36494, 0
-	jr LABEL_FC5773
+	jr Encoder_SyncLoop
 
-LABEL_FC576D:
-	calr LABEL_FC57AA
-	calr LABEL_FC57CB
+Encoder_ScanAndSync:
+	calr Encoder_ReadNextEntry
+	calr Encoder_PrepareCallback
 
-LABEL_FC5773:
+Encoder_SyncLoop:
 	call MidiCC_SyncForceResync
 	ldda8 a, 36492
 	extz wa
@@ -1005,7 +1005,7 @@ LABEL_FC5773:
 	ld_srib3 A, 0x07, 0xEC, 0xE0
 	stda8 36496, a
 	cp a, 0xFF
-	jr nz, LABEL_FC576D
+	jr nz, Encoder_ScanAndSync
 	ldda8 a, 36494
 	extz wa
 	sll wa, 2
@@ -1016,7 +1016,7 @@ LABEL_FC5773:
 	call MidiCC_ResetState
 	jrl VoiceEntry_FindMasterVolume
 
-LABEL_FC57AA:
+Encoder_ReadNextEntry:
 	call MidiCC_SyncForceResync
 	ldda8 a, 36492
 	extz wa
@@ -1028,17 +1028,17 @@ LABEL_FC57AA:
 	incdi8 1, 36492
 	ret
 
-LABEL_FC57CB:
+Encoder_PrepareCallback:
 	push xiz
 	ldda8 c, 36496
 	extz bc
 	sla bc, 2
 	ld xwa, 0xED9C1E
 	cpdi8 36148, 20
-	jr nz, LABEL_FC57E6
+	jr nz, Encoder_ResolveCallbackAddr
 	ld xwa, 0xED9C9E
 
-LABEL_FC57E6:
+Encoder_ResolveCallbackAddr:
 	ld_sril3 XIZ, 0x07, 0xE0, 0xE4
 	ldada xbc, 36476
 	ld (xbc + 4), 0xAA
@@ -1050,7 +1050,7 @@ LABEL_FC57E6:
 	ld (xbc + 7), a
 	jr FileIO_MainLoop
 
-LABEL_FC580A:
+FileIO_ProcessMaskAndShift:
 	ldada xhl, 36472
 	ld e, (xiz + 3)
 	ld d, e
@@ -1059,22 +1059,22 @@ LABEL_FC580A:
 	ld l, e
 	ld e, (xiz + 2)
 	bit 4, e
-	jr z, LABEL_FC583A
+	jr z, FileIO_AudioControlStart
 	res 4, e
 	ld a, e
 	and a, 0xF
-	jr z, LABEL_FC582F
+	jr z, FileIO_ShiftLeftLow
 	slla d
 
-LABEL_FC582F:
+FileIO_ShiftLeftLow:
 	ld a, e
 	and a, 0xF
-	jr z, LABEL_FC5838
+	jr z, FileIO_ShiftDone
 	slla l
 
-LABEL_FC5838:
+FileIO_ShiftDone:
 	jr FileIO_CallbackHandler
 
-LABEL_FC583A:
+FileIO_AudioControlStart:
 
 ; --- Audio Control, File I/O & MIDI Processing ---

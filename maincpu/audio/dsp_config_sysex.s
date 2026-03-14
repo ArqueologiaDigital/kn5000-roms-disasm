@@ -861,7 +861,7 @@ PostLswLoad:
 	call ToneGen_DispatchByMode
 	call SwbtWr_NullRet
 	call ToneGen_Config_InitAllEntries
-	call LABEL_FC4D7E
+	call ToneGen_DSPCfg_ResetAll
 	lds wa, 1
 	call BitMapOut_GetRenderMode_CheckBit3
 	call SoundParam_NotifyMultipleChanges
@@ -901,8 +901,8 @@ PrePmLoad:
 PostPmLoad:
 	cps wa, 0
 	ret lt
-	call LABEL_FC4C63
-	call LABEL_FC4D8E
+	call ToneGen_Config_InitAllChannels
+	call ToneGen_DSPCfg_ResetAllChannels
 	ret
 
 PrePmSave:

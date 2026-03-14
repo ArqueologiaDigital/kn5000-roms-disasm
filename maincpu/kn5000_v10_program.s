@@ -2815,7 +2815,7 @@ Boot_HandleFactoryReset:
 	cps a, 1		; Combo code == 1 (Initial Setting)?
 	ret nz			; No → not requesting reset, return
 	; --- Factory Reset: clear all DRAM and SRAM ---
-	call LABEL_FC54B2
+	call ToneGen_FlashReadAndRestore
 	ei 7
 	calr Boot_ClearAllInterruptEnables	; Clear all interrupt enables
 	ld xbc, 0x400
@@ -4528,7 +4528,7 @@ CPanel_PanelDetection_Wrapper:
 
 
 CPanel_KeyProcessing_Wrapper:
-	calr LABEL_FC4C4A
+	calr ToneGen_Config_AlignByte
 	ret
 
 

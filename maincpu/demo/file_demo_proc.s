@@ -478,7 +478,7 @@ DemoMode_Initialize:
 	calr Voice_SavePreset
 	resda 3, 10413
 	call SeqInit_PostEventSequence
-	call LABEL_FC5399
+	call ToneGen_FileIO_RestoreFromBackup
 	call SeqTimer_UpdateTempoReg
 	call Voice_InitializeAll
 	call Seq_StartMainControlAlt
@@ -732,7 +732,7 @@ Demo_SelectEntry_PlaySong:
 	extz wa
 	calr Demo_GetPresetBaseForPartAlt
 	ld xwa, xhl
-	call LABEL_FC534C
+	call ToneGen_FileIO_SaveAndSync
 	lds wa, 2
 	call BitMapOut_GetRenderMode_CheckBit3
 	call SwbtWr_ReinitBothBanks

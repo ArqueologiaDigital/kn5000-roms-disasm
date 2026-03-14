@@ -844,7 +844,7 @@ CDlikeExit_CheckPlaybackType:
 	cpdi8 36151, 122
 	jr z, PlayMode_ResetAndSchedule
 	stdi8 4330, 1
-	call LABEL_FC5399
+	call ToneGen_FileIO_RestoreFromBackup
 	call SeqTimer_UpdateTempoReg
 	call SwbtWr_ResetAllChannels
 	call SqTrAs_Setup
