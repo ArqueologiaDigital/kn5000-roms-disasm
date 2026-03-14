@@ -6242,16 +6242,16 @@ SngSel2Proc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1C00018
-	jr z, LABEL_F2FD71
+	jr z, SngSel2_HandleTimerResetEvent
 	cp xiz, 0x1C00017
-	jr z, LABEL_F2FD71
+	jr z, SngSel2_HandleTimerResetEvent
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F2FDA7
+	jr SngSel2_Epilogue
 
-LABEL_F2FD71:
+SngSel2_HandleTimerResetEvent:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -6270,7 +6270,7 @@ LABEL_F2FD71:
 	call SendEvent
 	lds32 xhl, 0
 
-LABEL_F2FDA7:
+SngSel2_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -6282,20 +6282,20 @@ SngSelProc:
 	ld xiz, xbc
 	ld (xsp + 78), xwa
 	cp xiz, 0x1C00018
-	jrl z, LABEL_F2FED2
+	jrl z, SngSel_HandleScrollEvent
 	cp xiz, 0x1C00017
-	jrl z, LABEL_F2FED2
+	jrl z, SngSel_HandleScrollEvent
 	cp xiz, 0x1C0000F
-	jr z, LABEL_F2FE05
+	jr z, SngSel_HandleEventF
 	cp xiz, 0x1C0000B
-	jr z, LABEL_F2FDE8
+	jr z, SngSel_HandleEventB
 	ld xwa, (xsp + 78)
 	ld xbc, xiz
 	ld xde, (xsp + 74)
 	call InheritedProc
-	jrl LABEL_F2FF04
+	jrl SngSel_Epilogue
 
-LABEL_F2FDE8:
+SngSel_HandleEventB:
 	ld xwa, (xsp + 78)
 	ld xbc, xiz
 	ld xde, (xsp + 74)
@@ -6306,7 +6306,7 @@ LABEL_F2FDE8:
 	call MainPostEvent
 	jrl StringDraw_CleanupAndReturn
 
-LABEL_F2FE05:
+SngSel_HandleEventF:
 	ld xwa, (xsp + 78)
 	ld xbc, xiz
 	ld xde, (xsp + 74)
@@ -6379,7 +6379,7 @@ LABEL_F2FE05:
 	call DrawStringLeftJustify
 	jr StringDraw_CleanupAndReturn
 
-LABEL_F2FED2:
+SngSel_HandleScrollEvent:
 	ld xwa, (xsp + 78)
 	ld xbc, xiz
 	ld xde, (xsp + 74)
@@ -6399,7 +6399,7 @@ LABEL_F2FED2:
 StringDraw_CleanupAndReturn:
 	lds32 xhl, 0
 
-LABEL_F2FF04:
+SngSel_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 78)
 	ret
@@ -6409,15 +6409,15 @@ SngSelFunc:
 	push xiz
 	ld (xsp + 4), xwa
 	cp xbc, 0x1E80069
-	jr z, LABEL_F2FF88
+	jr z, SngSelFunc_GetTitleIndex
 	cp xbc, 0x1E00045
-	jr z, LABEL_F2FF7F
+	jr z, SngSelFunc_LoadTitleCount
 	cp xbc, 0x1E00047
-	jr z, LABEL_F2FF2B
+	jr z, SngSelFunc_HandleEvent47
 	lds32 xhl, 0
 	jr ReturnTitleOrZero
 
-LABEL_F2FF2B:
+SngSelFunc_HandleEvent47:
 	ld xiz, xde
 	pushw 0xE3
 	pushw 0x4714
@@ -6450,12 +6450,12 @@ LABEL_F2FF2B:
 	ld xhl, (xsp + 4)
 	jr ReturnTitleOrZero
 
-LABEL_F2FF7F:
+SngSelFunc_LoadTitleCount:
 	lds32 xhl, 0
 	ld8_24 l, 0x00ffe3
 	jr ReturnTitleOrZero
 
-LABEL_F2FF88:
+SngSelFunc_GetTitleIndex:
 	call GetTitleNow
 	ldb h, 0x0
 	extz xhl
@@ -6468,9 +6468,9 @@ ReturnTitleOrZero:
 PlySngSelFunc:
 	ld xhl, xwa
 	cp xbc, 0x1C00007
-	jr z, LABEL_F2FFF1
+	jr z, PlySngSel_HandleSelectEvent
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2FFCE
+	jr z, PlySngSel_HandleTimerEvent
 	cp xbc, 0x1C00001
 	jr nz, PlaySong_ReturnZero
 	ld xwa, 0x1C00002
@@ -6484,26 +6484,26 @@ PlySngSelFunc:
 	stdi8 58254, 1
 	jr PlaySong_ReturnZero
 
-LABEL_F2FFCE:
+PlySngSel_HandleTimerEvent:
 	call GetTitleNow
 	cp xhl, 0x1A00081
-	jr nz, LABEL_F2FFEA
+	jr nz, PlySngSel_ClearFlagAndReturn
 	ld xwa, 0x810012
 	ld xbc, 0x1C00001
 	lds32 xde, 5
 	call SendEvent
 
-LABEL_F2FFEA:
+PlySngSel_ClearFlagAndReturn:
 	stdi8 58254, 0
 	jr PlaySong_ReturnZero
 
-LABEL_F2FFF1:
+PlySngSel_HandleSelectEvent:
 	ld xwa, 0xC8
 	cp xde, 0xF
-	jr nz, LABEL_F30000
+	jr nz, PlySngSel_ResetTimerCommon
 	lds32 xwa, 0
 
-LABEL_F30000:
+PlySngSel_ResetTimerCommon:
 	ld xbc, 0x1C00002
 	push xbc
 	lds32 xbc, 0
@@ -6583,7 +6583,7 @@ AcEntertainer_EventDispatch:
 	ld xde, xiz
 	ld xwa, 0x1480002
 	ld xbc, 0x1C0000B
-LABEL_F300EC:
+EntGrid_PostMainEvent:
 	call MainPostEvent
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
@@ -6620,7 +6620,7 @@ LABEL_F300EC:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F3019E
+	jr z, EntGrid_CheckOverflow1
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -6642,7 +6642,7 @@ LABEL_F300EC:
 	call SetAutoInc
 	jrl Entertainer_ReturnZeroJmp
 
-LABEL_F3019E:
+EntGrid_CheckOverflow1:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -6668,7 +6668,7 @@ LABEL_F3019E:
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_F302A0
+	jrl EntGrid_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6678,7 +6678,7 @@ LABEL_F3019E:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F30250
+	jr z, EntGrid_CheckOverflow2
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -6700,7 +6700,7 @@ LABEL_F3019E:
 	call SetAutoInc
 	jrl Entertainer_ReturnZeroJmp
 
-LABEL_F30250:
+EntGrid_CheckOverflow2:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -6727,7 +6727,7 @@ LABEL_F30250:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_F302A0:
+EntGrid_SetDialEnable:
 	call SetDialEnable
 	jr Entertainer_ReturnZeroJmp
 
@@ -6735,14 +6735,14 @@ LABEL_F302A0:
 EntGrid_PostEvent:
 	ld xwa, xiz
 	ld xiz, 0x3E
-	jr LABEL_F302B6
+	jr EntGrid_GetViewAndCopy
 
 ; Entertainer grid post return
 EntGrid_PostReturn:
 	ld xwa, xiz
 	ld xiz, 0x42
 
-LABEL_F302B6:
+EntGrid_GetViewAndCopy:
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -6790,7 +6790,7 @@ CallApFuncPath:
 
 Entertainer_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F30321
+	jr EntGrid_Epilogue
 
 ; Entertainer grid cell action 3
 EntGrid_CellAction3:
@@ -6799,7 +6799,7 @@ EntGrid_CellAction3:
 	ld xde, (xsp + 12)
 	call InheritedProc
 
-LABEL_F30321:
+EntGrid_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -6943,7 +6943,7 @@ EntGridCheck_Handler:
 	ld_sril3 XDE, 0x07, 0xE4, 0xE0
 	ld xbc, (xsp + 24)
 	cp xde, 0x4E13
-	jrl z, LABEL_F307BD
+	jrl z, EntGridCheck_Handle4E13
 	ld xhl, (xsp + 20)
 	lda xwa, (xhl + 1)
 	ld (xsp + 36), xwa
@@ -6951,15 +6951,15 @@ EntGridCheck_Handler:
 	ld (xsp + 32), xwa
 	ld xwa, xde
 	cp xde, 0x4E12
-	jrl z, LABEL_F3076F
+	jrl z, EntGridCheck_Handle4E12
 	cp xde, 0x4E11
-	jrl z, LABEL_F30725
+	jrl z, EntGridCheck_Handle4E11
 	cp xde, 0x4E10
-	jrl z, LABEL_F306DA
+	jrl z, EntGridCheck_Handle4E10
 	cp xde, 0x4E00
-	jr z, LABEL_F306A6
+	jr z, EntGridCheck_Handle4E00
 	cp xde, 0x4140
-	jr z, LABEL_F30678
+	jr z, EntGridCheck_Handle4140
 	cp xde, 0x4141
 	jrl nz, SndParam_ReturnZero
 	call SndParam_LookupReadOnly
@@ -6976,14 +6976,14 @@ EntGridCheck_Handler:
 	ld xbc, 0x1E0008C
 	jrl SndParam_SendEventReturnZero
 
-LABEL_F30678:
+EntGridCheck_Handle4140:
 	call SndParam_LookupReadOnly
 	ld xwa, 0xE347B0
 	cps hl, 0
-	jr z, LABEL_F3068A
+	jr z, EntGridCheck_CopyStringResult
 	ld xwa, 0xE347A6
 
-LABEL_F3068A:
+EntGridCheck_CopyStringResult:
 	push xwa
 	lda xwa, (xsp + 52)
 	push xwa
@@ -6995,7 +6995,7 @@ LABEL_F3068A:
 	ld xbc, 0x1E0008C
 	jrl SndParam_SendEventReturnZero
 
-LABEL_F306A6:
+EntGridCheck_Handle4E00:
 	pushw 0x9
 	ldda16 xwa, 10614
 	extz xwa
@@ -7015,7 +7015,7 @@ LABEL_F306A6:
 	ld xbc, 0x1E0008C
 	jrl SndParam_SendEventReturnZero
 
-LABEL_F306DA:
+EntGridCheck_Handle4E10:
 	ld xwa, (xsp + 20)
 	ld (xwa), 0x20
 	ld xwa, (xsp + 36)
@@ -7043,7 +7043,7 @@ LABEL_F306DA:
 	ld xbc, 0x1E0008C
 	jrl SndParam_SendEventReturnZero
 
-LABEL_F30725:
+EntGridCheck_Handle4E11:
 	ld xwa, (xsp + 20)
 	ld (xwa), 0x20
 	pushw 0x5
@@ -7070,7 +7070,7 @@ LABEL_F30725:
 	ld xbc, 0x1E0008C
 	jrl SndParam_SendEventReturnZero
 
-LABEL_F3076F:
+EntGridCheck_Handle4E12:
 	ld xde, (xsp + 20)
 	ld (xde), 0x20
 	ld xwa, (xsp + 36)
@@ -7099,7 +7099,7 @@ LABEL_F3076F:
 	ld xbc, 0x1E0008C
 	jrl SndParam_SendEventReturnZero
 
-LABEL_F307BD:
+EntGridCheck_Handle4E13:
 	pushm (xbc + 6)
 	pushw 0xE3
 	pushw 0x47BA
@@ -7156,14 +7156,14 @@ EntGridCheck_Default:
 	inc 2, xwa
 	ld (xsp + 36), xwa
 	cp xde, 0x3
-	jrl z, LABEL_F3090F
+	jrl z, EntGridCheck_SendAudioCommand
 	ld xwa, (xsp + 20)
 	lda xbc, (xwa + 1)
 	cp xde, 0x2
-	jr z, LABEL_F308D4
+	jr z, EntGridCheck_DefaultCase2
 	ld xwa, xde
 	cp xwa, 0x1
-	jr z, LABEL_F308A3
+	jr z, EntGridCheck_DefaultCase1
 	or xwa, xwa
 	jrl nz, SndParam_BuildDisplayEvent
 	ld (xbc), 0x20
@@ -7184,9 +7184,9 @@ EntGridCheck_Default:
 	lda xwa, (xsp + 48)
 	ld (xwa + 7), 0x73
 	ld (xwa + 8), 0x20
-	jr LABEL_F30909
+	jr EntGridCheck_NullTerminate
 
-LABEL_F308A3:
+EntGridCheck_DefaultCase1:
 	pushw 0x5
 	ld xwa, (xsp + 26)
 	ld wa, (xwa + 2)
@@ -7204,9 +7204,9 @@ LABEL_F308A3:
 	ld (xwa + 6), 0x48
 	ld (xwa + 7), 0x7A
 	ld (xwa + 8), 0x20
-	jr LABEL_F30909
+	jr EntGridCheck_NullTerminate
 
-LABEL_F308D4:
+EntGridCheck_DefaultCase2:
 	ld (xbc), 0x20
 	ld xwa, (xsp + 36)
 	ld (xwa), 0x20
@@ -7228,11 +7228,11 @@ LABEL_F308D4:
 	lda xwa, (xsp + 48)
 	ld (xwa + 8), 0x20
 
-LABEL_F30909:
+EntGridCheck_NullTerminate:
 	ld (xwa + 9), 0x0
 	jr SndParam_BuildDisplayEvent
 
-LABEL_F3090F:
+EntGridCheck_SendAudioCommand:
 	ld xwa, (xsp + 24)
 	pushm (xwa + 6)
 	pushw 0xE3
@@ -7264,15 +7264,15 @@ IvSongCopyExitProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1C00007
-	jr z, LABEL_F30978
+	jr z, IvSongCopyExit_HandleSelectEvent
 	cp xiz, 0x1E0003A
-	jr z, LABEL_F30964
+	jr z, IvSongCopyExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
-	jr LABEL_F309CF
+	jr IvSongCopyExit_CallInherited
 
-LABEL_F30964:
+IvSongCopyExit_CopyString:
 	pushw 0xE3
 	pushw 0x4800
 	ld xwa, (xsp + 8)
@@ -7280,43 +7280,43 @@ LABEL_F30964:
 	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
-	jr LABEL_F309D3
+	jr IvSongCopyExit_Epilogue
 
-LABEL_F30978:
+IvSongCopyExit_HandleSelectEvent:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1E00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F309C7
+	jr z, IvSongCopyExit_PrepareInherited
 	call GetTitleNow
 	cp xhl, 0x1A00091
-	jr nz, LABEL_F309A8
+	jr nz, IvSongCopyExit_CheckTitleA8
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00093
-	jr LABEL_F309C3
+	jr IvSongCopyExit_PostEvent
 
-LABEL_F309A8:
+IvSongCopyExit_CheckTitleA8:
 	call GetTitleNow
 	cp xhl, 0x1A000A8
-	jr nz, LABEL_F309C7
+	jr nz, IvSongCopyExit_PrepareInherited
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00084
 
-LABEL_F309C3:
+IvSongCopyExit_PostEvent:
 	call PostEvent
 
-LABEL_F309C7:
+IvSongCopyExit_PrepareInherited:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 
-LABEL_F309CF:
+IvSongCopyExit_CallInherited:
 	call InheritedProc
 
-LABEL_F309D3:
+IvSongCopyExit_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -7328,15 +7328,15 @@ IvPnlWrExitProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1C00007
-	jr z, LABEL_F30A10
+	jr z, IvPnlWrExit_HandleSelectEvent
 	cp xiz, 0x1E0003A
-	jr z, LABEL_F309FC
+	jr z, IvPnlWrExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
-	jr LABEL_F30A67
+	jr IvPnlWrExit_CallInherited
 
-LABEL_F309FC:
+IvPnlWrExit_CopyString:
 	pushw 0xE3
 	pushw 0x4806
 	ld xwa, (xsp + 8)
@@ -7344,43 +7344,43 @@ LABEL_F309FC:
 	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
-	jr LABEL_F30A6B
+	jr IvPnlWrExit_Epilogue
 
-LABEL_F30A10:
+IvPnlWrExit_HandleSelectEvent:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1E00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F30A5F
+	jr z, IvPnlWrExit_PrepareInherited
 	call GetTitleNow
 	cp xhl, 0x1A0008D
-	jr nz, LABEL_F30A40
+	jr nz, IvPnlWrExit_CheckTitleAA
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00084
-	jr LABEL_F30A5B
+	jr IvPnlWrExit_PostEvent
 
-LABEL_F30A40:
+IvPnlWrExit_CheckTitleAA:
 	call GetTitleNow
 	cp xhl, 0x1A000AA
-	jr nz, LABEL_F30A5F
+	jr nz, IvPnlWrExit_PrepareInherited
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00080
 
-LABEL_F30A5B:
+IvPnlWrExit_PostEvent:
 	call PostEvent
 
-LABEL_F30A5F:
+IvPnlWrExit_PrepareInherited:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 
-LABEL_F30A67:
+IvPnlWrExit_CallInherited:
 	call InheritedProc
 
-LABEL_F30A6B:
+IvPnlWrExit_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -8309,13 +8309,13 @@ SqedtFixProc:
 	ldirw
 	ldi85
 	cp xhl, 0x1C0000B
-	jr z, LABEL_F315F8
+	jr z, SqedtFix_HandleInitEvent
 	ld xwa, xiz
 	ld xbc, xhl
 	call InheritedProc
-	jrl LABEL_F31E90
+	jrl SqedtFix_Epilogue
 
-LABEL_F315F8:
+SqedtFix_HandleInitEvent:
 	ld xwa, xiz
 	ld xbc, xhl
 	call InheritedProc
@@ -8611,15 +8611,15 @@ LABEL_F315F8:
 	lda xiz, (xwa + 4)
 	lda xiy, (xwa + 6)
 	cp l, 0xA8
-	jrl z, LABEL_F31C2C
+	jrl z, SqedtFix_SetupLayoutB
 	cp l, 0x91
-	jrl z, LABEL_F31C2C
+	jrl z, SqedtFix_SetupLayoutB
 	cp l, 0xA4
-	jr z, LABEL_F3195D
+	jr z, SqedtFix_SetupLayoutA
 	cp l, 0xA2
-	jrl nz, LABEL_F31E8E
+	jrl nz, SqedtFix_ReturnZero
 
-LABEL_F3195D:
+SqedtFix_SetupLayoutA:
 	ldw (xwa), 0xA
 	ldw (xix), 0x3A
 	ld de, (xwa)
@@ -8874,9 +8874,9 @@ LABEL_F3195D:
 	ld xhl, (xsp + 8)
 	pushm (xhl + 22)
 	pushm (xhl + 24)
-	jrl LABEL_F31E8A
+	jrl SqedtFix_DrawString
 
-LABEL_F31C2C:
+SqedtFix_SetupLayoutB:
 	ldw (xwa), 0x6
 	ldw (xix), 0x3E
 	ld de, (xwa)
@@ -9094,13 +9094,13 @@ LABEL_F31C2C:
 	pushm (xhl + 22)
 	pushm (xhl + 24)
 
-LABEL_F31E8A:
+SqedtFix_DrawString:
 	call DrawStringLeftJustify
 
-LABEL_F31E8E:
+SqedtFix_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F31E90:
+SqedtFix_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x82, 0x00
 	ret
@@ -9112,20 +9112,20 @@ SqedtVal3Proc:
 	ld xiz, xbc
 	ld (xsp + 66), xwa
 	cp xiz, 0x1C00018
-	jrl z, LABEL_F32218
+	jrl z, SqedtVal3_HandleSelectEvent2
 	cp xiz, 0x1C00017
-	jrl z, LABEL_F321E4
+	jrl z, SqedtVal3_HandleSelectEvent1
 	cp xiz, 0x1C0000F
-	jr z, LABEL_F31F13
+	jr z, SqedtVal3_HandleScrollEvent
 	cp xiz, 0x1C0000B
-	jr z, LABEL_F31ED4
+	jr z, SqedtVal3_HandleInitEvent
 	ld xwa, (xsp + 66)
 	ld xbc, xiz
 	ld xde, (xsp + 62)
 	call InheritedProc
-	jrl LABEL_F32250
+	jrl SqedtVal3_Epilogue
 
-LABEL_F31ED4:
+SqedtVal3_HandleInitEvent:
 	ld xwa, (xsp + 66)
 	ld xbc, xiz
 	ld xde, (xsp + 62)
@@ -9146,7 +9146,7 @@ LABEL_F31ED4:
 	call SetDialEnable
 	jrl SqedtVal_ReturnZero2
 
-LABEL_F31F13:
+SqedtVal3_HandleScrollEvent:
 	ld xwa, (xsp + 66)
 	ld xbc, xiz
 	ld xde, (xsp + 62)
@@ -9200,10 +9200,10 @@ LABEL_F31F13:
 	ld xwa, xhl
 	lda xbc, (xhl + 20)
 
-LABEL_F31FB4:
+SqedtVal3_FillBufferLoop1:
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F31FB4
+	jr c, SqedtVal3_FillBufferLoop1
 	ld (xde + 18), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
@@ -9259,10 +9259,10 @@ LABEL_F31FB4:
 	ld xwa, xhl
 	lda xbc, (xhl + 20)
 
-LABEL_F3205D:
+SqedtVal3_FillBufferLoop2:
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F3205D
+	jr c, SqedtVal3_FillBufferLoop2
 	ld (xde + 18), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
@@ -9318,10 +9318,10 @@ LABEL_F3205D:
 	ld xwa, xhl
 	lda xbc, (xhl + 20)
 
-LABEL_F32106:
+SqedtVal3_FillBufferLoop3:
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F32106
+	jr c, SqedtVal3_FillBufferLoop3
 	ld (xde + 18), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
@@ -9377,10 +9377,10 @@ LABEL_F32106:
 	ld xwa, xhl
 	lda xbc, (xhl + 20)
 
-LABEL_F321AF:
+SqedtVal3_FillBufferLoop4:
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F321AF
+	jr c, SqedtVal3_FillBufferLoop4
 	ld (xde + 18), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
@@ -9397,7 +9397,7 @@ LABEL_F321AF:
 	call DrawStringLeftJustify
 	jr SqedtVal_ReturnZero2
 
-LABEL_F321E4:
+SqedtVal3_HandleSelectEvent1:
 	ld xwa, (xsp + 66)
 	ld xbc, xiz
 	ld xde, (xsp + 62)
@@ -9412,9 +9412,9 @@ LABEL_F321E4:
 	ld xwa, (xsp + 66)
 	ld xbc, xiz
 	ld xde, (xsp + 62)
-	jr LABEL_F3224A
+	jr SqedtVal3_CallSetAutoInc
 
-LABEL_F32218:
+SqedtVal3_HandleSelectEvent2:
 	ld xwa, (xsp + 66)
 	ld xbc, xiz
 	ld xde, (xsp + 62)
@@ -9430,13 +9430,13 @@ LABEL_F32218:
 	ld xbc, xiz
 	ld xde, (xsp + 62)
 
-LABEL_F3224A:
+SqedtVal3_CallSetAutoInc:
 	call SetAutoInc
 
 SqedtVal_ReturnZero2:
 	lds32 xhl, 0
 
-LABEL_F32250:
+SqedtVal3_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 66)
 	ret
@@ -9449,22 +9449,22 @@ SqedtVal2Proc:
 	ld (xsp + 74), xwa
 	ld xwa, (xsp + 70)
 	cp xwa, 0x1C00018
-	jrl z, LABEL_F32C09
+	jrl z, SqedtVal2_HandleUpScrollInner
 	cp xwa, 0x1C00017
-	jrl z, LABEL_F32773
+	jrl z, SqedtVal2_HandleSelectEvent
 	cp xwa, 0x1C0000E
-	jrl z, LABEL_F32634
+	jrl z, SqedtVal2_HandleUpScrollEvent
 	cp xwa, 0x1C0000F
-	jrl z, LABEL_F32380
+	jrl z, SqedtVal2_HandleScrollEvent
 	cp xwa, 0x1C0000B
-	jr z, LABEL_F322A1
+	jr z, SqedtVal2_HandleInitEvent
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
 	call InheritedProc
-	jrl LABEL_F33132
+	jrl SqedtVal2_Epilogue
 
-LABEL_F322A1:
+SqedtVal2_HandleInitEvent:
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
@@ -9495,11 +9495,11 @@ LABEL_F322A1:
 	ld xde, 0x10001
 	call SendEvent
 	cp (xsp + 6), 0xA2
-	jr z, LABEL_F32314
+	jr z, SqedtVal2_SendA2A4Events
 	cp (xsp + 6), 0xA4
-	jr nz, LABEL_F32333
+	jr nz, SqedtVal2_SendCommonEvents
 
-LABEL_F32314:
+SqedtVal2_SendA2A4Events:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000E
 	lds32 xde, 2
@@ -9509,7 +9509,7 @@ LABEL_F32314:
 	ld xde, 0x10002
 	call SendEvent
 
-LABEL_F32333:
+SqedtVal2_SendCommonEvents:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000E
 	ld xde, 0x100
@@ -9531,7 +9531,7 @@ LABEL_F32333:
 	sti8_24 0x03e2e0, 0x00
 	jrl AccIll_ReturnZero2
 
-LABEL_F32380:
+SqedtVal2_HandleScrollEvent:
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
@@ -9667,7 +9667,7 @@ AccIll_Dispatch:
 	.byte 0x9b, 0x18, 0x04, 0x1d, 0x4a, 0xcf, 0xfa, 0x78
 	.byte 0xfc, 0x0a
 
-LABEL_F32634:
+SqedtVal2_HandleUpScrollEvent:
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
@@ -9685,17 +9685,17 @@ LABEL_F32634:
 	and xwa, 0xFF
 	ldfr_berp A, 0xFB
 	cps c, 0
-	jr nz, LABEL_F326DB
+	jr nz, SqedtVal2_HandleDownScrollEvent
 	lda xix, (xsp + 58)
 	lda xbc, (xix + 2)
 	lda xde, (xix + 4)
 	lda xhl, (xix + 6)
 	cp (xsp + 6), 0x91
-	jr z, LABEL_F32688
+	jr z, SqedtVal2_UpScrollModeA2
 	cp (xsp + 6), 0xA8
-	jr nz, LABEL_F326AE
+	jr nz, SqedtVal2_UpScrollDefault
 
-LABEL_F32688:
+SqedtVal2_UpScrollModeA2:
 	ldto_berp A, 0xFB
 	extz wa
 	sla wa, 3
@@ -9709,9 +9709,9 @@ LABEL_F32688:
 	add wa, (xiy + 6)
 	ld (xhl), wa
 	ld xwa, xiy
-	jr LABEL_F326D2
+	jr SqedtVal2_UpScrollCalcOffset
 
-LABEL_F326AE:
+SqedtVal2_UpScrollDefault:
 	ldto_berp A, 0xFB
 	extz wa
 	sla wa, 3
@@ -9726,22 +9726,22 @@ LABEL_F326AE:
 	ld (xhl), wa
 	ld xwa, xiy
 
-LABEL_F326D2:
+SqedtVal2_UpScrollCalcOffset:
 	ld bc, (xix)
 	add bc, (xwa + 4)
 	ld (xde), bc
-	jr LABEL_F32743
+	jr SqedtVal2_DrawScrollFrame
 
-LABEL_F326DB:
+SqedtVal2_HandleDownScrollEvent:
 	ldto_berp A, 0xFB
 	extz wa
 	sla wa, 3
 	cp (xsp + 6), 0x91
-	jr z, LABEL_F326EF
+	jr z, SqedtVal2_DownScrollModeA2
 	cp (xsp + 6), 0xA8
-	jr nz, LABEL_F32716
+	jr nz, SqedtVal2_DownScrollDefault
 
-LABEL_F326EF:
+SqedtVal2_DownScrollModeA2:
 	lda xhl, (xsp + 58)
 	lda xde, (xhl + 2)
 	lda_24 xbc, 0xe3487a
@@ -9755,9 +9755,9 @@ LABEL_F326EF:
 	ld (xhl + 6), wa
 	ld xwa, xbc
 	ld xbc, xhl
-	jr LABEL_F3273B
+	jr SqedtVal2_DownScrollCalcOffset
 
-LABEL_F32716:
+SqedtVal2_DownScrollDefault:
 	lda xhl, (xsp + 58)
 	lda xde, (xhl + 2)
 	lda_24 xbc, 0xe34862
@@ -9772,35 +9772,35 @@ LABEL_F32716:
 	ld xwa, xbc
 	ld xbc, xhl
 
-LABEL_F3273B:
+SqedtVal2_DownScrollCalcOffset:
 	ld bc, (xbc)
 	add bc, (xwa + 4)
 	ld (xhl + 4), bc
 
-LABEL_F32743:
+SqedtVal2_DrawScrollFrame:
 	ld xwa, (xsp + 66)
 	srl xwa, 8
 	and xwa, 0xFF
 	cps a, 1
-	jr nz, LABEL_F3275F
+	jr nz, SqedtVal2_DrawWithViewColors
 	lda xwa, (xsp + 58)
 	pushw 0xF2
 	lds bc, 1
 	lds de, 2
-	jr LABEL_F3276C
+	jr SqedtVal2_CallDrawDesignFrame
 
-LABEL_F3275F:
+SqedtVal2_DrawWithViewColors:
 	lda xwa, (xsp + 58)
 	ld xbc, (xsp + 8)
 	pushm (xbc + 24)
 	lds bc, 1
 	lds de, 2
 
-LABEL_F3276C:
+SqedtVal2_CallDrawDesignFrame:
 	call DrawDesignFrame
 	jrl AccIll_ReturnZero2
 
-LABEL_F32773:
+SqedtVal2_HandleSelectEvent:
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
@@ -9814,7 +9814,7 @@ LABEL_F32773:
 	lda xbc, (xwa + 26)
 	ld xwa, (xsp + 66)
 	cp xwa, 0x1
-	jrl nz, LABEL_F32931
+	jrl nz, SqedtVal2_HandleSelectCase3
 	sti8_24 0x03e2e0, 0x00
 	ld xwa, (xbc)
 	ld xbc, 0x1E8003A
@@ -9822,7 +9822,7 @@ LABEL_F32773:
 	call ApFuncCall
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F327FD
+	jr z, SqedtVal2_CheckModeA2
 	lds32 xde, 0
 	ldto_berp E, 0xFB
 	ld xwa, (xsp + 74)
@@ -9842,9 +9842,9 @@ LABEL_F32773:
 	ld xbc, 0x1C0000E
 	call SendEvent
 
-LABEL_F327FD:
+SqedtVal2_CheckModeA2:
 	cp (xsp + 6), 0xA2
-	jr nz, LABEL_F32868
+	jr nz, SqedtVal2_CheckModeA4
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0xF
@@ -9868,11 +9868,11 @@ LABEL_F327FD:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x14
-	jrl LABEL_F32912
+	jrl SqedtVal2_SendScrollAndDial
 
-LABEL_F32868:
+SqedtVal2_CheckModeA4:
 	cp (xsp + 6), 0xA4
-	jr nz, LABEL_F328D2
+	jr nz, SqedtVal2_DefaultScrollSend
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x15
@@ -9896,9 +9896,9 @@ LABEL_F32868:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x1A
-	jr LABEL_F32912
+	jr SqedtVal2_SendScrollAndDial
 
-LABEL_F328D2:
+SqedtVal2_DefaultScrollSend:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x1B
@@ -9915,7 +9915,7 @@ LABEL_F328D2:
 	ld xbc, 0x1C0000F
 	ld xde, 0x1E
 
-LABEL_F32912:
+SqedtVal2_SendScrollAndDial:
 	call SendEvent
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C00017
@@ -9926,10 +9926,10 @@ LABEL_F32912:
 	lds32 xde, 2
 	jrl AccIll_CallSetDialDown
 
-LABEL_F32931:
+SqedtVal2_HandleSelectCase3:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x3
-	jrl nz, LABEL_F32AD1
+	jrl nz, SqedtVal2_HandleSelectCase2
 	sti8_24 0x03e2e0, 0x01
 	ld xwa, (xbc)
 	ld xbc, 0x1E8003C
@@ -9937,7 +9937,7 @@ LABEL_F32931:
 	call ApFuncCall
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr z, LABEL_F3299D
+	jr z, SqedtVal2_SelectCase3_ModeA2
 	lds32 xde, 0
 	ldto_berp E, 0xFB
 	add xde, 0x10000
@@ -9958,9 +9958,9 @@ LABEL_F32931:
 	ld xbc, 0x1C0000E
 	call SendEvent
 
-LABEL_F3299D:
+SqedtVal2_SelectCase3_ModeA2:
 	cp (xsp + 6), 0xA2
-	jr nz, LABEL_F32A08
+	jr nz, SqedtVal2_SelectCase3_ModeA4
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0xF
@@ -9984,11 +9984,11 @@ LABEL_F3299D:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x14
-	jrl LABEL_F32AB2
+	jrl SqedtVal2_SelectCase3_SendDial
 
-LABEL_F32A08:
+SqedtVal2_SelectCase3_ModeA4:
 	cp (xsp + 6), 0xA4
-	jr nz, LABEL_F32A72
+	jr nz, SqedtVal2_SelectCase3_Default
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x15
@@ -10012,9 +10012,9 @@ LABEL_F32A08:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x1A
-	jr LABEL_F32AB2
+	jr SqedtVal2_SelectCase3_SendDial
 
-LABEL_F32A72:
+SqedtVal2_SelectCase3_Default:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x1B
@@ -10031,7 +10031,7 @@ LABEL_F32A72:
 	ld xbc, 0x1C0000F
 	ld xde, 0x1E
 
-LABEL_F32AB2:
+SqedtVal2_SelectCase3_SendDial:
 	call SendEvent
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C00017
@@ -10042,10 +10042,10 @@ LABEL_F32AB2:
 	lds32 xde, 4
 	jrl AccIll_CallSetDialDown
 
-LABEL_F32AD1:
+SqedtVal2_HandleSelectCase2:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x2
-	jrl nz, LABEL_F32B6D
+	jrl nz, SqedtVal2_HandleSelectCase4
 	sti8_24 0x03e2e0, 0x00
 	ld xwa, (xbc)
 	ld xbc, 0x1E8003A
@@ -10053,27 +10053,27 @@ LABEL_F32AD1:
 	call ApFuncCall
 	ldfr_berp L, 0xFB
 	cp (xsp + 6), 0xA2
-	jr nz, LABEL_F32B0F
+	jr nz, SqedtVal2_SelectCase2_ModeA4
 	ldto_berp E, 0xFB
 	add e, 0xF
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80014
-	jr LABEL_F32B3F
+	jr SqedtVal2_SelectCase2_PostEvent
 
-LABEL_F32B0F:
+SqedtVal2_SelectCase2_ModeA4:
 	cp (xsp + 6), 0xA4
-	jr nz, LABEL_F32B2B
+	jr nz, SqedtVal2_SelectCase2_Default
 	ldto_berp E, 0xFB
 	add e, 0x15
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80014
-	jr LABEL_F32B3F
+	jr SqedtVal2_SelectCase2_PostEvent
 
-LABEL_F32B2B:
+SqedtVal2_SelectCase2_Default:
 	ldto_berp E, 0xFB
 	add e, 0x1B
 	ldb d, 0x0
@@ -10081,7 +10081,7 @@ LABEL_F32B2B:
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80014
 
-LABEL_F32B3F:
+SqedtVal2_SelectCase2_PostEvent:
 	call MainPostEvent
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
@@ -10096,7 +10096,7 @@ LABEL_F32B3F:
 	ld xde, (xsp + 66)
 	jrl AccIll_CallSetDialDown
 
-LABEL_F32B6D:
+SqedtVal2_HandleSelectCase4:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x4
 	jrl nz, AccIll_ReturnZero2
@@ -10107,27 +10107,27 @@ LABEL_F32B6D:
 	call ApFuncCall
 	ldfr_berp L, 0xFB
 	cp (xsp + 6), 0xA2
-	jr nz, LABEL_F32BAB
+	jr nz, SqedtVal2_SelectCase4_ModeA4
 	ldto_berp E, 0xFB
 	add e, 0x12
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80014
-	jr LABEL_F32BDB
+	jr SqedtVal2_SelectCase4_PostEvent
 
-LABEL_F32BAB:
+SqedtVal2_SelectCase4_ModeA4:
 	cp (xsp + 6), 0xA4
-	jr nz, LABEL_F32BC7
+	jr nz, SqedtVal2_SelectCase4_Default
 	ldto_berp E, 0xFB
 	add e, 0x18
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80014
-	jr LABEL_F32BDB
+	jr SqedtVal2_SelectCase4_PostEvent
 
-LABEL_F32BC7:
+SqedtVal2_SelectCase4_Default:
 	ldto_berp E, 0xFB
 	add e, 0x1D
 	ldb d, 0x0
@@ -10135,7 +10135,7 @@ LABEL_F32BC7:
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80014
 
-LABEL_F32BDB:
+SqedtVal2_SelectCase4_PostEvent:
 	call MainPostEvent
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
@@ -10150,7 +10150,7 @@ LABEL_F32BDB:
 	ld xde, (xsp + 66)
 	jrl AccIll_CallSetDialDown
 
-LABEL_F32C09:
+SqedtVal2_HandleUpScrollInner:
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
@@ -10162,7 +10162,7 @@ LABEL_F32C09:
 	ld (xsp + 6), l
 	ld xwa, (xsp + 66)
 	cp xwa, 0x1
-	jrl nz, LABEL_F32E0B
+	jrl nz, SqedtVal2_HandleDownScrollInner
 	sti8_24 0x03e2e0, 0x00
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
@@ -10173,13 +10173,13 @@ LABEL_F32C09:
 	lds32 xde, 0
 	ldto_berp E, 0xFB
 	cp (xsp + 6), 0x91
-	jr z, LABEL_F32C5F
+	jr z, SqedtVal2_UpInner_CheckA8
 	cp (xsp + 6), 0xA8
-	jrl nz, LABEL_F32CE1
+	jrl nz, SqedtVal2_UpInner_CheckA4
 
-LABEL_F32C5F:
+SqedtVal2_UpInner_CheckA8:
 	cpi_berp 0xFB, 1
-	jr nc, LABEL_F32C87
+	jr nc, SqedtVal2_UpInner_SendExtra
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000E
 	call SendEvent
@@ -10191,7 +10191,7 @@ LABEL_F32C5F:
 	ld xbc, 0x1E8003B
 	call ApFuncCall
 
-LABEL_F32C87:
+SqedtVal2_UpInner_SendExtra:
 	lds32 xde, 0
 	ldto_berp E, 0xFB
 	add xde, 0x100
@@ -10213,11 +10213,11 @@ LABEL_F32C87:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x1E
-	jrl LABEL_F32DEC
+	jrl SqedtVal2_UpInner_SendDial
 
-LABEL_F32CE1:
+SqedtVal2_UpInner_CheckA4:
 	cpi_berp 0xFB, 2
-	jr nc, LABEL_F32D20
+	jr nc, SqedtVal2_UpInner_SendFields
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000E
 	call SendEvent
@@ -10235,9 +10235,9 @@ LABEL_F32CE1:
 	ld xbc, 0x1C0000E
 	call SendEvent
 
-LABEL_F32D20:
+SqedtVal2_UpInner_SendFields:
 	cp (xsp + 6), 0xA2
-	jr nz, LABEL_F32D8A
+	jr nz, SqedtVal2_UpInner_ModeA4Scroll
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0xF
@@ -10261,9 +10261,9 @@ LABEL_F32D20:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x14
-	jr LABEL_F32DEC
+	jr SqedtVal2_UpInner_SendDial
 
-LABEL_F32D8A:
+SqedtVal2_UpInner_ModeA4Scroll:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x15
@@ -10288,7 +10288,7 @@ LABEL_F32D8A:
 	ld xbc, 0x1C0000F
 	ld xde, 0x1A
 
-LABEL_F32DEC:
+SqedtVal2_UpInner_SendDial:
 	call SendEvent
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C00017
@@ -10299,12 +10299,12 @@ LABEL_F32DEC:
 	lds32 xde, 2
 	jrl AccIll_CallSetDialDown
 
-LABEL_F32E0B:
+SqedtVal2_HandleDownScrollInner:
 	ld xwa, (xsp + 8)
 	lda xbc, (xwa + 26)
 	ld xwa, (xsp + 66)
 	cp xwa, 0x3
-	jrl nz, LABEL_F32FF7
+	jrl nz, SqedtVal2_HandleDownCase2
 	sti8_24 0x03e2e0, 0x01
 	ld xwa, (xbc)
 	ld xbc, 0x1E8003C
@@ -10315,13 +10315,13 @@ LABEL_F32E0B:
 	ldto_berp E, 0xFB
 	add xde, 0x10000
 	cp (xsp + 6), 0x91
-	jr z, LABEL_F32E4B
+	jr z, SqedtVal2_DownInner_CheckA8
 	cp (xsp + 6), 0xA8
-	jrl nz, LABEL_F32ECD
+	jrl nz, SqedtVal2_DownInner_CheckA4
 
-LABEL_F32E4B:
+SqedtVal2_DownInner_CheckA8:
 	cpi_berp 0xFB, 1
-	jr nc, LABEL_F32E8A
+	jr nc, SqedtVal2_DownInner_SendFields
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000E
 	call SendEvent
@@ -10339,7 +10339,7 @@ LABEL_F32E4B:
 	ld xbc, 0x1C0000E
 	call SendEvent
 
-LABEL_F32E8A:
+SqedtVal2_DownInner_SendFields:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x1B
@@ -10355,11 +10355,11 @@ LABEL_F32E8A:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x1E
-	jrl LABEL_F32FD8
+	jrl SqedtVal2_DownInner_SendDial
 
-LABEL_F32ECD:
+SqedtVal2_DownInner_CheckA4:
 	cpi_berp 0xFB, 2
-	jr nc, LABEL_F32F0C
+	jr nc, SqedtVal2_DownInner_SendExtra
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000E
 	call SendEvent
@@ -10377,9 +10377,9 @@ LABEL_F32ECD:
 	ld xbc, 0x1C0000E
 	call SendEvent
 
-LABEL_F32F0C:
+SqedtVal2_DownInner_SendExtra:
 	cp (xsp + 6), 0xA2
-	jr nz, LABEL_F32F76
+	jr nz, SqedtVal2_DownInner_ModeA4Scroll
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0xF
@@ -10403,9 +10403,9 @@ LABEL_F32F0C:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x14
-	jr LABEL_F32FD8
+	jr SqedtVal2_DownInner_SendDial
 
-LABEL_F32F76:
+SqedtVal2_DownInner_ModeA4Scroll:
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C0000F
 	ld xde, 0x15
@@ -10430,7 +10430,7 @@ LABEL_F32F76:
 	ld xbc, 0x1C0000F
 	ld xde, 0x1A
 
-LABEL_F32FD8:
+SqedtVal2_DownInner_SendDial:
 	call SendEvent
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1C00017
@@ -10441,10 +10441,10 @@ LABEL_F32FD8:
 	lds32 xde, 4
 	jrl AccIll_CallSetDialDown
 
-LABEL_F32FF7:
+SqedtVal2_HandleDownCase2:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x2
-	jrl nz, LABEL_F33093
+	jrl nz, SqedtVal2_HandleDownCase4
 	sti8_24 0x03e2e0, 0x00
 	ld xwa, (xbc)
 	ld xbc, 0x1E8003A
@@ -10452,27 +10452,27 @@ LABEL_F32FF7:
 	call ApFuncCall
 	ldfr_berp L, 0xFB
 	cp (xsp + 6), 0xA2
-	jr nz, LABEL_F33035
+	jr nz, SqedtVal2_DownCase2_ModeA4
 	ldto_berp E, 0xFB
 	add e, 0xF
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80015
-	jr LABEL_F33065
+	jr SqedtVal2_DownCase2_PostEvent
 
-LABEL_F33035:
+SqedtVal2_DownCase2_ModeA4:
 	cp (xsp + 6), 0xA4
-	jr nz, LABEL_F33051
+	jr nz, SqedtVal2_DownCase2_Default
 	ldto_berp E, 0xFB
 	add e, 0x15
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80015
-	jr LABEL_F33065
+	jr SqedtVal2_DownCase2_PostEvent
 
-LABEL_F33051:
+SqedtVal2_DownCase2_Default:
 	ldto_berp E, 0xFB
 	add e, 0x1B
 	ldb d, 0x0
@@ -10480,7 +10480,7 @@ LABEL_F33051:
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80015
 
-LABEL_F33065:
+SqedtVal2_DownCase2_PostEvent:
 	call MainPostEvent
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
@@ -10495,7 +10495,7 @@ LABEL_F33065:
 	ld xde, (xsp + 66)
 	jrl AccIll_CallSetDialDown
 
-LABEL_F33093:
+SqedtVal2_HandleDownCase4:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x4
 	jrl nz, AccIll_ReturnZero2
@@ -10506,27 +10506,27 @@ LABEL_F33093:
 	call ApFuncCall
 	ldfr_berp L, 0xFB
 	cp (xsp + 6), 0xA2
-	jr nz, LABEL_F330D1
+	jr nz, SqedtVal2_DownCase4_ModeA4
 	ldto_berp E, 0xFB
 	add e, 0x12
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80015
-	jr LABEL_F33101
+	jr SqedtVal2_DownCase4_PostEvent
 
-LABEL_F330D1:
+SqedtVal2_DownCase4_ModeA4:
 	cp (xsp + 6), 0xA4
-	jr nz, LABEL_F330ED
+	jr nz, SqedtVal2_DownCase4_Default
 	ldto_berp E, 0xFB
 	add e, 0x18
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80015
-	jr LABEL_F33101
+	jr SqedtVal2_DownCase4_PostEvent
 
-LABEL_F330ED:
+SqedtVal2_DownCase4_Default:
 	ldto_berp E, 0xFB
 	add e, 0x1D
 	ldb d, 0x0
@@ -10534,7 +10534,7 @@ LABEL_F330ED:
 	ld xwa, 0x1480000
 	ld xbc, 0x1E80015
 
-LABEL_F33101:
+SqedtVal2_DownCase4_PostEvent:
 	call MainPostEvent
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
@@ -10554,7 +10554,7 @@ AccIll_CallSetDialDown:
 AccIll_ReturnZero2:
 	lds32 xhl, 0
 
-LABEL_F33132:
+SqedtVal2_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 74)
 	ret
@@ -10871,21 +10871,21 @@ EffectBoxProc:
 	ldiw
 	ld_sril XWA, (xsp + 0x0152)
 	cp xwa, 0x1C00018
-	jrl z, LABEL_F33D60
+	jrl z, EffectBox_HandleCase0_Post
 	cp xwa, 0x1C00017
-	jrl z, LABEL_F33B77
+	jrl z, EffectBox_HandleDefaultEvent
 	cp xwa, 0x1C80001
-	jrl z, LABEL_F339BF
+	jrl z, EffectBox_HandleSelectEvent
 	cp xwa, 0x1C80000
-	jrl z, LABEL_F33627
+	jrl z, EffectBox_HandleScrollEvent
 	cp xwa, 0x1E8000F
-	jrl z, LABEL_F335E7
+	jrl z, EffectBox_HandleEvent1
 	cp xwa, 0x1E8000E
-	jrl z, LABEL_F335D9
+	jrl z, EffectBox_HandleEvent0
 	cp xwa, 0x1C0000E
-	jrl z, LABEL_F3354A
+	jrl z, EffectBox_HandleInitEvent
 	cp xwa, 0x1C0000B
-	jrl nz, LABEL_F33F96
+	jrl nz, EffectBox_HandleInherited
 	ld_sril XWA, (xsp + 0x0156)
 	ld_sril XBC, (xsp + 0x0152)
 	ld_sril XDE, (xsp + 0x014e)
@@ -10918,9 +10918,9 @@ EffectBoxProc:
 	lds32 xde, 2
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_F33B70
+	jrl EffectBox_SetDialDownAndEnable
 
-LABEL_F3354A:
+EffectBox_HandleInitEvent:
 	ld_sril XWA, (xsp + 0x0156)
 	ld_sril XBC, (xsp + 0x0152)
 	ld_sril XDE, (xsp + 0x014e)
@@ -10954,28 +10954,28 @@ LABEL_F3354A:
 	ld (xwa + 4), bc
 	ld_sril XBC, (xsp + 0x014e)
 	cp xbc, 0x1
-	jr nz, LABEL_F335CB
+	jr nz, EffectBox_DrawWithViewFrame
 	pushw 0xF2
 	lds bc, 1
 	lds de, 2
-	jr LABEL_F335D2
+	jr EffectBox_CallDrawDesignFrame
 
-LABEL_F335CB:
+EffectBox_DrawWithViewFrame:
 	pushm (xiz + 22)
 	lds bc, 1
 	lds de, 2
 
-LABEL_F335D2:
+EffectBox_CallDrawDesignFrame:
 	call DrawDesignFrame
 	jrl EffectBoxProc_ReturnZero
 
-LABEL_F335D9:
+EffectBox_HandleEvent0:
 	ld_sril XWA, (xsp + 0x0156)
 	ld xbc, 0x1C80000
 	lds32 xde, 0
-	jr LABEL_F33620
+	jr EffectBox_SendEventCommon
 
-LABEL_F335E7:
+EffectBox_HandleEvent1:
 	ld_sril XWA, (xsp + 0x0156)
 	call GetViewInstance
 	ld xwa, (xhl + 28)
@@ -10990,11 +10990,11 @@ LABEL_F335E7:
 	ld xbc, 0x1C80001
 	ld_sril XDE, (xsp + 0x014e)
 
-LABEL_F33620:
+EffectBox_SendEventCommon:
 	call SendEvent
 	jrl EffectBoxProc_ReturnZero
 
-LABEL_F33627:
+EffectBox_HandleScrollEvent:
 	ld_sril XWA, (xsp + 0x0156)
 	call GetViewInstance
 	ld (xsp + 4), xhl
@@ -11037,10 +11037,10 @@ LABEL_F33627:
 	ld xwa, xbc
 	lda xbc, (xbc + 20)
 
-LABEL_F336A1:
+EffectBox_FillBufferLoop1:
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F336A1
+	jr c, EffectBox_FillBufferLoop1
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1E00045
@@ -11087,17 +11087,17 @@ LABEL_F336A1:
 	ld xwa, xbc
 	lda xbc, (xbc + 20)
 
-LABEL_F33739:
+EffectBox_FillBufferLoop2:
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F33739
+	jr c, EffectBox_FillBufferLoop2
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1E80000
 	call ApFuncCall
 	lds iz, 0
 
-LABEL_F33752:
+EffectBox_PostFillSetup:
 	st_dri3b B, 0xFD, 0x3E, 0x01
 	lda xbc, (xde + 2)
 	ld wa, iz
@@ -11136,7 +11136,7 @@ LABEL_F33752:
 	call DrawStringLeftJustify
 	inc 1, iz
 	cp iz, 0x8
-	jr c, LABEL_F33752
+	jr c, EffectBox_PostFillSetup
 	st_dri3b A, 0xFD, 0x3E, 0x01
 	ldw (xbc), 0x100
 	ldw wa, 0x100
@@ -11152,13 +11152,13 @@ LABEL_F33752:
 	ld xwa, xbc
 	lda xbc, (xbc + 20)
 
-LABEL_F337EE:
+EffectBox_FillBufferLoop3:
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F337EE
+	jr c, EffectBox_FillBufferLoop3
 	lds iz, 0
 
-LABEL_F337F8:
+EffectBox_PostFill3Setup:
 	st_dri3b B, 0xFD, 0x3E, 0x01
 	lda xbc, (xde + 2)
 	ld wa, iz
@@ -11199,7 +11199,7 @@ LABEL_F337F8:
 	call DrawStringLeftJustify
 	inc 1, iz
 	cp iz, 0x8
-	jr c, LABEL_F337F8
+	jr c, EffectBox_PostFill3Setup
 	st_dri3b D, 0xFD, 0x3E, 0x01
 	ldw (xix), 0x2B
 	lda xde, (xix + 4)
@@ -11231,7 +11231,7 @@ LABEL_F337F8:
 	lds32 xde, 0
 	call ApFuncCall
 	or xhl, xhl
-	jr z, LABEL_F338E2
+	jr z, EffectBox_SetEmptyString1
 	pushw 0x4
 	lda xwa, (xsp + 14)
 	push xwa
@@ -11240,14 +11240,14 @@ LABEL_F337F8:
 	call Strncpy
 	lda xsp, (xsp + 10)
 	ld (xsp + 42), 0x0
-	jr LABEL_F338EC
+	jr EffectBox_DrawField1
 
-LABEL_F338E2:
+EffectBox_SetEmptyString1:
 	lda xwa, (xsp + 38)
 	ld (xwa), 0x20
 	ld (xwa + 1), 0x0
 
-LABEL_F338EC:
+EffectBox_DrawField1:
 	st_dri3b W, 0xFD, 0x3E, 0x01
 	st_dri3b A, 0xFD, 0x3A, 0x01
 	lda xde, (xsp + 38)
@@ -11286,7 +11286,7 @@ LABEL_F338EC:
 	call ApFuncCall
 	lda xwa, (xsp + 38)
 	or xhl, xhl
-	jr z, LABEL_F3397C
+	jr z, EffectBox_SetEmptyString2
 	pushw 0x4
 	lda xbc, (xsp + 10)
 	push xbc
@@ -11294,13 +11294,13 @@ LABEL_F338EC:
 	call Strncpy
 	lda xsp, (xsp + 10)
 	ld (xsp + 42), 0x0
-	jr LABEL_F33983
+	jr EffectBox_DrawField2
 
-LABEL_F3397C:
+EffectBox_SetEmptyString2:
 	ld (xwa), 0x20
 	ld (xwa + 1), 0x0
 
-LABEL_F33983:
+EffectBox_DrawField2:
 	st_dri3b W, 0xFD, 0x3E, 0x01
 	st_dri3b A, 0xFD, 0x3A, 0x01
 	lda xde, (xsp + 38)
@@ -11312,7 +11312,7 @@ LABEL_F33983:
 	call DrawStringLeftJustify
 	lds iz, 0
 
-LABEL_F339A2:
+EffectBox_DrawAndSendLoop:
 	ld de, iz
 	extz xde
 	ld_sril XWA, (xsp + 0x0156)
@@ -11320,10 +11320,10 @@ LABEL_F339A2:
 	call SendEvent
 	inc 1, iz
 	cp iz, 0x8
-	jr c, LABEL_F339A2
+	jr c, EffectBox_DrawAndSendLoop
 	jrl EffectBoxProc_ReturnZero
 
-LABEL_F339BF:
+EffectBox_HandleSelectEvent:
 	ld_sril XWA, (xsp + 0x014e)
 	cp xwa, 0x7
 	jrl ugt, EffectBoxProc_ReturnZero
@@ -11444,15 +11444,15 @@ EffectBoxProc_CopyNameAndSetup:
 	st_dri3b W, 0xFD, 0x3E, 0x01
 	st_dri3b A, 0xFD, 0x3A, 0x01
 	cp_sril_rm XHL, 0xFD, 0x4E, 0x01
-	jr nz, LABEL_F33B3B
+	jr nz, EffectBox_DrawWithFBColor
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
 	pushw 0x0
 	pushw 0xFF
-	jr LABEL_F33B4A
+	jr EffectBox_DrawStringAndSetDial
 
-LABEL_F33B3B:
+EffectBox_DrawWithFBColor:
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
@@ -11460,7 +11460,7 @@ LABEL_F33B3B:
 	ld xhl, (xsp + 10)
 	pushm (xhl + 22)
 
-LABEL_F33B4A:
+EffectBox_DrawStringAndSetDial:
 	call DrawStringLeftJustify
 	ld_sril XWA, (xsp + 0x0156)
 	ld xbc, 0x1C00017
@@ -11472,11 +11472,11 @@ LABEL_F33B4A:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_F33B70:
+EffectBox_SetDialDownAndEnable:
 	call SetDialEnable
 	jrl EffectBoxProc_ReturnZero
 
-LABEL_F33B77:
+EffectBox_HandleDefaultEvent:
 	ld_sril XWA, (xsp + 0x0156)
 	ld_sril XBC, (xsp + 0x0152)
 	ld_sril XDE, (xsp + 0x014e)
@@ -11488,14 +11488,14 @@ LABEL_F33B77:
 	lda xbc, (xwa + 28)
 	ld_sril XWA, (xsp + 0x014e)
 	cp xwa, 0x1
-	jrl nz, LABEL_F33C91
+	jrl nz, EffectBox_HandleCase2
 	ld xwa, (xbc)
 	ld xbc, 0x1E8000B
 	lds32 xde, 0
 	call ApFuncCall
 	ldfr_berp L, 0xFA
 	cpi_berp 0xFA, 0
-	jr z, LABEL_F33C23
+	jr z, EffectBox_RedrawAfterChange
 	ld_sril XWA, (xsp + 0x0156)
 	ld xbc, 0x1C0000E
 	lds32 xde, 0
@@ -11525,7 +11525,7 @@ LABEL_F33B77:
 	call SendEvent
 	jr EffectBoxProc_RestoreAndJumpToDispatch
 
-LABEL_F33C23:
+EffectBox_RedrawAfterChange:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1E8000D
@@ -11547,7 +11547,7 @@ LABEL_F33C23:
 	call SendEvent
 	lds iz, 0
 
-LABEL_F33C65:
+EffectBox_SendLoopValue:
 	ld de, iz
 	extz xde
 	ld_sril XWA, (xsp + 0x0156)
@@ -11555,7 +11555,7 @@ LABEL_F33C65:
 	call SendEvent
 	inc 1, iz
 	cp iz, 0x8
-	jr c, LABEL_F33C65
+	jr c, EffectBox_SendLoopValue
 
 EffectBoxProc_RestoreAndJumpToDispatch:
 	ld_sril XWA, (xsp + 0x0156)
@@ -11563,10 +11563,10 @@ EffectBoxProc_RestoreAndJumpToDispatch:
 	ld_sril XDE, (xsp + 0x014e)
 	jrl EffectBox_SetAutoInc
 
-LABEL_F33C91:
+EffectBox_HandleCase2:
 	ld_sril XWA, (xsp + 0x014e)
 	cp xwa, 0x2
-	jr nz, LABEL_F33CF2
+	jr nz, EffectBox_HandleCaseOther
 	ld xwa, (xbc)
 	ld xbc, 0x1E8000D
 	lds32 xde, 0
@@ -11591,7 +11591,7 @@ LABEL_F33C91:
 	ld_sril XDE, (xsp + 0x014e)
 	jrl EffectBox_SetAutoInc
 
-LABEL_F33CF2:
+EffectBox_HandleCaseOther:
 	ld_sril XWA, (xsp + 0x014e)
 	or xwa, xwa
 	jrl nz, EffectBoxProc_ReturnZero
@@ -11622,7 +11622,7 @@ LABEL_F33CF2:
 	ld_sril XDE, (xsp + 0x014e)
 	jrl EffectBox_SetAutoInc
 
-LABEL_F33D60:
+EffectBox_HandleCase0_Post:
 	ld_sril XWA, (xsp + 0x0156)
 	ld_sril XBC, (xsp + 0x0152)
 	ld_sril XDE, (xsp + 0x014e)
@@ -11634,7 +11634,7 @@ LABEL_F33D60:
 	ld xwa, (xwa + 28)
 	ld_sril XBC, (xsp + 0x014e)
 	cp xbc, 0x1
-	jrl nz, LABEL_F33EC3
+	jrl nz, EffectBox_HandleAppFunc
 	ld xbc, 0x1E8000B
 	lds32 xde, 0
 	call ApFuncCall
@@ -11642,7 +11642,7 @@ LABEL_F33D60:
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 28)
 	cpi_berp 0xFA, 7
-	jr nc, LABEL_F33E2A
+	jr nc, EffectBox_RedrawFullLoop
 	ldto_berp E, 0xFA
 	inc 1, e
 	ldb d, 0x0
@@ -11651,7 +11651,7 @@ LABEL_F33D60:
 	ld xbc, 0x1E80009
 	call ApFuncCall
 	or xhl, xhl
-	jrl z, LABEL_F33EB1
+	jrl z, EffectBox_SetAutoIncAfterLoop
 	ld_sril XWA, (xsp + 0x0156)
 	ld xbc, 0x1C0000E
 	lds32 xde, 0
@@ -11679,9 +11679,9 @@ LABEL_F33D60:
 	ld_sril XWA, (xsp + 0x0156)
 	ld xbc, 0x1C80001
 	call SendEvent
-	jrl LABEL_F33EB1
+	jrl EffectBox_SetAutoIncAfterLoop
 
-LABEL_F33E2A:
+EffectBox_RedrawFullLoop:
 	ld xwa, (xbc)
 	ld xbc, 0x1E8000D
 	lds32 xde, 0
@@ -11698,7 +11698,7 @@ LABEL_F33E2A:
 	ld xbc, 0x1E80009
 	call ApFuncCall
 	or xhl, xhl
-	jr z, LABEL_F33EB1
+	jr z, EffectBox_SetAutoIncAfterLoop
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1E8000D
@@ -11718,7 +11718,7 @@ LABEL_F33E2A:
 	call SendEvent
 	lds iz, 0
 
-LABEL_F33E97:
+EffectBox_SendMultipleValues:
 	ld de, iz
 	extz xde
 	ld_sril XWA, (xsp + 0x0156)
@@ -11726,18 +11726,18 @@ LABEL_F33E97:
 	call SendEvent
 	inc 1, iz
 	cp iz, 0x8
-	jr c, LABEL_F33E97
+	jr c, EffectBox_SendMultipleValues
 
-LABEL_F33EB1:
+EffectBox_SetAutoIncAfterLoop:
 	ld_sril XWA, (xsp + 0x0156)
 	ld_sril XBC, (xsp + 0x0152)
 	ld_sril XDE, (xsp + 0x014e)
 	jrl EffectBox_SetAutoInc
 
-LABEL_F33EC3:
+EffectBox_HandleAppFunc:
 	ld_sril XBC, (xsp + 0x014e)
 	cp xbc, 0x2
-	jr nz, LABEL_F33F21
+	jr nz, EffectBox_HandleCase0_Direct
 	ld xbc, 0x1E8000D
 	lds32 xde, 0
 	call ApFuncCall
@@ -11761,7 +11761,7 @@ LABEL_F33EC3:
 	ld_sril XDE, (xsp + 0x014e)
 	jr EffectBox_SetAutoInc
 
-LABEL_F33F21:
+EffectBox_HandleCase0_Direct:
 	ld_sril XWA, (xsp + 0x014e)
 	or xwa, xwa
 	jr nz, EffectBoxProc_ReturnZero
@@ -11796,15 +11796,15 @@ EffectBox_SetAutoInc:
 
 EffectBoxProc_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F33FA9
+	jr EffectBox_Epilogue
 
-LABEL_F33F96:
+EffectBox_HandleInherited:
 	ld_sril XWA, (xsp + 0x0156)
 	ld_sril XBC, (xsp + 0x0152)
 	ld_sril XDE, (xsp + 0x014e)
 	call InheritedProc
 
-LABEL_F33FA9:
+EffectBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x56, 0x01
 	ret
@@ -11816,19 +11816,19 @@ EqualizerBoxProc:
 	ld xiz, xbc
 	ld (xsp + 92), xwa
 	cp xiz, 0x1C80002
-	jrl z, LABEL_F3425D
+	jrl z, Equalizer_HandleScrollUpEvent
 	cp xiz, 0x1C00018
-	jrl z, LABEL_F341FC
+	jrl z, Equalizer_HandleEvent1
 	cp xiz, 0x1C00017
-	jrl z, LABEL_F341A0
+	jrl z, Equalizer_DrawStringDone
 	cp xiz, 0x1C80003
-	jrl z, LABEL_F34061
+	jrl z, Equalizer_HandleSelectEvent
 	cp xiz, 0x1E8000F
-	jr z, LABEL_F34041
+	jr z, Equalizer_SendAndLoopDone
 	cp xiz, 0x1E8000E
-	jr z, LABEL_F34016
+	jr z, Equalizer_SendPanelEvent
 	cp xiz, 0x1C0000B
-	jrl nz, LABEL_F345D3
+	jrl nz, Equalizer_HandleInherited
 	ld xwa, (xsp + 92)
 	ld xbc, xiz
 	ld xde, (xsp + 88)
@@ -11839,14 +11839,14 @@ EqualizerBoxProc:
 	call MainPostEvent
 	jrl SeqAccomp_ReturnZeroJmp
 
-LABEL_F34016:
+Equalizer_SendPanelEvent:
 	ld xwa, (xsp + 92)
 	ld xbc, 0x1C80002
 	lds32 xde, 1
 	call SendEvent
 	lds iz, 0
 
-LABEL_F34026:
+Equalizer_SendChannelLoop:
 	ld de, iz
 	extz xde
 	ld xwa, (xsp + 92)
@@ -11854,10 +11854,10 @@ LABEL_F34026:
 	call SendEvent
 	inc 1, iz
 	cp iz, 0x8
-	jr c, LABEL_F34026
+	jr c, Equalizer_SendChannelLoop
 	jrl SeqAccomp_ReturnZeroJmp
 
-LABEL_F34041:
+Equalizer_SendAndLoopDone:
 	ld xwa, (xsp + 92)
 	ld xbc, 0x1C80002
 	lds32 xde, 1
@@ -11868,7 +11868,7 @@ LABEL_F34041:
 	call SendEvent
 	jrl SeqAccomp_ReturnZeroJmp
 
-LABEL_F34061:
+Equalizer_HandleSelectEvent:
 	ld xwa, (xsp + 88)
 	cp xwa, 0x7
 	jrl ugt, SeqAccomp_ReturnZeroJmp
@@ -11977,7 +11977,7 @@ EffectBox_State1:
 	call DrawStringLeftJustify
 	jrl SeqAccomp_ReturnZeroJmp
 
-LABEL_F341A0:
+Equalizer_DrawStringDone:
 	ld xwa, (xsp + 92)
 	ld xbc, xiz
 	ld xde, (xsp + 88)
@@ -12003,9 +12003,9 @@ LABEL_F341A0:
 	ld xwa, (xsp + 92)
 	ld xbc, xiz
 	ld xde, (xsp + 88)
-	jr LABEL_F34256
+	jr Equalizer_CallSetAutoInc
 
-LABEL_F341FC:
+Equalizer_HandleEvent1:
 	ld xwa, (xsp + 92)
 	ld xbc, xiz
 	ld xde, (xsp + 88)
@@ -12032,11 +12032,11 @@ LABEL_F341FC:
 	ld xbc, xiz
 	ld xde, (xsp + 88)
 
-LABEL_F34256:
+Equalizer_CallSetAutoInc:
 	call SetAutoInc
 	jrl SeqAccomp_ReturnZeroJmp
 
-LABEL_F3425D:
+Equalizer_HandleScrollUpEvent:
 	ld xwa, (xsp + 92)
 	call GetViewInstance
 	ld (xsp + 22), xhl
@@ -12115,16 +12115,16 @@ LABEL_F3425D:
 	ld (xsp + 22), hl
 	ld xwa, (xsp + 88)
 	cp xwa, 0x1
-	jr nz, LABEL_F34368
+	jr nz, Equalizer_SetFixedWidth1
 	ldw (xsp + 24), 0xFB
-	jr LABEL_F34371
+	jr Equalizer_StoreWidthAndDraw1
 
-LABEL_F34368:
+Equalizer_SetFixedWidth1:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 22)
 	ld (xsp + 24), wa
 
-LABEL_F34371:
+Equalizer_StoreWidthAndDraw1:
 	lda xwa, (xsp + 72)
 	ldw (xwa), 0x20
 	ld hl, (xsp + 10)
@@ -12138,15 +12138,15 @@ LABEL_F34371:
 	ld wa, (xsp + 12)
 	sub wa, (xsp + 8)
 	cp wa, 0x14
-	jr ule, LABEL_F343A1
+	jr ule, Equalizer_SetFixedWidth2
 	ldw iz, 0xA
-	jr LABEL_F343A6
+	jr Equalizer_StoreWidthAndDraw2
 
-LABEL_F343A1:
+Equalizer_SetFixedWidth2:
 	ld iz, wa
 	srl iz, 1
 
-LABEL_F343A6:
+Equalizer_StoreWidthAndDraw2:
 	lda xwa, (xsp + 72)
 	ld bc, (xsp + 8)
 	ld (xwa), bc
@@ -12186,15 +12186,15 @@ LABEL_F343A6:
 	ld wa, (xsp + 16)
 	sub wa, (xsp + 12)
 	cp wa, 0x14
-	jr ule, LABEL_F34424
+	jr ule, Equalizer_SetFixedWidth3
 	ldw iz, 0xA
-	jr LABEL_F34429
+	jr Equalizer_StoreWidthAndDraw3
 
-LABEL_F34424:
+Equalizer_SetFixedWidth3:
 	ld iz, wa
 	srl iz, 1
 
-LABEL_F34429:
+Equalizer_StoreWidthAndDraw3:
 	lda xwa, (xsp + 72)
 	ld bc, (xsp + 12)
 	ld (xwa), bc
@@ -12234,15 +12234,15 @@ LABEL_F34429:
 	ld wa, (xsp + 20)
 	sub wa, (xsp + 16)
 	cp wa, 0x14
-	jr ule, LABEL_F344A7
+	jr ule, Equalizer_SetFixedWidth4
 	ldw iz, 0xA
-	jr LABEL_F344AC
+	jr Equalizer_StoreWidthAndDraw4
 
-LABEL_F344A7:
+Equalizer_SetFixedWidth4:
 	ld iz, wa
 	srl iz, 1
 
-LABEL_F344AC:
+Equalizer_StoreWidthAndDraw4:
 	lda xwa, (xsp + 72)
 	ld bc, (xsp + 16)
 	ld (xwa), bc
@@ -12291,16 +12291,16 @@ LABEL_F344AC:
 	call DrawLine
 	ld xwa, (xsp + 88)
 	cp xwa, 0x1
-	jr nz, LABEL_F3454A
+	jr nz, Equalizer_SetFixedWidthFF
 	ldw (xsp + 24), 0xFF
-	jr LABEL_F34553
+	jr Equalizer_StoreWidthAndDrawFF
 
-LABEL_F3454A:
+Equalizer_SetFixedWidthFF:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 22)
 	ld (xsp + 24), wa
 
-LABEL_F34553:
+Equalizer_StoreWidthAndDrawFF:
 	lda xwa, (xsp + 72)
 	ld de, (xsp + 8)
 	ld (xwa), de
@@ -12344,15 +12344,15 @@ LABEL_F34553:
 
 SeqAccomp_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F345DF
+	jr Equalizer_Epilogue
 
-LABEL_F345D3:
+Equalizer_HandleInherited:
 	ld xwa, (xsp + 92)
 	ld xbc, xiz
 	ld xde, (xsp + 88)
 	call InheritedProc
 
-LABEL_F345DF:
+Equalizer_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 92)
 	ret
@@ -12361,43 +12361,43 @@ EqOnOffFuncToggleProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0001C
-	jr z, LABEL_F34628
+	jr z, EqOnOff_CheckValue
 	cp xbc, 0x1C00001
-	jr z, LABEL_F345FF
+	jr z, EqOnOff_HandleToggleOn
 	ld xwa, xiz
 	call InheritedProc
 	jr SqplyFunc_FormatEntry
 
-LABEL_F345FF:
+EqOnOff_HandleToggleOn:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, 0x4006
 	call SndParam_LookupReadOnly
 	cps hl, 1
-	jr nz, LABEL_F3461D
+	jr nz, EqOnOff_HandleToggleOff
 	ld xwa, xiz
 	ld xbc, 0x1E0003B
 	lds32 xde, 1
 	jr SqEdit_SendEventEpilog
 
-LABEL_F3461D:
+EqOnOff_HandleToggleOff:
 	ld xwa, xiz
 	ld xbc, 0x1E0003B
 	lds32 xde, 0
 	jr SqEdit_SendEventEpilog
 
-LABEL_F34628:
+EqOnOff_CheckValue:
 	ld xwa, (xde)
 	cp xwa, 0x4006
 	jr nz, SqplyFunc_FormatDispatch
 	cpw (xde + 4), 0x1
-	jr nz, LABEL_F34644
+	jr nz, EqOnOff_ToggleResult
 	ld xwa, xiz
 	ld xbc, 0x1E0003B
 	lds32 xde, 1
 	jr SqEdit_SendEventEpilog
 
-LABEL_F34644:
+EqOnOff_ToggleResult:
 	ld xwa, xiz
 	ld xbc, 0x1E0003B
 	lds32 xde, 0
@@ -12963,7 +12963,7 @@ SqedtFunc_Case2:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	cpdi8 10360, 10
-	jr nz, LABEL_F34F68
+	jr nz, SqedtFunc_Case2_CopyParam
 	pushw 0xE3
 	pushw 0x4C5C
 	ld xwa, (xsp + 8)
@@ -12973,7 +12973,7 @@ SqedtFunc_Case2:
 	inc 8, xsp
 	jr StringCopyEpilog
 
-LABEL_F34F68:
+SqedtFunc_Case2_CopyParam:
 	push_sd16w 0x28, 0x27
 	ld xwa, 0xE34C62
 	push xwa
@@ -12981,14 +12981,14 @@ LABEL_F34F68:
 	lda xbc, (xwa + 18)
 	ld xwa, (xbc)
 	push xwa
-	jr LABEL_F34FB3
+	jr SqedtFunc_CheckMode_SendAudio
 
 ; SqedtFunc check mode
 SqedtFunc_CheckMode:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	cpdi8 10360, 10
-	jr nz, LABEL_F34F9F
+	jr nz, SqedtFunc_CheckMode_CopyParam
 	pushw 0xE3
 	pushw 0x4C68
 	ld xwa, (xsp + 8)
@@ -12998,7 +12998,7 @@ SqedtFunc_CheckMode:
 	inc 8, xsp
 	jr StringCopyEpilog
 
-LABEL_F34F9F:
+SqedtFunc_CheckMode_CopyParam:
 	ldda8 a, 10348
 	extz wa
 	pushw wa
@@ -13008,7 +13008,7 @@ LABEL_F34F9F:
 	ld xwa, (xwa + 18)
 	push xwa
 
-LABEL_F34FB3:
+SqedtFunc_CheckMode_SendAudio:
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	jr StringCopyEpilog
@@ -13203,282 +13203,282 @@ SqedtFunc_StateChainB:
 ; Sequencer format dispatch B
 SeqFormat_DispatchB:
 	cp xiz, 0x22
-	jr z, LABEL_F352A0
+	jr z, SeqFmt_Field_LoadB
 	cp xiz, 0x21
-	jr z, LABEL_F35299
+	jr z, SeqFmt_Field_LoadA
 	cp xiz, 0x20
-	jr nz, LABEL_F352A7
+	jr nz, SeqFmt_Field_LoadC
 	ldada xhl, 9706
 	jrl SqedtFunc_Epilogue
 
-LABEL_F35299:
+SeqFmt_Field_LoadA:
 	ldada xhl, 10024
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F352A0:
+SeqFmt_Field_LoadB:
 	ldada xhl, 10348
 	jrl SqedtFunc_Epilogue
 
-LABEL_F352A7:
+SeqFmt_Field_LoadC:
 	ldada xhl, 10360
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0xB
-	jr z, LABEL_F352E3
+	jr z, SeqFmt_Field_LoadF
 	cp xiz, 0xA
-	jr z, LABEL_F352DC
+	jr z, SeqFmt_Field_LoadE
 	cp xiz, 0x2
-	jr z, LABEL_F352D5
+	jr z, SeqFmt_Field_LoadD
 	cp xiz, 0x1
-	jr nz, LABEL_F352EA
+	jr nz, SeqFmt_Field_LoadG
 	ldada xhl, 9744
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F352D5:
+SeqFmt_Field_LoadD:
 	ldada xhl, 9746
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F352DC:
+SeqFmt_Field_LoadE:
 	ldada xhl, 9750
 	jrl SqedtFunc_Epilogue
 
-LABEL_F352E3:
+SeqFmt_Field_LoadF:
 	ldada xhl, 9816
 	jrl SqedtFunc_Epilogue
 
-LABEL_F352EA:
+SeqFmt_Field_LoadG:
 	ldada xhl, 9742
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x4
-	jr z, LABEL_F35317
+	jr z, SeqFmt_Field_LoadI
 	cp xiz, 0x2
-	jr z, LABEL_F35310
+	jr z, SeqFmt_Field_LoadH
 	cp xiz, 0x1
-	jr nz, LABEL_F3531E
+	jr nz, SeqFmt_Field_LoadJ
 	ldada xhl, 9758
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F35310:
+SeqFmt_Field_LoadH:
 	ldada xhl, 9760
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F35317:
+SeqFmt_Field_LoadI:
 	ldada xhl, 9762
 	jrl SqedtFunc_ReturnPath
 
-LABEL_F3531E:
+SeqFmt_Field_LoadJ:
 	ldada xhl, 9756
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x2
-	jr z, LABEL_F3533C
+	jr z, SeqFmt_Field_LoadK
 	cp xiz, 0x1
-	jr nz, LABEL_F35343
+	jr nz, SeqFmt_Field_LoadL
 	ldada xhl, 61911
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F3533C:
+SeqFmt_Field_LoadK:
 	ldada xhl, 9772
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F35343:
+SeqFmt_Field_LoadL:
 	ldada xhl, 61910
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x6
-	jr z, LABEL_F35370
+	jr z, SeqFmt_Field_LoadN
 	cp xiz, 0x2
-	jr z, LABEL_F35369
+	jr z, SeqFmt_Field_LoadM
 	cp xiz, 0x1
-	jr nz, LABEL_F35377
+	jr nz, SeqFmt_Field_LoadO
 	ldada xhl, 61916
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F35369:
+SeqFmt_Field_LoadM:
 	ldada xhl, 9766
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F35370:
+SeqFmt_Field_LoadN:
 	ldada xhl, 61920
 	jrl SqedtFunc_Epilogue
 
-LABEL_F35377:
+SeqFmt_Field_LoadO:
 	ldada xhl, 61915
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x9
-	jr z, LABEL_F353C2
+	jr z, SeqFmt_Field_LoadS
 	cp xiz, 0x8
-	jr z, LABEL_F353BB
+	jr z, SeqFmt_Field_LoadR
 	cp xiz, 0x7
-	jr z, LABEL_F353B4
+	jr z, SeqFmt_Field_LoadQ
 	cp xiz, 0x2
-	jr z, LABEL_F353AD
+	jr z, SeqFmt_Field_LoadP
 	cp xiz, 0x1
-	jr nz, LABEL_F353C9
+	jr nz, SeqFmt_Field_LoadT
 	ldada xhl, 61938
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F353AD:
+SeqFmt_Field_LoadP:
 	ldada xhl, 9724
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F353B4:
+SeqFmt_Field_LoadQ:
 	ldada xhl, 61942
 	jrl SqedtFunc_Epilogue
 
-LABEL_F353BB:
+SeqFmt_Field_LoadR:
 	ldada xhl, 9728
 	jrl SqedtFunc_Epilogue
 
-LABEL_F353C2:
+SeqFmt_Field_LoadS:
 	ldada xhl, 9730
 	jrl SqedtFunc_ReturnPath
 
-LABEL_F353C9:
+SeqFmt_Field_LoadT:
 	ldada xhl, 61937
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x5
-	jr z, LABEL_F353F6
+	jr z, SeqFmt_Field_LoadV
 	cp xiz, 0x2
-	jr z, LABEL_F353EF
+	jr z, SeqFmt_Field_LoadU
 	cp xiz, 0x1
-	jr nz, LABEL_F353FD
+	jr nz, SeqFmt_Field_LoadW
 	ldada xhl, 61993
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F353EF:
+SeqFmt_Field_LoadU:
 	ldada xhl, 9722
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F353F6:
+SeqFmt_Field_LoadV:
 	ldada xhl, 61998
 	jrl SqedtFunc_ReturnPath
 
-LABEL_F353FD:
+SeqFmt_Field_LoadW:
 	ldada xhl, 61992
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0xE
-	jr z, LABEL_F3541B
+	jr z, SeqFmt_Field_LoadX
 	cp xiz, 0xD
-	jr nz, LABEL_F35422
+	jr nz, SeqFmt_Field_LoadY
 	ldada xhl, 61908
 	jrl SqedtFunc_Epilogue
 
-LABEL_F3541B:
+SeqFmt_Field_LoadX:
 	ldada xhl, 61909
 	jrl SqedtFunc_Epilogue
 
-LABEL_F35422:
+SeqFmt_Field_LoadY:
 	ldada xhl, 61907
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x14
-	jr z, LABEL_F3546D
+	jr z, SeqFmt_Field_LoadAC
 	cp xiz, 0x13
-	jr z, LABEL_F35466
+	jr z, SeqFmt_Field_LoadAB
 	cp xiz, 0x12
-	jr z, LABEL_F3545F
+	jr z, SeqFmt_Field_LoadAA
 	cp xiz, 0x11
-	jr z, LABEL_F35458
+	jr z, SeqFmt_Field_LoadZ
 	cp xiz, 0x10
-	jr nz, LABEL_F35474
+	jr nz, SeqFmt_Field_LoadAD
 	ldada xhl, 61930
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F35458:
+SeqFmt_Field_LoadZ:
 	ldada xhl, 9768
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F3545F:
+SeqFmt_Field_LoadAA:
 	ldada xhl, 61934
 	jrl SqedtFunc_Epilogue
 
-LABEL_F35466:
+SeqFmt_Field_LoadAB:
 	ldada xhl, 61935
 	jrl SqedtFunc_EpilogueJump
 
-LABEL_F3546D:
+SeqFmt_Field_LoadAC:
 	ldada xhl, 9770
 	jrl SqedtFunc_Epilogue
 
-LABEL_F35474:
+SeqFmt_Field_LoadAD:
 	ldada xhl, 61929
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x1A
-	jr z, LABEL_F354BB
+	jr z, SeqFmt_Field_LoadAH
 	cp xiz, 0x19
-	jr z, LABEL_F354B5
+	jr z, SeqFmt_Field_LoadAG
 	cp xiz, 0x18
-	jr z, LABEL_F354AF
+	jr z, SeqFmt_Field_LoadAF
 	cp xiz, 0x17
-	jr z, LABEL_F354A9
+	jr z, SeqFmt_Field_LoadAE
 	cp xiz, 0x16
-	jr nz, LABEL_F354C1
+	jr nz, SeqFmt_Field_LoadAI
 	ldada xhl, 61922
 	jr SqedtFunc_EpilogueJump
 
-LABEL_F354A9:
+SeqFmt_Field_LoadAE:
 	ldada xhl, 9774
 	jr SqedtFunc_EpilogueJump
 
-LABEL_F354AF:
+SeqFmt_Field_LoadAF:
 	ldada xhl, 61926
 	jr SqedtFunc_Epilogue
 
-LABEL_F354B5:
+SeqFmt_Field_LoadAG:
 	ldada xhl, 61927
 	jr SqedtFunc_EpilogueJump
 
-LABEL_F354BB:
+SeqFmt_Field_LoadAH:
 	ldada xhl, 9776
 	jr SqedtFunc_Epilogue
 
-LABEL_F354C1:
+SeqFmt_Field_LoadAI:
 	ldada xhl, 61921
 	jr SqedtFunc_Epilogue
 
 ; DspItem0CngFunc dispatch
 DspItem0_CngFunc:
 	cp xiz, 0x1E
-	jr z, LABEL_F354EB
+	jr z, DspItem0Cng_LoadFieldB
 	cp xiz, 0x1D
-	jr z, LABEL_F354E5
+	jr z, DspItem0Cng_LoadFieldA
 	cp xiz, 0x1C
-	jr nz, LABEL_F354F1
+	jr nz, DspItem0Cng_LoadFieldC
 	ldada xhl, 9996
 	jr SqedtFunc_Epilogue
 
-LABEL_F354E5:
+DspItem0Cng_LoadFieldA:
 	ldada xhl, 9994
 	jr SqedtFunc_Epilogue
 
-LABEL_F354EB:
+DspItem0Cng_LoadFieldB:
 	ldada xhl, 9998
 	jr SqedtFunc_Epilogue
 
-LABEL_F354F1:
+DspItem0Cng_LoadFieldC:
 	ldada xhl, 9992
 	jr SqedtFunc_Epilogue
 
 SqedtFunc_GetFieldAddr_BySelector:
 	cp xiz, 0x3
-	jr z, LABEL_F3551B
+	jr z, SqedtFunc_FieldSel_LoadB
 	cp xiz, 0x2
-	jr z, LABEL_F35515
+	jr z, SqedtFunc_FieldSel_LoadA
 	cp xiz, 0x1
-	jr nz, LABEL_F35521
+	jr nz, SqedtFunc_FieldSel_LoadC
 	ldada xhl, 9734
 	jr SqedtFunc_EpilogueJump
 
-LABEL_F35515:
+SqedtFunc_FieldSel_LoadA:
 	ldada xhl, 9736
 
 SqedtFunc_EpilogueJump:
 	jr SqedtFunc_Epilogue
 
-LABEL_F3551B:
+SqedtFunc_FieldSel_LoadB:
 	ldada xhl, 9740
 
 SqedtFunc_ReturnPath:
 	jr SqedtFunc_Epilogue
 
-LABEL_F35521:
+SqedtFunc_FieldSel_LoadC:
 	ldada xhl, 9732
 
 SqedtFunc_Epilogue:
@@ -13501,7 +13501,7 @@ DspItem0CngFunc:
 	cp xix, 0x1E80069
 	jrl z, DspItem0_DispatchTarget
 	cp xix, 0x1E00046
-	jrl z, LABEL_F357C8
+	jrl z, DspItem0_HandleType2
 	ld8_24 l, 0x021098
 	ldada xwa, 10616
 	ld (xsp + 4), xwa
@@ -13741,7 +13741,7 @@ DspItem0_TypeDispatch:
 	st_dri3b C, 0x07, 0xE0, 0xE4
 	jr DspItem0_Epilogue
 
-LABEL_F357C8:
+DspItem0_HandleType2:
 	lds32 xhl, 2
 	jr DspItem0_Epilogue
 	lds32 xwa, 0
@@ -13933,7 +13933,7 @@ Equalizer_LookupParamString:
 	ld xwa, 0xE32390
 	add xwa, xbc
 	push xwa
-	jr LABEL_F359AE
+	jr FormatEqParam_CopyAndReturn
 	ld xix, xde
 	pushw 0x5
 	ldw wa, 0xE
@@ -13947,7 +13947,7 @@ FormatEqParamValue:
 	add xbc, xde
 	push xbc
 
-LABEL_F359AE:
+FormatEqParam_CopyAndReturn:
 	ld xwa, (xix + 18)
 	push xwa
 	call Strncpy
@@ -14122,7 +14122,7 @@ Equalizer_FormatDispatch:
 	lda_24 xix, 0xf35b85
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F35B85:
+EqFormat_DispatchTable:
 	.byte 0x0b, 0x05, 0x00, 0x40, 0x90, 0x23, 0xe3, 0x00
 	.byte 0x78, 0xc2, 0x00, 0x0b, 0x05, 0x00, 0x40, 0xf0
 	.byte 0x22, 0xe3, 0x00, 0x78, 0xb7, 0x00, 0x0b, 0x05
@@ -14169,20 +14169,20 @@ Equalizer_FormatDefault:
 	add bc, bc
 	ld_sriw3 WA, 0x07, 0xE8, 0xE4
 	cps wa, 0
-	jr ge, LABEL_F35C2D
+	jr ge, EqFormat_NegativeValue
 	neg wa
 	pushw wa
 	ld xwa, 0xE34E0C
 	jr SendAudioCommand
 
-LABEL_F35C2D:
+EqFormat_NegativeValue:
 	pushw wa
 	cps wa, 0
-	jr le, LABEL_F35C39
+	jr le, EqFormat_PositiveValue
 	ld xwa, 0xE34E12
 	jr SendAudioCommand
 
-LABEL_F35C39:
+EqFormat_PositiveValue:
 	ld xwa, 0xE34E18
 	jr SendAudioCommand
 	pushw 0x5
@@ -14231,89 +14231,89 @@ Equalizer_PadSpaceAndReturn:
 
 CycleOnOffFunc:
 	cp xbc, 0x1E0003B
-	jr nz, LABEL_F35CAF
+	jr nz, CycleOnOff_PostAndReturn
 	ld xwa, 0x1480003
 	ld xbc, 0x1E80044
 	call MainPostEvent
 
-LABEL_F35CAF:
+CycleOnOff_PostAndReturn:
 	lds32 xhl, 0
 	ret
 
 MetroOnOffFunc:
 	cp xbc, 0x1E0003B
-	jr nz, LABEL_F35CDC
+	jr nz, MetroOnOff_ReturnZero
 	or xde, xde
-	jr nz, LABEL_F35CCC
+	jr nz, MetroOnOff_SendDisable
 	ld xwa, 0x1480003
 	ld xbc, 0x1E80045
 	lds32 xde, 0
-	jr LABEL_F35CD8
+	jr MetroOnOff_PostEvent
 
-LABEL_F35CCC:
+MetroOnOff_SendDisable:
 	ld xwa, 0x1480003
 	ld xbc, 0x1E80045
 	lds32 xde, 1
 
-LABEL_F35CD8:
+MetroOnOff_PostEvent:
 	call MainPostEvent
 
-LABEL_F35CDC:
+MetroOnOff_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 PunchInOutFunc:
 	cp xbc, 0x1E0003B
-	jr nz, LABEL_F35D09
+	jr nz, PunchInOut_ReturnZero
 	or xde, xde
-	jr nz, LABEL_F35CF9
+	jr nz, PunchInOut_SendDisable
 	ld xwa, 0x1480003
 	ld xbc, 0x1E80046
 	lds32 xde, 0
-	jr LABEL_F35D05
+	jr PunchInOut_PostEvent
 
-LABEL_F35CF9:
+PunchInOut_SendDisable:
 	ld xwa, 0x1480003
 	ld xbc, 0x1E80046
 	lds32 xde, 1
 
-LABEL_F35D05:
+PunchInOut_PostEvent:
 	call MainPostEvent
 
-LABEL_F35D09:
+PunchInOut_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 EqInOutFunc:
 	cp xbc, 0x1E0003B
-	jr nz, LABEL_F35D30
+	jr nz, EqInOut_ReturnZero
 	or xde, xde
-	jr nz, LABEL_F35D23
+	jr nz, EqInOut_SendEnable
 	ld xwa, 0x4006
 	lds bc, 0
 	lds de, 1
-	jr LABEL_F35D2C
+	jr EqInOut_CallLswPut
 
-LABEL_F35D23:
+EqInOut_SendEnable:
 	ld xwa, 0x4006
 	lds bc, 1
 	lds de, 1
 
-LABEL_F35D2C:
+EqInOut_CallLswPut:
 	call MainLswPut
 
-LABEL_F35D30:
+EqInOut_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 MimeOnOffFunc:
 	cp xbc, 0x1E0003B
-	jr nz, LABEL_F35D49
+	jr nz, MimeOnOff_PostAndReturn
 	ld xwa, 0x1480023
 	ld xbc, 0x1E0003B
 	call MainPostEvent
 
-LABEL_F35D49:
+MimeOnOff_PostAndReturn:
 	lds32 xhl, 0
 	ret
 
@@ -14328,69 +14328,69 @@ TrkMixerIntTtlFunc:
 
 BitmapNtedt0k:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_F35D89
+	jr z, BitmapNtedt0k_GetHeight
 	cp xbc, 0x1E000A2
-	jr z, LABEL_F35D83
+	jr z, BitmapNtedt0k_GetWidth
 	cp xbc, 0x1E000A1
-	jr z, LABEL_F35D7D
+	jr z, BitmapNtedt0k_GetAddress
 	lds32 xhl, 0
 	ret
 
-LABEL_F35D7D:
+BitmapNtedt0k_GetAddress:
 	lda_24 xhl, 0xe34e78
 	ret
 
-LABEL_F35D83:
+BitmapNtedt0k_GetWidth:
 	ld xhl, 0x10
 	ret
 
-LABEL_F35D89:
+BitmapNtedt0k_GetHeight:
 	ld xhl, 0x7F
 	ret
 
 
 BitmapNtedt0d:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_F35DB6
+	jr z, BitmapNtedt0d_GetHeight
 	cp xbc, 0x1E000A2
-	jr z, LABEL_F35DB0
+	jr z, BitmapNtedt0d_GetWidth
 	cp xbc, 0x1E000A1
-	jr z, LABEL_F35DAA
+	jr z, BitmapNtedt0d_GetAddress
 	lds32 xhl, 0
 	ret
 
-LABEL_F35DAA:
+BitmapNtedt0d_GetAddress:
 	lda_24 xhl, 0xe35668
 	ret
 
-LABEL_F35DB0:
+BitmapNtedt0d_GetWidth:
 	ld xhl, 0xF0
 	ret
 
-LABEL_F35DB6:
+BitmapNtedt0d_GetHeight:
 	ld xhl, 0x7F
 	ret
 
 
 BitmapDredt0k:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_F35DE3
+	jr z, BitmapDredt0k_GetHeight
 	cp xbc, 0x1E000A2
-	jr z, LABEL_F35DDD
+	jr z, BitmapDredt0k_GetWidth
 	cp xbc, 0x1E000A1
-	jr z, LABEL_F35DD7
+	jr z, BitmapDredt0k_GetAddress
 	lds32 xhl, 0
 	ret
 
-LABEL_F35DD7:
+BitmapDredt0k_GetAddress:
 	lda_24 xhl, 0xe3cd78
 	ret
 
-LABEL_F35DDD:
+BitmapDredt0k_GetWidth:
 	ld xhl, 0x58
 	ret
 
-LABEL_F35DE3:
+BitmapDredt0k_GetHeight:
 	ld xhl, 0x77
 	ret
 

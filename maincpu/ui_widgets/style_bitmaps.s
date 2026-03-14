@@ -3176,7 +3176,7 @@ NakaInst_George_B_Unison_102:	aligned_string "George B Unison              102"
 	.byte 0xf0, 0x00, 0x1e, 0x68, 0xec, 0x00, 0xf1, 0x00
 	.long NakaInst_L_A_Synth_85
 	.byte 0xf2, 0x00, 0xda, 0x67
-	.long LABEL_F300EC
+	.long EntGrid_PostMainEvent
 	.zero 6
 	aligned_string "Drawbar Funk                  85"
 NakaInst_L_A_Synth_85:	aligned_string "L.A. Synth                    85"
