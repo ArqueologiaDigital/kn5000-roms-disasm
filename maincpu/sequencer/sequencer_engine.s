@@ -2618,7 +2618,7 @@ SeqPlay_ProcessVoice_Cleanup:
 	jr SeqPlay_ProcessVoice_ClearBit
 
 SeqPlay_ProcessVoice_PartChange:
-	call LABEL_F994EA
+	call UI_PostRefreshEvent
 
 SeqPlay_ProcessVoice_ClearBit:
 	resda 1, 9834
@@ -4673,7 +4673,7 @@ AccPedalConfig_CheckCtrl7:
 	ldda8 e, 7550
 	ldda8 d, 7552
 	ldda8 a, 7554
-	call LABEL_FCB897
+	call SeqVoice_UpdateTempoParam
 
 Chan_IsActive_RetFalse:
 	ldb l, 0x0
@@ -4914,7 +4914,7 @@ AccPedalDirect_ClearBit7:
 	ldda8 e, 7550
 	ldda8 d, 7552
 	ldda8 a, 7554
-	call LABEL_FCB771
+	call MidiNote_RhythmPartDispatch
 	ld c, (xsp + 6)
 	extz bc
 	lds wa, 0
@@ -7085,7 +7085,7 @@ SeqPlay_StopReset_CleanupAll:
 	stdi16 61854, 0
 	call Audio_CheckSubsystemReady
 	stdi16 10420, 0
-	call LABEL_F994FA
+	call UI_PostTimerResetEvent
 	call Demo_SelectEntry_AfterSongLoad
 	ret
 

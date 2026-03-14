@@ -17115,7 +17115,7 @@ AccPlayback_ProcessStyleChanges:
 	push xix
 	push xiy
 	push xiz
-	call LABEL_F994FA
+	call UI_PostTimerResetEvent
 	pop xiz
 	pop xiy
 	pop xix

@@ -3100,7 +3100,7 @@ NAKA_StyleExplorer3_Label_GuitarBallad106:
 	aligned_string "Sax Production              106"
 
 
-LABEL_E11C4E:
+NAKA_StyleExplorer3_Option_SubStyle:
 	naka_header NAKA_TYPE_OPTION
 	.byte 0x4a, 0x01, 0xff, 0xff, 0xff, 0xff
 	.byte 0x54, 0x01, 0x08, 0x00, 0x0e, 0x00, 0x91, 0x00
@@ -3108,7 +3108,7 @@ LABEL_E11C4E:
 	.byte 0xf2, 0x00
 
 
-LABEL_E11C6A:
+NAKA_StyleExplorer3_Panel_SkipBtn:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0x49, 0x01
 	.byte 0xff, 0xff, 0x57, 0x01, 0x4a, 0x01, 0x08, 0x00
@@ -3117,7 +3117,7 @@ LABEL_E11C6A:
 	.zero 8
 
 
-LABEL_E11C90:
+NAKA_StyleExplorer3_Label_Skip:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x49, 0x01, 0xff, 0xff
 	.byte 0x58, 0x01, 0x56, 0x01, 0x08, 0x00, 0x26, 0x00
@@ -3126,7 +3126,7 @@ LABEL_E11C90:
 	aligned_string "SKIP"
 
 
-LABEL_E11CB6:
+NAKA_StyleExplorer3_Label_NavUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x49, 0x01, 0xff, 0xff, 0x59, 0x01
 	.byte 0x57, 0x01, 0x08, 0x00, 0x0e, 0x00, 0xd7, 0x00
@@ -3136,7 +3136,7 @@ LABEL_E11CB6:
 	jr	le, 0x00
 
 
-LABEL_E11CDA:
+NAKA_StyleExplorer3_Label_NavDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x49, 0x01
 	.byte 0xff, 0xff, 0x5a, 0x01, 0x58, 0x01, 0x08, 0x00
@@ -3147,7 +3147,7 @@ LABEL_E11CDA:
 	.byte 0x00, 0x00, 0x7e, 0x39, 0x38, 0x00
 
 
-LABEL_E11CFE:
+NAKA_StyleExplorer3_Value_NavVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0x49, 0x01, 0xff, 0xff, 0x5b, 0x01
 	.byte 0x59, 0x01, 0x08, 0x00, 0x06, 0x00, 0xe3, 0x00
@@ -3155,7 +3155,7 @@ LABEL_E11CFE:
 	.byte 0x08, 0x00, 0x01, 0x00
 
 
-LABEL_E11D18:
+NAKA_StyleExplorer3_Panel_Nav2:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0x49, 0x01, 0x5c, 0x01
 	.byte 0x5f, 0x01, 0x5a, 0x01, 0x08, 0x00, 0x7c, 0x00
@@ -3164,7 +3164,7 @@ LABEL_E11D18:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
 
 
-LABEL_E11D3E:
+NAKA_StyleExplorer3_Label_Nav2Up:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x5b, 0x01, 0x5d, 0x01, 0x5e, 0x01
 	.byte 0xff, 0xff, 0x08, 0x00, 0x9a, 0x00, 0xd6, 0x00
@@ -3174,7 +3174,7 @@ LABEL_E11D3E:
 	.byte 0x35, 0x00
 
 
-LABEL_E11D62:
+NAKA_StyleExplorer3_Label_Nav2Down:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x5c, 0x01
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
@@ -3185,7 +3185,7 @@ LABEL_E11D62:
 	.byte 0x00, 0x00, 0x7e, 0x38, 0x31, 0x00
 
 
-LABEL_E11D86:
+NAKA_StyleExplorer3_Value_Category:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0x5b, 0x01, 0xff, 0xff, 0xff, 0xff
 	.byte 0x5c, 0x01, 0x08, 0x00, 0x7e, 0x00, 0xe3, 0x00
@@ -3193,7 +3193,7 @@ LABEL_E11D86:
 	.byte 0x08, 0x00, 0x01, 0x00
 
 
-LABEL_E11DA0:
+NAKA_StyleExplorer3_Label_CategoryRockPop:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x49, 0x01, 0xff, 0xff
 	.byte 0xff, 0xff, 0x5b, 0x01, 0x08, 0x00, 0x36, 0x00
@@ -3203,7 +3203,7 @@ LABEL_E11DA0:
 	aligned_string "CATEGORY : Rock & Pop"
 
 
-LABEL_E11DD6:
+NAKA_StyleExplorer4_Container_Root:
 	naka_header NAKA_TYPE_CONTAINER
 	.byte 0xff, 0xff, 0x61, 0x01, 0xff, 0xff
 	.byte 0xff, 0xff, 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -3215,7 +3215,7 @@ LABEL_E11DD6:
 	aligned_string "STYLE EXPLORER"
 
 
-LABEL_E11E10:
+NAKA_StyleExplorer4_Group_TopBar:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0x60, 0x01, 0x62, 0x01
 	.byte 0x6d, 0x01, 0xff, 0xff, 0x08, 0x00, 0x0a, 0x00
@@ -3223,7 +3223,7 @@ LABEL_E11E10:
 	.byte 0xc1, 0x00
 
 
-LABEL_E11E2A:
+NAKA_StyleExplorer4_Label_EuroPopShuffleHeader:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x61, 0x01
 	.byte 0xff, 0xff, 0x63, 0x01, 0xff, 0xff, 0x08, 0x00
@@ -3234,7 +3234,7 @@ LABEL_E11E2A:
 	aligned_string "Euro Pop Shuffle:              TEMPO"
 
 
-LABEL_E11E70:
+NAKA_StyleExplorer4_Label_ShuffleSynth144:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x61, 0x01, 0xff, 0xff
 	.byte 0x64, 0x01, 0x62, 0x01, 0x08, 0x00, 0x32, 0x00
@@ -3243,7 +3243,7 @@ LABEL_E11E70:
 	aligned_string "Shuffle Synth               144"
 
 
-LABEL_E11EB0:
+NAKA_StyleExplorer4_Label_JumpBrass144:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x61, 0x01, 0xff, 0xff
 	.byte 0x65, 0x01, 0x63, 0x01, 0x08, 0x00, 0x32, 0x00
@@ -3252,7 +3252,7 @@ LABEL_E11EB0:
 	aligned_string "Jump Brass                  144"
 
 
-LABEL_E11EF0:
+NAKA_StyleExplorer4_Label_PopLeader144:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x61, 0x01, 0xff, 0xff
 	.byte 0x66, 0x01, 0x64, 0x01, 0x08, 0x00, 0x32, 0x00
@@ -3261,7 +3261,7 @@ LABEL_E11EF0:
 	aligned_string "Pop Leader                  144"
 
 
-LABEL_E11F30:
+NAKA_StyleExplorer4_Label_ShuffleOrgan144:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x61, 0x01, 0xff, 0xff
 	.byte 0x67, 0x01, 0x65, 0x01, 0x08, 0x00, 0x32, 0x00
@@ -3270,7 +3270,7 @@ LABEL_E11F30:
 	aligned_string "Shuffle Organ               144"
 
 
-LABEL_E11F70:
+NAKA_StyleExplorer4_Label_80sLoveSongsHeader:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x61, 0x01, 0xff, 0xff
 	.byte 0x68, 0x01, 0x66, 0x01, 0x08, 0x00, 0x0e, 0x00
@@ -3279,7 +3279,7 @@ LABEL_E11F70:
 	aligned_string "80's Love Songs :              TEMPO"
 
 
-LABEL_E11FB6:
+NAKA_StyleExplorer4_Label_AnalogueBallad106:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x61, 0x01, 0xff, 0xff, 0x69, 0x01
 	.byte 0x67, 0x01, 0x08, 0x00, 0x32, 0x00, 0x94, 0x00
@@ -3288,7 +3288,7 @@ LABEL_E11FB6:
 	aligned_string "Analogue Ballad             106"
 
 
-LABEL_E11FF6:
+NAKA_StyleExplorer4_Label_DontFret106:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x61, 0x01, 0xff, 0xff, 0x6a, 0x01
 	.byte 0x68, 0x01, 0x08, 0x00, 0x32, 0x00, 0xa4, 0x00
@@ -3297,7 +3297,7 @@ LABEL_E11FF6:
 	aligned_string "Don't Fret!                 106"
 
 
-LABEL_E12036:
+NAKA_StyleExplorer4_Label_EPOfThe80s106:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x61, 0x01, 0xff, 0xff, 0x6b, 0x01
 	.byte 0x69, 0x01, 0x08, 0x00, 0x32, 0x00, 0xb4, 0x00
@@ -3306,7 +3306,7 @@ LABEL_E12036:
 	aligned_string "EP Of The 80's              106"
 
 
-LABEL_E12076:
+NAKA_StyleExplorer4_Label_SaxProduction106:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x61, 0x01, 0xff, 0xff, 0x6c, 0x01
 	.byte 0x6a, 0x01, 0x08, 0x00, 0x32, 0x00, 0xc4, 0x00
@@ -3315,7 +3315,7 @@ LABEL_E12076:
 	aligned_string "Sax Production              106"
 
 
-LABEL_E120B6:
+NAKA_StyleExplorer4_Option_SubStyle:
 	naka_header NAKA_TYPE_OPTION
 	.byte 0x61, 0x01, 0xff, 0xff, 0xff, 0xff
 	.byte 0x6b, 0x01, 0x08, 0x00, 0x0e, 0x00, 0xa1, 0x00
@@ -3323,7 +3323,7 @@ LABEL_E120B6:
 	.byte 0xf2, 0x00
 
 
-LABEL_E120D2:
+NAKA_StyleExplorer4_Panel_SkipBtn:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0x60, 0x01
 	.byte 0xff, 0xff, 0x6e, 0x01, 0x61, 0x01, 0x08, 0x00
@@ -3332,7 +3332,7 @@ LABEL_E120D2:
 	.zero 8
 
 
-LABEL_E120F8:
+NAKA_StyleExplorer4_Label_Skip:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x60, 0x01, 0xff, 0xff
 	.byte 0x6f, 0x01, 0x6d, 0x01, 0x08, 0x00, 0x26, 0x00
@@ -3341,7 +3341,7 @@ LABEL_E120F8:
 	aligned_string "SKIP"
 
 
-LABEL_E1211E:
+NAKA_StyleExplorer4_Label_NavUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x60, 0x01, 0xff, 0xff, 0x70, 0x01
 	.byte 0x6e, 0x01, 0x08, 0x00, 0x0e, 0x00, 0xd7, 0x00
@@ -3351,7 +3351,7 @@ LABEL_E1211E:
 	jr	le, 0x00
 
 
-LABEL_E12142:
+NAKA_StyleExplorer4_Label_NavDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x60, 0x01
 	.byte 0xff, 0xff, 0x71, 0x01, 0x6f, 0x01, 0x08, 0x00
@@ -3362,7 +3362,7 @@ LABEL_E12142:
 	.byte 0x00, 0x00, 0x7e, 0x39, 0x38, 0x00
 
 
-LABEL_E12166:
+NAKA_StyleExplorer4_Value_NavVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0x60, 0x01, 0xff, 0xff, 0x72, 0x01
 	.byte 0x70, 0x01, 0x08, 0x00, 0x06, 0x00, 0xe3, 0x00
@@ -3370,7 +3370,7 @@ LABEL_E12166:
 	.byte 0x08, 0x00, 0x01, 0x00
 
 
-LABEL_E12180:
+NAKA_StyleExplorer4_Panel_Nav2:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0x60, 0x01, 0x73, 0x01
 	.byte 0x76, 0x01, 0x71, 0x01, 0x08, 0x00, 0x7c, 0x00
@@ -3379,7 +3379,7 @@ LABEL_E12180:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
 
 
-LABEL_E121A6:
+NAKA_StyleExplorer4_Label_Nav2Up:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x72, 0x01, 0x74, 0x01, 0x75, 0x01
 	.byte 0xff, 0xff, 0x08, 0x00, 0x9a, 0x00, 0xd6, 0x00
@@ -3389,7 +3389,7 @@ LABEL_E121A6:
 	.byte 0x35, 0x00
 
 
-LABEL_E121CA:
+NAKA_StyleExplorer4_Label_Nav2Down:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x73, 0x01
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
@@ -3400,7 +3400,7 @@ LABEL_E121CA:
 	.byte 0x00, 0x00, 0x7e, 0x38, 0x31, 0x00
 
 
-LABEL_E121EE:
+NAKA_StyleExplorer4_Value_Category:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0x72, 0x01, 0xff, 0xff, 0xff, 0xff
 	.byte 0x73, 0x01, 0x08, 0x00, 0x7e, 0x00, 0xe3, 0x00
@@ -3408,7 +3408,7 @@ LABEL_E121EE:
 	.byte 0x08, 0x00, 0x01, 0x00
 
 
-LABEL_E12208:
+NAKA_StyleExplorer4_Label_CategoryRockPop:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x60, 0x01, 0xff, 0xff
 	.byte 0xff, 0xff, 0x72, 0x01, 0x08, 0x00, 0x36, 0x00
@@ -3418,7 +3418,7 @@ LABEL_E12208:
 	aligned_string "CATEGORY : Rock & Pop"
 
 
-LABEL_E1223E:
+NAKA_AlphaExplorer1_Container_Root:
 	naka_header NAKA_TYPE_CONTAINER
 	.byte 0xff, 0xff, 0x78, 0x01, 0xff, 0xff
 	.byte 0xff, 0xff, 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -3430,14 +3430,14 @@ LABEL_E1223E:
 	aligned_string "ALPHABETICAL EXPLORER"
 
 
-LABEL_E1227E:
+NAKA_AlphaExplorer1_Group_TopBar:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0x77, 0x01, 0x79, 0x01, 0x84, 0x01
 	.byte 0xff, 0xff, 0x08, 0x00, 0x08, 0x00, 0x24, 0x00
 	.byte 0x33, 0x01, 0xd1, 0x00, 0xf7, 0x00, 0xc1, 0x00
 
 
-LABEL_E12298:
+NAKA_AlphaExplorer1_Label_LetterB_Header:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x78, 0x01, 0x7a, 0x01
 	.byte 0x7b, 0x01, 0xff, 0xff, 0x08, 0x00, 0x12, 0x00
@@ -3446,14 +3446,14 @@ LABEL_E12298:
 	aligned_string "B:                           TEMPO"
 
 
-LABEL_E122DC:
+NAKA_AlphaExplorer1_Option_Styles:
 	naka_header NAKA_TYPE_OPTION
 	.byte 0x79, 0x01, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0x08, 0x00, 0x0c, 0x00, 0x8b, 0x00, 0x2d, 0x01
 	.byte 0x9c, 0x00, 0x01, 0x00, 0x02, 0x00, 0xf2, 0x00
 
 
-LABEL_E122F8:
+NAKA_AlphaExplorer1_Label_BallroomFiddle101:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x78, 0x01, 0xff, 0xff
 	.byte 0x7c, 0x01, 0x79, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3462,7 +3462,7 @@ LABEL_E122F8:
 	aligned_string "Ballroom Fiddle            101"
 
 
-LABEL_E12338:
+NAKA_AlphaExplorer1_Label_BebopSolo121:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x78, 0x01, 0xff, 0xff
 	.byte 0x7d, 0x01, 0x7b, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3471,7 +3471,7 @@ LABEL_E12338:
 	aligned_string "Bebop Solo                 121"
 
 
-LABEL_E12378:
+NAKA_AlphaExplorer1_Label_BarbarShop86:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x78, 0x01, 0xff, 0xff
 	.byte 0x7e, 0x01, 0x7c, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3480,7 +3480,7 @@ LABEL_E12378:
 	aligned_string "Barbar Shop                 86"
 
 
-LABEL_E123B8:
+NAKA_AlphaExplorer1_Label_BensonFrets147:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x78, 0x01, 0xff, 0xff
 	.byte 0x7f, 0x01, 0x7d, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3489,7 +3489,7 @@ LABEL_E123B8:
 	aligned_string "Benson Frets               147"
 
 
-LABEL_E123F8:
+NAKA_AlphaExplorer1_Label_BigStage98:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x78, 0x01, 0xff, 0xff
 	.byte 0x80, 0x01, 0x7e, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3498,7 +3498,7 @@ LABEL_E123F8:
 	aligned_string "Big Stage                   98"
 
 
-LABEL_E12438:
+NAKA_AlphaExplorer1_Label_BillysEP132:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x78, 0x01, 0xff, 0xff
 	.byte 0x81, 0x01, 0x7f, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3507,7 +3507,7 @@ LABEL_E12438:
 	aligned_string "Billy's E.P                132"
 
 
-LABEL_E12478:
+NAKA_AlphaExplorer1_Label_BonjourParis106:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x78, 0x01, 0xff, 0xff
 	.byte 0x82, 0x01, 0x80, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3516,7 +3516,7 @@ LABEL_E12478:
 	aligned_string "Bonjour Paris !            106"
 
 
-LABEL_E124B8:
+NAKA_AlphaExplorer1_Label_BreathyNight112:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x78, 0x01, 0xff, 0xff
 	.byte 0x83, 0x01, 0x81, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3525,7 +3525,7 @@ LABEL_E124B8:
 	aligned_string "Breathy Night              112"
 
 
-LABEL_E124F8:
+NAKA_AlphaExplorer1_Label_BridgeTooFar128:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x78, 0x01, 0xff, 0xff
 	.byte 0xff, 0xff, 0x82, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3534,7 +3534,7 @@ LABEL_E124F8:
 	aligned_string "Bridge Too Far             128"
 
 
-LABEL_E12538:
+NAKA_AlphaExplorer1_Panel_Left:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0x77, 0x01, 0x85, 0x01
 	.byte 0x89, 0x01, 0x78, 0x01, 0x08, 0x00, 0x78, 0x00
@@ -3543,7 +3543,7 @@ LABEL_E12538:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
 
 
-LABEL_E1255E:
+NAKA_AlphaExplorer1_Label_LeftUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x84, 0x01, 0x86, 0x01, 0x88, 0x01
 	.byte 0xff, 0xff, 0x08, 0x00, 0x96, 0x00, 0xd7, 0x00
@@ -3553,7 +3553,7 @@ LABEL_E1255E:
 	jr	le, 0x00
 
 
-LABEL_E12582:
+NAKA_AlphaExplorer1_Label_LeftIcon:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x85, 0x01
 	.byte 0x87, 0x01, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
@@ -3564,7 +3564,7 @@ LABEL_E12582:
 	.byte 0x00, 0x00, 0x7e, 0x39, 0x38, 0x00
 
 
-LABEL_E125A6:
+NAKA_AlphaExplorer1_Label_LeftDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x86, 0x01, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x96, 0x00, 0xe0, 0x00
@@ -3574,7 +3574,7 @@ LABEL_E125A6:
 	.byte 0x38, 0x00
 
 
-LABEL_E125CA:
+NAKA_AlphaExplorer1_Value_LeftVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0x84, 0x01
 	.byte 0xff, 0xff, 0xff, 0xff, 0x85, 0x01, 0x08, 0x00
@@ -3583,7 +3583,7 @@ LABEL_E125CA:
 	.byte 0x08, 0x00, 0x01, 0x00
 
 
-LABEL_E125E4:
+NAKA_AlphaExplorer1_Panel_Right:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0x77, 0x01, 0xff, 0xff, 0x8a, 0x01, 0x84, 0x01
 	.byte 0x08, 0x00, 0x04, 0x00, 0xd8, 0x00, 0x23, 0x00
@@ -3591,7 +3591,7 @@ LABEL_E125E4:
 	.zero 10
 
 
-LABEL_E1260A:
+NAKA_AlphaExplorer1_Label_RightSkip:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x77, 0x01
 	.byte 0xff, 0xff, 0x8b, 0x01, 0x89, 0x01, 0x08, 0x00
@@ -3602,7 +3602,7 @@ LABEL_E1260A:
 	aligned_string "SKIP"
 
 
-LABEL_E12630:
+NAKA_AlphaExplorer1_Label_RightUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x77, 0x01, 0xff, 0xff
 	.byte 0x8c, 0x01, 0x8a, 0x01, 0x08, 0x00, 0x0e, 0x00
@@ -3611,7 +3611,7 @@ LABEL_E12630:
 	.byte 0x7e, 0x39, 0x62, 0x00
 
 
-LABEL_E12654:
+NAKA_AlphaExplorer1_Label_RightDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x77, 0x01, 0xff, 0xff, 0x8d, 0x01, 0x8b, 0x01
 	.byte 0x08, 0x00, 0x0e, 0x00, 0xe0, 0x00, 0x19, 0x00
@@ -3619,7 +3619,7 @@ LABEL_E12654:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x7e, 0x39, 0x38, 0x00
 
 
-LABEL_E12678:
+NAKA_AlphaExplorer1_Value_RightVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0x77, 0x01, 0xff, 0xff
 	.byte 0xff, 0xff, 0x8c, 0x01, 0x08, 0x00, 0x06, 0x00
@@ -3627,7 +3627,7 @@ LABEL_E12678:
 	.byte 0x01, 0x00
 
 
-LABEL_E12692:
+NAKA_AlphaExplorer2_Container_Root:
 	naka_header NAKA_TYPE_CONTAINER
 	.byte 0xff, 0xff
 	.byte 0x8f, 0x01, 0xff, 0xff, 0xff, 0xff, 0x0a, 0x00
@@ -3638,7 +3638,7 @@ LABEL_E12692:
 	aligned_string "ALPHABETICAL EXPLORER"
 
 
-LABEL_E126D2:
+NAKA_AlphaExplorer2_Group_TopBar:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0x8e, 0x01
 	.byte 0x90, 0x01, 0x99, 0x01, 0xff, 0xff, 0x08, 0x00
@@ -3646,7 +3646,7 @@ LABEL_E126D2:
 	.byte 0xf7, 0x00, 0xc1, 0x00
 
 
-LABEL_E126EC:
+NAKA_AlphaExplorer2_Label_LetterC_Header:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8f, 0x01, 0xff, 0xff, 0x91, 0x01, 0xff, 0xff
 	.byte 0x08, 0x00, 0x12, 0x00, 0x2c, 0x00, 0x25, 0x01
@@ -3655,7 +3655,7 @@ LABEL_E126EC:
 	aligned_string "C:                           TEMPO"
 
 
-LABEL_E12730:
+NAKA_AlphaExplorer2_Label_CafeJazz76:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8f, 0x01, 0xff, 0xff
 	.byte 0x92, 0x01, 0x90, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3664,7 +3664,7 @@ LABEL_E12730:
 	aligned_string "Cafe Jazz                   76"
 
 
-LABEL_E12770:
+NAKA_AlphaExplorer2_Label_CharmingWaltz88:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8f, 0x01, 0xff, 0xff
 	.byte 0x93, 0x01, 0x91, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3673,7 +3673,7 @@ LABEL_E12770:
 	aligned_string "Charming Waltz              88"
 
 
-LABEL_E127B0:
+NAKA_AlphaExplorer2_Label_CasinoShow130:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8f, 0x01, 0xff, 0xff
 	.byte 0x94, 0x01, 0x92, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3682,7 +3682,7 @@ LABEL_E127B0:
 	aligned_string "Casino Show                130"
 
 
-LABEL_E127F0:
+NAKA_AlphaExplorer2_Label_ChubbysSolo147:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8f, 0x01, 0xff, 0xff
 	.byte 0x95, 0x01, 0x93, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3691,7 +3691,7 @@ LABEL_E127F0:
 	aligned_string "Chubby's Solo              147"
 
 
-LABEL_E12830:
+NAKA_AlphaExplorer2_Label_ClickPiano104:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8f, 0x01, 0xff, 0xff
 	.byte 0x96, 0x01, 0x94, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3700,7 +3700,7 @@ LABEL_E12830:
 	aligned_string "Click Piano                104"
 
 
-LABEL_E12870:
+NAKA_AlphaExplorer2_Label_CrystalDance130:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8f, 0x01, 0xff, 0xff
 	.byte 0x97, 0x01, 0x95, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3709,7 +3709,7 @@ LABEL_E12870:
 	aligned_string "Crystal Dance              130"
 
 
-LABEL_E128B0:
+NAKA_AlphaExplorer2_Label_CurtainUp116:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8f, 0x01, 0xff, 0xff
 	.byte 0x98, 0x01, 0x96, 0x01, 0x08, 0x00, 0x2a, 0x00
@@ -3718,7 +3718,7 @@ LABEL_E128B0:
 	aligned_string "Curtain Up!                116"
 
 
-LABEL_E128F0:
+NAKA_AlphaExplorer2_Option_Styles:
 	naka_header NAKA_TYPE_OPTION
 	.byte 0x8f, 0x01, 0xff, 0xff
 	.byte 0xff, 0xff, 0x97, 0x01, 0x08, 0x00, 0x0c, 0x00
@@ -3726,7 +3726,7 @@ LABEL_E128F0:
 	.byte 0x02, 0x00, 0xf2, 0x00
 
 
-LABEL_E1290C:
+NAKA_AlphaExplorer2_Panel_Left:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0x8e, 0x01, 0x9a, 0x01, 0x9e, 0x01, 0x8f, 0x01
 	.byte 0x08, 0x00, 0x78, 0x00, 0xd9, 0x00, 0xbf, 0x00
@@ -3735,7 +3735,7 @@ LABEL_E1290C:
 	.byte 0x02, 0x00
 
 
-LABEL_E12932:
+NAKA_AlphaExplorer2_Label_LeftUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x99, 0x01
 	.byte 0x9b, 0x01, 0x9d, 0x01, 0xff, 0xff, 0x08, 0x00
@@ -3745,7 +3745,7 @@ LABEL_E12932:
 	.byte 0x00, 0x00, 0x7e, 0x39, 0x62, 0x00
 
 
-LABEL_E12956:
+NAKA_AlphaExplorer2_Label_LeftIcon:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x9a, 0x01, 0x9c, 0x01, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x96, 0x00, 0xe0, 0x00
@@ -3755,7 +3755,7 @@ LABEL_E12956:
 	.byte 0x38, 0x00
 
 
-LABEL_E1297A:
+NAKA_AlphaExplorer2_Label_LeftDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x9b, 0x01
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
@@ -3766,7 +3766,7 @@ LABEL_E1297A:
 	.byte 0x00, 0x00, 0x7e, 0x39, 0x38, 0x00
 
 
-LABEL_E1299E:
+NAKA_AlphaExplorer2_Value_LeftVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0x99, 0x01, 0xff, 0xff, 0xff, 0xff
 	.byte 0x9a, 0x01, 0x08, 0x00, 0x7a, 0x00, 0xe3, 0x00
@@ -3774,7 +3774,7 @@ LABEL_E1299E:
 	.byte 0x08, 0x00, 0x01, 0x00
 
 
-LABEL_E129B8:
+NAKA_AlphaExplorer2_Panel_Right:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0x8e, 0x01, 0xff, 0xff
 	.byte 0x9f, 0x01, 0x99, 0x01, 0x08, 0x00, 0x04, 0x00
@@ -3783,7 +3783,7 @@ LABEL_E129B8:
 	.zero 6
 
 
-LABEL_E129DE:
+NAKA_AlphaExplorer2_Label_RightUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8e, 0x01, 0xff, 0xff, 0xa0, 0x01
 	.byte 0x9e, 0x01, 0x08, 0x00, 0x26, 0x00, 0xdc, 0x00
@@ -3793,7 +3793,7 @@ LABEL_E129DE:
 	.byte 0x49, 0x50, 0x00, 0xff
 
 
-LABEL_E12A04:
+NAKA_AlphaExplorer2_Label_RightIcon:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8e, 0x01, 0xff, 0xff, 0xa1, 0x01, 0x9f, 0x01
 	.byte 0x08, 0x00, 0x0e, 0x00, 0xd7, 0x00, 0x19, 0x00
@@ -3801,7 +3801,7 @@ LABEL_E12A04:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x7e, 0x39, 0x62, 0x00
 
 
-LABEL_E12A28:
+NAKA_AlphaExplorer2_Label_RightDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8e, 0x01, 0xff, 0xff
 	.byte 0xa2, 0x01, 0xa0, 0x01, 0x08, 0x00, 0x0e, 0x00
@@ -3810,14 +3810,14 @@ LABEL_E12A28:
 	.byte 0x7e, 0x39, 0x38, 0x00
 
 
-LABEL_E12A4C:
+NAKA_AlphaExplorer2_Value_RightVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0x8e, 0x01, 0xff, 0xff, 0xff, 0xff, 0xa1, 0x01
 	.byte 0x08, 0x00, 0x06, 0x00, 0xe3, 0x00, 0x21, 0x00
 	.byte 0xe3, 0x00, 0x08, 0x00, 0x01, 0x00
 
 
-LABEL_E12A66:
+NAKA_AlphaExplorer3_Container_Root:
 	naka_header NAKA_TYPE_CONTAINER
 	.byte 0xff, 0xff, 0xa4, 0x01, 0xff, 0xff
 	.byte 0xff, 0xff, 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -3829,14 +3829,14 @@ LABEL_E12A66:
 	aligned_string "ALPHABETICAL EXPLORER"
 
 
-LABEL_E12AA6:
+NAKA_AlphaExplorer3_Group_TopBar:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0xa3, 0x01, 0xa5, 0x01, 0xae, 0x01
 	.byte 0xff, 0xff, 0x08, 0x00, 0x08, 0x00, 0x24, 0x00
 	.byte 0x33, 0x01, 0xd1, 0x00, 0xf7, 0x00, 0xc1, 0x00
 
 
-LABEL_E12AC0:
+NAKA_AlphaExplorer3_Label_LetterC_Header:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa4, 0x01, 0xff, 0xff
 	.byte 0xa6, 0x01, 0xff, 0xff, 0x08, 0x00, 0x12, 0x00
@@ -3845,7 +3845,7 @@ LABEL_E12AC0:
 	aligned_string "C:                           TEMPO"
 
 
-LABEL_E12B04:
+NAKA_AlphaExplorer3_Label_CafeJazz76:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa4, 0x01, 0xff, 0xff, 0xa7, 0x01, 0xa5, 0x01
 	.byte 0x08, 0x00, 0x2a, 0x00, 0x3c, 0x00, 0x1d, 0x01
@@ -3854,7 +3854,7 @@ LABEL_E12B04:
 	aligned_string "Cafe Jazz                   76"
 
 
-LABEL_E12B44:
+NAKA_AlphaExplorer3_Label_CharmingWaltz88:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa4, 0x01, 0xff, 0xff, 0xa8, 0x01, 0xa6, 0x01
 	.byte 0x08, 0x00, 0x2a, 0x00, 0x5c, 0x00, 0x1d, 0x01
@@ -3863,7 +3863,7 @@ LABEL_E12B44:
 	aligned_string "Charming Waltz              88"
 
 
-LABEL_E12B84:
+NAKA_AlphaExplorer3_Label_CasinoShow130:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa4, 0x01, 0xff, 0xff, 0xa9, 0x01, 0xa7, 0x01
 	.byte 0x08, 0x00, 0x2a, 0x00, 0x4c, 0x00, 0x1d, 0x01
@@ -3872,7 +3872,7 @@ LABEL_E12B84:
 	aligned_string "Casino Show                130"
 
 
-LABEL_E12BC4:
+NAKA_AlphaExplorer3_Label_ChubbysSolo147:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa4, 0x01, 0xff, 0xff, 0xaa, 0x01, 0xa8, 0x01
 	.byte 0x08, 0x00, 0x2a, 0x00, 0x6e, 0x00, 0x1d, 0x01
@@ -3881,7 +3881,7 @@ LABEL_E12BC4:
 	aligned_string "Chubby's Solo              147"
 
 
-LABEL_E12C04:
+NAKA_AlphaExplorer3_Label_ClickPiano104:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa4, 0x01, 0xff, 0xff, 0xab, 0x01, 0xa9, 0x01
 	.byte 0x08, 0x00, 0x2a, 0x00, 0x7e, 0x00, 0x1d, 0x01
@@ -3890,7 +3890,7 @@ LABEL_E12C04:
 	aligned_string "Click Piano                104"
 
 
-LABEL_E12C44:
+NAKA_AlphaExplorer3_Label_CrystalDance130:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa4, 0x01, 0xff, 0xff, 0xac, 0x01, 0xaa, 0x01
 	.byte 0x08, 0x00, 0x2a, 0x00, 0x8e, 0x00, 0x1d, 0x01
@@ -3899,7 +3899,7 @@ LABEL_E12C44:
 	aligned_string "Crystal Dance              130"
 
 
-LABEL_E12C84:
+NAKA_AlphaExplorer3_Label_CurtainUp116:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa4, 0x01, 0xff, 0xff, 0xad, 0x01, 0xab, 0x01
 	.byte 0x08, 0x00, 0x2a, 0x00, 0x9e, 0x00, 0x1d, 0x01
@@ -3908,14 +3908,14 @@ LABEL_E12C84:
 	aligned_string "Curtain Up!                116"
 
 
-LABEL_E12CC4:
+NAKA_AlphaExplorer3_Option_Styles:
 	naka_header NAKA_TYPE_OPTION
 	.byte 0xa4, 0x01, 0xff, 0xff, 0xff, 0xff, 0xac, 0x01
 	.byte 0x08, 0x00, 0x0c, 0x00, 0x49, 0x00, 0x2d, 0x01
 	.byte 0x5a, 0x00, 0x01, 0x00, 0x02, 0x00, 0xf2, 0x00
 
 
-LABEL_E12CE0:
+NAKA_AlphaExplorer3_Panel_Left:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0xa3, 0x01, 0xaf, 0x01
 	.byte 0xb3, 0x01, 0xa4, 0x01, 0x08, 0x00, 0x78, 0x00
@@ -3924,7 +3924,7 @@ LABEL_E12CE0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
 
 
-LABEL_E12D06:
+NAKA_AlphaExplorer3_Label_LeftUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xae, 0x01, 0xb0, 0x01, 0xb2, 0x01
 	.byte 0xff, 0xff, 0x08, 0x00, 0x96, 0x00, 0xd7, 0x00
@@ -3934,7 +3934,7 @@ LABEL_E12D06:
 	jr	le, 0x00
 
 
-LABEL_E12D2A:
+NAKA_AlphaExplorer3_Label_LeftIcon:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xaf, 0x01
 	.byte 0xb1, 0x01, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
@@ -3945,7 +3945,7 @@ LABEL_E12D2A:
 	.byte 0x00, 0x00, 0x7e, 0x39, 0x38, 0x00
 
 
-LABEL_E12D4E:
+NAKA_AlphaExplorer3_Label_LeftDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb0, 0x01, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x96, 0x00, 0xe0, 0x00
@@ -3955,7 +3955,7 @@ LABEL_E12D4E:
 	.byte 0x38, 0x00
 
 
-LABEL_E12D72:
+NAKA_AlphaExplorer3_Value_LeftVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0xae, 0x01
 	.byte 0xff, 0xff, 0xff, 0xff, 0xaf, 0x01, 0x08, 0x00
@@ -3964,7 +3964,7 @@ LABEL_E12D72:
 	.byte 0x08, 0x00, 0x01, 0x00
 
 
-LABEL_E12D8C:
+NAKA_AlphaExplorer3_Panel_Right:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0xa3, 0x01, 0xff, 0xff, 0xb4, 0x01, 0xae, 0x01
 	.byte 0x08, 0x00, 0x04, 0x00, 0xd8, 0x00, 0x23, 0x00
@@ -3972,7 +3972,7 @@ LABEL_E12D8C:
 	.zero 10
 
 
-LABEL_E12DB2:
+NAKA_AlphaExplorer3_Label_RightSkip:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa3, 0x01
 	.byte 0xff, 0xff, 0xb5, 0x01, 0xb3, 0x01, 0x08, 0x00
@@ -3983,7 +3983,7 @@ LABEL_E12DB2:
 	aligned_string "SKIP"
 
 
-LABEL_E12DD8:
+NAKA_AlphaExplorer3_Label_RightUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa3, 0x01, 0xff, 0xff
 	.byte 0xb6, 0x01, 0xb4, 0x01, 0x08, 0x00, 0x0e, 0x00
@@ -3992,7 +3992,7 @@ LABEL_E12DD8:
 	.byte 0x7e, 0x39, 0x62, 0x00
 
 
-LABEL_E12DFC:
+NAKA_AlphaExplorer3_Label_RightDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa3, 0x01, 0xff, 0xff, 0xb7, 0x01, 0xb5, 0x01
 	.byte 0x08, 0x00, 0x0e, 0x00, 0xe0, 0x00, 0x19, 0x00
@@ -4000,7 +4000,7 @@ LABEL_E12DFC:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x7e, 0x39, 0x38, 0x00
 
 
-LABEL_E12E20:
+NAKA_AlphaExplorer3_Value_RightVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0xa3, 0x01, 0xff, 0xff
 	.byte 0xff, 0xff, 0xb6, 0x01, 0x08, 0x00, 0x06, 0x00
@@ -4008,7 +4008,7 @@ LABEL_E12E20:
 	.byte 0x01, 0x00
 
 
-LABEL_E12E3A:
+NAKA_StyleExplorer5_Container_Root:
 	naka_header NAKA_TYPE_CONTAINER
 	.byte 0xff, 0xff
 	.byte 0xb9, 0x01, 0xff, 0xff, 0xff, 0xff, 0x0a, 0x00
@@ -4019,14 +4019,14 @@ LABEL_E12E3A:
 	aligned_string "STYLE EXPLORER"
 
 
-LABEL_E12E74:
+NAKA_StyleExplorer5_Group_GenreList:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0xb8, 0x01, 0xba, 0x01, 0xc5, 0x01, 0xff, 0xff
 	.byte 0x08, 0x00, 0x00, 0x00, 0x2e, 0x00, 0x8f, 0x00
 	.byte 0xd5, 0x00, 0xf7, 0x00, 0xc1, 0x00
 
 
-LABEL_E12E8E:
+NAKA_StyleExplorer5_Label_EasyListening:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x01, 0xff, 0xff, 0xbb, 0x01
 	.byte 0xff, 0xff, 0x08, 0x00, 0x06, 0x00, 0x34, 0x00
@@ -4035,7 +4035,7 @@ LABEL_E12E8E:
 	aligned_string "Easy Listening"
 
 
-LABEL_E12EBE:
+NAKA_StyleExplorer5_Label_RockPop:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x01, 0xff, 0xff, 0xbc, 0x01
 	.byte 0xba, 0x01, 0x08, 0x00, 0x06, 0x00, 0x44, 0x00
@@ -4044,7 +4044,7 @@ LABEL_E12EBE:
 	aligned_string "Rock & Pop"
 
 
-LABEL_E12EEA:
+NAKA_StyleExplorer5_Label_PartyMusic:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x01
 	.byte 0xff, 0xff, 0xbd, 0x01, 0xbb, 0x01, 0x08, 0x00
@@ -4055,7 +4055,7 @@ LABEL_E12EEA:
 	aligned_string "Party Music"
 
 
-LABEL_E12F16:
+NAKA_StyleExplorer5_Label_DancePop:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x01, 0xff, 0xff, 0xbe, 0x01
 	.byte 0xbc, 0x01, 0x08, 0x00, 0x06, 0x00, 0x54, 0x00
@@ -4064,7 +4064,7 @@ LABEL_E12F16:
 	aligned_string "Dance Pop"
 
 
-LABEL_E12F40:
+NAKA_StyleExplorer5_Label_GospelBluesRnB:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x01, 0xff, 0xff
 	.byte 0xbf, 0x01, 0xbd, 0x01, 0x08, 0x00, 0x06, 0x00
@@ -4073,7 +4073,7 @@ LABEL_E12F40:
 	aligned_string "Gospel/Blues/R&B"
 
 
-LABEL_E12F72:
+NAKA_StyleExplorer5_Label_JazzSwing:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x01
 	.byte 0xff, 0xff, 0xc0, 0x01, 0xbe, 0x01, 0x08, 0x00
@@ -4084,7 +4084,7 @@ LABEL_E12F72:
 	aligned_string "Jazz & Swing"
 
 
-LABEL_E12FA0:
+NAKA_StyleExplorer5_Label_ShowTradDance:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x01, 0xff, 0xff
 	.byte 0xc1, 0x01, 0xbf, 0x01, 0x08, 0x00, 0x06, 0x00
@@ -4093,7 +4093,7 @@ LABEL_E12FA0:
 	aligned_string "Show/Trad Dance"
 
 
-LABEL_E12FD0:
+NAKA_StyleExplorer5_Label_TradFolk:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x01, 0xff, 0xff
 	.byte 0xc2, 0x01, 0xc0, 0x01, 0x08, 0x00, 0x06, 0x00
@@ -4102,7 +4102,7 @@ LABEL_E12FD0:
 	aligned_string "Trad / Folk"
 
 
-LABEL_E12FFC:
+NAKA_StyleExplorer5_Label_Country:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x01, 0xff, 0xff, 0xc3, 0x01, 0xc1, 0x01
 	.byte 0x08, 0x00, 0x06, 0x00, 0xb4, 0x00, 0x41, 0x00
@@ -4111,7 +4111,7 @@ LABEL_E12FFC:
 	aligned_string "Country"
 
 
-LABEL_E13024:
+NAKA_StyleExplorer5_Label_LatinWorld:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x01, 0xff, 0xff, 0xc4, 0x01, 0xc2, 0x01
 	.byte 0x08, 0x00, 0x06, 0x00, 0xc4, 0x00, 0x71, 0x00
@@ -4120,7 +4120,7 @@ LABEL_E13024:
 	aligned_string "Latin / World"
 
 
-LABEL_E13052:
+NAKA_StyleExplorer5_Option_Genre:
 	naka_header NAKA_TYPE_OPTION
 	.byte 0xb9, 0x01
 	.byte 0xff, 0xff, 0xff, 0xff, 0xc3, 0x01, 0x08, 0x00
@@ -4128,7 +4128,7 @@ LABEL_E13052:
 	.byte 0x01, 0x00, 0x02, 0x00, 0xf2, 0x00
 
 
-LABEL_E1306E:
+NAKA_StyleExplorer5_Panel_OkBtn:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0xb8, 0x01, 0xc6, 0x01, 0xc7, 0x01
 	.byte 0xb9, 0x01, 0x08, 0x00, 0x22, 0x01, 0xa0, 0x00
@@ -4137,7 +4137,7 @@ LABEL_E1306E:
 	.byte 0x00, 0x00, 0x0b, 0x00
 
 
-LABEL_E13094:
+NAKA_StyleExplorer5_Label_Ok:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xc5, 0x01, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0x08, 0x00, 0x22, 0x01, 0xa1, 0x00, 0x35, 0x01
@@ -4146,7 +4146,7 @@ LABEL_E13094:
 	aligned_string "OK"
 
 
-LABEL_E130B8:
+NAKA_StyleExplorer5_Panel_Left:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0xb8, 0x01, 0xc8, 0x01
 	.byte 0xcb, 0x01, 0xc5, 0x01, 0x08, 0x00, 0x2c, 0x00
@@ -4155,7 +4155,7 @@ LABEL_E130B8:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
 
 
-LABEL_E130DE:
+NAKA_StyleExplorer5_Label_LeftUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xc7, 0x01, 0xc9, 0x01, 0xca, 0x01
 	.byte 0xff, 0xff, 0x08, 0x00, 0x4a, 0x00, 0xd6, 0x00
@@ -4165,7 +4165,7 @@ LABEL_E130DE:
 	.byte 0x35, 0x00
 
 
-LABEL_E13102:
+NAKA_StyleExplorer5_Label_LeftDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xc8, 0x01
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
@@ -4176,7 +4176,7 @@ LABEL_E13102:
 	.byte 0x00, 0x00, 0x7e, 0x38, 0x31, 0x00
 
 
-LABEL_E13126:
+NAKA_StyleExplorer5_Value_LeftVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0xc7, 0x01, 0xff, 0xff, 0xff, 0xff
 	.byte 0xc8, 0x01, 0x08, 0x00, 0x2e, 0x00, 0xe3, 0x00
@@ -4184,7 +4184,7 @@ LABEL_E13126:
 	.byte 0x08, 0x00, 0x01, 0x00
 
 
-LABEL_E13140:
+NAKA_StyleExplorer5_Panel_Right:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0xb8, 0x01, 0xcc, 0x01
 	.byte 0xcf, 0x01, 0xc7, 0x01, 0x08, 0x00, 0xa4, 0x00
@@ -4194,7 +4194,7 @@ LABEL_E13140:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
 
 
-LABEL_E13166:
+NAKA_StyleExplorer5_Label_RightUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xcb, 0x01, 0xcd, 0x01, 0xce, 0x01
 	.byte 0xff, 0xff, 0x08, 0x00, 0xc2, 0x00, 0xd6, 0x00
@@ -4204,7 +4204,7 @@ LABEL_E13166:
 	.byte 0x35, 0x00
 
 
-LABEL_E1318A:
+NAKA_StyleExplorer5_Label_RightDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xcc, 0x01
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
@@ -4215,7 +4215,7 @@ LABEL_E1318A:
 	.byte 0x00, 0x00, 0x7e, 0x38, 0x31, 0x00
 
 
-LABEL_E131AE:
+NAKA_StyleExplorer5_Value_RightVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0xcb, 0x01, 0xff, 0xff, 0xff, 0xff
 	.byte 0xcc, 0x01, 0x08, 0x00, 0xa6, 0x00, 0xe3, 0x00
@@ -4223,7 +4223,7 @@ LABEL_E131AE:
 	.byte 0x08, 0x00, 0x01, 0x00
 
 
-LABEL_E131C8:
+NAKA_StyleExplorer5_Label_MainCategory:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb8, 0x01, 0xff, 0xff
 	.byte 0xd0, 0x01, 0xcb, 0x01, 0x08, 0x00, 0x12, 0x00
@@ -4232,14 +4232,14 @@ LABEL_E131C8:
 	aligned_string "MAIN CATEGORY"
 
 
-LABEL_E131F6:
+NAKA_StyleExplorer5_Group_SubStyles:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0xb8, 0x01, 0xd1, 0x01, 0xdc, 0x01
 	.byte 0xcf, 0x01, 0x08, 0x00, 0x90, 0x00, 0x2e, 0x00
 	.byte 0x1f, 0x01, 0xd5, 0x00, 0xf7, 0x00, 0xc1, 0x00
 
 
-LABEL_E13210:
+NAKA_StyleExplorer5_Label_GlamrockPiano:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd0, 0x01, 0xff, 0xff
 	.byte 0xd2, 0x01, 0xff, 0xff, 0x08, 0x00, 0x96, 0x00
@@ -4248,7 +4248,7 @@ LABEL_E13210:
 	aligned_string "Glamrock Piano"
 
 
-LABEL_E13240:
+NAKA_StyleExplorer5_Label_70sHits:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd0, 0x01, 0xff, 0xff
 	.byte 0xd3, 0x01, 0xd1, 0x01, 0x08, 0x00, 0x96, 0x00
@@ -4258,7 +4258,7 @@ LABEL_E13240:
 	aligned_string "70's Hits"
 
 
-LABEL_E1326A:
+NAKA_StyleExplorer5_Label_EuroPopShuffle:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd0, 0x01
 	.byte 0xff, 0xff, 0xd4, 0x01, 0xd2, 0x01, 0x08, 0x00
@@ -4269,7 +4269,7 @@ LABEL_E1326A:
 	aligned_string "Euro Pop Shuffle"
 
 
-LABEL_E1329C:
+NAKA_StyleExplorer5_Label_70sPowerRock:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd0, 0x01, 0xff, 0xff, 0xd5, 0x01, 0xd3, 0x01
 	.byte 0x08, 0x00, 0x96, 0x00, 0x54, 0x00, 0x11, 0x01
@@ -4278,7 +4278,7 @@ LABEL_E1329C:
 	aligned_string "70's Power Rock"
 
 
-LABEL_E132CC:
+NAKA_StyleExplorer5_Label_80sLoveSongs:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd0, 0x01, 0xff, 0xff, 0xd6, 0x01, 0xd4, 0x01
 	.byte 0x08, 0x00, 0x96, 0x00, 0x74, 0x00, 0x11, 0x01
@@ -4287,7 +4287,7 @@ LABEL_E132CC:
 	aligned_string "80's Love Songs"
 
 
-LABEL_E132FC:
+NAKA_StyleExplorer5_Label_InTheEighties:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd0, 0x01, 0xff, 0xff, 0xd7, 0x01, 0xd5, 0x01
 	.byte 0x08, 0x00, 0x96, 0x00, 0x84, 0x00, 0x11, 0x01
@@ -4296,7 +4296,7 @@ LABEL_E132FC:
 	aligned_string "In The Eighties"
 
 
-LABEL_E1332C:
+NAKA_StyleExplorer5_Label_PopBeat:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd0, 0x01, 0xff, 0xff, 0xd8, 0x01, 0xd6, 0x01
 	.byte 0x08, 0x00, 0x96, 0x00, 0x94, 0x00, 0xd9, 0x00
@@ -4305,7 +4305,7 @@ LABEL_E1332C:
 	aligned_string "Pop Beat"
 
 
-LABEL_E13356:
+NAKA_StyleExplorer5_Label_8BeatGroove:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd0, 0x01, 0xff, 0xff, 0xd9, 0x01
 	.byte 0xd7, 0x01, 0x08, 0x00, 0x96, 0x00, 0xa4, 0x00
@@ -4314,7 +4314,7 @@ LABEL_E13356:
 	aligned_string "8 Beat Groove"
 
 
-LABEL_E13384:
+NAKA_StyleExplorer5_Label_80sPopBallads:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd0, 0x01, 0xff, 0xff, 0xda, 0x01, 0xd8, 0x01
 	.byte 0x08, 0x00, 0x96, 0x00, 0xb4, 0x00, 0x19, 0x01
@@ -4323,7 +4323,7 @@ LABEL_E13384:
 	aligned_string "80's Pop Ballads"
 
 
-LABEL_E133B6:
+NAKA_StyleExplorer5_Label_RockGig:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd0, 0x01, 0xff, 0xff, 0xdb, 0x01
 	.byte 0xd9, 0x01, 0x08, 0x00, 0x96, 0x00, 0xc4, 0x00
@@ -4332,7 +4332,7 @@ LABEL_E133B6:
 	aligned_string "Rock Gig"
 
 
-LABEL_E133E0:
+NAKA_StyleExplorer5_Option_SubStyle:
 	naka_header NAKA_TYPE_OPTION
 	.byte 0xd0, 0x01, 0xff, 0xff
 	.byte 0xff, 0xff, 0xda, 0x01, 0x08, 0x00, 0x94, 0x00
@@ -4340,7 +4340,7 @@ LABEL_E133E0:
 	.byte 0x02, 0x00, 0xf2, 0x00
 
 
-LABEL_E133FC:
+NAKA_StyleExplorer5_Label_SubCategory:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb8, 0x01, 0xff, 0xff, 0xdd, 0x01, 0xd0, 0x01
 	.byte 0x08, 0x00, 0x96, 0x00, 0x1e, 0x00, 0xf9, 0x00
@@ -4348,7 +4348,7 @@ LABEL_E133FC:
 	.byte 0x00, 0x00, 0xfb, 0x00
 	aligned_string "SUB CATEGORY"
 
-LABEL_E1342A:
+NAKA_StyleExplorer5_Label_PageNum:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb8, 0x01
 	.byte 0xff, 0xff, 0xff, 0xff, 0xdc, 0x01, 0x08, 0x00
@@ -4709,143 +4709,143 @@ Naka_PresentationReg_Table5:
 	.long NAKA_StyleExplorer3_Label_DontFret106
 	.long NAKA_StyleExplorer3_Label_EPOfThe80s106
 	.long NAKA_StyleExplorer3_Label_GuitarBallad106
-	.long LABEL_E11C4E
-	.long LABEL_E11C6A
-	.long LABEL_E11C90
-	.long LABEL_E11CB6
-	.long LABEL_E11CDA
-	.long LABEL_E11CFE
-	.long LABEL_E11D18
-	.long LABEL_E11D3E
-	.long LABEL_E11D62
-	.long LABEL_E11D86
-	.long LABEL_E11DA0
-	.long LABEL_E11DD6
-	.long LABEL_E11E10
-	.long LABEL_E11E2A
-	.long LABEL_E11E70
-	.long LABEL_E11EB0
-	.long LABEL_E11EF0
-	.long LABEL_E11F30
-	.long LABEL_E11F70
-	.long LABEL_E11FB6
-	.long LABEL_E11FF6
-	.long LABEL_E12036
-	.long LABEL_E12076
-	.long LABEL_E120B6
-	.long LABEL_E120D2
-	.long LABEL_E120F8
-	.long LABEL_E1211E
-	.long LABEL_E12142
-	.long LABEL_E12166
-	.long LABEL_E12180
-	.long LABEL_E121A6
-	.long LABEL_E121CA
-	.long LABEL_E121EE
-	.long LABEL_E12208
-	.long LABEL_E1223E
-	.long LABEL_E1227E
-	.long LABEL_E12298
-	.long LABEL_E122DC
-	.long LABEL_E122F8
-	.long LABEL_E12338
-	.long LABEL_E12378
-	.long LABEL_E123B8
-	.long LABEL_E123F8
-	.long LABEL_E12438
-	.long LABEL_E12478
-	.long LABEL_E124B8
-	.long LABEL_E124F8
-	.long LABEL_E12538
-	.long LABEL_E1255E
-	.long LABEL_E12582
-	.long LABEL_E125A6
-	.long LABEL_E125CA
-	.long LABEL_E125E4
-	.long LABEL_E1260A
-	.long LABEL_E12630
-	.long LABEL_E12654
-	.long LABEL_E12678
-	.long LABEL_E12692
-	.long LABEL_E126D2
-	.long LABEL_E126EC
-	.long LABEL_E12730
-	.long LABEL_E12770
-	.long LABEL_E127B0
-	.long LABEL_E127F0
-	.long LABEL_E12830
-	.long LABEL_E12870
-	.long LABEL_E128B0
-	.long LABEL_E128F0
-	.long LABEL_E1290C
-	.long LABEL_E12932
-	.long LABEL_E12956
-	.long LABEL_E1297A
-	.long LABEL_E1299E
-	.long LABEL_E129B8
-	.long LABEL_E129DE
-	.long LABEL_E12A04
-	.long LABEL_E12A28
-	.long LABEL_E12A4C
-	.long LABEL_E12A66
-	.long LABEL_E12AA6
-	.long LABEL_E12AC0
-	.long LABEL_E12B04
-	.long LABEL_E12B44
-	.long LABEL_E12B84
-	.long LABEL_E12BC4
-	.long LABEL_E12C04
-	.long LABEL_E12C44
-	.long LABEL_E12C84
-	.long LABEL_E12CC4
-	.long LABEL_E12CE0
-	.long LABEL_E12D06
-	.long LABEL_E12D2A
-	.long LABEL_E12D4E
-	.long LABEL_E12D72
-	.long LABEL_E12D8C
-	.long LABEL_E12DB2
-	.long LABEL_E12DD8
-	.long LABEL_E12DFC
-	.long LABEL_E12E20
-	.long LABEL_E12E3A
-	.long LABEL_E12E74
-	.long LABEL_E12E8E
-	.long LABEL_E12EBE
-	.long LABEL_E12EEA
-	.long LABEL_E12F16
-	.long LABEL_E12F40
-	.long LABEL_E12F72
-	.long LABEL_E12FA0
-	.long LABEL_E12FD0
-	.long LABEL_E12FFC
-	.long LABEL_E13024
-	.long LABEL_E13052
-	.long LABEL_E1306E
-	.long LABEL_E13094
-	.long LABEL_E130B8
-	.long LABEL_E130DE
-	.long LABEL_E13102
-	.long LABEL_E13126
-	.long LABEL_E13140
-	.long LABEL_E13166
-	.long LABEL_E1318A
-	.long LABEL_E131AE
-	.long LABEL_E131C8
-	.long LABEL_E131F6
-	.long LABEL_E13210
-	.long LABEL_E13240
-	.long LABEL_E1326A
-	.long LABEL_E1329C
-	.long LABEL_E132CC
-	.long LABEL_E132FC
-	.long LABEL_E1332C
-	.long LABEL_E13356
-	.long LABEL_E13384
-	.long LABEL_E133B6
-	.long LABEL_E133E0
-	.long LABEL_E133FC
-	.long LABEL_E1342A
+	.long NAKA_StyleExplorer3_Option_SubStyle
+	.long NAKA_StyleExplorer3_Panel_SkipBtn
+	.long NAKA_StyleExplorer3_Label_Skip
+	.long NAKA_StyleExplorer3_Label_NavUp
+	.long NAKA_StyleExplorer3_Label_NavDown
+	.long NAKA_StyleExplorer3_Value_NavVal
+	.long NAKA_StyleExplorer3_Panel_Nav2
+	.long NAKA_StyleExplorer3_Label_Nav2Up
+	.long NAKA_StyleExplorer3_Label_Nav2Down
+	.long NAKA_StyleExplorer3_Value_Category
+	.long NAKA_StyleExplorer3_Label_CategoryRockPop
+	.long NAKA_StyleExplorer4_Container_Root
+	.long NAKA_StyleExplorer4_Group_TopBar
+	.long NAKA_StyleExplorer4_Label_EuroPopShuffleHeader
+	.long NAKA_StyleExplorer4_Label_ShuffleSynth144
+	.long NAKA_StyleExplorer4_Label_JumpBrass144
+	.long NAKA_StyleExplorer4_Label_PopLeader144
+	.long NAKA_StyleExplorer4_Label_ShuffleOrgan144
+	.long NAKA_StyleExplorer4_Label_80sLoveSongsHeader
+	.long NAKA_StyleExplorer4_Label_AnalogueBallad106
+	.long NAKA_StyleExplorer4_Label_DontFret106
+	.long NAKA_StyleExplorer4_Label_EPOfThe80s106
+	.long NAKA_StyleExplorer4_Label_SaxProduction106
+	.long NAKA_StyleExplorer4_Option_SubStyle
+	.long NAKA_StyleExplorer4_Panel_SkipBtn
+	.long NAKA_StyleExplorer4_Label_Skip
+	.long NAKA_StyleExplorer4_Label_NavUp
+	.long NAKA_StyleExplorer4_Label_NavDown
+	.long NAKA_StyleExplorer4_Value_NavVal
+	.long NAKA_StyleExplorer4_Panel_Nav2
+	.long NAKA_StyleExplorer4_Label_Nav2Up
+	.long NAKA_StyleExplorer4_Label_Nav2Down
+	.long NAKA_StyleExplorer4_Value_Category
+	.long NAKA_StyleExplorer4_Label_CategoryRockPop
+	.long NAKA_AlphaExplorer1_Container_Root
+	.long NAKA_AlphaExplorer1_Group_TopBar
+	.long NAKA_AlphaExplorer1_Label_LetterB_Header
+	.long NAKA_AlphaExplorer1_Option_Styles
+	.long NAKA_AlphaExplorer1_Label_BallroomFiddle101
+	.long NAKA_AlphaExplorer1_Label_BebopSolo121
+	.long NAKA_AlphaExplorer1_Label_BarbarShop86
+	.long NAKA_AlphaExplorer1_Label_BensonFrets147
+	.long NAKA_AlphaExplorer1_Label_BigStage98
+	.long NAKA_AlphaExplorer1_Label_BillysEP132
+	.long NAKA_AlphaExplorer1_Label_BonjourParis106
+	.long NAKA_AlphaExplorer1_Label_BreathyNight112
+	.long NAKA_AlphaExplorer1_Label_BridgeTooFar128
+	.long NAKA_AlphaExplorer1_Panel_Left
+	.long NAKA_AlphaExplorer1_Label_LeftUp
+	.long NAKA_AlphaExplorer1_Label_LeftIcon
+	.long NAKA_AlphaExplorer1_Label_LeftDown
+	.long NAKA_AlphaExplorer1_Value_LeftVal
+	.long NAKA_AlphaExplorer1_Panel_Right
+	.long NAKA_AlphaExplorer1_Label_RightSkip
+	.long NAKA_AlphaExplorer1_Label_RightUp
+	.long NAKA_AlphaExplorer1_Label_RightDown
+	.long NAKA_AlphaExplorer1_Value_RightVal
+	.long NAKA_AlphaExplorer2_Container_Root
+	.long NAKA_AlphaExplorer2_Group_TopBar
+	.long NAKA_AlphaExplorer2_Label_LetterC_Header
+	.long NAKA_AlphaExplorer2_Label_CafeJazz76
+	.long NAKA_AlphaExplorer2_Label_CharmingWaltz88
+	.long NAKA_AlphaExplorer2_Label_CasinoShow130
+	.long NAKA_AlphaExplorer2_Label_ChubbysSolo147
+	.long NAKA_AlphaExplorer2_Label_ClickPiano104
+	.long NAKA_AlphaExplorer2_Label_CrystalDance130
+	.long NAKA_AlphaExplorer2_Label_CurtainUp116
+	.long NAKA_AlphaExplorer2_Option_Styles
+	.long NAKA_AlphaExplorer2_Panel_Left
+	.long NAKA_AlphaExplorer2_Label_LeftUp
+	.long NAKA_AlphaExplorer2_Label_LeftIcon
+	.long NAKA_AlphaExplorer2_Label_LeftDown
+	.long NAKA_AlphaExplorer2_Value_LeftVal
+	.long NAKA_AlphaExplorer2_Panel_Right
+	.long NAKA_AlphaExplorer2_Label_RightUp
+	.long NAKA_AlphaExplorer2_Label_RightIcon
+	.long NAKA_AlphaExplorer2_Label_RightDown
+	.long NAKA_AlphaExplorer2_Value_RightVal
+	.long NAKA_AlphaExplorer3_Container_Root
+	.long NAKA_AlphaExplorer3_Group_TopBar
+	.long NAKA_AlphaExplorer3_Label_LetterC_Header
+	.long NAKA_AlphaExplorer3_Label_CafeJazz76
+	.long NAKA_AlphaExplorer3_Label_CharmingWaltz88
+	.long NAKA_AlphaExplorer3_Label_CasinoShow130
+	.long NAKA_AlphaExplorer3_Label_ChubbysSolo147
+	.long NAKA_AlphaExplorer3_Label_ClickPiano104
+	.long NAKA_AlphaExplorer3_Label_CrystalDance130
+	.long NAKA_AlphaExplorer3_Label_CurtainUp116
+	.long NAKA_AlphaExplorer3_Option_Styles
+	.long NAKA_AlphaExplorer3_Panel_Left
+	.long NAKA_AlphaExplorer3_Label_LeftUp
+	.long NAKA_AlphaExplorer3_Label_LeftIcon
+	.long NAKA_AlphaExplorer3_Label_LeftDown
+	.long NAKA_AlphaExplorer3_Value_LeftVal
+	.long NAKA_AlphaExplorer3_Panel_Right
+	.long NAKA_AlphaExplorer3_Label_RightSkip
+	.long NAKA_AlphaExplorer3_Label_RightUp
+	.long NAKA_AlphaExplorer3_Label_RightDown
+	.long NAKA_AlphaExplorer3_Value_RightVal
+	.long NAKA_StyleExplorer5_Container_Root
+	.long NAKA_StyleExplorer5_Group_GenreList
+	.long NAKA_StyleExplorer5_Label_EasyListening
+	.long NAKA_StyleExplorer5_Label_RockPop
+	.long NAKA_StyleExplorer5_Label_PartyMusic
+	.long NAKA_StyleExplorer5_Label_DancePop
+	.long NAKA_StyleExplorer5_Label_GospelBluesRnB
+	.long NAKA_StyleExplorer5_Label_JazzSwing
+	.long NAKA_StyleExplorer5_Label_ShowTradDance
+	.long NAKA_StyleExplorer5_Label_TradFolk
+	.long NAKA_StyleExplorer5_Label_Country
+	.long NAKA_StyleExplorer5_Label_LatinWorld
+	.long NAKA_StyleExplorer5_Option_Genre
+	.long NAKA_StyleExplorer5_Panel_OkBtn
+	.long NAKA_StyleExplorer5_Label_Ok
+	.long NAKA_StyleExplorer5_Panel_Left
+	.long NAKA_StyleExplorer5_Label_LeftUp
+	.long NAKA_StyleExplorer5_Label_LeftDown
+	.long NAKA_StyleExplorer5_Value_LeftVal
+	.long NAKA_StyleExplorer5_Panel_Right
+	.long NAKA_StyleExplorer5_Label_RightUp
+	.long NAKA_StyleExplorer5_Label_RightDown
+	.long NAKA_StyleExplorer5_Value_RightVal
+	.long NAKA_StyleExplorer5_Label_MainCategory
+	.long NAKA_StyleExplorer5_Group_SubStyles
+	.long NAKA_StyleExplorer5_Label_GlamrockPiano
+	.long NAKA_StyleExplorer5_Label_70sHits
+	.long NAKA_StyleExplorer5_Label_EuroPopShuffle
+	.long NAKA_StyleExplorer5_Label_70sPowerRock
+	.long NAKA_StyleExplorer5_Label_80sLoveSongs
+	.long NAKA_StyleExplorer5_Label_InTheEighties
+	.long NAKA_StyleExplorer5_Label_PopBeat
+	.long NAKA_StyleExplorer5_Label_8BeatGroove
+	.long NAKA_StyleExplorer5_Label_80sPopBallads
+	.long NAKA_StyleExplorer5_Label_RockGig
+	.long NAKA_StyleExplorer5_Option_SubStyle
+	.long NAKA_StyleExplorer5_Label_SubCategory
+	.long NAKA_StyleExplorer5_Label_PageNum
 	.long 0x0
 
 

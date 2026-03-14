@@ -17,7 +17,7 @@ SeMenu_SendEvent:
 	jr SeMenu_SendEvent_StoreAndReturn
 
 SeMenu_SendEvent_Indirect:
-	call LABEL_F994EA
+	call UI_PostRefreshEvent
 
 SeMenu_SendEvent_StoreAndReturn:
 	ld a, (xsp)

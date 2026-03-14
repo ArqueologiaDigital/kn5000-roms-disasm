@@ -15,7 +15,7 @@
 	ld xbc, 0x1E0008C
 	jr ParaLoadOptSendEvtReturn
 
-LABEL_F772AB:
+ParaLoadOpt_BuildFromIZ1:
 	ld a, (xiz + 1)
 	extz wa
 	sla wa, 2
@@ -31,7 +31,7 @@ LABEL_F772AB:
 	ld xbc, 0x1E0008C
 	jr ParaLoadOptSendEvtReturn
 
-LABEL_F772D3:
+ParaLoadOpt_BuildFromIZ2:
 	ld c, (xiz + 2)
 	extz bc
 	sla bc, 2
@@ -48,7 +48,7 @@ LABEL_F772D3:
 	ld xbc, 0x1E0008C
 	jr ParaLoadOptSendEvtReturn
 
-LABEL_F772FE:
+ParaLoadOpt_BuildFromIZ3:
 	ld c, (xiz + 3)
 	extz bc
 	sla bc, 2
@@ -75,20 +75,20 @@ ParaLoadOpt_ReturnZero:
 
 ParaLoadOptOKFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F77348
+	jr nz, ParaLoadOptOK_ReturnZero
 	ld xwa, 0x1430003
 	ld xbc, 0x1E30005
 	call MainFuncCall
 
-LABEL_F77348:
+ParaLoadOptOK_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 MainFlashFunc:
 	cp xbc, 0x1E30006
-	jr z, LABEL_F77393
+	jr z, MainFlash_AudioDispatch
 	cp xbc, 0x1E30005
-	jr nz, LABEL_F77399
+	jr nz, MainFlash_ReturnZero
 	stdi8 32578, 37
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
@@ -101,13 +101,13 @@ MainFlashFunc:
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
 	call ApPostEvent
-	jr LABEL_F77399
+	jr MainFlash_ReturnZero
 
-LABEL_F77393:
+MainFlash_AudioDispatch:
 	lds wa, 7
 	call Audio_DispatchCommand
 
-LABEL_F77399:
+MainFlash_ReturnZero:
 	lds32 xhl, 0
 	ret
 
@@ -135,13 +135,13 @@ AcTtlJgBoxProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x1C00007
-	jr z, LABEL_F95AEB
+	jr z, AcTtlJgBox_HandleOK
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
-	jr LABEL_F95B21
+	jr AcTtlJgBox_InheritedCall
 
-LABEL_F95AEB:
+AcTtlJgBox_HandleOK:
 	ld xwa, xiz
 	call GetViewInstance
 	ld (xsp + 4), xhl
@@ -150,24 +150,24 @@ LABEL_F95AEB:
 	ld xde, (xsp + 8)
 	call SendEvent
 	cps hl, 0
-	jr z, LABEL_F95B19
+	jr z, AcTtlJgBox_CallInherited
 	ld xde, xiz
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 50)
 	ld xbc, (xsp + 12)
 	call MainFuncCall
 	lds32 xhl, 0
-	jr LABEL_F95B25
+	jr AcTtlJgBox_Return
 
-LABEL_F95B19:
+AcTtlJgBox_CallInherited:
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 
-LABEL_F95B21:
+AcTtlJgBox_InheritedCall:
 	call InheritedProc
 
-LABEL_F95B25:
+AcTtlJgBox_Return:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -180,21 +180,21 @@ AcParaStrBoxProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C50000
-	jrl z, LABEL_F95BD7
+	jrl z, AcParaStrBox_HandleInit
 	cp xwa, 0x1C00002
-	jr z, LABEL_F95BC0
+	jr z, AcParaStrBox_HandleReEnable
 	cp xwa, 0x1C0000F
-	jr z, LABEL_F95BA3
+	jr z, AcParaStrBox_HandleTimer
 	cp xwa, 0x1C0000B
-	jr z, LABEL_F95B83
+	jr z, AcParaStrBox_HandleSuspend
 	cp xwa, 0x1C00001
-	jr z, LABEL_F95B6C
+	jr z, AcParaStrBox_HandleCreate
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	jrl AcParaStrBox_InheritedProcCall
 
-LABEL_F95B6C:
+AcParaStrBox_HandleCreate:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 40)
@@ -204,7 +204,7 @@ LABEL_F95B6C:
 	ld xde, (xsp + 4)
 	jr AcParaStrBox_InheritedProcCall
 
-LABEL_F95B83:
+AcParaStrBox_HandleSuspend:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -215,26 +215,26 @@ LABEL_F95B83:
 	ld xwa, (xhl + 36)
 	ld xbc, (xsp + 8)
 	call MainFuncCall
-	jr LABEL_F95BB2
+	jr AcParaStrBox_ReturnZero
 
-LABEL_F95BA3:
+AcParaStrBox_HandleTimer:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 40)
 	cpw (xwa), 0x0
-	jr nz, LABEL_F95BB6
+	jr nz, AcParaStrBox_ForwardInherited
 
-LABEL_F95BB2:
+AcParaStrBox_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F95BFD
+	jr AcParaStrBox_Return
 
-LABEL_F95BB6:
+AcParaStrBox_ForwardInherited:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	jr AcParaStrBox_InheritedProcCall
 
-LABEL_F95BC0:
+AcParaStrBox_HandleReEnable:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 40)
@@ -244,20 +244,20 @@ LABEL_F95BC0:
 	ld xde, (xsp + 4)
 	jr AcParaStrBox_InheritedProcCall
 
-LABEL_F95BD7:
+AcParaStrBox_HandleInit:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xbc, (xhl + 40)
 	ld xwa, (xsp + 4)
 	or xwa, xwa
-	jr z, LABEL_F95BED
+	jr z, AcParaStrBox_SetFlagOne
 	ldw (xbc), 0x0
-	jr LABEL_F95BF1
+	jr AcParaStrBox_AfterFlagSet
 
-LABEL_F95BED:
+AcParaStrBox_SetFlagOne:
 	ldw (xbc), 0x1
 
-LABEL_F95BF1:
+AcParaStrBox_AfterFlagSet:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -265,7 +265,7 @@ LABEL_F95BF1:
 AcParaStrBox_InheritedProcCall:
 	call InheritedProc
 
-LABEL_F95BFD:
+AcParaStrBox_Return:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -278,26 +278,26 @@ PsWindowToggleProc:
 	ld (xsp + 18), xwa
 	ld xwa, (xsp + 14)
 	cp xwa, 0x1C00002
-	jrl z, LABEL_F95D75
+	jrl z, PsWinToggle_HandleReEnable
 	cp xwa, 0x1C00007
-	jrl z, LABEL_F95CC1
+	jrl z, PsWinToggle_HandleOK
 	cp xwa, 0x1C00001
-	jr z, LABEL_F95C37
+	jr z, PsWinToggle_HandleCreate
 	ld xwa, (xsp + 18)
 	ld xbc, (xsp + 14)
 	ld xde, (xsp + 10)
 	jrl AcFileSfxChild_InheritedCall
 
-LABEL_F95C37:
+PsWinToggle_HandleCreate:
 	ld xwa, (xsp + 18)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 40)
 	cp xwa, 0xFFFFFFFF
-	jr z, LABEL_F95CB5
+	jr z, PsWinToggle_ForwardInherited
 	ld xwa, (xiz + 44)
 	cp xwa, 0xFFFFFFFF
-	jr z, LABEL_F95CB5
+	jr z, PsWinToggle_ForwardInherited
 	ld xwa, (xsp + 18)
 	ld xbc, 0x1E0006B
 	lds32 xde, 0
@@ -317,27 +317,27 @@ LABEL_F95C37:
 	ld xbc, 0x1E50007
 	call MainFuncCall
 	cpw (xsp + 4), 0x0
-	jr z, LABEL_F95CA8
+	jr z, PsWinToggle_SendToChild44
 	ld xwa, (xiz + 40)
 	ld xbc, (xsp + 14)
 	ld xde, (xsp + 10)
-	jr LABEL_F95CB1
+	jr PsWinToggle_SendChildEvent
 
-LABEL_F95CA8:
+PsWinToggle_SendToChild44:
 	ld xwa, (xiz + 44)
 	ld xbc, (xsp + 14)
 	ld xde, (xsp + 10)
 
-LABEL_F95CB1:
+PsWinToggle_SendChildEvent:
 	call SendEvent
 
-LABEL_F95CB5:
+PsWinToggle_ForwardInherited:
 	ld xwa, (xsp + 18)
 	ld xbc, (xsp + 14)
 	ld xde, (xsp + 10)
 	jrl AcFileSfxChild_InheritedCall
 
-LABEL_F95CC1:
+PsWinToggle_HandleOK:
 	ld xwa, (xsp + 18)
 	call GetViewInstance
 	ld (xsp + 6), xhl
@@ -346,14 +346,14 @@ LABEL_F95CC1:
 	ld xde, (xsp + 10)
 	call SendEvent
 	cps hl, 0
-	jrl z, LABEL_F95D6A
+	jrl z, PsWinToggle_InheritedFallback
 	ld xbc, (xsp + 6)
 	ld xwa, (xbc + 40)
 	cp xwa, 0xFFFFFFFF
-	jr z, LABEL_F95D66
+	jr z, PsWinToggle_ReturnZero
 	ld xwa, (xbc + 44)
 	cp xwa, 0xFFFFFFFF
-	jr z, LABEL_F95D66
+	jr z, PsWinToggle_ReturnZero
 	ld xwa, (xsp + 18)
 	ld xbc, 0x1E0006C
 	lds32 xde, 0
@@ -366,7 +366,7 @@ LABEL_F95CC1:
 	ld xbc, 0x1E50007
 	call MainFuncCall
 	cpw (xsp + 4), 0x0
-	jr z, LABEL_F95D44
+	jr z, PsWinToggle_HideChild40
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 44)
 	ld xbc, 0x1C00002
@@ -376,9 +376,9 @@ LABEL_F95CC1:
 	ld xwa, (xwa + 40)
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jr LABEL_F95D62
+	jr PsWinToggle_SendToggleEvent
 
-LABEL_F95D44:
+PsWinToggle_HideChild40:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 40)
 	ld xbc, 0x1C00002
@@ -389,50 +389,50 @@ LABEL_F95D44:
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
-LABEL_F95D62:
+PsWinToggle_SendToggleEvent:
 	call SendEvent
 
-LABEL_F95D66:
+PsWinToggle_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F95DD1
+	jr PsWinToggle_Return
 
-LABEL_F95D6A:
+PsWinToggle_InheritedFallback:
 	ld xwa, (xsp + 18)
 	ld xbc, (xsp + 14)
 	ld xde, (xsp + 10)
 	jr AcFileSfxChild_InheritedCall
 
-LABEL_F95D75:
+PsWinToggle_HandleReEnable:
 	ld xwa, (xsp + 18)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 40)
 	cp xwa, 0xFFFFFFFF
-	jr z, LABEL_F95DC4
+	jr z, PsWinToggle_ForwardToInherited
 	ld xwa, (xiz + 44)
 	cp xwa, 0xFFFFFFFF
-	jr z, LABEL_F95DC4
+	jr z, PsWinToggle_ForwardToInherited
 	ld xwa, (xsp + 18)
 	ld xbc, 0x1E0006B
 	lds32 xde, 0
 	call SendEvent
 	ld (xsp + 4), hl
 	cpw (xsp + 4), 0x0
-	jr z, LABEL_F95DB7
+	jr z, PsWinToggle_SelectChild44
 	ld xwa, (xiz + 40)
 	ld xbc, (xsp + 14)
 	ld xde, (xsp + 10)
-	jr LABEL_F95DC0
+	jr PsWinToggle_SendSelectedChild
 
-LABEL_F95DB7:
+PsWinToggle_SelectChild44:
 	ld xwa, (xiz + 44)
 	ld xbc, (xsp + 14)
 	ld xde, (xsp + 10)
 
-LABEL_F95DC0:
+PsWinToggle_SendSelectedChild:
 	call SendEvent
 
-LABEL_F95DC4:
+PsWinToggle_ForwardToInherited:
 	ld xwa, (xsp + 18)
 	ld xbc, (xsp + 14)
 	ld xde, (xsp + 10)
@@ -440,7 +440,7 @@ LABEL_F95DC4:
 AcFileSfxChild_InheritedCall:
 	call InheritedProc
 
-LABEL_F95DD1:
+PsWinToggle_Return:
 	pop xiz
 	lda xsp, (xsp + 18)
 	ret
@@ -452,21 +452,21 @@ AcFileSfxBoxProc:
 	ld xiz, xbc
 	ld (xsp + 28), xwa
 	cp xiz, 0x1C50000
-	jrl z, LABEL_F95F28
+	jrl z, AcFileSfx_HandleInit
 	cp xiz, 0x1C00002
-	jrl z, LABEL_F95F10
+	jrl z, AcFileSfx_HandleReEnable
 	cp xiz, 0x1E50001
-	jr z, LABEL_F95E61
+	jr z, AcFileSfx_HandleSfxEvent
 	cp xiz, 0x1C0000B
-	jr z, LABEL_F95E30
+	jr z, AcFileSfx_HandleSuspend
 	cp xiz, 0x1C00001
-	jr z, LABEL_F95E17
+	jr z, AcFileSfx_HandleCreate
 	ld xwa, (xsp + 28)
 	ld xbc, xiz
 	ld xde, (xsp + 24)
 	jrl AcFileSfxBox_InheritedCall
 
-LABEL_F95E17:
+AcFileSfx_HandleCreate:
 	ld xwa, (xsp + 28)
 	call GetViewInstance
 	ld xwa, (xhl + 30)
@@ -476,7 +476,7 @@ LABEL_F95E17:
 	ld xde, (xsp + 24)
 	jrl AcFileSfxBox_InheritedCall
 
-LABEL_F95E30:
+AcFileSfx_HandleSuspend:
 	ld xwa, (xsp + 28)
 	ld xbc, xiz
 	ld xde, (xsp + 24)
@@ -491,16 +491,16 @@ LABEL_F95E30:
 	ld xwa, (xiz + 26)
 	ld xbc, 0x1E50000
 	call MainFuncCall
-	jrl LABEL_F95F0C
+	jrl AcFileSfx_ReturnZero
 
-LABEL_F95E61:
+AcFileSfx_HandleSfxEvent:
 	ld xwa, (xsp + 28)
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 30)
 	cpw (xwa), 0x0
-	jrl z, LABEL_F95F0C
+	jrl z, AcFileSfx_ReturnZero
 	lda xbc, (xsp + 16)
 	ld xwa, (xsp + 28)
 	call GetClientBox
@@ -523,7 +523,7 @@ LABEL_F95E61:
 	ld (xsp + 6), wa
 	ldw (xsp + 4), 0x1
 
-LABEL_F95EB4:
+AcFileSfx_DrawLoop:
 	lda_24 xhl, 0xea97f2
 	ld xwa, (xsp + 8)
 	lda xix, (xwa + 22)
@@ -531,7 +531,7 @@ LABEL_F95EB4:
 	lda xbc, (xsp + 12)
 	ld xde, (xsp + 24)
 	bit 0, de
-	jr z, LABEL_F95EE4
+	jr z, AcFileSfx_DrawDefault
 	ld de, (xsp + 4)
 	extz xde
 	sll xde, 2
@@ -541,16 +541,16 @@ LABEL_F95EB4:
 	push xhl
 	pushw 0xFF
 	pushw 0xF5
-	jr LABEL_F95EEF
+	jr AcFileSfx_CallDrawString
 
-LABEL_F95EE4:
+AcFileSfx_DrawDefault:
 	ld xde, (xhl)
 	ld xhl, (xix)
 	push xhl
 	pushw 0xFF
 	pushw 0xF5
 
-LABEL_F95EEF:
+AcFileSfx_CallDrawString:
 	call DrawString
 	ld wa, (xsp + 6)
 	add (xsp + 14), wa
@@ -559,13 +559,13 @@ LABEL_F95EEF:
 	ld (xsp + 24), xwa
 	incm 1, (xsp + 4)
 	cpw (xsp + 4), 0x9
-	jr c, LABEL_F95EB4
+	jr c, AcFileSfx_DrawLoop
 
-LABEL_F95F0C:
+AcFileSfx_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F95F4F
+	jr AcFileSfx_Return
 
-LABEL_F95F10:
+AcFileSfx_HandleReEnable:
 	ld xwa, (xsp + 28)
 	call GetViewInstance
 	ld xwa, (xhl + 30)
@@ -575,20 +575,20 @@ LABEL_F95F10:
 	ld xde, (xsp + 24)
 	jr AcFileSfxBox_InheritedCall
 
-LABEL_F95F28:
+AcFileSfx_HandleInit:
 	ld xwa, (xsp + 28)
 	call GetViewInstance
 	ld xbc, (xhl + 30)
 	ld xwa, (xsp + 24)
 	or xwa, xwa
-	jr z, LABEL_F95F3F
+	jr z, AcFileSfx_SetFlagOne
 	ldw (xbc), 0x0
-	jr LABEL_F95F43
+	jr AcFileSfx_AfterFlagSet
 
-LABEL_F95F3F:
+AcFileSfx_SetFlagOne:
 	ldw (xbc), 0x1
 
-LABEL_F95F43:
+AcFileSfx_AfterFlagSet:
 	ld xwa, (xsp + 28)
 	ld xbc, xiz
 	ld xde, (xsp + 24)
@@ -596,7 +596,7 @@ LABEL_F95F43:
 AcFileSfxBox_InheritedCall:
 	call InheritedProc
 
-LABEL_F95F4F:
+AcFileSfx_Return:
 	pop xiz
 	lda xsp, (xsp + 28)
 	ret
@@ -609,15 +609,15 @@ AcMonoIndexToggleProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x1C00007
-	jr z, LABEL_F95FBE
+	jr z, IvFocus_HandleOK
 	cp xwa, 0x1C0000D
-	jr z, LABEL_F95F7E
+	jr z, IvFocus_HandleDestroy
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	jrl IvFocus_JumpInherited
 
-LABEL_F95F7E:
+IvFocus_HandleDestroy:
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
@@ -631,17 +631,17 @@ LABEL_F95F7E:
 	ld de, (xwa)
 	exts xde
 	cpw (xbc), 0x0
-	jr z, LABEL_F95FB2
+	jr z, IvFocus_SendListNotEmpty
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00017
 	jr IvFocus_SendEventReturn
 
-LABEL_F95FB2:
+IvFocus_SendListNotEmpty:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00018
 	jr IvFocus_SendEventReturn
 
-LABEL_F95FBE:
+IvFocus_HandleOK:
 	ld xwa, xiz
 	call GetViewInstance
 	ld (xsp + 4), xhl
@@ -1935,7 +1935,7 @@ UIState_KeyScan_Dispatch:
 	or xix, xix				; Test if pointer is null
 	ret z					; Return if no key map for this state
 	cpw (xix), 0xFFFE			; Check for PASS-THROUGH marker
-	jr nz, LABEL_F986EF			; Not pass-through, try normal scan
+	jr nz, KeyScan_CheckEmptyMarker			; Not pass-through, try normal scan
 	; --- Pass-through path: broadcast any key press ---
 	; Build XDE = (C080 << 24) | (C07D << 16) | (C07E << 8) | C07F
 	lds32	xde, 0
@@ -1954,8 +1954,8 @@ UIState_KeyScan_Dispatch:
 	add xde, xwa
 	ld xwa, 0xFFFFFFFF			; broadcast target (all handlers)
 	ld xbc, 0x01C00038			; key press event code
-	jr LABEL_F9873B				; dispatch event
-LABEL_F986EF:
+	jr KeyScan_DispatchEvent				; dispatch event
+KeyScan_CheckEmptyMarker:
 	cpw (xix), 0xFFFF			; Check for EMPTY marker
 	ret z					; Return if no keys for this state
 	; --- Normal scan: search array for matching (chain<<8)|param ---
@@ -1967,9 +1967,9 @@ LABEL_F986EF:
 	extz bc
 	sll bc, 8				; BC = chain << 8
 	add bc, hl				; BC = (chain << 8) | param = key code
-LABEL_F9870A:
+KeyScan_ScanLoop:
 	cp	(xix), bc
-	jr nz, LABEL_F9873F			; No match, advance to next entry
+	jr nz, KeyScan_AdvanceEntry			; No match, advance to next entry
 	; --- Match found: build XDE = (D<<24)|(E<<16)|(C07E<<8)|C07F ---
 	ldb d, 0x00
 	extz xde				; Zero-extend DE -> XDE
@@ -1987,12 +1987,12 @@ LABEL_F9870A:
 	add xde, xwa
 	ld xwa, 0xFFFFFFFF			; broadcast target
 	ld xbc, 0x01C00038			; key press event code
-LABEL_F9873B:
+KeyScan_DispatchEvent:
 	jp EventDispatch_Direct				; tail-call EventDispatch_Direct
-LABEL_F9873F:
+KeyScan_AdvanceEntry:
 	inc 2, xix				; advance to next 16-bit entry
 	cpw (xix), 0xFFFF			; check for end-of-list
-	jr nz, LABEL_F9870A			; continue scanning
+	jr nz, KeyScan_ScanLoop			; continue scanning
 	ret
 ; =============================================================================
 ; CtrlPanel_HandleKeyInput -- Alternate key handler (special key codes 0x00, 0x10)
@@ -2004,7 +2004,7 @@ LABEL_F9873F:
 CtrlPanel_HandleKeyInput:
 	ldda8 a, 0xC07D				; param byte (key code low)
 	cp a, 0x10				; Check for special key 0x10
-	jr z, LABEL_F98769			; Handle key 0x10
+	jr z, CtrlPanel_HandleKey10			; Handle key 0x10
 	cps a, 0				; Check for key 0x00
 	ret nz					; Other keys: return
 	ldda8 a, 0xC07F				; additional key data
@@ -2014,7 +2014,7 @@ CtrlPanel_HandleKeyInput:
 	and a, 0x03				; check bits 1:0
 	ret nz					; return if already active
 	jr PartSelect_UpdateDisplayState				; activate
-LABEL_F98769:
+CtrlPanel_HandleKey10:
 	call AudioMode_ResetVoiceState				; handler for key 0x10
 	lds32	xde, 0
 	ldda8 e, 0x8D3A				; load current state
@@ -2040,26 +2040,26 @@ ApTaskControl:
 	cp xbc, 0x1E000B0
 	jr z, ApTaskCtrl_ReturnZero
 	cp xbc, 0x1E000AD
-	jr z, LABEL_F987E0
+	jr z, ApTaskCtrl_HandleAD
 	cp xbc, 0x1E000AC
-	jr z, LABEL_F987D1
+	jr z, ApTaskCtrl_HandleAC
 	cp xbc, 0x1E000AF
 	jr z, ApTaskCtrl_ReturnZero
 	cp xbc, 0x1E000AE
 	jr nz, ApTaskCtrl_ReturnZero
 	lds wa, 1
 	call TaskSched_WakeBySlotID
-	jr LABEL_F987DA
+	jr ApTaskCtrl_ResumeTask
 
-LABEL_F987D1:
+ApTaskCtrl_HandleAC:
 	ld xwa, 0x140000C
 	call MainFuncCall
 
-LABEL_F987DA:
+ApTaskCtrl_ResumeTask:
 	call TaskSched_Resume
 	jr ApTaskCtrl_ReturnZero
 
-LABEL_F987E0:
+ApTaskCtrl_HandleAD:
 	lds wa, 1
 	call TaskSched_WakeBySlotID
 
@@ -2069,33 +2069,33 @@ ApTaskCtrl_ReturnZero:
 
 MainTaskControl:
 	cp xbc, 0x1E000B0
-	jr z, LABEL_F98830
+	jr z, MainTaskCtrl_HandleB0
 	cp xbc, 0x1E000AD
 	jr z, MainTaskCtrl_ReturnZero
 	cp xbc, 0x1E000AC
-	jr z, LABEL_F98824
+	jr z, MainTaskCtrl_HandleAC
 	cp xbc, 0x1E000AF
-	jr z, LABEL_F9881C
+	jr z, MainTaskCtrl_HandleAF
 	cp xbc, 0x1E000AE
 	jr nz, MainTaskCtrl_ReturnZero
 	ld xwa, 0xFFFFFFFF
 	call ApPostEvent
-	jr LABEL_F9882A
+	jr MainTaskCtrl_ResumeTask
 
-LABEL_F9881C:
+MainTaskCtrl_HandleAF:
 	lds wa, 4
 	call TaskSched_WakeBySlotID
 	jr MainTaskCtrl_ReturnZero
 
-LABEL_F98824:
+MainTaskCtrl_HandleAC:
 	lds wa, 4
 	call TaskSched_WakeBySlotID
 
-LABEL_F9882A:
+MainTaskCtrl_ResumeTask:
 	call TaskSched_Resume
 	jr MainTaskCtrl_ReturnZero
 
-LABEL_F98830:
+MainTaskCtrl_HandleB0:
 	ld xwa, 0xFFFFFFFF
 	call ApPostEvent
 
@@ -2475,9 +2475,9 @@ MainBitControl:
 	dec 8, xsp
 	push xiz
 	cp xbc, 0x1E00066
-	jr z, LABEL_F98C4F
+	jr z, BitCtrl_ReadBit
 	cp xbc, 0x1E00067
-	jrl nz, LABEL_F98CA8
+	jrl nz, BitCtrl_Return
 	ld xiz, xde
 	ld xwa, (xiz)
 	ld (xsp + 4), xwa
@@ -2493,21 +2493,21 @@ MainBitControl:
 	lda xbc, (xiz + 4)
 	lda xde, (xwa + 8)
 	cpw (xiz + 8), 0x0
-	jr z, LABEL_F98C1E
+	jr z, BitCtrl_ClearBit
 	ld xwa, (xsp + 4)
 	ld xbc, (xbc)
 	or (xwa), xbc
 	ldw (xde), 0x1
-	jr LABEL_F98C2F
+	jr BitCtrl_PostBitChangeEvent
 
-LABEL_F98C1E:
+BitCtrl_ClearBit:
 	ld xbc, (xbc)
 	xor xbc, 0xFFFFFFFF
 	ld xwa, (xsp + 4)
 	and (xwa), xbc
 	ldw (xde), 0x0
 
-LABEL_F98C2F:
+BitCtrl_PostBitChangeEvent:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00024
 	ld xde, (xsp + 8)
@@ -2515,9 +2515,9 @@ LABEL_F98C2F:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E00023
 	ld xde, (xsp + 8)
-	jr LABEL_F98CA4
+	jr BitCtrl_PostFinalEvent
 
-LABEL_F98C4F:
+BitCtrl_ReadBit:
 	ld xiz, xde
 	ld xwa, (xiz)
 	ld (xsp + 4), xwa
@@ -2526,14 +2526,14 @@ LABEL_F98C4F:
 	and xbc, (xwa)
 	lda xwa, (xiz + 8)
 	or xbc, xbc
-	jr z, LABEL_F98C6B
+	jr z, BitCtrl_ReadBitZero
 	ldw (xwa), 0x1
-	jr LABEL_F98C6F
+	jr BitCtrl_ReadBitDone
 
-LABEL_F98C6B:
+BitCtrl_ReadBitZero:
 	ldw (xwa), 0x0
 
-LABEL_F98C6F:
+BitCtrl_ReadBitDone:
 	pushw 0xE
 	call Malloc
 	inc 2, xsp
@@ -2551,10 +2551,10 @@ LABEL_F98C6F:
 	ld xbc, 0x1E00023
 	ld xde, (xsp + 8)
 
-LABEL_F98CA4:
+BitCtrl_PostFinalEvent:
 	call ApPostEvent
 
-LABEL_F98CA8:
+BitCtrl_Return:
 	lds32 xhl, 0
 	pop xiz
 	inc 8, xsp
@@ -2569,7 +2569,7 @@ MainPmanControl:
 	push xiz
 	ld xwa, xbc
 	cp xbc, 0x1E000A0
-	jrl z, LABEL_F99295
+	jrl z, MainPmanCtrl_HandleA0
 	sub xwa, 0x1E00057
 	cp xwa, 0x0
 	jrl lt, MainTitle_SendEventDone
@@ -2581,7 +2581,7 @@ MainPmanControl:
 	lda_24 xix, 0xf991b1
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F991B1:
+MainPmanCtrl_DispatchTable:
 	.byte 0xea, 0x8e, 0xa6, 0x20, 0x9e, 0x04, 0x21, 0x9e
 	.byte 0x06, 0x22, 0x1d, 0x01, 0xd2, 0xfc, 0x78, 0x2d
 	.byte 0x01, 0xea, 0x8e, 0xa6, 0x20, 0x9e, 0x04, 0x21
@@ -2613,39 +2613,39 @@ LABEL_F991B1:
 	.byte 0x00, 0xe0, 0x01, 0xaf, 0x04, 0x22, 0x1d, 0x58
 	.byte 0x9d, 0xfa, 0x68, 0x5a
 
-LABEL_F99295:
+MainPmanCtrl_HandleA0:
 	ldmi16 (xsp + 6), 0x8D3A
 	cp xde, 0x10
-	jr c, LABEL_F992B2
+	jr c, MainPmanCtrl_StorePartSelect
 	cp xde, 0x15
-	jr z, LABEL_F992B2
+	jr z, MainPmanCtrl_StorePartSelect
 	cp xde, 0x16
-	jr nz, LABEL_F992B8
+	jr nz, MainPmanCtrl_CheckSoundParam
 
-LABEL_F992B2:
+MainPmanCtrl_StorePartSelect:
 	stda8 36154, e
-	jr LABEL_F992D7
+	jr MainPmanCtrl_LoadPartSelect
 
-LABEL_F992B8:
+MainPmanCtrl_CheckSoundParam:
 	ld xwa, 0x4100
 	call SndParam_LookupReadOnly
 	cps l, 1
-	jr z, LABEL_F992C9
+	jr z, MainPmanCtrl_SetPartSelectOne
 	cps l, 5
-	jr nz, LABEL_F992D2
+	jr nz, MainPmanCtrl_SetPartSelectZero
 
-LABEL_F992C9:
+MainPmanCtrl_SetPartSelectOne:
 	stdi8 36154, 1
 	ldb e, 0x1
-	jr LABEL_F992DB
+	jr MainPmanCtrl_CompareAndUpdate
 
-LABEL_F992D2:
+MainPmanCtrl_SetPartSelectZero:
 	stdi8 36154, 0
 
-LABEL_F992D7:
+MainPmanCtrl_LoadPartSelect:
 	ldda8 e, 36154
 
-LABEL_F992DB:
+MainPmanCtrl_CompareAndUpdate:
 	cp e, (xsp + 6)
 	jr z, MainTitle_SendEventDone
 	extz de
@@ -2664,19 +2664,19 @@ MainTitleControl:
 	ld xwa, xde
 	and xwa, 0xFFFF
 	cp xbc, 0x1E000BB
-	jrl z, LABEL_F993EA
+	jrl z, MainTitleCtrl_HandleBB
 	ld hl, wa
 	cp xbc, 0x1E000BA
-	jrl z, LABEL_F993DC
+	jrl z, MainTitleCtrl_HandleBA
 	cp xbc, 0x1E000AB
-	jrl z, LABEL_F993CE
+	jrl z, MainTitleCtrl_HandleAB
 	ldda8 a, 36150
 	cp xbc, 0x1C00013
 	jrl z, SeqState_DemoModeHandler
 	cp xbc, 0x1C00028
-	jr z, LABEL_F99384
+	jr z, MainTitleCtrl_SaveAndTransition
 	cp xbc, 0x1C00016
-	jr z, LABEL_F99384
+	jr z, MainTitleCtrl_SaveAndTransition
 	cp xbc, 0x1C00015
 	jr z, SeqState_TransitionMode
 	cp xbc, 0x1C00014
@@ -2711,14 +2711,14 @@ SeqState_TransitionMode:
 	stda8 36150, l
 	stda8 36152, l
 	ldw wa, 0x61
-	jr LABEL_F99391
+	jr MainTitleCtrl_SetIndicatorAndClear
 
-LABEL_F99384:
+MainTitleCtrl_SaveAndTransition:
 	ldmm8 36153, 36152
 	stda8 36152, l
 	ldw wa, 0x61
 
-LABEL_F99391:
+MainTitleCtrl_SetIndicatorAndClear:
 	call CtrlPanel_SetIndicatorBit
 	lds32 xwa, 0
 	st32_24 0x0274a2, xwa
@@ -2731,36 +2731,36 @@ SeqState_DemoModeHandler:
 	cp xde, 0x8
 	jrl nz, UIWidget_ReturnZero
 	cpdm8 36152, a
-	jr nz, LABEL_F993C0
+	jr nz, SeqDemo_SaveCurrentState
 	stda8 36151, a
 
-LABEL_F993C0:
+SeqDemo_SaveCurrentState:
 	ldmm8 36153, 36152
 	ldmm8 36149, 36148
 	jr UIWidget_ReturnZero
 
-LABEL_F993CE:
+MainTitleCtrl_HandleAB:
 	st16_24 0x0274ac, xde
 	sti16_24 0x0274ae, 0x000a
 	jr UIWidget_ReturnZero
 
-LABEL_F993DC:
+MainTitleCtrl_HandleBA:
 	st16_24 0x0274a8, xde
 	sti16_24 0x0274aa, 0x000a
 	jr UIWidget_ReturnZero
 
-LABEL_F993EA:
+MainTitleCtrl_HandleBB:
 	ld16_24 xwa, 0x0274aa
 	cps wa, 0
-	jr z, LABEL_F99408
+	jr z, MainTitleCtrl_CheckSecondTimer
 	dec 1, wa
 	st16_24 0x0274aa, xwa
 	cps wa, 0
-	jr nz, LABEL_F99408
+	jr nz, MainTitleCtrl_CheckSecondTimer
 	ld16_24 xwa, 0x0274a8
 	st16_24 0x0274a6, xwa
 
-LABEL_F99408:
+MainTitleCtrl_CheckSecondTimer:
 	ld16_24 xwa, 0x0274ae
 	cps wa, 0
 	jr z, UIWidget_ReturnZero
@@ -2769,14 +2769,14 @@ LABEL_F99408:
 	cps wa, 0
 	jr nz, UIWidget_ReturnZero
 	cpdi16_24 160940, 0
-	jr z, LABEL_F9942B
+	jr z, MainTitleCtrl_ClearIndicatorBit
 	setda 0, 36700
-	jr LABEL_F9942F
+	jr MainTitleCtrl_SetIndicator60
 
-LABEL_F9942B:
+MainTitleCtrl_ClearIndicatorBit:
 	resda 0, 36700
 
-LABEL_F9942F:
+MainTitleCtrl_SetIndicator60:
 	ldw wa, 0x60
 	call CtrlPanel_SetIndicatorBit
 
@@ -2787,19 +2787,19 @@ UIWidget_ReturnZero:
 CtrlPanel_GetSelectionState:
 	ld16_24 xwa, 0x0274a6
 	bit 0, wa
-	jr z, LABEL_F99446
+	jr z, CtrlPanel_CheckBit1
 	lds hl, 1
 	ret
 
-LABEL_F99446:
+CtrlPanel_CheckBit1:
 	bit 1, wa
-	jr z, LABEL_F99454
+	jr z, CtrlPanel_SelectionReturnZero
 	and wa, 0x18
-	jr nz, LABEL_F99454
+	jr nz, CtrlPanel_SelectionReturnZero
 	lds hl, 2
 	ret
 
-LABEL_F99454:
+CtrlPanel_SelectionReturnZero:
 	lds hl, 0
 	ret
 
@@ -2866,13 +2866,13 @@ SoundCtrl_SendCommand:
 	inc 2, xsp
 	ret
 
-LABEL_F994EA:
+UI_PostRefreshEvent:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 	jp ApPostEvent
 
-LABEL_F994FA:
+UI_PostTimerResetEvent:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
@@ -2895,7 +2895,7 @@ UI_PostDialEnable:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0006F
 	jp ApPostEvent
-LABEL_F99539:
+UI_DialRangeData:
 	.byte 0xf2, 0x94, 0x74, 0x02, 0x41, 0x0e, 0xf2, 0x95
 	.byte 0x74, 0x02, 0x41, 0x0e
 
@@ -2927,16 +2927,16 @@ BoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E000B2
-	jr z, LABEL_F995CA
+	jr z, BoxProc_HandleB2
 	cp xbc, 0x1E000B1
-	jr z, LABEL_F995C1
+	jr z, BoxProc_HandleB1
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F995A4
+	jr z, BoxProc_HandleDestroy
 	ld xwa, xiz
 	call ViewableProc
-	jr LABEL_F995DB
+	jr BoxProc_Return
 
-LABEL_F995A4:
+BoxProc_HandleDestroy:
 	ld xwa, xiz
 	call ViewableProc
 	ld xwa, xiz
@@ -2946,24 +2946,24 @@ LABEL_F995A4:
 	ld de, (xhl + 22)
 	call DrawDesignBox
 	lds32 xhl, 0
-	jr LABEL_F995DB
+	jr BoxProc_Return
 
-LABEL_F995C1:
+BoxProc_HandleB1:
 	ld xwa, xiz
 	ld xiz, 0x18
-	jr LABEL_F995D1
+	jr BoxProc_ReadFieldByOffset
 
-LABEL_F995CA:
+BoxProc_HandleB2:
 	ld xwa, xiz
 	ld xiz, 0x16
 
-LABEL_F995D1:
+BoxProc_ReadFieldByOffset:
 	call GetViewInstance
 	add xhl, xiz
 	ld hl, (xhl)
 	exts xhl
 
-LABEL_F995DB:
+BoxProc_Return:
 	pop xiz
 	ret
 
@@ -3020,37 +3020,37 @@ CtrlPanel_DispatchByIndex:
 	lda_24 xix, 0xf9965e
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F9965E:
+CtrlPanel_FrameDispatchTable:
 	.byte 0xea, 0xac, 0x68, 0x12, 0xea, 0xab, 0x68, 0x0e
 	.byte 0xea, 0xa9, 0x9e, 0x04, 0x6a, 0xd8, 0xaa
 
-LABEL_F9966D:
+CtrlPanel_SubFrameOffset:
 	sub (xiz + 6), wa
 
 CtrlPanel_InvalidIndexHandler:
 	or xde, xde
-	jr z, LABEL_F99697
+	jr z, CtrlPanel_MarginDone
 
-LABEL_F99674:
+CtrlPanel_ApplyMarginLoop:
 	lds32 xiy, 0
 	cp xde, 0x0
-	jr le, LABEL_F99697
+	jr le, CtrlPanel_MarginDone
 	lda xix, (xiz + 2)
 	lda xhl, (xiz + 6)
 	ld xbc, xiz
 	lda xwa, (xiz + 4)
 
-LABEL_F99689:
+CtrlPanel_MarginAdjustStep:
 	incm 1, (xix)
 	decm 1, (xhl)
 	incm 1, (xbc)
 	decm 1, (xwa)
 	inc 1, xiy
 	cp xiy, xde
-	jr lt, LABEL_F99689
+	jr lt, CtrlPanel_MarginAdjustStep
 
-LABEL_F99697:
-	jrl LABEL_F99796
+CtrlPanel_MarginDone:
+	jrl CtrlPanel_FrameReturn
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1C
@@ -3079,7 +3079,7 @@ CtrlFrame_AddLeftMargin:
 	call GetFrameSPSize
 	ld wa, (xsp + 6)
 	add (xiz), wa
-	jr LABEL_F99703
+	jr CtrlPanel_AfterLeftMargin
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x24
@@ -3093,13 +3093,13 @@ CtrlFrame_SubRightMargin:
 	ld wa, (xsp + 6)
 	sub (xiz + 4), wa
 
-LABEL_F99703:
+CtrlPanel_AfterLeftMargin:
 	lds32 xde, 2
-	jrl LABEL_F99674
+	jrl CtrlPanel_ApplyMarginLoop
 	lds32 xde, 1
 	decm 1, (xiz + 4)
 	lds wa, 1
-	jrl LABEL_F9966D
+	jrl CtrlPanel_SubFrameOffset
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x19
@@ -3136,7 +3136,7 @@ CtrlPanel_Frame_AddLeftMargin:
 	call GetFrameSPSize
 	ld wa, (xsp + 6)
 	add (xiz), wa
-	jr LABEL_F99791
+	jr CtrlPanel_AfterTopMargin
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x22
@@ -3150,11 +3150,11 @@ CtrlPanel_Frame_SubtractTopMargin:
 	ld wa, (xsp + 6)
 	sub (xiz + 4), wa
 
-LABEL_F99791:
+CtrlPanel_AfterTopMargin:
 	lds32 xde, 1
-	jrl LABEL_F99674
+	jrl CtrlPanel_ApplyMarginLoop
 
-LABEL_F99796:
+CtrlPanel_FrameReturn:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -3214,25 +3214,25 @@ BoxCheck_ReturnZero:
 
 BoxLeftCheck:
 	cp wa, 0x88
-	jr gt, LABEL_F9982A
+	jr gt, BoxLeftCheck_ReturnZero
 	cp wa, 0x80
-	jr lt, LABEL_F9982A
+	jr lt, BoxLeftCheck_ReturnZero
 	lds hl, 1
 	ret
 
-LABEL_F9982A:
+BoxLeftCheck_ReturnZero:
 	lds hl, 0
 	ret
 
 BoxRightCheck:
 	cp wa, 0xA8
-	jr gt, LABEL_F9983C
+	jr gt, BoxRightCheck_ReturnZero
 	cp wa, 0xA0
-	jr lt, LABEL_F9983C
+	jr lt, BoxRightCheck_ReturnZero
 	lds hl, 1
 	ret
 
-LABEL_F9983C:
+BoxRightCheck_ReturnZero:
 	lds hl, 0
 	ret
 
@@ -3291,20 +3291,20 @@ GroupBoxProc:
 	cp xde, 0x1C00030
 	jrl z, GroupBoxProc_Ev1C00030
 	cp xde, 0x1C00026
-	jrl z, LABEL_F9A17E
+	jrl z, GroupBox_HandleKeyRepeatTimer
 	cp xde, 0x1C0001F
-	jrl z, LABEL_F99F5A
+	jrl z, GroupBox_HandleCursorNav
 	cp xde, 0x1C0003B
-	jrl z, LABEL_F99E57
+	jrl z, GroupBox_HandleStateCompare
 	ld xwa, xde
 	cp xwa, 0x1C00028
-	jrl z, LABEL_F99DD2
+	jrl z, GroupBox_HandleRefresh
 	cp xwa, 0x1C00016
-	jrl z, LABEL_F99B5F
+	jrl z, GroupBox_HandleSoundCommand
 	cp xwa, 0x1C00015
-	jrl z, LABEL_F99A71
+	jrl z, GroupBox_HandleModeChange
 	cp xwa, 0x1C00014
-	jr z, LABEL_F99961
+	jr z, GroupBox_HandlePartChange
 	ld xwa, (xsp + 4)
 	sub xwa, 0x1C00001
 	cp xwa, 0x0
@@ -3333,7 +3333,7 @@ CtrlPanel_FuncDispatch:
 	lda_24 xix, 0xf99961
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F99961:
+GroupBox_HandlePartChange:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E000AA
@@ -3352,38 +3352,38 @@ LABEL_F99961:
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F999F0
+	jr z, GroupBox_PartChange_SendEvents
 
-LABEL_F9999D:
+GroupBox_PartChange_DrawLoop:
 	cpw (xsp + 6), 0x0
-	jr nz, LABEL_F999B4
+	jr nz, GroupBox_PartChange_SendRefresh
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
 	call SendEvent
 
-LABEL_F999B4:
+GroupBox_PartChange_SendRefresh:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00028
 	lds32 xde, 0
 	call SendEvent
 	cpw (xsp + 6), 0x0
-	jr nz, LABEL_F999DB
+	jr nz, GroupBox_PartChange_CheckDraw
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
 	call SendEvent
 
-LABEL_F999DB:
+GroupBox_PartChange_CheckDraw:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E0007A
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr nz, LABEL_F9999D
+	jr nz, GroupBox_PartChange_DrawLoop
 
-LABEL_F999F0:
+GroupBox_PartChange_SendEvents:
 	ld xwa, (xsp + 30)
 	ld xde, xwa
 	ld xbc, (xsp + 34)
@@ -3423,7 +3423,7 @@ LABEL_F999F0:
 	ld xde, 0x8
 	jrl GroupBox_NavDispatch
 
-LABEL_F99A71:
+GroupBox_HandleModeChange:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E000AA
@@ -3442,38 +3442,38 @@ LABEL_F99A71:
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F99B00
+	jr z, GroupBox_ModeChange_SendEvents
 
-LABEL_F99AAD:
+GroupBox_ModeChange_DrawLoop:
 	cpw (xsp + 6), 0x0
-	jr nz, LABEL_F99AC4
+	jr nz, GroupBox_ModeChange_SendRefresh
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
 	call SendEvent
 
-LABEL_F99AC4:
+GroupBox_ModeChange_SendRefresh:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00028
 	lds32 xde, 0
 	call SendEvent
 	cpw (xsp + 6), 0x0
-	jr nz, LABEL_F99AEB
+	jr nz, GroupBox_ModeChange_CheckDraw
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
 	call SendEvent
 
-LABEL_F99AEB:
+GroupBox_ModeChange_CheckDraw:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E0007A
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr nz, LABEL_F99AAD
+	jr nz, GroupBox_ModeChange_DrawLoop
 
-LABEL_F99B00:
+GroupBox_ModeChange_SendEvents:
 	ld xwa, (xsp + 30)
 	ld xde, xwa
 	ld xbc, (xsp + 34)
@@ -3503,16 +3503,16 @@ LABEL_F99B00:
 	ld xde, 0x8
 	jrl GroupBox_NavDispatch
 
-LABEL_F99B5F:
+GroupBox_HandleSoundCommand:
 	ld xwa, (xsp + 30)
 	cp xwa, 0x1A000EE
-	jr nz, LABEL_F99B7A
+	jr nz, GroupBox_SndCmd_GetTitle
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 0
 	call SendEvent
 
-LABEL_F99B7A:
+GroupBox_SndCmd_GetTitle:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E000AA
@@ -3534,15 +3534,15 @@ LABEL_F99B7A:
 	ld xde, 0x1600062
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F99BDA
+	jr z, GroupBox_SndCmd_CheckDraw
 	call GetTitleNow
 	cp xhl, 0x1A000EE
-	jr z, LABEL_F99BDA
+	jr z, GroupBox_SndCmd_CheckDraw
 	call GetTitleNow
 	cp xhl, 0x1A000EF
-	jrl nz, LABEL_F99D45
+	jrl nz, GroupBox_SndCmd_CheckTitleWidget
 
-LABEL_F99BDA:
+GroupBox_SndCmd_CheckDraw:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E0007A
@@ -3551,27 +3551,27 @@ LABEL_F99BDA:
 	or xhl, xhl
 	jr z, GroupBox_TitleCheck
 
-LABEL_F99BEF:
+GroupBox_SndCmd_DrawLoop:
 	cpw (xsp + 6), 0x0
-	jr nz, LABEL_F99C06
+	jr nz, GroupBox_SndCmd_SendRefresh
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
 	call SendEvent
 
-LABEL_F99C06:
+GroupBox_SndCmd_SendRefresh:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00028
 	lds32 xde, 0
 	call SendEvent
 	cpw (xsp + 6), 0x0
-	jr nz, LABEL_F99C2D
+	jr nz, GroupBox_SndCmd_ClearStatus
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
 	call SendEvent
 
-LABEL_F99C2D:
+GroupBox_SndCmd_ClearStatus:
 	ldw (xsp + 2), 0x0
 	call GetTitleNow
 	ld xwa, xhl
@@ -3579,13 +3579,13 @@ LABEL_F99C2D:
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr nz, LABEL_F99BEF
+	jr nz, GroupBox_SndCmd_DrawLoop
 
 GroupBox_TitleCheck:
 	cpw (xsp + 2), 0x0
 	jrl nz, GroupBox_ReturnZero
 
-LABEL_F99C4F:
+GroupBox_SndCmd_ProcessTitle:
 	ld xwa, (xsp + 30)
 	ld xbc, 0x1E00033
 	lds32 xde, 0
@@ -3595,7 +3595,7 @@ LABEL_F99C4F:
 	ld xde, 0x1E000B6
 	call SendEvent
 	or xhl, xhl
-	jrl nz, LABEL_F99DC3
+	jrl nz, GroupBox_SndCmd_PostRefreshEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E00098
@@ -3658,7 +3658,7 @@ LABEL_F99C4F:
 	ld xbc, 0x1E0009A
 	jrl GroupBox_NavDispatch
 
-LABEL_F99D45:
+GroupBox_SndCmd_CheckTitleWidget:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E0007A
@@ -3678,32 +3678,32 @@ LABEL_F99D45:
 	or xhl, xhl
 	jrl z, GroupBox_TitleCheck
 	cpw (xsp + 6), 0x0
-	jr nz, LABEL_F99D98
+	jr nz, GroupBox_SndCmd_RefreshAfterDraw
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
 	call SendEvent
 
-LABEL_F99D98:
+GroupBox_SndCmd_RefreshAfterDraw:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00028
 	lds32 xde, 0
 	call SendEvent
 	cpw (xsp + 6), 0x0
-	jrl nz, LABEL_F99C4F
+	jrl nz, GroupBox_SndCmd_ProcessTitle
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 0
 	call SendEvent
-	jrl LABEL_F99C4F
+	jrl GroupBox_SndCmd_ProcessTitle
 
-LABEL_F99DC3:
+GroupBox_SndCmd_PostRefreshEvent:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
 	jrl GroupBox_NavDispatch
 
-LABEL_F99DD2:
+GroupBox_HandleRefresh:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xde, (xsp + 30)
@@ -3744,7 +3744,7 @@ LABEL_F99DD2:
 	lds32 xde, 0
 	jrl GroupBox_NavDispatch
 
-LABEL_F99E57:
+GroupBox_HandleStateCompare:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009A
 	lds32 xde, 0
@@ -3763,13 +3763,13 @@ LABEL_F99E57:
 	add xwa, xbc
 	ld xwa, (xwa)
 	cp xwa, (xde)
-	jr z, LABEL_F99E9D
+	jr z, GroupBox_StateCompare_Default
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1C00014
 	jrl GroupBox_NavDispatch
 
-LABEL_F99E9D:
+GroupBox_StateCompare_Default:
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1C00014
 	ld xde, 0x1800001
@@ -3789,18 +3789,18 @@ LABEL_F99E9D:
 	jrl z, GroupBox_ReturnZero
 	ld xwa, (xsp + 30)
 	cp xwa, 0x5
-	jr z, LABEL_F99EF1
+	jr z, GroupBox_Nav_SendSuspend
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1C0000A
 	lds32 xde, 0
-	jr LABEL_F99EFB
+	jr GroupBox_Nav_SendEventAndUpdate
 
-LABEL_F99EF1:
+GroupBox_Nav_SendSuspend:
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
 
-LABEL_F99EFB:
+GroupBox_Nav_SendEventAndUpdate:
 	call SendEvent
 	lds wa, 1
 	call SetNeedUpdate
@@ -3817,13 +3817,13 @@ LABEL_F99EFB:
 	inc 1, xde
 	st_dri3b A, 0xE5, 0xC0, 0x01
 
-LABEL_F99F2E:
+GroupBox_Nav_ClearWidgetFlags:
 	ld (xde), 0x0
 	ld (xwa), 0x0
 	lda xde, (xde + 28)
 	lda xwa, (xwa + 28)
 	cp xwa, xbc
-	jr ule, LABEL_F99F2E
+	jr ule, GroupBox_Nav_ClearWidgetFlags
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
@@ -3834,36 +3834,36 @@ LABEL_F99F2E:
 	lds32 xde, 0
 	jrl GroupBox_NavDispatch
 
-LABEL_F99F5A:
+GroupBox_HandleCursorNav:
 	cpdi16_24 257872, 0
-	jr z, LABEL_F99FA2
+	jr z, GroupBox_CursorNav_AddLsw
 	cp xwa, 0x0
-	jr ge, LABEL_F99F7C
+	jr ge, GroupBox_CursorNav_LoadPositive
 	ld32_24 xwa, 0x03ef56
 	ld32_24 xbc, 0x03ef5e
 	ld32_24 xde, 0x03ef66
-	jr LABEL_F99F8B
+	jr GroupBox_CursorNav_SendAndTitle
 
-LABEL_F99F7C:
+GroupBox_CursorNav_LoadPositive:
 	ld32_24 xwa, 0x03ef52
 	ld32_24 xbc, 0x03ef5a
 	ld32_24 xde, 0x03ef62
 
-LABEL_F99F8B:
+GroupBox_CursorNav_SendAndTitle:
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E00078
 	lds32 xde, 0
 	call SendEvent
-	jr LABEL_F99FA9
+	jr GroupBox_CursorNav_UpdateScreen
 
-LABEL_F99FA2:
+GroupBox_CursorNav_AddLsw:
 	lds32 xwa, 4
 	lds de, 4
 	calr MainLswAdd
 
-LABEL_F99FA9:
+GroupBox_CursorNav_UpdateScreen:
 	lds wa, 1
 	call SetNeedUpdate
 	call UpdateScreen
@@ -3878,13 +3878,13 @@ LABEL_F99FA9:
 	ld xde, 0x1600029
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F99FE8
+	jr z, GroupBox_KeyPress_CheckRange
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1C00032
 	call SendEvent
 
-LABEL_F99FE8:
+GroupBox_KeyPress_CheckRange:
 	ld xwa, (xsp + 30)
 	cp xwa, 0xFF
 	jrl ugt, GroupBox_ReturnZero
@@ -3931,13 +3931,13 @@ LABEL_F99FE8:
 	ld xde, 0x1600029
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F9A08B
+	jr z, GroupBox_KeyRelease_CheckRange
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1C00033
 	call SendEvent
 
-LABEL_F9A08B:
+GroupBox_KeyRelease_CheckRange:
 	ld xwa, (xsp + 30)
 	cp xwa, 0xFF
 	jrl ugt, GroupBox_ReturnZero
@@ -3985,19 +3985,19 @@ LABEL_F9A08B:
 	ld xde, 0x1600029
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F9A131
+	jr z, GroupBox_KeyHold_CheckRange
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, 0x1C0002B
 	call SendEvent
 
-LABEL_F9A131:
+GroupBox_KeyHold_CheckRange:
 	ld xwa, (xsp + 30)
 	cp xwa, 0xFF
 	jrl ugt, GroupBox_ReturnZero
 	ld xwa, (xsp + 30)
 	cp xwa, 0xF
-	jr nz, LABEL_F9A16E
+	jr nz, GroupBox_TimerRepeat_SendNav
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E0007A
@@ -4011,14 +4011,14 @@ LABEL_F9A131:
 	lds32 xde, 0
 	jrl GroupBox_NavDispatch
 
-LABEL_F9A16E:
+GroupBox_TimerRepeat_SendNav:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E00078
 	lds32 xde, 0
 	jrl GroupBox_NavDispatch
 
-LABEL_F9A17E:
+GroupBox_HandleKeyRepeatTimer:
 	ld xwa, (xsp + 30)
 	and xwa, 0x1F
 	ld (xsp + 4), wa

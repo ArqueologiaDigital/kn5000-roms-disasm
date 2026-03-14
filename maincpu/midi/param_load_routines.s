@@ -648,12 +648,12 @@ VoiceUI_MiscHandler:
 	jrl nz, ParaLoadOpt_ReturnZero
 	ld wa, (xde)
 	cp wa, 0x8
-	jrl z, LABEL_F772FE
+	jrl z, ParaLoadOpt_BuildFromIZ3
 	cps wa, 7
-	jr z, LABEL_F772D3
+	jr z, ParaLoadOpt_BuildFromIZ2
 	ld xbc, (xsp + 8)
 	cps wa, 3
-	jr z, LABEL_F772AB
+	jr z, ParaLoadOpt_BuildFromIZ1
 	cps wa, 2
 	jrl nz, ParaLoadOpt_ReturnZero
 	ld a, (xiz)
