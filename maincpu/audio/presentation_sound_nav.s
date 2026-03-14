@@ -1666,21 +1666,21 @@ AcNamingWindowProc:
 	ld (xsp + 50), xwa
 	ld xwa, (xsp + 46)
 	cp xwa, 0x1C00029
-	jrl z, LABEL_F9C04D
+	jrl z, WndScroll_HandleDialPage
 	cp xwa, 0x1E00081
-	jrl z, LABEL_F9C028
+	jrl z, WndScroll_HandleCharSet
 	cp xwa, 0x1E00080
-	jrl z, LABEL_F9BEC6
+	jrl z, WndScroll_HandleCharInput
 	ld xhl, (xsp + 42)
 	ld de, hl
 	cp xwa, 0x1E0007F
-	jrl z, LABEL_F9BE71
+	jrl z, WndScroll_HandleIndexChange
 	cp xwa, 0x1E0007B
-	jrl z, LABEL_F9BE66
+	jrl z, WndScroll_StoreCallerPtr
 	cp xwa, 0x1E0003A
-	jrl z, LABEL_F9BE53
+	jrl z, WndScroll_CopyFromSource
 	cp xwa, 0x1E00086
-	jrl z, LABEL_F9BE36
+	jrl z, WndScroll_CopyStringAndSend
 	cp xwa, 0x1C00018
 	jrl z, WndEvt_DispatchByEventCode
 	cp xwa, 0x1C0001A
@@ -1691,24 +1691,24 @@ AcNamingWindowProc:
 	jrl z, WndEvt_DispatchByEventCode
 	lda xbc, (xsp + 34)
 	cp xwa, 0x1C0000F
-	jrl z, LABEL_F9B74B
+	jrl z, WndScroll_RepaintAll
 	cp xwa, 0x1C0000E
-	jrl z, LABEL_F9B60F
+	jrl z, WndScroll_HandleSelectionChange
 	cp xwa, 0x1C00002
-	jrl z, LABEL_F9B600
+	jrl z, WndScroll_BasicWindowProc
 	cp xwa, 0x1C0000C
-	jrl z, LABEL_F9B5D4
+	jrl z, WndScroll_InitSelectionTrack
 	cp xwa, 0x1C0000B
-	jrl z, LABEL_F9B5D4
+	jrl z, WndScroll_InitSelectionTrack
 	cp xwa, 0x1C00001
-	jrl nz, LABEL_F9C119
+	jrl nz, WndScroll_ForwardToWindowProc
 	or xhl, xhl
 	jr z, LABEL_F9B4AB
 	ld xwa, xhl
 	cp xwa, 0x3
 	jr z, LABEL_F9B4AB
 	cp xwa, 0x5
-	jrl nz, LABEL_F9B5A6
+	jrl nz, WndScroll_InitWindowProc
 
 LABEL_F9B4AB:
 	ld32_24 xwa, 0x0274d2
@@ -1768,6 +1768,6 @@ LABEL_F9B558:
 	call SetVisible
 	lds iz, 0
 	cpdi16_24 160982, 0
-	jr ule, LABEL_F9B588
+	jr ule, WndScroll_InitBuffer
 
 ; --- UI Window Procs, Graphics & Mode Screens ---

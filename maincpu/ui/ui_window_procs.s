@@ -12,7 +12,7 @@
 	ld32_24 xhl, 0x0274e4
 	lds32 xbc, 0
 
-LABEL_F9B573:
+WndScroll_CopyLoop:
 	ld xwa, xbc
 	ld xix, xde
 	add xix, xwa
@@ -21,9 +21,9 @@ LABEL_F9B573:
 	inc 1, iz
 	inc 1, xbc
 	cpda16_24 xiz, 160982
-	jr c, LABEL_F9B573
+	jr c, WndScroll_CopyLoop
 
-LABEL_F9B588:
+WndScroll_InitBuffer:
 	ld wa, iz
 	extz xwa
 	lda_24 xde, 0x0274b0
@@ -34,7 +34,7 @@ LABEL_F9B588:
 	ld xbc, 0x1E0003A
 	call ApFuncCall
 
-LABEL_F9B5A6:
+WndScroll_InitWindowProc:
 	ld xwa, (xsp + 50)
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
@@ -51,7 +51,7 @@ LABEL_F9B5A6:
 	calr SetDialEnable
 	jrl UIDialog_ReturnZeroJmp
 
-LABEL_F9B5D4:
+WndScroll_InitSelectionTrack:
 	ld xwa, (xsp + 50)
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
@@ -64,14 +64,14 @@ LABEL_F9B5D4:
 	ld xbc, 0x1E00080
 	jrl WndScroll_SendAndReturn
 
-LABEL_F9B600:
+WndScroll_BasicWindowProc:
 	ld xwa, (xsp + 50)
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
 	calr WindowProc
 	jrl UIDialog_ReturnZeroJmp
 
-LABEL_F9B60F:
+WndScroll_HandleSelectionChange:
 	st16_24 0x0274de, xde
 	cpdm16_24 160992, xde
 	jrl z, UIDialog_ReturnZeroJmp
@@ -86,7 +86,7 @@ LABEL_F9B60F:
 	ld (xsp + 4), xwa
 	ld16_24 xwa, 0x0274e0
 	cp wa, 0xFFFF
-	jr z, LABEL_F9B6BE
+	jr z, WndScroll_DrawCurrentItem
 	extz xwa
 	sll xwa, 2
 	add xwa, (xsp + 4)
@@ -130,7 +130,7 @@ LABEL_F9B60F:
 	ldw bc, 0xF5
 	call DrawFrame
 
-LABEL_F9B6BE:
+WndScroll_DrawCurrentItem:
 	ld16_24 xwa, 0x0274de
 	extz xwa
 	sll xwa, 2
@@ -178,7 +178,7 @@ LABEL_F9B6BE:
 	st16_24 0x0274e0, xwa
 	jrl UIDialog_ReturnZeroJmp
 
-LABEL_F9B74B:
+WndScroll_RepaintAll:
 	ld16_24 xwa, 0x0274dc
 	cpda16_24 xwa, 160986
 	jrl z, UIDialog_ReturnZeroJmp
@@ -196,9 +196,9 @@ LABEL_F9B74B:
 	ld xwa, (xbc)
 	ld (xsp + 4), xwa
 	lds iz, 0
-	jr LABEL_F9B7DC
+	jr WndScroll_ItemCountCheck
 
-LABEL_F9B789:
+WndScroll_DrawSingleItem:
 	ld wa, iz
 	extz xwa
 	div wa, 0xD
@@ -231,7 +231,7 @@ LABEL_F9B789:
 	call DrawString
 	inc 1, iz
 
-LABEL_F9B7DC:
+WndScroll_ItemCountCheck:
 	ld16_24 xbc, 0x0274e2
 	mul bc, 0x3
 	ld16_24 xwa, 0x0274da
@@ -241,7 +241,7 @@ LABEL_F9B7DC:
 	ld xde, 0xEA9EDE
 	add xde, xbc
 	cp iz, (xde)
-	jr ule, LABEL_F9B789
+	jr ule, WndScroll_DrawSingleItem
 	st16_24 0x0274dc, xwa
 	jrl UIDialog_ReturnZeroJmp
 
@@ -459,7 +459,7 @@ WndEvt_EventCodeDispatch:
 	.byte 0x96, 0xfa, 0xaf, 0x32, 0x20, 0x41, 0x80, 0x00
 	.byte 0xe0, 0x01, 0xea, 0xa8, 0x78, 0xdb, 0x02
 
-LABEL_F9BE36:
+WndScroll_CopyStringAndSend:
 	ld xwa, (xsp + 42)
 	push xwa
 	pushw 0x2
@@ -471,7 +471,7 @@ LABEL_F9BE36:
 	lds32 xde, 0
 	jrl WndScroll_SendAndReturn
 
-LABEL_F9BE53:
+WndScroll_CopyFromSource:
 	pushw 0x2
 	pushw 0x74B0
 	ld xwa, (xsp + 46)
@@ -480,23 +480,23 @@ LABEL_F9BE53:
 	inc 8, xsp
 	jrl UIDialog_ReturnZeroJmp
 
-LABEL_F9BE66:
+WndScroll_StoreCallerPtr:
 	ld xwa, (xsp + 42)
 	st32_24 0x0274d2, xwa
 	jrl UIDialog_ReturnZeroJmp
 
-LABEL_F9BE71:
+WndScroll_HandleIndexChange:
 	ld wa, de
 	st16_24 0x0274da, xde
 	cpdi16_24 160994, 0
-	jr nz, LABEL_F9BE93
+	jr nz, WndScroll_SendSelectionEvents
 	ld de, wa
 	extz xde
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0002A
 	call SendEvent
 
-LABEL_F9BE93:
+WndScroll_SendSelectionEvents:
 	ld16_24 xde, 0x0274da
 	extz xde
 	ld xwa, (xsp + 50)
@@ -512,7 +512,7 @@ LABEL_F9BE93:
 	ld xbc, 0x1C0000F
 	jrl WndScroll_SendAndReturn
 
-LABEL_F9BEC6:
+WndScroll_HandleCharInput:
 	ld xwa, (xsp + 42)
 	st16_24 0x0274d8, xwa
 	ld de, wa
@@ -535,29 +535,29 @@ LABEL_F9BEC6:
 	lda_24 xhl, 0xeed778
 	ld_srib3 C, 0x07, 0xEC, 0xE4
 	bit 0, c
-	jr z, LABEL_F9BF23
+	jr z, WndScroll_CharIsUppercase
 	sti16_24 0x0274da, 0x0000
 	ldb c, 0x41
-	jr LABEL_F9BF4A
+	jr WndScroll_ComputeCharOffset
 
-LABEL_F9BF23:
+WndScroll_CharIsUppercase:
 	bit 1, c
-	jr z, LABEL_F9BF33
+	jr z, WndScroll_CharIsLowercase
 	sti16_24 0x0274da, 0x0001
 	ldb c, 0x61
-	jr LABEL_F9BF4A
+	jr WndScroll_ComputeCharOffset
 
-LABEL_F9BF33:
+WndScroll_CharIsLowercase:
 	bit 2, c
-	jr z, LABEL_F9BF61
+	jr z, WndScroll_CharIsSpace
 	cpdi16_24 160986, 2
-	jr nz, LABEL_F9BF48
+	jr nz, WndScroll_SetCategoryZero
 	sti16_24 0x0274da, 0x0000
 
-LABEL_F9BF48:
+WndScroll_SetCategoryZero:
 	ldb c, 0x15
 
-LABEL_F9BF4A:
+WndScroll_ComputeCharOffset:
 	ld16_24 xwa, 0x0274d8
 	extz xwa
 	add xde, xwa
@@ -567,37 +567,37 @@ LABEL_F9BF4A:
 	st16_24 0x0274de, xwa
 	jrl WndScroll_SendPageEvents
 
-LABEL_F9BF61:
+WndScroll_CharIsSpace:
 	cp a, 0x20
-	jr nz, LABEL_F9BF89
+	jr nz, WndScroll_CharIsUnderscore
 	cpdi16_24 160994, 0
 	jrl nz, WndScroll_SendPageEvents
 	cpdi16_24 160986, 2
-	jr nz, LABEL_F9BF80
+	jr nz, WndScroll_SetSpaceOffset
 	sti16_24 0x0274da, 0x0000
 
-LABEL_F9BF80:
+WndScroll_SetSpaceOffset:
 	sti16_24 0x0274de, 0x0025
 	jr WndScroll_SendPageEvents
 
-LABEL_F9BF89:
+WndScroll_CharIsUnderscore:
 	cp a, 0x5F
-	jr nz, LABEL_F9BFA7
+	jr nz, WndScroll_SearchCharTable
 	cpdi16_24 160986, 2
-	jr nz, LABEL_F9BF9E
+	jr nz, WndScroll_SetUnderscoreOffset
 	sti16_24 0x0274da, 0x0000
 
-LABEL_F9BF9E:
+WndScroll_SetUnderscoreOffset:
 	sti16_24 0x0274de, 0x001a
 	jr WndScroll_SendPageEvents
 
-LABEL_F9BFA7:
+WndScroll_SearchCharTable:
 	lda_24 xwa, 0xea9e00
 	ld (xsp + 8), xwa
 	lds iz, 0
-	jr LABEL_F9BFE9
+	jr WndScroll_CheckTableEnd
 
-LABEL_F9BFB3:
+WndScroll_CompareCharLoop:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
@@ -611,14 +611,14 @@ LABEL_F9BFB3:
 	add xbc, xwa
 	ld a, (xbc)
 	cp a, (xsp + 12)
-	jr nz, LABEL_F9BFE7
+	jr nz, WndScroll_CharMismatch
 	sti16_24 0x0274da, 0x0002
 	st16_24 0x0274de, xiz
 
-LABEL_F9BFE7:
+WndScroll_CharMismatch:
 	inc 1, iz
 
-LABEL_F9BFE9:
+WndScroll_CheckTableEnd:
 	ld16_24 xwa, 0x0274e2
 	mul wa, 0x3
 	inc 2, wa
@@ -627,7 +627,7 @@ LABEL_F9BFE9:
 	ld xbc, 0xEA9EDE
 	add xbc, xwa
 	cp iz, (xbc)
-	jr ule, LABEL_F9BFB3
+	jr ule, WndScroll_CompareCharLoop
 
 WndScroll_SendPageEvents:
 	ld16_24 xde, 0x0274da
@@ -641,7 +641,7 @@ WndScroll_SendPageEvents:
 	ld xbc, 0x1C0000E
 	jrl WndScroll_SendAndReturn
 
-LABEL_F9C028:
+WndScroll_HandleCharSet:
 	ld16_24 xwa, 0x0274d8
 	extz xwa
 	ld xbc, 0x274B0
@@ -654,7 +654,7 @@ LABEL_F9C028:
 	ld xbc, 0x1E00080
 	jrl WndScroll_SendAndReturn
 
-LABEL_F9C04D:
+WndScroll_HandleDialPage:
 	ld xwa, (xsp + 50)
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
@@ -680,10 +680,10 @@ LABEL_F9C04D:
 	add xwa, xbc
 	ld wa, (xwa)
 	cpdm16_24 160990, xwa
-	jr ule, LABEL_F9C0A3
+	jr ule, WndScroll_ClampPageCount
 	st16_24 0x0274de, xwa
 
-LABEL_F9C0A3:
+WndScroll_ClampPageCount:
 	ld16_24 xwa, 0x0274da
 	extz xwa
 	sll xwa, 2
@@ -701,23 +701,23 @@ LABEL_F9C0A3:
 	lda xwa, (xsp + 12)
 	ld e, (xwa)
 	cp e, 0x53
-	jr nz, LABEL_F9C0F2
+	jr nz, WndScroll_CheckSPMarker
 	cp (xwa + 1), 0x50
-	jr nz, LABEL_F9C0F2
+	jr nz, WndScroll_CheckSPMarker
 	ld32_24 xwa, 0x0274e4
 	lds32 xde, 0
 	ld e, (xwa)
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1E00081
-	jr LABEL_F9C0FE
+	jr WndScroll_SendConfirmEvent
 
-LABEL_F9C0F2:
+WndScroll_CheckSPMarker:
 	ldb d, 0x0
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1E00081
 
-LABEL_F9C0FE:
+WndScroll_SendConfirmEvent:
 	call SendEvent
 	ld16_24 xde, 0x0274de
 	extz xde
@@ -729,15 +729,15 @@ WndScroll_SendAndReturn:
 
 UIDialog_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F9C125
+	jr WndScroll_Epilogue
 
-LABEL_F9C119:
+WndScroll_ForwardToWindowProc:
 	ld xwa, (xsp + 50)
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
 	calr WindowProc
 
-LABEL_F9C125:
+WndScroll_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 50)
 	ret
