@@ -5829,19 +5829,19 @@ NakaInst_ftdemo01:	aligned_string "ftdemo01"
 NakaInst_TT_FDMSP:	aligned_string "TT_FDMSP"
 	.long 0x0
 
-LABEL_E14828:
+NakaInst_TT_FDMSP_EmptyPtr:
 	.long NakaInst_EmptySlot_448
 
 NakaInst_EmptySlot_448:	aligned_string ""
 
-LABEL_E1482E:
+MSG_BassPort_LangTable:
 	.long MSG_BASS_PORT_ID
 	.long MSG_BASS_PORT_EN2
 	.long MSG_BASS_PORT_FR
 	.long MSG_BASS_PORT_ES_UNUSED
 	.long MSG_BASS_PORT_DE
 	.long MSG_BASS_PORT_EN
-LABEL_E14846:
+MSG_BassPort_LangTableEnd:
 
 MSG_BASS_PORT_EN:	aligned_string "Bass Port Speaker"
 MSG_BASS_PORT_DE:	.asciz "Italian"	; NOTE: Appears to be mislabeled in ROM
@@ -5855,13 +5855,13 @@ Str_BassPortSpeaker_Help:
 	.long NakaInst_EmptySlot_453
 	.long NakaInst_EmptySlot_452
 	.long NakaInst_EmptySlot_451
-	.long LABEL_E148BC
+	.long MSG_BASS_PORT_ES
 	.long NakaInst_EmptySlot_450
 	.long NakaInst_EmptySlot_449
 NakaInst_EmptySlot_449:	aligned_string ""
 NakaInst_EmptySlot_450:	aligned_string ""
 
-LABEL_E148BC:	.asciz "Altavoz con portón para bajos"
+MSG_BASS_PORT_ES:	.asciz "Altavoz con portón para bajos"
 NakaInst_EmptySlot_451:	aligned_string ""
 NakaInst_EmptySlot_452:	aligned_string ""
 NakaInst_EmptySlot_453:	aligned_string ""
@@ -5915,27 +5915,27 @@ NakaInst_Gr_ce_au_Music_Stylist_explorez_l_un_apr_s_l:
 	aligned_string "Explore 1000 Musical Styles with the Music Stylist."
 Str_MusicStylist_Help:
 	.long NakaInst_Add_to_your_enjoyment_with_a_wide_range_of
-	.long LABEL_E14DB6
-	.long LABEL_E14D70
+	.long NakaInst_SoftwareMusic_DE
+	.long NakaInst_SoftwareMusic_FR
 	.long NakaInst_Disfrute_m_s_con_la_gran_variedad_de_programas_de
 	.long NakaInst_Italian_E14D20
 	.long NakaInst_Tambahkan_kesenangan_Anda_dengan_berbagai_jenis
 NakaInst_Tambahkan_kesenangan_Anda_dengan_berbagai_jenis:	aligned_string "Tambahkan kesenangan Anda dengan berbagai jenis Software Music dari Technics."
 NakaInst_Italian_E14D20:	aligned_string "Italian"
 NakaInst_Disfrute_m_s_con_la_gran_variedad_de_programas_de:	aligned_string "Disfrute más con la gran variedad de programas de software de Technics"
-LABEL_E14D70:	.asciz "Encore plus de possibilités grâce à la diversité du software Technics"
-LABEL_E14DB6:	.asciz "Nutzen Sie das große Technics-Softwareangebot zur individuellen Gestaltung Ihrer Musik."
+NakaInst_SoftwareMusic_FR:	.asciz "Encore plus de possibilités grâce à la diversité du software Technics"
+NakaInst_SoftwareMusic_DE:	.asciz "Nutzen Sie das große Technics-Softwareangebot zur individuellen Gestaltung Ihrer Musik."
 NakaInst_Add_to_your_enjoyment_with_a_wide_range_of:	aligned_string "Add to your enjoyment with a wide range of Technics Software"
 	.byte 0x9e, 0x4f, 0xe1, 0x00
 Str_SoftwareMusic_Help:
 	.long NakaInst_Konvertieren_Sie_Software_vieler_anderer
 	.long NakaInst_Et_vous_pouvez_convertir_les_softwares_de_la
-	.long LABEL_E14EBA
+	.long NakaInst_StyleConvert_ES
 	.long NakaInst_Italian_E14EB2
 	.long NakaInst_Dan_dapat_mengubah_hampir_semua_software_yang
 NakaInst_Dan_dapat_mengubah_hampir_semua_software_yang:	aligned_string "Dan dapat mengubah hampir semua software yang dihasilkan oleh pabrik manapun!"
 NakaInst_Italian_E14EB2:	aligned_string "Italian"
-LABEL_E14EBA:	.asciz "¡Y convierta el software de casi todos los fabricantes!"
+NakaInst_StyleConvert_ES:	.asciz "¡Y convierta el software de casi todos los fabricantes!"
 NakaInst_Et_vous_pouvez_convertir_les_softwares_de_la:	aligned_string "Et vous pouvez convertir les softwares de la plupart des autres principaux fabricants!"
 NakaInst_Konvertieren_Sie_Software_vieler_anderer:	aligned_string "Konvertieren Sie Software vieler anderer Hersteller zur Verwendung auf dem KN5000."
 	aligned_string "And convert software from almost any other manufacturer!"
@@ -6031,12 +6031,12 @@ Str_AcousticIllusion_Help:
 	.long NakaInst_Acoustic_Illusion_broadens_your_music_to_3
 	.long NakaInst_ACCOUSTIC_ILLUSION_verleiht_dem_Klang
 	.long NakaInst_La_fonction_Acoustic_Illusion_apporte_votre
-	.long LABEL_E1568A
+	.long NakaInst_AcousticIllusion_ES
 	.long NakaInst_Italian_E15682
 	.long NakaInst_Acoustic_Illusion_memperluas_musik_Anda_kedalam_3
 NakaInst_Acoustic_Illusion_memperluas_musik_Anda_kedalam_3:	aligned_string "Acoustic Illusion memperluas musik Anda kedalam 3 Dimensi!"
 NakaInst_Italian_E15682:	aligned_string "Italian"
-LABEL_E1568A:	.asciz "¡El Acoustic Illusion amplia su música a 3 dimensiones!"
+NakaInst_AcousticIllusion_ES:	.asciz "¡El Acoustic Illusion amplia su música a 3 dimensiones!"
 NakaInst_La_fonction_Acoustic_Illusion_apporte_votre:	aligned_string "La fonction « Acoustic Illusion » apporte à votre musique une 3 ème dimension!"
 NakaInst_ACCOUSTIC_ILLUSION_verleiht_dem_Klang:	aligned_string "ACCOUSTIC ILLUSION verleiht dem Klang dreidimensionale Räumlichkeit."
 NakaInst_Acoustic_Illusion_broadens_your_music_to_3:	aligned_string "Acoustic Illusion broadens your music to 3-Dimensions!"
@@ -6044,12 +6044,12 @@ Str_AcousticIllusionDesc_Help:
 	.long NakaInst_A_host_of_features_to_suit_any_style_of
 	.long NakaInst_Viele_weitere_leistungsf_hige_Funktionen_zur
 	.long NakaInst_Une_grande_diversit_de_fonctions_pour_tout_jouer
-	.long LABEL_E157FA
+	.long NakaInst_HostOfFeatures_ES
 	.long NakaInst_Italian_E157F2
 	.long NakaInst_Satu_pilihan_daripada_gambar_gambar_untuk
 NakaInst_Satu_pilihan_daripada_gambar_gambar_untuk:	aligned_string "Satu pilihan daripada gambar-gambar untuk disesuaikan ke gaya permainan!"
 NakaInst_Italian_E157F2:	aligned_string "Italian"
-LABEL_E157FA:	.asciz "¡Una serie de funciones apropiadas para cualquier estilo y ejecución!"
+NakaInst_HostOfFeatures_ES:	.asciz "¡Una serie de funciones apropiadas para cualquier estilo y ejecución!"
 NakaInst_Une_grande_diversit_de_fonctions_pour_tout_jouer:	aligned_string "Une grande diversité de fonctions pour tout jouer!"
 NakaInst_Viele_weitere_leistungsf_hige_Funktionen_zur:	aligned_string "Viele weitere leistungsfähige Funktionen zur Darbietung und Bearbeitung Ihrer Musik!"
 NakaInst_A_host_of_features_to_suit_any_style_of:	aligned_string "A host of features to suit any style of performance!"
@@ -6093,7 +6093,7 @@ NakaInst_Huge_Styles_E159F8:	aligned_string "Huge Styles"
 NakaInst_Huge_Styles_G_E15A04:	aligned_string "Huge Styles(G)"
 NakaInst_Huge_Styles_E15A14:	aligned_string "Huge Styles"
 
-LABEL_E15A20:
+NakaInst_PerfStyle_DataBlock1:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x90, 0x00
 	.byte 0x30, 0x50, 0x10, 0x00, 0x81, 0x90, 0x00, 0x31
 	.byte 0x50, 0x10, 0x00, 0x81, 0x90, 0x00, 0x32, 0x50
@@ -6105,7 +6105,7 @@ LABEL_E15A20:
 	.zero 184
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x87
 
-LABEL_E15B20:
+NakaInst_PerfStyle_DataBlock2:
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x07, 0x01, 0x20, 0x80
 	.byte 0x58, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
