@@ -29623,7 +29623,7 @@ msp_sv_mae:
 	ret
 
 MspSave_InitAndCalcSize:
-	call LABEL_F6F34E
+	call Voice_RefreshBankData
 	ld xhl, 0x1E881C
 	ld hl, (xhl)
 	extz xhl

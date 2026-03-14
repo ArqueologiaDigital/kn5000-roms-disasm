@@ -1208,7 +1208,7 @@ NakaWidget_SongMdlyGroup:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0x00, 0x00, 0x02, 0x00
 	.byte 0x05, 0x00, 0xff, 0xff, 0x08, 0x00, 0x50, 0x00
-	.long LABEL_EF0046
+	.long CharEncoding_ExtendedLo
 	.long SeqByteBlock_MedleyPlaybackB
 	.byte 0xc1, 0x00
 NakaWidget_SongMdlyVolume:

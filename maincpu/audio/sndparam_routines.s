@@ -1927,7 +1927,7 @@ SndParam_AllocAndInsert:
 	ld xwa, 0xEE1560
 	call LABEL_FFFEA1
 	pushw 0x1
-	call LABEL_EF03C1
+	call Boot_HaltInstruction
 	inc 2, xsp
 
 SndParam_AllocBuildKey:

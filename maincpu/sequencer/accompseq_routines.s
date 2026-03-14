@@ -1949,7 +1949,7 @@ LABEL_F6F078:
 	ret
 
 LABEL_F6F079:
-	call LABEL_F6F352
+	call Voice_ResetToFactoryBanks
 	ret
 
 LABEL_F6F07E:

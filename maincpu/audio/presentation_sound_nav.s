@@ -817,7 +817,7 @@ EditSwParam_TempoTable:
 	jr	3
 	ldw	wa, 300
 	ld	(xbc), wa
-	.long LABEL_EF02B2
+	.long NakaState_PresentationTail
 	.byte 0x0e
 
 ; GetEditSwPoint handler: default (value=0xA0/0x78)

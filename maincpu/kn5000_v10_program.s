@@ -1056,15 +1056,15 @@ NakaNode_Accomp7_Widget26:
 .include "factory_test/fd_test_data.s"
 RESOURCE_INFO_HANDLER_OFFSETS:
 	.short RESOURCE_INFO_HANDLERS - RESOURCE_INFO_HANDLERS
-	.short LABEL_F1EA64 - RESOURCE_INFO_HANDLERS
-	.short LABEL_F1EA7D - RESOURCE_INFO_HANDLERS
-	.short LABEL_F1EABF - RESOURCE_INFO_HANDLERS
-	.short LABEL_F1EACF - RESOURCE_INFO_HANDLERS
-	.short LABEL_F1EAE8 - RESOURCE_INFO_HANDLERS
-	.short LABEL_F1EA96 - RESOURCE_INFO_HANDLERS
-	.short LABEL_F1EB01 - RESOURCE_INFO_HANDLERS
-	.short LABEL_F1EB1A - RESOURCE_INFO_HANDLERS
-	.short LABEL_F1EAAF - RESOURCE_INFO_HANDLERS
+	.short ResInfo_GetSRAMBankRange - RESOURCE_INFO_HANDLERS
+	.short ResInfo_GetUserAreaRange - RESOURCE_INFO_HANDLERS
+	.short ResInfo_GetSndParamRange - RESOURCE_INFO_HANDLERS
+	.short ResInfo_GetVoiceBankRange - RESOURCE_INFO_HANDLERS
+	.short ResInfo_GetToneGenRange - RESOURCE_INFO_HANDLERS
+	.short ResInfo_GetFlashBankRange - RESOURCE_INFO_HANDLERS
+	.short ResInfo_GetMspSettingsRange - RESOURCE_INFO_HANDLERS
+	.short ResInfo_GetResourceListPtr - RESOURCE_INFO_HANDLERS
+	.short ResInfo_GetTableDataInfo - RESOURCE_INFO_HANDLERS
 
 SepaOut_Config_0:
 	.short 0xB0
@@ -2366,18 +2366,18 @@ NakaMenuItem_TechniChord:
 ; Character Encoding Tables & System Core (ROM EEF588-FC3113)
 ; =============================================================================
 	.ascii " \"!#\"$#%$&%'&(')(*)+*,+-,.-/.0/102132435465768798:9;:<;=<>=?>@?A@BACBDCEDFEGFHGIHJIKJLKMLNMONPOQPRQSRTSUTVUWVXWYXZY[Z\\[]\\^]_^`_a`bacbdce"
-LABEL_EF0000:	.ascii "dfegfhgihjikjlkmlnmonpoqprqsrtsutvuwvxwyxzy{z|{}|~}"
+CharEncoding_PrintableHi:	.ascii "dfegfhgihjikjlkmlnmonpoqprqsrtsutvuwvxwyxzy{z|{}|~}"
 	.byte 0x7f, 0x7e, 0x80, 0x7f, 0x00
 	.byte 0x81, 0x81, 0x82, 0x82, 0x83, 0x83, 0x84, 0x84
 	.byte 0x85, 0x85, 0x86, 0x86, 0x87, 0x87
-LABEL_EF0046:
+CharEncoding_ExtendedLo:
 	.byte 0x88, 0x88
 	.byte 0x89, 0x89, 0x8a, 0x8a, 0x8b, 0x8b, 0x8c, 0x8c
 	.byte 0x8d, 0x8d, 0x8e, 0x8e, 0x8f, 0x8f, 0x90, 0x90
 	.byte 0x91, 0x91, 0x92, 0x92, 0x93, 0x93, 0x94, 0x94
 	.byte 0x95, 0x95, 0x96, 0x96, 0x97, 0x97, 0x98, 0x98
 	.byte 0x99
-LABEL_EF0069:
+CharEncoding_ExtendedHi:
 	.byte 0x99, 0x9a, 0x9a, 0x9b, 0x9b, 0x9c, 0x9c
 	.byte 0x9d, 0x9d, 0x9e, 0x9e, 0x9f, 0x9f, 0xa0, 0xa0
 	.byte 0x20, 0x01, 0x00, 0x02, 0x01, 0x03, 0x02, 0x04
@@ -2393,31 +2393,31 @@ LABEL_EF0069:
 	.byte 0x00, 0x0a, 0xff, 0x14, 0xff
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00
 	.zero 12
-LABEL_EF00DC:
+NakaState_ZeroBlock_0:
 	.zero 23
-LABEL_EF00F3:
+NakaState_ZeroBlock_1:
 	.zero 2
-LABEL_EF00F5:
+NakaState_ZeroBlock_2:
 	.zero 34
-LABEL_EF0117:
+NakaState_ZeroBlock_3:
 	.zero 20
 NakaInst_BASS_ACCOMP1_ACCOMP2_ACCOMP3:
 	.zero 5
 NakaInst_RHYTHM_SELECT_TEMPO_APC_MEMORY_SPLIT_POINT:
 	.zero 11
-LABEL_EF013B:
+NakaState_ZeroBlock_4:
 	.zero 2
-LABEL_EF013D:
+NakaState_ZeroBlock_5:
 	.zero 2
 Naka_PresentationRootState:
 	.zero 371
-LABEL_EF02B2:
+NakaState_PresentationTail:
 	.zero 94
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00
 	.byte 0x00
 
 
-LABEL_EF0319:
+CharMap_ModeDispatchTable:
 	.long CharMap_DefaultIdentity
 	.long CharMap_DefaultIdentity
 	.long CharMap_DefaultIdentity
@@ -2461,10 +2461,10 @@ LABEL_EF0319:
 	.long CharMap_Mode15
 	.long CharMap_Mode21
 
-LABEL_EF03C1:
+Boot_HaltInstruction:
 	halt
 
-LABEL_EF03C2:
+Boot_PostHaltData:
 	.byte 0x0e, 0x68, 0x01, 0x0e
 
 
@@ -2478,7 +2478,7 @@ RESET_HANDLER:
 	and_sd8b_im 0xD3, 0xCF
 	and_sd8b_im 0xD3, 0xF0
 
-LABEL_EF050F:
+Boot_InitIOPorts:
 	stdi8 304, 255
 	stdi8 305, 255
 	stdi8 306, 3
@@ -2486,11 +2486,11 @@ LABEL_EF050F:
 	ld xsp, 0xC00
 	calr Boot_InitWorkRAM
 
-LABEL_EF0529:
+Boot_RunSelfTest:
 	call MainCPU_self_test_routines
 	call Get_Firmware_Version
 	cp l, 0xFF
-	jr nz, LABEL_EF054F
+	jr nz, Boot_PostSelfTest
 
 We_seem_to_be_running_boot_ROM_code:
 	call VGA_Setup
@@ -2501,14 +2501,14 @@ We_seem_to_be_running_boot_ROM_code:
 	ldw de, 0x50
 	call Draw_FlashMemUpdate_message_bitmap
 
-LABEL_EF054F:
+Boot_PostSelfTest:
 	lds32 xwa, 0
 	stda32 1033, xwa
 	stdi8 1024, 2
 	call TaskSched_Init
 	stdi8 1024, 3
-LABEL_EF0563:
-	calr LABEL_EF078D
+Boot_InitPeripherals:
+	calr Boot_ClearConfigFlag7
 	lda_dd8l XBC, 0xE4
 	ld a, (xbc)
 	and a, 0x8F
@@ -2521,14 +2521,14 @@ LABEL_EF0563:
 	ld (xbc), a
 	calr Detect_Region_Code
 	cpdi16_24 65482, 23205
-	jr z, LABEL_EF05A2
+	jr z, Boot_FlashAndExtensions
 	lda_24 xde, 0x00066e
 	srl xde, 1
 	ld xwa, 0xF980
 	ld xbc, 0x1E8000
 	call Copy_DE_words_from_XBC_to_XWA
 
-LABEL_EF05A2:
+Boot_FlashAndExtensions:
 	call Flash_InitAllBanks
 	bit_dd8 0, 0x38	;  Is the optional HD-AE5000 board present?
 	jr nz, BootInit_SeqAndPanel
@@ -2556,8 +2556,8 @@ BootInit_SeqAndPanel:
 	jr nz, User_didnt_request_flash_mem_update
 	call FLASH_MEM_UPDATE
 
-LABEL_EF05E6:
-	jr LABEL_EF05E6
+Boot_MainSequence_Trampoline:
+	jr Boot_MainSequence_Trampoline
 
 ; ===========================================================================
 ; User_didnt_request_flash_mem_update - Main Boot Sequence
@@ -2620,14 +2620,14 @@ Boot_DisplayScreen:
 	calr Boot_HandleComboDisplay	; Handle combo 2 (LEDs) or combo 3 (version screen)
 	lds wa, 4
 	call Show_ScreenGroup	; Show screen group 4 (main UI initialization)
-	calr LABEL_EF0792
+	calr Boot_SetConfigFlag7
 	jp MainLoop
 
-LABEL_EF0651:
+Boot_GetButtonComboCode:
 	ldda8 l, 1026
 	ret
 
-LABEL_EF0656:
+Boot_ClearAllInterruptEnables:
 	ldio 0xF0, 0x00
 	ldio 0xE0, 0x00
 	ldio 0xE1, 0x00
@@ -2663,13 +2663,13 @@ LABEL_EF0656:
 SubCPU_Send_Payload:
 	push xiz
 	cpi8_24 0xfffeef, 0xff
-	jrl nz, LABEL_EF078B
+	jrl nz, SubCPU_Payload_Done
 	lds32 xiz, 0
 
-LABEL_EF0696:
+SubCPU_Payload_DelayLoop_Short:
 	inc 1, xiz
 	cp xiz, 0x2000
-	jr c, LABEL_EF0696
+	jr c, SubCPU_Payload_DelayLoop_Short
 	ld xwa, 0x830000
 	ld xbc, 0x10000
 	ld xde, 0x50000
@@ -2692,16 +2692,16 @@ LABEL_EF0696:
 	call InterCPU_E1_Bulk_Transfer
 	ld xiz, 0x800000
 	cpi8_24 0xfffeed, 0xff
-	jr nz, LABEL_EF072A
+	jr nz, SubCPU_Payload_TransferPart2
 	ld xiz, 0x50000
 	ld xwa, 0x3E0000
 	ld xbc, 0x50000
 	call SLIDE_Parse_Header
 	cp hl, 0xFFFF
-	jr nz, LABEL_EF072A
+	jr nz, SubCPU_Payload_TransferPart2
 	ld xiz, 0x800000
 
-LABEL_EF072A:
+SubCPU_Payload_TransferPart2:
 	ldmm_sriw 0xF9, 0x00, 0x01, 0x04, 0x04
 	ld xwa, xiz
 	add xwa, 0x100
@@ -2724,20 +2724,20 @@ LABEL_EF072A:
 	call InterCPU_E1_Bulk_Transfer
 	lds32 xiz, 0
 
-LABEL_EF0781:
+SubCPU_Payload_DelayLoop_Long:
 	inc 1, xiz
 	cp xiz, 0x100000
-	jr c, LABEL_EF0781
+	jr c, SubCPU_Payload_DelayLoop_Long
 
-LABEL_EF078B:
+SubCPU_Payload_Done:
 	pop xiz
 	ret
 
-LABEL_EF078D:
+Boot_ClearConfigFlag7:
 	resda 7, 1030
 	ret
 
-LABEL_EF0792:
+Boot_SetConfigFlag7:
 	setda 7, 1030
 	ret
 
@@ -2782,18 +2782,18 @@ Boot_HandleComboDisplay_Check3:
 	call SoundCtrl_SendCommand		; Display SOFT VERSION screen
 	ret
 
-LABEL_EF07D4:
+Boot_ParseTableDataTimestamp:
 	ld xwa, 0x9FFFC4
 	push xwa
 	call ParseInt16
 	inc 4, xsp
 	ret
 
-LABEL_EF07E1:
+Boot_GetSystemPointer:
 	ldda16 xhl, 1028
 	ret
 
-LABEL_EF07E6:
+Boot_ParseSubCPUTimestamp:
 	ld xwa, 0x87FFF5
 	push xwa
 	call ParseInt16
@@ -2817,27 +2817,27 @@ Boot_HandleFactoryReset:
 	; --- Factory Reset: clear all DRAM and SRAM ---
 	call LABEL_FC54B2
 	ei 7
-	calr LABEL_EF0656	; Clear all interrupt enables
+	calr Boot_ClearAllInterruptEnables	; Clear all interrupt enables
 	ld xbc, 0x400
 
-LABEL_EF080E:
+FactoryReset_ClearDRAM:
 	lds32 xwa, 0
 	st_dpil XWA, 0xE6
 	cp xbc, 0x100000
-	jr c, LABEL_EF080E
+	jr c, FactoryReset_ClearDRAM
 	ld xbc, 0x1E0000
 
-LABEL_EF0820:
+FactoryReset_ClearSRAM:
 	lds32 xwa, 0
 	st_dpil XWA, 0xE6
 	cp xbc, 0x200000
-	jr c, LABEL_EF0820
+	jr c, FactoryReset_ClearSRAM
 	sti16_24 0x00ffca, 0x5aa5
-	jp LABEL_EF050F
-LABEL_EF0838:
+	jp Boot_InitIOPorts
+FactoryReset_TrailingByte:
 	.byte 0x0e
 
-LABEL_EF0839:
+Boot_ReadFDCStatus:
 	ldda8 l, 36458
 	ret
 
@@ -2899,7 +2899,7 @@ RESOURCE_INFO_HANDLERS:
 	ld (xbc + 4), xde
 	ret
 
-LABEL_F1EA64:
+ResInfo_GetSRAMBankRange:
 	lda_24 xwa, 0x1e7800
 	ld (xbc), xwa
 	lda_24 xwa, 0x1e7800
@@ -2909,7 +2909,7 @@ LABEL_F1EA64:
 	ld (xbc + 4), xwa
 	ret
 
-LABEL_F1EA7D:
+ResInfo_GetUserAreaRange:
 	lda_24 xwa, 0x1ed350
 	ld (xbc), xwa
 	lda_24 xwa, 0x1ed350
@@ -2919,7 +2919,7 @@ LABEL_F1EA7D:
 	ld (xbc + 4), xwa
 	ret
 
-LABEL_F1EA96:
+ResInfo_GetFlashBankRange:
 	lda_24 xwa, 0x1e0000
 	ld (xbc), xwa
 	lda_24 xwa, 0x1e0000
@@ -2929,21 +2929,21 @@ LABEL_F1EA96:
 	ld (xbc + 4), xwa
 	ret
 
-LABEL_F1EAAF:
+ResInfo_GetTableDataInfo:
 	ld xwa, 0x3D3000
 	ld (xbc), xwa
 	ld xwa, 0x400
 	ld (xbc + 4), xwa
 	ret
 
-LABEL_F1EABF:
+ResInfo_GetSndParamRange:
 	lda_24 xwa, 0x0ab000
 	ld (xbc), xwa
 	ld xwa, 0x5000
 	ld (xbc + 4), xwa
 	ret
 
-LABEL_F1EACF:
+ResInfo_GetVoiceBankRange:
 	lda_24 xwa, 0x0b0000
 	ld (xbc), xwa
 	lda_24 xwa, 0x0b0000
@@ -2953,7 +2953,7 @@ LABEL_F1EACF:
 	ld (xbc + 4), xwa
 	ret
 
-LABEL_F1EAE8:
+ResInfo_GetToneGenRange:
 	lda_24 xwa, 0x094800
 	ld (xbc), xwa
 	lda_24 xwa, 0x094800
@@ -2963,7 +2963,7 @@ LABEL_F1EAE8:
 	ld (xbc + 4), xwa
 	ret
 
-LABEL_F1EB01:
+ResInfo_GetMspSettingsRange:
 	lda_24 xwa, 0x1e8800
 	ld (xbc), xwa
 	lda_24 xwa, 0x1e8800
@@ -2973,14 +2973,14 @@ LABEL_F1EB01:
 	ld (xbc + 4), xwa
 	ret
 
-LABEL_F1EB1A:
+ResInfo_GetResourceListPtr:
 	lda_24 xwa, 0xe1ffcc
 	ld (xbc), xwa
 	lds32 xwa, 0
 	ld (xbc + 4), xwa
 	ret
 
-LABEL_F1EB27:
+ResInfo_NullHandler:
 	ret
 
 rcm_ld_XAPR_j:
@@ -3012,11 +3012,11 @@ SetSepaOutMode:
 	ldiw
 	ldiw
 	cps wa, 3
-	jrl z, LABEL_F1ECBB
+	jrl z, SetSepaOut_Mode3
 	cps wa, 2
-	jrl z, LABEL_F1EC53
+	jrl z, SetSepaOut_Mode2
 	cps wa, 1
-	jr z, LABEL_F1EBEA
+	jr z, SetSepaOut_Mode1
 	cps wa, 0
 	jrl nz, FileIO_SendCommand_Return
 	ld (xsp + 17), 0x14
@@ -3057,7 +3057,7 @@ SetSepaOutMode:
 	call sendCOMM
 	jrl FileIO_SendCommand_Return
 
-LABEL_F1EBEA:
+SetSepaOut_Mode1:
 	ld (xsp + 13), 0x14
 	lda xwa, (xsp + 12)
 	ld xde, xwa
@@ -3096,7 +3096,7 @@ LABEL_F1EBEA:
 	call sendCOMM
 	jrl FileIO_SendCommand_Return
 
-LABEL_F1EC53:
+SetSepaOut_Mode2:
 	ld (xsp + 13), 0x14
 	lda xwa, (xsp + 12)
 	ld xde, xwa
@@ -3135,7 +3135,7 @@ LABEL_F1EC53:
 	call sendCOMM
 	jr FileIO_SendCommand_Return
 
-LABEL_F1ECBB:
+SetSepaOut_Mode3:
 	ld (xsp + 13), 0x14
 	lda xwa, (xsp + 12)
 	ld xde, xwa
@@ -3236,10 +3236,10 @@ PlayHalt:
 	call Part_ReinitAllActive
 	call AccWrap_PlayModeDispatch
 	cp (xsp), 0x0
-	jr z, LABEL_F1ED85
+	jr z, PlayHalt_SkipSetFlag
 	setda 2, 10407
 
-LABEL_F1ED85:
+PlayHalt_SkipSetFlag:
 	call AccompSeq_StopSequence
 	call AudioInit_RefreshToneBank
 	call NoteMap_ProcessAndMerge
@@ -3253,10 +3253,10 @@ LABEL_F1ED85:
 
 PlayStandBy:
 	bitda 2, 10407
-	jr z, LABEL_F1EDB2
+	jr z, PlayStandBy_SkipClearFlag
 	resda 2, 10407
 
-LABEL_F1EDB2:
+PlayStandBy_SkipClearFlag:
 	resda 3, 10407
 	call SeqAcc_InitPlaybackState
 	jp MidiThru_Disable
@@ -3334,7 +3334,7 @@ Voice_InitBankDataSafe:
 	pop xiz
 	ret
 
-LABEL_F6F09C:
+Voice_InitBankDataSafe_Alt1:
 	push	xiz
 	call	16184125
 	pop	xiz
@@ -3355,12 +3355,12 @@ Voice_InitBankTables:
 	ldirw
 	ldb a, 0xC
 
-LABEL_F6F0C2:
+Voice_InitBankTables_Loop:
 	ld xiy, 0xF6F139
 	ldw bc, 0x8
 	ldirw
 	dec 1, a
-	jr nz, LABEL_F6F0C2
+	jr nz, Voice_InitBankTables_Loop
 	ld xiy, 0xF6F249
 	ld xix, 0x1E8A00
 	ldw bc, 0x20
@@ -3376,25 +3376,25 @@ LABEL_F6F0C2:
 	ld xix, 0x1E8B00
 	ldb a, 0x39
 
-LABEL_F6F104:
+Voice_InitBankTables_SlotLoop:
 	ld xiy, 0xF6F149
 	ldw bc, 0x80
 	ldirw
 	dec 1, a
-	jr nz, LABEL_F6F104
+	jr nz, Voice_InitBankTables_SlotLoop
 	stdi16 32280, 57
 	ret
 
-LABEL_F6F119:
+Voice_BankHeaderDefaults:
 	.byte 0x48, 0x00, 0x4b, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x5a, 0x5a, 0x5a, 0x00, 0x00
 	.byte 0x20, 0x00, 0x10, 0x00, 0x1e, 0x00, 0x00, 0x01
 	.byte 0x39, 0x00, 0x0c, 0x00, 0xc0, 0x03, 0xc0, 0x03
 
-LABEL_F6F139:
+Voice_BankSlotZeroInit:
 	.zero 16
 
-LABEL_F6F149:
+Voice_SlotTemplate:
 	.byte 0x00
 	.long 0xFFFFFFFF
 	.byte 0x87
@@ -3427,16 +3427,16 @@ Voice_InitBankData:
 	calr CountAvailableVoiceSlots
 	ret
 
-LABEL_F6F33D:
+Voice_BankLookupCode:
 	.byte 0x45, 0x00, 0x88, 0x1e, 0x00, 0xb5, 0x00, 0x48
 	.byte 0xbd, 0x01, 0x00, 0x00, 0xbd, 0x02, 0x00, 0x4b
 	.byte 0x0e
 
-LABEL_F6F34E:
-	calr LABEL_F6F3E0
+Voice_RefreshBankData:
+	calr Voice_ComputeAllocSize
 	ret
 
-LABEL_F6F352:
+Voice_ResetToFactoryBanks:
 	ldw wa, 0xA
 	ld xhl, 0x7AEC
 	ldw bc, 0xFF
@@ -3444,8 +3444,8 @@ LABEL_F6F352:
 	calr Voice_SetBankParams
 	ld xhl, 0x7BEC
 	calr Voice_SetBankParams
-	calr LABEL_F6F385
-	calr LABEL_F6F39A
+	calr Voice_ReinitIfBankCountNonzero
+	calr Voice_ReinitIfBitFlagSet
 	calr CountAvailableVoiceSlots
 	ret
 
@@ -3457,74 +3457,74 @@ Voice_SetBankParams:
 	ld (xhl + 8), de
 	ret
 
-LABEL_F6F385:
+Voice_ReinitIfBankCountNonzero:
 	ld xiy, 0x1E8800
 	add xiy, 0xE
 	ld wa, (xiy)
 	cps wa, 0
-	jr z, LABEL_F6F399
+	jr z, Voice_ReinitIfBankCount_Done
 	calr Voice_InitBankData
 
-LABEL_F6F399:
+Voice_ReinitIfBankCount_Done:
 	ret
 
-LABEL_F6F39A:
+Voice_ReinitIfBitFlagSet:
 	ld xiy, 0x1E8800
 	add xiy, 0xA
 	ld a, (xiy)
 	bit 0, a
-	jr z, LABEL_F6F3AF
+	jr z, Voice_ReinitIfBitFlag_Done
 	calr Voice_InitBankData
 
-LABEL_F6F3AF:
+Voice_ReinitIfBitFlag_Done:
 	ret
 
 CountAvailableVoiceSlots:
 	ldw wa, 0x39
 	ldw de, 0x38
 
-LABEL_F6F3B6:
+CountVoiceSlots_Loop:
 	ld hl, de
-	calr LABEL_F6F3D0
+	calr Voice_GetSlotAddress
 	bitm 7, (xhl)
-	jr z, LABEL_F6F3C1
+	jr z, CountVoiceSlots_NotUsed
 	dec 1, wa
 
-LABEL_F6F3C1:
+CountVoiceSlots_NotUsed:
 	dec 1, de
 	cp de, 0xFFFF
-	jr z, LABEL_F6F3CB
-	jr LABEL_F6F3B6
+	jr z, CountVoiceSlots_Done
+	jr CountVoiceSlots_Loop
 
-LABEL_F6F3CB:
+CountVoiceSlots_Done:
 	stda16 32280, xwa
 	ret
 
-LABEL_F6F3D0:
+Voice_GetSlotAddress:
 	and xhl, 0xFFFF
 	sla xhl, 8
 	add xhl, 0x1E8B00
 	ret
 
-LABEL_F6F3E0:
+Voice_ComputeAllocSize:
 	ld xhl, 0x3C00
 	ld xiy, 0x1E8800
 	add xiy, 0x200
 	add xiy, 0x3800
 	ldb c, 0x39
 
-LABEL_F6F3F8:
+Voice_AllocSize_Loop:
 	cps c, 0
-	jr z, LABEL_F6F413
+	jr z, Voice_AllocSize_Done
 	ld a, (xiy)
 	bit 7, a
-	jr nz, LABEL_F6F413
+	jr nz, Voice_AllocSize_Done
 	sub xhl, 0x100
 	sub xiy, 0x100
 	dec 1, c
-	jr LABEL_F6F3F8
+	jr Voice_AllocSize_Loop
 
-LABEL_F6F413:
+Voice_AllocSize_Done:
 	ld xwa, xhl
 	add xwa, 0x3FF
 	and xwa, 0xFFFFFC00
@@ -3534,7 +3534,7 @@ LABEL_F6F413:
 	calr CountAvailableVoiceSlots
 	ret
 
-LABEL_F6F42F:
+Voice_FactoryPresetData:
 	.byte 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x1a, 0x00, 0x7f, 0x40, 0x01, 0x00, 0x00
 	.byte 0x11, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00

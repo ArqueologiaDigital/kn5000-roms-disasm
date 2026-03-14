@@ -5558,7 +5558,7 @@ SeqTimer_ComputeRegValue:
 	ldw de, 0x40
 	mul xwa, xde
 	ld xde, 0x4C4B400
-	call LABEL_EF0839
+	call Boot_ReadFDCStatus
 	cps l, 4
 	jr nz, SeqTimer_AdjustForMode4
 	ld xde, 0x3938700

@@ -9594,7 +9594,7 @@ Softver_ShowHide:
 	ld xwa, 0xF00001
 	ld xbc, 0x1C0000F
 	call SendEvent
-	call LABEL_EF07D4
+	call Boot_ParseTableDataTimestamp
 	pushw hl
 	pushw 0xE9
 	pushw 0xDE42
@@ -9606,7 +9606,7 @@ Softver_ShowHide:
 	ld xwa, 0xF00002
 	ld xbc, 0x1C0000F
 	call SendEvent
-	call LABEL_EF07E1
+	call Boot_GetSystemPointer
 	pushw hl
 	pushw 0xE9
 	pushw 0xDE46
@@ -9618,7 +9618,7 @@ Softver_ShowHide:
 	ld xwa, 0xF00003
 	ld xbc, 0x1C0000F
 	call SendEvent
-	call LABEL_EF07E6
+	call Boot_ParseSubCPUTimestamp
 	pushw hl
 	pushw 0xE9
 	pushw 0xDE4A
@@ -9754,7 +9754,7 @@ AcWelcomScreen_Init_StoreData:
 	ld xbc, xiz
 	ld xde, (xsp + 16)
 	call InheritedProc
-	call LABEL_EF0651
+	call Boot_GetButtonComboCode
 	cps l, 2
 	jr nz, AcWelcomScreen_Init_CheckSubCpu
 	ld xwa, 0xFFFFFFFF

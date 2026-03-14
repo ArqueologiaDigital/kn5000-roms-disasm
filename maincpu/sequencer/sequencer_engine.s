@@ -15559,7 +15559,7 @@ Part_InitVoiceDefaults:
 	lds bc, 7
 	lds de, 0
 	calr Part_WriteByte
-	call LABEL_EF0839
+	call Boot_ReadFDCStatus
 	ld a, (xsp + 2)
 	extz wa
 	extz hl
