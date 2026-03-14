@@ -79,7 +79,7 @@ FDemo_DisplayCtrlJumpHandler:
 	; convert result, set up event codes, then dispatch via FA9D58.
 	; Also handles display state queries on (0x0251D8).
 	ld xwa, xde				; workspace
-	calr LABEL_F86360			; load display resource (format validation)
+	calr Seq_LoadDisplayResource			; load display resource (format validation)
 	exts xhl				; sign-extend result
 	ld xwa, 0xFFFFFFFF			; broadcast target
 	ld xbc, 0x01C10001			; event code
@@ -93,7 +93,7 @@ FDemo_DisplayCtrlJumpHandler:
 	ld xde, xhl
 	jr FDemo_DispatchEventPost
 	ld xwa, xde				; workspace
-	calr LABEL_F863E4			; load named display resource
+	calr Seq_LoadNamedResource			; load named display resource
 	exts xhl
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x01C10002			; event code 2
@@ -202,7 +202,7 @@ Seq_StartWithFullInit:
 	lds32 xde, 0
 	call PostEvent
 	ld wa, iz
-	calr LABEL_F862B5
+	calr Seq_CopyResourcePtrs
 	lds wa, 2
 	calr FDemoText_ProcessMarkupLoop
 	jrl ApPreControl_ReturnNull
@@ -2835,7 +2835,7 @@ LoadSMF_OpenAndProcess:
 	extz wa
 	ld c, (xsp + 6)
 	extz bc
-	call LABEL_F23251
+	call SMF_SelectBankAndLoad
 	ld iz, hl
 	call FileIO_CloseHandle
 	ld xwa, (xsp + 2)

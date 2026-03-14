@@ -12,21 +12,21 @@
 ; ==========================================================================
 
 SMF_InitSongPlayback:
-	call LABEL_F23005
-	call LABEL_F23134
-	call LABEL_F231D3
+	call SoundBank_InitDefaultParams
+	call SoundBank_CopyChannelData
+	call SoundBank_InitPlaybackFlags
 	call SMF_LoadSongBank
-	call LABEL_F2309F
+	call SoundBank_InitTrackParams
 	ret
 
-LABEL_F23005:
+SoundBank_InitDefaultParams:
 	push xhl
 	push xde
 	push xwa
 	push xbc
 	xor bc, bc
 
-LABEL_F2300B:
+SoundBank_InitDefaults_Loop:
 	pushw bc
 	ld xde, 0xAB000
 	xor xwa, xwa
@@ -36,14 +36,14 @@ LABEL_F2300B:
 	ld xhl, 0x4	;	TODO: Fix ASL: LD XHL, 00000004h:32
 	add xhl, xde
 	cp (xhl + 1), 0x0
-	jr nz, LABEL_F2302F
+	jr nz, SoundBank_InitDefaults_Type1
 	cp (xhl + 2), 0x3
 	jr c, SoundBank_InitEntryDefaults
 	jr SoundBank_NextEntry1
 
-LABEL_F2302F:
+SoundBank_InitDefaults_Type1:
 	cp (xhl + 1), 0x1
-	jr nz, LABEL_F2304F
+	jr nz, SoundBank_InitDefaults_Type2
 	cp (xhl + 2), 0x0
 	jr z, SoundBank_InitEntryDefaults
 	cp (xhl + 2), 0x2
@@ -54,14 +54,14 @@ LABEL_F2302F:
 	jr z, SoundBank_InitEntryDefaults
 	jr SoundBank_NextEntry1
 
-LABEL_F2304F:
+SoundBank_InitDefaults_Type2:
 	cp (xhl + 1), 0x2
-	jr nz, LABEL_F2305D
+	jr nz, SoundBank_InitDefaults_Type4
 	cp (xhl + 2), 0x3
 	jr c, SoundBank_InitEntryDefaults
 	jr SoundBank_NextEntry1
 
-LABEL_F2305D:
+SoundBank_InitDefaults_Type4:
 	cp (xhl + 1), 0x4
 	jr nz, SoundBank_NextEntry1
 	jr SoundBank_NextEntry1
@@ -84,27 +84,27 @@ SoundBank_NextEntry1:
 	popw bc
 	inc 1, bc
 	cp bc, 0xA
-	jrl c, LABEL_F2300B
+	jrl c, SoundBank_InitDefaults_Loop
 	pop xbc
 	pop xwa
 	pop xde
 	pop xhl
 	ret
 
-LABEL_F2309F:
+SoundBank_InitTrackParams:
 	push xhl
-	call LABEL_F230A6
+	call SoundBank_InitTrackParams_Inner
 	pop xhl
 	ret
 
-LABEL_F230A6:
+SoundBank_InitTrackParams_Inner:
 	push xix
 	push xde
 	push xwa
 	push xbc
 	xor bc, bc
 
-LABEL_F230AC:
+SoundBank_InitTrack_Loop:
 	pushw bc
 	ld xde, 0xAB000
 	xor xwa, xwa
@@ -115,56 +115,56 @@ LABEL_F230AC:
 	add xhl, xde
 	xor iy, iy
 
-LABEL_F230C4:
+SoundBank_InitTrack_ByteFields:
 	ld xix, 0xF23124
 	ld_srib3 A, 0x07, 0xF0, 0xF4
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	inc 1, iy
 	cps iy, 7
-	jr ule, LABEL_F230C4
+	jr ule, SoundBank_InitTrack_ByteFields
 	ldda8 a, 36458
 	lda_dri3 XBC, 0x07, 0xEC, 0xF4
 	ld xhl, 0x14
 	add xhl, xde
 	xor iy, iy
 
-LABEL_F230EB:
+SoundBank_InitTrack_WordFields:
 	ld xix, 0xF2312C
 	ld_sriw3 WA, 0x07, 0xF0, 0xF4
 	st_dri3w WA, 0x07, 0xEC, 0xF4
 	add iy, 0x2
 	cp iy, 0x8
-	jr c, LABEL_F230EB
+	jr c, SoundBank_InitTrack_WordFields
 	ld xix, 0x42
 	add xix, xde
 	xor wa, wa
 	lds bc, 6
 
-LABEL_F2310F:
+SoundBank_InitTrack_ClearTail:
 	st_dpiw WA, 0xF1
-	djnz xbc, LABEL_F2310F
+	djnz xbc, SoundBank_InitTrack_ClearTail
 	popw bc
 	inc 1, bc
 	cp bc, 0xA
-	jrl c, LABEL_F230AC
+	jrl c, SoundBank_InitTrack_Loop
 	pop xbc
 	pop xwa
 	pop xde
 	pop xix
 	ret
 
-LABEL_F23124:	.asciz "ZZZZ"
+SoundBank_DefaultTrackData:	.asciz "ZZZZ"
 	.byte 0x01, 0x08, 0x00
 	.byte 0x00, 0x00, 0x00, 0x01, 0x2e, 0x00, 0x20, 0x05
 
-LABEL_F23134:
+SoundBank_CopyChannelData:
 	push xhl
 	push xde
 	push xwa
 	push xbc
 	xor bc, bc
 
-LABEL_F2313A:
+SoundBank_CopyCh_Loop:
 	pushw bc
 	ld xde, 0xAB000
 	xor xwa, xwa
@@ -174,26 +174,26 @@ LABEL_F2313A:
 	ld xhl, 0x4	;	TODO: Fix ASL: LD XHL, 00000004h:32
 	add xhl, xde
 	cp (xhl + 1), 0x0
-	jr nz, LABEL_F2315E
+	jr nz, SoundBank_CopyCh_Type1
 	cp (xhl + 2), 0x4
 	jr nc, SoundBank_NextEntry2
 	jr SoundBank_CopyChData
 
-LABEL_F2315E:
+SoundBank_CopyCh_Type1:
 	cp (xhl + 1), 0x1
-	jr nz, LABEL_F2316C
+	jr nz, SoundBank_CopyCh_Type2
 	cp (xhl + 2), 0x8
 	jr nc, SoundBank_NextEntry2
 	jr SoundBank_CopyChData
 
-LABEL_F2316C:
+SoundBank_CopyCh_Type2:
 	cp (xhl + 1), 0x2
-	jr nz, LABEL_F2317A
+	jr nz, SoundBank_CopyCh_Type4
 	cp (xhl + 2), 0x5
 	jr nc, SoundBank_NextEntry2
 	jr SoundBank_CopyChData
 
-LABEL_F2317A:
+SoundBank_CopyCh_Type4:
 	cp (xhl + 1), 0x4
 	jr nz, SoundBank_NextEntry2
 	jr SoundBank_NextEntry2
@@ -208,15 +208,15 @@ SoundBank_CopyChData:
 	ld xiy, 0xC1
 	add xiy, xde
 	cp (xiy), 0x20
-	jr c, LABEL_F231A0
+	jr c, SoundBank_CopyCh_FromDefault
 	ldir85
-	jp LABEL_F231A7
+	jp SoundBank_CopyCh_InitRemaining
 
-LABEL_F231A0:
+SoundBank_CopyCh_FromDefault:
 	ld xiy, 0xF2324B
 	ldir85
 
-LABEL_F231A7:
+SoundBank_CopyCh_InitRemaining:
 	ldw bc, 0xA
 	ld xiy, 0xF23241
 	ldir85
@@ -233,21 +233,21 @@ SoundBank_NextEntry2:
 	popw bc
 	inc 1, bc
 	cp bc, 0xA
-	jrl c, LABEL_F2313A
+	jrl c, SoundBank_CopyCh_Loop
 	pop xbc
 	pop xwa
 	pop xde
 	pop xhl
 	ret
 
-LABEL_F231D3:
+SoundBank_InitPlaybackFlags:
 	push xhl
 	push xde
 	push xwa
 	push xbc
 	xor bc, bc
 
-LABEL_F231D9:
+SoundBank_InitFlags_Loop:
 	pushw bc
 	ld xde, 0xAB000
 	xor xwa, xwa
@@ -257,26 +257,26 @@ LABEL_F231D9:
 	ld xhl, 0x4	;	TODO: Fix ASL: LD XHL, 00000004h:32
 	add xhl, xde
 	cp (xhl + 1), 0x0
-	jr nz, LABEL_F231FD
+	jr nz, SoundBank_InitFlags_Type1
 	cp (xhl + 2), 0x4
 	jr nc, SoundBank_NextEntry3
 	jr SoundBank_StoreChParam
 
-LABEL_F231FD:
+SoundBank_InitFlags_Type1:
 	cp (xhl + 1), 0x1
-	jr nz, LABEL_F2320B
+	jr nz, SoundBank_InitFlags_Type2
 	cp (xhl + 2), 0x8
 	jr nc, SoundBank_NextEntry3
 	jr SoundBank_StoreChParam
 
-LABEL_F2320B:
+SoundBank_InitFlags_Type2:
 	cp (xhl + 1), 0x2
-	jr nz, LABEL_F23219
+	jr nz, SoundBank_InitFlags_Type4
 	cp (xhl + 2), 0x5
 	jr nc, SoundBank_NextEntry3
 	jr SoundBank_StoreChParam
 
-LABEL_F23219:
+SoundBank_InitFlags_Type4:
 	cp (xhl + 1), 0x4
 	jr nz, SoundBank_NextEntry3
 	jr SoundBank_NextEntry3
@@ -296,57 +296,57 @@ SoundBank_NextEntry3:
 	popw bc
 	inc 1, bc
 	cp bc, 0xA
-	jrl c, LABEL_F231D9
+	jrl c, SoundBank_InitFlags_Loop
 	pop xbc
 	pop xwa
 	pop xde
 	pop xhl
 	ret
 
-LABEL_F23241:	.ascii "          ______"
+SoundBank_DefaultNamePadding:	.ascii "          ______"
 
-LABEL_F23251:
+SMF_SelectBankAndLoad:
 	stda8 4599, a
 	stda8 4600, c
 	cpdi8 4600, 2
-	jr nz, LABEL_F23264
-	call LABEL_F232A1
+	jr nz, SMF_SelectBank_AfterReset
+	call SMF_ResetMidiChannelMap
 
-LABEL_F23264:
+SMF_SelectBank_AfterReset:
 	push xiz
 	push xix
 	push xde
 	call SetWall_LoadBankToToneGen
 	ldda8 a, 4599
 	cpda8_24 a, 65507
-	jrl z, LABEL_F23284
+	jrl z, SMF_SelectBank_AfterToneLoad
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a
 	call SoundBank_LoadToWorkRAM
 
-LABEL_F23284:
-	call LABEL_F23324
+SMF_SelectBank_AfterToneLoad:
+	call SMF_InitSequencerState
 	anddi8 10417, 254
 	pop xde
 	pop xix
 	pop xiz
 	ldda16 xhl, 6699
 	bit 15, hl
-	jr nz, LABEL_F232A0
+	jr nz, SMF_SelectBank_Return
 	cps hl, 1
-	jr z, LABEL_F232A0
+	jr z, SMF_SelectBank_Return
 	set 15, hl
 
-LABEL_F232A0:
+SMF_SelectBank_Return:
 	ret
 
-LABEL_F232A1:
+SMF_ResetMidiChannelMap:
 	push xbc
 	push xhl
 	push xix
 	xor xbc, xbc
 
-LABEL_F232A6:
+SMF_ResetMidiChanMap_Loop:
 	ld xix, 0x1A37
 	ld xhl, xbc
 	mul l, 0x2
@@ -355,7 +355,7 @@ LABEL_F232A6:
 	ld (xix + 1), 0x0
 	inc 1, bc
 	cp bc, 0x10
-	jr lt, LABEL_F232A6
+	jr lt, SMF_ResetMidiChanMap_Loop
 	ld xix, 0x1A37
 	ldw hl, 0x9
 	mul l, 0x2
@@ -390,7 +390,7 @@ SoundBank_LoadToWorkRAM:
 	stda16 61854, xwa
 	ret
 
-LABEL_F23324:
+SMF_InitSequencerState:
 	xor a, a
 	stda8 4323, a
 	stda8 4330, a
@@ -413,32 +413,32 @@ LABEL_F23324:
 	stdi8 6887, 0
 	pop xwa
 
-LABEL_F2336D:
+SMF_ReadMThd_Start:
 	lds bc, 4
 	ld xiy, 0xF236AF
 
-LABEL_F23374:
+SMF_ReadMThd_ByteLoop:
 	pushw bc
 	push xiy
 	call FloppyIO_ReadNextByte
 	pop xiy
 	popw bc
 	cp_spib A, 0xF4
-	jrl z, LABEL_F233A9
+	jrl z, SMF_ReadMThd_Matched
 	incdi8 1, 4343
 	cpdi8 4343, 1
-	jrl nz, LABEL_F233A0
+	jrl nz, SMF_ReadMThd_Mismatch
 	ld xwa, 0x13FA
 	add xwa, 0x80
 	stda32 4376, xwa
-	jrl LABEL_F2336D
+	jrl SMF_ReadMThd_Start
 
-LABEL_F233A0:
+SMF_ReadMThd_Mismatch:
 	stdi16 6699, 49
 	jrl SeqPlay_FloppyReady
 
-LABEL_F233A9:
-	djnz xbc, LABEL_F23374
+SMF_ReadMThd_Matched:
+	djnz xbc, SMF_ReadMThd_ByteLoop
 	stdi8 6887, 1
 	call FloppyIO_ReadNextByte
 	stda8 6886, a
@@ -479,7 +479,7 @@ FloppyIO_WaitReadComplete:
 	nop
 	jp FloppyIO_WaitReadComplete
 
-LABEL_F23436:
+SMF_AfterFloppyWait:
 	ldda8 a, 4600
 	call SeqTrack_ClearPartParamBuffers
 	cpdi16 3932, 0
@@ -504,23 +504,23 @@ FloppyIO_ReadAndValidateHeader:
 	lds bc, 4
 	ld xiy, 0xF236B3
 
-LABEL_F2348D:
+SMF_ReadMTrk_ByteLoop:
 	pushw bc
 	push xiy
 	call FloppyIO_ReadNextByte
 	pop xiy
 	popw bc
 	cp_spib A, 0xF4
-	jrl z, LABEL_F234A4
+	jrl z, SMF_ReadMTrk_Matched
 	stdi16 6699, 49
 	jrl SeqPlay_FloppyReady
 
-LABEL_F234A4:
-	djnz xbc, LABEL_F2348D
+SMF_ReadMTrk_Matched:
+	djnz xbc, SMF_ReadMTrk_ByteLoop
 	ld xix, 0xFA2
 	lds bc, 4
 
-LABEL_F234AE:
+SMF_ReadTrackData_Loop:
 	pushw bc
 	push xix
 	call FloppyIO_ReadNextByte
@@ -531,19 +531,19 @@ LABEL_F234AE:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F234C8
+	jr lt, SMF_ReadTrackData_FloppyErr
 	pop xbc
 	pop xwa
-	jp LABEL_F234CE
+	jp SMF_ReadTrackData_Continue
 
-LABEL_F234C8:
+SMF_ReadTrackData_FloppyErr:
 	pop xbc
 	pop xwa
 	jp SeqPlay_ResetAndStop
 
-LABEL_F234CE:
+SMF_ReadTrackData_Continue:
 	lda_dpi XBC, 0xF0
-	djnz xbc, LABEL_F234AE
+	djnz xbc, SMF_ReadTrackData_Loop
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
@@ -564,27 +564,27 @@ SMF_ReadLoopWithRetry:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F2351A
+	jr lt, SMF_MainLoop_FloppyErr1
 	pop xbc
 	pop xwa
-	jp LABEL_F23520
+	jp SMF_MainLoop_DispatchEvents
 
-LABEL_F2351A:
+SMF_MainLoop_FloppyErr1:
 	pop xbc
 	pop xwa
 	jp SeqPlay_ResetAndStop
 
-LABEL_F23520:
+SMF_MainLoop_DispatchEvents:
 	call SeqTrack_DispatchPartEvt
 	xor xiy, xiy
 
-LABEL_F23526:
+SMF_TempoScaling_Loop:
 	push xiy
 	call SeqTrack_ComputeTempoScaling
 	pop xiy
 	inc 1, xiy
 	cp xiy, 0xF
-	jrl ule, LABEL_F23526
+	jrl ule, SMF_TempoScaling_Loop
 	call SeqTrack_UpdateChannelVolumes
 	call FloppyIO_ReadNextByte
 	push xwa
@@ -592,116 +592,116 @@ LABEL_F23526:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23551
+	jr lt, SMF_MainLoop_FloppyErr2
 	pop xbc
 	pop xwa
-	jp LABEL_F23557
+	jp SMF_CheckMetaEvent
 
-LABEL_F23551:
+SMF_MainLoop_FloppyErr2:
 	pop xbc
 	pop xwa
 	jp SeqPlay_ResetAndStop
 
-LABEL_F23557:
+SMF_CheckMetaEvent:
 	cp a, 0xFF
-	jrl nz, LABEL_F2359B
+	jrl nz, SMF_CheckSysEx
 	call SMF_ParseTrackEvent
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23573
+	jr lt, SMF_MetaEvent_FloppyErr
 	pop xbc
 	pop xwa
-	jp LABEL_F23579
+	jp SMF_MetaEvent_CheckResult
 
-LABEL_F23573:
+SMF_MetaEvent_FloppyErr:
 	pop xbc
 	pop xwa
 	jp SeqPlay_ResetAndStop
 
-LABEL_F23579:
+SMF_MetaEvent_CheckResult:
 	cpdi8 4009, 255
-	jrl z, LABEL_F2358C
+	jrl z, SMF_ActivateVoicesAndFinish
 	cpdi8 4323, 0
 	jrl z, SMF_ReadLoopWithRetry
 	jrl Sequencer_ResetAfterFloppyIO
 
-LABEL_F2358C:
+SMF_ActivateVoicesAndFinish:
 	call Voice_ActivateAllChannels
 	call SoundGen_ScanActiveVoiceBitmap
 	call FloppyIO_ReturnReady
 	jrl SeqPlay_FinishFloppyLoadAndStart
 
-LABEL_F2359B:
+SMF_CheckSysEx:
 	cp a, 0xF7
-	jrl z, LABEL_F235A7
+	jrl z, SMF_ProcessSysEx
 	cp a, 0xF0
-	jrl nz, LABEL_F235C6
+	jrl nz, SMF_CheckMidiStatus
 
-LABEL_F235A7:
+SMF_ProcessSysEx:
 	call SMF_ProcessSysExBlock
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F235BD
+	jr lt, SMF_SysEx_FloppyErr
 	pop xbc
 	pop xwa
-	jp LABEL_F235C3
+	jp SMF_SysEx_ContinueLoop
 
-LABEL_F235BD:
+SMF_SysEx_FloppyErr:
 	pop xbc
 	pop xwa
 	jp SeqPlay_ResetAndStop
 
-LABEL_F235C3:
+SMF_SysEx_ContinueLoop:
 	jrl SMF_ReadLoopWithRetry
 
-LABEL_F235C6:
+SMF_CheckMidiStatus:
 	bit 7, a
-	jrl z, LABEL_F235F3
+	jrl z, SMF_RunningStatus_Read
 	call SMF_ReadMidiEventToBuffer
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F235E2
+	jr lt, SMF_MidiEvent_FloppyErr
 	pop xbc
 	pop xwa
-	jp LABEL_F235E8
+	jp SMF_MidiEvent_CheckResult
 
-LABEL_F235E2:
+SMF_MidiEvent_FloppyErr:
 	pop xbc
 	pop xwa
 	jp SeqPlay_ResetAndStop
 
-LABEL_F235E8:
+SMF_MidiEvent_CheckResult:
 	cpdi8 4323, 0
 	jrl nz, Sequencer_ResetAfterFloppyIO
 	jrl SMF_ReadLoopWithRetry
 
-LABEL_F235F3:
+SMF_RunningStatus_Read:
 	call FloppyIO_ReadMidiEventBytes
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F23609
+	jr lt, SMF_RunningStatus_FloppyErr
 	pop xbc
 	pop xwa
-	jp LABEL_F2360F
+	jp SMF_RunningStatus_CheckResult
 
-LABEL_F23609:
+SMF_RunningStatus_FloppyErr:
 	pop xbc
 	pop xwa
 	jp SeqPlay_ResetAndStop
 
-LABEL_F2360F:
+SMF_RunningStatus_CheckResult:
 	cpdi8 4323, 0
 	jrl nz, Sequencer_ResetAfterFloppyIO
 	jrl SMF_ReadLoopWithRetry
