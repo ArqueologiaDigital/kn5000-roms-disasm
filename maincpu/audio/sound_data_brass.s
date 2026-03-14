@@ -1,87 +1,87 @@
 BrassSound_SamplePtr_Table:
-	.long LABEL_E06DB0
-	.long LABEL_E06DB3
-	.long LABEL_E06DB6
-	.long LABEL_E06DB9
-	.long LABEL_E06DBC
-	.long LABEL_E06DBF
-	.long LABEL_E06DC2
-	.long LABEL_E06DC5
-	.long LABEL_E06DC8
-	.long LABEL_E06DCB
-	.long LABEL_E06DCE
-	.long LABEL_E06DD1
-	.long LABEL_E06DD4
-	.long LABEL_E06DD7
-	.long LABEL_E06DDA
-	.long LABEL_E06DDD
-	.long LABEL_E06DE0
-	.long LABEL_E06DE3
-	.long LABEL_E06DE6
-	.long LABEL_E06DE9
-	.long LABEL_E06DEC
-	.long LABEL_E06DEF
-	.long LABEL_E06DF2
-	.long LABEL_E06DF5
-	.long LABEL_E06DF8
-	.long LABEL_E06DFB
-	.long LABEL_E06DFE
-	.long LABEL_E06E01
-	.long LABEL_E06E04
-	.long LABEL_E06E07
-	.long LABEL_E06E0A
-	.long LABEL_E06E0D
-	.long LABEL_E06E10
-	.long LABEL_E06E13
-	.long LABEL_E06E16
-	.long LABEL_E06E19
-	.long LABEL_E06E1C
-	.long LABEL_E06E1F
-	.long LABEL_E06E22
-	.long LABEL_E06E25
-	.long LABEL_E06E28
-	.long LABEL_E06E2B
-	.long LABEL_E06E2E
-	.long LABEL_E06E31
-	.long LABEL_E06E34
-	.long LABEL_E06E37
-	.long LABEL_E06E3A
-	.long LABEL_E06E3D
-	.long LABEL_E06E40
-	.long LABEL_E06E43
-	.long LABEL_E06E46
-	.long LABEL_E06E49
-	.long LABEL_E06E4C
-	.long LABEL_E06E4F
-	.long LABEL_E06E52
-	.long LABEL_E06E55
-	.long LABEL_E06E58
-	.long LABEL_E06E5B
-	.long LABEL_E06E5E
-	.long LABEL_E06E61
-	.long LABEL_E06E64
-	.long LABEL_E06E67
-	.long LABEL_E06E6A
-	.long LABEL_E06E6D
-	.long LABEL_E06E70
-	.long LABEL_E06E73
-	.long LABEL_E06E76
-	.long LABEL_E06E79
-	.long LABEL_E06E7C
-	.long LABEL_E06E7F
-	.long LABEL_E06E82
-	.long LABEL_E06E85
-	.long LABEL_E06E88
-	.long LABEL_E06E8B
-	.long LABEL_E06E8E
-	.long LABEL_E06E91
-	.long LABEL_E06E94
-	.long LABEL_E06E97
-	.long LABEL_E06E9A
-	.long LABEL_E06E9D
-	.long LABEL_E06EA0
-	.long LABEL_E06EA3
-	.long LABEL_E06EA6
+	.long Brass_PatchEntry_000
+	.long Brass_PatchEntry_001
+	.long Brass_PatchEntry_002
+	.long Brass_PatchEntry_003
+	.long Brass_PatchEntry_004
+	.long Brass_PatchEntry_005
+	.long Brass_PatchEntry_006
+	.long Brass_PatchEntry_007
+	.long Brass_PatchEntry_008
+	.long Brass_PatchEntry_009
+	.long Brass_PatchEntry_010
+	.long Brass_PatchEntry_011
+	.long Brass_PatchEntry_012
+	.long Brass_PatchEntry_013
+	.long Brass_PatchEntry_014
+	.long Brass_PatchEntry_015
+	.long Brass_PatchEntry_016
+	.long Brass_PatchEntry_017
+	.long Brass_PatchEntry_018
+	.long Brass_PatchEntry_019
+	.long Brass_PatchEntry_020
+	.long Brass_PatchEntry_021
+	.long Brass_PatchEntry_022
+	.long Brass_PatchEntry_023
+	.long Brass_PatchEntry_024
+	.long Brass_PatchEntry_025
+	.long Brass_PatchEntry_026
+	.long Brass_PatchEntry_027
+	.long Brass_PatchEntry_028
+	.long Brass_PatchEntry_029
+	.long Brass_PatchEntry_030
+	.long Brass_PatchEntry_031
+	.long Brass_PatchEntry_032
+	.long Brass_PatchEntry_033
+	.long Brass_PatchEntry_034
+	.long Brass_PatchEntry_035
+	.long Brass_PatchEntry_036
+	.long Brass_PatchEntry_037
+	.long Brass_PatchEntry_038
+	.long Brass_PatchEntry_039
+	.long Brass_PatchEntry_040
+	.long Brass_PatchEntry_041
+	.long Brass_PatchEntry_042
+	.long Brass_PatchEntry_043
+	.long Brass_PatchEntry_044
+	.long Brass_PatchEntry_045
+	.long Brass_PatchEntry_046
+	.long Brass_PatchEntry_047
+	.long Brass_PatchEntry_048
+	.long Brass_PatchEntry_049
+	.long Brass_PatchEntry_050
+	.long Brass_PatchEntry_051
+	.long Brass_PatchEntry_052
+	.long Brass_PatchEntry_053
+	.long Brass_PatchEntry_054
+	.long Brass_PatchEntry_055
+	.long Brass_PatchEntry_056
+	.long Brass_PatchEntry_057
+	.long Brass_PatchEntry_058
+	.long Brass_PatchEntry_059
+	.long Brass_PatchEntry_060
+	.long Brass_PatchEntry_061
+	.long Brass_PatchEntry_062
+	.long Brass_PatchEntry_063
+	.long Brass_PatchEntry_064
+	.long Brass_PatchEntry_065
+	.long Brass_PatchEntry_066
+	.long Brass_PatchEntry_067
+	.long Brass_PatchEntry_068
+	.long Brass_PatchEntry_069
+	.long Brass_PatchEntry_070
+	.long Brass_PatchEntry_071
+	.long Brass_PatchEntry_072
+	.long Brass_PatchEntry_073
+	.long Brass_PatchEntry_074
+	.long Brass_PatchEntry_075
+	.long Brass_PatchEntry_076
+	.long Brass_PatchEntry_077
+	.long Brass_PatchEntry_078
+	.long Brass_PatchEntry_079
+	.long Brass_PatchEntry_080
+	.long Brass_PatchEntry_081
+	.long Brass_PatchEntry_082
 	.long Brass_PatchEntry_084
 	.long Brass_PatchEntry_085
 	.long Brass_PatchEntry_086
@@ -127,180 +127,180 @@ BrassSound_SamplePtr_Table:
 	.long Brass_PatchEntry_126
 	.long Brass_PatchEntry_127
 	.long Brass_PatchEntry_128
-LABEL_E06DB0:
+Brass_PatchEntry_000:
 
 	.byte 0x00, 0x00, 0xff
-LABEL_E06DB3:
+Brass_PatchEntry_001:
 	.byte 0x01, 0x00, 0xff
-LABEL_E06DB6:
+Brass_PatchEntry_002:
 	.byte 0x03, 0x00
 	.byte 0xff
-LABEL_E06DB9:
+Brass_PatchEntry_003:
 	.byte 0x01, 0x01, 0xff
-LABEL_E06DBC:
+Brass_PatchEntry_004:
 	.byte 0x05, 0x00, 0xff
-LABEL_E06DBF:
+Brass_PatchEntry_005:
 	.byte 0x06
 	.byte 0x00, 0xff
-LABEL_E06DC2:
+Brass_PatchEntry_006:
 	.byte 0x10, 0x00, 0xff
-LABEL_E06DC5:
+Brass_PatchEntry_007:
 	.byte 0x11, 0x00, 0xff
-LABEL_E06DC8:
+Brass_PatchEntry_008:
 	.byte 0x0c, 0x00, 0xff
-LABEL_E06DCB:
+Brass_PatchEntry_009:
 	.byte 0x09, 0x00, 0xff
-LABEL_E06DCE:
+Brass_PatchEntry_010:
 	.byte 0x07, 0x00
 	.byte 0xff
-LABEL_E06DD1:
+Brass_PatchEntry_011:
 	.byte 0x08, 0x00, 0xff
-LABEL_E06DD4:
+Brass_PatchEntry_012:
 	.byte 0x0a, 0x00, 0xff
-LABEL_E06DD7:
+Brass_PatchEntry_013:
 	.byte 0x0b
 	.byte 0x00, 0xff
-LABEL_E06DDA:
+Brass_PatchEntry_014:
 	.byte 0x0e, 0x00, 0xff
-LABEL_E06DDD:
+Brass_PatchEntry_015:
 	.byte 0x26, 0x01, 0xff
-LABEL_E06DE0:
+Brass_PatchEntry_016:
 	.byte 0x59, 0x00, 0xff
-LABEL_E06DE3:
+Brass_PatchEntry_017:
 	.byte 0x58, 0x00, 0xff
-LABEL_E06DE6:
+Brass_PatchEntry_018:
 	.byte 0x5c, 0x02
 	.byte 0xff
-LABEL_E06DE9:
+Brass_PatchEntry_019:
 	.byte 0x54, 0x00, 0xff
-LABEL_E06DEC:
+Brass_PatchEntry_020:
 	.byte 0x56, 0x02, 0xff
-LABEL_E06DEF:	aligned_string "P"
-LABEL_E06DF2:
+Brass_PatchEntry_021:	aligned_string "P"
+Brass_PatchEntry_022:
 	.byte 0x53, 0x00, 0xff
-LABEL_E06DF5:
+Brass_PatchEntry_023:
 	.byte 0x50, 0x01, 0xff
-LABEL_E06DF8:
+Brass_PatchEntry_024:
 	.byte 0x15, 0x00, 0xff
-LABEL_E06DFB:
+Brass_PatchEntry_025:
 	.byte 0x16, 0x00, 0xff
-LABEL_E06DFE:
+Brass_PatchEntry_026:
 	.byte 0x19, 0x00
 	.byte 0xff
-LABEL_E06E01:
+Brass_PatchEntry_027:
 	.byte 0x1a, 0x00, 0xff
-LABEL_E06E04:
+Brass_PatchEntry_028:
 	.byte 0x1d, 0x00, 0xff
-LABEL_E06E07:
+Brass_PatchEntry_029:
 	.byte 0x1b
 	.byte 0x02, 0xff
-LABEL_E06E0A:
+Brass_PatchEntry_030:
 	.byte 0x1e, 0x00, 0xff
-LABEL_E06E0D:
+Brass_PatchEntry_031:
 	.byte 0x1b, 0x01, 0xff
-LABEL_E06E10:
+Brass_PatchEntry_032:
 	.byte 0x2b, 0x00, 0xff
-LABEL_E06E13:
+Brass_PatchEntry_033:
 	.byte 0x28, 0x01, 0xff
-LABEL_E06E16:
+Brass_PatchEntry_034:
 	.byte 0x2a, 0x00
 	.byte 0xff
-LABEL_E06E19:
+Brass_PatchEntry_035:
 	.byte 0x28, 0x02, 0xff
-LABEL_E06E1C:
+Brass_PatchEntry_036:
 	.byte 0x29, 0x00, 0xff
-LABEL_E06E1F:
+Brass_PatchEntry_037:
 	.byte 0x29
 	.byte 0x01, 0xff
-LABEL_E06E22:
+Brass_PatchEntry_038:
 	.byte 0x2e, 0x00, 0xff
-LABEL_E06E25:
+Brass_PatchEntry_039:
 	.byte 0x2e, 0x05, 0xff
-LABEL_E06E28:
+Brass_PatchEntry_040:
 	.byte 0x60, 0x00, 0xff
-LABEL_E06E2B:
+Brass_PatchEntry_041:
 	.byte 0x61, 0x02, 0xff
-LABEL_E06E2E:
+Brass_PatchEntry_042:
 	.byte 0x61, 0x00
 	.byte 0xff
-LABEL_E06E31:
+Brass_PatchEntry_043:
 	.byte 0x62, 0x00, 0xff
-LABEL_E06E34:
+Brass_PatchEntry_044:
 	.byte 0x64, 0x02, 0xff
-LABEL_E06E37:	aligned_string "c"
-LABEL_E06E3A:
+Brass_PatchEntry_045:	aligned_string "c"
+Brass_PatchEntry_046:
 	.byte 0x20, 0x00, 0xff
-LABEL_E06E3D:
+Brass_PatchEntry_047:
 	.byte 0x7e, 0x00, 0xff
-LABEL_E06E40:
+Brass_PatchEntry_048:
 	.byte 0x64, 0x00, 0xff
-LABEL_E06E43:
+Brass_PatchEntry_049:
 	.byte 0x65, 0x00, 0xff
-LABEL_E06E46:
+Brass_PatchEntry_050:
 	.byte 0x67, 0x00
 	.byte 0xff
-LABEL_E06E49:
+Brass_PatchEntry_051:
 	.byte 0x67, 0x01, 0xff
-LABEL_E06E4C:
+Brass_PatchEntry_052:
 	.byte 0x68, 0x03, 0xff
-LABEL_E06E4F:	aligned_string "m"
-LABEL_E06E52:
+Brass_PatchEntry_053:	aligned_string "m"
+Brass_PatchEntry_054:
 	.byte 0x6b, 0x00, 0xff
-LABEL_E06E55:
+Brass_PatchEntry_055:
 	.byte 0x7f, 0x01, 0xff
-LABEL_E06E58:
+Brass_PatchEntry_056:
 	.byte 0x30, 0x00, 0xff
-LABEL_E06E5B:
+Brass_PatchEntry_057:
 	.byte 0x34, 0x00, 0xff
-LABEL_E06E5E:
+Brass_PatchEntry_058:
 	.byte 0x37, 0x00
 	.byte 0xff
-LABEL_E06E61:
+Brass_PatchEntry_059:
 	.byte 0x32, 0x00, 0xff
-LABEL_E06E64:
+Brass_PatchEntry_060:
 	.byte 0x36, 0x01, 0xff
-LABEL_E06E67:	aligned_string "8"
-LABEL_E06E6A:
+Brass_PatchEntry_061:	aligned_string "8"
+Brass_PatchEntry_062:
 	.byte 0x3c, 0x00, 0xff
-LABEL_E06E6D:
+Brass_PatchEntry_063:
 	.byte 0x3e, 0x04, 0xff
-LABEL_E06E70:
+Brass_PatchEntry_064:
 	.byte 0x4c, 0x00, 0xff
-LABEL_E06E73:
+Brass_PatchEntry_065:
 	.byte 0x4d, 0x00, 0xff
-LABEL_E06E76:
+Brass_PatchEntry_066:
 	.byte 0x4e, 0x03
 	.byte 0xff
-LABEL_E06E79:
+Brass_PatchEntry_067:
 	.byte 0x4f, 0x01, 0xff
-LABEL_E06E7C:
+Brass_PatchEntry_068:
 	.byte 0x42, 0x00, 0xff
-LABEL_E06E7F:	aligned_string "C"
-LABEL_E06E82:
+Brass_PatchEntry_069:	aligned_string "C"
+Brass_PatchEntry_070:
 	.byte 0x46, 0x00, 0xff
-LABEL_E06E85:
+Brass_PatchEntry_071:
 	.byte 0x44, 0x00, 0xff
-LABEL_E06E88:
+Brass_PatchEntry_072:
 	.byte 0x40, 0x00, 0xff
-LABEL_E06E8B:
+Brass_PatchEntry_073:
 	.byte 0x41, 0x00, 0xff
-LABEL_E06E8E:
+Brass_PatchEntry_074:
 	.byte 0x4a, 0x00
 	.byte 0xff
-LABEL_E06E91:
+Brass_PatchEntry_075:
 	.byte 0x48, 0x00, 0xff
-LABEL_E06E94:
+Brass_PatchEntry_076:
 	.byte 0x48, 0x02, 0xff
-LABEL_E06E97:	aligned_string "K"
-LABEL_E06E9A:
+Brass_PatchEntry_077:	aligned_string "K"
+Brass_PatchEntry_078:
 	.byte 0x6f, 0x00, 0xff
-LABEL_E06E9D:
+Brass_PatchEntry_079:
 	.byte 0x4a, 0x01, 0xff
-LABEL_E06EA0:
+Brass_PatchEntry_080:
 	.byte 0x75, 0x00, 0xff
-LABEL_E06EA3:
+Brass_PatchEntry_081:
 	.byte 0x76, 0x01, 0xff
-LABEL_E06EA6:
+Brass_PatchEntry_082:
 	.byte 0x48, 0x03
 	.byte 0xff
 Brass_PatchEntry_084:
