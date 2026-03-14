@@ -8,31 +8,31 @@
 ; =============================================================================
 
 FlashWrite_BlockHandler_Table:
-	.long LABEL_F15907
-	.long LABEL_F1593A
-	.long LABEL_F15907
-	.long LABEL_F1593A
-	.long LABEL_F15907
-	.long LABEL_F1593A
-	.long LABEL_F15907
-	.long LABEL_F1593A
-	.long LABEL_F15952
+	.long FlashWrite_BlockData_Type0
+	.long FlashWrite_BlockData_Type1
+	.long FlashWrite_BlockData_Type0
+	.long FlashWrite_BlockData_Type1
+	.long FlashWrite_BlockData_Type0
+	.long FlashWrite_BlockData_Type1
+	.long FlashWrite_BlockData_Type0
+	.long FlashWrite_BlockData_Type1
+	.long FlashWrite_BlockData_Type2
 	.long FlashRead_BlockHandler_Table
-	.long LABEL_F15952
+	.long FlashWrite_BlockData_Type2
 	.long FlashRead_BlockHandler_Table
-	.long LABEL_F159B3
-	.long LABEL_F159E0
-	.long LABEL_F159F4
-	.long LABEL_F15A1C
-	.long LABEL_F15A30
-	.long LABEL_F15A5A
-	.long LABEL_F159F4
-	.long LABEL_F15A1C
-	.long LABEL_F15A6E
-	.long LABEL_F15A91
-	.long LABEL_F15A6E
-	.long LABEL_F15A91
-LABEL_F15907:
+	.long FlashWrite_BlockData_Type3
+	.long FlashWrite_BlockRef_Type3
+	.long FlashWrite_BlockData_Type4
+	.long FlashWrite_BlockRef_Type4
+	.long FlashWrite_BlockData_Type5
+	.long FlashWrite_BlockRef_Type5
+	.long FlashWrite_BlockData_Type4
+	.long FlashWrite_BlockRef_Type4
+	.long FlashWrite_BlockData_Type6
+	.long FlashWrite_BlockRef_Type6
+	.long FlashWrite_BlockData_Type6
+	.long FlashWrite_BlockRef_Type6
+FlashWrite_BlockData_Type0:
 	.byte 0x00, 0x0a, 0x61, 0x06, 0xff, 0x00, 0x20, 0x0c
 	.byte 0x0b, 0x02, 0x00, 0x0a, 0x62, 0x06, 0xff, 0x00
 	.byte 0x20, 0x64, 0x0d, 0x02, 0x05, 0x0b, 0x63, 0x06
@@ -40,42 +40,42 @@ LABEL_F15907:
 	.byte 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20, 0x14, 0x12
 	.byte 0x02, 0x00, 0x0a, 0x65, 0x06, 0xff, 0x00, 0x20
 	.byte 0x6b, 0x14, 0x03
-LABEL_F1593A:
+FlashWrite_BlockData_Type1:
 	.byte 0x07, 0x59, 0xf1, 0x00, 0x07
 	.byte 0x59, 0xf1, 0x00, 0x11, 0x59, 0xf1, 0x00, 0x1b
 	.byte 0x59, 0xf1, 0x00, 0x26, 0x59, 0xf1, 0x00, 0x30
 	.byte 0x59, 0xf1, 0x00
-LABEL_F15952:
+FlashWrite_BlockData_Type2:
 	.byte 0x00, 0x0a, 0x61, 0x06, 0xff
 	.byte 0x00, 0x20, 0x0c, 0x0b, 0x02
-LABEL_F1595C:
+FlashRead_BlockData_Field2:
 	.byte 0x00, 0x0a, 0x62
 	.byte 0x06, 0xff, 0x00, 0x20, 0x64, 0x0d, 0x02
-LABEL_F15966:
+FlashRead_BlockData_Field3:
 	.byte 0x00
 	.byte 0x0a, 0x63, 0x06, 0xff, 0x00, 0x20, 0xbc, 0x0f
 	.byte 0x02
-LABEL_F15970:
+FlashRead_BlockData_Field4:
 	.byte 0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20
 	.byte 0x14, 0x12, 0x02
-LABEL_F1597A:
+FlashRead_BlockData_Field5:
 	.byte 0x05, 0x0b, 0x65, 0x06, 0xff
 	.byte 0x00, 0x20, 0x6b, 0x14, 0x02, 0x00
-LABEL_F15985:
+FlashRead_BlockData_Field6:
 	.byte 0x00, 0x0a
 	.long TmFlashWrite_Block3
 	.byte 0x20, 0xc4, 0x16, 0x02
 FlashRead_BlockHandler_Table:
-	.long LABEL_F15952
-	.long LABEL_F15952
-	.long LABEL_F1595C
-	.long LABEL_F15966
-	.long LABEL_F15970
-	.long LABEL_F1597A
-	.long LABEL_F15985
+	.long FlashWrite_BlockData_Type2
+	.long FlashWrite_BlockData_Type2
+	.long FlashRead_BlockData_Field2
+	.long FlashRead_BlockData_Field3
+	.long FlashRead_BlockData_Field4
+	.long FlashRead_BlockData_Field5
+	.long FlashRead_BlockData_Field6
 	.long LABEL_F1589C
 	.long LABEL_F15891
-LABEL_F159B3:
+FlashWrite_BlockData_Type3:
 	.byte 0x00, 0x0a, 0x61, 0x06
 	.byte 0xff, 0x00, 0x20, 0x0c, 0x0b, 0x02, 0x00, 0x0a
 	.long TmFlashWrite_Block2
@@ -96,41 +96,41 @@ LABEL_F159B3:
 	ldb	w, 19
 	ccf
 	.byte 0x03
-LABEL_F159E0:
+FlashWrite_BlockRef_Type3:
 	.byte 0xb3, 0x59, 0xf1, 0x00, 0xb3, 0x59, 0xf1
 	.byte 0x00, 0xbd, 0x59, 0xf1, 0x00, 0xc7, 0x59, 0xf1
 	.byte 0x00, 0xd6, 0x59, 0xf1, 0x00
-LABEL_F159F4:
+FlashWrite_BlockData_Type4:
 	.byte 0x00, 0x0a, 0x61
 	.byte 0x06, 0xff, 0x00, 0x20, 0x0c, 0x0b, 0x02, 0x00
 	.byte 0x0a, 0x62, 0x06, 0xff, 0x00, 0x20, 0x64, 0x0d
 	.byte 0x02, 0x00, 0x0a, 0x63, 0x06, 0xff, 0x00, 0x20
 	.byte 0xbc, 0x0f, 0x02, 0x00, 0x0a, 0x64, 0x06, 0xff
 	.byte 0x00, 0x20, 0x14, 0x12, 0x02
-LABEL_F15A1C:
+FlashWrite_BlockRef_Type4:
 	.byte 0xf4, 0x59, 0xf1
 	.byte 0x00, 0xf4, 0x59, 0xf1, 0x00, 0xfe, 0x59, 0xf1
 	.byte 0x00, 0x08, 0x5a, 0xf1, 0x00, 0x12, 0x5a, 0xf1
 	.byte 0x00
-LABEL_F15A30:
+FlashWrite_BlockData_Type5:
 	.byte 0x00, 0x0a, 0x61, 0x06, 0xff, 0x00, 0x20
 	.byte 0x0c, 0x0b, 0x02, 0x05, 0x0b, 0x62, 0x06, 0xff
 	.byte 0x00, 0x20, 0x63, 0x0d, 0x02, 0x00, 0x05, 0x0b
 	.byte 0x63, 0x06, 0xff, 0x00, 0x20, 0xbb, 0x0f, 0x02
 	.byte 0x00, 0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20
 	.byte 0x13, 0x12, 0x03
-LABEL_F15A5A:
+FlashWrite_BlockRef_Type5:
 	.byte 0x30, 0x5a, 0xf1, 0x00, 0x30
 	.byte 0x5a, 0xf1, 0x00, 0x3a, 0x5a, 0xf1, 0x00, 0x45
 	.byte 0x5a, 0xf1, 0x00, 0x50, 0x5a, 0xf1, 0x00
-LABEL_F15A6E:
+FlashWrite_BlockData_Type6:
 	.byte 0x02
 	.byte 0x0f, 0x61, 0x06, 0x01, 0x00, 0x20, 0xd1, 0x14
 	.byte 0xf1, 0x00, 0x03, 0x00, 0x0b, 0x0b, 0x00, 0x0a
 	.byte 0x62, 0x06, 0xff, 0x00, 0x20, 0x64, 0x0d, 0x02
 	.byte 0x00, 0x0a, 0x63, 0x06, 0xff, 0x00, 0x20, 0xbb
 	.byte 0x0f, 0x03
-LABEL_F15A91:
+FlashWrite_BlockRef_Type6:
 	.byte 0x6e, 0x5a, 0xf1, 0x00, 0x6e, 0x5a
 	.byte 0xf1, 0x00, 0x7d, 0x5a, 0xf1, 0x00, 0x87, 0x5a
 	.byte 0xf1, 0x00, 0x3a, 0x59, 0xf1, 0x00, 0x3a, 0x59
@@ -536,7 +536,7 @@ InitializeNaka:
 	lda xsp, (xsp + 14)
 	ret
 
-LABEL_F167AE:
+NAKA_InitDataBlock:
 	.byte 0x0e, 0xe9, 0xcf, 0x9f, 0x00, 0xe0, 0x01, 0x6e
 	.byte 0x06, 0xf2, 0x2e, 0x48, 0xe1, 0x33, 0x0e, 0xeb
 	.byte 0xa8, 0x0e, 0xe9, 0xcf, 0x9f, 0x00, 0xe0, 0x01
@@ -611,35 +611,35 @@ NoteEvent_LoadSoundGenParams:
 	ld xwa, xbc
 	st_dri3b B, 0xE5, 0x80, 0x00
 
-LABEL_F16974:
+NoteEvent_CopyVoiceParamsLoop:
 	ld xiy, 0xE15C20
 	ld xix, xwa
 	ldw bc, 0x10
 	ldirw
 	lda xwa, (xwa + 32)
 	cp xwa, xde
-	jr ule, LABEL_F16974
+	jr ule, NoteEvent_CopyVoiceParamsLoop
 	ldda32 xwa, 3186
 	st_dri3b W, 0xE1, 0x40, 0x0C
 	ld xde, xwa
 	st_dri3b W, 0xE1, 0xE0, 0x06
 	ld (xsp + 12), xwa
 
-LABEL_F1699A:
+NoteEvent_CopyExtParamsOuter:
 	ld xwa, xde
 	st_dri3b C, 0xE9, 0x80, 0x00
 
-LABEL_F169A1:
+NoteEvent_CopyExtParamsInner:
 	ld xiy, 0xE15C40
 	ld xix, xwa
 	ldw bc, 0x10
 	ldirw
 	lda xwa, (xwa + 32)
 	cp xwa, xhl
-	jr ule, LABEL_F169A1
+	jr ule, NoteEvent_CopyExtParamsInner
 	st_dri3b B, 0xE9, 0xA0, 0x00
 	cp xde, (xsp + 12)
-	jr ule, LABEL_F1699A
+	jr ule, NoteEvent_CopyExtParamsOuter
 	st_dri3b W, 0xFD, 0x10, 0x01
 	ld (xsp + 4), xwa
 	lda xbc, (xwa + 4)
@@ -652,7 +652,7 @@ LABEL_F169A1:
 	lda xwa, (xwa + 96)
 	lds de, 4
 
-LABEL_F169E1:
+NoteEvent_WriteRegOffsets_Loop:
 	ld ix, de
 	add ix, 0xFFFC
 	ld xbc, (xsp + 4)
@@ -676,16 +676,16 @@ LABEL_F169E1:
 	inc 5, de
 	lda xwa, (xwa + 96)
 	cp de, 0x95
-	jr ule, LABEL_F169E1
+	jr ule, NoteEvent_WriteRegOffsets_Loop
 	lds de, 0
 	ld xwa, 0x1400
 
-LABEL_F16A2A:
+NoteEvent_CopySlotData_Loop:
 	cp de, 0x96
-	jr c, LABEL_F16A34
+	jr c, NoteEvent_CopySlotData_Body
 	ld (xsp + 16), 0x0
 
-LABEL_F16A34:
+NoteEvent_CopySlotData_Body:
 	ld xix, xwa
 	addda32 xix, 3186
 	lda xiy, (xsp + 16)
@@ -694,7 +694,7 @@ LABEL_F16A34:
 	inc 1, de
 	add xwa, 0x100
 	cp de, 0x153
-	jr ule, LABEL_F16A2A
+	jr ule, NoteEvent_CopySlotData_Loop
 	pop xiz
 	st_dri3b L, 0xFD, 0x6C, 0x01
 	ret
@@ -730,7 +730,7 @@ Flash_InitExtMemAddrs:
 	stda32 3222, xwa
 	ret
 
-LABEL_F16ACB:
+Flash_InitBytecodeBlock:
 	.byte 0xbf, 0xf4, 0x37, 0xd7, 0xfa, 0x04, 0xbf, 0x0a
 	.byte 0x43, 0xbf, 0x0c, 0x41, 0xbf, 0x02, 0x00, 0x00
 	.byte 0xbf, 0x08, 0x00, 0x00, 0x1e, 0x75, 0xff, 0x8f
@@ -855,7 +855,7 @@ PartGrid_ColumnDispatch:
 	lda_24 xix, 0xf16e2d
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F16E2D:
+PartGrid_ColumnJumpTable:
 	ldda32	xhl, 3190
 	jr	38
 	ldda32	xhl, 3194
@@ -885,20 +885,20 @@ Util_FrameSetup10:
 	calr PartGrid_ColumnDispatch
 	ld (xsp), xhl
 	cp (xsp + 8), 0x1E
-	jr c, LABEL_F16E7C
+	jr c, FrameSetup_AdjustGE1E
 	submi8 (xsp + 8), 0x1E
-	jr LABEL_F16E91
+	jr FrameSetup_ComputeGridIndex
 
-LABEL_F16E7C:
+FrameSetup_AdjustGE1E:
 	cp (xsp + 8), 0xA
-	jr c, LABEL_F16E91
+	jr c, FrameSetup_ComputeGridIndex
 	submi8 (xsp + 8), 0xA
 	ld a, (xsp + 8)
 	extz wa
 	div a, 0x3
 	ld (xsp + 8), w
 
-LABEL_F16E91:
+FrameSetup_ComputeGridIndex:
 	ld c, (xsp + 8)
 	extz bc
 	ld a, (xsp + 6)
@@ -909,7 +909,7 @@ LABEL_F16E91:
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	ld e, (xsp + 4)
 	cp (xsp + 4), 0x4
-	jr z, LABEL_F16F02
+	jr z, FrameSetup_SpecialCase4
 	extz wa
 	muls wa, 0x60
 	ld bc, wa
@@ -918,37 +918,37 @@ LABEL_F16E91:
 	exts xbc
 	add xbc, xwa
 	cps e, 3
-	jr z, LABEL_F16EF4
+	jr z, FrameSetup_RowOffset3
 	cps e, 2
-	jr z, LABEL_F16EEA
+	jr z, FrameSetup_RowOffset2
 	cps e, 1
-	jr z, LABEL_F16EE0
+	jr z, FrameSetup_RowOffset1
 	cps e, 0
-	jr nz, LABEL_F16F1B
+	jr nz, FrameSetup_PackResult
 	ld l, (xbc + 24)
 	ld xwa, 0x19
 	jr PartGrid_ByteOffsetLoop
 
-LABEL_F16EE0:
+FrameSetup_RowOffset1:
 	ld l, (xbc + 32)
 	ld xwa, 0x21
 	jr PartGrid_ByteOffsetLoop
 
-LABEL_F16EEA:
+FrameSetup_RowOffset2:
 	ld l, (xbc + 40)
 	ld xwa, 0x29
 	jr PartGrid_ByteOffsetLoop
 
-LABEL_F16EF4:
+FrameSetup_RowOffset3:
 	ld l, (xbc + 48)
 	ld xwa, 0x31
 
 PartGrid_ByteOffsetLoop:
 	add xbc, xwa
 	ld a, (xbc)
-	jr LABEL_F16F1B
+	jr FrameSetup_PackResult
 
-LABEL_F16F02:
+FrameSetup_SpecialCase4:
 	extz wa
 	muls wa, 0x60
 	ld bc, wa
@@ -958,7 +958,7 @@ LABEL_F16F02:
 	ld l, (xwa + 56)
 	ld a, (xwa + 57)
 
-LABEL_F16F1B:
+FrameSetup_PackResult:
 	ld c, l
 	extz bc
 	extz wa
@@ -968,7 +968,7 @@ LABEL_F16F1B:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_F16F2C:
+PartGrid_OperationsBlock:
 	.byte 0xbf, 0xf2, 0x37, 0xbf, 0x08, 0x45, 0xbf, 0x0a
 	.byte 0x43, 0xbf, 0x0c, 0x41, 0x8f, 0x0c, 0x21, 0xd8
 	.byte 0x12, 0x1e, 0xb3, 0xfe, 0xbf, 0x04, 0x63, 0x8f
@@ -1014,7 +1014,7 @@ PartGrid_ColumnDispatch_Default:
 	ld (xsp + 4), a
 	ldi_werp 0xFA, 0
 
-LABEL_F1700A:
+PartGrid_DefaultLoop_Outer:
 	ldto_werp WA, 0xFA
 	extz xwa
 	ld xbc, xwa
@@ -1039,7 +1039,7 @@ LABEL_F1700A:
 	ld (xde), wa
 	lds iz, 2
 
-LABEL_F1704A:
+PartGrid_DefaultLoop_Inner:
 	ld bc, iz
 	extz xbc
 	add xbc, xbc
@@ -1070,10 +1070,10 @@ LABEL_F1704A:
 	ld (xhl + 96), wa
 	inc 1, iz
 	cps iz, 5
-	jr ule, LABEL_F1704A
+	jr ule, PartGrid_DefaultLoop_Inner
 	inc1_werp 0xFA
 	cp_erpw 0xFA, 0x1D, 0x00
-	jrl ule, LABEL_F1700A
+	jrl ule, PartGrid_DefaultLoop_Outer
 	ldi_werp 0xFA, 0
 
 ; NoteEventBuffer CopyToSlot dispatch (7-entry, table 0xE16128)
@@ -1218,19 +1218,19 @@ Flash_SectorWriteExecute:
 	ldirw
 	ld xbc, (xsp)
 
-LABEL_F17203:
+Flash_CopyMirrorLoop:
 	ld xhl, xbc
 	add xhl, 0x10000
 	ld_spib A, 0xE4
 	ld (xhl), a
 	cp xbc, xde
-	jr c, LABEL_F17203
+	jr c, Flash_CopyMirrorLoop
 	ld xwa, (xsp)
 	st_dri3b A, 0xE1, 0x00, 0x68
 	ld xde, (xsp + 4)
 	sub xde, 0x9800
 	lds wa, 1
-	jr LABEL_F172A4
+	jr Flash_EraseAndWriteFinal
 	ldda32 xwa, 3198
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
@@ -1268,28 +1268,28 @@ Flash_WriteSectorWithMirrorCopy:
 	ld xbc, xwa
 	st_dri3b B, 0xE1, 0x00, 0x68
 
-LABEL_F17286:
+Flash_CopyReverseMirrorLoop:
 	ld xhl, xbc
 	add xhl, 0xFFFF0000
 	ld_spib A, 0xE4
 	ld (xhl), a
 	cp xbc, xde
-	jr c, LABEL_F17286
+	jr c, Flash_CopyReverseMirrorLoop
 	ld xde, (xsp + 4)
 	add xde, 0x10000
 	lds wa, 1
 	ld xbc, (xsp)
 
-LABEL_F172A4:
+Flash_EraseAndWriteFinal:
 	call Flash_EraseSectorAndWrite
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_F172AC:
+Flash_StoreBaseAndInitAccPatch:
 	ldda32 xwa, 3186
 	stda32 14766, xwa
 	jp AccPatch_InitSlotChain_Wrap
-LABEL_F172B8:
+Flash_ExtendedOpsBlock:
 	.byte 0x3e, 0xda, 0x12, 0xf2, 0xc0, 0x60, 0xe1, 0x34
 	.byte 0xf3, 0x07, 0xf0, 0xe8, 0x33, 0x25, 0x00, 0xc9
 	.byte 0xcf, 0x0a, 0x6f, 0x4a, 0x83, 0x23, 0xd8, 0x12
@@ -1715,32 +1715,32 @@ LABEL_F172B8:
 	.byte 0x61, 0xca, 0x61, 0xd8, 0x61, 0xca, 0xdc, 0x67
 	.byte 0xe3, 0x0e
 
-LABEL_F17FB2:
+VoiceParam_ComputeOffset:
 	ld e, a
 	cp e, 0x28
-	jr nc, LABEL_F17FC0
+	jr nc, VoiceParam_SubtractBase
 	ld xhl, 0x10
-	jr LABEL_F17FC8
+	jr VoiceParam_AddOffset
 
-LABEL_F17FC0:
+VoiceParam_SubtractBase:
 	sub e, 0x28
 	ld xhl, 0x50
 
-LABEL_F17FC8:
+VoiceParam_AddOffset:
 	extz de
 	add hl, de
 	ldda32 xwa, 3222
 	lda_dri3 XHL, 0x07, 0xE0, 0xEC
 	ret
 
-LABEL_F17FD6:
+DualVoice_ScanAllColumns:
 	dec 2, xsp
 	push_werp 0xFA
 	ld (xsp + 2), a
-	calr LABEL_F18160
+	calr SlotTable_InitBank1748
 	ldi_berp 0xFB, 0
 
-LABEL_F17FE4:
+DualVoice_ScanColumnLoop:
 	ld a, (xsp + 2)
 	extz wa
 	ldto_berp C, 0xFB
@@ -1751,14 +1751,14 @@ LABEL_F17FE4:
 	ld bc, wa
 	and bc, 0x700
 	cp bc, 0x600
-	jr z, LABEL_F18007
+	jr z, DualVoice_StoreBankMatch
 	cp bc, 0x500
-	jr nz, LABEL_F1800B
+	jr nz, DualVoice_ScanRow1
 
-LABEL_F18007:
+DualVoice_StoreBankMatch:
 	stda16 1748, xwa
 
-LABEL_F1800B:
+DualVoice_ScanRow1:
 	ld a, (xsp + 2)
 	extz wa
 	ldto_berp C, 0xFB
@@ -1805,19 +1805,19 @@ LABEL_F1800B:
 	call_24 nc, 0xF182AE
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
-	jrl c, LABEL_F17FE4
+	jrl c, DualVoice_ScanColumnLoop
 	pop_werp 0xFA
 	inc 2, xsp
 	ret
 
-LABEL_F1809B:
+DualVoice_ScanAllColumnsAlt:
 	dec 2, xsp
 	push_werp 0xFA
 	ld (xsp + 2), a
-	calr LABEL_F18181
+	calr SlotTable_InitBank1850
 	ldi_berp 0xFB, 0
 
-LABEL_F180A9:
+DualVoice_ScanColumnLoopAlt:
 	ld a, (xsp + 2)
 	extz wa
 	ldto_berp C, 0xFB
@@ -1828,14 +1828,14 @@ LABEL_F180A9:
 	ld bc, wa
 	and bc, 0x700
 	cp bc, 0x600
-	jr z, LABEL_F180CC
+	jr z, DualVoice_StoreBankMatchAlt
 	cp bc, 0x500
-	jr nz, LABEL_F180D0
+	jr nz, DualVoice_ScanRow1Alt
 
-LABEL_F180CC:
+DualVoice_StoreBankMatchAlt:
 	stda16 1850, xwa
 
-LABEL_F180D0:
+DualVoice_ScanRow1Alt:
 	ld a, (xsp + 2)
 	extz wa
 	ldto_berp C, 0xFB
@@ -1882,44 +1882,44 @@ LABEL_F180D0:
 	call_24 nc, 0xF182DC
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
-	jrl c, LABEL_F180A9
+	jrl c, DualVoice_ScanColumnLoopAlt
 	pop_werp 0xFA
 	inc 2, xsp
 	ret
 
-LABEL_F18160:
+SlotTable_InitBank1748:
 	ldada xbc, 1748
 	ldw (xbc), 0xFFFF
 	ldb l, 0x0
 	lds wa, 0
 
-LABEL_F1816C:
+SlotTable_InitBank1748_Loop:
 	ld de, wa
 	inc 2, de
 	stiw_dri 0x07, 0xE4, 0xE8, 0xFF, 0xFF
 	inc 1, l
 	inc 2, wa
 	cp l, 0x32
-	jr c, LABEL_F1816C
+	jr c, SlotTable_InitBank1748_Loop
 	ret
 
-LABEL_F18181:
+SlotTable_InitBank1850:
 	ldada xbc, 1850
 	ldw (xbc), 0xFFFF
 	ldb l, 0x0
 	lds wa, 0
 
-LABEL_F1818D:
+SlotTable_InitBank1850_Loop:
 	ld de, wa
 	inc 2, de
 	stiw_dri 0x07, 0xE4, 0xE8, 0xFF, 0xFF
 	inc 1, l
 	inc 2, wa
 	cp l, 0x32
-	jr c, LABEL_F1818D
+	jr c, SlotTable_InitBank1850_Loop
 	ret
 
-LABEL_F181A2:
+SlotTable_ExtendedOpsBlock:
 	.byte 0xf1, 0xa0, 0x07, 0x32, 0xb2, 0x02, 0xff, 0xff
 	.byte 0xba, 0x02, 0x02, 0xff, 0xff, 0xba, 0x06, 0x31
 	.byte 0xe9, 0x88, 0xea, 0x64, 0xf3, 0xe5, 0xc8, 0x00
@@ -1957,11 +1957,11 @@ LABEL_F181A2:
 	.byte 0xff, 0xff, 0xcf, 0x61, 0xd8, 0x62, 0xcf, 0xcf
 	.byte 0x32, 0x67, 0xec, 0x0e
 
-LABEL_F182AE:
+SlotTable_Insert1748:
 	ldi_berp 0xE2, 0
 	ldada xhl, 1748
 
-LABEL_F182B5:
+SlotTable_Insert1748_Loop:
 	ldto_berp C, 0xE2
 	extz bc
 	add bc, bc
@@ -1971,21 +1971,21 @@ LABEL_F182B5:
 	cp bc, wa
 	ret z
 	cp bc, 0xFFFF
-	jr nz, LABEL_F182D2
+	jr nz, SlotTable_Insert1748_Next
 	ld (xde), wa
 	ret
 
-LABEL_F182D2:
+SlotTable_Insert1748_Next:
 	inc1_berp 0xE2
 	cp_erpb 0xE2, 0x32
-	jr c, LABEL_F182B5
+	jr c, SlotTable_Insert1748_Loop
 	ret
 
-LABEL_F182DC:
+SlotTable_Insert1850:
 	ldi_berp 0xE2, 0
 	ldada xhl, 1850
 
-LABEL_F182E3:
+SlotTable_Insert1850_Loop:
 	ldto_berp C, 0xE2
 	extz bc
 	add bc, bc
@@ -1995,17 +1995,17 @@ LABEL_F182E3:
 	cp bc, wa
 	ret z
 	cp bc, 0xFFFF
-	jr nz, LABEL_F18300
+	jr nz, SlotTable_Insert1850_Next
 	ld (xde), wa
 	ret
 
-LABEL_F18300:
+SlotTable_Insert1850_Next:
 	inc1_berp 0xE2
 	cp_erpb 0xE2, 0x32
-	jr c, LABEL_F182E3
+	jr c, SlotTable_Insert1850_Loop
 	ret
 
-LABEL_F1830A:
+Flash_WriteBackSlotTable:
 	push_werp 0xFA
 	ldda32 xix, 3222
 	ldda32 xiy, 3218
@@ -2013,18 +2013,18 @@ LABEL_F1830A:
 	ldirw
 	ldada xwa, 1850
 	cpw (xwa), 0xFFFF
-	jr z, LABEL_F18332
+	jr z, Flash_WriteBackSlot_StartLoop
 	ld wa, (xwa)
 	ldb w, 0x0
 	add a, 0x28
 	extz wa
 	lds bc, 0
-	calr LABEL_F17FB2
+	calr VoiceParam_ComputeOffset
 
-LABEL_F18332:
+Flash_WriteBackSlot_StartLoop:
 	ldi_berp 0xFB, 0
 
-LABEL_F18335:
+Flash_WriteBackSlot_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	add wa, wa
@@ -2032,16 +2032,16 @@ LABEL_F18335:
 	ldada xbc, 1850
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	cp wa, 0xFFFF
-	jr z, LABEL_F18361
+	jr z, Flash_WriteBackSlot_Erase
 	and wa, 0x7F
 	extz wa
 	lds bc, 0
-	calr LABEL_F17FB2
+	calr VoiceParam_ComputeOffset
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x32
-	jr c, LABEL_F18335
+	jr c, Flash_WriteBackSlot_Loop
 
-LABEL_F18361:
+Flash_WriteBackSlot_Erase:
 	ldda32 xbc, 3222
 	ldda32 xde, 3218
 	lds wa, 1
@@ -2049,7 +2049,7 @@ LABEL_F18361:
 	pop_werp 0xFA
 	ret
 
-LABEL_F18373:
+Flash_SlotUpdateOpsBlock:
 	.byte 0xef, 0x6e, 0xbf, 0x04, 0x41, 0xb7, 0x02, 0x00
 	.byte 0x00, 0xbf, 0x02, 0x02, 0x00, 0x00, 0xd1, 0xd4
 	.byte 0x06, 0x3f, 0xff, 0xff, 0x66, 0x12, 0x8f, 0x04
@@ -2404,12 +2404,12 @@ FloppyDisk_LoadNoteEvents:
 
 FloppyCtrl_LoadIzAndContinue:
 	ld hl, iz
-	jr LABEL_F18BF8
+	jr FloppyCtrl_PopIzStoreHL
 
 Floppy_SetHLFF9A_RetZero:
 	ldw hl, 0xFF9A
 
-LABEL_F18BF8:
+FloppyCtrl_PopIzStoreHL:
 	popw iz
 	st_dri3b L, 0xFD, 0x08, 0x04
 	ret
@@ -2674,7 +2674,7 @@ FloppyCtrl_PopIzStoreRet:
 	st_dri3b L, 0xFD, 0x18, 0x04
 	ret
 
-LABEL_F18EC8:
+ToneParam_ExtendedOpsBlock:
 	.byte 0x2e, 0x1d, 0x24, 0xbc, 0xf6, 0xf2, 0x00, 0x48
 	.byte 0x09, 0x30, 0xe8, 0x8a, 0xf2, 0x00, 0xb0, 0x0a
 	.byte 0x31, 0xea, 0xa1, 0x1d, 0x74, 0x8d, 0xf8, 0x1d
@@ -2848,10 +2848,10 @@ LABEL_F193A6:
 	jrl nc, DualVoice_LoadDoneRetVal
 	ld a, (xsp + 14)
 	extz wa
-	calr LABEL_F17FD6
+	calr DualVoice_ScanAllColumns
 	ld a, (xsp + 12)
 	extz wa
-	calr LABEL_F1809B
+	calr DualVoice_ScanAllColumnsAlt
 	ld a, (xsp + 12)
 	extz wa
 	calr NoteEvent_Store
@@ -2926,7 +2926,7 @@ LABEL_F19499:
 	jr c, LABEL_F1944E
 	cp (xsp + 10), 0x0
 	jr nz, LABEL_F1948D
-	calr LABEL_F172AC
+	calr Flash_StoreBaseAndInitAccPatch
 	ld a, (xsp + 6)
 	extz wa
 	calr NoteEventBuffer_Store
@@ -2937,7 +2937,7 @@ LABEL_F19499:
 	jr z, DualVoice_LoadDoneRetVal
 
 LABEL_F194C4:
-	calr LABEL_F1830A
+	calr Flash_WriteBackSlotTable
 	jr DualVoice_LoadDoneRetVal
 	pushw iz
 	call msp_ld_mae

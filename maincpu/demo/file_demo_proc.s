@@ -2026,7 +2026,7 @@ LoadRegion3_OpenSuccess:
 	call cmp_ld_ato
 	jr LoadRegion3_Finalize
 LoadRegion3_AltPath:
-	call LABEL_F18EC8				; alternate path
+	call ToneParam_ExtendedOpsBlock				; alternate path
 	ld iz, hl
 LoadRegion3_Finalize:
 	call FileIO_CloseHandle
