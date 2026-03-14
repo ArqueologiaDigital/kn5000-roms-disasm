@@ -10482,7 +10482,7 @@ MidiCtrl_Bit2ToChannel:
 MidiCtrl_Bit2ToChannel_Store:
 	extz bc
 	ld wa, bc
-	jp LABEL_FEBDD2
+	jp COMM_WriteAndCheck
 
 MidiCtrl_SendControlPacket:
 	dec 4, xsp

@@ -8745,14 +8745,14 @@ LABEL_F3DA78:
 
 SeqBuf_FlushAndReinit_NoteEvents:
 	call SeqBuf_SaveWritePos
-	call LABEL_FE09C4
+	call AccNoteOn_ChannelDispatch
 	call SeqBuf_Init
 	stdi8 7556, 0
 	ret
 
 SeqBuf_FlushAndReinit_VoiceCCEvents:
 	call SeqBuf_SaveWritePos
-	call LABEL_FCAD39
+	call Audio_ReinitAndProcessEvents
 	call SeqBuf_Init
 	call SwbtWr_ReinitBothBanks
 	stdi8 7558, 0

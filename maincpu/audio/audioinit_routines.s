@@ -408,7 +408,7 @@ LABEL_FDED58:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_FCAB9B
+	call Audio_ProcessPartExpressions
 	pop xiz
 	pop xix
 	pop xhl
@@ -1650,7 +1650,7 @@ AudioInit_Dispatch_CheckVoiceAssign:
 	call_24 nz, 0xFE12FC
 
 AudioInit_Dispatch_Finalize:
-	call LABEL_FE1311
+	call VoiceEvent_HandlerTable
 	ld xiy, 0xC1FE
 	ld xix, 0xC364
 	ldw bc, 0xB3
@@ -1666,7 +1666,7 @@ AudioInit_QueueCommand:
 	ld (xsp + 4), a
 	cpdi16 50378, 49
 	jr c, AudioInit_QueueCommand_Write
-	call LABEL_FE1311
+	call VoiceEvent_HandlerTable
 	stdi16 50378, 0
 
 AudioInit_QueueCommand_Write:

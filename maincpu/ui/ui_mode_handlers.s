@@ -1882,7 +1882,7 @@ LABEL_FB7B4D:
 	.byte 0xab, 0x1d, 0x2f, 0xd3, 0xfc, 0x1d, 0x75, 0x0e
 	.byte 0xfe, 0x0e
 
-LABEL_FB7BDF:
+Voice_EmitNoteWithVelocity:
 	cpdi8 36150, 246
 	ret nz
 	stda8 36228, a
@@ -2013,7 +2013,7 @@ LABEL_FB7CEE:
 	jr ugt, LABEL_FB7D42
 	lds32 xwa, 0
 	ld a, (xiz + 2)
-	call LABEL_FC7C33
+	call Util_FindLowestSetBit
 	ld a, l
 	add a, l
 	ld c, a

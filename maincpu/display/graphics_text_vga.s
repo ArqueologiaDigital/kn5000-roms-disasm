@@ -3930,7 +3930,7 @@ LABEL_FC2C26:
 	call LABEL_FEF99E
 	jr t, MainSysControl_PostDispatchFinalize
 LABEL_FC2C2C:
-	call LABEL_FC81EF
+	call Display_CopyAndRenderBitmaps
 	jr t, MainSysControl_PostDispatchFinalize
 LABEL_FC2C32:
 	call Voice_InitBankDataSafe

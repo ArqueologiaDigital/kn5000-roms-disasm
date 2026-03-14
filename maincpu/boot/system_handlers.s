@@ -1271,15 +1271,15 @@ LABEL_EF13AE:
 
 MainLoop_ReinitSwbtWr:
 	call SwbtWr_InitBank3
-	call LABEL_FC84A0
+	call Audio_MainPeriodicUpdate
 	stdi8 49209, 255
 	calr SwbtWr_ReinitBothBanks
 	ret
 
 MainLoop_AudioPeriodicCheck:
-	call LABEL_FE12B7
-	call LABEL_FE942C
-	call LABEL_FE8A80
+	call VoiceEvent_ResetAndInit
+	call Voice_UpdateNoteState
+	call SndParam_DispatchReturn
 	ret
 
 Seq_ProcessMidiEvent:
@@ -1366,14 +1366,14 @@ MidiSerial_BufferWrap:
 LABEL_EF1474:
 	pushw iz
 	ld (xhl - 6), iy
-	call LABEL_FE0245
+	call NoteOn_EntryPoint
 	jr LABEL_EF148F
 
 MidiSerial_ProcessAndReinit:
 	pushw iz
 	ld (xhl - 6), iy
 	call MidiSerial_ProcessInput
-	call LABEL_FCA75D
+	call Audio_ProcessAllMidiStreams
 	calr SwbtWr_ReinitBothBanks
 	jr __jrt_nop_EF148F
 __jrt_nop_EF148F:
@@ -1400,7 +1400,7 @@ LABEL_EF14B0:
 	calr SeqEvt_ProcessTimedEvents
 	call RhythmBuf_ProcessEvents
 	call SeqEvt_ProcessBuffer
-	call LABEL_FEBF7F
+	call MIDI_OutputFlush
 	call SysEx_ParseAndDispatch
 	cpdi8 1140, 85
 	jr z, LABEL_EF14D7
@@ -1461,7 +1461,7 @@ RhythmBuf_DispatchEvent:
 	jr RhythmBuf_Dispatch_UpdateReadPos
 
 RhythmBuf_Dispatch_NonNoteOn:
-	call LABEL_FE83D3
+	call SeqPart_EmitNoteOn_Full
 
 RhythmBuf_Dispatch_UpdateReadPos:
 	ld16_24 xwa, 0x01ef57
@@ -1697,7 +1697,7 @@ SeqEvt_CheckExpiry:
 	call NoteMap_FindBestMatch
 	cp l, 0xFF
 	jr z, SeqEvt_CheckExpiry_Return
-	call LABEL_FE12FC
+	call VoiceEvent_DispatchTable
 
 SeqEvt_CheckExpiry_Return:
 	ret

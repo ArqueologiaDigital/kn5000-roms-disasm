@@ -206,7 +206,7 @@ Audio_SendEventPostCmd:
 	lds32 xde, 0
 	jp ApPostEvent
 
-LABEL_F2AA12:
+Audio_ExternalCallback:
 	ld xwa, 0x720006
 	ld xbc, 0x1C70011
 	lds32 xde, 0
@@ -732,7 +732,7 @@ LABEL_F2AF96:
 
 LABEL_F2AF99:
 	lda_24 xwa, 0x020e4e
-	call LABEL_FECC6B
+	call SeqFile_ReadTrackData
 	pushw 0x2
 	pushw 0xE4E
 	call Strlen
@@ -884,7 +884,7 @@ LABEL_F2B0BC:
 LABEL_F2B122:
 	pushw iz
 	ld xwa, 0x20F4E
-	call LABEL_FECCA5
+	call SeqFile_ValidateAndStore
 	pushw 0x2
 	pushw 0xF4E
 	call Strlen

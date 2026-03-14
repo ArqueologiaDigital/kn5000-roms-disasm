@@ -4131,7 +4131,7 @@ ParamFunc_CommonExit:
 	lda xsp, (xsp + 12)
 	ret
 
-LABEL_F74A2C:
+AccWrap_SetMinVelocity:
 	ld c, a
 	cpdi8 36152, 236
 	ret nz

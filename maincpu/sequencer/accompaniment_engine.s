@@ -24835,7 +24835,7 @@ LABEL_F6713F:
 
 LABEL_F6718B:
 	stdi8 37110, 72
-	call LABEL_FCA18C
+	call SndParam_ApplyProgramChange_Safe
 	call VoiceParam_ClampAndValidate_Tramp
 	pushw hl
 	calr Rhythm_MapChannelToDrumIndex

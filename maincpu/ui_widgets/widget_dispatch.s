@@ -6501,7 +6501,7 @@ LABEL_EE840C:
 
 LABEL_EE8410:
 	.long UIState_KeyScan_Dispatch
-	.long LABEL_FEB010
+	.long HdaeRom_AltTableEntry9
 	.long 0xFFFFFFFF
 
 LABEL_EE841C:
@@ -6542,17 +6542,17 @@ LABEL_EE8478:
 LABEL_EE847C:
 	.fill 4, 1, 0xff
 LABEL_EE8480:
-	.long LABEL_FEAA18
+	.long HdaeRom_Entry
 	.long UIState_ProcessSimpleMode
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8490:
-	.long LABEL_FEAA80
+	.long HdaeRom_ProcessBlock
 	.long UIState_KeyScan_Dispatch
 	.long LABEL_F454F1
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84A0:
-	.long LABEL_FEAAC4
+	.long HdaeRom_ReadParam
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84AC:
@@ -6562,18 +6562,18 @@ LABEL_EE84AC:
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84BC:
 	.long LABEL_F454F1
-	.long LABEL_FEAB09
+	.long HdaeRom_WriteParam
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84C8:
 	.long LABEL_F454F1
-	.long LABEL_FEAB4D
+	.long HdaeRom_CheckResult
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84D4:
 	.long LABEL_F454F1
-	.long LABEL_FEAB91
+	.long HdaeRom_FinishBlock
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84E0:
-	.long LABEL_FEABD5
+	.long HdaeRom_TableEntry0
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84EC:
@@ -6581,7 +6581,7 @@ LABEL_EE84EC:
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE84F8:
-	.long LABEL_FEABD7
+	.long HdaeRom_TableEntry1
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8504:
@@ -6597,7 +6597,7 @@ LABEL_EE8518:
 LABEL_EE851C:
 	.byte 0xed, 0x7b, 0xfc, 0x00
 LABEL_EE8520:
-	.long LABEL_FEAD62
+	.long HdaeRom_AltReadParam
 	.long LABEL_FDE67D
 	.long UIState_KeyScan_Dispatch
 	.long DSPCfg_ProcessInput
@@ -6607,7 +6607,7 @@ LABEL_EE8534:
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8540:
-	.long LABEL_FEABD9
+	.long HdaeRom_TableEntry2
 	.long UIState_KeyScan_Dispatch
 	.fill 4, 1, 0xff
 LABEL_EE854C:
@@ -6617,7 +6617,7 @@ LABEL_EE8550:
 LABEL_EE8554:
 	.fill 4, 1, 0xff
 UIState_SeqInit_Table:
-	.long LABEL_FEAC82
+	.long HdaeRom_AltEntry
 	.long LABEL_FDE7EB
 	.long LABEL_FC9A40
 	.long UIState_KeyScan_Dispatch
@@ -6644,7 +6644,7 @@ UIState_EventHandler_Table:
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE85A8:
-	.long LABEL_FEAD01
+	.long HdaeRom_AltProcessBlock
 	.long UIState_KeyScan_Dispatch
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE85B4:
@@ -6657,7 +6657,7 @@ LABEL_EE85C8:
 	.long UIState_ProcessAltMode
 	.long LABEL_FDE7B5
 	.long AccWrap_ReplayStopAlt
-	.long LABEL_FEADC7
+	.long HdaeRom_AltCheckResult
 	.long BitMapOut_ByteData_DisplayUpdate
 	.long LABEL_FDBA3A
 	.long UIState_KeyScan_Dispatch
@@ -6697,31 +6697,31 @@ LABEL_EE8648:
 LABEL_EE864C:
 	.fill 4, 1, 0xff
 LABEL_EE8650:
-	.long LABEL_FEAE9E
+	.long HdaeRom_AltTableEntry0
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8658:
-	.long LABEL_FEAECA
+	.long HdaeRom_AltTableEntry1
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8660:
-	.long LABEL_FEAF26
+	.long HdaeRom_AltTableEntry2
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8668:
-	.long LABEL_FEAF52
+	.long HdaeRom_AltTableEntry3
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8670:
-	.long LABEL_FEAF7E
+	.long HdaeRom_AltTableEntry4
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8678:
-	.long LABEL_FEAFB6
+	.long HdaeRom_AltTableEntry5
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8680:
-	.long LABEL_FEAFE2
+	.long HdaeRom_AltTableEntry6
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8688:
-	.long LABEL_FEB00E
+	.long HdaeRom_AltTableEntry7
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8690:
-	.long LABEL_FEB00F
+	.long HdaeRom_AltTableEntry8
 	.byte 0xff, 0xff, 0xff, 0xff
 LABEL_EE8698:
 	.fill 4, 1, 0xff
@@ -7387,7 +7387,7 @@ LABEL_EE8EB8:
 LABEL_EE8ED8:	.ascii "!\"#$"
 	.byte 0xff, 0xff, 0xff, 0xff
 	.byte 0x00, 0x01, 0x02, 0x15, 0xff, 0xff, 0xff, 0xff
-	.long LABEL_FEA87F
+	.long SndParam_ProcessEntry
 	.long LABEL_FE0053
 	.byte 0x10, 0x11, 0x12, 0x13, 0x14, 0xff, 0xff, 0xff
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x17, 0x18

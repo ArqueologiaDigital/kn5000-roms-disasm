@@ -1544,7 +1544,7 @@ DisplayMode_RefreshState:
 	ld16_24 xwa, 0x021086
 	calr DkMdlyPly_CheckState
 	ld16_24 xwa, 0x021086
-	jp LABEL_FEC12A
+	jp FileIO_ReadChunk
 
 DpMdlyDocTtlFunc:
 	cp xbc, 0x1C00007

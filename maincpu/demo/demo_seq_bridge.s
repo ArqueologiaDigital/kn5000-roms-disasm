@@ -69,7 +69,7 @@ LABEL_F2258E:
 
 ; SqTrSelTtl case B
 SqTrSel_CaseB:
-	call LABEL_FECC0C
+	call SeqFile_ParseHeader
 
 ; SqTrSelTtl case C
 SqTrSel_CaseC:

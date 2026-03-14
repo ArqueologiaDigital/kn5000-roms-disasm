@@ -9,9 +9,9 @@
 
 LABEL_FDDB2E:
 	call MidiParam_ForceResync
-	call LABEL_FC7000
+	call Audio_UpdateLEDsAndChannels
 	call Reset_Floppy_Disk_Controller
-	call LABEL_FEA7EB
+	call SndParam_Init
 	call LABEL_F9800F
 	jp LoadAndRunXapr_Entry
 
@@ -269,5 +269,5 @@ LABEL_FDDDCB:
 	stdi8 51821, 0
 	stdi8 51822, 16
 	stdi8 51823, 0
-	jp LABEL_FEBA91
+	jp COMM_SendDataReturn
 

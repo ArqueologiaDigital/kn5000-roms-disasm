@@ -1352,7 +1352,7 @@ AccompSeq_Output_CheckFilter:
 	jr nz, AccompSeq_Output_CheckManual
 	pushw wa
 	pushw hl
-	call LABEL_FCA6DB
+	call Tempo_ProcessExpressionChange
 	popw hl
 	popw wa
 

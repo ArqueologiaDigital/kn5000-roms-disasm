@@ -998,7 +998,7 @@ LABEL_FC576D:
 	calr LABEL_FC57CB
 
 LABEL_FC5773:
-	call LABEL_FC6C4F
+	call MidiCC_SyncForceResync
 	ldda8 a, 36492
 	extz wa
 	muls wa, 0x3
@@ -1013,11 +1013,11 @@ LABEL_FC5773:
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0xFF
-	call LABEL_FC6C54
-	jrl LABEL_FC693D
+	call MidiCC_ResetState
+	jrl VoiceEntry_FindMasterVolume
 
 LABEL_FC57AA:
-	call LABEL_FC6C4F
+	call MidiCC_SyncForceResync
 	ldda8 a, 36492
 	extz wa
 	muls wa, 0x3
@@ -1048,7 +1048,7 @@ LABEL_FC57E6:
 	ld (xbc + 6), a
 	ld a, (xde + 2)
 	ld (xbc + 7), a
-	jr LABEL_FC5865
+	jr FileIO_MainLoop
 
 LABEL_FC580A:
 	ldada xhl, 36472

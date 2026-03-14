@@ -7496,7 +7496,7 @@ LABEL_F52F9C:
 	inc 4, xsp
 	ret
 
-LABEL_F52FB1:
+SndTable_LookupA:
 	sti8_24 0x03e3ec, 0x00
 	sti16_24 0x023580, 0x0000
 	sti8_24 0x02358a, 0x01
@@ -7582,10 +7582,10 @@ LABEL_F53082:
 	.byte 0xe8, 0x89, 0xda, 0x88, 0x1e, 0x8b, 0xff, 0xd2
 	.byte 0x8c, 0x35, 0x02, 0x61, 0x5e, 0x0e
 
-LABEL_F530B0:
+SndTable_LookupB:
 	jrl TaskBuf_ReadNextByte
 
-LABEL_F530B3:
+SndTable_LookupC:
 	calr FDC_DrainQueuesAndReset
 	sti8_24 0x03e3ec, 0x00
 	jrl FDC_RecalibrateCommand
@@ -7607,7 +7607,7 @@ LABEL_F530BF:
 	lds hl, 0
 	ret
 
-LABEL_F530F9:
+SndTable_LookupD:
 	sti8_24 0x03e3ec, 0x01
 	sti16_24 0x023580, 0x0000
 	sti8_24 0x02358a, 0x01

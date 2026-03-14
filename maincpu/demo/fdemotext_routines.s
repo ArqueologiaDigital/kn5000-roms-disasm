@@ -653,7 +653,7 @@ FDemoText_SendParams_LevelLoop:
 	ld c, (xsp + 12)
 	extz bc
 	ldw wa, 0xFF
-	call LABEL_FE1445
+	call VoiceEvent_FlushAndReturn
 
 FDemoText_SendVoiceParams_Return:
 	pop_werp 0xFA
@@ -719,7 +719,7 @@ FDemoText_SendExtParams_LevelLoop:
 	ld c, (xsp + 22)
 	extz bc
 	ldw wa, 0xFF
-	call LABEL_FE1445
+	call VoiceEvent_FlushAndReturn
 	pop_werp 0xFA
 	lda xsp, (xsp + 22)
 	ret

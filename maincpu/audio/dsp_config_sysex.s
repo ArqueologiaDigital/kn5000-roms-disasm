@@ -5013,7 +5013,7 @@ LABEL_FDDEF7:
 	call AudioInit_CheckMIDIStatus
 	jp AudioInit_DispatchChanges
 
-LABEL_FDDEFF:
+Audio_InitDispatchReturn:
 	cps a, 0
 	jr z, LABEL_FDDF12
 	ldda16 xwa, 50584
@@ -5557,7 +5557,7 @@ LABEL_FDE7C9:
 	call NoteMap_FindBestMatch
 	cp hl, 0x00FF
 	ret z
-	call LABEL_FE12FC
+	call VoiceEvent_DispatchTable
 	ret
 
 
