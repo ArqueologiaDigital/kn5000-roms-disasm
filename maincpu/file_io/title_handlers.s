@@ -18,7 +18,7 @@ LoadTtlJgFunc:
 	jr nz, LoadTtl_Return
 	ldw wa, 0x61
 	ldw bc, 0x64
-	calr LABEL_F8B36E
+	calr FileIO_DiskEventDispatch
 
 LoadTtl_Return:
 	lds32 xhl, 0

@@ -3593,7 +3593,7 @@ SearchOpen_Return:
 
 LoadFromSecondaryPage:
 	pushw iz
-	call LABEL_F8B015
+	call FileIO_GetCurrentWallpaperIndex
 	cps hl, 0
 	jr ge, LoadSecondary_OpenFile
 	ldw hl, 0xFF98
@@ -3601,7 +3601,7 @@ LoadFromSecondaryPage:
 
 LoadSecondary_OpenFile:
 	ld wa, hl
-	call LABEL_F8B13D
+	call FileIO_GetWallpaperEntry
 	ld xwa, xhl
 	ld xbc, 0xEA0264
 	call FileIO_OpenWithMode
@@ -7139,7 +7139,7 @@ FileIO_OpenWithBuiltPath:
 	st_dri3b L, 0xFD, 0x90, 0x00
 	ret
 
-LABEL_F8AC65:
+FileIO_BuildFileIndex:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
@@ -7147,18 +7147,18 @@ LABEL_F8AC65:
 	sti8_24 0x027414, 0x00
 	lds iz, 0
 
-LABEL_F8AC79:
+BuildIndex_ScanLoop:
 	ld xwa, (xsp + 4)
 	st_dri3b W, 0x07, 0xE0, 0xF8
 	ld xbc, 0xEA0540
 	lds de, 3
 	calr FileIO_Search_SkipEntry
 	cps hl, 0
-	jr z, LABEL_F8ACFE
+	jr z, BuildIndex_Return
 	ldi_werp 0xFA, 0
-	jr LABEL_F8ACBE
+	jr BuildIndex_CheckComma
 
-LABEL_F8AC94:
+BuildIndex_CheckSubEntry:
 	ld8_24 c, 0x027412
 	exts bc
 	sla bc, 5
@@ -7173,7 +7173,7 @@ LABEL_F8AC94:
 	inc1_werp 0xFA
 	inc 1, iz
 
-LABEL_F8ACBE:
+BuildIndex_CheckComma:
 	ld xwa, (xsp + 4)
 	st_dri3b W, 0x07, 0xE0, 0xF8
 	ld e, (xwa)
@@ -7182,7 +7182,7 @@ LABEL_F8ACBE:
 	cps e, 0
 	jr z, FileIO_StoreIndexedEntry
 	cp_erpw 0xFA, 0x20, 0x00
-	jr lt, LABEL_F8AC94
+	jr lt, BuildIndex_CheckSubEntry
 
 FileIO_StoreIndexedEntry:
 	ld8_24 a, 0x027412
@@ -7194,32 +7194,32 @@ FileIO_StoreIndexedEntry:
 	incdi8_24 1, 160786
 	inc 1, iz
 	cp iz, 0x80
-	jrl lt, LABEL_F8AC79
+	jrl lt, BuildIndex_ScanLoop
 
-LABEL_F8ACFE:
+BuildIndex_Return:
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_F8AD02:
+FileIO_FindPathSeparator:
 	ld xde, xwa
 	lds hl, 0
 	lda_24 xbc, 0x0272d2
-	jr LABEL_F8AD14
+	jr FindPathSep_CheckChar
 
-LABEL_F8AD0D:
+FindPathSep_NextChar:
 	lda_dpi XBC, 0xE4
 	inc 1, hl
 	inc 1, xde
 
-LABEL_F8AD14:
+FindPathSep_CheckChar:
 	ld a, (xde)
 	cp a, 0x5C
-	jr z, LABEL_F8AD21
+	jr z, FindPathSep_Found
 	cp hl, 0x1F
-	jr lt, LABEL_F8AD0D
+	jr lt, FindPathSep_NextChar
 
-LABEL_F8AD21:
+FindPathSep_Found:
 	ld (xbc), 0x5C
 	ret
 
@@ -7230,7 +7230,7 @@ ControlState_ProcessCommand:
 	st32_24 0x027416, xwa
 	sti8_24 0x027414, 0x00
 	cp (xiz), 0x2
-	jr nz, LABEL_F8AD76
+	jr nz, CtrlCmd_Return
 	ld e, (xiz + 1)
 	lda_24 xbc, 0x0272f2
 	lda xwa, (xiz + 2)
@@ -7239,27 +7239,27 @@ ControlState_ProcessCommand:
 	cp e, 0x40
 	jr z, ControlState_ProcessNext
 	cp e, 0x10
-	jr z, LABEL_F8AD66
+	jr z, CtrlCmd_SetPathAndBuild
 	cps e, 0
-	jr nz, LABEL_F8AD76
+	jr nz, CtrlCmd_Return
 	sti8_24 0x0272d2, 0x00
 	ld (xbc), 0x0
 	jr ControlState_ProcessNext
 
-LABEL_F8AD66:
+CtrlCmd_SetPathAndBuild:
 	ld (xbc), 0x0
-	calr LABEL_F8AD02
+	calr FileIO_FindPathSeparator
 	inc 3, hl
 	st_dri3b W, 0x07, 0xF8, 0xEC
 
 ControlState_ProcessNext:
-	calr LABEL_F8AC65
+	calr FileIO_BuildFileIndex
 
-LABEL_F8AD76:
+CtrlCmd_Return:
 	pop xiz
 	ret
 
-LABEL_F8AD78:
+FileIO_FindFirstMatch:
 	st_dri3b L, 0xFD, 0xEC, 0xFE
 	push xiz
 	st_dri3l XBC, 0xFD, 0x10, 0x01
@@ -7275,9 +7275,9 @@ LABEL_F8AD78:
 	ld8_24 a, 0x027412
 	exts wa
 	cp (xsp + 4), wa
-	jrl ge, LABEL_F8AE50
+	jrl ge, FindFirst_NotFound
 
-LABEL_F8ADB0:
+FindFirst_BuildPathLoop:
 	ld xwa, 0x25C6C
 	ld xbc, 0xEA0548
 	calr FileIO_CopyString
@@ -7298,48 +7298,48 @@ LABEL_F8ADB0:
 	call _findfirst
 	ld xiz, xhl
 	cp xiz, 0x0
-	jr lt, LABEL_F8AE40
+	jr lt, FindFirst_NextIndex
 	lda xbc, (xsp + 12)
 	ld_sril XWA, (xsp + 0x0114)
 	calr FileIO_CopyString
 	lda xbc, (xsp + 6)
 	bitm 4, (xbc)
-	jr z, LABEL_F8AE25
+	jr z, FindFirst_StoreFileSize
 	ld_sril XWA, (xsp + 0x0110)
 	ld xbc, 0xFFFFFFFF
 	ld (xwa), xbc
-	jr LABEL_F8AE2F
+	jr FindFirst_StoreResult
 
-LABEL_F8AE25:
+FindFirst_StoreFileSize:
 	ld_sril XWA, (xsp + 0x0110)
 	ld xbc, (xbc + 2)
 	ld (xwa), xbc
 
-LABEL_F8AE2F:
+FindFirst_StoreResult:
 	st32_24 0x027416, xiz
 	ld wa, (xsp + 4)
 	st8_24 0x027414, a
 	lds hl, 0
-	jr LABEL_F8AE5D
+	jr FindFirst_Return
 
-LABEL_F8AE40:
+FindFirst_NextIndex:
 	incm 1, (xsp + 4)
 	ld8_24 a, 0x027412
 	exts wa
 	cp (xsp + 4), wa
-	jrl lt, LABEL_F8ADB0
+	jrl lt, FindFirst_BuildPathLoop
 
-LABEL_F8AE50:
+FindFirst_NotFound:
 	ld xwa, 0xFFFFFFFF
 	st32_24 0x027416, xwa
 	ldw hl, 0xFFFF
 
-LABEL_F8AE5D:
+FindFirst_Return:
 	pop xiz
 	st_dri3b L, 0xFD, 0x14, 0x01
 	ret
 
-LABEL_F8AE64:
+FileIO_FindNextMatch:
 	st_dri3b L, 0xFD, 0xF2, 0xFE
 	push xiz
 	st_dri3l XBC, 0xFD, 0x0E, 0x01
@@ -7348,7 +7348,7 @@ LABEL_F8AE64:
 	lda xbc, (xsp + 4)
 	call _findnext
 	cps hl, 0
-	jr z, LABEL_F8AEA5
+	jr z, FindNext_CopyName
 	ld (xiz), 0x0
 	ld_sril XWA, (xsp + 0x010e)
 	lds32 xbc, 0
@@ -7358,29 +7358,29 @@ LABEL_F8AE64:
 	ld xwa, 0xFFFFFFFF
 	st32_24 0x027416, xwa
 	ldw hl, 0xFFFF
-	jr LABEL_F8AECE
+	jr FindNext_Return
 
-LABEL_F8AEA5:
+FindNext_CopyName:
 	lda xbc, (xsp + 10)
 	ld xwa, xiz
 	calr FileIO_CopyString
 	lda xbc, (xsp + 4)
 	bitm 4, (xbc)
-	jr z, LABEL_F8AEC2
+	jr z, FindNext_StoreFileSize
 	ld_sril XWA, (xsp + 0x010e)
 	ld xbc, 0xFFFFFFFF
 	ld (xwa), xbc
-	jr LABEL_F8AECC
+	jr FindNext_Ok
 
-LABEL_F8AEC2:
+FindNext_StoreFileSize:
 	ld_sril XWA, (xsp + 0x010e)
 	ld xbc, (xbc + 2)
 	ld (xwa), xbc
 
-LABEL_F8AECC:
+FindNext_Ok:
 	lds hl, 0
 
-LABEL_F8AECE:
+FindNext_Return:
 	pop xiz
 	st_dri3b L, 0xFD, 0x0E, 0x01
 	ret
@@ -7393,33 +7393,33 @@ FileIO_SearchStringMatch:
 	ldw hl, 0xFFFF
 	ld32_24 xwa, 0x027416
 	cp xwa, 0x0
-	jr ge, LABEL_F8AEF4
+	jr ge, SearchMatch_HasHandle
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
-	jr LABEL_F8AF16
+	jr SearchMatch_FirstSearch
 
-LABEL_F8AEF4:
+SearchMatch_HasHandle:
 	ld8_24 a, 0x027414
 	cpda8_24 a, 160786
-	jr ge, LABEL_F8AF19
+	jr ge, SearchMatch_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
-	calr LABEL_F8AE64
+	calr FileIO_FindNextMatch
 	cps hl, 0
-	jr ge, LABEL_F8AF19
+	jr ge, SearchMatch_Return
 	incdi8_24 1, 160788
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
 
-LABEL_F8AF16:
-	calr LABEL_F8AD78
+SearchMatch_FirstSearch:
+	calr FileIO_FindFirstMatch
 
-LABEL_F8AF19:
+SearchMatch_Return:
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_F8AF1D:
+FileIO_ExtractBasename:
 	lda_24 xhl, 0x025cec
 	ld (xhl), 0x0
 	ld32_24 xwa, 0x027416
@@ -7438,34 +7438,34 @@ LABEL_F8AF1D:
 	ldw de, 0xFFFF
 	lds ix, 0
 	cp (xbc), 0x0
-	jr z, LABEL_F8AF78
+	jr z, ExtractBase_TruncatePath
 
-LABEL_F8AF5D:
+ExtractBase_ScanLoop:
 	ld_srib3 A, 0x07, 0xE4, 0xF0
 	lda_dri3 XBC, 0x07, 0xEC, 0xF0
 	cp a, 0x5C
-	jr nz, LABEL_F8AF6E
+	jr nz, ExtractBase_TrackSep
 	ld de, ix
 
-LABEL_F8AF6E:
+ExtractBase_TrackSep:
 	inc 1, ix
 	cp_srib_im 0x07, 0xE4, 0xF0, 0x00
-	jr nz, LABEL_F8AF5D
+	jr nz, ExtractBase_ScanLoop
 
-LABEL_F8AF78:
+ExtractBase_TruncatePath:
 	cps de, 0
-	jr le, LABEL_F8AF86
+	jr le, ExtractBase_ClearAll
 	inc 1, de
 	stib_dri 0x07, 0xEC, 0xE8, 0x00
-	jr LABEL_F8AF89
+	jr ExtractBase_Done
 
-LABEL_F8AF86:
+ExtractBase_ClearAll:
 	ld (xhl), 0x0
 
-LABEL_F8AF89:
+ExtractBase_Done:
 	ret
 
-LABEL_F8AF8A:
+FileIO_NormalizePath:
 	cp (xwa), 0x5C
 	scc16 z, de
 	st_dri3b A, 0x07, 0xE0, 0xE8
@@ -7473,15 +7473,15 @@ LABEL_F8AF8A:
 	calr FileIO_CopyString
 	lds de, 0
 	lda_24 xbc, 0x0272f2
-	jr LABEL_F8AFA7
+	jr NormalizePath_CheckLoop
 
-LABEL_F8AFA5:
+NormalizePath_NextChar:
 	inc 1, de
 
-LABEL_F8AFA7:
+NormalizePath_CheckLoop:
 	st_dri3b W, 0x07, 0xE4, 0xE8
 	cp (xwa), 0x0
-	jr nz, LABEL_F8AFA5
+	jr nz, NormalizePath_NextChar
 	cp de, 0x20
 	ret ge
 	cps de, 0
@@ -7495,55 +7495,55 @@ LABEL_F8AFA7:
 FileIO_ValidateModeAndRange:
 	ld8_24 c, 0x025db6
 	cps c, 2
-	jr z, LABEL_F8AFDA
+	jr z, ValidateMode_CheckRange
 	cps c, 3
-	jr z, LABEL_F8AFDA
+	jr z, ValidateMode_CheckRange
 	cps c, 4
-	jr nz, LABEL_F8AFE5
+	jr nz, ValidateMode_Error
 
-LABEL_F8AFDA:
+ValidateMode_CheckRange:
 	cps wa, 0
-	jr lt, LABEL_F8AFE5
+	jr lt, ValidateMode_Error
 	cpda16_24 xwa, 160458
-	jr le, LABEL_F8AFE9
+	jr le, ValidateMode_InRange
 
-LABEL_F8AFE5:
+ValidateMode_Error:
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F8AFE9:
+ValidateMode_InRange:
 	ld16_24 xbc, 0x0271ee
 	cp wa, bc
-	jr lt, LABEL_F8AFF9
+	jr lt, ValidateMode_OutOfPage
 	cpda16_24 xwa, 160240
-	jr le, LABEL_F8AFFC
+	jr le, ValidateMode_InPage
 
-LABEL_F8AFF9:
+ValidateMode_OutOfPage:
 	lds hl, 1
 	ret
 
-LABEL_F8AFFC:
+ValidateMode_InPage:
 	sub wa, bc
 	muls wa, 0xE
 	lda_24 xbc, 0x02723c
 	cp_srib_im 0x07, 0xE4, 0xE0, 0x00
-	jr nz, LABEL_F8B012
+	jr nz, ValidateMode_Valid
 	lds hl, 2
 	ret
 
-LABEL_F8B012:
+ValidateMode_Valid:
 	lds hl, 0
 	ret
 
-LABEL_F8B015:
+FileIO_GetCurrentWallpaperIndex:
 	ld16_24 xwa, 0x0272c8
 	calr FileIO_ValidateModeAndRange
 	cps hl, 0
-	jr z, LABEL_F8B025
+	jr z, GetWallpaper_ReturnIndex
 	ldw hl, 0xFF98
 	ret
 
-LABEL_F8B025:
+GetWallpaper_ReturnIndex:
 	ld16_24 xhl, 0x0272c8
 	ret
 
@@ -7554,14 +7554,14 @@ FileIO_ScanDirEntries:
 	ld xwa, xbc
 	st_dri3b B, 0xE5, 0x8C, 0x00
 
-LABEL_F8B03D:
+ScanDir_CopyEntryLoop:
 	ld xiy, 0xEA043A
 	ld xix, xwa
 	lds bc, 7
 	ldirw
 	lda xwa, (xwa + 14)
 	cp xwa, xde
-	jr c, LABEL_F8B03D
+	jr c, ScanDir_CopyEntryLoop
 	lds iz, 0
 	lda xbc, (xsp + 10)
 	ld xwa, 0xEA054C
@@ -7569,14 +7569,14 @@ LABEL_F8B03D:
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 2)
 	cp xwa, 0x0
-	jr lt, LABEL_F8B0E8
+	jr lt, ScanDir_Return
 	lda xwa, (xsp + 16)
 	ld (xsp + 6), xwa
 	ld16_24 xwa, 0x0271ee
 	cps wa, 0
-	jr gt, LABEL_F8B098
+	jr gt, ScanDir_FirstEntryDone
 	cpdi16_24 160240, 0
-	jr lt, LABEL_F8B098
+	jr lt, ScanDir_FirstEntryDone
 	neg wa
 	muls wa, 0xE
 	lda_24 xbc, 0x02723c
@@ -7585,20 +7585,20 @@ LABEL_F8B03D:
 	ld xbc, (xsp + 6)
 	calr FileIO_CopyString
 
-LABEL_F8B098:
+ScanDir_FirstEntryDone:
 	lds iz, 1
 	lda xbc, (xsp + 10)
 	ld xwa, (xsp + 2)
 	call _findnext
 	cps hl, 0
-	jr nz, LABEL_F8B0E1
+	jr nz, ScanDir_CloseFindHandle
 
-LABEL_F8B0A8:
+ScanDir_NextEntryCheck:
 	ld16_24 xwa, 0x0271ee
 	cp iz, wa
-	jr lt, LABEL_F8B0D1
+	jr lt, ScanDir_IterateNext
 	cpda16_24 xiz, 160240
-	jr gt, LABEL_F8B0D1
+	jr gt, ScanDir_IterateNext
 	ld bc, iz
 	sub bc, wa
 	muls bc, 0xE
@@ -7609,37 +7609,37 @@ LABEL_F8B0A8:
 	ld xbc, (xsp + 6)
 	calr FileIO_CopyString
 
-LABEL_F8B0D1:
+ScanDir_IterateNext:
 	inc 1, iz
 	lda xbc, (xsp + 10)
 	ld xwa, (xsp + 2)
 	call _findnext
 	cps hl, 0
-	jr z, LABEL_F8B0A8
+	jr z, ScanDir_NextEntryCheck
 
-LABEL_F8B0E1:
+ScanDir_CloseFindHandle:
 	ld xwa, (xsp + 2)
 	call _findclose
 
-LABEL_F8B0E8:
+ScanDir_Return:
 	ld hl, iz
 	popw iz
 	st_dri3b L, 0xFD, 0x12, 0x01
 	ret
 
-LABEL_F8B0F1:
+FileIO_SelectWallpaperByIndex:
 	pushw iz
 	ld iz, wa
 	ld wa, iz
 	calr FileIO_ValidateModeAndRange
 	cp hl, 0xFFFF
-	jr nz, LABEL_F8B106
+	jr nz, SelectWP_CheckPageBound
 	ld16_24 xhl, 0x0272c8
-	jr LABEL_F8B13B
+	jr SelectWP_Return
 
-LABEL_F8B106:
+SelectWP_CheckPageBound:
 	cps hl, 1
-	jr nz, LABEL_F8B134
+	jr nz, SelectWP_StoreIndex
 	ld wa, iz
 	extz xwa
 	div wa, 0xA
@@ -7649,32 +7649,32 @@ LABEL_F8B106:
 	add bc, 0x9
 	ld16_24 xwa, 0x0272ca
 	cp bc, wa
-	jr ge, LABEL_F8B12C
+	jr ge, SelectWP_ClampEnd
 	ld wa, bc
 
-LABEL_F8B12C:
+SelectWP_ClampEnd:
 	st16_24 0x0271f0, xwa
 	calr FileIO_ScanDirEntries
 
-LABEL_F8B134:
+SelectWP_StoreIndex:
 	ld hl, iz
 	st16_24 0x0272c8, xhl
 
-LABEL_F8B13B:
+SelectWP_Return:
 	popw iz
 	ret
 
-LABEL_F8B13D:
+FileIO_GetWallpaperEntry:
 	pushw iz
 	ld iz, wa
 	ld wa, iz
 	calr FileIO_ValidateModeAndRange
 	cps hl, 0
-	jr z, LABEL_F8B150
+	jr z, GetWPEntry_ComputeOffset
 	lda_24 xhl, 0xea0448
-	jr LABEL_F8B16D
+	jr GetWPEntry_Return
 
-LABEL_F8B150:
+GetWPEntry_ComputeOffset:
 	ld16_24 xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
@@ -7687,21 +7687,21 @@ LABEL_F8B150:
 	ld xhl, 0x2723C
 	add xhl, xbc
 
-LABEL_F8B16D:
+GetWPEntry_Return:
 	popw iz
 	ret
 
-LABEL_F8B16F:
+FileIO_InitWallpaperNav:
 	sti16_24 0x0271ee, 0x0000
 	sti16_24 0x0271f0, 0x0009
 	calr FileIO_ScanDirEntries
 	lds wa, 0
 	cps hl, 0
-	jr le, LABEL_F8B18A
+	jr le, InitWPNav_ClampEnd
 	ld wa, hl
 	dec 1, wa
 
-LABEL_F8B18A:
+InitWPNav_ClampEnd:
 	st16_24 0x0272ca, xwa
 	cpdm16_24 160240, xwa
 	ret le
@@ -7721,18 +7721,18 @@ ResetProgressIndication:
 	ldiw
 	ret
 
-LABEL_F8B1D1:
+FileIO_DiskInserted:
 	stdi8 34046, 0
 	calr ResetProgressIndication
 	jp FileIO_ValidateRecord_Return
 
-LABEL_F8B1DD:
+FileIO_DiskInserted_Stub1:
 	ret
 
-LABEL_F8B1DE:
+FileIO_DiskInserted_Stub2:
 	ret
 
-LABEL_F8B1DF:
+FileIO_DiskRemoved:
 	stdi8 34046, 0
 	calr ResetProgressIndication
 	call FileIO_ValidateRecord_Return
@@ -7753,10 +7753,10 @@ InitializeOperationState:
 	call Part_ReinitAllActive
 	call AccWrap_PlayModeDispatch
 	cp (xsp), 0x0
-	jr z, LABEL_F8B221
+	jr z, InitOp_SkipSetFlag
 	setda 2, 10407
 
-LABEL_F8B221:
+InitOp_SkipSetFlag:
 	call AccompSeq_StopSequence
 	call AudioInit_RefreshToneBank
 	call NoteMap_ProcessAndMerge
@@ -7771,11 +7771,11 @@ LABEL_F8B221:
 CancelOperationCleanup:
 	ldda8 a, 10407
 	bit 2, a
-	jr z, LABEL_F8B254
+	jr z, CancelOp_ClearSeq
 	res 2, a
 	stda8 10407, a
 
-LABEL_F8B254:
+CancelOp_ClearSeq:
 	resda 3, 10407
 	call SeqAcc_InitPlaybackState
 	jp LABEL_FDBB2D
@@ -7798,29 +7798,29 @@ SeqPhase_OperationStateCheck:
 	lds wa, 0
 	calr InitializeOperationState
 	cpdi16 34048, 0
-	jr ge, LABEL_F8B2A2
+	jr ge, SeqPhase_CheckMediaType
 	call GetDiskSizeInfo
 	extz hl
 	stda16 34048, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8B2A2:
+SeqPhase_CheckMediaType:
 	ldda16 xwa, 34048
 	cps wa, 2
-	jr z, LABEL_F8B2B4
+	jr z, SeqPhase_MediaIsValid
 	cps wa, 3
-	jr z, LABEL_F8B2B4
+	jr z, SeqPhase_MediaIsValid
 	calr ResetProgressIndication
 	jrl SeqPhase_PopIzRet
 
-LABEL_F8B2B4:
+SeqPhase_MediaIsValid:
 	cpdi16 34050, 0
-	jr ge, LABEL_F8B2C7
+	jr ge, SeqPhase_CheckEncodedData
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 
-LABEL_F8B2C7:
+SeqPhase_CheckEncodedData:
 	cpdi16 34050, 0
 	jr z, SeqPhase_PopIzRet
 	ldda8 a, 1068
@@ -7836,13 +7836,13 @@ LABEL_F8B2C7:
 	jr z, SeqPhase_PopIzRet
 	lds iz, 0
 
-LABEL_F8B2F1:
+SeqPhase_FormatNameLoop:
 	ldto_berp A, 0xF8
 	extz wa
 	call FileIO_FormatName_Loop
 	inc 1, iz
 	cp iz, 0x8
-	jr lt, LABEL_F8B2F1
+	jr lt, SeqPhase_FormatNameLoop
 	stdi8 32578, 37
 	ldw wa, 0xEE
 	call SoundCtrl_SendCommand
@@ -7852,14 +7852,14 @@ LABEL_F8B2F1:
 	calr SignalProgressUpdate
 	calr CancelOperationCleanup
 	cps iz, 0
-	jr ge, LABEL_F8B329
+	jr ge, SeqPhase_LoadSuccess
 	stdi8 32578, 1
-	jr LABEL_F8B32E
+	jr SeqPhase_SendSoundCmd
 
-LABEL_F8B329:
+SeqPhase_LoadSuccess:
 	stdi8 32578, 35
 
-LABEL_F8B32E:
+SeqPhase_SendSoundCmd:
 	ldw wa, 0xEE
 	call SoundCtrl_SendCommand
 
@@ -7867,13 +7867,13 @@ SeqPhase_PopIzRet:
 	popw iz
 	ret
 
-LABEL_F8B337:
+FileIO_MidiOutSendByte:
 	dec 2, xsp
 	ld (xsp), a
 	ld xwa, 0x2280
 	call SndParam_LookupReadOnly
 	cps hl, 0
-	jr z, LABEL_F8B36B
+	jr z, MidiOutSend_Return
 	stdi8 1060, 243
 	ei 6
 	pushw 0xF3
@@ -7887,113 +7887,113 @@ LABEL_F8B337:
 	call MIDI_SC0_TX_DISPATCH
 	ei 0
 
-LABEL_F8B36B:
+MidiOutSend_Return:
 	inc 2, xsp
 	ret
 
-LABEL_F8B36E:
+FileIO_DiskEventDispatch:
 	dec 4, xsp
 	ld (xsp), c
 	ld (xsp + 2), a
 	cpdi16 34048, 0
-	jr ge, LABEL_F8B387
+	jr ge, DiskEvt_CheckMediaType
 	call GetDiskSizeInfo
 	extz hl
 	stda16 34048, xhl
 
-LABEL_F8B387:
+DiskEvt_CheckMediaType:
 	ldda16 xwa, 34048
 	cps wa, 1
-	jr z, LABEL_F8B3C6
+	jr z, DiskEvt_TypeIsCard
 	cps wa, 0
-	jr z, LABEL_F8B3BD
+	jr z, DiskEvt_TypeIsNone
 	cps wa, 5
-	jr z, LABEL_F8B3B3
+	jr z, DiskEvt_TypeIsUSB
 	cps wa, 2
-	jr z, LABEL_F8B39F
+	jr z, DiskEvt_TypeIsFloppyOrHD
 	cps wa, 3
-	jr nz, LABEL_F8B3D5
+	jr nz, DiskEvt_Return
 
-LABEL_F8B39F:
+DiskEvt_TypeIsFloppyOrHD:
 	bitda_24 0, 213236
-	jr z, LABEL_F8B3AC
+	jr z, DiskEvt_UseAltChannel
 	ld a, (xsp)
 	extz wa
-	jr LABEL_F8B3C0
+	jr DiskEvt_PostModeEvent
 
-LABEL_F8B3AC:
+DiskEvt_UseAltChannel:
 	ld a, (xsp + 2)
 	extz wa
-	jr LABEL_F8B3C0
+	jr DiskEvt_PostModeEvent
 
-LABEL_F8B3B3:
+DiskEvt_TypeIsUSB:
 	stdi8 32578, 0
 	ldw wa, 0xEE
-	jr LABEL_F8B3D1
+	jr DiskEvt_SendSoundCmd
 
-LABEL_F8B3BD:
+DiskEvt_TypeIsNone:
 	ldw wa, 0x7D
 
-LABEL_F8B3C0:
+DiskEvt_PostModeEvent:
 	call UI_PostModeChangeEvent
-	jr LABEL_F8B3D5
+	jr DiskEvt_Return
 
-LABEL_F8B3C6:
+DiskEvt_TypeIsCard:
 	calr ResetProgressIndication
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
-LABEL_F8B3D1:
+DiskEvt_SendSoundCmd:
 	call SoundCtrl_SendCommand
 
-LABEL_F8B3D5:
+DiskEvt_Return:
 	inc 4, xsp
 	ret
 
-LABEL_F8B3D8:
+FileIO_DetectFileTypeAndPost:
 	cpdi16 34048, 0
-	jr ge, LABEL_F8B3EA
+	jr ge, DetectType_CheckMediaType
 	call GetDiskSizeInfo
 	extz hl
 	stda16 34048, xhl
 
-LABEL_F8B3EA:
+DetectType_CheckMediaType:
 	ldda16 xwa, 34048
 	cps wa, 1
-	jr z, LABEL_F8B425
+	jr z, DetectType_IsCardReset
 	cps wa, 0
-	jr z, LABEL_F8B41E
+	jr z, DetectType_IsNone
 	cps wa, 5
-	jr z, LABEL_F8B419
+	jr z, DetectType_IsPdFormat
 	cps wa, 2
-	jr z, LABEL_F8B407
+	jr z, DetectType_TypeIsFloppy
 	cps wa, 3
 	ret nz
 	ldw wa, 0x6C
 	jr UI_PostEventCommon
 
-LABEL_F8B407:
+DetectType_TypeIsFloppy:
 	call DetectFileType
 	cps hl, 0
-	jr ge, LABEL_F8B414
+	jr ge, DetectType_IsDocFormat
 	ldw wa, 0x6C
 	jr UI_PostEventCommon
 
-LABEL_F8B414:
+DetectType_IsDocFormat:
 	ldw wa, 0x6D
 	jr UI_PostEventCommon
 
-LABEL_F8B419:
+DetectType_IsPdFormat:
 	ldw wa, 0x6E
 	jr UI_PostEventCommon
 
-LABEL_F8B41E:
+DetectType_IsNone:
 	ldw wa, 0x7D
 
 UI_PostEventCommon:
 	jp UI_PostModeChangeEvent
 
-LABEL_F8B425:
+DetectType_IsCardReset:
 	calr ResetProgressIndication
 	stdi8 32578, 2
 	ldw wa, 0xEE
@@ -8004,90 +8004,90 @@ FileIO_GetDiskCapacity:
 	dec 2, xsp
 	ld (xsp), a
 	cpdi16 34048, 0
-	jr ge, LABEL_F8B44B
+	jr ge, DiskCap_CheckMediaType
 	call GetDiskSizeInfo
 	extz hl
 	stda16 34048, xhl
 
-LABEL_F8B44B:
+DiskCap_CheckMediaType:
 	ldda16 xwa, 34048
 	cps wa, 3
-	jr z, LABEL_F8B483
+	jr z, DiskCap_TypeIsFloppyOrHD
 	cps wa, 2
-	jr z, LABEL_F8B483
+	jr z, DiskCap_TypeIsFloppyOrHD
 	cps wa, 1
-	jr z, LABEL_F8B472
+	jr z, DiskCap_TypeIsCardReset
 	cps wa, 0
-	jr z, LABEL_F8B46D
+	jr z, DiskCap_TypeIsNone
 	cps wa, 5
-	jr nz, LABEL_F8B48B
+	jr nz, DiskCap_Return
 	stdi8 32578, 0
 	ldw wa, 0xEE
-	jr LABEL_F8B47D
+	jr DiskCap_SendSoundCmd
 
-LABEL_F8B46D:
+DiskCap_TypeIsNone:
 	ldw wa, 0x7D
-	jr LABEL_F8B487
+	jr DiskCap_PostModeEvent
 
-LABEL_F8B472:
+DiskCap_TypeIsCardReset:
 	calr ResetProgressIndication
 	stdi8 32578, 2
 	ldw wa, 0xEE
 
-LABEL_F8B47D:
+DiskCap_SendSoundCmd:
 	call SoundCtrl_SendCommand
-	jr LABEL_F8B48B
+	jr DiskCap_Return
 
-LABEL_F8B483:
+DiskCap_TypeIsFloppyOrHD:
 	ld a, (xsp)
 	extz wa
 
-LABEL_F8B487:
+DiskCap_PostModeEvent:
 	call UI_PostModeChangeEvent
 
-LABEL_F8B48B:
+DiskCap_Return:
 	inc 2, xsp
 	ret
 
 FileIO_ValidateSignedValue:
 	cps wa, 0
-	jr ge, LABEL_F8B4C9
+	jr ge, ValidateSigned_Positive
 	ld de, wa
 	res 15, de
 	cp de, 0xFF
-	jr ge, LABEL_F8B4A0
+	jr ge, ValidateSigned_LookupTable
 	ld l, a
 	ret
 
-LABEL_F8B4A0:
+ValidateSigned_LookupTable:
 	lds iy, 0
 	lda_24 xix, 0xea067c
 	lds de, 0
-	jr LABEL_F8B4AF
+	jr ValidateSigned_ScanLoop
 
-LABEL_F8B4AB:
+ValidateSigned_NextEntry:
 	inc 1, iy
 	inc 4, de
 
-LABEL_F8B4AF:
+ValidateSigned_ScanLoop:
 	st_dri3b C, 0x07, 0xF0, 0xE8
 	cp wa, (xhl)
-	jr z, LABEL_F8B4BE
+	jr z, ValidateSigned_FoundMatch
 	cpw (xhl), 0x0
-	jr lt, LABEL_F8B4AB
+	jr lt, ValidateSigned_NextEntry
 
-LABEL_F8B4BE:
+ValidateSigned_FoundMatch:
 	ld l, (xhl + 2)
 	cp l, 0xFF
 	ret c
 	ld l, c
 	ret
 
-LABEL_F8B4C9:
+ValidateSigned_Positive:
 	ldb l, 0x23
 	ret
 
-LABEL_F8B4CC:
+FileIO_ErrorCodeByteBlock:
 	.byte 0x1d, 0x97, 0x07, 0xef, 0xdb, 0xd8, 0xb0, 0xf6
 	.byte 0xc1, 0x7d, 0xc0, 0x3f, 0x41, 0xb0, 0xfe, 0xf1
 	.byte 0x7f, 0xc0, 0xc8, 0xb0, 0xf6, 0xc1, 0x36, 0x8d
@@ -8133,40 +8133,40 @@ LABEL_F8B4CC:
 	.byte 0xf8, 0xcf, 0xd8, 0xb0, 0xf6, 0x1b, 0x1c, 0x68
 	.byte 0xf8
 
-LABEL_F8B615:
+FileIO_MedleyDispatchByMode:
 	ldda8 a, 36150
 	cp a, 0x79
-	jr nz, LABEL_F8B62D
+	jr nz, MedleyDisp_ModeSmf
 	lds32 xwa, 0
 	ld xbc, 0x1C00017
 	ld xde, 0xD
 	jrl FmmIntMedleyFunc
 
-LABEL_F8B62D:
+MedleyDisp_ModeSmf:
 	cp a, 0x6C
-	jr nz, LABEL_F8B641
+	jr nz, MedleyDisp_ModeDoc
 	lds32 xwa, 0
 	ld xbc, 0x1C00017
 	ld xde, 0xD
 	jrl FmmSmfMedleyFunc
 
-LABEL_F8B641:
+MedleyDisp_ModeDoc:
 	cp a, 0x6D
-	jr nz, LABEL_F8B656
+	jr nz, MedleyDisp_ModePd
 	lds32 xwa, 0
 	ld xbc, 0x1C00017
 	ld xde, 0xD
 	jp FmmDocMedleyFunc
 
-LABEL_F8B656:
+MedleyDisp_ModePd:
 	cp a, 0x6E
-	jr nz, LABEL_F8B66A
+	jr nz, MedleyDisp_ModeDisk
 	lds32 xwa, 0
 	ld xbc, 0x1C00017
 	ld xde, 0xD
 	jrl FmmPdMedleyFunc
 
-LABEL_F8B66A:
+MedleyDisp_ModeDisk:
 	cp a, 0x77
 	ret nz
 	lds32 xwa, 0
@@ -8175,22 +8175,22 @@ LABEL_F8B66A:
 	calr FmmDiskMedleySelectFunc
 	ret
 
-LABEL_F8B67F:
+NumToAscii_FormatNumber:
 	push xiz
 	lds ix, 0
 	cp c, 0x10
-	jr ule, LABEL_F8B68B
+	jr ule, NumToAscii_ClampMin
 	ldb c, 0x10
-	jr LABEL_F8B68F
+	jr NumToAscii_PadLeading
 
-LABEL_F8B68B:
+NumToAscii_ClampMin:
 	cps c, 5
-	jr ule, LABEL_F8B6A4
+	jr ule, NumToAscii_StartDigits
 
-LABEL_F8B68F:
+NumToAscii_PadLeading:
 	ldada xde, 32586
 
-LABEL_F8B693:
+NumToAscii_PadLoop:
 	ld hl, ix
 	inc 1, ix
 	extz xhl
@@ -8198,12 +8198,12 @@ LABEL_F8B693:
 	ld (xhl), 0x20
 	dec 1, c
 	cps c, 5
-	jr ugt, LABEL_F8B693
+	jr ugt, NumToAscii_PadLoop
 
-LABEL_F8B6A4:
+NumToAscii_StartDigits:
 	ld hl, ix
 	cp wa, 0x2710
-	jr c, LABEL_F8B6D0
+	jr c, NumToAscii_NoTenThousands
 	ld iy, wa
 	extz xiy
 	div iy, 0x2710
@@ -8217,11 +8217,11 @@ LABEL_F8B6A4:
 	ld (xiz), e
 	mul iy, 0x2710
 	sub wa, iy
-	jr LABEL_F8B6E5
+	jr NumToAscii_ThousandsDigit
 
-LABEL_F8B6D0:
+NumToAscii_NoTenThousands:
 	cps c, 5
-	jr c, LABEL_F8B6E5
+	jr c, NumToAscii_ThousandsDigit
 	ld hl, ix
 	inc 1, ix
 	ldada xde, 32586
@@ -8230,9 +8230,9 @@ LABEL_F8B6D0:
 	ld (xhl), 0x20
 	ld hl, ix
 
-LABEL_F8B6E5:
+NumToAscii_ThousandsDigit:
 	cp wa, 0x3E8
-	jr c, LABEL_F8B70F
+	jr c, NumToAscii_NoThousands
 	ld iy, wa
 	extz xiy
 	div iy, 0x3E8
@@ -8248,9 +8248,9 @@ LABEL_F8B6E5:
 	sub wa, iy
 	jr NumToAscii_HundredsDigit
 
-LABEL_F8B70F:
+NumToAscii_NoThousands:
 	cp ix, hl
-	jr z, LABEL_F8B724
+	jr z, NumToAscii_PadThousands
 	ld iy, ix
 	inc 1, ix
 	ldada xde, 32586
@@ -8259,7 +8259,7 @@ LABEL_F8B70F:
 	ld (xiy), 0x30
 	jr NumToAscii_HundredsDigit
 
-LABEL_F8B724:
+NumToAscii_PadThousands:
 	cps c, 4
 	jr c, NumToAscii_HundredsDigit
 	ld hl, ix
@@ -8272,7 +8272,7 @@ LABEL_F8B724:
 
 NumToAscii_HundredsDigit:
 	cp wa, 0x64
-	jr c, LABEL_F8B763
+	jr c, NumToAscii_NoHundreds
 	ld iy, wa
 	extz xiy
 	div iy, 0x64
@@ -8288,9 +8288,9 @@ NumToAscii_HundredsDigit:
 	sub wa, iy
 	jr NumToAscii_TensDigit
 
-LABEL_F8B763:
+NumToAscii_NoHundreds:
 	cp ix, hl
-	jr z, LABEL_F8B778
+	jr z, NumToAscii_PadHundreds
 	ld iy, ix
 	inc 1, ix
 	ldada xde, 32586
@@ -8299,7 +8299,7 @@ LABEL_F8B763:
 	ld (xiy), 0x30
 	jr NumToAscii_TensDigit
 
-LABEL_F8B778:
+NumToAscii_PadHundreds:
 	cps c, 3
 	jr c, NumToAscii_TensDigit
 	ld hl, ix
@@ -8312,7 +8312,7 @@ LABEL_F8B778:
 
 NumToAscii_TensDigit:
 	cp wa, 0xA
-	jr c, LABEL_F8B7B7
+	jr c, NumToAscii_NoTens
 	ld iy, wa
 	extz xiy
 	div iy, 0xA
@@ -8328,10 +8328,10 @@ NumToAscii_TensDigit:
 	sub wa, iy
 	jr NumToAscii_OnesDigitAndFinish
 
-LABEL_F8B7B7:
+NumToAscii_NoTens:
 	ldada xde, 32586
 	cp ix, hl
-	jr z, LABEL_F8B7CC
+	jr z, NumToAscii_PadTens
 	ld bc, ix
 	inc 1, ix
 	extz xbc
@@ -8339,7 +8339,7 @@ LABEL_F8B7B7:
 	ld (xbc), 0x30
 	jr NumToAscii_OnesDigitAndFinish
 
-LABEL_F8B7CC:
+NumToAscii_PadTens:
 	cps c, 2
 	jr c, NumToAscii_OnesDigitAndFinish
 	ld bc, ix

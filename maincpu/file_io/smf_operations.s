@@ -322,7 +322,7 @@ SeqToSong_BuildEntry:
 	inc 1, a
 	extz wa
 	lds bc, 2
-	calr LABEL_F8B67F
+	calr NumToAscii_FormatNumber
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_BuildFilePath
@@ -355,7 +355,7 @@ SeqFromSong_BuildEntry:
 	inc 1, a
 	extz wa
 	lds bc, 2
-	calr LABEL_F8B67F
+	calr NumToAscii_FormatNumber
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_BuildFilePath
@@ -1279,7 +1279,7 @@ DispSeqList_LoopBody:
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
-	call LABEL_F8B13D
+	call FileIO_GetWallpaperEntry
 	ld xbc, xhl
 	ld wa, iz
 	sll wa, 5

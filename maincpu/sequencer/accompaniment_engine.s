@@ -14005,7 +14005,7 @@ AccPatch_CallParamLookup:
 	push_sd16b 0x2F, 0x34
 	push_sd16b 0x30, 0x34
 	push_sd16b 0x31, 0x34
-	call LABEL_F532FE
+	call RhythmPart_CopyData_Tramp
 	popb_dd16 0x31, 0x34
 	popb_dd16 0x30, 0x34
 	popb_dd16 0x2F, 0x34
@@ -30891,7 +30891,7 @@ StylCnvCnvt_OK_Select_WriteStyle:
 	extz xbc
 	add xbc, xwa
 	ld xwa, xbc
-	call LABEL_F8AF8A
+	call FileIO_NormalizePath
 
 StylCnvCnvt_OK_Select_Finalize:
 	sti8_24 0x0ffc00, 0xff
@@ -31565,7 +31565,7 @@ StylCnv_Type3_SearchLoop:
 	ldda32 xwa, 18568
 	cp xwa, 0x0
 	jr lt, StylCnv_Type3_SearchNext
-	call LABEL_F8AF1D
+	call FileIO_ExtractBasename
 	push xhl
 	lda xwa, (xsp + 22)
 	push xwa

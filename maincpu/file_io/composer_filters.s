@@ -546,7 +546,7 @@ LoadFilter_OpLoad:
 	call GetCurrentFileIndex
 	extz hl
 	ld wa, hl
-	calr LABEL_F8B337
+	calr FileIO_MidiOutSendByte
 	lds wa, 0
 	calr InitializeOperationState
 	call FileIO_ParseDirectoryEntry

@@ -52,7 +52,7 @@ WPLoad_DispatchState:
 	jr z, WPLoad_HandleCancel
 	cpdi16 34058, 0
 	jr ge, WPLoad_ContinueWait
-	call LABEL_F8B16F
+	call FileIO_InitWallpaperNav
 	stda16 34058, xhl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
@@ -126,7 +126,7 @@ WPLoad_HandleAbort:
 WPLoad_HandleSelection:
 	ld xwa, (xsp + 6)
 	stda32 33200, xwa
-	call LABEL_F8B015
+	call FileIO_GetCurrentWallpaperIndex
 	stda16 33204, xhl
 	cps hl, 0
 	jr ge, WPLoad_Selection_Positive
@@ -260,7 +260,7 @@ WPLoad_UpdateDisplay:
 	cp (xsp + 4), bc
 	jrl z, WPLoad_SendState
 	ld wa, bc
-	call LABEL_F8B0F1
+	call FileIO_SelectWallpaperByIndex
 	ldda16 xwa, 33204
 	exts xwa
 	divs wa, 0xA

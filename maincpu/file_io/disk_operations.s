@@ -609,7 +609,7 @@ UtilityTtlJgFunc:
 	jr nz, UtilTtlJg_Return
 	ldw wa, 0x7B
 	ldw bc, 0x7C
-	calr LABEL_F8B36E
+	calr FileIO_DiskEventDispatch
 
 UtilTtlJg_Return:
 	lds32 xhl, 0
@@ -1054,7 +1054,7 @@ DiskInfo_RenderStrings:
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 4)
 	lds bc, 4
-	calr LABEL_F8B67F
+	calr NumToAscii_FormatNumber
 	ld xbc, xhl
 	ld xwa, (xsp + 12)
 	call FileIO_BuildFilePath
@@ -1065,7 +1065,7 @@ DiskInfo_RenderStrings:
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
 	lds bc, 3
-	calr LABEL_F8B67F
+	calr NumToAscii_FormatNumber
 	ld xbc, xhl
 	ld xwa, (xsp + 12)
 	call FileIO_BuildFilePath

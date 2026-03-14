@@ -278,7 +278,7 @@ LABEL_F20629:
 	jr DispatchHandler_ClearActiveFlag
 
 Part_ValidateCallAndClear:
-	call LABEL_F8B615
+	call FileIO_MedleyDispatchByMode
 
 DispatchHandler_ClearActiveFlag:
 	anddi8 3381, 254
@@ -2930,7 +2930,7 @@ SeqStepModeFunc:
 	push xhl
 	push xix
 	push xiz
-	call ChannelFilter_InitAndApply
+	call LABEL_EF5F56
 	pop xiz
 	pop xix
 	pop xhl
@@ -2943,7 +2943,7 @@ DpSmfLyr_CaseD:
 	push xhl
 	push xix
 	push xiz
-	call Display_LoadAndSetIndicator
+	call LABEL_EF5FBE
 	pop xiz
 	pop xix
 	pop xhl
@@ -2991,7 +2991,7 @@ LABEL_F2227B:
 	push xhl
 	push xix
 	push xiz
-	call Display_InitScreenLayout
+	call LABEL_EF5FFC
 	pop xiz
 	pop xix
 	pop xhl
@@ -3002,7 +3002,7 @@ LABEL_F22288:
 	push xhl
 	push xix
 	push xiz
-	call Display_ConditionalCompare
+	call LABEL_EF6038
 	pop xiz
 	pop xix
 	pop xhl
@@ -3013,7 +3013,7 @@ LABEL_F22295:
 	push xhl
 	push xix
 	push xiz
-	call Display_PollAudioAndUpdate
+	call LABEL_EF604C
 	pop xiz
 	pop xix
 	pop xhl
@@ -3025,7 +3025,7 @@ SqTrSel_CaseA:
 	push xhl
 	push xix
 	push xiz
-	call Display_NullHandler
+	call LABEL_EF6084
 	pop xiz
 	pop xix
 	pop xhl
