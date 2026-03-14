@@ -8785,19 +8785,19 @@ PsLabelBoxProc:
 	st_dri3l XDE, 0xFD, 0x10, 0x01
 	st_dri3l XWA, 0xFD, 0x14, 0x01
 	cp xbc, 0x1E0003A
-	jrl z, LABEL_F7ED3E
+	jrl z, PsLabel_GetText
 	cp xbc, 0x1E00087
-	jrl z, LABEL_F7ECED
+	jrl z, PsLabel_HandleWidget2
 	cp xbc, 0x1E0004D
-	jrl z, LABEL_F7EC9F
+	jrl z, PsLabel_HandleWidget1
 	cp xbc, 0x1C0001B
-	jrl z, LABEL_F7EC47
+	jrl z, PsLabel_Notify
 	cp xbc, 0x1C0000E
-	jrl z, LABEL_F7EC2A
+	jrl z, PsLabel_Select
 	cp xbc, 0x1C0000F
-	jr z, LABEL_F7EBA8
+	jr z, PsLabel_Confirm
 	cp xbc, 0x1C0000D
-	jrl nz, LABEL_F7ED5B
+	jrl nz, PsLabel_ForwardToBase
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	call InheritedProc
@@ -8810,7 +8810,7 @@ PsLabelBoxProc:
 	lds32 xde, 0
 	jrl PsLabelBox_SendEvent_Continue
 
-LABEL_F7EBA8:
+PsLabel_Confirm:
 	st_dri3b A, 0xFD, 0x08, 0x01
 	ld_sril XWA, (xsp + 0x0114)
 	call GetClientBox
@@ -8823,22 +8823,22 @@ LABEL_F7EBA8:
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0110)
 	or xwa, xwa
-	jr nz, LABEL_F7EBF2
+	jr nz, PsLabel_CopyDataStr
 	ld_sril XWA, (xsp + 0x0114)
 	ld xbc, 0x1E0003A
 	call SendEvent
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_F7EBFF
+	jr nz, PsLabel_DrawReverse
 	jrl LswMaster_ReturnZeroJmp
 
-LABEL_F7EBF2:
+PsLabel_CopyDataStr:
 	ld_sril XWA, (xsp + 0x0110)
 	push xwa
 	push xde
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7EBFF:
+PsLabel_DrawReverse:
 	st_dri3b C, 0xFD, 0x08, 0x01
 	st_dri3b A, 0xFD, 0x04, 0x01
 	lda xde, (xsp + 4)
@@ -8855,7 +8855,7 @@ LABEL_F7EBFF:
 	call DrawStringReverse
 	jrl LswMaster_ReturnZeroJmp
 
-LABEL_F7EC2A:
+PsLabel_Select:
 	ld_sril XWA, (xsp + 0x0114)
 	call GetViewInstance
 	ld xwa, (xhl + 40)
@@ -8865,7 +8865,7 @@ LABEL_F7EC2A:
 	ld xbc, 0x1E0004E
 	jrl PsLabelBox_SendEvent_Continue
 
-LABEL_F7EC47:
+PsLabel_Notify:
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	call InheritedProc
@@ -8878,13 +8878,13 @@ LABEL_F7EC47:
 	jrl nz, LswMaster_ReturnZeroJmp
 	ld xwa, (xiz + 40)
 	cpw (xwa), 0x0
-	jr z, LABEL_F7EC86
+	jr z, PsLabel_CheckSecondWidget
 	ld_sril XWA, (xsp + 0x0114)
 	ld xbc, 0x1E0004D
 	lds32 xde, 0
 	call SendEvent
 
-LABEL_F7EC86:
+PsLabel_CheckSecondWidget:
 	ld xwa, (xiz + 44)
 	cpw (xwa), 0x0
 	jrl z, LswMaster_ReturnZeroJmp
@@ -8893,7 +8893,7 @@ LABEL_F7EC86:
 	lds32 xde, 0
 	jrl PsLabelBox_SendEvent_Continue
 
-LABEL_F7EC9F:
+PsLabel_HandleWidget1:
 	ld_sril XWA, (xsp + 0x0114)
 	call GetViewInstance
 	ld xiz, xhl
@@ -8904,14 +8904,14 @@ LABEL_F7EC9F:
 	jrl z, LswMaster_ReturnZeroJmp
 	ld_sril XWA, (xsp + 0x0110)
 	cps wa, 1
-	jr nz, LABEL_F7ECD5
+	jr nz, PsLabel_StoreWidget1
 	ld de, (xiz + 26)
 	exts xde
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001B
 	call SendEvent
 
-LABEL_F7ECD5:
+PsLabel_StoreWidget1:
 	ld xbc, (xiz + 40)
 	ld_sril XWA, (xsp + 0x0110)
 	ld (xbc), wa
@@ -8920,7 +8920,7 @@ LABEL_F7ECD5:
 	lds32 xde, 0
 	jr PsLabelBox_SendEvent_Continue
 
-LABEL_F7ECED:
+PsLabel_HandleWidget2:
 	ld_sril XWA, (xsp + 0x0114)
 	call GetViewInstance
 	ld xiz, xhl
@@ -8931,14 +8931,14 @@ LABEL_F7ECED:
 	jr z, LswMaster_ReturnZeroJmp
 	ld_sril XWA, (xsp + 0x0110)
 	cps wa, 1
-	jr nz, LABEL_F7ED22
+	jr nz, PsLabel_StoreWidget2
 	ld de, (xiz + 26)
 	exts xde
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001B
 	call SendEvent
 
-LABEL_F7ED22:
+PsLabel_StoreWidget2:
 	ld xbc, (xiz + 44)
 	ld_sril XWA, (xsp + 0x0110)
 	ld (xbc), wa
@@ -8950,7 +8950,7 @@ PsLabelBox_SendEvent_Continue:
 	call SendEvent
 	jr LswMaster_ReturnZeroJmp
 
-LABEL_F7ED3E:
+PsLabel_GetText:
 	ld_sril XWA, (xsp + 0x0114)
 	call GetViewInstance
 	ld xwa, (xhl + 28)
@@ -8962,14 +8962,14 @@ LABEL_F7ED3E:
 
 LswMaster_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F7ED69
+	jr PsLabel_Epilogue
 
-LABEL_F7ED5B:
+PsLabel_ForwardToBase:
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	call InheritedProc
 
-LABEL_F7ED69:
+PsLabel_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x14, 0x01
 	ret
@@ -8995,7 +8995,7 @@ LswMasterTuning:
 	cp xde, 0x1E0003E
 	jrl z, StringOp_ReturnOne
 	cp xde, 0x1E00041
-	jrl z, LABEL_F7EE52
+	jrl z, LswTuning_StepSize
 	cp xde, 0x1E00040
 	jrl z, StringOp_ReturnZero
 	cp xde, 0x1E00042
@@ -9005,7 +9005,7 @@ LswMasterTuning:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 4)
 
-LABEL_F7EDDD:
+LswTuning_SearchLoop:
 	ld wa, iz
 	extz xwa
 	ld xhl, xde
@@ -9013,7 +9013,7 @@ LABEL_F7EDDD:
 	ld a, (xhl)
 	extz wa
 	cp wa, bc
-	jr nz, LABEL_F7EE34
+	jr nz, LswTuning_SearchNext
 	ld wa, iz
 	extz xwa
 	div wa, 0x3
@@ -9031,26 +9031,26 @@ LABEL_F7EDDD:
 	ldto_werp BC, 0xE2
 	lda xwa, (xsp + 6)
 	cps bc, 2
-	jr z, LABEL_F7EE2F
+	jr z, LswTuning_Octave6
 	cps bc, 1
-	jr z, LABEL_F7EE2A
+	jr z, LswTuning_Octave3
 	cps bc, 0
 	jr nz, StringOp_CopyCall
 	ld (xwa), 0x30
 	jr StringOp_CopyCall
 
-LABEL_F7EE2A:
+LswTuning_Octave3:
 	ld (xwa), 0x33
 	jr StringOp_CopyCall
 
-LABEL_F7EE2F:
+LswTuning_Octave6:
 	ld (xwa), 0x36
 	jr StringOp_CopyCall
 
-LABEL_F7EE34:
+LswTuning_SearchNext:
 	inc 1, iz
 	cp iz, 0x4E
-	jr ule, LABEL_F7EDDD
+	jr ule, LswTuning_SearchLoop
 
 StringOp_CopyCall:
 	lda xwa, (xsp + 2)
@@ -9063,7 +9063,7 @@ StringOp_CopyCall:
 	ld xhl, (xsp + 12)
 	jr StringOp_ReturnPoint
 
-LABEL_F7EE52:
+LswTuning_StepSize:
 	lds32 xhl, 3
 	jr StringOp_ReturnPoint
 
@@ -9119,19 +9119,19 @@ IvSdscltyp2Proc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1E0003A
-	jrl z, LABEL_F7F061
+	jrl z, Sdscltyp2_GetText
 	cp xiz, 0x1C0000D
-	jrl z, LABEL_F7F045
+	jrl z, Sdscltyp2_Paint
 	cp xiz, 0x1C0001A
-	jrl z, LABEL_F7EFD3
+	jrl z, Sdscltyp2_ScrollUp
 	cp xiz, 0x1C00018
-	jrl z, LABEL_F7EFD3
+	jrl z, Sdscltyp2_ScrollUp
 	cp xiz, 0x1C00019
-	jr z, LABEL_F7EF63
+	jr z, Sdscltyp2_ScrollDown
 	cp xiz, 0x1C00017
-	jr z, LABEL_F7EF63
+	jr z, Sdscltyp2_ScrollDown
 	cp xiz, 0x1C00001
-	jrl nz, LABEL_F7F075
+	jrl nz, Sdscltyp2_ForwardToBase
 	ld xwa, 0x50011
 	ld xbc, 0x1E00051
 	lds32 xde, 0
@@ -9153,7 +9153,7 @@ IvSdscltyp2Proc:
 	call InheritedProc
 	jrl IvSdscltyp2_ReturnZeroJmp
 
-LABEL_F7EF63:
+Sdscltyp2_ScrollDown:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -9163,7 +9163,7 @@ LABEL_F7EF63:
 	jrl nz, IvSdscltyp2_ReturnZeroJmp
 	ld16_24 xwa, 0x02478e
 	cp wa, 0xB
-	jr ge, LABEL_F7EFC6
+	jr ge, Sdscltyp2_SetAutoIncDown
 	inc 1, wa
 	st16_24 0x02478e, xwa
 	ld xwa, 0x50011
@@ -9182,13 +9182,13 @@ LABEL_F7EF63:
 	lds32 xde, 1
 	call SendEvent
 
-LABEL_F7EFC6:
+Sdscltyp2_SetAutoIncDown:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1C00019
 	ld xde, (xsp + 4)
-	jr LABEL_F7F03F
+	jr Sdscltyp2_SetAutoInc
 
-LABEL_F7EFD3:
+Sdscltyp2_ScrollUp:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -9198,7 +9198,7 @@ LABEL_F7EFD3:
 	jrl nz, IvSdscltyp2_ReturnZeroJmp
 	ld16_24 xwa, 0x02478e
 	cps wa, 0
-	jr le, LABEL_F7F034
+	jr le, Sdscltyp2_SetAutoIncUp
 	dec 1, wa
 	st16_24 0x02478e, xwa
 	ld xwa, 0x50011
@@ -9217,16 +9217,16 @@ LABEL_F7EFD3:
 	lds32 xde, 1
 	call SendEvent
 
-LABEL_F7F034:
+Sdscltyp2_SetAutoIncUp:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1C0001A
 	ld xde, (xsp + 4)
 
-LABEL_F7F03F:
+Sdscltyp2_SetAutoInc:
 	call SetAutoInc
 	jr IvSdscltyp2_ReturnZeroJmp
 
-LABEL_F7F045:
+Sdscltyp2_Paint:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -9237,7 +9237,7 @@ LABEL_F7F045:
 	call SendEvent
 	jr IvSdscltyp2_ReturnZeroJmp
 
-LABEL_F7F061:
+Sdscltyp2_GetText:
 	pushw 0xE9
 	pushw 0xDBB0
 	ld xwa, (xsp + 8)
@@ -9247,15 +9247,15 @@ LABEL_F7F061:
 
 IvSdscltyp2_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F7F081
+	jr Sdscltyp2_Epilogue
 
-LABEL_F7F075:
+Sdscltyp2_ForwardToBase:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
 
-LABEL_F7F081:
+Sdscltyp2_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -9266,53 +9266,53 @@ LswScalingType:
 	ld xiz, xde
 	ld (xsp + 4), xwa
 	cp xbc, 0x1E00083
-	jr z, LABEL_F7F102
+	jr z, LswScaleType_ReturnZero
 	cp xbc, 0x1E0003F
-	jr z, LABEL_F7F0FE
+	jr z, LswScaleType_ReturnOne
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7F0FE
+	jr z, LswScaleType_ReturnOne
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7F0FA
+	jr z, LswScaleType_StepSize
 	cp xbc, 0x1E00040
-	jr z, LABEL_F7F0F3
+	jr z, LswScaleType_SubParam
 	cp xbc, 0x1E00042
-	jr nz, LABEL_F7F102
+	jr nz, LswScaleType_ReturnZero
 	ld bc, (xiz + 4)
 	ld xwa, 0xE9DBB6
 	calr SdpartLookupPartId
 	ld xbc, (xiz + 8)
 	cp hl, 0xFFFF
-	jr z, LABEL_F7F0E1
+	jr z, LswScaleType_StrDefault
 	sla hl, 2
 	lda_24 xwa, 0xe9dbd6
 	ld_sril3 XWA, 0x07, 0xE0, 0xEC
 	push xwa
-	jr LABEL_F7F0E7
+	jr LswScaleType_StrCopyReturn
 
-LABEL_F7F0E1:
+LswScaleType_StrDefault:
 	pushw 0xE9
 	pushw 0xDD08
 
-LABEL_F7F0E7:
+LswScaleType_StrCopyReturn:
 	push xbc
 	call Strcpy
 	inc 8, xsp
 	ld xhl, (xsp + 4)
 	jr LswScaleType_PopIzSkip4Ret
 
-LABEL_F7F0F3:
+LswScaleType_SubParam:
 	ld xhl, 0x4281
 	jr LswScaleType_PopIzSkip4Ret
 
-LABEL_F7F0FA:
+LswScaleType_StepSize:
 	lds32 xhl, 3
 	jr LswScaleType_PopIzSkip4Ret
 
-LABEL_F7F0FE:
+LswScaleType_ReturnOne:
 	lds32 xhl, 1
 	jr LswScaleType_PopIzSkip4Ret
 
-LABEL_F7F102:
+LswScaleType_ReturnZero:
 	lds32 xhl, 0
 
 LswScaleType_PopIzSkip4Ret:
@@ -9324,17 +9324,17 @@ LswScalingShift:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E00083
-	jr z, LABEL_F7F169
+	jr z, LswScaleShift_ReturnZero
 	cp xbc, 0x1E0003F
-	jr z, LABEL_F7F165
+	jr z, LswScaleShift_ReturnOne
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7F165
+	jr z, LswScaleShift_ReturnOne
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7F161
+	jr z, LswScaleShift_StepSize
 	cp xbc, 0x1E00040
-	jr z, LABEL_F7F15A
+	jr z, LswScaleShift_SubParam
 	cp xbc, 0x1E00042
-	jr nz, LABEL_F7F169
+	jr nz, LswScaleShift_ReturnZero
 	ld wa, (xde + 4)
 	sla wa, 2
 	lda_24 xbc, 0xe9dd16
@@ -9347,19 +9347,19 @@ LswScalingShift:
 	ld xhl, xiz
 	jr LswScaleSharp_PopIzRet
 
-LABEL_F7F15A:
+LswScaleShift_SubParam:
 	ld xhl, 0x4282
 	jr LswScaleSharp_PopIzRet
 
-LABEL_F7F161:
+LswScaleShift_StepSize:
 	lds32 xhl, 3
 	jr LswScaleSharp_PopIzRet
 
-LABEL_F7F165:
+LswScaleShift_ReturnOne:
 	lds32 xhl, 1
 	jr LswScaleSharp_PopIzRet
 
-LABEL_F7F169:
+LswScaleShift_ReturnZero:
 	lds32 xhl, 0
 
 LswScaleSharp_PopIzRet:
@@ -9370,17 +9370,17 @@ LswScalingShift2:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E00083
-	jr z, LABEL_F7F1CE
+	jr z, LswScaleShift2_ReturnZero
 	cp xbc, 0x1E0003F
-	jr z, LABEL_F7F1CA
+	jr z, LswScaleShift2_ReturnOne
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7F1CA
+	jr z, LswScaleShift2_ReturnOne
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7F1C6
+	jr z, LswScaleShift2_StepSize
 	cp xbc, 0x1E00040
-	jr z, LABEL_F7F1BF
+	jr z, LswScaleShift2_SubParam
 	cp xbc, 0x1E00042
-	jr nz, LABEL_F7F1CE
+	jr nz, LswScaleShift2_ReturnZero
 	ld wa, (xde + 4)
 	sla wa, 2
 	lda_24 xbc, 0xe9dd76
@@ -9393,19 +9393,19 @@ LswScalingShift2:
 	ld xhl, xiz
 	jr LswScaleSharp_PopIzRet2
 
-LABEL_F7F1BF:
+LswScaleShift2_SubParam:
 	ld xhl, 0x4282
 	jr LswScaleSharp_PopIzRet2
 
-LABEL_F7F1C6:
+LswScaleShift2_StepSize:
 	lds32 xhl, 3
 	jr LswScaleSharp_PopIzRet2
 
-LABEL_F7F1CA:
+LswScaleShift2_ReturnOne:
 	lds32 xhl, 1
 	jr LswScaleSharp_PopIzRet2
 
-LABEL_F7F1CE:
+LswScaleShift2_ReturnZero:
 	lds32 xhl, 0
 
 LswScaleSharp_PopIzRet2:
@@ -9416,17 +9416,17 @@ LswScalingMode:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E00083
-	jr z, LABEL_F7F233
+	jr z, LswScaleMode_ReturnZero
 	cp xbc, 0x1E0003F
-	jr z, LABEL_F7F22F
+	jr z, LswScaleMode_ReturnOne
 	cp xbc, 0x1E0003E
-	jr z, LABEL_F7F22F
+	jr z, LswScaleMode_ReturnOne
 	cp xbc, 0x1E00041
-	jr z, LABEL_F7F22B
+	jr z, LswScaleMode_StepSize
 	cp xbc, 0x1E00040
-	jr z, LABEL_F7F224
+	jr z, LswScaleMode_SubParam
 	cp xbc, 0x1E00042
-	jr nz, LABEL_F7F233
+	jr nz, LswScaleMode_ReturnZero
 	ld wa, (xde + 4)
 	sla wa, 2
 	lda_24 xbc, 0xe9de1e
@@ -9439,19 +9439,19 @@ LswScalingMode:
 	ld xhl, xiz
 	jr LswScaleMode_PopIzRet
 
-LABEL_F7F224:
+LswScaleMode_SubParam:
 	ld xhl, 0x4280
 	jr LswScaleMode_PopIzRet
 
-LABEL_F7F22B:
+LswScaleMode_StepSize:
 	lds32 xhl, 3
 	jr LswScaleMode_PopIzRet
 
-LABEL_F7F22F:
+LswScaleMode_ReturnOne:
 	lds32 xhl, 1
 	jr LswScaleMode_PopIzRet
 
-LABEL_F7F233:
+LswScaleMode_ReturnZero:
 	lds32 xhl, 0
 
 LswScaleMode_PopIzRet:
@@ -9464,21 +9464,21 @@ LswScalingKeyX:
 	ld xiz, xde
 	ld (xsp + 4), xwa
 	cp xbc, 0x1E000B9
-	jrl z, LABEL_F7F31F
+	jrl z, LswScaleKeyX_ReturnRange
 	cp xbc, 0x1E000B8
-	jrl z, LABEL_F7F31B
+	jrl z, LswScaleKeyX_ReturnOne
 	cp xbc, 0x1E00083
-	jrl z, LABEL_F7F30F
+	jrl z, LswScaleKeyX_ReturnZero
 	cp xbc, 0x1E0003F
-	jrl z, LABEL_F7F31B
+	jrl z, LswScaleKeyX_ReturnOne
 	cp xbc, 0x1E0003E
-	jrl z, LABEL_F7F317
+	jrl z, LswScaleKeyX_ReturnFour
 	cp xbc, 0x1E00041
-	jrl z, LABEL_F7F313
+	jrl z, LswScaleKeyX_StepSize
 	cp xbc, 0x1E00040
-	jr z, LABEL_F7F2CF
+	jr z, LswScaleKeyX_FindFocus
 	cp xbc, 0x1E00042
-	jrl nz, LABEL_F7F30F
+	jrl nz, LswScaleKeyX_ReturnZero
 	ld hl, (xiz + 4)
 	exts xhl
 	ld xwa, xhl
@@ -9489,31 +9489,31 @@ LswScalingKeyX:
 	sub xhl, 0x64
 	ld xwa, (xiz + 8)
 	or xhl, xhl
-	jr z, LABEL_F7F2BD
+	jr z, LswScaleKeyX_StrZero
 	push xhl
 	pushw 0xE9
 	pushw 0xDE32
 	push xwa
 	call Audio_SendCommand
 	lda xsp, (xsp + 12)
-	jr LABEL_F7F2CA
+	jr LswScaleKeyX_LoadReturn
 
-LABEL_F7F2BD:
+LswScaleKeyX_StrZero:
 	pushw 0xE9
 	pushw 0xDE38
 	push xwa
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7F2CA:
+LswScaleKeyX_LoadReturn:
 	ld xhl, (xsp + 4)
 	jr LswEnd_PopIzSkip4Ret
 
-LABEL_F7F2CF:
+LswScaleKeyX_FindFocus:
 	lds iz, 0
-	jr LABEL_F7F2F7
+	jr LswScaleKeyX_LoopCheck
 
-LABEL_F7F2D3:
+LswScaleKeyX_LoopBody:
 	call GetFocusObject
 	ld wa, iz
 	extz xwa
@@ -9522,15 +9522,15 @@ LABEL_F7F2D3:
 	ld xde, 0xE9DB7C
 	add xde, xbc
 	cp (xde), xhl
-	jr nz, LABEL_F7F2F5
+	jr nz, LswScaleKeyX_LoopNext
 	add xwa, 0x4283
 	ld xhl, xwa
 	jr LswEnd_PopIzSkip4Ret
 
-LABEL_F7F2F5:
+LswScaleKeyX_LoopNext:
 	inc 1, iz
 
-LABEL_F7F2F7:
+LswScaleKeyX_LoopCheck:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
@@ -9538,25 +9538,25 @@ LABEL_F7F2F7:
 	add xbc, xwa
 	ld xwa, (xbc)
 	cp xwa, 0xFFFFFFFF
-	jr nz, LABEL_F7F2D3
+	jr nz, LswScaleKeyX_LoopBody
 
-LABEL_F7F30F:
+LswScaleKeyX_ReturnZero:
 	lds32 xhl, 0
 	jr LswEnd_PopIzSkip4Ret
 
-LABEL_F7F313:
+LswScaleKeyX_StepSize:
 	lds32 xhl, 3
 	jr LswEnd_PopIzSkip4Ret
 
-LABEL_F7F317:
+LswScaleKeyX_ReturnFour:
 	lds32 xhl, 4
 	jr LswEnd_PopIzSkip4Ret
 
-LABEL_F7F31B:
+LswScaleKeyX_ReturnOne:
 	lds32 xhl, 1
 	jr LswEnd_PopIzSkip4Ret
 
-LABEL_F7F31F:
+LswScaleKeyX_ReturnRange:
 	ld xhl, 0x80
 
 LswEnd_PopIzSkip4Ret:
@@ -9569,18 +9569,18 @@ IvSoftverProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E0003A
-	jrl z, LABEL_F7F40E
+	jrl z, Softver_GetText
 	cp xbc, 0x1C0000D
-	jrl z, LABEL_F7F3F9
+	jrl z, Softver_Paint
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F7F359
+	jr z, Softver_ShowHide
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F7F359
+	jr z, Softver_ShowHide
 	ld xwa, xiz
 	call InheritedProc
-	jrl LABEL_F7F41D
+	jrl Softver_Epilogue
 
-LABEL_F7F359:
+Softver_ShowHide:
 	ld xwa, xiz
 	call InheritedProc
 	push_sd24w 0x30, 0x79, 0xEB
@@ -9629,30 +9629,30 @@ LABEL_F7F359:
 	lda xde, (xsp + 4)
 	ld xwa, 0xF00004
 	ld xbc, 0x1C0000F
-	jr LABEL_F7F408
+	jr Softver_SendEvent
 
-LABEL_F7F3F9:
+Softver_Paint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 
-LABEL_F7F408:
+Softver_SendEvent:
 	call SendEvent
-	jr LABEL_F7F41B
+	jr Softver_ReturnZero
 
-LABEL_F7F40E:
+Softver_GetText:
 	pushw 0xE9
 	pushw 0xDE4E
 	push xde
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7F41B:
+Softver_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F7F41D:
+Softver_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
@@ -9662,18 +9662,18 @@ IvMPverProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E0003A
-	jr z, LABEL_F7F492
+	jr z, MPver_GetText
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F7F47D
+	jr z, MPver_Paint
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F7F450
+	jr z, MPver_ShowHide
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F7F450
+	jr z, MPver_ShowHide
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F7F4A1
+	jr MPver_Epilogue
 
-LABEL_F7F450:
+MPver_ShowHide:
 	ld xwa, xiz
 	call InheritedProc
 	call Get_Firmware_Version
@@ -9688,30 +9688,30 @@ LABEL_F7F450:
 	lda xde, (xsp + 4)
 	ld xwa, 0xEF000A
 	ld xbc, 0x1C0000F
-	jr LABEL_F7F48C
+	jr MPver_SendEvent
 
-LABEL_F7F47D:
+MPver_Paint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 
-LABEL_F7F48C:
+MPver_SendEvent:
 	call SendEvent
-	jr LABEL_F7F49F
+	jr MPver_ReturnZero
 
-LABEL_F7F492:
+MPver_GetText:
 	pushw 0xE9
 	pushw 0xDE5C
 	push xde
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F7F49F:
+MPver_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F7F4A1:
+MPver_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
@@ -10095,11 +10095,11 @@ PsMixerControlProc:
 PsMixer_ControlHandler:
 	ld xwa, (xsp + 82)
 	cp xwa, 0x4
-	jr z, LABEL_F7FB86
+	jr z, AudioCtrl_SendB3Event
 	cp xwa, 0x5
-	jr z, LABEL_F7FB3C
+	jr z, AudioCtrl_InitCounters
 	or xwa, xwa
-	jr z, LABEL_F7FB3C
+	jr z, AudioCtrl_InitCounters
 	cp xwa, 0x3
 	jr nz, AudioCtrl_MainFuncCallPt
 	ld xwa, 0xFFFFFFFF
@@ -10109,31 +10109,31 @@ PsMixer_ControlHandler:
 	call GetPartSelect
 	st16_24 0x02478a, xhl
 
-LABEL_F7FB3C:
+AudioCtrl_InitCounters:
 	sti16_24 0x024794, 0x0000
 	sti16_24 0x024790, 0x0000
 	sti16_24 0x024796, 0x0000
 	sti16_24 0x024792, 0x0000
 	ldw (xsp + 10), 0x0
 
-LABEL_F7FB5D:
+AudioCtrl_ScanLoop:
 	ld wa, (xsp + 10)
 	calr Util_SignExtendAndDouble
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	cpw (xwa + 6), 0x1
-	jr nz, LABEL_F7FB7A
+	jr nz, AudioCtrl_ScanNext
 	ld wa, (xsp + 10)
 	st16_24 0x024792, xwa
 	jr AudioCtrl_MainFuncCallPt
 
-LABEL_F7FB7A:
+AudioCtrl_ScanNext:
 	incm 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
-	jr c, LABEL_F7FB5D
+	jr c, AudioCtrl_ScanLoop
 	jr AudioCtrl_MainFuncCallPt
 
-LABEL_F7FB86:
+AudioCtrl_SendB3Event:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E000B3
 	lds32 xde, 1
@@ -10158,30 +10158,30 @@ PsMixer_ControlCase1:
 	call InheritedProc
 	ld xwa, (xsp + 82)
 	cp xwa, 0x4
-	jr z, LABEL_F7FBF3
+	jr z, PsMixer_Case1_PartSelect
 	cp xwa, 0x3
-	jr z, LABEL_F7FC08
+	jr z, PsMixer_Case1_ReturnAB
 	cp xwa, 0x5
-	jr z, LABEL_F7FBE2
+	jr z, PsMixer_Case1_SetupA0
 	or xwa, xwa
-	jr nz, LABEL_F7FC08
+	jr nz, PsMixer_Case1_ReturnAB
 
-LABEL_F7FBE2:
+PsMixer_Case1_SetupA0:
 	ld xwa, 0x1400002
 	ld xbc, 0x1E000A0
 	ld xde, 0x3F
-	jr LABEL_F7FC04
+	jr PsMixer_Case1_MainFuncCall
 
-LABEL_F7FBF3:
+PsMixer_Case1_PartSelect:
 	ld16_24 xde, 0x02478a
 	extz xde
 	ld xwa, 0x1400002
 	ld xbc, 0x1E000A0
 
-LABEL_F7FC04:
+PsMixer_Case1_MainFuncCall:
 	call MainFuncCall
 
-LABEL_F7FC08:
+PsMixer_Case1_ReturnAB:
 	ld xwa, 0x1400001
 	ld xbc, 0x1E000AB
 	lds32 xde, 0
@@ -10272,7 +10272,7 @@ PsMixer_ControlHelper:
 	ld xbc, 0x1C0000E
 	ld xhl, (xhl)
 	call (xhl)
-	jr LABEL_F7FD1F
+	jr PsMixer_GridSetup
 
 ; PsMixer event callback dispatch
 PsMixer_EventCallback:
@@ -10281,7 +10281,7 @@ PsMixer_EventCallback:
 	ld xhl, (xhl)
 	call (xhl)
 
-LABEL_F7FD1F:
+PsMixer_GridSetup:
 	ld16_24 xiz, 0x024794
 	sla iz, 3
 	ldw (xsp + 12), 0x0
@@ -10335,24 +10335,24 @@ PsMixer_GridLoop:
 	ld (xsp + 8), wa
 	ldw (xsp + 10), 0x0
 
-LABEL_F7FDC5:
+PsMixer_FindActiveLoop:
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	cpw (xwa + 6), 0x1
-	jr nz, LABEL_F7FDE2
+	jr nz, PsMixer_FindActiveNext
 	ld wa, (xsp + 8)
 	st16_24 0x024792, xwa
-	jr LABEL_F7FDEF
+	jr PsMixer_ShowEventAndForward
 
-LABEL_F7FDE2:
+PsMixer_FindActiveNext:
 	incm 1, (xsp + 8)
 	incm 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
-	jr c, LABEL_F7FDC5
+	jr c, PsMixer_FindActiveLoop
 
-LABEL_F7FDEF:
+PsMixer_ShowEventAndForward:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
@@ -10371,7 +10371,7 @@ PsMixer_ControlCase5:
 	sla wa, 3
 	add iz, wa
 	cpda16_24 xiz, 149392
-	jrl z, LABEL_F7FEC6
+	jrl z, PsMixer_Case5_DialSetup
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
 	extz xhl
@@ -10421,9 +10421,9 @@ PsMixer_ControlCase5:
 	ld xwa, 0x1400004
 	ld xbc, 0x1E0005E
 	call FuncCall
-	jr LABEL_F7FEF6
+	jr PsMixer_Case5_SetAutoInc
 
-LABEL_F7FEC6:
+PsMixer_Case5_DialSetup:
 	ld wa, iz
 	ld16_24 xbc, 0x024792
 	extz xbc
@@ -10433,19 +10433,19 @@ LABEL_F7FEC6:
 	add xde, xbc
 	ld xwa, (xsp + 82)
 	bit 7, wa
-	jr z, LABEL_F7FEEA
+	jr z, PsMixer_Case5_DialUp
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1C00018
-	jr LABEL_F7FEF2
+	jr PsMixer_Case5_SendEvent
 
-LABEL_F7FEEA:
+PsMixer_Case5_DialUp:
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1C00017
 
-LABEL_F7FEF2:
+PsMixer_Case5_SendEvent:
 	call SendEvent
 
-LABEL_F7FEF6:
+PsMixer_Case5_SetAutoInc:
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1C00027
 	ld xde, (xsp + 82)
@@ -10455,9 +10455,9 @@ LABEL_F7FEF6:
 ; Audio controller dispatch handler
 AudioCtrl_DispatchHandler:
 	cp iz, 0x88
-	jrl lt, LABEL_F7FFFB
+	jrl lt, AudioCtrl_PageHandler
 	cp iz, 0x8C
-	jrl gt, LABEL_F7FFFB
+	jrl gt, AudioCtrl_PageHandler
 	ld16_24 xwa, 0x024796
 	muls wa, 0x5
 	ld (xsp + 8), iz
@@ -10526,7 +10526,7 @@ AudioCtrl_DispatchHandler:
 	lds32 xde, 0
 	jrl PsMixer_SendEventAndForward
 
-LABEL_F7FFFB:
+AudioCtrl_PageHandler:
 	ld xwa, (xsp + 82)
 	cp xwa, 0x8F
 	jrl nz, LABEL_F800F5
@@ -10536,7 +10536,7 @@ LABEL_F7FFFB:
 	calr PsMixer_ReadWordArrayEntry
 	ldfr_werp HL, 0xFA
 	cp_erpw 0xFA, 0xFF, 0x00
-	jr z, LABEL_F8003D
+	jr z, AudioCtrl_PageAdvance
 	ld xwa, 0xC0
 	call SndParam_LookupReadOnly
 	cps hl, 1
@@ -10544,9 +10544,9 @@ LABEL_F7FFFB:
 	cpdi16_24 149396, 2
 	scc16 z, wa
 	and wa, bc
-	jr z, LABEL_F80062
+	jr z, AudioCtrl_SetupPartDisplay
 
-LABEL_F8003D:
+AudioCtrl_PageAdvance:
 	ld16_24 xwa, 0x024790
 	exts xwa
 	divs wa, 0x8
@@ -10557,7 +10557,7 @@ LABEL_F8003D:
 	calr PsMixer_ReadWordArrayEntry
 	ldfr_werp HL, 0xFA
 
-LABEL_F80062:
+AudioCtrl_SetupPartDisplay:
 	ldto_werp WA, 0xFA
 	add wa, wa
 	lda_24 xbc, 0xe953ce
