@@ -31,6 +31,18 @@ HANDLER_NAMES = {
     0x00000f34: "selection",
 }
 
+# Handler addresses that are self-referential data pointers into this struct.
+# Maps handler address → SD_PTR() expression for symbolic representation.
+ROM_BASE = 0xE00000
+SCREENDATA_MAIN_ADDR = ROM_BASE + ROM_OFFSET
+HANDLER_SD_PTR = {
+    0x00e0bd98: "SD_PTR(control_widgets) + 15",
+    0x00e0c3a6: "SD_PTR(chord_root_names)",
+    0x00e0c3c6: "SD_PTR(chord_type_names)",
+    0x00e0c506: "SD_PTR(setup_text) + 38",
+    0x00e0c8cc: "SD_PTR(bottom_bar_marker)",
+}
+
 
 def extract_bytes_from_rom(rom_path, offset, size):
     """Read raw bytes from ROM binary at given offset."""
@@ -113,9 +125,10 @@ def fmt_widget(data, off):
     x = data[off + 13]
     y = data[off + 14]
     hname = HANDLER_NAMES.get(handler, f"0x{handler:06x}")
+    handler_str = HANDLER_SD_PTR.get(handler, f"0x{handler:08x}")
     return (f"{{ .opcode = 0x02, .subtype = 0x{subtype:02x}, "
             f".id = 0x{id_val:04x}, .flags = 0x{flags:04x}, "
-            f".ref_tag = 0x{ref_tag:02x}, .handler = 0x{handler:08x}, "
+            f".ref_tag = 0x{ref_tag:02x}, .handler = {handler_str}, "
             f".param = {param}, .x = {x}, .y = {y} }},"
             f"  /* {hname} */")
 
@@ -206,6 +219,7 @@ def main():
     out.append(' */')
     out.append('')
     out.append('#include "screendata_types.h"')
+    out.append('#include <stddef.h>')
     out.append('')
 
     # ========== STRUCT DEFINITION ==========
@@ -280,9 +294,22 @@ def main():
     out.append('\tuint8_t footer_labels[40];')
     out.append('')
 
-    # Setup/control data
+    # Setup/control data — fully typed sub-sections
     out.append('\t/* === SETUP/CONTROL Blocks + Coordinate Arrays (580 bytes) === */')
-    out.append('\tuint8_t setup_control_data[580];')
+    out.append('\tuint8_t          setup_text[40];         /* blank text buffer */')
+    out.append('\tuint8_t          setup_label[6];         /* format label "_ 7 6 " */')
+    out.append('\tsd_config_block_t    setup_config;       /* config reference (8 bytes) */')
+    out.append('\tsd_boundary_block_t  setup_boundary;     /* cursor boundary (10 bytes) */')
+    out.append('\tsd_block_hdr_t   setup_row_hdr;          /* row-level cursor (11 bytes) */')
+    out.append('\tsd_cursor_rect_t setup_row_rects[4];     /* 4 default positions */')
+    out.append('\tsd_block_hdr_t   setup_col_hdr;          /* column-level cursor (11 bytes) */')
+    out.append('\tsd_cursor_rect_t setup_col_rects[8];     /* 8 column positions */')
+    out.append('\tsd_block_hdr_t   setup_char_hdr;         /* char-level cursor (11 bytes) */')
+    out.append('\tsd_cursor_rect_t setup_char_rects[33];   /* 33 character-cell positions */')
+    out.append('\tsd_block_hdr_t   ctrl_row[3];            /* 3 row control handlers */')
+    out.append('\tsd_value_entry_t value_table_row1[5];    /* row 1 value display (4 + terminator) */')
+    out.append('\tsd_value_entry_t value_table_row2[5];    /* row 2 value display (4 + terminator) */')
+    out.append('\tsd_value_entry_t value_table_row3[5];    /* row 3 value display (4 + terminator) */')
     out.append('')
 
     # Chord bitmap
@@ -305,6 +332,12 @@ def main():
     out.append('')
     out.append('_Static_assert(sizeof(screendata_main_t) == 3531,')
     out.append('\t"ScreenData_Main must be exactly 3531 bytes");')
+    out.append('')
+    out.append('/* ROM address where this struct is placed by the linker */')
+    out.append(f'#define SCREENDATA_MAIN_BASE  0x{SCREENDATA_MAIN_ADDR:08X}u')
+    out.append('')
+    out.append('/* Self-referential data pointer: handler fields that reference other parts of this struct */')
+    out.append('#define SD_PTR(field)  (SCREENDATA_MAIN_BASE + offsetof(screendata_main_t, field))')
     out.append('')
 
     # ========== INITIALIZER ==========
@@ -459,15 +492,89 @@ def main():
     out.append('\t},')
     out.append('')
 
-    # --- Setup/control data ---
-    # First 46 bytes are text (40 spaces + "_ 7 6 "), rest is binary control data
-    out.append('\t/* SETUP/CONTROL blocks with coordinate arrays */')
-    out.append('\t.setup_control_data = {')
-    text_end = SETUP_CONTROL + 46
-    parts = ', '.join(fmt_lcd_byte(raw[SETUP_CONTROL + i]) for i in range(46))
+    # --- Setup/control data (fully typed) ---
+    off = SETUP_CONTROL
+
+    # Text buffer (40 spaces)
+    out.append('\t/* Setup text buffer (40 spaces) */')
+    out.append('\t.setup_text = {')
+    parts = ', '.join(fmt_lcd_byte(raw[off + i]) for i in range(40))
     out.append(f'\t\t{parts},')
-    out.append(fmt_raw(raw, text_end, CHORD_BITMAP))
     out.append('\t},')
+    off += 40
+
+    # Format label (6 chars: "_ 7 6 ")
+    out.append('\t.setup_label = {')
+    parts = ', '.join(fmt_lcd_byte(raw[off + i]) for i in range(6))
+    out.append(f'\t\t{parts},')
+    out.append('\t},')
+    off += 6
+
+    # Config block (8 bytes, type=0x0E)
+    out.append('\t.setup_config = {')
+    out.append(f'\t\t.type = 0x{raw[off]:02x}, .length = 0x{raw[off+1]:02x},')
+    out.append(f'\t\t.id = 0x{u16(raw, off+2):04x}, .flags = 0x{u16(raw, off+4):04x}, .param = 0x{u16(raw, off+6):04x},')
+    out.append('\t},')
+    off += 8
+
+    # Boundary block (10 bytes, type=0x1B)
+    out.append('\t.setup_boundary = {')
+    out.append(f'\t\t.type = 0x{raw[off]:02x}, .length = 0x{raw[off+1]:02x},')
+    p1x, p1y = u16(raw, off+2), u16(raw, off+4)
+    p2x, p2y = u16(raw, off+6), u16(raw, off+8)
+    out.append(f'\t\t.p1 = {{ .x = {p1x}, .y = {p1y} }}, .p2 = {{ .x = {p2x}, .y = {p2y} }},')
+    out.append('\t},')
+    off += 10
+
+    # SETUP blocks (3 × header + coordinate arrays)
+    setup_defs = [
+        ('setup_row_hdr',  'setup_row_rects',  4,  'Row-level cursor (4 default positions)'),
+        ('setup_col_hdr',  'setup_col_rects',  8,  'Column-level cursor (8 columns, 32px spacing)'),
+        ('setup_char_hdr', 'setup_char_rects', 33, 'Character-level cursor (33 cells, 8px spacing)'),
+    ]
+    for hdr_name, rects_name, n_rects, comment in setup_defs:
+        out.append(f'\t/* {comment} */')
+        out.append(f'\t.{hdr_name} = {{')
+        out.append(f'\t\t.type = SD_BLOCK_SETUP, .length = 0x{raw[off+1]:02x},')
+        out.append(f'\t\t.id = 0x{u16(raw, off+2):04x}, .flags = 0x{u16(raw, off+4):04x},')
+        out.append(f'\t\t.tag = 0x{raw[off+6]:02x}, .handler = SD_PTR({rects_name}),')
+        out.append('\t},')
+        off += 11
+        out.append(f'\t.{rects_name} = {{')
+        for i in range(n_rects):
+            x1, y1 = u16(raw, off), u16(raw, off+2)
+            x2, y2 = u16(raw, off+4), u16(raw, off+6)
+            out.append(f'\t\t{{ .x1 = {x1:3d}, .y1 = {y1:3d}, .x2 = {x2:3d}, .y2 = {y2:3d} }},')
+            off += 8
+        out.append('\t},')
+    out.append('')
+
+    # CTRL blocks (3 × 11 bytes)
+    ctrl_targets = ['value_table_row1', 'value_table_row2', 'value_table_row3']
+    out.append('\t/* Row control handlers */')
+    out.append('\t.ctrl_row = {')
+    for i in range(3):
+        out.append(f'\t\t{{ .type = SD_BLOCK_CTRL, .length = 0x{raw[off+1]:02x},')
+        out.append(f'\t\t  .id = 0x{u16(raw, off+2):04x}, .flags = 0x{u16(raw, off+4):04x},')
+        out.append(f'\t\t  .tag = 0x{raw[off+6]:02x}, .handler = SD_PTR({ctrl_targets[i]}) }},')
+        off += 11
+    out.append('\t},')
+    out.append('')
+
+    # Per-row value display tables (3 × 5 entries × 6 bytes)
+    for row in range(1, 4):
+        out.append(f'\t/* Row {row} value display (4 widths + terminator, right-aligned) */')
+        out.append(f'\t.value_table_row{row} = {{')
+        for i in range(5):
+            x, y = raw[off], raw[off+1]
+            w, h = u16(raw, off+2), u16(raw, off+4)
+            if x == 0 and y == 0:
+                out.append(f'\t\t{{ .x = {x}, .y = {y}, .width = {w}, .height = {h} }},  /* terminator */')
+            else:
+                out.append(f'\t\t{{ .x = {x:3d}, .y = {y:2d}, .width = {w:2d}, .height = {h:2d} }},')
+            off += 6
+        out.append('\t},')
+    assert off == CHORD_BITMAP, f"setup_control end: expected {CHORD_BITMAP}, got {off}"
     out.append('')
 
     # --- Chord bitmap ---

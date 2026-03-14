@@ -17,6 +17,7 @@
  */
 
 #include "screendata_types.h"
+#include <stddef.h>
 
 typedef struct __attribute__((packed)) {
 	/* === Chord Name Boxes (180 bytes, y=35) === */
@@ -105,7 +106,20 @@ typedef struct __attribute__((packed)) {
 	uint8_t footer_labels[40];
 
 	/* === SETUP/CONTROL Blocks + Coordinate Arrays (580 bytes) === */
-	uint8_t setup_control_data[580];
+	uint8_t          setup_text[40];         /* blank text buffer */
+	uint8_t          setup_label[6];         /* format label "_ 7 6 " */
+	sd_config_block_t    setup_config;       /* config reference (8 bytes) */
+	sd_boundary_block_t  setup_boundary;     /* cursor boundary (10 bytes) */
+	sd_block_hdr_t   setup_row_hdr;          /* row-level cursor (11 bytes) */
+	sd_cursor_rect_t setup_row_rects[4];     /* 4 default positions */
+	sd_block_hdr_t   setup_col_hdr;          /* column-level cursor (11 bytes) */
+	sd_cursor_rect_t setup_col_rects[8];     /* 8 column positions */
+	sd_block_hdr_t   setup_char_hdr;         /* char-level cursor (11 bytes) */
+	sd_cursor_rect_t setup_char_rects[33];   /* 33 character-cell positions */
+	sd_block_hdr_t   ctrl_row[3];            /* 3 row control handlers */
+	sd_value_entry_t value_table_row1[5];    /* row 1 value display (4 + terminator) */
+	sd_value_entry_t value_table_row2[5];    /* row 2 value display (4 + terminator) */
+	sd_value_entry_t value_table_row3[5];    /* row 3 value display (4 + terminator) */
 
 	/* === Chord Recognition Bitmap (64 bytes: 0x91=enabled, 0x2a=disabled) === */
 	uint8_t chord_bitmap[64];
@@ -121,6 +135,12 @@ typedef struct __attribute__((packed)) {
 
 _Static_assert(sizeof(screendata_main_t) == 3531,
 	"ScreenData_Main must be exactly 3531 bytes");
+
+/* ROM address where this struct is placed by the linker */
+#define SCREENDATA_MAIN_BASE  0x00E0BB90u
+
+/* Self-referential data pointer: handler fields that reference other parts of this struct */
+#define SD_PTR(field)  (SCREENDATA_MAIN_BASE + offsetof(screendata_main_t, field))
 
 const screendata_main_t StyleUI_ScreenData_Main
 	__attribute__((section(".text"), used)) = {
@@ -204,109 +224,109 @@ const screendata_main_t StyleUI_ScreenData_Main
 
 	/* Parameter value widgets (handler 0xe0bd98) */
 	.param_widgets = {
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119b, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 33, .y = 8 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119c, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 37, .y = 8 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119d, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 41, .y = 8 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119e, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 45, .y = 8 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119f, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 49, .y = 8 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a0, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 53, .y = 8 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a1, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 57, .y = 8 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a2, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 61, .y = 8 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a3, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 41, .y = 15 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a4, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 45, .y = 15 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a5, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 49, .y = 15 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a6, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 53, .y = 15 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a7, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 57, .y = 15 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a8, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 61, .y = 15 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a9, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 65, .y = 15 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11aa, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 69, .y = 15 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ab, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 49, .y = 22 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ac, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 53, .y = 22 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ad, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 57, .y = 22 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ae, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 61, .y = 22 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11af, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 65, .y = 22 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b0, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 69, .y = 22 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b1, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 73, .y = 22 },  /* param_value */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b2, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0bd98, .param = 4, .x = 77, .y = 22 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119b, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 33, .y = 8 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119c, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 37, .y = 8 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119d, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 41, .y = 8 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119e, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 45, .y = 8 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119f, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 49, .y = 8 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a0, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 53, .y = 8 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a1, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 57, .y = 8 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a2, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 61, .y = 8 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a3, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 41, .y = 15 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a4, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 45, .y = 15 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a5, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 49, .y = 15 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a6, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 53, .y = 15 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a7, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 57, .y = 15 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a8, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 61, .y = 15 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a9, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 65, .y = 15 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11aa, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 69, .y = 15 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ab, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 49, .y = 22 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ac, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 53, .y = 22 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ad, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 57, .y = 22 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ae, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 61, .y = 22 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11af, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 65, .y = 22 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b0, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 69, .y = 22 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b1, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 73, .y = 22 },  /* param_value */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b2, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(control_widgets) + 15, .param = 4, .x = 77, .y = 22 },  /* param_value */
 	},
 
 	/* Chord root/type/quality widgets (3 rows × 8 cells × 3 layers) */
 	.chord_widgets = {
 		/* Row 1 (y=8): 8 cells × (root + type + quality) */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a3, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 33, .y = 8 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a4, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 35, .y = 8 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 35, .y = 8 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a5, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 37, .y = 8 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a6, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 39, .y = 8 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 39, .y = 8 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a7, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 41, .y = 8 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0d, .id = 0x11a8, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 43, .y = 8 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 43, .y = 8 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a9, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 45, .y = 8 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11aa, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 47, .y = 8 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 47, .y = 8 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ab, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 49, .y = 8 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ac, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 51, .y = 8 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 51, .y = 8 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ad, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 53, .y = 8 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ae, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 55, .y = 8 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 55, .y = 8 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11af, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 57, .y = 8 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b0, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 59, .y = 8 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 59, .y = 8 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b1, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 61, .y = 8 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b2, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 63, .y = 8 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 63, .y = 8 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a3, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 33, .y = 8 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a4, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 35, .y = 8 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 35, .y = 8 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a5, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 37, .y = 8 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a6, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 39, .y = 8 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 39, .y = 8 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a7, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 41, .y = 8 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0d, .id = 0x11a8, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 43, .y = 8 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 43, .y = 8 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a9, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 45, .y = 8 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11aa, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 47, .y = 8 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 47, .y = 8 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ab, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 49, .y = 8 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ac, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 51, .y = 8 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 51, .y = 8 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ad, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 53, .y = 8 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ae, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 55, .y = 8 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 55, .y = 8 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11af, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 57, .y = 8 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b0, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 59, .y = 8 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 59, .y = 8 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b1, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 61, .y = 8 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b2, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 63, .y = 8 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 63, .y = 8 },  /* chord_quality */
 		/* Row 2 (y=15) */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a3, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 41, .y = 15 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a4, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 43, .y = 15 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 43, .y = 15 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a5, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 45, .y = 15 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a6, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 47, .y = 15 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 47, .y = 15 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a7, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 49, .y = 15 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a8, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 51, .y = 15 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 51, .y = 15 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a9, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 53, .y = 15 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11aa, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 55, .y = 15 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 55, .y = 15 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ab, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 57, .y = 15 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ac, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 59, .y = 15 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 59, .y = 15 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ad, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 61, .y = 15 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ae, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 63, .y = 15 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 63, .y = 15 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x14, .id = 0x11af, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 65, .y = 15 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b0, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 67, .y = 15 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 67, .y = 15 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b1, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 69, .y = 15 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b2, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 71, .y = 15 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 71, .y = 15 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a3, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 41, .y = 15 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a4, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 43, .y = 15 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 43, .y = 15 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a5, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 45, .y = 15 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a6, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 47, .y = 15 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 47, .y = 15 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a7, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 49, .y = 15 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a8, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 51, .y = 15 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 51, .y = 15 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a9, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 53, .y = 15 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11aa, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 55, .y = 15 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 55, .y = 15 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ab, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 57, .y = 15 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ac, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 59, .y = 15 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 59, .y = 15 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ad, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 61, .y = 15 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ae, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 63, .y = 15 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 63, .y = 15 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x14, .id = 0x11af, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 65, .y = 15 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b0, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 67, .y = 15 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 67, .y = 15 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b1, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 69, .y = 15 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b2, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 71, .y = 15 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 71, .y = 15 },  /* chord_quality */
 		/* Row 3 (y=22) */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a3, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 49, .y = 22 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a4, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 51, .y = 22 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 51, .y = 22 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a5, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 53, .y = 22 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a6, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 55, .y = 22 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 55, .y = 22 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a7, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 57, .y = 22 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a8, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 59, .y = 22 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 59, .y = 22 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a9, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 61, .y = 22 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11aa, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 63, .y = 22 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 63, .y = 22 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ab, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 65, .y = 22 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ac, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 67, .y = 22 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 67, .y = 22 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ad, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 69, .y = 22 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ae, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 71, .y = 22 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 71, .y = 22 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11af, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 73, .y = 22 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b0, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 75, .y = 22 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 75, .y = 22 },  /* chord_quality */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b1, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3a6, .param = 2, .x = 77, .y = 22 },  /* chord_root */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b2, .flags = 0x00ff, .ref_tag = 0x06, .handler = 0x00e0c3c6, .param = 5, .x = 79, .y = 22 },  /* chord_type */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = 0x00e0c506, .param = 2, .x = 79, .y = 22 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a3, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 49, .y = 22 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a4, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 51, .y = 22 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 51, .y = 22 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a5, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 53, .y = 22 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a6, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 55, .y = 22 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 55, .y = 22 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a7, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 57, .y = 22 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a8, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 59, .y = 22 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 59, .y = 22 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a9, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 61, .y = 22 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11aa, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 63, .y = 22 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 63, .y = 22 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ab, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 65, .y = 22 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ac, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 67, .y = 22 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 67, .y = 22 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ad, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 69, .y = 22 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ae, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 71, .y = 22 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 71, .y = 22 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11af, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 73, .y = 22 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b0, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 75, .y = 22 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 75, .y = 22 },  /* chord_quality */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b1, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_root_names), .param = 2, .x = 77, .y = 22 },  /* chord_root */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b2, .flags = 0x00ff, .ref_tag = 0x06, .handler = SD_PTR(chord_type_names), .param = 5, .x = 79, .y = 22 },  /* chord_type */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x0003, .ref_tag = 0x06, .handler = SD_PTR(setup_text) + 38, .param = 2, .x = 79, .y = 22 },  /* chord_quality */
 	},
 
 	.chord_root_names = {
@@ -385,43 +405,127 @@ const screendata_main_t StyleUI_ScreenData_Main
 		' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
 	},
 
-	/* SETUP/CONTROL blocks with coordinate arrays */
-	.setup_control_data = {
-		' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '_', ' ', '7', ' ', '6', ' ',
-		0x0e, 0x08, 0x59, 0x11, 0x21, 0x00, 0x0b, 0x00, 0x1b, 0x0a, 0x08, 0x01, 0x6f, 0x00, 0x08, 0x01,
-		0x79, 0x00, 0x03, 0x0b, 0x92, 0x11, 0x0c, 0x82, 0x05, 0x2b, 0xc5, 0xe0, 0x00, 0x08, 0x00, 0x6f,
-		0x00, 0x10, 0x00, 0x79, 0x00, 0x08, 0x00, 0x6f, 0x00, 0x10, 0x00, 0x79, 0x00, 0x08, 0x00, 0x6f,
-		0x00, 0x10, 0x00, 0x79, 0x00, 0x08, 0x00, 0x6f, 0x00, 0x10, 0x00, 0x79, 0x00, 0x03, 0x0b, 0x91,
-		0x11, 0xff, 0x00, 0x05, 0x56, 0xc5, 0xe0, 0x00, 0x08, 0x00, 0x6f, 0x00, 0x10, 0x00, 0x79, 0x00,
-		0x28, 0x00, 0x6f, 0x00, 0x30, 0x00, 0x79, 0x00, 0x48, 0x00, 0x6f, 0x00, 0x50, 0x00, 0x79, 0x00,
-		0x68, 0x00, 0x6f, 0x00, 0x70, 0x00, 0x79, 0x00, 0x88, 0x00, 0x6f, 0x00, 0x90, 0x00, 0x79, 0x00,
-		0xa8, 0x00, 0x6f, 0x00, 0xb0, 0x00, 0x79, 0x00, 0xc8, 0x00, 0x6f, 0x00, 0xd0, 0x00, 0x79, 0x00,
-		0xe8, 0x00, 0x6f, 0x00, 0xf0, 0x00, 0x79, 0x00, 0x03, 0x0b, 0x8f, 0x11, 0xff, 0x00, 0x05, 0xa1,
-		0xc5, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x6f, 0x00, 0x10,
-		0x00, 0x79, 0x00, 0x10, 0x00, 0x6f, 0x00, 0x18, 0x00, 0x79, 0x00, 0x18, 0x00, 0x6f, 0x00, 0x20,
-		0x00, 0x79, 0x00, 0x20, 0x00, 0x6f, 0x00, 0x28, 0x00, 0x79, 0x00, 0x28, 0x00, 0x6f, 0x00, 0x30,
-		0x00, 0x79, 0x00, 0x30, 0x00, 0x6f, 0x00, 0x38, 0x00, 0x79, 0x00, 0x38, 0x00, 0x6f, 0x00, 0x40,
-		0x00, 0x79, 0x00, 0x40, 0x00, 0x6f, 0x00, 0x48, 0x00, 0x79, 0x00, 0x48, 0x00, 0x6f, 0x00, 0x50,
-		0x00, 0x79, 0x00, 0x50, 0x00, 0x6f, 0x00, 0x58, 0x00, 0x79, 0x00, 0x58, 0x00, 0x6f, 0x00, 0x60,
-		0x00, 0x79, 0x00, 0x60, 0x00, 0x6f, 0x00, 0x68, 0x00, 0x79, 0x00, 0x68, 0x00, 0x6f, 0x00, 0x70,
-		0x00, 0x79, 0x00, 0x70, 0x00, 0x6f, 0x00, 0x78, 0x00, 0x79, 0x00, 0x78, 0x00, 0x6f, 0x00, 0x80,
-		0x00, 0x79, 0x00, 0x80, 0x00, 0x6f, 0x00, 0x88, 0x00, 0x79, 0x00, 0x88, 0x00, 0x6f, 0x00, 0x90,
-		0x00, 0x79, 0x00, 0x90, 0x00, 0x6f, 0x00, 0x98, 0x00, 0x79, 0x00, 0x98, 0x00, 0x6f, 0x00, 0xa0,
-		0x00, 0x79, 0x00, 0xa0, 0x00, 0x6f, 0x00, 0xa8, 0x00, 0x79, 0x00, 0xa8, 0x00, 0x6f, 0x00, 0xb0,
-		0x00, 0x79, 0x00, 0xb0, 0x00, 0x6f, 0x00, 0xb8, 0x00, 0x79, 0x00, 0xb8, 0x00, 0x6f, 0x00, 0xc0,
-		0x00, 0x79, 0x00, 0xc0, 0x00, 0x6f, 0x00, 0xc8, 0x00, 0x79, 0x00, 0xc8, 0x00, 0x6f, 0x00, 0xd0,
-		0x00, 0x79, 0x00, 0xd0, 0x00, 0x6f, 0x00, 0xd8, 0x00, 0x79, 0x00, 0xd8, 0x00, 0x6f, 0x00, 0xe0,
-		0x00, 0x79, 0x00, 0xe0, 0x00, 0x6f, 0x00, 0xe8, 0x00, 0x79, 0x00, 0xe8, 0x00, 0x6f, 0x00, 0xf0,
-		0x00, 0x79, 0x00, 0xf0, 0x00, 0x6f, 0x00, 0xf8, 0x00, 0x79, 0x00, 0xf8, 0x00, 0x6f, 0x00, 0x00,
-		0x01, 0x79, 0x00, 0x00, 0x01, 0x6f, 0x00, 0x08, 0x01, 0x79, 0x00, 0x04, 0x0b, 0x9b, 0x11, 0xff,
-		0x00, 0x0e, 0xca, 0xc6, 0xe0, 0x00, 0x04, 0x0b, 0x9c, 0x11, 0xff, 0x00, 0x0e, 0xe8, 0xc6, 0xe0,
-		0x00, 0x04, 0x0b, 0x9d, 0x11, 0xff, 0x00, 0x0e, 0x06, 0xc7, 0xe0, 0x00, 0x51, 0x0a, 0x20, 0x00,
-		0x0a, 0x00, 0x59, 0x0a, 0x18, 0x00, 0x0a, 0x00, 0x61, 0x0a, 0x10, 0x00, 0x0a, 0x00, 0x69, 0x0a,
-		0x08, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x59, 0x11, 0x20, 0x00, 0x0a, 0x00,
-		0x61, 0x11, 0x18, 0x00, 0x0a, 0x00, 0x69, 0x11, 0x10, 0x00, 0x0a, 0x00, 0x71, 0x11, 0x08, 0x00,
-		0x0a, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x61, 0x18, 0x20, 0x00, 0x0a, 0x00, 0x69, 0x18,
-		0x18, 0x00, 0x0a, 0x00, 0x71, 0x18, 0x10, 0x00, 0x0a, 0x00, 0x79, 0x18, 0x08, 0x00, 0x0a, 0x00,
-		0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
+	/* Setup text buffer (40 spaces) */
+	.setup_text = {
+		' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+	},
+	.setup_label = {
+		'_', ' ', '7', ' ', '6', ' ',
+	},
+	.setup_config = {
+		.type = 0x0e, .length = 0x08,
+		.id = 0x1159, .flags = 0x0021, .param = 0x000b,
+	},
+	.setup_boundary = {
+		.type = 0x1b, .length = 0x0a,
+		.p1 = { .x = 264, .y = 111 }, .p2 = { .x = 264, .y = 121 },
+	},
+	/* Row-level cursor (4 default positions) */
+	.setup_row_hdr = {
+		.type = SD_BLOCK_SETUP, .length = 0x0b,
+		.id = 0x1192, .flags = 0x820c,
+		.tag = 0x05, .handler = SD_PTR(setup_row_rects),
+	},
+	.setup_row_rects = {
+		{ .x1 =   8, .y1 = 111, .x2 =  16, .y2 = 121 },
+		{ .x1 =   8, .y1 = 111, .x2 =  16, .y2 = 121 },
+		{ .x1 =   8, .y1 = 111, .x2 =  16, .y2 = 121 },
+		{ .x1 =   8, .y1 = 111, .x2 =  16, .y2 = 121 },
+	},
+	/* Column-level cursor (8 columns, 32px spacing) */
+	.setup_col_hdr = {
+		.type = SD_BLOCK_SETUP, .length = 0x0b,
+		.id = 0x1191, .flags = 0x00ff,
+		.tag = 0x05, .handler = SD_PTR(setup_col_rects),
+	},
+	.setup_col_rects = {
+		{ .x1 =   8, .y1 = 111, .x2 =  16, .y2 = 121 },
+		{ .x1 =  40, .y1 = 111, .x2 =  48, .y2 = 121 },
+		{ .x1 =  72, .y1 = 111, .x2 =  80, .y2 = 121 },
+		{ .x1 = 104, .y1 = 111, .x2 = 112, .y2 = 121 },
+		{ .x1 = 136, .y1 = 111, .x2 = 144, .y2 = 121 },
+		{ .x1 = 168, .y1 = 111, .x2 = 176, .y2 = 121 },
+		{ .x1 = 200, .y1 = 111, .x2 = 208, .y2 = 121 },
+		{ .x1 = 232, .y1 = 111, .x2 = 240, .y2 = 121 },
+	},
+	/* Character-level cursor (33 cells, 8px spacing) */
+	.setup_char_hdr = {
+		.type = SD_BLOCK_SETUP, .length = 0x0b,
+		.id = 0x118f, .flags = 0x00ff,
+		.tag = 0x05, .handler = SD_PTR(setup_char_rects),
+	},
+	.setup_char_rects = {
+		{ .x1 =   0, .y1 =   0, .x2 =   0, .y2 =   0 },
+		{ .x1 =   8, .y1 = 111, .x2 =  16, .y2 = 121 },
+		{ .x1 =  16, .y1 = 111, .x2 =  24, .y2 = 121 },
+		{ .x1 =  24, .y1 = 111, .x2 =  32, .y2 = 121 },
+		{ .x1 =  32, .y1 = 111, .x2 =  40, .y2 = 121 },
+		{ .x1 =  40, .y1 = 111, .x2 =  48, .y2 = 121 },
+		{ .x1 =  48, .y1 = 111, .x2 =  56, .y2 = 121 },
+		{ .x1 =  56, .y1 = 111, .x2 =  64, .y2 = 121 },
+		{ .x1 =  64, .y1 = 111, .x2 =  72, .y2 = 121 },
+		{ .x1 =  72, .y1 = 111, .x2 =  80, .y2 = 121 },
+		{ .x1 =  80, .y1 = 111, .x2 =  88, .y2 = 121 },
+		{ .x1 =  88, .y1 = 111, .x2 =  96, .y2 = 121 },
+		{ .x1 =  96, .y1 = 111, .x2 = 104, .y2 = 121 },
+		{ .x1 = 104, .y1 = 111, .x2 = 112, .y2 = 121 },
+		{ .x1 = 112, .y1 = 111, .x2 = 120, .y2 = 121 },
+		{ .x1 = 120, .y1 = 111, .x2 = 128, .y2 = 121 },
+		{ .x1 = 128, .y1 = 111, .x2 = 136, .y2 = 121 },
+		{ .x1 = 136, .y1 = 111, .x2 = 144, .y2 = 121 },
+		{ .x1 = 144, .y1 = 111, .x2 = 152, .y2 = 121 },
+		{ .x1 = 152, .y1 = 111, .x2 = 160, .y2 = 121 },
+		{ .x1 = 160, .y1 = 111, .x2 = 168, .y2 = 121 },
+		{ .x1 = 168, .y1 = 111, .x2 = 176, .y2 = 121 },
+		{ .x1 = 176, .y1 = 111, .x2 = 184, .y2 = 121 },
+		{ .x1 = 184, .y1 = 111, .x2 = 192, .y2 = 121 },
+		{ .x1 = 192, .y1 = 111, .x2 = 200, .y2 = 121 },
+		{ .x1 = 200, .y1 = 111, .x2 = 208, .y2 = 121 },
+		{ .x1 = 208, .y1 = 111, .x2 = 216, .y2 = 121 },
+		{ .x1 = 216, .y1 = 111, .x2 = 224, .y2 = 121 },
+		{ .x1 = 224, .y1 = 111, .x2 = 232, .y2 = 121 },
+		{ .x1 = 232, .y1 = 111, .x2 = 240, .y2 = 121 },
+		{ .x1 = 240, .y1 = 111, .x2 = 248, .y2 = 121 },
+		{ .x1 = 248, .y1 = 111, .x2 = 256, .y2 = 121 },
+		{ .x1 = 256, .y1 = 111, .x2 = 264, .y2 = 121 },
+	},
+
+	/* Row control handlers */
+	.ctrl_row = {
+		{ .type = SD_BLOCK_CTRL, .length = 0x0b,
+		  .id = 0x119b, .flags = 0x00ff,
+		  .tag = 0x0e, .handler = SD_PTR(value_table_row1) },
+		{ .type = SD_BLOCK_CTRL, .length = 0x0b,
+		  .id = 0x119c, .flags = 0x00ff,
+		  .tag = 0x0e, .handler = SD_PTR(value_table_row2) },
+		{ .type = SD_BLOCK_CTRL, .length = 0x0b,
+		  .id = 0x119d, .flags = 0x00ff,
+		  .tag = 0x0e, .handler = SD_PTR(value_table_row3) },
+	},
+
+	/* Row 1 value display (4 widths + terminator, right-aligned) */
+	.value_table_row1 = {
+		{ .x =  81, .y = 10, .width = 32, .height = 10 },
+		{ .x =  89, .y = 10, .width = 24, .height = 10 },
+		{ .x =  97, .y = 10, .width = 16, .height = 10 },
+		{ .x = 105, .y = 10, .width =  8, .height = 10 },
+		{ .x = 0, .y = 0, .width = 1, .height = 1 },  /* terminator */
+	},
+	/* Row 2 value display (4 widths + terminator, right-aligned) */
+	.value_table_row2 = {
+		{ .x =  89, .y = 17, .width = 32, .height = 10 },
+		{ .x =  97, .y = 17, .width = 24, .height = 10 },
+		{ .x = 105, .y = 17, .width = 16, .height = 10 },
+		{ .x = 113, .y = 17, .width =  8, .height = 10 },
+		{ .x = 0, .y = 0, .width = 1, .height = 1 },  /* terminator */
+	},
+	/* Row 3 value display (4 widths + terminator, right-aligned) */
+	.value_table_row3 = {
+		{ .x =  97, .y = 24, .width = 32, .height = 10 },
+		{ .x = 105, .y = 24, .width = 24, .height = 10 },
+		{ .x = 113, .y = 24, .width = 16, .height = 10 },
+		{ .x = 121, .y = 24, .width =  8, .height = 10 },
+		{ .x = 0, .y = 0, .width = 1, .height = 1 },  /* terminator */
 	},
 
 	/* Chord recognition bitmap (0x91=enabled, 0x2a=disabled) */
@@ -434,30 +538,30 @@ const screendata_main_t StyleUI_ScreenData_Main
 
 	/* Track status widgets (handler 0xe0c8cc, flags=0x8560) */
 	.track_status_widgets = {
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 81, .y = 10 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b4, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 85, .y = 10 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b5, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 89, .y = 10 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b6, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 93, .y = 10 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b7, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 97, .y = 10 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b8, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 101, .y = 10 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b9, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 105, .y = 10 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ba, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 109, .y = 10 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1192, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 89, .y = 17 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1193, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 93, .y = 17 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1194, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 97, .y = 17 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1195, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 101, .y = 17 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1196, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 105, .y = 17 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1197, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 109, .y = 17 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1198, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 113, .y = 17 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1199, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 117, .y = 17 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119a, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 97, .y = 24 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119b, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 101, .y = 24 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119c, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 105, .y = 24 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119d, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 109, .y = 24 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119e, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 113, .y = 24 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119f, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 117, .y = 24 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a0, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 121, .y = 24 },  /* track_status */
-		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a1, .flags = 0x8560, .ref_tag = 0x06, .handler = 0x00e0c8cc, .param = 1, .x = 125, .y = 24 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b3, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 81, .y = 10 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b4, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 85, .y = 10 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b5, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 89, .y = 10 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b6, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 93, .y = 10 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b7, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 97, .y = 10 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b8, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 101, .y = 10 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11b9, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 105, .y = 10 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11ba, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 109, .y = 10 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1192, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 89, .y = 17 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1193, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 93, .y = 17 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1194, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 97, .y = 17 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1195, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 101, .y = 17 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1196, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 105, .y = 17 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1197, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 109, .y = 17 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1198, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 113, .y = 17 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x1199, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 117, .y = 17 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119a, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 97, .y = 24 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119b, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 101, .y = 24 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119c, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 105, .y = 24 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119d, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 109, .y = 24 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119e, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 113, .y = 24 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x119f, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 117, .y = 24 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a0, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 121, .y = 24 },  /* track_status */
+		{ .opcode = 0x02, .subtype = 0x0f, .id = 0x11a1, .flags = 0x8560, .ref_tag = 0x06, .handler = SD_PTR(bottom_bar_marker), .param = 1, .x = 125, .y = 24 },  /* track_status */
 	},
 
 	/* Bottom bar marker */

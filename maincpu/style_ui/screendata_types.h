@@ -207,4 +207,55 @@ typedef struct __attribute__((packed)) {
 
 typedef SD_UNKNOWN_TYPE(3) sd_unknown_5_t;
 
+/* ── SETUP/CONTROL block types ─────────────────────────────── */
+
+/** Block header (11 bytes) — used for SETUP (type=0x03) and CTRL (type=0x04) blocks.
+ *  SETUP blocks are followed by variable-length cursor coordinate arrays.
+ *  CTRL blocks stand alone (no trailing data).
+ */
+typedef struct __attribute__((packed)) {
+    uint8_t  type;       /* 0x03=SETUP, 0x04=CTRL */
+    uint8_t  length;     /* 0x0B */
+    uint16_t id;         /* widget ID (LE) */
+    uint16_t flags;      /* flags (LE) */
+    uint8_t  tag;        /* reference tag (0x05 for SETUP, 0x0E for CTRL) */
+    uint32_t handler;    /* handler address (24-bit, zero-extended to 32-bit LE) */
+} sd_block_hdr_t;
+
+#define SD_BLOCK_SETUP  0x03
+#define SD_BLOCK_CTRL   0x04
+
+/** Config block (8 bytes, type=0x0E) */
+typedef struct __attribute__((packed)) {
+    uint8_t  type;       /* 0x0E */
+    uint8_t  length;     /* 0x08 */
+    uint16_t id;         /* reference ID (LE) */
+    uint16_t flags;      /* flags (LE) */
+    uint16_t param;      /* parameter (LE) */
+} sd_config_block_t;
+
+/** Boundary block (10 bytes, type=0x1B) — cursor movement boundary rectangle */
+typedef struct __attribute__((packed)) {
+    uint8_t  type;       /* 0x1B */
+    uint8_t  length;     /* 0x0A */
+    sd_point_t p1;       /* boundary point 1 */
+    sd_point_t p2;       /* boundary point 2 */
+} sd_boundary_block_t;
+
+/** Cursor selection rectangle (8 bytes) — (x1,y1)-(x2,y2) highlight box */
+typedef struct __attribute__((packed)) {
+    uint16_t x1;
+    uint16_t y1;
+    uint16_t x2;
+    uint16_t y2;
+} sd_cursor_rect_t;
+
+/** Value display entry (6 bytes) — right-aligned display rectangle for parameter values */
+typedef struct __attribute__((packed)) {
+    uint8_t  x;          /* left edge x position */
+    uint8_t  y;          /* y position */
+    uint16_t width;      /* display width in pixels */
+    uint16_t height;     /* display height in pixels */
+} sd_value_entry_t;
+
 #endif /* SCREENDATA_TYPES_H */
