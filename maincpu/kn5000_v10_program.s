@@ -4851,20 +4851,20 @@ FIRMWARE_VERSION:
 	.set NakaStr_PdMdlyOrcha, 0xE22322
 	.set LABEL_E2364A, 0xE2364A
 	.set LABEL_E23C12, 0xE23C12
-	.set LABEL_E23C1A, 0xE23C1A
+	.set NakaWidget_Perf2Flute, 0xE23C1A
 	.set LABEL_E23CCA, 0xE23CCA
-	.set LABEL_E23CD4, 0xE23CD4
+	.set NakaWidget_Perf2Piano, 0xE23CD4
 	.set LABEL_E23D0A, 0xE23D0A
 	.set LABEL_E23E62, 0xE23E62
-	.set LABEL_E23E6E, 0xE23E6E
+	.set NakaWidget_Perf3JazzBand, 0xE23E6E
 	.set LABEL_E23EA4, 0xE23EA4
-	.set LABEL_E23EB4, 0xE23EB4
+	.set NakaWidget_Perf3LatinOrch, 0xE23EB4
 	.set LABEL_E23EEA, 0xE23EEA
-	.set LABEL_E23EF6, 0xE23EF6
+	.set NakaWidget_Perf3BigBand, 0xE23EF6
 	.set LABEL_E23F2C, 0xE23F2C
-	.set LABEL_E23F3A, 0xE23F3A
+	.set NakaWidget_Perf3SymphOrch, 0xE23F3A
 	.set LABEL_E2405E, 0xE2405E
-	.set LABEL_E270EA, 0xE270EA
+	.set NakaFld_TabIndexFunc, 0xE270EA
 	.set LABEL_E2713C, 0xE2713C
 	.set NakaInst_SqedtVal, 0xE27564
 	.set NakaInst_SqedtVal_B, 0xE27574

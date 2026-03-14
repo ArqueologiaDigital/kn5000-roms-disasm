@@ -10,14 +10,14 @@
 	.byte 0x03, 0x00, 0x06, 0x00, 0x07, 0x00
 	aligned_string "RHYTHM"
 	aligned_string "RHYTHM"
-LABEL_E2406E:
+NakaHdr_Perf2MeasureBoxData:
 
 
 	naka_header NAKA_TYPE_0x29
 	.byte 0x00, 0x00, 0xff, 0xff, 0x0b, 0x00
 	.byte 0x09, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x1f, 0x00, 0x1f, 0x00, 0x1b, 0x00, 0x47, 0x01
-LABEL_E24088:
+NakaHdr_Perf2FileListData:
 	.byte 0x14, 0x00, 0x67, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0x0a, 0x00, 0x08, 0x00, 0x64, 0x00
 	.byte 0x28, 0x00, 0xd5, 0x00, 0x3a, 0x00, 0xf5, 0x00
@@ -329,10 +329,10 @@ NakaWidgetPtrTbl_Perf:
 	.long NakaWidget_Perf2Container
 	.long NakaWidget_Perf2Strings
 	.long NakaWidget_Perf2Gamelan
-	.long LABEL_E23C1A
+	.long NakaWidget_Perf2Flute
 	.long NakaWidget_Perf2Guitar
 	.long NakaWidget_Perf2SaxBrass
-	.long LABEL_E23CD4
+	.long NakaWidget_Perf2Piano
 	.long NakaWidget_Perf2StyleSel
 	.long NakaWidget_Perf2SoundSel
 	.long NakaWidget_Perf2RhythmSel
@@ -343,107 +343,107 @@ NakaWidgetPtrTbl_Perf:
 
 NakaWidgetPtrTbl_Perf2:
 	.long NakaWidget_Perf3HokieDance
-	.long LABEL_E23E6E
-	.long LABEL_E23EB4
-	.long LABEL_E23EF6
-	.long LABEL_E23F3A
+	.long NakaWidget_Perf3JazzBand
+	.long NakaWidget_Perf3LatinOrch
+	.long NakaWidget_Perf3BigBand
+	.long NakaWidget_Perf3SymphOrch
 	.long NakaWidget_Perf3ModernBluegrass
 	.long NakaWidget_Perf3StyleSel
 	.long NakaWidget_Perf3SoundSel
 	.long NakaWidget_Perf3RhythmSel
-	.long LABEL_E2406E
-	.long LABEL_E24088
+	.long NakaHdr_Perf2MeasureBoxData
+	.long NakaHdr_Perf2FileListData
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
 NakaWinStateTbl_DpSmf:
 	.long NakaInst_DpSmf
-	.long LABEL_E246C0
-	.long LABEL_E246BE
-	.long LABEL_E246BC
-	.long LABEL_E246BA
-	.long LABEL_E246B8
-	.long LABEL_E246B6
-	.long LABEL_E246B4
-	.long LABEL_E246B2
-	.long LABEL_E246B0
+	.long NakaWinStr_DpSmf_1
+	.long NakaWinStr_DpSmf_2
+	.long NakaWinStr_DpSmf_3
+	.long NakaWinStr_DpSmf_4
+	.long NakaWinStr_DpSmf_5
+	.long NakaWinStr_DpSmf_6
+	.long NakaWinStr_DpSmf_7
+	.long NakaWinStr_DpSmf_8
+	.long NakaWinStr_DpSmf_9
 	.long NakaInst_SMFMuteSw
-	.long LABEL_E246A4
-	.long LABEL_E246A2
-	.long LABEL_E246A0
-	.long LABEL_E2469E
-	.long LABEL_E2469C
-	.long LABEL_E2469A
-	.long LABEL_E24698
-	.long LABEL_E24696
-	.long LABEL_E24694
-	.long LABEL_E24692
-	.long LABEL_E24690
-	.long LABEL_E2468E
-	.long LABEL_E2468C
+	.long NakaWinStr_DpSmf_11
+	.long NakaWinStr_DpSmf_12
+	.long NakaWinStr_DpSmf_13
+	.long NakaWinStr_DpSmf_14
+	.long NakaWinStr_DpSmf_15
+	.long NakaWinStr_DpSmf_16
+	.long NakaWinStr_DpSmf_17
+	.long NakaWinStr_DpSmf_18
+	.long NakaWinStr_DpSmf_19
+	.long NakaWinStr_DpSmf_20
+	.long NakaWinStr_DpSmf_21
+	.long NakaWinStr_DpSmf_22
+	.long NakaWinStr_DpSmf_23
 	.long NakaInst_CDswWindow
-	.long LABEL_E2467E
-	.long LABEL_E2467C
-	.long LABEL_E2467A
-	.long LABEL_E24678
-	.long LABEL_E24676
-	.long LABEL_E24674
-	.long LABEL_E24672
-	.long LABEL_E24670
-	.long LABEL_E2466E
-	.long LABEL_E2466C
-	.long LABEL_E2466A
+	.long NakaWinStr_DpSmf_25
+	.long NakaWinStr_DpSmf_26
+	.long NakaWinStr_DpSmf_27
+	.long NakaWinStr_DpSmf_28
+	.long NakaWinStr_DpSmf_29
+	.long NakaWinStr_DpSmf_30
+	.long NakaWinStr_DpSmf_31
+	.long NakaWinStr_DpSmf_32
+	.long NakaWinStr_DpSmf_33
+	.long NakaWinStr_DpSmf_34
+	.long NakaWinStr_DpSmf_35
 	.long NakaInst_PauseDisp
 	.long NakaInst_PlayDisp
 	.long NakaInst_Lyrics
 	.long NakaInst_LyricsData
-	.long LABEL_E24640
+	.long NakaWinStr_DpSmf_40
 	.long NakaInst_LyricsSong
 	.long NakaInst_Comporser
 	.long NakaWinStateStr_DpSmf_0
 NakaWinStateStr_DpSmf_0:	aligned_string ""
 NakaInst_Comporser:			aligned_string "Comporser"
 NakaInst_LyricsSong:			aligned_string "LyricsSong"
-LABEL_E24640:			aligned_string ""
+NakaWinStr_DpSmf_40:			aligned_string ""
 NakaInst_LyricsData:			aligned_string "LyricsData"
 NakaInst_Lyrics:			aligned_string "Lyrics"
 NakaInst_PlayDisp:			aligned_string "PlayDisp"
 NakaInst_PauseDisp:			aligned_string "PauseDisp"
-LABEL_E2466A:			aligned_string ""
-LABEL_E2466C:			aligned_string ""
-LABEL_E2466E:			aligned_string ""
-LABEL_E24670:			aligned_string ""
-LABEL_E24672:			aligned_string ""
-LABEL_E24674:			aligned_string ""
-LABEL_E24676:			aligned_string ""
-LABEL_E24678:			aligned_string ""
-LABEL_E2467A:			aligned_string ""
-LABEL_E2467C:			aligned_string ""
-LABEL_E2467E:			aligned_string ""
+NakaWinStr_DpSmf_35:			aligned_string ""
+NakaWinStr_DpSmf_34:			aligned_string ""
+NakaWinStr_DpSmf_33:			aligned_string ""
+NakaWinStr_DpSmf_32:			aligned_string ""
+NakaWinStr_DpSmf_31:			aligned_string ""
+NakaWinStr_DpSmf_30:			aligned_string ""
+NakaWinStr_DpSmf_29:			aligned_string ""
+NakaWinStr_DpSmf_28:			aligned_string ""
+NakaWinStr_DpSmf_27:			aligned_string ""
+NakaWinStr_DpSmf_26:			aligned_string ""
+NakaWinStr_DpSmf_25:			aligned_string ""
 NakaInst_CDswWindow:			aligned_string "CDswWindow"
-LABEL_E2468C:			aligned_string ""
-LABEL_E2468E:			aligned_string ""
-LABEL_E24690:			aligned_string ""
-LABEL_E24692:			aligned_string ""
-LABEL_E24694:			aligned_string ""
-LABEL_E24696:			aligned_string ""
-LABEL_E24698:			aligned_string ""
-LABEL_E2469A:			aligned_string ""
-LABEL_E2469C:			aligned_string ""
-LABEL_E2469E:			aligned_string ""
-LABEL_E246A0:			aligned_string ""
-LABEL_E246A2:			aligned_string ""
-LABEL_E246A4:			aligned_string ""
+NakaWinStr_DpSmf_23:			aligned_string ""
+NakaWinStr_DpSmf_22:			aligned_string ""
+NakaWinStr_DpSmf_21:			aligned_string ""
+NakaWinStr_DpSmf_20:			aligned_string ""
+NakaWinStr_DpSmf_19:			aligned_string ""
+NakaWinStr_DpSmf_18:			aligned_string ""
+NakaWinStr_DpSmf_17:			aligned_string ""
+NakaWinStr_DpSmf_16:			aligned_string ""
+NakaWinStr_DpSmf_15:			aligned_string ""
+NakaWinStr_DpSmf_14:			aligned_string ""
+NakaWinStr_DpSmf_13:			aligned_string ""
+NakaWinStr_DpSmf_12:			aligned_string ""
+NakaWinStr_DpSmf_11:			aligned_string ""
 NakaInst_SMFMuteSw:			aligned_string "SMFMuteSw"
-LABEL_E246B0:			aligned_string ""
-LABEL_E246B2:			aligned_string ""
-LABEL_E246B4:			aligned_string ""
-LABEL_E246B6:			aligned_string ""
-LABEL_E246B8:			aligned_string ""
-LABEL_E246BA:			aligned_string ""
-LABEL_E246BC:			aligned_string ""
-LABEL_E246BE:			aligned_string ""
-LABEL_E246C0:			aligned_string ""
+NakaWinStr_DpSmf_9:			aligned_string ""
+NakaWinStr_DpSmf_8:			aligned_string ""
+NakaWinStr_DpSmf_7:			aligned_string ""
+NakaWinStr_DpSmf_6:			aligned_string ""
+NakaWinStr_DpSmf_5:			aligned_string ""
+NakaWinStr_DpSmf_4:			aligned_string ""
+NakaWinStr_DpSmf_3:			aligned_string ""
+NakaWinStr_DpSmf_2:			aligned_string ""
+NakaWinStr_DpSmf_1:			aligned_string ""
 NakaInst_DpSmf:			aligned_string "DpSmf"
 NakaWinStateTbl_DpDoc:
 	.long NakaInst_DpDoc
@@ -453,8 +453,8 @@ NakaWinStateTbl_DpDoc:
 	.long NakaWinStateStr_DpDoc_6
 	.long NakaWinStateStr_DpDoc_5
 	.long NakaWinStateStr_DpDoc_4
-	.long LABEL_E24714
-	.long LABEL_E2470C
+	.long NakaInst_DOCR1Sw
+	.long NakaInst_DOCR2Sw
 	.long NakaInst_DOCOrchSw
 	.long NakaWinStateStr_DpDoc_2
 	.long NakaWinStateStr_DpDoc_1
@@ -463,8 +463,8 @@ NakaWinStateStr_DpDoc_0:	aligned_string ""
 NakaWinStateStr_DpDoc_1:	aligned_string ""
 NakaWinStateStr_DpDoc_2:	aligned_string ""
 NakaInst_DOCOrchSw:			aligned_string "DOCOrchSw"
-LABEL_E2470C:			.asciz "DOCR2Sw"
-LABEL_E24714:			.asciz "DOCR1Sw"
+NakaInst_DOCR2Sw:			.asciz "DOCR2Sw"
+NakaInst_DOCR1Sw:			.asciz "DOCR1Sw"
 NakaWinStateStr_DpDoc_4:	aligned_string ""
 NakaWinStateStr_DpDoc_5:	aligned_string ""
 NakaWinStateStr_DpDoc_6:	aligned_string ""
@@ -549,88 +549,88 @@ NakaWinStateStr_DpMdlySmf_13:	aligned_string ""
 NakaWinStateStr_DpMdlySmf_14:	aligned_string ""
 NakaWinStateStr_DpMdlySmf_15:	aligned_string ""
 NakaInst_DpMdlySmf:			aligned_string "DpMdlySmf"
-	.long LABEL_E248CA
+	.long NakaHdr_DpMdlyDoc
 NakaWinStateTbl_DpMdlyDoc:
 	.long NakaInst_DpMdlyDoc
-	.long LABEL_E248BE
-	.long LABEL_E248BC
-	.long LABEL_E248BA
-	.long LABEL_E248B8
-	.long LABEL_E248B6
-	.long LABEL_E248B4
-	.long LABEL_E248B2
-	.long LABEL_E248B0
+	.long NakaWinStr_DpMdlyDoc_1
+	.long NakaWinStr_DpMdlyDoc_2
+	.long NakaWinStr_DpMdlyDoc_3
+	.long NakaWinStr_DpMdlyDoc_4
+	.long NakaWinStr_DpMdlyDoc_5
+	.long NakaWinStr_DpMdlyDoc_6
+	.long NakaWinStr_DpMdlyDoc_7
+	.long NakaWinStr_DpMdlyDoc_8
 	.long NakaInst_DOCMedR1Sw
 	.long NakaInst_DOCMedR2Sw
 	.long NakaInst_DOCMedOrchSw
-	.long LABEL_E24888
-	.long LABEL_E24886
-	.long LABEL_E24884
-LABEL_E24884:	aligned_string ""
-LABEL_E24886:	aligned_string ""
-LABEL_E24888:	aligned_string ""
+	.long NakaWinStr_DpMdlyDoc_12
+	.long NakaWinStr_DpMdlyDoc_13
+	.long NakaWinStr_DpMdlyDoc_14
+NakaWinStr_DpMdlyDoc_14:	aligned_string ""
+NakaWinStr_DpMdlyDoc_13:	aligned_string ""
+NakaWinStr_DpMdlyDoc_12:	aligned_string ""
 NakaInst_DOCMedOrchSw:	aligned_string "DOCMedOrchSw"
 NakaInst_DOCMedR2Sw:	aligned_string "DOCMedR2Sw"
 NakaInst_DOCMedR1Sw:	aligned_string "DOCMedR1Sw"
-LABEL_E248B0:	aligned_string ""
-LABEL_E248B2:	aligned_string ""
-LABEL_E248B4:	aligned_string ""
-LABEL_E248B6:	aligned_string ""
-LABEL_E248B8:	aligned_string ""
-LABEL_E248BA:	aligned_string ""
-LABEL_E248BC:	aligned_string ""
-LABEL_E248BE:	aligned_string ""
+NakaWinStr_DpMdlyDoc_8:	aligned_string ""
+NakaWinStr_DpMdlyDoc_7:	aligned_string ""
+NakaWinStr_DpMdlyDoc_6:	aligned_string ""
+NakaWinStr_DpMdlyDoc_5:	aligned_string ""
+NakaWinStr_DpMdlyDoc_4:	aligned_string ""
+NakaWinStr_DpMdlyDoc_3:	aligned_string ""
+NakaWinStr_DpMdlyDoc_2:	aligned_string ""
+NakaWinStr_DpMdlyDoc_1:	aligned_string ""
 NakaInst_DpMdlyDoc:	aligned_string "DpMdlyDoc"
-LABEL_E248CA:	.byte 0x00, 0xff, 0x30, 0x49, 0xe2, 0x00
+NakaHdr_DpMdlyDoc:	.byte 0x00, 0xff, 0x30, 0x49, 0xe2, 0x00
 Naka_DigitalDelay_Screens:
-	.long LABEL_E2492E
-	.long LABEL_E2492C
-	.long LABEL_E2492A
-	.long LABEL_E24928
-	.long LABEL_E24926
-	.long LABEL_E24924
-	.long LABEL_E24922
-	.long LABEL_E24920
+	.long NakaWinStr_DpMdlyPd_0
+	.long NakaWinStr_DpMdlyPd_1
+	.long NakaWinStr_DpMdlyPd_2
+	.long NakaWinStr_DpMdlyPd_3
+	.long NakaWinStr_DpMdlyPd_4
+	.long NakaWinStr_DpMdlyPd_5
+	.long NakaWinStr_DpMdlyPd_6
+	.long NakaWinStr_DpMdlyPd_7
 	.long NakaInst_PDMedR1Sw
 	.long NakaInst_PDMedOrchSw
-	.long LABEL_E24908
-	.long LABEL_E24906
-	.long LABEL_E24904
-LABEL_E24904:	aligned_string ""
-LABEL_E24906:	aligned_string ""
-LABEL_E24908:	aligned_string ""
+	.long NakaWinStr_DpMdlyPd_10
+	.long NakaWinStr_DpMdlyPd_11
+	.long NakaWinStr_DpMdlyPd_12
+NakaWinStr_DpMdlyPd_12:	aligned_string ""
+NakaWinStr_DpMdlyPd_11:	aligned_string ""
+NakaWinStr_DpMdlyPd_10:	aligned_string ""
 NakaInst_PDMedOrchSw:	aligned_string "PDMedOrchSw"
 NakaInst_PDMedR1Sw:	aligned_string "PDMedR1Sw"
-LABEL_E24920:	aligned_string ""
-LABEL_E24922:	aligned_string ""
-LABEL_E24924:	aligned_string ""
-LABEL_E24926:	aligned_string ""
-LABEL_E24928:	aligned_string ""
-LABEL_E2492A:	aligned_string ""
-LABEL_E2492C:	aligned_string ""
-LABEL_E2492E:	aligned_string ""
+NakaWinStr_DpMdlyPd_7:	aligned_string ""
+NakaWinStr_DpMdlyPd_6:	aligned_string ""
+NakaWinStr_DpMdlyPd_5:	aligned_string ""
+NakaWinStr_DpMdlyPd_4:	aligned_string ""
+NakaWinStr_DpMdlyPd_3:	aligned_string ""
+NakaWinStr_DpMdlyPd_2:	aligned_string ""
+NakaWinStr_DpMdlyPd_1:	aligned_string ""
+NakaWinStr_DpMdlyPd_0:	aligned_string ""
 NakaInst_DpMdlyPd:	aligned_string "DpMdlyPd"
 Naka_PDMedR1_Screens:
 	.long NakaInst_DpMdlySmfLyr
-	.long LABEL_E2496C
-	.long LABEL_E2496A
-	.long LABEL_E24968
-	.long LABEL_E24966
-	.long LABEL_E24964
-	.long LABEL_E24962
-	.long LABEL_E24960
-	.long LABEL_E2495E
-LABEL_E2495E:	aligned_string ""
-LABEL_E24960:	aligned_string ""
-LABEL_E24962:	aligned_string ""
-LABEL_E24964:	aligned_string ""
-LABEL_E24966:	aligned_string ""
-LABEL_E24968:	aligned_string ""
-LABEL_E2496A:	aligned_string ""
-LABEL_E2496C:	aligned_string ""
+	.long NakaWinStr_DpMdlySmfLyr_1
+	.long NakaWinStr_DpMdlySmfLyr_2
+	.long NakaWinStr_DpMdlySmfLyr_3
+	.long NakaWinStr_DpMdlySmfLyr_4
+	.long NakaWinStr_DpMdlySmfLyr_5
+	.long NakaWinStr_DpMdlySmfLyr_6
+	.long NakaWinStr_DpMdlySmfLyr_7
+	.long NakaWinStr_DpMdlySmfLyr_8
+NakaWinStr_DpMdlySmfLyr_8:	aligned_string ""
+NakaWinStr_DpMdlySmfLyr_7:	aligned_string ""
+NakaWinStr_DpMdlySmfLyr_6:	aligned_string ""
+NakaWinStr_DpMdlySmfLyr_5:	aligned_string ""
+NakaWinStr_DpMdlySmfLyr_4:	aligned_string ""
+NakaWinStr_DpMdlySmfLyr_3:	aligned_string ""
+NakaWinStr_DpMdlySmfLyr_2:	aligned_string ""
+NakaWinStr_DpMdlySmfLyr_1:	aligned_string ""
 NakaInst_DpMdlySmfLyr:	aligned_string "DpMdlySmfLyr"
 	.long DkMdlyPly_Name
-LABEL_E24980:
+NakaWinStateTbl_DkMdlyPly:
 	.long DkMdlyPly_Str29
 	.long DkMdlyPly_Str28
 	.long DkMdlyPly_Str27
@@ -1774,7 +1774,7 @@ NakaDesc_Empty_D:
 	.long NakaFld_Empty_D
 NakaFld_Empty_D:	aligned_string ""
 NakaDesc_FuncIndex:
-	.long LABEL_E270EA
+	.long NakaFld_TabIndexFunc
 	.long NakaFld_TabIndex
 	.long NakaFld_Func_K
 	.long NakaFld_FuncIndex_Pad
