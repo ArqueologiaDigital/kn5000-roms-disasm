@@ -249,9 +249,9 @@ NakaNode_Accomp11_Widget01:
 	.long Naka_PresentationRootState
 	.byte 0xf9, 0x00, 0x00, 0x00
 	.byte 0xca, 0x00, 0xa0, 0x01, 0x7e, 0xd7, 0x03, 0x00
-	.long LABEL_E1AFF8
+	.long NakaInst_MSP_COMPILE_SETTING
 	.byte 0xa7, 0x00, 0x00, 0x00
-LABEL_E1AFF8:	.asciz "MSP COMPILE SETTING"	; DB "ING", 000h
+NakaInst_MSP_COMPILE_SETTING:	.asciz "MSP COMPILE SETTING"	; DB "ING", 000h
 NakaNode_Accomp11_Widget02:
 
 

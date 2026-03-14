@@ -6,7 +6,7 @@
 ; Manages playback settings, channel assignments, and tempo.
 ; =============================================================================
 
-LABEL_F28107:
+SMF_ProcessTimedEvent_Entry:
 	ldda8 l, 4215
 
 SMF_ProcessTimedEvent_Continue:
@@ -22,37 +22,37 @@ SMF_ProcessTimedEvent_Continue:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F2812D
+	jr lt, SMF_WriteLoop1_BufferEmpty
 	pop xbc
 	pop xwa
-	jp LABEL_F28133
+	jp SMF_WriteLoop1_Continue
 
-LABEL_F2812D:
+SMF_WriteLoop1_BufferEmpty:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F28133:
+SMF_WriteLoop1_Continue:
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F28149
+	jr lt, SMF_WriteLoop2_BufferEmpty
 	pop xbc
 	pop xwa
-	jp LABEL_F2814F
+	jp SMF_WriteLoop2_Continue
 
-LABEL_F28149:
+SMF_WriteLoop2_BufferEmpty:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F2814F:
+SMF_WriteLoop2_Continue:
 	jrl SMF_ProcessEventLoop
 
-LABEL_F28152:
+SMF_ProcessEventLoop_Entry:
 	jrl SMF_ProcessEventLoop
 
 SMF_IncrementPosition:
@@ -76,17 +76,17 @@ SMF_IncrementPosition:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F28193
+	jr lt, SMF_IncrPos_BufferEmpty
 	pop xbc
 	pop xwa
-	jp LABEL_F28199
+	jp SMF_IncrPos_WriteEndMarker
 
-LABEL_F28193:
+SMF_IncrPos_BufferEmpty:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F28199:
+SMF_IncrPos_WriteEndMarker:
 	ldb a, 0xFF
 	ldb w, 0x2F
 	ldb l, 0x0
@@ -96,17 +96,17 @@ LABEL_F28199:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F281B5
+	jr lt, SMF_EndMarker_BufferEmpty
 	pop xbc
 	pop xwa
-	jp LABEL_F281BB
+	jp SMF_EndMarker_CheckPlayback
 
-LABEL_F281B5:
+SMF_EndMarker_BufferEmpty:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
 
-LABEL_F281BB:
+SMF_EndMarker_CheckPlayback:
 	cpdi16 4347, 0
 	jr nz, SMF_FinalizeAndStartPlayback
 	call SMF_FlushToFile
@@ -115,12 +115,12 @@ LABEL_F281BB:
 	lds32 xbc, 0
 	ldda32 xwa, 6701
 	cp xwa, xbc
-	jr lt, LABEL_F281D9
+	jr lt, SMF_Flush_BufferEmpty
 	pop xbc
 	pop xwa
 	jp SMF_FinalizeAndStartPlayback
 
-LABEL_F281D9:
+SMF_Flush_BufferEmpty:
 	pop xbc
 	pop xwa
 	jp SMF_FlushAndFinalize
@@ -134,10 +134,10 @@ SMF_FinalizeAndStartPlayback:
 	call SeqPlay_StartWithDisplay
 	stdi16 6699, 2
 
-LABEL_F281FE:
+SMF_Finalize_PopReturn:
 	jr SMF_PopReturn
 
-LABEL_F28200:
+SMF_Finalize_RestoreAndPlay:
 	call Vga_RestoreMultiPlaneDisplay
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a

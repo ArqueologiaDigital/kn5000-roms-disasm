@@ -874,7 +874,7 @@ SMF_LoopNextChannel:
 
 SMF_SetStatusAndJump:
 	stdi16 6699, 47
-	jrl LABEL_F281FE
+	jrl SMF_Finalize_PopReturn
 
 SMF_FoundActiveChannel:
 	call Vga_SetupMultiPlaneDisplay
@@ -908,7 +908,7 @@ SMF_FindFirstActiveChannel:
 	cp c, 0xF
 	jr ule, SMF_FindFirstActiveChannel
 	stdi16 6699, 3
-	jrl LABEL_F28200
+	jrl SMF_Finalize_RestoreAndPlay
 
 SMF_SetupActiveChannel:
 	stda8 10359, c
@@ -2343,18 +2343,18 @@ SMF_ControlChange_Handler:
 	cps hl, 6
 	jrl nz, SMF_ProcessEventLoop
 	cpdi8 4213, 127
-	jrl z, LABEL_F28152
+	jrl z, SMF_ProcessEventLoop_Entry
 	ldda8 l, 4214
 	ldda8 a, 4213
 	jrl SMF_ControlChange_ValidateRange
 	ldda8 l, 4214
 	cp l, 0x7F
-	jrl z, LABEL_F28152
+	jrl z, SMF_ProcessEventLoop_Entry
 	and l, 0x1F
 	cps l, 0
-	jrl c, LABEL_F28152
+	jrl c, SMF_ProcessEventLoop_Entry
 	cp l, 0xF
-	jrl ugt, LABEL_F28152
+	jrl ugt, SMF_ProcessEventLoop_Entry
 	jrl SMF_ProcessEventLoop
 	jrl SMF_ProcessEventLoop
 	jrl SMF_ProcessEventLoop
@@ -2860,7 +2860,7 @@ SMF_CC_Chorus_SetupCC91:
 
 SMF_CC_Volume_Handler:
 	cpdi8 6709, 0
-	jr z, LABEL_F28107
+	jr z, SMF_ProcessTimedEvent_Entry
 	bitda 0, 4236
 	jrl z, SMF_ProcessEventLoop
 

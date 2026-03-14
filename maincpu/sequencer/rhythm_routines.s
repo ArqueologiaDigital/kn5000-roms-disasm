@@ -22,7 +22,7 @@ Rhythm_CompareAndTrigger:
 
 Rhythm_CompareAndTriggerNotes:
 	bitda 1, 13015
-	jr nz, LABEL_F54C65
+	jr nz, Rhythm_CompareNoteA_Only
 	ldda8 a, 13016
 	ldda8 w, 13017
 	ldda8 l, 13023
@@ -32,22 +32,22 @@ Rhythm_CompareAndTriggerNotes:
 	calr Rhythm_NoteOnAfterSetup_A
 	jr Rhythm_SaveCurrentNoteState
 
-LABEL_F54C65:
+Rhythm_CompareNoteA_Only:
 	ldda8 a, 13016
 	ldda8 w, 13023
 	cp a, w
-	jr z, LABEL_F54C76
+	jr z, Rhythm_CompareNoteB
 	calr Rhythm_NoteOnAfterSetup_A
 	jr Rhythm_SaveCurrentNoteState
 
-LABEL_F54C76:
+Rhythm_CompareNoteB:
 	ldda8 a, 13017
 	ldda8 w, 13024
 	cp a, w
-	jr z, LABEL_F54C85
+	jr z, Rhythm_CompareNoteC
 	calr Rhythm_NoteOnAfterSetup_B
 
-LABEL_F54C85:
+Rhythm_CompareNoteC:
 	ldda8 a, 13018
 	ldda8 w, 13025
 	cp a, w
@@ -74,7 +74,7 @@ Rhythm_SaveNoteState:
 	ret
 
 Rhythm_NoteOnAfterSetup_A:
-	calr LABEL_F54D61
+	calr Rhythm_SetupAllChannels
 	calr Rhythm_AllNotesOff_Dispatch
 	calr Rhythm_Send_Ch90_7F_7E
 	calr Rhythm_NoteOffMax_Dispatch
@@ -130,7 +130,7 @@ Rhythm_NoteOnAfterSetup_C:
 	call Rhythm_SendByte
 	ret
 
-LABEL_F54D61:
+Rhythm_SetupAllChannels:
 	calr Rhythm_SetupChannel_D7
 	calr Rhythm_SetupChannel_D4
 	calr Rhythm_SetupChannel_D5
@@ -1583,6 +1583,6 @@ Rhythm_TranspMod_WrapDone:
 	ld a, w
 	ret
 
-LABEL_F55BAE:
+Rhythm_TailPadding:
 	.byte 0x1d, 0x37, 0x34, 0xf5, 0x0e
 

@@ -8500,7 +8500,7 @@ MidiSeq_ApplyPendingParams:
 	ldda8 e, 48392
 	res 7, e
 	extz de
-	call LABEL_F768AF
+	call ParaLoadOpt_AudioFlagCheck
 	jr MidiSeq_ClearSyncFlag
 
 MidiSeq_ApplyParams_Lower:
@@ -8513,7 +8513,7 @@ MidiSeq_ApplyParams_Lower:
 	ldda8 e, 48404
 	res 7, e
 	extz de
-	call LABEL_F76A52
+	call ParaLoadOpt_AudioFlagCheck_B
 
 MidiSeq_ClearSyncFlag:
 	resda 6, 48412

@@ -226,8 +226,8 @@ Naka_Event_Table2:
 	.long NakaInst_AcDrawSettingProc
 	.long NakaInst_AcDrawbarNameProc
 	.long NakaInst_IvMPverProc
-	.long LABEL_E81624
-LABEL_E81624:	aligned_string ""
+	.long NakaInst_EmptyString
+NakaInst_EmptyString:	aligned_string ""
 NakaInst_IvMPverProc:	aligned_string "IvMPverProc"
 NakaInst_AcDrawbarNameProc:	aligned_string "AcDrawbarNameProc"
 NakaInst_AcDrawSettingProc:	aligned_string "AcDrawSettingProc"
@@ -266,7 +266,7 @@ NakaInst_AcVolPartEditBoxProc:	aligned_string "AcVolPartEditBoxProc"
 NakaInst_AcLswPartEditBoxProc:	aligned_string "AcLswPartEditBoxProc"
 NakaInst_IvSdpartProc:	aligned_string "IvSdpartProc"
 
-LABEL_E818B0:
+NakaContainer_SoundMenu_Root:
 	naka_header NAKA_TYPE_CONTAINER
 	.byte 0xff, 0xff, 0x01, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x0a, 0x00, 0x00, 0x00
@@ -281,6 +281,6 @@ LABEL_E818B0:
 
 NakaDesc_SOUND_MENU:	aligned_string "SOUND MENU"
 
-LABEL_E818E6:	; This is a yellow "PAGE 1/2" button
+NakaWidget_SoundMenu_PageButton:	; This is a yellow "PAGE 1/2" button
 	naka_header NAKA_TYPE_0x25
 	.byte 0x00, 0x00

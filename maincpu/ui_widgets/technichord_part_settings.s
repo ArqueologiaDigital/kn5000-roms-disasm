@@ -2973,8 +2973,8 @@ Naka_SoftVersion_ScrollMeta:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x04, 0x00, 0x18, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x1f, 0x00, 0x1f, 0x00
 Naka_SoundSelect_Table:
-	.long LABEL_E818B0
-	.long LABEL_E818E6
+	.long NakaContainer_SoundMenu_Root
+	.long NakaWidget_SoundMenu_PageButton
 	.long NakaWidget_SoundMenu_ScrollBar1
 	.long NakaWidget_SoundMenu_ScrollBar2
 	.long NakaWidget_SoundMenu_ListBox

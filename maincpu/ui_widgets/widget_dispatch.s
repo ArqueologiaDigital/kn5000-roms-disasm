@@ -6683,9 +6683,9 @@ UIState_ConfigB_081:
 	.long FileIO_ErrorCodeByteBlock
 	.long BitMapOut_ByteData_RenderState
 	.long UIState_KeyScan_Dispatch
-	.long LABEL_F69CC2
+	.long AccGuard_ProgramChangeCheck
 	.long MidiPart_DataBlock
-	.long LABEL_F6D84D
+	.long AccStyle_TableDataEntry
 	.long HelpLang_DispatchDataBlock
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_082:

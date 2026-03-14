@@ -28028,7 +28028,7 @@ SoundCtrl_CalcTempo_Clamp:
 	stda8 14763, l
 	ret
 
-LABEL_F69CC2:
+AccGuard_ProgramChangeCheck:
 	; --- Multi-condition guard with conditional calls (85 bytes) ---
 	ldda8	c, 49278
 	ldda8	a, 49277
@@ -32409,7 +32409,7 @@ StylCnv_Epilogue114:
 TableData_JumpToEntry:
 	ld xhl, 0x80000
 	jp (xhl)
-LABEL_F6D84D:
+AccStyle_TableDataEntry:
 	.byte 0x1d, 0x97, 0x07, 0xef, 0xdb, 0xd8, 0xb0, 0xf6
 	.byte 0xc1, 0x7d, 0xc0, 0x3f, 0x41, 0xb0, 0xfe, 0xf1
 	.byte 0x7f, 0xc0, 0xc8, 0xb0, 0xf6, 0xc1, 0x36, 0x8d

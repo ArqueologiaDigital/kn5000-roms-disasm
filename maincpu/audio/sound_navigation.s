@@ -352,7 +352,7 @@ MainGetRhythmName:
 	dec 4, xsp
 	push_werp 0xFA
 	cp xbc, 0x1E0005F
-	jrl nz, LABEL_F9907C
+	jrl nz, MainGetRhythmName_Return
 	ld xwa, 0x28000
 	call SndParam_LookupReadOnly
 	ldfr_berp L, 0xFA
@@ -401,7 +401,7 @@ MainGetRhythmName:
 	ld xde, (xsp + 2)
 	call ApPostEvent
 
-LABEL_F9907C:
+MainGetRhythmName_Return:
 	lds32 xhl, 0
 	pop_werp 0xFA
 	inc 4, xsp
@@ -438,18 +438,18 @@ MainGetPmemName:
 	ldto_berp A, 0xFB
 	extz wa
 	cp wa, de
-	jr nz, LABEL_F990F0
+	jr nz, MainGetPmemName_CalcOffset
 	call BitMapOut_GetRenderMode
 	bit 7, l
-	jr z, LABEL_F990EC
+	jr z, MainGetPmemName_PageNotFirst
 	lds bc, 0
-	jr LABEL_F990FE
+	jr MainGetPmemName_StoreResult
 
-LABEL_F990EC:
+MainGetPmemName_PageNotFirst:
 	lds bc, 1
-	jr LABEL_F990FE
+	jr MainGetPmemName_StoreResult
 
-LABEL_F990F0:
+MainGetPmemName_CalcOffset:
 	ldto_berp A, 0xFB
 	sll a, 3
 	inc 1, a
@@ -457,7 +457,7 @@ LABEL_F990F0:
 	ld (xbc), wa
 	lds bc, 0
 
-LABEL_F990FE:
+MainGetPmemName_StoreResult:
 	ld xwa, (xsp + 2)
 	ld (xwa), bc
 	ld xbc, (xsp + 6)
@@ -486,19 +486,19 @@ MainTrSwControl:
 	ld xwa, (xsp)
 	extz wa
 	cp xbc, 0x1E00093
-	jr z, LABEL_F9916E
+	jr z, MainTrSwControl_HandleChannel
 	cp xbc, 0x1E00092
-	jr nz, LABEL_F99172
+	jr nz, MainTrSwControl_Return
 	call SeqVoice_DispatchEventToHandler
 	ld xwa, (xsp)
 	extz wa
 	call SeqVoice_ComputeStatusFlags
-	jr LABEL_F99172
+	jr MainTrSwControl_Return
 
-LABEL_F9916E:
+MainTrSwControl_HandleChannel:
 	call AppEvent_HandleChannelEvent
 
-LABEL_F99172:
+MainTrSwControl_Return:
 	lds32 xhl, 0
 	inc 4, xsp
 	ret

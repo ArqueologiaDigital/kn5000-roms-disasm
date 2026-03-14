@@ -8,7 +8,7 @@
 ; =============================================================================
 
 
-LABEL_F768AF:
+ParaLoadOpt_AudioFlagCheck:
 	dec 6, xsp
 	ld (xsp), e
 	ld (xsp + 2), c
@@ -66,7 +66,7 @@ ParaLoadOpt_CaseC:
 	lda_24 xix, 0xf76955
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F76955:
+ParaLoadOpt_DispatchTable_A:
 	.byte 0xf2, 0x60, 0x47, 0x02, 0x00, 0x00, 0xf2, 0x62
 	.byte 0x47, 0x02, 0x00, 0x00, 0xf2, 0x64, 0x47, 0x02
 	.byte 0x00, 0x00, 0xf2, 0x66, 0x47, 0x02, 0x00, 0x00
@@ -104,7 +104,7 @@ MidiFunc_SendEvtReturnAlt:
 	inc 6, xsp
 	ret
 
-LABEL_F76A52:
+ParaLoadOpt_AudioFlagCheck_B:
 	dec 6, xsp
 	ld (xsp), e
 	ld (xsp + 2), c
@@ -166,7 +166,7 @@ ParaLoadOpt_CaseF:
 	lda_24 xix, 0xf76b03
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F76B03:
+ParaLoadOpt_DispatchTable_B:
 	.byte 0xf2, 0x60, 0x47, 0x02, 0x00, 0x00, 0xf2, 0x62
 	.byte 0x47, 0x02, 0x00, 0x00, 0xf2, 0x64, 0x47, 0x02
 	.byte 0x00, 0x00, 0xf2, 0x66, 0x47, 0x02, 0x00, 0x00
@@ -204,7 +204,7 @@ MidiFunc_SendEventReturn:
 	inc 6, xsp
 	ret
 
-LABEL_F76C00:
+ParaLoadOpt_PostDualEvent:
 	ld	xwa, 5701638
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -302,7 +302,7 @@ ParaLoadOpt_GridHandler:
 	ld xbc, 0x1C00018
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_F76EFE
+	jrl ParaLoadOpt_SetDialAndReturn
 
 ; ParaLoadOpt grid return
 ParaLoadOpt_GridReturn:
@@ -344,7 +344,7 @@ ParaLoadOpt_GridReturn:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F76DFC
+	jr z, ParaLoadOpt_GridDelegateProc
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -366,7 +366,7 @@ ParaLoadOpt_GridReturn:
 	call SetAutoInc
 	jrl AccFunc_ReturnZeroJmp
 
-LABEL_F76DFC:
+ParaLoadOpt_GridDelegateProc:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -392,7 +392,7 @@ LABEL_F76DFC:
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_F76EFE
+	jrl ParaLoadOpt_SetDialAndReturn
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -402,7 +402,7 @@ LABEL_F76DFC:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F76EAE
+	jr z, ParaLoadOpt_GridDelegateProc_B
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -424,7 +424,7 @@ LABEL_F76DFC:
 	call SetAutoInc
 	jrl AccFunc_ReturnZeroJmp
 
-LABEL_F76EAE:
+ParaLoadOpt_GridDelegateProc_B:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -451,7 +451,7 @@ LABEL_F76EAE:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_F76EFE:
+ParaLoadOpt_SetDialAndReturn:
 	call SetDialEnable
 	jr AccFunc_ReturnZeroJmp
 
@@ -459,14 +459,14 @@ LABEL_F76EFE:
 ParaLoadOpt_GridCheck0:
 	ld xwa, xiz
 	ld xiz, 0x3E
-	jr LABEL_F76F14
+	jr ParaLoadOpt_GetViewAndCopy
 
 ; ParaLoadOpt grid check case 1
 ParaLoadOpt_GridCheck1:
 	ld xwa, xiz
 	ld xiz, 0x42
 
-LABEL_F76F14:
+ParaLoadOpt_GetViewAndCopy:
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -481,7 +481,7 @@ LABEL_F76F14:
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
-	jr LABEL_F76F49
+	jr ParaLoadOpt_CallApFunc
 
 ; ParaLoadOpt grid check case 2
 ParaLoadOpt_GridCheck2:
@@ -491,7 +491,7 @@ ParaLoadOpt_GridCheck2:
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 
-LABEL_F76F49:
+ParaLoadOpt_CallApFunc:
 	call ApFuncCall
 
 AccFunc_ReturnZeroJmp:

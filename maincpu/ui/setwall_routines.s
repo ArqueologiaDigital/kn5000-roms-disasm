@@ -1598,12 +1598,12 @@ SetWall_Replay_MainLoop:
 
 SetWall_Replay_Type84:
 	cp w, 0x84
-	jr nz, LABEL_F1FEA6
+	jr nz, SetWall_Replay_CheckType81
 	lds iy, 5
 	ldda32 xhl, 10383
 	jr SetWall_Replay_MainLoop
 
-LABEL_F1FEA6:
+SetWall_Replay_CheckType81:
 	cp w, 0x81
 	jrl z, SetWall_Replay_Type81
 	call SetWall_StreamAdvanceBounded
