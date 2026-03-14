@@ -37,6 +37,14 @@ maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/parambloc
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
 	@rm -f $@.o
 
+# ctlonly uses linker to resolve extern symbol addresses from scoop_display.s
+maincpu/includes/generated/style_ui_screendata_ctlonly.bin: maincpu/style_ui/ctlonly.c maincpu/style_ui/screendata_types.h maincpu/style_ui/ctlonly_link.ld
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/style_ui -o $@.o $<
+	$(LLVM_LLD) -T maincpu/style_ui/ctlonly_link.ld -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
+
 maincpu/includes/generated/style_ui_screendata_%.bin: maincpu/style_ui/%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/style_ui -o $@.o $<
