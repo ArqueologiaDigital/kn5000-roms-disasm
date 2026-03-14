@@ -10,25 +10,34 @@
 #include "screendata_types.h"
 #include <stddef.h>
 
+/* Handler data tables (resolved by linker via se_screens_link.ld) */
+extern const char SE_DrumChannel_Labels;
+extern const char SE_DrumKit_ParamAddr_0;
+extern const char SE_DrumKit_ParamAddr_1;
+extern const char SE_DrumKit_ParamAddr_2;
+extern const char SE_DrumKit_ParamAddr_3;
+
+#define HANDLER_ADDR(sym) ((uint32_t)&(sym))
+
 /* Entry points into this block:
  *   se_drumkit_display: offset 0 (0xF12B86, 293 bytes)
  *   se_setup_drumkit: offset 190 (0xF12C44, 103 bytes)
  */
 
 typedef struct __attribute__((packed)) {
-	sd_widget_t                    widget_0;  /* handler=0xf12ccf param=2 (160,18) */
-	sd_widget_t                    widget_1;  /* handler=0x020bf3 param=13 (162,18) */
+	sd_widget_t                    widget_0;  /* drum channel labels (160,18) */
+	sd_widget_t                    widget_1;  /* DRAM param slot 0 (162,18) */
 	sd_nop_10_t                    nop_0;
-	sd_widget_t                    widget_2;  /* handler=0xf12ccf param=2 (32,21) */
-	sd_widget_t                    widget_3;  /* handler=0x020c03 param=13 (34,21) */
+	sd_widget_t                    widget_2;  /* drum channel labels (32,21) */
+	sd_widget_t                    widget_3;  /* DRAM param slot 1 (34,21) */
 	sd_nop_10_t                    nop_1;
 	sd_nop_10_t                    nop_2;
-	sd_widget_t                    widget_4;  /* handler=0xf12ccf param=2 (160,23) */
-	sd_widget_t                    widget_5;  /* handler=0x020c13 param=13 (162,23) */
+	sd_widget_t                    widget_4;  /* drum channel labels (160,23) */
+	sd_widget_t                    widget_5;  /* DRAM param slot 2 (162,23) */
 	sd_nop_10_t                    nop_3;
 	sd_nop_10_t                    nop_4;
-	sd_widget_t                    widget_6;  /* handler=0xf12ccf param=2 (32,26) */
-	sd_widget_t                    widget_7;  /* handler=0x020c23 param=13 (34,26) */
+	sd_widget_t                    widget_6;  /* drum channel labels (32,26) */
+	sd_widget_t                    widget_7;  /* DRAM param slot 3 (34,26) */
 	sd_nop_10_t                    nop_5;
 	sd_nop_10_t                    nop_6;
 	SD_LABELED_REF_TYPE(4)         labeled_ref_0;  /* "  0-" */
@@ -54,19 +63,19 @@ _Static_assert(sizeof(screendata_se_drumkit_display_t) == 329,
 
 const screendata_se_drumkit_display_t se_drumkit_display
 	__attribute__((section(".text"), used)) = {
-	.widget_0 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0668, .flags = 0x000f, .ref_tag = 0x20, .handler = 0x00f12ccf, .param = 2, .x = 160, .y = 18 },
-	.widget_1 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0000, .flags = 0x0000, .ref_tag = 0x20, .handler = 0x00020bf3, .param = 13, .x = 162, .y = 18 },
+	.widget_0 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0668, .flags = 0x000f, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_DrumChannel_Labels), .param = 2, .x = 160, .y = 18 },
+	.widget_1 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0000, .flags = 0x0000, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_DrumKit_ParamAddr_0), .param = 13, .x = 162, .y = 18 },
 	.nop_0 = { .opcode = 0x00, .length = 0x0a, .data = { 0x61, 0x06, 0x7f, 0x00, 0x20, 0xb4, 0x12, 0x03 } },
-	.widget_2 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0669, .flags = 0x000f, .ref_tag = 0x20, .handler = 0x00f12ccf, .param = 2, .x = 32, .y = 21 },
-	.widget_3 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0000, .flags = 0x0000, .ref_tag = 0x20, .handler = 0x00020c03, .param = 13, .x = 34, .y = 21 },
+	.widget_2 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0669, .flags = 0x000f, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_DrumChannel_Labels), .param = 2, .x = 32, .y = 21 },
+	.widget_3 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0000, .flags = 0x0000, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_DrumKit_ParamAddr_1), .param = 13, .x = 34, .y = 21 },
 	.nop_1 = { .opcode = 0x00, .length = 0x0a, .data = { 0x64, 0x06, 0x7f, 0x00, 0x20, 0x30, 0x15, 0x03 } },
 	.nop_2 = { .opcode = 0x00, .length = 0x0a, .data = { 0x62, 0x06, 0x7f, 0x00, 0x20, 0x34, 0x15, 0x03 } },
-	.widget_4 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066a, .flags = 0x000f, .ref_tag = 0x20, .handler = 0x00f12ccf, .param = 2, .x = 160, .y = 23 },
-	.widget_5 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0000, .flags = 0x0000, .ref_tag = 0x20, .handler = 0x00020c13, .param = 13, .x = 162, .y = 23 },
+	.widget_4 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066a, .flags = 0x000f, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_DrumChannel_Labels), .param = 2, .x = 160, .y = 23 },
+	.widget_5 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0000, .flags = 0x0000, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_DrumKit_ParamAddr_2), .param = 13, .x = 162, .y = 23 },
 	.nop_3 = { .opcode = 0x00, .length = 0x0a, .data = { 0x65, 0x06, 0x7f, 0x00, 0x20, 0xb0, 0x17, 0x03 } },
 	.nop_4 = { .opcode = 0x00, .length = 0x0a, .data = { 0x63, 0x06, 0x7f, 0x00, 0x20, 0xb4, 0x17, 0x03 } },
-	.widget_6 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066b, .flags = 0x000f, .ref_tag = 0x20, .handler = 0x00f12ccf, .param = 2, .x = 32, .y = 26 },
-	.widget_7 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0000, .flags = 0x0000, .ref_tag = 0x20, .handler = 0x00020c23, .param = 13, .x = 34, .y = 26 },
+	.widget_6 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066b, .flags = 0x000f, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_DrumChannel_Labels), .param = 2, .x = 32, .y = 26 },
+	.widget_7 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0000, .flags = 0x0000, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_DrumKit_ParamAddr_3), .param = 13, .x = 34, .y = 26 },
 	.nop_5 = { .opcode = 0x00, .length = 0x0a, .data = { 0x66, 0x06, 0x7f, 0x00, 0x20, 0x30, 0x1a, 0x03 } },
 	.nop_6 = { .opcode = 0x00, .length = 0x0a, .data = { 0x67, 0x06, 0x7f, 0x00, 0x20, 0x34, 0x1a, 0x03 } },
 	.labeled_ref_0 = { .opcode = SD_OP_LABELED_REF, .length = 8, .addr = 0x12b0, .label = { ' ', ' ', '0', '-' } },

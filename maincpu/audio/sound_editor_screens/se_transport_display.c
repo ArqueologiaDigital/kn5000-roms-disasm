@@ -10,22 +10,29 @@
 #include "screendata_types.h"
 #include <stddef.h>
 
+/* Handler data tables (resolved by linker via se_screens_link.ld) */
+extern const char SE_Transport_SwitchNames;
+extern const char SE_Transport_ParamNames;
+extern const char SE_Transport_CursorCoords;
+
+#define HANDLER_ADDR(sym) ((uint32_t)&(sym))
+
 /* Entry points into this block:
  *   se_transport_display: offset 0 (0xF149D9, 141 bytes)
  *   se_transport_sub: offset 100 (0xF14A3D, 41 bytes)
  */
 
 typedef struct __attribute__((packed)) {
-	sd_widget_t                    widget_0;  /* handler=0xf14a86 param=3 (167,34) */
-	sd_widget_t                    widget_1;  /* handler=0xf14a86 param=3 (171,34) */
-	sd_widget_t                    widget_2;  /* handler=0xf14a92 param=13 (18,12) */
-	sd_widget_t                    widget_3;  /* handler=0xf14a92 param=13 (32,12) */
-	sd_widget_t                    widget_4;  /* handler=0xf14a92 param=13 (178,17) */
-	sd_widget_t                    widget_5;  /* handler=0xf14a92 param=13 (192,17) */
+	sd_widget_t                    widget_0;  /* switch names (167,34) */
+	sd_widget_t                    widget_1;  /* switch names (171,34) */
+	sd_widget_t                    widget_2;  /* param names (18,12) */
+	sd_widget_t                    widget_3;  /* param names (32,12) */
+	sd_widget_t                    widget_4;  /* param names (178,17) */
+	sd_widget_t                    widget_5;  /* param names (192,17) */
 	sd_nop_10_t                    nop_0;
-	sd_widget_t                    widget_6;  /* handler=0xf14a86 param=3 (159,34) */
-	sd_widget_t                    widget_7;  /* handler=0xf14a86 param=3 (163,34) */
-	sd_block_hdr_t                 setup_0;  /* id=0x0660 handler=0xf14df0 */
+	sd_widget_t                    widget_6;  /* switch names (159,34) */
+	sd_widget_t                    widget_7;  /* switch names (163,34) */
+	sd_block_hdr_t                 setup_0;  /* id=0x0660 cursor coords */
 } screendata_se_transport_display_t;
 
 _Static_assert(sizeof(screendata_se_transport_display_t) == 141,
@@ -36,14 +43,14 @@ _Static_assert(sizeof(screendata_se_transport_display_t) == 141,
 
 const screendata_se_transport_display_t se_transport_display
 	__attribute__((section(".text"), used)) = {
-	.widget_0 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066c, .flags = 0x0430, .ref_tag = 0x20, .handler = 0x00f14a86, .param = 3, .x = 167, .y = 34 },
-	.widget_1 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066c, .flags = 0x06c0, .ref_tag = 0x20, .handler = 0x00f14a86, .param = 3, .x = 171, .y = 34 },
-	.widget_2 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0661, .flags = 0x003f, .ref_tag = 0x20, .handler = 0x00f14a92, .param = 13, .x = 18, .y = 12 },
-	.widget_3 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0662, .flags = 0x003f, .ref_tag = 0x20, .handler = 0x00f14a92, .param = 13, .x = 32, .y = 12 },
-	.widget_4 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0665, .flags = 0x003f, .ref_tag = 0x20, .handler = 0x00f14a92, .param = 13, .x = 178, .y = 17 },
-	.widget_5 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0666, .flags = 0x003f, .ref_tag = 0x20, .handler = 0x00f14a92, .param = 13, .x = 192, .y = 17 },
+	.widget_0 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066c, .flags = 0x0430, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_Transport_SwitchNames), .param = 3, .x = 167, .y = 34 },
+	.widget_1 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066c, .flags = 0x06c0, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_Transport_SwitchNames), .param = 3, .x = 171, .y = 34 },
+	.widget_2 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0661, .flags = 0x003f, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_Transport_ParamNames), .param = 13, .x = 18, .y = 12 },
+	.widget_3 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0662, .flags = 0x003f, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_Transport_ParamNames), .param = 13, .x = 32, .y = 12 },
+	.widget_4 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0665, .flags = 0x003f, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_Transport_ParamNames), .param = 13, .x = 178, .y = 17 },
+	.widget_5 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0666, .flags = 0x003f, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_Transport_ParamNames), .param = 13, .x = 192, .y = 17 },
 	.nop_0 = { .opcode = 0x00, .length = 0x0a, .data = { 0x6b, 0x06, 0x7f, 0x00, 0x20, 0x98, 0x22, 0x03 } },
-	.widget_6 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066c, .flags = 0x0003, .ref_tag = 0x20, .handler = 0x00f14a86, .param = 3, .x = 159, .y = 34 },
-	.widget_7 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066c, .flags = 0x020c, .ref_tag = 0x20, .handler = 0x00f14a86, .param = 3, .x = 163, .y = 34 },
-	.setup_0 = { .type = SD_BLOCK_SETUP, .length = 0x0b, .id = 0x0660, .flags = 0x0007, .tag = 0x05, .handler = 0x00f14df0 },
+	.widget_6 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066c, .flags = 0x0003, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_Transport_SwitchNames), .param = 3, .x = 159, .y = 34 },
+	.widget_7 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066c, .flags = 0x020c, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_Transport_SwitchNames), .param = 3, .x = 163, .y = 34 },
+	.setup_0 = { .type = SD_BLOCK_SETUP, .length = 0x0b, .id = 0x0660, .flags = 0x0007, .tag = 0x05, .handler = HANDLER_ADDR(SE_Transport_CursorCoords) },
 };

@@ -10,8 +10,13 @@
 #include "screendata_types.h"
 #include <stddef.h>
 
+/* Handler data tables (resolved by linker via accomp_screens_link.ld) */
+extern const char Accomp_SectionParam_Names;
+
+#define HANDLER_ADDR(sym) ((uint32_t)&(sym))
+
 typedef struct __attribute__((packed)) {
-	sd_widget_t                    widget_0;  /* handler=0xf6aca0 param=20 (133,27) */
+	sd_widget_t                    widget_0;  /* section parameter names (133,27) */
 } screendata_accomp_section_widget_t;
 
 _Static_assert(sizeof(screendata_accomp_section_widget_t) == 15,
@@ -22,5 +27,5 @@ _Static_assert(sizeof(screendata_accomp_section_widget_t) == 15,
 
 const screendata_accomp_section_widget_t accomp_section_widget
 	__attribute__((section(".text"), used)) = {
-	.widget_0 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39ba, .flags = 0x0007, .ref_tag = 0x06, .handler = 0x00f6aca0, .param = 20, .x = 133, .y = 27 },
+	.widget_0 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39ba, .flags = 0x0007, .ref_tag = 0x06, .handler = HANDLER_ADDR(Accomp_SectionParam_Names), .param = 20, .x = 133, .y = 27 },
 };

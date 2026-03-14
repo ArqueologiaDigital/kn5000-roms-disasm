@@ -10,9 +10,15 @@
 #include "screendata_types.h"
 #include <stddef.h>
 
+/* Handler data tables (resolved by linker via se_screens_link.ld) */
+extern const char SE_SetupSel3_HoldNames;
+extern const char SE_SetupSel3_EnableNames;
+
+#define HANDLER_ADDR(sym) ((uint32_t)&(sym))
+
 typedef struct __attribute__((packed)) {
-	sd_widget_t                    widget_0;  /* handler=0xf14e46 param=4 (123,14) */
-	sd_widget_t                    widget_1;  /* handler=0xf14e4e param=7 (75,17) */
+	sd_widget_t                    widget_0;  /* hold option names (123,14) */
+	sd_widget_t                    widget_1;  /* enable option names (75,17) */
 } screendata_se_setup_sel3_t;
 
 _Static_assert(sizeof(screendata_se_setup_sel3_t) == 30,
@@ -23,6 +29,6 @@ _Static_assert(sizeof(screendata_se_setup_sel3_t) == 30,
 
 const screendata_se_setup_sel3_t se_setup_sel3
 	__attribute__((section(".text"), used)) = {
-	.widget_0 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0660, .flags = 0x0410, .ref_tag = 0x20, .handler = 0x00f14e46, .param = 4, .x = 123, .y = 14 },
-	.widget_1 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0660, .flags = 0x0520, .ref_tag = 0x20, .handler = 0x00f14e4e, .param = 7, .x = 75, .y = 17 },
+	.widget_0 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0660, .flags = 0x0410, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_SetupSel3_HoldNames), .param = 4, .x = 123, .y = 14 },
+	.widget_1 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0660, .flags = 0x0520, .ref_tag = 0x20, .handler = HANDLER_ADDR(SE_SetupSel3_EnableNames), .param = 7, .x = 75, .y = 17 },
 };

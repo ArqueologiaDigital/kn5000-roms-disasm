@@ -26,8 +26,12 @@ SCREENDATA_BINS = $(patsubst %,maincpu/includes/generated/style_ui_screendata_%.
 ACCOMP_NAMES = accomp_section_widget accomp_part_widget accomp_display_full
 ACCOMP_BINS = $(patsubst %,maincpu/includes/generated/%.bin,$(ACCOMP_NAMES))
 
-SE_NAMES = se_drumkit_display se_rhythm_transport_tables
+SE_NAMES = se_drumkit_display se_rhythm_transport_tables se_name_editor se_compare_screen se_parameter_grid se_transport_display se_setup_sel3 se_apply_confirm se_general_edit
+# Note: se_drumkit_display and se_rhythm_transport_tables are .incbin'd in assembly.
+# The remaining SE files are compiled but awaiting .incbin integration.
 SE_BINS = $(patsubst %,maincpu/includes/generated/%.bin,$(SE_NAMES))
+SE_LINK_LD = maincpu/audio/sound_editor_screens/se_screens_link.ld
+ACCOMP_LINK_LD = maincpu/sequencer/accomp_screens/accomp_screens_link.ld
 
 C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS)
 
@@ -51,17 +55,21 @@ maincpu/includes/generated/style_ui_screendata_%.bin: maincpu/style_ui/%.c mainc
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
 	@rm -f $@.o
 
-maincpu/includes/generated/se_%.bin: maincpu/audio/sound_editor_screens/se_%.c maincpu/style_ui/screendata_types.h
+# SE screens use shared linker script to resolve extern handler symbols
+maincpu/includes/generated/se_%.bin: maincpu/audio/sound_editor_screens/se_%.c maincpu/style_ui/screendata_types.h $(SE_LINK_LD)
 	@mkdir -p maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/style_ui -o $@.o $<
-	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
-	@rm -f $@.o
+	$(LLVM_LLD) -T $(SE_LINK_LD) -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
 
-maincpu/includes/generated/accomp_%.bin: maincpu/sequencer/accomp_screens/accomp_%.c maincpu/style_ui/screendata_types.h
+# Accomp screens use shared linker script to resolve extern handler symbols
+maincpu/includes/generated/accomp_%.bin: maincpu/sequencer/accomp_screens/accomp_%.c maincpu/style_ui/screendata_types.h $(ACCOMP_LINK_LD)
 	@mkdir -p maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/style_ui -o $@.o $<
-	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
-	@rm -f $@.o
+	$(LLVM_LLD) -T $(ACCOMP_LINK_LD) -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
 
 paramblocks: $(PARAMBLOCK_BINS)
 screendata: $(SCREENDATA_BINS)

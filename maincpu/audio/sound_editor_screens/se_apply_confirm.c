@@ -10,17 +10,26 @@
 #include "screendata_types.h"
 #include <stddef.h>
 
+/* Handler data tables (resolved by linker via se_screens_link.ld) */
+extern const char SE_ApplyConfirm_ParamAddr_R1;
+extern const char SE_ApplyConfirm_ParamAddr_R2;
+extern const char SE_ApplyConfirm_FlaggedAddr_R1;
+extern const char SE_ApplyConfirm_FlaggedAddr_R2;
+extern const char SE_ApplyConfirm_CursorCoords;
+
+#define HANDLER_ADDR(sym) ((uint32_t)&(sym))
+
 /* Entry points into this block:
  *   se_apply_confirm: offset 0 (0xF163AA, 55 bytes)
  *   se_setup_confirm: offset 0 (0xF163AA, 55 bytes)
  */
 
 typedef struct __attribute__((packed)) {
-	sd_block_hdr_t                 setup5_0;  /* id=0x0661 handler=0x020d50 */
-	sd_block_hdr_t                 setup5_1;  /* id=0x0662 handler=0x021250 */
-	sd_block_hdr_t                 setup5_2;  /* id=0x0663 handler=0x3020d55 */
-	sd_block_hdr_t                 setup5_3;  /* id=0x0664 handler=0x3021255 */
-	sd_block_hdr_t                 setup_0;  /* id=0x065d handler=0xf163ff */
+	sd_block_hdr_t                 setup5_0;  /* id=0x0661 DRAM param R1 */
+	sd_block_hdr_t                 setup5_1;  /* id=0x0662 DRAM param R2 */
+	sd_block_hdr_t                 setup5_2;  /* id=0x0663 flagged R1 */
+	sd_block_hdr_t                 setup5_3;  /* id=0x0664 flagged R2 */
+	sd_block_hdr_t                 setup_0;  /* id=0x065d cursor coords */
 } screendata_se_apply_confirm_t;
 
 _Static_assert(sizeof(screendata_se_apply_confirm_t) == 55,
@@ -31,9 +40,9 @@ _Static_assert(sizeof(screendata_se_apply_confirm_t) == 55,
 
 const screendata_se_apply_confirm_t se_apply_confirm
 	__attribute__((section(".text"), used)) = {
-	.setup5_0 = { .type = 0x05, .length = 0x0b, .id = 0x0661, .flags = 0x00ff, .tag = 0x20, .handler = 0x00020d50 },
-	.setup5_1 = { .type = 0x05, .length = 0x0b, .id = 0x0662, .flags = 0x00ff, .tag = 0x20, .handler = 0x00021250 },
-	.setup5_2 = { .type = 0x05, .length = 0x0b, .id = 0x0663, .flags = 0x05e0, .tag = 0x20, .handler = 0x03020d55 },
-	.setup5_3 = { .type = 0x05, .length = 0x0b, .id = 0x0664, .flags = 0x05e0, .tag = 0x20, .handler = 0x03021255 },
-	.setup_0 = { .type = SD_BLOCK_SETUP, .length = 0x0b, .id = 0x065d, .flags = 0x000f, .tag = 0x05, .handler = 0x00f163ff },
+	.setup5_0 = { .type = 0x05, .length = 0x0b, .id = 0x0661, .flags = 0x00ff, .tag = 0x20, .handler = HANDLER_ADDR(SE_ApplyConfirm_ParamAddr_R1) },
+	.setup5_1 = { .type = 0x05, .length = 0x0b, .id = 0x0662, .flags = 0x00ff, .tag = 0x20, .handler = HANDLER_ADDR(SE_ApplyConfirm_ParamAddr_R2) },
+	.setup5_2 = { .type = 0x05, .length = 0x0b, .id = 0x0663, .flags = 0x05e0, .tag = 0x20, .handler = HANDLER_ADDR(SE_ApplyConfirm_FlaggedAddr_R1) },
+	.setup5_3 = { .type = 0x05, .length = 0x0b, .id = 0x0664, .flags = 0x05e0, .tag = 0x20, .handler = HANDLER_ADDR(SE_ApplyConfirm_FlaggedAddr_R2) },
+	.setup_0 = { .type = SD_BLOCK_SETUP, .length = 0x0b, .id = 0x065d, .flags = 0x000f, .tag = 0x05, .handler = HANDLER_ADDR(SE_ApplyConfirm_CursorCoords) },
 };

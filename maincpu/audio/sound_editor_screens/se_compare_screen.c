@@ -10,20 +10,33 @@
 #include "screendata_types.h"
 #include <stddef.h>
 
+/* Handler data tables (resolved by linker via se_screens_link.ld) */
+extern const char SE_CompareScreen_CursorCoords;
+extern const char SE_Compare_ParamAddr_R1;
+extern const char SE_Compare_ParamAddr_R2;
+extern const char SE_Compare_ParamAddr_R3;
+extern const char SE_Compare_ParamAddr_R4;
+extern const char SE_Compare_FlaggedAddr_R1;
+extern const char SE_Compare_FlaggedAddr_R2;
+extern const char SE_Compare_FlaggedAddr_R3;
+extern const char SE_Compare_FlaggedAddr_R4;
+
+#define HANDLER_ADDR(sym) ((uint32_t)&(sym))
+
 typedef struct __attribute__((packed)) {
 	sd_nop_10_t                    nop_0;
 	sd_nop_10_t                    nop_1;
 	sd_nop_10_t                    nop_2;
 	sd_nop_10_t                    nop_3;
-	sd_block_hdr_t                 setup5_0;  /* id=0x0665 handler=0x020d57 */
-	sd_block_hdr_t                 setup5_1;  /* id=0x0666 handler=0x021257 */
-	sd_block_hdr_t                 setup5_2;  /* id=0x0667 handler=0x02177f */
-	sd_block_hdr_t                 setup5_3;  /* id=0x0668 handler=0x021c7f */
-	sd_block_hdr_t                 setup5_4;  /* id=0x0669 handler=0x3020d5d */
-	sd_block_hdr_t                 setup5_5;  /* id=0x066a handler=0x302125d */
-	sd_block_hdr_t                 setup5_6;  /* id=0x066b handler=0x3021785 */
-	sd_block_hdr_t                 setup5_7;  /* id=0x066c handler=0x3021c85 */
-	sd_block_hdr_t                 setup_0;  /* id=0x065d handler=0xf1305e */
+	sd_block_hdr_t                 setup5_0;  /* id=0x0665 DRAM param R1 */
+	sd_block_hdr_t                 setup5_1;  /* id=0x0666 DRAM param R2 */
+	sd_block_hdr_t                 setup5_2;  /* id=0x0667 DRAM param R3 */
+	sd_block_hdr_t                 setup5_3;  /* id=0x0668 DRAM param R4 */
+	sd_block_hdr_t                 setup5_4;  /* id=0x0669 flagged R1 */
+	sd_block_hdr_t                 setup5_5;  /* id=0x066a flagged R2 */
+	sd_block_hdr_t                 setup5_6;  /* id=0x066b flagged R3 */
+	sd_block_hdr_t                 setup5_7;  /* id=0x066c flagged R4 */
+	sd_block_hdr_t                 setup_0;  /* id=0x065d cursor coords */
 } screendata_se_compare_screen_t;
 
 _Static_assert(sizeof(screendata_se_compare_screen_t) == 139,
@@ -38,13 +51,13 @@ const screendata_se_compare_screen_t se_compare_screen
 	.nop_1 = { .opcode = 0x00, .length = 0x0a, .data = { 0x62, 0x06, 0x7f, 0x00, 0x20, 0x51, 0x12, 0x03 } },
 	.nop_2 = { .opcode = 0x00, .length = 0x0a, .data = { 0x63, 0x06, 0x7f, 0x00, 0x20, 0x79, 0x17, 0x03 } },
 	.nop_3 = { .opcode = 0x00, .length = 0x0a, .data = { 0x64, 0x06, 0x7f, 0x00, 0x20, 0x79, 0x1c, 0x03 } },
-	.setup5_0 = { .type = 0x05, .length = 0x0b, .id = 0x0665, .flags = 0x00ff, .tag = 0x20, .handler = 0x00020d57 },
-	.setup5_1 = { .type = 0x05, .length = 0x0b, .id = 0x0666, .flags = 0x00ff, .tag = 0x20, .handler = 0x00021257 },
-	.setup5_2 = { .type = 0x05, .length = 0x0b, .id = 0x0667, .flags = 0x00ff, .tag = 0x20, .handler = 0x0002177f },
-	.setup5_3 = { .type = 0x05, .length = 0x0b, .id = 0x0668, .flags = 0x00ff, .tag = 0x20, .handler = 0x00021c7f },
-	.setup5_4 = { .type = 0x05, .length = 0x0b, .id = 0x0669, .flags = 0x05e0, .tag = 0x20, .handler = 0x03020d5d },
-	.setup5_5 = { .type = 0x05, .length = 0x0b, .id = 0x066a, .flags = 0x05e0, .tag = 0x20, .handler = 0x0302125d },
-	.setup5_6 = { .type = 0x05, .length = 0x0b, .id = 0x066b, .flags = 0x05e0, .tag = 0x20, .handler = 0x03021785 },
-	.setup5_7 = { .type = 0x05, .length = 0x0b, .id = 0x066c, .flags = 0x05e0, .tag = 0x20, .handler = 0x03021c85 },
-	.setup_0 = { .type = SD_BLOCK_SETUP, .length = 0x0b, .id = 0x065d, .flags = 0x000f, .tag = 0x05, .handler = 0x00f1305e },
+	.setup5_0 = { .type = 0x05, .length = 0x0b, .id = 0x0665, .flags = 0x00ff, .tag = 0x20, .handler = HANDLER_ADDR(SE_Compare_ParamAddr_R1) },
+	.setup5_1 = { .type = 0x05, .length = 0x0b, .id = 0x0666, .flags = 0x00ff, .tag = 0x20, .handler = HANDLER_ADDR(SE_Compare_ParamAddr_R2) },
+	.setup5_2 = { .type = 0x05, .length = 0x0b, .id = 0x0667, .flags = 0x00ff, .tag = 0x20, .handler = HANDLER_ADDR(SE_Compare_ParamAddr_R3) },
+	.setup5_3 = { .type = 0x05, .length = 0x0b, .id = 0x0668, .flags = 0x00ff, .tag = 0x20, .handler = HANDLER_ADDR(SE_Compare_ParamAddr_R4) },
+	.setup5_4 = { .type = 0x05, .length = 0x0b, .id = 0x0669, .flags = 0x05e0, .tag = 0x20, .handler = HANDLER_ADDR(SE_Compare_FlaggedAddr_R1) },
+	.setup5_5 = { .type = 0x05, .length = 0x0b, .id = 0x066a, .flags = 0x05e0, .tag = 0x20, .handler = HANDLER_ADDR(SE_Compare_FlaggedAddr_R2) },
+	.setup5_6 = { .type = 0x05, .length = 0x0b, .id = 0x066b, .flags = 0x05e0, .tag = 0x20, .handler = HANDLER_ADDR(SE_Compare_FlaggedAddr_R3) },
+	.setup5_7 = { .type = 0x05, .length = 0x0b, .id = 0x066c, .flags = 0x05e0, .tag = 0x20, .handler = HANDLER_ADDR(SE_Compare_FlaggedAddr_R4) },
+	.setup_0 = { .type = SD_BLOCK_SETUP, .length = 0x0b, .id = 0x065d, .flags = 0x000f, .tag = 0x05, .handler = HANDLER_ADDR(SE_CompareScreen_CursorCoords) },
 };
