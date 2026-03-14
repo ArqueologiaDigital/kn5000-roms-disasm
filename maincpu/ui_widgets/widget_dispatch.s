@@ -7289,7 +7289,7 @@ SystemConfig_PointerTable:
 	.long NakaInst_SoundConfig_LookupTable
 	.long LABEL_EDB2E4
 	.long DiskOp_ChannelCfgTable
-	.long LABEL_EB7932
+	.long WidgetStyleDataTable
 	.long EffectMode_DispatchTable
 	.long SoundParam_EncoderMappingData
 	.long LABEL_EED3DE

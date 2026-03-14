@@ -803,11 +803,11 @@ Naka_DrawbarReg_Table:
 	.long LABEL_EB53DE
 	.long LABEL_EB63DE
 	.long LABEL_EB63DE
-	.long LABEL_ECFDD2
-	.long LABEL_ECFDCE
-	.long LABEL_ECFDC8
-	.long LABEL_ECFDC0
-	.long LABEL_ECFDB6
+	.long SeqChan_Map_2ch
+	.long SeqChan_Map_4ch
+	.long SeqChan_Map_6ch
+	.long SeqChan_Map_8ch
+	.long SeqChan_Map_10ch
 	.long LABEL_ED0212
 	.long LABEL_ED0212
 	.long LABEL_ED0212
