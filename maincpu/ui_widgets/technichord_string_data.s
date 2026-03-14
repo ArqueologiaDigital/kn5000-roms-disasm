@@ -1237,12 +1237,12 @@ NakaInst_ERROR_55:	aligned_string "ERROR 55"
 Str_RKBLKBSpecialTracks_Multilingual:
 	.long LABEL_E9C6FC
 	.long NakaInst_es_qui_ne_peuvent_tre_utilis_es_en_association
-	.long LABEL_E9C54C
+	.long NakaInst_es_RKB_LKB_pistas_especiales
 	.long NakaInst_ERROR_60
 	.long NakaInst_s_v
 NakaInst_s_v:	aligned_string "•s—v"
 NakaInst_ERROR_60:	aligned_string "ERROR 60"
-LABEL_E9C54C:	.asciz "RKB y LKB son pistas especiales que no pueden ser empleadas en conjuntamente con derecha 1, derecha 2, izquierda y las pistas de acordes automáticos. Por favor, asigne RKB y LKB a cualquier otra parte y pruebe nuevamente."
+NakaInst_es_RKB_LKB_pistas_especiales:	.asciz "RKB y LKB son pistas especiales que no pueden ser empleadas en conjuntamente con derecha 1, derecha 2, izquierda y las pistas de acordes automáticos. Por favor, asigne RKB y LKB a cualquier otra parte y pruebe nuevamente."
 NakaInst_es_qui_ne_peuvent_tre_utilis_es_en_association:	.ascii "RKB et LKB sont des pistes d"
 	inc	4, xbc
 	jr	ge, 0xe9
@@ -1280,12 +1280,12 @@ NakaInst_es_qui_ne_peuvent_tre_utilis_es_en_association:	.ascii "RKB et LKB sont
 Str_InitSettingWarning_Multilingual:
 	.long NakaInst_This_Bitmap_is_in_the_wrong_format_for_the_KN5000
 	.long NakaInst_Cette_configuration_Bitmap_n_est_pas_au_bon
-	.long LABEL_E9CFB8
+	.long NakaInst_es_Bitmap_formato_incorrecto
 	.long NakaInst_ERROR_63
 	.long NakaInst_Bitmap_adalah_salah_format_dari_KN_5000_dan
 NakaInst_Bitmap_adalah_salah_format_dari_KN_5000_dan:	aligned_string "Bitmap adalah salah format dari KN-5000 dan disket tidak dapat dipanggil. Lihat Pedoman Pemakaian untuk penjelasan yang mendetil."
 NakaInst_ERROR_63:	aligned_string "ERROR 63"
-LABEL_E9CFB8:	.asciz "Este mapa de bits tiene en un formato incorrecto para el KN5000 y no puede ser cargado. Para obtener más detalles, vea el Manual del Propietario."
+NakaInst_es_Bitmap_formato_incorrecto:	.asciz "Este mapa de bits tiene en un formato incorrecto para el KN5000 y no puede ser cargado. Para obtener más detalles, vea el Manual del Propietario."
 NakaInst_Cette_configuration_Bitmap_n_est_pas_au_bon:	aligned_string "Cette configuration Bitmap n'est pas au bon format pour le KN5000 et ne peut pas être chargée. Reportez-vous au mode d'emploi pour plus de détails. "
 NakaInst_This_Bitmap_is_in_the_wrong_format_for_the_KN5000:	.asciz "Das Format dieses Bitmaps kann vom SX-KN5000 nicht geladen werden. Lesen Sie die Bedienungsanleitung für weitere Informationen."
 	aligned_string "This Bitmap is in the wrong format for the KN5000 and cannot be loaded. See the Owners Manual for more details. "
