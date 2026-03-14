@@ -694,7 +694,7 @@ MainPcgOutSend:
 	ld c, (xde + 1)
 	extz bc
 	ld de, (xde + 2)
-	call LABEL_FDB904
+	call MidiSysEx_BuildAndSend
 
 MainPcgOutSend_Exit:
 	lds32 xhl, 0

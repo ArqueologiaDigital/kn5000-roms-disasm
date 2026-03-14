@@ -7764,7 +7764,7 @@ InitOp_SkipSetFlag:
 	call Voice_InitTablePair
 	call Voice_InitTableGroup
 	call MIDI_SendAllSoundOff
-	call LABEL_FDBB32
+	call MidiThru_Enable
 	inc 2, xsp
 	ret
 
@@ -7778,7 +7778,7 @@ CancelOperationCleanup:
 CancelOp_ClearSeq:
 	resda 3, 10407
 	call SeqAcc_InitPlaybackState
-	jp LABEL_FDBB2D
+	jp MidiThru_Disable
 
 SignalProgressUpdate:
 	call CPanel_InitButtonState_SaveRegs

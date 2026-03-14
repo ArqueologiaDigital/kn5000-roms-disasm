@@ -149,7 +149,7 @@ INTRX0_HANDLER:
 	push xwa
 	lds wa, 1
 	pushw wa
-	call LABEL_FDB7DC
+	call MidiSeq_ReceiveAndForward
 	inc 8, xsp
 	pop xiz
 	pop xiy
@@ -855,7 +855,7 @@ SC0Init_Entry:
 	calr SC0Init_ClearContextSlots
 	calr SC0Init_StandardBaudTable
 	calr READ_COM_SELECT_SWITCH
-	call LABEL_FDBA02
+	call CompIface_SendActiveSensing
 	calr SC0Init_EnableRegisters
 	ret
 
@@ -963,7 +963,7 @@ MIDI_SC0_TX_DISPATCH:
 	jr SC0TxDisp_RestoreAndReturn
 
 SC0TxDisp_NonMidiPath:
-	call LABEL_FDB903
+	call SeqBuf3_EnableTx_Stub
 
 SC0TxDisp_RestoreAndReturn:
 	pop xiz

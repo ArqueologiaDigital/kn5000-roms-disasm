@@ -6523,7 +6523,7 @@ UIState_ConfigB_043:
 UIState_ConfigB_044:
 	.long UIState_ProcessExtendedMode
 	.long AccWrap_ReplayStop
-	.long LABEL_FDE2A8
+	.long UIStateEvt_ParamEdit_Data
 	.long NotePool_DataBlock_8BA
 	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_RenderE
@@ -6598,7 +6598,7 @@ UIState_ConfigB_065:
 	.byte 0xed, 0x7b, 0xfc, 0x00
 UIState_ConfigB_066:
 	.long HdaeRom_AltReadParam
-	.long LABEL_FDE67D
+	.long UIStateEvt_EffectSelect_Data
 	.long UIState_KeyScan_Dispatch
 	.long DSPCfg_ProcessInput
 	.byte 0xff, 0xff, 0xff, 0xff
@@ -6618,7 +6618,7 @@ UIState_ConfigB_071:
 	.fill 4, 1, 0xff
 UIState_SeqInit_Table:
 	.long HdaeRom_AltEntry
-	.long LABEL_FDE7EB
+	.long UIStateEvt_ChannelConfig_Data
 	.long UIWidget_MidiStreamControl
 	.long UIState_KeyScan_Dispatch
 	.fill 4, 1, 0xff
@@ -6628,7 +6628,7 @@ UIState_ConfigB_072:
 
 UIState_ConfigB_073:
 	.long UIState_SwitchOnDisplayMode
-	.long LABEL_FDE514
+	.long UIStateEvt_VolumeMixer_Data
 	.long AccStyle_JumpTable2
 	.long UIState_KeyScan_Dispatch
 	.long CtrlPanel_HandleKeyInput
@@ -6655,11 +6655,11 @@ UIState_ConfigB_076:
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_077:
 	.long UIState_ProcessAltMode
-	.long LABEL_FDE7B5
+	.long UIStateEvt_PlayModeGuard_Data
 	.long AccWrap_ReplayStopAlt
 	.long HdaeRom_AltCheckResult
 	.long BitMapOut_ByteData_DisplayUpdate
-	.long LABEL_FDBA3A
+	.long MidiOut_RealtimeDispatch_Data
 	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_TransitionSeq
 	.long DSPCfg_ProcessInput
@@ -6679,7 +6679,7 @@ UIState_ConfigB_080:
 	.byte 0x8b, 0x75, 0xef, 0x00
 UIState_ConfigB_081:
 	.long Demo_SelectEntry_ByteTable
-	.long LABEL_FDE983
+	.long UIStateEvt_MuteToggle_Data
 	.long FileIO_ErrorCodeByteBlock
 	.long BitMapOut_ByteData_RenderState
 	.long UIState_KeyScan_Dispatch

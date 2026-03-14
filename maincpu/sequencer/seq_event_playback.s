@@ -1017,7 +1017,7 @@ AccPlay_InitializeStart:
 	call AccWrap_PlayModeDispatch
 	call CountAvailableVoiceSlots
 	calr AccPlay_SetupSoundParams
-	call LABEL_FDDEF7
+	call AudioInit_CheckMIDIAndDispatch
 	calr AccPlay_SaveMuteStates
 	stdi16 32526, 65534
 	stdi8 32564, 0
@@ -1071,7 +1071,7 @@ AccPlay_MainUpdateLoop:
 	pop xbc
 	pop xhl
 	pop xwa
-	call LABEL_FDDEF7
+	call AudioInit_CheckMIDIAndDispatch
 	calr AccPlay_RestoreMuteStates
 	calr AccPlay_ClearSlotTable
 	cpdi8 36148, 16

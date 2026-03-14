@@ -21537,7 +21537,7 @@ MimeSyori:
 	or xde, xde
 	scc8 nz, a
 	extz wa
-	call LABEL_FDE01C
+	call AudioMode_ConfigureExternal
 
 MimeSyori_ReturnZero:
 	lds32 xhl, 0

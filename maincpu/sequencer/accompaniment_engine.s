@@ -22337,7 +22337,7 @@ RhythmFillIn_LookupAndApply:
 	ld_srib3 A, 0x07, 0xE0, 0xEC
 	stda8 14235, a
 	calr DrumKit_UpdateStatusFlags
-	call LABEL_FDDEEF
+	call AudioInit_SelectAndDispatch
 	call AudioMode_ResetVoiceState
 	ret
 
@@ -22446,7 +22446,7 @@ RhythmVariation_Select:
 	ordi8 13517, 128
 
 RhythmVariation_PostDispatch:
-	call LABEL_FDDEEF
+	call AudioInit_SelectAndDispatch
 	call AudioMode_ResetVoiceState
 
 RhythmVariation_Return:

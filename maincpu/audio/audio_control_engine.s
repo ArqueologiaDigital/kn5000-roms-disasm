@@ -709,7 +709,7 @@ Encoder_IncrementAndDispatch:
 	call Audio_IncrementUpdateCounter
 	push_sr
 	ei 6
-	call LABEL_FDBA5D
+	call MidiOut_SerializeAndSend
 	pop_sr
 	jp CompIface_ProcessInput
 
