@@ -1639,28 +1639,28 @@ DrawEditSw:
 	lda xsp, (xsp - 18)
 	pushw iz
 	cp wa, 0xFF
-	jrl z, LABEL_F9CB61
+	jrl z, DrawEditSw_SkipDraw
 	cp wa, 0xF
-	jrl z, LABEL_F9CB61
+	jrl z, DrawEditSw_SkipDraw
 	lda xbc, (xsp + 8)
 	calr GetEditSwPoint
 	lda xwa, (xsp + 8)
 	lda xbc, (xsp + 2)
 	cpw (xwa + 2), 0xEF
-	jr z, LABEL_F9CAC0
+	jr z, DrawEditSw_SelectVariantC
 	cpw (xwa), 0x0
-	jr nz, LABEL_F9CAB9
+	jr nz, DrawEditSw_SelectVariantA
 	ld xwa, 0xEAA172
-	jr LABEL_F9CAC5
+	jr DrawEditSw_CopyVariant
 
-LABEL_F9CAB9:
+DrawEditSw_SelectVariantA:
 	ld xwa, 0xEAA176
-	jr LABEL_F9CAC5
+	jr DrawEditSw_CopyVariant
 
-LABEL_F9CAC0:
+DrawEditSw_SelectVariantC:
 	ld xwa, 0xEAA17A
 
-LABEL_F9CAC5:
+DrawEditSw_CopyVariant:
 	push xwa
 	push xbc
 	call Strcpy
@@ -1677,15 +1677,15 @@ LABEL_F9CAC5:
 	divs de, 0x2
 	lda xwa, (xsp + 12)
 	cpw (xbc), 0x0
-	jr nz, LABEL_F9CAFE
+	jr nz, DrawEditSw_PositionLeft
 	ldw (xwa), 0xFFFE
 	ld ix, (xbc + 2)
 	sub ix, de
 	ld (xwa + 2), ix
 
-LABEL_F9CAFE:
+DrawEditSw_PositionLeft:
 	cpw (xbc), 0x13F
-	jr nz, LABEL_F9CB13
+	jr nz, DrawEditSw_PositionRight
 	ldw ix, 0x13E
 	sub ix, iz
 	ld (xwa), ix
@@ -1693,10 +1693,10 @@ LABEL_F9CAFE:
 	sub ix, de
 	ld (xwa + 2), ix
 
-LABEL_F9CB13:
+DrawEditSw_PositionRight:
 	lda xix, (xbc + 2)
 	cpw (xix), 0xEF
-	jr nz, LABEL_F9CB34
+	jr nz, DrawEditSw_FinalPosition
 	ld de, iz
 	exts xde
 	divs de, 0x2
@@ -1708,7 +1708,7 @@ LABEL_F9CB13:
 	sub de, hl
 	ld (xwa + 2), de
 
-LABEL_F9CB34:
+DrawEditSw_FinalPosition:
 	ld de, (xwa)
 	inc 2, de
 	ld (xbc), de
@@ -1729,7 +1729,7 @@ LABEL_F9CB34:
 	pushw 0xF7
 	call DrawString
 
-LABEL_F9CB61:
+DrawEditSw_SkipDraw:
 	popw iz
 	lda xsp, (xsp + 18)
 	ret
@@ -1739,12 +1739,12 @@ TextBoxProc:
 	push xiz
 	ld (xsp + 38), xwa
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F9CB7E
+	jr z, TextBox_HandlePaint
 	ld xwa, (xsp + 38)
 	calr BoxProc
-	jrl LABEL_F9CCE1
+	jrl TextBox_Epilogue
 
-LABEL_F9CB7E:
+TextBox_HandlePaint:
 	ld xwa, (xsp + 38)
 	calr BoxProc
 	ld xwa, (xsp + 38)
@@ -1772,15 +1772,15 @@ LABEL_F9CB7E:
 	lds bc, 0
 	ld wa, (xsp + 16)
 	add wa, 0x1
-	jr ule, LABEL_F9CBD7
+	jr ule, TextBox_SetupWordwrap
 
-LABEL_F9CBCD:
+TextBox_FillBufferLoop:
 	stib_dpi 0xF8, 0x00
 	inc 1, bc
 	cp bc, wa
-	jr c, LABEL_F9CBCD
+	jr c, TextBox_FillBufferLoop
 
-LABEL_F9CBD7:
+TextBox_SetupWordwrap:
 	ld xiz, (xsp + 22)
 	ld xwa, (xsp + 18)
 	ld xwa, (xwa + 26)
@@ -1809,9 +1809,9 @@ LABEL_F9CBD7:
 	ld (xsp + 8), de
 	ldw (xsp + 16), 0x0
 	cps bc, 0
-	jrl ule, LABEL_F9CCD5
+	jrl ule, TextBox_FreeBuffer
 
-LABEL_F9CC2A:
+TextBox_DrawLineLoop:
 	pushw 0xEA
 	pushw 0xA17E
 	push xiz
@@ -1833,7 +1833,7 @@ LABEL_F9CC2A:
 	inc 4, xsp
 	ld wa, (xsp + 14)
 	cp wa, hl
-	jr z, LABEL_F9CC7E
+	jr z, TextBox_CheckMoreText
 	ld xwa, (xsp + 10)
 	ld (xwa), 0xD
 	ld wa, (xsp + 14)
@@ -1843,7 +1843,7 @@ LABEL_F9CC2A:
 	stib_dpd 0xE0, 0x00
 	ld (xsp + 10), xwa
 
-LABEL_F9CC7E:
+TextBox_CheckMoreText:
 	ld wa, (xsp + 8)
 	mrdw3 0x9F, 0x10, 0x40
 	lda xde, (xsp + 26)
@@ -1871,21 +1871,21 @@ LABEL_F9CC7E:
 	inc 1, xwa
 	ld xiz, xwa
 	cp (xwa), 0x0
-	jr z, LABEL_F9CCD5
+	jr z, TextBox_FreeBuffer
 	incm 1, (xsp + 16)
 	ld xwa, (xsp + 4)
 	ld bc, (xsp + 16)
 	cp bc, (xwa + 38)
-	jrl c, LABEL_F9CC2A
+	jrl c, TextBox_DrawLineLoop
 
-LABEL_F9CCD5:
+TextBox_FreeBuffer:
 	ld xwa, (xsp + 22)
 	push xwa
 	call Free
 	inc 4, xsp
 	lds32 xhl, 0
 
-LABEL_F9CCE1:
+TextBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 38)
 	ret
@@ -1896,17 +1896,17 @@ VwBoxProc:
 	ld (xsp + 12), xde
 	ld xiz, xwa
 	cp xbc, 0x1E000B2
-	jrl z, LABEL_F9CD95
+	jrl z, VwBox_HandleGetColor
 	cp xbc, 0x1E000B1
-	jrl z, LABEL_F9CD8C
+	jrl z, VwBox_HandleGetHeight
 	cp xbc, 0x1E00050
-	jr z, LABEL_F9CD78
+	jr z, VwBox_HandleHitTest
 	cp xbc, 0x1E00051
-	jr z, LABEL_F9CD6F
+	jr z, VwBox_HandleGetWidth
 	cp xbc, 0x1E0004E
-	jr z, LABEL_F9CD40
+	jr z, VwBox_HandleGetFocus
 	cp xbc, 0x1C0000D
-	jrl nz, LABEL_F9CDA8
+	jrl nz, VwBox_DefaultHandler
 	ld xwa, xiz
 	ld xde, (xsp + 12)
 	call ViewableProc
@@ -1916,9 +1916,9 @@ VwBoxProc:
 	ld bc, (xhl + 24)
 	ld de, (xhl + 22)
 	call DrawDesignBox
-	jr LABEL_F9CD6B
+	jr VwBox_DrawReturnZero
 
-LABEL_F9CD40:
+VwBox_HandleGetFocus:
 	lda xbc, (xsp + 4)
 	ld xwa, xiz
 	calr GetClientBox
@@ -1927,30 +1927,30 @@ LABEL_F9CD40:
 	ld xbc, (xsp + 12)
 	lda xwa, (xsp + 4)
 	cps bc, 0
-	jr z, LABEL_F9CD61
+	jr z, VwBox_UseFocusColor
 	pushw 0xF2
 	lds bc, 1
 	lds de, 2
-	jr LABEL_F9CD68
+	jr VwBox_CallDrawDesignFrame
 
-LABEL_F9CD61:
+VwBox_UseFocusColor:
 	pushm (xhl + 22)
 	lds bc, 1
 	lds de, 2
 
-LABEL_F9CD68:
+VwBox_CallDrawDesignFrame:
 	calr DrawDesignFrame
 
-LABEL_F9CD6B:
+VwBox_DrawReturnZero:
 	lds32 xhl, 0
 	jr ViewableProc_Return
 
-LABEL_F9CD6F:
+VwBox_HandleGetWidth:
 	ld xwa, xiz
 	ld xiz, 0x1A
-	jr LABEL_F9CD9C
+	jr VwBox_GetFieldAtOffset
 
-LABEL_F9CD78:
+VwBox_HandleHitTest:
 	ld xwa, xiz
 	call GetViewInstance
 	ld wa, (xhl + 26)
@@ -1960,23 +1960,23 @@ LABEL_F9CD78:
 	extz xhl
 	jr ViewableProc_Return
 
-LABEL_F9CD8C:
+VwBox_HandleGetHeight:
 	ld xwa, xiz
 	ld xiz, 0x18
-	jr LABEL_F9CD9C
+	jr VwBox_GetFieldAtOffset
 
-LABEL_F9CD95:
+VwBox_HandleGetColor:
 	ld xwa, xiz
 	ld xiz, 0x16
 
-LABEL_F9CD9C:
+VwBox_GetFieldAtOffset:
 	call GetViewInstance
 	add xhl, xiz
 	ld hl, (xhl)
 	exts xhl
 	jr ViewableProc_Return
 
-LABEL_F9CDA8:
+VwBox_DefaultHandler:
 	ld xwa, xiz
 	ld xde, (xsp + 12)
 	call ViewableProc
@@ -1992,15 +1992,15 @@ PsParaBoxProc:
 	st_dri3l XDE, 0xFD, 0x10, 0x01
 	st_dri3l XWA, 0xFD, 0x14, 0x01
 	cp xbc, 0x1E0003A
-	jrl z, LABEL_F9CE6D
+	jrl z, PsParaBox_HandleGetText
 	cp xbc, 0x1C0000F
-	jr z, LABEL_F9CDE7
+	jr z, PsParaBox_HandleConfirm
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	calr VwBoxProc
-	jrl LABEL_F9CE77
+	jrl PsParaBox_Epilogue
 
-LABEL_F9CDE7:
+PsParaBox_HandleConfirm:
 	ld_sril XWA, (xsp + 0x0114)
 	ld_sril XDE, (xsp + 0x0110)
 	calr VwBoxProc
@@ -2016,22 +2016,22 @@ LABEL_F9CDE7:
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0110)
 	or xwa, xwa
-	jr nz, LABEL_F9CE3B
+	jr nz, PsParaBox_UseEventText
 	ld_sril XWA, (xsp + 0x0114)
 	ld xbc, 0x1E0003A
 	call SendEvent
 	cp (xsp + 4), 0x0
-	jr nz, LABEL_F9CE48
-	jr LABEL_F9CE75
+	jr nz, PsParaBox_DrawAligned
+	jr PsParaBox_ReturnZero
 
-LABEL_F9CE3B:
+PsParaBox_UseEventText:
 	ld_sril XWA, (xsp + 0x0110)
 	push xwa
 	push xde
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F9CE48:
+PsParaBox_DrawAligned:
 	st_dri3b W, 0xFD, 0x08, 0x01
 	st_dri3b C, 0xFD, 0x04, 0x01
 	lda xde, (xsp + 4)
@@ -2044,16 +2044,16 @@ LABEL_F9CE48:
 	pushw bc
 	ld xbc, xhl
 	call DrawStringAlignment
-	jr LABEL_F9CE75
+	jr PsParaBox_ReturnZero
 
-LABEL_F9CE6D:
+PsParaBox_HandleGetText:
 	ld_sril XWA, (xsp + 0x0110)
 	ld (xwa), 0x0
 
-LABEL_F9CE75:
+PsParaBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F9CE77:
+PsParaBox_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x14, 0x01
 	ret
