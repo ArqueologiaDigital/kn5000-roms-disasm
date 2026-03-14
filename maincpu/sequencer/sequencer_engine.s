@@ -25161,12 +25161,12 @@ SeqScan_ValidateAndDispatch:
 	ret lt
 	cps a, 2
 	jr z, SeqScan_ValidateReturn2
-	jr SeqScan_ProcessAllParts
+	jr SeqScan_ProcessAllPartsAndVoices
 
 SeqScan_ValidateReturn2:
 	ret
 
-SeqScan_ProcessAllParts:
+SeqScan_ProcessAllPartsAndVoices:
 	push_werp 0xFA
 	calr VoiceAlloc_InitBitMap
 	ldi_berp 0xFA, 1
