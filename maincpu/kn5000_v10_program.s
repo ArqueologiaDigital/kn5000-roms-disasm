@@ -1442,7 +1442,7 @@ NakaWidgetList_AcModeBoxes:
 	.long NakaBoxName_IvNamingExit
 	.long NakaBoxData_IvNamingExit
 	.long NakaPropTbl_IvNamingExit
-	.long LABEL_F2BBF9
+	.long IvNamingExit_ScreenData
 	naka_header NAKA_TYPE_0x11
 	.byte 0x32, 0x00, 0x16, 0x00
 	.long NakaBoxName_PsSongSelBoxProc

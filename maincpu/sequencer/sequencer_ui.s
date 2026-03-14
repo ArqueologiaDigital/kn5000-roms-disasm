@@ -97,77 +97,77 @@ InitializeYoko:
 
 PartSelLangCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2A93A
+	jr nz, PartSelLang_ReturnZero
 	lda_24 xhl, 0xe26078
 	ret
 
-LABEL_F2A93A:
+PartSelLang_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 AfterLangCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2A94B
+	jr nz, AfterLang_ReturnZero
 	lda_24 xhl, 0xe26090
 	ret
 
-LABEL_F2A94B:
+AfterLang_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 TrAsPreLangCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2A95C
+	jr nz, TrAsPreLang_ReturnZero
 	lda_24 xhl, 0xe260a8
 	ret
 
-LABEL_F2A95C:
+TrAsPreLang_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 AtentionLangCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2A96D
+	jr nz, AtentionLang_ReturnZero
 	lda_24 xhl, 0xe260c0
 	ret
 
-LABEL_F2A96D:
+AtentionLang_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 AreYouSureLangCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2A97E
+	jr nz, AreYouSureLang_ReturnZero
 	lda_24 xhl, 0xe260d8
 	ret
 
-LABEL_F2A97E:
+AreYouSureLang_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 GmOnSureLangCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2A98F
+	jr nz, GmOnSureLang_ReturnZero
 	lda_24 xhl, 0xe260f0
 	ret
 
-LABEL_F2A98F:
+GmOnSureLang_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 GmOffSureLangCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2A9A0
+	jr nz, GmOffSureLang_ReturnZero
 	lda_24 xhl, 0xe26108
 	ret
 
-LABEL_F2A9A0:
+GmOffSureLang_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 TrAsSureLangCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2A9FF
+	jr nz, TrAsSureLang_ReturnZero
 	ldda8 a, 10355
 	extz wa
 	sla wa, 2
@@ -196,7 +196,7 @@ TrAsSureLangCheck:
 	lda_24 xhl, 0x03def8
 	ret
 
-LABEL_F2A9FF:
+TrAsSureLang_ReturnZero:
 	lds32 xhl, 0
 	ret
 
@@ -215,7 +215,7 @@ Audio_ExternalCallback:
 	ld xbc, 0x1C70013
 	lds32 xde, 0
 	jp ApPostEvent
-LABEL_F2AA32:
+Audio_ExternalCallback_End:
 
 LyricsBoxProc:
 	lda xsp, (xsp - 48)
@@ -223,53 +223,53 @@ LyricsBoxProc:
 	ld xiz, xde
 	ld (xsp + 48), xwa
 	cp xbc, 0x1C7000D
-	jrl z, LABEL_F2AE01
+	jrl z, LyricsBox_HandleEventD
 	cp xbc, 0x1C7000C
-	jrl z, LABEL_F2AD36
+	jrl z, LyricsBox_HandleEventC
 	cp xbc, 0x1C7000B
-	jrl z, LABEL_F2AC6C
+	jrl z, LyricsBox_HandleEventB
 	cp xbc, 0x1C7000A
-	jr z, LABEL_F2AABB
+	jr z, LyricsBox_HandleEventA
 	cp xbc, 0x1C70009
-	jr z, LABEL_F2AA72
+	jr z, LyricsBox_HandleEvent9
 	ld xwa, (xsp + 48)
 	ld xde, xiz
 	call InheritedProc
-	jrl LABEL_F2AE82
+	jrl LyricsBox_Epilogue
 
-LABEL_F2AA72:
+LyricsBox_HandleEvent9:
 	call GetTitleNow
 	cp xhl, 0x1A00072
-	jr z, LABEL_F2AA8A
+	jr z, LyricsBox_MatchedTitle
 	call GetTitleNow
 	cp xhl, 0x1A00076
-	jr nz, LABEL_F2AA98
+	jr nz, LyricsBox_ClearBuffers
 
-LABEL_F2AA8A:
+LyricsBox_MatchedTitle:
 	ld xwa, (xsp + 48)
 	ld xbc, 0x1C0000D
 	ld xde, xiz
 	call SendEvent
 
-LABEL_F2AA98:
+LyricsBox_ClearBuffers:
 	lda_24 xbc, 0x020cbe
 	ld xwa, xbc
 	st_dri3b A, 0xE5, 0x40, 0x01
 
-LABEL_F2AAA4:
+LyricsBox_ClearOuterLoop:
 	ld xde, xwa
 	lda xhl, (xwa + 64)
 
-LABEL_F2AAA9:
+LyricsBox_ClearInnerLoop:
 	stib_dpi 0xE8, 0x00
 	cp xde, xhl
-	jr c, LABEL_F2AAA9
+	jr c, LyricsBox_ClearInnerLoop
 	lda xwa, (xwa + 64)
 	cp xwa, xbc
-	jr c, LABEL_F2AAA4
+	jr c, LyricsBox_ClearOuterLoop
 	jrl SongEdit_ReturnZero
 
-LABEL_F2AABB:
+LyricsBox_HandleEventA:
 	ld xwa, (xsp + 48)
 	ld xde, xiz
 	call InheritedProc
@@ -280,12 +280,12 @@ LABEL_F2AABB:
 	ld (xsp + 4), xwa
 	call GetTitleNow
 	cp xhl, 0x1A00072
-	jr z, LABEL_F2AAED
+	jr z, LyricsBox_DrawClientArea
 	call GetTitleNow
 	cp xhl, 0x1A00076
 	jrl nz, SongEdit_ReturnZero
 
-LABEL_F2AAED:
+LyricsBox_DrawClientArea:
 	lda xbc, (xsp + 40)
 	ld xwa, (xsp + 48)
 	call GetClientBox
@@ -299,7 +299,7 @@ LABEL_F2AAED:
 	cpw (xwa + 38), 0x0
 	jrl ule, SongEdit_ReturnZero
 
-LABEL_F2AB15:
+LyricsBox_DrawLineLoop:
 	lda_24 xix, 0x020e3e
 	ld de, (xix + 2)
 	ld bc, (xsp + 8)
@@ -308,7 +308,7 @@ LABEL_F2AB15:
 	ld xhl, 0x20CBE
 	add xhl, xbc
 	cp (xsp + 8), de
-	jr nc, LABEL_F2AB6C
+	jr nc, LyricsBox_CheckCurrentLine
 	push xhl
 	pushw 0x2
 	pushw 0xDFE
@@ -329,12 +329,12 @@ LABEL_F2AB15:
 	pushm (xhl + 34)
 	pushw 0x7
 	ld xde, 0x20DFE
-	jrl LABEL_F2AC56
+	jrl LyricsBox_DrawAndAdvance
 
-LABEL_F2AB6C:
+LyricsBox_CheckCurrentLine:
 	lda_24 xbc, 0x020dfe
 	cp de, (xsp + 8)
-	jrl nz, LABEL_F2AC23
+	jrl nz, LyricsBox_CopyAndDraw
 	ld wa, (xix)
 	inc 1, wa
 	ld (xsp + 10), wa
@@ -397,9 +397,9 @@ LABEL_F2AB6C:
 	pushm (xde + 32)
 	pushw 0x7
 	ld xde, 0x20DFE
-	jr LABEL_F2AC56
+	jr LyricsBox_DrawAndAdvance
 
-LABEL_F2AC23:
+LyricsBox_CopyAndDraw:
 	push xhl
 	push xbc
 	call Strcpy
@@ -420,16 +420,16 @@ LABEL_F2AC23:
 	pushw 0x7
 	ld xde, 0x20DFE
 
-LABEL_F2AC56:
+LyricsBox_DrawAndAdvance:
 	call DrawString
 	incm 1, (xsp + 8)
 	ld xwa, (xsp + 12)
 	ld bc, (xsp + 8)
 	cp bc, (xwa + 38)
-	jrl c, LABEL_F2AB15
+	jrl c, LyricsBox_DrawLineLoop
 	jrl SongEdit_ReturnZero
 
-LABEL_F2AC6C:
+LyricsBox_HandleEventB:
 	ld xwa, (xsp + 48)
 	ld xde, xiz
 	call InheritedProc
@@ -438,12 +438,12 @@ LABEL_F2AC6C:
 	ld (xsp + 12), xhl
 	call GetTitleNow
 	cp xhl, 0x1A00072
-	jr z, LABEL_F2AC98
+	jr z, LyricsBox_DrawCurrentLine
 	call GetTitleNow
 	cp xhl, 0x1A00076
-	jrl nz, LABEL_F2AD29
+	jrl nz, LyricsBox_UpdateCursors46
 
-LABEL_F2AC98:
+LyricsBox_DrawCurrentLine:
 	lda xbc, (xsp + 40)
 	ld xwa, (xsp + 48)
 	call GetClientBox
@@ -493,12 +493,12 @@ LABEL_F2AC98:
 	pushw 0x7
 	call DrawString
 
-LABEL_F2AD29:
+LyricsBox_UpdateCursors46:
 	ld xbc, 0x20E46
 	ld xwa, 0x20E4A
-	jrl LABEL_F2ADFB
+	jrl LyricsBox_StoreCursorPos
 
-LABEL_F2AD36:
+LyricsBox_HandleEventC:
 	ld xwa, (xsp + 48)
 	ld xde, xiz
 	call InheritedProc
@@ -507,12 +507,12 @@ LABEL_F2AD36:
 	ld (xsp + 12), xhl
 	call GetTitleNow
 	cp xhl, 0x1A00072
-	jr z, LABEL_F2AD62
+	jr z, LyricsBox_DrawSelLine
 	call GetTitleNow
 	cp xhl, 0x1A00076
-	jrl nz, LABEL_F2ADF1
+	jrl nz, LyricsBox_UpdateCursors3E
 
-LABEL_F2AD62:
+LyricsBox_DrawSelLine:
 	lda xbc, (xsp + 40)
 	ld xwa, (xsp + 48)
 	call GetClientBox
@@ -561,27 +561,27 @@ LABEL_F2AD62:
 	pushw 0x7
 	call DrawString
 
-LABEL_F2ADF1:
+LyricsBox_UpdateCursors3E:
 	ld xbc, 0x20E3E
 	ld xwa, 0x20E42
 
-LABEL_F2ADFB:
+LyricsBox_StoreCursorPos:
 	ld wa, (xwa)
 	ld (xbc), wa
 	jr SongEdit_ReturnZero
 
-LABEL_F2AE01:
+LyricsBox_HandleEventD:
 	ld xwa, (xsp + 48)
 	ld xde, xiz
 	call InheritedProc
 	call GetTitleNow
 	cp xhl, 0x1A00072
-	jr z, LABEL_F2AE22
+	jr z, LyricsBox_ScrollAndDraw
 	call GetTitleNow
 	cp xhl, 0x1A00076
 	jr nz, SongEdit_ReturnZero
 
-LABEL_F2AE22:
+LyricsBox_ScrollAndDraw:
 	lda xbc, (xsp + 40)
 	ld xwa, (xsp + 48)
 	call GetClientBox
@@ -619,7 +619,7 @@ LABEL_F2AE22:
 SongEdit_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2AE82:
+LyricsBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 48)
 	ret
@@ -634,7 +634,7 @@ SongEdit_CheckBounds:
 	lda_24 xbc, 0x020cbe
 	lda xde, (xix + 2)
 	cp wa, 0x22
-	jr ge, LABEL_F2AEE6
+	jr ge, SongEdit_OverflowCheck
 	ld a, (xsp)
 	inc 1, a
 	extz wa
@@ -658,13 +658,13 @@ SongEdit_CheckBounds:
 	ld xwa, 0x6F0027
 	ld xbc, 0x1C7000B
 	lds32 xde, 0
-	jrl LABEL_F2AF8C
+	jrl SongEdit_SendAndReturnOK
 
-LABEL_F2AEE6:
+SongEdit_OverflowCheck:
 	ld xhl, xde
 	ld wa, (xde)
 	cps wa, 4
-	jrl ge, LABEL_F2AF94
+	jrl ge, SongEdit_ReturnOverflow
 	sla wa, 6
 	add wa, (xix)
 	stib_dri 0x07, 0xE4, 0xE0, 0x0D
@@ -718,19 +718,19 @@ LABEL_F2AEE6:
 	ld xbc, 0x1C7000B
 	lds32 xde, 0
 
-LABEL_F2AF8C:
+SongEdit_SendAndReturnOK:
 	call SendEvent
 	ldb l, 0x0
-	jr LABEL_F2AF96
+	jr SongEdit_CheckBounds_Epilogue
 
-LABEL_F2AF94:
+SongEdit_ReturnOverflow:
 	ldb l, 0xFF
 
-LABEL_F2AF96:
+SongEdit_CheckBounds_Epilogue:
 	inc 2, xsp
 	ret
 
-LABEL_F2AF99:
+LyricsTrack_ReadAndParse:
 	lda_24 xwa, 0x020e4e
 	call SeqFile_ReadTrackData
 	pushw 0x2
@@ -738,10 +738,10 @@ LABEL_F2AF99:
 	call Strlen
 	inc 4, xsp
 	cp hl, 0x22
-	jr c, LABEL_F2AFBA
+	jr c, LyricsTrack_CheckEmpty
 	sti8_24 0x020e6f, 0x00
 
-LABEL_F2AFBA:
+LyricsTrack_CheckEmpty:
 	lda_24 xwa, 0x020e4e
 	cp (xwa), 0x0
 	ret z
@@ -756,24 +756,24 @@ LABEL_F2AFBA:
 	ld c, (xde)
 	push xwa
 	cp c, 0xA
-	jr z, LABEL_F2AFE6
+	jr z, LyricsTrack_HandleNewline
 	cp c, 0xD
-	jrl nz, LABEL_F2B074
+	jrl nz, LyricsTrack_HandleNormalChar
 
-LABEL_F2AFE6:
+LyricsTrack_HandleNewline:
 	call Strlen
 	inc 4, xsp
 	cps l, 1
-	jr z, LABEL_F2B002
+	jr z, LyricsTrack_HandleSingleChar
 	pushw 0x2
 	pushw 0xE4E
 	call Strlen
 	inc 4, xsp
 	extz hl
 	ld wa, hl
-	jr LABEL_F2B07E
+	jr LyricsTrack_JmpCheckBounds
 
-LABEL_F2B002:
+LyricsTrack_HandleSingleChar:
 	lda_24 xde, 0x020e4a
 	lda xbc, (xde + 2)
 	ld wa, (xbc)
@@ -812,20 +812,20 @@ LABEL_F2B002:
 	sti8_24 0x020e4e, 0x00
 	ret
 
-LABEL_F2B074:
+LyricsTrack_HandleNormalChar:
 	call Strlen
 	inc 4, xsp
 	extz hl
 	ld wa, hl
 
-LABEL_F2B07E:
+LyricsTrack_JmpCheckBounds:
 	jrl SongEdit_CheckBounds
 
-LABEL_F2B081:
+LyricsTrack_ResetAllBuffers:
 	pushw iz
 	lds iz, 0
 
-LABEL_F2B084:
+LyricsTrack_ResetBufferLoop:
 	pushw 0x40
 	ld bc, iz
 	sla bc, 6
@@ -847,15 +847,15 @@ LABEL_F2B084:
 	ld xwa, xbc
 	lda xbc, (xbc + 64)
 
-LABEL_F2B0BC:
+LyricsTrack_ZeroFillLoop:
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F2B0BC
+	jr c, LyricsTrack_ZeroFillLoop
 	inc 1, iz
 	ld wa, iz
 	inc 1, wa
 	cps wa, 4
-	jr le, LABEL_F2B084
+	jr le, LyricsTrack_ResetBufferLoop
 	lda_24 xwa, 0x020e3e
 	ldw (xwa + 2), 0x2
 	ldw (xwa), 0x0
@@ -881,7 +881,7 @@ LABEL_F2B0BC:
 	popw iz
 	ret
 
-LABEL_F2B122:
+LyricsFile_ValidateAndInsert:
 	pushw iz
 	ld xwa, 0x20F4E
 	call SeqFile_ValidateAndStore
@@ -890,36 +890,36 @@ LABEL_F2B122:
 	call Strlen
 	inc 4, xsp
 	cp hl, 0x22
-	jr c, LABEL_F2B144
+	jr c, LyricsFile_CheckFirstByte
 	sti8_24 0x020f6f, 0x00
 
-LABEL_F2B144:
+LyricsFile_CheckFirstByte:
 	ld8_24 e, 0x020f4e
 	cps e, 0
 	jrl z, LyricsBox_PopIzRet
 	lda_24 xhl, 0x020cbe
 	cp e, 0xD
-	jr nz, LABEL_F2B171
+	jr nz, LyricsFile_CheckLinefeed
 	lda_24 xbc, 0x020e42
 	ld de, (xbc + 2)
 	sla de, 6
 	add de, (xbc)
 	cp_srib_im 0x07, 0xEC, 0xE8, 0x0D
-	jrl z, LABEL_F2B205
+	jrl z, LyricsFile_ResetBuffers
 	jrl LyricsBox_PopIzRet
 
-LABEL_F2B171:
+LyricsFile_CheckLinefeed:
 	lda_24 xbc, 0x020e42
 	ld wa, (xbc + 2)
 	sla wa, 6
 	cp e, 0xA
-	jr nz, LABEL_F2B18D
+	jr nz, LyricsFile_InsertNormalChar
 	add wa, (xbc)
 	cp_srib_im 0x07, 0xEC, 0xE0, 0x0D
-	jr z, LABEL_F2B205
+	jr z, LyricsFile_ResetBuffers
 	jr LyricsBox_PopIzRet
 
-LABEL_F2B18D:
+LyricsFile_InsertNormalChar:
 	add wa, (xbc)
 	cp_srib_im 0x07, 0xEC, 0xE0, 0x0D
 	call_24 z, 0xF2B081
@@ -956,38 +956,38 @@ LABEL_F2B18D:
 	cp_srib_im 0x07, 0xE0, 0xE4, 0x0D
 	jr nz, LyricsBox_PopIzRet
 
-LABEL_F2B205:
-	calr LABEL_F2B081
+LyricsFile_ResetBuffers:
+	calr LyricsTrack_ResetAllBuffers
 
 LyricsBox_PopIzRet:
 	popw iz
 	ret
-LABEL_F2B20A:
+LyricsBoxFuncProc_Boundary:
 
 LyricsBoxFuncProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C70013
-	jrl z, LABEL_F2B3B6
+	jrl z, LyricsBoxFunc_ValidateFile
 	lda_24 xwa, 0x020e4e
 	cp xbc, 0x1C70012
-	jrl z, LABEL_F2B2BD
+	jrl z, LyricsBoxFunc_HandleInput
 	cp xbc, 0x1C70011
-	jr z, LABEL_F2B2AA
+	jr z, LyricsBoxFunc_SendEvent12
 	cp xbc, 0x1C70010
-	jr z, LABEL_F2B266
+	jr z, LyricsBoxFunc_ResetCursors
 	cp xbc, 0x1E0003A
-	jr z, LABEL_F2B256
+	jr z, LyricsBoxFunc_CopyString
 	cp xbc, 0x1C0000D
-	jrl nz, LABEL_F2B3BD
+	jrl nz, LyricsBoxFunc_InheritedProc
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
-	jr LABEL_F2B2B6
+	jr LyricsBoxFunc_SendAndReturn
 
-LABEL_F2B256:
+LyricsBoxFunc_CopyString:
 	pushw 0xE2
 	pushw 0x61FA
 	push xde
@@ -995,7 +995,7 @@ LABEL_F2B256:
 	inc 8, xsp
 	jrl SongName_ReturnZeroJmp
 
-LABEL_F2B266:
+LyricsBoxFunc_ResetCursors:
 	lda_24 xbc, 0x020e3e
 	ldw (xbc), 0x0
 	ldw (xbc + 2), 0x2
@@ -1012,19 +1012,19 @@ LABEL_F2B266:
 	sti8_24 0x020f4e, 0x00
 	jrl SongName_ReturnZeroJmp
 
-LABEL_F2B2AA:
+LyricsBoxFunc_SendEvent12:
 	ld xwa, 0x720006
 	ld xbc, 0x1C70012
 	lds32 xde, 0
 
-LABEL_F2B2B6:
+LyricsBoxFunc_SendAndReturn:
 	call SendEvent
 	jrl SongName_ReturnZeroJmp
 
-LABEL_F2B2BD:
+LyricsBoxFunc_HandleInput:
 	ld xbc, xwa
 	cp (xwa), 0x0
-	jrl z, LABEL_F2B3AF
+	jrl z, LyricsBoxFunc_ReadTrack
 	push xbc
 	call Strlen
 	inc 4, xsp
@@ -1036,15 +1036,15 @@ LABEL_F2B2BD:
 	ld c, (xde)
 	push xwa
 	cp c, 0xA
-	jr z, LABEL_F2B2E7
+	jr z, LyricsBoxFunc_HandleNewline
 	cp c, 0xD
-	jrl nz, LABEL_F2B38D
+	jrl nz, LyricsBoxFunc_HandleNormalChar
 
-LABEL_F2B2E7:
+LyricsBoxFunc_HandleNewline:
 	call Strlen
 	inc 4, xsp
 	cps l, 1
-	jr z, LABEL_F2B319
+	jr z, LyricsBoxFunc_HandleSingleChar
 	pushw 0x2
 	pushw 0xE4E
 	call Strlen
@@ -1057,9 +1057,9 @@ LABEL_F2B2E7:
 	ld xwa, 0x6F0027
 	ld xbc, 0x1C7000B
 	lds32 xde, 0
-	jrl LABEL_F2B3AB
+	jrl LyricsBoxFunc_SendEventB
 
-LABEL_F2B319:
+LyricsBoxFunc_HandleSingleChar:
 	lda_24 xde, 0x020e4a
 	lda xbc, (xde + 2)
 	ld wa, (xbc)
@@ -1096,9 +1096,9 @@ LABEL_F2B319:
 	ld (xbc), wa
 	ldw (xde), 0x0
 	sti8_24 0x020e4e, 0x00
-	jr LABEL_F2B3AF
+	jr LyricsBoxFunc_ReadTrack
 
-LABEL_F2B38D:
+LyricsBoxFunc_HandleNormalChar:
 	call Strlen
 	inc 4, xsp
 	extz hl
@@ -1110,29 +1110,29 @@ LABEL_F2B38D:
 	ld xbc, 0x1C7000B
 	lds32 xde, 0
 
-LABEL_F2B3AB:
+LyricsBoxFunc_SendEventB:
 	call SendEvent
 
-LABEL_F2B3AF:
+LyricsBoxFunc_ReadTrack:
 	lds wa, 0
-	calr LABEL_F2AF99
+	calr LyricsTrack_ReadAndParse
 	jr SongName_ReturnZeroJmp
 
-LABEL_F2B3B6:
-	calr LABEL_F2B122
+LyricsBoxFunc_ValidateFile:
+	calr LyricsFile_ValidateAndInsert
 
 SongName_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F2B3C3
+	jr LyricsBoxFunc_Epilogue
 
-LABEL_F2B3BD:
+LyricsBoxFunc_InheritedProc:
 	ld xwa, xiz
 	call InheritedProc
 
-LABEL_F2B3C3:
+LyricsBoxFunc_Epilogue:
 	pop xiz
 	ret
-LABEL_F2B3C5:
+LyricsBoxFunc_End:
 
 SongNameBoxProc:
 	lda xsp, (xsp - 24)
@@ -1141,28 +1141,28 @@ SongNameBoxProc:
 	ld xiz, xbc
 	ld (xsp + 24), xwa
 	cp xiz, 0x1C7000F
-	jr z, LABEL_F2B44A
+	jr z, SongNameBox_HandleEventF
 	cp xiz, 0x1C70009
-	jr z, LABEL_F2B439
+	jr z, SongNameBox_HandleEvent9
 	cp xiz, 0x1C0000C
 	jr z, SongNameBox_HandleFocusGained
 	cp xiz, 0x1C0000B
 	jr z, SongNameBox_HandleFocusGained
 	cp xiz, 0x1C00002
-	jr z, LABEL_F2B40C
+	jr z, SongNameBox_HandleSize
 	cp xiz, 0x1C00001
-	jrl nz, LABEL_F2B4A3
+	jrl nz, SongNameBox_DefaultHandler
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
 	ld xde, (xsp + 20)
-	jr LABEL_F2B414
+	jr SongNameBox_InheritAndDraw
 
-LABEL_F2B40C:
+SongNameBox_HandleSize:
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
 	ld xde, (xsp + 20)
 
-LABEL_F2B414:
+SongNameBox_InheritAndDraw:
 	call InheritedProc
 	jrl DrawStringCenter_RetZero2
 
@@ -1177,14 +1177,14 @@ SongNameBox_HandleFocusGained:
 	call MainFuncCall
 	jr DrawStringCenter_RetZero2
 
-LABEL_F2B439:
+SongNameBox_HandleEvent9:
 	ld xwa, (xsp + 24)
 	ld xbc, 0x1C0000D
 	ld xde, (xsp + 20)
 	call SendEvent
 	jr DrawStringCenter_RetZero2
 
-LABEL_F2B44A:
+SongNameBox_HandleEventF:
 	ld xwa, (xsp + 24)
 	ld xbc, 0x1C0000D
 	ld xde, (xsp + 20)
@@ -1214,19 +1214,19 @@ LABEL_F2B44A:
 
 DrawStringCenter_RetZero2:
 	lds32 xhl, 0
-	jr LABEL_F2B4AF
+	jr SongNameBox_Epilogue
 
-LABEL_F2B4A3:
+SongNameBox_DefaultHandler:
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
 	ld xde, (xsp + 20)
 	call InheritedProc
 
-LABEL_F2B4AF:
+SongNameBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 24)
 	ret
-LABEL_F2B4B4:
+SongNameBox_End:
 
 ComporserNameBoxProc:
 	lda xsp, (xsp - 24)
@@ -1235,28 +1235,28 @@ ComporserNameBoxProc:
 	ld xiz, xbc
 	ld (xsp + 24), xwa
 	cp xiz, 0x1C7000E
-	jr z, LABEL_F2B539
+	jr z, ComposerBox_HandleEventE
 	cp xiz, 0x1C70009
-	jr z, LABEL_F2B528
+	jr z, ComposerBox_HandleEvent9
 	cp xiz, 0x1C0000C
 	jr z, SongNameBox2_HandleFocusGained
 	cp xiz, 0x1C0000B
 	jr z, SongNameBox2_HandleFocusGained
 	cp xiz, 0x1C00002
-	jr z, LABEL_F2B4FB
+	jr z, ComposerBox_HandleSize
 	cp xiz, 0x1C00001
-	jrl nz, LABEL_F2B592
+	jrl nz, ComposerBox_DefaultHandler
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
 	ld xde, (xsp + 20)
-	jr LABEL_F2B503
+	jr ComposerBox_InheritAndDraw
 
-LABEL_F2B4FB:
+ComposerBox_HandleSize:
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
 	ld xde, (xsp + 20)
 
-LABEL_F2B503:
+ComposerBox_InheritAndDraw:
 	call InheritedProc
 	jrl DrawStringCentered_RetZero
 
@@ -1271,14 +1271,14 @@ SongNameBox2_HandleFocusGained:
 	call MainFuncCall
 	jr DrawStringCentered_RetZero
 
-LABEL_F2B528:
+ComposerBox_HandleEvent9:
 	ld xwa, (xsp + 24)
 	ld xbc, 0x1C0000D
 	ld xde, (xsp + 20)
 	call SendEvent
 	jr DrawStringCentered_RetZero
 
-LABEL_F2B539:
+ComposerBox_HandleEventE:
 	ld xwa, (xsp + 24)
 	ld xbc, 0x1C0000D
 	ld xde, (xsp + 20)
@@ -1308,19 +1308,19 @@ LABEL_F2B539:
 
 DrawStringCentered_RetZero:
 	lds32 xhl, 0
-	jr LABEL_F2B59E
+	jr ComposerBox_Epilogue
 
-LABEL_F2B592:
+ComposerBox_DefaultHandler:
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
 	ld xde, (xsp + 20)
 	call InheritedProc
 
-LABEL_F2B59E:
+ComposerBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 24)
 	ret
-LABEL_F2B5A3:
+ComposerBox_End:
 
 MeasureBoxProc:
 	lda xsp, (xsp - 62)
@@ -1329,16 +1329,16 @@ MeasureBoxProc:
 	ld xiz, xbc
 	ld (xsp + 62), xwa
 	cp xiz, 0x1C0000F
-	jr z, LABEL_F2B5EB
+	jr z, MeasureBox_HandleEventF
 	cp xiz, 0x1C0000B
-	jr z, LABEL_F2B5CE
+	jr z, MeasureBox_HandleFocusGained
 	ld xwa, (xsp + 62)
 	ld xbc, xiz
 	ld xde, (xsp + 58)
 	call InheritedProc
-	jrl LABEL_F2B695
+	jrl MeasureBox_Epilogue
 
-LABEL_F2B5CE:
+MeasureBox_HandleFocusGained:
 	ld xwa, (xsp + 62)
 	ld xbc, xiz
 	ld xde, (xsp + 58)
@@ -1347,9 +1347,9 @@ LABEL_F2B5CE:
 	ld xwa, 0x147001E
 	ld xbc, xiz
 	call MainPostEvent
-	jrl LABEL_F2B693
+	jrl MeasureBox_ReturnZero
 
-LABEL_F2B5EB:
+MeasureBox_HandleEventF:
 	ld xwa, (xsp + 62)
 	ld xbc, xiz
 	ld xde, (xsp + 58)
@@ -1391,10 +1391,10 @@ LABEL_F2B5EB:
 	ld xwa, xhl
 	lda xbc, (xhl + 16)
 
-LABEL_F2B660:
+MeasureBox_ZeroFillLoop:
 	stib_dpi 0xE0, 0x00
 	cp xwa, xbc
-	jr c, LABEL_F2B660
+	jr c, MeasureBox_ZeroFillLoop
 	ld (xde + 18), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
@@ -1410,10 +1410,10 @@ LABEL_F2B660:
 	pushm (xhl + 24)
 	call DrawStringLeftJustify
 
-LABEL_F2B693:
+MeasureBox_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2B695:
+MeasureBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 62)
 	ret
@@ -1422,13 +1422,13 @@ MeasureBoxFunc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E00045
-	jr z, LABEL_F2B6CA
+	jr z, MeasureBoxFunc_LoadAddr
 	cp xbc, 0x1E70016
-	jr z, LABEL_F2B6B1
+	jr z, MeasureBoxFunc_DrawMeasure
 	lds32 xhl, 0
-	jr LABEL_F2B6CE
+	jr MeasureBoxFunc_Epilogue
 
-LABEL_F2B6B1:
+MeasureBoxFunc_DrawMeasure:
 	push_sd16w 0x68, 0x26
 	pushw 0xE2
 	pushw 0x6200
@@ -1437,44 +1437,44 @@ LABEL_F2B6B1:
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	ld xhl, xiz
-	jr LABEL_F2B6CE
+	jr MeasureBoxFunc_Epilogue
 
-LABEL_F2B6CA:
+MeasureBoxFunc_LoadAddr:
 	ldada xhl, 9832
 
-LABEL_F2B6CE:
+MeasureBoxFunc_Epilogue:
 	pop xiz
 	ret
-LABEL_F2B6D0:
+MeasureBoxFunc_End:
 
 AcDiskFileNameBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C70001
-	jr z, LABEL_F2B72C
+	jr z, AcDiskFileName_HandleEventF
 	cp xbc, 0x1C0000C
 	jr z, AcDiskFileName_HandleFocusGained
 	cp xbc, 0x1C0000B
 	jr z, AcDiskFileName_HandleFocusGained
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2B70C
+	jr z, AcDiskFileName_HandleEvent1
 	cp xbc, 0x1C00001
-	jr z, LABEL_F2B708
+	jr z, AcDiskFileName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F2B770
+	jr AcDiskFileName_Epilogue
 
-LABEL_F2B708:
+AcDiskFileName_HandleEvent2:
 	ld xwa, xiz
-	jr LABEL_F2B70E
+	jr AcDiskFileName_CallInherited
 
-LABEL_F2B70C:
+AcDiskFileName_HandleEvent1:
 	ld xwa, xiz
 
-LABEL_F2B70E:
+AcDiskFileName_CallInherited:
 	call InheritedProc
-	jr LABEL_F2B76E
+	jr AcDiskFileName_ReturnZero
 
 AcDiskFileName_HandleFocusGained:
 	ld xwa, xiz
@@ -1483,9 +1483,9 @@ AcDiskFileName_HandleFocusGained:
 	ld xbc, 0x1E7000E
 	lds32 xde, 0
 	call MainFuncCall
-	jr LABEL_F2B76E
+	jr AcDiskFileName_ReturnZero
 
-LABEL_F2B72C:
+AcDiskFileName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0xE2
@@ -1509,43 +1509,43 @@ LABEL_F2B72C:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F2B76E:
+AcDiskFileName_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2B770:
+AcDiskFileName_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
-LABEL_F2B777:
+AcDiskFileName_End:
 
 AcSmfFileNameBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C70002
-	jr z, LABEL_F2B7D3
+	jr z, AcSmfFileName_HandleEventF
 	cp xbc, 0x1C0000C
 	jr z, AcSmfFileName_HandleFocusGained
 	cp xbc, 0x1C0000B
 	jr z, AcSmfFileName_HandleFocusGained
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2B7B3
+	jr z, AcSmfFileName_HandleEvent1
 	cp xbc, 0x1C00001
-	jr z, LABEL_F2B7AF
+	jr z, AcSmfFileName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F2B817
+	jr AcSmfFileName_Epilogue
 
-LABEL_F2B7AF:
+AcSmfFileName_HandleEvent2:
 	ld xwa, xiz
-	jr LABEL_F2B7B5
+	jr AcSmfFileName_CallInherited
 
-LABEL_F2B7B3:
+AcSmfFileName_HandleEvent1:
 	ld xwa, xiz
 
-LABEL_F2B7B5:
+AcSmfFileName_CallInherited:
 	call InheritedProc
-	jr LABEL_F2B815
+	jr AcSmfFileName_ReturnZero
 
 AcSmfFileName_HandleFocusGained:
 	ld xwa, xiz
@@ -1554,9 +1554,9 @@ AcSmfFileName_HandleFocusGained:
 	ld xbc, 0x1E7000F
 	lds32 xde, 0
 	call MainFuncCall
-	jr LABEL_F2B815
+	jr AcSmfFileName_ReturnZero
 
-LABEL_F2B7D3:
+AcSmfFileName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0xE2
@@ -1580,54 +1580,54 @@ LABEL_F2B7D3:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F2B815:
+AcSmfFileName_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2B817:
+AcSmfFileName_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
-LABEL_F2B81E:
+AcSmfFileName_End:
 
 AcSmfSongNameBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C70003
-	jr z, LABEL_F2B87A
+	jr z, AcSmfSongName_HandleEventF
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F2B862
+	jr z, AcSmfSongName_HandleFocusGained
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F2B862
+	jr z, AcSmfSongName_HandleFocusGained
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2B85A
+	jr z, AcSmfSongName_HandleEvent1
 	cp xbc, 0x1C00001
-	jr z, LABEL_F2B856
+	jr z, AcSmfSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F2B8BE
+	jr AcSmfSongName_Epilogue
 
-LABEL_F2B856:
+AcSmfSongName_HandleEvent2:
 	ld xwa, xiz
-	jr LABEL_F2B85C
+	jr AcSmfSongName_CallInherited
 
-LABEL_F2B85A:
+AcSmfSongName_HandleEvent1:
 	ld xwa, xiz
 
-LABEL_F2B85C:
+AcSmfSongName_CallInherited:
 	call InheritedProc
-	jr LABEL_F2B8BC
+	jr AcSmfSongName_ReturnZero
 
-LABEL_F2B862:
+AcSmfSongName_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, 0x147001D
 	ld xbc, 0x1E70010
 	lds32 xde, 0
 	call MainFuncCall
-	jr LABEL_F2B8BC
+	jr AcSmfSongName_ReturnZero
 
-LABEL_F2B87A:
+AcSmfSongName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0xE2
@@ -1651,54 +1651,54 @@ LABEL_F2B87A:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F2B8BC:
+AcSmfSongName_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2B8BE:
+AcSmfSongName_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
-LABEL_F2B8C5:
+AcSmfSongName_End:
 
 AcDocSongNameBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C70005
-	jr z, LABEL_F2B921
+	jr z, AcDocSongName_HandleEventF
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F2B909
+	jr z, AcDocSongName_HandleFocusGained
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F2B909
+	jr z, AcDocSongName_HandleFocusGained
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2B901
+	jr z, AcDocSongName_HandleEvent1
 	cp xbc, 0x1C00001
-	jr z, LABEL_F2B8FD
+	jr z, AcDocSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F2B965
+	jr AcDocSongName_Epilogue
 
-LABEL_F2B8FD:
+AcDocSongName_HandleEvent2:
 	ld xwa, xiz
-	jr LABEL_F2B903
+	jr AcDocSongName_CallInherited
 
-LABEL_F2B901:
+AcDocSongName_HandleEvent1:
 	ld xwa, xiz
 
-LABEL_F2B903:
+AcDocSongName_CallInherited:
 	call InheritedProc
-	jr LABEL_F2B963
+	jr AcDocSongName_ReturnZero
 
-LABEL_F2B909:
+AcDocSongName_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, 0x147001D
 	ld xbc, 0x1E70012
 	lds32 xde, 0
 	call MainFuncCall
-	jr LABEL_F2B963
+	jr AcDocSongName_ReturnZero
 
-LABEL_F2B921:
+AcDocSongName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0xE2
@@ -1722,54 +1722,54 @@ LABEL_F2B921:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F2B963:
+AcDocSongName_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2B965:
+AcDocSongName_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
-LABEL_F2B96C:
+AcDocSongName_End:
 
 AcDocFileNoBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C70006
-	jr z, LABEL_F2B9C8
+	jr z, AcDocFileNo_HandleEventF
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F2B9B0
+	jr z, AcDocFileNo_HandleFocusGained
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F2B9B0
+	jr z, AcDocFileNo_HandleFocusGained
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2B9A8
+	jr z, AcDocFileNo_HandleEvent1
 	cp xbc, 0x1C00001
-	jr z, LABEL_F2B9A4
+	jr z, AcDocFileNo_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F2BA0C
+	jr AcDocFileNo_Epilogue
 
-LABEL_F2B9A4:
+AcDocFileNo_HandleEvent2:
 	ld xwa, xiz
-	jr LABEL_F2B9AA
+	jr AcDocFileNo_CallInherited
 
-LABEL_F2B9A8:
+AcDocFileNo_HandleEvent1:
 	ld xwa, xiz
 
-LABEL_F2B9AA:
+AcDocFileNo_CallInherited:
 	call InheritedProc
-	jr LABEL_F2BA0A
+	jr AcDocFileNo_ReturnZero
 
-LABEL_F2B9B0:
+AcDocFileNo_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, 0x147001D
 	ld xbc, 0x1E70013
 	lds32 xde, 0
 	call MainFuncCall
-	jr LABEL_F2BA0A
+	jr AcDocFileNo_ReturnZero
 
-LABEL_F2B9C8:
+AcDocFileNo_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0xE2
@@ -1793,54 +1793,54 @@ LABEL_F2B9C8:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F2BA0A:
+AcDocFileNo_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2BA0C:
+AcDocFileNo_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
-LABEL_F2BA13:
+AcDocFileNo_End:
 
 AcPDSongNameBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C70007
-	jr z, LABEL_F2BA6F
+	jr z, AcPDSongName_HandleEventF
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F2BA57
+	jr z, AcPDSongName_HandleFocusGained
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F2BA57
+	jr z, AcPDSongName_HandleFocusGained
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2BA4F
+	jr z, AcPDSongName_HandleEvent1
 	cp xbc, 0x1C00001
-	jr z, LABEL_F2BA4B
+	jr z, AcPDSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F2BAB3
+	jr AcPDSongName_Epilogue
 
-LABEL_F2BA4B:
+AcPDSongName_HandleEvent2:
 	ld xwa, xiz
-	jr LABEL_F2BA51
+	jr AcPDSongName_CallInherited
 
-LABEL_F2BA4F:
+AcPDSongName_HandleEvent1:
 	ld xwa, xiz
 
-LABEL_F2BA51:
+AcPDSongName_CallInherited:
 	call InheritedProc
-	jr LABEL_F2BAB1
+	jr AcPDSongName_ReturnZero
 
-LABEL_F2BA57:
+AcPDSongName_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, 0x147001D
 	ld xbc, 0x1E70014
 	lds32 xde, 0
 	call MainFuncCall
-	jr LABEL_F2BAB1
+	jr AcPDSongName_ReturnZero
 
-LABEL_F2BA6F:
+AcPDSongName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0xE2
@@ -1864,54 +1864,54 @@ LABEL_F2BA6F:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F2BAB1:
+AcPDSongName_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2BAB3:
+AcPDSongName_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
-LABEL_F2BABA:
+AcPDSongName_End:
 
 AcPDFileNoBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C70008
-	jr z, LABEL_F2BB16
+	jr z, AcPDFileNo_HandleEventF
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F2BAFE
+	jr z, AcPDFileNo_HandleFocusGained
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F2BAFE
+	jr z, AcPDFileNo_HandleFocusGained
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2BAF6
+	jr z, AcPDFileNo_HandleEvent1
 	cp xbc, 0x1C00001
-	jr z, LABEL_F2BAF2
+	jr z, AcPDFileNo_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F2BB5A
+	jr AcPDFileNo_Epilogue
 
-LABEL_F2BAF2:
+AcPDFileNo_HandleEvent2:
 	ld xwa, xiz
-	jr LABEL_F2BAF8
+	jr AcPDFileNo_CallInherited
 
-LABEL_F2BAF6:
+AcPDFileNo_HandleEvent1:
 	ld xwa, xiz
 
-LABEL_F2BAF8:
+AcPDFileNo_CallInherited:
 	call InheritedProc
-	jr LABEL_F2BB58
+	jr AcPDFileNo_ReturnZero
 
-LABEL_F2BAFE:
+AcPDFileNo_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, 0x147001D
 	ld xbc, 0x1E70015
 	lds32 xde, 0
 	call MainFuncCall
-	jr LABEL_F2BB58
+	jr AcPDFileNo_ReturnZero
 
-LABEL_F2BB16:
+AcPDFileNo_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0xE2
@@ -1935,10 +1935,10 @@ LABEL_F2BB16:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F2BB58:
+AcPDFileNo_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2BB5A:
+AcPDFileNo_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
@@ -1950,15 +1950,15 @@ IvNamingExitProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1C00007
-	jr z, LABEL_F2BB9A
+	jr z, IvNamingExit_ReturnZero
 	cp xiz, 0x1E0003A
-	jr z, LABEL_F2BB86
+	jr z, IvNamingExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
-	jr LABEL_F2BBF1
+	jr IvNamingExit_CallInherited
 
-LABEL_F2BB86:
+IvNamingExit_CopyString:
 	pushw 0xE2
 	pushw 0x62C4
 	ld xwa, (xsp + 8)
@@ -1966,9 +1966,9 @@ LABEL_F2BB86:
 	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
-	jr LABEL_F2BBF5
+	jr IvNamingExit_Epilogue
 
-LABEL_F2BB9A:
+IvNamingExit_ReturnZero:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1E00053
 	ld xde, (xsp + 4)
@@ -1977,13 +1977,13 @@ LABEL_F2BB9A:
 	jr z, IvNamingExit_ForwardEvent
 	call GetTitleNow
 	cp xhl, 0x1A0008F
-	jr nz, LABEL_F2BBCA
+	jr nz, IvNamingExit_CheckTitleA7
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A0008E
-	jr LABEL_F2BBE5
+	jr IvNamingExit_PostTitleEvent
 
-LABEL_F2BBCA:
+IvNamingExit_CheckTitleA7:
 	call GetTitleNow
 	cp xhl, 0x1A000A7
 	jr nz, IvNamingExit_ForwardEvent
@@ -1991,7 +1991,7 @@ LABEL_F2BBCA:
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00083
 
-LABEL_F2BBE5:
+IvNamingExit_PostTitleEvent:
 	call PostEvent
 
 IvNamingExit_ForwardEvent:
@@ -1999,15 +1999,15 @@ IvNamingExit_ForwardEvent:
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 
-LABEL_F2BBF1:
+IvNamingExit_CallInherited:
 	call InheritedProc
 
-LABEL_F2BBF5:
+IvNamingExit_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
 
-LABEL_F2BBF9:
+IvNamingExit_ScreenData:
 	.byte 0xf3, 0xfd, 0x4e, 0xff, 0x37, 0x3e, 0xf3, 0xfd
 	.byte 0xaa, 0x00, 0x62
 	ld	(xsp+174), xbc
