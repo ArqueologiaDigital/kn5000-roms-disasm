@@ -2,130 +2,130 @@
 
 	naka_header NAKA_TYPE_GROUP
 	.byte 0x20, 0x00, 0x06, 0x00, 0xcc, 0x74, 0xe2, 0x00
-	.long LABEL_E274C8
+	.long NakaInst_NoteEditBox
 	.long NakaDesc_FuncTtlNo_B
 	.byte 0xe4, 0x45, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x44
 	.byte 0x2c, 0x00, 0x00, 0x00, 0xb6, 0x74, 0xe2, 0x00
-	.long LABEL_E274B4
+	.long NakaInst_EqOnOffFuncToggle
 	.long NakaDesc_Empty_C
 	.byte 0xfa, 0xef, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x10
 	.byte 0x16, 0x00, 0x00, 0x00, 0xaa, 0x74, 0xe2, 0x00
-	.long LABEL_E274A8
+	.long NakaInst_MsgToTtl
 	.long NakaDesc_Empty_D
 	.byte 0xf1, 0xec, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x45
 	.byte 0x32, 0x00, 0x08, 0x00, 0x96, 0x74, 0xe2, 0x00
-	.long LABEL_E27492
+	.long NakaInst_AcIndexWideToggle
 	.long NakaDesc_FuncIndex
 	.byte 0x76, 0xeb, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x47
 	.byte 0x1a, 0x00, 0x04, 0x00, 0x86, 0x74, 0xe2, 0x00
-	.long LABEL_E27484
+	.long NakaInst_IvPlayExit
 	.long NakaDesc_Mode
 	.byte 0xa4, 0xe8, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x10
 	.byte 0x24, 0x00, 0x0e, 0x00, 0x7c, 0x74, 0xe2, 0x00
-	.long LABEL_E27476
+	.long NakaInst_HelpTtl
 	.long NakaDesc_ColorFontPageFunc
 	.byte 0xd7, 0x09, 0xf3, 0x00
 
 
 	naka_header NAKA_TYPE_0x47
 	.byte 0x16, 0x00, 0x00, 0x00, 0x6a, 0x74, 0xe2, 0x00
-	.long LABEL_E27468
+	.long NakaInst_IvPnlWrExit
 	.long LABEL_E2713C
 	.byte 0x7e, 0xe9, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x27
 	.byte 0x16, 0x00, 0x00, 0x00, 0x60, 0x74, 0xe2, 0x00
-	.long LABEL_E2745E
+	.long NakaInst_IvSdrev
 	.long NakaDesc_Empty_E
 	.byte 0x1d, 0xea, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x27
 	.byte 0x16, 0x00, 0x00, 0x00, 0x56, 0x74, 0xe2, 0x00
-	.long LABEL_E27454
+	.long NakaInst_IvSddsp
 	.long NakaDesc_Empty_F
 	.byte 0xd8, 0xea, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x27
 	.byte 0x16, 0x00, 0x00, 0x00, 0x4c, 0x74, 0xe2, 0x00
-	.long LABEL_E2744A
+	.long NakaInst_IvSdacc
 	.long NakaDesc_Empty_G
 	.byte 0xff, 0xeb, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x47
 	.byte 0x16, 0x00, 0x00, 0x00, 0x3e, 0x74, 0xe2, 0x00
-	.long LABEL_E2743C
+	.long NakaInst_IvPunchExit
 	.long NakaDesc_Empty_H
 	.byte 0x74, 0xec, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x47
 	.byte 0x16, 0x00, 0x00, 0x00, 0x2c, 0x74, 0xe2, 0x00
-	.long LABEL_E2742A
+	.long NakaInst_IvAutoPunchExit
 	.long NakaDesc_Empty_I
 	.byte 0x32, 0xe5, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x21
 	.byte 0x2e, 0x00, 0x06, 0x00, 0x1c, 0x74, 0xe2, 0x00
-	.long LABEL_E27418
+	.long NakaInst_AcPanicEditSw
 	.long NakaDesc_StyleFunc
 	.byte 0x90, 0xe4, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x47
 	.byte 0x16, 0x00, 0x00, 0x00, 0x0a, 0x74, 0xe2, 0x00
-	.long LABEL_E27408
+	.long NakaInst_IvRealRecExit
 	.long NakaDesc_Empty_J
 	.zero 24
-LABEL_E27408:	aligned_string ""
+NakaInst_IvRealRecExit:	aligned_string ""
 	aligned_string "IvRealRecExit"
-LABEL_E27418:
+NakaInst_AcPanicEditSw:
 	.byte 0x66, 0x6a, 0x00, 0xff
 	aligned_string "AcPanicEditSw"
-LABEL_E2742A:	aligned_string ""
+NakaInst_IvAutoPunchExit:	aligned_string ""
 	aligned_string "IvAutoPunchExit"
-LABEL_E2743C:	aligned_string ""
+NakaInst_IvPunchExit:	aligned_string ""
 	aligned_string "IvPunchExit"
-LABEL_E2744A:	aligned_string ""
+NakaInst_IvSdacc:	aligned_string ""
 	aligned_string "IvSdacc"
-LABEL_E27454:	aligned_string ""
+NakaInst_IvSddsp:	aligned_string ""
 	aligned_string "IvSddsp"
-LABEL_E2745E:	aligned_string ""
+NakaInst_IvSdrev:	aligned_string ""
 	aligned_string "IvSdrev"
-LABEL_E27468:	aligned_string ""
+NakaInst_IvPnlWrExit:	aligned_string ""
 	aligned_string "IvPnlWrExit"
-LABEL_E27476:	.asciz "^^cGj"
+NakaInst_HelpTtl:	.asciz "^^cGj"
 	aligned_string "HelpTtl"
-LABEL_E27484:
+NakaInst_IvPlayExit:
 	.byte 0x60, 0x00
 	aligned_string "IvPlayExit"
-LABEL_E27492:
+NakaInst_AcIndexWideToggle:
 	.byte 0x41, 0x41, 0x6a, 0x00
 	aligned_string "AcIndexWideToggle"
-LABEL_E274A8:	aligned_string ""
+NakaInst_MsgToTtl:	aligned_string ""
 	aligned_string "MsgToTtl"
-LABEL_E274B4:	aligned_string ""
+NakaInst_EqOnOffFuncToggle:	aligned_string ""
 	aligned_string "EqOnOffFuncToggle"
-LABEL_E274C8:
+NakaInst_NoteEditBox:
 	.byte 0x6a, 0x43, 0x00, 0xff
 	aligned_string "NoteEditBox"
 NakaInst_SngSel2:	aligned_string ""
