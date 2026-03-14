@@ -1,19 +1,19 @@
-LABEL_E55E38:	aligned_string "AcMidiPartGridBoxProc"
-LABEL_E55E4E:	aligned_string "AcCtlMsgGridBoxProc"
-LABEL_E55E62:	aligned_string "AcPmemOutRGridBoxProc"
-LABEL_E55E78:	aligned_string "AcPmemOutLGridBoxProc"
-LABEL_E55E8E:	aligned_string "AcPcgOutGridBoxProc"
-LABEL_E55EA2:	aligned_string "AcParaLoadOptGridBoxProc"
-LABEL_E55EBC:	aligned_string "AcInOutGridBoxProc"
-LABEL_E55ED0:	aligned_string "AcVocalGridBoxProc"
-LABEL_E55EE4:	aligned_string "AcFadeSetGridBoxProc"
-LABEL_E55EFA:	aligned_string "AcLswFuncEditBoxProc"
-LABEL_E55F10:	aligned_string "AcLswFuncBoxProc"
-LABEL_E55F22:	aligned_string "AcGMOnOffBoxProc"
-LABEL_E55F34:	aligned_string "AcSendEditSwProc"
-LABEL_E55F46:	aligned_string "IvMpstPageControlProc"
-LABEL_E55F5C:	aligned_string "PsHarmOnOffBoxProc"
-LABEL_E55F70:	aligned_string "AcVocalistListBoxProc"
+NakaInst_AcMidiPartGridBoxProc:	aligned_string "AcMidiPartGridBoxProc"
+NakaInst_AcCtlMsgGridBoxProc:	aligned_string "AcCtlMsgGridBoxProc"
+NakaInst_AcPmemOutRGridBoxProc:	aligned_string "AcPmemOutRGridBoxProc"
+NakaInst_AcPmemOutLGridBoxProc:	aligned_string "AcPmemOutLGridBoxProc"
+NakaInst_AcPcgOutGridBoxProc:	aligned_string "AcPcgOutGridBoxProc"
+NakaInst_AcParaLoadOptGridBoxProc:	aligned_string "AcParaLoadOptGridBoxProc"
+NakaInst_AcInOutGridBoxProc:	aligned_string "AcInOutGridBoxProc"
+NakaInst_AcVocalGridBoxProc:	aligned_string "AcVocalGridBoxProc"
+NakaInst_AcFadeSetGridBoxProc:	aligned_string "AcFadeSetGridBoxProc"
+NakaInst_AcLswFuncEditBoxProc:	aligned_string "AcLswFuncEditBoxProc"
+NakaInst_AcLswFuncBoxProc:	aligned_string "AcLswFuncBoxProc"
+NakaInst_AcGMOnOffBoxProc:	aligned_string "AcGMOnOffBoxProc"
+NakaInst_AcSendEditSwProc:	aligned_string "AcSendEditSwProc"
+NakaInst_IvMpstPageControlProc:	aligned_string "IvMpstPageControlProc"
+NakaInst_PsHarmOnOffBoxProc:	aligned_string "PsHarmOnOffBoxProc"
+NakaInst_AcVocalistListBoxProc:	aligned_string "AcVocalistListBoxProc"
 
 
 	naka_header NAKA_TYPE_CONTAINER
@@ -22,9 +22,9 @@ LABEL_E55F70:	aligned_string "AcVocalistListBoxProc"
 	.long Naka_PresentationRootState
 	.byte 0xf8, 0x00, 0x02, 0x00
 	.byte 0x02, 0x00, 0xa0, 0x01, 0xf2, 0xe3, 0x03, 0x00
-	.long LABEL_E55FB0
+	.long NakaDesc_REVERB_EQUALIZER_PRESETS
 	.byte 0x91, 0x00, 0x00, 0x00
-LABEL_E55FB0:	aligned_string "REVERB & EQUALIZER PRESETS"
+NakaDesc_REVERB_EQUALIZER_PRESETS:	aligned_string "REVERB & EQUALIZER PRESETS"
 
 
 	naka_header NAKA_TYPE_MENU_ITEM
@@ -73,12 +73,12 @@ LABEL_E55FB0:	aligned_string "REVERB & EQUALIZER PRESETS"
 	.byte 0x00, 0x00, 0xff, 0xff, 0x02, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x10, 0x00, 0x57, 0x00, 0x2c, 0x01
 	.byte 0x9e, 0x00, 0xf5, 0x00, 0xc1, 0x00, 0x01, 0x00
-	.long LABEL_E56126
+	.long NakaInst_OCTAVE
 	.byte 0x04, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x05, 0x00, 0xff, 0x00
 	.byte 0x01, 0x00, 0x00, 0xe4, 0x03, 0x00, 0x07, 0x00
 	.byte 0x23, 0x01, 0x02, 0xe4, 0x03, 0x00
-LABEL_E56126:	aligned_string "OCTAVE   :"
+NakaInst_OCTAVE:	aligned_string "OCTAVE   :"
 
 
 	naka_header NAKA_TYPE_0x22
@@ -106,7 +106,7 @@ LABEL_E56126:	aligned_string "OCTAVE   :"
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x88, 0x00, 0x08, 0xe4, 0x03, 0x00
 	.byte 0x00, 0x00, 0xc6, 0x61, 0xe5, 0x00
-LABEL_E561C6:	aligned_string "Huge Room"
+NakaInst_Huge_Room:	aligned_string "Huge Room"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -116,7 +116,7 @@ LABEL_E561C6:	aligned_string "Huge Room"
 	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x89, 0x00, 0x0a, 0xe4
 	.byte 0x03, 0x00, 0x01, 0x00, 0x00, 0x62, 0xe5, 0x00
-LABEL_E56200:	aligned_string "Box Room"
+NakaInst_Box_Room:	aligned_string "Box Room"
 
 
 	naka_header NAKA_TYPE_0x52
@@ -132,8 +132,8 @@ LABEL_E56200:	aligned_string "Box Room"
 	.byte 0x8b, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
 	.byte 0x8a, 0x00, 0x0c, 0xe4, 0x03, 0x00, 0x02, 0x00
-	.long LABEL_E56254
-LABEL_E56254:	aligned_string "Small Plate"
+	.long NakaInst_Small_Plate
+NakaInst_Small_Plate:	aligned_string "Small Plate"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -143,7 +143,7 @@ LABEL_E56254:	aligned_string "Small Plate"
 	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x8b, 0x00, 0x0e, 0xe4
 	.byte 0x03, 0x00, 0x03, 0x00, 0x90, 0x62, 0xe5, 0x00
-LABEL_E56290:	aligned_string "Sports Hall"
+NakaInst_Sports_Hall:	aligned_string "Sports Hall"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -152,8 +152,8 @@ LABEL_E56290:	aligned_string "Sports Hall"
 	.byte 0xdf, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
 	.byte 0x8c, 0x00, 0x10, 0xe4, 0x03, 0x00, 0x04, 0x00
-	.long LABEL_E562CC
-LABEL_E562CC:	aligned_string "Bright Hall"
+	.long NakaInst_Bright_Hall
+NakaInst_Bright_Hall:	aligned_string "Bright Hall"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -163,7 +163,7 @@ LABEL_E562CC:	aligned_string "Bright Hall"
 	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x08, 0x00, 0x12, 0xe4
 	.byte 0x03, 0x00, 0x05, 0x00, 0x08, 0x63, 0xe5, 0x00
-LABEL_E56308:	aligned_string "Dark Confines"
+NakaInst_Dark_Confines:	aligned_string "Dark Confines"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -173,7 +173,7 @@ LABEL_E56308:	aligned_string "Dark Confines"
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x09, 0x00, 0x14, 0xe4, 0x03, 0x00
 	.byte 0x06, 0x00, 0x46, 0x63, 0xe5, 0x00
-LABEL_E56346:	aligned_string "Reflection"
+NakaInst_Reflection:	aligned_string "Reflection"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -184,7 +184,7 @@ LABEL_E56346:	aligned_string "Reflection"
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x0a, 0x00
 	.byte 0x16, 0xe4, 0x03, 0x00, 0x07, 0x00, 0x82, 0x63
 	.byte 0xe5, 0x00
-LABEL_E56382:	aligned_string "High & Open"
+NakaInst_High_Open:	aligned_string "High & Open"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -194,7 +194,7 @@ LABEL_E56382:	aligned_string "High & Open"
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x0b, 0x00, 0x18, 0xe4, 0x03, 0x00
 	.byte 0x08, 0x00, 0xbe, 0x63, 0xe5, 0x00
-LABEL_E563BE:	aligned_string "Left To Right"
+NakaInst_Left_To_Right:	aligned_string "Left To Right"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -203,8 +203,8 @@ LABEL_E563BE:	aligned_string "Left To Right"
 	.byte 0xdf, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
 	.byte 0x0c, 0x00, 0x1a, 0xe4, 0x03, 0x00, 0x09, 0x00
-	.long LABEL_E563FC
-LABEL_E563FC:	aligned_string "Cavernous"
+	.long NakaInst_Cavernous
+NakaInst_Cavernous:	aligned_string "Cavernous"
 
 
 	naka_header NAKA_TYPE_CONTAINER
@@ -213,9 +213,9 @@ LABEL_E563FC:	aligned_string "Cavernous"
 	.long Naka_PresentationRootState
 	.byte 0xf8, 0x00, 0x02, 0x00
 	.byte 0x09, 0x00, 0xa0, 0x01, 0x1c, 0xe4, 0x03, 0x00
-	.long LABEL_E56430
+	.long NakaDesc_EQUALIZER_PRESETS
 	.byte 0x91, 0x00, 0x00, 0x00
-LABEL_E56430:	aligned_string "EQUALIZER PRESETS"
+NakaDesc_EQUALIZER_PRESETS:	aligned_string "EQUALIZER PRESETS"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -226,7 +226,7 @@ LABEL_E56430:	aligned_string "EQUALIZER PRESETS"
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x88, 0x00
 	.byte 0x20, 0xe4, 0x03, 0x00, 0x00, 0x00, 0x72, 0x64
 	.byte 0xe5, 0x00
-LABEL_E56472:	aligned_string "Make Up"
+NakaInst_Make_Up:	aligned_string "Make Up"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -237,7 +237,7 @@ LABEL_E56472:	aligned_string "Make Up"
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x89, 0x00
 	.byte 0x22, 0xe4, 0x03, 0x00, 0x01, 0x00, 0xaa, 0x64
 	.byte 0xe5, 0x00
-LABEL_E564AA:	aligned_string "Middle Cut"
+NakaInst_Middle_Cut:	aligned_string "Middle Cut"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -247,7 +247,7 @@ LABEL_E564AA:	aligned_string "Middle Cut"
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x8a, 0x00, 0x24, 0xe4, 0x03, 0x00
 	.byte 0x02, 0x00, 0xe6, 0x64, 0xe5, 0x00
-LABEL_E564E6:	aligned_string "Transistor Radio"
+NakaInst_Transistor_Radio:	aligned_string "Transistor Radio"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -257,7 +257,7 @@ LABEL_E564E6:	aligned_string "Transistor Radio"
 	.byte 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x8b, 0x00, 0x26, 0xe4
 	.byte 0x03, 0x00, 0x03, 0x00, 0x28, 0x65, 0xe5, 0x00
-LABEL_E56528:	aligned_string "Treble Boost"
+NakaInst_Treble_Boost:	aligned_string "Treble Boost"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -267,7 +267,7 @@ LABEL_E56528:	aligned_string "Treble Boost"
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x8c, 0x00, 0x28, 0xe4, 0x03, 0x00
 	.byte 0x04, 0x00, 0x66, 0x65, 0xe5, 0x00
-LABEL_E56566:	aligned_string "Treble Cut"
+NakaInst_Treble_Cut:	aligned_string "Treble Cut"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -278,7 +278,7 @@ LABEL_E56566:	aligned_string "Treble Cut"
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x08, 0x00
 	.byte 0x2a, 0xe4, 0x03, 0x00, 0x05, 0x00, 0xa2, 0x65
 	.byte 0xe5, 0x00
-LABEL_E565A2:	aligned_string "No Hi Hat"
+NakaInst_No_Hi_Hat:	aligned_string "No Hi Hat"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -287,8 +287,8 @@ LABEL_E565A2:	aligned_string "No Hi Hat"
 	.byte 0x61, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x02, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
 	.byte 0x09, 0x00, 0x2c, 0xe4, 0x03, 0x00, 0x06, 0x00
-	.long LABEL_E565DC
-LABEL_E565DC:	aligned_string "Tubby Bass"
+	.long NakaInst_Tubby_Bass
+NakaInst_Tubby_Bass:	aligned_string "Tubby Bass"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -298,7 +298,7 @@ LABEL_E565DC:	aligned_string "Tubby Bass"
 	.byte 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x0a, 0x00, 0x2e, 0xe4
 	.byte 0x03, 0x00, 0x07, 0x00, 0x18, 0x66, 0xe5, 0x00
-LABEL_E56618:	aligned_string "Bass Cut"
+NakaInst_Bass_Cut:	aligned_string "Bass Cut"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -309,7 +309,7 @@ LABEL_E56618:	aligned_string "Bass Cut"
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x0b, 0x00
 	.byte 0x30, 0xe4, 0x03, 0x00, 0x08, 0x00, 0x52, 0x66
 	.byte 0xe5, 0x00
-LABEL_E56652:	aligned_string "Too Bright"
+NakaInst_Too_Bright:	aligned_string "Too Bright"
 
 
 	naka_header NAKA_TYPE_0x52
@@ -335,9 +335,9 @@ LABEL_E56652:	aligned_string "Too Bright"
 	.long Naka_PresentationRootState
 	.byte 0xf8, 0x00, 0x02, 0x00
 	.byte 0x09, 0x00, 0xa0, 0x01, 0x34, 0xe4, 0x03, 0x00
-	.long LABEL_E566E0
+	.long NakaDesc_REVERB_EQUALIZER_PRESETS_E566E0
 	.byte 0x91, 0x00, 0x00, 0x00
-LABEL_E566E0:	aligned_string "REVERB + EQUALIZER PRESETS"
+NakaDesc_REVERB_EQUALIZER_PRESETS_E566E0:	aligned_string "REVERB + EQUALIZER PRESETS"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -346,8 +346,8 @@ LABEL_E566E0:	aligned_string "REVERB + EQUALIZER PRESETS"
 	.byte 0x37, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x03, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
 	.byte 0x88, 0x00, 0x38, 0xe4, 0x03, 0x00, 0x00, 0x00
-	.long LABEL_E5672C
-LABEL_E5672C:	aligned_string "Warm & Wide"
+	.long NakaInst_Warm_Wide
+NakaInst_Warm_Wide:	aligned_string "Warm & Wide"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -357,7 +357,7 @@ LABEL_E5672C:	aligned_string "Warm & Wide"
 	.byte 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x89, 0x00, 0x3a, 0xe4
 	.byte 0x03, 0x00, 0x01, 0x00, 0x68, 0x67, 0xe5, 0x00
-LABEL_E56768:	aligned_string "In Your Face"
+NakaInst_In_Your_Face:	aligned_string "In Your Face"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -367,7 +367,7 @@ LABEL_E56768:	aligned_string "In Your Face"
 	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x8a, 0x00, 0x3c, 0xe4, 0x03, 0x00
 	.byte 0x02, 0x00, 0xa6, 0x67, 0xe5, 0x00
-LABEL_E567A6:	aligned_string "Oil Tank"
+NakaInst_Oil_Tank:	aligned_string "Oil Tank"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -377,7 +377,7 @@ LABEL_E567A6:	aligned_string "Oil Tank"
 	.byte 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x8b, 0x00, 0x3e, 0xe4
 	.byte 0x03, 0x00, 0x03, 0x00, 0xe0, 0x67, 0xe5, 0x00
-LABEL_E567E0:	aligned_string "Warm Plate"
+NakaInst_Warm_Plate:	aligned_string "Warm Plate"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -386,8 +386,8 @@ LABEL_E567E0:	aligned_string "Warm Plate"
 	.byte 0xdf, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x03, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
 	.byte 0x8c, 0x00, 0x40, 0xe4, 0x03, 0x00, 0x04, 0x00
-	.long LABEL_E5681C
-LABEL_E5681C:	aligned_string "Light & Shade"
+	.long NakaInst_Light_Shade
+NakaInst_Light_Shade:	aligned_string "Light & Shade"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -398,7 +398,7 @@ LABEL_E5681C:	aligned_string "Light & Shade"
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x08, 0x00
 	.byte 0x42, 0xe4, 0x03, 0x00, 0x05, 0x00, 0x5a, 0x68
 	.byte 0xe5, 0x00
-LABEL_E5685A:	aligned_string "Warm & Fuzzy"
+NakaInst_Warm_Fuzzy:	aligned_string "Warm & Fuzzy"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -408,7 +408,7 @@ LABEL_E5685A:	aligned_string "Warm & Fuzzy"
 	.byte 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x09, 0x00, 0x44, 0xe4
 	.byte 0x03, 0x00, 0x06, 0x00, 0x98, 0x68, 0xe5, 0x00
-LABEL_E56898:	aligned_string "Ice Box"
+NakaInst_Ice_Box:	aligned_string "Ice Box"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -418,7 +418,7 @@ LABEL_E56898:	aligned_string "Ice Box"
 	.byte 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x0a, 0x00, 0x46, 0xe4
 	.byte 0x03, 0x00, 0x07, 0x00, 0xd0, 0x68, 0xe5, 0x00
-LABEL_E568D0:	aligned_string "Stadium"
+NakaInst_Stadium:	aligned_string "Stadium"
 
 
 	naka_header NAKA_TYPE_0x51
@@ -428,7 +428,7 @@ LABEL_E568D0:	aligned_string "Stadium"
 	.byte 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x48, 0xe4
 	.byte 0x03, 0x00, 0x08, 0x00, 0x08, 0x69, 0xe5, 0x00
-LABEL_E56908:	aligned_string "Live Room"
+NakaInst_Live_Room:	aligned_string "Live Room"
 
 
 	naka_header NAKA_TYPE_0x44
@@ -725,9 +725,9 @@ String_MIDI_MENU:
 	.long Naka_PresentationRootState
 	.byte 0xf8, 0x00, 0x02, 0x00
 	.byte 0x50, 0x00, 0xa0, 0x01, 0x90, 0xe4, 0x03, 0x00
-	.long LABEL_E56F98
+	.long NakaDesc_CONTROL_MESSAGES
 	.byte 0x86, 0x00, 0x00, 0x00
-LABEL_E56F98:	aligned_string "CONTROL MESSAGES"
+NakaDesc_CONTROL_MESSAGES:	aligned_string "CONTROL MESSAGES"
 
 
 	naka_header NAKA_TYPE_0x24
@@ -744,9 +744,9 @@ LABEL_E56F98:	aligned_string "CONTROL MESSAGES"
 	.byte 0x98, 0xe4, 0x03, 0x00, 0x9a, 0xe4, 0x03, 0x00
 	.byte 0x9e, 0xe4, 0x03, 0x00, 0xa2, 0xe4, 0x03, 0x00
 	.long LABEL_E57068
-	.long LABEL_E57018
+	.long NakaInst_PRG_CHANGE_BANK_SELECT_PITCH_BEND_VOLUME
 	.byte 0x14, 0x00, 0x23, 0x01, 0xa6, 0xe4, 0x03, 0x00
-LABEL_E57018:	aligned_string "PRG.CHANGE|BANK SELECT|PITCH BEND|VOLUME|EXPRESSION|PAN|SUSTAIN|EFFECT & REVERB"
+NakaInst_PRG_CHANGE_BANK_SELECT_PITCH_BEND_VOLUME:	aligned_string "PRG.CHANGE|BANK SELECT|PITCH BEND|VOLUME|EXPRESSION|PAN|SUSTAIN|EFFECT & REVERB"
 LABEL_E57068:	aligned_string "     |   "
 
 
@@ -814,10 +814,10 @@ LABEL_E57068:	aligned_string "     |   "
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x05, 0x00
 	.byte 0x89, 0x00, 0x01, 0x00, 0xac, 0xe4, 0x03, 0x00
 	.byte 0xae, 0xe4, 0x03, 0x00, 0xe0, 0x71, 0xe5, 0x00
-	.long LABEL_E571DA
+	.long NakaInst_OFF
 	.byte 0x81, 0x22, 0x00, 0x00
 	.byte 0x01, 0x00
-LABEL_E571DA:	aligned_string " OFF "
+NakaInst_OFF:	aligned_string " OFF "
 	aligned_string " ON  "
 	aligned_string "REALTIME COMMANDS :"
 	.byte 0x05, 0x00, 0x63, 0x01, 0x00, 0x00
@@ -827,11 +827,11 @@ LABEL_E571DA:	aligned_string " OFF "
 	.byte 0xe5, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x8b, 0x00, 0x01, 0x00
 	.byte 0xb0, 0xe4, 0x03, 0x00, 0xb2, 0xe4, 0x03, 0x00
-	.long LABEL_E5724A
-	.long LABEL_E5723E
+	.long NakaInst_MIDI
+	.long NakaInst_INTERNAL
 	.byte 0x00, 0x22, 0x00, 0x00, 0x01, 0x00
-LABEL_E5723E:	aligned_string " INTERNAL "
-LABEL_E5724A:	aligned_string "   MIDI   "
+NakaInst_INTERNAL:	aligned_string " INTERNAL "
+NakaInst_MIDI:	aligned_string "   MIDI   "
 	aligned_string "    CLOCK            :"
 
 
@@ -855,9 +855,9 @@ LABEL_E5724A:	aligned_string "   MIDI   "
 	.long Naka_PresentationRootState
 	.byte 0xf8, 0x00, 0x02, 0x00
 	.byte 0x50, 0x00, 0xa0, 0x01, 0xb4, 0xe4, 0x03, 0x00
-	.long LABEL_E572D8
+	.long NakaDesc_COMMON_SETTING
 	.byte 0x1a, 0x00, 0x00, 0x00
-LABEL_E572D8:	aligned_string "COMMON SETTING"
+NakaDesc_COMMON_SETTING:	aligned_string "COMMON SETTING"
 
 
 	naka_header NAKA_TYPE_0x56
@@ -1039,7 +1039,7 @@ LABEL_E575C0:	aligned_string "     |  "
 	.byte 0xea, 0xe4, 0x03, 0x00, 0x12, 0x78, 0xe5, 0x00
 	.byte 0x01, 0x00
 LABEL_E57812:	.ascii "Organ             ~95|Organ Fixed Touch ~95|PX Piano          ~95|Accordion   "
-LABEL_E57860:	aligned_string "      ~95|Bass Pedals       ~95|Ext. Sequencer    ~95"
+NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:	aligned_string "      ~95|Bass Pedals       ~95|Ext. Sequencer    ~95"
 
 
 	naka_header NAKA_TYPE_0x23
@@ -1073,10 +1073,10 @@ LABEL_E57860:	aligned_string "      ~95|Bass Pedals       ~95|Ext. Sequencer    
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x0f, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x92, 0x00, 0xdb, 0x00
-	.long LABEL_ED00D5
-	.long LABEL_E5793E
+	.long NakaInst_WITH_APC
+	.long NakaDesc_WITH_APC
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-LABEL_E5793E:	aligned_string "WITH APC"
+NakaDesc_WITH_APC:	aligned_string "WITH APC"
 
 
 	naka_header NAKA_TYPE_0x69
@@ -1381,7 +1381,7 @@ LABEL_E5793E:	aligned_string "WITH APC"
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x32, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x92, 0x00, 0xdb, 0x00
-	.long LABEL_ED00D5
+	.long NakaInst_WITH_APC
 	.long LABEL_E5804E
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	aligned_string "WITH APC"
@@ -1470,7 +1470,7 @@ LABEL_E5793E:	aligned_string "WITH APC"
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x3c, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x92, 0x00, 0xdb, 0x00
-	.long LABEL_ED00D5
+	.long NakaInst_WITH_APC
 	.long LABEL_E5821E
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	aligned_string "WITH APC"
@@ -2121,7 +2121,7 @@ LABEL_E5793E:	aligned_string "WITH APC"
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0x06, 0x00, 0x08, 0x00
 	.byte 0x94, 0x00, 0x96, 0x00, 0xa7, 0x00, 0xa8, 0x00
-	.long LABEL_E5904A
+	.long NakaInst_P_MEM_ON_OFF_PART
 	.byte 0x02, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x7e, 0x39, 0x35, 0x00, 0x0c, 0x00
 	.byte 0x63, 0x01, 0x00, 0x00, 0xff, 0xff, 0x09, 0x00
@@ -2132,9 +2132,9 @@ LABEL_E5793E:	aligned_string "WITH APC"
 	.byte 0xb4, 0xe5, 0x03, 0x00, 0xb6, 0xe5, 0x03, 0x00
 	.byte 0xb8, 0xe5, 0x03, 0x00, 0xbc, 0xe5, 0x03, 0x00
 	.byte 0xc0, 0xe5, 0x03, 0x00, 0xb0, 0x90, 0xe5, 0x00
-	.long LABEL_E59098
+	.long NakaDesc_P_MEM_ON_OFF_PART
 	.byte 0x11, 0x00, 0x23, 0x01
-LABEL_E59098:	aligned_string "P.MEM:|ON/OFF:|-|PART:"
+NakaDesc_P_MEM_ON_OFF_PART:	aligned_string "P.MEM:|ON/OFF:|-|PART:"
 	.byte 0x20, 0x7c, 0x20, 0x00, 0x0d, 0x00, 0x63, 0x01
 	.byte 0x00, 0x00, 0xff, 0xff, 0x0a, 0x00, 0x08, 0x00
 	.byte 0x08, 0x00, 0xaa, 0x00, 0x3c, 0x00, 0x3f, 0x01
@@ -2222,9 +2222,9 @@ LABEL_E59098:	aligned_string "P.MEM:|ON/OFF:|-|PART:"
 	.byte 0xd8, 0xe5, 0x03, 0x00, 0xda, 0xe5, 0x03, 0x00
 	.byte 0xdc, 0xe5, 0x03, 0x00, 0xe0, 0xe5, 0x03, 0x00
 	.byte 0xe4, 0xe5, 0x03, 0x00, 0x26, 0x93, 0xe5, 0x00
-	.long LABEL_E592B8
+	.long NakaInst_From_Registration_file_From_Sequencer_song_GM
 	.byte 0x09, 0x00, 0x23, 0x01
-LABEL_E592B8:	aligned_string " |-|From Registration file :|From Sequencer song    :|-| |-|GM mode is ON          :|GM mode is OFF         :"
+NakaInst_From_Registration_file_From_Sequencer_song_GM:	aligned_string " |-|From Registration file :|From Sequencer song    :|-| |-|GM mode is ON          :|GM mode is OFF         :"
 	ldb	w, 0x20
 	aligned_string "  |  "
 
@@ -2445,7 +2445,7 @@ LABEL_E592B8:	aligned_string " |-|From Registration file :|From Sequencer song  
 	naka_header NAKA_TYPE_0x22
 	.byte 0x0e, 0x00, 0xff, 0xff, 0x15, 0x00
 	.byte 0x13, 0x00, 0x08, 0x00, 0x7c, 0x00, 0xd8, 0x00
-	.long LABEL_EE00C3
+	.long NakaInst_NEXT
 	.byte 0x07, 0x00, 0xc9, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x03, 0x00, 0x04, 0x00, 0x03, 0x00
@@ -2495,9 +2495,9 @@ LABEL_E592B8:	aligned_string " |-|From Registration file :|From Sequencer song  
 	.byte 0x16, 0xe6, 0x03, 0x00, 0x18, 0xe6, 0x03, 0x00
 	.byte 0x1a, 0xe6, 0x03, 0x00, 0x1e, 0xe6, 0x03, 0x00
 	.byte 0x22, 0xe6, 0x03, 0x00, 0x9e, 0x9a, 0xe5, 0x00
-	.long LABEL_E59A30
+	.long NakaInst_Time_Time_Auto_reset_Rhythm_Auto_stop_SEQ_Auto
 	.byte 0x32, 0x00, 0x23, 0x01
-LABEL_E59A30:	aligned_string " |  Time             :| |  Time             :|  Auto reset       :|  Rhythm Auto stop :|  SEQ Auto stop    :"
+NakaInst_Time_Time_Auto_reset_Rhythm_Auto_stop_SEQ_Auto:	aligned_string " |  Time             :| |  Time             :|  Auto reset       :|  Rhythm Auto stop :|  SEQ Auto stop    :"
 	aligned_string "   |  "
 
 
@@ -2553,9 +2553,9 @@ LABEL_E59A30:	aligned_string " |  Time             :| |  Time             :|  Au
 	.long Naka_PresentationRootState
 	.byte 0xf8, 0x00, 0x02, 0x00
 	.byte 0x00, 0x00, 0xa0, 0x01, 0x26, 0xe6, 0x03, 0x00
-	.long LABEL_E59BA8
+	.long NakaDesc_SPLIT_POINT
 	.byte 0x9e, 0x00, 0x00, 0x00
-LABEL_E59BA8:	aligned_string "SPLIT POINT"
+NakaDesc_SPLIT_POINT:	aligned_string "SPLIT POINT"
 
 
 	naka_header NAKA_TYPE_0x11
@@ -2754,7 +2754,7 @@ LABEL_E5A13A:
 	.byte 0x00, 0xff
 LABEL_E5A13C:
 	.byte 0x00, 0xff
-LABEL_E5A13E:	aligned_string "ReverbEqualizerMenu"
+NakaInst_ReverbEqualizerMenu:	aligned_string "ReverbEqualizerMenu"
 	.byte 0x68, 0xa1, 0xe5, 0x00, 0x66, 0xa1
 	.byte 0xe5, 0x00, 0x64, 0xa1, 0xe5, 0x00, 0x62, 0xa1
 	.byte 0xe5, 0x00
@@ -2764,7 +2764,7 @@ LABEL_E5A164:
 	.byte 0x00, 0xff
 LABEL_E5A166:
 	.byte 0x00, 0xff
-LABEL_E5A168:	aligned_string "R12OctaveSetting"
+NakaInst_R12OctaveSetting:	aligned_string "R12OctaveSetting"
 	.byte 0xc6, 0xa1, 0xe5, 0x00, 0xc4, 0xa1
 	.byte 0xe5, 0x00, 0xc2, 0xa1, 0xe5, 0x00, 0xc0, 0xa1
 	.byte 0xe5, 0x00, 0xbe, 0xa1, 0xe5, 0x00, 0xbc, 0xa1
@@ -2793,8 +2793,8 @@ LABEL_E5A1C2:
 	.byte 0x00, 0xff
 LABEL_E5A1C4:
 	.byte 0x00, 0xff
-LABEL_E5A1C6:	aligned_string "ReverbPreset"
-	.long LABEL_E5A22A
+NakaInst_ReverbPreset:	aligned_string "ReverbPreset"
+	.long NakaInst_EqualizerPreset
 Naka_MidiChannel_Table:
 	.long LABEL_E5A228
 	.long LABEL_E5A226
@@ -2806,10 +2806,10 @@ Naka_MidiChannel_Table:
 	.long LABEL_E5A21A
 	.long LABEL_E5A218
 	.long LABEL_E5A216
-	.long LABEL_E5A20A
+	.long NakaInst_EqOnOffBox
 	.long LABEL_E5A208
 LABEL_E5A208:	aligned_string ""
-LABEL_E5A20A:	aligned_string "EqOnOffBox"
+NakaInst_EqOnOffBox:	aligned_string "EqOnOffBox"
 LABEL_E5A216:	aligned_string ""
 LABEL_E5A218:	aligned_string ""
 LABEL_E5A21A:	aligned_string ""
@@ -2820,7 +2820,7 @@ LABEL_E5A222:	aligned_string ""
 LABEL_E5A224:	aligned_string ""
 LABEL_E5A226:	aligned_string ""
 LABEL_E5A228:	aligned_string ""
-LABEL_E5A22A:	aligned_string "EqualizerPreset"
+NakaInst_EqualizerPreset:	aligned_string "EqualizerPreset"
 	.byte 0x92, 0xa2, 0xe5, 0x00, 0x90, 0xa2
 	.byte 0xe5, 0x00, 0x8e, 0xa2, 0xe5, 0x00, 0x8c, 0xa2
 	.byte 0xe5, 0x00, 0x8a, 0xa2, 0xe5, 0x00, 0x88, 0xa2
@@ -2831,7 +2831,7 @@ LABEL_E5A22A:	aligned_string "EqualizerPreset"
 LABEL_E5A26E:
 	.byte 0x00, 0xff
 LABEL_E5A270:	aligned_string ""
-LABEL_E5A272:	aligned_string "RevEqOnOffBox"
+NakaInst_RevEqOnOffBox:	aligned_string "RevEqOnOffBox"
 	.byte 0x00, 0xff
 LABEL_E5A282:
 	.byte 0x00, 0xff
@@ -2847,15 +2847,15 @@ LABEL_E5A28C:
 LABEL_E5A28E:
 	.byte 0x00, 0xff
 LABEL_E5A290:	aligned_string ""
-LABEL_E5A292:	aligned_string "ReverbEqualizerPreset"
+NakaInst_ReverbEqualizerPreset:	aligned_string "ReverbEqualizerPreset"
 Naka_MidiPart_Table1:
-	.long LABEL_E5A346
-	.long LABEL_E5A33A
+	.long NakaInst_MidiMenu
+	.long NakaInst_MdmenuPage
 	.long LABEL_E5A338
 	.long LABEL_E5A336
 	.long LABEL_E5A334
 	.long LABEL_E5A332
-	.long LABEL_E5A324
+	.long NakaInst_MidiMenuPage1
 	.long LABEL_E5A322
 	.long LABEL_E5A320
 	.long LABEL_E5A31E
@@ -2866,14 +2866,14 @@ Naka_MidiPart_Table1:
 	.long LABEL_E5A314
 	.long LABEL_E5A312
 	.long LABEL_E5A310
-	.long LABEL_E5A302
+	.long NakaInst_MidiMenuPage2
 	.long LABEL_E5A300
 	.long LABEL_E5A2FE
 	.long LABEL_E5A2FC
 LABEL_E5A2FC:	aligned_string ""
 LABEL_E5A2FE:	aligned_string ""
 LABEL_E5A300:	aligned_string ""
-LABEL_E5A302:	aligned_string "MidiMenuPage2"
+NakaInst_MidiMenuPage2:	aligned_string "MidiMenuPage2"
 LABEL_E5A310:	aligned_string ""
 LABEL_E5A312:	aligned_string ""
 LABEL_E5A314:	aligned_string ""
@@ -2884,16 +2884,16 @@ LABEL_E5A31C:	aligned_string ""
 LABEL_E5A31E:	aligned_string ""
 LABEL_E5A320:	aligned_string ""
 LABEL_E5A322:	aligned_string ""
-LABEL_E5A324:	aligned_string "MidiMenuPage1"
+NakaInst_MidiMenuPage1:	aligned_string "MidiMenuPage1"
 LABEL_E5A332:	aligned_string ""
 LABEL_E5A334:	aligned_string ""
 LABEL_E5A336:	aligned_string ""
 LABEL_E5A338:	aligned_string ""
-LABEL_E5A33A:	aligned_string "MdmenuPage"
-LABEL_E5A346:	aligned_string "MidiMenu"
+NakaInst_MdmenuPage:	aligned_string "MdmenuPage"
+NakaInst_MidiMenu:	aligned_string "MidiMenu"
 Naka_MIDI_PartEditorTable:
-	.long LABEL_E5A38E
-	.long LABEL_E5A37C
+	.long NakaInst_MidiPartSetting
+	.long NakaInst_MdPartSetGridBox
 	.long LABEL_E5A37A
 	.long LABEL_E5A378
 	.long LABEL_E5A376
@@ -2906,5 +2906,5 @@ LABEL_E5A374:	aligned_string ""
 LABEL_E5A376:	aligned_string ""
 LABEL_E5A378:	aligned_string ""
 LABEL_E5A37A:	aligned_string ""
-LABEL_E5A37C:	aligned_string "MdPartSetGridBox"
-LABEL_E5A38E:	aligned_string "MidiPartSetting"
+NakaInst_MdPartSetGridBox:	aligned_string "MdPartSetGridBox"
+NakaInst_MidiPartSetting:	aligned_string "MidiPartSetting"

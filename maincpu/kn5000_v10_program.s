@@ -2062,22 +2062,22 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	.byte 0x86, 0xf7, 0x00, 0xdc, 0x9a, 0xf7, 0x00, 0xf4
 	.byte 0xa1, 0xf7, 0x00, 0x00, 0x00, 0x00, 0x00
 MidiMenu_NakaProcName_Table:
-	.long LABEL_E55F70
-	.long LABEL_E55F5C
-	.long LABEL_E55F46
-	.long LABEL_E55F34
-	.long LABEL_E55F22
-	.long LABEL_E55F10
-	.long LABEL_E55EFA
-	.long LABEL_E55EE4
-	.long LABEL_E55ED0
-	.long LABEL_E55EBC
-	.long LABEL_E55EA2
-	.long LABEL_E55E8E
-	.long LABEL_E55E78
-	.long LABEL_E55E62
-	.long LABEL_E55E4E
-	.long LABEL_E55E38
+	.long NakaInst_AcVocalistListBoxProc
+	.long NakaInst_PsHarmOnOffBoxProc
+	.long NakaInst_IvMpstPageControlProc
+	.long NakaInst_AcSendEditSwProc
+	.long NakaInst_AcGMOnOffBoxProc
+	.long NakaInst_AcLswFuncBoxProc
+	.long NakaInst_AcLswFuncEditBoxProc
+	.long NakaInst_AcFadeSetGridBoxProc
+	.long NakaInst_AcVocalGridBoxProc
+	.long NakaInst_AcInOutGridBoxProc
+	.long NakaInst_AcParaLoadOptGridBoxProc
+	.long NakaInst_AcPcgOutGridBoxProc
+	.long NakaInst_AcPmemOutLGridBoxProc
+	.long NakaInst_AcPmemOutRGridBoxProc
+	.long NakaInst_AcCtlMsgGridBoxProc
+	.long NakaInst_AcMidiPartGridBoxProc
 	.long NakaProc_NullEntry
 NakaProc_NullEntry:
 	.byte 0x00, 0xff
@@ -2345,7 +2345,7 @@ LABEL_E81C98:
 	.byte 0xf7, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x0a, 0x00
 	.long 0x3E68C
-	.long LABEL_E81CCE
+	.long NakaInst_TECHNI_CHORD
 	.byte 0x0d, 0x00
 	.byte 0xa0, 0x01, 0x18, 0x00, 0x00, 0x00
 .include "ui_widgets/technichord_part_settings.s"
@@ -2401,7 +2401,7 @@ LABEL_EF00F5:
 	.zero 34
 LABEL_EF0117:
 	.zero 20
-LABEL_EF012B:
+NakaInst_BASS_ACCOMP1_ACCOMP2_ACCOMP3:
 	.zero 5
 NakaInst_RHYTHM_SELECT_TEMPO_APC_MEMORY_SPLIT_POINT:
 	.zero 11
@@ -4945,7 +4945,7 @@ FIRMWARE_VERSION:
 	.set LABEL_E583A6, 0xE583A6
 	.set LABEL_E58742, 0xE58742
 	.set LABEL_E58FDA, 0xE58FDA
-	.set LABEL_E5904A, 0xE5904A
+	.set NakaInst_P_MEM_ON_OFF_PART, 0xE5904A
 	.set LABEL_E59532, 0xE59532
 	.set LABEL_E5985A, 0xE5985A
 	.set LABEL_E60000, 0xE60000
@@ -5280,7 +5280,7 @@ FIRMWARE_VERSION:
 	.set LABEL_ECE2AC, 0xECE2AC
 	.set LABEL_ED0072, 0xED0072
 	.set LABEL_ED009C, 0xED009C
-	.set LABEL_ED00D5, 0xED00D5
+	.set NakaInst_WITH_APC, 0xED00D5
 	.set LABEL_ED013B, 0xED013B
 	.set LABEL_ED0212, 0xED0212
 	.set LABEL_ED029C, 0xED029C

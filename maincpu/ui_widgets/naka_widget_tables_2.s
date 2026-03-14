@@ -781,10 +781,10 @@ LABEL_E7F7DE:
 DisplayMode_OnOff_Table:
 	.long LABEL_E7F922
 	.long LABEL_E7F91C
-	.long NakaInst_OFF
+	.long NakaInst_OFF_WidgetTbl2
 	.long NakaInst_ON
 NakaInst_ON:	aligned_string " ON  "
-NakaInst_OFF:
+NakaInst_OFF_WidgetTbl2:
 	ldb	w, 0x4f
 	.byte 0x4e, 0x20, 0x20, 0x00
 	aligned_string " OFF "
