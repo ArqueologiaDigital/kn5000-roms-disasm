@@ -80,6 +80,18 @@ make website            # All of the above (gallery + issues + rom-status)
 
 ## Project Policies
 
+### LLVM Toolchain Provenance Tracking (STRICT POLICY)
+
+Every commit to this repository must include in its commit message:
+`LLVM: <branch>@<short-hash> (<full-hash>)`
+
+This records the exact LLVM source (`llvm-mc`, `ld.lld`, `clang`, `llvm-objcopy`) used for the build. Obtain via:
+`cd /mnt/shared/llvm-project && git log -1 --format="%D @ %h (%H)"`
+
+The `TOOLCHAIN_VERSION` file records the current build. Update it when the toolchain is rebuilt from a different commit.
+
+**LLVM history is immutable after use.** Once an LLVM commit has produced verified ROM artifacts, no `--amend`, `rebase`, or `--force` push may destroy it. Further changes must be new commits.
+
 ### Clean Working Directory (STRICT POLICY)
 
 **Keep the working directory as clean as possible at all times.**
