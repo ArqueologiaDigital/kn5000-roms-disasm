@@ -7291,7 +7291,7 @@ SystemConfig_PointerTable:
 	.long DiskOp_ChannelCfgTable
 	.long LABEL_EB7932
 	.long EffectMode_DispatchTable
-	.long LABEL_ED9D1E
+	.long SoundParam_EncoderMappingData
 	.long LABEL_EED3DE
 	.long LABEL_E44636
 	.long SeqByteBlock_DispatchJumpTable
