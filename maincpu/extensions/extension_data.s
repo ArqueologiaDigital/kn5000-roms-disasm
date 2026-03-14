@@ -1489,26 +1489,26 @@ LABEL_ED3282:	aligned_string "NormScreenProc"
 	.byte 0x00, 0xac, 0x7d, 0xfb, 0x00, 0xe0, 0x7d, 0xfb
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00
 NoteNameStr_Table_8:
-	.long LABEL_ED3448
-	.long LABEL_ED343A
-	.long LABEL_ED342A
-	.long LABEL_ED341C
-	.long LABEL_ED340C
-	.long LABEL_ED33FA
-	.long LABEL_ED33E8
-	.long LABEL_ED33DA
-	.long LABEL_ED33D0
-	.long LABEL_ED33C4
-	.long LABEL_ED33B4
-	.long LABEL_ED33A8
-	.long LABEL_ED339A
-	.long LABEL_ED338C
-	.long LABEL_ED337A
-	.long LABEL_ED3364
-	.long LABEL_ED335A
-	.long LABEL_ED3350
-	.long LABEL_ED3346
-	.long LABEL_ED333C
+	.long NakaInst_MainVariSet
+	.long NakaInst_MainSvariIni
+	.long NakaInst_MainGetSndName
+	.long NakaInst_MainRvariIni
+	.long NakaInst_MainGetRhyName
+	.long NakaInst_MainGetSndGrpName
+	.long NakaInst_MainGetRhyGrpName
+	.long NakaInst_MainChordPre
+	.long NakaInst_MainPmGet
+	.long NakaInst_OneTchFUNC
+	.long NakaInst_MainSysControl
+	.long NakaInst_CntIniFunc
+	.long NakaInst_FswAsIniFunc
+	.long NakaInst_MainMssSetUp
+	.long NakaInst_MainTimeFlashFunc
+	.long NakaInst_MainWallSetFlashFunc
+	.long NakaInst_TEST2FUNC
+	.long NakaInst_TEST3FUNC
+	.long NakaInst_TEST4FUNC
+	.long NakaInst_TEST6FUNC
 	.long LABEL_ED333A
 LABEL_ED333A:
 	.byte 0x00, 0xff

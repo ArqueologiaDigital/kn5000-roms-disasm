@@ -1,23 +1,23 @@
-LABEL_ED333C:	aligned_string "TEST6FUNC"
-LABEL_ED3346:	aligned_string "TEST4FUNC"
-LABEL_ED3350:	aligned_string "TEST3FUNC"
-LABEL_ED335A:	aligned_string "TEST2FUNC"
-LABEL_ED3364:	aligned_string "MainWallSetFlashFunc"
-LABEL_ED337A:	aligned_string "MainTimeFlashFunc"
-LABEL_ED338C:	aligned_string "MainMssSetUp"
-LABEL_ED339A:	aligned_string "FswAsIniFunc"
-LABEL_ED33A8:	aligned_string "CntIniFunc"
-LABEL_ED33B4:	aligned_string "MainSysControl"
-LABEL_ED33C4:	aligned_string "OneTchFUNC"
-LABEL_ED33D0:	aligned_string "MainPmGet"
-LABEL_ED33DA:	aligned_string "MainChordPre"
-LABEL_ED33E8:	aligned_string "MainGetRhyGrpName"
-LABEL_ED33FA:	aligned_string "MainGetSndGrpName"
-LABEL_ED340C:	aligned_string "MainGetRhyName"
-LABEL_ED341C:	aligned_string "MainRvariIni"
-LABEL_ED342A:	aligned_string "MainGetSndName"
-LABEL_ED343A:	aligned_string "MainSvariIni"
-LABEL_ED3448:	aligned_string "MainVariSet"
+NakaInst_TEST6FUNC:	aligned_string "TEST6FUNC"
+NakaInst_TEST4FUNC:	aligned_string "TEST4FUNC"
+NakaInst_TEST3FUNC:	aligned_string "TEST3FUNC"
+NakaInst_TEST2FUNC:	aligned_string "TEST2FUNC"
+NakaInst_MainWallSetFlashFunc:	aligned_string "MainWallSetFlashFunc"
+NakaInst_MainTimeFlashFunc:	aligned_string "MainTimeFlashFunc"
+NakaInst_MainMssSetUp:	aligned_string "MainMssSetUp"
+NakaInst_FswAsIniFunc:	aligned_string "FswAsIniFunc"
+NakaInst_CntIniFunc:	aligned_string "CntIniFunc"
+NakaInst_MainSysControl:	aligned_string "MainSysControl"
+NakaInst_OneTchFUNC:	aligned_string "OneTchFUNC"
+NakaInst_MainPmGet:	aligned_string "MainPmGet"
+NakaInst_MainChordPre:	aligned_string "MainChordPre"
+NakaInst_MainGetRhyGrpName:	aligned_string "MainGetRhyGrpName"
+NakaInst_MainGetSndGrpName:	aligned_string "MainGetSndGrpName"
+NakaInst_MainGetRhyName:	aligned_string "MainGetRhyName"
+NakaInst_MainRvariIni:	aligned_string "MainRvariIni"
+NakaInst_MainGetSndName:	aligned_string "MainGetSndName"
+NakaInst_MainSvariIni:	aligned_string "MainSvariIni"
+NakaInst_MainVariSet:	aligned_string "MainVariSet"
 
 
 	naka_header NAKA_TYPE_CONTAINER
@@ -33,9 +33,9 @@ LABEL_ED3448:	aligned_string "MainVariSet"
 	.long Naka_PresentationRootState
 	.byte 0xff, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0xa0, 0x01, 0xfc, 0xf3, 0x03, 0x00
-	.long LABEL_ED34B0
+	.long NakaStr_NormalContainerName
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_ED34B0:	aligned_string ""
+NakaStr_NormalContainerName:	aligned_string ""
 
 
 	naka_header NAKA_TYPE_0x14
@@ -99,10 +99,10 @@ LABEL_ED34B0:	aligned_string ""
 	.byte 0x01, 0x00, 0xff, 0xff, 0x0a, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0xb0, 0x00, 0x1c, 0x00
 	.byte 0xdc, 0x00, 0x26, 0x00, 0x02, 0x00, 0x00, 0x00
-	.long LABEL_ED35E4
+	.long NakaInst_RIGHT1
 	.byte 0x03, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00
-LABEL_ED35E4:	aligned_string "RIGHT1"
+NakaInst_RIGHT1:	aligned_string "RIGHT1"
 
 
 	naka_header NAKA_TYPE_0x37
