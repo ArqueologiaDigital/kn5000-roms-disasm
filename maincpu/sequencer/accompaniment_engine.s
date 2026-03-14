@@ -17,7 +17,7 @@ Rhythm_DispatchNote:
 	jr c, Rhythm_DispatchNote_Lookup
 	cp a, 0xF0
 	jr c, Rhythm_DispatchNote_SetParam
-	call LABEL_F5E8CC
+	call AccTone_LookupByProgramWrapped
 	jr Rhythm_DispatchNote_Return
 
 Rhythm_DispatchNote_SetParam:
@@ -1238,7 +1238,7 @@ AccVoice_BarEnd_NextPage:
 	stda8 13275, w
 	incdi8 1, 13274
 	calr AccBuf_AdvanceNoPage
-	call LABEL_F5E834
+	call AccVoice_IncrementBarWithSave
 	calr AccPart_Reactivate
 	anddi8 13153, 251
 	bitda 0, 13068
@@ -11362,7 +11362,7 @@ AccTone_ExtendAndDispatch:
 	jr __jrt_nop_F5D740
 __jrt_nop_F5D740:
 
-LABEL_F5D740:
+AccTone_ExtendAndDispatch_Body:
 	push xiz
 	extz bc
 	sla bc, 2
@@ -11389,7 +11389,7 @@ LABEL_F5D740:
 	and de, 0x4
 	extz bc
 	cps de, 4
-	jr nz, LABEL_F5D7C3
+	jr nz, AccTone_CheckBit10Flag
 	lda_24 xde, 0xe4a03c
 	ld_srib3 A, 0x07, 0xE8, 0xE4
 	extz wa
@@ -11400,20 +11400,20 @@ LABEL_F5D740:
 	extz bc
 	ldto_berp A, 0xE2
 	cp_srib_rm A, 0x07, 0xEC, 0xE4
-	jr z, LABEL_F5D7F4
+	jr z, AccTone_FoundMatch_IncRet
 
 AccTone_SetupExit:
 	ldb l, 0x0
 
-LABEL_F5D7C1:
+AccTone_ExtendAndDispatch_PopRet:
 	pop xiz
 	ret
 
-LABEL_F5D7C3:
+AccTone_CheckBit10Flag:
 	ld de, wa
 	and de, 0x400
 	cp de, 0x400
-	jr nz, LABEL_F5D7FB
+	jr nz, AccTone_CheckBit3Flag
 	lda_24 xde, 0xe4a040
 	ld_srib3 A, 0x07, 0xE8, 0xE4
 	extz wa
@@ -11426,12 +11426,12 @@ LABEL_F5D7C3:
 	cp_srib_rm A, 0x07, 0xEC, 0xE4
 	jr nz, AccTone_SetupExit
 
-LABEL_F5D7F4:
+AccTone_FoundMatch_IncRet:
 	ld l, (xiz + 13)
 	inc 1, l
-	jr LABEL_F5D7C1
+	jr AccTone_ExtendAndDispatch_PopRet
 
-LABEL_F5D7FB:
+AccTone_CheckBit3Flag:
 	and wa, 0x8
 	cp wa, 0x8
 	jr nz, AccTone_SetupExit
@@ -11441,11 +11441,11 @@ LABEL_F5D7FB:
 	bit_dri 0, 0x07, 0xE4, 0xE0
 	jr nz, AccTone_SetupExit
 	ldb l, 0x1
-	jr LABEL_F5D7C1
+	jr AccTone_ExtendAndDispatch_PopRet
 	dec 4, xsp
 	ldda16 xde, 4360
 	and de, 0x40C
-	jrl z, LABEL_F5D8C0
+	jrl z, AccTone_LookupFailed
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xe49f94
@@ -11461,7 +11461,7 @@ LABEL_F5D7FB:
 	extz wa
 	lda_24 xbc, 0xe46bb0
 	bit_dri 0, 0x07, 0xE4, 0xE0
-	jr nz, LABEL_F5D8C0
+	jr nz, AccTone_LookupFailed
 	lda xwa, (xsp)
 	ld c, (xde + 16)
 	ld (xwa), c
@@ -11474,29 +11474,29 @@ LABEL_F5D7FB:
 	ld bc, de
 	or bc, hl
 	cp bc, 0x208
-	jr z, LABEL_F5D88E
+	jr z, AccTone_CheckDirectAddr
 	ld c, (xwa)
 	extz bc
 	or de, bc
 	cp de, 0x318
-	jr nz, LABEL_F5D8A2
+	jr nz, AccTone_ValidateAndWrite
 
-LABEL_F5D88E:
+AccTone_CheckDirectAddr:
 	ldda8 a, 13055
 	cps a, 1
-	jr z, LABEL_F5D89A
+	jr z, AccTone_DirectAddr_Mode1
 	cps a, 2
-	jr z, LABEL_F5D89E
+	jr z, AccTone_DirectAddr_Mode2
 
-LABEL_F5D89A:
+AccTone_DirectAddr_Mode1:
 	ldb l, 0x2
 	jr AccTone_LookupDone
 
-LABEL_F5D89E:
+AccTone_DirectAddr_Mode2:
 	ldb l, 0x1
 	jr AccTone_LookupDone
 
-LABEL_F5D8A2:
+AccTone_ValidateAndWrite:
 	call AccTone_ValidateAndClamp
 	lda xwa, (xsp + 2)
 	lda xbc, (xsp)
@@ -11509,14 +11509,14 @@ LABEL_F5D8A2:
 	calr AccTone_NoteLookup
 	jr AccTone_LookupDone
 
-LABEL_F5D8C0:
+AccTone_LookupFailed:
 	ldb l, 0x0
 
 AccTone_LookupDone:
 	inc 4, xsp
 	ret
 
-LABEL_F5D8C5:
+AccTone_InlineBytecodeData:
 	.byte 0xf1, 0x1f, 0x34, 0xb0, 0xc1, 0x17, 0x33, 0x3f
 	.byte 0x00, 0xd9, 0x76, 0xc1, 0x16, 0x33, 0x3f, 0x00
 	.byte 0xda, 0x76, 0xd9, 0xc2, 0xc1, 0x18, 0x33, 0x3f
@@ -11720,7 +11720,7 @@ LABEL_F5D8C5:
 	.byte 0x23, 0xbb, 0x05, 0x43, 0x8a, 0x06, 0x23, 0xbb
 	.byte 0x06, 0x43, 0xc1, 0x2c, 0x33, 0xe9, 0x0e
 
-LABEL_F5DEC4:
+AccVoice_ClearChannelStates:
 	stdi8 13291, 0
 	stdi8 13292, 0
 	stdi8 13293, 0
@@ -11729,7 +11729,7 @@ LABEL_F5DEC4:
 	stdi8 13296, 0
 	ret
 
-LABEL_F5DEE3:
+AccVoice_IncrementBarCounter:
 	ldda8 a, 13290
 	inc 1, a
 	stda8 13290, a
@@ -11739,7 +11739,7 @@ LABEL_F5DEE3:
 	stdi8 13290, 0
 	ret
 
-LABEL_F5DEFC:
+AccVoice_BarCounterBytecodeData:
 	.byte 0xf1, 0xe0, 0x33, 0x00, 0x00, 0xc1, 0x21, 0x34
 	.byte 0x21, 0xd8, 0x12, 0xc1, 0xeb, 0x33, 0x25, 0xda
 	.byte 0x12, 0xd9, 0xa8, 0x1e, 0xe8, 0xfa, 0xf1, 0x97
@@ -11898,14 +11898,14 @@ LABEL_F5DEFC:
 	.byte 0x33, 0x3e, 0x3f, 0x5e
 	.byte 0xef, 0x62, 0x0e
 
-LABEL_F5E393:
+AccTuning_ReadAndApplyOffset:
 	ldda8 a, 13347
 	extz wa
 	lda_24 xbc, 0xe49fc8
 	ldmm_srib 0x07, 0xE4, 0xE0, 0x22, 0x34
 	ret
 
-LABEL_F5E3A6:
+AccTuning_ComplexBytecodeData:
 	.byte 0xef, 0x6a, 0x3e, 0xf1, 0x63, 0x33, 0xc8, 0x76
 	.byte 0xb3, 0x00, 0xc1, 0x70, 0x34, 0x23, 0xcb, 0x8d
 	.byte 0xcd, 0xcc, 0x80, 0xc1, 0xd4, 0x33, 0x27, 0xcf
@@ -12040,7 +12040,7 @@ AccTone_ValidateAndClamp:
 	pop xiz
 	ret
 
-LABEL_F5E700:
+AccTone_LookupByProgram_Dispatch:
 	push	xiz
 	and	xwa, 255
 	and	xbc, 255
@@ -12171,7 +12171,7 @@ AccTone_CallWithSaveAll:
 	push xbc
 	push xde
 	push xhl
-	call LABEL_F5DEC4
+	call AccVoice_ClearChannelStates
 	pop xhl
 	pop xde
 	pop xbc
@@ -12181,7 +12181,7 @@ AccTone_CallWithSaveAll:
 	pop xix
 	ret
 
-LABEL_F5E834:
+AccVoice_IncrementBarWithSave:
 	push xix
 	push xiy
 	push xiz
@@ -12189,7 +12189,7 @@ LABEL_F5E834:
 	push xbc
 	push xde
 	push xhl
-	call LABEL_F5DEE3
+	call AccVoice_IncrementBarCounter
 	pop xhl
 	pop xde
 	pop xbc
@@ -12199,7 +12199,7 @@ LABEL_F5E834:
 	pop xix
 	ret
 
-LABEL_F5E847:	.ascii "<=>89:;"
+AccTuning_DispatchDataBlock_A:	.ascii "<=>89:;"
 	.byte 0x1d
 	.byte 0xfc, 0xde, 0xf5
 	.byte 0x5b, 0x5a, 0x59, 0x58, 0x5e
@@ -12230,7 +12230,7 @@ AccTuning_CallWithSaveRestore:
 	push xbc
 	push xde
 	push xhl
-	call LABEL_F5E393
+	call AccTuning_ReadAndApplyOffset
 	pop xhl
 	pop xde
 	pop xbc
@@ -12240,13 +12240,13 @@ AccTuning_CallWithSaveRestore:
 	pop xix
 	ret
 
-LABEL_F5E8BD:	.ascii "<=>9;"
+AccTuning_DispatchDataBlock_B:	.ascii "<=>9;"
 	.byte 0x1d, 0xa6, 0xe3
 	.byte 0xf5
 	.byte 0x5b, 0x59, 0x5e, 0x5d, 0x5c
 	.byte 0x0e
 
-LABEL_F5E8CC:
+AccTone_LookupByProgramWrapped:
 	push xix
 	push xiy
 	push xiz
@@ -12264,7 +12264,7 @@ LABEL_F5E8CC:
 	pop xix
 	ret
 
-LABEL_F5E8E7:
+AccTone_JumpTableData:
 	.byte 0x1d, 0xc5, 0xd8, 0xf5, 0x0e, 0x1d, 0x69, 0xdb
 	.byte 0xf5, 0x0e, 0x1d, 0x50, 0xdb, 0xf5, 0x0e, 0x1d
 	.byte 0x4d, 0xda, 0xf5, 0x0e, 0x1d, 0x77, 0xd9, 0xf5
@@ -12272,22 +12272,22 @@ LABEL_F5E8E7:
 	.byte 0x18, 0xe9, 0xf5, 0x00, 0x17, 0xe9, 0xf5, 0x00
 	.byte 0x31, 0xe9, 0xf5, 0x00, 0x21, 0xe9, 0xf5, 0x00
 
-LABEL_F5E917:
+AccTone_StubReturn_A:
 	ret
 
-LABEL_F5E918:
+AccTone_StubReturn_B:
 	ret
 
-LABEL_F5E919:
+AccPatch_CountSlots_Wrapper:
 	calr AccPatch_CountAvailableSlots
 	ret
 
 AccPatch_CountSlotsAlt:
-	calr LABEL_F5F466
+	calr AccPatch_CountSlotsAlt_Body
 	ret
 
-LABEL_F5E921:
-	calr LABEL_F5EAEE
+AccPatch_InitAndCountSlots:
+	calr AccPatch_CheckAndInitDemo
 	calr AccPatch_CountAvailableSlots
 	call LABEL_F66EFD
 	stdi8 14775, 10
@@ -12300,20 +12300,20 @@ AccDemo_InitDone:
 	pop xiz
 	ret
 
-LABEL_F5E93B:
+AccPatch_InitByteData:
 	.byte 0x3e, 0x1d, 0x0d, 0xb2, 0xf6, 0x5e, 0x0e, 0x1d
 	.byte 0xa5, 0xb3, 0xf6, 0x0e, 0x1d, 0x20, 0xce, 0xf5
 	.byte 0x0e, 0x3e, 0x1e, 0xe5, 0x11, 0x1e, 0xf1, 0x0a
 	.byte 0xc1, 0xcd, 0x34, 0x3e, 0x80, 0x5e, 0x0e
 
-LABEL_F5E95A:
+AccDemo_InitWithFlag:
 	push xiz
 	ordi8 13521, 128
 	call AccDemo_Init_Wrap
 	pop xiz
 	ret
 
-LABEL_F5E966:
+AccPatch_MultiCallWrapper:
 	push	xiz
 	calr	4559
 	calr	18
@@ -12329,7 +12329,7 @@ LABEL_F5E966:
 	pop	xiz
 	.byte 0x0e
 
-LABEL_F5E97F:
+AccPatch_ClearModeFlag:
 	stdi8 13781, 0
 	ret
 
@@ -12384,18 +12384,18 @@ Not_sure_maybe_SOFT_VERSION_related:
 	.byte 0xff, 0xbc, 0x03, 0x02, 0xff, 0xff, 0x68, 0xe5
 	.byte 0x0e
 
-LABEL_F5EAEE:
+AccPatch_CheckAndInitDemo:
 	ld xiy, 0x94800
 	add xiy, 0xE
 	ld wa, (xiy)
 	cps wa, 0
-	jr z, LABEL_F5EB03
+	jr z, AccPatch_CheckAndInitDemo_Ret
 	call AccDemo_Init_Wrap
 
-LABEL_F5EB03:
+AccPatch_CheckAndInitDemo_Ret:
 	ret
 
-LABEL_F5EB04:
+AccPatch_SlotConfigByteData:
 	.byte 0x0e, 0x0e, 0xc1, 0x9b, 0x37, 0x04, 0xc1, 0xd6
 	.byte 0x34, 0x04, 0xf1, 0xd6, 0x34, 0x00, 0x00, 0xc1
 	.byte 0xd6, 0x34, 0x3f, 0x0c, 0x66, 0x2e, 0xf1, 0x9b
@@ -12422,7 +12422,7 @@ AccPatch_InitCurrentSlotPointer:
 	stdi16 13844, 6
 	ret
 
-LABEL_F5EB9C:
+AccPatch_SlotScanByteData:
 	.byte 0x23, 0x00, 0xcb, 0xcf, 0x08, 0x66, 0x0b, 0xcb
 	.byte 0x04, 0x1e, 0x56, 0x00, 0xcb, 0x05, 0xcb, 0x61
 	.byte 0x68, 0xf0, 0x0e, 0x1d, 0x18, 0xfe, 0xf5, 0xc9
@@ -12448,13 +12448,13 @@ LABEL_F5EB9C:
 	.byte 0x50, 0x0e, 0x02, 0x03, 0x04, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00
 
-LABEL_F5EC57:
+AccPatch_RefreshSlotOffset_Wrap:
 	push xiz
-	call LABEL_F5EC5E
+	call AccPatch_RefreshSlotOffset
 	pop xiz
 	ret
 
-LABEL_F5EC5E:
+AccPatch_RefreshSlotOffset:
 	calr AccPatch_GetCurrentSlotAddr
 	lds32 xhl, 0
 	ld l, (xiy + 12)
@@ -12465,50 +12465,50 @@ LABEL_F5EC5E:
 	ret
 
 Seq_RhythmProcessor:
-	calr LABEL_F5EC91
-	calr LABEL_F5ECB0
-	calr LABEL_F5ED44
-	calr LABEL_F5ED49
-	calr LABEL_F5F11C
-	calr LABEL_F5F3DA
-	calr LABEL_F5F3E8
-	calr LABEL_F5F4B5
-	calr LABEL_F5F41C
+	calr RhythmProc_CheckStyleChange
+	calr RhythmProc_CheckPlayMode
+	calr RhythmProc_CallDispatch
+	calr RhythmProc_NullStub
+	calr RhythmProc_CheckRhythmEdit
+	calr RhythmProc_CheckStyleSwitch
+	calr RhythmProc_CheckRepeatFlag
+	calr AccPatch_ProcessPartChanges
+	calr RhythmProc_SavePrevState
 	ret
 
-LABEL_F5EC91:
+RhythmProc_CheckStyleChange:
 	cpdi8 36150, 178
-	jr z, LABEL_F5EC9A
-	jr LABEL_F5ECAF
+	jr z, RhythmProc_StyleChange_Init
+	jr RhythmProc_StyleChange_Ret
 
-LABEL_F5EC9A:
+RhythmProc_StyleChange_Init:
 	bitda 2, 13517
-	jr z, LABEL_F5ECAF
+	jr z, RhythmProc_StyleChange_Ret
 	anddi8 13517, 251
 	calr AccPatch_InitCurrentSlot
 	calr AccPatch_UpdateAllChains
 	call RhythmPatInit_LoadParams
 
-LABEL_F5ECAF:
+RhythmProc_StyleChange_Ret:
 	ret
 
-LABEL_F5ECB0:
+RhythmProc_CheckPlayMode:
 	cpdi8 36150, 181
-	jr z, LABEL_F5ECC4
+	jr z, RhythmProc_PlayMode_Compare
 	ldda8 a, 13519
 	and a, 0xF3
 	stda8 13519, a
 	jr AccPatch_CopySlotsExit
 
-LABEL_F5ECC4:
+RhythmProc_PlayMode_Compare:
 	cpdi8 13605, 181
-	jr z, LABEL_F5ECDB
+	jr z, RhythmProc_PlayMode_SendTempo
 	stdi8 13822, 0
 	ldda8 a, 12979
 	and a, 0x7
 	stda8 13532, a
 
-LABEL_F5ECDB:
+RhythmProc_PlayMode_SendTempo:
 	bitda 1, 13519
 	jr z, AccPatch_DetectModeChange
 	anddi8 13519, 253
@@ -12520,7 +12520,7 @@ LABEL_F5ECDB:
 	and a, 0xC
 	cps a, 0
 	jr nz, AccPatch_DetectModeChange
-	calr LABEL_F5F1B7
+	calr AccPatch_RebuildChannelSlot
 	push xwa
 	push xhl
 	push xbc
@@ -12538,7 +12538,7 @@ LABEL_F5ECDB:
 	pop xwa
 
 AccPatch_DetectModeChange:
-	call LABEL_F5FE07
+	call AccPatch_SeqDispatch_Entry
 	ldda8 a, 12979
 	and a, 0x7
 	cpda8 a, 13532
@@ -12566,20 +12566,20 @@ AccPatch_DetectModeChange:
 AccPatch_CopySlotsExit:
 	ret
 
-LABEL_F5ED44:
+RhythmProc_CallDispatch:
 	call LABEL_F61390
 	ret
 
-LABEL_F5ED49:
+RhythmProc_NullStub:
 	ret
 
-LABEL_F5ED4A:
+RhythmProc_CopySlotData_Wrap:
 	push xiz
-	call LABEL_F5ED51
+	call RhythmProc_CopySlotData
 	pop xiz
 	ret
 
-LABEL_F5ED51:
+RhythmProc_CopySlotData:
 	calr AccPatch_GetCurrentSlotAddr
 	ld xbc, 0x40
 	add xiy, xbc
@@ -12592,7 +12592,7 @@ LABEL_F5ED51:
 	ldir85
 	ret
 
-LABEL_F5ED6C:
+RhythmProc_ChannelMapTable:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x04, 0x04, 0x04, 0x04
 	.byte 0x08, 0x08, 0x08, 0x08, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04
@@ -12610,17 +12610,17 @@ AccPatch_GetCurrentSlotAddr:
 	lds32 xhl, 0
 	ldda8 l, 13526
 	cp l, 0x1E
-	jr c, LABEL_F5ED97
+	jr c, AccPatch_GetSlotAddr_Valid
 	ldb l, 0x0
 
-LABEL_F5ED97:
+AccPatch_GetSlotAddr_Valid:
 	mul hl, 0x60
 	add xhl, 0x60
 	ld xiy, 0x94800
 	add xiy, xhl
 	ret
 
-LABEL_F5EDA9:
+AccPatch_GetSlotAddr_Preserve:
 	push	xwa
 	push	xix
 	xor	xhl, xhl
@@ -12646,7 +12646,7 @@ LABEL_F5EDA9:
 ; ============================================================================
 AccPatch_GetEntryAddr:
 	cp hl, 0xFFFF
-	jr z, LABEL_F5EDE2
+	jr z, AccPatch_GetEntryAddr_Ret
 	pushw hl
 	pushw hl
 	lds32 xhl, 0
@@ -12656,14 +12656,14 @@ AccPatch_GetEntryAddr:
 	add xix, xhl
 	popw hl
 
-LABEL_F5EDE2:
+AccPatch_GetEntryAddr_Ret:
 	ret
 
 AccPatch_InitCurrentSlot:
 	calr AccPatch_GetCurrentSlotAddr
-	calr LABEL_F5EECD
-	calr LABEL_F5EF72
-	calr LABEL_F5EF1C
+	calr AccPatch_FreeAllChains
+	calr AccPatch_CopyDefaultsForInit
+	calr AccPatch_FillAllVoiceData
 	ordi8 13517, 128
 	calr AccPatch_ScanToSequenceStart
 	ret
@@ -12678,22 +12678,22 @@ AccPatch_InitFromIndex:
 	xor xhl, xhl
 	ldda8 l, 14764
 	cp l, 0x1E
-	jr c, LABEL_F5EE0B
+	jr c, AccPatch_InitFromIndex_Valid
 	xor l, l
 
-LABEL_F5EE0B:
+AccPatch_InitFromIndex_Valid:
 	mul hl, 0x60
 	add xhl, 0x60
 	ldda32 xiy, 14766
 	add xiy, xhl
-	calr LABEL_F5FC9F
-	calr LABEL_F5EE4A
-	calr LABEL_F5FD0A
+	calr AccPatch_FreeAllChains_Alt
+	calr AccPatch_CopyDefaultsToSlot
+	calr AccPatch_FillAllSlots_Alt
 	ordi8 13517, 128
-	calr LABEL_F5FD60
+	calr AccPatch_ScanSequenceToEnd
 	ret
 
-LABEL_F5EE2D:
+AccPatch_InitByteStub:
 	.byte 0x3e, 0x1e, 0x02, 0x00, 0x5e, 0x0e
 
 AccPat_InitWorkAreaFromSlot:
@@ -12706,7 +12706,7 @@ AccPat_InitWorkAreaFromSlot:
 	calr AccPatch_InitFromIndex
 	ret
 
-LABEL_F5EE4A:
+AccPatch_CopyDefaultsToSlot:
 	push xiy
 	push xwa
 	push xbc
@@ -12728,59 +12728,59 @@ LABEL_F5EE4A:
 	ld bc, wa
 	popw wa
 	cps a, 7
-	jr nz, LABEL_F5EE78
+	jr nz, AccPatch_CopyDefaults_Done
 	ld (xiy + 16), bc
 
-LABEL_F5EE78:
+AccPatch_CopyDefaults_Done:
 	pop xbc
 	pop xwa
 	pop xiy
-	calr LABEL_F5EE7F
+	calr AccPatch_ClearSlot13ByIndex
 	ret
 
-LABEL_F5EE7F:
+AccPatch_ClearSlot13ByIndex:
 	push xwa
 	ldb a, 0x0
 	ldda8 w, 14764
 	cp w, 0xE
-	jr nz, LABEL_F5EE8E
+	jr nz, AccPatch_ClearSlot13_Check0F
 	ld (xiy + 13), a
 
-LABEL_F5EE8E:
+AccPatch_ClearSlot13_Check0F:
 	cp w, 0xF
-	jr nz, LABEL_F5EE96
+	jr nz, AccPatch_ClearSlot13_Check14
 	ld (xiy + 13), a
 
-LABEL_F5EE96:
+AccPatch_ClearSlot13_Check14:
 	cp w, 0x14
-	jr nz, LABEL_F5EE9E
+	jr nz, AccPatch_ClearSlot13_Check15
 	ld (xiy + 13), a
 
-LABEL_F5EE9E:
+AccPatch_ClearSlot13_Check15:
 	cp w, 0x15
-	jr nz, LABEL_F5EEA6
+	jr nz, AccPatch_ClearSlot13_Check1A
 	ld (xiy + 13), a
 
-LABEL_F5EEA6:
+AccPatch_ClearSlot13_Check1A:
 	cp w, 0x1A
-	jr nz, LABEL_F5EEAE
+	jr nz, AccPatch_ClearSlot13_Check1B
 	ld (xiy + 13), a
 
-LABEL_F5EEAE:
+AccPatch_ClearSlot13_Check1B:
 	cp w, 0x1B
-	jr nz, LABEL_F5EEB6
+	jr nz, AccPatch_ClearSlot13_Done
 	ld (xiy + 13), a
 
-LABEL_F5EEB6:
+AccPatch_ClearSlot13_Done:
 	pop xwa
 	ret
 
-LABEL_F5EEB8:
+AccPatch_MiscByteData:
 	.byte 0x1e, 0xee, 0xfe, 0x1e, 0x0f, 0x00, 0x1e, 0xb1
 	.byte 0x00, 0x1e, 0x58, 0x00, 0xc1, 0xcd, 0x34, 0x3e
 	.byte 0x80, 0x1e, 0xf5, 0x10, 0x0e
 
-LABEL_F5EECD:
+AccPatch_FreeAllChains:
 	ld hl, (xiy + 256)
 	calr AccPatch_FreeChainEntries
 	ld hl, (xiy + 4)
@@ -12798,9 +12798,9 @@ AccPatch_FreeChainEntries:
 	calr AccPatch_GetEntryAddr
 	ld wa, (xix + 3)
 	cp wa, 0xFFFF
-	jr z, LABEL_F5EF1A
+	jr z, AccPatch_FreeChain_Done
 
-LABEL_F5EEF9:
+AccPatch_FreeChainLoop:
 	ld hl, wa
 	ldw (xix + 3), 0xFFFF
 	calr AccPatch_GetEntryAddr
@@ -12809,14 +12809,14 @@ LABEL_F5EEF9:
 	incdi16 1, 13524
 	ld wa, (xix + 3)
 	cp wa, 0xFFFF
-	jr z, LABEL_F5EF1A
-	jr LABEL_F5EEF9
+	jr z, AccPatch_FreeChain_Done
+	jr AccPatch_FreeChainLoop
 
-LABEL_F5EF1A:
+AccPatch_FreeChain_Done:
 	pop xiy
 	ret
 
-LABEL_F5EF1C:
+AccPatch_FillAllVoiceData:
 	ld hl, (xiy + 256)
 	calr AccPatch_FillEntryWithVoiceData
 	ld hl, (xiy + 4)
@@ -12846,17 +12846,17 @@ AccPatch_FillEntryWithVoiceData:
 	add xix, 0x6
 	ldb l, 0x81
 
-LABEL_F5EF63:
+AccPatch_FillVoice_Loop:
 	ld (xix), l
 	dec 1, wa
 	inc 1, xix
 	cps wa, 0
-	jr nz, LABEL_F5EF63
+	jr nz, AccPatch_FillVoice_Loop
 	ld (xix), 0x83
 	pop xiy
 	ret
 
-LABEL_F5EF72:
+AccPatch_CopyDefaultsForInit:
 	push xiy
 	push xwa
 	push xbc
@@ -12878,17 +12878,17 @@ LABEL_F5EF72:
 	ld bc, wa
 	popw wa
 	cps a, 7
-	jr nz, LABEL_F5EFA0
+	jr nz, AccPatch_CopyDefaults_InitDone
 	ld (xiy + 16), bc
 
-LABEL_F5EFA0:
+AccPatch_CopyDefaults_InitDone:
 	pop xbc
 	pop xwa
 	pop xiy
-	calr LABEL_F5EFFB
+	calr AccPatch_ClearSlot13BySlotIdx
 	ret
 
-LABEL_F5EFA7:
+AccPatch_DefaultSlotData:
 	.byte 0x07, 0x01, 0x20, 0x80, 0x58, 0x02, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x28, 0x00, 0x40, 0x00
@@ -12899,41 +12899,41 @@ LABEL_F5EFA7:
 	.asciz "    clear       "
 	.zero 15
 
-LABEL_F5EFFB:
+AccPatch_ClearSlot13BySlotIdx:
 	ldb a, 0x0
 	cpdi8 13526, 14
-	jr nz, LABEL_F5F007
+	jr nz, AccPatch_ClearSlot13_Idx0F
 	ld (xiy + 13), a
 
-LABEL_F5F007:
+AccPatch_ClearSlot13_Idx0F:
 	cpdi8 13526, 15
-	jr nz, LABEL_F5F011
+	jr nz, AccPatch_ClearSlot13_Idx14
 	ld (xiy + 13), a
 
-LABEL_F5F011:
+AccPatch_ClearSlot13_Idx14:
 	cpdi8 13526, 20
-	jr nz, LABEL_F5F01B
+	jr nz, AccPatch_ClearSlot13_Idx15
 	ld (xiy + 13), a
 
-LABEL_F5F01B:
+AccPatch_ClearSlot13_Idx15:
 	cpdi8 13526, 21
-	jr nz, LABEL_F5F025
+	jr nz, AccPatch_ClearSlot13_Idx1A
 	ld (xiy + 13), a
 
-LABEL_F5F025:
+AccPatch_ClearSlot13_Idx1A:
 	cpdi8 13526, 26
-	jr nz, LABEL_F5F02F
+	jr nz, AccPatch_ClearSlot13_Idx1B
 	ld (xiy + 13), a
 
-LABEL_F5F02F:
+AccPatch_ClearSlot13_Idx1B:
 	cpdi8 13526, 27
-	jr nz, LABEL_F5F039
+	jr nz, AccPatch_ClearSlot13_IdxDone
 	ld (xiy + 13), a
 
-LABEL_F5F039:
+AccPatch_ClearSlot13_IdxDone:
 	ret
 
-LABEL_F5F03A:
+AccPatch_SetVoiceAndInit:
 	calr AccPatch_GetCurrentSlotAddr
 	ldda8 a, 13528
 	ld (xiy + 12), a
@@ -12947,18 +12947,18 @@ LABEL_F5F03A:
 	add xhl, 0xF5F068
 	ld wa, (xhl)
 	ld (xiy + 16), wa
-	calr LABEL_F5F090
+	calr AccPatch_CheckConfigType
 	ordi8 13517, 128
 	ret
 
-LABEL_F5F068:
+AccPatch_VoiceStrideTable:
 	.byte 0x00, 0x00, 0x58, 0x02, 0x08, 0x02, 0x18, 0x03
 	.byte 0x00, 0x00, 0x00, 0x00, 0x09, 0x01, 0x58, 0x02
 	.byte 0x00, 0x00, 0x08, 0x02, 0x00, 0x00, 0x18, 0x03
 	.byte 0x00, 0x00, 0x00, 0x00, 0x09, 0x01, 0x58, 0x02
 	.byte 0x00, 0x00, 0x08, 0x02, 0x00, 0x00, 0x18, 0x03
 
-LABEL_F5F090:
+AccPatch_CheckConfigType:
 	cpdi8 13529, 6
 	jr z, RhythmConfig_CheckAndSkip
 	cpdi8 13529, 8
@@ -12967,12 +12967,12 @@ LABEL_F5F090:
 	jr z, RhythmConfig_CheckAndSkip
 	cpdi8 13529, 3
 	jr z, RhythmConfig_CheckAndSkip
-	jr LABEL_F5F0B2
+	jr AccPatch_CheckConfig_Done
 
 RhythmConfig_CheckAndSkip:
 	call RhythmConfig_ReturnStub
 
-LABEL_F5F0B2:
+AccPatch_CheckConfig_Done:
 	ret
 
 AccPatch_InitAllSentinels:
@@ -13004,12 +13004,12 @@ AccPatch_InitSlotSentinels:
 	pop c
 	ld b, c
 
-LABEL_F5F0F8:
+AccPatch_WriteSentinel_Loop:
 	ld (xix), 0x81
 	inc 1, xix
 	dec 1, b
 	cps b, 0
-	jr nz, LABEL_F5F0F8
+	jr nz, AccPatch_WriteSentinel_Loop
 	ld (xix), 0x83
 	pop xiy
 	ret
@@ -13023,31 +13023,31 @@ AccPatch_ReadVoiceStride:
 	stda8 13529, a
 	ret
 
-LABEL_F5F11C:
+RhythmProc_CheckRhythmEdit:
 	cpdi8 36150, 180
-	jr nz, LABEL_F5F129
-	calr LABEL_F5F12A
-	calr LABEL_F5F158
+	jr nz, RhythmProc_RhythmEdit_Ret
+	calr RhythmProc_CheckVoiceChange
+	calr RhythmProc_CheckConfigBits
 
-LABEL_F5F129:
+RhythmProc_RhythmEdit_Ret:
 	ret
 
-LABEL_F5F12A:
+RhythmProc_CheckVoiceChange:
 	bitda 1, 13518
-	jr z, LABEL_F5F138
+	jr z, RhythmProc_CheckVoiceUpdate
 	anddi8 13518, 253
-	calr LABEL_F5F03A
+	calr AccPatch_SetVoiceAndInit
 
-LABEL_F5F138:
+RhythmProc_CheckVoiceUpdate:
 	bitda 0, 13518
-	jr z, LABEL_F5F146
+	jr z, RhythmProc_VoiceUpdate_Ret
 	anddi8 13518, 254
-	calr LABEL_F5F147
+	calr RhythmProc_UpdateVoiceSentinels
 
-LABEL_F5F146:
+RhythmProc_VoiceUpdate_Ret:
 	ret
 
-LABEL_F5F147:
+RhythmProc_UpdateVoiceSentinels:
 	calr AccPatch_GetCurrentSlotAddr
 	ldda8 a, 13527
 	and a, 0x7
@@ -13055,9 +13055,9 @@ LABEL_F5F147:
 	calr AccPatch_InitAllSentinels
 	ret
 
-LABEL_F5F158:
+RhythmProc_CheckConfigBits:
 	bitda 0, 13522
-	jr z, LABEL_F5F174
+	jr z, RhythmProc_ConfigBit1
 	anddi8 13522, 254
 	calr AccPatch_GetCurrentSlotAddr
 	andmi8 (xiy + 14), 0xF0
@@ -13065,39 +13065,39 @@ LABEL_F5F158:
 	and a, 0xF
 	or (xiy + 14), a
 
-LABEL_F5F174:
+RhythmProc_ConfigBit1:
 	bitda 1, 13522
-	jr z, LABEL_F5F190
+	jr z, RhythmProc_ConfigBit2
 	anddi8 13522, 253
 	calr AccPatch_GetCurrentSlotAddr
 	andmi8 (xiy + 14), 0xEF
 	bitda 4, 13546
-	jr z, LABEL_F5F190
+	jr z, RhythmProc_ConfigBit2
 	ormi8 (xiy + 14), 0x10
 
-LABEL_F5F190:
+RhythmProc_ConfigBit2:
 	bitda 2, 13522
-	jr z, LABEL_F5F1B6
+	jr z, RhythmProc_ConfigBits_Done
 	anddi8 13522, 251
 	calr AccPatch_GetCurrentSlotAddr
 	andmi8 (xiy + 14), 0x9F
 	bitda 5, 13546
-	jr z, LABEL_F5F1AC
+	jr z, RhythmProc_ConfigBit2_SetBit6
 	ormi8 (xiy + 14), 0x20
 
-LABEL_F5F1AC:
+RhythmProc_ConfigBit2_SetBit6:
 	bitda 6, 13546
-	jr z, LABEL_F5F1B6
+	jr z, RhythmProc_ConfigBits_Done
 	ormi8 (xiy + 14), 0x40
 
-LABEL_F5F1B6:
+RhythmProc_ConfigBits_Done:
 	ret
 
-LABEL_F5F1B7:
+AccPatch_RebuildChannelSlot:
 	ldda8 a, 14235
 	and a, 0x1F
 	cps a, 0
-	jr z, LABEL_F5F21C
+	jr z, AccPatch_RebuildChannel_Done
 	calr MapBitFlagsToChannelOffset
 	stda8 13358, w
 	ld c, w
@@ -13120,14 +13120,14 @@ LABEL_F5F1B7:
 	ld c, l
 	ldda16 xhl, 13373
 	calr AccPatch_InitSlotSentinels
-	calr LABEL_F5F23C
+	calr AccPatch_ComputeSeqPosition
 	stdi8 13822, 0
-	calr LABEL_F5F2D7
+	calr AccPatch_WriteRhythmInit
 	bitda 0, 12931
-	jr nz, LABEL_F5F21C
+	jr nz, AccPatch_RebuildChannel_Done
 	ordi8 13517, 128
 
-LABEL_F5F21C:
+AccPatch_RebuildChannel_Done:
 	ret
 
 MapBitFlagsToChannelOffset:
@@ -13148,7 +13148,7 @@ MapBitFlagsToChannelOffset:
 MapBitFlags_NullRet:
 	ret
 
-LABEL_F5F23C:
+AccPatch_ComputeSeqPosition:
 	lds32 xwa, 0
 	ldda8 a, 12979
 	ldda8 c, 13529
@@ -13158,7 +13158,7 @@ LABEL_F5F23C:
 	ldda8 a, 12927
 	add a, 0x18
 	cp a, 0x60
-	jr lt, LABEL_F5F270
+	jr lt, AccPatch_SeqPosition_Store
 	inc 1, l
 	lds32 xwa, 0
 	ldda8 a, 13529
@@ -13166,10 +13166,10 @@ LABEL_F5F23C:
 	inc 1, c
 	mul8rr a, c
 	cp a, l
-	jr nz, LABEL_F5F270
+	jr nz, AccPatch_SeqPosition_Store
 	ldb l, 0x0
 
-LABEL_F5F270:
+AccPatch_SeqPosition_Store:
 	lds32 xbc, 0
 	ld c, l
 	ldda16 xhl, 13373
@@ -13190,7 +13190,7 @@ LABEL_F5F270:
 	ld (xhl), wa
 	ret
 
-LABEL_F5F2A7:
+AccPatch_SeqBaseAddrTable:
 	.byte 0x87, 0x32, 0x00, 0x00, 0x89, 0x32, 0x00, 0x00
 	.byte 0x8b, 0x32, 0x00, 0x00, 0x8d, 0x32, 0x00, 0x00
 	.byte 0x8f, 0x32, 0x00, 0x00, 0x91, 0x32, 0x00, 0x00
@@ -13198,16 +13198,16 @@ LABEL_F5F2A7:
 	.byte 0x9b, 0x32, 0x00, 0x00, 0x9d, 0x32, 0x00, 0x00
 	.byte 0x9f, 0x32, 0x00, 0x00, 0xa1, 0x32, 0x00, 0x00
 
-LABEL_F5F2D7:
+AccPatch_WriteRhythmInit:
 	ldda8 l, 13358
 	cps l, 0
-	jr z, LABEL_F5F30F
+	jr z, AccPatch_WriteRhythm_Done
 	lds32 xhl, 0
 	ldda8 l, 13358
 	add xhl, 0xF5F310
 	ld a, (xhl)
 	push_sd16b 0x2E, 0x34
-	calr LABEL_F5F338
+	calr AccPatch_WriteRhythmParams
 	popb_dd16 0x2E, 0x34
 	lds32 xhl, 0
 	ldda8 l, 13358
@@ -13217,26 +13217,26 @@ LABEL_F5F2D7:
 	ld iy, (xhl + 4)
 	ld (xhl + 6), iy
 
-LABEL_F5F30F:
+AccPatch_WriteRhythm_Done:
 	ret
 
-LABEL_F5F310:
+AccPatch_ChannelToParamTable:
 	.byte 0x00, 0x00, 0x00, 0x00, 0xd7, 0x00, 0xd4, 0x00
 	.byte 0xd5, 0x00, 0xd6, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	.byte 0x94, 0x2c, 0x00, 0x00, 0x94, 0x2d, 0x00, 0x00
 	.byte 0x94, 0x2e, 0x00, 0x00, 0x94, 0x2f, 0x00, 0x00
 
-LABEL_F5F338:
-	calr LABEL_F5F39A
+AccPatch_WriteRhythmParams:
+	calr AccPatch_FetchVolumeForChannel
 	push_a
 	lds32 xwa, 0
 	pop_a
 	ldb c, 0x0
 
-LABEL_F5F341:
+AccPatch_WriteRhythmParam_Loop:
 	cps c, 6
-	jr z, LABEL_F5F38D
+	jr z, AccPatch_WriteRhythmParam_Done
 	push c
 	push xwa
 	push c
@@ -13256,26 +13256,26 @@ LABEL_F5F341:
 	ld xwa, 0xF5F38E
 	ld_srib3 A, 0x03, 0xE0, 0xE4
 	cps c, 7
-	jr nz, LABEL_F5F37F
+	jr nz, AccPatch_WriteRhythmParam_Push
 	ldda8 a, 13389
 
-LABEL_F5F37F:
+AccPatch_WriteRhythmParam_Push:
 	pushw wa
 	call RhythmBuf_WriteByte
 	inc 2, xsp
 	pop xwa
 	pop c
 	inc 1, c
-	jr LABEL_F5F341
+	jr AccPatch_WriteRhythmParam_Loop
 
-LABEL_F5F38D:
+AccPatch_WriteRhythmParam_Done:
 	ret
 
-LABEL_F5F38E:
+AccPatch_RhythmParamDefaults:
 	.byte 0x01, 0x00, 0x02, 0x40, 0x03, 0x00, 0x04, 0x40
 	.byte 0x05, 0x7f, 0x06, 0x00
 
-LABEL_F5F39A:
+AccPatch_FetchVolumeForChannel:
 	push xwa
 	push xhl
 	push xix
@@ -13294,13 +13294,13 @@ LABEL_F5F39A:
 	cp a, 0xD6
 	jr z, ToneGen_FetchSelectRestore
 	ldb a, 0x40
-	jr LABEL_F5F3D1
+	jr AccPatch_FetchVolume_Default
 
 ToneGen_FetchSelectRestore:
 	add xix, xiy
 	ld a, (xix)
 
-LABEL_F5F3D1:
+AccPatch_FetchVolume_Default:
 	stda8 13389, a
 	pop xiy
 	pop xix
@@ -13308,22 +13308,22 @@ LABEL_F5F3D1:
 	pop xwa
 	ret
 
-LABEL_F5F3DA:
+RhythmProc_CheckStyleSwitch:
 	cpdi8 36150, 184
-	jr z, LABEL_F5F3E3
-	jr LABEL_F5F3E7
+	jr z, RhythmProc_StyleSwitch_Call
+	jr RhythmProc_StyleSwitch_Ret
 
-LABEL_F5F3E3:
+RhythmProc_StyleSwitch_Call:
 	call LABEL_F6314F
 
-LABEL_F5F3E7:
+RhythmProc_StyleSwitch_Ret:
 	ret
 
-LABEL_F5F3E8:
+RhythmProc_CheckRepeatFlag:
 	cpdi8 36150, 189
-	jr nz, LABEL_F5F41B
+	jr nz, RhythmProc_RepeatFlag_Ret
 	bitda 1, 13523
-	jr z, LABEL_F5F41B
+	jr z, RhythmProc_RepeatFlag_Ret
 	anddi8 13523, 253
 	ld xiy, 0x94800
 	add xiy, 0x0
@@ -13331,16 +13331,16 @@ LABEL_F5F3E8:
 	ld a, (xiy)
 	and a, 0xFE
 	bitda 0, 13523
-	jr z, LABEL_F5F419
+	jr z, RhythmProc_RepeatFlag_Store
 	or a, 0x1
 
-LABEL_F5F419:
+RhythmProc_RepeatFlag_Store:
 	ld (xiy), a
 
-LABEL_F5F41B:
+RhythmProc_RepeatFlag_Ret:
 	ret
 
-LABEL_F5F41C:
+RhythmProc_SavePrevState:
 	ldda8 a, 36150
 	stda8 13605, a
 	ldda8 a, 14235
@@ -13349,10 +13349,10 @@ LABEL_F5F41C:
 	ldda8 a, 12931
 	stda8 13825, a
 	cpdi8 36148, 14
-	jr z, LABEL_F5F443
+	jr z, RhythmProc_SavePrevState_Done
 	stdi8 14235, 0
 
-LABEL_F5F443:
+RhythmProc_SavePrevState_Done:
 	ret
 
 AccPatch_CountAvailableSlots:
@@ -13360,24 +13360,24 @@ AccPatch_CountAvailableSlots:
 	ldw de, 0x153
 	xor iy, iy
 
-LABEL_F5F44C:
+AccPatch_CountSlots_Loop:
 	ld hl, de
 	calr AccPatch_GetEntryAddr
 	bitm 7, (xix)
-	jr z, LABEL_F5F457
+	jr z, AccPatch_CountSlots_Dec
 	dec 1, wa
 
-LABEL_F5F457:
+AccPatch_CountSlots_Dec:
 	dec 1, de
 	cp de, 0x95
-	jr z, LABEL_F5F461
-	jr LABEL_F5F44C
+	jr z, AccPatch_CountSlots_Store
+	jr AccPatch_CountSlots_Loop
 
-LABEL_F5F461:
+AccPatch_CountSlots_Store:
 	stda16 13524, xwa
 	ret
 
-LABEL_F5F466:
+AccPatch_CountSlotsAlt_Body:
 	ldda32 xix, 14766
 	push xix
 	ld xix, 0x69800
@@ -13386,40 +13386,40 @@ LABEL_F5F466:
 	ldw de, 0x153
 	xor iy, iy
 
-LABEL_F5F47C:
+AccPatch_CountSlotsAlt_Loop:
 	ld hl, de
 	calr AccPatch_ResolveSlotAddr
 	bitm 7, (xix)
-	jr z, LABEL_F5F487
+	jr z, AccPatch_CountSlotsAlt_Dec
 	dec 1, wa
 
-LABEL_F5F487:
+AccPatch_CountSlotsAlt_Dec:
 	dec 1, de
 	cp de, 0x95
-	jr z, LABEL_F5F491
-	jr LABEL_F5F47C
+	jr z, AccPatch_CountSlotsAlt_Store
+	jr AccPatch_CountSlotsAlt_Loop
 
-LABEL_F5F491:
+AccPatch_CountSlotsAlt_Store:
 	stda16 13524, xwa
 	pop xix
 	stda32 14766, xix
 	ret
 
-LABEL_F5F49B:
+AccPatch_MiscDataBlock:
 	.byte 0x40, 0x64, 0x00, 0x00, 0x00, 0xd1, 0xd4, 0x34
 	.byte 0x40, 0x33, 0xbe, 0x00, 0xdb, 0x50, 0xc9, 0xcf
 	.byte 0x64, 0x67, 0x02, 0x21, 0x63, 0xf1, 0xab, 0x39
 	.byte 0x41, 0x0e
 
-LABEL_F5F4B5:
+AccPatch_ProcessPartChanges:
 	ldda8 a, 14235
 	and a, 0x1F
 	cps a, 0
-	jr nz, LABEL_F5F4DF
+	jr nz, AccPatch_PartChanges_MapLookup
 	ldda8 w, 13584
 	and w, 0x1F
 	cps w, 0
-	jr z, LABEL_F5F4DD
+	jr z, AccPatch_PartChanges_NoNew
 	push xwa
 	push xhl
 	push xbc
@@ -13436,10 +13436,10 @@ LABEL_F5F4B5:
 	pop xhl
 	pop xwa
 
-LABEL_F5F4DD:
-	jr LABEL_F5F519
+AccPatch_PartChanges_NoNew:
+	jr AccPatch_PartChanges_CheckFlag
 
-LABEL_F5F4DF:
+AccPatch_PartChanges_MapLookup:
 	ldda8 a, 14235
 	and a, 0x1F
 	lds32 xhl, 0
@@ -13453,46 +13453,46 @@ LABEL_F5F4DF:
 	and a, 0x1F
 	and w, 0x1F
 	cp w, a
-	jr z, LABEL_F5F516
+	jr z, AccPatch_PartChanges_Update
 	ld a, e
 	ldb e, 0x90
 	ldb d, 0x10
 	ldb w, 0xFF
 	call SwbtWr_QueuePostEvent
 
-LABEL_F5F516:
-	calr LABEL_F5F891
+AccPatch_PartChanges_Update:
+	calr AccPatch_SyncAllVoiceParams
 
-LABEL_F5F519:
+AccPatch_PartChanges_CheckFlag:
 	ldda8 a, 13584
 	bit 6, a
-	jr z, LABEL_F5F532
+	jr z, AccPatch_PartChanges_Done
 	ldda8 w, 14235
 	bit 5, w
-	jr z, LABEL_F5F532
-	call LABEL_F5F533
+	jr z, AccPatch_PartChanges_Done
+	call AccPatch_ReadRepeatBit
 	calr AccPatch_UpdateAllChains
 
-LABEL_F5F532:
+AccPatch_PartChanges_Done:
 	ret
 
-LABEL_F5F533:
+AccPatch_ReadRepeatBit:
 	ld xix, 0x94800
 	add xix, 0x0
 	add xix, 0x10
 	ld a, (xix)
 	bit 0, a
-	jr nz, LABEL_F5F552
+	jr nz, AccPatch_SetRepeatBitOn
 	anddi8 13523, 254
-	jr LABEL_F5F557
+	jr AccPatch_SetRepeatBit_Done
 
-LABEL_F5F552:
+AccPatch_SetRepeatBitOn:
 	ordi8 13523, 1
 
-LABEL_F5F557:
+AccPatch_SetRepeatBit_Done:
 	ret
 
-LABEL_F5F558:
+AccPatch_PartNumberTable:
 	.byte 0x00, 0x10, 0x11, 0x00, 0x12, 0x00, 0x00, 0x00
 	.byte 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -13500,17 +13500,17 @@ LABEL_F5F558:
 
 AccPatch_UpdateAllChains:
 	calr AccPatch_GetCurrentSlotAddr
-	calr LABEL_F5F58B
-	calr LABEL_F5F624
-	calr LABEL_F5F6C0
-	calr LABEL_F5F759
-	calr LABEL_F5F7F2
+	calr AccPatch_UpdateChain_Rhythm
+	calr AccPatch_UpdateChain_Bass
+	calr AccPatch_UpdateChain_Acc1
+	calr AccPatch_UpdateChain_Acc2
+	calr AccPatch_UpdateChain_Acc3
 	ret
 
 ; Curious thing I've just observed:
 ; The routines below are almost identical to each other...
 
-LABEL_F5F58B:
+AccPatch_UpdateChain_Rhythm:
 	push xiy
 	add xiy, 0x20
 	ld xix, 0xFBA4
@@ -13565,7 +13565,7 @@ LABEL_F5F58B:
 	pop xiy
 	ret
 
-LABEL_F5F624:
+AccPatch_UpdateChain_Bass:
 	push xiy
 	add xiy, 0x18
 	ld xix, 0xFBBE
@@ -13621,7 +13621,7 @@ LABEL_F5F624:
 	pop xiy
 	ret
 
-LABEL_F5F6C0:
+AccPatch_UpdateChain_Acc1:
 	push xiy
 	add xiy, 0x28
 	ld xix, 0xFB56
@@ -13676,7 +13676,7 @@ LABEL_F5F6C0:
 	pop xiy
 	ret
 
-LABEL_F5F759:
+AccPatch_UpdateChain_Acc2:
 	push xiy
 	add xiy, 0x30
 	ld xix, 0xFB70
@@ -13731,7 +13731,7 @@ LABEL_F5F759:
 	pop xiy
 	ret
 
-LABEL_F5F7F2:
+AccPatch_UpdateChain_Acc3:
 	push xiy
 	add xiy, 0x38
 	ld xix, 0xFB8A
@@ -13792,16 +13792,16 @@ LABEL_F5F7F2:
 	pop xiy
 	ret
 
-LABEL_F5F891:
+AccPatch_SyncAllVoiceParams:
 	calr AccPatch_GetCurrentSlotAddr
-	calr LABEL_F5F8A4
-	calr LABEL_F5F957
-	calr LABEL_F5F9AF
-	calr LABEL_F5FA07
-	calr LABEL_F5F8FC
+	calr AccPatch_SyncVoice_Rhythm
+	calr AccPatch_SyncVoice_Acc1
+	calr AccPatch_SyncVoice_Acc2
+	calr AccPatch_SyncVoice_Acc3
+	calr AccPatch_SyncVoice_Bass
 	ret
 
-LABEL_F5F8A4:
+AccPatch_SyncVoice_Rhythm:
 	push xiy
 	add xiy, 0x20
 	ld xix, 0xFBA4
@@ -13810,16 +13810,16 @@ LABEL_F5F8A4:
 	ld a, (xix + 1)
 	and a, 0x7F
 	bitm 6, (xix + 4)
-	jr z, LABEL_F5F8C8
+	jr z, AccPatch_SyncRhythm_HasBank
 	ldb h, 0x40
 	sll h, 1
 	or a, h
 
-LABEL_F5F8C8:
+AccPatch_SyncRhythm_HasBank:
 	ldda8 h, 13537
 	ldda8 l, 13538
 	cp hl, wa
-	jr z, LABEL_F5F8FA
+	jr z, AccPatch_SyncRhythm_Done
 	pushw wa
 	ld (xiy + 256), w
 	ld c, a
@@ -13834,11 +13834,11 @@ LABEL_F5F8C8:
 	ld xix, 0x3219
 	calr AccPatch_LoadVoiceParams
 
-LABEL_F5F8FA:
+AccPatch_SyncRhythm_Done:
 	pop xiy
 	ret
 
-LABEL_F5F8FC:
+AccPatch_SyncVoice_Bass:
 	push xiy
 	add xiy, 0x18
 	ld xix, 0xFBBE
@@ -13848,16 +13848,16 @@ LABEL_F5F8FC:
 	ld a, (xix + 1)
 	and a, 0x7F
 	bitm 6, (xix + 4)
-	jr z, LABEL_F5F923
+	jr z, AccPatch_SyncBass_HasBank
 	ldb h, 0x40
 	sll h, 1
 	or a, h
 
-LABEL_F5F923:
+AccPatch_SyncBass_HasBank:
 	ldda8 h, 13535
 	ldda8 l, 13536
 	cp hl, wa
-	jr z, LABEL_F5F955
+	jr z, AccPatch_SyncBass_Done
 	pushw wa
 	ld (xiy + 256), w
 	ld c, a
@@ -13872,11 +13872,11 @@ LABEL_F5F923:
 	ld xix, 0x3214
 	calr AccPatch_LoadVoiceParams
 
-LABEL_F5F955:
+AccPatch_SyncBass_Done:
 	pop xiy
 	ret
 
-LABEL_F5F957:
+AccPatch_SyncVoice_Acc1:
 	push xiy
 	add xiy, 0x28
 	ld xix, 0xFB56
@@ -13885,16 +13885,16 @@ LABEL_F5F957:
 	ld a, (xix + 1)
 	and a, 0x7F
 	bitm 6, (xix + 4)
-	jr z, LABEL_F5F97B
+	jr z, AccPatch_SyncAcc1_HasBank
 	ldb h, 0x40
 	sll h, 1
 	or a, h
 
-LABEL_F5F97B:
+AccPatch_SyncAcc1_HasBank:
 	ldda8 h, 13539
 	ldda8 l, 13540
 	cp hl, wa
-	jr z, LABEL_F5F9AD
+	jr z, AccPatch_SyncAcc1_Done
 	pushw wa
 	ld (xiy + 256), w
 	ld c, a
@@ -13909,11 +13909,11 @@ LABEL_F5F97B:
 	ld xix, 0x321E
 	calr AccPatch_LoadVoiceParams
 
-LABEL_F5F9AD:
+AccPatch_SyncAcc1_Done:
 	pop xiy
 	ret
 
-LABEL_F5F9AF:
+AccPatch_SyncVoice_Acc2:
 	push xiy
 	add xiy, 0x30
 	ld xix, 0xFB70
@@ -13922,16 +13922,16 @@ LABEL_F5F9AF:
 	ld a, (xix + 1)
 	and a, 0x7F
 	bitm 6, (xix + 4)
-	jr z, LABEL_F5F9D3
+	jr z, AccPatch_SyncAcc2_HasBank
 	ldb h, 0x40
 	sll h, 1
 	or a, h
 
-LABEL_F5F9D3:
+AccPatch_SyncAcc2_HasBank:
 	ldda8 h, 13541
 	ldda8 l, 13542
 	cp hl, wa
-	jr z, LABEL_F5FA05
+	jr z, AccPatch_SyncAcc2_Done
 	pushw wa
 	ld (xiy + 256), w
 	ld c, a
@@ -13946,11 +13946,11 @@ LABEL_F5F9D3:
 	ld xix, 0x3223
 	calr AccPatch_LoadVoiceParams
 
-LABEL_F5FA05:
+AccPatch_SyncAcc2_Done:
 	pop xiy
 	ret
 
-LABEL_F5FA07:
+AccPatch_SyncVoice_Acc3:
 	push xiy
 	add xiy, 0x38
 	ld xix, 0xFB8A
@@ -13959,16 +13959,16 @@ LABEL_F5FA07:
 	ld a, (xix + 1)
 	and a, 0x7F
 	bitm 6, (xix + 4)
-	jr z, LABEL_F5FA2B
+	jr z, AccPatch_SyncAcc3_HasBank
 	ldb h, 0x40
 	sll h, 1
 	or a, h
 
-LABEL_F5FA2B:
+AccPatch_SyncAcc3_HasBank:
 	ldda8 h, 13543
 	ldda8 l, 13544
 	cp hl, wa
-	jr z, LABEL_F5FA5D
+	jr z, AccPatch_SyncAcc3_Done
 	pushw wa
 	ld (xiy + 256), w
 	ld c, a
@@ -13983,7 +13983,7 @@ LABEL_F5FA2B:
 	ld xix, 0x3228
 	calr AccPatch_LoadVoiceParams
 
-LABEL_F5FA5D:
+AccPatch_SyncAcc3_Done:
 	pop xiy
 	ret
 
@@ -13996,10 +13996,10 @@ AccPatch_LoadVoiceParams:
 	stda8 13360, a
 	ld a, (xiy + 4)
 	stda8 13361, a
-	calr LABEL_F5FA7E
+	calr AccPatch_CallParamLookup
 	ret
 
-LABEL_F5FA7E:
+AccPatch_CallParamLookup:
 	push xix
 	pushw de
 	push_sd16b 0x2F, 0x34
@@ -14012,11 +14012,11 @@ LABEL_F5FA7E:
 	popw de
 	pop xix
 	bit 7, e
-	jr z, LABEL_F5FAA9
+	jr z, AccPatch_StoreVoiceParams
 	or d, 0x10
 	and e, 0x7F
 
-LABEL_F5FAA9:
+AccPatch_StoreVoiceParams:
 	ld (xix), e
 	ld (xix + 1), d
 	ldda8 a, 13359
@@ -14028,7 +14028,7 @@ LABEL_F5FAA9:
 	call AccVoice_LoadAllChannelParams
 	ret
 
-LABEL_F5FAC8:
+AccPatch_ComplexDataBlock:
 	.byte 0xc1, 0x34, 0x8d, 0x21, 0xc9, 0xcf, 0x0e, 0x6e
 	.byte 0x03, 0x1e, 0x01, 0x00, 0x0e, 0xc1, 0x7d, 0xc0
 	.byte 0x21, 0xc9, 0xd8, 0x6e, 0x33, 0xc1, 0x7e, 0xc0
@@ -14089,7 +14089,7 @@ LABEL_F5FAC8:
 	.byte 0xb4, 0x47, 0xd8, 0x69, 0xec, 0x61, 0xd8, 0xd8
 	.byte 0x6e, 0xf6, 0xb4, 0x00, 0x83, 0x5d, 0x0e
 
-LABEL_F5FC9F:
+AccPatch_FreeAllChains_Alt:
 	ld hl, (xiy + 256)
 	calr AccPatch_ClearLinkedListEntries
 	ld hl, (xiy + 4)
@@ -14107,9 +14107,9 @@ AccPatch_ClearLinkedListEntries:
 	calr AccPatch_ResolveSlotAddr
 	ld wa, (xix + 3)
 	cp wa, 0xFFFF
-	jr z, LABEL_F5FCEC
+	jr z, AccPatch_FreeChain_Alt_Done
 
-LABEL_F5FCCB:
+AccPatch_FreeChainLoop_Alt:
 	ld hl, wa
 	ldw (xix + 3), 0xFFFF
 	calr AccPatch_ResolveSlotAddr
@@ -14118,16 +14118,16 @@ LABEL_F5FCCB:
 	incdi16 1, 13524
 	ld wa, (xix + 3)
 	cp wa, 0xFFFF
-	jr z, LABEL_F5FCEC
-	jr LABEL_F5FCCB
+	jr z, AccPatch_FreeChain_Alt_Done
+	jr AccPatch_FreeChainLoop_Alt
 
-LABEL_F5FCEC:
+AccPatch_FreeChain_Alt_Done:
 	pop xiy
 	ret
 
 AccPatch_ResolveSlotAddr:
 	cp hl, 0xFFFF
-	jr z, LABEL_F5FD09
+	jr z, AccPatch_ResolveSlotAddr_Ret
 	pushw hl
 	pushw hl
 	lds32 xhl, 0
@@ -14138,10 +14138,10 @@ AccPatch_ResolveSlotAddr:
 	add xix, xhl
 	popw hl
 
-LABEL_F5FD09:
+AccPatch_ResolveSlotAddr_Ret:
 	ret
 
-LABEL_F5FD0A:
+AccPatch_FillAllSlots_Alt:
 	ld hl, (xiy + 256)
 	calr AccPatch_FillSlotWithVoiceData
 	ld hl, (xiy + 4)
@@ -14171,36 +14171,36 @@ AccPatch_FillSlotWithVoiceData:
 	add xix, 0x6
 	ldb l, 0x81
 
-LABEL_F5FD51:
+AccPatch_FillSlot_Alt_Loop:
 	ld (xix), l
 	dec 1, wa
 	inc 1, xix
 	cps wa, 0
-	jr nz, LABEL_F5FD51
+	jr nz, AccPatch_FillSlot_Alt_Loop
 	ld (xix), 0x83
 	pop xiy
 	ret
 
-LABEL_F5FD60:
-	calr LABEL_F5FDD3
+AccPatch_ScanSequenceToEnd:
+	calr AccPatch_InitSlotPointer_Alt
 
-LABEL_F5FD63:
-	calr LABEL_F5FD87
+AccPatch_ScanSeq_Loop:
+	calr AccPatch_SeqReadByte_Alt
 	cp a, 0x83
-	jr z, LABEL_F5FD76
-	calr LABEL_F5FD9A
+	jr z, AccPatch_ScanSeq_StorePosAndRet
+	calr AccPatch_SeqAdvance_Alt
 	bitda 0, 13846
-	jr nz, LABEL_F5FD76
-	jr LABEL_F5FD63
+	jr nz, AccPatch_ScanSeq_StorePosAndRet
+	jr AccPatch_ScanSeq_Loop
 
-LABEL_F5FD76:
+AccPatch_ScanSeq_StorePosAndRet:
 	ldda16 xwa, 13842
 	stda16 13830, xwa
 	ldda16 xwa, 13844
 	stda16 13832, xwa
 	ret
 
-LABEL_F5FD87:
+AccPatch_SeqReadByte_Alt:
 	push xix
 	ldda16 xhl, 13842
 	calr AccPatch_ResolveSlotAddr
@@ -14209,42 +14209,42 @@ LABEL_F5FD87:
 	pop xix
 	ret
 
-LABEL_F5FD9A:
+AccPatch_SeqAdvance_Alt:
 	ldda16 xwa, 13844
 	cp wa, 0xFE
-	jr nz, LABEL_F5FDCC
+	jr nz, AccPatch_SeqAdvance_Inc
 	ldda16 xhl, 13842
 	calr AccPatch_ResolveSlotAddr
 	ld wa, (xix + 3)
 	stda16 13842, xwa
 	cp wa, 0xFFFF
-	jr nz, LABEL_F5FDBD
+	jr nz, AccPatch_SeqAdvance_CheckLimit
 	ordi8 13846, 1
 
-LABEL_F5FDBD:
+AccPatch_SeqAdvance_CheckLimit:
 	cp wa, 0x154
-	jr lt, LABEL_F5FDC8
+	jr lt, AccPatch_SeqAdvance_ResetBase
 	ordi8 13846, 1
 
-LABEL_F5FDC8:
+AccPatch_SeqAdvance_ResetBase:
 	lds wa, 6
-	jr LABEL_F5FDCE
+	jr AccPatch_SeqAdvance_Store
 
-LABEL_F5FDCC:
+AccPatch_SeqAdvance_Inc:
 	inc 1, wa
 
-LABEL_F5FDCE:
+AccPatch_SeqAdvance_Store:
 	stda16 13844, xwa
 	ret
 
-LABEL_F5FDD3:
+AccPatch_InitSlotPointer_Alt:
 	xor xhl, xhl
 	ldda8 l, 14764
 	cp l, 0x1E
-	jr c, LABEL_F5FDE0
+	jr c, AccPatch_InitSlotAlt_Valid
 	xor l, l
 
-LABEL_F5FDE0:
+AccPatch_InitSlotAlt_Valid:
 	mul hl, 0x60
 	add xhl, 0x60
 	ldda32 xiy, 14766
@@ -14256,8 +14256,8 @@ LABEL_F5FDE0:
 	stdi16 13844, 6
 	ret
 
-LABEL_F5FE07:
-	jr LABEL_F5FE68
+AccPatch_SeqDispatch_Entry:
+	jr AccPatch_SeqDispatch_Main
 	adc wa, (xwa)
 	adc wa, (xwa)
 	adc wa, (xwa)
@@ -14275,86 +14275,86 @@ AccPatch_SeqReadByte:
 	pop xix
 	ret
 
-LABEL_F5FE2B:
+AccPatch_SeqDispatch_Padding:
 	.byte 0x00, 0x00
 
 AccPatch_AdvanceSeqIndex:
 	ldda16 xwa, 13844
 	cp wa, 0xFE
-	jr nz, LABEL_F5FE5F
+	jr nz, AccPatch_AdvSeq_Inc
 	ldda16 xhl, 13842
 	calr AccPatch_GetEntryAddr
 	ld wa, (xix + 3)
 	stda16 13842, xwa
 	cp wa, 0xFFFF
-	jr nz, LABEL_F5FE50
+	jr nz, AccPatch_AdvSeq_CheckLimit
 	ordi8 13846, 1
 
-LABEL_F5FE50:
+AccPatch_AdvSeq_CheckLimit:
 	cp wa, 0x154
-	jr lt, LABEL_F5FE5B
+	jr lt, AccPatch_AdvSeq_ResetBase
 	ordi8 13846, 1
 
-LABEL_F5FE5B:
+AccPatch_AdvSeq_ResetBase:
 	lds wa, 6
-	jr LABEL_F5FE61
+	jr AccPatch_AdvSeq_Store
 
-LABEL_F5FE5F:
+AccPatch_AdvSeq_Inc:
 	inc 1, wa
 
-LABEL_F5FE61:
+AccPatch_AdvSeq_Store:
 	stda16 13844, xwa
 	ret
 
-LABEL_F5FE66:
+AccPatch_AdvSeq_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F5FE68:
+AccPatch_SeqDispatch_Main:
 	ldda8 a, 14235
 	cpda8 a, 13822
-	jr z, LABEL_F5FE78
+	jr z, AccPatch_SeqDispatch_CheckEmpty
 	calr AccPatch_ScanToSequenceStart
 	calr AccPatch_InitAndLoadSequence
 
-LABEL_F5FE78:
+AccPatch_SeqDispatch_CheckEmpty:
 	ldda8 a, 14235
 	and a, 0x1F
 	cps a, 0
-	jr nz, LABEL_F5FE86
+	jr nz, AccPatch_SeqDispatch_CheckPlaying
 	jrl AccPatch_SyncStateAndReturn
 
-LABEL_F5FE86:
+AccPatch_SeqDispatch_CheckPlaying:
 	bitda 0, 12931
-	jr nz, LABEL_F5FE93
+	jr nz, AccPatch_SeqDispatch_CheckStarted
 	call TempoRingBuf_ReInitAndRet
 	jrl AccPatch_SyncStateAndReturn
 
-LABEL_F5FE93:
+AccPatch_SeqDispatch_CheckStarted:
 	bitda 0, 13825
-	jr nz, LABEL_F5FEAF
-	calr LABEL_F60036
+	jr nz, AccPatch_SeqDispatch_ProcessFlags
+	calr AccPatch_ResetSeqCounters
 	calr AccPatch_InitCurrentSlotPointer
 	ldda16 xwa, 13842
 	stda16 13826, xwa
 	ldda16 xwa, 13844
 	stda16 13828, xwa
 
-LABEL_F5FEAF:
-	calr LABEL_F5FF36
+AccPatch_SeqDispatch_ProcessFlags:
+	calr AccPatch_ReadModeFlags
 	ldda8 a, 13519
 	and a, 0xC
 	cps a, 0
-	jr nz, LABEL_F5FEC8
+	jr nz, AccPatch_SeqDispatch_ModeChange
 	ldda8 a, 13820
 	and a, 0xC
 	cps a, 0
-	jr z, LABEL_F5FECD
+	jr z, AccPatch_SeqDispatch_RunNotes
 
-LABEL_F5FEC8:
+AccPatch_SeqDispatch_ModeChange:
 	calr LABEL_F600C2
 	jr AccPatch_SyncStateAndReturn
 
-LABEL_F5FECD:
+AccPatch_SeqDispatch_RunNotes:
 	call AccPatch_CheckEmpty
 	cps wa, 0
 	jr z, AccPatch_SyncStateAndReturn
@@ -14363,7 +14363,7 @@ LABEL_F5FECD:
 	stdi8 13823, 0
 	calr LABEL_F60611
 	cpdi16 13834, 0
-	jr z, LABEL_F5FF10
+	jr z, AccPatch_SeqDispatch_CheckQueued
 	ldda16 xwa, 13826
 	stda16 14078, xwa
 	ldda16 xwa, 13828
@@ -14373,7 +14373,7 @@ LABEL_F5FECD:
 	calr AccPatch_AdvanceAllSteps
 	stdi16 13834, 0
 
-LABEL_F5FF10:
+AccPatch_SeqDispatch_CheckQueued:
 	cpdi16 13838, 0
 	jr z, AccPatch_SyncStateAndReturn
 	calr AccPatch_DispatchQueuedNotes
@@ -14383,20 +14383,20 @@ AccPatch_SyncStateAndReturn:
 	stda8 13822, a
 	ret
 
-LABEL_F5FF24:
+AccPatch_SeqDispatch_MiscData:
 	.byte 0x00, 0x00, 0xc1, 0xcf, 0x34, 0x3e, 0x08, 0x0e
 	.byte 0xc1, 0xcf, 0x34, 0x3c, 0xf7, 0x1d, 0xea, 0xff
 	.byte 0xf5, 0x0e
 
-LABEL_F5FF36:
+AccPatch_ReadModeFlags:
 	ldda8 a, 13519
 	and a, 0xF3
 	stda8 13519, a
 	cpdi8 36152, 181
-	jr z, LABEL_F5FF4A
+	jr z, AccPatch_ReadModeFlags_Active
 	jr AccPatch_SetFlagExit
 
-LABEL_F5FF4A:
+AccPatch_ReadModeFlags_Active:
 	ld32_24 xwa, 0x02749a
 	orda32_24 xwa, 160926
 	stda32 4560, xwa
@@ -14405,16 +14405,16 @@ LABEL_F5FF4A:
 	ldda32 xwa, 4560
 	and xwa, 0x200
 	cp xwa, 0x0
-	jr z, LABEL_F5FF90
+	jr z, AccPatch_ReadModeFlags_Check400
 	ldda32 xwa, 14816
 	and xwa, 0x200
 	cp xwa, 0x0
-	jr nz, LABEL_F5FF90
+	jr nz, AccPatch_ReadModeFlags_Check400
 	ldda8 a, 13519
 	or a, 0x4
 	stda8 13519, a
 
-LABEL_F5FF90:
+AccPatch_ReadModeFlags_Check400:
 	ldda32 xwa, 4560
 	and xwa, 0x400
 	cp xwa, 0x0
@@ -14430,45 +14430,45 @@ LABEL_F5FF90:
 AccPatch_SetFlagExit:
 	ret
 
-LABEL_F5FFC0:
+AccPatch_ScanSeq_PaddingByte:
 	.byte 0x0e
 
 AccPatch_ScanToSequenceStart:
 	calr AccPatch_InitCurrentSlotPointer
 
-LABEL_F5FFC4:
+AccPatch_ScanSeq_ReadLoop:
 	calr AccPatch_SeqReadByte
 	cp a, 0x83
-	jr z, LABEL_F5FFD7
+	jr z, AccPatch_ScanSeq_StorePosition
 	calr AccPatch_AdvanceSeqIndex
 	bitda 0, 13846
-	jr nz, LABEL_F5FFD7
-	jr LABEL_F5FFC4
+	jr nz, AccPatch_ScanSeq_StorePosition
+	jr AccPatch_ScanSeq_ReadLoop
 
-LABEL_F5FFD7:
+AccPatch_ScanSeq_StorePosition:
 	ldda16 xwa, 13842
 	stda16 13830, xwa
 	ldda16 xwa, 13844
 	stda16 13832, xwa
 	ret
 
-LABEL_F5FFE8:
+AccPatch_ScanSeq_PaddingWord:
 	.byte 0x00, 0x00
 
 AccPatch_InitAndLoadSequence:
 	ld xhl, 0x361A
 	ldw bc, 0x8
 
-LABEL_F5FFF2:
+AccPatch_InitSeq_ClearLoop:
 	ldw (xhl), 0x0
 	add hl, 0x6
-	djnz xbc, LABEL_F5FFF2
+	djnz xbc, AccPatch_InitSeq_ClearLoop
 	ei 6
 	bitda 0, 13898
-	jr nz, LABEL_F60009
+	jr nz, AccPatch_InitSeq_LoadTempo
 	call TempoRingBuf_ReInitAndRet
 
-LABEL_F60009:
+AccPatch_InitSeq_LoadTempo:
 	ldda8 a, 1077
 	ldda8 c, 1046
 	ei 0
@@ -14481,21 +14481,21 @@ LABEL_F60009:
 	calr AccPatch_InitCurrentSlotPointer
 	popw bc
 	cps bc, 0
-	jr z, LABEL_F60033
+	jr z, AccPatch_InitSeq_AdvDone
 
-LABEL_F6002B:
+AccPatch_InitSeq_AdvLoop:
 	pushw bc
 	calr AccPatch_ScanToSequenceEnd
 	popw bc
-	djnz xbc, LABEL_F6002B
+	djnz xbc, AccPatch_InitSeq_AdvLoop
 
-LABEL_F60033:
+AccPatch_InitSeq_AdvDone:
 	ret
 
-LABEL_F60034:
+AccPatch_InitSeq_Padding:
 	.byte 0x00, 0x00
 
-LABEL_F60036:
+AccPatch_ResetSeqCounters:
 	ld xhl, 0x361A
 	ldw bc, 0x8
 
@@ -21924,7 +21924,7 @@ DrumKitInit_CheckExtAssign:
 	call SwbtWr_QueuePostEvent
 
 DrumKitInit_FinalSetup:
-	call LABEL_F5E919
+	call AccPatch_CountSlots_Wrapper
 	stdi8 13580, 0
 	call SeqAcc_SetIndicator_PB
 	stdi16 61854, 0
@@ -23676,7 +23676,7 @@ Tempo_DisplayBPMReturn:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F5EC57
+	call AccPatch_RefreshSlotOffset_Wrap
 	pop xiz
 	pop xix
 	pop xhl
@@ -27573,7 +27573,7 @@ MiddleNameFunc:
 	push xhl
 	push xix
 	push xiz
-	call LABEL_F5ED4A
+	call RhythmProc_CopySlotData_Wrap
 	pop xiz
 	pop xix
 	pop xhl
@@ -29544,7 +29544,7 @@ cmp_ld_mae:
 	ret
 
 LABEL_F6BC2A:
-	call LABEL_F5E95A
+	call AccDemo_InitWithFlag
 	ret
 
 cmp_ld_ato:
@@ -29556,7 +29556,7 @@ cmp_ld_ato:
 LABEL_F6BC35:
 	cps wa, 0
 	jr lt, LABEL_F6BC3F
-	call LABEL_F5E97F
+	call AccPatch_ClearModeFlag
 	jr LABEL_F6BC43
 
 LABEL_F6BC3F:
