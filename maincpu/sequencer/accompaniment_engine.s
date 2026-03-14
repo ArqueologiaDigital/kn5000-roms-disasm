@@ -12567,7 +12567,7 @@ AccPatch_CopySlotsExit:
 	ret
 
 RhythmProc_CallDispatch:
-	call LABEL_F61390
+	call AccPlayback_InitOrUpdate
 	ret
 
 RhythmProc_NullStub:
@@ -14968,7 +14968,7 @@ AccPatch_CopySequenceEntry:
 	ldda16 xhl, 13914
 	calr AccPatch_GetEntryAddr
 	stda32 13900, xix
-	calr LABEL_F610FE
+	calr AccPatch_SetupBlockCopyDispatch
 	dec 1, ix
 	stda16 14084, xix
 	ldda16 xwa, 13914
@@ -15208,7 +15208,7 @@ AccPatch_EventDispatchLoop:
 	jrl AccPatch_EventDispatch_Done
 
 AccPatch_EventDispatch_ReadCmd:
-	call LABEL_F61385
+	call TempoRingBuf_PeekByte
 	cp a, 0x81
 	jr z, AccPatch_EventDispatch_EndMarker
 	ldb w, 0xF0
@@ -16127,11 +16127,11 @@ AccPatch_CalcBlockCopy_Clamp:
 	jr AccPatch_CalcBlockCopy_StoreIX
 
 AccPatch_CalcBlockCopy_StoreIY:
-	calr LABEL_F60F7C
+	calr BlockCopy_SameEntry_Reverse
 	jr AccPatch_CalcBlockCopy_StoreIX
 
 AccPatch_CalcBlockCopy_CheckIX:
-	calr LABEL_F60FE3
+	calr BlockCopy_IXFirst_Reverse
 
 AccPatch_CalcBlockCopy_StoreIX:
 	cpdi8 32578, 0
@@ -16159,31 +16159,31 @@ __pad_F60E86:
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F60EC4
+	jr z, BlockCopy_Rev_CheckSameEntry
 	jr DSP_SetupDone
 
-LABEL_F60EC4:
+BlockCopy_Rev_CheckSameEntry:
 	cpda16 xde, 13912
-	jr nz, LABEL_F60ECC
-	jr LABEL_F60EF2
+	jr nz, BlockCopy_Rev_CopyDiffEntry
+	jr BlockCopy_Rev_StoreBounds
 
-LABEL_F60ECC:
+BlockCopy_Rev_CopyDiffEntry:
 	ldda16 xbc, 13908
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F60EDF
+	jr z, BlockCopy_Rev_CopyRemainder
 	jr DSP_SetupDone
 
-LABEL_F60EDF:
+BlockCopy_Rev_CopyRemainder:
 	ldda16 xbc, 13910
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F60EC4
+	jr z, BlockCopy_Rev_CheckSameEntry
 	jr DSP_SetupDone
 
-LABEL_F60EF2:
+BlockCopy_Rev_StoreBounds:
 	ldda16 xwa, 13908
 	stda16 13926, xwa
 	ldw bc, 0xFF
@@ -16241,7 +16241,7 @@ DSP_BlockCopyForward:
 	pop xwa
 	ret
 
-LABEL_F60F7C:
+BlockCopy_SameEntry_Reverse:
 	ldda16 xbc, 13918
 	sub bc, 0x6
 	inc 1, bc
@@ -16250,36 +16250,36 @@ LABEL_F60F7C:
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F60F9D
+	jr z, BlockCopy_SameEntry_AdvIY
 	jr DSP_NullRet
 
-LABEL_F60F9D:
+BlockCopy_SameEntry_AdvIY:
 	calr AccPatch_AdvanceNextEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F60FA9
+	jr z, BlockCopy_SameEntry_CheckDE
 	jr DSP_NullRet
 
-LABEL_F60FA9:
+BlockCopy_SameEntry_CheckDE:
 	cpda16 xde, 13912
-	jr nz, LABEL_F60FB1
-	jr LABEL_F60FD3
+	jr nz, BlockCopy_SameEntry_FullCopy
+	jr BlockCopy_SameEntry_StoreBounds
 
-LABEL_F60FB1:
+BlockCopy_SameEntry_FullCopy:
 	ldw bc, 0xFF
 	sub bc, 0x6
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F60FC7
+	jr z, BlockCopy_SameEntry_AdvIYLoop
 	jr DSP_NullRet
 
-LABEL_F60FC7:
+BlockCopy_SameEntry_AdvIYLoop:
 	calr AccPatch_AdvanceNextEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F60FA9
+	jr z, BlockCopy_SameEntry_CheckDE
 	jr DSP_NullRet
 
-LABEL_F60FD3:
+BlockCopy_SameEntry_StoreBounds:
 	ldw bc, 0xFF
 	sub bc, 0x6
 	stda16 13926, xbc
@@ -16288,7 +16288,7 @@ LABEL_F60FD3:
 DSP_NullRet:
 	ret
 
-LABEL_F60FE3:
+BlockCopy_IXFirst_Reverse:
 	ldda16 xwa, 13918
 	subda16 xwa, 13920
 	stda16 13908, xwa
@@ -16306,39 +16306,39 @@ LABEL_F60FE3:
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F61021
+	jr z, BlockCopy_IXFirst_CopyOffset
 	jr DSP_NullRet2
 
-LABEL_F61021:
+BlockCopy_IXFirst_CopyOffset:
 	ldda16 xbc, 13908
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F61034
+	jr z, BlockCopy_IXFirst_CheckDE
 	jr DSP_NullRet2
 
-LABEL_F61034:
+BlockCopy_IXFirst_CheckDE:
 	cpda16 xde, 13912
-	jr nz, LABEL_F6103C
-	jr LABEL_F61062
+	jr nz, BlockCopy_IXFirst_CopyRemainder
+	jr BlockCopy_IXFirst_StoreBounds
 
-LABEL_F6103C:
+BlockCopy_IXFirst_CopyRemainder:
 	ldda16 xbc, 13910
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F6104F
+	jr z, BlockCopy_IXFirst_CopyOffset2
 	jr DSP_NullRet2
 
-LABEL_F6104F:
+BlockCopy_IXFirst_CopyOffset2:
 	ldda16 xbc, 13908
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F61034
+	jr z, BlockCopy_IXFirst_CheckDE
 	jr DSP_NullRet2
 
-LABEL_F61062:
+BlockCopy_IXFirst_StoreBounds:
 	ldda16 xwa, 13910
 	stda16 13926, xwa
 	ldw wa, 0xFF
@@ -16355,27 +16355,27 @@ AccPatch_CalcBlockCopyBounds:
 	sub bc, wa
 	stda16 13928, xbc
 	cpdm16 13926, xbc
-	jr nc, LABEL_F61090
-	jr LABEL_F61095
+	jr nc, BlockCopyBounds_UseBC
+	jr BlockCopyBounds_UseSmaller
 
-LABEL_F61090:
+BlockCopyBounds_UseBC:
 	calr DSP_BlockCopyReverse
-	jr LABEL_F610B3
+	jr BlockCopyBounds_Return
 
-LABEL_F61095:
+BlockCopyBounds_UseSmaller:
 	ldda16 xbc, 13926
 	calr DSP_BlockCopyReverse
 	calr AccPatch_AdvanceNextEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F610A8
-	jr LABEL_F610B3
+	jr z, BlockCopyBounds_CopyRemainder
+	jr BlockCopyBounds_Return
 
-LABEL_F610A8:
+BlockCopyBounds_CopyRemainder:
 	ldda16 xbc, 13928
 	subda16 xbc, 13926
 	calr DSP_BlockCopyReverse
 
-LABEL_F610B3:
+BlockCopyBounds_Return:
 	ret
 
 AccPatch_AdvanceNextEntry_IY:
@@ -16385,16 +16385,16 @@ AccPatch_AdvanceNextEntry_IY:
 	stda16 13912, xhl
 	calr AccPatch_GetEntryAddr
 	bitm 7, (xix + 256)
-	jr nz, LABEL_F610CF
+	jr nz, AdvNextEntry_IY_StoreAndReset
 	stdi8 32578, 11
-	jr LABEL_F610D8
+	jr AdvNextEntry_IY_Return
 
-LABEL_F610CF:
+AdvNextEntry_IY_StoreAndReset:
 	stda32 13904, xix
 	lds32 xiy, 0
 	ldw iy, 0xFE
 
-LABEL_F610D8:
+AdvNextEntry_IY_Return:
 	pop xix
 	ret
 
@@ -16404,25 +16404,25 @@ AccPatch_AdvanceNextEntry_IX:
 	stda16 13914, xhl
 	calr AccPatch_GetEntryAddr
 	bitm 7, (xix + 256)
-	jr nz, LABEL_F610F4
+	jr nz, AdvNextEntry_IX_StoreAndReset
 	stdi8 32578, 11
-	jr LABEL_F610FD
+	jr AdvNextEntry_IX_Return
 
-LABEL_F610F4:
+AdvNextEntry_IX_StoreAndReset:
 	stda32 13900, xix
 	lds32 xix, 0
 	ldw ix, 0xFE
 
-LABEL_F610FD:
+AdvNextEntry_IX_Return:
 	ret
 
-LABEL_F610FE:
+AccPatch_SetupBlockCopyDispatch:
 	stdi8 32578, 0
 	ldda16 xhl, 13912
 	calr AccPatch_GetEntryAddr
 	stda32 13904, xix
 	cpda16 xde, 13912
-	jr nz, LABEL_F6113B
+	jr nz, BlockCopyDisp_CompareOffsets
 	lds32 xiy, 0
 	ldw iy, 0xFF
 	subda16 xiy, 13918
@@ -16434,37 +16434,37 @@ LABEL_F610FE:
 	stda16 13926, xix
 	ldda16 xix, 13920
 	calr AccPatch_ForwardBlockCopy
-	jr LABEL_F61162
+	jr BlockCopyDisp_Return
 
-LABEL_F6113B:
+BlockCopyDisp_CompareOffsets:
 	ldda16 xwa, 13920
 	cpda16 xwa, 13918
-	jr c, LABEL_F61149
-	jr z, LABEL_F6114E
-	jr ugt, LABEL_F61153
+	jr c, BlockCopyDisp_IXSmaller
+	jr z, BlockCopyDisp_Equal
+	jr ugt, BlockCopyDisp_IXLarger
 
-LABEL_F61149:
-	calr LABEL_F61163
-	jr LABEL_F61158
+BlockCopyDisp_IXSmaller:
+	calr BlockCopy_FwdIYSmaller
+	jr BlockCopyDisp_CheckAndForward
 
-LABEL_F6114E:
-	calr LABEL_F611E8
-	jr LABEL_F61158
+BlockCopyDisp_Equal:
+	calr BlockCopy_FwdEqual
+	jr BlockCopyDisp_CheckAndForward
 
-LABEL_F61153:
-	calr LABEL_F61250
+BlockCopyDisp_IXLarger:
+	calr BlockCopy_FwdIXSmaller
 	jr __jrt_nop_F61158
 __jrt_nop_F61158:
 
-LABEL_F61158:
+BlockCopyDisp_CheckAndForward:
 	cpdi8 32578, 0
-	jr nz, LABEL_F61162
+	jr nz, BlockCopyDisp_Return
 	calr AccPatch_ForwardBlockCopy
 
-LABEL_F61162:
+BlockCopyDisp_Return:
 	ret
 
-LABEL_F61163:
+BlockCopy_FwdIYSmaller:
 	ldw wa, 0xFF
 	subda16 xwa, 13920
 	ldw bc, 0xFF
@@ -16484,31 +16484,31 @@ LABEL_F61163:
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F611A6
+	jr z, BlockCopy_FwdIYSmall_CheckDE
 	jr DSP_CopyDone
 
-LABEL_F611A6:
+BlockCopy_FwdIYSmall_CheckDE:
 	cpda16 xde, 13912
-	jr nz, LABEL_F611AE
-	jr LABEL_F611D4
+	jr nz, BlockCopy_FwdIYSmall_CopyOffset
+	jr BlockCopy_FwdIYSmall_StoreBounds
 
-LABEL_F611AE:
+BlockCopy_FwdIYSmall_CopyOffset:
 	ldda16 xbc, 13908
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F611C1
+	jr z, BlockCopy_FwdIYSmall_CopyRem
 	jr DSP_CopyDone
 
-LABEL_F611C1:
+BlockCopy_FwdIYSmall_CopyRem:
 	ldda16 xbc, 13910
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F611A6
+	jr z, BlockCopy_FwdIYSmall_CheckDE
 	jr DSP_CopyDone
 
-LABEL_F611D4:
+BlockCopy_FwdIYSmall_StoreBounds:
 	ldda16 xwa, 13908
 	stda16 13926, xwa
 	ldw bc, 0xFF
@@ -16518,7 +16518,7 @@ LABEL_F611D4:
 DSP_CopyDone:
 	ret
 
-LABEL_F611E8:
+BlockCopy_FwdEqual:
 	ldw bc, 0xFF
 	subda16 xbc, 13918
 	lds32 xiy, 0
@@ -16528,36 +16528,36 @@ LABEL_F611E8:
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F6120A
+	jr z, BlockCopy_FwdEqual_AdvIX
 	jr AccPatch_NullRet2
 
-LABEL_F6120A:
+BlockCopy_FwdEqual_AdvIX:
 	calr AccPatch_AdvancePrevEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F61216
+	jr z, BlockCopy_FwdEqual_CheckDE
 	jr AccPatch_NullRet2
 
-LABEL_F61216:
+BlockCopy_FwdEqual_CheckDE:
 	cpda16 xde, 13912
-	jr nz, LABEL_F6121E
-	jr LABEL_F61240
+	jr nz, BlockCopy_FwdEqual_FullCopy
+	jr BlockCopy_FwdEqual_StoreBounds
 
-LABEL_F6121E:
+BlockCopy_FwdEqual_FullCopy:
 	ldw bc, 0xFF
 	sub bc, 0x6
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F61234
+	jr z, BlockCopy_FwdEqual_AdvIXLoop
 	jr AccPatch_NullRet2
 
-LABEL_F61234:
+BlockCopy_FwdEqual_AdvIXLoop:
 	calr AccPatch_AdvancePrevEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F61216
+	jr z, BlockCopy_FwdEqual_CheckDE
 	jr AccPatch_NullRet2
 
-LABEL_F61240:
+BlockCopy_FwdEqual_StoreBounds:
 	ldw bc, 0xFF
 	sub bc, 0x6
 	stda16 13926, xbc
@@ -16566,7 +16566,7 @@ LABEL_F61240:
 AccPatch_NullRet2:
 	ret
 
-LABEL_F61250:
+BlockCopy_FwdIXSmaller:
 	ldw wa, 0xFF
 	subda16 xwa, 13918
 	ldw bc, 0xFF
@@ -16586,39 +16586,39 @@ LABEL_F61250:
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F61293
+	jr z, BlockCopy_FwdIXSmall_CopyOff
 	jr AccPatch_NullRet3
 
-LABEL_F61293:
+BlockCopy_FwdIXSmall_CopyOff:
 	ldda16 xbc, 13908
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F612A6
+	jr z, BlockCopy_FwdIXSmall_CheckDE
 	jr AccPatch_NullRet3
 
-LABEL_F612A6:
+BlockCopy_FwdIXSmall_CheckDE:
 	cpda16 xde, 13912
-	jr nz, LABEL_F612AE
-	jr LABEL_F612D4
+	jr nz, BlockCopy_FwdIXSmall_CopyRem
+	jr BlockCopy_FwdIXSmall_StoreBounds
 
-LABEL_F612AE:
+BlockCopy_FwdIXSmall_CopyRem:
 	ldda16 xbc, 13910
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F612C1
+	jr z, BlockCopy_FwdIXSmall_CopyOff2
 	jr AccPatch_NullRet3
 
-LABEL_F612C1:
+BlockCopy_FwdIXSmall_CopyOff2:
 	ldda16 xbc, 13908
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IY
 	cpdi8 32578, 0
-	jr z, LABEL_F612A6
+	jr z, BlockCopy_FwdIXSmall_CheckDE
 	jr AccPatch_NullRet3
 
-LABEL_F612D4:
+BlockCopy_FwdIXSmall_StoreBounds:
 	ldda16 xwa, 13910
 	stda16 13926, xwa
 	ldw wa, 0xFF
@@ -16637,22 +16637,22 @@ AccPatch_ForwardBlockCopy:
 	sub bc, wa
 	stda16 13928, xbc
 	cpdm16 13926, xbc
-	jr nc, LABEL_F61308
-	jr LABEL_F6130D
+	jr nc, FwdBlockCopy_UseFull
+	jr FwdBlockCopy_UseSmaller
 
-LABEL_F61308:
+FwdBlockCopy_UseFull:
 	calr DSP_BlockCopyForward
 	jr AccPatch_DoneBlockCopy
 
-LABEL_F6130D:
+FwdBlockCopy_UseSmaller:
 	ldda16 xbc, 13926
 	calr DSP_BlockCopyForward
 	calr AccPatch_AdvancePrevEntry_IX
 	cpdi8 32578, 0
-	jr z, LABEL_F61320
+	jr z, FwdBlockCopy_CopyRemainder
 	jr AccPatch_DoneBlockCopy
 
-LABEL_F61320:
+FwdBlockCopy_CopyRemainder:
 	ldda16 xbc, 13928
 	subda16 xbc, 13926
 	calr DSP_BlockCopyForward
@@ -16666,16 +16666,16 @@ AccPatch_AdvancePrevEntry_IX:
 	stda16 13914, xhl
 	calr AccPatch_GetEntryAddr
 	bitm 7, (xix)
-	jr nz, LABEL_F61345
+	jr nz, AdvPrevEntry_IX_StoreAndReset
 	stdi8 32578, 11
-	jr LABEL_F6134D
+	jr AdvPrevEntry_IX_Return
 
-LABEL_F61345:
+AdvPrevEntry_IX_StoreAndReset:
 	stda32 13900, xix
 	lds32 xix, 0
 	lds ix, 6
 
-LABEL_F6134D:
+AdvPrevEntry_IX_Return:
 	ret
 
 AccPatch_AdvancePrevEntry_IY:
@@ -16685,16 +16685,16 @@ AccPatch_AdvancePrevEntry_IY:
 	stda16 13912, xhl
 	calr AccPatch_GetEntryAddr
 	bitm 7, (xix)
-	jr nz, LABEL_F61368
+	jr nz, AdvPrevEntry_IY_StoreAndReset
 	stdi8 32578, 11
-	jr LABEL_F61370
+	jr AdvPrevEntry_IY_Return
 
-LABEL_F61368:
+AdvPrevEntry_IY_StoreAndReset:
 	stda32 13904, xix
 	lds32 xiy, 0
 	lds iy, 6
 
-LABEL_F61370:
+AdvPrevEntry_IY_Return:
 	pop xix
 	ret
 
@@ -16712,50 +16712,50 @@ TempoRingBuf_ReInitAndRet:
 	call TempoRingBuf_Init
 	ret
 
-LABEL_F61385:
+TempoRingBuf_PeekByte:
 	call TempoRingBuf_SaveReadPos
 	call TempoRingBuf_ReadAlternate
 	ld a, l
 	ret
 
-LABEL_F61390:
+AccPlayback_InitOrUpdate:
 	anddi8 13520, 239
 	ldda8 a, 14235
 	and a, 0x7F
 	cpda8 a, 13584
-	jr z, LABEL_F613AE
+	jr z, AccPlayback_CheckStyleMatch
 	and a, 0x1F
 	cps a, 0
-	jr z, LABEL_F613AE
+	jr z, AccPlayback_CheckStyleMatch
 	ordi8 13520, 16
 
-LABEL_F613AE:
+AccPlayback_CheckStyleMatch:
 	ldda8 a, 36150
 	cp a, 0xB6
-	jr z, LABEL_F613BA
-	jrl LABEL_F6149F
+	jr z, AccPlayback_CheckActiveStyle
+	jrl AccPlayback_Finalize
 
-LABEL_F613BA:
+AccPlayback_CheckActiveStyle:
 	cpda8 a, 13605
-	jr z, LABEL_F613DC
+	jr z, AccPlayback_CheckBit4
 	stdi8 13565, 0
 	call TempoRingBuf_Init
 	bitda 0, 12931
-	jr nz, LABEL_F613D4
+	jr nz, AccPlayback_GetSlotAddr
 	ordi8 13517, 128
 
-LABEL_F613D4:
+AccPlayback_GetSlotAddr:
 	call AccPatch_GetCurrentSlotAddr
 	call AccPatch_ReadVoiceStride
 
-LABEL_F613DC:
+AccPlayback_CheckBit4:
 	bitda 4, 13520
-	jr nz, LABEL_F613EB
+	jr nz, AccPlayback_InitTimingVars
 	ldda8 a, 13605
 	cp a, 0xB6
-	jr z, LABEL_F61422
+	jr z, AccPlayback_CheckStateFlags
 
-LABEL_F613EB:
+AccPlayback_InitTimingVars:
 	ldb a, 0x0
 	stda8 13562, a
 	stda8 13564, a
@@ -16770,60 +16770,60 @@ LABEL_F613EB:
 	stdi8 13602, 0
 	anddi8 13519, 127
 
-LABEL_F61422:
+AccPlayback_CheckStateFlags:
 	anddi8 13520, 254
 	ldda8 a, 14099
 	and a, 0xC0
 	cps a, 0
-	jr z, LABEL_F61449
+	jr z, AccPlayback_CheckSkipInit
 	ordi8 13520, 1
-	calr LABEL_F6152F
+	calr AccPlayback_AdjustBeatPosition
 	calr AccPlayback_CalcTimingPosition
 	call AccPatch_GetCurrentSlotAddr
 	calr AccVoice_InitPatternBuffer
 	ordi8 58336, 16
 
-LABEL_F61449:
+AccPlayback_CheckSkipInit:
 	bitda 4, 13520
-	jr nz, LABEL_F6145E
+	jr nz, AccPlayback_ApplyChanges
 	bitda 0, 13520
-	jr nz, LABEL_F6145E
+	jr nz, AccPlayback_ApplyChanges
 	ldda8 a, 13605
 	cp a, 0xB6
-	jr z, LABEL_F61470
+	jr z, AccPlayback_CheckBit0_3
 
-LABEL_F6145E:
+AccPlayback_ApplyChanges:
 	anddi8 13520, 223
-	calr LABEL_F616D7
+	calr AccPlayback_ProcessStyleChanges
 	anddi8 13520, 254
 	anddi8 14099, 63
 
-LABEL_F61470:
+AccPlayback_CheckBit0_3:
 	ldda8 a, 14099
 	and a, 0x3
 	cps a, 0
-	jr z, LABEL_F61483
-	calr LABEL_F6171D
+	jr z, AccPlayback_ProcessMiscFlags
+	calr AccPlayback_ProcessPartChanges
 	anddi8 14099, 252
 
-LABEL_F61483:
+AccPlayback_ProcessMiscFlags:
 	ldda8 a, 14125
 	and a, 0x3F
 	cps a, 0
-	jr z, LABEL_F61496
+	jr z, AccPlayback_RunPeriodicTasks
 	calr LABEL_F62661
 	anddi8 14125, 192
 
-LABEL_F61496:
+AccPlayback_RunPeriodicTasks:
 	calr LABEL_F61D78
 	calr LABEL_F622FF
 	calr LABEL_F62504
 
-LABEL_F6149F:
+AccPlayback_Finalize:
 	calr LABEL_F62629
 	ret
 
-LABEL_F614A3:
+__pad_F614A3:
 	.byte 0x00, 0x00, 0x2b, 0xdb, 0xcc, 0xff, 0x0f, 0xdb
 	.byte 0xec, 0x04, 0x4b, 0x0e, 0x00, 0x00
 
@@ -16841,7 +16841,7 @@ ToneGen_CalcBufferAddr:
 	add xhl, 0x95C00
 	ret
 
-LABEL_F614C1:
+__pad_F614C1:
 	.byte 0x00, 0x00
 
 AccPlayback_CalcTimingPosition:
@@ -16850,15 +16850,15 @@ AccPlayback_CalcTimingPosition:
 	xor w, w
 	stda16 14106, xwa
 	calr LABEL_F62DB0
-	jr LABEL_F614E1
+	jr AccTiming_ComputeOffset
 	ldb a, 0x20
 	cpdi8 13563, 4
-	jr c, LABEL_F614DD
+	jr c, AccTiming_StorePartA
 
-LABEL_F614DD:
+AccTiming_StorePartA:
 	stda8 14108, a
 
-LABEL_F614E1:
+AccTiming_ComputeOffset:
 	ldda8 w, 13563
 	ldb a, 0x8
 	muls8rr a, w
@@ -16873,57 +16873,57 @@ LABEL_F614E1:
 	subda8 a, 14150
 	ldb w, 0x20
 	cpdi8 13529, 5
-	jr c, LABEL_F6150C
+	jr c, AccTiming_UseFullBar
 	ldb w, 0x40
 
-LABEL_F6150C:
+AccTiming_UseFullBar:
 	muls8rr a, w
 	add h, a
 	stda8 14095, h
-	jr LABEL_F61522
+	jr AccTiming_CompareStyles
 	cp h, 0x20
-	jr ule, LABEL_F6151E
+	jr ule, AccTiming_StoreResult
 	sub h, 0x20
 
-LABEL_F6151E:
+AccTiming_StoreResult:
 	stda8 14095, h
 
-LABEL_F61522:
+AccTiming_CompareStyles:
 	ldda8 a, 36150
 	cpda8 a, 36152
-	jr nz, LABEL_F6152C
+	jr nz, AccTiming_Return
 
-LABEL_F6152C:
+AccTiming_Return:
 	ret
 
-LABEL_F6152D:
+__pad_F6152D:
 	.byte 0x00, 0x00
 
-LABEL_F6152F:
+AccPlayback_AdjustBeatPosition:
 	ldda16 xwa, 14106
 	dec 1, a
 	bitda 7, 14099
-	jr z, LABEL_F61545
+	jr z, AccBeatAdj_CheckBit6
 	inc 1, a
 	cpda8 a, 13527
-	jr ule, LABEL_F61545
+	jr ule, AccBeatAdj_CheckBit6
 	ldb a, 0x0
 
-LABEL_F61545:
+AccBeatAdj_CheckBit6:
 	bitda 6, 14099
-	jr z, LABEL_F61556
+	jr z, AccBeatAdj_StoreAndClear
 	dec 1, a
 	cp a, 0xFF
-	jr nz, LABEL_F61556
+	jr nz, AccBeatAdj_StoreAndClear
 	ldda8 a, 13527
 
-LABEL_F61556:
+AccBeatAdj_StoreAndClear:
 	stda8 13562, a
 	stdi8 13564, 0
 	stdi8 13563, 0
 	ret
 
-LABEL_F61565:
+__pad_F61565:
 	.byte 0x00, 0x00
 
 AccVoice_InitPatternBuffer:
@@ -16977,19 +16977,19 @@ ToneGen_SkipToNoteEntry:
 	add xix, xhl
 	popw bc
 
-LABEL_F615D3:
+ToneGen_SkipLoop:
 	cps c, 0
-	jr z, LABEL_F615E5
+	jr z, ToneGen_ParseAllEvents
 	ld a, (xix)
 	cp a, 0x81
-	jr nz, LABEL_F615E0
+	jr nz, ToneGen_SkipLoop_ReadNext
 	dec 1, c
 
-LABEL_F615E0:
+ToneGen_SkipLoop_ReadNext:
 	calr ToneGen_ReadBufferWithIndirection
-	jr LABEL_F615D3
+	jr ToneGen_SkipLoop
 
-LABEL_F615E5:
+ToneGen_ParseAllEvents:
 	stdi8 13582, 0
 	ldda8 c, 14142
 	calr ToneGen_ParseEventBuffer
@@ -17004,10 +17004,10 @@ LABEL_F615E5:
 	calr ToneGen_ParseEventBuffer
 	ldda8 a, 36150
 	cpda8 a, 36152
-	jr nz, LABEL_F61621
+	jr nz, ToneGen_SaveRegsAndCall
 	stdi8 58336, 16
 
-LABEL_F61621:
+ToneGen_SaveRegsAndCall:
 	push xwa
 	push xhl
 	push xbc
@@ -17025,7 +17025,7 @@ LABEL_F61621:
 	pop xwa
 	ret
 
-LABEL_F61634:
+__pad_F61634:
 	.byte 0x00, 0x00
 
 ToneGen_ParseEventBuffer:
@@ -17033,19 +17033,19 @@ ToneGen_ParseEventBuffer:
 
 EventBuffer_ParseLoop:
 	cps c, 0
-	jr nz, LABEL_F61642
-	jrl LABEL_F616D4
+	jr nz, EventBuffer_ReadByte
+	jrl ToneGen_ParseEvent_Done
 
-LABEL_F61642:
+EventBuffer_ReadByte:
 	ld a, (xix)
 	cp a, 0x81
-	jr nz, LABEL_F61654
+	jr nz, EventBuffer_CheckNoteType
 	dec 1, c
 	incdi8 1, 13583
 	calr ToneGen_ReadBufferWithIndirection
 	jr EventBuffer_ParseLoop
 
-LABEL_F61654:
+EventBuffer_CheckNoteType:
 	cp a, 0x90
 	jr z, ToneGen_MapNoteToOctaveBitmask
 	cp a, 0x91
@@ -17078,11 +17078,11 @@ ToneGen_MapNoteToOctaveBitmask:
 	xor b, b
 	ld xix, 0xF616A1
 	ld_srib3 C, 0x07, 0xF0, 0xE4
-	jr LABEL_F616A9
+	jr ToneGen_MapNote_OrMask
 	; Bit mask lookup table (powers of 2):
 	.byte 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80
 
-LABEL_F616A9:
+ToneGen_MapNote_OrMask:
 	ldda8 l, 13583
 	xor h, h
 	ldda8 a, 13582
@@ -17098,13 +17098,13 @@ LABEL_F616A9:
 	calr ToneGen_ReadBufferWithIndirection
 	jrl EventBuffer_ParseLoop
 
-LABEL_F616D4:
+ToneGen_ParseEvent_Done:
 	ret
 
-LABEL_F616D5:
+__pad_F616D5:
 	.byte 0x00, 0x00
 
-LABEL_F616D7:
+AccPlayback_ProcessStyleChanges:
 	stdi8 14095, 1
 	stdi8 14098, 4
 	stdi8 14103, 255
@@ -17135,45 +17135,45 @@ LABEL_F616D7:
 	calr AccVoice_InitPatternBuffer
 	ret
 
-LABEL_F6171B:
+AccStyleChange_CheckPartCount:
 	.byte 0x00, 0x00
 
-LABEL_F6171D:
+AccPlayback_ProcessPartChanges:
 	anddi8 13602, 115
 	cpdi8 13564, 0
-	jr nz, LABEL_F6172E
+	jr nz, AccPartChange_Bit1
 	ordi8 13602, 4
 
-LABEL_F6172E:
+AccPartChange_Bit1:
 	bitda 0, 14099
-	jr nz, LABEL_F6173A
+	jr nz, AccPartChange_CheckBit2
 	calr LABEL_F6182B
 	jrl LABEL_F61803
 
-LABEL_F6173A:
+AccPartChange_CheckBit2:
 	bitda 5, 13520
-	jr z, LABEL_F61745
+	jr z, AccPartChange_Done
 	calr LABEL_F61AB1
-	jr LABEL_F6174C
+	jr AccPartChange_ProcessBit2
 
-LABEL_F61745:
+AccPartChange_Done:
 	call AccPatch_GetCurrentSlotAddr
 	calr ToneGen_ProcessVoiceSlots
 
-LABEL_F6174C:
+AccPartChange_ProcessBit2:
 	calr LABEL_F61B7A
 	cp bc, wa
-	jr ugt, LABEL_F61755
-	jr LABEL_F61760
+	jr ugt, AccPartChange_StoreResult
+	jr __pad_F61760
 
-LABEL_F61755:
+AccPartChange_StoreResult:
 	anddi8 13520, 223
 
 ToneGen_CalcAndRestart:
 	calr LABEL_F61BAD
 	jrl LABEL_F61803
 
-LABEL_F61760:
+__pad_F61760:
 	ldda16 xwa, 13419
 	stda16 13588, xwa
 	ldda16 xwa, 13385
