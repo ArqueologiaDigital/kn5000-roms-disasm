@@ -8068,10 +8068,10 @@ MidiChan_EnableAndReturn:
 MidiChan_CheckTimeout:
 	ldw de, 0x9C4
 	bitda 2, 48408
-	jr z, LABEL_FD70CD
+	jr z, MidiChan_ApplyTimeout
 	ldw de, 0x3E8
 
-LABEL_FD70CD:
+MidiChan_ApplyTimeout:
 	ldda16 xbc, 1033
 	sub bc, wa
 	cp bc, de
@@ -8894,33 +8894,33 @@ MidiPkt_ArpConfigChain_Data:
 MidiPkt_ArpChordHandler:
 	; --- Main: guard check, loop with bit 4 flag, multiple calls (76 bytes) ---
 	.byte 0xc1, 0x36, 0x8d, 0x3f, 0x57		; cp (0x8D36), 0x57  [C1 prefix]
-	jr nz, LABEL_FD7AF0
+	jr nz, ArpChord_ClearBitAndReturn
 	ldda32	xwa, 48300
 	lds	bc, 0
 	call SeqData_ReadFieldByIndex
 	cps	l, 7
-	jr c, LABEL_FD7AF0
+	jr c, ArpChord_ClearBitAndReturn
 	.byte 0xf1, 0x18, 0xbd, 0xbc			; set 4, (0xBD18)  [F1 prefix]
 	call MidiChan_ClearAllStates
-	jr t, LABEL_FD7AE0
-LABEL_FD7AC8:
+	jr t, ArpChord_DispatchAndLoop
+ArpChord_CheckPlaybackDone:
 	ldda32	xwa, 48300
 	lds	bc, 4
 	call SeqData_ReadFieldByIndex
 	cps	l, 0
-	jr z, LABEL_FD7ADC
+	jr z, ArpChord_ProcessAndDispatch
 	.byte 0xf1, 0x18, 0xbd, 0xb4			; res 4, (0xBD18)  [F1 prefix]
-	jr t, LABEL_FD7AE9
-LABEL_FD7ADC:
+	jr t, ArpChord_FinalizePass
+ArpChord_ProcessAndDispatch:
 	call SeqAlt_ProcessAndFinalize
-LABEL_FD7AE0:
+ArpChord_DispatchAndLoop:
 	calr MidiTable_DispatchHelper
 	.byte 0xf1, 0x18, 0xbd, 0xcc			; bit 4, (0xBD18)  [F1 prefix]
-	jr nz, LABEL_FD7AC8
-LABEL_FD7AE9:
+	jr nz, ArpChord_CheckPlaybackDone
+ArpChord_FinalizePass:
 	calr	1913
 	call MidiSeq_PartLookup_Data
-LABEL_FD7AF0:
+ArpChord_ClearBitAndReturn:
 	.byte 0xf1, 0x18, 0xbd, 0xb4			; res 4, (0xBD18)  [F1 prefix]
 	ret
 ; MIDI table dispatch helper
@@ -9626,25 +9626,25 @@ SoundMode_ResetAllParams:
 	stdi8 48384, 0
 	ret
 
-LABEL_FD84EE:
+SoundMode_ResetJump:
 	jr SoundMode_ResetAllParams
 
-LABEL_FD84F0:
-	jr LABEL_FD84EE
+SoundMode_ResetJump2:
+	jr SoundMode_ResetJump
 
-LABEL_FD84F2:
+SoundMode_RetStub_A:
 	ret
 
-LABEL_FD84F3:
+SoundMode_RetStub_B:
 	ret
 
-LABEL_FD84F4:
+SoundMode_RetStub_C:
 	ret
 
-LABEL_FD84F5:
+SoundMode_RetStub_D:
 	ret
 
-LABEL_FD84F6:
+SoundMode_ApplyVoiceParams:
 	lds wa, 2
 	ld xbc, 0xF980
 	call SysEx_ApplyVoiceParam_49
@@ -9655,25 +9655,25 @@ LABEL_FD84F6:
 	ld xwa, xbc
 	lda xbc, (xbc + 31)
 
-LABEL_FD8515:
+SoundMode_VoiceIterLoop:
 	stib_dpi 0xE0, 0x23
 	cp xwa, xbc
-	jr ule, LABEL_FD8515
+	jr ule, SoundMode_VoiceIterLoop
 	ret
 
-LABEL_FD851E:
+SoundMode_RetStub_E:
 	ret
 
-LABEL_FD851F:
+SoundMode_RetStub_F:
 	ret
 
-LABEL_FD8520:
+SoundMode_RetStub_G:
 	ret
 
-LABEL_FD8521:
+SoundMode_RetStub_H:
 	ret
 
-LABEL_FD8522:
+SoundMode_SysExConfig_Data:
 	.byte 0xf1, 0x50, 0xfd, 0xcc, 0xb0, 0xfe, 0xd8, 0xcc
 	.byte 0xff, 0x01, 0xf1, 0x5a, 0xfc, 0x31, 0xc9, 0x8f
 	.byte 0xb9, 0x08, 0x47, 0xb9, 0x09, 0x32, 0x82, 0x23
@@ -9686,7 +9686,7 @@ LABEL_FD8522:
 	.byte 0x3b, 0x3c, 0x3e, 0x1d, 0x18, 0xa3, 0xfc, 0x5e
 	.byte 0x5c, 0x5b, 0x5a, 0xf1, 0xf9, 0x90, 0xb4, 0x0e
 
-LABEL_FD857A:
+SoundMode_DispatchRender:
 	dec 2, xsp
 	ld (xsp), a
 	setda 0, 47086
@@ -9700,20 +9700,20 @@ LABEL_FD857A:
 	pop xhl
 	pop xde
 	cp (xsp), 0x2
-	jr z, LABEL_FD85A2
+	jr z, SoundMode_DispatchRender_2
 	cp (xsp), 0x1
-	jr z, LABEL_FD859D
+	jr z, SoundMode_DispatchRender_1
 	calr SoundMode_RenderWithNotify
-	jr LABEL_FD85A5
+	jr SoundMode_PostRender
 
-LABEL_FD859D:
+SoundMode_DispatchRender_1:
 	calr SoundMode_FullRenderUpdate
-	jr LABEL_FD85A5
+	jr SoundMode_PostRender
 
-LABEL_FD85A2:
-	calr LABEL_FD866D
+SoundMode_DispatchRender_2:
+	calr SoundMode_AlternateRender
 
-LABEL_FD85A5:
+SoundMode_PostRender:
 	call BitMapOut_ComputeRegionDelta
 	lda_24 xde, 0x03c8e4
 	ldada xbc, 63904
@@ -9726,17 +9726,17 @@ LABEL_FD85A5:
 	ld xwa, xbc
 	dec 1, xbc
 	or xwa, xwa
-	jr z, LABEL_FD85D7
+	jr z, SoundMode_CopyBitmapDone
 
-LABEL_FD85C9:
+SoundMode_CopyBitmapLoop:
 	ld_spiw WA, 0xE9
 	st_dpiw WA, 0xED
 	ld xwa, xbc
 	dec 1, xbc
 	or xwa, xwa
-	jr nz, LABEL_FD85C9
+	jr nz, SoundMode_CopyBitmapLoop
 
-LABEL_FD85D7:
+SoundMode_CopyBitmapDone:
 	resda 0, 47086
 	inc 2, xsp
 	ret
@@ -9751,24 +9751,24 @@ SoundMode_FullRenderUpdate:
 	pop xix
 	pop xhl
 	pop xde
-	calr LABEL_FD84F5
-	calr LABEL_FD87DC
-	calr LABEL_FD8520
-	calr LABEL_FD88A0
-	calr LABEL_FD88C6
-	calr LABEL_FD88EC
-	calr LABEL_FD8912
-	calr LABEL_FD8938
-	calr LABEL_FD8939
-	calr LABEL_FD895F
-	calr LABEL_FD8985
-	calr LABEL_FD89AB
-	calr LABEL_FD89D1
-	calr LABEL_FD89F7
-	calr LABEL_FD8A4E
+	calr SoundMode_RetStub_D
+	calr TGReg_WriteCC0_Volume
+	calr SoundMode_RetStub_G
+	calr TGReg_WriteCC3_Expression
+	calr TGReg_WriteCC4_Pan
+	calr TGReg_WriteCC5_Modulation
+	calr TGReg_WriteCC4_Sustain
+	calr TGReg_WriteCC6_RetStub
+	calr TGReg_WriteCC7_Reverb
+	calr TGReg_WriteCC8_Chorus
+	calr TGReg_WriteCC9_Variation
+	calr TGReg_WriteCC10_KeyShift
+	calr TGReg_WriteCC11_PartMode
+	calr SoundMode_SetReverbType
+	calr VoiceData_ZeroFillAll
 	calr SoundParam_ApplyBit15Toggle
-	calr LABEL_FD8AA3
-	calr LABEL_FD84F6
+	calr TGReg_WriteCC12_Assign
+	calr SoundMode_ApplyVoiceParams
 	jrl VoiceData_SyncAllToHardware
 
 SoundMode_RenderWithNotify:
@@ -9785,7 +9785,7 @@ SoundMode_RenderWithNotify:
 	cp a, 0x73
 	jr z, SoundMode_NotifyActiveVoices
 	cp a, 0x6F
-	jr nz, LABEL_FD865D
+	jr nz, SoundMode_RenderPopRegs
 
 SoundMode_NotifyActiveVoices:
 	ld xwa, 0x2201
@@ -9797,17 +9797,17 @@ SoundMode_NotifyActiveVoices:
 	lds de, 0
 	call SoundParam_NotifyChange
 
-LABEL_FD865D:
+SoundMode_RenderPopRegs:
 	pop xiz
 	pop xix
 	pop xhl
 	pop xde
-	calr LABEL_FD8A26
-	calr LABEL_FD8521
-	calr LABEL_FD8AA1
+	calr SoundMode_SetChorusType
+	calr SoundMode_RetStub_H
+	calr SoundParam_Bit15Jump
 	jrl VoiceData_SyncAllToHardware
 
-LABEL_FD866D:
+SoundMode_AlternateRender:
 	push xde
 	push xhl
 	push xix
@@ -9817,29 +9817,29 @@ LABEL_FD866D:
 	pop xix
 	pop xhl
 	pop xde
-	calr LABEL_FD84F5
-	calr LABEL_FD883E
-	calr LABEL_FD8521
-	calr LABEL_FD88A0
-	calr LABEL_FD88C6
-	calr LABEL_FD88EC
-	calr LABEL_FD8912
-	calr LABEL_FD8938
-	calr LABEL_FD8939
-	calr LABEL_FD895F
-	calr LABEL_FD8985
-	calr LABEL_FD89AB
-	calr LABEL_FD89D1
-	calr LABEL_FD8A4E
+	calr SoundMode_RetStub_D
+	calr TGReg_WriteCC0_AltMask
+	calr SoundMode_RetStub_H
+	calr TGReg_WriteCC3_Expression
+	calr TGReg_WriteCC4_Pan
+	calr TGReg_WriteCC5_Modulation
+	calr TGReg_WriteCC4_Sustain
+	calr TGReg_WriteCC6_RetStub
+	calr TGReg_WriteCC7_Reverb
+	calr TGReg_WriteCC8_Chorus
+	calr TGReg_WriteCC9_Variation
+	calr TGReg_WriteCC10_KeyShift
+	calr TGReg_WriteCC11_PartMode
+	calr VoiceData_ZeroFillAll
 	calr SoundParam_ApplyBit15Toggle
-	calr LABEL_FD84F6
+	calr SoundMode_ApplyVoiceParams
 	jrl VoiceData_SyncAllToHardware
-LABEL_FD86AC:
+MidiCtrl_ModeSwitchHandler:
 	cpdi8 49277, 3
 	ret nz
 	ldda8 a, 49279
 	bit 2, a
-	jr z, LABEL_FD86FF
+	jr z, MidiCtrl_CheckAltCommand
 	ldda8 a, 47086
 	bit 0, a
 	ret nz
@@ -9847,7 +9847,7 @@ LABEL_FD86AC:
 	stda8 47086, a
 	ldda16 xwa, 4597
 	bit 15, wa
-	jr nz, LABEL_FD86E5
+	jr nz, MidiCtrl_ApplyModeSwitch
 	push xde
 	push xhl
 	push xix
@@ -9859,18 +9859,18 @@ LABEL_FD86AC:
 	pop xhl
 	pop xde
 
-LABEL_FD86E5:
+MidiCtrl_ApplyModeSwitch:
 	ldda8 a, 49278
 	extz wa
 	calr MidiCtrl_Bit2ToChannel
 	ldda8 a, 49278
 	extz wa
 	calr MidiCtrl_SendControlPacket
-	calr LABEL_FD870E
+	calr MidiCtrl_FullReconfigure
 	resda 0, 47086
 	ret
 
-LABEL_FD86FF:
+MidiCtrl_CheckAltCommand:
 	cpdi8 49278, 4
 	ret nz
 	cps a, 0
@@ -9878,7 +9878,7 @@ LABEL_FD86FF:
 	calr SwbtWr_InitAndWriteAllBlocks
 	ret
 
-LABEL_FD870E:
+MidiCtrl_FullReconfigure:
 	push_werp 0xFA
 	push xde
 	push xhl
@@ -9893,27 +9893,27 @@ LABEL_FD870E:
 	ldda8 a, 64607
 	ldfr_berp A, 0xFB
 	bitda 2, 49278
-	jr z, LABEL_FD874E
-	calr LABEL_FD851E
+	jr z, MidiCtrl_RenderAndProcess
+	calr SoundMode_RetStub_E
 	calr SoundMode_FullRenderUpdate
 	bitda 0, 4330
 	jr nz, SoundMode_ProcessToneAndParams
 	ldda8 a, 36150
 	cp a, 0x76
-	jr ugt, LABEL_FD8748
+	jr ugt, MidiCtrl_DeltaAndProcess
 	cp a, 0x6C
 	jr nc, SoundMode_ProcessToneAndParams
 
-LABEL_FD8748:
+MidiCtrl_DeltaAndProcess:
 	call BitMapOut_ComputeRegionDelta
 	jr SoundMode_ProcessToneAndParams
 
-LABEL_FD874E:
+MidiCtrl_RenderAndProcess:
 	calr SoundMode_RenderWithNotify
-	calr LABEL_FD851F
+	calr SoundMode_RetStub_F
 
 SoundMode_ProcessToneAndParams:
-	calr LABEL_FD87C7
+	calr TGReg_ClearTerminator
 	push xde
 	push xhl
 	push xix
@@ -9956,7 +9956,7 @@ SoundMode_ProcessToneAndParams:
 	pop_werp 0xFA
 	ret
 
-LABEL_FD87C7:
+TGReg_ClearTerminator:
 	ldada xwa, 63926
 	sub xwa, 0xF9B4
 	lda_24 xbc, 0x03c8e4
@@ -9964,12 +9964,12 @@ LABEL_FD87C7:
 	ld (xwa), 0xFF
 	ret
 
-LABEL_FD87DC:
+TGReg_WriteCC0_Volume:
 	dec 4, xsp
 	ld (xsp + 256), 0x0
-	jr LABEL_FD8806
+	jr TGReg_WriteCC0_Check
 
-LABEL_FD87E4:
+TGReg_WriteCC0_Body:
 	ld (xbc), 0x0
 	ld (xde), 0x0
 	ld (xhl), 0xFF
@@ -9981,13 +9981,13 @@ LABEL_FD87E4:
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD8806:
+TGReg_WriteCC0_Check:
 	lda xwa, (xsp)
 	lda xbc, (xwa + 1)
 	lda xde, (xwa + 2)
 	lda xhl, (xwa + 3)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD87E4
+	jr ule, TGReg_WriteCC0_Body
 	ld (xwa), 0xF
 	ld (xbc), 0x0
 	ld (xde), 0x0
@@ -10002,12 +10002,12 @@ LABEL_FD8806:
 	inc 4, xsp
 	ret
 
-LABEL_FD883E:
+TGReg_WriteCC0_AltMask:
 	dec 4, xsp
 	ld (xsp + 256), 0x0
-	jr LABEL_FD8868
+	jr TGReg_WriteCC0_AltCheck
 
-LABEL_FD8846:
+TGReg_WriteCC0_AltBody:
 	ld (xbc), 0x0
 	ld (xde), 0x0
 	ld (xhl), 0xFF
@@ -10019,13 +10019,13 @@ LABEL_FD8846:
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD8868:
+TGReg_WriteCC0_AltCheck:
 	lda xwa, (xsp)
 	lda xbc, (xwa + 1)
 	lda xde, (xwa + 2)
 	lda xhl, (xwa + 3)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD8846
+	jr ule, TGReg_WriteCC0_AltBody
 	ld (xwa), 0xF
 	ld (xbc), 0x0
 	ld (xde), 0xF0
@@ -10040,259 +10040,259 @@ LABEL_FD8868:
 	inc 4, xsp
 	ret
 
-LABEL_FD88A0:
+TGReg_WriteCC3_Expression:
 	dec 4, xsp
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x3
 	ld (xwa + 2), 0x64
 	ld (xwa + 3), 0x7F
 	ld (xwa), 0x0
-	jr LABEL_FD88BC
+	jr TGReg_WriteCC3_Check
 
-LABEL_FD88B5:
+TGReg_WriteCC3_Body:
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD88BC:
+TGReg_WriteCC3_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD88B5
+	jr ule, TGReg_WriteCC3_Body
 	inc 4, xsp
 	ret
 
-LABEL_FD88C6:
+TGReg_WriteCC4_Pan:
 	dec 4, xsp
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x4
 	ld (xwa + 2), 0x0
 	ld (xwa + 3), 0x8
 	ld (xwa), 0x0
-	jr LABEL_FD88E2
+	jr TGReg_WriteCC4_Check
 
-LABEL_FD88DB:
+TGReg_WriteCC4_Body:
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD88E2:
+TGReg_WriteCC4_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD88DB
+	jr ule, TGReg_WriteCC4_Body
 	inc 4, xsp
 	ret
 
-LABEL_FD88EC:
+TGReg_WriteCC5_Modulation:
 	dec 4, xsp
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x5
 	ld (xwa + 2), 0x0
 	ld (xwa + 3), 0x7F
 	ld (xwa), 0x0
-	jr LABEL_FD8908
+	jr TGReg_WriteCC5_Check
 
-LABEL_FD8901:
+TGReg_WriteCC5_Body:
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD8908:
+TGReg_WriteCC5_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD8901
+	jr ule, TGReg_WriteCC5_Body
 	inc 4, xsp
 	ret
 
-LABEL_FD8912:
+TGReg_WriteCC4_Sustain:
 	dec 4, xsp
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x4
 	ld (xwa + 2), 0x0
 	ld (xwa + 3), 0x40
 	ld (xwa), 0x0
-	jr LABEL_FD892E
+	jr TGReg_WriteCC4_SustainCheck
 
-LABEL_FD8927:
+TGReg_WriteCC4_SustainBody:
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD892E:
+TGReg_WriteCC4_SustainCheck:
 	lda xwa, (xsp)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD8927
+	jr ule, TGReg_WriteCC4_SustainBody
 	inc 4, xsp
 	ret
 
-LABEL_FD8938:
+TGReg_WriteCC6_RetStub:
 	ret
 
-LABEL_FD8939:
+TGReg_WriteCC7_Reverb:
 	dec 4, xsp
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x7
 	ld (xwa + 2), 0x28
 	ld (xwa + 3), 0x7F
 	ld (xwa), 0x0
-	jr LABEL_FD8955
+	jr TGReg_WriteCC7_Check
 
-LABEL_FD894E:
+TGReg_WriteCC7_Body:
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD8955:
+TGReg_WriteCC7_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD894E
+	jr ule, TGReg_WriteCC7_Body
 	inc 4, xsp
 	ret
 
-LABEL_FD895F:
+TGReg_WriteCC8_Chorus:
 	dec 4, xsp
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x8
 	ld (xwa + 2), 0x40
 	ld (xwa + 3), 0x7F
 	ld (xwa), 0x0
-	jr LABEL_FD897B
+	jr TGReg_WriteCC8_Check
 
-LABEL_FD8974:
+TGReg_WriteCC8_Body:
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD897B:
+TGReg_WriteCC8_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD8974
+	jr ule, TGReg_WriteCC8_Body
 	inc 4, xsp
 	ret
 
-LABEL_FD8985:
+TGReg_WriteCC9_Variation:
 	dec 4, xsp
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x9
 	ld (xwa + 2), 0x40
 	ld (xwa + 3), 0x7F
 	ld (xwa), 0x0
-	jr LABEL_FD89A1
+	jr TGReg_WriteCC9_Check
 
-LABEL_FD899A:
+TGReg_WriteCC9_Body:
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD89A1:
+TGReg_WriteCC9_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD899A
+	jr ule, TGReg_WriteCC9_Body
 	inc 4, xsp
 	ret
 
-LABEL_FD89AB:
+TGReg_WriteCC10_KeyShift:
 	dec 4, xsp
 	lda xwa, (xsp)
 	ld (xwa + 1), 0xA
 	ld (xwa + 2), 0x80
 	ld (xwa + 3), 0xFF
 	ld (xwa), 0x0
-	jr LABEL_FD89C7
+	jr TGReg_WriteCC10_Check
 
-LABEL_FD89C0:
+TGReg_WriteCC10_Body:
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD89C7:
+TGReg_WriteCC10_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD89C0
+	jr ule, TGReg_WriteCC10_Body
 	inc 4, xsp
 	ret
 
-LABEL_FD89D1:
+TGReg_WriteCC11_PartMode:
 	dec 4, xsp
 	lda xwa, (xsp)
 	ld (xwa + 1), 0xB
 	ld (xwa + 2), 0x2
 	ld (xwa + 3), 0x7F
 	ld (xwa), 0x0
-	jr LABEL_FD89ED
+	jr TGReg_WriteCC11_Check
 
-LABEL_FD89E6:
+TGReg_WriteCC11_Body:
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD89ED:
+TGReg_WriteCC11_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD89E6
+	jr ule, TGReg_WriteCC11_Body
 	inc 4, xsp
 	ret
 
-LABEL_FD89F7:
+SoundMode_SetReverbType:
 	ld8_24 a, 0x0340f8
 	cps a, 3
-	jr z, LABEL_FD8A1D
+	jr z, SoundMode_ReverbType3
 	cps a, 2
-	jr z, LABEL_FD8A16
+	jr z, SoundMode_ReverbType2
 	cps a, 1
-	jr z, LABEL_FD8A0F
+	jr z, SoundMode_ReverbType1
 	stdi8 47084, 128
 	jr SoundParam_SyncAndReturn
 
-LABEL_FD8A0F:
+SoundMode_ReverbType1:
 	stdi8 47084, 155
 	jr SoundParam_SyncAndReturn
 
-LABEL_FD8A16:
+SoundMode_ReverbType2:
 	stdi8 47084, 156
 	jr SoundParam_SyncAndReturn
 
-LABEL_FD8A1D:
+SoundMode_ReverbType3:
 	stdi8 47084, 157
 
 SoundParam_SyncAndReturn:
 	jp SndParam_ApplyAndSync
 
-LABEL_FD8A26:
+SoundMode_SetChorusType:
 	ld8_24 a, 0x0340f9
 	cps a, 3
-	jr z, LABEL_FD8A45
+	jr z, SoundMode_ChorusType3
 	cps a, 2
-	jr z, LABEL_FD8A3E
+	jr z, SoundMode_ChorusType2
 	cps a, 1
 	ret nz
 	stdi8 47084, 91
-	jr LABEL_FD8A4A
+	jr SoundMode_ChorusSyncAndRet
 
-LABEL_FD8A3E:
+SoundMode_ChorusType2:
 	stdi8 47084, 92
-	jr LABEL_FD8A4A
+	jr SoundMode_ChorusSyncAndRet
 
-LABEL_FD8A45:
+SoundMode_ChorusType3:
 	stdi8 47084, 93
 
-LABEL_FD8A4A:
+SoundMode_ChorusSyncAndRet:
 	jp SndParam_ApplyAndSync
 
-LABEL_FD8A4E:
+VoiceData_ZeroFillAll:
 	lda_24 xbc, 0xee2f36
 	ld xwa, xbc
 	lda xbc, (xbc + 64)
 
-LABEL_FD8A58:
+VoiceData_ZeroFillOuter:
 	ld xhl, (xwa)
 	ld d, (xhl - 1)
 	ld e, d
 	dec 1, d
 	cps e, 0
-	jr z, LABEL_FD8A71
+	jr z, VoiceData_ZeroFillNext
 
-LABEL_FD8A65:
+VoiceData_ZeroFillInner:
 	stib_dpi 0xEC, 0x00
 	ld e, d
 	dec 1, d
 	cps e, 0
-	jr nz, LABEL_FD8A65
+	jr nz, VoiceData_ZeroFillInner
 
-LABEL_FD8A71:
+VoiceData_ZeroFillNext:
 	inc 4, xwa
 	cp xwa, xbc
-	jr c, LABEL_FD8A58
+	jr c, VoiceData_ZeroFillOuter
 	ret
 
 SoundParam_ApplyBit15Toggle:
@@ -10312,25 +10312,25 @@ SoundParam_ApplyBit15Toggle:
 	ld (xde), c
 	ret
 
-LABEL_FD8AA1:
+SoundParam_Bit15Jump:
 	jr SoundParam_ApplyBit15Toggle
 
-LABEL_FD8AA3:
+TGReg_WriteCC12_Assign:
 	dec 4, xsp
 	ld (xsp + 256), 0x0
-	jr LABEL_FD8ABE
+	jr TGReg_WriteCC12_Check
 
-LABEL_FD8AAB:
+TGReg_WriteCC12_Body:
 	ld (xwa + 1), 0xC
 	ld (xwa + 2), 0x0
 	ld (xwa + 3), 0x10
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
-LABEL_FD8ABE:
+TGReg_WriteCC12_Check:
 	lda xwa, (xsp)
 	cp (xwa), 0xF
-	jr ule, LABEL_FD8AAB
+	jr ule, TGReg_WriteCC12_Body
 	inc 4, xsp
 	ret
 
@@ -10547,14 +10547,14 @@ VoiceData_SyncLoop:
 	ld (xbc), a
 	ldada xwa, 64623
 	cpdi8 36468, 0
-	jr z, LABEL_FD8C8F
+	jr z, VoiceSync_ClearBit5
 	setm 5, (xwa)
-	jr LABEL_FD8C91
+	jr VoiceSync_PopReturn
 
-LABEL_FD8C8F:
+VoiceSync_ClearBit5:
 	resm 5, (xwa)
 
-LABEL_FD8C91:
+VoiceSync_PopReturn:
 	popw iz
 	ret
 
@@ -10788,7 +10788,7 @@ SeqData_FormatOutput_CaseA:
 	cp de, 0x012C
 	ret	ugt
 	ld wa, de
-	call LABEL_FD8522
+	call SoundMode_SysExConfig_Data
 	calr SeqData_FormatOutput_CaseB
 	ret
 SeqData_FormatOutput_CaseB:

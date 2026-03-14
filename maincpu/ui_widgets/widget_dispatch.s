@@ -5781,7 +5781,7 @@ UIState_ConfigA_101:
 	.fill 1, 1, 0xff
 	.byte 0xff, 0xff, 0xff
 UIState_ConfigA_102:
-	.long LABEL_FD86AC
+	.long MidiCtrl_ModeSwitchHandler
 	.byte 0xff
 	.fill 3, 1, 0xff
 UIState_ConfigA_103:

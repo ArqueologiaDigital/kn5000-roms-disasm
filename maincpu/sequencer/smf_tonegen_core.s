@@ -206,7 +206,7 @@ FloppyIO_SelectReadMode_ModeDefault:
 	ldb a, 0x1
 
 FloppyIO_SelectReadMode_Dispatch:
-	call LABEL_FD857A
+	call SoundMode_DispatchRender
 	pop xiz
 	pop xiy
 	pop xix
