@@ -1200,7 +1200,7 @@ NakaGroup_RealtimeRecording_Controls:
 	.byte 0x00, 0x00
 	.byte 0x02, 0x00, 0x04, 0x00, 0xff, 0xff, 0x08, 0x00
 	.byte 0x34, 0x00
-	.long LABEL_E20030
+	.long SepaOut_LayoutParams_1
 	.long LABEL_F700BB
 	.byte 0xc1, 0x00
 NakaNode_RealtimeRecording_StatusLine:

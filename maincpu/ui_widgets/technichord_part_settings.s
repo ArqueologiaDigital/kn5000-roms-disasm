@@ -2975,24 +2975,24 @@ Naka_SoftVersion_ScrollMeta:
 Naka_SoundSelect_Table:
 	.long LABEL_E818B0
 	.long LABEL_E818E6
-	.long LABEL_E8190A
-	.long LABEL_E81926
-	.long LABEL_E81942
-	.long LABEL_E8195C
-	.long LABEL_E81976
-	.long LABEL_E8199A
-	.long LABEL_E819DE
-	.long LABEL_E81A1A
-	.long LABEL_E81A5E
-	.long LABEL_E81AA0
-	.long LABEL_E81AEA
-	.long LABEL_E81B28
-	.long LABEL_E81B68
-	.long LABEL_E81BAA
-	.long LABEL_E81BF2
-	.long LABEL_E81C34
-	.long LABEL_E81C58
-	.long LABEL_E81C98
+	.long NakaWidget_SoundMenu_ScrollBar1
+	.long NakaWidget_SoundMenu_ScrollBar2
+	.long NakaWidget_SoundMenu_ListBox
+	.long NakaWidget_SoundMenu_ValueEdit
+	.long NakaWidget_SoundMenu_PageControl
+	.long NakaMenuItem_PartSetting
+	.long NakaMenuItem_Mixer
+	.long NakaMenuItem_MasterTuning
+	.long NakaMenuItem_KeyScaling
+	.long NakaMenuItem_ReverbEqPresets
+	.long NakaMenuItem_Reverb
+	.long NakaMenuItem_Equalizer
+	.long NakaMenuItem_DspEffect
+	.long NakaMenuItem_AcousticIllusion
+	.long NakaWidget_SoundEdit
+	.long NakaWidget_SoundMenu_PageControl2
+	.long NakaMenuItem_LeftHold
+	.long NakaMenuItem_TechniChord
 	.byte 0x00, 0x00, 0x00, 0x00, 0xdc, 0x1c, 0xe8, 0x00
 Naka_SoundDemo_Table:
 	.long Naka_SndPartSet_Item01

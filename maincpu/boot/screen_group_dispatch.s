@@ -7,7 +7,7 @@
 ; called during display mode transitions.
 ; =============================================================================
 
-LABEL_FDDB2E:
+ScreenGroup_ReInit:
 	call MidiParam_ForceResync
 	call Audio_UpdateLEDsAndChannels
 	call Reset_Floppy_Disk_Controller
@@ -39,13 +39,13 @@ ScreenGroup_DispatchAlt:
 	push xiz
 	ld iz, wa	; Screen group ID
 	cps iz, 0
-	jr nz, LABEL_FDDB55
-	call LABEL_FDDB9B	; Initialize screen state
+	jr nz, ScreenGroup_SetupWidgetPtr
+	call ScreenGroup_InitState	; Initialize screen state
 	call TmFlash_CopyToExtMem
 
-LABEL_FDDB55:
+ScreenGroup_SetupWidgetPtr:
 	ldi_werp 0xFA, 0
-	jr LABEL_FDDB7D
+	jr ScreenGroup_WidgetLoop
 
 ; Voice initialization dispatch
 VoiceInit_Dispatch:
@@ -65,7 +65,7 @@ VoiceInit_Dispatch:
 	pop xiz
 	inc1_werp 0xFA
 
-LABEL_FDDB7D:
+ScreenGroup_WidgetLoop:
 	ldto_werp WA, 0xFA
 	extz xwa
 	sll xwa, 2
@@ -79,7 +79,7 @@ LABEL_FDDB7D:
 	pop xiz
 	ret
 
-LABEL_FDDB9B:
+ScreenGroup_InitState:
 	ldada xbc, 49662
 	ld (xbc), 0x1
 	ld (xbc + 1), 0xFF
@@ -107,9 +107,9 @@ LABEL_FDDB9B:
 	anddi8 49877, 1
 	lds de, 0
 	cp de, 0x20
-	jrl ge, LABEL_FDDCCB
+	jrl ge, ScreenGroup_InitParams16
 
-LABEL_FDDC1B:
+ScreenGroup_InitVoiceLoop:
 	ld wa, de
 	inc 4, wa
 	stib_dri 0x07, 0xE4, 0xE0, 0xFF
@@ -161,14 +161,14 @@ LABEL_FDDC1B:
 	andmi8 (xwa + 1), 0xF
 	inc 1, de
 	cp de, 0x20
-	jrl lt, LABEL_FDDC1B
+	jrl lt, ScreenGroup_InitVoiceLoop
 
-LABEL_FDDCCB:
+ScreenGroup_InitParams16:
 	lds de, 0
 	cp de, 0x10
-	jr ge, LABEL_FDDCFF
+	jr ge, ScreenGroup_InitParams8
 
-LABEL_FDDCD3:
+ScreenGroup_InitParam16Loop:
 	ld wa, de
 	add wa, 0x84
 	stib_dri 0x07, 0xE4, 0xE0, 0xFF
@@ -180,14 +180,14 @@ LABEL_FDDCD3:
 	stib_dri 0x07, 0xE4, 0xE0, 0xFF
 	inc 1, de
 	cp de, 0x10
-	jr lt, LABEL_FDDCD3
+	jr lt, ScreenGroup_InitParam16Loop
 
-LABEL_FDDCFF:
+ScreenGroup_InitParams8:
 	lds de, 0
 	cp de, 0x8
-	jr ge, LABEL_FDDD27
+	jr ge, ScreenGroup_InitParams8Complex
 
-LABEL_FDDD07:
+ScreenGroup_InitParam8Loop:
 	ld wa, de
 	add wa, 0xB4
 	stib_dri 0x07, 0xE4, 0xE0, 0xFF
@@ -196,14 +196,14 @@ LABEL_FDDD07:
 	stib_dri 0x07, 0xE4, 0xE0, 0xFF
 	inc 1, de
 	cp de, 0x8
-	jr lt, LABEL_FDDD07
+	jr lt, ScreenGroup_InitParam8Loop
 
-LABEL_FDDD27:
+ScreenGroup_InitParams8Complex:
 	lds de, 0
 	cp de, 0x8
-	jr ge, LABEL_FDDD87
+	jr ge, ScreenGroup_FinalInit
 
-LABEL_FDDD2F:
+ScreenGroup_InitParam8ComplexLoop:
 	ld wa, de
 	sla wa, 2
 	add wa, 0xC4
@@ -232,9 +232,9 @@ LABEL_FDDD2F:
 	andmi8 (xwa + 3), 0x1
 	inc 1, de
 	cp de, 0x8
-	jr lt, LABEL_FDDD2F
+	jr lt, ScreenGroup_InitParam8ComplexLoop
 
-LABEL_FDDD87:
+ScreenGroup_FinalInit:
 	ld (xbc), 0x1
 	ld (xbc + 4), 0x0
 	ld xiy, 0xC1FE
@@ -243,9 +243,9 @@ LABEL_FDDD87:
 	ldirw
 	lds de, 0
 	cp de, 0xA1
-	jr ge, LABEL_FDDDCB
+	jr ge, ScreenGroup_InitFinalize
 
-LABEL_FDDDA5:
+ScreenGroup_InitWordPairsLoop:
 	ld wa, de
 	add wa, wa
 	ldada xbc, 50730
@@ -260,9 +260,9 @@ LABEL_FDDDA5:
 	ld (xwa), 0x0
 	inc 1, de
 	cp de, 0xA1
-	jr lt, LABEL_FDDDA5
+	jr lt, ScreenGroup_InitWordPairsLoop
 
-LABEL_FDDDCB:
+ScreenGroup_InitFinalize:
 	stdi8 51818, 8
 	stdi8 51819, 0
 	stdi8 51820, 8

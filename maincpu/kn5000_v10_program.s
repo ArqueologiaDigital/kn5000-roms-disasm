@@ -1066,53 +1066,53 @@ RESOURCE_INFO_HANDLER_OFFSETS:
 	.short LABEL_F1EB1A - RESOURCE_INFO_HANDLERS
 	.short LABEL_F1EAAF - RESOURCE_INFO_HANDLERS
 
-LABEL_E1FFE6:
+SepaOut_Config_0:
 	.short 0xB0
 	.short 0x19B
 
-LABEL_E1FFEA:
+SepaOut_Config_1:
 	.short 0xB0
 	.short 0x209B
 
-LABEL_E1FFEE:
+SepaOut_Config_2:
 	.short 0xB0
 	.short 0x9D
 
-LABEL_E1FFF2:
+SepaOut_Config_3:
 	.short 0xB0
 	.short 0x19D
 
-LABEL_E1FFF6:
+SepaOut_Config_4:
 	.short 0xB0
 	.short 0x29D
 
-LABEL_E1FFFA:
+SepaOut_LayoutParams_0:
 	.byte 0x00, 0x00, 0x0e, 0x00, 0x1a, 0x00
 	.byte 0x1a
-LABEL_E20001:
+SepaOut_LayoutByte_0:
 	.byte 0x00
-LABEL_E20002:
+SepaOut_LayoutByte_1:
 	.byte 0x1a
-LABEL_E20003:
+SepaOut_LayoutByte_2:
 	.byte 0x00
-LABEL_E20004:
+SepaOut_LayoutByte_3:
 	.byte 0x1a
-LABEL_E20005:
+SepaOut_LayoutByte_4:
 	.byte 0x00
-LABEL_E20006:
+SepaOut_LayoutByte_5:
 	.byte 0x00, 0x00
 	.byte 0x0e, 0x00, 0x1a, 0x00, 0x1a, 0x00, 0x1a, 0x00
 	.byte 0x1a, 0x00, 0x00, 0x00, 0x33, 0x00, 0xa3, 0x00
 	.byte 0x4c, 0x00, 0xa3, 0x00, 0xa3, 0x00, 0x00, 0x00
 	.byte 0x3e, 0x00, 0x60, 0x00, 0x60, 0x00, 0x60, 0x00
 	.byte 0x60, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01
-LABEL_E20030:
+SepaOut_LayoutParams_1:
 	.byte 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00
 	.byte 0x0c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0e, 0x00
 	.byte 0x5a, 0x00, 0x5a, 0x00, 0x5a, 0x00, 0x5a, 0x00
 	.byte 0x00, 0x00, 0x0e, 0x00, 0x5a, 0x00, 0x5a, 0x00
 	.byte 0x5a, 0x00, 0x5a, 0x00, 0x01, 0x00, 0x02, 0x00
-LABEL_E20058:
+SepaOut_BitMaskTable:
 	.byte 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20, 0x00
 	.byte 0x40, 0x00, 0x80, 0x00, 0x00, 0x01, 0x00, 0x02
 	.byte 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20
@@ -1132,7 +1132,7 @@ LABEL_E20058:
 	.byte 0x74, 0x00, 0x00, 0x00, 0x28, 0x00, 0x81, 0x00
 	.byte 0x81, 0x00, 0x81, 0x00, 0x81, 0x00, 0x00, 0x00
 	.byte 0x49, 0x00, 0xa7, 0x00, 0x5a
-LABEL_E200ED:
+SepaOut_FormatData_Tail:
 	.byte 0x00, 0xa7, 0x00
 	.byte 0xa7, 0x00
 	aligned_string "%2d : %s"
@@ -1209,7 +1209,7 @@ LABEL_E200ED:
 	.byte 0xc5, 0xb3, 0xf2, 0x00, 0xb4, 0xb4, 0xf2, 0x00
 	.byte 0x3c, 0xd0, 0xf2, 0x00, 0x1a, 0xd2, 0xf2, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xfc, 0x06, 0xe2, 0x00
-LABEL_E20320:
+DbgStr_NakaProcName_Table:
 	.long DbgStr_AfterLangCheck
 	.long DbgStr_TrAsPreLangCheck
 	.long DbgStr_AtentionLangCheck
@@ -1235,48 +1235,48 @@ LABEL_E20320:
 	.long DbgStr_DPPauseDspCheck
 	.long DbgStr_MeasureBoxProc
 	.long DbgStr_MeasureBoxFunc
-	.long LABEL_E20550
-	.long LABEL_E2053A
-	.long LABEL_E20526
-	.long LABEL_E20514
-	.long LABEL_E204FE
-	.long LABEL_E204E8
-	.long LABEL_E204D4
-	.long LABEL_E204C2
-	.long LABEL_E204B0
-	.long LABEL_E2049A
-	.long LABEL_E20484
-	.long LABEL_E20472
-	.long LABEL_E20460
-	.long LABEL_E2044C
-	.long LABEL_E2043E
-	.long LABEL_E2042C
-	.long LABEL_E2041C
-	.long LABEL_E20406
-	.long LABEL_E203EE
-	.long LABEL_E203DA
-	.long LABEL_E203D8
-LABEL_E203D8:			aligned_string ""
-LABEL_E203DA:			aligned_string "IvExitModeTrSelProc"
-LABEL_E203EE:			aligned_string "AcDemoMedleyDispBoxProc"
-LABEL_E20406:			aligned_string "ComporserNameBoxProc"
-LABEL_E2041C:			aligned_string "SongNameBoxProc"
-LABEL_E2042C:			aligned_string "LyricsBoxFuncProc"
-LABEL_E2043E:			aligned_string "LyricsBoxProc"
-LABEL_E2044C:			aligned_string "AcMuteToggleBoxProc"
-LABEL_E20460:			aligned_string "AcTrAsGridBoxProc"
-LABEL_E20472:			aligned_string "AcDemoSongBoxProc"
-LABEL_E20484:			aligned_string "AcCurSongNameBoxProc"
-LABEL_E2049A:			aligned_string "AcCurrentSongBoxProc"
-LABEL_E204B0:			aligned_string "AcModeSelBoxProc"
-LABEL_E204C2:			aligned_string "IvNamingExitProc"
-LABEL_E204D4:			aligned_string "AcPDSongNameBoxProc"
-LABEL_E204E8:			aligned_string "AcDocSongNameBoxProc"
-LABEL_E204FE:			aligned_string "AcSmfSongNameBoxProc"
-LABEL_E20514:			aligned_string "AcPDFileNoBoxProc"
-LABEL_E20526:			aligned_string "AcDocFileNoBoxProc"
-LABEL_E2053A:			aligned_string "AcSmfFileNameBoxProc"
-LABEL_E20550:			aligned_string "AcDiskFileNameBoxProc"
+	.long DbgStr_AcDiskFileNameBoxProc
+	.long DbgStr_AcSmfFileNameBoxProc
+	.long DbgStr_AcDocFileNoBoxProc
+	.long DbgStr_AcPDFileNoBoxProc
+	.long DbgStr_AcSmfSongNameBoxProc
+	.long DbgStr_AcDocSongNameBoxProc
+	.long DbgStr_AcPDSongNameBoxProc
+	.long DbgStr_IvNamingExitProc
+	.long DbgStr_AcModeSelBoxProc
+	.long DbgStr_AcCurrentSongBoxProc
+	.long DbgStr_AcCurSongNameBoxProc
+	.long DbgStr_AcDemoSongBoxProc
+	.long DbgStr_AcTrAsGridBoxProc
+	.long DbgStr_AcMuteToggleBoxProc
+	.long DbgStr_LyricsBoxProc
+	.long DbgStr_LyricsBoxFuncProc
+	.long DbgStr_SongNameBoxProc
+	.long DbgStr_ComporserNameBoxProc
+	.long DbgStr_AcDemoMedleyDispBoxProc
+	.long DbgStr_IvExitModeTrSelProc
+	.long DbgStr_EmptyProc
+DbgStr_EmptyProc:			aligned_string ""
+DbgStr_IvExitModeTrSelProc:			aligned_string "IvExitModeTrSelProc"
+DbgStr_AcDemoMedleyDispBoxProc:			aligned_string "AcDemoMedleyDispBoxProc"
+DbgStr_ComporserNameBoxProc:			aligned_string "ComporserNameBoxProc"
+DbgStr_SongNameBoxProc:			aligned_string "SongNameBoxProc"
+DbgStr_LyricsBoxFuncProc:			aligned_string "LyricsBoxFuncProc"
+DbgStr_LyricsBoxProc:			aligned_string "LyricsBoxProc"
+DbgStr_AcMuteToggleBoxProc:			aligned_string "AcMuteToggleBoxProc"
+DbgStr_AcTrAsGridBoxProc:			aligned_string "AcTrAsGridBoxProc"
+DbgStr_AcDemoSongBoxProc:			aligned_string "AcDemoSongBoxProc"
+DbgStr_AcCurSongNameBoxProc:			aligned_string "AcCurSongNameBoxProc"
+DbgStr_AcCurrentSongBoxProc:			aligned_string "AcCurrentSongBoxProc"
+DbgStr_AcModeSelBoxProc:			aligned_string "AcModeSelBoxProc"
+DbgStr_IvNamingExitProc:			aligned_string "IvNamingExitProc"
+DbgStr_AcPDSongNameBoxProc:			aligned_string "AcPDSongNameBoxProc"
+DbgStr_AcDocSongNameBoxProc:			aligned_string "AcDocSongNameBoxProc"
+DbgStr_AcSmfSongNameBoxProc:			aligned_string "AcSmfSongNameBoxProc"
+DbgStr_AcPDFileNoBoxProc:			aligned_string "AcPDFileNoBoxProc"
+DbgStr_AcDocFileNoBoxProc:			aligned_string "AcDocFileNoBoxProc"
+DbgStr_AcSmfFileNameBoxProc:			aligned_string "AcSmfFileNameBoxProc"
+DbgStr_AcDiskFileNameBoxProc:			aligned_string "AcDiskFileNameBoxProc"
 DbgStr_MeasureBoxFunc:		aligned_string "MeasureBoxFunc"
 DbgStr_MeasureBoxProc:		aligned_string "MeasureBoxProc"
 DbgStr_DPPauseDspCheck:		aligned_string "DPPauseDspCheck"
@@ -1307,25 +1307,25 @@ NakaPropTbl_IvNamingExit:
 	.long NakaPropStr_IvNamingExit_0
 NakaPropStr_IvNamingExit_0:	aligned_string ""
 NakaPropTbl_SelBox:
-	.long LABEL_E20772
-	.long LABEL_E20768
-	.long LABEL_E2075E
-	.long LABEL_E20756
+	.long NakaPropStr_SelBox_Font
+	.long NakaPropStr_SelBox_FontColor
+	.long NakaPropStr_SelBox_MainFunc
+	.long NakaPropStr_SelBox_Column
 	.long NakaPropStr_SelBox_Row
-	.long LABEL_E2074A
-	.long LABEL_E20744
-	.long LABEL_E2073A
+	.long NakaPropStr_SelBox_SelNum
+	.long NakaPropStr_SelBox_Dial
+	.long NakaPropStr_SelBox_AutoInc
 	.long NakaPropStr_SelBox_0
 NakaPropStr_SelBox_0:	aligned_string ""
-LABEL_E2073A:		aligned_string "auto_inc"
-LABEL_E20744:		aligned_string "dial"
-LABEL_E2074A:		aligned_string "sel_num"
+NakaPropStr_SelBox_AutoInc:		aligned_string "auto_inc"
+NakaPropStr_SelBox_Dial:		aligned_string "dial"
+NakaPropStr_SelBox_SelNum:		aligned_string "sel_num"
 NakaPropStr_SelBox_Row:
 	.byte 0x72, 0x6f, 0x77, 0x00
-LABEL_E20756:	aligned_string "column"
-LABEL_E2075E:	aligned_string "main_func"
-LABEL_E20768:	aligned_string "fontcolor"
-LABEL_E20772:	aligned_string "font"
+NakaPropStr_SelBox_Column:	aligned_string "column"
+NakaPropStr_SelBox_MainFunc:	aligned_string "main_func"
+NakaPropStr_SelBox_FontColor:	aligned_string "fontcolor"
+NakaPropStr_SelBox_Font:	aligned_string "font"
 NakaPropTbl_Ram:
 	.long NakaPropStr_Ram_1
 	.long NakaPropStr_Ram_0
@@ -1333,10 +1333,10 @@ NakaPropStr_Ram_0:	aligned_string ""
 NakaPropStr_Ram_1:
 	.byte 0x72, 0x61, 0x6d, 0x00
 NakaPropTbl_Func:
-	.long LABEL_E20790
+	.long NakaPropStr_Func_Func
 	.long NakaPropStr_Func_0
 NakaPropStr_Func_0:	aligned_string ""
-LABEL_E20790:		aligned_string "func"
+NakaPropStr_Func_Func:		aligned_string "func"
 NakaPropTbl_CurSongName:
 	.long NakaPropStr_CurSongName_0
 NakaPropStr_CurSongName_0:	aligned_string ""
@@ -1344,14 +1344,14 @@ NakaPropTbl_TrAsGrid:
 	.long NakaPropStr_TrAsGrid_0
 NakaPropStr_TrAsGrid_0:	aligned_string ""
 NakaPropTbl_Grid:
-	.long LABEL_E207C4
-	.long LABEL_E207BA
-	.long LABEL_E207B4
+	.long NakaPropStr_Grid_FixedCol
+	.long NakaPropStr_Grid_FixedRow
+	.long NakaPropStr_Grid_Func
 	.long NakaPropStr_Grid_0
 NakaPropStr_Grid_0:	aligned_string ""
-LABEL_E207B4:		aligned_string "func"
-LABEL_E207BA:		aligned_string "fixedrow"
-LABEL_E207C4:		aligned_string "fixedcol"
+NakaPropStr_Grid_Func:		aligned_string "func"
+NakaPropStr_Grid_FixedRow:		aligned_string "fixedrow"
+NakaPropStr_Grid_FixedCol:		aligned_string "fixedcol"
 NakaPropTbl_SmfFileName:
 	.long NakaPropStr_SmfFileName_0
 NakaPropStr_SmfFileName_0:	aligned_string ""
@@ -1374,57 +1374,57 @@ NakaPropTbl_MeasureBox:
 	.long NakaPropStr_MeasureBox_0
 NakaPropStr_MeasureBox_0:	aligned_string ""
 NakaPropTbl_MuteToggle:
-	.long LABEL_E2081A
-	.long LABEL_E20810
-	.long LABEL_E2080A
+	.long NakaPropStr_MuteToggle_Color
+	.long NakaPropStr_MuteToggle_FontColor
+	.long NakaPropStr_MuteToggle_Func
 	.long NakaPropStr_MuteToggle_0
 NakaPropStr_MuteToggle_0:	aligned_string ""
-LABEL_E2080A:			aligned_string "func"
-LABEL_E20810:			aligned_string "fontcolor"
-LABEL_E2081A:			aligned_string "color"
+NakaPropStr_MuteToggle_Func:			aligned_string "func"
+NakaPropStr_MuteToggle_FontColor:			aligned_string "fontcolor"
+NakaPropStr_MuteToggle_Color:			aligned_string "color"
 NakaPropTbl_LyricsBox:
 	.long NakaPropStr_LyricsBox_0
 NakaPropStr_LyricsBox_0:	aligned_string ""
 NakaPropTbl_TextLabel:
-	.long LABEL_E20868
-	.long LABEL_E2085E
-	.long LABEL_E20850
-	.long LABEL_E20846
-	.long LABEL_E20840
+	.long NakaPropStr_TextLabel_Font
+	.long NakaPropStr_TextLabel_FontColor
+	.long NakaPropStr_TextLabel_ReverseColor
+	.long NakaPropStr_TextLabel_Alignment
+	.long NakaPropStr_TextLabel_Lines
 	.long NakaPropStr_TextLabel_0
 NakaPropStr_TextLabel_0:	aligned_string ""
-LABEL_E20840:			aligned_string "lines"
-LABEL_E20846:			aligned_string "alignment"
-LABEL_E20850:			aligned_string "reversecolor"
-LABEL_E2085E:			aligned_string "fontcolor"
-LABEL_E20868:			aligned_string "font"
+NakaPropStr_TextLabel_Lines:			aligned_string "lines"
+NakaPropStr_TextLabel_Alignment:			aligned_string "alignment"
+NakaPropStr_TextLabel_ReverseColor:			aligned_string "reversecolor"
+NakaPropStr_TextLabel_FontColor:			aligned_string "fontcolor"
+NakaPropStr_TextLabel_Font:			aligned_string "font"
 
 
 NakaPropTbl_TextLabel2:
-	.long LABEL_E2089E
-	.long LABEL_E20894
-	.long LABEL_E2088A
-	.long LABEL_E20884
+	.long NakaPropStr_TextLabel2_Font
+	.long NakaPropStr_TextLabel2_FontColor
+	.long NakaPropStr_TextLabel2_Alignment
+	.long NakaPropStr_TextLabel2_Lines
 	.long NakaPropStr_TextLabel2_0
 NakaPropStr_TextLabel2_0:	aligned_string ""
-LABEL_E20884:			aligned_string "lines"
-LABEL_E2088A:			aligned_string "alignment"
-LABEL_E20894:			aligned_string "fontcolor"
-LABEL_E2089E:
+NakaPropStr_TextLabel2_Lines:			aligned_string "lines"
+NakaPropStr_TextLabel2_Alignment:			aligned_string "alignment"
+NakaPropStr_TextLabel2_FontColor:			aligned_string "fontcolor"
+NakaPropStr_TextLabel2_Font:
 	jr	z, 0x6f
 	.byte 0x6e, 0x74, 0x00, 0xff, 0xd4, 0x08, 0xe2, 0x00
 
 
 NakaPropTbl_LyricsBoxFunc:
-	.long LABEL_E208CA
-	.long LABEL_E208C0
-	.long LABEL_E208BA
+	.long NakaPropStr_LyricsBoxFunc_FontColor
+	.long NakaPropStr_LyricsBoxFunc_Alignment
+	.long NakaPropStr_LyricsBoxFunc_Lines
 	.long NakaPropStr_LyricsBoxFunc_0
 NakaPropStr_LyricsBoxFunc_0:	aligned_string ""
-LABEL_E208BA:			aligned_string "lines"
-LABEL_E208C0:			aligned_string "alignment"
-LABEL_E208CA:			aligned_string "fontcolor"
-LABEL_E208D4:			aligned_string "font"
+NakaPropStr_LyricsBoxFunc_Lines:			aligned_string "lines"
+NakaPropStr_LyricsBoxFunc_Alignment:			aligned_string "alignment"
+NakaPropStr_LyricsBoxFunc_FontColor:			aligned_string "fontcolor"
+NakaPropStr_LyricsBoxFunc_Font:			aligned_string "font"
 NakaPropTbl_DemoMedleyDisp:
 	.long NakaPropStr_DemoMedleyDisp_0
 NakaPropStr_DemoMedleyDisp_0:	aligned_string ""
@@ -1992,7 +1992,7 @@ MT_GetEffDlt0Str_Name:
 
 MT_GetEffFixString_Name:	aligned_string "MT_GetEffFixString"
 
-LABEL_E27FA2:
+EffectsEditor_GapByte:
 	.byte 0x77, 0x00
 .include "ui_widgets/effects_sequencer_screens.s"
 	.include "ui_widgets/widget_descriptors.s"
@@ -2094,14 +2094,14 @@ NakaProc_NullEntry:
 	.long 0x3E664	; <-- the LSByte here affects the page number
 	.short 0x1
 	.short 0x2	; total number of pages
-LABEL_E8190A:
+NakaWidget_SoundMenu_ScrollBar1:
 
 	naka_header NAKA_TYPE_0x28
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x03, 0x00, 0x01, 0x00, 0x18, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x1f, 0x00, 0x1f, 0x00
 	.byte 0x01, 0x00, 0x06, 0x00, 0x02, 0x00
-LABEL_E81926:
+NakaWidget_SoundMenu_ScrollBar2:
 
 
 	naka_header NAKA_TYPE_0x28
@@ -2109,7 +2109,7 @@ LABEL_E81926:
 	.byte 0x02, 0x00, 0x18, 0x00, 0x24, 0x00, 0x00, 0x00
 	.byte 0x43, 0x00, 0x1f, 0x00, 0x02, 0x00, 0x11, 0x00
 	.byte 0x02, 0x00
-LABEL_E81942:
+NakaWidget_SoundMenu_ListBox:
 
 
 	naka_header NAKA_TYPE_0x48
@@ -2117,14 +2117,14 @@ LABEL_E81942:
 	.byte 0xff, 0xff, 0x05, 0x00, 0x03, 0x00, 0x18, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x1f, 0x00, 0x1f, 0x00
 	.byte 0x01, 0x00, 0x80, 0x01
-LABEL_E8195C:
+NakaWidget_SoundMenu_ValueEdit:
 
 
 	naka_header NAKA_TYPE_0x64
 	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x04, 0x00
 	.byte 0x18, 0x00, 0x48, 0x00, 0x00, 0x00, 0x67, 0x00
 	.byte 0x1f, 0x00, 0x00, 0x00, 0x21, 0x01
-LABEL_E81976:
+NakaWidget_SoundMenu_PageControl:
 
 
 	naka_header NAKA_TYPE_0x35
@@ -2135,7 +2135,7 @@ LABEL_E81976:
 	.byte 0x03, 0x00
 
 
-LABEL_E8199A:
+NakaMenuItem_PartSetting:
 	naka_header NAKA_TYPE_MENU_ITEM
 	.byte 0x06, 0x00
 	.short 0xFFFF, 0x8
@@ -2147,11 +2147,11 @@ LABEL_E8199A:
 	.short 0x0, 0xFF
 	.short 0x0, 0x88
 	.long 0x3E66E
-	.long LABEL_E819D0
+	.long MenuStr_PartSetting
 	.short 0x3, 0x1A0
 	.long 0x2
 
-LABEL_E819D0:	aligned_string "PART SETTING"
+MenuStr_PartSetting:	aligned_string "PART SETTING"
 
 ; header: type=1D
 ;MenuItem     STRUCT
@@ -2180,7 +2180,7 @@ LABEL_E819D0:	aligned_string "PART SETTING"
 ;MenuItem     ENDSTRUCT
 
 
-LABEL_E819DE:
+NakaMenuItem_Mixer:
 	.byte 0x1d, 0x00
 	.byte 0x60, 0x01, 0x06, 0x00
 	.short 0xFFFF, 0x9
@@ -2199,14 +2199,14 @@ LABEL_E819DE:
 			;    with mirror and offset on the x axis
 
 	.long 0x3E670
-	.long LABEL_E81A14
+	.long MenuStr_Mixer
 	.short 0x8, 0x1A0
 	.long 0x7	; <== Select Icon (0 = no-icon, 1=worm, 2=... etc)
 
-LABEL_E81A14:	aligned_string "MIXER"
+MenuStr_Mixer:	aligned_string "MIXER"
 
 
-LABEL_E81A1A:
+NakaMenuItem_MasterTuning:
 	naka_header NAKA_TYPE_MENU_ITEM
 	.byte 0x06, 0x00
 	.byte 0xff, 0xff, 0x0a, 0x00, 0x08, 0x00, 0x08, 0x00
@@ -2216,7 +2216,7 @@ LABEL_E81A1A:
 	.byte 0x72, 0xe6, 0x03, 0x00, 0x50, 0x1a, 0xe8, 0x00
 	.byte 0x04, 0x00, 0xa0, 0x01, 0x09, 0x00, 0x00, 0x00
 	aligned_string "MASTER TUNING"
-LABEL_E81A5E:
+NakaMenuItem_KeyScaling:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	.byte 0x06, 0x00
@@ -2228,11 +2228,11 @@ LABEL_E81A5E:
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x8c, 0x00
 	.long 0x3E674
-	.long LABEL_E81A94
+	.long MenuStr_KeyScaling
 	.byte 0x05, 0x00, 0xa0, 0x01
 	.byte 0x84, 0x00, 0x00, 0x00
-LABEL_E81A94:	aligned_string "KEY SCALING"
-LABEL_E81AA0:
+MenuStr_KeyScaling:	aligned_string "KEY SCALING"
+NakaMenuItem_ReverbEqPresets:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	.byte 0x06, 0x00
@@ -2244,12 +2244,12 @@ LABEL_E81AA0:
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x08, 0x00
 	.long 0x3E676
-	.long LABEL_E81AD6
+	.long MenuStr_ReverbEqPresets
 	.byte 0x09, 0x00
 	.byte 0xa0, 0x01, 0x91, 0x00, 0x00, 0x00
 
-LABEL_E81AD6:	aligned_string "REVERB & EQ PRESETS"
-LABEL_E81AEA:
+MenuStr_ReverbEqPresets:	aligned_string "REVERB & EQ PRESETS"
+NakaMenuItem_Reverb:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	.byte 0x06, 0x00
@@ -2260,7 +2260,7 @@ LABEL_E81AEA:
 	.byte 0x78, 0xe6, 0x03, 0x00, 0x20, 0x1b, 0xe8, 0x00
 	.byte 0x0a, 0x00, 0xa0, 0x01, 0x17, 0x00, 0x00, 0x00
 	aligned_string "REVERB"
-LABEL_E81B28:
+NakaMenuItem_Equalizer:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	.byte 0x06, 0x00, 0xff, 0xff
@@ -2271,7 +2271,7 @@ LABEL_E81B28:
 	.byte 0x03, 0x00, 0x5e, 0x1b, 0xe8, 0x00, 0x0c, 0x00
 	.byte 0xa0, 0x01, 0x0d, 0x00, 0x00, 0x00
 	aligned_string "EQUALIZER"
-LABEL_E81B68:
+NakaMenuItem_DspEffect:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	.byte 0x06, 0x00, 0xff, 0xff
@@ -2282,7 +2282,7 @@ LABEL_E81B68:
 	.byte 0x03, 0x00, 0x9e, 0x1b, 0xe8, 0x00, 0x0b, 0x00
 	.byte 0xa0, 0x01, 0x0c, 0x00, 0x00, 0x00
 	aligned_string "DSP EFFECT"
-LABEL_E81BAA:
+NakaMenuItem_AcousticIllusion:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	.byte 0x06, 0x00
@@ -2291,11 +2291,11 @@ LABEL_E81BAA:
 	.byte 0xf7, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x0c, 0x00
 	.long 0x3E67E
-	.long LABEL_E81BE0
+	.long MenuStr_AcousticIllusion
 	.byte 0x0e, 0x00, 0xa0, 0x01, 0x92, 0x00, 0x00, 0x00
 
-LABEL_E81BE0:	aligned_string "ACOUSTIC ILLUSION"
-LABEL_E81BF2:
+MenuStr_AcousticIllusion:	aligned_string "ACOUSTIC ILLUSION"
+NakaWidget_SoundEdit:
 
 	.byte 0x20, 0x00, 0x61, 0x01, 0x06, 0x00
 	.byte 0xff, 0xff
@@ -2314,18 +2314,18 @@ LABEL_E81BF2:
 	.byte 0x00, 0x00
 	.byte 0x8a, 0x00
 	.long 0x3E680
-	.long LABEL_E81C28
+	.long MenuStr_SoundEdit
 	.byte 0x03, 0x00, 0x80, 0x01, 0x0f, 0x00, 0x00, 0x00
 
-LABEL_E81C28:	aligned_string "SOUND EDIT"
-LABEL_E81C34:
+MenuStr_SoundEdit:	aligned_string "SOUND EDIT"
+NakaWidget_SoundMenu_PageControl2:
 
 	naka_header NAKA_TYPE_0x35
 	.byte 0xff, 0xff, 0x12, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0x08, 0x00, 0x38, 0x00, 0x78, 0x00, 0x5b, 0x00
 	.byte 0x87, 0x00, 0xf7, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x82, 0xe6, 0x03, 0x00, 0x86, 0xe6, 0x03, 0x00
-LABEL_E81C58:
+NakaMenuItem_LeftHold:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	.byte 0x11, 0x00, 0xff, 0xff
@@ -2336,7 +2336,7 @@ LABEL_E81C58:
 	.byte 0x03, 0x00, 0x8e, 0x1c, 0xe8, 0x00, 0x07, 0x00
 	.byte 0xa0, 0x01, 0x16, 0x00, 0x00, 0x00
 	aligned_string "LEFT HOLD"
-LABEL_E81C98:
+NakaMenuItem_TechniChord:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	.byte 0x11, 0x00
