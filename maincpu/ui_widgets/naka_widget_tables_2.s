@@ -717,12 +717,12 @@ GMMode_Attention_English2:	aligned_string "ATTENTION!"
 
 
 SplitPoint_NoteNameTable:
-	.long LABEL_E7F7DE
+	.long SplitPoint_NoteEntry_C_Code
 	.long NakaInst_D_a0
-	.long LABEL_E7F7D4
+	.long SplitPoint_NoteEntry_D_Code
 	.long NakaInst_E_a0
-	.long LABEL_E7F7CA
-	.long LABEL_E7F7C6
+	.long SplitPoint_NoteEntry_E_Code
+	.long SplitPoint_NoteStr_F
 	.long NakaInst_F_9e
 	.long SplitPoint_NoteEntry_G_Code
 	.long SplitPoint_NoteStr_A
@@ -738,14 +738,14 @@ SplitPoint_NoteStr_A:	aligned_string "A~a0"
 SplitPoint_NoteEntry_G_Code:
 	.byte 0x47, 0x20, 0x00, 0xff
 NakaInst_F_9e:	aligned_string "F~9e"
-LABEL_E7F7C6:	aligned_string "F "
-LABEL_E7F7CA:
+SplitPoint_NoteStr_F:	aligned_string "F "
+SplitPoint_NoteEntry_E_Code:
 	.byte 0x45, 0x20, 0x00, 0xff
 NakaInst_E_a0:	aligned_string "E~a0"
-LABEL_E7F7D4:
+SplitPoint_NoteEntry_D_Code:
 	.byte 0x44, 0x20, 0x00, 0xff
 NakaInst_D_a0:	aligned_string "D~a0"
-LABEL_E7F7DE:
+SplitPoint_NoteEntry_C_Code:
 	.byte 0x43, 0x20
 	.byte 0x00, 0xff, 0x4a, 0xae, 0xe5, 0x00, 0x12, 0xba
 	.byte 0xe5, 0x00, 0xda, 0xc5, 0xe5, 0x00, 0xa2, 0xd1
@@ -779,8 +779,8 @@ LABEL_E7F7DE:
 
 
 DisplayMode_OnOff_Table:
-	.long LABEL_E7F922
-	.long LABEL_E7F91C
+	.long DisplayMode_FormatStr2
+	.long DisplayMode_FormatStr1
 	.long NakaInst_OFF_WidgetTbl2
 	.long NakaInst_ON
 NakaInst_ON:	aligned_string " ON  "
@@ -869,14 +869,14 @@ NakaInst_DIRECT_E7FCE4:	aligned_string " DIRECT "
 	.byte 0x3a, 0x00, 0x34, 0x00, 0x3a, 0x00, 0x3d, 0x00
 	.byte 0x31, 0x00, 0x00, 0x00
 FileTransfer_Status_Table:
-	.long LABEL_E7FDCC
+	.long FileTransfer_BlankStatus
 	.long NakaInst_SENDING
 	.long NakaInst_RECIEVING
 	.long NakaInst_COMPLETED
 NakaInst_COMPLETED:	aligned_string "COMPLETED"
 NakaInst_RECIEVING:	aligned_string "RECIEVING"
 NakaInst_SENDING:	aligned_string " SENDING "
-LABEL_E7FDCC:	aligned_string "         "
+FileTransfer_BlankStatus:	aligned_string "         "
 	.byte 0x1e, 0x00
 	.byte 0x1e, 0x00, 0x26, 0x00, 0x26, 0x00, 0x26, 0x00
 	.byte 0x22, 0x00, 0x26, 0x00, 0x2a, 0x00, 0x1e, 0x00
@@ -893,7 +893,7 @@ LABEL_E7FDCC:	aligned_string "         "
 	.byte 0x00, 0x00, 0x00, 0x00, 0x2d, 0x00, 0x42, 0x00
 	.byte 0x57, 0x00, 0x6c, 0x00, 0x80, 0x00, 0x94, 0x00
 	.byte 0xa8, 0x00, 0xbc, 0x00, 0xfa, 0x00, 0xfa, 0x00
-	.long LABEL_E400D0
+	.long NakaData_UserMemoryConfig
 	.byte 0x00, 0x00, 0x2d, 0x00
 	.byte 0x42, 0x00, 0x57, 0x00, 0x6c, 0x00, 0x80, 0x00
 	.byte 0x94, 0x00, 0xa8, 0x00, 0xbc, 0x00, 0xfa, 0x00
@@ -904,12 +904,12 @@ LABEL_E7FDCC:	aligned_string "         "
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
 	.byte 0x01, 0x00, 0xd5, 0x00, 0x87, 0x01, 0xd5, 0x00
 	.byte 0x87, 0x01, 0x89, 0x02, 0x61, 0x02, 0x61, 0x02
-LABEL_E7FEA0:
+UserMemory_ConfirmData:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc4, 0xfe
 	.byte 0xe7, 0x00, 0xbe, 0xfe, 0xe7, 0x00
-LABEL_E7FEBE:	.asciz " YES "
+UserMemory_String_YES:	.asciz " YES "
 NakaInst_NO:	aligned_string " NO  "
 UserMemory_Config_Table:
 	.long NakaInst_INITIAL
@@ -925,7 +925,7 @@ NakaInst_INITIAL:	aligned_string " INITIAL "
 	.byte 0xb7, 0x00, 0x49, 0x03, 0x49, 0x03, 0x90, 0x01
 	.byte 0x6a, 0x00, 0x0e, 0x01, 0x6a, 0x00, 0x0e, 0x01
 	.byte 0x07, 0x02, 0xdf, 0x01, 0xdf, 0x01
-LABEL_E7FF2E:
+UserMemory_FormatStrings:
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0xff, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
@@ -966,9 +966,9 @@ LABEL_E7FF2E:
 	.byte 0x0e, 0x01, 0x00, 0x00, 0x0e, 0x01, 0xc6, 0x06
 	.byte 0xc6, 0x06, 0x58, 0x02, 0x0e, 0x01, 0xa0, 0x00
 	.byte 0x35, 0x01, 0xb2, 0x00, 0x22, 0x01, 0xaa, 0x00
-LABEL_E80008:
+NakaData_ModeConfig1:
 	.byte 0x21, 0x01, 0xa9, 0x00, 0x00, 0x00
-LABEL_E8000E:
+NakaData_ModeConfig2:
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x22
 	.byte 0x00, 0x00, 0x02, 0x22, 0x00, 0x00, 0x82, 0x22
@@ -1003,13 +1003,13 @@ NakaInst_GM:	aligned_string " GM   "
 	.byte 0x6a, 0x00, 0x6a, 0x00, 0x98, 0x02, 0x6e, 0x02
 NakaInst_NEXT_E800E8:
 	.byte 0x6e, 0x02, 0x06, 0x01, 0xe8
-LABEL_E800ED:
+NakaData_PartConfig:
 	.byte 0x00, 0xfe, 0x00
 	.byte 0xe8, 0x00, 0xf6, 0x00, 0xe8, 0x00
 NakaInst_LEFT:	aligned_string " LEFT  "
 NakaInst_RIGHT_2:	aligned_string "RIGHT 2"
 NakaInst_RIGHT_1:	aligned_string "RIGHT 1"
-LABEL_E8010E:
+NakaData_PartFlags:
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01
@@ -1155,22 +1155,22 @@ NakaInst_ON_E80168:	aligned_string " ON  "
 	.byte 0x07, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x00
 	.byte 0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x06, 0x00
 Transpose_ValueDisplay_Table:
-	.long LABEL_E806AA
-	.long LABEL_E806A4
-	.long LABEL_E8069E
-	.long LABEL_E80698
-	.long LABEL_E80692
-	.long LABEL_E8068C
-	.long LABEL_E80686
-	.long LABEL_E80680
-LABEL_E80680:	aligned_string " -1  "
-LABEL_E80686:
+	.long Transpose_String_Zero
+	.long Transpose_String_Plus1
+	.long Transpose_String_Plus2
+	.long Transpose_String_Plus3
+	.long Transpose_String_Error
+	.long Transpose_String_Minus3
+	.long Transpose_String_Minus2
+	.long Transpose_String_Minus1
+Transpose_String_Minus1:	aligned_string " -1  "
+Transpose_String_Minus2:
 	ldb	w, 0x2d
 	.byte 0x32, 0x20, 0x20, 0x00
 	aligned_string " -3  "
 	.asciz "Error"
-LABEL_E80698:	aligned_string "  3  "
-LABEL_E8069E:
+Transpose_String_Plus3:	aligned_string "  3  "
+Transpose_String_Plus2:
 	ldb	w, 0x20
 	.byte 0x32, 0x20, 0x20, 0x00
 	aligned_string "  1  "
@@ -1189,7 +1189,7 @@ LABEL_E8069E:
 	aligned_string " ON  "
 	ldb	w, 0x4f
 	.byte 0x46, 0x46, 0x20, 0x00, 0x00, 0x00, 0xe4, 0x00
-	.long LABEL_E40000
+	.long NakaData_ExternalBase
 	.byte 0x6e, 0x04, 0xd0, 0x01
 	.byte 0x6e, 0x04, 0x1e, 0xb6, 0xf7, 0x00, 0xb8, 0xb6
 	.byte 0xf7, 0x00, 0x7a, 0xcc, 0xf7, 0x00, 0x91, 0xce
@@ -1284,156 +1284,156 @@ LABEL_E8069E:
 	.byte 0xd6, 0x0a, 0xe8, 0x00, 0x00, 0xff
 	.long NakaInst_func
 	.long NakaInst_data
-	.long LABEL_E80AE4
-LABEL_E80AE4:	aligned_string ""
+	.long NakaObj_FuncData_Null
+NakaObj_FuncData_Null:	aligned_string ""
 NakaInst_data:	aligned_string "data"
 NakaInst_func:	aligned_string "func"
 	.byte 0x10, 0x0b, 0xe8, 0x00, 0x0a, 0x0b
 	.byte 0xe8, 0x00, 0x04, 0x0b, 0xe8, 0x00, 0x02, 0x0b
-LABEL_E80B00:
+NakaObj_FmuteVol_DataEntry:
 	.byte 0xe8, 0x00
-LABEL_E80B02:
+NakaObj_FmuteVol_NullTerm:
 	.byte 0x00, 0xff
 NakaInst_data_E80B04:	aligned_string "data"
 NakaInst_fmute:	aligned_string "fmute"
 NakaInst_fvol:	aligned_string "fvol"
 	.byte 0x1a
-LABEL_E80B17:
+NakaObj_FmuteVol_LinkEntry1:
 	.byte 0x0b
 	.byte 0xe8, 0x00
-LABEL_E80B1A:
+NakaObj_FmuteVol_LinkEntry2:
 	.byte 0x00, 0xff, 0x20, 0x0b, 0xe8, 0x00
 	.byte 0x00, 0xff, 0x26, 0x0b, 0xe8, 0x00
-LABEL_E80B26:
+NakaObj_FmuteVol_LinkEntry3:
 	.byte 0x00, 0xff
 AudioStream_Property_Table:
 	.long NakaInst_str1
 	.long NakaInst_str3
-	.long LABEL_E80B34
-LABEL_E80B34:	aligned_string ""
+	.long AudioStream_Prop_Null
+AudioStream_Prop_Null:	aligned_string ""
 NakaInst_str3:	aligned_string "str3"
 NakaInst_str1:	aligned_string "str1"
 UIElement_Property_Table:
-	.long LABEL_E80B8A
+	.long UIElement_Prop_StrEntry
 	.long NakaInst_font
 	.long NakaInst_fontcolor
 	.long NakaInst_align
 	.long NakaInst_selected
 	.long NakaInst_dialfocus
-	.long LABEL_E80B5E
-LABEL_E80B5E:
+	.long UIElement_Prop_NullTerm
+UIElement_Prop_NullTerm:
 	.byte 0x00, 0xff
 NakaInst_dialfocus:	aligned_string "dialfocus"
 NakaInst_selected:	aligned_string "selected"
 NakaInst_align:	aligned_string "align"
 NakaInst_fontcolor:	aligned_string "fontcolor"
 NakaInst_font:	aligned_string "font"
-LABEL_E80B8A:
+UIElement_Prop_StrEntry:
 	.byte 0x73, 0x74, 0x72, 0x00, 0x92, 0x0b
 	.byte 0xe8, 0x00
-LABEL_E80B92:
+UIElement_PropChain_Null1:
 	.byte 0x00, 0xff, 0x98, 0x0b, 0xe8, 0x00
 	.byte 0x00, 0xff, 0x9e, 0x0b, 0xe8, 0x00
-LABEL_E80B9E:
+UIElement_PropChain_Null2:
 	.byte 0x00, 0xff
-	.long LABEL_E80BA4
-LABEL_E80BA4:
+	.long UIElement_PropChain_Null3
+UIElement_PropChain_Null3:
 	.byte 0x00, 0xff, 0xaa, 0x0b
 	.byte 0xe8, 0x00
-LABEL_E80BAA:
+UIElement_PropChain_Null4:
 	.byte 0x00, 0xff, 0xb0, 0x0b, 0xe8, 0x00
 	.byte 0x00, 0xff, 0xb6, 0x0b, 0xe8, 0x00
-LABEL_E80BB6:
+UIElement_PropChain_Null5:
 	.byte 0x00, 0xff
-	.long LABEL_E80BBC
-LABEL_E80BBC:
+	.long UIElement_PropChain_Group1
+UIElement_PropChain_Group1:
 	.byte 0x00, 0xff, 0xd4, 0x0b
 	.byte 0xe8, 0x00, 0xcc, 0x0b, 0xe8, 0x00, 0xca, 0x0b
 	.byte 0xe8, 0x00
-LABEL_E80BCA:
+UIElement_PropChain_Null6:
 	.byte 0x00, 0xff
 NakaInst_window:	aligned_string "window"
 NakaInst_page:	aligned_string "page"
 	.byte 0xde, 0x0b, 0xe8, 0x00
-LABEL_E80BDE:
+UIElement_PropChain_Null7:
 	.byte 0x00, 0xff
-	.long LABEL_E80BE4
-LABEL_E80BE4:
+	.long UIElement_PropChain_Null8
+UIElement_PropChain_Null8:
 	.byte 0x00, 0xff, 0xea, 0x0b
 	.byte 0xe8, 0x00
-LABEL_E80BEA:
+UIElement_PropChain_Null9:
 	.byte 0x00, 0xff, 0xf0, 0x0b, 0xe8, 0x00
 	.byte 0x00, 0xff, 0xf6, 0x0b, 0xe8, 0x00
-LABEL_E80BF6:
+UIElement_PropChain_Null10:
 	.byte 0x00, 0xff
-	.long LABEL_E80BFC
-LABEL_E80BFC:	aligned_string ""
+	.long UIElement_PropChain_NullEnd
+UIElement_PropChain_NullEnd:	aligned_string ""
 TextInput_Property_Table:
 	.long NakaInst_font_E80C3A
 	.long NakaInst_fontcolor_E80C30
 	.long NakaInst_align_E80C2A
 	.long NakaInst_editsw
 	.long NakaInst_selected_E80C18
-	.long LABEL_E80C16
-LABEL_E80C16:
+	.long TextInput_Prop_NullTerm
+TextInput_Prop_NullTerm:
 	.byte 0x00, 0xff
 NakaInst_selected_E80C18:	aligned_string "selected"
 NakaInst_editsw:	aligned_string "editsw"
 NakaInst_align_E80C2A:	aligned_string "align"
 NakaInst_fontcolor_E80C30:	aligned_string "fontcolor"
 NakaInst_font_E80C3A:	aligned_string "font"
-	.long LABEL_E80C44
-LABEL_E80C44:
+	.long TextInput_PropChain_Start
+TextInput_PropChain_Start:
 	.byte 0x00, 0xff, 0x4a, 0x0c
 	.byte 0xe8, 0x00
-LABEL_E80C4A:
+TextInput_PropChain_Null1:
 	.byte 0x00, 0xff, 0x50, 0x0c, 0xe8, 0x00
 	.byte 0x00, 0xff, 0x56, 0x0c, 0xe8, 0x00
-LABEL_E80C56:
+TextInput_PropChain_Null2:
 	.byte 0x00, 0xff
 	.long NakaInst_func_E80C6C
 	.long NakaInst_data_E80C66
-	.long LABEL_E80C64
-LABEL_E80C64:	aligned_string ""
+	.long TextInput_FuncData_Null
+TextInput_FuncData_Null:	aligned_string ""
 NakaInst_data_E80C66:	aligned_string "data"
 NakaInst_func_E80C6C:	aligned_string "func"
 Widget_DataProperty_Table:
-	.long LABEL_E80CA0
+	.long WidgetData_Prop_StrEntry
 	.long NakaInst_editsw_E80C98
 	.long NakaInst_selected_E80C8E
 	.long NakaInst_song
-	.long LABEL_E80C86
-LABEL_E80C86:
+	.long WidgetData_Prop_NullTerm
+WidgetData_Prop_NullTerm:
 	.byte 0x00, 0xff
 NakaInst_song:	aligned_string "song"
 NakaInst_selected_E80C8E:	aligned_string "selected"
 NakaInst_editsw_E80C98:	aligned_string "editsw"
-LABEL_E80CA0:
+WidgetData_Prop_StrEntry:
 	.byte 0x73, 0x74, 0x72, 0x00, 0xa8, 0x0c, 0xe8, 0x00
 	.byte 0x00, 0xff, 0xae, 0x0c, 0xe8, 0x00
-LABEL_E80CAE:
+WidgetData_PropChain_Null1:
 	.byte 0x00, 0xff
-	.long LABEL_E80CB4
-LABEL_E80CB4:
+	.long WidgetData_PropChain_Null2
+WidgetData_PropChain_Null2:
 	.byte 0x00, 0xff, 0xba, 0x0c
 	.byte 0xe8, 0x00
-LABEL_E80CBA:
+WidgetData_PropChain_Null3:
 	.byte 0x00, 0xff, 0xce, 0x0c, 0xe8, 0x00
-	.long LABEL_E80CCA
-	.long LABEL_E80CC8
-LABEL_E80CC8:	aligned_string ""
-LABEL_E80CCA:
+	.long WidgetData_TagEntry
+	.long WidgetData_TagIndex_Null
+WidgetData_TagIndex_Null:	aligned_string ""
+WidgetData_TagEntry:
 	.byte 0x74, 0x61, 0x67, 0x00
-LABEL_E80CCE:
+WidgetData_IndexEntry:
 	.byte 0x69, 0x6e
 	.byte 0x64, 0x65, 0x78, 0x00, 0xea, 0x0c, 0xe8, 0x00
 	.long NakaInst_editsw_E80CE2
-	.long LABEL_E80CE0
-LABEL_E80CE0:	aligned_string ""
+	.long WidgetData_EditswPart_Null
+WidgetData_EditswPart_Null:	aligned_string ""
 NakaInst_editsw_E80CE2:	aligned_string "editsw"
 NakaInst_part:	aligned_string "part"
-	.long LABEL_E80CF4
-LABEL_E80CF4:
+	.long WidgetData_TrailingData
+WidgetData_TrailingData:
 	.byte 0x00, 0xff, 0x25, 0xb7
 	.byte 0xf7, 0x00
 
