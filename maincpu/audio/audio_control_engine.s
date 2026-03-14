@@ -6548,7 +6548,7 @@ VoiceMode_ParamHandler_4:
 	cpdi8 37211, 23
 	jr nz, VoiceMode4_SetupChannelAndWrite
 	ld hl, de
-	call LABEL_F6DCAD
+	call AccompSeq_ManualMidiEntry2
 	ret
 
 VoiceMode4_SetupChannelAndWrite:

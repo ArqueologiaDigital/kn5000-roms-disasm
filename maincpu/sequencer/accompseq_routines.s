@@ -7,32 +7,32 @@
 ; =============================================================================
 
 AccompSeq_PeriodicEntry:
-	jp LABEL_F6DCB5
+	jp AccompSeq_PeriodicMain
 
-LABEL_F6DCAD:
+AccompSeq_ManualMidiEntry2:
 	jp AccompSeq_ManualMidiMode2
 
-LABEL_F6DCB1:
+AccompSeq_ManualMidiEntry1:
 	jp AccompSeq_ManualMidiMode1
 
-LABEL_F6DCB5:
-	calr LABEL_F6DCD1
+AccompSeq_PeriodicMain:
+	calr AccompSeq_CaptureTimerState
 	anddi8 32339, 223
-	calr LABEL_F6DD0F
+	calr AccompSeq_CheckChannelActive
 	bitda 5, 32339
-	jr nz, LABEL_F6DCD0
+	jr nz, AccompSeq_PeriodicReturn
 	calr AccompSeq_FadeOutTick
 	call AccPlay_Entry
-	calr LABEL_F6DCF6
+	calr AccompSeq_SaveTimerSnapshot
 
-LABEL_F6DCD0:
+AccompSeq_PeriodicReturn:
 	ret
 
-LABEL_F6DCD1:
+AccompSeq_CaptureTimerState:
 	jr __jrt_nop_F6DCD3
 __jrt_nop_F6DCD3:
 
-LABEL_F6DCD3:
+AccompSeq_ReadTimerRegisters:
 	xor a, a
 	ei 6
 	stda8 1131, a
@@ -45,7 +45,7 @@ LABEL_F6DCD3:
 	ei 0
 	ret
 
-LABEL_F6DCF6:
+AccompSeq_SaveTimerSnapshot:
 	ldda16 xwa, 32284
 	stda16 32288, xwa
 	ldda8 a, 32286
@@ -54,14 +54,14 @@ LABEL_F6DCF6:
 	stda8 32291, a
 	ret
 
-LABEL_F6DD0F:
+AccompSeq_CheckChannelActive:
 	bitda 2, 32287
-	jr nz, LABEL_F6DD19
-	jp LABEL_F6DDEB
+	jr nz, AccompSeq_SetupChannel1
+	jp AccompSeq_ChannelSetupDone
 
-LABEL_F6DD19:
+AccompSeq_SetupChannel1:
 	bitda 0, 32292
-	jr z, LABEL_F6DD82
+	jr z, AccompSeq_SetupChannel2
 	stdi8 32338, 0
 	ld xwa, 0x7AEC
 	stda32 32332, xwa
@@ -87,9 +87,9 @@ LABEL_F6DD19:
 	ldda16 xwa, 32322
 	stda16 32300, xwa
 
-LABEL_F6DD82:
+AccompSeq_SetupChannel2:
 	bitda 1, 32292
-	jr z, LABEL_F6DDEB
+	jr z, AccompSeq_ChannelSetupDone
 	stdi8 32338, 1
 	ld xwa, 0x7BEC
 	stda32 32332, xwa
@@ -115,10 +115,10 @@ LABEL_F6DD82:
 	ldda16 xwa, 32322
 	stda16 32304, xwa
 
-LABEL_F6DDEB:
+AccompSeq_ChannelSetupDone:
 	ret
 
-LABEL_F6DDEC:
+AccompSeq_IncrementTickCounter:
 	ldda16	hl, 1128
 	ldda8	a, 1130
 	inc	1, a
@@ -139,26 +139,26 @@ AccompSeq_InitEventDispatch:
 
 AccompSeq_EventDispatchLoop:
 	bitda 0, 32339
-	jr z, LABEL_F6DE25
-	jp LABEL_F6DEC4
+	jr z, AccompSeq_DispatchByOpcode
+	jp AccompSeq_EventDispatchDone
 
-LABEL_F6DE25:
+AccompSeq_DispatchByOpcode:
 	calr ResolveVRAMAddressForVoice
 	ld a, (xiy)
 	cp a, 0x84
-	jr nz, LABEL_F6DE34
+	jr nz, AccompSeq_CheckLoopMarker
 	calr AccompSeq_UpdatePosition
 	jr AccompSeq_EventDispatchLoop
 
-LABEL_F6DE34:
+AccompSeq_CheckLoopMarker:
 	cp a, 0x83
-	jr nz, LABEL_F6DE3E
-	calr LABEL_F6DFDC
+	jr nz, AccompSeq_CheckTimedOpcodes
+	calr AccompSeq_HandlePartTransition
 	jr AccompSeq_EventDispatchLoop
 
-LABEL_F6DE3E:
+AccompSeq_CheckTimedOpcodes:
 	cp a, 0x81
-	jr z, LABEL_F6DE8D
+	jr z, AccompSeq_HandleEndMarker
 	cp a, 0x90
 	jr z, AccompSeq_ProcessTimedEvent
 	cp a, 0x91
@@ -184,29 +184,29 @@ AccompSeq_ProcessTimedEvent:
 	calr AccompSeq_CheckPatternEnd
 	call AccompSeq_CalcDeltaTime
 	cp a, 0x18
-	jr ugt, LABEL_F6DE86
+	jr ugt, AccompSeq_SetTimePending
 	calr AccompSeq_ParseEvents
 	jr AccompSeq_EventDispatchLoop
 
-LABEL_F6DE86:
+AccompSeq_SetTimePending:
 	ordi8 32339, 1
 	jr AccompSeq_EventDispatchLoop
 
-LABEL_F6DE8D:
+AccompSeq_HandleEndMarker:
 	bitda 1, 32339
-	jr z, LABEL_F6DE9A
+	jr z, AccompSeq_EndMarkerCalcTime
 	ordi8 32339, 1
 	jr AccompSeq_EventDispatchLoop
 
-LABEL_F6DE9A:
+AccompSeq_EndMarkerCalcTime:
 	ldb a, 0x60
 	call AccompSeq_CalcDeltaTime
 	cp a, 0x18
-	jr ule, LABEL_F6DEAE
+	jr ule, AccompSeq_EndMarkerAdvance
 	ordi8 32339, 1
 	jp AccompSeq_EventDispatchLoop
 
-LABEL_F6DEAE:
+AccompSeq_EndMarkerAdvance:
 	ordi8 32339, 2
 	ldda16 xwa, 32326
 	inc 1, wa
@@ -214,7 +214,7 @@ LABEL_F6DEAE:
 	calr AccompSeq_AdvancePosition
 	jp AccompSeq_EventDispatchLoop
 
-LABEL_F6DEC4:
+AccompSeq_EventDispatchDone:
 	ret
 
 AccompSeq_CheckPatternEnd:
@@ -222,14 +222,14 @@ AccompSeq_CheckPatternEnd:
 	calr ResolveVRAMAddressForVoice
 	ld a, (xiy + 1)
 	cp a, 0x87
-	jr nz, LABEL_F6DEDE
+	jr nz, AccompSeq_PatternEndReturn
 	calr AccompSeq_ReadBeatHeader
 	ldfr_werp WA, 0xE2
 	lds wa, 6
 	calr AccompSeq_BuildVRAMAddr
 	ld a, (xiy)
 
-LABEL_F6DEDE:
+AccompSeq_PatternEndReturn:
 	pop xiy
 	ret
 
@@ -247,18 +247,18 @@ AccompSeq_AdvancePosition:
 	inc 1, wa
 	stda16 32324, xwa
 	cps wa, 0
-	jr nz, LABEL_F6DEFA
+	jr nz, AccompSeq_AdvanceCheckPattern
 	pushw wa
 	ldda16 xwa, 32322
 	inc 1, wa
 	stda16 32322, xwa
 	popw wa
 
-LABEL_F6DEFA:
+AccompSeq_AdvanceCheckPattern:
 	calr ResolveVRAMAddressForVoice
 	ld a, (xiy)
 	cp a, 0x87
-	jr nz, LABEL_F6DF19
+	jr nz, AccompSeq_AdvanceDone
 	calr AccompSeq_ReadBeatHeader
 	stda16 32322, xwa
 	ldfr_werp WA, 0xE2
@@ -267,10 +267,10 @@ LABEL_F6DEFA:
 	calr AccompSeq_BuildVRAMAddr
 	ld a, (xiy)
 
-LABEL_F6DF19:
+AccompSeq_AdvanceDone:
 	ret
 
-LABEL_F6DF1A:
+AccompSeq_VRAMHelperData:
 	.byte 0xc1, 0x25, 0x7e, 0x3f, 0x80, 0x67, 0x05, 0x1e
 	.byte 0x09, 0x00, 0x68, 0x06, 0xd1, 0x42, 0x7e, 0x20
 	.byte 0xd8, 0x8d, 0x0e, 0xd1, 0x42, 0x7e, 0x20, 0xe8
@@ -280,9 +280,9 @@ LABEL_F6DF1A:
 
 ResolveVRAMAddressForVoice:
 	cpdi8 32293, 128
-	jr c, LABEL_F6DF73
+	jr c, AccompSeq_ResolveVRAMFallback
 	bitda 0, 32365
-	jr nz, LABEL_F6DF73
+	jr nz, AccompSeq_ResolveVRAMFallback
 	ldda16 xwa, 32322
 	and xwa, 0xFFF
 	sla xwa, 8
@@ -291,15 +291,15 @@ ResolveVRAMAddressForVoice:
 	and xwa, 0xFF
 	add xiy, xwa
 	add xiy, 0x1E8B00
-	jr LABEL_F6DF80
+	jr AccompSeq_ResolveVRAMDone
 
-LABEL_F6DF73:
+AccompSeq_ResolveVRAMFallback:
 	ldda16 xwa, 32322
 	ldfr_werp WA, 0xE2
 	ldda16 xwa, 32324
 	ld xiy, xwa
 
-LABEL_F6DF80:
+AccompSeq_ResolveVRAMDone:
 	ret
 
 AccompSeq_BuildVRAMAddr:
@@ -325,7 +325,7 @@ AccompSeq_ReadBeatHeader:
 	ld wa, (xwa)
 	ret
 
-LABEL_F6DFC0:
+AccompSeq_ReadPatternTimeSig:
 	ldda16	wa, 32322
 	and	xwa, 4095
 	sla	xwa, 8
@@ -334,18 +334,18 @@ LABEL_F6DFC0:
 	ld	wa, (xwa)
 	ret
 
-LABEL_F6DFDC:
+AccompSeq_HandlePartTransition:
 	bitda 3, 32295
 	jr z, AccompSeq_StopPart
 	cpdi8 32338, 1
-	jr z, LABEL_F6DFFB
+	jr z, AccompSeq_TransitionChannel2
 	ldda16 xwa, 32308
 	stda16 32322, xwa
 	ldda16 xwa, 32310
 	stda16 32324, xwa
 	jr AccompSeq_PartTransitionDone
 
-LABEL_F6DFFB:
+AccompSeq_TransitionChannel2:
 	ldda16 xwa, 32312
 	stda16 32322, xwa
 	ldda16 xwa, 32314
@@ -1910,60 +1910,60 @@ AccompSeq_SeqParse_Return:
 	ret
 
 AccompSeq_TempoScaleTable:
-	.long LABEL_F6F060
-	.long LABEL_F6F057
-	.long LABEL_F6F04D
-	.long LABEL_F6F042
-	.long LABEL_F6F036
-	.long LABEL_F6F029
-	.long LABEL_F6F01B
-	.long LABEL_F6F00C
-LABEL_F6F00C:
+	.long TempoScale_1Beat
+	.long TempoScale_2Beats
+	.long TempoScale_3Beats
+	.long TempoScale_4Beats
+	.long TempoScale_5Beats
+	.long TempoScale_6Beats
+	.long TempoScale_7Beats
+	.long TempoScale_8Beats
+TempoScale_8Beats:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81
 	.byte 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x84
-LABEL_F6F01B:
+TempoScale_7Beats:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81
 	.byte 0x81, 0x81, 0x81, 0x81, 0x81, 0x84
-LABEL_F6F029:
+TempoScale_6Beats:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81
 	.byte 0x81, 0x81, 0x81, 0x81, 0x84
-LABEL_F6F036:
+TempoScale_5Beats:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81
 	.byte 0x81, 0x81, 0x81, 0x84
-LABEL_F6F042:
+TempoScale_4Beats:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81
 	.byte 0x81, 0x81, 0x84
-LABEL_F6F04D:
+TempoScale_3Beats:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81
 	add	d, (xbc)
-LABEL_F6F057:
+TempoScale_2Beats:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81
 	.byte 0x84
-LABEL_F6F060:
+TempoScale_1Beat:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x84
 	.byte 0x79, 0xf0, 0xf6, 0x00, 0x78, 0xf0, 0xf6, 0x00
-	.long LABEL_F6F07E
-	.long LABEL_F6F078
+	.long AccompSeq_InitBankIfNoError
+	.long AccompSeq_VoiceResetStub
 
-LABEL_F6F078:
+AccompSeq_VoiceResetStub:
 	ret
 
-LABEL_F6F079:
+AccompSeq_ResetToFactoryBanks:
 	call Voice_ResetToFactoryBanks
 	ret
 
-LABEL_F6F07E:
+AccompSeq_InitBankIfNoError:
 	call SubCPU_Payload_GetErrorFlag
 	cp hl, 0xFFFF
-	jr nz, LABEL_F6F08C
+	jr nz, AccompSeq_InitBankDone
 	call Voice_InitBankData
 
-LABEL_F6F08C:
+AccompSeq_InitBankDone:
 	ret
 
-LABEL_F6F08D:
+AccompSeq_BankTablePtr:
 	.byte 0x1b, 0x52, 0xf3, 0xf6
 
-LABEL_F6F091:
+AccompSeq_InitBankTables:
 	jp Voice_InitBankTables
 

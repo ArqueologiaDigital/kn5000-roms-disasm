@@ -29596,7 +29596,7 @@ msp_ld_mae:
 	ret
 
 MspLoad_InitVoice:
-	call LABEL_F6F091
+	call AccompSeq_InitBankTables
 	ret
 
 msp_ld_ato:

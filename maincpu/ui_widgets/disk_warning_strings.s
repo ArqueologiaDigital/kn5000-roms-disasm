@@ -14,28 +14,28 @@
 	.byte 0x34, 0x8e, 0xea, 0x00
 PtrTbl_DiskFormatWarning:
 	.long NakaInst_Using_DISK_FORMAT_will_erase_any_current_data_on
-	.long LABEL_EA8DB6
+	.long Str_DiskFormatWarn_French
 	.long Str_DiskFormatWarn_Spanish
 	.long Str_DiskFormatWarn_English
 	.long Str_DiskFormatWarn_Indonesian
 Str_DiskFormatWarn_Indonesian:	aligned_string "Gunakan Disk Format untuk menghapus suatu data yang ada sekarang didalam disk."
 Str_DiskFormatWarn_English:	aligned_string "Using DISK FORMAT will erase any current data on the disk."
 Str_DiskFormatWarn_Spanish:	aligned_string "Al formatear el disco  se borran los datos del disco."
-LABEL_EA8DB6:			.asciz "L'utilisation deDISK FORMAT effacera toute donnée existante sur la disquette."
+Str_DiskFormatWarn_French:			.asciz "L'utilisation deDISK FORMAT effacera toute donnée existante sur la disquette."
 NakaInst_Using_DISK_FORMAT_will_erase_any_current_data_on:			.asciz "DISK FORMAT löscht alle Daten auf der Diskette."
 	aligned_string "Using DISK FORMAT will erase any current data on the disk."
 PtrTbl_FileDeleteWarning:
 	.long Str_FileDeleteWarn_English2
-	.long LABEL_EA9082
+	.long Str_FileDeleteWarn_German
 	.long NakaInst_La_fonction_FILE_DELETE_va_effacer_compl_tement
-	.long LABEL_EA8F72
+	.long Str_FileDeleteWarn_Spanish
 	.long Str_FileDeleteWarn_English
 	.long NakaInst_Usando_FILE_DELETE_si_canceller_il_file
 NakaInst_Usando_FILE_DELETE_si_canceller_il_file:			aligned_string "Usando FILE DELETE si cancelleràil file completamente. Se sei incerto per favore conferma la tua selezione del file."
 Str_FileDeleteWarn_English:	aligned_string "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
-LABEL_EA8F72:			.asciz "El uso del FILE DELETE borrará completamente el archivo seleccionado. Si no está seguro, confirme la selección del archivo."
+Str_FileDeleteWarn_Spanish:			.asciz "El uso del FILE DELETE borrará completamente el archivo seleccionado. Si no está seguro, confirme la selección del archivo."
 NakaInst_La_fonction_FILE_DELETE_va_effacer_compl_tement:			aligned_string "La fonction FILE DELETE va effacer complètement le fichier que vous m'avez indiqué. Si vous avez un doute, veuillez vérifier le numéro du fichier."
-LABEL_EA9082:			.asciz "Die gewählte Disketten-Bank wird komplett gelöscht."
+Str_FileDeleteWarn_German:			.asciz "Die gewählte Disketten-Bank wird komplett gelöscht."
 Str_FileDeleteWarn_English2:	aligned_string "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection."
 	.byte 0xca, 0x93, 0xea, 0x00, 0x44, 0x93
 	.byte 0xea, 0x00, 0xa6, 0x92, 0xea, 0x00, 0x2c, 0x92
@@ -63,7 +63,7 @@ NakaInst_When_a_disk_is_inserted_open_this_page:			.asciz "Diese Seite wird geöf
 	aligned_string "When a disk is inserted open this page."
 PtrTbl_FilePriorityMsg:
 	.long Str_FilePriority_Lang5
-	.long LABEL_EA9620
+	.long Str_FilePriority_German
 	.long Str_FilePriority_Lang3
 	.long Str_FilePriority_Lang2
 	.long Str_FilePriority_Lang1
@@ -72,7 +72,7 @@ Str_FilePriority_Lang0:	aligned_string "When a disk contains Technics & SMF file
 Str_FilePriority_Lang1:	aligned_string "When a disk contains Technics & SMF files."
 Str_FilePriority_Lang2:	aligned_string "When a disk contains Technics & SMF files."
 Str_FilePriority_Lang3:	aligned_string "When a disk contains Technics & SMF files."
-LABEL_EA9620:		.asciz "Priorität, wenn eine Diskette Technics und SMF Files enthält."
+Str_FilePriority_German:		.asciz "Priorität, wenn eine Diskette Technics und SMF Files enthält."
 Str_FilePriority_Lang5:	aligned_string "When a disk contains Technics & SMF files."
 PtrTbl_DiskStartupModeNames:
 	.long Str_DiskMode_Off
@@ -198,7 +198,7 @@ Data_ScrollVelocityTable:
 	.byte 0x04, 0x00, 0x00, 0x00, 0xb4, 0x00, 0xca, 0x00
 	.byte 0xe0, 0x00, 0x3c, 0x00, 0x52, 0x00, 0xf6, 0x00
 	.byte 0x01, 0x01, 0x68, 0x00, 0x73, 0x00, 0xbf, 0x00
-	.long LABEL_EB00D5
+	.long Data_WidgetNamesCharMapBlock
 	.byte 0x47, 0x00, 0x5d, 0x00
 	.byte 0x15, 0x01, 0x20, 0x01, 0x87, 0x00, 0x92, 0x00
 	.byte 0x33, 0x01, 0xa5, 0x00, 0x33, 0x01, 0xa5, 0x00
@@ -372,10 +372,10 @@ KbChar_Upper_B:
 KbChar_Upper_A:
 	.byte 0x41, 0x00, 0xfe, 0x9d, 0xea, 0x00
 PtrTbl_KeyboardChars_Lower:
-	.long LABEL_EA9DFC
-	.long LABEL_EA9DFA
-	.long LABEL_EA9DF8
-	.long LABEL_EA9DF6
+	.long KbChar_Lower_b
+	.long KbChar_Lower_c
+	.long KbChar_Lower_d
+	.long KbChar_Lower_e
 	.long KbChar_Lower_f
 	.long KbChar_Lower_g
 	.long KbChar_Lower_h
@@ -477,121 +477,121 @@ KbChar_Lower_g:
 	.byte 0x67, 0x00
 KbChar_Lower_f:
 	.byte 0x66, 0x00
-LABEL_EA9DF6:
+KbChar_Lower_e:
 	.byte 0x65, 0x00
-LABEL_EA9DF8:
+KbChar_Lower_d:
 	.byte 0x64, 0x00
-LABEL_EA9DFA:
+KbChar_Lower_c:
 	.byte 0x63, 0x00
-LABEL_EA9DFC:
+KbChar_Lower_b:
 	.byte 0x62, 0x00
-LABEL_EA9DFE:
+KbChar_Lower_a:
 	.byte 0x61, 0x00
 Naka_SoundEditor_Screens:
-	.long LABEL_EA9ED0
-	.long LABEL_EA9ECE
-	.long LABEL_EA9ECC
-	.long LABEL_EA9ECA
-	.long LABEL_EA9EC8
-	.long LABEL_EA9EC6
-	.long LABEL_EA9EC2
-	.long LABEL_EA9EBE
-	.long LABEL_EA9EBC
-	.long LABEL_EA9EBA
-	.long LABEL_EA9EB6
-	.long LABEL_EA9EB2
-	.long LABEL_EA9EB0
-	.long LABEL_EA9EAE
-	.long LABEL_EA9EAC
-	.long LABEL_EA9EAA
-	.long LABEL_EA9EA8
-	.long LABEL_EA9EA6
-	.long LABEL_EA9EA4
-	.long LABEL_EA9EA2
-	.long LABEL_EA9EA0
-	.long LABEL_EA9E9E
-	.long LABEL_EA9E9A
-	.long LABEL_EA9E96
-	.long LABEL_EA9E94
-	.long LABEL_EA9E92
-	.long LABEL_EA9E90
-	.long LABEL_EA9E8E
-	.long LABEL_EA9E8C
-	.long LABEL_EA9E8A
-	.long LABEL_EA9E88
-	.long LABEL_EA9E86
-	.long LABEL_EA9E84
-LABEL_EA9E84:	aligned_string ""
-LABEL_EA9E86:
+	.long SeChar_Exclamation
+	.long SeChar_Hash
+	.long SeChar_Dollar
+	.long SeChar_Percent
+	.long SeChar_Ampersand
+	.long SeChar_Question
+	.long SeChar_Tilde40
+	.long SeChar_Tilde5c
+	.long SeChar_Caret
+	.long SeChar_Pipe
+	.long SeChar_Tilde22
+	.long SeChar_Tilde27
+	.long SeChar_Backtick
+	.long SeChar_Comma
+	.long SeChar_Period
+	.long SeChar_Colon
+	.long SeChar_Semicolon
+	.long SeChar_Plus
+	.long SeChar_Minus
+	.long SeChar_Asterisk
+	.long SeChar_Slash
+	.long SeChar_Equals
+	.long SeChar_Tilde8b
+	.long SeChar_Tilde8d
+	.long SeChar_OpenParen
+	.long SeChar_CloseParen
+	.long SeChar_LessThan
+	.long SeChar_GreaterThan
+	.long SeChar_OpenBracket
+	.long SeChar_CloseBracket
+	.long SeChar_OpenBrace
+	.long SeChar_CloseBrace
+	.long SeChar_Empty
+SeChar_Empty:	aligned_string ""
+SeChar_CloseBrace:
 	.byte 0x7d, 0x00
-LABEL_EA9E88:
+SeChar_OpenBrace:
 	.byte 0x7b, 0x00
-LABEL_EA9E8A:
+SeChar_CloseBracket:
 	.byte 0x5d, 0x00
-LABEL_EA9E8C:
+SeChar_OpenBracket:
 	.byte 0x5b, 0x00
-LABEL_EA9E8E:
+SeChar_GreaterThan:
 	.byte 0x3e, 0x00
-LABEL_EA9E90:
+SeChar_LessThan:
 	.byte 0x3c, 0x00
-LABEL_EA9E92:
+SeChar_CloseParen:
 	.byte 0x29, 0x00
-LABEL_EA9E94:
+SeChar_OpenParen:
 	.byte 0x28, 0x00
-LABEL_EA9E96:	.asciz "~8d"
-LABEL_EA9E9A:
+SeChar_Tilde8d:	.asciz "~8d"
+SeChar_Tilde8b:
 	.byte 0x7e, 0x38, 0x62, 0x00
-LABEL_EA9E9E:
+SeChar_Equals:
 	.byte 0x3d, 0x00
-LABEL_EA9EA0:
+SeChar_Slash:
 	.byte 0x2f, 0x00
-LABEL_EA9EA2:
+SeChar_Asterisk:
 	.byte 0x2a, 0x00
-LABEL_EA9EA4:
+SeChar_Minus:
 	.byte 0x2d, 0x00
-LABEL_EA9EA6:
+SeChar_Plus:
 	.byte 0x2b, 0x00
-LABEL_EA9EA8:
+SeChar_Semicolon:
 	.byte 0x3b, 0x00
-LABEL_EA9EAA:
+SeChar_Colon:
 	.byte 0x3a, 0x00
-LABEL_EA9EAC:
+SeChar_Period:
 	.byte 0x2e, 0x00
-LABEL_EA9EAE:
+SeChar_Comma:
 	.byte 0x2c, 0x00
-LABEL_EA9EB0:
+SeChar_Backtick:
 	.byte 0x60, 0x00
-LABEL_EA9EB2:
+SeChar_Tilde27:
 	.byte 0x7e, 0x32, 0x37, 0x00
-LABEL_EA9EB6:	.asciz "~22"
-LABEL_EA9EBA:
+SeChar_Tilde22:	.asciz "~22"
+SeChar_Pipe:
 	.byte 0x7c, 0x00
-LABEL_EA9EBC:
+SeChar_Caret:
 	.byte 0x5e, 0x00
-LABEL_EA9EBE:	.asciz "~5c"
-LABEL_EA9EC2:
+SeChar_Tilde5c:	.asciz "~5c"
+SeChar_Tilde40:
 	.byte 0x7e, 0x34, 0x30, 0x00
-LABEL_EA9EC6:
+SeChar_Question:
 	.byte 0x3f, 0x00
-LABEL_EA9EC8:
+SeChar_Ampersand:
 	.byte 0x26, 0x00
-LABEL_EA9ECA:
+SeChar_Percent:
 	.byte 0x25, 0x00
-LABEL_EA9ECC:
+SeChar_Dollar:
 	.byte 0x24, 0x00
-LABEL_EA9ECE:
+SeChar_Hash:
 	.byte 0x23, 0x00
-LABEL_EA9ED0:
+SeChar_Exclamation:
 	.byte 0x21, 0x00
-LABEL_EA9ED2:
+Data_SoundEditorCharsLayout:
 	.byte 0x28, 0x9c, 0xea, 0x00, 0x14, 0x9d
 	.byte 0xea, 0x00, 0x00, 0x9e, 0xea, 0x00, 0x25, 0x00
 	.byte 0x25, 0x00, 0x1f, 0x00, 0x24, 0x00, 0x24, 0x00
 	.byte 0x1f, 0x00, 0xf4, 0x9e, 0xea, 0x00, 0xf2, 0x9e
 	.byte 0xea, 0x00
-LABEL_EA9EF2:
+NamingChar_Underscore:
 	.byte 0x5f, 0x00
-LABEL_EA9EF4:
+NamingChar_Space:
 	.byte 0x20, 0x00, 0x00, 0x00
 	.byte 0x2d, 0x00, 0x61, 0x00, 0xdd, 0x00, 0xae, 0x02
 	.byte 0x69, 0x03, 0xdf, 0x03, 0x55, 0x04, 0x9e, 0x05
@@ -633,9 +633,9 @@ NakaInst_ACTIVE:	aligned_string "ACTIVE "
 NakaInst_PASSIVE:	aligned_string "PASSIVE"
 	.byte 0xa6, 0xa2, 0xea, 0x00, 0xa2, 0xa2
 	.byte 0xea, 0x00
-LABEL_EAA2A2:
+Str_OnPadded:
 	.byte 0x4f, 0x4e, 0x20, 0x00
-LABEL_EAA2A6:
+Str_OffPadded:
 	.byte 0x4f, 0x46
 	.byte 0x46, 0x00, 0x25, 0x00, 0x25, 0x64, 0x00, 0xff
 	.byte 0x64, 0x00, 0x25, 0x33, 0x64, 0x00, 0x25, 0x33
@@ -643,8 +643,8 @@ LABEL_EAA2A6:
 	.byte 0x36, 0x00, 0x36, 0x00, 0x21, 0x00, 0x28, 0x00
 	.byte 0x2f, 0x00, 0x19, 0x00, 0x00, 0x00, 0xdc, 0xa2
 	.byte 0xea, 0x00, 0xd6, 0xa2, 0xea, 0x00
-LABEL_EAA2D6:	.asciz "TRUE "
-LABEL_EAA2DC:	.byte 0x46, 0x41, 0x4c, 0x53
+Str_True:	.asciz "TRUE "
+Str_False:	.byte 0x46, 0x41, 0x4c, 0x53
 	.byte 0x45, 0x00, 0x4f, 0x4e, 0x00, 0xff, 0x4f, 0x46
 	.byte 0x46, 0x00, 0x7e, 0x39, 0x62, 0x00, 0x7e, 0x39
 	.byte 0x38, 0x00, 0x7e, 0x38, 0x35, 0x00, 0x7e, 0x38
@@ -656,7 +656,7 @@ NakaInst_OK:
 	.asciz "<"
 	.byte 0x3e, 0x00, 0x7e, 0x37, 0x66, 0x00, 0x7e, 0x38
 	.byte 0x30, 0x00, 0x59, 0x45, 0x53, 0x00
-LABEL_EAA316:
+Str_No:
 	.byte 0x4e, 0x4f
 	.byte 0x00, 0xff, 0x00, 0x00, 0x13, 0x00, 0x1a, 0x00
 	.byte 0x77, 0x00, 0x2f, 0x00, 0x36, 0x00, 0x3d, 0x00
@@ -695,15 +695,15 @@ LABEL_EAA316:
 	aligned_string "PMEM:%2d-  %16s"
 	aligned_string "PMEM:%2d-                  "
 Naka_InternalVar_Screens:
-	.long LABEL_EAA508
-	.long LABEL_EAA504
+	.long NakaInst_RT1
+	.long NakaInst_RT2
 	.long NakaInst_LEFT_DiskWarn
-	.long LABEL_EAA4FA
-	.long LABEL_EAA4F6
-	.long LABEL_EAA4F2
-	.long LABEL_EAA4EE
-	.long LABEL_EAA4EA
-	.long LABEL_EAA4E6
+	.long NakaInst_PT4
+	.long NakaInst_PT5
+	.long NakaInst_PT6
+	.long NakaInst_PT7
+	.long NakaInst_PT8
+	.long NakaInst_PT9
 	.long NakaInst_PT10
 	.long NakaInst_PT11
 	.long NakaInst_PT12
@@ -718,20 +718,20 @@ Naka_InternalVar_Screens:
 	.long NakaInst_DRUM
 	.long NakaInst_CHRD
 	.long NakaInst_RTBS
-	.long LABEL_EAA48E
-	.long LABEL_EAA48A
-	.long LABEL_EAA484
-	.long LABEL_EAA47E
-	.long LABEL_EAA47A
-LABEL_EAA47A:
+	.long NakaInst_MSP_A
+	.long NakaInst_MSP_B
+	.long NakaInst_CTRL
+	.long NakaInst_METR
+	.long NakaInst_MIC
+NakaInst_MIC:
 	.byte 0x4d, 0x49, 0x43, 0x00
-LABEL_EAA47E:
+NakaInst_METR:
 	.byte 0x4d, 0x45, 0x54, 0x52, 0x00, 0xff
-LABEL_EAA484:
+NakaInst_CTRL:
 	.byte 0x43, 0x54, 0x52, 0x4c, 0x00, 0xff
-LABEL_EAA48A:
+NakaInst_MSP_B:
 	.byte 0x4d, 0x53, 0x50, 0x00
-LABEL_EAA48E:
+NakaInst_MSP_A:
 	.byte 0x4d, 0x53, 0x50, 0x00
 NakaInst_RTBS:	aligned_string "RTBS"
 NakaInst_CHRD:	aligned_string "CHRD"
@@ -747,19 +747,19 @@ NakaInst_PT13:	aligned_string "PT13"
 NakaInst_PT12:	aligned_string "PT12"
 NakaInst_PT11:	aligned_string "PT11"
 NakaInst_PT10:	aligned_string "PT10"
-LABEL_EAA4E6:	.asciz "PT9"
-LABEL_EAA4EA:
+NakaInst_PT9:	.asciz "PT9"
+NakaInst_PT8:
 	.byte 0x50, 0x54, 0x38, 0x00
-LABEL_EAA4EE:	.asciz "PT7"
-LABEL_EAA4F2:
+NakaInst_PT7:	.asciz "PT7"
+NakaInst_PT6:
 	.byte 0x50, 0x54, 0x36, 0x00
-LABEL_EAA4F6:	.asciz "PT5"
-LABEL_EAA4FA:
+NakaInst_PT5:	.asciz "PT5"
+NakaInst_PT4:
 	.byte 0x50, 0x54, 0x34, 0x00
 NakaInst_LEFT_DiskWarn:	aligned_string "LEFT"
-LABEL_EAA504:
+NakaInst_RT2:
 	.byte 0x52, 0x54, 0x32, 0x00
-LABEL_EAA508:
+NakaInst_RT1:
 	.byte 0x52, 0x54, 0x31, 0x00, 0x07, 0x80, 0x00, 0x00
 	.byte 0x08, 0x80, 0x00, 0x00, 0x04, 0x00, 0x07, 0x84
 	.byte 0x00, 0x00, 0x08, 0x84, 0x00, 0x00, 0x04, 0x00
@@ -828,77 +828,77 @@ LABEL_EAA508:
 
 
 Naka_Debug3_Screens:
-	.long LABEL_EAA7EC
-	.long LABEL_EAA7E8
-	.long LABEL_EAA7E4
-	.long LABEL_EAA7E0
-	.long LABEL_EAA7DC
-	.long LABEL_EAA7D8
-	.long LABEL_EAA7D4
-	.long LABEL_EAA7D0
-	.long LABEL_EAA7CC
-	.long LABEL_EAA7C8
-	.long LABEL_EAA7C4
-	.long LABEL_EAA7C0
-	.long LABEL_EAA7BC
-	.long LABEL_EAA7B8
-	.long LABEL_EAA7B4
-	.long LABEL_EAA7B0
-	.long LABEL_EAA7AC
-	.long LABEL_EAA7A8
-	.long LABEL_EAA7A4
-	.long LABEL_EAA7A0
-LABEL_EAA7A0:
+	.long DbgPart_RT1
+	.long DbgPart_LFT
+	.long DbgPart_RT2
+	.long DbgPart_P8
+	.long DbgPart_P9
+	.long DbgPart_P10
+	.long DbgPart_P11
+	.long DbgPart_P12
+	.long DbgPart_P5
+	.long DbgPart_P6
+	.long DbgPart_P7
+	.long DbgPart_P4
+	.long DbgPart_DRM
+	.long DbgPart_CHD
+	.long DbgPart_APC
+	.long DbgPart_CTL
+	.long DbgPart_RHY
+	.long DbgPart_P13
+	.long DbgPart_P14
+	.long DbgPart_P15
+DbgPart_P15:
 	.byte 0x50, 0x31, 0x35, 0x00
-LABEL_EAA7A4:
+DbgPart_P14:
 	.byte 0x50, 0x31, 0x34, 0x00
-LABEL_EAA7A8:
+DbgPart_P13:
 	.byte 0x50, 0x31, 0x33, 0x00
-LABEL_EAA7AC:
+DbgPart_RHY:
 	.byte 0x52, 0x48, 0x59, 0x00
-LABEL_EAA7B0:
+DbgPart_CTL:
 	.byte 0x43, 0x54, 0x4c, 0x00
-LABEL_EAA7B4:
+DbgPart_APC:
 	.byte 0x41, 0x50, 0x43, 0x00
-LABEL_EAA7B8:
+DbgPart_CHD:
 	.byte 0x43, 0x48, 0x44, 0x00
-LABEL_EAA7BC:
+DbgPart_DRM:
 	.byte 0x44, 0x52, 0x4d, 0x00
-LABEL_EAA7C0:
+DbgPart_P4:
 	.byte 0x50, 0x20, 0x34, 0x00
-LABEL_EAA7C4:
+DbgPart_P7:
 	.byte 0x50, 0x20, 0x37, 0x00
-LABEL_EAA7C8:
+DbgPart_P6:
 	.byte 0x50, 0x20, 0x36, 0x00
-LABEL_EAA7CC:
+DbgPart_P5:
 	.byte 0x50, 0x20, 0x35, 0x00
-LABEL_EAA7D0:
+DbgPart_P12:
 	.byte 0x50, 0x31, 0x32, 0x00
-LABEL_EAA7D4:
+DbgPart_P11:
 	.byte 0x50, 0x31, 0x31, 0x00
-LABEL_EAA7D8:
+DbgPart_P10:
 	.byte 0x50, 0x31, 0x30, 0x00
-LABEL_EAA7DC:
+DbgPart_P9:
 	.byte 0x50, 0x20, 0x39, 0x00
-LABEL_EAA7E0:
+DbgPart_P8:
 	.byte 0x50, 0x20, 0x38, 0x00
-LABEL_EAA7E4:
+DbgPart_RT2:
 	.byte 0x52, 0x54, 0x32, 0x00
-LABEL_EAA7E8:
+DbgPart_LFT:
 	.byte 0x4c, 0x46, 0x54, 0x00
-LABEL_EAA7EC:
+DbgPart_RT1:
 	.byte 0x52, 0x54, 0x31, 0x00
 Naka_SeqPlay_Screens:
 	.long NakaInst_PsTextBox
-	.long LABEL_EAA814
+	.long NakaInst_REC
 	.long NakaInst_PLAY
 	.long NakaInst_MUTE
-	.long LABEL_EAA804
-LABEL_EAA804:
+	.long NakaInst_CLR
+NakaInst_CLR:
 	.byte 0x43, 0x4c, 0x52, 0x00
 NakaInst_MUTE:	aligned_string "MUTE"
 NakaInst_PLAY:	aligned_string "PLAY"
-LABEL_EAA814:
+NakaInst_REC:
 	.byte 0x52, 0x45, 0x43, 0x00
 NakaInst_PsTextBox:
 	.byte 0x00, 0xff, 0xf5, 0x00, 0x0a, 0x00, 0x0d, 0x00
@@ -930,7 +930,7 @@ NakaInst_English:	aligned_string "English"
 	.byte 0x6e, 0x02, 0x8d, 0x02, 0x00, 0x00, 0x20, 0x01
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xda, 0xa8
 	.byte 0xea, 0x00
-LABEL_EAA8DA:
+Data_RomramScreenConfig:
 	.byte 0x00, 0xff, 0x00, 0x00, 0x20, 0x01
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xf2, 0xa8
 	.byte 0xea, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -1229,7 +1229,7 @@ LABEL_EAA8DA:
 	.byte 0x25, 0x31, 0x64, 0x00, 0x25, 0x32, 0x64, 0x00
 	.byte 0x25, 0x33, 0x64, 0x00, 0x25, 0x32, 0x64, 0x00
 	.byte 0x25, 0x33, 0x64, 0x00, 0x25, 0x34, 0x64, 0x00
-LABEL_EAB1A0:
+Data_CharMapFormatBlock:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3f, 0x01, 0xef, 0x00
 	.byte 0x25, 0x31, 0x64, 0x00, 0x25, 0x32, 0x64, 0x00
 	.byte 0x25, 0x33, 0x64, 0x00, 0x00, 0x20, 0x20, 0x20
@@ -1263,8 +1263,8 @@ Naka_SoundParam_Screens:
 	.long NakaInst_UserBitmapCheck
 	.long NakaInst_CaptureLcdCheck
 	.long NakaInst_ApTaskControl
-	.long LABEL_EAB31C
-LABEL_EAB31C:	aligned_string ""
+	.long NakaInst_SoundParamSentinel
+NakaInst_SoundParamSentinel:	aligned_string ""
 NakaInst_ApTaskControl:	aligned_string "ApTaskControl"
 NakaInst_CaptureLcdCheck:	aligned_string "CaptureLcdCheck"
 NakaInst_UserBitmapCheck:	aligned_string "UserBitmapCheck"
@@ -1286,7 +1286,7 @@ Naka_LanguageCheck_Screens:
 	.long NakaInst_MixerPoint
 	.long NakaInst_Forward
 	.long NakaInst_Backward
-	.long LABEL_EAB8A6
+	.long NakaInst_Pause
 	.long NakaInst_Start
 	.long NakaInst_Before
 	.long NakaInst_Next
@@ -1302,7 +1302,7 @@ Naka_LanguageCheck_Screens:
 	.long NakaInst_LiOrgan
 	.long NakaInst_LiOrchPad
 	.long NakaInst_LiPiano
-	.long LABEL_EAB826
+	.long NakaInst_LiSax
 	.long NakaInst_LiStrings
 	.long NakaInst_LiSynth
 	.long NakaInst_LiDrawbar
@@ -1311,11 +1311,11 @@ Naka_LanguageCheck_Screens:
 	.long NakaInst_LedSwOff
 	.long NakaInst_LiGMSpecial
 	.long NakaInst_LiMetronome
-	.long LABEL_EAB7CE
-	.long LABEL_EAB7CC
+	.long NakaInst_LiMIC
+	.long NakaInst_LangCheckSentinel
 	.zero 884
-LABEL_EAB7CC:	aligned_string ""
-LABEL_EAB7CE:	.asciz "LiMIC"
+NakaInst_LangCheckSentinel:	aligned_string ""
+NakaInst_LiMIC:	.asciz "LiMIC"
 NakaInst_LiMetronome:	aligned_string "LiMetronome"
 NakaInst_LiGMSpecial:	aligned_string "LiGMSpecial"
 NakaInst_LedSwOff:	aligned_string "LedSwOff"
@@ -1324,7 +1324,7 @@ NakaInst_LiAccordion:	aligned_string "LiAccordion"
 NakaInst_LiDrawbar:	aligned_string "LiDrawbar"
 NakaInst_LiSynth:	aligned_string "LiSynth"
 NakaInst_LiStrings:	aligned_string "LiStrings"
-LABEL_EAB826:	.asciz "LiSax"
+NakaInst_LiSax:	.asciz "LiSax"
 NakaInst_LiPiano:	aligned_string "LiPiano"
 NakaInst_LiOrchPad:	aligned_string "LiOrchPad"
 NakaInst_LiOrgan:	aligned_string "LiOrgan"
@@ -1340,7 +1340,7 @@ NakaInst_LiBass:	aligned_string "LiBass"
 NakaInst_Next:	aligned_string "Next"
 NakaInst_Before:	aligned_string "Before"
 NakaInst_Start:	aligned_string "Start"
-LABEL_EAB8A6:	.asciz "Pause"
+NakaInst_Pause:	.asciz "Pause"
 NakaInst_Backward:	aligned_string "Backward"
 NakaInst_Forward:	aligned_string "Forward"
 NakaInst_MixerPoint:	aligned_string "MixerPoint"

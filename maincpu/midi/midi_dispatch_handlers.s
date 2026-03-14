@@ -6269,7 +6269,7 @@ MidiStream_RefreshDisplay:
 	push xiz
 	ldda8 l, 48422
 	ldda8 h, 48423
-	call LABEL_F6DCB1
+	call AccompSeq_ManualMidiEntry1
 	pop xiz
 	pop xix
 	pop xhl
