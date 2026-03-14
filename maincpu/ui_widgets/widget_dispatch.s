@@ -6619,7 +6619,7 @@ UIState_ConfigB_071:
 UIState_SeqInit_Table:
 	.long HdaeRom_AltEntry
 	.long LABEL_FDE7EB
-	.long LABEL_FC9A40
+	.long UIWidget_MidiStreamControl
 	.long UIState_KeyScan_Dispatch
 	.fill 4, 1, 0xff
 UIState_ConfigB_072:
@@ -6666,7 +6666,7 @@ UIState_ConfigB_077:
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_078:
 	.long UIState_KeyScan_Dispatch
-	.long LABEL_FC9507
+	.long UIState_CheckAndRenderBitmap
 	.byte 0xff, 0xff, 0xff, 0xff
 UIState_ConfigB_079:
 	.byte 0x38, 0xae, 0xfe, 0x00

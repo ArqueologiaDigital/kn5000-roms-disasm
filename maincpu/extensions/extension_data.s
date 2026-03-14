@@ -1973,11 +1973,11 @@ ErrorDialog_RecoveryLine3:
 	.byte 0x10, 0x00, 0x6e, 0x74
 	.byte 0xfc, 0x00, 0x20, 0x00, 0x8b, 0x74, 0xfc, 0x00
 	.byte 0x40, 0x00, 0x01, 0x75, 0xfc, 0x00, 0x00, 0x01
-	.long LABEL_FC7519
+	.long ExtData_VoiceParam_DispatchBytecode
 	.byte 0x00, 0x04, 0xa6, 0x75
 	.byte 0xfc, 0x00, 0x00, 0x10, 0xb7, 0x75, 0xfc, 0x00
 	.byte 0x00, 0x20, 0x41, 0x77, 0xfc, 0x00, 0x00, 0x40
-	.long LABEL_FC775B
+	.long CtrlPanel_SetResBit6_ViaLookup
 	.byte 0x00, 0x80, 0x75, 0x77
 	.byte 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0x01, 0x00, 0xbf, 0x77, 0xfc, 0x00, 0x02, 0x00
@@ -2157,32 +2157,32 @@ Protocol_values_for_LED_rows:
 	.zero 8
 	.byte 0x00, 0x00, 0x63, 0x00
 SoundProgram_DispatchTable:
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
-	.long LABEL_FC8542
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
+	.long ExtData_ToneParam_DispatchHandler
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
@@ -2224,12 +2224,12 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-	.long LABEL_FC873D
-	.long LABEL_FC876A
-	.long LABEL_FC876A
-	.long LABEL_FC876A
-	.long LABEL_FC87D3
-	.long LABEL_FC87D4
+	.long ExtData_ToneParam_CheckMode
+	.long ExtData_ToneParam_AltDispatch
+	.long ExtData_ToneParam_AltDispatch
+	.long ExtData_ToneParam_AltDispatch
+	.long ExtData_ToneParam_AltEntry
+	.long ExtData_ToneParam_AltBody
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
@@ -2253,7 +2253,7 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-	.long LABEL_FC8B97
+	.long ExtData_Voice_CheckMode
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
@@ -2261,7 +2261,7 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-	.long LABEL_FC8BAF
+	.long ExtData_Voice_RetEntry
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
@@ -2269,9 +2269,9 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-	.long LABEL_FC8BB0
+	.long ExtData_Voice_MixedHandler
 	.long ToshiCmd_DefaultHandler_Ret
-	.long LABEL_FC8CA3
+	.long ExtData_Voice_CheckMode3
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
@@ -2279,7 +2279,7 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-	.long LABEL_FC8CB2
+	.long ExtData_Voice_RetEntry2
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
@@ -2301,7 +2301,7 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-	.long LABEL_FC88F9
+	.long ExtData_ToneParam_MultiChannel
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
@@ -2309,7 +2309,7 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-	.long LABEL_FC8CB3
+	.long ExtData_Voice_FullHandler
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
@@ -2325,7 +2325,7 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-	.long LABEL_FC8D84
+	.long ExtData_Voice_CopyAndJump
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
@@ -2333,20 +2333,20 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-	.long LABEL_FC8D93
-	.long LABEL_FC8F3C
-	.long LABEL_FC8EBC
-	.long LABEL_FC9047
-	.long LABEL_FC8FB1
-	.long LABEL_FC8EBC
-	.long LABEL_FC8EBC
-	.long LABEL_FC8EBC
-	.long LABEL_FC8EBC
-	.long LABEL_FC8EBC
-	.long LABEL_FC8EBC
-	.long LABEL_FC8EBC
-	.long LABEL_FC8EBC
-	.long LABEL_FC8EBC
+	.long ExtData_Voice_CompareAndDispatch
+	.long MidiCh_IterateVolume_Reverse
+	.long MidiCh_IterateVolume_Forward
+	.long MidiCh_IterateExpression
+	.long MidiCh_IteratePan_Forward
+	.long MidiCh_IterateVolume_Forward
+	.long MidiCh_IterateVolume_Forward
+	.long MidiCh_IterateVolume_Forward
+	.long MidiCh_IterateVolume_Forward
+	.long MidiCh_IterateVolume_Forward
+	.long MidiCh_IterateVolume_Forward
+	.long MidiCh_IterateVolume_Forward
+	.long MidiCh_IterateVolume_Forward
+	.long MidiCh_IterateVolume_Forward
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret

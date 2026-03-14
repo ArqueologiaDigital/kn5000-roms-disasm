@@ -2511,10 +2511,10 @@ SoundParam_EncoderMappingData:
 	.byte 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e
 	.byte 0x02, 0x01, 0x00, 0xff, 0x97, 0x67, 0xfc, 0x00
 SoundParam_EncoderHandlers:
-	.long LABEL_FC67BC
-	.long LABEL_FC65E8
+	.long ExtDev_SndParam_DispatchAndWriteA8
+	.long ExtDev_SndParam_Write98_Block
 	.long LABEL_FC64EA
-	.long LABEL_FC6815
+	.long ExtDev_SndParam_DispatchAndWriteA8_Alt
 	.long LABEL_FC647F
 	.byte 0xad, 0xb3, 0x96, 0x91
 	.byte 0xb4, 0x90, 0x54, 0x65, 0xfc, 0x00, 0x9e, 0x65
@@ -2558,24 +2558,24 @@ Naka_EditorValue_Screens:
 	.long LABEL_FC645A
 	.long LABEL_FC647F
 	.long LABEL_FC64EA
-	.long LABEL_FC6554
-	.long LABEL_FC6579
-	.long LABEL_FC659E
-	.long LABEL_FC65C3
-	.long LABEL_FC65E8
-	.long LABEL_FC66C1
-	.long LABEL_FC670E
-	.long LABEL_FC6732
-	.long LABEL_FC676B
-	.long LABEL_FC6797
-	.long LABEL_FC67BC
-	.long LABEL_FC6815
-	.long LABEL_FC686E
-	.long LABEL_FC688C
-	.long LABEL_FC664A
-	.long LABEL_FC6625
-	.long LABEL_FC6677
-	.long LABEL_FC669C
+	.long ExtDev_SndParam_Block48_Var40
+	.long ExtDev_SndParam_Block48_Var80
+	.long ExtDev_SndParam_Block48_Var04
+	.long ExtDev_SndParam_Block48_Var04_B
+	.long ExtDev_SndParam_Write98_Block
+	.long ExtDev_SndParam_ConfigAndWrite
+	.long ExtDev_SndParam_Block14_Dual
+	.long ExtDev_SndParam_Write48_Block
+	.long ExtDev_SndParam_Block48_Var02
+	.long ExtDev_SndParam_Block70_Var04
+	.long ExtDev_SndParam_DispatchAndWriteA8
+	.long ExtDev_SndParam_DispatchAndWriteA8_Alt
+	.long ExtDev_SndParam_MultiReg_Iterate
+	.long ExtDev_SndParam_DispatchComplex
+	.long ExtDev_SndParam_BlockA9_Var02
+	.long ExtDev_SndParam_Block98_Var40
+	.long ExtDev_SndParam_Block98_Var80
+	.long ExtDev_SndParam_Block98_Var40_B
 	.byte 0x04, 0x04, 0x04, 0x04
 	.byte 0x04, 0x04, 0x04, 0x04
 EncQuantize_ParamGroup0:
