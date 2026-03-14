@@ -1059,12 +1059,12 @@ LabelProc:	; LABEL_F9C4B6
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F9C4CC
+	jr z, Label_HandlePaint
 	ld xwa, xiz
 	call ViewableProc
-	jr LABEL_F9C50B
+	jr Label_Epilogue
 
-LABEL_F9C4CC:
+Label_HandlePaint:
 	ld xwa, xiz
 	call ViewableProc
 	ld xwa, xiz
@@ -1090,7 +1090,7 @@ LABEL_F9C4CC:
 	call DrawString
 	lds32 xhl, 0
 
-LABEL_F9C50B:
+Label_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -1100,12 +1100,12 @@ BitmapProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F9C525
+	jr z, Bitmap_HandlePaint
 	ld xwa, xiz
 	call ViewableProc
-	jr LABEL_F9C548
+	jr Bitmap_Epilogue
 
-LABEL_F9C525:
+Bitmap_HandlePaint:
 	ld xwa, xiz
 	call ViewableProc
 	ld xwa, xiz
@@ -1119,7 +1119,7 @@ LABEL_F9C525:
 	call DrawBitmap
 	lds32 xhl, 0
 
-LABEL_F9C548:
+Bitmap_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -1129,12 +1129,12 @@ VwUserBitmapProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F9C562
+	jr z, VwUserBitmap_HandlePaint
 	ld xwa, xiz
 	call ViewableProc
-	jr LABEL_F9C5D0
+	jr VwUserBitmap_Epilogue
 
-LABEL_F9C562:
+VwUserBitmap_HandlePaint:
 	ld xwa, xiz
 	call ViewableProc
 	ld xwa, xiz
@@ -1152,7 +1152,7 @@ LABEL_F9C562:
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 6)
 	or xwa, xwa
-	jr z, LABEL_F9C5C5
+	jr z, VwUserBitmap_DrawFallback
 	ld xwa, (xiz + 22)
 	ld xbc, 0x1E000A2
 	lds32 xde, 0
@@ -1167,36 +1167,36 @@ LABEL_F9C562:
 	ld xbc, (xsp + 8)
 	ld de, (xsp + 6)
 	call DrawBitmapSPFast
-	jr LABEL_F9C5CE
+	jr VwUserBitmap_ReturnZero
 
-LABEL_F9C5C5:
+VwUserBitmap_DrawFallback:
 	lda xwa, (xsp + 10)
 	lds32 xbc, 0
 	call DrawBitmap
 
-LABEL_F9C5CE:
+VwUserBitmap_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F9C5D0:
+VwUserBitmap_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 10)
 	ret
 
 UserBitmapCheck:
 	cp xbc, 0x1E000A3
-	jr z, LABEL_F9C5F6
+	jr z, UserBitmapCheck_ReturnSize
 	cp xbc, 0x1E000A2
-	jr z, LABEL_F9C5F6
+	jr z, UserBitmapCheck_ReturnSize
 	cp xbc, 0x1E000A1
-	jr z, LABEL_F9C5F0
+	jr z, UserBitmapCheck_ReturnTablePtr
 	lds32 xhl, 0
 	ret
 
-LABEL_F9C5F0:
+UserBitmapCheck_ReturnTablePtr:
 	lda_24 xhl, 0xea9f20
 	ret
 
-LABEL_F9C5F6:
+UserBitmapCheck_ReturnSize:
 	ld xhl, 0x18
 	ret
 
@@ -1207,24 +1207,24 @@ VwUserBitmapByNameProc:
 	ld xiz, xbc
 	ld (xsp + 28), xwa
 	cp xiz, 0x1C00002
-	jrl z, LABEL_F9C695
+	jrl z, VwUserBitmapByName_HandleClose
 	cp xiz, 0x1C0000D
-	jr z, LABEL_F9C639
+	jr z, VwUserBitmapByName_HandlePaint
 	cp xiz, 0x1C00001
-	jr z, LABEL_F9C62F
+	jr z, VwUserBitmapByName_HandleCreate
 	ld xwa, (xsp + 28)
 	ld xbc, xiz
 	ld xde, (xsp + 24)
 	call ViewableProc
-	jr LABEL_F9C6A9
+	jr VwUserBitmapByName_Epilogue
 
-LABEL_F9C62F:
+VwUserBitmapByName_HandleCreate:
 	ld xwa, (xsp + 28)
 	ld xbc, xiz
 	ld xde, (xsp + 24)
-	jr LABEL_F9C6A3
+	jr VwUserBitmapByName_CallViewable
 
-LABEL_F9C639:
+VwUserBitmapByName_HandlePaint:
 	ld xwa, (xsp + 28)
 	ld xbc, xiz
 	ld xde, (xsp + 24)
@@ -1252,29 +1252,29 @@ LABEL_F9C639:
 	ld xbc, xhl
 	lda xwa, (xsp + 20)
 	or xbc, xbc
-	jr z, LABEL_F9C68D
+	jr z, VwUserBitmapByName_DrawDefault
 	call DrawBitmapFile
-	jr LABEL_F9C6A7
+	jr VwUserBitmapByName_ReturnZero
 
-LABEL_F9C68D:
+VwUserBitmapByName_DrawDefault:
 	lds32 xbc, 0
 	call DrawBitmap
-	jr LABEL_F9C6A7
+	jr VwUserBitmapByName_ReturnZero
 
-LABEL_F9C695:
+VwUserBitmapByName_HandleClose:
 	lds wa, 2
 	call ChangePalette
 	ld xwa, (xsp + 28)
 	ld xbc, xiz
 	ld xde, (xsp + 24)
 
-LABEL_F9C6A3:
+VwUserBitmapByName_CallViewable:
 	call ViewableProc
 
-LABEL_F9C6A7:
+VwUserBitmapByName_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F9C6A9:
+VwUserBitmapByName_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 28)
 	ret
@@ -1284,12 +1284,12 @@ IconProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F9C6C4
+	jr z, Icon_HandlePaint
 	ld xwa, xiz
 	call ViewableProc
-	jr LABEL_F9C71E
+	jr Icon_Epilogue
 
-LABEL_F9C6C4:
+Icon_HandlePaint:
 	ld xwa, xiz
 	call ViewableProc
 	ld xwa, xiz
@@ -1324,7 +1324,7 @@ LABEL_F9C6C4:
 	call DrawIcons
 	lds32 xhl, 0
 
-LABEL_F9C71E:
+Icon_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -1334,12 +1334,12 @@ LineProc:
 	push xiz
 	ld (xsp + 20), xwa
 	cp xbc, 0x1C0000D
-	jr z, LABEL_F9C73B
+	jr z, Line_HandlePaint
 	ld xwa, (xsp + 20)
 	call ViewableProc
-	jr LABEL_F9C7A0
+	jr Line_Epilogue
 
-LABEL_F9C73B:
+Line_HandlePaint:
 	ld xwa, (xsp + 20)
 	call ViewableProc
 	ld xwa, (xsp + 20)
@@ -1355,7 +1355,7 @@ LABEL_F9C73B:
 	lda xix, (xbc + 2)
 	lda xiy, (xwa + 2)
 	cp (xhl + 24), 0x1
-	jr nz, LABEL_F9C783
+	jr nz, Line_DrawHorizontal
 	ld (xwa), de
 	ld xde, (xsp + 8)
 	ld de, (xde)
@@ -1365,9 +1365,9 @@ LABEL_F9C73B:
 	ld (xbc), de
 	ld de, (xiz)
 	ld (xix), de
-	jr LABEL_F9C797
+	jr Line_DrawAndReturn
 
-LABEL_F9C783:
+Line_DrawHorizontal:
 	ld (xwa), de
 	ld de, (xiz)
 	ld (xiy), de
@@ -1378,12 +1378,12 @@ LABEL_F9C783:
 	ld de, (xde)
 	ld (xix), de
 
-LABEL_F9C797:
+Line_DrawAndReturn:
 	ld de, (xhl + 22)
 	call DrawLine
 	lds32 xhl, 0
 
-LABEL_F9C7A0:
+Line_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 20)
 	ret
@@ -1396,22 +1396,22 @@ FrameProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C0000D
-	jr z, LABEL_F9C7C9
+	jr z, Frame_HandlePaint
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call ViewableProc
-	jr LABEL_F9C7FA
+	jr Frame_Epilogue
 
-LABEL_F9C7C9:
+Frame_HandlePaint:
 	ld xwa, xiz
 	call GetVisible
 	cps hl, 0
-	jr nz, LABEL_F9C7D7
+	jr nz, Frame_DrawVisible
 	lds32 xhl, 1
-	jr LABEL_F9C7FA
+	jr Frame_Epilogue
 
-LABEL_F9C7D7:
+Frame_DrawVisible:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1425,7 +1425,7 @@ LABEL_F9C7D7:
 	calr DrawDesignFrame
 	lds32 xhl, 0
 
-LABEL_F9C7FA:
+Frame_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -1461,11 +1461,11 @@ GetClientFrame2:
 	cps wa, 0
 	jr z, FrameLoop_Cleanup
 	cps wa, 1
-	jr nz, LABEL_F9C842
+	jr nz, ClientFrame2_ProcessThickness
 	ld hl, (xsp + 4)
 	exts xhl
 
-LABEL_F9C842:
+ClientFrame2_ProcessThickness:
 	or xhl, xhl
 	jr z, FrameLoop_Cleanup
 	lds32 xiy, 0
@@ -1476,14 +1476,14 @@ LABEL_F9C842:
 	ld xbc, xiz
 	lda xwa, (xiz + 4)
 
-LABEL_F9C85B:
+ClientFrame2_InsetLoop:
 	incm 1, (xix)
 	decm 1, (xde)
 	incm 1, (xbc)
 	decm 1, (xwa)
 	inc 1, xiy
 	cp xiy, xhl
-	jr lt, LABEL_F9C85B
+	jr lt, ClientFrame2_InsetLoop
 
 FrameLoop_Cleanup:
 	pop xiz
@@ -1500,14 +1500,14 @@ DrawDesignFrame:
 	lds bc, 4
 	ldirw
 	cps de, 1
-	jr nz, LABEL_F9C8B7
+	jr nz, DesignFrame_Epilogue
 	lds32 xiz, 0
 	ld wa, (xsp + 12)
 	exts xwa
 	cp xwa, 0x0
-	jr le, LABEL_F9C8B7
+	jr le, DesignFrame_Epilogue
 
-LABEL_F9C894:
+DesignFrame_DrawLoop:
 	lda xwa, (xsp + 4)
 	ld bc, (xsp + 18)
 	call DrawFrame
@@ -1520,9 +1520,9 @@ LABEL_F9C894:
 	ld wa, (xsp + 12)
 	exts xwa
 	cp xiz, xwa
-	jr lt, LABEL_F9C894
+	jr lt, DesignFrame_DrawLoop
 
-LABEL_F9C8B7:
+DesignFrame_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 10)
 	retd 0x2
@@ -1535,13 +1535,13 @@ EditSwProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x1C00007
-	jr z, LABEL_F9C8DF
+	jr z, EditSw_HandleOK
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
-	jr LABEL_F9C94E
+	jr EditSw_CallLabelProc
 
-LABEL_F9C8DF:
+EditSw_HandleOK:
 	ld xwa, xiz
 	call GetViewInstance
 	ld (xsp + 4), xhl
@@ -1553,7 +1553,7 @@ LABEL_F9C8DF:
 	ld wa, (xbc + 32)
 	extz xwa
 	cp xwa, xhl
-	jr nz, LABEL_F9C946
+	jr nz, EditSw_ForwardToLabel
 	ld xwa, (xbc + 34)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
@@ -1561,40 +1561,40 @@ LABEL_F9C8DF:
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 38)
 	cp de, 0xFFFF
-	jr z, LABEL_F9C942
+	jr z, EditSw_ReturnZero
 	exts xde
 	ld xwa, (xsp + 8)
 	bit 7, wa
-	jr z, LABEL_F9C934
+	jr z, EditSw_SendDialDown
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00018
-	jr LABEL_F9C93E
+	jr EditSw_SendDialEvent
 
-LABEL_F9C934:
+EditSw_SendDialDown:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00017
 
-LABEL_F9C93E:
+EditSw_SendDialEvent:
 	call SendEvent
 
-LABEL_F9C942:
+EditSw_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F9C951
+	jr EditSw_Epilogue
 
-LABEL_F9C946:
+EditSw_ForwardToLabel:
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 
-LABEL_F9C94E:
+EditSw_CallLabelProc:
 	calr LabelProc
 
-LABEL_F9C951:
+EditSw_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
 
-LABEL_F9C956:
+EditSw_ByteData:
 	.byte 0xbf, 0xe4, 0x37, 0x2e, 0x1d, 0x66, 0x62, 0xfa
 	.byte 0xbf, 0x08, 0x63, 0xaf, 0x08, 0x20, 0xbf, 0x02
 	.byte 0x60, 0xbf, 0x12, 0x31, 0x98, 0x20, 0x20, 0x1e
