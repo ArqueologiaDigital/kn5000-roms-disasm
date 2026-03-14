@@ -7858,13 +7858,13 @@ LABEL_F532FE:
 
 LABEL_F53302:
 	push xiz
-	call LABEL_F55BEE
+	call AccStyle_LookupTempoAndVelocity
 	pop xiz
 	ret
 
 Rhythm_DispatchNote_Finalize:
 	push xiz
-	call LABEL_F55C4F
+	call AccStyle_LookupVelocityTable
 	pop xiz
 	ret
 
@@ -8091,8 +8091,8 @@ LABEL_F53582:
 	jr LABEL_F53596
 
 LABEL_F5358E:
-	call LABEL_F55CD0
-	call LABEL_F55CE8
+	call AccStyle_CheckRecordMode
+	call AccStyle_DetectChanges
 
 LABEL_F53596:
 	ret
