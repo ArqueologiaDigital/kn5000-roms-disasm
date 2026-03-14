@@ -15,62 +15,62 @@ AcLswFuncBoxProc:
 	ld (xsp + 4), xde
 	ld xiz, xwa
 	cp xbc, 0x1C00018
-	jrl z, LABEL_F74F5C
+	jrl z, AcLswBox_HandleScrollDownEvt
 	cp xbc, 0x1C0001A
-	jrl z, LABEL_F74F33
+	jrl z, AcLswBox_HandleScrollUpEvt
 	cp xbc, 0x1C00017
-	jrl z, LABEL_F74F0D
+	jrl z, AcLswBox_HandleDialDecEvt
 	cp xbc, 0x1C00019
-	jrl z, LABEL_F74EE6
+	jrl z, AcLswBox_HandleDialIncEvt
 	cp xbc, 0x1C0001C
-	jrl z, LABEL_F74EB8
+	jrl z, AcLswBox_HandleValueChange
 	cp xbc, 0x1C0000C
-	jrl z, LABEL_F74E9F
+	jrl z, AcLswBox_HandleGetLsw
 	cp xbc, 0x1C0000B
-	jrl z, LABEL_F74E9F
+	jrl z, AcLswBox_HandleGetLsw
 	cp xbc, 0x1C00002
-	jrl z, LABEL_F74E84
+	jrl z, AcLswBox_HandleResetFilter
 	cp xbc, 0x1C00001
-	jrl z, LABEL_F74E69
+	jrl z, AcLswBox_OnCreateEvt
 	cp xbc, 0x1E0003D
-	jr z, LABEL_F74E53
+	jr z, AcLswBox_HandleAdd
 	cp xbc, 0x1E0003B
-	jr z, LABEL_F74E3D
+	jr z, AcLswBox_HandlePut
 	cp xbc, 0x1E0003A
-	jrl nz, LABEL_F74F8B
+	jrl nz, AcLswBox_DefaultInherited
 	ld xwa, xiz
 	call GetViewInstance
 	lda xwa, (xhl + 36)
 	ld xbc, (xwa)
 	cpw (xbc), 0x0
-	jr nz, LABEL_F74E16
+	jr nz, AcLswBox_CheckState1
 	ld xwa, 0x2C
-	jr LABEL_F74E23
+	jr AcLswBox_AddOffsetAndPush
 
-LABEL_F74E16:
+AcLswBox_CheckState1:
 	ld xwa, (xwa)
 	cpw (xwa), 0x1
-	jr nz, LABEL_F74E2A
+	jr nz, AcLswBox_PushDefaultStr
 	ld xwa, 0x28
 
-LABEL_F74E23:
+AcLswBox_AddOffsetAndPush:
 	add xhl, xwa
 	ld xwa, (xhl)
 	push xwa
-	jr LABEL_F74E30
+	jr AcLswBox_StrcpyAndReturn
 
-LABEL_F74E2A:
+AcLswBox_PushDefaultStr:
 	pushw 0xE7
 	pushw 0xF93C
 
-LABEL_F74E30:
+AcLswBox_StrcpyAndReturn:
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	jrl AudioMix_ReturnZeroJmp2
 
-LABEL_F74E3D:
+AcLswBox_HandlePut:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xbc, (xsp + 4)
@@ -79,7 +79,7 @@ LABEL_F74E3D:
 	call MainLswPut
 	jrl AudioMix_ReturnZeroJmp2
 
-LABEL_F74E53:
+AcLswBox_HandleAdd:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xbc, (xsp + 4)
@@ -88,7 +88,7 @@ LABEL_F74E53:
 	call MainLswAdd
 	jrl AudioMix_ReturnZeroJmp2
 
-LABEL_F74E69:
+AcLswBox_OnCreateEvt:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -99,7 +99,7 @@ LABEL_F74E69:
 	call SetLswFilter
 	jrl AudioMix_ReturnZeroJmp2
 
-LABEL_F74E84:
+AcLswBox_HandleResetFilter:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -110,7 +110,7 @@ LABEL_F74E84:
 	call ResetLswFilter
 	jrl AudioMix_ReturnZeroJmp2
 
-LABEL_F74E9F:
+AcLswBox_HandleGetLsw:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -120,7 +120,7 @@ LABEL_F74E9F:
 	call MainLswGet
 	jrl AudioMix_ReturnZeroJmp2
 
-LABEL_F74EB8:
+AcLswBox_HandleValueChange:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -138,7 +138,7 @@ LABEL_F74EB8:
 	lds32 xde, 0
 	jrl AudioMix_SendEventAlt
 
-LABEL_F74EE6:
+AcLswBox_HandleDialIncEvt:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -153,7 +153,7 @@ LABEL_F74EE6:
 	lds32 xde, 1
 	jr AudioMix_SendEventAlt
 
-LABEL_F74F0D:
+AcLswBox_HandleDialDecEvt:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -168,7 +168,7 @@ LABEL_F74F0D:
 	lds32 xde, 1
 	jr AudioMix_SendEventAlt
 
-LABEL_F74F33:
+AcLswBox_HandleScrollUpEvt:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -183,7 +183,7 @@ LABEL_F74F33:
 	ld xde, 0xFFFFFFFF
 	jr AudioMix_SendEventAlt
 
-LABEL_F74F5C:
+AcLswBox_HandleScrollDownEvt:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -202,14 +202,14 @@ AudioMix_SendEventAlt:
 
 AudioMix_ReturnZeroJmp2:
 	lds32 xhl, 0
-	jr LABEL_F74F94
+	jr AcLswBox_ReturnEpilogue
 
-LABEL_F74F8B:
+AcLswBox_DefaultInherited:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
 
-LABEL_F74F94:
+AcLswBox_ReturnEpilogue:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -244,62 +244,62 @@ AcLswFuncEditBoxProc:
 	ld (xsp + 4), xde
 	ld xiz, xwa
 	cp xbc, 0x1C00018
-	jrl z, LABEL_F751AF
+	jrl z, AcLswEdit_HandleScrollDownEvt
 	cp xbc, 0x1C0001A
-	jrl z, LABEL_F75186
+	jrl z, AcLswEdit_HandleScrollUpEvt
 	cp xbc, 0x1C00017
-	jrl z, LABEL_F75160
+	jrl z, AcLswEdit_HandleDialDecEvt
 	cp xbc, 0x1C00019
-	jrl z, LABEL_F75139
+	jrl z, AcLswEdit_HandleDialIncEvt
 	cp xbc, 0x1C0001C
-	jrl z, LABEL_F7510B
+	jrl z, AcLswEdit_HandleValueChange
 	cp xbc, 0x1C0000C
-	jrl z, LABEL_F750F2
+	jrl z, AcLswEdit_HandleGetLsw
 	cp xbc, 0x1C0000B
-	jrl z, LABEL_F750F2
+	jrl z, AcLswEdit_HandleGetLsw
 	cp xbc, 0x1C00002
-	jrl z, LABEL_F750D7
+	jrl z, AcLswEdit_HandleResetFilter
 	cp xbc, 0x1C00001
-	jrl z, LABEL_F750BC
+	jrl z, AcLswEdit_HandleCreate
 	cp xbc, 0x1E0003D
-	jr z, LABEL_F750A6
+	jr z, AcLswEdit_HandleAdd
 	cp xbc, 0x1E0003B
-	jr z, LABEL_F75090
+	jr z, AcLswEdit_HandlePut
 	cp xbc, 0x1E0003A
-	jrl nz, LABEL_F751DE
+	jrl nz, AcLswEdit_DefaultInherited
 	ld xwa, xiz
 	call GetViewInstance
 	lda xwa, (xhl + 50)
 	ld xbc, (xwa)
 	cpw (xbc), 0x0
-	jr nz, LABEL_F75069
+	jr nz, AcLswEdit_CheckState1
 	ld xwa, 0x3A
-	jr LABEL_F75076
+	jr AcLswEdit_AddOffsetAndPush
 
-LABEL_F75069:
+AcLswEdit_CheckState1:
 	ld xwa, (xwa)
 	cpw (xwa), 0x1
-	jr nz, LABEL_F7507D
+	jr nz, AcLswEdit_PushDefaultStr
 	ld xwa, 0x36
 
-LABEL_F75076:
+AcLswEdit_AddOffsetAndPush:
 	add xhl, xwa
 	ld xwa, (xhl)
 	push xwa
-	jr LABEL_F75083
+	jr AcLswEdit_StrcpyAndReturn
 
-LABEL_F7507D:
+AcLswEdit_PushDefaultStr:
 	pushw 0xE7
 	pushw 0xF942
 
-LABEL_F75083:
+AcLswEdit_StrcpyAndReturn:
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	jrl AudioMix_ReturnZeroJmp
 
-LABEL_F75090:
+AcLswEdit_HandlePut:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xbc, (xsp + 4)
@@ -308,7 +308,7 @@ LABEL_F75090:
 	call MainLswPut
 	jrl AudioMix_ReturnZeroJmp
 
-LABEL_F750A6:
+AcLswEdit_HandleAdd:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xbc, (xsp + 4)
@@ -317,7 +317,7 @@ LABEL_F750A6:
 	call MainLswAdd
 	jrl AudioMix_ReturnZeroJmp
 
-LABEL_F750BC:
+AcLswEdit_HandleCreate:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -328,7 +328,7 @@ LABEL_F750BC:
 	call SetLswFilter
 	jrl AudioMix_ReturnZeroJmp
 
-LABEL_F750D7:
+AcLswEdit_HandleResetFilter:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -339,7 +339,7 @@ LABEL_F750D7:
 	call ResetLswFilter
 	jrl AudioMix_ReturnZeroJmp
 
-LABEL_F750F2:
+AcLswEdit_HandleGetLsw:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -349,7 +349,7 @@ LABEL_F750F2:
 	call MainLswGet
 	jrl AudioMix_ReturnZeroJmp
 
-LABEL_F7510B:
+AcLswEdit_HandleValueChange:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -367,7 +367,7 @@ LABEL_F7510B:
 	lds32 xde, 0
 	jrl AudioMix_SendEvent
 
-LABEL_F75139:
+AcLswEdit_HandleDialIncEvt:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -382,7 +382,7 @@ LABEL_F75139:
 	lds32 xde, 1
 	jr AudioMix_SendEvent
 
-LABEL_F75160:
+AcLswEdit_HandleDialDecEvt:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -397,7 +397,7 @@ LABEL_F75160:
 	lds32 xde, 1
 	jr AudioMix_SendEvent
 
-LABEL_F75186:
+AcLswEdit_HandleScrollUpEvt:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -412,7 +412,7 @@ LABEL_F75186:
 	ld xde, 0xFFFFFFFF
 	jr AudioMix_SendEvent
 
-LABEL_F751AF:
+AcLswEdit_HandleScrollDownEvt:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
@@ -431,14 +431,14 @@ AudioMix_SendEvent:
 
 AudioMix_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_F751E7
+	jr AcLswEdit_Epilogue
 
-LABEL_F751DE:
+AcLswEdit_DefaultInherited:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
 
-LABEL_F751E7:
+AcLswEdit_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -566,7 +566,7 @@ VoiceParam_ListHandler:
 	ld xbc, 0x1C00018
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_F7545A
+	jrl FadeGrid_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -576,7 +576,7 @@ VoiceParam_ListHandler:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F75358
+	jr z, FadeGrid_CheckFadeOut
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -600,7 +600,7 @@ VoiceParam_ListHandler:
 	call SetAutoInc
 	jrl AudioMix_ReturnZeroJmp3
 
-LABEL_F75358:
+FadeGrid_CheckFadeOut:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -626,7 +626,7 @@ LABEL_F75358:
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_F7545A
+	jrl FadeGrid_SetDialEnable
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -636,7 +636,7 @@ LABEL_F75358:
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F7540A
+	jr z, FadeGrid_CheckFadeOutAlt
 	ld xwa, xiz
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -658,7 +658,7 @@ LABEL_F75358:
 	call SetAutoInc
 	jrl AudioMix_ReturnZeroJmp3
 
-LABEL_F7540A:
+FadeGrid_CheckFadeOutAlt:
 	ld xwa, xiz
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 12)
@@ -685,7 +685,7 @@ LABEL_F7540A:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_F7545A:
+FadeGrid_SetDialEnable:
 	call SetDialEnable
 	jr AudioMix_ReturnZeroJmp3
 
@@ -693,14 +693,14 @@ LABEL_F7545A:
 VoiceUI_GridCase0:
 	ld xwa, xiz
 	ld xiz, 0x3E
-	jr LABEL_F75470
+	jr FadeGrid_GetViewAndStrcpy
 
 ; Voice UI grid case 1
 VoiceUI_GridCase1:
 	ld xwa, xiz
 	ld xiz, 0x42
 
-LABEL_F75470:
+FadeGrid_GetViewAndStrcpy:
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -715,7 +715,7 @@ LABEL_F75470:
 	ld xwa, (xhl + 70)
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
-	jr LABEL_F754A5
+	jr FadeGrid_ApFuncCallAndReturn
 
 ; Voice UI grid case 2
 VoiceUI_GridCase2:
@@ -725,7 +725,7 @@ VoiceUI_GridCase2:
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
 
-LABEL_F754A5:
+FadeGrid_ApFuncCallAndReturn:
 	call ApFuncCall
 
 AudioMix_ReturnZeroJmp3:
@@ -784,7 +784,7 @@ FadeSetGridCheck:
 	lda_24 xix, 0xf75517
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F75517:
+Data_FadeSetGridDispatch:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xbf, 0x1c, 0x63, 0xbf, 0x04, 0x31, 0xaf
@@ -823,7 +823,7 @@ LABEL_F75517:
 	.byte 0x88, 0xbf, 0x04, 0x32, 0x41, 0x8c, 0x00, 0xe0
 	.byte 0x01, 0x78, 0xd6, 0x00, 0x40, 0xb2, 0xf9, 0xe7
 	.byte 0x00, 0x92, 0x3f, 0x00, 0x00, 0x66, 0x05, 0x40
-	.long LABEL_E7F9AC
+	.long Data_AcGridParamTable
 	push	xwa
 	push	xbc
 	call	16715597
@@ -860,11 +860,11 @@ AcInOutGrid_Handler:
 	cp xbc, 0x2A10
 	jr z, SndParam_FormatAndDisplay
 	cp xbc, 0x2A01
-	jr z, LABEL_F756C0
+	jr z, SndParam_LookupAndSendCmd
 	cp xbc, 0x2A00
 	jr nz, SndParam_ReturnZero2
 
-LABEL_F756C0:
+SndParam_LookupAndSendCmd:
 	call SndParam_LookupReadOnly
 	pushw hl
 	pushw 0xE7
@@ -877,17 +877,17 @@ LABEL_F756C0:
 	ld xwa, xhl
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
-	jr LABEL_F75711
+	jr SndParam_SendEventAndReturn
 
 SndParam_FormatAndDisplay:
 	call SndParam_LookupReadOnly
 	lda xbc, (xsp + 12)
 	ld xwa, 0xE7F9CC
 	cps hl, 0
-	jr z, LABEL_F756FB
+	jr z, SndParam_PushStrAndCopy
 	ld xwa, 0xE7F9C6
 
-LABEL_F756FB:
+SndParam_PushStrAndCopy:
 	push xwa
 	push xbc
 	call Strcpy
@@ -897,7 +897,7 @@ LABEL_F756FB:
 	lda xde, (xsp + 4)
 	ld xbc, 0x1E0008C
 
-LABEL_F75711:
+SndParam_SendEventAndReturn:
 	call SendEvent
 
 SndParam_ReturnZero2:
@@ -1245,7 +1245,7 @@ InOutGridCheck:
 	lda_24 xix, 0xf75ade
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F75ADE:
+Data_InOutGridDispatch:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x60, 0x96
 	.byte 0xfa, 0xeb, 0x8e, 0xbf, 0x04, 0x30, 0xee, 0x89
@@ -1268,7 +1268,7 @@ LABEL_F75ADE:
 	.byte 0xa9, 0x78, 0xfa, 0x00, 0x40, 0x81, 0x21, 0x00
 	.byte 0x00, 0xd9, 0xa9, 0xda, 0xa9, 0x78, 0xee, 0x00
 	.byte 0x40, 0x84, 0x21, 0x00, 0x00, 0xd9, 0xa9, 0xda
-	.long LABEL_E278A9
+	.long Data_NakaPresetConfig
 	.byte 0x40, 0x82, 0x21, 0x00
 	.byte 0x00, 0xd9, 0xa9, 0xda, 0xa9, 0x78, 0xd6, 0x00
 	.byte 0x40, 0x83, 0x21, 0x00, 0x00, 0xd9, 0xa9, 0xda
@@ -1409,7 +1409,7 @@ ParaLoadOpt_Entry:
 	lda_24 xix, 0xf75f68
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F75F68:
+Data_ParaLoadOptDispatch:
 	.byte 0x40, 0x00, 0x21, 0x00, 0x00, 0x1d, 0x37, 0xd4
 	.byte 0xfc, 0xdb, 0xec, 0x02, 0xf2, 0xa8, 0xfc, 0xe7
 	.byte 0x30, 0xe3, 0x07, 0xe0, 0xec, 0x20, 0x38, 0xbf
@@ -1527,18 +1527,18 @@ IvMpstPageControlProc:
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C0001E
-	jr z, LABEL_F7629B
+	jr z, IvMpst_HandlePageSwitch
 	cp xwa, 0x1E0003A
-	jr z, LABEL_F76288
+	jr z, IvMpst_HandleGetName
 	cp xwa, 0x1C0000D
-	jr z, LABEL_F7626E
+	jr z, IvMpst_HandleClose
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jrl LABEL_F7631F
+	jrl IvMpst_Epilogue
 
-LABEL_F7626E:
+IvMpst_HandleClose:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1546,18 +1546,18 @@ LABEL_F7626E:
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
-	jrl LABEL_F76319
+	jrl IvMpst_SendEventEpilogue
 
-LABEL_F76288:
+IvMpst_HandleGetName:
 	pushw 0xE7
 	pushw 0xFD7E
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	jrl LABEL_F7631D
+	jrl IvMpst_ReturnZero
 
-LABEL_F7629B:
+IvMpst_HandlePageSwitch:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	ld xiz, xhl
@@ -1566,25 +1566,25 @@ LABEL_F7629B:
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F762C4
+	jr z, IvMpst_CheckSecondView
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1C00002
 	lds32 xde, 0
 	call SendEvent
 
-LABEL_F762C4:
+IvMpst_CheckSecondView:
 	ld xwa, (xiz + 28)
 	ld xbc, 0x1E00094
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F762E4
+	jr z, IvMpst_InheritAndCheck
 	ld xwa, (xiz + 28)
 	ld xbc, 0x1C00002
 	lds32 xde, 0
 	call SendEvent
 
-LABEL_F762E4:
+IvMpst_InheritAndCheck:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1592,26 +1592,26 @@ LABEL_F762E4:
 	ld wa, (xiz + 22)
 	exts xwa
 	cp xwa, (xsp + 4)
-	jr nz, LABEL_F7631D
+	jr nz, IvMpst_ReturnZero
 	cpi8_24 0x024756, 0x00
-	jr nz, LABEL_F7630F
+	jr nz, IvMpst_ActivateSecondView
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jr LABEL_F76319
+	jr IvMpst_SendEventEpilogue
 
-LABEL_F7630F:
+IvMpst_ActivateSecondView:
 	ld xwa, (xiz + 28)
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
-LABEL_F76319:
+IvMpst_SendEventEpilogue:
 	call SendEvent
 
-LABEL_F7631D:
+IvMpst_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F7631F:
+IvMpst_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -1628,7 +1628,7 @@ MdPresetWithoutFunc:
 	lds32 xde, 0
 	call SendEvent
 	cps l, 2
-	jr z, LABEL_F76378
+	jr z, MdPresetWithout_Slot2Path
 	cps l, 1
 	jr nz, MdPresetWith_ReturnSuccess
 	ld xwa, 0x560004
@@ -1641,9 +1641,9 @@ MdPresetWithoutFunc:
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jr LABEL_F7639B
+	jr MdPresetWithout_SendCreate
 
-LABEL_F76378:
+MdPresetWithout_Slot2Path:
 	ld xwa, 0x560005
 	call GetViewInstance
 	ld xiz, xhl
@@ -1655,7 +1655,7 @@ LABEL_F76378:
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
-LABEL_F7639B:
+MdPresetWithout_SendCreate:
 	call SendEvent
 
 MdPresetWith_ReturnSuccess:
@@ -1675,7 +1675,7 @@ MdPresetWithFunc:
 	lds32 xde, 0
 	call SendEvent
 	cps l, 2
-	jr z, LABEL_F763F7
+	jr z, MdPresetWith_Slot2Path
 	cps l, 1
 	jr nz, MdPreset_ReturnSuccess
 	ld xwa, 0x560004
@@ -1688,9 +1688,9 @@ MdPresetWithFunc:
 	ld xwa, (xiz + 28)
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jr LABEL_F7641A
+	jr MdPresetWith_SendCreate
 
-LABEL_F763F7:
+MdPresetWith_Slot2Path:
 	ld xwa, 0x560005
 	call GetViewInstance
 	ld xiz, xhl
@@ -1702,7 +1702,7 @@ LABEL_F763F7:
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 
-LABEL_F7641A:
+MdPresetWith_SendCreate:
 	call SendEvent
 
 MdPreset_ReturnSuccess:
@@ -1719,16 +1719,16 @@ MdPresetOKFunc:
 	lds32 xde, 0
 	call SendEvent
 	cps l, 4
-	jrl z, LABEL_F76523
+	jrl z, MdPresetOK_Slot4Path
 	cps l, 3
-	jrl z, LABEL_F764FE
+	jrl z, MdPresetOK_Slot3Path
 	ld8_24 a, 0x024756
 	cps l, 2
-	jr z, LABEL_F764AA
+	jr z, MdPresetOK_CheckSlotB
 	cps l, 1
 	jrl nz, MdPreset_PostMainFunc
 	cps a, 1
-	jr z, LABEL_F76484
+	jr z, MdPresetOK_Slot1Func
 	cps a, 0
 	jrl nz, MdPreset_PostMainFunc
 	ld xwa, 0x56000C
@@ -1743,7 +1743,7 @@ MdPresetOKFunc:
 	ld xde, xhl
 	jrl MdPreset_CallMainFunc
 
-LABEL_F76484:
+MdPresetOK_Slot1Func:
 	ld xwa, 0x560015
 	ld xbc, 0x1E00090
 	lds32 xde, 0
@@ -1756,9 +1756,9 @@ LABEL_F76484:
 	ld xde, xhl
 	jrl MdPreset_CallMainFunc
 
-LABEL_F764AA:
+MdPresetOK_CheckSlotB:
 	cps a, 1
-	jr z, LABEL_F764D9
+	jr z, MdPresetOK_SlotBFunc
 	cps a, 0
 	jrl nz, MdPreset_PostMainFunc
 	ld xwa, 0x56002D
@@ -1773,7 +1773,7 @@ LABEL_F764AA:
 	ld xde, xhl
 	jrl MdPreset_CallMainFunc
 
-LABEL_F764D9:
+MdPresetOK_SlotBFunc:
 	ld xwa, 0x560039
 	ld xbc, 0x1E00090
 	lds32 xde, 0
@@ -1786,7 +1786,7 @@ LABEL_F764D9:
 	ld xde, xhl
 	jr MdPreset_CallMainFunc
 
-LABEL_F764FE:
+MdPresetOK_Slot3Path:
 	ld xwa, 0x560020
 	ld xbc, 0x1E00090
 	lds32 xde, 0
@@ -1799,7 +1799,7 @@ LABEL_F764FE:
 	ld xde, xhl
 	jr MdPreset_CallMainFunc
 
-LABEL_F76523:
+MdPresetOK_Slot4Path:
 	ld xwa, 0x560029
 	ld xbc, 0x1E0006B
 	lds32 xde, 0
@@ -1826,9 +1826,9 @@ MainMpstFunc:
 	dec 4, xsp
 	ld (xsp), xde
 	cp xbc, 0x1E30004
-	jr z, LABEL_F76593
+	jr z, MainMpst_HandlePresetCopy
 	cp xbc, 0x1E30003
-	jr nz, LABEL_F765CB
+	jr nz, MainMpst_ReturnZero
 	ld xwa, (xsp)
 	stda8 47084, a
 	call SndParam_ApplyAndSync
@@ -1836,9 +1836,9 @@ MainMpstFunc:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
-	jr LABEL_F765C7
+	jr MainMpst_PostEvent
 
-LABEL_F76593:
+MainMpst_HandlePresetCopy:
 	stdi8 32578, 37
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00016
@@ -1852,15 +1852,15 @@ LABEL_F76593:
 	ld xbc, 0x1C00016
 	ld xde, 0x1A000EE
 
-LABEL_F765C7:
+MainMpst_PostEvent:
 	call ApPostEvent
 
-LABEL_F765CB:
+MainMpst_ReturnZero:
 	lds32 xhl, 0
 	inc 4, xsp
 	ret
 
-LABEL_F765D0:
+MainMpst_ReadPresetIndex:
 	ld8_24 l, 0x024758
 	ret
 
@@ -1870,7 +1870,7 @@ TtMdExc:
 	cp xbc, 0x1C0000B
 	jr z, TtMdExc_ReturnZero
 	cp xbc, 0x1C00002
-	jr z, LABEL_F76610
+	jr z, TtMdExc_HandleClose
 	cp xbc, 0x1C00001
 	jr nz, TtMdExc_ReturnZero
 	or xde, xde
@@ -1882,7 +1882,7 @@ TtMdExc:
 	ldw (xwa), 0x0
 	jr TtMdExc_ReturnZero
 
-LABEL_F76610:
+TtMdExc_HandleClose:
 	or xde, xde
 	jr nz, TtMdExc_ReturnZero
 	resda 6, 47074

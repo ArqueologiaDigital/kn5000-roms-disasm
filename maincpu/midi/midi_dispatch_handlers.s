@@ -5569,7 +5569,7 @@ SndParam_CopyPreset_MaskLoop:
 	inc 6, xbc
 	cp xbc, xde
 	jr c, SndParam_CopyPreset_MaskLoop
-	call LABEL_F765D0
+	call MainMpst_ReadPresetIndex
 	cps l, 0
 	jr nz, SndParam_CopyPreset_SelectBank
 	lds32 xwa, 0
