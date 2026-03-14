@@ -2042,9 +2042,9 @@ CDlikeSwTtl_ShowDocTitle:
 	bit 0, hl
 	ret nz
 	pushw 0xC
-	call LABEL_F8A7CE
+	call FileIO_GetCurrentFileIndex_Alt
 	ld wa, hl
-	call LABEL_F8A9A2
+	call FileIO_GetFileEntryByIndex
 	push xhl
 	pushw 0x0
 	pushw 0x1C2C

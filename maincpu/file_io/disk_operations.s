@@ -135,7 +135,7 @@ FCopy_HandleCopyContext:
 	cps hl, 0
 	jrl z, FCopy_CopyExecute
 	ldda16 xwa, 32614
-	call LABEL_F8945F
+	call FileIO_GetRecordFlags
 	cps hl, 0
 	jr z, FCopy_CopyConfirm_Execute
 	cpi8_24 0x0340ea, 0x00
@@ -1000,7 +1000,7 @@ DiskInfo_ReadDriveType:
 DiskInfo_ReadCapacity:
 	call GetEncodedFreeSpaceData
 	ld (xsp + 4), xhl
-	call LABEL_F89573
+	call FileIO_GetDiskRecordPtr
 	ld (xsp + 12), xhl
 	jr DiskInfo_ComputePercent
 

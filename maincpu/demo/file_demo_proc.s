@@ -2679,18 +2679,18 @@ SaveRegion4_Return:
 	ret
 
 
-LABEL_F87EAD:
+FileIO_SaveAllRegions:
 	lda xsp, (xsp - 26)
 	push xiz
 	ldw (xsp + 4), 0x0
 	call GetCurrentFileIndex
 	ld iz, hl
 	cps iz, 0
-	jr ge, LABEL_F87EC6
+	jr ge, SaveAll_GetEntryPtr
 	ldw hl, 0xFF98
-	jrl LABEL_F88000
+	jrl SaveAll_Return
 
-LABEL_F87EC6:
+SaveAll_GetEntryPtr:
 	ld wa, iz
 	call GetFileEntryPtr
 	ld xde, xhl
@@ -2700,14 +2700,14 @@ LABEL_F87EC6:
 	call FileIO_FormatFileIndex
 	ldi_werp 0xFA, 0
 
-LABEL_F87EDD:
+SaveAll_CheckRecordLoop:
 	ldto_werp WA, 0xFA
 	muls wa, 0x6
 	lda_24 xbc, 0xea0210
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	call FileIO_CheckRecordValid
 	cps l, 0
-	jr z, LABEL_F87F23
+	jr z, SaveAll_NextRecord
 	lda xbc, (xsp + 20)
 	ldto_werp WA, 0xFA
 	muls wa, 0x6
@@ -2719,12 +2719,12 @@ LABEL_F87EDD:
 	call FileIO_OpenDefault
 	ld (xsp + 4), hl
 	cpw (xsp + 4), 0x0
-	jrl lt, LABEL_F87FFD
+	jrl lt, SaveAll_GetResult
 
-LABEL_F87F23:
+SaveAll_NextRecord:
 	inc1_werp 0xFA
 	cp_erpw 0xFA, 0x08, 0x00
-	jr lt, LABEL_F87EDD
+	jr lt, SaveAll_CheckRecordLoop
 	lda xbc, (xsp + 20)
 	lda xwa, (xsp + 6)
 	ldw de, 0x8
@@ -2753,7 +2753,7 @@ FileDemo_ProcessCallback:
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	call FileIO_FormatName_Return
 	cps l, 0
-	jr z, LABEL_F87FA4
+	jr z, SaveAll_ProcessNextRecord
 	lda xwa, (xsp + 20)
 	ldto_werp BC, 0xFA
 	muls bc, 0x6
@@ -2764,26 +2764,26 @@ FileDemo_ProcessCallback:
 	call (xhl)
 	ld (xsp + 4), hl
 	cpw (xsp + 4), 0x0
-	jr lt, LABEL_F87FAE
+	jr lt, SaveAll_CheckSaveError
 
-LABEL_F87FA4:
+SaveAll_ProcessNextRecord:
 	inc1_werp 0xFA
 	cp_erpw 0xFA, 0x08, 0x00
 	jr lt, FileDemo_ProcessCallback
 
-LABEL_F87FAE:
+SaveAll_CheckSaveError:
 	cpw (xsp + 4), 0x0
-	jr ge, LABEL_F87FFD
+	jr ge, SaveAll_GetResult
 	ldi_werp 0xFA, 0
 
-LABEL_F87FB8:
+SaveAll_RollbackLoop:
 	ldto_werp WA, 0xFA
 	muls wa, 0x6
 	lda_24 xbc, 0xea0210
 	ld_srib3 A, 0x07, 0xE4, 0xE0
 	call FileIO_FormatName_Return
 	cps l, 0
-	jr z, LABEL_F87FF3
+	jr z, SaveAll_RollbackNext
 	lda xbc, (xsp + 20)
 	ldto_werp WA, 0xFA
 	muls wa, 0x6
@@ -2794,15 +2794,15 @@ LABEL_F87FB8:
 	lda xwa, (xsp + 6)
 	call FileIO_OpenDefault
 
-LABEL_F87FF3:
+SaveAll_RollbackNext:
 	inc1_werp 0xFA
 	cp_erpw 0xFA, 0x08, 0x00
-	jr lt, LABEL_F87FB8
+	jr lt, SaveAll_RollbackLoop
 
-LABEL_F87FFD:
+SaveAll_GetResult:
 	ld hl, (xsp + 4)
 
-LABEL_F88000:
+SaveAll_Return:
 	pop xiz
 	lda xsp, (xsp + 26)
 	ret
@@ -4685,23 +4685,23 @@ FileIO_SetModeFlag_Reading:
 FileIO_CheckRecordValid:
 	ld16_24 xbc, 0x025ea8
 	cps bc, 0
-	jr lt, LABEL_F893E5
+	jr lt, CheckRecord_ReturnFalse
 	cp bc, 0x14
-	jr ge, LABEL_F893E5
+	jr ge, CheckRecord_ReturnFalse
 	cp a, 0xA
-	jr c, LABEL_F893E8
+	jr c, CheckRecord_ValidRange
 
-LABEL_F893E5:
+CheckRecord_ReturnFalse:
 	ldb l, 0x0
 	ret
 
-LABEL_F893E8:
+CheckRecord_ValidRange:
 	lds de, 1
 	and a, 0xF
-	jr z, LABEL_F893F1
+	jr z, CheckRecord_ShiftDone
 	slla de
 
-LABEL_F893F1:
+CheckRecord_ShiftDone:
 	muls bc, 0xC
 	ld wa, bc
 	lda_24 xbc, 0x025db8
@@ -4714,22 +4714,22 @@ LABEL_F893F1:
 FileIO_CheckRecordByFile:
 	ld de, wa
 	cp de, 0x14
-	jr nc, LABEL_F89415
+	jr nc, CheckRecordByFile_OutOfRange
 	cp c, 0xA
-	jr c, LABEL_F89418
+	jr c, CheckRecordByFile_Valid
 
-LABEL_F89415:
+CheckRecordByFile_OutOfRange:
 	ldb l, 0x0
 	ret
 
-LABEL_F89418:
+CheckRecordByFile_Valid:
 	lds hl, 1
 	ld a, c
 	and a, 0xF
-	jr z, LABEL_F89423
+	jr z, CheckRecordByFile_ShiftDone
 	slla hl
 
-LABEL_F89423:
+CheckRecordByFile_ShiftDone:
 	extz xde
 	ld xbc, xde
 	add xbc, xbc
@@ -4746,27 +4746,27 @@ LABEL_F89423:
 CheckFileSystemStatus:
 	ld16_24 xwa, 0x025ea8
 	cps wa, 0
-	jr lt, LABEL_F8944D
+	jr lt, CheckFS_ReturnZero
 	cp wa, 0x14
-	jr lt, LABEL_F89450
+	jr lt, CheckFS_ValidIndex
 
-LABEL_F8944D:
+CheckFS_ReturnZero:
 	lds hl, 0
 	ret
 
-LABEL_F89450:
+CheckFS_ValidIndex:
 	muls wa, 0xC
 	lda_24 xbc, 0x025db8
 	ld_sriw3 HL, 0x07, 0xE4, 0xE0
 	ret
 
-LABEL_F8945F:
+FileIO_GetRecordFlags:
 	cp wa, 0x14
-	jr c, LABEL_F89468
+	jr c, GetRecordFlags_Valid
 	lds hl, 0
 	ret
 
-LABEL_F89468:
+GetRecordFlags_Valid:
 	extz xwa
 	ld xbc, xwa
 	add xbc, xbc
@@ -4777,25 +4777,25 @@ LABEL_F89468:
 	ld hl, (xwa)
 	ret
 
-LABEL_F8947D:
+FileIO_CheckFileExists:
 	st_dri3b L, 0xFD, 0xF6, 0xFE
 	lda xbc, (xsp)
 	call _findfirst
 	ld xwa, xhl
 	cp xwa, 0x0
-	jr lt, LABEL_F8949A
+	jr lt, CheckFileExists_NotFound
 	call _findclose
 	ldb l, 0x1
-	jr LABEL_F8949C
+	jr CheckFileExists_Done
 
-LABEL_F8949A:
+CheckFileExists_NotFound:
 	ldb l, 0x0
 
-LABEL_F8949C:
+CheckFileExists_Done:
 	st_dri3b L, 0xFD, 0x0A, 0x01
 	ret
 
-LABEL_F894A2:
+FileIO_InitRecordTable:
 	ld xiy, 0xEA0390
 	ld xix, 0x25D6C
 	ldw bc, 0x26
@@ -4804,26 +4804,26 @@ LABEL_F894A2:
 	ld xwa, xbc
 	st_dri3b B, 0xE5, 0xF0, 0x00
 
-LABEL_F894BD:
+InitRecordTable_CopyLoop:
 	ld xiy, 0xEA03DC
 	ld xix, xwa
 	lds bc, 6
 	ldirw
 	lda xwa, (xwa + 12)
 	cp xwa, xde
-	jr c, LABEL_F894BD
+	jr c, InitRecordTable_CopyLoop
 	lda_24 xbc, 0x025eb2
 	ld xwa, xbc
 	st_dri3b B, 0xE5, 0x38, 0x13
 
-LABEL_F894DB:
+InitRecordTable_ExtLoop:
 	ld xiy, 0xEA03E8
 	ld xix, xwa
 	ldw bc, 0x29
 	ldirw
 	lda xwa, (xwa + 82)
 	cp xwa, xde
-	jr c, LABEL_F894DB
+	jr c, InitRecordTable_ExtLoop
 	sti16_24 0x025ea8, 0x0000
 	sti16_24 0x0271ea, 0x0000
 	sti16_24 0x0271ec, 0x0000
@@ -4836,11 +4836,11 @@ LABEL_F894DB:
 GetDiskSizeInfo:
 	ld8_24 a, 0xea03da
 	cpda8_24 a, 155062
-	jr nz, LABEL_F89535
+	jr nz, GetDiskSize_Return
 	call GetMediaType
 	st8_24 0x025db6, l
 
-LABEL_F89535:
+GetDiskSize_Return:
 	ld8_24 l, 0x025db6
 	ret
 
@@ -4848,11 +4848,11 @@ GetEncodedFreeSpaceData:
 	lda_24 xwa, 0x025d6c
 	ld32_24 xbc, 0xea0390
 	cp xbc, (xwa)
-	jr nz, LABEL_F89550
+	jr nz, GetEncoded_Return
 	lda xbc, (xwa + 4)
 	call GetDiskFreeSpace
 
-LABEL_F89550:
+GetEncoded_Return:
 	ld32_24 xhl, 0x025d6c
 	ret
 
@@ -4868,7 +4868,7 @@ FileIO_ResetCurrentRecord:
 	st32_24 0x025d6c, xwa
 	ret
 
-LABEL_F89573:
+FileIO_GetDiskRecordPtr:
 	lda_24 xwa, 0x025d6c
 	lda xbc, (xwa + 4)
 	ld32_24 xde, 0xea0394
@@ -4883,26 +4883,26 @@ FileIO_SearchAndLoadFile:
 	lda_24 xbc, 0xea0398
 	calr FileIO_SearchFile
 	cps hl, 0
-	jr nz, LABEL_F895C6
+	jr nz, SearchLoad_Return
 	call GetVolumeLabel
 	ld xwa, xhl
 	ld xiz, xwa
 	or xwa, xwa
-	jr z, LABEL_F895B7
+	jr z, SearchLoad_DefaultVolume
 	lda_24 xbc, 0xea0398
 	calr FileIO_SearchFile
 	cps hl, 0
-	jr nz, LABEL_F895BC
+	jr nz, SearchLoad_CopyPath
 
-LABEL_F895B7:
+SearchLoad_DefaultVolume:
 	ld xiz, 0xEA0462
 
-LABEL_F895BC:
+SearchLoad_CopyPath:
 	lda_24 xwa, 0x025d74
 	ld xbc, xiz
 	calr FileIO_CopyString
 
-LABEL_F895C6:
+SearchLoad_Return:
 	lda_24 xhl, 0x025d74
 	pop xiz
 	ret
@@ -4910,23 +4910,23 @@ LABEL_F895C6:
 ValidateFileSelectionIndex:
 	ld8_24 c, 0x025db6
 	cps c, 2
-	jr z, LABEL_F895DE
+	jr z, ValidateSelection_CheckRange
 	cps c, 3
-	jr z, LABEL_F895DE
+	jr z, ValidateSelection_CheckRange
 	cps c, 4
-	jr nz, LABEL_F895E8
+	jr nz, ValidateSelection_Error
 
-LABEL_F895DE:
+ValidateSelection_CheckRange:
 	cps wa, 0
-	jr lt, LABEL_F895E8
+	jr lt, ValidateSelection_Error
 	cp wa, 0x14
-	jr lt, LABEL_F895EC
+	jr lt, ValidateSelection_Ok
 
-LABEL_F895E8:
+ValidateSelection_Error:
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F895EC:
+ValidateSelection_Ok:
 	lds hl, 0
 	ret
 
@@ -4934,11 +4934,11 @@ GetCurrentFileIndex:
 	ld16_24 xwa, 0x025ea8
 	calr ValidateFileSelectionIndex
 	cps hl, 0
-	jr z, LABEL_F895FF
+	jr z, GetCurrentFile_ReturnIndex
 	ldw hl, 0xFF98
 	ret
 
-LABEL_F895FF:
+GetCurrentFile_ReturnIndex:
 	ld16_24 xhl, 0x025ea8
 	ret
 
@@ -6168,11 +6168,11 @@ GetEntry_ComputeOffset:
 	lda_24 xbc, 0xea03f6
 	calr FileIO_SearchFile
 	cps hl, 0
-	jr nz, LABEL_F8A0C0
+	jr nz, FileEntry_ComputeOffset
 	ld wa, iz
 	calr ProcessFileRecord
 
-LABEL_F8A0C0:
+FileEntry_ComputeOffset:
 	ld16_24 xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
@@ -6690,15 +6690,15 @@ ValidateRangeAlt_IsValid:
 	lds hl, 0
 	ret
 
-LABEL_F8A7CE:
+FileIO_GetCurrentFileIndex_Alt:
 	ld16_24 xwa, 0x0271ea
 	calr ValidateFileRangeAlt
 	cps hl, 0
-	jr z, LABEL_F8A7DE
+	jr z, GetCurrentFileAlt_ReturnIndex
 	ldw hl, 0xFF98
 	ret
 
-LABEL_F8A7DE:
+GetCurrentFileAlt_ReturnIndex:
 	ld16_24 xhl, 0x0271ea
 	ret
 
@@ -6725,22 +6725,22 @@ FileIO_InitDirScan:
 	ld xwa, xbc
 	st_dri3b B, 0xE5, 0x38, 0x13
 
-LABEL_F8A817:
+InitDirScan_CopyLoop:
 	ld xiy, 0xEA03E8
 	ld xix, xwa
 	ldw bc, 0x29
 	ldirw
 	lda xwa, (xwa + 82)
 	cp xwa, xde
-	jr c, LABEL_F8A817
+	jr c, InitDirScan_CopyLoop
 	ldi_werp 0xFA, 0
 	cpi8_24 0x025db6, 0x06
-	jrl nz, LABEL_F8A8CB
+	jrl nz, DirScan_AltMediaPath
 	ld xwa, 0xEA0504
 	ld xbc, 0xEA0500
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr lt, LABEL_F8A8C3
+	jr lt, DirScan_ReturnResult
 	ld xwa, 0x51
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
@@ -6750,7 +6750,7 @@ LABEL_F8A817:
 	cpda16_24 xiz, 160240
 	jr gt, FileIO_DirScanDone
 
-LABEL_F8A866:
+DirScan_ProcessEntry:
 	lda_24 xwa, 0x027200
 	ld_srib3 A, 0x07, 0xE0, 0xF8
 	exts wa
@@ -6776,27 +6776,27 @@ LABEL_F8A866:
 	calr FileIO_BuildFileExtName
 	inc 1, iz
 	cpda16_24 xiz, 160240
-	jr le, LABEL_F8A866
+	jr le, DirScan_ProcessEntry
 
 FileIO_DirScanDone:
 	call FileIO_CloseHandle
 
-LABEL_F8A8C3:
+DirScan_ReturnResult:
 	ldto_werp HL, 0xFA
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
 
-LABEL_F8A8CB:
+DirScan_AltMediaPath:
 	ld xwa, 0xEA0512
 	ld xbc, 0xEA050E
 	call FileIO_OpenWithMode
 	cps hl, 0
-	jr lt, LABEL_F8A8C3
+	jr lt, DirScan_ReturnResult
 	ld xwa, 0x10
 	lds bc, 0
 
-LABEL_F8A8E4:
+DirScan_AltReadLoop:
 	call FileIO_SeekAndReadBlock
 	lda xwa, (xsp + 4)
 	ld xbc, 0xB
@@ -6810,10 +6810,10 @@ LABEL_F8A8E4:
 	ld16_24 xde, 0x0271ee
 	ldto_werp WA, 0xFA
 	cp wa, de
-	jr lt, LABEL_F8A94A
+	jr lt, DirScan_AltNextEntry
 	ldto_werp WA, 0xFA
 	cpda16_24 xwa, 160240
-	jr gt, LABEL_F8A94A
+	jr gt, DirScan_AltNextEntry
 	ldto_werp WA, 0xFA
 	sub wa, de
 	muls wa, 0x52
@@ -6830,25 +6830,25 @@ LABEL_F8A8E4:
 	add xwa, xbc
 	calr FileIO_BuildFileExtName
 
-LABEL_F8A94A:
+DirScan_AltNextEntry:
 	inc1_werp 0xFA
 	ld xwa, 0x45
 	lds bc, 1
-	jr LABEL_F8A8E4
+	jr DirScan_AltReadLoop
 
-LABEL_F8A956:
+FileIO_SelectFileByIndex:
 	pushw iz
 	ld iz, wa
 	ld wa, iz
 	calr ValidateFileRangeAlt
 	cp hl, 0xFFFF
-	jr nz, LABEL_F8A96B
+	jr nz, SelectFile_CheckPageBound
 	ld16_24 xhl, 0x0271ea
-	jr LABEL_F8A9A0
+	jr SelectFile_Return
 
-LABEL_F8A96B:
+SelectFile_CheckPageBound:
 	cps hl, 1
-	jr nz, LABEL_F8A999
+	jr nz, SelectFile_StoreIndex
 	ld wa, iz
 	extz xwa
 	div wa, 0x3C
@@ -6858,32 +6858,32 @@ LABEL_F8A96B:
 	add bc, 0x3B
 	ld16_24 xwa, 0x0271ec
 	cp bc, wa
-	jr ge, LABEL_F8A991
+	jr ge, SelectFile_ClampEnd
 	ld wa, bc
 
-LABEL_F8A991:
+SelectFile_ClampEnd:
 	st16_24 0x0271f0, xwa
 	calr FileIO_InitDirScan
 
-LABEL_F8A999:
+SelectFile_StoreIndex:
 	ld hl, iz
 	st16_24 0x0271ea, xhl
 
-LABEL_F8A9A0:
+SelectFile_Return:
 	popw iz
 	ret
 
-LABEL_F8A9A2:
+FileIO_GetFileEntryByIndex:
 	pushw iz
 	ld iz, wa
 	ld wa, iz
 	calr ValidateFileRangeAlt
 	cps hl, 0
-	jr z, LABEL_F8A9B5
+	jr z, GetFileEntry_ComputeOffset
 	lda_24 xhl, 0xea0448
-	jr LABEL_F8A9D4
+	jr GetFileEntry_Return
 
-LABEL_F8A9B5:
+GetFileEntry_ComputeOffset:
 	ld16_24 xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
@@ -6895,42 +6895,42 @@ LABEL_F8A9B5:
 	add xwa, xhl
 	ld xhl, xwa
 
-LABEL_F8A9D4:
+GetFileEntry_Return:
 	popw iz
 	ret
 
-LABEL_F8A9D6:
+FileIO_InitFileNavigation:
 	sti16_24 0x0271ee, 0x0000
 	sti16_24 0x0271f0, 0x003b
 	calr FileIO_InitDirScan
 	lds wa, 0
 	cps hl, 0
-	jr le, LABEL_F8A9F1
+	jr le, InitFileNav_ClampEnd
 	ld wa, hl
 	dec 1, wa
 
-LABEL_F8A9F1:
+InitFileNav_ClampEnd:
 	st16_24 0x0271ec, xwa
 	cpdm16_24 160240, xwa
 	ret le
 	st16_24 0x0271f0, xwa
 	ret
 
-LABEL_F8AA03:
+FileIO_RefreshFileNames:
 	push xiz
 	cpi8_24 0x025db6, 0x06
-	jrl nz, LABEL_F8AAE7
+	jrl nz, RefreshNames_AltMediaPath
 	ld xwa, 0xEA0524
 	ld xbc, 0xEA0520
 	call FileIO_OpenWithMode
 	ld16_24 xwa, 0x0271ee
 	ld iz, wa
 	cps hl, 0
-	jr ge, LABEL_F8AA55
+	jr ge, RefreshNames_CheckEnd
 	cpda16_24 xwa, 160240
 	jrl gt, FileIO_ScanComplete_Return
 
-LABEL_F8AA2E:
+RefreshNames_FallbackLoop:
 	ld wa, iz
 	subda16_24 xwa, 160238
 	muls wa, 0x52
@@ -6940,14 +6940,14 @@ LABEL_F8AA2E:
 	calr FileIO_CopyString
 	inc 1, iz
 	cpda16_24 xiz, 160240
-	jr le, LABEL_F8AA2E
+	jr le, RefreshNames_FallbackLoop
 	jrl FileIO_ScanComplete_Return
 
-LABEL_F8AA55:
+RefreshNames_CheckEnd:
 	cpda16_24 xwa, 160240
 	jrl gt, FileIO_ScanDone
 
-LABEL_F8AA5D:
+RefreshNames_ReadLoop:
 	lda_24 xwa, 0x027200
 	ld_srib3 A, 0x07, 0xE0, 0xF8
 	exts wa
@@ -6976,7 +6976,7 @@ LABEL_F8AA5D:
 	ldw de, 0x40
 	calr TrimAndFormatFilename
 	cps hl, 0
-	jr ge, LABEL_F8AADA
+	jr ge, RefreshNames_NextEntry
 	ld wa, iz
 	subda16_24 xwa, 160238
 	muls wa, 0x52
@@ -6985,24 +6985,24 @@ LABEL_F8AA5D:
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 
-LABEL_F8AADA:
+RefreshNames_NextEntry:
 	inc 1, iz
 	cpda16_24 xiz, 160240
-	jrl le, LABEL_F8AA5D
+	jrl le, RefreshNames_ReadLoop
 	jrl FileIO_ScanDone
 
-LABEL_F8AAE7:
+RefreshNames_AltMediaPath:
 	ld xwa, 0xEA0532
 	ld xbc, 0xEA052E
 	call FileIO_OpenWithMode
 	ld16_24 xwa, 0x0271ee
 	cps hl, 0
-	jr ge, LABEL_F8AB2F
+	jr ge, RefreshNames_AltOpenSuccess
 	ld iz, wa
 	cpda16_24 xwa, 160240
 	jrl gt, FileIO_ScanComplete_Return
 
-LABEL_F8AB08:
+RefreshNames_AltFallbackLoop:
 	ld wa, iz
 	subda16_24 xwa, 160238
 	muls wa, 0x52
@@ -7012,16 +7012,16 @@ LABEL_F8AB08:
 	calr FileIO_CopyString
 	inc 1, iz
 	cpda16_24 xiz, 160240
-	jr le, LABEL_F8AB08
+	jr le, RefreshNames_AltFallbackLoop
 	jrl FileIO_ScanComplete_Return
 
-LABEL_F8AB2F:
+RefreshNames_AltOpenSuccess:
 	ldi_erpw 0xFA, 0x40, 0x00
 	ld iz, wa
 	cpda16_24 xwa, 160240
 	jr gt, FileIO_ScanDone
 
-LABEL_F8AB3D:
+RefreshNames_AltReadLoop:
 	ldto_werp WA, 0xFA
 	exts xwa
 	lds bc, 0
@@ -7045,7 +7045,7 @@ LABEL_F8AB3D:
 	lds de, 0
 	calr TrimAndFormatFilename
 	cps hl, 0
-	jr ge, LABEL_F8ABA5
+	jr ge, RefreshNames_AltNextEntry
 	ld wa, iz
 	subda16_24 xwa, 160238
 	muls wa, 0x52
@@ -7054,11 +7054,11 @@ LABEL_F8AB3D:
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 
-LABEL_F8ABA5:
+RefreshNames_AltNextEntry:
 	add_erpw 0xFA, 0x50, 0x00
 	inc 1, iz
 	cpda16_24 xiz, 160240
-	jr le, LABEL_F8AB3D
+	jr le, RefreshNames_AltReadLoop
 
 FileIO_ScanDone:
 	call FileIO_CloseHandle
@@ -7068,17 +7068,17 @@ FileIO_ScanComplete_Return:
 	pop xiz
 	ret
 
-LABEL_F8ABBB:
+FileIO_GetFileEntryWithRefresh:
 	pushw iz
 	ld iz, wa
 	ld wa, iz
 	calr ValidateFileRangeAlt
 	cps hl, 0
-	jr z, LABEL_F8ABCE
+	jr z, GetEntryRefresh_ComputeOffset
 	lda_24 xhl, 0xea0448
-	jr LABEL_F8AC12
+	jr GetEntryRefresh_Return
 
-LABEL_F8ABCE:
+GetEntryRefresh_ComputeOffset:
 	ld16_24 xwa, 0x0271ee
 	ld bc, iz
 	sub bc, wa
@@ -7101,20 +7101,20 @@ LABEL_F8ABCE:
 	add xwa, xhl
 	ld xhl, xwa
 
-LABEL_F8AC12:
+GetEntryRefresh_Return:
 	popw iz
 	ret
 
-LABEL_F8AC14:
+FileIO_CheckMediaIsWritable:
 	call GetMediaType
 	cps l, 2
-	jr z, LABEL_F8AC24
+	jr z, CheckMediaWritable_Ok
 	cps l, 3
-	jr z, LABEL_F8AC24
+	jr z, CheckMediaWritable_Ok
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F8AC24:
+CheckMediaWritable_Ok:
 	lds hl, 0
 	ret
 
@@ -7715,7 +7715,7 @@ ResetProgressIndication:
 	stdi16 34054, 65535
 	stdi16 34056, 65535
 	stdi16 34058, 65535
-	call LABEL_F894A2
+	call FileIO_InitRecordTable
 	ld xiy, 0xEA066A
 	ld xix, 0x8A0C
 	ldiw

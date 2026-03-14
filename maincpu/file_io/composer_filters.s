@@ -863,7 +863,7 @@ SaveFilter_Save_Execute:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	call LABEL_F87EAD
+	call FileIO_SaveAllRegions
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue
@@ -900,7 +900,7 @@ SaveFilter_OpFormat:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	call LABEL_F87EAD
+	call FileIO_SaveAllRegions
 	ld wa, hl
 	lds bc, 5
 	calr FileIO_ValidateSignedValue

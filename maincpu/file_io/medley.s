@@ -1825,7 +1825,7 @@ NavigateDocList:
 NavDoc_CheckBounds:
 	cpdi16 34056, 0
 	jr le, NavDoc_Exit
-	call LABEL_F8A7CE
+	call FileIO_GetCurrentFileIndex_Alt
 	cps hl, 0
 	jr lt, NavDoc_Exit
 	ld wa, hl
@@ -3296,7 +3296,7 @@ DocFmt_FormatLoop:
 	ld (xde), a
 	ld wa, (xsp + 2)
 	add wa, iz
-	call LABEL_F8ABBB
+	call FileIO_GetFileEntryWithRefresh
 	ld xbc, xhl
 	ld wa, iz
 	sll wa, 5
@@ -3349,7 +3349,7 @@ FmmDocFileNameFunc:
 	cp xbc, 0x1E50004
 	jr nz, DocName_ReturnZero
 	stda32 33950, xde
-	call LABEL_F8A7CE
+	call FileIO_GetCurrentFileIndex_Alt
 	stda16 33954, xhl
 	cps hl, 0
 	jr ge, DocName_UpdateIndex
@@ -3444,7 +3444,7 @@ DocName_GetCurrentIndex:
 DocName_UpdateDisplay:
 	cp iz, wa
 	jrl z, DocName_ReturnZero
-	call LABEL_F8A956
+	call FileIO_SelectFileByIndex
 	ldda16 xwa, 33954
 	exts xwa
 	divs wa, 0xA
@@ -3501,7 +3501,7 @@ DocName_SetIndexPlaying:
 	jrl z, DocName_ReturnZero
 	stda16 33954, xde
 	ld wa, de
-	call LABEL_F8A956
+	call FileIO_SelectFileByIndex
 	ldda16 xwa, 33954
 	exts xwa
 	divs wa, 0xA
@@ -3762,7 +3762,7 @@ DocMed_InitFromDisk:
 	ld xbc, 0x1C00001
 	lds32 xde, 5
 	call ApPostEvent
-	call LABEL_F8A9D6
+	call FileIO_InitFileNavigation
 	stda16 34056, xhl
 	ld xwa, 0x600026
 	ld xbc, 0x1C00002

@@ -792,7 +792,7 @@ SmfFN_HandleOpen:
 	call ApPostEvent
 	call FileIO_GetRecordPtrAlt
 	ld xwa, xhl
-	call LABEL_F8947D
+	call FileIO_CheckFileExists
 	cps l, 0
 	jr z, SmfFN_Open_Execute
 	cpi8_24 0x0340ea, 0x00

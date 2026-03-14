@@ -30151,7 +30151,7 @@ StylCnvWaitTtlFunc:
 	calr StyleConv_InitEntryTable
 	stdi8 15622, 0
 	calr AccDisplay_FullInit
-	call LABEL_F8AC14
+	call FileIO_CheckMediaIsWritable
 	cps hl, 0
 	jr nz, StylCnvWait_SetStatus
 	ldw wa, 0x11
@@ -30884,7 +30884,7 @@ StylCnvCnvt_OK_SelectItem:
 StylCnvCnvt_OK_Select_WriteStyle:
 	ldda32 xwa, 15708
 	stda32 15712, xwa
-	call LABEL_F8AC14
+	call FileIO_CheckMediaIsWritable
 	ldda16 xbc, 15620
 	mul bc, 0x25
 	ldada xwa, 21989
