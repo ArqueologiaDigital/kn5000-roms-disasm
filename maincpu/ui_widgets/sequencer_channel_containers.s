@@ -198,7 +198,7 @@
 	.byte 0x9c, 0x00, 0x61, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x89, 0x00, 0x30, 0xe1, 0x03, 0x00
-	.long LABEL_E2DB96
+	.long NakaInst_FADE_IN_OUT_SETTING
 	.byte 0xd8, 0x00, 0xa0, 0x01
 	.byte 0x00, 0x00, 0x00, 0x00
 
@@ -434,33 +434,33 @@ LABEL_EEECC0:
 	.long Str_PartName_Empty
 	.byte 0x08, 0x00, 0x00, 0x00
 Naka_DrawbarControl_Table:
-	.long LABEL_E9D9B0
-	.long LABEL_E9D9A6
-	.long LABEL_E9D99C
-	.long LABEL_E9D992
-	.long LABEL_E9D988
-	.long LABEL_E9D97E
-	.long LABEL_E9D974
-	.long LABEL_E9D96A
-	.long LABEL_E9D960
-	.long LABEL_E9D956
-	.long LABEL_E9D94C
-	.long LABEL_E9D942
-	.long LABEL_E9D938
-	.long LABEL_E9D92E
-	.long LABEL_E9D924
-	.long LABEL_E9D91A
-	.long LABEL_E9D910
-	.long LABEL_E9D906
-	.long LABEL_E9D8FC
-	.long LABEL_E9D8F2
-	.long LABEL_E9D8E8
-	.long LABEL_E9D8DE
-	.long LABEL_E9D8D4
-	.long LABEL_E9D8CA
-	.long LABEL_E9D8C0
-	.long LABEL_E9D8B6
-	.long LABEL_E9D8AC
+	.long NakaInst_RIGHT_1_E9D9B0
+	.long NakaInst_RIGHT_2_E9D9A6
+	.long NakaInst_LEFT_E9D99C
+	.long NakaInst_PART_4
+	.long NakaInst_PART_5
+	.long NakaInst_PART_6
+	.long NakaInst_PART_7
+	.long NakaInst_PART_8
+	.long NakaInst_PART_9
+	.long NakaInst_PART_10
+	.long NakaInst_PART_11
+	.long NakaInst_PART_12
+	.long NakaInst_PART_13
+	.long NakaInst_PART_14
+	.long NakaInst_PART_15
+	.long NakaInst_PART_16
+	.long NakaInst_ACCOMP1
+	.long NakaInst_ACCOMP2
+	.long NakaInst_ACCOMP3
+	.long NakaInst_BASS_E9D8F2
+	.long NakaInst_DRUM_E9D8E8
+	.long NakaInst_CHORD
+	.long NakaInst_R_BASS
+	.long NakaInst_MSP_E9D8CA
+	.long NakaInst_MSP
+	.long NakaInst_CONTROL
+	.long NakaInst_METRO
 	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0x02, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x02, 0x00, 0xff, 0xff

@@ -16,53 +16,53 @@
 
 
 TechniChord_StyleDispatch_Table:
-	.long LABEL_E8605C
-	.long LABEL_E86054
-	.long LABEL_E8604C
-	.long LABEL_E86044
-	.long LABEL_E8603C
-	.long LABEL_E86032
-	.long LABEL_E86028
-	.long LABEL_E86020
-	.long LABEL_E86010
-	.long LABEL_E86000
-	.long LABEL_E85FF6
-	.long LABEL_E85FEE
-	.long LABEL_E85FE2
-	.long LABEL_E85FD8
+	.long NakaInst_TcClose
+	.long NakaInst_TcOpen1
+	.long NakaInst_TcOpen2
+	.long NakaInst_TcDuet1
+	.long NakaInst_TcDuet2
+	.long NakaInst_TcCountry
+	.long NakaInst_TcTheatre
+	.long NakaInst_TcHymn
+	.long NakaInst_TcBigBandBrass
+	.long NakaInst_TcBigBandReeds
+	.long NakaInst_TcOctave
+	.long NakaInst_TcBlock
+	.long NakaInst_TcHardRock
+	.long NakaInst_TcFanfare
 	.byte 0xd6, 0x5f, 0xe8, 0x00, 0xce, 0x5f, 0xe8, 0x00
 	.byte 0xcc, 0x5f, 0xe8, 0x00, 0xca, 0x5f, 0xe8, 0x00
 	.byte 0xc8, 0x5f, 0xe8, 0x00, 0xc6, 0x5f, 0xe8, 0x00
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	aligned_string "Sdtecd2"
 	.byte 0x00, 0xff
-LABEL_E85FD8:	aligned_string "TcFanfare"
-LABEL_E85FE2:	aligned_string "TcHardRock"
-LABEL_E85FEE:	aligned_string "TcBlock"
-LABEL_E85FF6:	aligned_string "TcOctave"
-LABEL_E86000:	aligned_string "TcBigBandReeds"
-LABEL_E86010:	aligned_string "TcBigBandBrass"
-LABEL_E86020:	aligned_string "TcHymn"
-LABEL_E86028:	aligned_string "TcTheatre"
-LABEL_E86032:	aligned_string "TcCountry"
-LABEL_E8603C:	aligned_string "TcDuet2"
-LABEL_E86044:	aligned_string "TcDuet1"
-LABEL_E8604C:	aligned_string "TcOpen2"
-LABEL_E86054:	aligned_string "TcOpen1"
-LABEL_E8605C:	aligned_string "TcClose"
+NakaInst_TcFanfare:	aligned_string "TcFanfare"
+NakaInst_TcHardRock:	aligned_string "TcHardRock"
+NakaInst_TcBlock:	aligned_string "TcBlock"
+NakaInst_TcOctave:	aligned_string "TcOctave"
+NakaInst_TcBigBandReeds:	aligned_string "TcBigBandReeds"
+NakaInst_TcBigBandBrass:	aligned_string "TcBigBandBrass"
+NakaInst_TcHymn:	aligned_string "TcHymn"
+NakaInst_TcTheatre:	aligned_string "TcTheatre"
+NakaInst_TcCountry:	aligned_string "TcCountry"
+NakaInst_TcDuet2:	aligned_string "TcDuet2"
+NakaInst_TcDuet1:	aligned_string "TcDuet1"
+NakaInst_TcOpen2:	aligned_string "TcOpen2"
+NakaInst_TcOpen1:	aligned_string "TcOpen1"
+NakaInst_TcClose:	aligned_string "TcClose"
 	.byte 0x00, 0xff
 LABEL_E86066:
 	.byte 0x00, 0xff
 LABEL_E86068:	aligned_string ""
-LABEL_E8606A:	aligned_string "Sdtecd1"
+NakaInst_Sdtecd1:	aligned_string "Sdtecd1"
 	.byte 0x00, 0xff
 LABEL_E86074:
 	.byte 0x00, 0xff
 LABEL_E86076:
 	.byte 0x00, 0xff
 LABEL_E86078:	aligned_string ""
-LABEL_E8607A:	aligned_string "SdtecdPage"
-LABEL_E86086:	aligned_string "Sdtecd"
+NakaInst_SdtecdPage:	aligned_string "SdtecdPage"
+NakaInst_Sdtecd:	aligned_string "Sdtecd"
 	.byte 0xaa, 0x60
 	.byte 0xe8, 0x00, 0xa8, 0x60, 0xe8, 0x00, 0xa6, 0x60
 	.byte 0xe8, 0x00, 0xa4, 0x60, 0xe8, 0x00, 0xa2, 0x60
@@ -74,7 +74,7 @@ LABEL_E860A4:
 LABEL_E860A6:
 	.byte 0x00, 0xff
 LABEL_E860A8:	aligned_string ""
-LABEL_E860AA:	aligned_string "Sqmixer"
+NakaInst_Sqmixer:	aligned_string "Sqmixer"
 	.byte 0x72, 0x61, 0xe8, 0x00, 0x70, 0x61
 	.byte 0xe8, 0x00, 0x62, 0x61, 0xe8, 0x00, 0x60, 0x61
 	.byte 0xe8, 0x00, 0x5e, 0x61, 0xe8, 0x00, 0x50, 0x61
@@ -86,22 +86,22 @@ LABEL_E860AA:	aligned_string "Sqmixer"
 	.byte 0xe8, 0x00
 LABEL_E860F2:
 	.byte 0x00, 0xff
-LABEL_E860F4:	aligned_string "PresentationTitle"
+NakaInst_PresentationTitle:	aligned_string "PresentationTitle"
 LABEL_E86106:	aligned_string ""
-LABEL_E86108:	aligned_string "LoadingPresentation"
+NakaInst_LoadingPresentation:	aligned_string "LoadingPresentation"
 LABEL_E8611C:	aligned_string ""
-LABEL_E8611E:	aligned_string "PresentationControl"
-LABEL_E86132:	aligned_string "PlainScreen"
-LABEL_E8613E:	aligned_string "FDemoTitleBox"
+NakaInst_PresentationControl:	aligned_string "PresentationControl"
+NakaInst_PlainScreen:	aligned_string "PlainScreen"
+NakaInst_FDemoTitleBox:	aligned_string "FDemoTitleBox"
 	.byte 0x00, 0xff
 LABEL_E8614E:
 	.byte 0x00, 0xff
-LABEL_E86150:	aligned_string "Demofeature2"
+NakaInst_Demofeature2:	aligned_string "Demofeature2"
 LABEL_E8615E:	aligned_string ""
 LABEL_E86160:	aligned_string ""
-LABEL_E86162:	aligned_string "Demofeature1"
+NakaInst_Demofeature1:	aligned_string "Demofeature1"
 LABEL_E86170:	aligned_string ""
-LABEL_E86172:	aligned_string "Demofeature"
+NakaInst_Demofeature:	aligned_string "Demofeature"
 	inc	2, xde
 	.byte 0xe8, 0x00, 0xe8, 0x62, 0xe8, 0x00
 
@@ -1126,12 +1126,12 @@ StrTable_DiskErr48:
 	.long LABEL_E9AF02
 	.long LABEL_E9AE9A
 	.long LABEL_E9AE30
-	.long LABEL_E9ADCA
-	.long LABEL_E9ADC0
-	.long LABEL_E9AD60
-LABEL_E9AD60:	aligned_string "Tipe disket yang digunakan \" 2HD \".  Model ini hanya bisa digunakan untuk disket tipe \" 2DD \"."
-LABEL_E9ADC0:	aligned_string "ERR0R 48"
-LABEL_E9ADCA:	.ascii "El disquete insertado es de tipo \"2HD\". En este modo s"
+	.long NakaInst_lo_pueden_usarse_los_disquetes_de_tipo
+	.long NakaInst_ERR0R_48
+	.long NakaInst_Tipe_disket_yang_digunakan
+NakaInst_Tipe_disket_yang_digunakan:	aligned_string "Tipe disket yang digunakan \" 2HD \".  Model ini hanya bisa digunakan untuk disket tipe \" 2DD \"."
+NakaInst_ERR0R_48:	aligned_string "ERR0R 48"
+NakaInst_lo_pueden_usarse_los_disquetes_de_tipo:	.ascii "El disquete insertado es de tipo \"2HD\". En este modo s"
 	.byte 0xf3
 	aligned_string "lo pueden usarse los disquetes de tipo \"2DD\"."
 LABEL_E9AE30:	.ascii "La disquette ins"
@@ -1145,8 +1145,8 @@ LABEL_E9AF02:	.asciz "The type of inserted DISK is \"2HD\".  It can be used only
 	.byte 0xe9, 0x00, 0x36, 0xb1, 0xe9, 0x00, 0x8a, 0xb0
 	.byte 0xe9, 0x00, 0xf0, 0xaf, 0xe9, 0x00, 0xe6, 0xaf
 	.byte 0xe9, 0x00, 0x6e, 0xaf, 0xe9, 0x00
-LABEL_E9AF6E:	aligned_string "Jumlah lagu melebihi kapasitas KN-5000. Coba lagi sesudah dikurangi jumlahnya seperti menghilangkan TRACK atau MEASURE."
-LABEL_E9AFE6:	aligned_string "ERROR 49"
+NakaInst_Jumlah_lagu_melebihi_kapasitas_KN_5000_Coba_lagi:	aligned_string "Jumlah lagu melebihi kapasitas KN-5000. Coba lagi sesudah dikurangi jumlahnya seperti menghilangkan TRACK atau MEASURE."
+NakaInst_ERROR_49:	aligned_string "ERROR 49"
 	.ascii "La longitud de esta canción supera la capacidad del KN5000. Por favor trate de reducir la longitud (por ejemplo, omita los parámetros de pista o compás)"
 	.byte 0x2e, 0x00
 	aligned_string "La taille de cette séquence dépasse la capacité du KN5000. Veuillez essayer à  nouveau après avoir diminué sa taille en éliminant des pistes TRACK ou des mesures MEASURE."
@@ -1156,23 +1156,23 @@ LABEL_E9AFE6:	aligned_string "ERROR 49"
 LABEL_E9B27C:
 	.byte 0xf6, 0xb4, 0xe9, 0x00
 Str_SongCapacityExceeded_Multilingual:
-	.long LABEL_E9B480
-	.long LABEL_E9B3C4
-	.long LABEL_E9B326
-	.long LABEL_E9B31C
-	.long LABEL_E9B294
-LABEL_E9B294:	aligned_string "Tidak mungkin merekam dengan menggunakan Preset Banks, Compile banks atau Control Banks.  Silahkan pilih satu dari User Banks yang ada."
-LABEL_E9B31C:	aligned_string "ERROR 54"
-LABEL_E9B326:	aligned_string "No es posible grabar sobre los bancos preconfigurados, los bancos del compilador o los bancos de control. Por favor seleccione uno de los bancos de usuario."
-LABEL_E9B3C4:	aligned_string "Il n'est pas possible d'effectuer un enregistrement en utilisant des banques présélectionnées, compilées ou de contrôle. Veuillez sélectionner l'une des banques réservées à l'utilisateur."
-LABEL_E9B480:	.asciz "Es ist nicht möglich auf Preset-, Re-Group- oder Control-Bänke aufzunehmen. Bitte wählen Sie eine der User-Bänke aus."
+	.long NakaInst_It_is_not_possible_to_record_using_preset_banks
+	.long NakaInst_Il_n_est_pas_possible_d_effectuer_un
+	.long NakaInst_No_es_posible_grabar_sobre_los_bancos
+	.long NakaInst_ERROR_54
+	.long NakaInst_Tidak_mungkin_merekam_dengan_menggunakan_Preset
+NakaInst_Tidak_mungkin_merekam_dengan_menggunakan_Preset:	aligned_string "Tidak mungkin merekam dengan menggunakan Preset Banks, Compile banks atau Control Banks.  Silahkan pilih satu dari User Banks yang ada."
+NakaInst_ERROR_54:	aligned_string "ERROR 54"
+NakaInst_No_es_posible_grabar_sobre_los_bancos:	aligned_string "No es posible grabar sobre los bancos preconfigurados, los bancos del compilador o los bancos de control. Por favor seleccione uno de los bancos de usuario."
+NakaInst_Il_n_est_pas_possible_d_effectuer_un:	aligned_string "Il n'est pas possible d'effectuer un enregistrement en utilisant des banques présélectionnées, compilées ou de contrôle. Veuillez sélectionner l'une des banques réservées à l'utilisateur."
+NakaInst_It_is_not_possible_to_record_using_preset_banks:	.asciz "Es ist nicht möglich auf Preset-, Re-Group- oder Control-Bänke aufzunehmen. Bitte wählen Sie eine der User-Bänke aus."
 	aligned_string "It is not possible to record using preset banks, compile banks, or control banks.  Please select one of the user banks."
 	.byte 0x7e, 0xb8
 	.byte 0xe9, 0x00, 0xc4, 0xb7, 0xe9, 0x00, 0x1c, 0xb7
 	.byte 0xe9, 0x00, 0x3e, 0xb6, 0xe9, 0x00, 0x34, 0xb6
 	.byte 0xe9, 0x00, 0x86, 0xb5, 0xe9, 0x00
-LABEL_E9B586:	aligned_string "Special Tracks seperti Chord/APC, Rhythm dan Control sudah tersedia dari lagu yang sedang anda gandakan dan tidak kompatibel dengan tujuan lagu karena ini ada dalam GM Mode."
-LABEL_E9B634:	aligned_string "ERROR 55"
+NakaInst_Special_Tracks_seperti_Chord_APC_Rhythm_dan:	aligned_string "Special Tracks seperti Chord/APC, Rhythm dan Control sudah tersedia dari lagu yang sedang anda gandakan dan tidak kompatibel dengan tujuan lagu karena ini ada dalam GM Mode."
+NakaInst_ERROR_55:	aligned_string "ERROR 55"
 	.byte 0x45, 0x6e
 	aligned_string " la canción que usted está tratando de copiar existen pistas especiales tales como acordes/acordes automáticos, ritmo y control que son incompatibles con la canción de destino, porque ésta utiliza el modo MIDI General."
 	aligned_string "Des pistes assignées à Chord/APC, Rhythm et Control existent dans la séquence que vous désirez copier et sont incompatibles avec la séquence de destination en mode GM."
@@ -1236,14 +1236,14 @@ LABEL_E9B634:	aligned_string "ERROR 55"
 
 Str_RKBLKBSpecialTracks_Multilingual:
 	.long LABEL_E9C6FC
-	.long LABEL_E9C62A
+	.long NakaInst_es_qui_ne_peuvent_tre_utilis_es_en_association
 	.long LABEL_E9C54C
-	.long LABEL_E9C542
-	.long LABEL_E9C53C
-LABEL_E9C53C:	aligned_string "•s—v"
-LABEL_E9C542:	aligned_string "ERROR 60"
+	.long NakaInst_ERROR_60
+	.long NakaInst_s_v
+NakaInst_s_v:	aligned_string "•s—v"
+NakaInst_ERROR_60:	aligned_string "ERROR 60"
 LABEL_E9C54C:	.asciz "RKB y LKB son pistas especiales que no pueden ser empleadas en conjuntamente con derecha 1, derecha 2, izquierda y las pistas de acordes automáticos. Por favor, asigne RKB y LKB a cualquier otra parte y pruebe nuevamente."
-LABEL_E9C62A:	.ascii "RKB et LKB sont des pistes d"
+NakaInst_es_qui_ne_peuvent_tre_utilis_es_en_association:	.ascii "RKB et LKB sont des pistes d"
 	inc	4, xbc
 	jr	ge, 0xe9
 	aligned_string "es qui ne peuvent être utilisées en association avec les pistes assignées à Right1,Right2,Left et APC. Veuillez ré- assigner RKB et LKB à d'autres parties et essayez à nouveau."
@@ -1278,16 +1278,16 @@ LABEL_E9C62A:	.ascii "RKB et LKB sont des pistes d"
 
 
 Str_InitSettingWarning_Multilingual:
-	.long LABEL_E9D0E0
-	.long LABEL_E9D04A
+	.long NakaInst_This_Bitmap_is_in_the_wrong_format_for_the_KN5000
+	.long NakaInst_Cette_configuration_Bitmap_n_est_pas_au_bon
 	.long LABEL_E9CFB8
-	.long LABEL_E9CFAE
-	.long LABEL_E9CF2C
-LABEL_E9CF2C:	aligned_string "Bitmap adalah salah format dari KN-5000 dan disket tidak dapat dipanggil. Lihat Pedoman Pemakaian untuk penjelasan yang mendetil."
-LABEL_E9CFAE:	aligned_string "ERROR 63"
+	.long NakaInst_ERROR_63
+	.long NakaInst_Bitmap_adalah_salah_format_dari_KN_5000_dan
+NakaInst_Bitmap_adalah_salah_format_dari_KN_5000_dan:	aligned_string "Bitmap adalah salah format dari KN-5000 dan disket tidak dapat dipanggil. Lihat Pedoman Pemakaian untuk penjelasan yang mendetil."
+NakaInst_ERROR_63:	aligned_string "ERROR 63"
 LABEL_E9CFB8:	.asciz "Este mapa de bits tiene en un formato incorrecto para el KN5000 y no puede ser cargado. Para obtener más detalles, vea el Manual del Propietario."
-LABEL_E9D04A:	aligned_string "Cette configuration Bitmap n'est pas au bon format pour le KN5000 et ne peut pas être chargée. Reportez-vous au mode d'emploi pour plus de détails. "
-LABEL_E9D0E0:	.asciz "Das Format dieses Bitmaps kann vom SX-KN5000 nicht geladen werden. Lesen Sie die Bedienungsanleitung für weitere Informationen."
+NakaInst_Cette_configuration_Bitmap_n_est_pas_au_bon:	aligned_string "Cette configuration Bitmap n'est pas au bon format pour le KN5000 et ne peut pas être chargée. Reportez-vous au mode d'emploi pour plus de détails. "
+NakaInst_This_Bitmap_is_in_the_wrong_format_for_the_KN5000:	.asciz "Das Format dieses Bitmaps kann vom SX-KN5000 nicht geladen werden. Lesen Sie die Bedienungsanleitung für weitere Informationen."
 	aligned_string "This Bitmap is in the wrong format for the KN5000 and cannot be loaded. See the Owners Manual for more details. "
 LABEL_E9D1D2:
 	.byte 0x0a
@@ -1295,9 +1295,9 @@ LABEL_E9D1D2:
 	.byte 0xe9, 0x00, 0x66, 0xd2, 0xe9, 0x00, 0x28, 0xd2
 	.byte 0xe9, 0x00, 0x1e, 0xd2, 0xe9, 0x00, 0xea, 0xd1
 	.byte 0xe9, 0x00
-LABEL_E9D1EA:	aligned_string "Pilihlah Panel Memory yang ingin anda berikan nama."
-LABEL_E9D21E:	aligned_string "ERROR 64"
-LABEL_E9D228:	aligned_string "Por favor seleccione el Panel Memory al que desea dar nombre."
+NakaInst_Pilihlah_Panel_Memory_yang_ingin_anda_berikan_nama:	aligned_string "Pilihlah Panel Memory yang ingin anda berikan nama."
+NakaInst_ERROR_64:	aligned_string "ERROR 64"
+NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea:	aligned_string "Por favor seleccione el Panel Memory al que desea dar nombre."
 	.byte 0x56, 0x65
 	aligned_string "uillez sélectionner le « Panel Memory » auquel vous désirez assigner un nom."
 	.byte 0x42, 0x69
@@ -1492,8 +1492,8 @@ LABEL_E9D228:	aligned_string "Por favor seleccione el Panel Memory al que desea 
 	.byte 0xe9, 0x00, 0x16, 0xd8, 0xe9, 0x00, 0x02, 0xd8
 	.byte 0xe9, 0x00, 0xf4, 0xd7, 0xe9, 0x00, 0xe2, 0xd7
 	.byte 0xe9, 0x00
-LABEL_E9D7E2:	aligned_string "SILAHKAN TUNGGU!"
-LABEL_E9D7F4:	aligned_string "PLEASE WAIT!"
+NakaInst_SILAHKAN_TUNGGU:	aligned_string "SILAHKAN TUNGGU!"
+NakaInst_PLEASE_WAIT:	aligned_string "PLEASE WAIT!"
 	.byte 0xa1
 	.asciz "POR FAVOR, ESPERE!"
 	.byte 0x56, 0x45
@@ -1501,47 +1501,47 @@ LABEL_E9D7F4:	aligned_string "PLEASE WAIT!"
 	aligned_string "BITTE WARTEN!"
 	aligned_string "PLEASE WAIT!"
 Str_PleaseWait_Multilingual:
-	.long LABEL_E9D88A
-	.long LABEL_E9D882
-	.long LABEL_E9D87A
-	.long LABEL_E9D872
-	.long LABEL_E9D86A
-	.long LABEL_E9D85E
-LABEL_E9D85E:	aligned_string "Indonesian"
-LABEL_E9D86A:	aligned_string "Italian"
-LABEL_E9D872:	aligned_string "Spanish"
-LABEL_E9D87A:	aligned_string "French"
-LABEL_E9D882:	aligned_string "German"
-LABEL_E9D88A:	aligned_string "English"
+	.long NakaInst_English_E9D88A
+	.long NakaInst_German_E9D882
+	.long NakaInst_French_E9D87A
+	.long NakaInst_Spanish_E9D872
+	.long NakaInst_Italian_E9D86A
+	.long NakaInst_Indonesian_E9D85E
+NakaInst_Indonesian_E9D85E:	aligned_string "Indonesian"
+NakaInst_Italian_E9D86A:	aligned_string "Italian"
+NakaInst_Spanish_E9D872:	aligned_string "Spanish"
+NakaInst_French_E9D87A:	aligned_string "French"
+NakaInst_German_E9D882:	aligned_string "German"
+NakaInst_English_E9D88A:	aligned_string "English"
 	aligned_string "MessageID : %3d"
 	aligned_string "%s %02d!"
-LABEL_E9D8AC:	aligned_string "METRO  :"
-LABEL_E9D8B6:	aligned_string "CONTROL:"
-LABEL_E9D8C0:	aligned_string "MSP    :"
-LABEL_E9D8CA:	aligned_string "MSP    :"
-LABEL_E9D8D4:	aligned_string "R.BASS :"
-LABEL_E9D8DE:	aligned_string "CHORD  :"
-LABEL_E9D8E8:	aligned_string "DRUM   :"
-LABEL_E9D8F2:	aligned_string "BASS   :"
-LABEL_E9D8FC:	aligned_string "ACCOMP3:"
-LABEL_E9D906:	aligned_string "ACCOMP2:"
-LABEL_E9D910:	aligned_string "ACCOMP1:"
-LABEL_E9D91A:	aligned_string "PART 16:"
-LABEL_E9D924:	aligned_string "PART 15:"
-LABEL_E9D92E:	aligned_string "PART 14:"
-LABEL_E9D938:	aligned_string "PART 13:"
-LABEL_E9D942:	aligned_string "PART 12:"
-LABEL_E9D94C:	aligned_string "PART 11:"
-LABEL_E9D956:	aligned_string "PART 10:"
-LABEL_E9D960:	aligned_string "PART 9 :"
-LABEL_E9D96A:	aligned_string "PART 8 :"
-LABEL_E9D974:	aligned_string "PART 7 :"
-LABEL_E9D97E:	aligned_string "PART 6 :"
-LABEL_E9D988:	aligned_string "PART 5 :"
-LABEL_E9D992:	aligned_string "PART 4 :"
-LABEL_E9D99C:	aligned_string "LEFT   :"
-LABEL_E9D9A6:	aligned_string "RIGHT 2:"
-LABEL_E9D9B0:	aligned_string "RIGHT 1:"
+NakaInst_METRO:	aligned_string "METRO  :"
+NakaInst_CONTROL:	aligned_string "CONTROL:"
+NakaInst_MSP:	aligned_string "MSP    :"
+NakaInst_MSP_E9D8CA:	aligned_string "MSP    :"
+NakaInst_R_BASS:	aligned_string "R.BASS :"
+NakaInst_CHORD:	aligned_string "CHORD  :"
+NakaInst_DRUM_E9D8E8:	aligned_string "DRUM   :"
+NakaInst_BASS_E9D8F2:	aligned_string "BASS   :"
+NakaInst_ACCOMP3:	aligned_string "ACCOMP3:"
+NakaInst_ACCOMP2:	aligned_string "ACCOMP2:"
+NakaInst_ACCOMP1:	aligned_string "ACCOMP1:"
+NakaInst_PART_16:	aligned_string "PART 16:"
+NakaInst_PART_15:	aligned_string "PART 15:"
+NakaInst_PART_14:	aligned_string "PART 14:"
+NakaInst_PART_13:	aligned_string "PART 13:"
+NakaInst_PART_12:	aligned_string "PART 12:"
+NakaInst_PART_11:	aligned_string "PART 11:"
+NakaInst_PART_10:	aligned_string "PART 10:"
+NakaInst_PART_9:	aligned_string "PART 9 :"
+NakaInst_PART_8:	aligned_string "PART 8 :"
+NakaInst_PART_7:	aligned_string "PART 7 :"
+NakaInst_PART_6:	aligned_string "PART 6 :"
+NakaInst_PART_5:	aligned_string "PART 5 :"
+NakaInst_PART_4:	aligned_string "PART 4 :"
+NakaInst_LEFT_E9D99C:	aligned_string "LEFT   :"
+NakaInst_RIGHT_2_E9D9A6:	aligned_string "RIGHT 2:"
+NakaInst_RIGHT_1_E9D9B0:	aligned_string "RIGHT 1:"
 	aligned_string "Acdn"
 	aligned_string "Acdn"
 	.byte 0x54, 0x65
@@ -1559,40 +1559,40 @@ LABEL_E9D9B0:	aligned_string "RIGHT 1:"
 	.byte 0xff, 0xff
 	aligned_string "TeC1"
 Naka_TechniChord1_Screens:
-	.long LABEL_E9DB0C
-	.long LABEL_E9DB02
-	.long LABEL_E9DAF8
-	.long LABEL_E9DAEE
-	.long LABEL_E9DAE4
-	.long LABEL_E9DADA
-	.long LABEL_E9DAD0
-	.long LABEL_E9DAC6
-	.long LABEL_E9DABC
-	.long LABEL_E9DAB2
-	.long LABEL_E9DAA8
-	.long LABEL_E9DA9E
-	.long LABEL_E9DA94
-	.long LABEL_E9DA8A
-	.long LABEL_E9DA80
-	.long LABEL_E9DA76
-	.long LABEL_E9DA6C
-LABEL_E9DA6C:	aligned_string "CONDUCTOR"
-LABEL_E9DA76:	aligned_string " PART 16 "
-LABEL_E9DA80:	aligned_string " PART 15 "
-LABEL_E9DA8A:	aligned_string " PART 14 "
-LABEL_E9DA94:	aligned_string " PART 13 "
-LABEL_E9DA9E:	aligned_string " PART 12 "
-LABEL_E9DAA8:	aligned_string " PART 11 "
-LABEL_E9DAB2:	aligned_string " PART 10 "
-LABEL_E9DABC:	aligned_string " PART 9  "
-LABEL_E9DAC6:	aligned_string " PART 8  "
-LABEL_E9DAD0:	aligned_string " PART 7  "
-LABEL_E9DADA:	aligned_string " PART 6  "
-LABEL_E9DAE4:	aligned_string " PART 5  "
-LABEL_E9DAEE:	aligned_string " PART 4  "
-LABEL_E9DAF8:	aligned_string "  LEFT   "
-LABEL_E9DB02:	aligned_string " RIGHT 2 "
-LABEL_E9DB0C:	aligned_string " RIGHT 1 "
+	.long NakaInst_RIGHT_1_E9DB0C
+	.long NakaInst_RIGHT_2_E9DB02
+	.long NakaInst_LEFT_E9DAF8
+	.long NakaInst_PART_4_E9DAEE
+	.long NakaInst_PART_5_E9DAE4
+	.long NakaInst_PART_6_E9DADA
+	.long NakaInst_PART_7_E9DAD0
+	.long NakaInst_PART_8_E9DAC6
+	.long NakaInst_PART_9_E9DABC
+	.long NakaInst_PART_10_E9DAB2
+	.long NakaInst_PART_11_E9DAA8
+	.long NakaInst_PART_12_E9DA9E
+	.long NakaInst_PART_13_E9DA94
+	.long NakaInst_PART_14_E9DA8A
+	.long NakaInst_PART_15_E9DA80
+	.long NakaInst_PART_16_E9DA76
+	.long NakaInst_CONDUCTOR
+NakaInst_CONDUCTOR:	aligned_string "CONDUCTOR"
+NakaInst_PART_16_E9DA76:	aligned_string " PART 16 "
+NakaInst_PART_15_E9DA80:	aligned_string " PART 15 "
+NakaInst_PART_14_E9DA8A:	aligned_string " PART 14 "
+NakaInst_PART_13_E9DA94:	aligned_string " PART 13 "
+NakaInst_PART_12_E9DA9E:	aligned_string " PART 12 "
+NakaInst_PART_11_E9DAA8:	aligned_string " PART 11 "
+NakaInst_PART_10_E9DAB2:	aligned_string " PART 10 "
+NakaInst_PART_9_E9DABC:	aligned_string " PART 9  "
+NakaInst_PART_8_E9DAC6:	aligned_string " PART 8  "
+NakaInst_PART_7_E9DAD0:	aligned_string " PART 7  "
+NakaInst_PART_6_E9DADA:	aligned_string " PART 6  "
+NakaInst_PART_5_E9DAE4:	aligned_string " PART 5  "
+NakaInst_PART_4_E9DAEE:	aligned_string " PART 4  "
+NakaInst_LEFT_E9DAF8:	aligned_string "  LEFT   "
+NakaInst_RIGHT_2_E9DB02:	aligned_string " RIGHT 2 "
+NakaInst_RIGHT_1_E9DB0C:	aligned_string " RIGHT 1 "
 	aligned_string "CONDUCTOR"
 	.byte 0xc0, 0xc0, 0xc1, 0xc3, 0xc4, 0xc6, 0xc8, 0xca
 	.byte 0xcb, 0xcd, 0xcf, 0xd0, 0xd2, 0xd4, 0xd6, 0xd7
@@ -1618,40 +1618,40 @@ LABEL_E9DB0C:	aligned_string " RIGHT 1 "
 	.byte 0x00, 0x15, 0x00, 0x16, 0x00, 0x80, 0x00, 0xff
 	.byte 0xff
 Naka_Scale2_Screens:
-	.long LABEL_E9DCFA
-	.long LABEL_E9DCEC
-	.long LABEL_E9DCDE
-	.long LABEL_E9DCD0
-	.long LABEL_E9DCC2
-	.long LABEL_E9DCB4
-	.long LABEL_E9DCA6
-	.long LABEL_E9DC98
-	.long LABEL_E9DC8A
-	.long LABEL_E9DC7C
-	.long LABEL_E9DC6E
-	.long LABEL_E9DC60
-	.long LABEL_E9DC52
-	.long LABEL_E9DC44
-	.long LABEL_E9DC36
-	.long LABEL_E9DC28
-	.long LABEL_E9DC1A
-LABEL_E9DC1A:	aligned_string " NO TYPE !! "
-LABEL_E9DC28:	aligned_string "    USER    "
-LABEL_E9DC36:	aligned_string "    USER    "
-LABEL_E9DC44:	aligned_string "   PELOG    "
-LABEL_E9DC52:	aligned_string "  SLENDRO   "
-LABEL_E9DC60:	aligned_string "  ARABIC 5  "
-LABEL_E9DC6E:	aligned_string "  ARABIC 4  "
-LABEL_E9DC7C:	aligned_string "  ARABIC 3  "
-LABEL_E9DC8A:	aligned_string "  ARABIC 2  "
-LABEL_E9DC98:	aligned_string "  ARABIC 1  "
-LABEL_E9DCA6:	aligned_string " KIRNBERGER "
-LABEL_E9DCB4:	aligned_string "WERCKMEISTER"
-LABEL_E9DCC2:	aligned_string "PYTHAGOREAN "
-LABEL_E9DCD0:	aligned_string " ORCHESTRA  "
-LABEL_E9DCDE:	aligned_string "   PIANO    "
-LABEL_E9DCEC:	aligned_string "   RANDOM   "
-LABEL_E9DCFA:	aligned_string "    OFF     "
+	.long NakaInst_OFF_E9DCFA
+	.long NakaInst_RANDOM
+	.long NakaInst_PIANO
+	.long NakaInst_ORCHESTRA
+	.long NakaInst_PYTHAGOREAN
+	.long NakaInst_WERCKMEISTER
+	.long NakaInst_KIRNBERGER
+	.long NakaInst_ARABIC_1
+	.long NakaInst_ARABIC_2
+	.long NakaInst_ARABIC_3
+	.long NakaInst_ARABIC_4
+	.long NakaInst_ARABIC_5
+	.long NakaInst_SLENDRO
+	.long NakaInst_PELOG
+	.long NakaInst_USER_E9DC36
+	.long NakaInst_USER
+	.long NakaInst_NO_TYPE
+NakaInst_NO_TYPE:	aligned_string " NO TYPE !! "
+NakaInst_USER:	aligned_string "    USER    "
+NakaInst_USER_E9DC36:	aligned_string "    USER    "
+NakaInst_PELOG:	aligned_string "   PELOG    "
+NakaInst_SLENDRO:	aligned_string "  SLENDRO   "
+NakaInst_ARABIC_5:	aligned_string "  ARABIC 5  "
+NakaInst_ARABIC_4:	aligned_string "  ARABIC 4  "
+NakaInst_ARABIC_3:	aligned_string "  ARABIC 3  "
+NakaInst_ARABIC_2:	aligned_string "  ARABIC 2  "
+NakaInst_ARABIC_1:	aligned_string "  ARABIC 1  "
+NakaInst_KIRNBERGER:	aligned_string " KIRNBERGER "
+NakaInst_WERCKMEISTER:	aligned_string "WERCKMEISTER"
+NakaInst_PYTHAGOREAN:	aligned_string "PYTHAGOREAN "
+NakaInst_ORCHESTRA:	aligned_string " ORCHESTRA  "
+NakaInst_PIANO:	aligned_string "   PIANO    "
+NakaInst_RANDOM:	aligned_string "   RANDOM   "
+NakaInst_OFF_E9DCFA:	aligned_string "    OFF     "
 	aligned_string " NO TYPE !! "
 Scale_Arabic2_NameTable:
 	.long LABEL_E9DD72
@@ -1691,34 +1691,34 @@ LABEL_E9DD6E:
 LABEL_E9DD72:
 	.byte 0x20, 0x20, 0x30, 0x00
 Scale_Names_Table:
-	.long LABEL_E9DE14
-	.long LABEL_E9DE0A
-	.long LABEL_E9DE00
-	.long LABEL_E9DDF6
-	.long LABEL_E9DDEC
-	.long LABEL_E9DDE2
-	.long LABEL_E9DDD8
-	.long LABEL_E9DDCE
-	.long LABEL_E9DDC4
-	.long LABEL_E9DDBA
-	.long LABEL_E9DDB0
-	.long LABEL_E9DDA6
-LABEL_E9DDA6:	aligned_string "[KEY=B ]"
-LABEL_E9DDB0:	aligned_string "[KEY=A#]"
-LABEL_E9DDBA:	aligned_string "[KEY=A ]"
-LABEL_E9DDC4:	aligned_string "[KEY=G#]"
-LABEL_E9DDCE:	aligned_string "[KEY=G ]"
-LABEL_E9DDD8:	aligned_string "[KEY=F#]"
-LABEL_E9DDE2:	aligned_string "[KEY=F ]"
-LABEL_E9DDEC:	aligned_string "[KEY=E ]"
-LABEL_E9DDF6:	aligned_string "[KEY=D#]"
-LABEL_E9DE00:	aligned_string "[KEY=D ]"
-LABEL_E9DE0A:	aligned_string "[KEY=C#]"
-LABEL_E9DE14:	aligned_string "[KEY=C ]"
+	.long NakaInst_KEY_C_E9DE14
+	.long NakaInst_KEY_C
+	.long NakaInst_KEY_D_E9DE00
+	.long NakaInst_KEY_D
+	.long NakaInst_KEY_E
+	.long NakaInst_KEY_F_E9DDE2
+	.long NakaInst_KEY_F
+	.long NakaInst_KEY_G_E9DDCE
+	.long NakaInst_KEY_G
+	.long NakaInst_KEY_A_E9DDBA
+	.long NakaInst_KEY_A
+	.long NakaInst_KEY_B
+NakaInst_KEY_B:	aligned_string "[KEY=B ]"
+NakaInst_KEY_A:	aligned_string "[KEY=A#]"
+NakaInst_KEY_A_E9DDBA:	aligned_string "[KEY=A ]"
+NakaInst_KEY_G:	aligned_string "[KEY=G#]"
+NakaInst_KEY_G_E9DDCE:	aligned_string "[KEY=G ]"
+NakaInst_KEY_F:	aligned_string "[KEY=F#]"
+NakaInst_KEY_F_E9DDE2:	aligned_string "[KEY=F ]"
+NakaInst_KEY_E:	aligned_string "[KEY=E ]"
+NakaInst_KEY_D:	aligned_string "[KEY=D#]"
+NakaInst_KEY_D_E9DE00:	aligned_string "[KEY=D ]"
+NakaInst_KEY_C:	aligned_string "[KEY=C#]"
+NakaInst_KEY_C_E9DE14:	aligned_string "[KEY=C ]"
 	.byte 0x2c, 0xde
 	.byte 0xe9, 0x00, 0x26, 0xde, 0xe9, 0x00
 LABEL_E9DE26:	.asciz "SOUND"
-LABEL_E9DE2C:	aligned_string "TOTAL"
+NakaInst_TOTAL:	aligned_string "TOTAL"
 	aligned_string "%+4d"
 	aligned_string "   0"
 	.byte 0x25, 0x34
@@ -3638,19 +3638,19 @@ Str_Mt_SetFileSfx:		aligned_string "MT_SetFileSfx"
 	.byte 0xf9, 0x00, 0x80, 0x6a, 0xf9, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
 PtrTbl_NakaModuleHandlers:
-	.long LABEL_EA14A2
-	.long LABEL_EA148E
-	.long LABEL_EA147E
-	.long LABEL_EA146C
-	.long LABEL_EA145A
-	.long LABEL_EA1444
-	.long LABEL_EA1430
-	.long LABEL_EA141E
-	.long LABEL_EA1414
-	.long LABEL_EA1402
-	.long LABEL_EA13F2
-	.long LABEL_EA13DE
-	.long LABEL_EA13CC
+	.long NakaInst_PsFileNameBoxProc
+	.long NakaInst_PsWindowToggleProc
+	.long NakaInst_AcTtlJgBoxProc
+	.long NakaInst_AcParaStrBoxProc
+	.long NakaInst_AcFileSfxBoxProc
+	.long NakaInst_AcMonoIndexToggleProc
+	.long NakaInst_IvOneShotTimerProc
+	.long NakaInst_VwScreenTitleProc
+	.long NakaInst_ArrowProc
+	.long NakaInst_IvIndexSwCtrlProc
+	.long NakaInst_AcRotStrBoxProc
+	.long NakaInst_IvIndexSwDelayProc
+	.long NakaInst_IvWaitWinCtlProc
 	.long Data_NakaSep_EA13CA
 Data_NakaSep_EA13CA:
 	.byte 0x00, 0xff

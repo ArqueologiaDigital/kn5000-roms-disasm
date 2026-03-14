@@ -87,7 +87,19 @@ def parse_widget_entries(content_str):
     return entries
 
 
-def compute_renames(content_str):
+def collect_existing_naka_defs(repo_dir):
+    """Collect all existing NakaInst/NakaDesc/NakaParam/NakaStr definitions."""
+    existing = set()
+    for pattern in ['maincpu/**/*.s', 'subcpu/**/*.s', 'hdae5000/**/*.s']:
+        for fpath in glob.glob(os.path.join(repo_dir, pattern), recursive=True):
+            with open(fpath, 'rb') as f:
+                content = f.read().decode('latin-1')
+            for m in re.finditer(r'^(Naka(?:Inst|Desc|Param|Str)_\w+):', content, re.MULTILINE):
+                existing.add(m.group(1))
+    return existing
+
+
+def compute_renames(content_str, existing_defs=None):
     """Compute all label renames using widget entry structure."""
     lines = content_str.split('\n')
     renames = {}
@@ -106,7 +118,7 @@ def compute_renames(content_str):
 
     # Build rename map using widget entries
     # Each entry: [inst_label, desc_label, param, proc]
-    used_names = set()
+    used_names = set(existing_defs) if existing_defs else set()
 
     for longs in entries:
         if len(longs) < 2:
@@ -244,11 +256,19 @@ def find_all_files_with_label(label, search_dir):
 
 
 def apply_renames_to_content(content_bytes, renames):
-    """Apply renames preserving binary encoding."""
-    result = content_bytes
+    """Apply renames preserving binary encoding.
+
+    Uses regex word-boundary matching to avoid substring replacement issues
+    (e.g., replacing LABEL_E80048 inside LABEL_E80048_suffix).
+    """
+    import re as _re
+    content_str = content_bytes.decode('latin-1')
+    # Sort by length descending to handle longer names first
     for old_name, new_name in sorted(renames.items(), key=lambda x: -len(x[0])):
-        result = result.replace(old_name.encode('ascii'), new_name.encode('ascii'))
-    return result
+        # Word boundary: label chars are [A-Za-z0-9_], so match only whole tokens
+        pattern = _re.escape(old_name) + r'(?![A-Za-z0-9_])'
+        content_str = _re.sub(pattern, new_name, content_str)
+    return content_str.encode('latin-1')
 
 
 def main():
@@ -263,7 +283,9 @@ def main():
     content_bytes = read_file(filepath)
     content_str = content_bytes.decode('latin-1')
 
-    renames = compute_renames(content_str)
+    # Collect existing definitions to avoid cross-file collisions
+    existing_defs = collect_existing_naka_defs(repo_dir)
+    renames = compute_renames(content_str, existing_defs)
 
     if not renames:
         print(f"No labels to rename in {filepath}")

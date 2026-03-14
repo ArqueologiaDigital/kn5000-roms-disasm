@@ -4028,7 +4028,7 @@ ToneKit_DefaultParams:
 	.byte 0x00, 0x54, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0xff
-LABEL_EE5A58:	aligned_string " PFTK"
+NakaInst_PFTK:	aligned_string " PFTK"
 	.zero 10
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0xff
 LABEL_EE5A70:	.ascii "!ZDTK"
@@ -4412,7 +4412,7 @@ ToneKit_VoiceDispatch_Table:
 	.long ToneKit_DefaultParams
 	.long ToneKit_DefaultParams
 	.long ToneKit_DefaultParams
-	.long LABEL_EE5A58
+	.long NakaInst_PFTK
 	.long LABEL_EE5A70
 	.long LABEL_EE5A88
 	.long LABEL_EE5AA0

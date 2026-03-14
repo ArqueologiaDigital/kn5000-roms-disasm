@@ -8,9 +8,9 @@ LABEL_E27FA6:
 	.long Naka_PresentationRootState
 	.byte 0xff, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0xa0, 0x01, 0x18, 0xdf, 0x03, 0x00
-	.long LABEL_E27FD0
+	.long NakaDesc_REVERB
 	.byte 0x17, 0x00, 0x00, 0x00
-LABEL_E27FD0:	aligned_string "REVERB"
+NakaDesc_REVERB:	aligned_string "REVERB"
 LABEL_E27FD8:
 
 	naka_header NAKA_TYPE_0x22
@@ -53,10 +53,10 @@ LABEL_E2807C:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x06, 0x00, 0x04, 0x00
 	.byte 0x08, 0x00, 0x78, 0x00, 0xca, 0x00, 0xc3, 0x00
 	.byte 0xdc, 0x00
-	.long LABEL_E2809C
+	.long NakaInst_PARAMETER
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-LABEL_E2809C:	aligned_string "PARAMETER"
+NakaInst_PARAMETER:	aligned_string "PARAMETER"
 LABEL_E280A6:
 
 	.byte 0x2b, 0x00
@@ -113,10 +113,10 @@ LABEL_E28160:
 	.byte 0xff, 0x00
 	.byte 0x00, 0x00, 0x02, 0x00, 0xa0, 0x01, 0x1c, 0xdf
 	.byte 0x03, 0x00
-	.long LABEL_E2818A
+	.long NakaDesc_DSP_EFFECT
 	.byte 0x0c, 0x00
 	.byte 0x00, 0x00
-LABEL_E2818A:	aligned_string "DSP EFFECT"
+NakaDesc_DSP_EFFECT:	aligned_string "DSP EFFECT"
 LABEL_E28196:
 
 	naka_header NAKA_TYPE_LABEL
@@ -171,10 +171,10 @@ LABEL_E28262:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x07, 0x00, 0x05, 0x00, 0x08, 0x00
 	.byte 0x78, 0x00, 0xca, 0x00, 0xc3, 0x00, 0xdc, 0x00
-	.long LABEL_E28282
+	.long NakaInst_PARAMETER_E28282
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E28282:	aligned_string "PARAMETER"
+NakaInst_PARAMETER_E28282:	aligned_string "PARAMETER"
 LABEL_E2828C:
 
 	naka_header NAKA_TYPE_LABEL
@@ -222,10 +222,10 @@ LABEL_E28320:
 	.byte 0xff, 0x00
 	.byte 0x00, 0x00, 0x02, 0x00, 0xa0, 0x01, 0x20, 0xdf
 	.byte 0x03, 0x00
-	.long LABEL_E2834A
+	.long NakaDesc_EQUALIZER
 	.byte 0x0d, 0x00
 	.byte 0x00, 0x00
-LABEL_E2834A:	aligned_string "EQUALIZER"
+NakaDesc_EQUALIZER:	aligned_string "EQUALIZER"
 LABEL_E28354:
 
 
@@ -304,20 +304,20 @@ LABEL_E28494:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x0a, 0x00, 0x08, 0x00
 	.byte 0x08, 0x00, 0x05, 0x00, 0xce, 0x00, 0x20, 0x00
 	.byte 0xd8, 0x00
-	.long LABEL_E284B4
+	.long NakaInst_FREQ
 	.byte 0x03, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-LABEL_E284B4:	aligned_string "FREQ"
+NakaInst_FREQ:	aligned_string "FREQ"
 LABEL_E284BA:
 
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x0b, 0x00, 0x09, 0x00, 0x08, 0x00
 	.byte 0x2d, 0x00, 0xce, 0x00, 0x48, 0x00, 0xd8, 0x00
-	.long LABEL_E284DA
+	.long NakaInst_GAIN
 	.byte 0x03, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E284DA:	aligned_string "GAIN"
+NakaInst_GAIN:	aligned_string "GAIN"
 LABEL_E284E0:
 
 	naka_header NAKA_TYPE_LABEL
@@ -340,20 +340,20 @@ LABEL_E2852C:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x0e, 0x00, 0x0c, 0x00
 	.byte 0x08, 0x00, 0xf5, 0x00, 0xce, 0x00, 0x10, 0x01
 	.byte 0xd8, 0x00
-	.long LABEL_E2854C
+	.long NakaInst_FREQ_E2854C
 	.byte 0x03, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-LABEL_E2854C:	aligned_string "FREQ"
+NakaInst_FREQ_E2854C:	aligned_string "FREQ"
 LABEL_E28552:
 
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x0f, 0x00, 0x0d, 0x00, 0x08, 0x00
 	.byte 0x7d, 0x00, 0xce, 0x00, 0x98, 0x00, 0xd8, 0x00
-	.long LABEL_E28572
+	.long NakaInst_GAIN_E28572
 	.byte 0x03, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E28572:	aligned_string "GAIN"
+NakaInst_GAIN_E28572:	aligned_string "GAIN"
 LABEL_E28578:
 
 	naka_header NAKA_TYPE_LABEL
@@ -404,11 +404,11 @@ LABEL_E2863A:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x15, 0x00, 0x13, 0x00, 0x08, 0x00
 	.byte 0x09, 0x01, 0xc2, 0x00, 0x24, 0x01, 0xcc, 0x00
-	.long LABEL_E2865A
+	.long NakaInst_HIGH
 	.byte 0x03, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
 
-LABEL_E2865A:	aligned_string "HIGH"
+NakaInst_HIGH:	aligned_string "HIGH"
 LABEL_E28660:
 
 	naka_header NAKA_TYPE_VALUE
@@ -456,21 +456,21 @@ LABEL_E28704:
 	.byte 0x1a, 0x00, 0xff, 0xff, 0x1c, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x08, 0x00, 0x9c, 0x00, 0x4b, 0x00
 	.byte 0xae, 0x00
-	.long LABEL_E28724
+	.long NakaInst_FREQ_Hz
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xf1, 0x00
 
-LABEL_E28724:	aligned_string "FREQ(Hz)"
+NakaInst_FREQ_Hz:	aligned_string "FREQ(Hz)"
 LABEL_E2872E:
 
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x1a, 0x00, 0xff, 0xff, 0x1d, 0x00
 	.byte 0x1b, 0x00, 0x08, 0x00, 0x08, 0x00, 0xac, 0x00
 	.byte 0x4b, 0x00, 0xbe, 0x00
-	.long LABEL_E2874E
+	.long NakaInst_GAIN_dB
 	.byte 0x00, 0x00, 0x00, 0x00, 0xf1, 0x00
 
-LABEL_E2874E:	aligned_string "GAIN(dB)"
+NakaInst_GAIN_dB:	aligned_string "GAIN(dB)"
 LABEL_E28758:
 
 	naka_header NAKA_TYPE_LABEL
@@ -488,22 +488,22 @@ LABEL_E2877C:
 	.byte 0x1a, 0x00, 0xff, 0xff, 0x1f, 0x00, 0x1d, 0x00
 	.byte 0x08, 0x00, 0x82, 0x00, 0x8a, 0x00, 0xbd, 0x00
 	.byte 0x9c, 0x00
-	.long LABEL_E2879C
+	.long NakaInst_MID_LOW
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xf1, 0x00
 
-LABEL_E2879C:	aligned_string "MID-LOW"
+NakaInst_MID_LOW:	aligned_string "MID-LOW"
 LABEL_E287A4:
 
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x1a, 0x00, 0xff, 0xff, 0x20, 0x00, 0x1e, 0x00
 	.byte 0x08, 0x00, 0xc4, 0x00, 0x8a, 0x00, 0x07, 0x01
 	.byte 0x9c, 0x00
-	.long LABEL_E287C4
+	.long NakaInst_MID_HIGH
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xf1, 0x00
 
-LABEL_E287C4:	aligned_string "MID-HIGH"
+NakaInst_MID_HIGH:	aligned_string "MID-HIGH"
 LABEL_E287CE:
 
 	naka_header NAKA_TYPE_LABEL
@@ -537,12 +537,12 @@ LABEL_E2884E:
 	.byte 0x68, 0x01, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0x23, 0x00, 0x08, 0x00, 0x00, 0x01, 0x22, 0x00
 	.byte 0x37, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E28882
-	.long LABEL_E2887A
+	.long NakaInst_EQ_ON
+	.long NakaInst_EQ_OFF
 	.byte 0x24, 0xdf, 0x03, 0x00, 0x08, 0x00, 0x27, 0x00
 	.byte 0x28, 0x01
-LABEL_E2887A:	aligned_string "EQ:OFF"
-LABEL_E28882:	aligned_string "EQ:ON"
+NakaInst_EQ_OFF:	aligned_string "EQ:OFF"
+NakaInst_EQ_ON:	aligned_string "EQ:ON"
 
 	naka_header NAKA_TYPE_CONTAINER
 	.byte 0xff, 0xff, 0x01, 0x00
@@ -552,10 +552,10 @@ LABEL_E28882:	aligned_string "EQ:ON"
 	.byte 0xff, 0x00
 	.byte 0x00, 0x00, 0x02, 0x00, 0xa0, 0x01, 0x26, 0xdf
 	.byte 0x03, 0x00
-	.long LABEL_E288B2
+	.long NakaDesc_ACOUSTIC_ILLUSION
 	.byte 0x92, 0x00
 	.byte 0x00, 0x00
-LABEL_E288B2:	aligned_string "ACOUSTIC ILLUSION"
+NakaDesc_ACOUSTIC_ILLUSION:	aligned_string "ACOUSTIC ILLUSION"
 LABEL_E288C4:
 
 	naka_header NAKA_TYPE_0x22
@@ -667,10 +667,10 @@ LABEL_E28AB4:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x03, 0x00, 0x01, 0x00
 	.byte 0x08, 0x00, 0x16, 0x01, 0x38, 0x00, 0x39, 0x01
 	.byte 0x4a, 0x00
-	.long LABEL_E28AD4
+	.long NakaInst_SONG
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-LABEL_E28AD4:	aligned_string "SONG"
+NakaInst_SONG:	aligned_string "SONG"
 LABEL_E28ADA:
 
 	naka_header NAKA_TYPE_0x40
@@ -776,10 +776,10 @@ LABEL_E28CCA:
 	.byte 0xff, 0xff, 0x04, 0x00, 0x02, 0x00, 0x08, 0x00
 	.byte 0xeb, 0x00, 0x76, 0x00, 0x37, 0x01, 0x87, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x8d, 0xe2, 0x00
-	.long LABEL_E28CF6
+	.long NakaInst_CYCLE_OFF
 	.byte 0x38, 0xdf, 0x03, 0x00
 	.byte 0x0a, 0x00, 0x1e, 0x00, 0x28, 0x01
-LABEL_E28CF6:	aligned_string "CYCLE:OFF"
+NakaInst_CYCLE_OFF:	aligned_string "CYCLE:OFF"
 	aligned_string "CYCLE:ON"
 LABEL_E28D0A:
 
@@ -832,10 +832,10 @@ LABEL_E28DD2:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x0b, 0x00, 0x09, 0x00, 0x08, 0x00
 	.byte 0x5f, 0x00, 0x49, 0x00, 0xba, 0x00, 0x5b, 0x00
-	.long LABEL_E28DF2
+	.long NakaInst_TIME_SIG
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E28DF2:	aligned_string "TIME SIG. ="
+NakaInst_TIME_SIG:	aligned_string "TIME SIG. ="
 LABEL_E28DFE:
 
 	naka_header NAKA_TYPE_0x14
@@ -907,10 +907,10 @@ LABEL_E28F26:
 	.byte 0x3a, 0x01, 0x61, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x09, 0x00, 0x42, 0xdf, 0x03, 0x00
-	.long LABEL_E28F5C
+	.long NakaInst_MEDLEY
 	.byte 0x79, 0x00, 0xa0, 0x01
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_E28F5C:	aligned_string "MEDLEY"
+NakaInst_MEDLEY:	aligned_string "MEDLEY"
 LABEL_E28F64:
 
 	naka_header NAKA_TYPE_0x20
@@ -959,10 +959,10 @@ LABEL_E2902A:
 	.byte 0x16, 0x00
 	.byte 0xff, 0xff, 0x1a, 0x00, 0x18, 0x00, 0x08, 0x00
 	.byte 0x16, 0x01, 0x38, 0x00, 0x39, 0x01, 0x4a, 0x00
-	.long LABEL_E2904A
+	.long NakaInst_SONG_E2904A
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E2904A:	aligned_string "SONG"
+NakaInst_SONG_E2904A:	aligned_string "SONG"
 LABEL_E29050:
 
 
@@ -986,10 +986,10 @@ LABEL_E29080:
 	.byte 0x02, 0x00
 	.byte 0x00, 0x00, 0x81, 0x00, 0xa0, 0x01, 0x4c, 0xdf
 	.byte 0x03, 0x00
-	.long LABEL_E290AA
+	.long NakaDesc_CYCLE_PLAY
 	.byte 0x7e, 0x00
 	.byte 0x00, 0x00
-LABEL_E290AA:	aligned_string "CYCLE PLAY"
+NakaDesc_CYCLE_PLAY:	aligned_string "CYCLE PLAY"
 LABEL_E290B6:
 	.byte 0x06, 0x00
 	.byte 0x68, 0x01, 0x00, 0x00, 0x02, 0x00, 0x03, 0x00
@@ -1004,11 +1004,11 @@ LABEL_E290D6:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x08, 0x00, 0x72, 0x00
 	.byte 0xeb, 0x00, 0x8b, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E29108
+	.long NakaInst_CYCLE_START_MEASURE
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x8a, 0x00, 0x01, 0x00, 0x50, 0xdf, 0x03, 0x00
-LABEL_E29108:	aligned_string "CYCLE START MEASURE :"
+NakaInst_CYCLE_START_MEASURE:	aligned_string "CYCLE START MEASURE :"
 LABEL_E2911E:
 
 
@@ -1101,10 +1101,10 @@ LABEL_E29298:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x0a, 0x00, 0x5a, 0xdf
 	.byte 0x03, 0x00
-	.long LABEL_E292CE
+	.long NakaInst_NAMING
 	.byte 0xa7, 0x00
 	.byte 0xa0, 0x01, 0x00, 0x00, 0x00, 0x00
-LABEL_E292CE:	aligned_string "NAMING"
+NakaInst_NAMING:	aligned_string "NAMING"
 LABEL_E292D6:
 
 
@@ -1218,10 +1218,10 @@ LABEL_E29498:
 	.byte 0xf9, 0x00
 	.byte 0x02, 0x00, 0x80, 0x00, 0xa0, 0x01, 0x7a, 0xdf
 	.byte 0x03, 0x00
-	.long LABEL_E294C2
+	.long NakaDesc_CREATE
 	.byte 0x8a, 0x00
 	.byte 0x00, 0x00
-LABEL_E294C2:	aligned_string "CREATE"
+NakaDesc_CREATE:	aligned_string "CREATE"
 LABEL_E294CA:
 
 
@@ -1243,10 +1243,10 @@ LABEL_E2950E:
 	.byte 0x9c, 0x00, 0xdf, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x8c, 0x00, 0x80, 0xdf, 0x03, 0x00
-	.long LABEL_E29544
+	.long NakaInst_PANEL_WRITE
 	.byte 0x8d, 0x00, 0xa0, 0x01
 	.byte 0x46, 0x00, 0x00, 0x00
-LABEL_E29544:	aligned_string "PANEL WRITE"
+NakaInst_PANEL_WRITE:	aligned_string "PANEL WRITE"
 LABEL_E29550:
 
 
@@ -1257,10 +1257,10 @@ LABEL_E29550:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x08, 0x00, 0x82, 0xdf
 	.byte 0x03, 0x00
-	.long LABEL_E29586
+	.long NakaInst_SONG_SELECT_NAMING
 	.byte 0x8e, 0x00
 	.byte 0xa0, 0x01, 0x37, 0x00, 0x00, 0x00
-LABEL_E29586:	aligned_string "SONG SELECT /NAMING"
+NakaInst_SONG_SELECT_NAMING:	aligned_string "SONG SELECT /NAMING"
 LABEL_E2959A:
 
 
@@ -1307,10 +1307,10 @@ LABEL_E29668:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x88, 0x00, 0x8a, 0xdf
 	.byte 0x03, 0x00
-	.long LABEL_E2969E
+	.long NakaInst_REALTIME_RECORD
 	.byte 0x0b, 0x00
 	.byte 0x80, 0x01, 0x34, 0x00, 0x00, 0x00
-LABEL_E2969E:	aligned_string "REALTIME RECORD"
+NakaInst_REALTIME_RECORD:	aligned_string "REALTIME RECORD"
 LABEL_E296AE:
 
 
@@ -1320,10 +1320,10 @@ LABEL_E296AE:
 	.byte 0x9c, 0x00, 0x8b, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x8a, 0x00, 0x8c, 0xdf, 0x03, 0x00
-	.long LABEL_E296E4
+	.long NakaInst_STEP_RECORD
 	.byte 0x0d, 0x00, 0x80, 0x01
 	.byte 0x36, 0x00, 0x00, 0x00
-LABEL_E296E4:	aligned_string "STEP RECORD"
+NakaInst_STEP_RECORD:	aligned_string "STEP RECORD"
 LABEL_E296F0:
 
 
@@ -1334,10 +1334,10 @@ LABEL_E296F0:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x89, 0x00, 0x8e, 0xdf
 	.byte 0x03, 0x00
-	.long LABEL_E29726
+	.long NakaInst_PUNCH_RECORD
 	.byte 0x87, 0x00
 	.byte 0xa0, 0x01, 0x35, 0x00, 0x00, 0x00
-LABEL_E29726:	aligned_string "PUNCH RECORD"
+NakaInst_PUNCH_RECORD:	aligned_string "PUNCH RECORD"
 
 
 	naka_header NAKA_TYPE_CONTAINER
@@ -1359,7 +1359,7 @@ LABEL_E29784:
 
 	naka_header NAKA_TYPE_0x20
 	.byte 0x00, 0x00, 0x03, 0x00, 0x04, 0x00, 0x01, 0x00
-	.long LABEL_EC0008
+	.long NakaInst_o_s_Guitar_110
 	.byte 0x76, 0x00, 0x37, 0x01
 	.byte 0x87, 0x00, 0x07, 0x00, 0xc1, 0x00, 0x01, 0x00
 	.zero 8
@@ -1381,10 +1381,10 @@ LABEL_E297DA:
 	.byte 0xff, 0xff, 0x05, 0x00, 0x02, 0x00, 0x08, 0x00
 	.byte 0xeb, 0x00, 0x4c, 0x00, 0x37, 0x01, 0x5d, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x10, 0x98, 0xe2, 0x00
-	.long LABEL_E29806
+	.long NakaInst_CYCLE_OFF_E29806
 	.byte 0x94, 0xdf, 0x03, 0x00
 	.byte 0x09, 0x00, 0x1e, 0x00, 0x28, 0x01
-LABEL_E29806:	aligned_string "CYCLE:OFF"
+NakaInst_CYCLE_OFF_E29806:	aligned_string "CYCLE:OFF"
 	aligned_string "CYCLE:ON"
 LABEL_E2981A:
 
@@ -1402,10 +1402,10 @@ LABEL_E29834:
 	.byte 0x08, 0x00, 0x0f, 0x01, 0x22, 0x00, 0x37, 0x01
 	.byte 0x33, 0x00, 0x00, 0x00, 0x00, 0x00, 0x68, 0x98
 	.byte 0xe2, 0x00
-	.long LABEL_E29860
+	.long NakaInst_a4OFF
 	.byte 0x96, 0xdf
 	.byte 0x03, 0x00, 0x08, 0x00, 0x1f, 0x00, 0x28, 0x01
-LABEL_E29860:	aligned_string "~a4OFF"
+NakaInst_a4OFF:	aligned_string "~a4OFF"
 	aligned_string "~a4ON"
 LABEL_E2986E:
 	.byte 0x06, 0x00
@@ -1436,10 +1436,10 @@ LABEL_E298D4:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x0b, 0x00, 0x09, 0x00
 	.byte 0x08, 0x00, 0x5f, 0x00, 0x49, 0x00, 0xba, 0x00
 	.byte 0x5b, 0x00
-	.long LABEL_E298F4
+	.long NakaInst_TIME_SIG_E298F4
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-LABEL_E298F4:	aligned_string "TIME SIG. ="
+NakaInst_TIME_SIG_E298F4:	aligned_string "TIME SIG. ="
 LABEL_E29900:
 
 
@@ -1508,10 +1508,10 @@ LABEL_E29A0A:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x13, 0x00, 0x11, 0x00, 0x08, 0x00
 	.byte 0x0a, 0x00, 0x77, 0x00, 0x35, 0x00, 0x89, 0x00
-	.long LABEL_E29A2A
+	.long NakaInst_MIXER
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E29A2A:	aligned_string "MIXER"
+NakaInst_MIXER:	aligned_string "MIXER"
 	aligned_string "CLEAR"
 LABEL_E29A36:
 	.byte 0x19, 0x00
@@ -1569,11 +1569,11 @@ LABEL_E29B1C:
 	.byte 0x01, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0x08, 0x00, 0x08, 0x00, 0x72, 0x00, 0xeb, 0x00
 	.byte 0x8b, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E29B4E
+	.long NakaInst_CYCLE_START_MEASURE_E29B4E
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8a, 0x00
 	.byte 0x00, 0x00, 0xa4, 0xdf, 0x03, 0x00
-LABEL_E29B4E:	aligned_string "CYCLE START MEASURE :"
+NakaInst_CYCLE_START_MEASURE_E29B4E:	aligned_string "CYCLE START MEASURE :"
 LABEL_E29B64:
 
 
@@ -1581,10 +1581,10 @@ LABEL_E29B64:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x04, 0x00, 0x01, 0x00
 	.byte 0x08, 0x00, 0x2a, 0x00, 0x2a, 0x00, 0xb5, 0x00
 	.byte 0x3c, 0x00
-	.long LABEL_E29B84
+	.long NakaInst_CURRENT_MEASURE
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-LABEL_E29B84:	aligned_string "CURRENT MEASURE :"
+NakaInst_CURRENT_MEASURE:	aligned_string "CURRENT MEASURE :"
 LABEL_E29B96:
 
 
@@ -1593,11 +1593,11 @@ LABEL_E29B96:
 	.byte 0x03, 0x00, 0x08, 0x00, 0x08, 0x00, 0x9c, 0x00
 	.byte 0xeb, 0x00, 0xb5, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E29BC8
+	.long NakaInst_CYCLE_END_MEASURE
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x8b, 0x00, 0x00, 0x00, 0xa6, 0xdf, 0x03, 0x00
-LABEL_E29BC8:	aligned_string "CYCLE END MEASURE   :"
+NakaInst_CYCLE_END_MEASURE:	aligned_string "CYCLE END MEASURE   :"
 LABEL_E29BDE:
 
 
@@ -1624,12 +1624,12 @@ LABEL_E29C2E:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x08, 0x00
 	.byte 0x06, 0x00, 0x08, 0x00, 0x0f, 0x01, 0x22, 0x00
 	.byte 0x37, 0x01, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E29C62
-	.long LABEL_E29C5A
+	.long NakaInst_a4ON
+	.long NakaDesc_a4ON
 	.byte 0xa8, 0xdf, 0x03, 0x00, 0x08, 0x00, 0x1f, 0x00
 	.byte 0x28, 0x01
-LABEL_E29C5A:	aligned_string "~a4OFF"
-LABEL_E29C62:	aligned_string "~a4ON"
+NakaDesc_a4ON:	aligned_string "~a4OFF"
+NakaInst_a4ON:	aligned_string "~a4ON"
 LABEL_E29C68:
 
 
@@ -1716,10 +1716,10 @@ LABEL_E29DC2:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x07, 0x00, 0x05, 0x00, 0x08, 0x00
 	.byte 0x5f, 0x00, 0x49, 0x00, 0xba, 0x00, 0x5b, 0x00
-	.long LABEL_E29DE2
+	.long NakaInst_TIME_SIG_E29DE2
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E29DE2:	aligned_string "TIME SIG. ="
+NakaInst_TIME_SIG_E29DE2:	aligned_string "TIME SIG. ="
 LABEL_E29DEE:
 
 
@@ -1780,10 +1780,10 @@ LABEL_E29ECC:
 	.byte 0x08, 0x00, 0x0f, 0x01, 0x22, 0x00, 0x37, 0x01
 	.byte 0x33, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x9f
 	.byte 0xe2, 0x00
-	.long LABEL_E29EF8
+	.long NakaInst_a4OFF_E29EF8
 	jp_cc_ri xwa, 15
 	.byte 0x03, 0x00, 0x08, 0x00, 0x1f, 0x00, 0x28, 0x01
-LABEL_E29EF8:	aligned_string "~a4OFF"
+NakaInst_a4OFF_E29EF8:	aligned_string "~a4OFF"
 	aligned_string "~a4ON"
 LABEL_E29F06:
 
@@ -1794,12 +1794,12 @@ LABEL_E29F06:
 	.long Presentation_TagStrTable
 	.byte 0x76, 0x00
 	.byte 0x37, 0x01, 0x87, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E29F3C
-	.long LABEL_E29F32
+	.long NakaDesc_PUNCH_OUT
+	.long NakaParam_PUNCH_OUT
 	.byte 0xb2, 0xdf, 0x03, 0x00, 0x0a, 0x00, 0x25, 0x00
 	.byte 0x28, 0x01
-LABEL_E29F32:	aligned_string "PUNCH IN"
-LABEL_E29F3C:	aligned_string "PUNCH OUT"
+NakaParam_PUNCH_OUT:	aligned_string "PUNCH IN"
+NakaDesc_PUNCH_OUT:	aligned_string "PUNCH OUT"
 LABEL_E29F46:
 
 
@@ -1906,10 +1906,10 @@ LABEL_E2A102:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x03, 0x00, 0x01, 0x00, 0x08, 0x00
 	.byte 0x06, 0x01, 0xc8, 0x00, 0x29, 0x01, 0xda, 0x00
-	.long LABEL_E2A122
+	.long NakaInst_MEAS_E2A122
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E2A122:	aligned_string "MEAS"
+NakaInst_MEAS_E2A122:	aligned_string "MEAS"
 LABEL_E2A128:
 
 
@@ -1927,10 +1927,10 @@ LABEL_E2A15A:
 	.byte 0xff, 0xff, 0x05, 0x00, 0x03, 0x00, 0x08, 0x00
 	.byte 0x0f, 0x01, 0x22, 0x00, 0x37, 0x01, 0x33, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x8e, 0xa1, 0xe2, 0x00
-	.long LABEL_E2A186
+	.long NakaInst_a4OFF_E2A186
 	.byte 0xb8, 0xdf, 0x03, 0x00
 	.byte 0x08, 0x00, 0x1f, 0x00, 0x28, 0x01
-LABEL_E2A186:	aligned_string "~a4OFF"
+NakaInst_a4OFF_E2A186:	aligned_string "~a4OFF"
 	.byte 0x7e, 0x61
 	.byte 0x34, 0x4f, 0x4e, 0x00
 LABEL_E2A194:
@@ -1946,11 +1946,11 @@ LABEL_E2A1B4:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x07, 0x00, 0x05, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x48, 0x00, 0xde, 0x00
 	.byte 0x61, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2A1E6
+	.long NakaInst_PUNCH_IN_MEASURE
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x89, 0x00
 	.byte 0x00, 0x00, 0xba, 0xdf, 0x03, 0x00
-LABEL_E2A1E6:	aligned_string "PUNCH IN MEASURE  :"
+NakaInst_PUNCH_IN_MEASURE:	aligned_string "PUNCH IN MEASURE  :"
 LABEL_E2A1FA:
 
 
@@ -1997,9 +1997,9 @@ LABEL_E2A2C6:
 	.long Naka_PresentationRootState
 	.byte 0xff, 0x00, 0x00, 0x00
 	.byte 0x87, 0x00, 0xa0, 0x01, 0xc0, 0xdf, 0x03, 0x00
-	.long LABEL_E2A2F0
+	.long NakaDesc_AUTO_PUNCH_RECORD
 	.byte 0x35, 0x00, 0x00, 0x00
-LABEL_E2A2F0:	aligned_string "AUTO PUNCH RECORD"
+NakaDesc_AUTO_PUNCH_RECORD:	aligned_string "AUTO PUNCH RECORD"
 
 
 	naka_header NAKA_TYPE_CONTAINER
@@ -2061,10 +2061,10 @@ LABEL_E2A404:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x03, 0x00, 0x01, 0x00
 	.byte 0x08, 0x00, 0xe1, 0x00, 0xc8, 0x00, 0x3c, 0x01
 	.byte 0xda, 0x00
-	.long LABEL_E2A424
+	.long NakaInst_SONG_NO_ALL
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-LABEL_E2A424:	aligned_string "SONG NO/ALL"
+NakaInst_SONG_NO_ALL:	aligned_string "SONG NO/ALL"
 LABEL_E2A430:
 	.byte 0x07, 0x00, 0x68, 0x01, 0x00, 0x00, 0x04, 0x00
 	.byte 0x07, 0x00, 0x02, 0x00, 0x08, 0x00, 0x3c, 0x00
@@ -2366,10 +2366,10 @@ LABEL_E2A8D0:
 	.byte 0xf9, 0x00
 	.byte 0x02, 0x00, 0x80, 0x00, 0xa0, 0x01, 0xe4, 0xdf
 	.byte 0x03, 0x00
-	.long LABEL_E2A8FA
+	.long NakaDesc_EDIT
 	.byte 0x12, 0x00
 	.byte 0x00, 0x00
-LABEL_E2A8FA:	aligned_string "EDIT"
+NakaDesc_EDIT:	aligned_string "EDIT"
 LABEL_E2A900:
 
 
@@ -2488,10 +2488,10 @@ LABEL_E2AAFE:
 	.byte 0x37, 0x01, 0x37, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x08, 0x00, 0xfc, 0xdf, 0x03, 0x00
-	.long LABEL_E2AB34
+	.long NakaInst_QUANTIZE_E2AB34
 	.byte 0x9c, 0x00, 0xa0, 0x01
 	.byte 0x3d, 0x00, 0x00, 0x00
-LABEL_E2AB34:	aligned_string "QUANTIZE"
+NakaInst_QUANTIZE_E2AB34:	aligned_string "QUANTIZE"
 LABEL_E2AB3E:
 
 
@@ -2501,10 +2501,10 @@ LABEL_E2AB3E:
 	.byte 0x37, 0x01, 0x61, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x09, 0x00, 0xfe, 0xdf, 0x03, 0x00
-	.long LABEL_E2AB74
+	.long NakaInst_TRANSPOSE
 	.byte 0x9d, 0x00, 0xa0, 0x01
 	.byte 0x3e, 0x00, 0x00, 0x00
-LABEL_E2AB74:	aligned_string "TRANSPOSE"
+NakaInst_TRANSPOSE:	aligned_string "TRANSPOSE"
 LABEL_E2AB7E:
 
 
@@ -2514,10 +2514,10 @@ LABEL_E2AB7E:
 	.byte 0x37, 0x01, 0x8b, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x0a, 0x00, 0x00, 0xe0, 0x03, 0x00
-	.long LABEL_E2ABB4
+	.long NakaInst_VELOCITY_CHANGE
 	.byte 0x9e, 0x00, 0xa0, 0x01
 	.byte 0x8b, 0x00, 0x00, 0x00
-LABEL_E2ABB4:	aligned_string "VELOCITY CHANGE"
+NakaInst_VELOCITY_CHANGE:	aligned_string "VELOCITY CHANGE"
 LABEL_E2ABC4:
 
 
@@ -2539,11 +2539,11 @@ LABEL_E2AC06:
 	.byte 0x37, 0x01, 0xdf, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x0c, 0x00, 0x04, 0xe0, 0x03, 0x00
-	.long LABEL_E2AC3C
+	.long NakaInst_ADVANCE_DELAY
 	.byte 0xa0, 0x00, 0xa0, 0x01
 	.asciz "B"
 	.byte 0x00, 0x00
-LABEL_E2AC3C:	aligned_string "ADVANCE/DELAY"
+NakaInst_ADVANCE_DELAY:	aligned_string "ADVANCE/DELAY"
 LABEL_E2AC4A:
 
 
@@ -2562,10 +2562,10 @@ LABEL_E2AC6E:
 	.byte 0x9c, 0x00, 0x37, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x88, 0x00, 0x0e, 0xe0, 0x03, 0x00
-	.long LABEL_E2ACA4
+	.long NakaInst_COPY
 	.byte 0xa2, 0x00, 0xa0, 0x01
 	.byte 0x47, 0x00, 0x00, 0x00
-LABEL_E2ACA4:	aligned_string "COPY"
+NakaInst_COPY:	aligned_string "COPY"
 LABEL_E2ACAA:
 
 
@@ -2596,10 +2596,10 @@ LABEL_E2AD00:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x8a, 0x00, 0x12, 0xe0
 	.byte 0x03, 0x00
-	.long LABEL_E2AD36
+	.long NakaInst_DELETE
 	.byte 0xa3, 0x00
 	.byte 0xa0, 0x01, 0x49, 0x00, 0x00, 0x00
-LABEL_E2AD36:	aligned_string "DELETE"
+NakaInst_DELETE:	aligned_string "DELETE"
 LABEL_E2AD3E:
 
 
@@ -2609,10 +2609,10 @@ LABEL_E2AD3E:
 	.byte 0x9c, 0x00, 0xb5, 0x00, 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x8b, 0x00, 0x14, 0xe0, 0x03, 0x00
-	.long LABEL_E2AD74
+	.long NakaInst_INSERT
 	.byte 0xa4, 0x00, 0xa0, 0x01
 	.byte 0x4a, 0x00, 0x00, 0x00
-LABEL_E2AD74:	aligned_string "INSERT"
+NakaInst_INSERT:	aligned_string "INSERT"
 LABEL_E2AD7C:
 
 
@@ -2648,10 +2648,10 @@ LABEL_E2ADBE:
 	.byte 0xf9, 0x00
 	.byte 0x00, 0x00, 0x93, 0x00, 0xa0, 0x01, 0x16, 0xe0
 	.byte 0x03, 0x00
-	.long LABEL_E2AE02
+	.long NakaDesc_NOTE_EDIT
 	.byte 0x04, 0x00
 	.byte 0x00, 0x00
-LABEL_E2AE02:	aligned_string "NOTE EDIT  "
+NakaDesc_NOTE_EDIT:	aligned_string "NOTE EDIT  "
 LABEL_E2AE0E:
 
 
@@ -2779,10 +2779,10 @@ LABEL_E2AFEA:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x0a, 0x00, 0x08, 0x00, 0x08, 0x00
 	.byte 0x52, 0x00, 0xca, 0x00, 0x75, 0x00, 0xdc, 0x00
-	.long LABEL_E2B00A
+	.long NakaInst_NOTE
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E2B00A:	aligned_string "NOTE"
+NakaInst_NOTE:	aligned_string "NOTE"
 LABEL_E2B010:
 
 
@@ -2821,10 +2821,10 @@ LABEL_E2B07C:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x0e, 0x00, 0x0c, 0x00
 	.byte 0x08, 0x00, 0xfe, 0x00, 0xca, 0x00, 0x31, 0x01
 	.byte 0xdc, 0x00
-	.long LABEL_E2B09C
+	.long NakaInst_CURSOR
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-LABEL_E2B09C:	aligned_string "CURSOR"
+NakaInst_CURSOR:	aligned_string "CURSOR"
 LABEL_E2B0A4:
 
 
@@ -2916,10 +2916,10 @@ LABEL_E2B1FC:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x19, 0x00, 0x17, 0x00
 	.byte 0x08, 0x00, 0x14, 0x01, 0x23, 0x00, 0x37, 0x01
 	.byte 0x35, 0x00
-	.long LABEL_E2B21C
+	.long NakaInst_PLAY_E2B21C
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-LABEL_E2B21C:	aligned_string "PLAY"
+NakaInst_PLAY_E2B21C:	aligned_string "PLAY"
 LABEL_E2B222:
 
 
@@ -3007,11 +3007,11 @@ LABEL_E2B384:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x07, 0x00, 0x05, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x72, 0x00, 0xed, 0x00
 	.byte 0x8b, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2B3B6
+	.long NakaInst_CYCLE_START_MEASURE_E2B3B6
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8a, 0x00
 	.byte 0x00, 0x00, 0x24, 0xe0, 0x03, 0x00
-LABEL_E2B3B6:	aligned_string "CYCLE START MEASURE :"
+NakaInst_CYCLE_START_MEASURE_E2B3B6:	aligned_string "CYCLE START MEASURE :"
 LABEL_E2B3CC:
 
 
@@ -3019,11 +3019,11 @@ LABEL_E2B3CC:
 	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x06, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x9c, 0x00, 0xed, 0x00
 	.byte 0xb5, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2B3FE
+	.long NakaInst_CYCLE_END_MEASURE_E2B3FE
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8b, 0x00
 	.byte 0x00, 0x00, 0x26, 0xe0, 0x03, 0x00
-LABEL_E2B3FE:	aligned_string "CYCLE END MEASURE   :"
+NakaInst_CYCLE_END_MEASURE_E2B3FE:	aligned_string "CYCLE END MEASURE   :"
 
 
 	naka_header NAKA_TYPE_CONTAINER
@@ -3040,10 +3040,10 @@ LABEL_E2B44A:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x02, 0x00, 0xff, 0xff, 0x08, 0x00
 	.byte 0xd2, 0x00, 0x0a, 0x00, 0x35, 0x01, 0x1c, 0x00
-	.long LABEL_E2B46A
+	.long NakaInst_PART_SELECT
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E2B46A:	aligned_string ":PART SELECT"
+NakaInst_PART_SELECT:	aligned_string ":PART SELECT"
 LABEL_E2B478:
 
 
@@ -3071,10 +3071,10 @@ LABEL_E2B4B8:
 	.byte 0xf9, 0x00
 	.byte 0x00, 0x00, 0x97, 0x00, 0xa0, 0x01, 0x2c, 0xe0
 	.byte 0x03, 0x00
-	.long LABEL_E2B4E2
+	.long NakaDesc_DRUM_EDIT
 	.byte 0x11, 0x00
 	.byte 0x00, 0x00
-LABEL_E2B4E2:	aligned_string "DRUM EDIT"
+NakaDesc_DRUM_EDIT:	aligned_string "DRUM EDIT"
 LABEL_E2B4EC:
 
 
@@ -3136,10 +3136,10 @@ LABEL_E2B5DC:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x08, 0x00, 0x06, 0x00
 	.byte 0x08, 0x00, 0x02, 0x00, 0xca, 0x00, 0x25, 0x00
 	.byte 0xdc, 0x00
-	.long LABEL_E2B5FC
+	.long NakaInst_MEAS_E2B5FC
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-LABEL_E2B5FC:	aligned_string "MEAS"
+NakaInst_MEAS_E2B5FC:	aligned_string "MEAS"
 LABEL_E2B602:
 
 
@@ -3189,10 +3189,10 @@ LABEL_E2B692:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x0d, 0x00, 0x0b, 0x00, 0x08, 0x00
 	.byte 0xd6, 0x00, 0xca, 0x00, 0x09, 0x01, 0xdc, 0x00
-	.long LABEL_E2B6B2
+	.long NakaInst_CURSOR_E2B6B2
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E2B6B2:	aligned_string "CURSOR"
+NakaInst_CURSOR_E2B6B2:	aligned_string "CURSOR"
 LABEL_E2B6BA:
 
 
@@ -3200,10 +3200,10 @@ LABEL_E2B6BA:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x0e, 0x00, 0x0c, 0x00, 0x08, 0x00
 	.byte 0x14, 0x01, 0xca, 0x00, 0x3f, 0x01, 0xdc, 0x00
-	.long LABEL_E2B6DA
+	.long NakaInst_SOUND
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E2B6DA:	aligned_string "SOUND"
+NakaInst_SOUND:	aligned_string "SOUND"
 LABEL_E2B6E0:
 
 
@@ -3317,9 +3317,9 @@ LABEL_E2B85E:
 	.long Naka_PresentationRootState
 	.byte 0xf9, 0x00, 0x00, 0x00
 	.byte 0x98, 0x00, 0xa0, 0x01, 0x30, 0xe0, 0x03, 0x00
-	.long LABEL_E2B8B0
+	.long NakaDesc_CYCLE_PLAY_E2B8B0
 	.byte 0x7e, 0x00, 0x00, 0x00
-LABEL_E2B8B0:	aligned_string "CYCLE PLAY"
+NakaDesc_CYCLE_PLAY_E2B8B0:	aligned_string "CYCLE PLAY"
 LABEL_E2B8BC:
 
 
@@ -3327,10 +3327,10 @@ LABEL_E2B8BC:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x02, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x2a, 0x00, 0x2a, 0x00, 0xb5, 0x00
 	.byte 0x3c, 0x00
-	.long LABEL_E2B8DC
+	.long NakaInst_CURRENT_MEASURE_E2B8DC
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00
-LABEL_E2B8DC:	aligned_string "CURRENT MEASURE :"
+NakaInst_CURRENT_MEASURE_E2B8DC:	aligned_string "CURRENT MEASURE :"
 LABEL_E2B8EE:
 
 
@@ -3364,11 +3364,11 @@ LABEL_E2B95E:
 	.byte 0x04, 0x00, 0x08, 0x00, 0x08, 0x00, 0x48, 0x00
 	.byte 0x7f, 0x00, 0x61, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E2B990
+	.long NakaInst_SOLO
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x89, 0x00, 0x00, 0x00, 0x34, 0xe0, 0x03, 0x00
-LABEL_E2B990:	aligned_string "SOLO :"
+NakaInst_SOLO:	aligned_string "SOLO :"
 LABEL_E2B998:
 
 
@@ -3406,10 +3406,10 @@ LABEL_E2BA28:
 	.byte 0xf9, 0x00
 	.byte 0x00, 0x00, 0x93, 0x00, 0xa0, 0x01, 0x3a, 0xe0
 	.byte 0x03, 0x00
-	.long LABEL_E2BA52
+	.long NakaDesc_TRACK_CLEAR
 	.byte 0x40, 0x00
 	.byte 0x00, 0x00
-LABEL_E2BA52:	aligned_string "TRACK CLEAR"
+NakaDesc_TRACK_CLEAR:	aligned_string "TRACK CLEAR"
 LABEL_E2BA5E:
 
 
@@ -3535,10 +3535,10 @@ LABEL_E2BC1E:
 	.byte 0xf9, 0x00
 	.byte 0x00, 0x00, 0x93, 0x00, 0xa0, 0x01, 0x48, 0xe0
 	.byte 0x03, 0x00
-	.long LABEL_E2BC72
+	.long NakaDesc_TRACK_MERGE
 	.byte 0x45, 0x00
 	.byte 0x00, 0x00
-LABEL_E2BC72:	aligned_string "TRACK MERGE"
+NakaDesc_TRACK_MERGE:	aligned_string "TRACK MERGE"
 LABEL_E2BC7E:
 
 
@@ -3631,11 +3631,11 @@ LABEL_E2BDC4:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x0c, 0x00, 0x09, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x1e, 0x00, 0x7b, 0x00
 	.byte 0x37, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2BDF6
+	.long NakaInst_TRACK
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x88, 0x00
 	.byte 0x01, 0x00, 0x4e, 0xe0, 0x03, 0x00
-LABEL_E2BDF6:	aligned_string "TRACK :"
+NakaInst_TRACK:	aligned_string "TRACK :"
 LABEL_E2BDFE:
 
 
@@ -3644,11 +3644,11 @@ LABEL_E2BDFE:
 	.byte 0x0b, 0x00, 0x08, 0x00, 0xc4, 0x00, 0x48, 0x00
 	.byte 0x37, 0x01, 0x61, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E2BE30
+	.long NakaInst_TRACK_E2BE30
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x09, 0x00, 0x01, 0x00, 0x50, 0xe0, 0x03, 0x00
-LABEL_E2BE30:	aligned_string "TRACK :"
+NakaInst_TRACK_E2BE30:	aligned_string "TRACK :"
 LABEL_E2BE38:
 	.byte 0x0e, 0x00, 0x68, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0x0e, 0x00, 0x0c, 0x00, 0x08, 0x00, 0x3c, 0x00
@@ -3823,11 +3823,11 @@ LABEL_E2C144:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x0a, 0x00, 0x08, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x9c, 0x00, 0xac, 0x00
 	.byte 0xb5, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2C176
+	.long NakaInst_VALUE_E2C176
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8b, 0x00
 	.byte 0x00, 0x00, 0x68, 0xe0, 0x03, 0x00
-LABEL_E2C176:	aligned_string "VALUE        :"
+NakaInst_VALUE_E2C176:	aligned_string "VALUE        :"
 LABEL_E2C186:
 
 
@@ -3836,11 +3836,11 @@ LABEL_E2C186:
 	.byte 0x09, 0x00, 0x08, 0x00, 0xaf, 0x00, 0x1e, 0x00
 	.byte 0x37, 0x01, 0x37, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E2C1B8
+	.long NakaInst_STRENGTH
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x6a, 0xe0, 0x03, 0x00
-LABEL_E2C1B8:	aligned_string "STRENGTH:"
+NakaInst_STRENGTH:	aligned_string "STRENGTH:"
 LABEL_E2C1C2:
 
 
@@ -3943,10 +3943,10 @@ LABEL_E2C328:
 	.byte 0xf9, 0x00
 	.byte 0x00, 0x00, 0x93, 0x00, 0xa0, 0x01, 0x76, 0xe0
 	.byte 0x03, 0x00
-	.long LABEL_E2C352
+	.long NakaDesc_TRANSPOSE
 	.byte 0x3e, 0x00
 	.byte 0x00, 0x00
-LABEL_E2C352:	aligned_string "TRANSPOSE"
+NakaDesc_TRANSPOSE:	aligned_string "TRANSPOSE"
 LABEL_E2C35C:
 
 
@@ -3981,11 +3981,11 @@ LABEL_E2C3CC:
 	.byte 0x03, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0x08, 0x00, 0x08, 0x00, 0x72, 0x00, 0xac, 0x00
 	.byte 0x8b, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2C3FE
+	.long NakaInst_LAST_MEASURE
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8a, 0x00
 	.byte 0x01, 0x00, 0x7a, 0xe0, 0x03, 0x00
-LABEL_E2C3FE:	aligned_string "LAST MEASURE :"
+NakaInst_LAST_MEASURE:	aligned_string "LAST MEASURE :"
 LABEL_E2C40E:
 
 
@@ -3994,11 +3994,11 @@ LABEL_E2C40E:
 	.byte 0x03, 0x00, 0x08, 0x00, 0x08, 0x00, 0x1e, 0x00
 	.byte 0xac, 0x00, 0x37, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E2C440
+	.long NakaInst_TRACK_E2C440
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x88, 0x00, 0x01, 0x00, 0x7c, 0xe0, 0x03, 0x00
-LABEL_E2C440:	aligned_string "TRACK        :"
+NakaInst_TRACK_E2C440:	aligned_string "TRACK        :"
 LABEL_E2C450:
 
 
@@ -4055,10 +4055,10 @@ LABEL_E2C538:
 	.byte 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x8a, 0xe0
 	.byte 0x03, 0x00
-	.long LABEL_E2C56E
+	.long NakaInst_NO_E2C56E
 	.byte 0x00, 0x00
 	.byte 0x9d, 0x00, 0x00, 0x00, 0x00, 0x00
-LABEL_E2C56E:	aligned_string "NO"
+NakaInst_NO_E2C56E:	aligned_string "NO"
 LABEL_E2C572:
 
 
@@ -4135,11 +4135,11 @@ LABEL_E2C6A6:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x08, 0x00, 0x72, 0x00
 	.byte 0xac, 0x00, 0x8b, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E2C6D8
+	.long NakaInst_LAST_MEASURE_E2C6D8
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x8a, 0x00, 0x01, 0x00, 0x90, 0xe0, 0x03, 0x00
-LABEL_E2C6D8:	aligned_string "LAST MEASURE :"
+NakaInst_LAST_MEASURE_E2C6D8:	aligned_string "LAST MEASURE :"
 LABEL_E2C6E8:
 
 
@@ -4171,11 +4171,11 @@ LABEL_E2C76C:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x08, 0x00, 0x06, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x9c, 0x00, 0xb7, 0x00
 	.byte 0xb5, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2C79E
+	.long NakaInst_VELOCITY
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8b, 0x00
 	.byte 0x01, 0x00, 0x96, 0xe0, 0x03, 0x00
-LABEL_E2C79E:	aligned_string "VELOCITY    :"
+NakaInst_VELOCITY:	aligned_string "VELOCITY    :"
 LABEL_E2C7AC:
 	.byte 0x0e, 0x00, 0x68, 0x01
 	.byte 0x00, 0x00, 0xff, 0xff, 0x09, 0x00, 0x07, 0x00
@@ -4256,9 +4256,9 @@ LABEL_E2C8D6:
 	.long Naka_PresentationRootState
 	.byte 0xf9, 0x00, 0x00, 0x00
 	.byte 0x93, 0x00, 0xa0, 0x01, 0xa2, 0xe0, 0x03, 0x00
-	.long LABEL_E2C900
+	.long NakaDesc_NOTE_CHANGE
 	.byte 0x41, 0x00, 0x00, 0x00
-LABEL_E2C900:	aligned_string "NOTE CHANGE"
+NakaDesc_NOTE_CHANGE:	aligned_string "NOTE CHANGE"
 LABEL_E2C90C:
 	.byte 0x02, 0x00, 0x68, 0x01
 	.byte 0x00, 0x00, 0x02, 0x00, 0x04, 0x00, 0xff, 0xff
@@ -4385,11 +4385,11 @@ LABEL_E2CAFE:
 	.byte 0x0d, 0x00, 0x08, 0x00, 0x08, 0x00, 0x48, 0x00
 	.byte 0xac, 0x00, 0x61, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E2CB30
+	.long NakaInst_FIRST_MEASURE
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x89, 0x00, 0x01, 0x00, 0xac, 0xe0, 0x03, 0x00
-LABEL_E2CB30:	aligned_string "FIRST MEASURE:"
+NakaInst_FIRST_MEASURE:	aligned_string "FIRST MEASURE:"
 LABEL_E2CB40:
 
 
@@ -4434,10 +4434,10 @@ LABEL_E2CBE8:
 	.byte 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0b, 0x00, 0xb8, 0xe0
 	.byte 0x03, 0x00
-	.long LABEL_E2CC1E
+	.long NakaInst_NO_E2CC1E
 	.byte 0x00, 0x00
 	.byte 0x9f, 0x00, 0x00, 0x00, 0x00, 0x00
-LABEL_E2CC1E:	aligned_string "NO"
+NakaInst_NO_E2CC1E:	aligned_string "NO"
 LABEL_E2CC22:
 
 
@@ -4489,9 +4489,9 @@ LABEL_E2CCC6:
 	.long Naka_PresentationRootState
 	.byte 0xf9, 0x00, 0x00, 0x00
 	.byte 0x93, 0x00, 0xa0, 0x01, 0xba, 0xe0, 0x03, 0x00
-	.long LABEL_E2CCF0
+	.long NakaDesc_ADVANCE_DELAY
 	.byte 0x42, 0x00, 0x00, 0x00
-LABEL_E2CCF0:	aligned_string "ADVANCE/DELAY"
+NakaDesc_ADVANCE_DELAY:	aligned_string "ADVANCE/DELAY"
 LABEL_E2CCFE:
 
 
@@ -4525,11 +4525,11 @@ LABEL_E2CD6E:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x08, 0x00, 0x48, 0x00
 	.byte 0xac, 0x00, 0x61, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E2CDA0
+	.long NakaInst_FIRST_MEASURE_E2CDA0
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x89, 0x00, 0x01, 0x00, 0xbe, 0xe0, 0x03, 0x00
-LABEL_E2CDA0:	aligned_string "FIRST MEASURE:"
+NakaInst_FIRST_MEASURE_E2CDA0:	aligned_string "FIRST MEASURE:"
 LABEL_E2CDB0:
 
 
@@ -4561,11 +4561,11 @@ LABEL_E2CE34:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x08, 0x00, 0x06, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x9c, 0x00, 0xac, 0x00
 	.byte 0xb5, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2CE66
+	.long NakaInst_ADVANCE_DELAY_E2CE66
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8b, 0x00
 	.byte 0x01, 0x00, 0xc4, 0xe0, 0x03, 0x00
-LABEL_E2CE66:	aligned_string "ADVANCE/DELAY:"
+NakaInst_ADVANCE_DELAY_E2CE66:	aligned_string "ADVANCE/DELAY:"
 LABEL_E2CE76:
 	.byte 0x0e, 0x00
 	.byte 0x68, 0x01, 0x00, 0x00, 0xff, 0xff, 0x09, 0x00
@@ -4610,10 +4610,10 @@ LABEL_E2CF08:
 	.byte 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0b, 0x00, 0xce, 0xe0
 	.byte 0x03, 0x00
-	.long LABEL_E2CF3E
+	.long NakaInst_NO_E2CF3E
 	.byte 0x00, 0x00
 	.byte 0xa0, 0x00, 0x00, 0x00, 0x00, 0x00
-LABEL_E2CF3E:	aligned_string "NO"
+NakaInst_NO_E2CF3E:	aligned_string "NO"
 LABEL_E2CF42:
 
 
@@ -4649,10 +4649,10 @@ LABEL_E2CF76:
 	.byte 0xf9, 0x00
 	.byte 0x00, 0x00, 0x93, 0x00, 0xa0, 0x01, 0xd0, 0xe0
 	.byte 0x03, 0x00
-	.long LABEL_E2CFCA
+	.long NakaDesc_MEASURE_ERASE
 	.byte 0x48, 0x00
 	.byte 0x00, 0x00
-LABEL_E2CFCA:	aligned_string "MEASURE ERASE"
+NakaDesc_MEASURE_ERASE:	aligned_string "MEASURE ERASE"
 LABEL_E2CFD8:
 
 
@@ -4672,10 +4672,10 @@ LABEL_E2D002:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0x03, 0x00, 0x01, 0x00, 0x08, 0x00
 	.byte 0x00, 0x01, 0xca, 0x00, 0x2b, 0x01, 0xdc, 0x00
-	.long LABEL_E2D022
+	.long NakaInst_VALUE_E2D022
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00
-LABEL_E2D022:	aligned_string "VALUE"
+NakaInst_VALUE_E2D022:	aligned_string "VALUE"
 LABEL_E2D028:
 	.byte 0x02, 0x00, 0x68, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0x04, 0x00, 0x02, 0x00, 0x08, 0x00, 0x3c, 0x00
@@ -4712,11 +4712,11 @@ LABEL_E2D0CC:
 	.byte 0x00, 0x00, 0xff, 0xff, 0x07, 0x00, 0x05, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x72, 0x00, 0xac, 0x00
 	.byte 0x8b, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2D0FE
+	.long NakaInst_LAST_MEASURE_E2D0FE
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x8a, 0x00
 	.byte 0x01, 0x00, 0xd8, 0xe0, 0x03, 0x00
-LABEL_E2D0FE:	aligned_string "LAST MEASURE :"
+NakaInst_LAST_MEASURE_E2D0FE:	aligned_string "LAST MEASURE :"
 LABEL_E2D10E:
 
 
@@ -4725,11 +4725,11 @@ LABEL_E2D10E:
 	.byte 0x06, 0x00, 0x08, 0x00, 0x08, 0x00, 0x9c, 0x00
 	.byte 0xd0, 0x00, 0xb5, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E2D140
+	.long NakaInst_ERASE_DATA
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x8b, 0x00, 0x01, 0x00, 0xda, 0xe0, 0x03, 0x00
-LABEL_E2D140:	aligned_string "ERASE DATA   :"
+NakaInst_ERASE_DATA:	aligned_string "ERASE DATA   :"
 LABEL_E2D150:
 	.byte 0x0e, 0x00, 0x68, 0x01, 0x00, 0x00, 0xff, 0xff
 	.byte 0x09, 0x00, 0x07, 0x00, 0x08, 0x00, 0x3c, 0x00
@@ -4950,10 +4950,10 @@ LABEL_E2D4B8:
 	.byte 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0b, 0x00, 0xf2, 0xe0
 	.byte 0x03, 0x00
-	.long LABEL_E2D4EE
+	.long NakaInst_NO_E2D4EE
 	.byte 0x00, 0x00
 	.byte 0xa2, 0x00, 0x00, 0x00, 0x00, 0x00
-LABEL_E2D4EE:	aligned_string "NO"
+NakaInst_NO_E2D4EE:	aligned_string "NO"
 LABEL_E2D4F2:
 
 
@@ -4999,11 +4999,11 @@ LABEL_E2D59C:
 	.byte 0x03, 0x00, 0xff, 0xff, 0x05, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x08, 0x00, 0x48, 0x00, 0xac, 0x00
 	.byte 0x61, 0x00, 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2D5CE
+	.long NakaInst_FIRST_MEASURE_E2D5CE
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x01, 0x00, 0x04, 0x00, 0x89, 0x00
 	.byte 0x01, 0x00, 0xf8, 0xe0, 0x03, 0x00
-LABEL_E2D5CE:	aligned_string "FIRST MEASURE:"
+NakaInst_FIRST_MEASURE_E2D5CE:	aligned_string "FIRST MEASURE:"
 LABEL_E2D5DE:
 
 
@@ -5012,11 +5012,11 @@ LABEL_E2D5DE:
 	.byte 0x04, 0x00, 0x08, 0x00, 0x08, 0x00, 0x72, 0x00
 	.byte 0xac, 0x00, 0x8b, 0x00, 0xf5, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
-	.long LABEL_E2D610
+	.long NakaInst_LAST_MEASURE_E2D610
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x01, 0x00, 0x04, 0x00
 	.byte 0x8a, 0x00, 0x01, 0x00, 0xfa, 0xe0, 0x03, 0x00
-LABEL_E2D610:	aligned_string "LAST MEASURE :"
+NakaInst_LAST_MEASURE_E2D610:	aligned_string "LAST MEASURE :"
 LABEL_E2D620:
 
 
@@ -5283,10 +5283,10 @@ LABEL_E2DA40:
 	.byte 0xff, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa0, 0x01, 0x1a, 0xe1
 	.byte 0x03, 0x00
-	.long LABEL_E2DA8A
+	.long NakaDesc_ENTERTAINER
 	.byte 0x9b, 0x00
 	.byte 0x00, 0x00
-LABEL_E2DA8A:	aligned_string "ENTERTAINER"
+NakaDesc_ENTERTAINER:	aligned_string "ENTERTAINER"
 LABEL_E2DA96:
 	.byte 0x09, 0x00
 	.byte 0x68, 0x01, 0x00, 0x00, 0x02, 0x00, 0x03, 0x00
@@ -5297,9 +5297,9 @@ LABEL_E2DA96:
 	.byte 0x1e, 0xe1, 0x03, 0x00, 0x20, 0xe1, 0x03, 0x00
 	.byte 0x22, 0xe1, 0x03, 0x00, 0x26, 0xe1, 0x03, 0x00
 	.byte 0x2a, 0xe1, 0x03, 0x00, 0x46, 0xdb, 0xe2, 0x00
-	.long LABEL_E2DAE0
+	.long NakaInst_MIC_BALANCE_ON_OFF_TYPE_REVERB_TIME_EXCITER_FC
 	.byte 0x21, 0x00, 0x28, 0x01
-LABEL_E2DAE0:	aligned_string "MIC BALANCE :|-|| ON/OFF     :| TYPE       :| REVERB TIME:| EXCITER FC :| EXCITER G  :| VOLUME     :|"
+NakaInst_MIC_BALANCE_ON_OFF_TYPE_REVERB_TIME_EXCITER_FC:	aligned_string "MIC BALANCE :|-|| ON/OFF     :| TYPE       :| REVERB TIME:| EXCITER FC :| EXCITER G  :| VOLUME     :|"
 	ldb	w, 0x20
 	aligned_string "   |    "
 LABEL_E2DB52:
@@ -5309,12 +5309,12 @@ LABEL_E2DB52:
 	.byte 0x01, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
 	.byte 0x73, 0x00, 0x3a, 0x00, 0xd6, 0x00, 0x4c, 0x00
-	.long LABEL_E2DB72
+	.long NakaInst_VOCAL_REVERB
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xf1, 0x00
-LABEL_E2DB72:	aligned_string "VOCAL REVERB"
+NakaInst_VOCAL_REVERB:	aligned_string "VOCAL REVERB"
 	aligned_string "VOCALIST WORKSTATION"
-LABEL_E2DB96:	aligned_string "FADE IN/OUT SETTING"
+NakaInst_FADE_IN_OUT_SETTING:	aligned_string "FADE IN/OUT SETTING"
 	aligned_string "MIXER"
 	aligned_string "DISK LOAD"
 LABEL_E2DBBA:
@@ -5372,10 +5372,10 @@ LABEL_E2DC74:
 	.byte 0x08, 0x00, 0x08, 0x00, 0xca, 0x00, 0x75, 0x00
 	.byte 0xdb, 0x00, 0x00, 0x00, 0x00, 0x00, 0xae, 0xdc
 	.byte 0xe2, 0x00
-	.long LABEL_E2DCA0
+	.long NakaInst_MUTE_KEYS_OFF
 	.byte 0x36, 0xe1
 	.byte 0x03, 0x00, 0x8c, 0x00, 0x2d, 0x00, 0x28, 0x01
-LABEL_E2DCA0:	aligned_string "MUTE KEYS:OFF"
+NakaInst_MUTE_KEYS_OFF:	aligned_string "MUTE KEYS:OFF"
 	aligned_string "MUTE KEYS:ON "
 LABEL_E2DCBC:
 	.byte 0x18, 0x00, 0x68, 0x01
@@ -5392,10 +5392,10 @@ LABEL_E2DCEA:
 	.byte 0x00, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x0d, 0x00, 0x08, 0x00
 	.byte 0x12, 0x00, 0xdf, 0x00, 0x3d, 0x00, 0xf1, 0x00
-	.long LABEL_E2DD0A
+	.long NakaInst_PANIC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0xf9, 0x00
-LABEL_E2DD0A:	aligned_string "PANIC"
+NakaInst_PANIC:	aligned_string "PANIC"
 
 
 	naka_header NAKA_TYPE_CONTAINER
@@ -5458,12 +5458,12 @@ LABEL_E2DDF6:
 	.byte 0xff, 0xff, 0x08, 0x00, 0x04, 0x00, 0xdf, 0x00
 	.long LABEL_EE004B
 	.byte 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2DE30
-	.long LABEL_E2DE28
+	.long NakaInst_ENGLISH_E2DE30
+	.long NakaInst_ENGLISH
 	.byte 0x44, 0xe1, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3a, 0x00, 0x28, 0x01
-LABEL_E2DE28:	aligned_string "ENGLISH"
-LABEL_E2DE30:	aligned_string "ENGLISH"
+NakaInst_ENGLISH:	aligned_string "ENGLISH"
+NakaInst_ENGLISH_E2DE30:	aligned_string "ENGLISH"
 LABEL_E2DE38:
 	.byte 0x0f, 0x00, 0x68, 0x01, 0x05, 0x00, 0xff, 0xff
 	.byte 0x08, 0x00, 0x06, 0x00, 0x08, 0x00, 0x54, 0x00
@@ -5479,11 +5479,11 @@ LABEL_E2DE7A:
 	.byte 0xff, 0xff, 0x09, 0x00, 0x07, 0x00, 0x08, 0x00
 	.byte 0xa4, 0x00, 0xdf, 0x00, 0xeb, 0x00, 0xee, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xb4, 0xde, 0xe2, 0x00
-	.long LABEL_E2DEAC
+	.long NakaInst_FRENCH
 	.byte 0x48, 0xe1, 0x03, 0x00
 	.byte 0x04, 0x00, 0x05, 0x00, 0x00, 0x00, 0x02, 0x00
 	.byte 0x3a, 0x00, 0x28, 0x01
-LABEL_E2DEAC:	aligned_string "FRENCH"
+NakaInst_FRENCH:	aligned_string "FRENCH"
 	.byte 0x46, 0x52, 0x45, 0x4e
 	.byte 0x43, 0x48, 0x00, 0xff
 LABEL_E2DEBC:
@@ -5530,12 +5530,12 @@ LABEL_E2DEFE:
 	.byte 0x0c, 0x00, 0x08, 0x00, 0xec, 0x00, 0xdf, 0x00
 	.long LABEL_EE013D
 	.byte 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E2DFE2
-	.long LABEL_E2DFD8
+	.long NakaInst_INDONESIA_E2DFE2
+	.long NakaInst_INDONESIA
 	.byte 0x58, 0xe1, 0x03, 0x00, 0x06, 0x00, 0x07, 0x00
 	.byte 0x00, 0x00, 0x05, 0x00, 0x3a, 0x00, 0x28, 0x01
-LABEL_E2DFD8:	aligned_string "INDONESIA"
-LABEL_E2DFE2:	aligned_string "INDONESIA"
+NakaInst_INDONESIA:	aligned_string "INDONESIA"
+NakaInst_INDONESIA_E2DFE2:	aligned_string "INDONESIA"
 LABEL_E2DFEC:
 
 
@@ -6759,10 +6759,10 @@ Naka_SeqUI_Table_29:
 	.long LABEL_E2F1EE
 	.long LABEL_E2F1EC
 	.long LABEL_E2F1EA
-	.long LABEL_E2F1E2
+	.long NakaInst_EqOnOff
 	.long LABEL_E2F1E0
 LABEL_E2F1E0:	aligned_string ""
-LABEL_E2F1E2:	aligned_string "EqOnOff"
+NakaInst_EqOnOff:	aligned_string "EqOnOff"
 LABEL_E2F1EA:	aligned_string ""
 LABEL_E2F1EC:	aligned_string ""
 LABEL_E2F1EE:	aligned_string ""
@@ -6883,14 +6883,14 @@ LABEL_E2F34A:
 	.byte 0x00, 0xff
 LABEL_E2F34C:
 	.byte 0x00, 0xff
-LABEL_E2F34E:	aligned_string "SngSelWin2"
+NakaInst_SngSelWin2:	aligned_string "SngSelWin2"
 	.byte 0x00, 0xff
 LABEL_E2F35C:
 	.byte 0x00, 0xff
 LABEL_E2F35E:
 	.byte 0x00, 0xff
-LABEL_E2F360:	aligned_string "SngSelWin1"
-LABEL_E2F36C:	aligned_string "PlySngSel"
+NakaInst_SngSelWin1:	aligned_string "SngSelWin1"
+NakaInst_PlySngSel:	aligned_string "PlySngSel"
 LABEL_E2F376:	aligned_string ""
 	.byte 0x00, 0xff
 LABEL_E2F37A:
@@ -6909,9 +6909,9 @@ LABEL_E2F386:
 	.byte 0x00, 0xff
 LABEL_E2F38A:
 	.byte 0x00, 0xff
-LABEL_E2F38C:	aligned_string "SqPlayGamen"
+NakaInst_SqPlayGamen:	aligned_string "SqPlayGamen"
 LABEL_E2F398:	aligned_string ""
-LABEL_E2F39A:	aligned_string "CycPlySw"
+NakaInst_CycPlySw:	aligned_string "CycPlySw"
 	.byte 0x00, 0xff
 LABEL_E2F3A6:
 	.byte 0x00, 0xff
@@ -7003,10 +7003,10 @@ Naka_SeqUI_Table_32:
 	.long LABEL_E2F55C
 	.long LABEL_E2F55A
 	.long LABEL_E2F558
-	.long LABEL_E2F54E
+	.long NakaInst_CycRecSw
 	.long LABEL_E2F54C
-	.long LABEL_E2F542
-	.long LABEL_E2F532
+	.long NakaInst_MetRecSw
+	.long NakaInst_SqRealRecGamen
 	.long LABEL_E2F530
 	.long LABEL_E2F52E
 	.long LABEL_E2F52C
@@ -7018,20 +7018,20 @@ Naka_SeqUI_Table_32:
 	.long LABEL_E2F520
 	.long LABEL_E2F51E
 	.long LABEL_E2F51C
-	.long LABEL_E2F510
-	.long LABEL_E2F502
+	.long NakaInst_CycRecClrSw
+	.long NakaInst_CycRecClrStr
 	.long LABEL_E2F500
-	.long LABEL_E2F4F6
+	.long NakaInst_CycClrSw
 	.long LABEL_E2F4F4
 	.long LABEL_E2F4F2
 	.long LABEL_E2F4F0
 LABEL_E2F4F0:	aligned_string ""
 LABEL_E2F4F2:	aligned_string ""
 LABEL_E2F4F4:	aligned_string ""
-LABEL_E2F4F6:	aligned_string "CycClrSw"
+NakaInst_CycClrSw:	aligned_string "CycClrSw"
 LABEL_E2F500:	aligned_string ""
-LABEL_E2F502:	aligned_string "CycRecClrStr"
-LABEL_E2F510:	aligned_string "CycRecClrSw"
+NakaInst_CycRecClrStr:	aligned_string "CycRecClrStr"
+NakaInst_CycRecClrSw:	aligned_string "CycRecClrSw"
 LABEL_E2F51C:	aligned_string ""
 LABEL_E2F51E:	aligned_string ""
 LABEL_E2F520:	aligned_string ""
@@ -7043,10 +7043,10 @@ LABEL_E2F52A:	aligned_string ""
 LABEL_E2F52C:	aligned_string ""
 LABEL_E2F52E:	aligned_string ""
 LABEL_E2F530:	aligned_string ""
-LABEL_E2F532:	aligned_string "SqRealRecGamen"
-LABEL_E2F542:	aligned_string "MetRecSw"
+NakaInst_SqRealRecGamen:	aligned_string "SqRealRecGamen"
+NakaInst_MetRecSw:	aligned_string "MetRecSw"
 LABEL_E2F54C:	aligned_string ""
-LABEL_E2F54E:	aligned_string "CycRecSw"
+NakaInst_CycRecSw:	aligned_string "CycRecSw"
 LABEL_E2F558:	aligned_string ""
 LABEL_E2F55A:	aligned_string ""
 LABEL_E2F55C:	aligned_string ""
@@ -7059,7 +7059,7 @@ Naka_SeqRealtimeRec_Screens:
 	.long LABEL_E2F5A8
 	.long LABEL_E2F5A6
 	.long LABEL_E2F5A4
-	.long LABEL_E2F598
+	.long NakaInst_MetCycRecSw
 	.long LABEL_E2F596
 	.long LABEL_E2F594
 	.long LABEL_E2F592
@@ -7068,7 +7068,7 @@ LABEL_E2F590:	aligned_string ""
 LABEL_E2F592:	aligned_string ""
 LABEL_E2F594:	aligned_string ""
 LABEL_E2F596:	aligned_string ""
-LABEL_E2F598:	aligned_string "MetCycRecSw"
+NakaInst_MetCycRecSw:	aligned_string "MetCycRecSw"
 LABEL_E2F5A4:	aligned_string ""
 LABEL_E2F5A6:	aligned_string ""
 LABEL_E2F5A8:	aligned_string ""
@@ -7106,8 +7106,8 @@ LABEL_E2F624:
 LABEL_E2F626:
 	.byte 0x00, 0xff
 LABEL_E2F628:	aligned_string ""
-LABEL_E2F62A:	aligned_string "PunchInOutSw"
-LABEL_E2F638:	aligned_string "MetPunchSw"
+NakaInst_PunchInOutSw:	aligned_string "PunchInOutSw"
+NakaInst_MetPunchSw:	aligned_string "MetPunchSw"
 	.byte 0x00, 0xff
 LABEL_E2F646:
 	.byte 0x00, 0xff
@@ -7123,7 +7123,7 @@ LABEL_E2F652:
 	.byte 0x00, 0xff
 LABEL_E2F654:
 	.byte 0x00, 0xff
-LABEL_E2F656:	aligned_string "SqPunchGamen"
+NakaInst_SqPunchGamen:	aligned_string "SqPunchGamen"
 	.byte 0x00, 0xff
 LABEL_E2F666:
 	.byte 0x00, 0xff
@@ -7148,7 +7148,7 @@ LABEL_E2F6AA:
 	.byte 0x00, 0xff
 LABEL_E2F6AC:
 	.byte 0x00, 0xff
-LABEL_E2F6AE:	aligned_string "MetPunchmSw"
+NakaInst_MetPunchmSw:	aligned_string "MetPunchmSw"
 	.byte 0x00, 0xff
 LABEL_E2F6BC:
 	.byte 0x00, 0xff
@@ -7176,7 +7176,7 @@ Naka_SeqUI_Table_34:
 	.long LABEL_E2F74A
 	.long LABEL_E2F748
 	.long LABEL_E2F746
-	.long LABEL_E2F738
+	.long NakaInst_SoclSureDisp
 	.long LABEL_E2F736
 	.long LABEL_E2F734
 	.long LABEL_E2F732
@@ -7193,7 +7193,7 @@ LABEL_E2F730:	aligned_string ""
 LABEL_E2F732:	aligned_string ""
 LABEL_E2F734:	aligned_string ""
 LABEL_E2F736:	aligned_string ""
-LABEL_E2F738:	aligned_string "SoclSureDisp"
+NakaInst_SoclSureDisp:	aligned_string "SoclSureDisp"
 LABEL_E2F746:	aligned_string ""
 LABEL_E2F748:	aligned_string ""
 LABEL_E2F74A:	aligned_string ""
@@ -7215,7 +7215,7 @@ Naka_SongOclSure_Screens:
 	.long LABEL_E2F7CA
 	.long LABEL_E2F7C8
 	.long LABEL_E2F7C6
-	.long LABEL_E2F7B8
+	.long NakaInst_SngCpSureDisp
 	.long LABEL_E2F7B6
 	.long LABEL_E2F7B4
 	.long LABEL_E2F7B2
@@ -7232,7 +7232,7 @@ LABEL_E2F7B0:	aligned_string ""
 LABEL_E2F7B2:	aligned_string ""
 LABEL_E2F7B4:	aligned_string ""
 LABEL_E2F7B6:	aligned_string ""
-LABEL_E2F7B8:	aligned_string "SngCpSureDisp"
+NakaInst_SngCpSureDisp:	aligned_string "SngCpSureDisp"
 LABEL_E2F7C6:	aligned_string ""
 LABEL_E2F7C8:	aligned_string ""
 LABEL_E2F7CA:	aligned_string ""
@@ -7247,11 +7247,11 @@ LABEL_E2F7DA:
 	.byte 0x00, 0xff, 0x96, 0xf8, 0xe2, 0x00
 Naka_SongCopySure_Screens:
 	.long LABEL_E2F894
-	.long LABEL_E2F888
+	.long NakaInst_EdMenuPage
 	.long LABEL_E2F886
 	.long LABEL_E2F884
 	.long LABEL_E2F882
-	.long LABEL_E2F878
+	.long NakaInst_SQEMENU_1
 	.long LABEL_E2F876
 	.long LABEL_E2F874
 	.long LABEL_E2F872
@@ -7262,7 +7262,7 @@ Naka_SongCopySure_Screens:
 	.long LABEL_E2F868
 	.long LABEL_E2F866
 	.long LABEL_E2F864
-	.long LABEL_E2F85A
+	.long NakaInst_SQEMENU_2
 	.long LABEL_E2F858
 	.long LABEL_E2F856
 	.long LABEL_E2F854
@@ -7281,7 +7281,7 @@ LABEL_E2F852:	aligned_string ""
 LABEL_E2F854:	aligned_string ""
 LABEL_E2F856:	aligned_string ""
 LABEL_E2F858:	aligned_string ""
-LABEL_E2F85A:	aligned_string "SQEMENU_2"
+NakaInst_SQEMENU_2:	aligned_string "SQEMENU_2"
 LABEL_E2F864:	aligned_string ""
 LABEL_E2F866:	aligned_string ""
 LABEL_E2F868:	aligned_string ""
@@ -7292,11 +7292,11 @@ LABEL_E2F870:	aligned_string ""
 LABEL_E2F872:	aligned_string ""
 LABEL_E2F874:	aligned_string ""
 LABEL_E2F876:	aligned_string ""
-LABEL_E2F878:	aligned_string "SQEMENU_1"
+NakaInst_SQEMENU_1:	aligned_string "SQEMENU_1"
 LABEL_E2F882:	aligned_string ""
 LABEL_E2F884:	aligned_string ""
 LABEL_E2F886:	aligned_string ""
-LABEL_E2F888:	aligned_string "EdMenuPage"
+NakaInst_EdMenuPage:	aligned_string "EdMenuPage"
 LABEL_E2F894:
 	.byte 0x00, 0xff
 LABEL_E2F896:
@@ -7339,7 +7339,7 @@ LABEL_E2F92E:
 	.byte 0x00, 0xff
 LABEL_E2F932:
 	.byte 0x00, 0xff
-LABEL_E2F934:	aligned_string "NTBitmap"
+NakaInst_NTBitmap:	aligned_string "NTBitmap"
 LABEL_E2F93E:	aligned_string ""
 	.byte 0x00, 0xff
 LABEL_E2F942:
@@ -7434,7 +7434,7 @@ LABEL_E2FA34:
 	.byte 0x00, 0xff
 LABEL_E2FA36:
 	.byte 0x00, 0xff
-LABEL_E2FA38:	aligned_string "DRBitmap"
+NakaInst_DRBitmap:	aligned_string "DRBitmap"
 	.byte 0x00, 0xff
 LABEL_E2FA44:
 	.byte 0x00, 0xff
@@ -7503,7 +7503,7 @@ LABEL_E2FAE2:
 	.byte 0x00, 0xff
 LABEL_E2FAE4:
 	.byte 0x00, 0xff
-LABEL_E2FAE6:	aligned_string "TrkClrSureDisp"
+NakaInst_TrkClrSureDisp:	aligned_string "TrkClrSureDisp"
 LABEL_E2FAF6:	aligned_string ""
 	.byte 0x00, 0xff
 LABEL_E2FAFA:
@@ -7536,7 +7536,7 @@ LABEL_E2FB66:
 	.byte 0x00, 0xff
 LABEL_E2FB6A:
 	.byte 0x00, 0xff
-LABEL_E2FB6C:	aligned_string "TrkMrgSureDisp"
+NakaInst_TrkMrgSureDisp:	aligned_string "TrkMrgSureDisp"
 	.byte 0x00, 0xff
 LABEL_E2FB7E:
 	.byte 0x00, 0xff
@@ -7586,7 +7586,7 @@ LABEL_E2FBFC:
 	.byte 0x00, 0xff
 LABEL_E2FBFE:
 	.byte 0x00, 0xff
-LABEL_E2FC00:	aligned_string "QtzSureDisp"
+NakaInst_QtzSureDisp:	aligned_string "QtzSureDisp"
 	.byte 0x00, 0xff
 LABEL_E2FC0E:
 	.byte 0x00, 0xff
@@ -7622,7 +7622,7 @@ Naka_SeqUI_Table_37:
 	.long LABEL_E2FC8A
 	.long LABEL_E2FC88
 	.long LABEL_E2FC86
-	.long LABEL_E2FC78
+	.long NakaInst_TrnsSureDisp
 	.long LABEL_E2FC76
 	.long LABEL_E2FC74
 	.long LABEL_E2FC72
@@ -7635,7 +7635,7 @@ LABEL_E2FC70:	aligned_string ""
 LABEL_E2FC72:	aligned_string ""
 LABEL_E2FC74:	aligned_string ""
 LABEL_E2FC76:	aligned_string ""
-LABEL_E2FC78:	aligned_string "TrnsSureDisp"
+NakaInst_TrnsSureDisp:	aligned_string "TrnsSureDisp"
 LABEL_E2FC86:	aligned_string ""
 LABEL_E2FC88:	aligned_string ""
 LABEL_E2FC8A:	aligned_string ""
@@ -7665,7 +7665,7 @@ LABEL_E2FCE4:
 LABEL_E2FCE6:
 	.byte 0x00, 0xff
 LABEL_E2FCE8:	aligned_string ""
-LABEL_E2FCEA:	aligned_string "VeloSureDisp"
+NakaInst_VeloSureDisp:	aligned_string "VeloSureDisp"
 	.byte 0x00, 0xff
 LABEL_E2FCFA:
 	.byte 0x00, 0xff
@@ -7701,7 +7701,7 @@ Naka_SeqUI_Table_38:
 	.long LABEL_E2FD94
 	.long LABEL_E2FD92
 	.long LABEL_E2FD90
-	.long LABEL_E2FD82
+	.long NakaInst_NoteSureDisp
 	.long LABEL_E2FD80
 	.long LABEL_E2FD7E
 	.long LABEL_E2FD7C
@@ -7716,7 +7716,7 @@ LABEL_E2FD7A:	aligned_string ""
 LABEL_E2FD7C:	aligned_string ""
 LABEL_E2FD7E:	aligned_string ""
 LABEL_E2FD80:	aligned_string ""
-LABEL_E2FD82:	aligned_string "NoteSureDisp"
+NakaInst_NoteSureDisp:	aligned_string "NoteSureDisp"
 LABEL_E2FD90:	aligned_string ""
 LABEL_E2FD92:	aligned_string ""
 LABEL_E2FD94:	aligned_string ""
@@ -7747,7 +7747,7 @@ Naka_SeqUI_Table_39:
 	.long LABEL_E2FE14
 	.long LABEL_E2FE12
 	.long LABEL_E2FE10
-	.long LABEL_E2FE04
+	.long NakaInst_AdvSureDisp
 	.long LABEL_E2FE02
 	.long LABEL_E2FE00
 	.long LABEL_E2FDFE
@@ -7760,7 +7760,7 @@ LABEL_E2FDFC:	aligned_string ""
 LABEL_E2FDFE:	aligned_string ""
 LABEL_E2FE00:	aligned_string ""
 LABEL_E2FE02:	aligned_string ""
-LABEL_E2FE04:	aligned_string "AdvSureDisp"
+NakaInst_AdvSureDisp:	aligned_string "AdvSureDisp"
 LABEL_E2FE10:	aligned_string ""
 LABEL_E2FE12:	aligned_string ""
 LABEL_E2FE14:	aligned_string ""
@@ -7783,7 +7783,7 @@ Naka_AdvancedSure_Screens:
 	.long LABEL_E2FE86
 	.long LABEL_E2FE84
 	.long LABEL_E2FE82
-	.long LABEL_E2FE74
+	.long NakaInst_MersSureDisp
 	.long LABEL_E2FE72
 	.long LABEL_E2FE70
 	.long LABEL_E2FE6E
@@ -7796,7 +7796,7 @@ LABEL_E2FE6C:	aligned_string ""
 LABEL_E2FE6E:	aligned_string ""
 LABEL_E2FE70:	aligned_string ""
 LABEL_E2FE72:	aligned_string ""
-LABEL_E2FE74:	aligned_string "MersSureDisp"
+NakaInst_MersSureDisp:	aligned_string "MersSureDisp"
 LABEL_E2FE82:	aligned_string ""
 LABEL_E2FE84:	aligned_string ""
 LABEL_E2FE86:	aligned_string ""
@@ -7832,7 +7832,7 @@ LABEL_E2FEEA:
 	.byte 0x00, 0xff
 LABEL_E2FEEC:
 	.byte 0x00, 0xff
-LABEL_E2FEEE:	aligned_string "McpSureDisp"
+NakaInst_McpSureDisp:	aligned_string "McpSureDisp"
 	.byte 0x00, 0xff
 LABEL_E2FEFC:
 	.byte 0x00, 0xff
@@ -7857,7 +7857,7 @@ Naka_SeqUI_Table_41:
 	.long LABEL_E2FF6A
 	.long LABEL_E2FF68
 	.long LABEL_E2FF66
-	.long LABEL_E2FF58
+	.long NakaInst_MdelSureDisp
 	.long LABEL_E2FF56
 	.long LABEL_E2FF54
 	.long LABEL_E2FF52
@@ -7870,7 +7870,7 @@ LABEL_E2FF50:	aligned_string ""
 LABEL_E2FF52:	aligned_string ""
 LABEL_E2FF54:	aligned_string ""
 LABEL_E2FF56:	aligned_string ""
-LABEL_E2FF58:	aligned_string "MdelSureDisp"
+NakaInst_MdelSureDisp:	aligned_string "MdelSureDisp"
 LABEL_E2FF66:	aligned_string ""
 LABEL_E2FF68:	aligned_string ""
 LABEL_E2FF6A:	aligned_string ""
@@ -7892,7 +7892,7 @@ Naka_MedleySure_Screens:
 	.long LABEL_E2FFE2
 	.long LABEL_E2FFE0
 	.long LABEL_E2FFDE
-	.long LABEL_E2FFD0
+	.long NakaInst_MinsSureDisp
 	.long LABEL_E2FFCE
 	.long LABEL_E2FFCC
 	.long LABEL_E2FFCA
@@ -7909,7 +7909,7 @@ LABEL_E2FFC8:	aligned_string ""
 LABEL_E2FFCA:	aligned_string ""
 LABEL_E2FFCC:	aligned_string ""
 LABEL_E2FFCE:	aligned_string ""
-LABEL_E2FFD0:	aligned_string "MinsSureDisp"
+NakaInst_MinsSureDisp:	aligned_string "MinsSureDisp"
 LABEL_E2FFDE:	aligned_string ""
 LABEL_E2FFE0:	aligned_string ""
 LABEL_E2FFE2:	aligned_string ""
@@ -7936,10 +7936,10 @@ LABEL_E3000C:
 	.byte 0xe3, 0x00, 0x8c, 0x00, 0xe3, 0x00, 0x8a, 0x00
 	.byte 0xe3, 0x00
 Naka_SwitchControls_Table:
-	.long LABEL_E30080
-	.long LABEL_E30074
-	.long LABEL_E3006C
-	.long LABEL_E30060
+	.long NakaInst_VocWorkSw
+	.long NakaInst_FadeInOutSw
+	.long NakaInst_MixerSw
+	.long NakaInst_DiskLoadSw
 	.byte 0x5e, 0x00, 0xe3, 0x00, 0x5c, 0x00, 0xe3, 0x00
 	.byte 0x5a, 0x00, 0xe3, 0x00, 0x58, 0x00, 0xe3, 0x00
 	.byte 0x56, 0x00, 0xe3, 0x00, 0x54, 0x00, 0xe3, 0x00
@@ -7961,14 +7961,14 @@ LABEL_E3005C:
 	.byte 0x00, 0xff
 LABEL_E3005E:
 	.byte 0x00, 0xff
-LABEL_E30060:	aligned_string "DiskLoadSw"
-LABEL_E3006C:	aligned_string "MixerSw"
-LABEL_E30074:	aligned_string "FadeInOutSw"
-LABEL_E30080:	aligned_string "VocWorkSw"
+NakaInst_DiskLoadSw:	aligned_string "DiskLoadSw"
+NakaInst_MixerSw:	aligned_string "MixerSw"
+NakaInst_FadeInOutSw:	aligned_string "FadeInOutSw"
+NakaInst_VocWorkSw:	aligned_string "VocWorkSw"
 	.byte 0x00, 0xff
 LABEL_E3008C:
 	.byte 0x00, 0xff
-LABEL_E3008E:	aligned_string "EnterTainerScr"
+NakaInst_EnterTainerScr:	aligned_string "EnterTainerScr"
 	.byte 0xf6, 0x02
 	.byte 0xe3, 0x00, 0xf4, 0x02, 0xe3, 0x00, 0xea, 0x02
 	.byte 0xe3, 0x00, 0xe8, 0x02, 0xe3, 0x00, 0xe6, 0x02
@@ -8016,13 +8016,13 @@ LABEL_E30113:
 LABEL_E30196:
 	.byte 0x00, 0xff
 LABEL_E30198:	aligned_string ""
-LABEL_E3019A:	aligned_string "HelpLang4P4"
+NakaInst_HelpLang4P4:	aligned_string "HelpLang4P4"
 LABEL_E301A6:	aligned_string ""
-LABEL_E301A8:	aligned_string "HelpLang4P3"
+NakaInst_HelpLang4P3:	aligned_string "HelpLang4P3"
 LABEL_E301B4:	aligned_string ""
-LABEL_E301B6:	aligned_string "HelpLang4P2"
+NakaInst_HelpLang4P2:	aligned_string "HelpLang4P2"
 LABEL_E301C2:	aligned_string ""
-LABEL_E301C4:	aligned_string "HelpLang4P1"
+NakaInst_HelpLang4P1:	aligned_string "HelpLang4P1"
 	.byte 0x00, 0xff
 LABEL_E301D2:
 	.byte 0x00, 0xff
@@ -8031,60 +8031,60 @@ LABEL_E301D4:
 LABEL_E301D6:
 	.byte 0x00, 0xff
 LABEL_E301D8:	aligned_string ""
-LABEL_E301DA:	aligned_string "HelpTtlStr4"
-LABEL_E301E6:	aligned_string "Help_P4"
+NakaInst_HelpTtlStr4:	aligned_string "HelpTtlStr4"
+NakaInst_Help_P4:	aligned_string "Help_P4"
 LABEL_E301EE:	aligned_string ""
-LABEL_E301F0:	aligned_string "HelpSwTtl4Scr"
+NakaInst_HelpSwTtl4Scr:	aligned_string "HelpSwTtl4Scr"
 LABEL_E301FE:	aligned_string ""
 	.byte 0x00, 0xff
 LABEL_E30202:
 	.byte 0x00, 0xff
 LABEL_E30204:
 	.byte 0x00, 0xff
-LABEL_E30206:	aligned_string "Help_P3"
-LABEL_E3020E:	aligned_string "HelpTtlStr3"
+NakaInst_Help_P3:	aligned_string "Help_P3"
+NakaInst_HelpTtlStr3:	aligned_string "HelpTtlStr3"
 LABEL_E3021A:	aligned_string ""
-LABEL_E3021C:	aligned_string "HelpSwTtl3Scr"
+NakaInst_HelpSwTtl3Scr:	aligned_string "HelpSwTtl3Scr"
 LABEL_E3022A:	aligned_string ""
-LABEL_E3022C:	aligned_string "HelpLang3P3"
+NakaInst_HelpLang3P3:	aligned_string "HelpLang3P3"
 LABEL_E30238:	aligned_string ""
-LABEL_E3023A:	aligned_string "HelpLang3P2"
+NakaInst_HelpLang3P2:	aligned_string "HelpLang3P2"
 LABEL_E30246:	aligned_string ""
-LABEL_E30248:	aligned_string "HelpLang3P1"
+NakaInst_HelpLang3P1:	aligned_string "HelpLang3P1"
 LABEL_E30254:	aligned_string ""
-LABEL_E30256:	aligned_string "Help_P2"
+NakaInst_Help_P2:	aligned_string "Help_P2"
 LABEL_E3025E:	aligned_string ""
 LABEL_E30260:	aligned_string ""
-LABEL_E30262:	aligned_string "HelpTtlStr2"
+NakaInst_HelpTtlStr2:	aligned_string "HelpTtlStr2"
 LABEL_E3026E:	aligned_string ""
-LABEL_E30270:	aligned_string "HelpSwTtl2Scr"
+NakaInst_HelpSwTtl2Scr:	aligned_string "HelpSwTtl2Scr"
 LABEL_E3027E:	aligned_string ""
-LABEL_E30280:	aligned_string "HelpLang2P2"
+NakaInst_HelpLang2P2:	aligned_string "HelpLang2P2"
 LABEL_E3028C:	aligned_string ""
-LABEL_E3028E:	aligned_string "HelpLang2P1"
+NakaInst_HelpLang2P1:	aligned_string "HelpLang2P1"
 LABEL_E3029A:	aligned_string ""
-LABEL_E3029C:	aligned_string "HelpLang1"
-LABEL_E302A6:	aligned_string "HelpTtlStr1"
+NakaInst_HelpLang1:	aligned_string "HelpLang1"
+NakaInst_HelpTtlStr1:	aligned_string "HelpTtlStr1"
 LABEL_E302B2:	aligned_string ""
-LABEL_E302B4:	aligned_string "HelpSwTtl1Scr"
+NakaInst_HelpSwTtl1Scr:	aligned_string "HelpSwTtl1Scr"
 	.byte 0x00, 0xff
 LABEL_E302C4:
 	.byte 0x00, 0xff
 LABEL_E302C6:
 	.byte 0x00, 0xff
-LABEL_E302C8:	aligned_string "HelpXWin"
+NakaInst_HelpXWin:	aligned_string "HelpXWin"
 	.byte 0x00, 0xff
 LABEL_E302D4:
 	.byte 0x00, 0xff
 LABEL_E302D6:
 	.byte 0x00, 0xff
 LABEL_E302D8:	aligned_string ""
-LABEL_E302DA:	aligned_string "HelpNotXWin"
+NakaInst_HelpNotXWin:	aligned_string "HelpNotXWin"
 LABEL_E302E6:	aligned_string ""
 LABEL_E302E8:	aligned_string ""
-LABEL_E302EA:	aligned_string "HelpMenu"
+NakaInst_HelpMenu:	aligned_string "HelpMenu"
 	.byte 0x00, 0xff
-LABEL_E302F6:
+NakaInst_MD_ENTERTAINER:
 	.byte 0x00, 0xff
 	aligned_string "MD_ENTERTAINER"
 	aligned_string "MD_SEQ"
@@ -8157,98 +8157,98 @@ LABEL_E302F6:
 	.byte 0x50, 0x76, 0xf4, 0x00, 0x00, 0x00, 0x00, 0x00
 
 Naka_SeqUI_Table_43:
-	.long LABEL_E30932
-	.long LABEL_E30926
-	.long LABEL_E3091A
-	.long LABEL_E3090E
-	.long LABEL_E30902
-	.long LABEL_E308F2
-	.long LABEL_E308E2
-	.long LABEL_E308D2
-	.long LABEL_E308C2
-	.long LABEL_E308AE
-	.long LABEL_E3089E
-	.long LABEL_E3088C
-	.long LABEL_E3087A
-	.long LABEL_E3086A
-	.long LABEL_E3085A
-	.long LABEL_E3084A
-	.long LABEL_E3083A
-	.long LABEL_E3082A
-	.long LABEL_E3081A
-	.long LABEL_E3080A
-	.long LABEL_E307FA
-	.long LABEL_E307EA
-	.long LABEL_E307DA
-	.long LABEL_E307C8
-	.long LABEL_E307B8
-	.long LABEL_E307A8
-	.long LABEL_E30796
-	.long LABEL_E30784
-	.long LABEL_E30770
-	.long LABEL_E3075C
-	.long LABEL_E30750
-	.long LABEL_E30742
-	.long LABEL_E30730
-	.long LABEL_E3071E
-	.long LABEL_E3070C
-	.long LABEL_E30702
-	.long LABEL_E306EE
-	.long LABEL_E306DA
-	.long LABEL_E306CC
-	.long LABEL_E306BE
-	.long LABEL_E306AE
-	.long LABEL_E306A0
-	.long LABEL_E30690
-	.long LABEL_E30686
+	.long NakaInst_ApEditSyori
+	.long NakaInst_MainExeCall
+	.long NakaInst_EffEditMain
+	.long NakaInst_ApPlaySyori
+	.long NakaInst_SeqModeFunc
+	.long NakaInst_SeqRealModeFunc
+	.long NakaInst_SeqPlayModeFunc
+	.long NakaInst_SeqErecModeFunc
+	.long NakaInst_SeqEditModeFunc
+	.long NakaInst_SqRealRecTitleFunc
+	.long NakaInst_SqPlayTitleFunc
+	.long NakaInst_SqPunchTitleFunc
+	.long NakaInst_SqPunchmTitleFunc
+	.long NakaInst_SqQtzTitleFunc
+	.long NakaInst_SqMdelTitleFunc
+	.long NakaInst_SqMersTitleFunc
+	.long NakaInst_SqVcngTitleFunc
+	.long NakaInst_SqTrnsTitleFunc
+	.long NakaInst_SqNcngTitleFunc
+	.long NakaInst_SqSoclTitleFunc
+	.long NakaInst_SqMcpyTitleFunc
+	.long NakaInst_SqMinsTitleFunc
+	.long NakaInst_SqTrclTitleFunc
+	.long NakaInst_SqSngcpTitleFunc
+	.long NakaInst_SqTrmgTitleFunc
+	.long NakaInst_SqAdlyTitleFunc
+	.long NakaInst_SqDrmEdtTitleFunc
+	.long NakaInst_SqDrmSelTitleFunc
+	.long NakaInst_SqNoteEdtTitleFunc
+	.long NakaInst_SqNoteSelTitleFunc
+	.long NakaInst_SngSelSyori
+	.long NakaInst_NoteEditSyori
+	.long NakaInst_SdRevsetTitleFunc
+	.long NakaInst_SdDspeffTitleFunc
+	.long NakaInst_SdAccillTitleFunc
+	.long NakaInst_MimeSyori
+	.long NakaInst_SqNoteCycpTitleFunc
+	.long NakaInst_SqDrmCycpTitleFunc
+	.long NakaInst_HelpModeFunc
+	.long NakaInst_HelpTitleFunc
+	.long NakaInst_HelpLangChkMain
+	.long NakaInst_HelpFlashFunc
+	.long NakaInst_EtmenuTitleFunc
+	.long NakaInst_MainPanic
 	.long LABEL_E30684
 LABEL_E30684:	aligned_string ""
-LABEL_E30686:
+NakaInst_MainPanic:
 
 	aligned_string "MainPanic"
-LABEL_E30690:	aligned_string "EtmenuTitleFunc"
-LABEL_E306A0:	aligned_string "HelpFlashFunc"
-LABEL_E306AE:	aligned_string "HelpLangChkMain"
-LABEL_E306BE:	aligned_string "HelpTitleFunc"
-LABEL_E306CC:	aligned_string "HelpModeFunc"
-LABEL_E306DA:	aligned_string "SqDrmCycpTitleFunc"
-LABEL_E306EE:	aligned_string "SqNoteCycpTitleFunc"
-LABEL_E30702:	aligned_string "MimeSyori"
-LABEL_E3070C:	aligned_string "SdAccillTitleFunc"
-LABEL_E3071E:	aligned_string "SdDspeffTitleFunc"
-LABEL_E30730:	aligned_string "SdRevsetTitleFunc"
-LABEL_E30742:	aligned_string "NoteEditSyori"
-LABEL_E30750:	aligned_string "SngSelSyori"
-LABEL_E3075C:	aligned_string "SqNoteSelTitleFunc"
-LABEL_E30770:	aligned_string "SqNoteEdtTitleFunc"
-LABEL_E30784:	aligned_string "SqDrmSelTitleFunc"
-LABEL_E30796:	aligned_string "SqDrmEdtTitleFunc"
-LABEL_E307A8:	aligned_string "SqAdlyTitleFunc"
-LABEL_E307B8:	aligned_string "SqTrmgTitleFunc"
-LABEL_E307C8:	aligned_string "SqSngcpTitleFunc"
-LABEL_E307DA:	aligned_string "SqTrclTitleFunc"
-LABEL_E307EA:	aligned_string "SqMinsTitleFunc"
-LABEL_E307FA:	aligned_string "SqMcpyTitleFunc"
-LABEL_E3080A:	aligned_string "SqSoclTitleFunc"
-LABEL_E3081A:	aligned_string "SqNcngTitleFunc"
-LABEL_E3082A:	aligned_string "SqTrnsTitleFunc"
-LABEL_E3083A:	aligned_string "SqVcngTitleFunc"
-LABEL_E3084A:	aligned_string "SqMersTitleFunc"
-LABEL_E3085A:	aligned_string "SqMdelTitleFunc"
-LABEL_E3086A:	aligned_string "SqQtzTitleFunc"
-LABEL_E3087A:	aligned_string "SqPunchmTitleFunc"
-LABEL_E3088C:	aligned_string "SqPunchTitleFunc"
-LABEL_E3089E:	aligned_string "SqPlayTitleFunc"
-LABEL_E308AE:	aligned_string "SqRealRecTitleFunc"
-LABEL_E308C2:	aligned_string "SeqEditModeFunc"
-LABEL_E308D2:	aligned_string "SeqErecModeFunc"
-LABEL_E308E2:	aligned_string "SeqPlayModeFunc"
-LABEL_E308F2:	aligned_string "SeqRealModeFunc"
-LABEL_E30902:	aligned_string "SeqModeFunc"
-LABEL_E3090E:	aligned_string "ApPlaySyori"
-LABEL_E3091A:	aligned_string "EffEditMain"
-LABEL_E30926:	aligned_string "MainExeCall"
-LABEL_E30932:	aligned_string "ApEditSyori"
+NakaInst_EtmenuTitleFunc:	aligned_string "EtmenuTitleFunc"
+NakaInst_HelpFlashFunc:	aligned_string "HelpFlashFunc"
+NakaInst_HelpLangChkMain:	aligned_string "HelpLangChkMain"
+NakaInst_HelpTitleFunc:	aligned_string "HelpTitleFunc"
+NakaInst_HelpModeFunc:	aligned_string "HelpModeFunc"
+NakaInst_SqDrmCycpTitleFunc:	aligned_string "SqDrmCycpTitleFunc"
+NakaInst_SqNoteCycpTitleFunc:	aligned_string "SqNoteCycpTitleFunc"
+NakaInst_MimeSyori:	aligned_string "MimeSyori"
+NakaInst_SdAccillTitleFunc:	aligned_string "SdAccillTitleFunc"
+NakaInst_SdDspeffTitleFunc:	aligned_string "SdDspeffTitleFunc"
+NakaInst_SdRevsetTitleFunc:	aligned_string "SdRevsetTitleFunc"
+NakaInst_NoteEditSyori:	aligned_string "NoteEditSyori"
+NakaInst_SngSelSyori:	aligned_string "SngSelSyori"
+NakaInst_SqNoteSelTitleFunc:	aligned_string "SqNoteSelTitleFunc"
+NakaInst_SqNoteEdtTitleFunc:	aligned_string "SqNoteEdtTitleFunc"
+NakaInst_SqDrmSelTitleFunc:	aligned_string "SqDrmSelTitleFunc"
+NakaInst_SqDrmEdtTitleFunc:	aligned_string "SqDrmEdtTitleFunc"
+NakaInst_SqAdlyTitleFunc:	aligned_string "SqAdlyTitleFunc"
+NakaInst_SqTrmgTitleFunc:	aligned_string "SqTrmgTitleFunc"
+NakaInst_SqSngcpTitleFunc:	aligned_string "SqSngcpTitleFunc"
+NakaInst_SqTrclTitleFunc:	aligned_string "SqTrclTitleFunc"
+NakaInst_SqMinsTitleFunc:	aligned_string "SqMinsTitleFunc"
+NakaInst_SqMcpyTitleFunc:	aligned_string "SqMcpyTitleFunc"
+NakaInst_SqSoclTitleFunc:	aligned_string "SqSoclTitleFunc"
+NakaInst_SqNcngTitleFunc:	aligned_string "SqNcngTitleFunc"
+NakaInst_SqTrnsTitleFunc:	aligned_string "SqTrnsTitleFunc"
+NakaInst_SqVcngTitleFunc:	aligned_string "SqVcngTitleFunc"
+NakaInst_SqMersTitleFunc:	aligned_string "SqMersTitleFunc"
+NakaInst_SqMdelTitleFunc:	aligned_string "SqMdelTitleFunc"
+NakaInst_SqQtzTitleFunc:	aligned_string "SqQtzTitleFunc"
+NakaInst_SqPunchmTitleFunc:	aligned_string "SqPunchmTitleFunc"
+NakaInst_SqPunchTitleFunc:	aligned_string "SqPunchTitleFunc"
+NakaInst_SqPlayTitleFunc:	aligned_string "SqPlayTitleFunc"
+NakaInst_SqRealRecTitleFunc:	aligned_string "SqRealRecTitleFunc"
+NakaInst_SeqEditModeFunc:	aligned_string "SeqEditModeFunc"
+NakaInst_SeqErecModeFunc:	aligned_string "SeqErecModeFunc"
+NakaInst_SeqPlayModeFunc:	aligned_string "SeqPlayModeFunc"
+NakaInst_SeqRealModeFunc:	aligned_string "SeqRealModeFunc"
+NakaInst_SeqModeFunc:	aligned_string "SeqModeFunc"
+NakaInst_ApPlaySyori:	aligned_string "ApPlaySyori"
+NakaInst_EffEditMain:	aligned_string "EffEditMain"
+NakaInst_MainExeCall:	aligned_string "MainExeCall"
+NakaInst_ApEditSyori:	aligned_string "ApEditSyori"
 
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	aligned_string "~43~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46~2d~32~46~9e~bc~47~2d~32~41~a0~bc~41~2d~32~42~a0~bc~42~2d~32~43~2d~31~44~a0~bb~44~2d~31~45~a0~bb~45~2d~31~46~2d~31~46~9e~bb~47~2d~31~41~a0~bb~41~2d~31~42~a0~bb~42~2d~31~43~30~20~44~a0~30~44~30~20~45~a0~30~45~30~20~46~30~20~46~9e~30~47~30~20~41~a0~30~41~30~20~42~a0~30~42~30~20~43~31~20~44~a0~31~44~31~20~45~a0~31~45~31~20~46~31~20~46~9e~31~47~31~20~41~a0~31~41~31~20~42~a0~31~42~31~20~43~32~20~44~a0~32~44~32~20~45~a0~32~45~32~20~46~32~20~46~9e~32~47~32~20~41~a0~32~41~32~20~42~a0~32~42~32~20~43~33~20~44~a0~33~44~33~20~45~a0~33~45~33~20~46~33~20~46~9e~33~47~33~20~41~a0~33~41~33~20~42~a0~33~42~33~20~43~34~20~44~a0~34~44~34~20~45~a0~34~45~34~20~46~34~20~46~9e~34~47~34~20~41~a0~34~41~34~20~42~a0~34~42~34~20~43~35~20~44~a0~35~44~35~20~45~a0~35~45~35~20~46~35~20~46~9e~35~47~35~20~41~a0~35~41~35~20~42~a0~35~42~35~20~43~36~20~44~a0~36~44~36~20~45~a0~36~45~36~20~46~36~20~46~9e~36~47~36~20~41~a0~36~41~36~20~42~a0~36~42~36~20~43~37~20~44~a0~37~44~37~20~45~a0~37~45~37~20~46~37~20~46~9e~37~47~37~20~41~a0~37~41~37~20~42~a0~37~42~37~20~43~38~20~44~a0~38~44~38~20~45~a0~38~45~38~20~46~38~20~46~9e~38~47~38~200"
