@@ -17106,23 +17106,23 @@ Part_CheckAndReallocVoices:
 	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
-	jr z, LABEL_F4260A
+	jr z, PartRealloc_Return
 	cp wa, 0x4D8
-	jr ule, LABEL_F425FF
+	jr ule, PartRealloc_StealAndClear
 	stdi8 10362, 10
-	jr LABEL_F4260A
+	jr PartRealloc_Return
 
-LABEL_F425FF:
+PartRealloc_StealAndClear:
 	calr Part_StealAndReallocVoices
 	ld wa, iz
 	ldw bc, 0xFFFF
 	calr PartCtrl_WriteWord
 
-LABEL_F4260A:
+PartRealloc_Return:
 	popw iz
 	ret
 
-LABEL_F4260C:
+PartCtrl_SwapAndRelinkBlock:
 	.byte 0xef, 0x68, 0x3e, 0xd8, 0x8e, 0xbf, 0x08, 0x51
 	.byte 0xbf, 0x0a, 0x16, 0x2f, 0xf2, 0xf1, 0x2f, 0xf2
 	.byte 0x56, 0xbf, 0x04, 0x02, 0x00, 0x00, 0xde, 0x88
@@ -17151,11 +17151,11 @@ PartCtrl_ReadWordRoutine:
 	push xiz
 	ldda16 xiz, 61999
 	cp iz, 0xFFFF
-	jr nz, LABEL_F426CE
+	jr nz, PartCtrlRd_ProcessAndRelink
 	ldw hl, 0xFFFF
-	jr LABEL_F42708
+	jr PartCtrlRd_Return
 
-LABEL_F426CE:
+PartCtrlRd_ProcessAndRelink:
 	ld wa, iz
 	calr PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
@@ -17171,16 +17171,16 @@ LABEL_F426CE:
 	ldto_werp WA, 0xFA
 	stda16 61999, xwa
 	cp_erpw 0xFA, 0xFF, 0xFF
-	jr z, LABEL_F42702
+	jr z, PartCtrlRd_DecrementCount
 	ldto_werp WA, 0xFA
 	lds bc, 0
 	calr PartCtrl_WriteWord_Off1
 
-LABEL_F42702:
+PartCtrlRd_DecrementCount:
 	decdi16 1, 62001
 	ld hl, iz
 
-LABEL_F42708:
+PartCtrlRd_Return:
 	pop xiz
 	ret
 
@@ -17190,12 +17190,12 @@ Rhythm_ComputeNoteAllocation:
 	ld (xsp), 0x0
 	lda xbc, (xsp + 2)
 	lda xde, (xsp)
-	calr LABEL_F42852
+	calr Rhythm_DispatchNoteAlloc
 	ld hl, (xsp + 2)
 	inc 4, xsp
 	ret
 
-LABEL_F42722:
+Rhythm_NoteAllocBlock:
 	.byte 0xef, 0x68, 0x3e, 0xbf, 0x06, 0x62, 0xd9, 0x8e
 	.byte 0xbf, 0x0a, 0x41, 0xbf, 0x04, 0x02, 0x00, 0x00
 	.byte 0x8f, 0x0a, 0x23, 0xd9, 0x12, 0xd8, 0xa8, 0x1e
@@ -17216,27 +17216,27 @@ LABEL_F42722:
 	.byte 0x04, 0x50, 0x9f, 0x04, 0x23, 0x5e, 0xef, 0x60
 	.byte 0x0e
 
-LABEL_F427AB:
+Rhythm_SetupAndDispatch:
 	dec 6, xsp
 	push xiz
 	ldw (xsp + 8), 0x0
 	ld (xsp + 6), 0x0
 	ld (xsp + 4), 0x0
-	calr LABEL_F42828
+	calr Rhythm_CheckHighBitFlag
 	cps l, 0
-	jr z, LABEL_F427D3
-	calr LABEL_F42835
+	jr z, Rhythm_SetupFail
+	calr Rhythm_ClearHighBitFlag
 	cpdi16 61854, 0
-	jr z, LABEL_F427D3
+	jr z, Rhythm_SetupFail
 	bitda 2, 1057
-	jr z, LABEL_F427D7
+	jr z, Rhythm_SetupComputeState
 
-LABEL_F427D3:
+Rhythm_SetupFail:
 	ldb l, 0xFF
-	jr LABEL_F42824
+	jr Rhythm_SetupReturn
 
-LABEL_F427D7:
-	calr LABEL_F4283A
+Rhythm_SetupComputeState:
+	calr Rhythm_ComputeNoteIndex
 	ld iz, hl
 	srl iz, 2
 	and hl, 0x3
@@ -17246,7 +17246,7 @@ LABEL_F427D7:
 	lda xwa, (xsp + 4)
 	push xwa
 	ld wa, iz
-	calr LABEL_F429A0
+	calr Rhythm_ExtendedNoteAlloc
 	stda16 1052, xiz
 	ldto_berp A, 0xFB
 	mul a, 0x18
@@ -17262,23 +17262,23 @@ LABEL_F427D7:
 	stda16 9008, xwa
 	ldb l, 0x0
 
-LABEL_F42824:
+Rhythm_SetupReturn:
 	pop xiz
 	inc 6, xsp
 	ret
 
-LABEL_F42828:
+Rhythm_CheckHighBitFlag:
 	ldda8 a, 1070
 	and a, 0x80
 	srl a, 7
 	ld l, a
 	ret
 
-LABEL_F42835:
+Rhythm_ClearHighBitFlag:
 	resda 7, 1070
 	ret
 
-LABEL_F4283A:
+Rhythm_ComputeNoteIndex:
 	ldda8 l, 1069
 	res 7, l
 	extz hl
@@ -17289,7 +17289,7 @@ LABEL_F4283A:
 	add hl, wa
 	ret
 
-LABEL_F42852:
+Rhythm_DispatchNoteAlloc:
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 14), xde
@@ -17306,7 +17306,7 @@ LABEL_F42852:
 	calr SeqPart_FindActiveVoiceSlot
 	ldfr_berp L, 0xFB
 	cpi_berp 0xFB, 0
-	jr nz, LABEL_F4289F
+	jr nz, Rhythm_AllocMultiVoice
 	calr SeqPart_DispatchRhythmNote
 	ld xwa, (xsp + 14)
 	ld (xwa), l
@@ -17318,9 +17318,9 @@ LABEL_F42852:
 	ld bc, wa
 	ld xwa, (xsp + 18)
 	ld (xwa), bc
-	jrl LABEL_F42981
+	jrl Rhythm_AllocReturn
 
-LABEL_F4289F:
+Rhythm_AllocMultiVoice:
 	calr SeqPart_DispatchRhythmNote
 	ldfr_berp L, 0xFA
 	lds iz, 1
@@ -17340,9 +17340,9 @@ LABEL_F4289F:
 	ldiw
 	ldi_berp 0xFB, 1
 	cpw (xsp + 22), 0x1
-	jr ule, LABEL_F42950
+	jr ule, Rhythm_AllocCheckDone
 
-LABEL_F428DB:
+Rhythm_AllocProcessLoop:
 	lda xwa, (xsp + 6)
 	calr SeqEvent_ProcessRhythm4Ch
 	ld e, l
@@ -17353,11 +17353,11 @@ LABEL_F428DB:
 	cp e, 0xB0
 	jr z, SeqPart_NoteProcessing_Loop
 	cp e, 0x84
-	jr z, LABEL_F42936
+	jr z, Rhythm_AllocResetMarker
 	cp e, 0x82
-	jr z, LABEL_F42917
+	jr z, Rhythm_AllocEndSection
 	cp e, 0x81
-	jr nz, LABEL_F42948
+	jr nz, Rhythm_AllocStoreAndCont
 	ld xwa, (xsp + 18)
 	incm 1, (xwa)
 	incm 1, (xsp + 4)
@@ -17367,7 +17367,7 @@ LABEL_F428DB:
 	ldw (xsp + 4), 0x0
 	jr SeqPart_NoteProcessing_Loop
 
-LABEL_F42917:
+Rhythm_AllocEndSection:
 	ld de, bc
 	sub de, (xsp + 4)
 	ld xhl, (xsp + 18)
@@ -17382,7 +17382,7 @@ LABEL_F42917:
 	ldi_berp 0xFB, 0
 	jr SeqPart_NoteProcessing_Loop
 
-LABEL_F42936:
+Rhythm_AllocResetMarker:
 	calr SeqPart_DispatchRhythmNote
 	ldfr_berp L, 0xFA
 	lda xiy, (xsp + 10)
@@ -17391,62 +17391,62 @@ LABEL_F42936:
 	ldiw
 	jr SeqPart_NoteProcessing_Loop
 
-LABEL_F42948:
+Rhythm_AllocStoreAndCont:
 	ldfr_berp L, 0xFA
 
 SeqPart_NoteProcessing_Loop:
 	cp iz, (xsp + 22)
-	jr c, LABEL_F428DB
+	jr c, Rhythm_AllocProcessLoop
 
-LABEL_F42950:
+Rhythm_AllocCheckDone:
 	cpi_berp 0xFB, 1
-	jr nz, LABEL_F42979
+	jr nz, Rhythm_AllocStoreResult
 
-LABEL_F42955:
+Rhythm_AllocFinalizeLoop:
 	lda xwa, (xsp + 6)
 	calr SeqEvent_ProcessRhythm4Ch
 	cp l, 0x82
-	jr z, LABEL_F4299B
+	jr z, Rhythm_AllocClearFlag
 	cp l, 0x81
-	jr z, LABEL_F4299B
+	jr z, Rhythm_AllocClearFlag
 	cp l, 0x84
-	jr z, LABEL_F42986
+	jr z, Rhythm_AllocResetAlt
 	cp l, 0xB1
-	jr z, LABEL_F42974
+	jr z, Rhythm_AllocCheckFlag
 	cp l, 0xB0
-	jr nz, LABEL_F42998
+	jr nz, Rhythm_AllocStoreAlt
 
-LABEL_F42974:
+Rhythm_AllocCheckFlag:
 	cpi_berp 0xFB, 1
-	jr z, LABEL_F42955
+	jr z, Rhythm_AllocFinalizeLoop
 
-LABEL_F42979:
+Rhythm_AllocStoreResult:
 	ld xwa, (xsp + 14)
 	ldto_berp C, 0xFA
 	ld (xwa), c
 
-LABEL_F42981:
+Rhythm_AllocReturn:
 	pop xiz
 	lda xsp, (xsp + 20)
 	ret
 
-LABEL_F42986:
+Rhythm_AllocResetAlt:
 	calr SeqPart_DispatchRhythmNote
 	ldfr_berp L, 0xFA
 	lda xiy, (xsp + 10)
 	lda xix, (xsp + 6)
 	ldiw
 	ldiw
-	jr LABEL_F42974
+	jr Rhythm_AllocCheckFlag
 
-LABEL_F42998:
+Rhythm_AllocStoreAlt:
 	ldfr_berp L, 0xFA
 
-LABEL_F4299B:
+Rhythm_AllocClearFlag:
 	ldi_berp 0xFB, 0
-	jr LABEL_F42979
+	jr Rhythm_AllocStoreResult
 
-LABEL_F429A0:
+Rhythm_ExtendedNoteAlloc:
 	lda xsp, (xsp - 22)
 	push xiz
 	ld (xsp + 16), xde
@@ -17463,7 +17463,7 @@ LABEL_F429A0:
 	calr SeqPart_FindActiveVoiceSlot
 	ldfr_berp L, 0xFA
 	cpi_berp 0xFA, 0
-	jr nz, LABEL_F429F6
+	jr nz, Rhythm_ExtAllocMultiVoice
 	calr SeqPart_DispatchRhythmNote
 	ld xde, (xsp + 30)
 	ld (xde), l
@@ -17479,9 +17479,9 @@ LABEL_F429A0:
 	ld bc, (xsp + 24)
 	mrib2 0x82, 0x53
 	ld c, b
-	jrl LABEL_F42ACC
+	jrl Rhythm_ExtAllocReturn
 
-LABEL_F429F6:
+Rhythm_ExtAllocMultiVoice:
 	calr SeqPart_DispatchRhythmNote
 	ldfr_berp L, 0xFB
 	ldw (xsp + 4), 0x1
@@ -17501,9 +17501,9 @@ LABEL_F429F6:
 	ldiw
 	ldiw
 	cpw (xsp + 24), 0x0
-	jrl ule, LABEL_F42AB9
+	jrl ule, Rhythm_ExtAllocStoreResult
 
-LABEL_F42A36:
+Rhythm_ExtAllocProcessLoop:
 	lda xwa, (xsp + 8)
 	calr SeqEvent_ProcessRhythm4Ch
 	ld a, l
@@ -17512,11 +17512,11 @@ LABEL_F42A36:
 	cp a, 0xB0
 	jr z, Rhythm_NoteAllocation_Finalize
 	cp a, 0x84
-	jr z, LABEL_F42A9B
+	jr z, Rhythm_ExtAllocResetMarker
 	cp a, 0x82
-	jr z, LABEL_F42A6D
+	jr z, Rhythm_ExtAllocEndSection
 	cp a, 0x81
-	jr nz, LABEL_F42AAD
+	jr nz, Rhythm_ExtAllocStoreAndCont
 	incm 1, (xsp + 6)
 	inc1_berp 0xF9
 	ldto_berp A, 0xF9
@@ -17526,7 +17526,7 @@ LABEL_F42A36:
 	ldi_berp 0xF9, 0
 	jr Rhythm_NoteAllocation_Finalize
 
-LABEL_F42A6D:
+Rhythm_ExtAllocEndSection:
 	ldto_berp A, 0xFB
 	sub_berp A, 0xF9
 	extz wa
@@ -17546,7 +17546,7 @@ LABEL_F42A6D:
 	ldfr_berp A, 0xF9
 	jr Rhythm_NoteAllocation_Finalize
 
-LABEL_F42A9B:
+Rhythm_ExtAllocResetMarker:
 	calr SeqPart_DispatchRhythmNote
 	ldfr_berp L, 0xFB
 	lda xiy, (xsp + 12)
@@ -17555,15 +17555,15 @@ LABEL_F42A9B:
 	ldiw
 	jr Rhythm_NoteAllocation_Finalize
 
-LABEL_F42AAD:
+Rhythm_ExtAllocStoreAndCont:
 	ldfr_berp L, 0xFB
 
 Rhythm_NoteAllocation_Finalize:
 	ld wa, (xsp + 6)
 	cp wa, (xsp + 24)
-	jrl c, LABEL_F42A36
+	jrl c, Rhythm_ExtAllocProcessLoop
 
-LABEL_F42AB9:
+Rhythm_ExtAllocStoreResult:
 	ld xwa, (xsp + 20)
 	ld bc, (xsp + 4)
 	ld (xwa), bc
@@ -17572,7 +17572,7 @@ LABEL_F42AB9:
 	ld (xwa), c
 	ldto_berp C, 0xF9
 
-LABEL_F42ACC:
+Rhythm_ExtAllocReturn:
 	ld xwa, (xsp + 16)
 	ld (xwa), c
 	pop xiz
@@ -17583,47 +17583,47 @@ SeqPart_FindActiveVoiceSlot:
 	push_werp 0xFA
 	ldi_berp 0xFB, 1
 
-LABEL_F42ADE:
+SeqFind_VoiceSlotLoop:
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
 	calr Part_ReadSubBlock32
 	cp l, 0x10
-	jr nz, LABEL_F42B15
+	jr nz, SeqFind_NextSlot
 	ldto_berp A, 0xFB
 	dec 1, a
 	lds bc, 1
 	and a, 0xF
-	jr z, LABEL_F42AFB
+	jr z, SeqFind_ShiftBitMask
 	slaa bc
 
-LABEL_F42AFB:
+SeqFind_ShiftBitMask:
 	andda16 xbc, 61854
-	jr z, LABEL_F42B0F
+	jr z, SeqFind_SlotNotActive
 	ldto_berp C, 0xFB
 	extz bc
 	lds wa, 0
 	calr Part_ReadVoiceBit7
 	cps l, 0
-	jr nz, LABEL_F42B1E
+	jr nz, SeqFind_CheckOverflow
 
-LABEL_F42B0F:
+SeqFind_SlotNotActive:
 	ldi_erpb 0xFB, 0x11
-	jr LABEL_F42B24
+	jr SeqFind_SetZeroResult
 
-LABEL_F42B15:
+SeqFind_NextSlot:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr ule, LABEL_F42ADE
+	jr ule, SeqFind_VoiceSlotLoop
 
-LABEL_F42B1E:
+SeqFind_CheckOverflow:
 	cp_erpb 0xFB, 0x11
-	jr nz, LABEL_F42B27
+	jr nz, SeqFind_ReturnResult
 
-LABEL_F42B24:
+SeqFind_SetZeroResult:
 	ldi_berp 0xFB, 0
 
-LABEL_F42B27:
+SeqFind_ReturnResult:
 	ldto_berp L, 0xFB
 	pop_werp 0xFA
 	ret
@@ -17660,7 +17660,7 @@ SeqEvent_ProcessRhythm4Ch:
 	ldirw
 	ldi_berp 0xFB, 1
 
-LABEL_F42B79:
+SeqEvt4Ch_ReadEventLoop:
 	lda xbc, (xsp + 2)
 	ld xwa, (xsp + 10)
 	calr SeqPart_ReadNextEventByte
@@ -17677,11 +17677,11 @@ LABEL_F42B79:
 	cp a, 0x81
 	jr z, SeqEvent_ProcessRhythm3Ch
 
-LABEL_F42BA0:
+SeqEvt4Ch_CheckFlag:
 	cpi_berp 0xFB, 1
-	jr z, LABEL_F42B79
+	jr z, SeqEvt4Ch_ReadEventLoop
 
-LABEL_F42BA5:
+SeqEvt4Ch_Return:
 	ld l, (xsp + 2)
 	pop_werp 0xFA
 	lda xsp, (xsp + 12)
@@ -17689,9 +17689,9 @@ LABEL_F42BA5:
 
 SeqEvent_DispatchRhythmIfMatch:
 	cp (xbc + 2), 0x48
-	jr nz, LABEL_F42BA0
+	jr nz, SeqEvt4Ch_CheckFlag
 	cp (xbc + 3), 0x0
-	jr nz, LABEL_F42BA0
+	jr nz, SeqEvt4Ch_CheckFlag
 	and a, 0x1
 	sll a, 7
 	add a, (xbc + 4)
@@ -17703,7 +17703,7 @@ SeqEvent_DispatchRhythmIfMatch:
 
 SeqEvent_ProcessRhythm3Ch:
 	ldi_berp 0xFB, 0
-	jr LABEL_F42BA5
+	jr SeqEvt4Ch_Return
 	lda xsp, (xsp - 10)
 	push_werp 0xFA
 	ld (xsp + 8), xwa
@@ -17713,7 +17713,7 @@ SeqEvent_ProcessRhythm3Ch:
 	ldirw
 	ldi_berp 0xFB, 1
 
-LABEL_F42BEF:
+SeqEvt3Ch_ReadEventLoop:
 	lda xbc, (xsp + 2)
 	ld xwa, (xsp + 8)
 	calr SeqPart_ReadNextEventByte
@@ -17724,9 +17724,9 @@ LABEL_F42BEF:
 	lda xhl, (xiy + 4)
 	lda xix, (xiy + 5)
 	cp a, 0xC1
-	jrl z, LABEL_F42CD7
+	jrl z, SeqEvt3Ch_DispatchNote
 	cp a, 0xC0
-	jrl z, LABEL_F42CD7
+	jrl z, SeqEvt3Ch_DispatchNote
 	cp a, 0x84
 	jrl z, Rhythm_ClearAndReturn
 	cp a, 0x82
@@ -17740,11 +17740,11 @@ LABEL_F42BEF:
 	cp (xbc), 0x48
 	jrl nz, AppEvent_CheckAndBranch
 	cp (xde), 0x5
-	jr nz, LABEL_F42C6A
+	jr nz, SeqEvt3Ch_CheckCC6
 	ld a, (xix)
 	and a, (xhl)
 	bit 2, a
-	jr z, LABEL_F42C6A
+	jr z, SeqEvt3Ch_CheckCC6
 	ld (xiy), 0xB0
 	stdi16 4360, 4
 	call AccTone_ReadAndProcess
@@ -17756,14 +17756,14 @@ LABEL_F42BEF:
 	stdi16 4360, 0
 	ldi_berp 0xFB, 0
 
-LABEL_F42C6A:
+SeqEvt3Ch_CheckCC6:
 	lda xbc, (xsp + 2)
 	cp (xbc + 3), 0x6
-	jr nz, LABEL_F42CA1
+	jr nz, SeqEvt3Ch_CheckCC5
 	ld a, (xbc + 5)
 	and a, (xbc + 4)
 	bit 2, a
-	jr z, LABEL_F42CA1
+	jr z, SeqEvt3Ch_CheckCC5
 	ld (xbc), 0xB0
 	stdi16 4360, 1024
 	call AccTone_ReadAndProcess
@@ -17775,7 +17775,7 @@ LABEL_F42C6A:
 	stdi16 4360, 0
 	ldi_berp 0xFB, 0
 
-LABEL_F42CA1:
+SeqEvt3Ch_CheckCC5:
 	lda xbc, (xsp + 2)
 	cp (xbc + 3), 0x5
 	jr nz, AppEvent_CheckAndBranch
@@ -17794,7 +17794,7 @@ LABEL_F42CA1:
 	stdi16 4360, 0
 	jr Rhythm_ClearAndReturn
 
-LABEL_F42CD7:
+SeqEvt3Ch_DispatchNote:
 	cp (xbc), 0x48
 	jr nz, AppEvent_CheckAndBranch
 	cp (xde), 0x0
@@ -17810,19 +17810,19 @@ LABEL_F42CD7:
 
 Rhythm_ClearAndReturn:
 	ldi_berp 0xFB, 0
-	jr LABEL_F42D01
+	jr SeqEvt3Ch_ReturnResult
 
 AppEvent_CheckAndBranch:
 	cpi_berp 0xFB, 1
-	jrl z, LABEL_F42BEF
+	jrl z, SeqEvt3Ch_ReadEventLoop
 
-LABEL_F42D01:
+SeqEvt3Ch_ReturnResult:
 	ld l, (xsp + 2)
 	pop_werp 0xFA
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_F42D0B:
+SeqEvt_ProcessBlock:
 	.byte 0xbf, 0xf6, 0x37, 0xbf, 0x08, 0x41, 0xb7, 0x02
 	.byte 0x00, 0x00, 0xbf, 0x02, 0x00, 0x01, 0x45, 0x2e
 	.byte 0x46, 0xe4, 0x00, 0xbf, 0x04, 0x34, 0x95, 0x10
@@ -17854,19 +17854,19 @@ LABEL_F42D0B:
 	.byte 0x0c, 0x23, 0x21, 0xd8, 0x12, 0xb7, 0x50, 0xbf
 	.byte 0x02, 0x00, 0x00, 0x68, 0xec
 
-LABEL_F42DF8:
+SeqInit_ReturnStub:
 	ret
 
-LABEL_F42DF9:
+SeqInit_SetBaseAddress:
 	stdi16 10349, 1240
 	lda_24 xwa, 0x0b0000
 	stda32 7514, xwa
 	ret
 
-LABEL_F42E09:
+SeqInit_JumpToPartInit:
 	jrl Part_InitFromPreset
 
-LABEL_F42E0C:
+SeqInit_FullReset:
 	push_werp 0xFA
 	stdi16 9832, 1
 	stdi16 61854, 0
@@ -17878,7 +17878,7 @@ LABEL_F42E0C:
 	call Audio_CheckSubsystemReady
 	ldi_berp 0xFB, 0
 
-LABEL_F42E33:
+SeqInit_ClearCBLoop:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0xCB
@@ -17886,7 +17886,7 @@ LABEL_F42E33:
 	calr Part_WriteByte
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
-	jr ule, LABEL_F42E33
+	jr ule, SeqInit_ClearCBLoop
 	pushw 0x1
 	ldw wa, 0x91
 	lds bc, 3
@@ -17894,22 +17894,22 @@ LABEL_F42E33:
 	call AddswbWr
 	ldi_berp 0xFB, 0
 
-LABEL_F42E5A:
+SeqInit_WriteDefaultsLoop:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x1C
 	calr Part_ReadWord
 	cps hl, 0
-	jr z, LABEL_F42E74
+	jr z, SeqInit_InitVoiceSubBlocks
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x32
 	calr Part_ReleaseVoicesForRange
 
-LABEL_F42E74:
+SeqInit_InitVoiceSubBlocks:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
-	jr ule, LABEL_F42E5A
+	jr ule, SeqInit_WriteDefaultsLoop
 	stdi16 9500, 1
 	stdi16 9502, 1
 	stdi16 9504, 1
@@ -17929,16 +17929,16 @@ Part_InitFromPreset:
 	ldirw
 	ldi_berp 0xFB, 0
 
-LABEL_F42EB8:
+SeqInit_SetMIDIDefaults:
 	ldto_berp A, 0xFB
 	extz wa
 	call DataBuf_InitSlotFromPreset
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
-	jr ule, LABEL_F42EB8
+	jr ule, SeqInit_SetMIDIDefaults
 	ldi_berp 0xFB, 0
 
-LABEL_F42ECD:
+SeqInit_FinalizeSetup:
 	ldto_berp A, 0xFB
 	extz wa
 	calr Part_InitVoiceDefaults
@@ -17956,14 +17956,14 @@ LABEL_F42ECD:
 	ldto_berp A, 0xFB
 	extz wa
 	cps l, 0
-	jr nz, LABEL_F42F00
+	jr nz, SeqInit_WriteMoreDefaults
 	calr Part_WriteAllVoiceSubBlocks_A
-	jr LABEL_F42F03
+	jr SeqInit_Return
 
-LABEL_F42F00:
+SeqInit_WriteMoreDefaults:
 	calr Part_WriteAllVoiceSubBlocks_B
 
-LABEL_F42F03:
+SeqInit_Return:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x50
@@ -18209,7 +18209,7 @@ LABEL_F43138:
 	calr Part_WriteByte
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
-	jrl ule, LABEL_F42ECD
+	jrl ule, SeqInit_FinalizeSetup
 	call Audio_CheckSubsystemReady
 	resda 0, 10405
 	ldw wa, 0x4C
@@ -18883,7 +18883,7 @@ SeqPlay_CheckMidiPending:
 	ret
 
 LABEL_F437CB:
-	calr LABEL_F427AB
+	calr Rhythm_SetupAndDispatch
 	cps l, 0
 	ret nz
 	cpdi16 1052, 0
