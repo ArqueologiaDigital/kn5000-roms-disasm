@@ -1889,12 +1889,12 @@ LABEL_F87710:
 	jrl lt, FileIO_CloseHandle_Return
 	call FileIO_SeekRead_ExtReturn
 	lda xwa, (xsp + 4)
-	call LABEL_F47E3C
+	call SeqLoad_ValidateFormat
 	cps hl, 0
 	jrl z, LABEL_F877CC
 	cps hl, 1
 	jrl nz, FileIO_CloseHandle_Return
-	call LABEL_F47E60
+	call SeqLoad_JmpLoadPre
 	ld xwa, 0xAB000
 	ld xbc, 0x5000
 	call FileIO_ReadBlock
@@ -1937,14 +1937,14 @@ LABEL_F877A3:
 	jr lt, LABEL_F877A3
 	call SMF_InitSongPlayback
 	ld wa, (xsp + 2)
-	call LABEL_F47E63
+	call SeqLoad_JmpLoadPost
 	cpw (xsp + 2), 0x0
 	jr lt, FileIO_CloseHandle_Return
 	call ResetSlotsIfEmpty
 	jr FileIO_CloseHandle_Return
 
 LABEL_F877CC:
-	call LABEL_F47E66
+	call SeqLoad_JmpInitPreset
 	ld xwa, 0xAB000
 	ld xbc, 0x800
 	call FileIO_ReadBlock
@@ -1977,7 +1977,7 @@ Song_LoadAndInitPlayback:
 	call FileData_LoadFromSlot
 	call SMF_InitSongPlayback
 	ld wa, (xsp + 2)
-	call LABEL_F47E69
+	call SeqLoad_JmpAltEntry
 
 FileIO_CloseHandle_Return:
 	call FileIO_CloseHandle
@@ -2953,7 +2953,7 @@ MultiPass_LoopNext:
 MultiPass_Finalize:
 	ld wa, (xsp + 30)
 	extz wa
-	call LABEL_F47C70
+	call SeqSave_PreparePartData
 	ldfr_werp HL, 0xFA
 	call FileIO_CloseHandle
 	cpi_werp 0xFA, 0

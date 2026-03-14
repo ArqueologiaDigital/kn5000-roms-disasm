@@ -24160,7 +24160,7 @@ SeqLoad_PostInitParts:
 	lds bc, 4
 	lds de, 0
 	call Part_WriteByte
-	calr LABEL_F47FA4
+	calr SeqLoad_RestorePartConfig
 	call SeqStep_FindLastUsedPart
 	ld8_24 a, 0x00ffe3
 	extz wa
@@ -24316,7 +24316,7 @@ SeqLoad_ProcessDataBlock:
 	.byte 0xec, 0xff, 0x00, 0x16, 0x9e, 0xf1, 0x5e, 0xef
 	jr	f, 0x0e
 
-LABEL_F47B34:
+FileIO_WriteBlockToStream:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), bc
@@ -24334,7 +24334,7 @@ LABEL_F47B34:
 	ld xde, xix
 	lds iy, 0
 
-LABEL_F47B5C:
+FileIO_WriteBlockCopyLoop:
 	ld wa, iy
 	extz xwa
 	ld xbc, xwa
@@ -24344,7 +24344,7 @@ LABEL_F47B5C:
 	ld (xbc), a
 	inc 1, iy
 	cp iy, 0x100
-	jr c, LABEL_F47B5C
+	jr c, FileIO_WriteBlockCopyLoop
 	ldda16 xwa, 10740
 	ldda16 xbc, 10738
 	add bc, wa
@@ -24354,31 +24354,31 @@ LABEL_F47B5C:
 	inc 1, bc
 	ld (xix + 3), bc
 	cpdi16 10740, 0
-	jr nz, LABEL_F47B95
+	jr nz, FileIO_WriteCheckDefault
 	ldw (xde + 1), 0x0
 
-LABEL_F47B95:
+FileIO_WriteCheckDefault:
 	cpw (xsp + 4), 0xFFFF
-	jr nz, LABEL_F47BA1
+	jr nz, FileIO_WriteUpdateCounter
 	ldw (xix + 3), 0xFFFF
 
-LABEL_F47BA1:
+FileIO_WriteUpdateCounter:
 	ldda16 xwa, 10742
 	inc 1, wa
 	stda16 10742, xwa
 	cp wa, 0x20
-	jr c, LABEL_F47BC4
+	jr c, FileIO_WritePopReturn
 	ldda32 xwa, 10734
 	ld xbc, 0x2000
 	call FileIO_WriteByte_Impl
 	stdi16 10742, 0
 
-LABEL_F47BC4:
+FileIO_WritePopReturn:
 	pop xiz
 	inc 2, xsp
 	ret
 
-LABEL_F47BC8:
+FileIO_FlushPendingBlock:
 	lds32 xhl, 0
 	ldda16 xbc, 10742
 	cps bc, 0
@@ -24389,7 +24389,7 @@ LABEL_F47BC8:
 	call FileIO_WriteByte_Impl
 	ret
 
-LABEL_F47BE0:
+FileIO_WriteAllPartVoices:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 8), a
@@ -24398,7 +24398,7 @@ LABEL_F47BE0:
 	stdi16 10742, 0
 	ld (xsp + 4), 0x1
 
-LABEL_F47BFB:
+FileIO_WritePartLoop:
 	stdi16 10740, 0
 	ld a, (xsp + 8)
 	inc 1, a
@@ -24407,7 +24407,7 @@ LABEL_F47BFB:
 	extz bc
 	call Part_ReadVoiceBit7
 	cps l, 0
-	jr z, LABEL_F47C5D
+	jr z, FileIO_WriteNextPart
 	ld a, (xsp + 8)
 	inc 1, a
 	extz wa
@@ -24416,50 +24416,50 @@ LABEL_F47BFB:
 	call Part_ReadVoiceWord
 	ld iz, hl
 	cp iz, 0xFFFF
-	jr z, LABEL_F47C55
+	jr z, FileIO_WritePartAccumulate
 
-LABEL_F47C2D:
+FileIO_WriteVoiceChainLoop:
 	ld wa, iz
 	call PartCtrl_ReadWord
 	ldfr_werp HL, 0xFA
 	ld wa, iz
 	ldto_werp BC, 0xFA
-	calr LABEL_F47B34
+	calr FileIO_WriteBlockToStream
 	ld (xsp + 6), hl
 	cpw (xsp + 6), 0x0
-	jr lt, LABEL_F47C69
+	jr lt, FileIO_WriteEpilogue
 	ldto_werp IZ, 0xFA
 	incdi16 1, 10740
 	cp iz, 0xFFFF
-	jr nz, LABEL_F47C2D
+	jr nz, FileIO_WriteVoiceChainLoop
 
-LABEL_F47C55:
+FileIO_WritePartAccumulate:
 	ldda16 xwa, 10740
 	adddm16 10738, xwa
 
-LABEL_F47C5D:
+FileIO_WriteNextPart:
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x10
-	jr ule, LABEL_F47BFB
-	calr LABEL_F47BC8
+	jr ule, FileIO_WritePartLoop
+	calr FileIO_FlushPendingBlock
 
-LABEL_F47C69:
+FileIO_WriteEpilogue:
 	ld hl, (xsp + 6)
 	pop xiz
 	inc 6, xsp
 	ret
 
-LABEL_F47C70:
+SeqSave_PreparePartData:
 	dec 6, xsp
 	push xiz
 	ld (xsp + 8), a
 	ld8_24 a, 0x00ffe3
 	cp a, (xsp + 8)
-	jr nz, LABEL_F47C8B
+	jr nz, SeqSave_CopyBlockAndInit
 	ldmm_sd24w 0xEC, 0xFF, 0x00, 0x9E, 0xF1
 	call Audio_CheckSubsystemReady
 
-LABEL_F47C8B:
+SeqSave_CopyBlockAndInit:
 	ld8_24 a, 0x00ffe3
 	extz wa
 	call SeqData_CopyBlockToBuffer
@@ -24482,7 +24482,7 @@ LABEL_F47C8B:
 	call Part_WriteWord
 	ld a, (xsp + 8)
 	extz wa
-	calr LABEL_F47FE1
+	calr SeqSave_ComputeVoiceSize
 	ld (xsp + 4), xhl
 	ld xhl, (xsp + 4)
 	cp xhl, 0x0
@@ -24491,14 +24491,14 @@ LABEL_F47C8B:
 	cp xhl, 0x0
 	jrl lt, AppEvent_PopIzSkip6Ret
 	cp (xsp + 4), xhl
-	jr le, LABEL_F47CF9
+	jr le, SeqSave_AllocAndWrite
 	ldw hl, 0xFF9B
 	jrl AppEvent_PopIzSkip6Ret
 
-LABEL_F47CF9:
+SeqSave_AllocAndWrite:
 	ld a, (xsp + 8)
 	extz wa
-	calr LABEL_F48094
+	calr SeqSave_WriteBlockToFile
 	ld xiz, xhl
 	cp xiz, 0x0
 	jrl lt, AppEvent_LoadIzToHL
@@ -24507,14 +24507,14 @@ LABEL_F47CF9:
 	inc 2, xsp
 	stda32 10734, xhl
 	or xhl, xhl
-	jr nz, LABEL_F47D23
+	jr nz, SeqSave_WriteAndFree
 	ldw hl, 0xFFFD
 	jrl AppEvent_PopIzSkip6Ret
 
-LABEL_F47D23:
+SeqSave_WriteAndFree:
 	ld a, (xsp + 8)
 	extz wa
-	calr LABEL_F47BE0
+	calr FileIO_WriteAllPartVoices
 	ld iz, hl
 	exts xiz
 	ldda32 xwa, 10734
@@ -24528,10 +24528,10 @@ LABEL_F47D23:
 	ld xwa, xde
 	lda xde, (xde + 32)
 
-LABEL_F47D4E:
+SeqSave_CountBlocksLoop:
 	add_spiw BC, 0xE1
 	cp xwa, xde
-	jr c, LABEL_F47D4E
+	jr c, SeqSave_CountBlocksLoop
 	sll bc, 4
 	ld xwa, 0x4E
 	calr FileIO_SeekAndRead16BitValue
@@ -24540,14 +24540,14 @@ LABEL_F47D4E:
 	jrl lt, AppEvent_LoadIzToHL
 	lds32 xwa, 4
 	lds bc, 0
-	calr LABEL_F480AD
+	calr FileIO_SeekReadAndCheck
 	ld xiz, xhl
 	cp xiz, 0x0
 	jrl lt, AppEvent_LoadIzToHL
 	ldw (xsp + 6), 0x0
 	ld (xsp + 4), 0x0
 
-LABEL_F47D86:
+SeqSave_WritePartDataLoop:
 	ld c, (xsp + 4)
 	extz bc
 	add bc, bc
@@ -24558,7 +24558,7 @@ LABEL_F47D86:
 	ldb w, 0x0
 	extz xwa
 	cp_sriw_im 0x07, 0xE8, 0xE4, 0x00, 0x00
-	jr nz, LABEL_F47DD6
+	jr nz, SeqSave_WritePartInner
 	ldw bc, 0xFFFF
 	calr FileIO_SeekAndRead16BitValue
 	ld xiz, xhl
@@ -24573,10 +24573,10 @@ LABEL_F47D86:
 	calr FileIO_SeekAndRead16BitValue
 	ld xiz, xhl
 	cp xiz, 0x0
-	jr ge, LABEL_F47E28
+	jr ge, SeqSave_NextPartLoop
 	jr AppEvent_LoadIzToHL
 
-LABEL_F47DD6:
+SeqSave_WritePartInner:
 	ld bc, (xsp + 6)
 	inc 1, bc
 	calr FileIO_SeekAndRead16BitValue
@@ -24605,10 +24605,10 @@ LABEL_F47DD6:
 	ld_sriw3 WA, 0x07, 0xE4, 0xE0
 	add (xsp + 6), wa
 
-LABEL_F47E28:
+SeqSave_NextPartLoop:
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x10
-	jrl c, LABEL_F47D86
+	jrl c, SeqSave_WritePartDataLoop
 	resda 0, 36232
 
 AppEvent_LoadIzToHL:
@@ -24619,9 +24619,9 @@ AppEvent_PopIzSkip6Ret:
 	inc 6, xsp
 	ret
 
-LABEL_F47E3C:
+SeqLoad_ValidateFormat:
 	cp (xwa + 5), 0x1
-	jr nz, LABEL_F47E56
+	jr nz, SeqLoad_FormatInvalid
 	ld l, (xwa + 6)
 	cps l, 3
 	jr z, SeqLoad_FetchPartLength
@@ -24632,7 +24632,7 @@ LABEL_F47E3C:
 	cp l, 0x8
 	jr z, SeqLoad_FetchPartLength
 
-LABEL_F47E56:
+SeqLoad_FormatInvalid:
 	ldw hl, 0xFF9A
 	ret
 
@@ -24641,16 +24641,16 @@ SeqLoad_FetchPartLength:
 	extz hl
 	ret
 
-LABEL_F47E60:
+SeqLoad_JmpLoadPre:
 	jrl SeqLoadPre
 
-LABEL_F47E63:
+SeqLoad_JmpLoadPost:
 	jrl SeqLoadPost
 
-LABEL_F47E66:
+SeqLoad_JmpInitPreset:
 	jrl SeqLoad_JumpInitFromPreset
 
-LABEL_F47E69:
+SeqLoad_JmpAltEntry:
 	jrl SeqLoad_PostAltEntry
 
 SeqBar_ComputeAndSetPositions:
@@ -24660,34 +24660,34 @@ SeqBar_ComputeAndSetPositions:
 	srl wa, 4
 	add bc, wa
 	cp bc, 0x4D8
-	jr c, LABEL_F47E83
+	jr c, SeqBar_ClampAndStore
 	ldw bc, 0xFFFF
 
-LABEL_F47E83:
+SeqBar_ClampAndStore:
 	ld wa, bc
 	call Part_WriteWordBlock_OffsetAF
 	ldda16 xbc, 61999
 	cp bc, 0xFFFF
-	jr nz, LABEL_F47E9D
+	jr nz, SeqBar_ComputeRange
 	stdi16 62001, 0
 	lds wa, 0
-	jr LABEL_F47EAC
+	jr SeqBar_CheckZeroRange
 
-LABEL_F47E9D:
+SeqBar_ComputeRange:
 	ldw wa, 0x4D8
 	sub wa, bc
 	inc 1, wa
 	call Part_SetAllVoicePos
 	ldda16 xwa, 62001
 
-LABEL_F47EAC:
+SeqBar_CheckZeroRange:
 	cps wa, 0
-	jr z, LABEL_F47EFF
+	jr z, SeqBar_ReturnDone
 	ldda16 xiz, 61999
 	cp iz, wa
-	jr ugt, LABEL_F47EEB
+	jr ugt, SeqBar_WriteBoundary
 
-LABEL_F47EB8:
+SeqBar_SetPositionLoop:
 	ld wa, iz
 	lds bc, 0
 	call PartCtrl_SetClearBit7
@@ -24696,22 +24696,22 @@ LABEL_F47EB8:
 	ldw de, 0x82
 	call PartCtrl_WriteByteToBuf
 	cps iz, 0
-	jr z, LABEL_F47ED9
+	jr z, SeqBar_LinkNextPosition
 	ld bc, iz
 	dec 1, bc
 	ld wa, iz
 	call PartCtrl_WriteWord_Off1
 
-LABEL_F47ED9:
+SeqBar_LinkNextPosition:
 	ld bc, iz
 	inc 1, bc
 	ld wa, iz
 	call PartCtrl_WriteWord
 	inc 1, iz
 	cpda16 xiz, 62001
-	jr ule, LABEL_F47EB8
+	jr ule, SeqBar_SetPositionLoop
 
-LABEL_F47EEB:
+SeqBar_WriteBoundary:
 	ldda16 xwa, 61999
 	lds bc, 0
 	call PartCtrl_WriteWord_Off1
@@ -24719,11 +24719,11 @@ LABEL_F47EEB:
 	ldw bc, 0xFFFF
 	call PartCtrl_WriteWord
 
-LABEL_F47EFF:
+SeqBar_ReturnDone:
 	popw iz
 	ret
 
-LABEL_F47F01:
+SeqBar_DataBlock:
 	.byte 0xd1, 0x2f, 0xf2, 0x19, 0xca, 0x29, 0xd1, 0x31
 	.byte 0xf2, 0x19, 0xcc, 0x29, 0x0e, 0xd1, 0xca, 0x29
 	.byte 0x19, 0x2f, 0xf2, 0xd1, 0xcc, 0x29, 0x19, 0x31
@@ -24746,7 +24746,7 @@ LABEL_F47F01:
 	.byte 0x61, 0xe8, 0x12, 0xeb, 0x80, 0x80, 0x21, 0xba
 	.byte 0x09, 0x41, 0x0e
 
-LABEL_F47FA4:
+SeqLoad_RestorePartConfig:
 	lds wa, 1
 	ldw bc, 0xC7
 	call Part_ReadByteDirect
@@ -24767,20 +24767,20 @@ LABEL_F47FA4:
 	resda 3, 10407
 	ret
 
-LABEL_F47FE1:
+SeqSave_ComputeVoiceSize:
 	dec 4, xsp
 	push_werp 0xFA
 	ld (xsp + 4), a
 	ldw (xsp + 2), 0x0
 	cp (xsp + 4), 0x10
-	jr c, LABEL_F47FFB
+	jr c, SeqSave_VoiceSizeInitLoop
 	ld xhl, 0xFFFFFFFF
-	jr LABEL_F48076
+	jr SeqSave_VoiceSizeReturn
 
-LABEL_F47FFB:
+SeqSave_VoiceSizeInitLoop:
 	ldi_berp 0xFB, 1
 
-LABEL_F47FFE:
+SeqSave_VoiceSizePartLoop:
 	ldto_berp A, 0xFB
 	dec 1, a
 	extz wa
@@ -24794,7 +24794,7 @@ LABEL_F47FFE:
 	extz bc
 	call Part_ReadVoiceBit7
 	cps l, 0
-	jr z, LABEL_F4805F
+	jr z, SeqSave_VoiceSizeNextPart
 	ld a, (xsp + 4)
 	inc 1, a
 	extz wa
@@ -24803,9 +24803,9 @@ LABEL_F47FFE:
 	call Part_ReadVoiceWord
 	ld wa, hl
 	cp wa, 0xFFFF
-	jr z, LABEL_F4805F
+	jr z, SeqSave_VoiceSizeNextPart
 
-LABEL_F4803E:
+SeqSave_VoiceSizeChainLoop:
 	ldto_berp C, 0xFB
 	dec 1, c
 	extz bc
@@ -24816,23 +24816,23 @@ LABEL_F4803E:
 	call PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
-	jr nz, LABEL_F4803E
+	jr nz, SeqSave_VoiceSizeChainLoop
 
-LABEL_F4805F:
+SeqSave_VoiceSizeNextPart:
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x10
-	jr ule, LABEL_F47FFE
+	jr ule, SeqSave_VoiceSizePartLoop
 	ld hl, (xsp + 2)
 	extz xhl
 	sll xhl, 8
 	add xhl, 0x800
 
-LABEL_F48076:
+SeqSave_VoiceSizeReturn:
 	pop_werp 0xFA
 	inc 4, xsp
 	ret
 
-LABEL_F4807C:
+SeqSave_ReadBlockFromMem:
 	ldda32	xbc, 7514
 	extz	xwa
 	dec	1, xwa
@@ -24842,7 +24842,7 @@ LABEL_F4807C:
 	ld	xbc, 256
 	jp	16289320
 
-LABEL_F48094:
+SeqSave_WriteBlockToFile:
 	ld c, a
 	ldb b, 0x0
 	extz xbc
@@ -24852,20 +24852,20 @@ LABEL_F48094:
 	ld xbc, 0x800
 	jp FileIO_WriteByte_Impl
 
-LABEL_F480AD:
+FileIO_SeekReadAndCheck:
 	dec 2, xsp
 	ld (xsp), c
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
 	exts xhl
 	or xhl, xhl
-	jr nz, LABEL_F480C7
+	jr nz, FileIO_SeekReadReturn
 	ld a, (xsp)
 	extz wa
 	call FileIO_ReadByte_BufferHit
 	exts xhl
 
-LABEL_F480C7:
+FileIO_SeekReadReturn:
 	inc 2, xsp
 	ret
 
@@ -24876,25 +24876,25 @@ FileIO_SeekAndRead16BitValue:
 	call FileIO_SeekAndReadBlock
 	exts xhl
 	or xhl, xhl
-	jr nz, LABEL_F480F6
+	jr nz, FileIO_Read16Return
 	ld wa, iz
 	ldb w, 0x0
 	extz wa
 	call FileIO_ReadByte_BufferHit
 	exts xhl
 	or xhl, xhl
-	jr nz, LABEL_F480F6
+	jr nz, FileIO_Read16Return
 	ld wa, iz
 	srl wa, 8
 	extz wa
 	call FileIO_ReadByte_BufferHit
 	exts xhl
 
-LABEL_F480F6:
+FileIO_Read16Return:
 	popw iz
 	ret
 
-LABEL_F480F8:
+SeqLoad_ReadPartDataBlock:
 	.byte 0xbf, 0xf6, 0x37, 0x3e, 0xbf, 0x0c, 0x41, 0x8f
 	.byte 0x0c, 0x21, 0xd8, 0x12, 0xd8, 0x80, 0xf1, 0xce
 	.byte 0x29, 0x32, 0xd3, 0x07, 0xe8, 0xe0, 0x3f, 0x00
@@ -24949,7 +24949,7 @@ SeqLoad_SkipBitCheck:
 	jr __jrt_nop_F48211
 __jrt_nop_F48211:
 
-LABEL_F48211:
+SeqLoad_ClearAutoAccompBit1:
 	resda 1, 62014
 	ret
 
@@ -24958,10 +24958,10 @@ SeqLoad_ProcessAllVoiceData:
 	push xiz
 	ld (xsp + 4), 0x1
 
-LABEL_F4821D:
+SeqLoad_ProcessOuterLoop:
 	ld (xsp + 6), 0x1
 
-LABEL_F48221:
+SeqLoad_ProcessInnerLoop:
 	ld a, (xsp + 4)
 	extz wa
 	ld c, (xsp + 6)
@@ -24980,7 +24980,7 @@ LABEL_F48221:
 	cpw (xsp + 8), 0xFFFF
 	jrl z, VoiceData_LoopEnd
 
-LABEL_F48255:
+SeqLoad_ProcessVoiceFound:
 	cpw (xsp + 8), 0x1
 	jr z, VoiceData_ProcessLoop
 	cpw (xsp + 8), 0x2
@@ -25008,7 +25008,7 @@ VoiceData_ProcessLoop:
 	sll xhl, 8
 	lds de, 0
 
-LABEL_F4829F:
+SeqLoad_ProcessNextInner:
 	ld wa, de
 	extz xwa
 	ld xbc, xwa
@@ -25020,17 +25020,17 @@ LABEL_F4829F:
 	ld (xbc), a
 	inc 1, de
 	cp de, 0x100
-	jr c, LABEL_F4829F
+	jr c, SeqLoad_ProcessNextInner
 	ld wa, (xsp + 8)
 	call PartCtrl_ReadWord_Off1
 	ld wa, hl
 	cps wa, 0
-	jr z, LABEL_F482CF
+	jr z, SeqLoad_ProcessNextOuter
 	ld bc, (xsp + 10)
 	call PartCtrl_WriteWord
-	jr LABEL_F482FA
+	jr SeqLoad_ProcessReturn
 
-LABEL_F482CF:
+SeqLoad_ProcessNextOuter:
 	ld a, (xsp + 4)
 	extz wa
 	ld c, (xsp + 6)
@@ -25040,24 +25040,24 @@ LABEL_F482CF:
 	ld a, (xsp + 4)
 	dec 1, a
 	cpda8_24 a, 65507
-	jr nz, LABEL_F482FA
+	jr nz, SeqLoad_ProcessReturn
 	ld c, (xsp + 6)
 	extz bc
 	lds wa, 0
 	ld de, (xsp + 10)
 	call Part_WriteVoiceWord
 
-LABEL_F482FA:
+SeqLoad_ProcessReturn:
 	ld wa, (xsp + 8)
 	call PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
-	jr z, LABEL_F48312
+	jr z, SeqLoad_ProcessCopyLoop
 	ld bc, (xsp + 10)
 	call PartCtrl_WriteWord_Off1
 	jr VoiceData_NextWord
 
-LABEL_F48312:
+SeqLoad_ProcessCopyLoop:
 	ld a, (xsp + 4)
 	extz wa
 	ld c, (xsp + 6)
@@ -25079,15 +25079,15 @@ VoiceData_NextWord:
 	call PartCtrl_ReadWord
 	ld (xsp + 8), hl
 	cpw (xsp + 8), 0xFFFF
-	jrl nz, LABEL_F48255
+	jrl nz, SeqLoad_ProcessVoiceFound
 
 VoiceData_LoopEnd:
 	incm8 1, (xsp + 6)
 	cp (xsp + 6), 0x10
-	jrl ule, LABEL_F48221
+	jrl ule, SeqLoad_ProcessInnerLoop
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0xA
-	jrl ule, LABEL_F4821D
+	jrl ule, SeqLoad_ProcessOuterLoop
 	lds wa, 1
 	lds bc, 1
 	call PartCtrl_SetClearBit7

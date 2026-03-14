@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rename LABEL_XXXXXX labels in sequencer_engine.s to semantic names (batch 12).
+"""Rename LABEL_XXXXXX labels in sequencer_engine.s to semantic names (batch 13).
 
 Uses binary I/O to preserve Latin-1 bytes.
 Updates all .s files in maincpu/ that reference renamed labels.
@@ -10,76 +10,92 @@ import os
 import glob
 
 RENAMES = {
-    "LABEL_F46532": "NoteEditSy_Dispatch85",
-    "LABEL_F46540": "NoteEditSy_Dispatch87",
-    "LABEL_F46560": "NoteEditSy_DeliverParam7",
-    "LABEL_F4656B": "NoteEditSy_DeliverReturn",
-    "LABEL_F4658D": "SeqMode_Status85",
-    "LABEL_F4659B": "SeqMode_Status87",
-    "LABEL_F465A7": "SeqMode_StatusDeliver",
-    "LABEL_F465BA": "SeqAccomp_StopNotifyDeliver",
-    "LABEL_F46600": "SngSel_HandlePrevSong",
-    "LABEL_F46630": "SngSel_HandleNextSong",
-    "LABEL_F4665D": "SngSel_SendVoiceUpdate",
-    "LABEL_F46A7D": "SeqErec_ClearPlayFlags",
-    "LABEL_F46AAC": "SeqErecFunc_SetIndicator",
-    "LABEL_F46AAF": "SeqErecFunc_CallSetIndicator",
-    "LABEL_F46AB3": "SeqErecFunc_ReturnZero",
-    "LABEL_F46AE3": "SeqPlayMode_SaveAndCleanup",
-    "LABEL_F46B2C": "SeqReal_CopyBarFromSaved",
-    "LABEL_F46B32": "SeqReal_InitStartState",
-    "LABEL_F46B39": "SeqReal_HandleActivation",
-    "LABEL_F46BA3": "SeqReal_SetBarFlag",
-    "LABEL_F46BA9": "SeqReal_CheckAccompBit",
-    "LABEL_F46BE7": "SeqEdit_RestoreAndClear",
-    "LABEL_F46BEF": "SeqEdit_ReturnZero",
-    "LABEL_F46C2E": "SqRealRec_SetBitMaskLoop",
-    "LABEL_F46C69": "SqRealRec_DetectAndInit",
-    "LABEL_F46C7C": "SqRealRec_HandleExitState",
-    "LABEL_F46CCA": "SqPlay_HandleExitState",
-    "LABEL_F46CFD": "SqQtz_ClearBit4",
-    "LABEL_F46D29": "SqMdel_ClearBit0",
-    "LABEL_F46D55": "SqMers_ClearBit1",
-    "LABEL_F46D81": "SqVcng_ClearBit5",
-    "LABEL_F46DD5": "SqMcpy_ClearBit3",
-    "LABEL_F46DDB": "SqMcpy_HandleExitState",
-    "LABEL_F46E0C": "SqMins_ClearBit2",
-    "LABEL_F46E12": "SqMins_HandleExitState",
-    "LABEL_F46E3C": "SqTrcl_HandleExitState",
-    "LABEL_F46E92": "SqTrmg_ReturnZero",
-    "LABEL_F46EB6": "SqPunch_HandleTickOnExit",
-    "LABEL_F46EDB": "SqPunchm_HandleStopOnExit",
-    "LABEL_F46F14": "SqNoteEdt_ReturnZero",
-    "LABEL_F46F4D": "SqDrmEdt_ReturnZero",
-    "LABEL_F46F68": "SdRevset_ClearFlag",
-    "LABEL_F46F6D": "SdRevset_ReturnZero",
-    "LABEL_F46F88": "SdDspeff_ClearFlag",
-    "LABEL_F46F8D": "SdDspeff_ReturnZero",
-    "LABEL_F46FA8": "SdAccill_ClearFlag",
-    "LABEL_F46FAD": "SdAccill_ReturnZero",
-    "LABEL_F46FC3": "SqNoteCycp_ReturnZero",
-    "LABEL_F46FD9": "SqDrmCycp_ReturnZero",
-    "LABEL_F46FF3": "HelpMode_ReturnZero",
-    "LABEL_F47667": "HelpLang_DispatchDataBlock",
-    "LABEL_F47664": "MainPanic_ReturnZero",
-    "LABEL_F4778A": "HelpLang_SetRegion5",
-    "LABEL_F47796": "HelpLang_PostEvent",
-    "LABEL_F477BA": "HelpLang_LoadSlide",
-    "LABEL_F477D3": "HelpLang_ParseSlideHeader",
-    "LABEL_F477D7": "HelpLangChk_ReturnZero",
-    "LABEL_F477FE": "HelpFlash_DispatchAudio",
-    "LABEL_F47804": "HelpFlash_ReturnZero",
-    "LABEL_F47807": "SeqIndicator_HideBoth",
-    "LABEL_F47864": "SeqLoad_PostInitParts",
-    "LABEL_F47899": "SeqLoad_PostSetPositions",
-    "LABEL_F478A2": "SeqLoad_PostCheckAutoAccomp",
-    "LABEL_F478BA": "SeqLoad_JumpInitFromPreset",
-    "LABEL_F478BE": "SeqLoad_PostAltEntry",
-    "LABEL_F478CA": "SeqLoad_AltInitParts",
-    "LABEL_F47902": "SeqLoad_AltSetPositions",
-    "LABEL_F4790B": "SeqLoad_AltCheckAutoAccomp",
-    "LABEL_F47958": "SeqSave_PostReturn",
-    "LABEL_F4795A": "SeqLoad_ProcessDataBlock",
+    # --- LABEL_F47B34 - FileIO block write area (lines ~24319-24390) ---
+    "LABEL_F47B34": "FileIO_WriteBlockToStream",
+    "LABEL_F47B5C": "FileIO_WriteBlockCopyLoop",
+    "LABEL_F47B95": "FileIO_WriteCheckDefault",
+    "LABEL_F47BA1": "FileIO_WriteUpdateCounter",
+    "LABEL_F47BC4": "FileIO_WritePopReturn",
+    "LABEL_F47BC8": "FileIO_FlushPendingBlock",
+
+    # --- LABEL_F47BE0 - FileIO write all parts (lines ~24392-24450) ---
+    "LABEL_F47BE0": "FileIO_WriteAllPartVoices",
+    "LABEL_F47BFB": "FileIO_WritePartLoop",
+    "LABEL_F47C2D": "FileIO_WriteVoiceChainLoop",
+    "LABEL_F47C55": "FileIO_WritePartAccumulate",
+    "LABEL_F47C5D": "FileIO_WriteNextPart",
+    "LABEL_F47C69": "FileIO_WriteEpilogue",
+
+    # --- LABEL_F47C70 - SeqSave prepare (lines ~24452-24496) ---
+    "LABEL_F47C70": "SeqSave_PreparePartData",
+    "LABEL_F47C8B": "SeqSave_CopyBlockAndInit",
+    "LABEL_F47CF9": "SeqSave_AllocAndWrite",
+
+    # --- LABEL_F47D23 - SeqSave write (lines ~24514-24612) ---
+    "LABEL_F47D23": "SeqSave_WriteAndFree",
+    "LABEL_F47D4E": "SeqSave_CountBlocksLoop",
+    "LABEL_F47D86": "SeqSave_WritePartDataLoop",
+    "LABEL_F47DD6": "SeqSave_WritePartInner",
+    "LABEL_F47E28": "SeqSave_NextPartLoop",
+
+    # --- LABEL_F47E3C - SeqLoad format validation (lines ~24622-24654) ---
+    "LABEL_F47E3C": "SeqLoad_ValidateFormat",
+    "LABEL_F47E56": "SeqLoad_FormatInvalid",
+    "LABEL_F47E60": "SeqLoad_JmpLoadPre",
+    "LABEL_F47E63": "SeqLoad_JmpLoadPost",
+    "LABEL_F47E66": "SeqLoad_JmpInitPreset",
+    "LABEL_F47E69": "SeqLoad_JmpAltEntry",
+
+    # --- SeqBar_ComputeAndSetPositions area (lines ~24656-24724) ---
+    "LABEL_F47E83": "SeqBar_ClampAndStore",
+    "LABEL_F47E9D": "SeqBar_ComputeRange",
+    "LABEL_F47EAC": "SeqBar_CheckZeroRange",
+    "LABEL_F47EB8": "SeqBar_SetPositionLoop",
+    "LABEL_F47ED9": "SeqBar_LinkNextPosition",
+    "LABEL_F47EEB": "SeqBar_WriteBoundary",
+    "LABEL_F47EFF": "SeqBar_ReturnDone",
+
+    # --- LABEL_F47F01 - large .byte data block ---
+    "LABEL_F47F01": "SeqBar_DataBlock",
+
+    # --- LABEL_F47FA4 - restore part config (lines ~24749-24768) ---
+    "LABEL_F47FA4": "SeqLoad_RestorePartConfig",
+
+    # --- LABEL_F47FE1 - compute total voice size (lines ~24770-24833) ---
+    "LABEL_F47FE1": "SeqSave_ComputeVoiceSize",
+    "LABEL_F47FFB": "SeqSave_VoiceSizeInitLoop",
+    "LABEL_F47FFE": "SeqSave_VoiceSizePartLoop",
+    "LABEL_F4803E": "SeqSave_VoiceSizeChainLoop",
+    "LABEL_F4805F": "SeqSave_VoiceSizeNextPart",
+    "LABEL_F48076": "SeqSave_VoiceSizeReturn",
+
+    # --- LABEL_F4807C - read block from memory ---
+    "LABEL_F4807C": "SeqSave_ReadBlockFromMem",
+
+    # --- LABEL_F48094 - write block to file ---
+    "LABEL_F48094": "SeqSave_WriteBlockToFile",
+
+    # --- LABEL_F480AD - seek and read with buffer ---
+    "LABEL_F480AD": "FileIO_SeekReadAndCheck",
+    "LABEL_F480C7": "FileIO_SeekReadReturn",
+
+    # --- FileIO_SeekAndRead16BitValue area (lines ~24872-24895) ---
+    "LABEL_F480F6": "FileIO_Read16Return",
+
+    # --- LABEL_F480F8 - large .byte block ---
+    "LABEL_F480F8": "SeqLoad_ReadPartDataBlock",
+
+    # --- SeqLoad_CheckAutoAccompFlag area (lines ~24929-24954) ---
+    "LABEL_F48211": "SeqLoad_ClearAutoAccompBit1",
+
+    # --- SeqLoad_ProcessAllVoiceData area ---
+    "LABEL_F4821D": "SeqLoad_ProcessOuterLoop",
+    "LABEL_F48221": "SeqLoad_ProcessInnerLoop",
+    "LABEL_F48255": "SeqLoad_ProcessVoiceFound",
+    "LABEL_F4829F": "SeqLoad_ProcessNextInner",
+    "LABEL_F482CF": "SeqLoad_ProcessNextOuter",
+    "LABEL_F482FA": "SeqLoad_ProcessReturn",
+    "LABEL_F48312": "SeqLoad_ProcessCopyLoop",
 }
 
 def main():
