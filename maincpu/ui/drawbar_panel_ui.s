@@ -10529,7 +10529,7 @@ AudioCtrl_DispatchHandler:
 AudioCtrl_PageHandler:
 	ld xwa, (xsp + 82)
 	cp xwa, 0x8F
-	jrl nz, LABEL_F800F5
+	jrl nz, AudioCtrl_CheckEventF
 	incdi16_24 8, 149392
 	incdi16_24 1, 149396
 	ld16_24 xwa, 0x024790
@@ -10601,9 +10601,9 @@ AudioCtrl_SetupPartDisplay:
 	lds32 xde, 0
 	jrl PsMixer_SendEventAndForward
 
-LABEL_F800F5:
+AudioCtrl_CheckEventF:
 	ld xwa, (xsp + 82)
-LABEL_F800F8:
+AudioCtrl_HandleEventF:
 	cp xwa, 0xF
 	jrl nz, AudioCtrl_ReturnToCallerExit
 	call GetTitleNow
@@ -10612,10 +10612,10 @@ LABEL_F800F8:
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr nz, LABEL_F80168
+	jr nz, AudioCtrl_QueryTitle
 	call GetModeNow
 	cp xhl, 0x1800007
-	jr z, LABEL_F80149
+	jr z, AudioCtrl_PostMode7
 	cp xhl, 0x1800002
 	jr nz, AudioCtrl_ReturnToCallerExit
 	ld xwa, 0xFFFFFFFF
@@ -10627,7 +10627,7 @@ LABEL_F800F8:
 	ld xde, (xsp + 82)
 	jrl AudioCtrl_ProcessParamsAndReturn
 
-LABEL_F80149:
+AudioCtrl_PostMode7:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A000D6
@@ -10637,7 +10637,7 @@ LABEL_F80149:
 	ld xde, (xsp + 82)
 	jrl AudioCtrl_ProcessParamsAndReturn
 
-LABEL_F80168:
+AudioCtrl_QueryTitle:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1E00079
@@ -10663,7 +10663,7 @@ PsMixer_ControlCase6:
 	call SendEvent
 	ld iz, hl
 	cps iz, 7
-	jr gt, LABEL_F801F9
+	jr gt, PsMixer_Case6_Forward
 	ld16_24 xwa, 0x024794
 	sla wa, 3
 	add iz, wa
@@ -10676,16 +10676,16 @@ PsMixer_ControlCase6:
 	add xde, xbc
 	ld xwa, (xsp + 82)
 	bit 7, wa
-	jr z, LABEL_F801DB
+	jr z, PsMixer_Case6_ScrollDown
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1C0001A
-	jr LABEL_F801E3
+	jr PsMixer_Case6_SendScroll
 
-LABEL_F801DB:
+PsMixer_Case6_ScrollDown:
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1C00019
 
-LABEL_F801E3:
+PsMixer_Case6_SendScroll:
 	call SendEvent
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1C00027
@@ -10693,7 +10693,7 @@ LABEL_F801E3:
 	call SetAutoInc
 	jrl AudioCtrl_ReturnZero
 
-LABEL_F801F9:
+PsMixer_Case6_Forward:
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -10707,7 +10707,7 @@ PsMixer_ControlCase7:
 	call SendEvent
 	ld iz, hl
 	cps iz, 7
-	jr gt, LABEL_F80268
+	jr gt, PsMixer_Case7_Forward
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00009
 	ld xde, (xsp + 82)
@@ -10731,7 +10731,7 @@ PsMixer_ControlCase7:
 	ld xbc, 0x1C00031
 	jrl PsMixer_SendEventAndForward
 
-LABEL_F80268:
+PsMixer_Case7_Forward:
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -10777,9 +10777,9 @@ PsMixer_ControlCase8:
 	ld (xsp + 8), wa
 	ldw (xsp + 10), 0x0
 	cp hl, 0xFFFF
-	jrl z, LABEL_F80406
+	jrl z, PsMixer_UnmatchedPartScan
 
-LABEL_F802F1:
+PsMixer_MidiScanOuterLoop:
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
 	ld (xsp + 4), xhl
@@ -10875,10 +10875,10 @@ AudioCtrl_MixerLoopNext:
 	incm 1, (xsp + 8)
 	incm 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
-	jrl c, LABEL_F802F1
+	jrl c, PsMixer_MidiScanOuterLoop
 	jrl AudioCtrl_ReturnZero
 
-LABEL_F80406:
+PsMixer_UnmatchedPartScan:
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
 	ld (xsp + 4), xhl
@@ -10926,7 +10926,7 @@ AudioCtrl_ArrayReadHandler:
 	ld xbc, 0x1C0000F
 	ld xhl, (xhl)
 	call (xhl)
-	jr LABEL_F804E5
+	jr PsMixer_ScanArrayNext
 
 ; AudioCtrl dispatch callback
 AudioCtrl_DispatchCallback:
@@ -10941,7 +10941,7 @@ AudioCtrl_DispatchCallback:
 	ld xix, (xhl)
 	call (xix)
 	or xhl, xhl
-	jr z, LABEL_F804E5
+	jr z, PsMixer_ScanArrayNext
 	ld bc, (xsp + 8)
 	extz xbc
 	ld wa, iz
@@ -10959,7 +10959,7 @@ AudioCtrl_DispatchCallback:
 	ld xhl, (xhl)
 	call (xhl)
 
-LABEL_F804E5:
+PsMixer_ScanArrayNext:
 	inc 1, iz
 	incm 1, (xsp + 12)
 	cpw (xsp + 12), 0x8
@@ -10967,7 +10967,7 @@ LABEL_F804E5:
 	incm 1, (xsp + 8)
 	incm 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
-	jrl c, LABEL_F80406
+	jrl c, PsMixer_UnmatchedPartScan
 	jrl AudioCtrl_ReturnZero
 
 ; PsMixer control case 9
@@ -10995,27 +10995,27 @@ PsMixer_ControlCase9:
 	calr PsMixer_ReadWordArrayEntry
 	ldto_werp WA, 0xFA
 	cp wa, hl
-	jr nz, LABEL_F80559
+	jr nz, PsMixer_VolSel_SearchGrid
 	ld16_24 xiz, 0x024790
 	jr PsMixer_VolumeSelect_Continue
 
-LABEL_F80559:
+PsMixer_VolSel_SearchGrid:
 	ld16_24 xiz, 0x024794
 	sla iz, 3
 	ldw (xsp + 10), 0x0
 
-LABEL_F80566:
+PsMixer_VolSel_SearchLoop:
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
 	ldto_werp WA, 0xFA
 	cp wa, hl
-	jr z, LABEL_F8057E
+	jr z, PsMixer_VolSel_CheckFound
 	inc 1, iz
 	incm 1, (xsp + 10)
 	cpw (xsp + 10), 0x8
-	jr c, LABEL_F80566
+	jr c, PsMixer_VolSel_SearchLoop
 
-LABEL_F8057E:
+PsMixer_VolSel_CheckFound:
 	cpw (xsp + 10), 0x8
 	jr nz, PsMixer_VolumeSelect_Continue
 	lds iz, 0
@@ -11024,7 +11024,7 @@ LABEL_F8057E:
 	cp hl, 0xFF
 	jr z, PsMixer_VolumeSelect_Continue
 
-LABEL_F80592:
+PsMixer_VolSel_SearchFallback:
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
 	ldto_werp WA, 0xFA
@@ -11034,7 +11034,7 @@ LABEL_F80592:
 	ld wa, iz
 	calr PsMixer_ReadWordArrayEntry
 	cp hl, 0xFF
-	jr nz, LABEL_F80592
+	jr nz, PsMixer_VolSel_SearchFallback
 
 PsMixer_VolumeSelect_Continue:
 	ld wa, iz
@@ -11099,7 +11099,7 @@ PsMixer_SendEventAndForward:
 	ld_sriw3 BC, 0x07, 0xE4, 0xE0
 	ld xwa, (xsp + 82)
 	cp bc, (xwa)
-	jr nz, LABEL_F806AE
+	jr nz, PsMixer_EventFwd_Setup
 	ld xwa, (xwa + 2)
 	push xwa
 	ldto_werp WA, 0xFA
@@ -11118,7 +11118,7 @@ PsMixer_SendEventAndForward:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F806AE:
+PsMixer_EventFwd_Setup:
 	ld16_24 xwa, 0x024796
 	muls wa, 0x5
 	ld (xsp + 8), wa
@@ -11136,7 +11136,7 @@ PsMixer_EventForwardHelper:
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	ld (xsp + 14), xwa
 	cp xwa, 0x1210027
-	jr nz, LABEL_F80704
+	jr nz, PsMixer_EventFwd_Next
 	ld wa, (xde + 2)
 	sla wa, 2
 	lda_24 xbc, 0xe9f11c
@@ -11148,7 +11148,7 @@ PsMixer_EventForwardHelper:
 	call (xhl)
 	jr AudioCtrl_ReturnZero
 
-LABEL_F80704:
+PsMixer_EventFwd_Next:
 	incm 1, (xsp + 8)
 	incm 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
@@ -11166,7 +11166,7 @@ PsMixer_ControlCommon:
 
 AudioCtrl_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F80734
+	jr AudioCtrl_Epilogue
 
 ; PsMixer control return
 PsMixer_ControlReturn:
@@ -11177,7 +11177,7 @@ PsMixer_ControlReturn:
 AudioCtrl_ProcessParamsAndReturn:
 	call InheritedProc
 
-LABEL_F80734:
+AudioCtrl_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 90)
 	ret
@@ -11190,25 +11190,25 @@ AcPartMixerProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C00001
-	jr z, LABEL_F8075D
+	jr z, PartMixer_Init
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F8077B
+	jr PartMixer_Epilogue
 
-LABEL_F8075D:
+PartMixer_Init:
 	ld xwa, 0xE9F5BC
-	calr LABEL_F808CE
+	calr Util_StorePartArrayBase
 	ld xwa, 0xE9F6C0
-	calr LABEL_F808E0
+	calr Util_StoreGridArrayBase
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc
 	lds32 xhl, 0
 
-LABEL_F8077B:
+PartMixer_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -11225,27 +11225,27 @@ AcTrackMixerProc:
 	ldirw
 	ld xwa, (xsp + 46)
 	cp xwa, 0x1C0002D
-	jr z, LABEL_F80812
+	jr z, TrackMixer_UpdateHandler
 	cp xwa, 0x1C0000C
-	jr z, LABEL_F80803
+	jr z, TrackMixer_ShowHide
 	cp xwa, 0x1C0000B
-	jr z, LABEL_F80803
+	jr z, TrackMixer_ShowHide
 	cp xwa, 0x1C00001
-	jr z, LABEL_F807CC
+	jr z, TrackMixer_Init
 	ld xwa, (xsp + 50)
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
 	call InheritedProc
-	jrl LABEL_F80866
+	jrl TrackMixer_Epilogue
 
-LABEL_F807CC:
+TrackMixer_Init:
 	ld xwa, 0xE9F700
-	calr LABEL_F808CE
+	calr Util_StorePartArrayBase
 	ld xwa, 0x3EBE8
-	calr LABEL_F808E0
+	calr Util_StoreGridArrayBase
 	lds iz, 0
 
-LABEL_F807DE:
+TrackMixer_InitPartLoop:
 	ld de, iz
 	exts xde
 	ld xwa, 0x140000A
@@ -11253,22 +11253,22 @@ LABEL_F807DE:
 	call MainFuncCall
 	inc 1, iz
 	cp iz, 0xF
-	jr le, LABEL_F807DE
+	jr le, TrackMixer_InitPartLoop
 	ld xwa, (xsp + 50)
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
-	jr LABEL_F8080C
+	jr TrackMixer_CallInherited
 
-LABEL_F80803:
+TrackMixer_ShowHide:
 	ld xwa, (xsp + 50)
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
 
-LABEL_F8080C:
+TrackMixer_CallInherited:
 	call InheritedProc
-	jr LABEL_F80864
+	jr TrackMixer_ReturnZero
 
-LABEL_F80812:
+TrackMixer_UpdateHandler:
 	ld xwa, (xsp + 50)
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
@@ -11291,16 +11291,16 @@ LABEL_F80812:
 	ld wa, (xbc)
 	ld (xhl), wa
 	cp de, 0xF
-	jr nz, LABEL_F80864
+	jr nz, TrackMixer_ReturnZero
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
 	call SendEvent
 
-LABEL_F80864:
+TrackMixer_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F80866:
+TrackMixer_Epilogue:
 	popw iz
 	lda xsp, (xsp + 52)
 	ret
@@ -11313,34 +11313,34 @@ AcResetPageProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C00001
-	jr z, LABEL_F8088F
+	jr z, ResetPage_Init
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F808B9
+	jr ResetPage_Epilogue
 
-LABEL_F8088F:
+ResetPage_Init:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x3
-	jr z, LABEL_F8089E
+	jr z, ResetPage_SendViewEvent
 	or xwa, xwa
-	jr nz, LABEL_F808AB
+	jr nz, ResetPage_CallInherited
 
-LABEL_F8089E:
+ResetPage_SendViewEvent:
 	ld xwa, xiz
 	ld xbc, 0x1E0007F
 	lds32 xde, 1
 	call SendEvent
 
-LABEL_F808AB:
+ResetPage_CallInherited:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc
 	lds32 xhl, 0
 
-LABEL_F808B9:
+ResetPage_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -11354,7 +11354,7 @@ Util_SignExtendAndDouble:
 	addda32_24 xhl, 256560
 	ret
 
-LABEL_F808CE:
+Util_StorePartArrayBase:
 	st32_24 0x03ea30, xwa
 	ret
 
@@ -11365,11 +11365,11 @@ PsMixer_ReadWordArrayEntry:
 	ld hl, (xwa)
 	ret
 
-LABEL_F808E0:
+Util_StoreGridArrayBase:
 	st32_24 0x03ea34, xwa
 	ret
 
-LABEL_F808E6:
+AudioCtrl_DataBlock:
 	.byte 0xbf, 0xea, 0x37, 0x3e, 0xbf, 0x18, 0x51, 0xe8
 	.byte 0x8e, 0xbf, 0x06, 0x31, 0xbf, 0x04, 0x32, 0x30
 	.byte 0x34, 0x00, 0x1d, 0xf3, 0x25, 0xfb, 0xee, 0x8d
@@ -12763,60 +12763,60 @@ AcDrawSettingProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x1E00050
-	jr z, LABEL_F82AEF
+	jr z, DrawCombo_CompareMatch
 	cp xwa, 0x1E00051
-	jr z, LABEL_F82AE2
+	jr z, DrawCombo_GetWidgetValue
 	cp xwa, 0x1C00007
-	jr z, LABEL_F82A8F
+	jr z, DrawCombo_CheckVisible
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
-	jr LABEL_F82ADC
+	jr DrawCombo_CallInherited
 
-LABEL_F82A8F:
+DrawCombo_CheckVisible:
 	ld xwa, xiz
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, xiz
 	call GetVisible
 	cps hl, 0
-	jr z, LABEL_F82AD4
+	jr z, DrawCombo_ForwardToBase
 	ld xwa, xiz
 	ld xbc, 0x1E00053
 	ld xde, (xsp + 8)
 	call SendEvent
 	cps hl, 0
-	jr z, LABEL_F82AD4
+	jr z, DrawCombo_ForwardToBase
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 40)
 	cp de, 0xFFFF
-	jr z, LABEL_F82AD0
+	jr z, DrawCombo_ReturnZero
 	exts xde
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001B
 	call SendEvent
 
-LABEL_F82AD0:
+DrawCombo_ReturnZero:
 	lds32 xhl, 0
 	jr AcDrawComboBox_CheckDone
 
-LABEL_F82AD4:
+DrawCombo_ForwardToBase:
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 
-LABEL_F82ADC:
+DrawCombo_CallInherited:
 	call InheritedProc
 	jr AcDrawComboBox_CheckDone
 
-LABEL_F82AE2:
+DrawCombo_GetWidgetValue:
 	ld xwa, xiz
 	call GetViewInstance
 	ld hl, (xhl + 40)
 	exts xhl
 	jr AcDrawComboBox_CheckDone
 
-LABEL_F82AEF:
+DrawCombo_CompareMatch:
 	ld xwa, xiz
 	call GetViewInstance
 	ld wa, (xhl + 40)
@@ -13114,20 +13114,20 @@ IvPageOverWriteProc:
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C0001E
-	jrl z, LABEL_F82E98
+	jrl z, DrawCombo_CloseWidget
 	cp xwa, 0x1C00035
-	jr z, LABEL_F82E4C
+	jr z, DrawCombo_InitWidget
 	cp xwa, 0x1E0003A
-	jr z, LABEL_F82E39
+	jr z, DrawCombo_GetText
 	cp xwa, 0x1C0000D
-	jr z, LABEL_F82E1F
+	jr z, DrawCombo_Paint
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jrl LABEL_F82EE8
+	jrl DrawCombo_Epilogue
 
-LABEL_F82E1F:
+DrawCombo_Paint:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -13135,9 +13135,9 @@ LABEL_F82E1F:
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
-	jrl LABEL_F82EE2
+	jrl DrawCombo_SendEvent
 
-LABEL_F82E39:
+DrawCombo_GetText:
 	pushw 0xE9
 	pushw 0xF930
 	ld xwa, (xsp + 8)
@@ -13146,7 +13146,7 @@ LABEL_F82E39:
 	inc 8, xsp
 	jrl AcDrawComboBox_Return
 
-LABEL_F82E4C:
+DrawCombo_InitWidget:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	ld xiz, xhl
@@ -13155,13 +13155,13 @@ LABEL_F82E4C:
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F82E75
+	jr z, DrawCombo_InitForward
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1C00002
 	lds32 xde, 0
 	call SendEvent
 
-LABEL_F82E75:
+DrawCombo_InitForward:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -13173,9 +13173,9 @@ LABEL_F82E75:
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1C00001
 	lds32 xde, 0
-	jr LABEL_F82EE2
+	jr DrawCombo_SendEvent
 
-LABEL_F82E98:
+DrawCombo_CloseWidget:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	ld xiz, xhl
@@ -13184,13 +13184,13 @@ LABEL_F82E98:
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F82EC1
+	jr z, DrawCombo_CloseForward
 	ld xwa, (xiz + 24)
 	ld xbc, 0x1C00002
 	lds32 xde, 5
 	call SendEvent
 
-LABEL_F82EC1:
+DrawCombo_CloseForward:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -13203,13 +13203,13 @@ LABEL_F82EC1:
 	ld xbc, 0x1C00001
 	lds32 xde, 5
 
-LABEL_F82EE2:
+DrawCombo_SendEvent:
 	call SendEvent
 
 AcDrawComboBox_Return:
 	lds32 xhl, 0
 
-LABEL_F82EE8:
+DrawCombo_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -13222,13 +13222,13 @@ AcDrawEditBoxProc:
 	ld (xsp + 8), xwa
 	call GetModeNow
 	cp xhl, 0x1800003
-	jr z, LABEL_F82F0F
+	jr z, EditBox_CheckDialEvent
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
-	jrl LABEL_F82F95
+	jrl EditBox_CallInherited2
 
-LABEL_F82F0F:
+EditBox_CheckDialEvent:
 	cp xiz, 0x1C00018
 	jr z, AcEditBox_DialApplyEvent
 	cp xiz, 0x1C0001A
@@ -13238,15 +13238,15 @@ LABEL_F82F0F:
 	cp xiz, 0x1C00019
 	jr z, AcEditBox_DialApplyEvent
 	cp xiz, 0x1C0000C
-	jr z, LABEL_F82F3F
+	jr z, EditBox_ShowHide
 	cp xiz, 0x1C0000B
-	jr nz, LABEL_F82F8D
+	jr nz, EditBox_ForwardToBase
 
-LABEL_F82F3F:
+EditBox_ShowHide:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
-	jr LABEL_F82F85
+	jr EditBox_CallInherited
 
 AcEditBox_DialApplyEvent:
 	ld xwa, (xsp + 8)
@@ -13254,7 +13254,7 @@ AcEditBox_DialApplyEvent:
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F82F7D
+	jr z, EditBox_DialForward
 	ld xwa, (xsp + 8)
 	call GetViewInstance
 	ld xwa, (xhl + 50)
@@ -13265,29 +13265,29 @@ AcEditBox_DialApplyEvent:
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call SetAutoInc
-	jr LABEL_F82F89
+	jr EditBox_ReturnZero
 
-LABEL_F82F7D:
+EditBox_DialForward:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 
-LABEL_F82F85:
+EditBox_CallInherited:
 	call InheritedProc
 
-LABEL_F82F89:
+EditBox_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F82F99
+	jr EditBox_Epilogue
 
-LABEL_F82F8D:
+EditBox_ForwardToBase:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 
-LABEL_F82F95:
+EditBox_CallInherited2:
 	call InheritedProc
 
-LABEL_F82F99:
+EditBox_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -13304,19 +13304,19 @@ LswPercDecay:
 	cp xbc, 0x1C00019
 	jrl z, Lsw_PercDecay_DialScroll
 	cp xbc, 0x1E00083
-	jr z, LABEL_F83041
+	jr z, LswPercDecay_StoreDE
 	cp xbc, 0x1E0003F
 	jr z, LswPercDecay_ReturnOne
 	cp xbc, 0x1E0003E
 	jr z, LswPercDecay_ReturnOne
 	cp xbc, 0x1E00041
-	jr z, LABEL_F8303D
+	jr z, LswPercDecay_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F83036
+	jr z, LswPercDecay_SubParam
 	cp xbc, 0x1E10002
 	jr z, LswPercDecay_ReturnOne
 	cp xbc, 0x1E10000
-	jr z, LABEL_F83023
+	jr z, LswPercDecay_PartIdLookup
 	cp xbc, 0x1E00042
 	jr nz, LswPercDecay_Return
 	ld wa, (xde + 4)
@@ -13331,7 +13331,7 @@ LswPercDecay:
 	ld xhl, xiz
 	jr LswPercDecay_PopIzRet
 
-LABEL_F83023:
+LswPercDecay_PartIdLookup:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -13343,15 +13343,15 @@ LswPercDecay_ReturnOne:
 	lds32 xhl, 1
 	jr LswPercDecay_PopIzRet
 
-LABEL_F83036:
+LswPercDecay_SubParam:
 	ld xhl, 0x2CC
 	jr LswPercDecay_PopIzRet
 
-LABEL_F8303D:
+LswPercDecay_StepSize:
 	lds32 xhl, 3
 	jr LswPercDecay_PopIzRet
 
-LABEL_F83041:
+LswPercDecay_StoreDE:
 	st16_24 0x0247c6, xde
 	jr LswPercDecay_Return
 
@@ -13382,30 +13382,30 @@ LswPercDecay_PopIzRet:
 SdpartClampSignedScrollDelta:
 	ld hl, wa
 	cps wa, 7
-	jr le, LABEL_F83088
+	jr le, SdpartClamp_CheckUpper
 	sub wa, 0x10
 
-LABEL_F83088:
+SdpartClamp_CheckUpper:
 	cps wa, 5
-	jr gt, LABEL_F83092
+	jr gt, SdpartClamp_ReturnZero
 	cp wa, 0xFFFB
-	jr ge, LABEL_F83095
+	jr ge, SdpartClamp_Apply
 
-LABEL_F83092:
+SdpartClamp_ReturnZero:
 	lds hl, 0
 	ret
 
-LABEL_F83095:
+SdpartClamp_Apply:
 	add wa, bc
 	cps wa, 5
 	ret gt
 	cp wa, 0xFFFB
 	ret lt
 	cps wa, 0
-	jr ge, LABEL_F830A9
+	jr ge, SdpartClamp_StoreResult
 	add wa, 0x10
 
-LABEL_F830A9:
+SdpartClamp_StoreResult:
 	ld hl, wa
 	ret
 
@@ -13421,19 +13421,19 @@ LswPercLevel:
 	cp xbc, 0x1C00019
 	jrl z, Lsw_PercLevel_DialScroll
 	cp xbc, 0x1E00083
-	jr z, LABEL_F83150
+	jr z, LswPercLevel_StoreDE
 	cp xbc, 0x1E0003F
 	jr z, LswPercLevel_ReturnOne
 	cp xbc, 0x1E0003E
 	jr z, LswPercLevel_ReturnOne
 	cp xbc, 0x1E00041
-	jr z, LABEL_F8314C
+	jr z, LswPercLevel_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F83145
+	jr z, LswPercLevel_SubParam
 	cp xbc, 0x1E10002
 	jr z, LswPercLevel_ReturnOne
 	cp xbc, 0x1E10000
-	jr z, LABEL_F83132
+	jr z, LswPercLevel_PartIdLookup
 	cp xbc, 0x1E00042
 	jr nz, LswPercLevel_Return
 	ld wa, (xde + 4)
@@ -13448,7 +13448,7 @@ LswPercLevel:
 	ld xhl, xiz
 	jr LswPercLevel_PopIzRet
 
-LABEL_F83132:
+LswPercLevel_PartIdLookup:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -13460,15 +13460,15 @@ LswPercLevel_ReturnOne:
 	lds32 xhl, 1
 	jr LswPercLevel_PopIzRet
 
-LABEL_F83145:
+LswPercLevel_SubParam:
 	ld xhl, 0x2CB
 	jr LswPercLevel_PopIzRet
 
-LABEL_F8314C:
+LswPercLevel_StepSize:
 	lds32 xhl, 3
 	jr LswPercLevel_PopIzRet
 
-LABEL_F83150:
+LswPercLevel_StoreDE:
 	st16_24 0x0247c8, xde
 	jr LswPercLevel_Return
 
@@ -13508,19 +13508,19 @@ LswDrawAttack:
 	cp xbc, 0x1C00019
 	jrl z, Lsw_DrawAttack_DialScroll
 	cp xbc, 0x1E00083
-	jr z, LABEL_F83231
+	jr z, LswDrawAttack_StoreDE
 	cp xbc, 0x1E0003F
 	jr z, LswDrawAttack_ReturnOne
 	cp xbc, 0x1E0003E
 	jr z, LswDrawAttack_ReturnOne
 	cp xbc, 0x1E00041
-	jr z, LABEL_F8322D
+	jr z, LswDrawAttack_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F83226
+	jr z, LswDrawAttack_SubParam
 	cp xbc, 0x1E10002
 	jr z, LswDrawAttack_ReturnOne
 	cp xbc, 0x1E10000
-	jr z, LABEL_F83213
+	jr z, LswDrawAttack_PartIdLookup
 	cp xbc, 0x1E00042
 	jr nz, LswDrawAttack_Return
 	ld wa, (xde + 4)
@@ -13535,7 +13535,7 @@ LswDrawAttack:
 	ld xhl, xiz
 	jr LswDrawAttack_PopIzRet
 
-LABEL_F83213:
+LswDrawAttack_PartIdLookup:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -13547,15 +13547,15 @@ LswDrawAttack_ReturnOne:
 	lds32 xhl, 1
 	jr LswDrawAttack_PopIzRet
 
-LABEL_F83226:
+LswDrawAttack_SubParam:
 	ld xhl, 0x294
 	jr LswDrawAttack_PopIzRet
 
-LABEL_F8322D:
+LswDrawAttack_StepSize:
 	lds32 xhl, 3
 	jr LswDrawAttack_PopIzRet
 
-LABEL_F83231:
+LswDrawAttack_StoreDE:
 	st16_24 0x0247cc, xde
 	jr LswDrawAttack_Return
 
@@ -13595,19 +13595,19 @@ LswDrawRelease:
 	cp xbc, 0x1C00019
 	jrl z, Lsw_DrawRelease_DialScroll
 	cp xbc, 0x1E00083
-	jr z, LABEL_F83312
+	jr z, LswDrawRelease_StoreDE
 	cp xbc, 0x1E0003F
 	jr z, LswDrawRelease_ReturnOne
 	cp xbc, 0x1E0003E
 	jr z, LswDrawRelease_ReturnOne
 	cp xbc, 0x1E00041
-	jr z, LABEL_F8330E
+	jr z, LswDrawRelease_StepSize
 	cp xbc, 0x1E10001
-	jr z, LABEL_F83307
+	jr z, LswDrawRelease_SubParam
 	cp xbc, 0x1E10002
 	jr z, LswDrawRelease_ReturnOne
 	cp xbc, 0x1E10000
-	jr z, LABEL_F832F4
+	jr z, LswDrawRelease_PartIdLookup
 	cp xbc, 0x1E00042
 	jr nz, LswDrawRelease_Return
 	ld wa, (xde + 4)
@@ -13622,7 +13622,7 @@ LswDrawRelease:
 	ld xhl, xiz
 	jr LswDrawRelease_PopIzRet
 
-LABEL_F832F4:
+LswDrawRelease_PartIdLookup:
 	add xde, xde
 	ld xwa, 0xE953CE
 	add xwa, xde
@@ -13634,15 +13634,15 @@ LswDrawRelease_ReturnOne:
 	lds32 xhl, 1
 	jr LswDrawRelease_PopIzRet
 
-LABEL_F83307:
+LswDrawRelease_SubParam:
 	ld xhl, 0x293
 	jr LswDrawRelease_PopIzRet
 
-LABEL_F8330E:
+LswDrawRelease_StepSize:
 	lds32 xhl, 3
 	jr LswDrawRelease_PopIzRet
 
-LABEL_F83312:
+LswDrawRelease_StoreDE:
 	st16_24 0x0247ca, xde
 	jr LswDrawRelease_Return
 
