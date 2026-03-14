@@ -161,7 +161,7 @@ SeqStep_EventProcess:
 	ldmw2 (xsp + 4), 0x2666
 	ldmm16 10415, 10044
 	ldmm16 9830, 10046
-	call LABEL_F3F799
+	call SeqPos_DecrementAndCheck
 	ldada xbc, 10288
 	ldda16 xwa, 10415
 	ld (xbc), wa

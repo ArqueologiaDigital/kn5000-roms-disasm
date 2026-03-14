@@ -6142,7 +6142,7 @@ SeqReassign_PartShiftDone:
 	jr z, SeqReassign_ProcessAndDecrement
 	ldto_berp A, 0xFB
 	extz wa
-	call LABEL_F3F469
+	call Part_ClearAndStealSingleVoice
 	ldto_berp A, 0xFB
 	extz wa
 	dec 1, a
@@ -11381,17 +11381,17 @@ SeqPosAdv_Return:
 	cpw (xsp + 10), 0xFFFF
 	jrl z, PartCtrl_IncrAndLoop
 
-LABEL_F3F1DA:
+PartCtrl_CompareWordValues:
 	cpw (xsp + 10), 0x1
-	jr z, LABEL_F3F1E9
+	jr z, PartCtrl_SetupLinkedCopy
 	cpw (xsp + 10), 0x2
 	jrl nz, PartCtrl_ReadWordCheck
 
-LABEL_F3F1E9:
+PartCtrl_SetupLinkedCopy:
 	ld (xsp + 14), 0x1
 	ldmw2 (xsp + 12), 0xF22F
 	cpw (xsp + 12), 0x1
-	jr nz, LABEL_F3F209
+	jr nz, PartCtrl_CheckValue2
 
 PartCtrl_SkipLinkedEntries:
 	ld wa, (xsp + 12)
@@ -11400,7 +11400,7 @@ PartCtrl_SkipLinkedEntries:
 	cpw (xsp + 12), 0x1
 	jr z, PartCtrl_SkipLinkedEntries
 
-LABEL_F3F209:
+PartCtrl_CheckValue2:
 	cpw (xsp + 12), 0x2
 	jr z, PartCtrl_SkipLinkedEntries
 	ld wa, (xsp + 12)
@@ -11424,7 +11424,7 @@ LABEL_F3F209:
 	sll xhl, 8
 	lds de, 0
 
-LABEL_F3F242:
+PartCtrl_CopyBlockLoop:
 	ld wa, de
 	extz xwa
 	ld xbc, xwa
@@ -11436,17 +11436,17 @@ LABEL_F3F242:
 	ld (xbc), a
 	inc 1, de
 	cp de, 0x100
-	jr c, LABEL_F3F242
+	jr c, PartCtrl_CopyBlockLoop
 	ld wa, (xsp + 10)
 	calr PartCtrl_ReadWord_Off1
 	ld wa, hl
 	cps wa, 0
-	jr z, LABEL_F3F270
+	jr z, PartCtrl_UpdateVoiceWord
 	ld bc, (xsp + 12)
 	calr PartCtrl_WriteWord
-	jr LABEL_F3F299
+	jr PartCtrl_ReadAndRelinkNext
 
-LABEL_F3F270:
+PartCtrl_UpdateVoiceWord:
 	ld a, (xsp + 8)
 	extz wa
 	ld c, (xsp + 6)
@@ -11456,24 +11456,24 @@ LABEL_F3F270:
 	ld a, (xsp + 8)
 	dec 1, a
 	cpda8_24 a, 65507
-	jr nz, LABEL_F3F299
+	jr nz, PartCtrl_ReadAndRelinkNext
 	ld c, (xsp + 6)
 	extz bc
 	lds wa, 0
 	ld de, (xsp + 12)
 	calr Part_WriteVoiceWord
 
-LABEL_F3F299:
+PartCtrl_ReadAndRelinkNext:
 	ld wa, (xsp + 10)
 	calr PartCtrl_ReadWord
 	ld wa, hl
 	cp wa, 0xFFFF
-	jr z, LABEL_F3F2AF
+	jr z, PartCtrl_WriteIndexedAndCheck
 	ld bc, (xsp + 12)
 	calr PartCtrl_WriteWord_Off1
 	jr PartCtrl_ReadWordCheck
 
-LABEL_F3F2AF:
+PartCtrl_WriteIndexedAndCheck:
 	ld a, (xsp + 8)
 	extz wa
 	ld c, (xsp + 6)
@@ -11495,7 +11495,7 @@ PartCtrl_ReadWordCheck:
 	calr PartCtrl_ReadWord
 	ld (xsp + 10), hl
 	cpw (xsp + 10), 0xFFFF
-	jrl nz, LABEL_F3F1DA
+	jrl nz, PartCtrl_CompareWordValues
 
 PartCtrl_IncrAndLoop:
 	incm8 1, (xsp + 6)
@@ -11505,7 +11505,7 @@ PartCtrl_IncrAndLoop:
 	cp (xsp + 8), 0xA
 	jrl ule, SeqPosAdv_CheckEndMark
 	cp (xsp + 14), 0x1
-	jr nz, LABEL_F3F345
+	jr nz, PartCtrl_CheckUnlinkFlag
 	lds wa, 1
 	lds bc, 1
 	calr PartCtrl_SetClearBit7
@@ -11532,18 +11532,18 @@ PartCtrl_IncrAndLoop:
 	lds bc, 5
 	ldw de, 0x82
 	calr PartCtrl_WriteByteToBuf
-	jr LABEL_F3F355
+	jr PartCtrl_DeallocReturn
 
-LABEL_F3F345:
+PartCtrl_CheckUnlinkFlag:
 	cpdi16 61999, 1
-	jr nz, LABEL_F3F352
+	jr nz, PartCtrl_DeallocVoices
 	calr Part_UnlinkVoiceFromChain
-	jr LABEL_F3F355
+	jr PartCtrl_DeallocReturn
 
-LABEL_F3F352:
+PartCtrl_DeallocVoices:
 	calr Part_DeallocVoices1And2
 
-LABEL_F3F355:
+PartCtrl_DeallocReturn:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -11554,50 +11554,50 @@ Part_ReleaseVoicesForRange:
 	ld (xsp + 10), c
 	ld (xsp + 12), a
 	cp (xsp + 12), 0xB
-	jr nz, LABEL_F3F373
+	jr nz, PartRelRange_SetCurrentMode
 	ldi_berp 0xFB, 0
 	ld (xsp + 4), 0xA
-	jr LABEL_F3F37C
+	jr PartRelRange_CheckAllParts
 
-LABEL_F3F373:
+PartRelRange_SetCurrentMode:
 	ld a, (xsp + 12)
 	ldfr_berp A, 0xFB
 	ld (xsp + 4), a
 
-LABEL_F3F37C:
+PartRelRange_CheckAllParts:
 	cp (xsp + 10), 0x32
-	jr nz, LABEL_F3F38C
+	jr nz, PartRelRange_SetSinglePart
 	ld (xsp + 6), 0x1
 	ld (xsp + 8), 0x10
-	jr LABEL_F3F395
+	jr PartRelRange_CheckInitChain
 
-LABEL_F3F38C:
+PartRelRange_SetSinglePart:
 	ld a, (xsp + 10)
 	ld (xsp + 6), a
 	ld (xsp + 8), a
 
-LABEL_F3F395:
+PartRelRange_CheckInitChain:
 	cp (xsp + 12), 0xB
-	jr nz, LABEL_F3F3AE
+	jr nz, PartRelRange_OuterLoop
 	cp (xsp + 10), 0x32
-	jr nz, LABEL_F3F3AE
+	jr nz, PartRelRange_OuterLoop
 	calr PartCtrl_InitChainLinkedList
 	sti16_24 0x00ffec, 0x0000
 	calr Part_UnlinkVoiceFromChain
 
-LABEL_F3F3AE:
+PartRelRange_OuterLoop:
 	ldto_berp A, 0xFB
 	ldto_berp A, 0xFB
 	cp a, (xsp + 4)
-	jrl ugt, LABEL_F3F456
+	jrl ugt, PartRelRange_OuterNext
 
-LABEL_F3F3BA:
+PartRelRange_InnerLoop:
 	ld a, (xsp + 6)
 	ldfr_berp A, 0xFA
 	cp a, (xsp + 8)
-	jrl ugt, LABEL_F3F44A
+	jrl ugt, PartRelRange_InnerNext
 
-LABEL_F3F3C6:
+PartRelRange_ClearAndWrite:
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xFA
@@ -11629,15 +11629,15 @@ LABEL_F3F3C6:
 	lds de, 5
 	calr Part_WriteByte_Indexed
 	cp (xsp + 12), 0xB
-	jr nz, LABEL_F3F41F
+	jr nz, PartRelRange_StealVoices
 	cp (xsp + 10), 0x32
-	jr z, LABEL_F3F424
+	jr z, PartRelRange_WriteDefaults
 
-LABEL_F3F41F:
+PartRelRange_StealVoices:
 	ld wa, iz
 	calr Part_StealAndReallocVoices
 
-LABEL_F3F424:
+PartRelRange_WriteDefaults:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x1C
@@ -11651,15 +11651,15 @@ LABEL_F3F424:
 	inc1_berp 0xFA
 	ldto_berp A, 0xFA
 	cp a, (xsp + 8)
-	jrl ule, LABEL_F3F3C6
+	jrl ule, PartRelRange_ClearAndWrite
 
-LABEL_F3F44A:
+PartRelRange_InnerNext:
 	inc1_berp 0xFB
 	ldto_berp A, 0xFB
 	cp a, (xsp + 4)
-	jrl ule, LABEL_F3F3BA
+	jrl ule, PartRelRange_InnerLoop
 
-LABEL_F3F456:
+PartRelRange_OuterNext:
 	pushw 0x1
 	ldw wa, 0x91
 	lds bc, 3
@@ -11669,7 +11669,7 @@ LABEL_F3F456:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_F3F469:
+Part_ClearAndStealSingleVoice:
 	dec 4, xsp
 	ld (xsp + 2), a
 	ld c, (xsp + 2)
@@ -11768,33 +11768,33 @@ SeqParams_InitDefaults:
 
 Seq_ValidatePartNumber:
 	cps a, 1
-	jr c, LABEL_F3F60E
+	jr c, SeqValidate_PartFail
 	cpda8 a, 10401
-	jr ule, LABEL_F3F612
+	jr ule, SeqValidate_PartOK
 
-LABEL_F3F60E:
+SeqValidate_PartFail:
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F3F612:
+SeqValidate_PartOK:
 	lds hl, 0
 	ret
 
 Seq_ValidateTempoValue:
 	cps wa, 1
-	jr c, LABEL_F3F61F
+	jr c, SeqValidate_TempoFail
 	cp wa, 0x3E7
-	jr ule, LABEL_F3F623
+	jr ule, SeqValidate_TempoOK
 
-LABEL_F3F61F:
+SeqValidate_TempoFail:
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F3F623:
+SeqValidate_TempoOK:
 	lds hl, 0
 	ret
 
-LABEL_F3F626:
+Seq_ValidateAllParams_DataBlock:
 	ldda8	a, 10359
 	cp	a, 127
 	jr	z, 22
@@ -11824,10 +11824,10 @@ LABEL_F3F626:
 	lds	hl, 0
 	ret
 
-LABEL_F3F66D:
+Seq_ValidatePartAndTempo:
 	ldda8 a, 10359
 	cp a, 0x7F
-	jr z, LABEL_F3F68C
+	jr z, SeqValPT_CheckTempoValues
 	extz wa
 	calr Seq_ValidatePartNumber
 	cps hl, 0
@@ -11838,7 +11838,7 @@ LABEL_F3F66D:
 	cps hl, 0
 	jr nz, Seq_TempoValidationFailReturn
 
-LABEL_F3F68C:
+SeqValPT_CheckTempoValues:
 	ldda16 xwa, 9778
 	calr Seq_ValidateTempoValue
 	cps hl, 0
@@ -11850,26 +11850,26 @@ LABEL_F3F68C:
 	ldda16 xwa, 9862
 	calr Seq_ValidateTempoValue
 	cps hl, 0
-	jr z, LABEL_F3F6B1
+	jr z, SeqValPT_ReturnOK
 
 Seq_TempoValidationFailReturn:
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F3F6B1:
+SeqValPT_ReturnOK:
 	lds hl, 0
 	ret
 
-LABEL_F3F6B4:
+Seq_ValidatePartTempoAndKey:
 	ldda8 a, 10359
 	cp a, 0x7F
-	jr z, LABEL_F3F6C6
+	jr z, SeqValPTK_CheckTempo
 	extz wa
 	calr Seq_ValidatePartNumber
 	cps hl, 0
 	ret nz
 
-LABEL_F3F6C6:
+SeqValPTK_CheckTempo:
 	ldda16 xwa, 9778
 	calr Seq_ValidateTempoValue
 	cps hl, 0
@@ -11881,29 +11881,29 @@ LABEL_F3F6C6:
 	ldda8 a, 9726
 	extz wa
 	cps wa, 0
-	jr mi, LABEL_F3F6EC
+	jr mi, SeqValPTK_ClampKeyValue
 	cp wa, 0xC
-	jr le, LABEL_F3F6EF
+	jr le, SeqValPTK_LookupAndReturn
 
-LABEL_F3F6EC:
+SeqValPTK_ClampKeyValue:
 	ldw wa, 0xD
 
-LABEL_F3F6EF:
+SeqValPTK_LookupAndReturn:
 	lda_24 xix, 0xe445f2
 	ld_srib3 L, 0x07, 0xF0, 0xE0
 	exts hl
 	ret
 
-LABEL_F3F6FC:
+Seq_ValidatePartTempoAndMode:
 	ldda8 a, 10359
 	cp a, 0x7F
-	jr z, LABEL_F3F70E
+	jr z, SeqValPTM_CheckTempo
 	extz wa
 	calr Seq_ValidatePartNumber
 	cps hl, 0
 	jr nz, SeqPart_ErrorReturnFFFF
 
-LABEL_F3F70E:
+SeqValPTM_CheckTempo:
 	ldda16 xwa, 9778
 	calr Seq_ValidateTempoValue
 	cps hl, 0
@@ -11928,34 +11928,34 @@ SeqPart_SuccessReturn:
 	lds hl, 0
 	ret
 
-LABEL_F3F73B:
+Seq_ValidatePartAndTempoAlt:
 	ldda8 a, 10359
 	cp a, 0x11
-	jr z, LABEL_F3F74D
+	jr z, SeqValPTA_CheckTempo
 	extz wa
 	calr Seq_ValidatePartNumber
 	cps hl, 0
-	jr nz, LABEL_F3F763
+	jr nz, SeqValPTA_FailReturn
 
-LABEL_F3F74D:
+SeqValPTA_CheckTempo:
 	ldda16 xwa, 9778
 	calr Seq_ValidateTempoValue
 	cps hl, 0
-	jr nz, LABEL_F3F763
+	jr nz, SeqValPTA_FailReturn
 	ldda16 xwa, 9694
 	calr Seq_ValidateTempoValue
 	cps hl, 0
-	jr z, LABEL_F3F767
+	jr z, SeqValPTA_OKReturn
 
-LABEL_F3F763:
+SeqValPTA_FailReturn:
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F3F767:
+SeqValPTA_OKReturn:
 	lds hl, 0
 	ret
 
-LABEL_F3F76A:
+Seq_ValidateExtended_DataBlock:
 	ldda8	a, 10359
 	cp	a, 127
 	jr	z, 9
@@ -11976,7 +11976,7 @@ LABEL_F3F76A:
 	lds	hl, 0
 	ret
 
-LABEL_F3F799:
+SeqPos_DecrementAndCheck:
 	dec 2, xsp
 	push xiz
 	ldda16 xwa, 10415
@@ -11986,48 +11986,48 @@ LABEL_F3F799:
 	dec 1, wa
 	stda16 9830, xwa
 	cps wa, 5
-	jr nc, LABEL_F3F809
+	jr nc, SeqPosDec_Return
 	ldda16 xwa, 10415
 	calr PartCtrl_ReadWord_Off1
 	ld iz, hl
 	cps iz, 0
-	jr z, LABEL_F3F7C7
+	jr z, SeqPosDec_HandleInvalid
 	cp iz, 0x4D8
-	jr ule, LABEL_F3F7DD
+	jr ule, SeqPosDec_TestBit7
 
-LABEL_F3F7C7:
+SeqPosDec_HandleInvalid:
 	stdi8 10362, 10
 	ldto_werp WA, 0xFA
 	stda16 10415, xwa
 	mrdw5 0x9F, 0x04, 0x19, 0x66, 0x26
 	ldw wa, 0x50
-	jr LABEL_F3F7FA
+	jr SeqPosDec_SetErrorCode
 
-LABEL_F3F7DD:
+SeqPosDec_TestBit7:
 	ld wa, iz
 	calr PartCtrl_TestBit7
 	cps l, 0
-	jr nz, LABEL_F3F7FF
+	jr nz, SeqPosDec_StorePosition
 	stdi8 10362, 11
 	ldto_werp WA, 0xFA
 	stda16 10415, xwa
 	mrdw5 0x9F, 0x04, 0x19, 0x66, 0x26
 	ldw wa, 0x51
 
-LABEL_F3F7FA:
+SeqPosDec_SetErrorCode:
 	calr SeqData_SetErrorCode
-	jr LABEL_F3F809
+	jr SeqPosDec_Return
 
-LABEL_F3F7FF:
+SeqPosDec_StorePosition:
 	stda16 10415, xiz
 	stdi16 9830, 255
 
-LABEL_F3F809:
+SeqPosDec_Return:
 	pop xiz
 	inc 2, xsp
 	ret
 
-LABEL_F3F80D:
+SeqPos_DataBlock:
 	.byte 0xd7, 0xfa, 0x04, 0xc1, 0x78, 0x28, 0x21, 0xc7
 	.byte 0xfb, 0x99, 0xc2, 0xe3, 0xff, 0x00, 0x19, 0x78
 	.byte 0x28, 0x1d, 0x66, 0x9a, 0xf4, 0xc7, 0xfb, 0x89
@@ -12038,16 +12038,16 @@ LABEL_F3F80D:
 	.byte 0x07, 0xc1, 0x33, 0x04, 0x19, 0x5a, 0x26, 0x0e
 	.byte 0xc1, 0x8e, 0x28, 0x19, 0x5a, 0x26, 0x0e
 
-LABEL_F3F854:
+Seq_ValidatePartTempoAndRange:
 	ldda8 a, 10359
 	cp a, 0x11
-	jr z, LABEL_F3F866
+	jr z, SeqValPTR_CheckTempo
 	extz wa
 	calr Seq_ValidatePartNumber
 	cps hl, 0
 	jr nz, Seq_ValidationFailReturn
 
-LABEL_F3F866:
+SeqValPTR_CheckTempo:
 	ldda16 xwa, 9778
 	calr Seq_ValidateTempoValue
 	cps hl, 0
@@ -12059,17 +12059,17 @@ LABEL_F3F866:
 	cpdi8 9750, 127
 	jr ugt, Seq_ValidationFailReturn
 	cpdi8 9816, 127
-	jr ule, LABEL_F3F88E
+	jr ule, SeqValRange_CheckBounds
 
 Seq_ValidationFailReturn:
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F3F88E:
+SeqValRange_CheckBounds:
 	lds hl, 0
 	ret
 
-LABEL_F3F891:
+SeqValRange_ReturnOK:
 	.byte 0xd7, 0xfa, 0x04, 0xc1, 0x78, 0x28, 0x21, 0xc7
 	.byte 0xfb, 0x99, 0xc1, 0x2a, 0x27, 0x19, 0x78, 0x28
 	.byte 0x1e, 0x0b, 0x00, 0xc7, 0xfb, 0x89, 0xf1, 0x78
@@ -12083,25 +12083,25 @@ SeqVoice_InitAllChannelParams:
 	stdi8 10359, 1
 	ldda8 a, 10360
 	cpda8_24 a, 65507
-	jr nz, LABEL_F3F8CF
+	jr nz, SeqDispatch_ValidateParam
 	ldi_berp 0xFB, 0
-	jr LABEL_F3F8D4
+	jr SeqDispatch_ParamFail
 
-LABEL_F3F8CF:
+SeqDispatch_ValidateParam:
 	inc 1, a
 	ldfr_berp A, 0xFB
 
-LABEL_F3F8D4:
+SeqDispatch_ParamFail:
 	ldi_berp 0xF9, 1
 
-LABEL_F3F8D7:
+SeqDispatch_ParamOK:
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xF9
 	extz bc
 	calr Part_ReadVoiceBit7
 	cps l, 0
-	jr z, LABEL_F3F900
+	jr z, SeqTempo_CheckAndClamp
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xF9
@@ -12111,13 +12111,13 @@ LABEL_F3F8D7:
 	cp wa, 0xFFFF
 	call_24 nz, 0xF41F7C
 
-LABEL_F3F900:
+SeqTempo_CheckAndClamp:
 	inc1_berp 0xF9
 	cp_erpb 0xF9, 0x10
-	jr ule, LABEL_F3F8D7
+	jr ule, SeqDispatch_ParamOK
 	ldi_berp 0xF9, 1
 
-LABEL_F3F90C:
+SeqTempo_ClampedReturn:
 	ldda8 a, 10360
 	inc 1, a
 	extz wa
@@ -12134,10 +12134,10 @@ LABEL_F3F90C:
 	calr Part_WriteByte_Indexed
 	inc1_berp 0xF9
 	cp_erpb 0xF9, 0x10
-	jr ule, LABEL_F3F90C
+	jr ule, SeqTempo_ClampedReturn
 	ldi_berp 0xF9, 1
 
-LABEL_F3F93D:
+SeqTempo_ApplyAndReturn:
 	ldda8 a, 10360
 	inc 1, a
 	extz wa
@@ -12154,7 +12154,7 @@ LABEL_F3F93D:
 	calr Part_WriteVoiceWord
 	inc1_berp 0xF9
 	cp_erpb 0xF9, 0x10
-	jr ule, LABEL_F3F93D
+	jr ule, SeqTempo_ApplyAndReturn
 	ldda8 a, 10360
 	inc 1, a
 	extz wa
@@ -12175,7 +12175,7 @@ LABEL_F3F93D:
 	calr Part_WriteByte
 	ldda8 a, 10360
 	cpda8_24 a, 65507
-	jr nz, LABEL_F3FA0C
+	jr nz, SeqBufPos_HandleOverflow
 	stdi16 61854, 0
 	call Audio_CheckSubsystemReady
 	sti16_24 0x00ffec, 0x0000
@@ -12183,7 +12183,7 @@ LABEL_F3F93D:
 	stdi8 62027, 0
 	ldi_berp 0xF9, 1
 
-LABEL_F3F9C5:
+SeqBufPos_UpdateAndSync:
 	ldto_berp C, 0xF9
 	extz bc
 	lds wa, 0
@@ -12196,10 +12196,10 @@ LABEL_F3F9C5:
 	calr Part_WriteByte_Indexed
 	inc1_berp 0xF9
 	cp_erpb 0xF9, 0x10
-	jr ule, LABEL_F3F9C5
+	jr ule, SeqBufPos_UpdateAndSync
 	ldi_berp 0xF9, 1
 
-LABEL_F3F9EA:
+SeqBufPos_CheckLimit:
 	ldto_berp C, 0xF9
 	extz bc
 	lds wa, 0
@@ -12212,19 +12212,19 @@ LABEL_F3F9EA:
 	calr Part_WriteVoiceWord
 	inc1_berp 0xF9
 	cp_erpb 0xF9, 0x10
-	jr ule, LABEL_F3F9EA
+	jr ule, SeqBufPos_CheckLimit
 
-LABEL_F3FA0C:
+SeqBufPos_HandleOverflow:
 	ldto_berp A, 0xFA
 	stda8 10359, a
 	pop xiz
 	ret
 
-LABEL_F3FA15:
+SeqBufPos_WrapAround:
 	push_werp 0xFA
 	ldi_berp 0xFB, 1
 
-LABEL_F3FA1B:
+SeqBufPos_StoreResult:
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x1C
@@ -12232,7 +12232,7 @@ LABEL_F3FA1B:
 	calr Part_WriteWord
 	ldi_berp 0xFA, 1
 
-LABEL_F3FA2B:
+SeqBufPos_Return:
 	ldto_berp A, 0xFB
 	extz wa
 	ldto_berp C, 0xFA
@@ -12259,7 +12259,7 @@ LABEL_F3FA2B:
 	calr Part_WriteByte_Indexed
 	inc1_berp 0xFA
 	cp_erpb 0xFA, 0x10
-	jr ule, LABEL_F3FA2B
+	jr ule, SeqBufPos_Return
 	ldto_berp A, 0xFB
 	extz wa
 	ldw bc, 0x1E
@@ -12272,7 +12272,7 @@ LABEL_F3FA2B:
 	calr Part_WriteByte
 	inc1_berp 0xFB
 	cp_erpb 0xFB, 0x0A
-	jr ule, LABEL_F3FA1B
+	jr ule, SeqBufPos_StoreResult
 	stdi16 61854, 0
 	sti16_24 0x00ffec, 0x0000
 	call Audio_CheckSubsystemReady
@@ -12283,7 +12283,7 @@ LABEL_F3FA2B:
 	pop_werp 0xFA
 	ret
 
-LABEL_F3FABF:
+SeqAccPlay_InitAndDispatch:
 	ldda8 a, 10359
 	extz wa
 	calr Seq_ValidatePartNumber
@@ -12300,13 +12300,13 @@ LABEL_F3FABF:
 	extz wa
 	calr Seq_ValidatePartNumber
 	cps hl, 0
-	jr z, LABEL_F3FAF0
+	jr z, SeqAccPlay_Return
 
 SeqPart_ErrorReturn:
 	ldw hl, 0xFFFF
 	ret
 
-LABEL_F3FAF0:
+SeqAccPlay_Return:
 	lds hl, 0
 	ret
 
@@ -27654,7 +27654,7 @@ SeqVoice_InitEntry:
 	call SeqVoice_SetDefaultParams
 	cpdi8 10360, 10
 	jr nz, LABEL_F49A85
-	call LABEL_F3FA15
+	call SeqBufPos_WrapAround
 	stdi16 61852, 0
 	call Part_ClearAllVoiceChannels
 	jrl LABEL_F49B23
@@ -28279,7 +28279,7 @@ SeqPart_ValidateLeftCore:
 
 SeqPart_InitWithValidation:
 	call SeqVoice_SetDefaultParams
-	call LABEL_F3FABF
+	call SeqAccPlay_InitAndDispatch
 	cps hl, 0
 	jr z, SeqPart_InitValidOk
 	stdi8 10362, 3
@@ -28556,7 +28556,7 @@ SeqPart_ByteBlockA207:
 SeqPart_SinglePartLoad:
 	push_werp 0xFA
 	call SeqVoice_SetDefaultParams
-	call LABEL_F3F6FC
+	call Seq_ValidatePartTempoAndMode
 	cps hl, 0
 	jr z, SeqPart_SingleLoadCheckType
 	stdi8 10362, 3
@@ -29493,7 +29493,7 @@ SeqPart_DualPartLoad:
 	resda 0, 10397
 	resda 2, 10397
 	call SeqVoice_SetDefaultParams
-	call LABEL_F3F66D
+	call Seq_ValidatePartAndTempo
 	cps hl, 0
 	jr z, SeqPart_DualLoadSetup
 	stdi8 10362, 3
@@ -31008,7 +31008,7 @@ SeqPart_TransposePopReturn:
 SeqPart_VelocityEditSetup:
 	push_werp 0xFA
 	call SeqVoice_SetDefaultParams
-	call LABEL_F3F6B4
+	call Seq_ValidatePartTempoAndKey
 	cps hl, 0
 	jr z, SeqPart_VelEditCheck
 	stdi8 10362, 3
@@ -31755,7 +31755,7 @@ SeqPart_InnerReturn:
 SeqPart_PartVoiceCheck:
 	push_werp 0xFA
 	call SeqVoice_SetDefaultParams
-	call LABEL_F3F854
+	call Seq_ValidatePartTempoAndRange
 	cps hl, 0
 	jr z, SeqPart_VoiceCheckCompare
 	stdi8 10362, 3
@@ -31937,7 +31937,7 @@ SeqPart_VoiceCheckModeB:
 	push_werp 0xFA
 	call SeqVoice_SetDefaultParams
 	stdi8 10362, 0
-	call LABEL_F3F73B
+	call Seq_ValidatePartAndTempoAlt
 	cps hl, 0
 	jr z, SeqPart_VoiceCheckModeC
 	stdi8 10362, 3
