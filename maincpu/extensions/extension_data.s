@@ -1,5 +1,5 @@
 LABEL_ED0008:
-	.long LABEL_F400ED
+	.long SeqVoice_ValidateState_StoreChannel
 	.byte 0xed, 0x00, 0xee, 0x00
 	.long LABEL_E800ED
 	.long LABEL_E200ED
