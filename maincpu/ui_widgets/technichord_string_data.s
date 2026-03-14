@@ -1217,7 +1217,8 @@ LABEL_E9B634:	aligned_string "ERROR 55"
 	.asciz "e Melodie, die Sie zu laden versuchten, übersteigt die verfügbare Speicherkapazität des Modells KN3000, und kann daher nicht geladen werden. Der Inhalt des gewählten Melodiespeichers wurde gelöscht. "
 	aligned_string "The song that you have tried to load exceeds the KN5000's available memory and cannot be loaded. The selected song memory has been cleared. "
 	.byte 0x9e, 0xc4
-	.byte 0xe9, 0x00, 0xf2, 0xc3, 0xe9, 0x00, 0x4a, 0xc3
+	.byte 0xe9, 0x00, 0xf2
+	and	c, (xde+18944)
 	.byte 0xe9, 0x00, 0x9e, 0xc2, 0xe9, 0x00, 0x94, 0xc2
 	.byte 0xe9, 0x00, 0x8e, 0xc2, 0xe9, 0x00, 0x95, 0x73
 	.byte 0x97, 0x76, 0x00, 0xff
@@ -1289,7 +1290,8 @@ LABEL_E9D04A:	aligned_string "Cette configuration Bitmap n'est pas au bon format
 LABEL_E9D0E0:	.asciz "Das Format dieses Bitmaps kann vom SX-KN5000 nicht geladen werden. Lesen Sie die Bedienungsanleitung für weitere Informationen."
 	aligned_string "This Bitmap is in the wrong format for the KN5000 and cannot be loaded. See the Owners Manual for more details. "
 LABEL_E9D1D2:
-	.byte 0x0a, 0xd3, 0xe9, 0x00, 0xb6, 0xd2
+	.byte 0x0a
+	xor	de, (xde-18944)
 	.byte 0xe9, 0x00, 0x66, 0xd2, 0xe9, 0x00, 0x28, 0xd2
 	.byte 0xe9, 0x00, 0x1e, 0xd2, 0xe9, 0x00, 0xea, 0xd1
 	.byte 0xe9, 0x00
