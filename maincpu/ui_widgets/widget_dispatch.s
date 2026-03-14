@@ -7293,7 +7293,7 @@ SystemConfig_PointerTable:
 	.long EffectMode_DispatchTable
 	.long SoundParam_EncoderMappingData
 	.long LABEL_EED3DE
-	.long LABEL_E44636
+	.long WidgetData_CharsetMappingTable
 	.long SeqByteBlock_DispatchJumpTable
 	jr	t, 0xf0
 	.byte 0xf6, 0x00, 0x07, 0xe9, 0xf5, 0x00, 0x7d, 0xd5

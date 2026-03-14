@@ -84,58 +84,58 @@
 	.byte 0xe3, 0x00, 0xb0, 0x2c, 0xe3, 0x00, 0x9e, 0x2c
 	.byte 0xe3, 0x00, 0x8c, 0x2c, 0xe3, 0x00, 0x7a, 0x2c
 	.byte 0xe3, 0x00
-LABEL_E32C7A:	aligned_string "   ----------   "
-LABEL_E32C8C:	aligned_string "   ----------   "
-LABEL_E32C9E:	aligned_string "   ----------   "
-LABEL_E32CB0:	aligned_string "   ----------   "
-LABEL_E32CC2:	aligned_string "   ----------   "
-LABEL_E32CD4:	aligned_string "   ----------   "
-LABEL_E32CE6:	aligned_string "   ----------   "
-LABEL_E32CF8:	aligned_string "   ----------   "
-LABEL_E32D0A:	aligned_string "   ----------   "
-LABEL_E32D1C:	aligned_string "   ----------   "
-LABEL_E32D2E:	aligned_string "   ----------   "
-LABEL_E32D40:	aligned_string "   ----------   "
-LABEL_E32D52:	aligned_string "   ----------   "
-LABEL_E32D64:	aligned_string "   ----------   "
-LABEL_E32D76:	aligned_string "   ----------   "
-LABEL_E32D88:	aligned_string "   ----------   "
-LABEL_E32D9A:	aligned_string "   ----------   "
-LABEL_E32DAC:	aligned_string "   ----------   "
-LABEL_E32DBE:	aligned_string "   ----------   "
-LABEL_E32DD0:	aligned_string "   ----------   "
-LABEL_E32DE2:	aligned_string "   ----------   "
-LABEL_E32DF4:	aligned_string "   ----------   "
-LABEL_E32E06:	aligned_string "   ----------   "
-LABEL_E32E18:	aligned_string "   ----------   "
-LABEL_E32E2A:	aligned_string "   ----------   "
-LABEL_E32E3C:	aligned_string "   ----------   "
-LABEL_E32E4E:	aligned_string "   ----------   "
-LABEL_E32E60:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_00:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_01:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_02:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_03:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_04:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_05:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_06:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_07:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_08:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_09:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_10:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_11:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_12:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_13:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_14:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_15:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_16:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_17:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_18:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_19:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_20:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_21:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_22:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_23:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_24:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_25:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_26:	aligned_string "   ----------   "
+NakaInst_FxReservedSlot_27:	aligned_string "   ----------   "
 NakaInst_PEQ_OVERDR_DELAY:	aligned_string "PEQ+OVERDR+DELAY"
 NakaInst_PEQ_DIST_DELAY:	aligned_string " PEQ+DIST+DELAY "
 NakaInst_PEQ_COMPR_OVERDR:	aligned_string "PEQ+COMPR+OVERDR"
 NakaInst_PEQ_COMPR_DIST:	aligned_string " PEQ+COMPR+DIST "
-LABEL_E32EBA:	aligned_string "   ----------   "
-LABEL_E32ECC:	aligned_string "   ----------   "
-LABEL_E32EDE:	aligned_string "   ----------   "
-LABEL_E32EF0:	aligned_string "   ----------   "
+NakaInst_FxComboReserved_0:	aligned_string "   ----------   "
+NakaInst_FxComboReserved_1:	aligned_string "   ----------   "
+NakaInst_FxComboReserved_2:	aligned_string "   ----------   "
+NakaInst_FxComboReserved_3:	aligned_string "   ----------   "
 NakaInst_STAGE:	aligned_string "  STAGE         "
 NakaInst_BATH_ROOM:	aligned_string "BATH ROOM       "
 NakaInst_KARAOKE:	aligned_string " KARAOKE        "
 NakaInst_ROOM:	aligned_string "  ROOM          "
-LABEL_E32F4A:	aligned_string "   ----------   "
-LABEL_E32F5C:	aligned_string "   ----------   "
-LABEL_E32F6E:	aligned_string "   ----------   "
-LABEL_E32F80:	aligned_string "   ----------   "
-LABEL_E32F92:	aligned_string "   ----------   "
-LABEL_E32FA4:	aligned_string "   ----------   "
+NakaInst_ReverbReserved_0:	aligned_string "   ----------   "
+NakaInst_ReverbReserved_1:	aligned_string "   ----------   "
+NakaInst_ReverbReserved_2:	aligned_string "   ----------   "
+NakaInst_ReverbReserved_3:	aligned_string "   ----------   "
+NakaInst_ReverbReserved_4:	aligned_string "   ----------   "
+NakaInst_ReverbReserved_5:	aligned_string "   ----------   "
 NakaInst_OVER_D:	aligned_string "     OVER_D     "
 NakaInst_DS_D:	aligned_string "      DS_D      "
 NakaInst_GEQ:	aligned_string "      GEQ       "
-LABEL_E32FEC:	aligned_string "   ----------   "
-LABEL_E32FFE:	aligned_string "   ----------   "
-LABEL_E33010:	aligned_string "   ----------   "
+NakaInst_EqReserved_0:	aligned_string "   ----------   "
+NakaInst_EqReserved_1:	aligned_string "   ----------   "
+NakaInst_EqReserved_2:	aligned_string "   ----------   "
 NakaInst_PEQ_COMPRESSOR:	aligned_string " PEQ+COMPRESSOR "
 NakaInst_PEQ_VIBRATO:	aligned_string "  PEQ+VIBRATO   "
 NakaInst_PEQ_FLANGER:	aligned_string "  PEQ+FLANGER   "
@@ -149,8 +149,8 @@ NakaInst_S_DELAY_FLANGER:	aligned_string "S.DELAY+FLANGER "
 NakaInst_S_DELAY_S_DELAY:	aligned_string "S.DELAY+S.DELAY "
 NakaInst_S_DELAY_CHORUS:	aligned_string "S.DELAY+CHORUS  "
 NakaInst_STRING:	aligned_string "     STRING     "
-LABEL_E3310C:	aligned_string "   ----------   "
-LABEL_E3311E:	aligned_string "   ----------   "
+NakaInst_ChorusReserved_0:	aligned_string "   ----------   "
+NakaInst_ChorusReserved_1:	aligned_string "   ----------   "
 NakaInst_DEEP_SPACE:	aligned_string "   DEEP SPACE   "
 NakaInst_SYMPHONIC:	aligned_string "   SYMPHONIC    "
 NakaInst_PERCUSSIVE:	aligned_string "   PERCUSSIVE   "
@@ -164,14 +164,14 @@ NakaInst_PEDAL_WAH:	aligned_string "   PEDAL WAH    "
 NakaInst_VIBRATO:	aligned_string "    VIBRATO     "
 NakaInst_PITCH_SHIFTER:	aligned_string " PITCH SHIFTER  "
 NakaInst_AUTO_PAN:	aligned_string "    AUTO PAN    "
-LABEL_E3321A:	aligned_string "   ----------   "
-LABEL_E3322C:	aligned_string "   ----------   "
+NakaInst_ModulationReserved_0:	aligned_string "   ----------   "
+NakaInst_ModulationReserved_1:	aligned_string "   ----------   "
 NakaInst_CELM:	aligned_string "     CELM       "
 NakaInst_CEL:	aligned_string "      CEL       "
-LABEL_E33262:	aligned_string "   ----------   "
-LABEL_E33274:	aligned_string "   ----------   "
-LABEL_E33286:	aligned_string "   ----------   "
-LABEL_E33298:	aligned_string "   ----------   "
+NakaInst_CelReserved_0:	aligned_string "   ----------   "
+NakaInst_CelReserved_1:	aligned_string "   ----------   "
+NakaInst_CelReserved_2:	aligned_string "   ----------   "
+NakaInst_CelReserved_3:	aligned_string "   ----------   "
 NakaInst_PARAMETRIC_EQ:	aligned_string " PARAMETRIC EQ  "
 NakaInst_NOISE_FLANGER:	aligned_string " NOISE FLANGER  "
 NakaInst_SLOW_ATTACKER:	aligned_string " SLOW ATTACKER  "
@@ -180,10 +180,10 @@ NakaInst_EXCITER:	aligned_string "    EXCITER     "
 NakaInst_FUZZ:	aligned_string "      FUZZ      "
 NakaInst_OVERDRIVE:	aligned_string "   OVERDRIVE    "
 NakaInst_DISTORTION:	aligned_string "   DISTORTION   "
-LABEL_E3333A:	aligned_string "   ----------   "
-LABEL_E3334C:	aligned_string "   ----------   "
-LABEL_E3335E:	aligned_string "   ----------   "
-LABEL_E33370:	aligned_string "   ----------   "
+NakaInst_DistReserved_0:	aligned_string "   ----------   "
+NakaInst_DistReserved_1:	aligned_string "   ----------   "
+NakaInst_DistReserved_2:	aligned_string "   ----------   "
+NakaInst_DistReserved_3:	aligned_string "   ----------   "
 NakaInst_WAVE_REVERB_2:	aligned_string " WAVE REVERB 2  "
 NakaInst_WAVE_REVERB_1:	aligned_string " WAVE REVERB 1  "
 NakaInst_BRIGHT_REVERB_2:	aligned_string "BRIGHT REVERB 2 "
@@ -197,14 +197,14 @@ NakaInst_PLATE_REVERB_1:	aligned_string " PLATE REVERB 1 "
 NakaInst_ROOM_REVERB_2:	aligned_string " ROOM REVERB 2  "
 NakaInst_ROOM_REVERB_1:	aligned_string " ROOM REVERB 1  "
 NakaInst_ROCK_ROTARY:	aligned_string "  ROCK ROTARY   "
-LABEL_E3346C:	aligned_string "   ----------   "
-LABEL_E3347E:	aligned_string "   ----------   "
-LABEL_E33490:	aligned_string "   ----------   "
+NakaInst_DelayReserved_0:	aligned_string "   ----------   "
+NakaInst_DelayReserved_1:	aligned_string "   ----------   "
+NakaInst_DelayReserved_2:	aligned_string "   ----------   "
 NakaInst_MODULATION_DELAY:	aligned_string "MODULATION DELAY"
 NakaInst_MULTI_TAP_DELAY:	aligned_string "MULTI TAP DELAY "
 NakaInst_SINGLE_DELAY:	aligned_string "  SINGLE DELAY  "
 NakaInst_GATED_REVERB:	aligned_string "  GATED REVERB  "
-LABEL_E334EA:	aligned_string "   ----------   "
+NakaInst_ReverbGateReserved:	aligned_string "   ----------   "
 NakaInst_ENSEMBLE:	aligned_string "    ENSEMBLE    "
 NakaInst_PHASER:	aligned_string "     PHASER     "
 NakaInst_FLANGER:	aligned_string "    FLANGER     "
@@ -306,7 +306,7 @@ NakaInst_ATENCI_N:	aligned_string "¡ATENCIÓN!"
 NakaInst_Perhatian:	aligned_string "Perhatian !"
 	aligned_string "Are You Sure?"
 NakaInst_Sind_Sie_sicher:	aligned_string "Sind Sie sicher ?"
-LABEL_E33886:	.asciz "Etes-vous s•Ó? "
+NakaInst_Etes_vous_sur_FR:	.asciz "Etes-vous s•Ó? "
 NakaInst_Est_seguro:
 	aligned_string "¿Está seguro? "
 	aligned_string "Apakah yakin akan dihapus ?"
@@ -315,19 +315,19 @@ NakaInst_Est_seguro:
 NakaInst_Features_for_editing_a_song:	aligned_string "Features for editing a song."
 NakaInst_Funktionen_zur_Bearbeitung_eines_Songs:	aligned_string "Funktionen zur Bearbeitung eines Songs."
 NakaInst_EASY_RECORD_sets_the_Sequencer_to_record_your:	aligned_string "EASY RECORD sets the Sequencer to record your complete performance including Auto Play Chord. The selected song will be cleared. "
-LABEL_E339D0:	.asciz "EASY RECORD aktiviert die wichtigsten Spuren, um ein komplettes Stück mit Begleitautomatik aufzunehmen. Der aktuelle Song wird dadurch gelöscht. "
+NakaInst_EASY_RECORD_aktiviert_DE:	.asciz "EASY RECORD aktiviert die wichtigsten Spuren, um ein komplettes Stück mit Begleitautomatik aufzunehmen. Der aktuelle Song wird dadurch gelöscht. "
 NakaInst_Press_OK_to_proceed:	aligned_string "Press OK to proceed."
-LABEL_E33A78:	.asciz "Bestätigen Sie mit OK. "
+NakaInst_Bestaetigen_Sie_mit_OK_DE:	.asciz "Bestätigen Sie mit OK. "
 NakaInst_PANEL_WRITE_replaces_the_sounds_and_settings_at:	aligned_string "PANEL WRITE replaces the sounds and settings at the beginning of your song, which are selected when you press SEQUENCER RESET. Make the desired changes and press OK to store your new settings."
 NakaInst_PANEL_WRITE_ersetzt_alle_Kl_nge_und_Einstellungen:	aligned_string "PANEL WRITE ersetzt alle Klänge und Einstellungen am Anfang Ihres Songs, die eingestellt werden, wenn SEQUENCER RESET gewählt wird. Nehmen Sie alle gewünschten Änderungen vor und bestätigen mit OK um diese zu speichern. "
 NakaInst_Press_the_up_down_buttons_under_the_screen:	aligned_string "Press the up/down buttons under the screen corresponding to the tracks that you want to clear. "
-LABEL_E33C90:	.asciz "Drücken Sie einer der Doppeltasten unter dem Display, entsprechend der Spuren, die Sie löschen möchten "
+NakaInst_Druecken_Sie_Doppeltasten_DE:	.asciz "Drücken Sie einer der Doppeltasten unter dem Display, entsprechend der Spuren, die Sie löschen möchten "
 NakaInst_Press_OK_to_complete_TRACK_CLEAR:	aligned_string "Press OK to complete TRACK CLEAR."
-LABEL_E33D1A:	.asciz "Drücken Sie OK um TRACK CLEAR auszuführen. "
+NakaInst_Druecken_OK_TRACK_CLEAR_DE:	.asciz "Drücken Sie OK um TRACK CLEAR auszuführen. "
 NakaInst_Press_the_up_down_button_under_the_screen:	aligned_string "Press the up/down button under the screen corresponding to the track that you want to edit."
 NakaInst_Dr_cken_Sie_eine_der_Doppeltasten_unter_dem:	aligned_string "Drücken Sie eine der Doppeltasten unter dem Display, entsprechend der Spur, die Sie editieren möchten "
 NakaInst_Using_SONG_CLEAR_will_erase_any_existing:	aligned_string "Using SONG CLEAR will erase any existing recording in the Sequencer."
-LABEL_E33E50:	.asciz "SONG CLEAR löscht alle aufgenommenen Daten in diesem Song. "
+NakaInst_SONG_CLEAR_loescht_DE:	.asciz "SONG CLEAR löscht alle aufgenommenen Daten in diesem Song. "
 NakaInst_Al_anular_la_canci_n_se_borra_la_grabaci_n_del:	.asciz "L'utilisation de SONG CLEAR effacera tout enregistrement précédent dans le séquenceur. "
 	aligned_string "Al anular la canción se borra la grabación del secuenciador. "
 	aligned_string "Gunakan SONG CLEAR untuk menghapus suatu rekaman yang ada didalam Sequencer."
@@ -432,7 +432,7 @@ NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las:	.asciz "L'utilisation de 
 	.byte 0x41, 0x50, 0x00, 0xff, 0x66, 0x38, 0xe3, 0x00
 ExtDevice_ModeDispatch_Table:
 	.long NakaInst_Sind_Sie_sicher
-	.long LABEL_E33886
+	.long NakaInst_Etes_vous_sur_FR
 	.long NakaInst_Est_seguro
 	.long TableData_NullDialogText
 	.long LABEL_E338A6
@@ -455,13 +455,13 @@ ExtDevice_ModeDispatch_Table:
 	.long TableData_NullDialogText
 	.long NakaInst_Features_for_editing_a_song
 	.long NakaInst_EASY_RECORD_sets_the_Sequencer_to_record_your
-	.long LABEL_E339D0
+	.long NakaInst_EASY_RECORD_aktiviert_DE
 	.long NakaInst_EASY_RECORD_sets_the_Sequencer_to_record_your
 	.long NakaInst_EASY_RECORD_sets_the_Sequencer_to_record_your
 	.long TableData_NullDialogText
 	.long NakaInst_EASY_RECORD_sets_the_Sequencer_to_record_your
 	.long NakaInst_Press_OK_to_proceed
-	.long LABEL_E33A78
+	.long NakaInst_Bestaetigen_Sie_mit_OK_DE
 	.long NakaInst_Press_OK_to_proceed
 	.long NakaInst_Press_OK_to_proceed
 	.long TableData_NullDialogText
@@ -473,13 +473,13 @@ ExtDevice_ModeDispatch_Table:
 	.long TableData_NullDialogText
 	.long NakaInst_PANEL_WRITE_replaces_the_sounds_and_settings_at
 	.long NakaInst_Press_the_up_down_buttons_under_the_screen
-	.long LABEL_E33C90
+	.long NakaInst_Druecken_Sie_Doppeltasten_DE
 	.long NakaInst_Press_the_up_down_buttons_under_the_screen
 	.long NakaInst_Press_the_up_down_buttons_under_the_screen
 	.long TableData_NullDialogText
 	.long NakaInst_Press_the_up_down_buttons_under_the_screen
 	.long NakaInst_Press_OK_to_complete_TRACK_CLEAR
-	.long LABEL_E33D1A
+	.long NakaInst_Druecken_OK_TRACK_CLEAR_DE
 	.long NakaInst_Press_OK_to_complete_TRACK_CLEAR
 	.long NakaInst_Press_OK_to_complete_TRACK_CLEAR
 	.long TableData_NullDialogText
@@ -497,7 +497,7 @@ ExtDevice_ModeDispatch_Table:
 	.long TableData_NullDialogText
 	.long LABEL_E340A6
 	.long NakaInst_Using_SONG_CLEAR_will_erase_any_existing
-	.long LABEL_E33E50
+	.long NakaInst_SONG_CLEAR_loescht_DE
 	.long NakaInst_Al_anular_la_canci_n_se_borra_la_grabaci_n_del
 	.long LABEL_E33EE4
 	.long TableData_NullDialogText
@@ -781,7 +781,7 @@ Bitmap_Ntedt0k:	.incbin "images/BitmapNtedt0k.bin"
 Bitmap_Ntedt0d:	.incbin "images/BitmapNtedt0d.bin"
 Bitmap_Dredt0k:	.incbin "images/BitmapDredt0k.bin"
 Bitmap_Dredt0d:	.incbin "images/BitmapDredt0d.bin"
-LABEL_E44478:
+WidgetData_DrawbarPositionTable:
 	.byte 0x00, 0x17, 0x09, 0x23, 0x15, 0x2f, 0x21, 0x3b
 	.ascii "-G9SE_Qk]wi"
 	.byte 0x7f, 0x01, 0x01, 0xb6, 0xf9
@@ -835,7 +835,7 @@ LABEL_E44478:
 	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
 	.ascii "   ALL SONGS    "
 	.zero 38
-LABEL_E44636:
+WidgetData_CharsetMappingTable:
 	.byte 0xf9, 0x2d
 	.byte 0xf4, 0x00, 0xf8, 0x2d, 0xf4, 0x00, 0x09, 0x2e
 	.byte 0xf4, 0x00, 0x0c, 0x2e, 0xf4, 0x00, 0x5f, 0x5f
@@ -1006,7 +1006,7 @@ LABEL_E44636:
 	.byte 0x04, 0x03, 0x02, 0x02, 0x01, 0x01, 0x03, 0x02
 	.byte 0x01, 0x02, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02
 	.byte 0x03, 0x02
-LABEL_E44B72:
+FontPalette_Gradient7:
 	.byte 0x03, 0x03, 0x01, 0x02, 0x03, 0x02
 	.byte 0x03, 0x02, 0x01, 0x02, 0x02, 0x02, 0x01, 0x02
 	.byte 0x04, 0x03, 0x02, 0x03, 0x02, 0x03, 0x01, 0x01
@@ -1016,7 +1016,7 @@ LABEL_E44B72:
 	.byte 0x02, 0x02, 0x02, 0x02, 0x00, 0x02, 0x01, 0x07
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05, 0x06, 0x03
 	.byte 0x0f, 0xff, 0xff, 0xff, 0xff, 0x0c, 0x0d, 0x0e
-LABEL_E44BB8:
+FontPalette_Gradient6:
 	.zero 48
 	.fill 8, 1, 0x7f
 	.fill 8, 1, 0x7f
@@ -1024,13 +1024,13 @@ LABEL_E44BB8:
 	.fill 8, 1, 0x7f
 	.fill 8, 1, 0x7f
 	.fill 8, 1, 0x7f
-LABEL_E44C18:
+FontPalette_Gradient5:
 	.zero 24
 	.ascii "000000000000000000000000000000000000000000000000"
 	.fill 8, 1, 0x7f
 	.fill 8, 1, 0x7f
 	.fill 8, 1, 0x7f
-LABEL_E44C78:
+FontPalette_Gradient4:
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x18, 0x18, 0x18, 0x18
 	.fill 8, 1, 0x18
@@ -1039,25 +1039,25 @@ LABEL_E44C78:
 	.ascii "000000000000000000000000HHHHHHHHHHHHHHHHHHHHHHHH"
 	.byte 0x7f, 0x7f, 0x7f, 0x7f
 	.fill 8, 1, 0x7f
-LABEL_E44CD8:
+FontPalette_Gradient3:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0c, 0x0c
 	.fill 8, 1, 0x0c
 	.byte 0x0c, 0x0c, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18
 	.byte 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x24, 0x24
 	.ascii "$$$$$$$$$$000000000000<<<<<<<<<<<<IIIIIIIIIIIITTTTTTTTTTTT"
 	.byte 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f
-LABEL_E44D38:
+FontPalette_Gradient2:
 	.zero 16
 	.ascii "                                @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 	.fill 8, 1, 0x7f
 	.fill 8, 1, 0x7f
-LABEL_E44D98:
+FontPalette_Gradient1:
 	.zero 8
 	.fill 8, 1, 0x10
 	.fill 8, 1, 0x10
 	.ascii "                0000000000000000@@@@@@@@@@@@@@@@PPPPPPPPPPPPPPPP"
 	.fill 8, 1, 0x7f
-LABEL_E44DF8:
+FontPalette_Gradient0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x08, 0x08, 0x08, 0x08
 	.byte 0x08, 0x08, 0x08, 0x08, 0x10, 0x10, 0x10, 0x10
 	.byte 0x10, 0x10, 0x10, 0x10, 0x18, 0x18, 0x18, 0x18
@@ -1065,13 +1065,13 @@ LABEL_E44DF8:
 	.ascii "        ((((((((0000000088888888@@@@@@@@HHHHHHHHPPPPPPPPXXXXXXXX"
 	.byte 0x7f, 0x7f, 0x7f, 0x7f
 Display_FontPalette_Table:
-	.long LABEL_E44DF8
-	.long LABEL_E44CD8
-	.long LABEL_E44D98
-	.long LABEL_E44C78
-	.long LABEL_E44D38
-	.long LABEL_E44C18
-	.long LABEL_E44BB8
+	.long FontPalette_Gradient0
+	.long FontPalette_Gradient3
+	.long FontPalette_Gradient1
+	.long FontPalette_Gradient4
+	.long FontPalette_Gradient2
+	.long FontPalette_Gradient5
+	.long FontPalette_Gradient6
 	.byte 0x30, 0xff, 0x18, 0x48
 	.byte 0x0c, 0x24, 0x3c, 0x54, 0x06, 0x12, 0x1e, 0x2a
 	.byte 0x36, 0x42, 0x4e, 0x5a
@@ -4054,11 +4054,11 @@ NakaInst_MEMORY_A:	aligned_string "  MEMORY-A   "
 	.byte 0x00, 0x00, 0x26, 0x00, 0x26, 0x00, 0x26, 0x00
 	.byte 0x26, 0x00, 0x26, 0x00, 0x26, 0x00, 0xc2, 0xc0
 	.byte 0xe4, 0x00
-LABEL_E4C0C2:
+NakaInst_DashDash:
 	.byte 0x2d, 0x2d, 0x20, 0x00, 0xd2, 0xc0
 	.byte 0xe4, 0x00, 0xce, 0xc0, 0xe4, 0x00
-LABEL_E4C0CE:	.asciz "ON "
-LABEL_E4C0D2:
+NakaInst_ON_Str:	.asciz "ON "
+NakaInst_OFF_Str:
 	.byte 0x4f, 0x46, 0x46, 0x00, 0x14, 0x13
 	.byte 0x10, 0x11, 0x12, 0xff, 0xf8, 0x39, 0x00, 0x00
 	.byte 0x09, 0x3a, 0x00, 0x00, 0x1a, 0x3a, 0x00, 0x00
@@ -9117,8 +9117,8 @@ Naka_UIStringRef_Table:
 	.long NakaInst_EqOnOffFunc
 	.long NakaInst_RevEqSelFunc
 	.long NakaInst_RevEqOnOffFunc
-	.long LABEL_E553F8
-LABEL_E553F8:	aligned_string ""
+	.long NakaInst_EmptyFuncName
+NakaInst_EmptyFuncName:	aligned_string ""
 NakaInst_RevEqOnOffFunc:	aligned_string "RevEqOnOffFunc"
 NakaInst_RevEqSelFunc:	aligned_string "RevEqSelFunc"
 NakaInst_EqOnOffFunc:	aligned_string "EqOnOffFunc"
@@ -9181,9 +9181,9 @@ NakaInst_TtMdRealMsg:	aligned_string "TtMdRealMsg"
 NakaInst_TtMdmenu:	aligned_string "TtMdmenu"
 	.byte 0x60, 0x57, 0xe5, 0x00
 	.byte 0x00, 0xff, 0x66, 0x57, 0xe5, 0x00
-LABEL_E55766:
+NakaDesc_PageWindow_Sentinel:
 	.byte 0x00, 0xff
-LABEL_E55768:
+NakaDesc_PageWindow_Table:
 	.long NakaDesc_PageWindow_Page
 	.long NakaDesc_PageWindow_Window0
 	.long NakaDesc_PageWindow_Window1
