@@ -26,7 +26,7 @@ SCREENDATA_BINS = $(patsubst %,maincpu/includes/generated/style_ui_screendata_%.
 ACCOMP_NAMES = accomp_section_widget accomp_part_widget accomp_display_full
 ACCOMP_BINS = $(patsubst %,maincpu/includes/generated/%.bin,$(ACCOMP_NAMES))
 
-SE_NAMES = se_drumkit_display
+SE_NAMES = se_drumkit_display se_rhythm_transport_tables
 SE_BINS = $(patsubst %,maincpu/includes/generated/%.bin,$(SE_NAMES))
 
 C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS)

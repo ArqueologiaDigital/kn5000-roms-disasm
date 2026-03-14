@@ -196,6 +196,13 @@ typedef struct __attribute__((packed)) {
     uint8_t  data[8];    /* padding data */
 } sd_nop_10_t;
 
+/** NOP/PAD: padding command (12 bytes) */
+typedef struct __attribute__((packed)) {
+    uint8_t  opcode;     /* 0x00 or 0x03 */
+    uint8_t  length;     /* 0x0C */
+    uint8_t  data[10];   /* padding/setup data */
+} sd_nop_12_t;
+
 /* ── Helper for unknown opcodes ──────────────────────────────── */
 
 #define SD_UNKNOWN_TYPE(data_len) \
