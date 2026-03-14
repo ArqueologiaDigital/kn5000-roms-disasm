@@ -5312,25 +5312,25 @@ FIRMWARE_VERSION:
 	.set LABEL_ED4DE2, 0xED4DE2
 	.set LABEL_ED5122, 0xED5122
 	.set LABEL_ED517A, 0xED517A
-	.set LABEL_ED690A, 0xED690A
-	.set LABEL_ED69A2, 0xED69A2
-	.set LABEL_ED6A7A, 0xED6A7A
-	.set LABEL_ED6B0A, 0xED6B0A
-	.set LABEL_ED6B52, 0xED6B52
-	.set LABEL_ED6BE2, 0xED6BE2
-	.set LABEL_ED6C6E, 0xED6C6E
-	.set LABEL_ED6FF2, 0xED6FF2
-	.set LABEL_ED70A2, 0xED70A2
-	.set LABEL_ED71B2, 0xED71B2
-	.set LABEL_ED723A, 0xED723A
-	.set LABEL_ED729A, 0xED729A
-	.set LABEL_ED734A, 0xED734A
-	.set LABEL_ED745A, 0xED745A
-	.set LABEL_ED74E2, 0xED74E2
-	.set LABEL_ED7542, 0xED7542
-	.set LABEL_ED75F2, 0xED75F2
-	.set LABEL_ED9F54, 0xED9F54
-	.set LABEL_ED9F5C, 0xED9F5C
+	.set ExtDevScreen_SndParamBank_Desc, 0xED690A
+	.set ExtDevScreen_SndParamPage_Desc, 0xED69A2
+	.set ExtDevScreen_VoiceParamBank_Desc, 0xED6A7A
+	.set ExtDevScreen_VoiceParamRhythm_Desc, 0xED6B0A
+	.set ExtDevScreen_VoiceParamDrums_Desc, 0xED6B52
+	.set ExtDevScreen_VoiceSetup_Desc, 0xED6BE2
+	.set ExtDevScreen_VoiceMainPage_Desc, 0xED6C6E
+	.set ExtDevScreen_MidiCtrl_Desc, 0xED6FF2
+	.set ExtDevScreen_MidiCtrlPage_Desc, 0xED70A2
+	.set ExtDevScreen_MidiCtrlDetail_Desc, 0xED71B2
+	.set ExtDevScreen_MidiCtrlAdvanced_Desc, 0xED723A
+	.set ExtDevScreen_DspEffect_Desc, 0xED729A
+	.set ExtDevScreen_DspEffectPage_Desc, 0xED734A
+	.set ExtDevScreen_ReverbSetup_Desc, 0xED745A
+	.set ExtDevScreen_ReverbPage_Desc, 0xED74E2
+	.set ExtDevScreen_Equalizer_Desc, 0xED7542
+	.set ExtDevScreen_EqualizerPage_Desc, 0xED75F2
+	.set ExtDevScreen_UserInitWallpaper_Flag, 0xED9F54
+	.set ExtDevScreen_UserInitWallpaper_Data, 0xED9F5C
 	.set ENCODER_LUT_VOLUME, 0xEDA1BC
 	.set ENCODER_LUT_BREATH_INDEX, 0xEDA2BC
 	.set ENCODER_LUT_BREATH_VALUE, 0xEDA2D2
@@ -5366,8 +5366,8 @@ FIRMWARE_VERSION:
 	.set LABEL_EDAA04, 0xEDAA04
 	.set LABEL_EDAA34, 0xEDAA34
 	.set LABEL_EDB2E4, 0xEDB2E4
-	.set LABEL_EDBA44, 0xEDBA44
-	.set LABEL_EDBAAE, 0xEDBAAE
+	.set WidgetParam_TestMode_Entry, 0xEDBA44
+	.set WidgetParam_SineWave_Entry, 0xEDBAAE
 	.set LABEL_EE0206, 0xEE0206
 	.set LABEL_EE3023, 0xEE3023
 	.set LABEL_EE3025, 0xEE3025
