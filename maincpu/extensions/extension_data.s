@@ -852,112 +852,112 @@ KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	.byte 0x00, 0x10, 0x80, 0xfb, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00
 NoteNameStr_Table_5:
-	.long LABEL_ED20B8
-	.long LABEL_ED20A6
-	.long LABEL_ED2098
-	.long LABEL_ED208C
-	.long LABEL_ED207A
-	.long LABEL_ED206C
-	.long LABEL_ED205E
-	.long LABEL_ED204A
-	.long LABEL_ED203C
-	.long LABEL_ED202C
-	.long LABEL_ED201E
-	.long LABEL_ED200C
-	.long LABEL_ED1FFC
-	.long LABEL_ED1FE6
-	.long LABEL_ED1FD0
-	.long LABEL_ED1FBC
-	.long LABEL_ED1FA6
-	.long LABEL_ED1F92
-	.long LABEL_ED1F7C
-	.long LABEL_ED1F68
-	.long LABEL_ED1F56
-	.long LABEL_ED1F44
-	.long LABEL_ED1F36
-	.long LABEL_ED1F2A
-	.long LABEL_ED1F1C
-	.long LABEL_ED1F0E
-	.long LABEL_ED1F02
-	.long LABEL_ED1EF0
-	.long LABEL_ED1EDE
-	.long LABEL_ED1ECC
-	.long LABEL_ED1EBA
-	.long LABEL_ED1EA8
-	.long LABEL_ED1E9A
-	.long LABEL_ED1E8A
-	.long LABEL_ED1E78
-	.long LABEL_ED1E66
-	.long LABEL_ED1E52
-	.long LABEL_ED1E3C
-	.long LABEL_ED1E2A
-	.long LABEL_ED1E1A
-	.long LABEL_ED1E08
-	.long LABEL_ED1DF8
-	.long LABEL_ED1DF6
-LABEL_ED1DF6:
+	.long FuncNameStr_PmBkNameFunc
+	.long FuncNameStr_PmBankNamingCheck
+	.long FuncNameStr_PmNamingCheck
+	.long FuncNameStr_MssNameFunc
+	.long FuncNameStr_SystemInitOkFunc
+	.long FuncNameStr_SysIniNoFunc
+	.long FuncNameStr_SysIniYesFunc
+	.long FuncNameStr_SysSureShowHideFunc
+	.long FuncNameStr_AttnLngCheck
+	.long FuncNameStr_SysSureLngCheck
+	.long FuncNameStr_SureLngCheck
+	.long FuncNameStr_TchSensGridCheck
+	.long FuncNameStr_FSWAssGridCheck
+	.long FuncNameStr_PmExpFilterGridCheck
+	.long FuncNameStr_DispTimeSetGridCheck
+	.long FuncNameStr_MstSugAlpGridCheck
+	.long FuncNameStr_MstStyleAlpGridCheck
+	.long FuncNameStr_MstStyle1GridCheck
+	.long FuncNameStr_MstStyle1SubGridCheck
+	.long FuncNameStr_MstStyle2GridCheck
+	.long FuncNameStr_MstSong1GridCheck
+	.long FuncNameStr_MstSong2GridCheck
+	.long FuncNameStr_BitmapFinpic
+	.long FuncNameStr_BitmapFinst
+	.long FuncNameStr_BitmapFoutpic
+	.long FuncNameStr_BitmapFoutst
+	.long FuncNameStr_GmOnOffFunc
+	.long FuncNameStr_DispTimeSetOKFunc
+	.long FuncNameStr_SystemInitMDFunc
+	.long FuncNameStr_WallHomeEditCheck
+	.long FuncNameStr_WallMenuEditCheck
+	.long FuncNameStr_WallOthEditCheck
+	.long FuncNameStr_WallSetOKFunc
+	.long FuncNameStr_WallUsrIniFunc
+	.long FuncNameStr_WallUsrIniNoFunc
+	.long FuncNameStr_WallUsrIniYesFunc
+	.long FuncNameStr_WallUsrShowHideFunc
+	.long FuncNameStr_WallSureShowHideFunc
+	.long FuncNameStr_WallSureLngCheck
+	.long FuncNameStr_CtlIniLngCheck
+	.long FuncNameStr_PmemNormLngCheck
+	.long FuncNameStr_PmemExpLngCheck
+	.long FuncNameStr_NullTerm
+FuncNameStr_NullTerm:
 	.byte 0x00, 0xff
-LABEL_ED1DF8:	aligned_string "PmemExpLngCheck"
-LABEL_ED1E08:	aligned_string "PmemNormLngCheck"
-LABEL_ED1E1A:	aligned_string "CtlIniLngCheck"
-LABEL_ED1E2A:	aligned_string "WallSureLngCheck"
-LABEL_ED1E3C:	aligned_string "WallSureShowHideFunc"
-LABEL_ED1E52:	aligned_string "WallUsrShowHideFunc"
-LABEL_ED1E66:	aligned_string "WallUsrIniYesFunc"
-LABEL_ED1E78:	aligned_string "WallUsrIniNoFunc"
-LABEL_ED1E8A:	aligned_string "WallUsrIniFunc"
-LABEL_ED1E9A:	aligned_string "WallSetOKFunc"
-LABEL_ED1EA8:	aligned_string "WallOthEditCheck"
-LABEL_ED1EBA:	aligned_string "WallMenuEditCheck"
-LABEL_ED1ECC:	aligned_string "WallHomeEditCheck"
-LABEL_ED1EDE:	aligned_string "SystemInitMDFunc"
-LABEL_ED1EF0:	aligned_string "DispTimeSetOKFunc"
-LABEL_ED1F02:	aligned_string "GmOnOffFunc"
-LABEL_ED1F0E:	aligned_string "BitmapFoutst"
-LABEL_ED1F1C:	aligned_string "BitmapFoutpic"
-LABEL_ED1F2A:	aligned_string "BitmapFinst"
-LABEL_ED1F36:	aligned_string "BitmapFinpic"
-LABEL_ED1F44:	aligned_string "MstSong2GridCheck"
-LABEL_ED1F56:	aligned_string "MstSong1GridCheck"
-LABEL_ED1F68:	aligned_string "MstStyle2GridCheck"
-LABEL_ED1F7C:	aligned_string "MstStyle1SubGridCheck"
-LABEL_ED1F92:	aligned_string "MstStyle1GridCheck"
-LABEL_ED1FA6:	aligned_string "MstStyleAlpGridCheck"
-LABEL_ED1FBC:	aligned_string "MstSugAlpGridCheck"
-LABEL_ED1FD0:	aligned_string "DispTimeSetGridCheck"
-LABEL_ED1FE6:	aligned_string "PmExpFilterGridCheck"
-LABEL_ED1FFC:	aligned_string "FSWAssGridCheck"
-LABEL_ED200C:	aligned_string "TchSensGridCheck"
-LABEL_ED201E:	aligned_string "SureLngCheck"
-LABEL_ED202C:	aligned_string "SysSureLngCheck"
-LABEL_ED203C:	aligned_string "AttnLngCheck"
-LABEL_ED204A:	aligned_string "SysSureShowHideFunc"
-LABEL_ED205E:	aligned_string "SysIniYesFunc"
-LABEL_ED206C:	aligned_string "SysIniNoFunc"
-LABEL_ED207A:	aligned_string "SystemInitOkFunc"
-LABEL_ED208C:	aligned_string "MssNameFunc"
-LABEL_ED2098:	aligned_string "PmNamingCheck"
-LABEL_ED20A6:	aligned_string "PmBankNamingCheck"
-LABEL_ED20B8:	aligned_string "PmBkNameFunc"
+FuncNameStr_PmemExpLngCheck:	aligned_string "PmemExpLngCheck"
+FuncNameStr_PmemNormLngCheck:	aligned_string "PmemNormLngCheck"
+FuncNameStr_CtlIniLngCheck:	aligned_string "CtlIniLngCheck"
+FuncNameStr_WallSureLngCheck:	aligned_string "WallSureLngCheck"
+FuncNameStr_WallSureShowHideFunc:	aligned_string "WallSureShowHideFunc"
+FuncNameStr_WallUsrShowHideFunc:	aligned_string "WallUsrShowHideFunc"
+FuncNameStr_WallUsrIniYesFunc:	aligned_string "WallUsrIniYesFunc"
+FuncNameStr_WallUsrIniNoFunc:	aligned_string "WallUsrIniNoFunc"
+FuncNameStr_WallUsrIniFunc:	aligned_string "WallUsrIniFunc"
+FuncNameStr_WallSetOKFunc:	aligned_string "WallSetOKFunc"
+FuncNameStr_WallOthEditCheck:	aligned_string "WallOthEditCheck"
+FuncNameStr_WallMenuEditCheck:	aligned_string "WallMenuEditCheck"
+FuncNameStr_WallHomeEditCheck:	aligned_string "WallHomeEditCheck"
+FuncNameStr_SystemInitMDFunc:	aligned_string "SystemInitMDFunc"
+FuncNameStr_DispTimeSetOKFunc:	aligned_string "DispTimeSetOKFunc"
+FuncNameStr_GmOnOffFunc:	aligned_string "GmOnOffFunc"
+FuncNameStr_BitmapFoutst:	aligned_string "BitmapFoutst"
+FuncNameStr_BitmapFoutpic:	aligned_string "BitmapFoutpic"
+FuncNameStr_BitmapFinst:	aligned_string "BitmapFinst"
+FuncNameStr_BitmapFinpic:	aligned_string "BitmapFinpic"
+FuncNameStr_MstSong2GridCheck:	aligned_string "MstSong2GridCheck"
+FuncNameStr_MstSong1GridCheck:	aligned_string "MstSong1GridCheck"
+FuncNameStr_MstStyle2GridCheck:	aligned_string "MstStyle2GridCheck"
+FuncNameStr_MstStyle1SubGridCheck:	aligned_string "MstStyle1SubGridCheck"
+FuncNameStr_MstStyle1GridCheck:	aligned_string "MstStyle1GridCheck"
+FuncNameStr_MstStyleAlpGridCheck:	aligned_string "MstStyleAlpGridCheck"
+FuncNameStr_MstSugAlpGridCheck:	aligned_string "MstSugAlpGridCheck"
+FuncNameStr_DispTimeSetGridCheck:	aligned_string "DispTimeSetGridCheck"
+FuncNameStr_PmExpFilterGridCheck:	aligned_string "PmExpFilterGridCheck"
+FuncNameStr_FSWAssGridCheck:	aligned_string "FSWAssGridCheck"
+FuncNameStr_TchSensGridCheck:	aligned_string "TchSensGridCheck"
+FuncNameStr_SureLngCheck:	aligned_string "SureLngCheck"
+FuncNameStr_SysSureLngCheck:	aligned_string "SysSureLngCheck"
+FuncNameStr_AttnLngCheck:	aligned_string "AttnLngCheck"
+FuncNameStr_SysSureShowHideFunc:	aligned_string "SysSureShowHideFunc"
+FuncNameStr_SysIniYesFunc:	aligned_string "SysIniYesFunc"
+FuncNameStr_SysIniNoFunc:	aligned_string "SysIniNoFunc"
+FuncNameStr_SystemInitOkFunc:	aligned_string "SystemInitOkFunc"
+FuncNameStr_MssNameFunc:	aligned_string "MssNameFunc"
+FuncNameStr_PmNamingCheck:	aligned_string "PmNamingCheck"
+FuncNameStr_PmBankNamingCheck:	aligned_string "PmBankNamingCheck"
+FuncNameStr_PmBkNameFunc:	aligned_string "PmBkNameFunc"
 NakaParam_VariScreen:
-	.long LABEL_ED20CA
-LABEL_ED20CA:	aligned_string ""
+	.long NakaParam_VariScreen_Empty
+NakaParam_VariScreen_Empty:	aligned_string ""
 NakaParam_RVariScreen:
 	.byte 0x32, 0x21, 0xed, 0x00
 ParamStr_Table_08:
-	.long LABEL_ED212C
-	.long LABEL_ED2122
-	.long LABEL_ED211C
-	.long LABEL_ED2116
-	.long LABEL_ED210E
-	.long LABEL_ED2106
-	.long LABEL_ED20FE
-	.long LABEL_ED20F6
-	.long LABEL_ED20F4
-LABEL_ED20F4:	aligned_string ""
-LABEL_ED20F6:	aligned_string "oldvari"
-LABEL_ED20FE:	aligned_string "nowvari"
-LABEL_ED2106:
+	.long ParamStr08_func
+	.long ParamStr08_font
+	.long ParamStr08_fontcolor
+	.long ParamStr08_page
+	.long ParamStr08_varisupart
+	.long ParamStr08_nowswno
+	.long ParamStr08_nowvari
+	.long ParamStr08_oldvari
+	.long ParamStr08_Empty
+ParamStr08_Empty:	aligned_string ""
+ParamStr08_oldvari:	aligned_string "oldvari"
+ParamStr08_nowvari:	aligned_string "nowvari"
+ParamStr08_nowswno:
 	jr	nz, 0x6f
 	aligned_string "wswno"
 	aligned_string "varisu"
@@ -970,148 +970,148 @@ LABEL_ED2106:
 
 
 ParamStr_Table_09:
-	.long LABEL_ED219E
-	.long LABEL_ED2198
-	.long LABEL_ED218E
-	.long LABEL_ED2188
-	.long LABEL_ED2182
-	.long LABEL_ED217A
-	.long LABEL_ED2172
-	.long LABEL_ED216A
-	.long LABEL_ED2162
-	.long LABEL_ED2160
-LABEL_ED2160:	aligned_string ""
-LABEL_ED2162:	aligned_string "oldvari"
-LABEL_ED216A:	aligned_string "nowvari"
-LABEL_ED2172:	aligned_string "nowswno"
-LABEL_ED217A:	aligned_string "varisu"
-LABEL_ED2182:	aligned_string "part"
-LABEL_ED2188:	aligned_string "page"
-LABEL_ED218E:	aligned_string "fontcolor"
-LABEL_ED2198:	aligned_string "font"
-LABEL_ED219E:	aligned_string "func"
+	.long ParamStr09_func
+	.long ParamStr09_font
+	.long ParamStr09_fontcolor
+	.long ParamStr09_page
+	.long ParamStr09_part
+	.long ParamStr09_varisu
+	.long ParamStr09_nowswno
+	.long ParamStr09_nowvari
+	.long ParamStr09_oldvari
+	.long ParamStr09_Empty
+ParamStr09_Empty:	aligned_string ""
+ParamStr09_oldvari:	aligned_string "oldvari"
+ParamStr09_nowvari:	aligned_string "nowvari"
+ParamStr09_nowswno:	aligned_string "nowswno"
+ParamStr09_varisu:	aligned_string "varisu"
+ParamStr09_part:	aligned_string "part"
+ParamStr09_page:	aligned_string "page"
+ParamStr09_fontcolor:	aligned_string "fontcolor"
+ParamStr09_font:	aligned_string "font"
+ParamStr09_func:	aligned_string "func"
 NakaParam_AcChordBox:
-	.long LABEL_ED21A8
-LABEL_ED21A8:	aligned_string ""
+	.long NakaParam_AcChordBox_Empty
+NakaParam_AcChordBox_Empty:	aligned_string ""
 NakaParam_AcFreeSplitBox:
-	.long LABEL_ED21AE
-LABEL_ED21AE:	aligned_string ""
+	.long NakaParam_AcFreeSplitBox_Empty
+NakaParam_AcFreeSplitBox_Empty:	aligned_string ""
 NakaParam_AcBkNoBox:
-	.long LABEL_ED21B4
-LABEL_ED21B4:	aligned_string ""
+	.long NakaParam_AcBkNoBox_Empty
+NakaParam_AcBkNoBox_Empty:	aligned_string ""
 NakaParam_AcPmBkNoBox:
-	.long LABEL_ED21BA
-LABEL_ED21BA:	aligned_string ""
+	.long NakaParam_AcPmBkNoBox_Empty
+NakaParam_AcPmBkNoBox_Empty:	aligned_string ""
 NakaParam_PmBankScreen:
-	.long LABEL_ED21C0
-LABEL_ED21C0:	aligned_string ""
+	.long NakaParam_PmBankScreen_Empty
+NakaParam_PmBankScreen_Empty:	aligned_string ""
 ParamStr_Table_10:
-	.long LABEL_ED2206
-	.long LABEL_ED2200
-	.long LABEL_ED21F6
-	.long LABEL_ED21F0
-	.long LABEL_ED21E8
-	.long LABEL_ED21E0
-	.long LABEL_ED21DE
-LABEL_ED21DE:	aligned_string ""
-LABEL_ED21E0:	aligned_string "oldbank"
-LABEL_ED21E8:	aligned_string "nowbank"
-LABEL_ED21F0:	aligned_string "page"
-LABEL_ED21F6:	aligned_string "fontcolor"
-LABEL_ED2200:	aligned_string "font"
-LABEL_ED2206:	aligned_string "func"
+	.long ParamStr10_func
+	.long ParamStr10_font
+	.long ParamStr10_fontcolor
+	.long ParamStr10_page
+	.long ParamStr10_nowbank
+	.long ParamStr10_oldbank
+	.long ParamStr10_Empty
+ParamStr10_Empty:	aligned_string ""
+ParamStr10_oldbank:	aligned_string "oldbank"
+ParamStr10_nowbank:	aligned_string "nowbank"
+ParamStr10_page:	aligned_string "page"
+ParamStr10_fontcolor:	aligned_string "fontcolor"
+ParamStr10_font:	aligned_string "font"
+ParamStr10_func:	aligned_string "func"
 ParamStr_Table_11:
-	.long LABEL_ED2220
-	.long LABEL_ED221A
-	.long LABEL_ED2218
-LABEL_ED2218:	aligned_string ""
-LABEL_ED221A:	aligned_string "data"
-LABEL_ED2220:	aligned_string "func"
+	.long ParamStr11_func
+	.long ParamStr11_data
+	.long ParamStr11_Empty
+ParamStr11_Empty:	aligned_string ""
+ParamStr11_data:	aligned_string "data"
+ParamStr11_func:	aligned_string "func"
 ParamStr_Table_12:
-	.long LABEL_ED2268
-	.long LABEL_ED2262
-	.long LABEL_ED2258
-	.long LABEL_ED224C
-	.long LABEL_ED2240
-	.long LABEL_ED223E
-LABEL_ED223E:	aligned_string ""
-LABEL_ED2240:	aligned_string "oldmsamode"
-LABEL_ED224C:	aligned_string "newmsamode"
-LABEL_ED2258:	aligned_string "fontcolor"
-LABEL_ED2262:	aligned_string "font"
-LABEL_ED2268:	aligned_string "func"
+	.long ParamStr12_func
+	.long ParamStr12_font
+	.long ParamStr12_fontcolor
+	.long ParamStr12_newmsamode
+	.long ParamStr12_oldmsamode
+	.long ParamStr12_Empty
+ParamStr12_Empty:	aligned_string ""
+ParamStr12_oldmsamode:	aligned_string "oldmsamode"
+ParamStr12_newmsamode:	aligned_string "newmsamode"
+ParamStr12_fontcolor:	aligned_string "fontcolor"
+ParamStr12_font:	aligned_string "font"
+ParamStr12_func:	aligned_string "func"
 
 
 ParamStr_Table_13:
-	.long LABEL_ED22B0
-	.long LABEL_ED22AA
-	.long LABEL_ED22A0
-	.long LABEL_ED2294
-	.long LABEL_ED2288
-	.long LABEL_ED2286
-LABEL_ED2286:	aligned_string ""
-LABEL_ED2288:	aligned_string "oldpmemmode"
-LABEL_ED2294:	aligned_string "newpmemmode"
-LABEL_ED22A0:	aligned_string "fontcolo"
-LABEL_ED22AA:	aligned_string "font"
-LABEL_ED22B0:	aligned_string "func"
+	.long ParamStr13_func
+	.long ParamStr13_font
+	.long ParamStr13_fontcolo
+	.long ParamStr13_newpmemmode
+	.long ParamStr13_oldpmemmode
+	.long ParamStr13_Empty
+ParamStr13_Empty:	aligned_string ""
+ParamStr13_oldpmemmode:	aligned_string "oldpmemmode"
+ParamStr13_newpmemmode:	aligned_string "newpmemmode"
+ParamStr13_fontcolo:	aligned_string "fontcolo"
+ParamStr13_font:	aligned_string "font"
+ParamStr13_func:	aligned_string "func"
 NakaParam_IvPmemWindowPageCtl:
-	.long LABEL_ED22C0
-	.long LABEL_ED22BE
-LABEL_ED22BE:	aligned_string ""
-LABEL_ED22C0:	aligned_string "page"
+	.long NakaParam_IvPmemWinPg_page
+	.long NakaParam_IvPmemWinPg_Empty
+NakaParam_IvPmemWinPg_Empty:	aligned_string ""
+NakaParam_IvPmemWinPg_page:	aligned_string "page"
 NakaParam_IvMstStyleWindowPgCtl:
-	.long LABEL_ED22D0
-	.long LABEL_ED22CE
-LABEL_ED22CE:	aligned_string ""
-LABEL_ED22D0:	aligned_string "page"
+	.long NakaParam_IvMstStyleWinPg_page
+	.long NakaParam_IvMstStyleWinPg_Empty
+NakaParam_IvMstStyleWinPg_Empty:	aligned_string ""
+NakaParam_IvMstStyleWinPg_page:	aligned_string "page"
 NakaParam_AcTchSensGridBox:
-	.long LABEL_ED22E0
-	.long LABEL_ED22DE
-LABEL_ED22DE:	aligned_string ""
-LABEL_ED22E0:	aligned_string "page"
+	.long NakaParam_AcTchSens_page
+	.long NakaParam_AcTchSens_Empty
+NakaParam_AcTchSens_Empty:	aligned_string ""
+NakaParam_AcTchSens_page:	aligned_string "page"
 ParamStr_Table_14:
-	.long LABEL_ED2308
-	.long LABEL_ED22FE
-	.long LABEL_ED22F8
-	.long LABEL_ED22F6
-LABEL_ED22F6:	aligned_string ""
-LABEL_ED22F8:	aligned_string "func"
-LABEL_ED22FE:	aligned_string "fixedrow"
-LABEL_ED2308:	aligned_string "fixedcol"
+	.long ParamStr14_fixedcol
+	.long ParamStr14_fixedrow
+	.long ParamStr14_func
+	.long ParamStr14_Empty
+ParamStr14_Empty:	aligned_string ""
+ParamStr14_func:	aligned_string "func"
+ParamStr14_fixedrow:	aligned_string "fixedrow"
+ParamStr14_fixedcol:	aligned_string "fixedcol"
 
 
 ParamStr_Table_15:
-	.long LABEL_ED2334
-	.long LABEL_ED232A
-	.long LABEL_ED2324
-	.long LABEL_ED2322
-LABEL_ED2322:	aligned_string ""
-LABEL_ED2324:	aligned_string "func"
-LABEL_ED232A:	aligned_string "fixedrow"
-LABEL_ED2334:	aligned_string "fixedcol"
+	.long ParamStr15_fixedcol
+	.long ParamStr15_fixedrow
+	.long ParamStr15_func
+	.long ParamStr15_Empty
+ParamStr15_Empty:	aligned_string ""
+ParamStr15_func:	aligned_string "func"
+ParamStr15_fixedrow:	aligned_string "fixedrow"
+ParamStr15_fixedcol:	aligned_string "fixedcol"
 
 
 ParamStr_Table_16:
-	.long LABEL_ED2360
-	.long LABEL_ED2356
-	.long LABEL_ED2350
-	.long LABEL_ED234E
-LABEL_ED234E:	aligned_string ""
-LABEL_ED2350:	aligned_string "func"
-LABEL_ED2356:	aligned_string "fixedrow"
-LABEL_ED2360:	aligned_string "fixedcol"
+	.long ParamStr16_fixedcol
+	.long ParamStr16_fixedrow
+	.long ParamStr16_func
+	.long ParamStr16_Empty
+ParamStr16_Empty:	aligned_string ""
+ParamStr16_func:	aligned_string "func"
+ParamStr16_fixedrow:	aligned_string "fixedrow"
+ParamStr16_fixedcol:	aligned_string "fixedcol"
 
 
 ParamStr_Table_17:
-	.long LABEL_ED238C
-	.long LABEL_ED2382
-	.long LABEL_ED237C
-	.long LABEL_ED237A
-LABEL_ED237A:	aligned_string ""
-LABEL_ED237C:	aligned_string "func"
-LABEL_ED2382:	aligned_string "fixedrow"
-LABEL_ED238C:	aligned_string "fixedcol"
+	.long ParamStr17_fixedcol
+	.long ParamStr17_fixedrow
+	.long ParamStr17_func
+	.long ParamStr17_Empty
+ParamStr17_Empty:	aligned_string ""
+ParamStr17_func:	aligned_string "func"
+ParamStr17_fixedrow:	aligned_string "fixedrow"
+ParamStr17_fixedcol:	aligned_string "fixedcol"
 NakaParam_AcMstStyleAlpGridBox:
 	.byte 0x2e, 0x24
 	.byte 0xed, 0x00, 0x24, 0x24, 0xed, 0x00, 0x1e, 0x24
@@ -1120,12 +1120,12 @@ NakaParam_AcMstStyleAlpGridBox:
 	.byte 0xed, 0x00, 0xe2, 0x23, 0xed, 0x00, 0xd2, 0x23
 	.byte 0xed, 0x00, 0xc4, 0x23, 0xed, 0x00, 0xc2, 0x23
 	.byte 0xed, 0x00
-LABEL_ED23C2:
+MstStyleAlpGrid_Empty:
 	.byte 0x00, 0xff
-LABEL_ED23C4:	aligned_string "nowttlselsong"
-LABEL_ED23D2:	aligned_string "nowalphselsong"
-LABEL_ED23E2:	aligned_string "nowalphpage"
-LABEL_ED23EE:	jr	nz, 0x6f
+MstStyleAlpGrid_nowttlselsong:	aligned_string "nowttlselsong"
+MstStyleAlpGrid_nowalphselsong:	aligned_string "nowalphselsong"
+MstStyleAlpGrid_nowalphpage:	aligned_string "nowalphpage"
+MstStyleAlpGrid_nowalphmaxpage:	jr	nz, 0x6f
 	aligned_string "walphmaxpage"
 	aligned_string "nowalphdtno"
 	aligned_string "nowalphtop"
@@ -1137,38 +1137,38 @@ LABEL_ED23EE:	jr	nz, 0x6f
 
 
 ParamStr_Table_18:
-	.long LABEL_ED24AA
-	.long LABEL_ED24A0
-	.long LABEL_ED249A
-	.long LABEL_ED2492
-	.long LABEL_ED2486
-	.long LABEL_ED247A
-	.long LABEL_ED246A
-	.long LABEL_ED245E
-	.long LABEL_ED245C
-LABEL_ED245C:	aligned_string ""
-LABEL_ED245E:	aligned_string "nowalphpage"
-LABEL_ED246A:	aligned_string "nowalphmaxpage"
-LABEL_ED247A:	aligned_string "nowalphdtno"
-LABEL_ED2486:	aligned_string "nowalphtop"
-LABEL_ED2492:	aligned_string "nowalph"
-LABEL_ED249A:	aligned_string "func"
-LABEL_ED24A0:	aligned_string "fixedrow"
-LABEL_ED24AA:	aligned_string "fixedcol"
+	.long ParamStr18_fixedcol
+	.long ParamStr18_fixedrow
+	.long ParamStr18_func
+	.long ParamStr18_nowalph
+	.long ParamStr18_nowalphtop
+	.long ParamStr18_nowalphdtno
+	.long ParamStr18_nowalphmaxpage
+	.long ParamStr18_nowalphpage
+	.long ParamStr18_Empty
+ParamStr18_Empty:	aligned_string ""
+ParamStr18_nowalphpage:	aligned_string "nowalphpage"
+ParamStr18_nowalphmaxpage:	aligned_string "nowalphmaxpage"
+ParamStr18_nowalphdtno:	aligned_string "nowalphdtno"
+ParamStr18_nowalphtop:	aligned_string "nowalphtop"
+ParamStr18_nowalph:	aligned_string "nowalph"
+ParamStr18_func:	aligned_string "func"
+ParamStr18_fixedrow:	aligned_string "fixedrow"
+ParamStr18_fixedcol:	aligned_string "fixedcol"
 NakaParam_AcMstStyle1SubGridBox:
 	.byte 0x16, 0x25, 0xed, 0x00
 ParamStr_Table_19:
-	.long LABEL_ED250C
-	.long LABEL_ED2506
-	.long LABEL_ED24F6
-	.long LABEL_ED24E2
-	.long LABEL_ED24D2
-	.long LABEL_ED24D0
-LABEL_ED24D0:	aligned_string ""
-LABEL_ED24D2:	aligned_string "nowstylectgpage"
-LABEL_ED24E2:	aligned_string "nowstylectgmaxpage"
-LABEL_ED24F6:	aligned_string "nowstylectgdtno"
-LABEL_ED2506:
+	.long ParamStr19_fixedcol
+	.long ParamStr19_func
+	.long ParamStr19_nowstylectgdtno
+	.long ParamStr19_nowstylectgmaxpage
+	.long ParamStr19_nowstylectgpage
+	.long ParamStr19_Empty
+ParamStr19_Empty:	aligned_string ""
+ParamStr19_nowstylectgpage:	aligned_string "nowstylectgpage"
+ParamStr19_nowstylectgmaxpage:	aligned_string "nowstylectgmaxpage"
+ParamStr19_nowstylectgdtno:	aligned_string "nowstylectgdtno"
+ParamStr19_func:
 	jr	z, 0x75
 	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
@@ -1176,82 +1176,82 @@ LABEL_ED2506:
 
 
 ParamStr_Table_20:
-	.long LABEL_ED258C
-	.long LABEL_ED2582
-	.long LABEL_ED257C
-	.long LABEL_ED2568
-	.long LABEL_ED2552
-	.long LABEL_ED253E
-	.long LABEL_ED253C
-LABEL_ED253C:	aligned_string ""
-LABEL_ED253E:	aligned_string "nowstylesubctgpage"
-LABEL_ED2552:	aligned_string "nowstylesubctgmaxpage"
-LABEL_ED2568:	aligned_string "nowstylesubctgdtno"
-LABEL_ED257C:	aligned_string "func"
-LABEL_ED2582:	aligned_string "fixedrow"
-LABEL_ED258C:	aligned_string "fixedcol"
+	.long ParamStr20_fixedcol
+	.long ParamStr20_fixedrow
+	.long ParamStr20_func
+	.long ParamStr20_nowstylesubctgdtno
+	.long ParamStr20_nowstylesubctgmaxpage
+	.long ParamStr20_nowstylesubctgpage
+	.long ParamStr20_Empty
+ParamStr20_Empty:	aligned_string ""
+ParamStr20_nowstylesubctgpage:	aligned_string "nowstylesubctgpage"
+ParamStr20_nowstylesubctgmaxpage:	aligned_string "nowstylesubctgmaxpage"
+ParamStr20_nowstylesubctgdtno:	aligned_string "nowstylesubctgdtno"
+ParamStr20_func:	aligned_string "func"
+ParamStr20_fixedrow:	aligned_string "fixedrow"
+ParamStr20_fixedcol:	aligned_string "fixedcol"
 
 
 ParamStr_Table_21:
-	.long LABEL_ED2654
-	.long LABEL_ED264A
-	.long LABEL_ED2644
-	.long LABEL_ED2630
-	.long LABEL_ED261A
-	.long LABEL_ED2606
-	.long LABEL_ED25F6
-	.long LABEL_ED25EC
-	.long LABEL_ED25D8
-	.long LABEL_ED25C4
-	.long LABEL_ED25C2
-LABEL_ED25C2:	aligned_string ""
-LABEL_ED25C4:	aligned_string "nowstylesubsubdtno2"
-LABEL_ED25D8:	aligned_string "nowstylesubsubdtno1"
-LABEL_ED25EC:	aligned_string "nowstyle"
-LABEL_ED25F6:	aligned_string "nowstylesubctg"
-LABEL_ED2606:	aligned_string "nowstylesubctgpage"
-LABEL_ED261A:	aligned_string "nowstylesubctgmaxpage"
-LABEL_ED2630:	aligned_string "nowstylesubctgdtno"
-LABEL_ED2644:	aligned_string "func"
-LABEL_ED264A:	aligned_string "fixedrow"
-LABEL_ED2654:	aligned_string "fixedcol"
+	.long ParamStr21_fixedcol
+	.long ParamStr21_fixedrow
+	.long ParamStr21_func
+	.long ParamStr21_nowstylesubctgdtno
+	.long ParamStr21_nowstylesubctgmaxpage
+	.long ParamStr21_nowstylesubctgpage
+	.long ParamStr21_nowstylesubctg
+	.long ParamStr21_nowstyle
+	.long ParamStr21_nowstylesubsubdtno1
+	.long ParamStr21_nowstylesubsubdtno2
+	.long ParamStr21_Empty
+ParamStr21_Empty:	aligned_string ""
+ParamStr21_nowstylesubsubdtno2:	aligned_string "nowstylesubsubdtno2"
+ParamStr21_nowstylesubsubdtno1:	aligned_string "nowstylesubsubdtno1"
+ParamStr21_nowstyle:	aligned_string "nowstyle"
+ParamStr21_nowstylesubctg:	aligned_string "nowstylesubctg"
+ParamStr21_nowstylesubctgpage:	aligned_string "nowstylesubctgpage"
+ParamStr21_nowstylesubctgmaxpage:	aligned_string "nowstylesubctgmaxpage"
+ParamStr21_nowstylesubctgdtno:	aligned_string "nowstylesubctgdtno"
+ParamStr21_func:	aligned_string "func"
+ParamStr21_fixedrow:	aligned_string "fixedrow"
+ParamStr21_fixedcol:	aligned_string "fixedcol"
 NakaParam_AcMstSong2GridBox:
 	.byte 0xbe, 0x26
 	.byte 0xed, 0x00, 0xb4, 0x26, 0xed, 0x00, 0xae, 0x26
 	.byte 0xed, 0x00, 0x9e, 0x26, 0xed, 0x00, 0x8c, 0x26
 	.byte 0xed, 0x00, 0x7c, 0x26, 0xed, 0x00, 0x7a, 0x26
 	.byte 0xed, 0x00
-LABEL_ED267A:
+MstSong2Grid_Empty:
 	.byte 0x00, 0xff
-LABEL_ED267C:	aligned_string "nowsongctgpage"
-LABEL_ED268C:	aligned_string "nowsongctgmaxpage"
-LABEL_ED269E:	jr	nz, 0x6f
+MstSong2Grid_nowsongctgpage:	aligned_string "nowsongctgpage"
+MstSong2Grid_nowsongctgmaxpage:	aligned_string "nowsongctgmaxpage"
+MstSong2Grid_nowsongctgdtno:	jr	nz, 0x6f
 	aligned_string "wsongctgdtno"
 	.byte 0x66, 0x75
-LABEL_ED26AE:	.byte 0x6e, 0x63, 0x00, 0xff
+MstSong2Grid_func:	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
 
 
 ParamStr_Table_22:
-	.long LABEL_ED277E
-	.long LABEL_ED2774
-	.long LABEL_ED276E
-	.long LABEL_ED275C
-	.long LABEL_ED2746
-	.long LABEL_ED2734
-	.long LABEL_ED2726
-	.long LABEL_ED271E
-	.long LABEL_ED270A
-	.long LABEL_ED26F6
-	.long LABEL_ED26F4
-LABEL_ED26F4:	aligned_string ""
-LABEL_ED26F6:	aligned_string "nowsongsubsubdtno2"
-LABEL_ED270A:	aligned_string "nowsongsubsubdtno1"
-LABEL_ED271E:	aligned_string "nowsong"
-LABEL_ED2726:	aligned_string "nowsongsubctg"
-LABEL_ED2734:	aligned_string "nowsongsubctgpage"
-LABEL_ED2746:
+	.long ParamStr22_fixedcol
+	.long ParamStr22_fixedrow
+	.long ParamStr22_func
+	.long ParamStr22_nowsongsubctgdtno
+	.long ParamStr22_nowsongsubctgmaxpage
+	.long ParamStr22_nowsongsubctgpage
+	.long ParamStr22_nowsongsubctg
+	.long ParamStr22_nowsong
+	.long ParamStr22_nowsongsubsubdtno1
+	.long ParamStr22_nowsongsubsubdtno2
+	.long ParamStr22_Empty
+ParamStr22_Empty:	aligned_string ""
+ParamStr22_nowsongsubsubdtno2:	aligned_string "nowsongsubsubdtno2"
+ParamStr22_nowsongsubsubdtno1:	aligned_string "nowsongsubsubdtno1"
+ParamStr22_nowsong:	aligned_string "nowsong"
+ParamStr22_nowsongsubctg:	aligned_string "nowsongsubctg"
+ParamStr22_nowsongsubctgpage:	aligned_string "nowsongsubctgpage"
+ParamStr22_nowsongsubctgmaxpage:
 	jr	nz, 0x6f
 	aligned_string "wsongsubctgmaxpage"
 	aligned_string "nowsongsubctgdtno"
@@ -1262,27 +1262,27 @@ LABEL_ED2746:
 
 
 ParamStr_Table_23:
-	.long LABEL_ED27C2
-	.long LABEL_ED27BC
-	.long LABEL_ED27B2
-	.long LABEL_ED27AA
-	.long LABEL_ED27A2
-	.long LABEL_ED27A0
-LABEL_ED27A0:	aligned_string ""
-LABEL_ED27A2:	aligned_string "oldswno"
-LABEL_ED27AA:	aligned_string "nowswno"
-LABEL_ED27B2:	aligned_string "fontcolor"
-LABEL_ED27BC:	aligned_string "font"
-LABEL_ED27C2:	aligned_string "func"
+	.long ParamStr23_func
+	.long ParamStr23_font
+	.long ParamStr23_fontcolor
+	.long ParamStr23_nowswno
+	.long ParamStr23_oldswno
+	.long ParamStr23_Empty
+ParamStr23_Empty:	aligned_string ""
+ParamStr23_oldswno:	aligned_string "oldswno"
+ParamStr23_nowswno:	aligned_string "nowswno"
+ParamStr23_fontcolor:	aligned_string "fontcolor"
+ParamStr23_font:	aligned_string "font"
+ParamStr23_func:	aligned_string "func"
 ParamStr_Table_24:
-	.long LABEL_ED27DE
-	.long LABEL_ED27D6
-	.long LABEL_ED27D4
-LABEL_ED27D4:	aligned_string ""
-LABEL_ED27D6:	aligned_string "window"
-LABEL_ED27DE:	aligned_string "page"
+	.long ParamStr24_page
+	.long ParamStr24_window
+	.long ParamStr24_Empty
+ParamStr24_Empty:	aligned_string ""
+ParamStr24_window:	aligned_string "window"
+ParamStr24_page:	aligned_string "page"
 
-LABEL_ED27E4:
+ExtData_NormScreenProc_Ptr:
 	.long NormScreenProc
 .include "ui_widgets/master_style_grid_screens.s"
 	jr	gt, 0x00
@@ -1332,75 +1332,75 @@ NakaDesc_VariScreen:	aligned_string ""
 NakaInst_VariScreen:	aligned_string "NormScreen"
 	.byte 0x1c, 0x00, 0x84, 0x2d, 0xed, 0x00
 ParamStr_Table_25:
-	.long LABEL_ED2D78
-	.long LABEL_ED2D6C
-	.long LABEL_ED2D62
-	.long LABEL_ED2D50
-	.long LABEL_ED2D42
-	.long LABEL_ED2D36
-	.long LABEL_ED2D28
+	.long EventNameStr_EV_CHORDDSP
+	.long EventNameStr_EV_PMBKNAME
+	.long EventNameStr_EV_PMNAME
+	.long EventNameStr_EV_FRTPAGECHANGE
+	.long EventNameStr_EV_SUBCTSHOW
+	.long EventNameStr_EV_PAGESET
+	.long EventNameStr_EV_TVARIPAINT
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_ED2D28:	aligned_string "EV_TVARIPAINT"
-LABEL_ED2D36:	aligned_string "EV_PAGESET"
-LABEL_ED2D42:	aligned_string "EV_SUBCTSHOW"
-LABEL_ED2D50:	aligned_string "EV_FRTPAGECHANGE"
-LABEL_ED2D62:	aligned_string "EV_PMNAME"
-LABEL_ED2D6C:	aligned_string "EV_PMBKNAME"
-LABEL_ED2D78:	aligned_string "EV_CHORDDSP"
+EventNameStr_EV_TVARIPAINT:	aligned_string "EV_TVARIPAINT"
+EventNameStr_EV_PAGESET:	aligned_string "EV_PAGESET"
+EventNameStr_EV_SUBCTSHOW:	aligned_string "EV_SUBCTSHOW"
+EventNameStr_EV_FRTPAGECHANGE:	aligned_string "EV_FRTPAGECHANGE"
+EventNameStr_EV_PMNAME:	aligned_string "EV_PMNAME"
+EventNameStr_EV_PMBKNAME:	aligned_string "EV_PMBKNAME"
+EventNameStr_EV_CHORDDSP:	aligned_string "EV_CHORDDSP"
 	aligned_string "EV_CHORDSHOW"
 	.byte 0x08, 0x00, 0x56, 0x2f, 0xed, 0x00
 NoteNameStr_Table_6:
-	.long LABEL_ED2F4A
-	.long LABEL_ED2F3E
-	.long LABEL_ED2F30
-	.long LABEL_ED2F1E
-	.long LABEL_ED2F10
-	.long LABEL_ED2F00
-	.long LABEL_ED2EF4
-	.long LABEL_ED2EE8
-	.long LABEL_ED2EDA
-	.long LABEL_ED2EC8
-	.long LABEL_ED2EBA
-	.long LABEL_ED2EA8
-	.long LABEL_ED2E9C
-	.long LABEL_ED2E8E
-	.long LABEL_ED2E80
-	.long LABEL_ED2E72
-	.long LABEL_ED2E66
-	.long LABEL_ED2E5C
-	.long LABEL_ED2E52
-	.long LABEL_ED2E44
-	.long LABEL_ED2E36
-	.long LABEL_ED2E2A
-	.long LABEL_ED2E1E
-	.long LABEL_ED2E10
-	.long LABEL_ED2E00
+	.long MethodNameStr_MT_SvariIni
+	.long MethodNameStr_MT_SvariSet
+	.long MethodNameStr_MT_GetSndName
+	.long MethodNameStr_MT_GetSndGrpName
+	.long MethodNameStr_MT_SOUNDNAME
+	.long MethodNameStr_MT_SOUNDGRPNAME
+	.long MethodNameStr_MT_RvariIni
+	.long MethodNameStr_MT_RvariSet
+	.long MethodNameStr_MT_GetRhyName
+	.long MethodNameStr_MT_GetRhyGrpName
+	.long MethodNameStr_MT_RHYTHMNAME
+	.long MethodNameStr_MT_RHYTHMGRPNAME
+	.long MethodNameStr_MT_ChordPre
+	.long MethodNameStr_MT_PMBANKSET
+	.long MethodNameStr_MT_PmBankSet
+	.long MethodNameStr_MT_PmBankName
+	.long MethodNameStr_MT_PmBankMk
+	.long MethodNameStr_MT_PmName
+	.long MethodNameStr_MT_SYSINI
+	.long MethodNameStr_MT_FLASHWRITE
+	.long MethodNameStr_MT_FLASHLOAD
+	.long MethodNameStr_MT_WALLINI
+	.long MethodNameStr_MT_KEYINFO
+	.long MethodNameStr_MT_OTPCNTSET
+	.long MethodNameStr_MT_OTPCNTRESET
 	.byte 0x00, 0x00, 0x00, 0x00
-LABEL_ED2E00:	aligned_string "MT_OTPCNTRESET"
-LABEL_ED2E10:	aligned_string "MT_OTPCNTSET"
-LABEL_ED2E1E:	aligned_string "MT_KEYINFO"
-LABEL_ED2E2A:	aligned_string "MT_WALLINI"
-LABEL_ED2E36:	aligned_string "MT_FLASHLOAD"
-LABEL_ED2E44:	aligned_string "MT_FLASHWRITE"
-LABEL_ED2E52:	aligned_string "MT_SYSINI"
-LABEL_ED2E5C:	aligned_string "MT_PmName"
-LABEL_ED2E66:	aligned_string "MT_PmBankMk"
-LABEL_ED2E72:	aligned_string "MT_PmBankName"
-LABEL_ED2E80:	aligned_string "MT_PmBankSet"
-LABEL_ED2E8E:	aligned_string "MT_PMBANKSET"
-LABEL_ED2E9C:	aligned_string "MT_ChordPre"
-LABEL_ED2EA8:	aligned_string "MT_RHYTHMGRPNAME"
-LABEL_ED2EBA:	aligned_string "MT_RHYTHMNAME"
-LABEL_ED2EC8:	aligned_string "MT_GetRhyGrpName"
-LABEL_ED2EDA:	aligned_string "MT_GetRhyName"
-LABEL_ED2EE8:	aligned_string "MT_RvariSet"
-LABEL_ED2EF4:	aligned_string "MT_RvariIni"
-LABEL_ED2F00:	aligned_string "MT_SOUNDGRPNAME"
-LABEL_ED2F10:	aligned_string "MT_SOUNDNAME"
-LABEL_ED2F1E:	aligned_string "MT_GetSndGrpName"
-LABEL_ED2F30:	aligned_string "MT_GetSndName"
-LABEL_ED2F3E:	aligned_string "MT_SvariSet"
-LABEL_ED2F4A:	aligned_string "MT_SvariIni"
+MethodNameStr_MT_OTPCNTRESET:	aligned_string "MT_OTPCNTRESET"
+MethodNameStr_MT_OTPCNTSET:	aligned_string "MT_OTPCNTSET"
+MethodNameStr_MT_KEYINFO:	aligned_string "MT_KEYINFO"
+MethodNameStr_MT_WALLINI:	aligned_string "MT_WALLINI"
+MethodNameStr_MT_FLASHLOAD:	aligned_string "MT_FLASHLOAD"
+MethodNameStr_MT_FLASHWRITE:	aligned_string "MT_FLASHWRITE"
+MethodNameStr_MT_SYSINI:	aligned_string "MT_SYSINI"
+MethodNameStr_MT_PmName:	aligned_string "MT_PmName"
+MethodNameStr_MT_PmBankMk:	aligned_string "MT_PmBankMk"
+MethodNameStr_MT_PmBankName:	aligned_string "MT_PmBankName"
+MethodNameStr_MT_PmBankSet:	aligned_string "MT_PmBankSet"
+MethodNameStr_MT_PMBANKSET:	aligned_string "MT_PMBANKSET"
+MethodNameStr_MT_ChordPre:	aligned_string "MT_ChordPre"
+MethodNameStr_MT_RHYTHMGRPNAME:	aligned_string "MT_RHYTHMGRPNAME"
+MethodNameStr_MT_RHYTHMNAME:	aligned_string "MT_RHYTHMNAME"
+MethodNameStr_MT_GetRhyGrpName:	aligned_string "MT_GetRhyGrpName"
+MethodNameStr_MT_GetRhyName:	aligned_string "MT_GetRhyName"
+MethodNameStr_MT_RvariSet:	aligned_string "MT_RvariSet"
+MethodNameStr_MT_RvariIni:	aligned_string "MT_RvariIni"
+MethodNameStr_MT_SOUNDGRPNAME:	aligned_string "MT_SOUNDGRPNAME"
+MethodNameStr_MT_SOUNDNAME:	aligned_string "MT_SOUNDNAME"
+MethodNameStr_MT_GetSndGrpName:	aligned_string "MT_GetSndGrpName"
+MethodNameStr_MT_GetSndName:	aligned_string "MT_GetSndName"
+MethodNameStr_MT_SvariSet:	aligned_string "MT_SvariSet"
+MethodNameStr_MT_SvariIni:	aligned_string "MT_SvariIni"
 	aligned_string "MT_VariWrite"
 	.byte 0x1a, 0x00, 0x62, 0xcd, 0xfb, 0x00, 0xe7
 	.byte 0xe1, 0xfb, 0x00, 0x18, 0xf5, 0xfb, 0x00, 0xc3
@@ -1418,65 +1418,65 @@ LABEL_ED2F4A:	aligned_string "MT_SvariIni"
 	.byte 0xa6, 0xfb, 0x00, 0x26, 0x1f, 0xfc, 0x00, 0x22
 	.byte 0xd0, 0xfb, 0x00, 0x00, 0x00, 0x00, 0x00
 NoteNameStr_Table_7:
-	.long LABEL_ED3282
-	.long LABEL_ED3272
-	.long LABEL_ED3262
-	.long LABEL_ED324E
-	.long LABEL_ED323A
-	.long LABEL_ED322A
-	.long LABEL_ED3218
-	.long LABEL_ED3206
-	.long LABEL_ED31F4
-	.long LABEL_ED31E4
-	.long LABEL_ED31D6
-	.long LABEL_ED31C6
-	.long LABEL_ED31AE
-	.long LABEL_ED3196
-	.long LABEL_ED3180
-	.long LABEL_ED316C
-	.long LABEL_ED3152
-	.long LABEL_ED3138
-	.long LABEL_ED3120
-	.long LABEL_ED3106
-	.long LABEL_ED30EC
-	.long LABEL_ED30D4
-	.long LABEL_ED30BA
-	.long LABEL_ED30A2
-	.long LABEL_ED308C
-	.long LABEL_ED3076
-	.long LABEL_ED3062
-	.long LABEL_ED3050
-	.long LABEL_ED304E
-LABEL_ED304E:
+	.long ProcNameStr_NormScreenProc
+	.long ProcNameStr_VariScreenProc
+	.long ProcNameStr_RVariScreenProc
+	.long ProcNameStr_AcTransposeBoxProc
+	.long ProcNameStr_AcFreeSplitBoxProc
+	.long ProcNameStr_AcChordBoxProc
+	.long ProcNameStr_PmBankScreenProc
+	.long ProcNameStr_AcPmBkEditBoxProc
+	.long ProcNameStr_MsaModeScreenProc
+	.long ProcNameStr_PmemModeBoxProc
+	.long ProcNameStr_AcBkNoBoxProc
+	.long ProcNameStr_AcPmBkNoBoxProc
+	.long ProcNameStr_IvWindowPageControlProc
+	.long ProcNameStr_IvPmemWindowPageCtlProc
+	.long ProcNameStr_AcTchSensGridBoxProc
+	.long ProcNameStr_AcFSWAssGridBoxProc
+	.long ProcNameStr_AcPmExpFilterGridBoxProc
+	.long ProcNameStr_AcDispTimeSetGridBoxProc
+	.long ProcNameStr_AcMstSugAlpGridBoxProc
+	.long ProcNameStr_AcMstStyleAlpGridBoxProc
+	.long ProcNameStr_IvMstStyleWindowPgCtlProc
+	.long ProcNameStr_AcMstStyle1GridBoxProc
+	.long ProcNameStr_AcMstStyle1SubGridBoxProc
+	.long ProcNameStr_AcMstStyle2GridBoxProc
+	.long ProcNameStr_AcMstSong1GridBoxProc
+	.long ProcNameStr_AcMstSong2GridBoxProc
+	.long ProcNameStr_SineWaveScreenProc
+	.long ProcNameStr_IvPageOverWrProc
+	.long ProcNameStr_NullTerm
+ProcNameStr_NullTerm:
 	.byte 0x00, 0xff
-LABEL_ED3050:	aligned_string "IvPageOverWrProc"
-LABEL_ED3062:	aligned_string "SineWaveScreenProc"
-LABEL_ED3076:	aligned_string "AcMstSong2GridBoxProc"
-LABEL_ED308C:	aligned_string "AcMstSong1GridBoxProc"
-LABEL_ED30A2:	aligned_string "AcMstStyle2GridBoxProc"
-LABEL_ED30BA:	aligned_string "AcMstStyle1SubGridBoxProc"
-LABEL_ED30D4:	aligned_string "AcMstStyle1GridBoxProc"
-LABEL_ED30EC:	aligned_string "IvMstStyleWindowPgCtlProc"
-LABEL_ED3106:	aligned_string "AcMstStyleAlpGridBoxProc"
-LABEL_ED3120:	aligned_string "AcMstSugAlpGridBoxProc"
-LABEL_ED3138:	aligned_string "AcDispTimeSetGridBoxProc"
-LABEL_ED3152:	aligned_string "AcPmExpFilterGridBoxProc"
-LABEL_ED316C:	aligned_string "AcFSWAssGridBoxProc"
-LABEL_ED3180:	aligned_string "AcTchSensGridBoxProc"
-LABEL_ED3196:	aligned_string "IvPmemWindowPageCtlProc"
-LABEL_ED31AE:	aligned_string "IvWindowPageControlProc"
-LABEL_ED31C6:	aligned_string "AcPmBkNoBoxProc"
-LABEL_ED31D6:	aligned_string "AcBkNoBoxProc"
-LABEL_ED31E4:	aligned_string "PmemModeBoxProc"
-LABEL_ED31F4:	aligned_string "MsaModeScreenProc"
-LABEL_ED3206:	aligned_string "AcPmBkEditBoxProc"
-LABEL_ED3218:	aligned_string "PmBankScreenProc"
-LABEL_ED322A:	aligned_string "AcChordBoxProc"
-LABEL_ED323A:	aligned_string "AcFreeSplitBoxProc"
-LABEL_ED324E:	aligned_string "AcTransposeBoxProc"
-LABEL_ED3262:	aligned_string "RVariScreenProc"
-LABEL_ED3272:	aligned_string "VariScreenProc"
-LABEL_ED3282:	aligned_string "NormScreenProc"
+ProcNameStr_IvPageOverWrProc:	aligned_string "IvPageOverWrProc"
+ProcNameStr_SineWaveScreenProc:	aligned_string "SineWaveScreenProc"
+ProcNameStr_AcMstSong2GridBoxProc:	aligned_string "AcMstSong2GridBoxProc"
+ProcNameStr_AcMstSong1GridBoxProc:	aligned_string "AcMstSong1GridBoxProc"
+ProcNameStr_AcMstStyle2GridBoxProc:	aligned_string "AcMstStyle2GridBoxProc"
+ProcNameStr_AcMstStyle1SubGridBoxProc:	aligned_string "AcMstStyle1SubGridBoxProc"
+ProcNameStr_AcMstStyle1GridBoxProc:	aligned_string "AcMstStyle1GridBoxProc"
+ProcNameStr_IvMstStyleWindowPgCtlProc:	aligned_string "IvMstStyleWindowPgCtlProc"
+ProcNameStr_AcMstStyleAlpGridBoxProc:	aligned_string "AcMstStyleAlpGridBoxProc"
+ProcNameStr_AcMstSugAlpGridBoxProc:	aligned_string "AcMstSugAlpGridBoxProc"
+ProcNameStr_AcDispTimeSetGridBoxProc:	aligned_string "AcDispTimeSetGridBoxProc"
+ProcNameStr_AcPmExpFilterGridBoxProc:	aligned_string "AcPmExpFilterGridBoxProc"
+ProcNameStr_AcFSWAssGridBoxProc:	aligned_string "AcFSWAssGridBoxProc"
+ProcNameStr_AcTchSensGridBoxProc:	aligned_string "AcTchSensGridBoxProc"
+ProcNameStr_IvPmemWindowPageCtlProc:	aligned_string "IvPmemWindowPageCtlProc"
+ProcNameStr_IvWindowPageControlProc:	aligned_string "IvWindowPageControlProc"
+ProcNameStr_AcPmBkNoBoxProc:	aligned_string "AcPmBkNoBoxProc"
+ProcNameStr_AcBkNoBoxProc:	aligned_string "AcBkNoBoxProc"
+ProcNameStr_PmemModeBoxProc:	aligned_string "PmemModeBoxProc"
+ProcNameStr_MsaModeScreenProc:	aligned_string "MsaModeScreenProc"
+ProcNameStr_AcPmBkEditBoxProc:	aligned_string "AcPmBkEditBoxProc"
+ProcNameStr_PmBankScreenProc:	aligned_string "PmBankScreenProc"
+ProcNameStr_AcChordBoxProc:	aligned_string "AcChordBoxProc"
+ProcNameStr_AcFreeSplitBoxProc:	aligned_string "AcFreeSplitBoxProc"
+ProcNameStr_AcTransposeBoxProc:	aligned_string "AcTransposeBoxProc"
+ProcNameStr_RVariScreenProc:	aligned_string "RVariScreenProc"
+ProcNameStr_VariScreenProc:	aligned_string "VariScreenProc"
+ProcNameStr_NormScreenProc:	aligned_string "NormScreenProc"
 	.byte 0xd9, 0x27, 0xfc, 0x00, 0x15, 0x28, 0xfc
 	.byte 0x00, 0x5e, 0x29, 0xfc, 0x00, 0x87, 0x28, 0xfc
 	.byte 0x00, 0x44, 0x2a, 0xfc, 0x00, 0xec, 0x28, 0xfc
@@ -1509,8 +1509,8 @@ NoteNameStr_Table_8:
 	.long NakaInst_TEST3FUNC
 	.long NakaInst_TEST4FUNC
 	.long NakaInst_TEST6FUNC
-	.long LABEL_ED333A
-LABEL_ED333A:
+	.long NakaInstTable8_NullTerm
+NakaInstTable8_NullTerm:
 	.byte 0x00, 0xff
 .include "ui_widgets/normal_mode_layout.s"
 	stib_dpi 0x00, 0x00
@@ -1583,35 +1583,35 @@ LABEL_ED333A:
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x23, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0xa0, 0x00, 0x80, 0x00
-	.long LABEL_EB00C6
+	.long WidgetName_PtrBlock_I2
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x15, 0x00, 0x04, 0x00
 
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x24, 0x00
 	.byte 0x22, 0x00, 0x08, 0x00, 0x79, 0x00, 0x80, 0x00
-	.long LABEL_EB009F
+	.long WidgetName_PtrBlock_F2
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x16, 0x00, 0x03, 0x00
 
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x25, 0x00
 	.byte 0x23, 0x00, 0x08, 0x00, 0x52, 0x00, 0x80, 0x00
-	.long LABEL_EB0078
+	.long WidgetName_PtrBlock_E
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x17, 0x00, 0x02, 0x00
 
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0x26, 0x00
 	.byte 0x24, 0x00, 0x08, 0x00, 0x2b, 0x00, 0x80, 0x00
-	.long LABEL_EB0051
+	.long WidgetName_PtrBlock_D
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x1a, 0x00, 0x01, 0x00
 
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x21, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0x25, 0x00, 0x08, 0x00, 0x04, 0x00, 0x80, 0x00
-	.long LABEL_EB002A
+	.long WidgetName_PtrBlock_C
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x1b, 0x00, 0x00, 0x00
 
@@ -1689,56 +1689,56 @@ LABEL_ED333A:
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x32, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0x04, 0x00, 0x80, 0x00
-	.long LABEL_EB002A
+	.long WidgetName_PtrBlock_C
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0x00, 0x00
 
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x33, 0x00
 	.byte 0x31, 0x00, 0x08, 0x00, 0x2b, 0x00, 0x80, 0x00
-	.long LABEL_EB0051
+	.long WidgetName_PtrBlock_D
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x09, 0x00, 0x01, 0x00
 
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x34, 0x00
 	.byte 0x32, 0x00, 0x08, 0x00, 0x52, 0x00, 0x80, 0x00
-	.long LABEL_EB0078
+	.long WidgetName_PtrBlock_E
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x0a, 0x00, 0x02, 0x00
 
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x35, 0x00
 	.byte 0x33, 0x00, 0x08, 0x00, 0x79, 0x00, 0x80, 0x00
-	.long LABEL_EB009F
+	.long WidgetName_PtrBlock_F2
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x0b, 0x00, 0x03, 0x00
 
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x36, 0x00
 	.byte 0x34, 0x00, 0x08, 0x00, 0xa0, 0x00, 0x80, 0x00
-	.long LABEL_EB00C6
+	.long WidgetName_PtrBlock_I2
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x0c, 0x00, 0x04, 0x00
 
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x37, 0x00
 	.byte 0x35, 0x00, 0x08, 0x00, 0xc7, 0x00, 0x80, 0x00
-	.long LABEL_EB00ED
+	.long WidgetName_PtrBlock_L
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x0d, 0x00, 0x05, 0x00
 
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0x38, 0x00
 	.byte 0x36, 0x00, 0x08, 0x00, 0xee, 0x00, 0x80, 0x00
-	.long LABEL_EB0114
+	.long WidgetName_PtrBlock_M2
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x0e, 0x00, 0x06, 0x00
 
 
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x30, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0x37, 0x00, 0x08, 0x00, 0x15, 0x01, 0x80, 0x00
-	.long LABEL_EB013B
+	.long WidgetName_PtrBlock_N1
 	.byte 0x07, 0x00, 0xc1, 0x00
 	.byte 0xff, 0xff, 0x0f, 0x00, 0x07, 0x00
 
@@ -1792,10 +1792,10 @@ LABEL_ED333A:
 	.byte 0x80, 0x00	; Y position: 128
 	.byte 0xe1, 0x00	; Width: 225
 	.byte 0x92, 0x00	; Height: 146
-	.long LABEL_ED66BA
+	.long Str_ErrorDialog_Caution
 	.byte 0x02, 0x00, 0x00, 0x00	; String flags
 	.byte 0xf9, 0x00	; Text attributes
-LABEL_ED66BA:	.asciz "CAUTION!!"	; English text
+Str_ErrorDialog_Caution:	.asciz "CAUTION!!"	; English text
 
 
 ; ---------------------------------------------------------------------------
@@ -1838,10 +1838,10 @@ ErrorDialog_RecoveryLine1:
 	.byte 0xae, 0x00	; Y position: 174
 	.byte 0x09, 0x01	; Width: 265
 	.byte 0xb8, 0x00	; Height: 184
-	.long LABEL_ED672A
+	.long Str_ErrorDialog_TryTurningOff
 	.byte 0x03, 0x00, 0x00, 0x00	; String flags
 	.byte 0x00, 0x00	; Text attributes
-LABEL_ED672A:	aligned_string "Please try turning off and on again."
+Str_ErrorDialog_TryTurningOff:	aligned_string "Please try turning off and on again."
 
 
 ; ---------------------------------------------------------------------------

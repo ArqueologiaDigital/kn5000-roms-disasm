@@ -737,7 +737,7 @@ Naka_DrawbarDisplay_Table2:
 	.long NakaInst_chara1w_fnt
 	.long NakaInst_chara2w_fnt
 	.long NakaInst_chara5w_fnt
-	.long LABEL_EADAE8
+	.long NakaInst_CharaList_Pad
 	.zero 84
 	.byte 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.fill 8, 1, 0xff
@@ -808,58 +808,58 @@ Naka_DrawbarReg_Table:
 	.long SeqChan_Map_6ch
 	.long SeqChan_Map_8ch
 	.long SeqChan_Map_10ch
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED0212
-	.long LABEL_ED0212
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
 	.long NoteNameStr_Table_1
-	.long LABEL_ED0212
+	.long SeqChanContainer_ChordTypeRef_A
 	.long NoteNameStr_Table_2
-	.long LABEL_ED0212
-	.long LABEL_ED029C
-	.long LABEL_ED0212
-	.long LABEL_ED0212
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_A
 	.long NoteNameStr_Table_3
-	.long LABEL_ED0212
-	.long LABEL_ED029C
+	.long SeqChanContainer_ChordTypeRef_A
+	.long SeqChanContainer_ChordTypeRef_B
 	.byte 0x28, 0xf2, 0x03, 0x00
 	.byte 0x28, 0xf2, 0x03, 0x00, 0x28, 0xf2, 0x03, 0x00
 	.byte 0x28, 0xf2, 0x03, 0x00, 0x28, 0xf2, 0x03, 0x00
