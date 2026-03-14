@@ -1211,7 +1211,7 @@ NAKA_BankView_Container_Root:
 	aligned_string "BANK VIEW"
 
 
-LABEL_E0FB28:
+NAKA_BankView_Group_TopBar:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0x8a, 0x00, 0x8c, 0x00
 	.byte 0x8d, 0x00, 0xff, 0xff, 0x08, 0x00, 0x08, 0x00
@@ -1220,7 +1220,7 @@ LABEL_E0FB28:
 	.byte 0xc1, 0x00
 
 
-LABEL_E0FB42:
+NAKA_BankView_Label_Bank1ForDinnerShow:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8b, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
@@ -1231,7 +1231,7 @@ LABEL_E0FB42:
 	aligned_string "BANK 1:For Dinner Show"
 
 
-LABEL_E0FB7A:
+NAKA_BankView_Panel_Nav:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0x8a, 0x00
 	.byte 0x8e, 0x00, 0x90, 0x00, 0x8b, 0x00, 0x08, 0x00
@@ -1240,7 +1240,7 @@ LABEL_E0FB7A:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
 
 
-LABEL_E0FBA0:
+NAKA_BankView_Label_NavUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8d, 0x00, 0x8f, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0x12, 0x01
@@ -1249,7 +1249,7 @@ LABEL_E0FBA0:
 	.byte 0x7e, 0x39, 0x62, 0x00
 
 
-LABEL_E0FBC4:
+NAKA_BankView_Label_NavDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8e, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0x08, 0x00, 0x12, 0x01, 0xe0, 0x00, 0x1d, 0x01
@@ -1257,7 +1257,7 @@ LABEL_E0FBC4:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x7e, 0x39, 0x38, 0x00
 
 
-LABEL_E0FBE8:
+NAKA_BankView_Slider_Scroll1:
 	naka_header NAKA_TYPE_SLIDER
 	.byte 0x8a, 0x00, 0xff, 0xff
 	.byte 0x91, 0x00, 0x8d, 0x00, 0x08, 0x00, 0x36, 0x01
@@ -1267,7 +1267,7 @@ LABEL_E0FBE8:
 	.byte 0x7e, 0x38, 0x30, 0x00
 
 
-LABEL_E0FC14:
+NAKA_BankView_Slider_Scroll2:
 	naka_header NAKA_TYPE_SLIDER
 	.byte 0x8a, 0x00, 0xff, 0xff, 0x92, 0x00, 0x90, 0x00
 	.byte 0x08, 0x00, 0x36, 0x01, 0x77, 0x00, 0x3f, 0x01
@@ -1276,7 +1276,7 @@ LABEL_E0FC14:
 	.byte 0x20, 0x01, 0xff, 0xff, 0x7e, 0x38, 0x30, 0x00
 
 
-LABEL_E0FC40:
+NAKA_BankView_Label_Bank:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00, 0xff, 0xff
 	.byte 0x93, 0x00, 0x91, 0x00, 0x08, 0x00, 0x02, 0x01
@@ -1285,7 +1285,7 @@ LABEL_E0FC40:
 	aligned_string "BANK"
 
 
-LABEL_E0FC66:
+NAKA_BankView_Label_Naming:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00, 0xff, 0xff, 0x94, 0x00
 	.byte 0x92, 0x00, 0x08, 0x00, 0x02, 0x01, 0x52, 0x00
@@ -1294,7 +1294,7 @@ LABEL_E0FC66:
 	aligned_string "NAMING"
 
 
-LABEL_E0FC8E:
+NAKA_BankView_Label_Memory:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00, 0xff, 0xff, 0x95, 0x00
 	.byte 0x93, 0x00, 0x08, 0x00, 0x02, 0x01, 0x6e, 0x00
@@ -1303,7 +1303,7 @@ LABEL_E0FC8E:
 	aligned_string "MEMORY"
 
 
-LABEL_E0FCB6:
+NAKA_BankView_Label_Naming2:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00, 0xff, 0xff, 0x96, 0x00
 	.byte 0x94, 0x00, 0x08, 0x00, 0x02, 0x01, 0x7e, 0x00
@@ -1312,7 +1312,7 @@ LABEL_E0FCB6:
 	aligned_string "NAMING"
 
 
-LABEL_E0FCDE:
+NAKA_BankView_Value_BankNum:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0x8a, 0x00, 0xff, 0xff, 0x97, 0x00
 	.byte 0x95, 0x00, 0x08, 0x00, 0xf6, 0x00, 0xe3, 0x00
@@ -1320,7 +1320,7 @@ LABEL_E0FCDE:
 	.byte 0x08, 0x00, 0x01, 0x00
 
 
-LABEL_E0FCF8:
+NAKA_BankView_Label_Bank8CurtainCall:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00, 0xff, 0xff
 	.byte 0x98, 0x00, 0x96, 0x00, 0x08, 0x00, 0x2a, 0x00
@@ -1329,7 +1329,7 @@ LABEL_E0FCF8:
 	aligned_string "8:Curtain Call !!"
 
 
-LABEL_E0FD2A:
+NAKA_BankView_Label_Bank3HotelCombo:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00
 	.byte 0xff, 0xff, 0x99, 0x00, 0x97, 0x00, 0x08, 0x00
@@ -1340,7 +1340,7 @@ LABEL_E0FD2A:
 	aligned_string "3:Hotel Combo"
 
 
-LABEL_E0FD58:
+NAKA_BankView_Label_Bank7PubSingAlong:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00, 0xff, 0xff
 	.byte 0x9a, 0x00, 0x98, 0x00, 0x08, 0x00, 0x2a, 0x00
@@ -1349,7 +1349,7 @@ LABEL_E0FD58:
 	aligned_string "7:Pub Sing Along"
 
 
-LABEL_E0FD8A:
+NAKA_BankView_Label_Bank6SoloRomance:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00
 	.byte 0xff, 0xff, 0x9b, 0x00, 0x99, 0x00, 0x08, 0x00
@@ -1360,7 +1360,7 @@ LABEL_E0FD8A:
 	aligned_string "6:Solo Romance"
 
 
-LABEL_E0FDBA:
+NAKA_BankView_Label_Bank5CasinoLights:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00
 	.byte 0xff, 0xff, 0x9c, 0x00, 0x9a, 0x00, 0x08, 0x00
@@ -1371,7 +1371,7 @@ LABEL_E0FDBA:
 	aligned_string "5:Casino Lights"
 
 
-LABEL_E0FDEA:
+NAKA_BankView_Label_Bank4LaidBackOctave:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00
 	.byte 0xff, 0xff, 0x9d, 0x00, 0x9b, 0x00, 0x08, 0x00
@@ -1382,7 +1382,7 @@ LABEL_E0FDEA:
 	aligned_string "4:Laid Back Octave"
 
 
-LABEL_E0FE1E:
+NAKA_BankView_Label_Bank1Overture:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00, 0xff, 0xff, 0x9e, 0x00
 	.byte 0x9c, 0x00, 0x08, 0x00, 0x2a, 0x00, 0x50, 0x00
@@ -1391,7 +1391,7 @@ LABEL_E0FE1E:
 	aligned_string "1:Overture"
 
 
-LABEL_E0FE4A:
+NAKA_BankView_Label_Bank2LateAtNight:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00
 	.byte 0xff, 0xff, 0x9f, 0x00, 0x9d, 0x00, 0x08, 0x00
@@ -1402,7 +1402,7 @@ LABEL_E0FE4A:
 	aligned_string "2:Late At Night"
 
 
-LABEL_E0FE7A:
+NAKA_BankView_Label_BankFooter:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0x8a, 0x00
 	.byte 0xff, 0xff, 0xa0, 0x00, 0x9e, 0x00, 0x08, 0x00
@@ -1413,7 +1413,7 @@ LABEL_E0FE7A:
 	aligned_string "BANK"
 
 
-LABEL_E0FEA0:
+NAKA_BankView_Group_Page2Header:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0x8a, 0x00, 0xa1, 0x00
 	.byte 0xff, 0xff, 0x9f, 0x00, 0x08, 0x00, 0xf0, 0x00
@@ -1421,7 +1421,7 @@ LABEL_E0FEA0:
 	.byte 0xc1, 0x00
 
 
-LABEL_E0FEBA:
+NAKA_BankView_Label_Page2of2:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa0, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
@@ -1431,7 +1431,7 @@ LABEL_E0FEBA:
 	aligned_string "PAGE 2/2"
 
 
-LABEL_E0FEE4:
+NAKA_SmfDirectPlay_Container_Root:
 	naka_header NAKA_TYPE_CONTAINER
 	.byte 0xff, 0xff, 0xa3, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3f, 0x01
@@ -1441,7 +1441,7 @@ LABEL_E0FEE4:
 	aligned_string "SMF DIRECT PLAY  "
 
 
-LABEL_E0FF20:
+NAKA_SmfDirectPlay_Label_Tempo:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa2, 0x00, 0xff, 0xff
 	.byte 0xa4, 0x00, 0xff, 0xff, 0x08, 0x00, 0x00, 0x01
@@ -1450,7 +1450,7 @@ LABEL_E0FF20:
 	aligned_string "~aa=115"
 
 
-LABEL_E0FF48:
+NAKA_SmfDirectPlay_Label_Icon1:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa2, 0x00, 0xff, 0xff
 	.byte 0xa5, 0x00, 0xa3, 0x00, 0x08, 0x00, 0xfe, 0xff
@@ -1459,7 +1459,7 @@ LABEL_E0FF48:
 	.byte 0x7e, 0x37, 0x66, 0x00
 
 
-LABEL_E0FF6C:
+NAKA_SmfDirectPlay_Label_Mic:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa2, 0x00, 0xff, 0xff, 0xa6, 0x00, 0xa4, 0x00
 	.byte 0x08, 0x00, 0x08, 0x00, 0x22, 0x00, 0x23, 0x00
@@ -1468,7 +1468,7 @@ LABEL_E0FF6C:
 	.asciz "MIC"
 
 
-LABEL_E0FF90:
+NAKA_SmfDirectPlay_Group_SaintsLyrics:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0xa2, 0x00, 0xa7, 0x00
 	.byte 0xac, 0x00, 0xa5, 0x00, 0x08, 0x00, 0x14, 0x00
@@ -1476,7 +1476,7 @@ LABEL_E0FF90:
 	.byte 0xc1, 0x00
 
 
-LABEL_E0FFAA:
+NAKA_SmfDirectPlay_Label_SaintsPart1:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa6, 0x00
 	.byte 0xff, 0xff, 0xa8, 0x00, 0xff, 0xff, 0x08, 0x00
@@ -1487,7 +1487,7 @@ LYRICS_SAINTS_PART1:
 	aligned_string "Oh,I want to be in that num"
 
 
-LABEL_E0FFE6:
+NAKA_SmfDirectPlay_Label_SaintsPart2:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa6, 0x00, 0xff, 0xff, 0xa9, 0x00
 	.byte 0xa7, 0x00, 0x08, 0x00, 0xf6, 0x00, 0x96, 0x00
@@ -1498,7 +1498,7 @@ LYRICS_SAINTS_PART2:
 	aligned_string "ber."
 
 
-LABEL_E1000C:
+NAKA_SmfDirectPlay_Label_SaintsPart3:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa6, 0x00, 0xff, 0xff, 0xaa, 0x00, 0xa8, 0x00
 	.byte 0x08, 0x00, 0x1e, 0x00, 0x66, 0x00, 0xb1, 0x00
@@ -1509,18 +1509,18 @@ LYRICS_SAINTS_PART3:
 	aligned_string "Oh,When the Saints"
 
 
-LABEL_E10040:
+NAKA_SmfDirectPlay_Label_SaintsMarchin:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa6, 0x00, 0xff, 0xff
 	.byte 0xab, 0x00, 0xa9, 0x00, 0x08, 0x00, 0x1e, 0x00
 	.byte 0xa6, 0x00, 0x11, 0x01, 0xb8, 0x00
-	.long LABEL_E10060h
+	.long NAKA_SmfDirectPlay_Str_SaintsMarchin
 	.byte 0x00, 0x00, 0x00, 0x00, 0xfc, 0x00
-LABEL_E10060h:
+NAKA_SmfDirectPlay_Str_SaintsMarchin:
 	aligned_string "When the Saints go marchin'in."
 
 
-LABEL_E10080:
+NAKA_SmfDirectPlay_Label_SaintsMarchin2:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa6, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0xaa, 0x00, 0x08, 0x00, 0x1e, 0x00
@@ -1529,7 +1529,7 @@ LABEL_E10080:
 	aligned_string "go marchin'in."
 
 
-LABEL_E100B0:
+NAKA_SmfDirectPlay_Label_WhenTheSaints:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa2, 0x00, 0xff, 0xff
 	.byte 0xad, 0x00, 0xa6, 0x00, 0x08, 0x00, 0x4e, 0x00
@@ -1538,7 +1538,7 @@ LABEL_E100B0:
 	aligned_string "When The Saints"
 
 
-LABEL_E100E0:
+NAKA_SmfDirectPlay_Label_TransportIcon:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa2, 0x00, 0xff, 0xff
 	.byte 0xae, 0x00, 0xac, 0x00, 0x08, 0x00, 0x32, 0x00
@@ -1547,7 +1547,7 @@ LABEL_E100E0:
 	.byte 0x00, 0xff
 
 
-LABEL_E10102:
+NAKA_SmfDirectPlay_Label_Play:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xa2, 0x00
 	.byte 0xff, 0xff, 0xaf, 0x00, 0xad, 0x00, 0x08, 0x00
@@ -1558,7 +1558,7 @@ LABEL_E10102:
 	aligned_string "PLAY"
 
 
-LABEL_E10128:
+NAKA_SmfDirectPlay_Widget3E_TrackA:
 	naka_header NAKA_TYPE_0x3E
 	.byte 0xa2, 0x00, 0xb0, 0x00
 	.byte 0xb1, 0x00, 0xae, 0x00, 0x08, 0x00, 0x54, 0x00
@@ -1566,10 +1566,10 @@ LABEL_E10128:
 	.byte 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x54, 0x01, 0xe1, 0x00
-LABEL_E10154:	aligned_string ""
+NAKA_SmfDirectPlay_EmptyStr_TrackA:	aligned_string ""
 
 
-LABEL_E10156:
+NAKA_SmfDirectPlay_Widget2C_TrackA:
 	naka_header NAKA_TYPE_0x2C
 	.byte 0xaf, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x56, 0x00, 0xdb, 0x00
@@ -1577,7 +1577,7 @@ LABEL_E10156:
 	.byte 0x08, 0x00, 0x00, 0x00
 
 
-LABEL_E10170:
+NAKA_SmfDirectPlay_Panel_TrackB:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0xa2, 0x00, 0xb2, 0x00
 	.byte 0xb3, 0x00, 0xaf, 0x00, 0x08, 0x00, 0xa4, 0x00
@@ -1586,7 +1586,7 @@ LABEL_E10170:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x07, 0x00
 
 
-LABEL_E10196:
+NAKA_SmfDirectPlay_Widget2C_TrackB:
 	naka_header NAKA_TYPE_0x2C
 	.byte 0xb1, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0xa6, 0x00, 0xdb, 0x00
@@ -1594,7 +1594,7 @@ LABEL_E10196:
 	.byte 0x06, 0x00, 0x00, 0x00
 
 
-LABEL_E101B0:
+NAKA_SmfDirectPlay_Panel_TrackC:
 	naka_header NAKA_TYPE_PANEL
 	.byte 0xa2, 0x00, 0xb4, 0x00
 	.byte 0xb5, 0x00, 0xb1, 0x00, 0x08, 0x00, 0x7c, 0x00
@@ -1603,7 +1603,7 @@ LABEL_E101B0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x07, 0x00
 
 
-LABEL_E101D6:
+NAKA_SmfDirectPlay_Widget2C_TrackC:
 	naka_header NAKA_TYPE_0x2C
 	.byte 0xb3, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x7e, 0x00, 0xdb, 0x00
@@ -1611,7 +1611,7 @@ LABEL_E101D6:
 	.byte 0x09, 0x00, 0x00, 0x00
 
 
-LABEL_E101F0:
+NAKA_SmfDirectPlay_Widget3E_TrackD:
 	naka_header NAKA_TYPE_0x3E
 	.byte 0xa2, 0x00, 0xb6, 0x00
 	.byte 0xb7, 0x00, 0xb3, 0x00, 0x08, 0x00, 0x2c, 0x00
@@ -1619,10 +1619,10 @@ LABEL_E101F0:
 	.byte 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x1c, 0x02, 0xe1, 0x00
-LABEL_E1021C:	aligned_string ""
+NAKA_SmfDirectPlay_EmptyStr_TrackD:	aligned_string ""
 
 
-LABEL_E1021E:
+NAKA_SmfDirectPlay_Widget2C_TrackD:
 	naka_header NAKA_TYPE_0x2C
 	.byte 0xb5, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x2e, 0x00, 0xdb, 0x00
@@ -1630,7 +1630,7 @@ LABEL_E1021E:
 	.byte 0x0a, 0x00, 0x00, 0x00
 
 
-LABEL_E10238:
+NAKA_SmfDirectPlay_Widget3E_TrackE:
 	naka_header NAKA_TYPE_0x3E
 	.byte 0xa2, 0x00, 0xb8, 0x00
 	.byte 0xff, 0xff, 0xb5, 0x00, 0x08, 0x00, 0xcc, 0x00
@@ -1639,10 +1639,10 @@ LABEL_E10238:
 	.byte 0xc1, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x64, 0x02, 0xe1, 0x00
-LABEL_E10264:	aligned_string ""
+NAKA_SmfDirectPlay_EmptyStr_TrackE:	aligned_string ""
 
 
-LABEL_E10266:
+NAKA_SmfDirectPlay_Widget2C_TrackE:
 	naka_header NAKA_TYPE_0x2C
 	.byte 0xb7, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0xce, 0x00, 0xdb, 0x00
@@ -1650,7 +1650,7 @@ LABEL_E10266:
 	.byte 0x0b, 0x00, 0x00, 0x00
 
 
-LABEL_E10280:
+NAKA_Entertainer_Container_Root:
 	naka_header NAKA_TYPE_CONTAINER
 	.byte 0xff, 0xff, 0xba, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0x0a, 0x00, 0x00, 0x00
@@ -1661,14 +1661,14 @@ LABEL_E10280:
 	aligned_string "ENTERTAINER"
 
 
-LABEL_E102B6:
+NAKA_Entertainer_Group_TopBar:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0xb9, 0x00, 0xbb, 0x00, 0xc6, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0x6e, 0x00, 0x1e, 0x00
 	.byte 0x3d, 0x01, 0xc7, 0x00, 0xf7, 0x00, 0xc1, 0x00
 
 
-LABEL_E102D0:
+NAKA_Entertainer_Value_MicLevel:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0xba, 0x00, 0xff, 0xff
 	.byte 0xbc, 0x00, 0xff, 0xff, 0x08, 0x00, 0x70, 0x00
@@ -1676,7 +1676,7 @@ LABEL_E102D0:
 	.byte 0x01, 0x00
 
 
-LABEL_E102EA:
+NAKA_Entertainer_Label_MicBalance:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xba, 0x00
 	.byte 0xff, 0xff, 0xbd, 0x00, 0xbb, 0x00, 0x08, 0x00
@@ -1687,7 +1687,7 @@ LABEL_E102EA:
 	aligned_string "MIC BALANCE :       100"
 
 
-LABEL_E10322:
+NAKA_Entertainer_Label_VocalReverb:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xba, 0x00
 	.byte 0xff, 0xff, 0xbe, 0x00, 0xbc, 0x00, 0x08, 0x00
@@ -1698,7 +1698,7 @@ LABEL_E10322:
 	aligned_string "VOCAL REVERB"
 
 
-LABEL_E10350:
+NAKA_Entertainer_Label_ReverbTime:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xba, 0x00, 0xff, 0xff
 	.byte 0xbf, 0x00, 0xbd, 0x00, 0x08, 0x00, 0x7a, 0x00
@@ -1707,7 +1707,7 @@ LABEL_E10350:
 	aligned_string "REVERB TIME:     2.00s"
 
 
-LABEL_E10388:
+NAKA_Entertainer_Label_ReverbType:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xba, 0x00, 0xff, 0xff
 	.byte 0xc0, 0x00, 0xbe, 0x00, 0x08, 0x00, 0x7a, 0x00
@@ -1716,7 +1716,7 @@ LABEL_E10388:
 	aligned_string "TYPE       :"
 
 
-LABEL_E103B6:
+NAKA_Entertainer_Label_OnOff:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xba, 0x00, 0xff, 0xff, 0xc1, 0x00
 	.byte 0xbf, 0x00, 0x08, 0x00, 0x7a, 0x00, 0x4e, 0x00
@@ -1725,7 +1725,7 @@ LABEL_E103B6:
 	aligned_string "ON/OFF     :        ON"
 
 
-LABEL_E103EE:
+NAKA_Entertainer_Label_ExciterFC:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xba, 0x00, 0xff, 0xff, 0xc2, 0x00
 	.byte 0xc0, 0x00, 0x08, 0x00, 0x7a, 0x00, 0x87, 0x00
@@ -1734,7 +1734,7 @@ LABEL_E103EE:
 	aligned_string "EXCITER FC :      1kHz"
 
 
-LABEL_E10426:
+NAKA_Entertainer_Label_ExciterGain:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xba, 0x00, 0xff, 0xff, 0xc3, 0x00
 	.byte 0xc1, 0x00, 0x08, 0x00, 0x7a, 0x00, 0x9a, 0x00
@@ -1743,7 +1743,7 @@ LABEL_E10426:
 	aligned_string "EXCITER G  :     + 2.0"
 
 
-LABEL_E1045E:
+NAKA_Entertainer_Label_Volume:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xba, 0x00, 0xff, 0xff, 0xc4, 0x00
 	.byte 0xc2, 0x00, 0x08, 0x00, 0x7a, 0x00, 0xae, 0x00
@@ -1752,14 +1752,14 @@ LABEL_E1045E:
 	aligned_string "VOLUME     :        84"
 
 
-LABEL_E10496:
+NAKA_Entertainer_Group_StageSection:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0xba, 0x00, 0xc5, 0x00, 0xff, 0xff
 	.byte 0xc3, 0x00, 0x08, 0x00, 0xe8, 0x00, 0x61, 0x00
 	.byte 0x34, 0x01, 0x70, 0x00, 0xff, 0x00, 0x00, 0x00
 
 
-LABEL_E104B0:
+NAKA_Entertainer_Label_Stage:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xc4, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0x08, 0x00, 0xfa, 0x00
@@ -1768,7 +1768,7 @@ LABEL_E104B0:
 	aligned_string "STAGE"
 
 
-LABEL_E104D6:
+NAKA_Entertainer_Label_MenuItem1:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00, 0xff, 0xff, 0xc7, 0x00
 	.byte 0xba, 0x00, 0x08, 0x00, 0xfe, 0xff, 0x26, 0x00
@@ -1777,7 +1777,7 @@ LABEL_E104D6:
 	jr	z, 0x00
 
 
-LABEL_E104FA:
+NAKA_Entertainer_Label_MenuItem2:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00
 	.byte 0xff, 0xff, 0xc8, 0x00, 0xc6, 0x00, 0x08, 0x00
@@ -1787,7 +1787,7 @@ LABEL_E104FA:
 	.byte 0x0a, 0x00, 0x7e, 0x37, 0x66, 0x00
 
 
-LABEL_E1051E:
+NAKA_Entertainer_Label_MenuItem3:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00, 0xff, 0xff, 0xc9, 0x00
 	.byte 0xc7, 0x00, 0x08, 0x00, 0xfe, 0xff, 0x9e, 0x00
@@ -1796,7 +1796,7 @@ LABEL_E1051E:
 	jr	z, 0x00
 
 
-LABEL_E10542:
+NAKA_Entertainer_Label_MenuItem4:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00
 	.byte 0xff, 0xff, 0xca, 0x00, 0xc8, 0x00, 0x08, 0x00
@@ -1806,7 +1806,7 @@ LABEL_E10542:
 	.byte 0x0a, 0x00, 0x7e, 0x37, 0x66, 0x00
 
 
-LABEL_E10566:
+NAKA_Entertainer_Label_MenuItem5:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00, 0xff, 0xff, 0xcb, 0x00
 	.byte 0xc9, 0x00, 0x08, 0x00, 0xfe, 0xff, 0x4e, 0x00
@@ -1815,7 +1815,7 @@ LABEL_E10566:
 	jr	z, 0x00
 
 
-LABEL_E1058A:
+NAKA_Entertainer_Label_Vocalist:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00
 	.byte 0xcc, 0x00, 0xcd, 0x00, 0xca, 0x00, 0x08, 0x00
@@ -1826,7 +1826,7 @@ LABEL_E1058A:
 	aligned_string "VOCALIST"
 
 
-LABEL_E105B4:
+NAKA_Entertainer_Label_Workstation:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xcb, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0x08, 0x00, 0x0a, 0x00, 0x2a, 0x00, 0x65, 0x00
@@ -1835,7 +1835,7 @@ LABEL_E105B4:
 	aligned_string "WORKSTATION"
 
 
-LABEL_E105E0:
+NAKA_Entertainer_Label_FadeInOut:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00, 0xce, 0x00
 	.byte 0xcf, 0x00, 0xcb, 0x00, 0x08, 0x00, 0x0a, 0x00
@@ -1844,7 +1844,7 @@ LABEL_E105E0:
 	aligned_string "FADE IN/OUT"
 
 
-LABEL_E1060C:
+NAKA_Entertainer_Label_Setting:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xcd, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0x08, 0x00, 0x0a, 0x00, 0x52, 0x00, 0x45, 0x00
@@ -1853,7 +1853,7 @@ LABEL_E1060C:
 	.asciz "SETTING"
 
 
-LABEL_E10634:
+NAKA_Entertainer_Label_Mixer:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00, 0xff, 0xff, 0xd0, 0x00, 0xcd, 0x00
 	.byte 0x08, 0x00, 0x0a, 0x00, 0x76, 0x00, 0x35, 0x00
@@ -1862,7 +1862,7 @@ LABEL_E10634:
 	aligned_string "MIXER"
 
 
-LABEL_E1065A:
+NAKA_Entertainer_Label_DiskLoad:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00
 	.byte 0xff, 0xff, 0xd1, 0x00, 0xcf, 0x00, 0x08, 0x00
@@ -1873,14 +1873,14 @@ LABEL_E1065A:
 	aligned_string "DISK LOAD"
 
 
-LABEL_E10684:
+NAKA_Entertainer_Group_MuteKeys:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0xb9, 0x00, 0xd2, 0x00, 0xd3, 0x00, 0xd0, 0x00
 	.byte 0x08, 0x00, 0x09, 0x00, 0xcb, 0x00, 0x76, 0x00
 	.byte 0xdc, 0x00, 0x07, 0x00, 0xc1, 0x00
 
 
-LABEL_E1069E:
+NAKA_Entertainer_Label_MuteKeysOff:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd1, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x0a, 0x00, 0xcc, 0x00
@@ -1889,14 +1889,14 @@ LABEL_E1069E:
 	aligned_string "MUTE KEYS:OFF"
 
 
-LABEL_E106CC:
+NAKA_Entertainer_Group_Panic:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0xb9, 0x00, 0xd4, 0x00, 0xd5, 0x00, 0xd1, 0x00
 	.byte 0x08, 0x00, 0x04, 0x00, 0xdf, 0x00, 0x4b, 0x00
 	.byte 0xee, 0x00, 0x07, 0x00, 0xc9, 0x00
 
 
-LABEL_E106E6:
+NAKA_Entertainer_Label_Panic:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd3, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0x08, 0x00, 0x12, 0x00, 0xdf, 0x00
@@ -1905,14 +1905,14 @@ LABEL_E106E6:
 	aligned_string "PANIC"
 
 
-LABEL_E1070C:
+NAKA_Entertainer_Group_BottomLeft:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0xb9, 0x00, 0xd6, 0x00, 0xd8, 0x00, 0xd3, 0x00
 	.byte 0x08, 0x00, 0x7c, 0x00, 0xd9, 0x00, 0xc3, 0x00
 	.byte 0xef, 0x00, 0x07, 0x00, 0xc9, 0x00
 
 
-LABEL_E10726:
+NAKA_Entertainer_Label_BottomLeftIcon:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd5, 0x00, 0xff, 0xff, 0xd7, 0x00
 	.byte 0xff, 0xff, 0x08, 0x00, 0x99, 0x00, 0xd7, 0x00
@@ -1922,7 +1922,7 @@ LABEL_E10726:
 	.byte 0x35, 0x00
 
 
-LABEL_E1074A:
+NAKA_Entertainer_Value_BottomLeftVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0xd5, 0x00
 	.byte 0xff, 0xff, 0xff, 0xff, 0xd6, 0x00, 0x08, 0x00
@@ -1931,7 +1931,7 @@ LABEL_E1074A:
 	.byte 0x00, 0x00, 0x01, 0x00
 
 
-LABEL_E10764:
+NAKA_Entertainer_Label_BottomLeftIcon2:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00, 0xff, 0xff, 0xd9, 0x00, 0xd5, 0x00
 	.byte 0x08, 0x00, 0x99, 0x00, 0xe1, 0x00, 0xa4, 0x00
@@ -1939,7 +1939,7 @@ LABEL_E10764:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x7e, 0x38, 0x31, 0x00
 
 
-LABEL_E10788:
+NAKA_Entertainer_Group_BottomRight:
 	naka_header NAKA_TYPE_GROUP
 	.byte 0xb9, 0x00, 0xda, 0x00
 	.byte 0xdc, 0x00, 0xd8, 0x00, 0x08, 0x00, 0xf4, 0x00
@@ -1947,7 +1947,7 @@ LABEL_E10788:
 	.byte 0xc9, 0x00
 
 
-LABEL_E107A2:
+NAKA_Entertainer_Label_BottomRightUp:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xd9, 0x00
 	.byte 0xff, 0xff, 0xdb, 0x00, 0xff, 0xff, 0x08, 0x00
@@ -1957,7 +1957,7 @@ LABEL_E107A2:
 	.byte 0x00, 0x00, 0x7e, 0x39, 0x62, 0x00
 
 
-LABEL_E107C6:
+NAKA_Entertainer_Value_BottomRightVal:
 	naka_header NAKA_TYPE_VALUE
 	.byte 0xd9, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0xda, 0x00, 0x08, 0x00, 0xf6, 0x00, 0xe4, 0x00
@@ -1965,7 +1965,7 @@ LABEL_E107C6:
 	.byte 0x00, 0x00, 0x01, 0x00
 
 
-LABEL_E107E0:
+NAKA_Entertainer_Label_BottomRightDown:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00, 0xff, 0xff
 	.byte 0xdd, 0x00, 0xd9, 0x00, 0x08, 0x00, 0x11, 0x01
@@ -1974,7 +1974,7 @@ LABEL_E107E0:
 	.byte 0x7e, 0x39, 0x38, 0x00
 
 
-LABEL_E10804:
+NAKA_Entertainer_Label_Item:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00, 0xff, 0xff, 0xde, 0x00, 0xdc, 0x00
 	.byte 0x08, 0x00, 0x8e, 0x00, 0xca, 0x00, 0xb1, 0x00
@@ -1984,7 +1984,7 @@ LABEL_E10804:
 	.byte 0x00, 0xff
 
 
-LABEL_E1082A:
+NAKA_Entertainer_Label_Value:
 	naka_header NAKA_TYPE_LABEL
 	.byte 0xb9, 0x00
 	.byte 0xff, 0xff, 0xdf, 0x00, 0xdd, 0x00, 0x08, 0x00
@@ -1995,7 +1995,7 @@ LABEL_E1082A:
 	aligned_string "VALUE"
 
 
-LABEL_E10850:
+NAKA_Entertainer_Option_Main:
 	naka_header NAKA_TYPE_OPTION
 	.byte 0xb9, 0x00, 0xff, 0xff
 	.byte 0xff, 0xff, 0xde, 0x00, 0x08, 0x00, 0x71, 0x00
@@ -4504,91 +4504,91 @@ Naka_PresentationReg_Table4:
 	.long NAKA_FtDemo_Container_Screen10
 	.long NAKA_FeatPres_List_Screen10Content
 	.long NAKA_BankView_Container_Root
-	.long LABEL_E0FB28
-	.long LABEL_E0FB42
-	.long LABEL_E0FB7A
-	.long LABEL_E0FBA0
-	.long LABEL_E0FBC4
-	.long LABEL_E0FBE8
-	.long LABEL_E0FC14
-	.long LABEL_E0FC40
-	.long LABEL_E0FC66
-	.long LABEL_E0FC8E
-	.long LABEL_E0FCB6
-	.long LABEL_E0FCDE
-	.long LABEL_E0FCF8
-	.long LABEL_E0FD2A
-	.long LABEL_E0FD58
-	.long LABEL_E0FD8A
-	.long LABEL_E0FDBA
-	.long LABEL_E0FDEA
-	.long LABEL_E0FE1E
-	.long LABEL_E0FE4A
-	.long LABEL_E0FE7A
-	.long LABEL_E0FEA0
-	.long LABEL_E0FEBA
-	.long LABEL_E0FEE4
-	.long LABEL_E0FF20
-	.long LABEL_E0FF48
-	.long LABEL_E0FF6C
-	.long LABEL_E0FF90
-	.long LABEL_E0FFAA
-	.long LABEL_E0FFE6
-	.long LABEL_E1000C
-	.long LABEL_E10040
-	.long LABEL_E10080
-	.long LABEL_E100B0
-	.long LABEL_E100E0
-	.long LABEL_E10102
-	.long LABEL_E10128
-	.long LABEL_E10156
-	.long LABEL_E10170
-	.long LABEL_E10196
-	.long LABEL_E101B0
-	.long LABEL_E101D6
-	.long LABEL_E101F0
-	.long LABEL_E1021E
-	.long LABEL_E10238
-	.long LABEL_E10266
-	.long LABEL_E10280
-	.long LABEL_E102B6
-	.long LABEL_E102D0
-	.long LABEL_E102EA
-	.long LABEL_E10322
-	.long LABEL_E10350
-	.long LABEL_E10388
-	.long LABEL_E103B6
-	.long LABEL_E103EE
-	.long LABEL_E10426
-	.long LABEL_E1045E
-	.long LABEL_E10496
-	.long LABEL_E104B0
-	.long LABEL_E104D6
-	.long LABEL_E104FA
-	.long LABEL_E1051E
-	.long LABEL_E10542
-	.long LABEL_E10566
-	.long LABEL_E1058A
-	.long LABEL_E105B4
-	.long LABEL_E105E0
-	.long LABEL_E1060C
-	.long LABEL_E10634
-	.long LABEL_E1065A
-	.long LABEL_E10684
-	.long LABEL_E1069E
-	.long LABEL_E106CC
-	.long LABEL_E106E6
-	.long LABEL_E1070C
-	.long LABEL_E10726
-	.long LABEL_E1074A
-	.long LABEL_E10764
-	.long LABEL_E10788
-	.long LABEL_E107A2
-	.long LABEL_E107C6
-	.long LABEL_E107E0
-	.long LABEL_E10804
-	.long LABEL_E1082A
-	.long LABEL_E10850
+	.long NAKA_BankView_Group_TopBar
+	.long NAKA_BankView_Label_Bank1ForDinnerShow
+	.long NAKA_BankView_Panel_Nav
+	.long NAKA_BankView_Label_NavUp
+	.long NAKA_BankView_Label_NavDown
+	.long NAKA_BankView_Slider_Scroll1
+	.long NAKA_BankView_Slider_Scroll2
+	.long NAKA_BankView_Label_Bank
+	.long NAKA_BankView_Label_Naming
+	.long NAKA_BankView_Label_Memory
+	.long NAKA_BankView_Label_Naming2
+	.long NAKA_BankView_Value_BankNum
+	.long NAKA_BankView_Label_Bank8CurtainCall
+	.long NAKA_BankView_Label_Bank3HotelCombo
+	.long NAKA_BankView_Label_Bank7PubSingAlong
+	.long NAKA_BankView_Label_Bank6SoloRomance
+	.long NAKA_BankView_Label_Bank5CasinoLights
+	.long NAKA_BankView_Label_Bank4LaidBackOctave
+	.long NAKA_BankView_Label_Bank1Overture
+	.long NAKA_BankView_Label_Bank2LateAtNight
+	.long NAKA_BankView_Label_BankFooter
+	.long NAKA_BankView_Group_Page2Header
+	.long NAKA_BankView_Label_Page2of2
+	.long NAKA_SmfDirectPlay_Container_Root
+	.long NAKA_SmfDirectPlay_Label_Tempo
+	.long NAKA_SmfDirectPlay_Label_Icon1
+	.long NAKA_SmfDirectPlay_Label_Mic
+	.long NAKA_SmfDirectPlay_Group_SaintsLyrics
+	.long NAKA_SmfDirectPlay_Label_SaintsPart1
+	.long NAKA_SmfDirectPlay_Label_SaintsPart2
+	.long NAKA_SmfDirectPlay_Label_SaintsPart3
+	.long NAKA_SmfDirectPlay_Label_SaintsMarchin
+	.long NAKA_SmfDirectPlay_Label_SaintsMarchin2
+	.long NAKA_SmfDirectPlay_Label_WhenTheSaints
+	.long NAKA_SmfDirectPlay_Label_TransportIcon
+	.long NAKA_SmfDirectPlay_Label_Play
+	.long NAKA_SmfDirectPlay_Widget3E_TrackA
+	.long NAKA_SmfDirectPlay_Widget2C_TrackA
+	.long NAKA_SmfDirectPlay_Panel_TrackB
+	.long NAKA_SmfDirectPlay_Widget2C_TrackB
+	.long NAKA_SmfDirectPlay_Panel_TrackC
+	.long NAKA_SmfDirectPlay_Widget2C_TrackC
+	.long NAKA_SmfDirectPlay_Widget3E_TrackD
+	.long NAKA_SmfDirectPlay_Widget2C_TrackD
+	.long NAKA_SmfDirectPlay_Widget3E_TrackE
+	.long NAKA_SmfDirectPlay_Widget2C_TrackE
+	.long NAKA_Entertainer_Container_Root
+	.long NAKA_Entertainer_Group_TopBar
+	.long NAKA_Entertainer_Value_MicLevel
+	.long NAKA_Entertainer_Label_MicBalance
+	.long NAKA_Entertainer_Label_VocalReverb
+	.long NAKA_Entertainer_Label_ReverbTime
+	.long NAKA_Entertainer_Label_ReverbType
+	.long NAKA_Entertainer_Label_OnOff
+	.long NAKA_Entertainer_Label_ExciterFC
+	.long NAKA_Entertainer_Label_ExciterGain
+	.long NAKA_Entertainer_Label_Volume
+	.long NAKA_Entertainer_Group_StageSection
+	.long NAKA_Entertainer_Label_Stage
+	.long NAKA_Entertainer_Label_MenuItem1
+	.long NAKA_Entertainer_Label_MenuItem2
+	.long NAKA_Entertainer_Label_MenuItem3
+	.long NAKA_Entertainer_Label_MenuItem4
+	.long NAKA_Entertainer_Label_MenuItem5
+	.long NAKA_Entertainer_Label_Vocalist
+	.long NAKA_Entertainer_Label_Workstation
+	.long NAKA_Entertainer_Label_FadeInOut
+	.long NAKA_Entertainer_Label_Setting
+	.long NAKA_Entertainer_Label_Mixer
+	.long NAKA_Entertainer_Label_DiskLoad
+	.long NAKA_Entertainer_Group_MuteKeys
+	.long NAKA_Entertainer_Label_MuteKeysOff
+	.long NAKA_Entertainer_Group_Panic
+	.long NAKA_Entertainer_Label_Panic
+	.long NAKA_Entertainer_Group_BottomLeft
+	.long NAKA_Entertainer_Label_BottomLeftIcon
+	.long NAKA_Entertainer_Value_BottomLeftVal
+	.long NAKA_Entertainer_Label_BottomLeftIcon2
+	.long NAKA_Entertainer_Group_BottomRight
+	.long NAKA_Entertainer_Label_BottomRightUp
+	.long NAKA_Entertainer_Value_BottomRightVal
+	.long NAKA_Entertainer_Label_BottomRightDown
+	.long NAKA_Entertainer_Label_Item
+	.long NAKA_Entertainer_Label_Value
+	.long NAKA_Entertainer_Option_Main
 	.long LABEL_E1086C
 	.long FTDEMO_SCREEN06_KN5000_RAINBOW
 
