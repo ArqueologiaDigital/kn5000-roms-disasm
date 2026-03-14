@@ -825,7 +825,7 @@ CDlikeBankLoad_Return:
 	ret
 
 CDlike_ExitModeAndRestore:
-	call LABEL_F22B9C
+	call PlayMode_CheckAndAbort
 	anddi8 47074, 191
 	anddi8 10412, 251
 	stdi8 4420, 0

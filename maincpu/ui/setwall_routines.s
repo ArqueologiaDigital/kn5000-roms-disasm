@@ -185,7 +185,7 @@ SetWall_CopySlotData:
 	stda8 4438, a
 	cpi8_24 0x0340ea, 0x00
 	jr z, SetWall_DirectHandler
-	call LABEL_F2297B
+	call CDlikeSwTtl_SendStopEvtD
 	jp SetWall_Return
 
 SetWall_DirectHandler:
@@ -288,7 +288,7 @@ SetWall_ACSlot_NoPanel:
 SetWall_ACSlot_Direct:
 	cpi8_24 0x0340ea, 0x00
 	jr z, SetWall_ACSlot_DirectLocal
-	call LABEL_F2299B
+	call CDlikeSwTtl_SendEvent8C_A
 	jp SetWall_ACSlot_Return
 
 SetWall_ACSlot_DirectLocal:
@@ -298,7 +298,7 @@ SetWall_ACSlot_DirectLocal:
 SetWall_ACSlot_PanelChange:
 	cpi8_24 0x0340ea, 0x00
 	jr z, SetWall_ACSlot_PanelLocal
-	call LABEL_F229AB
+	call CDlikeSwTtl_SendEvent8C_13
 	jp SetWall_ACSlot_Return
 
 SetWall_ACSlot_PanelLocal:
@@ -317,7 +317,7 @@ SetWall_ACSlot_AllChange:
 	call SetWall_WriteAllSlots
 
 SetWall_ACSlot_PostFinalize:
-	call LABEL_F22BC4
+	call PlayMode_SwitchToModeAndNotify
 
 SetWall_ACSlot_Return:
 	ret
@@ -454,7 +454,7 @@ SetWall_LocalSingle:
 	call SetWall_LocalSingle_Exec
 
 SetWall_LocalFinalize:
-	call LABEL_F22BC4
+	call PlayMode_SwitchToModeAndNotify
 	ret
 
 SetWall_LocalSingle_Exec:
@@ -520,7 +520,7 @@ SetWall_LocalWriteAll_Mode:
 	ret
 
 SetWall_ExternalSync:
-	call LABEL_F2298B
+	call CDlikeSwTtl_SendEvent8C_0
 	ret
 
 SetWall_InlineCodeBlock2:

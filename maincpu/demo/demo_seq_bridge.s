@@ -23,7 +23,7 @@ MiddleFuncCall:
 	lda_24 xix, 0xf2258e
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F2258E:
+MiddleFuncCall_DispatchData:
 	.byte 0xf1, 0xa4
 	.ascii "(E:;<>"
 	call	16280444
@@ -95,24 +95,24 @@ SongBank_ComputeTableOfs:
 	add xiz, xix
 	lda_dpi XSP, 0xF8
 	cps e, 0
-	jr z, LABEL_F2267E
+	jr z, SongBank_CopyNameAndFinish
 	cpw (xsp + 4), 0x9
-	jr nz, LABEL_F2266C
+	jr nz, SongBank_FormatTwoDigit
 	stib_dpi 0xF8, 0x31
 	ld (xiz), 0x30
-	jr LABEL_F22678
+	jr SongBank_AppendColon
 
-LABEL_F2266C:
+SongBank_FormatTwoDigit:
 	stib_dpi 0xF8, 0x20
 	ld wa, (xsp + 4)
 	add a, 0x31
 	ld (xiz), a
 
-LABEL_F22678:
+SongBank_AppendColon:
 	inc 1, xiz
 	stib_dpi 0xF8, 0x3A
 
-LABEL_F2267E:
+SongBank_CopyNameAndFinish:
 	ld xwa, xiz
 	ldw de, 0x10
 	call FileIO_CopyString_WriteNull
@@ -136,7 +136,7 @@ SeqSongNameFunc:
 	cp xbc, 0x1C00017
 	jr z, SongBank_HandleNextPrev
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F226EE
+	jr z, SeqSongName_RefreshAll
 	cp xbc, 0x1E70002
 	jrl nz, SongBank_ReturnZero
 	stda32 7116, xde
@@ -150,10 +150,10 @@ SeqSongNameFunc:
 	call ApPostEvent
 	jrl SongBank_ReturnZero
 
-LABEL_F226EE:
+SeqSongName_RefreshAll:
 	lds iz, 0
 
-LABEL_F226F0:
+SeqSongName_RefreshLoop:
 	ld wa, iz
 	ld bc, iz
 	lds de, 1
@@ -164,27 +164,27 @@ LABEL_F226F0:
 	call ApPostEvent
 	inc 1, iz
 	cp iz, 0xA
-	jr c, LABEL_F226F0
+	jr c, SeqSongName_RefreshLoop
 	jrl SongBank_ReturnZero
 
 SongBank_HandleNextPrev:
 	ldda16 xwa, 7120
 	ld iz, wa
 	cp xbc, 0x1C00018
-	jr nz, LABEL_F2272B
+	jr nz, SeqSongName_CheckPrev
 	cp wa, 0x9
 	jr nc, SongBank_StoreCurrentSong
 	inc 1, wa
-	jr LABEL_F22739
+	jr SeqSongName_StoreCurrent
 
-LABEL_F2272B:
+SeqSongName_CheckPrev:
 	cp xbc, 0x1C00017
 	jr nz, SongBank_StoreCurrentSong
 	cps wa, 0
 	jr z, SongBank_StoreCurrentSong
 	dec 1, wa
 
-LABEL_F22739:
+SeqSongName_StoreCurrent:
 	stda16 7120, xwa
 
 SongBank_StoreCurrentSong:
@@ -246,23 +246,23 @@ SongBank_LookupTableEntry:
 	add xiz, xhl
 	lda_dpi XHL, 0xF8
 	cps e, 0
-	jr z, LABEL_F227EC
+	jr z, SongBankLookup_BuildAudioCmd
 	cpw (xsp + 4), 0x9
-	jr nz, LABEL_F227DE
+	jr nz, SongBankLookup_FormatTwoDigit
 	stib_dpi 0xF8, 0x31
 	ld (xiz), 0x30
-	jr LABEL_F227EA
+	jr SongBankLookup_AppendColon
 
-LABEL_F227DE:
+SongBankLookup_FormatTwoDigit:
 	stib_dpi 0xF8, 0x20
 	ld wa, (xsp + 4)
 	add a, 0x31
 	ld (xiz), a
 
-LABEL_F227EA:
+SongBankLookup_AppendColon:
 	inc 1, xiz
 
-LABEL_F227EC:
+SongBankLookup_BuildAudioCmd:
 	stib_dpi 0xF8, 0x3A
 	ld a, (xix)
 	extz wa
@@ -292,7 +292,7 @@ SeqSongMemoryFunc:
 	cp xbc, 0x1C00017
 	jr z, SongBank_HandleNextPrevAlt
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F22866
+	jr z, SeqSongMem_RefreshAll
 	cp xbc, 0x1E70002
 	jrl nz, SongBank_EventHandler_Return
 	stda32 7192, xde
@@ -303,12 +303,12 @@ SeqSongMemoryFunc:
 	extz xde
 	ldda32 xwa, 7192
 	ld xbc, 0x1E70003
-	jrl LABEL_F228F9
+	jrl SeqSongMem_PostAndReturn
 
-LABEL_F22866:
+SeqSongMem_RefreshAll:
 	lds iz, 0
 
-LABEL_F22868:
+SeqSongMem_RefreshLoop:
 	ld wa, iz
 	ld bc, iz
 	lds de, 0
@@ -319,27 +319,27 @@ LABEL_F22868:
 	call ApPostEvent
 	inc 1, iz
 	cp iz, 0xA
-	jr c, LABEL_F22868
+	jr c, SeqSongMem_RefreshLoop
 	jr SongBank_EventHandler_Return
 
 SongBank_HandleNextPrevAlt:
 	ldda16 xwa, 7196
 	ld iz, wa
 	cp xbc, 0x1C00018
-	jr nz, LABEL_F228A2
+	jr nz, SeqSongMem_CheckPrev
 	cp wa, 0x9
 	jr nc, SongBank_EventCompare
 	inc 1, wa
-	jr LABEL_F228B0
+	jr SeqSongMem_StoreCurrent
 
-LABEL_F228A2:
+SeqSongMem_CheckPrev:
 	cp xbc, 0x1C00017
 	jr nz, SongBank_EventCompare
 	cps wa, 0
 	jr z, SongBank_EventCompare
 	dec 1, wa
 
-LABEL_F228B0:
+SeqSongMem_StoreCurrent:
 	stda16 7196, xwa
 
 SongBank_EventCompare:
@@ -366,7 +366,7 @@ SongBank_EventCompare:
 	ldda32 xwa, 7192
 	ld xbc, 0x1C0000F
 
-LABEL_F228F9:
+SeqSongMem_PostAndReturn:
 	call ApPostEvent
 
 SongBank_EventHandler_Return:
@@ -374,7 +374,7 @@ SongBank_EventHandler_Return:
 	popw iz
 	ret
 
-LABEL_F22901:
+CDlikeSwTtl_DispatchData:
 	.byte 0xeb, 0xa8, 0x0e, 0xeb, 0xa8, 0x0e, 0xf1, 0xe0
 	.byte 0x0c, 0xc8, 0x6e, 0x1e, 0xc1, 0xdf, 0x0c, 0x21
 	.byte 0xc9, 0x62, 0xd8, 0x12, 0xd8, 0x8a, 0xea, 0x12
@@ -400,31 +400,31 @@ CDlikeSwTtl_SendResetEvent:
 	lds32 xde, 0
 	jp ApPostEvent
 
-LABEL_F2297B:
+CDlikeSwTtl_SendStopEvtD:
 	ld xwa, 0x8B000D
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 	jp ApPostEvent
 
-LABEL_F2298B:
+CDlikeSwTtl_SendEvent8C_0:
 	ld xwa, 0x8C0000
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 	jp ApPostEvent
 
-LABEL_F2299B:
+CDlikeSwTtl_SendEvent8C_A:
 	ld xwa, 0x8C000A
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 	jp ApPostEvent
 
-LABEL_F229AB:
+CDlikeSwTtl_SendEvent8C_13:
 	ld xwa, 0x8C0013
 	ld xbc, 0x1C00001
 	lds32 xde, 0
 	jp ApPostEvent
 
-LABEL_F229BB:
+CDlikeSwTtl_SetRecordAndNotify:
 	sti8_24 0x021090, 0x01
 	ld xwa, 0xE1000B
 	ld xbc, 0x1C0000C
@@ -454,17 +454,17 @@ SeqInit_PostEventSequence:
 	lds32 xde, 0
 	jp ApPostEvent
 
-LABEL_F22A27:
+SeqInit_LookupDispatchEntry:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xe20208
 	ld_sril3 XHL, 0x07, 0xE4, 0xE0
 	ret
 
-LABEL_F22A37:
+SeqInit_PostDispatchEvent:
 	ldda8 a, 10404
 	extz wa
-	calr LABEL_F22A27
+	calr SeqInit_LookupDispatchEntry
 	ld xwa, xhl
 	ld xbc, 0x1E0004D
 	lds32 xde, 1
@@ -561,12 +561,12 @@ SqTrSel_CaseG:
 	lda_24 xix, 0xf22b5f
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
-LABEL_F22B5F:
+SqTrSel_CaseG_JumpTable:
 	; --- Jump table entries + 4 register-save call thunks ---
 	jrl CDlikeSwTtl_SongBit1Check
 	jrl CDlikeSwTtl_DocBitCheck
 	jrl CDlikeSwTtl_PdBitCheck
-LABEL_F22B68:
+SqTrSel_CaseG_Thunk1:
 	push xde
 	push xhl
 	push xix
@@ -577,7 +577,7 @@ LABEL_F22B68:
 	pop xhl
 	pop xde
 	ret
-LABEL_F22B75:
+SqTrSel_CaseG_Thunk2:
 	push xde
 	push xhl
 	push xix
@@ -588,7 +588,7 @@ LABEL_F22B75:
 	pop xhl
 	pop xde
 	ret
-LABEL_F22B82:
+SqTrSel_CaseG_Thunk3:
 	push xde
 	push xhl
 	push xix
@@ -599,7 +599,7 @@ LABEL_F22B82:
 	pop xhl
 	pop xde
 	ret
-LABEL_F22B8F:
+SqTrSel_CaseG_Thunk4:
 	push xde
 	push xhl
 	push xix
@@ -612,7 +612,7 @@ LABEL_F22B8F:
 	ret
 
 
-LABEL_F22B9C:
+PlayMode_CheckAndAbort:
 	cpdi8 36150, 114
 	ret z
 	call SeqState_GetFlags
@@ -626,7 +626,7 @@ LABEL_F22B9C:
 	call ApPostEvent
 	ret
 
-LABEL_F22BC4:
+PlayMode_SwitchToModeAndNotify:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
@@ -640,34 +640,34 @@ LABEL_F22BC4:
 	stdi8 32578, 35
 	ldw wa, 0xEE
 	jp SoundCtrl_SendCommand
-LABEL_F22BF7:
+DispatchHandler_ConditionalJump:
 	jr	t, 0x08
 
 DispatchHandler_JumpToSubHandler:
-	jr LABEL_F22C06
+	jr DispatchHandler_CallResolve
 
 DispatchHandler_JumpSub:
-	jr LABEL_F22C0B
+	jr DispatchHandler_CallNodeInsert
 
 DispatchHandler_SubJumpTable:
-	jr LABEL_F22C10
-	jr LABEL_F22C15
-	call LABEL_F22C23
+	jr DispatchHandler_CallSlotResolve
+	jr DispatchHandler_StoreNodePtr
+	call DispatchHandler_InitAllSlots
 	ret
 
-LABEL_F22C06:
+DispatchHandler_CallResolve:
 	call DispatchHandler_ResolveSlot
 	ret
 
-LABEL_F22C0B:
-	call LABEL_F22D34
+DispatchHandler_CallNodeInsert:
+	call SeqNode_InsertAtPosition
 	ret
 
-LABEL_F22C10:
+DispatchHandler_CallSlotResolve:
 	call SeqNode_ResolveSlotPtr
 	ret
 
-LABEL_F22C15:
+DispatchHandler_StoreNodePtr:
 	ld xhl, 0x110A
 	push xde
 	ldda32 xde, 7514
@@ -675,7 +675,7 @@ LABEL_F22C15:
 	pop xde
 	ret
 
-LABEL_F22C23:
+DispatchHandler_InitAllSlots:
 	ld xhl, 0x110A
 	push xde
 	ldda32 xde, 7514
@@ -691,7 +691,7 @@ LABEL_F22C23:
 	stda16 62001, xbc
 	dec 1, bc
 
-LABEL_F22C4E:
+SeqSlot_InitEntryLoop:
 	andmi8 (xiy), 0x7F
 	ld (xiy + 1), hl
 	ld (xiy + 3), de
@@ -699,7 +699,7 @@ LABEL_F22C4E:
 	inc 1, hl
 	inc 1, de
 	add xiy, 0x100
-	djnz xbc, LABEL_F22C4E
+	djnz xbc, SeqSlot_InitEntryLoop
 	andmi8 (xiy), 0x7F
 	ld (xiy + 1), hl
 	ld (xiy + 5), 0x82
@@ -707,39 +707,39 @@ LABEL_F22C4E:
 	ld xhl, 0xF250
 	ldw bc, 0x10
 
-LABEL_F22C7F:
+SeqSlot_ClearF250Loop:
 	ld (xhl), 0x0
 	ldw (xhl + 1), 0xFFFF
 	add xhl, 0x3
-	djnz xbc, LABEL_F22C7F
+	djnz xbc, SeqSlot_ClearF250Loop
 	ld xhl, 0xC9E
 	ldw bc, 0x10
 
-LABEL_F22C98:
+SeqSlot_ClearC9ELoop:
 	ldw (xhl), 0xFFFF
 	inc 2, xhl
-	djnz xbc, LABEL_F22C98
+	djnz xbc, SeqSlot_ClearC9ELoop
 	ld xhl, 0xCAE
 	ldw bc, 0x10
 
-LABEL_F22CA9:
+SeqSlot_InitCAELoop:
 	ld (xhl), 0x5
 	inc 1, xhl
-	djnz xbc, LABEL_F22CA9
+	djnz xbc, SeqSlot_InitCAELoop
 	ld xhl, 0xF1F8
 	ldw bc, 0x10
 
-LABEL_F22CB9:
+SeqSlot_ClearF1F8Loop:
 	ldw (xhl), 0xFFFF
 	inc 2, xhl
-	djnz xbc, LABEL_F22CB9
+	djnz xbc, SeqSlot_ClearF1F8Loop
 	ld xhl, 0xF218
 	ldw bc, 0x10
 
-LABEL_F22CCA:
+SeqSlot_InitF218Loop:
 	ld (xhl), 0x5
 	inc 1, xhl
-	djnz xbc, LABEL_F22CCA
+	djnz xbc, SeqSlot_InitF218Loop
 	ret
 
 DispatchHandler_ResolveSlot:
@@ -751,7 +751,7 @@ DispatchHandler_ResolveSlot:
 	pop xde
 	ldda16 xiy, 61999
 	cp iy, 0xFFFF
-	jr z, LABEL_F22D30
+	jr z, DispatchResolve_ReturnFail
 	ldda32 xde, 4349
 	push xde
 	call SeqNode_ResolveSlotPtr
@@ -760,13 +760,13 @@ DispatchHandler_ResolveSlot:
 	stda16 61999, xwa
 	ld ix, iy
 	cp wa, 0xFFFF
-	jr z, LABEL_F22D16
+	jr z, DispatchResolve_MarkCurrent
 	ld iy, wa
 	call SeqNode_ResolveSlotPtr
 	ldda32 xhl, 4349
 	ldw (xhl + 1), 0x0
 
-LABEL_F22D16:
+DispatchResolve_MarkCurrent:
 	ld iy, ix
 	call SeqNode_ResolveSlotPtr
 	ldda32 xhl, 4349
@@ -778,12 +778,12 @@ LABEL_F22D16:
 	pop xde
 	ret
 
-LABEL_F22D30:
+DispatchResolve_ReturnFail:
 	ldb w, 0xFF
 	pop xde
 	ret
 
-LABEL_F22D34:
+SeqNode_InsertAtPosition:
 	ld xhl, 0x110A
 	push xde
 	ldda32 xde, 7514
@@ -798,7 +798,7 @@ LABEL_F22D34:
 	ld ix, (xhl + 1)
 	ld de, ix
 	cps ix, 0
-	jr z, LABEL_F22DDE
+	jr z, SeqNodeInsert_EmptyList
 	ld iy, ix
 	ldw (xhl + 1), 0x0
 	call SeqNode_ResolveSlotPtr
@@ -806,30 +806,30 @@ LABEL_F22D34:
 	ldda32 xhl, 4349
 	ld iy, (xhl + 3)
 
-LABEL_F22D74:
+SeqNodeInsert_TraverseNext:
 	call SeqNode_ResolveSlotPtr
 	ld ix, iy
 	ldda32 xhl, 4349
 	ld iy, (xhl + 3)
 	cp iy, 0xFFFF
-	jr z, LABEL_F22DA3
+	jr z, SeqNodeInsert_LinkHead
 
-LABEL_F22D87:
+SeqNodeInsert_UnmarkAndCount:
 	andmi8 (xhl), 0x7F
 	ld (xhl + 5), 0x82
 	inc 1, wa
 	cpda16 xwa, 3302
-	jr nz, LABEL_F22D74
+	jr nz, SeqNodeInsert_TraverseNext
 	dec 1, wa
 
-LABEL_F22D98:
+SeqNodeInsert_LinkPrev:
 	call SeqNode_ResolveSlotPtr
 	ldda32 xhl, 4349
 	ld (xhl + 1), de
 
-LABEL_F22DA3:
+SeqNodeInsert_LinkHead:
 	cps de, 0
-	jr z, LABEL_F22DB6
+	jr z, SeqNodeInsert_Finalize
 	pushw iy
 	ld iy, de
 	call SeqNode_ResolveSlotPtr
@@ -837,7 +837,7 @@ LABEL_F22DA3:
 	ldda32 xhl, 4349
 	ld (xhl + 3), iy
 
-LABEL_F22DB6:
+SeqNodeInsert_Finalize:
 	ld iy, ix
 	call SeqNode_ResolveSlotPtr
 	ldda32 xhl, 4349
@@ -852,17 +852,17 @@ LABEL_F22DB6:
 	adddm16 62001, xwa
 	ret
 
-LABEL_F22DDE:
+SeqNodeInsert_EmptyList:
 	call SeqNode_ResolveSlotPtr
 	ld ix, iy
 	ldda32 xhl, 4349
 	ld iy, (xhl + 3)
 	cp iy, 0xFFFF
-	jr nz, LABEL_F22D87
+	jr nz, SeqNodeInsert_UnmarkAndCount
 	stdi16 3302, 0
 	ld iy, ix
 	andmi8 (xhl), 0x7F
-	jr LABEL_F22D98
+	jr SeqNodeInsert_LinkPrev
 
 SeqNode_ResolveSlotPtr:
 	ld hl, iy
@@ -874,11 +874,11 @@ SeqNode_ResolveSlotPtr:
 	xor xhl, xhl
 	ret
 
-LABEL_F22E12:
-	call LABEL_F22E17
+VoiceSlot_AssignWrapper:
+	call VoiceSlot_AssignToChannel
 	ret
 
-LABEL_F22E17:
+VoiceSlot_AssignToChannel:
 	pushw bc
 	stda32 4353, xiy
 	stda8 3822, a
@@ -888,10 +888,10 @@ LABEL_F22E17:
 	ld xix, 0xF1F8
 	xor b, b
 
-LABEL_F22E2F:
+VoiceSlot_ScanLoop:
 	ld_sriw3 IY, 0x07, 0xF0, 0xF8
 	cp iy, 0xFFFF
-	jrl z, LABEL_F22F85
+	jrl z, VoiceSlot_AllocNewSlot
 	stda16 10426, xiy
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
@@ -903,10 +903,10 @@ LABEL_F22E2F:
 	stda16 10428, xwa
 	ld xix, 0xC9E
 
-LABEL_F22E5B:
+VoiceSlot_FindFreeEntry:
 	ld_sriw3 DE, 0x07, 0xF0, 0xF8
 	cp de, 0xFFFF
-	jr nz, LABEL_F22E7F
+	jr nz, VoiceSlot_CheckOccupied
 	st_dri3w IY, 0x07, 0xF0, 0xF8
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
@@ -914,9 +914,9 @@ LABEL_F22E5B:
 	ld (xix + 32), 0x5
 	ldto_lerp XIX, 0x38
 	sla iz, 1
-	jr LABEL_F22E5B
+	jr VoiceSlot_FindFreeEntry
 
-LABEL_F22E7F:
+VoiceSlot_CheckOccupied:
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
@@ -935,7 +935,7 @@ LABEL_F22E7F:
 	sla iz, 1
 	add wa, bc
 	cp wa, 0xFF
-	jr ugt, LABEL_F22EF0
+	jr ugt, VoiceSlot_Overflow
 	ld_sriw3 IY, 0x07, 0xF0, 0xF8
 	stda16 10399, xiy
 	stda16 10422, xwa
@@ -965,14 +965,14 @@ LABEL_F22E7F:
 	popw bc
 	ret
 
-LABEL_F22EF0:
+VoiceSlot_Overflow:
 	sub wa, 0xFB
 	stda16 10422, xwa
 	pushw de
 	call DispatchHandler_ResolveSlot
 	popw de
 	cp w, 0xFF
-	jr z, LABEL_F22F6D
+	jr z, VoiceSlot_SendErrorAndReset
 	ld iy, ix
 	ld xix, 0xF1F8
 	srl iz, 1
@@ -1017,7 +1017,7 @@ LABEL_F22EF0:
 	popw bc
 	ret
 
-LABEL_F22F6D:
+VoiceSlot_SendErrorAndReset:
 	ldb w, 0x68
 	call MIDI_SendSysExCmd
 	anddi8 58338, 111
@@ -1026,13 +1026,13 @@ LABEL_F22F6D:
 	popw bc
 	ret
 
-LABEL_F22F85:
+VoiceSlot_AllocNewSlot:
 	push xix
 	call DispatchHandler_ResolveSlot
 	ld iy, ix
 	pop xix
 	cp w, 0xFF
-	jr z, LABEL_F22F6D
+	jr z, VoiceSlot_SendErrorAndReset
 	st_dri3w IY, 0x07, 0xF0, 0xF8
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
@@ -1063,7 +1063,7 @@ LABEL_F22F85:
 	ldda32 xhl, 4349
 	ldw (xhl + 1), 0x0
 	ldw (xhl + 3), 0xFFFF
-	jrl LABEL_F22E2F
+	jrl VoiceSlot_ScanLoop
 
 
 ; --- SMF Playback & Sequencer ---

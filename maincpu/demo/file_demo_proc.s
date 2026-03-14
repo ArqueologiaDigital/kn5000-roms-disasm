@@ -762,7 +762,7 @@ Demo_SelectEntry_StartPlayback:
 	ldmm8 4439, 10404
 	cpdi8 36152, 228
 	ret z
-	call LABEL_F22A37
+	call SeqInit_PostDispatchEvent
 	ret
 
 Audio_WaitForReady:

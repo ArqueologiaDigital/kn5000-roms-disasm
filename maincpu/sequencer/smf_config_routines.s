@@ -2186,7 +2186,7 @@ SMF_Config_GetTableEntry:
 	nop
 
 SMF_Config_CallHandler:
-	call LABEL_F22E12
+	call VoiceSlot_AssignWrapper
 	xor hl, hl
 	ldda8 l, 3301
 	sll hl, 1
