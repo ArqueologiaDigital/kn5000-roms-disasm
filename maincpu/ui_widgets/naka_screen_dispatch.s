@@ -139,401 +139,401 @@ Naka_ExpandMode_Screens:
 
 Naka_Accomp7_Screens:
 	.long NakaContainer_CustomCopy_FinalRoot
-	.long LABEL_E1A73E
-	.long LABEL_E1A762
-	.long LABEL_E1A77E
-	.long LABEL_E1A79A
-	.long LABEL_E1A7B4
-	.long LABEL_E1A7CC
-	.long LABEL_E1A7F0
-	.long LABEL_E1A81C
-	.long LABEL_E1A848
-	.long LABEL_E1A874
-	.long LABEL_E1A8A0
-	.long LABEL_E1A8CC
-	.long LABEL_E1A8F8
-	.long LABEL_E1A924
-	.long LABEL_E1A950
-	.long LABEL_E1A97C
-	.long LABEL_E1A9A8
-	.long LABEL_E1A9CC
-	.long LABEL_E1A9F8
-	.long LABEL_E1AA24
-	.long LABEL_E1AA50
-	.long LABEL_E1AA7C
-	.long LABEL_E1AAA8
-	.long LABEL_E1AAD4
-	.long LABEL_E1AB00
-	.long LABEL_E1AB2C
+	.long NakaNode_Accomp7_Widget01
+	.long NakaNode_Accomp7_Widget02
+	.long NakaNode_Accomp7_Widget03
+	.long NakaNode_Accomp7_Widget04
+	.long NakaNode_Accomp7_Widget05
+	.long NakaNode_Accomp7_Widget06
+	.long NakaNode_Accomp7_Widget07
+	.long NakaNode_Accomp7_Widget08
+	.long NakaNode_Accomp7_Widget09
+	.long NakaNode_Accomp7_Widget10
+	.long NakaNode_Accomp7_Widget11
+	.long NakaNode_Accomp7_Widget12
+	.long NakaNode_Accomp7_Widget13
+	.long NakaNode_Accomp7_Widget14
+	.long NakaNode_Accomp7_Widget15
+	.long NakaNode_Accomp7_Widget16
+	.long NakaNode_Accomp7_Widget17
+	.long NakaNode_Accomp7_Widget18
+	.long NakaNode_Accomp7_Widget19
+	.long NakaNode_Accomp7_Widget20
+	.long NakaNode_Accomp7_Widget21
+	.long NakaNode_Accomp7_Widget22
+	.long NakaNode_Accomp7_Widget23
+	.long NakaNode_Accomp7_Widget24
+	.long NakaNode_Accomp7_Widget25
+	.long NakaNode_Accomp7_Widget26
 	.byte 0x00, 0x00, 0x00, 0x00
-	.long LABEL_E1AB58
+	.long NakaNode_Accomp7_Widget27
 
 Naka_Accomp8_Screens:
-	.long LABEL_E1AB98
-	.long LABEL_E1ABB4
-	.long LABEL_E1ABE6
-	.long LABEL_E1AC0E
-	.long LABEL_E1AC32
-	.long LABEL_E1AC56
-	.long LABEL_E1AC72
-	.long LABEL_E1AC9C
-	.long LABEL_E1ACC0
-	.long LABEL_E1ACE4
-	.long LABEL_E1AD08
-	.long LABEL_E1AD2A
-	.long LABEL_E1AD52
-	.long LABEL_E1AD98
-	.long LABEL_E1ADC2
+	.long NakaNode_Accomp8_Widget01
+	.long NakaNode_Accomp8_Widget02
+	.long NakaNode_Accomp8_Widget03
+	.long NakaNode_Accomp8_Widget04
+	.long NakaNode_Accomp8_Widget05
+	.long NakaNode_Accomp8_Widget06
+	.long NakaNode_Accomp8_Widget07
+	.long NakaNode_Accomp8_Widget08
+	.long NakaNode_Accomp8_Widget09
+	.long NakaNode_Accomp8_Widget10
+	.long NakaNode_Accomp8_Widget11
+	.long NakaNode_Accomp8_Widget12
+	.long NakaNode_Accomp8_Widget13
+	.long NakaNode_Accomp8_Widget14
+	.long NakaNode_Accomp8_Widget15
 	.zero 4
 
 
 Naka_Accomp9_Screens:
-	.long LABEL_E1ADDC
-	.long LABEL_E1AE10
-	.long LABEL_E1AE52
-	.long LABEL_E1AEA6
-	.long LABEL_E1AEC0
-	.long LABEL_E1AF08
+	.long NakaNode_Accomp9_Widget01
+	.long NakaNode_Accomp9_Widget02
+	.long NakaNode_Accomp9_Widget03
+	.long NakaNode_Accomp9_Widget04
+	.long NakaNode_Accomp9_Widget05
+	.long NakaNode_Accomp9_Widget06
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
 Naka_Accomp10_Screens:
-	.long LABEL_E1AF32
-	.long LABEL_E1AF64
-	.long LABEL_E1AF90
-	.long LABEL_E1AFAA
+	.long NakaNode_Accomp10_Widget01
+	.long NakaNode_Accomp10_Widget02
+	.long NakaNode_Accomp10_Widget03
+	.long NakaNode_Accomp10_Widget04
 	.zero 4
 
 
 Naka_Accomp11_Screens:
-	.long LABEL_E1AFCE
-	.long LABEL_E1B00C
-	.long LABEL_E1B038
-	.long LABEL_E1B064
-	.long LABEL_E1B0EC
-	.long LABEL_E1B114
-	.long LABEL_E1B13E
-	.long LABEL_E1B168
-	.long LABEL_E1B18C
+	.long NakaNode_Accomp11_Widget01
+	.long NakaNode_Accomp11_Widget02
+	.long NakaNode_Accomp11_Widget03
+	.long NakaNode_Accomp11_Widget04
+	.long NakaNode_Accomp11_Widget05
+	.long NakaNode_Accomp11_Widget06
+	.long NakaNode_Accomp11_Widget07
+	.long NakaNode_Accomp11_Widget08
+	.long NakaNode_Accomp11_Widget09
 	.zero 4
 
 
 Naka_Accomp12_Screens:
-	.long LABEL_E1B1A6
-	.long LABEL_E1B1E0
-	.long LABEL_E1B212
-	.long LABEL_E1B236
-	.long LABEL_E1B250
-	.long LABEL_E1B26A
-	.long LABEL_E1B302
-	.long LABEL_E1B32C
+	.long NakaNode_Accomp12_Widget01
+	.long NakaNode_Accomp12_Widget02
+	.long NakaNode_Accomp12_Widget03
+	.long NakaNode_Accomp12_Widget04
+	.long NakaNode_Accomp12_Widget05
+	.long NakaNode_Accomp12_Widget06
+	.long NakaNode_Accomp12_Widget07
+	.long NakaNode_Accomp12_Widget08
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
 Naka_Accomp13_Screens:
-	.long LABEL_E1B356
-	.long LABEL_E1B390
-	.long LABEL_E1B3D0
-	.long LABEL_E1B40E
-	.long LABEL_E1B44A
-	.long LABEL_E1B496
+	.long NakaNode_Accomp13_Widget01
+	.long NakaNode_Accomp13_Widget02
+	.long NakaNode_Accomp13_Widget03
+	.long NakaNode_Accomp13_Widget04
+	.long NakaNode_Accomp13_Widget05
+	.long NakaNode_Accomp13_Widget06
 	.zero 4
 
 
 Naka_Accomp14_Screens:
 	.long NakaInst_StylCnvWaitScreen
-	.long LABEL_E1BB0E
-	.long LABEL_E1BB0C
-	.long LABEL_E1BB0A
-LABEL_E1BB0A:	aligned_string ""
-LABEL_E1BB0C:	aligned_string ""
-LABEL_E1BB0E:	aligned_string ""
+	.long NakaEmpty_Accomp14_Slot1
+	.long NakaEmpty_Accomp14_Slot2
+	.long NakaEmpty_Accomp14_Slot3
+NakaEmpty_Accomp14_Slot3:	aligned_string ""
+NakaEmpty_Accomp14_Slot2:	aligned_string ""
+NakaEmpty_Accomp14_Slot1:	aligned_string ""
 NakaInst_StylCnvWaitScreen:	aligned_string "StylCnvWaitScreen"
 Naka_StylCnvWait_Screens:
 	.long NakaInst_StylCnvModlScreen
-	.long LABEL_E1BB6C
+	.long NakaEmpty_StylCnvModl_Slot1
 	.long NakaInst_StylCnvModlBox
-	.long LABEL_E1BB5A
-	.long LABEL_E1BB58
-	.long LABEL_E1BB56
-	.long LABEL_E1BB54
+	.long NakaEmpty_StylCnvWait_Slot5
+	.long NakaEmpty_StylCnvWait_Slot2
+	.long NakaEmpty_StylCnvWait_Slot3
+	.long NakaEmpty_StylCnvWait_Slot4
 	.long NakaInst_StylCnvVer
-	.long LABEL_E1BB46
-LABEL_E1BB46:	aligned_string ""
+	.long NakaEmpty_StylCnvWait_Slot1
+NakaEmpty_StylCnvWait_Slot1:	aligned_string ""
 NakaInst_StylCnvVer:	aligned_string "StylCnvVer"
-LABEL_E1BB54:	aligned_string ""
-LABEL_E1BB56:	aligned_string ""
-LABEL_E1BB58:	aligned_string ""
-LABEL_E1BB5A:	aligned_string ""
+NakaEmpty_StylCnvWait_Slot4:	aligned_string ""
+NakaEmpty_StylCnvWait_Slot3:	aligned_string ""
+NakaEmpty_StylCnvWait_Slot2:	aligned_string ""
+NakaEmpty_StylCnvWait_Slot5:	aligned_string ""
 NakaInst_StylCnvModlBox:	aligned_string "StylCnvModlBox"
-LABEL_E1BB6C:	aligned_string ""
+NakaEmpty_StylCnvModl_Slot1:	aligned_string ""
 NakaInst_StylCnvModlScreen:	aligned_string "StylCnvModlScreen"
 Naka_StylCnvVer_Screens:
 	.long NakaInst_StylCnvCnvtScreen
-	.long LABEL_E1BBBA
+	.long NakaEmpty_StylCnvCnvt_Slot1
 	.long NakaInst_StylCnvCnvtBox
-	.long LABEL_E1BBA8
-	.long LABEL_E1BBA6
-	.long LABEL_E1BBA4
-	.long LABEL_E1BBA2
-	.long LABEL_E1BBA0
-LABEL_E1BBA0:	aligned_string ""
-LABEL_E1BBA2:	aligned_string ""
-LABEL_E1BBA4:	aligned_string ""
-LABEL_E1BBA6:	aligned_string ""
-LABEL_E1BBA8:	aligned_string ""
+	.long NakaEmpty_StylCnvVer_Slot1
+	.long NakaEmpty_StylCnvVer_Slot2
+	.long NakaEmpty_StylCnvVer_Slot3
+	.long NakaEmpty_StylCnvVer_Slot4
+	.long NakaEmpty_StylCnvVer_Slot5
+NakaEmpty_StylCnvVer_Slot5:	aligned_string ""
+NakaEmpty_StylCnvVer_Slot4:	aligned_string ""
+NakaEmpty_StylCnvVer_Slot3:	aligned_string ""
+NakaEmpty_StylCnvVer_Slot2:	aligned_string ""
+NakaEmpty_StylCnvVer_Slot1:	aligned_string ""
 NakaInst_StylCnvCnvtBox:	aligned_string "StylCnvCnvtBox"
-LABEL_E1BBBA:	aligned_string ""
+NakaEmpty_StylCnvCnvt_Slot1:	aligned_string ""
 NakaInst_StylCnvCnvtScreen:	aligned_string "StylCnvCnvtScreen"
 	.byte 0xea, 0xbb
 	.byte 0xe1, 0x00
 Naka_StylCnvCnvtBox_Screens:
-	.long LABEL_E1BBE8
-	.long LABEL_E1BBE6
-	.long LABEL_E1BBE4
-	.long LABEL_E1BBE2
-LABEL_E1BBE2:	aligned_string ""
-LABEL_E1BBE4:	aligned_string ""
-LABEL_E1BBE6:	aligned_string ""
-LABEL_E1BBE8:	aligned_string ""
+	.long NakaEmpty_StylCnvCnvtBox_Slot1
+	.long NakaEmpty_StylCnvCnvtBox_Slot2
+	.long NakaEmpty_StylCnvCnvtBox_Slot3
+	.long NakaEmpty_StylCnvCnvtBox_Slot4
+NakaEmpty_StylCnvCnvtBox_Slot4:	aligned_string ""
+NakaEmpty_StylCnvCnvtBox_Slot3:	aligned_string ""
+NakaEmpty_StylCnvCnvtBox_Slot2:	aligned_string ""
+NakaEmpty_StylCnvCnvtBox_Slot1:	aligned_string ""
 NakaInst_StylCnvStorScreen:	aligned_string "StylCnvStorScreen"
 	.long NakaInst_StylCnvTxtScreen
 Naka_StylCnvStor_Screens:
-	.long LABEL_E1BC16
-	.long LABEL_E1BC14
-	.long LABEL_E1BC12
-	.long LABEL_E1BC10
-LABEL_E1BC10:	aligned_string ""
-LABEL_E1BC12:	aligned_string ""
-LABEL_E1BC14:	aligned_string ""
-LABEL_E1BC16:	aligned_string ""
+	.long NakaEmpty_StylCnvStor_Slot1
+	.long NakaEmpty_StylCnvStor_Slot2
+	.long NakaEmpty_StylCnvStor_Slot3
+	.long NakaEmpty_StylCnvStor_Slot4
+NakaEmpty_StylCnvStor_Slot4:	aligned_string ""
+NakaEmpty_StylCnvStor_Slot3:	aligned_string ""
+NakaEmpty_StylCnvStor_Slot2:	aligned_string ""
+NakaEmpty_StylCnvStor_Slot1:	aligned_string ""
 NakaInst_StylCnvTxtScreen:	aligned_string "StylCnvTxtScreen"
 Naka_StylCnvTxt_Screens:
 	.long NakaInst_StylCnvSelScreen
-	.long LABEL_E1BC68
+	.long NakaEmpty_StylCnvSel_Slot1
 	.long NakaInst_StylCnvSelBox
-	.long LABEL_E1BC58
-	.long LABEL_E1BC56
-	.long LABEL_E1BC54
-	.long LABEL_E1BC52
-	.long LABEL_E1BC50
-	.long LABEL_E1BC4E
-LABEL_E1BC4E:	aligned_string ""
-LABEL_E1BC50:	aligned_string ""
-LABEL_E1BC52:	aligned_string ""
-LABEL_E1BC54:	aligned_string ""
-LABEL_E1BC56:	aligned_string ""
-LABEL_E1BC58:	aligned_string ""
+	.long NakaEmpty_StylCnvTxt_Slot1
+	.long NakaEmpty_StylCnvTxt_Slot2
+	.long NakaEmpty_StylCnvTxt_Slot3
+	.long NakaEmpty_StylCnvTxt_Slot4
+	.long NakaEmpty_StylCnvTxt_Slot5
+	.long NakaEmpty_StylCnvTxt_Slot6
+NakaEmpty_StylCnvTxt_Slot6:	aligned_string ""
+NakaEmpty_StylCnvTxt_Slot5:	aligned_string ""
+NakaEmpty_StylCnvTxt_Slot4:	aligned_string ""
+NakaEmpty_StylCnvTxt_Slot3:	aligned_string ""
+NakaEmpty_StylCnvTxt_Slot2:	aligned_string ""
+NakaEmpty_StylCnvTxt_Slot1:	aligned_string ""
 NakaInst_StylCnvSelBox:	aligned_string "StylCnvSelBox"
-LABEL_E1BC68:	aligned_string ""
+NakaEmpty_StylCnvSel_Slot1:	aligned_string ""
 NakaInst_StylCnvSelScreen:	aligned_string "StylCnvSelScreen"
 	.long NakaInst_StylCnvContScreen
 Naka_StylCnvSelBox_Screens:
-	.long LABEL_E1BCA8
-	.long LABEL_E1BCA6
-	.long LABEL_E1BCA4
-	.long LABEL_E1BCA2
-	.long LABEL_E1BCA0
-	.long LABEL_E1BC9E
-	.long LABEL_E1BC9C
-LABEL_E1BC9C:	aligned_string ""
-LABEL_E1BC9E:	aligned_string ""
-LABEL_E1BCA0:	aligned_string ""
-LABEL_E1BCA2:	aligned_string ""
-LABEL_E1BCA4:	aligned_string ""
-LABEL_E1BCA6:	aligned_string ""
-LABEL_E1BCA8:	aligned_string ""
+	.long NakaEmpty_StylCnvSelBox_Slot1
+	.long NakaEmpty_StylCnvSelBox_Slot2
+	.long NakaEmpty_StylCnvSelBox_Slot3
+	.long NakaEmpty_StylCnvSelBox_Slot4
+	.long NakaEmpty_StylCnvSelBox_Slot5
+	.long NakaEmpty_StylCnvSelBox_Slot6
+	.long NakaEmpty_StylCnvSelBox_Slot7
+NakaEmpty_StylCnvSelBox_Slot7:	aligned_string ""
+NakaEmpty_StylCnvSelBox_Slot6:	aligned_string ""
+NakaEmpty_StylCnvSelBox_Slot5:	aligned_string ""
+NakaEmpty_StylCnvSelBox_Slot4:	aligned_string ""
+NakaEmpty_StylCnvSelBox_Slot3:	aligned_string ""
+NakaEmpty_StylCnvSelBox_Slot2:	aligned_string ""
+NakaEmpty_StylCnvSelBox_Slot1:	aligned_string ""
 NakaInst_StylCnvContScreen:	aligned_string "StylCnvContScreen"
 	.long NakaInst_CmpMenuScreen
 Naka_StylCnvCont_Screens:
-	.long LABEL_E1BD2A
-	.long LABEL_E1BD28
-	.long LABEL_E1BD26
-	.long LABEL_E1BD24
-	.long LABEL_E1BD22
-	.long LABEL_E1BD20
-	.long LABEL_E1BD1E
-	.long LABEL_E1BD1C
-	.long LABEL_E1BD1A
-	.long LABEL_E1BD18
-	.long LABEL_E1BD16
-	.long LABEL_E1BD14
-	.long LABEL_E1BD12
-	.long LABEL_E1BD10
-	.long LABEL_E1BD0E
-	.long LABEL_E1BD0C
-	.long LABEL_E1BD0A
-	.long LABEL_E1BD08
-LABEL_E1BD08:	aligned_string ""
-LABEL_E1BD0A:	aligned_string ""
-LABEL_E1BD0C:	aligned_string ""
-LABEL_E1BD0E:	aligned_string ""
-LABEL_E1BD10:	aligned_string ""
-LABEL_E1BD12:	aligned_string ""
-LABEL_E1BD14:	aligned_string ""
-LABEL_E1BD16:	aligned_string ""
-LABEL_E1BD18:	aligned_string ""
-LABEL_E1BD1A:	aligned_string ""
-LABEL_E1BD1C:	aligned_string ""
-LABEL_E1BD1E:	aligned_string ""
-LABEL_E1BD20:	aligned_string ""
-LABEL_E1BD22:	aligned_string ""
-LABEL_E1BD24:	aligned_string ""
-LABEL_E1BD26:	aligned_string ""
-LABEL_E1BD28:	aligned_string ""
-LABEL_E1BD2A:	aligned_string ""
+	.long NakaEmpty_StylCnvCont_Slot1
+	.long NakaEmpty_StylCnvCont_Slot2
+	.long NakaEmpty_StylCnvCont_Slot3
+	.long NakaEmpty_StylCnvCont_Slot4
+	.long NakaEmpty_StylCnvCont_Slot5
+	.long NakaEmpty_StylCnvCont_Slot6
+	.long NakaEmpty_StylCnvCont_Slot7
+	.long NakaEmpty_StylCnvCont_Slot8
+	.long NakaEmpty_StylCnvCont_Slot9
+	.long NakaEmpty_StylCnvCont_Slot10
+	.long NakaEmpty_StylCnvCont_Slot11
+	.long NakaEmpty_StylCnvCont_Slot12
+	.long NakaEmpty_StylCnvCont_Slot13
+	.long NakaEmpty_StylCnvCont_Slot14
+	.long NakaEmpty_StylCnvCont_Slot15
+	.long NakaEmpty_StylCnvCont_Slot16
+	.long NakaEmpty_StylCnvCont_Slot17
+	.long NakaEmpty_StylCnvCont_Slot18
+NakaEmpty_StylCnvCont_Slot18:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot17:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot16:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot15:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot14:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot13:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot12:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot11:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot10:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot9:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot8:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot7:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot6:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot5:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot4:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot3:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot2:	aligned_string ""
+NakaEmpty_StylCnvCont_Slot1:	aligned_string ""
 NakaInst_CmpMenuScreen:	aligned_string "CmpMenuScreen"
 Naka_CmpMenu_Screens:
 	.long NakaInst_CmpBkslScreen
-	.long LABEL_E1BD84
-	.long LABEL_E1BD82
-	.long LABEL_E1BD80
-	.long LABEL_E1BD7E
-	.long LABEL_E1BD7C
-	.long LABEL_E1BD7A
-	.long LABEL_E1BD78
-	.long LABEL_E1BD76
-	.long LABEL_E1BD74
-	.long LABEL_E1BD72
-	.long LABEL_E1BD70
-	.long LABEL_E1BD6E
-LABEL_E1BD6E:	aligned_string ""
-LABEL_E1BD70:	aligned_string ""
-LABEL_E1BD72:	aligned_string ""
-LABEL_E1BD74:	aligned_string ""
-LABEL_E1BD76:	aligned_string ""
-LABEL_E1BD78:	aligned_string ""
-LABEL_E1BD7A:	aligned_string ""
-LABEL_E1BD7C:	aligned_string ""
-LABEL_E1BD7E:	aligned_string ""
-LABEL_E1BD80:	aligned_string ""
-LABEL_E1BD82:	aligned_string ""
-LABEL_E1BD84:	aligned_string ""
+	.long NakaEmpty_CmpMenu_Slot1
+	.long NakaEmpty_CmpMenu_Slot2
+	.long NakaEmpty_CmpMenu_Slot3
+	.long NakaEmpty_CmpMenu_Slot4
+	.long NakaEmpty_CmpMenu_Slot5
+	.long NakaEmpty_CmpMenu_Slot6
+	.long NakaEmpty_CmpMenu_Slot7
+	.long NakaEmpty_CmpMenu_Slot8
+	.long NakaEmpty_CmpMenu_Slot9
+	.long NakaEmpty_CmpMenu_Slot10
+	.long NakaEmpty_CmpMenu_Slot11
+	.long NakaEmpty_CmpMenu_Slot12
+NakaEmpty_CmpMenu_Slot12:	aligned_string ""
+NakaEmpty_CmpMenu_Slot11:	aligned_string ""
+NakaEmpty_CmpMenu_Slot10:	aligned_string ""
+NakaEmpty_CmpMenu_Slot9:	aligned_string ""
+NakaEmpty_CmpMenu_Slot8:	aligned_string ""
+NakaEmpty_CmpMenu_Slot7:	aligned_string ""
+NakaEmpty_CmpMenu_Slot6:	aligned_string ""
+NakaEmpty_CmpMenu_Slot5:	aligned_string ""
+NakaEmpty_CmpMenu_Slot4:	aligned_string ""
+NakaEmpty_CmpMenu_Slot3:	aligned_string ""
+NakaEmpty_CmpMenu_Slot2:	aligned_string ""
+NakaEmpty_CmpMenu_Slot1:	aligned_string ""
 NakaInst_CmpBkslScreen:	aligned_string "CmpBkslScreen"
 	.long NakaInst_CmpBkslSScreen
 Naka_CmpBookshelf_Screens:
-	.long LABEL_E1BE42
-	.long LABEL_E1BE40
-	.long LABEL_E1BE3E
-	.long LABEL_E1BE3C
-	.long LABEL_E1BE3A
-	.long LABEL_E1BE38
-	.long LABEL_E1BE36
-	.long LABEL_E1BE34
-	.long LABEL_E1BE32
-	.long LABEL_E1BE30
-	.long LABEL_E1BE2E
-	.long LABEL_E1BE2C
-	.long LABEL_E1BE2A
-	.long LABEL_E1BE28
-	.long LABEL_E1BE26
+	.long NakaEmpty_CmpBksl_Slot16
+	.long NakaEmpty_CmpBksl_Slot17
+	.long NakaEmpty_CmpBksl_Slot18
+	.long NakaEmpty_CmpBksl_Slot4
+	.long NakaEmpty_CmpBksl_Slot5
+	.long NakaEmpty_CmpBksl_Slot6
+	.long NakaEmpty_CmpBksl_Slot7
+	.long NakaEmpty_CmpBksl_Slot8
+	.long NakaEmpty_CmpBksl_Slot9
+	.long NakaEmpty_CmpBksl_Slot10
+	.long NakaEmpty_CmpBksl_Slot11
+	.long NakaEmpty_CmpBksl_Slot12
+	.long NakaEmpty_CmpBksl_Slot13
+	.long NakaEmpty_CmpBksl_Slot14
+	.long NakaEmpty_CmpBksl_Slot15
 	.long NakaInst_CmpNameMenu
-	.long LABEL_E1BE18
+	.long NakaEmpty_CmpBksl_Slot3
 	.long NakaInst_CmpClrSure
 	.long NakaInst_CmpClrYesSw
 	.long NakaInst_CmpClrNoSw
-	.long LABEL_E1BDF2
-	.long LABEL_E1BDF0
-LABEL_E1BDF0:	aligned_string ""
-LABEL_E1BDF2:	aligned_string ""
+	.long NakaEmpty_CmpBksl_Slot1
+	.long NakaEmpty_CmpBksl_Slot2
+NakaEmpty_CmpBksl_Slot2:	aligned_string ""
+NakaEmpty_CmpBksl_Slot1:	aligned_string ""
 NakaInst_CmpClrNoSw:	aligned_string "CmpClrNoSw"
 NakaInst_CmpClrYesSw:	aligned_string "CmpClrYesSw"
 NakaInst_CmpClrSure:	aligned_string "CmpClrSure"
-LABEL_E1BE18:	aligned_string ""
+NakaEmpty_CmpBksl_Slot3:	aligned_string ""
 NakaInst_CmpNameMenu:	aligned_string "CmpNameMenu"
-LABEL_E1BE26:	aligned_string ""
-LABEL_E1BE28:	aligned_string ""
-LABEL_E1BE2A:	aligned_string ""
-LABEL_E1BE2C:	aligned_string ""
-LABEL_E1BE2E:	aligned_string ""
-LABEL_E1BE30:	aligned_string ""
-LABEL_E1BE32:	aligned_string ""
-LABEL_E1BE34:	aligned_string ""
-LABEL_E1BE36:	aligned_string ""
-LABEL_E1BE38:	aligned_string ""
-LABEL_E1BE3A:	aligned_string ""
-LABEL_E1BE3C:	aligned_string ""
-LABEL_E1BE3E:	aligned_string ""
-LABEL_E1BE40:	aligned_string ""
-LABEL_E1BE42:	aligned_string ""
+NakaEmpty_CmpBksl_Slot15:	aligned_string ""
+NakaEmpty_CmpBksl_Slot14:	aligned_string ""
+NakaEmpty_CmpBksl_Slot13:	aligned_string ""
+NakaEmpty_CmpBksl_Slot12:	aligned_string ""
+NakaEmpty_CmpBksl_Slot11:	aligned_string ""
+NakaEmpty_CmpBksl_Slot10:	aligned_string ""
+NakaEmpty_CmpBksl_Slot9:	aligned_string ""
+NakaEmpty_CmpBksl_Slot8:	aligned_string ""
+NakaEmpty_CmpBksl_Slot7:	aligned_string ""
+NakaEmpty_CmpBksl_Slot6:	aligned_string ""
+NakaEmpty_CmpBksl_Slot5:	aligned_string ""
+NakaEmpty_CmpBksl_Slot4:	aligned_string ""
+NakaEmpty_CmpBksl_Slot18:	aligned_string ""
+NakaEmpty_CmpBksl_Slot17:	aligned_string ""
+NakaEmpty_CmpBksl_Slot16:	aligned_string ""
 NakaInst_CmpBkslSScreen:	aligned_string "CmpBkslSScreen"
 	.long NakaInst_CmpNamingScreen
 Naka_CmpBookshelfSub_Screens:
-	.long LABEL_E1BE88
-	.long LABEL_E1BE86
+	.long NakaEmpty_CmpBkslSub_Slot2
+	.long NakaEmpty_CmpBkslSub_Slot3
 	.long NakaInst_NameMemLabel
 	.long NakaInst_NamingMem
-	.long LABEL_E1BE6C
-LABEL_E1BE6C:	aligned_string ""
+	.long NakaEmpty_CmpBkslSub_Slot1
+NakaEmpty_CmpBkslSub_Slot1:	aligned_string ""
 NakaInst_NamingMem:	aligned_string "NamingMem"
 NakaInst_NameMemLabel:	aligned_string "NameMemLabel"
-LABEL_E1BE86:	aligned_string ""
-LABEL_E1BE88:	aligned_string ""
+NakaEmpty_CmpBkslSub_Slot3:	aligned_string ""
+NakaEmpty_CmpBkslSub_Slot2:	aligned_string ""
 NakaInst_CmpNamingScreen:	aligned_string "CmpNamingScreen"
 Naka_NamingMem_Screens:
 	.long NakaInst_CmpSetScreen
-	.long LABEL_E1BF6A
+	.long NakaEmpty_CmpSet_Slot8
 	.long NakaInst_CmSetPage
 	.long NakaInst_CmSetP1Ctl
 	.long NakaInst_CmSetP2Ctl
-	.long LABEL_E1BF46
+	.long NakaEmpty_CmpSet_Slot7
 	.long NakaInst_CmSetPage1
 	.long NakaInst_CmSetP1Grid
-	.long LABEL_E1BF2C
-	.long LABEL_E1BF2A
-	.long LABEL_E1BF28
-	.long LABEL_E1BF26
-	.long LABEL_E1BF24
+	.long NakaEmpty_CmpSet_Slot2
+	.long NakaEmpty_CmpSet_Slot3
+	.long NakaEmpty_CmpSet_Slot4
+	.long NakaEmpty_CmpSet_Slot5
+	.long NakaEmpty_CmpSet_Slot6
 	.long NakaInst_CmSetPage2
 	.long NakaInst_CmpSetGrid
 	.long NakaInst_CmSetPartSw
 	.long NakaInst_CmSetPanSw
 	.long NakaInst_CmSetRLmtSw
-	.long LABEL_E1BEE6
-LABEL_E1BEE6:	aligned_string ""
+	.long NakaEmpty_CmpSet_Slot1
+NakaEmpty_CmpSet_Slot1:	aligned_string ""
 NakaInst_CmSetRLmtSw:	aligned_string "CmSetRLmtSw"
 NakaInst_CmSetPanSw:	aligned_string "CmSetPanSw"
 NakaInst_CmSetPartSw:	aligned_string "CmSetPartSw"
 NakaInst_CmpSetGrid:	aligned_string "CmpSetGrid"
 NakaInst_CmSetPage2:	aligned_string "CmSetPage2"
-LABEL_E1BF24:	aligned_string ""
-LABEL_E1BF26:	aligned_string ""
-LABEL_E1BF28:	aligned_string ""
-LABEL_E1BF2A:	aligned_string ""
-LABEL_E1BF2C:	aligned_string ""
+NakaEmpty_CmpSet_Slot6:	aligned_string ""
+NakaEmpty_CmpSet_Slot5:	aligned_string ""
+NakaEmpty_CmpSet_Slot4:	aligned_string ""
+NakaEmpty_CmpSet_Slot3:	aligned_string ""
+NakaEmpty_CmpSet_Slot2:	aligned_string ""
 NakaInst_CmSetP1Grid:	aligned_string "CmSetP1Grid"
 NakaInst_CmSetPage1:	aligned_string "CmSetPage1"
-LABEL_E1BF46:	aligned_string ""
+NakaEmpty_CmpSet_Slot7:	aligned_string ""
 NakaInst_CmSetP2Ctl:	aligned_string "CmSetP2Ctl"
 NakaInst_CmSetP1Ctl:	aligned_string "CmSetP1Ctl"
 NakaInst_CmSetPage:	aligned_string "CmSetPage"
-LABEL_E1BF6A:	aligned_string ""
+NakaEmpty_CmpSet_Slot8:	aligned_string ""
 NakaInst_CmpSetScreen:	aligned_string "CmpSetScreen"
 Naka_CmSetP1Grid_Screens:
 	.long NakaInst_CmpRealScreen
-	.long LABEL_E1C066
+	.long NakaEmpty_CmpReal_Slot23
 	.long NakaInst_CmpMem
-	.long LABEL_E1C05C
-	.long LABEL_E1C05A
-	.long LABEL_E1C058
-	.long LABEL_E1C056
-	.long LABEL_E1C054
-	.long LABEL_E1C052
-	.long LABEL_E1C050
-	.long LABEL_E1C04E
-	.long LABEL_E1C04C
-	.long LABEL_E1C04A
-	.long LABEL_E1C048
-	.long LABEL_E1C046
-	.long LABEL_E1C044
-	.long LABEL_E1C042
-	.long LABEL_E1C040
-	.long LABEL_E1C03E
-	.long LABEL_E1C03C
-	.long LABEL_E1C03A
-	.long LABEL_E1C038
-	.long LABEL_E1C036
-	.long LABEL_E1C034
+	.long NakaEmpty_CmpReal_Slot2
+	.long NakaEmpty_CmpReal_Slot3
+	.long NakaEmpty_CmpReal_Slot4
+	.long NakaEmpty_CmpReal_Slot5
+	.long NakaEmpty_CmpReal_Slot6
+	.long NakaEmpty_CmpReal_Slot7
+	.long NakaEmpty_CmpReal_Slot8
+	.long NakaEmpty_CmpReal_Slot9
+	.long NakaEmpty_CmpReal_Slot10
+	.long NakaEmpty_CmpReal_Slot11
+	.long NakaEmpty_CmpReal_Slot12
+	.long NakaEmpty_CmpReal_Slot13
+	.long NakaEmpty_CmpReal_Slot14
+	.long NakaEmpty_CmpReal_Slot15
+	.long NakaEmpty_CmpReal_Slot16
+	.long NakaEmpty_CmpReal_Slot17
+	.long NakaEmpty_CmpReal_Slot18
+	.long NakaEmpty_CmpReal_Slot19
+	.long NakaEmpty_CmpReal_Slot20
+	.long NakaEmpty_CmpReal_Slot21
+	.long NakaEmpty_CmpReal_Slot22
 	.long NakaInst_DrmRec
 	.long NakaInst_Ac3Rec
 	.long NakaInst_Ac2Rec
@@ -541,8 +541,8 @@ Naka_CmSetP1Grid_Screens:
 	.long NakaInst_BasRec
 	.long NakaInst_CmpQtz
 	.long NakaInst_CmpMeas
-	.long LABEL_E1BFFA
-LABEL_E1BFFA:	aligned_string ""
+	.long NakaEmpty_CmpReal_Slot1
+NakaEmpty_CmpReal_Slot1:	aligned_string ""
 NakaInst_CmpMeas:	aligned_string "CmpMeas"
 NakaInst_CmpQtz:	aligned_string "CmpQtz"
 NakaInst_BasRec:	aligned_string "BasRec"
@@ -550,35 +550,35 @@ NakaInst_Ac1Rec:	aligned_string "Ac1Rec"
 NakaInst_Ac2Rec:	aligned_string "Ac2Rec"
 NakaInst_Ac3Rec:	aligned_string "Ac3Rec"
 NakaInst_DrmRec:	aligned_string "DrmRec"
-LABEL_E1C034:	aligned_string ""
-LABEL_E1C036:	aligned_string ""
-LABEL_E1C038:	aligned_string ""
-LABEL_E1C03A:	aligned_string ""
-LABEL_E1C03C:	aligned_string ""
-LABEL_E1C03E:	aligned_string ""
-LABEL_E1C040:	aligned_string ""
-LABEL_E1C042:	aligned_string ""
-LABEL_E1C044:	aligned_string ""
-LABEL_E1C046:	aligned_string ""
-LABEL_E1C048:	aligned_string ""
-LABEL_E1C04A:	aligned_string ""
-LABEL_E1C04C:	aligned_string ""
-LABEL_E1C04E:	aligned_string ""
-LABEL_E1C050:	aligned_string ""
-LABEL_E1C052:	aligned_string ""
-LABEL_E1C054:	aligned_string ""
-LABEL_E1C056:	aligned_string ""
-LABEL_E1C058:	aligned_string ""
-LABEL_E1C05A:	aligned_string ""
-LABEL_E1C05C:	aligned_string ""
+NakaEmpty_CmpReal_Slot22:	aligned_string ""
+NakaEmpty_CmpReal_Slot21:	aligned_string ""
+NakaEmpty_CmpReal_Slot20:	aligned_string ""
+NakaEmpty_CmpReal_Slot19:	aligned_string ""
+NakaEmpty_CmpReal_Slot18:	aligned_string ""
+NakaEmpty_CmpReal_Slot17:	aligned_string ""
+NakaEmpty_CmpReal_Slot16:	aligned_string ""
+NakaEmpty_CmpReal_Slot15:	aligned_string ""
+NakaEmpty_CmpReal_Slot14:	aligned_string ""
+NakaEmpty_CmpReal_Slot13:	aligned_string ""
+NakaEmpty_CmpReal_Slot12:	aligned_string ""
+NakaEmpty_CmpReal_Slot11:	aligned_string ""
+NakaEmpty_CmpReal_Slot10:	aligned_string ""
+NakaEmpty_CmpReal_Slot9:	aligned_string ""
+NakaEmpty_CmpReal_Slot8:	aligned_string ""
+NakaEmpty_CmpReal_Slot7:	aligned_string ""
+NakaEmpty_CmpReal_Slot6:	aligned_string ""
+NakaEmpty_CmpReal_Slot5:	aligned_string ""
+NakaEmpty_CmpReal_Slot4:	aligned_string ""
+NakaEmpty_CmpReal_Slot3:	aligned_string ""
+NakaEmpty_CmpReal_Slot2:	aligned_string ""
 NakaInst_CmpMem:	aligned_string "CmpMem"
-LABEL_E1C066:	aligned_string ""
+NakaEmpty_CmpReal_Slot23:	aligned_string ""
 NakaInst_CmpRealScreen:	aligned_string "CmpRealScreen"
 	and	w, (xwa)
 	.byte 0xe1, 0x00
-	.long LABEL_E1C07E
-LABEL_E1C07E:	aligned_string ""
-LABEL_E1C080:	aligned_string ""
+	.long NakaEmpty_CmpReal_Slot24
+NakaEmpty_CmpReal_Slot24:	aligned_string ""
+NakaEmpty_CmpReal_Slot25:	aligned_string ""
 Naka_CmpMem_Screens:
 	.long NakaInst_CmpBalScreen
 	.long NakaInst_CmpDrmVol
@@ -586,15 +586,15 @@ Naka_CmpMem_Screens:
 	.long NakaInst_CmpAc2Vol
 	.long NakaInst_CmpAc1Vol
 	.long NakaInst_CmpBasVol
-	.long LABEL_E1C09E
-LABEL_E1C09E:	aligned_string ""
+	.long NakaEmpty_CmpBal_Slot1
+NakaEmpty_CmpBal_Slot1:	aligned_string ""
 NakaInst_CmpBasVol:	aligned_string "CmpBasVol"
 NakaInst_CmpAc1Vol:	aligned_string "CmpAc1Vol"
 NakaInst_CmpAc2Vol:	aligned_string "CmpAc2Vol"
 NakaInst_CmpAc3Vol:	aligned_string "CmpAc3Vol"
 NakaInst_CmpDrmVol:	aligned_string "CmpDrmVol"
 NakaInst_CmpBalScreen:	aligned_string "CmpBalScreen"
-LABEL_E1C0E0:
+PtrTbl_CmpNcpScreenStrs:
 	.long StrCmpNcpScreen
 	.long StrCmpNcpFitmSw_Empty
 	.long StrCmpNcpFitmSw
@@ -2160,7 +2160,7 @@ SLOT_NAME_MEMORY_C:	aligned_string "MEMORY C "
 SLOT_NAME_MEMORY_B:	aligned_string "MEMORY B "
 SLOT_NAME_MEMORY_A:	aligned_string "MEMORY A "
 
-LABEL_E1E4BC:
+MsgBox_AttentionHeader:
 	; Control codes/header
 	.byte 0x1c, 0x00, 0x1c, 0x00, 0x2d, 0x00, 0x2d, 0x00, 0x2d, 0x00, 0x20, 0x00
 	.byte 0x2d, 0x00, 0x27, 0x00, 0x1c, 0x00, 0x00, 0x00
