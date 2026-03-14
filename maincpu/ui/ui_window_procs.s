@@ -3715,19 +3715,19 @@ DrawDesignBox_Impl:
 	cpw (xsp + 72), 0xA8
 	jr gt, DrawDesignBox_CheckStyleA0
 	cpw (xsp + 72), 0xA1
-	jrl ge, LABEL_FADAD6
+	jrl ge, DrawDesignBox_PartGroupStyle
 
 DrawDesignBox_CheckStyleA0:
 	cp wa, 0xA0
-	jrl z, LABEL_FAD94C
+	jrl z, DrawDesignBox_IconStyle
 	cp wa, 0x88
 	jr gt, DrawDesignBox_CheckStyle80
 	cp wa, 0x81
-	jrl ge, LABEL_FADAD6
+	jrl ge, DrawDesignBox_PartGroupStyle
 
 DrawDesignBox_CheckStyle80:
 	cp wa, 0x80
-	jrl z, LABEL_FAD94C
+	jrl z, DrawDesignBox_IconStyle
 	lda xbc, (xsp + 36)
 	ld xhl, xbc
 	lda xde, (xsp + 28)
@@ -4048,36 +4048,36 @@ ColorAttribute_SetupReturn:
 	jrl lt, DrawDesignBox_BorderC4C5Check
 	jrl DrawFunc_Epilogue74
 
-LABEL_FAD94C:
+DrawDesignBox_IconStyle:
 	ldw (xsp + 16), 0x0
 	ldw (xsp + 14), 0x0
 	cpw (xsp + 72), 0xA0
-	jr z, LABEL_FAD970
+	jr z, DrawDesignBox_IconA0
 	cpw (xsp + 72), 0x80
-	jr nz, LABEL_FAD97A
+	jr nz, DrawDesignBox_IconCheckFlags
 	ldw (xsp + 12), 0x19
 	ldw (xsp + 16), 0x1
-	jr LABEL_FAD988
+	jr DrawDesignBox_IconGetFrameSize
 
-LABEL_FAD970:
+DrawDesignBox_IconA0:
 	ldw (xsp + 12), 0x14
 	ldw (xsp + 14), 0x1
 
-LABEL_FAD97A:
+DrawDesignBox_IconCheckFlags:
 	cpw (xsp + 16), 0x1
-	jr z, LABEL_FAD988
+	jr z, DrawDesignBox_IconGetFrameSize
 	cpw (xsp + 14), 0x1
-	jr nz, LABEL_FAD995
+	jr nz, DrawDesignBox_IconCheckLeft
 
-LABEL_FAD988:
+DrawDesignBox_IconGetFrameSize:
 	lda xbc, (xsp + 20)
 	lda xde, (xsp + 18)
 	ld wa, (xsp + 12)
 	call GetFrameSPSize
 
-LABEL_FAD995:
+DrawDesignBox_IconCheckLeft:
 	cpw (xsp + 16), 0x0
-	jr z, LABEL_FAD9CF
+	jr z, DrawDesignBox_IconCheckRight
 	lda xwa, (xsp + 50)
 	lda xhl, (xsp + 62)
 	ld bc, (xhl)
@@ -4098,9 +4098,9 @@ LABEL_FAD995:
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 
-LABEL_FAD9CF:
+DrawDesignBox_IconCheckRight:
 	cpw (xsp + 14), 0x0
-	jr z, LABEL_FADA0F
+	jr z, DrawDesignBox_IconAdjustFrame
 	lda xwa, (xsp + 50)
 	lda xbc, (xsp + 62)
 	ld de, (xbc + 4)
@@ -4123,36 +4123,36 @@ LABEL_FAD9CF:
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 
-LABEL_FADA0F:
+DrawDesignBox_IconAdjustFrame:
 	lda xwa, (xsp + 62)
 	incm 1, (xwa + 2)
 	decm 1, (xwa + 6)
 	cpw (xsp + 16), 0x0
-	jr nz, LABEL_FADA23
+	jr nz, DrawDesignBox_IconLeftWidth
 	lds bc, 1
-	jr LABEL_FADA26
+	jr DrawDesignBox_IconApplyAdjust
 
-LABEL_FADA23:
+DrawDesignBox_IconLeftWidth:
 	ld bc, (xsp + 20)
 
-LABEL_FADA26:
+DrawDesignBox_IconApplyAdjust:
 	add (xwa), bc
 	ld bc, (xwa)
 	ld (xsp + 50), bc
 	lda xbc, (xwa + 4)
 	cpw (xsp + 14), 0x0
-	jr nz, LABEL_FADA3F
+	jr nz, DrawDesignBox_IconAdjustRight
 	ld de, (xbc)
 	dec 1, de
 	ld (xbc), de
-	jr LABEL_FADA46
+	jr DrawDesignBox_IconComputeFill
 
-LABEL_FADA3F:
+DrawDesignBox_IconAdjustRight:
 	ld de, (xbc)
 	sub de, (xsp + 20)
 	ld (xbc), de
 
-LABEL_FADA46:
+DrawDesignBox_IconComputeFill:
 	ld (xsp + 46), de
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
@@ -4186,7 +4186,7 @@ LABEL_FADA46:
 	ld de, (xhl + 6)
 	ld (xbc + 2), de
 	cpw (xsp + 16), 0x0
-	jr nz, LABEL_FADAB4
+	jr nz, DrawDesignBox_IconLeftBorder
 	ld de, (xhl)
 	dec 1, de
 	ld (xwa), de
@@ -4196,7 +4196,7 @@ LABEL_FADA46:
 	lds de, 0
 	calr DrawLine_Impl
 
-LABEL_FADAB4:
+DrawDesignBox_IconLeftBorder:
 	cpw (xsp + 14), 0x0
 	jrl nz, DrawFunc_Epilogue74
 	lda xwa, (xsp + 50)
@@ -4211,18 +4211,18 @@ LABEL_FADAB4:
 	lds de, 0
 	jrl DrawFunc_DrawLineAndReturn
 
-LABEL_FADAD6:
+DrawDesignBox_PartGroupStyle:
 	ldw (xsp + 16), 0x0
 	ldw (xsp + 14), 0x0
 	ld wa, (xsp + 72)
 	cpw (xsp + 72), 0xB
-	jrl z, LABEL_FADB88
+	jrl z, DrawPartGroup_StyleB
 	cpw (xsp + 72), 0xA
-	jrl z, LABEL_FADB73
+	jrl z, DrawPartGroup_StyleA
 	cpw (xsp + 72), 0x9
-	jr z, LABEL_FADB5E
+	jr z, DrawPartGroup_Style9
 	cpw (xsp + 72), 0x8
-	jr z, LABEL_FADB4C
+	jr z, DrawPartGroup_Style8
 	cpw (xsp + 72), 0x7
 	jr z, DrawPartGroup_TableJump_DefaultCase
 	sub wa, 0x81
@@ -4251,28 +4251,28 @@ DrawPartGroup_TableJump_DefaultCase:
 	ldi_werp 0xFA, 3
 	jrl DrawPartGroup_Loop
 
-LABEL_FADB4C:
+DrawPartGroup_Style8:
 	lds iz, 4
 	ldw (xsp + 8), 0x5
 	ldw (xsp + 10), 0x6
 	ldi_werp 0xFA, 7
 	jrl DrawPartGroup_Loop
 
-LABEL_FADB5E:
+DrawPartGroup_Style9:
 	ldw iz, 0x8
 	ldw (xsp + 8), 0x9
 	ldw (xsp + 10), 0xA
 	ldi_erpw 0xFA, 0x0B, 0x00
 	jrl DrawPartGroup_Loop
 
-LABEL_FADB73:
+DrawPartGroup_StyleA:
 	ldw iz, 0xC
 	ldw (xsp + 8), 0xD
 	ldw (xsp + 10), 0xE
 	ldi_erpw 0xFA, 0x0F, 0x00
 	jrl DrawPartGroup_Loop
 
-LABEL_FADB88:
+DrawPartGroup_StyleB:
 	ldw iz, 0x10
 	ldw (xsp + 8), 0x11
 	ldw (xsp + 10), 0x12
@@ -4398,24 +4398,24 @@ DrawPartGroup_Loop:
 	ldto_werp WA, 0xFA
 	call GetFrameSPSize
 	cpw (xsp + 16), 0x1
-	jr z, LABEL_FADD65
+	jr z, DrawPartGroup_CheckAltFlag
 	cpw (xsp + 14), 0x1
-	jr nz, LABEL_FADD72
+	jr nz, DrawPartGroup_CopyBoxRect
 
-LABEL_FADD65:
+DrawPartGroup_CheckAltFlag:
 	lda xbc, (xsp + 20)
 	lda xde, (xsp + 18)
 	ld wa, (xsp + 12)
 	call GetFrameSPSize
 
-LABEL_FADD72:
+DrawPartGroup_CopyBoxRect:
 	ld xwa, (xsp + 74)
 	ld xiy, xwa
 	lda xix, (xsp + 54)
 	lds bc, 4
 	ldirw
 	cpw (xsp + 16), 0x0
-	jr nz, LABEL_FADDCC
+	jr nz, DrawPartGroup_NoLeftFlag
 	lda xwa, (xsp + 50)
 	lda xde, (xsp + 62)
 	ld bc, (xde)
@@ -4442,9 +4442,9 @@ LABEL_FADD72:
 	ld wa, (xsp + 36)
 	inc 1, wa
 	add (xsp + 54), wa
-	jr LABEL_FADE0B
+	jr DrawPartGroup_DrawSides
 
-LABEL_FADDCC:
+DrawPartGroup_NoLeftFlag:
 	lda xwa, (xsp + 50)
 	lda xhl, (xsp + 62)
 	ld bc, (xhl)
@@ -4469,12 +4469,12 @@ LABEL_FADDCC:
 	ld wa, (xsp + 20)
 	add (xsp + 54), wa
 
-LABEL_FADE0B:
+DrawPartGroup_DrawSides:
 	lda xhl, (xsp + 62)
 	lda xbc, (xhl + 2)
 	lda xde, (xhl + 4)
 	cpw (xsp + 14), 0x0
-	jr nz, LABEL_FADE62
+	jr nz, DrawPartGroup_CenterRightIcon
 	lda xwa, (xsp + 50)
 	ld de, (xde)
 	sub de, (xsp + 34)
@@ -4500,9 +4500,9 @@ LABEL_FADE0B:
 	ld wa, (xsp + 34)
 	inc 1, wa
 	sub (xsp + 58), wa
-	jr LABEL_FADEA2
+	jr DrawPartGroup_FillAndBorder
 
-LABEL_FADE62:
+DrawPartGroup_CenterRightIcon:
 	lda xwa, (xsp + 50)
 	ld de, (xde)
 	sub de, (xsp + 20)
@@ -4528,7 +4528,7 @@ LABEL_FADE62:
 	ld wa, (xsp + 20)
 	sub (xsp + 58), wa
 
-LABEL_FADEA2:
+DrawPartGroup_FillAndBorder:
 	lda xwa, (xsp + 62)
 	ld bc, (xsp + 28)
 	inc 1, bc
@@ -4560,38 +4560,38 @@ LABEL_FADEA2:
 	calr DrawBox_Impl
 	lda xbc, (xsp + 50)
 	cpw (xsp + 16), 0x0
-	jr nz, LABEL_FADF0B
+	jr nz, DrawPartGroup_CheckLeftTopCorner
 	ld xwa, (xsp + 74)
 	ld wa, (xwa)
 	add wa, (xsp + 36)
 	inc 1, wa
 	ld (xbc), wa
-	jr LABEL_FADF15
+	jr DrawPartGroup_SetTopLeftX
 
-LABEL_FADF0B:
+DrawPartGroup_CheckLeftTopCorner:
 	ld xwa, (xsp + 74)
 	ld wa, (xwa)
 	add wa, (xsp + 20)
 	ld (xbc), wa
 
-LABEL_FADF15:
+DrawPartGroup_SetTopLeftX:
 	lda xbc, (xsp + 46)
 	ld xwa, (xsp + 74)
 	inc 4, xwa
 	cpw (xsp + 14), 0x0
-	jr nz, LABEL_FADF2F
+	jr nz, DrawPartGroup_CheckRightBR
 	ld wa, (xwa)
 	sub wa, (xsp + 34)
 	dec 1, wa
 	ld (xbc), wa
-	jr LABEL_FADF36
+	jr DrawPartGroup_DrawBorderLines
 
-LABEL_FADF2F:
+DrawPartGroup_CheckRightBR:
 	ld wa, (xwa)
 	sub wa, (xsp + 20)
 	ld (xbc), wa
 
-LABEL_FADF36:
+DrawPartGroup_DrawBorderLines:
 	lda xwa, (xsp + 50)
 	ld xbc, (xsp + 74)
 	lda xde, (xbc + 2)
@@ -4624,7 +4624,7 @@ LABEL_FADF36:
 	dec 1, de
 	ld (xbc + 2), de
 	cpw (xsp + 16), 0x0
-	jr nz, LABEL_FADF9F
+	jr nz, DrawPartGroup_DrawLeftBorder
 	ld de, (xhl)
 	ld (xwa), de
 	ld de, (xhl)
@@ -4632,7 +4632,7 @@ LABEL_FADF36:
 	lds de, 0
 	calr DrawLine_Impl
 
-LABEL_FADF9F:
+DrawPartGroup_DrawLeftBorder:
 	cpw (xsp + 14), 0x0
 	jrl nz, DrawFunc_Epilogue74
 	lda xwa, (xsp + 50)
@@ -4646,16 +4646,16 @@ LABEL_FADF9F:
 	lds de, 0
 	jrl DrawFunc_DrawLineAndReturn
 	cpw (xsp + 72), 0xCA
-	jr z, LABEL_FADFE5
+	jr z, DrawPartGroup_StyleCA
 	ldw iz, 0x28
 	ldw (xsp + 8), 0x29
 	ldw (xsp + 10), 0x2A
 	ldi_erpw 0xFA, 0x2B, 0x00
 	ldw (xsp + 4), 0xFF
 	ldw (xsp + 6), 0xF8
-	jr LABEL_FAE001
+	jr DrawPartGroup_DrawCAFrames
 
-LABEL_FADFE5:
+DrawPartGroup_StyleCA:
 	ldw iz, 0x30
 	ldw (xsp + 8), 0x31
 	ldw (xsp + 10), 0x32
@@ -4663,7 +4663,7 @@ LABEL_FADFE5:
 	ldw (xsp + 6), 0xFF
 	ldw (xsp + 4), 0xF8
 
-LABEL_FAE001:
+DrawPartGroup_DrawCAFrames:
 	ld wa, iz
 	call GetFrameSPSize
 	lda xbc, (xsp + 34)
