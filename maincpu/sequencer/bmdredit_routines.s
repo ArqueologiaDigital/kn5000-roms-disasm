@@ -586,7 +586,7 @@ BmDrEdit_DelayAExpired:
 	stdi8 10588, 0
 	ldda8 a, 10589
 	cps a, 5
-	jrl z, LABEL_F37B1C
+	jrl z, BmDrEdit_DelayAction_WalkAndUpdateAlt
 	cps a, 4
 	jrl z, BmDrEdit_DelayAction_UpdateScrollAlt
 	cps a, 3
@@ -1669,7 +1669,7 @@ BmDrEdit_InsertNoteEvent:
 	ldda8 a, 10122
 	stda8 10593, a
 	ldmm8 10120, 10122
-	calr LABEL_F37B22
+	calr BmDrEdit_PlayNoteAndSetDelay
 	calr BmDrEdit_WalkEventsOrSetError
 	jr BmDrEdit_RefreshAfterInsert
 
@@ -2624,14 +2624,14 @@ BmDrEdit_InsertNoteSequence:
 	ldfr_werp WA, 0xFA
 	ldda16 xiz, 9830
 	resda 2, 10591
-	calr LABEL_F37884
+	calr BmDrEdit_LoadAlternateAndValidate
 	ldda16 xbc, 10138
 	extz xbc
 	div bc, 0x60
 	inc 1, bc
 	ldda16 xwa, 10098
 	cp bc, wa
-	jr c, LABEL_F37804
+	jr c, BmDrEdit_InsertSeq_PopIzRet
 	inc 1, bc
 	sub bc, wa
 	stda16 10098, xbc
@@ -2639,55 +2639,55 @@ BmDrEdit_InsertNoteSequence:
 	cpdi16 10098, 0
 	jr z, BmDrEdit_SavePositionAndReturn
 
-LABEL_F377DB:
+BmDrEdit_InsertSeq_StepLoop:
 	calr BmDrEdit_InsertStepEntry
 	cpdi8 10362, 0
-	jr z, LABEL_F377EB
+	jr z, BmDrEdit_InsertSeq_DecrementCount
 	setda 2, 10591
 	jr BmDrEdit_SavePositionAndReturn
 
-LABEL_F377EB:
+BmDrEdit_InsertSeq_DecrementCount:
 	ldda16 xwa, 10098
 	dec 1, wa
 	stda16 10098, xwa
 	cps wa, 0
-	jr nz, LABEL_F377DB
+	jr nz, BmDrEdit_InsertSeq_StepLoop
 
 BmDrEdit_SavePositionAndReturn:
 	ldto_werp WA, 0xFA
 	stda16 10415, xwa
 	stda16 9830, xiz
 
-LABEL_F37804:
+BmDrEdit_InsertSeq_PopIzRet:
 	pop xiz
 	ret
 
-LABEL_F37806:
+BmDrEdit_ScanAfterModify:
 	dec 4, xsp
 	resda 3, 10591
 	cpdi16 10140, 0
-	jr nz, LABEL_F37838
+	jr nz, BmDrEdit_ScanAfterModify_LoadAndWalk
 	call SeqData_ReadNextByte
 	cp l, 0x81
 	jr z, BmDrEdit_SetFlagReturn
 	and l, 0xF0
 	cp l, 0x90
-	jr z, LABEL_F3782A
+	jr z, BmDrEdit_ScanAfterModify_CheckVelocity
 	calr BmDrEdit_WalkAndScanAfterEdit
-	jr LABEL_F37860
+	jr BmDrEdit_ScanAfterModify_Return
 
-LABEL_F3782A:
+BmDrEdit_ScanAfterModify_CheckVelocity:
 	calr BmDrEdit_CompareVelocity
 	cps l, 0
 	jr nz, BmDrEdit_SetFlagReturn
 	cpdi8 10080, 0
 	jr nz, BmDrEdit_SetFlagReturn
 
-LABEL_F37838:
+BmDrEdit_ScanAfterModify_LoadAndWalk:
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_CheckNoteAtPosition
 
-LABEL_F3783E:
+BmDrEdit_ScanAfterModify_WalkLoop:
 	calr BmDrEdit_SaveEditState
 	calr BmDrEdit_WalkTrackForward
 	lda xwa, (xsp + 2)
@@ -2696,69 +2696,69 @@ LABEL_F3783E:
 	ld wa, (xsp + 2)
 	sub wa, (xsp)
 	cpda16 xwa, 10140
-	jr c, LABEL_F3783E
+	jr c, BmDrEdit_ScanAfterModify_WalkLoop
 	calr BmDrEdit_RestoreEditState
-	jr LABEL_F37860
+	jr BmDrEdit_ScanAfterModify_Return
 
 BmDrEdit_SetFlagReturn:
 	setda 3, 10591
 
-LABEL_F37860:
+BmDrEdit_ScanAfterModify_Return:
 	inc 4, xsp
 	ret
 
-LABEL_F37863:
+BmDrEdit_AlignGridBackward:
 	ldda16 xwa, 10138
 	cps wa, 0
 	ret z
 	lds de, 0
 	cps wa, 0
-	jr ule, LABEL_F3787B
+	jr ule, BmDrEdit_AlignGridBackward_Store
 	ldda16 xbc, 10130
 
-LABEL_F37875:
+BmDrEdit_AlignGridBackward_AccumLoop:
 	add de, bc
 	cp de, wa
-	jr c, LABEL_F37875
+	jr c, BmDrEdit_AlignGridBackward_AccumLoop
 
-LABEL_F3787B:
+BmDrEdit_AlignGridBackward_Store:
 	subda16 xde, 10130
 	stda16 10138, xde
 	ret
 
-LABEL_F37884:
+BmDrEdit_LoadAlternateAndValidate:
 	calr BmDrEdit_LoadAlternateState
 	cpdi8 10362, 0
-	jr z, LABEL_F37895
+	jr z, BmDrEdit_LoadAlternateAndValidate_Done
 	ldw wa, 0xB8
 	call SeqData_SetErrorCode
 
-LABEL_F37895:
+BmDrEdit_LoadAlternateAndValidate_Done:
 	jr __jrt_nop_F37897
 __jrt_nop_F37897:
 
 BmDrEdit_CountMeasuresAndValidate:
 	cpdi8 10362, 0
-	jr z, LABEL_F378A5
+	jr z, BmDrEdit_CountMeasures_Init
 	ldw wa, 0xD1
 	call SeqData_SetErrorCode
 
-LABEL_F378A5:
+BmDrEdit_CountMeasures_Init:
 	stdi16 10098, 0
 
-LABEL_F378AB:
+BmDrEdit_CountMeasures_Loop:
 	call SeqData_ReadNextByte
 	cp l, 0x82
 	jr z, BmDrEdit_CheckAndReportScanError
 	cp l, 0x84
 	jr z, BmDrEdit_CheckAndReportScanError
 	cp l, 0x81
-	jr nz, LABEL_F378C2
+	jr nz, BmDrEdit_CountMeasures_SkipEvent
 	incdi16 1, 10098
 
-LABEL_F378C2:
+BmDrEdit_CountMeasures_SkipEvent:
 	call SeqData_SkipToNextEvent
-	jr LABEL_F378AB
+	jr BmDrEdit_CountMeasures_Loop
 
 BmDrEdit_CheckAndReportScanError:
 	cpdi8 10362, 0
@@ -2767,19 +2767,19 @@ BmDrEdit_CheckAndReportScanError:
 	call SeqData_SetErrorCode
 	ret
 
-LABEL_F378D7:
+BmDrEdit_NavigateBackwardWithEdit:
 	dec 4, xsp
 	bitda 7, 10588
 	jrl nz, BmDrEdit_NavigateReturn
 	calr BmDrEdit_SaveEditState
 	ldmm16 10140, 10138
-	calr LABEL_F37863
+	calr BmDrEdit_AlignGridBackward
 	calr BmDrEdit_CalcBeatMeasure
 	bitda 0, 10591
 	jr nz, BmDrEdit_NavigateAfterEdit
-	calr LABEL_F37806
+	calr BmDrEdit_ScanAfterModify
 	bitda 3, 10591
-	jr z, LABEL_F3791A
+	jr z, BmDrEdit_NavEdit_CheckPosition
 	cpdi16 10052, 1
 	jr z, BmDrEdit_ResetToFirstEvent
 	cpdi16 10140, 0
@@ -2793,7 +2793,7 @@ BmDrEdit_GoToPrevPage:
 	calr BmDrEdit_NavigatePrevPage
 	jrl BmDrEdit_NavigateReturn
 
-LABEL_F3791A:
+BmDrEdit_NavEdit_CheckPosition:
 	ldda16 xwa, 10094
 	cpda16 xwa, 10415
 	jr nz, BmDrEdit_CheckCurrentNoteMatch
@@ -2823,19 +2823,19 @@ BmDrEdit_CheckCurrentNoteMatch:
 	ld wa, (xsp + 2)
 	sub wa, (xsp)
 	cpda16 xwa, 10138
-	jr nc, LABEL_F379A2
+	jr nc, BmDrEdit_NavEdit_InitView
 
 BmDrEdit_NavigateAfterEdit:
 	calr BmDrEdit_WalkAndScanAfterEdit
 	bitda 3, 10591
-	jr z, LABEL_F37984
+	jr z, BmDrEdit_NavEdit_CalcCoords
 	cpdi16 10052, 1
 	jr z, BmDrEdit_ResetToFirstEvent
 	cpdi16 10140, 0
 	jr z, BmDrEdit_GoToPrevPage
 	jr BmDrEdit_ResetToFirstEvent
 
-LABEL_F37984:
+BmDrEdit_NavEdit_CalcCoords:
 	lda xwa, (xsp + 2)
 	lda xbc, (xsp)
 	calr BmDrEdit_SetupCoordinates
@@ -2848,7 +2848,7 @@ LABEL_F37984:
 	cp wa, (xsp)
 	jrl c, BmDrEdit_ResetToFirstEvent
 
-LABEL_F379A2:
+BmDrEdit_NavEdit_InitView:
 	calr BmDrEdit_InitViewAndNavigate
 
 BmDrEdit_NavigateReturn:
@@ -2876,15 +2876,15 @@ BmDrEdit_WalkAndScanAfterEdit:
 BmDrEdit_ScanSequenceEnd:
 	calr BmDrEdit_ClearAndScanToEnd
 	cpdi8 10362, 0
-	jr z, LABEL_F379E9
+	jr z, BmDrEdit_WalkScan_ReadNext
 	setda 3, 10591
 	stdi8 10362, 0
-	jr LABEL_F37A36
+	jr BmDrEdit_WalkScan_Return
 
-LABEL_F379E9:
+BmDrEdit_WalkScan_ReadNext:
 	call SeqData_ReadNextByte
 	cp l, 0x81
-	jr nz, LABEL_F37A11
+	jr nz, BmDrEdit_WalkScan_CheckNoteOn
 	ldda16 xwa, 10078
 	cps wa, 0
 	jr z, BmDrEdit_CheckVelocityMatch
@@ -2898,7 +2898,7 @@ LABEL_F379E9:
 	jr nc, BmDrEdit_ScanSequenceEnd
 	jr BmDrEdit_CheckVelocityMatch
 
-LABEL_F37A11:
+BmDrEdit_WalkScan_CheckNoteOn:
 	and l, 0xF0
 	cp l, 0x90
 	jr nz, BmDrEdit_ScanSequenceEnd
@@ -2911,16 +2911,16 @@ LABEL_F37A11:
 	calr BmDrEdit_SetupCoordinates
 	ld wa, (xsp + 2)
 	cp wa, (xsp)
-	jr nc, LABEL_F37A36
+	jr nc, BmDrEdit_WalkScan_Return
 
 BmDrEdit_CheckVelocityMatch:
 	setda 3, 10591
 
-LABEL_F37A36:
+BmDrEdit_WalkScan_Return:
 	inc 4, xsp
 	ret
 
-LABEL_F37A39:
+BmDrEdit_PostModeChange96:
 	bitda 7, 10054
 	ret nz
 	bitda 7, 10588
@@ -2928,35 +2928,35 @@ LABEL_F37A39:
 	ldw wa, 0x96
 	jp UI_PostModeChangeEvent
 
-LABEL_F37A4C:
+BmDrEdit_DrumVoiceUp_Check:
 	bitda 7, 10588
-	jr z, LABEL_F37A59
+	jr z, BmDrEdit_DrumVoiceUp_ClearFlag
 	cpdi8 10589, 5
 	ret nz
 
-LABEL_F37A59:
+BmDrEdit_DrumVoiceUp_ClearFlag:
 	resda 0, 10591
 	jr __jrt_nop_F37A5F
 __jrt_nop_F37A5F:
 
-LABEL_F37A5F:
+BmDrEdit_DrumVoiceUp:
 	bitda 7, 10054
 	ret nz
 	ldda16 xwa, 10144
 	cp wa, 0xB
-	jr c, LABEL_F37A81
+	jr c, BmDrEdit_DrumVoiceUp_IncrementOctave
 	ldda16 xwa, 10142
 	cp wa, 0x74
 	ret nc
 	inc 1, wa
 	stda16 10142, xwa
-	jr LABEL_F37A87
+	jr BmDrEdit_DrumVoiceUp_UpdateDisplay
 
-LABEL_F37A81:
+BmDrEdit_DrumVoiceUp_IncrementOctave:
 	inc 1, wa
 	stda16 10144, xwa
 
-LABEL_F37A87:
+BmDrEdit_DrumVoiceUp_UpdateDisplay:
 	call NoteEditSy_SendWidgetCmd0
 	calr NoteEdit_SendScrollCmds
 	call NoteEditSy_UpdateChordDisplay
@@ -2965,35 +2965,35 @@ LABEL_F37A87:
 	stdi8 10589, 5
 	jp Audio_CheckSubsystemReady
 
-LABEL_F37AA3:
+BmDrEdit_DrumVoiceDown_Check:
 	bitda 7, 10588
-	jr z, LABEL_F37AB0
+	jr z, BmDrEdit_DrumVoiceDown_ClearFlag
 	cpdi8 10589, 5
 	ret nz
 
-LABEL_F37AB0:
+BmDrEdit_DrumVoiceDown_ClearFlag:
 	resda 0, 10591
 	jr __jrt_nop_F37AB6
 __jrt_nop_F37AB6:
 
-LABEL_F37AB6:
+BmDrEdit_DrumVoiceDown:
 	bitda 7, 10054
 	ret nz
 	ldda16 xwa, 10144
 	cps wa, 0
-	jr nz, LABEL_F37AD4
+	jr nz, BmDrEdit_DrumVoiceDown_DecrementOctave
 	ldda16 xwa, 10142
 	cps wa, 1
 	ret z
 	dec 1, wa
 	stda16 10142, xwa
-	jr LABEL_F37ADA
+	jr BmDrEdit_DrumVoiceDown_UpdateDisplay
 
-LABEL_F37AD4:
+BmDrEdit_DrumVoiceDown_DecrementOctave:
 	dec 1, wa
 	stda16 10144, xwa
 
-LABEL_F37ADA:
+BmDrEdit_DrumVoiceDown_UpdateDisplay:
 	call NoteEditSy_SendWidgetCmd0
 	calr NoteEdit_SendScrollCmds
 	call NoteEditSy_UpdateChordDisplay
@@ -3010,7 +3010,7 @@ BmDrEdit_CalcTrackPosition:
 	stda8 10118, a
 	ret
 
-LABEL_F37B09:
+BmDrEdit_PostModeChange99:
 	bitda 7, 10054
 	ret nz
 	bitda 7, 10588
@@ -3018,11 +3018,11 @@ LABEL_F37B09:
 	ldw wa, 0x99
 	jp UI_PostModeChangeEvent
 
-LABEL_F37B1C:
+BmDrEdit_DelayAction_WalkAndUpdateAlt:
 	calr BmDrEdit_SetupAndWalkToNote
 	jrl NoteEdit_UpdateScrollAndDisplay
 
-LABEL_F37B22:
+BmDrEdit_PlayNoteAndSetDelay:
 	calr BmDrEdit_SendMetronomeNoteOn
 	stdi8 10590, 134
 	ret
@@ -3034,9 +3034,9 @@ BmDrEdit_ApplyVelocityChange:
 	ld (xsp + 16), xbc
 	ld (xsp + 20), a
 	cpw (xsp + 14), 0x0
-	jrl z, LABEL_F37C40
+	jrl z, BmDrEdit_VelChange_ReturnZero
 	cpw (xsp + 14), 0xFF
-	jr ugt, LABEL_F37BA9
+	jr ugt, BmDrEdit_VelChange_Error
 	ldmw2 (xsp + 2), 0x28AF
 	ldmw2 (xsp + 4), 0x2666
 	ld c, (xsp + 20)
@@ -3055,29 +3055,29 @@ BmDrEdit_ApplyVelocityChange:
 	add wa, (xsp + 14)
 	ld (xsp + 6), wa
 	cpw (xsp + 6), 0xFF
-	jr ule, LABEL_F37BB7
+	jr ule, BmDrEdit_VelChange_WriteParams
 	ld wa, (xsp + 12)
 	call PartCtrl_ReadWord
 	ld (xsp + 8), hl
 	cpw (xsp + 8), 0xFFFF
-	jr nz, LABEL_F37BAF
+	jr nz, BmDrEdit_VelChange_LinkVoice
 	ld wa, (xsp + 12)
 	call Part_LinkVoiceToChain
 	ld (xsp + 8), hl
 	cps hl, 0
-	jr ge, LABEL_F37BAF
+	jr ge, BmDrEdit_VelChange_LinkVoice
 	ldw wa, 0xBB
 	call SeqData_SetErrorCode
 
-LABEL_F37BA9:
+BmDrEdit_VelChange_Error:
 	ldw hl, 0xFFFF
-	jrl LABEL_F37C42
+	jrl BmDrEdit_VelChange_Epilog
 
-LABEL_F37BAF:
+BmDrEdit_VelChange_LinkVoice:
 	submi16 (xsp + 6), 0xFF
 	incm 4, (xsp + 6)
 
-LABEL_F37BB7:
+BmDrEdit_VelChange_WriteParams:
 	ld c, (xsp + 20)
 	extz bc
 	ld de, (xsp + 8)
@@ -3091,7 +3091,7 @@ LABEL_F37BB7:
 	lds wa, 0
 	call Part_WriteByte_Indexed
 
-LABEL_F37BD7:
+BmDrEdit_VelChange_CopyLoop:
 	ld wa, (xsp + 12)
 	ld bc, (xsp + 10)
 	calr PartCtrl_ReadByteExtended
@@ -3102,26 +3102,26 @@ LABEL_F37BD7:
 	calr PartCtrl_WriteByte_ZeroExtended
 	ldda16 xwa, 10415
 	cp wa, (xsp + 12)
-	jr nz, LABEL_F37BFF
+	jr nz, BmDrEdit_VelChange_DecrementCounters
 	ldda16 xwa, 9830
 	cp wa, (xsp + 10)
-	jr z, LABEL_F37C13
+	jr z, BmDrEdit_VelChange_WriteEventBytes
 
-LABEL_F37BFF:
+BmDrEdit_VelChange_DecrementCounters:
 	lda xwa, (xsp + 12)
 	lda xbc, (xsp + 10)
 	calr BmDrEdit_DecrementAndValidateCounter
 	lda xwa, (xsp + 8)
 	lda xbc, (xsp + 6)
 	calr BmDrEdit_DecrementAndValidateCounter
-	jr LABEL_F37BD7
+	jr BmDrEdit_VelChange_CopyLoop
 
-LABEL_F37C13:
+BmDrEdit_VelChange_WriteEventBytes:
 	lds iz, 0
 	cpw (xsp + 14), 0x0
-	jr ule, LABEL_F37C36
+	jr ule, BmDrEdit_VelChange_Finalize
 
-LABEL_F37C1C:
+BmDrEdit_VelChange_WriteByteLoop:
 	ld wa, iz
 	extz xwa
 	add xwa, (xsp + 16)
@@ -3131,16 +3131,16 @@ LABEL_F37C1C:
 	call SeqData_AdvancePosition
 	inc 1, iz
 	cp iz, (xsp + 14)
-	jr c, LABEL_F37C1C
+	jr c, BmDrEdit_VelChange_WriteByteLoop
 
-LABEL_F37C36:
+BmDrEdit_VelChange_Finalize:
 	mrdw5 0x9F, 0x02, 0x19, 0xAF, 0x28
 	mrdw5 0x9F, 0x04, 0x19, 0x66, 0x26
 
-LABEL_F37C40:
+BmDrEdit_VelChange_ReturnZero:
 	lds hl, 0
 
-LABEL_F37C42:
+BmDrEdit_VelChange_Epilog:
 	popw iz
 	lda xsp, (xsp + 20)
 	ret
@@ -3153,25 +3153,25 @@ BmDrEdit_DecrementAndValidateCounter:
 	ld xwa, (xsp + 4)
 	decm 1, (xwa)
 	cpw (xwa), 0x5
-	jr nc, LABEL_F37C7B
+	jr nc, BmDrEdit_DecrValidate_ReturnZero
 	ld wa, (xiz)
 	call PartCtrl_ReadWord_Off1
 	ld (xiz), hl
 	cpw (xiz), 0x4D8
-	jr ule, LABEL_F37C74
+	jr ule, BmDrEdit_DecrValidate_LinkNext
 	ldw wa, 0xA0
 	call SeqData_SetErrorCode
 	ldw hl, 0xFFFF
-	jr LABEL_F37C7D
+	jr BmDrEdit_DecrValidate_Epilog
 
-LABEL_F37C74:
+BmDrEdit_DecrValidate_LinkNext:
 	ld xwa, (xsp + 4)
 	ldw (xwa), 0xFF
 
-LABEL_F37C7B:
+BmDrEdit_DecrValidate_ReturnZero:
 	lds hl, 0
 
-LABEL_F37C7D:
+BmDrEdit_DecrValidate_Epilog:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -3184,25 +3184,25 @@ PartCtrl_ReadWordWithBoundsCheck:
 	ld xwa, (xsp + 4)
 	incm 1, (xwa)
 	cpw (xwa), 0xFF
-	jr ule, LABEL_F37CB5
+	jr ule, BmDrEdit_BoundsCheck_ReturnZero
 	ld wa, (xiz)
 	call PartCtrl_ReadWord
 	ld (xiz), hl
 	cpw (xiz), 0x4D8
-	jr ule, LABEL_F37CAE
+	jr ule, BmDrEdit_BoundsCheck_ResetCounter
 	ldw wa, 0xA1
 	call SeqData_SetErrorCode
 	ldw hl, 0xFFFF
-	jr LABEL_F37CB7
+	jr BmDrEdit_BoundsCheck_Epilog
 
-LABEL_F37CAE:
+BmDrEdit_BoundsCheck_ResetCounter:
 	ld xwa, (xsp + 4)
 	ldw (xwa), 0x5
 
-LABEL_F37CB5:
+BmDrEdit_BoundsCheck_ReturnZero:
 	lds hl, 0
 
-LABEL_F37CB7:
+BmDrEdit_BoundsCheck_Epilog:
 	pop xiz
 	inc 4, xsp
 	ret
@@ -3271,11 +3271,11 @@ BmDrEdit_ValidateAndProcessVoice:
 	extz wa
 	call Part_ValidateVoiceChannel
 	cpdi8 10362, 0
-	jr z, LABEL_F37D71
+	jr z, BmDrEdit_ValidateVoice_ProcessState
 	ldb l, 0xFF
-	jr LABEL_F37DD5
+	jr BmDrEdit_ValidateVoice_Epilog
 
-LABEL_F37D71:
+BmDrEdit_ValidateVoice_ProcessState:
 	ldda16 xiz, 10415
 	ldda16 xwa, 9830
 	ldfr_werp WA, 0xFA
@@ -3289,7 +3289,7 @@ LABEL_F37D71:
 	cpdi16 10367, 1
 	jr z, BmDrEdit_TrackValidateRet
 
-LABEL_F37D9F:
+BmDrEdit_ValidateVoice_SkipSections:
 	ldda8 a, 10382
 	extz wa
 	ld xbc, (xsp + 6)
@@ -3305,12 +3305,12 @@ LABEL_F37D9F:
 	jr nz, BmDrEdit_TrackValidateRet
 	ld wa, (xsp + 4)
 	cpda16 xwa, 10367
-	jr nz, LABEL_F37D9F
+	jr nz, BmDrEdit_ValidateVoice_SkipSections
 
 BmDrEdit_TrackValidateRet:
 	ldda8 l, 10382
 
-LABEL_F37DD5:
+BmDrEdit_ValidateVoice_Epilog:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -3364,7 +3364,7 @@ BmDrEdit_CopyEventDataBetweenParts:
 	ldmw2 (xsp + 4), 0x28AF
 	ldmw2 (xsp + 2), 0x2666
 
-LABEL_F37E62:
+BmDrEdit_CopyEventLoop:
 	ld wa, (xsp + 4)
 	ld bc, (xsp + 2)
 	calr PartCtrl_ReadByteExtended
@@ -3384,7 +3384,7 @@ LABEL_F37E62:
 	lda xwa, (xsp + 4)
 	lda xbc, (xsp + 2)
 	calr PartCtrl_ReadWordWithBoundsCheck
-	jr LABEL_F37E62
+	jr BmDrEdit_CopyEventLoop
 
 BmDrEdit_FinalizePartTransfer:
 	ld c, (xsp + 10)
@@ -3411,33 +3411,33 @@ BmDrEdit_FinalizePartTransfer:
 	lda xsp, (xsp + 10)
 	ret
 
-LABEL_F37EDC:
+BmDrEdit_DeleteNoteAtCursor:
 	push xiz
 	bitda 7, 10588
-	jr nz, LABEL_F37F44
+	jr nz, BmDrEdit_DeleteNote_PopIzRet
 	bitda 0, 10591
-	jr z, LABEL_F37F44
+	jr z, BmDrEdit_DeleteNote_PopIzRet
 	ldda8 a, 10597
 	inc 1, a
 	extz wa
 	calr BmDrEdit_CopyEventDataBetweenParts
 	call SeqData_ReadNextByte
 	cp l, 0x82
-	jr z, LABEL_F37F02
+	jr z, BmDrEdit_DeleteNote_EndOfTrack
 	cp l, 0x84
-	jr nz, LABEL_F37F09
+	jr nz, BmDrEdit_DeleteNote_CheckStep
 
-LABEL_F37F02:
+BmDrEdit_DeleteNote_EndOfTrack:
 	stdi8 10080, 0
 	jr NoteEdit_FinalizeAndRefreshDisplay
 
-LABEL_F37F09:
+BmDrEdit_DeleteNote_CheckStep:
 	cp l, 0x81
-	jr nz, LABEL_F37F14
+	jr nz, BmDrEdit_DeleteNote_ReadNextEvent
 	incdi16 1, 10078
 	jr NoteEdit_FinalizeAndRefreshDisplay
 
-LABEL_F37F14:
+BmDrEdit_DeleteNote_ReadNextEvent:
 	ldda16 xwa, 10415
 	ldfr_werp WA, 0xFA
 	ldda16 xiz, 9830
@@ -3454,7 +3454,7 @@ NoteEdit_FinalizeAndRefreshDisplay:
 	calr NoteEdit_SendScrollCmds
 	calr NoteEdit_UpdateScrollAndDisplay
 
-LABEL_F37F44:
+BmDrEdit_DeleteNote_PopIzRet:
 	pop xiz
 	ret
 
@@ -3468,15 +3468,15 @@ BmDrEdit_ScanChannelEvents:
 	lds iz, 0
 	ldw (xsp + 2), 0x0
 
-LABEL_F37F61:
+BmDrEdit_ScanChannel_SelectLoop:
 	calr BmDrEdit_CheckAndSelectChannel
 	ldda8 a, 10597
 	inc 1, a
 	bitda 2, 10363
-	jr z, LABEL_F37F72
+	jr z, BmDrEdit_ScanChannel_UseChannel
 	ld a, l
 
-LABEL_F37F72:
+BmDrEdit_ScanChannel_UseChannel:
 	extz wa
 	extz hl
 	lda xde, (xsp + 4)
@@ -3484,14 +3484,14 @@ LABEL_F37F72:
 	calr BmDrEdit_ValidateAndProcessVoice
 	ldada xwa, 10148
 	cpdi8 10362, 0
-	jr z, LABEL_F37FBF
+	jr z, BmDrEdit_ScanChannel_StoreAndContinue
 	ld xbc, xwa
 	ldda8 a, 10146
 	ldfr_berp A, 0xF0
 	extz ix
 	ld wa, (xsp + 2)
 
-LABEL_F37F97:
+BmDrEdit_ScanChannel_StoreEntry:
 	ldda8 l, 10382
 	incm 1, (xsp + 2)
 	inc 1, a
@@ -3500,20 +3500,20 @@ LABEL_F37F97:
 	add xiy, xbc
 	ld (xiy), a
 
-LABEL_F37FA8:
+BmDrEdit_ScanChannel_NextSlot:
 	inc 1, iz
 	cp iz, ix
-	jr nc, LABEL_F37FDB
+	jr nc, BmDrEdit_ScanChannel_RestoreAndReturn
 	cps l, 1
-	jr z, LABEL_F37F97
+	jr z, BmDrEdit_ScanChannel_StoreEntry
 	ld de, iz
 	extz xde
 	add xde, xbc
 	ld (xde), 0x0
 	dec 1, l
-	jr LABEL_F37FA8
+	jr BmDrEdit_ScanChannel_NextSlot
 
-LABEL_F37FBF:
+BmDrEdit_ScanChannel_StoreAndContinue:
 	incm 1, (xsp + 2)
 	ld xbc, xwa
 	ld de, iz
@@ -3524,31 +3524,31 @@ LABEL_F37FBF:
 	ldda8 e, 10146
 	extz de
 
-LABEL_F37FD5:
+BmDrEdit_ScanChannel_FillRemaining:
 	inc 1, iz
 	cp iz, de
-	jr c, LABEL_F37FE7
+	jr c, BmDrEdit_ScanChannel_AdvanceSong
 
-LABEL_F37FDB:
+BmDrEdit_ScanChannel_RestoreAndReturn:
 	calr BmDrEdit_RestoreEditState
 	stdi8 10362, 0
 	popw iz
 	inc 4, xsp
 	ret
 
-LABEL_F37FE7:
+BmDrEdit_ScanChannel_AdvanceSong:
 	cps l, 1
-	jr nz, LABEL_F37FF2
+	jr nz, BmDrEdit_ScanChannel_ClearSlot
 	incdi16 1, 10367
-	jrl LABEL_F37F61
+	jrl BmDrEdit_ScanChannel_SelectLoop
 
-LABEL_F37FF2:
+BmDrEdit_ScanChannel_ClearSlot:
 	ld wa, iz
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0x0
 	dec 1, l
-	jr LABEL_F37FD5
+	jr BmDrEdit_ScanChannel_FillRemaining
 
 BmDrEdit_BuildVoiceList:
 	ldda16 xbc, 10052

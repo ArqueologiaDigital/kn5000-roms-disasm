@@ -22553,11 +22553,11 @@ NoteEditSy_UpScroll_Param7:
 	jr NoteEditSy_ReturnZero
 
 NoteEditSy_UpScroll_Param8:
-	call LABEL_F37EDC
+	call BmDrEdit_DeleteNoteAtCursor
 	jr NoteEditSy_ReturnZero
 
 NoteEditSy_UpScroll_Param9:
-	call LABEL_F37AA3
+	call BmDrEdit_DrumVoiceDown_Check
 	jr NoteEditSy_ReturnZero
 
 NoteEditSy_UpScroll_Param10:
@@ -22565,11 +22565,11 @@ NoteEditSy_UpScroll_Param10:
 	jr NoteEditSy_ReturnZero
 
 NoteEditSy_UpScroll_Param11:
-	call LABEL_F37A39
+	call BmDrEdit_PostModeChange96
 	jr NoteEditSy_ReturnZero
 
 NoteEditSy_UpScroll_Param12:
-	call LABEL_F37B09
+	call BmDrEdit_PostModeChange99
 	jr NoteEditSy_ReturnZero
 
 NoteEditSy_HandleDownScroll:
@@ -22606,13 +22606,13 @@ NoteEditSy_DownScroll_Param5:
 	jr NoteEditSy_ReturnZero
 
 NoteEditSy_DownScroll_Param6:
-	call LABEL_F378D7
+	call BmDrEdit_NavigateBackwardWithEdit
 	jr NoteEditSy_ReturnZero
 
 NoteEditSy_DownScroll_Param7:
 	call BmDrEdit_ChordScrollDown_Check
 	jr NoteEditSy_ReturnZero
-	call LABEL_F37A4C
+	call BmDrEdit_DrumVoiceUp_Check
 
 NoteEditSy_ReturnZero:
 	lds32 xhl, 0
