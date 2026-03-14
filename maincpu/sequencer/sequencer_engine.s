@@ -22545,7 +22545,7 @@ NoteEditSy_UpScroll_Param5:
 	jr NoteEditSy_ReturnZero
 
 NoteEditSy_UpScroll_Param6:
-	call LABEL_F375D7
+	call BmDrEdit_AdjustViewAndInsert
 	jr NoteEditSy_ReturnZero
 
 NoteEditSy_UpScroll_Param7:
