@@ -1965,29 +1965,29 @@ SeqChan_CommandDispatch_Table:
 	.long SeqChan_UnhandledCmd
 	.long LABEL_FD8262
 	.long LABEL_FD8263
-	.long LABEL_FD80B2
+	.long SeqChan_DispatchByType_Data
 	.long MidiSysEx_ProcessBlock
 	.long LABEL_FD8273
 	.long LABEL_FD8264
-	.long LABEL_FD7B67
-	.long LABEL_FD7B7F
+	.long MidiPkt_InitSingleField_Data
+	.long MidiPkt_HandleCmdCode01
 	.long SeqChan_UnhandledCmd
-	.long LABEL_FD7E10
-	.long LABEL_FD7BC8
-	.long LABEL_FD7BFC
-	.long LABEL_FD7C23
-	.long LABEL_FD7C53
-	.long LABEL_FD7C7A
-	.long LABEL_FD7CAE
-	.long LABEL_FD7CD6
-	.long LABEL_FD7D8A
-	.long LABEL_FD7DBA
-	.long LABEL_FD7DE2
-	.long LABEL_FD7E0E
-	.long LABEL_FD7E0F
-	.long LABEL_FD7D02
-	.long LABEL_FD7D36
-	.long LABEL_FD7D5E
+	.long MidiPkt_ArpExtHandler_N_Data
+	.long MidiPkt_ArpExtHandler_A
+	.long MidiPkt_ArpExtHandler_B_Data
+	.long MidiPkt_ArpExtHandler_C_Data
+	.long MidiPkt_ArpExtHandler_D_Data
+	.long MidiPkt_ArpExtHandler_E_Data
+	.long MidiPkt_ArpExtHandler_F_Data
+	.long MidiPkt_ArpExtHandler_G
+	.long MidiPkt_ArpExtHandler_K
+	.long MidiPkt_ArpExtHandler_L
+	.long MidiPkt_ArpExtHandler_M_Data
+	.long MidiPkt_RetStub_A
+	.long MidiPkt_RetStub_B
+	.long MidiPkt_ArpExtHandler_H_Data
+	.long MidiPkt_ArpExtHandler_I_Data
+	.long MidiPkt_ArpExtHandler_J
 	.long SeqChan_UnhandledCmd
 	.long SeqChan_UnhandledCmd
 	.long SeqChan_UnhandledCmd
@@ -2002,49 +2002,49 @@ SeqChan_CommandDispatch_Table:
 	.long SeqChan_UnhandledCmd
 	.long SeqChan_UnhandledCmd
 	.long SeqChan_ProcessStepCmd
-	.long LABEL_FD7E3E
-	.long LABEL_FD7E6A
+	.long SeqChan_StepCmd_Field1to2
+	.long SeqChan_StepCmd_Field2to3
 	.long SeqChan_ProcessStepCmd
-	.long LABEL_FD7E96
-	.long LABEL_FD7EC2
+	.long SeqChan_StepCmd_Field4to5
+	.long SeqChan_StepCmd_Field5to6
 	.long SeqChan_ProcessStepCmd
-	.long LABEL_FD7EF2
-	.long LABEL_FD7F1F
-	.long LABEL_FD7F4D
+	.long SeqChan_StepCmd_Field6_Data
+	.long SeqChan_StepCmd_Field8to9
+	.long SeqChan_StepCmd_Field9to10
 	.long SeqChan_ProcessStepCmd
-	.long LABEL_FD8005
-	.long LABEL_FD803E
-	.long LABEL_FD8077
+	.long SeqChan_StepCmd_Field11_Data
+	.long SeqChan_StepCmd_Field12_Data
+	.long SeqChan_StepCmd_Field13Write
 	.long SeqChan_ProcessStepCmd
-	.long LABEL_FD80B0
-	.long LABEL_FD80B1
+	.long SeqChan_RetStub_A
+	.long SeqChan_RetStub_B
 	.long SeqChan_ProcessStepCmd
-	.long LABEL_FD7F7B
-	.long LABEL_FD7FA9
-	.long LABEL_FD7FD7
+	.long SeqChan_StepCmd_Field10_Data
+	.long SeqChan_StepCmd_Field13_Data
+	.long SeqChan_StepCmd_Field20to21
 	.long SeqChan_ProcessStepCmd
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
-	.long LABEL_FD80E1
+	.long SeqChan_WriteField_Data_A
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
-	.long LABEL_FD80F2
-	.long SeqChan_DefaultHandler
-	.long SeqChan_DefaultHandler
-	.long SeqChan_DefaultHandler
-	.long LABEL_FD8103
+	.long SeqChan_WriteField_Data_B
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
-	.long LABEL_FD8114
-	.long SeqChan_DefaultHandler
-	.long SeqChan_DefaultHandler
-	.long LABEL_FD8125
+	.long SeqChan_WriteField_Data_C
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
-	.long LABEL_FD8126
+	.long SeqChan_WriteField_Data_D
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_RetStub_C
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_WriteField_Data_E
 	.byte 0x88, 0x00, 0x18, 0x00, 0x00, 0x00, 0x9b, 0x82
 	.byte 0xfd, 0x00, 0x9c, 0x82, 0xfd, 0x00, 0x9c, 0x82
 	.byte 0xfd, 0x00, 0x9c, 0x82, 0xfd, 0x00, 0xa0, 0x82

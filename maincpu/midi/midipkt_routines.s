@@ -266,7 +266,7 @@ MidiPkt_ProcessEventQueue:
 
 MidiPkt_ProcessEventQueue_Loop:
 	push xiz
-	call LABEL_FD6C66
+	call SeqVoice_StoreEntry
 	inc 4, xsp
 	stda32 48418, xhl
 	ldada xwa, 48418

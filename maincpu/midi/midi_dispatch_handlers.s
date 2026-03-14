@@ -6330,7 +6330,7 @@ MidiStream_PrevBankCheck:
 	.byte 0xfa, 0x05, 0x0e
 
 SeqAlt_ProcessAndFinalize:
-	call LABEL_FD83F4
+	call MidiSeq_SwapActiveBuffers
 	calr SeqBuf_WaitForEmpty
 	calr MidiChan_ParseVoiceData
 	calr SeqData_InitPlaybackFromField
@@ -6436,9 +6436,9 @@ MidiChan_WriteAndSetFlag:
 	setda 5, 1074
 
 MIDI_ProcessChannelPair:
-	calr LABEL_FD709F
+	calr MidiChan_CheckFlags
 	ld wa, iz
-	calr LABEL_FD70C1
+	calr MidiChan_CheckTimeout
 
 MidiChan_CheckSysExFlag:
 	bitda 5, 48408
@@ -6581,10 +6581,10 @@ SeqData_InitPlaybackFromField:
 	ret nz
 	calr MidiSeq_AssignVoiceSlots
 	calr MidiStream_RetStub3
-	calr LABEL_FD67A0
-	calr LABEL_FD67A1
-	calr LABEL_FD68B8
-	calr LABEL_FD6959
+	calr MidiSeq_NopRet
+	calr MidiSeq_ValidateVoiceRange
+	calr MidiSeq_CheckQueuePosition
+	calr MidiSeq_ParseVoiceConfig
 	ret
 
 MidiSeq_AssignVoiceSlots:
@@ -7264,7 +7264,7 @@ MidiSeq_Slot8_CheckMatch:
 	cp l, (xbc)
 	jr z, MidiSeq_Slot8_WriteParams
 	cp (xbc), 0xFE
-	jrl nz, LABEL_FD66F5
+	jrl nz, MidiSeq_Slot8_NextEntry
 
 MidiSeq_Slot8_WriteParams:
 	extz hl
@@ -7332,22 +7332,22 @@ MidiSeq_ScanSlot9_Loop:
 	ld xbc, (xsp + 2)
 	st_dri3b A, 0x07, 0xE4, 0xE8
 	cp (xbc), 0xFF
-	jr nz, LABEL_FD66FB
+	jr nz, MidiSeq_Slot9_CheckMatch
 	lds bc, 4
 	ldw de, 0x10
 	jrl MidiSeq_ChannelWriteEpilog
 
-LABEL_FD66F5:
+MidiSeq_Slot8_NextEntry:
 	inc1_berp 0xFB
 	jrl MidiSeq_ScanSlot8_Loop
 
-LABEL_FD66FB:
+MidiSeq_Slot9_CheckMatch:
 	cp l, (xbc)
-	jr z, LABEL_FD6705
+	jr z, MidiSeq_Slot9_WriteParams
 	cp (xbc), 0xFE
-	jrl nz, LABEL_FD679A
+	jrl nz, MidiSeq_Slot9_NextEntry
 
-LABEL_FD6705:
+MidiSeq_Slot9_WriteParams:
 	extz hl
 	ldw bc, 0xE
 	ld de, hl
@@ -7370,7 +7370,7 @@ LABEL_FD6705:
 	st_dri3b W, 0x07, 0xE0, 0xE4
 	ld e, (xwa + 1)
 	cps e, 0
-	jr z, LABEL_FD6794
+	jr z, MidiSeq_RestoreAndReturn
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
@@ -7399,19 +7399,19 @@ LABEL_FD6705:
 MidiSeq_ChannelWriteEpilog:
 	calr MIDI_ReadChannelParam
 
-LABEL_FD6794:
+MidiSeq_RestoreAndReturn:
 	pop_werp 0xFA
 	inc 4, xsp
 	ret
 
-LABEL_FD679A:
+MidiSeq_Slot9_NextEntry:
 	inc1_berp 0xFB
 	jrl MidiSeq_ScanSlot9_Loop
 
-LABEL_FD67A0:
+MidiSeq_NopRet:
 	ret
 
-LABEL_FD67A1:
+MidiSeq_ValidateVoiceRange:
 	push xiz
 	ldda32 xwa, 48300
 	lds bc, 4
@@ -7423,13 +7423,13 @@ LABEL_FD67A1:
 	calr SeqData_ReadFieldByIndex
 	ldfr_berp L, 0xFB
 	cp_erpb 0xFB, 0x11
-	jr z, LABEL_FD67CF
+	jr z, MidiSeq_Dequeue3Voices
 	cp_erpb 0xFB, 0x14
-	jr z, LABEL_FD67CF
+	jr z, MidiSeq_Dequeue3Voices
 	cp_erpb 0xFB, 0x19
-	jrl nz, LABEL_FD6862
+	jrl nz, MidiSeq_CheckBitfieldType
 
-LABEL_FD67CF:
+MidiSeq_Dequeue3Voices:
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
 	ldfr_berp L, 0xF8
@@ -7450,25 +7450,25 @@ LABEL_FD67CF:
 	sll xwa, 14
 	or xde, xwa
 	cp_erpb 0xFB, 0x14
-	jr z, LABEL_FD6826
+	jr z, MidiSeq_SetRange4D800
 	cp_erpb 0xFB, 0x19
-	jr z, LABEL_FD681F
+	jr z, MidiSeq_SetRange3900
 	cp_erpb 0xFB, 0x11
-	jr nz, LABEL_FD6826
+	jr nz, MidiSeq_SetRange4D800
 	ld xbc, 0x15440
-	jr LABEL_FD682B
+	jr MidiSeq_CompareRange
 
-LABEL_FD681F:
+MidiSeq_SetRange3900:
 	ld xbc, 0x3900
-	jr LABEL_FD682B
+	jr MidiSeq_CompareRange
 
-LABEL_FD6826:
+MidiSeq_SetRange4D800:
 	ld xbc, 0x4D800
 
-LABEL_FD682B:
+MidiSeq_CompareRange:
 	ldda32 xwa, 48300
 	cp xde, xbc
-	jr ugt, LABEL_FD685B
+	jr ugt, MidiSeq_RangeOverflow
 	ldto_berp E, 0xF8
 	extz de
 	ldw bc, 0xC
@@ -7482,20 +7482,20 @@ LABEL_FD682B:
 	extz de
 	ldda32 xwa, 48300
 	ldw bc, 0xE
-	jr LABEL_FD68B3
+	jr MidiSeq_WriteParamAndReturn
 
-LABEL_FD685B:
+MidiSeq_RangeOverflow:
 	lds bc, 4
 	ldw de, 0x16
-	jr LABEL_FD68B3
+	jr MidiSeq_WriteParamAndReturn
 
-LABEL_FD6862:
+MidiSeq_CheckBitfieldType:
 	cp_erpb 0xFB, 0x1B
-	jr z, LABEL_FD686E
+	jr z, MidiSeq_ReadBitfield
 	cp_erpb 0xFB, 0x1D
 	jr nz, MidiSeq_PopIzRet
 
-LABEL_FD686E:
+MidiSeq_ReadBitfield:
 	ldda32 xwa, 48300
 	ldw bc, 0xC
 	calr SeqData_ReadFieldByIndex
@@ -7520,14 +7520,14 @@ LABEL_FD686E:
 	lds bc, 4
 	ldw de, 0xE
 
-LABEL_FD68B3:
+MidiSeq_WriteParamAndReturn:
 	calr MIDI_ReadChannelParam
 
 MidiSeq_PopIzRet:
 	pop xiz
 	ret
 
-LABEL_FD68B8:
+MidiSeq_CheckQueuePosition:
 	push_werp 0xFA
 	ldda32 xwa, 48300
 	lds bc, 4
@@ -7557,13 +7557,13 @@ LABEL_FD68B8:
 	calr SeqData_ReadFieldByIndex
 	ldfr_berp L, 0xFB
 	cp_erpb 0xFB, 0x7E
-	jr z, LABEL_FD691D
+	jr z, MidiSeq_TrimQueue
 	cp_erpb 0xFB, 0x2D
-	jr z, LABEL_FD691D
+	jr z, MidiSeq_TrimQueue
 	cp_erpb 0xFB, 0x2C
 	jr nz, MidiSeq_PopRetFA
 
-LABEL_FD691D:
+MidiSeq_TrimQueue:
 	ldda32 xbc, 48212
 	ld xde, (xbc + 10)
 	dec 3, xde
@@ -7572,16 +7572,16 @@ LABEL_FD691D:
 	ldda32 xbc, 48212
 	inc 2, xbc
 	cp (xbc), xde
-	jr nc, LABEL_FD6940
+	jr nc, MidiSeq_TrimCheckDone
 	ld xhl, xbc
 
-LABEL_FD6938:
+MidiSeq_TrimLoop:
 	lds32 xwa, 2
 	add (xhl), xwa
 	cp (xbc), xde
-	jr c, LABEL_FD6938
+	jr c, MidiSeq_TrimLoop
 
-LABEL_FD6940:
+MidiSeq_TrimCheckDone:
 	ldda32 xwa, 48212
 	cp (xwa + 2), xde
 	jr z, MidiSeq_PopRetFA
@@ -7594,7 +7594,7 @@ MidiSeq_PopRetFA:
 	pop_werp 0xFA
 	ret
 
-LABEL_FD6959:
+MidiSeq_ParseVoiceConfig:
 	push_werp 0xFA
 	ldi_berp 0xFB, 0
 	ldda32 xwa, 48300
@@ -7619,11 +7619,11 @@ SeqData_ParseFieldAndDequeue:
 	calr MidiChan_DequeueVoiceEntry
 	ldda32 xwa, 48300
 	cps l, 0
-	jr z, LABEL_FD699C
+	jr z, MidiSeq_DequeueWriteField15
 	cps l, 1
-	jr nz, LABEL_FD69E2
+	jr nz, MidiSeq_WriteField4_12
 
-LABEL_FD699C:
+MidiSeq_DequeueWriteField15:
 	extz hl
 	ldw bc, 0xF
 	ld de, hl
@@ -7633,16 +7633,16 @@ LABEL_FD699C:
 	ld xhl, xbc
 	ld xde, (xwa + 2)
 	cp xbc, xde
-	jr z, LABEL_FD69C3
+	jr z, MidiSeq_NegateAndCheck
 
-LABEL_FD69B6:
+MidiSeq_CountEntriesLoop:
 	ldto_berp C, 0xFB
 	add_spib C, 0xEC
 	ldfr_berp C, 0xFB
 	cp xhl, xde
-	jr nz, LABEL_FD69B6
+	jr nz, MidiSeq_CountEntriesLoop
 
-LABEL_FD69C3:
+MidiSeq_NegateAndCheck:
 	ldto_berp C, 0xFB
 	neg c
 	ldfr_berp C, 0xFB
@@ -7653,13 +7653,13 @@ LABEL_FD69C3:
 	ldda32 xwa, 48300
 	lds bc, 4
 	ldw de, 0x14
-	jr LABEL_FD69E7
+	jr MidiSeq_WriteParamAndExit
 
-LABEL_FD69E2:
+MidiSeq_WriteField4_12:
 	lds bc, 4
 	ldw de, 0x12
 
-LABEL_FD69E7:
+MidiSeq_WriteParamAndExit:
 	calr MIDI_ReadChannelParam
 
 MidiChan_DequeueExit:
@@ -7670,11 +7670,11 @@ SeqBuf_FlushNoteOffs:
 	ld de, bc
 	dec 1, bc
 	cps de, 0
-	jr z, LABEL_FD6A13
+	jr z, SeqBuf_FlushTerminate
 	ldda32 xhl, 48220
 	lda xix, (xhl + 10)
 
-LABEL_FD69FD:
+SeqBuf_FlushLoop:
 	ld xde, (xix)
 	st_dpib E, 0xE8
 	ld (xix), xde
@@ -7684,9 +7684,9 @@ LABEL_FD69FD:
 	ld de, bc
 	dec 1, bc
 	cps de, 0
-	jr nz, LABEL_FD69FD
+	jr nz, SeqBuf_FlushLoop
 
-LABEL_FD6A13:
+SeqBuf_FlushTerminate:
 	ldda32 xwa, 48220
 	ld xwa, (xwa + 10)
 	ld (xwa), 0xFF
@@ -7695,12 +7695,12 @@ LABEL_FD6A13:
 	cp (xbc - 1), 0xF7
 	ret nz
 
-	calr LABEL_FD6BAF
-	call LABEL_FD73A1
+	calr SeqOut_FlushWithChunking
+	call MidiSeq_UpdateAllParams
 	call ArpQueue_SwapBuffers
 	ret
 
-LABEL_FD6A36:
+ArpQueue_Pack21BitValue:
 	dec	4, xsp
 	lda	xwa, (xsp)
 	ldada	xde, 48340
@@ -7724,11 +7724,11 @@ ArpQueue_Enqueue:
 	ld de, bc
 	dec 1, bc
 	cps de, 0
-	jr z, LABEL_FD6A88
+	jr z, ArpQueue_EnqueueDone
 	ldda32 xhl, 48220
 	lda xix, (xhl + 10)
 
-LABEL_FD6A72:
+ArpQueue_EnqueueLoop:
 	ld xde, (xix)
 	st_dpib E, 0xE8
 	ld (xix), xde
@@ -7738,15 +7738,15 @@ LABEL_FD6A72:
 	ld de, bc
 	dec 1, bc
 	cps de, 0
-	jr nz, LABEL_FD6A72
+	jr nz, ArpQueue_EnqueueLoop
 
-LABEL_FD6A88:
+ArpQueue_EnqueueDone:
 	ldda32 xwa, 48220
 	ld xwa, (xwa + 10)
 	ld (xwa), 0xFF
 	ret
 
-LABEL_FD6A93:
+ArpQueue_ProcessAndSort_Data:
 	.byte 0xe1, 0xac, 0xbc, 0x20, 0x88, 0x04, 0x3f, 0x00
 	.byte 0xb0, 0xfe, 0xe1, 0xac, 0xbc, 0x20, 0x88, 0x04
 	.byte 0x3f, 0x00, 0xb0, 0xfe, 0x1d, 0x0f, 0x76, 0xfd
@@ -7788,14 +7788,14 @@ ArpQueue_ComputeAndEnqueue:
 	ld xhl, xbc
 	ld xwa, (xwa + 10)
 	cp xbc, xwa
-	jr z, LABEL_FD6B9E
+	jr z, ArpQueue_ComputeSize
 
-LABEL_FD6B97:
+ArpQueue_CountLoop:
 	add_spib E, 0xEC
 	cp xhl, xwa
-	jr nz, LABEL_FD6B97
+	jr nz, ArpQueue_CountLoop
 
-LABEL_FD6B9E:
+ArpQueue_ComputeSize:
 	lda xwa, (xsp)
 	neg e
 	res 7, e
@@ -7805,7 +7805,7 @@ LABEL_FD6B9E:
 	inc 2, xsp
 	ret
 
-LABEL_FD6BAF:
+SeqOut_FlushWithChunking:
 	dec 2, xsp
 	push xiz
 	ld xiz, xwa
@@ -7816,9 +7816,9 @@ LABEL_FD6BAF:
 	calr MidiStream_RetStub2
 	lda xiz, (xiz + 14)
 	cpw (xsp + 4), 0x20
-	jr ule, LABEL_FD6BEA
+	jr ule, SeqOut_ChunkRemainder
 
-LABEL_FD6BCD:
+SeqOut_ChunkLoop32:
 	ei 6
 	push xiz
 	pushw 0x20
@@ -7828,9 +7828,9 @@ LABEL_FD6BCD:
 	submi16 (xsp + 4), 0x20
 	lda xiz, (xiz + 32)
 	cpw (xsp + 4), 0x20
-	jr ugt, LABEL_FD6BCD
+	jr ugt, SeqOut_ChunkLoop32
 
-LABEL_FD6BEA:
+SeqOut_ChunkRemainder:
 	ei 6
 	push xiz
 	pushm (xsp + 8)
@@ -7852,9 +7852,9 @@ SeqOut_FlushTimedBuffer:
 	calr MidiStream_RetStub2
 	lda xiz, (xiz + 14)
 	cpw (xsp + 4), 0x20
-	jr ule, LABEL_FD6C37
+	jr ule, SeqOut_TimedChunkRemainder
 
-LABEL_FD6C1A:
+SeqOut_TimedChunkLoop32:
 	ei 6
 	push xiz
 	pushw 0x20
@@ -7864,9 +7864,9 @@ LABEL_FD6C1A:
 	submi16 (xsp + 4), 0x20
 	lda xiz, (xiz + 32)
 	cpw (xsp + 4), 0x20
-	jr ugt, LABEL_FD6C1A
+	jr ugt, SeqOut_TimedChunkLoop32
 
-LABEL_FD6C37:
+SeqOut_TimedChunkRemainder:
 	ei 6
 	push xiz
 	pushm (xsp + 8)
@@ -7877,20 +7877,20 @@ LABEL_FD6C37:
 	inc 2, xsp
 	ret
 
-LABEL_FD6C49:
+SeqVoice_ReadEntryFields_Data:
 	.byte 0xe8, 0x8a, 0x82, 0x21, 0xf5, 0xe4, 0x41, 0x8a
 	.byte 0x01, 0x21, 0xf5, 0xe4, 0x41, 0x8a, 0x02, 0x21
 	.byte 0xf5, 0xe4, 0x41, 0x8a, 0x03, 0x21, 0xf5, 0xe4
 	ld	xbc, 0x0eff00b1
 
-LABEL_FD6C66:
+SeqVoice_StoreEntry:
 	dec 4, xsp
 	lda xbc, (xsp)
 	ld xde, (xsp + 8)
 	ld_spib A, 0xE8
 	ld (xbc), a
 	cp a, 0xFF
-	jr z, LABEL_FD6C88
+	jr z, SeqVoice_StoreEntryDone
 	ld_spib A, 0xE8
 	ld (xbc + 1), a
 	ld_spib A, 0xE8
@@ -7898,12 +7898,12 @@ LABEL_FD6C66:
 	ld a, (xde)
 	ld (xbc + 3), a
 
-LABEL_FD6C88:
+SeqVoice_StoreEntryDone:
 	ld xhl, (xsp)
 	inc 4, xsp
 	ret
 
-LABEL_FD6C8D:
+SeqVoice_DispatchProcess_Data:
 	.byte 0xbf, 0xf4, 0x37, 0x3e, 0xe1, 0x54, 0xbc, 0x26
 	.byte 0x96, 0x3f, 0x00, 0x00, 0x66, 0x72, 0xbe, 0x06
 	.byte 0x31, 0xe9, 0x8c, 0xe9, 0x8b, 0xf1, 0xec, 0xbc
@@ -8049,23 +8049,23 @@ LABEL_FD6C8D:
 	.byte 0x1c, 0x88, 0x1e, 0x23, 0xeb, 0x12, 0xeb, 0xee
 	.byte 0x04, 0x0e
 
-LABEL_FD709F:
+MidiChan_CheckFlags:
 	ei 6
 	ldda8 a, 1063
 	and a, 0x2C
-	jr z, LABEL_FD70BE
-	call LABEL_FD833E
+	jr z, MidiChan_EnableAndReturn
+	call SeqBuf2_InitWithInterrupts
 	ldda32 xwa, 48300
 	lds bc, 4
 	lds de, 4
 	calr MIDI_ReadChannelParam
 	anddi8 1063, 211
 
-LABEL_FD70BE:
+MidiChan_EnableAndReturn:
 	ei 0
 	ret
 
-LABEL_FD70C1:
+MidiChan_CheckTimeout:
 	ldw de, 0x9C4
 	bitda 2, 48408
 	jr z, LABEL_FD70CD
@@ -8082,7 +8082,7 @@ LABEL_FD70CD:
 	calr MIDI_ReadChannelParam
 	ret
 
-LABEL_FD70E3:	.ascii ":;<>"
+MidiChan_TimerDispatch_Data:	.ascii ":;<>"
 	call	16534750
 	call	16535941
 	pop	xiz
@@ -8098,7 +8098,7 @@ LABEL_FD70E3:	.ascii ":;<>"
 	jr	lt, -14
 	ret
 
-LABEL_FD7107:
+Part_LookupByIndex:
 	ldda32 xbc, 37106
 	extz wa
 	sla wa, 2
@@ -8126,9 +8126,9 @@ MidiTG_WriteRegByDescriptor:
 	ldw (xsp + 4), 0x0
 	ld a, (xiz)
 	extz wa
-	calr LABEL_FD7107
+	calr Part_LookupByIndex
 	cp xhl, 0xFFFFFFFF
-	jr z, LABEL_FD7175
+	jr z, MidiTG_WriteReg_NoEntry
 	lda xde, (xiz + 2)
 	lda xix, (xiz + 3)
 	ld a, (xix)
@@ -8144,12 +8144,12 @@ MidiTG_WriteRegByDescriptor:
 	extz bc
 	ld a, (xde)
 	or_srib_mr A, 0x07, 0xEC, 0xE4
-	jr LABEL_FD717A
+	jr MidiTG_WriteReg_Return
 
-LABEL_FD7175:
+MidiTG_WriteReg_NoEntry:
 	ldw (xsp + 4), 0xFFFF
 
-LABEL_FD717A:
+MidiTG_WriteReg_Return:
 	ld hl, (xsp + 4)
 	pop xiz
 	inc 2, xsp
@@ -8162,9 +8162,9 @@ AssSwb_ApplyBitDescriptor:
 	ldw (xsp + 4), 0x0
 	ld a, (xiz)
 	extz wa
-	calr LABEL_FD7107
+	calr Part_LookupByIndex
 	cp xhl, 0xFFFFFFFF
-	jr z, LABEL_FD71DF
+	jr z, AssSwb_NoEntry
 	lda xde, (xiz + 2)
 	lda xix, (xiz + 3)
 	ld a, (xix)
@@ -8191,18 +8191,18 @@ AssSwb_ApplyBitDescriptor:
 	extz hl
 	pushw hl
 	call AssswbWr
-	jr LABEL_FD71E4
+	jr AssSwb_Return
 
-LABEL_FD71DF:
+AssSwb_NoEntry:
 	ldw (xsp + 4), 0xFFFF
 
-LABEL_FD71E4:
+AssSwb_Return:
 	ld hl, (xsp + 4)
 	pop xiz
 	inc 2, xsp
 	ret
 
-LABEL_FD71EB:
+AssSwb_ProcessLoop_Data:
 	.byte 0xef, 0x6e, 0x3e, 0xe8, 0x8e, 0xbf, 0x04, 0x02
 	.byte 0x00, 0x00, 0x86, 0x21, 0xd8, 0x12, 0x1e, 0x0b
 	.byte 0xff, 0xbf, 0x06, 0x63, 0xaf, 0x06, 0x21, 0xe9
@@ -8235,16 +8235,16 @@ Part_LookupTableEntry:
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	cp xwa, 0xFFFFFFFF
-	jr z, LABEL_FD72CB
+	jr z, Part_LookupReturnZero
 	extz bc
 	ld_srib3 L, 0x07, 0xE0, 0xE4
 	ret
 
-LABEL_FD72CB:
+Part_LookupReturnZero:
 	ldb l, 0x0
 	ret
 
-LABEL_FD72CE:
+Part_ProcessEntry_Data:
 	.byte 0xe8, 0x8b, 0xd9, 0x88, 0xd9, 0x69, 0xd8, 0xd8
 	.byte 0xb0, 0xf6, 0xc5, 0xec, 0x21, 0xf5, 0xe8, 0x41
 	.byte 0xd9, 0x88, 0xd9, 0x69, 0xd8, 0xd8, 0x6e, 0xf2
@@ -8271,56 +8271,56 @@ MidiChan_ClearAllStates:
 	stdi8 48406, 0
 	stdi8 48438, 0
 	stdi8 48440, 0
-	calr LABEL_FD7366
-	calr LABEL_FD738F
-	jrl LABEL_FD75BE
+	calr MidiChan_SetStateMode
+	calr MidiChan_SetVoiceBaseState
+	jrl MidiSeq_ApplyPendingParams
 
-LABEL_FD7366:
+MidiChan_SetStateMode:
 	bitda 6, 48408
-	jr z, LABEL_FD7375
+	jr z, MidiChan_SetStateMode2
 	stdi8 48438, 1
 	ldb a, 0x1
-	jr LABEL_FD737E
+	jr MidiChan_CompareAndFlag
 
-LABEL_FD7375:
+MidiChan_SetStateMode2:
 	stdi8 48438, 2
 	ldda8 a, 48438
 
-LABEL_FD737E:
+MidiChan_CompareAndFlag:
 	cpda8 a, 48440
 	ret z
 	setda 6, 48412
 	ldmm8 48440, 48438
 	ret
 
-LABEL_FD738F:
+MidiChan_SetVoiceBaseState:
 	bitda 6, 48408
-	jr z, LABEL_FD739B
+	jr z, MidiChan_SetBaseState128
 	stdi8 48384, 128
 	ret
 
-LABEL_FD739B:
+MidiChan_SetBaseState128:
 	stdi8 48396, 128
 	ret
 
-LABEL_FD73A1:
+MidiSeq_UpdateAllParams:
 	ldda32 xwa, 48300
 	lds bc, 4
 	call SeqData_ReadFieldByIndex
 	cps l, 0
 	ret nz
-	calr LABEL_FD73C6
-	calr LABEL_FD740A
-	calr LABEL_FD7464
-	calr LABEL_FD749F
-	calr LABEL_FD7517
-	calr LABEL_FD75BE
+	calr MidiSeq_SyncToneStates_Upper
+	calr MidiSeq_UpdateToneParam
+	calr MidiSeq_UpdateVolumeScale
+	calr MidiSeq_ComputeExpression
+	calr MidiSeq_CheckSyncDirty
+	calr MidiSeq_ApplyPendingParams
 	call MainTitle_PrepareAndDispatch
 	ret
 
-LABEL_FD73C6:
+MidiSeq_SyncToneStates_Upper:
 	bitda 6, 48408
-	jr z, LABEL_FD73EB
+	jr z, MidiSeq_SyncToneStates_Lower
 	resda 7, 48384
 	ldmm8 48386, 48384
 	resda 7, 48388
@@ -8329,7 +8329,7 @@ LABEL_FD73C6:
 	ldmm8 48394, 48392
 	ret
 
-LABEL_FD73EB:
+MidiSeq_SyncToneStates_Lower:
 	resda 7, 48396
 	ldmm8 48398, 48396
 	resda 7, 48400
@@ -8338,9 +8338,9 @@ LABEL_FD73EB:
 	ldmm8 48406, 48404
 	ret
 
-LABEL_FD740A:
+MidiSeq_UpdateToneParam:
 	bitda 6, 48408
-	jr z, LABEL_FD743A
+	jr z, MidiSeq_UpdateToneParam_Lower
 	ldda32 xwa, 48308
 	lds bc, 3
 	call SeqData_ReadFieldByIndex
@@ -8355,7 +8355,7 @@ LABEL_FD740A:
 	stda8 48384, a
 	ret
 
-LABEL_FD743A:
+MidiSeq_UpdateToneParam_Lower:
 	ldda32 xwa, 48300
 	lds bc, 3
 	call SeqData_ReadFieldByIndex
@@ -8370,35 +8370,35 @@ LABEL_FD743A:
 	stda8 48396, a
 	ret
 
-LABEL_FD7464:
+MidiSeq_UpdateVolumeScale:
 	ldada xwa, 48412
 	bitm 7, (xwa)
 	ret nz
 	bitda 6, 48408
-	jr z, LABEL_FD7486
+	jr z, MidiSeq_VolScale_Lower
 	ldada xbc, 48316
 	ld xde, (xbc + 8)
 	srl xde, 5
 	ld (xbc + 12), xde
 	stdi8 48388, 160
-	jr LABEL_FD7498
+	jr MidiSeq_VolScale_SetActive
 
-LABEL_FD7486:
+MidiSeq_VolScale_Lower:
 	ldada xbc, 48348
 	ld xde, (xbc + 8)
 	srl xde, 5
 	ld (xbc + 12), xde
 	stdi8 48400, 160
 
-LABEL_FD7498:
+MidiSeq_VolScale_SetActive:
 	or xde, xde
 	ret z
 	setm 7, (xwa)
 	ret
 
-LABEL_FD749F:
+MidiSeq_ComputeExpression:
 	bitda 6, 48408
-	jr z, LABEL_FD74DE
+	jr z, MidiSeq_Expression_Lower
 	ldada xwa, 48316
 	ld xde, (xwa + 8)
 	ld xbc, (xwa + 12)
@@ -8420,7 +8420,7 @@ LABEL_FD749F:
 	stda8 48392, a
 	ret
 
-LABEL_FD74DE:
+MidiSeq_Expression_Lower:
 	ldada xwa, 48348
 	ld xde, (xwa + 8)
 	ld xbc, (xwa + 12)
@@ -8442,10 +8442,10 @@ LABEL_FD74DE:
 	stda8 48404, a
 	ret
 
-LABEL_FD7517:
+MidiSeq_CheckSyncDirty:
 	ldada xbc, 48412
 	bitda 6, 48408
-	jr z, LABEL_FD7540
+	jr z, MidiSeq_CheckSyncDirty_Lower
 	ldda8 a, 48384
 	cpda8 a, 48386
 	jr nz, DSP_Init_ErrorFlagSet
@@ -8457,7 +8457,7 @@ LABEL_FD7517:
 	jr nz, DSP_Init_ErrorFlagSet
 	ret
 
-LABEL_FD7540:
+MidiSeq_CheckSyncDirty_Lower:
 	ldda8 a, 48396
 	cpda8 a, 48398
 	jr nz, DSP_Init_ErrorFlagSet
@@ -8472,7 +8472,7 @@ DSP_Init_ErrorFlagSet:
 	setm 6, (xbc)
 	ret
 
-LABEL_FD7561:
+MidiSeq_PartLookup_Data:
 	.byte 0xd8, 0xa8, 0x1d, 0x00, 0x6c, 0xf7, 0xe1, 0xac
 	.byte 0xbc, 0x20, 0xd9, 0xac, 0x1d, 0xb6, 0x5e, 0xfd
 	.byte 0xcf, 0xcf, 0x22, 0x66, 0x09, 0xcf, 0xd8, 0x6e
@@ -8486,11 +8486,11 @@ LABEL_FD7561:
 	.byte 0x07, 0xe4, 0xec, 0x19, 0x42, 0x7f, 0x30, 0xee
 	.byte 0x00, 0x1b, 0xbd, 0x94, 0xf9
 
-LABEL_FD75BE:
+MidiSeq_ApplyPendingParams:
 	bitda 6, 48412
 	ret z
 	bitda 6, 48408
-	jr z, LABEL_FD75EB
+	jr z, MidiSeq_ApplyParams_Lower
 	ldda8 a, 48384
 	res 7, a
 	extz wa
@@ -8501,9 +8501,9 @@ LABEL_FD75BE:
 	res 7, e
 	extz de
 	call LABEL_F768AF
-	jr LABEL_FD760A
+	jr MidiSeq_ClearSyncFlag
 
-LABEL_FD75EB:
+MidiSeq_ApplyParams_Lower:
 	ldda8 a, 48396
 	res 7, a
 	extz wa
@@ -8515,11 +8515,11 @@ LABEL_FD75EB:
 	extz de
 	call LABEL_F76A52
 
-LABEL_FD760A:
+MidiSeq_ClearSyncFlag:
 	resda 6, 48412
 	ret
 
-LABEL_FD760F:
+MidiSeq_PartConfigure_Data:
 	.byte 0x0e, 0x30, 0xee, 0x00
 	.byte 0x1b, 0xbd, 0x94, 0xf9
 	.byte 0xf1, 0x18, 0xbd, 0xbb, 0x40, 0xbc, 0xbc, 0x00
@@ -8534,12 +8534,12 @@ LABEL_FD760F:
 	.byte 0xbc, 0x00, 0x00, 0x1d, 0xb2, 0x6f, 0xfd, 0x78
 	.byte 0x1c, 0x03
 
-LABEL_FD7669:
+MidiPkt_ArpMultiPass:
 	push_werp 0xFA
 	resda 7, 48408
 	ldi_berp 0xFB, 0
 
-LABEL_FD7673:
+MidiPkt_ArpPassLoop:
 	ld xwa, 0xEE35BC
 	lds bc, 7
 	call SeqBuf_FlushNoteOffs
@@ -8549,21 +8549,21 @@ LABEL_FD7673:
 	lds bc, 0
 	call SeqData_ReadFieldByIndex
 	cp l, 0x8
-	jr z, LABEL_FD769D
+	jr z, MidiPkt_ArpPassDone
 	inc1_berp 0xFB
 	cpi_berp 0xFB, 3
-	jr c, LABEL_FD7673
+	jr c, MidiPkt_ArpPassLoop
 
-LABEL_FD769D:
+MidiPkt_ArpPassDone:
 	ldda32 xwa, 48300
 	cpi_berp 0xFB, 3
-	jr nz, LABEL_FD76B0
+	jr nz, MidiPkt_ArpStoreFieldValues
 	lds bc, 4
 	lds de, 0
 	call MIDI_ReadChannelParam
-	jr LABEL_FD7709
+	jr MidiPkt_ArpPopReturn
 
-LABEL_FD76B0:
+MidiPkt_ArpStoreFieldValues:
 	lds bc, 6
 	call SeqData_ReadFieldByIndex
 	stda8 48228, l
@@ -8577,7 +8577,7 @@ LABEL_FD76B0:
 	stda8 48230, l
 	ldi_berp 0xFB, 0
 
-LABEL_FD76DA:
+MidiPkt_ArpSecondLoop:
 	ld xwa, 0xEE35C4
 	lds bc, 7
 	call SeqBuf_FlushNoteOffs
@@ -8587,20 +8587,20 @@ LABEL_FD76DA:
 	lds bc, 0
 	call SeqData_ReadFieldByIndex
 	cps l, 1
-	jr nz, LABEL_FD7701
+	jr nz, MidiPkt_ArpSecondLoopNext
 	setda 7, 48408
-	jr LABEL_FD7709
+	jr MidiPkt_ArpPopReturn
 
-LABEL_FD7701:
+MidiPkt_ArpSecondLoopNext:
 	inc1_berp 0xFB
 	cpi_berp 0xFB, 3
-	jr c, LABEL_FD76DA
+	jr c, MidiPkt_ArpSecondLoop
 
-LABEL_FD7709:
+MidiPkt_ArpPopReturn:
 	pop_werp 0xFA
 	ret
 
-LABEL_FD770D:
+MidiPkt_ArpConfigChain_Data:
 	calr	12
 	calr	122
 	calr	623
@@ -8919,7 +8919,7 @@ LABEL_FD7AE0:
 	jr nz, LABEL_FD7AC8
 LABEL_FD7AE9:
 	calr	1913
-	call LABEL_FD7561
+	call MidiSeq_PartLookup_Data
 LABEL_FD7AF0:
 	.byte 0xf1, 0x18, 0xbd, 0xb4			; res 4, (0xBD18)  [F1 prefix]
 	ret
@@ -8931,7 +8931,7 @@ MidiTable_DispatchHelper:
 	call SeqData_ReadFieldByIndex
 	cps	l, 0
 	ret nz
-	call LABEL_FD760F
+	call MidiSeq_PartConfigure_Data
 	ldda32	xwa, 48300
 	cp (xwa), 0x27
 	ret nc
@@ -8941,11 +8941,11 @@ MidiTable_DispatchHelper:
 	lda_24 xbc, 0xEE2D6C
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23		; ld xhl, (xbc+wa)  [register-indexed]
 	call	(xhl)
-	calr LABEL_FD7B2F
-	call LABEL_FD73A1
+	calr MidiTable_FlushArpNotes
+	call MidiSeq_UpdateAllParams
 	call 0xFD7316
 	ret
-LABEL_FD7B2F:
+MidiTable_FlushArpNotes:
 	; --- Helper 2: conditional A-based 3-way pointer selection (56 bytes) ---
 	.byte 0xf1, 0x18, 0xbd, 0xcf			; bit 7, (0xBD18)  [F1 prefix]
 	ret z
@@ -8953,33 +8953,33 @@ LABEL_FD7B2F:
 	ldda32	xwa, 48300
 	ld a, (xwa+4)
 	cps	a, 0
-	jr nz, LABEL_FD7B4D
+	jr nz, MidiTable_CheckSpecialSlot
 	ld xwa, 0x00EE3594
 	lds	bc, 5
-	jr t, LABEL_FD7B62
-LABEL_FD7B4D:
+	jr t, MidiTable_CallFlush
+MidiTable_CheckSpecialSlot:
 	cp a, 0x16
-	jr nz, LABEL_FD7B5B
+	jr nz, MidiTable_UseDefaultBuf
 	ld xwa, 0x00EE35B2
 	lds	bc, 5
-	jr t, LABEL_FD7B62
-LABEL_FD7B5B:
+	jr t, MidiTable_CallFlush
+MidiTable_UseDefaultBuf:
 	ld xwa, 0x00EE359A
 	lds	bc, 5
-LABEL_FD7B62:
+MidiTable_CallFlush:
 	call SeqBuf_FlushNoteOffs
 	ret
 
 
-LABEL_FD7B67:
+MidiPkt_InitSingleField_Data:
 	.byte 0xc1, 0x20, 0xbd, 0x3f, 0x00, 0xb0
 	.byte 0xfe, 0xf1, 0x20, 0xbd, 0x00, 0x01, 0x40, 0xc4
 	.byte 0x35, 0xee, 0x00, 0xd9, 0xaf, 0x1d, 0xee, 0x69
 	.byte 0xfd, 0x0e
-LABEL_FD7B7F:
+MidiPkt_HandleCmdCode01:
 	; --- Two-path: 3x field extraction or single store (73 bytes) ---
 	.byte 0xc1, 0x20, 0xbd, 0x3f, 0x01		; cp (0xBD20), 0x01  [C1 prefix]
-	jr nz, LABEL_FD7BBB
+	jr nz, MidiPkt_SetSlot18
 	ldda32	xwa, 48300
 	lds	bc, 6
 	call SeqData_ReadFieldByIndex
@@ -8995,14 +8995,14 @@ LABEL_FD7B7F:
 	.byte 0xf1, 0x18, 0xbd, 0xbf			; set 7, (0xBD18)  [F1 prefix]
 	stdi8	48416, 2
 	ret
-LABEL_FD7BBB:
+MidiPkt_SetSlot18:
 	ldda32	xwa, 48300
 	ld (xwa+4), 0x18
 	.byte 0xf1, 0x18, 0xbd, 0xb4			; res 4, (0xBD18)  [F1 prefix]
 	ret
 
 
-LABEL_FD7BC8:
+MidiPkt_ArpExtHandler_A:
 	ldda32	xwa, 48304
 	lds	bc, 3
 	call	16604854
@@ -9018,14 +9018,14 @@ LABEL_FD7BC8:
 	lds	bc, 4
 	ldw	de, 25
 	jp	16604730
-LABEL_FD7BFC:
+MidiPkt_ArpExtHandler_B_Data:
 	.byte 0xe1
 	.byte 0xb0, 0xbc, 0x20, 0xd9, 0xab, 0x1d, 0xb6, 0x5e
 	.byte 0xfd, 0xcf, 0xda, 0x6e, 0x0c, 0x40, 0xec, 0xbc
 	.byte 0x00, 0x00, 0x1d, 0x05, 0x6e, 0xfd, 0x78, 0x54
 	.byte 0x02, 0xe1, 0xac, 0xbc, 0x20, 0xd9, 0xac, 0x32
 	.byte 0x19, 0x00, 0x1b, 0x3a, 0x5e, 0xfd
-LABEL_FD7C23:
+MidiPkt_ArpExtHandler_C_Data:
 	.byte 0xe1, 0xb0
 	.byte 0xbc, 0x20, 0xd9, 0xab, 0x1d, 0xb6, 0x5e, 0xfd
 	.byte 0xcf, 0xd8, 0x6e, 0x15, 0x40, 0xdc, 0xbc, 0x00
@@ -9033,14 +9033,14 @@ LABEL_FD7C23:
 	.byte 0x00, 0x00, 0x1d, 0x38, 0x6e, 0xfd, 0x78, 0x50
 	.byte 0x02, 0xe1, 0xac, 0xbc, 0x20, 0xd9, 0xac, 0x32
 	.byte 0x1a, 0x00, 0x1b, 0x3a, 0x5e, 0xfd
-LABEL_FD7C53:
+MidiPkt_ArpExtHandler_D_Data:
 	.byte 0xe1, 0xb0
 	.byte 0xbc, 0x20, 0xd9, 0xab, 0x1d, 0xb6, 0x5e, 0xfd
 	.byte 0xcf, 0xdd, 0x6e, 0x0c, 0x40, 0xec, 0xbc, 0x00
 	.byte 0x00, 0x1d, 0x50, 0x6e, 0xfd, 0x78, 0x55, 0x02
 	.byte 0xe1, 0xac, 0xbc, 0x20, 0xd9, 0xac, 0x32, 0x19
 	.byte 0x00, 0x1b, 0x3a, 0x5e, 0xfd
-LABEL_FD7C7A:
+MidiPkt_ArpExtHandler_E_Data:
 	.byte 0xe1, 0xb0, 0xbc
 	.byte 0x20, 0xd9, 0xab, 0x1d, 0xb6, 0x5e, 0xfd, 0xcf
 	.byte 0xd8, 0x6e, 0x19, 0x1d, 0xe2, 0x82, 0xfd, 0x40
@@ -9049,14 +9049,14 @@ LABEL_FD7C7A:
 	.byte 0xfd, 0x78, 0x51, 0x02, 0xe1, 0xac, 0xbc, 0x20
 	.byte 0xd9, 0xac, 0x32, 0x1b, 0x00, 0x1b, 0x3a, 0x5e
 	.byte 0xfd
-LABEL_FD7CAE:
+MidiPkt_ArpExtHandler_F_Data:
 	.byte 0xe1, 0xb0, 0xbc, 0x20, 0xd9, 0xab, 0x1d
 	.byte 0xb6, 0x5e, 0xfd, 0xcf, 0xcf, 0x08, 0x6e, 0x0c
 	.byte 0x40, 0xec, 0xbc, 0x00, 0x00, 0x1d, 0xb7, 0x6e
 	.byte 0xfd, 0x78, 0x56, 0x02, 0xe1, 0xac, 0xbc, 0x20
 	.byte 0xd9, 0xac, 0x32, 0x1b, 0x00, 0x1b, 0x3a, 0x5e
 	.byte 0xfd
-LABEL_FD7CD6:
+MidiPkt_ArpExtHandler_G:
 	ldda32	xwa, 48304
 	lds	bc, 3
 	call	16604854
@@ -9070,7 +9070,7 @@ LABEL_FD7CD6:
 	lds	bc, 4
 	ldw	de, 27
 	jp	16604730
-LABEL_FD7D02:
+MidiPkt_ArpExtHandler_H_Data:
 	.byte 0xe1, 0xb0, 0xbc
 	.byte 0x20, 0xd9, 0xab, 0x1d, 0xb6, 0x5e, 0xfd, 0xcf
 	.byte 0xd8, 0x6e, 0x19, 0x1d, 0x14, 0x83, 0xfd, 0x40
@@ -9079,14 +9079,14 @@ LABEL_FD7D02:
 	.byte 0xfd, 0x78, 0x52, 0x02, 0xe1, 0xac, 0xbc, 0x20
 	.byte 0xd9, 0xac, 0x32, 0x1e, 0x00, 0x1b, 0x3a, 0x5e
 	.byte 0xfd
-LABEL_FD7D36:
+MidiPkt_ArpExtHandler_I_Data:
 	.byte 0xe1, 0xb0, 0xbc, 0x20, 0xd9, 0xab, 0x1d
 	.byte 0xb6, 0x5e, 0xfd, 0xcf, 0xcf, 0x13, 0x6e, 0x0c
 	.byte 0x40, 0xec, 0xbc, 0x00, 0x00, 0x1d, 0xfa, 0x6f
 	.byte 0xfd, 0x78, 0x58, 0x02, 0xe1, 0xac, 0xbc, 0x20
 	.byte 0xd9, 0xac, 0x32, 0x1e, 0x00, 0x1b, 0x3a, 0x5e
 	.byte 0xfd
-LABEL_FD7D5E:
+MidiPkt_ArpExtHandler_J:
 	ldda32	xwa, 48304
 	lds	bc, 3
 	call	16604854
@@ -9100,7 +9100,7 @@ LABEL_FD7D5E:
 	lds	bc, 4
 	ldw	de, 30
 	jp	16604730
-LABEL_FD7D8A:
+MidiPkt_ArpExtHandler_K:
 	ldda32	xwa, 48304
 	lds	bc, 3
 	call	16604854
@@ -9115,7 +9115,7 @@ LABEL_FD7D8A:
 	lds	bc, 4
 	ldw	de, 28
 	jp	16604730
-LABEL_FD7DBA:
+MidiPkt_ArpExtHandler_L:
 	ldda32	xwa, 48304
 	lds	bc, 3
 	call	16604854
@@ -9128,7 +9128,7 @@ LABEL_FD7DBA:
 	lds	bc, 4
 	ldw	de, 28
 	jp	16604730
-LABEL_FD7DE2:
+MidiPkt_ArpExtHandler_M_Data:
 	.byte 0xe1, 0xb0, 0xbc
 	.byte 0x20, 0xd9, 0xab, 0x1d, 0xb6, 0x5e, 0xfd, 0xcf
 	.byte 0xcf, 0x0d, 0x6e, 0x10, 0x40, 0xec, 0xbc, 0x00
@@ -9136,11 +9136,11 @@ LABEL_FD7DE2:
 	.byte 0xfd, 0x78, 0x76, 0x02, 0xe1, 0xac, 0xbc, 0x20
 	.byte 0xd9, 0xac, 0x32, 0x1c, 0x00, 0x1b, 0x3a, 0x5e
 	.byte 0xfd
-LABEL_FD7E0E:
+MidiPkt_RetStub_A:
 	.byte 0x0e
-LABEL_FD7E0F:
+MidiPkt_RetStub_B:
 	.byte 0x0e
-LABEL_FD7E10:
+MidiPkt_ArpExtHandler_N_Data:
 	.byte 0xe1, 0xb0, 0xbc, 0x20, 0xd9
 	.byte 0xab, 0x1d, 0xb6, 0x5e, 0xfd, 0xcf, 0xcf, 0x16
 	.byte 0xb0, 0xff, 0xdb, 0x12, 0xdb, 0xec, 0x02, 0xf2
@@ -9150,7 +9150,7 @@ SeqChan_ProcessStepCmd:
 	.byte 0xe1, 0xac, 0xbc, 0x20
 	.byte 0xd9, 0xac, 0x32, 0x13, 0x00, 0x1b, 0x3a, 0x5e
 	.byte 0xfd
-LABEL_FD7E3E:
+SeqChan_StepCmd_Field1to2:
 	ldda32	xwa, 48300
 	lds	bc, 3
 	lds	de, 1
@@ -9166,7 +9166,7 @@ LABEL_FD7E3E:
 	lds	de, 2
 	call	16604730
 	ret
-LABEL_FD7E6A:
+SeqChan_StepCmd_Field2to3:
 	ldda32	xwa, 48300
 	lds	bc, 3
 	lds	de, 2
@@ -9182,7 +9182,7 @@ LABEL_FD7E6A:
 	lds	de, 3
 	call	16604730
 	.byte 0x0e
-LABEL_FD7E96:
+SeqChan_StepCmd_Field4to5:
 	ldda32	xwa, 48300
 	lds	bc, 3
 	lds	de, 4
@@ -9198,7 +9198,7 @@ LABEL_FD7E96:
 	lds	de, 5
 	call	16604730
 	ret
-LABEL_FD7EC2:
+SeqChan_StepCmd_Field5to6:
 	ldda32	xwa, 48300
 	lds	bc, 3
 	lds	de, 5
@@ -9215,7 +9215,7 @@ LABEL_FD7EC2:
 	lds	de, 6
 	call	16604730
 	ret
-LABEL_FD7EF2:
+SeqChan_StepCmd_Field6_Data:
 	.byte 0xe1, 0xac, 0xbc
 	.byte 0x20, 0xd9, 0xab, 0xda, 0xaf, 0x1d, 0x3a, 0x5e
 	.byte 0xfd, 0x1d, 0x8d, 0x6c, 0xfd, 0xe1, 0xac, 0xbc
@@ -9223,7 +9223,7 @@ LABEL_FD7EF2:
 	.byte 0xcf, 0xd8, 0xb0, 0xfe, 0xe1, 0xac, 0xbc, 0x20
 	.byte 0xd9, 0xab, 0x32, 0x08, 0x00, 0x1d, 0x3a, 0x5e
 	.byte 0xfd, 0x0e
-LABEL_FD7F1F:
+SeqChan_StepCmd_Field8to9:
 	ldda32	xwa, 48300
 	lds	bc, 3
 	ldw	de, 8
@@ -9239,7 +9239,7 @@ LABEL_FD7F1F:
 	ldw	de, 9
 	call	16604730
 	ret
-LABEL_FD7F4D:
+SeqChan_StepCmd_Field9to10:
 	ldda32	xwa, 48300
 	lds	bc, 3
 	ldw	de, 9
@@ -9255,7 +9255,7 @@ LABEL_FD7F4D:
 	ldw	de, 10
 	call	16604730
 	ret
-LABEL_FD7F7B:
+SeqChan_StepCmd_Field10_Data:
 	.byte 0xe1, 0xac
 	.byte 0xbc, 0x20, 0xd9, 0xab, 0x32, 0x12, 0x00, 0x1d
 	.byte 0x3a, 0x5e, 0xfd, 0x1d, 0x8d, 0x6c, 0xfd, 0xe1
@@ -9263,7 +9263,7 @@ LABEL_FD7F7B:
 	.byte 0x5e, 0xfd, 0xcf, 0xd8, 0xb0, 0xfe, 0xe1, 0xac
 	.byte 0xbc, 0x20, 0xd9, 0xab, 0x32, 0x13, 0x00, 0x1d
 	.byte 0x3a, 0x5e, 0xfd, 0x0e
-LABEL_FD7FA9:
+SeqChan_StepCmd_Field13_Data:
 	.byte 0xe1, 0xac, 0xbc, 0x20
 	.byte 0xd9, 0xab, 0x32, 0x13, 0x00, 0x1d, 0x3a, 0x5e
 	.byte 0xfd, 0x1d, 0x8d, 0x6c, 0xfd, 0xe1, 0xac, 0xbc
@@ -9271,7 +9271,7 @@ LABEL_FD7FA9:
 	.byte 0xcf, 0xd8, 0xb0, 0xfe, 0xe1, 0xac, 0xbc, 0x20
 	.byte 0xd9, 0xab, 0x32, 0x14, 0x00, 0x1d, 0x3a, 0x5e
 	.byte 0xfd, 0x0e
-LABEL_FD7FD7:
+SeqChan_StepCmd_Field20to21:
 	ldda32	xwa, 48300
 	lds	bc, 3
 	ldw	de, 20
@@ -9287,7 +9287,7 @@ LABEL_FD7FD7:
 	ldw	de, 21
 	call	16604730
 	ret
-LABEL_FD8005:
+SeqChan_StepCmd_Field11_Data:
 	.byte 0xe1, 0xac, 0xbc, 0x20, 0xd9, 0xab, 0x32, 0x0b
 	.byte 0x00, 0x1d, 0x3a, 0x5e, 0xfd, 0xd8, 0xac, 0x1d
 	.byte 0xac, 0x5c, 0xfd, 0xdb, 0xcf, 0xff, 0xff, 0xf2
@@ -9296,7 +9296,7 @@ LABEL_FD8005:
 	.byte 0xd8, 0xb0, 0xfe, 0xe1, 0xac, 0xbc, 0x20, 0xd9
 	.byte 0xab, 0x32, 0x0c, 0x00, 0x1d, 0x3a, 0x5e, 0xfd
 	.byte 0x0e
-LABEL_FD803E:
+SeqChan_StepCmd_Field12_Data:
 	.byte 0xe1, 0xac, 0xbc, 0x20, 0xd9, 0xab, 0x32
 	.byte 0x0c, 0x00, 0x1d, 0x3a, 0x5e, 0xfd, 0xd8, 0xac
 	.byte 0x1d, 0xac, 0x5c, 0xfd, 0xdb, 0xcf, 0xff, 0xff
@@ -9305,7 +9305,7 @@ LABEL_FD803E:
 	.byte 0xcf, 0xd8, 0xb0, 0xfe, 0xe1, 0xac, 0xbc, 0x20
 	.byte 0xd9, 0xab, 0x32, 0x0d, 0x00, 0x1d, 0x3a, 0x5e
 	.byte 0xfd, 0x0e
-LABEL_FD8077:
+SeqChan_StepCmd_Field13Write:
 	; --- Section 1: load XWA, setup BC/DE, call, then compare HL ---
 	ldda32	xwa, 48300
 	lds	bc, 3
@@ -9329,11 +9329,11 @@ LABEL_FD8077:
 	ret
 
 
-LABEL_FD80B0:
+SeqChan_RetStub_A:
 	.byte 0x0e
-LABEL_FD80B1:
+SeqChan_RetStub_B:
 	.byte 0x0e
-LABEL_FD80B2:
+SeqChan_DispatchByType_Data:
 	.byte 0xe1, 0xb0, 0xbc
 	.byte 0x20, 0x88, 0x03, 0x21, 0xc9, 0xcf, 0x16, 0xb0
 	.byte 0xff, 0xd8, 0x12, 0xd8, 0xec, 0x02, 0xf2, 0x60
@@ -9343,25 +9343,25 @@ SeqChan_DefaultHandler:
 	.byte 0xe1
 	.byte 0xac, 0xbc, 0x20, 0xd9, 0xac, 0x32, 0x1f, 0x00
 	.byte 0x1b, 0x3a, 0x5e, 0xfd
-LABEL_FD80E1:
+SeqChan_WriteField_Data_A:
 	.byte 0xe1, 0xac, 0xbc, 0x20
 	.byte 0xd9, 0xab, 0xda, 0xa8, 0x1d, 0x3a, 0x5e, 0xfd
 	.byte 0xf1, 0x1a, 0xbd, 0xbf, 0x0e
-LABEL_FD80F2:
+SeqChan_WriteField_Data_B:
 	.byte 0xe1, 0xac, 0xbc
 	.byte 0x20, 0xd9, 0xab, 0xda, 0xa8, 0x1d, 0x3a, 0x5e
 	.byte 0xfd, 0xf1, 0x1a, 0xbd, 0xbe, 0x0e
-LABEL_FD8103:
+SeqChan_WriteField_Data_C:
 	.byte 0xe1, 0xac
 	.byte 0xbc, 0x20, 0xd9, 0xab, 0xda, 0xa8, 0x1d, 0x3a
 	.byte 0x5e, 0xfd, 0xf1, 0x1a, 0xbd, 0xbd, 0x0e
-LABEL_FD8114:
+SeqChan_WriteField_Data_D:
 	.byte 0xe1
 	.byte 0xac, 0xbc, 0x20, 0xd9, 0xab, 0xda, 0xa8, 0x1d
 	.byte 0x3a, 0x5e, 0xfd, 0xf1, 0x1a, 0xbd, 0xbc, 0x0e
-LABEL_FD8125:
+SeqChan_RetStub_C:
 	.byte 0x0e
-LABEL_FD8126:
+SeqChan_WriteField_Data_E:
 	.byte 0xe1, 0xac, 0xbc, 0x20, 0xd9, 0xab, 0xda
 	.byte 0xa8, 0x1d, 0x3a, 0x5e, 0xfd, 0xf1, 0x1a, 0xbd
 	.byte 0xba, 0x0e
@@ -9476,17 +9476,17 @@ SeqAlt_CheckInitBuffer:
 	ei 0
 	ret
 
-LABEL_FD833E:
+SeqBuf2_InitWithInterrupts:
 	ei 6
 	call SeqBuf2_Init
 	ei 0
 	ret
 
-LABEL_FD8347:
+SeqBuf_Timing_Data:
 	.byte 0x06, 0x06, 0x1d, 0x6b, 0x28, 0xef, 0x06, 0x00
 	.byte 0x0e
 
-LABEL_FD8350:
+MidiChan_ClearStorageFields:
 	ldada xwa, 48232
 	ld (xwa), 0xFF
 	ld (xwa + 1), 0xFF
@@ -9497,7 +9497,7 @@ LABEL_FD8350:
 	ld (xwa + 2), 0xFF
 	ret
 
-LABEL_FD836F:
+MidiChan_InitAllBufferPtrs:
 	ldada xwa, 47092
 	stda32 48212, xwa
 	ldada xbc, 48236
@@ -9540,14 +9540,14 @@ ArpQueue_InitBuffer:
 	ldirw
 	ret
 
-LABEL_FD83F4:
+MidiSeq_SwapActiveBuffers:
 	ldda32 xbc, 48300
 	cp (xbc + 4), 0x0
-	jr nz, LABEL_FD8426
+	jr nz, MidiSeq_SwapBuffersFallthru
 	ldda32 xwa, 48212
 	lda xde, (xwa + 14)
 	cp xde, (xwa + 10)
-	jr z, LABEL_FD8426
+	jr z, MidiSeq_SwapBuffersFallthru
 	ldda32 xwa, 48304
 	stda32 48304, xbc
 	stda32 48300, xwa
@@ -9556,17 +9556,17 @@ LABEL_FD83F4:
 	stda32 48216, xwa
 	stda32 48212, xbc
 
-LABEL_FD8426:
-	jr LABEL_FD846E
+MidiSeq_SwapBuffersFallthru:
+	jr MidiSeq_ReinitCurrentBuffer
 
 ArpQueue_SwapBuffers:
 	ldda32 xbc, 48308
 	cp (xbc + 4), 0x0
-	jr nz, LABEL_FD846C
+	jr nz, ArpQueue_SwapFallthru
 	ldda32 xwa, 48220
 	lda xde, (xwa + 14)
 	cp xde, (xwa + 10)
-	jr z, LABEL_FD846C
+	jr z, ArpQueue_SwapFallthru
 	ldda32 xwa, 48312
 	stda32 48312, xbc
 	stda32 48308, xwa
@@ -9574,27 +9574,27 @@ ArpQueue_SwapBuffers:
 	ldda32 xwa, 48220
 	stda32 48224, xwa
 	stda32 48220, xbc
-	calr LABEL_FD8479
+	calr ArpQueue_ReinitCurrentBuffer
 	ldda32 xbc, 48308
 	ldda32 xwa, 48312
 	ld a, (xwa + 3)
 	ld (xbc + 3), a
 	ret
 
-LABEL_FD846C:
-	jr LABEL_FD8479
+ArpQueue_SwapFallthru:
+	jr ArpQueue_ReinitCurrentBuffer
 
-LABEL_FD846E:
+MidiSeq_ReinitCurrentBuffer:
 	ldda32 xwa, 48212
 	ldda32 xbc, 48300
 	jrl ArpQueue_InitBuffer
 
-LABEL_FD8479:
+ArpQueue_ReinitCurrentBuffer:
 	ldda32 xwa, 48220
 	ldda32 xbc, 48308
 	jrl ArpQueue_InitBuffer
 
-LABEL_FD8484:
+MidiChan_InitSoundRegisters:
 	ld xiy, 0xEE2F16
 	ld xix, 0xBCBC
 	ldw bc, 0x8
@@ -9614,9 +9614,9 @@ LABEL_FD8484:
 	ret
 
 SoundMode_ResetAllParams:
-	calr LABEL_FD836F
-	calr LABEL_FD8350
-	calr LABEL_FD8484
+	calr MidiChan_InitAllBufferPtrs
+	calr MidiChan_ClearStorageFields
+	calr MidiChan_InitSoundRegisters
 	stdi8 48408, 0
 	stdi8 48410, 0
 	stdi8 48412, 0
@@ -10577,7 +10577,7 @@ SysEx_InitiateSend:
 	setda 6, 48408
 	call SeqAlt_CheckInitBuffer
 	call MidiChan_ClearAllStates
-	call LABEL_FD7669
+	call MidiPkt_ArpMultiPass
 	ldda8 a, 48380
 	and a, 0x7
 	extz wa
@@ -10652,7 +10652,7 @@ SysEx_ParseState_Reset:
 	stdi8 48414, 0
 
 SysEx_ParseState_DispatchByte:
-	call LABEL_FD846E
+	call MidiSeq_ReinitCurrentBuffer
 	jr SysEx_ParserLoop
 
 SysEx_ParseState2_CheckBit7:
