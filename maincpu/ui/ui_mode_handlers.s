@@ -2376,12 +2376,12 @@ AcMstStyleAlpGridBoxProc:
 	ld (xsp + 74), xwa
 	ld xbc, (xsp + 70)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FB88AB
+	jrl z, MasterSetup_ForwardToChild
 	ld xwa, (xsp + 70)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_FB8820
+	jrl z, MasterSetup_GetNameB_DrawString
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_FB8808
+	jrl z, MasterSetup_GetNameA
 	cp xwa, 0x1C00007
 	jrl z, MasterSetup_HandleDialTurn
 	cp xwa, 0x1C00002
@@ -2390,9 +2390,9 @@ AcMstStyleAlpGridBoxProc:
 	jr z, MasterSetup_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_FB88C3
+	jrl lt, MasterSetup_InheritedProc_Fallback
 	cp xbc, 0x6
-	jrl gt, LABEL_FB88C3
+	jrl gt, MasterSetup_InheritedProc_Fallback
 	add xbc, xbc
 	add xbc, 0xED0D24
 	ld bc, (xbc)
@@ -2893,7 +2893,7 @@ MasterSetup_FallbackEvent:
 	ld xde, (xsp + 66)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_FB8801
+	jrl MasterSetup_SetDialEnable
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
@@ -3109,11 +3109,11 @@ LABEL_FB87AC:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_FB8801:
+MasterSetup_SetDialEnable:
 	call SetDialEnable
 	jrl SeqFile_ReturnZeroJmp2
 
-LABEL_FB8808:
+MasterSetup_GetNameA:
 	ld xwa, (xsp + 74)
 	call GetViewInstance
 	ld xwa, (xhl + 62)
@@ -3124,7 +3124,7 @@ LABEL_FB8808:
 	inc 8, xsp
 	jrl SeqFile_ReturnZeroJmp2
 
-LABEL_FB8820:
+MasterSetup_GetNameB_DrawString:
 	ld xwa, (xsp + 74)
 	call GetViewInstance
 	ld xiz, xhl
@@ -3176,7 +3176,7 @@ LABEL_FB8820:
 	ld xde, (xsp + 66)
 	jr SeqFile_CallApFunc
 
-LABEL_FB88AB:
+MasterSetup_ForwardToChild:
 	ld xwa, (xsp + 74)
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -3188,15 +3188,15 @@ SeqFile_CallApFunc:
 
 SeqFile_ReturnZeroJmp2:
 	lds32 xhl, 0
-	jr LABEL_FB88D0
+	jr MasterSetup_Epilogue
 
-LABEL_FB88C3:
+MasterSetup_InheritedProc_Fallback:
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
 	call InheritedProc
 
-LABEL_FB88D0:
+MasterSetup_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 74)
 	ret
@@ -3207,7 +3207,7 @@ MstStyleAlpGridCheck:
 	ld (xsp + 58), xde
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FB896C
+	jrl z, MstStyleAlp_CellSelect
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
 	jrl lt, EffectMode_SendEvent_Return
@@ -3234,7 +3234,7 @@ MstStyleAlp_EventDispatch:
 	.byte 0xe2, 0x01, 0x1d, 0x63, 0x4a, 0xfa, 0x78, 0x98
 	.byte 0x01
 
-LABEL_FB896C:
+MstStyleAlp_CellSelect:
 	call GetFocusObject
 	ld xwa, xhl
 	call GetViewInstance
@@ -3400,7 +3400,7 @@ EffectMode_SendEvent_Return:
 	pop xiz
 	lda xsp, (xsp + 58)
 	ret
-LABEL_FB8B0B:
+MstStyle1Grid_Boundary:
 
 AcMstStyle1GridBoxProc:
 	lda xsp, (xsp - 16)
@@ -3410,19 +3410,19 @@ AcMstStyle1GridBoxProc:
 	ld (xsp + 16), xwa
 	ld xbc, (xsp + 12)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FB8E65
+	jrl z, MstStyle_ForwardToChild
 	ld xwa, (xsp + 12)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_FB8E48
+	jrl z, MstStyle_GetNameB
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_FB8E3E
+	jrl z, MstStyle_GetNameA
 	cp xwa, 0x1C00001
 	jr z, MstStyle_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_FB8E7D
+	jrl lt, MstStyle_InheritedProc_Fallback
 	cp xbc, 0x6
-	jrl gt, LABEL_FB8E7D
+	jrl gt, MstStyle_InheritedProc_Fallback
 	add xbc, xbc
 	add xbc, 0xED0D66
 	ld bc, (xbc)
@@ -3470,14 +3470,14 @@ MstStyle_EventDispatch:
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
-	jrl z, LABEL_FB8C9E
+	jrl z, MstStyle_FallbackEvent
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
 	call SendEvent
 	ld iy, hl
 	cps iy, 0
-	jr nz, LABEL_FB8C5F
+	jr nz, MstStyle_DialDown_Decrement
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 82)
 	ld xwa, (xbc)
@@ -3504,9 +3504,9 @@ MstStyle_EventDispatch:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C20005
 	lds32 xde, 0
-	jr LABEL_FB8C97
+	jr MstStyle_DialDown_PostEvent
 
-LABEL_FB8C5F:
+MstStyle_DialDown_Decrement:
 	decdi16_24 1, 213188
 	ld wa, iy
 	dec 1, wa
@@ -3524,11 +3524,11 @@ LABEL_FB8C5F:
 	ld xbc, 0x1C20005
 	lds32 xde, 0
 
-LABEL_FB8C97:
+MstStyle_DialDown_PostEvent:
 	call SendEvent
 	jrl SeqFileAlt_ReturnZeroJmp
 
-LABEL_FB8C9E:
+MstStyle_FallbackEvent:
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 8)
@@ -3544,7 +3544,7 @@ LABEL_FB8C9E:
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
-	jrl LABEL_FB8E38
+	jrl MstStyle_SetAutoInc_Return
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
@@ -3557,7 +3557,7 @@ LABEL_FB8C9E:
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
-	jrl z, LABEL_FB8E08
+	jrl z, MstStyle_DialUp_FallbackEvent
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -3570,9 +3570,9 @@ LABEL_FB8C9E:
 	inc 1, bc
 	ld wa, (xde)
 	cp wa, (xix)
-	jrl ge, LABEL_FB8DA9
+	jrl ge, MstStyle_DialUp_CheckLimit
 	cp iy, 0x9
-	jr nz, LABEL_FB8D73
+	jr nz, MstStyle_DialUp_Increment
 	incm 1, (xde)
 	ld xwa, (xhl)
 	ld wa, (xwa)
@@ -3594,9 +3594,9 @@ LABEL_FB8C9E:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C20005
 	lds32 xde, 0
-	jrl LABEL_FB8E02
+	jrl MstStyle_DialUp_PostEvent
 
-LABEL_FB8D73:
+MstStyle_DialUp_Increment:
 	incdi16_24 1, 213188
 	ld de, bc
 	extz xde
@@ -3611,9 +3611,9 @@ LABEL_FB8D73:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C20005
 	lds32 xde, 0
-	jr LABEL_FB8E02
+	jr MstStyle_DialUp_PostEvent
 
-LABEL_FB8DA9:
+MstStyle_DialUp_CheckLimit:
 	ld xwa, (xiz + 74)
 	ld de, (xwa)
 	ld wa, de
@@ -3643,11 +3643,11 @@ LABEL_FB8DA9:
 	ld xbc, 0x1C20005
 	lds32 xde, 0
 
-LABEL_FB8E02:
+MstStyle_DialUp_PostEvent:
 	call SendEvent
 	jr SeqFileAlt_ReturnZeroJmp
 
-LABEL_FB8E08:
+MstStyle_DialUp_FallbackEvent:
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 8)
@@ -3664,20 +3664,20 @@ LABEL_FB8E08:
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 
-LABEL_FB8E38:
+MstStyle_SetAutoInc_Return:
 	call SetAutoInc
 	jr SeqFileAlt_ReturnZeroJmp
 
-LABEL_FB8E3E:
+MstStyle_GetNameA:
 	ld xwa, (xsp + 16)
 	ld xiz, 0x3E
-	jr LABEL_FB8E50
+	jr MstStyle_GetName_Load
 
-LABEL_FB8E48:
+MstStyle_GetNameB:
 	ld xwa, (xsp + 16)
 	ld xiz, 0x42
 
-LABEL_FB8E50:
+MstStyle_GetName_Load:
 	call GetViewInstance
 	add xhl, xiz
 	ld xwa, (xhl)
@@ -3688,7 +3688,7 @@ LABEL_FB8E50:
 	inc 8, xsp
 	jr SeqFileAlt_ReturnZeroJmp
 
-LABEL_FB8E65:
+MstStyle_ForwardToChild:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -3698,15 +3698,15 @@ LABEL_FB8E65:
 
 SeqFileAlt_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_FB8E8A
+	jr MstStyle_Epilogue
 
-LABEL_FB8E7D:
+MstStyle_InheritedProc_Fallback:
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	call InheritedProc
 
-LABEL_FB8E8A:
+MstStyle_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 16)
 	ret
@@ -3717,13 +3717,13 @@ MstStyle1GridCheck:
 	ld (xsp + 38), xde
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jr z, LABEL_FB8ED1
+	jr z, MstStyle1Grid_CellSelect
 	lds32 xhl, 0
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
-	jrl lt, LABEL_FB9038
+	jrl lt, MstStyle1Grid_Epilogue
 	cp xwa, 0x6
-	jrl gt, LABEL_FB9038
+	jrl gt, MstStyle1Grid_Epilogue
 	add xwa, xwa
 	add xwa, 0xED0D8A
 	ld wa, (xwa)
@@ -3734,7 +3734,7 @@ MstStyle1GridCheck:
 MstStyle1Grid_EventDispatch:
 	jrl	t, 0x0167
 
-LABEL_FB8ED1:
+MstStyle1Grid_CellSelect:
 	call GetFocusObject
 	ld xwa, xhl
 	call GetViewInstance
@@ -3762,7 +3762,7 @@ LABEL_FB8ED1:
 	sub ix, 0xA
 	ld wa, (xiz)
 	cp wa, (xiy)
-	jrl nz, LABEL_FB8FB6
+	jrl nz, MstStyle1Grid_BottomSection
 	ld xwa, (xsp + 4)
 	ld xiy, (xwa + 74)
 	ld xwa, (xhl)
@@ -3773,7 +3773,7 @@ LABEL_FB8ED1:
 	sub hl, wa
 	ld wa, (xde)
 	cp wa, hl
-	jr ge, LABEL_FB8FA7
+	jr ge, MstStyle1Grid_OutOfRange
 	add ix, wa
 	sla ix, 3
 	ld xwa, (xsp + 8)
@@ -3783,9 +3783,9 @@ LABEL_FB8ED1:
 	call Strcpy
 	inc 8, xsp
 	ld (xsp + 10), 0x0
-	jr LABEL_FB8F70
+	jr MstStyle1Grid_PadLeft_Check
 
-LABEL_FB8F59:
+MstStyle1Grid_PadLeft_Loop:
 	pushw 0x1
 	pushw 0xED
 	pushw 0xD74
@@ -3795,7 +3795,7 @@ LABEL_FB8F59:
 	lda xsp, (xsp + 10)
 	incm8 1, (xsp + 10)
 
-LABEL_FB8F70:
+MstStyle1Grid_PadLeft_Check:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 82)
 	ld wa, (xwa)
@@ -3813,18 +3813,18 @@ LABEL_FB8F70:
 	ld a, (xsp + 10)
 	extz wa
 	cp wa, bc
-	jr c, LABEL_FB8F59
-	jr LABEL_FB901D
+	jr c, MstStyle1Grid_PadLeft_Loop
+	jr MstStyle1Grid_CheckPlayAudio
 
-LABEL_FB8FA7:
+MstStyle1Grid_OutOfRange:
 	pushw 0xED
 	pushw 0xD76
 	push xbc
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_FB901D
+	jr MstStyle1Grid_CheckPlayAudio
 
-LABEL_FB8FB6:
+MstStyle1Grid_BottomSection:
 	add ix, (xde)
 	sla ix, 3
 	ld xwa, (xsp + 8)
@@ -3834,9 +3834,9 @@ LABEL_FB8FB6:
 	call Strcpy
 	inc 8, xsp
 	ld (xsp + 10), 0x0
-	jr LABEL_FB8FE8
+	jr MstStyle1Grid_PadLeft_CheckB
 
-LABEL_FB8FD1:
+MstStyle1Grid_PadLeft_LoopB:
 	pushw 0x1
 	pushw 0xED
 	pushw 0xD88
@@ -3846,7 +3846,7 @@ LABEL_FB8FD1:
 	lda xsp, (xsp + 10)
 	incm8 1, (xsp + 10)
 
-LABEL_FB8FE8:
+MstStyle1Grid_PadLeft_CheckB:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 82)
 	ld wa, (xwa)
@@ -3864,26 +3864,26 @@ LABEL_FB8FE8:
 	ld a, (xsp + 10)
 	extz wa
 	cp wa, bc
-	jr c, LABEL_FB8FD1
+	jr c, MstStyle1Grid_PadLeft_LoopB
 
-LABEL_FB901D:
+MstStyle1Grid_CheckPlayAudio:
 	ld wa, (xsp + 30)
 	cps wa, 1
-	jr nz, LABEL_FB9036
+	jr nz, MstStyle1Grid_ReturnZero
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 30)
 	ld xbc, 0x1E0008C
 	call SendEvent
 
-LABEL_FB9036:
+MstStyle1Grid_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_FB9038:
+MstStyle1Grid_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 38)
 	ret
-LABEL_FB903D:
+MstStyle1SubGrid_Boundary:
 
 AcMstStyle1SubGridBoxProc:
 	lda xsp, (xsp - 66)
@@ -3893,23 +3893,23 @@ AcMstStyle1SubGridBoxProc:
 	ld (xsp + 66), xwa
 	ld xbc, (xsp + 62)
 	cp xbc, 0x1E0008D
-	jrl z, LABEL_FB95C2
+	jrl z, MstStyle1Sub_ForwardToChild
 	ld xwa, (xsp + 62)
 	cp xwa, 0x1E0008B
-	jrl z, LABEL_FB9547
+	jrl z, MstStyle1Sub_GetNameB_DrawString
 	cp xwa, 0x1E0008A
-	jrl z, LABEL_FB952F
+	jrl z, MstStyle1Sub_GetNameA
 	cp xwa, 0x1C20005
-	jrl z, LABEL_FB91E1
+	jrl z, MstStyle1Sub_HandleSubSelect
 	cp xwa, 0x1C0000B
-	jrl z, LABEL_FB91A8
+	jrl z, MstStyle1Sub_HandleScroll
 	cp xwa, 0x1C00001
 	jr z, MstStyle1_EventDispatch
 	sub xbc, 0x1C00017
 	cp xbc, 0x0
-	jrl lt, LABEL_FB95DA
+	jrl lt, MstStyle1Sub_InheritedFallback
 	cp xbc, 0x6
-	jrl gt, LABEL_FB95DA
+	jrl gt, MstStyle1Sub_InheritedFallback
 	add xbc, xbc
 	add xbc, 0xED0D9E
 	ld bc, (xbc)
@@ -3966,23 +3966,23 @@ MstStyle1_EventDispatch:
 	st32_24 0x0340d2, xde
 	ldb c, 0x0
 
-LABEL_FB9143:
+MstStyle1Sub_CountEntries_Loop:
 	ld a, c
 	extz wa
 	sla wa, 3
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB915A
+	jr z, MstStyle1Sub_CountEntries_Done
 	inc 1, c
 	cp c, 0xFF
-	jr c, LABEL_FB9143
+	jr c, MstStyle1Sub_CountEntries_Loop
 
-LABEL_FB915A:
+MstStyle1Sub_CountEntries_Done:
 	cps c, 0
-	jr z, LABEL_FB9160
+	jr z, MstStyle1Sub_CountEntries_Adjust
 	dec 1, c
 
-LABEL_FB9160:
+MstStyle1Sub_CountEntries_Adjust:
 	ld16_24 xwa, 0x0340c4
 	extz xwa
 	ld xde, 0x340C8
@@ -4010,7 +4010,7 @@ LABEL_FB9160:
 	ld (xbc), wa
 	jrl SeqFile_ReturnZeroJmp
 
-LABEL_FB91A8:
+MstStyle1Sub_HandleScroll:
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
@@ -4028,7 +4028,7 @@ LABEL_FB91A8:
 	call SendEvent
 	jrl SeqFile_ReturnZeroJmp
 
-LABEL_FB91E1:
+MstStyle1Sub_HandleSubSelect:
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
@@ -4044,23 +4044,23 @@ LABEL_FB91E1:
 	st32_24 0x0340d2, xde
 	ldb c, 0x0
 
-LABEL_FB920F:
+MstStyle1Sub_SubSel_CountLoop:
 	ld a, c
 	extz wa
 	sla wa, 3
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB9226
+	jr z, MstStyle1Sub_SubSel_CountDone
 	inc 1, c
 	cp c, 0xFF
-	jr c, LABEL_FB920F
+	jr c, MstStyle1Sub_SubSel_CountLoop
 
-LABEL_FB9226:
+MstStyle1Sub_SubSel_CountDone:
 	cps c, 0
-	jr z, LABEL_FB922C
+	jr z, MstStyle1Sub_SubSel_Adjust
 	dec 1, c
 
-LABEL_FB922C:
+MstStyle1Sub_SubSel_Adjust:
 	ld16_24 xwa, 0x0340c4
 	extz xwa
 	ld xde, 0x340C8
@@ -4101,14 +4101,14 @@ LABEL_FB922C:
 	ld xde, (xsp + 58)
 	call SendEvent
 	or xhl, xhl
-	jrl z, LABEL_FB9353
+	jrl z, MstStyle1Sub_FallbackEvent
 	ld xwa, (xsp + 66)
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
 	call SendEvent
 	lda_24 xbc, 0x0340c8
 	cps hl, 0
-	jr nz, LABEL_FB9314
+	jr nz, MstStyle1Sub_DialDown_Decrement
 	ld xwa, (xsp + 8)
 	lda xde, (xwa + 82)
 	ld xwa, (xde)
@@ -4135,9 +4135,9 @@ LABEL_FB922C:
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
-	jr LABEL_FB934C
+	jr MstStyle1Sub_DialDown_SetAutoInc
 
-LABEL_FB9314:
+MstStyle1Sub_DialDown_Decrement:
 	ld16_24 xwa, 0x0340c6
 	dec 1, wa
 	st16_24 0x0340c6, xwa
@@ -4156,11 +4156,11 @@ LABEL_FB9314:
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
 
-LABEL_FB934C:
+MstStyle1Sub_DialDown_SetAutoInc:
 	call SetAutoInc
 	jrl SeqFile_ReturnZeroJmp
 
-LABEL_FB9353:
+MstStyle1Sub_FallbackEvent:
 	ld xwa, (xsp + 66)
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 58)
@@ -4186,7 +4186,7 @@ LABEL_FB9353:
 	ld xde, (xsp + 58)
 	call SetDialDown
 	lds wa, 1
-	jrl LABEL_FB9528
+	jrl MstStyle1Sub_SetDialEnable
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
@@ -4201,7 +4201,7 @@ LABEL_FB9353:
 	ld xde, (xsp + 58)
 	call SendEvent
 	or xhl, xhl
-	jrl z, LABEL_FB94D3
+	jrl z, MstStyle1Sub_DialUp_FallbackEvent
 	ld xwa, (xsp + 66)
 	ld xbc, 0x1E0008F
 	lds32 xde, 0
@@ -4218,10 +4218,10 @@ LABEL_FB9353:
 	ld16_24 xbc, 0x0340c6
 	ld wa, (xiy)
 	cp wa, (xix)
-	jr ge, LABEL_FB948A
+	jr ge, MstStyle1Sub_DialUp_CheckLimit
 	lda_24 xix, 0x0340c8
 	cp hl, 0x9
-	jr nz, LABEL_FB9461
+	jr nz, MstStyle1Sub_DialUp_Increment
 	incm 1, (xiy)
 	ld xwa, (xiz)
 	ld wa, (xwa)
@@ -4243,9 +4243,9 @@ LABEL_FB9353:
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
-	jr LABEL_FB94CC
+	jr MstStyle1Sub_DialUp_SetAutoInc
 
-LABEL_FB9461:
+MstStyle1Sub_DialUp_Increment:
 	inc 1, bc
 	st16_24 0x0340c6, xbc
 	ld16_24 xwa, 0x0340c4
@@ -4258,9 +4258,9 @@ LABEL_FB9461:
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
-	jr LABEL_FB94CC
+	jr MstStyle1Sub_DialUp_SetAutoInc
 
-LABEL_FB948A:
+MstStyle1Sub_DialUp_CheckLimit:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 74)
 	ld wa, (xwa)
@@ -4283,11 +4283,11 @@ LABEL_FB948A:
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
 
-LABEL_FB94CC:
+MstStyle1Sub_DialUp_SetAutoInc:
 	call SetAutoInc
 	jrl SeqFile_ReturnZeroJmp
 
-LABEL_FB94D3:
+MstStyle1Sub_DialUp_FallbackEvent:
 	ld xwa, (xsp + 66)
 	ld xbc, 0x1E00091
 	ld xde, (xsp + 58)
@@ -4314,11 +4314,11 @@ LABEL_FB94D3:
 	call SetDialDown
 	lds wa, 1
 
-LABEL_FB9528:
+MstStyle1Sub_SetDialEnable:
 	call SetDialEnable
 	jrl SeqFile_ReturnZeroJmp
 
-LABEL_FB952F:
+MstStyle1Sub_GetNameA:
 	ld xwa, (xsp + 66)
 	call GetViewInstance
 	ld xwa, (xhl + 62)
@@ -4329,7 +4329,7 @@ LABEL_FB952F:
 	inc 8, xsp
 	jrl SeqFile_ReturnZeroJmp
 
-LABEL_FB9547:
+MstStyle1Sub_GetNameB_DrawString:
 	ld xwa, (xsp + 66)
 	call GetViewInstance
 	ld (xsp + 8), xhl
@@ -4375,7 +4375,7 @@ LABEL_FB9547:
 	call DrawString
 	jr SeqFile_ReturnZeroJmp
 
-LABEL_FB95C2:
+MstStyle1Sub_ForwardToChild:
 	ld xwa, (xsp + 66)
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -4385,15 +4385,15 @@ LABEL_FB95C2:
 
 SeqFile_ReturnZeroJmp:
 	lds32 xhl, 0
-	jr LABEL_FB95E7
+	jr MstStyle1Sub_Epilogue
 
-LABEL_FB95DA:
+MstStyle1Sub_InheritedFallback:
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
 	call InheritedProc
 
-LABEL_FB95E7:
+MstStyle1Sub_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 66)
 	ret
@@ -4404,13 +4404,13 @@ MstStyle1SubGridCheck:
 	ld xiz, xde
 	ld xwa, xbc
 	cp xbc, 0x1E0008D
-	jr z, LABEL_FB962D
+	jr z, MstStyle1SubGrid_CellSelect
 	lds32 xhl, 0
 	sub xwa, 0x1C00017
 	cp xwa, 0x0
-	jrl lt, LABEL_FB9788
+	jrl lt, MstStyle1SubGrid_Epilogue
 	cp xwa, 0x6
-	jrl gt, LABEL_FB9788
+	jrl gt, MstStyle1SubGrid_Epilogue
 	add xwa, xwa
 	add xwa, 0xED0DC2
 	ld wa, (xwa)
@@ -4421,7 +4421,7 @@ MstStyle1SubGridCheck:
 MstStyle1Sub_EventDispatch:
 	jrl	t, 0x015b
 
-LABEL_FB962D:
+MstStyle1SubGrid_CellSelect:
 	call GetFocusObject
 	ld xwa, xhl
 	call GetViewInstance
@@ -4447,7 +4447,7 @@ LABEL_FB962D:
 	sub hl, 0xA
 	ld wa, (xiz)
 	cp wa, (xiy)
-	jrl nz, LABEL_FB9707
+	jrl nz, MstStyle1SubGrid_BottomSection
 	ld xwa, (xsp + 4)
 	ld xiy, (xwa + 74)
 	ld xwa, (xix)
@@ -4458,7 +4458,7 @@ LABEL_FB962D:
 	sub ix, wa
 	ld wa, (xbc)
 	cp wa, ix
-	jr gt, LABEL_FB96F8
+	jr gt, MstStyle1SubGrid_OutOfRange
 	add hl, wa
 	exts xhl
 	sll xhl, 3
@@ -4469,9 +4469,9 @@ LABEL_FB962D:
 	call Strcpy
 	inc 8, xsp
 	ldi_berp 0xFB, 0
-	jr LABEL_FB96C2
+	jr MstStyle1SubGrid_PadLeft_Check
 
-LABEL_FB96AB:
+MstStyle1SubGrid_PadLeft_Loop:
 	pushw 0x1
 	pushw 0xED
 	pushw 0xDAC
@@ -4481,7 +4481,7 @@ LABEL_FB96AB:
 	lda xsp, (xsp + 10)
 	inc1_berp 0xFB
 
-LABEL_FB96C2:
+MstStyle1SubGrid_PadLeft_Check:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 82)
 	ld wa, (xwa)
@@ -4500,18 +4500,18 @@ LABEL_FB96C2:
 	ldto_berp A, 0xFB
 	extz wa
 	cp wa, bc
-	jr c, LABEL_FB96AB
-	jr LABEL_FB976D
+	jr c, MstStyle1SubGrid_PadLeft_Loop
+	jr MstStyle1SubGrid_CheckPlayAudio
 
-LABEL_FB96F8:
+MstStyle1SubGrid_OutOfRange:
 	pushw 0xED
 	pushw 0xDAE
 	push xde
 	call Strcpy
 	inc 8, xsp
-	jr LABEL_FB976D
+	jr MstStyle1SubGrid_CheckPlayAudio
 
-LABEL_FB9707:
+MstStyle1SubGrid_BottomSection:
 	add hl, (xbc)
 	exts xhl
 	sll xhl, 3
@@ -4522,9 +4522,9 @@ LABEL_FB9707:
 	call Strcpy
 	inc 8, xsp
 	ldi_berp 0xFB, 0
-	jr LABEL_FB9739
+	jr MstStyle1SubGrid_PadLeft_CheckB
 
-LABEL_FB9722:
+MstStyle1SubGrid_PadLeft_LoopB:
 	pushw 0x1
 	pushw 0xED
 	pushw 0xDC0
@@ -4534,7 +4534,7 @@ LABEL_FB9722:
 	lda xsp, (xsp + 10)
 	inc1_berp 0xFB
 
-LABEL_FB9739:
+MstStyle1SubGrid_PadLeft_CheckB:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 82)
 	ld wa, (xwa)
@@ -4553,26 +4553,26 @@ LABEL_FB9739:
 	ldto_berp A, 0xFB
 	extz wa
 	cp wa, bc
-	jr c, LABEL_FB9722
+	jr c, MstStyle1SubGrid_PadLeft_LoopB
 
-LABEL_FB976D:
+MstStyle1SubGrid_CheckPlayAudio:
 	ld wa, (xsp + 26)
 	cps wa, 1
-	jr nz, LABEL_FB9786
+	jr nz, MstStyle1SubGrid_ReturnZero
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 26)
 	ld xbc, 0x1E0008C
 	call SendEvent
 
-LABEL_FB9786:
+MstStyle1SubGrid_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_FB9788:
+MstStyle1SubGrid_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 30)
 	ret
-LABEL_FB978D:
+MstStyle2Grid_Boundary:
 
 AcMstStyle2GridBoxProc:
 	lda xsp, (xsp - 56)
@@ -4589,9 +4589,9 @@ AcMstStyle2GridBoxProc:
 	cp xwa, 0x1E0008A
 	jrl z, LABEL_FBA19A
 	cp xwa, 0x1C00007
-	jrl z, LABEL_FB9AAB
+	jrl z, MstStyle2_HandleDialTurn
 	cp xwa, 0x1C00002
-	jrl z, LABEL_FB9A8B
+	jrl z, MstStyle2_HandleDialStop
 	cp xwa, 0x1C00001
 	jr z, MstStyle1Page_EventDispatch
 	sub xbc, 0x1C00017
@@ -4647,9 +4647,9 @@ MstStyle1Page_EventDispatch:
 	call SetDialEnable
 	ld xwa, (xsp + 48)
 	cp xwa, 0x4
-	jrl z, LABEL_FB9A61
+	jrl z, MstStyle2_HandleSpecialEvent
 	cp xwa, 0x3
-	jrl z, LABEL_FB9A61
+	jrl z, MstStyle2_HandleSpecialEvent
 	or xwa, xwa
 	jrl nz, SeqData_ReturnZero
 	ld16_24 xwa, 0x0340c4
@@ -4661,23 +4661,23 @@ MstStyle1Page_EventDispatch:
 	st32_24 0x0340d2, xde
 	ldb c, 0x0
 
-LABEL_FB98A8:
+MstStyle2_CountEntries_Loop:
 	ld a, c
 	extz wa
 	sla wa, 3
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB98BF
+	jr z, MstStyle2_CountEntries_Done
 	inc 1, c
 	cp c, 0xFF
-	jr c, LABEL_FB98A8
+	jr c, MstStyle2_CountEntries_Loop
 
-LABEL_FB98BF:
+MstStyle2_CountEntries_Done:
 	cps c, 0
-	jr z, LABEL_FB98C5
+	jr z, MstStyle2_CountEntries_Adjust
 	dec 1, c
 
-LABEL_FB98C5:
+MstStyle2_CountEntries_Adjust:
 	ld xix, (xsp + 8)
 	lda xde, (xix + 74)
 	ld xhl, (xde)
@@ -4702,7 +4702,7 @@ LABEL_FB98C5:
 	ldw (xwa), 0x1
 	ld16_24 xwa, 0x0340c6
 	bit 0, wa
-	jrl nz, LABEL_FB99B0
+	jrl nz, MstStyle2_InitOdd_Setup
 	extz xwa
 	sll xwa, 3
 	addda32_24 xwa, 213202
@@ -4710,23 +4710,23 @@ LABEL_FB98C5:
 	st32_24 0x0340d6, xhl
 	ldb c, 0x0
 
-LABEL_FB9921:
+MstStyle2_CountSubEntries_LoopA:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xEC, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB9938
+	jr z, MstStyle2_CountSubEntries_DoneA
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FB9921
+	jr c, MstStyle2_CountSubEntries_LoopA
 
-LABEL_FB9938:
+MstStyle2_CountSubEntries_DoneA:
 	cps c, 0
-	jr z, LABEL_FB993E
+	jr z, MstStyle2_CountSubEntries_AdjA
 	dec 1, c
 
-LABEL_FB993E:
+MstStyle2_CountSubEntries_AdjA:
 	ld xwa, (xsp + 8)
 	ld xhl, (xwa + 94)
 	extz bc
@@ -4735,7 +4735,7 @@ LABEL_FB993E:
 	ld bc, (xwa)
 	ld16_24 xwa, 0x0340c6
 	cp bc, wa
-	jr ule, LABEL_FB9992
+	jr ule, MstStyle2_InitDone_PostEvent
 	inc 1, wa
 	extz xwa
 	sll xwa, 3
@@ -4744,29 +4744,29 @@ LABEL_FB993E:
 	st32_24 0x0340da, xde
 	ldb c, 0x0
 
-LABEL_FB996B:
+MstStyle2_CountSubEntries_LoopB:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB9982
+	jr z, MstStyle2_CountSubEntries_DoneB
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FB996B
+	jr c, MstStyle2_CountSubEntries_LoopB
 
-LABEL_FB9982:
+MstStyle2_CountSubEntries_DoneB:
 	cps c, 0
-	jr z, LABEL_FB9988
+	jr z, MstStyle2_CountSubEntries_AdjB
 	dec 1, c
 
-LABEL_FB9988:
+MstStyle2_CountSubEntries_AdjB:
 	ld xwa, (xsp + 8)
 	ld xde, (xwa + 98)
 	extz bc
 	ld (xde), bc
 
-LABEL_FB9992:
+MstStyle2_InitDone_PostEvent:
 	ld xwa, (xsp + 56)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
@@ -4774,9 +4774,9 @@ LABEL_FB9992:
 	ld xwa, (xsp + 56)
 	ld xbc, 0x1C0000E
 	ld xde, 0xFFFF0000
-	jrl LABEL_FB9A48
+	jrl MstStyle2_SendEvent_Done
 
-LABEL_FB99B0:
+MstStyle2_InitOdd_Setup:
 	dec 1, wa
 	extz xwa
 	sll xwa, 3
@@ -4785,23 +4785,23 @@ LABEL_FB99B0:
 	st32_24 0x0340d6, xde
 	ldb c, 0x0
 
-LABEL_FB99C6:
+MstStyle2_InitOdd_CountLoopA:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB99DD
+	jr z, MstStyle2_InitOdd_CountDoneA
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FB99C6
+	jr c, MstStyle2_InitOdd_CountLoopA
 
-LABEL_FB99DD:
+MstStyle2_InitOdd_CountDoneA:
 	cps c, 0
-	jr z, LABEL_FB99E3
+	jr z, MstStyle2_InitOdd_CountAdjA
 	dec 1, c
 
-LABEL_FB99E3:
+MstStyle2_InitOdd_CountAdjA:
 	ld xwa, (xsp + 8)
 	ld xde, (xwa + 94)
 	extz bc
@@ -4814,23 +4814,23 @@ LABEL_FB99E3:
 	st32_24 0x0340da, xde
 	ldb c, 0x0
 
-LABEL_FB9A06:
+MstStyle2_InitOdd_CountLoopB:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xE8, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB9A1D
+	jr z, MstStyle2_InitOdd_CountDoneB
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FB9A06
+	jr c, MstStyle2_InitOdd_CountLoopB
 
-LABEL_FB9A1D:
+MstStyle2_InitOdd_CountDoneB:
 	cps c, 0
-	jr z, LABEL_FB9A23
+	jr z, MstStyle2_InitOdd_CountAdjB
 	dec 1, c
 
-LABEL_FB9A23:
+MstStyle2_InitOdd_CountAdjB:
 	ld xwa, (xsp + 8)
 	ld xde, (xwa + 98)
 	extz bc
@@ -4843,7 +4843,7 @@ LABEL_FB9A23:
 	ld xbc, 0x1C0000E
 	ld xde, 0xFFFF0005
 
-LABEL_FB9A48:
+MstStyle2_SendEvent_Done:
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 70)
@@ -4852,7 +4852,7 @@ LABEL_FB9A48:
 	call ApFuncCall
 	jrl SeqData_ReturnZero
 
-LABEL_FB9A61:
+MstStyle2_HandleSpecialEvent:
 	ld xwa, (xsp + 56)
 	ld xbc, 0x1C0000B
 	lds32 xde, 0
@@ -4866,7 +4866,7 @@ LABEL_FB9A61:
 	call SendEvent
 	jrl SeqData_ReturnZero
 
-LABEL_FB9A8B:
+MstStyle2_HandleDialStop:
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
@@ -4877,7 +4877,7 @@ LABEL_FB9A8B:
 	call MainFuncCall
 	jrl SeqData_ReturnZero
 
-LABEL_FB9AAB:
+MstStyle2_HandleDialTurn:
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
@@ -4904,7 +4904,7 @@ LABEL_FB9AAB:
 	divs wa, 0x2
 	ldto_werp WA, 0xE2
 	cps wa, 0
-	jr z, LABEL_FB9B31
+	jr z, MstStyle2_DialDown_PageDec
 	decm 1, (xix)
 	ld16_24 xwa, 0x0340c4
 	extz xwa
@@ -4922,7 +4922,7 @@ LABEL_FB9AAB:
 	ld xde, (xsp + 48)
 	jrl Seq_ApplyFunctionAndReturn
 
-LABEL_FB9B31:
+MstStyle2_DialDown_PageDec:
 	ld xix, xhl
 	ld xwa, (xhl)
 	decm 1, (xwa)
@@ -4937,23 +4937,23 @@ LABEL_FB9B31:
 	st32_24 0x0340d6, xhl
 	ldb c, 0x0
 
-LABEL_FB9B54:
+MstStyle2_PageDec_CountLoop:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xEC, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB9B6B
+	jr z, MstStyle2_PageDec_CountDone
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FB9B54
+	jr c, MstStyle2_PageDec_CountLoop
 
-LABEL_FB9B6B:
+MstStyle2_PageDec_CountDone:
 	cps c, 0
-	jr z, LABEL_FB9B71
+	jr z, MstStyle2_PageDec_CountAdj
 	dec 1, c
 
-LABEL_FB9B71:
+MstStyle2_PageDec_CountAdj:
 	ld xwa, (xsp + 4)
 	ld xhl, (xwa + 94)
 	extz bc
@@ -4965,7 +4965,7 @@ LABEL_FB9B71:
 	ld bc, wa
 	dec 2, bc
 	cp (xhl), bc
-	jr le, LABEL_FB9BCA
+	jr le, MstStyle2_DialDown_UpdateAndPost
 	dec 1, wa
 	exts xwa
 	sll xwa, 3
@@ -4974,29 +4974,29 @@ LABEL_FB9B71:
 	st32_24 0x0340da, xhl
 	ldb c, 0x0
 
-LABEL_FB9BA3:
+MstStyle2_PageDec_CountLoop2:
 	ld a, c
 	extz wa
 	muls wa, 0x6
 	ld_sril3 XWA, 0x07, 0xEC, 0xE0
 	or xwa, xwa
-	jr z, LABEL_FB9BBA
+	jr z, MstStyle2_PageDec_CountDone2
 	inc 1, c
 	cps c, 4
-	jr c, LABEL_FB9BA3
+	jr c, MstStyle2_PageDec_CountLoop2
 
-LABEL_FB9BBA:
+MstStyle2_PageDec_CountDone2:
 	cps c, 0
-	jr z, LABEL_FB9BC0
+	jr z, MstStyle2_PageDec_CountAdj2
 	dec 1, c
 
-LABEL_FB9BC0:
+MstStyle2_PageDec_CountAdj2:
 	ld xwa, (xsp + 8)
 	ld xhl, (xwa + 98)
 	extz bc
 	ld (xhl), bc
 
-LABEL_FB9BCA:
+MstStyle2_DialDown_UpdateAndPost:
 	ld xwa, (xde)
 	decm 1, (xwa)
 	ld16_24 xwa, 0x0340c4
