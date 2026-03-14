@@ -3019,99 +3019,99 @@ AcModeSelBoxProc:
 	ld (xsp + 4), xde
 	ld xiz, xwa
 	cp xbc, 0x1E0004D
-	jr z, LABEL_F2C9B8
+	jr z, VoiceConfig_HandleInit
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F2C9D9
+	jr VoiceConfig_Epilogue
 
-LABEL_F2C9B8:
+VoiceConfig_HandleInit:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 4)
 	cp xwa, 0x1
-	jr nz, LABEL_F2C9D7
+	jr nz, VoiceConfig_ReturnZero
 	ld xwa, xiz
 	call GetViewInstance
 	mrdb5 0x8B, 0x32, 0x19, 0x3E, 0x0D
 
-LABEL_F2C9D7:
+VoiceConfig_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2C9D9:
+VoiceConfig_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
 
-LABEL_F2C9DD:
+VoiceConfig_ScreenTypeDispatch:
 	push xiz
 	ld xiz, xwa
 	cp xiz, 0xB
-	jr z, LABEL_F2CA46
+	jr z, VoiceConfig_SetType5
 	cp xiz, 0xA
-	jr z, LABEL_F2CA42
+	jr z, VoiceConfig_SetType4
 	cp xiz, 0x9
-	jr z, LABEL_F2CA3E
+	jr z, VoiceConfig_SetType3
 	cp xiz, 0x8B
-	jr z, LABEL_F2CA3A
+	jr z, VoiceConfig_SetType2
 	cp xiz, 0x8A
-	jr z, LABEL_F2CA36
+	jr z, VoiceConfig_SetType1
 	cp xiz, 0x89
-	jr nz, LABEL_F2CA58
+	jr nz, VoiceConfig_ReturnZeroShort
 	lds32 xiz, 0
 
 VoiceConfig_LookupByScreenType:
 	call GetTitleNow
 	ldi_werp 0xEE, 0
 	cp hl, 0xE3
-	jr z, LABEL_F2CA51
+	jr z, VoiceConfig_LoadTableB
 	cp hl, 0xE2
-	jr z, LABEL_F2CA4A
+	jr z, VoiceConfig_LoadTableA
 	cp hl, 0xE1
-	jr nz, LABEL_F2CA58
+	jr nz, VoiceConfig_ReturnZeroShort
 	ld xwa, 0xE264DE
 
 VoiceConfig_ReadFromTable:
 	add xwa, xiz
 	ld l, (xwa)
-	jr LABEL_F2CA5A
+	jr VoiceConfig_PopIzRet
 
-LABEL_F2CA36:
+VoiceConfig_SetType1:
 	lds32 xiz, 1
 	jr VoiceConfig_LookupByScreenType
 
-LABEL_F2CA3A:
+VoiceConfig_SetType2:
 	lds32 xiz, 2
 	jr VoiceConfig_LookupByScreenType
 
-LABEL_F2CA3E:
+VoiceConfig_SetType3:
 	lds32 xiz, 3
 	jr VoiceConfig_LookupByScreenType
 
-LABEL_F2CA42:
+VoiceConfig_SetType4:
 	lds32 xiz, 4
 	jr VoiceConfig_LookupByScreenType
 
-LABEL_F2CA46:
+VoiceConfig_SetType5:
 	lds32 xiz, 5
 	jr VoiceConfig_LookupByScreenType
 
-LABEL_F2CA4A:
+VoiceConfig_LoadTableA:
 	ld xwa, 0xE264E4
 	jr VoiceConfig_ReadFromTable
 
-LABEL_F2CA51:
+VoiceConfig_LoadTableB:
 	ld xwa, 0xE264EA
 	jr VoiceConfig_ReadFromTable
 
-LABEL_F2CA58:
+VoiceConfig_ReturnZeroShort:
 	ldb l, 0x0
 
-LABEL_F2CA5A:
+VoiceConfig_PopIzRet:
 	pop xiz
 	ret
-LABEL_F2CA5C:
+VoiceConfig_End:
 
 AcDemoSongBoxProc:
 	lda xsp, (xsp - 12)
@@ -3121,16 +3121,16 @@ AcDemoSongBoxProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x1C00007
-	jr z, LABEL_F2CAA0
+	jr z, AcDemoSong_HandleResize
 	cp xwa, 0x1C00002
-	jr z, LABEL_F2CA89
+	jr z, AcDemoSong_HandleInit
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	call InheritedProc
-	jr LABEL_F2CAF6
+	jr AcDemoSong_Epilogue
 
-LABEL_F2CA89:
+AcDemoSong_HandleInit:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 46)
@@ -3138,9 +3138,9 @@ LABEL_F2CA89:
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
-	jr LABEL_F2CAF0
+	jr AcDemoSong_CallInherited
 
-LABEL_F2CAA0:
+AcDemoSong_HandleResize:
 	ld xwa, xiz
 	call GetViewInstance
 	ld (xsp + 4), xhl
@@ -3148,17 +3148,17 @@ LABEL_F2CAA0:
 	ld wa, (xwa + 42)
 	extz xwa
 	cp xwa, (xsp + 8)
-	jr nz, LABEL_F2CAE8
+	jr nz, AcDemoSong_DefaultHandler
 	ld xwa, (xsp + 8)
-	calr LABEL_F2C9DD
+	calr VoiceConfig_ScreenTypeDispatch
 	cpdi8 3375, 0
 	jr nz, AcCurrentSongBox_RetZero
 	bitda 3, 10413
-	jr z, LABEL_F2CACF
+	jr z, AcDemoSong_SetupDisplay
 	cpdm8 4439, l
 	jr nz, AcCurrentSongBox_RetZero
 
-LABEL_F2CACF:
+AcDemoSong_SetupDisplay:
 	ldb h, 0x0
 	extz xhl
 	ld (xsp + 8), xhl
@@ -3169,22 +3169,22 @@ LABEL_F2CACF:
 	call ApFuncCall
 	jr AcCurrentSongBox_RetZero
 
-LABEL_F2CAE8:
+AcDemoSong_DefaultHandler:
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 
-LABEL_F2CAF0:
+AcDemoSong_CallInherited:
 	call InheritedProc
 
 AcCurrentSongBox_RetZero:
 	lds32 xhl, 0
 
-LABEL_F2CAF6:
+AcDemoSong_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
-LABEL_F2CAFB:
+AcDemoSong_End:
 
 AcCurrentSongBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
@@ -3195,23 +3195,23 @@ AcCurrentSongBoxProc:
 	cp xbc, 0x1C0000B
 	jr z, AcCurSongName_HandleFocusGained
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2CB2F
+	jr z, AcCurSong_HandleEvent1
 	cp xbc, 0x1C00001
-	jr z, LABEL_F2CB2B
+	jr z, AcCurSong_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F2CB68
+	jr AcCurSong_Epilogue
 
-LABEL_F2CB2B:
+AcCurSong_HandleEvent2:
 	ld xwa, xiz
-	jr LABEL_F2CB31
+	jr AcCurSong_CallInherited
 
-LABEL_F2CB2F:
+AcCurSong_HandleEvent1:
 	ld xwa, xiz
 
-LABEL_F2CB31:
+AcCurSong_CallInherited:
 	call InheritedProc
-	jr LABEL_F2CB66
+	jr AcCurSong_ReturnZero
 
 AcCurSongName_HandleFocusGained:
 	ld xwa, xiz
@@ -3231,45 +3231,45 @@ AcCurSongName_HandleFocusGained:
 	ld xbc, 0x1C0000F
 	call SendEvent
 
-LABEL_F2CB66:
+AcCurSong_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2CB68:
+AcCurSong_Epilogue:
 	pop xiz
 	st_dri3b L, 0xFD, 0x00, 0x01
 	ret
-LABEL_F2CB6F:
+AcCurSong_End:
 
 AcCurSongNameBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1C70000
-	jr z, LABEL_F2CBCB
+	jr z, AcCurSongName_HandleEventF
 	cp xbc, 0x1C0000C
-	jr z, LABEL_F2CBB3
+	jr z, AcCurSongName_HandleFocusGained
 	cp xbc, 0x1C0000B
-	jr z, LABEL_F2CBB3
+	jr z, AcCurSongName_HandleFocusGained
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2CBAB
+	jr z, AcCurSongName_HandleEvent1
 	cp xbc, 0x1C00001
-	jr z, LABEL_F2CBA7
+	jr z, AcCurSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
 	jr MuteChSel_TtlDefault
 
-LABEL_F2CBA7:
+AcCurSongName_HandleEvent2:
 	ld xwa, xiz
-	jr LABEL_F2CBAD
+	jr AcCurSongName_CallInherited
 
-LABEL_F2CBAB:
+AcCurSongName_HandleEvent1:
 	ld xwa, xiz
 
-LABEL_F2CBAD:
+AcCurSongName_CallInherited:
 	call InheritedProc
 	jr MuteChSel_TtlSetup
 
-LABEL_F2CBB3:
+AcCurSongName_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, 0x147001D
@@ -3278,7 +3278,7 @@ LABEL_F2CBB3:
 	call MainFuncCall
 	jr MuteChSel_TtlSetup
 
-LABEL_F2CBCB:
+AcCurSongName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0xE2
@@ -3377,10 +3377,10 @@ SqTrAsPsSong_Dispatch:
 ; SqTrAsPsSongFunc return zero
 SqTrAsPsSong_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F2CCE6
+	jr MuteChSel_Epilogue
 	ldada xhl, 3391
 
-LABEL_F2CCE6:
+MuteChSel_Epilogue:
 	pop xiz
 	ret
 
@@ -3487,7 +3487,7 @@ MuteChSetFunc_Exit:
 	lds32 xhl, 0
 	pop xiz
 	ret
-LABEL_F2CDDA:
+SqAftSetFunc_End:
 
 AcMuteToggleBoxProc:
 	dec 8, xsp
@@ -3497,14 +3497,14 @@ AcMuteToggleBoxProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C00001
-	jr z, LABEL_F2CDFE
+	jr z, AcMuteToggle_HandleInit
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F2CE32
+	jr AcMuteToggle_Epilogue
 
-LABEL_F2CDFE:
+AcMuteToggle_HandleInit:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 40)
@@ -3522,21 +3522,21 @@ LABEL_F2CDFE:
 	call InheritedProc
 	lds32 xhl, 0
 
-LABEL_F2CE32:
+AcMuteToggle_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
 
 SMFMuteOnOffFunc:
 	cp xbc, 0x1E70017
-	jr nz, LABEL_F2CE46
+	jr nz, SMFMuteOnOff_Enable
 	lds32 xhl, 0
 	ld8_24 l, 0x021088
 	ret
 
-LABEL_F2CE46:
+SMFMuteOnOff_Enable:
 	cp xde, 0x1
-	jr nz, LABEL_F2CE6C
+	jr nz, SMFMuteOnOff_Disable
 	sti8_24 0x021088, 0x01
 	ld8_24 a, 0x02108a
 	extz wa
@@ -3544,39 +3544,39 @@ LABEL_F2CE46:
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
-	jr LABEL_F2CE85
+	jr SMFMuteOnOff_PostCall
 
-LABEL_F2CE6C:
+SMFMuteOnOff_Disable:
 	sti8_24 0x021088, 0x00
 	sti16_24 0x021086, 0x0000
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
 
-LABEL_F2CE85:
+SMFMuteOnOff_PostCall:
 	call MainFuncCall
 	lds32 xhl, 0
 	ret
 
-LABEL_F2CE8C:
+SMFMute_GetBit0Status:
 	ld16_24 xhl, 0x021086
 	and hl, 0x1
 	extz xhl
 	ret
 
-LABEL_F2CE98:
+SMFMute_GetBit1Status:
 	ld16_24 xhl, 0x021086
 	and hl, 0x2
 	extz xhl
 	ret
 
-LABEL_F2CEA4:
+SMFMute_GetUpperBits:
 	ld16_24 xhl, 0x021086
 	and hl, 0xFFFC
 	extz xhl
 	ret
 
-LABEL_F2CEB0:
+SMFMute_ClearBit0:
 	ld16_24 xhl, 0x021086
 	res 0, hl
 	extz xhl
@@ -3584,88 +3584,88 @@ LABEL_F2CEB0:
 
 Rt1MuteFunc:
 	cp xbc, 0x1E70017
-	jr z, LABEL_F2CE8C
+	jr z, SMFMute_GetBit0Status
 	cp xde, 0x1
-	jr nz, LABEL_F2CEE0
+	jr nz, Rt1Mute_ClearAndPost
 	ordi16_24 135302, 1
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
-	jr LABEL_F2CEF3
+	jr Rt1Mute_PostCall
 
-LABEL_F2CEE0:
+Rt1Mute_ClearAndPost:
 	anddi16_24 135302, 65534
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
 
-LABEL_F2CEF3:
+Rt1Mute_PostCall:
 	call MainFuncCall
 	lds32 xhl, 0
 	ret
 
 Rt2MuteFunc:
 	cp xbc, 0x1E70017
-	jr z, LABEL_F2CE98
+	jr z, SMFMute_GetBit1Status
 	cp xde, 0x1
-	jr nz, LABEL_F2CF1F
+	jr nz, Rt2Mute_ClearAndPost
 	ordi16_24 135302, 2
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
-	jr LABEL_F2CF32
+	jr Rt2Mute_PostCall
 
-LABEL_F2CF1F:
+Rt2Mute_ClearAndPost:
 	anddi16_24 135302, 65533
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
 
-LABEL_F2CF32:
+Rt2Mute_PostCall:
 	call MainFuncCall
 	lds32 xhl, 0
 	ret
 
 DocOrchMuteFunc:
 	cp xbc, 0x1E70017
-	jrl z, LABEL_F2CEA4
+	jrl z, SMFMute_GetUpperBits
 	cp xde, 0x1
-	jr nz, LABEL_F2CF5F
+	jr nz, DocOrchMute_ClearAndPost
 	ordi16_24 135302, 65532
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
-	jr LABEL_F2CF72
+	jr DocOrchMute_PostCall
 
-LABEL_F2CF5F:
+DocOrchMute_ClearAndPost:
 	anddi16_24 135302, 3
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
 
-LABEL_F2CF72:
+DocOrchMute_PostCall:
 	call MainFuncCall
 	lds32 xhl, 0
 	ret
 
 PdOrchMuteFunc:
 	cp xbc, 0x1E70017
-	jrl z, LABEL_F2CEB0
+	jrl z, SMFMute_ClearBit0
 	cp xde, 0x1
-	jr nz, LABEL_F2CF9F
+	jr nz, PdOrchMute_ClearAndPost
 	ordi16_24 135302, 65534
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
-	jr LABEL_F2CFB2
+	jr PdOrchMute_PostCall
 
-LABEL_F2CF9F:
+PdOrchMute_ClearAndPost:
 	anddi16_24 135302, 1
 	ld xwa, 0x147001C
 	ld xbc, 0x1E7000B
 	lds32 xde, 0
 
-LABEL_F2CFB2:
+PdOrchMute_PostCall:
 	call MainFuncCall
 	lds32 xhl, 0
 	ret
@@ -3689,11 +3689,11 @@ SeqNamingCheck:
 	ld (xsp + 4), xde
 	ld xiz, xwa
 	cp xbc, 0x1E0007C
-	jr z, LABEL_F2D033
+	jr z, SeqNameOK_Return10
 	cp xbc, 0x1E00084
-	jr z, LABEL_F2D02F
+	jr z, SeqNameOK_ReturnZero
 	cp xbc, 0x1E0003A
-	jr nz, LABEL_F2D02F
+	jr nz, SeqNameOK_ReturnZero
 	pushw 0x10
 	pushw 0x0
 	pushw 0xF280
@@ -3708,20 +3708,20 @@ SeqNamingCheck:
 	call Strcpy
 	lda xsp, (xsp + 18)
 	ld xhl, xiz
-	jr LABEL_F2D038
+	jr SeqNameOK_Epilogue
 
-LABEL_F2D02F:
+SeqNameOK_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F2D038
+	jr SeqNameOK_Epilogue
 
-LABEL_F2D033:
+SeqNameOK_Return10:
 	ld xhl, 0x10
 
-LABEL_F2D038:
+SeqNameOK_Epilogue:
 	pop xiz
 	inc 4, xsp
 	ret
-LABEL_F2D03C:
+SeqNameOK_End:
 
 AcDemoMedleyDispBoxProc:
 	st_dri3b L, 0xFD, 0x00, 0xFF
@@ -3734,12 +3734,12 @@ AcDemoMedleyDispBoxProc:
 	cp xbc, 0x1C00002
 	jr z, DemoMedDsp_LoadEntry
 	cp xbc, 0x1C00001
-	jr z, LABEL_F2D06C
+	jr z, DemoMedDsp_HandleDefault
 	ld xwa, xiz
 	call InheritedProc
 	jr DPPauseDsp_CheckEntry
 
-LABEL_F2D06C:
+DemoMedDsp_HandleDefault:
 	ld xwa, xiz
 	jr DemoMedDsp_LoadReturn
 
@@ -3913,7 +3913,7 @@ DPPause_DspReturn:
 	lds32 xhl, 0
 	pop xiz
 	ret
-LABEL_F2D21A:
+DemoMedDsp_End:
 
 IvExitModeTrSelProc:
 	dec 8, xsp
@@ -3923,15 +3923,15 @@ IvExitModeTrSelProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1C00007
-	jr z, LABEL_F2D256
+	jr z, IvExitTrSel_CheckSendEvent
 	cp xwa, 0x1E0003A
-	jr z, LABEL_F2D242
+	jr z, IvExitTrSel_CopyString
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
-	jr LABEL_F2D2BC
+	jr IvExitTrSel_CallInherited
 
-LABEL_F2D242:
+IvExitTrSel_CopyString:
 	pushw 0xE2
 	pushw 0x67FE
 	ld xwa, (xsp + 8)
@@ -3939,9 +3939,9 @@ LABEL_F2D242:
 	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
-	jr LABEL_F2D2C0
+	jr IvExitTrSel_Epilogue
 
-LABEL_F2D256:
+IvExitTrSel_CheckSendEvent:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, xiz
@@ -3949,7 +3949,7 @@ LABEL_F2D256:
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F2D2B4
+	jr z, IvExitTrSel_PrepareInherited
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
@@ -3967,15 +3967,15 @@ LABEL_F2D256:
 	ld xde, 0x1A00084
 	call PostEvent
 
-LABEL_F2D2B4:
+IvExitTrSel_PrepareInherited:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 
-LABEL_F2D2BC:
+IvExitTrSel_CallInherited:
 	call InheritedProc
 
-LABEL_F2D2C0:
+IvExitTrSel_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -4125,15 +4125,15 @@ InitializeKubo:
 
 AutoPunchTtlRqFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F2E48D
+	jr nz, IvRealRecCheck_ReturnZero
 	bitda 2, 1057
-	jr nz, LABEL_F2E48D
+	jr nz, IvRealRecCheck_ReturnZero
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00088
 	call PostEvent
 
-LABEL_F2E48D:
+IvRealRecCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
@@ -4144,15 +4144,15 @@ IvRealRecExitProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1C00007
-	jr z, LABEL_F2E4C9
+	jr z, IvRealRecExit_CheckSendEvent
 	cp xiz, 0x1E0003A
-	jr z, LABEL_F2E4B5
+	jr z, IvRealRecExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
-	jr LABEL_F2E52A
+	jr IvRealRecExit_CallInherited
 
-LABEL_F2E4B5:
+IvRealRecExit_CopyString:
 	pushw 0xE3
 	pushw 0x416A
 	ld xwa, (xsp + 8)
@@ -4160,15 +4160,15 @@ LABEL_F2E4B5:
 	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
-	jr LABEL_F2E52E
+	jr IvRealRecExit_Epilogue
 
-LABEL_F2E4C9:
+IvRealRecExit_CheckSendEvent:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1E00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F2E522
+	jr z, IvRealRecExit_PrepareInherited
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
@@ -4186,15 +4186,15 @@ LABEL_F2E4C9:
 	ld xde, 0x1A00084
 	call PostEvent
 
-LABEL_F2E522:
+IvRealRecExit_PrepareInherited:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 
-LABEL_F2E52A:
+IvRealRecExit_CallInherited:
 	call InheritedProc
 
-LABEL_F2E52E:
+IvRealRecExit_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -4207,17 +4207,17 @@ AcPanicEditSwProc:
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 4)
 	cp xwa, 0x1C00009
-	jrl z, LABEL_F2E5FE
+	jrl z, AcPanicEditSw_HandleLostInherited
 	cp xwa, 0x1C00008
-	jr z, LABEL_F2E58A
+	jr z, AcPanicEditSw_HandleFocus
 	cp xwa, 0x1C0000D
-	jr z, LABEL_F2E564
+	jr z, AcPanicEditSw_HandleInit
 	ld xwa, (xsp + 8)
 	ld xbc, (xsp + 4)
 	ld xde, xiz
-	jrl LABEL_F2E648
+	jrl AcPanicEditSw_CallInherited
 
-LABEL_F2E564:
+AcPanicEditSw_HandleInit:
 	ld xwa, (xsp + 8)
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -4229,9 +4229,9 @@ LABEL_F2E564:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1C0000F
 	call SendEvent
-	jr LABEL_F2E5F0
+	jr AcPanicEditSw_ReturnZero
 
-LABEL_F2E58A:
+AcPanicEditSw_HandleFocus:
 	ld xwa, (xsp + 8)
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -4239,74 +4239,74 @@ LABEL_F2E58A:
 	ld xwa, (xsp + 8)
 	call GetViewInstance
 	cp xiz, 0x1
-	jr z, LABEL_F2E5CE
+	jr z, AcPanicEditSw_SetMode3
 	cp xiz, 0x81
-	jr z, LABEL_F2E5C7
+	jr z, AcPanicEditSw_SetMode2
 	or xiz, xiz
-	jr z, LABEL_F2E5C0
+	jr z, AcPanicEditSw_SetMode1
 	cp xiz, 0x80
 	jr nz, UI_CheckDisplayModeAndDispatch
 	setda_24 0, 135326
 	jr UI_CheckDisplayModeAndDispatch
 
-LABEL_F2E5C0:
+AcPanicEditSw_SetMode1:
 	setda_24 1, 135326
 	jr UI_CheckDisplayModeAndDispatch
 
-LABEL_F2E5C7:
+AcPanicEditSw_SetMode2:
 	setda_24 2, 135326
 	jr UI_CheckDisplayModeAndDispatch
 
-LABEL_F2E5CE:
+AcPanicEditSw_SetMode3:
 	setda_24 3, 135326
 
 UI_CheckDisplayModeAndDispatch:
 	ld8_24 c, 0x02109e
 	ld a, c
 	and a, 0x3
-	jr z, LABEL_F2E5F4
+	jr z, AcPanicEditSw_HandleFocusLost
 	and c, 0xC
-	jr z, LABEL_F2E5F4
+	jr z, AcPanicEditSw_HandleFocusLost
 	ld xwa, (xhl + 42)
 	ld xbc, (xsp + 4)
 	ld xde, xiz
 	call ApFuncCall
 
-LABEL_F2E5F0:
+AcPanicEditSw_ReturnZero:
 	lds32 xhl, 0
-	jr LABEL_F2E64C
+	jr AcPanicEditSw_Epilogue
 
-LABEL_F2E5F4:
+AcPanicEditSw_HandleFocusLost:
 	ld xwa, (xsp + 8)
 	ld xbc, (xsp + 4)
 	ld xde, xiz
-	jr LABEL_F2E648
+	jr AcPanicEditSw_CallInherited
 
-LABEL_F2E5FE:
+AcPanicEditSw_HandleLostInherited:
 	ld xwa, (xsp + 8)
 	ld xbc, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
 	cp xiz, 0x1
-	jr z, LABEL_F2E63B
+	jr z, AcPanicEditSw_ClearMode3
 	cp xiz, 0x81
-	jr z, LABEL_F2E634
+	jr z, AcPanicEditSw_ClearMode2
 	or xiz, xiz
-	jr z, LABEL_F2E62D
+	jr z, AcPanicEditSw_ClearMode1
 	cp xiz, 0x80
 	jr nz, EventHandler_FinalizeAndReturn
 	resda_24 0, 135326
 	jr EventHandler_FinalizeAndReturn
 
-LABEL_F2E62D:
+AcPanicEditSw_ClearMode1:
 	resda_24 1, 135326
 	jr EventHandler_FinalizeAndReturn
 
-LABEL_F2E634:
+AcPanicEditSw_ClearMode2:
 	resda_24 2, 135326
 	jr EventHandler_FinalizeAndReturn
 
-LABEL_F2E63B:
+AcPanicEditSw_ClearMode3:
 	resda_24 3, 135326
 
 EventHandler_FinalizeAndReturn:
@@ -4314,28 +4314,28 @@ EventHandler_FinalizeAndReturn:
 	ld xbc, (xsp + 4)
 	ld xde, xiz
 
-LABEL_F2E648:
+AcPanicEditSw_CallInherited:
 	call InheritedProc
 
-LABEL_F2E64C:
+AcPanicEditSw_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
 
 PanicFunc:
 	cp xbc, 0x1C00008
-	jr nz, LABEL_F2E666
+	jr nz, PanicFunc_ReturnZero
 	ld xwa, 0x148002B
 	ld xbc, 0x1E80076
 	call MainFuncCall
 
-LABEL_F2E666:
+PanicFunc_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 HelpStsCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2E68E
+	jr nz, HelpStsCheck_ReturnZero
 	lds32 xbc, 0
 	ld8_24 c, 0x0340e4
 	sll xbc, 2
@@ -4347,13 +4347,13 @@ HelpStsCheck:
 	sub xhl, xbc
 	ret
 
-LABEL_F2E68E:
+HelpStsCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 HelpStsP2Check:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2E6BB
+	jr nz, HelpStsP2Check_ReturnZero
 	lds32 xbc, 0
 	ld8_24 c, 0x0340e4
 	sll xbc, 2
@@ -4366,13 +4366,13 @@ HelpStsP2Check:
 	sub xhl, xbc
 	ret
 
-LABEL_F2E6BB:
+HelpStsP2Check_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 HelpStsP3Check:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2E6E8
+	jr nz, HelpStsP3Check_ReturnZero
 	lds32 xbc, 0
 	ld8_24 c, 0x0340e4
 	sll xbc, 2
@@ -4385,13 +4385,13 @@ HelpStsP3Check:
 	sub xhl, xbc
 	ret
 
-LABEL_F2E6E8:
+HelpStsP3Check_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 HelpStsP4Check:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2E715
+	jr nz, HelpStsP4Check_ReturnZero
 	lds32 xbc, 0
 	ld8_24 c, 0x0340e4
 	sll xbc, 2
@@ -4404,17 +4404,17 @@ HelpStsP4Check:
 	sub xhl, xbc
 	ret
 
-LABEL_F2E715:
+HelpStsP4Check_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 HelpMenuCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2E726
+	jr nz, HelpMenuCheck_ReturnZero
 	ld xhl, 0x988000
 	ret
 
-LABEL_F2E726:
+HelpMenuCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
@@ -4422,7 +4422,7 @@ HelpLangChkFunc:
 	push xiz
 	ld xiz, xde
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2E749
+	jr z, HelpLangChk_CheckIzZero
 	cp xbc, 0x1C00001
 	jr nz, HelpLang_ReturnZero
 	ld xwa, 0x1480028
@@ -4430,7 +4430,7 @@ HelpLangChkFunc:
 	call MainPostEvent
 	jr HelpLang_ReturnZero
 
-LABEL_F2E749:
+HelpLangChk_CheckIzZero:
 	or xiz, xiz
 	jr nz, HelpLang_ReturnZero
 	call GetTitleNow
@@ -4484,7 +4484,7 @@ HelpFuncChkFunc:
 	push xiz
 	ld xiz, xde
 	cp xbc, 0x1C00002
-	jr z, LABEL_F2E825
+	jr z, HelpFunc_CheckIzZero
 	cp xbc, 0x1C00001
 	jrl nz, HelpFunc_ReturnZero
 	or xiz, xiz
@@ -4503,7 +4503,7 @@ HelpFuncChkFunc:
 	call SendEvent
 	jr HelpFunc_ReturnZero
 
-LABEL_F2E825:
+HelpFunc_CheckIzZero:
 	or xiz, xiz
 	jr nz, HelpFunc_ReturnZero
 	call GetTitleNow
@@ -4538,12 +4538,12 @@ HelpFunc_ReturnZero:
 
 HelpOkSwFunc:
 	cp xbc, 0x1C00007
-	jr nz, LABEL_F2E8A1
+	jr nz, HelpFunc_ReturnZero2
 	ld xwa, 0x1480029
 	ld xbc, 0x1E80074
 	call MainFuncCall
 
-LABEL_F2E8A1:
+HelpFunc_ReturnZero2:
 	lds32 xhl, 0
 	ret
 
@@ -4557,7 +4557,7 @@ HelpTtlProc:
 	jr z, HelpTtlProc_HandleActivation
 	ld xwa, xiz
 	call InheritedProc
-	jr LABEL_F2E929
+	jr HelpTtl_Epilogue
 
 HelpTtlProc_HandleActivation:
 	ld xwa, xiz
@@ -4595,7 +4595,7 @@ HelpTtlProc_HandleActivation:
 	call DrawTitleBar
 	lds32 xhl, 0
 
-LABEL_F2E929:
+HelpTtl_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 74)
 	ret
@@ -4604,30 +4604,30 @@ HelpTtlFunc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, 0x1E00047
-	jr z, LABEL_F2E94D
+	jr z, HelpTtlFunc_DecrementPage
 	cp xbc, 0x1E00045
-	jr z, LABEL_F2E945
+	jr z, HelpTtlFunc_LoadPageCount
 	lds32 xhl, 0
-	jr LABEL_F2E97C
+	jr HelpTtlFunc_Epilogue
 
-LABEL_F2E945:
+HelpTtlFunc_LoadPageCount:
 	lds32 xhl, 0
 	ldda8 l, 10606
-	jr LABEL_F2E97C
+	jr HelpTtlFunc_Epilogue
 
-LABEL_F2E94D:
+HelpTtlFunc_DecrementPage:
 	ldda8 a, 10606
 	extz wa
 	dec 1, wa
 	cps wa, 0
-	jr lt, LABEL_F2E95F
+	jr lt, HelpTtlFunc_ClampMin
 	cp wa, 0x30
-	jr le, LABEL_F2E962
+	jr le, HelpTtlFunc_LookupSlide
 
-LABEL_F2E95F:
+HelpTtlFunc_ClampMin:
 	ldw wa, 0x31
 
-LABEL_F2E962:
+HelpTtlFunc_LookupSlide:
 	sll wa, 2
 	lda_24 xix, 0xe343ee
 	ld_sril3 XWA, 0x07, 0xF0, 0xE0
@@ -4638,7 +4638,7 @@ LABEL_F2E962:
 	inc 8, xsp
 	ld xhl, xiz
 
-LABEL_F2E97C:
+HelpTtlFunc_Epilogue:
 	pop xiz
 	ret
 
@@ -4649,18 +4649,18 @@ IvSdrevProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1E0003A
-	jr z, LABEL_F2EA07
+	jr z, IvSdrev_CopyString
 	cp xiz, 0x1C0000D
-	jr z, LABEL_F2E9EB
+	jr z, IvSdrev_HandleFocus
 	cp xiz, 0x1C00001
-	jr z, LABEL_F2E9AF
+	jr z, IvSdrev_CheckParam
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F2EA19
+	jr IvSdrev_Epilogue
 
-LABEL_F2E9AF:
+IvSdrev_CheckParam:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x4
 	jr z, MasterParam_Return
@@ -4680,9 +4680,9 @@ MasterParam_Return:
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F2EA17
+	jr IvSdrev_ReturnZero
 
-LABEL_F2E9EB:
+IvSdrev_HandleFocus:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -4691,9 +4691,9 @@ LABEL_F2E9EB:
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	call SendEvent
-	jr LABEL_F2EA17
+	jr IvSdrev_ReturnZero
 
-LABEL_F2EA07:
+IvSdrev_CopyString:
 	pushw 0xE3
 	pushw 0x44B6
 	ld xwa, (xsp + 8)
@@ -4701,10 +4701,10 @@ LABEL_F2EA07:
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F2EA17:
+IvSdrev_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2EA19:
+IvSdrev_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -4717,18 +4717,18 @@ IvSddspProc:
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 6)
 	cp xwa, 0x1E0003A
-	jrl z, LABEL_F2EAC1
+	jrl z, IvSddsp_CopyString
 	cp xwa, 0x1C0000D
-	jr z, LABEL_F2EAA4
+	jr z, IvSddsp_HandleFocus
 	cp xwa, 0x1C00001
-	jr z, LABEL_F2EA55
+	jr z, IvSddsp_CheckParam
 	ld xwa, (xsp + 10)
 	ld xbc, (xsp + 6)
 	ld xde, (xsp + 2)
 	call InheritedProc
-	jr LABEL_F2EAD3
+	jr IvSddsp_Epilogue
 
-LABEL_F2EA55:
+IvSddsp_CheckParam:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x4
 	jr z, FilterParam_Return
@@ -4757,9 +4757,9 @@ FilterParam_Return:
 	ld xbc, (xsp + 6)
 	ld xde, (xsp + 2)
 	call InheritedProc
-	jr LABEL_F2EAD1
+	jr IvSddsp_ReturnZero
 
-LABEL_F2EAA4:
+IvSddsp_HandleFocus:
 	ld xwa, (xsp + 10)
 	ld xbc, (xsp + 6)
 	ld xde, (xsp + 2)
@@ -4768,9 +4768,9 @@ LABEL_F2EAA4:
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	call SendEvent
-	jr LABEL_F2EAD1
+	jr IvSddsp_ReturnZero
 
-LABEL_F2EAC1:
+IvSddsp_CopyString:
 	pushw 0xE3
 	pushw 0x44BA
 	ld xwa, (xsp + 6)
@@ -4778,10 +4778,10 @@ LABEL_F2EAC1:
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F2EAD1:
+IvSddsp_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2EAD3:
+IvSddsp_Epilogue:
 	popw iz
 	lda xsp, (xsp + 12)
 	ret
@@ -4793,18 +4793,18 @@ IvSdaccProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1E0003A
-	jr z, LABEL_F2EB60
+	jr z, IvSdacc_CopyString
 	cp xiz, 0x1C0000D
-	jr z, LABEL_F2EB44
+	jr z, IvSdacc_HandleFocus
 	cp xiz, 0x1C00001
-	jr z, LABEL_F2EB09
+	jr z, IvSdacc_CheckParam
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F2EB72
+	jr IvSdacc_Epilogue
 
-LABEL_F2EB09:
+IvSdacc_CheckParam:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x4
 	jr z, OscillatorParam_Return
@@ -4824,9 +4824,9 @@ OscillatorParam_Return:
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	jr LABEL_F2EB70
+	jr IvSdacc_ReturnZero
 
-LABEL_F2EB44:
+IvSdacc_HandleFocus:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -4835,9 +4835,9 @@ LABEL_F2EB44:
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
 	call SendEvent
-	jr LABEL_F2EB70
+	jr IvSdacc_ReturnZero
 
-LABEL_F2EB60:
+IvSdacc_CopyString:
 	pushw 0xE3
 	pushw 0x44BE
 	ld xwa, (xsp + 8)
@@ -4845,10 +4845,10 @@ LABEL_F2EB60:
 	call Strcpy
 	inc 8, xsp
 
-LABEL_F2EB70:
+IvSdacc_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2EB72:
+IvSdacc_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -4861,15 +4861,15 @@ IvPlayExitProc:
 	ld xiz, xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x1C00007
-	jr z, LABEL_F2EBB3
+	jr z, IvPlayExit_CheckSendEvent
 	cp xwa, 0x1E0003A
-	jr z, LABEL_F2EB9F
+	jr z, IvPlayExit_CopyString
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
-	jr LABEL_F2EBF6
+	jr IvPlayExit_CallInherited
 
-LABEL_F2EB9F:
+IvPlayExit_CopyString:
 	pushw 0xE3
 	pushw 0x44C2
 	ld xwa, (xsp + 12)
@@ -4877,9 +4877,9 @@ LABEL_F2EB9F:
 	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
-	jr LABEL_F2EBFA
+	jr IvPlayExit_Epilogue
 
-LABEL_F2EBB3:
+IvPlayExit_CheckSendEvent:
 	ld xwa, xiz
 	call GetViewInstance
 	ld (xsp + 4), xhl
@@ -4888,27 +4888,27 @@ LABEL_F2EBB3:
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F2EBEE
+	jr z, IvPlayExit_PrepareInherited
 	cpdi8 58254, 0
-	jr nz, LABEL_F2EBE9
+	jr nz, IvPlayExit_ClearFlag
 	ld xwa, (xsp + 4)
 	ld xde, (xwa + 22)
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00014
 	call PostEvent
 
-LABEL_F2EBE9:
+IvPlayExit_ClearFlag:
 	stdi8 58254, 0
 
-LABEL_F2EBEE:
+IvPlayExit_PrepareInherited:
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 
-LABEL_F2EBF6:
+IvPlayExit_CallInherited:
 	call InheritedProc
 
-LABEL_F2EBFA:
+IvPlayExit_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -4920,15 +4920,15 @@ IvPunchExitProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1C00007
-	jr z, LABEL_F2EC38
+	jr z, IvPunchExit_CheckSendEvent
 	cp xiz, 0x1E0003A
-	jr z, LABEL_F2EC24
+	jr z, IvPunchExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
-	jr LABEL_F2EC6C
+	jr IvPunchExit_CallInherited
 
-LABEL_F2EC24:
+IvPunchExit_CopyString:
 	pushw 0xE3
 	pushw 0x44C8
 	ld xwa, (xsp + 8)
@@ -4936,31 +4936,31 @@ LABEL_F2EC24:
 	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
-	jr LABEL_F2EC70
+	jr IvPunchExit_Epilogue
 
-LABEL_F2EC38:
+IvPunchExit_CheckSendEvent:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1E00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F2EC64
+	jr z, IvPunchExit_PrepareInherited
 	bitda 2, 1057
-	jr nz, LABEL_F2EC64
+	jr nz, IvPunchExit_PrepareInherited
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00084
 	call PostEvent
 
-LABEL_F2EC64:
+IvPunchExit_PrepareInherited:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 
-LABEL_F2EC6C:
+IvPunchExit_CallInherited:
 	call InheritedProc
 
-LABEL_F2EC70:
+IvPunchExit_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -4972,15 +4972,15 @@ IvAutoPunchExitProc:
 	ld xiz, xbc
 	ld (xsp + 8), xwa
 	cp xiz, 0x1C00007
-	jr z, LABEL_F2ECAD
+	jr z, IvAutoPunchExit_CheckSendEvent
 	cp xiz, 0x1E0003A
-	jr z, LABEL_F2EC99
+	jr z, IvAutoPunchExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
-	jr LABEL_F2ECE9
+	jr IvAutoPunchExit_CallInherited
 
-LABEL_F2EC99:
+IvAutoPunchExit_CopyString:
 	pushw 0xE3
 	pushw 0x44CE
 	ld xwa, (xsp + 8)
@@ -4988,35 +4988,35 @@ LABEL_F2EC99:
 	call Strcpy
 	inc 8, xsp
 	lds32 xhl, 0
-	jr LABEL_F2ECED
+	jr IvAutoPunchExit_Epilogue
 
-LABEL_F2ECAD:
+IvAutoPunchExit_CheckSendEvent:
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1E00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
-	jr z, LABEL_F2ECE1
+	jr z, IvAutoPunchExit_PrepareInherited
 	cpdi16 10408, 0
-	jr z, LABEL_F2ECCE
+	jr z, IvAutoPunchExit_PostSceneEvent
 	bitda 2, 1057
-	jr nz, LABEL_F2ECE1
+	jr nz, IvAutoPunchExit_PrepareInherited
 
-LABEL_F2ECCE:
+IvAutoPunchExit_PostSceneEvent:
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00087
 	call PostEvent
 
-LABEL_F2ECE1:
+IvAutoPunchExit_PrepareInherited:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 
-LABEL_F2ECE9:
+IvAutoPunchExit_CallInherited:
 	call InheritedProc
 
-LABEL_F2ECED:
+IvAutoPunchExit_Epilogue:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -5028,21 +5028,21 @@ AcIndexWideToggleProc:
 	ld xiz, xbc
 	ld (xsp + 12), xwa
 	cp xiz, 0x1C0002A
-	jrl z, LABEL_F2EE84
+	jrl z, AcIndexToggle_HandleDefault
 	cp xiz, 0x1E8006E
-	jrl z, LABEL_F2EE43
+	jrl z, AcIndexToggle_CheckNoteRange
 	cp xiz, 0x1C0001B
-	jrl z, LABEL_F2EE0E
+	jrl z, AcIndexToggle_HandleFocusLost
 	cp xiz, 0x1C00007
-	jr z, LABEL_F2ED71
+	jr z, AcIndexToggle_HandleSelectEvent
 	cp xiz, 0x1C00001
-	jr z, LABEL_F2ED33
+	jr z, AcIndexToggle_HandleInit
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
-	jrl LABEL_F2EE07
+	jrl AcIndexToggle_CallInherited
 
-LABEL_F2ED33:
+AcIndexToggle_HandleInit:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -5064,20 +5064,20 @@ LABEL_F2ED33:
 	ld xbc, 0x1C0002A
 	jrl SendNoteDeleteEvent
 
-LABEL_F2ED71:
+AcIndexToggle_HandleSelectEvent:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 12)
 	call GetVisible
 	cps hl, 0
-	jr z, LABEL_F2EDFF
+	jr z, AcIndexToggle_PrepareInherited
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1E8006E
 	ld xde, (xsp + 8)
 	call SendEvent
 	cps hl, 0
-	jr z, LABEL_F2EDFF
+	jr z, AcIndexToggle_PrepareInherited
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 44)
 	exts xde
@@ -5089,13 +5089,13 @@ LABEL_F2ED71:
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 42)
 	cp de, 0xFFFF
-	jr z, LABEL_F2EDCE
+	jr z, AcIndexToggle_SendVisibility
 	exts xde
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C0001B
 	call SendEvent
 
-LABEL_F2EDCE:
+AcIndexToggle_SendVisibility:
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1E0003B
 	lds32 xde, 1
@@ -5111,16 +5111,16 @@ LABEL_F2EDCE:
 	lds32 xde, 0
 	jrl SendNoteDeleteEvent
 
-LABEL_F2EDFF:
+AcIndexToggle_PrepareInherited:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
 
-LABEL_F2EE07:
+AcIndexToggle_CallInherited:
 	call InheritedProc
-	jrl LABEL_F2EEDB
+	jrl AcIndexToggle_Epilogue
 
-LABEL_F2EE0E:
+AcIndexToggle_HandleFocusLost:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -5139,7 +5139,7 @@ LABEL_F2EE0E:
 	lds32 xde, 0
 	jrl SendNoteDeleteEvent
 
-LABEL_F2EE43:
+AcIndexToggle_CheckNoteRange:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	lda xwa, (xhl + 38)
@@ -5148,16 +5148,16 @@ LABEL_F2EE43:
 	ld de, (xwa)
 	ld wa, de
 	cp wa, (xhl)
-	jr nc, LABEL_F2EE61
+	jr nc, AcIndexToggle_SetFromDE
 	ld iz, de
 	ldfr_werp BC, 0xFA
-	jr LABEL_F2EE66
+	jr AcIndexToggle_SendNoteEvent
 
-LABEL_F2EE61:
+AcIndexToggle_SetFromDE:
 	ld iz, bc
 	ldfr_werp DE, 0xFA
 
-LABEL_F2EE66:
+AcIndexToggle_SendNoteEvent:
 	ld xwa, 0x2600024
 	ld xbc, 0x1E00029
 	ld xde, (xsp + 8)
@@ -5167,9 +5167,9 @@ LABEL_F2EE66:
 	cp_werp HL, 0xFA
 	jr ugt, SqedtNote_ReturnZero
 	lds32 xhl, 1
-	jr LABEL_F2EEDB
+	jr AcIndexToggle_Epilogue
 
-LABEL_F2EE84:
+AcIndexToggle_HandleDefault:
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -5204,7 +5204,7 @@ SendNoteDeleteEvent:
 SqedtNote_ReturnZero:
 	lds32 xhl, 0
 
-LABEL_F2EEDB:
+AcIndexToggle_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -5212,25 +5212,25 @@ LABEL_F2EEDB:
 AcIndexWideToggleFunc:
 	ld a, e
 	cp xbc, 0x1E80071
-	jr z, LABEL_F2EF13
+	jr z, AcIndexToggleFunc_CheckMatch
 	cp xbc, 0x1E80070
-	jr z, LABEL_F2EF02
+	jr z, AcIndexToggleFunc_StoreAndPost
 	cp xbc, 0x1E8006F
-	jr nz, LABEL_F2EF10
+	jr nz, AcIndexToggleFunc_ReturnZero
 	lds32 xhl, 0
 	ld8_24 l, 0x0340e4
 	ret
 
-LABEL_F2EF02:
+AcIndexToggleFunc_StoreAndPost:
 	st8_24 0x0340e4, a
 	ld xwa, 0x1480028
 	call MainPostEvent
 
-LABEL_F2EF10:
+AcIndexToggleFunc_ReturnZero:
 	lds32 xhl, 0
 	ret
 
-LABEL_F2EF13:
+AcIndexToggleFunc_CheckMatch:
 	cpda8_24 a, 213220
 	scc16 z, hl
 	extz xhl
@@ -5238,131 +5238,131 @@ LABEL_F2EF13:
 
 AttAreYouSureCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EF2B
+	jr nz, AttModePreCheck_ReturnZero
 	lda_24 xhl, 0xe344d4
 	ret
 
-LABEL_F2EF2B:
+AttModePreCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 AttAttentionCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EF3C
+	jr nz, AttAttentionCheck_ReturnZero
 	lda_24 xhl, 0xe344ec
 	ret
 
-LABEL_F2EF3C:
+AttAttentionCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 StsSeqMenu1Check:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EF4D
+	jr nz, StsSeqMenu1Check_ReturnZero
 	lda_24 xhl, 0xe34504
 	ret
 
-LABEL_F2EF4D:
+StsSeqMenu1Check_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 StsSeqMenu2Check:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EF5E
+	jr nz, StsSeqMenu2Check_ReturnZero
 	lda_24 xhl, 0xe3451c
 	ret
 
-LABEL_F2EF5E:
+StsSeqMenu2Check_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 StsEasyRec1Check:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EF6F
+	jr nz, StsEasyRec1Check_ReturnZero
 	lda_24 xhl, 0xe34534
 	ret
 
-LABEL_F2EF6F:
+StsEasyRec1Check_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 StsEasyRec2Check:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EF80
+	jr nz, StsEasyRec2Check_ReturnZero
 	lda_24 xhl, 0xe3454c
 	ret
 
-LABEL_F2EF80:
+StsEasyRec2Check_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 StsPnlWrtCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EF91
+	jr nz, StsPnlWrtCheck_ReturnZero
 	lda_24 xhl, 0xe34564
 	ret
 
-LABEL_F2EF91:
+StsPnlWrtCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 StsTrkClr1Check:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EFA2
+	jr nz, StsTrkClr1Check_ReturnZero
 	lda_24 xhl, 0xe3457c
 	ret
 
-LABEL_F2EFA2:
+StsTrkClr1Check_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 StsTrkClr2Check:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EFB3
+	jr nz, StsTrkClr2Check_ReturnZero
 	lda_24 xhl, 0xe34594
 	ret
 
-LABEL_F2EFB3:
+StsTrkClr2Check_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 StsNtDrEditCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EFC4
+	jr nz, StsNtDrEditCheck_ReturnZero
 	lda_24 xhl, 0xe345ac
 	ret
 
-LABEL_F2EFC4:
+StsNtDrEditCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 AttTrkClrCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EFD5
+	jr nz, AttTrkClrCheck_ReturnZero
 	lda_24 xhl, 0xe345c4
 	ret
 
-LABEL_F2EFD5:
+AttTrkClrCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 AttSongClrCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EFE6
+	jr nz, AttSongClrCheck_ReturnZero
 	lda_24 xhl, 0xe345dc
 	ret
 
-LABEL_F2EFE6:
+AttSongClrCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
 StsAtPunchCheck:
 	cp xbc, 0x1E0009F
-	jr nz, LABEL_F2EFF7
+	jr nz, StsAtPunchCheck_ReturnZero
 	lda_24 xhl, 0xe345f4
 	ret
 
-LABEL_F2EFF7:
+StsAtPunchCheck_ReturnZero:
 	lds32 xhl, 0
 	ret
 
@@ -5372,10 +5372,10 @@ MsgToTtlProc:
 	call InheritedProc
 	call GetTitleOld
 	cp xhl, 0x1A000EE
-	jr nz, LABEL_F2F071
+	jr nz, MsgToTtl_ReturnZero
 	call CheckNotDrawFlag
 	cps hl, 0
-	jr z, LABEL_F2F071
+	jr z, MsgToTtl_ReturnZero
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1E0009E
 	lds32 xde, 1
@@ -5386,23 +5386,23 @@ MsgToTtlProc:
 	call PostEvent
 	call GetTitleNow
 	cp l, 0x90
-	jr nz, LABEL_F2F057
+	jr nz, MsgToTtl_CheckTitleAndPost
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, 0x1A00084
-	jr LABEL_F2F06D
+	jr MsgToTtl_PostEvent
 
-LABEL_F2F057:
+MsgToTtl_CheckTitleAndPost:
 	call GetTitleNow
 	add xhl, 0x1A00000
 	ld xwa, 0xFFFFFFFF
 	ld xbc, 0x1C00015
 	ld xde, xhl
 
-LABEL_F2F06D:
+MsgToTtl_PostEvent:
 	call PostEvent
 
-LABEL_F2F071:
+MsgToTtl_ReturnZero:
 	lds32 xhl, 0
 	ret
 
@@ -5419,16 +5419,16 @@ NoteEditBoxProc:
 	cp xiz, 0x1C80004
 	jrl z, NoteEditBox_GridDispatch2
 	cp xiz, 0x1C0000F
-	jr z, LABEL_F2F0F9
+	jr z, NoteEditBox_HandleFocusLost
 	cp xiz, 0x1C0000B
-	jr z, LABEL_F2F0BA
+	jr z, NoteEditBox_HandleFocusGained
 	ld xwa, (xsp + 94)
 	ld xbc, xiz
 	ld xde, (xsp + 90)
 	call InheritedProc
 	jrl NoteEdit_FormatReturn
 
-LABEL_F2F0BA:
+NoteEditBox_HandleFocusGained:
 	ld xwa, (xsp + 94)
 	ld xbc, xiz
 	ld xde, (xsp + 90)
@@ -5449,7 +5449,7 @@ LABEL_F2F0BA:
 	call SetDialEnable
 	jrl NoteEdit_ReturnZero
 
-LABEL_F2F0F9:
+NoteEditBox_HandleFocusLost:
 	ld xwa, (xsp + 94)
 	ld xbc, xiz
 	ld xde, (xsp + 90)
@@ -5814,31 +5814,31 @@ NoteEditBox_EventDispatch2:
 NoteEditBoxProc_ClassifyGridPosition:
 	ld xwa, (xsp + 90)
 	cp xwa, 0x2
-	jr z, LABEL_F2F953
+	jr z, NoteEditGrid_CheckTitle95
 	cp xwa, 0x1
-	jr nz, LABEL_F2F96B
+	jr nz, NoteEditGrid_CheckTitle95Alt
 	call GetTitleNow
 	cp xhl, 0x1A00095
-	jr nz, LABEL_F2F94D
+	jr nz, NoteEditGrid_SetCoord3
 	ld (xsp + 10), 0x2
 	jr NoteEditGrid_LoadCoordinates
 
-LABEL_F2F94D:
+NoteEditGrid_SetCoord3:
 	ld (xsp + 10), 0x3
 	jr NoteEditGrid_LoadCoordinates
 
-LABEL_F2F953:
+NoteEditGrid_CheckTitle95:
 	call GetTitleNow
 	cp xhl, 0x1A00095
-	jr nz, LABEL_F2F965
+	jr nz, NoteEditGrid_SetCoord5
 	ld (xsp + 10), 0x4
 	jr NoteEditGrid_LoadCoordinates
 
-LABEL_F2F965:
+NoteEditGrid_SetCoord5:
 	ld (xsp + 10), 0x5
 	jr NoteEditGrid_LoadCoordinates
 
-LABEL_F2F96B:
+NoteEditGrid_CheckTitle95Alt:
 	call GetTitleNow
 	ld (xsp + 10), 0x1
 	cp xhl, 0x1A00095
