@@ -4330,58 +4330,58 @@ NakaInst_FILE_COPY:	aligned_string "FILE COPY"
 Naka_IntSongMedley_Screens:
 	.long NakaInst_DiskLoad
 	.long NakaInst_DiskLoadPage
-	.long LABEL_EA75AC
-	.long LABEL_EA75AA
-	.long LABEL_EA75A8
-	.long LABEL_EA75A6
-	.long LABEL_EA75A4
+	.long NakaStr_DiskLoadP1_Elem04
+	.long NakaStr_DiskLoadP1_Elem03
+	.long NakaStr_DiskLoadP1_Elem02
+	.long NakaStr_DiskLoadP1_Elem01
+	.long NakaStr_DiskLoadP1_Elem00
 	.long NakaInst_DiskLoadP1
-	.long LABEL_EA7596
-	.long LABEL_EA7594
-	.long LABEL_EA7592
-	.long LABEL_EA7590
-	.long LABEL_EA758E
-	.long LABEL_EA758C
-	.long LABEL_EA758A
-	.long LABEL_EA7588
-	.long LABEL_EA7586
-	.long LABEL_EA7584
-	.long LABEL_EA7582
-	.long LABEL_EA7580
+	.long NakaStr_DiskLoadP2_Elem11
+	.long NakaStr_DiskLoadP2_Elem10
+	.long NakaStr_DiskLoadP2_Elem09
+	.long NakaStr_DiskLoadP2_Elem08
+	.long NakaStr_DiskLoadP2_Elem07
+	.long NakaStr_DiskLoadP2_Elem06
+	.long NakaStr_DiskLoadP2_Elem05
+	.long NakaStr_DiskLoadP2_Elem04
+	.long NakaStr_DiskLoadP2_Elem03
+	.long NakaStr_DiskLoadP2_Elem02
+	.long NakaStr_DiskLoadP2_Elem01
+	.long NakaStr_DiskLoadP2_Elem00
 	.long NakaInst_DiskLoadP2
-	.long LABEL_EA7572
-	.long LABEL_EA7570
-	.long LABEL_EA756E
-	.long LABEL_EA756C
-	.long LABEL_EA756A
-	.long LABEL_EA7568
-	.long LABEL_EA7566
-	.long LABEL_EA7564
-	.long LABEL_EA7562
-	.long LABEL_EA7560
-	.long LABEL_EA755E
-	.long LABEL_EA755C
-	.long LABEL_EA755A
-	.long LABEL_EA7558
-	.long LABEL_EA7556
-	.long LABEL_EA7554
-	.long LABEL_EA7552
-	.long LABEL_EA7550
-	.long LABEL_EA754E
-	.long LABEL_EA754C
-	.long LABEL_EA754A
-	.long LABEL_EA7548
-	.long LABEL_EA7546
-	.long LABEL_EA7544
-	.long LABEL_EA7542
-	.long LABEL_EA7540
-	.long LABEL_EA753E
-	.long LABEL_EA753C
-	.long LABEL_EA753A
-	.long LABEL_EA7538
-	.long LABEL_EA7536
+	.long NakaStr_DiskLoadP3_Elem30
+	.long NakaStr_DiskLoadP3_Elem29
+	.long NakaStr_DiskLoadP3_Elem28
+	.long NakaStr_DiskLoadP3_Elem27
+	.long NakaStr_DiskLoadP3_Elem26
+	.long NakaStr_DiskLoadP3_Elem25
+	.long NakaStr_DiskLoadP3_Elem24
+	.long NakaStr_DiskLoadP3_Elem23
+	.long NakaStr_DiskLoadP3_Elem22
+	.long NakaStr_DiskLoadP3_Elem21
+	.long NakaStr_DiskLoadP3_Elem20
+	.long NakaStr_DiskLoadP3_Elem19
+	.long NakaStr_DiskLoadP3_Elem18
+	.long NakaStr_DiskLoadP3_Elem17
+	.long NakaStr_DiskLoadP3_Elem16
+	.long NakaStr_DiskLoadP3_Elem15
+	.long NakaStr_DiskLoadP3_Elem14
+	.long NakaStr_DiskLoadP3_Elem13
+	.long NakaStr_DiskLoadP3_Elem12
+	.long NakaStr_DiskLoadP3_Elem11
+	.long NakaStr_DiskLoadP3_Elem10
+	.long NakaStr_DiskLoadP3_Elem09
+	.long NakaStr_DiskLoadP3_Elem08
+	.long NakaStr_DiskLoadP3_Elem07
+	.long NakaStr_DiskLoadP3_Elem06
+	.long NakaStr_DiskLoadP3_Elem05
+	.long NakaStr_DiskLoadP3_Elem04
+	.long NakaStr_DiskLoadP3_Elem03
+	.long NakaStr_DiskLoadP3_Elem02
+	.long NakaStr_DiskLoadP3_Elem01
+	.long NakaStr_DiskLoadP3_Elem00
 	.long NakaInst_DiskLoadP3
-	.long LABEL_EA7528
+	.long NakaStr_SingleLoadSwCtl_Elem00
 	.long NakaInst_SingleLoadSwCtl
 	.long NakaStr_SingleBankToggle_Elem18
 	.long NakaStr_SingleBankToggle_Elem17
@@ -4532,78 +4532,78 @@ NakaStr_SingleBankToggle_Elem16:	aligned_string ""
 NakaStr_SingleBankToggle_Elem17:	aligned_string ""
 NakaStr_SingleBankToggle_Elem18:	aligned_string ""
 NakaInst_SingleLoadSwCtl:	aligned_string "SingleLoadSwCtl"
-LABEL_EA7528:	aligned_string ""
+NakaStr_SingleLoadSwCtl_Elem00:	aligned_string ""
 NakaInst_DiskLoadP3:	aligned_string "DiskLoadP3"
-LABEL_EA7536:	aligned_string ""
-LABEL_EA7538:	aligned_string ""
-LABEL_EA753A:	aligned_string ""
-LABEL_EA753C:	aligned_string ""
-LABEL_EA753E:	aligned_string ""
-LABEL_EA7540:	aligned_string ""
-LABEL_EA7542:	aligned_string ""
-LABEL_EA7544:	aligned_string ""
-LABEL_EA7546:	aligned_string ""
-LABEL_EA7548:	aligned_string ""
-LABEL_EA754A:	aligned_string ""
-LABEL_EA754C:	aligned_string ""
-LABEL_EA754E:	aligned_string ""
-LABEL_EA7550:	aligned_string ""
-LABEL_EA7552:	aligned_string ""
-LABEL_EA7554:	aligned_string ""
-LABEL_EA7556:	aligned_string ""
-LABEL_EA7558:	aligned_string ""
-LABEL_EA755A:	aligned_string ""
-LABEL_EA755C:	aligned_string ""
-LABEL_EA755E:	aligned_string ""
-LABEL_EA7560:	aligned_string ""
-LABEL_EA7562:	aligned_string ""
-LABEL_EA7564:	aligned_string ""
-LABEL_EA7566:	aligned_string ""
-LABEL_EA7568:	aligned_string ""
-LABEL_EA756A:	aligned_string ""
-LABEL_EA756C:	aligned_string ""
-LABEL_EA756E:	aligned_string ""
-LABEL_EA7570:	aligned_string ""
-LABEL_EA7572:	aligned_string ""
+NakaStr_DiskLoadP3_Elem00:	aligned_string ""
+NakaStr_DiskLoadP3_Elem01:	aligned_string ""
+NakaStr_DiskLoadP3_Elem02:	aligned_string ""
+NakaStr_DiskLoadP3_Elem03:	aligned_string ""
+NakaStr_DiskLoadP3_Elem04:	aligned_string ""
+NakaStr_DiskLoadP3_Elem05:	aligned_string ""
+NakaStr_DiskLoadP3_Elem06:	aligned_string ""
+NakaStr_DiskLoadP3_Elem07:	aligned_string ""
+NakaStr_DiskLoadP3_Elem08:	aligned_string ""
+NakaStr_DiskLoadP3_Elem09:	aligned_string ""
+NakaStr_DiskLoadP3_Elem10:	aligned_string ""
+NakaStr_DiskLoadP3_Elem11:	aligned_string ""
+NakaStr_DiskLoadP3_Elem12:	aligned_string ""
+NakaStr_DiskLoadP3_Elem13:	aligned_string ""
+NakaStr_DiskLoadP3_Elem14:	aligned_string ""
+NakaStr_DiskLoadP3_Elem15:	aligned_string ""
+NakaStr_DiskLoadP3_Elem16:	aligned_string ""
+NakaStr_DiskLoadP3_Elem17:	aligned_string ""
+NakaStr_DiskLoadP3_Elem18:	aligned_string ""
+NakaStr_DiskLoadP3_Elem19:	aligned_string ""
+NakaStr_DiskLoadP3_Elem20:	aligned_string ""
+NakaStr_DiskLoadP3_Elem21:	aligned_string ""
+NakaStr_DiskLoadP3_Elem22:	aligned_string ""
+NakaStr_DiskLoadP3_Elem23:	aligned_string ""
+NakaStr_DiskLoadP3_Elem24:	aligned_string ""
+NakaStr_DiskLoadP3_Elem25:	aligned_string ""
+NakaStr_DiskLoadP3_Elem26:	aligned_string ""
+NakaStr_DiskLoadP3_Elem27:	aligned_string ""
+NakaStr_DiskLoadP3_Elem28:	aligned_string ""
+NakaStr_DiskLoadP3_Elem29:	aligned_string ""
+NakaStr_DiskLoadP3_Elem30:	aligned_string ""
 NakaInst_DiskLoadP2:	aligned_string "DiskLoadP2"
-LABEL_EA7580:	aligned_string ""
-LABEL_EA7582:	aligned_string ""
-LABEL_EA7584:	aligned_string ""
-LABEL_EA7586:	aligned_string ""
-LABEL_EA7588:	aligned_string ""
-LABEL_EA758A:	aligned_string ""
-LABEL_EA758C:	aligned_string ""
-LABEL_EA758E:	aligned_string ""
-LABEL_EA7590:	aligned_string ""
-LABEL_EA7592:	aligned_string ""
-LABEL_EA7594:	aligned_string ""
-LABEL_EA7596:	aligned_string ""
+NakaStr_DiskLoadP2_Elem00:	aligned_string ""
+NakaStr_DiskLoadP2_Elem01:	aligned_string ""
+NakaStr_DiskLoadP2_Elem02:	aligned_string ""
+NakaStr_DiskLoadP2_Elem03:	aligned_string ""
+NakaStr_DiskLoadP2_Elem04:	aligned_string ""
+NakaStr_DiskLoadP2_Elem05:	aligned_string ""
+NakaStr_DiskLoadP2_Elem06:	aligned_string ""
+NakaStr_DiskLoadP2_Elem07:	aligned_string ""
+NakaStr_DiskLoadP2_Elem08:	aligned_string ""
+NakaStr_DiskLoadP2_Elem09:	aligned_string ""
+NakaStr_DiskLoadP2_Elem10:	aligned_string ""
+NakaStr_DiskLoadP2_Elem11:	aligned_string ""
 NakaInst_DiskLoadP1:	aligned_string "DiskLoadP1"
-LABEL_EA75A4:	aligned_string ""
-LABEL_EA75A6:	aligned_string ""
-LABEL_EA75A8:	aligned_string ""
-LABEL_EA75AA:	aligned_string ""
-LABEL_EA75AC:	aligned_string ""
+NakaStr_DiskLoadP1_Elem00:	aligned_string ""
+NakaStr_DiskLoadP1_Elem01:	aligned_string ""
+NakaStr_DiskLoadP1_Elem02:	aligned_string ""
+NakaStr_DiskLoadP1_Elem03:	aligned_string ""
+NakaStr_DiskLoadP1_Elem04:	aligned_string ""
 NakaInst_DiskLoadPage:	aligned_string "DiskLoadPage"
 NakaInst_DiskLoad:	aligned_string "DiskLoad"
 	.byte 0xca, 0x75
 	.byte 0xea, 0x00
-LABEL_EA75CA:
+NakaData_DiskLoadPage_Ptr0:
 	.byte 0x00, 0xff, 0xd0, 0x75, 0xea, 0x00
 	.byte 0x00, 0xff, 0xd6, 0x75, 0xea, 0x00
-LABEL_EA75D6:
+NakaData_DiskLoadPage_Ptr1:
 	.byte 0x00, 0xff
 Naka_DiskLoadPage_Screens:
 	.long NakaInst_DiskSaveMenu
-	.long LABEL_EA75EC
-	.long LABEL_EA75EA
-	.long LABEL_EA75E8
-LABEL_EA75E8:	aligned_string ""
-LABEL_EA75EA:	aligned_string ""
-LABEL_EA75EC:	aligned_string ""
+	.long NakaStr_DiskLoadPage_Scr02
+	.long NakaStr_DiskLoadPage_Scr01
+	.long NakaStr_DiskLoadPage_Scr00
+NakaStr_DiskLoadPage_Scr00:	aligned_string ""
+NakaStr_DiskLoadPage_Scr01:	aligned_string ""
+NakaStr_DiskLoadPage_Scr02:	aligned_string ""
 NakaInst_DiskSaveMenu:	aligned_string "DiskSaveMenu"
 	.byte 0x00, 0x76, 0xea, 0x00
-LABEL_EA7600:	.byte 0x00, 0xff, 0xda, 0x77, 0xea, 0x00, 0xcc, 0x77
+NakaData_DiskSaveMenu_PtrTable:	.byte 0x00, 0xff, 0xda, 0x77, 0xea, 0x00, 0xcc, 0x77
 	.byte 0xea, 0x00, 0xca, 0x77, 0xea, 0x00, 0xc8, 0x77
 	.byte 0xea, 0x00, 0xc6, 0x77, 0xea, 0x00, 0xc4, 0x77
 	.byte 0xea, 0x00, 0xc2, 0x77, 0xea, 0x00, 0xb6, 0x77
@@ -4640,129 +4640,129 @@ LABEL_EA7600:	.byte 0x00, 0xff, 0xda, 0x77, 0xea, 0x00, 0xcc, 0x77
 	.byte 0xea, 0x00, 0x28, 0x77, 0xea, 0x00, 0x26, 0x77
 	.byte 0xea, 0x00, 0x24, 0x77, 0xea, 0x00, 0x22, 0x77
 	.byte 0xea, 0x00
-LABEL_EA7722:
+NakaData_DiskSaveP3_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA7724:
+NakaData_DiskSaveP3_Pad01:
 	.byte 0x00, 0xff
-LABEL_EA7726:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA772A:
-	.byte 0x00, 0xff
-LABEL_EA772C:
-	.byte 0x00, 0xff
-LABEL_EA772E:
+NakaData_DiskSaveP3_Pad02:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7732:
+NakaData_DiskSaveP3_Pad03:
 	.byte 0x00, 0xff
-LABEL_EA7734:
+NakaData_DiskSaveP3_Pad04:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP3_Pad05:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_DiskSaveP3_Pad06:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP3_Pad07:
 	.byte 0x00, 0xff
 NakaInst_DiskSaveP3:	aligned_string "DiskSaveP3"
 	.byte 0x00, 0xff
-LABEL_EA7744:
+NakaData_DiskSaveP3_Pad08:
 	.byte 0x00, 0xff
-LABEL_EA7746:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA774A:
-	.byte 0x00, 0xff
-LABEL_EA774C:
-	.byte 0x00, 0xff
-LABEL_EA774E:
+NakaData_DiskSaveP3_Pad09:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7752:
+NakaData_DiskSaveP3_Pad10:
 	.byte 0x00, 0xff
-LABEL_EA7754:
+NakaData_DiskSaveP3_Pad11:
 	.byte 0x00, 0xff
-LABEL_EA7756:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA775A:
-	.byte 0x00, 0xff
-LABEL_EA775C:
-	.byte 0x00, 0xff
-LABEL_EA775E:
+NakaData_DiskSaveP3_Pad12:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7762:
+NakaData_DiskSaveP3_Pad13:
 	.byte 0x00, 0xff
-LABEL_EA7764:
+NakaData_DiskSaveP3_Pad14:
 	.byte 0x00, 0xff
-LABEL_EA7766:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA776A:
-	.byte 0x00, 0xff
-LABEL_EA776C:
-	.byte 0x00, 0xff
-LABEL_EA776E:
+NakaData_DiskSaveP3_Pad15:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7772:
+NakaData_DiskSaveP3_Pad16:
 	.byte 0x00, 0xff
-LABEL_EA7774:
+NakaData_DiskSaveP3_Pad17:
 	.byte 0x00, 0xff
-LABEL_EA7776:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA777A:
-	.byte 0x00, 0xff
-LABEL_EA777C:
-	.byte 0x00, 0xff
-LABEL_EA777E:
+NakaData_DiskSaveP3_Pad18:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7782:
+NakaData_DiskSaveP3_Pad19:
 	.byte 0x00, 0xff
-LABEL_EA7784:
+NakaData_DiskSaveP3_Pad20:
 	.byte 0x00, 0xff
-LABEL_EA7786:
+NakaData_DiskSaveP3_Pad21:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA778A:
+NakaData_DiskSaveP3_Pad22:
 	.byte 0x00, 0xff
-LABEL_EA778C:
+NakaData_DiskSaveP3_Pad23:
 	.byte 0x00, 0xff
-LABEL_EA778E:
+NakaData_DiskSaveP3_Pad24:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_DiskSaveP3_Pad25:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP3_Pad26:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP3_Pad27:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_DiskSaveP3_Pad28:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP3_Pad29:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP3_Pad30:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_DiskSaveP2_Pad00:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP2_Pad01:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP2_Pad02:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_DiskSaveP2_Pad03:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP2_Pad04:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP2_Pad05:
 	.byte 0x00, 0xff
 NakaInst_DiskSaveP2:	aligned_string "DiskSaveP2"
 	.byte 0x00, 0xff
-LABEL_EA779E:
+NakaData_DiskSaveP2_Pad06:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA77A2:
+NakaData_DiskSaveP2_Pad07:
 	.byte 0x00, 0xff
-LABEL_EA77A4:
+NakaData_DiskSaveP2_Pad08:
 	.byte 0x00, 0xff
-LABEL_EA77A6:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA77AA:
-	.byte 0x00, 0xff
-LABEL_EA77AC:
-	.byte 0x00, 0xff
-LABEL_EA77AE:
+NakaData_DiskSaveP2_Pad09:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA77B2:
+NakaData_DiskSaveP2_Pad10:
 	.byte 0x00, 0xff
-LABEL_EA77B4:
+NakaData_DiskSaveP2_Pad11:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP2_Pad12:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_DiskSaveP1_Pad00:
+	.byte 0x00, 0xff
+NakaData_DiskSaveP1_Pad01:
 	.byte 0x00, 0xff
 NakaInst_DiskSaveP1:	aligned_string "DiskSaveP1"
 	.byte 0x00, 0xff
-LABEL_EA77C4:
+NakaData_DiskSavePage_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA77C6:
+NakaData_DiskSavePage_Pad01:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA77CA:
+NakaData_DiskSave_Pad00:
 	.byte 0x00, 0xff
 NakaInst_DiskSavePage:	aligned_string "DiskSavePage"
 NakaInst_DiskSave:	aligned_string "DiskSave"
 	.byte 0xe8, 0x77, 0xea, 0x00
-LABEL_EA77E8:	.byte 0x00, 0xff, 0x6c, 0x78, 0xea, 0x00, 0x6a, 0x78
+NakaData_DiskDirectPlay_PtrTable:	.byte 0x00, 0xff, 0x6c, 0x78, 0xea, 0x00, 0x6a, 0x78
 	.byte 0xea, 0x00, 0x68, 0x78, 0xea, 0x00, 0x66, 0x78
 	.byte 0xea, 0x00, 0x64, 0x78, 0xea, 0x00, 0x62, 0x78
 	.byte 0xea, 0x00, 0x60, 0x78, 0xea, 0x00, 0x5e, 0x78
@@ -4774,218 +4774,218 @@ LABEL_EA77E8:	.byte 0x00, 0xff, 0x6c, 0x78, 0xea, 0x00, 0x6a, 0x78
 	.byte 0xea, 0x00, 0x48, 0x78, 0xea, 0x00, 0x46, 0x78
 	.byte 0xea, 0x00, 0x44, 0x78, 0xea, 0x00, 0x42, 0x78
 	.byte 0xea, 0x00
-LABEL_EA7842:
+NakaData_DirectPlayP3_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA7844:
+NakaData_DirectPlayP3_Pad01:
 	.byte 0x00, 0xff
-LABEL_EA7846:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA784A:
-	.byte 0x00, 0xff
-LABEL_EA784C:
-	.byte 0x00, 0xff
-LABEL_EA784E:
+NakaData_DirectPlayP3_Pad02:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7852:
+NakaData_DirectPlayP3_Pad03:
 	.byte 0x00, 0xff
-LABEL_EA7854:
+NakaData_DirectPlayP3_Pad04:
 	.byte 0x00, 0xff
-LABEL_EA7856:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA785A:
-	.byte 0x00, 0xff
-LABEL_EA785C:
-	.byte 0x00, 0xff
-LABEL_EA785E:
+NakaData_DirectPlayP3_Pad05:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7862:
+NakaData_DirectPlayP3_Pad06:
 	.byte 0x00, 0xff
-LABEL_EA7864:
+NakaData_DirectPlayP3_Pad07:
 	.byte 0x00, 0xff
-LABEL_EA7866:
+NakaData_DirectPlayP3_Pad08:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA786A:
+NakaData_DirectPlayP2_Pad00:
+	.byte 0x00, 0xff
+NakaData_DirectPlayP2_Pad01:
+	.byte 0x00, 0xff
+NakaData_DirectPlayP2_Pad02:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_DirectPlayP2_Pad03:
+	.byte 0x00, 0xff
+NakaData_DirectPlayP2_Pad04:
+	.byte 0x00, 0xff
+NakaData_DirectPlayP2_Pad05:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_DirectPlayP1_Pad00:
 	.byte 0x00, 0xff
 NakaInst_DiskSmfSave:	aligned_string "DiskSmfSave"
 Naka_DiskSmfSave_Screens:
 	.long NakaInst_DiskSmfDirectPlay
-	.long LABEL_EA7AB6
-	.long LABEL_EA7AB4
-	.long LABEL_EA7AB2
-	.long LABEL_EA7AB0
-	.long LABEL_EA7AAE
-	.long LABEL_EA7AAC
-	.long LABEL_EA7AAA
-	.long LABEL_EA7AA8
-	.long LABEL_EA7AA6
-	.long LABEL_EA7AA4
-	.long LABEL_EA7AA2
-	.long LABEL_EA7AA0
-	.long LABEL_EA7A9E
-	.long LABEL_EA7A9C
-	.long LABEL_EA7A9A
-	.long LABEL_EA7A98
-	.long LABEL_EA7A96
-	.long LABEL_EA7A94
-	.long LABEL_EA7A92
-	.long LABEL_EA7A90
-	.long LABEL_EA7A8E
-	.long LABEL_EA7A8C
-	.long LABEL_EA7A8A
+	.long NakaStr_SmfDirectPlay_Elem22
+	.long NakaStr_SmfDirectPlay_Elem21
+	.long NakaStr_SmfDirectPlay_Elem20
+	.long NakaStr_SmfDirectPlay_Elem19
+	.long NakaStr_SmfDirectPlay_Elem18
+	.long NakaStr_SmfDirectPlay_Elem17
+	.long NakaStr_SmfDirectPlay_Elem16
+	.long NakaStr_SmfDirectPlay_Elem15
+	.long NakaStr_SmfDirectPlay_Elem14
+	.long NakaStr_SmfDirectPlay_Elem13
+	.long NakaStr_SmfDirectPlay_Elem12
+	.long NakaStr_SmfDirectPlay_Elem11
+	.long NakaStr_SmfDirectPlay_Elem10
+	.long NakaStr_SmfDirectPlay_Elem09
+	.long NakaStr_SmfDirectPlay_Elem08
+	.long NakaStr_SmfDirectPlay_Elem07
+	.long NakaStr_SmfDirectPlay_Elem06
+	.long NakaStr_SmfDirectPlay_Elem05
+	.long NakaStr_SmfDirectPlay_Elem04
+	.long NakaStr_SmfDirectPlay_Elem03
+	.long NakaStr_SmfDirectPlay_Elem02
+	.long NakaStr_SmfDirectPlay_Elem01
+	.long NakaStr_SmfDirectPlay_Elem00
 	.long NakaInst_SmfMidiOut
-	.long LABEL_EA7A7C
-	.long LABEL_EA7A7A
-	.long LABEL_EA7A78
+	.long NakaStr_DiskMedleySongName_Elem02
+	.long NakaStr_DiskMedleySongName_Elem01
+	.long NakaStr_DiskMedleySongName_Elem00
 	.long NakaInst_SongNameDPSmfWin
-	.long LABEL_EA7A64
-	.long LABEL_EA7A62
-	.long LABEL_EA7A60
+	.long NakaStr_DiskMedleyInfo_Elem02
+	.long NakaStr_DiskMedleyInfo_Elem01
+	.long NakaStr_DiskMedleyInfo_Elem00
 	.long NakaInst_DiskInfoDPSmfWin
-	.long LABEL_EA7A4C
-	.long LABEL_EA7A4A
-	.long LABEL_EA7A48
-	.long LABEL_EA7A46
-	.long LABEL_EA7A44
+	.long NakaStr_DiskMedleySelect_Elem04
+	.long NakaStr_DiskMedleySelect_Elem03
+	.long NakaStr_DiskMedleySelect_Elem02
+	.long NakaStr_DiskMedleySelect_Elem01
+	.long NakaStr_DiskMedleySelect_Elem00
 	.long NakaInst_DiskDocDirectPlay
-	.long LABEL_EA7A30
-	.long LABEL_EA7A2E
-	.long LABEL_EA7A2C
-	.long LABEL_EA7A2A
-	.long LABEL_EA7A28
-	.long LABEL_EA7A26
-	.long LABEL_EA7A24
-	.long LABEL_EA7A22
-	.long LABEL_EA7A20
-	.long LABEL_EA7A1E
-	.long LABEL_EA7A1C
-	.long LABEL_EA7A1A
-	.long LABEL_EA7A18
-	.long LABEL_EA7A16
-	.long LABEL_EA7A14
-	.long LABEL_EA7A12
-	.long LABEL_EA7A10
-	.long LABEL_EA7A0E
-	.long LABEL_EA7A0C
-	.long LABEL_EA7A0A
-	.long LABEL_EA7A08
-	.long LABEL_EA7A06
+	.long NakaStr_DocDirectPlay_Elem21
+	.long NakaStr_DocDirectPlay_Elem20
+	.long NakaStr_DocDirectPlay_Elem19
+	.long NakaStr_DocDirectPlay_Elem18
+	.long NakaStr_DocDirectPlay_Elem17
+	.long NakaStr_DocDirectPlay_Elem16
+	.long NakaStr_DocDirectPlay_Elem15
+	.long NakaStr_DocDirectPlay_Elem14
+	.long NakaStr_DocDirectPlay_Elem13
+	.long NakaStr_DocDirectPlay_Elem12
+	.long NakaStr_DocDirectPlay_Elem11
+	.long NakaStr_DocDirectPlay_Elem10
+	.long NakaStr_DocDirectPlay_Elem09
+	.long NakaStr_DocDirectPlay_Elem08
+	.long NakaStr_DocDirectPlay_Elem07
+	.long NakaStr_DocDirectPlay_Elem06
+	.long NakaStr_DocDirectPlay_Elem05
+	.long NakaStr_DocDirectPlay_Elem04
+	.long NakaStr_DocDirectPlay_Elem03
+	.long NakaStr_DocDirectPlay_Elem02
+	.long NakaStr_DocDirectPlay_Elem01
+	.long NakaStr_DocDirectPlay_Elem00
 	.long NakaInst_DiskPdDirectPlay
-	.long LABEL_EA79F2
-	.long LABEL_EA79F0
-	.long LABEL_EA79EE
-	.long LABEL_EA79EC
-	.long LABEL_EA79EA
-	.long LABEL_EA79E8
-	.long LABEL_EA79E6
-	.long LABEL_EA79E4
-	.long LABEL_EA79E2
-	.long LABEL_EA79E0
-	.long LABEL_EA79DE
-	.long LABEL_EA79DC
-	.long LABEL_EA79DA
-	.long LABEL_EA79D8
-	.long LABEL_EA79D6
-	.long LABEL_EA79D4
-	.long LABEL_EA79D2
-	.long LABEL_EA79D0
-	.long LABEL_EA79CE
-	.long LABEL_EA79CC
-	.long LABEL_EA79CA
-	.long LABEL_EA79C8
-LABEL_EA79C8:	aligned_string ""
-LABEL_EA79CA:	aligned_string ""
-LABEL_EA79CC:	aligned_string ""
-LABEL_EA79CE:	aligned_string ""
-LABEL_EA79D0:	aligned_string ""
-LABEL_EA79D2:	aligned_string ""
-LABEL_EA79D4:	aligned_string ""
-LABEL_EA79D6:	aligned_string ""
-LABEL_EA79D8:	aligned_string ""
-LABEL_EA79DA:	aligned_string ""
-LABEL_EA79DC:	aligned_string ""
-LABEL_EA79DE:	aligned_string ""
-LABEL_EA79E0:	aligned_string ""
-LABEL_EA79E2:	aligned_string ""
-LABEL_EA79E4:	aligned_string ""
-LABEL_EA79E6:	aligned_string ""
-LABEL_EA79E8:	aligned_string ""
-LABEL_EA79EA:	aligned_string ""
-LABEL_EA79EC:	aligned_string ""
-LABEL_EA79EE:	aligned_string ""
-LABEL_EA79F0:	aligned_string ""
-LABEL_EA79F2:	aligned_string ""
+	.long NakaStr_PdDirectPlay_Elem21
+	.long NakaStr_PdDirectPlay_Elem20
+	.long NakaStr_PdDirectPlay_Elem19
+	.long NakaStr_PdDirectPlay_Elem18
+	.long NakaStr_PdDirectPlay_Elem17
+	.long NakaStr_PdDirectPlay_Elem16
+	.long NakaStr_PdDirectPlay_Elem15
+	.long NakaStr_PdDirectPlay_Elem14
+	.long NakaStr_PdDirectPlay_Elem13
+	.long NakaStr_PdDirectPlay_Elem12
+	.long NakaStr_PdDirectPlay_Elem11
+	.long NakaStr_PdDirectPlay_Elem10
+	.long NakaStr_PdDirectPlay_Elem09
+	.long NakaStr_PdDirectPlay_Elem08
+	.long NakaStr_PdDirectPlay_Elem07
+	.long NakaStr_PdDirectPlay_Elem06
+	.long NakaStr_PdDirectPlay_Elem05
+	.long NakaStr_PdDirectPlay_Elem04
+	.long NakaStr_PdDirectPlay_Elem03
+	.long NakaStr_PdDirectPlay_Elem02
+	.long NakaStr_PdDirectPlay_Elem01
+	.long NakaStr_PdDirectPlay_Elem00
+NakaStr_PdDirectPlay_Elem00:	aligned_string ""
+NakaStr_PdDirectPlay_Elem01:	aligned_string ""
+NakaStr_PdDirectPlay_Elem02:	aligned_string ""
+NakaStr_PdDirectPlay_Elem03:	aligned_string ""
+NakaStr_PdDirectPlay_Elem04:	aligned_string ""
+NakaStr_PdDirectPlay_Elem05:	aligned_string ""
+NakaStr_PdDirectPlay_Elem06:	aligned_string ""
+NakaStr_PdDirectPlay_Elem07:	aligned_string ""
+NakaStr_PdDirectPlay_Elem08:	aligned_string ""
+NakaStr_PdDirectPlay_Elem09:	aligned_string ""
+NakaStr_PdDirectPlay_Elem10:	aligned_string ""
+NakaStr_PdDirectPlay_Elem11:	aligned_string ""
+NakaStr_PdDirectPlay_Elem12:	aligned_string ""
+NakaStr_PdDirectPlay_Elem13:	aligned_string ""
+NakaStr_PdDirectPlay_Elem14:	aligned_string ""
+NakaStr_PdDirectPlay_Elem15:	aligned_string ""
+NakaStr_PdDirectPlay_Elem16:	aligned_string ""
+NakaStr_PdDirectPlay_Elem17:	aligned_string ""
+NakaStr_PdDirectPlay_Elem18:	aligned_string ""
+NakaStr_PdDirectPlay_Elem19:	aligned_string ""
+NakaStr_PdDirectPlay_Elem20:	aligned_string ""
+NakaStr_PdDirectPlay_Elem21:	aligned_string ""
 NakaInst_DiskPdDirectPlay:	aligned_string "DiskPdDirectPlay"
-LABEL_EA7A06:	aligned_string ""
-LABEL_EA7A08:	aligned_string ""
-LABEL_EA7A0A:	aligned_string ""
-LABEL_EA7A0C:	aligned_string ""
-LABEL_EA7A0E:	aligned_string ""
-LABEL_EA7A10:	aligned_string ""
-LABEL_EA7A12:	aligned_string ""
-LABEL_EA7A14:	aligned_string ""
-LABEL_EA7A16:	aligned_string ""
-LABEL_EA7A18:	aligned_string ""
-LABEL_EA7A1A:	aligned_string ""
-LABEL_EA7A1C:	aligned_string ""
-LABEL_EA7A1E:	aligned_string ""
-LABEL_EA7A20:	aligned_string ""
-LABEL_EA7A22:	aligned_string ""
-LABEL_EA7A24:	aligned_string ""
-LABEL_EA7A26:	aligned_string ""
-LABEL_EA7A28:	aligned_string ""
-LABEL_EA7A2A:	aligned_string ""
-LABEL_EA7A2C:	aligned_string ""
-LABEL_EA7A2E:	aligned_string ""
-LABEL_EA7A30:	aligned_string ""
+NakaStr_DocDirectPlay_Elem00:	aligned_string ""
+NakaStr_DocDirectPlay_Elem01:	aligned_string ""
+NakaStr_DocDirectPlay_Elem02:	aligned_string ""
+NakaStr_DocDirectPlay_Elem03:	aligned_string ""
+NakaStr_DocDirectPlay_Elem04:	aligned_string ""
+NakaStr_DocDirectPlay_Elem05:	aligned_string ""
+NakaStr_DocDirectPlay_Elem06:	aligned_string ""
+NakaStr_DocDirectPlay_Elem07:	aligned_string ""
+NakaStr_DocDirectPlay_Elem08:	aligned_string ""
+NakaStr_DocDirectPlay_Elem09:	aligned_string ""
+NakaStr_DocDirectPlay_Elem10:	aligned_string ""
+NakaStr_DocDirectPlay_Elem11:	aligned_string ""
+NakaStr_DocDirectPlay_Elem12:	aligned_string ""
+NakaStr_DocDirectPlay_Elem13:	aligned_string ""
+NakaStr_DocDirectPlay_Elem14:	aligned_string ""
+NakaStr_DocDirectPlay_Elem15:	aligned_string ""
+NakaStr_DocDirectPlay_Elem16:	aligned_string ""
+NakaStr_DocDirectPlay_Elem17:	aligned_string ""
+NakaStr_DocDirectPlay_Elem18:	aligned_string ""
+NakaStr_DocDirectPlay_Elem19:	aligned_string ""
+NakaStr_DocDirectPlay_Elem20:	aligned_string ""
+NakaStr_DocDirectPlay_Elem21:	aligned_string ""
 NakaInst_DiskDocDirectPlay:	aligned_string "DiskDocDirectPlay"
-LABEL_EA7A44:	aligned_string ""
-LABEL_EA7A46:	aligned_string ""
-LABEL_EA7A48:	aligned_string ""
-LABEL_EA7A4A:	aligned_string ""
-LABEL_EA7A4C:	aligned_string ""
+NakaStr_DiskMedleySelect_Elem00:	aligned_string ""
+NakaStr_DiskMedleySelect_Elem01:	aligned_string ""
+NakaStr_DiskMedleySelect_Elem02:	aligned_string ""
+NakaStr_DiskMedleySelect_Elem03:	aligned_string ""
+NakaStr_DiskMedleySelect_Elem04:	aligned_string ""
 NakaInst_DiskInfoDPSmfWin:	aligned_string "DiskInfoDPSmfWin"
-LABEL_EA7A60:	aligned_string ""
-LABEL_EA7A62:	aligned_string ""
-LABEL_EA7A64:	aligned_string ""
+NakaStr_DiskMedleyInfo_Elem00:	aligned_string ""
+NakaStr_DiskMedleyInfo_Elem01:	aligned_string ""
+NakaStr_DiskMedleyInfo_Elem02:	aligned_string ""
 NakaInst_SongNameDPSmfWin:	aligned_string "SongNameDPSmfWin"
-LABEL_EA7A78:	aligned_string ""
-LABEL_EA7A7A:	aligned_string ""
-LABEL_EA7A7C:	aligned_string ""
+NakaStr_DiskMedleySongName_Elem00:	aligned_string ""
+NakaStr_DiskMedleySongName_Elem01:	aligned_string ""
+NakaStr_DiskMedleySongName_Elem02:	aligned_string ""
 NakaInst_SmfMidiOut:	aligned_string "SmfMidiOut"
-LABEL_EA7A8A:	aligned_string ""
-LABEL_EA7A8C:	aligned_string ""
-LABEL_EA7A8E:	aligned_string ""
-LABEL_EA7A90:	aligned_string ""
-LABEL_EA7A92:	aligned_string ""
-LABEL_EA7A94:	aligned_string ""
-LABEL_EA7A96:	aligned_string ""
-LABEL_EA7A98:	aligned_string ""
-LABEL_EA7A9A:	aligned_string ""
-LABEL_EA7A9C:	aligned_string ""
-LABEL_EA7A9E:	aligned_string ""
-LABEL_EA7AA0:	aligned_string ""
-LABEL_EA7AA2:	aligned_string ""
-LABEL_EA7AA4:	aligned_string ""
-LABEL_EA7AA6:	aligned_string ""
-LABEL_EA7AA8:	aligned_string ""
-LABEL_EA7AAA:	aligned_string ""
-LABEL_EA7AAC:	aligned_string ""
-LABEL_EA7AAE:	aligned_string ""
-LABEL_EA7AB0:	aligned_string ""
-LABEL_EA7AB2:	aligned_string ""
-LABEL_EA7AB4:	aligned_string ""
-LABEL_EA7AB6:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem00:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem01:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem02:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem03:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem04:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem05:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem06:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem07:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem08:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem09:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem10:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem11:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem12:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem13:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem14:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem15:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem16:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem17:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem18:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem19:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem20:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem21:	aligned_string ""
+NakaStr_SmfDirectPlay_Elem22:	aligned_string ""
 NakaInst_DiskSmfDirectPlay:	aligned_string "DiskSmfDirectPlay"
 	.byte 0xce, 0x7a, 0xea, 0x00
-LABEL_EA7ACE:
+NakaData_SmfDirectPlay_Ptr0:
 	.byte 0x00, 0xff
-	.long LABEL_EA7AD4
-LABEL_EA7AD4:
+	.long NakaData_SmfDirectPlay_Ptr1
+NakaData_SmfDirectPlay_Ptr1:
 	.byte 0x00, 0xff, 0x7c, 0x7b
 	.byte 0xea, 0x00, 0x7a, 0x7b, 0xea, 0x00, 0x78, 0x7b
 	.byte 0xea, 0x00, 0x76, 0x7b, 0xea, 0x00, 0x74, 0x7b
@@ -4998,43 +4998,43 @@ LABEL_EA7AD4:
 	.byte 0xea, 0x00, 0x36, 0x7b, 0xea, 0x00, 0x34, 0x7b
 	.byte 0xea, 0x00, 0x32, 0x7b, 0xea, 0x00, 0x30, 0x7b
 	.byte 0xea, 0x00, 0x2e, 0x7b, 0xea, 0x00
-LABEL_EA7B2E:
+NakaData_SongMedleyP3_Pad00:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7B32:
+NakaData_SongMedleyP3_Pad01:
 	.byte 0x00, 0xff
-LABEL_EA7B34:
+NakaData_SongMedleyP3_Pad02:
 	.byte 0x00, 0xff
-LABEL_EA7B36:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA7B3A:
-	.byte 0x00, 0xff
-LABEL_EA7B3C:
-	.byte 0x00, 0xff
-LABEL_EA7B3E:
+NakaData_SongMedleyP3_Pad03:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7B42:
+NakaData_SongMedleyP3_Pad04:
 	.byte 0x00, 0xff
-LABEL_EA7B44:
+NakaData_SongMedleyP3_Pad05:
+	.byte 0x00, 0xff
+NakaData_SongMedleyP3_Pad06:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_SongMedleyP3_Pad07:
+	.byte 0x00, 0xff
+NakaData_SongMedleyP3_Pad08:
 	.byte 0x00, 0xff
 NakaInst_SongMedleyDiskInfo:	aligned_string "SongMedleyDiskInfo"
 NakaInst_SongMedleyDiskName:	aligned_string "SongMedleyDiskName"
-LABEL_EA7B6E:	aligned_string ""
+NakaStr_SongMedleyInfo_Elem00:	aligned_string ""
 	.byte 0x00, 0xff
-LABEL_EA7B72:
+NakaData_SongMedleyP2_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA7B74:
+NakaData_SongMedleyP2_Pad01:
 	.byte 0x00, 0xff
-LABEL_EA7B76:
+NakaData_SongMedleyP2_Pad02:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7B7A:
+NakaData_SongMedleyP1_Pad00:
 	.byte 0x00, 0xff
 NakaInst_DiskSongMedley:	aligned_string "DiskSongMedley"
 	.byte 0x90, 0x7b, 0xea, 0x00
-LABEL_EA7B90:	.byte 0x00, 0xff, 0x8c, 0x7e, 0xea, 0x00, 0x8a, 0x7e
+NakaData_DiskSongMedley_PtrTable:	.byte 0x00, 0xff, 0x8c, 0x7e, 0xea, 0x00, 0x8a, 0x7e
 	.byte 0xea, 0x00, 0x88, 0x7e, 0xea, 0x00, 0x86, 0x7e
 	.byte 0xea, 0x00, 0x84, 0x7e, 0xea, 0x00, 0x82, 0x7e
 	.byte 0xea, 0x00, 0x80, 0x7e, 0xea, 0x00, 0x7e, 0x7e
@@ -5082,173 +5082,173 @@ LABEL_EA7B90:	.byte 0x00, 0xff, 0x8c, 0x7e, 0xea, 0x00, 0x8a, 0x7e
 	.byte 0xea, 0x00, 0x24, 0x7d, 0xea, 0x00, 0x22, 0x7d
 	.byte 0xea, 0x00, 0x12, 0x7d, 0xea, 0x00, 0x10, 0x7d
 	.byte 0xea, 0x00, 0x0e, 0x7d, 0xea, 0x00
-LABEL_EA7D0E:
+NakaData_DiskSaveSure_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA7D10:	aligned_string ""
+NakaStr_DiskSaveSure_Elem00:	aligned_string ""
 NakaInst_DiskSaveSureScr:	aligned_string "DiskSaveSureScr"
-LABEL_EA7D22:	aligned_string ""
+NakaStr_DiskDeleteSure_Elem00:	aligned_string ""
 NakaInst_DiskDeleteSureScr:	aligned_string "DiskDeleteSureScr"
-LABEL_EA7D36:	aligned_string ""
+NakaStr_DiskDeleteSure_Elem01:	aligned_string ""
 	.byte 0x00, 0xff
-LABEL_EA7D3A:
+NakaData_DiskDeleteSure_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA7D3C:
+NakaData_DiskDeleteSure_Pad01:
 	.byte 0x00, 0xff
-LABEL_EA7D3E:
+NakaData_DiskDeleteSure_Pad02:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7D42:
+NakaData_DiskDeleteSure_Pad03:
 	.byte 0x00, 0xff
-LABEL_EA7D44:
+NakaData_DiskDeleteSure_Pad04:
 	.byte 0x00, 0xff
 NakaInst_DiskDeleteSureWin:	aligned_string "DiskDeleteSureWin"
 	.byte 0x00, 0xff
-LABEL_EA7D5A:
+NakaData_FileRenameSMF_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA7D5C:
+NakaData_FileRenameSMF_Pad01:
 	.byte 0x00, 0xff
 NakaInst_FileRenameSMF:	aligned_string "FileRenameSMF"
 	.byte 0x00, 0xff
-LABEL_EA7D6E:
+NakaData_FileRenameSMF_Pad02:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7D72:
+NakaData_FileRenameSMF_Pad03:
 	.byte 0x00, 0xff
-LABEL_EA7D74:
+NakaData_FileRenameSMF_Pad04:
 	.byte 0x00, 0xff
-LABEL_EA7D76:
+NakaData_FileRenameSMF_Pad05:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7D7A:
+NakaData_FileRenameSMF_Pad06:
 	.byte 0x00, 0xff
 NakaInst_FileCopy:	aligned_string "FileCopy"
-LABEL_EA7D86:	aligned_string ""
+NakaStr_FileCopy_Elem00:	aligned_string ""
 	.byte 0x00, 0xff
-LABEL_EA7D8A:
+NakaData_FileCopy_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA7D8C:
+NakaData_FileCopy_Pad01:
 	.byte 0x00, 0xff
 NakaInst_DiskFormatSelectWin:	aligned_string "DiskFormatSelectWin"
 	.byte 0x00, 0xff
-LABEL_EA7DA4:
+NakaData_DiskFormatSelect_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA7DA6:
+NakaData_DiskFormatSelect_Pad01:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7DAA:
+NakaData_DiskFormatSelect_Pad02:
 	.byte 0x00, 0xff
-LABEL_EA7DAC:
+NakaData_DiskFormatSelect_Pad03:
 	.byte 0x00, 0xff
-LABEL_EA7DAE:
+NakaData_DiskFormatSelect_Pad04:
 	.byte 0x00, 0xff
-LABEL_EA7DB0:	aligned_string ""
+NakaStr_DiskFormatSelect_Elem00:	aligned_string ""
 NakaInst_DiskFormatSureWin:	aligned_string "DiskFormatSureWin"
 	.byte 0x00, 0xff
-LABEL_EA7DC6:
+NakaData_DiskFormatSure_Pad00:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7DCA:
+NakaData_DiskFormatSure_Pad01:
 	.byte 0x00, 0xff
 NakaInst_DiskFormatNamingWin:	aligned_string "DiskFormatNamingWin"
-LABEL_EA7DE0:	aligned_string ""
+NakaStr_DiskFormatNaming_Elem00:	aligned_string ""
 NakaInst_SongNameWin:	aligned_string "SongNameWin"
-LABEL_EA7DEE:	aligned_string ""
+NakaStr_SongNameWin_Elem00:	aligned_string ""
 	.byte 0x00, 0xff
-LABEL_EA7DF2:
+NakaData_SongNameWin_Pad00:
 	.byte 0x00, 0xff
 NakaInst_DiskInfoWin:	aligned_string "DiskInfoWin"
 NakaInst_WaitWinCtlSmf:	aligned_string "WaitWinCtlSmf"
-LABEL_EA7E0E:	aligned_string ""
+NakaStr_WaitWinCtlSmf_Elem00:	aligned_string ""
 	.byte 0x00, 0xff
-LABEL_EA7E12:
+NakaData_WaitWinCtlSmf_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA7E14:
+NakaData_WaitWinCtlSmf_Pad01:
 	.byte 0x00, 0xff
-LABEL_EA7E16:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA7E1A:
-	.byte 0x00, 0xff
-LABEL_EA7E1C:
-	.byte 0x00, 0xff
-LABEL_EA7E1E:
+NakaData_WaitWinCtlSmf_Pad02:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7E22:
+NakaData_WaitWinCtlSmf_Pad03:
 	.byte 0x00, 0xff
-LABEL_EA7E24:
+NakaData_WaitWinCtlSmf_Pad04:
 	.byte 0x00, 0xff
-LABEL_EA7E26:
+NakaData_WaitWinCtlSmf_Pad05:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7E2A:
+NakaData_WaitWinCtlSmf_Pad06:
 	.byte 0x00, 0xff
-LABEL_EA7E2C:
+NakaData_WaitWinCtlSmf_Pad07:
+	.byte 0x00, 0xff
+NakaData_WaitWinCtlSmf_Pad08:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_WaitWinCtlSmf_Pad09:
+	.byte 0x00, 0xff
+NakaData_WaitWinCtlSmf_Pad10:
 	.byte 0x00, 0xff
 NakaInst_DiskUtilitySMF:	aligned_string "DiskUtilitySMF"
 NakaInst_DiskFormat:	aligned_string "DiskFormat"
 	.byte 0x00, 0xff
-LABEL_EA7E4C:
+NakaData_DiskFormat_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA7E4E:
+NakaData_DiskFormat_Pad01:
 	.byte 0x00, 0xff
 NakaInst_FileRename:	aligned_string "FileRename"
 NakaInst_WaitWinCtl:	aligned_string "WaitWinCtl"
 	.byte 0x00, 0xff
-LABEL_EA7E6A:
+NakaData_WaitWinCtl_Pad00:
 	.byte 0x00, 0xff
-LABEL_EA7E6C:
+NakaData_WaitWinCtl_Pad01:
 	.byte 0x00, 0xff
-LABEL_EA7E6E:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA7E72:
-	.byte 0x00, 0xff
-LABEL_EA7E74:
-	.byte 0x00, 0xff
-LABEL_EA7E76:
+NakaData_WaitWinCtl_Pad02:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7E7A:
+NakaData_WaitWinCtl_Pad03:
 	.byte 0x00, 0xff
-LABEL_EA7E7C:
+NakaData_WaitWinCtl_Pad04:
 	.byte 0x00, 0xff
-LABEL_EA7E7E:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-LABEL_EA7E82:
-	.byte 0x00, 0xff
-LABEL_EA7E84:
-	.byte 0x00, 0xff
-LABEL_EA7E86:
+NakaData_WaitWinCtl_Pad05:
 	.byte 0x00, 0xff
 	.byte 0x00, 0xff
-LABEL_EA7E8A:
+NakaData_WaitWinCtl_Pad06:
+	.byte 0x00, 0xff
+NakaData_WaitWinCtl_Pad07:
+	.byte 0x00, 0xff
+NakaData_WaitWinCtl_Pad08:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_WaitWinCtl_Pad09:
+	.byte 0x00, 0xff
+NakaData_WaitWinCtl_Pad10:
+	.byte 0x00, 0xff
+NakaData_WaitWinCtl_Pad11:
+	.byte 0x00, 0xff
+	.byte 0x00, 0xff
+NakaData_WaitWinCtl_Pad12:
 	.byte 0x00, 0xff
 NakaInst_DiskUtility:	aligned_string "DiskUtility"
-	.long LABEL_EA7E9C
-LABEL_EA7E9C:
+	.long NakaData_DiskUtility_Ptr0
+NakaData_DiskUtility_Ptr0:
 	.byte 0x00, 0xff, 0xa2, 0x7e
 	.byte 0xea, 0x00
-LABEL_EA7EA2:
+NakaData_DiskUtility_Ptr1:
 	.byte 0x00, 0xff, 0xd8, 0x7e, 0xea, 0x00
 Naka_DiskUtility_Screens:
-	.long LABEL_EA7ED6
-	.long LABEL_EA7ED4
-	.long LABEL_EA7ED2
-	.long LABEL_EA7ED0
-	.long LABEL_EA7ECE
-	.long LABEL_EA7ECC
-	.long LABEL_EA7ECA
-	.long LABEL_EA7EC8
-LABEL_EA7EC8:	aligned_string ""
-LABEL_EA7ECA:	aligned_string ""
-LABEL_EA7ECC:	aligned_string ""
-LABEL_EA7ECE:	aligned_string ""
-LABEL_EA7ED0:	aligned_string ""
-LABEL_EA7ED2:	aligned_string ""
-LABEL_EA7ED4:	aligned_string ""
-LABEL_EA7ED6:	aligned_string ""
+	.long NakaStr_DiskUtility_Scr07
+	.long NakaStr_DiskUtility_Scr06
+	.long NakaStr_DiskUtility_Scr05
+	.long NakaStr_DiskUtility_Scr04
+	.long NakaStr_DiskUtility_Scr03
+	.long NakaStr_DiskUtility_Scr02
+	.long NakaStr_DiskUtility_Scr01
+	.long NakaStr_DiskUtility_Scr00
+NakaStr_DiskUtility_Scr00:	aligned_string ""
+NakaStr_DiskUtility_Scr01:	aligned_string ""
+NakaStr_DiskUtility_Scr02:	aligned_string ""
+NakaStr_DiskUtility_Scr03:	aligned_string ""
+NakaStr_DiskUtility_Scr04:	aligned_string ""
+NakaStr_DiskUtility_Scr05:	aligned_string ""
+NakaStr_DiskUtility_Scr06:	aligned_string ""
+NakaStr_DiskUtility_Scr07:	aligned_string ""
 NakaInst_DiskSetup:	aligned_string "DiskSetup"
 	.byte 0xe6, 0x7e, 0xea, 0x00
 NakaInst_MD_DISK:
@@ -5362,8 +5362,8 @@ Naka_DiskOps_Table:
 	.long NakaInst_FmmCmpSingleLoadFunc
 	.long NakaInst_FmmWallpaperLoadFunc
 	.long NakaInst_FmmPasswordFunc
-	.long LABEL_EA819E
-LABEL_EA819E:
+	.long NakaData_FmmPassword_Pad
+NakaData_FmmPassword_Pad:
 	.byte 0x00, 0xff
 NakaInst_FmmPasswordFunc:	aligned_string "FmmPasswordFunc"
 NakaInst_FmmWallpaperLoadFunc:	aligned_string "FmmWallpaperLoadFunc"
@@ -5494,10 +5494,10 @@ NakaInst_ATTENTION_EA8C22:	aligned_string "ATTENTION!"
 Str_Attention2_Multilingual:
 	.long LABEL_EA8CBC
 	.long LABEL_EA8CAC
-	.long LABEL_EA8C9E
+	.long NakaStr_AreYouSure_Spanish
 	.long NakaInst_Are_You_Sure
 	.long NakaInst_Apakah_yakin_akan_dihapus
 NakaInst_Apakah_yakin_akan_dihapus:	aligned_string "Apakah yakin akan dihapus ?"
 NakaInst_Are_You_Sure:	aligned_string "Are You Sure?"
-LABEL_EA8C9E:
+NakaStr_AreYouSure_Spanish:
 	.asciz "¿Está seguro?"
