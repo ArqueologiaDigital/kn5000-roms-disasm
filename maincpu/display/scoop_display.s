@@ -4674,7 +4674,7 @@ VoiceCtrl_ParamSetupBytecode:
 	ldb	a, 0
 	jp	15702468
 	ld	xhl, 15702469
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
+	ld_rr8b	a, xhl, w
 	jp	15702442
 	ldfr_berp	a, 60
 	ld	a, (xiy)
@@ -5618,7 +5618,7 @@ PortConfig_Handler_0:
 	pop	xix
 	.byte 0x43
 	.long PortConfig_DataTable_A
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
+	ld_rr8b	a, xhl, w
 	stda8	3429, a
 	ret
 PortConfig_DataTable_A:
@@ -5654,7 +5654,7 @@ PortConfig_DataTable_A:
 	sla	hl, 2
 	.byte 0x43
 	.long PortConfig_DataTable_B
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
+	ld_rr8b	a, xhl, w
 	cp	a, 255
 	jrl	z, 15
 	stda8	36154, a
@@ -5689,7 +5689,7 @@ PortConfig_DataTable_B:
 	ld	xhl, 15706019
 	ldda8	a, 3429
 	and	a, 3
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
+	ld_rr8b	a, xhl, w
 	stda8	3567, a
 	ret
 	nop
@@ -6986,7 +6986,7 @@ SystemInit_Handler_Table:
 	push	xhl
 	ld	a, l
 	ld	xhl, 15710334
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
+	ld_rr8b	a, xhl, w
 	stda8	14120, a
 	stdi8	3422, 16
 	call	15703488
@@ -8099,7 +8099,7 @@ VoiceSlot_StatusRet:
 	sla	a, 1
 	or	a, e
 	ld	xhl, 15716523
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
+	ld_rr8b	a, xhl, w
 	stda8	3425, a
 	call	15725848
 	jp	15716434
@@ -10702,7 +10702,7 @@ Display_BytecodeBlock_F:
 	ld	xiy, 15725128
 	ldda8	a, 4539
 	ld	xhl, 15725112
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
+	ld_rr8b	a, xhl, w
 	exts	wa
 	cpdi8	4539, 23
 	jrl	nz, 6

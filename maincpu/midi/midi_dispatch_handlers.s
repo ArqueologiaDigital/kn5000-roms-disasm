@@ -132,12 +132,12 @@ MidiSerial_HandleDefault_Data:
 	ldda8	a, 38452
 	and	a, 15
 	ld	xhl, 38132
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
+	ld_rr8b	a, xhl, w
 	cp	a, 255
 	jr	z, 80
 	stda8	38504, a
 	ld	xhl, 38164
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
+	ld_rr8b	a, xhl, w
 	cps	a, 0
 	jr	z, 62
 	stda8	38505, a
@@ -176,7 +176,7 @@ MidiCC_Handler_SimpleParamStore:
 MidiCC_Handler_CC3_TableLookup:
 	ld	xix, 16584295
 	ldda8	l, 38453
-	.byte 0xc3, 0x03, 0xf0, 0xec, 0x21
+	ld_rr8b	a, xix, h
 	stda8	38487, a
 	cp	a, 255
 	jr	z, 56
@@ -187,7 +187,7 @@ MidiCC_Handler_CC3_TableLookup:
 	cp	wa, 65535
 	jr	z, 14
 	ld	xix, 64855
-	.byte 0xc3, 0x03, 0xf0, 0xe1, 0x23
+	ld_rr8b	c, xix, a
 	and	c, a
 	jr	z, 21
 	extz	wa
@@ -263,7 +263,7 @@ MidiCC_Handler_BitManipulation:
 	cps	a, 2
 	jr	ugt, 10
 	ld	xix, 16579769
-	.byte 0xc3, 0x03, 0xf0, 0xe0, 0x25
+	ld_rr8b	e, xix, w
 	ldw	bc, 2968
 	ldb	d, 192
 	ldda8	a, 38455
@@ -326,7 +326,7 @@ MidiCC_Handler_RangeCheck:
 	cps	a, 3
 	jr	ugt, 10
 	ld	xix, 16579959
-	.byte 0xc3, 0x03, 0xf0, 0xe0, 0x25
+	ld_rr8b	e, xix, w
 	ldw	bc, 840
 	ldb	d, 7
 	ldda8	a, 38455
@@ -832,7 +832,7 @@ MidiCC_Handler_ParamDispatch:
 	jr	ugt, 44
 	sll	a, 1
 	ld	xix, 16586055
-	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x21
+	ld_rr8w	bc, xix, w
 	cp	c, 255
 	jr	z, 26
 	ldda8	e, 38454
@@ -850,7 +850,7 @@ MidiCC_Handler_TableDispatch:
 	jr ugt, MidiCC_Handler_TableDispatch_Ret
 	sll	a, 1
 	ld xix, 0x00FD1587
-	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x21		; ld bc, (xix+a)  [register-indexed]
+	ld_rr8w	bc, xix, w
 	cp c, 0xff
 	jr z, MidiCC_Handler_TableDispatch_Ret
 	ldda8	e, 38454
@@ -893,7 +893,7 @@ MidiCC_Handler_CC4_VoiceParam:
 	jr	z, 44
 	sll	a, 1
 	ld	xix, 16586183
-	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x21
+	ld_rr8w	bc, xix, w
 	cp	c, 255
 	jr	z, 26
 	ldda8	e, 38453
@@ -912,7 +912,7 @@ MidiCC_Handler_CC6_VoiceParam:
 	jr	z, 46
 	sll	a, 1
 	ld	xix, 16586247
-	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x21
+	ld_rr8w	bc, xix, w
 	cp	c, 255
 	jr	z, 28
 	ldda8	e, 38453
@@ -931,7 +931,7 @@ MidiCC_Handler_CC5_VoiceParam:
 	jr	z, 44
 	sll	a, 1
 	ld	xix, 16586311
-	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x21
+	ld_rr8w	bc, xix, w
 	cp	c, 255
 	jr	z, 26
 	ldda8	e, 38453
@@ -1469,7 +1469,7 @@ PanelEvt_Dispatch11_TableAndHandlers:
 	and	e, 192
 	srl	e, 6
 	ld	xiy, 16583177
-	.byte 0xc3, 0x03, 0xf4, 0xe8, 0x25
+	ld_rr8b	e, xiy, d
 	ldb	w, 18
 	calr	779
 	ret

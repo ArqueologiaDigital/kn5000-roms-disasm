@@ -1032,7 +1032,7 @@ AccStyle_ReadParamRet:
 AccStyle_ByteDataBlock:
 	ld	xhl, 16082506
 	sla	a, 1
-	.byte 0xd3, 0x03, 0xec, 0xe0, 0x23
+	ld_rr8w	hl, xhl, w
 	extz	xhl
 	add	xhl, xiy
 	cpdi8	13268, 1
@@ -14260,10 +14260,10 @@ AccPatch_SlotScanByteData:
 	pop c
 	sll	c, 2
 	ldda16	wa, 13842
-	.byte 0xf3, 0x03, 0xf0, 0xe4, 0x50
+	st_rr8w	wa, xix, b
 	ldda16	wa, 13844
 	inc	2, c
-	.byte 0xf3, 0x03, 0xf0, 0xe4, 0x50
+	st_rr8w	wa, xix, b
 	ret
 	push_sr
 	pop_sr
@@ -25734,7 +25734,7 @@ DrumVoice_Handler7:
 	jr	z, 35
 	and	a, 127
 	ld	xix, 16143762
-	.byte 0xc3, 0x03, 0xf0, 0xe0, 0x21
+	ld_rr8b	a, xix, w
 	stda8	64602, a
 	stda8	13549, a
 	and	a, 127
@@ -25777,7 +25777,7 @@ DrumVoice_Handler7:
 	ldda8	a, 14759
 	sll	a, 1
 	ld	xix, 16143856
-	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x23
+	ld_rr8w	hl, xix, w
 	call	16143937
 	ret
 	nop
@@ -25809,7 +25809,7 @@ DrumVoice_Handler7:
 	ldda8	a, 14760
 	sll	a, 1
 	ld	xix, 16143926
-	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x23
+	ld_rr8w	hl, xix, w
 	call	16143937
 	ret
 	pop_sr
@@ -25952,7 +25952,7 @@ DrumVoice_Handler7:
 	jr	nz, 2
 	ldb	l, 0
 	ld	xix, 65426
-	.byte 0xc3, 0x03, 0xf0, 0xec, 0x26
+	ld_rr8b	h, xix, h
 	ldb	a, 72
 	stda8	37110, a
 	call	16556428
@@ -26009,7 +26009,7 @@ DrumVoice_Handler7:
 	ldb	a, 0
 	ld	h, a
 	ld	xwa, 65426
-	.byte 0xf3, 0x03, 0xe0, 0xec, 0x46
+	st_rr8b	h, xwa, h
 	ldb	a, 72
 	stda8	37110, a
 	call	16556428
@@ -28004,11 +28004,11 @@ VoiceSlot_Dispatch_Return:
 	add	l, 128
 	ld	xbc, 64602
 	ldb	a, 0
-	.byte 0xf3, 0x03, 0xe4, 0xe0, 0x47
+	st_rr8b	l, xbc, w
 	ldb	a, 1
-	.byte 0xc3, 0x03, 0xe4, 0xe0, 0x26
+	ld_rr8b	h, xbc, w
 	and	h, 128
-	.byte 0xf3, 0x03, 0xe4, 0xe0, 0x46
+	st_rr8b	h, xbc, w
 	ldda8	a, 64602
 	ldb	w, 0
 	ldb	e, 72
@@ -29157,29 +29157,29 @@ AccVoice_SetupSlots_DataBlock:
 	calr	-692
 	ldda8	w, 13528
 	ldb	a, 12
-	.byte 0xf3, 0x03, 0xf0, 0xe0, 0x40
+	st_rr8b	w, xix, w
 	ldda8	w, 13527
 	ldb	a, 13
 	.byte 0xf3, 0x03, 0xf0, 0xe0
 	.ascii "@  !"
 	ret
-	.byte 0xf3, 0x03, 0xf0, 0xe0, 0x40
+	st_rr8b	w, xix, w
 	ldb	w, 0
 	ldb	a, 15
-	.byte 0xf3, 0x03, 0xf0, 0xe0, 0x40
+	st_rr8b	w, xix, w
 	ldb	a, 1
 	stda8	14281, a
 	push xix
 	.byte 0x1e, 0xf3, 0xf6
 	pop xix
 	ld	xiy, 14546
-	.byte 0xc3, 0x03, 0xf4, 0xe4, 0x20
+	ld_rr8b	w, xiy, b
 	ldb	a, 16
-	.byte 0xf3, 0x03, 0xf0, 0xe0, 0x40
+	st_rr8b	w, xix, w
 	ld	xiy, 14553
-	.byte 0xc3, 0x03, 0xf4, 0xe4, 0x20
+	ld_rr8b	w, xiy, b
 	ldb	a, 17
-	.byte 0xf3, 0x03, 0xf0, 0xe0, 0x40
+	st_rr8b	w, xix, w
 	ld	xiy, 16153090
 	add	xix, 64
 	lds32	xbc, 0
@@ -29325,7 +29325,7 @@ AccVoice_SetupSlots_DataBlock:
 	push xix
 	.byte 0x1e, 0x0f, 0xf5
 	pop xix
-	.byte 0xc3, 0x03, 0xf0, 0xe4, 0x21
+	ld_rr8b	a, xix, b
 	ret
 	push l
 	lds32	xhl, 0
@@ -29429,7 +29429,7 @@ AccVoice_SetupSlots_DataBlock:
 	sll	de, 7
 	add	xde, 14990578
 	pop_a
-	.byte 0xc3, 0x03, 0xe8, 0xe0, 0x23
+	ld_rr8b	c, xde, w
 	ret
 	ld	a, (xix)
 	.byte 0x1e, 0x73, 0xfb
@@ -33087,7 +33087,7 @@ AccScreen_DataBlock:
 	ld	xbc, xhl
 	and	l, 31
 	sla	l, 2
-	.byte 0xe3, 0x03, 0xf0, 0xec, 0x24
+	ld_rr8l	xix, xix, h
 	call	(xix)
 	ret
 	push	xix
@@ -33096,7 +33096,7 @@ AccScreen_DataBlock:
 	xor	e, e
 	sla	e, 2
 	ld	xix, 16164114
-	.byte 0xe3, 0x03, 0xf0, 0xe8, 0x22
+	ld_rr8l	xde, xix, d
 	pop	xix
 	ret
 	nop

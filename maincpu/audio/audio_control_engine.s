@@ -10531,7 +10531,7 @@ MidiStream_DispatchData:
 	jr	ugt, 28
 	set	7, e
 	ld	xix, 38066
-	.byte 0xf3, 0x03, 0xf0, 0xe4, 0x45
+	st_rr8b	e, xix, b
 	jr	13
 	stdi8	37112, 255
 	stda8	36578, e
@@ -10548,7 +10548,7 @@ MidiStream_DispatchData:
 	jr	ugt, 13
 	set	7, e
 	ld	xix, 37938
-	.byte 0xf3, 0x03, 0xf0, 0xe5, 0x45
+	st_rr8b	e, xix, c
 	ret
 	calr	1283
 	ret
@@ -10557,7 +10557,7 @@ MidiStream_DispatchData:
 	set	7, e
 	ld	xix, 38002
 	sll	b, 1
-	.byte 0xf3, 0x03, 0xf0, 0xe5, 0x52
+	st_rr8w	de, xix, c
 	ret
 	calr	1257
 	ret
@@ -10565,7 +10565,7 @@ MidiStream_DispatchData:
 	jr	ugt, -36
 	set	7, e
 	ld	xix, 37970
-	.byte 0xf3, 0x03, 0xf0, 0xe5, 0x45
+	st_rr8b	e, xix, c
 	ret
 	calr	1234
 	ret
@@ -10856,7 +10856,7 @@ MidiStream_HandlePgmChange:
 	ldda32	xix, 37106
 	ld_rrl	xix, xix, hl
 	ld	l, b
-	.byte 0xc3, 0x03, 0xf0, 0xec, 0x25
+	ld_rr8b	e, xix, h
 	and	e, 127
 	ldb	d, 127
 	call	16556542
@@ -10878,7 +10878,7 @@ MidiStream_HandleChanPressure:
 	ldda32	xix, 37106
 	ld_rrl	xix, xix, hl
 	ld	l, b
-	.byte 0xc3, 0x03, 0xf0, 0xec, 0x25
+	ld_rr8b	e, xix, h
 	and	d, 72
 	call	16556542
 	ret
@@ -10891,7 +10891,7 @@ MidiStream_HandleSysMsg:
 	ldda32	xix, 37106
 	ld_rrl	xix, xix, hl
 	ld	l, b
-	.byte 0xc3, 0x03, 0xf0, 0xec, 0x25
+	ld_rr8b	e, xix, h
 	call	16556542
 	ret
 	extz	hl
@@ -11067,7 +11067,7 @@ MidiStream_ExtendedDispatch:
 	and	l, 3
 	sla	l, 2
 	ld	xix, 16567183
-	.byte 0xe3, 0x03, 0xf0, 0xec, 0x24
+	ld_rr8l	xix, xix, h
 	call	(xix)
 	ret
 	calr	-114
@@ -11310,7 +11310,7 @@ MidiStream_ExtendedDispatch:
 	and	b, 3
 	sll	b, 2
 	ld	xiy, 16567843
-	.byte 0xe3, 0x03, 0xf4, 0xe5, 0x25
+	ld_rr8l	xiy, xiy, c
 	jp	(xiy)
 	ldw	hl, 64718
 	nop
@@ -11352,7 +11352,7 @@ MidiStream_HandleRunningStatus:
 	and	l, 3
 	sll	hl, 2
 	ld	xix, 16567946
-	.byte 0xe3, 0x03, 0xf0, 0xec, 0x24
+	ld_rr8l	xix, xix, h
 	jp	(xix)
 	ret
 	cp	(xde-50), ix

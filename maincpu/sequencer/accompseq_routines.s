@@ -1100,9 +1100,9 @@ AccompSeq_LargeCodeBlock2:
 	jr	nz, 6
 	add	xix, 16
 	sll	h, 1
-	.byte 0xc3, 0x03, 0xf0, 0xed, 0x27
+	ld_rr8b	l, xix, l
 	inc	1, h
-	.byte 0xc3, 0x03, 0xf0, 0xed, 0x26
+	ld_rr8b	h, xix, l
 	cp	l, 14
 	jr	ugt, 33
 	call	16192629

@@ -1228,7 +1228,7 @@ SndParam_RegisterMultiField_Data:
 	ld	a, (xde+11)
 	sla	a, 2
 	lda_24	xbc, 15597976
-	.byte 0xe3, 0x03, 0xe4, 0xe0, 0x21
+	ld_rr8l	xbc, xbc, w
 	lds32	xwa, 1
 	cp	l, (xbc)
 	jr	c, 2
@@ -1326,7 +1326,7 @@ SndParam_RegisterBitfield_Data:
 	ld	c, (xwa+11)
 	sla	c, 2
 	lda_24	xiy, 15597980
-	.byte 0xe3, 0x03, 0xf4, 0xe4, 0x25
+	ld_rr8l	xiy, xiy, b
 	exts	xde
 	add	xde, xde
 	add	xde, xiy
@@ -1509,7 +1509,7 @@ SndParam_RegisterLinked2_Data:
 	cp	a, 255
 	jr	z, 10
 	sla	a, 2
-	.byte 0xe3, 0x03, 0xe4, 0xe0, 0x25
+	ld_rr8l	xiy, xbc, w
 	jr	2
 	ld	xiy, (xbc)
 	extz	hl
@@ -1909,7 +1909,7 @@ SndParam_RegisterComplex_Data:
 	ld	a, (xwa+11)
 	sla	a, 2
 	lda_24	xbc, 15597976
-	.byte 0xe3, 0x03, 0xe4, 0xe0, 0x21
+	ld_rr8l	xbc, xbc, w
 	cpw	(xsp+10), 0
 	jr	lt, 9
 	ld	a, (xbc)
@@ -2077,7 +2077,7 @@ SndParam_RegisterDual_Data:
 	cp	a, 255
 	jr	z, 10
 	sla	a, 2
-	.byte 0xe3, 0x03, 0xe4, 0xe0, 0x25
+	ld_rr8l	xiy, xbc, w
 	jr	2
 	ld	xiy, (xbc)
 	ld	a, w
@@ -2365,7 +2365,7 @@ SndParam_EncodeFieldSub_Data:
 	ld	a, (xbc+11)
 	sla	a, 2
 	lda_24	xde, 15597976
-	.byte 0xe3, 0x03, 0xe8, 0xe0, 0x22
+	ld_rr8l	xde, xde, w
 	lds32	xwa, 1
 	cp	l, (xde)
 	jr	c, 2
@@ -2431,7 +2431,7 @@ SndParam_DecodeFieldAlt_Data:
 	ld	a, (xde+11)
 	sla	a, 2
 	lda_24	xbc, 15597976
-	.byte 0xe3, 0x03, 0xe4, 0xe0, 0x21
+	ld_rr8l	xbc, xbc, w
 	cp	l, (xbc+1)
 	jr	nz, 4
 	lds32	xwa, 3
@@ -2495,7 +2495,7 @@ SndParam_WriteFieldSub_Data:
 	ld	a, (xde+11)
 	sla	a, 2
 	lda_24	xbc, 15597976
-	.byte 0xe3, 0x03, 0xe4, 0xe0, 0x21
+	ld_rr8l	xbc, xbc, w
 	lds32	xwa, 1
 	cp	l, (xbc)
 	jr	c, 2
