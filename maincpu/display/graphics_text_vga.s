@@ -391,7 +391,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc+2), de
 	muls	de, 40
 	sub	hl, de
-	.byte 0xdb, 0xee, 0x03
+	sll	hl, 3
 	ld	(xbc), hl
 	lds	iy, 0
 	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
@@ -446,7 +446,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc+2), de
 	muls	de, 40
 	sub	hl, de
-	.byte 0xdb, 0xee, 0x03
+	sll	hl, 3
 	ld	(xbc), hl
 	lds	iy, 0
 	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
@@ -601,7 +601,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc+2), de
 	muls	de, 40
 	sub	hl, de
-	.byte 0xdb, 0xee, 0x03
+	sll	hl, 3
 	ld	(xbc), hl
 	lds	iy, 0
 	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
@@ -954,13 +954,13 @@ DrawText_LayoutAndRender_Variant1:
 	extz	xbc
 	div	bc, 40
 	ld	bc, qbc
-	.byte 0xd9, 0xee, 0x03
+	sll	bc, 3
 	ld	(xhl), bc
 	ld	bc, (xde)
 	add	bc, (xwa+10)
 	ld	(xhl+6), bc
 	ld	bc, (xwa+8)
-	.byte 0xd9, 0xee, 0x03
+	sll	bc, 3
 	ld	de, (xhl)
 	add	de, bc
 	ld	(xhl+4), de
@@ -983,7 +983,7 @@ DrawText_LayoutAndRender_Variant1:
 	extz	xbc
 	div	bc, 40
 	ld	bc, qbc
-	.byte 0xd9, 0xee, 0x03
+	sll	bc, 3
 	ld	(xhl), bc
 	ld	a, (xwa+2)
 	.byte 0xc7, 0xf8, 0x99
@@ -1357,7 +1357,7 @@ DrawFunc_Init_Variant1:
 	ld	(xbc+2), wa
 	muls	wa, 40
 	sub	ix, wa
-	.byte 0xdc, 0xee, 0x03
+	sll	ix, 3
 	ld	(xbc), ix
 	ld	a, (xiz+10)
 	cp	a, e
@@ -1429,7 +1429,7 @@ DrawFunc_Init_Variant1:
 	ld	(xbc+2), wa
 	muls	wa, 40
 	sub	de, wa
-	.byte 0xda, 0xee, 0x03
+	sll	de, 3
 	ld	(xbc), de
 	lda	xbc, (xsp+4)
 	cps	hl, 2
@@ -1451,7 +1451,7 @@ DrawFunc_Init_Variant1:
 	ld	a, (xiz+6)
 	and	a, 63
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15380484
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23
 	lda	xwa, (xsp+264)
@@ -1711,13 +1711,13 @@ ColorBlit_Variant_ByteData:
 	extz	xbc
 	div	bc, 40
 	ld	bc, qbc
-	.byte 0xd9, 0xee, 0x03
+	sll	bc, 3
 	ld	(xwa), bc
 	ld	bc, (xde)
 	add	bc, (xhl+4)
 	ld	(xwa+6), bc
 	ld	bc, (xhl+2)
-	.byte 0xd9, 0xee, 0x03
+	sll	bc, 3
 	ld	de, (xwa)
 	add	de, bc
 	ld	(xwa+4), de

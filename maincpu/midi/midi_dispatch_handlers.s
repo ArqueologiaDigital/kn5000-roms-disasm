@@ -85,7 +85,7 @@ MidiSerial_WaitDone:
 MidiSerial_ParseStatus_Data:
 	ldda8	l, 38452
 	and	l, 15
-	.byte 0xcf, 0xec, 0x02
+	sla	l, 2
 	extz	hl
 	ld	xiz, 16579175
 	.byte 0xe3, 0x07, 0xf8, 0xec, 0x26, 0xb6, 0xe8
@@ -150,7 +150,7 @@ MidiSerial_HandleDefault_Data:
 	xor	h, h
 	ldda8	l, 38452
 	and	l, 112
-	.byte 0xdb, 0xef, 0x02
+	srl	hl, 2
 	ld	xix, 16579389
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24, 0xb4, 0xe8
 	decdi8	1, 38507
@@ -179,7 +179,7 @@ MidiCC_Handler_CC3_TableLookup:
 	cp	a, 255
 	jr	z, 56
 	extz	wa
-	.byte 0xc9, 0xee, 0x01
+	sll	a, 1
 	ld	xix, 16584423
 	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
 	cp	wa, 65535
@@ -190,7 +190,7 @@ MidiCC_Handler_CC3_TableLookup:
 	jr	z, 21
 	extz	wa
 	ldda8	a, 38487
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	xix, 16579507
 	.byte 0xe3, 0x07, 0xf0, 0xe0, 0x24, 0xb4, 0xe8
 	ret
@@ -279,7 +279,7 @@ MidiCC_Handler_PairedParamA:
 	jr	ugt, 50
 	.byte 0xf1, 0x57, 0xfd, 0xcc
 	jr	z, 44
-	.byte 0xdb, 0xee, 0x01
+	sll	hl, 1
 	ld	xix, 16586407
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
 	cp	c, 255
@@ -299,7 +299,7 @@ MidiCC_Handler_PairedParamB:
 	jr	ugt, 50
 	.byte 0xf1, 0x57, 0xfd, 0xcc
 	jr	z, 44
-	.byte 0xdb, 0xee, 0x01
+	sll	hl, 1
 	ld	xix, 16586407
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
 	cp	c, 255
@@ -347,7 +347,7 @@ MidiCC_Handler_ChannelMapping:
 	cp	a, 11
 	jr	ugt, 22
 	extz	wa
-	.byte 0xd8, 0xee, 0x02
+	sll	wa, 2
 	ld	xix, 16580059
 	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x21
 	inc	2, wa
@@ -412,7 +412,7 @@ MidiCC_VoiceParam_0:
 	jr	ugt, 54
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16584519
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -433,7 +433,7 @@ MidiCC_VoiceParam_1:
 	jr	ugt, 55
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16584615
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -454,7 +454,7 @@ MidiCC_VoiceParam_2:
 	jr	ugt, 55
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16584711
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -475,7 +475,7 @@ MidiCC_VoiceParam_3:
 	jr	ugt, 55
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16584807
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -496,7 +496,7 @@ MidiCC_VoiceParam_4:
 	jr	ugt, 55
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16584903
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -517,7 +517,7 @@ MidiCC_VoiceParam_5:
 	jr	ugt, 55
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16584999
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -538,7 +538,7 @@ MidiCC_VoiceParam_6:
 	jr	ugt, 55
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16585095
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -559,7 +559,7 @@ MidiCC_VoiceParam_7:
 	jr	ugt, 55
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16585191
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -580,7 +580,7 @@ MidiCC_VoiceParam_8:
 	jr	ugt, 54
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16585287
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -601,7 +601,7 @@ MidiCC_VoiceParam_9:
 	jr	ugt, 65
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16585383
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -630,7 +630,7 @@ MidiCC_VoiceParam_10:
 	jr	ugt, 55
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16585671
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -652,7 +652,7 @@ MidiCC_VoiceParam_11:
 	xor	w, w
 MidiCC_VoiceParam_11_MidEntry:
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16585767
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -673,7 +673,7 @@ MidiCC_VoiceParam_12:
 	jr	ugt, 55
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16585863
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -694,7 +694,7 @@ MidiCC_VoiceParam_13:
 	jr	ugt, 55
 	xor	w, w
 	ld	hl, wa
-	.byte 0xd8, 0xee, 0x01
+	sll	wa, 1
 	add	hl, wa
 	ld	xix, 16585959
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x21
@@ -718,7 +718,7 @@ MidiCC_Handler_BankModeSelect:
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x23
 	cp	c, 255
 	jr	z, 117
-	.byte 0xdb, 0xee, 0x01
+	sll	hl, 1
 	ld	xix, 38516
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x20
 	cp	wa, 32896
@@ -740,7 +740,7 @@ MidiCC_Handler_BankModeSelect:
 	jr	z, 57
 	ldb	b, 10
 	ldda8	e, 38454
-	.byte 0xcd, 0xee, 0x01
+	sll	e, 1
 	ldb	d, 255
 	jr	24
 	.byte 0xf1, 0x57, 0xfd, 0xc9
@@ -767,7 +767,7 @@ MidiCC_Handler_ExpressionParam:
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x23
 	cp	c, 255
 	jr	z, 80
-	.byte 0xdb, 0xee, 0x01
+	sll	hl, 1
 	ld	xix, 38516
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x3f, 0x81, 0x80
 	jr	nz, 63
@@ -781,7 +781,7 @@ MidiCC_Handler_ExpressionParam:
 	ld	a, (xix+10)
 	res	0, a
 	ldda8	e, 38454
-	.byte 0xcd, 0xef, 0x06
+	srl	e, 6
 	or	e, a
 	ldb	d, 255
 	ldda8	a, 38455
@@ -795,7 +795,7 @@ MidiCC_Handler_DirectStoreA:
 	set	7, a
 	extz	hl
 	ldda8	l, 38506
-	.byte 0xdb, 0xee, 0x01
+	sll	hl, 1
 	ld	xix, 38517
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x41
 	dec	1, xix
@@ -809,7 +809,7 @@ MidiCC_Handler_DirectStoreB:
 	set	7, a
 	extz	hl
 	ldda8	l, 38506
-	.byte 0xdb, 0xee, 0x01
+	sll	hl, 1
 	ld	xix, 38516
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x41
 	inc	1, xix
@@ -823,7 +823,7 @@ MidiCC_Handler_ParamDispatch:
 	ldda8	a, 38506
 	cp	a, 31
 	jr	ugt, 44
-	.byte 0xc9, 0xee, 0x01
+	sll	a, 1
 	ld	xix, 16586055
 	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x21
 	cp	c, 255
@@ -884,7 +884,7 @@ MidiCC_Handler_CC4_VoiceParam:
 	jr	ugt, 50
 	.byte 0xf1, 0x57, 0xfd, 0xcc
 	jr	z, 44
-	.byte 0xc9, 0xee, 0x01
+	sll	a, 1
 	ld	xix, 16586183
 	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x21
 	cp	c, 255
@@ -903,7 +903,7 @@ MidiCC_Handler_CC6_VoiceParam:
 	jr	ugt, 52
 	.byte 0xf1, 0x57, 0xfd, 0xce
 	jr	z, 46
-	.byte 0xc9, 0xee, 0x01
+	sll	a, 1
 	ld	xix, 16586247
 	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x21
 	cp	c, 255
@@ -922,7 +922,7 @@ MidiCC_Handler_CC5_VoiceParam:
 	jr	ugt, 50
 	.byte 0xf1, 0x57, 0xfd, 0xcd
 	jr	z, 44
-	.byte 0xc9, 0xee, 0x01
+	sll	a, 1
 	ld	xix, 16586311
 	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x21
 	cp	c, 255
@@ -1272,7 +1272,8 @@ PanelEvt_Handler_10_TwoByteParam:
 	lds	bc, 1
 	ldda8	d, 38478
 	xor	e, e
-	.byte 0xda, 0xef, 0x01, 0xcd, 0xef, 0x01
+	srl	de, 1
+	srl	e, 1
 	calr	1372
 	ret
 PanelEvt_Handler_11_SingleByteParam:
@@ -1447,7 +1448,7 @@ PanelEvt_Dispatch11_TableAndHandlers:
 	jr	z, 25
 	ldda8	e, 38478
 	and	e, 192
-	.byte 0xcd, 0xef, 0x06
+	srl	e, 6
 	ld	xiy, 16583177
 	.byte 0xc3, 0x03, 0xf4, 0xe8, 0x25
 	ldb	w, 18
@@ -4803,7 +4804,7 @@ FileData_RawDataBlock:
 	ld	wa, (xsp+4)
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x05
+	sll	xbc, 5
 	add	xbc, 32
 	ld	xiz, xbc
 	add	xiz, (xsp+10)
@@ -4823,7 +4824,7 @@ FileData_RawDataBlock:
 	ld	xbc, xwa
 	add	xbc, xbc
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x02
+	sll	xbc, 2
 	ld	xwa, xbc
 	add	xwa, 800
 	add	xwa, (xsp+10)
@@ -4852,7 +4853,7 @@ FileData_RawDataBlock:
 	ld	wa, (xsp+4)
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x05
+	sll	xbc, 5
 	add	xbc, 874
 	ld	xiz, xbc
 	add	xiz, (xsp+10)
@@ -4923,14 +4924,14 @@ FileData_RawDataBlock:
 	calr	10765
 	.byte 0xbf, 0x08, 0x02, 0x00, 0x00
 	ld	wa, (xsp+12)
-	.byte 0xd8, 0xef, 0x03
+	srl	wa, 3
 	cps	wa, 0
 	jr	ule, 20
 	ld	wa, (xsp+8)
 	calr	10986
 	incm	1, (xsp+8)
 	ld	wa, (xsp+12)
-	.byte 0xd8, 0xef, 0x03
+	srl	wa, 3
 	cp	(xsp+8), wa
 	jr	c, -20
 	pushw 768
@@ -4961,9 +4962,9 @@ FileData_RawDataBlock:
 	ld	wa, (xsp+10)
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x04
+	sll	xbc, 4
 	sub	xbc, xwa
-	.byte 0xe9, 0xee, 0x06
+	sll	xbc, 6
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	ld	(xsp+4), xwa
@@ -4973,7 +4974,7 @@ FileData_RawDataBlock:
 	ld	xbc, xwa
 	add	xbc, xbc
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x03
+	sll	xbc, 3
 	ld	xiz, xbc
 	add	xiz, (xsp+14)
 	ld	xbc, 26
@@ -4992,7 +4993,7 @@ FileData_RawDataBlock:
 	ld	xbc, xwa
 	add	xbc, xbc
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x02
+	sll	xbc, 2
 	ld	xwa, xbc
 	add	xwa, 576
 	add	xwa, (xsp+14)
@@ -5021,7 +5022,7 @@ FileData_RawDataBlock:
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x05
+	sll	xbc, 5
 	add	xbc, 645
 	ld	xiz, xbc
 	add	xiz, (xsp+14)
@@ -6779,7 +6780,7 @@ DataBuf_CopyBulkBitfields_Large:
 	ld	wa, (xsp+4)
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x05
+	sll	xbc, 5
 	add	xbc, 1008
 	ld	xiz, xbc
 	add	xiz, (xsp+10)
@@ -6808,7 +6809,7 @@ DataBuf_CopyBulkBitfields_Large:
 	.byte 0xf3, 0xf1, 0x34, 0x04, 0x9f
 	scc8	c, c
 	and	c, 1
-	.byte 0xcb, 0xec, 0x07
+	sla	c, 7
 	andmi8	(xiy+1048), 127
 	or	(xiy+1048), c
 	ld	xhl, xiy
@@ -6824,9 +6825,9 @@ DataBuf_CopyBulkBitfields_Large:
 	andmi8	(xhl+1050), 128
 	or	(xhl+1050), c
 	ld	c, (xix+1079)
-	.byte 0xcb, 0xef, 0x04
+	srl	c, 4
 	and	c, 15
-	.byte 0xcb, 0xec, 0x04
+	sla	c, 4
 	andmi8	(xhl+1051), 15
 	.byte 0xc3, 0xed, 0x1b, 0x04, 0xeb, 0xf3, 0xf1, 0x38, 0x04, 0x98
 	scc8	c, c
@@ -7234,7 +7235,7 @@ DataBuf_CopyBulkBitfields_Large:
 	ld	xbc, xwa
 	add	xbc, xbc
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x02
+	sll	xbc, 2
 	add	xbc, 32
 	ld	xiz, xbc
 	add	xiz, (xsp+10)
@@ -7255,7 +7256,7 @@ DataBuf_CopyBulkBitfields_Large:
 	add	xwa, xbc
 	ld	a, (xwa)
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	de, wa
 	add	de, 414
 	ld	xwa, (xsp+10)
@@ -7351,9 +7352,9 @@ DataBuf_CopyBulkBitfields_Large:
 	ld	wa, (xsp+6)
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x04
+	sll	xbc, 4
 	sub	xbc, xwa
-	.byte 0xe9, 0xee, 0x06
+	sll	xbc, 6
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	ld	(xsp+2), xwa
@@ -7363,7 +7364,7 @@ DataBuf_CopyBulkBitfields_Large:
 	ld	xwa, xbc
 	add	xwa, xwa
 	add	xwa, xbc
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	(xsp+12), xwa
 	ld	xwa, (xsp+8)
 	add	(xsp+12), xwa
@@ -8150,7 +8151,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	and	a, 7
 	jr	z, 19
 	ld	a, (xhl)
-	.byte 0xc9, 0xee, 0x04
+	sll	a, 4
 	and	a, 48
 	.byte 0xc3, 0xe5, 0xe1, 0x02, 0x3c, 0xcf, 0xc3, 0xe5, 0xe1, 0x02, 0xe9
 	lda	xwa, (xde+1006)
@@ -8199,7 +8200,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	.byte 0xf3, 0xe9, 0x75, 0x01, 0x33
 	ld	a, (xhl)
 	and	a, 112
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 7
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x8f
 	or	(xix), a
@@ -8226,7 +8227,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	or	(xbc+1087), a
 	.byte 0xf3, 0xe5, 0x40, 0x04, 0x34, 0xf3, 0xe9, 0x05, 0x02, 0x33
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8237,7 +8238,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	lda	xix, (xbc+1089)
 	lda	xhl, (xde+518)
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8247,7 +8248,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	or	(xix), a
 	.byte 0xf3, 0xe5, 0x42, 0x04, 0x34, 0xf3, 0xe9, 0x07, 0x02, 0x33
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8258,7 +8259,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	lda	xix, (xbc+1091)
 	lda	xhl, (xde+520)
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8268,7 +8269,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	or	(xix), a
 	.byte 0xf3, 0xe5, 0x44, 0x04, 0x34, 0xf3, 0xe9, 0x09, 0x02, 0x33
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8279,7 +8280,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	lda	xix, (xbc+1093)
 	lda	xhl, (xde+522)
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8289,7 +8290,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	or	(xix), a
 	.byte 0xf3, 0xe5, 0x46, 0x04, 0x34, 0xf3, 0xe9, 0x0b, 0x02, 0x33
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8300,7 +8301,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	lda	xix, (xbc+1095)
 	lda	xhl, (xde+524)
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8310,7 +8311,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	or	(xix), a
 	.byte 0xf3, 0xe5, 0x48, 0x04, 0x34, 0xf3, 0xe9, 0x0d, 0x02, 0x33
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8321,7 +8322,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	lda	xix, (xbc+1097)
 	lda	xhl, (xde+529)
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8331,7 +8332,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	or	(xix), a
 	.byte 0xf3, 0xe5, 0x4a, 0x04, 0x34, 0xf3, 0xe9, 0x12, 0x02, 0x33
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8342,7 +8343,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	lda	xix, (xbc+1099)
 	lda	xhl, (xde+531)
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8352,7 +8353,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	or	(xix), a
 	.byte 0xf3, 0xe5, 0x4c, 0x04, 0x34, 0xf3, 0xe9, 0x14, 0x02, 0x33
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8363,7 +8364,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	lda	xix, (xbc+1101)
 	lda	xhl, (xde+533)
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8373,7 +8374,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	or	(xix), a
 	.byte 0xf3, 0xe5, 0x4e, 0x04, 0x34, 0xf3, 0xe9, 0x16, 0x02, 0x33
 	ld	a, (xhl)
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	and	a, 15
 	.byte 0xc9, 0xec, 0x04, 0x84, 0x3c, 0x0f
 	or	(xix), a
@@ -8587,9 +8588,9 @@ DataBuf_Data_FormatDispatch:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x04
+	sll	xbc, 4
 	sub	xbc, xwa
-	.byte 0xe9, 0xee, 0x06
+	sll	xbc, 6
 	ld	xde, 2020352
 	add	xde, xbc
 	pushw 960
@@ -11173,7 +11174,7 @@ ArpQueue_ProcessAndSort_Data:
 	ld	c, (xix)
 	ld	(xde), c
 	ld	(xwa), c
-	.byte 0xcb, 0xef, 0x04
+	srl	c, 4
 	ld	(xwa), c
 	.byte 0x82, 0x3c, 0x0f
 	lds	bc, 2
@@ -11373,7 +11374,7 @@ SeqVoice_DispatchProcess_Data:
 	.byte 0xf5, 0xe0, 0x31
 	ld	(xix), xwa
 	ld	c, (xbc)
-	.byte 0xcb, 0xee, 0x04
+	sll	c, 4
 	ld	xwa, (xhl)
 	.byte 0xf5, 0xe0, 0x36
 	ld	(xhl), xwa
@@ -11419,7 +11420,7 @@ SeqVoice_DispatchProcess_Data:
 	calr	-3708
 	ldb	h, 0
 	extz	xhl
-	.byte 0xeb, 0xee, 0x07
+	sll	xhl, 7
 	or	xiz, xhl
 	ldda32	xwa, 48300
 	ldw	bc, 14
@@ -11707,7 +11708,7 @@ SeqVoice_DispatchProcess_Data:
 	pop	xde
 	ld16_24	hl, 608302
 	extz	xhl
-	.byte 0xeb, 0xee, 0x04
+	sll	xhl, 4
 	ret
 	push	xde
 	push	xhl
@@ -11720,7 +11721,7 @@ SeqVoice_DispatchProcess_Data:
 	pop	xde
 	ldda16	hl, 61902
 	extz	xhl
-	.byte 0xeb, 0xee, 0x04
+	sll	xhl, 4
 	ret
 	push	xde
 	push	xhl
@@ -11733,7 +11734,7 @@ SeqVoice_DispatchProcess_Data:
 	pop	xde
 	ld16_24	hl, 2000924
 	extz	xhl
-	.byte 0xeb, 0xee, 0x04
+	sll	xhl, 4
 	ret
 
 MidiChan_CheckFlags:
@@ -11922,7 +11923,7 @@ AssSwb_ProcessLoop_Data:
 	ld	iy, wa
 	inc	1, iy
 	ld	wa, (xhl)
-	.byte 0xd8, 0xef, 0x08
+	srl	wa, 8
 	cpl	a
 	.byte 0xc3, 0x07, 0xe4, 0xf4, 0xc9
 	ld	a, (xde)
@@ -11930,7 +11931,7 @@ AssSwb_ProcessLoop_Data:
 	ld	iy, wa
 	inc	1, iy
 	ld	wa, (xix)
-	.byte 0xd8, 0xef, 0x08
+	srl	wa, 8
 	ld	xix, (xsp+6)
 	.byte 0xc3, 0x07, 0xf0, 0xf4, 0xe9
 	ld	a, (xiz)
@@ -11955,7 +11956,7 @@ AssSwb_ProcessLoop_Data:
 	.byte 0xc3, 0x07, 0xe8, 0xec, 0x25
 	extz	de
 	ld	hl, (xiz+4)
-	.byte 0xdb, 0xef, 0x08
+	srl	hl, 8
 	extz	hl
 	pushw	hl
 	call	16626163
@@ -12991,7 +12992,7 @@ MidiPkt_ArpExtHandler_N_Data:
 	cp	l, 22
 	ret	nc
 	extz	hl
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xbc, 15609352
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x23, 0xb3, 0xe8
 	ret
@@ -13233,7 +13234,7 @@ SeqChan_DispatchByType_Data:
 	cp	a, 22
 	ret	nc
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15609440
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23, 0xb3, 0xe8, 0xf1, 0x1c, 0xbd, 0xb7
 	ret
@@ -13439,7 +13440,7 @@ MidiSysEx_ProcessBlock:
 	cp	a, 22
 	ret	nc
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15609534
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23, 0xb3, 0xe8
 	ret
@@ -13748,7 +13749,7 @@ SoundMode_SysExConfig_Data:
 	ld	c, (xde)
 	res	0, c
 	ld	(xde), c
-	.byte 0xd8, 0xef, 0x08
+	srl	wa, 8
 	or	c, a
 	ld	(xde), c
 	stdi8	37159, 72
@@ -14973,7 +14974,7 @@ SeqData_FormatOutput_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617578
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	6074
@@ -14981,13 +14982,13 @@ SeqData_FormatOutput_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617578
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617898
 	exts	xbc
 	add	xbc, xde
@@ -15002,7 +15003,7 @@ SeqData_FormatOutput_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617666
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	5981
@@ -15010,13 +15011,13 @@ SeqData_FormatOutput_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617666
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617898
 	exts	xbc
 	add	xbc, xde
@@ -15031,7 +15032,7 @@ SeqData_FormatOutput_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617674
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	5887
@@ -15039,13 +15040,13 @@ SeqData_FormatOutput_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617674
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617898
 	exts	xbc
 	add	xbc, xde
@@ -15061,7 +15062,7 @@ SeqData_FormatOutput_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617770
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	5793
@@ -15069,13 +15070,13 @@ SeqData_FormatOutput_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617770
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617898
 	exts	xbc
 	add	xbc, xde
@@ -15090,7 +15091,7 @@ SeqData_FormatOutput_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617778
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	5700
@@ -15098,13 +15099,13 @@ SeqData_FormatOutput_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617778
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617898
 	exts	xbc
 	add	xbc, xde
@@ -15119,7 +15120,7 @@ SeqData_FormatOutput_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617786
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	5606
@@ -15127,13 +15128,13 @@ SeqData_FormatOutput_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617786
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617898
 	exts	xbc
 	add	xbc, xde
@@ -15473,14 +15474,14 @@ SeqAlt_DescriptorBlock_Data:
 	call	16609558
 	.byte 0xc7, 0xf8, 0x9f
 	extz	iz
-	.byte 0xde, 0xee, 0x08
+	sll	iz, 8
 	ldda32	xwa, 48212
 	call	16609558
 	extz	hl
 	or	iz, hl
 	cp	iz, 16383
 	jr	ugt, 91
-	.byte 0xde, 0xef, 0x04
+	srl	iz, 4
 	and	iz, 63
 	ldda32	xwa, 48300
 	ldw	bc, 10
@@ -15528,7 +15529,7 @@ SeqAlt_DescriptorBlock_Data:
 	cps	a, 1
 	jrl	nc, 167
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617568
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	ld	(xsp+4), xwa
@@ -15604,7 +15605,7 @@ SeqAlt_DescriptorBlock_Data:
 	cps	a, 1
 	jr	nc, 93
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617574
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	lda	xbc, (xsp+6)
@@ -16067,7 +16068,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617622
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	3322
@@ -16075,13 +16076,13 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617622
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617946
 	exts	xbc
 	add	xbc, xde
@@ -16096,7 +16097,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617670
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	3229
@@ -16104,13 +16105,13 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617670
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617946
 	exts	xbc
 	add	xbc, xde
@@ -16125,7 +16126,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617722
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	3135
@@ -16133,13 +16134,13 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617722
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617946
 	exts	xbc
 	add	xbc, xde
@@ -16155,7 +16156,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617774
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	3041
@@ -16163,13 +16164,13 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617774
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617946
 	exts	xbc
 	add	xbc, xde
@@ -16184,7 +16185,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617782
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	2948
@@ -16192,13 +16193,13 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617782
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617946
 	exts	xbc
 	add	xbc, xde
@@ -16213,7 +16214,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	nc, 68
 	.byte 0xc7, 0xfb, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15617842
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20
 	calr	2854
@@ -16221,13 +16222,13 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr	z, 41
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617842
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x21
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15617946
 	exts	xbc
 	add	xbc, xde

@@ -204,6 +204,7 @@ def translate_unidasm_to_llvm(mnemonic):
     """Attempt to translate unidasm mnemonic to LLVM assembly syntax.
 
     Returns the LLVM instruction string, or None if translation not possible.
+    May also return a list of alternative forms to try (for compact/extended).
     """
     mnem = mnemonic.strip()
 
@@ -211,24 +212,92 @@ def translate_unidasm_to_llvm(mnemonic):
     if mnem.startswith('db') or mnem == 'max' or mnem == 'normal':
         return None
 
-    # Handle some specific patterns
-    # push immediate: "push 0xNNNN"
+    # ── Special single-byte instructions (LLVM uses underscored mnemonics) ──
+    if mnem == 'push SR':
+        return 'push_sr'
+    if mnem == 'pop SR':
+        return 'pop_sr'
+    if mnem == 'push F':
+        return 'push_f'
+    if mnem == 'pop F':
+        return 'pop_f'
+    if mnem == 'push A':
+        return 'push_a'
+    if mnem == 'pop A':
+        return 'pop_a'
+    if mnem == "ex F,F'":
+        return 'ex_ff'
+    if mnem == 'incf':
+        return 'incf'
+    if mnem == 'decf':
+        return 'decf'
+    if mnem == 'rcf':
+        return 'rcf'
+    if mnem == 'scf':
+        return 'scf'
+    if mnem == 'ccf':
+        return 'ccf'
+    if mnem == 'zcf':
+        return 'zcf'
+
+    # ── LDF instruction: "ldf 0xNN" → "ldf N" ──
+    m = re.match(r'^ldf\s+0x([0-9a-fA-F]+)$', mnem)
+    if m:
+        val = int(m.group(1), 16)
+        return f'ldf\t{val}'
+    m = re.match(r'^ldf\s+(\d+)$', mnem)
+    if m:
+        return f'ldf\t{m.group(1)}'
+
+    # ── Shift/rotate with reversed operand order ──
+    # unidasm: "sla 0x02,WA" → LLVM: "sla wa, 2"
+    # unidasm: "sra 0x01,BC" → LLVM: "sra bc, 1"
+    SHIFT_OPS = {'sla', 'sra', 'srl', 'sll', 'rl', 'rlc', 'rr', 'rrc'}
+    m = re.match(r'^(\w+)\s+0x([0-9a-fA-F]+)\s*,\s*([A-Z]+)$', mnem)
+    if m and m.group(1).lower() in SHIFT_OPS:
+        op = m.group(1).lower()
+        count = int(m.group(2), 16)
+        reg = UNIDASM_REG_MAP.get(m.group(3))
+        if reg:
+            return f'{op}\t{reg}, {count}'
+    m = re.match(r'^(\w+)\s+(\d+)\s*,\s*([A-Z]+)$', mnem)
+    if m and m.group(1).lower() in SHIFT_OPS:
+        op = m.group(1).lower()
+        count = int(m.group(2))
+        reg = UNIDASM_REG_MAP.get(m.group(3))
+        if reg:
+            return f'{op}\t{reg}, {count}'
+
+    # ── Push immediate: "push 0xNNNN" ──
     m = re.match(r'^push\s+0x([0-9a-fA-F]+)$', mnem)
     if m:
         val = int(m.group(1), 16)
         return f'pushw {val}'
 
-    # push register
+    # ── Push register — try both compact (pushw) and extended (push) ──
+    # 16-bit regs: pushw wa (0x28) is 1-byte compact, push wa (0xd8 0x04) is 2-byte
+    PUSH16_SHORT = {'WA': 'wa', 'BC': 'bc', 'DE': 'de', 'HL': 'hl',
+                    'IX': 'ix', 'IY': 'iy', 'IZ': 'iz', 'SP': 'sp'}
     m = re.match(r'^push\s+([A-Z]+)$', mnem)
     if m:
-        reg = UNIDASM_REG_MAP.get(m.group(1))
+        regname = m.group(1)
+        if regname in PUSH16_SHORT:
+            # Return list: try compact first, then extended
+            return [f'pushw {PUSH16_SHORT[regname]}', f'push {PUSH16_SHORT[regname]}']
+        reg = UNIDASM_REG_MAP.get(regname)
         if reg:
             return f'push {reg}'
 
-    # pop register
+    # ── Pop register — try both compact and extended ──
+    POP16_SHORT = {'WA': 'wa', 'BC': 'bc', 'DE': 'de', 'HL': 'hl',
+                   'IX': 'ix', 'IY': 'iy', 'IZ': 'iz', 'SP': 'sp'}
     m = re.match(r'^pop\s+([A-Z]+)$', mnem)
     if m:
-        reg = UNIDASM_REG_MAP.get(m.group(1))
+        regname = m.group(1)
+        if regname in POP16_SHORT:
+            # pop16_short uses 0x48+r, pop16 uses prefix 0xD8+r 0x05
+            return [f'popw {POP16_SHORT[regname]}', f'pop {POP16_SHORT[regname]}']
+        reg = UNIDASM_REG_MAP.get(regname)
         if reg:
             return f'pop {reg}'
 
@@ -245,7 +314,6 @@ def translate_unidasm_to_llvm(mnemonic):
     op = parts[0].lower()
     operands = parts[1] if len(parts) > 1 else ''
 
-    # Handle ld/ldw/cp/add/sub/and/or/xor with memory operands
     def translate_operand(operand):
         operand = operand.strip()
 
@@ -257,7 +325,7 @@ def translate_unidasm_to_llvm(mnemonic):
             if reg:
                 return f'({reg}+{disp})'
 
-        # Memory indirect with negative disp: (XRR-0xNN) — unidasm may not use this
+        # Memory indirect with negative disp: (XRR-0xNN)
         m = re.match(r'^\(([A-Z]+)-(0x[0-9a-fA-F]+)\)$', operand)
         if m:
             reg = UNIDASM_REG_MAP.get(m.group(1))
@@ -333,6 +401,24 @@ def translate_unidasm_to_llvm(mnemonic):
     llvm_op = op
     if op == 'ldw':
         llvm_op = 'ld'  # LLVM uses ld for all sizes, operand size determines encoding
+
+    # ── Generate alternative forms for compact encodings ──
+    alternatives = []
+
+    # For LD with 16-bit register and immediate 0 or 1: try compact ldw form
+    if op == 'ld' and len(translated_ops) == 2:
+        reg16 = {'wa', 'bc', 'de', 'hl', 'ix', 'iy', 'iz', 'sp'}
+        if translated_ops[0] in reg16:
+            # Try compact ldw form first, then extended ld
+            compact = f'ldw\t{translated_ops[0]}, {translated_ops[1]}'
+            extended = f'ld\t{translated_ops[0]}, {translated_ops[1]}'
+            return [compact, extended]
+        reg8 = {'a', 'w', 'b', 'c', 'd', 'e', 'h', 'l'}
+        if translated_ops[0] in reg8 and translated_ops[1].lstrip('-').isdigit():
+            # Try compact ldb form first for 8-bit reg + immediate
+            compact = f'ldb\t{translated_ops[0]}, {translated_ops[1]}'
+            extended = f'ld\t{translated_ops[0]}, {translated_ops[1]}'
+            return [compact, extended]
 
     if translated_ops:
         return f'{llvm_op}\t{", ".join(translated_ops)}'
@@ -423,32 +509,50 @@ def main():
                     continue
 
                 # Translate to LLVM syntax
-                llvm_inst = translate_unidasm_to_llvm(mnem)
-                if llvm_inst is None:
+                llvm_result = translate_unidasm_to_llvm(mnem)
+                if llvm_result is None:
                     block_free = False
                     failure_categories[f'no_translation: {mnem[:40]}'] += 1
                     continue
 
-                # Try LLVM encoding
-                encoded = try_llvm_encode(llvm_inst)
-                if encoded is None:
-                    block_free = False
-                    failure_categories[f'llvm_cant_encode: {llvm_inst[:40]}'] += 1
-                    continue
+                # Handle alternative forms (list) or single form (string)
+                if isinstance(llvm_result, list):
+                    candidates = llvm_result
+                else:
+                    candidates = [llvm_result]
 
-                # Check byte match
+                # Try each candidate and find one that byte-matches
                 inst_bytes = raw_bytes[offset:offset + length]
-                if encoded != inst_bytes:
+                matched_inst = None
+                last_encoded = None
+                last_candidate = None
+                for candidate in candidates:
+                    encoded = try_llvm_encode(candidate)
+                    if encoded is not None and encoded == inst_bytes:
+                        matched_inst = candidate
+                        break
+                    if encoded is not None:
+                        last_encoded = encoded
+                        last_candidate = candidate
+                    elif last_candidate is None:
+                        last_candidate = candidate
+
+                if matched_inst is None:
                     block_free = False
-                    failure_categories[f'byte_mismatch: {llvm_inst[:40]}'] += 1
-                    if args.verbose:
-                        print(f"  MISMATCH {rel}:{start_line}: "
-                              f"expected {' '.join(f'{b:02x}' for b in inst_bytes)}, "
-                              f"got {' '.join(f'{b:02x}' for b in encoded)} "
-                              f"for: {llvm_inst}", file=sys.stderr)
+                    # Categorize the failure
+                    disp = last_candidate or candidates[0]
+                    if last_encoded is not None:
+                        failure_categories[f'byte_mismatch: {disp[:40]}'] += 1
+                        if args.verbose:
+                            print(f"  MISMATCH {rel}:{start_line}: "
+                                  f"expected {' '.join(f'{b:02x}' for b in inst_bytes)}, "
+                                  f"got {' '.join(f'{b:02x}' for b in last_encoded)} "
+                                  f"for: {disp}", file=sys.stderr)
+                    else:
+                        failure_categories[f'llvm_cant_encode: {disp[:40]}'] += 1
                     continue
 
-                block_instructions.append((offset, length, llvm_inst))
+                block_instructions.append((offset, length, matched_inst))
 
             if block_free and block_instructions:
                 free_wins += 1

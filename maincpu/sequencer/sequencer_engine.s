@@ -15651,7 +15651,7 @@ Part_VoiceSearchBlock:
 	dec	1, a
 	ldb	w, 0
 	extz	xwa
-	.byte 0xe8, 0xee, 0x0b
+	sll	xwa, 11
 	lda	xwa, (xwa+48)
 	lda_24	xde, 700416
 	add	xde, xwa
@@ -16354,7 +16354,7 @@ PartCtrl_DataBlock_CE1:
 	ld	wa, (xiz)
 	dec	1, wa
 	extz	xwa
-	.byte 0xe8, 0xee, 0x08
+	sll	xwa, 8
 	add	xwa, xhl
 	lda_24	xhl, 720896
 	add	xhl, xwa
@@ -16384,7 +16384,7 @@ PartCtrl_DataBlock_CE1:
 	ld	wa, (xiz)
 	dec	1, wa
 	extz	xwa
-	.byte 0xe8, 0xee, 0x08
+	sll	xwa, 8
 	add	xwa, xhl
 	lda_24	xhl, 720896
 	add	xhl, xwa
@@ -20773,7 +20773,7 @@ AppEvent_SubDispatch:
 	cps	wa, 7
 	jr	le, 3
 	ldw	wa, 8
-	.byte 0xd8, 0xee, 0x02
+	sll	wa, 2
 	lda_24	xix, 14961006
 	.byte 0xe3, 0x07, 0xf0, 0xe0, 0x20, 0x80, 0x3f, 0x01
 	jrl	ule, 1740
@@ -24935,7 +24935,7 @@ SeqLoad_ProcessDataBlock:
 	cp	wa, 65535
 	jr	nz, -17
 	ld	xhl, (xsp+2)
-	.byte 0xeb, 0xee, 0x08
+	sll	xhl, 8
 	ld	(xsp+2), xhl
 	pop qiz
 	inc	6, xsp
@@ -25005,7 +25005,7 @@ SeqLoad_ProcessDataBlock:
 	jr	ule, -77
 	.byte 0xbf, 0x08, 0x16, 0xce, 0xf1
 	ld	wa, (xsp+8)
-	.byte 0xd8, 0xef, 0x04
+	srl	wa, 4
 	ld	(xsp+8), wa
 	ldda16	iz, 61999
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00, 0x9f, 0x08, 0x3f, 0x00, 0x00
@@ -25696,7 +25696,7 @@ SeqLoad_ReadPartDataBlock:
 	add	xwa, xde
 	ld	hl, (xwa)
 	extz	xhl
-	.byte 0xeb, 0xee, 0x08
+	sll	xhl, 8
 	add	(xsp+4), xhl
 	ld	wa, (xwa)
 	add	(xsp+10), wa

@@ -66,7 +66,8 @@ SetWall_InlineCodeBlock:
 	ret
 	retd	0x1107
 	ccf
-	.byte 0x02, 0x0b, 0x01, 0x04
+	push_sr
+	pushw 1025
 	halt
 	ei	0x07
 	scf
@@ -1974,7 +1975,7 @@ SetWall_MiscDataAndCode:
 	.byte 0x85, 0x11
 	xor	xwa, xwa
 	ld8_24	a, 65507
-	.byte 0xe8, 0xec, 0x0b
+	sla	xwa, 11
 	ld	xix, 700416
 	add	xix, xwa
 	ld	xwa, 256
@@ -2001,7 +2002,7 @@ SetWall_MiscDataAndCode:
 	ld	xix, 62032
 	jr	16
 	ld	xix, 700416
-	.byte 0xe8, 0xec, 0x0b
+	sla	xwa, 11
 	add	xix, xwa
 	add	xix, 208
 	xor	xbc, xbc

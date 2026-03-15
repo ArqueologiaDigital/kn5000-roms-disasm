@@ -3817,7 +3817,7 @@ BitMapOut_UpdateWidget_Done:
 	extz	bc
 	ld	a, (xsp+2)
 	extz	wa
-	.byte 0xd8, 0xee, 0x03
+	sll	wa, 3
 	add	wa, bc
 	call	16534664
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x08

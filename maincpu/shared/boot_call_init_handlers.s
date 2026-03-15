@@ -62,7 +62,7 @@ Boot_CallInitHandlers__handler_loop:
 	; EXTZ BC
 	extz	bc
 	; SLA 2, BC (multiply by 4 for 32-bit table entries)
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	; LDA XDE, 0xFFFEF0 (init handler table)
 	lda_24	xde, 16776944
 	; LD XBC, (XDE+BC) - load handler address from table

@@ -280,7 +280,7 @@ AccompSeq_VRAMHelperData:
 	ret
 	ldda16	wa, 32322
 	and	xwa, 4095
-	.byte 0xe8, 0xec, 0x08
+	sla	xwa, 8
 	add	xwa, 2001664
 	ld	xiy, xwa
 	ret

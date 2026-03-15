@@ -1210,7 +1210,7 @@ FDemoText_ByteData_DisplayRefresh:
 	cp	(xhl), 0
 	jr	nz, 58
 	ld	xwa, xiz
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	and	xwa, 4095
 	extz	xwa
 	add	xwa, 27262976
@@ -1257,7 +1257,7 @@ FDemoText_ByteData_DisplayRefresh:
 	jr	ule, 69
 	ld	xbc, xiz
 	ld	xwa, (xsp+4)
-	.byte 0xe8, 0xee, 0x00
+	sll	xwa, 0
 	add	xwa, xbc
 	call	16401092
 	cps	hl, 0
@@ -1276,7 +1276,7 @@ FDemoText_ByteData_DisplayRefresh:
 	jr	nz, 14
 	ld	xbc, xiz
 	ld	xwa, (xsp+4)
-	.byte 0xe8, 0xee, 0x00
+	sll	xwa, 0
 	add	xwa, xbc
 	ld	xhl, xwa
 	jr	39
@@ -1649,7 +1649,8 @@ FDemoText_ByteData_TextRenderer:
 	ld	iz, wa
 	ld	wa, iz
 	exts	xwa
-	.byte 0xe8, 0xee, 0x02, 0xaf, 0x0a, 0x80
+	sll	xwa, 2
+	add	xwa, (xsp+10)
 	ld	xwa, (xwa)
 	push	xwa
 	call	16715680
@@ -1659,7 +1660,8 @@ FDemoText_ByteData_TextRenderer:
 	ld	(xsp+8), xhl
 	ld	wa, iz
 	exts	xwa
-	.byte 0xe8, 0xee, 0x02, 0xaf, 0x10, 0x80
+	sll	xwa, 2
+	add	xwa, (xsp+16)
 	ld	xwa, (xwa)
 	push	xwa
 	ld	xwa, (xsp+12)
@@ -1767,7 +1769,7 @@ FDemoText_ByteData_LayoutEngine:
 	inc	8, xsp
 	inc	1, qiz
 	ld	bc, qiz
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15334900
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x21, 0x81, 0x3f, 0x00
 	jr	nz, -90
@@ -1902,7 +1904,7 @@ FDemoText_ByteData_LayoutEngine:
 	add	iz, 64
 	inc	1, qiz
 	ld	bc, qiz
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15335018
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20, 0x80, 0x3f, 0x00
 	jr	nz, -115
@@ -1941,7 +1943,7 @@ FDemoText_ByteData_LayoutEngine:
 	cp	iz, 127
 	jr	gt, 20
 	ld	bc, iz
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 151512
 	ld32_24	xwa, 149972
 	.byte 0xf3, 0x07, 0xe8, 0xe4, 0x60
@@ -2000,12 +2002,12 @@ FDemoText_ByteData_LayoutEngine:
 	ld	(xsp+144), xbc
 	ld	(xsp+148), wa
 	ld16_24	wa, 154430
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 154432
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	ld	(xsp+4), xwa
 	ld16_24	wa, 154464
-	.byte 0xd8, 0xec, 0x01
+	sla	wa, 1
 	lda_24	xbc, 154466
 	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x20
 	ld	(xsp+8), wa
@@ -2040,7 +2042,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	lt, 44
 	cp	hl, 9
 	jr	gt, 38
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 15335066
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	ld	(xsp+4), xwa
@@ -2055,7 +2057,7 @@ FDemoText_ByteData_LayoutEngine:
 	ld	(xsp+8), hl
 	inc	1, qiz
 	ld	bc, qiz
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15335040
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x20, 0x80, 0x3f, 0x00
 	jr	nz, -109
@@ -2074,12 +2076,12 @@ FDemoText_ByteData_LayoutEngine:
 	st16_24	154464, wa
 	cp	bc, 8
 	jr	ge, 37
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 154432
 	ld	xwa, (xsp+4)
 	.byte 0xf3, 0x07, 0xe8, 0xe4, 0x60
 	ld16_24	bc, 154464
-	.byte 0xd9, 0xec, 0x01
+	sla	bc, 1
 	lda_24	xde, 154466
 	ld	wa, (xsp+8)
 	.byte 0xf3, 0x07, 0xe8, 0xe4, 0x50
@@ -2100,12 +2102,12 @@ FDemoText_ByteData_LayoutEngine:
 	sti16_24	154430, 0
 	sti16_24	154464, 0
 	ld16_24	bc, 154430
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 154432
 	lds32	xwa, 5
 	.byte 0xf3, 0x07, 0xe8, 0xe4, 0x60
 	ld16_24	wa, 154464
-	.byte 0xd8, 0xec, 0x01
+	sla	wa, 1
 	lda_24	xbc, 154466
 	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x02, 0xff, 0x00
 	lds	hl, 0
@@ -2197,7 +2199,7 @@ FDemoText_ByteData_LayoutEngine:
 	inc	8, xsp
 	inc	1, qiz
 	ld	bc, qiz
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xwa, 15335340
 	.byte 0xe3, 0x07, 0xe0, 0xe4, 0x21, 0x81, 0x3f, 0x00
 	jr	nz, -60
@@ -2559,13 +2561,13 @@ FDemoText_ByteData_LayoutB:
 	pushw	iz
 	ld	(xsp+12), xwa
 	ld16_24	wa, 154430
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 154432
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	call	16459274
 	ld	iz, hl
 	ld16_24	wa, 154430
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 154432
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	call	16459287
@@ -2579,7 +2581,7 @@ FDemoText_ByteData_LayoutB:
 	inc	3, wa
 	exts	xwa
 	divs	wa, 4
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	add	bc, wa
 	ld	(xde), bc
 	ld	xwa, (xsp+12)

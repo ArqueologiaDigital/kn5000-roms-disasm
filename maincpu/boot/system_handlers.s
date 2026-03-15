@@ -1887,7 +1887,7 @@ AudioMix_BytecodeData:
 	pushw	wa
 	pushw	bc
 	ld	a, (xsp+12)
-	.byte 0xc9, 0xee, 0x05
+	sll	a, 5
 	set	4, a
 	ld	xiy, 1376256
 	ld	(xiy), a

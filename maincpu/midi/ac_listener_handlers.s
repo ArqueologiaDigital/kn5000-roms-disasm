@@ -793,14 +793,14 @@ Data_FadeSetGridDispatch:
 	ld	(xsp+28), xhl
 	lda	xbc, (xsp+4)
 	ld	xwa, (xsp+28)
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	ld	(xbc), wa
 	ld	xwa, (xsp+28)
 	ld	(xbc+2), wa
 	.byte 0x91, 0x3f, 0x01, 0x00
 	jrl	nz, 463
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15202674
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	cp	xwa, 4294967295
@@ -816,14 +816,14 @@ Data_FadeSetGridDispatch:
 	ld	(xsp+28), xhl
 	lda	xbc, (xsp+4)
 	ld	xwa, (xsp+28)
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	ld	(xbc), wa
 	ld	xwa, (xsp+28)
 	ld	(xbc+2), wa
 	.byte 0x91, 0x3f, 0x01, 0x00
 	jrl	nz, 388
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15202674
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	cp	xwa, 4294967295
@@ -840,7 +840,7 @@ Data_FadeSetGridDispatch:
 	ld	xiz, (xsp+28)
 	jr	18
 	ld	iy, bc
-	.byte 0xdd, 0xec, 0x02
+	sla	iy, 2
 	ld	xwa, (xiz)
 	.byte 0xe3, 0x07, 0xf0, 0xf4, 0xf0
 	jr	z, 10
@@ -1308,7 +1308,7 @@ Data_InOutGridDispatch:
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	bc, iz
@@ -1374,7 +1374,7 @@ Data_InOutGridDispatch:
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	bc, iz
@@ -1461,7 +1461,7 @@ Data_InOutGridDispatch:
 	jrl	nz, 1301
 	.byte 0xb1, 0x02, 0x00, 0x00
 	ld	wa, (xwa)
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15203496
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	push	xwa
@@ -1669,7 +1669,7 @@ ParaLoadOpt_Entry:
 Data_ParaLoadOptDispatch:
 	ld	xwa, 8448
 	call	16569399
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 15203496
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	push	xwa
@@ -1684,7 +1684,7 @@ Data_ParaLoadOptDispatch:
 	jrl	602
 	ld	xwa, 8449
 	call	16569399
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 15203476
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	push	xwa
@@ -1699,7 +1699,7 @@ Data_ParaLoadOptDispatch:
 	jrl	552
 	ld	xwa, 20480
 	call	16569399
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 15203524
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	push	xwa
@@ -1812,7 +1812,7 @@ Data_ParaLoadOptDispatch:
 	jrl	195
 	ld	xwa, 8577
 	call	16569399
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 15203476
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	push	xwa
@@ -1827,7 +1827,7 @@ Data_ParaLoadOptDispatch:
 	jrl	145
 	ld	xwa, 8580
 	call	16569399
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 15203476
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	push	xwa
@@ -1842,7 +1842,7 @@ Data_ParaLoadOptDispatch:
 	jr	96
 	ld	xwa, 8578
 	call	16569399
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 15203476
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	push	xwa
@@ -1857,7 +1857,7 @@ Data_ParaLoadOptDispatch:
 	jr	47
 	ld	xwa, 8579
 	call	16569399
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 15203476
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	push	xwa

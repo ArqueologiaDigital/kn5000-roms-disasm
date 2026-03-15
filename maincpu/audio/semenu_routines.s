@@ -382,7 +382,7 @@ SeMenu_RegisterParamDisplay_Data:
 	calr	-767
 	lda	xhl, (xsp+16)
 	ld	wa, iz
-	.byte 0xd8, 0xef, 0x08
+	srl	wa, 8
 	ld	(xhl), a
 	lda	xde, (xhl+1)
 	.byte 0xc7, 0xf8, 0x89
@@ -426,7 +426,7 @@ SeMenu_RegisterParamDisplay_Data:
 	calr	-883
 	lda	xhl, (xsp+16)
 	ld	wa, iz
-	.byte 0xd8, 0xef, 0x08
+	srl	wa, 8
 	ld	(xhl), a
 	lda	xde, (xhl+1)
 	.byte 0xc7, 0xf8, 0x89
@@ -450,7 +450,7 @@ SeMenu_RegisterParamDisplay_Data:
 	ld	e, (xsp+20)
 	dec	1, e
 	ld	(xhl), e
-	.byte 0xcd, 0xee, 0x04
+	sll	e, 4
 	ld	(xhl), e
 	ld	c, (xsp+22)
 	dec	1, c
@@ -503,7 +503,7 @@ SeMenu_SetupDisplayObject_Data:
 	calr	-1068
 	lda	xhl, (xsp+14)
 	ld	wa, iz
-	.byte 0xd8, 0xef, 0x08
+	srl	wa, 8
 	ld	(xhl), a
 	lda	xde, (xhl+1)
 	.byte 0xc7, 0xf8, 0x89
@@ -1181,7 +1181,7 @@ SeMenu_BitShiftMask_End:
 	extz	bc
 	cps	bc, 0
 	ret	ule
-	.byte 0xcf, 0xef, 0x01
+	srl	l, 1
 	inc	1, de
 	cp	de, bc
 	jr	c, -9
@@ -1704,7 +1704,7 @@ SeMenu_TransferPartValues_EndData:
 	ld	(xde), c
 	ld	a, (xsp+4)
 	dec	1, a
-	.byte 0xc9, 0xee, 0x06
+	sll	a, 6
 	or	c, a
 	ld	(xde), c
 	jr	15
@@ -4278,7 +4278,7 @@ SeMenu_RefreshPartDisplay_Data:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14737920
 	exts	xbc
 	add	xbc, xde
@@ -4297,7 +4297,7 @@ SeMenu_RefreshPartDisplay_Data:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14737992
 	exts	xbc
 	add	xbc, xde
@@ -4316,7 +4316,7 @@ SeMenu_RefreshPartDisplay_Data:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14738064
 	exts	xbc
 	add	xbc, xde
@@ -4335,7 +4335,7 @@ SeMenu_RefreshPartDisplay_Data:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14738136
 	exts	xbc
 	add	xbc, xde

@@ -123,7 +123,7 @@ ExcPmemFunc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ExcPmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xbc, 15203742
 	add	xbc, xwa
 	ld	xwa, (xbc)
@@ -163,7 +163,7 @@ ExcSmemFunc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ExcSmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xbc, 15203742
 	add	xbc, xwa
 	ld	xwa, (xbc)
@@ -203,7 +203,7 @@ ExcCompFunc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ExcCompFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xbc, 15203742
 	add	xbc, xwa
 	ld	xwa, (xbc)
@@ -243,7 +243,7 @@ ExcSeqFunc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ExcSeqFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xbc, 15203742
 	add	xbc, xwa
 	ld	xwa, (xbc)
@@ -283,7 +283,7 @@ ExcMspFunc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ExcMspFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xbc, 15203742
 	add	xbc, xwa
 	ld	xwa, (xbc)

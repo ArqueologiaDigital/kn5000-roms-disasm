@@ -37,7 +37,7 @@ Scoop_SoundEditorData:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14736566
 	exts	xbc
 	add	xbc, xde
@@ -56,7 +56,7 @@ Scoop_SoundEditorData:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14736638
 	exts	xbc
 	add	xbc, xde
@@ -75,7 +75,7 @@ Scoop_SoundEditorData:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14736710
 	exts	xbc
 	add	xbc, xde
@@ -94,7 +94,7 @@ Scoop_SoundEditorData:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14736782
 	exts	xbc
 	add	xbc, xde
@@ -113,7 +113,7 @@ Scoop_SoundEditorData:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14736854
 	exts	xbc
 	add	xbc, xde

@@ -41,7 +41,8 @@ Naka_SeqToComposer_Screens:
 	.long NakaLabel_SeqToComposer_MeasLastLabel
 	.long NakaGroup_SeqToComposer_TransGroup
 	ldb	h, 0xd9
-	.byte 0x03, 0x00
+	pop_sr
+	nop
 	.long NakaLabel_SeqToComposer_TrnLabel
 	.long NakaLabel_SeqToComposer_MemLabel
 	.long NakaLabel_SeqToComposer_ComposerMemory
@@ -1283,7 +1284,11 @@ StrTimeSig_3_2:
 StrTimeSig_2_2:
 	.byte 0x32, 0x2f, 0x32, 0x00
 StrTimeSig_1_2:
-	.byte 0x31, 0x2f, 0x32, 0x00, 0x25, 0x64, 0x00, 0xff
+	ldw	bc, 12847
+	nop
+	ldb	e, 100
+	nop
+	swi	7
 	aligned_string "%s (%s)"
 	.byte 0x00, 0x00, 0x1a, 0x00, 0xa4, 0x00, 0xa4, 0x00
 	.byte 0x55, 0x00, 0x60, 0x00, 0x7e, 0x00, 0x82, 0x00
@@ -1784,10 +1789,17 @@ StrRhySlot_MemoryB:		aligned_string "MEMORY B "
 StrRhySlot_MemoryA:		aligned_string "MEMORY A "
 	aligned_string "MEMORY"
 	aligned_string "CUSTOM"
-	.byte 0x4d, 0x45, 0x4d, 0x4f
-	.byte 0x52, 0x59, 0x00, 0xff
-	.byte 0x43, 0x55, 0x53, 0x54
-	.byte 0x4f, 0x4d, 0x00, 0xff, 0x00, 0xdd, 0xe1, 0x00
+	popw iy
+	ld	xiy, 1498566477
+	nop
+	swi	7
+	ld	xhl, 1330926421
+	popw iy
+	nop
+	swi	7
+	nop
+	or	bc, iy
+	nop
 PtrTbl_StyleSectShortNames2:
 	.long StrStyleSect2_A_Vari2
 	.long StrStyleSect2_A_Vari3
@@ -2096,7 +2108,9 @@ StrCompileBank2:	aligned_string "COMPILE BANK:2"
 StrCompileBank1:	aligned_string "COMPILE BANK:1"
 	aligned_string "MEASURE = %d"
 	aligned_string "MEMORY = %2d"
-	.byte 0x25, 0x64, 0x00, 0xff
+	ldb	e, 100
+	nop
+	swi	7
 	.long StrInstantStart
 	.long StrSyncToRhythm
 StrSyncToRhythm:	aligned_string "SYNC TO RHYTHM   "

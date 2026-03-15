@@ -1860,7 +1860,9 @@ SMF_ChannelTranslationTable:
 	.byte 0x90, 0x11, 0x50, 0x51
 	jrl	f, 4721
 	zcf
-	.byte 0x14, 0x15, 0x16
+	push_a
+	pop_a
+	ex_ff
 	swi	7
 	.byte 0x98, 0x40, 0xff, 0x52, 0x92, 0xff
 	jrl	le, -26113
@@ -3212,7 +3214,9 @@ SMF_SlotParam_RPNReturn:
 	nop
 	ccf
 	zcf
-	.byte 0x14, 0x15, 0x16
+	push_a
+	pop_a
+	ex_ff
 	nop
 	.byte 0x01, 0x02, 0x03, 0x04
 	halt
@@ -3228,7 +3232,9 @@ SMF_SlotParam_RPNReturn:
 	nop
 	ccf
 	zcf
-	.byte 0x14, 0x15, 0x16
+	push_a
+	pop_a
+	ex_ff
 
 SMF_SlotParam_NRPN:
 	bitda 0, 4411

@@ -934,7 +934,8 @@ OFFSETS_FCF90C:
 	nop
 	.byte 0x01
 	nop
-	.byte 0x02, 0x03
+	push_sr
+	pop_sr
 	nop
 
 SC0Init_ClearContextSlots:

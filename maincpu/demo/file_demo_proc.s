@@ -3171,12 +3171,12 @@ FileIO_ByteBlock_F8817E:
 	ld	wa, (xsp+38)
 	extz	xwa
 	ld	xiz, xwa
-	.byte 0xee, 0xee, 0x04
+	sll	xiz, 4
 	add	xiz, 16
 	ld	wa, (xsp+36)
 	extz	xwa
 	ld	(xsp+4), xwa
-	.byte 0xe8, 0xee, 0x04
+	sll	xwa, 4
 	ld	(xsp+4), xwa
 	ld	xwa, 16
 	add	(xsp+4), xwa
@@ -3196,7 +3196,7 @@ FileIO_ByteBlock_F8817E:
 	ld16_24	wa, 2020189
 	extz	xwa
 	ld	(xsp+8), xwa
-	.byte 0xe8, 0xee, 0x03
+	sll	xwa, 3
 	ld	(xsp+8), xwa
 	ld	wa, (xsp+38)
 	extz	xwa
@@ -3284,7 +3284,7 @@ FileIO_ByteBlock_F8817E:
 	ld	xiz, xhl
 	ld	bc, (xsp+32)
 	extz	xbc
-	.byte 0xe9, 0xee, 0x0b
+	sll	xbc, 11
 	lda_24	xwa, 700416
 	add	xwa, xbc
 	ld	xbc, 2048
@@ -3427,18 +3427,18 @@ FileIO_ByteBlock_F8817E:
 	.byte 0xbf, 0x0a, 0x02, 0x50, 0x00
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x02
+	sll	xbc, 2
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x04
+	sll	xbc, 4
 	ld	(xsp+2), xbc
 	ld	xwa, 19111
 	add	(xsp+2), xwa
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x02
+	sll	xbc, 2
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x04
+	sll	xbc, 4
 	ld	(xsp+6), xbc
 	ld	xwa, 19111
 	add	(xsp+6), xwa
@@ -6640,7 +6640,7 @@ FileIO_ByteBlock_F8A0E1:
 	ld	xhl, 15336520
 	jr	47
 	ld	wa, (xsp+26)
-	.byte 0xd8, 0xee, 0x04
+	sll	wa, 4
 	add	wa, 16
 	extz	xwa
 	lds	bc, 0
@@ -6686,7 +6686,7 @@ FileIO_ByteBlock_F8A0E1:
 	call	16289020
 	ld	iz, hl
 	call	16289020
-	.byte 0xdb, 0xee, 0x08
+	sll	hl, 8
 	or	iz, hl
 	.byte 0x9f, 0x1c, 0x46
 	ld	xwa, xiz
@@ -6729,7 +6729,7 @@ FileIO_ByteBlock_F8A0E1:
 	ld	xhl, 15336520
 	jr	47
 	ld	wa, (xsp+26)
-	.byte 0xd8, 0xee, 0x0b
+	sll	wa, 11
 	add	wa, 256
 	extz	xwa
 	lds	bc, 0
@@ -6771,7 +6771,8 @@ FileIO_ByteBlock_F8A0E1:
 	ld	xhl, 15336520
 	jr	54
 	ld	wa, (xsp+28)
-	.byte 0xd8, 0xee, 0x02, 0x9f, 0x1a, 0x80
+	sll	wa, 2
+	add	wa, (xsp+26)
 	mul	wa, 96
 	add	wa, 160
 	extz	xwa

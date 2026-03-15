@@ -390,12 +390,26 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	.byte 0x20, 0x4f, 0x4b, 0x00, 0x0a
 	aligned_string "Data Compare =>"
 	aligned_string " Error!!!!!!!!"
-	.byte 0x20, 0x4f
-	.byte 0x4b, 0x00, 0x2a, 0x2e, 0x2a, 0x00
+	ldb	w, 79
+	popw hl
+	nop
+	pushw de
+	pushw iz
+	pushw de
+	nop
 	aligned_string "File Name 20 charact"
-	.byte 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	ldw	hl, 0
+	nop
+	nop
+	nop
 	aligned_string "TEST_HAMA"
 	aligned_string "TESTHAMA2HD"
 	aligned_string "LOAD"

@@ -54,7 +54,8 @@ LED_patterns_indicating_firmware_version:
 	.byte 0x18, 0x14, 0x1c, 0x12, 0x1a, 0x16, 0x1e
 LED_patterns_firmware_v8_plus:
 	scf
-	.byte 0x19, 0x15
+	pop_f
+	pop_a
 	call	1514259
 	.byte 0x1f
 
@@ -354,260 +355,298 @@ StrDesc_PsStylCnvVer:
 StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long AcMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_AcMemNoBox
 	.long StrEmpty_AcMemNoBox
 	.long StrDesc_Empty_0
 	.long AcCmpRecBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x26, 0x00
-	.byte 0x02, 0x00
+	ldb	h, 0
+	push_sr
+	nop
 	.long StrName_AcCmpRecBox
 	.long StrPrefix_AcCmpRecBox
 	.long StrDesc_RecordBits
 	.long PsCmpQtzBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsCmpQtzBox
 	.long StrEmpty_PsCmpQtzBox
 	.long StrDesc_Empty_1
 	.long PsCmpMeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsCmpMeasBox
 	.long StrEmpty_PsCmpMeasBox
 	.long StrDesc_Empty_2
 	.long PsCmpMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsCmpMemBox
 	.long StrEmpty_PsCmpMemBox
 	.long StrDesc_Empty_3
 	.long AcS2cMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_AcS2cMemNoBox
 	.long StrEmpty_AcS2cMemNoBox
 	.long StrDesc_Empty_4
 	.long PsS2cFmeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsS2cFmeasBox
 	.long StrEmpty_PsS2cFmeasBox
 	.long StrDesc_Empty_5
 	.long PsS2cLmeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsS2cLmeasBox
 	.long StrEmpty_PsS2cLmeasBox
 	.long StrDesc_Empty_6
 	.long PsSeqSongNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsSeqSongNoBox
 	.long StrEmpty_PsSeqSongNoBox
 	.long StrDesc_Empty_7
 	.long PsS2cTransBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsS2cTransBox
 	.long StrEmpty_PsS2cTransBox
 	.long StrDesc_Empty_8
 	.long PsCstmCpBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x26, 0x00
-	.byte 0x02, 0x00
+	ldb	h, 0
+	push_sr
+	nop
 	.long StrName_PsCstmCpBnkBox
 	.long StrPrefix_PsCstmCpBnkBox
 	.long StrDesc_BankPair_0
 	.long PsCstmCpSwBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x26, 0x00
-	.byte 0x02, 0x00
+	ldb	h, 0
+	push_sr
+	nop
 	.long StrName_PsCstmCpSwBox
 	.long StrPrefix_PsCstmCpSwBox
 	.long StrDesc_BankPair_1
 	.long PsCtmAttStrBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsCtmAttStrBox
 	.long StrEmpty_PsCtmAttStrBox
 	.long StrDesc_RamField
 	.long AcCmpMdBoxProc
 	naka_header NAKA_TYPE_0x15
-	.byte 0x34, 0x00
-	.byte 0x02, 0x00
+	ldw	ix, 512
+	nop
 	.long StrName_AcCmpMdBox
 	.long StrPrefix_AcCmpMdBox
 	.long StrDesc_RamNamePair
 	.long AcApcMdBoxProc
 	naka_header NAKA_TYPE_0x15
-	.byte 0x34, 0x00
-	.byte 0x02, 0x00
+	ldw	ix, 512
+	nop
 	.long StrName_AcApcMdBox
 	.long StrPrefix_AcApcMdBox
 	.long StrDesc_ApcDataPair
 	.long AcMspBnkSlBoxProc
 	naka_header NAKA_TYPE_0x15
-	.byte 0x34, 0x00
-	.byte 0x02, 0x00
+	ldw	ix, 512
+	nop
 	.long StrName_AcMspBnkSlBox
 	.long StrPrefix_AcMspBnkSlBox
 	.long StrDesc_MspBnkPair_0
 	.long PsMspBnkNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x26, 0x00
-	.byte 0x02, 0x00
+	ldb	h, 0
+	push_sr
+	nop
 	.long StrName_PsMspBnkNameBox
 	.long StrPrefix_PsMspBnkNameBox
 	.long StrDesc_MspBnkPair_1
 	.long AcCmpTempoBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_AcCmpTempoBox
 	.long StrEmpty_AcCmpTempoBox
 	.long StrDesc_Empty_9
 	.long PsCmpCpFGrpBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsCmpCpFGrpBox
 	.long StrEmpty_PsCmpCpFGrpBox
 	.long StrDesc_Empty_10
 	.long PsCmpCpFVariBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsCmpCpFVariBox
 	.long StrEmpty_PsCmpCpFVariBox
 	.long StrDesc_Empty_11
 	.long PsCmpCpFPtnBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsCmpCpFPtnBox
 	.long StrEmpty_PsCmpCpFPtnBox
 	.long StrDesc_Empty_12
 	.long PsNameMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsNameMemBox
 	.long StrEmpty_PsNameMemBox
 	.long StrDesc_Empty_13
 	.long AcCmpSetGridBoxProc
 	naka_header NAKA_TYPE_0x54
-	.byte 0x4a, 0x00
-	.byte 0x0c, 0x00
+	popw de
+	nop
+	incf
+	nop
 	.long StrName_AcCmpSetGridBox
 	.long StrPrefix_AcCmpSetGrid
 	.long GridProperty_Config_Table
 	.long PsRgpSetBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsRgpSetBnkBox
 	.long StrEmpty_PsRgpSetBnkBox
 	.long StrDesc_Empty_14
 	.long AcEasyCmpGridBoxProc
 	naka_header NAKA_TYPE_0x54
-	.byte 0x4a, 0x00
-	.byte 0x0c, 0x00
+	popw de
+	nop
+	incf
+	nop
 	.long StrName_AcEasyCmpGridBox
 	.long StrPrefix_AcEasyCmpGrid
 	.long GridProperty_AltConfig_Table
 	.long PsMspMeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsMspMeasBox
 	.long StrEmpty_PsMspMeasBox
 	.long StrDesc_Empty_15
 	.long PsMspMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsMspMemBox
 	.long StrEmpty_PsMspMemBox
 	.long StrDesc_Empty_16
 	.long PsMspRecPadBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsMspRecPadBox
 	.long StrEmpty_PsMspRecPadBox
 	.long StrDesc_Empty_17
 	.long PsMspRecBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsMspRecBnkBox
 	.long StrEmpty_PsMspRecBnkBox
 	.long StrDesc_Empty_18
 	.long PsMspNameBnkProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsMspNameBnk
 	.long StrEmpty_PsMspNameBnk
 	.long StrDesc_Empty_19
 	.long PsCstmCpNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x26, 0x00
-	.byte 0x02, 0x00
+	ldb	h, 0
+	push_sr
+	nop
 	.long StrName_PsCstmCpNameBox
 	.long LABEL_E1711E
 	.long StrDesc_CstmCpNameBox
 	.long AcApcToggleProc
 	naka_header NAKA_TYPE_0x26
-	.byte 0x30, 0x00
-	.byte 0x08, 0x00
+	ldw	wa, 2048
+	nop
 	.long LABEL_E17112
 	.long StrPrefix_AcApcToggle
 	.long StrDesc_AcApcToggle
 	.long AcSndArgGridBoxProc
 	naka_header NAKA_TYPE_0x54
-	.byte 0x4a, 0x00
-	.byte 0x0c, 0x00
+	popw de
+	nop
+	incf
+	nop
 	.long StrName_AcSndArgGridBox
 	.long StrPrefix_AcSndArgGrid
 	.long StrDesc_AcSndArgGrid
 	.long PsParaListBoxProc
 	naka_header NAKA_TYPE_0x11
-	.byte 0x2a, 0x00
-	.byte 0x0e, 0x00
+	pushw de
+	nop
+	ret
+	nop
 	.long StrName_PsParaListBox
 	.long StrExtra_ParaList_JpChars
 	.long StrDesc_PsParaListBox
 	.long PsSCTxtBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsSCTxtBox
 	.long StrEmpty_PsSCTxtBox
 	.long LABEL_E16BAC
 	.long PsSCTxtBox2Proc
 	naka_header NAKA_TYPE_0x65
-	.byte 0x26, 0x00
-	.byte 0x00, 0x00
+	ldb	h, 0
+	nop
+	nop
 	.long StrName_PsSCTxtBox2
 	.long StrEmpty_PsSCTxtBox2
 	.long StrDesc_PsSCTxtBox2
 	.long VwVariBoxProc
 	naka_header NAKA_TYPE_0x11
-	.byte 0x2c, 0x00
-	.byte 0x10, 0x00
+	pushw ix
+	nop
+	rcf
+	nop
 NakaDesc_VwVariBox_DataPtrs:
 	.long StrName_VwVariBox
 	.long StrExtra_Yajirushi_JpChars2
@@ -621,22 +660,25 @@ NakaDesc_VwVariBox_DataPtrs:
 	.long StrDesc_YajirushiBox
 	.long CmpNameMenuBoxProc
 	naka_header NAKA_TYPE_0x3D
-	.byte 0x32, 0x00
-	.byte 0x00, 0x00
+	ldw	de, 0
+	nop
 	.long StrName_CmpNameMenuBox
 	.long LABEL_E17096
 	.long StrDesc_CmpNameMenuBox
 	.long S2cGridBoxProc
 	naka_header NAKA_TYPE_0x54
-	.byte 0x4a, 0x00
-	.byte 0x0c, 0x00
+	popw de
+	nop
+	incf
+	nop
 	.long LABEL_E1708A
 	.long StrPrefix_S2cGridBox
 	.long StrDesc_S2cGridBox
 	.long PsStylCnvVerProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long StrName_PsStylCnvVer
 	.long StrEmpty_PsStylCnvVer
 	.long StrDesc_PsStylCnvVer
@@ -1635,86 +1677,113 @@ NakaPropStr_IvExitModeTrSelEnd_0:	.byte 0x00, 0xff, 0x61, 0xbb, 0xf2, 0x00
 
 
 	naka_header NAKA_TYPE_0x47
-	.byte 0x16, 0x00, 0x00, 0x00
+	ex_ff
+	nop
+	nop
+	nop
 NakaWidgetList_AcModeBoxes:
 	.long NakaBoxName_IvNamingExit
 	.long NakaBoxData_IvNamingExit
 	.long NakaPropTbl_IvNamingExit
 	.long IvNamingExit_ScreenData
 	naka_header NAKA_TYPE_0x11
-	.byte 0x32, 0x00, 0x16, 0x00
+	ldw	de, 5632
+	nop
 	.long NakaBoxName_PsSongSelBoxProc
 	.long NakaBoxEnc_PsSongSelBox
 	.long NakaPropTbl_SelBox
 	.long AcModeSelBoxProc
 	naka_header NAKA_TYPE_0x15
-	.byte 0x34, 0x00, 0x02, 0x00
+	ldw	ix, 512
+	nop
 	.long NakaBoxName_AcModeSelBox
 	.long NakaBoxData_AcModeSelBox
 	.long NakaPropTbl_Ram
 	.long AcDemoSongBoxProc
 	naka_header NAKA_TYPE_0x15
-	.byte 0x36, 0x00, 0x04, 0x00
+	ldw	iz, 1024
+	nop
 	.long NakaBoxName_AcDemoSongBox
 	.long NakaBoxData_AcDemoSongBox
 	.long NakaPropTbl_Func
 	.long AcCurrentSongBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00, 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long NakaBoxName_AcCurrentSongBox
 	.long NakaBoxData_AcCurrentSongBox
 	.long NakaPropTbl_CurSongName
 	.long AcCurSongNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00, 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long NakaBoxName_AcCurSongNameBox
 	.long NakaBoxData_AcCurSongNameBox
 	.long NakaPropTbl_TrAsGrid
 	.long AcTrAsGridBoxProc
 	naka_header NAKA_TYPE_0x54
-	.byte 0x4a, 0x00, 0x0c, 0x00
+	popw de
+	nop
+	incf
+	nop
 	.long NakaBoxName_AcTrAsGridBox
 	.long NakaBoxData_AcTrAsGridBox
 	.long NakaPropTbl_Grid
 	.long AcDiskFileNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00, 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long NakaBoxName_AcDiskFileNameBox
 	.long NakaBoxData_AcDiskFileNameBox
 	.long NakaPropTbl_SmfFileName
 	.long AcSmfFileNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00, 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long NakaBoxName_AcSmfFileNameBox
 	.long NakaBoxData_AcSmfFileNameBox
 	.long NakaPropTbl_DocFileNo
 	.long AcDocFileNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00, 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long NakaBoxName_AcDocFileNoBox
 	.long NakaBoxData_AcDocFileNoBox
 	.long NakaPropTbl_PdFileNo
 	.long AcPDFileNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00, 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long NakaBoxName_AcPDFileNoBox
 	.long NakaBoxData_AcPDFileNoBox
 	.long NakaPropTbl_SmfSongName
 	.long AcSmfSongNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00, 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long NakaBoxName_AcSmfSongNameBox
 	.long NakaBoxData_AcSmfSongNameBox
 	.long NakaPropTbl_DocSongName
 	.long AcDocSongNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00, 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long NakaBoxName_AcDocSongNameBox
 	.long NakaBoxData_AcDocSongNameBox
 	.long NakaPropTbl_PdSongName
 	.long AcPDSongNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00, 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long NakaBoxName_AcPDSongNameBox
 	.long NakaBoxData_AcPDSongNameBox
 	.long NakaPropTbl_MeasureBox
@@ -1726,13 +1795,19 @@ NakaWidgetList_AcModeBoxes:
 	.long NakaPropTbl_MuteToggle
 	.long AcMuteToggleBoxProc
 	naka_header NAKA_TYPE_0x44
-	.byte 0x2c, 0x00, 0x00, 0x00
+	pushw ix
+	nop
+	nop
+	nop
 	.long NakaBoxName_AcMuteToggleBox
 	.long LABEL_E20B86
 	.long NakaPropTbl_LyricsBox
 	.long LyricsBoxProc
 	naka_header NAKA_TYPE_0x11
-	.byte 0x28, 0x00, 0x0c, 0x00
+	pushw wa
+	nop
+	incf
+	nop
 	.long LABEL_E20B7C
 	.long NakaBoxData_LyricsBox
 	.long NakaPropTbl_TextLabel
@@ -1750,19 +1825,27 @@ NakaWidgetList_AcModeBoxes:
 	.long LABEL_E208A4
 	.long LyricsBoxFuncProc
 	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00, 0x00, 0x00
+	ex_ff
+	nop
+	nop
+	nop
 	.long NakaBoxName_LyricsBoxFunc
 	.long NakaBoxData_LyricsBoxFunc
 	.long NakaPropTbl_DemoMedleyDisp
 	.long AcDemoMedleyDispBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00, 0x00, 0x00
+	ldb	d, 0
+	nop
+	nop
 	.long NakaBoxName_AcDemoMedleyDisp
 	.long NakaBoxData_AcDemoMedleyDisp
 	.long NakaPropTbl_IvExitModeTrSel
 	.long IvExitModeTrSelProc
 	naka_header NAKA_TYPE_0x47
-	.byte 0x16, 0x00, 0x00, 0x00
+	ex_ff
+	nop
+	nop
+	nop
 	.long NakaBoxName_IvExitModeTrSel
 	.long NakaBoxData_IvExitModeTrSel
 	.long NakaPropTbl_IvExitModeTrSelEnd
@@ -3973,7 +4056,7 @@ Voice_FactoryPresetData:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	.byte 0xe8, 0xed, 0x00
+	sra	xwa, 0
 	ld	(xbc), wa
 	ld	xwa, (xsp+16)
 	add	(xbc+2), wa
@@ -3984,7 +4067,7 @@ Voice_FactoryPresetData:
 	jrl	le, -249
 	jrl	330
 	ld	xwa, (xsp+8)
-	.byte 0xe8, 0xec, 0x00
+	sla	xwa, 0
 	ld	xbc, (xsp+4)
 	call	16714766
 	ld	xiz, xhl
@@ -3999,7 +4082,7 @@ Voice_FactoryPresetData:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+8), xwa
-	.byte 0xe8, 0xec, 0x00
+	sla	xwa, 0
 	ld	(xsp+8), xwa
 	ld	xwa, 32768
 	add	(xsp+8), xwa
@@ -4019,9 +4102,9 @@ Voice_FactoryPresetData:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	xde, xwa
-	.byte 0xea, 0xee, 0x02
+	sll	xde, 2
 	add	xde, xwa
-	.byte 0xea, 0xee, 0x06
+	sll	xde, 6
 	cps	l, 2
 	jrl	z, 146
 	cps	l, 1
@@ -4055,9 +4138,9 @@ Voice_FactoryPresetData:
 	ld	wa, (xhl+2)
 	exts	xwa
 	ld	xhl, xwa
-	.byte 0xeb, 0xee, 0x02
+	sll	xhl, 2
 	add	xhl, xwa
-	.byte 0xeb, 0xee, 0x06
+	sll	xhl, 6
 	add	xhl, xde
 	add	xiy, xhl
 	.byte 0x84, 0x3c, 0x60
@@ -4097,7 +4180,7 @@ Voice_FactoryPresetData:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xde, (xsp+8)
-	.byte 0xea, 0xed, 0x00
+	sra	xde, 0
 	ld	xwa, (xsp+34)
 	ld	(xwa), de
 	ld	xwa, (xsp+12)

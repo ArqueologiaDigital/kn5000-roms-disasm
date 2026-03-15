@@ -5007,12 +5007,12 @@ VoiceSynth_Algo_MultiPath:
 	pop	xiy
 	cpdi8	4323, 0
 	jr	nz, 67
-	.byte 0xed, 0xec, 0x01
+	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
 	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
 	pop	xix
-	.byte 0xed, 0xef, 0x01
+	srl	xiy, 1
 	push	xiy
 	call	15879227
 	pop	xiy
@@ -5044,7 +5044,7 @@ VoiceSynth_Algo_ChannelConfig:
 	jr	z, 66
 	ld	c, l
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15883948
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -5104,12 +5104,12 @@ VoiceSynth_Algo_MultiStage:
 	pop	xiy
 	cpdi8	4323, 0
 	jrl	nz, 150
-	.byte 0xed, 0xec, 0x01
+	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
 	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
 	pop	xix
-	.byte 0xed, 0xef, 0x01
+	srl	xiy, 1
 	push	xiy
 	call	15879227
 	pop	xiy
@@ -5168,12 +5168,12 @@ VoiceSynth_Algo_PitchModulated:
 	pop	xiy
 	cpdi8	4323, 0
 	jr	nz, 78
-	.byte 0xed, 0xec, 0x01
+	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
 	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
 	pop	xix
-	.byte 0xed, 0xef, 0x01
+	srl	xiy, 1
 	push	xiy
 	call	15879227
 	pop	xiy
@@ -5216,12 +5216,12 @@ VoiceSynth_Algo_PitchShift:
 	pop	xiy
 	cpdi8	4323, 0
 	jr	nz, 67
-	.byte 0xdd, 0xec, 0x01
+	sla	iy, 1
 	push	xix
 	ld	xix, 4014
 	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
 	pop	xix
-	.byte 0xdd, 0xef, 0x01
+	srl	iy, 1
 	push	xiy
 	call	15879227
 	pop	xiy
@@ -5251,7 +5251,7 @@ VoiceParam_ReadUpdate_6:
 	jr	z, 66
 	ld	c, l
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15883948
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -5301,12 +5301,12 @@ VoiceParam_ReadUpdate_10:
 	pop	xiy
 	cpdi8	4323, 0
 	jrl	nz, 122
-	.byte 0xdd, 0xec, 0x01
+	sla	iy, 1
 	push	xix
 	ld	xix, 4014
 	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
 	pop	xix
-	.byte 0xdd, 0xef, 0x01
+	srl	iy, 1
 	push	xiy
 	call	15879227
 	pop	xiy
@@ -5358,12 +5358,12 @@ VoiceParam_ReadUpdate_11:
 	pop	xiy
 	cpdi8	4323, 0
 	jrl	nz, 80
-	.byte 0xed, 0xec, 0x01
+	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
 	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
 	pop	xix
-	.byte 0xed, 0xef, 0x01
+	srl	xiy, 1
 	push	xiy
 	call	15879227
 	pop	xiy

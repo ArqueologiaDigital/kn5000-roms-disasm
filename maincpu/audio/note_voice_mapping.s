@@ -18067,7 +18067,7 @@ SendEpilogue_Data:
 	push	xiz
 	ld	iz, bc
 	ld	xbc, xwa
-	.byte 0xe9, 0xef, 0x08
+	srl	xbc, 8
 	ld	hl, bc
 	ld	xbc, xwa
 	and	xbc, 255
@@ -22150,13 +22150,14 @@ Dispatch_Data:
 	ld	e, (xbc+1)
 	res	7, e
 	ld	a, e
-	.byte 0xc9, 0xee, 0x07, 0xcd, 0xef, 0x01
+	sll	a, 7
+	srl	e, 1
 	or	l, a
 	ld	c, l
 	extz	bc
 	ld	a, e
 	extz	wa
-	.byte 0xd8, 0xec, 0x08
+	sla	wa, 8
 	add	wa, bc
 	ld	hl, wa
 	exts	xhl
@@ -22170,12 +22171,13 @@ Dispatch_Data:
 	ld	e, (xwa)
 	ld	c, (xwa+1)
 	ld	a, c
-	.byte 0xcb, 0xef, 0x01, 0xc9, 0xee, 0x07
+	srl	c, 1
+	sll	a, 7
 	res	7, e
 	or	e, a
 	ld	a, c
 	extz	wa
-	.byte 0xd8, 0xec, 0x08
+	sla	wa, 8
 	ld	iz, wa
 	exts	xiz
 	lds32	xwa, 0
@@ -25947,7 +25949,7 @@ SendPartDataBlock_Data:
 	ld	(xsp+18), xwa
 	ld	a, (xwa)
 	and	a, 192
-	.byte 0xc9, 0xef, 0x06
+	srl	a, 6
 	inc	7, a
 	ld	c, a
 	ld	xwa, (xsp+14)
@@ -25955,9 +25957,9 @@ SendPartDataBlock_Data:
 	ld	xiy, (xsp+18)
 	ld	a, (xiy)
 	and	a, 48
-	.byte 0xc9, 0xef, 0x04
+	srl	a, 4
 	inc	7, a
-	.byte 0xc9, 0xee, 0x04
+	sll	a, 4
 	ld	e, a
 	ld	xwa, (xsp+10)
 	ld	c, (xwa)
@@ -25966,7 +25968,7 @@ SendPartDataBlock_Data:
 	ld	(xde), c
 	ld	a, (xiy)
 	and	a, 12
-	.byte 0xc9, 0xef, 0x02
+	srl	a, 2
 	inc	7, a
 	or	c, a
 	ld	(xde), c
@@ -26005,7 +26007,7 @@ SendPartDataBlock_Data:
 	ld	(xwa), c
 	ld	xwa, (xsp+18)
 	ld	a, (xwa)
-	.byte 0xc9, 0xee, 0x01
+	sll	a, 1
 	dec	4, a
 	ld	c, a
 	ld	xwa, (xsp+14)
@@ -26029,7 +26031,7 @@ SendPartDataBlock_Data:
 	ld	c, (xde)
 	ld	(xhl+46), c
 	ld	c, (xix+30)
-	.byte 0xcb, 0xee, 0x03
+	sll	c, 3
 	ld	(xhl+92), c
 	ld	xwa, xix
 	lda	xwa, (xwa+31)
@@ -26097,10 +26099,10 @@ SendPartDataBlock_Data:
 	.byte 0xb9, 0x2f, 0x00, 0x00
 SendPartDataBlock_Data2:
 	ld	a, (xde+13)
-	.byte 0xc9, 0xee, 0x01
+	sll	a, 1
 	ld	(xbc+41), a
 	ld	a, (xde+14)
-	.byte 0xc9, 0xec, 0x01
+	sla	a, 1
 	ld	(xbc+42), a
 	ld	a, (xde+15)
 	.byte 0xc9, 0xee
@@ -26108,10 +26110,10 @@ SendPartDataBlock_Data3:
 	.byte 0x01
 	ld	(xbc+43), a
 	ld	a, (xde+16)
-	.byte 0xc9, 0xec, 0x01
+	sla	a, 1
 	ld	(xbc+44), a
 	ld	a, (xde+17)
-	.byte 0xc9, 0xee, 0x01
+	sll	a, 1
 	ld	(xbc+45), a
 	lda	xwa, (xde+18)
 	ld	(xsp+18), xwa
@@ -26163,7 +26165,7 @@ SendPartDataBlock_Data3:
 	ld	(xsp+18), xwa
 	ld	a, (xde+29)
 	inc	3, a
-	.byte 0xc9, 0xec, 0x05
+	sla	a, 5
 	ld	l, a
 	ld	xwa, (xsp+18)
 	ld	(xwa), l
@@ -26448,9 +26450,9 @@ HdaeRom_DataDispatch:
 	dec	1, wa
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x03
+	sll	xbc, 3
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x04
+	sll	xbc, 4
 	add	xbc, 80
 	ld	xiy, xbc
 	add	xiy, (xsp+6)
@@ -26474,9 +26476,9 @@ HdaeRom_DataDispatch:
 	ld	wa, (xsp+4)
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x03
+	sll	xbc, 3
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x04
+	sll	xbc, 4
 	add	xbc, 80
 	add	xbc, (xsp+6)
 	ld	xwa, xbc
@@ -26489,9 +26491,9 @@ HdaeRom_DataDispatch:
 	add	xhl, 16
 	add	xhl, (xsp+6)
 	ld	xbc, xiz
-	.byte 0xe9, 0xee, 0x03
+	sll	xbc, 3
 	add	xbc, xiz
-	.byte 0xe9, 0xee, 0x04
+	sll	xbc, 4
 	add	xbc, 80
 	add	xbc, (xsp+6)
 	ld	xwa, xhl
@@ -26707,9 +26709,9 @@ TmFlashWrite_Block1:
 	extz	wa
 	extz	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x02
+	sll	xbc, 2
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x04
+	sll	xbc, 4
 	add	xbc, 19111
 	ld	xwa, 1966080
 	add	xwa, xbc

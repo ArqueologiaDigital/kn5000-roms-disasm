@@ -59,7 +59,8 @@ FlashWrite_BlockData_Type0:
 	ldwio	101, 65286
 	nop
 	ldb	w, 107
-	.byte 0x14, 0x03
+	push_a
+	pop_sr
 FlashWrite_BlockData_Type1:
 	reti
 	pop	xbc
@@ -96,13 +97,15 @@ FlashRead_BlockData_Field5:
 	swi	7
 	nop
 	ldb	w, 107
-	.byte 0x14, 0x02
+	push_a
+	push_sr
 	nop
 FlashRead_BlockData_Field6:
 	.byte 0x00, 0x0a
 	.long TmFlashWrite_Block3
 	ldb	w, 196
-	.byte 0x16, 0x02
+	ex_ff
+	push_sr
 FlashRead_BlockHandler_Table:
 	.long FlashWrite_BlockData_Type2
 	.long FlashWrite_BlockData_Type2
@@ -1460,7 +1463,7 @@ PartGrid_OperationsBlock:
 	ld	bc, (xsp+18)
 	ld	de, bc
 	ldb	d, 0
-	.byte 0xd9, 0xef, 0x08
+	srl	bc, 8
 	ld	(xsp), c
 	ld	a, (xsp+2)
 	extz	wa
@@ -1906,7 +1909,7 @@ Flash_ExtendedOpsBlock:
 	jr	nz, 46
 	ld	e, h
 	extz	de
-	.byte 0xda, 0xec, 0x02
+	sla	de, 2
 	ld	iz, de
 	inc	4, iz
 	ldada	xiy, 1952
@@ -1967,7 +1970,7 @@ Flash_ExtendedOpsBlock:
 	extz	wa
 	.byte 0xc7, 0xe2, 0xcf, 0xff
 	jr	nz, 38
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	iy, wa
 	inc	4, iy
 	ldada	xix, 1952
@@ -1995,7 +1998,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0xc7, 0xe2, 0x99, 0xc7, 0xe2, 0xd9
 	jr	nz, 43
 	ld	wa, iy
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	iy, wa
 	inc	4, iy
 	ldada	xix, 1952
@@ -2757,7 +2760,8 @@ Flash_SlotUpdateOpsBlock:
 	extz	hl
 	ld	(xsp+2), hl
 	ld	hl, (xsp)
-	.byte 0xdb, 0xee, 0x08, 0x9f, 0x02, 0x83
+	sll	hl, 8
+	add	hl, (xsp+2)
 	inc	6, xsp
 	ret
 	dec	4, xsp
@@ -2862,7 +2866,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	a, (xsp+2)
 	extz	wa
 	ld	de, wa
-	.byte 0xda, 0xec, 0x02
+	sla	de, 2
 	add	de, 106
 	ldada	xbc, 2360
 	.byte 0xd3, 0x07, 0xe4, 0xe8, 0x3f, 0xff, 0xff
@@ -2881,7 +2885,7 @@ Flash_SlotUpdateOpsBlock:
 	ldada	xbc, 1952
 	ld	e, (xsp+2)
 	extz	de
-	.byte 0xda, 0xec, 0x02
+	sla	de, 2
 	ldada	xwa, 2466
 	.byte 0xd3, 0x07, 0xe0, 0xe8, 0x20
 	ld	(xbc+4), wa
@@ -2915,7 +2919,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	(xbc+2), wa
 	.byte 0xc7, 0xe2, 0xa8, 0xc7, 0xe2, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	ld	wa, bc
 	add	wa, 106
 	.byte 0xd3, 0x07, 0xec, 0xe0, 0x20
@@ -2970,7 +2974,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	(xbc+2), wa
 	.byte 0xc7, 0xe2, 0xa8, 0xc7, 0xe2, 0x8b
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	ld	wa, bc
 	add	wa, 106
 	.byte 0xd3, 0x07, 0xec, 0xe0, 0x20
@@ -3119,9 +3123,9 @@ Flash_SlotUpdateOpsBlock:
 	lda	xbc, (xsp+16)
 	lda	xwa, (xbc+68)
 	ld	(xsp+12), xwa
-	.byte 0xec, 0xee, 0x08
+	sll	xix, 8
 	add	xix, xhl
-	.byte 0xec, 0xee, 0x04
+	sll	xix, 4
 	ld	xwa, (xsp+12)
 	ld	(xwa), xix
 	ldda32	xde, 3194
@@ -3132,9 +3136,9 @@ Flash_SlotUpdateOpsBlock:
 	.byte 0xc7, 0xf0, 0x99
 	lda	xwa, (xbc+72)
 	ld	(xsp+8), xwa
-	.byte 0xec, 0xee, 0x08
+	sll	xix, 8
 	add	xix, xhl
-	.byte 0xec, 0xee, 0x04
+	sll	xix, 4
 	ld	xwa, (xsp+8)
 	ld	(xwa), xix
 	ldda32	xde, 3198
@@ -3145,9 +3149,9 @@ Flash_SlotUpdateOpsBlock:
 	.byte 0xc7, 0xf0, 0x99
 	lda	xwa, (xbc+76)
 	ld	(xsp+4), xwa
-	.byte 0xec, 0xee, 0x08
+	sll	xix, 8
 	add	xix, xhl
-	.byte 0xec, 0xee, 0x04
+	sll	xix, 4
 	ld	xwa, (xsp+4)
 	ld	(xwa), xix
 	ldda32	xde, 3202
@@ -3157,9 +3161,9 @@ Flash_SlotUpdateOpsBlock:
 	lds32	xix, 0
 	.byte 0xc7, 0xf0, 0x99
 	lda	xde, (xbc+80)
-	.byte 0xec, 0xee, 0x08
+	sll	xix, 8
 	add	xix, xhl
-	.byte 0xec, 0xee, 0x04
+	sll	xix, 4
 	ld	(xde), xix
 	ldda32	xix, 3206
 	lds32	xhl, 0
@@ -3168,9 +3172,9 @@ Flash_SlotUpdateOpsBlock:
 	lds32	xix, 0
 	.byte 0xc7, 0xf0, 0x99
 	lda	xiy, (xbc+84)
-	.byte 0xec, 0xee, 0x08
+	sll	xix, 8
 	add	xix, xhl
-	.byte 0xec, 0xee, 0x04
+	sll	xix, 4
 	ld	(xiy), xix
 	ldda32	xix, 3210
 	lds32	xhl, 0
@@ -3179,9 +3183,9 @@ Flash_SlotUpdateOpsBlock:
 	lds32	xix, 0
 	.byte 0xc7, 0xf0, 0x99
 	lda	xiz, (xbc+88)
-	.byte 0xec, 0xee, 0x08
+	sll	xix, 8
 	add	xix, xhl
-	.byte 0xec, 0xee, 0x04
+	sll	xix, 4
 	ld	(xiz), xix
 	ldda32	xix, 3214
 	lds32	xhl, 0
@@ -3191,7 +3195,7 @@ Flash_SlotUpdateOpsBlock:
 	.byte 0xc7, 0xf0, 0x99, 0xec, 0xee, 0x08
 	add	xix, xhl
 	ld	xhl, xix
-	.byte 0xeb, 0xee, 0x04
+	sll	xhl, 4
 	ld	(xbc+92), xhl
 	ld	xwa, (xsp+12)
 	ld	xix, (xwa)
@@ -3231,9 +3235,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	e, (xwa+46)
 	lds32	xbc, 0
 	ld	c, (xwa+47)
-	.byte 0xe9, 0xec, 0x08
+	sla	xbc, 8
 	add	xbc, xde
-	.byte 0xe9, 0xec, 0x04
+	sla	xbc, 4
 	call	16289320
 	call	16288706
 	cps	hl, 0
@@ -3245,9 +3249,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	e, (xwa+46)
 	lds32	xbc, 0
 	ld	c, (xwa+47)
-	.byte 0xe9, 0xec, 0x08
+	sla	xbc, 8
 	add	xbc, xde
-	.byte 0xe9, 0xec, 0x04
+	sla	xbc, 4
 	call	16289320
 	call	16288706
 	cps	hl, 0
@@ -3259,9 +3263,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	e, (xwa+46)
 	lds32	xbc, 0
 	ld	c, (xwa+47)
-	.byte 0xe9, 0xec, 0x08
+	sla	xbc, 8
 	add	xbc, xde
-	.byte 0xe9, 0xec, 0x04
+	sla	xbc, 4
 	call	16289320
 	call	16288706
 	cps	hl, 0
@@ -3273,9 +3277,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	e, (xwa+46)
 	lds32	xbc, 0
 	ld	c, (xwa+47)
-	.byte 0xe9, 0xec, 0x08
+	sla	xbc, 8
 	add	xbc, xde
-	.byte 0xe9, 0xec, 0x04
+	sla	xbc, 4
 	call	16289320
 	call	16288706
 	cps	hl, 0
@@ -3287,9 +3291,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	e, (xhl+46)
 	lds32	xbc, 0
 	ld	c, (xhl+47)
-	.byte 0xe9, 0xec, 0x08
+	sla	xbc, 8
 	add	xbc, xde
-	.byte 0xe9, 0xec, 0x04
+	sla	xbc, 4
 	ld	xwa, xhl
 	call	16289320
 	call	16288706
@@ -3302,9 +3306,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	e, (xhl+46)
 	lds32	xbc, 0
 	ld	c, (xhl+47)
-	.byte 0xe9, 0xec, 0x08
+	sla	xbc, 8
 	add	xbc, xde
-	.byte 0xe9, 0xec, 0x04
+	sla	xbc, 4
 	ld	xwa, xhl
 	call	16289320
 	call	16288706
@@ -3317,9 +3321,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	e, (xhl+46)
 	lds32	xbc, 0
 	ld	c, (xhl+47)
-	.byte 0xe9, 0xec, 0x08
+	sla	xbc, 8
 	add	xbc, xde
-	.byte 0xe9, 0xec, 0x04
+	sla	xbc, 4
 	ld	xwa, xhl
 	call	16289320
 	call	16288706
@@ -4887,7 +4891,7 @@ CmpSetP1_GridCheck_EventEnc:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -4906,7 +4910,7 @@ CmpSetP1_GridCheck_EventEnc:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de

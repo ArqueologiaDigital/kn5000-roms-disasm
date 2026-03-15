@@ -20,27 +20,32 @@ ExtData_ChordType_NullByte:
 ChordTypeStr_Blank_0:	aligned_string "     "
 ChordTypeStr_Blank_1:	aligned_string "     "
 ChordTypeStr_Blank_2:	ldb	w, 0x20
-	.byte 0x20, 0x20, 0x20, 0x00
+	ldb	w, 32
+	ldb	w, 0
 	aligned_string "     "
 	aligned_string "     "
 	aligned_string "     "
 	ldb	w, 0x20
-	.byte 0x20, 0x20, 0x20, 0x00
+	ldb	w, 32
+	ldb	w, 0
 	aligned_string "     "
 	aligned_string "     "
 	aligned_string "     "
 	ldb	w, 0x20
-	.byte 0x20, 0x20, 0x20, 0x00
+	ldb	w, 32
+	ldb	w, 0
 	aligned_string "     "
 	aligned_string "     "
 	aligned_string "     "
 	ldb	w, 0x20
-	.byte 0x20, 0x20, 0x20, 0x00
+	ldb	w, 32
+	ldb	w, 0
 	aligned_string "     "
 	aligned_string "     "
 	aligned_string "     "
 	ldb	w, 0x20
-	.byte 0x20, 0x20, 0x20, 0x00
+	ldb	w, 32
+	ldb	w, 0
 	aligned_string "     "
 	aligned_string "     "
 	aligned_string "     "
@@ -65,7 +70,9 @@ ChordTypeStr_M7_Sharp5:	aligned_string "M7~a05 "
 ChordTypeStr_7_Flat9:	aligned_string "7 ~9e9 "
 ChordTypeStr_sus4:	aligned_string "sus4 "
 ChordTypeStr_69:	jr	pl, 0x36
-	.byte 0x39, 0x20, 0x20, 0x00
+	push xbc
+	ldb	w, 32
+	nop
 	aligned_string "m79  "
 	aligned_string "m ~a05 "
 	aligned_string "m6   "
@@ -90,7 +97,8 @@ ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
 	aligned_string "Maj7 "
 	aligned_string "7    "
 	ldb	w, 0x20
-	.byte 0x20, 0x20, 0x20, 0x00
+	ldb	w, 32
+	ldb	w, 0
 	aligned_string "     "
 	.byte 0x98, 0x02, 0xed, 0x00, 0x94, 0x02
 	.byte 0xed, 0x00, 0x8e, 0x02, 0xed, 0x00, 0x8a, 0x02
@@ -373,7 +381,7 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	.byte 0xef, 0x02, 0x1d, 0x05, 0x27, 0x08, 0xfd, 0x07
 	.byte 0xfd, 0x07, 0x20, 0x00
 	aligned_string "                                "
-	.byte 0x20, 0x00
+	ldb	w, 0
 	.zero 8
 	.byte 0xf1, 0x01, 0xf1, 0x01, 0xf1, 0x01, 0x59, 0x00
 	.byte 0x65, 0x01, 0x59, 0x00, 0x65, 0x01, 0x10, 0x03
@@ -391,7 +399,11 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	.byte 0x25, 0x73, 0x3a, 0x00
 	aligned_string "                 "
 	ldb	w, 0x20
-	.byte 0x20, 0x20, 0x20, 0x00, 0x25, 0x73, 0x3a, 0x00
+	ldb	w, 32
+	ldb	w, 0
+	ldb	e, 115
+	push xde
+	nop
 	aligned_string "TEMPO"
 	ldb	e, 0x73
 	push xde
@@ -401,11 +413,11 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	.byte 0x5a, 0x05, 0x6a, 0x07, 0xae, 0x0b, 0x96, 0x0b
 	.byte 0x96, 0x0b, 0x20, 0x00
 	aligned_string "                                "
-	.byte 0x20, 0x00
+	ldb	w, 0
 	aligned_string "                                "
-	.byte 0x20, 0x00
+	ldb	w, 0
 	aligned_string "                                "
-	.byte 0x20, 0x00
+	ldb	w, 0
 	aligned_string "                                "
 	aligned_string "                                "
 	.byte 0x00, 0x00, 0x00, 0x00
@@ -542,7 +554,9 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	.byte 0x4f, 0x4e, 0x2f, 0x4f
 	.byte 0x46, 0x46, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
 	aligned_string "PAGE 2/3"
-	.byte 0x25, 0x73, 0x00, 0xff
+	ldb	e, 115
+	nop
+	swi	7
 	aligned_string "PAGE 3/3"
 	.byte 0xbe, 0x02, 0xa7, 0x03, 0xbe, 0x02, 0xa7, 0x03
 	.byte 0x4e, 0x05, 0xc8, 0x04, 0xc8, 0x04, 0x00, 0x29
@@ -606,7 +620,9 @@ FadeTimeStr_Off:	aligned_string "  OFF  "
 	.byte 0xa4, 0x00, 0xaf, 0x00, 0xb5, 0x00, 0x00, 0x00
 	aligned_string "        "
 	aligned_string "%d-%d:"
-	.byte 0x25, 0x64, 0x3a, 0x00
+	ldb	e, 100
+	push xde
+	nop
 	aligned_string "PAGE 1/3"
 	aligned_string "BANK%2d:"
 	.byte 0x25, 0x64, 0x3a, 0x00, 0x01, 0x00
@@ -617,8 +633,12 @@ FadeTimeStr_Off:	aligned_string "  OFF  "
 	.byte 0x44, 0x00, 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64
 	.byte 0x3a, 0x00
 	aligned_string "PAGE %d/%d"
-	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a
-	.byte 0x00
+	ldb	e, 100
+	push xde
+	nop
+	ldb	e, 100
+	push xde
+	nop
 ParamStr_Table_04:
 	.long VariationStr_V1
 	.long VariationStr_V2
@@ -633,10 +653,21 @@ VariationStr_V2:
 VariationStr_V1:
 	.byte 0x56, 0x31, 0x00, 0xff
 	aligned_string "RHYTHM"
-	.byte 0x25, 0x73
-	.byte 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64
-	.byte 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73
-	.byte 0x3a, 0x00
+	ldb	e, 115
+	push xde
+	nop
+	ldb	e, 115
+	push xde
+	nop
+	ldb	e, 100
+	push xde
+	nop
+	ldb	e, 100
+	push xde
+	nop
+	ldb	e, 115
+	push xde
+	nop
 	aligned_string "PAGE %d/%d"
 	.byte 0x25, 0x64
 	.byte 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64
@@ -708,9 +739,16 @@ TransposeNoteStr_C:
 	aligned_string "DEFAULT"
 	aligned_string " USER  "
 	aligned_string " ERROR "
-	.byte 0x31, 0x00, 0x31, 0x00, 0x40, 0x00
-	.byte 0x40, 0x00, 0x40, 0x00, 0x31, 0x00, 0x40, 0x00
-	.byte 0x35, 0x00, 0x3c, 0x00, 0x00, 0x00
+	ldw	bc, 12544
+	nop
+	ld	xwa, 1073758208
+	nop
+	ldw	bc, 16384
+	nop
+	ldw	iy, 15360
+	nop
+	nop
+	nop
 	aligned_string "DEFAULT"
 	ldb	w, 0x55
 	aligned_string "SER  "
@@ -826,7 +864,9 @@ KeyScaleNoteStr_A:
 	.byte 0x41, 0x20, 0x00, 0xff
 KeyScaleNoteStr_AFlat:	aligned_string "A~a0"
 KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
-	.byte 0x20, 0x20, 0x00, 0xff
+	ldb	w, 32
+	nop
+	swi	7
 	aligned_string "<%s>"
 	.byte 0x25, 0x73, 0x00, 0xff, 0x6f, 0x6e, 0x00
 	.byte 0xff, 0x20, 0x20, 0x00, 0xff, 0xc3, 0xe0, 0xfb
@@ -1807,7 +1847,8 @@ Str_ErrorDialog_Caution:	.asciz "CAUTION!!"	; English text
 ; Screen group 7, index 10 - Main error message
 ; ---------------------------------------------------------------------------
 ErrorDialog_CPUTransmissionError:
-	.byte 0x2b, 0x00	; Entry length: 43 bytes
+	pushw hl
+	nop
 	jr	f, 0x01
 	.byte 0x07, 0x00	; Screen group: 7 (error dialogs)
 	.byte 0xff, 0xff	; Flags: default
@@ -1830,7 +1871,8 @@ ErrorDialog_CPUTransmissionError:
 ; Screen group 7, index 11
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine1:
-	.byte 0x2b, 0x00	; Entry length: 43 bytes
+	pushw hl
+	nop
 	jr	f, 0x01
 	.byte 0x07, 0x00	; Screen group: 7 (error dialogs)
 	.byte 0xff, 0xff	; Flags: default
@@ -1853,7 +1895,8 @@ Str_ErrorDialog_TryTurningOff:	aligned_string "Please try turning off and on aga
 ; Screen group 7, index 12
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine2:
-	.byte 0x2b, 0x00	; Entry length: 43 bytes
+	pushw hl
+	nop
 	jr	f, 0x01
 	.byte 0x07, 0x00	; Screen group: 7 (error dialogs)
 	.byte 0xff, 0xff	; Flags: default
@@ -1875,7 +1918,8 @@ ErrorDialog_RecoveryLine2:
 ; Screen group 7, final widget
 ; ---------------------------------------------------------------------------
 ErrorDialog_RecoveryLine3:
-	.byte 0x2b, 0x00	; Entry length: 43 bytes
+	pushw hl
+	nop
 	jr	f, 0x01
 	.byte 0x07, 0x00	; Screen group: 7 (error dialogs)
 	.byte 0xff, 0xff	; Flags: default

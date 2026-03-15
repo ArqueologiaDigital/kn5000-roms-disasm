@@ -768,7 +768,7 @@ SoundEvt_LongPacketHandler:
 	ldda8	l, 3429
 	and	l, 3
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15687890
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -785,7 +785,7 @@ SoundEvt_LongPacketHandler:
 	stda8	3925, w
 	.byte 0xc8, 0xb9
 	exts	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	iy, wa
 	ldda16	wa, 14106
 	stda16	3816, wa
@@ -829,7 +829,7 @@ ScoopDisp_HandlerData2:
 	and	w, 3
 	.byte 0xc8, 0xb9
 	exts	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	iy, wa
 	ldda16	wa, 14106
 	stda16	3816, wa
@@ -880,7 +880,7 @@ DefaultHandler_Ret:
 	ldda8	e, 3429
 	and	e, 3
 	xor	d, d
-	.byte 0xda, 0xec, 0x02
+	sla	de, 2
 	ld	iy, de
 	stda16	9920, bc
 	push	xhl
@@ -918,7 +918,7 @@ DefaultHandler_Ret:
 	jrl	nz, 44
 	call	15693778
 	jp	15688334
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15688359
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -984,7 +984,7 @@ ToneParam_Evt0F_BytecodeHandler:
 	.byte 0xc1, 0xd3, 0x0d, 0x3c, 0xfe
 	ldda8	e, 3567
 	xor	d, d
-	.byte 0xda, 0xec, 0x02
+	sla	de, 2
 	ld	iy, de
 	push	xhl
 	ld	xhl, 15688637
@@ -1050,7 +1050,7 @@ PerfMode_ParamHandler_Table:
 	.long DefaultHandler_Ret
 	ldda8	e, 3567
 	xor	d, d
-	.byte 0xda, 0xec, 0x02
+	sla	de, 2
 	ld	iy, de
 	.ascii ";C#d"
 	.byte 0xef, 0x00, 0xe3, 0x07
@@ -1079,7 +1079,7 @@ PerfMode_ParamHandler_0:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15688842
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -1172,7 +1172,7 @@ PerfMode_ParamHandler_1:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15689181
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -1230,7 +1230,7 @@ PerfMode_ParamHandler_2:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15689336
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -1275,7 +1275,7 @@ PerfMode_ParamHandler_3:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	.ascii "<D&g"
 	.byte 0xef, 0x00, 0xe3, 0x07
 	.byte 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
@@ -1323,7 +1323,7 @@ PerfMode_ParamHandler_4:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	.byte 0x44
 	.long PerfMode_StringData_4
@@ -1368,7 +1368,7 @@ PerfMode_ParamHandler_5:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	.ascii "<D\\h"
 	.byte 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
@@ -1409,7 +1409,7 @@ PerfMode_ParamHandler_7:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15689994
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -1461,7 +1461,7 @@ PerfMode_ParamHandler_8:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15690149
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -1563,7 +1563,7 @@ PerfMode_ParamHandler_9:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15690482
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -1712,7 +1712,7 @@ PerfMode_ParamHandler_10:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	.ascii "<Dkl"
 	.byte 0xef, 0x00, 0xe3, 0x07
 	.byte 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
@@ -1868,7 +1868,7 @@ UIState_PerfModeEntry:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	.ascii "<DDn"
 	.byte 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
@@ -2338,7 +2338,7 @@ PerfMode_BytecodeBody_A:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	.byte 0x44
 	.long PerfMode_StringData_A
@@ -2383,7 +2383,7 @@ PerfMode_BytecodeEntry_B:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	.ascii "<DZt"
 	.byte 0xef, 0x00, 0xe3
 	.byte 0x07, 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
@@ -2424,7 +2424,7 @@ PerfMode_BytecodeEntry_C:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15693045
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -2588,10 +2588,10 @@ PerfMode_Handler_EvtB:
 	pop	xhl
 	ldda8	a, 49278
 	and	a, 24
-	.byte 0xc9, 0xef, 0x01
+	srl	a, 1
 	ldda8	w, 49279
 	and	w, 24
-	.byte 0xc8, 0xef, 0x03
+	srl	w, 3
 	or	a, w
 	xor	w, w
 	ld	iy, wa
@@ -2613,11 +2613,15 @@ ScoopDisp_DispatchTable_Extended:
 	.long DefaultHandler_Ret
 	.long VoiceCtrl_CheckAndReset
 	nop
-	.byte 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
 	nop
 	.byte 0x01, 0x03, 0x03
 	nop
-	.byte 0x03, 0x02, 0x03
+	pop_sr
+	push_sr
+	pop_sr
 	nop
 	nop
 	nop
@@ -3202,7 +3206,7 @@ ToneParam_Evt09_BytecodeHandler:
 	.byte 0xc1, 0xd3, 0x0d, 0x3e, 0x01
 	ldda8	l, 3429
 	and	hl, 3
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15696255
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -3442,7 +3446,7 @@ ToneParam_HandlerTable_BC:
 	and	a, 31
 	.byte 0xc7, 0x3c, 0x89
 	jrl	nz, 47
-	.byte 0xc9, 0xef, 0x05
+	srl	a, 5
 	and	a, 3
 	ld	d, a
 	ldda8	e, 3528
@@ -3772,7 +3776,7 @@ DisplayMode_Handler_3:
 	ld	(xix+2), a
 	pushw	wa
 	call	15713972
-	.byte 0xee, 0xef, 0x01
+	srl	xiz, 1
 	popw	wa
 	push	xix
 	ld	xix, 61856
@@ -3800,9 +3804,9 @@ DisplayMode_Handler_3:
 	jrl	nz, -115
 	ld	xiy, 3471
 	ld	a, l
-	.byte 0xc9, 0xec, 0x01
+	sla	a, 1
 	ld	w, a
-	.byte 0xc9, 0xec, 0x01
+	sla	a, 1
 	add	w, a
 	.ascii "8;9:<=>"
 	.byte 0x1d, 0xd0, 0xbd, 0xef, 0x5e, 0x5d, 0x5c
@@ -4074,7 +4078,7 @@ VoiceSlot_TableSetup:
 	ld	xix, 3262
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
 	stda8	3564, a
-	.byte 0xdb, 0xec, 0x01
+	sla	hl, 1
 	ld	xix, 3230
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x20
 	stda16	3560, wa
@@ -4091,7 +4095,7 @@ VoiceSlot_TableSetup:
 	ld	xix, 3262
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
 	stda8	3565, a
-	.byte 0xdb, 0xec, 0x01
+	sla	hl, 1
 	ld	xix, 3230
 	.byte 0xd3, 0x07, 0xf0, 0xec, 0x20
 	stda16	3562, wa
@@ -4130,12 +4134,12 @@ VoiceSlot_TableSetup:
 	ldda8	l, 3822
 	dec	1, l
 	xor	h, h
-	.byte 0xdb, 0xec, 0x01
+	sla	hl, 1
 	push	xde
 	ld	xde, 3230
 	.byte 0xf3, 0x07, 0xe8, 0xec, 0x50
 	ldda8	a, 3564
-	.byte 0xdb, 0xef, 0x01
+	srl	hl, 1
 	ld	xde, 3262
 	.byte 0xf3, 0x07, 0xe8, 0xec
 	ld	xbc, 0x3732445a
@@ -4581,7 +4585,7 @@ VoiceCtrl_ParamSetupBytecode:
 	push	xhl
 	ld	h, (xiy)
 	and	h, 4
-	.byte 0xce, 0xec, 0x05
+	sla	h, 5
 	or	a, h
 	pop	xhl
 	ld	w, (xiy+3)
@@ -4672,14 +4676,22 @@ VoiceCtrl_ParamSetupBytecode:
 	scf
 	ccf
 	zcf
-	.byte 0x14, 0x15, 0x16
+	push_a
+	pop_a
+	ex_ff
 	swi	7
 	swi	7
 	.fill 8, 1, 0xff
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
 	swi	7
 	swi	7
 	swi	7
@@ -4951,7 +4963,7 @@ SerialPort_ModeHandler_0:
 	cps	l, 0
 	jrl	nz, 2
 	ldb	l, 6
-	.byte 0xcf, 0xec, 0x01
+	sla	l, 1
 	xor	h, h
 	push	xix
 	.byte 0x44
@@ -4969,7 +4981,7 @@ SerialPort_ModeHandler_0:
 	ldda8	a, 14102
 	cps	a, 1
 	jrl	nz, 21
-	.byte 0xda, 0xec, 0x02
+	sla	de, 2
 	ld	wa, de
 	xor	de, de
 	lds	hl, 5
@@ -4980,7 +4992,7 @@ SerialPort_ModeHandler_0:
 	cps	a, 0
 	jrl	nz, 28
 	ld	wa, de
-	.byte 0xd8, 0xec, 0x04
+	sla	wa, 4
 	add	wa, de
 	add	wa, de
 	add	wa, de
@@ -4992,10 +5004,10 @@ SerialPort_ModeHandler_0:
 	jp	15703968
 	cps	a, 2
 	jrl	nz, 9
-	.byte 0xda, 0xef, 0x01
+	srl	de, 1
 	ld	wa, de
 	jp	15703968
-	.byte 0xda, 0xef, 0x02
+	srl	de, 2
 	ld	wa, de
 	ldb	l, 96
 	div8rr	a, l
@@ -5347,7 +5359,7 @@ Display_RegionUpdateFromHW:
 PortConfig_SetupBytecode:
 	stdi8	10430, 255
 	call	15713972
-	.byte 0xee, 0xef, 0x01
+	srl	xiz, 1
 	push	xix
 	ld	xix, 61856
 	.byte 0xc3, 0x07, 0xf0, 0xf8, 0x3f, 0x0e
@@ -5363,7 +5375,7 @@ PortConfig_SetupBytecode:
 	ret
 	ldda8	a, 3429
 	and	wa, 3
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	hl, wa
 	push	xix
 	ld	xix, 15705352
@@ -5510,7 +5522,7 @@ PortConfig_Handler_0:
 	ldda8	a, 3424
 	stda8	3822, a
 	call	15713972
-	.byte 0xee, 0xef, 0x01
+	srl	xiz, 1
 	push	xix
 	ld	xix, 61856
 	.byte 0xc3, 0x07, 0xf0, 0xf8, 0x21
@@ -5528,7 +5540,7 @@ PortConfig_DataTable_A:
 	nop
 	.byte 0x02, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
 	call	15713972
-	.byte 0xee, 0xef, 0x01
+	srl	xiz, 1
 	push	xix
 	ld	xix, 61856
 	.byte 0xc3, 0x07, 0xf0, 0xf8, 0x21
@@ -5626,7 +5638,7 @@ ClockConfig_Handler_0:
 	and	a, 127
 	extz	wa
 	div	a, 4
-	.byte 0xc8, 0xec, 0x04
+	sla	w, 4
 	ldda8	a, 64609
 	and	a, 207
 	or	a, w
@@ -5757,7 +5769,7 @@ ClockConfig_Handler_0:
 	cpdi8	10430, 255
 	jrl	z, 20
 	call	15713972
-	.byte 0xde, 0xed, 0x01
+	sra	iz, 1
 	push	xix
 	ld	xix, 61856
 	.byte 0xf3, 0x07, 0xf0, 0xf8, 0x00, 0x0e
@@ -5895,7 +5907,7 @@ SysEx_BytecodeDispatcher:
 	pop	xiy
 	call	15711581
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15707108
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -6118,7 +6130,7 @@ MemConfig_Handler_1:
 	cp	iy, 65535
 	jrl	nz, 4
 	jp	15707957
-	.byte 0xde, 0xef, 0x01
+	srl	iz, 1
 	push	xix
 	ld	xix, 3262
 	.byte 0xc3, 0x07, 0xf0, 0xf8, 0x21
@@ -6340,7 +6352,7 @@ MemConfig_Handler_3:
 	stda8	3521, a
 	call	15708980
 	xor	w, w
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	hl, wa
 	push	xix
 	ld	xix, 15708582
@@ -6367,7 +6379,7 @@ SndDispatch_Handler_1:
 	jrl	z, 23
 	dec	1, a
 	xor	w, w
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	hl, wa
 	push	xix
 	ld	xix, 15708663
@@ -6389,7 +6401,7 @@ SndDispatch_Handler_2:
 	jrl	z, 23
 	dec	1, a
 	exts	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	hl, wa
 	push	xix
 	ld	xix, 15708724
@@ -6411,7 +6423,7 @@ SndDispatch_TableEntryBegin:
 	jrl	z, 23
 	dec	1, a
 	exts	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	hl, wa
 	push	xix
 	.byte 0x44
@@ -6437,7 +6449,7 @@ SndDispatch_Handler_3:
 	jrl	z, 23
 	dec	1, a
 	exts	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	hl, wa
 	push	xix
 	ld	xix, 15708851
@@ -6459,7 +6471,7 @@ SndDispatch_Handler_4:
 	jrl	z, 23
 	dec	1, a
 	exts	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	hl, wa
 	push	xix
 	ld	xix, 15708912
@@ -6866,11 +6878,11 @@ SystemInit_Handler_Table:
 	jrl	lt, 3
 	sub	l, 2
 	xor	h, h
-	.byte 0xdb, 0xec, 0x03
+	sla	hl, 3
 	call	15707132
 	ld	a, w
 	exts	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	ld	iy, wa
 	push	xde
 	ld	xde, 15710171
@@ -6930,7 +6942,7 @@ SystemInit_StepHandler_0:
 	.byte 0xc1, 0x53, 0x0d, 0x3e, 0x40
 	ret
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	extz	xhl
 	push	xix
 	ld	xix, 15710514
@@ -7007,7 +7019,7 @@ SysInit_BytecodeBlock:
 	cp	l, 255
 	jrl	z, 88
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xde
 	ld	xde, 15710514
 	.byte 0xf3, 0x07, 0xe8, 0xec, 0x32
@@ -7348,7 +7360,7 @@ VoiceSlot_RetZ:
 	ld	a, (xix+32)
 	.byte 0xe7, 0x38, 0x8c
 	xor	w, w
-	.byte 0xde, 0xec, 0x01
+	sla	iz, 1
 	stda16	10422, wa
 	xor	b, b
 	add	wa, bc
@@ -7660,7 +7672,7 @@ VoiceSlot_FinalRetZ:
 	push	xhl
 	pushw	de
 	dec	1, e
-	.byte 0xcd, 0xec, 0x01
+	sla	e, 1
 	xor	d, d
 	ld	iz, de
 	extz	xiz
@@ -7669,13 +7681,13 @@ VoiceSlot_FinalRetZ:
 	.byte 0xd3, 0x07, 0xf0, 0xf8, 0x25
 	pop	xix
 	call	15713952
-	.byte 0xde, 0xef, 0x01
+	srl	iz, 1
 	push	xix
 	ld	xix, 3262
 	.byte 0xd3, 0x07, 0xf0, 0xf8, 0x25
 	pop	xix
 	and	iy, 255
-	.byte 0xde, 0xec, 0x01
+	sla	iz, 1
 	ldda32	xhl, 4349
 	.byte 0xc3, 0x07, 0xec, 0xf4, 0x21
 	popw	de
@@ -7908,7 +7920,7 @@ VoiceSlot_StatusRet:
 	call	15716435
 	pushw	wa
 	call	15713972
-	.byte 0xde, 0xef, 0x01
+	srl	iz, 1
 	popw	wa
 	push	xix
 	ld	xix, 61856
@@ -7939,7 +7951,7 @@ VoiceSlot_StatusRet:
 	ld	e, a
 	call	15713129
 	and	a, 7
-	.byte 0xc9, 0xec, 0x01
+	sla	a, 1
 	or	a, e
 	ld	xhl, 15716523
 	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
@@ -7998,7 +8010,7 @@ VoiceSlot_StatusRet:
 	and	a, 127
 	ldda8	h, 3528
 	and	h, 4
-	.byte 0xce, 0xec, 0x05
+	sla	h, 5
 	or	a, h
 	stda8	4337, a
 	cp	a, 72
@@ -8464,7 +8476,7 @@ VoiceState_RestoreDone:
 
 VoiceState_DataBlock2:	.ascii ";>=<"
 	and	a, 7
-	.byte 0xc9, 0xec, 0x03
+	sla	a, 3
 	xor	w, w
 	exts	xwa
 	add	xwa, 3583
@@ -8506,7 +8518,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	push	xhl
 	xor	w, w
 	and	a, 7
-	.byte 0xc9, 0xec, 0x03
+	sla	a, 3
 	exts	xwa
 	add	xwa, 3583
 	ld	xhl, xwa
@@ -8528,7 +8540,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	ldda8	a, 3822
 	dec	1, a
 	exts	wa
-	.byte 0xd8, 0xec, 0x01
+	sla	wa, 1
 	ld	ix, wa
 	push	xde
 	ld	xde, 3230
@@ -8862,7 +8874,8 @@ SubCPU_ToneParamDisplay:
 	ld	xiy, 15719192
 	ldda8	a, 4380
 	ld	w, a
-	.byte 0xc9, 0xec, 0x03, 0xc8, 0xec, 0x01
+	sla	a, 3
+	sla	w, 1
 	add	a, w
 	xor	w, w
 	.byte 0xf3, 0x07, 0xf4, 0xe0, 0x35
@@ -9031,7 +9044,7 @@ SubCPU_ToneClearRegion:
 	ldda8	l, 3429
 	and	l, 3
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	.byte 0x44
 	.long DisplayMode_DispatchTable
@@ -9056,7 +9069,7 @@ PerfMode_ParamHandler_11:
 	ld	hl, bc
 	cp	hl, 31
 	jrl	ugt, 17
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xix
 	ld	xix, 15719617
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
@@ -9177,7 +9190,7 @@ SubCPU_ToneParamRet:
 	ldda8	l, 3822
 	dec	1, l
 	ld	h, l
-	.byte 0xcf, 0xec, 0x01
+	sla	l, 1
 	add	l, h
 	xor	h, h
 	push	xde
@@ -9409,7 +9422,7 @@ SubCPU_ToneParamRet:
 	ldda8	l, 3424
 	dec	1, l
 	ld	h, l
-	.byte 0xcf, 0xec, 0x01
+	sla	l, 1
 	add	l, h
 	xor	h, h
 	push	xde
@@ -9631,7 +9644,7 @@ SubCPU_ToneParamRet:
 	cps	a, 4
 	jrl	c, 3
 	sub	a, 4
-	.byte 0xc9, 0xec, 0x01
+	sla	a, 1
 	cpdi8	3415, 0
 	jrl	z, 2
 	inc	1, a
@@ -9776,7 +9789,7 @@ OscScope_Handler_7:
 	ret
 	ldda32	xix, 4372
 	ldda8	e, 3780
-	.byte 0xcd, 0xec, 0x02
+	sla	e, 2
 	xor	d, d
 	extz	xde
 	add	xix, xde
@@ -9784,7 +9797,7 @@ OscScope_Handler_7:
 	ret
 	ldda32	xix, 4372
 	ldda8	e, 3780
-	.byte 0xcd, 0xec, 0x02
+	sla	e, 2
 	xor	d, d
 	extz	xde
 	add	xix, xde
@@ -9887,7 +9900,7 @@ OscScope_RefreshLoop:
 	ldda8	l, 3822
 	xor	h, h
 	dec	1, hl
-	.byte 0xdb, 0xec, 0x01
+	sla	hl, 1
 	push	xde
 	ld	xde, 3230
 	.byte 0xd3, 0x07, 0xe8, 0xec, 0x20
@@ -9962,7 +9975,7 @@ OscScope_FinalizeRender:
 	nop
 	ldb	c, 1
 	ldda8	e, 3666
-	.byte 0xcd, 0xec, 0x01
+	sla	e, 1
 	call	15723010
 	cpdi8	4479, 0
 	jrl	nz, 96
@@ -9970,7 +9983,7 @@ OscScope_FinalizeRender:
 	ld	xix, 3705
 	ldb	c, 1
 	ldda8	e, 3667
-	.byte 0xcd, 0xec, 0x01
+	sla	e, 1
 	call	15723010
 	cpdi8	4479, 0
 	jrl	nz, 65
@@ -9978,7 +9991,7 @@ OscScope_FinalizeRender:
 	ld	xix, 3737
 	ldb	c, 1
 	ldda8	e, 3668
-	.byte 0xcd, 0xec, 0x01
+	sla	e, 1
 	call	15723010
 	ld	xiy, 3697
 	cp	(xiy), 0
@@ -10100,10 +10113,10 @@ VoiceBank_StoreIndex:
 DisplayStr_BytecodeBlock_A:
 	stdi8	3830, 0
 	ldda8	c, 3777
-	.byte 0xcb, 0xec, 0x01
+	sla	c, 1
 	xor	hl, hl
 	ldda8	l, 3780
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	xor	wa, wa
 	ldda32	xiy, 4372
 	.byte 0xc3, 0x07, 0xf4, 0xec, 0x21
@@ -10123,7 +10136,7 @@ DisplayStr_BytecodeBlock_A:
 	stdi8	3830, 0
 	.byte 0xd1, 0xc4, 0x0e, 0x38, 0x02, 0x00
 	ldda8	c, 3777
-	.byte 0xcb, 0xec, 0x01
+	sla	c, 1
 	cpdm8	3780, c
 	jrl	c, 96
 	ldda8	l, 3782
@@ -10131,7 +10144,7 @@ DisplayStr_BytecodeBlock_A:
 	jrl	z, 26
 	inc	1, l
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xde
 	ld	xde, 15723678
 	.byte 0xe3, 0x07, 0xe8, 0xec, 0x23
@@ -10159,10 +10172,10 @@ DisplayStr_BytecodeBlock_A:
 	ret
 	stdi8	3830, 0
 	ldda8	c, 3777
-	.byte 0xcb, 0xec, 0x01
+	sla	c, 1
 	xor	hl, hl
 	ldda8	l, 3780
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	xor	wa, wa
 	ldda32	xiy, 4372
 	.byte 0xc3, 0x07, 0xf4, 0xec, 0x21
@@ -10182,7 +10195,7 @@ DisplayStr_BytecodeBlock_A:
 	stdi8	3830, 0
 	incdi16	1, 3780
 	ldda8	c, 3777
-	.byte 0xcb, 0xec, 0x01
+	sla	c, 1
 	cpdm8	3780, c
 	jrl	c, 96
 	ldda8	l, 3782
@@ -10190,7 +10203,7 @@ DisplayStr_BytecodeBlock_A:
 	jrl	z, 26
 	inc	1, l
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	push	xde
 	ld	xde, 15723678
 	.byte 0xe3, 0x07, 0xe8, 0xec, 0x23
@@ -10541,7 +10554,7 @@ Display_BytecodeBlock_F:
 	cpdi8	4539, 64
 	jrl	nz, 2
 	ldb	a, 16
-	.byte 0xc9, 0xec, 0x02
+	sla	a, 2
 	exts	xwa
 	add	xiy, xwa
 	ld	wa, (xiy)
@@ -10836,7 +10849,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	call	15724584
 	ldda8	l, 4337
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	ld	xiy, 15726905
 	.byte 0xf3, 0x07, 0xf4, 0xec, 0x35
 	ld	xix, 3793
@@ -10867,7 +10880,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	call	15724584
 	ldda8	l, 4337
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	ld	xiy, 15726905
 	.byte 0xf3, 0x07, 0xf4, 0xec, 0x35
 	ld	xix, 3791
@@ -10980,7 +10993,7 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	call	15724584
 	ldda8	l, 4337
 	xor	h, h
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	ld	xiy, 15726905
 	.byte 0xf3, 0x07, 0xf4, 0xec, 0x35
 	ld	xix, 3791
@@ -11069,7 +11082,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	popw	wa
 	ld	l, w
 	xor	h, h
-	.byte 0xdb, 0xec, 0x04
+	sla	hl, 4
 	ld	xiy, 15728506
 	ld	xix, 3791
 	ldw	bc, 14
@@ -12621,7 +12634,7 @@ Scoop_SpecialMode_UpdateParams:
 	stda16	10426, wa
 	extz	xwa
 	dec	1, xwa
-	.byte 0xe8, 0xec, 0x08
+	sla	xwa, 8
 	addda32	xwa, 7514
 	stda32	4349, xwa
 	.byte 0xb0, 0xcf
@@ -12641,7 +12654,7 @@ Scoop_SpecialMode_UpdateParams:
 	stda16	10399, wa
 	extz	xwa
 	dec	1, xwa
-	.byte 0xe8, 0xec, 0x08
+	sla	xwa, 8
 	addda32	xwa, 7514
 	stda32	4349, xwa
 	.byte 0xb4, 0xcf, 0xb0, 0xcf
@@ -12946,7 +12959,7 @@ Scoop_EnvelopeCalc_Data:
 	ld	wa, (xsp+268)
 	muls	wa, 40
 	sub	hl, wa
-	.byte 0xdb, 0xee, 0x03
+	sll	hl, 3
 	ld	(xsp+266), hl
 	lds	iy, 0
 	cp	iy, de
@@ -12979,7 +12992,7 @@ Scoop_EnvelopeCalc_Data:
 	ld	a, (xbc+6)
 	and	a, 63
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15380484
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	ld	(xsp+4), xwa
@@ -13070,7 +13083,7 @@ Scoop_EnvelopeCalc_Data:
 	jr	z, 2
 	.byte 0xcf, 0xff
 	ld	a, l
-	.byte 0xc9, 0xee, 0x02
+	sll	a, 2
 	extz	wa
 	add	wa, wa
 	ld	xbc, (xbc+7)
@@ -13198,7 +13211,7 @@ Scoop_EnvCalc_Handler3:
 	extz	xbc
 	div	bc, 40
 	ld	bc, qbc
-	.byte 0xd9, 0xee, 0x03
+	sll	bc, 3
 	ld	(xsp+10), bc
 	ld	a, (xwa+2)
 	.byte 0xc7, 0xf8, 0x99
@@ -13641,7 +13654,8 @@ Scoop_EnvProcessor_Data:
 	ld	wa, (xsp+262)
 	muls	wa, 40
 	sub	bc, wa
-	.byte 0xd9, 0xee, 0x03, 0xf3, 0xfd, 0x04, 0x01, 0x51
+	sll	bc, 3
+	ld	(xsp+260), bc
 	ld	wa, hl
 	cps	wa, 2
 	jr	z, 28
@@ -13676,7 +13690,7 @@ Scoop_EnvProcessor_Data:
 	ld	a, (xiz+6)
 	and	a, 63
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15380484
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24, 0xf3, 0xfd, 0x08, 0x01, 0x30
 	ld	xhl, xwa
@@ -13721,7 +13735,7 @@ Scoop_EnvProcessor_Data:
 	ld	wa, (xsp+262)
 	muls	wa, 40
 	sub	bc, wa
-	.byte 0xd9, 0xee, 0x03
+	sll	bc, 3
 	ld	(xsp+260), bc
 	ld	a, (xiz+10)
 	cp	a, e
@@ -13968,7 +13982,7 @@ Scoop_EventLoop_36Entry_Data:
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15380740
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24
 	lda	xwa, (xsp+264)
@@ -14118,7 +14132,7 @@ Scoop_EventLoop_36Entry_Data:
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15380740
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24, 0xf3, 0xfd, 0x08, 0x01, 0x30
 	ld	xhl, xwa
@@ -14187,7 +14201,7 @@ Scoop_EventLoop_36Entry_Data:
 	ld	a, (xde+6)
 	and	a, 15
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15380740
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24, 0xf3, 0xfd, 0x0a, 0x01, 0x30
 	ld	xhl, xwa

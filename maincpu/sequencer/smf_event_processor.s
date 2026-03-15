@@ -3562,13 +3562,13 @@ SeqStep_FileCloseExit:
 	cpw	qiz, 16
 	jr	ge, 107
 	ld	wa, qiz
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 135348
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	or	xwa, xwa
 	jr	z, 77
 	ld	wa, qiz
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 135348
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	cp	xwa, 4294967295
@@ -3577,12 +3577,12 @@ SeqStep_FileCloseExit:
 	push	xwa
 	pushw 1
 	ld	wa, qiz
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 135348
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	push	xwa
 	ld	wa, qiz
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 135348
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	ld	xwa, (xwa+14)
@@ -4515,7 +4515,7 @@ SeqStep_FileSectorDone:
 	lds32	xwa, 1
 	add	(xbc), xwa
 	ld	wa, (xsp+4)
-	.byte 0xd8, 0xef, 0x08
+	srl	wa, 8
 	ld	(xde), a
 	ret
 	ld	xbc, (xsp+8)
@@ -4532,7 +4532,7 @@ SeqStep_FileSectorDone:
 	lds32	xwa, 1
 	add	(xde), xwa
 	ld	xwa, xhl
-	.byte 0xe8, 0xef, 0x08
+	srl	xwa, 8
 	and	xwa, 255
 	ld	(xix), a
 	ld	xde, xbc
@@ -4625,7 +4625,7 @@ SeqStep_FileSectorReturn:
 	.byte 0xf5, 0xe0, 0x31
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+13)
-	.byte 0xd8, 0xef, 0x08
+	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
 	.byte 0xf5, 0xe0, 0x31
@@ -4637,7 +4637,7 @@ SeqStep_FileSectorReturn:
 	.byte 0xf5, 0xe0, 0x31
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+15)
-	.byte 0xd8, 0xef, 0x08
+	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
 	.byte 0xf5, 0xe0, 0x31
@@ -4649,7 +4649,7 @@ SeqStep_FileSectorReturn:
 	.byte 0xf5, 0xe0, 0x31
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+17)
-	.byte 0xd8, 0xef, 0x08
+	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
 	.byte 0xf5, 0xe0, 0x31
@@ -4661,14 +4661,14 @@ SeqStep_FileSectorReturn:
 	.byte 0xf5, 0xe0, 0x31
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
-	.byte 0xe8, 0xef, 0x08
+	srl	xwa, 8
 	and	xwa, 255
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
 	.byte 0xf5, 0xe0, 0x31
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	and	xwa, 255
 	ld	(xbc), a
 	ld	xwa, (xiz+19)
@@ -4808,14 +4808,16 @@ SeqStep_FileSectorPopReturn:
 	jrl	nz, 345
 	ld	wa, (xsp+14)
 	mul	wa, 3
-	.byte 0xd8, 0xef, 0x01
+	srl	wa, 1
 	ld	bc, wa
 	extz	xbc
 	ld	xwa, xbc
 	and	xwa, 511
 	ld	(xsp+4), wa
 	ld	xiz, xbc
-	.byte 0xee, 0xef, 0x09, 0xaa, 0x18, 0x86, 0x0b, 0x06, 0x00
+	srl	xiz, 9
+	add	xiz, (xde+24)
+	pushw 6
 	ld	xwa, (xsp+12)
 	.byte 0xa8
 	.ascii "& 8>"
@@ -5332,7 +5334,7 @@ SeqByteBlock_StyleBitmapRef:
 	and	a, 192
 	extz	wa
 	ld	(xsp+18), wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	add	wa, bc
 	ld	(xsp+18), wa
 	incm	1, (xsp+16)
@@ -5538,7 +5540,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	(xwa+28), xde
 	ld	xwa, (xsp+4)
 	ld	bc, (xwa+38)
-	.byte 0xd9, 0xef, 0x05
+	srl	bc, 5
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa+44)
 	extz	xwa
@@ -6716,7 +6718,7 @@ SeqChan_WritePatchData:
 	ld	a, (xiz+5)
 	extz	wa
 	ld	bc, wa
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 135348
 	lds32	xwa, 0
 	.byte 0xf3, 0x07, 0xe8, 0xe4, 0x60

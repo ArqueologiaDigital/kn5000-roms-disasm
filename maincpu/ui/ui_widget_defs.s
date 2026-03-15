@@ -17289,7 +17289,7 @@ CommonIDProc_JumpTable:
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
 	ld	xbc, (xwa+8)
-	.byte 0xe9, 0xee, 0x03
+	sll	xbc, 3
 	ld	xwa, (xsp+12)
 	add	xbc, (xwa+8)
 	ld	xwa, (xbc)

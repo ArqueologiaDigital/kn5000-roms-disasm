@@ -2895,7 +2895,7 @@ DSPCfg_Data_FDC4B7:
 	ld	iz, wa
 	ld	xwa, xbc
 	calr	-354
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xbc, 15622212
 	mul	iz, 6
 	ld	xwa, xiz
@@ -3819,7 +3819,7 @@ DSPCfg_Data_ParamDispatch:
 	ld	a, (xbc)
 	extz	wa
 	ld	iz, wa
-	.byte 0xde, 0xee, 0x08
+	sll	iz, 8
 	add	iz, hl
 	ld	xwa, (xsp+34)
 	ld	a, (xwa)
@@ -5800,7 +5800,7 @@ UIStateEvt_VolumeMixer_Data:
 	cp	de, 26
 	jr	ge, 79
 	ld	wa, de
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15633780
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0xb8, 0x16, 0xc8
 	jr	z, 32

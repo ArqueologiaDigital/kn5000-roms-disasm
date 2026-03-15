@@ -171,7 +171,7 @@ SLSrcBankList_FuncBody:
 	.byte 0xf5, 0xe0, 0x00, 0x00
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336946
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc
@@ -233,7 +233,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (xwa+43)
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336996
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc
@@ -490,7 +490,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (xwa+22)
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336996
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc
@@ -546,7 +546,7 @@ SLSrcBankList_FuncBody:
 	.byte 0xf5, 0xe0, 0x00, 0x00
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336946
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc
@@ -590,7 +590,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (xwa+43)
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336996
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc
@@ -870,7 +870,7 @@ SLSrcBankList_FuncBody:
 	.byte 0xf5, 0xe0, 0x00, 0x00
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336946
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc
@@ -935,7 +935,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (xwa+43)
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336996
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc
@@ -1471,7 +1471,7 @@ SLDstBankList_FuncBody:
 	.byte 0xf5, 0xe0, 0x00, 0x00
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336946
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc
@@ -1525,7 +1525,7 @@ SLDstBankList_FuncBody:
 	extz	wa
 	lda_24	xhl, 15336996
 	ld	bc, wa
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda	xwa, (xde+43)
 	.byte 0xe3, 0x07, 0xec, 0xe4, 0x21
 	inc	1, xbc
@@ -1751,7 +1751,7 @@ SLDstBankList_FuncBody:
 	lda	xwa, (xwa+22)
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336996
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc
@@ -1876,7 +1876,7 @@ SLDstBankList_FuncBody:
 	.byte 0xf5, 0xe0, 0x00, 0x00
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336946
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc
@@ -1914,7 +1914,7 @@ SLDstBankList_FuncBody:
 	lda	xwa, (xwa+43)
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336996
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc
@@ -2140,7 +2140,7 @@ SLDstBankList_FuncBody:
 	.byte 0xf5, 0xe0, 0x00, 0x00
 	ldda8	c, 35320
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 15336946
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
 	inc	1, xbc

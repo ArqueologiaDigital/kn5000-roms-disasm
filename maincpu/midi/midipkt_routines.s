@@ -166,7 +166,7 @@ MidiPkt_BuildControl:
 	ld	xwa, (xsp+16)
 	ld	a, (xwa+14)
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617568
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x26
 	ld	a, (xsp+4)
@@ -198,7 +198,7 @@ MidiPkt_BuildControl:
 	and	c, 15
 	ld	(xwa+1), c
 	ld	c, (xwa)
-	.byte 0xcb, 0xef, 0x04
+	srl	c, 4
 	ld	(xwa), c
 	lds	bc, 3
 	call	16607843
@@ -228,7 +228,7 @@ MidiPkt_BuildControl:
 	cps	a, 1
 	jr	nc, 76
 	extz	wa
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15617574
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x26
 	ld	a, (xsp+4)
@@ -698,7 +698,7 @@ MidiPkt_EnqueueExtended_Data:
 	and	c, 15
 	ld	(xwa+1), c
 	ld	c, (xwa)
-	.byte 0xcb, 0xef, 0x04
+	srl	c, 4
 	ld	(xwa), c
 	lds	bc, 3
 	call	16607843
@@ -1099,7 +1099,7 @@ MidiPkt_EnqueueExtended2_Data:
 	and	c, 15
 	ld	(xwa+1), c
 	ld	c, (xwa)
-	.byte 0xcb, 0xef, 0x04
+	srl	c, 4
 	ld	(xwa), c
 	lds	bc, 3
 	call	16607843

@@ -28,7 +28,7 @@ JumpInsertFunc:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 JumpInsert_DispatchBody:
 	ld	xwa, (xde+14)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xbc, 15373962
 	add	xbc, xwa
 	ld	xwa, (xbc)

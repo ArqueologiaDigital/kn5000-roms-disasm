@@ -6636,7 +6636,7 @@ TchSensGrid_EventDispatch:
 	ld	xde, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -6680,7 +6680,7 @@ TchSensGrid_EventDispatch:
 	ld	xde, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -7144,7 +7144,7 @@ FSWAssGrid_EventDispatch:
 	ld	xde, xhl
 	lda	xwa, (xsp+260)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -7509,7 +7509,7 @@ FSWAssGrid_EventDispatch:
 	extz	wa
 	calr	1136
 	extz	hl
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
@@ -7535,7 +7535,7 @@ FSWAssGrid_EventDispatch:
 	extz	wa
 	calr	1048
 	extz	hl
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
@@ -7559,7 +7559,7 @@ FSWAssGrid_EventDispatch:
 	extz	wa
 	calr	968
 	extz	hl
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
@@ -7583,7 +7583,7 @@ FSWAssGrid_EventDispatch:
 	extz	wa
 	calr	888
 	extz	hl
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
@@ -7608,7 +7608,7 @@ FSWAssGrid_EventDispatch:
 	extz	wa
 	calr	806
 	extz	hl
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
@@ -7632,7 +7632,7 @@ FSWAssGrid_EventDispatch:
 	extz	wa
 	calr	727
 	extz	hl
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
@@ -7656,7 +7656,7 @@ FSWAssGrid_EventDispatch:
 	extz	wa
 	calr	647
 	extz	hl
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
@@ -8618,7 +8618,7 @@ PmExpFilter_EventDispatch:
 	ld	xde, xhl
 	.byte 0xf3, 0xfd, 0x00, 0x01, 0x30
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -8626,7 +8626,7 @@ PmExpFilter_EventDispatch:
 	jrl	nz, 619
 	ld8_24	c, 213218
 	ld	wa, de
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	dec	8, wa
 	cps	c, 2
 	jr	z, 35
@@ -8658,12 +8658,12 @@ PmExpFilter_EventDispatch:
 	ld	xde, xhl
 	.byte 0xf3, 0xfd, 0x00, 0x01, 0x31
 	ld	xwa, xde
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	ld	(xbc), wa
 	ld	(xbc+2), de
 	ld	wa, de
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	dec	8, wa
 	.byte 0x91, 0x3f, 0x01, 0x00
 	jrl	nz, 488
@@ -9132,7 +9132,7 @@ DispTimeSet_EventDispatch:
 	ld	xde, xhl
 	lda	xwa, (xsp+40)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -9234,7 +9234,7 @@ DispTimeSet_EventDispatch:
 	ld	xde, xhl
 	lda	xiy, (xsp+40)
 	ld	xwa, xde
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	ld	(xiy), wa
 	ld	iz, de
@@ -9342,7 +9342,7 @@ DispTimeSet_EventDispatch:
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xde, 15537334
 	add	xde, xwa
 	ld	xwa, (xde)
@@ -9365,7 +9365,7 @@ DispTimeSet_EventDispatch:
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xde, 15537334
 	add	xde, xwa
 	ld	xwa, (xde)
@@ -9390,7 +9390,7 @@ DispTimeSet_EventDispatch:
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xde, (xsp+4)
 	add	xde, xwa
 	ld	xwa, (xde)
@@ -9413,7 +9413,7 @@ DispTimeSet_EventDispatch:
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xde, (xsp+4)
 	add	xde, xwa
 	ld	xwa, (xde)
@@ -9438,7 +9438,7 @@ DispTimeSet_EventDispatch:
 	.byte 0xb3, 0x02, 0x01, 0x00, 0xb0, 0x02, 0x06, 0x00
 	ld	(xbc), xix
 	ld	xwa, (xiy)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xbc, (xsp+4)
 	add	xbc, xwa
 	ld	xwa, (xbc)
@@ -9459,7 +9459,7 @@ DispTimeSet_EventDispatch:
 	.byte 0xb3, 0x02, 0x01, 0x00, 0xb0, 0x02, 0x07, 0x00
 	ld	(xbc), xix
 	ld	xwa, (xiy)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xbc, (xsp+4)
 	add	xbc, xwa
 	ld	xwa, (xbc)
@@ -10236,7 +10236,7 @@ MssName_EventDispatch:
 	lda	xsp, (xsp+18)
 	ld	xwa, 15537572
 	jr	37
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	add	xwa, 9990144
 	ld	xbc, (xwa)
 	ld	a, (xbc+42)

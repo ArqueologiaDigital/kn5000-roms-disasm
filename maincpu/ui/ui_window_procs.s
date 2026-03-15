@@ -348,7 +348,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
 	extz	xbc
-	.byte 0xe9, 0xee, 0x02
+	sll	xbc, 2
 	ld	xwa, xbc
 	add	xwa, (xsp+4)
 	lda	xbc, (xsp+12)
@@ -389,7 +389,7 @@ WndEvt_EventCodeDispatch:
 	ld16_24	bc, 160986
 	ld	wa, bc
 	extz	xwa
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xde, 15376082
 	add	xde, xwa
 	ld	xwa, (xde)
@@ -409,7 +409,8 @@ WndEvt_EventCodeDispatch:
 	inc	1, wa
 	st16_24	160990, wa
 	extz	xwa
-	.byte 0xe8, 0xee, 0x02, 0xaf, 0x04, 0x80
+	sll	xwa, 2
+	add	xwa, (xsp+4)
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
 	call	16459328
@@ -3956,9 +3957,9 @@ DrawDesignBox_ByteData:
 	ld	de, (xwa+2)
 	exts	xde
 	ld	xhl, xde
-	.byte 0xeb, 0xee, 0x02
+	sll	xhl, 2
 	add	xhl, xde
-	.byte 0xeb, 0xee, 0x06
+	sll	xhl, 6
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xhl
@@ -3990,9 +3991,9 @@ DrawDesignBox_ByteData:
 	ld	de, (xwa+2)
 	exts	xde
 	ld	xhl, xde
-	.byte 0xeb, 0xee, 0x02
+	sll	xhl, 2
 	add	xhl, xde
-	.byte 0xeb, 0xee, 0x06
+	sll	xhl, 6
 	ld	wa, (xwa)
 	exts	xwa
 	add	xwa, xhl
@@ -4013,7 +4014,7 @@ DrawDesignBox_ByteData:
 	cp	xwa, (xsp+4)
 	jrl	le, 151
 	ld	xwa, (xsp+4)
-	.byte 0xe8, 0xec, 0x00
+	sla	xwa, 0
 	ld	xbc, (xsp+8)
 	call	16714766
 	ld	xiz, xhl
@@ -4026,7 +4027,7 @@ DrawDesignBox_ByteData:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+4), xwa
-	.byte 0xe8, 0xec, 0x00
+	sla	xwa, 0
 	ld	(xsp+4), xwa
 	ld	xwa, 32768
 	add	(xsp+4), xwa
@@ -4043,9 +4044,9 @@ DrawDesignBox_ByteData:
 	ld	wa, (xde+2)
 	exts	xwa
 	ld	xhl, xwa
-	.byte 0xeb, 0xee, 0x02
+	sll	xhl, 2
 	add	xhl, xwa
-	.byte 0xeb, 0xee, 0x06
+	sll	xhl, 6
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xhl
@@ -4057,7 +4058,7 @@ DrawDesignBox_ByteData:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	.byte 0xe8, 0xed, 0x00
+	sra	xwa, 0
 	ld	(xde), wa
 	ld	xwa, (xsp+16)
 	add	(xde+2), wa
@@ -4066,7 +4067,7 @@ DrawDesignBox_ByteData:
 	jr	le, -81
 	jrl	148
 	ld	xwa, (xsp+8)
-	.byte 0xe8, 0xec, 0x00
+	sla	xwa, 0
 	ld	xbc, (xsp+4)
 	call	16714766
 	ld	xiz, xhl
@@ -4080,7 +4081,7 @@ DrawDesignBox_ByteData:
 	ld	wa, (xhl)
 	exts	xwa
 	ld	(xsp+8), xwa
-	.byte 0xe8, 0xec, 0x00
+	sla	xwa, 0
 	ld	(xsp+8), xwa
 	ld	xwa, 32768
 	add	(xsp+8), xwa
@@ -4097,9 +4098,9 @@ DrawDesignBox_ByteData:
 	ld	wa, (xhl)
 	exts	xwa
 	ld	xix, xwa
-	.byte 0xec, 0xee, 0x02
+	sll	xix, 2
 	add	xix, xwa
-	.byte 0xec, 0xee, 0x06
+	sll	xix, 6
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xix
@@ -4111,7 +4112,7 @@ DrawDesignBox_ByteData:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
-	.byte 0xe8, 0xed, 0x00
+	sra	xwa, 0
 	ld	(xhl), wa
 	ld	xwa, (xsp+12)
 	add	(xde), wa
@@ -5905,9 +5906,9 @@ Gfx_ImageDecodeByteData:
 	ld	bc, ix
 	extz	xbc
 	ld	xde, xbc
-	.byte 0xea, 0xee, 0x02
+	sll	xde, 2
 	add	xde, xbc
-	.byte 0xea, 0xee, 0x06
+	sll	xde, 6
 	ld	bc, (xwa)
 	exts	xbc
 	add	xbc, xde
@@ -8146,9 +8147,9 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	xde, xwa
-	.byte 0xea, 0xee, 0x02
+	sll	xde, 2
 	add	xde, xwa
-	.byte 0xea, 0xee, 0x06
+	sll	xde, 6
 	lda_24	xbc, 277504
 	.byte 0xbf, 0x02, 0xcf
 	jr	z, 108
@@ -8179,9 +8180,9 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xiy+2)
 	exts	xwa
 	ld	xde, xwa
-	.byte 0xea, 0xee, 0x02
+	sll	xde, 2
 	add	xde, xwa
-	.byte 0xea, 0xee, 0x06
+	sll	xde, 6
 	add	xde, xbc
 	add	xhl, xde
 	.byte 0x84, 0x3c, 0x60
@@ -8223,9 +8224,9 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xiy+2)
 	exts	xwa
 	ld	xde, xwa
-	.byte 0xea, 0xee, 0x02
+	sll	xde, 2
 	add	xde, xwa
-	.byte 0xea, 0xee, 0x06
+	sll	xde, 6
 	add	xde, xbc
 	add	xhl, xde
 	.byte 0x84, 0x3c, 0x60
@@ -8284,7 +8285,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xhl)
 	exts	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x02
+	sll	xbc, 2
 	add	xbc, xwa
 	.byte 0xe9, 0xee, 0x06, 0xbf, 0x02, 0xcf
 	jr	z, 16
@@ -8349,7 +8350,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xhl)
 	exts	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x02
+	sll	xbc, 2
 	add	xbc, xwa
 	.byte 0xe9, 0xee, 0x06, 0xbf, 0x02, 0xcf
 	jr	z, 19
@@ -8524,14 +8525,14 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+38), xwa
 	ld	(xsp+30), xwa
 	ld	xwa, (xsp+8)
-	.byte 0xe8, 0xec, 0x00
+	sla	xwa, 0
 	ld	xbc, (xsp+4)
 	call	16714766
 	ld	(xsp+34), xhl
 	lda	xwa, (xsp+62)
 	ld	(xsp+42), xwa
 	ld	xwa, (xsp+4)
-	.byte 0xe8, 0xec, 0x00
+	sla	xwa, 0
 	ld	xbc, (xsp+8)
 	call	16714766
 	ld	xix, (xsp+42)
@@ -8539,7 +8540,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+46), xwa
 	ld	wa, (xwa)
 	exts	xwa
-	.byte 0xe8, 0xec, 0x00
+	sla	xwa, 0
 	ld	(xsp+50), xwa
 	ld	xwa, 32768
 	add	(xsp+50), xwa
@@ -8557,9 +8558,9 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x02
+	sll	xbc, 2
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x06
+	sll	xbc, 6
 	ld	wa, (xix)
 	exts	xwa
 	add	xwa, xbc
@@ -8584,7 +8585,9 @@ ColorBlit2_LargeCodeBlock:
 	jr	z, 3
 	.byte 0x83, 0x3d, 0x60
 	ld	xwa, (xsp+16)
-	.byte 0xe8, 0xec, 0x02, 0xaf, 0x10, 0x80, 0xe8, 0xec, 0x06
+	sla	xwa, 2
+	add	xwa, (xsp+16)
+	sla	xwa, 6
 	add	xhl, xwa
 	inc	1, xbc
 	cp	xbc, (xsp+8)
@@ -8611,7 +8614,9 @@ ColorBlit2_LargeCodeBlock:
 	jr	z, 3
 	.byte 0x83, 0x3d, 0x60
 	ld	xwa, (xsp+16)
-	.byte 0xe8, 0xec, 0x02, 0xaf, 0x10, 0x80, 0xe8, 0xec, 0x06
+	sla	xwa, 2
+	add	xwa, (xsp+16)
+	sla	xwa, 6
 	add	xhl, xwa
 	add	xix, xwa
 	inc	1, xbc
@@ -8626,9 +8631,9 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	xbc, xwa
-	.byte 0xe9, 0xee, 0x02
+	sll	xbc, 2
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x06
+	sll	xbc, 6
 	ld	xwa, (xsp+42)
 	ld	wa, (xwa)
 	exts	xwa
@@ -8693,7 +8698,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+4), xwa
-	.byte 0xe8, 0xec, 0x00
+	sla	xwa, 0
 	ld	(xsp+4), xwa
 	ld	xwa, 32768
 	add	(xsp+4), xwa
@@ -8708,9 +8713,9 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	xix, xwa
-	.byte 0xec, 0xee, 0x02
+	sll	xix, 2
 	add	xix, xwa
-	.byte 0xec, 0xee, 0x06
+	sll	xix, 6
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xix
@@ -8996,7 +9001,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+4), xwa
-	.byte 0xe8, 0xec, 0x00
+	sla	xwa, 0
 	ld	(xsp+4), xwa
 	ld	xwa, 32768
 	add	(xsp+4), xwa
@@ -9016,9 +9021,9 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xbc+2)
 	exts	xwa
 	ld	xhl, xwa
-	.byte 0xeb, 0xee, 0x02
+	sll	xhl, 2
 	add	xhl, xwa
-	.byte 0xeb, 0xee, 0x06
+	sll	xhl, 6
 	lda_24	xde, 277504
 	.byte 0xc7, 0xf0, 0xda
 	jrl	z, 140
@@ -9053,9 +9058,9 @@ ColorBlit2_LargeCodeBlock:
 	ld	wa, (xiz+2)
 	exts	xwa
 	ld	xhl, xwa
-	.byte 0xeb, 0xee, 0x02
+	sll	xhl, 2
 	add	xhl, xwa
-	.byte 0xeb, 0xee, 0x06
+	sll	xhl, 6
 	add	xhl, xde
 	add	xiy, xhl
 	.byte 0x84, 0x3c, 0x60

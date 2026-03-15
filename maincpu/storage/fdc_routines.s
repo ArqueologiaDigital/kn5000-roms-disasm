@@ -952,7 +952,7 @@ FDC_HardwareSetup:
 	jr	75
 	ldda8	a, 35369
 	and	a, 1
-	.byte 0xc9, 0xee, 0x02
+	sll	a, 2
 	ld	e, a
 	ldda8	a, 35370
 	and	a, 3
@@ -1020,7 +1020,7 @@ FDC_HardwareSetup:
 	extz	wa
 	jrl	-603
 	ldda8	a, 35383
-	.byte 0xc9, 0xee, 0x04
+	sll	a, 4
 	ld	e, a
 	ldda8	a, 35384
 	and	a, 15
@@ -1030,7 +1030,7 @@ FDC_HardwareSetup:
 	extz	wa
 	calr	-630
 	ldda8	a, 35385
-	.byte 0xc9, 0xee, 0x01
+	sll	a, 1
 	ld	e, a
 	ldda8	a, 35386
 	and	a, 1
@@ -1596,7 +1596,7 @@ FDC_MC_EXIT:
 	stdi8	35373, 1
 	stdi16	35356, 0
 	ldda16	ix, 35594
-	.byte 0xdc, 0xef, 0x01
+	srl	ix, 1
 	ldb	e, 0
 	lds	iy, 0
 	cp	iy, ix
@@ -1675,7 +1675,7 @@ FDC_MC_EXIT:
 	ld	(xhl), a
 	jr	29
 	ldda16	wa, 35594
-	.byte 0xd8, 0xef, 0x01
+	srl	wa, 1
 	addda8	a, 35373
 	ld	l, a
 	ld	a, e

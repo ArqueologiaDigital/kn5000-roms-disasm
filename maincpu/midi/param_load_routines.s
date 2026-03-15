@@ -611,7 +611,7 @@ ParaLoadOpt_GridDispatch:
 	call	16422496
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl
@@ -672,7 +672,7 @@ ParaLoadOpt_GridDispatch:
 	call	16422496
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl

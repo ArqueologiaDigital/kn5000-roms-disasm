@@ -2104,7 +2104,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14738253
 	exts	xbc
 	add	xbc, xde
@@ -2123,7 +2123,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14738325
 	exts	xbc
 	add	xbc, xde
@@ -2334,7 +2334,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+10)
 	extz	bc
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	lda_24	xde, 14738397
 	exts	xbc
 	add	xbc, xde
@@ -4294,7 +4294,7 @@ SeMenu_NameEditor_End:
 	jr	z, 71
 	ldda8	a, 49278
 	and	a, 64
-	.byte 0xc9, 0xec, 0x01
+	sla	a, 1
 	cpdi8	36152, 33
 	jr	nz, 19
 	ldda8	w, 1642
@@ -4915,13 +4915,13 @@ SeMenu_PresetManager_Data:
 	ldb	c, 4
 	ldda8	w, 1630
 	ld	a, c
-	.byte 0xc9, 0xec, 0x01
+	sla	a, 1
 	dec	1, a
 	.byte 0xc8, 0xff
 	jr	c, 34
 	push c
 	xor	b, b
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	ld	xiz, 15800316
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
 	add	bc, 4
@@ -4931,7 +4931,7 @@ SeMenu_PresetManager_Data:
 	jr	32
 	push c
 	xor	b, b
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	ld	xiz, 15800244
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
 	add	bc, 4
@@ -4948,13 +4948,13 @@ SeMenu_PresetManager_Data:
 	ldb	c, 4
 	ldda8	w, 1630
 	ld	a, c
-	.byte 0xc9, 0xec, 0x01
+	sla	a, 1
 	dec	1, a
 	.byte 0xc8, 0xff
 	jr	c, 34
 	push c
 	xor	b, b
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	ld	xiz, 15800536
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
 	add	bc, 4
@@ -4964,7 +4964,7 @@ SeMenu_PresetManager_Data:
 	jr	32
 	push c
 	xor	b, b
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	ld	xiz, 15800416
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
 	add	bc, 4
@@ -4977,13 +4977,13 @@ SeMenu_PresetManager_Data:
 	ldb	c, 2
 	ldda8	w, 1630
 	ld	a, c
-	.byte 0xc9, 0xec, 0x01
+	sla	a, 1
 	dec	1, a
 	.byte 0xc8, 0xff
 	jr	c, 34
 	push c
 	xor	b, b
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	ld	xiz, 15800660
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
 	add	bc, 4
@@ -4993,7 +4993,7 @@ SeMenu_PresetManager_Data:
 	jr	32
 	push c
 	xor	b, b
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	ld	xiz, 15800602
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
 	add	bc, 4
@@ -5067,13 +5067,13 @@ SeMenu_PresetBrowser_Data:
 	ldb	c, 4
 	ldda8	w, 1630
 	ld	a, c
-	.byte 0xc9, 0xec, 0x01
+	sla	a, 1
 	dec	1, a
 	.byte 0xc8, 0xff
 	jr	c, 34
 	push c
 	xor	b, b
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	ld	xiz, 15811695
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
 	add	bc, 4
@@ -5083,7 +5083,7 @@ SeMenu_PresetBrowser_Data:
 	jr	32
 	push c
 	xor	b, b
-	.byte 0xd9, 0xec, 0x02
+	sla	bc, 2
 	ld	xiz, 15811623
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
 	add	bc, 4
@@ -5119,7 +5119,7 @@ SeMenu_PresetBrowser_Data:
 	sub	d, c
 	ld	e, d
 	xor	d, d
-	.byte 0xda, 0xec, 0x02
+	sla	de, 2
 	ld	xiz, 15807910
 	.byte 0xe3, 0x07, 0xf8, 0xe8, 0x25
 	pushw	de
@@ -5146,7 +5146,7 @@ SeMenu_PresetBrowser_Data:
 	push	xiy
 	ld	a, (xiy)
 	and	a, 192
-	.byte 0xc9, 0xef, 0x06
+	srl	a, 6
 	xor	w, w
 	mul	a, 10
 	ld	xiz, 15808220
@@ -5509,7 +5509,7 @@ SeMenu_NameEdit_DataBlock1:
 	call	15789056
 	xor	xwa, xwa
 	ldda8	a, 1648
-	.byte 0xd8, 0xec, 0x03
+	sla	wa, 3
 	ld	xiz, 15816708
 	add	xiz, xwa
 	ld	xiy, (xiz)
@@ -5539,7 +5539,7 @@ SeMenu_NameEdit_DataBlock1:
 	call	15789069
 	xor	xwa, xwa
 	ldda8	a, 1648
-	.byte 0xd8, 0xec, 0x03
+	sla	wa, 3
 	ld	xiz, 15816871
 	add	xiz, xwa
 	ld	xiy, (xiz)
@@ -6327,11 +6327,21 @@ SeBitmap_EnvCurve1:
 	swi	7
 	swi	6
 	swi	2
-	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
 	.fill 8, 1, 0x03
 	.fill 8, 1, 0x03
 	.fill 8, 1, 0x03
-	.byte 0x03, 0x03, 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
 	swi	7
 	swi	7
 SeBitmap_EnvCurve2:
@@ -6394,11 +6404,21 @@ SeBitmap_EnvCurve2:
 	swi	7
 	swi	6
 	swi	6
-	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
 	.fill 8, 1, 0x03
 	.fill 8, 1, 0x03
 	.fill 8, 1, 0x03
-	.byte 0x03, 0x03, 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
 	swi	7
 	swi	7
 SeBitmap_EnvCurve3:
@@ -6478,7 +6498,11 @@ SeBitmap_EnvCurve3:
 	.fill 8, 1, 0x03
 	.fill 8, 1, 0x03
 	.fill 8, 1, 0x03
-	.byte 0x03, 0x03, 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
 	swi	7
 	swi	7
 SeBitmap_EnvCurve4:
@@ -6549,10 +6573,16 @@ SeBitmap_EnvCurve4:
 	zcf
 	ldb	c, 35
 	ld	xhl, 58966851
-	.byte 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
 	.fill 8, 1, 0x03
 	.fill 8, 1, 0x03
-	.byte 0x03, 0x03, 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
 	swi	7
 	swi	7
 SeBitmap_EnvCurve5:
@@ -6611,9 +6641,17 @@ SeBitmap_EnvCurve5:
 	zcf
 	ldb	c, 35
 	ld	xhl, 58950467
-	.byte 0x03, 0x03, 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
 	.fill 8, 1, 0x03
-	.byte 0x03, 0x03, 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
 	swi	7
 	swi	7
 	swi	7
@@ -6664,7 +6702,16 @@ SeBitmap_EnvCurve5:
 	zcf
 	ldb	c, 35
 	ld	xhl, 50561859
-	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
+	pop_sr
 	swi	7
 	swi	7
 	jp	778
@@ -7899,20 +7946,23 @@ SeBitmap_EnvCurve5:
 	ldwio	104, 32518
 	nop
 	ldb	w, 233
-	.byte 0x16, 0x03
+	ex_ff
+	pop_sr
 	halt
 	pushw 1641
 	swi	7
 	nop
 	ldb	w, 238
-	.byte 0x16, 0x02
+	ex_ff
+	push_sr
 	nop
 	halt
 	pushw 1642
 	swi	7
 	nop
 	ldb	w, 242
-	.byte 0x16, 0x02
+	ex_ff
+	push_sr
 	nop
 	nop
 	ldwio	107, 32518
@@ -9496,7 +9546,8 @@ TuningSystem_Handler_Table:
 	swi	7
 	nop
 	ldb	w, 27
-	.byte 0x19, 0x02
+	pop_f
+	push_sr
 	nop
 
 	.include "storage/flash_floppy_handlers.s"
@@ -9543,7 +9594,7 @@ S2c_GridCheck_DataBlock:
 	ld	xde, xhl
 	lda	xwa, (xsp+10)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -9561,7 +9612,7 @@ S2c_GridCheck_DataBlock:
 	ld	xde, xhl
 	lda	xwa, (xsp+10)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -11126,7 +11177,7 @@ EasyCmp_GridCheck_DataBlock:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -11150,7 +11201,7 @@ EasyCmp_GridCheck_DataBlock:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -12133,7 +12184,7 @@ MspRGrpSetGridCheck_DataBlock:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -12157,7 +12208,7 @@ MspRGrpSetGridCheck_DataBlock:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -13463,7 +13514,7 @@ StylCnvStorBnkSel:
 
 StylCnvStorBnkSel_DataBlock:
 	ld	xwa, (xhl+14)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	lda	xbc, (xsp+4)
 	add	xbc, xwa
 	ld	xwa, (xbc)
@@ -13698,7 +13749,7 @@ StylCnvStorOkFunc_DataBlock:
 	exts	xwa
 	divs	wa, 2
 	add	bc, wa
-	.byte 0xdc, 0xef, 0x01
+	srl	ix, 1
 	ld	wa, ix
 	add	wa, bc
 	ld	(xiy+2), wa
@@ -13868,7 +13919,7 @@ StylCnvStorOkFunc_DataBlock:
 	divs	wa, 2
 	add	bc, wa
 	ld	wa, iz
-	.byte 0xd8, 0xef, 0x01
+	srl	wa, 1
 	sub	bc, wa
 	lda	xwa, (xsp+22)
 	ld	(xwa+2), bc
@@ -13900,7 +13951,7 @@ StylCnvStorOkFunc_DataBlock:
 	divs	bc, 2
 	add	de, bc
 	ld	bc, iz
-	.byte 0xd9, 0xef, 0x01
+	srl	bc, 1
 	add	bc, de
 	ld	(xwa+2), bc
 	lda	xde, (xsp+18)

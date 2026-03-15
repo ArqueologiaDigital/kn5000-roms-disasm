@@ -289,7 +289,7 @@ MdSetupLoadFunc:
 SetupLoadOptionJumpTable:
 	ld	xwa, (xde+14)
 	and	xwa, 2
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	lda	xbc, (xsp+4)
 	add	xbc, xwa
 	ld	xwa, (xbc)

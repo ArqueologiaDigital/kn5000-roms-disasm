@@ -876,23 +876,27 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x02, 0x02
+	push_sr
+	push_sr
 	nop
 	nop
 	.byte 0x03, 0x01
 	nop
 	nop
-	.byte 0x02, 0x03
+	push_sr
+	pop_sr
 	nop
 	nop
-	.byte 0x03, 0x02
+	pop_sr
+	push_sr
 	nop
 	nop
 	nop
 	nop
 	nop
 	nop
-	.byte 0x03, 0x03
+	pop_sr
+	pop_sr
 	nop
 	nop
 	nop
@@ -1054,7 +1058,8 @@ Voice_NoteChannelTable1:
 	nop
 	and	l, 15
 	and	h, 7
-	.byte 0xcf, 0xec, 0x04, 0xce, 0xec, 0x01
+	sla	l, 4
+	sla	h, 1
 	or	l, h
 	xor	h, h
 	push	xix
@@ -4303,7 +4308,7 @@ VocalistGrid_DispatchData:
 	ld	xde, xhl
 	lda	xhl, (xsp+12)
 	ld	xwa, xde
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	ld	(xhl), wa
 	ld	bc, de
@@ -4313,9 +4318,9 @@ VocalistGrid_DispatchData:
 	.byte 0x93, 0x3f, 0x02, 0x00
 	jrl	nz, 1604
 	ld	wa, (xhl)
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	dec	4, wa
-	.byte 0xd9, 0xec, 0x03
+	sla	bc, 3
 	ld	ix, bc
 	add	ix, wa
 	lda_24	xde, 15199840
@@ -4323,7 +4328,7 @@ VocalistGrid_DispatchData:
 	cp	xwa, 4294967295
 	jrl	z, 1571
 	ld	wa, (xhl)
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x20
@@ -4338,7 +4343,7 @@ VocalistGrid_DispatchData:
 	ld	xde, xhl
 	lda	xhl, (xsp+12)
 	ld	xwa, xde
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	ld	(xhl), wa
 	ld	bc, de
@@ -4348,9 +4353,9 @@ VocalistGrid_DispatchData:
 	.byte 0x93, 0x3f, 0x02, 0x00
 	jrl	nz, 1501
 	ld	wa, (xhl)
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	dec	4, wa
-	.byte 0xd9, 0xec, 0x03
+	sla	bc, 3
 	ld	ix, bc
 	add	ix, wa
 	lda_24	xde, 15199840
@@ -4358,7 +4363,7 @@ VocalistGrid_DispatchData:
 	cp	xwa, 4294967295
 	jrl	z, 1468
 	ld	wa, (xhl)
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x20
@@ -4467,7 +4472,7 @@ VocalistGrid_DispatchData:
 	ld	xbc, 31457420
 	jrl	1144
 	ld	wa, (xbc)
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15199646
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	push	xwa
@@ -4621,7 +4626,7 @@ VocalistGrid_CheckDispData:
 	jrl	521
 	ld	xwa, 11526
 	call	16569399
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 15199646
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	push	xwa
@@ -4698,7 +4703,7 @@ VocalistGrid_CheckDispData:
 	call	16569399
 	exts	xhl
 	divs	hl, 12
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xbc, 15199752
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
@@ -4707,13 +4712,13 @@ VocalistGrid_CheckDispData:
 	exts	xhl
 	divs	hl, 12
 	ld	wa, qhl
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15199646
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	push	xwa
 	ld	xwa, 11534
 	call	16569399
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 15199626
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	push	xwa
@@ -4732,7 +4737,7 @@ VocalistGrid_CheckDispData:
 	call	16569399
 	exts	xhl
 	divs	hl, 12
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xbc, 15199752
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
@@ -4741,13 +4746,13 @@ VocalistGrid_CheckDispData:
 	exts	xhl
 	divs	hl, 12
 	ld	wa, qhl
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	lda_24	xbc, 15199646
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
 	push	xwa
 	ld	xwa, 11538
 	call	16569399
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 15199626
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	push	xwa
@@ -4764,7 +4769,7 @@ VocalistGrid_CheckDispData:
 	jr	60
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa)
-	.byte 0xd8, 0xec, 0x02
+	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x20
@@ -5059,7 +5064,7 @@ VocalistPage1OK_Dispatch:
 	stdi8	47084, 11
 	call	16602230
 	ld	xwa, (xsp)
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	cps	wa, 0
 	jr	z, 11
@@ -5093,7 +5098,7 @@ VocalistPage1_DispatchData:
 	stdi8	47084, 2
 	call	16602230
 	ld	xwa, (xsp)
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	cps	wa, 0
 	jr	z, 11
@@ -5120,7 +5125,7 @@ VocalistPage1_DispatchData:
 	lds	de, 2
 	call	16568833
 	ld	xwa, (xsp)
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	cps	wa, 0
 	jr	z, 11

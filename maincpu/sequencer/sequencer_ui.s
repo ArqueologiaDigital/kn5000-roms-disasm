@@ -2772,7 +2772,7 @@ TrAsGridChk_ByteData:
 	ld	xiz, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xiz
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	de, iz
@@ -2871,7 +2871,7 @@ TrAsGridChk_ByteData:
 	ld	xiz, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xiz
-	.byte 0xe9, 0xef, 0x00
+	srl	xbc, 0
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	de, iz
@@ -3560,7 +3560,7 @@ SmfMuteChSelFunc:
 ; SmfMuteChSelFunc dispatch
 MuteChSel_Dispatch:
 	ld	xwa, (xde+14)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xbc, 14837008
 	add	xbc, xwa
 	ld	xwa, (xbc)
@@ -3603,7 +3603,7 @@ SqTrAsPsSongFunc:
 ; SqTrAsPsSongFunc dispatch
 SqTrAsPsSong_Dispatch:
 	ld	xwa, (xde+14)
-	.byte 0xe8, 0xee, 0x02
+	sll	xwa, 2
 	ld	xbc, 14837188
 	add	xbc, xwa
 	ld	xwa, (xbc)
@@ -5864,7 +5864,7 @@ NoteEditBox_EventDispatch2:
 	lda	xwa, (xsp+28)
 	ld	c, (xsp+10)
 	extz	bc
-	.byte 0xd9, 0xec, 0x03
+	sla	bc, 3
 	lda_24	xde, 14890864
 	.byte 0xf3, 0x07, 0xe8, 0xe4, 0x32
 	ld	bc, (xde)
@@ -5898,7 +5898,7 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xix+2)
 	ld	a, (xsp+10)
 	extz	wa
-	.byte 0xd8, 0xec, 0x03
+	sla	wa, 3
 	lda_24	xbc, 14890864
 	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31
 	ld	wa, (xbc+2)
@@ -5950,7 +5950,7 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xix+2)
 	ld	a, (xsp+10)
 	extz	wa
-	.byte 0xd8, 0xec, 0x03
+	sla	wa, 3
 	lda_24	xbc, 14890864
 	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31
 	ld	wa, (xbc+2)
@@ -7462,7 +7462,7 @@ SndParam_Dispatch:
 	ld	(xsp+58), xhl
 	lda	xbc, (xsp+40)
 	ld	xwa, (xsp+58)
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	ld	(xbc), wa
 	ld	xde, (xsp+58)
@@ -7480,7 +7480,7 @@ SndParam_Dispatch:
 	lda_24	xix, 15926313
 	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
 	ld	xbc, (xsp+62)
-	.byte 0xda, 0xec, 0x02
+	sla	de, 2
 	cp	xbc, 29360153
 	jr	nz, 16
 	lda_24	xbc, 14894928
@@ -7512,7 +7512,7 @@ SndParam_Dispatch:
 	ld	(xsp+58), xhl
 	lda	xbc, (xsp+40)
 	ld	xwa, (xsp+58)
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	ld	(xbc), wa
 	ld	xhl, (xsp+58)
@@ -7530,7 +7530,7 @@ SndParam_Dispatch:
 	lda_24	xix, 15926485
 	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
 	ld	xde, (xsp+62)
-	.byte 0xdb, 0xec, 0x02
+	sla	hl, 2
 	lda_24	xwa, 14894928
 	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
 	cp	xde, 29360154
@@ -7562,7 +7562,7 @@ SndParam_Dispatch:
 	ld	xiz, (xsp+58)
 	jr	18
 	ld	iy, bc
-	.byte 0xdd, 0xec, 0x02
+	sla	iy, 2
 	ld	xwa, (xiz)
 	.byte 0xe3, 0x07, 0xf0, 0xf4, 0xf0
 	jr	z, 12

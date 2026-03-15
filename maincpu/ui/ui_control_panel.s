@@ -2619,7 +2619,7 @@ MainPmanCtrl_DispatchTable:
 	jr	122
 	ld	xiz, xde
 	ld	xwa, (xiz)
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	ld	xbc, (xiz)
 	.byte 0x9e, 0x06, 0x04
@@ -2637,7 +2637,7 @@ MainPmanCtrl_DispatchTable:
 	jrl	168
 	ld	xiz, xde
 	ld	xwa, (xiz)
-	.byte 0xe8, 0xef, 0x00
+	srl	xwa, 0
 	ld	qwa, 0
 	ld	xbc, (xiz)
 	call	16569591
