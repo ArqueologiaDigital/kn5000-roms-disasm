@@ -2619,9 +2619,11 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+14), c
 	ld	(xsp+16), a
 	lda	xwa, (xsp+12)
-	.byte 0x1e, 0xcb, 0xea, 0xb7, 0x31
+	.byte 0x1e, 0xcb, 0xea
+	lda	xbc, (xsp)
 	lds	wa, 1
-	.byte 0x1e, 0xc5, 0xeb, 0xb7, 0x31
+	.byte 0x1e, 0xc5, 0xeb
+	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
 	ld	(xbc+8), 50
@@ -2729,7 +2731,8 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x1e, 0xa4, 0xea
 	ld	a, (xsp+4)
 	extz	wa
-	.byte 0xb7, 0x31, 0x1e, 0x1b, 0xf4
+	lda	xbc, (xsp)
+	.byte 0x1e, 0x1b, 0xf4
 	ld	a, (xsp+2)
 	extz	wa
 	ld	c, (xsp)

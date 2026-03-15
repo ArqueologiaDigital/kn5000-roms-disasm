@@ -3420,10 +3420,10 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	wa, 0
 	call	15756091
 	andmi8	(xsp+12), 15
-	.byte 0xb7, 0x31
+	lda	xbc, (xsp)
 	lds	wa, 2
 	call	15756091
-	.byte 0xb7, 0x31
+	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
 	ld	a, (xsp+14)
@@ -3431,7 +3431,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xbc, (xbc+10)
 	call	15758524
 	ld	e, (xsp+12)
-	.byte 0xb7, 0x31
+	lda	xbc, (xsp)
 	lda	xwa, (xbc+8)
 	lda	xbc, (xbc+9)
 	cp	e, 8
@@ -3445,7 +3445,8 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	e, 7
 	.byte 0x6b, 0x3d
 	cps	e, 0
-	.byte 0x67, 0x39, 0xb7, 0x30
+	.byte 0x67, 0x39
+	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 	ld	(xwa+9), 0
 	lds32	xwa, 1
@@ -3542,10 +3543,10 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	wa, 0
 	call	15756091
 	andmi8	(xsp+12), 15
-	.byte 0xb7, 0x31
+	lda	xbc, (xsp)
 	lds	wa, 7
 	call	15756091
-	.byte 0xb7, 0x31
+	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
 	ld	a, (xsp+14)
@@ -3560,7 +3561,8 @@ SeMenu_CopyWriteUpdate_Data:
 	cp	a, 9
 	.byte 0x6b, 0x28
 	cps	a, 0
-	.byte 0x67, 0x24, 0xb7, 0x31
+	.byte 0x67, 0x24
+	lda	xbc, (xsp)
 	ld	(xbc+8), 50
 	ld	(xbc+9), 206
 	lds32	xwa, 6

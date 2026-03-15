@@ -807,6 +807,17 @@ def translate_unidasm_to_llvm(mnemonic):
             if forms:
                 return forms
 
+        # ── LDA reg, reg (zero-displacement form) ──
+        # Unidasm shows: lda XBC,XSP → ROM uses d8=0: lda_rid8 xsp, 0, xbc
+        # Also try lda_ri (no-disp) and lda (mem)
+        if op == 'lda' and op1 in REG32_SET:
+            forms = []
+            forms.append(f'lda_rid8\t{op1}, 0, {op0}')
+            forms.append(f'lda_ri\t{op1}, {op0}')
+            forms.append(f'lda\t{op0}, ({op1})')
+            forms.append(f'lda\t{op0}, ({op1}+0)')
+            return forms
+
         # ── LDA reg, direct_addr ──
         # Unidasm may show (0xNNNN) → DIRECT:nnn or bare 0xNNNN → decimal
         if op == 'lda':
