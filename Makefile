@@ -33,7 +33,11 @@ SE_BINS = $(patsubst %,maincpu/includes/generated/%.bin,$(SE_NAMES))
 SE_LINK_LD = maincpu/audio/sound_editor_screens/se_screens_link.ld
 ACCOMP_LINK_LD = maincpu/sequencer/accomp_screens/accomp_screens_link.ld
 
-C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS)
+NAKA_LINK_LD = maincpu/ui_widgets/naka_ctrl_menu_link.ld
+NAKA_TYPES_H = maincpu/ui_widgets/naka_types.h
+NAKA_BINS = maincpu/includes/generated/naka_control_menu_header.bin
+
+C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS)
 
 maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/paramblock/%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
@@ -71,8 +75,17 @@ maincpu/includes/generated/accomp_%.bin: maincpu/sequencer/accomp_screens/accomp
 	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
 	@rm -f $@.o $@.elf
 
+# NAKA widget descriptors — compiled C structs with named fields
+maincpu/includes/generated/naka_control_menu_header.bin: maincpu/ui_widgets/control_menu_header.c $(NAKA_TYPES_H) $(NAKA_LINK_LD)
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/ui_widgets -o $@.o $<
+	$(LLVM_LLD) -T $(NAKA_LINK_LD) -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
+
 paramblocks: $(PARAMBLOCK_BINS)
 screendata: $(SCREENDATA_BINS)
+naka: $(NAKA_BINS)
 
 # --- Maincpu ---
 rebuilt_ROMs/kn5000_v10_program.llvm.o: maincpu/kn5000_v10_program.s original_ROMs/kn5000_v10_program.rom $(C_DATA_BINS)
