@@ -8709,28 +8709,28 @@ FileIO_ErrorCodeByteBlock:
 	jr	z, 52
 	cp	c, 126
 	.asciz "f/0`"
-	.byte 0x68, 0x26
+	jr	t, 38
 	cp	c, 188
-	.byte 0x66, 0x0a
+	jr	z, 10
 	cp	c, 97
-	.byte 0x66, 0x05
+	jr	z, 5
 	cp	c, 100
-	.byte 0x6e, 0x05
+	jr	nz, 5
 	ldw	wa, 96
-	.byte 0x68, 0x12
+	jr	t, 18
 	cp	c, 98
-	.byte 0x6e, 0x05
+	jr	nz, 5
 	ldw	wa, 176
-	.byte 0x68, 0x08
+	jr	t, 8
 	cp	c, 99
-	.byte 0x6e, 0x07
+	jr	nz, 7
 	ldw	wa, 72
 	call	16356496
 	.byte 0x1e, 0x64, 0xfc
 	ret
 	ld8_24	a, 213234
 	cpdi8	36148, 1
-	.byte 0x6e, 0x4b
+	jr	nz, 75
 	bitda	2, 1056
 	ret	nz
 	bitda	2, 1055
@@ -8747,9 +8747,9 @@ FileIO_ErrorCodeByteBlock:
 	lda_24	xbc, 15336786
 	ld_rrb	a, xbc, wa
 	cp	a, 119
-	.byte 0x66, 0x15
+	jr	z, 21
 	cp	a, 108
-	.byte 0x66, 0x0d
+	jr	z, 13
 	cp	a, 97
 	ret	nz
 	ldw	wa, 97

@@ -24705,13 +24705,13 @@ Param_SignExtendRetu_Data:
 	ld	(xsp), c
 	ld	xbc, xwa
 	cp	xbc, 426
-	.byte 0x67, 0x40
+	jr	c, 64
 	sub	xbc, 426
 	ld	xwa, xbc
 	ld	xbc, 11
 	call	16714770
 	cp	xhl, 9
-	.byte 0x7b, 0x9b, 0x01
+	jrl	ugt, 411
 	add	xhl, xhl
 	add	xhl, 15652004
 	ld	hl, (xhl)
@@ -24723,15 +24723,15 @@ Param_SignExtendRetu_Data:
 	pushw 0
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0x70, 0x01
+	jrl	t, 368
 	cp	xbc, 102
-	.byte 0x77, 0xa7, 0x00
+	jrl	c, 167
 	sub	xbc, 102
 	ld	xwa, xbc
 	ld	xbc, 81
 	call	16714770
 	cp	xhl, 76
-	.byte 0x7b, 0x52, 0x01
+	jrl	ugt, 338
 	add	xhl, 15651913
 	ld	hl, (xhl)
 	extz	hl
@@ -24746,52 +24746,52 @@ Param_SignExtendRetu_Data:
 	pushw 0
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0x1a, 0x01
+	jrl	t, 282
 	ld	a, (xsp)
 	exts	wa
 	pushw 128
 	pushw 0
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0x08, 0x01
+	jrl	t, 264
 	ld	a, (xsp)
 	exts	wa
 	pushw 127
 	pushw 0
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0xf6, 0x00
+	jrl	t, 246
 	ld	a, (xsp)
 	exts	wa
 	pushw 24
 	pushw 65512
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0xe4, 0x00
+	jrl	t, 228
 	ld	a, (xsp)
 	exts	wa
 	pushw 50
 	pushw 65486
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0xd2, 0x00
+	jrl	t, 210
 	ld	a, (xsp)
 	exts	wa
 	pushw 100
 	pushw 0
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0xc0, 0x00
+	jrl	t, 192
 	ld	xbc, xwa
 	cp	xwa, 15
-	.byte 0x6a, 0x08
+	jr	gt, 8
 	cp	xwa, 0
-	.byte 0x69, 0x39
+	jr	ge, 57
 	sub	xbc, 16
 	cp	xbc, 0
-	.byte 0x71, 0xa4, 0x00
+	jrl	lt, 164
 	cp	xbc, 76
-	.byte 0x7a, 0x9b, 0x00
+	jrl	gt, 155
 	add	xbc, 15651822
 	ld	bc, (xbc)
 	extz	bc
@@ -24806,42 +24806,42 @@ Param_SignExtendRetu_Data:
 	pushw 32
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x68, 0x64
+	jr	t, 100
 	ld	a, (xsp)
 	exts	wa
 	pushw 66
 	pushw 0
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x68, 0x53
+	jr	t, 83
 	ld	a, (xsp)
 	exts	wa
 	pushw 49
 	pushw 0
 	ldw	bc, 127
 	lds	de, 0
-	.byte 0x68, 0x42
+	jr	t, 66
 	ld	a, (xsp)
 	exts	wa
 	pushw 127
 	pushw 0
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x68, 0x31
+	jr	t, 49
 	ld	a, (xsp)
 	exts	wa
 	pushw 10
 	pushw 6
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x68, 0x20
+	jr	t, 32
 	ld	a, (xsp)
 	exts	wa
 	pushw 50
 	pushw 0
 	ldw	bc, 127
 	lds	de, 0
-	.byte 0x68, 0x0f
+	jr	t, 15
 	ld	a, (xsp)
 	exts	wa
 	pushw 30
@@ -24862,7 +24862,7 @@ Param_SignExtendRetu_Data:
 	ld	(xsp+6), bc
 	ld	(xsp+4), bc
 	cp	xiz, 295
-	.byte 0x77, 0x35, 0x01
+	jrl	c, 309
 	ld	xwa, xiz
 	sub	xwa, 295
 	ld	xbc, 80
@@ -24874,14 +24874,14 @@ Param_SignExtendRetu_Data:
 	lda	xwa, (xwa+295)
 	lda	xwa, (xwa+58)
 	cp	xiz, xwa
-	.byte 0x67, 0x3d
+	jr	c, 61
 	ld	xbc, xiz
 	sub	xbc, xwa
 	ld	xwa, xbc
 	ld	xbc, 11
 	call	16714770
 	cp	xhl, 9
-	.byte 0x7b, 0x73, 0x01
+	jrl	ugt, 371
 	add	xhl, xhl
 	add	xhl, 15652108
 	ld	hl, (xhl)
@@ -24892,7 +24892,7 @@ Param_SignExtendRetu_Data:
 	ld	wa, (xsp+10)
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0x48, 0x01
+	jrl	t, 328
 	extz	hl
 	mul	hl, 80
 	add	xhl, 295
@@ -24900,14 +24900,14 @@ Param_SignExtendRetu_Data:
 	sub	xbc, xhl
 	ld	xwa, xbc
 	cp	xbc, 12
-	.byte 0x6b, 0x08
+	jr	ugt, 8
 	cp	xbc, 0
-	.byte 0x6f, 0x39
+	jr	nc, 57
 	sub	xwa, 13
 	cp	xwa, 0
-	.byte 0x77, 0x1d, 0x01
+	jrl	c, 285
 	cp	xwa, 40
-	.byte 0x7b, 0x14, 0x01
+	jrl	ugt, 276
 	add	xwa, 15652053
 	ld	wa, (xwa)
 	extz	wa
@@ -24921,53 +24921,53 @@ Param_SignExtendRetu_Data:
 	ld	wa, (xsp+8)
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0xdc, 0x00
+	jrl	t, 220
 	pushw 127
 	pushw 0
 	ld	wa, (xsp+10)
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0xcb, 0x00
+	jrl	t, 203
 	pushw 50
 	pushw 0
 	ld	wa, (xsp+10)
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0xba, 0x00
+	jrl	t, 186
 	pushw 128
 	pushw 0
 	ld	wa, (xsp+10)
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0xa9, 0x00
+	jrl	t, 169
 	pushw 127
 	pushw 0
 	ld	wa, (xsp+10)
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0x98, 0x00
+	jrl	t, 152
 	pushw 50
 	pushw 65486
 	ld	wa, (xsp+10)
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x78, 0x87, 0x00
+	jrl	t, 135
 	pushw 100
 	pushw 0
 	ld	wa, (xsp+10)
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x68, 0x77
+	jr	t, 119
 	ld	xbc, xwa
 	cp	xwa, 15
-	.byte 0x6a, 0x08
+	jr	gt, 8
 	cp	xwa, 0
-	.byte 0x69, 0x37
+	jr	ge, 55
 	sub	xbc, 16
 	cp	xbc, 0
-	.byte 0x61, 0x5d
+	jr	lt, 93
 	cp	xbc, 22
-	.byte 0x6a, 0x55
+	jr	gt, 85
 	add	xbc, 15652024
 	ld	bc, (xbc)
 	extz	bc
@@ -24981,13 +24981,13 @@ Param_SignExtendRetu_Data:
 	ld	wa, (xsp+8)
 	ldw	bc, 65535
 	lds	de, 0
-	.byte 0x68, 0x1e
+	jr	t, 30
 	pushw 49
 	pushw 0
 	ld	wa, (xsp+10)
 	ldw	bc, 127
 	lds	de, 0
-	.byte 0x68, 0x0e
+	jr	t, 14
 	pushw 127
 	pushw 0
 	ld	wa, (xsp+10)
@@ -25009,11 +25009,11 @@ Param_SignExtendRetu_Data:
 	ld	xwa, (xsp+20)
 	.byte 0x1e, 0x1f, 0xfc
 	cpw	(xsp+6), 0
-	.byte 0x76, 0xcd, 0x00
+	jrl	z, 205
 	cpw	(xsp+6), 120
-	.byte 0x72, 0xc5, 0x00
+	jrl	le, 197
 	or	xhl, xhl
-	.byte 0x76, 0xc0, 0x00
+	jrl	z, 192
 	ld	xwa, xhl
 	sra	xwa, 15
 	sra	xwa, 0
@@ -25026,15 +25026,15 @@ Param_SignExtendRetu_Data:
 	ld	a, (xbc+16)
 	and	a, 192
 	cp	a, 192
-	.byte 0x76, 0x9a, 0x00
+	jrl	z, 154
 	cp	a, 64
-	.byte 0x76, 0x94, 0x00
+	jrl	z, 148
 	cp	a, 128
-	.byte 0x66, 0x05
+	jr	z, 5
 	cps	a, 0
-	.byte 0x7e, 0x8a, 0x00
+	jrl	nz, 138
 	cp	xbc, 470
-	.byte 0x6b, 0x7d
+	jr	ugt, 125
 	ldada	xde, 57752
 	ld	(xde), 45
 	ld	xwa, (xsp+20)
@@ -25042,20 +25042,20 @@ Param_SignExtendRetu_Data:
 	lda	xwa, (xde+1)
 	ld	(xsp+12), xwa
 	cps	iz, 6
-	.byte 0x6f, 0x0d
+	jr	nc, 13
 	ld	xwa, (xsp+12)
 	ld	c, (xhl)
 	ld	(xwa), c
 	inc	1, iz
 	cps	iz, 6
-	.byte 0x67, 0xf3
+	jr	c, 16777203
 	ld	(xde+7), 0
 	lda	xwa, (xde+8)
 	ld	(xsp+16), xwa
 	ld	(xsp+12), xwa
 	ld	wa, (xsp+6)
 	cp	iz, wa
-	.byte 0x6f, 0x2e
+	jr	nc, 46
 	ld	xwa, (xsp+16)
 	ld	c, (xwa+1)
 	and	c, 15
@@ -25073,14 +25073,14 @@ Param_SignExtendRetu_Data:
 	add	(xsp+8), xwa
 	ld	wa, (xsp+6)
 	cp	iz, wa
-	.byte 0x67, 0xd2
+	jr	c, 16777170
 	ld	bc, (xsp+6)
 	inc	0, bc
 	lds	wa, 3
 	ld	xde, 57752
 	call	15676148
 	ldw	(xsp+18), 0
-	.byte 0x68, 0x05
+	jr	t, 5
 	ldw	(xsp+18), 1
 	ld	hl, (xsp+18)
 	popw iz
@@ -25099,25 +25099,25 @@ Param_SignExtendRetu_Data:
 	sll	a, 4
 	or	a, c
 	cp	a, 16
-	.byte 0x66, 0x05
+	jr	z, 5
 	cp	a, 17
-	.byte 0x6e, 0x0b
+	jr	nz, 11
 	stda32	57747, xde
 	lds	wa, 3
 	ldw	bc, 21
-	.byte 0x68, 0x17
+	jr	t, 23
 	cp	a, 80
-	.byte 0x66, 0x05
+	jr	z, 5
 	cp	a, 81
-	.byte 0x6e, 0x15
+	jr	nz, 21
 	cps	w, 2
-	.byte 0x6f, 0x11
+	jr	nc, 17
 	stda32	57747, xde
 	lds	wa, 3
 	ldw	bc, 21
 	call	15676148
 	lds	hl, 0
-	.byte 0x68, 0x02
+	jr	t, 2
 	lds	hl, 1
 	ret
 	dec	2, xsp
@@ -25172,11 +25172,11 @@ Param_SignExtendRetu_Data:
 	ld	bc, (xsp+6)
 	exts	xbc
 	cpw	(xsp+6), 0
-	.byte 0x66, 0x71
+	jr	z, 113
 	cpw	(xsp+6), 120
-	.byte 0x62, 0x6a
+	jr	le, 106
 	or	xhl, xhl
-	.byte 0x66, 0x66
+	jr	z, 102
 	ld	xwa, xhl
 	sra	xwa, 15
 	sra	xwa, 0
@@ -25187,30 +25187,30 @@ Param_SignExtendRetu_Data:
 	ld	e, (xhl+16)
 	and	e, 192
 	cp	e, 192
-	.byte 0x66, 0x48
+	jr	z, 72
 	add	xhl, xbc
 	cp	e, 128
-	.byte 0x66, 0x1e
+	jr	z, 30
 	cp	e, 64
-	.byte 0x66, 0x3c
+	jr	z, 60
 	cps	e, 0
-	.byte 0x6e, 0x38
+	jr	nz, 56
 	cp	xhl, 470
-	.byte 0x6b, 0x2b
+	jr	ugt, 43
 	stda32	57747, xiz
 	lds	wa, 3
 	ld	bc, (xsp+6)
 	ld	xde, xiz
-	.byte 0x68, 0x13
+	jr	t, 19
 	cp	xhl, 10535
-	.byte 0x6b, 0x16
+	jr	ugt, 22
 	stda32	57747, xiz
 	lds	wa, 3
 	ld	bc, (xsp+6)
 	ld	xde, xiz
 	call	15676148
 	ldw	(xsp+4), 0
-	.byte 0x68, 0x05
+	jr	t, 5
 	ldw	(xsp+4), 1
 	ld	hl, (xsp+4)
 	pop xiz
@@ -26860,7 +26860,7 @@ HdaeRom_DataDispatch:
 	jrl	208
 	ld	(xsp+6), xbc
 	cp	(xsp+442), 255
-	.byte 0x6e, 0x5a
+	jr	nz, 90
 	cp	(xsp+440), 255
 	jr	nz, 82
 	ldw	(xsp+4), 36

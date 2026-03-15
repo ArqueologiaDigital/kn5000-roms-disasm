@@ -2147,7 +2147,8 @@ TaskSched_InitMsgQueues:
 	nop
 	normal
 	nop
-	.byte 0x64, 0x19, 0xef, 0x00
+	jr	pe, 25
+	.byte 0xef, 0x00
 
 TaskSched_PostInit:
 	call TaskTimer_Register

@@ -20825,16 +20825,17 @@ AppEvent_SubDispatch:
 	call	16424455
 	ldda8	a, 36150
 	cp	a, 163
-	.byte 0x76, 0xb7, 0x00
+	jrl	z, 183
 	cp	a, 161
-	.byte 0x76, 0xc8, 0x00, 0x78, 0x07, 0x06
+	jrl	z, 200
+	jrl	t, 1543
 	ldda8	a, 36150
 	extz	wa
 	sub	wa, 156
 	cps	wa, 0
-	.byte 0x61, 0x56
+	jr	lt, 86
 	cps	wa, 7
-	.byte 0x6a, 0x52
+	jr	gt, 82
 	add	wa, wa
 	lda_24	xix, 14960974
 	ld_rrw	wa, xix, wa
@@ -20912,20 +20913,22 @@ AppEvent_SubDispatch:
 	retd	49152
 	normal
 	ld	xde, 11
-	.byte 0x78, 0x18, 0x04, 0xc1
+	jrl	t, 1048
+	.byte 0xc1
 	xor	(xix-14047), bc
-	.byte 0x63, 0x08
+	jr	ule, 8
 	dec	1, a
 	stda8	61907, a
-	.byte 0x68, 0x09, 0xf1
+	jr	t, 9
+	.byte 0xf1
 	and	bc, (xix+4096)
 	xor	ix, (xix-16095)
 	.byte 0xf1, 0xf1, 0x6e, 0x11
 	cps	a, 1
-	.byte 0x63, 0x08
+	jr	ule, 8
 	dec	1, a
 	stda8	61907, a
-	.byte 0x68, 0x05
+	jr	t, 5
 	stdi8	61907, 16
 	.byte 0xe1
 	.ascii "r) A"
@@ -22519,7 +22522,7 @@ SeqAccomp_SubHandlerB:
 	.ascii "h&h."
 	ld	wa, iz
 	cps	iz, 1
-	.byte 0x73, 0x5d, 0x02
+	jrl	ule, 605
 	dec	1, wa
 	stda16	9502, wa
 	.byte 0xd1, 0x1c, 0x25, 0xf8, 0x63, 0x15, 0xd1, 0x1e

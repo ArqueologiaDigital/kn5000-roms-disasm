@@ -1210,6 +1210,19 @@ def translate_unidasm_to_llvm(mnemonic):
             if cc_num is not None:
                 return [f'jp_rr\t{cc_num}, {base}, {idx}']
 
+    # ── JR/JRL displacement adjustment ──
+    # Unidasm outputs target = PC + instr_len + displacement, but LLVM expects
+    # the raw displacement byte. Subtract instruction length to recover it.
+    # JR cc,d8 is 2 bytes; JRL cc,d16 is 3 bytes.
+    if op in ('jr', 'jrl') and len(translated_ops) == 2:
+        cc_str = translated_ops[0]
+        disp_str = translated_ops[1]
+        if disp_str.lstrip('-').isdigit():
+            target = int(disp_str)
+            instr_len = 2 if op == 'jr' else 3
+            raw_disp = target - instr_len
+            translated_ops[1] = str(raw_disp)
+
     if translated_ops:
         return f'{llvm_op}\t{", ".join(translated_ops)}'
     else:

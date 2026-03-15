@@ -1146,7 +1146,7 @@ PanelDisplay_DispatchData:
 	.byte 0xc5, 0xe8, 0xf1, 0x6e, 0x1c
 	inc	1, bc
 	cps	bc, 4
-	.byte 0x67, 0xf2
+	jr	c, 16777202
 	jr	t, 0x1d
 	.asciz "B@4="
 	.byte 0xf2

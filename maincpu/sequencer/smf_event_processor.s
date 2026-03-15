@@ -4831,10 +4831,10 @@ SeqStep_FileSectorPopReturn:
 	ld	xwa, (xsp+10)
 	ld	(xwa+38), xbc
 	or	xhl, xhl
-	.byte 0x76, 0x82, 0x01
+	jrl	z, 386
 	ld	wa, (xsp+14)
 	bit	0, a
-	.byte 0x66, 0x7f
+	jr	z, 127
 	ld	wa, (xsp+16)
 	and	wa, 15
 	ld	bc, wa
@@ -4854,7 +4854,7 @@ SeqStep_FileSectorPopReturn:
 	add	xwa, xhl
 	ld	(xwa), c
 	cpw	(xsp+4), 511
-	.byte 0x6e, 0x29
+	jr	nz, 41
 	pushw 6
 	lds32	xwa, 0
 	push xwa
@@ -4866,11 +4866,11 @@ SeqStep_FileSectorPopReturn:
 	.byte 0x1e, 0xa8, 0xf8
 	add	xsp, 14
 	or	xhl, xhl
-	.byte 0x76, 0x23, 0x01
+	jrl	z, 291
 	ld	wa, (xsp+16)
 	srl	wa, 4
 	ld	(xhl+26), a
-	.byte 0x78, 0x17, 0x01
+	jrl	t, 279
 	ld	wa, (xsp+4)
 	inc	1, wa
 	extz	xwa
@@ -4880,7 +4880,7 @@ SeqStep_FileSectorPopReturn:
 	ld	wa, (xsp+16)
 	srl	wa, 4
 	ld	(xbc), a
-	.byte 0x78, 0xfb, 0x00
+	jrl	t, 251
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, 26
@@ -4890,7 +4890,7 @@ SeqStep_FileSectorPopReturn:
 	ldb	w, 0
 	ld	(xbc), a
 	cpw	(xsp+4), 511
-	.byte 0x6e, 0x39
+	jr	nz, 57
 	pushw 6
 	lds32	xwa, 0
 	push xwa
@@ -4902,7 +4902,7 @@ SeqStep_FileSectorPopReturn:
 	.byte 0x1e, 0x46, 0xf8
 	add	xsp, 14
 	or	xhl, xhl
-	.byte 0x76, 0xc1, 0x00
+	jrl	z, 193
 	ld	wa, (xsp+16)
 	srl	wa, 8
 	ld	bc, wa
@@ -4912,7 +4912,7 @@ SeqStep_FileSectorPopReturn:
 	extz	wa
 	or	wa, bc
 	ld	(xhl+26), a
-	.byte 0x78, 0xa5, 0x00
+	jrl	t, 165
 	ld	wa, (xsp+16)
 	srl	wa, 8
 	ld	bc, wa
@@ -4933,7 +4933,7 @@ SeqStep_FileSectorPopReturn:
 	add	xwa, 26
 	add	xwa, xhl
 	ld	(xwa), c
-	.byte 0x68, 0x6c
+	jr	t, 108
 	ld	wa, (xsp+14)
 	extz	xwa
 	ld	xbc, xwa
@@ -4957,7 +4957,7 @@ SeqStep_FileSectorPopReturn:
 	ld	xwa, (xsp+10)
 	ld	(xwa+38), xbc
 	or	xhl, xhl
-	.byte 0x66, 0x2f
+	jr	z, 47
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, 26
@@ -4988,22 +4988,24 @@ SeqStep_FileSectorPopReturn:
 	ld	wa, (xiz+42)
 	ld	(xsp+4), wa
 	cpw	(xsp+4), 0
-	.byte 0x6e, 0x09
+	jr	nz, 9
 	ldw	(xiz+44), 0
 	lds	hl, 0
-	.byte 0x68, 0x27
+	jr	t, 39
 	ldw	(xiz+44), 1
-	.byte 0x68, 0x0d, 0x9f, 0x04, 0x61
+	jr	t, 13
+	.byte 0x9f, 0x04, 0x61
 	ld	wa, (xsp+4)
 	cp	wa, hl
-	.byte 0x6e, 0x13, 0x9e, 0x2c, 0x61
+	jr	nz, 19
+	.byte 0x9e, 0x2c, 0x61
 	pushm	(xsp+4)
 	push xiz
 	.byte 0x1e, 0xdc, 0xfc
 	inc	6, xsp
 	ld	wa, hl
 	cp	wa, (xsp+6)
-	.byte 0x63, 0xe3
+	jr	ule, 16777187
 	ld	hl, (xiz+44)
 	pop xiz
 	inc	4, xsp
@@ -5026,40 +5028,40 @@ SeqStep_FileSectorPopReturn:
 	ld	wa, (xsp+26)
 	.byte 0x9f, 0x1a, 0x69
 	cps	wa, 0
-	.byte 0x76, 0xdd, 0x00
+	jrl	z, 221
 	lds	bc, 2
 	ld	wa, (xsp+6)
 	inc	1, wa
 	cps	wa, 2
-	.byte 0x67, 0x05
+	jr	c, 5
 	ld	bc, (xsp+6)
 	inc	1, bc
 	ld	iz, bc
 	cp	iz, (xsp+4)
-	.byte 0x6b, 0x15
+	jr	ugt, 21
 	pushw iz
 	ld	xwa, (xsp+22)
 	push xwa
 	.byte 0x1e, 0x73, 0xfc
 	inc	6, xsp
 	cps	hl, 0
-	.byte 0x66, 0x39
+	jr	z, 57
 	inc	1, iz
 	cp	iz, (xsp+4)
-	.byte 0x63, 0xeb
+	jr	ule, 16777195
 	lds	iz, 2
 	cp	iz, (xsp+6)
-	.byte 0x6f, 0x15
+	jr	nc, 21
 	pushw iz
 	ld	xwa, (xsp+22)
 	push xwa
 	.byte 0x1e, 0x57, 0xfc
 	inc	6, xsp
 	cps	hl, 0
-	.byte 0x66, 0x1d
+	jr	z, 29
 	inc	1, iz
 	cp	iz, (xsp+6)
-	.byte 0x67, 0xeb
+	jr	c, 16777195
 	ld	xwa, (xsp+20)
 	push xwa
 	.byte 0x1e, 0x00, 0x08
@@ -5068,7 +5070,7 @@ SeqStep_FileSectorPopReturn:
 	.byte 0x1e, 0xb1, 0xf9
 	inc	0, xsp
 	ldw	hl, 15
-	.byte 0x78, 0xf1, 0x00
+	jrl	t, 241
 	ld	xwa, (xsp+20)
 	ld	xwa, (xwa+30)
 	pushm	(xwa+36)
@@ -5079,10 +5081,10 @@ SeqStep_FileSectorPopReturn:
 	inc	0, xsp
 	ld	xwa, (xsp+20)
 	cpw	(xwa+69), 0
-	.byte 0x6e, 0x08
+	jr	nz, 8
 	ld	xwa, (xsp+20)
 	ld	(xwa+69), iz
-	.byte 0x68, 0x1a
+	jr	t, 26
 	pushw iz
 	pushm	(xsp+8)
 	ld	xwa, (xsp+24)
@@ -5090,19 +5092,19 @@ SeqStep_FileSectorPopReturn:
 	.byte 0x1e, 0x0c, 0xfd
 	inc	0, xsp
 	cpw	(xsp+8), 0
-	.byte 0x6e, 0x06
+	jr	nz, 6
 	ld	xwa, (xsp+20)
 	.byte 0x98, 0x2e, 0x61
 	ld	(xsp+6), iz
 	.byte 0x9f, 0x0a, 0x61
 	ld	wa, (xsp+10)
 	cp	wa, iz
-	.byte 0x6e, 0x08
+	jr	nz, 8
 	ld	xwa, (xsp+20)
 	.byte 0x98, 0x2c, 0x61, 0x68, 0x05
 	ldw	(xsp+10), 0
 	cpw	(xsp+8), 0
-	.byte 0x6e, 0x14
+	jr	nz, 20
 	ld	xwa, (xsp+20)
 	ld	(xwa+42), iz
 	ld	(xsp+8), iz
@@ -5112,9 +5114,9 @@ SeqStep_FileSectorPopReturn:
 	ld	wa, (xsp+26)
 	.byte 0x9f, 0x1a, 0x69
 	cps	wa, 0
-	.byte 0x7e, 0x23, 0xff
+	jrl	nz, 16776995
 	cpw	(xsp+24), 0
-	.byte 0x66, 0x69
+	jr	z, 105
 	ld	xwa, (xsp+12)
 	lda	xbc, (xwa+32)
 	ld	wa, iz
@@ -5127,7 +5129,7 @@ SeqStep_FileSectorPopReturn:
 	add	xwa, xhl
 	ld	(xsp+8), xwa
 	ld	xiz, xwa
-	.byte 0x68, 0x3b
+	jr	t, 59
 	pushw 34
 	lds32	xwa, 0
 	push xwa
@@ -5137,13 +5139,13 @@ SeqStep_FileSectorPopReturn:
 	.byte 0x1e, 0xd7, 0xf5
 	add	xsp, 14
 	or	xhl, xhl
-	.byte 0x6e, 0x05
+	jr	nz, 5
 	ldw	hl, 10
-	.byte 0x68, 0x2d
+	jr	t, 45
 	cpw	(xhl+20), 0
-	.byte 0x66, 0x05
+	jr	z, 5
 	ld	hl, (xhl+20)
-	.byte 0x68, 0x21
+	jr	t, 33
 	pushw 512
 	pushw 0
 	lda	xwa, (xhl+26)
@@ -5155,7 +5157,7 @@ SeqStep_FileSectorPopReturn:
 	ld	xwa, (xsp+12)
 	add	xbc, (xwa+32)
 	cp	xiz, xbc
-	.byte 0x67, 0xb8
+	jr	c, 16777144
 	lds	hl, 0
 	pop xiz
 	lda	xsp, (xsp+12)
@@ -5441,7 +5443,7 @@ SeqByteBlock_StyleBitmapRef:
 	nop
 	add	(xsp+10), xwa
 	cp	(xiz+51), 16
-	.byte 0x67, 0xdd
+	jr	c, 16777181
 	ld	xwa, (xsp+18)
 	andmi8	(xwa+22), 231
 	lds32	xwa, 1
@@ -5450,7 +5452,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+32)
 	cp	(xsp+4), wa
-	.byte 0x71, 0x7b, 0xff
+	jrl	lt, 16777083
 	ld	wa, (xiz+42)
 	ld	(xsp+20), wa
 	pushm	(xiz+42)
@@ -5462,7 +5464,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	wa, (xwa+36)
 	dec	0, wa
 	cp	(xiz+42), wa
-	.byte 0x73, 0x36, 0xff
+	jrl	ule, 16777014
 	ld	(xiz+51), 0
 	ld	wa, (xsp+20)
 	ld	(xiz+42), wa
@@ -5473,7 +5475,7 @@ SeqByteBlock_StyleBitmapRef:
 	inc	0, xsp
 	ld	wa, hl
 	cps	wa, 0
-	.byte 0x76, 0x19, 0xff
+	jrl	z, 16776985
 	pop xiz
 	lda	xsp, (xsp+30)
 	ret
@@ -5496,9 +5498,9 @@ SeqByteBlock_StyleBitmapRef:
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	.byte 0x6e, 0x05
+	jr	nz, 5
 	ldw	hl, 10
-	.byte 0x68, 0x29
+	jr	t, 41
 	ld	a, (xiz+51)
 	extz	wa
 	sla	wa, 5
@@ -5521,9 +5523,9 @@ SeqByteBlock_StyleBitmapRef:
 	ld	xwa, (xsp+8)
 	ld	iz, (xwa+69)
 	cps	iz, 0
-	.byte 0x6e, 0x21
+	jr	nz, 33
 	ld	qiz, 0
-	.byte 0x68, 0x1c
+	jr	t, 28
 	pushw iz
 	ld	xwa, (xsp+10)
 	push xwa
@@ -5537,16 +5539,16 @@ SeqByteBlock_StyleBitmapRef:
 	lda	xsp, (xsp+14)
 	ld	iz, qiz
 	cps	iz, 0
-	.byte 0x66, 0x0f
+	jr	z, 15
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+30)
 	ld	wa, (xwa+36)
 	dec	0, wa
 	cp	iz, wa
-	.byte 0x63, 0xd1
+	jr	ule, 16777169
 	ld	xwa, (xsp+8)
 	bitm	5, (xwa+3)
-	.byte 0x6e, 0x18
+	jr	nz, 24
 	ld	xwa, (xsp+8)
 	ldw	(xwa+69), 0
 	lds	bc, 0
@@ -5577,9 +5579,9 @@ SeqByteBlock_StyleBitmapRef:
 	ld	(xsp+8), xhl
 	ld	xwa, xhl
 	or	xwa, xwa
-	.byte 0x6e, 0x05
+	jr	nz, 5
 	lds	hl, 3
-	.byte 0x78, 0x17, 0x04
+	jrl	t, 1047
 	ld	xwa, (xsp+8)
 	ld	xbc, (xsp+42)
 	ld	(xwa), xbc
@@ -5592,9 +5594,9 @@ SeqByteBlock_StyleBitmapRef:
 	ldw	(xwa+52), 8
 	ld	xwa, (xsp+42)
 	bitm	7, (xwa+4)
-	.byte 0x76, 0x1f, 0x01
+	jrl	z, 287
 	ldw	(xsp+16), 0
-	.byte 0x78, 0xfb, 0x00
+	jrl	t, 251
 	ld	xwa, (xsp+8)
 	push xwa
 	ld	xwa, (xsp+28)
@@ -5606,7 +5608,7 @@ SeqByteBlock_StyleBitmapRef:
 	inc	0, xsp
 	ld	iz, hl
 	cps	iz, 0
-	.byte 0x6e, 0x19
+	jr	nz, 25
 	ld	xwa, (xsp+8)
 	cp	(xwa+536), 85
 	jr	nz, 11

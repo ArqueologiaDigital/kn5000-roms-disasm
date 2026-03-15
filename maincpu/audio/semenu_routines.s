@@ -2671,9 +2671,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xbc+7), 0
 	lda	xwa, (xbc+8)
 	cp	(xsp+14), 0
-	.byte 0x6e, 0x05
+	jr	nz, 5
 	ld	(xwa), 27
-	.byte 0x68, 0x03
+	jr	t, 3
 	ld	(xwa), 3
 	ld	(xbc+9), 0
 	ld	a, (xsp+24)
@@ -2683,7 +2683,7 @@ SeMenu_ApplyPartEdit_Data2:
 	lda	xwa, (xsp+2)
 	.byte 0x1e, 0x61, 0xeb
 	cps	l, 0
-	.byte 0x66, 0x6d
+	jr	z, 109
 	ldto_berp	a, 251
 	extz	wa
 	ld	c, (xsp+5)
@@ -2692,12 +2692,12 @@ SeMenu_ApplyPartEdit_Data2:
 	ldto_berp	a, 251
 	extz	wa
 	cp	(xsp+22), 2
-	.byte 0x6e, 0x06
+	jr	nz, 6
 	pushw wa
 	pushw 59
-	.byte 0x68, 0x0a
+	jr	t, 10
 	cp	(xsp+22), 3
-	.byte 0x6e, 0x0a
+	jr	nz, 10
 	pushw wa
 	pushw 60
 	call	15789915
@@ -2716,7 +2716,7 @@ SeMenu_ApplyPartEdit_Data2:
 	extz	hl
 	lda	xde, (xsp+5)
 	cp	(xsp+14), 0
-	.byte 0x6e, 0x08
+	jr	nz, 8
 	pushw hl
 	lds	wa, 0
 	.byte 0x1e, 0x65, 0xe1, 0x68, 0x06
@@ -2788,7 +2788,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x1e, 0x92, 0x14
 	lda	xbc, (xsp+16)
 	cp	(xsp+24), 0
-	.byte 0x6e, 0x0f
+	jr	nz, 15
 	lds	wa, 0
 	.byte 0x1e, 0x14, 0xea
 	lda	xbc, (xsp+17)
@@ -2801,7 +2801,7 @@ SeMenu_ApplyPartEdit_Data2:
 	lds	wa, 0
 	.byte 0x1e, 0xf9, 0xe9
 	bitm	5, (xsp+14)
-	.byte 0x6e, 0x0b
+	jr	nz, 11
 	lda	xwa, (xsp+16)
 	ld	(xwa+5), 0
 	ld	(xwa+6), 0
@@ -2812,11 +2812,11 @@ SeMenu_ApplyPartEdit_Data2:
 	res	7, l
 	ld	(xwa), l
 	cp	l, 100
-	.byte 0x63, 0x03
+	jr	ule, 3
 	ld	(xwa), 100
 	inc	1, xwa
 	cp	xwa, xde
-	.byte 0x63, 0xeb
+	jr	ule, 16777195
 	ld	a, (xbc+1)
 	extz	wa
 	ld	(xsp+6), wa
@@ -2838,9 +2838,10 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	l, e
 	extz	hl
 	cps	hl, 0
-	.byte 0x6e, 0x0c, 0x9f, 0x04, 0x38, 0x10, 0x27
+	jr	nz, 12
+	.byte 0x9f, 0x04, 0x38, 0x10, 0x27
 	ldw	(xsp+6), 0
-	.byte 0x68, 0x0a
+	jr	t, 10
 	ld	wa, (xsp+4)
 	extz	xwa
 	div	xwa, xhl
@@ -2861,13 +2862,13 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+8), wa
 	ld	wa, (xsp+10)
 	cp	wa, (xsp+6)
-	.byte 0x67, 0x10
+	jr	c, 16
 	ld	hl, (xsp+10)
 	sub	hl, (xsp+6)
 	ld	wa, (xsp+8)
 	mul	xwa, xhl
 	ld	(xsp+8), wa
-	.byte 0x68, 0x0e
+	jr	t, 14
 	ld	hl, (xsp+6)
 	sub	hl, (xsp+10)
 	ld	wa, (xsp+8)
@@ -2877,10 +2878,11 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	l, e
 	extz	hl
 	cps	hl, 0
-	.byte 0x6e, 0x0d, 0x9f, 0x08, 0x38, 0x10, 0x27
+	jr	nz, 13
+	.byte 0x9f, 0x08, 0x38, 0x10, 0x27
 	ld	wa, (xsp+6)
 	ld	(xsp+10), wa
-	.byte 0x68, 0x0a
+	jr	t, 10
 	ld	wa, (xsp+8)
 	extz	xwa
 	div	xwa, xhl
@@ -2898,13 +2900,13 @@ SeMenu_ApplyPartEdit_Data2:
 	extz	iz
 	ld	wa, qiz
 	cp	wa, (xsp+10)
-	.byte 0x67, 0x0e
+	jr	c, 14
 	ld	hl, qiz
 	sub	hl, (xsp+10)
 	ld	wa, iz
 	mul	xwa, xhl
 	ld	iz, wa
-	.byte 0x68, 0x0c
+	jr	t, 12
 	ld	hl, (xsp+10)
 	sub	hl, qiz
 	ld	wa, iz
@@ -2914,11 +2916,11 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	l, e
 	extz	hl
 	cps	hl, 0
-	.byte 0x6e, 0x0c
+	jr	nz, 12
 	add	iz, 10000
 	ld	wa, (xsp+10)
 	ld	qiz, wa
-	.byte 0x68, 0x08
+	jr	t, 8
 	ld	wa, iz
 	extz	xwa
 	div	xwa, xhl
@@ -2931,9 +2933,9 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	l, c
 	extz	hl
 	cps	hl, 0
-	.byte 0x6e, 0x06
+	jr	nz, 6
 	add	de, 10000
-	.byte 0x68, 0x04
+	jr	t, 4
 	extz	xde
 	div	xde, xhl
 	ld	bc, (xsp+4)
@@ -2946,12 +2948,12 @@ SeMenu_ApplyPartEdit_Data2:
 	div	wa, 45
 	ld	de, wa
 	cp	bc, de
-	.byte 0x67, 0x05
+	jr	c, 5
 	ld	(xsp+12), c
-	.byte 0x68, 0x03
+	jr	t, 3
 	ld	(xsp+12), e
 	cp	(xsp+12), 5
-	.byte 0x63, 0x04
+	jr	ule, 4
 	ld	(xsp+12), 5
 	.byte 0x8f, 0x0c, 0x61
 	ld	c, (xsp+12)
@@ -2988,7 +2990,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x1e, 0x7f, 0x00
 	ld	bc, hl
 	cps	bc, 0
-	.byte 0x6e, 0x3a
+	jr	nz, 58
 	pushm	(xsp+10)
 	ld	wa, (xsp+6)
 	ld	bc, (xsp+8)
@@ -2996,7 +2998,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x1e, 0x6a, 0x00
 	ld	bc, hl
 	cps	bc, 0
-	.byte 0x6e, 0x25
+	jr	nz, 37
 	push qiz
 	ld	wa, (xsp+10)
 	ld	bc, (xsp+12)
@@ -3004,7 +3006,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x1e, 0x56, 0x00
 	ld	bc, hl
 	cps	bc, 0
-	.byte 0x6e, 0x11
+	jr	nz, 17
 	push qiz
 	ld	wa, iz
 	ld	bc, qiz
@@ -3022,9 +3024,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	l, a
 	extz	hl
 	cps	hl, 0
-	.byte 0x6e, 0x06
+	jr	nz, 6
 	add	de, 10000
-	.byte 0x68, 0x04
+	jr	t, 4
 	extz	xde
 	div	xde, xhl
 	ld	l, (xsp+12)
@@ -3045,9 +3047,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	hl, iy
 	sub	hl, ix
 	cp	wa, 213
-	.byte 0x6f, 0x26
+	jr	nc, 38
 	cp	de, 213
-	.byte 0x63, 0x48
+	jr	ule, 72
 	sub	de, wa
 	ld	ix, de
 	ldw	de, 213
@@ -3062,10 +3064,10 @@ SeMenu_ApplyPartEdit_Data2:
 	add	hl, bc
 	ld	iy, hl
 	ldw	de, 213
-	.byte 0x68, 0x26
+	jr	t, 38
 	dec	1, wa
 	cp	de, 258
-	.byte 0x63, 0x20
+	jr	ule, 32
 	sub	de, wa
 	ld	ix, de
 	ldw	de, 258
@@ -3113,11 +3115,11 @@ SeMenu_ApplyPartEdit_Data2:
 	res	7, e
 	ld	(xwa), e
 	cp	e, 100
-	.byte 0x63, 0x03
+	jr	ule, 3
 	ld	(xwa), 100
 	inc	1, xwa
 	cp	xwa, xbc
-	.byte 0x67, 0xeb
+	jr	c, 16777195
 	lda	xbc, (xsp+22)
 	lds	wa, 2
 	.byte 0x1e, 0xc1, 0xe6
@@ -3176,10 +3178,11 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	a, c
 	ld	c, a
 	cps	c, 0
-	.byte 0x6e, 0x0d, 0x9f, 0x08, 0x38, 0x10, 0x27
+	jr	nz, 13
+	.byte 0x9f, 0x08, 0x38, 0x10, 0x27
 	ld	wa, (xsp+6)
 	ld	(xsp+10), wa
-	.byte 0x68, 0x0c
+	jr	t, 12
 	extz	bc
 	ld	wa, (xsp+8)
 	exts	xwa
@@ -3227,10 +3230,11 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	a, c
 	ld	c, a
 	cps	c, 0
-	.byte 0x6e, 0x0d, 0x9f, 0x0c, 0x38, 0x10, 0x27
+	jr	nz, 13
+	.byte 0x9f, 0x0c, 0x38, 0x10, 0x27
 	ld	wa, (xsp+10)
 	ld	(xsp+14), wa
-	.byte 0x68, 0x0c
+	jr	t, 12
 	extz	bc
 	ld	wa, (xsp+12)
 	exts	xwa
@@ -3278,10 +3282,11 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	a, c
 	ld	c, a
 	cps	c, 0
-	.byte 0x6e, 0x0d, 0x9f, 0x10, 0x38, 0x10, 0x27
+	jr	nz, 13
+	.byte 0x9f, 0x10, 0x38, 0x10, 0x27
 	ld	wa, (xsp+14)
 	ld	(xsp+18), wa
-	.byte 0x68, 0x0c
+	jr	t, 12
 	extz	bc
 	ld	wa, (xsp+16)
 	exts	xwa
@@ -3329,10 +3334,11 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	a, c
 	ld	c, a
 	cps	c, 0
-	.byte 0x6e, 0x0d, 0xd7, 0xfa, 0xc8, 0x10, 0x27
+	jr	nz, 13
+	.byte 0xd7, 0xfa, 0xc8, 0x10, 0x27
 	ld	wa, (xsp+18)
 	ld	(xsp+20), wa
-	.byte 0x68, 0x0c
+	jr	t, 12
 	extz	bc
 	ld	wa, qiz
 	exts	xwa
@@ -3348,15 +3354,15 @@ SeMenu_ApplyPartEdit_Data2:
 	extz	xwa
 	div	wa, 45
 	cps	bc, 5
-	.byte 0x63, 0x02
+	jr	ule, 2
 	lds	bc, 5
 	cps	wa, 5
-	.byte 0x63, 0x02
+	jr	ule, 2
 	lds	wa, 5
 	cp	bc, wa
-	.byte 0x67, 0x05
+	jr	c, 5
 	ld	(xsp+4), c
-	.byte 0x68, 0x03
+	jr	t, 3
 	ld	(xsp+4), a
 	.byte 0x8f, 0x04, 0x61
 	ld	c, (xsp+4)
@@ -3401,7 +3407,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x1e, 0x3b, 0xfc
 	ld	iz, hl
 	cps	iz, 0
-	.byte 0x6e, 0x3c
+	jr	nz, 60
 	ld	wa, (xsp+8)
 	ld	bc, (xsp+10)
 	ld	de, (xsp+12)
@@ -3410,7 +3416,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x1e, 0x25, 0xfc
 	ld	iz, hl
 	cps	iz, 0
-	.byte 0x6e, 0x26
+	jr	nz, 38
 	ld	wa, (xsp+12)
 	ld	bc, (xsp+14)
 	ld	de, (xsp+16)
@@ -3419,7 +3425,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x1e, 0x0f, 0xfc
 	ld	iz, hl
 	cps	iz, 0
-	.byte 0x6e, 0x10
+	jr	nz, 16
 	ld	wa, (xsp+16)
 	ld	bc, (xsp+18)
 	pushw bc
@@ -3454,10 +3460,11 @@ SeMenu_ApplyPartEdit_Data2:
 	sub	a, c
 	ld	c, a
 	cps	c, 0
-	.byte 0x6e, 0x0d, 0xd7, 0xfa, 0xc8, 0x10, 0x27
+	jr	nz, 13
+	.byte 0xd7, 0xfa, 0xc8, 0x10, 0x27
 	ld	wa, (xsp+18)
 	ld	(xsp+20), wa
-	.byte 0x68, 0x0c
+	jr	t, 12
 	extz	bc
 	ld	wa, qiz
 	exts	xwa
@@ -3477,7 +3484,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	bc, iz
 	.byte 0x1e, 0x72, 0xfb
 	cps	hl, 0
-	.byte 0x6e, 0x10
+	jr	nz, 16
 	inc	1, qiz
 	ld	wa, qiz
 	ld	bc, (xsp+20)
@@ -3493,10 +3500,10 @@ SeMenu_ApplyPartEdit_Data2:
 	lda	xwa, (xsp+4)
 	.byte 0x1e, 0x28, 0xd9
 	cp	(xiz), 50
-	.byte 0x62, 0x03
+	jr	le, 3
 	ld	(xiz), 50
 	cp	(xiz), 206
-	.byte 0x69, 0x03
+	jr	ge, 3
 	ld	(xiz), 206
 	lda	xbc, (xsp+6)
 	lds	wa, 1

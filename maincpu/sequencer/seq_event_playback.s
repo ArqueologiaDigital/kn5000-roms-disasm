@@ -1084,7 +1084,7 @@ Voice_NoteChannelTable1:
 	normal
 	jrl	le, 31233
 	normal
-	.byte 0x74, 0x01, 0x75
+	jrl	pe, 29953
 	normal
 	nop
 	nop
@@ -2452,9 +2452,9 @@ Voice_NoteParamTable:
 	normal
 	jrl	le, 1
 	normal
-	.byte 0x74, 0x01, 0x74
+	jrl	pe, 29697
 	normal
-	.byte 0x74, 0x01, 0x00
+	jrl	pe, 1
 	normal
 	jrl	mi, 29953
 	normal
@@ -2484,9 +2484,9 @@ Voice_NoteParamTable:
 	normal
 	jrl	ugt, 1
 	normal
-	.byte 0x7c, 0x01, 0x7c
+	jrl	po, 31745
 	normal
-	.byte 0x7c, 0x01, 0x00
+	jrl	po, 1
 	normal
 	jrl	pl, 32001
 	normal

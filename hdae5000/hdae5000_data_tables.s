@@ -7177,7 +7177,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "`"
 	.byte 0x1f
 	nop
-	.byte 0x7f, 0x00, 0x0d
+	jrl	nc, 3328
 	nop
 	popw de
 	normal
@@ -15438,9 +15438,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	nop
 	push xde
 	normal
-	.byte 0x7f, 0x00, 0x1f
+	jrl	nc, 7936
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	popw iz
 	normal
 	.fill 2, 1, 0xff
@@ -15881,7 +15881,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	nop
 	.byte 0x1f
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	pop xbc
 	normal
 	.fill 2, 1, 0xff
@@ -15906,7 +15906,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	nop
 	retd	7936
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	pop xbc
 	normal
 	.fill 2, 1, 0xff
@@ -15969,7 +15969,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.byte 0x1f
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	pop xbc
 	normal
 	.ascii "b"
@@ -17855,8 +17855,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	normal
 	.byte 0x1f
 	nop
-	.byte 0x60, 0x01, 0x82, 0x01, 0xa3, 0x01, 0xa4, 0x01
-	.byte 0xa1, 0x01
+	jr	f, 1
+	.byte 0x82, 0x01, 0xa3, 0x01, 0xa4, 0x01, 0xa1, 0x01
 	ldio	0, 13
 	normal
 	.byte 0x1e, 0x00, 0x37
@@ -19465,7 +19465,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	normal
 	.byte 0x1f
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	orda8_24	b, 123137
 	normal
 	.byte 0xdf, 0x01
@@ -25568,7 +25568,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.asciz "`"
 	.byte 0x1f
 	nop
-	.byte 0x7f, 0x00, 0x0d
+	jrl	nc, 3328
 	nop
 	popw de
 	normal
@@ -33911,9 +33911,9 @@ HDAE5000_Test_Strings:	; 0x2E21D8
 	.byte 0x00
 	.asciz "HDAE"
 	.zero 3
-	.byte 0x7f, 0x00, 0x52
+	jrl	nc, 20992
 	push_sr
-	.byte 0x7f, 0x00, 0x57
+	jrl	nc, 22272
 	push_sr
 	.byte 0x7f, 0x00
 	pop xix
@@ -33998,14 +33998,14 @@ HDAE5000_Test_Strings:	; 0x2E21D8
 	.byte 0x7f, 0x00
 	pop xhl
 	normal
-	.byte 0x7f, 0x00, 0x03
+	jrl	nc, 768
 	normal
 	.byte 0x7f, 0x00
 	pop xix
 	normal
-	.byte 0x7f, 0x00, 0x02
+	jrl	nc, 512
 	normal
-	.byte 0x7f, 0x00, 0x60
+	jrl	nc, 24576
 	normal
 	.byte 0x7f, 0x00
 

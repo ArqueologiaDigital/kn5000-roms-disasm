@@ -1277,7 +1277,7 @@ NoteStepDisplayData:
 	nop
 	normal
 	nop
-	.byte 0x6a, 0x00
+	jr	gt, 0
 	call16	27137
 	nop
 	call16	3073
@@ -1357,7 +1357,8 @@ StrTimeSig_1_2:
 	nop
 	.byte 0xa4, 0x00, 0x55
 	nop
-	.byte 0x60, 0x00, 0x7e, 0x00, 0x82
+	jr	f, 0
+	jrl	nz, 16744960
 	nop
 	nop
 	nop
@@ -1367,7 +1368,7 @@ StrTimeSig_1_2:
 	nop
 	push xwa
 	nop
-	.byte 0x72, 0x01, 0x72
+	jrl	le, 29185
 	normal
 	.byte 0x72, 0x01
 StrPanRight63:	aligned_string "Right 63"
@@ -1562,9 +1563,9 @@ StrStyleSect_A_Vari3:	aligned_string "A-vari3"
 StrStyleSect_A_Vari2:	aligned_string "A-vari2"
 StrStyleSect_A_Vari1:	aligned_string "A-vari1"
 	ldb	e, 51
-	.byte 0x64, 0x00
+	jr	pe, 0
 	ldb	e, 51
-	.byte 0x64, 0x00
+	jr	pe, 0
 	aligned_string "(SONG:%2d)"
 PtrTbl_TransposeStrs:
 	.long StrTranspose_Minus25
@@ -1961,7 +1962,7 @@ PtrTbl_NotePositionStrs:
 	.long StrNotePos_Natural
 StrNotePos_Natural:
 	ldb	w, 0x7e
-	.byte 0x61, 0x61
+	jr	lt, 97
 	ldb	w, 0
 	aligned_string " ~ab "
 	aligned_string " ~ab~b8"

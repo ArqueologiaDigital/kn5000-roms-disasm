@@ -4779,7 +4779,7 @@ VoiceCtrl_ParamSetupBytecode:
 	ldda8	a, 3415
 	add	a, 48
 	cp	a, 96
-	.byte 0x77, 0x07, 0x00
+	jrl	c, 7
 	sub	a, 96
 	incdi8	1, 3533
 	stda8	3534, a
@@ -4796,7 +4796,7 @@ VoiceCtrl_ParamSetupBytecode:
 	inc	1, a
 	ld	(xiy+1), a
 	bitda	1, 3529
-	.byte 0x76, 0x03, 0x00
+	jrl	z, 3
 	ormi8	(xiy), 2
 	ld	(xiy+4), 0
 	ldb	w, 6
@@ -4809,7 +4809,7 @@ VoiceCtrl_ParamSetupBytecode:
 	call	15716619
 	ret
 	cpdi8	3429, 0
-	.byte 0x7e, 0x04, 0x00
+	jrl	nz, 4
 	jp	15703229
 	ld	xiy, 3471
 	call	15672488
@@ -4851,12 +4851,12 @@ VoiceCtrl_ParamSetupBytecode:
 	stda8	3655, a
 	call	16356634
 	cps	hl, 0
-	.byte 0x7e, 0x10, 0x00
+	jrl	nz, 16
 	ldda8	w, 4539
 	cp	w, 15
-	.byte 0x72, 0x43, 0x00
+	jrl	le, 67
 	cp	w, 72
-	.byte 0x76, 0x64, 0x00
+	jrl	z, 100
 	push xhl
 	ld	l, a
 	ldda8	h, 4542
@@ -7512,7 +7512,7 @@ VoiceSlot_RetZ:
 	.ascii "]\\ZY[X"
 	sub	wa, bc
 	cps	wa, 4
-	.byte 0x72, 0x18, 0x00
+	jrl	le, 24
 	srl	iz, 1
 	.byte 0xe7, 0x38, 0x9c
 	lda_rr	xix, xix, iz
@@ -7521,7 +7521,7 @@ VoiceSlot_RetZ:
 	sla	iz, 1
 	jp	15712702
 	cp	wa, 65535
-	.byte 0x72, 0x07, 0x00
+	jrl	le, 7
 	add	a, 251
 	jp	15712645
 	sub	wa, 5
@@ -9066,7 +9066,7 @@ SubCPU_ToneDispatch:
 	nop
 	.byte 0xd0, 0xf9, 0x00
 	nop
-	.byte 0x6c, 0xfa
+	jr	po, 16777210
 	nop
 	nop
 	cp	(xiz), b
@@ -11098,7 +11098,7 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.byte 0xef, 0x0e
 	.ascii "BEND SENS="
 	cpdi8	3567, 1
-	.byte 0x76, 0x09, 0x00
+	jrl	z, 9
 	stdi8	3567, 1
 	call	15686539
 	call	15724584
@@ -13980,9 +13980,9 @@ Scoop_EnvProcessor_Data:
 	.asciz "7hR%"
 	ld	wa, hl
 	cps	wa, 2
-	.byte 0x66, 0x1c
+	jr	z, 28
 	cps	wa, 1
-	.byte 0x6e, 0x30
+	jr	nz, 48
 	ld	a, e
 	extz	wa
 	pushw wa
@@ -13992,7 +13992,7 @@ Scoop_EnvProcessor_Data:
 	push xwa
 	call	16714354
 	lda	xsp, (xsp+10)
-	.byte 0x68, 0x2e
+	jr	t, 46
 	ld	a, e
 	extz	wa
 	pushw wa
@@ -14002,7 +14002,7 @@ Scoop_EnvProcessor_Data:
 	push xwa
 	call	16714354
 	lda	xsp, (xsp+10)
-	.byte 0x68, 0x16
+	jr	t, 22
 	ld	a, e
 	extz	wa
 	pushw wa
@@ -14294,9 +14294,9 @@ Scoop_EventLoop_36Entry_Data:
 	.asciz "7hR%"
 	ld	a, c
 	cps	a, 2
-	.byte 0x66, 0x1c
+	jr	z, 28
 	cps	a, 1
-	.byte 0x6e, 0x30
+	jr	nz, 48
 	ld	a, e
 	extz	wa
 	pushw wa
@@ -14306,7 +14306,7 @@ Scoop_EventLoop_36Entry_Data:
 	push xwa
 	call	16714354
 	lda	xsp, (xsp+10)
-	.byte 0x68, 0x2e
+	jr	t, 46
 	ld	a, e
 	extz	wa
 	pushw wa
@@ -14316,7 +14316,7 @@ Scoop_EventLoop_36Entry_Data:
 	push xwa
 	call	16714354
 	lda	xsp, (xsp+10)
-	.byte 0x68, 0x16
+	jr	t, 22
 	ld	a, e
 	extz	wa
 	pushw wa

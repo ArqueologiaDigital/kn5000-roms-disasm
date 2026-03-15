@@ -75,7 +75,7 @@ FDTest_DiagList_OK:
 	nop
 	ldio	0, 8
 	nop
-	.byte 0x77, 0x00, 0x9c
+	jrl	c, 16751616
 	nop
 	.byte 0x96, 0x00
 	reti
@@ -624,7 +624,7 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	nop
 	.byte 0x0a
 	aligned_string "File Read =>"
-	.byte 0x72, 0x62, 0x00
+	jrl	le, 98
 	swi	7
 	.byte 0x0a
 	aligned_string "cannot open read file"
@@ -662,7 +662,7 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	.byte 0x47, 0x4f, 0x00, 0xff
 	aligned_string "Finishd"
 	aligned_string "Media Error"
-	.byte 0x72, 0x62, 0x00
+	jrl	le, 98
 	swi	7
 	aligned_string "A:HKEXT.XAP"
 	aligned_string "Cannot open"

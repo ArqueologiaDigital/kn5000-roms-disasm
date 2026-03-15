@@ -266,7 +266,7 @@ EMPTY_HANDLER_WITH_RESET:	; 01FBBD
 PrevBank_RegHelper:
 	push qiz
 	cpi8_24	16776942, 255
-	.byte 0x6e, 0x24
+	jr	nz, 36
 	ldi_berp	251, 0
 	ldto_berp	a, 251
 	extz	wa
@@ -278,7 +278,7 @@ PrevBank_RegHelper:
 	call	130270
 	inc_berp	251, 1
 	cpi_berp	251, 4
-	.byte 0x67, 0xdf
+	jr	c, 16777183
 	pop qiz
 	ret
 
@@ -289,7 +289,7 @@ MUTE_AND_HALT:	; 01FBF4
 
 
 Timer_StatusHelper:
-	.byte 0x68, 0xfd
+	jr	t, 16777213
 	ldda8	l, 4154
 	extz	hl
 	ret
@@ -21285,7 +21285,7 @@ ToneGen_NoteTable_02D55E:
 	.byte 0xf0, 0x18, 0xbf
 	ld	wa, (xiz+46)
 	st16_24	1048578, wa
-	.byte 0x68, 0x00
+	jr	t, 0
 	nop
 	nop
 	nop
@@ -21304,7 +21304,7 @@ ToneGen_NoteTable_02D55E:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+8)
 	st16_24	1048578, wa
-	.byte 0x68, 0x00
+	jr	t, 0
 	nop
 	nop
 	nop
@@ -21317,7 +21317,7 @@ ToneGen_NoteTable_02D55E:
 	ld	xwa, (xsp+2)
 	ld	wa, (xwa+10)
 	st16_24	1048578, wa
-	.byte 0x68, 0x00
+	jr	t, 0
 	nop
 	nop
 	nop
@@ -22944,9 +22944,9 @@ VoiceParam_FullSetup_ExtData:
 	lda_24	xde, 267112
 	ld_rrw	wa, xde, wa
 	and	wa, 3
-	.byte 0x76, 0x33, 0x01
+	jrl	z, 307
 	cps	c, 0
-	.byte 0x6e, 0x2a
+	jr	nz, 42
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -23005,7 +23005,7 @@ VoiceParam_FullSetup_ExtData:
 	lda_24	xbc, 267118
 	ld_rrl	xwa, xbc, wa
 	bitm	7, (xwa+93)
-	.byte 0x66, 0x16
+	jr	z, 22
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
@@ -23025,17 +23025,17 @@ VoiceParam_FullSetup_ExtData:
 	ld	a, (xwa+16)
 	and	a, 192
 	cp	a, 128
-	.byte 0x66, 0x20
+	jr	z, 32
 	cp	a, 64
-	.byte 0x66, 0x13
+	jr	z, 19
 	cp	a, 192
-	.byte 0x66, 0x04
+	jr	z, 4
 	cps	a, 0
-	.byte 0x6e, 0x12
+	jr	nz, 18
 	ld	a, (xsp)
 	extz	wa
 	call	215184
-	.byte 0x68, 0x08
+	jr	t, 8
 	ld	a, (xsp)
 	extz	wa
 	call	215400
@@ -23096,7 +23096,7 @@ VoiceParam_FullSetup_ExtData:
 	.byte 0x1e, 0xe4, 0xfb
 	ldi_berp	250, 0
 	cpi_berp	250, 4
-	.byte 0x6f, 0x23
+	jr	nc, 35
 	ld	a, (xsp+2)
 	ld	l, a
 	extz	hl
@@ -23110,7 +23110,7 @@ VoiceParam_FullSetup_ExtData:
 	call	207074
 	inc_berp	250, 1
 	cpi_berp	250, 4
-	.byte 0x67, 0xdd
+	jr	c, 16777181
 	pop qiz
 	inc	2, xsp
 	ret
@@ -23195,7 +23195,7 @@ VoiceParam_FullSetup_ExtData:
 	cps	wa, 0
 	.byte 0x75, 0x98, 0x00
 	cps	wa, 6
-	.byte 0x7a, 0x93, 0x00
+	jrl	gt, 147
 	add	wa, wa
 	lda_24	xix, 63845
 	ld_rrw	wa, xix, wa
@@ -23204,12 +23204,12 @@ VoiceParam_FullSetup_ExtData:
 	ld	a, (xsp+2)
 	extz	wa
 	call	214161
-	.byte 0x68, 0x72
+	jr	t, 114
 	ld	a, (xsp+2)
 	extz	wa
 	call	214275
 	cp	(xsp), 245
-	.byte 0x66, 0x09
+	jr	z, 9
 	ld	a, (xsp+2)
 	extz	wa
 	call	214534
@@ -23234,7 +23234,7 @@ VoiceParam_FullSetup_ExtData:
 	ld	a, (xsp+2)
 	extz	wa
 	call	214759
-	.byte 0x68, 0x1a
+	jr	t, 26
 	ld	a, (xsp+2)
 	extz	wa
 	call	214834
@@ -23254,7 +23254,7 @@ VoiceParam_FullSetup_ExtData:
 	ld	(xbc+29351), a
 	ld	qiz, 0
 	cp	qiz, 2
-	.byte 0x6f, 0x77
+	jr	nc, 119
 	ld	a, (xsp+4)
 	extz	wa
 	muls	wa, 80
@@ -23279,7 +23279,7 @@ VoiceParam_FullSetup_ExtData:
 	ld	(xde), a
 	lds	bc, 0
 	cps	bc, 4
-	.byte 0x6f, 0x20
+	jr	nc, 32
 	ld	wa, bc
 	extz	xwa
 	inc	1, xwa
@@ -23293,10 +23293,10 @@ VoiceParam_FullSetup_ExtData:
 	ld	(xix), a
 	inc	1, bc
 	cps	bc, 4
-	.byte 0x67, 0xe0
+	jr	c, 16777184
 	inc	1, qiz
 	cp	qiz, 2
-	.byte 0x67, 0x89
+	jr	c, 16777097
 	pop xiz
 	inc	2, xsp
 	ret
@@ -23339,7 +23339,7 @@ VoiceParam_FullSetup_ExtData:
 	.byte 0x1e, 0xec, 0xf8
 	ld	(xsp+14), 0
 	cp	(xsp+14), 2
-	.byte 0x6f, 0x48
+	jr	nc, 72
 	ld	a, (xsp+14)
 	extz	wa
 	muls	wa, 21
@@ -23365,7 +23365,7 @@ VoiceParam_FullSetup_ExtData:
 	ormi8	(xiz+2), 80
 	.byte 0x8f, 0x0e, 0x61
 	cp	(xsp+14), 2
-	.byte 0x67, 0xb8
+	jr	c, 16777144
 	ld	a, (xsp+12)
 	extz	wa
 	add	wa, wa
@@ -23581,7 +23581,7 @@ VoiceAlloc_CheckAndInit_Return:
 VoiceAlloc_CheckAndInit_ExtData:
 	ld	e, (xwa+1)
 	cps	e, 2
-	.byte 0x63, 0x1a
+	jr	ule, 26
 	ld	a, e
 	extz	wa
 	muls	wa, 287
@@ -23596,7 +23596,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	lda_24	xbc, 267112
 	ld_rrw	wa, xbc, wa
 	bit	0, wa
-	.byte 0x66, 0x15
+	jr	z, 21
 	ld	a, e
 	extz	wa
 	muls	wa, 287
@@ -23648,12 +23648,12 @@ VoiceAlloc_CheckAndInit_ExtData:
 	cps	wa, 0
 	.byte 0x75, 0x81, 0x02
 	cp	wa, 13
-	.byte 0x62, 0x10
+	jr	le, 16
 	dec	5, wa
 	cp	wa, 14
-	.byte 0x71, 0x72, 0x02
+	jrl	lt, 626
 	cp	wa, 19
-	.byte 0x7a, 0x6b, 0x02
+	jrl	gt, 619
 	add	wa, wa
 	lda_24	xix, 63859
 	ld_rrw	wa, xix, wa
@@ -23678,7 +23678,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	bc
 	ld	wa, de
 	call	175650
-	.byte 0x78, 0x20, 0x02
+	jrl	t, 544
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0x14, 0xfe
@@ -23690,7 +23690,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	bc
 	ld	wa, de
 	call	175704
-	.byte 0x78, 0x01, 0x02
+	jrl	t, 513
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0xf5, 0xfd
@@ -23702,7 +23702,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	bc
 	ld	wa, de
 	call	175778
-	.byte 0x78, 0xe2, 0x01
+	jrl	t, 482
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0xd6, 0xfd
@@ -23714,7 +23714,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	bc
 	ld	wa, de
 	call	175852
-	.byte 0x78, 0xc3, 0x01
+	jrl	t, 451
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0xb7, 0xfd
@@ -23726,7 +23726,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	bc
 	ld	wa, de
 	call	175930
-	.byte 0x78, 0xa4, 0x01
+	jrl	t, 420
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0x98, 0xfd
@@ -23775,7 +23775,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xwa+16)
 	and	a, 192
 	cp	a, 64
-	.byte 0x6e, 0x17
+	jr	nz, 23
 	ld	a, (xiz+1)
 	ld	e, a
 	extz	de
@@ -23784,7 +23784,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	bc
 	ld	wa, de
 	call	176002
-	.byte 0x78, 0x09, 0x01
+	jrl	t, 265
 	ld	a, (xiz+1)
 	extz	wa
 	.byte 0x1e, 0xfd, 0xfc
@@ -23801,7 +23801,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	st8_24	283045, a
 	ld	a, (xiz+1)
 	st8_24	283044, a
-	.byte 0x78, 0xd3, 0x00
+	jrl	t, 211
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -23810,7 +23810,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	a, (xwa+16)
 	and	a, 192
 	cp	a, 64
-	.byte 0x7e, 0xb4, 0x00
+	jrl	nz, 180
 	ld	a, (xiz+1)
 	ld	e, a
 	extz	de
@@ -23819,7 +23819,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	bc
 	ld	wa, de
 	call	176061
-	.byte 0x78, 0x9d, 0x00
+	jrl	t, 157
 	ld	xwa, xiz
 	.byte 0x1e, 0x48, 0xfd
 	ld	a, (xiz+4)
@@ -24046,9 +24046,9 @@ VoiceAlloc_CheckAndInit_ExtData:
 	add	xwa, xbc
 	ld	xbc, xwa
 	bitm	7, (xbc+19)
-	.byte 0x66, 0x06
+	jr	z, 6
 	ld	(xde+94), 1
-	.byte 0x68, 0x04
+	jr	t, 4
 	ld	(xde+94), 0
 	ld	a, (xbc+2)
 	and	a, 63
@@ -24074,9 +24074,9 @@ VoiceAlloc_CheckAndInit_ExtData:
 	add	xwa, xbc
 	ld	xbc, xwa
 	bitm	7, (xbc+19)
-	.byte 0x66, 0x06
+	jr	z, 6
 	ld	(xde+94), 1
-	.byte 0x68, 0x04
+	jr	t, 4
 	ld	(xde+94), 0
 	ld	a, (xbc+2)
 	and	a, 63
@@ -24110,40 +24110,40 @@ VoiceAlloc_CheckAndInit_ExtData:
 	jp_rr	8, xix, bc
 	extz	wa
 	lds	bc, 0
-	.byte 0x78, 0x30, 0xfd
+	jrl	t, 16776496
 	extz	wa
 	lds	bc, 1
-	.byte 0x78, 0x29, 0xfd
+	jrl	t, 16776489
 	extz	wa
 	lds	bc, 2
-	.byte 0x78, 0x22, 0xfd
+	jrl	t, 16776482
 	extz	wa
 	lds	bc, 3
-	.byte 0x78, 0x1b, 0xfd
+	jrl	t, 16776475
 	extz	wa
 	lds	bc, 4
-	.byte 0x78, 0x61, 0xfd
+	jrl	t, 16776545
 	extz	wa
 	lds	bc, 5
-	.byte 0x78, 0x5a, 0xfd
+	jrl	t, 16776538
 	extz	wa
 	lds	bc, 6
-	.byte 0x78, 0xa6, 0xfd
+	jrl	t, 16776614
 	extz	wa
 	lds	bc, 7
-	.byte 0x78, 0xef, 0xfd
+	jrl	t, 16776687
 	extz	wa
 	ldw	bc, 8
-	.byte 0x78, 0x36, 0xfe
+	jrl	t, 16776758
 	extz	wa
 	ldw	bc, 9
-	.byte 0x78, 0x7e, 0xfe
+	jrl	t, 16776830
 	extz	wa
 	ldw	bc, 10
-	.byte 0x78, 0xc6, 0xfe
+	jrl	t, 16776902
 	extz	wa
 	ldw	bc, 11
-	.byte 0x78, 0x15, 0xff
+	jrl	t, 16776981
 	ret
 	dec	2, xsp
 	ld	(xsp), a
@@ -24158,7 +24158,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	cps	wa, 0
 	.byte 0x65, 0x67
 	cps	wa, 7
-	.byte 0x6a, 0x63
+	jr	gt, 99
 	add	wa, wa
 	lda_24	xix, 63923
 	ld_rrw	wa, xix, wa
@@ -24172,23 +24172,23 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	wa
 	lds	bc, 1
 	call	163044
-	.byte 0x68, 0x37
+	jr	t, 55
 	ld	a, (xsp)
 	extz	wa
 	lds	bc, 0
 	call	163044
-	.byte 0x68, 0x2b
+	jr	t, 43
 	ld	a, (xsp)
 	extz	wa
 	call	163518
-	.byte 0x68, 0x21
+	jr	t, 33
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267122
 	ld_rrw	wa, xbc, wa
 	bit	14, wa
-	.byte 0x66, 0x0a
+	jr	z, 10
 	ld	a, (xsp)
 	extz	wa
 	lds	bc, 0
@@ -24208,7 +24208,7 @@ VoiceAlloc_CheckAndInit_ExtData:
 	cps	wa, 0
 	.byte 0x65, 0x6f
 	cps	wa, 7
-	.byte 0x6a, 0x6b
+	jr	gt, 107
 	add	wa, wa
 	.byte 0xf2
 	xor	c, (xiz+13312)
@@ -24224,23 +24224,23 @@ VoiceAlloc_CheckAndInit_ExtData:
 	extz	wa
 	lds	bc, 1
 	call	163281
-	.byte 0x68, 0x3f
+	jr	t, 63
 	ld	a, (xsp)
 	extz	wa
 	lds	bc, 0
 	call	163281
-	.byte 0x68, 0x33
+	jr	t, 51
 	ld	a, (xsp)
 	extz	wa
 	call	163609
-	.byte 0x68, 0x29
+	jr	t, 41
 	ld	a, (xsp)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267122
 	ld_rrw	wa, xbc, wa
 	bit	14, wa
-	.byte 0x66, 0x12
+	jr	z, 18
 	ld	a, (xsp)
 	extz	wa
 	lds	bc, 0
@@ -24297,9 +24297,9 @@ VoiceAlloc_CheckAndInit_ExtData:
 	ld	c, (xbc+93)
 	and	c, 15
 	cps	c, 7
-	.byte 0x66, 0x10
+	jr	z, 16
 	cps	c, 5
-	.byte 0x66, 0x04
+	jr	z, 4
 	cps	c, 4
 	ret	nz
 	extz	wa
@@ -24360,7 +24360,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	209109
 	ldi_berp	251, 0
 	cpi_berp	251, 4
-	.byte 0x6f, 0x1e
+	jr	nc, 30
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -24372,7 +24372,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	209854
 	inc_berp	251, 1
 	cpi_berp	251, 4
-	.byte 0x67, 0xe2
+	jr	c, 16777186
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
@@ -24385,7 +24385,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	137870
 	ld	(xsp+4), xhl
 	ldw	(xsp+8), 0
-	.byte 0x68, 0x69
+	jr	t, 105
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -24428,7 +24428,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	.byte 0x67, 0x81
+	jr	c, 16777089
 	pop xiz
 	lda	xsp, (xsp+10)
 	ret
@@ -24458,7 +24458,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	209109
 	ldi_berp	251, 0
 	cpi_berp	251, 4
-	.byte 0x6f, 0x1e
+	jr	nc, 30
 	ld	a, (xsp+10)
 	ld	e, a
 	extz	de
@@ -24470,7 +24470,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	209854
 	inc_berp	251, 1
 	cpi_berp	251, 4
-	.byte 0x67, 0xe2
+	jr	c, 16777186
 	ld	a, (xsp+10)
 	ld	e, a
 	extz	de
@@ -24484,7 +24484,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	137870
 	ld	(xsp+4), xhl
 	ld	qiz, 0
-	.byte 0x68, 0x69
+	jr	t, 105
 	ld	wa, qiz
 	extz	xwa
 	add	xwa, xwa
@@ -24527,7 +24527,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 64
-	.byte 0x67, 0x81
+	jr	c, 16777089
 	pop xiz
 	inc	0, xsp
 	ret
@@ -24557,7 +24557,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	209109
 	ldi_berp	251, 0
 	cpi_berp	251, 4
-	.byte 0x6f, 0x1e
+	jr	nc, 30
 	ld	a, (xsp+10)
 	ld	e, a
 	extz	de
@@ -24569,7 +24569,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	209854
 	inc_berp	251, 1
 	cpi_berp	251, 4
-	.byte 0x67, 0xe2
+	jr	c, 16777186
 	ld	a, (xsp+10)
 	ld	e, a
 	extz	de
@@ -24583,7 +24583,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	137870
 	ld	(xsp+4), xhl
 	ld	qiz, 0
-	.byte 0x68, 0x5f
+	jr	t, 95
 	ld	wa, qiz
 	extz	xwa
 	add	xwa, xwa
@@ -24624,7 +24624,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	.byte 0x67, 0x8b
+	jr	c, 16777099
 	pop xiz
 	inc	0, xsp
 	ret
@@ -24639,9 +24639,9 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	wa
 	sub	wa, 21
 	cps	wa, 0
-	.byte 0x71, 0x47, 0x01
+	jrl	lt, 327
 	cp	wa, 18
-	.byte 0x7a, 0x40, 0x01
+	jrl	gt, 320
 	add	wa, wa
 	lda_24	xix, 64118
 	ld_rrw	wa, xix, wa
@@ -24659,7 +24659,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	wa, hl
 	lds	bc, 0
 	call	171569
-	.byte 0x78, 0x02, 0x01
+	jrl	t, 258
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24674,7 +24674,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x78, 0xd6, 0x00
+	jrl	t, 214
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24689,7 +24689,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x78, 0xaa, 0x00
+	jrl	t, 170
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24704,7 +24704,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x68, 0x7f
+	jr	t, 127
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24719,7 +24719,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x68, 0x54
+	jr	t, 84
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24734,7 +24734,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x68, 0x29
+	jr	t, 41
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24761,15 +24761,15 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+2)
 	cp	a, 16
-	.byte 0x6b, 0x05
+	jr	ugt, 5
 	cps	a, 0
-	.byte 0x7f, 0xba, 0x03
+	jrl	nc, 954
 	extz	wa
 	sub	wa, 17
 	cps	wa, 0
-	.byte 0x71, 0xaf, 0x03
+	jrl	lt, 943
 	cp	wa, 84
-	.byte 0x7a, 0xa8, 0x03
+	jrl	gt, 936
 	lda_24	xix, 63971
 	ld_rrw	wa, xix, wa
 	extz	wa
@@ -24778,7 +24778,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 195066
 	jp_rr	8, xix, wa
-	.byte 0x78, 0x82, 0x03
+	jrl	t, 898
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -24787,12 +24787,12 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	extz	wa
 	call	208414
-	.byte 0x78, 0x67, 0x03
+	jrl	t, 871
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	call	207646
-	.byte 0x78, 0x58, 0x03
+	jrl	t, 856
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24807,7 +24807,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x78, 0x2c, 0x03
+	jrl	t, 812
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24822,7 +24822,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x78, 0x00, 0x03
+	jrl	t, 768
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24837,7 +24837,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x78, 0xd4, 0x02
+	jrl	t, 724
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24852,7 +24852,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x78, 0xa8, 0x02
+	jrl	t, 680
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24867,7 +24867,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x78, 0x7c, 0x02
+	jrl	t, 636
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24882,7 +24882,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x78, 0x50, 0x02
+	jrl	t, 592
 	ldto_berp	a, 251
 	ld	e, a
 	extz	de
@@ -24897,7 +24897,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xde, xbc
 	lds	bc, 0
 	call	171569
-	.byte 0x78, 0x24, 0x02
+	jrl	t, 548
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -24960,7 +24960,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	.byte 0x1e, 0x1d, 0xfb, 0x78, 0x64, 0x01
 	ld	xwa, (xsp+2)
 	cp	(xwa+5), 15
-	.byte 0x7e, 0x9a, 0x00
+	jrl	nz, 154
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25012,7 +25012,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	muls	wa, 287
 	lda_24	xbc, 267214
 	st_rrb	l, xbc, wa
-	.byte 0x78, 0xc0, 0x00
+	jrl	t, 192
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25021,7 +25021,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	extz	wa
 	call	208414
-	.byte 0x78, 0xa5, 0x00
+	jrl	t, 165
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25034,7 +25034,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	extz	wa
 	call	213775
-	.byte 0x68, 0x7e
+	jr	t, 126
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25043,7 +25043,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	extz	wa
 	call	213775
-	.byte 0x68, 0x65
+	jr	t, 101
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25052,22 +25052,22 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	extz	wa
 	call	213775
-	.byte 0x68, 0x4c
+	jr	t, 76
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	call	213775
-	.byte 0x68, 0x3e
+	jr	t, 62
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	call	213775
-	.byte 0x68, 0x30
+	jr	t, 48
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
 	call	214161
-	.byte 0x68, 0x22
+	jr	t, 34
 	ld	xwa, (xsp+2)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25101,7 +25101,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xde+54)
 	and	a, 7
 	cp	a, (xbc)
-	.byte 0x6e, 0x27
+	jr	nz, 39
 	lds	hl, 0
 	cps	hl, 4
 	ret	nc
@@ -25118,23 +25118,23 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	.byte 0x67, 0xe0
+	jr	c, 16777184
 	ret
 	ld	a, (xbc)
 	cps	a, 5
-	.byte 0x76, 0x9c, 0x00
+	jrl	z, 156
 	cps	a, 4
-	.byte 0x66, 0x52
+	jr	z, 82
 	cps	a, 2
-	.byte 0x66, 0x4e
+	jr	z, 78
 	cps	a, 3
-	.byte 0x66, 0x04
+	jr	z, 4
 	cps	a, 1
 	ret	nz
 	ld	a, (xde+54)
 	and	a, 7
 	cps	a, 5
-	.byte 0x6e, 0x15
+	jr	nz, 21
 	ld	(xde+77), 0
 	ld	(xde+78), 1
 	ld	a, (xbc+1)
@@ -25158,12 +25158,12 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	.byte 0x67, 0xe0
+	jr	c, 16777184
 	ret
 	ld	a, (xde+54)
 	and	a, 7
 	cps	a, 5
-	.byte 0x6e, 0x15
+	jr	nz, 21
 	ld	a, (xbc+1)
 	ld	(xde+77), a
 	ld	a, (xbc+2)
@@ -25187,16 +25187,16 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	.byte 0x67, 0xe0
+	jr	c, 16777184
 	ret
 	ld	a, (xde+54)
 	and	a, 7
 	cps	a, 4
-	.byte 0x66, 0x21
+	jr	z, 33
 	cps	a, 2
-	.byte 0x66, 0x1d
+	jr	z, 29
 	cps	a, 3
-	.byte 0x66, 0x04
+	jr	z, 4
 	cps	a, 1
 	ret	nz
 	ld	a, (xbc+3)
@@ -25250,7 +25250,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xix), a
 	inc	1, bc
 	cps	bc, 4
-	.byte 0x67, 0xe0
+	jr	c, 16777184
 	ret
 	dec	6, xsp
 	pushw iz
@@ -25276,37 +25276,37 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+2)
 	res	7, a
 	cp	a, 77
-	.byte 0x76, 0x47, 0x02
+	jrl	z, 583
 	cp	a, 78
-	.byte 0x76, 0x41, 0x02
+	jrl	z, 577
 	cp	a, 79
-	.byte 0x76, 0x3b, 0x02
+	jrl	z, 571
 	cp	a, 80
-	.byte 0x76, 0x35, 0x02
+	jrl	z, 565
 	cp	a, 76
-	.byte 0x7b, 0x45, 0x02
+	jrl	ugt, 581
 	cp	a, 57
-	.byte 0x7f, 0x3f, 0x02
+	jrl	nc, 575
 	cp	a, 37
-	.byte 0x6b, 0x06
+	jr	ugt, 6
 	cp	a, 24
-	.byte 0x7f, 0x34, 0x02
+	jrl	nc, 564
 	cp	a, 23
-	.byte 0x76, 0x0f, 0x01
+	jrl	z, 271
 	cp	a, 22
-	.byte 0x6b, 0x05
+	jr	ugt, 5
 	cps	a, 7
-	.byte 0x7f, 0x24, 0x02
+	jrl	nc, 548
 	extz	wa
 	cps	wa, 0
 	.byte 0x75, 0x1d, 0x02
 	cps	wa, 6
-	.byte 0x62, 0x10
+	jr	le, 16
 	sub	wa, 31
 	cps	wa, 7
-	.byte 0x71, 0x10, 0x02
+	jrl	lt, 528
 	cp	wa, 25
-	.byte 0x7a, 0x09, 0x02
+	jrl	gt, 521
 	lda_24	xix, 64156
 	ld_rrw	wa, xix, wa
 	extz	wa
@@ -25319,7 +25319,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xwa+1)
 	extz	wa
 	call	208414
-	.byte 0x78, 0xd7, 0x01
+	jrl	t, 471
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25331,7 +25331,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	206518
 	lds	iz, 0
 	cps	iz, 4
-	.byte 0x7f, 0xb9, 0x01
+	jrl	nc, 441
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	l, a
@@ -25346,17 +25346,18 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	207074
 	inc	1, iz
 	cps	iz, 4
-	.byte 0x67, 0xdc, 0x78, 0x92, 0x01
+	jr	c, 16777180
+	jrl	t, 402
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
 	call	183606
 	ld	xwa, xhl
 	call	167244
-	.byte 0x78, 0x7d, 0x01
+	jrl	t, 381
 	lds	iz, 0
 	cps	iz, 4
-	.byte 0x6f, 0x3c
+	jr	nc, 60
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25381,7 +25382,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	208853
 	inc	1, iz
 	cps	iz, 4
-	.byte 0x67, 0xc4
+	jr	c, 16777156
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25392,17 +25393,17 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	wa, de
 	lds	de, 0
 	call	209854
-	.byte 0x78, 0x1f, 0x01
+	jrl	t, 287
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
 	call	183606
 	ld	xwa, xhl
 	call	167359
-	.byte 0x78, 0x0a, 0x01
+	jrl	t, 266
 	lds	iz, 0
 	cps	iz, 4
-	.byte 0x6f, 0x3c
+	jr	nc, 60
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25427,7 +25428,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	208853
 	inc	1, iz
 	cps	iz, 4
-	.byte 0x67, 0xc4
+	jr	c, 16777156
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25438,7 +25439,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	wa, de
 	lds	de, 1
 	call	209854
-	.byte 0x78, 0xac, 0x00
+	jrl	t, 172
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
@@ -25446,10 +25447,10 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	xwa, xhl
 	lds	bc, 1
 	call	167462
-	.byte 0x78, 0x95, 0x00
+	jrl	t, 149
 	ld	xwa, (xsp+4)
 	cp	(xwa+5), 7
-	.byte 0x7e, 0x8b, 0x00
+	jrl	nz, 139
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25461,7 +25462,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	.byte 0x1e, 0x1b, 0xfc, 0x68, 0x73
 	lds	iz, 0
 	cps	iz, 4
-	.byte 0x6f, 0x3c
+	jr	nc, 60
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25486,7 +25487,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	208853
 	inc	1, iz
 	cps	iz, 4
-	.byte 0x67, 0xc4
+	jr	c, 16777156
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25497,7 +25498,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	wa, de
 	lds	de, 2
 	call	209854
-	.byte 0x68, 0x16
+	jr	t, 22
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -25574,7 +25575,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	a, (xbc+15)
 	and	a, 7
 	cp	a, (xde)
-	.byte 0x6e, 0x27
+	jr	nz, 39
 	lds	hl, 0
 	cps	hl, 4
 	ret	nc
@@ -25591,23 +25592,23 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	.byte 0x67, 0xe0
+	jr	c, 16777184
 	ret
 	ld	a, (xde)
 	cps	a, 5
-	.byte 0x76, 0x9c, 0x00
+	jrl	z, 156
 	cps	a, 4
-	.byte 0x66, 0x52
+	jr	z, 82
 	cps	a, 2
-	.byte 0x66, 0x4e
+	jr	z, 78
 	cps	a, 3
-	.byte 0x66, 0x04
+	jr	z, 4
 	cps	a, 1
 	ret	nz
 	ld	a, (xbc+15)
 	and	a, 7
 	cps	a, 5
-	.byte 0x6e, 0x15
+	jr	nz, 21
 	ld	(xbc+17), 0
 	ld	(xbc+18), 1
 	ld	a, (xde+1)
@@ -25631,12 +25632,12 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	.byte 0x67, 0xe0
+	jr	c, 16777184
 	ret
 	ld	a, (xbc+15)
 	and	a, 7
 	cps	a, 5
-	.byte 0x6e, 0x15
+	jr	nz, 21
 	ld	a, (xde+1)
 	ld	(xbc+17), a
 	ld	a, (xde+2)
@@ -25660,16 +25661,16 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	.byte 0x67, 0xe0
+	jr	c, 16777184
 	ret
 	ld	a, (xbc+15)
 	and	a, 7
 	cps	a, 4
-	.byte 0x66, 0x21
+	jr	z, 33
 	cps	a, 2
-	.byte 0x66, 0x1d
+	jr	z, 29
 	cps	a, 3
-	.byte 0x66, 0x04
+	jr	z, 4
 	cps	a, 1
 	ret	nz
 	ld	a, (xde+3)
@@ -25725,7 +25726,7 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	ld	(xix), a
 	inc	1, bc
 	cps	bc, 4
-	.byte 0x67, 0xe0
+	jr	c, 16777184
 	ret
 	dec	4, xsp
 	push xiz
@@ -25756,14 +25757,14 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	extz	wa
 	sub	wa, 25
 	cps	wa, 0
-	.byte 0x71, 0x8b, 0x00
+	jrl	lt, 139
 	cp	wa, 11
-	.byte 0x62, 0x10
+	jr	le, 16
 	sub	wa, 9
 	cp	wa, 12
-	.byte 0x61, 0x7b
+	jr	lt, 123
 	cp	wa, 23
-	.byte 0x6a, 0x75
+	jr	gt, 117
 	lda_24	xix, 64200
 	ld_rrw	wa, xix, wa
 	extz	wa
@@ -25777,20 +25778,20 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	call	183606
 	ld	xwa, xhl
 	call	168049
-	.byte 0x68, 0x41
+	jr	t, 65
 	ld	a, (xiz+1)
 	extz	wa
 	call	183541
 	ld	xwa, xhl
 	lds	bc, 1
 	call	167462
-	.byte 0x68, 0x2e
+	jr	t, 46
 	cp	(xiz+5), 7
-	.byte 0x6e, 0x28
+	jr	nz, 40
 	lds	wa, 0
 	.byte 0x1e, 0x7a, 0xfd, 0x68, 0x21
 	cp	(xiz+5), 7
-	.byte 0x6e, 0x1b
+	jr	nz, 27
 	lds	wa, 1
 	.byte 0x1e, 0x6d, 0xfd, 0x68, 0x14
 	ld	a, (xiz+1)
@@ -26505,30 +26506,30 @@ DSP_VoiceCoeffRoute2:
 ; ----------------------------------------------------------------------------
 DSP_AlgoCoeffLookup:
 	cps	a, 4
-	.byte 0x66, 0x3c
+	jr	z, 60
 	cps	a, 3
-	.byte 0x66, 0x2c
+	jr	z, 44
 	cps	a, 2
-	.byte 0x66, 0x1c
+	jr	z, 28
 	cps	a, 1
-	.byte 0x66, 0x0e
+	jr	z, 14
 	cps	a, 0
-	.byte 0x6e, 0x38
+	jr	nz, 56
 	ld32_24	xwa, 283412
 	ld	xix, (xwa+84)
-	.byte 0x68, 0x36
+	jr	t, 54
 	ld32_24	xwa, 283412
 	ld	xix, (xwa+104)
-	.byte 0x68, 0x2c
+	jr	t, 44
 	ld32_24	xwa, 283412
 	ld	xix, (xwa+132)
-	.byte 0x68, 0x20
+	jr	t, 32
 	ld32_24	xwa, 283412
 	ld	xix, (xwa+144)
-	.byte 0x68, 0x14
+	jr	t, 20
 	ld32_24	xwa, 283412
 	ld	xix, (xwa+152)
-	.byte 0x68, 0x08
+	jr	t, 8
 	ld32_24	xwa, 283412
 	ld	xix, (xwa+84)
 	ld32_24	xwa, 283408
@@ -26554,7 +26555,7 @@ DSP_AlgoCoeffLookup:
 	ld	(xiy), a
 	inc	1, de
 	cp	de, hl
-	.byte 0x67, 0xe1
+	jr	c, 16777185
 	ret
 
 ; =============================================================================
@@ -26889,12 +26890,12 @@ DSP_SetCoeff_RouteComplex:
 	ldw	hl, 13
 	ld	wa, ix
 	cp	wa, 32
-	.byte 0x66, 0x35
+	jr	z, 53
 	cps	wa, 0
-	.byte 0x6e, 0x6c
+	jr	nz, 108
 	lds	ix, 0
 	cp	ix, hl
-	.byte 0x6f, 0x66
+	jr	nc, 102
 	ld	bc, ix
 	extz	xbc
 	ld	wa, de
@@ -26912,10 +26913,11 @@ DSP_SetCoeff_RouteComplex:
 	ld	(xiy), a
 	inc	1, ix
 	cp	ix, hl
-	.byte 0x67, 0xd7, 0x68, 0x3b
+	jr	c, 16777175
+	jr	t, 59
 	lds	ix, 0
 	cp	ix, hl
-	.byte 0x6f, 0x35
+	jr	nc, 53
 	ld	a, c
 	extz	wa
 	muls	wa, 80
@@ -26935,7 +26937,7 @@ DSP_SetCoeff_RouteComplex:
 	ld	(xiy), a
 	inc	1, ix
 	cp	ix, hl
-	.byte 0x67, 0xcb
+	jr	c, 16777163
 	ld	wa, hl
 	inc	6, wa
 	extz	xwa
@@ -27103,13 +27105,13 @@ DSP_SetCoeff_FullPipeline:
 	extz	wa
 	and	wa, 192
 	cp	wa, 192
-	.byte 0x66, 0x10
+	jr	z, 16
 	cp	wa, 128
-	.byte 0x66, 0x0a
+	jr	z, 10
 	cp	wa, 64
-	.byte 0x66, 0x04
+	jr	z, 4
 	cps	wa, 0
-	.byte 0x6e, 0x0b
+	jr	nz, 11
 	ld32_24	xwa, 283412
 	ld	xwa, (xwa+96)
 	ld	(xsp+4), xwa
@@ -27130,7 +27132,7 @@ DSP_SetCoeff_FullPipeline:
 	ldw	hl, 13
 	lds	iy, 0
 	cp	iy, hl
-	.byte 0x6f, 0x28
+	jr	nc, 40
 	ld	bc, iy
 	extz	xbc
 	ld	wa, de
@@ -27148,7 +27150,7 @@ DSP_SetCoeff_FullPipeline:
 	ld	(xiz), a
 	inc	1, iy
 	cp	iy, hl
-	.byte 0x67, 0xd8
+	jr	c, 16777176
 	ld	wa, hl
 	inc	6, wa
 	extz	xwa
@@ -27194,13 +27196,13 @@ DSP_SetCoeff_WithDispatch:
 	and	bc, 15
 	and	de, 192
 	cp	de, 192
-	.byte 0x66, 0x10
+	jr	z, 16
 	cp	de, 128
-	.byte 0x66, 0x0a
+	jr	z, 10
 	cp	de, 64
-	.byte 0x66, 0x04
+	jr	z, 4
 	cps	de, 0
-	.byte 0x6e, 0x08
+	jr	nz, 8
 	ld32_24	xde, 283412
 	ld	xhl, (xde+76)
 	sll	bc, 7
@@ -27219,7 +27221,7 @@ DSP_SetCoeff_WithDispatch:
 	ldw	hl, 13
 	lds	de, 0
 	cp	de, hl
-	.byte 0x6f, 0x28
+	jr	nc, 40
 	ld	bc, de
 	extz	xbc
 	ld	wa, ix
@@ -27237,7 +27239,7 @@ DSP_SetCoeff_WithDispatch:
 	ld	(xiz), a
 	inc	1, de
 	cp	de, hl
-	.byte 0x67, 0xd8
+	jr	c, 16777176
 	pop xiz
 	ret
 ; ----------------------------------------------------------------------------
@@ -27279,7 +27281,7 @@ DSP_SetCoeff_MasterConfig:
 	cps	wa, 0
 	.byte 0x75, 0x9f, 0x02
 	cp	wa, 23
-	.byte 0x7a, 0x98, 0x02
+	jrl	gt, 664
 	add	wa, wa
 	lda_24	xix, 64238
 	ld_rrw	wa, xix, wa
@@ -27294,13 +27296,13 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, de
 	.byte 0x1e, 0x33, 0xee
 	ld	iz, hl
-	.byte 0x78, 0x67, 0x02
+	jrl	t, 615
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
 	.byte 0x1e, 0x1e, 0xca
 	cps	l, 0
-	.byte 0x66, 0x0c
+	jr	z, 12
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
@@ -27318,7 +27320,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, hl
 	.byte 0x1e, 0x3b, 0xf1
 	ld	iz, hl
-	.byte 0x78, 0x27, 0x02
+	jrl	t, 551
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	l, a
@@ -27332,7 +27334,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, hl
 	.byte 0x1e, 0xa0, 0xf1
 	ld	iz, hl
-	.byte 0x78, 0x02, 0x02
+	jrl	t, 514
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	e, a
@@ -27344,7 +27346,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, de
 	.byte 0x1e, 0xa2, 0xf1
 	ld	iz, hl
-	.byte 0x78, 0xe4, 0x01
+	jrl	t, 484
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	e, a
@@ -27356,7 +27358,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, de
 	.byte 0x1e, 0x27, 0xf2
 	ld	iz, hl
-	.byte 0x78, 0xc6, 0x01
+	jrl	t, 454
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	c, a
@@ -27368,7 +27370,7 @@ DSP_SetCoeff_MasterConfig:
 	or	wa, bc
 	.byte 0x1e, 0xab, 0xf2
 	ld	iz, hl
-	.byte 0x78, 0xa7, 0x01
+	jrl	t, 423
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	c, a
@@ -27380,7 +27382,7 @@ DSP_SetCoeff_MasterConfig:
 	or	wa, bc
 	.byte 0x1e, 0xcf, 0xf2
 	ld	iz, hl
-	.byte 0x78, 0x88, 0x01
+	jrl	t, 392
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -27392,7 +27394,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, de
 	.byte 0x1e, 0xf4, 0xf2
 	ld	iz, hl
-	.byte 0x78, 0x6a, 0x01
+	jrl	t, 362
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -27404,16 +27406,16 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, de
 	.byte 0x1e, 0x43, 0xf4
 	ld	iz, hl
-	.byte 0x78, 0x4c, 0x01
+	jrl	t, 332
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	extz	wa
 	.byte 0x1e, 0xe1, 0xf5
 	ld	iz, hl
-	.byte 0x78, 0x3c, 0x01
+	jrl	t, 316
 	ldw	iz, 8
 	cp	(xsp+2), iz
-	.byte 0x7f, 0x33, 0x01
+	jrl	nc, 307
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	c, a
@@ -27427,7 +27429,8 @@ DSP_SetCoeff_MasterConfig:
 	ld	bc, (xsp+2)
 	.byte 0x1e, 0x3f, 0xf6, 0x9f, 0x02, 0x61
 	cp	(xsp+2), iz
-	.byte 0x67, 0xd8, 0x78, 0x08, 0x01
+	jr	c, 16777176
+	jrl	t, 264
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	l, a
@@ -27441,7 +27444,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, hl
 	.byte 0x1e, 0x06, 0xf7
 	ld	iz, hl
-	.byte 0x78, 0xe3, 0x00
+	jrl	t, 227
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	l, a
@@ -27455,7 +27458,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, hl
 	.byte 0x1e, 0xf1, 0xf6
 	ld	iz, hl
-	.byte 0x78, 0xbe, 0x00
+	jrl	t, 190
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	c, a
@@ -27467,7 +27470,7 @@ DSP_SetCoeff_MasterConfig:
 	or	wa, bc
 	.byte 0x1e, 0x82, 0xf8
 	ld	iz, hl
-	.byte 0x78, 0x9f, 0x00
+	jrl	t, 159
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	e, a
@@ -27479,7 +27482,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, de
 	.byte 0x1e, 0xa9, 0xf8
 	ld	iz, hl
-	.byte 0x78, 0x81, 0x00
+	jrl	t, 129
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
 	ld	c, a
@@ -27491,7 +27494,7 @@ DSP_SetCoeff_MasterConfig:
 	or	wa, bc
 	.byte 0x1e, 0xe2, 0xf9
 	ld	iz, hl
-	.byte 0x68, 0x63
+	jr	t, 99
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	l, a
@@ -27507,7 +27510,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, hl
 	.byte 0x1e, 0xfc, 0xf9
 	ld	iz, hl
-	.byte 0x68, 0x38
+	jr	t, 56
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	ld	l, a
@@ -27523,7 +27526,7 @@ DSP_SetCoeff_MasterConfig:
 	ld	wa, hl
 	.byte 0x1e, 0xf4, 0xfa
 	ld	iz, hl
-	.byte 0x68, 0x0d
+	jr	t, 13
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+1)
 	extz	wa
@@ -27666,24 +27669,24 @@ VoiceParamFinalize_SecondaryBody:
 	lda_24	xbc, 267122
 	ld_rrw	wa, xbc, wa
 	bit	14, wa
-	.byte 0x66, 0x02
+	jr	z, 2
 	ldb	e, 128
 	or	(xhl), e
 	ld	l, (xiz+3)
 	extz	hl
-	.byte 0x78, 0x65, 0x02
+	jrl	t, 613
 	ld	a, (xiz+2)
 	and	a, 128
 	cp	a, 128
-	.byte 0x66, 0x19
+	jr	z, 25
 	cps	a, 0
-	.byte 0x6e, 0x28
+	jr	nz, 40
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267222
 	ld_rrl	xbc, xbc, wa
-	.byte 0x68, 0x13
+	jr	t, 19
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -27703,19 +27706,19 @@ VoiceParamFinalize_SecondaryBody:
 	.byte 0x1e, 0x39, 0xfe
 	ld	l, (xiz+3)
 	extz	hl
-	.byte 0x78, 0x07, 0x02
+	jrl	t, 519
 	ld	a, (xiz+2)
 	and	a, 128
 	cp	a, 128
-	.byte 0x66, 0x19
+	jr	z, 25
 	cps	a, 0
-	.byte 0x6e, 0x28
+	jr	nz, 40
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267296
 	ld_rrl	xbc, xbc, wa
-	.byte 0x68, 0x13
+	jr	t, 19
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -27735,35 +27738,35 @@ VoiceParamFinalize_SecondaryBody:
 	.byte 0x1e, 0xdb, 0xfd
 	ld	l, (xiz+3)
 	extz	hl
-	.byte 0x78, 0xa9, 0x01
+	jrl	t, 425
 	ld	a, (xiz+2)
 	and	a, 192
 	cp	a, 192
-	.byte 0x66, 0x4d
+	jr	z, 77
 	cp	a, 128
-	.byte 0x66, 0x33
+	jr	z, 51
 	cp	a, 64
-	.byte 0x66, 0x19
+	jr	z, 25
 	cps	a, 0
-	.byte 0x6e, 0x52
+	jr	nz, 82
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267226
 	ld_rrl	xbc, xbc, wa
-	.byte 0x68, 0x3d
+	jr	t, 61
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267263
 	ld_rrl	xbc, xbc, wa
-	.byte 0x68, 0x28
+	jr	t, 40
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, 267300
 	ld_rrl	xbc, xbc, wa
-	.byte 0x68, 0x13
+	jr	t, 19
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -27783,7 +27786,7 @@ VoiceParamFinalize_SecondaryBody:
 	.byte 0x1e, 0x49, 0xfd
 	ld	l, (xiz+3)
 	extz	hl
-	.byte 0x78, 0x17, 0x01
+	jrl	t, 279
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -27802,7 +27805,7 @@ VoiceParamFinalize_SecondaryBody:
 	.byte 0x1e, 0x12, 0xfd
 	ld	l, (xiz+3)
 	extz	hl
-	.byte 0x78, 0xe0, 0x00
+	jrl	t, 224
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -27831,7 +27834,7 @@ VoiceParamFinalize_SecondaryBody:
 	.byte 0x1e, 0xbe, 0xfc
 	ld	l, (xiz+3)
 	extz	hl
-	.byte 0x78, 0x8c, 0x00
+	jrl	t, 140
 	ld	a, (xiz+1)
 	extz	wa
 	muls	wa, 287
@@ -30899,7 +30902,7 @@ DSP_AlgoType_Dispatch3:
 
 DSP_AlgoType_Dispatch3_TableData:
 	cps	e, 0
-	.byte 0x6e, 0x73
+	jr	nz, 115
 	ld	e, c
 	extz	de
 	muls	de, 5
@@ -30918,7 +30921,7 @@ DSP_AlgoType_Dispatch3_TableData:
 	lda_24	xde, 267118
 	ld_rrl	xwa, xde, wa
 	bitm	6, (xwa+93)
-	.byte 0x66, 0x32
+	jr	z, 50
 	ld	a, c
 	extz	wa
 	muls	wa, 5
@@ -30932,11 +30935,11 @@ DSP_AlgoType_Dispatch3_TableData:
 	add	xwa, xbc
 	.byte 0xf3, 0x07, 0xe0, 0xe8, 0xcb, 0x66, 0x06
 	ldw	hl, 192
-	.byte 0x78, 0xc4, 0x00
+	jrl	t, 196
 	ldw	hl, 64
-	.byte 0x78, 0xbe, 0x00
+	jrl	t, 190
 	ldw	hl, 64
-	.byte 0x78, 0xb8, 0x00
+	jrl	t, 184
 	ld	e, c
 	extz	de
 	muls	de, 5
@@ -30955,7 +30958,7 @@ DSP_AlgoType_Dispatch3_TableData:
 	lda_24	xde, 267118
 	ld_rrl	xwa, xde, wa
 	bitm	6, (xwa+93)
-	.byte 0x66, 0x30
+	jr	z, 48
 	ld	a, c
 	extz	wa
 	muls	wa, 5

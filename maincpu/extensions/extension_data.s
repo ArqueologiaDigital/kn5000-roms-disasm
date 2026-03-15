@@ -50,7 +50,7 @@ ChordTypeStr_Blank_2:	ldb	w, 0x20
 	aligned_string "     "
 	aligned_string "     "
 	jr	pl, 0x61
-	.byte 0x64, 0x64
+	jr	pe, 100
 	push xbc
 	nop
 	aligned_string " add9"
@@ -95,7 +95,7 @@ ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
 	aligned_string "dim  "
 	aligned_string "min7 "
 	jr	pl, 0x69
-	.byte 0x6e, 0x20
+	jr	nz, 32
 	ldb	w, 0
 	aligned_string "aug  "
 	aligned_string "Maj7 "
@@ -114,12 +114,13 @@ ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
 	.byte 0x84, 0x02, 0xed, 0x00, 0x80, 0x02, 0xed, 0x00
 	.byte 0x7c, 0x02, 0xed
 	nop
-	.byte 0x76, 0x02, 0xed
+	jrl	z, 16772354
 	nop
-	.byte 0x72, 0x02, 0xed
+	jrl	le, 16772354
 	nop
-	.byte 0x6c, 0x02, 0xed, 0x00, 0x68, 0x02, 0xed, 0x00
-	.byte 0x62, 0x02, 0xed, 0x00
+	jr	po, 2
+	.byte 0xed, 0x00, 0x68, 0x02, 0xed, 0x00, 0x62, 0x02
+	.byte 0xed, 0x00
 	pop xiz
 	push_sr
 	.byte 0xed, 0x00
@@ -144,7 +145,7 @@ ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
 	.byte 0x41, 0x20, 0x00, 0xff
 	aligned_string "A~a0"
 	ld	xsp, 1207894048
-	.byte 0x7e, 0x61, 0x30
+	jrl	nz, 12385
 	nop
 	swi	7
 	ld	xiz, 1174339616
@@ -152,7 +153,7 @@ ChordTypeStr_7sus4:	.byte 0x75, 0x73, 0x34, 0x00
 	swi	7
 	aligned_string "E~a0"
 	ld	xix, 1157562400
-	.byte 0x7e, 0x61, 0x30
+	jrl	nz, 12385
 	nop
 	swi	7
 	ld	xhl, 553582624
@@ -367,7 +368,7 @@ Str_InitSettingWarn_IT:	aligned_string "Italian"
 	.byte 0x96, 0x07, 0xed, 0x00, 0x86, 0x07, 0xed, 0x00
 	.byte 0x78, 0x07, 0xed
 	nop
-	.byte 0x70, 0x07, 0xed
+	jrl	f, 16772359
 	nop
 	.byte 0x56
 	reti
@@ -379,7 +380,7 @@ Str_AreYouSure_IT:	aligned_string "Italian"
 	.byte 0x45, 0x74
 	.ascii "es vous s"
 	swi	3
-	.byte 0x72, 0x3f, 0x00
+	jrl	le, 63
 	swi	7
 	aligned_string "SIND SIE SICHER?"
 	aligned_string "Are You Sure?"
@@ -398,7 +399,7 @@ Str_FactoryResetDesc_EN2:	aligned_string "                               Resets 
 Str_FactoryResetDesc_EN3:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
 	.byte 0x53, 0x65
 	.ascii "tzt die PERFORMANCE Daten, d.h. die von Ihnen erstellten Daten und Einstellungen, auf die Werkseinstellung zur¸c"
-	.byte 0x6b, 0x2e
+	jr	ugt, 46
 	nop
 	swi	7
 	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
@@ -464,7 +465,7 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	nop
 	nop
 	nop
-	.byte 0x6a, 0x01
+	jr	gt, 1
 	nop
 	nop
 	nop
@@ -519,10 +520,10 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	swi	7
 	pop xde
 	halt
-	.byte 0x6a, 0x07
+	jr	gt, 7
 	pop xde
 	halt
-	.byte 0x6a, 0x07
+	jr	gt, 7
 	adc	xiz, (xiz+11)
 	pushw 2966
 	ldb	w, 0
@@ -544,45 +545,45 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	nop
 	.byte 0xdb, 0x02, 0xdb, 0x02, 0xdb, 0x02, 0x6a, 0x00
 	ldb	l, 1
-	.byte 0x6a, 0x00
+	jr	gt, 0
 	ldb	l, 1
 	ldw	ix, 3074
 	push_sr
 	incf
 	push_sr
 	ldb	e, 51
-	.byte 0x64, 0x00
+	jr	pe, 0
 	popw sp
 	popw iz
 	ldb	w, 0
 	.byte 0x4f
 	ld	xiz, 858062918
-	.byte 0x64, 0x00
+	jr	pe, 0
 	ldb	e, 51
-	.byte 0x64, 0x00
+	jr	pe, 0
 	ldb	e, 51
-	.byte 0x64, 0x00
+	jr	pe, 0
 	popw sp
 	ld	xiz, 1313800262
 	ldb	w, 0
 	ldb	e, 51
-	.byte 0x64, 0x00
+	jr	pe, 0
 	ldb	e, 51
-	.byte 0x64, 0x00
+	jr	pe, 0
 	nop
 	nop
-	.byte 0x7c, 0x00, 0x00
+	jrl	po, 0
 	nop
-	.byte 0x7c, 0x00, 0xf8
+	jrl	po, 16775168
 	push_sr
 	swi	6
 	nop
 	swi	6
 	nop
-	.byte 0x6a, 0x00
+	jr	gt, 0
 	ret
 	normal
-	.byte 0x6a, 0x00
+	jr	gt, 0
 	ret
 	normal
 	push_sr
@@ -717,7 +718,7 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	pushw sp
 	popw sp
 	ld	xiz, 637468742
-	.byte 0x73, 0x00, 0xff
+	jrl	ule, 16776960
 	aligned_string "PAGE 2/3"
 	ldb	e, 115
 	nop
@@ -809,9 +810,9 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	ldb	w, 0
 	nop
 	nop
-	.byte 0x7c, 0x00, 0x00
+	jrl	po, 0
 	nop
-	.byte 0x7c, 0x00, 0x97
+	jrl	po, 16750336
 	push_sr
 	swi	2
 	nop
@@ -999,7 +1000,7 @@ VariationStr_V1:
 	nop
 	push_sr
 	nop
-	.byte 0x62, 0x00
+	jr	le, 0
 	push xix
 	normal
 	.byte 0x81, 0x00
@@ -1071,8 +1072,10 @@ TransposeNoteStr_C:
 	aligned_string "RROR "
 	.byte 0x9c, 0x00, 0x9c
 	nop
-	.byte 0x60, 0x00, 0x60, 0x00, 0x60, 0x00, 0x9c, 0x00
-	.byte 0x60
+	jr	f, 0
+	jr	f, 0
+	jr	f, 0
+	.byte 0x9c, 0x00, 0x60
 	nop
 	.byte 0xa0, 0x00, 0xa7, 0x00
 	jr	ov, 0x00
@@ -1226,7 +1229,7 @@ KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	ldb	e, 115
 	nop
 	swi	7
-	.byte 0x6f, 0x6e
+	jr	nc, 110
 	nop
 	swi	7
 	ldb	w, 32
@@ -1257,7 +1260,7 @@ KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	.byte 0xdd, 0x7f
 	swi	3
 	nop
-	.byte 0x61, 0xaa
+	jr	lt, 16777130
 	swi	3
 	nop
 	retd	64432
@@ -1284,7 +1287,8 @@ KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	swi	3
 	nop
 	popw de
-	.byte 0x7e, 0xfb, 0x00, 0x77, 0x7e, 0xfb
+	jrl	nz, 251
+	jrl	c, 16776062
 	nop
 	.byte 0xa4, 0x7e
 	swi	3
@@ -1295,7 +1299,7 @@ KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	.byte 0xcc, 0xfb
 	nop
 	swi	6
-	.byte 0x7e, 0xfb, 0x00
+	jrl	nz, 251
 	ld	xiy, 922811428
 	ldb	e, 252
 	nop
@@ -1314,7 +1318,7 @@ KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	.byte 0x6d, 0x27
 	swi	4
 	nop
-	.byte 0x6a, 0x27
+	jr	gt, 39
 	swi	4
 	nop
 	ldw	de, 64551
@@ -1323,7 +1327,7 @@ KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	swi	3
 	nop
 	swi	7
-	.byte 0x7f, 0xfb, 0x00
+	jrl	nc, 251
 	rcf
 	cp	(xwa), c
 	nop
@@ -1441,8 +1445,8 @@ ParamStr08_nowswno:
 	jr	nz, 0x6f
 	aligned_string "wswno"
 	aligned_string "varisu"
-	.byte 0x70, 0x61
-	.byte 0x72, 0x74, 0x00, 0xff
+	jrl	f, 29281
+	jrl	pe, 16776960
 	aligned_string "page"
 	aligned_string "fontcolor"
 	aligned_string "font"
@@ -1611,7 +1615,7 @@ MstStyleAlpGrid_nowalphmaxpage:	jr	nz, 0x6f
 	aligned_string "nowalphtop"
 	aligned_string "nowalph"
 	jr	z, 0x75
-	.byte 0x6e, 0x63
+	jr	nz, 99
 	nop
 	swi	7
 	aligned_string "fixedrow"
@@ -1652,7 +1656,7 @@ ParamStr19_nowstylectgmaxpage:	aligned_string "nowstylectgmaxpage"
 ParamStr19_nowstylectgdtno:	aligned_string "nowstylectgdtno"
 ParamStr19_func:
 	jr	z, 0x75
-	.byte 0x6e, 0x63
+	jr	nz, 99
 	nop
 	swi	7
 	aligned_string "fixedrow"
@@ -1711,7 +1715,7 @@ MstSong2Grid_nowsongctgpage:	aligned_string "nowsongctgpage"
 MstSong2Grid_nowsongctgmaxpage:	aligned_string "nowsongctgmaxpage"
 MstSong2Grid_nowsongctgdtno:	jr	nz, 0x6f
 	aligned_string "wsongctgdtno"
-	.byte 0x66, 0x75
+	jr	z, 117
 MstSong2Grid_func:	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
@@ -1740,7 +1744,7 @@ ParamStr22_nowsongsubctgmaxpage:
 	aligned_string "wsongsubctgmaxpage"
 	aligned_string "nowsongsubctgdtno"
 	jr	z, 0x75
-	.byte 0x6e, 0x63
+	jr	nz, 99
 	nop
 	swi	7
 	aligned_string "fixedrow"
@@ -1784,9 +1788,9 @@ NakaDesc_AcFSWAssGridBox:
 	pop xwa
 	jr	gt, 0x00
 	aligned_string "AcTchSensGridBox"
-	.byte 0x6e, 0x00
+	jr	nz, 0
 	aligned_string "IvMstStyleWindowPgCtl"
-	.byte 0x6e, 0x00
+	jr	nz, 0
 	aligned_string "IvPmemWindowPageCtl"
 	jr	nz, 0x00
 	aligned_string "IvWindowPageControl"
@@ -2060,7 +2064,7 @@ NakaInstTable8_NullTerm:
 	max
 	.byte 0xf4, 0x03, 0x00, 0x08, 0xf4, 0x03, 0x00, 0x3c
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	push_f
 	nop
 	swi	7
@@ -2082,7 +2086,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	push_f
 	nop
 	swi	7
@@ -2102,7 +2106,7 @@ NakaInstTable8_NullTerm:
 	ei	0
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	push_f
 	nop
 	swi	7
@@ -2121,7 +2125,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	push_f
 	nop
 	swi	7
@@ -2141,7 +2145,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	push_f
 	nop
 	swi	7
@@ -2161,7 +2165,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	push_f
 	nop
 	swi	7
@@ -2182,7 +2186,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	push_f
 	nop
 	swi	7
@@ -2204,7 +2208,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	push_f
 	nop
 	swi	7
@@ -2237,7 +2241,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ldio	0, 0
 	nop
-	.byte 0x7f, 0x00, 0x3f
+	jrl	nc, 16128
 	normal
 	.byte 0xef, 0x00, 0xf5, 0x00, 0x00, 0x00
 	nop
@@ -2245,7 +2249,7 @@ NakaInstTable8_NullTerm:
 	incf
 	.byte 0xf4, 0x03, 0x00, 0x10, 0xf4, 0x03, 0x00, 0x3c
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	ldb	a, 0
 	swi	7
 	swi	7
@@ -2317,7 +2321,7 @@ NakaInstTable8_NullTerm:
 	push_a
 	.byte 0xf4, 0x03, 0x00, 0x18, 0xf4, 0x03, 0x00, 0x3c
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	ldb	l, 0
 	swi	7
 	swi	7
@@ -2340,7 +2344,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	ldb	l, 0
 	swi	7
 	swi	7
@@ -2362,7 +2366,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	ldb	l, 0
 	swi	7
 	swi	7
@@ -2383,7 +2387,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	ldb	l, 0
 	swi	7
 	swi	7
@@ -2404,7 +2408,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	ldb	l, 0
 	swi	7
 	swi	7
@@ -2426,7 +2430,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	ldb	l, 0
 	swi	7
 	swi	7
@@ -2446,7 +2450,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	ldb	l, 0
 	swi	7
 	swi	7
@@ -2467,7 +2471,7 @@ NakaInstTable8_NullTerm:
 	ei	0
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	ldb	l, 0
 	swi	7
 	swi	7
@@ -2498,7 +2502,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ldio	0, 0
 	nop
-	.byte 0x7f, 0x00, 0x3f
+	jrl	nc, 16128
 	normal
 	.byte 0xef, 0x00, 0xf5, 0x00, 0x00, 0x00
 	nop
@@ -2510,7 +2514,7 @@ NakaInstTable8_NullTerm:
 	nop
 	push xix
 	nop
-	.byte 0x60, 0x01
+	jr	f, 1
 	ldw	wa, 65280
 	swi	7
 	ldw	de, 65280

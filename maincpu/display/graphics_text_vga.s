@@ -1400,13 +1400,13 @@ DrawFunc_Init_Variant1:
 	.ascii "8:h#"
 	pushw 0
 	cps	hl, 2
-	.byte 0x66, 0x0b
+	jr	z, 11
 	cps	hl, 1
-	.byte 0x6e, 0x0e
+	jr	nz, 14
 	ld	xwa, 15380812
-	.byte 0x68, 0x0c
+	jr	t, 12
 	ld	xwa, 15380816
-	.byte 0x68, 0x05
+	jr	t, 5
 	ld	xwa, 15380820
 	push xwa
 	lda	xwa, (xsp+10)
@@ -1598,13 +1598,13 @@ DrawFunc_Init_Variant1:
 	ldw	bc, 11
 	nop
 	cps	l, 2
-	.byte 0x66, 0x0b
+	jr	z, 11
 	cps	l, 1
-	.byte 0x6e, 0x0e
+	jr	nz, 14
 	ld	xwa, 15380884
-	.byte 0x68, 0x0c
+	jr	t, 12
 	ld	xwa, 15380888
-	.byte 0x68, 0x05
+	jr	t, 5
 	ld	xwa, 15380892
 	push xwa
 	push xbc

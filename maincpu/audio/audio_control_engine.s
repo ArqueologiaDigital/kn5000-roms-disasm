@@ -160,15 +160,15 @@ FileIO_BytecodeData:
 	.ascii "h!@0"
 	.byte 0x9d, 0xed, 0x00, 0x68, 0x1a
 	ld	xwa, 15572274
-	.byte 0x68, 0x13
+	jr	t, 19
 	ld	xwa, 15572276
-	.byte 0x68, 0x0c
+	jr	t, 12
 	ld	xwa, 15572278
-	.byte 0x68, 0x05
+	jr	t, 5
 	ld	xwa, 15572280
 	ld_rrb	a, xwa, hl
 	ld	(xde), a
-	.byte 0x68, 0x8e
+	jr	t, 16777102
 	ld	xwa, xiz
 	.byte 0x1e, 0xbe, 0xfe
 	inc	4, xiz
@@ -179,56 +179,56 @@ FileIO_BytecodeData:
 	push xiz
 	ld	xiz, xwa
 	cpdi8	36148, 19
-	.byte 0x6e, 0x0f
+	jr	nz, 15
 	ld	a, (xiz+2)
 	cp	a, 19
-	.byte 0x66, 0x07
+	jr	z, 7
 	cps	a, 0
-	.byte 0x66, 0x03
+	jr	z, 3
 	ld	(xiz), 255
 	ld	xwa, 192
 	call	16569399
 	cps	hl, 1
-	.byte 0x6e, 0x1f
+	jr	nz, 31
 	ld	a, (xiz+2)
 	cp	a, 15
-	.byte 0x66, 0x14
+	jr	z, 20
 	cp	a, 17
-	.byte 0x66, 0x0f
+	jr	z, 15
 	cp	a, 19
-	.byte 0x66, 0x0a
+	jr	z, 10
 	cp	a, 9
-	.byte 0x66, 0x05
+	jr	z, 5
 	cp	a, 14
-	.byte 0x6e, 0x03
+	jr	nz, 3
 	ld	(xiz), 255
 	call	16695162
 	and	hl, 7
-	.byte 0x66, 0x09
+	jr	z, 9
 	cp	(xiz+2), 7
-	.byte 0x6e, 0x03
+	jr	nz, 3
 	ld	(xiz), 255
 	lda	xwa, (xiz+2)
 	cp	(xwa), 9
-	.byte 0x6e, 0x0c
+	jr	nz, 12
 	cpdi8	9980, 1
-	.byte 0x6e, 0x05
+	jr	nz, 5
 	ld	(xwa), 8
-	.byte 0x68, 0x05
+	jr	t, 5
 	cp	(xwa), 8
-	.byte 0x6e, 0x09
+	jr	nz, 9
 	bitda	0, 9834
-	.byte 0x66, 0x03
+	jr	z, 3
 	ld	(xwa), 10
 	cpdi16	10408, 0
-	.byte 0x66, 0x11
+	jr	z, 17
 	ld	a, (xwa)
 	cp	a, 19
-	.byte 0x66, 0x05
+	jr	z, 5
 	cp	a, 20
-	.byte 0x6e, 0x05
+	jr	nz, 5
 	ld	(xiz), 255
-	.byte 0x68, 0x04
+	jr	t, 4
 	resda	0, 9834
 	pop xiz
 	ret
@@ -237,20 +237,20 @@ FileIO_BytecodeData:
 	lda	xbc, (xiz+2)
 	ld	a, (xbc)
 	cps	a, 0
-	.byte 0x66, 0x7a
+	jr	z, 122
 	ldda8	a, 36148
 	cp	a, 19
-	.byte 0x66, 0x71
+	jr	z, 113
 	bitda	2, 1057
-	.byte 0x6e, 0x51
+	jr	nz, 81
 	ldda8	a, 10405
 	xor	a, 1
 	stda8	10405, a
 	ldda8	c, 36148
 	cp	c, 13
-	.byte 0x6b, 0x24
+	jr	ugt, 36
 	cp	c, 8
-	.byte 0x67, 0x1f
+	jr	c, 31
 	ld	xwa, xiz
 	.byte 0x1e
 	sub	(xsp+182), xbc

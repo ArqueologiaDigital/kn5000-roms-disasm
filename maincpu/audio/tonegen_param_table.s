@@ -134,7 +134,8 @@
 	.byte 0x54
 	cp	w, l
 	nop
-	.byte 0x6c, 0xcf, 0xf0, 0x00, 0x8b
+	jr	po, 16777167
+	.byte 0xf0, 0x00, 0x8b
 	cp	w, l
 	nop
 	and	(xhl), xsp
@@ -345,7 +346,8 @@
 	nop
 	cp	wa, iz
 	nop
-	.byte 0x64, 0xde, 0xf0, 0x00, 0xd3
+	jr	pe, 16777182
+	.byte 0xf0, 0x00, 0xd3
 	cp	wa, iz
 	nop
 	popw	de
@@ -585,7 +587,8 @@
 	.byte 0xe0, 0x00, 0x72
 	or	xwa, xwa
 	nop
-	.byte 0x64, 0xe8, 0xe0, 0x00, 0x56
+	jr	pe, 16777192
+	.byte 0xe0, 0x00, 0x56
 	or	xwa, xwa
 	nop
 	popw	wa
@@ -596,108 +599,109 @@
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x31, 0x37
+	jrl	pe, 14129
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x31, 0x36
+	jrl	pe, 13873
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x31, 0x35
+	jrl	pe, 13617
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x31, 0x34
+	jrl	pe, 13361
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x31, 0x33
+	jrl	pe, 13105
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x31, 0x32
+	jrl	pe, 12849
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x31, 0x31
+	jrl	pe, 12593
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x31, 0x30
+	jrl	pe, 12337
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x30, 0x39
+	jrl	pe, 14640
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x30, 0x38
+	jrl	pe, 14384
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x30, 0x37
+	jrl	pe, 14128
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x30, 0x36
+	jrl	pe, 13872
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x30, 0x35
+	jrl	pe, 13616
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x30, 0x34
+	jrl	pe, 13360
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x30, 0x33
+	jrl	pe, 13104
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x30, 0x32
+	jrl	pe, 12848
 	nop
 	swi	7
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x30, 0x31, 0x53
+	jrl	pe, 12592
+	.byte 0x53
 	nop
 	ld	xiz, 1851870324
 	jr	c, 84
 	jr	mi, 120
-	.byte 0x74, 0x30, 0x31
+	jrl	pe, 12592
 	nop
 	swi	7
 	nop

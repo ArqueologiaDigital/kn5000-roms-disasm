@@ -14096,7 +14096,7 @@ Sqedt_ParamDispatch:
 	extz	wa
 	pushw wa
 	ld	xwa, 14896214
-	.byte 0x78, 0xb5, 0x00
+	jrl	t, 181
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw 3
@@ -14107,7 +14107,7 @@ Sqedt_ParamDispatch:
 	exts	xwa
 	add	xwa, xbc
 	push xwa
-	.byte 0x78, 0xc3, 0x00
+	jrl	t, 195
 
 ; SqedtFunc dispatch case 0
 SqedtFunc_Case0:

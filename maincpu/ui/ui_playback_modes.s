@@ -1952,7 +1952,7 @@ DpMdlySmfLyrTtl_Dispatch:
 	jr	nc, 0x00
 	ld	xbc, 29818890
 	lds32	xde, 0
-	.byte 0x68, 0x1d
+	jr	t, 29
 	push xde
 	push xhl
 	push xix

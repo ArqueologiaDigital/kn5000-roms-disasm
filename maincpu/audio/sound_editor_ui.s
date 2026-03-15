@@ -3407,11 +3407,11 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15757111
 	lds	wa, 1
 	call	15758489
-	.byte 0x68, 0x0a
+	jr	t, 10
 	ld	(xwa), 30
-	.byte 0x68, 0xd9
+	jr	t, 16777177
 	ld	(xwa), 1
-	.byte 0x68, 0xd4
+	jr	t, 16777172
 	lda	xsp, (xsp+16)
 	ret
 	.byte 0xbf, 0xf0, 0x37
@@ -3435,17 +3435,17 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xbc+8)
 	lda	xbc, (xbc+9)
 	cp	e, 8
-	.byte 0x66, 0x40
+	jr	z, 64
 	cp	e, 9
-	.byte 0x66, 0x43
+	jr	z, 67
 	cp	e, 10
-	.byte 0x66, 0x0d
+	jr	z, 13
 	cp	e, 11
-	.byte 0x66, 0x08
+	jr	z, 8
 	cps	e, 7
-	.byte 0x6b, 0x3d
+	jr	ugt, 61
 	cps	e, 0
-	.byte 0x67, 0x39
+	jr	c, 57
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 	ld	(xwa+9), 0
@@ -3555,13 +3555,13 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15758524
 	ld	a, (xsp+12)
 	cp	a, 10
-	.byte 0x66, 0x32
+	jr	z, 50
 	cp	a, 11
-	.byte 0x66, 0x09
+	jr	z, 9
 	cp	a, 9
-	.byte 0x6b, 0x28
+	jr	ugt, 40
 	cps	a, 0
-	.byte 0x67, 0x24
+	jr	c, 36
 	lda	xbc, (xsp)
 	ld	(xbc+8), 50
 	ld	(xbc+9), 206
@@ -4671,10 +4671,10 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	xix, 15799392
 	call	15789056
 	cpdi8	1628, 0
-	.byte 0x66, 0x0c
+	jr	z, 12
 	ld	xiy, 15799392
 	ld	xix, 15799402
-	.byte 0x68, 0x10
+	jr	t, 16
 	sti8_24	257960, 1
 	ld	xiy, 15799402
 	ld	xix, 15799412
@@ -6896,7 +6896,8 @@ SeBitmap_EnvCurve5:
 	push_f
 	rcf
 	ei	9
-	.byte 0x67, 0x18, 0x50
+	jr	c, 24
+	.byte 0x50
 	popw bc
 	.byte 0x54
 	ld	xhl, 2466907720
@@ -7029,7 +7030,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xe9, 0x00, 0x05, 0x0a, 0x46, 0x00, 0xdc, 0x00
 	.long LABEL_E800FA
 	ldb	c, 5
-	.byte 0x64, 0x83
+	jr	pe, 16777091
 	nop
 	call16	29201
 	nop
@@ -7436,7 +7437,8 @@ SeBitmap_EnvCurve5:
 	.byte 0x55
 	ld	xhl, 2953516872
 	nop
-	.byte 0x7b, 0x00, 0x43, 0x55, 0x52, 0x56
+	jrl	ugt, 17152
+	.byte 0x55, 0x52, 0x56
 	ld	xiy, 11012642
 	ld	xiz, 1811992064
 	nop
@@ -7455,7 +7457,8 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0x9b, 0x00, 0x43, 0x55, 0x52, 0x56
 	ld	xiy, 11012642
-	.byte 0x66, 0x00, 0xce, 0x00, 0x8c, 0x00, 0x01
+	jr	z, 0
+	.byte 0xce, 0x00, 0x8c, 0x00, 0x01
 	ldwio	158, 31232
 	nop
 	.byte 0xa8, 0x00, 0x7a
@@ -7752,7 +7755,7 @@ SeBitmap_EnvCurve5:
 	push 10
 	push_a
 	normal
-	.byte 0x69, 0x00
+	jr	ge, 0
 	ldw	ix, 31233
 	nop
 	normal
@@ -7777,17 +7780,17 @@ SeBitmap_EnvCurve5:
 	ldwio	34, 24577
 	nop
 	ldb	e, 1
-	.byte 0x60, 0x00
+	jr	f, 0
 	normal
 	ldwio	33, 24833
 	nop
 	ldb	h, 1
-	.byte 0x61, 0x00
+	jr	lt, 0
 	normal
 	ldwio	32, 25089
 	nop
 	ldb	l, 1
-	.byte 0x62, 0x00
+	jr	le, 0
 	push 10
 	ldb	c, 1
 	ldw	iz, 9216
@@ -7797,7 +7800,7 @@ SeBitmap_EnvCurve5:
 	pop xiz
 	nop
 	ldb	d, 1
-	.byte 0x69, 0x00
+	jr	ge, 0
 	ldb	c, 5
 	ldb	a, 134
 	nop
@@ -7885,7 +7888,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xa9, 0x22, 0x4b
 	ei	6
 	ld	de, (xbc)
-	.byte 0x64, 0x42
+	jr	pe, 66
 	ei	6
 	.byte 0xad, 0x22, 0x64
 	ld	xde, 608306439
@@ -7905,7 +7908,7 @@ SeBitmap_EnvCurve5:
 	ldb	d, 18
 	reti
 	halt
-	.byte 0x60, 0x24
+	jr	f, 36
 	ccf
 	reti
 	halt
@@ -8074,7 +8077,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xd1, 0x00, 0x52, 0x45, 0x53
 	popw sp
 	ldf	12
-	.byte 0x7e, 0x00, 0xd1
+	jrl	nz, 16765184
 	nop
 	.ascii "CUTOFF"
 	ldf	10
@@ -8093,12 +8096,12 @@ SeBitmap_EnvCurve5:
 	.byte 0x8f, 0x22, 0x4b
 	ei	6
 	ld	de, (xix)
-	.byte 0x64, 0x42
+	jr	pe, 66
 	ei	5
 	.byte 0x9b, 0x22, 0x4b
 	ei	6
 	ld	xde, (xwa)
-	.byte 0x64, 0x42
+	jr	pe, 66
 	reti
 	halt
 	ld	xiz, 84349476
@@ -8118,7 +8121,7 @@ SeBitmap_EnvCurve5:
 	ldb	d, 18
 	reti
 	halt
-	.byte 0x60, 0x24
+	jr	f, 36
 	ccf
 	ldb	b, 10
 	ld	xde, 3909110784
@@ -8129,7 +8132,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x75, 0x00, 0xe9
 	nop
 	push 10
-	.byte 0x7a, 0x00, 0xcd
+	jrl	gt, 16764160
 	nop
 	push_f
 	normal
@@ -8148,7 +8151,7 @@ SeBitmap_EnvCurve5:
 	halt
 	ldwio	30, 56320
 	nop
-	.byte 0x74, 0x00, 0xe8
+	jrl	pe, 16771072
 	nop
 	halt
 	ldwio	123, 56320
@@ -8157,7 +8160,8 @@ SeBitmap_EnvCurve5:
 	.byte 0xe8, 0x00
 	call16	28685
 	nop
-	.byte 0x60, 0x00, 0x54
+	jr	f, 0
+	.byte 0x54
 	.ascii "HROUGH\""
 	.byte 0x0a
 	.byte 0x42, 0x00, 0x4c, 0x00, 0xe9, 0x00, 0x83, 0x00
@@ -8177,7 +8181,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x50, 0x41
 	ld	xsp, 0x322f3145
 	ldf	14
-	.byte 0x7f, 0x00, 0x30
+	jrl	nc, 12288
 	nop
 	ld	xiy, 0x4c45564e
 	popw sp
@@ -8272,7 +8276,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0x82, 0x00
 	ldw	bc, 1815
-	.byte 0x7a, 0x00, 0x82
+	jrl	gt, 16744960
 	nop
 	ldw	de, 1815
 	.byte 0x96, 0x00, 0x82, 0x00
@@ -8289,7 +8293,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xc3, 0x00, 0x45
 	.ascii "NVELOPE"
 	ldf	9
-	.byte 0x73, 0x00, 0xc3
+	jrl	ule, 16761600
 	nop
 	popw hl
 	ld	xiy, 2332825433
@@ -8348,11 +8352,11 @@ SeBitmap_EnvCurve5:
 	ldb	d, 18
 	reti
 	halt
-	.byte 0x60, 0x24
+	jr	f, 36
 	ccf
 	reti
 	halt
-	.byte 0x66, 0x24
+	jr	z, 36
 	ccf
 	ldb	b, 10
 	.byte 0x2f
@@ -8550,7 +8554,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ldb	w, 233
 	jp	722179
-	.byte 0x6c, 0x06
+	jr	po, 6
 	swi	7
 	nop
 	ldb	w, 238
@@ -8598,7 +8602,7 @@ SeBitmap_EnvCurve5:
 	nop
 	decf
 	nop
-	.byte 0x69, 0x00
+	jr	ge, 0
 	ldw	hl, 34049
 	nop
 	decf
@@ -8723,7 +8727,8 @@ SeMenu_CompareScreen_DataTable:
 	nop
 	.byte 0xd2, 0x00, 0x68, 0x00, 0x0d
 	nop
-	.byte 0x6c, 0x00, 0xd2, 0x00, 0x88, 0x00, 0x0d
+	jr	po, 0
+	.byte 0xd2, 0x00, 0x88, 0x00, 0x0d
 	nop
 	.byte 0x8c, 0x00, 0xd2
 	nop
@@ -9089,7 +9094,7 @@ TuningSystem_Handler_Table:
 	halt
 	rcf
 	ldb	w, 6
-	.byte 0x7a, 0x05, 0x30
+	jrl	gt, 12293
 	popw hl
 	reti
 	.byte 0x09
@@ -9101,7 +9106,7 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0x91, 0x07
 	halt
-	.byte 0x7c, 0x11, 0x8d
+	jrl	po, 16747793
 	reti
 	halt
 	.byte 0xcf, 0x11, 0xa9, 0x07, 0x13, 0x67, 0x13
@@ -9238,7 +9243,8 @@ TuningSystem_Handler_Table:
 	.byte 0x0a, 0x0a, 0x4d, 0x00
 	push xhl
 	nop
-	.byte 0x6c, 0x00, 0x51
+	jr	po, 0
+	.byte 0x51
 	nop
 	reti
 	scf
@@ -9307,7 +9313,7 @@ TuningSystem_Handler_Table:
 	popw sp
 	nop
 	jp	8202
-	.byte 0x67, 0x00
+	jr	c, 0
 	push_f
 	normal
 	.byte 0xc0, 0x00, 0x51
@@ -9322,15 +9328,15 @@ TuningSystem_Handler_Table:
 	nop
 	push xiz
 	nop
-	.byte 0x67, 0x00
+	jr	c, 0
 	popw sp
 	nop
-	.byte 0x67, 0x00
+	jr	c, 0
 	push xiz
 	nop
-	.byte 0x72, 0x00, 0x4f
+	jrl	le, 20224
 	nop
-	.byte 0x72, 0x00, 0x3e
+	jrl	le, 15872
 	nop
 	.byte 0x7d, 0x00, 0x4f
 	nop
@@ -9397,7 +9403,8 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0x50
 	nop
-	.byte 0x60, 0x00, 0x70, 0x00, 0x80
+	jr	f, 0
+	jrl	f, 16744448
 	nop
 	.byte 0x90, 0x00, 0xa0, 0x00
 	ld	(xwa), 192
@@ -9407,7 +9414,8 @@ TuningSystem_Handler_Table:
 	.byte 0xf0, 0x00, 0x00, 0x01
 	rcf
 	normal
-	.byte 0x67, 0x00, 0x76, 0x00, 0x85
+	jr	c, 0
+	jrl	z, 16745728
 	nop
 	.byte 0x94, 0x00, 0xa3, 0x00
 	ld	(xde), 67
@@ -9466,7 +9474,7 @@ TuningSystem_Handler_Table:
 	scf
 	rcf
 	ei	5
-	.byte 0x70, 0x17, 0x10
+	jrl	f, 4119
 	ldf	12
 	.byte 0xf7
 	nop
@@ -9562,7 +9570,7 @@ TuningSystem_Handler_Table:
 	push_sr
 	ldwio	124, 14336
 	nop
-	.byte 0x7c, 0x00, 0xca
+	jrl	po, 16763392
 	nop
 	push_sr
 	ldwio	174, 14336
@@ -9657,7 +9665,7 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0xd0, 0x00, 0x57
 	ld	xbc, 186074454
-	.byte 0x7e, 0x00, 0xd0
+	jrl	nz, 16764928
 	nop
 	ld	xix, 0x59414c45
 	ldf	11
@@ -9717,7 +9725,7 @@ TuningSystem_Handler_Table:
 	nop
 	pushw	ix
 	nop
-	.byte 0x64, 0x00
+	jr	pe, 0
 	scf
 	ldwio	8, 29952
 	nop
@@ -9904,7 +9912,7 @@ TuningSystem_Handler_Table:
 	pushw 24415
 	reti
 	halt
-	.byte 0x68, 0x0b
+	jr	t, 11
 	rcf
 	reti
 	halt
@@ -10255,7 +10263,7 @@ TuningSystem_Handler_Table:
 	.byte 0x42
 	.ascii "ALANCE"
 	ei	5
-	.byte 0x69, 0x14
+	jr	ge, 20
 	push xde
 	ldf	11
 	ei	0
@@ -10271,7 +10279,7 @@ TuningSystem_Handler_Table:
 	.byte 0xd1, 0x00, 0x44
 	ld	xiy, 0x454e5554
 	ldf	11
-	.byte 0x7c, 0x00, 0xd1
+	jrl	po, 16765184
 	nop
 	ld	xix, 0x59414c45
 	ldf	13
@@ -10284,7 +10292,7 @@ TuningSystem_Handler_Table:
 	.byte 0x05, 0x09, 0x0b, 0x3a, 0x06, 0x0a, 0x53, 0x0d
 	.ascii "SPEED1"
 	ei	5
-	.byte 0x61, 0x0d
+	jr	lt, 13
 	push xde
 	ei	10
 	.byte 0xab, 0x0f, 0x44
@@ -10345,7 +10353,7 @@ TuningSystem_Handler_Table:
 	decf
 	.byte 0x53, 0x50
 	ld	xiy, 84296773
-	.byte 0x61, 0x0d
+	jr	lt, 13
 	push xde
 	ei	8
 	.byte 0xab, 0x0f, 0x57
@@ -10454,7 +10462,7 @@ TuningSystem_Handler_Table:
 	.byte 0xd1, 0x00, 0x4b, 0x45
 	pop xbc
 	ldf	13
-	.byte 0x78, 0x00, 0xd1
+	jrl	t, 16765184
 	nop
 	ld	xde, 1312902209
 	ld	xhl, 4211672645
@@ -10465,7 +10473,7 @@ TuningSystem_Handler_Table:
 	decf
 	ld	xix, 1497449285
 	ei	5
-	.byte 0x61, 0x0d
+	jr	lt, 13
 	push xde
 	.byte 0x06
 	pushw 0x0fab
@@ -10500,7 +10508,7 @@ TuningSystem_Handler_Table:
 	.byte 0x0b, 0x3a, 0x06, 0x0f, 0x53, 0x0d, 0x54, 0x4f
 	.ascii "UCH DEPTH"
 	ei	5
-	.byte 0x61, 0x0d
+	jr	lt, 13
 	push xde
 	ei	9
 	.byte 0xab, 0x0f

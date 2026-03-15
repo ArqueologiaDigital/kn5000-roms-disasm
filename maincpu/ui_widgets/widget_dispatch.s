@@ -7519,7 +7519,7 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	nop
 	call16	21760
 	nop
-	.byte 0x73, 0x00, 0x91
+	jrl	ule, 16748800
 	nop
 	.byte 0xcd, 0x00, 0xaf, 0x00, 0x08
 	pop_sr
@@ -8893,7 +8893,7 @@ SoundEffect_Dispatch_Table:
 	ldf	0
 	ldw	ix, 14848
 	nop
-	.byte 0x6f, 0x00
+	jr	nc, 0
 	pop xiy
 	normal
 	pop xiy
@@ -9744,7 +9744,7 @@ CharMap_FullPermutation:
 	nop
 	ld	xwa, 169085507
 	normal
-	.byte 0x64, 0x00
+	jr	pe, 0
 	nop
 	nop
 	nop
@@ -9758,12 +9758,12 @@ CharMap_FullPermutation:
 	nop
 	ld	xde, 1509949440
 	push_a
-	.byte 0x60, 0x42
+	jr	f, 66
 	push_f
-	.byte 0x66, 0x00
+	jr	z, 0
 	nop
 	nop
-	.byte 0x7f, 0x7f, 0x00
+	jrl	nc, 127
 	nop
 	.byte 0x7f
 	jrl	nc, 0x0000
@@ -9827,7 +9827,7 @@ CharMap_FullPermutation:
 	ldw	wa, 256
 	nop
 	nop
-	.byte 0x78, 0x00, 0x00
+	jrl	t, 0
 	nop
 	nop
 	nop

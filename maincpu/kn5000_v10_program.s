@@ -1435,14 +1435,14 @@ SepaOut_BitMaskTable:
 	.byte 0x98, 0x00, 0x00
 	nop
 	jp	29696
-	.byte 0x74, 0x00, 0x74
+	jrl	pe, 29696
 	nop
-	.byte 0x74, 0x00, 0x00
+	jrl	pe, 0
 	nop
 	jp	29696
-	.byte 0x74, 0x00, 0x74
+	jrl	pe, 29696
 	nop
-	.byte 0x74, 0x00, 0x00
+	jrl	pe, 0
 	nop
 	pushw	wa
 	nop
@@ -1483,10 +1483,12 @@ SepaOut_FormatData_Tail:
 	nop
 	pushw bc
 	nop
-	.byte 0x6b, 0x00
+	jr	ugt, 0
 	pushw iz
 	nop
-	.byte 0x6b, 0x00, 0x6b, 0x00, 0x6b, 0x00
+	jr	ugt, 0
+	jr	ugt, 0
+	jr	ugt, 0
 	push xde
 	nop
 	ldw	iy, 0
@@ -1500,10 +1502,12 @@ SepaOut_FormatData_Tail:
 	nop
 	pushw bc
 	nop
-	.byte 0x6b, 0x00
+	jr	ugt, 0
 	pushw iz
 	nop
-	.byte 0x6b, 0x00, 0x6b, 0x00, 0x6b, 0x00
+	jr	ugt, 0
+	jr	ugt, 0
+	jr	ugt, 0
 	push xde
 	nop
 	ldw	iy, 0
@@ -1517,10 +1521,12 @@ SepaOut_FormatData_Tail:
 	nop
 	pushw bc
 	nop
-	.byte 0x6b, 0x00
+	jr	ugt, 0
 	pushw iz
 	nop
-	.byte 0x6b, 0x00, 0x6b, 0x00, 0x6b, 0x00
+	jr	ugt, 0
+	jr	ugt, 0
+	jr	ugt, 0
 	push xde
 	nop
 	ldw	iy, 0
@@ -1586,7 +1592,7 @@ SepaOut_FormatData_Tail:
 	push	xix
 	nop
 	jr	z, 0
-	.byte 0x74, 0x00, 0x4a
+	jrl	pe, 18944
 	nop
 	pop	xwa
 	nop
@@ -1665,13 +1671,13 @@ SepaOut_FormatData_Tail:
 	push xbc
 	cp	b, l
 	nop
-	.byte 0x79, 0xcf, 0xf2
+	jrl	ge, 16773839
 	nop
 	.byte 0xe3, 0xcf, 0xf2
 	nop
 	.byte 0xb9, 0xcf, 0xf2
 	nop
-	.byte 0x77, 0xc4, 0xf2
+	jrl	c, 16773828
 	nop
 	.byte 0xb2, 0xd0, 0xf2, 0x00, 0x2a, 0xd1, 0xf2
 	nop
@@ -1682,9 +1688,10 @@ SepaOut_FormatData_Tail:
 	nop
 	.byte 0xd0, 0xb6, 0xf2
 	nop
-	.byte 0x77, 0xb7, 0xf2
+	jrl	c, 16773815
 	nop
-	.byte 0x6c, 0xb9, 0xf2, 0x00, 0xba, 0xba, 0xf2
+	jr	po, 16777145
+	.byte 0xf2, 0x00, 0xba, 0xba, 0xf2
 	nop
 	.byte 0x1e, 0xb8, 0xf2
 	nop
@@ -1697,7 +1704,8 @@ SepaOut_FormatData_Tail:
 	swi	3
 	cp	b, b
 	nop
-	.byte 0x6f, 0xcb, 0xf2, 0x00, 0x5c, 0xca, 0xf2
+	jr	nc, 16777163
+	.byte 0xf2, 0x00, 0x5c, 0xca, 0xf2
 	nop
 	.byte 0x1e, 0xbf, 0xf2
 	nop
@@ -1921,7 +1929,7 @@ NakaPropStr_TextLabel2_Alignment:			aligned_string "alignment"
 NakaPropStr_TextLabel2_FontColor:			aligned_string "fontcolor"
 NakaPropStr_TextLabel2_Font:
 	jr	z, 0x6f
-	.byte 0x6e, 0x74
+	jr	nz, 116
 	nop
 	swi	7
 	.byte 0xd4, 0x08, 0xe2
@@ -2139,7 +2147,7 @@ NakaBoxName_SongNameBox:	aligned_string "SongNameBox"
 NakaBoxData_LyricsBox:
 	jr	ule, 0x5e
 	pop xiz
-	.byte 0x64, 0x42
+	jr	pe, 66
 	nop
 	aligned_string "LyricsBox"
 	nop
@@ -2300,11 +2308,11 @@ MtName_SongNameSet:		aligned_string "MT_SongNameSet"
 	aligned_string "SqedtVal2"
 	aligned_string "^^jC"
 	aligned_string "SqedtVal"
-	.byte 0x6a, 0x43
+	jr	gt, 67
 	nop
 	swi	7
 	aligned_string "EqualizerBox"
-	.byte 0x6a, 0x42
+	jr	gt, 66
 	.byte 0x42, 0x43, 0x00, 0xff
 	aligned_string "EffectBox"
 	.byte 0x1a, 0x00
@@ -2577,15 +2585,15 @@ EffectsEditor_GapByte:
 	aligned_string "AcPmemOutLGridBox"
 	pop xwa
 	pop xwa
-	.byte 0x6a, 0x00
+	jr	gt, 0
 	aligned_string "AcPcgOutGridBox"
 	pop xwa
 	pop xwa
-	.byte 0x6a, 0x00
+	jr	gt, 0
 	aligned_string "AcParaLoadOptGridBox"
 	pop xwa
 	pop xwa
-	.byte 0x6a, 0x00
+	jr	gt, 0
 	aligned_string "AcInOutGridBox"
 	pop xwa
 	pop xwa
@@ -2593,7 +2601,7 @@ EffectsEditor_GapByte:
 	aligned_string "AcVocalGridBox"
 	pop xwa
 	pop xwa
-	.byte 0x6a, 0x00
+	jr	gt, 0
 	aligned_string "AcFadeSetGridBox"
 	aligned_string "nXXFB"
 	aligned_string "AcLswFuncBox"
@@ -2678,7 +2686,7 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	ldx
 	nop
 	pop xiz
-	.byte 0x6c, 0xf7
+	jr	po, 16777207
 	nop
 	.byte 0xda, 0x73
 	ldx
@@ -2686,7 +2694,7 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	pushw bc
 	cp	l, (xhl)
 	nop
-	.byte 0x7c, 0x86, 0xf7
+	jrl	po, 16775046
 	nop
 	.byte 0xdc, 0x9a
 	ldx
@@ -2822,7 +2830,8 @@ NakaWidget_SoundMenu_ValueEdit:
 	nop
 	nop
 	nop
-	.byte 0x67, 0x00, 0x1f
+	jr	c, 0
+	.byte 0x1f
 	nop
 	nop
 	nop
@@ -2849,10 +2858,10 @@ NakaWidget_SoundMenu_PageControl:
 	nop
 	nop
 	nop
-	.byte 0x66, 0xe6
+	jr	z, 16777190
 	pop_sr
 	nop
-	.byte 0x6a, 0xe6
+	jr	gt, 16777190
 	pop_sr
 	nop
 
@@ -3065,7 +3074,7 @@ NakaMenuItem_Reverb:
 	nop
 	nop
 	push 0
-	.byte 0x78, 0xe6, 0x03
+	jrl	t, 998
 	nop
 	ldb	w, 27
 	.byte 0xe8, 0x00
@@ -3086,7 +3095,7 @@ NakaMenuItem_Equalizer:
 	nop
 	ldio	0, 163
 	nop
-	.byte 0x72, 0x00, 0x37
+	jrl	le, 14080
 	normal
 	.byte 0x8b, 0x00, 0xf7
 	nop
@@ -3232,7 +3241,7 @@ NakaWidget_SoundMenu_PageControl2:
 	swi	7
 	ldio	0, 56
 	nop
-	.byte 0x78, 0x00, 0x5b
+	jrl	t, 23296
 	nop
 	.byte 0x87, 0x00
 	ldx
@@ -3260,7 +3269,7 @@ NakaMenuItem_LeftHold:
 	swi	7
 	ldio	0, 8
 	nop
-	.byte 0x72, 0x00, 0x9c
+	jrl	le, 16751616
 	nop
 	.byte 0x8b, 0x00, 0xf7
 	nop
@@ -3302,7 +3311,7 @@ NakaMenuItem_TechniChord:
 	nop
 	ldio	0, 163
 	nop
-	.byte 0x72, 0x00, 0x37
+	jrl	le, 14080
 	normal
 	.byte 0x8b, 0x00, 0xf7
 	nop

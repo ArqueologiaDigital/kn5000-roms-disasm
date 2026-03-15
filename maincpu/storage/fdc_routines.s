@@ -1881,10 +1881,10 @@ FDC_CommandEntry_CopyParams:
 	stdi8 35364, 0
 	calr FDC_COMMAND_DISPATCHER
 	cps l, 0
-	.byte 0x6e, 0x74	; jr nz, +116 → FDC_Handler_ExitStatus (fixed displacement)
+	jr	nz, 116
 	ldda16 xwa, 35392
 	cp wa, 0xB
-	.byte 0x6b, 0x64	; jr ugt, +100 → FDC_Handler_InvalidCommand (fixed displacement)
+	jr	ugt, 100
 	add wa, wa
 	lda_24 xix, 0xea98ca
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0

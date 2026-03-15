@@ -731,7 +731,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xbc, 4294967295
 	ld	(xwa+14), xbc
 	call	16383626
-	.byte 0x78, 0xb9, 0x01
+	jrl	t, 441
 	ld	xix, xhl
 	ldw	(xiy), 1
 	ld	(xsp+16), xbc
@@ -740,7 +740,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xbc, xiz
 	lda	xde, (xhl+14)
 	cp	xiz, (xhl)
-	.byte 0x6e, 0x2c
+	jr	nz, 44
 	ldw	(xwa), 2
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -756,10 +756,10 @@ ParaLoadOpt_GridDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
-	.byte 0x78, 0x72, 0x01
+	jrl	t, 370
 	lda	xhl, (xbc+1)
 	cp	xhl, (xix)
-	.byte 0x6e, 0x2c
+	jr	nz, 44
 	ldw	(xwa), 3
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -775,10 +775,10 @@ ParaLoadOpt_GridDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
-	.byte 0x78, 0x3f, 0x01
+	jrl	t, 319
 	lda	xhl, (xbc+2)
 	cp	xhl, (xix)
-	.byte 0x6e, 0x2c
+	jr	nz, 44
 	ldw	(xwa), 7
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -794,10 +794,10 @@ ParaLoadOpt_GridDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
-	.byte 0x78, 0x0c, 0x01
+	jrl	t, 268
 	inc	3, xbc
 	cp	xbc, (xix)
-	.byte 0x7e, 0x09, 0x01
+	jrl	nz, 265
 	ldw	(xwa), 8
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -813,7 +813,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
-	.byte 0x78, 0xd9, 0x00
+	jrl	t, 217
 
 ; Voice UI misc handler
 VoiceUI_MiscHandler:
