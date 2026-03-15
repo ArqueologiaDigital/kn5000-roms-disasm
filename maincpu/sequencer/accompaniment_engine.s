@@ -34615,7 +34615,7 @@ AccPatch_VoiceAssignDataBlock:
 	ret
 	xor	xiz, xiz
 	ld	xiz, 256
-	.byte 0xdb, 0x46
+	mul	xiz, xhl
 	add	xiz, 613376
 	ret
 	push xiz

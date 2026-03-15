@@ -468,6 +468,20 @@ def translate_unidasm_to_llvm(mnemonic):
         if reg:
             return f'unlk\t{reg}'
 
+    # ── MUL/MULS/DIV/DIVS reg, reg — prefix encoding uses 32-bit src register ──
+    # Unidasm: "divs XWA,BC" → LLVM needs "divs xwa, xbc" (src in prefix = 32-bit)
+    REG16_TO_32 = {'wa': 'xwa', 'bc': 'xbc', 'de': 'xde', 'hl': 'xhl',
+                   'ix': 'xix', 'iy': 'xiy', 'iz': 'xiz', 'sp': 'xsp'}
+    m = re.match(r'^(muls?|divs?)\s+([A-Z]+)\s*,\s*([A-Z]+)$', mnem)
+    if m:
+        op_name = m.group(1).lower()
+        dst = UNIDASM_REG_MAP.get(m.group(2))
+        src = UNIDASM_REG_MAP.get(m.group(3))
+        if dst and src:
+            # Source needs 32-bit form for prefix encoding
+            src32 = REG16_TO_32.get(src, src)
+            return f'{op_name}\t{dst}, {src32}'
+
     # Generic instruction translation:
     # 1. Lowercase the mnemonic
     # 2. Replace register names

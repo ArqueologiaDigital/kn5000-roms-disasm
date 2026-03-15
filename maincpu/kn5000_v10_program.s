@@ -2660,7 +2660,7 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	ld	xsp, 1301020919
 	.byte 0xf7
 	nop
-	.byte 0xdf, 0x4f
+	muls	xsp, xsp
 	ldx
 	nop
 	pushw bc

@@ -1914,7 +1914,7 @@ Audio_DSP_StateTable_Packed:
 	pushw hl
 	push_sr
 	nop
-	.byte 0xdd, 0x52
+	div	xde, xiy
 	push_sr
 	nop
 	.byte 0x69, 0x7d
@@ -2532,7 +2532,7 @@ Audio_DSP_StateTable_Packed:
 	nop
 	.byte 0x9f, 0x0e, 0x08
 	nop
-	.byte 0xda, 0x4a
+	muls	xde, xde
 	ldio	0, 215
 	.byte 0x88, 0x08, 0x00
 	and	(xhl), xwa
@@ -3830,7 +3830,8 @@ Audio_DSP_StateTable_Packed:
 	.byte 0xe0, 0xd8, 0x1a
 	ccf
 	cp	xhl, (xwa)
-	.byte 0xaf, 0x12, 0x60, 0xda, 0x49
+	.byte 0xaf, 0x12, 0x60
+	muls	xbc, xde
 	zcf
 	sbc	xix, (xwa)
 	exts	xwa
@@ -10289,7 +10290,7 @@ ToneGen_WorkArea:
 	nop
 	.byte 0xc0, 0xff, 0xff
 	swi	7
-	.byte 0xdf, 0x41
+	mul	xbc, xsp
 	nop
 	nop
 	nop
