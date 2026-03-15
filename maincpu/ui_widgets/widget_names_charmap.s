@@ -1,2405 +1,681 @@
-; =============================================================================
-; Widget Name Strings & Character Map Data (2.4K lines)
-; =============================================================================
-;
-; Widget type name strings (VwUserBitmap, TrChordBox, etc.),
-; character encoding/mapping tables, NAKA presentation root
-; state, and widget type identifier data.
-; =============================================================================
 
-	jr	gt, 0x00
-	aligned_string "VwUserBitmap"
-	.byte 0x00, 0xff
-	aligned_string "TrChordBox"
-	.byte 0x00, 0xff
-	aligned_string "TrTransposeBox"
-	jr	gt, 0x00
-	aligned_string "AcLanguageText"
-	aligned_string "c^dB"
-	aligned_string "PsTextBox"
-	jr	gt, 0x00
-	aligned_string "IvShowHide"
-	.byte 0x00, 0xff
-	aligned_string "IvIntEasySet"
-	.byte 0x00, 0xff
-	aligned_string "IvIntVari"
-	.byte 0x00, 0xff
-	aligned_string "IvIntComplete"
-	.byte 0x00, 0xff
-	aligned_string "IvIntError"
-	.byte 0x00, 0xff
-	aligned_string "IvIntReminder"
-	.byte 0x77, 0x00
-	aligned_string "IvInterrupt"
-	.byte 0x73, 0x00
-	aligned_string "DbMemoryDump"
-	.byte 0x00, 0xff
-	aligned_string "IvExitWindow"
-	.byte 0x00, 0xff
-	aligned_string "IvTrackSwitch"
-	.byte 0x00, 0xff
-	aligned_string "IvDirmdScreen"
-	.byte 0x00, 0xff
-	aligned_string "AcTrackSwitch"
-	aligned_string "vmnn"
-	aligned_string "PsTrackSwitch"
-	.byte 0x6e, 0x00
-	aligned_string "DbDebugMenu"
-	.byte 0x58, 0x58, 0x6a, 0x00
-	aligned_string "AcGridBox"
-	.byte 0x58, 0x47, 0x00, 0xff
-	aligned_string "AcListBox"
-	jr	ule, 0x5e
-	aligned_string "dBBGnnsss"
-	aligned_string "PsGridBox"
-	aligned_string "c^dBn"
-	aligned_string "PsListBox"
-	.byte 0x6a, 0x00
-	aligned_string "IvCatchEvent"
-	.byte 0x58, 0x00
-	aligned_string "AcStrRadioBox"
-	aligned_string "c^demA"
-	aligned_string "PsRadioBox"
-	.byte 0x6a, 0x72, 0x00, 0xff
-	aligned_string "AcRamBox"
-	.byte 0x41, 0x41
-	.byte 0x00, 0xff
-	aligned_string "AcIndexToggle"
-	jr	gt, 0x00
-	aligned_string "IvNaming"
-	.byte 0x6e, 0x00
-	aligned_string "PsCursorBox"
-	.byte 0x00, 0xff
-	aligned_string "AcNamingWindow"
-	.byte 0x74, 0x00
-	aligned_string "IvFixWin"
-	.byte 0x4e, 0x00
-	aligned_string "IvExitScreen"
-	jr	f, 0x00
-	aligned_string "IvExitMode"
-	.byte 0x00, 0xff
-	aligned_string "IvExit"
-	.byte 0x00, 0xff
-	aligned_string "DbMemo"
-	.byte 0x65, 0x00
-	aligned_string "PsWideToggle"
-	.byte 0x6a, 0x00
-	aligned_string "AcFuncToggle"
-	.byte 0x6a, 0x6d, 0x00, 0xff
-	aligned_string "AcBitEditBox"
-	.byte 0x58, 0x74, 0x62, 0x00
-	aligned_string "AcWindowMenu"
-	.byte 0x58, 0x4e
-	jr	le, 0x00
-	aligned_string "AcScreenMenu"
-	.byte 0x58, 0x60, 0x62, 0x00
-	aligned_string "AcModeMenu"
-	.byte 0x66, 0x58, 0x00, 0xff
-	aligned_string "VwWideESBox"
-	.byte 0x66, 0x58, 0x00, 0xff
-	aligned_string "VwEditSwBox"
-	.byte 0x58, 0x62, 0x00, 0xff
-	aligned_string "VwMenuBox"
-	.byte 0x75, 0x65
-	.byte 0x00, 0xff
-	aligned_string "AcMixerVol"
-	.byte 0x00, 0xff
-	aligned_string "AcPmemName"
-	.byte 0x00, 0xff
-	aligned_string "AcRhythmName"
-	aligned_string "akNlX"
-	aligned_string "TitleEdit"
-	aligned_string "`kalX"
-	aligned_string "ModeEdit"
-	aligned_string "Xc^d"
-	aligned_string "StringBox"
-	aligned_string "Xc^dB"
-	aligned_string "TextBox"
-	.byte 0x47, 0x72, 0x72, 0x00
-	aligned_string "Window"
-	.byte 0x58, 0x62
-	.byte 0x00, 0xff
-	aligned_string "TtlScreen"
-	.byte 0x61, 0x72, 0x00, 0xff
-	aligned_string "Screen"
-	.byte 0x00, 0xff
-	aligned_string "GroupBox"
-	.byte 0x5e, 0x5f, 0x00, 0xff
-	.byte 0x42, 0x6f, 0x78, 0x00, 0x65, 0x6a, 0x41, 0x00
-	aligned_string "EditSw"
-	.byte 0x68, 0x41, 0x5e, 0x00
-	aligned_string "Frame"
-	pop	xiz
-	jr	c, 0
-	swi	7
-	popw	ix
-	jr	ge, 110
-	jr	mi, 0
-	swi	7
-	jr	le, 0
-	popw	bc
-	jr	ule, 111
-	jr	nz, 0
-	swi	7
-	jr	ge, 0
-	aligned_string "Bitmap"
-	.byte 0x58, 0x63
-	.byte 0x5e, 0x00
-	aligned_string "Label"
-	.byte 0x75, 0x00
-	aligned_string "AcSoundName"
-	jr	ugt, 0x00
-	aligned_string "IvMainEditSw"
-	.byte 0x41, 0x74
-	.byte 0x00, 0xff
-	aligned_string "IvPageControl"
-	.byte 0x00, 0xff
-	aligned_string "PsInvisibleBox"
-	aligned_string "cXXme"
-	aligned_string "PsToggleBox"
-	.byte 0x41, 0x41, 0x00, 0xff
-	aligned_string "AcWindowPage"
-	.byte 0x6e, 0x00
-	aligned_string "PsPageBox"
-	.byte 0x66, 0x6a, 0x00, 0xff
-	aligned_string "AcFuncWideES"
-	.byte 0x66, 0x00
-	aligned_string "AcIndexWideES"
-	.byte 0x65, 0x00
-	aligned_string "PsWideESBox"
-	.byte 0x66, 0x6a, 0x00, 0xff
-	aligned_string "AcFuncEditSw"
-	.byte 0x66, 0x00
-	aligned_string "AcIndexEditSw"
-	aligned_string "c^de"
-	aligned_string "PsEditSwBox"
-	.byte 0x58, 0x61
-	jr	le, 0x00
-	aligned_string "AcTitleMenu"
-	jr	ule, 0x5e
-	.byte 0x64, 0x65, 0x6d, 0x00
-	aligned_string "PsMenuBox"
-	jr	gt, 0x72
-	.byte 0x00, 0xff
-	aligned_string "AcRamEditBox"
-	.byte 0x6a, 0x6e, 0x00, 0xff
-	aligned_string "AcLswEditBox"
-	aligned_string "nAAAAA"
-	aligned_string "AcNumEditBox"
-	jr	pl, 0x00
-	aligned_string "AcOnOffBox"
-	.byte 0x6a, 0x00
-	aligned_string "PsTblEditBox"
-	.byte 0x41, 0x00
-	aligned_string "PsNumEditBox"
-	aligned_string "Xc^dBeGm"
-	aligned_string "PsEditBox"
-	.byte 0x00, 0xff
-	aligned_string "AcTempoBox"
-	.byte 0x6a, 0x6e, 0x00, 0xff
-	aligned_string "AcLswBox"
-	.byte 0x63, 0x5e
-	jr	ov, 0x00
-	aligned_string "PsParaBox"
-	.byte 0x5e, 0x5f, 0x41, 0x00
-	aligned_string "VwBox"
-	aligned_string "M[[[[]P"
-	aligned_string "Viewable"
-	.byte 0x58, 0x00
-	aligned_string "ResName"
-	.byte 0x42, 0x00
-	aligned_string "ResString"
-	.byte 0x58, 0x00
-	aligned_string "ResMethod"
-	.byte 0x58, 0x00
-	aligned_string "ResEvent"
-	.byte 0x42, 0x00
-	aligned_string "ResFont"
-	.byte 0x42, 0x00
-	aligned_string "ResIcon"
-	.byte 0x42, 0x00
-	aligned_string "ResFrame"
-	.byte 0x42, 0x00
-	aligned_string "ResBitmap"
-	aligned_string "kNlXNAA"
-	aligned_string "Title"
-	aligned_string "kalX"
-	.byte 0x4d, 0x6f
-	.byte 0x64, 0x65, 0x00, 0xff
-	.byte 0x4a, 0x42, 0x42, 0x4b
-	.byte 0x00, 0xff
-	aligned_string "SupportClass"
-	aligned_string "JMBBXXL"
-	aligned_string "Class"
-	.byte 0x00, 0xff
-	aligned_string "MainFunction"
-	.byte 0x00, 0xff
-	aligned_string "ApFunction"
-	.byte 0x49, 0x00
-	aligned_string "Function"
-	.byte 0x00, 0xff
-	aligned_string "Object"
-	.byte 0x6d, 0x00, 0x0a, 0x00, 0x00, 0xff
-NakaInst_CHARA5W:	aligned_string "CHARA5W"
-NakaInst_CHARA2W:	aligned_string "CHARA2W"
-NakaInst_CHARA1W:	aligned_string "CHARA1W"
-NakaInst_CHARA6:	aligned_string "CHARA6"
-NakaInst_CHARA1P:	aligned_string "CHARA1P"
-NakaInst_CHARA5:	aligned_string "CHARA5"
-NakaInst_CHARA4:	aligned_string "CHARA4"
-NakaInst_CHARA3:	aligned_string "CHARA3"
-NakaInst_CHARA2:	aligned_string "CHARA2"
-NakaInst_CHARA1:	aligned_string "CHARA1"
-NakaInst_CharaList_Pad:	aligned_string ""
-NakaInst_chara5w_fnt:	aligned_string "chara5w.fnt"
-NakaInst_chara2w_fnt:	aligned_string "chara2w.fnt"
-NakaInst_chara1w_fnt:	aligned_string "chara1w.fnt"
-NakaInst_ara6_fnt:
-	jr	ule, 0x68
-	aligned_string "ara6.fnt"
-	aligned_string "chara1p.fnt"
-	jr	ule, 0x68
-	aligned_string "ara5.fnt"
-	aligned_string "chara4.fnt"
-	aligned_string "chara3.fnt"
-	aligned_string "chara2.fnt"
-	aligned_string "chara1.fnt"
-	.byte 0x1e, 0xe1, 0xea, 0x00, 0x16, 0xe1
-	.byte 0xea, 0x00, 0x0e, 0xe1, 0xea, 0x00, 0x06, 0xe1
-	.byte 0xea, 0x00, 0xfe, 0xe0, 0xea, 0x00, 0xf6, 0xe0
-	.byte 0xea, 0x00, 0xee, 0xe0, 0xea, 0x00, 0xe6, 0xe0
-	.byte 0xea, 0x00, 0xde, 0xe0, 0xea, 0x00, 0xd6, 0xe0
-	.byte 0xea, 0x00, 0xce, 0xe0, 0xea, 0x00, 0xc6, 0xe0
-	.byte 0xea, 0x00, 0xbe, 0xe0, 0xea, 0x00, 0xb6, 0xe0
-	.byte 0xea, 0x00, 0xae, 0xe0, 0xea, 0x00, 0xa6, 0xe0
-	.byte 0xea, 0x00, 0x9c, 0xe0, 0xea, 0x00, 0x92, 0xe0
-	.byte 0xea, 0x00, 0x88, 0xe0, 0xea, 0x00, 0x7e, 0xe0
-	.byte 0xea, 0x00, 0x76, 0xe0, 0xea, 0x00, 0x6e, 0xe0
-	.byte 0xea, 0x00, 0x66, 0xe0, 0xea, 0x00, 0x5e, 0xe0
-	.byte 0xea, 0x00, 0x56, 0xe0, 0xea, 0x00, 0x4e, 0xe0
-	.byte 0xea, 0x00, 0x46, 0xe0, 0xea, 0x00, 0x3e, 0xe0
-	.byte 0xea, 0x00, 0x36, 0xe0, 0xea, 0x00, 0x2e, 0xe0
-	.byte 0xea, 0x00, 0x24, 0xe0, 0xea, 0x00, 0x1a, 0xe0
-	.byte 0xea, 0x00, 0x10, 0xe0, 0xea, 0x00, 0x06, 0xe0
-	.byte 0xea, 0x00, 0xfc, 0xdf, 0xea, 0x00, 0xf2, 0xdf
-	.byte 0xea, 0x00, 0xe8, 0xdf, 0xea, 0x00, 0xde, 0xdf
-	.byte 0xea, 0x00, 0xd2, 0xdf, 0xea, 0x00, 0xc6, 0xdf
-	.byte 0xea, 0x00, 0xc0, 0xdf, 0xea, 0x00, 0xba, 0xdf
-	.byte 0xea, 0x00, 0xb4, 0xdf, 0xea, 0x00, 0xae, 0xdf
-	.byte 0xea, 0x00, 0xa6, 0xdf, 0xea, 0x00, 0x9e, 0xdf
-	.byte 0xea, 0x00, 0x96, 0xdf, 0xea, 0x00, 0x8e, 0xdf
-	.byte 0xea, 0x00, 0x86, 0xdf, 0xea, 0x00, 0x7e, 0xdf
-	.byte 0xea, 0x00, 0x76, 0xdf, 0xea, 0x00, 0x6e, 0xdf
-	.byte 0xea, 0x00, 0x64, 0xdf, 0xea, 0x00, 0x62, 0xdf
-	.byte 0xea, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 800
-	.byte 0x00, 0x00, 0x00, 0xff
-	aligned_string "MixerTab"
-	aligned_string "EditDD"
-	aligned_string "EditDC"
-	aligned_string "EditDB"
-	aligned_string "EditDA"
-	aligned_string "Edit95D"
-	aligned_string "Edit95C"
-	aligned_string "Edit95B"
-	aligned_string "Edit95A"
-	.byte 0x45, 0x64
-	.byte 0x69, 0x74, 0x44, 0x00
-	aligned_string "EditC"
-	aligned_string "EditB"
-	aligned_string "EditA"
-	aligned_string "RightSwitch"
-	aligned_string "LeftSwitch"
-	aligned_string "ROnOff48"
-	aligned_string "ROnOff32"
-	aligned_string "ROnOff24"
-	aligned_string "ROnOff16"
-	aligned_string "LOnOff48"
-	aligned_string "LOnOff32"
-	aligned_string "LOnOff24"
-	aligned_string "LOnOff16"
-	aligned_string "Left48"
-	aligned_string "Left32"
-	aligned_string "Left24"
-	aligned_string "Left16"
-	aligned_string "Left12"
-	aligned_string "Right48"
-	aligned_string "Right32"
-	aligned_string "Right24"
-	aligned_string "Right16"
-	aligned_string "Right12"
-	aligned_string "Round14d"
-	aligned_string "Round14c"
-	aligned_string "Round14b"
-	aligned_string "Round14a"
-	aligned_string "Round9d"
-	aligned_string "Round9c"
-	aligned_string "Round9b"
-	aligned_string "Round9a"
-	aligned_string "Round5d"
-	aligned_string "Round5c"
-	aligned_string "Round5b"
-	aligned_string "Round5a"
-	aligned_string "Round2d"
-	aligned_string "Round2c"
-	aligned_string "Round2b"
-	aligned_string "Round2a"
-	aligned_string "Round1d"
-	aligned_string "Round1c"
-	aligned_string "Round1b"
-	aligned_string "Round1a"
-	.byte 0xaa, 0xe7
-	.byte 0xea, 0x00, 0x9e, 0xe7, 0xea, 0x00, 0x92, 0xe7
-	.byte 0xea, 0x00, 0x86, 0xe7, 0xea, 0x00, 0x7a, 0xe7
-	.byte 0xea, 0x00, 0x6e, 0xe7, 0xea, 0x00, 0x62, 0xe7
-	.byte 0xea, 0x00, 0x56, 0xe7, 0xea, 0x00, 0x4a, 0xe7
-	.byte 0xea, 0x00, 0x3e, 0xe7, 0xea, 0x00, 0x32, 0xe7
-	.byte 0xea, 0x00, 0x26, 0xe7, 0xea, 0x00, 0x1a, 0xe7
-	.byte 0xea, 0x00, 0x0e, 0xe7, 0xea, 0x00, 0x02, 0xe7
-	.byte 0xea, 0x00, 0xf6, 0xe6, 0xea, 0x00, 0xe8, 0xe6
-	.byte 0xea, 0x00, 0xda, 0xe6, 0xea, 0x00, 0xcc, 0xe6
-	.byte 0xea, 0x00, 0xbe, 0xe6, 0xea, 0x00, 0xb2, 0xe6
-	.byte 0xea, 0x00, 0xa6, 0xe6, 0xea, 0x00, 0x9a, 0xe6
-	.byte 0xea, 0x00, 0x8e, 0xe6, 0xea, 0x00, 0x82, 0xe6
-	.byte 0xea, 0x00, 0x76, 0xe6, 0xea, 0x00, 0x6a, 0xe6
-	.byte 0xea, 0x00, 0x5e, 0xe6, 0xea, 0x00, 0x52, 0xe6
-	.byte 0xea, 0x00, 0x46, 0xe6, 0xea, 0x00, 0x38, 0xe6
-	.byte 0xea, 0x00, 0x2a, 0xe6, 0xea, 0x00, 0x1c, 0xe6
-	.byte 0xea, 0x00, 0x0e, 0xe6, 0xea, 0x00, 0x00, 0xe6
-	.byte 0xea, 0x00, 0xf2, 0xe5, 0xea, 0x00, 0xe4, 0xe5
-	.byte 0xea, 0x00, 0xd6, 0xe5, 0xea, 0x00, 0xca, 0xe5
-	.byte 0xea, 0x00, 0xbe, 0xe5, 0xea, 0x00, 0xb4, 0xe5
-	.byte 0xea, 0x00, 0xaa, 0xe5, 0xea, 0x00, 0xa0, 0xe5
-	.byte 0xea, 0x00, 0x96, 0xe5, 0xea, 0x00, 0x8a, 0xe5
-	.byte 0xea, 0x00, 0x7e, 0xe5, 0xea, 0x00, 0x72, 0xe5
-	.byte 0xea, 0x00, 0x66, 0xe5, 0xea, 0x00, 0x5a, 0xe5
-	.byte 0xea, 0x00, 0x4e, 0xe5, 0xea, 0x00, 0x42, 0xe5
-	.byte 0xea, 0x00, 0x36, 0xe5, 0xea, 0x00, 0x28, 0xe5
-	.byte 0xea, 0x00, 0x26, 0xe5, 0xea, 0x00, 0x00, 0x00
-	.zero 800
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	aligned_string "Mixertab.bmp"
-	aligned_string "EditDD.bmp"
-	aligned_string "EditDC.bmp"
-	aligned_string "EditDB.bmp"
-	aligned_string "EditDA.bmp"
-	aligned_string "Edit95D.bmp"
-	aligned_string "Edit95C.bmp"
-	aligned_string "Edit95B.bmp"
-	aligned_string "Edit95A.bmp"
-	aligned_string "EditD.bmp"
-	aligned_string "EditC.bmp"
-	aligned_string "EditB.bmp"
-	aligned_string "EditA.bmp"
-	aligned_string "RightSw.bmp"
-	aligned_string "LeftSw.bmp"
-	aligned_string "ROnOff48.bmp"
-	aligned_string "ROnOff32.bmp"
-	aligned_string "ROnOff24.bmp"
-	aligned_string "ROnOff16.bmp"
-	aligned_string "LOnOff48.bmp"
-	aligned_string "LOnOff32.bmp"
-	aligned_string "LOnOff24.bmp"
-	aligned_string "LOnOff16.bmp"
-	aligned_string "Left48.bmp"
-	aligned_string "Left32.bmp"
-	aligned_string "Left24.bmp"
-	aligned_string "Left16.bmp"
-	aligned_string "Left12.bmp"
-	aligned_string "Right48.bmp"
-	aligned_string "Right32.bmp"
-	aligned_string "Right24.bmp"
-	aligned_string "Right16.bmp"
-	aligned_string "Right12.bmp"
-	aligned_string "Round14d.bmp"
-	aligned_string "Round14c.bmp"
-	aligned_string "Round14b.bmp"
-	aligned_string "Round14a.bmp"
-	aligned_string "Round9d.bmp"
-	aligned_string "Round9c.bmp"
-	aligned_string "Round9b.bmp"
-	aligned_string "Round9a.bmp"
-	aligned_string "Round5d.bmp"
-	aligned_string "Round5c.bmp"
-	aligned_string "Round5b.bmp"
-	aligned_string "Round5a.bmp"
-	aligned_string "Round2d.bmp"
-	aligned_string "Round2c.bmp"
-	aligned_string "Round2b.bmp"
-	aligned_string "Round2a.bmp"
-	aligned_string "Round1.bmp"
-	aligned_string "Round1.bmp"
-	aligned_string "Round1.bmp"
-	aligned_string "Round1.bmp"
-	.byte 0xa8, 0xeb
-	.byte 0xea, 0x00, 0xa0, 0xeb, 0xea, 0x00, 0x98, 0xeb
-	.byte 0xea, 0x00, 0x90, 0xeb, 0xea, 0x00, 0x88, 0xeb
-	.byte 0xea, 0x00, 0x7e, 0xeb, 0xea, 0x00, 0x74, 0xeb
-	.byte 0xea, 0x00, 0x6c, 0xeb, 0xea, 0x00, 0x64, 0xeb
-	.byte 0xea, 0x00, 0x5a, 0xeb, 0xea, 0x00, 0x4e, 0xeb
-	.byte 0xea, 0x00, 0x44, 0xeb, 0xea, 0x00, 0x38, 0xeb
-	.byte 0xea, 0x00, 0x30, 0xeb, 0xea, 0x00, 0x24, 0xeb
-	.byte 0xea, 0x00, 0x18, 0xeb, 0xea, 0x00, 0x0e, 0xeb
-	.byte 0xea, 0x00, 0xfc, 0xea, 0xea, 0x00, 0xf2, 0xea
-	.byte 0xea, 0x00, 0xe6, 0xea, 0xea, 0x00, 0xd6, 0xea
-	.byte 0xea, 0x00, 0xc6, 0xea, 0xea, 0x00, 0xb2, 0xea
-	.byte 0xea, 0x00, 0xa4, 0xea, 0xea, 0x00, 0x94, 0xea
-	.byte 0xea, 0x00, 0x82, 0xea, 0xea, 0x00, 0x6e, 0xea
-	.byte 0xea, 0x00, 0x5e, 0xea, 0xea, 0x00, 0x52, 0xea
-	.byte 0xea, 0x00, 0x46, 0xea, 0xea, 0x00, 0x38, 0xea
-	.byte 0xea, 0x00, 0x30, 0xea, 0xea, 0x00, 0x22, 0xea
-	.byte 0xea, 0x00, 0x14, 0xea, 0xea, 0x00, 0x08, 0xea
-	.byte 0xea, 0x00, 0xfa, 0xe9, 0xea, 0x00, 0xee, 0xe9
-	.byte 0xea, 0x00, 0xe2, 0xe9, 0xea, 0x00, 0xd6, 0xe9
-	.byte 0xea, 0x00, 0xca, 0xe9, 0xea, 0x00, 0xba, 0xe9
-	.byte 0xea, 0x00, 0xaa, 0xe9, 0xea, 0x00, 0x98, 0xe9
-	.byte 0xea, 0x00, 0x8c, 0xe9, 0xea, 0x00, 0x78, 0xe9
-	.byte 0xea, 0x00, 0x6c, 0xe9, 0xea, 0x00, 0x5c, 0xe9
-	.byte 0xea, 0x00, 0x4e, 0xe9, 0xea, 0x00, 0x44, 0xe9
-	.byte 0xea, 0x00, 0x34, 0xe9, 0xea, 0x00, 0x28, 0xe9
-	.byte 0xea, 0x00, 0x1a, 0xe9, 0xea, 0x00, 0x0c, 0xe9
-	.byte 0xea, 0x00, 0x00, 0xe9, 0xea, 0x00, 0xf0, 0xe8
-	.byte 0xea, 0x00, 0xde, 0xe8, 0xea, 0x00, 0xd4, 0xe8
-	.byte 0xea, 0x00, 0xc6, 0xe8, 0xea, 0x00, 0xb8, 0xe8
-	.byte 0xea, 0x00, 0xaa, 0xe8, 0xea, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "EV_SWIN_MODE"
-	aligned_string "EV_OLD_TITLE"
-	aligned_string "EV_NEW_TITLE"
-	aligned_string "EV_ASSSWB"
-	aligned_string "EV_DELIVERYEVENT"
-	aligned_string "EV_UPDATESCREEN"
-	aligned_string "EV_PAGEINIT"
-	aligned_string "EV_SENDSWBOTH"
-	aligned_string "EV_SENDSWOFF"
-	aligned_string "EV_SENDSWON"
-	aligned_string "EV_INDEXSW_BOTH"
-	aligned_string "EV_SWBOTH"
-	aligned_string "EV_PARTSELECT"
-	aligned_string "EV_TRSWCOMMAND"
-	aligned_string "EV_TRSWPART"
-	aligned_string "EV_CHANGEDIALFOCUS"
-	aligned_string "EV_SENDSWIN"
-	aligned_string "EV_YOUARESELECTED"
-	aligned_string "EV_IAMSELECTED"
-	aligned_string "EV_RETURN_TITLE"
-	aligned_string "EV_SWIN_AIC"
-	aligned_string "EV_AUTOINC"
-	aligned_string "EV_MEMODRAW"
-	aligned_string "EV_BITDATA"
-	aligned_string "EV_SOUNDSWNO"
-	aligned_string "EV_PMEMNAME"
-	aligned_string "EV_RHYTHMNAME"
-	aligned_string "EV_SOUNDNAME"
-	aligned_string "EV_DIAL"
-	aligned_string "EV_PAGECHANGE"
-	aligned_string "EV_RAMDATA"
-	aligned_string "EV_LSWDATA"
-	aligned_string "EV_INDEXSELECT"
-	aligned_string "EV_INDEXSW_DOWN_AIC"
-	aligned_string "EV_INDEXSW_UP_AIC"
-	aligned_string "EV_INDEXSW_DOWN"
-	aligned_string "EV_INDEXSW_UP"
-	aligned_string "EV_INTERRUPT_TITLE"
-	aligned_string "EV_CHANGE_TITLE"
-	aligned_string "EV_CHANGE_MODE"
-	aligned_string "EV_ACTIVATE"
-	aligned_string "EV_TIMER"
-	aligned_string "EV_CHANGEPROPERTY"
-	aligned_string "EV_RESET"
-	aligned_string "EV_PARADRAW"
-	aligned_string "EV_SELEDRAW"
-	aligned_string "EV_DRAW"
-	aligned_string "EV_REPAINT"
-	aligned_string "EV_PAINT"
-	aligned_string "EV_ALLPAINT"
-	aligned_string "EV_SWOFF"
-	.byte 0x45, 0x56, 0x5f, 0x53
-	.byte 0x57, 0x4f, 0x4e, 0x00
-	.byte 0x45, 0x56, 0x5f, 0x53
-	.byte 0x57, 0x49, 0x4e, 0x00
-	aligned_string "EV_ACTION"
-	aligned_string "EV_RESIZE"
-	aligned_string "EV_MOVE"
-	aligned_string "EV_INIT"
-	aligned_string "EV_HIDE"
-	aligned_string "EV_SHOW"
-	aligned_string "EV_NONE"
-	.byte 0x3c, 0x00, 0x5e, 0xfa, 0xea, 0x00, 0x4a, 0xfa
-	.byte 0xea, 0x00, 0x38, 0xfa, 0xea, 0x00, 0x22, 0xfa
-	.byte 0xea, 0x00, 0x12, 0xfa, 0xea, 0x00, 0xfe, 0xf9
-	.byte 0xea, 0x00, 0xec, 0xf9, 0xea, 0x00, 0xda, 0xf9
-	.byte 0xea, 0x00, 0xc8, 0xf9, 0xea, 0x00, 0xb6, 0xf9
-	.byte 0xea, 0x00, 0xa4, 0xf9, 0xea, 0x00, 0x92, 0xf9
-	.byte 0xea, 0x00, 0x80, 0xf9, 0xea, 0x00, 0x6e, 0xf9
-	.byte 0xea, 0x00, 0x58, 0xf9, 0xea, 0x00, 0x48, 0xf9
-	.byte 0xea, 0x00, 0x3c, 0xf9, 0xea, 0x00, 0x2a, 0xf9
-	.byte 0xea, 0x00, 0x1a, 0xf9, 0xea, 0x00, 0x0a, 0xf9
-	.byte 0xea, 0x00, 0xfc, 0xf8, 0xea, 0x00, 0xf0, 0xf8
-	.byte 0xea, 0x00, 0xe4, 0xf8, 0xea, 0x00, 0xd4, 0xf8
-	.byte 0xea, 0x00, 0xc4, 0xf8, 0xea, 0x00, 0xb2, 0xf8
-	.byte 0xea, 0x00, 0xa2, 0xf8, 0xea, 0x00, 0x92, 0xf8
-	.byte 0xea, 0x00, 0x82, 0xf8, 0xea, 0x00, 0x72, 0xf8
-	.byte 0xea, 0x00, 0x62, 0xf8, 0xea, 0x00, 0x52, 0xf8
-	.byte 0xea, 0x00, 0x3e, 0xf8, 0xea, 0x00, 0x2a, 0xf8
-	.byte 0xea, 0x00, 0x1a, 0xf8, 0xea, 0x00, 0x0e, 0xf8
-	.byte 0xea, 0x00, 0xfe, 0xf7, 0xea, 0x00, 0xea, 0xf7
-	.byte 0xea, 0x00, 0xd8, 0xf7, 0xea, 0x00, 0xc8, 0xf7
-	.byte 0xea, 0x00, 0xbc, 0xf7, 0xea, 0x00, 0xac, 0xf7
-	.byte 0xea, 0x00, 0x9c, 0xf7, 0xea, 0x00, 0x8c, 0xf7
-	.byte 0xea, 0x00, 0x7a, 0xf7, 0xea, 0x00, 0x68, 0xf7
-	.byte 0xea, 0x00, 0x5a, 0xf7, 0xea, 0x00, 0x4c, 0xf7
-	.byte 0xea, 0x00, 0x3e, 0xf7, 0xea, 0x00, 0x2e, 0xf7
-	.byte 0xea, 0x00, 0x1c, 0xf7, 0xea, 0x00, 0x0a, 0xf7
-	.byte 0xea, 0x00, 0xfa, 0xf6, 0xea, 0x00, 0xea, 0xf6
-	.byte 0xea, 0x00, 0xda, 0xf6, 0xea, 0x00, 0xcc, 0xf6
-	.byte 0xea, 0x00, 0xbc, 0xf6, 0xea, 0x00, 0xac, 0xf6
-	.byte 0xea, 0x00, 0x9e, 0xf6, 0xea, 0x00, 0x92, 0xf6
-	.byte 0xea, 0x00, 0x80, 0xf6, 0xea, 0x00, 0x72, 0xf6
-	.byte 0xea, 0x00, 0x62, 0xf6, 0xea, 0x00, 0x52, 0xf6
-	.byte 0xea, 0x00, 0x40, 0xf6, 0xea, 0x00, 0x30, 0xf6
-	.byte 0xea, 0x00, 0x20, 0xf6, 0xea, 0x00, 0x16, 0xf6
-	.byte 0xea, 0x00, 0x0c, 0xf6, 0xea, 0x00, 0xfa, 0xf5
-	.byte 0xea, 0x00, 0xec, 0xf5, 0xea, 0x00, 0xdc, 0xf5
-	.byte 0xea, 0x00, 0xc8, 0xf5, 0xea, 0x00, 0xb6, 0xf5
-	.byte 0xea, 0x00, 0xa2, 0xf5, 0xea, 0x00, 0x90, 0xf5
-	.byte 0xea, 0x00, 0x7e, 0xf5, 0xea, 0x00, 0x6e, 0xf5
-	.byte 0xea, 0x00, 0x5e, 0xf5, 0xea, 0x00, 0x4e, 0xf5
-	.byte 0xea, 0x00, 0x40, 0xf5, 0xea, 0x00, 0x34, 0xf5
-	.byte 0xea, 0x00, 0x22, 0xf5, 0xea, 0x00, 0x12, 0xf5
-	.byte 0xea, 0x00, 0x04, 0xf5, 0xea, 0x00, 0xf6, 0xf4
-	.byte 0xea, 0x00, 0xe8, 0xf4, 0xea, 0x00, 0xde, 0xf4
-	.byte 0xea, 0x00, 0xd4, 0xf4, 0xea, 0x00, 0xca, 0xf4
-	.byte 0xea, 0x00, 0xbc, 0xf4, 0xea, 0x00, 0xae, 0xf4
-	.byte 0xea, 0x00, 0xa0, 0xf4, 0xea, 0x00, 0x8e, 0xf4
-	.byte 0xea, 0x00, 0x7e, 0xf4, 0xea, 0x00, 0x6c, 0xf4
-	.byte 0xea, 0x00, 0x5c, 0xf4, 0xea, 0x00, 0x4c, 0xf4
-	.byte 0xea, 0x00, 0x3c, 0xf4, 0xea, 0x00, 0x2a, 0xf4
-	.byte 0xea, 0x00, 0x20, 0xf4, 0xea, 0x00, 0x10, 0xf4
-	.byte 0xea, 0x00, 0x06, 0xf4, 0xea, 0x00, 0xfc, 0xf3
-	.byte 0xea, 0x00, 0xf2, 0xf3, 0xea, 0x00, 0xe8, 0xf3
-	.byte 0xea, 0x00, 0xde, 0xf3, 0xea, 0x00, 0xd2, 0xf3
-	.byte 0xea, 0x00, 0xc2, 0xf3, 0xea, 0x00, 0xb6, 0xf3
-	.byte 0xea, 0x00, 0xaa, 0xf3, 0xea, 0x00, 0x9e, 0xf3
-	.byte 0xea, 0x00, 0x8e, 0xf3, 0xea, 0x00, 0x80, 0xf3
-	.byte 0xea, 0x00, 0x6c, 0xf3, 0xea, 0x00, 0x5a, 0xf3
-	.byte 0xea, 0x00, 0x46, 0xf3, 0xea, 0x00, 0x34, 0xf3
-	.byte 0xea, 0x00, 0x20, 0xf3, 0xea, 0x00, 0x0c, 0xf3
-	.byte 0xea, 0x00, 0xf6, 0xf2, 0xea, 0x00, 0xe4, 0xf2
-	.byte 0xea, 0x00, 0xd4, 0xf2, 0xea, 0x00, 0xc2, 0xf2
-	.byte 0xea, 0x00, 0xae, 0xf2, 0xea, 0x00, 0x9e, 0xf2
-	.byte 0xea, 0x00, 0x8c, 0xf2, 0xea, 0x00, 0x80, 0xf2
-	.byte 0xea, 0x00, 0x72, 0xf2, 0xea, 0x00, 0x66, 0xf2
-	.byte 0xea, 0x00, 0x5a, 0xf2, 0xea, 0x00, 0x4e, 0xf2
-	.byte 0xea, 0x00, 0x3c, 0xf2, 0xea, 0x00, 0x28, 0xf2
-	.byte 0xea, 0x00, 0x1a, 0xf2, 0xea, 0x00, 0x0a, 0xf2
-	.byte 0xea, 0x00, 0xfa, 0xf1, 0xea, 0x00, 0xec, 0xf1
-	.byte 0xea, 0x00, 0xda, 0xf1, 0xea, 0x00, 0xc8, 0xf1
-	.byte 0xea, 0x00, 0xbc, 0xf1, 0xea, 0x00, 0xa8, 0xf1
-	.byte 0xea, 0x00, 0x96, 0xf1, 0xea, 0x00, 0x84, 0xf1
-	.byte 0xea, 0x00, 0x74, 0xf1, 0xea, 0x00, 0x62, 0xf1
-	.byte 0xea, 0x00, 0x4c, 0xf1, 0xea, 0x00, 0x36, 0xf1
-	.byte 0xea, 0x00, 0x22, 0xf1, 0xea, 0x00, 0x14, 0xf1
-	.byte 0xea, 0x00, 0x08, 0xf1, 0xea, 0x00, 0xfc, 0xf0
-	.byte 0xea, 0x00, 0xea, 0xf0, 0xea, 0x00, 0xd6, 0xf0
-	.byte 0xea, 0x00, 0xca, 0xf0, 0xea, 0x00, 0xbc, 0xf0
-	.byte 0xea, 0x00, 0xae, 0xf0, 0xea, 0x00, 0x9a, 0xf0
-	.byte 0xea, 0x00, 0x88, 0xf0, 0xea, 0x00, 0x76, 0xf0
-	.byte 0xea, 0x00, 0x64, 0xf0, 0xea, 0x00, 0x52, 0xf0
-	.byte 0xea, 0x00, 0x40, 0xf0, 0xea, 0x00, 0x2c, 0xf0
-	.byte 0xea, 0x00, 0x18, 0xf0, 0xea, 0x00, 0x0a, 0xf0
-	.byte 0xea, 0x00, 0xfc, 0xef, 0xea, 0x00, 0xe8, 0xef
-	.byte 0xea, 0x00, 0xd8, 0xef, 0xea, 0x00, 0xc8, 0xef
-	.byte 0xea, 0x00, 0xba, 0xef, 0xea, 0x00, 0xaa, 0xef
-	.byte 0xea, 0x00, 0x98, 0xef, 0xea, 0x00, 0x86, 0xef
-	.byte 0xea, 0x00, 0x76, 0xef, 0xea, 0x00, 0x66, 0xef
-	.byte 0xea, 0x00, 0x54, 0xef, 0xea, 0x00, 0x44, 0xef
-	.byte 0xea, 0x00, 0x34, 0xef, 0xea, 0x00, 0x28, 0xef
-	.byte 0xea, 0x00, 0x16, 0xef, 0xea, 0x00, 0x08, 0xef
-	.byte 0xea, 0x00, 0xf8, 0xee, 0xea, 0x00, 0xea, 0xee
-	.byte 0xea, 0x00, 0xd8, 0xee, 0xea, 0x00, 0xc8, 0xee
-	.byte 0xea, 0x00, 0xb8, 0xee, 0xea, 0x00, 0xa6, 0xee
-	.byte 0xea, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "MT_MainLoopCount"
-	aligned_string "MT_SetTitleFlag"
-	aligned_string "MT_GetInitData"
-	aligned_string "MT_CheckInitData"
-	aligned_string "MT_EasySetGo"
-	aligned_string "MT_InterruptOff"
-	aligned_string "MT_SearchLink"
-	aligned_string "MT_RefreshSwEvent"
-	aligned_string "MT_SetKeep"
-	aligned_string "MT_GetBoxColor"
-	aligned_string "MT_GetBoxBorder"
-	aligned_string "MT_RefreshApTask"
-	aligned_string "MT_WakeUpApTask"
-	aligned_string "MT_SleepApTask"
-	aligned_string "MT_WakeUpMainTask"
-	aligned_string "MT_SleepMainTask"
-	aligned_string "MT_OtherPartLed"
-	aligned_string "MT_CheckHold"
-	aligned_string "MT_AddSoundSwNo"
-	aligned_string "MT_SetSoundSwNo"
-	aligned_string "MT_RefreshParaDraw"
-	aligned_string "MT_EasySetOff"
-	aligned_string "MT_EasySetOn"
-	aligned_string "MT_GetBitmapPalette"
-	aligned_string "MT_GetBitmapHeight"
-	aligned_string "MT_GetBitmapWidth"
-	aligned_string "MT_GetBitmapData"
-	aligned_string "MT_PartSelectPut"
-	aligned_string "MT_GetLanguagePtr"
-	aligned_string "MT_SetNotDrawFlag"
-	aligned_string "MT_GetInterruptTime"
-	aligned_string "MT_SetVisible"
-	aligned_string "MT_ToggleHold"
-	aligned_string "MT_SetHold"
-	aligned_string "MT_SetInterruptTime"
-	aligned_string "MT_InterruptHold"
-	aligned_string "MT_PopWall"
-	aligned_string "MT_PushWall"
-	aligned_string "MT_ChangeWall"
-	aligned_string "MT_CheckShowWindow"
-	aligned_string "MT_ToggleTrackSwitch"
-	aligned_string "MT_RequestTrackSwitch"
-	aligned_string "MT_CheckGridIndex"
-	aligned_string "MT_GetSelected"
-	aligned_string "MT_GetSelectedCel"
-	aligned_string "MT_SetSelectedCel"
-	aligned_string "MT_RequestGridDraw"
-	aligned_string "MT_GridDraw"
-	aligned_string "MT_GetFixedRowStr"
-	aligned_string "MT_GetFixedColStr"
-	aligned_string "MT_GetStrPtr"
-	aligned_string "MT_GetDialFocus"
-	aligned_string "MT_SetDialFocus"
-	aligned_string "MT_SetString"
-	aligned_string "MT_AreYouClassProc"
-	aligned_string "MT_GetNamingMode"
-	aligned_string "MT_LswData"
-	aligned_string "MT_RamData"
-	aligned_string "MT_SetChara"
-	aligned_string "MT_SetCursor"
-	aligned_string "MT_SetPage"
-	aligned_string "MT_RequestString"
-	aligned_string "MT_ReturnString"
-	aligned_string "MT_GetStringLength"
-	aligned_string "MT_SetApFunction"
-	aligned_string "MT_IsInterrupt"
-	aligned_string "MT_InterruptExit"
-	aligned_string "MT_ResetInterruptTime"
-	aligned_string "MT_SetReturnScreen"
-	aligned_string "MT_GetReturnScreen"
-	aligned_string "MT_GetChildScreen"
-	aligned_string "MT_GetParentScreen"
-	aligned_string "MT_SetChildScreen"
-	aligned_string "MT_SetParentScreen"
-	aligned_string "MT_EditUpSet"
-	aligned_string "MT_EditDownSet"
-	aligned_string "MT_ValenSet"
-	aligned_string "MT_AicenSet"
-	aligned_string "MT_DrawMemo"
-	aligned_string "MT_ToggleParam"
-	aligned_string "MT_GetParam"
-	aligned_string "MT_RamAdd"
-	aligned_string "MT_RamPut"
-	aligned_string "MT_RamGet"
-	aligned_string "MT_BitPut"
-	aligned_string "MT_BitGet"
-	aligned_string "MT_GetDirection"
-	aligned_string "MT_GetBit"
-	aligned_string "MT_GetBitAddress"
-	aligned_string "MT_GetBitString"
-	aligned_string "MT_GetSoundSwNo"
-	aligned_string "MT_GetPmemName"
-	aligned_string "MT_GetRhythmName"
-	aligned_string "MT_GetSoundName"
-	aligned_string "MT_SetWallPalette"
-	aligned_string "MT_LswPartGet"
-	aligned_string "MT_LswPartAdd"
-	aligned_string "MT_LswPartPut"
-	aligned_string "MT_LswGet"
-	aligned_string "MT_LswAdd"
-	aligned_string "MT_LswPut"
-	aligned_string "MT_GetPageNow"
-	aligned_string "MT_GetPageMax"
-	aligned_string "MT_GetPageMin"
-	aligned_string "MT_CheckEditSw"
-	aligned_string "MT_SetEditSwRect"
-	aligned_string "MT_GetIndex"
-	aligned_string "MT_CheckIndex"
-	aligned_string "MT_SetMenuRect"
-	aligned_string "MT_DrawSelected"
-	aligned_string "MT_SetSelected"
-	aligned_string "MT_GetTableString"
-	aligned_string "MT_GetChildWindow"
-	aligned_string "MT_GetParentWindow"
-	aligned_string "MT_SetChildWindow"
-	aligned_string "MT_SetParentWindow"
-	aligned_string "MT_GetRamString"
-	aligned_string "MT_GetRamSize"
-	aligned_string "MT_GetRamAddress"
-	aligned_string "MT_GetMin"
-	aligned_string "MT_GetMax"
-	aligned_string "MT_GetLswString"
-	aligned_string "MT_GetLswOutput"
-	aligned_string "MT_GetLswAddress"
-	aligned_string "MT_GetSmallStep"
-	aligned_string "MT_GetLargeStep"
-	aligned_string "MT_CalcParam"
-	aligned_string "MT_CheckSelected"
-	aligned_string "MT_SetParam"
-	aligned_string "MT_GetString"
-	aligned_string "MT_GetPrevview"
-	aligned_string "MT_GetNextview"
-	aligned_string "MT_GetSubview"
-	aligned_string "MT_GetSuperview"
-	aligned_string "MT_GetTitleOld"
-	aligned_string "MT_GetTitleNow"
-	aligned_string "MT_GetStartScreen"
-	aligned_string "MT_GetTitleProcID"
-	aligned_string "MT_GetTitleProc"
-	aligned_string "MT_GetUserID"
-	aligned_string "MT_GetModeOld"
-	aligned_string "MT_GetModeNow"
-	aligned_string "MT_GetStartTitle"
-	aligned_string "MT_GetModeProcID"
-	aligned_string "MT_GetModeProc"
-	aligned_string "MT_GetFunction"
-	aligned_string "MT_MakeEditSwID"
-	aligned_string "MT_MakeDump"
-	aligned_string "MT_GetPropSize"
-	aligned_string "MT_GetPropMember"
-	aligned_string "MT_CheckPropString"
-	aligned_string "MT_SearchClass"
-	aligned_string "MT_AutoFree"
-	aligned_string "MT_GetPropChar"
-	aligned_string "MT_GetInstanceSize"
-	aligned_string "MT_GetPropDataCount"
-	aligned_string "MT_GetPropData"
-	aligned_string "MT_SetProperty"
-	aligned_string "MT_GetProperty"
-	aligned_string "MT_DumpPointer"
-	aligned_string "MT_DumpProperty"
-	aligned_string "MT_CopyProperty"
-	aligned_string "MT_GetPropString"
-	aligned_string "MT_GetPropName"
-	aligned_string "MT_GetPropCount"
-	aligned_string "MT_SetName"
-	aligned_string "MT_GetName"
-	aligned_string "MT_CheckClass"
-	aligned_string "MT_GetProcedure"
-	aligned_string "MT_GetClassName"
-	aligned_string "MT_GetParentClass"
-	aligned_string "MT_GetClass"
-	aligned_string "MT_GetInstance"
-	aligned_string "MT_GetPropDataCountSp"
-	aligned_string "MT_GetPropDataSp"
-	aligned_string "MT_SetPropertyEx"
-	aligned_string "MT_GetPropertyEx"
-	aligned_string "MT_DumpPointerEx"
-	aligned_string "MT_DumpPropertyEx"
-	aligned_string "MT_CopyPropertyEx"
-	aligned_string "MT_GetPropNameSp"
-	aligned_string "MT_GetPropCountSp"
-	aligned_string "MT_GetPropStringEx"
-	aligned_string "MT_CheckClassSp"
-	aligned_string "MT_GetInstanceSizeSp"
-	aligned_string "MT_GetProcedureSp"
-	aligned_string "MT_GetParentClassSp"
-	aligned_string "MT_GetClassSp"
-	.byte 0xbc, 0x00, 0xcb, 0x28, 0xfb, 0x00, 0x77, 0xad
-	.byte 0xf7, 0x00, 0x1a, 0x31, 0xfc, 0x00, 0xac, 0x2b
-	.byte 0xf7, 0x00, 0x36, 0x96, 0xf1, 0x00, 0x6a, 0x42
-	.byte 0xf9, 0x00, 0xe3, 0x28, 0xf0, 0x00, 0x6d, 0x9e
-	.byte 0xf2, 0x00, 0xc4, 0xd2, 0xf2, 0x00, 0x46, 0xe1
-	.byte 0xf1, 0x00, 0x4f, 0x3e, 0xfc, 0x00, 0xeb, 0x65
-	.byte 0xf1, 0x00, 0x50, 0x3e, 0xfc, 0x00, 0x51, 0x3e
-	.byte 0xfc, 0x00, 0x52, 0x3e, 0xfc, 0x00, 0x53, 0x3e
-	.byte 0xfc, 0x00, 0x54, 0x3e, 0xfc, 0x00, 0x55, 0x3e
-	.byte 0xfc, 0x00, 0x56, 0x3e, 0xfc, 0x00, 0x57, 0x3e
-	.byte 0xfc, 0x00, 0x58, 0x3e, 0xfc, 0x00, 0x59, 0x3e
-	.byte 0xfc, 0x00, 0x5a, 0x3e, 0xfc, 0x00, 0x5b, 0x3e
-	.byte 0xfc, 0x00, 0x5c, 0x3e, 0xfc, 0x00, 0x5d, 0x3e
-	.byte 0xfc, 0x00, 0x5e, 0x3e, 0xfc, 0x00, 0x5f, 0x3e
-	.byte 0xfc, 0x00, 0x60, 0x3e, 0xfc, 0x00, 0x61, 0x3e
-	.byte 0xfc, 0x00, 0x62, 0x3e, 0xfc, 0x00, 0x63, 0x3e
-	.byte 0xfc, 0x00, 0x47, 0xa5, 0xfa, 0x00, 0x1d, 0xa6
-	.byte 0xfa, 0x00, 0x61, 0xa7, 0xfa, 0x00, 0x62, 0xa7
-	.byte 0xfa, 0x00, 0xb2, 0xa7, 0xfa, 0x00, 0xe4, 0xa7
-	.byte 0xfa, 0x00, 0x44, 0xa8, 0xfa, 0x00, 0x8a, 0xa9
-	.byte 0xfa, 0x00, 0x12, 0xaf, 0xfa, 0x00, 0x73, 0xb2
-	.byte 0xfa, 0x00, 0xde, 0xb3, 0xfa, 0x00, 0x09, 0xb8
-	.byte 0xfa, 0x00, 0x53, 0xba, 0xfa, 0x00, 0x73, 0xbb
-	.byte 0xfa, 0x00, 0x3c, 0xbc, 0xfa, 0x00, 0x3f, 0xbf
-	.byte 0xfa, 0x00, 0x7c, 0xc0, 0xfa, 0x00, 0xca, 0xca
-	.byte 0xfa, 0x00, 0xac, 0xce, 0xfa, 0x00, 0x4a, 0xcf
-	.byte 0xfa, 0x00, 0xb1, 0xcf, 0xfa, 0x00, 0x49, 0xd0
-	.byte 0xfa, 0x00, 0x85, 0x3d, 0xfa, 0x00, 0x09, 0x44
-	.byte 0xfa, 0x00, 0xb3, 0x40, 0xfa, 0x00, 0xfb, 0x42
-	.byte 0xfa, 0x00, 0x1a, 0x43, 0xfa, 0x00, 0xb3, 0x43
-	.byte 0xfa, 0x00, 0x7f, 0x42, 0xfa, 0x00, 0xc4, 0x42
-	.byte 0xfa, 0x00, 0x84, 0x95, 0xfa, 0x00, 0x85, 0x95
-	.byte 0xfa, 0x00, 0x60, 0x96, 0xfa, 0x00, 0x52, 0x97
-	.byte 0xfa, 0x00, 0xd0, 0x97, 0xfa, 0x00, 0x77, 0x9a
-	.byte 0xfa, 0x00, 0x7d, 0x9a, 0xfa, 0x00, 0x8b, 0x9a
-	.byte 0xfa, 0x00, 0xf4, 0x9a, 0xfa, 0x00, 0x5d, 0x9b
-	.byte 0xfa, 0x00, 0x06, 0x9c, 0xfa, 0x00, 0x58, 0x9d
-	.byte 0xfa, 0x00, 0xda, 0x62, 0xfa, 0x00, 0xdd, 0x62
-	.byte 0xfa, 0x00, 0xe0, 0x62, 0xfa, 0x00, 0xe3, 0x62
-	.byte 0xfa, 0x00, 0xe6, 0x62, 0xfa, 0x00, 0xfb, 0x58
-	.byte 0xfa, 0x00, 0x48, 0x59, 0xfa, 0x00, 0xe9, 0x62
-	.byte 0xfa, 0x00, 0xcb, 0x62, 0xfa, 0x00, 0xf3, 0x25
-	.byte 0xfb, 0x00, 0x0a, 0x26, 0xfb, 0x00, 0x17, 0x26
-	.byte 0xfb, 0x00, 0x24, 0x26, 0xfb, 0x00, 0x40, 0x26
-	.byte 0xfb, 0x00, 0xd1, 0x26, 0xfb, 0x00, 0x5a, 0x27
-	.byte 0xfb, 0x00, 0xe2, 0x44, 0xfa, 0x00, 0x36, 0x48
-	.byte 0xfa, 0x00, 0xec, 0x62, 0xfa, 0x00, 0x50, 0x63
-	.byte 0xfa, 0x00, 0xb4, 0x63, 0xfa, 0x00, 0x18, 0x64
-	.byte 0xfa, 0x00, 0x7e, 0x64, 0xfa, 0x00, 0xe0, 0x64
-	.byte 0xfa, 0x00, 0x42, 0x65, 0xfa, 0x00, 0xa6, 0x65
-	.byte 0xfa, 0x00, 0xe2, 0x66, 0xfa, 0x00, 0x1e, 0x68
-	.byte 0xfa, 0x00, 0x5a, 0x69, 0xfa, 0x00, 0x98, 0x6a
-	.byte 0xfa, 0x00, 0xd4, 0x6b, 0xfa, 0x00, 0x0e, 0x6d
-	.byte 0xfa, 0x00, 0xf2, 0x92, 0xfa, 0x00, 0xf5, 0x92
-	.byte 0xfa, 0x00, 0xf8, 0x92, 0xfa, 0x00, 0xfb, 0x92
-	.byte 0xfa, 0x00, 0xfe, 0x92, 0xfa, 0x00, 0xe6, 0x73
-	.byte 0xfa, 0x00, 0x09, 0x86, 0xfa, 0x00, 0x99, 0x89
-	.byte 0xfa, 0x00, 0x01, 0x93, 0xfa, 0x00, 0x4e, 0x6e
-	.byte 0xfa, 0x00, 0xc8, 0x6e, 0xfa, 0x00, 0xb9, 0x6f
-	.byte 0xfa, 0x00, 0x58, 0x70, 0xfa, 0x00, 0x12, 0x71
-	.byte 0xfa, 0x00, 0xe9, 0x71, 0xfa, 0x00, 0x62, 0x72
-	.byte 0xfa, 0x00, 0x40, 0x73, 0xfa, 0x00, 0x9a, 0x7a
-	.byte 0xfa, 0x00, 0xb5, 0x91, 0xfa, 0x00, 0x3e, 0x92
-	.byte 0xfa, 0x00, 0xfd, 0x82, 0xfa, 0x00, 0xad, 0x75
-	.byte 0xfa, 0x00, 0x11, 0x76, 0xfa, 0x00, 0x75, 0x76
-	.byte 0xfa, 0x00, 0x29, 0x8d, 0xfa, 0x00, 0x6f, 0x8f
-	.byte 0xfa, 0x00, 0xef, 0x7c, 0xfa, 0x00, 0xcf, 0x7b
-	.byte 0xfa, 0x00, 0xd9, 0x76, 0xfa, 0x00, 0xa1, 0x77
-	.byte 0xfa, 0x00, 0x3d, 0x77, 0xfa, 0x00, 0x42, 0x78
-	.byte 0xfa, 0x00, 0xa6, 0x78, 0xfa, 0x00, 0x0f, 0x7e
-	.byte 0xfa, 0x00, 0x2f, 0x7f, 0xfa, 0x00, 0x16, 0x81
-	.byte 0xfa, 0x00, 0x0a, 0x79, 0xfa, 0x00, 0x6e, 0x79
-	.byte 0xfa, 0x00, 0xd2, 0x79, 0xfa, 0x00, 0xa9, 0x48
-	.byte 0xfa, 0x00, 0x6c, 0x49, 0xfa, 0x00, 0x18, 0x4a
-	.byte 0xfa, 0x00, 0xb7, 0x49, 0xfa, 0x00, 0x63, 0x4a
-	.byte 0xfa, 0x00, 0x6d, 0x4a, 0xfa, 0x00, 0x2b, 0x4d
-	.byte 0xfa, 0x00, 0x51, 0x4d, 0xfa, 0x00, 0x1f, 0x4d
-	.byte 0xfa, 0x00, 0x25, 0x4d, 0xfa, 0x00, 0x03, 0x4e
-	.byte 0xfa, 0x00, 0x80, 0x4d, 0xfa, 0x00, 0xc4, 0x4d
-	.byte 0xfa, 0x00, 0x67, 0x58, 0xfa, 0x00, 0x6d, 0x58
-	.byte 0xfa, 0x00, 0x95, 0x59, 0xfa, 0x00, 0x64, 0x5e
-	.byte 0xfa, 0x00, 0x7d, 0x5e, 0xfa, 0x00, 0x3c, 0x5e
-	.byte 0xfa, 0x00, 0x55, 0x5e, 0xfa, 0x00, 0x8c, 0x5e
-	.byte 0xfa, 0x00, 0xa5, 0x5e, 0xfa, 0x00, 0xb4, 0x5e
-	.byte 0xfa, 0x00, 0xcd, 0x5e, 0xfa, 0x00, 0xdc, 0x5e
-	.byte 0xfa, 0x00, 0x40, 0x5f, 0xfa, 0x00, 0xa4, 0x5f
-	.byte 0xfa, 0x00, 0x08, 0x60, 0xfa, 0x00, 0x6c, 0x60
-	.byte 0xfa, 0x00, 0xca, 0x60, 0xfa, 0x00, 0x97, 0x61
-	.byte 0xfa, 0x00, 0x07, 0x62, 0xfa, 0x00, 0x66, 0x62
-	.byte 0xfa, 0x00, 0x96, 0x62, 0xfa, 0x00, 0xa7, 0x62
-	.byte 0xfa, 0x00, 0x81, 0x95, 0xf9, 0x00, 0xdd, 0x95
-	.byte 0xf9, 0x00, 0xff, 0x95, 0xf9, 0x00, 0x59, 0xd5
-	.byte 0xfa, 0x00, 0xc3, 0x97, 0xf9, 0x00, 0x1b, 0x98
-	.byte 0xf9, 0x00, 0x2d, 0x98, 0xf9, 0x00, 0x9f, 0xa6
-	.byte 0xf9, 0x00, 0x33, 0xa9, 0xf9, 0x00, 0xa5, 0xc7
-	.byte 0xf9, 0x00, 0xfe, 0xc7, 0xf9, 0x00, 0x22, 0xc8
-	.byte 0xf9, 0x00, 0x6f, 0xc8, 0xf9, 0x00, 0x6d, 0xaa
-	.byte 0xf9, 0x00, 0xcb, 0xaa, 0xf9, 0x00, 0xbe, 0xc8
-	.byte 0xf9, 0x00, 0x87, 0xca, 0xf9, 0x00, 0x8a, 0xf8
-	.byte 0xf9, 0x00, 0xdd, 0xf8, 0xf9, 0x00, 0x42, 0xf9
-	.byte 0xf9, 0x00, 0x95, 0xf9, 0xf9, 0x00, 0xfa, 0xf9
-	.byte 0xf9, 0x00, 0x45, 0xfa, 0xf9, 0x00, 0xa3, 0xfa
-	.byte 0xf9, 0x00, 0xab, 0xfa, 0xf9, 0x00, 0x47, 0xfe
-	.byte 0xf9, 0x00, 0x8a, 0xfe, 0xf9, 0x00, 0xcd, 0xfe
-	.byte 0xf9, 0x00, 0x2a, 0xc1, 0xf9, 0x00, 0xbc, 0xc2
-	.byte 0xf9, 0x00, 0x3f, 0x98, 0xf9, 0x00, 0xb6, 0xaf
-	.byte 0xf9, 0x00, 0x4e, 0xc4, 0xf9, 0x00, 0xb6, 0xc4
-	.byte 0xf9, 0x00, 0x10, 0xc5, 0xf9, 0x00, 0xae, 0xc6
-	.byte 0xf9, 0x00, 0x23, 0xc7, 0xf9, 0x00, 0x66, 0xcb
-	.byte 0xf9, 0x00, 0xe6, 0xcc, 0xf9, 0x00, 0xb6, 0xcd
-	.byte 0xf9, 0x00, 0x7e, 0xce, 0xf9, 0x00, 0x56, 0xd2
-	.byte 0xf9, 0x00, 0x3f, 0xec, 0xf9, 0x00, 0x7d, 0xf0
-	.byte 0xf9, 0x00, 0x0e, 0xf1, 0xf9, 0x00, 0x91, 0xf1
-	.byte 0xf9, 0x00, 0x98, 0xf2, 0xf9, 0x00, 0xdb, 0xf4
-	.byte 0xf9, 0x00, 0xb3, 0xfa, 0xf9, 0x00, 0x18, 0x02
-	.byte 0xfa, 0x00, 0x28, 0x03, 0xfa, 0x00, 0xcf, 0x09
-	.byte 0xfa, 0x00, 0xe4, 0x0e, 0xfa, 0x00, 0xb8, 0x0f
-	.byte 0xfa, 0x00, 0x9c, 0x11, 0xfa, 0x00, 0x23, 0x13
-	.byte 0xfa, 0x00, 0xa1, 0x14, 0xfa, 0x00, 0x90, 0x15
-	.byte 0xfa, 0x00, 0xa1, 0x1a, 0xfa, 0x00, 0xc3, 0x1a
-	.byte 0xfa, 0x00, 0x7b, 0x1b, 0xfa, 0x00, 0x3b, 0xa5
-	.byte 0xf9, 0x00, 0x79, 0xa5, 0xf9, 0x00, 0x8a, 0xa5
-	.byte 0xf9, 0x00, 0x5b, 0xf2, 0xfa, 0x00, 0xb3, 0x28
-	.byte 0xfb, 0x00, 0x2b, 0x24, 0xfa, 0x00, 0xc6, 0x25
-	.byte 0xfa, 0x00, 0x7d, 0x26, 0xfa, 0x00, 0x99, 0x27
-	.byte 0xfa, 0x00, 0x27, 0x07, 0xfa, 0x00, 0x79, 0x12
-	.byte 0xfa, 0x00, 0x1e, 0xff, 0xf9, 0x00, 0x87, 0x01
-	.byte 0xfa, 0x00, 0xcb, 0x01, 0xfa, 0x00, 0xe8, 0x17
-	.byte 0xfa, 0x00, 0xcd, 0x19, 0xfa, 0x00, 0x44, 0x2d
-	.byte 0xfa, 0x00, 0x08, 0x9f, 0xfa, 0x00, 0x45, 0x9f
-	.byte 0xfa, 0x00, 0x35, 0xa1, 0xfa, 0x00, 0x14, 0xa2
-	.byte 0xfa, 0x00, 0x57, 0xa2, 0xfa, 0x00, 0xac, 0x44
-	.byte 0xfa, 0x00, 0xb2, 0x44, 0xfa, 0x00, 0xb8, 0x44
-	.byte 0xfa, 0x00, 0x9b, 0xa5, 0xf9, 0x00, 0xbd, 0xa5
-	.byte 0xf9, 0x00, 0xbe, 0x44, 0xfa, 0x00, 0xd0, 0x44
-	.byte 0xfa, 0x00, 0xd6, 0x44, 0xfa, 0x00, 0xdc, 0x44
-	.byte 0xfa, 0x00, 0x3b, 0x1c, 0xfa, 0x00, 0x8e, 0x1c
-	.byte 0xfa, 0x00, 0x45, 0x1d, 0xfa, 0x00, 0x84, 0xd0
-	.byte 0xfa, 0x00, 0x9a, 0x97, 0xf9, 0x00, 0xae, 0x1e
-	.byte 0xfa, 0x00, 0xe3, 0xb3, 0xf9, 0x00, 0x90, 0x31
-	.byte 0xfa, 0x00, 0x2d, 0x1f, 0xfa, 0x00, 0x5b, 0x18
-	.byte 0xfa, 0x00, 0x6d, 0xd0, 0xf9, 0x00, 0x2d, 0xd3
-	.byte 0xf9, 0x00, 0x09, 0xd7, 0xf9, 0x00, 0x6c, 0x20
-	.byte 0xfa, 0x00, 0x47, 0xa5, 0xf9, 0x00, 0x64, 0xa5
-	.byte 0xf9, 0x00, 0x2e, 0xd7, 0xf9, 0x00, 0x85, 0xdd
-	.byte 0xf9, 0x00, 0xe0, 0xdb, 0xf9, 0x00, 0x56, 0xe9
-	.byte 0xf9, 0x00, 0xee, 0x33, 0xfa, 0x00, 0x04, 0x36
-	.byte 0xfa, 0x00, 0x33, 0x3a, 0xfa, 0x00, 0x62, 0xac
-	.byte 0xf9, 0x00, 0x97, 0xae, 0xf9, 0x00, 0xf0, 0xad
-	.byte 0xf9, 0x00, 0x08, 0x20, 0xfa, 0x00, 0xf9, 0x1d
-	.byte 0xfa, 0x00, 0xe6, 0x2e, 0xfa, 0x00, 0x36, 0x7a
-	.byte 0xfa, 0x00, 0x47, 0x21, 0xfa, 0x00, 0x73, 0x58
-	.byte 0xfa, 0x00, 0x9f, 0x58, 0xfa, 0x00, 0x0e, 0x22
-	.byte 0xfa, 0x00, 0x60, 0x22, 0xfa, 0x00, 0x37, 0x22
-	.byte 0xfa, 0x00, 0x89, 0x22, 0xfa, 0x00, 0x03, 0x23
-	.byte 0xfa, 0x00, 0xad, 0x58, 0xfa, 0x00, 0xad, 0x26
-	.byte 0xfb, 0x00, 0xbb, 0x58, 0xfa, 0x00, 0xa1, 0x23
-	.byte 0xfa, 0x00, 0x5d, 0x3b, 0xfa, 0x00, 0x14, 0x3d
-	.byte 0xfa, 0x00, 0x7d, 0x3d, 0xfa, 0x00, 0x81, 0x3d
-	.byte 0xfa, 0x00, 0x57, 0x94, 0xf9, 0x00, 0xec, 0xc1
-	.byte 0xfa, 0x00, 0x4c, 0xc5, 0xf9, 0x00, 0x30, 0xf0
-	.byte 0xfa, 0x00, 0x61, 0xaa, 0xf9, 0x00, 0xc7, 0x1f
-	.byte 0xfa, 0x00, 0xdb, 0xc3, 0xfa, 0x00, 0x13, 0xbe
-	.byte 0xfa, 0x00, 0x95, 0x28, 0xfb, 0x00, 0x79, 0x28
-	.byte 0xfb, 0x00, 0xef, 0xa9, 0xf9, 0x00, 0x36, 0xaa
-	.byte 0xf9, 0x00, 0x2c, 0x23, 0xfa, 0x00, 0x32, 0x49
-	.byte 0xfa, 0x00, 0xd1, 0x98, 0xfa, 0x00, 0x68, 0x98
-	.byte 0xfa, 0x00, 0x3c, 0x88, 0xf9, 0x00, 0x4b, 0x88
-	.byte 0xf9, 0x00, 0x5a, 0x88, 0xf9, 0x00, 0x68, 0x88
-	.byte 0xf9, 0x00, 0x77, 0x88, 0xf9, 0x00, 0x07, 0x9e
-	.byte 0xfa, 0x00, 0xfc, 0xc5, 0xf9, 0x00, 0x97, 0xc6
-	.byte 0xfa, 0x00, 0xdb, 0xa5, 0xfa, 0x00, 0xb6, 0xa5
-	.byte 0xfa, 0x00, 0x26, 0x89, 0xf9, 0x00, 0x45, 0xa3
-	.byte 0xfa, 0x00, 0xc4, 0x44, 0xfa, 0x00, 0xca, 0x44
-	.byte 0xfa, 0x00, 0x8c, 0xa4, 0xfa, 0x00, 0xe4, 0x9c
-	.byte 0xfa, 0x00, 0x7b, 0x9c, 0xfa, 0x00, 0x09, 0xc5
-	.byte 0xfa, 0x00, 0x00, 0x00, 0x00, 0x00
-WidgetName_InitPtrTable:
-	.long Str_InitializeRoot
-	.long Str_InitializeMurai
-	.long Str_InitializeToshi
-	.long Str_InitializeEast
-	.long Str_InitializeSuna
-	.byte 0xda, 0x18
-WidgetName_PtrBlock_A:
-	.byte 0xeb, 0x00, 0xca, 0x18, 0xeb, 0x00, 0xba, 0x18
-	.byte 0xeb, 0x00, 0xaa, 0x18, 0xeb, 0x00, 0x9a, 0x18
-	.byte 0xeb, 0x00, 0x8c, 0x18, 0xeb, 0x00, 0x7c, 0x18
-WidgetName_PtrBlock_B1:
-	.byte 0xeb
-WidgetName_PtrBlock_B2:
-	.byte 0x00, 0x6a, 0x18, 0xeb, 0x00, 0x58, 0x18
-	.byte 0xeb, 0x00
-WidgetName_PtrBlock_C:
-	.byte 0x46, 0x18, 0xeb, 0x00, 0x34, 0x18
-	.byte 0xeb, 0x00, 0x22, 0x18, 0xeb, 0x00, 0x10, 0x18
-	.byte 0xeb, 0x00, 0xfe, 0x17, 0xeb, 0x00, 0xec, 0x17
-	.byte 0xeb, 0x00, 0xda, 0x17, 0xeb, 0x00, 0xc8, 0x17
-	.byte 0xeb, 0x00, 0xb6, 0x17, 0xeb, 0x00, 0xa4, 0x17
-	.byte 0xeb
-WidgetName_PtrBlock_D:
-	.byte 0x00, 0x92, 0x17, 0xeb, 0x00, 0x80, 0x17
-	.byte 0xeb, 0x00, 0x6e, 0x17, 0xeb, 0x00, 0x5c, 0x17
-	.byte 0xeb, 0x00, 0x4a, 0x17, 0xeb, 0x00, 0x38, 0x17
-	.byte 0xeb, 0x00, 0x26, 0x17, 0xeb, 0x00, 0x14, 0x17
-	.byte 0xeb, 0x00, 0x00, 0x17, 0xeb, 0x00, 0xf2, 0x16
-WidgetName_PtrBlock_E:
-	.byte 0xeb, 0x00, 0xe4, 0x16, 0xeb, 0x00, 0xd6, 0x16
-	.byte 0xeb, 0x00, 0xcc, 0x16, 0xeb, 0x00, 0xc0, 0x16
-	.byte 0xeb, 0x00, 0xb2, 0x16, 0xeb, 0x00, 0xa8, 0x16
-	.byte 0xeb, 0x00, 0x9c, 0x16, 0xeb, 0x00, 0x94, 0x16
-	.byte 0xeb, 0x00, 0x8a, 0x16
-WidgetName_PtrBlock_F1:
-	.byte 0xeb, 0x00, 0x7e
-WidgetName_PtrBlock_F2:
-	.byte 0x16
-	.byte 0xeb, 0x00, 0x72, 0x16
-WidgetName_PtrBlock_G:
-	.byte 0xeb, 0x00, 0x68, 0x16
-	.byte 0xeb, 0x00, 0x5c, 0x16, 0xeb, 0x00, 0x52, 0x16
-	.byte 0xeb, 0x00, 0x46, 0x16, 0xeb, 0x00, 0x3a, 0x16
-WidgetName_PtrBlock_H:
-	.byte 0xeb, 0x00, 0x26, 0x16, 0xeb, 0x00, 0x10, 0x16
-	.byte 0xeb, 0x00, 0xf8, 0x15
-WidgetName_PtrBlock_I1:
-	.byte 0xeb, 0x00
-WidgetName_PtrBlock_I2:
-	.byte 0xe4, 0x15
-	.byte 0xeb, 0x00, 0xd8, 0x15, 0xeb, 0x00, 0xca, 0x15
-	.byte 0xeb, 0x00, 0xb4, 0x15, 0xeb
-Data_WidgetNamesCharMapBlock:
-	.byte 0x00, 0xa0, 0x15
-WidgetCharMap_DataEntry1:
-	.byte 0xeb, 0x00, 0x90
-WidgetName_PtrBlock_K:
-	.byte 0x15, 0xeb, 0x00, 0x7e, 0x15
-	.byte 0xeb, 0x00, 0x72, 0x15, 0xeb, 0x00, 0x62, 0x15
-	.byte 0xeb, 0x00, 0x4c, 0x15, 0xeb
-WidgetName_PtrBlock_L:
-	.byte 0x00, 0x3e, 0x15
-	.byte 0xeb, 0x00, 0x34, 0x15, 0xeb, 0x00, 0x2a, 0x15
-	.byte 0xeb, 0x00, 0x20, 0x15, 0xeb, 0x00, 0x0e, 0x15
-	.byte 0xeb, 0x00, 0xfc, 0x14, 0xeb, 0x00, 0xea, 0x14
-	.byte 0xeb, 0x00, 0xdc, 0x14, 0xeb, 0x00, 0xce
-WidgetName_PtrBlock_M1:
-	.byte 0x14
-	.byte 0xeb, 0x00, 0xc0, 0x14
-WidgetName_PtrBlock_M2:
-	.byte 0xeb, 0x00, 0xb4, 0x14
-	.byte 0xeb, 0x00, 0xa6, 0x14, 0xeb, 0x00, 0x98, 0x14
-	.byte 0xeb, 0x00, 0x8a, 0x14, 0xeb, 0x00, 0x7e, 0x14
-	.byte 0xeb, 0x00, 0x72, 0x14, 0xeb, 0x00, 0x64, 0x14
-	.byte 0xeb, 0x00, 0x56, 0x14, 0xeb, 0x00, 0x48, 0x14
-	.byte 0xeb, 0x00, 0x3c
-WidgetName_PtrBlock_N1:
-	.byte 0x14, 0xeb, 0x00, 0x2c
-WidgetCharMap_DataEntry2:
-	.byte 0x14
-	.byte 0xeb, 0x00, 0x1e, 0x14, 0xeb, 0x00, 0x0e, 0x14
-	.byte 0xeb, 0x00, 0xfc, 0x13, 0xeb, 0x00, 0xec, 0x13
-	.byte 0xeb, 0x00, 0xdc, 0x13, 0xeb, 0x00, 0xcc, 0x13
-	.byte 0xeb, 0x00, 0xc2, 0x13, 0xeb, 0x00, 0xb0, 0x13
-	.byte 0xeb, 0x00, 0xa6, 0x13, 0xeb, 0x00, 0x9c, 0x13
-	.byte 0xeb, 0x00, 0x92, 0x13, 0xeb, 0x00, 0x88, 0x13
-	.byte 0xeb, 0x00, 0x7e, 0x13, 0xeb, 0x00, 0x74, 0x13
-	.byte 0xeb, 0x00, 0x6a, 0x13, 0xeb, 0x00, 0x60, 0x13
-	.byte 0xeb, 0x00, 0x54, 0x13, 0xeb, 0x00, 0x48, 0x13
-	.byte 0xeb, 0x00, 0x3c, 0x13, 0xeb, 0x00, 0x30, 0x13
-	.byte 0xeb, 0x00, 0x24, 0x13, 0xeb, 0x00, 0x18, 0x13
-	.byte 0xeb, 0x00, 0x0a, 0x13, 0xeb, 0x00, 0x00, 0x13
-	.byte 0xeb, 0x00, 0xf6, 0x12, 0xeb, 0x00, 0xec, 0x12
-	.byte 0xeb, 0x00, 0xe0, 0x12, 0xeb, 0x00, 0xd4, 0x12
-	.byte 0xeb, 0x00, 0xc6, 0x12, 0xeb, 0x00, 0xb8, 0x12
-	.byte 0xeb, 0x00, 0xac, 0x12, 0xeb, 0x00, 0xa2, 0x12
-	.byte 0xeb, 0x00, 0x96, 0x12, 0xeb, 0x00
-WidgetName_PtrBlock_O:
-	.byte 0x8a, 0x12
-	.byte 0xeb, 0x00, 0x7e, 0x12, 0xeb, 0x00, 0x72, 0x12
-	.byte 0xeb, 0x00, 0x66, 0x12, 0xeb, 0x00, 0x5a, 0x12
-	.byte 0xeb, 0x00, 0x4e, 0x12, 0xeb, 0x00, 0x42, 0x12
-	.byte 0xeb, 0x00, 0x38, 0x12, 0xeb, 0x00, 0x2a, 0x12
-	.byte 0xeb, 0x00, 0x1e, 0x12, 0xeb, 0x00, 0x10, 0x12
-	.byte 0xeb, 0x00, 0x04, 0x12, 0xeb, 0x00, 0xf6, 0x11
-	.byte 0xeb, 0x00, 0xea, 0x11, 0xeb, 0x00, 0xde, 0x11
-	.byte 0xeb, 0x00, 0xd2, 0x11, 0xeb, 0x00, 0xc6, 0x11
-	.byte 0xeb, 0x00, 0xb6, 0x11, 0xeb, 0x00, 0xa8, 0x11
-	.byte 0xeb, 0x00, 0x96, 0x11, 0xeb, 0x00, 0x86, 0x11
-	.byte 0xeb, 0x00, 0x7a, 0x11, 0xeb, 0x00, 0x6c, 0x11
-	.byte 0xeb, 0x00, 0x5e, 0x11, 0xeb, 0x00, 0x4e, 0x11
-	.byte 0xeb, 0x00, 0x42, 0x11, 0xeb, 0x00, 0x36, 0x11
-	.byte 0xeb, 0x00, 0x2a, 0x11, 0xeb, 0x00, 0x1c, 0x11
-	.byte 0xeb, 0x00, 0x0c, 0x11, 0xeb, 0x00, 0xfa, 0x10
-	.byte 0xeb, 0x00, 0xee, 0x10, 0xeb, 0x00, 0xe0, 0x10
-	.byte 0xeb, 0x00, 0xd6, 0x10, 0xeb, 0x00, 0xc8, 0x10
-	.byte 0xeb, 0x00, 0xb6, 0x10, 0xeb, 0x00, 0xaa, 0x10
-	.byte 0xeb, 0x00, 0x9e, 0x10, 0xeb, 0x00, 0x94, 0x10
-	.byte 0xeb, 0x00, 0x86, 0x10, 0xeb, 0x00, 0x74, 0x10
-	.byte 0xeb, 0x00, 0x68, 0x10, 0xeb, 0x00, 0x5c, 0x10
-	.byte 0xeb, 0x00, 0x4e, 0x10, 0xeb, 0x00, 0x44, 0x10
-	.byte 0xeb, 0x00, 0x3a, 0x10, 0xeb, 0x00, 0x30, 0x10
-	.byte 0xeb, 0x00, 0x26, 0x10, 0xeb, 0x00, 0x1a, 0x10
-	.byte 0xeb, 0x00, 0x0e, 0x10, 0xeb, 0x00, 0x02, 0x10
-	.byte 0xeb, 0x00, 0xf6, 0x0f, 0xeb, 0x00, 0xec, 0x0f
-	.byte 0xeb, 0x00, 0xe2, 0x0f, 0xeb, 0x00, 0xd8, 0x0f
-	.byte 0xeb, 0x00, 0xd0, 0x0f, 0xeb, 0x00, 0xca, 0x0f
-	.byte 0xeb, 0x00, 0xc2, 0x0f, 0xeb, 0x00, 0xb4, 0x0f
-	.byte 0xeb, 0x00, 0xa8, 0x0f, 0xeb, 0x00, 0x98, 0x0f
-	.byte 0xeb, 0x00, 0x90, 0x0f, 0xeb, 0x00, 0x88, 0x0f
-	.byte 0xeb, 0x00, 0x80, 0x0f, 0xeb, 0x00, 0x72, 0x0f
-	.byte 0xeb, 0x00, 0x64, 0x0f, 0xeb, 0x00, 0x56, 0x0f
-	.byte 0xeb, 0x00, 0x48, 0x0f, 0xeb, 0x00, 0x3a, 0x0f
-	.byte 0xeb, 0x00, 0x2c, 0x0f, 0xeb, 0x00, 0x20, 0x0f
-	.byte 0xeb, 0x00, 0x10, 0x0f, 0xeb, 0x00, 0x06, 0x0f
-	.byte 0xeb, 0x00, 0xf6, 0x0e, 0xeb, 0x00, 0xe6, 0x0e
-	.byte 0xeb, 0x00, 0xd6, 0x0e, 0xeb, 0x00, 0xc8, 0x0e
-	.byte 0xeb, 0x00, 0xba, 0x0e, 0xeb, 0x00, 0xae, 0x0e
-	.byte 0xeb, 0x00, 0xa2, 0x0e, 0xeb, 0x00, 0x96, 0x0e
-	.byte 0xeb, 0x00, 0x86, 0x0e, 0xeb, 0x00, 0x7a, 0x0e
-	.byte 0xeb, 0x00, 0x6a, 0x0e, 0xeb, 0x00, 0x5e, 0x0e
-	.byte 0xeb, 0x00, 0x4e, 0x0e, 0xeb, 0x00, 0x40, 0x0e
-	.byte 0xeb, 0x00, 0x30, 0x0e, 0xeb, 0x00, 0x24, 0x0e
-	.byte 0xeb, 0x00, 0x18, 0x0e, 0xeb, 0x00, 0x0c, 0x0e
-	.byte 0xeb, 0x00, 0xfe, 0x0d, 0xeb, 0x00, 0xf0, 0x0d
-	.byte 0xeb, 0x00, 0xe2, 0x0d, 0xeb, 0x00, 0xd6, 0x0d
-	.byte 0xeb, 0x00, 0xc8, 0x0d, 0xeb, 0x00, 0xbe, 0x0d
-	.byte 0xeb, 0x00, 0xb2, 0x0d, 0xeb, 0x00, 0xa8, 0x0d
-	.byte 0xeb, 0x00, 0x9e, 0x0d, 0xeb, 0x00, 0x92, 0x0d
-	.byte 0xeb, 0x00, 0x88, 0x0d, 0xeb, 0x00, 0x7a, 0x0d
-	.byte 0xeb, 0x00, 0x6c, 0x0d, 0xeb, 0x00, 0x5c, 0x0d
-	.byte 0xeb, 0x00, 0x4e, 0x0d, 0xeb, 0x00, 0x3c, 0x0d
-	.byte 0xeb, 0x00, 0x2a, 0x0d, 0xeb, 0x00, 0x1a, 0x0d
-	.byte 0xeb, 0x00, 0x08, 0x0d, 0xeb, 0x00, 0xf6, 0x0c
-	.byte 0xeb, 0x00, 0xe4, 0x0c, 0xeb, 0x00, 0xd6, 0x0c
-	.byte 0xeb, 0x00, 0xc6, 0x0c, 0xeb, 0x00, 0xb6, 0x0c
-	.byte 0xeb, 0x00, 0xa6, 0x0c, 0xeb, 0x00, 0x94, 0x0c
-	.byte 0xeb, 0x00, 0x82, 0x0c, 0xeb, 0x00, 0x74, 0x0c
-	.byte 0xeb, 0x00, 0x62, 0x0c, 0xeb, 0x00, 0x52, 0x0c
-	.byte 0xeb, 0x00, 0x3e, 0x0c, 0xeb, 0x00, 0x2c, 0x0c
-	.byte 0xeb, 0x00, 0x1a, 0x0c, 0xeb, 0x00, 0x0c, 0x0c
-	.byte 0xeb, 0x00, 0x02, 0x0c, 0xeb, 0x00, 0xf6, 0x0b
-	.byte 0xeb, 0x00, 0xe4, 0x0b, 0xeb, 0x00, 0xd2, 0x0b
-	.byte 0xeb, 0x00, 0xc2, 0x0b, 0xeb, 0x00, 0xb0, 0x0b
-	.byte 0xeb, 0x00, 0xa0, 0x0b, 0xeb, 0x00, 0x90, 0x0b
-	.byte 0xeb, 0x00, 0x82, 0x0b, 0xeb, 0x00, 0x72, 0x0b
-	.byte 0xeb, 0x00, 0x60, 0x0b, 0xeb, 0x00, 0x54, 0x0b
-	.byte 0xeb, 0x00, 0x48, 0x0b, 0xeb, 0x00, 0x36, 0x0b
-	.byte 0xeb, 0x00, 0x24, 0x0b, 0xeb, 0x00, 0x18, 0x0b
-	.byte 0xeb, 0x00, 0x08, 0x0b, 0xeb, 0x00, 0x00, 0x0b
-	.byte 0xeb, 0x00, 0xf4, 0x0a, 0xeb, 0x00, 0xe6, 0x0a
-	.byte 0xeb, 0x00, 0xda, 0x0a, 0xeb, 0x00, 0xcc, 0x0a
-	.byte 0xeb, 0x00, 0xbe, 0x0a, 0xeb, 0x00, 0xb0, 0x0a
-	.byte 0xeb, 0x00, 0x9e, 0x0a, 0xeb, 0x00, 0x92, 0x0a
-	.byte 0xeb, 0x00, 0x84, 0x0a, 0xeb, 0x00, 0x74, 0x0a
-	.byte 0xeb, 0x00, 0x66, 0x0a, 0xeb, 0x00, 0x58, 0x0a
-	.byte 0xeb, 0x00, 0x4c, 0x0a, 0xeb, 0x00, 0x3c, 0x0a
-	.byte 0xeb, 0x00, 0x2a, 0x0a, 0xeb, 0x00, 0x18, 0x0a
-	.byte 0xeb, 0x00, 0x0a, 0x0a, 0xeb, 0x00, 0xfc, 0x09
-	.byte 0xeb, 0x00, 0xe8, 0x09, 0xeb, 0x00, 0xd8, 0x09
-	.byte 0xeb, 0x00, 0xca, 0x09, 0xeb, 0x00, 0xb8, 0x09
-	.byte 0xeb, 0x00, 0xaa, 0x09, 0xeb, 0x00, 0x9a, 0x09
-	.byte 0xeb, 0x00, 0x88, 0x09, 0xeb, 0x00, 0x76, 0x09
-	.byte 0xeb, 0x00, 0x68, 0x09, 0xeb, 0x00, 0x5a, 0x09
-	.byte 0xeb, 0x00, 0x4c, 0x09, 0xeb, 0x00, 0x3e, 0x09
-	.byte 0xeb, 0x00, 0x30, 0x09, 0xeb, 0x00, 0x22, 0x09
-	.byte 0xeb, 0x00, 0x12, 0x09, 0xeb, 0x00, 0x00, 0x09
-	.byte 0xeb, 0x00, 0xee, 0x08, 0xeb, 0x00, 0xdc, 0x08
-	.byte 0xeb, 0x00, 0xce, 0x08, 0xeb, 0x00, 0xc0, 0x08
-	.byte 0xeb, 0x00, 0xae, 0x08, 0xeb, 0x00, 0x9c, 0x08
-	.byte 0xeb, 0x00, 0x8a, 0x08, 0xeb, 0x00, 0x7c, 0x08
-	.byte 0xeb, 0x00, 0x6c, 0x08, 0xeb, 0x00, 0x5a, 0x08
-	.byte 0xeb, 0x00, 0x48, 0x08, 0xeb, 0x00, 0x36, 0x08
-	.byte 0xeb, 0x00, 0x26, 0x08, 0xeb, 0x00, 0x14, 0x08
-	.byte 0xeb, 0x00, 0x06, 0x08, 0xeb, 0x00, 0xf4, 0x07
-	.byte 0xeb, 0x00, 0xe8, 0x07, 0xeb, 0x00, 0xd6, 0x07
-	.byte 0xeb, 0x00, 0xc6, 0x07, 0xeb, 0x00, 0xb6, 0x07
-	.byte 0xeb, 0x00, 0xa8, 0x07, 0xeb, 0x00, 0x94, 0x07
-	.byte 0xeb, 0x00, 0x80, 0x07, 0xeb, 0x00, 0x70, 0x07
-	.byte 0xeb, 0x00, 0x62, 0x07, 0xeb, 0x00, 0x54, 0x07
-	.byte 0xeb, 0x00, 0x42, 0x07, 0xeb, 0x00, 0x36, 0x07
-	.byte 0xeb, 0x00, 0x28, 0x07, 0xeb, 0x00, 0x16, 0x07
-	.byte 0xeb, 0x00, 0x04, 0x07, 0xeb, 0x00, 0xf4, 0x06
-	.byte 0xeb, 0x00, 0xe6, 0x06, 0xeb, 0x00, 0xd6, 0x06
-	.byte 0xeb, 0x00, 0xc8, 0x06, 0xeb, 0x00, 0xba, 0x06
-	.byte 0xeb, 0x00, 0xa8, 0x06, 0xeb, 0x00, 0x9e, 0x06
-	.byte 0xeb, 0x00, 0x8a, 0x06, 0xeb, 0x00, 0x7e, 0x06
-	.byte 0xeb, 0x00, 0x70, 0x06, 0xeb, 0x00, 0x60, 0x06
-	.byte 0xeb, 0x00, 0x54, 0x06, 0xeb, 0x00, 0x46, 0x06
-	.byte 0xeb, 0x00, 0x38, 0x06, 0xeb, 0x00, 0x28, 0x06
-	.byte 0xeb, 0x00, 0x10, 0x06, 0xeb, 0x00, 0x00, 0x06
-	.byte 0xeb, 0x00, 0xf8, 0x05, 0xeb, 0x00, 0xf2, 0x05
-	.byte 0xeb, 0x00, 0xe2, 0x05, 0xeb, 0x00, 0xd4, 0x05
-	.byte 0xeb, 0x00, 0xc6, 0x05, 0xeb, 0x00, 0xb8, 0x05
-	.byte 0xeb, 0x00, 0xae, 0x05, 0xeb, 0x00, 0x96, 0x05
-	.byte 0xeb, 0x00, 0x86, 0x05, 0xeb, 0x00, 0x78, 0x05
-	.byte 0xeb, 0x00, 0x76, 0x05, 0xeb, 0x00
-NakaInst_FuncNames_Terminator:
-	.byte 0x00, 0xff
-NakaInst_DrawBitmapSP2:			aligned_string "DrawBitmapSP2"
-NakaInst_MainDeleteEvent:			aligned_string "MainDeleteEvent"
-NakaInst_MainDeleteSpecificEvent:			aligned_string "MainDeleteSpecificEvent"
-NakaInst_DrawFunc:			aligned_string "DrawFunc"
-NakaInst_SetRootParam:			aligned_string "SetRootParam"
-NakaInst_SetRootEvent:			aligned_string "SetRootEvent"
-NakaInst_InitDrawTask:			aligned_string "InitDrawTask"
-NakaInst_RefreshSwEvent:			aligned_string "RefreshSwEvent"
-NakaInst_LcdOn:			aligned_string "LcdOn"
-NakaInst_LcdOff:			aligned_string "LcdOff"
-NakaInst_DrawBitmapFile:			aligned_string "DrawBitmapFile"
-NakaInst_VwUserBitmapByNameProc:			aligned_string "VwUserBitmapByNameProc"
-NakaInst_ApDeliveryEvent:			aligned_string "ApDeliveryEvent"
-Str_RefreshApTask:			.asciz "RefreshApTask"
-NakaInst_WakeUpApTask:			aligned_string "WakeUpApTask"
-Str_SleepApTask:			.asciz "SleepApTask"
-NakaInst_WakeUpMainTask:			aligned_string "WakeUpMainTask"
-NakaInst_SleepMainTask:			aligned_string "SleepMainTask"
-NakaInst_DeleteEvent:			aligned_string "DeleteEvent"
-NakaInst_DeleteSpecificEvent:			aligned_string "DeleteSpecificEvent"
-NakaInst_FuncCall:			aligned_string "FuncCall"
-NakaInst_IvIntWelcomeProc:			aligned_string "IvIntWelcomeProc"
-NakaInst_SetWallColor:			aligned_string "SetWallColor"
-NakaInst_SetWallPaper:			aligned_string "SetWallPaper"
-NakaInst_InitPaletteRGB:			aligned_string "InitPaletteRGB"
-NakaInst_SetPaletteRGB:			aligned_string "SetPaletteRGB"
-NakaInst_DrawBitmapFast:			aligned_string "DrawBitmapFast"
-Str_DrawBitmapSPFast:		aligned_string "DrawBitmapSPFast"
-Str_GetNamingWindowID:		aligned_string "GetNamingWindowID"
-Str_IvScreenProc:		aligned_string "IvScreenProc"
-Str_CaptureLcd:			aligned_string "CaptureLcd"
-Str_VwUserBitmapProc:		aligned_string "VwUserBitmapProc"
-Str_DrawBitmapSP:		aligned_string "DrawBitmapSP"
-Str_GetPartSelect:		aligned_string "GetPartSelect"
-Str_TrChordBoxProc:		aligned_string "TrChordBoxProc"
-Str_TrTransposeBoxProc:		aligned_string "TrTransposeBoxProc"
-Str_AcLanguageTextProc:		aligned_string "AcLanguageTextProc"
-Str_PsTextBoxProc:		aligned_string "PsTextBoxProc"
-Str_IvShowHideProc:		aligned_string "IvShowHideProc"
-Str_SetNotDrawFlag:		aligned_string "SetNotDrawFlag"
-Str_ConvertStringsEx:		aligned_string "ConvertStringsEx"
-Str_SetVariFlag:		aligned_string "SetVariFlag"
-Str_IvIntEasySetProc:		aligned_string "IvIntEasySetProc"
-Str_IvIntVariProc:		aligned_string "IvIntVariProc"
-Str_IvIntCompleteProc:		aligned_string "IvIntCompleteProc"
-Str_IvIntErrorProc:		aligned_string "IvIntErrorProc"
-Str_IvIntReminderProc:		aligned_string "IvIntReminderProc"
-Str_CheckNotDrawFlag:		aligned_string "CheckNotDrawFlag"
-Str_SetInterruptTime:		aligned_string "SetInterruptTime"
-Str_IvInterruptProc:		aligned_string "IvInterruptProc"
-Str_IntTimeIDProc:		aligned_string "IntTimeIDProc"
-Str_DbMemoryDumpProc:		aligned_string "DbMemoryDumpProc"
-Str_IvExitWindowProc:		aligned_string "IvExitWindowProc"
-Str_IvTrackSwitchProc:		aligned_string "IvTrackSwitchProc"
-Str_GetDirmdFlag:		aligned_string "GetDirmdFlag"
-Str_DirmdEmulator:		aligned_string "DirmdEmulator"
-Str_IvDirmdScreenProc:		aligned_string "IvDirmdScreenProc"
-Str_AcTrackSwitchProc:		aligned_string "AcTrackSwitchProc"
-Str_PsTrackSwitchProc:		aligned_string "PsTrackSwitchProc"
-Str_DbDebugMenuProc:		aligned_string "DbDebugMenuProc"
-Str_AcGridBoxProc:		aligned_string "AcGridBoxProc"
-Str_AcListBoxProc:		aligned_string "AcListBoxProc"
-Str_PsGridBoxProc:		aligned_string "PsGridBoxProc"
-Str_PsListBoxProc:		aligned_string "PsListBoxProc"
-Str_GetDialFocus:		aligned_string "GetDialFocus"
-Str_SetDialFocus:		aligned_string "SetDialFocus"
-Str_IvCatchEventProc:		aligned_string "IvCatchEventProc"
-Str_AcStrRadioBoxProc:		aligned_string "AcStrRadioBoxProc"
-Str_PsRadioBoxProc:		aligned_string "PsRadioBoxProc"
-Str_AcRamBoxProc:		aligned_string "AcRamBoxProc"
-Str_AcIndexToggleProc:		aligned_string "AcIndexToggleProc"
-Str_IvNamingProc:		aligned_string "IvNamingProc"
-Str_PsCursorBoxProc:		aligned_string "PsCursorBoxProc"
-Str_AcNamingWindowProc:		aligned_string "AcNamingWindowProc"
-Str_IvFixWinProc:		aligned_string "IvFixWinProc"
-Str_GetBoxCenter:		aligned_string "GetBoxCenter"
-Str_DrawStringReverse:		aligned_string "DrawStringReverse"
-Str_IvExitScreenProc:		aligned_string "IvExitScreenProc"
-Str_IvExitModeProc:		aligned_string "IvExitModeProc"
-Str_IvExitProc:			aligned_string "IvExitProc"
-Str_GetFocusParam:		aligned_string "GetFocusParam"
-Str_GetFocusEvent:		aligned_string "GetFocusEvent"
-Str_GetFocusObject:		aligned_string "GetFocusObject"
-Str_SetRootObject:		aligned_string "SetRootObject"
-Str_SetAutoInc:			aligned_string "SetAutoInc"
-Str_SetAutoIncDefault:		aligned_string "SetAutoIncDefault"
-Str_GetRootParam:		aligned_string "GetRootParam"
-Str_GetRootEvent:		aligned_string "GetRootEvent"
-Str_GetRootObject:		aligned_string "GetRootObject"
-Str_KillApTimer:		aligned_string "KillApTimer"
-Str_ResetApTimer:		aligned_string "ResetApTimer"
-Str_SetApTimer:			aligned_string "SetApTimer"
-Str_ApTimer:			aligned_string "ApTimer"
-Str_InitializeTimer:		aligned_string "InitializeTimer"
-Str_DbMemoProc:			aligned_string "DbMemoProc"
-Str_PsWideToggleProc:		aligned_string "PsWideToggleProc"
-Str_AcFuncToggleProc:		aligned_string "AcFuncToggleProc"
-Str_MainBitGet:			aligned_string "MainBitGet"
-Str_MainBitPut:			aligned_string "MainBitPut"
-Str_AcBitEditBoxProc:		aligned_string "AcBitEditBoxProc"
-Str_VwEditSwBoxProc:		aligned_string "VwEditSwBoxProc"
-Str_VwMenuBoxProc:		aligned_string "VwMenuBoxProc"
-Str_AcMixerVolProc:		aligned_string "AcMixerVolProc"
-Str_AcPmemNameProc:		aligned_string "AcPmemNameProc"
-Str_AcRhythmNameProc:		aligned_string "AcRhythmNameProc"
-Str_AcSoundNameProc:		aligned_string "AcSoundNameProc"
-Str_GetWallPaletteRGB:		aligned_string "GetWallPaletteRGB"
-Str_ChangeWallPalette:		aligned_string "ChangeWallPalette"
-Str_SetDialDown:		aligned_string "SetDialDown"
-Str_SetDialUp:			aligned_string "SetDialUp"
-Str_SetDialEnable:		aligned_string "SetDialEnable"
-Str_IvMainEditSwProc:		aligned_string "IvMainEditSwProc"
-Str_IvPageControlProc:		aligned_string "IvPageControlProc"
-Str_PsInvisibleBoxProc:		aligned_string "PsInvisibleBoxProc"
-Str_PsToggleBoxProc:		aligned_string "PsToggleBoxProc"
-Str_AcWindowPageProc:		aligned_string "AcWindowPageProc"
-Str_PsPageBoxProc:		aligned_string "PsPageBoxProc"
-Str_AcFuncEditSwProc:		aligned_string "AcFuncEditSwProc"
-Str_AcIndexEditSwProc:		aligned_string "AcIndexEditSwProc"
-Str_PsWideESBoxProc:		aligned_string "PsWideESBoxProc"
-Str_PsEditSwBoxProc:		aligned_string "PsEditSwBoxProc"
-Str_AcTitleMenuProc:		aligned_string "AcTitleMenuProc"
-Str_PsMenuBoxProc:		aligned_string "PsMenuBoxProc"
-Str_AcRamEditBoxProc:		aligned_string "AcRamEditBoxProc"
-Str_AcLswEditBoxProc:		aligned_string "AcLswEditBoxProc"
-Str_AcNumEditBoxProc:		aligned_string "AcNumEditBoxProc"
-Str_AcOnOffBoxProc:		aligned_string "AcOnOffBoxProc"
-Str_PsTblEditBoxProc:		aligned_string "PsTblEditBoxProc"
-Str_PsNumEditBoxProc:		aligned_string "PsNumEditBoxProc"
-Str_PsEditBoxProc:		aligned_string "PsEditBoxProc"
-Str_AcTempoBoxProc:		aligned_string "AcTempoBoxProc"
-Str_AcLswBoxProc:		aligned_string "AcLswBoxProc"
-Str_PsParaBoxProc:		aligned_string "PsParaBoxProc"
-Str_VwBoxProc:			aligned_string "VwBoxProc"
-Str_TextBoxProc:		aligned_string "TextBoxProc"
-Str_LineProc:			aligned_string "LineProc"
-Str_IconProc:			aligned_string "IconProc"
-Str_BitmapProc:			aligned_string "BitmapProc"
-Str_LabelProc:			aligned_string "LabelProc"
-Str_StringBoxProc:		aligned_string "StringBoxProc"
-Str_WindowProc:			aligned_string "WindowProc"
-Str_GroupBoxProc:		aligned_string "GroupBoxProc"
-Str_TitleEditProc:		aligned_string "TitleEditProc"
-Str_ModeEditProc:		aligned_string "ModeEditProc"
-Str_MainRamGet:			aligned_string "MainRamGet"
-Str_MainRamAdd:			aligned_string "MainRamAdd"
-Str_MainRamPut:			aligned_string "MainRamPut"
-Str_ResetLswFilter:		aligned_string "ResetLswFilter"
-Str_SetLswFilter:		aligned_string "SetLswFilter"
-Str_MainLswPartGet:		aligned_string "MainLswPartGet"
-Str_MainLswGet:			aligned_string "MainLswGet"
-Str_MainLswPartAdd:		aligned_string "MainLswPartAdd"
-Str_MainLswAdd:			aligned_string "MainLswAdd"
-Str_MainLswPartPut:		aligned_string "MainLswPartPut"
-Str_MainLswPut:			aligned_string "MainLswPut"
-Str_DrawEditSw:			aligned_string "DrawEditSw"
-Str_EditSwProc:			aligned_string "EditSwProc"
-Str_DrawTitleBar:		aligned_string "DrawTitleBar"
-Str_TtlScreenProc:		aligned_string "TtlScreenProc"
-Str_DrawDesignFrame:		aligned_string "DrawDesignFrame"
-Str_GetClientFrame2:		aligned_string "GetClientFrame2"
-Str_GetClientFrame:		aligned_string "GetClientFrame"
-Str_FrameProc:			aligned_string "FrameProc"
-Str_GetEditSwPoint:		aligned_string "GetEditSwPoint"
-Str_ScreenProc:			aligned_string "ScreenProc"
-Str_BoxRightCheck:		aligned_string "BoxRightCheck"
-Str_BoxLeftCheck:		aligned_string "BoxLeftCheck"
-Str_GetFrameColor:		aligned_string "GetFrameColor"
-Str_DrawDesignBox:		aligned_string "DrawDesignBox"
-Str_GetClientBox2:		aligned_string "GetClientBox2"
-Str_GetClientBox:		aligned_string "GetClientBox"
-Str_BoxProc:			aligned_string "BoxProc"
-Str_SetBox:			aligned_string "SetBox"
-Str_GetBox:			aligned_string "GetBox"
-Str_GetViewInstance:		aligned_string "GetViewInstance"
-Str_GetLinkView:		aligned_string "GetLinkView"
-Str_SetSuperView:		aligned_string "SetSuperView"
-Str_Unlink:			aligned_string "Unlink"
-Str_Link:			aligned_string "Link"
-Str_SubView:			aligned_string "SubView"
-Str_SuperView:			aligned_string "SuperView"
-Str_PrevView:			aligned_string "PrevView"
-Str_NextView:			aligned_string "NextView"
-Str_GetMovable:			aligned_string "GetMovable"
-Str_SetMovable:			aligned_string "SetMovable"
-Str_GetVisible:			aligned_string "GetVisible"
-Str_SetVisible:			aligned_string "SetVisible"
-Str_GetChange:			aligned_string "GetChange"
-Str_SetChange:			aligned_string "SetChange"
-Str_GetConst:			aligned_string "GetConst"
-Str_SetConst:			aligned_string "SetConst"
-Str_ViewableProc:		aligned_string "ViewableProc"
-Str_GetTitleOld:		aligned_string "GetTitleOld"
-Str_GetTitleNow:		aligned_string "GetTitleNow"
-Str_UnregisteredTitle:		aligned_string "UnregisteredTitle"
-Str_RegisterTitle:		aligned_string "RegisterTitle"
-Str_TitleProc:			aligned_string "TitleProc"
-Str_GetModeOld:			aligned_string "GetModeOld"
-Str_GetModeNow:			aligned_string "GetModeNow"
-Str_UnregisteredMode:		aligned_string "UnregisteredMode"
-Str_RegisterMode:		aligned_string "RegisterMode"
-Str_ModeProc:			aligned_string "ModeProc"
-Str_MainFuncCall:		aligned_string "MainFuncCall"
-Str_ApFuncCall:			aligned_string "ApFuncCall"
-Str_MainFunctionProc:		aligned_string "MainFunctionProc"
-Str_ApFunctionProc:		aligned_string "ApFunctionProc"
-Str_FunctionProc:		aligned_string "FunctionProc"
-Str_TrackIDProc:		aligned_string "TrackIDProc"
-Str_PartIDProc:			aligned_string "PartIDProc"
-Str_UserIDProc:			aligned_string "UserIDProc"
-Str_MainFuncIDProc:		aligned_string "MainFuncIDProc"
-Str_ApFuncIDProc:		aligned_string "ApFuncIDProc"
-Str_BitmapIDProc:		aligned_string "BitmapIDProc"
-Str_FrameIDProc:		aligned_string "FrameIDProc"
-Str_LineModeIDProc:		aligned_string "LineModeIDProc"
-Str_EditSwStyleIDProc:		aligned_string "EditSwStyleIDProc"
-Str_EditSwIDProc:		aligned_string "EditSwIDProc"
-Str_AlignmentIDProc:		aligned_string "AlignmentIDProc"
-Str_FontIDProc:			aligned_string "FontIDProc"
-Str_IconIDProc:			aligned_string "IconIDProc"
-Str_TitleIDProc:		aligned_string "TitleIDProc"
-Str_ModeIDProc:			aligned_string "ModeIDProc"
-Str_BorderIDProc:		aligned_string "BorderIDProc"
-Str_ColorIDProc:		aligned_string "ColorIDProc"
-Str_ViewFlagProc:		aligned_string "ViewFlagProc"
-Str_ViewIDProc:			aligned_string "ViewIDProc"
-Str_ConstFlagProc:		aligned_string "ConstFlagProc"
-Str_NameProc:			aligned_string "NameProc"
-Str_StringProc:			aligned_string "StringProc"
-Str_PointYProc:			aligned_string "PointYProc"
-Str_PointXProc:			aligned_string "PointXProc"
-Str_POINTWProc:			aligned_string "POINTWProc"
-Str_RectY2Proc:			aligned_string "RectY2Proc"
-Str_RectX2Proc:			aligned_string "RectX2Proc"
-Str_RectY1Proc:			aligned_string "RectY1Proc"
-Str_RectX1Proc:			aligned_string "RectX1Proc"
-Str_RECTWProc:			aligned_string "RECTWProc"
-Str_EventIDProc:		aligned_string "EventIDProc"
-Str_WindowIDProc:		aligned_string "WindowIDProc"
-Str_ScreenIDProc:		aligned_string "ScreenIDProc"
-Str_ClassIDProc:		aligned_string "ClassIDProc"
-Str_pStringProc:		aligned_string "pStringProc"
-Str_pPropProc:			aligned_string "pPropProc"
-Str_pProcProc:			aligned_string "pProcProc"
-Str_pFuncProc:			aligned_string "pFuncProc"
-Str_ObjectIDProc:		aligned_string "ObjectIDProc"
-Str_pUlongProc:			aligned_string "pUlongProc"
-Str_pSlongProc:			aligned_string "pSlongProc"
-Str_pUcharProc:			aligned_string "pUcharProc"
-Str_pScharProc:			aligned_string "pScharProc"
-Str_pUwordProc:			aligned_string "pUwordProc"
-Str_pSwordProc:			aligned_string "pSwordProc"
-Str_pBoolProc:			aligned_string "pBoolProc"
-Str_boolProc:			aligned_string "boolProc"
-Str_ulongProc:			aligned_string "ulongProc"
-Str_slongProc:			aligned_string "slongProc"
-Str_scharProc:			aligned_string "scharProc"
-Str_ucharProc:			aligned_string "ucharProc"
-Str_uwordProc:			aligned_string "uwordProc"
-Str_swordProc:			aligned_string "swordProc"
-Str_SupportClassProc:		aligned_string "SupportClassProc"
-Str_ClassProc:			aligned_string "ClassProc"
-Str_WordwrapStrings:		aligned_string "WordwrapStrings"
-Str_CalcTotalWidth:		aligned_string "CalcTotalWidth"
-Str_ConvertStrings:		aligned_string "ConvertStrings"
-Str_GetCenteredDelta:		aligned_string "GetCenteredDelta"
-Str_GetCharDescent:		aligned_string "GetCharDescent"
-Str_GetCharHeight:		aligned_string "GetCharHeight"
-Str_GetFrameSPSize:		aligned_string "GetFrameSPSize"
-Str_ResNameProc:		aligned_string "ResNameProc"
-Str_ResStringProc:		aligned_string "ResStringProc"
-Str_ResMethodProc:		aligned_string "ResMethodProc"
-Str_ResEventProc:		aligned_string "ResEventProc"
-Str_ResFontProc:		aligned_string "ResFontProc"
-Str_ResIconProc:		aligned_string "ResIconProc"
-Str_ResFrameProc:		aligned_string "ResFrameProc"
-Str_ResBitmapProc:		aligned_string "ResBitmapProc"
-Str_ResourceProc:		aligned_string "ResourceProc"
-Str_ApPostEvent:		aligned_string "ApPostEvent"
-Str_MainGetEvent:		aligned_string "MainGetEvent"
-Str_MainPostEvent:		aligned_string "MainPostEvent"
-Str_MainSendEvent:		aligned_string "MainSendEvent"
-Str_MainDispatchEvent:		aligned_string "MainDispatchEvent"
-Str_SetCurrentTarget:		aligned_string "SetCurrentTarget"
-Str_GetCurrentTarget:		aligned_string "GetCurrentTarget"
-Str_GetEvent:			aligned_string "GetEvent"
-Str_PostEvent:			aligned_string "PostEvent"
-Str_SendEvent:			aligned_string "SendEvent"
-Str_DispatchEvent:		aligned_string "DispatchEvent"
-Str_InitializeEventQueue:	aligned_string "InitializeEventQueue"
-Str_CheckViewObject:		aligned_string "CheckViewObject"
-Str_CountObject:		aligned_string "CountObject"
-Str_UnRegisterObject:		aligned_string "UnRegisterObject"
-Str_RegisterObject:		aligned_string "RegisterObject"
-Str_RegisterObjectTable:	aligned_string "RegisterObjectTable"
-Str_InitializeObjectTable:	aligned_string "InitializeObjectTable"
-Str_InheritedProc:		aligned_string "InheritedProc"
-Str_ObjectProc:			aligned_string "ObjectProc"
-Str_DrawStringAlignment:	aligned_string "DrawStringAlignment"
-Str_DrawStringRightJustify:	aligned_string "DrawStringRightJustify"
-Str_DrawStringLeftJustify:	aligned_string "DrawStringLeftJustify"
-Str_DrawStringCentered:		aligned_string "DrawStringCentered"
-Str_DrawString:			aligned_string "DrawString"
-Str_DrawFrameSP:		aligned_string "DrawFrameSP"
-Str_DrawIcons:			aligned_string "DrawIcons"
-Str_DrawBitmap:			aligned_string "DrawBitmap"
-Str_DrawWall:			aligned_string "DrawWall"
-Str_MovePixels:			aligned_string "MovePixels"
-Str_DrawFrameEx:		aligned_string "DrawFrameEx"
-Str_DrawFrame:			aligned_string "DrawFrame"
-Str_DrawBox:			aligned_string "DrawBox"
-Str_DrawLineEx:			aligned_string "DrawLineEx"
-Str_DrawLine:			aligned_string "DrawLine"
-Str_ModifyPixelEx:		aligned_string "ModifyPixelEx"
-Str_ModifyPixel:		aligned_string "ModifyPixel"
-Str_ReadPixel:			aligned_string "ReadPixel"
-Str_SetChangeRect:		aligned_string "SetChangeRect"
-Str_SetNeedUpdate:		aligned_string "SetNeedUpdate"
-Str_UpdateScreen:		aligned_string "UpdateScreen"
-Str_InitializeGraphics:		aligned_string "InitializeGraphics"
-Str_InitializeUser31:		aligned_string "InitializeUser31"
-Str_InitializeUser30:		aligned_string "InitializeUser30"
-Str_InitializeUser29:		aligned_string "InitializeUser29"
-Str_InitializeUser28:		aligned_string "InitializeUser28"
-Str_InitializeUser27:		aligned_string "InitializeUser27"
-Str_InitializeUser26:		aligned_string "InitializeUser26"
-Str_InitializeUser25:		aligned_string "InitializeUser25"
-Str_InitializeUser24:		aligned_string "InitializeUser24"
-Str_InitializeUser23:		aligned_string "InitializeUser23"
-Str_InitializeUser22:		aligned_string "InitializeUser22"
-Str_InitializeUser21:		aligned_string "InitializeUser21"
-Str_InitializeUser20:		aligned_string "InitializeUser20"
-Str_InitializeUser19:		aligned_string "InitializeUser19"
-Str_InitializeUser18:		aligned_string "InitializeUser18"
-Str_InitializeUser17:		aligned_string "InitializeUser17"
-Str_InitializeUser16:		aligned_string "InitializeUser16"
-Str_InitializeUser15:		aligned_string "InitializeUser15"
-Str_InitializeUser14:		aligned_string "InitializeUser14"
-Str_InitializeUser13:		aligned_string "InitializeUser13"
-Str_InitializeUser12:		aligned_string "InitializeUser12"
-Str_InitializeNaka:		aligned_string "InitializeNaka"
-Str_InitializeKSS:		aligned_string "InitializeKSS"
-Str_InitializeHama:		aligned_string "InitializeHama"
-Str_InitializeKubo:		aligned_string "InitializeKubo"
-Str_InitializeYoko:		aligned_string "InitializeYoko"
-Str_InitializeScoop:		aligned_string "InitializeScoop"
-Str_InitializeCheap:		aligned_string "InitializeCheap"
-Str_InitializeSuna:		aligned_string "InitializeSuna"
-Str_InitializeEast:		aligned_string "InitializeEast"
-Str_InitializeToshi:		aligned_string "InitializeToshi"
-Str_InitializeMurai:		aligned_string "InitializeMurai"
-Str_InitializeRoot:		aligned_string "InitializeRoot"
-	.byte 0xb0, 0x00, 0x92, 0x20, 0xeb, 0x00
-IconNamePtrTable:
-	.long IconName_Default
-	.long IconName_i0
-	.long IconName_i1
-	.long IconName_i2
-	.long IconName_i3
-	.long IconName_i4
-	.long IconName_i5
-	.long IconName_i6
-	.long IconName_i7
-	.long IconName_i8
-	.long IconName_i9
-	.long IconName_i10
-	.long IconName_i11
-	.long IconName_i12
-	.long IconName_i13
-	.long IconName_i14
-	.long IconName_i15
-	.long IconName_i16
-	.long IconName_i17
-	.long IconName_i18
-	.long IconName_i19
-	.long IconName_i20
-	.long IconName_i21
-	.long IconName_i22
-	.long IconName_i23
-	.long IconName_i24
-	.long IconName_i25
-	.long IconName_i26
-	.long IconName_i27
-	.long IconName_i28
-	.long IconName_i29
-	.long IconName_i30
-	.long IconName_i31
-	.long IconName_i32
-	.long IconName_i33
-	.long IconName_i34
-	.long IconName_i35
-	.long IconName_i36
-	.long IconName_i37
-	.long IconName_i38
-	.long IconName_i39
-	.long IconName_i40
-	.long IconName_i41
-	.long IconName_i42
-	.long IconName_i43
-	.long IconName_i44
-	.long IconName_i45
-	.long IconName_i46
-	.long IconName_i47
-	.long IconName_i48
-	.long IconName_i49
-	.long IconName_i50
-	.long IconName_i51
-	.long IconName_i52
-	.long IconName_i53
-	.long IconName_i54
-	.long IconName_i55
-	.long IconName_i56
-	.long IconName_i57
-	.long IconName_i58
-	.long IconName_i59
-	.long IconName_i60
-	.long IconName_i61
-	.long IconName_i62
-	.long IconName_i63
-	.long IconName_i64
-	.long IconName_i65
-	.long IconName_i66
-	.long IconName_i67
-	.long IconName_i68
-	.long IconName_i69
-	.long IconName_i70
-	.long IconName_i71
-	.long IconName_i72
-	.long IconName_i73
-	.long IconName_i74
-	.long IconName_i75
-	.long IconName_i76
-	.long IconName_i77
-	.long IconName_i78
-	.long IconName_i79
-	.long IconName_i80
-	.long IconName_i81
-	.long IconName_i82
-	.long IconName_i83
-	.long IconName_i84
-	.long IconName_i85
-	.long IconName_i86
-	.long IconName_i87
-	.long IconName_i88
-	.long IconName_i89
-	.long IconName_i90
-	.long IconName_i91
-	.long IconName_i92
-	.long IconName_i93
-	.long IconName_i94
-	.long IconName_i95
-	.long IconName_i96
-	.long IconName_i97
-	.long IconName_i98
-	.long IconName_i99
-	.long IconName_i100
-	.long IconName_i101
-	.long IconName_i102
-	.long IconName_i103
-	.long IconName_i104
-	.long IconName_i105
-	.long IconName_i106
-	.long IconName_i107
-	.long IconName_i108
-	.long IconName_i109
-	.long IconName_i110
-	.long IconName_i111
-	.long IconName_i112
-	.long IconName_i113
-	.long IconName_i114
-	.long IconName_i115
-	.long IconName_i116
-	.long IconName_i117
-	.long IconName_i118
-	.long IconName_i119
-	.long IconName_i120
-	.long IconName_i121
-	.long IconName_i122
-	.long IconName_i123
-	.long IconName_i124
-	.long IconName_i125
-	.long IconName_i126
-	.long IconName_i127
-	.long IconName_i128
-	.long IconName_i129
-	.long IconName_i130
-	.long IconName_i131
-	.long IconName_i132
-	.long IconName_i133
-	.long IconName_i134
-	.long IconName_i135
-	.long IconName_i136
-	.long IconName_i137
-	.long IconName_i138
-	.long IconName_i139
-	.long IconName_i140
-	.long IconName_i141
-	.long IconName_i142
-	.long IconName_i143
-	.long IconName_i144
-	.long IconName_i145
-	.long IconName_i146
-	.long IconName_i147
-	.long IconName_i148
-	.long IconName_i149
-	.long IconName_i150
-	.long IconName_i151
-	.long IconName_i152
-	.long IconName_i153
-	.long IconName_i154
-	.long IconName_i155
-	.long IconName_i156
-	.long IconName_i157
-	.long IconName_i158
-	.long IconName_i159
-	.long IconName_i160
-	.long IconName_i161
-	.long IconName_i162
-	.long IconName_i163
-	.long IconName_i164
-	.long IconName_i165
-	.long IconName_i166
-	.long IconName_i167
-	.long IconName_i168
-	.long IconName_i169
-	.long IconName_i170
-	.long IconName_i171
-	.long IconName_i172
-	.long IconName_i173
-	.long IconName_Empty
-	.zero 316
-IconName_Empty:	aligned_string ""
-IconName_i173:	aligned_string "i173"
-IconName_i172:	aligned_string "i172"
-IconName_i171:	aligned_string "i171"
-IconName_i170:	aligned_string "i170"
-IconName_i169:	aligned_string "i169"
-IconName_i168:	aligned_string "i168"
-IconName_i167:	aligned_string "i167"
-IconName_i166:	aligned_string "i166"
-IconName_i165:	aligned_string "i165"
-IconName_i164:	aligned_string "i164"
-IconName_i163:	aligned_string "i163"
-IconName_i162:	aligned_string "i162"
-IconName_i161:	aligned_string "i161"
-IconName_i160:	aligned_string "i160"
-IconName_i159:	aligned_string "i159"
-IconName_i158:	aligned_string "i158"
-IconName_i157:	aligned_string "i157"
-IconName_i156:	aligned_string "i156"
-IconName_i155:	aligned_string "i155"
-IconName_i154:	aligned_string "i154"
-IconName_i153:	aligned_string "i153"
-IconName_i152:	aligned_string "i152"
-IconName_i151:	aligned_string "i151"
-IconName_i150:	aligned_string "i150"
-IconName_i149:	aligned_string "i149"
-IconName_i148:	aligned_string "i148"
-IconName_i147:	aligned_string "i147"
-IconName_i146:	aligned_string "i146"
-IconName_i145:	aligned_string "i145"
-IconName_i144:	aligned_string "i144"
-IconName_i143:	aligned_string "i143"
-IconName_i142:	aligned_string "i142"
-IconName_i141:	aligned_string "i141"
-IconName_i140:	aligned_string "i140"
-IconName_i139:	aligned_string "i139"
-IconName_i138:	aligned_string "i138"
-IconName_i137:	aligned_string "i137"
-IconName_i136:	aligned_string "i136"
-IconName_i135:	aligned_string "i135"
-IconName_i134:	aligned_string "i134"
-IconName_i133:	aligned_string "i133"
-IconName_i132:	aligned_string "i132"
-IconName_i131:	aligned_string "i131"
-IconName_i130:	aligned_string "i130"
-IconName_i129:	aligned_string "i129"
-IconName_i128:	aligned_string "i128"
-IconName_i127:	aligned_string "i127"
-IconName_i126:	aligned_string "i126"
-IconName_i125:	aligned_string "i125"
-IconName_i124:	aligned_string "i124"
-IconName_i123:	aligned_string "i123"
-IconName_i122:	aligned_string "i122"
-IconName_i121:	aligned_string "i121"
-IconName_i120:	aligned_string "i120"
-IconName_i119:	aligned_string "i119"
-IconName_i118:	aligned_string "i118"
-IconName_i117:	aligned_string "i117"
-IconName_i116:	aligned_string "i116"
-IconName_i115:	aligned_string "i115"
-IconName_i114:	aligned_string "i114"
-IconName_i113:	aligned_string "i113"
-IconName_i112:	aligned_string "i112"
-IconName_i111:	aligned_string "i111"
-IconName_i110:	aligned_string "i110"
-IconName_i109:	aligned_string "i109"
-IconName_i108:	aligned_string "i108"
-IconName_i107:	aligned_string "i107"
-IconName_i106:	aligned_string "i106"
-IconName_i105:	aligned_string "i105"
-IconName_i104:	aligned_string "i104"
-IconName_i103:	aligned_string "i103"
-IconName_i102:	aligned_string "i102"
-IconName_i101:	aligned_string "i101"
-IconName_i100:	aligned_string "i100"
-IconName_i99:
-	.byte 0x69, 0x39, 0x39, 0x00
-IconName_i98:	.asciz "i98"
-IconName_i97:
-	.byte 0x69, 0x39, 0x37, 0x00
-IconName_i96:	.asciz "i96"
-IconName_i95:
-	.byte 0x69, 0x39, 0x35, 0x00
-IconName_i94:	.asciz "i94"
-IconName_i93:
-	.byte 0x69, 0x39, 0x33, 0x00
-IconName_i92:	.asciz "i92"
-IconName_i91:
-	.byte 0x69, 0x39, 0x31, 0x00
-IconName_i90:	.asciz "i90"
-IconName_i89:
-	.byte 0x69, 0x38, 0x39, 0x00
-IconName_i88:	.asciz "i88"
-IconName_i87:
-	.byte 0x69, 0x38, 0x37, 0x00
-IconName_i86:	.asciz "i86"
-IconName_i85:
-	.byte 0x69, 0x38, 0x35, 0x00
-IconName_i84:	.asciz "i84"
-IconName_i83:
-	.byte 0x69, 0x38, 0x33, 0x00
-IconName_i82:	.asciz "i82"
-IconName_i81:
-	.byte 0x69, 0x38, 0x31, 0x00
-IconName_i80:	.asciz "i80"
-IconName_i79:
-	.byte 0x69, 0x37, 0x39, 0x00
-IconName_i78:	.asciz "i78"
-IconName_i77:
-	.byte 0x69, 0x37, 0x37, 0x00
-IconName_i76:	.asciz "i76"
-IconName_i75:
-	.byte 0x69, 0x37, 0x35, 0x00
-IconName_i74:	.asciz "i74"
-IconName_i73:
-	.byte 0x69, 0x37, 0x33, 0x00
-IconName_i72:	.asciz "i72"
-IconName_i71:
-	.byte 0x69, 0x37, 0x31, 0x00
-IconName_i70:	.asciz "i70"
-IconName_i69:
-	.byte 0x69, 0x36, 0x39, 0x00
-IconName_i68:	.asciz "i68"
-IconName_i67:
-	.byte 0x69, 0x36, 0x37, 0x00
-IconName_i66:	.asciz "i66"
-IconName_i65:
-	.byte 0x69, 0x36, 0x35, 0x00
-IconName_i64:	.asciz "i64"
-IconName_i63:
-	.byte 0x69, 0x36, 0x33, 0x00
-IconName_i62:	.asciz "i62"
-IconName_i61:
-	.byte 0x69, 0x36, 0x31, 0x00
-IconName_i60:	.asciz "i60"
-IconName_i59:
-	.byte 0x69, 0x35, 0x39, 0x00
-IconName_i58:	.asciz "i58"
-IconName_i57:
-	.byte 0x69, 0x35, 0x37, 0x00
-IconName_i56:	.asciz "i56"
-IconName_i55:
-	.byte 0x69, 0x35, 0x35, 0x00
-IconName_i54:	.asciz "i54"
-IconName_i53:
-	.byte 0x69, 0x35, 0x33, 0x00
-IconName_i52:	.asciz "i52"
-IconName_i51:
-	.byte 0x69, 0x35, 0x31, 0x00
-IconName_i50:	.asciz "i50"
-IconName_i49:
-	.byte 0x69, 0x34, 0x39, 0x00
-IconName_i48:	.asciz "i48"
-IconName_i47:
-	.byte 0x69, 0x34, 0x37, 0x00
-IconName_i46:	.asciz "i46"
-IconName_i45:
-	.byte 0x69, 0x34, 0x35, 0x00
-IconName_i44:	.asciz "i44"
-IconName_i43:
-	.byte 0x69, 0x34, 0x33, 0x00
-IconName_i42:	.asciz "i42"
-IconName_i41:
-	.byte 0x69, 0x34, 0x31, 0x00
-IconName_i40:	.asciz "i40"
-IconName_i39:
-	.byte 0x69, 0x33, 0x39, 0x00
-IconName_i38:	.asciz "i38"
-IconName_i37:
-	.byte 0x69, 0x33, 0x37, 0x00
-IconName_i36:	.asciz "i36"
-IconName_i35:
-	.byte 0x69, 0x33, 0x35, 0x00
-IconName_i34:	.asciz "i34"
-IconName_i33:
-	.byte 0x69, 0x33, 0x33, 0x00
-IconName_i32:	.asciz "i32"
-IconName_i31:
-	.byte 0x69, 0x33, 0x31, 0x00
-IconName_i30:	.asciz "i30"
-IconName_i29:
-	.byte 0x69, 0x32, 0x39, 0x00
-IconName_i28:	.asciz "i28"
-IconName_i27:
-	.byte 0x69, 0x32, 0x37, 0x00
-IconName_i26:	.asciz "i26"
-IconName_i25:
-	.byte 0x69, 0x32, 0x35, 0x00
-IconName_i24:	.asciz "i24"
-IconName_i23:
-	.byte 0x69, 0x32, 0x33, 0x00
-IconName_i22:	.asciz "i22"
-IconName_i21:
-	.byte 0x69, 0x32, 0x31, 0x00
-IconName_i20:	.asciz "i20"
-IconName_i19:
-	.byte 0x69, 0x31, 0x39, 0x00
-IconName_i18:	.asciz "i18"
-IconName_i17:
-	.byte 0x69, 0x31, 0x37, 0x00
-IconName_i16:	.asciz "i16"
-IconName_i15:
-	.byte 0x69, 0x31, 0x35, 0x00
-IconName_i14:	.asciz "i14"
-IconName_i13:
-	.byte 0x69, 0x31, 0x33, 0x00
-IconName_i12:	.asciz "i12"
-IconName_i11:
-	.byte 0x69, 0x31, 0x31, 0x00
-IconName_i10:	.asciz "i10"
-IconName_i9:
-	.byte 0x69, 0x39, 0x00, 0xff
-IconName_i8:	aligned_string "i8"
-IconName_i7:
-	.byte 0x69, 0x37, 0x00, 0xff
-IconName_i6:	aligned_string "i6"
-IconName_i5:
-	.byte 0x69, 0x35, 0x00, 0xff
-IconName_i4:	aligned_string "i4"
-IconName_i3:
-	.byte 0x69, 0x33, 0x00, 0xff
-IconName_i2:	aligned_string "i2"
-IconName_i1:
-	.byte 0x69, 0x31, 0x00, 0xff
-IconName_i0:		aligned_string "i0"
-IconName_Default:	aligned_string "Default"
-	aligned_string "None"
-IconBitmapNamePtrTable:
-	.long NakaInst_trash_bmp
-	.long LABEL_EB2AAE
-	.long LABEL_EB2AA6
-	.long LABEL_EB2A9E
-	.long LABEL_EB2A96
-	.long LABEL_EB2A8E
-	.long LABEL_EB2A86
-	.long LABEL_EB2A7E
-	.long LABEL_EB2A76
-	.long LABEL_EB2A6E
-	.long LABEL_EB2A66
-	.long LABEL_EB2A5E
-	.long LABEL_EB2A56
-	.long LABEL_EB2A4E
-	.long LABEL_EB2A46
-	.long LABEL_EB2A3E
-	.long LABEL_EB2A36
-	.long LABEL_EB2A2E
-	.long LABEL_EB2A26
-	.long LABEL_EB2A1E
-	.long LABEL_EB2A16
-	.long LABEL_EB2A0E
-	.long LABEL_EB2A06
-	.long LABEL_EB29FE
-	.long LABEL_EB29F6
-	.long LABEL_EB29EE
-	.long LABEL_EB29E6
-	.long LABEL_EB29DE
-	.long LABEL_EB29D6
-	.long LABEL_EB29CE
-	.long LABEL_EB29C6
-	.long LABEL_EB29BE
-	.long LABEL_EB29B6
-	.long LABEL_EB29AE
-	.long LABEL_EB29A6
-	.long LABEL_EB299E
-	.long LABEL_EB2996
-	.long LABEL_EB298E
-	.long LABEL_EB2986
-	.long LABEL_EB297E
-	.long LABEL_EB2976
-	.long LABEL_EB296E
-	.long LABEL_EB2966
-	.long LABEL_EB295E
-	.long LABEL_EB2956
-	.long LABEL_EB294E
-	.long LABEL_EB2946
-	.long LABEL_EB293E
-	.long LABEL_EB2936
-	.long LABEL_EB292E
-	.long LABEL_EB2926
-	.long LABEL_EB291E
-	.long LABEL_EB2916
-	.long LABEL_EB290E
-	.long LABEL_EB2906
-	.long LABEL_EB28FE
-	.long LABEL_EB28F6
-	.long LABEL_EB28EE
-	.long LABEL_EB28E6
-	.long LABEL_EB28DE
-	.long LABEL_EB28D6
-	.long LABEL_EB28CE
-	.long LABEL_EB28C6
-	.long LABEL_EB28BE
-	.long LABEL_EB28B6
-	.long LABEL_EB28AE
-	.long LABEL_EB28A6
-	.long LABEL_EB289E
-	.long LABEL_EB2896
-	.long LABEL_EB288E
-	.long LABEL_EB2886
-	.long LABEL_EB287E
-	.long NakaInst_0_bmp
-	.long NakaInst_i71_bmp
-	.long NakaInst_i72_bmp
-	.long NakaInst_i73o_bmp
-	.long NakaInst_i74o_bmp
-	.long NakaInst_i75_bmp
-	.long NakaInst_i76_bmp
-	.long NakaInst_i77_bmp
-	.long NakaInst_i78_bmp
-	.long NakaInst_i79_bmp
-	.long NakaInst_i80_bmp
-	.long NakaInst_i81_bmp
-	.long NakaInst_i82_bmp
-	.long NakaInst_i83_bmp
-	.long NakaInst_i84o_bmp
-	.long NakaInst_i85_bmp
-	.long NakaInst_i86_bmp
-	.long NakaInst_i87_bmp
-	.long IconBitmapName_i88
-	.long IconBitmapName_i89
-	.long IconBitmapName_i90o
-	.long IconBitmapName_i91o
-	.long IconBitmapName_i92o
-	.long IconBitmapName_i93o
-	.long IconBitmapName_i94
-	.long IconBitmapName_i95
-	.long IconBitmapName_i96o
-	.long IconBitmapName_i97
-	.long IconBitmapName_i98
-	.long IconBitmapName_i99
-	.long IconBitmapName_i100
-	.long IconBitmapName_i101
-	.long IconBitmapName_i102
-	.long IconBitmapName_i103
-	.long IconBitmapName_i104
-	.long IconBitmapName_i105
-	.long IconBitmapName_i106
-	.long IconBitmapName_i107o
-	.long IconBitmapName_i108
-	.long IconBitmapName_i109
-	.long IconBitmapName_i110
-	.long IconBitmapName_i111
-	.long IconBitmapName_i112
-	.long IconBitmapName_i113
-	.long IconBitmapName_i114
-	.long IconBitmapName_i115
-	.long IconBitmapName_i116
-	.long IconBitmapName_i117
-	.long IconBitmapName_i118
-	.long IconBitmapName_i119
-	.long IconBitmapName_i120
-	.long IconBitmapName_i121
-	.long IconBitmapName_i122
-	.long IconBitmapName_i123
-	.long IconBitmapName_i124
-	.long IconBitmapName_i125
-	.long IconBitmapName_i126
-	.long IconBitmapName_i127
-	.long IconBitmapName_i128
-	.long IconBitmapName_i129
-	.long IconBitmapName_i130
-	.long IconBitmapName_i131
-	.long IconBitmapName_i132
-	.long IconBitmapName_i133
-	.long IconBitmapName_i134
-	.long IconBitmapName_i135
-	.long IconBitmapName_i136
-	.long IconBitmapName_i137
-	.long IconBitmapName_i138
-	.long IconBitmapName_i139
-	.long IconBitmapName_i140
-	.long IconBitmapName_i141
-	.long IconBitmapName_i142
-	.long IconBitmapName_i143
-	.long IconBitmapName_i144
-	.long IconBitmapName_i145
-	.long IconBitmapName_i146
-	.long IconBitmapName_i147
-	.long IconBitmapName_i148
-	.long IconBitmapName_i149
-	.long IconBitmapName_i150
-	.long IconBitmapName_i151
-	.long IconBitmapName_i152
-	.long IconBitmapName_i153
-	.long IconBitmapName_i154
-	.long IconBitmapName_i155
-	.long IconBitmapName_i156
-	.long IconBitmapName_i157
-	.long IconBitmapName_i158
-	.long IconBitmapName_i159
-	.long IconBitmapName_i160
-	.long IconBitmapName_i161
-	.long IconBitmapName_i162
-	.long IconBitmapName_i163
-	.long IconBitmapName_i164
-	.long IconBitmapName_i165
-	.long IconBitmapName_i166
-	.long IconBitmapName_i167
-	.long IconBitmapName_i168
-	.long IconBitmapName_i169
-	.long IconBitmapName_i170
-	.long IconBitmapName_i171
-	.long IconBitmapName_i172
-	.long IconBitmapName_i173
-	.long IconBitmapName_Empty
-	.zero 316
-IconBitmapName_Empty:	aligned_string ""
-IconBitmapName_i173:	aligned_string "i173.bmp"
-IconBitmapName_i172:	aligned_string "i172.bmp"
-IconBitmapName_i171:	aligned_string "i171.bmp"
-IconBitmapName_i170:	aligned_string "i170.bmp"
-IconBitmapName_i169:	aligned_string "i169.bmp"
-IconBitmapName_i168:	aligned_string "i168.bmp"
-IconBitmapName_i167:	aligned_string "i167.bmp"
-IconBitmapName_i166:	aligned_string "i166.bmp"
-IconBitmapName_i165:	aligned_string "i165.bmp"
-IconBitmapName_i164:	aligned_string "i164.bmp"
-IconBitmapName_i163:	aligned_string "i163.bmp"
-IconBitmapName_i162:	aligned_string "i162.bmp"
-IconBitmapName_i161:	aligned_string "i161.bmp"
-IconBitmapName_i160:	aligned_string "i160.bmp"
-IconBitmapName_i159:	aligned_string "i159.bmp"
-IconBitmapName_i158:	aligned_string "i158.bmp"
-IconBitmapName_i157:	aligned_string "i157.bmp"
-IconBitmapName_i156:	aligned_string "i156.bmp"
-IconBitmapName_i155:	aligned_string "i155.bmp"
-IconBitmapName_i154:	aligned_string "i154.bmp"
-IconBitmapName_i153:	aligned_string "i153.bmp"
-IconBitmapName_i152:	aligned_string "i152.bmp"
-IconBitmapName_i151:	aligned_string "i151.bmp"
-IconBitmapName_i150:	aligned_string "i150.bmp"
-IconBitmapName_i149:	aligned_string "i149.bmp"
-IconBitmapName_i148:	aligned_string "i148.bmp"
-IconBitmapName_i147:	aligned_string "i147.bmp"
-IconBitmapName_i146:	aligned_string "i146.bmp"
-IconBitmapName_i145:	aligned_string "i145.bmp"
-IconBitmapName_i144:	aligned_string "i144.bmp"
-IconBitmapName_i143:	aligned_string "i143.bmp"
-IconBitmapName_i142:	aligned_string "i142.bmp"
-IconBitmapName_i141:	aligned_string "i141.bmp"
-IconBitmapName_i140:	aligned_string "i140.bmp"
-IconBitmapName_i139:	aligned_string "i139.bmp"
-IconBitmapName_i138:	aligned_string "i138.bmp"
-IconBitmapName_i137:	aligned_string "i137.bmp"
-IconBitmapName_i136:	aligned_string "i136.bmp"
-IconBitmapName_i135:	aligned_string "i135.bmp"
-IconBitmapName_i134:	aligned_string "i134.bmp"
-IconBitmapName_i133:	aligned_string "i133.bmp"
-IconBitmapName_i132:	aligned_string "i132.bmp"
-IconBitmapName_i131:	aligned_string "i131.bmp"
-IconBitmapName_i130:	aligned_string "i130.bmp"
-IconBitmapName_i129:	aligned_string "i129.bmp"
-IconBitmapName_i128:	aligned_string "i128.bmp"
-IconBitmapName_i127:	aligned_string "i127.bmp"
-IconBitmapName_i126:	aligned_string "i126.bmp"
-IconBitmapName_i125:	aligned_string "i125.bmp"
-IconBitmapName_i124:	aligned_string "i124.bmp"
-IconBitmapName_i123:	aligned_string "i123.bmp"
-IconBitmapName_i122:	aligned_string "i122.bmp"
-IconBitmapName_i121:	aligned_string "i121.bmp"
-IconBitmapName_i120:	aligned_string "i120.bmp"
-IconBitmapName_i119:	aligned_string "i119.bmp"
-IconBitmapName_i118:	aligned_string "i118.bmp"
-IconBitmapName_i117:	aligned_string "i117.bmp"
-IconBitmapName_i116:	aligned_string "i116.bmp"
-IconBitmapName_i115:	aligned_string "i115.bmp"
-IconBitmapName_i114:	aligned_string "i114.bmp"
-IconBitmapName_i113:	aligned_string "i113.bmp"
-IconBitmapName_i112:	aligned_string "i112.bmp"
-IconBitmapName_i111:	aligned_string "i111.bmp"
-IconBitmapName_i110:	aligned_string "i110.bmp"
-IconBitmapName_i109:	aligned_string "i109.bmp"
-IconBitmapName_i108:	aligned_string "i108.bmp"
-IconBitmapName_i107o:	aligned_string "i107o.bmp"
-IconBitmapName_i106:	aligned_string "i106.bmp"
-IconBitmapName_i105:	aligned_string "i105.bmp"
-IconBitmapName_i104:	aligned_string "i104.bmp"
-IconBitmapName_i103:	aligned_string "i103.bmp"
-IconBitmapName_i102:	aligned_string "i102.bmp"
-IconBitmapName_i101:	aligned_string "i101.bmp"
-IconBitmapName_i100:	aligned_string "i100.bmp"
-IconBitmapName_i99:	aligned_string "i99.bmp"
-IconBitmapName_i98:	aligned_string "i98.bmp"
-IconBitmapName_i97:
-	jr	ge, 0x39
-	aligned_string "7.bmp"
-	jr	ge, 0x39
-	aligned_string "6o.bmp"
-IconBitmapName_i95:	aligned_string "i95.bmp"
-IconBitmapName_i94:	aligned_string "i94.bmp"
-IconBitmapName_i93o:	aligned_string "i93o.bmp"
-IconBitmapName_i92o:	aligned_string "i92o.bmp"
-IconBitmapName_i91o:	aligned_string "i91o.bmp"
-IconBitmapName_i90o:	aligned_string "i90o.bmp"
-IconBitmapName_i89:	aligned_string "i89.bmp"
-IconBitmapName_i88:	aligned_string "i88.bmp"
-NakaInst_i87_bmp:		aligned_string "i87.bmp"
-NakaInst_i86_bmp:		aligned_string "i86.bmp"
-NakaInst_i85_bmp:		aligned_string "i85.bmp"
-NakaInst_i84o_bmp:		aligned_string "i84o.bmp"
-NakaInst_i83_bmp:		aligned_string "i83.bmp"
-NakaInst_i82_bmp:		aligned_string "i82.bmp"
-NakaInst_i81_bmp:		aligned_string "i81.bmp"
-NakaInst_i80_bmp:		aligned_string "i80.bmp"
-NakaInst_i79_bmp:		aligned_string "i79.bmp"
-NakaInst_i78_bmp:		aligned_string "i78.bmp"
-NakaInst_i77_bmp:		aligned_string "i77.bmp"
-NakaInst_i76_bmp:		aligned_string "i76.bmp"
-NakaInst_i75_bmp:		aligned_string "i75.bmp"
-NakaInst_i74o_bmp:		aligned_string "i74o.bmp"
-NakaInst_i73o_bmp:		aligned_string "i73o.bmp"
-NakaInst_i72_bmp:		aligned_string "i72.bmp"
-NakaInst_i71_bmp:		aligned_string "i71.bmp"
-NakaInst_0_bmp:
-	jr	ge, 0x37
-	aligned_string "0.bmp"
-	jr	ge, 0x36
-	aligned_string "9.bmp"
-	jr	ge, 0x36
-	aligned_string "8.bmp"
-	jr	ge, 0x36
-	aligned_string "7.bmp"
-	jr	ge, 0x36
-	aligned_string "6.bmp"
-	jr	ge, 0x36
-	aligned_string "5.bmp"
-	jr	ge, 0x36
-	aligned_string "4.bmp"
-	jr	ge, 0x36
-	aligned_string "3.bmp"
-	jr	ge, 0x36
-	aligned_string "2.bmp"
-	jr	ge, 0x36
-	aligned_string "1.bmp"
-	jr	ge, 0x36
-	aligned_string "0.bmp"
-	jr	ge, 0x35
-	aligned_string "9.bmp"
-	jr	ge, 0x35
-	aligned_string "8.bmp"
-	jr	ge, 0x35
-	aligned_string "7.bmp"
-	jr	ge, 0x35
-	aligned_string "6.bmp"
-	jr	ge, 0x35
-	aligned_string "5.bmp"
-	jr	ge, 0x35
-	aligned_string "4.bmp"
-	jr	ge, 0x35
-	aligned_string "3.bmp"
-	jr	ge, 0x35
-	aligned_string "2.bmp"
-	jr	ge, 0x35
-	aligned_string "1.bmp"
-	jr	ge, 0x35
-	aligned_string "0.bmp"
-	jr	ge, 0x34
-	aligned_string "9.bmp"
-	jr	ge, 0x34
-	aligned_string "8.bmp"
-	jr	ge, 0x34
-	aligned_string "7.bmp"
-	jr	ge, 0x34
-	aligned_string "6.bmp"
-	jr	ge, 0x34
-	aligned_string "5.bmp"
-	jr	ge, 0x34
-	aligned_string "4.bmp"
-	jr	ge, 0x34
-	aligned_string "3.bmp"
-	jr	ge, 0x34
-	aligned_string "2.bmp"
-	jr	ge, 0x34
-	aligned_string "1.bmp"
-	jr	ge, 0x34
-	aligned_string "0.bmp"
-	jr	ge, 0x33
-	aligned_string "9.bmp"
-	jr	ge, 0x33
-	aligned_string "8.bmp"
-	jr	ge, 0x33
-	aligned_string "7.bmp"
-	jr	ge, 0x33
-	aligned_string "6.bmp"
-	jr	ge, 0x33
-	aligned_string "5.bmp"
-	jr	ge, 0x33
-	aligned_string "4.bmp"
-	jr	ge, 0x33
-	aligned_string "3.bmp"
-	jr	ge, 0x33
-	aligned_string "2.bmp"
-	jr	ge, 0x33
-	aligned_string "1.bmp"
-	jr	ge, 0x33
-	aligned_string "0.bmp"
-	jr	ge, 0x32
-	aligned_string "9.bmp"
-	jr	ge, 0x32
-	aligned_string "8.bmp"
-	jr	ge, 0x32
-	aligned_string "7.bmp"
-	jr	ge, 0x32
-	aligned_string "6.bmp"
-	jr	ge, 0x32
-	aligned_string "5.bmp"
-	jr	ge, 0x32
-	aligned_string "4.bmp"
-	jr	ge, 0x32
-	aligned_string "3.bmp"
-	jr	ge, 0x32
-	aligned_string "2.bmp"
-	jr	ge, 0x32
-	aligned_string "1.bmp"
-	jr	ge, 0x32
-	aligned_string "0.bmp"
-	jr	ge, 0x31
-	aligned_string "9.bmp"
-	jr	ge, 0x31
-	aligned_string "8.bmp"
-	jr	ge, 0x31
-	aligned_string "7.bmp"
-	jr	ge, 0x31
-	aligned_string "6.bmp"
-	jr	ge, 0x31
-	aligned_string "5.bmp"
-	jr	ge, 0x31
-	aligned_string "4.bmp"
-	jr	ge, 0x31
-	aligned_string "3.bmp"
-	jr	ge, 0x31
-	aligned_string "2.bmp"
-	jr	ge, 0x31
-	aligned_string "1.bmp"
-	jr	ge, 0x31
-	aligned_string "0.bmp"
-	jr	ge, 0x39
-	aligned_string ".bmp"
-	aligned_string "i8.bmp"
-	aligned_string "i7.bmp"
-	aligned_string "i6o.bmp"
-	jr	ge, 0x35
-	aligned_string ".bmp"
-	aligned_string "i4o.bmp"
-	jr	ge, 0x33
-	aligned_string "o.bmp"
-	jr	ge, 0x32
-	aligned_string ".bmp"
-	aligned_string "i1.bmp"
-	aligned_string "i0.bmp"
-	aligned_string "trash.bmp"
-NakaInst_trash_bmp:	aligned_string "trash.bmp"
+; Widget Name Strings & Character Map Data (2 widgets, 22158 bytes)
+; Source: maincpu/ui_widgets/naka_widget_names_charmap.c (raw byte array)
+NakaData_WidgetNames:
+	.incbin "includes/generated/naka_widget_names_charmap.bin"
 
-
-	naka_header NAKA_TYPE_0x33
-	.byte 0xff, 0xff
-	.byte 0x01, 0x00, 0xff, 0xff, 0xff, 0xff, 0x08, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x3f, 0x01, 0xef, 0x00
-	.byte 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0xa0, 0x01
-	.byte 0xac, 0xf0, 0x03, 0x00
-Naka_FileManagerEntry:
-
-
-	naka_header NAKA_TYPE_0x2C
-	.byte 0x00, 0x00, 0xff, 0xff, 0x02, 0x00, 0xff, 0xff
-	.byte 0x08, 0x00, 0x06, 0x00, 0x22, 0x00, 0x38, 0x01
-	.byte 0x4e, 0x00, 0x01, 0x00, 0x00, 0x00
+; External label offsets within the binary blob above.
+	.equ NakaInst_CHARA5W, NakaData_WidgetNames + 0x0628
+	.equ NakaInst_CHARA2W, NakaData_WidgetNames + 0x0630
+	.equ NakaInst_CHARA1W, NakaData_WidgetNames + 0x0638
+	.equ NakaInst_CHARA6, NakaData_WidgetNames + 0x0640
+	.equ NakaInst_CHARA1P, NakaData_WidgetNames + 0x0648
+	.equ NakaInst_CHARA5, NakaData_WidgetNames + 0x0650
+	.equ NakaInst_CHARA4, NakaData_WidgetNames + 0x0658
+	.equ NakaInst_CHARA3, NakaData_WidgetNames + 0x0660
+	.equ NakaInst_CHARA2, NakaData_WidgetNames + 0x0668
+	.equ NakaInst_CHARA1, NakaData_WidgetNames + 0x0670
+	.equ NakaInst_CharaList_Pad, NakaData_WidgetNames + 0x0678
+	.equ NakaInst_chara5w_fnt, NakaData_WidgetNames + 0x067A
+	.equ NakaInst_chara2w_fnt, NakaData_WidgetNames + 0x0686
+	.equ NakaInst_chara1w_fnt, NakaData_WidgetNames + 0x0692
+	.equ NakaInst_ara6_fnt, NakaData_WidgetNames + 0x069E
+	.equ WidgetName_InitPtrTable, NakaData_WidgetNames + 0x2B82
+	.equ WidgetName_PtrBlock_A, NakaData_WidgetNames + 0x2B98
+	.equ WidgetName_PtrBlock_B1, NakaData_WidgetNames + 0x2BB0
+	.equ WidgetName_PtrBlock_B2, NakaData_WidgetNames + 0x2BB1
+	.equ WidgetName_PtrBlock_C, NakaData_WidgetNames + 0x2BBA
+	.equ WidgetName_PtrBlock_D, NakaData_WidgetNames + 0x2BE1
+	.equ WidgetName_PtrBlock_E, NakaData_WidgetNames + 0x2C08
+	.equ WidgetName_PtrBlock_F1, NakaData_WidgetNames + 0x2C2C
+	.equ WidgetName_PtrBlock_F2, NakaData_WidgetNames + 0x2C2F
+	.equ WidgetName_PtrBlock_G, NakaData_WidgetNames + 0x2C34
+	.equ WidgetName_PtrBlock_H, NakaData_WidgetNames + 0x2C48
+	.equ WidgetName_PtrBlock_I1, NakaData_WidgetNames + 0x2C54
+	.equ WidgetName_PtrBlock_I2, NakaData_WidgetNames + 0x2C56
+	.equ Data_WidgetNamesCharMapBlock, NakaData_WidgetNames + 0x2C65
+	.equ WidgetCharMap_DataEntry1, NakaData_WidgetNames + 0x2C68
+	.equ WidgetName_PtrBlock_K, NakaData_WidgetNames + 0x2C6B
+	.equ WidgetName_PtrBlock_L, NakaData_WidgetNames + 0x2C7D
+	.equ WidgetName_PtrBlock_M1, NakaData_WidgetNames + 0x2C9F
+	.equ WidgetName_PtrBlock_M2, NakaData_WidgetNames + 0x2CA4
+	.equ WidgetName_PtrBlock_N1, NakaData_WidgetNames + 0x2CCB
+	.equ WidgetCharMap_DataEntry2, NakaData_WidgetNames + 0x2CCF
+	.equ WidgetName_PtrBlock_O, NakaData_WidgetNames + 0x2D56
+	.equ NakaInst_FuncNames_Terminator, NakaData_WidgetNames + 0x3106
+	.equ NakaInst_DrawBitmapSP2, NakaData_WidgetNames + 0x3108
+	.equ NakaInst_MainDeleteEvent, NakaData_WidgetNames + 0x3116
+	.equ NakaInst_MainDeleteSpecificEvent, NakaData_WidgetNames + 0x3126
+	.equ NakaInst_DrawFunc, NakaData_WidgetNames + 0x313E
+	.equ NakaInst_SetRootParam, NakaData_WidgetNames + 0x3148
+	.equ NakaInst_SetRootEvent, NakaData_WidgetNames + 0x3156
+	.equ NakaInst_InitDrawTask, NakaData_WidgetNames + 0x3164
+	.equ NakaInst_RefreshSwEvent, NakaData_WidgetNames + 0x3172
+	.equ NakaInst_LcdOn, NakaData_WidgetNames + 0x3182
+	.equ NakaInst_LcdOff, NakaData_WidgetNames + 0x3188
+	.equ NakaInst_DrawBitmapFile, NakaData_WidgetNames + 0x3190
+	.equ NakaInst_VwUserBitmapByNameProc, NakaData_WidgetNames + 0x31A0
+	.equ NakaInst_ApDeliveryEvent, NakaData_WidgetNames + 0x31B8
+	.equ Str_RefreshApTask, NakaData_WidgetNames + 0x31C8
+	.equ NakaInst_WakeUpApTask, NakaData_WidgetNames + 0x31D6
+	.equ Str_SleepApTask, NakaData_WidgetNames + 0x31E4
+	.equ NakaInst_WakeUpMainTask, NakaData_WidgetNames + 0x31F0
+	.equ NakaInst_SleepMainTask, NakaData_WidgetNames + 0x3200
+	.equ NakaInst_DeleteEvent, NakaData_WidgetNames + 0x320E
+	.equ NakaInst_DeleteSpecificEvent, NakaData_WidgetNames + 0x321A
+	.equ NakaInst_FuncCall, NakaData_WidgetNames + 0x322E
+	.equ NakaInst_IvIntWelcomeProc, NakaData_WidgetNames + 0x3238
+	.equ NakaInst_SetWallColor, NakaData_WidgetNames + 0x324A
+	.equ NakaInst_SetWallPaper, NakaData_WidgetNames + 0x3258
+	.equ NakaInst_InitPaletteRGB, NakaData_WidgetNames + 0x3266
+	.equ NakaInst_SetPaletteRGB, NakaData_WidgetNames + 0x3276
+	.equ NakaInst_DrawBitmapFast, NakaData_WidgetNames + 0x3284
+	.equ Str_DrawBitmapSPFast, NakaData_WidgetNames + 0x3294
+	.equ Str_GetNamingWindowID, NakaData_WidgetNames + 0x32A6
+	.equ Str_IvScreenProc, NakaData_WidgetNames + 0x32B8
+	.equ Str_CaptureLcd, NakaData_WidgetNames + 0x32C6
+	.equ Str_VwUserBitmapProc, NakaData_WidgetNames + 0x32D2
+	.equ Str_DrawBitmapSP, NakaData_WidgetNames + 0x32E4
+	.equ Str_GetPartSelect, NakaData_WidgetNames + 0x32F2
+	.equ Str_TrChordBoxProc, NakaData_WidgetNames + 0x3300
+	.equ Str_TrTransposeBoxProc, NakaData_WidgetNames + 0x3310
+	.equ Str_AcLanguageTextProc, NakaData_WidgetNames + 0x3324
+	.equ Str_PsTextBoxProc, NakaData_WidgetNames + 0x3338
+	.equ Str_IvShowHideProc, NakaData_WidgetNames + 0x3346
+	.equ Str_SetNotDrawFlag, NakaData_WidgetNames + 0x3356
+	.equ Str_ConvertStringsEx, NakaData_WidgetNames + 0x3366
+	.equ Str_SetVariFlag, NakaData_WidgetNames + 0x3378
+	.equ Str_IvIntEasySetProc, NakaData_WidgetNames + 0x3384
+	.equ Str_IvIntVariProc, NakaData_WidgetNames + 0x3396
+	.equ Str_IvIntCompleteProc, NakaData_WidgetNames + 0x33A4
+	.equ Str_IvIntErrorProc, NakaData_WidgetNames + 0x33B6
+	.equ Str_IvIntReminderProc, NakaData_WidgetNames + 0x33C6
+	.equ Str_CheckNotDrawFlag, NakaData_WidgetNames + 0x33D8
+	.equ Str_SetInterruptTime, NakaData_WidgetNames + 0x33EA
+	.equ Str_IvInterruptProc, NakaData_WidgetNames + 0x33FC
+	.equ Str_IntTimeIDProc, NakaData_WidgetNames + 0x340C
+	.equ Str_DbMemoryDumpProc, NakaData_WidgetNames + 0x341A
+	.equ Str_IvExitWindowProc, NakaData_WidgetNames + 0x342C
+	.equ Str_IvTrackSwitchProc, NakaData_WidgetNames + 0x343E
+	.equ Str_GetDirmdFlag, NakaData_WidgetNames + 0x3450
+	.equ Str_DirmdEmulator, NakaData_WidgetNames + 0x345E
+	.equ Str_IvDirmdScreenProc, NakaData_WidgetNames + 0x346C
+	.equ Str_AcTrackSwitchProc, NakaData_WidgetNames + 0x347E
+	.equ Str_PsTrackSwitchProc, NakaData_WidgetNames + 0x3490
+	.equ Str_DbDebugMenuProc, NakaData_WidgetNames + 0x34A2
+	.equ Str_AcGridBoxProc, NakaData_WidgetNames + 0x34B2
+	.equ Str_AcListBoxProc, NakaData_WidgetNames + 0x34C0
+	.equ Str_PsGridBoxProc, NakaData_WidgetNames + 0x34CE
+	.equ Str_PsListBoxProc, NakaData_WidgetNames + 0x34DC
+	.equ Str_GetDialFocus, NakaData_WidgetNames + 0x34EA
+	.equ Str_SetDialFocus, NakaData_WidgetNames + 0x34F8
+	.equ Str_IvCatchEventProc, NakaData_WidgetNames + 0x3506
+	.equ Str_AcStrRadioBoxProc, NakaData_WidgetNames + 0x3518
+	.equ Str_PsRadioBoxProc, NakaData_WidgetNames + 0x352A
+	.equ Str_AcRamBoxProc, NakaData_WidgetNames + 0x353A
+	.equ Str_AcIndexToggleProc, NakaData_WidgetNames + 0x3548
+	.equ Str_IvNamingProc, NakaData_WidgetNames + 0x355A
+	.equ Str_PsCursorBoxProc, NakaData_WidgetNames + 0x3568
+	.equ Str_AcNamingWindowProc, NakaData_WidgetNames + 0x3578
+	.equ Str_IvFixWinProc, NakaData_WidgetNames + 0x358C
+	.equ Str_GetBoxCenter, NakaData_WidgetNames + 0x359A
+	.equ Str_DrawStringReverse, NakaData_WidgetNames + 0x35A8
+	.equ Str_IvExitScreenProc, NakaData_WidgetNames + 0x35BA
+	.equ Str_IvExitModeProc, NakaData_WidgetNames + 0x35CC
+	.equ Str_IvExitProc, NakaData_WidgetNames + 0x35DC
+	.equ Str_GetFocusParam, NakaData_WidgetNames + 0x35E8
+	.equ Str_GetFocusEvent, NakaData_WidgetNames + 0x35F6
+	.equ Str_GetFocusObject, NakaData_WidgetNames + 0x3604
+	.equ Str_SetRootObject, NakaData_WidgetNames + 0x3614
+	.equ Str_SetAutoInc, NakaData_WidgetNames + 0x3622
+	.equ Str_SetAutoIncDefault, NakaData_WidgetNames + 0x362E
+	.equ Str_GetRootParam, NakaData_WidgetNames + 0x3640
+	.equ Str_GetRootEvent, NakaData_WidgetNames + 0x364E
+	.equ Str_GetRootObject, NakaData_WidgetNames + 0x365C
+	.equ Str_KillApTimer, NakaData_WidgetNames + 0x366A
+	.equ Str_ResetApTimer, NakaData_WidgetNames + 0x3676
+	.equ Str_SetApTimer, NakaData_WidgetNames + 0x3684
+	.equ Str_ApTimer, NakaData_WidgetNames + 0x3690
+	.equ Str_InitializeTimer, NakaData_WidgetNames + 0x3698
+	.equ Str_DbMemoProc, NakaData_WidgetNames + 0x36A8
+	.equ Str_PsWideToggleProc, NakaData_WidgetNames + 0x36B4
+	.equ Str_AcFuncToggleProc, NakaData_WidgetNames + 0x36C6
+	.equ Str_MainBitGet, NakaData_WidgetNames + 0x36D8
+	.equ Str_MainBitPut, NakaData_WidgetNames + 0x36E4
+	.equ Str_AcBitEditBoxProc, NakaData_WidgetNames + 0x36F0
+	.equ Str_VwEditSwBoxProc, NakaData_WidgetNames + 0x3702
+	.equ Str_VwMenuBoxProc, NakaData_WidgetNames + 0x3712
+	.equ Str_AcMixerVolProc, NakaData_WidgetNames + 0x3720
+	.equ Str_AcPmemNameProc, NakaData_WidgetNames + 0x3730
+	.equ Str_AcRhythmNameProc, NakaData_WidgetNames + 0x3740
+	.equ Str_AcSoundNameProc, NakaData_WidgetNames + 0x3752
+	.equ Str_GetWallPaletteRGB, NakaData_WidgetNames + 0x3762
+	.equ Str_ChangeWallPalette, NakaData_WidgetNames + 0x3774
+	.equ Str_SetDialDown, NakaData_WidgetNames + 0x3786
+	.equ Str_SetDialUp, NakaData_WidgetNames + 0x3792
+	.equ Str_SetDialEnable, NakaData_WidgetNames + 0x379C
+	.equ Str_IvMainEditSwProc, NakaData_WidgetNames + 0x37AA
+	.equ Str_IvPageControlProc, NakaData_WidgetNames + 0x37BC
+	.equ Str_PsInvisibleBoxProc, NakaData_WidgetNames + 0x37CE
+	.equ Str_PsToggleBoxProc, NakaData_WidgetNames + 0x37E2
+	.equ Str_AcWindowPageProc, NakaData_WidgetNames + 0x37F2
+	.equ Str_PsPageBoxProc, NakaData_WidgetNames + 0x3804
+	.equ Str_AcFuncEditSwProc, NakaData_WidgetNames + 0x3812
+	.equ Str_AcIndexEditSwProc, NakaData_WidgetNames + 0x3824
+	.equ Str_PsWideESBoxProc, NakaData_WidgetNames + 0x3836
+	.equ Str_PsEditSwBoxProc, NakaData_WidgetNames + 0x3846
+	.equ Str_AcTitleMenuProc, NakaData_WidgetNames + 0x3856
+	.equ Str_PsMenuBoxProc, NakaData_WidgetNames + 0x3866
+	.equ Str_AcRamEditBoxProc, NakaData_WidgetNames + 0x3874
+	.equ Str_AcLswEditBoxProc, NakaData_WidgetNames + 0x3886
+	.equ Str_AcNumEditBoxProc, NakaData_WidgetNames + 0x3898
+	.equ Str_AcOnOffBoxProc, NakaData_WidgetNames + 0x38AA
+	.equ Str_PsTblEditBoxProc, NakaData_WidgetNames + 0x38BA
+	.equ Str_PsNumEditBoxProc, NakaData_WidgetNames + 0x38CC
+	.equ Str_PsEditBoxProc, NakaData_WidgetNames + 0x38DE
+	.equ Str_AcTempoBoxProc, NakaData_WidgetNames + 0x38EC
+	.equ Str_AcLswBoxProc, NakaData_WidgetNames + 0x38FC
+	.equ Str_PsParaBoxProc, NakaData_WidgetNames + 0x390A
+	.equ Str_VwBoxProc, NakaData_WidgetNames + 0x3918
+	.equ Str_TextBoxProc, NakaData_WidgetNames + 0x3922
+	.equ Str_LineProc, NakaData_WidgetNames + 0x392E
+	.equ Str_IconProc, NakaData_WidgetNames + 0x3938
+	.equ Str_BitmapProc, NakaData_WidgetNames + 0x3942
+	.equ Str_LabelProc, NakaData_WidgetNames + 0x394E
+	.equ Str_StringBoxProc, NakaData_WidgetNames + 0x3958
+	.equ Str_WindowProc, NakaData_WidgetNames + 0x3966
+	.equ Str_GroupBoxProc, NakaData_WidgetNames + 0x3972
+	.equ Str_TitleEditProc, NakaData_WidgetNames + 0x3980
+	.equ Str_ModeEditProc, NakaData_WidgetNames + 0x398E
+	.equ Str_MainRamGet, NakaData_WidgetNames + 0x399C
+	.equ Str_MainRamAdd, NakaData_WidgetNames + 0x39A8
+	.equ Str_MainRamPut, NakaData_WidgetNames + 0x39B4
+	.equ Str_ResetLswFilter, NakaData_WidgetNames + 0x39C0
+	.equ Str_SetLswFilter, NakaData_WidgetNames + 0x39D0
+	.equ Str_MainLswPartGet, NakaData_WidgetNames + 0x39DE
+	.equ Str_MainLswGet, NakaData_WidgetNames + 0x39EE
+	.equ Str_MainLswPartAdd, NakaData_WidgetNames + 0x39FA
+	.equ Str_MainLswAdd, NakaData_WidgetNames + 0x3A0A
+	.equ Str_MainLswPartPut, NakaData_WidgetNames + 0x3A16
+	.equ Str_MainLswPut, NakaData_WidgetNames + 0x3A26
+	.equ Str_DrawEditSw, NakaData_WidgetNames + 0x3A32
+	.equ Str_EditSwProc, NakaData_WidgetNames + 0x3A3E
+	.equ Str_DrawTitleBar, NakaData_WidgetNames + 0x3A4A
+	.equ Str_TtlScreenProc, NakaData_WidgetNames + 0x3A58
+	.equ Str_DrawDesignFrame, NakaData_WidgetNames + 0x3A66
+	.equ Str_GetClientFrame2, NakaData_WidgetNames + 0x3A76
+	.equ Str_GetClientFrame, NakaData_WidgetNames + 0x3A86
+	.equ Str_FrameProc, NakaData_WidgetNames + 0x3A96
+	.equ Str_GetEditSwPoint, NakaData_WidgetNames + 0x3AA0
+	.equ Str_ScreenProc, NakaData_WidgetNames + 0x3AB0
+	.equ Str_BoxRightCheck, NakaData_WidgetNames + 0x3ABC
+	.equ Str_BoxLeftCheck, NakaData_WidgetNames + 0x3ACA
+	.equ Str_GetFrameColor, NakaData_WidgetNames + 0x3AD8
+	.equ Str_DrawDesignBox, NakaData_WidgetNames + 0x3AE6
+	.equ Str_GetClientBox2, NakaData_WidgetNames + 0x3AF4
+	.equ Str_GetClientBox, NakaData_WidgetNames + 0x3B02
+	.equ Str_BoxProc, NakaData_WidgetNames + 0x3B10
+	.equ Str_SetBox, NakaData_WidgetNames + 0x3B18
+	.equ Str_GetBox, NakaData_WidgetNames + 0x3B20
+	.equ Str_GetViewInstance, NakaData_WidgetNames + 0x3B28
+	.equ Str_GetLinkView, NakaData_WidgetNames + 0x3B38
+	.equ Str_SetSuperView, NakaData_WidgetNames + 0x3B44
+	.equ Str_Unlink, NakaData_WidgetNames + 0x3B52
+	.equ Str_Link, NakaData_WidgetNames + 0x3B5A
+	.equ Str_SubView, NakaData_WidgetNames + 0x3B60
+	.equ Str_SuperView, NakaData_WidgetNames + 0x3B68
+	.equ Str_PrevView, NakaData_WidgetNames + 0x3B72
+	.equ Str_NextView, NakaData_WidgetNames + 0x3B7C
+	.equ Str_GetMovable, NakaData_WidgetNames + 0x3B86
+	.equ Str_SetMovable, NakaData_WidgetNames + 0x3B92
+	.equ Str_GetVisible, NakaData_WidgetNames + 0x3B9E
+	.equ Str_SetVisible, NakaData_WidgetNames + 0x3BAA
+	.equ Str_GetChange, NakaData_WidgetNames + 0x3BB6
+	.equ Str_SetChange, NakaData_WidgetNames + 0x3BC0
+	.equ Str_GetConst, NakaData_WidgetNames + 0x3BCA
+	.equ Str_SetConst, NakaData_WidgetNames + 0x3BD4
+	.equ Str_ViewableProc, NakaData_WidgetNames + 0x3BDE
+	.equ Str_GetTitleOld, NakaData_WidgetNames + 0x3BEC
+	.equ Str_GetTitleNow, NakaData_WidgetNames + 0x3BF8
+	.equ Str_UnregisteredTitle, NakaData_WidgetNames + 0x3C04
+	.equ Str_RegisterTitle, NakaData_WidgetNames + 0x3C16
+	.equ Str_TitleProc, NakaData_WidgetNames + 0x3C24
+	.equ Str_GetModeOld, NakaData_WidgetNames + 0x3C2E
+	.equ Str_GetModeNow, NakaData_WidgetNames + 0x3C3A
+	.equ Str_UnregisteredMode, NakaData_WidgetNames + 0x3C46
+	.equ Str_RegisterMode, NakaData_WidgetNames + 0x3C58
+	.equ Str_ModeProc, NakaData_WidgetNames + 0x3C66
+	.equ Str_MainFuncCall, NakaData_WidgetNames + 0x3C70
+	.equ Str_ApFuncCall, NakaData_WidgetNames + 0x3C7E
+	.equ Str_MainFunctionProc, NakaData_WidgetNames + 0x3C8A
+	.equ Str_ApFunctionProc, NakaData_WidgetNames + 0x3C9C
+	.equ Str_FunctionProc, NakaData_WidgetNames + 0x3CAC
+	.equ Str_TrackIDProc, NakaData_WidgetNames + 0x3CBA
+	.equ Str_PartIDProc, NakaData_WidgetNames + 0x3CC6
+	.equ Str_UserIDProc, NakaData_WidgetNames + 0x3CD2
+	.equ Str_MainFuncIDProc, NakaData_WidgetNames + 0x3CDE
+	.equ Str_ApFuncIDProc, NakaData_WidgetNames + 0x3CEE
+	.equ Str_BitmapIDProc, NakaData_WidgetNames + 0x3CFC
+	.equ Str_FrameIDProc, NakaData_WidgetNames + 0x3D0A
+	.equ Str_LineModeIDProc, NakaData_WidgetNames + 0x3D16
+	.equ Str_EditSwStyleIDProc, NakaData_WidgetNames + 0x3D26
+	.equ Str_EditSwIDProc, NakaData_WidgetNames + 0x3D38
+	.equ Str_AlignmentIDProc, NakaData_WidgetNames + 0x3D46
+	.equ Str_FontIDProc, NakaData_WidgetNames + 0x3D56
+	.equ Str_IconIDProc, NakaData_WidgetNames + 0x3D62
+	.equ Str_TitleIDProc, NakaData_WidgetNames + 0x3D6E
+	.equ Str_ModeIDProc, NakaData_WidgetNames + 0x3D7A
+	.equ Str_BorderIDProc, NakaData_WidgetNames + 0x3D86
+	.equ Str_ColorIDProc, NakaData_WidgetNames + 0x3D94
+	.equ Str_ViewFlagProc, NakaData_WidgetNames + 0x3DA0
+	.equ Str_ViewIDProc, NakaData_WidgetNames + 0x3DAE
+	.equ Str_ConstFlagProc, NakaData_WidgetNames + 0x3DBA
+	.equ Str_NameProc, NakaData_WidgetNames + 0x3DC8
+	.equ Str_StringProc, NakaData_WidgetNames + 0x3DD2
+	.equ Str_PointYProc, NakaData_WidgetNames + 0x3DDE
+	.equ Str_PointXProc, NakaData_WidgetNames + 0x3DEA
+	.equ Str_POINTWProc, NakaData_WidgetNames + 0x3DF6
+	.equ Str_RectY2Proc, NakaData_WidgetNames + 0x3E02
+	.equ Str_RectX2Proc, NakaData_WidgetNames + 0x3E0E
+	.equ Str_RectY1Proc, NakaData_WidgetNames + 0x3E1A
+	.equ Str_RectX1Proc, NakaData_WidgetNames + 0x3E26
+	.equ Str_RECTWProc, NakaData_WidgetNames + 0x3E32
+	.equ Str_EventIDProc, NakaData_WidgetNames + 0x3E3C
+	.equ Str_WindowIDProc, NakaData_WidgetNames + 0x3E48
+	.equ Str_ScreenIDProc, NakaData_WidgetNames + 0x3E56
+	.equ Str_ClassIDProc, NakaData_WidgetNames + 0x3E64
+	.equ Str_pStringProc, NakaData_WidgetNames + 0x3E70
+	.equ Str_pPropProc, NakaData_WidgetNames + 0x3E7C
+	.equ Str_pProcProc, NakaData_WidgetNames + 0x3E86
+	.equ Str_pFuncProc, NakaData_WidgetNames + 0x3E90
+	.equ Str_ObjectIDProc, NakaData_WidgetNames + 0x3E9A
+	.equ Str_pUlongProc, NakaData_WidgetNames + 0x3EA8
+	.equ Str_pSlongProc, NakaData_WidgetNames + 0x3EB4
+	.equ Str_pUcharProc, NakaData_WidgetNames + 0x3EC0
+	.equ Str_pScharProc, NakaData_WidgetNames + 0x3ECC
+	.equ Str_pUwordProc, NakaData_WidgetNames + 0x3ED8
+	.equ Str_pSwordProc, NakaData_WidgetNames + 0x3EE4
+	.equ Str_pBoolProc, NakaData_WidgetNames + 0x3EF0
+	.equ Str_boolProc, NakaData_WidgetNames + 0x3EFA
+	.equ Str_ulongProc, NakaData_WidgetNames + 0x3F04
+	.equ Str_slongProc, NakaData_WidgetNames + 0x3F0E
+	.equ Str_scharProc, NakaData_WidgetNames + 0x3F18
+	.equ Str_ucharProc, NakaData_WidgetNames + 0x3F22
+	.equ Str_uwordProc, NakaData_WidgetNames + 0x3F2C
+	.equ Str_swordProc, NakaData_WidgetNames + 0x3F36
+	.equ Str_SupportClassProc, NakaData_WidgetNames + 0x3F40
+	.equ Str_ClassProc, NakaData_WidgetNames + 0x3F52
+	.equ Str_WordwrapStrings, NakaData_WidgetNames + 0x3F5C
+	.equ Str_CalcTotalWidth, NakaData_WidgetNames + 0x3F6C
+	.equ Str_ConvertStrings, NakaData_WidgetNames + 0x3F7C
+	.equ Str_GetCenteredDelta, NakaData_WidgetNames + 0x3F8C
+	.equ Str_GetCharDescent, NakaData_WidgetNames + 0x3F9E
+	.equ Str_GetCharHeight, NakaData_WidgetNames + 0x3FAE
+	.equ Str_GetFrameSPSize, NakaData_WidgetNames + 0x3FBC
+	.equ Str_ResNameProc, NakaData_WidgetNames + 0x3FCC
+	.equ Str_ResStringProc, NakaData_WidgetNames + 0x3FD8
+	.equ Str_ResMethodProc, NakaData_WidgetNames + 0x3FE6
+	.equ Str_ResEventProc, NakaData_WidgetNames + 0x3FF4
+	.equ Str_ResFontProc, NakaData_WidgetNames + 0x4002
+	.equ Str_ResIconProc, NakaData_WidgetNames + 0x400E
+	.equ Str_ResFrameProc, NakaData_WidgetNames + 0x401A
+	.equ Str_ResBitmapProc, NakaData_WidgetNames + 0x4028
+	.equ Str_ResourceProc, NakaData_WidgetNames + 0x4036
+	.equ Str_ApPostEvent, NakaData_WidgetNames + 0x4044
+	.equ Str_MainGetEvent, NakaData_WidgetNames + 0x4050
+	.equ Str_MainPostEvent, NakaData_WidgetNames + 0x405E
+	.equ Str_MainSendEvent, NakaData_WidgetNames + 0x406C
+	.equ Str_MainDispatchEvent, NakaData_WidgetNames + 0x407A
+	.equ Str_SetCurrentTarget, NakaData_WidgetNames + 0x408C
+	.equ Str_GetCurrentTarget, NakaData_WidgetNames + 0x409E
+	.equ Str_GetEvent, NakaData_WidgetNames + 0x40B0
+	.equ Str_PostEvent, NakaData_WidgetNames + 0x40BA
+	.equ Str_SendEvent, NakaData_WidgetNames + 0x40C4
+	.equ Str_DispatchEvent, NakaData_WidgetNames + 0x40CE
+	.equ Str_InitializeEventQueue, NakaData_WidgetNames + 0x40DC
+	.equ Str_CheckViewObject, NakaData_WidgetNames + 0x40F2
+	.equ Str_CountObject, NakaData_WidgetNames + 0x4102
+	.equ Str_UnRegisterObject, NakaData_WidgetNames + 0x410E
+	.equ Str_RegisterObject, NakaData_WidgetNames + 0x4120
+	.equ Str_RegisterObjectTable, NakaData_WidgetNames + 0x4130
+	.equ Str_InitializeObjectTable, NakaData_WidgetNames + 0x4144
+	.equ Str_InheritedProc, NakaData_WidgetNames + 0x415A
+	.equ Str_ObjectProc, NakaData_WidgetNames + 0x4168
+	.equ Str_DrawStringAlignment, NakaData_WidgetNames + 0x4174
+	.equ Str_DrawStringRightJustify, NakaData_WidgetNames + 0x4188
+	.equ Str_DrawStringLeftJustify, NakaData_WidgetNames + 0x41A0
+	.equ Str_DrawStringCentered, NakaData_WidgetNames + 0x41B6
+	.equ Str_DrawString, NakaData_WidgetNames + 0x41CA
+	.equ Str_DrawFrameSP, NakaData_WidgetNames + 0x41D6
+	.equ Str_DrawIcons, NakaData_WidgetNames + 0x41E2
+	.equ Str_DrawBitmap, NakaData_WidgetNames + 0x41EC
+	.equ Str_DrawWall, NakaData_WidgetNames + 0x41F8
+	.equ Str_MovePixels, NakaData_WidgetNames + 0x4202
+	.equ Str_DrawFrameEx, NakaData_WidgetNames + 0x420E
+	.equ Str_DrawFrame, NakaData_WidgetNames + 0x421A
+	.equ Str_DrawBox, NakaData_WidgetNames + 0x4224
+	.equ Str_DrawLineEx, NakaData_WidgetNames + 0x422C
+	.equ Str_DrawLine, NakaData_WidgetNames + 0x4238
+	.equ Str_ModifyPixelEx, NakaData_WidgetNames + 0x4242
+	.equ Str_ModifyPixel, NakaData_WidgetNames + 0x4250
+	.equ Str_ReadPixel, NakaData_WidgetNames + 0x425C
+	.equ Str_SetChangeRect, NakaData_WidgetNames + 0x4266
+	.equ Str_SetNeedUpdate, NakaData_WidgetNames + 0x4274
+	.equ Str_UpdateScreen, NakaData_WidgetNames + 0x4282
+	.equ Str_InitializeGraphics, NakaData_WidgetNames + 0x4290
+	.equ Str_InitializeUser31, NakaData_WidgetNames + 0x42A4
+	.equ Str_InitializeUser30, NakaData_WidgetNames + 0x42B6
+	.equ Str_InitializeUser29, NakaData_WidgetNames + 0x42C8
+	.equ Str_InitializeUser28, NakaData_WidgetNames + 0x42DA
+	.equ Str_InitializeUser27, NakaData_WidgetNames + 0x42EC
+	.equ Str_InitializeUser26, NakaData_WidgetNames + 0x42FE
+	.equ Str_InitializeUser25, NakaData_WidgetNames + 0x4310
+	.equ Str_InitializeUser24, NakaData_WidgetNames + 0x4322
+	.equ Str_InitializeUser23, NakaData_WidgetNames + 0x4334
+	.equ Str_InitializeUser22, NakaData_WidgetNames + 0x4346
+	.equ Str_InitializeUser21, NakaData_WidgetNames + 0x4358
+	.equ Str_InitializeUser20, NakaData_WidgetNames + 0x436A
+	.equ Str_InitializeUser19, NakaData_WidgetNames + 0x437C
+	.equ Str_InitializeUser18, NakaData_WidgetNames + 0x438E
+	.equ Str_InitializeUser17, NakaData_WidgetNames + 0x43A0
+	.equ Str_InitializeUser16, NakaData_WidgetNames + 0x43B2
+	.equ Str_InitializeUser15, NakaData_WidgetNames + 0x43C4
+	.equ Str_InitializeUser14, NakaData_WidgetNames + 0x43D6
+	.equ Str_InitializeUser13, NakaData_WidgetNames + 0x43E8
+	.equ Str_InitializeUser12, NakaData_WidgetNames + 0x43FA
+	.equ Str_InitializeNaka, NakaData_WidgetNames + 0x440C
+	.equ Str_InitializeKSS, NakaData_WidgetNames + 0x441C
+	.equ Str_InitializeHama, NakaData_WidgetNames + 0x442A
+	.equ Str_InitializeKubo, NakaData_WidgetNames + 0x443A
+	.equ Str_InitializeYoko, NakaData_WidgetNames + 0x444A
+	.equ Str_InitializeScoop, NakaData_WidgetNames + 0x445A
+	.equ Str_InitializeCheap, NakaData_WidgetNames + 0x446A
+	.equ Str_InitializeSuna, NakaData_WidgetNames + 0x447A
+	.equ Str_InitializeEast, NakaData_WidgetNames + 0x448A
+	.equ Str_InitializeToshi, NakaData_WidgetNames + 0x449A
+	.equ Str_InitializeMurai, NakaData_WidgetNames + 0x44AA
+	.equ Str_InitializeRoot, NakaData_WidgetNames + 0x44BA
+	.equ IconNamePtrTable, NakaData_WidgetNames + 0x44D0
+	.equ IconName_Empty, NakaData_WidgetNames + 0x48CC
+	.equ IconName_i173, NakaData_WidgetNames + 0x48CE
+	.equ IconName_i172, NakaData_WidgetNames + 0x48D4
+	.equ IconName_i171, NakaData_WidgetNames + 0x48DA
+	.equ IconName_i170, NakaData_WidgetNames + 0x48E0
+	.equ IconName_i169, NakaData_WidgetNames + 0x48E6
+	.equ IconName_i168, NakaData_WidgetNames + 0x48EC
+	.equ IconName_i167, NakaData_WidgetNames + 0x48F2
+	.equ IconName_i166, NakaData_WidgetNames + 0x48F8
+	.equ IconName_i165, NakaData_WidgetNames + 0x48FE
+	.equ IconName_i164, NakaData_WidgetNames + 0x4904
+	.equ IconName_i163, NakaData_WidgetNames + 0x490A
+	.equ IconName_i162, NakaData_WidgetNames + 0x4910
+	.equ IconName_i161, NakaData_WidgetNames + 0x4916
+	.equ IconName_i160, NakaData_WidgetNames + 0x491C
+	.equ IconName_i159, NakaData_WidgetNames + 0x4922
+	.equ IconName_i158, NakaData_WidgetNames + 0x4928
+	.equ IconName_i157, NakaData_WidgetNames + 0x492E
+	.equ IconName_i156, NakaData_WidgetNames + 0x4934
+	.equ IconName_i155, NakaData_WidgetNames + 0x493A
+	.equ IconName_i154, NakaData_WidgetNames + 0x4940
+	.equ IconName_i153, NakaData_WidgetNames + 0x4946
+	.equ IconName_i152, NakaData_WidgetNames + 0x494C
+	.equ IconName_i151, NakaData_WidgetNames + 0x4952
+	.equ IconName_i150, NakaData_WidgetNames + 0x4958
+	.equ IconName_i149, NakaData_WidgetNames + 0x495E
+	.equ IconName_i148, NakaData_WidgetNames + 0x4964
+	.equ IconName_i147, NakaData_WidgetNames + 0x496A
+	.equ IconName_i146, NakaData_WidgetNames + 0x4970
+	.equ IconName_i145, NakaData_WidgetNames + 0x4976
+	.equ IconName_i144, NakaData_WidgetNames + 0x497C
+	.equ IconName_i143, NakaData_WidgetNames + 0x4982
+	.equ IconName_i142, NakaData_WidgetNames + 0x4988
+	.equ IconName_i141, NakaData_WidgetNames + 0x498E
+	.equ IconName_i140, NakaData_WidgetNames + 0x4994
+	.equ IconName_i139, NakaData_WidgetNames + 0x499A
+	.equ IconName_i138, NakaData_WidgetNames + 0x49A0
+	.equ IconName_i137, NakaData_WidgetNames + 0x49A6
+	.equ IconName_i136, NakaData_WidgetNames + 0x49AC
+	.equ IconName_i135, NakaData_WidgetNames + 0x49B2
+	.equ IconName_i134, NakaData_WidgetNames + 0x49B8
+	.equ IconName_i133, NakaData_WidgetNames + 0x49BE
+	.equ IconName_i132, NakaData_WidgetNames + 0x49C4
+	.equ IconName_i131, NakaData_WidgetNames + 0x49CA
+	.equ IconName_i130, NakaData_WidgetNames + 0x49D0
+	.equ IconName_i129, NakaData_WidgetNames + 0x49D6
+	.equ IconName_i128, NakaData_WidgetNames + 0x49DC
+	.equ IconName_i127, NakaData_WidgetNames + 0x49E2
+	.equ IconName_i126, NakaData_WidgetNames + 0x49E8
+	.equ IconName_i125, NakaData_WidgetNames + 0x49EE
+	.equ IconName_i124, NakaData_WidgetNames + 0x49F4
+	.equ IconName_i123, NakaData_WidgetNames + 0x49FA
+	.equ IconName_i122, NakaData_WidgetNames + 0x4A00
+	.equ IconName_i121, NakaData_WidgetNames + 0x4A06
+	.equ IconName_i120, NakaData_WidgetNames + 0x4A0C
+	.equ IconName_i119, NakaData_WidgetNames + 0x4A12
+	.equ IconName_i118, NakaData_WidgetNames + 0x4A18
+	.equ IconName_i117, NakaData_WidgetNames + 0x4A1E
+	.equ IconName_i116, NakaData_WidgetNames + 0x4A24
+	.equ IconName_i115, NakaData_WidgetNames + 0x4A2A
+	.equ IconName_i114, NakaData_WidgetNames + 0x4A30
+	.equ IconName_i113, NakaData_WidgetNames + 0x4A36
+	.equ IconName_i112, NakaData_WidgetNames + 0x4A3C
+	.equ IconName_i111, NakaData_WidgetNames + 0x4A42
+	.equ IconName_i110, NakaData_WidgetNames + 0x4A48
+	.equ IconName_i109, NakaData_WidgetNames + 0x4A4E
+	.equ IconName_i108, NakaData_WidgetNames + 0x4A54
+	.equ IconName_i107, NakaData_WidgetNames + 0x4A5A
+	.equ IconName_i106, NakaData_WidgetNames + 0x4A60
+	.equ IconName_i105, NakaData_WidgetNames + 0x4A66
+	.equ IconName_i104, NakaData_WidgetNames + 0x4A6C
+	.equ IconName_i103, NakaData_WidgetNames + 0x4A72
+	.equ IconName_i102, NakaData_WidgetNames + 0x4A78
+	.equ IconName_i101, NakaData_WidgetNames + 0x4A7E
+	.equ IconName_i100, NakaData_WidgetNames + 0x4A84
+	.equ IconName_i99, NakaData_WidgetNames + 0x4A8A
+	.equ IconName_i98, NakaData_WidgetNames + 0x4A8E
+	.equ IconName_i97, NakaData_WidgetNames + 0x4A92
+	.equ IconName_i96, NakaData_WidgetNames + 0x4A96
+	.equ IconName_i95, NakaData_WidgetNames + 0x4A9A
+	.equ IconName_i94, NakaData_WidgetNames + 0x4A9E
+	.equ IconName_i93, NakaData_WidgetNames + 0x4AA2
+	.equ IconName_i92, NakaData_WidgetNames + 0x4AA6
+	.equ IconName_i91, NakaData_WidgetNames + 0x4AAA
+	.equ IconName_i90, NakaData_WidgetNames + 0x4AAE
+	.equ IconName_i89, NakaData_WidgetNames + 0x4AB2
+	.equ IconName_i88, NakaData_WidgetNames + 0x4AB6
+	.equ IconName_i87, NakaData_WidgetNames + 0x4ABA
+	.equ IconName_i86, NakaData_WidgetNames + 0x4ABE
+	.equ IconName_i85, NakaData_WidgetNames + 0x4AC2
+	.equ IconName_i84, NakaData_WidgetNames + 0x4AC6
+	.equ IconName_i83, NakaData_WidgetNames + 0x4ACA
+	.equ IconName_i82, NakaData_WidgetNames + 0x4ACE
+	.equ IconName_i81, NakaData_WidgetNames + 0x4AD2
+	.equ IconName_i80, NakaData_WidgetNames + 0x4AD6
+	.equ IconName_i79, NakaData_WidgetNames + 0x4ADA
+	.equ IconName_i78, NakaData_WidgetNames + 0x4ADE
+	.equ IconName_i77, NakaData_WidgetNames + 0x4AE2
+	.equ IconName_i76, NakaData_WidgetNames + 0x4AE6
+	.equ IconName_i75, NakaData_WidgetNames + 0x4AEA
+	.equ IconName_i74, NakaData_WidgetNames + 0x4AEE
+	.equ IconName_i73, NakaData_WidgetNames + 0x4AF2
+	.equ IconName_i72, NakaData_WidgetNames + 0x4AF6
+	.equ IconName_i71, NakaData_WidgetNames + 0x4AFA
+	.equ IconName_i70, NakaData_WidgetNames + 0x4AFE
+	.equ IconName_i69, NakaData_WidgetNames + 0x4B02
+	.equ IconName_i68, NakaData_WidgetNames + 0x4B06
+	.equ IconName_i67, NakaData_WidgetNames + 0x4B0A
+	.equ IconName_i66, NakaData_WidgetNames + 0x4B0E
+	.equ IconName_i65, NakaData_WidgetNames + 0x4B12
+	.equ IconName_i64, NakaData_WidgetNames + 0x4B16
+	.equ IconName_i63, NakaData_WidgetNames + 0x4B1A
+	.equ IconName_i62, NakaData_WidgetNames + 0x4B1E
+	.equ IconName_i61, NakaData_WidgetNames + 0x4B22
+	.equ IconName_i60, NakaData_WidgetNames + 0x4B26
+	.equ IconName_i59, NakaData_WidgetNames + 0x4B2A
+	.equ IconName_i58, NakaData_WidgetNames + 0x4B2E
+	.equ IconName_i57, NakaData_WidgetNames + 0x4B32
+	.equ IconName_i56, NakaData_WidgetNames + 0x4B36
+	.equ IconName_i55, NakaData_WidgetNames + 0x4B3A
+	.equ IconName_i54, NakaData_WidgetNames + 0x4B3E
+	.equ IconName_i53, NakaData_WidgetNames + 0x4B42
+	.equ IconName_i52, NakaData_WidgetNames + 0x4B46
+	.equ IconName_i51, NakaData_WidgetNames + 0x4B4A
+	.equ IconName_i50, NakaData_WidgetNames + 0x4B4E
+	.equ IconName_i49, NakaData_WidgetNames + 0x4B52
+	.equ IconName_i48, NakaData_WidgetNames + 0x4B56
+	.equ IconName_i47, NakaData_WidgetNames + 0x4B5A
+	.equ IconName_i46, NakaData_WidgetNames + 0x4B5E
+	.equ IconName_i45, NakaData_WidgetNames + 0x4B62
+	.equ IconName_i44, NakaData_WidgetNames + 0x4B66
+	.equ IconName_i43, NakaData_WidgetNames + 0x4B6A
+	.equ IconName_i42, NakaData_WidgetNames + 0x4B6E
+	.equ IconName_i41, NakaData_WidgetNames + 0x4B72
+	.equ IconName_i40, NakaData_WidgetNames + 0x4B76
+	.equ IconName_i39, NakaData_WidgetNames + 0x4B7A
+	.equ IconName_i38, NakaData_WidgetNames + 0x4B7E
+	.equ IconName_i37, NakaData_WidgetNames + 0x4B82
+	.equ IconName_i36, NakaData_WidgetNames + 0x4B86
+	.equ IconName_i35, NakaData_WidgetNames + 0x4B8A
+	.equ IconName_i34, NakaData_WidgetNames + 0x4B8E
+	.equ IconName_i33, NakaData_WidgetNames + 0x4B92
+	.equ IconName_i32, NakaData_WidgetNames + 0x4B96
+	.equ IconName_i31, NakaData_WidgetNames + 0x4B9A
+	.equ IconName_i30, NakaData_WidgetNames + 0x4B9E
+	.equ IconName_i29, NakaData_WidgetNames + 0x4BA2
+	.equ IconName_i28, NakaData_WidgetNames + 0x4BA6
+	.equ IconName_i27, NakaData_WidgetNames + 0x4BAA
+	.equ IconName_i26, NakaData_WidgetNames + 0x4BAE
+	.equ IconName_i25, NakaData_WidgetNames + 0x4BB2
+	.equ IconName_i24, NakaData_WidgetNames + 0x4BB6
+	.equ IconName_i23, NakaData_WidgetNames + 0x4BBA
+	.equ IconName_i22, NakaData_WidgetNames + 0x4BBE
+	.equ IconName_i21, NakaData_WidgetNames + 0x4BC2
+	.equ IconName_i20, NakaData_WidgetNames + 0x4BC6
+	.equ IconName_i19, NakaData_WidgetNames + 0x4BCA
+	.equ IconName_i18, NakaData_WidgetNames + 0x4BCE
+	.equ IconName_i17, NakaData_WidgetNames + 0x4BD2
+	.equ IconName_i16, NakaData_WidgetNames + 0x4BD6
+	.equ IconName_i15, NakaData_WidgetNames + 0x4BDA
+	.equ IconName_i14, NakaData_WidgetNames + 0x4BDE
+	.equ IconName_i13, NakaData_WidgetNames + 0x4BE2
+	.equ IconName_i12, NakaData_WidgetNames + 0x4BE6
+	.equ IconName_i11, NakaData_WidgetNames + 0x4BEA
+	.equ IconName_i10, NakaData_WidgetNames + 0x4BEE
+	.equ IconName_i9, NakaData_WidgetNames + 0x4BF2
+	.equ IconName_i8, NakaData_WidgetNames + 0x4BF6
+	.equ IconName_i7, NakaData_WidgetNames + 0x4BFA
+	.equ IconName_i6, NakaData_WidgetNames + 0x4BFE
+	.equ IconName_i5, NakaData_WidgetNames + 0x4C02
+	.equ IconName_i4, NakaData_WidgetNames + 0x4C06
+	.equ IconName_i3, NakaData_WidgetNames + 0x4C0A
+	.equ IconName_i2, NakaData_WidgetNames + 0x4C0E
+	.equ IconName_i1, NakaData_WidgetNames + 0x4C12
+	.equ IconName_i0, NakaData_WidgetNames + 0x4C16
+	.equ IconName_Default, NakaData_WidgetNames + 0x4C1A
+	.equ IconBitmapNamePtrTable, NakaData_WidgetNames + 0x4C28
+	.equ IconBitmapName_Empty, NakaData_WidgetNames + 0x5028
+	.equ IconBitmapName_i173, NakaData_WidgetNames + 0x502A
+	.equ IconBitmapName_i172, NakaData_WidgetNames + 0x5034
+	.equ IconBitmapName_i171, NakaData_WidgetNames + 0x503E
+	.equ IconBitmapName_i170, NakaData_WidgetNames + 0x5048
+	.equ IconBitmapName_i169, NakaData_WidgetNames + 0x5052
+	.equ IconBitmapName_i168, NakaData_WidgetNames + 0x505C
+	.equ IconBitmapName_i167, NakaData_WidgetNames + 0x5066
+	.equ IconBitmapName_i166, NakaData_WidgetNames + 0x5070
+	.equ IconBitmapName_i165, NakaData_WidgetNames + 0x507A
+	.equ IconBitmapName_i164, NakaData_WidgetNames + 0x5084
+	.equ IconBitmapName_i163, NakaData_WidgetNames + 0x508E
+	.equ IconBitmapName_i162, NakaData_WidgetNames + 0x5098
+	.equ IconBitmapName_i161, NakaData_WidgetNames + 0x50A2
+	.equ IconBitmapName_i160, NakaData_WidgetNames + 0x50AC
+	.equ IconBitmapName_i159, NakaData_WidgetNames + 0x50B6
+	.equ IconBitmapName_i158, NakaData_WidgetNames + 0x50C0
+	.equ IconBitmapName_i157, NakaData_WidgetNames + 0x50CA
+	.equ IconBitmapName_i156, NakaData_WidgetNames + 0x50D4
+	.equ IconBitmapName_i155, NakaData_WidgetNames + 0x50DE
+	.equ IconBitmapName_i154, NakaData_WidgetNames + 0x50E8
+	.equ IconBitmapName_i153, NakaData_WidgetNames + 0x50F2
+	.equ IconBitmapName_i152, NakaData_WidgetNames + 0x50FC
+	.equ IconBitmapName_i151, NakaData_WidgetNames + 0x5106
+	.equ IconBitmapName_i150, NakaData_WidgetNames + 0x5110
+	.equ IconBitmapName_i149, NakaData_WidgetNames + 0x511A
+	.equ IconBitmapName_i148, NakaData_WidgetNames + 0x5124
+	.equ IconBitmapName_i147, NakaData_WidgetNames + 0x512E
+	.equ IconBitmapName_i146, NakaData_WidgetNames + 0x5138
+	.equ IconBitmapName_i145, NakaData_WidgetNames + 0x5142
+	.equ IconBitmapName_i144, NakaData_WidgetNames + 0x514C
+	.equ IconBitmapName_i143, NakaData_WidgetNames + 0x5156
+	.equ IconBitmapName_i142, NakaData_WidgetNames + 0x5160
+	.equ IconBitmapName_i141, NakaData_WidgetNames + 0x516A
+	.equ IconBitmapName_i140, NakaData_WidgetNames + 0x5174
+	.equ IconBitmapName_i139, NakaData_WidgetNames + 0x517E
+	.equ IconBitmapName_i138, NakaData_WidgetNames + 0x5188
+	.equ IconBitmapName_i137, NakaData_WidgetNames + 0x5192
+	.equ IconBitmapName_i136, NakaData_WidgetNames + 0x519C
+	.equ IconBitmapName_i135, NakaData_WidgetNames + 0x51A6
+	.equ IconBitmapName_i134, NakaData_WidgetNames + 0x51B0
+	.equ IconBitmapName_i133, NakaData_WidgetNames + 0x51BA
+	.equ IconBitmapName_i132, NakaData_WidgetNames + 0x51C4
+	.equ IconBitmapName_i131, NakaData_WidgetNames + 0x51CE
+	.equ IconBitmapName_i130, NakaData_WidgetNames + 0x51D8
+	.equ IconBitmapName_i129, NakaData_WidgetNames + 0x51E2
+	.equ IconBitmapName_i128, NakaData_WidgetNames + 0x51EC
+	.equ IconBitmapName_i127, NakaData_WidgetNames + 0x51F6
+	.equ IconBitmapName_i126, NakaData_WidgetNames + 0x5200
+	.equ IconBitmapName_i125, NakaData_WidgetNames + 0x520A
+	.equ IconBitmapName_i124, NakaData_WidgetNames + 0x5214
+	.equ IconBitmapName_i123, NakaData_WidgetNames + 0x521E
+	.equ IconBitmapName_i122, NakaData_WidgetNames + 0x5228
+	.equ IconBitmapName_i121, NakaData_WidgetNames + 0x5232
+	.equ IconBitmapName_i120, NakaData_WidgetNames + 0x523C
+	.equ IconBitmapName_i119, NakaData_WidgetNames + 0x5246
+	.equ IconBitmapName_i118, NakaData_WidgetNames + 0x5250
+	.equ IconBitmapName_i117, NakaData_WidgetNames + 0x525A
+	.equ IconBitmapName_i116, NakaData_WidgetNames + 0x5264
+	.equ IconBitmapName_i115, NakaData_WidgetNames + 0x526E
+	.equ IconBitmapName_i114, NakaData_WidgetNames + 0x5278
+	.equ IconBitmapName_i113, NakaData_WidgetNames + 0x5282
+	.equ IconBitmapName_i112, NakaData_WidgetNames + 0x528C
+	.equ IconBitmapName_i111, NakaData_WidgetNames + 0x5296
+	.equ IconBitmapName_i110, NakaData_WidgetNames + 0x52A0
+	.equ IconBitmapName_i109, NakaData_WidgetNames + 0x52AA
+	.equ IconBitmapName_i108, NakaData_WidgetNames + 0x52B4
+	.equ IconBitmapName_i107o, NakaData_WidgetNames + 0x52BE
+	.equ IconBitmapName_i106, NakaData_WidgetNames + 0x52C8
+	.equ IconBitmapName_i105, NakaData_WidgetNames + 0x52D2
+	.equ IconBitmapName_i104, NakaData_WidgetNames + 0x52DC
+	.equ IconBitmapName_i103, NakaData_WidgetNames + 0x52E6
+	.equ IconBitmapName_i102, NakaData_WidgetNames + 0x52F0
+	.equ IconBitmapName_i101, NakaData_WidgetNames + 0x52FA
+	.equ IconBitmapName_i100, NakaData_WidgetNames + 0x5304
+	.equ IconBitmapName_i99, NakaData_WidgetNames + 0x530E
+	.equ IconBitmapName_i98, NakaData_WidgetNames + 0x5316
+	.equ IconBitmapName_i97, NakaData_WidgetNames + 0x531E
+	.equ IconBitmapName_i95, NakaData_WidgetNames + 0x5330
+	.equ IconBitmapName_i94, NakaData_WidgetNames + 0x5338
+	.equ IconBitmapName_i93o, NakaData_WidgetNames + 0x5340
+	.equ IconBitmapName_i92o, NakaData_WidgetNames + 0x534A
+	.equ IconBitmapName_i91o, NakaData_WidgetNames + 0x5354
+	.equ IconBitmapName_i90o, NakaData_WidgetNames + 0x535E
+	.equ IconBitmapName_i89, NakaData_WidgetNames + 0x5368
+	.equ IconBitmapName_i88, NakaData_WidgetNames + 0x5370
+	.equ NakaInst_i87_bmp, NakaData_WidgetNames + 0x5378
+	.equ NakaInst_i86_bmp, NakaData_WidgetNames + 0x5380
+	.equ NakaInst_i85_bmp, NakaData_WidgetNames + 0x5388
+	.equ NakaInst_i84o_bmp, NakaData_WidgetNames + 0x5390
+	.equ NakaInst_i83_bmp, NakaData_WidgetNames + 0x539A
+	.equ NakaInst_i82_bmp, NakaData_WidgetNames + 0x53A2
+	.equ NakaInst_i81_bmp, NakaData_WidgetNames + 0x53AA
+	.equ NakaInst_i80_bmp, NakaData_WidgetNames + 0x53B2
+	.equ NakaInst_i79_bmp, NakaData_WidgetNames + 0x53BA
+	.equ NakaInst_i78_bmp, NakaData_WidgetNames + 0x53C2
+	.equ NakaInst_i77_bmp, NakaData_WidgetNames + 0x53CA
+	.equ NakaInst_i76_bmp, NakaData_WidgetNames + 0x53D2
+	.equ NakaInst_i75_bmp, NakaData_WidgetNames + 0x53DA
+	.equ NakaInst_i74o_bmp, NakaData_WidgetNames + 0x53E2
+	.equ NakaInst_i73o_bmp, NakaData_WidgetNames + 0x53EC
+	.equ NakaInst_i72_bmp, NakaData_WidgetNames + 0x53F6
+	.equ NakaInst_i71_bmp, NakaData_WidgetNames + 0x53FE
+	.equ NakaInst_0_bmp, NakaData_WidgetNames + 0x5406
+	.equ NakaInst_trash_bmp, NakaData_WidgetNames + 0x5648
+	.equ Naka_FileManagerEntry, NakaData_WidgetNames + 0x5674
