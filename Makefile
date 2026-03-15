@@ -35,7 +35,7 @@ ACCOMP_LINK_LD = maincpu/sequencer/accomp_screens/accomp_screens_link.ld
 
 NAKA_LINK_LD = maincpu/ui_widgets/naka_ctrl_menu_link.ld
 NAKA_TYPES_H = maincpu/ui_widgets/naka_types.h
-NAKA_BINS = maincpu/includes/generated/naka_control_menu_header.bin maincpu/includes/generated/naka_ctrl_menu_body.bin maincpu/includes/generated/naka_perf_style.bin
+NAKA_BINS = maincpu/includes/generated/naka_control_menu_header.bin maincpu/includes/generated/naka_ctrl_menu_body.bin maincpu/includes/generated/naka_perf_style.bin maincpu/includes/generated/naka_msp_recording.bin
 
 C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS)
 
@@ -94,6 +94,13 @@ maincpu/includes/generated/naka_perf_style.bin: maincpu/ui_widgets/naka_perf_sty
 	@mkdir -p maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/ui_widgets -o $@.o $<
 	$(LLVM_LLD) -T maincpu/ui_widgets/naka_perf_style_link.ld -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
+
+maincpu/includes/generated/naka_msp_recording.bin: maincpu/ui_widgets/naka_msp_recording.c $(NAKA_TYPES_H) maincpu/ui_widgets/naka_msp_recording_link.ld
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/ui_widgets -o $@.o $<
+	$(LLVM_LLD) -T maincpu/ui_widgets/naka_msp_recording_link.ld -o $@.elf $@.o
 	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
 	@rm -f $@.o $@.elf
 
