@@ -399,14 +399,28 @@ def format_string_bytes(data):
     # Check if all chars are printable ASCII
     if all(0x20 <= b <= 0x7E for b in string_part):
         text = string_part.decode('ascii')
+        # Check for characters that need special handling in C
+        has_special = any(b in (0x27, 0x5C, 0x22) for b in string_part)  # ' \ "
         if len(remaining) == 1:
-            # Just NUL, no pad
-            return f'"{text}"'
+            # Just NUL, no pad — use C string if no special chars
+            if not has_special:
+                return f'"{text}"'
+            else:
+                escaped = text.replace('\\', '\\\\').replace('"', '\\"')
+                return f'"{escaped}"'
         elif len(remaining) == 2 and remaining[1] == 0xFF:
             # NUL + 0xFF pad — need explicit char array
             if len(string_part) == 0:
                 return "{ 0, 0xFF }"
-            chars = ', '.join(f"'{chr(b)}'" for b in string_part)
+            def fmt_char(b):
+                c = chr(b)
+                if c == "'":
+                    return "'\\''"
+                elif c == "\\":
+                    return "'\\\\'"
+                else:
+                    return f"'{c}'"
+            chars = ', '.join(fmt_char(b) for b in string_part)
             return f"{{ {chars}, 0, 0xFF }}"
         else:
             # More data after NUL — use raw bytes
