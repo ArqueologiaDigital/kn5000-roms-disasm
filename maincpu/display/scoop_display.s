@@ -10772,7 +10772,7 @@ StringData_KeyNames:	.ascii "  C D"
 	ldb	w, 23
 	.byte 0x1f
 	ldb	w, 32
-	.byte 0x17, 0x20
+	ldf	32
 	ldb	w, 32
 	.byte 0x16, 0x1f
 	ldb	w, 32

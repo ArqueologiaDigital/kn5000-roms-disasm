@@ -1576,7 +1576,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	.byte 0x17, 0x00
+	ldf	0
 	nop
 	nop
 	nop

@@ -1294,7 +1294,8 @@ SepaOut_BitMaskTable:
 	nop
 	.byte 0x16
 	nop
-	.byte 0x17, 0x00, 0x18
+	ldf	0
+	push_f
 	nop
 	.byte 0x19
 	nop

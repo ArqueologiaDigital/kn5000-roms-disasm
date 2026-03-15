@@ -655,7 +655,7 @@ DrumDetailEdit_Menu_Table:
 	ldb	w, 132
 	ldb	b, 2
 	nop
-	.byte 0x17, 0x64
+	ldf	100
 	stda32	9728, xix
 	stda32	12288, xix
 	stda32	14848, xix

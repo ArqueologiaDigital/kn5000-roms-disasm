@@ -8876,7 +8876,7 @@ VoiceMode_ParamConfigTables:
 	nop
 	swi	7
 	nop
-	.byte 0x17, 0x04
+	ldf	4
 	popw	wa
 	.byte 0x01, 0x17, 0x08
 	jrl	nc, -255

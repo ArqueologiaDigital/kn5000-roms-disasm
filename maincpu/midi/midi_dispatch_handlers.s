@@ -2318,7 +2318,7 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 1813
 	jrl	nc, -1
 	swi	7
-	.byte 0x17, 0x07
+	ldf	7
 	jrl	nc, -1
 	swi	7
 	jr	f, 1
@@ -2486,7 +2486,7 @@ MidiCC_ChannelMappingData:
 	nop
 	swi	7
 	swi	7
-	.byte 0x17, 0x00
+	ldf	0
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xbc), 177
@@ -2558,7 +2558,7 @@ MidiCC_ChannelMappingData:
 	nop
 	swi	7
 	nop
-	.byte 0x17, 0x00
+	ldf	0
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 PanelEvt_Handler_4_DualValueCheck:

@@ -3204,7 +3204,9 @@ SMF_SlotParam_RPNReturn:
 	halt
 	ei	0x07
 	ldio	9, 10
-	.byte 0x0b, 0x0c, 0x0d, 0x17, 0x0e, 0x18
+	pushw 3340
+	ldf	14
+	push_f
 	retd	0x1000
 	nop
 	scf
@@ -3222,7 +3224,9 @@ SMF_SlotParam_RPNReturn:
 	halt
 	ei	0x07
 	ldio	9, 10
-	.byte 0x0b, 0x0c, 0x0d, 0x17, 0x0e, 0x18
+	pushw 3340
+	ldf	14
+	push_f
 	retd	0x1000
 	nop
 	scf

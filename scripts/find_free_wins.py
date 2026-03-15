@@ -403,22 +403,61 @@ def translate_unidasm_to_llvm(mnemonic):
         llvm_op = 'ld'  # LLVM uses ld for all sizes, operand size determines encoding
 
     # ── Generate alternative forms for compact encodings ──
-    alternatives = []
 
-    # For LD with 16-bit register and immediate 0 or 1: try compact ldw form
+    # For LD with register and small immediate: try compact forms
     if op == 'ld' and len(translated_ops) == 2:
         reg16 = {'wa', 'bc', 'de', 'hl', 'ix', 'iy', 'iz', 'sp'}
-        if translated_ops[0] in reg16:
-            # Try compact ldw form first, then extended ld
-            compact = f'ldw\t{translated_ops[0]}, {translated_ops[1]}'
-            extended = f'ld\t{translated_ops[0]}, {translated_ops[1]}'
-            return [compact, extended]
+        reg32 = {'xwa', 'xbc', 'xde', 'xhl', 'xix', 'xiy', 'xiz', 'xsp'}
         reg8 = {'a', 'w', 'b', 'c', 'd', 'e', 'h', 'l'}
-        if translated_ops[0] in reg8 and translated_ops[1].lstrip('-').isdigit():
-            # Try compact ldb form first for 8-bit reg + immediate
-            compact = f'ldb\t{translated_ops[0]}, {translated_ops[1]}'
-            extended = f'ld\t{translated_ops[0]}, {translated_ops[1]}'
-            return [compact, extended]
+        imm_str = translated_ops[1]
+        is_imm = imm_str.lstrip('-').isdigit()
+
+        if is_imm:
+            imm_val = int(imm_str)
+            if translated_ops[0] in reg16:
+                forms = []
+                # lds (compact small imm 0-7) → 2 bytes
+                if 0 <= imm_val <= 7:
+                    forms.append(f'lds\t{translated_ops[0]}, {imm_val}')
+                # ldw (compact 3-byte form)
+                forms.append(f'ldw\t{translated_ops[0]}, {imm_str}')
+                # ld (extended 4-byte form)
+                forms.append(f'ld\t{translated_ops[0]}, {imm_str}')
+                return forms
+            elif translated_ops[0] in reg32:
+                forms = []
+                if 0 <= imm_val <= 7:
+                    forms.append(f'lds32\t{translated_ops[0]}, {imm_val}')
+                forms.append(f'ld\t{translated_ops[0]}, {imm_str}')
+                return forms
+            elif translated_ops[0] in reg8:
+                forms = []
+                if 0 <= imm_val <= 7:
+                    forms.append(f'lds8\t{translated_ops[0]}, {imm_val}')
+                forms.append(f'ldb\t{translated_ops[0]}, {imm_str}')
+                forms.append(f'ld\t{translated_ops[0]}, {imm_str}')
+                return forms
+        elif translated_ops[0] in reg16:
+            # Non-immediate second operand (register)
+            return [f'ldw\t{translated_ops[0]}, {translated_ops[1]}',
+                    f'ld\t{translated_ops[0]}, {translated_ops[1]}']
+        elif translated_ops[0] in reg8:
+            return [f'ldb\t{translated_ops[0]}, {translated_ops[1]}',
+                    f'ld\t{translated_ops[0]}, {translated_ops[1]}']
+
+    # For CP with register: try compact cps form
+    if op == 'cp' and len(translated_ops) == 2:
+        reg16 = {'wa', 'bc', 'de', 'hl', 'ix', 'iy', 'iz', 'sp'}
+        imm_str = translated_ops[1]
+        is_imm = imm_str.lstrip('-').isdigit()
+        if is_imm and translated_ops[0] in reg16:
+            imm_val = int(imm_str)
+            forms = []
+            if 0 <= imm_val <= 7:
+                forms.append(f'cps\t{translated_ops[0]}, {imm_val}')
+            forms.append(f'cpw\t{translated_ops[0]}, {imm_str}')
+            forms.append(f'cp\t{translated_ops[0]}, {imm_str}')
+            return forms
 
     if translated_ops:
         return f'{llvm_op}\t{", ".join(translated_ops)}'

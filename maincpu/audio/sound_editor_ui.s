@@ -7292,7 +7292,7 @@ SeBitmap_EnvCurve5:
 	push	xiz
 	nop
 	ld	xhl, 1163285077
-	.byte 0x17, 0x0b
+	ldf	11
 	popw	iz
 	nop
 	.byte 0xd1, 0x00, 0x4c, 0x45, 0x56
@@ -7775,7 +7775,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x41, 0x43, 0x4b, 0x17, 0x0b, 0x4c, 0x00, 0xd1
 	.byte 0x00
 	ld	xix, 0x59414345
-	.byte 0x17, 0x0d
+	ldf	13
 	jrl	f, -12032
 	nop
 	.byte 0x52
@@ -8250,7 +8250,7 @@ SeMenu_CompareScreen_DataTable:
 	jr	ge, 6
 	.byte 0x03
 	nop
-	.byte 0x17, 0xa5
+	ldf	165
 	ldw	bc, 241
 	ldio	0, 157
 	nop
@@ -9423,7 +9423,8 @@ TuningSystem_Handler_Table:
 	scf
 	ccf
 	push	xde
-	.byte 0x17, 0x0c, 0x02
+	ldf	12
+	push_sr
 	nop
 	.byte 0xd1, 0x00, 0x44, 0x45, 0x50, 0x54
 	popw	wa

@@ -14862,12 +14862,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0xff
 	.zero 8
-	.byte 0x0b
-	.byte 0x00
-	.byte 0x06
-	.byte 0x00
-	.byte 0x17
-	.byte 0x00
+	pushw 1536
+	nop
+	ldf	0
 	pushw de
 	.byte 0x01
 	.asciz " "
@@ -14897,8 +14894,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x8a  ; ""
 	.byte 0x00
 	.zero 2
-	.byte 0x17
-	.byte 0x00
+	ldf	0
 	pushw de
 	.byte 0x01
 	.asciz "+"
@@ -22179,12 +22175,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0xff
 	.zero 8
-	.byte 0x0b
-	.byte 0x00
-	.byte 0x06
-	.byte 0x00
-	.byte 0x17
-	.byte 0x00
+	pushw 1536
+	nop
+	ldf	0
 	pushw de
 	.byte 0x01
 	.asciz " "
@@ -22214,8 +22207,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x8a  ; ""
 	.byte 0x00
 	.zero 2
-	.byte 0x17
-	.byte 0x00
+	ldf	0
 	pushw de
 	.byte 0x01
 	.asciz "+"
@@ -28092,7 +28084,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	pushw de                                ; push DE
 	nop                                     ; nop
 	popw de                                 ; pop DE
-	.byte 0x17, 0x2a                       ; ldf 0x2a
+	ldf	42
 	nop                                     ; nop
 	cpdr_ri xwa		; cpdr
 	pushw de                                ; push DE

@@ -23838,7 +23838,7 @@ DrumKit_GroupAssignTable:
 	.byte 0x14, 0x1a, 0x0f, 0x15
 	jp	1840656
 	scf
-	.byte 0x17, 0x1d
+	ldf	29
 
 RhythmROM_LoadDrumKit:
 	ldda8 a, 13549
