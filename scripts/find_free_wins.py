@@ -75,7 +75,7 @@ def extract_code_byte_blocks(file_path):
     try:
         with open(file_path, 'rb') as f:
             raw = f.read()
-        lines = raw.decode('latin-1').splitlines()
+        lines = raw.decode('latin-1').split('\n')
     except Exception as e:
         print(f"  Warning: cannot read {file_path}: {e}", file=sys.stderr)
         return []
@@ -593,22 +593,25 @@ def main():
 
                 block_instructions.append((offset, length, matched_inst))
 
-            if block_free and block_instructions:
-                free_wins += 1
-                free_win_bytes += len(raw_bytes)
+            if block_instructions:
+                if block_free:
+                    free_wins += 1
+                    free_win_bytes += len(raw_bytes)
+                else:
+                    # Partial block — some instructions convertible
+                    needs_llvm += 1
+                    needs_llvm_bytes += len(raw_bytes)
+
                 if args.verbose:
                     for offset, length, inst in block_instructions:
-                        print(f"  FREE WIN {rel}:{start_line}+{offset}: {inst}")
+                        tag = "FREE WIN" if block_free else "PARTIAL"
+                        print(f"  {tag} {rel}:{start_line}+{offset}: {inst}")
 
-                # Record for conversion
+                # Record for conversion (both full and partial)
                 file_conversions[str(file_path)].append(
                     (start_line, end_line, raw_bytes, block_instructions)
                 )
                 success_instructions.extend(inst for _, _, inst in block_instructions)
-            elif block_instructions:
-                # Partial — some instructions translatable, some not
-                needs_llvm += 1
-                needs_llvm_bytes += len(raw_bytes)
             else:
                 cant_translate += 1
                 cant_translate_bytes += len(raw_bytes)
@@ -658,24 +661,60 @@ def main():
 
 
 def apply_conversions(file_path, conversions):
-    """Apply free win conversions to a file using binary I/O (Latin-1 safe)."""
+    """Apply conversions to a file using binary I/O (Latin-1 safe).
+
+    Handles both full and partial block conversions. For partial blocks,
+    emits native instructions for matched parts and .byte for gaps.
+    """
     with open(file_path, 'rb') as f:
         raw = f.read()
-    lines = raw.decode('latin-1').splitlines(keepends=True)
-
-    # Build a mapping: line_number -> replacement instruction
-    # Each conversion: (start_line, end_line, raw_bytes, [(offset, length, llvm_inst), ...])
-    # A free win block has contiguous .byte lines that decode to native instructions.
-    # We need to replace the .byte lines with the instruction(s).
+    # IMPORTANT: use split('\n') not splitlines() because splitlines()
+    # splits on Latin-1 0x85 (NEL) which appears in UTF-8 encoded comments
+    lines = [line + '\n' for line in raw.decode('latin-1').split('\n')]
+    if lines and lines[-1] == '\n':
+        lines[-1] = ''  # Last element after split is empty if file ends with \n
 
     replacements = {}  # line_number (1-indexed) -> list of replacement strings
     lines_to_remove = set()
 
     for start_line, end_line, raw_bytes, block_instructions in conversions:
-        # Generate replacement lines
+        # Safety: verify instruction offsets are within bounds
+        valid_insts = [(o, l, inst) for o, l, inst in block_instructions
+                       if o >= 0 and o + l <= len(raw_bytes)]
+        if not valid_insts:
+            continue
+
+        # Sort instructions by offset
+        sorted_insts = sorted(valid_insts, key=lambda x: x[0])
+
+        # Build mixed output: native instructions + .byte for gaps
         new_lines = []
-        for offset, length, llvm_inst in block_instructions:
+        pos = 0  # current position in raw_bytes
+
+        for offset, length, llvm_inst in sorted_insts:
+            # Emit .byte for gap before this instruction
+            if offset > pos:
+                gap_bytes = raw_bytes[pos:offset]
+                new_lines.append(_format_byte_line(gap_bytes))
+
+            # Emit the native instruction
             new_lines.append(f'\t{llvm_inst}\n')
+            pos = offset + length
+
+        # Emit .byte for any trailing gap
+        if pos < len(raw_bytes):
+            gap_bytes = raw_bytes[pos:]
+            new_lines.append(_format_byte_line(gap_bytes))
+
+        # Safety: verify the generated content encodes the same bytes
+        # Count bytes: each .byte line contributes its values, each native
+        # instruction contributes its length
+        total_gen_bytes = sum(l for _, l, _ in sorted_insts)
+        total_gap_bytes = len(raw_bytes) - total_gen_bytes
+        if total_gen_bytes + total_gap_bytes != len(raw_bytes):
+            print(f"  WARNING: byte count mismatch in {file_path}:{start_line}, skipping",
+                  file=sys.stderr)
+            continue
 
         # Find the .byte lines in this range
         byte_line_numbers = []
@@ -688,7 +727,19 @@ def apply_conversions(file_path, conversions):
         if not byte_line_numbers:
             continue
 
-        # Replace first .byte line with the new instruction(s)
+        # Verify: total bytes from original .byte lines should match raw_bytes
+        orig_byte_count = 0
+        for ln in byte_line_numbers:
+            m = BYTE_LINE_RE.match(lines[ln - 1])
+            if m:
+                orig_byte_count += len(BYTE_VAL_RE.findall(m.group(1)))
+        if orig_byte_count != len(raw_bytes):
+            print(f"  WARNING: original byte count {orig_byte_count} != "
+                  f"raw_bytes {len(raw_bytes)} in {file_path}:{start_line}, skipping",
+                  file=sys.stderr)
+            continue
+
+        # Replace first .byte line with the new content
         replacements[byte_line_numbers[0]] = new_lines
         # Mark remaining .byte lines for removal
         for ln in byte_line_numbers[1:]:
@@ -713,6 +764,19 @@ def apply_conversions(file_path, conversions):
         f.write(new_content)
 
     return len(replacements)
+
+
+def _format_byte_line(byte_vals):
+    """Format a sequence of bytes as a .byte directive line."""
+    if not byte_vals:
+        return ''
+    hex_strs = [f'0x{b:02x}' for b in byte_vals]
+    # Split into lines of max 8 bytes each
+    result = []
+    for i in range(0, len(hex_strs), 8):
+        chunk = hex_strs[i:i+8]
+        result.append(f'\t.byte {", ".join(chunk)}\n')
+    return ''.join(result)
 
 
 if __name__ == '__main__':

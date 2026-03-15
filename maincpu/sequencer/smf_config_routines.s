@@ -1231,7 +1231,9 @@ SMF_EventLoop_Return:
 
 SMF_PartAssignTable:
 	nop
-	.byte 0x02, 0x01, 0x0b, 0x08, 0x09
+	push_sr
+	.byte 0x01
+	pushw 2312
 	ldwio	3, 1284
 	ei	0x07
 	scf
@@ -1850,7 +1852,10 @@ SMF_Translate_Return:
 
 SMF_ChannelTranslationTable:
 	nop
-	.byte 0x01, 0x02, 0x03, 0x04
+	.byte 0x01
+	push_sr
+	pop_sr
+	.byte 0x04
 	halt
 	ei	0x07
 	ldio	9, 10
@@ -3200,7 +3205,10 @@ SMF_SlotParam_RPNDone:
 
 SMF_SlotParam_RPNReturn:
 	nop
-	.byte 0x01, 0x02, 0x03, 0x04
+	.byte 0x01
+	push_sr
+	pop_sr
+	.byte 0x04
 	halt
 	ei	0x07
 	ldio	9, 10
@@ -3220,7 +3228,10 @@ SMF_SlotParam_RPNReturn:
 	pop_a
 	ex_ff
 	nop
-	.byte 0x01, 0x02, 0x03, 0x04
+	.byte 0x01
+	push_sr
+	pop_sr
+	.byte 0x04
 	halt
 	ei	0x07
 	ldio	9, 10

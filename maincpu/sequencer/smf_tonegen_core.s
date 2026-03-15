@@ -975,7 +975,9 @@ VoiceChannels_LoadPartMap_Mode1:
 
 VoiceChannels_PartMapTable:
 	nop
-	.byte 0x02, 0x01, 0x0b, 0x08, 0x09
+	push_sr
+	.byte 0x01
+	pushw 2312
 	ldwio	3, 1284
 	ei	0x07
 	scf
@@ -983,7 +985,9 @@ VoiceChannels_PartMapTable:
 	zcf
 	incf
 	nop
-	.byte 0x02, 0x01, 0x0b, 0x08, 0x09
+	push_sr
+	.byte 0x01
+	pushw 2312
 	ldwio	3, 3076
 	ei	0x07
 	scf
@@ -1577,14 +1581,19 @@ SoundGen_ResetBitmapDone:
 
 SeqTrack_ChannelMapIdentity:
 	nop
-	.byte 0x01, 0x02, 0x03, 0x04
+	.byte 0x01
+	push_sr
+	pop_sr
+	.byte 0x04
 	halt
 	ei	0x07
 	ldio	9, 10
 	pushw 3340
 	ret
 	retd	0x0100
-	.byte 0x02, 0x03, 0x04
+	push_sr
+	pop_sr
+	.byte 0x04
 	halt
 	ei	0x07
 	ldio	15, 10
@@ -4020,7 +4029,10 @@ VoiceParam_NullReturn:
 
 VoiceParam_ChannelMapRemapped:
 	nop
-	.byte 0x01, 0x02, 0x03, 0x04
+	.byte 0x01
+	push_sr
+	pop_sr
+	.byte 0x04
 	halt
 	ei	0x07
 	ldio	15, 10

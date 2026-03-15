@@ -368,7 +368,8 @@ BitMapOut_ByteData_PresetCopy:
 	calr	14
 	ldw	wa, 130
 	calr	7268
-	.byte 0xf1, 0x46, 0x8d, 0xb3, 0xd7, 0xfa, 0x05
+	.byte 0xf1, 0x46, 0x8d, 0xb3
+	pop qiz
 	ret
 
 BitMapOut_CopyVoicePreset9:
@@ -3639,7 +3640,8 @@ BitMapOut_ByteData_RenderState:
 	pop	xiz
 	ret
 BitMapOut_ByteData_DisplayUpdate:
-	.byte 0x3e, 0xc1
+	push xiz
+	.byte 0xc1
 	jrl	pl, 8640
 	cps	a, 1
 	jr	nz, 107

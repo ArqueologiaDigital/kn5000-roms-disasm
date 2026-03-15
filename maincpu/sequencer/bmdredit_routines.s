@@ -1763,7 +1763,8 @@ BmDrEdit_ByteData_ScrollParams:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 14959758
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x80, 0x3f, 0xf0
+	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	cp	(xwa), 240
 	jr	c, 3
 	lds	hl, 0
 	ret
@@ -3983,7 +3984,8 @@ BmDrEdit_ByteData_CompoundWidgetUpdate:
 	add	wa, 22
 	stda16	10170, wa
 	ldda16	wa, 10192
-	.byte 0xd8, 0xef, 0x02, 0xd1, 0xba, 0x27, 0x80
+	srl	wa, 2
+	.byte 0xd1, 0xba, 0x27, 0x80
 	stda16	10172, wa
 	ldda16	wa, 10174
 	inc	3, wa

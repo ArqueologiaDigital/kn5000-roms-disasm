@@ -8287,7 +8287,8 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, xwa
 	sll	xbc, 2
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x06, 0xbf, 0x02, 0xcf
+	sll	xbc, 6
+	.byte 0xbf, 0x02, 0xcf
 	jr	z, 16
 	ld	wa, (xde)
 	exts	xwa
@@ -8352,7 +8353,8 @@ ColorBlit2_LargeCodeBlock:
 	ld	xbc, xwa
 	sll	xbc, 2
 	add	xbc, xwa
-	.byte 0xe9, 0xee, 0x06, 0xbf, 0x02, 0xcf
+	sll	xbc, 6
+	.byte 0xbf, 0x02, 0xcf
 	jr	z, 19
 	ld	wa, (xde)
 	exts	xwa
@@ -8657,7 +8659,8 @@ ColorBlit2_LargeCodeBlock:
 	extz	wa
 	cp	wa, de
 	jr	z, 3
-	.byte 0x83, 0x3d, 0x60, 0xaf, 0x0c, 0x83
+	.byte 0x83, 0x3d, 0x60
+	add	xhl, (xsp+12)
 	inc	1, xbc
 	cp	xbc, (xsp+4)
 	jr	le, -43
@@ -8681,7 +8684,9 @@ ColorBlit2_LargeCodeBlock:
 	and	a, 128
 	cp	a, e
 	jr	z, 3
-	.byte 0x83, 0x3d, 0x60, 0xaf, 0x0c, 0x83, 0xaf, 0x0c, 0x84
+	.byte 0x83, 0x3d, 0x60
+	add	xhl, (xsp+12)
+	add	xix, (xsp+12)
 	inc	1, xbc
 	cp	xbc, (xsp+4)
 	jr	le, -40

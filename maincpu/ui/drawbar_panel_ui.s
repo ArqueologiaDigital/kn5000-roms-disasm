@@ -1293,7 +1293,8 @@ PmemOutLGridCheck_JumpTable:
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x20, 0x80, 0xb0, 0xcf, 0x66
+	add	xwa, (xsp+32)
+	.byte 0xb0, 0xcf, 0x66
 	.long LABEL_E80B12
 	pushw 330
 	lda	xwa, (xsp+48)
@@ -1362,7 +1363,8 @@ PmemOutLGridCheck_JumpTable:
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x20, 0x80, 0xb0, 0xcf
+	add	xwa, (xsp+32)
+	.byte 0xb0, 0xcf
 	jr	z, 18
 	pushw 232
 	pushw 348
@@ -1528,7 +1530,8 @@ PmemOutLGridCheck_JumpTable:
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x20, 0x80, 0xb0, 0xcf, 0x66
+	add	xwa, (xsp+32)
+	.byte 0xb0, 0xcf, 0x66
 	.long LABEL_E80B12
 	pushw 390
 	lda	xwa, (xsp+48)
@@ -2095,7 +2098,8 @@ TtMdCtlMsg_EventDispatch:
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80, 0xb0, 0xcf
+	add	xwa, (xsp+28)
+	.byte 0xb0, 0xcf
 	jr	z, 18
 	pushw 232
 	pushw 524
@@ -2139,7 +2143,8 @@ TtMdCtlMsg_EventDispatch:
 	ld	xwa, (xsp+16)
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80, 0xb0, 0xcf
+	add	xwa, (xsp+28)
+	.byte 0xb0, 0xcf
 	jr	z, 18
 	pushw 232
 	pushw 536
@@ -10852,7 +10857,9 @@ AcWelcomScreen_RenderBytecode:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+12)
-	.byte 0x0b, 0x11, 0x00, 0x92, 0x04, 0x0b, 0xf7, 0x00
+	pushw 17
+	.byte 0x92, 0x04
+	pushw 247
 	ld	xbc, 15326816
 	ldw	de, 16
 	jrl	171
@@ -10860,7 +10867,9 @@ AcWelcomScreen_RenderBytecode:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+12)
-	.byte 0x0b, 0x11, 0x00, 0x92, 0x04, 0x0b, 0xf7, 0x00
+	pushw 17
+	.byte 0x92, 0x04
+	pushw 247
 	ld	xbc, 15326952
 	ldw	de, 16
 	jrl	142
@@ -10868,7 +10877,10 @@ AcWelcomScreen_RenderBytecode:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+12)
-	.byte 0x0b, 0x11, 0x00, 0x92, 0x04, 0x0b, 0xf7, 0x00, 0x41
+	pushw 17
+	.byte 0x92, 0x04
+	pushw 247
+	.byte 0x41
 	.long Bitmap_DigitL
 	ldw	de, 16
 	jr	114
@@ -10876,7 +10888,9 @@ AcWelcomScreen_RenderBytecode:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+12)
-	.byte 0x0b, 0x11, 0x00, 0x92, 0x04, 0x0b, 0xf7, 0x00
+	pushw 17
+	.byte 0x92, 0x04
+	pushw 247
 	ld	xbc, 15327020
 	ldw	de, 16
 	jr	86
@@ -10884,7 +10898,10 @@ AcWelcomScreen_RenderBytecode:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+12)
-	.byte 0x0b, 0x11, 0x00, 0x92, 0x04, 0x0b, 0xf7, 0x00, 0x41
+	pushw 17
+	.byte 0x92, 0x04
+	pushw 247
+	.byte 0x41
 	.long Bitmap_DigitR
 	ldw	de, 16
 	jr	58
@@ -10893,12 +10910,18 @@ AcWelcomScreen_RenderBytecode:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+12)
-	.byte 0x0b, 0x11, 0x00, 0x0b, 0xff, 0x00, 0x0b, 0xf7, 0x00, 0x41
+	pushw 17
+	pushw 255
+	pushw 247
+	.byte 0x41
 	.long Bitmap_Digit1
 	ldw	de, 16
 	call	16434441
 	lda	xwa, (xsp+12)
-	.byte 0x90, 0x38, 0x10, 0x00, 0x0b, 0x11, 0x00, 0x0b, 0xff, 0x00, 0x0b, 0xf7, 0x00
+	.byte 0x90, 0x38, 0x10, 0x00
+	pushw 17
+	pushw 255
+	pushw 247
 	ld	xbc, 15326918
 	ldw	de, 16
 	call	16434441
@@ -10952,12 +10975,14 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xbc
 	sll	xde, 2
 	addda32_24	xde, 149382
-	.byte 0x9a, 0x0a, 0x04, 0x0b, 0xf7, 0x00
+	.byte 0x9a, 0x0a, 0x04
+	pushw 247
 	ld	xbc, 15326816
 	ldw	de, 16
 	call	16434441
 	lda	xwa, (xsp+12)
-	.byte 0x90, 0x38, 0x10, 0x00, 0x0b, 0x11, 0x00
+	.byte 0x90, 0x38, 0x10, 0x00
+	pushw 17
 	ld16_24	bc, 149380
 	exts	xbc
 	ld	xde, xbc
@@ -10965,12 +10990,14 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xbc
 	sll	xde, 2
 	addda32_24	xde, 149382
-	.byte 0x9a, 0x0a, 0x04, 0x0b, 0xf7, 0x00
+	.byte 0x9a, 0x0a, 0x04
+	pushw 247
 	ld	xbc, 15326952
 	ldw	de, 16
 	call	16434441
 	lda	xwa, (xsp+12)
-	.byte 0x90, 0x38, 0x10, 0x00, 0x0b, 0x11, 0x00
+	.byte 0x90, 0x38, 0x10, 0x00
+	pushw 17
 	ld16_24	bc, 149380
 	exts	xbc
 	ld	xde, xbc
@@ -10978,12 +11005,14 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xbc
 	sll	xde, 2
 	addda32_24	xde, 149382
-	.byte 0x9a, 0x0a, 0x04, 0x0b, 0xf7, 0x00
+	.byte 0x9a, 0x0a, 0x04
+	pushw 247
 	ld	xbc, 15326884
 	ldw	de, 16
 	call	16434441
 	lda	xwa, (xsp+12)
-	.byte 0x90, 0x38, 0x10, 0x00, 0x0b, 0x11, 0x00
+	.byte 0x90, 0x38, 0x10, 0x00
+	pushw 17
 	ld16_24	bc, 149380
 	exts	xbc
 	ld	xde, xbc
@@ -10991,7 +11020,8 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xbc
 	sll	xde, 2
 	addda32_24	xde, 149382
-	.byte 0x9a, 0x0a, 0x04, 0x0b, 0xf7, 0x00
+	.byte 0x9a, 0x0a, 0x04
+	pushw 247
 	ld	xbc, 15326952
 	ldw	de, 16
 	call	16434441
@@ -11006,7 +11036,8 @@ AcWelcomScreen_RenderBytecode:
 	.byte 0x99, 0x08, 0x3f, 0x0c, 0x00
 	jr	nz, 51
 	lda	xwa, (xsp+12)
-	.byte 0x90, 0x38, 0x10, 0x00, 0x0b, 0x11, 0x00
+	.byte 0x90, 0x38, 0x10, 0x00
+	pushw 17
 	ld16_24	bc, 149380
 	exts	xbc
 	ld	xde, xbc
@@ -11015,12 +11046,15 @@ AcWelcomScreen_RenderBytecode:
 	sll	xde, 2
 	ld32_24	xbc, 149382
 	add	xde, xbc
-	.byte 0x9a, 0x0a, 0x04, 0x0b, 0xf7, 0x00, 0x41
+	.byte 0x9a, 0x0a, 0x04
+	pushw 247
+	.byte 0x41
 	.long Bitmap_DigitD
 	ldw	de, 16
 	call	16434441
 	lda	xwa, (xsp+12)
-	.byte 0x90, 0x38, 0x10, 0x00, 0x0b, 0x11, 0x00
+	.byte 0x90, 0x38, 0x10, 0x00
+	pushw 17
 	ld16_24	bc, 149380
 	exts	xbc
 	ld	xde, xbc
@@ -11028,7 +11062,8 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xbc
 	sll	xde, 2
 	addda32_24	xde, 149382
-	.byte 0x9a, 0x0a, 0x04, 0x0b, 0xf7, 0x00
+	.byte 0x9a, 0x0a, 0x04
+	pushw 247
 	ld	xbc, 15326986
 	ldw	de, 16
 	call	16434441
@@ -12740,7 +12775,8 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+16)
 	lda_24	xwa, 256688
 	ld	de, (xsp+4)
-	.byte 0xda, 0xec, 0x02, 0xe3, 0x07, 0xe0, 0xe8, 0x22
+	sla	de, 2
+	.byte 0xe3, 0x07, 0xe0, 0xe8, 0x22
 	lda	xwa, (xsp+20)
 	ld	hl, (xsp+14)
 	.byte 0xd2, 0x90, 0x47, 0x02, 0xf3
@@ -12882,7 +12918,8 @@ AudioCtrl_DataBlock:
 	.byte 0x99, 0x02, 0x38, 0x0a, 0x00
 	lda_24	xwa, 256904
 	ld	de, (xsp+14)
-	.byte 0xda, 0xec, 0x02, 0xe3, 0x07, 0xe0, 0xe8, 0x22
+	sla	de, 2
+	.byte 0xe3, 0x07, 0xe0, 0xe8, 0x22
 	lda	xwa, (xsp+20)
 	ld	hl, (xsp+14)
 	.byte 0xd2, 0x90, 0x47, 0x02, 0xf3
@@ -13123,7 +13160,9 @@ AudioCtrl_DataBlock:
 	lda	xhl, (xsp+58)
 	lda	xde, (xsp+50)
 	ld	wa, (xde)
-	.byte 0xd8, 0xed, 0x03, 0xd8, 0xec, 0x02, 0xd3, 0x07, 0xe4, 0xe0, 0x20
+	sra	wa, 3
+	sla	wa, 2
+	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x20
 	add	(xhl), wa
 	ld	wa, (xde)
 	sra	wa, 3
@@ -13605,7 +13644,9 @@ AudioCtrl_DataBlock:
 	calr	-3125
 	lda	xiy, (xsp+62)
 	lda	xix, (xsp+58)
-	.byte 0x95, 0x10, 0x95, 0x10, 0x9f, 0x40, 0x3a, 0x09, 0x00
+	ldiw
+	ldiw
+	.byte 0x9f, 0x40, 0x3a, 0x09, 0x00
 	lda	xwa, (xsp+58)
 	decm	7, (xwa)
 	decm	1, (xwa+2)
@@ -13733,7 +13774,8 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	16402871
-	.byte 0xd7, 0xfa, 0x9b, 0x9f, 0x0a, 0x04
+	ld	qiz, hl
+	.byte 0x9f, 0x0a, 0x04
 	ld	wa, iz
 	ld	bc, qiz
 	ld	de, (xsp+14)
