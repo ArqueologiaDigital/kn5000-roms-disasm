@@ -252,7 +252,7 @@
 	popw	de
 	jr	ugt, -16
 	nop
-	.byte 0x0b, 0xdb, 0xf0
+	pushw 61659
 	nop
 	popw	de
 	jr	ugt, -16
@@ -524,7 +524,7 @@
 	.byte 0xbe, 0xba, 0xf0
 	nop
 	swi	7
-	.byte 0xaf, 0x67, 0xf1
+	cp	xbc, (xsp+103)
 	nop
 	.byte 0xc0, 0x67, 0xf1
 	nop

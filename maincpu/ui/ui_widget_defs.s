@@ -8316,7 +8316,7 @@ AcTrkSw_Return:
 	jrl	682
 	ld	xwa, xiz
 	ld	xbc, 31457281
-	.byte 0xe3, 0xfd, 0x88, 0x00, 0x22
+	ld	xde, (xsp+136)
 	jrl	597
 	ld	xwa, xiz
 	ld	xbc, 31457282
@@ -8338,7 +8338,7 @@ AcTrkSw_Return:
 	ld	(xwa), 0
 	ld	xwa, xiz
 	ld	xbc, 31457285
-	.byte 0xe3, 0xfd, 0x88, 0x00, 0x22
+	ld	xde, (xsp+136)
 	calr	1662
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+144)
@@ -8348,7 +8348,8 @@ AcTrkSw_Return:
 	or	xhl, xhl
 	.byte 0x66
 	.long Data_DiskFuncPtrTbl_EA0B12
-	.byte 0x0b, 0x90, 0xa8, 0xe3, 0xfd, 0x8c, 0x00, 0x20
+	pushw 43152
+	ld	xwa, (xsp+140)
 	push	xwa
 	call	16715201
 	inc	8, xsp
@@ -8364,25 +8365,29 @@ AcTrkSw_Return:
 	call	16422496
 	lda	xbc, (xsp+8)
 	ld	xhl, xbc
-	.byte 0xe3, 0xfd, 0x88, 0x00, 0x20, 0xa0, 0x83
+	ld	xwa, (xsp+136)
+	add	xhl, (xwa)
 	lda	xde, (xwa+4)
-	.byte 0x83, 0x3f, 0x59
+	cp	(xhl), 89
 	jr	nz, 11
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0x94, 0xa8
+	pushw 234
+	pushw 43156
 	ld	xwa, (xde)
 	push	xwa
 	jr	21
 	ld	xwa, (xsp+136)
-	.byte 0xa0, 0x81
+	add	xbc, (xwa)
 	ld	xwa, (xde)
-	.byte 0x81, 0x3f, 0x5a
+	cp	(xbc), 90
 	jr	nz, 16
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0x9a, 0xa8
+	pushw 234
+	pushw 43162
 	push	xwa
 	call	16715597
 	inc	8, xsp
 	jrl	419
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0xa2, 0xa8
+	pushw 234
+	pushw 43170
 	push	xwa
 	call	16715597
 	inc	8, xsp
@@ -8391,7 +8396,7 @@ AcTrkSw_Return:
 	ld	xde, (xsp+136)
 	jrl	343
 	lda	xde, (xsp+8)
-	.byte 0xe3, 0xfd, 0x90, 0x00, 0x20
+	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
 	call	16422496
 	ld	xwa, (xsp+136)
@@ -8405,33 +8410,34 @@ AcTrkSw_Return:
 	extz	xwa
 	add	xwa, 39845888
 	ld	xbc, 31457288
-	.byte 0xe3, 0xfd, 0x88, 0x00, 0x22
+	ld	xde, (xsp+136)
 	jrl	184
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
 	call	16422496
-	.byte 0xe3, 0xfd, 0x90, 0x00, 0x21, 0xe3, 0xfd, 0x88, 0x00, 0x20
+	ld	xbc, (xsp+144)
+	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
 	lda	xbc, (xsp+8)
-	.byte 0xa0, 0x81
+	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
 	ldb	w, 0
 	extz	xwa
 	add	xwa, 39845888
 	ld	xbc, 31457289
-	.byte 0xe3, 0xfd, 0x88, 0x00, 0x22
+	ld	xde, (xsp+136)
 	jr	122
 	lda	xde, (xsp+8)
-	.byte 0xe3, 0xfd, 0x90, 0x00, 0x20
+	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
 	call	16422496
-	.byte 0xe3, 0xfd, 0x90, 0x00, 0x21
+	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
 	lda	xbc, (xsp+8)
-	.byte 0xa0, 0x81
+	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
 	ldb	w, 0
@@ -8441,14 +8447,14 @@ AcTrkSw_Return:
 	ld	xde, (xsp+136)
 	jr	60
 	lda	xde, (xsp+8)
-	.byte 0xe3, 0xfd, 0x90, 0x00, 0x20
+	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
 	call	16422496
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
 	lda	xbc, (xsp+8)
-	.byte 0xa0, 0x81
+	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
 	ldb	w, 0
@@ -8462,27 +8468,27 @@ AcTrkSw_Return:
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
 	call	16422496
-	.byte 0xe3, 0xfd, 0x90, 0x00, 0x21
+	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
 	lda	xbc, (xsp+8)
-	.byte 0xa0, 0x81
+	add	xbc, (xwa)
 	ld	a, (xbc)
 	sub	a, 65
 	ldb	w, 0
 	extz	xwa
 	add	xwa, 39845888
 	ld	xbc, 31457292
-	.byte 0xe3, 0xfd, 0x88, 0x00, 0x22
+	ld	xde, (xsp+136)
 	call	16422496
 	jr	96
 	ld	xwa, xiz
 	ld	xbc, 31457293
-	.byte 0xe3, 0xfd, 0x88, 0x00, 0x22
+	ld	xde, (xsp+136)
 	jr	12
 	ld	xwa, xiz
 	ld	xbc, 31457294
-	.byte 0xe3, 0xfd, 0x88, 0x00, 0x22
+	ld	xde, (xsp+136)
 	calr	1145
 	jr	65
 	lda	xde, (xsp+8)
@@ -8494,7 +8500,7 @@ AcTrkSw_Return:
 	lds32	xhl, 0
 	ld	l, (xwa)
 	jr	34
-	.byte 0xe3, 0xfd, 0x88, 0x00, 0x20
+	ld	xwa, (xsp+136)
 	push	xwa
 	call	16714482
 	inc	4, xsp
@@ -17285,7 +17291,7 @@ CommonIDProc_JumpTable:
 	ld	xbc, (xwa+8)
 	.byte 0xe9, 0xee, 0x03
 	ld	xwa, (xsp+12)
-	.byte 0xa8, 0x08, 0x81
+	add	xbc, (xwa+8)
 	ld	xwa, (xbc)
 	push	xwa
 	jr	24

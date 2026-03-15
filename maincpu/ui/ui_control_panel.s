@@ -2600,7 +2600,7 @@ MainPmanCtrl_DispatchTable:
 	ld	xwa, (xiz)
 	call	16569399
 	ld	(xiz+4), hl
-	.byte 0x0b, 0x0c, 0x00
+	pushw 12
 	call	16715392
 	inc	2, xsp
 	ld	(xsp+4), xhl
@@ -2608,7 +2608,7 @@ MainPmanCtrl_DispatchTable:
 	ld	xiy, xiz
 	ld	xix, xwa
 	lds	bc, 6
-	.byte 0x95, 0x11
+	ldirw
 	ld	xwa, 4294967295
 	ld	xbc, 29360156
 	ld	xde, (xsp+4)
@@ -2642,7 +2642,7 @@ MainPmanCtrl_DispatchTable:
 	ld	xbc, (xiz)
 	call	16569591
 	ld	(xiz+4), hl
-	.byte 0x0b, 0x0c, 0x00
+	pushw 12
 	call	16715392
 	inc	2, xsp
 	ld	(xsp+4), xhl
@@ -2650,7 +2650,7 @@ MainPmanCtrl_DispatchTable:
 	ld	xiy, xiz
 	ld	xix, xwa
 	lds	bc, 6
-	.byte 0x95, 0x11
+	ldirw
 	ld	xwa, 4294967295
 	ld	xbc, 29360156
 	ld	xde, (xsp+4)

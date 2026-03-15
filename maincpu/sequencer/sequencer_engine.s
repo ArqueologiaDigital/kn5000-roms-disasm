@@ -10026,7 +10026,7 @@ NotePool_DataBlock:
 	cpl	bc
 	.byte 0xd1, 0x16, 0x23, 0xc9, 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x10
 	jr	c, -59
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	ret
 
 SeqBuffer_MoveEntryToHead:
@@ -12161,13 +12161,13 @@ SeqPosDec_Return:
 	ret
 
 SeqPos_DataBlock:
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ldda8	a, 10360
 	.byte 0xc7, 0xfb, 0x99, 0xc2, 0xe3, 0xff, 0x00, 0x19, 0x78, 0x28
 	call	16030310
 	.byte 0xc7, 0xfb, 0x89
 	stda8	10360, a
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	ret
 	calr	2167
 	.byte 0xd1, 0x68, 0x26, 0x19, 0x7f, 0x28
@@ -12214,13 +12214,13 @@ SeqValRange_CheckBounds:
 	ret
 
 SeqValRange_ReturnOK:
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ldda8	a, 10360
 	.byte 0xc7, 0xfb, 0x99, 0xc1, 0x2a, 0x27, 0x19, 0x78, 0x28
 	calr	11
 	.byte 0xc7, 0xfb, 0x89
 	stda8	10360, a
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	ret
 
 SeqVoice_InitAllChannelParams:
@@ -12824,7 +12824,7 @@ Part_PopRetFA2:
 	ret
 
 SeqPart_LoadDualPartData:
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ldda8	a, 9776
 	cps	a, 0
 	jr	z, 103
@@ -12857,7 +12857,7 @@ SeqPart_LoadDualPartData:
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0x89
 	cpda8	a, 9776
 	jr	c, -51
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	ret
 
 SeqVoice_SeekToBar:
@@ -13637,7 +13637,7 @@ SeqPart_PositionUpdateBlock:
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0x89
 	cpda8	a, 10401
 	jrl	ule, -186
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	ret
 
 SeqPart_CalcTickRate:
@@ -14198,7 +14198,7 @@ SeqDataCopy_RestoreStack:
 	ret
 
 SeqData_VoiceSetupBlock:
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	calr	141
 	calr	-2483
 	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xd8
@@ -17452,7 +17452,7 @@ PartCtrl_SwapAndRelinkBlock:
 	calr	-2533
 	ld	wa, iz
 	calr	-2519
-	.byte 0xd7, 0xfa, 0x9b
+	ld	qiz, hl
 	cpw	qiz, 65535
 	jr	nz, 70
 	ld	(xsp+8), iz
@@ -17489,12 +17489,12 @@ PartCtrl_SwapAndRelinkBlock:
 	calr	-2510
 	incm	1, (xsp+4)
 	ld	wa, (xsp+4)
-	.byte 0x9f, 0x08, 0xf0
+	cp	wa, (xsp+8)
 	jr	nz, 22
 	ld	(xsp+8), iz
 	ld	wa, iz
 	calr	-2635
-	.byte 0xd7, 0xfa, 0x9b
+	ld	qiz, hl
 	ld	wa, qiz
 	ld	bc, (xsp+6)
 	calr	-2666
@@ -18200,7 +18200,8 @@ SeqEvt_ProcessBlock:
 	ld	(xsp+2), 1
 	ld	xiy, 14960174
 	lda	xix, (xsp+4)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	ld	c, (xsp+8)
 	extz	bc
 	lds	wa, 0
@@ -18227,7 +18228,7 @@ SeqEvt_ProcessBlock:
 	cp	l, 129
 	jr	nz, 2
 	incm	1, (xsp)
-	.byte 0x8f, 0x02, 0x3f, 0x01
+	cp	(xsp+2), 1
 	jr	z, -29
 	ld	hl, (xsp)
 	lda	xsp, (xsp+10)
@@ -18241,7 +18242,8 @@ SeqEvt_ProcessBlock:
 	ld	(xsp+2), 1
 	ld	xiy, 14960178
 	lda	xix, (xsp+4)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	ld	c, (xsp+8)
 	extz	bc
 	lds	wa, 0
@@ -18269,7 +18271,7 @@ SeqEvt_ProcessBlock:
 	jr	z, 25
 	cp	l, 129
 	jr	z, 20
-	.byte 0x8f, 0x02, 0x3f, 0x01
+	cp	(xsp+2), 1
 	jr	z, -37
 	ld	hl, (xsp)
 	lda	xsp, (xsp+10)
@@ -24893,7 +24895,7 @@ SeqSave_PostReturn:
 
 SeqLoad_ProcessDataBlock:
 	dec	6, xsp
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ld	(xsp+6), a
 	lds32	xwa, 0
 	ld	(xsp+2), xwa
@@ -24935,7 +24937,7 @@ SeqLoad_ProcessDataBlock:
 	ld	xhl, (xsp+2)
 	.byte 0xeb, 0xee, 0x08
 	ld	(xsp+2), xhl
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	inc	6, xsp
 	ret
 	dec	2, xsp
@@ -25009,32 +25011,32 @@ SeqLoad_ProcessDataBlock:
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00, 0x9f, 0x08, 0x3f, 0x00, 0x00
 	jr	ule, 77
 	ld	wa, iz
-	.byte 0x9f, 0x04, 0x80
+	add	wa, (xsp+4)
 	call	15998009
 	ld	bc, hl
 	cp	bc, 65535
 	jr	z, 16
 	cps	bc, 0
 	jr	z, 12
-	.byte 0x9f, 0x06, 0x81
+	add	bc, (xsp+6)
 	ld	wa, iz
-	.byte 0x9f, 0x04, 0x80
+	add	wa, (xsp+4)
 	call	15998028
 	ld	wa, iz
-	.byte 0x9f, 0x04, 0x80
+	add	wa, (xsp+4)
 	call	15998047
 	ld	bc, hl
 	cp	bc, 65535
 	jr	z, 16
 	cps	bc, 0
 	jr	z, 12
-	.byte 0x9f, 0x06, 0x81
+	add	bc, (xsp+6)
 	ld	wa, iz
-	.byte 0x9f, 0x04, 0x80
+	add	wa, (xsp+4)
 	call	15998066
 	incm	1, (xsp+4)
 	ld	wa, (xsp+4)
-	.byte 0x9f, 0x08, 0xf0
+	cp	wa, (xsp+8)
 	jr	c, -77
 	calr	866
 	stdi16	9832, 1
@@ -25483,7 +25485,7 @@ SeqBar_DataBlock:
 	cps	de, 0
 	jr	nz, 2
 	jr	13
-	.byte 0x97, 0x82
+	add	de, (xsp)
 	ld	c, (xsp+2)
 	extz	bc
 	lds	wa, 0
@@ -25715,7 +25717,7 @@ SeqLoad_ReadPartDataBlock:
 	ld	xwa, (xsp+4)
 	inc	2, xwa
 	ld	bc, (xsp+10)
-	.byte 0x9f, 0x08, 0x81
+	add	bc, (xsp+8)
 	inc	1, bc
 	calr	-182
 	ld	xiz, xhl
@@ -25731,7 +25733,7 @@ SeqLoad_ReadPartDataBlock:
 	add	hl, hl
 	ldada	xde, 10702
 	ld	bc, (xsp+10)
-	.byte 0x9f, 0x08, 0x81
+	add	bc, (xsp+8)
 	dec	1, bc
 	ld	wa, (xsp+8)
 	.byte 0xd3, 0x07, 0xe8, 0xec, 0xf0
@@ -29289,7 +29291,7 @@ SeqPart_AllocReturn:
 	ret
 
 SeqPart_ByteBlockA207:
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	call	15990523
 	call	15988586
 	cps	hl, 0
@@ -29364,7 +29366,7 @@ SeqPart_ByteBlockA207:
 	ldada	xbc, 61856
 	extz	xwa
 	add	xwa, xbc
-	.byte 0x80, 0x3f, 0x10
+	cp	(xwa), 16
 	jr	nz, 9
 	stdi8	10362, 0
 	call	15993425
@@ -29392,7 +29394,7 @@ SeqPart_ByteBlockA207:
 	.byte 0xc1, 0x36, 0x26, 0x19, 0x7a, 0x28
 	call	15990594
 	call	15990554
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	ret
 	stdi8	10362, 0
 	ldda8	a, 9780
@@ -29944,7 +29946,7 @@ SeqPart_FullLoadErrorExit:
 	ret
 
 SeqPart_ByteBlockA95A:
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ldda8	a, 10361
 	res	0, a
 	res	1, a
@@ -30066,7 +30068,7 @@ SeqPart_ByteBlockA95A:
 	ldada	xwa, 61856
 	extz	xbc
 	add	xbc, xwa
-	.byte 0x81, 0x3f, 0x10
+	cp	(xbc), 16
 	jr	nz, 11
 	calr	1528
 	cpdi8	10362, 0
@@ -30109,7 +30111,7 @@ SeqPart_ByteBlockA95A:
 	ldada	xwa, 61856
 	extz	xbc
 	add	xbc, xwa
-	.byte 0x81, 0x3f, 0x10
+	cp	(xbc), 16
 	jr	nz, 15
 	stdi8	10362, 0
 	calr	1382
@@ -30130,7 +30132,7 @@ SeqPart_ByteBlockA95A:
 	jr	ule, -95
 	.byte 0xc1, 0x36, 0x26, 0x19, 0x7a, 0x28
 	calr	4
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	ret
 	call	15990566
 	call	15990554

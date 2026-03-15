@@ -3034,7 +3034,7 @@ SeqStep_ByteBlockEA5F:
 	call	15995915
 	calr	-714
 	ldda16	wa, 61902
-	.byte 0xd7, 0xfa, 0x98
+	ld	qiz, wa
 	ldda16	iz, 62001
 	.byte 0xbf, 0x04, 0x16, 0x2f, 0xf2
 	ld8_24	a, 65507

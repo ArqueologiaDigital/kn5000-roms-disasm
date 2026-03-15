@@ -372,11 +372,11 @@ DSPCfg_InitDispatchData:
 	.byte 0xf3, 0x07, 0xe8, 0xe0, 0x32
 	ld	l, (xbc+2)
 	ld	a, l
-	.byte 0x82, 0xc1
+	and	a, (xde)
 	cp	(xbc+3), a
 	jr	ugt, 9
 	ld	a, l
-	.byte 0x82, 0xc1
+	and	a, (xde)
 	cp	(xbc+4), a
 	jr	nc, 9
 	cpl	l
@@ -391,11 +391,11 @@ DSPCfg_InitDispatchData:
 	.byte 0xf3, 0x07, 0xe8, 0xe0, 0x32
 	ld	l, (xbc+2)
 	ld	a, l
-	.byte 0x82, 0xc1
+	and	a, (xde)
 	cp	(xbc+3), a
 	jr	ugt, 18
 	ld	a, l
-	.byte 0x82, 0xc1
+	and	a, (xde)
 	cp	(xbc+4), a
 	jr	c, 9
 	cpl	l
@@ -419,9 +419,9 @@ DSPCfg_InitDispatchData:
 	extz	iz
 	ld	l, (xde+2)
 	ld	h, l
-	.byte 0x80, 0xc6
+	and	h, (xwa)
 	lds32	xiy, 5
-	.byte 0xde, 0xf4
+	cp	ix, iz
 	jr	nc, 21
 	ld	xbc, xiy
 	add	xbc, xde
@@ -431,7 +431,7 @@ DSPCfg_InitDispatchData:
 	jr	22
 	inc	1, ix
 	inc	1, xiy
-	.byte 0xde, 0xf4
+	cp	ix, iz
 	jr	c, -21
 	cpl	l
 	and	(xwa), l
@@ -459,7 +459,7 @@ DSPCfg_InitDispatchData:
 	extz	iz
 	ld	l, (xde+2)
 	ld	h, l
-	.byte 0x80, 0xc6
+	and	h, (xwa)
 	lds32	xix, 5
 	cp	iy, iz
 	jr	nc, 27
@@ -547,16 +547,16 @@ DSPCfg_SyncBitmapData:
 	ld	(xsp+8), a
 	lds32	xwa, 2
 	add	(xsp+18), xwa
-	.byte 0x8f, 0x08, 0x3f, 0x00
+	cp	(xsp+8), 0
 	jr	z, 115
 	ld	xwa, (xsp+18)
 	ld	a, (xwa)
-	.byte 0x86, 0xf1
+	cp	a, (xiz)
 	jr	z, 87
 	cp	bc, 500
 	jr	c, 22
 	extz	xbc
-	.byte 0xaf, 0x0a, 0x81
+	add	xbc, (xsp+10)
 	ld	(xbc), 255
 	push	xde
 	push	xhl
@@ -571,43 +571,43 @@ DSPCfg_SyncBitmapData:
 	ld	de, bc
 	inc	1, bc
 	extz	xde
-	.byte 0xaf, 0x0a, 0x82
+	add	xde, (xsp+10)
 	ld	a, (xsp+4)
 	ld	(xde), a
 	ld	de, bc
 	inc	1, bc
 	extz	xde
-	.byte 0xaf, 0x0a, 0x82
+	add	xde, (xsp+10)
 	ld	a, (xsp+6)
 	ld	(xde), a
 	ld	de, bc
 	inc	1, bc
 	extz	xde
-	.byte 0xaf, 0x0a, 0x82
+	add	xde, (xsp+10)
 	ld	a, (xiz)
 	ld	(xde), a
 	ld	xwa, (xsp+18)
 	ld	e, (xwa)
-	.byte 0x86, 0xd5
+	xor	e, (xiz)
 	ld	wa, bc
 	inc	1, bc
 	extz	xwa
-	.byte 0xaf, 0x0a, 0x80
+	add	xwa, (xsp+10)
 	ld	(xwa), e
 	incm8	1, (xsp+6)
 	decm8	1, (xsp+8)
 	inc	1, xiz
 	lds32	xwa, 1
 	add	(xsp+18), xwa
-	.byte 0x8f, 0x08, 0x3f, 0x00
+	cp	(xsp+8), 0
 	jr	nz, -115
 	.byte 0xc5, 0xf8, 0x21
 	ld	(xsp+4), a
-	.byte 0x8f, 0x04, 0x3f, 0xff
+	cp	(xsp+4), 255
 	jrl	nz, -149
 	ld	wa, bc
 	extz	xwa
-	.byte 0xaf, 0x0e, 0x80
+	add	xwa, (xsp+14)
 	ld	(xwa), 255
 	stda16	37086, bc
 	pop	xiz

@@ -536,7 +536,7 @@ Rhythm_InstrMapTable_Default:
 	.byte 0x04, 0x02
 	halt
 	ei	0x06
-	.byte 0x0b, 0x0c, 0x0e
+	pushw 3596
 	retd	0x0a08
 	rcf
 	scf
@@ -555,7 +555,7 @@ Rhythm_InstrMapTable_Default:
 	.byte 0x01, 0x01
 	ei	0x04
 	halt
-	.byte 0x0b, 0x10, 0x00
+	pushw 16
 	nop
 	nop
 	nop
@@ -868,7 +868,7 @@ Rhythm_VelocityTable_A:
 	ldwio	7, 516
 	halt
 	ei	0x06
-	.byte 0x0b, 0x0c, 0x0e
+	pushw 3596
 	retd	0x0a08
 	rcf
 	scf
@@ -887,7 +887,7 @@ Rhythm_VelocityTable_A:
 	.byte 0x01, 0x01
 	ei	0x04
 	halt
-	.byte 0x0b, 0x10, 0x00
+	pushw 16
 	nop
 	nop
 	nop

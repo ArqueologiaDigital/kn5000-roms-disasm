@@ -1148,7 +1148,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	xiy, 15204622
 	lda	xix, (xsp+60)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+60)
 	lda_24	xbc, 149362
 	ld	(xwa), xbc
@@ -1159,7 +1159,7 @@ PmemOutLGridCheck_JumpTable:
 	.long NakaData_PartFlags
 	lda	xix, (xsp+60)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	ldada	xde, 64812
 	sub	xde, 63904
 	lds32	xwa, 0
@@ -1186,7 +1186,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	xiy, 15204622
 	lda	xix, (xsp+60)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+60)
 	lda_24	xbc, 149364
 	ld	(xwa), xbc
@@ -1215,7 +1215,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	xiy, 15204622
 	lda	xix, (xsp+60)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+60)
 	lda_24	xbc, 149362
 	ld	(xwa), xbc
@@ -1295,7 +1295,7 @@ PmemOutLGridCheck_JumpTable:
 	add	xwa, xhl
 	.byte 0xaf, 0x20, 0x80, 0xb0, 0xcf, 0x66
 	.long LABEL_E80B12
-	.byte 0x0b, 0x4a, 0x01
+	pushw 330
 	lda	xwa, (xsp+48)
 	push	xwa
 	call	16715597
@@ -1304,7 +1304,8 @@ PmemOutLGridCheck_JumpTable:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x50, 0x01
+	pushw 232
+	pushw 336
 	lda	xwa, (xsp+50)
 	push	xwa
 	call	16714354
@@ -1330,11 +1331,12 @@ PmemOutLGridCheck_JumpTable:
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x20, 0x80
+	add	xwa, (xsp+32)
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x56, 0x01
+	pushw 232
+	pushw 342
 	lda	xwa, (xsp+50)
 	push	xwa
 	call	16714354
@@ -1362,7 +1364,8 @@ PmemOutLGridCheck_JumpTable:
 	add	xwa, xhl
 	.byte 0xaf, 0x20, 0x80, 0xb0, 0xcf
 	jr	z, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x5c, 0x01
+	pushw 232
+	pushw 348
 	lda	xwa, (xsp+48)
 	push	xwa
 	call	16715597
@@ -1371,7 +1374,8 @@ PmemOutLGridCheck_JumpTable:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x62, 0x01
+	pushw 232
+	pushw 354
 	lda	xwa, (xsp+50)
 	push	xwa
 	call	16714354
@@ -1392,7 +1396,7 @@ PmemOutLGridCheck_JumpTable:
 	add	xwa, xbc
 	ld	(xsp+24), xwa
 	ld	xbc, xwa
-	.byte 0xaf, 0x20, 0x81
+	add	xbc, (xsp+32)
 	ld	xwa, (xsp+4)
 	cp	(xwa), xbc
 	jr	nz, 57
@@ -1418,7 +1422,7 @@ PmemOutLGridCheck_JumpTable:
 	jrl	897
 	lda_24	xbc, 149364
 	ld	xwa, (xsp+4)
-	.byte 0xa0, 0xf1
+	cp	xbc, (xwa)
 	jrl	nz, 397
 	ld	xwa, (xsp+16)
 	.byte 0xb0, 0x02, 0x03, 0x00
@@ -1455,11 +1459,12 @@ PmemOutLGridCheck_JumpTable:
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x20, 0x80
+	add	xwa, (xsp+32)
 	lda	xbc, (xsp+44)
 	.byte 0xb0, 0xcf
 	jr	z, 15
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x74, 0x01
+	pushw 232
+	pushw 372
 	push	xbc
 	call	16715597
 	inc	8, xsp
@@ -1467,7 +1472,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	a, (xwa)
 	extz	wa
 	.long AudioStream_Property_Table
-	.byte 0x0b, 0x7a, 0x01
+	pushw 378
 	push	xbc
 	call	16714354
 	lda	xsp, (xsp+10)
@@ -1492,11 +1497,12 @@ PmemOutLGridCheck_JumpTable:
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x20, 0x80
+	add	xwa, (xsp+32)
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x80, 0x01
+	pushw 232
+	pushw 384
 	lda	xwa, (xsp+50)
 	push	xwa
 	call	16714354
@@ -1524,7 +1530,7 @@ PmemOutLGridCheck_JumpTable:
 	add	xwa, xhl
 	.byte 0xaf, 0x20, 0x80, 0xb0, 0xcf, 0x66
 	.long LABEL_E80B12
-	.byte 0x0b, 0x86, 0x01
+	pushw 390
 	lda	xwa, (xsp+48)
 	push	xwa
 	call	16715597
@@ -1533,7 +1539,8 @@ PmemOutLGridCheck_JumpTable:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x8c, 0x01
+	pushw 232
+	pushw 396
 	lda	xwa, (xsp+50)
 	push	xwa
 	call	16714354
@@ -1545,7 +1552,7 @@ PmemOutLGridCheck_JumpTable:
 	ldada	xwa, 63926
 	ld	(xsp+32), xwa
 	lda	xwa, (xwa+14)
-	.byte 0xaf, 0x14, 0xa0
+	sub	xwa, (xsp+20)
 	ld	(xsp+8), xwa
 	lds32	xwa, 0
 	ld8_24	a, 149364
@@ -1554,7 +1561,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	xbc, (xsp+24)
 	add	xbc, xhl
 	ld	xde, xbc
-	.byte 0xaf, 0x08, 0x82
+	add	xde, (xsp+8)
 	ld	xwa, (xsp+4)
 	cp	(xwa), xde
 	jr	nz, 69
@@ -1564,14 +1571,16 @@ PmemOutLGridCheck_JumpTable:
 	ld	xwa, (xwa)
 	bit	7, wa
 	jr	z, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x92, 0x01
+	pushw 232
+	pushw 402
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	16715597
 	inc	8, xsp
 	jr	18
 	push	xwa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x98, 0x01
+	pushw 232
+	pushw 408
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	16714354
@@ -1582,7 +1591,7 @@ PmemOutLGridCheck_JumpTable:
 	jrl	369
 	ld	xwa, (xsp+32)
 	lda	xwa, (xwa+15)
-	.byte 0xaf, 0x14, 0xa0
+	sub	xwa, (xsp+20)
 	ld	xde, xbc
 	add	xde, xwa
 	ld	xwa, (xsp+4)
@@ -1593,7 +1602,8 @@ PmemOutLGridCheck_JumpTable:
 	ld	xwa, (xsp+28)
 	ld	xwa, (xwa)
 	push	xwa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x9e, 0x01
+	pushw 232
+	pushw 414
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	16714354
@@ -1604,7 +1614,7 @@ PmemOutLGridCheck_JumpTable:
 	jrl	303
 	ld	xwa, (xsp+32)
 	lda	xwa, (xwa+17)
-	.byte 0xaf, 0x14, 0xa0
+	sub	xwa, (xsp+20)
 	add	xbc, xwa
 	ld	xwa, (xsp+4)
 	cp	(xwa), xbc
@@ -1615,14 +1625,16 @@ PmemOutLGridCheck_JumpTable:
 	ld	xwa, (xwa)
 	bit	7, wa
 	jr	z, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xa4, 0x01
+	pushw 232
+	pushw 420
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	16715597
 	inc	8, xsp
 	jr	18
 	push	xwa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xaa, 0x01
+	pushw 232
+	pushw 426
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	16714354
@@ -1802,7 +1814,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xiy, 15204820
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	ldada	xwa, 63940
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -1820,7 +1832,7 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 127
@@ -1836,7 +1848,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xiy, 15204820
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	ldada	xwa, 63941
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -1854,7 +1866,7 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 255
@@ -1863,7 +1875,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xiy, 15204820
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	ldada	xwa, 63943
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -1881,7 +1893,7 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 127
@@ -1918,7 +1930,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xiy, 15204820
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	ldada	xwa, 63940
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -1936,7 +1948,7 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 127
@@ -1946,7 +1958,7 @@ TtMdCtlMsg_EventDispatch:
 	jrl	nz, 1584
 	ld	xbc, (xwa)
 	lda	xde, (xwa+14)
-	.byte 0x81, 0x3f, 0x00
+	cp	(xbc), 0
 	jr	nz, 10
 	ld	xbc, 128
 	ld	(xde), xbc
@@ -1958,7 +1970,7 @@ TtMdCtlMsg_EventDispatch:
 	.long LABEL_E801D4
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	ldada	xwa, 63941
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -1976,7 +1988,7 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 255
@@ -2014,7 +2026,7 @@ TtMdCtlMsg_EventDispatch:
 	.byte 0xa1, 0xe9, 0xee, 0x06, 0xaf, 0x10, 0x20, 0xe9
 	.byte 0x80, 0xeb, 0x80, 0xee, 0x80, 0xb0, 0xcf, 0x66
 	.long LABEL_E80B12
-	.byte 0x0b, 0xfa, 0x01
+	pushw 506
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	16715597
@@ -2023,7 +2035,8 @@ TtMdCtlMsg_EventDispatch:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x00, 0x02
+	pushw 232
+	pushw 512
 	ld	xwa, (xsp+18)
 	push	xwa
 	call	16714354
@@ -2050,11 +2063,12 @@ TtMdCtlMsg_EventDispatch:
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x06, 0x02
+	pushw 232
+	pushw 518
 	lda	xwa, (xsp+46)
 	push	xwa
 	call	16714354
@@ -2083,7 +2097,8 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xhl
 	.byte 0xaf, 0x1c, 0x80, 0xb0, 0xcf
 	jr	z, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x0c, 0x02
+	pushw 232
+	pushw 524
 	lda	xwa, (xsp+44)
 	push	xwa
 	call	16715597
@@ -2092,7 +2107,8 @@ TtMdCtlMsg_EventDispatch:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x12, 0x02
+	pushw 232
+	pushw 530
 	lda	xwa, (xsp+46)
 	push	xwa
 	call	16714354
@@ -2106,7 +2122,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xwa, (xsp+28)
 	sub	xwa, xbc
 	ld	(xsp+28), xwa
-	.byte 0xa6, 0xf2
+	cp	xde, (xiz)
 	jrl	nz, 336
 	ld	xwa, (xsp+24)
 	.byte 0xb0, 0x02, 0x00, 0x00
@@ -2125,7 +2141,8 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xhl
 	.byte 0xaf, 0x1c, 0x80, 0xb0, 0xcf
 	jr	z, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x18, 0x02
+	pushw 232
+	pushw 536
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	16715597
@@ -2134,7 +2151,8 @@ TtMdCtlMsg_EventDispatch:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x1e, 0x02
+	pushw 232
+	pushw 542
 	ld	xwa, (xsp+18)
 	push	xwa
 	call	16714354
@@ -2161,11 +2179,12 @@ TtMdCtlMsg_EventDispatch:
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x24, 0x02
+	pushw 232
+	pushw 548
 	lda	xwa, (xsp+46)
 	push	xwa
 	call	16714354
@@ -2192,11 +2211,12 @@ TtMdCtlMsg_EventDispatch:
 	lda_24	xwa, 2020352
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	lda	xbc, (xsp+40)
 	.byte 0xb0, 0xcf
 	jr	z, 15
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x2a, 0x02
+	pushw 232
+	pushw 554
 	push	xbc
 	call	16715597
 	inc	8, xsp
@@ -2204,7 +2224,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	a, (xwa)
 	extz	wa
 	.long AudioStream_Property_Table
-	.byte 0x0b, 0x30, 0x02
+	pushw 560
 	push	xbc
 	call	16714354
 	lda	xsp, (xsp+10)
@@ -2230,7 +2250,7 @@ TtMdCtlMsg_EventDispatch:
 	add	xbc, xwa
 	add	xbc, xhl
 	ld	xwa, xbc
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	cp	(xiz), xwa
 	jr	nz, 68
 	ld	xwa, (xsp+24)
@@ -2239,14 +2259,15 @@ TtMdCtlMsg_EventDispatch:
 	bit	7, wa
 	.byte 0x66
 	.long LABEL_E80B12
-	.byte 0x0b, 0x36, 0x02
+	pushw 566
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	16715597
 	inc	8, xsp
 	jr	18
 	push	xwa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x3c, 0x02
+	pushw 232
+	pushw 572
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	16714354
@@ -2258,7 +2279,7 @@ TtMdCtlMsg_EventDispatch:
 	jrl	463
 	ld	xwa, (xsp+20)
 	lda	xwa, (xwa+15)
-	.byte 0xaf, 0x08, 0xa0
+	sub	xwa, (xsp+8)
 	ld	xhl, xbc
 	add	xhl, xwa
 	ld	xwa, (xsp+4)
@@ -2269,7 +2290,8 @@ TtMdCtlMsg_EventDispatch:
 	.byte 0xb0, 0x02, 0x01, 0x00
 	ld	xwa, (xde)
 	push	xwa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x42, 0x02
+	pushw 232
+	pushw 578
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	16714354
@@ -2281,7 +2303,7 @@ TtMdCtlMsg_EventDispatch:
 	jrl	396
 	ld	xwa, (xsp+20)
 	lda	xwa, (xwa+17)
-	.byte 0xaf, 0x08, 0xa0
+	sub	xwa, (xsp+8)
 	add	xbc, xwa
 	ld	xwa, (xsp+4)
 	cp	(xwa), xbc
@@ -2291,14 +2313,16 @@ TtMdCtlMsg_EventDispatch:
 	ld	xwa, (xde)
 	bit	7, wa
 	jr	z, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x48, 0x02
+	pushw 232
+	pushw 584
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	16715597
 	inc	8, xsp
 	jr	18
 	push	xwa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x4e, 0x02
+	pushw 232
+	pushw 590
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	16714354
@@ -3916,7 +3940,8 @@ MidiPartGridCheck_JumpTable:
 	call	16569399
 	cps	hl, 0
 	jr	nz, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xba, 0x06
+	pushw 232
+	pushw 1722
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	16715597
@@ -3926,7 +3951,8 @@ MidiPartGridCheck_JumpTable:
 	ld	wa, (xwa+4)
 	inc	1, wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xc0, 0x06
+	pushw 232
+	pushw 1728
 	lda	xwa, (xsp+30)
 	push	xwa
 	call	16714354
@@ -3944,7 +3970,8 @@ MidiPartGridCheck_JumpTable:
 	ld	xwa, (xsp+4)
 	.byte 0xb0, 0x02, 0x01, 0x00, 0x92, 0x3f, 0x00, 0x00
 	jr	nz, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xc8, 0x06
+	pushw 232
+	pushw 1736
 	ld	xwa, (xsp+12)
 	push	xwa
 	call	16715597
@@ -3956,7 +3983,8 @@ MidiPartGridCheck_JumpTable:
 	call	16569399
 	inc	1, hl
 	pushw	hl
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xce, 0x06
+	pushw 232
+	pushw 1742
 	lda	xwa, (xsp+30)
 	push	xwa
 	call	16714354
@@ -10781,7 +10809,8 @@ AcWelcomScreen_RenderBytecode:
 	jr	z, 20
 	lda	xiy, (xwa+4)
 	lda	xix, (xsp+12)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	ldw	bc, 30
 	call	16446786
@@ -10794,7 +10823,8 @@ AcWelcomScreen_RenderBytecode:
 	addda32_24	xbc, 149382
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	ldw	bc, 30
 	call	16446432
@@ -10811,7 +10841,7 @@ AcWelcomScreen_RenderBytecode:
 	addda32_24	xiy, 149382
 	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x34
 	lds	bc, 6
-	.byte 0x95, 0x11
+	ldirw
 	jrl	734
 	ld	xwa, (xsp+20)
 	ld	xbc, 29360140
@@ -10819,35 +10849,40 @@ AcWelcomScreen_RenderBytecode:
 	call	16422496
 	jrl	717
 	lda	xix, (xsp+12)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	.byte 0x0b, 0x11, 0x00, 0x92, 0x04, 0x0b, 0xf7, 0x00
 	ld	xbc, 15326816
 	ldw	de, 16
 	jrl	171
 	lda	xix, (xsp+12)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	.byte 0x0b, 0x11, 0x00, 0x92, 0x04, 0x0b, 0xf7, 0x00
 	ld	xbc, 15326952
 	ldw	de, 16
 	jrl	142
 	lda	xix, (xsp+12)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	.byte 0x0b, 0x11, 0x00, 0x92, 0x04, 0x0b, 0xf7, 0x00, 0x41
 	.long Bitmap_DigitL
 	ldw	de, 16
 	jr	114
 	lda	xix, (xsp+12)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	.byte 0x0b, 0x11, 0x00, 0x92, 0x04, 0x0b, 0xf7, 0x00
 	ld	xbc, 15327020
 	ldw	de, 16
 	jr	86
 	lda	xix, (xsp+12)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	.byte 0x0b, 0x11, 0x00, 0x92, 0x04, 0x0b, 0xf7, 0x00, 0x41
 	.long Bitmap_DigitR
@@ -10855,7 +10890,8 @@ AcWelcomScreen_RenderBytecode:
 	jr	58
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	.byte 0x0b, 0x11, 0x00, 0x0b, 0xff, 0x00, 0x0b, 0xf7, 0x00, 0x41
 	.long Bitmap_Digit1
@@ -10905,9 +10941,10 @@ AcWelcomScreen_RenderBytecode:
 	addda32_24	xbc, 149382
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
-	.byte 0x0b, 0x11, 0x00
+	pushw 17
 	ld16_24	bc, 149380
 	exts	xbc
 	ld	xde, xbc
@@ -11004,7 +11041,7 @@ AcWelcomScreen_RenderBytecode:
 	addda32_24	xiy, 149382
 	ld	xix, 256548
 	lds	bc, 6
-	.byte 0x95, 0x11
+	ldirw
 	jr	36
 	ld	xwa, 18874379
 	ld	xbc, 31457452
@@ -12419,7 +12456,7 @@ AudioCtrl_DataBlock:
 	ld	xiy, xiz
 	lda	xix, (xsp+16)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+16)
 	ld	bc, (xsp+4)
 	dec	2, bc
@@ -12467,7 +12504,7 @@ AudioCtrl_DataBlock:
 	ld	xiy, xiz
 	lda	xix, (xsp+8)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+8)
 	ld	bc, (xsp+4)
 	dec	2, bc
@@ -12503,13 +12540,13 @@ AudioCtrl_DataBlock:
 	ld	xiy, xiz
 	lda	xix, (xsp+12)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+12)
 	ld	bc, (xiz)
-	.byte 0x9f, 0x06, 0x81
+	add	bc, (xsp+6)
 	ld	(xwa+4), bc
 	ld	bc, (xiz+2)
-	.byte 0x9f, 0x04, 0x81
+	add	bc, (xsp+4)
 	ld	(xwa+6), bc
 	lda	xbc, (xsp+8)
 	call	16357274
@@ -12517,7 +12554,8 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+8)
 	lds32	xde, 3
 	push	xde
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0xf7, 0x00
+	pushw 255
+	pushw 247
 	ld	xde, (xsp+28)
 	call	16436908
 	pop	xiz
@@ -12541,20 +12579,20 @@ AudioCtrl_DataBlock:
 	ld	wa, (xbc+4)
 	ld	(xsp+4), wa
 	ldw	wa, 136
-	.byte 0x9f, 0x06, 0x80
+	add	wa, (xsp+6)
 	lda	xbc, (xsp+8)
 	call	16361779
 	lda	xde, (xiz+2)
 	lda	xbc, (xsp+10)
 	ld	wa, (xbc)
 	sub	wa, 9
-	.byte 0x9f, 0x06, 0xa0
+	sub	wa, (xsp+6)
 	ld	(xde), wa
 	.byte 0xb6, 0x02, 0x08, 0x00, 0xbe, 0x04, 0x02, 0x37, 0x01
 	lda	xhl, (xiz+6)
 	ld	wa, (xbc)
 	add	wa, 31
-	.byte 0x9f, 0x06, 0xa0
+	sub	wa, (xsp+6)
 	ld	(xhl), wa
 	ld	wa, (xsp+4)
 	add	(xde), wa
@@ -12574,7 +12612,7 @@ AudioCtrl_DataBlock:
 	ld	xiy, xiz
 	lda	xix, (xsp+12)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	wa, (xsp+4)
 	dec	2, wa
 	add	(xsp+14), wa
@@ -12611,7 +12649,7 @@ AudioCtrl_DataBlock:
 	ld	xiy, xiz
 	lda	xix, (xsp+8)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xde, (xsp+8)
 	lda	xbc, (xde+2)
 	ld	wa, (xsp+4)
@@ -12622,7 +12660,7 @@ AudioCtrl_DataBlock:
 	divs	wa, 8
 	ld	hl, qwa
 	ld	wa, (xde+4)
-	.byte 0x92, 0xa0
+	sub	wa, (xde)
 	ld	ix, wa
 	exts	xix
 	divs	ix, 4
@@ -12709,11 +12747,17 @@ AudioCtrl_DataBlock:
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0xf2, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00
+	pushw 255
+	pushw 242
+	pushw 0
+	pushw 0
 	jr	15
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0x08, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00
+	pushw 255
+	pushw 8
+	pushw 0
+	pushw 0
 	call	16437380
 	jrl	193
 	ld	wa, (xsp+12)
@@ -12831,7 +12875,8 @@ AudioCtrl_DataBlock:
 	.byte 0xe3, 0x07, 0xec, 0xe8, 0x22
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xf7, 0x00
+	pushw 0
+	pushw 247
 	call	16436908
 	lda	xbc, (xsp+16)
 	.byte 0x99, 0x02, 0x38, 0x0a, 0x00
@@ -12844,11 +12889,17 @@ AudioCtrl_DataBlock:
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0xf2, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00
+	pushw 255
+	pushw 242
+	pushw 0
+	pushw 0
 	jr	15
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0x08, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00
+	pushw 255
+	pushw 8
+	pushw 0
+	pushw 0
 	call	16437380
 	jrl	193
 	ld	wa, (xsp+12)
@@ -13040,11 +13091,17 @@ AudioCtrl_DataBlock:
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x07, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x01, 0x00
+	pushw 0
+	pushw 7
+	pushw 0
+	pushw 1
 	jr	15
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x07, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00
+	pushw 0
+	pushw 7
+	pushw 0
+	pushw 0
 	call	16437380
 	lda	xwa, (xsp+62)
 	lda	xbc, (xsp+58)
@@ -13338,11 +13395,17 @@ AudioCtrl_DataBlock:
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x07, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x01, 0x00
+	pushw 0
+	pushw 7
+	pushw 0
+	pushw 1
 	jr	15
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x07, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00
+	pushw 0
+	pushw 7
+	pushw 0
+	pushw 0
 	call	16437380
 	jrl	387
 	ld	wa, (xsp+12)
@@ -13559,7 +13622,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	16402871
-	.byte 0xd7, 0xfa, 0x9b
+	ld	qiz, hl
 	ld	wa, iz
 	ld	bc, qiz
 	call	16569591
@@ -13595,11 +13658,17 @@ AudioCtrl_DataBlock:
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x07, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x01, 0x00
+	pushw 0
+	pushw 7
+	pushw 0
+	pushw 1
 	jr	15
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x07, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00
+	pushw 0
+	pushw 7
+	pushw 0
+	pushw 0
 	call	16437380
 	ld	de, (xsp+4)
 	exts	xde
@@ -13809,11 +13878,17 @@ AudioCtrl_DataBlock:
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x07, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x01, 0x00
+	pushw 0
+	pushw 7
+	pushw 0
+	pushw 1
 	jr	15
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x07, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00
+	pushw 0
+	pushw 7
+	pushw 0
+	pushw 0
 	call	16437380
 	lda	xwa, (xsp+64)
 	.byte 0x98, 0x06, 0x38, 0x20, 0x00
@@ -13825,7 +13900,7 @@ AudioCtrl_DataBlock:
 	lds32	xbc, 2
 	call	16432188
 	ldw	wa, 128
-	.byte 0x9f, 0x34, 0xa0
+	sub	wa, (xsp+52)
 	muls	wa, 36
 	exts	xwa
 	divs	wa, 128
@@ -13994,7 +14069,10 @@ AudioCtrl_DataBlock:
 	.byte 0x98, 0x06, 0x38, 0x12, 0x00
 	lds32	xde, 3
 	push	xde
-	.byte 0x0b, 0xfb, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x01, 0x00
+	pushw 251
+	pushw 0
+	pushw 0
+	pushw 1
 	ld	xde, 15333484
 	call	16437380
 	lds32	xhl, 0

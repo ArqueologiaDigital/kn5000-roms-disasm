@@ -2010,10 +2010,10 @@ IvNamingExit_Epilogue:
 IvNamingExit_ScreenData:
 	.byte 0xf3, 0xfd, 0x4e, 0xff, 0x37
 	push	xiz
-	.byte 0xf3, 0xfd, 0xaa, 0x00, 0x62
+	ld	(xsp+170), xde
 	ld	(xsp+174), xbc
 	ld	(xsp+178), xwa
-	.byte 0xe3, 0xfd, 0xae, 0x00, 0x20
+	ld	xwa, (xsp+174)
 	cp	xwa, 29360152
 	jrl	z, 654
 	cp	xwa, 29360151
@@ -2026,30 +2026,32 @@ IvNamingExit_ScreenData:
 	jr	z, 105
 	cp	xwa, 29360129
 	jrl	nz, 687
-	.byte 0xe3, 0xfd, 0xb2, 0x00, 0x20, 0xe3, 0xfd, 0xae, 0x00, 0x21
+	ld	xwa, (xsp+178)
+	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
 	call	16401417
 	ld	xwa, (xsp+178)
 	call	16409190
 	ld	xiz, xhl
-	.byte 0xe3, 0xfd, 0xb2, 0x00, 0x22
+	ld	xde, (xsp+178)
 	ld	xwa, (xiz+34)
 	ld	xbc, 31916034
 	call	16403043
 	.byte 0x9e, 0x2e, 0x3f, 0x00, 0x00
 	jrl	z, 628
-	.byte 0xe3, 0xfd, 0xb2, 0x00, 0x20
+	ld	xwa, (xsp+178)
 	ld	xbc, 29360152
 	lds32	xde, 0
 	call	16360825
-	.byte 0xe3, 0xfd, 0xb2, 0x00, 0x20
+	ld	xwa, (xsp+178)
 	ld	xbc, 29360151
 	lds32	xde, 0
 	call	16360842
 	lds	wa, 1
 	call	16360763
 	jrl	587
-	.byte 0xe3, 0xfd, 0xb2, 0x00, 0x20, 0xe3, 0xfd, 0xae, 0x00, 0x21
+	ld	xwa, (xsp+178)
+	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
 	call	16401417
 	ld	xwa, (xsp+178)
@@ -2057,7 +2059,7 @@ IvNamingExit_ScreenData:
 	ld	(xsp+22), xhl
 	ld	xwa, (xsp+22)
 	ld	xwa, (xwa+34)
-	.byte 0xe3, 0xfd, 0xae, 0x00, 0x21
+	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
 	call	16403043
 	ld	xwa, (xsp+22)
@@ -2068,14 +2070,14 @@ IvNamingExit_ScreenData:
 	call	16356829
 	lda	xde, (xsp+154)
 	ld	bc, (xde+4)
-	.byte 0x92, 0xa1
+	sub	bc, (xde)
 	exts	xbc
 	ld	xwa, (xsp+22)
 	.byte 0x98, 0x26, 0x59
 	ld	(xsp+8), bc
 	ld	wa, (xde+2)
 	inc	1, wa
-	.byte 0xf3, 0xfd, 0xa8, 0x00, 0x50
+	ld	(xsp+168), wa
 	ld	wa, (xde+6)
 	dec	1, wa
 	.byte 0xf3, 0xfd, 0xa4, 0x00, 0x50, 0xbf, 0x14, 0x02, 0x01, 0x00
@@ -2086,8 +2088,7 @@ IvNamingExit_ScreenData:
 	add	bc, wa
 	dec	1, bc
 	lda	xwa, (xsp+166)
-	.byte 0xb0
-	.byte 0x51
+	ld	(xwa), bc
 	lda	xbc, (xsp+162)
 	ld	de, (xwa)
 	ld	(xbc), de
@@ -2100,16 +2101,15 @@ IvNamingExit_ScreenData:
 	jr	c, -51
 	jrl	409
 	ld	xwa, (xsp+178)
-	.byte 0xe3, 0xfd
-	.byte 0xae, 0x00, 0x21
+	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
 	call	16401417
-	.byte 0xe3, 0xfd, 0xb2, 0x00, 0x20
+	ld	xwa, (xsp+178)
 	call	16409190
 	ld	(xsp+10), xhl
 	ld	xwa, (xsp+10)
 	ld	(xsp+4), xwa
-	.byte 0xe3, 0xfd, 0xaa, 0x00, 0x22
+	ld	xde, (xsp+170)
 	or	xde, xde
 	jrl	z, 253
 	ld	bc, (xwa+38)
@@ -2124,7 +2124,7 @@ IvNamingExit_ScreenData:
 	lda	xwa, (xbc+4)
 	ld	(xsp+18), xwa
 	ld	de, (xwa)
-	.byte 0x91, 0xa2
+	sub	de, (xbc)
 	exts	xde
 	ld	xhl, (xsp+10)
 	.byte 0x9b, 0x26, 0x5a
@@ -2166,7 +2166,7 @@ IvNamingExit_ScreenData:
 	inc	2, wa
 	add	(xbc), wa
 	ld	de, (xbc)
-	.byte 0x9f, 0x08, 0x82
+	add	de, (xsp+8)
 	ld	xwa, (xsp+18)
 	ld	(xwa), de
 	lda	xde, (xsp+166)
@@ -2174,7 +2174,7 @@ IvNamingExit_ScreenData:
 	ld	(xde), wa
 	ld	wa, (xiy)
 	ld	(xde+2), wa
-	.byte 0xe3, 0xfd, 0xaa, 0x00, 0x20
+	ld	xwa, (xsp+170)
 	inc	1, xwa
 	push	xwa
 	lda	xwa, (xsp+30)
@@ -2183,7 +2183,7 @@ IvNamingExit_ScreenData:
 	inc	8, xsp
 	ld	xbc, (xsp+10)
 	ld	xix, (xbc+42)
-	.byte 0xe3, 0xfd, 0xaa, 0x00, 0x20
+	ld	xwa, (xsp+170)
 	ld	a, (xwa)
 	.byte 0xc7, 0xf4, 0x99
 	exts	iy
@@ -2194,7 +2194,8 @@ IvNamingExit_ScreenData:
 	jr	nz, 11
 	ld	xhl, (xhl)
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00
+	pushw 0
+	pushw 255
 	jr	15
 	ld	xhl, (xhl)
 	push	xhl
@@ -2203,37 +2204,37 @@ IvNamingExit_ScreenData:
 	ld	xhl, (xsp+10)
 	.byte 0x9b, 0x16, 0x04
 	call	16435914
-	.byte 0xe3, 0xfd, 0xb2, 0x00, 0x20
+	ld	xwa, (xsp+178)
 	call	16409190
 	ld	wa, (xhl+38)
 	.byte 0x9b, 0x28, 0x48
 	exts	xwa
-	.byte 0xe3, 0xfd, 0xaa, 0x00, 0xf8
+	cp	(xsp+170), xwa
 	jr	nc, 85
 	ld	xbc, (xhl+42)
 	ld	xwa, (xsp+170)
 	ld	(xbc), wa
 	jr	73
 	ld	xwa, (xsp+178)
-	.byte 0xe3, 0xfd
-	.byte 0xae, 0x00, 0x21
+	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
 	call	16401417
-	.byte 0xe3, 0xfd, 0xb2, 0x00, 0x20
+	ld	xwa, (xsp+178)
 	call	16409190
 	ld	xiz, xhl
 	ld	xwa, (xiz+34)
 	ld	xbc, (xsp+174)
-	.byte 0xe3, 0xfd, 0xaa, 0x00, 0x22
+	ld	xde, (xsp+170)
 	call	16403043
 	.byte 0x9e, 0x30, 0x3f, 0x00, 0x00
 	jr	z, 19
-	.byte 0xe3, 0xfd, 0xb2, 0x00, 0x20, 0xe3, 0xfd, 0xae, 0x00, 0x21
+	ld	xwa, (xsp+178)
+	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
 	call	16360893
 	lds32	xhl, 0
 	jr	19
-	.byte 0xe3, 0xfd, 0xb2, 0x00, 0x20
+	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
 	call	16401417
@@ -5872,10 +5873,10 @@ NoteEditBox_EventDispatch2:
 	ld	bc, (xde+2)
 	ld	(xhl), bc
 	ld	bc, (xwa)
-	.byte 0x9a, 0x04, 0x81
+	add	bc, (xde+4)
 	ld	(xwa+4), bc
 	ld	bc, (xhl)
-	.byte 0x9a, 0x06, 0x81
+	add	bc, (xde+6)
 	ld	(xwa+6), bc
 	lds	bc, 0
 	ldw	de, 245
@@ -5903,15 +5904,15 @@ NoteEditBox_EventDispatch2:
 	ld	wa, (xbc+2)
 	ld	(xde), wa
 	ld	hl, (xix)
-	.byte 0x99, 0x04, 0x83
+	add	hl, (xbc+4)
 	lda	xwa, (xix+4)
 	ld	(xwa), hl
 	ld	iy, (xde)
-	.byte 0x99, 0x06, 0x85
+	add	iy, (xbc+6)
 	lda	xhl, (xix+6)
 	ld	(xhl), iy
 	ld	wa, (xwa)
-	.byte 0x94, 0xa0
+	sub	wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	bc, (xix)
@@ -5926,7 +5927,7 @@ NoteEditBox_EventDispatch2:
 	add	bc, wa
 	.byte 0xbc, 0x02
 	.long LABEL_E30B51
-	.byte 0x0b, 0x0c, 0x46
+	pushw 17932
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	16715597
@@ -5936,7 +5937,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0xfb, 0x00, 0x0b, 0xf5, 0x00
+	pushw 251
+	pushw 245
 	call	16437066
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
@@ -5954,15 +5956,15 @@ NoteEditBox_EventDispatch2:
 	ld	wa, (xbc+2)
 	ld	(xde), wa
 	ld	hl, (xix)
-	.byte 0x99, 0x04, 0x83
+	add	hl, (xbc+4)
 	lda	xwa, (xix+4)
 	ld	(xwa), hl
 	ld	iy, (xde)
-	.byte 0x99, 0x06, 0x85
+	add	iy, (xbc+6)
 	lda	xhl, (xix+6)
 	ld	(xhl), iy
 	ld	wa, (xwa)
-	.byte 0x94, 0xa0
+	sub	wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	bc, (xix)
@@ -5976,7 +5978,8 @@ NoteEditBox_EventDispatch2:
 	divs	wa, 2
 	add	bc, wa
 	ld	(xix+2), bc
-	.byte 0x0b, 0xe3, 0x00, 0x0b, 0x10, 0x46
+	pushw 227
+	pushw 17936
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	16715597
@@ -5986,7 +5989,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0xfb, 0x00, 0x0b, 0xf5, 0x00
+	pushw 251
+	pushw 245
 	jrl	941
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
@@ -6003,7 +6007,7 @@ NoteEditBox_EventDispatch2:
 	ld	de, (xwa)
 	ld	(xbc), de
 	ld	de, (xhl)
-	.byte 0x9c, 0x46, 0x82
+	add	de, (xix+70)
 	ld	(xbc+2), de
 	ldw	de, 242
 	call	16427402
@@ -6073,7 +6077,7 @@ NoteEditBox_EventDispatch2:
 	ld	bc, (xwa)
 	add	bc, 32
 	ld	(xwa+4), bc
-	.byte 0x90, 0xa1
+	sub	bc, (xwa)
 	exts	xbc
 	divs	bc, 2
 	ld	de, (xwa)
@@ -6090,7 +6094,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	ld	xhl, (xsp+4)
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0xf5, 0x00
+	pushw 255
+	pushw 245
 	call	16437066
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x0b
 	jrl	c, -236
@@ -6151,7 +6156,7 @@ NoteEditBox_EventDispatch2:
 	ld	bc, (xwa)
 	add	bc, 32
 	ld	(xwa+4), bc
-	.byte 0x90, 0xa1
+	sub	bc, (xwa)
 	exts	xbc
 	divs	bc, 2
 	ld	de, (xwa)
@@ -6168,7 +6173,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	ld	xhl, (xsp+4)
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0xf5, 0x00
+	pushw 255
+	pushw 245
 	call	16437066
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x08
 	jrl	c, -232
@@ -6202,7 +6208,7 @@ NoteEditBox_EventDispatch2:
 	inc	6, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94, 0xa0
+	sub	wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xix)
@@ -6239,7 +6245,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00
+	pushw 0
+	pushw 255
 	call	16437066
 	lda	xhl, (xsp+28)
 	lda	xbc, (xhl+2)
@@ -6247,7 +6254,7 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xhl+6)
 	.byte 0xb2, 0x02, 0xa1, 0x00
 	ld	wa, (xhl+4)
-	.byte 0x93, 0xa0
+	sub	wa, (xhl)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xhl)
@@ -6279,7 +6286,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00
+	pushw 0
+	pushw 255
 	call	16437066
 	jrl	634
 	ld	xwa, (xsp+12)
@@ -6313,7 +6321,7 @@ NoteEditBox_EventDispatch2:
 	inc	8, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94, 0xa0
+	sub	wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xix)
@@ -6340,13 +6348,15 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0xf2, 0x00
+	pushw 255
+	pushw 242
 	jr	15
 	lda	xwa, (xsp+28)
 	lda	xde, (xsp+36)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0xf2, 0x00, 0x0b, 0xff, 0x00
+	pushw 242
+	pushw 255
 	call	16437066
 	lda	xix, (xsp+28)
 	.byte 0xb4, 0x02, 0x17, 0x00
@@ -6364,7 +6374,7 @@ NoteEditBox_EventDispatch2:
 	inc	8, wa
 	ld	(xhl), wa
 	ld	wa, (xde)
-	.byte 0x94, 0xa0
+	sub	wa, (xix)
 	exts	xwa
 	divs	wa, 2
 	ld	ix, (xix)
@@ -6388,7 +6398,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0xf2, 0x00, 0x0b, 0xff, 0x00
+	pushw 242
+	pushw 255
 	call	16437066
 	ld8_24	a, 135318
 	inc	1, a
@@ -8295,7 +8306,8 @@ SqplyVal_ExtraParamsData:
 	jr	z, 65
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00
+	pushw 0
+	pushw 255
 	jr	66
 	ld	xwa, (xbc)
 	ld	xbc, 31981634
@@ -8723,7 +8735,8 @@ SqedtVal_DrawParamsData:
 	jrl	z, 202
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00
+	pushw 0
+	pushw 255
 	jrl	202
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
@@ -10371,7 +10384,8 @@ AccIll_Dispatch:
 	lda	xde, (xsp+34)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00
+	pushw 0
+	pushw 255
 	jrl	163
 	ld	xwa, (xbc)
 	ld	xbc, 31981606
@@ -10448,7 +10462,7 @@ AccIll_Dispatch:
 	add	wa, 14
 	ld	(xix), wa
 	ld	wa, (xhl)
-	.byte 0x95, 0xa0
+	sub	wa, (xiy)
 	exts	xwa
 	divs	wa, 2
 	ld	iy, (xiy)
@@ -10478,7 +10492,8 @@ AccIll_Dispatch:
 	lda	xwa, (xsp+58)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00
+	pushw 0
+	pushw 255
 	jr	100
 	lda	xiy, (xsp+58)
 	.byte 0xb5, 0x02, 0xae, 0x00
@@ -10493,7 +10508,7 @@ AccIll_Dispatch:
 	add	wa, 14
 	ld	(xix), wa
 	ld	wa, (xhl)
-	.byte 0x95, 0xa0
+	sub	wa, (xiy)
 	exts	xwa
 	divs	wa, 2
 	ld	iy, (xiy)
@@ -13654,7 +13669,7 @@ SqedtFunc:
 Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0x0b, 0x05, 0x00
+	pushw 5
 	extz	hl
 	sub	hl, 156
 	cps	hl, 0
@@ -13753,7 +13768,7 @@ Sqedt_ParamDispatch:
 	jr	le, 17
 	exts	de
 	.long LABEL_E30B2A
-	.byte 0x0b, 0xa0, 0x4b
+	pushw 19360
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jr	21
@@ -13764,13 +13779,15 @@ Sqedt_ParamDispatch:
 	neg	e
 	exts	de
 	pushw	de
-	.byte 0x0b, 0xe3, 0x00, 0x0b, 0xa8, 0x4b
+	pushw 227
+	pushw 19368
 	ld	xwa, (xbc)
 	push	xwa
 	jrl	981
 	exts	de
 	pushw	de
-	.byte 0x0b, 0xe3, 0x00, 0x0b, 0xb0, 0x4b
+	pushw 227
+	pushw 19376
 	jrl	910
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -13819,7 +13836,7 @@ Sqedt_ParamDispatch:
 	jrl	801
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0x0b, 0x09, 0x00
+	pushw 9
 	ldda8	a, 61920
 	extz	wa
 	muls	wa, 9
@@ -13830,7 +13847,7 @@ Sqedt_ParamDispatch:
 	jrl	866
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0x0b, 0x0f, 0x00
+	pushw 15
 	ldda8	a, 61942
 	extz	wa
 	muls	wa, 15
@@ -13874,7 +13891,7 @@ Sqedt_ParamDispatch:
 	lda	xbc, (xwa+18)
 	ld	xwa, (xbc)
 	ld	(xwa), 32
-	.byte 0x0b, 0x09, 0x00
+	pushw 9
 	ldda8	a, 9750
 	extz	wa
 	muls	wa, 9
@@ -13897,7 +13914,7 @@ Sqedt_ParamDispatch:
 	lda	xbc, (xwa+18)
 	ld	xwa, (xbc)
 	ld	(xwa), 32
-	.byte 0x0b, 0x09, 0x00
+	pushw 9
 	ldda8	a, 9816
 	extz	wa
 	muls	wa, 9
@@ -13946,7 +13963,7 @@ Sqedt_ParamDispatch:
 	jrl	501
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0x0b, 0x05, 0x00
+	pushw 5
 	ldda8	a, 61929
 	jrl	175
 	ld	xwa, (xsp+8)
@@ -13964,7 +13981,7 @@ Sqedt_ParamDispatch:
 	jrl	442
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0x0b, 0x05, 0x00
+	pushw 5
 	ldda8	a, 61934
 	jr	117
 	ld	xwa, (xsp+8)
@@ -13984,7 +14001,7 @@ Sqedt_ParamDispatch:
 	jrl	381
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0x0b, 0x05, 0x00
+	pushw 5
 	ldda8	a, 61921
 	jr	56
 	ld	xwa, (xsp+8)
@@ -14002,7 +14019,7 @@ Sqedt_ParamDispatch:
 	jrl	323
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0x0b, 0x05, 0x00
+	pushw 5
 	ldda8	a, 61926
 	extz	wa
 	muls	wa, 5
@@ -15328,13 +15345,13 @@ Equalizer_FormatDispatch:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 EqFormat_DispatchTable:
-	.byte 0x0b, 0x05, 0x00
+	pushw 5
 	ld	xwa, 14885776
 	jrl	194
-	.byte 0x0b, 0x05, 0x00
+	pushw 5
 	ld	xwa, 14885616
 	jrl	183
-	.byte 0x0b, 0x05, 0x00
+	pushw 5
 	ld	xwa, 14885370
 	jrl	172
 

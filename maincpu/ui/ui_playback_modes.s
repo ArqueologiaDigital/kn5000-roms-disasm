@@ -1942,8 +1942,12 @@ DpMdlySmfLyrTtl_Dispatch:
 	push	xiz
 	call	15862110
 	.ascii "^\\[Zh"
-	.byte 0x0c, 0x3a
-	.byte 0x3b, 0x3c, 0x3e, 0x1d, 0xf2, 0x09, 0xf2
+	incf
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call	15862258
 	aligned_string "^\\[Z@&"
 	jr	nc, 0x00
 	.byte 0x41, 0x0a, 0x00, 0xc7, 0x01, 0xea, 0xa8, 0x68
@@ -2014,7 +2018,11 @@ NameGetFuncCall:
 	jp_dri 8, 0x07, 0xF0, 0xE4
 ; NameGetFuncCall dispatch
 NameGetFuncCall_Dispatch:
-	.byte 0x0b, 0x10, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x80, 0xf2, 0x0b, 0x00, 0x00, 0x0b, 0xe8, 0x1a
+	pushw 16
+	pushw 0
+	pushw 62080
+	pushw 0
+	pushw 6888
 	call	16714995
 	ldada	xwa, 6888
 	ld	(xwa+16), 0
@@ -2023,7 +2031,10 @@ NameGetFuncCall_Dispatch:
 	inc	1, a
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe2, 0x00, 0x0b, 0xf2, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x50, 0x1c
+	pushw 226
+	pushw 242
+	pushw 0
+	pushw 7248
 	call	16714354
 	lda	xsp, (xsp+24)
 	ld	xwa, 4294967295
@@ -2037,7 +2048,10 @@ NameGetFuncCall_Dispatch:
 	call	16291311
 	inc	1, hl
 	pushw	hl
-	.byte 0x0b, 0xe2, 0x00, 0x0b, 0xfc, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x66, 0x1c
+	pushw 226
+	pushw 252
+	pushw 0
+	pushw 7270
 	call	16714354
 	lda	xsp, (xsp+14)
 	stdi8	7283, 0
@@ -2052,7 +2066,10 @@ NameGetFuncCall_Dispatch:
 	call	16292551
 	inc	1, hl
 	pushw	hl
-	.byte 0x0b, 0xe2, 0x00, 0x0b, 0x08, 0x01, 0x0b, 0x00, 0x00, 0x0b, 0x74, 0x1c
+	pushw 226
+	pushw 264
+	pushw 0
+	pushw 7284
 	call	16714354
 	lda	xsp, (xsp+14)
 	ldada	xwa, 7284
@@ -2062,12 +2079,13 @@ NameGetFuncCall_Dispatch:
 	ld	xbc, 29818882
 	lds32	xde, 0
 	jrl	500
-	.byte 0x0b, 0x14, 0x00
+	pushw 20
 	call	16292551
 	ld	wa, hl
 	call	16294015
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x88, 0x1c
+	pushw 0
+	pushw 7304
 	call	16714995
 	lda	xsp, (xsp+10)
 	ldada	xwa, 7304
@@ -2086,7 +2104,10 @@ NameGetFuncCall_Dispatch:
 	call	16295886
 	inc	1, hl
 	pushw	hl
-	.byte 0x0b, 0xe2, 0x00, 0x0b, 0x10, 0x01, 0x0b, 0x00, 0x00, 0x0b, 0xc2, 0x1c
+	pushw 226
+	pushw 272
+	pushw 0
+	pushw 7362
 	call	16714354
 	lda	xsp, (xsp+10)
 	stdi8	7365, 0
@@ -2094,12 +2115,13 @@ NameGetFuncCall_Dispatch:
 	ld	xbc, 29818886
 	lds32	xde, 0
 	jrl	378
-	.byte 0x0b, 0x0c, 0x00
+	pushw 12
 	call	16295886
 	ld	wa, hl
 	call	16296891
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x9e, 0x1c
+	pushw 0
+	pushw 7326
 	call	16714995
 	lda	xsp, (xsp+10)
 	ldada	xwa, 7326
@@ -2118,7 +2140,10 @@ NameGetFuncCall_Dispatch:
 	call	16295112
 	inc	1, hl
 	pushw	hl
-	.byte 0x0b, 0xe2, 0x00, 0x0b, 0x18, 0x01, 0x0b, 0x00, 0x00, 0x0b, 0xc6, 0x1c
+	pushw 226
+	pushw 280
+	pushw 0
+	pushw 7366
 	call	16714354
 	lda	xsp, (xsp+10)
 	stdi8	7369, 0
@@ -2130,7 +2155,8 @@ NameGetFuncCall_Dispatch:
 	ld	wa, hl
 	call	16295409
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xac, 0x1c
+	pushw 0
+	pushw 7340
 	call	16715597
 	inc	8, xsp
 	ldada	xwa, 7340
@@ -2150,9 +2176,14 @@ NameGetFuncCall_Dispatch:
 	ld	wa, hl
 	call	16294015
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xca, 0x1c
+	pushw 0
+	pushw 7370
 	call	16715597
-	.byte 0x0b, 0x14, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0xca, 0x1c, 0x0b, 0x02, 0x00, 0x0b, 0x4e, 0x10
+	pushw 20
+	pushw 0
+	pushw 7370
+	pushw 2
+	pushw 4174
 	call	16714995
 	lda	xsp, (xsp+18)
 	lda_24	xwa, 135246
@@ -2172,16 +2203,19 @@ NameGetFuncCall_Dispatch:
 	ld	wa, hl
 	call	16294015
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xca, 0x1c
+	pushw 0
+	pushw 7370
 	call	16715597
-	.byte 0x0b, 0x3b, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0xca, 0x1c
+	pushw 59
+	pushw 0
+	pushw 7370
 	call	16715373
 	lda	xsp, (xsp+14)
 	lda_24	xwa, 135268
 	or	xhl, xhl
 	jr	z, 22
 	inc	1, xhl
-	.byte 0x0b, 0x1c, 0x00
+	pushw 28
 	push	xhl
 	push	xwa
 	call	16714995

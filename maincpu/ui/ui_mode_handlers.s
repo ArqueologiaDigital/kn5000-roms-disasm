@@ -1967,7 +1967,7 @@ EffectMode_ByteData_DiagEvents:
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	16424280
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	ret
 	ldda8	a, 36151
 	cpda8	a, 36150
@@ -3343,7 +3343,7 @@ MstStyleAlp_EventDispatch:
 	ld	wa, (xwa)
 	muls	wa, 9
 	sub	wa, 9
-	.byte 0x91, 0x80
+	add	wa, (xbc)
 	add	de, wa
 	muls	de, 6
 	lda_24	xbc, 15443096
@@ -5946,7 +5946,7 @@ MstGrid2_ScrollJumpTable:
 	cps	bc, 4
 	jr	ge, 42
 	ld	xwa, (xhl+94)
-	.byte 0x90, 0xf1
+	cp	bc, (xwa)
 	jrl	gt, 683
 	ld	wa, bc
 	exts	xwa
@@ -7513,7 +7513,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xee, 0x11
+	pushw 237
+	pushw 4590
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16714354
@@ -7538,7 +7539,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xf2, 0x11
+	pushw 237
+	pushw 4594
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16714354
@@ -7561,7 +7563,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xf6, 0x11
+	pushw 237
+	pushw 4598
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16714354
@@ -7584,7 +7587,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xfa, 0x11
+	pushw 237
+	pushw 4602
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16714354
@@ -7608,7 +7612,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xfe, 0x11
+	pushw 237
+	pushw 4606
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16714354
@@ -7631,7 +7636,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x02, 0x12
+	pushw 237
+	pushw 4610
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16714354
@@ -7654,7 +7660,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x06, 0x12
+	pushw 237
+	pushw 4614
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16714354
@@ -9328,7 +9335,7 @@ DispTimeSet_EventDispatch:
 	jrl	825
 	lda_24	xwa, 213222
 	lda	xiy, (xde+14)
-	.byte 0xa2, 0xf0
+	cp	xwa, (xde)
 	jr	nz, 64
 	lda	xwa, (xsp+40)
 	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x02, 0x00
@@ -9340,7 +9347,8 @@ DispTimeSet_EventDispatch:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x52, 0x15
+	pushw 237
+	pushw 5458
 	push	xbc
 	call	16714354
 	lda	xsp, (xsp+12)
@@ -9350,7 +9358,7 @@ DispTimeSet_EventDispatch:
 	ld	xbc, 31457420
 	jrl	745
 	lda_24	xwa, 213224
-	.byte 0xa2, 0xf0
+	cp	xwa, (xde)
 	jr	nz, 64
 	lda	xwa, (xsp+40)
 	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x03, 0x00
@@ -9362,7 +9370,8 @@ DispTimeSet_EventDispatch:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x56, 0x15
+	pushw 237
+	pushw 5462
 	push	xbc
 	call	16714354
 	lda	xsp, (xsp+12)
@@ -9374,7 +9383,7 @@ DispTimeSet_EventDispatch:
 	lda_24	xbc, 213226
 	lda_24	xwa, 15537334
 	ld	(xsp+4), xwa
-	.byte 0xa2, 0xf1
+	cp	xbc, (xde)
 	jr	nz, 62
 	lda	xwa, (xsp+40)
 	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x04, 0x00
@@ -9386,7 +9395,8 @@ DispTimeSet_EventDispatch:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x5a, 0x15
+	pushw 237
+	pushw 5466
 	push	xbc
 	call	16714354
 	lda	xsp, (xsp+12)
@@ -9396,7 +9406,7 @@ DispTimeSet_EventDispatch:
 	ld	xbc, 31457420
 	jrl	593
 	lda_24	xwa, 213228
-	.byte 0xa2, 0xf0
+	cp	xwa, (xde)
 	jr	nz, 62
 	lda	xwa, (xsp+40)
 	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x05, 0x00
@@ -9408,7 +9418,8 @@ DispTimeSet_EventDispatch:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x5e, 0x15
+	pushw 237
+	pushw 5470
 	push	xbc
 	call	16714354
 	lda	xsp, (xsp+12)
@@ -9422,7 +9433,7 @@ DispTimeSet_EventDispatch:
 	lda	xix, (xsp+30)
 	lda	xwa, (xhl+2)
 	lda	xbc, (xhl+4)
-	.byte 0xa2, 0xf6
+	cp	xiz, (xde)
 	jr	nz, 54
 	.byte 0xb3, 0x02, 0x01, 0x00, 0xb0, 0x02, 0x06, 0x00
 	ld	(xbc), xix
@@ -9432,7 +9443,8 @@ DispTimeSet_EventDispatch:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x62, 0x15
+	pushw 237
+	pushw 5474
 	push	xix
 	call	16714354
 	lda	xsp, (xsp+12)
@@ -9442,7 +9454,7 @@ DispTimeSet_EventDispatch:
 	ld	xbc, 31457420
 	jrl	447
 	lda_24	xiz, 213232
-	.byte 0xa2, 0xf6
+	cp	xiz, (xde)
 	jrl	nz, 441
 	.byte 0xb3, 0x02, 0x01, 0x00, 0xb0, 0x02, 0x07, 0x00
 	ld	(xbc), xix
@@ -9452,7 +9464,8 @@ DispTimeSet_EventDispatch:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x66, 0x15
+	pushw 237
+	pushw 5478
 	push	xix
 	call	16714354
 	lda	xsp, (xsp+12)
@@ -10189,7 +10202,8 @@ MssName_EventDispatch:
 	ld	xwa, (xbc)
 	or	xwa, xwa
 	jr	nz, 19
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x96, 0x15
+	pushw 237
+	pushw 5526
 	ld	xwa, (xiz+18)
 	push	xwa
 	call	16715597
@@ -10207,13 +10221,14 @@ MssName_EventDispatch:
 	dec	1, xwa
 	cp	xhl, 4294967295
 	jr	z, 43
-	.byte 0x0b, 0x10, 0x00
+	pushw 16
 	call	16477847
 	push	xhl
 	ld	xwa, (xiz+18)
 	push	xwa
 	call	16714995
-	.byte 0x0b, 0x02, 0x00, 0x0b, 0x20, 0x00
+	pushw 2
+	pushw 32
 	ld	xwa, (xiz+18)
 	lda	xwa, (xwa+16)
 	push	xwa

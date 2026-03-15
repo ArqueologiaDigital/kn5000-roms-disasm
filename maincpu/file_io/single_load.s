@@ -373,7 +373,7 @@ SLSrcBankList_FuncBody:
 	stdi8	33232, 1
 	stdi8	33230, 1
 	ldda32	xwa, 33226
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	z, 312
 	ldada	xde, 35171
 	ld	xwa, xiz
@@ -427,7 +427,7 @@ SLSrcBankList_FuncBody:
 	calr	-644
 	stdi8	33230, 1
 	ldda32	xwa, 33226
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	z, 150
 	ldada	xde, 35171
 	ld	xwa, xiz
@@ -443,7 +443,7 @@ SLSrcBankList_FuncBody:
 	cp	xwa, 8
 	jr	nz, 48
 	ldda32	xwa, 33226
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jr	z, 94
 	ldada	xde, 35171
 	ld	xwa, xiz
@@ -631,7 +631,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	.byte 0x8f, 0x06, 0x53
 	extz	bc
-	.byte 0x0b, 0x03, 0x00
+	pushw 3
 	ld	de, (xsp+6)
 	calr	-2127
 	ldada	xde, 35213
@@ -735,7 +735,7 @@ SLSrcBankList_FuncBody:
 	calr	-497
 	stdi8	33238, 1
 	ldda32	xwa, 33234
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	z, 284
 	ldada	xde, 35171
 	ld	xwa, xiz
@@ -789,7 +789,7 @@ SLSrcBankList_FuncBody:
 	calr	-659
 	stdi8	33238, 1
 	ldda32	xwa, 33234
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jr	z, 123
 	ldada	xde, 35171
 	ld	xwa, xiz
@@ -805,7 +805,7 @@ SLSrcBankList_FuncBody:
 	cp	xwa, 8
 	jr	nz, 48
 	ldda32	xwa, 33234
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jr	z, 67
 	ldada	xde, 35171
 	ld	xwa, xiz
@@ -886,7 +886,7 @@ SLSrcBankList_FuncBody:
 	ld	xde, 35150
 	call	16424280
 	ld	a, (xsp)
-	.byte 0x87, 0x81
+	add	a, (xsp)
 	ldda8	c, 35328
 	cp	c, a
 	jr	nc, 31
@@ -946,7 +946,7 @@ SLSrcBankList_FuncBody:
 	cpdi8	35322, 0
 	jr	nz, 65
 	ld	e, (xsp+4)
-	.byte 0x8f, 0x04, 0x85
+	add	e, (xsp+4)
 	ldda8	c, 35328
 	ldada	xwa, 35193
 	cp	c, e
@@ -1082,7 +1082,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-468
 	ld8_24	c, 15337874
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	jr	78
@@ -1107,14 +1108,15 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-548
 	ld8_24	c, 15337874
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	calr	-857
 	stdi8	33246, 1
 	stdi8	33244, 1
 	ldda32	xwa, 33240
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	z, 449
 	ldada	xde, 35171
 	ld	xwa, xiz
@@ -1154,7 +1156,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-700
 	ld8_24	c, 15337874
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	jrl	152
@@ -1164,7 +1167,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-738
 	ld8_24	c, 15337874
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	jr	115
@@ -1190,7 +1194,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-814
 	ld8_24	c, 15337874
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	jr	39
@@ -1202,13 +1207,14 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-855
 	ld8_24	c, 15337874
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	calr	-1164
 	stdi8	33244, 1
 	ldda32	xwa, 33240
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	z, 147
 	ldada	xde, 35171
 	ld	xwa, xiz
@@ -1224,7 +1230,7 @@ SLSrcBankList_FuncBody:
 	cp	xwa, 8
 	jr	nz, 48
 	ldda32	xwa, 33240
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jr	z, 91
 	ldada	xde, 35171
 	ld	xwa, xiz
@@ -1628,7 +1634,7 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-384
 	ldda32	xwa, 33252
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jr	z, 37
 	ldada	xde, 35255
 	ld	xwa, xiz
@@ -1685,7 +1691,7 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-553
 	ldda32	xwa, 33252
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	z, -133
 	ldada	xde, 35255
 	ld	xwa, xiz
@@ -1701,7 +1707,7 @@ SLDstBankList_FuncBody:
 	cp	xwa, 6
 	jr	nz, 39
 	ldda32	xwa, 33252
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	z, -191
 	ldada	xde, 35255
 	ld	xwa, xiz
@@ -1949,7 +1955,7 @@ SLDstBankList_FuncBody:
 	.byte 0x8f, 0x04, 0x55
 	ld	e, d
 	extz	de
-	.byte 0x0b, 0x03, 0x00
+	pushw 3
 	calr	-6180
 	ldada	xde, 35276
 	ld	xwa, (xsp+6)
@@ -2018,7 +2024,7 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-376
 	ldda32	xwa, 33256
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jr	z, 37
 	ldada	xde, 35255
 	ld	xwa, xiz
@@ -2075,7 +2081,7 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-545
 	ldda32	xwa, 33256
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	z, -133
 	ldada	xde, 35255
 	ld	xwa, xiz
@@ -2091,7 +2097,7 @@ SLDstBankList_FuncBody:
 	cp	xwa, 6
 	jr	nz, 39
 	ldda32	xwa, 33256
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	z, -191
 	ldada	xde, 35255
 	ld	xwa, xiz
@@ -2147,7 +2153,7 @@ SLDstBankList_FuncBody:
 	ldw	bc, 16
 	calr	-10585
 	ld	e, (xsp)
-	.byte 0x87, 0x85
+	add	e, (xsp)
 	ldda8	c, 35336
 	ldada	xwa, 35255
 	cp	c, e
@@ -2198,7 +2204,7 @@ SLDstBankList_FuncBody:
 	call	16290012
 	jrl	214
 	ld	l, (xsp+4)
-	.byte 0x8f, 0x04, 0x87
+	add	l, (xsp+4)
 	ldada	xbc, 35234
 	lda	xwa, (xbc+43)
 	ld	(xbc+42), 2
@@ -2214,7 +2220,7 @@ SLDstBankList_FuncBody:
 	call	16290067
 	ldada	xiz, 35277
 	ld	c, (xsp+4)
-	.byte 0x8f, 0x04, 0x83
+	add	c, (xsp+4)
 	ldda8	a, 35336
 	sub	a, c
 	inc	1, a
@@ -2229,7 +2235,7 @@ SLDstBankList_FuncBody:
 	calr	-10852
 	ldada	xwa, 35297
 	ld	e, (xsp+4)
-	.byte 0x8f, 0x04, 0x85
+	add	e, (xsp+4)
 	ldda8	c, 35336
 	sub	c, e
 	extz	bc
@@ -2321,7 +2327,8 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-489
 	ld8_24	c, 15338002
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	jr	82
@@ -2348,12 +2355,13 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-573
 	ld8_24	c, 15338002
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	calr	-4725
 	ldda32	xwa, 33260
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jr	z, 37
 	ldada	xde, 35255
 	ld	xwa, xiz
@@ -2397,7 +2405,8 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-727
 	ld8_24	c, 15338002
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	jrl	152
@@ -2407,7 +2416,8 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-765
 	ld8_24	c, 15338002
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	jr	115
@@ -2433,7 +2443,8 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-841
 	ld8_24	c, 15338002
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	jr	39
@@ -2445,12 +2456,13 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-882
 	ld8_24	c, 15338002
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x08, 0x8a
+	pushw 0
+	pushw 35336
 	ld	xwa, (xsp+8)
 	ld	xde, 35328
 	calr	-5034
 	ldda32	xwa, 33260
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	z, -273
 	ldada	xde, 35255
 	ld	xwa, xiz
@@ -2466,7 +2478,7 @@ SLDstBankList_FuncBody:
 	cp	xwa, 6
 	jr	nz, 39
 	ldda32	xwa, 33260
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	z, -331
 	ldada	xde, 35255
 	ld	xwa, xiz

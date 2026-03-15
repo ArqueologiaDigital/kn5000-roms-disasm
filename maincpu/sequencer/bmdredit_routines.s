@@ -3933,7 +3933,7 @@ BmDrEdit_UpdateDisplay_MelodicOffset:
 
 BmDrEdit_ByteData_CompoundWidgetUpdate:
 	dec	8, xsp
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda	xwa, (xsp+8)
 	lda	xbc, (xsp+6)
 	calr	-6217
@@ -3964,7 +3964,7 @@ BmDrEdit_ByteData_CompoundWidgetUpdate:
 	add	bc, wa
 	stda16	10192, bc
 	calr	6
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	inc	8, xsp
 	ret
 	ldda8	e, 10100

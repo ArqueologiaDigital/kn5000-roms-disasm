@@ -644,10 +644,12 @@ NakaDesc_VwVariBox_DataPtrs:
 StrEmpty_PsStylCnvVer:	aligned_string ""
 StrName_PsStylCnvVer:	aligned_string "PsStylCnvVer"
 StrPrefix_S2cGridBox:
-	.byte 0x58, 0x58
+	pop xwa
+	pop xwa
 	jr	gt, 0x00
 	aligned_string "S2cGridBox"
-	.byte 0x00, 0xff
+	nop
+	swi	7
 StrName_CmpNameMenuBox:		aligned_string "CmpNameMenuBox"
 StrExtra_Yajirushi_JpChars:	aligned_string "^GBBB"
 StrName_YajirushiBox:		aligned_string "Yajirushi"
@@ -666,7 +668,8 @@ StrPrefix_AcSndArgGrid:
 StrName_AcSndArgGridBox:	aligned_string "AcSndArgGridBox"
 StrPrefix_AcApcToggle:
 	jr	gt, 0x46
-	.byte 0x00, 0xff
+	nop
+	swi	7
 	aligned_string "AcApcToggle"
 	.byte 0x43, 0x00
 StrName_PsCstmCpNameBox:	aligned_string "PsCstmCpNameBox"
@@ -1778,7 +1781,8 @@ NakaBoxData_LyricsBox:
 	jr	ule, 0x5e
 	.byte 0x5e, 0x64, 0x42, 0x00
 	aligned_string "LyricsBox"
-	.byte 0x00, 0xff
+	nop
+	swi	7
 NakaBoxName_AcMuteToggleBox:	aligned_string "AcMuteToggleBox"
 NakaBoxData_MeasureBox:
 	.byte 0x5e, 0x5e, 0x6a, 0x00
@@ -2212,7 +2216,8 @@ EffectsEditor_GapByte:
 	aligned_string "AcParaLoadOptGridBox"
 	.byte 0x58, 0x58, 0x6a, 0x00
 	aligned_string "AcInOutGridBox"
-	.byte 0x58, 0x58
+	pop xwa
+	pop xwa
 	jr	gt, 0x00
 	aligned_string "AcVocalGridBox"
 	.byte 0x58, 0x58, 0x6a, 0x00
@@ -2221,15 +2226,18 @@ EffectsEditor_GapByte:
 	aligned_string "AcLswFuncBox"
 	aligned_string "nXXFB"
 	aligned_string "AcLswFuncEditBox"
-	.byte 0x00, 0xff
+	nop
+	swi	7
 	aligned_string "AcGMOnOffBox"
 	aligned_string "fjXn"
 	aligned_string "AcSendEditSw"
 	.byte 0x41, 0x74, 0x74, 0x00
 	aligned_string "IvMpstPageControl"
-	.byte 0x00, 0xff
+	nop
+	swi	7
 	aligned_string "AcVocalistListBox"
-	.byte 0x00, 0xff
+	nop
+	swi	7
 	aligned_string "PsHarmOnOffBox"
 	.byte 0x10, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xa0, 0x5d, 0xe5, 0x00
@@ -2348,7 +2356,7 @@ NakaWidget_SoundMenu_PageControl:
 
 NakaMenuItem_PartSetting:
 	naka_header NAKA_TYPE_MENU_ITEM
-	.byte 0x06, 0x00
+	ei	0
 	.short 0xFFFF, 0x8
 	.short 0xFFFF, 0x8
 	.short 0x8, 0x1E
@@ -2612,7 +2620,7 @@ CharEncoding_ExtendedHi:
 	.byte 0x09, 0x08
 	ldwio	9, 2571
 	incf
-	.byte 0x0b, 0x0d, 0x0c
+	pushw 3085
 	ret
 	decf
 	retd	0x100e
@@ -3972,7 +3980,7 @@ Voice_FactoryPresetData:
 	lds32	xwa, 1
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
-	.byte 0xaf, 0x08, 0xf0
+	cp	xwa, (xsp+8)
 	jrl	le, -249
 	jrl	330
 	ld	xwa, (xsp+8)
@@ -4000,11 +4008,11 @@ Voice_FactoryPresetData:
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
 	jrl	lt, 255
-	.byte 0x8f, 0x18, 0x3f, 0x03
+	cp	(xsp+24), 3
 	jr	ule, 7
 	ld	(xsp+24), 0
 	jrl	206
-	.byte 0x8f, 0x18, 0x3f, 0x01
+	cp	(xsp+24), 1
 	jrl	ugt, 196
 	ld8_24	l, 257962
 	ld	xwa, (xsp+34)
@@ -4097,7 +4105,7 @@ Voice_FactoryPresetData:
 	lds32	xwa, 1
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
-	.byte 0xaf, 0x04, 0xf0
+	cp	xwa, (xsp+4)
 	jrl	le, -255
 	lda	xwa, (xsp+38)
 	ld	xbc, (xsp+30)
@@ -4139,7 +4147,7 @@ Voice_FactoryPresetData:
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
 	ld8_24	c, 257960

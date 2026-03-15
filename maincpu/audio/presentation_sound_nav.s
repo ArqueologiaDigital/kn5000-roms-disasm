@@ -1291,7 +1291,8 @@ DirmdEmu_CaseF:
 	.byte 0xd3, 0xfd, 0x08, 0x01, 0x04
 	ld	iz, (xsp+264)
 	pushw	iz
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0x94, 0x9b
+	pushw 234
+	pushw 39828
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	16714354
@@ -1534,7 +1535,7 @@ WindowProc_EventDispatch:
 	ld	xbc, 31457352
 	call	16422496
 	call	16423543
-	.byte 0xaf, 0x18, 0xf3
+	cp	xhl, (xsp+24)
 	jr	nz, 12
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
@@ -1548,7 +1549,7 @@ WindowProc_EventDispatch:
 	ld	(xbc), xwa
 	jrl	514
 	call	16423543
-	.byte 0xaf, 0x18, 0xf3
+	cp	xhl, (xsp+24)
 	jrl	nz, 504
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)

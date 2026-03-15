@@ -1865,19 +1865,19 @@ AudioMix_WriteChannelGroup_Loop:
 AudioMix_BytecodeData:
 	push	xbc
 	push	xde
-	.byte 0x0b, 0x01, 0x00
+	pushw 1
 	calr	36
 	ld	xbc, (xsp+10)
 	ld	xde, xiz
-	.byte 0x0b, 0x00, 0x00
+	pushw 0
 	calr	25
 	ld	xbc, xwa
 	ld	xde, xhl
-	.byte 0x0b, 0x02, 0x00
+	pushw 2
 	calr	15
 	ld	xbc, xix
 	ld	xde, xiy
-	.byte 0x0b, 0x03, 0x00
+	pushw 3
 	calr	5
 	inc	8, xsp
 	pop	xde
@@ -7938,7 +7938,7 @@ HDAE5000_FlashVerify_BytecodeBlock:
 	cp	xiz, 131072
 	jr	c, -34
 	incm8	1, (xsp+12)
-	.byte 0x8f, 0x0c, 0x3f, 0x04
+	cp	(xsp+12), 4
 	jr	c, -61
 	pop	xiz
 	lda	xsp, (xsp+10)
@@ -8007,7 +8007,7 @@ HDAE5000_Init_BytecodeBlock:
 	jr	8
 	.byte 0xc7, 0xfb, 0xd9
 	jr	nz, 5
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	jr	-2
 	sti8_24	1441796, 0
 	ld	xwa, 8388608

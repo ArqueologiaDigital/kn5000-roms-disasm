@@ -264,7 +264,7 @@ def try_roundtrip(instruction):
         return None
 
     for line in result.stdout.splitlines():
-        m = re.search(r'# encoding:\s*\[(.*?)\]', line)
+        m = re.search(r'[;#] encoding:\s*\[(.*?)\]', line)
         if m:
             hex_vals = re.findall(r'0x([0-9a-fA-F]{2})', m.group(1))
             return [int(v, 16) for v in hex_vals]

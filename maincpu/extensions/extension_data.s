@@ -394,7 +394,8 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	.byte 0x20, 0x20, 0x20, 0x00, 0x25, 0x73, 0x3a, 0x00
 	aligned_string "TEMPO"
 	ldb	e, 0x73
-	.byte 0x3a, 0x00
+	push xde
+	nop
 	aligned_string "TEMPO"
 	.byte 0x25, 0x73, 0x00, 0xff, 0x5a, 0x05, 0x6a, 0x07
 	.byte 0x5a, 0x05, 0x6a, 0x07, 0xae, 0x0b, 0x96, 0x0b
@@ -1294,7 +1295,8 @@ NakaDesc_AcPmExpFilterGridBox:
 	.byte 0x58, 0x58, 0x6a, 0x00
 NakaInst_AcPmExpFilterGridBox:	aligned_string "AcFSWAssGridBox"
 NakaDesc_AcFSWAssGridBox:
-	.byte 0x58, 0x58
+	pop xwa
+	pop xwa
 	jr	gt, 0x00
 	aligned_string "AcTchSensGridBox"
 	.byte 0x6e, 0x00
@@ -1309,7 +1311,8 @@ NakaDesc_PmemModeBox:	aligned_string "kc^nn"
 NakaInst_PmemModeBox:	aligned_string "MsaModeScreen"
 NakaDesc_MsaModeScreen:
 	jr	gt, 0x72
-	.byte 0x00, 0xff
+	nop
+	swi	7
 	aligned_string "AcPmBkEditBox"
 NakaDesc_AcPmBkEditBox:	aligned_string "kc^nnn"
 NakaInst_AcPmBkEditBox:	.asciz "PmBankScreen"

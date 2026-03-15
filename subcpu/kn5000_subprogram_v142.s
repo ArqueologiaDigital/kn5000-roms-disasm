@@ -489,7 +489,7 @@ DSP_WriteChannelRegs_Inner:
 	ld (xiy + 2), b			; Write data B
 	inc 1, a
 	ld (xiy), a			; Reg addr [2]
-	.byte 0xd7, 0xe6, 0x89		; ld bc, qbc  (load BC from prevbank)
+	ld	bc, qbc
 	ld (xiy + 2), c			; Write prevbank C
 	inc 1, a
 	ld (xiy), a			; Reg addr [3]
@@ -502,7 +502,7 @@ DSP_WriteChannelRegs_Inner:
 	ld (xiy + 2), d			; Write data D
 	inc 1, a
 	ld (xiy), a			; Reg addr [6]
-	.byte 0xd7, 0xea, 0x89		; ld bc, qde  (load BC from prevbank DE)
+	ld	bc, qde
 	ld (xiy + 2), c			; Write prevbank DE.low
 	inc 1, a
 	ld (xiy), a			; Reg addr [7]

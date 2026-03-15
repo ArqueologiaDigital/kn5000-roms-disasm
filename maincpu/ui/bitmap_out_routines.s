@@ -337,7 +337,7 @@ BitMapOut_ByteData_TransitionSeq:
 	call	16424280
 	ret
 BitMapOut_ByteData_PresetCopy:
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	cpdi8	36148, 14
 	jr	z, 87
 	.byte 0xf1, 0x46, 0x8d, 0xcb
@@ -3614,7 +3614,7 @@ BitMapOut_ByteData_RenderState:
 	call	16406631
 	cp	xhl, 27263185
 	jr	nz, 59
-	.byte 0x0b, 0x12, 0x00
+	pushw 18
 	call	16715392
 	inc	2, xsp
 	ld	xiz, xhl
@@ -3805,7 +3805,7 @@ BitMapOut_UpdateWidget_Done:
 	jp	16534664
 	ret
 	dec	2, xsp
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ld	(xsp+2), a
 	cps	bc, 0
 	jr	ge, 11
@@ -3822,7 +3822,7 @@ BitMapOut_UpdateWidget_Done:
 	call	16534664
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x08
 	jr	c, -28
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	inc	2, xsp
 	ret
 

@@ -43,7 +43,7 @@ FileIO_MainLoop:
 	ret
 
 FileIO_BytecodeData:
-	.byte 0x80, 0x3f, 0xff
+	cp	(xwa), 255
 	ret	z
 	ldda8	c, 36494
 	cp	c, 15
@@ -59,7 +59,8 @@ FileIO_BytecodeData:
 	extz	xix
 	add	xix, xde
 	ld	xiy, xwa
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	ld	(xwa), 255
 	ret
 	push	xiz
@@ -132,7 +133,7 @@ FileIO_BytecodeData:
 	ld	(xiz+3), 255
 	ld	xwa, xiz
 	calr	119
-	.byte 0x86, 0x3f, 0xff
+	cp	(xiz), 255
 	jr	nz, 100
 	ld	xwa, xiz
 	jr	105
@@ -232,7 +233,7 @@ FileIO_BytecodeData:
 	extz	wa
 	call	16546851
 	lda	xbc, (xiz+2)
-	.byte 0x81, 0x3f, 0x00
+	cp	(xbc), 0
 	jr	z, 6
 	.byte 0xe1, 0x84, 0x8e, 0xeb
 	jr	11
@@ -260,7 +261,7 @@ FileIO_BytecodeData:
 	extz	wa
 	call	16546851
 	lda	xbc, (xiz+2)
-	.byte 0x81, 0x3f, 0x00
+	cp	(xbc), 0
 	jr	z, 6
 	.byte 0xe1, 0x88, 0x8e, 0xeb
 	jr	11
@@ -306,7 +307,7 @@ FileIO_BytecodeData:
 	pop	xiz
 	ret
 	dec	4, xsp
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ld	(xsp+2), xwa
 	ld	xwa, (xsp+2)
 	ld	c, (xwa+2)
@@ -358,20 +359,20 @@ FileIO_BytecodeData:
 	inc	2, xwa
 	.byte 0xc7, 0xfb, 0xda
 	jr	ule, 5
-	.byte 0x80, 0x3f, 0x0c
+	cp	(xwa), 12
 	jr	z, 125
 	.byte 0xc7, 0xfb, 0xcf, 0x0f
 	jr	z, 6
 	.byte 0xc7, 0xfb, 0xcf, 0x14
 	jr	nz, 5
-	.byte 0x80, 0x3f, 0x0f
+	cp	(xwa), 15
 	jr	nz, 108
 	.byte 0xc7, 0xfb, 0xcf, 0x10
 	jr	c, 15
 	.byte 0xc7, 0xfb, 0xcf, 0x13
 	jr	ugt, 9
 	ld	xwa, (xsp+2)
-	.byte 0x88, 0x02, 0x3f, 0x0f
+	cp	(xwa+2), 15
 	jr	z, 87
 	ld	xwa, 192
 	call	16569399
@@ -404,7 +405,7 @@ FileIO_BytecodeData:
 	add	(xsp+2), xwa
 	ld	xwa, (xsp+2)
 	calr	-1112
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	inc	4, xsp
 	ret
 	push	xiz
@@ -712,7 +713,7 @@ ExtDev_SndParam_Block48_Var40:
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, 5
 	ld	(xde), 64
 	jr	3
@@ -726,7 +727,7 @@ ExtDev_SndParam_Block48_Var80:
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, 5
 	ld	(xde), 128
 	jr	3
@@ -740,7 +741,7 @@ ExtDev_SndParam_Block48_Var04:
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, 5
 	ld	(xde), 4
 	jr	3
@@ -754,7 +755,7 @@ ExtDev_SndParam_Block48_Var04_B:
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, 5
 	ld	(xde), 4
 	jr	3
@@ -776,7 +777,7 @@ ExtDev_SndParam_Write98_Block:
 	lda	xbc, (xiz+2)
 	lda	xde, (xiz+3)
 	ld	a, (xde)
-	.byte 0x81, 0xc1
+	and	a, (xbc)
 	jr	z, 5
 	ld	(xbc), 128
 	jr	3
@@ -793,7 +794,7 @@ ExtDev_SndParam_Block98_Var40:
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, 5
 	ld	(xde), 64
 	jr	3
@@ -809,7 +810,7 @@ ExtDev_SndParam_BlockA9_Var02:
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, 5
 	ld	(xde), 2
 	jr	3
@@ -824,7 +825,7 @@ ExtDev_SndParam_Block98_Var80:
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, 5
 	ld	(xde), 128
 	jr	3
@@ -838,7 +839,7 @@ ExtDev_SndParam_Block98_Var40_B:
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, 5
 	ld	(xde), 64
 	jr	3
@@ -849,7 +850,7 @@ ExtDev_SndParam_ConfigAndWrite:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (xiz+3)
-	.byte 0x8e, 0x02, 0xc1
+	and	a, (xiz+2)
 	jr	z, 64
 	.byte 0xf1, 0xf9, 0x90, 0xb9, 0xb6, 0x14, 0x3a, 0x8d
 	ld	(xiz+1), 5
@@ -900,7 +901,7 @@ ExtDev_SndParam_Write48_Block:
 	lda	xbc, (xiz+2)
 	lda	xde, (xiz+3)
 	ld	a, (xde)
-	.byte 0x81, 0xc1
+	and	a, (xbc)
 	jr	z, 5
 	ld	(xbc), 64
 	jr	3
@@ -919,7 +920,7 @@ ExtDev_SndParam_Block48_Var02:
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, 5
 	ld	(xde), 2
 	jr	3
@@ -933,7 +934,7 @@ ExtDev_SndParam_Block70_Var04:
 	lda	xde, (xwa+2)
 	lda	xhl, (xwa+3)
 	ld	c, (xhl)
-	.byte 0x82, 0xc3
+	and	c, (xde)
 	jr	z, 5
 	ld	(xde), 4
 	jr	3
@@ -1049,7 +1050,7 @@ ExtDev_SndParam_DispatchComplex:
 	cps	hl, 1
 	jr	z, 46
 	ld	a, (xiz+3)
-	.byte 0x8e, 0x02, 0xc1
+	and	a, (xiz+2)
 	jr	z, 38
 	.byte 0xf1, 0xf9, 0x90, 0xb9
 	ld	(xiz), 152
@@ -3243,7 +3244,7 @@ VoiceData_ExtendedParamSetup:
 	add	xde, 10087424
 	lda_24	xbc, 2020192
 	add	xbc, xwa
-	.byte 0x0b, 0x10, 0x00
+	pushw 16
 	push	xde
 	push	xbc
 	call	16715161
@@ -3269,13 +3270,13 @@ VoiceData_ExtendedParamSetup:
 	call	16714332
 	add	xhl, 20
 	ld	xbc, xhl
-	.byte 0xaf, 0x02, 0x81
+	add	xbc, (xsp+2)
 	ld	a, (xbc+1)
 	extz	wa
 	pushw	wa
 	lda	xwa, (xbc+2)
 	push	xwa
-	.byte 0xaf, 0x0c, 0x83
+	add	xhl, (xsp+12)
 	lda	xwa, (xhl+2)
 	push	xwa
 	call	16715161
@@ -3285,7 +3286,7 @@ VoiceData_ExtendedParamSetup:
 	ld	xbc, 26
 	call	16714332
 	add	xhl, 20
-	.byte 0xaf, 0x06, 0x83
+	add	xhl, (xsp+6)
 	ld	xwa, xhl
 	calr	971
 	inc	1, iz
@@ -3296,7 +3297,7 @@ VoiceData_ExtendedParamSetup:
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-10)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda_24	xwa, 15578108
 	ld	(xsp+4), xwa
 	ldada	xwa, 63904
@@ -3323,10 +3324,10 @@ VoiceData_ExtendedParamSetup:
 	extz	wa
 	ld	e, c
 	extz	de
-	.byte 0x0b, 0x07, 0x00
+	pushw 7
 	ldw	bc, 12
 	calr	1032
-	.byte 0x0b, 0x09, 0x00
+	pushw 9
 	ld	a, (xsp+4)
 	extz	wa
 	muls	wa, 26
@@ -3358,12 +3359,12 @@ VoiceData_ExtendedParamSetup:
 	.byte 0xf3, 0x07, 0xe8, 0xec, 0x32
 	ld	e, (xde+22)
 	extz	de
-	.byte 0x0b, 0xff, 0x00
+	pushw 255
 	calr	929
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x15
 	jr	ule, -59
 	incm8	1, (xsp+2)
-	.byte 0x8f, 0x02, 0x3f, 0x18
+	cp	(xsp+2), 24
 	jrl	c, -190
 	.byte 0xf2, 0xc0, 0xff, 0x00, 0xb9, 0x0b, 0x0e, 0x00
 	ld	xwa, (xsp+6)
@@ -3382,11 +3383,11 @@ VoiceData_ExtendedParamSetup:
 	ld	xwa, (xsp+8)
 	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x25
 	extz	de
-	.byte 0x0b, 0xff, 0x00
+	pushw 255
 	ldw	wa, 128
 	calr	843
 	incm8	1, (xsp+2)
-	.byte 0x8f, 0x02, 0x3f, 0x0e
+	cp	(xsp+2), 14
 	jr	c, -39
 	ld	xwa, (xsp+8)
 	.byte 0xf3, 0xe1, 0x0d, 0x04, 0x31
@@ -3397,7 +3398,7 @@ VoiceData_ExtendedParamSetup:
 	ld	(xbc), a
 	ld	e, a
 	extz	de
-	.byte 0x0b, 0x04, 0x00
+	pushw 4
 	ldw	wa, 145
 	lds	bc, 3
 	calr	799
@@ -3440,7 +3441,7 @@ VoiceData_ExtendedParamSetup:
 	and	a, 7
 	or	c, a
 	ld	(xde), c
-	.byte 0x0b, 0x09, 0x00
+	pushw 9
 	lda	xwa, (xhl+15)
 	push	xwa
 	lda	xwa, (xix+15)
@@ -3449,7 +3450,7 @@ VoiceData_ExtendedParamSetup:
 	lda	xsp, (xsp+10)
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x18
 	jr	c, -77
-	.byte 0x0b, 0x0e, 0x00
+	pushw 14
 	ld	xwa, (xsp+6)
 	.byte 0xf3, 0xe1, 0xb0, 0x03, 0x30
 	push	xwa
@@ -3459,9 +3460,9 @@ VoiceData_ExtendedParamSetup:
 	call	16715161
 	lda	xsp, (xsp+10)
 	incm8	1, (xsp+2)
-	.byte 0x8f, 0x02, 0x3f, 0x50
+	cp	(xsp+2), 80
 	jrl	c, -151
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+10)
 	ret
 	calr	117
@@ -4367,7 +4368,7 @@ MidiCh_IterateVolume_Forward:
 	jr	z, 95
 	cps	a, 2
 	jr	nz, 6
-	.byte 0x8a, 0x01, 0x3f, 0xff
+	cp	(xde+1), 255
 	jr	nz, 77
 	.byte 0xc1, 0x27, 0x91, 0x19, 0x7e, 0x91, 0x81, 0x19, 0x7f, 0x91, 0xc1, 0x30, 0x91, 0x19, 0x80, 0x91, 0xc1, 0x31, 0x91, 0x19, 0x81, 0x91
 	call	16556529
@@ -4403,7 +4404,7 @@ MidiCh_IterateVolume_Reverse:
 	jr	z, 95
 	cps	a, 2
 	jr	nz, 6
-	.byte 0x8a, 0x01, 0x3f, 0xff
+	cp	(xde+1), 255
 	jr	nz, 77
 	.byte 0xc1, 0x27, 0x91, 0x19, 0x7e, 0x91, 0x81, 0x19, 0x7f, 0x91, 0xc1, 0x30, 0x91, 0x19, 0x80, 0x91, 0xc1, 0x31, 0x91, 0x19, 0x81, 0x91
 	call	16556529
@@ -4443,7 +4444,7 @@ MidiCh_IteratePan_Forward:
 	jr	z, 116
 	cps	a, 2
 	jr	nz, 6
-	.byte 0x89, 0x01, 0x3f, 0xff
+	cp	(xbc+1), 255
 	jr	nz, 97
 	extz	wa
 	calr	3604
@@ -4988,7 +4989,7 @@ UIState_CheckAndRenderBitmap:
 	cp	a, 182
 	jr	nz, 41
 	lds	iz, 0
-	.byte 0x0b, 0x03, 0x00
+	pushw 3
 	ld	wa, iz
 	ldw	bc, 11
 	ldw	de, 127
@@ -5028,7 +5029,7 @@ UIState_RenderBitmapData:
 	jr	nz, 18
 	ldda8	a, 49280
 	extz	wa
-	.byte 0x0b, 0x03, 0x00
+	pushw 3
 	ldw	bc, 434
 	lds	de, 0
 	call	16569115
@@ -5040,7 +5041,7 @@ UIState_RenderBitmapData:
 	ret	nz
 	ldda8	a, 49280
 	extz	wa
-	.byte 0x0b, 0x03, 0x00
+	pushw 3
 	ldw	bc, 11
 	ldw	de, 127
 	call	16569115
@@ -5189,10 +5190,10 @@ VoiceParam_CompareAndUpdate:
 	dec	2, xsp
 	ld	(xsp), a
 	ldda8	a, 37169
-	.byte 0x87, 0xc1
+	and	a, (xsp)
 	jr	z, 72
 	ldda8	a, 37168
-	.byte 0x87, 0xc1
+	and	a, (xsp)
 	jr	z, 64
 	ldda8	a, 37159
 	extz	wa
@@ -5204,7 +5205,7 @@ VoiceParam_CompareAndUpdate:
 	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33
 	ld	a, (xsp)
 	cpl	a
-	.byte 0x83, 0xc1
+	and	a, (xhl)
 	orda8	a, 37168
 	ld	c, a
 	ldda8	a, 37170
@@ -5220,7 +5221,7 @@ VoiceParam_CompareAndUpdate:
 	dec	2, xsp
 	ld	(xsp), a
 	ldda8	a, 37169
-	.byte 0x87, 0xc1
+	and	a, (xsp)
 	jr	z, 64
 	ldda8	a, 37159
 	extz	wa
@@ -5232,7 +5233,7 @@ VoiceParam_CompareAndUpdate:
 	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33
 	ld	a, (xsp)
 	cpl	a
-	.byte 0x83, 0xc1
+	and	a, (xhl)
 	orda8	a, 37168
 	ld	c, a
 	ldda8	a, 37170
@@ -5248,10 +5249,10 @@ VoiceParam_CompareAndUpdate:
 	dec	2, xsp
 	ld	(xsp), a
 	ldda8	a, 37169
-	.byte 0x87, 0xc1
+	and	a, (xsp)
 	jr	z, 74
 	ldda8	a, 37168
-	.byte 0x87, 0xc1
+	and	a, (xsp)
 	jr	z, 66
 	ldda8	a, 37159
 	extz	wa
@@ -5264,7 +5265,7 @@ VoiceParam_CompareAndUpdate:
 	ld	c, (xsp)
 	cpl	c
 	ld	e, c
-	.byte 0x83, 0xc5
+	and	e, (xhl)
 	orda8	e, 37168
 	ldda8	a, 37170
 	cp	e, a
@@ -5280,7 +5281,7 @@ VoiceParam_CompareAndUpdate:
 	dec	2, xsp
 	ld	(xsp), a
 	ldda8	a, 37169
-	.byte 0x87, 0xc1
+	and	a, (xsp)
 	jr	z, 66
 	ldda8	a, 37159
 	extz	wa
@@ -5293,7 +5294,7 @@ VoiceParam_CompareAndUpdate:
 	ld	c, (xsp)
 	cpl	c
 	ld	e, c
-	.byte 0x83, 0xc5
+	and	e, (xhl)
 	orda8	e, 37168
 	ldda8	a, 37170
 	cp	e, a
@@ -5323,7 +5324,7 @@ VoiceParam_CompareAndUpdate:
 	extz	wa
 	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33
 	ld	e, (xhl)
-	.byte 0x87, 0xc5
+	and	e, (xsp)
 	ldda8	c, 37203
 	ld	a, e
 	add	a, c
@@ -5334,7 +5335,7 @@ VoiceParam_CompareAndUpdate:
 	ldda8	e, 37205
 	ld	a, (xsp)
 	cpl	a
-	.byte 0x83, 0xc1
+	and	a, (xhl)
 	or	e, a
 	ldda8	a, 37170
 	cp	e, a
@@ -5349,7 +5350,7 @@ VoiceParam_CompareAndUpdate:
 	dec	2, xsp
 	ld	(xsp), a
 	ldda8	a, 37169
-	.byte 0x87, 0xc1
+	and	a, (xsp)
 	jr	z, 60
 	ldda8	a, 37159
 	extz	wa
@@ -5361,10 +5362,10 @@ VoiceParam_CompareAndUpdate:
 	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33
 	ld	a, (xsp)
 	cpl	a
-	.byte 0x83, 0xc1
+	and	a, (xhl)
 	ld	c, a
 	ldda8	a, 37168
-	.byte 0x87, 0xc1
+	and	a, (xsp)
 	or	a, c
 	ld	(xhl), a
 	stda8	37170, a
@@ -5562,7 +5563,8 @@ SndParam_ApplyFromPointer:
 	ld	(xiz+3), a
 	ld	a, (xbc+1)
 	ld	(xiz+4), a
-	.byte 0x5e, 0x0e
+	pop xiz
+	ret
 
 SndParam_FetchAndStore:
 	dec 6, xsp
@@ -5810,7 +5812,7 @@ VoiceData_DistributeToChannels:
 	ld	(xsp+4), c
 	ld	(xsp+6), a
 	ld	(xsp+2), 0
-	.byte 0x8f, 0x06, 0x3f, 0x1f
+	cp	(xsp+6), 31
 	jr	ugt, 44
 	call	16705392
 	ld	(xsp), l
@@ -5820,14 +5822,14 @@ VoiceData_DistributeToChannels:
 	cp	xhl, 4294967295
 	jr	z, 17
 	ld	a, (xsp+4)
-	.byte 0x87, 0xf1
+	cp	a, (xsp)
 	jr	ugt, 10
 	extz	wa
 	.byte 0xc3, 0x07, 0xec, 0xe0, 0x21
 	ld	(xsp+2), a
 	ld	l, (xsp+2)
 	jr	13
-	.byte 0x8f, 0x06, 0x3f, 0x48
+	cp	(xsp+6), 72
 	jr	nz, 5
 	ld	(xsp), 15
 	jr	-49
@@ -7958,7 +7960,7 @@ VoiceMode3_DispatchTable:
 	pushw	de
 	.byte 0xb2, 0xfc
 	nop
-	.byte 0x82, 0xb2
+	sbc	b, (xde)
 	swi	4
 	nop
 	.byte 0xd6, 0xb2, 0xfc
@@ -8324,7 +8326,7 @@ VoiceParam_ModeDispatch_Table:
 	.byte 0x09, 0xb5
 	swi	4
 	nop
-	.byte 0x93, 0xb5
+	sbc	iy, (xhl)
 	swi	4
 	nop
 	ldb	h, 182
@@ -8889,7 +8891,7 @@ VoiceMode_ParamConfigTables:
 	.byte 0x02, 0x01
 	reti
 	ldio	9, 10
-	.byte 0x0b, 0x04, 0x05
+	pushw 1284
 	ei	0x03
 	retd	0x1515
 	nop
@@ -8900,7 +8902,7 @@ VoiceMode_ParamConfigTables:
 	nop
 	.byte 0x02, 0x01
 	ldio	9, 10
-	.byte 0x0b, 0x03, 0x04
+	pushw 1027
 	halt
 	ei	0x07
 	scf
@@ -8909,7 +8911,7 @@ VoiceMode_ParamConfigTables:
 	nop
 	.byte 0x02, 0x01
 	ldio	9, 10
-	.byte 0x0b, 0x03, 0x04
+	pushw 1027
 	halt
 	ei	0x07
 	scf
@@ -8918,7 +8920,7 @@ VoiceMode_ParamConfigTables:
 	nop
 	.byte 0x02, 0x01
 	ldio	9, 10
-	.byte 0x0b, 0x03, 0x04
+	pushw 1027
 	halt
 	ei	0x07
 	scf
@@ -8972,7 +8974,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 1
 	ldio	127, 1
 	nop
-	.byte 0x0b, 0x7f, 0x01
+	pushw 383
 	nop
 	ldwio	255, 1
 	.byte 0x09, 0x7f, 0x01
@@ -9137,7 +9139,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 1281
 	ldio	127, 1
 	halt
-	.byte 0x0b, 0x7f, 0x01
+	pushw 383
 	halt
 	ldwio	255, 1281
 	.byte 0x09, 0x7f, 0x01, 0xad, 0x05, 0x7f, 0x01, 0xae, 0x05, 0x7f, 0x01
@@ -9201,7 +9203,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 1793
 	ldio	127, 1
 	reti
-	.byte 0x0b, 0x7f, 0x01
+	pushw 383
 	reti
 	ldwio	255, 1793
 	.byte 0x09, 0x7f, 0x01, 0xad, 0x07, 0x7f, 0x01, 0xae, 0x07, 0x7f, 0x01
@@ -9290,7 +9292,8 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, -20218
 	.byte 0x0b, 0x7f, 0x03, 0xb2, 0x0b
 	jrl	nc, -19708
-	.byte 0x0b, 0x7f, 0x05, 0x0b, 0x00, 0xff
+	pushw 1407
+	pushw 65280
 	nop
 	.byte 0x0b, 0x03, 0xff, 0x01, 0x0b, 0x04, 0x48, 0x01, 0x0b, 0x05, 0x7f, 0x01, 0x0b, 0x07, 0x7f, 0x01, 0x0b, 0x08, 0x7f, 0x01, 0x0b, 0x0b, 0x7f, 0x01, 0x0b, 0x0a, 0xff, 0x01, 0x0b, 0x09, 0x7f, 0x01, 0xad, 0x0b, 0x7f, 0x01, 0xae, 0x0b, 0x7f, 0x01
 	swi	7
@@ -9327,7 +9330,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 3073
 	ldio	127, 1
 	incf
-	.byte 0x0b, 0x7f, 0x01
+	pushw 383
 	incf
 	ldwio	255, 3073
 	.byte 0x09, 0x7f, 0x01, 0xad, 0x0c, 0x7f, 0x01, 0xae, 0x0c, 0x7f, 0x01
@@ -9358,7 +9361,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 3329
 	ldio	127, 1
 	decf
-	.byte 0x0b, 0x7f, 0x01
+	pushw 383
 	decf
 	ldwio	255, 3329
 	.byte 0x09, 0x7f, 0x01, 0xad, 0x0d, 0x7f, 0x01, 0xae, 0x0d, 0x7f, 0x01
@@ -9396,7 +9399,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 3585
 	ldio	127, 1
 	ret
-	.byte 0x0b, 0x7f, 0x01
+	pushw 383
 	ret
 	ldwio	255, 3585
 	.byte 0x09, 0x7f, 0x01, 0xad, 0x0e, 0x7f, 0x01, 0xae, 0x0e, 0x7f, 0x01
@@ -9561,7 +9564,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 6
 	ldio	127, 6
 	nop
-	.byte 0x0b, 0x7f, 0x06
+	pushw 1663
 	nop
 	ldwio	255, 6
 	.byte 0x09, 0x7f
@@ -9816,7 +9819,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 1286
 	ldio	127, 6
 	halt
-	.byte 0x0b, 0x7f, 0x06
+	pushw 1663
 	halt
 	ldwio	255, 1286
 	.byte 0x09, 0x7f
@@ -9859,7 +9862,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 1798
 	ldio	127, 6
 	reti
-	.byte 0x0b, 0x7f, 0x06
+	pushw 1663
 	reti
 	ldwio	255, 1798
 	.byte 0x09, 0x7f
@@ -9914,16 +9917,16 @@ VoiceMode_ParamConfigTables:
 	ldwio	9, 1663
 	.byte 0xad, 0x0a, 0x7f, 0x03, 0xae, 0x0a, 0x7f, 0x04
 	.fill 8, 1, 0xff
-	.byte 0x0b, 0x03, 0xff
+	pushw 65283
 	halt
-	.byte 0x0b, 0x04, 0x48
+	pushw 18436
 	ei	0x0b
 	halt
 	jrl	nc, 2822
 	reti
 	jrl	nc, 2822
 	ldio	127, 6
-	.byte 0x0b, 0x0b, 0x7f
+	pushw 32523
 	ei	0x0b
 	ldwio	255, 2822
 	.byte 0x09, 0x7f
@@ -9944,7 +9947,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 3078
 	ldio	127, 6
 	incf
-	.byte 0x0b, 0x7f, 0x06
+	pushw 1663
 	incf
 	ldwio	255, 3078
 	.byte 0x09, 0x7f
@@ -9968,7 +9971,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 3334
 	ldio	127, 6
 	decf
-	.byte 0x0b, 0x7f, 0x06
+	pushw 1663
 	decf
 	ldwio	255, 3334
 	.byte 0x09, 0x7f
@@ -9992,7 +9995,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 3590
 	ldio	127, 6
 	ret
-	.byte 0x0b, 0x7f, 0x06
+	pushw 1663
 	ret
 	ldwio	255, 3590
 	.byte 0x09, 0x7f

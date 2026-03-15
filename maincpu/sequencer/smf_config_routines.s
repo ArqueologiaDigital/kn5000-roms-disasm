@@ -1854,7 +1854,7 @@ SMF_ChannelTranslationTable:
 	halt
 	ei	0x07
 	ldio	9, 10
-	.byte 0x0b, 0x0c, 0x0d
+	pushw 3340
 	ld	xbc, 1208959502
 	rcf
 	.byte 0x90, 0x11, 0x50, 0x51
@@ -2870,9 +2870,9 @@ SMF_SlotParam_PortamentoTime:
 	jr	nz, 48
 	cpdi8	10355, 15
 	jr	nz, 41
-	.byte 0x8d, 0x02, 0x3f, 0x14
+	cp	(xiy+2), 20
 	jr	nz, 35
-	.byte 0x8d, 0x03, 0x3f, 0x04
+	cp	(xiy+3), 4
 	jr	nz, 29
 	ld	a, (xiy+2)
 	calr	-2476

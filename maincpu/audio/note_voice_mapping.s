@@ -4355,11 +4355,11 @@ NoteMap_AllocCheckNoteOn:
 
 AllocCheckNoteOn_Data:
 	lda	xsp, (xsp-10)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ld	(xsp+2), e
 	ld	(xsp+4), xbc
 	ld	(xsp+8), xwa
-	.byte 0x8f, 0x02, 0x3f, 0x15
+	cp	(xsp+2), 21
 	jr	nz, 126
 	ld	xwa, (xsp+8)
 	lds	bc, 0
@@ -4391,7 +4391,8 @@ AllocCheckNoteOn_Data:
 	extz	wa
 	add	wa, 132
 	extz	xwa
-	.byte 0xaf, 0x04, 0x80, 0x80, 0x3f, 0x15
+	add	xwa, (xsp+4)
+	cp	(xwa), 21
 	jr	nz, 14
 	.byte 0xc7, 0xfb, 0x89
 	ld	c, a
@@ -4430,9 +4431,9 @@ AllocCheckNoteOn_Data:
 	extz	wa
 	inc	4, wa
 	extz	xwa
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	a, (xwa)
-	.byte 0x8f, 0x02, 0xf1
+	cp	a, (xsp+2)
 	jr	nz, 14
 	ld	a, (xsp+2)
 	ld	c, a
@@ -4443,7 +4444,7 @@ AllocCheckNoteOn_Data:
 	extz	wa
 	add	wa, 36
 	extz	xwa
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	e, (xwa)
 	ld	a, e
 	cp	a, 255
@@ -4469,9 +4470,9 @@ AllocCheckNoteOn_Data:
 	extz	wa
 	add	wa, 132
 	extz	xwa
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	a, (xwa)
-	.byte 0x8f, 0x02, 0xf1
+	cp	a, (xsp+2)
 	jr	nz, 14
 	.byte 0xc7, 0xfb, 0x89
 	ld	c, a
@@ -4484,7 +4485,7 @@ AllocCheckNoteOn_Data:
 	extz	wa
 	add	wa, 68
 	extz	xwa
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	a, (xwa)
 	.byte 0xc7, 0xfb, 0x99
 	cp	a, 255
@@ -4498,7 +4499,7 @@ AllocCheckNoteOn_Data:
 	extz	wa
 	add	wa, 100
 	extz	xwa
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	a, (xwa)
 	.byte 0xc7, 0xfb, 0x99
 	cp	a, 255
@@ -4508,7 +4509,7 @@ AllocCheckNoteOn_Data:
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	16667729
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+10)
 	ret
 
@@ -16712,7 +16713,7 @@ __jrt_nop_FEA344_Data:
 	.byte 0x04
 	reti
 	ldwio	0, 1796
-	.byte 0x0b, 0x00, 0x04
+	pushw 1024
 	ldio	0, 0
 	.byte 0x03
 	reti
@@ -16726,7 +16727,7 @@ __jrt_nop_FEA344_Data:
 	nop
 	.byte 0x03
 	reti
-	.byte 0x0b, 0x00, 0x05
+	pushw 1280
 	reti
 	ldwio	0, 1796
 	.byte 0x09, 0x00, 0x04
@@ -16740,7 +16741,7 @@ __jrt_nop_FEA344_Data:
 	reti
 	ldwio	2, 1796
 	ldwio	1, 1796
-	.byte 0x0b, 0x02, 0x04
+	pushw 1026
 	reti
 	.byte 0x09, 0x02
 	nop
@@ -16798,7 +16799,7 @@ __jrt_nop_FEA344_Data:
 	halt
 	ei	0x07
 	ldio	9, 10
-	.byte 0x0b, 0x0c, 0x0d
+	pushw 3340
 	ret
 	retd	0x1110
 	ccf
@@ -17703,7 +17704,7 @@ HdaeRom_AltTableEntry4:
 	dec	4, xsp
 	.byte 0xbf, 0x00, 0x14, 0x80, 0xc0, 0xbf, 0x01, 0x14, 0x7d, 0xc0, 0xbf, 0x02, 0x14, 0x7e, 0xc0, 0xbf, 0x03, 0x14, 0x7f, 0xc0, 0x8f, 0x01, 0x3f, 0x10
 	jr	c, 6
-	.byte 0x8f, 0x01, 0x3f, 0x14
+	cp	(xsp+1), 20
 	jr	ule, 19
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -18259,7 +18260,7 @@ SendEpilogue_Data:
 	.byte 0xc7, 0xf8, 0x89
 	extz	wa
 	calr	2042
-	.byte 0xd7, 0xfa, 0x9b
+	ld	qiz, hl
 	ld	de, qiz
 	ldb	d, 0
 	ldw	wa, 80
@@ -18302,7 +18303,7 @@ SendEpilogue_Data:
 	ld	a, l
 	extz	wa
 	calr	1917
-	.byte 0xd7, 0xfa, 0x9b
+	ld	qiz, hl
 	ld	wa, qiz
 	and	wa, 65280
 	jrl	nz, 908
@@ -20030,9 +20031,10 @@ SendSinglePacket_Epilogue:
 SendSinglePacket_Data:	.asciz "¿Þ7>éŽ¿$PØ©E¨Áî"
 	lda	xix, (xsp+4)
 	ldw	bc, 16
-	.byte 0x95, 0x11, 0x86, 0x3f, 0xf0
+	ldirw
+	cp	(xiz), 240
 	jr	c, 21
-	.byte 0x86, 0x3f, 0xf7
+	cp	(xiz), 247
 	jr	ugt, 16
 	ei	0x06
 	push	xiz
@@ -23218,7 +23220,7 @@ CalcAddrOffset_Data:
 	ld	(xsp+6), wa
 	lds	iz, 0
 	ld	wa, iz
-	.byte 0x9f, 0x06, 0xf0
+	cp	wa, (xsp+6)
 	jr	nc, 31
 	calr	-85
 	ld	wa, hl
@@ -23230,7 +23232,7 @@ CalcAddrOffset_Data:
 	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x47
 	inc	1, iz
 	ld	wa, iz
-	.byte 0x9f, 0x06, 0xf0
+	cp	wa, (xsp+6)
 	jr	c, -31
 	lds	hl, 0
 	popw	iz
@@ -25623,7 +25625,7 @@ SendPartDataBlock_Data:
 	ld	xiy, xde
 	ld	xix, xiz
 	ldw	bc, 8
-	.byte 0x95, 0x11
+	ldirw
 	ld	a, (xde+16)
 	ld	(xiz+16), a
 	ld	xbc, xde
@@ -25891,11 +25893,11 @@ SendPartDataBlock_Data:
 	ld	xiy, 15652253
 	ld	xix, xsp
 	ldw	bc, 213
-	.byte 0x95, 0x11
+	ldirw
 	ld	xiy, xsp
 	ld	xix, xde
 	ldw	bc, 213
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xde+102)
 	ld	xiy, xwa
 	.byte 0xf3, 0xe9, 0xb7, 0x00, 0x34
@@ -25922,7 +25924,7 @@ SendPartDataBlock_Data:
 	ld	xiy, xwa
 	ld	xix, xde
 	ldw	bc, 8
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xwa+16)
 	.byte 0xb0, 0xcf
 	jr	z, 4
@@ -26046,7 +26048,7 @@ SendPartDataBlock_Data:
 	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21, 0xf3, 0x07, 0xe4, 0xf0, 0x41
 	incm8	1, (xsp+4)
 	inc	1, de
-	.byte 0x8f, 0x04, 0x3f, 0x08
+	cp	(xsp+4), 8
 	jr	c, -39
 	ld	xwa, (xsp+6)
 	ld	a, (xwa)
@@ -26131,16 +26133,16 @@ SendPartDataBlock_Data3:
 	ld	a, (xde+20)
 	ld	(xiy), a
 	ld	xwa, (xsp+18)
-	.byte 0x80, 0x3f, 0x00
+	cp	(xwa), 0
 	jr	nz, 43
 	ld	xwa, (xsp+14)
-	.byte 0x80, 0x3f, 0x00
+	cp	(xwa), 0
 	jr	z, 12
 	ld	a, (xde+22)
 	ld	(xix), a
 	ld	xwa, 23
 	jr	15
-	.byte 0x86, 0x3f, 0x00
+	cp	(xiz), 0
 	jr	z, 18
 	ld	a, (xde+25)
 	ld	(xix), a
@@ -26165,7 +26167,7 @@ SendPartDataBlock_Data3:
 	ld	l, a
 	ld	xwa, (xsp+18)
 	ld	(xwa), l
-	.byte 0x8a, 0x1e, 0x3f, 0xff
+	cp	(xde+30), 255
 	jr	z, 5
 	.byte 0xcf
 SendPartDataBlock_Data4:
@@ -26204,7 +26206,7 @@ SendPartDataBlock_Data5:
 	incm8	1, (xsp+4)
 	lda	xbc, (xbc+81)
 	lda	xde, (xde+34)
-	.byte 0x8f, 0x04, 0x3f, 0x03
+	cp	(xsp+4), 3
 	jrl	c, -474
 	pop	xiz
 	lda	xsp, (xsp+26)
@@ -26403,9 +26405,9 @@ HdaeRom_DataHandler:
 ; HDAE5000 extension ROM data dispatch (6-entry, table 0xEED747)
 HdaeRom_DataDispatch:
 	ld	(xsp+6), xbc
-	.byte 0xc3, 0xfd, 0xba, 0x01, 0x3f, 0xff
+	cp	(xsp+442), 255
 	jrl	nz, 307
-	.byte 0xc3, 0xfd, 0xb8, 0x01, 0x3f, 0xff
+	cp	(xsp+440), 255
 	jrl	nz, 298
 	.byte 0xbf, 0x04, 0x02, 0x28, 0x00
 	lda	xwa, (xsp+14)
@@ -26419,7 +26421,7 @@ HdaeRom_DataDispatch:
 	call	16714332
 	add	xhl, 16
 	ld	xiy, xhl
-	.byte 0xaf, 0x06, 0x85
+	add	xiy, (xsp+6)
 	ld	xix, (xsp+10)
 	ldw	bc, 144
 	.byte 0x95, 0x11, 0x85, 0x10
@@ -26427,7 +26429,7 @@ HdaeRom_DataDispatch:
 	ld	xbc, 470
 	call	16714332
 	add	xhl, 16
-	.byte 0xaf, 0x06, 0x83
+	add	xhl, (xsp+6)
 	ld	xwa, xhl
 	ld	xbc, (xsp+10)
 	calr	-2368
@@ -26451,21 +26453,21 @@ HdaeRom_DataDispatch:
 	.byte 0xe9, 0xee, 0x04
 	add	xbc, 80
 	ld	xiy, xbc
-	.byte 0xaf, 0x06, 0x85
+	add	xiy, (xsp+6)
 	ld	xix, (xsp+10)
 	ldw	bc, 72
-	.byte 0x95, 0x11
+	ldirw
 	ld	xbc, 470
 	call	16714332
 	add	xhl, 16
-	.byte 0xaf, 0x06, 0x83
+	add	xhl, (xsp+6)
 	ld	xwa, xhl
 	ld	xbc, (xsp+10)
 	calr	-1507
 	.byte 0x9f, 0x04, 0x3a, 0x01, 0x00
 	jr	nz, -75
 	jr	107
-	.byte 0xc3, 0xfd, 0xb8, 0x01, 0x21
+	ld	a, (xsp+440)
 	extz	wa
 	ld	(xsp+4), wa
 	jr	81
@@ -26476,7 +26478,7 @@ HdaeRom_DataDispatch:
 	add	xbc, xwa
 	.byte 0xe9, 0xee, 0x04
 	add	xbc, 80
-	.byte 0xaf, 0x06, 0x81
+	add	xbc, (xsp+6)
 	ld	xwa, xbc
 	calr	-1892
 	ld	iz, (xsp+4)
@@ -26485,13 +26487,13 @@ HdaeRom_DataDispatch:
 	ld	xbc, 470
 	call	16714332
 	add	xhl, 16
-	.byte 0xaf, 0x06, 0x83
+	add	xhl, (xsp+6)
 	ld	xbc, xiz
 	.byte 0xe9, 0xee, 0x03
 	add	xbc, xiz
 	.byte 0xe9, 0xee, 0x04
 	add	xbc, 80
-	.byte 0xaf, 0x06, 0x81
+	add	xbc, (xsp+6)
 	ld	xwa, xhl
 	calr	-1606
 	incm	1, (xsp+4)
@@ -26528,14 +26530,14 @@ HdaeRom_DataDispatch_Block3:
 	lda	xhl, (xwa+18833)
 	.byte 0xf3, 0xe1, 0xa7, 0x72, 0x34
 	dec	1, xix
-	.byte 0xeb, 0xf4
+	cp	xix, xhl
 	jr	c, 16
 	lda	xde, (xix-1)
 	ld	c, (xde)
 	ld	(xde+1), c
 	dec	1, xde
 	dec	1, xix
-	.byte 0xeb, 0xf4
+	cp	xix, xhl
 	jr	nc, -13
 	ld	(xhl), 1
 	.byte 0xc7, 0xea, 0xa8
@@ -26680,7 +26682,7 @@ TmFlashWrite_Block1:
 	extz	bc
 	cps	de, 0
 	jr	lt, 123
-	.byte 0x8f, 0x02, 0x3f, 0x40
+	cp	(xsp+2), 64
 	jr	nc, 55
 	calr	-794
 	calr	-399
@@ -26735,7 +26737,7 @@ TmFlashWrite_Block1:
 	.byte 0x80, 0x00, 0x67, 0xeb, 0x1e, 0x83, 0xfd, 0xf2
 	.byte 0xa7, 0x4a, 0x1e, 0x30, 0x31, 0x00, 0x28, 0x42
 TmFlashWrite_Block2:
-	.byte 0xa7, 0xc2
+	and	xde, (xsp)
 	nop
 	nop
 TmFlashWrite_Block3:
@@ -27637,7 +27639,7 @@ NumFormat_DivideAndC_Epilogue:
 NumFormat_DivideAndC_Data:
 	ld	xhl, (xsp+4)
 	ld	wa, (xsp+8)
-	.byte 0x83, 0xf1
+	cp	a, (xhl)
 	ret	z
 	.byte 0xc5, 0xec, 0x3f, 0x00
 	jr	nz, -10

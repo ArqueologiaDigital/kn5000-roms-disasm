@@ -31,7 +31,7 @@ SysEx_ApplyToSlot4B_Data:
 	ld	(xsp+4), l
 	ld	xwa, 19204
 	call	16631801
-	.byte 0xd7, 0xfa, 0x9b
+	ld	qiz, hl
 	cp	qiz, 0
 	jr	lt, 63
 	lds	iz, 0
@@ -91,7 +91,7 @@ SysEx_ApplyToSlot49_Data:
 	jr	lt, 72
 	ld	xwa, 18692
 	call	16631801
-	.byte 0xd7, 0xfa, 0x9b
+	ld	qiz, hl
 	cp	qiz, 0
 	jr	lt, 55
 	lds	iz, 0
@@ -143,7 +143,7 @@ SysEx_ApplyToSlot49_Format_Data:
 	ld	(xsp+4), l
 	ld	xwa, 18692
 	call	16631801
-	.byte 0xd7, 0xfa, 0x9b
+	ld	qiz, hl
 	cp	qiz, 0
 	jr	lt, 63
 	lds	iz, 0
@@ -978,7 +978,7 @@ SwbtWr_QueuePostEvent_Done:
 
 SwbtWr_TrailingBytecode:
 	ld	xhl, 49209
-	.byte 0x83, 0x3f, 0xff
+	cp	(xhl), 255
 	jr	z, 6
 	add	hl, 4
 	jr	-11
@@ -2908,7 +2908,7 @@ DSPCfg_Data_FDC4B7:
 	push	xhl
 	calr	-284
 	ldw	hl, 65535
-	.byte 0x8f, 0x06, 0x3f, 0x01
+	cp	(xsp+6), 1
 	jr	nz, 2
 	lds	hl, 0
 	pop	xiz
@@ -3827,12 +3827,12 @@ DSPCfg_Data_ParamDispatch:
 	ld	a, (xde+2)
 	ld	(xsp+6), a
 	lda	xwa, (xsp+12)
-	.byte 0x8f, 0x06, 0x3f, 0x76
+	cp	(xsp+6), 118
 	jrl	z, 159
 	ld	hl, iz
-	.byte 0x8f, 0x06, 0x3f, 0x70
+	cp	(xsp+6), 112
 	jr	z, 70
-	.byte 0x8f, 0x06, 0x3f, 0x67
+	cp	(xsp+6), 103
 	jr	z, 59
 	.byte 0x8f, 0x06
 	.ascii "?df5Å"

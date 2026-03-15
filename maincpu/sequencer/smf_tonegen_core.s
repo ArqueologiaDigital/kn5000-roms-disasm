@@ -217,13 +217,13 @@ FloppyIO_SelectReadMode_Dispatch:
 	ret
 
 FloppyIO_SwitchboardChannelPtrs:
-	.byte 0x96, 0xf4
+	cp	ix, (xiz)
 	nop
 	nop
 	.byte 0xb0, 0xf4
 	nop
 	nop
-	.byte 0xca, 0xf4
+	cp	d, b
 	nop
 	nop
 	.byte 0xe4, 0xf4, 0x00
@@ -1581,14 +1581,14 @@ SeqTrack_ChannelMapIdentity:
 	halt
 	ei	0x07
 	ldio	9, 10
-	.byte 0x0b, 0x0c, 0x0d
+	pushw 3340
 	ret
 	retd	0x0100
 	.byte 0x02, 0x03, 0x04
 	halt
 	ei	0x07
 	ldio	15, 10
-	.byte 0x0b, 0x0c, 0x0d
+	pushw 3340
 	ret
 	.byte 0x09
 
@@ -4024,7 +4024,7 @@ VoiceParam_ChannelMapRemapped:
 	halt
 	ei	0x07
 	ldio	15, 10
-	.byte 0x0b, 0x0c, 0x0d
+	pushw 3340
 	ret
 	.byte 0x09
 
@@ -4460,7 +4460,7 @@ VoiceSynth_DataEntry_PtrTable:
 	.byte 0x19
 	nop
 	nop
-	.byte 0x0b, 0x1a, 0x00
+	pushw 26
 	nop
 
 VoiceSynth_HandlePan:

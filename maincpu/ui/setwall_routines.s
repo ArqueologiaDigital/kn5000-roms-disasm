@@ -645,7 +645,7 @@ SetWall_SlotTypeMap:
 	.byte 0x02, 0x01
 	reti
 	ldio	9, 10
-	.byte 0x0b, 0x04, 0x05
+	pushw 1284
 	ei	0x03
 	retd	0xffff
 	swi	7
@@ -726,7 +726,7 @@ SetWall_SlotOrderTable:
 	.byte 0x02, 0x01
 	decf
 	retd	0x0c10
-	.byte 0x0b, 0x08, 0x09
+	pushw 2312
 	ldwio	3, 1284
 	ei	0x07
 	nop

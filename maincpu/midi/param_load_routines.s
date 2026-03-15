@@ -628,7 +628,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+44)
 	lda_24	xbc, 213238
 	ld	(xwa), xbc
@@ -638,7 +638,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+44)
 	lda_24	xbc, 213239
 	ld	(xwa), xbc
@@ -648,7 +648,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+44)
 	lda_24	xbc, 213240
 	ld	(xwa), xbc
@@ -658,7 +658,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+44)
 	lda_24	xbc, 213241
 	ld	(xwa), xbc
@@ -689,7 +689,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+44)
 	lda_24	xbc, 213238
 	ld	(xwa), xbc
@@ -701,7 +701,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xiy, 15204000
 	lda	xix, (xsp+44)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+44)
 	lda_24	xbc, 213239
 	ld	(xwa), xbc

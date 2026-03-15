@@ -406,8 +406,8 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	.byte 0x72, 0x62, 0x00, 0xff
 	aligned_string "A:HKEXT.XAP"
 	aligned_string "Cannot open"
-	.byte 0x58, 0x41, 0x50, 0x52
-	.byte 0x00, 0xff
+	pop xwa
+	ld	xbc, 4278211152
 	aligned_string "Different ID"
 	aligned_string "XAPR"
 	.byte 0xa9, 0xe9

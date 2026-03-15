@@ -376,7 +376,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	xiy, 15380444
 	lda	xix, (xsp+270)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	hl, (xwa+2)
 	ld	c, (xwa+1)
 	dec	4, c
@@ -409,7 +409,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xiz), c
 	inc	1, iy
 	inc	1, xde
-	.byte 0x9f, 0x04, 0xf5
+	cp	iy, (xsp+4)
 	jr	c, -30
 	ld	wa, iy
 	extz	xwa
@@ -431,7 +431,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	xiy, 15380452
 	.byte 0xf3, 0xfd, 0x0e, 0x01, 0x34
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	hl, (xwa+2)
 	ld	c, (xwa+1)
 	dec	4, c
@@ -464,7 +464,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xiz), c
 	inc	1, iy
 	inc	1, xde
-	.byte 0x9f, 0x04, 0xf5
+	cp	iy, (xsp+4)
 	jr	c, -30
 	ld	wa, iy
 	extz	xwa
@@ -486,7 +486,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	xiy, 15380460
 	lda	xix, (xsp+270)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	c, (xwa+1)
 	dec	6, c
 	extz	bc
@@ -514,7 +514,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xiz), c
 	inc	1, iy
 	inc	1, xde
-	.byte 0x9f, 0x04, 0xf5
+	cp	iy, (xsp+4)
 	jr	c, -30
 	ld	wa, iy
 	extz	xwa
@@ -536,7 +536,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	xiy, 15380468
 	.byte 0xf3, 0xfd, 0x0e, 0x01, 0x34
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	c, (xwa+1)
 	dec	6, c
 	extz	bc
@@ -564,7 +564,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xiz), c
 	inc	1, iy
 	inc	1, xde
-	.byte 0x9f, 0x04, 0xf5
+	cp	iy, (xsp+4)
 	jr	c, -30
 	ld	wa, iy
 	extz	xwa
@@ -586,7 +586,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	xiy, 15380476
 	lda	xix, (xsp+270)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	hl, (xwa+2)
 	ld	c, (xwa+1)
 	dec	4, c
@@ -619,7 +619,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xiz), c
 	inc	1, iy
 	inc	1, xde
-	.byte 0x9f, 0x04, 0xf5
+	cp	iy, (xsp+4)
 	jr	c, -30
 	ld	wa, iy
 	extz	xwa
@@ -957,7 +957,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0xd9, 0xee, 0x03
 	ld	(xhl), bc
 	ld	bc, (xde)
-	.byte 0x98, 0x0a, 0x81
+	add	bc, (xwa+10)
 	ld	(xhl+6), bc
 	ld	bc, (xwa+8)
 	.byte 0xd9, 0xee, 0x03
@@ -1013,7 +1013,7 @@ DrawText_LayoutAndRender_Variant1:
 	lda	xsp, (xsp+12)
 	ret
 	dec	8, xsp
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda	xbc, (xsp+2)
 	ld	de, (xwa+2)
 	ld	(xbc), de
@@ -1032,7 +1032,7 @@ DrawText_LayoutAndRender_Variant1:
 	calr	-10104
 	.byte 0xc7, 0xfb, 0x89
 	st8_24	257960, a
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	inc	8, xsp
 	ret
 
@@ -1179,11 +1179,11 @@ DrawText_ExtLayout_NullAndDraw:
 DrawText_ExtLayout_Variant1:
 	.byte 0xf3, 0xfd, 0xe4, 0xfe, 0x37
 	push	xiz
-	.byte 0xf3, 0xfd, 0x1c, 0x01, 0x60
+	ld	(xsp+284), xwa
 	ld	xiy, 15380764
 	lda	xix, (xsp+276)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	xde, (xsp+284)
 	ld	iy, (xde+2)
 	extz	xiy
@@ -1231,7 +1231,7 @@ DrawText_ExtLayout_Variant1:
 	inc	1, hl
 	inc	1, xde
 	inc	1, xbc
-	.byte 0x9f, 0x04, 0xf3
+	cp	hl, (xsp+4)
 	jr	c, -28
 	extz	xhl
 	lda	xwa, (xsp+16)
@@ -1335,7 +1335,7 @@ DrawFunc_Init_Variant1:
 	ld	xiy, 15380792
 	.byte 0xf3, 0xfd, 0x08, 0x01, 0x34
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	wa, (xiz+2)
 	extz	xwa
 	ld	e, (xiz+4)
@@ -1387,7 +1387,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380800
 	jr	15
 	pushw	bc
-	.byte 0x0b, 0xea, 0x00
+	pushw 234
 	pushw 0xb144
 	.ascii ":h,@H"
 	.byte 0xb1, 0xea, 0x00
@@ -1416,7 +1416,7 @@ DrawFunc_Init_Variant1:
 	ld	xiy, 15380824
 	.byte 0xf3, 0xfd, 0x08, 0x01, 0x34
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	ix, (xiz+2)
 	extz	xix
 	ld	de, (xiz+7)
@@ -1469,7 +1469,7 @@ DrawFunc_Init_Variant1:
 	ld	xiy, 15380844
 	.byte 0xf3, 0xfd, 0x08, 0x01, 0x34
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	wa, (xiz+2)
 	extz	xwa
 	ld	e, (xiz+4)
@@ -1524,7 +1524,7 @@ DrawFunc_Init_Variant1:
 	ld	xiy, 15380864
 	lda	xix, (xsp+264)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	wa, (xiz+2)
 	extz	xwa
 	ld	e, (xiz+4)
@@ -1597,7 +1597,7 @@ DrawFunc_Init_Variant1:
 	.long Data_CharMapFormatBlock
 	.byte 0xf3, 0xfd, 0x08, 0x01, 0x34
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	ld	de, (xiz+2)
 	extz	xde
 	ld	l, (xiz+11)
@@ -1714,7 +1714,7 @@ ColorBlit_Variant_ByteData:
 	.byte 0xd9, 0xee, 0x03
 	ld	(xwa), bc
 	ld	bc, (xde)
-	.byte 0x9b, 0x04, 0x81
+	add	bc, (xhl+4)
 	ld	(xwa+6), bc
 	ld	bc, (xhl+2)
 	.byte 0xd9, 0xee, 0x03
@@ -2774,7 +2774,7 @@ VGA_WritePalEntry_WriteBlue:
 
 VGA_CRTCTiming_ByteData:
 	dec	4, xsp
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ld	(xsp+2), xwa
 	.byte 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0x89
 	extz	wa
@@ -4134,7 +4134,7 @@ ToneGen_WriteParamByIndex:
 ToneGen_ParamWriteDispatch:
 	lda	xix, (xsp+6)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xde, (xsp+2)
 	lda	xbc, (xsp+6)
 	ld	hl, (xbc)
@@ -4146,7 +4146,7 @@ ToneGen_ParamWriteDispatch:
 	lds32	xhl, 0
 	push	xhl
 	pushw	wa
-	.byte 0x0b, 0xf7, 0x00
+	pushw 247
 	ld	xwa, xbc
 	ld	xbc, xde
 	ld	xde, 15538064
@@ -4162,13 +4162,13 @@ ToneGen_ParamWriteDispatch:
 	lds32	xde, 7
 	push	xde
 	pushw	iz
-	.byte 0x0b, 0xf7, 0x00
+	pushw 247
 	ld	xde, 15538100
 	jrl	271
 	inc	8, xiy
 	lda	xix, (xsp+6)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xde, (xsp+2)
 	lda	xbc, (xsp+6)
 	ld	hl, (xbc)
@@ -4180,7 +4180,7 @@ ToneGen_ParamWriteDispatch:
 	lds32	xhl, 0
 	push	xhl
 	pushw	wa
-	.byte 0x0b, 0xf7, 0x00
+	pushw 247
 	ld	xwa, xbc
 	ld	xbc, xde
 	ld	xde, 15538138
@@ -4196,13 +4196,13 @@ ToneGen_ParamWriteDispatch:
 	lds32	xde, 7
 	push	xde
 	pushw	iz
-	.byte 0x0b, 0xf7, 0x00
+	pushw 247
 	ld	xde, 15538168
 	jrl	183
 	lda	xiy, (xiy+16)
 	lda	xix, (xsp+6)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xbc, (xsp+2)
 	lda	xde, (xsp+6)
 	ld	hl, (xde)
@@ -4214,14 +4214,14 @@ ToneGen_ParamWriteDispatch:
 	lds32	xhl, 0
 	push	xhl
 	pushw	wa
-	.byte 0x0b, 0xf7, 0x00
+	pushw 247
 	ld	xwa, xde
 	ld	xde, 15538208
 	jrl	136
 	lda	xiy, (xiy+24)
 	lda	xix, (xsp+6)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xbc, (xsp+2)
 	lda	xde, (xsp+6)
 	ld	hl, (xde)
@@ -4233,14 +4233,14 @@ ToneGen_ParamWriteDispatch:
 	lds32	xhl, 0
 	push	xhl
 	pushw	wa
-	.byte 0x0b, 0xf7, 0x00
+	pushw 247
 	ld	xwa, xde
 	ld	xde, 15538238
 	jr	90
 	lda	xiy, (xiy+32)
 	lda	xix, (xsp+6)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xbc, (xsp+2)
 	lda	xde, (xsp+6)
 	ld	hl, (xde)
@@ -4252,14 +4252,14 @@ ToneGen_ParamWriteDispatch:
 	lds32	xhl, 0
 	push	xhl
 	pushw	wa
-	.byte 0x0b, 0xf7, 0x00
+	pushw 247
 	ld	xwa, xde
 	ld	xde, 15538268
 	jr	44
 	lda	xiy, (xiy+40)
 	lda	xix, (xsp+6)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xbc, (xsp+2)
 	lda	xde, (xsp+6)
 	ld	hl, (xde)
@@ -4271,7 +4271,7 @@ ToneGen_ParamWriteDispatch:
 	lds32	xhl, 0
 	push	xhl
 	pushw	wa
-	.byte 0x0b, 0xf7, 0x00
+	pushw 247
 	ld	xwa, xde
 	ld	xde, 15538302
 	call	16435914

@@ -1553,13 +1553,15 @@ Data_InOutGridDispatch:
 	ld	wa, (xiz+4)
 	exts	wa
 	pushw	wa
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0xfe, 0xfc
+	pushw 231
+	pushw 64766
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	16714354
 	lda	xsp, (xsp+10)
 	jr	16
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x04, 0xfd
+	pushw 231
+	pushw 64772
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	16715597
@@ -1580,7 +1582,8 @@ Data_InOutGridDispatch:
 	call	16714354
 	lda	xsp, (xsp+10)
 	jr	16
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x10, 0xfd
+	pushw 231
+	pushw 64784
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	16715597
@@ -1733,7 +1736,8 @@ Data_ParaLoadOptDispatch:
 	call	16569399
 	exts	hl
 	pushw	hl
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x1c, 0xfd
+	pushw 231
+	pushw 64796
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	16714354
@@ -1747,7 +1751,8 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 20482
 	call	16569399
 	pushw	hl
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x22, 0xfd
+	pushw 231
+	pushw 64802
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	16714354
@@ -1765,7 +1770,8 @@ Data_ParaLoadOptDispatch:
 	jr	z, 38
 	cps	hl, 0
 	jrl	nz, 322
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x28, 0xfd
+	pushw 231
+	pushw 64808
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	16715597
@@ -1779,7 +1785,8 @@ Data_ParaLoadOptDispatch:
 	call	16569399
 	exts	hl
 	pushw	hl
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x2e, 0xfd
+	pushw 231
+	pushw 64814
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	16714354
@@ -1792,7 +1799,8 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 20482
 	call	16569399
 	pushw	hl
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x34, 0xfd
+	pushw 231
+	pushw 64820
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	16714354

@@ -26,7 +26,7 @@ FDemo_DisplayResourceData:
 	lda	xwa, (xsp+278)
 	.byte 0xb8, 0x08, 0x00
 	.long Data_DiskFuncPtrTbl_EA0B00
-	.byte 0x0b, 0x70, 0x00
+	pushw 112
 	push	xwa
 	call	16715201
 	lda	xsp, (xsp+22)
@@ -48,7 +48,7 @@ FDemo_DisplayResourceData:
 	ld	a, (xbc+4)
 	extz	wa
 	ld	(xsp+6), wa
-	.byte 0x0b, 0x00, 0x01
+	pushw 256
 	push	xbc
 	push	xhl
 	call	16715161
@@ -61,7 +61,7 @@ FDemo_DisplayResourceData:
 	jr	z, 23
 	ld	xwa, 256
 	calr	132
-	.byte 0x0b, 0x00, 0x01
+	pushw 256
 	lda	xwa, (xsp+10)
 	push	xwa
 	push	xhl
@@ -86,7 +86,7 @@ FDemo_DisplayResourceData:
 	jr	z, 39
 	ld	xwa, 256
 	calr	56
-	.byte 0x0b, 0x00, 0x01
+	pushw 256
 	lda	xwa, (xsp+10)
 	push	xwa
 	push	xhl
@@ -3119,7 +3119,7 @@ FileIO_ByteBlock_F8817E:
 	extz	wa
 	call	16474805
 	lda_24	xwa, 2020176
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	xbc, (xsp+8)
 	call	16289140
 	call	16288706
@@ -3190,7 +3190,7 @@ FileIO_ByteBlock_F8817E:
 	extz	wa
 	call	16474819
 	lda_24	xwa, 2020176
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	xbc, 16
 	call	16289140
 	ld16_24	wa, 2020189
@@ -3215,7 +3215,7 @@ FileIO_ByteBlock_F8817E:
 	lds	bc, 0
 	call	16289504
 	lda_24	xwa, 2020176
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	xbc, (xsp+8)
 	call	16289140
 	call	16288706
@@ -3457,7 +3457,7 @@ FileIO_ByteBlock_F8817E:
 	extz	bc
 	call	16713034
 	lda_24	xwa, 1966080
-	.byte 0xaf, 0x06, 0x80
+	add	xwa, (xsp+6)
 	ld	bc, (xsp+10)
 	extz	xbc
 	call	16289140
@@ -3544,7 +3544,7 @@ FileIO_ByteBlock_F8817E:
 	extz	wa
 	call	16713189
 	lda_24	xwa, 1966080
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	bc, (xsp+8)
 	extz	xbc
 	call	16289140

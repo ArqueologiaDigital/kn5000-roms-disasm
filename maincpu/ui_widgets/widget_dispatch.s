@@ -4518,7 +4518,8 @@ WidgetParam_Config_001:
 	.asciz "&ffz"
 	.byte 0x06, 0x74, 0x00, 0x01, 0x7a, 0xf0
 WidgetParam_Config_002:
-	.byte 0x00, 0x07
+	nop
+	reti
 	jr	lt, 0
 	jr	lt, 1
 	jrl	gt, 1792

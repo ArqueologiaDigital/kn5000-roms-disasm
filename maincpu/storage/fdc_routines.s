@@ -712,7 +712,7 @@ FDC_ResultPhase_Read:
 	cp	qiz, 0
 	jr	z, -25
 	ldda16	wa, 1033
-	.byte 0x9f, 0x04, 0xa0
+	sub	wa, (xsp+4)
 	cp	wa, 500
 	jr	ule, 5
 	ldw	qiz, 65535
@@ -944,9 +944,9 @@ FDC_HardwareSetup:
 	calr	-429
 	cpdi8	35364, 0
 	jr	nz, 90
-	.byte 0x87, 0x3f, 0x08
+	cp	(xsp), 8
 	jr	z, 85
-	.byte 0x87, 0x3f, 0x03
+	cp	(xsp), 3
 	jr	nz, 5
 	calr	171
 	jr	75
@@ -1251,7 +1251,7 @@ FDC_InitSequence_Full:
 ; Contains error checking and retry logic with FDC_Set_Status calls.
 ; Restores head number from prevbank on exit.
 FDC_SeekRecalibrate:
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ldda8	a, 35382
 	.byte 0xc7, 0xfb, 0x99
 	stdi8	35382, 5
@@ -1269,7 +1269,7 @@ FDC_SeekRecalibrate:
 	stda8	35382, a
 	ldw	wa, 16
 	calr	-128
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	ret
 	ldda8	a, 35382
 	cpda8	a, 35588
@@ -1389,7 +1389,7 @@ FDC_CMD_EXEC:
 	ldada	xbc, 35404
 	ldda16	wa, 35356
 	extz	xwa
-	.byte 0xa1, 0x80
+	add	xwa, (xbc)
 	ld	(xbc), xwa
 	stdi16	35400, 1
 	stdi8	35373, 1
@@ -1478,7 +1478,7 @@ FDC_CMD_EXEC:
 	ldada	xbc, 35404
 	ldda16	wa, 35356
 	extz	xwa
-	.byte 0xa1, 0x80
+	add	xwa, (xbc)
 	ld	(xbc), xwa
 	stdi16	35400, 1
 	stdi8	35373, 1
@@ -1801,7 +1801,7 @@ FDC_STATUS_COPY:
 ;   bit 6 → status 0x2F (bad cylinder).
 ; Disables interrupts (D7 FA 05 = di 4) before return.
 FDC_INTERRUPT_HANDLER:
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	cpdi8	35364, 0
 	jr	nz, 64
 	lds	wa, 4
@@ -1824,7 +1824,7 @@ FDC_INTERRUPT_HANDLER:
 	jr	z, 6
 	ldw	wa, 47
 	calr	-1817
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	ret
 
 FDC_CommandEntry:

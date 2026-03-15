@@ -709,15 +709,15 @@ MIDI_CHANNEL_HANDLER_JUMP_TABLE:
 	nop
 	cp	(xwa-9), xix
 	nop
-	.byte 0x81, 0xf7
+	cp	l, (xbc)
 	swi	4
 	nop
 	cp	(xwa-9), xix
 	nop
-	.byte 0x82, 0xf7
+	cp	l, (xde)
 	swi	4
 	nop
-	.byte 0x82, 0xf7
+	cp	l, (xde)
 	swi	4
 	nop
 	cp	(xwa-9), xix

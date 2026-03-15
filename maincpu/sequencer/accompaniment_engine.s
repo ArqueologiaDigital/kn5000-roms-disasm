@@ -5660,7 +5660,7 @@ AccVoice_SetupByteData:
 	inc	1, e
 	jr	-38
 	ret
-	.byte 0xc3, 0xf5, 0xd1, 0x03, 0x21
+	ld	a, (xiy+977)
 	stda8	12933, a
 	stdi8	13268, 1
 	ldda8	a, 12963
@@ -8221,7 +8221,8 @@ AccAutoPlay_Configure_Done:
 	.byte 0xc1, 0x98, 0x34, 0x3c, 0xfe		; and (0x3498), 0xFE  [C1 prefix]
 AccAutoPlay_Configure_Return2:
 	ret
-	.byte 0x00, 0x00				; nop; nop  [alignment padding]
+	nop
+	nop
 
 
 AccAutoPlay_PeriodicCheck:
@@ -9131,7 +9132,8 @@ AccReplay_SavedExpr_Return:
 	jr	z, 4
 	call	16116017
 	ret
-	.byte 0x00, 0x00
+	nop
+	nop
 
 AccReplay_FullStop:
 	ldda8 a, 64607
@@ -11018,7 +11020,7 @@ AccVoice_ChannelCountTable:
 	ret
 	incf
 	ccf
-	.byte 0x0b, 0x0b, 0x0c
+	pushw 3083
 	decf
 	zcf
 	.byte 0x0b
@@ -11056,7 +11058,7 @@ AccVoice_CopyFromROM_DataBlock:
 	popw	hl
 	lds32	xix, 0
 	ldw	bc, 8
-	.byte 0x95, 0x11
+	ldirw
 	ld	xiy, 16106765
 	jr	c, 5
 	ld	xiy, 16106804
@@ -11116,7 +11118,8 @@ AccVoice_CopyFromROM_DataBlock:
 	halt
 	.byte 0x02
 	nop
-	.byte 0x0b, 0x02, 0x00, 0x0b, 0x05, 0x01
+	pushw 2
+	pushw 261
 	decf
 	.byte 0x02
 	nop
@@ -11985,7 +11988,9 @@ AccDemo_Init_DataBlock:
 	nop
 	nop
 	ld	xix, 608256
-	.byte 0xf3, 0xf1, 0xa0, 0x0b, 0x00, 0x00, 0xf3, 0xf1, 0xa1, 0x0b, 0x00, 0x01, 0xf3, 0xf1, 0xa2, 0x0b, 0x00, 0x02
+	ld	(xix+2976), 0
+	ld	(xix+2977), 1
+	ld	(xix+2978), 2
 	ld	(xix+2979), 3
 	.byte 0x0e
 
@@ -12200,7 +12205,7 @@ Demo_StyleRhythmData:
 	nop
 	nop
 	nop
-	.byte 0x87, 0x80
+	add	w, (xsp)
 	swi	7
 	swi	7
 	swi	7
@@ -13665,17 +13670,17 @@ Not_sure_maybe_SOFT_VERSION_related:
 	ldb	c, 0
 	cp	c, a
 	jr	z, 26
-	.byte 0xcb, 0x04
+	push c
 	pushw	wa
 	calr	350
 	cp	a, 131
 	jr	z, 7
 	popw	wa
-	.byte 0xcb, 0x05
+	pop c
 	inc	1, c
 	jr	-22
 	popw	wa
-	.byte 0xcb, 0x05
+	pop c
 	calr	3
 	ld	w, b
 	ret
@@ -13774,7 +13779,8 @@ AccPatch_SlotConfigByteData:
 	jr	z, 24
 	.byte 0xcd, 0x04, 0x14, 0xcb, 0x04
 	calr	121
-	.byte 0xcb, 0x05, 0xcb, 0x04
+	pop c
+	push c
 	calr	134
 	.byte 0xcb, 0x05, 0x15, 0xcd, 0x05
 	inc	1, c
@@ -13794,9 +13800,9 @@ AccPatch_SlotScanByteData:
 	ldb	c, 0
 	cp	c, 8
 	jr	z, 11
-	.byte 0xcb, 0x04
+	push c
 	calr	86
-	.byte 0xcb, 0x05
+	pop c
 	inc	1, c
 	jr	-16
 	ret
@@ -13832,7 +13838,7 @@ AccPatch_SlotScanByteData:
 	inc	1, c
 	jr	-17
 	ret
-	.byte 0xcb, 0x04
+	push c
 	lds32	xwa, 0
 	ldb	a, 160
 	ldda8	c, 13526
@@ -15648,11 +15654,11 @@ AccPatch_ComplexDataBlock:
 	jr	nz, 7
 	call	16120853
 	jrl	130
-	.byte 0x85, 0x3f, 0x4c
+	cp	(xiy), 76
 	jr	nz, 22
-	.byte 0x8d, 0x01, 0x3f, 0x4b
+	cp	(xiy+1), 75
 	jr	nz, 16
-	.byte 0x8d, 0x02, 0x3f, 0x45
+	cp	(xiy+2), 69
 	jr	nz, 10
 	call	16120853
 	call	16120854
@@ -19023,7 +19029,7 @@ ToneGen_VoiceSlotLookupTable:
 	nop
 	nop
 	nop
-	.byte 0x94, 0x95
+	adc	iy, (xix)
 	nop
 	.byte 0x96, 0x00
 	nop
@@ -23995,7 +24001,7 @@ DrumParam_Lookup:
 DrumParam_PointerTableAndData:
 	nop
 	nop
-	.byte 0x9b, 0x47, 0xf6
+	cp	iz, (xhl+71)
 	nop
 	muls	xbc, xhl
 	.byte 0xf6
@@ -25245,7 +25251,10 @@ DrumVoice_Handler7:
 	stda8	65471, a
 	calr	-2413
 	ret
-	.byte 0x80, 0x80, 0x80, 0x80, 0x84, 0x84, 0x84, 0x84
+	add	w, (xwa)
+	add	w, (xwa)
+	add	d, (xix)
+	add	d, (xix)
 	add	(xwa-120), w
 	.byte 0x88, 0x3e, 0x1d, 0xa5, 0x55, 0xf6
 	pop	xiz
@@ -25333,7 +25342,7 @@ DrumVoice_Handler7:
 	nop
 	.byte 0x90, 0x56, 0xf6
 	nop
-	.byte 0xaa, 0x56, 0xf6
+	cp	xiz, (xde+86)
 	nop
 	.byte 0xbe, 0x56, 0xf6
 	nop
@@ -25424,7 +25433,7 @@ DrumVoice_Handler7:
 	stdi8	13526, 0
 	calr	-3212
 	ret
-	.byte 0xc8, 0x04
+	push w
 	ldda8	l, 64602
 	and	l, 255
 	ldda8	h, 64603
@@ -25432,7 +25441,7 @@ DrumVoice_Handler7:
 	ldb	a, 72
 	stda8	37111, a
 	call	16556463
-	.byte 0xc8, 0x05
+	pop w
 	bit	7, w
 	jr	nz, 11
 	inc	1, l
@@ -25474,7 +25483,7 @@ DrumVoice_Handler7:
 	ld	a, (xix+976)
 	stda8	13552, a
 	ret
-	.byte 0xc8, 0x04
+	push w
 	ldda8	l, 64602
 	and	l, 255
 	ldda8	h, 64603
@@ -25487,7 +25496,7 @@ DrumVoice_Handler7:
 	call	16105613
 	stda8	13357, l
 	popw	hl
-	.byte 0xc8, 0x05
+	pop w
 	bit	7, w
 	jr	nz, 14
 	inc	1, a
@@ -26087,7 +26096,7 @@ Tempo_TimeSigCodeBlock:
 	lds	bc, 4
 	calr	360
 	ldda8	a, 14736
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, 14
 	ld	c, a
 	cps	a, 4
@@ -26141,7 +26150,7 @@ Tempo_EditBPMApply:
 	ldw	bc, 18
 	calr	240
 	ldda16	wa, 14730
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, 32
 	ld	bc, wa
 	cp	wa, 999
@@ -26181,7 +26190,7 @@ Tempo_EditBPMApply:
 	ldw	bc, 19
 	calr	123
 	ldda16	wa, 14732
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, 37
 	ld	bc, wa
 	cp	wa, 999
@@ -26236,7 +26245,7 @@ Tempo_DisplayParamSkipClear:
 	jp SoundCtrl_SendCommand
 Tempo_DisplayParamFormat:
 	.long LABEL_E3DEF1
-	.byte 0x80, 0xf1
+	cp	a, (xwa)
 	or	hl, ix
 	.byte 0x41, 0x0e, 0x0e
 
@@ -28433,9 +28442,9 @@ AccVoice_SetupSlots_DataBlock:
 	inc	1, c
 	cpda8	c, 14545
 	jr	le, 19
-	.byte 0xcb, 0x04
+	push c
 	calr	18
-	.byte 0xcb, 0x05
+	pop c
 	ldda8	a, 14545
 	inc	1, a
 	stda8	14545, a
@@ -28454,12 +28463,12 @@ AccVoice_SetupSlots_DataBlock:
 	ldda8	c, 13529
 	cpdm8	14544, c
 	jr	ge, 19
-	.byte 0xcb, 0x04
+	push c
 	calr	41
 	ldda8	a, 14544
 	inc	1, a
 	stda8	14544, a
-	.byte 0xcb, 0x05
+	pop c
 	jr	-25
 	ret
 	calr	-1812
@@ -32290,7 +32299,7 @@ AccScreen_DataBlock:
 	nop
 	.byte 0xc1, 0xa6, 0xf6, 0x00
 	andda8_24	c, 63142
-	.byte 0xa6, 0xf6
+	cp	xiz, (xiz)
 	nop
 	.byte 0xd5, 0xa6, 0xf6
 	nop
@@ -32991,7 +33000,7 @@ AccScreen_UIDataBlock:
 	.byte 0x01
 	nop
 	ldw	bc, 1046
-	.byte 0x0b, 0x00, 0x00
+	pushw 0
 	nop
 	nop
 	ret
@@ -33025,7 +33034,7 @@ AccScreen_UIDataBlock:
 	popw	wa
 	.byte 0x52, 0x53, 0x56
 	ld	xbc, 71652684
-	.byte 0x0b, 0x00, 0x00
+	pushw 0
 	nop
 	nop
 	ret
@@ -33147,14 +33156,17 @@ AccScreen_UIDataBlock:
 	ldw	de, 13363
 	ldw	iy, 14134
 	push	xwa
-	.byte 0x91, 0x91, 0x91, 0x91
+	adc	bc, (xbc)
+	adc	bc, (xbc)
 	pushw	de
-	.byte 0x91, 0x91, 0x91, 0x91
+	adc	bc, (xbc)
+	adc	bc, (xbc)
 	pushw	de
-	.byte 0x91, 0x91
+	adc	bc, (xbc)
 	pushw	de
 	pushw	de
-	.byte 0x91, 0x91, 0x91, 0x91
+	adc	bc, (xbc)
+	adc	bc, (xbc)
 	pushw	de
 	.byte 0x91, 0x2a, 0x91, 0x2a, 0x91, 0x91
 	pushw	de
@@ -33162,10 +33174,11 @@ AccScreen_UIDataBlock:
 	.byte 0x91, 0x2a
 	pushw	de
 	pushw	de
-	.byte 0x91, 0x91, 0x91, 0x91
+	adc	bc, (xbc)
+	adc	bc, (xbc)
 	pushw	de
 	pushw	de
-	.byte 0x91, 0x91
+	adc	bc, (xbc)
 	pushw	de
 	.byte 0x91, 0x2a, 0x91, 0x2a
 	pushw	de
@@ -33729,24 +33742,24 @@ AccPatch_VoiceAssignDataBlock:
 	ldw	bc, 42
 	add	xiy, 12
 	add	xix, 12
-	.byte 0x95, 0x11
+	ldirw
 	djnz8	e, -22
 	ret
-	.byte 0xed, 0xf4
+	cp	xix, xiy
 	jr	ugt, 15
 	xor	xbc, xbc
 	ldw	bc, 128
-	.byte 0x95, 0x11
+	ldirw
 	dec	1, e
 	cps	e, 0
 	jr	ugt, -13
 	jr	38
-	.byte 0xcc, 0x04
+	push d
 	ldb	d, 0
 	lds32	xbc, 0
 	ldw	bc, 256
 	mul	xbc, xde
-	.byte 0xcc, 0x05
+	pop d
 	add	xix, xbc
 	add	xiy, xbc
 	push	xix
@@ -36993,7 +37006,7 @@ AccStyle_TableDataEntry:
 	ld	xiy, 14991752
 	lda	xix, (xsp+4)
 	ldw	bc, 15
-	.byte 0x95, 0x11
+	ldirw
 	lda_24	xde, 608256
 	lda_24	xbc, 700416
 	sub	xbc, xde
@@ -37036,15 +37049,15 @@ AccStyle_TableDataEntry:
 	ldda32	xwa, 31460
 	ld	(xwa+2), 75
 	ldda32	xbc, 31464
-	.byte 0x8f, 0x24, 0x3f, 0x1d
+	cp	(xsp+36), 29
 	jrl	ule, 264
-	.byte 0x8f, 0x22, 0x3f, 0x1d
+	cp	(xsp+34), 29
 	jrl	ule, 257
 	ldda32	xwa, 31460
 	ld	e, (xwa+14)
 	cps	e, 0
 	jr	nz, 6
-	.byte 0x88, 0x0f, 0x3f, 0x00
+	cp	(xwa+15), 0
 	jr	z, 13
 	ld	(xbc+14), e
 	ldda32	xwa, 31460
@@ -37115,7 +37128,7 @@ AccStyle_TableDataEntry:
 	jrl	z, 357
 	ldda32	xwa, 31464
 	stda32	14766, xwa
-	.byte 0x8f, 0x22, 0x3f, 0x1e
+	cp	(xsp+34), 30
 	jrl	nc, 293
 	ld	c, (xsp+34)
 	extz	bc
@@ -37123,13 +37136,13 @@ AccStyle_TableDataEntry:
 	.byte 0xc3, 0x07, 0xe0, 0xe4, 0x19, 0xac, 0x39
 	call	16117240
 	jrl	320
-	.byte 0x8f, 0x24, 0x3f, 0x1d
+	cp	(xsp+36), 29
 	jr	ule, 6
-	.byte 0x8f, 0x22, 0x3f, 0x1e
+	cp	(xsp+34), 30
 	jr	c, 12
-	.byte 0x8f, 0x24, 0x3f, 0x1e
+	cp	(xsp+36), 30
 	jr	nc, 14
-	.byte 0x8f, 0x22, 0x3f, 0x1d
+	cp	(xsp+34), 29
 	jr	ule, 8
 	stdi8	14672, 130
 	jrl	304
@@ -37225,7 +37238,7 @@ AccStyle_TableDataEntry:
 	lda	xsp, (xsp+34)
 	ret
 	dec	4, xsp
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ld	(xsp+2), c
 	ld	(xsp+4), a
 	ldda32	xwa, 31464
@@ -37274,7 +37287,7 @@ AccStyle_TableDataEntry:
 	jr	9
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x0a
 	jr	c, -81
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	inc	4, xsp
 	ret
 

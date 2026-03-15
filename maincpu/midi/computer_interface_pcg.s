@@ -323,7 +323,7 @@ PcgOutGridCheckJumpTable:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+22)
 	lda_24	xbc, 149354
 	ld	(xwa), xbc
@@ -337,7 +337,7 @@ PcgOutGridCheckJumpTable:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+22)
 	lda_24	xbc, 149356
 	ld	(xwa), xbc
@@ -353,7 +353,7 @@ PcgOutGridCheckJumpTable:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+22)
 	lda_24	xbc, 149358
 	ld	(xwa), xbc
@@ -368,7 +368,7 @@ PcgOutGridCheckJumpTable:
 	.long UserMemory_FormatStrings
 	lda	xix, (xsp+22)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+22)
 	lda_24	xbc, 149360
 	ld	(xwa), xbc
@@ -408,7 +408,7 @@ PcgOutGridCheckJumpTable:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+22)
 	lda_24	xbc, 149354
 	ld	(xwa), xbc
@@ -426,7 +426,7 @@ PcgOutGridCheckJumpTable:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+22)
 	lda_24	xbc, 149356
 	ld	(xwa), xbc
@@ -446,7 +446,7 @@ PcgOutGridCheckJumpTable:
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (xsp+22)
 	lda_24	xbc, 149358
 	ld	(xwa), xbc

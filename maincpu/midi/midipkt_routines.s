@@ -145,7 +145,7 @@ MidiPkt_BuildControl:
 	lda	xix, (xsp+6)
 	.byte 0x85, 0x10, 0x95, 0x10
 	ld	xwa, (xsp+16)
-	.byte 0x88, 0x0e, 0x3f, 0x01
+	cp	(xwa+14), 1
 	jrl	nc, 181
 	ld	xwa, (xsp+16)
 	calr	2344
@@ -180,7 +180,7 @@ MidiPkt_BuildControl:
 	ld	xwa, 15611356
 	lds	bc, 6
 	call	16607843
-	.byte 0x0b, 0x06, 0x00
+	pushw 6
 	lda	xwa, (xsp+12)
 	push	xwa
 	ld	xwa, (xsp+22)
@@ -214,7 +214,7 @@ MidiPkt_BuildControl:
 	push	xiz
 	ld	(xsp+18), xwa
 	ld	xwa, (xsp+18)
-	.byte 0x88, 0x0e, 0x3f, 0xff
+	cp	(xwa+14), 255
 	jr	z, 108
 	ldda32	xwa, 48300
 	ldw	bc, 10
@@ -237,7 +237,7 @@ MidiPkt_BuildControl:
 	call	16609965
 	lda	xbc, (xsp+14)
 	lda	xwa, (xbc+2)
-	.byte 0x86, 0xf7
+	cp	l, (xiz)
 	jr	ugt, 5
 	ld	(xwa), 0
 	jr	3
@@ -673,7 +673,7 @@ MidiPkt_EnqueueExtended_Data:
 	cp	hl, 65535
 	jr	z, 102
 	lda_24	xwa, 15616488
-	.byte 0xae, 0x04, 0xf0
+	cp	xwa, (xiz+4)
 	jr	z, 92
 	ld	xwa, (xiz)
 	.byte 0x98, 0x04, 0x3f, 0x00, 0x00
@@ -687,7 +687,7 @@ MidiPkt_EnqueueExtended_Data:
 	ld	xwa, (xiz)
 	ld	xbc, xwa
 	ld	bc, (xbc+4)
-	.byte 0x98, 0x02, 0xc1
+	and	bc, (xwa+2)
 	ld	xwa, (xiz+4)
 	ld	a, (xwa+11)
 	and	a, 15
@@ -1066,12 +1066,12 @@ MidiPkt_EnqueueExtended2_Data:
 	jr	z, 121
 	ld	xbc, (xiz)
 	ld	a, (xwa+8)
-	.byte 0x89, 0x03, 0xc1
+	and	a, (xbc+3)
 	jr	z, 111
 	ld	xwa, 15611356
 	lds	bc, 6
 	call	16607843
-	.byte 0x0b, 0x06, 0x00
+	pushw 6
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	xwa, (xiz+4)
@@ -1088,7 +1088,7 @@ MidiPkt_EnqueueExtended2_Data:
 	ld	xbc, (xiz)
 	ld	xde, (xiz+4)
 	ld	a, (xde+8)
-	.byte 0x89, 0x02, 0xc1
+	and	a, (xbc+2)
 	ld	c, a
 	ld	a, (xde+11)
 	and	a, 15
@@ -1255,7 +1255,7 @@ MidiPkt_SysExValidator_Data:
 	set	2, e
 	ld	(xbc), e
 	extz	de
-	.byte 0x0b, 0x04, 0x00
+	pushw 4
 	ldw	wa, 145
 	lds	bc, 3
 	call	16626163
@@ -1284,7 +1284,7 @@ MidiPkt_SysExProcessor_Data:
 	res	2, e
 	ld	(xbc), e
 	extz	de
-	.byte 0x0b, 0x04, 0x00
+	pushw 4
 	ldw	wa, 145
 	lds	bc, 3
 	call	16626163
@@ -1348,7 +1348,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	pop	xde
 	ret
 	lda	xsp, (xsp-12)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ldda32	xwa, 48300
 	ldw	bc, 9
 	call	16604854
@@ -1369,69 +1369,75 @@ MidiPkt_SysExBulkTransfer_Data:
 	extz	wa
 	cps	l, 0
 	jr	z, 97
-	.byte 0x0b, 0x00, 0x00
+	pushw 0
 	lds	bc, 0
 	lds	de, 0
 	call	16569115
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0x0b, 0x00, 0x00
+	pushw 0
 	ldw	bc, 32
 	ldw	de, 120
 	call	16569115
 	ld	xiy, 15610764
 	lda	xix, (xsp+10)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+10)
 	.byte 0xc7, 0xfb, 0x8b
 	ld	(xwa), c
 	calr	-215
 	ld	xiy, 15610768
 	lda	xix, (xsp+6)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+6)
 	.byte 0xc7, 0xfb, 0x8b
 	ld	(xwa), c
 	calr	-238
 	ld	xiy, 15610772
 	lda	xix, (xsp+2)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+2)
 	.byte 0xc7, 0xfb, 0x8b
 	ld	(xwa), c
 	jr	94
-	.byte 0x0b, 0x00, 0x00
+	pushw 0
 	lds	bc, 0
 	lds	de, 0
 	call	16569115
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0x0b, 0x00, 0x00
+	pushw 0
 	ldw	bc, 32
 	lds	de, 0
 	call	16569115
 	ld	xiy, 15610776
 	lda	xix, (xsp+10)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+10)
 	.byte 0xc7, 0xfb, 0x8b
 	ld	(xwa), c
 	calr	-311
 	ld	xiy, 15610780
 	lda	xix, (xsp+6)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+6)
 	.byte 0xc7, 0xfb, 0x8b
 	ld	(xwa), c
 	calr	-334
 	ld	xiy, 15610784
 	lda	xix, (xsp+2)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+2)
 	.byte 0xc7, 0xfb, 0x8b
 	ld	(xwa), c
 	calr	-318
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+12)
 	ret
 	jrl	-568
@@ -1452,7 +1458,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	jr	lt, 72
 	ld	xwa, 19204
 	call	16631801
-	.byte 0xd7, 0xfa, 0x9b
+	ld	qiz, hl
 	cp	qiz, 0
 	jr	lt, 55
 	lds	iz, 0

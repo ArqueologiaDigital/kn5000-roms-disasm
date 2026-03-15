@@ -2057,7 +2057,11 @@ TempoScale_8Beats:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x87, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x84
+	add	a, (xsp)
+	add	a, (xbc)
+	add	a, (xbc)
+	add	a, (xbc)
+	add	d, (xbc)
 TempoScale_7Beats:
 	cp	(xwa), l
 	swi	7
@@ -2069,7 +2073,10 @@ TempoScale_6Beats:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x87, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x84
+	add	a, (xsp)
+	add	a, (xbc)
+	add	a, (xbc)
+	add	d, (xbc)
 TempoScale_5Beats:
 	cp	(xwa), l
 	swi	7
@@ -2081,7 +2088,9 @@ TempoScale_4Beats:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x87, 0x81, 0x81, 0x81, 0x81, 0x84
+	add	a, (xsp)
+	add	a, (xbc)
+	add	d, (xbc)
 TempoScale_3Beats:
 	cp	(xwa), l
 	swi	7
@@ -2094,7 +2103,8 @@ TempoScale_2Beats:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x87, 0x81, 0x81, 0x84
+	add	a, (xsp)
+	add	d, (xbc)
 TempoScale_1Beat:
 	cp	(xwa), l
 	swi	7

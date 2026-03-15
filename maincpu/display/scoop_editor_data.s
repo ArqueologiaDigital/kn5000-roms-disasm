@@ -141,7 +141,7 @@ Scoop_SoundEditorData:
 	lda	xbc, (xhl+7)
 	lda	xde, (xhl+8)
 	lda	xhl, (xhl+9)
-	.byte 0x8f, 0x0e, 0x3f, 0x00
+	cp	(xsp+14), 0
 	jr	nz, 16
 	ld	(xwa), 127
 	ld	(xbc), 0
@@ -171,7 +171,7 @@ Scoop_SoundEditorData:
 	push	xwa
 	ldw	wa, 43
 	call	15757111
-	.byte 0x8f, 0x0e, 0x3f, 0x00
+	cp	(xsp+14), 0
 	jr	nz, 18
 	cps	l, 1
 	jr	nz, 14
@@ -185,13 +185,13 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-18)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
 	call	15766955
 	lda	xwa, (xsp+16)
 	call	15755834
-	.byte 0x8f, 0x0e, 0x3f, 0x00
+	cp	(xsp+14), 0
 	jr	nz, 10
 	ld	a, (xsp+16)
 	inc	4, a
@@ -212,7 +212,7 @@ Scoop_SoundEditorData:
 	lda	xbc, (xhl+7)
 	lda	xde, (xhl+8)
 	lda	xhl, (xhl+9)
-	.byte 0x8f, 0x0e, 0x3f, 0x00
+	cp	(xsp+14), 0
 	jr	nz, 16
 	ld	(xwa), 255
 	ld	(xbc), 0
@@ -244,15 +244,15 @@ Scoop_SoundEditorData:
 	call	15757111
 	lds	wa, 4
 	call	15758489
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+18)
 	ret
 	lda	xsp, (xsp-18)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
 	call	15766955
-	.byte 0x8f, 0x0e, 0x3f, 0x01
+	cp	(xsp+14), 1
 	jr	z, 85
 	lda	xwa, (xsp+16)
 	call	15755834
@@ -275,14 +275,14 @@ Scoop_SoundEditorData:
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
-	.byte 0x0b, 0x19, 0x00
+	pushw 25
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 43
 	call	15757111
 	lds	wa, 5
 	call	15758489
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+18)
 	ret
 	cps	a, 0
@@ -301,9 +301,9 @@ Scoop_SoundEditorData:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	15766955
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, 16
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, 22
 	ldw	wa, 47
 	lds	bc, 0
@@ -319,9 +319,9 @@ Scoop_SoundEditorData:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	15766955
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, 17
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	z, 11
 	ldw	wa, 43
 	lds	bc, 3
@@ -333,9 +333,9 @@ Scoop_SoundEditorData:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	15766955
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, 17
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	z, 11
 	ldw	wa, 43
 	lds	bc, 4
@@ -347,9 +347,9 @@ Scoop_SoundEditorData:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	15766955
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, 15
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, 9
 	ldw	wa, 44
 	lds	bc, 0
@@ -362,9 +362,9 @@ Scoop_SoundEditorData:
 	call	15755567
 	lda	xwa, (xsp)
 	call	15766955
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, 21
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, 7
 	ldw	wa, 32
 	lds	bc, 0

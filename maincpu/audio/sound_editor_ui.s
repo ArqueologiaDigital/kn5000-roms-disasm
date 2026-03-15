@@ -596,19 +596,19 @@ UpdSeSel_DetailedUpdate_End:
 
 UpdSeSel_ExtendedOps_Data:
 	lda	xsp, (xsp-38)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda	xwa, (xsp+38)
 	call	15757703
 	lds	wa, 0
 	lds	bc, 1
 	call	15756078
-	.byte 0x8f, 0x26, 0x3f, 0x00
+	cp	(xsp+38), 0
 	jr	nz, 11
 	ldw	wa, 33
 	call	15755140
 	lds	wa, 1
 	jr	110
-	.byte 0x8f, 0x26, 0x3f, 0x01
+	cp	(xsp+38), 1
 	jr	nz, 63
 	lda	xwa, (xsp+2)
 	call	15757820
@@ -623,7 +623,7 @@ UpdSeSel_ExtendedOps_Data:
 	call	15756078
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x08
 	jr	ule, -35
-	.byte 0x0b, 0x21, 0x00
+	pushw 33
 	lds	wa, 0
 	ldw	bc, 41
 	lds	de, 1
@@ -631,14 +631,14 @@ UpdSeSel_ExtendedOps_Data:
 	lds	wa, 2
 	jr	41
 	lda	xwa, (xsp+2)
-	.byte 0x8f, 0x26, 0x3f, 0x02
+	cp	(xsp+38), 2
 	jr	nz, 38
 	call	15757766
 	ld	c, (xsp+2)
 	extz	bc
 	ldw	wa, 9
 	call	15756078
-	.byte 0x0b, 0x21, 0x00
+	pushw 33
 	lds	wa, 0
 	ldw	bc, 93
 	lds	de, 1
@@ -662,20 +662,20 @@ UpdSeSel_ExtendedOps_Data:
 	extz	bc
 	lds	wa, 2
 	call	15756078
-	.byte 0x0b, 0x21, 0x00
+	pushw 33
 	call	15789674
 	inc	2, xsp
 	lds	wa, 0
 	call	15757708
 	call	15757713
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+38)
 	ret
 	lda	xsp, (xsp-10)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda	xwa, (xsp+10)
 	call	15757703
-	.byte 0x8f, 0x0a, 0x3f, 0x00
+	cp	(xsp+10), 0
 	jr	nz, 114
 	.byte 0xc7, 0xfa, 0xa9, 0xc7, 0xfb, 0xa8, 0xc7, 0xfa, 0x89
 	extz	wa
@@ -687,17 +687,17 @@ UpdSeSel_ExtendedOps_Data:
 	jr	c, -27
 	.byte 0xc7, 0xfa, 0x61, 0xc7, 0xfa, 0xdc
 	jr	ule, -38
-	.byte 0x0b, 0x27, 0x00
+	pushw 39
 	lds	wa, 0
 	ldw	bc, 19
 	lds	de, 1
 	call	15753785
-	.byte 0x0b, 0x27, 0x00
+	pushw 39
 	lds	wa, 0
 	ldw	bc, 41
 	lds	de, 1
 	call	15753785
-	.byte 0x0b, 0x27, 0x00
+	pushw 39
 	lds	wa, 0
 	ldw	bc, 42
 	lds	de, 1
@@ -748,7 +748,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldw	wa, 13
 	lds	bc, 1
 	call	15756078
-	.byte 0x0b, 0x27, 0x00
+	pushw 39
 	call	15789674
 	inc	2, xsp
 	lds	wa, 1
@@ -756,14 +756,14 @@ UpdSeSel_ExtendedOps_Data:
 	lds	wa, 0
 	call	15757708
 	call	15757713
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+10)
 	ret
 	lda	xsp, (xsp-10)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda	xwa, (xsp+10)
 	call	15757703
-	.byte 0x8f, 0x0a, 0x3f, 0x00
+	cp	(xsp+10), 0
 	jr	nz, 58
 	lda	xwa, (xsp+2)
 	call	15755834
@@ -795,7 +795,7 @@ UpdSeSel_ExtendedOps_Data:
 	call	15757719
 	cp	l, 10
 	jr	ule, 29
-	.byte 0x0b, 0x28, 0x00
+	pushw 40
 	call	15789674
 	inc	2, xsp
 	call	15762463
@@ -804,14 +804,14 @@ UpdSeSel_ExtendedOps_Data:
 	lds	wa, 0
 	call	15757708
 	call	15757713
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+10)
 	ret
 	lda	xsp, (xsp-10)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda	xwa, (xsp+10)
 	call	15757703
-	.byte 0x8f, 0x0a, 0x3f, 0x00
+	cp	(xsp+10), 0
 	jr	nz, 45
 	lda	xwa, (xsp+2)
 	call	15755834
@@ -849,7 +849,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldw	wa, 9
 	lds	bc, 0
 	call	15756078
-	.byte 0x0b, 0x29, 0x00
+	pushw 41
 	call	15789674
 	inc	2, xsp
 	lds	wa, 2
@@ -860,20 +860,20 @@ UpdSeSel_ExtendedOps_Data:
 	lds	wa, 0
 	call	15757708
 	call	15757713
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+10)
 	ret
 	ldw	wa, 42
 	jr	0
 	lda	xsp, (xsp-14)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ld	(xsp+14), a
-	.byte 0x8f, 0x0e, 0x3f, 0x2a
+	cp	(xsp+14), 42
 	jrl	nz, 147
 	.byte 0xc7, 0xfb, 0xa9
 	lda	xwa, (xsp+12)
 	call	15757703
-	.byte 0x8f, 0x0c, 0x3f, 0x00
+	cp	(xsp+12), 0
 	jrl	nz, 154
 	.byte 0xc7, 0xfb, 0x89
 	extz	wa
@@ -920,7 +920,7 @@ UpdSeSel_ExtendedOps_Data:
 	lds	wa, 0
 	call	15756078
 	jr	89
-	.byte 0x8f, 0x0e, 0x3f, 0x2f
+	cp	(xsp+14), 47
 	jr	nz, 6
 	.byte 0xc7, 0xfb, 0xa8
 	jrl	-156
@@ -1368,19 +1368,19 @@ SeMenu_AltUpdate_End:
 
 SeMenu_AltUpdate_Data:
 	lda	xsp, (xsp-10)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda	xwa, (xsp+10)
 	call	15757703
-	.byte 0x8f, 0x0a, 0x3f, 0x00
+	cp	(xsp+10), 0
 	jr	nz, 112
-	.byte 0x0b, 0x23, 0x00
+	pushw 35
 	lds	wa, 0
 	ldw	bc, 18
 	lds	de, 1
 	call	15753785
 	.byte 0xc7, 0xfb, 0xa9, 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0x0b, 0x23, 0x00
+	pushw 35
 	lds	bc, 0
 	lds	de, 1
 	call	15753785
@@ -1388,13 +1388,13 @@ SeMenu_AltUpdate_Data:
 	jr	ule, -24
 	.byte 0xc7, 0xfb, 0xa9, 0xc7, 0xfb, 0x89
 	extz	wa
-	.byte 0x0b, 0x23, 0x00
+	pushw 35
 	lds	bc, 1
 	lds	de, 1
 	call	15753785
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xdc
 	jr	ule, -24
-	.byte 0x0b, 0x23, 0x00
+	pushw 35
 	lds	wa, 0
 	ldw	bc, 92
 	lds	de, 1
@@ -1426,7 +1426,7 @@ SeMenu_AltUpdate_Data:
 	call	15758731
 	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xdc
 	jr	ule, -17
-	.byte 0x0b, 0x23, 0x00
+	pushw 35
 	call	15789674
 	inc	2, xsp
 	lds	wa, 1
@@ -1434,14 +1434,14 @@ SeMenu_AltUpdate_Data:
 	lds	wa, 0
 	call	15757708
 	call	15757713
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+10)
 	ret
 	lda	xsp, (xsp-10)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda	xwa, (xsp+10)
 	call	15757703
-	.byte 0x8f, 0x0a, 0x3f, 0x00
+	cp	(xsp+10), 0
 	jr	nz, 101
 	lda	xwa, (xsp+2)
 	call	15755834
@@ -1484,7 +1484,7 @@ SeMenu_AltUpdate_Data:
 	call	15757719
 	cp	l, 20
 	jr	ule, 59
-	.byte 0x0b, 0x24, 0x00
+	pushw 36
 	call	15789674
 	inc	2, xsp
 	.byte 0xc7, 0xfa, 0xa9, 0xc7, 0xfa, 0x8b
@@ -1502,14 +1502,14 @@ SeMenu_AltUpdate_Data:
 	lds	wa, 0
 	call	15757708
 	call	15757713
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+10)
 	ret
 	lda	xsp, (xsp-10)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda	xwa, (xsp+10)
 	call	15757703
-	.byte 0x8f, 0x0a, 0x3f, 0x00
+	cp	(xsp+10), 0
 	jr	nz, 101
 	lda	xwa, (xsp+2)
 	call	15755834
@@ -1552,7 +1552,7 @@ SeMenu_AltUpdate_Data:
 	call	15757719
 	cp	l, 20
 	jr	ule, 59
-	.byte 0x0b, 0x25, 0x00
+	pushw 37
 	call	15789674
 	inc	2, xsp
 	.byte 0xc7, 0xfa, 0xa9, 0xc7, 0xfa, 0x8b
@@ -1570,7 +1570,7 @@ SeMenu_AltUpdate_Data:
 	lds	wa, 0
 	call	15757708
 	call	15757713
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+10)
 	ret
 
@@ -1784,10 +1784,10 @@ SeMenu_CopyWriteUpdate_End:
 
 SeMenu_CopyWriteUpdate_Data:
 	lda	xsp, (xsp-24)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda	xwa, (xsp+2)
 	call	15767391
-	.byte 0x8f, 0x02, 0x3f, 0x01
+	cp	(xsp+2), 1
 	jr	nz, 15
 	lds	wa, 2
 	call	15753634
@@ -1796,9 +1796,9 @@ SeMenu_CopyWriteUpdate_Data:
 	jrl	209
 	lda	xwa, (xsp+24)
 	call	15757703
-	.byte 0x8f, 0x18, 0x3f, 0x00
+	cp	(xsp+24), 0
 	jr	nz, 23
-	.byte 0x0b, 0x3e, 0x00
+	pushw 62
 	lds	wa, 0
 	lds	bc, 0
 	ldw	de, 16
@@ -1845,7 +1845,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lds	wa, 1
 	call	15756078
-	.byte 0x0b, 0x3e, 0x00
+	pushw 62
 	call	15789674
 	inc	2, xsp
 	lds	wa, 1
@@ -1864,14 +1864,14 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	bc, 0
 	call	15756078
 	call	15757713
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+24)
 	ret
 	dec	2, xsp
 	lda	xwa, (xsp)
 	call	15766955
 	ldb	a, 13
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, 2
 	ldb	a, 16
 	extz	wa
@@ -1879,10 +1879,10 @@ SeMenu_CopyWriteUpdate_Data:
 	inc	2, xsp
 	ret
 	lda	xsp, (xsp-10)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	lda	xwa, (xsp+10)
 	call	15757703
-	.byte 0x8f, 0x0a, 0x3f, 0x00
+	cp	(xsp+10), 0
 	jr	nz, 42
 	lds	wa, 1
 	call	15767821
@@ -1921,7 +1921,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lds	wa, 0
 	call	15756078
-	.byte 0x0b, 0x3a, 0x00
+	pushw 58
 	call	15789674
 	inc	2, xsp
 	lds	wa, 0
@@ -1929,15 +1929,15 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15757713
 	lds	wa, 0
 	call	15767821
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+10)
 	ret
 	lda	xsp, (xsp-20)
 	lda	xwa, (xsp+18)
 	call	15757703
-	.byte 0x8f, 0x12, 0x3f, 0x00
+	cp	(xsp+18), 0
 	jr	nz, 18
-	.byte 0x0b, 0x3d, 0x00
+	pushw 61
 	lds	wa, 0
 	lds	bc, 0
 	ldw	de, 13
@@ -1949,7 +1949,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xbc, (xsp)
 	ld	xwa, xbc
 	lda	xde, (xbc+13)
-	.byte 0x80, 0x3f, 0x7f
+	cp	(xwa), 127
 	jr	ule, 3
 	ld	(xwa), 32
 	inc	1, xwa
@@ -1958,7 +1958,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	wa, 1
 	ldw	de, 13
 	call	15757843
-	.byte 0x0b, 0x3d, 0x00
+	pushw 61
 	call	15789674
 	inc	2, xsp
 	lds	wa, 0
@@ -2148,7 +2148,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	15766955
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, 11
 	ld	c, (xsp+2)
 	extz	bc
@@ -2160,7 +2160,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	15766955
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, 11
 	ld	c, (xsp+2)
 	extz	bc
@@ -2173,13 +2173,13 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xbc, (xsp)
 	lds	wa, 0
 	call	15756091
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, 9
-	.byte 0x87, 0x3f, 0x02
+	cp	(xsp), 2
 	jr	z, 24
 	lds	wa, 2
 	jr	7
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, 15
 	lds	wa, 1
 	call	15756908
@@ -2193,13 +2193,13 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xbc, (xsp)
 	lds	wa, 0
 	call	15756091
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, 9
-	.byte 0x87, 0x3f, 0x06
+	cp	(xsp), 6
 	jr	z, 24
 	lds	wa, 6
 	jr	7
-	.byte 0x87, 0x3f, 0x05
+	cp	(xsp), 5
 	jr	z, 15
 	lds	wa, 5
 	call	15756908
@@ -2212,9 +2212,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	15766955
-	.byte 0x87, 0x3f, 0x01
+	cp	(xsp), 1
 	jr	z, 15
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, 9
 	ldw	wa, 60
 	lds	bc, 0
@@ -2225,9 +2225,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
 	call	15766955
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, 21
-	.byte 0x87, 0x3f, 0x00
+	cp	(xsp), 0
 	jr	nz, 7
 	ldw	wa, 32
 	lds	bc, 0
@@ -2251,7 +2251,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	15758524
-	.byte 0x0b, 0x10, 0x00
+	pushw 16
 	lda	xwa, (xsp+2)
 	push	xwa
 	ldw	wa, 60
@@ -2276,7 +2276,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	15758524
-	.byte 0x0b, 0x10, 0x00
+	pushw 16
 	lda	xwa, (xsp+2)
 	push	xwa
 	ldw	wa, 60
@@ -2305,11 +2305,11 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	iz, wa
 	lda	xwa, (xsp+6)
 	call	15767401
-	.byte 0x8f, 0x06, 0x3f, 0x00
+	cp	(xsp+6), 0
 	jr	nz, 13
 	lda	xwa, (xsp+2)
 	call	15767826
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	nz, 80
 	lda	xde, (xsp+10)
 	lda	xwa, (xsp+8)
@@ -2325,7 +2325,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+4)
 	call	15767836
 	ld	a, (xsp+10)
-	.byte 0x8f, 0x04, 0xf1
+	cp	a, (xsp+4)
 	jr	nz, 35
 	ld	a, (xsp+10)
 	extz	wa
@@ -2344,15 +2344,15 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xsp, (xsp+12)
 	ret
 	dec	6, xsp
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ld	(xsp+6), a
 	lda	xwa, (xsp+2)
 	call	15766955
-	.byte 0x8f, 0x02, 0x3f, 0x00
+	cp	(xsp+2), 0
 	jr	z, 81
 	lda	xwa, (xsp+2)
 	call	15767401
-	.byte 0x8f, 0x02, 0x3f, 0x01
+	cp	(xsp+2), 1
 	jr	z, 68
 	ld	a, (xsp+6)
 	res	7, a
@@ -2375,21 +2375,22 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nz, 18
 	lds	bc, 1
 	call	15755941
-	.byte 0x0b, 0x02, 0x00, 0x0b, 0x20, 0x00
+	pushw 2
+	pushw 32
 	call	15789915
 	inc	4, xsp
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	inc	6, xsp
 	ret
 	lda	xsp, (xsp-12)
 	ld	(xsp+10), a
 	lda	xwa, (xsp+6)
 	call	15766955
-	.byte 0x8f, 0x06, 0x3f, 0x00
+	cp	(xsp+6), 0
 	jr	z, 117
 	lda	xwa, (xsp+6)
 	call	15767401
-	.byte 0x8f, 0x06, 0x3f, 0x01
+	cp	(xsp+6), 1
 	jr	z, 104
 	lda	xbc, (xsp)
 	lds	wa, 0
@@ -2411,7 +2412,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nc, 56
 	incm8	1, (xsp+4)
 	jr	9
-	.byte 0x8f, 0x04, 0x3f, 0x00
+	cp	(xsp+4), 0
 	jr	z, 45
 	decm8	1, (xsp+4)
 	ld	c, (xsp+4)
@@ -2435,11 +2436,11 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+8), a
 	lda	xwa, (xsp+6)
 	call	15766955
-	.byte 0x8f, 0x06, 0x3f, 0x00
+	cp	(xsp+6), 0
 	jr	z, 104
 	lda	xwa, (xsp+6)
 	call	15767401
-	.byte 0x8f, 0x06, 0x3f, 0x01
+	cp	(xsp+6), 1
 	jr	z, 91
 	lda	xbc, (xsp+4)
 	lds	wa, 0
@@ -2476,15 +2477,15 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xsp, (xsp+10)
 	ret
 	lda	xsp, (xsp-18)
-	.byte 0xd7, 0xfa, 0x04
+	push qiz
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
 	call	15766955
-	.byte 0x8f, 0x0e, 0x3f, 0x00
+	cp	(xsp+14), 0
 	jrl	z, 133
 	lda	xwa, (xsp+14)
 	call	15767401
-	.byte 0x8f, 0x0e, 0x3f, 0x01
+	cp	(xsp+14), 1
 	jr	z, 120
 	lda	xbc, (xsp+16)
 	lds	wa, 0
@@ -4385,7 +4386,8 @@ SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
 	call	15789197
 	pop	xiy
 	.ascii "\\[ZYX^"
-	.byte 0x0e, 0x3e
+	ret
+	push xiz
 	ld	xiz, xsp
 	.ascii "89:;<="
 	.byte 0x9e, 0x08, 0x20, 0xf1, 0xcc, 0x06, 0x50, 0x9e
@@ -4593,7 +4595,8 @@ SeMenu_ShowConfirmDialog_Data:
 	.byte 0xf1, 0x00, 0x1d, 0x00, 0xec, 0xf0, 0x45, 0x7e
 	.byte 0x14, 0xf1, 0x00, 0x1d, 0xde, 0xec, 0xf0, 0x5e
 	.ascii "]\\[ZYX"
-	.byte 0x0e, 0x3e
+	ret
+	push xiz
 	ld	xiz, xsp
 	.ascii "89:;<="
 	.byte 0x9e, 0x08, 0x20, 0xf1, 0xcc, 0x06, 0x50, 0x9e
@@ -4916,7 +4919,7 @@ SeMenu_PresetManager_Data:
 	dec	1, a
 	.byte 0xc8, 0xff
 	jr	c, 34
-	.byte 0xcb, 0x04
+	push c
 	xor	b, b
 	.byte 0xd9, 0xec, 0x02
 	ld	xiz, 15800316
@@ -4924,9 +4927,9 @@ SeMenu_PresetManager_Data:
 	add	bc, 4
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
 	call	15789056
-	.byte 0xcb, 0x05
+	pop c
 	jr	32
-	.byte 0xcb, 0x04
+	push c
 	xor	b, b
 	.byte 0xd9, 0xec, 0x02
 	ld	xiz, 15800244
@@ -4934,7 +4937,7 @@ SeMenu_PresetManager_Data:
 	add	bc, 4
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
 	call	15789056
-	.byte 0xcb, 0x05
+	pop c
 	djnz8	c, -84
 	ret
 	sti8_24	257960, 0
@@ -4949,7 +4952,7 @@ SeMenu_PresetManager_Data:
 	dec	1, a
 	.byte 0xc8, 0xff
 	jr	c, 34
-	.byte 0xcb, 0x04
+	push c
 	xor	b, b
 	.byte 0xd9, 0xec, 0x02
 	ld	xiz, 15800536
@@ -4957,9 +4960,9 @@ SeMenu_PresetManager_Data:
 	add	bc, 4
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
 	call	15789056
-	.byte 0xcb, 0x05
+	pop c
 	jr	32
-	.byte 0xcb, 0x04
+	push c
 	xor	b, b
 	.byte 0xd9, 0xec, 0x02
 	ld	xiz, 15800416
@@ -4967,7 +4970,7 @@ SeMenu_PresetManager_Data:
 	add	bc, 4
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
 	call	15789056
-	.byte 0xcb, 0x05
+	pop c
 	djnz8	c, -84
 	ret
 	sti8_24	257960, 0
@@ -4978,7 +4981,7 @@ SeMenu_PresetManager_Data:
 	dec	1, a
 	.byte 0xc8, 0xff
 	jr	c, 34
-	.byte 0xcb, 0x04
+	push c
 	xor	b, b
 	.byte 0xd9, 0xec, 0x02
 	ld	xiz, 15800660
@@ -4986,9 +4989,9 @@ SeMenu_PresetManager_Data:
 	add	bc, 4
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
 	call	15789056
-	.byte 0xcb, 0x05
+	pop c
 	jr	32
-	.byte 0xcb, 0x04
+	push c
 	xor	b, b
 	.byte 0xd9, 0xec, 0x02
 	ld	xiz, 15800602
@@ -4996,7 +4999,7 @@ SeMenu_PresetManager_Data:
 	add	bc, 4
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
 	call	15789056
-	.byte 0xcb, 0x05
+	pop c
 	djnz8	c, -84
 	ret
 	sti8_24	257960, 0
@@ -5068,7 +5071,7 @@ SeMenu_PresetBrowser_Data:
 	dec	1, a
 	.byte 0xc8, 0xff
 	jr	c, 34
-	.byte 0xcb, 0x04
+	push c
 	xor	b, b
 	.byte 0xd9, 0xec, 0x02
 	ld	xiz, 15811695
@@ -5076,9 +5079,9 @@ SeMenu_PresetBrowser_Data:
 	add	bc, 4
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
 	call	15789056
-	.byte 0xcb, 0x05
+	pop c
 	jr	32
-	.byte 0xcb, 0x04
+	push c
 	xor	b, b
 	.byte 0xd9, 0xec, 0x02
 	ld	xiz, 15811623
@@ -5086,7 +5089,7 @@ SeMenu_PresetBrowser_Data:
 	add	bc, 4
 	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
 	call	15789056
-	.byte 0xcb, 0x05
+	pop c
 	djnz8	c, -84
 	ret
 	sti8_24	257960, 1
@@ -5109,7 +5112,8 @@ SeMenu_PresetBrowser_Data:
 	ld	w, (xiy)
 	and	w, 32
 	jrl	z, 187
-	.byte 0xc8, 0x04, 0xcb, 0x04
+	push w
+	push c
 	push	xiy
 	ldb	d, 4
 	sub	d, c
@@ -5124,9 +5128,10 @@ SeMenu_PresetBrowser_Data:
 	call	15789056
 	popw	de
 	pop	xiy
-	.byte 0xcb, 0x05, 0xc8, 0x05
+	pop c
+	pop w
 	sti8_24	257960, 0
-	.byte 0xcb, 0x04
+	push c
 	push	xiy
 	ld	xiz, 15808264
 	.byte 0xe3, 0x07, 0xf8, 0xe8, 0x25
@@ -5136,7 +5141,8 @@ SeMenu_PresetBrowser_Data:
 	call	15789056
 	popw	de
 	pop	xiy
-	.byte 0xcb, 0x05, 0xcb, 0x04
+	pop c
+	push c
 	push	xiy
 	ld	a, (xiy)
 	and	a, 192
@@ -5153,7 +5159,8 @@ SeMenu_PresetBrowser_Data:
 	call	15789056
 	popw	de
 	pop	xiy
-	.byte 0xcb, 0x05, 0xcb, 0x04
+	pop c
+	push c
 	push	xiy
 	ld	xiz, 15807782
 	.byte 0xe3, 0x07, 0xf8, 0xe8, 0x25
@@ -5161,9 +5168,9 @@ SeMenu_PresetBrowser_Data:
 	call	15789082
 	popw	de
 	pop	xiy
-	.byte 0xcb, 0x05
+	pop c
 	sti8_24	257960, 2
-	.byte 0xcb, 0x04
+	push c
 	push	xiy
 	ld	xiz, 15811719
 	.byte 0xe3, 0x07, 0xf8, 0xe8, 0x25
@@ -5171,7 +5178,7 @@ SeMenu_PresetBrowser_Data:
 	add	xix, 20
 	call	15789056
 	pop	xiy
-	.byte 0xcb, 0x05
+	pop c
 	jr	0
 	add	xiy, 1
 	dec	1, c
@@ -6263,7 +6270,9 @@ SeMenu_EqEdit_DrawInit:
 SeBitmap_EnvCurve1:
 	.byte 0xff
 	.fill 8, 1, 0x80
-	.byte 0x80, 0x80, 0x81, 0x81, 0x82, 0x84
+	add	w, (xwa)
+	add	a, (xbc)
+	add	d, (xde)
 	add	(xix), w
 	.byte 0x88, 0x90, 0x90, 0x90, 0xa0, 0xa0, 0xa0, 0xa0, 0xa0, 0xa0, 0xa0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0
 	cp	(xwa), l
@@ -6329,7 +6338,9 @@ SeBitmap_EnvCurve2:
 	.byte 0xff
 	.fill 8, 1, 0x80
 	.fill 8, 1, 0x80
-	.byte 0x80, 0x81, 0x81, 0x82, 0x82, 0x84
+	add	a, (xwa)
+	add	b, (xbc)
+	add	d, (xde)
 	add	(xix), w
 	.byte 0x88, 0x90, 0x90, 0x90, 0xa0, 0xa0, 0xa0, 0xa0, 0xc0, 0xc0, 0xc0, 0xc0, 0xc0, 0xff, 0x7f
 	swi	7
@@ -6395,7 +6406,8 @@ SeBitmap_EnvCurve3:
 	.fill 8, 1, 0x80
 	.fill 8, 1, 0x80
 	.fill 8, 1, 0x80
-	.byte 0x81, 0x83, 0x86, 0x84
+	add	c, (xbc)
+	add	d, (xiz)
 	add	(xix), w
 	.byte 0x88, 0x90, 0x90, 0xa0, 0xa0, 0xa0, 0xc0
 	swi	7
@@ -6411,7 +6423,7 @@ SeBitmap_EnvCurve3:
 	ei	0x0c
 	ldio	24, 48
 	jr	f, -64
-	.byte 0x80, 0x80
+	add	w, (xwa)
 	nop
 	nop
 	nop
@@ -6533,7 +6545,7 @@ SeBitmap_EnvCurve4:
 	swi	7
 	swi	6
 	ei	0x0b
-	.byte 0x0b, 0x0b, 0x13
+	pushw 4875
 	zcf
 	ldb	c, 35
 	ld	xhl, 58966851
@@ -6549,7 +6561,8 @@ SeBitmap_EnvCurve5:
 	.fill 8, 1, 0x80
 	.fill 8, 1, 0x80
 	.fill 8, 1, 0x80
-	.byte 0x80, 0x80, 0x80, 0x80
+	add	w, (xwa)
+	add	w, (xwa)
 	swi	7
 	swi	7
 	.byte 0x7f, 0xff
@@ -6593,7 +6606,8 @@ SeBitmap_EnvCurve5:
 	reti
 	reti
 	reti
-	.byte 0x0b, 0x0b, 0x0b, 0x0b, 0x13, 0x13
+	pushw 2827
+	pushw 4883
 	zcf
 	ldb	c, 35
 	ld	xhl, 58950467
@@ -6644,7 +6658,9 @@ SeBitmap_EnvCurve5:
 	reti
 	reti
 	reti
-	.byte 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x13, 0x13
+	pushw 2827
+	pushw 2827
+	pushw 4883
 	zcf
 	ldb	c, 35
 	ld	xhl, 50561859
@@ -7220,7 +7236,7 @@ SeBitmap_EnvCurve5:
 	ldw	de, 2839
 	ld	xhl, 1275084288
 	ld	xiy, 390874454
-	.byte 0x0b, 0x73, 0x00
+	pushw 115
 	push	xiz
 	nop
 	.byte 0x54, 0x4f, 0x55
@@ -7780,7 +7796,7 @@ SeBitmap_EnvCurve5:
 	nop
 	nop
 	ldb	w, 243
-	.byte 0x0b, 0x02, 0x00
+	pushw 2
 	decf
 	nop
 	.byte 0xda, 0x0c, 0x02
@@ -7842,7 +7858,7 @@ SeBitmap_EnvCurve5:
 	incf
 	.byte 0x03
 	halt
-	.byte 0x0b, 0x63, 0x06
+	pushw 1635
 	swi	7
 	nop
 	ldb	w, 238
@@ -7850,7 +7866,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x02
 	nop
 	halt
-	.byte 0x0b, 0x64, 0x06
+	pushw 1636
 	swi	7
 	nop
 	ldb	w, 242
@@ -7864,7 +7880,7 @@ SeBitmap_EnvCurve5:
 	scf
 	.byte 0x03
 	halt
-	.byte 0x0b, 0x66, 0x06
+	pushw 1638
 	swi	7
 	nop
 	ldb	w, 238
@@ -7872,7 +7888,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x02
 	nop
 	halt
-	.byte 0x0b, 0x67, 0x06
+	pushw 1639
 	swi	7
 	nop
 	ldb	w, 242
@@ -7885,14 +7901,14 @@ SeBitmap_EnvCurve5:
 	ldb	w, 233
 	.byte 0x16, 0x03
 	halt
-	.byte 0x0b, 0x69, 0x06
+	pushw 1641
 	swi	7
 	nop
 	ldb	w, 238
 	.byte 0x16, 0x02
 	nop
 	halt
-	.byte 0x0b, 0x6a, 0x06
+	pushw 1642
 	swi	7
 	nop
 	ldb	w, 242
@@ -7908,12 +7924,12 @@ SeBitmap_EnvCurve5:
 	nop
 	ldb	w, 238
 	jp	327682
-	.byte 0x0b, 0x6d, 0x06
+	pushw 1645
 	swi	7
 	nop
 	ldb	w, 242
 	jp	196610
-	.byte 0x0b, 0x5d, 0x06
+	pushw 1629
 	retd	0x0500
 	.byte 0x53
 	pushw	hl
@@ -8043,7 +8059,7 @@ SeMenu_CompareScreen_DataTable:
 	nop
 	.byte 0xc8, 0x00
 	halt
-	.byte 0x0b, 0x63, 0x06
+	pushw 1635
 	swi	7
 	nop
 	ldb	w, 147
@@ -8122,14 +8138,14 @@ SeMenu_CompareScreen_DataTable:
 	ldw	bc, 241
 	ldwio	49, 241
 	halt
-	.byte 0x0b, 0x60, 0x06
+	pushw 1632
 	swi	7
 	nop
 	ldb	w, 166
 	ldb	b, 2
 	nop
 	halt
-	.byte 0x0b, 0x61, 0x06
+	pushw 1633
 	swi	7
 	nop
 	ldb	w, 172
@@ -8159,21 +8175,21 @@ SeMenu_CompareScreen_DataTable:
 	nop
 	ld	xde, (xbc)
 	halt
-	.byte 0x0b, 0x65, 0x06
+	pushw 1637
 	swi	7
 	nop
 	ldb	w, 137
 	ldb	b, 2
 	nop
 	halt
-	.byte 0x0b, 0x66, 0x06
+	pushw 1638
 	swi	7
 	nop
 	ldb	w, 142
 	ldb	b, 2
 	nop
 	halt
-	.byte 0x0b, 0x67, 0x06
+	pushw 1639
 	swi	7
 	nop
 	ldb	w, 146
@@ -8280,7 +8296,7 @@ TuningSystem_Handler_Table:
 	.byte 0x14
 	stdi8	768, 171
 	ldb	b, 3
-	.byte 0x0b, 0x60, 0x06
+	pushw 1632
 	reti
 	nop
 	halt
@@ -9465,18 +9481,18 @@ TuningSystem_Handler_Table:
 	ldb	w, 215
 	.byte 0x14
 	stdi8	768, 186
-	.byte 0x0b, 0x02, 0x0f
+	pushw 3842
 	jr	f, 6
 	ld	xwa, 1537024006
 	stdi8	1536, 170
 	scf
 	halt
-	.byte 0x0b, 0x68, 0x06
+	pushw 1640
 	swi	7
 	nop
 	ldb	w, 115
 	jp	327682
-	.byte 0x0b, 0x67, 0x06
+	pushw 1639
 	swi	7
 	nop
 	ldb	w, 27
@@ -13628,11 +13644,11 @@ StylCnvStorOkFunc_DataBlock:
 	ld	xiy, xwa
 	lda	xix, (xsp+24)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xhl, (xsp+24)
 	ld	bc, (xhl+4)
 	ld	wa, bc
-	.byte 0x93, 0xa0
+	sub	wa, (xhl)
 	mul	xwa, xde
 	ld	iz, wa
 	extz	xiz
@@ -13647,7 +13663,7 @@ StylCnvStorOkFunc_DataBlock:
 	extz	xix
 	div	ix, 100
 	ld	wa, bc
-	.byte 0x93, 0xa0
+	sub	wa, (xhl)
 	ld	(xsp+4), wa
 	sub	(xsp+4), iz
 	.byte 0x9f, 0x08, 0x3f, 0x00, 0x00
@@ -13748,7 +13764,7 @@ StylCnvStorOkFunc_DataBlock:
 	add	(xsp+16), wa
 	incm	1, (xsp+14)
 	ld	wa, (xsp+14)
-	.byte 0x9f, 0x04, 0xf0
+	cp	wa, (xsp+4)
 	jr	c, -32
 	lda	xix, (xsp+16)
 	lda	xhl, (xsp+20)
@@ -13760,7 +13776,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xhl+2), wa
 	ld	bc, (xbc)
 	ld	wa, bc
-	.byte 0x9a, 0x02, 0xa0
+	sub	wa, (xde+2)
 	exts	xwa
 	divs	wa, 2
 	sub	bc, wa
@@ -13776,7 +13792,7 @@ StylCnvStorOkFunc_DataBlock:
 	add	(xsp+16), wa
 	incm	1, (xsp+14)
 	ld	wa, (xsp+14)
-	.byte 0x9f, 0x04, 0xf0
+	cp	wa, (xsp+4)
 	jr	c, -32
 	pop	xiz
 	lda	xsp, (xsp+30)
@@ -13796,17 +13812,17 @@ StylCnvStorOkFunc_DataBlock:
 	ld	xiy, xwa
 	lda	xix, (xsp+26)
 	lds	bc, 4
-	.byte 0x95, 0x11
+	ldirw
 	lda	xhl, (xsp+26)
 	lda	xix, (xhl+4)
 	ld	bc, (xix)
 	ld	wa, bc
-	.byte 0x93, 0xa0
+	sub	wa, (xhl)
 	mul	xwa, xde
-	.byte 0xd7, 0xfa, 0x98
+	ld	qiz, wa
 	extz	xwa
 	div	wa, 100
-	.byte 0xd7, 0xfa, 0x98
+	ld	qiz, wa
 	lda	xde, (xhl+6)
 	lda	xiy, (xhl+2)
 	ld	wa, (xde)
@@ -13816,7 +13832,7 @@ StylCnvStorOkFunc_DataBlock:
 	div	wa, 100
 	ld	iz, wa
 	ld	wa, bc
-	.byte 0x93, 0xa0
+	sub	wa, (xhl)
 	ld	(xsp+4), wa
 	ld	wa, qiz
 	sub	(xsp+4), wa
@@ -13824,7 +13840,7 @@ StylCnvStorOkFunc_DataBlock:
 	jr	z, 57
 	ld	(xsp+22), bc
 	ld	wa, (xix)
-	.byte 0xd7, 0xfa, 0xa0
+	sub	wa, qiz
 	ld	(xsp+18), wa
 	jr	57
 	.byte 0xbf, 0x06, 0x02, 0x01, 0x00
@@ -13843,7 +13859,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	wa, (xhl)
 	ld	(xsp+22), wa
 	ld	wa, (xhl)
-	.byte 0xd7, 0xfa, 0x80
+	add	wa, qiz
 	ld	(xsp+18), wa
 	ld	bc, (xiy)
 	ld	wa, (xde)
@@ -13906,10 +13922,12 @@ StylCnvStorOkFunc_DataBlock:
 	calr	-875
 	lda	xiy, (xsp+14)
 	lda	xix, (xsp+22)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xiy, (xsp+10)
 	lda	xix, (xsp+18)
-	.byte 0x95, 0x10, 0x95, 0x10
+	ldiw
+	ldiw
 	lda	xwa, (xsp+22)
 	lda	xbc, (xsp+18)
 	.byte 0x9f, 0x08, 0x04
@@ -13921,16 +13939,16 @@ StylCnvStorOkFunc_DataBlock:
 	.byte 0x9f, 0x06, 0x3f, 0x00, 0x00
 	jr	z, 17
 	ld	wa, (xwa+4)
-	.byte 0xd7, 0xfa, 0xa0
+	sub	wa, qiz
 	ld	(xbc), wa
-	.byte 0x9f, 0x04, 0xa0
+	sub	wa, (xsp+4)
 	inc	1, wa
 	ld	(xde), wa
 	jr	14
 	ld	wa, (xwa)
-	.byte 0xd7, 0xfa, 0x80
+	add	wa, qiz
 	ld	(xbc), wa
-	.byte 0x9f, 0x04, 0x80
+	add	wa, (xsp+4)
 	dec	1, wa
 	ld	(xde), wa
 	lda	xwa, (xsp+22)
@@ -13956,7 +13974,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xwa+2), bc
 	ld	de, (xde)
 	ld	bc, de
-	.byte 0x9b, 0x02, 0xa1
+	sub	bc, (xhl+2)
 	exts	xbc
 	divs	bc, 2
 	sub	de, bc

@@ -1678,7 +1678,7 @@ AudioCmd_FFixed_Return:
 
 AudioCmd_FFixed_DataTable:
 	ld	xwa, (xsp+4)
-	.byte 0x80, 0x3f, 0x00
+	cp	(xwa), 0
 	jr	nz, 3
 	lds	hl, 1
 	ret
@@ -3081,7 +3081,7 @@ AudioCmd_DataBlock_28E9:
 	dec	1, de
 	cps	wa, 0
 	ret	z
-	.byte 0x84, 0x3f, 0x00
+	cp	(xix), 0
 	jr	nz, -21
 	ret
 
