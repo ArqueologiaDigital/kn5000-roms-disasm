@@ -17183,7 +17183,7 @@ SndParam_ProcessEntry:
 	extz	bc
 	ld	xwa, xde
 	calr	1963
-	.byte 0xbf, 0x03, 0xcb
+	bitm	3, (xsp+3)
 	jr	z, 19
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -17193,7 +17193,7 @@ SndParam_ProcessEntry:
 	extz	bc
 	ld	xwa, xde
 	calr	1939
-	.byte 0xbf, 0x03, 0xce
+	bitm	6, (xsp+3)
 	jrl	z, 287
 	.byte 0x8f, 0x00, 0x21
 	extz	wa
@@ -17291,7 +17291,7 @@ SndParam_ProcessEntry:
 	ld	xwa, xde
 	calr	1696
 	jr	48
-	.byte 0xbf, 0x03, 0xcb
+	bitm	3, (xsp+3)
 	jr	z, 19
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -17301,7 +17301,7 @@ SndParam_ProcessEntry:
 	extz	bc
 	ld	xwa, xde
 	calr	1670
-	.byte 0xbf, 0x03, 0xcd
+	bitm	5, (xsp+3)
 	jr	z, 19
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -17319,7 +17319,7 @@ HdaeRom_Entry:
 	ld	a, (xsp+1)
 	cps	a, 1
 	jr	nz, 72
-	.byte 0xbf, 0x03, 0xcf
+	bitm	7, (xsp+3)
 	jr	z, 19
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -17329,7 +17329,7 @@ HdaeRom_Entry:
 	extz	bc
 	ld	xwa, xde
 	calr	1590
-	.byte 0xbf, 0x03, 0xce
+	bitm	6, (xsp+3)
 	jr	z, 19
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -17339,7 +17339,7 @@ HdaeRom_Entry:
 	extz	bc
 	ld	xwa, xde
 	calr	1566
-	.byte 0xbf, 0x03, 0xcd
+	bitm	5, (xsp+3)
 	jr	z, 19
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -17485,7 +17485,7 @@ HdaeRom_TableEntry2:
 	jr	z, 98
 	lda	xbc, (xsp+2)
 	ldb	a, 0
-	.byte 0xbf, 0x02, 0xcf
+	bitm	7, (xsp+2)
 	jr	nz, 6
 	ld	a, (xsp+2)
 	res	7, a
@@ -17562,7 +17562,7 @@ UIStateEvt_ProcessHandler:
 	ld	xwa, xde
 	calr	927
 	jr	24
-	.byte 0xbf, 0x03, 0xc8
+	bitm	0, (xsp+3)
 	jr	z, 19
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -17597,7 +17597,7 @@ HdaeRom_AltProcessBlock:
 	lda	xwa, (xsp)
 	ldw	bc, 15
 	calr	828
-	.byte 0xbf, 0x03, 0xcf
+	bitm	7, (xsp+3)
 	jr	z, 18
 	lda	xwa, (xsp)
 	ldw	bc, 128
@@ -17623,7 +17623,7 @@ HdaeRom_AltReadParam:
 	jr	z, 57
 	cps	a, 0
 	jr	nz, 53
-	.byte 0xbf, 0x03, 0xca
+	bitm	2, (xsp+3)
 	jr	z, 48
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -17812,7 +17812,7 @@ HdaeRom_AltTableEntry9:
 	jr	z, 30
 	cps	a, 0
 	jr	nz, 79
-	.byte 0xbf, 0x03, 0xcf
+	bitm	7, (xsp+3)
 	jr	z, 74
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -17835,7 +17835,7 @@ HdaeRom_AltTableEntry9:
 	extz	bc
 	ld	xwa, xde
 	calr	27
-	.byte 0xbf, 0x03, 0xcf
+	bitm	7, (xsp+3)
 	jr	z, 19
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -26098,12 +26098,12 @@ SendPartDataBlock_Data:
 	lda	xhl, (xde+12)
 	ld	a, (xhl)
 	ld	(xbc+25), a
-	.byte 0xb1, 0xb7
+	resm	7, (xbc)
 	ld	a, (xhl)
 	and	a, 16
 	cp	a, 16
 	jr	nz, 2
-	.byte 0xb1, 0xbf
+	setm	7, (xbc)
 	ld	a, (xde+13)
 	ld	(xbc+26), a
 	ld	a, (xde+14)
@@ -26215,13 +26215,13 @@ SendPartDataBlock_Data:
 	and	e, 183
 	ld	(xhl), e
 	lda	xbc, (xwa+17)
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jr	z, 5
 	set	6, e
 	ld	(xhl), e
-	.byte 0xb1, 0xc9
+	bitm	1, (xbc)
 	jr	z, 2
-	.byte 0xb3, 0xbb
+	setm	3, (xhl)
 	ld	c, (xwa+18)
 	and	c, 240
 	ldfr_berp	c, 240
@@ -26331,15 +26331,16 @@ SendPartDataBlock_Data:
 	ldw	bc, 8
 	ldirw
 	lda	xwa, (xwa+16)
-	.byte 0xb0, 0xcf
+	bitm	7, (xwa)
 	jr	z, 4
-	.byte 0xb3, 0xbd
+	setm	5, (xhl)
 	jr	2
-	.byte 0xb3, 0xb5, 0xb0, 0xca
+	resm	5, (xhl)
+	bitm	2, (xwa)
 	jr	z, 4
-	.byte 0xb3, 0xbc
+	setm	4, (xhl)
 	jr	2
-	.byte 0xb3, 0xb4
+	resm	4, (xhl)
 	ld	xhl, (xsp+26)
 	lda	xwa, (xhl+41)
 	ld	(xsp+14), xwa
@@ -26954,7 +26955,7 @@ HdaeRom_DataDispatch_Block3:
 	andmi8	(xhl+1), 207
 	exts	xbc
 	add	xbc, xwa
-	.byte 0xb9, 0x01, 0xbd
+	setm	5, (xbc+1)
 	inc_berp	234, 1
 	inc	2, de
 	cp_erpb	234, 128
@@ -27184,12 +27185,12 @@ TmFlash_WriteRoutine:
 	ld	xbc, 470
 	call	16714332
 	add	xhl, 16
-	.byte 0xbf, 0x14, 0xc8
+	bitm	0, (xsp+20)
 	jr	z, 96
 	lda_24	xiz, 3145728
 	add	xiz, 721920
 	ld	xde, xiz
-	.byte 0xbf, 0x14, 0xc9
+	bitm	1, (xsp+20)
 	jr	z, 59
 	.byte 0x9f, 0x12, 0x3f, 0x04, 0x00
 	jr	nc, 36

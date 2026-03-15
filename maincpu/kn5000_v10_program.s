@@ -1465,7 +1465,8 @@ SepaOut_FormatData_Tail:
 	push xhl
 	.byte 0x01
 	decf
-	.byte 0x01, 0xb5, 0x01, 0x87, 0x01, 0xb9, 0x02, 0xb9
+	.byte 0x01, 0xb5, 0x01, 0x87, 0x01
+	setm	1, (xbc+2)
 	push_sr
 	.byte 0xb9, 0x02, 0xfd, 0x01
 	pop xbc
@@ -1699,7 +1700,8 @@ SepaOut_FormatData_Tail:
 	nop
 	.byte 0x0a, 0xb2, 0xf2, 0x00, 0xc5, 0xb3, 0xf2
 	nop
-	.byte 0xb4, 0xb4, 0xf2, 0x00, 0x3c, 0xd0, 0xf2
+	resm	4, (xix)
+	.byte 0xf2, 0x00, 0x3c, 0xd0, 0xf2
 	nop
 	.byte 0x1a, 0xd2, 0xf2
 	nop
@@ -4721,11 +4723,11 @@ Voice_FactoryPresetData:
 	exts	xwa
 	add	xwa, xhl
 	add	xde, xwa
-	.byte 0xb2, 0xcf
+	bitm	7, (xde)
 	jr	z, 4
-	.byte 0xb2, 0xb6
+	resm	6, (xde)
 	jr	2
-	.byte 0xb2, 0xbe
+	setm	6, (xde)
 	incm8	1, (xsp+24)
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
@@ -4834,22 +4836,22 @@ Voice_FactoryPresetData:
 	add	xwa, xde
 	lda_24	xde, 277504
 	add	xde, xwa
-	.byte 0xb2, 0xcf
+	bitm	7, (xde)
 	jr	z, 4
-	.byte 0xb2, 0xb5
+	resm	5, (xde)
 	jr	27
-	.byte 0xb2, 0xbd
+	setm	5, (xde)
 	jr	23
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
 	lda_24	xde, 277504
 	add	xde, xwa
-	.byte 0xb2, 0xcf
+	bitm	7, (xde)
 	jr	z, 4
-	.byte 0xb2, 0xb6
+	resm	6, (xde)
 	jr	2
-	.byte 0xb2, 0xbe
+	setm	6, (xde)
 	incm8	1, (xsp+24)
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa

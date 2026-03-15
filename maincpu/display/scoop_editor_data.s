@@ -1789,7 +1789,7 @@ Scoop_SoundEditorData:
 	lds	wa, 0
 	call	15756091
 	andmi8	(xsp+2), 248
-	.byte 0xbf, 0x02, 0xb9
+	setm	1, (xsp+2)
 	ld	a, (xsp+2)
 	extz	wa
 	call	15756578
@@ -2027,7 +2027,7 @@ Scoop_SoundEditorData:
 	lds	wa, 0
 	call	15756091
 	andmi8	(xsp+2), 248
-	.byte 0xbf, 0x02, 0xba
+	setm	2, (xsp+2)
 	ld	a, (xsp+2)
 	extz	wa
 	call	15756578

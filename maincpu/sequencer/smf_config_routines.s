@@ -2297,7 +2297,7 @@ SMF_ConfigSlot_CodeBlock:
 	ld	hl, wa
 	calr	192
 	ldda32	xhl, 4349
-	.byte 0xb3, 0xcf
+	bitm	7, (xhl)
 	jr	nz, 7
 	stdi8	10362, 2
 	jr	12

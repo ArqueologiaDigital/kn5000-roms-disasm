@@ -8151,7 +8151,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xde, xwa
 	sll	xde, 6
 	lda_24	xbc, 277504
-	.byte 0xbf, 0x02, 0xcf
+	bitm	7, (xsp+2)
 	jr	z, 108
 	ld	xiy, (xsp+10)
 	ld	iz, (xsp+22)
@@ -8288,14 +8288,14 @@ ColorBlit2_LargeCodeBlock:
 	sll	xbc, 2
 	add	xbc, xwa
 	sll	xbc, 6
-	.byte 0xbf, 0x02, 0xcf
+	bitm	7, (xsp+2)
 	jr	z, 16
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xbc
 	ld	xbc, xix
 	add	xbc, xwa
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jr	nz, 20
 	jr	14
 	ld	wa, (xde)
@@ -8303,11 +8303,11 @@ ColorBlit2_LargeCodeBlock:
 	add	xwa, xbc
 	ld	xbc, xix
 	add	xbc, xwa
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jr	z, 4
-	.byte 0xb1, 0xbd
+	setm	5, (xbc)
 	jr	2
-	.byte 0xb1, 0xb5
+	resm	5, (xbc)
 	ld	a, (xsp+2)
 	add	(xsp+2), a
 	incm	1, (xde)
@@ -8354,14 +8354,14 @@ ColorBlit2_LargeCodeBlock:
 	sll	xbc, 2
 	add	xbc, xwa
 	sll	xbc, 6
-	.byte 0xbf, 0x02, 0xcf
+	bitm	7, (xsp+2)
 	jr	z, 19
 	ld	wa, (xde)
 	exts	xwa
 	add	xwa, xbc
 	lda_24	xbc, 277504
 	add	xbc, xwa
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jr	nz, 23
 	jr	17
 	ld	wa, (xde)
@@ -8369,11 +8369,11 @@ ColorBlit2_LargeCodeBlock:
 	add	xwa, xbc
 	lda_24	xbc, 277504
 	add	xbc, xwa
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jr	z, 4
-	.byte 0xb1, 0xbe
+	setm	6, (xbc)
 	jr	2
-	.byte 0xb1, 0xb6
+	resm	6, (xbc)
 	ld	a, (xsp+2)
 	add	(xsp+2), a
 	incm	1, (xde)
@@ -9084,10 +9084,10 @@ ColorBlit2_LargeCodeBlock:
 	exts	xwa
 	add	xwa, xhl
 	add	xde, xwa
-	.byte 0xb2, 0xcf
+	bitm	7, (xde)
 	jr	z, 4
-	.byte 0xb2, 0xb5
+	resm	5, (xde)
 	jr	22
-	.byte 0xb2, 0xbd
+	setm	5, (xde)
 	jr	18
 	ld	wa, (xbc)

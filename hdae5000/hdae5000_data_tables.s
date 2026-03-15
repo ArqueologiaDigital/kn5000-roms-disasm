@@ -35303,21 +35303,21 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.byte 0x00
 	sub	(xsp-81), xsp
 	nop
-	.byte 0xb0, 0xb0
+	resm	0, (xwa)
 	ld	(xwa), 177
-	.byte 0xb1, 0xb1
+	resm	1, (xbc)
 	nop
-	.byte 0xb2, 0xb2
+	resm	2, (xde)
 	ld	(xde), 179
-	.byte 0xb3, 0xb3
+	resm	3, (xhl)
 	nop
-	.byte 0xb4, 0xb4
+	resm	4, (xix)
 	ld	(xix), 181
-	.byte 0xb5, 0xb5
+	resm	5, (xiy)
 	nop
-	.byte 0xb6, 0xb6
+	resm	6, (xiz)
 	ld	(xiz), 183
-	.byte 0xb7, 0xb7
+	resm	7, (xsp)
 	nop
 	setm	0, (xwa-72)
 	.byte 0x00

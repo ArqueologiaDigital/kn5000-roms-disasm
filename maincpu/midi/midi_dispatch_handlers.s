@@ -6846,12 +6846,15 @@ DataBuf_CopyBulkBitfields_Large:
 	or	(xbc), a
 	lda	xde, (xiy+1047)
 	lda	xwa, (xix+1075)
-	.byte 0xb0, 0x9f, 0xb2, 0xa7, 0xb0, 0x9e, 0xb1, 0xa6
+	ldcfm	7, (xwa)
+	stcfm	7, (xde)
+	ldcfm	6, (xwa)
+	stcfm	6, (xbc)
 	ld	a, (xwa)
 	and	a, 63
 	andmi8	(xde), 128
 	or	(xde), a
-	.byte 0xf3, 0xf1, 0x34, 0x04, 0x9f
+	ldcfm	7, (xix+1076)
 	scc8	c, c
 	and	c, 1
 	sla	c, 7
@@ -6864,7 +6867,8 @@ DataBuf_CopyBulkBitfields_Large:
 	and	e, 112
 	andmi8	(xbc), 143
 	or	(xbc), e
-	.byte 0xb0, 0x98, 0xb1, 0xa0
+	ldcfm	0, (xwa)
+	stcfm	0, (xbc)
 	ld	c, (xix+1078)
 	res	7, c
 	res	7, c
@@ -6876,22 +6880,37 @@ DataBuf_CopyBulkBitfields_Large:
 	sla	c, 4
 	andmi8	(xhl+1051), 15
 	or	(xhl+1051), c
-	.byte 0xf3, 0xf1, 0x38, 0x04, 0x98
+	ldcfm	0, (xix+1080)
 	scc8	c, c
 	and	c, 1
 	andmi8	(xhl+1052), 254
 	or	(xhl+1052), c
 	lda	xbc, (xhl+1053)
 	lda	xwa, (xix+1081)
-	.byte 0xb0, 0x9f, 0xb1, 0xa7, 0xb0, 0x9e, 0xb1, 0xa6
-	.byte 0xb0, 0x9d, 0xb1, 0xa5, 0xb0, 0x9c, 0xb1, 0xa4
-	.byte 0xb0, 0x9b, 0xb1, 0xa3, 0xb0, 0x9a, 0xb1, 0xa2
-	.byte 0xb0, 0x99, 0xb1, 0xa1, 0xb0, 0x98, 0xb1, 0xa0
+	ldcfm	7, (xwa)
+	stcfm	7, (xbc)
+	ldcfm	6, (xwa)
+	stcfm	6, (xbc)
+	ldcfm	5, (xwa)
+	stcfm	5, (xbc)
+	ldcfm	4, (xwa)
+	stcfm	4, (xbc)
+	ldcfm	3, (xwa)
+	stcfm	3, (xbc)
+	ldcfm	2, (xwa)
+	stcfm	2, (xbc)
+	ldcfm	1, (xwa)
+	stcfm	1, (xbc)
+	ldcfm	0, (xwa)
+	stcfm	0, (xbc)
 	lda	xbc, (xhl+1054)
 	lda	xwa, (xix+1082)
-	.byte 0xb0, 0x9a, 0xb1
-	.byte 0xa2, 0xb0, 0x99, 0xb1, 0xa1, 0xb0, 0x98, 0xb1
-	.byte 0xa0
+	ldcfm	2, (xwa)
+	stcfm	2, (xbc)
+	ldcfm	1, (xwa)
+	stcfm	1, (xbc)
+	ldcfm	0, (xwa)
+	stcfm	0, (xbc)
 	ld	c, (xix+1083)
 	ld	(xhl+1056), c
 	ld	c, (xix+1122)
@@ -6902,8 +6921,12 @@ DataBuf_CopyBulkBitfields_Large:
 	ld	(xhl+1068), c
 	lda	xbc, (xhl+1069)
 	lda	xwa, (xix+1125)
-	.byte 0xb0, 0x9a, 0xb1, 0xa2, 0xb0, 0x99, 0xb1, 0xa1
-	.byte 0xb0, 0x98, 0xb1, 0xa0
+	ldcfm	2, (xwa)
+	stcfm	2, (xbc)
+	ldcfm	1, (xwa)
+	stcfm	1, (xbc)
+	ldcfm	0, (xwa)
+	stcfm	0, (xbc)
 	lda	xbc, (xhl+1078)
 	lda	xwa, (xix+1138)
 	ld	e, (xwa)
@@ -7852,7 +7875,12 @@ VoiceParam_CopyBitfields_LargeBlock:
 	and	l, 15
 	andmi8	(xde), 240
 	or	(xde), l
-	.byte 0xb0, 0x9d, 0xb2, 0xa5, 0xb0, 0x9e, 0xb2, 0xa6, 0xb0, 0x9e, 0xb2, 0xa7
+	ldcfm	5, (xwa)
+	stcfm	5, (xde)
+	ldcfm	6, (xwa)
+	stcfm	6, (xde)
+	ldcfm	6, (xwa)
+	stcfm	7, (xde)
 	ld	a, (xwa+1)
 	and	a, 7
 	andmi8	(xbc+14), 248
@@ -7866,34 +7894,37 @@ VoiceParam_CopyBitfields_LargeBlock:
 	and	a, 3
 	andmi8	(xix), 252
 	or	(xix), a
-	.byte 0xb3, 0x9a
+	ldcfm	2, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 2
 	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
+	ldcfm	3, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 3
 	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
+	ldcfm	4, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 4
 	andmi8	(xix), 239
 	or	(xix), a
-	.byte 0xb3, 0x9d
+	ldcfm	5, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 5
 	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9e, 0xb4, 0xa6, 0xba, 0x03, 0x9b, 0xb9, 0x03, 0xa3
+	ldcfm	6, (xhl)
+	stcfm	6, (xix)
+	ldcfm	3, (xde+3)
+	stcfm	3, (xbc+3)
 	lda	xix, (xbc+4)
 	lda	xhl, (xde+4)
-	.byte 0xb3, 0x9a
+	ldcfm	2, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 2
@@ -7905,24 +7936,25 @@ VoiceParam_CopyBitfields_LargeBlock:
 	or	(xix), a
 	lda	xix, (xbc+5)
 	lda	xhl, (xde+5)
-	.byte 0xb3, 0x98
+	ldcfm	0, (xhl)
 	scc8	c, a
 	and	a, 1
 	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x9a
+	ldcfm	2, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 2
 	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9e
+	ldcfm	6, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 6
 	andmi8	(xix), 191
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xix, (xbc+7)
 	lda	xhl, (xde+7)
 	ld	a, (xhl)
@@ -7930,142 +7962,151 @@ VoiceParam_CopyBitfields_LargeBlock:
 	and	a, 15
 	andmi8	(xix), 240
 	or	(xix), a
-	.byte 0xb3, 0x9c
+	ldcfm	4, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 4
 	andmi8	(xix), 239
 	or	(xix), a
-	.byte 0xb3, 0x9d, 0xb4, 0xa5
+	ldcfm	5, (xhl)
+	stcfm	5, (xix)
 	lda	xix, (xbc+8)
 	lda	xhl, (xde+8)
-	.byte 0xb3, 0x98
+	ldcfm	0, (xhl)
 	scc8	c, a
 	and	a, 1
 	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x99
+	ldcfm	1, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 1
 	andmi8	(xix), 253
 	or	(xix), a
-	.byte 0xb3, 0x9a
+	ldcfm	2, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 2
 	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
+	ldcfm	3, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 3
 	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
+	ldcfm	4, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 4
 	andmi8	(xix), 239
 	or	(xix), a
-	.byte 0xb3, 0x9d
+	ldcfm	5, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 5
 	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9e
+	ldcfm	6, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 6
 	andmi8	(xix), 191
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xix, (xbc+9)
 	lda	xhl, (xde+9)
-	.byte 0xb3, 0x98
+	ldcfm	0, (xhl)
 	scc8	c, a
 	and	a, 1
 	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x99
+	ldcfm	1, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 1
 	andmi8	(xix), 253
 	or	(xix), a
-	.byte 0xb3, 0x9a
+	ldcfm	2, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 2
 	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
+	ldcfm	3, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 3
 	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
+	ldcfm	4, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 4
 	andmi8	(xix), 239
 	or	(xix), a
-	.byte 0xb3, 0x9d
+	ldcfm	5, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 5
 	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9e
+	ldcfm	6, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 6
 	andmi8	(xix), 191
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xix, (xbc+10)
 	lda	xhl, (xde+10)
-	.byte 0xb3, 0x98
+	ldcfm	0, (xhl)
 	scc8	c, a
 	and	a, 1
 	andmi8	(xix), 254
 	or	(xix), a
-	.byte 0xb3, 0x99
+	ldcfm	1, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 1
 	andmi8	(xix), 253
 	or	(xix), a
-	.byte 0xb3, 0x9a
+	ldcfm	2, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 2
 	andmi8	(xix), 251
 	or	(xix), a
-	.byte 0xb3, 0x9b
+	ldcfm	3, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 3
 	andmi8	(xix), 247
 	or	(xix), a
-	.byte 0xb3, 0x9c
+	ldcfm	4, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 4
 	andmi8	(xix), 239
 	or	(xix), a
-	.byte 0xb3, 0x9d
+	ldcfm	5, (xhl)
 	scc8	c, a
 	and	a, 1
 	sla	a, 5
 	andmi8	(xix), 223
 	or	(xix), a
-	.byte 0xb3, 0x9f, 0xb4, 0xa7
+	ldcfm	7, (xhl)
+	stcfm	7, (xix)
 	lda	xbc, (xbc+11)
 	lda	xwa, (xde+11)
-	.byte 0xb0, 0x98, 0xb1, 0xa0, 0xb0, 0x9d, 0xb1, 0xa5, 0xb0, 0x9e, 0xb1, 0xa6
+	ldcfm	0, (xwa)
+	stcfm	0, (xbc)
+	ldcfm	5, (xwa)
+	stcfm	5, (xbc)
+	ldcfm	6, (xwa)
+	stcfm	6, (xbc)
 	ret
 
 DSPCfg_ConfigureVoiceSlotA:
@@ -8282,7 +8323,8 @@ DSPCfg_VoiceSlotB_ExtractData:
 	and	l, 31
 	andmi8	(xbc+1047), 128
 	or	(xbc+1047), l
-	.byte 0xb0, 0x9e, 0xf3, 0xe5, 0x16, 0x04, 0xa6
+	ldcfm	6, (xwa)
+	stcfm	6, (xbc+1046)
 	lda	xix, (xbc+1049)
 	lda	xhl, (xde+373)
 	ld	a, (xhl)
@@ -8295,7 +8337,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	ld	a, (xhl)
 	and	a, 7
 	jr	z, 2
-	.byte 0xb4, 0xb8
+	setm	0, (xix)
 	ld	a, (xde+374)
 	and	a, 127
 	andmi8	(xbc+1050), 128
@@ -8496,8 +8538,8 @@ DSPCfg_VoiceSlotB_ExtractData:
 	and	a, 15
 	andmi8	(xix), 240
 	or	(xix), a
-	.byte 0xf3, 0xe9, 0x97, 0x01, 0x9f, 0xf3, 0xe5, 0x2d
-	.byte 0x04, 0xa2
+	ldcfm	7, (xde+407)
+	stcfm	2, (xbc+1069)
 	ld	a, (xde+1056)
 	ld	(xbc+1576), a
 	ld	a, (xde+1057)

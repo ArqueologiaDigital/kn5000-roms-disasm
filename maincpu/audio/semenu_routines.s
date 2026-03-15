@@ -2064,7 +2064,7 @@ SeMenu_SetupPartDisplay_End:
 	jr	ugt, 9
 	sub	c, 17
 	ld	(xde), c
-	.byte 0xb3, 0xbf
+	setm	7, (xhl)
 	jr	-25
 	cp	wa, 25
 	jr	nz, 4
@@ -2791,7 +2791,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+17), 100
 	lda	xbc, (xsp+14)
 	lds	wa, 0
-	.byte 0x1e, 0xf9, 0xe9, 0xbf, 0x0e, 0xcd, 0x6e, 0x0b
+	.byte 0x1e, 0xf9, 0xe9
+	bitm	5, (xsp+14)
+	.byte 0x6e, 0x0b
 	lda	xwa, (xsp+16)
 	ld	(xwa+5), 0
 	ld	(xwa+6), 0
@@ -3811,7 +3813,7 @@ SeMenu_ApplyPartEdit_Data2:
 	lda	xbc, (xsp+24)
 	lds	wa, 2
 	calr	-9706
-	.byte 0xbf, 0x18, 0xb7
+	resm	7, (xsp+24)
 	lda	xbc, (xsp+22)
 	lds	wa, 3
 	calr	-9717
@@ -3822,7 +3824,7 @@ SeMenu_ApplyPartEdit_Data2:
 	lda	xbc, (xsp+20)
 	lds	wa, 4
 	calr	-9739
-	.byte 0xbf, 0x14, 0xb7
+	resm	7, (xsp+20)
 	lda	xbc, (xsp+18)
 	lds	wa, 5
 	calr	-9750
@@ -4566,7 +4568,7 @@ SeMenu_PatchBank_Data:
 	ld	a, (xsp+4)
 	and	a, 128
 	ld	(xsp), a
-	.byte 0xbf, 0x04, 0xb7
+	resm	7, (xsp+4)
 	cp	(xsp+6), 0
 	jr	z, 10
 	cp	(xsp+6), 12
@@ -4647,7 +4649,7 @@ SeMenu_OrPartConfig:
 
 SeMenu_OrPartConfig_Data:
 	.long LABEL_E3E2F2
-	.byte 0xbb, 0x0e, 0xc2
+	chgm	2, (xhl+14)
 	anddm32_24	2556131, xsp
 	mul	d, 14
 

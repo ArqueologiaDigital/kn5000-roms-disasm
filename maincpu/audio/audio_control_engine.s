@@ -304,7 +304,7 @@ FileIO_BytecodeData:
 	ldda32	xwa, 36488
 	and	xwa, xhl
 	jr	z, 2
-	.byte 0xb1, 0xb9
+	setm	1, (xbc)
 	ld	xwa, xiz
 	calr	-684
 	inc	4, xiz
@@ -333,7 +333,7 @@ FileIO_BytecodeData:
 	ldda32	xwa, 36484
 	and	xwa, xhl
 	jr	z, 2
-	.byte 0xb1, 0xb8
+	setm	0, (xbc)
 	ld	xwa, xiz
 	calr	-757
 	inc	4, xiz
@@ -2011,7 +2011,7 @@ SndParam_SetResBit0_Via028100:
 	lda	xwa, (xiz+4)
 	cps	hl, 1
 	jr nz, SndParam028100_ResBit0
-	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
+	setm	0, (xwa)
 	jr t, SndParam028100_Done
 SndParam028100_ResBit0:
 	.byte 0xb0, 0xb0				; res 0, (xwa)  [not in LLVM]
@@ -2031,7 +2031,7 @@ SndParam_SetResBit1_Via028100_028101:
 	cps	hl, 1
 	jr nz, SndParam028101_ResBit1
 SndParam028101_SetBit1:
-	.byte 0xbe, 0x04, 0xb9				; set 1, (xiz+4)  [not in LLVM]
+	setm	1, (xiz+4)
 	jr t, SndParam028101_Done
 SndParam028101_ResBit1:
 	.byte 0xbe, 0x04, 0xb1				; res 1, (xiz+4)  [not in LLVM]
@@ -2051,7 +2051,7 @@ SndParam_SetResBit2_Via028101_028102:
 	cps	hl, 1
 	jr nz, SndParam028102_ResBit2
 SndParam028102_SetBit2:
-	.byte 0xbe, 0x04, 0xba				; set 2, (xiz+4)  [not in LLVM]
+	setm	2, (xiz+4)
 	jr t, SndParam028102_Done
 SndParam028102_ResBit2:
 	.byte 0xbe, 0x04, 0xb2				; res 2, (xiz+4)  [not in LLVM]
@@ -2073,7 +2073,7 @@ SndParam_SetResBit3_Via028101_028102:
 	cps	hl, 2
 	jr nz, SndParam028102_ResBit3
 SndParam028102_SetBit3:
-	.byte 0xbe, 0x04, 0xbb				; set 3, (xiz+4)  [not in LLVM]
+	setm	3, (xiz+4)
 	jr t, SndParam028102_Done2
 SndParam028102_ResBit3:
 	.byte 0xbe, 0x04, 0xb3				; res 3, (xiz+4)  [not in LLVM]
@@ -2089,7 +2089,7 @@ SndParam_SetResBit3_Via4002:
 	lda	xwa, (xiz+6)
 	cps	hl, 0
 	jr z, SndParam4002_ResBit3
-	.byte 0xb0, 0xbb				; set 3, (xwa)  [not in LLVM]
+	setm	3, (xwa)
 	jr t, SndParam4002_Done
 SndParam4002_ResBit3:
 	.byte 0xb0, 0xb3				; res 3, (xwa)  [not in LLVM]
@@ -2105,7 +2105,7 @@ SndParam_SetResBit4_Via4004:
 	lda	xwa, (xiz+6)
 	cps	hl, 0
 	jr z, SndParam4004_ResBit4
-	.byte 0xb0, 0xbc				; set 4, (xwa)  [not in LLVM]
+	setm	4, (xwa)
 	jr t, SndParam4004_Done
 SndParam4004_ResBit4:
 	.byte 0xb0, 0xb4				; res 4, (xwa)  [not in LLVM]
@@ -2140,7 +2140,7 @@ SndParam_SetResBit1_ViaPartCC5E:
 	lda	xwa, (xiz+6)
 	cp hl, 0x007F
 	jr nz, SndParamCC5E_ResBit1
-	.byte 0xb0, 0xb9				; set 1, (xwa)  [not in LLVM]
+	setm	1, (xwa)
 	jr t, SndParamCC5E_Done
 SndParamCC5E_ResBit1:
 	.byte 0xb0, 0xb1				; res 1, (xwa)  [not in LLVM]
@@ -2168,7 +2168,7 @@ SndParam_SetResBit2_ViaPartCC5D:
 	cp hl, 0xFFFF
 	jr nz, SndParamCC5D_SetBit2
 SndParamCC5D_ResBit2:
-	.byte 0xbe, 0x06, 0xb2				; res 2, (xiz+6)  [not in LLVM]
+	resm	2, (xiz+6)
 	jr t, SndParamCC5D_Done
 SndParamCC5D_SetBit2:
 	.byte 0xbe, 0x06, 0xba				; set 2, (xiz+6)  [not in LLVM]
@@ -2187,7 +2187,7 @@ SndParam_SetResBit0_ViaPartCC40:
 	lda	xwa, (xiz+6)
 	cp hl, 0x007F
 	jr nz, SndParamCC40_ResBit0
-	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
+	setm	0, (xwa)
 	jr t, SndParamCC40_Done
 SndParamCC40_ResBit0:
 	.byte 0xb0, 0xb0				; res 0, (xwa)  [not in LLVM]
@@ -2228,7 +2228,7 @@ SndParam_SetResBit0_Via028103:
 	lda	xwa, (xiz+13)
 	cps	hl, 1
 	jr nz, SndParam028103_ResBit0
-	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
+	setm	0, (xwa)
 	jr t, SndParam028103_Done
 SndParam028103_ResBit0:
 	.byte 0xb0, 0xb0				; res 0, (xwa)  [not in LLVM]
@@ -2244,7 +2244,7 @@ SndParam_SetResBit5_Via028080:
 	lda	xwa, (xiz+3)
 	cps	hl, 0
 	jr nz, SndParam028080_SetBit5
-	.byte 0xb0, 0xb5				; res 5, (xwa)  [not in LLVM]
+	resm	5, (xwa)
 	jr t, SndParam028080_Done
 SndParam028080_SetBit5:
 	.byte 0xb0, 0xbd				; set 5, (xwa)  [not in LLVM]
@@ -2296,7 +2296,7 @@ SndParam_SetResBit7_Via4200:
 	lda	xwa, (xiz+10)
 	cps	hl, 1
 	jr nz, SndParam4200_ResBit7
-	.byte 0xb0, 0xbf				; set 7, (xwa)  [not in LLVM]
+	setm	7, (xwa)
 	jr t, SndParam4200_Done
 SndParam4200_ResBit7:
 	.byte 0xb0, 0xb7				; res 7, (xwa)  [not in LLVM]
@@ -2342,7 +2342,7 @@ SndParam_SetResBit4_Via0400:
 	lda	xwa, (xiz+3)
 	cps	hl, 1
 	jr nz, SndParam0400_ResBit4
-	.byte 0xb0, 0xbc				; set 4, (xwa)  [not in LLVM]
+	setm	4, (xwa)
 	jr t, SndParam0400_Done
 SndParam0400_ResBit4:
 	.byte 0xb0, 0xb4				; res 4, (xwa)  [not in LLVM]
@@ -2360,7 +2360,7 @@ SndParam_SetResBit7_ViaSelection:
 	jr z, SndParamSelect_SetBit7
 	cps	hl, 0
 	jr nz, CtrlPanel_SetResBit7_Ret
-	.byte 0xb6, 0xb7				; res 7, (xiz)  [not in LLVM]
+	resm	7, (xiz)
 	jr t, CtrlPanel_SetResBit7_Ret
 SndParamSelect_SetBit7:
 	.byte 0xb6, 0xbf				; set 7, (xiz)  [not in LLVM]
@@ -2375,7 +2375,7 @@ SndParam_SetResBit7_ViaF9A541:
 	lda	xwa, (xiz+4)
 	cps	hl, 0
 	jr z, SndParamF9A541_ResBit7
-	.byte 0xb0, 0xbf				; set 7, (xwa)  [not in LLVM]
+	setm	7, (xwa)
 	jr t, SndParamF9A541_Done
 SndParamF9A541_ResBit7:
 	.byte 0xb0, 0xb7				; res 7, (xwa)  [not in LLVM]
@@ -2466,7 +2466,7 @@ CtrlPanel_SetResBit6_ViaLookup:
 	call SndParam_LookupReadOnly
 	cps	hl, 1
 	jr nz, CtrlPanel_ResBit6
-	.byte 0xb6, 0xbe				; set 6, (xiz)  [not in LLVM]
+	setm	6, (xiz)
 	jr t, CtrlPanel_Bit6Done
 CtrlPanel_ResBit6:
 	.byte 0xb6, 0xb6				; res 6, (xiz)  [not in LLVM]
@@ -2511,15 +2511,15 @@ CtrlPanel_SyncBit0_From8F5C:
 	ldada	xwa, 36637
 	bitda	0, 36700
 	jr z, CtrlPanel_ResBit0_8F5C
-	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
+	setm	0, (xwa)
 	ret
 CtrlPanel_ResBit0_8F5C:
-	.byte 0xb0, 0xb0				; res 0, (xwa)  [not in LLVM]
+	resm	0, (xwa)
 	ret
 CtrlPanel_SetBit3_OnStyleD0D3:
 	; --- Sub 4: conditionally set bit 3 at (0x8F25) based on (0x8D38) (33 bytes) ---
 	ldada	xwa, 36645
-	.byte 0xb0, 0xb3				; res 3, (xwa)  [not in LLVM]
+	resm	3, (xwa)
 	ldda8	c, 36152
 	cp c, 0xd3
 	jr z, CtrlPanel_SetBit3
@@ -2530,7 +2530,7 @@ CtrlPanel_SetBit3_OnStyleD0D3:
 	cp c, 0xd0
 	ret nz
 CtrlPanel_SetBit3:
-	.byte 0xb0, 0xbb				; set 3, (xwa)  [not in LLVM]
+	setm	3, (xwa)
 	ret
 CtrlPanel_SetResBit0_ViaLookup4:
 	; --- Sub 5: set/res bit 0 at (XIZ+4) via FC7C23 + (0x8F54) lookup (34 bytes) ---
@@ -2543,7 +2543,7 @@ CtrlPanel_SetResBit0_ViaLookup4:
 	lda	xwa, (xiz+4)
 	cps	l, 0
 	jr z, CtrlPanelLookup4_ResBit0
-	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
+	setm	0, (xwa)
 	jr t, CtrlPanelLookup4_Done
 CtrlPanelLookup4_ResBit0:
 	.byte 0xb0, 0xb0				; res 0, (xwa)  [not in LLVM]
@@ -2561,7 +2561,7 @@ CtrlPanel_SetResBit1_ViaLookup56:
 	lda	xwa, (xiz+4)
 	cps	l, 0
 	jr z, CtrlPanelLookup56_ResBit1
-	.byte 0xb0, 0xb9				; set 1, (xwa)  [not in LLVM]
+	setm	1, (xwa)
 	jr t, CtrlPanelLookup56_Done
 CtrlPanelLookup56_ResBit1:
 	.byte 0xb0, 0xb1				; res 1, (xwa)  [not in LLVM]
@@ -2579,7 +2579,7 @@ CtrlPanel_SetResBit2_ViaLookup50:
 	lda	xwa, (xiz+4)
 	cps	l, 0
 	jr z, CtrlPanelLookup50_ResBit2
-	.byte 0xb0, 0xba				; set 2, (xwa)  [not in LLVM]
+	setm	2, (xwa)
 	jr t, CtrlPanelLookup50_Done
 CtrlPanelLookup50_ResBit2:
 	.byte 0xb0, 0xb2				; res 2, (xwa)  [not in LLVM]
@@ -2597,7 +2597,7 @@ CtrlPanel_SetResBit3_ViaLookup52:
 	lda	xwa, (xiz+4)
 	cps	l, 0
 	jr z, CtrlPanelLookup52_ResBit3
-	.byte 0xb0, 0xbb				; set 3, (xwa)  [not in LLVM]
+	setm	3, (xwa)
 	jr t, CtrlPanelLookup52_Done
 CtrlPanelLookup52_ResBit3:
 	.byte 0xb0, 0xb3				; res 3, (xwa)  [not in LLVM]
@@ -2647,7 +2647,7 @@ CtrlPanel_SetResBit0_ViaLookup4C:
 	lda	xwa, (xiz+13)
 	cps	l, 0
 	jr z, CtrlPanelLookup4C_ResBit0
-	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
+	setm	0, (xwa)
 	jr t, CtrlPanelLookup4C_Done
 CtrlPanelLookup4C_ResBit0:
 	.byte 0xb0, 0xb0				; res 0, (xwa)  [not in LLVM]
@@ -2663,7 +2663,7 @@ CtrlPanel_SetResBit7_ViaLookup4C:
 	call CtrlPanel_LookupIndicatorEntry
 	andda8	l, 36682
 	jr z, CtrlPanelBit7_Res
-	.byte 0xb6, 0xbf				; set 7, (xiz)  [not in LLVM]
+	setm	7, (xiz)
 	jr t, CtrlPanelBit7_Done
 CtrlPanelBit7_Res:
 	.byte 0xb6, 0xb7				; res 7, (xiz)  [not in LLVM]
@@ -2679,7 +2679,7 @@ CtrlPanel_SetResBit5_ViaLookup4C:
 	call CtrlPanel_LookupIndicatorEntry
 	andda8	l, 36682
 	jr z, CtrlPanelBit5_Res
-	.byte 0xb6, 0xbd				; set 5, (xiz)  [not in LLVM]
+	setm	5, (xiz)
 	jr t, CtrlPanelBit5_Done
 CtrlPanelBit5_Res:
 	.byte 0xb6, 0xb5				; res 5, (xiz)  [not in LLVM]
@@ -2695,7 +2695,7 @@ CtrlPanel_SetResBit6_ViaLookup4C:
 	call CtrlPanel_LookupIndicatorEntry
 	andda8	l, 36682
 	jr z, CtrlPanelBit6_Res
-	.byte 0xb6, 0xbe				; set 6, (xiz)  [not in LLVM]
+	setm	6, (xiz)
 	jr t, CtrlPanelBit6_Done
 CtrlPanelBit6_Res:
 	.byte 0xb6, 0xb6				; res 6, (xiz)  [not in LLVM]
@@ -4450,7 +4450,7 @@ MidiCh_IterateVolume_Forward:
 	ld	a, (xbc)
 	extz	wa
 	calr	3812
-	.byte 0xbb, 0x0d, 0xcd
+	bitm	5, (xhl+13)
 	jr	nz, 29
 	ldada	xwa, 37115
 	ld	bc, iz
@@ -4486,7 +4486,7 @@ MidiCh_IterateVolume_Reverse:
 	ld	a, (xbc)
 	extz	wa
 	calr	3695
-	.byte 0xbb, 0x0d, 0xcd
+	bitm	5, (xhl+13)
 	jr	nz, 29
 	ldada	xwa, 37115
 	ld	bc, iz
@@ -4519,7 +4519,7 @@ MidiCh_IteratePan_Forward:
 	jr	nz, 97
 	extz	wa
 	calr	3604
-	.byte 0xbb, 0x0c, 0xcc
+	bitm	4, (xhl+12)
 	jr	z, 87
 	.byte 0xc1, 0x27, 0x91, 0x19, 0x7e, 0x91
 	ldada	xwa, 37115
@@ -4535,7 +4535,7 @@ MidiCh_IteratePan_Forward:
 	ld	a, (xbc)
 	extz	wa
 	calr	3546
-	.byte 0xbb, 0x0d, 0xcd
+	bitm	5, (xhl+13)
 	jr	nz, 29
 	ldada	xwa, 37115
 	ld	bc, iz
@@ -4568,7 +4568,7 @@ MidiCh_IterateExpression:
 	ld	xiz, xhl
 	cp	xiz, 4294967295
 	jr	z, 77
-	.byte 0xbe, 0x04, 0xcd
+	bitm	5, (xiz+4)
 	jr	z, 72
 	.byte 0xc1, 0x27, 0x91, 0x19, 0x7e, 0x91
 	ldada	xwa, 37115
@@ -4577,7 +4577,7 @@ MidiCh_IterateExpression:
 	add	xbc, xwa
 	.byte 0x81, 0x19, 0x7f, 0x91, 0xc1, 0x30, 0x91, 0x19, 0x80, 0x91, 0xc1, 0x31, 0x91, 0x19, 0x81, 0x91
 	call	16556529
-	.byte 0xbe, 0x0d, 0xcd
+	bitm	5, (xiz+13)
 	jr	nz, 30
 	ldada	xwa, 37115
 	ld	bc, (xsp+4)
@@ -7070,13 +7070,14 @@ MidiSeqBuf_ProcessorTable:
 	lds8	w, 1
 	swi	4
 	nop
-	.byte 0xf3, 0xa9, 0xfc, 0x00, 0x18, 0xaa, 0xfc, 0x00, 0xb7, 0xa6
+	.byte 0xf3, 0xa9, 0xfc, 0x00, 0x18, 0xaa, 0xfc, 0x00
+	stcfm	6, (xsp)
 	swi	4
 	nop
-	.byte 0xb7, 0xa6
+	stcfm	6, (xsp)
 	swi	4
 	nop
-	.byte 0xb7, 0xa6
+	stcfm	6, (xsp)
 	swi	4
 	nop
 	ret
@@ -11334,100 +11335,100 @@ MidiStream_HandleRunningStatus:
 	call	16556542
 	ret
 	swi	7
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
-	.byte 0xb4, 0xc8
+	bitm	0, (xix)
 	swi	4
 	nop
 	swi	7

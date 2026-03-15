@@ -5902,9 +5902,9 @@ E1DMA_ISR_Epilogue:
 E1DMA_ISR_BytecodeBlock:
 	ei	0x06
 	ldada	xwa, 1566
-	.byte 0xb0, 0xcf
+	bitm	7, (xwa)
 	jr	z, 19
-	.byte 0xb0, 0xb7
+	resm	7, (xwa)
 	ei	0x00
 	ldada	xde, 1556
 	ld	xwa, (xde)

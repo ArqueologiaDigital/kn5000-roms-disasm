@@ -2581,7 +2581,7 @@ PerfMode_Handler_EvtB:
 	and	a, 1
 	jrl	z, 71
 	ld	xhl, 3412
-	.byte 0xb3, 0xcb
+	bitm	3, (xhl)
 	jrl	z, 61
 	sti8_24	132584, 255
 	sti8_24	132588, 255
@@ -2748,7 +2748,7 @@ Timer_ModeHandler_0:
 	stdi8	14120, 0
 	ret
 	ld	xiy, 3411
-	.byte 0xb5, 0xc8
+	bitm	0, (xiy)
 	jrl	z, 53
 	ld	xiy, 14130
 	ldda8	c, 14095
@@ -2841,9 +2841,9 @@ Timer_ModeHandler_0:
 	call	15716619
 	ret
 	ld	xhl, 3412
-	.byte 0xb3, 0xca
+	bitm	2, (xhl)
 	jrl	z, 119
-	.byte 0xb3, 0xb2
+	resm	2, (xhl)
 	call	15713129
 	and	a, 240
 	cp	a, 144
@@ -4057,7 +4057,7 @@ DMA_FlagCheckWithCalls:
 	and a, 0xf0
 	cp a, 0x90
 	jrl nz, DMA_StoreFlagAndReturn
-	.byte 0xb3, 0xba				; set 2, (xhl)  [not in LLVM]
+	setm	2, (xhl)
 DMA_StoreFlagAndReturn:
 	stdi8	3422, 0
 	ret
@@ -4572,7 +4572,7 @@ VoiceCtrl_ParamSetupBytecode:
 	jrl	nz, 17
 	cp	(xiy+3), 7
 	jrl	nz, 10
-	.byte 0xbd, 0x05, 0xcc
+	bitm	4, (xiy+5)
 	jrl	z, 4
 	call	15717299
 	ld	xiy, 3471
@@ -6146,9 +6146,9 @@ MemConfig_VoiceSlotRet:
 
 MemConfig_Handler_0:
 	ld	xhl, 3412
-	.byte 0xb3, 0xcb
+	bitm	3, (xhl)
 	jrl	z, 10
-	.byte 0xb3, 0xb3
+	resm	3, (xhl)
 	call	15705324
 	jp	15707639
 	call	15701707
@@ -6834,9 +6834,9 @@ SndDispatch_ProcessCommand:
 	ret
 MemConfig_Handler_4:
 	ld	xhl, 4345
-	.byte 0xb3, 0xc9
+	bitm	1, (xhl)
 	jrl	z, 14
-	.byte 0xb3, 0xb1
+	resm	1, (xhl)
 	call	15718252
 	setda	2, 4345
 	jp	15709756
@@ -12786,7 +12786,7 @@ Scoop_SpecialMode_UpdateParams:
 	sla	xwa, 8
 	addda32	xwa, 7514
 	stda32	4349, xwa
-	.byte 0xb0, 0xcf
+	bitm	7, (xwa)
 	jr	nz, 7
 	stdi8	10362, 11
 	jr	12
@@ -12806,7 +12806,8 @@ Scoop_SpecialMode_UpdateParams:
 	sla	xwa, 8
 	addda32	xwa, 7514
 	stda32	4349, xwa
-	.byte 0xb4, 0xcf, 0xb0, 0xcf
+	bitm	7, (xix)
+	bitm	7, (xwa)
 	jr	nz, 7
 	stdi8	10362, 11
 	jr	10

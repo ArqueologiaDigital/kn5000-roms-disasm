@@ -844,6 +844,40 @@ def translate_unidasm_to_llvm(mnemonic):
             addr = _direct_addr(target)
             return [f'call_24\t{cc}, {addr}']
 
+    # ── Memory-indirect bit operations: bit/set/res/tset/chg N, (reg) ──
+    # Unidasm produces: bit 0, (XIX) → LLVM needs: bitm 0, (xix)
+    MEM_BIT_OPS = {'bit': 'bitm', 'set': 'setm', 'res': 'resm',
+                   'tset': 'tsetm', 'chg': 'chgm'}
+    if op in MEM_BIT_OPS and len(translated_ops) == 2:
+        bit_num = translated_ops[0]
+        mem_op = translated_ops[1]
+        if bit_num.isdigit() and mem_op.startswith('(') and not _is_direct(mem_op):
+            llvm_mnem = MEM_BIT_OPS[op]
+            return [f'{llvm_mnem}\t{bit_num}, {mem_op}']
+
+    # ── Memory-indirect carry flag bit ops: orcf/andcf/xorcf N, (reg) ──
+    # Unidasm produces: orcf 6, (XDE) → LLVM needs: orcfn_ri xde, 6
+    MEM_CF_OPS = {'orcf': 'orcfn_ri', 'andcf': 'andcfn_ri', 'xorcf': 'xorcfn_ri'}
+    if op in MEM_CF_OPS and len(translated_ops) == 2:
+        bit_num = translated_ops[0]
+        mem_op = translated_ops[1]
+        if bit_num.isdigit() and mem_op.startswith('(') and not _is_direct(mem_op):
+            # Extract register from (xde) → xde
+            reg_match = re.match(r'^\((\w+)\)$', mem_op)
+            if reg_match:
+                reg = reg_match.group(1)
+                llvm_mnem = MEM_CF_OPS[op]
+                return [f'{llvm_mnem}\t{reg}, {bit_num}']
+
+    # ── Memory-indirect stcf/ldcf: stcf N, (reg) → stcfm N, (reg) ──
+    MEM_CF_OPS2 = {'stcf': 'stcfm', 'ldcf': 'ldcfm'}
+    if op in MEM_CF_OPS2 and len(translated_ops) == 2:
+        bit_num = translated_ops[0]
+        mem_op = translated_ops[1]
+        if bit_num.isdigit() and mem_op.startswith('(') and not _is_direct(mem_op):
+            llvm_mnem = MEM_CF_OPS2[op]
+            return [f'{llvm_mnem}\t{bit_num}, {mem_op}']
+
     # ── Generate alternative forms for compact encodings ──
 
     # For LD with register and small immediate: try compact forms

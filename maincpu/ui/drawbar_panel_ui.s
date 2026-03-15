@@ -1294,7 +1294,8 @@ PmemOutLGridCheck_JumpTable:
 	add	xwa, xbc
 	add	xwa, xhl
 	add	xwa, (xsp+32)
-	.byte 0xb0, 0xcf, 0x66
+	bitm	7, (xwa)
+	.byte 0x66
 	.long LABEL_E80B12
 	pushw 330
 	lda	xwa, (xsp+48)
@@ -1364,7 +1365,7 @@ PmemOutLGridCheck_JumpTable:
 	add	xwa, xbc
 	add	xwa, xhl
 	add	xwa, (xsp+32)
-	.byte 0xb0, 0xcf
+	bitm	7, (xwa)
 	jr	z, 18
 	pushw 232
 	pushw 348
@@ -1463,7 +1464,7 @@ PmemOutLGridCheck_JumpTable:
 	add	xwa, xhl
 	add	xwa, (xsp+32)
 	lda	xbc, (xsp+44)
-	.byte 0xb0, 0xcf
+	bitm	7, (xwa)
 	jr	z, 15
 	pushw 232
 	pushw 372
@@ -1531,7 +1532,8 @@ PmemOutLGridCheck_JumpTable:
 	add	xwa, xbc
 	add	xwa, xhl
 	add	xwa, (xsp+32)
-	.byte 0xb0, 0xcf, 0x66
+	bitm	7, (xwa)
+	.byte 0x66
 	.long LABEL_E80B12
 	pushw 390
 	lda	xwa, (xsp+48)
@@ -1841,7 +1843,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jr	z, 12
 	lds32	xbc, 0
 	ld	(xwa+14), xbc
@@ -1902,7 +1904,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jr	z, 12
 	lds32	xbc, 0
 	ld	(xwa+14), xbc
@@ -1957,7 +1959,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jrl	nz, 1584
 	ld	xbc, (xwa)
 	lda	xde, (xwa+14)
@@ -2099,7 +2101,7 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	add	xwa, (xsp+28)
-	.byte 0xb0, 0xcf
+	bitm	7, (xwa)
 	jr	z, 18
 	pushw 232
 	pushw 524
@@ -2144,7 +2146,7 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	add	xwa, (xsp+28)
-	.byte 0xb0, 0xcf
+	bitm	7, (xwa)
 	jr	z, 18
 	pushw 232
 	pushw 536
@@ -2218,7 +2220,7 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xhl
 	add	xwa, (xsp+28)
 	lda	xbc, (xsp+40)
-	.byte 0xb0, 0xcf
+	bitm	7, (xwa)
 	jr	z, 15
 	pushw 232
 	pushw 554

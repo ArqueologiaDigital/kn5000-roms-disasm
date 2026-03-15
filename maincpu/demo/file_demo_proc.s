@@ -6608,7 +6608,7 @@ FileIO_ByteBlock_F8A0E1:
 	call	16714332
 	lda_24	xwa, 155394
 	add	xwa, xhl
-	.byte 0xb0, 0x9f
+	ldcfm	7, (xwa)
 	scc8	c, l
 	extz	hl
 	popw	iz
