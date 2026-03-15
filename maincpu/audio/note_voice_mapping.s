@@ -24862,7 +24862,8 @@ Param_SignExtendRetu_Data:
 	extz	wa
 	muls	wa, 80
 	extz	xwa
-	.byte 0xf3, 0xe1, 0x27, 0x01, 0x30, 0xb8, 0x3a, 0x30
+	lda	xwa, (xwa+295)
+	lda	xwa, (xwa+58)
 	cp	xiz, xwa
 	.byte 0x67, 0x3d
 	ld	xbc, xiz
@@ -25023,7 +25024,8 @@ Param_SignExtendRetu_Data:
 	.byte 0x6b, 0x7d, 0xf1, 0x98, 0xe1, 0x32
 	ld	(xde), 45
 	ld	xwa, (xsp+20)
-	.byte 0xb8, 0x06, 0x33, 0xba, 0x01, 0x30
+	lda	xhl, (xwa+6)
+	lda	xwa, (xde+1)
 	ld	(xsp+12), xwa
 	cps	iz, 6
 	.byte 0x6f, 0x0d
@@ -25034,7 +25036,7 @@ Param_SignExtendRetu_Data:
 	cps	iz, 6
 	.byte 0x67, 0xf3
 	ld	(xde+7), 0
-	.byte 0xba, 0x08, 0x30
+	lda	xwa, (xde+8)
 	ld	(xsp+16), xwa
 	ld	(xsp+12), xwa
 	ld	wa, (xsp+6)
@@ -25067,10 +25069,10 @@ Param_SignExtendRetu_Data:
 	.byte 0x12, 0x02, 0x01, 0x00
 	ld	hl, (xsp+18)
 	popw iz
-	.byte 0xbf, 0x16, 0x37
+	lda	xsp, (xsp+22)
 	ret
 	ld	xde, xwa
-	.byte 0xba, 0x0c, 0x33
+	lda	xhl, (xde+12)
 	ld	c, (xhl+1)
 	and	c, 15
 	ld	w, (xhl)
@@ -26285,7 +26287,7 @@ SendPartDataBlock_Data:
 	ldirw
 	lda	xwa, (xde+102)
 	ld	xiy, xwa
-	.byte 0xf3, 0xe9, 0xb7, 0x00, 0x34
+	lda	xix, (xde+183)
 	ldw	bc, 40
 	ldirw
 	ldi85
@@ -26299,7 +26301,7 @@ SendPartDataBlock_Data:
 	ldw	bc, 40
 	ldirw
 	ldi85
-	.byte 0xf3, 0xfd, 0xaa, 0x01, 0x37
+	lda	xsp, (xsp+426)
 	ret
 	lda	xsp, (xsp-26)
 	push	xiz
@@ -26327,7 +26329,7 @@ SendPartDataBlock_Data:
 	ld	xhl, (xsp+26)
 	lda	xwa, (xhl+41)
 	ld	(xsp+14), xwa
-	.byte 0x80, 0x3c, 0xf0
+	andmi8	(xwa), 240
 	lda	xwa, (xhl+42)
 	ld	(xsp+10), xwa
 	ld	(xwa), 0
@@ -26918,7 +26920,7 @@ HdaeRom_DataDispatch_Block2:
 
 HdaeRom_DataDispatch_Block3:
 	lda	xhl, (xwa+18833)
-	.byte 0xf3, 0xe1, 0xa7, 0x72, 0x34
+	lda	xix, (xwa+29351)
 	dec	1, xix
 	cp	xix, xhl
 	jr	c, 16
@@ -26934,7 +26936,8 @@ HdaeRom_DataDispatch_Block3:
 	lds	de, 0
 	ld	bc, de
 	add	bc, 18855
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x33, 0x8b, 0x01, 0x3c, 0xcf
+	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x33
+	andmi8	(xhl+1), 207
 	exts	xbc
 	add	xbc, xwa
 	.byte 0xb9, 0x01, 0xbd

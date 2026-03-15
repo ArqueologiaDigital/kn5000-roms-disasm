@@ -2065,7 +2065,7 @@ IvNamingExit_ScreenData:
 	ld	xwa, (xsp+22)
 	.byte 0x98, 0x26, 0x3f, 0x02, 0x00
 	jrl	lt, 525
-	.byte 0xf3, 0xfd, 0x9a, 0x00, 0x31
+	lda	xbc, (xsp+154)
 	ld	xwa, (xsp+178)
 	call	16356829
 	lda	xde, (xsp+154)
@@ -2119,10 +2119,10 @@ IvNamingExit_ScreenData:
 	exts	wa
 	cp	wa, bc
 	jrl	ge, 238
-	.byte 0xf3, 0xfd, 0x9a, 0x00, 0x31
+	lda	xbc, (xsp+154)
 	ld	xwa, (xsp+178)
 	call	16356829
-	.byte 0xf3, 0xfd, 0x9a, 0x00, 0x31
+	lda	xbc, (xsp+154)
 	lda	xwa, (xbc+4)
 	ld	(xsp+18), xwa
 	ld	de, (xwa)
@@ -2192,7 +2192,7 @@ IvNamingExit_ScreenData:
 	lda	xde, (xsp+26)
 	lda	xhl, (xbc+28)
 	lda	xbc, (xsp+166)
-	.byte 0xf3, 0xfd, 0x9a, 0x00, 0x30
+	lda	xwa, (xsp+154)
 	cp	iy, (xix)
 	jr	nz, 11
 	ld	xhl, (xhl)
@@ -2242,7 +2242,7 @@ IvNamingExit_ScreenData:
 	ld	xde, (xsp+170)
 	call	16401417
 	pop	xiz
-	.byte 0xf3, 0xfd, 0xb2, 0x00, 0x37
+	lda	xsp, (xsp+178)
 	ret
 
 TrAsGrid_LookupByteTable:

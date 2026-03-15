@@ -11579,7 +11579,7 @@ AccStyle_InlinedBlock:
 	stdi8	13198, 32
 	call	16109025
 	add	xhl, 1996816
-	.byte 0x8b, 0x01, 0x3e, 0x80
+	ormi8	(xhl+1), 128
 	calr	799
 	call	16095156
 	.byte 0xc1, 0x46
@@ -13383,7 +13383,8 @@ AccVoice_BarCounterBytecodeData:
 	extz	bc
 	or	de, bc
 	cp	de, 792
-	.byte 0xf2, 0xeb, 0xe6, 0xf5, 0xee, 0xbf, 0x04, 0x31
+	.byte 0xf2, 0xeb, 0xe6, 0xf5, 0xee
+	lda	xbc, (xsp+4)
 	ld	a, (xbc)
 	extz	wa
 	ld	c, (xbc+1)
@@ -14040,7 +14041,7 @@ Not_sure_maybe_SOFT_VERSION_related:
 	cp	hl, 340
 	jr	nc, 21
 	calr	753
-	.byte 0x84, 0x3c, 0x7f
+	andmi8	(xix), 127
 	ld	hl, (xix+3)
 	.byte 0xbc, 0x01, 0x02, 0xff, 0xff, 0xbc, 0x03, 0x02, 0xff, 0xff
 	jr	-27

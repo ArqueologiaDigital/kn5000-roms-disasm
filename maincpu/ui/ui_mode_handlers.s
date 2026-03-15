@@ -7530,7 +7530,7 @@ FSWAssGrid_EventDispatch:
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
 	jrl	1071
-	.byte 0xf3, 0xfd, 0x04, 0x01, 0x33
+	lda	xhl, (xsp+260)
 	lda	xbc, (xhl+4)
 	ld	xwa, (xde)
 	cp	xwa, 10376
@@ -7626,7 +7626,7 @@ FSWAssGrid_EventDispatch:
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
-	.byte 0xf3, 0xfd, 0x04, 0x01, 0x32
+	lda	xde, (xsp+260)
 	ld	xbc, 31457420
 	jrl	741
 	ld	xwa, (xde)

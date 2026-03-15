@@ -207,7 +207,7 @@ FileIO_BytecodeData:
 	cp	(xiz+2), 7
 	.byte 0x6e, 0x03
 	ld	(xiz), 255
-	.byte 0xbe, 0x02, 0x30
+	lda	xwa, (xiz+2)
 	cp	(xwa), 9
 	.byte 0x6e, 0x0c, 0xc1, 0xfc, 0x26, 0x3f, 0x01, 0x6e
 	.byte 0x05
@@ -228,7 +228,7 @@ FileIO_BytecodeData:
 	ret
 	push xiz
 	ld	xiz, xwa
-	.byte 0xbe, 0x02, 0x31
+	lda	xbc, (xiz+2)
 	ld	a, (xbc)
 	cps	a, 0
 	.byte 0x66, 0x7a, 0xc1, 0x34, 0x8d, 0x21
@@ -2112,7 +2112,7 @@ SndParam_TableLookup_Via4100:
 	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21		; ld a, (xwa+hl)  [register-indexed]
 	and a, 0x07
 	sla	a, 4
-	.byte 0x8e, 0x0a, 0x3c, 0x8f			; and (xiz+0x0A), 0x8F  [indirect ALU]
+	andmi8	(xiz+10), 143
 	or	(xiz+10), a
 	pop xiz
 	ret
@@ -2192,8 +2192,8 @@ SndParam_GuardedNibbleSet_028103:
 	call SndParam_LookupReadOnly
 	cps	hl, 0
 	jr nz, MidiCtrl_PopIzRet
-	.byte 0x8e, 0x0e, 0x3c, 0xf0			; and (xiz+0x0E), 0xF0  [indirect ALU]
-	.byte 0xf1, 0x21, 0x04, 0xca			; bit 2, (0x0421)  [F1 prefix]
+	andmi8	(xiz+14), 240
+	.byte 0xf1, 0x21, 0x04, 0xca
 	jr z, MidiCtrl_PopIzRet
 	lds32	xwa, 1
 	call SndParam_LookupReadOnly
@@ -2270,7 +2270,7 @@ SndParam028000_GetBankBit:
 SndParam028000_LookupAndMerge:
 	call CtrlPanel_LookupIndicatorEntry
 	and l, 0x0F
-	.byte 0x8e, 0x03, 0x3c, 0xf0			; and (xiz+3), 0xF0  [indirect ALU]
+	andmi8	(xiz+3), 240
 	or (xiz+3), l
 	pop xiz
 	inc 6, xsp
@@ -2485,7 +2485,7 @@ CtrlPanel_SetBit1:
 	ld (xbc), a
 	jr t, CtrlPanel_BitManip_Ret
 CtrlPanel_ClearBits1_2:
-	.byte 0x81, 0x3c, 0xf9				; and (xbc), 0xF9  [indirect ALU]
+	andmi8	(xbc), 249
 	jr t, CtrlPanel_BitManip_Ret
 CtrlPanel_SetBit2:
 	and a, 0xf9
@@ -3444,7 +3444,7 @@ VoiceData_ExtendedParamSetup:
 	cp	(xsp+2), 14
 	jr	c, -39
 	ld	xwa, (xsp+8)
-	.byte 0xf3, 0xe1, 0x0d, 0x04, 0x31
+	lda	xbc, (xwa+1037)
 	ld	a, (xbc)
 	bit	2, a
 	jr	z, 20
@@ -3508,10 +3508,10 @@ VoiceData_ExtendedParamSetup:
 	jr	c, -77
 	pushw 14
 	ld	xwa, (xsp+6)
-	.byte 0xf3, 0xe1, 0xb0, 0x03, 0x30
+	lda	xwa, (xwa+944)
 	push	xwa
 	ld	xwa, (xsp+14)
-	.byte 0xf3, 0xe1, 0xb0, 0x03, 0x30
+	lda	xwa, (xwa+944)
 	push	xwa
 	call	16715161
 	lda	xsp, (xsp+10)
@@ -11092,7 +11092,7 @@ MidiStream_ExtendedDispatch:
 	ldda32	xix, 37106
 	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
 	ld	(xix), e
-	.byte 0x8c, 0x01, 0x3c, 0x80
+	andmi8	(xix+1), 128
 	or	(xix+1), b
 	ld	h, b
 	ld	l, e

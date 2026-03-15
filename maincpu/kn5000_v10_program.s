@@ -4794,7 +4794,7 @@ Voice_FactoryPresetData:
 	add	xix, xwa
 	.byte 0x9f, 0x32, 0x3f, 0xf5, 0x00
 	jr	z, 30
-	.byte 0x84, 0x3c, 0x60
+	andmi8	(xix), 96
 	ld	wa, iy
 	and	wa, 159
 	add	(xix), a
@@ -4817,7 +4817,7 @@ Voice_FactoryPresetData:
 	sll	xhl, 6
 	add	xhl, xde
 	add	xiy, xhl
-	.byte 0x84, 0x3c, 0x60
+	andmi8	(xix), 96
 	ld	a, (xiy)
 	and	a, 159
 	add	(xix), a
@@ -4827,7 +4827,7 @@ Voice_FactoryPresetData:
 	and	a, 128
 	cp	a, e
 	jr	z, 53
-	.byte 0x84, 0x3d, 0x60
+	xormi8	(xix), 96
 	jr	48
 	ld	wa, (xbc)
 	exts	xwa

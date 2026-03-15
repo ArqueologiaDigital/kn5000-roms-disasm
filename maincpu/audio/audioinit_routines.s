@@ -1262,7 +1262,7 @@ AudioInit_VoiceRoutingTable:
 	ldada	xbc, 49890
 	extz	xwa
 	add	xwa, xbc
-	.byte 0x80, 0x3c, 0x8f
+	andmi8	(xwa), 143
 	ld	wa, de
 	add	wa, wa
 	ldada	xbc, 49954
@@ -1292,14 +1292,14 @@ AudioInit_VoiceRoutingTable:
 	ldada	xbc, 49954
 	extz	xwa
 	add	xwa, xbc
-	.byte 0x80, 0x3c, 0xf1
+	andmi8	(xwa), 241
 	ld	wa, de
 	add	wa, wa
 	add	wa, 292
 	ldada	xbc, 49663
 	extz	xwa
 	add	xwa, xbc
-	.byte 0x80, 0x3c, 0x0f
+	andmi8	(xwa), 15
 	inc	1, de
 	cp	de, 32
 	jr	c, -127

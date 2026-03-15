@@ -4783,8 +4783,8 @@ VoiceCtrl_ParamSetupBytecode:
 	.byte 0xc1, 0x57, 0x0d, 0x21
 	inc	1, a
 	ld	(xiy+1), a
-	.byte 0xf1, 0xc9, 0x0d, 0xc9, 0x76, 0x03, 0x00, 0x85
-	.byte 0x3e, 0x02
+	.byte 0xf1, 0xc9, 0x0d, 0xc9, 0x76, 0x03, 0x00
+	ormi8	(xiy), 2
 	ld	(xiy+4), 0
 	ldb	w, 6
 	push xhl
@@ -6047,7 +6047,7 @@ MemoryConfig_Handler_Table:
 	.byte 0xc3, 0x07, 0xf4, 0xec, 0x21
 	bit	7, a
 	jrl	z, 10
-	.byte 0x84, 0x3e, 0x01
+	ormi8	(xix), 1
 	ld	(xix+4), w
 	jp	15707211
 	ld	(xix+4), a
@@ -6056,7 +6056,7 @@ MemoryConfig_Handler_Table:
 	.byte 0xe7, 0x38, 0x8d
 	bit	7, a
 	jrl	z, 10
-	.byte 0x84, 0x3e, 0x02
+	ormi8	(xix), 2
 	ld	(xix+5), w
 	jp	15707244
 	ld	(xix+5), a
@@ -8935,13 +8935,13 @@ SubCPU_ToneParamDisplay:
 	ld	(xix), 176
 	cpdi8	4380, 2
 	jrl	nz, 3
-	.byte 0x84, 0x3e, 0x02
+	ormi8	(xix), 2
 	ld	(xix+4), a
-	.byte 0x8c, 0x04, 0x3c, 0x7f
+	andmi8	(xix+4), 127
 	ld	(xix+5), 127
 	bit	7, a
 	jrl	z, 3
-	.byte 0x84, 0x3e, 0x01
+	ormi8	(xix), 1
 	ldda8	a, 3415
 	ld	(xix+1), a
 	ldda8	a, 36154
@@ -9900,7 +9900,8 @@ OscScope_Handler_7:
 	xor	d, d
 	extz	xde
 	add	xix, xde
-	.byte 0x84, 0x3c, 0xdf, 0x84, 0x3e, 0x40
+	andmi8	(xix), 223
+	ormi8	(xix), 64
 	ret
 	ldda32	xix, 4372
 	ldda8	e, 3780
@@ -10103,15 +10104,15 @@ OscScope_FinalizeRender:
 	ld	xiy, 3697
 	cp	(xiy), 0
 	jrl	z, 3
-	.byte 0x85, 0x3e, 0x80
+	ormi8	(xiy), 128
 	ld	xiy, 3729
 	cp	(xiy), 0
 	jrl	z, 3
-	.byte 0x85, 0x3e, 0x80
+	ormi8	(xiy), 128
 	ld	xiy, 3761
 	cp	(xiy), 0
 	jrl	z, 3
-	.byte 0x85, 0x3e, 0x80
+	ormi8	(xiy), 128
 	ret
 	stdi8	4479, 0
 	cps	e, 0
@@ -10131,9 +10132,9 @@ OscScope_FinalizeRender:
 	jrl	z, 7
 	cp	(xiy+2), 0
 	jrl	nz, 7
-	.byte 0x85, 0x3c, 0x7f
+	andmi8	(xiy), 127
 	jp	15723078
-	.byte 0x85, 0x3e, 0x80
+	ormi8	(xiy), 128
 	add	iy, 4
 	add	ix, 4
 	inc	1, c
@@ -13155,7 +13156,7 @@ Scoop_EnvelopeCalc_Data:
 	ld	xwa, xhl
 	call	16435914
 	pop	xiz
-	.byte 0xf3, 0xfd, 0x12, 0x01, 0x37
+	lda	xsp, (xsp+274)
 	ret
 	dec	8, xsp
 	ld	xbc, xwa
@@ -13300,7 +13301,7 @@ Scoop_EnvCalc_Handler1:
 	lda	xbc, (xsp)
 	add	xbc, xwa
 	ld	(xbc), 0
-	.byte 0xf3, 0xfd, 0x04, 0x01, 0x30
+	lda	xwa, (xsp+260)
 	ld	xhl, xwa
 	.byte 0xf3, 0xfd, 0x00, 0x01, 0x30
 	ld	xbc, xwa
@@ -13312,7 +13313,7 @@ Scoop_EnvCalc_Handler1:
 	pushw 245
 	ld	xwa, xhl
 	call	16435914
-	.byte 0xf3, 0xfd, 0x0c, 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 Scoop_EnvCalc_Handler2:
 	dec	8, xsp
@@ -13502,7 +13503,7 @@ Scoop_GlideParam_Data:
 	lda	xbc, (xsp)
 	add	xbc, xwa
 	ld	(xbc), 0
-	.byte 0xf3, 0xfd, 0x04, 0x01, 0x30
+	lda	xwa, (xsp+260)
 	ld	xhl, xwa
 	.byte 0xf3, 0xfd, 0x00, 0x01, 0x30
 	ld	xbc, xwa
@@ -13514,12 +13515,12 @@ Scoop_GlideParam_Data:
 	pushw 245
 	ld	xwa, xhl
 	call	16435914
-	.byte 0xf3, 0xfd, 0x0c, 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 Scoop_GlideCalc_Handler0:
 	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
 	ld	xiy, 14732330
-	.byte 0xf3, 0xfd, 0x04, 0x01, 0x34
+	lda	xix, (xsp+260)
 	lds	bc, 4
 	ldirw
 	ld	hl, (xwa+2)
@@ -13557,7 +13558,7 @@ Scoop_GlideCalc_Handler0:
 	lda	xbc, (xsp)
 	add	xbc, xwa
 	ld	(xbc), 0
-	.byte 0xf3, 0xfd, 0x04, 0x01, 0x30
+	lda	xwa, (xsp+260)
 	ld	xhl, xwa
 	.byte 0xf3, 0xfd, 0x00, 0x01, 0x30
 	ld	xbc, xwa
@@ -13569,7 +13570,7 @@ Scoop_GlideCalc_Handler0:
 	pushw 245
 	ld	xwa, xhl
 	call	16435914
-	.byte 0xf3, 0xfd, 0x0c, 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 Scoop_GlideCalc_Handler1:
 	dec	8, xsp
@@ -13764,7 +13765,7 @@ Scoop_EnvProcessor_Data:
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, 14732482
-	.byte 0xf3, 0xfd, 0x08, 0x01, 0x34
+	lda	xix, (xsp+264)
 	lds	bc, 4
 	ldirw
 	ld	wa, (xiz+2)
@@ -13827,9 +13828,10 @@ Scoop_EnvProcessor_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15380484
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24, 0xf3, 0xfd, 0x08, 0x01, 0x30
+	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24
+	lda	xwa, (xsp+264)
 	ld	xhl, xwa
-	.byte 0xf3, 0xfd, 0x04, 0x01, 0x30
+	lda	xwa, (xsp+260)
 	ld	xbc, xwa
 	lda	xwa, (xsp+4)
 	ld	xde, xwa
@@ -13839,7 +13841,7 @@ Scoop_EnvProcessor_Data:
 	ld	xwa, xhl
 	call	16435914
 	pop	xiz
-	.byte 0xf3, 0xfd, 0x0c, 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
 	push	xiz
@@ -13933,34 +13935,37 @@ Scoop_EnvProcessor_Data:
 	pushw wa
 	pushw 224
 	pushw 52458
-	.byte 0xbf, 0x0a, 0x30
+	lda	xwa, (xsp+10)
 	push xwa
 	call	16714354
-	.byte 0xbf, 0x0a, 0x37, 0x68, 0x2e
+	lda	xsp, (xsp+10)
+	.byte 0x68, 0x2e
 	ld	a, e
 	extz	wa
 	pushw wa
 	pushw 224
 	pushw 52462
-	.byte 0xbf, 0x0a, 0x30
+	lda	xwa, (xsp+10)
 	push xwa
 	call	16714354
-	.byte 0xbf, 0x0a, 0x37, 0x68, 0x16
+	lda	xsp, (xsp+10)
+	.byte 0x68, 0x16
 	ld	a, e
 	extz	wa
 	pushw wa
 	pushw 224
 	pushw 52466
-	.byte 0xbf, 0x0a, 0x30
+	lda	xwa, (xsp+10)
 	push xwa
 	call	16714354
-	.byte 0xbf, 0x0a, 0x37
+	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 63
 	extz	wa
 	sla	wa, 2
 	.byte 0xf2, 0x04, 0xb0, 0xea, 0x31, 0xe3, 0x07, 0xe4
-	.byte 0xe0, 0x24, 0xf3, 0xfd, 0x08, 0x01, 0x30
+	.byte 0xe0, 0x24
+	lda	xwa, (xsp+264)
 	ld	xhl, xwa
 	lda	xwa, (xsp+260)
 	ld	xbc, xwa
@@ -13972,7 +13977,7 @@ Scoop_EnvProcessor_Data:
 	ld	xwa, xhl
 	call	16435914
 	pop	xiz
-	.byte 0xf3, 0xfd, 0x0c, 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 
 Scoop_EventLoop_36Entry:
@@ -14085,7 +14090,7 @@ Scoop_EventLoop_36Entry_Data:
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, 14732554
-	.byte 0xf3, 0xfd, 0x08, 0x01, 0x34
+	lda	xix, (xsp+264)
 	lds	bc, 4
 	ldirw
 	ld	wa, (xiz+2)
@@ -14146,7 +14151,7 @@ Scoop_EventLoop_36Entry_Data:
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
-	.byte 0xf3, 0xfd, 0x04, 0x01, 0x30
+	lda	xwa, (xsp+260)
 	ld	xbc, xwa
 	lda	xwa, (xsp+4)
 	ld	xde, xwa
@@ -14156,14 +14161,14 @@ Scoop_EventLoop_36Entry_Data:
 	ld	xwa, xhl
 	call	16435914
 	pop	xiz
-	.byte 0xf3, 0xfd, 0x0c, 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
 	push	xiz
 	ld	xiz, xwa
 	.byte 0x45
 	.long GUI_FormatStrings
-	.byte 0xf3, 0xfd, 0x08, 0x01, 0x34
+	lda	xix, (xsp+264)
 	lds	bc, 4
 	ldirw
 	ld	wa, (xiz+2)
@@ -14244,38 +14249,41 @@ Scoop_EventLoop_36Entry_Data:
 	pushw wa
 	pushw 224
 	pushw 52530
-	.byte 0xbf, 0x0a, 0x30
+	lda	xwa, (xsp+10)
 	push xwa
 	call	16714354
-	.byte 0xbf, 0x0a, 0x37, 0x68, 0x2e
+	lda	xsp, (xsp+10)
+	.byte 0x68, 0x2e
 	ld	a, e
 	extz	wa
 	pushw wa
 	pushw 224
 	pushw 52534
-	.byte 0xbf, 0x0a, 0x30
+	lda	xwa, (xsp+10)
 	push xwa
 	call	16714354
-	.byte 0xbf, 0x0a, 0x37, 0x68, 0x16
+	lda	xsp, (xsp+10)
+	.byte 0x68, 0x16
 	ld	a, e
 	extz	wa
 	pushw wa
 	pushw 224
 	pushw 52538
-	.byte 0xbf, 0x0a, 0x30
+	lda	xwa, (xsp+10)
 	push xwa
 	call	16714354
-	.byte 0xbf, 0x0a, 0x37
+	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
 	sla	wa, 2
 	.byte 0xf2, 0x04, 0xb1, 0xea, 0x31, 0xe3, 0x07, 0xe4
-	.byte 0xe0, 0x24, 0xf3, 0xfd, 0x08, 0x01, 0x30
+	.byte 0xe0, 0x24
+	lda	xwa, (xsp+264)
 	ld	xhl, xwa
-	.byte 0xf3, 0xfd, 0x04, 0x01, 0x30
+	lda	xwa, (xsp+260)
 	ld	xbc, xwa
-	.byte 0xbf, 0x04, 0x30
+	lda	xwa, (xsp+4)
 	ld	xde, xwa
 	push xix
 	pushw 255
@@ -14283,7 +14291,7 @@ Scoop_EventLoop_36Entry_Data:
 	ld	xwa, xhl
 	call	16435914
 	pop xiz
-	.byte 0xf3, 0xfd, 0x0c, 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
 	push xiz
@@ -14332,9 +14340,10 @@ Scoop_EventLoop_36Entry_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15380740
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24, 0xf3, 0xfd, 0x08, 0x01, 0x30
+	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24
+	lda	xwa, (xsp+264)
 	ld	xhl, xwa
-	.byte 0xf3, 0xfd, 0x04, 0x01, 0x30
+	lda	xwa, (xsp+260)
 	ld	xbc, xwa
 	lda	xwa, (xsp+4)
 	ld	xde, xwa
@@ -14344,7 +14353,7 @@ Scoop_EventLoop_36Entry_Data:
 	ld	xwa, xhl
 	call	16435914
 	pop	xiz
-	.byte 0xf3, 0xfd, 0x0c, 0x01, 0x37
+	lda	xsp, (xsp+268)
 	ret
 	.byte 0xf3, 0xfd, 0xf2, 0xfe, 0x37
 	push	xiz
@@ -14401,7 +14410,8 @@ Scoop_EventLoop_36Entry_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15380740
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24, 0xf3, 0xfd, 0x0a, 0x01, 0x30
+	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24
+	lda	xwa, (xsp+266)
 	ld	xhl, xwa
 	lda	xwa, (xsp+262)
 	ld	xbc, xwa
@@ -14413,7 +14423,7 @@ Scoop_EventLoop_36Entry_Data:
 	ld	xwa, xhl
 	call	16435914
 	pop	xiz
-	.byte 0xf3, 0xfd, 0x0e, 0x01, 0x37
+	lda	xsp, (xsp+270)
 	ret
 
 Scoop_EventLoop_12Entry_Alt:

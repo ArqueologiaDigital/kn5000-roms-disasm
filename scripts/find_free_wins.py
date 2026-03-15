@@ -511,6 +511,19 @@ def translate_unidasm_to_llvm(mnemonic):
         if m:
             return None  # May need special handling
 
+        # Bare register+displacement: XRR+0xNN (used by lda)
+        m = re.match(r'^([A-Z]+)\+(0x[0-9a-fA-F]+)$', operand)
+        if m:
+            reg = UNIDASM_REG_MAP.get(m.group(1))
+            disp = int(m.group(2), 16)
+            if reg:
+                return f'({reg}+{disp})'
+
+        # Bare register+register: XRR+RR (used by jp T, XRR+RR)
+        m = re.match(r'^([A-Z]+)\+([A-Z]+)$', operand)
+        if m:
+            return None  # LLVM doesn't support R+R addressing
+
         # Register
         reg = UNIDASM_REG_MAP.get(operand)
         if reg:
@@ -552,6 +565,17 @@ def translate_unidasm_to_llvm(mnemonic):
     llvm_op = op
     if op == 'ldw':
         llvm_op = 'ld'  # LLVM uses ld for all sizes, operand size determines encoding
+
+    # ── Memory-immediate ALU: and/or/xor (mem), imm → andmi8/ormi8/xormi8 ──
+    MEM_IMM_OPS = {'and': 'andmi8', 'or': 'ormi8', 'xor': 'xormi8'}
+    if op in MEM_IMM_OPS and len(translated_ops) == 2:
+        mem_op = translated_ops[0]
+        imm_str = translated_ops[1]
+        is_mem = mem_op.startswith('(')
+        is_imm = imm_str.lstrip('-').isdigit()
+        if is_mem and is_imm:
+            mi_mnem = MEM_IMM_OPS[op]
+            return [f'{mi_mnem}\t{mem_op}, {imm_str}', f'{op}\t{mem_op}, {imm_str}']
 
     # ── Generate alternative forms for compact encodings ──
 

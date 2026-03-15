@@ -4440,7 +4440,7 @@ SeqStep_FileBufferFinal:
 	jr	nz, 9
 	.byte 0xbe, 0x16, 0xca
 	jr	nz, 4
-	.byte 0x8e, 0x16, 0x3c, 0x80
+	andmi8	(xiz+22), 128
 	incm	1, (xsp+6)
 	lda	xiz, (xiz+538)
 	.byte 0x9f, 0x06, 0x3f, 0x0a, 0x00
@@ -4824,7 +4824,8 @@ SeqStep_FileSectorPopReturn:
 	.ascii "& 8>"
 	ld	xwa, (xsp+20)
 	push xwa
-	.byte 0x1e, 0x0c, 0xf9, 0xbf, 0x0e, 0x37
+	.byte 0x1e, 0x0c, 0xf9
+	lda	xsp, (xsp+14)
 	ld	xbc, xhl
 	ld	xwa, (xsp+10)
 	ld	(xwa+38), xbc
@@ -4947,7 +4948,8 @@ SeqStep_FileSectorPopReturn:
 	push xiz
 	ld	xwa, (xsp+20)
 	push xwa
-	.byte 0x1e, 0xb8, 0xf7, 0xbf, 0x0e, 0x37
+	.byte 0x1e, 0xb8, 0xf7
+	lda	xsp, (xsp+14)
 	ld	xbc, xhl
 	ld	xwa, (xsp+10)
 	ld	(xwa+38), xbc
@@ -5104,7 +5106,7 @@ SeqStep_FileSectorPopReturn:
 	.byte 0x7e, 0x23, 0xff, 0x9f, 0x18, 0x3f, 0x00, 0x00
 	.byte 0x66, 0x69
 	ld	xwa, (xsp+12)
-	.byte 0xb8, 0x20, 0x31
+	lda	xbc, (xwa+32)
 	ld	wa, iz
 	dec	2, wa
 	extz	xwa
@@ -5133,7 +5135,7 @@ SeqStep_FileSectorPopReturn:
 	.byte 0x68, 0x21
 	pushw 512
 	pushw 0
-	.byte 0xbb, 0x1a, 0x30
+	lda	xwa, (xhl+26)
 	push xwa
 	call	16715770
 	inc	0, xsp
@@ -5145,7 +5147,7 @@ SeqStep_FileSectorPopReturn:
 	.byte 0x67, 0xb8
 	lds	hl, 0
 	pop xiz
-	.byte 0xbf, 0x0c, 0x37
+	lda	xsp, (xsp+12)
 	ret
 	push xiz
 	ld	xiz, (xsp+12)
@@ -5430,7 +5432,7 @@ SeqByteBlock_StyleBitmapRef:
 	cp	(xiz+51), 16
 	.byte 0x67, 0xdd
 	ld	xwa, (xsp+18)
-	.byte 0x88, 0x16, 0x3c, 0xe7
+	andmi8	(xwa+22), 231
 	lds32	xwa, 1
 	add	(xiz+26), xwa
 	.byte 0x9f, 0x04, 0x61
@@ -5462,12 +5464,12 @@ SeqByteBlock_StyleBitmapRef:
 	cps	wa, 0
 	.byte 0x76, 0x19, 0xff
 	pop xiz
-	.byte 0xbf, 0x1e, 0x37
+	lda	xsp, (xsp+30)
 	ret
 	dec	4, xsp
 	push xiz
 	ld	xiz, (xsp+12)
-	.byte 0xbe, 0x41, 0x30
+	lda	xwa, (xiz+65)
 	push xwa
 	ld	xwa, (xiz+10)
 	ld	xwa, (xwa+24)
@@ -5478,7 +5480,8 @@ SeqByteBlock_StyleBitmapRef:
 	ld	xwa, (xiz+26)
 	push xwa
 	push xiz
-	.byte 0x1e, 0x7b, 0xee, 0xbf, 0x12, 0x37
+	.byte 0x1e, 0x7b, 0xee
+	lda	xsp, (xsp+18)
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
@@ -5493,12 +5496,12 @@ SeqByteBlock_StyleBitmapRef:
 	ld	xwa, (xsp+4)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30
 	push xwa
-	.byte 0xbe, 0x34, 0x30
+	lda	xwa, (xiz+52)
 	push xwa
 	.byte 0x1e, 0x0c, 0xf3
 	inc	0, xsp
 	ld	xwa, (xsp+4)
-	.byte 0x88, 0x16, 0x3c, 0xe7
+	andmi8	(xwa+22), 231
 	lds	hl, 0
 	pop xiz
 	inc	4, xsp
@@ -5519,7 +5522,8 @@ SeqByteBlock_StyleBitmapRef:
 	pushw iz
 	ld	xwa, (xsp+18)
 	push xwa
-	.byte 0x1e, 0xc6, 0xf4, 0xbf, 0x0e, 0x37
+	.byte 0x1e, 0xc6, 0xf4
+	lda	xsp, (xsp+14)
 	ld	iz, qiz
 	cps	iz, 0
 	.byte 0x66, 0x0f
@@ -6949,7 +6953,7 @@ SeqChan_TraverseAndProcess:
 	jr	z, 18
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
-	.byte 0x88, 0x16, 0x3c, 0xe7
+	andmi8	(xwa+22), 231
 	ld	xwa, (xsp+12)
 	lds32	xbc, 0
 	ld	(xwa+34), xbc
@@ -6972,9 +6976,10 @@ SeqChan_TraverseAndProcess:
 	calr	-7909
 	inc	4, xsp
 	or	(xsp+6), hl
-	.byte 0x8e, 0x16, 0x3c, 0xe5
+	andmi8	(xiz+22), 229
 	incm	1, (xsp+4)
-	.byte 0xf3, 0xf9, 0x1a, 0x02, 0x36, 0x9f, 0x04, 0x3f, 0x0a, 0x00
+	lda	xiz, (xiz+538)
+	.byte 0x9f, 0x04, 0x3f, 0x0a, 0x00
 	jr	lt, -49
 	ld	hl, (xsp+6)
 	pop	xiz

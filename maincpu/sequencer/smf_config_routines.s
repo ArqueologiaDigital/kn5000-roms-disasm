@@ -2886,7 +2886,7 @@ SMF_SlotParam_PortamentoTime:
 	bit	7, a
 	jr	z, 6
 	and	a, 127
-	.byte 0x85, 0x3e, 0x04
+	ormi8	(xiy), 4
 	ld	(xiy+2), a
 	ld	(xiy+3), 2
 	.byte 0xc1, 0x3b, 0x11, 0x3e, 0x01

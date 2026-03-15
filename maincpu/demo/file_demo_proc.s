@@ -10,7 +10,8 @@ FDemo_DisplayResourceData:
 	.byte 0xf3, 0xfd, 0xdc, 0xfe, 0x37
 	push	xiz
 	ld	xiz, xwa
-	.byte 0xbf, 0x06, 0x02, 0x00, 0x00, 0xf3, 0xfd, 0x08, 0x01, 0x31
+	.byte 0xbf, 0x06, 0x02, 0x00, 0x00
+	lda	xbc, (xsp+264)
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
 	.byte 0xf5, 0xe0, 0x00, 0x20
@@ -20,7 +21,7 @@ FDemo_DisplayResourceData:
 	call	16715680
 	pushw	hl
 	push	xiz
-	.byte 0xf3, 0xfd, 0x12, 0x01, 0x30
+	lda	xwa, (xsp+274)
 	push	xwa
 	call	16714995
 	lda	xwa, (xsp+278)
@@ -30,7 +31,7 @@ FDemo_DisplayResourceData:
 	push	xwa
 	call	16715201
 	lda	xsp, (xsp+22)
-	.byte 0xf3, 0xfd, 0x08, 0x01, 0x30
+	lda	xwa, (xsp+264)
 	ld	xbc, 15335542
 	call	16288711
 	ld	(xsp+4), hl
@@ -100,7 +101,7 @@ FDemo_DisplayResourceData:
 	call	16288840
 	ld	hl, (xsp+4)
 	pop	xiz
-	.byte 0xf3, 0xfd, 0x24, 0x01, 0x37
+	lda	xsp, (xsp+292)
 	ret
 	lda_24	xwa, 700416
 	st32_24	154494, xwa
@@ -5850,7 +5851,7 @@ IdxRecLookup_ReleaseHandle:
 IdxRecLookup_Return:
 	ld hl, (xsp + 6)			; return result flag
 	popw iz
-	.byte 0xf3, 0xfd, 0x20, 0x01, 0x37	; lda xsp, (xsp + 0x0120)  [R+d16, not in LLVM]
+	lda	xsp, (xsp+288)
 	ret
 
 
@@ -6084,7 +6085,7 @@ ValidateAndSearch_Found:
 	ld xhl, (xsp + 20)
 ValidateAndSearch_Return:
 	popw iz
-	.byte 0xf3, 0xfd, 0x1a, 0x01, 0x37	; lda xsp, (xsp + 0x011A)  [R+d16]
+	lda	xsp, (xsp+282)
 	ret
 
 

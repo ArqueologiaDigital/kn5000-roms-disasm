@@ -5907,7 +5907,7 @@ UIStateEvt_EffectSelect_Data:
 	ld	c, e
 	and	c, 15
 	sla	c, 4
-	.byte 0x80, 0x3c, 0x0f
+	andmi8	(xwa), 15
 	or	(xwa), c
 	inc	1, hl
 	cp	hl, 26
@@ -5989,7 +5989,7 @@ UIStateEvt_ChannelConfig_Data:
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21
 	and	a, 15
 	sla	a, 4
-	.byte 0x83, 0x3c, 0x0f
+	andmi8	(xhl), 15
 	or	(xhl), a
 	inc	1, de
 	cp	de, 26
@@ -6004,7 +6004,7 @@ UIStateEvt_ChannelConfig_Data:
 	ldada	xbc, 49663
 	extz	xwa
 	add	xwa, xbc
-	.byte 0x80, 0x3c, 0x0f
+	andmi8	(xwa), 15
 	inc	1, de
 	cp	de, 26
 	jr	c, -27
