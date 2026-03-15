@@ -1483,7 +1483,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	add	xwa, 19216
 	call	16632065
 	inc	1, iz
-	.byte 0xd7, 0xfa, 0xf6
+	cp	iz, qiz
 	jr	lt, -42
 	push	xiz
 	call	15668467

@@ -53,7 +53,7 @@ SysEx_ApplyToSlot4B_Data:
 	call	16632065
 	jr	7
 	inc	1, iz
-	.byte 0xd7, 0xfa, 0xf6
+	cp	iz, qiz
 	jr	lt, -50
 	push	xiz
 	call	15668467
@@ -110,7 +110,7 @@ SysEx_ApplyToSlot49_Data:
 	add	xwa, 18704
 	call	16632065
 	inc	1, iz
-	.byte 0xd7, 0xfa, 0xf6
+	cp	iz, qiz
 	jr	lt, -42
 	push	xiz
 	call	15668467
@@ -165,7 +165,7 @@ SysEx_ApplyToSlot49_Format_Data:
 	call	16632065
 	jr	7
 	inc	1, iz
-	.byte 0xd7, 0xfa, 0xf6
+	cp	iz, qiz
 	jr	lt, -50
 	push	xiz
 	call	15668467

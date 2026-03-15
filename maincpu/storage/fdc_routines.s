@@ -1201,7 +1201,7 @@ FDC_ClearStatus_InitTimer:
 	ldw	bc, 65535
 	ldda16	wa, 1033
 	sub	wa, iz
-	.byte 0xd7, 0xfa, 0xf0
+	cp	wa, qiz
 	jr	ule, 9
 	ldw	wa, 9
 	calr	-92
