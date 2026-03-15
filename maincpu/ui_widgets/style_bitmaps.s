@@ -1,5902 +1,751 @@
-	jr	ge, 0x64
-	aligned_string "uToshi"
-NakaInst_iduMurai:	aligned_string "iduMurai"
-NakaInst_iduRoot:	aligned_string "iduRoot"
-NakaInst_False_EB71DA:
-	.byte 0xfa, 0x71, 0xeb, 0x00, 0x01, 0x00
-	.byte 0x00, 0x00, 0xf4, 0x71, 0xeb, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0xf2, 0x71, 0xeb, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0xff
-	aligned_string "False"
-	aligned_string "True"
-	.long NakaInst_pSword_EmptyStr
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_pSword_EmptyStr:	aligned_string ""
-NakaInst_pUword_FormatData:
-	.byte 0x12, 0x72, 0xeb, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0xff, 0x1c, 0x72, 0xeb, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-NakaInst_pUchar_FormatData:
-	.byte 0x26, 0x72
-	.byte 0xeb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	.long NakaInst_pSlong_EmptyStr
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_pSlong_EmptyStr:	aligned_string ""
-NakaInst_pUlong_FormatData:
-	.byte 0x3a, 0x72, 0xeb, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0xff, 0x44, 0x72, 0xeb, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-NakaInst_PartID_EnumTable:
-	.byte 0x5e, 0x74
-	.byte 0xeb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x54, 0x74
-	.byte 0xeb, 0x00, 0x01, 0x00, 0x00, 0x00, 0x4a, 0x74
-	.byte 0xeb, 0x00, 0x02, 0x00, 0x00, 0x00, 0x40, 0x74
-	.byte 0xeb, 0x00, 0x03, 0x00, 0x00, 0x00, 0x36, 0x74
-	.byte 0xeb, 0x00, 0x04, 0x00, 0x00, 0x00, 0x2c, 0x74
-	.byte 0xeb, 0x00, 0x05, 0x00, 0x00, 0x00, 0x22, 0x74
-	.byte 0xeb, 0x00, 0x06, 0x00, 0x00, 0x00, 0x18, 0x74
-	.byte 0xeb, 0x00, 0x07, 0x00, 0x00, 0x00, 0x0e, 0x74
-	.byte 0xeb, 0x00, 0x08, 0x00, 0x00, 0x00, 0x04, 0x74
-	.byte 0xeb, 0x00, 0x09, 0x00, 0x00, 0x00, 0xfa, 0x73
-	.byte 0xeb, 0x00, 0x0a, 0x00, 0x00, 0x00, 0xf0, 0x73
-	.byte 0xeb, 0x00, 0x0b, 0x00, 0x00, 0x00, 0xe6, 0x73
-	.byte 0xeb, 0x00, 0x0c, 0x00, 0x00, 0x00, 0xdc, 0x73
-	.byte 0xeb, 0x00, 0x0d, 0x00, 0x00, 0x00, 0xd2, 0x73
-	.byte 0xeb, 0x00, 0x0e, 0x00, 0x00, 0x00, 0xc8, 0x73
-	.byte 0xeb, 0x00, 0x0f, 0x00, 0x00, 0x00, 0xbc, 0x73
-	.byte 0xeb, 0x00, 0x10, 0x00, 0x00, 0x00, 0xb0, 0x73
-	.byte 0xeb, 0x00, 0x11, 0x00, 0x00, 0x00, 0xa4, 0x73
-	.byte 0xeb, 0x00, 0x12, 0x00, 0x00, 0x00, 0x9c, 0x73
-	.byte 0xeb, 0x00, 0x13, 0x00, 0x00, 0x00, 0x94, 0x73
-	.byte 0xeb, 0x00, 0x14, 0x00, 0x00, 0x00, 0x8a, 0x73
-	.byte 0xeb, 0x00, 0x15, 0x00, 0x00, 0x00, 0x7e, 0x73
-	.byte 0xeb, 0x00, 0x16, 0x00, 0x00, 0x00, 0x76, 0x73
-	.byte 0xeb, 0x00, 0x17, 0x00, 0x00, 0x00, 0x6e, 0x73
-	.byte 0xeb, 0x00, 0x18, 0x00, 0x00, 0x00, 0x62, 0x73
-	.byte 0xeb, 0x00, 0x19, 0x00, 0x00, 0x00, 0x54, 0x73
-	.byte 0xeb, 0x00, 0x1a, 0x00, 0x00, 0x00, 0x46, 0x73
-	.byte 0xeb, 0x00, 0x1b, 0x00, 0x00, 0x00, 0x38, 0x73
-	.byte 0xeb, 0x00, 0xff, 0x00, 0x00, 0x00, 0x36, 0x73
-	.byte 0xeb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-	aligned_string "PT_PartSelect"
-	aligned_string "PT_Microphone"
-	aligned_string "PT_Metronome"
-	aligned_string "PT_Control"
-	aligned_string "PT_Msp2"
-	aligned_string "PT_Msp1"
-	aligned_string "PT_RootBass"
-	aligned_string "PT_Chord"
-	.byte 0x50, 0x54, 0x5f, 0x44
-	.byte 0x72, 0x75, 0x6d, 0x00
-	.byte 0x50, 0x54, 0x5f, 0x42
-	.byte 0x61, 0x73, 0x73, 0x00
-	aligned_string "PT_Accomp3"
-	aligned_string "PT_Accomp2"
-	aligned_string "PT_Accomp1"
-	aligned_string "PT_Part16"
-	aligned_string "PT_Part15"
-	aligned_string "PT_Part14"
-	aligned_string "PT_Part13"
-	aligned_string "PT_Part12"
-	aligned_string "PT_Part11"
-	aligned_string "PT_Part10"
-	aligned_string "PT_Part9"
-	aligned_string "PT_Part8"
-	aligned_string "PT_Part7"
-	aligned_string "PT_Part6"
-	aligned_string "PT_Part5"
-	aligned_string "PT_Part4"
-	aligned_string "PT_Part3"
-	aligned_string "PT_Part2"
-	aligned_string "PT_Part1"
-	.long NakaInst_TR_Track1
-	.byte 0x00, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track2
-	.byte 0x01, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track3
-	.byte 0x02, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track4
-	.byte 0x03, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track5
-	.byte 0x04, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track6
-	.byte 0x05, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track7
-	.byte 0x06, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track8
-	.byte 0x07, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track9
-	.byte 0x08, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track10
-	.byte 0x09, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track11
-	.byte 0x0a, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track12
-	.byte 0x0b, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track13
-	.byte 0x0c, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track14
-	.byte 0x0d, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track15
-	.byte 0x0e, 0x00, 0x00, 0x00
-	.long NakaInst_TR_Track16
-	.byte 0x0f, 0x00, 0x00, 0x00
-	.long NakaInst_TR_All
-	.byte 0xff, 0x00, 0x00, 0x00
-	.long NakaInst_TrackID_EmptyStr
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_TrackID_EmptyStr:	aligned_string ""
-NakaInst_TR_All:	aligned_string "TR_All"
-NakaInst_TR_Track16:	aligned_string "TR_Track16"
-NakaInst_TR_Track15:	aligned_string "TR_Track15"
-NakaInst_TR_Track14:	aligned_string "TR_Track14"
-NakaInst_TR_Track13:	aligned_string "TR_Track13"
-NakaInst_TR_Track12:	aligned_string "TR_Track12"
-NakaInst_TR_Track11:	aligned_string "TR_Track11"
-NakaInst_TR_Track10:	aligned_string "TR_Track10"
-NakaInst_TR_Track9:	aligned_string "TR_Track9"
-NakaInst_TR_Track8:	aligned_string "TR_Track8"
-NakaInst_TR_Track7:	aligned_string "TR_Track7"
-NakaInst_TR_Track6:	aligned_string "TR_Track6"
-NakaInst_TR_Track5:	aligned_string "TR_Track5"
-NakaInst_TR_Track4:	aligned_string "TR_Track4"
-NakaInst_TR_Track3:	aligned_string "TR_Track3"
-NakaInst_TR_Track2:	aligned_string "TR_Track2"
-NakaInst_TR_Track1:	aligned_string "TR_Track1"
-NakaInst_IntTimeID_EnumTable:
-	.long NakaInst_IT_Off
-	.byte 0x00, 0x00, 0x00, 0x00
-	.long NakaInst_IT_Default
-	.byte 0x01, 0x00, 0x00, 0x00
-	.long NakaInst_IT_Hold
-	.byte 0x02, 0x00, 0x00, 0x00
-	.long NakaInst_IT_1Sec
-	.byte 0x03, 0x00, 0x00, 0x00
-	.long NakaInst_IT_2Sec
-	.byte 0x04, 0x00, 0x00, 0x00
-	.long NakaInst_IT_3Sec
-	.byte 0x05, 0x00, 0x00, 0x00
-	.long NakaInst_IT_4Sec
-	.byte 0x06, 0x00, 0x00, 0x00
-	.long NakaInst_IT_5Sec
-	.byte 0x07, 0x00, 0x00, 0x00
-	.long NakaInst_IT_6Sec
-	.byte 0x08, 0x00, 0x00, 0x00
-	.long NakaInst_IT_7Sec
-	.byte 0x09, 0x00, 0x00, 0x00
-	.long NakaInst_IT_8Sec
-	.byte 0x0a, 0x00, 0x00, 0x00
-	.long NakaInst_IT_9Sec
-	.byte 0x0b, 0x00, 0x00, 0x00
-	.long NakaInst_IT_10Sec
-	.byte 0x0c, 0x00, 0x00, 0x00
-	.long NakaInst_IntTimeID_EmptyStr
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_IntTimeID_EmptyStr:	aligned_string ""
-NakaInst_IT_10Sec:	aligned_string "IT_10Sec"
-NakaInst_IT_9Sec:	.asciz "IT_9Sec"
-NakaInst_IT_8Sec:	.asciz "IT_8Sec"
-NakaInst_IT_7Sec:	.asciz "IT_7Sec"
-NakaInst_IT_6Sec:	.asciz "IT_6Sec"
-NakaInst_IT_5Sec:	.asciz "IT_5Sec"
-NakaInst_IT_4Sec:	.asciz "IT_4Sec"
-NakaInst_IT_3Sec:	.asciz "IT_3Sec"
-NakaInst_IT_2Sec:	.asciz "IT_2Sec"
-NakaInst_IT_1Sec:	.asciz "IT_1Sec"
-NakaInst_IT_Hold:	.asciz "IT_Hold"
-NakaInst_IT_Default:	aligned_string "IT_Default"
-NakaInst_IT_Off:	aligned_string "IT_Off"
-	.byte 0xec, 0x62, 0xfa, 0x00, 0x00, 0x00, 0x02, 0x00
-	.long NakaProp_FontEntry0
-	.long uwordProc
-	.byte 0x00, 0x00, 0x02, 0x00, 0xe8, 0x67, 0xeb, 0x00
-	.byte 0xb4, 0x63, 0xfa, 0x00, 0x00, 0x00, 0x01, 0x00
-	.long NakaProp_FontEntry1
-	.long scharProc
-	.byte 0x00, 0x00, 0x01, 0x00, 0xfc, 0x67, 0xeb, 0x00
-	.byte 0x7e, 0x64, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x00
-	.long NakaProp_FontEntry2
-	.long ulongProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0x10, 0x68, 0xeb, 0x00
-	.byte 0x42, 0x65, 0xfa, 0x00, 0x02, 0x00, 0x02, 0x00
-	.long NakaInst_False
-	.long ObjectIDProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0x40, 0x68, 0xeb, 0x00
-	.byte 0xf5, 0x92, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x00
-	.long NakaProp_BoolEntry1
-	.long pProcProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0x54, 0x68, 0xeb, 0x00
-	.byte 0xfb, 0x92, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x00
-	.long NakaProp_BoolEntry2
-	.long pStringProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0x68, 0x68, 0xeb, 0x00
-	.byte 0xe6, 0x73, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x00
-	.long NakaProp_BoolEntry3
-	.long ScreenIDProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0x7c, 0x68, 0xeb, 0x00
-	.byte 0x01, 0x93, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x00
-	.long NakaProp_BoolEntry4
-	.long RECTWProc
-	.byte 0x00, 0x00, 0x08, 0x00, 0x90, 0x68, 0xeb, 0x00
-	.byte 0xc8, 0x6e, 0xfa, 0x00, 0x00, 0x00, 0x02, 0x00
-	.long NakaProp_BoolEntry5
-	.long RectY1Proc
-	.byte 0x00, 0x00, 0x02, 0x00, 0xa4, 0x68, 0xeb, 0x00
-	.byte 0x58, 0x70, 0xfa, 0x00, 0x00, 0x00, 0x02, 0x00
-	.long NakaProp_BoolEntry6
-	.long RectY2Proc
-	.byte 0x00, 0x00, 0x02, 0x00, 0xb8, 0x68, 0xeb, 0x00
-	.byte 0xe9, 0x71, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x00
-	.long NakaProp_BoolEntry7
-	.long PointXProc
-	.byte 0x00, 0x00, 0x02, 0x00, 0xcc, 0x68, 0xeb, 0x00
-	.byte 0x40, 0x73, 0xfa, 0x00, 0x00, 0x00, 0x02, 0x00
-	.long NakaProp_BoolEntry8
-	.long StringProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0xe0, 0x68, 0xeb, 0x00
-	.byte 0xb5, 0x91, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x00
-	.long NakaProp_CFlagEntry
-	.long ConstFlagProc
-	.byte 0x02, 0x00, 0x04, 0x00, 0xf4, 0x68, 0xeb, 0x00
-	.byte 0xfd, 0x82, 0xfa, 0x00, 0x00, 0x00, 0x02, 0x00
-	.long NakaProp_VisFlag_Header
-	.long uwordProc
-	.byte 0x00, 0x00, 0x02, 0x00, 0xe8, 0x67, 0xeb, 0x00
-	.byte 0xad, 0x75, 0xfa, 0x00, 0x06, 0x00, 0x02, 0x00
-	.long NakaProp_VisFlag_Chain
-	.long ColorIDProc
-	.byte 0x1d, 0x00, 0x02, 0x00, 0xaa, 0x69, 0xeb, 0x00
-	.byte 0x75, 0x76, 0xfa, 0x00, 0x14, 0x00, 0x02, 0x00
-	.long NakaProp_BorderDefs
-	.long ModeIDProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0x62, 0x6d, 0xeb, 0x00
-	.byte 0x6f, 0x8f, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x00
-	.long NakaProp_Align_Header
-	.long IconIDProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0x76, 0x6d, 0xeb, 0x00
-	.byte 0xcf, 0x7b, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x00
-	.long NakaProp_Align_PtrEntry
-	.long AlignmentIDProc
-	.byte 0x03, 0x00, 0x01, 0x00, 0x8a, 0x6d, 0xeb, 0x00
-	.byte 0xa1, 0x77, 0xfa, 0x00, 0x14, 0x00, 0x02, 0x00
-	.long NakaProp_EditSwitch_Chain
-	.long EditSwStyleIDProc
-	.byte 0x11, 0x00, 0x01, 0x00, 0x54, 0x6f, 0xeb, 0x00
-	.byte 0x42, 0x78, 0xfa, 0x00, 0x02, 0x00, 0x01, 0x00
-	.long NakaInst_LM_RightDown
-	.long FrameIDProc
-	.byte 0x02, 0x00, 0x02, 0x00, 0xae, 0x70, 0xeb, 0x00
-	.byte 0x0f, 0x7e, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x00
-	.long NakaProp_Frame_Header
-	.long ApFuncIDProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0xe4, 0x70, 0xeb, 0x00
-	.byte 0x16, 0x81, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x00
-	.long NakaProp_Frame_Chain
-	.long UserIDProc
-	.byte 0x0d, 0x00, 0x02, 0x00, 0xf8, 0x70, 0xeb, 0x00
-	.long pBoolProc
-	.byte 0x02, 0x00, 0x04, 0x00
-	.long NakaInst_False_EB71DA
-	.long pSwordProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0x00, 0x72, 0xeb, 0x00
-	.long pUwordProc
-	.byte 0x00, 0x00, 0x04, 0x00
-	.long NakaInst_pUword_FormatData
-	.long pScharProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0x14, 0x72, 0xeb, 0x00
-	.long pUcharProc
-	.byte 0x00, 0x00, 0x04, 0x00
-	.long NakaInst_pUchar_FormatData
-	.long pSlongProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0x28, 0x72, 0xeb, 0x00
-	.long pUlongProc
-	.byte 0x00, 0x00, 0x04, 0x00
-	.long NakaInst_pUlong_FormatData
-	.long WindowIDProc
-	.byte 0x00, 0x00, 0x04, 0x00, 0x3c, 0x72, 0xeb
-NakaInst_WindowID_Cont:
-	.byte 0x00
-	.long PartIDProc
-	.byte 0x1d, 0x00, 0x02, 0x00
-	.long NakaInst_PartID_EnumTable
-	.long TrackIDProc
-	.byte 0x11, 0x00, 0x02, 0x00, 0x68, 0x74, 0xeb, 0x00
-	.long IntTimeIDProc
-	.byte 0x0d, 0x00, 0x02, 0x00
-	.long NakaInst_IntTimeID_EnumTable
-	.zero 12
-	.byte 0x4a, 0x05
-WidgetStyleDataTable:
-	.byte 0x06, 0x2b, 0xfb, 0x00, 0x60, 0x30
-	.byte 0xfb, 0x00, 0x61, 0x30, 0xfb, 0x00, 0x62, 0x30
-	.byte 0xfb, 0x00, 0x00, 0xd4, 0x1e, 0x00, 0xc0, 0xd7
-	.byte 0x1e, 0x00, 0x80, 0xdb, 0x1e, 0x00, 0x40, 0xdf
-	.byte 0x1e, 0x00, 0x00, 0xe3, 0x1e, 0x00, 0xc0, 0xe6
-	.byte 0x1e, 0x00, 0x80, 0xea, 0x1e, 0x00, 0x40, 0xee
-	.byte 0x1e, 0x00, 0x00, 0xf2, 0x1e, 0x00, 0xc0, 0xf5
-	.byte 0x1e, 0x00, 0x80, 0xf9, 0x1e, 0x00, 0x40, 0xfd
-	.byte 0x1e, 0x00, 0x00, 0x01, 0x1f, 0x00, 0xc0, 0x04
-	.byte 0x1f, 0x00, 0x80, 0x08, 0x1f, 0x00, 0x40, 0x0c
-	.byte 0x1f, 0x00, 0x00, 0x10, 0x1f, 0x00, 0xc0, 0x13
-	.byte 0x1f, 0x00, 0x80, 0x17, 0x1f, 0x00, 0x40, 0x1b
-	.byte 0x1f, 0x00, 0x00, 0x1f, 0x1f, 0x00, 0xc0, 0x22
-	.byte 0x1f, 0x00, 0x80, 0x26, 0x1f, 0x00, 0x40, 0x2a
-	.byte 0x1f, 0x00, 0x00, 0x2e, 0x1f, 0x00, 0xc0, 0x31
-	.byte 0x1f, 0x00, 0x80, 0x35, 0x1f, 0x00, 0x40, 0x39
-	.byte 0x1f, 0x00, 0x00, 0x3d, 0x1f, 0x00, 0xc0, 0x40
-	.byte 0x1f, 0x00, 0x80, 0x44, 0x1f, 0x00, 0x40, 0x48
-	.byte 0x1f, 0x00, 0x00, 0x4c, 0x1f, 0x00, 0xc0, 0x4f
-	.byte 0x1f, 0x00, 0x80, 0x53, 0x1f, 0x00, 0x40, 0x57
-	.byte 0x1f, 0x00, 0x00, 0x5b, 0x1f, 0x00, 0xc0, 0x5e
-	.byte 0x1f, 0x00, 0x80, 0x62, 0x1f, 0x00, 0x40, 0x66
-	.byte 0x1f, 0x00, 0x00, 0x6a, 0x1f, 0x00, 0xc0, 0x6d
-	.byte 0x1f, 0x00, 0x80, 0x71, 0x1f, 0x00, 0x40, 0x75
-	.byte 0x1f, 0x00, 0x00, 0x79, 0x1f, 0x00, 0xc0, 0x7c
-	.byte 0x1f, 0x00, 0x80, 0x80, 0x1f, 0x00, 0x40, 0x84
-	.byte 0x1f, 0x00, 0x00, 0x88, 0x1f, 0x00, 0xc0, 0x8b
-	.byte 0x1f, 0x00, 0x80, 0x8f, 0x1f, 0x00, 0x40, 0x93
-	.byte 0x1f, 0x00, 0x00, 0x97, 0x1f, 0x00, 0xc0, 0x9a
-	.byte 0x1f, 0x00, 0x80, 0x9e, 0x1f, 0x00, 0x40, 0xa2
-	.byte 0x1f, 0x00, 0x00, 0xa6, 0x1f, 0x00, 0xc0, 0xa9
-	.byte 0x1f, 0x00, 0x80, 0xad, 0x1f, 0x00, 0x40, 0xb1
-	.byte 0x1f, 0x00, 0x00, 0xb5, 0x1f, 0x00, 0xc0, 0xb8
-	.byte 0x1f, 0x00, 0x80, 0xbc, 0x1f, 0x00, 0x40, 0xc0
-	.byte 0x1f, 0x00, 0x00, 0xc4, 0x1f, 0x00, 0xc0, 0xc7
-	.byte 0x1f, 0x00, 0x80, 0xcb, 0x1f, 0x00, 0x40, 0xcf
-	.byte 0x1f, 0x00, 0x00, 0xd3, 0x1f, 0x00, 0xc0, 0xd6
-	.byte 0x1f, 0x00, 0x80, 0xda, 0x1f, 0x00, 0x40, 0xde
-	.byte 0x1f, 0x00, 0x00, 0xe2, 0x1f, 0x00, 0xc0, 0xe5
-	.byte 0x1f, 0x00, 0x80, 0xe9, 0x1f, 0x00, 0x40, 0xed
-	.byte 0x1f, 0x00, 0x00, 0xf1, 0x1f, 0x00, 0xc0, 0xf4
-	.byte 0x1f, 0x00, 0x80, 0xf8, 0x1f, 0x00, 0x40, 0xfc
-	.byte 0x1f, 0x00, 0xc4, 0xc2, 0x03, 0x00, 0xb6, 0xf9
-	.byte 0x00, 0x00, 0xb7, 0xf9, 0x00, 0x00, 0x00, 0x00
-	.byte 0xda, 0xfd, 0x00, 0x00, 0xd0, 0xf9, 0x00, 0x00
-	.byte 0xd1, 0xf9, 0x00, 0x00, 0x01, 0x00, 0xee, 0xfd
-	.byte 0x00, 0x00, 0xea, 0xf9, 0x00, 0x00, 0xeb, 0xf9
-	.byte 0x00, 0x00, 0x02, 0x00, 0x02, 0xfe, 0x00, 0x00
-	.byte 0x04, 0xfa, 0x00, 0x00, 0x05, 0xfa, 0x00, 0x00
-	.byte 0x03, 0x00, 0x16, 0xfe, 0x00, 0x00, 0x1e, 0xfa
-	.byte 0x00, 0x00, 0x1f, 0xfa, 0x00, 0x00, 0x04, 0x00
-	.byte 0x2a, 0xfe, 0x00, 0x00, 0x38, 0xfa, 0x00, 0x00
-	.byte 0x39, 0xfa, 0x00, 0x00, 0x05, 0x00, 0x3e, 0xfe
-	.byte 0x00, 0x00, 0x52, 0xfa, 0x00, 0x00, 0x53, 0xfa
-	.byte 0x00, 0x00, 0x06, 0x00, 0x52, 0xfe, 0x00, 0x00
-	.byte 0x6c, 0xfa, 0x00, 0x00, 0x6d, 0xfa, 0x00, 0x00
-	.byte 0x07, 0x00, 0x66, 0xfe, 0x00, 0x00, 0x86, 0xfa
-	.byte 0x00, 0x00, 0x87, 0xfa, 0x00, 0x00, 0x08, 0x00
-	.byte 0x7a, 0xfe, 0x00, 0x00, 0xa0, 0xfa, 0x00, 0x00
-	.byte 0xa1, 0xfa, 0x00, 0x00, 0x09, 0x00, 0x8e, 0xfe
-	.byte 0x00, 0x00, 0xba, 0xfa, 0x00, 0x00, 0xbb, 0xfa
-	.byte 0x00, 0x00, 0x0a, 0x00, 0xa2, 0xfe, 0x00, 0x00
-	.byte 0xd4, 0xfa, 0x00, 0x00, 0xd5, 0xfa, 0x00, 0x00
-	.byte 0x0b, 0x00, 0xb6, 0xfe, 0x00, 0x00, 0xee, 0xfa
-	.byte 0x00, 0x00, 0xef, 0xfa, 0x00, 0x00, 0x0c, 0x00
-	.byte 0xca, 0xfe, 0x00, 0x00, 0x08, 0xfb, 0x00, 0x00
-	.byte 0x09, 0xfb, 0x00, 0x00, 0x0d, 0x00, 0xde, 0xfe
-	.byte 0x00, 0x00, 0x22, 0xfb, 0x00, 0x00, 0x23, 0xfb
-	.byte 0x00, 0x00, 0x0e, 0x00, 0xf2, 0xfe, 0x00, 0x00
-	.byte 0x3c, 0xfb, 0x00, 0x00, 0x3d, 0xfb, 0x00, 0x00
-	.byte 0x0f, 0x00, 0x06, 0xff, 0x00, 0x00, 0x56, 0xfb
-	.byte 0x00, 0x00, 0x57, 0xfb, 0x00, 0x00, 0x10, 0x00
-	.byte 0x1a, 0xff, 0x00, 0x00, 0x70, 0xfb, 0x00, 0x00
-	.byte 0x71, 0xfb, 0x00, 0x00, 0x11, 0x00, 0x2e, 0xff
-	.byte 0x00, 0x00, 0x8a, 0xfb, 0x00, 0x00, 0x8b, 0xfb
-	.byte 0x00, 0x00, 0x12, 0x00, 0x42, 0xff, 0x00, 0x00
-	.byte 0xa4, 0xfb, 0x00, 0x00, 0xa5, 0xfb, 0x00, 0x00
-	.byte 0x13, 0x00, 0x56, 0xff, 0x00, 0x00, 0xbe, 0xfb
-	.byte 0x00, 0x00, 0xbf, 0xfb, 0x00, 0x00, 0x14, 0x00
-	.byte 0x6a, 0xff, 0x00, 0x00, 0x62, 0xfd, 0x00, 0x00
-	.byte 0x63, 0xfd, 0x00, 0x00, 0x17, 0x00, 0x7e, 0xff
-	.byte 0x00, 0x00, 0x5a, 0xfc, 0x00, 0x00, 0x5b, 0xfc
-	.byte 0x00, 0x00, 0x48, 0x00, 0x92, 0xff, 0x00, 0x00
-	aligned_string "Non Panel Memory"
-	.byte 0x16, 0x00, 0x00, 0x00, 0x00, 0x0a
-	.byte 0x30, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x4a, 0x00
-	.byte 0x00, 0x00, 0x00, 0x09, 0x64, 0x00, 0x00, 0x00
-	.byte 0x01, 0x02, 0x64, 0x00, 0x00, 0x00, 0x03, 0x02
-	.byte 0x64, 0x00, 0x00, 0x00, 0x08, 0x01, 0xb6, 0x01
-	.byte 0x00, 0x00, 0x03, 0x01, 0xb6, 0x01, 0x00, 0x00
-	.byte 0x07, 0x01, 0xd0, 0x01, 0x00, 0x00, 0x03, 0x01
-	.byte 0xd0, 0x01, 0x00, 0x00, 0x07, 0x01, 0xea, 0x01
-	.byte 0x00, 0x00, 0x03, 0x01, 0xea, 0x01, 0x00, 0x00
-	.byte 0x07, 0x01, 0x04, 0x02, 0x00, 0x00, 0x03, 0x01
-	.byte 0x04, 0x02, 0x00, 0x00, 0x07, 0x01, 0x1e, 0x02
-	.byte 0x00, 0x00, 0x03, 0x01, 0x1e, 0x02, 0x00, 0x00
-	.byte 0x07, 0x01, 0x86, 0x02, 0x00, 0x00, 0x00, 0x08
-	.byte 0x92, 0x02, 0x00, 0x00, 0x00, 0x08, 0x9e, 0x02
-	.byte 0x00, 0x00, 0x00, 0x08, 0xba, 0x02, 0x00, 0x00
-	.byte 0x00, 0x05, 0xba, 0x02, 0x00, 0x00, 0x07, 0x03
-	.byte 0xc6, 0x02, 0x00, 0x00, 0x00, 0x04, 0xce, 0x02
-	.byte 0x00, 0x00, 0x01, 0x01, 0xd4, 0x02, 0x00, 0x00
-	.byte 0x00, 0x11, 0xd4, 0x02, 0x00, 0x00, 0x11, 0x01
-	.byte 0xee, 0x02, 0x00, 0x00, 0x00, 0x09, 0x22, 0x03
-	.byte 0x00, 0x00, 0x00, 0x02, 0x62, 0x03, 0x00, 0x00
-	.byte 0x00, 0x01, 0x62, 0x03, 0x00, 0x00, 0x03, 0x01
-	.byte 0x62, 0x03, 0x00, 0x00, 0x04, 0x01, 0xff, 0x00
-	.byte 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x18, 0x00
-	.byte 0x18, 0x00, 0x18, 0x00, 0x18, 0x00, 0x18, 0x00
-	.byte 0x49, 0x02
-	.ascii "Modern Vibes    "
-	.byte 0x1d, 0x03
-	.ascii "Moscow Mandolins"
-	.byte 0xd5, 0x01, 0x53, 0x69
-	.ascii "ng It, Play It"
-	.byte 0xe5, 0x02
-	.ascii "Alpine Combo    7"
-	.byte 0x01
-	.ascii "Aye Aye Caramba "
-	.byte 0xc8, 0x02
-	.ascii "Ball Gown Waltz "
-	.byte 0x0a, 0x00, 0x53, 0x6f
-	.ascii "ft Rock       "
-	.byte 0xbb, 0x03
-	.ascii "Toreador Band   _"
-	.byte 0x02
-	.ascii "Vaudeville Bones}"
-	.byte 0x01
-	.ascii "Oklahoma Dance  7"
-	.byte 0x03, 0x59, 0x65
-	.ascii "e Ha Fiddles  R"
-	.byte 0x03
-	.ascii "Cowboy Saxes    "
-	.byte 0xc7, 0x02
-	.ascii "Cuckoo Clock 3/4f"
-	.byte 0x02
-	.ascii "Soft Da-Dance   *"
-	.byte 0x03, 0x43, 0x75
-	.ascii "caracha Duo   "
-	.byte 0x12, 0x00
-	.ascii "Dream Beat      "
-	.byte 0xcc, 0x02
-	.ascii "Fife & Drums    U"
-	.byte 0x02
-	.ascii "Fred & Ginger   "
-	ldw	(xwa), 0x7449
-	.ascii "alian Tango   ~"
-	.byte 0x01
-	.ascii "Hoedown Frets   "
-	.byte 0xbf, 0x00
-	.ascii "Italy Pop Organ "
-	.byte 0x1f, 0x01
-	.ascii "Disco Metal     "
-	.byte 0x85, 0x01, 0x4d, 0x6f
-	.ascii "dern Vibes    "
-	.byte 0xed, 0x02
-	.ascii "Moscow Mandolins"
-	.byte 0xb9, 0x01
-	.ascii "Sing It, Play It"
-	.byte 0xa1, 0x02
-	.ascii "Oklahoma Dance  "
-	.byte 0xc5, 0x02, 0x46, 0x72
-	.ascii "ed & Ginger   "
-	.byte 0x01, 0x01
-	.byte 0x02, 0xb0, 0xd2, 0x83, 0x02, 0x01, 0x02, 0x02
-	.byte 0x02, 0x04, 0x02, 0x08, 0x02, 0x10, 0x02, 0x20
-	.byte 0x02, 0x40, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02
-	.byte 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20
-	.byte 0x00, 0x40, 0x00, 0x00, 0x04, 0x01, 0x04, 0x02
-	.byte 0x04, 0x04, 0x04, 0x08, 0x00, 0x00, 0x00, 0x00
-	.byte 0x0e, 0x0f, 0x0e, 0x0f, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x02, 0x80, 0x0e, 0x0f, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x03, 0x01, 0x03, 0x02
-	.byte 0x03, 0x04, 0x03, 0x08, 0x03, 0x10, 0x04, 0x70
-	.byte 0x03, 0x20, 0x00, 0x00, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x0e, 0x0f, 0x0e, 0x0f, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x02
-	.byte 0x01, 0x04, 0x01, 0x08, 0x01, 0x10, 0x01, 0x20
-	.byte 0x01, 0x40, 0x01, 0x80, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x00, 0x80, 0x0e, 0x0f, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x0e, 0x0f, 0x0e, 0x0f, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x0e, 0x0f, 0x00, 0x00, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x0e, 0x0f, 0x0e, 0x0f, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x0e, 0x0f, 0x00, 0x00, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x0e, 0x0f, 0x0e, 0x0f, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x0e, 0x0f, 0x05, 0x01, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x0e, 0x0f, 0x0e, 0x0f, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0e, 0x0f
-	.byte 0x0e, 0x0f, 0x00, 0x00, 0x08, 0x01, 0x08, 0x02
-	.byte 0x08, 0x04, 0x08, 0x08, 0x08, 0x10, 0x08, 0x20
-	.byte 0x08, 0x40, 0x08, 0x80, 0x07, 0x01, 0x07, 0x02
-	.byte 0x07, 0x04, 0x07, 0x08, 0x07, 0x10, 0x07, 0x20
-	.byte 0x07, 0x40, 0x07, 0x80, 0x06, 0x01, 0x06, 0x02
-	.byte 0x06, 0x04, 0x06, 0x08, 0x06, 0x10, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x0a, 0x01, 0x0a, 0x02
-	.byte 0x0a, 0x04, 0x0a, 0x08, 0x0a, 0x10, 0x0a, 0x20
-	.byte 0x0a, 0x40, 0x0a, 0x80, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x06, 0x20, 0x06, 0x40, 0x06, 0x80
-	.byte 0x00, 0x00, 0x00, 0x00, 0x09, 0x01, 0x09, 0x02
-	.byte 0x09, 0x04, 0x09, 0x08, 0x09, 0x10, 0x09, 0x20
-	.byte 0x09, 0x40, 0x09, 0x80, 0x0e, 0x0f, 0x0e, 0x0f
-	.byte 0x0d, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x0d, 0x02, 0x0d, 0x04, 0x0e, 0x0f
-	.byte 0x0d, 0x01, 0x0e, 0x0f, 0x00, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x0c, 0x01, 0x0c, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x0b, 0x01, 0x0b, 0x02, 0x0b, 0x04, 0x0b, 0x08
-	.byte 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff, 0x01
-	.byte 0xff, 0x02, 0x3f, 0x03, 0xff, 0x04, 0x01, 0x05
-	.byte 0xff, 0x06, 0xff, 0x07, 0xff, 0x08, 0xff, 0x09
-	.byte 0xff, 0x0a, 0x0f, 0x0b, 0x03, 0x0c, 0x0f, 0x0d
-	.byte 0x0f, 0x0e, 0xff, 0xff, 0x00, 0x00, 0x40, 0x00
-	.byte 0x00, 0x01, 0x04, 0x05, 0x01, 0x00, 0x68, 0x6b
-	.byte 0x70, 0x72, 0x16, 0x80, 0xeb, 0x00, 0x68, 0x6b
-	.byte 0x70, 0x72, 0x01, 0x00, 0xc0, 0xff, 0x9f, 0x00
-	.ascii "hkt_"
-	.byte 0x02, 0x00, 0x00, 0x40
-	.byte 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x01, 0x02
-	.byte 0x00, 0x00, 0x1e, 0x00, 0x00, 0x80, 0x00, 0x00
-	.byte 0x04, 0x00, 0x00, 0x00, 0x03, 0x00, 0x03, 0x00
-	.byte 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x00, 0x00
-	.byte 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x03, 0x00
-	.byte 0x03, 0x00, 0x00, 0x00, 0x03, 0x00, 0x03, 0x00
-	.byte 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x00, 0x00
-	.byte 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x03, 0x00
-	.byte 0x03, 0x00
 
-; =============================================================================
-; Bitmap_FadeIn/FadeOut data - Pre-computed fade transition lookup tables
-;
-; Four data blobs used by the fade-in/fade-out transition effects.
-; "Picture" variants are used for graphical screen transitions,
-; "Text" variants for text-mode screen transitions.
-;
-; Sizes:  FadeInPicture=2800, FadeInText=1440,
-;         FadeOutPicture=2850, FadeOutText=2160
-; =============================================================================
-Bitmap_FadeInPicture:	.incbin "images/BitmapFadeInPicture.bin"
-Bitmap_FadeInText:	.incbin "images/BitmapFadeInText.bin"
-Bitmap_FadeOutPicture:	.incbin "images/BitmapFadeOutPicture.bin"
-Bitmap_FadeOutText:	.incbin "images/BitmapFadeOutText.bin"
-StyleSong_MasterTable:
-	.long NakaInst_12_Boogie_Bars_160
-	.byte 0x11, 0x02, 0x90, 0x40, 0xec, 0x00, 0xb5, 0x03
-	.long NakaInst_16_On_Stage_82
-	.byte 0x33, 0x00, 0x4c, 0x40
-	.byte 0xec, 0x00, 0x24, 0x00, 0x2a, 0x40, 0xec, 0x00
-	.byte 0x41, 0x02, 0x08, 0x40, 0xec, 0x00, 0x46, 0x02
-	.long NakaInst_3_4_Romance_130
-	.byte 0xbc, 0x02, 0xc4, 0x3f
-	.byte 0xec, 0x00, 0x43, 0x02, 0xa2, 0x3f, 0xec, 0x00
-	.byte 0x67, 0x01, 0x80, 0x3f, 0xec, 0x00, 0xac, 0x00
-	.long NakaInst_70_s_Glamour_129
-	.byte 0xa7, 0x00, 0x3c, 0x3f
-	.byte 0xec, 0x00, 0xab, 0x00, 0x1a, 0x3f, 0xec, 0x00
-	.byte 0x17, 0x01, 0xf8, 0x3e, 0xec, 0x00, 0x10, 0x01
-	.long NakaInst_80_s_Pop_Sax_118
-	.byte 0xbd, 0x00, 0xb4, 0x3e
-	.byte 0xec, 0x00, 0x3a, 0x00, 0x92, 0x3e, 0xec, 0x00
-	.byte 0xfa, 0x00, 0x70, 0x3e, 0xec, 0x00, 0x7a, 0x01
-	.long NakaInst_88_Note_8_Beat_90
-	.byte 0x04, 0x00, 0x2c, 0x3e
-	.byte 0xec, 0x00, 0xcd, 0x00, 0x0a, 0x3e, 0xec, 0x00
-	.byte 0x06, 0x01, 0xe8, 0x3d, 0xec, 0x00, 0x1d, 0x01
-	.long NakaInst_A_Case_Of_Soul_114
-	.byte 0x98, 0x01, 0xa4, 0x3d
-	.byte 0xec, 0x00, 0x99, 0x01, 0x82, 0x3d, 0xec, 0x00
-	.byte 0x73, 0x01, 0x60, 0x3d, 0xec, 0x00, 0x26, 0x02
-	.long NakaInst_Accordion_Dream_64
-	.byte 0x53, 0x00, 0x1c, 0x3d
-	.byte 0xec, 0x00, 0x69, 0x01, 0xfa, 0x3c, 0xec, 0x00
-	.byte 0x8d, 0x00, 0xd8, 0x3c, 0xec, 0x00, 0xe8, 0x01
-	.long NakaInst_Acoustic_Beat_108
-	.byte 0x00, 0x00, 0x94, 0x3c
-	.byte 0xec, 0x00, 0x18, 0x00, 0x72, 0x3c, 0xec, 0x00
-	.byte 0xdc, 0x00, 0x50, 0x3c, 0xec, 0x00, 0x08, 0x02
-	.long NakaInst_Ady_s_PartyOrgan_125
-	.byte 0x52, 0x01, 0x0c, 0x3c
-	.long LABEL_F400EC
-	.byte 0xea, 0x3b, 0xec, 0x00
-	.byte 0xe4, 0x00, 0xc8, 0x3b, 0xec, 0x00, 0x17, 0x03
-	.long NakaInst_All_Out_Combo_180
-	.byte 0x6b, 0x00, 0x84, 0x3b
-	.byte 0xec, 0x00, 0x1b, 0x02, 0x62, 0x3b, 0xec, 0x00
-	.byte 0xf6, 0x02, 0x40, 0x3b, 0xec, 0x00, 0xe0, 0x02
-	.long NakaInst_Alpine_Combo_125
-	.byte 0xe5, 0x02, 0xfc, 0x3a
-	.byte 0xec, 0x00, 0xf4, 0x02, 0xda, 0x3a, 0xec, 0x00
-	.byte 0x6a, 0x01, 0xb8, 0x3a, 0xec, 0x00, 0xd2, 0x02
-	.long NakaInst_Alto_Samba_116
-	.byte 0x3c, 0x01, 0x74, 0x3a
-	.byte 0xec, 0x00, 0x8c, 0x00, 0x52, 0x3a, 0xec, 0x00
-	.byte 0xd4, 0x01, 0x30, 0x3a, 0xec, 0x00, 0x9a, 0x03
-	.long NakaInst_Amor_Reed_117
-	.byte 0x88, 0x03, 0xec, 0x39
-	.byte 0xec, 0x00, 0xb8, 0x00, 0xca, 0x39, 0xec, 0x00
-	.byte 0xae, 0x01, 0xa8, 0x39, 0xec, 0x00, 0x65, 0x01
-	.long NakaInst_Art_Meets_Lionel_190
-	.byte 0x31, 0x02, 0x64, 0x39
-	.byte 0xec, 0x00, 0x30, 0x02, 0x42, 0x39, 0xec, 0x00
-	.byte 0xd7, 0x03, 0x20, 0x39, 0xec, 0x00, 0xb5, 0x02
-	.long NakaInst_At_The_Eger_120
-	.byte 0xd8, 0x02, 0xdc, 0x38
-	.byte 0xec, 0x00, 0x0d, 0x01, 0xba, 0x38, 0xec, 0x00
-	.byte 0x1a, 0x00, 0x98, 0x38, 0xec, 0x00, 0x84, 0x01
-	.long NakaInst_Austria_Symphony_169
-	.byte 0xf3, 0x02, 0x54, 0x38
-	.byte 0xec, 0x00, 0xe3, 0x02, 0x32, 0x38, 0xec, 0x00
-	.byte 0x37, 0x01, 0x10, 0x38, 0xec, 0x00, 0x3a, 0x02
-	.long NakaInst_Bad_B3_Blues_78
-	.byte 0xb1, 0x01, 0xcc, 0x37
-	.byte 0xec, 0x00, 0xbe, 0x01, 0xaa, 0x37, 0xec, 0x00
-	.byte 0x92, 0x01, 0x88, 0x37, 0xec, 0x00, 0xc8, 0x02
-	.long NakaInst_Ballad_Acoustics_84
-	.byte 0x40, 0x00, 0x44, 0x37
-	.byte 0xec, 0x00, 0x3b, 0x00, 0x22, 0x37, 0xec, 0x00
-	.byte 0x34, 0x00, 0x00, 0x37, 0xec, 0x00, 0x5a, 0x00
-	.long NakaInst_Ballad_Guitar_67
-	.byte 0x90, 0x00, 0xbc, 0x36
-	.byte 0xec, 0x00, 0x43, 0x00, 0x9a, 0x36, 0xec, 0x00
-	.byte 0xdb, 0x00, 0x78, 0x36, 0xec, 0x00, 0x4d, 0x00
-	.long NakaInst_Ballad_Romance_67
-	.byte 0x35, 0x00, 0x34, 0x36
-	.byte 0xec, 0x00, 0xc8, 0x00, 0x12, 0x36, 0xec, 0x00
-	.byte 0x87, 0x02, 0xf0, 0x35, 0xec, 0x00, 0xc9, 0x02
-	.long NakaInst_Baltic_Reeds_141
-	.byte 0x1e, 0x03, 0xac, 0x35
-	.byte 0xec, 0x00, 0xee, 0x01, 0x8a, 0x35, 0xec, 0x00
-	.byte 0xfe, 0x02, 0x68, 0x35, 0xec, 0x00, 0x39, 0x03
-	.long NakaInst_Banjo_Dance_138
-	.byte 0x80, 0x01, 0x24, 0x35
-	.byte 0xec, 0x00, 0x0c, 0x03, 0x02, 0x35, 0xec, 0x00
-	.byte 0x75, 0x01, 0xe0, 0x34, 0xec, 0x00, 0xa9, 0x03
-	.long NakaInst_Barber_Shop_Jazz_196
-	.byte 0x12, 0x03, 0x9c, 0x34
-	.byte 0xec, 0x00, 0x98, 0x02, 0x7a, 0x34, 0xec, 0x00
-	.byte 0x43, 0x03, 0x58, 0x34, 0xec, 0x00, 0x8f, 0x00
-	.long NakaInst_Bavaria_To_Tyrol_195
-	.byte 0x8b, 0x01, 0x14, 0x34
-	.byte 0xec, 0x00, 0xc5, 0x02, 0xf2, 0x33, 0xec, 0x00
-	.byte 0xd6, 0x02, 0xd0, 0x33, 0xec, 0x00, 0x89, 0x01
-	.long NakaInst_Beach_Party_Song_152
-	.byte 0xbf, 0x03, 0x8c, 0x33
-	.byte 0xec, 0x00, 0xc7, 0x00, 0x6a, 0x33, 0xec, 0x00
-	.byte 0x8b, 0x03, 0x48, 0x33, 0xec, 0x00, 0xa2, 0x02
-	.long NakaInst_Bellow_Shake_Hit_135
-	.byte 0xe1, 0x02, 0x04, 0x33
-	.byte 0xec, 0x00, 0x27, 0x02, 0xe2, 0x32, 0xec, 0x00
-	.byte 0x2a, 0x00, 0xc0, 0x32, 0xec, 0x00, 0xf0, 0x00
-	.long NakaInst_Besame_Strings_120
-	.byte 0x85, 0x03, 0x7c, 0x32
-	.byte 0xec, 0x00, 0x8a, 0x03, 0x5a, 0x32, 0xec, 0x00
-	.byte 0xb3, 0x01, 0x38, 0x32, 0xec, 0x00, 0xf2, 0x01
-	.long NakaInst_Bigband_Shout_170
-	.byte 0xdb, 0x01, 0xf4, 0x31
-	.byte 0xec, 0x00, 0x71, 0x01, 0xd2, 0x31, 0xec, 0x00
-	.byte 0x70, 0x01, 0xb0, 0x31, 0xec, 0x00, 0x44, 0x03
-	.long NakaInst_Blue_Suede_Rock_158
-	.byte 0x8a, 0x00, 0x6c, 0x31
-	.byte 0xec, 0x00, 0x51, 0x03, 0x4a, 0x31, 0xec, 0x00
-	.byte 0x30, 0x03, 0x28, 0x31, 0xec, 0x00, 0x34, 0x03
-	.long NakaInst_Blues_Alley_124
-	.byte 0xb6, 0x01, 0xe4, 0x30
-	.byte 0xec, 0x00, 0xba, 0x01, 0xc2, 0x30, 0xec, 0x00
-	.byte 0xe2, 0x00, 0xa0, 0x30, 0xec, 0x00, 0xaf, 0x01
-	.long NakaInst_Blues_Rock_Keys_124
-	.byte 0xb4, 0x01, 0x5c, 0x30
-	.byte 0xec, 0x00, 0xb9, 0x01, 0x3a, 0x30, 0xec, 0x00
-	.byte 0xbc, 0x01, 0x18, 0x30, 0xec, 0x00, 0x8d, 0x03
-	.long NakaInst_Bolero_Orchestra_120
-	.byte 0x8f, 0x03, 0xd4, 0x2f
-	.byte 0xec, 0x00, 0xee, 0x02, 0xb2, 0x2f, 0xec, 0x00
-	.byte 0x85, 0x00, 0x90, 0x2f, 0xec, 0x00, 0x13, 0x02
-	.long NakaInst_Boogie_Dance_160
-	.byte 0x12, 0x02, 0x4c, 0x2f
-	.byte 0xec, 0x00, 0x79, 0x03, 0x2a, 0x2f, 0xec, 0x00
-	.byte 0x7e, 0x03, 0x08, 0x2f, 0xec, 0x00, 0x7b, 0x03
-	.long NakaInst_Bourbon_Street_196
-	.byte 0x11, 0x03, 0xc4, 0x2e
-	.byte 0xec, 0x00, 0x1b, 0x03, 0xa2, 0x2e, 0xec, 0x00
-	.byte 0x47, 0x00, 0x80, 0x2e, 0xec, 0x00, 0x8a, 0x02
-	.long NakaInst_Boxing_Jazzy_147
-	.byte 0x34, 0x02, 0x3c, 0x2e
-	.byte 0xec, 0x00, 0x76, 0x03, 0x1a, 0x2e, 0xec, 0x00
-	.byte 0x9e, 0x02, 0xf8, 0x2d, 0xec, 0x00, 0xab, 0x02
-	.long NakaInst_Brassy_Dance_108
-	.byte 0x24, 0x01, 0xb4, 0x2d
-	.byte 0xec, 0x00, 0xaf, 0x03, 0x92, 0x2d, 0xec, 0x00
-	.byte 0x19, 0x00, 0x70, 0x2d, 0xec, 0x00, 0x46, 0x00
-	.long NakaInst_Breathy_Moments_83
-	.byte 0x61, 0x00, 0x2c, 0x2d
-	.byte 0xec, 0x00, 0x39, 0x02, 0x0a, 0x2d, 0xec, 0x00
-	.byte 0x5b, 0x01, 0xe8, 0x2c, 0xec, 0x00, 0xdb, 0x03
-	.long NakaInst_Bright_Keys_16_74
-	.byte 0x29, 0x00, 0xa4, 0x2c
-	.byte 0xec, 0x00, 0xd1, 0x02, 0x82, 0x2c, 0xec, 0x00
-	.byte 0xb2, 0x00, 0x60, 0x2c, 0xec, 0x00, 0x6e, 0x02
-	.long NakaInst_Caber_Dance_172
-	.byte 0xed, 0x02, 0x1c, 0x2c
-	.byte 0xec, 0x00, 0x75, 0x00, 0xfa, 0x2b, 0xec, 0x00
-	.byte 0x6c, 0x00, 0xd8, 0x2b, 0xec, 0x00, 0x32, 0x03
-	.long NakaInst_Calypso_Steel_152
-	.byte 0xbd, 0x03, 0x94, 0x2b
-	.byte 0xec, 0x00, 0x70, 0x02, 0x72, 0x2b, 0xec, 0x00
-	.byte 0x2e, 0x01, 0x50, 0x2b, 0xec, 0x00, 0xa8, 0x03
-	.long NakaInst_Caribbean_Synth_90
-	.byte 0xe7, 0x03, 0x0c, 0x2b
-	.byte 0xec, 0x00, 0x81, 0x03, 0xea, 0x2a, 0xec, 0x00
-	.byte 0xc7, 0x03, 0xc8, 0x2a, 0xec, 0x00, 0xd1, 0x03
-	.long NakaInst_Carol_Singers_75
-	.byte 0x8e, 0x01, 0x84, 0x2a
-	.byte 0xec, 0x00, 0x49, 0x03, 0x62, 0x2a, 0xec, 0x00
-	.byte 0x71, 0x02, 0x40, 0x2a, 0xec, 0x00, 0x9d, 0x02
-	.long NakaInst_Chapel_Brass_124
-	.byte 0xca, 0x01, 0xfc, 0x29
-	.byte 0xec, 0x00, 0x53, 0x03, 0xda, 0x29, 0xec, 0x00
-	.byte 0x28, 0x02, 0xb8, 0x29, 0xec, 0x00, 0xea, 0x02
-	.long NakaInst_Chiff_Funk_97
-	.byte 0xf9, 0x00, 0x74, 0x29
-	.byte 0xec, 0x00, 0x72, 0x01, 0x52, 0x29, 0xec, 0x00
-	.byte 0x93, 0x02, 0x30, 0x29, 0xec, 0x00, 0x99, 0x02
-	.long NakaInst_Chuck_s_Late_Gig_72
-	.byte 0x3e, 0x02, 0xec, 0x28
-	.byte 0xec, 0x00, 0xd1, 0x01, 0xca, 0x28, 0xec, 0x00
-	.byte 0x56, 0x02, 0xa8, 0x28, 0xec, 0x00, 0x19, 0x02
-	.long NakaInst_Classical_Tango_120
-	ldw	(xix), 0x2864
-	.byte 0xec, 0x00, 0x3f, 0x00, 0x42, 0x28, 0xec, 0x00
-	.byte 0x3c, 0x00, 0x20, 0x28, 0xec, 0x00, 0x71, 0x03
-	.long NakaInst_Clean_Metal_148
-	.byte 0xd4, 0x00, 0xdc, 0x27
-	.byte 0xec, 0x00, 0x05, 0x02, 0xba, 0x27, 0xec, 0x00
-	.byte 0x74, 0x01, 0x98, 0x27, 0xec, 0x00, 0x30, 0x01
-	.long NakaInst_Coconut_Frets_152
-	.byte 0xbe, 0x03, 0x54, 0x27
-	.byte 0xec, 0x00, 0x06, 0x02, 0x32, 0x27, 0xec, 0x00
-	.byte 0x1f, 0x02, 0x10, 0x27, 0xec, 0x00, 0x85, 0x02
-	.long NakaInst_Come_On_Baby_168
-	.byte 0x91, 0x02, 0xcc, 0x26
-	.byte 0xec, 0x00, 0xbb, 0x02, 0xaa, 0x26, 0xec, 0x00
-	.byte 0xb8, 0x02, 0x88, 0x26, 0xec, 0x00, 0xcf, 0x01
-	.long NakaInst_Convoy_Bluegrass_206
-	.byte 0x3d, 0x03, 0x44, 0x26
-	.byte 0xec, 0x00, 0x1a, 0x01, 0x22, 0x26, 0xec, 0x00
-	.byte 0x4e, 0x02, 0x00, 0x26, 0xec, 0x00, 0xe9, 0x00
-	.long NakaInst_Cool_Jazz_B3_145
-	.byte 0x16, 0x02, 0xbc, 0x25
-	.byte 0xec, 0x00, 0xde, 0x00, 0x9a, 0x25, 0xec, 0x00
-	.byte 0xee, 0x00, 0x78, 0x25, 0xec, 0x00, 0x0f, 0x00
-	.long NakaInst_Cool_Soul_Frets_66
-	.byte 0xa6, 0x01, 0x34, 0x25
-	.byte 0xec, 0x00, 0x1c, 0x00, 0x12, 0x25, 0xec, 0x00
-	.byte 0x1f, 0x03, 0xf0, 0x24, 0xec, 0x00, 0xc4, 0x02
-	.long NakaInst_Count_On_It_90
-	.byte 0xea, 0x01, 0xac, 0x24
-	.byte 0xec, 0x00, 0x59, 0x03, 0x8a, 0x24, 0xec, 0x00
-	.byte 0x7c, 0x01, 0x68, 0x24, 0xec, 0x00, 0x38, 0x03
-	.long NakaInst_Country_Harp_88
-	.byte 0x4d, 0x03, 0x24, 0x24
-	.byte 0xec, 0x00, 0x6f, 0x03, 0x02, 0x24, 0xec, 0x00
-	.byte 0x46, 0x03, 0xe0, 0x23, 0xec, 0x00, 0x5d, 0x03
-	.long NakaInst_Country_Licks_235
-	.byte 0x35, 0x03, 0x9c, 0x23
-	.byte 0xec, 0x00, 0x79, 0x01, 0x7a, 0x23, 0xec, 0x00
-	.byte 0x56, 0x03, 0x58, 0x23, 0xec, 0x00, 0x63, 0x03
-	.long NakaInst_Country_Tenor_88
-	.byte 0x4c, 0x03, 0x14, 0x23
-	.byte 0xec, 0x00, 0x6a, 0x03, 0xf2, 0x22, 0xec, 0x00
-	.byte 0x52, 0x03, 0xd0, 0x22, 0xec, 0x00, 0x64, 0x03
-	.long NakaInst_Crazy_Horse_Show_118
-	.byte 0x6b, 0x02, 0x8c, 0x22
-	.byte 0xec, 0x00, 0xa9, 0x00, 0x6a, 0x22, 0xec, 0x00
-	.byte 0xc2, 0x03, 0x48, 0x22, 0xec, 0x00, 0x2a, 0x03
-	.long NakaInst_Cuckoo_Clock_3_4_183
-	.byte 0xc7, 0x02, 0x04, 0x22
-	.byte 0xec, 0x00, 0xa5, 0x03, 0xe2, 0x21, 0xec, 0x00
-	.byte 0x59, 0x02, 0xc0, 0x21, 0xec, 0x00, 0x31, 0x01
-	.long NakaInst_Dance_Band_Jive_176
-	.byte 0x95, 0x02, 0x7c, 0x21
-	.byte 0xec, 0x00, 0x81, 0x01, 0x5a, 0x21, 0xec, 0x00
-	.byte 0x7b, 0x01, 0x38, 0x21, 0xec, 0x00, 0x01, 0x01
-	.long NakaInst_Dance_Island_104
-	.byte 0x2f, 0x01, 0xf4, 0x20
-	.byte 0xec, 0x00, 0x40, 0x01, 0xd2, 0x20, 0xec, 0x00
-	.byte 0x0c, 0x01, 0xb0, 0x20, 0xec, 0x00, 0x3b, 0x01
-	.long NakaInst_Dance_Surround_124
-	.byte 0x42, 0x01, 0x6c, 0x20
-	.byte 0xec, 0x00, 0xfb, 0x02, 0x4a, 0x20, 0xec, 0x00
-	.byte 0x3a, 0x01, 0x28, 0x20, 0xec, 0x00, 0x6e, 0x01
-	.long NakaInst_Dancing_Flutes_125
-	.byte 0x35, 0x01, 0xe4, 0x1f
-	.byte 0xec, 0x00, 0xd2, 0x00, 0xc2, 0x1f, 0xec, 0x00
-	.byte 0xb4, 0x03, 0xa0, 0x1f, 0xec, 0x00, 0x96, 0x01
-	.long NakaInst_Deuringer_Swing_190
-	.byte 0x32, 0x02, 0x5c, 0x1f
-	.byte 0xec, 0x00, 0x26, 0x01, 0x3a, 0x1f, 0xec, 0x00
-	.byte 0x26, 0x00, 0x18, 0x1f, 0xec, 0x00, 0xdf, 0x00
-	.long NakaInst_Dire_Strats_138
-	.byte 0xaf, 0x00, 0xd4, 0x1e
-	.byte 0xec, 0x00, 0x18, 0x01, 0xb2, 0x1e, 0xec, 0x00
-	.byte 0x1b, 0x01, 0x90, 0x1e, 0xec, 0x00, 0x27, 0x01
-	.long NakaInst_Disco_Metal_124
-	.byte 0x1f, 0x01, 0x4c, 0x1e
-	.byte 0xec, 0x00, 0x11, 0x01, 0x2a, 0x1e, 0xec, 0x00
-	.byte 0x34, 0x01, 0x08, 0x1e, 0xec, 0x00, 0x1e, 0x01
-	.long NakaInst_Disco_Techni_118
-	.byte 0x12, 0x01, 0xc4, 0x1d
-	.byte 0xec, 0x00, 0xd1, 0x00, 0xa2, 0x1d, 0xec, 0x00
-	.byte 0x14, 0x03, 0x80, 0x1d, 0xec, 0x00, 0x16, 0x03
-	.long NakaInst_Django_s_Solo_190
-	.byte 0x2c, 0x02, 0x3c, 0x1d
-	.byte 0xec, 0x00, 0x9d, 0x03, 0x1a, 0x1d, 0xec, 0x00
-	.byte 0x90, 0x02, 0xf8, 0x1c, 0xec, 0x00, 0x42, 0x02
-	.long NakaInst_Dolly_s_Strings_128
-	.byte 0x66, 0x03, 0xb4, 0x1c
-	.byte 0xec, 0x00, 0x88, 0x00, 0x92, 0x1c, 0xec, 0x00
-	.byte 0x33, 0x03, 0x70, 0x1c, 0xec, 0x00, 0xb9, 0x00
-	.long NakaInst_Doo_You_Dance_200
-	.byte 0x8c, 0x02, 0x2c, 0x1c
-	.byte 0xec, 0x00, 0xdd, 0x01, 0x0a, 0x1c, 0xec, 0x00
-	.byte 0xb7, 0x01, 0xe8, 0x1b, 0xec, 0x00, 0xa6, 0x03
-	.long NakaInst_Drawbar_Funk_85
-	.byte 0xf3, 0x00, 0xa4, 0x1b
-	.byte 0xec, 0x00, 0xd2, 0x01, 0x82, 0x1b, 0xec, 0x00
-	.byte 0x12, 0x00, 0x60, 0x1b, 0xec, 0x00, 0x58, 0x00
-	.long NakaInst_Dreamy_Orchestra_67
-	.byte 0x37, 0x00, 0x1c, 0x1b
-	.byte 0xec, 0x00, 0xc1, 0x00, 0xfa, 0x1a, 0xec, 0x00
-	.byte 0x61, 0x03, 0xd8, 0x1a, 0xec, 0x00, 0x35, 0x02
-	.long NakaInst_E_P_Does_It_82
-	.byte 0x30, 0x00, 0x94, 0x1a
-	.byte 0xec, 0x00, 0x2d, 0x00, 0x72, 0x1a, 0xec, 0x00
-	.byte 0xba, 0x00, 0x50, 0x1a, 0xec, 0x00, 0x4a, 0x03
-	.long NakaInst_Easy_Bacharach_150
-	.byte 0xa1, 0x00, 0x0c, 0x1a
-	.byte 0xec, 0x00, 0xd8, 0x03, 0xea, 0x19, 0xec, 0x00
-	.byte 0x05, 0x00, 0xc8, 0x19, 0xec, 0x00, 0x2b, 0x00
-	.long NakaInst_Easy_Threesy_110
-	.byte 0x70, 0x00, 0x84, 0x19
-	.byte 0xec, 0x00, 0x54, 0x00, 0x62, 0x19, 0xec, 0x00
-	.byte 0xeb, 0x02, 0x40, 0x19, 0xec, 0x00, 0x83, 0x03
-	.long NakaInst_Electric_Gospel_88
-	.byte 0xc0, 0x01, 0xfc, 0x18
-	.byte 0xec, 0x00, 0x87, 0x03, 0xda, 0x18, 0xec, 0x00
-	.byte 0xa8, 0x00, 0xb8, 0x18, 0xec, 0x00, 0xe8, 0x02
-	.long NakaInst_Emerson_Keys_145
-	.byte 0xb1, 0x00, 0x74, 0x18
-	.byte 0xec, 0x00, 0x19, 0x01, 0x52, 0x18, 0xec, 0x00
-	.byte 0x4a, 0x00, 0x30, 0x18, 0xec, 0x00, 0x0b, 0x03
-	.long NakaInst_Ernst_Friends_120
-	.byte 0xda, 0x02, 0xec, 0x17
-	.byte 0xec, 0x00, 0xa8, 0x02, 0xca, 0x17, 0xec, 0x00
-	.byte 0x79, 0x02, 0xa8, 0x17, 0xec, 0x00, 0x86, 0x00
-	.long NakaInst_Euro_Squeezebox_147
-	.byte 0x36, 0x02, 0x64, 0x17
-	.byte 0xec, 0x00, 0x18, 0x02, 0x42, 0x17, 0xec, 0x00
-	.byte 0xcf, 0x00, 0x20, 0x17, 0xec, 0x00, 0xbc, 0x00
-	.long NakaInst_Fair_Sea_Organ_125
-	.byte 0x57, 0x01, 0xdc, 0x16
-	.byte 0xec, 0x00, 0xa7, 0x03, 0xba, 0x16, 0xec, 0x00
-	.byte 0x16, 0x00, 0x98, 0x16, 0xec, 0x00, 0x27, 0x00
-	.long NakaInst_Fantasy_Rhumba_115
-	.byte 0x91, 0x03, 0x54, 0x16
-	.byte 0xec, 0x00, 0xda, 0x01, 0x32, 0x16, 0xec, 0x00
-	.byte 0xdc, 0x01, 0x10, 0x16, 0xec, 0x00, 0x90, 0x01
-	.long NakaInst_Festival_Amigos_116
-	.byte 0x3f, 0x01, 0xcc, 0x15
-	.byte 0xec, 0x00, 0xad, 0x03, 0xaa, 0x15, 0xec, 0x00
-	.byte 0xd7, 0x02, 0x88, 0x15, 0xec, 0x00, 0x78, 0x01
-	.long NakaInst_Fiddle_For_Jazz_210
-	.byte 0x21, 0x02, 0x44, 0x15
-	.byte 0xec, 0x00, 0x60, 0x03, 0x22, 0x15, 0xec, 0x00
-	.byte 0xa3, 0x03, 0x00, 0x15, 0xec, 0x00, 0xcc, 0x02
-	.long NakaInst_Finale_Salute_115
-	.byte 0xd3, 0x02, 0xbc, 0x14
-	.byte 0xec, 0x00, 0xa9, 0x02, 0x9a, 0x14, 0xec, 0x00
-	.byte 0x44, 0x02, 0x78, 0x14, 0xec, 0x00, 0x4e, 0x01
-	.long NakaInst_Flugel_Ballad_63
-	.byte 0x4c, 0x00, 0x34, 0x14
-	.byte 0xec, 0x00, 0x01, 0x00, 0x12, 0x14, 0xec, 0x00
-	.byte 0xc4, 0x03, 0xf0, 0x13, 0xec, 0x00, 0x4f, 0x00
-	.long NakaInst_Fogerty_s_Stomp_206
-	.byte 0x3f, 0x03, 0xac, 0x13
-	.byte 0xec, 0x00, 0x2c, 0x03, 0x8a, 0x13, 0xec, 0x00
-	.byte 0xdd, 0x02, 0x68, 0x13, 0xec, 0x00, 0xfa, 0x02
-	.long NakaInst_Folklore_Brass_115
-	.byte 0x23, 0x03, 0x24, 0x13
-	.byte 0xec, 0x00, 0x81, 0x02, 0x02, 0x13, 0xec, 0x00
-	.byte 0x89, 0x02, 0xe0, 0x12, 0xec, 0x00, 0x7b, 0x02
-	.long NakaInst_Foxtrot_Sparkle_120
-	.byte 0x86, 0x02, 0x9c, 0x12
-	.byte 0xec, 0x00, 0x82, 0x02, 0x7a, 0x12, 0xec, 0x00
-	.byte 0x84, 0x02, 0x58, 0x12, 0xec, 0x00, 0x7a, 0x02
-	.long NakaInst_Foxy_Squeezebox_154
-	.byte 0x78, 0x02, 0x14, 0x12
-	.byte 0xec, 0x00, 0x56, 0x01, 0xf2, 0x11, 0xec, 0x00
-	.byte 0x55, 0x02, 0xd0, 0x11, 0xec, 0x00, 0x6f, 0x00
-	.long NakaInst_Full_Brass_Band_115
-	.byte 0xcf, 0x02, 0x8c, 0x11
-	.byte 0xec, 0x00, 0xed, 0x01, 0x6a, 0x11, 0xec, 0x00
-	.byte 0xde, 0x01, 0x48, 0x11, 0xec, 0x00, 0xb3, 0x00
-	.long NakaInst_Full_Tilt_Swing_127
-	.byte 0xf7, 0x01, 0x04, 0x11
-	.long SeqByteBlock_StyleBitmapRef
-	.byte 0xe2, 0x10, 0xec, 0x00
-	.byte 0xe0, 0x03, 0xc0, 0x10, 0xec, 0x00, 0x1c, 0x01
-	.long NakaInst_Funky_Talk_110
-	.byte 0xfc, 0x00, 0x7c, 0x10
-	.long LABEL_E600EC
-	.long NakaInst_Fusion_Tines_98
-	.byte 0x4f, 0x02, 0x38, 0x10, 0xec, 0x00, 0xe9, 0x02
-	.long NakaInst_Galombang_98
-	ld	iy, 0x0ff4
-	.byte 0xec, 0x00, 0x68, 0x03, 0xd2, 0x0f, 0xec, 0x00
-	.byte 0x54, 0x02, 0xb0, 0x0f, 0xec, 0x00, 0x10, 0x00
-	.long NakaInst_Gentle_Ballad_75
-	.byte 0x38, 0x00, 0x6c, 0x0f
-	.byte 0xec, 0x00, 0xf1, 0x01, 0x4a, 0x0f, 0xec, 0x00
-	.byte 0x07, 0x00, 0x28, 0x0f, 0xec, 0x00, 0xed, 0x00
-	.long NakaInst_Georgia_Brass_64
-	.byte 0xab, 0x01, 0xe4, 0x0e
-	.byte 0xec, 0x00, 0xe4, 0x02, 0xc2, 0x0e, 0xec, 0x00
-	.byte 0x51, 0x01, 0xa0, 0x0e, 0xec, 0x00, 0x57, 0x00
-	.long NakaInst_German_Party_Hit_111
-	.byte 0x63, 0x01, 0x5c, 0x0e
-	.byte 0xec, 0x00, 0x4f, 0x01, 0x3a, 0x0e, 0xec, 0x00
-	.byte 0xe0, 0x01, 0x18, 0x0e, 0xec, 0x00, 0x7a, 0x03
-	.long NakaInst_Girls_On_Stage_118
-	.byte 0x6a, 0x02, 0xd4, 0x0d
-	.byte 0xec, 0x00, 0xba, 0x03, 0xb2, 0x0d, 0xec, 0x00
-	.byte 0xef, 0x01, 0x90, 0x0d, 0xec, 0x00, 0xa6, 0x00
-	.long NakaInst_Golden_Movie_Era_120
-	.byte 0x57, 0x02, 0x4c, 0x0d
-	.byte 0xec, 0x00, 0xc1, 0x01, 0x2a, 0x0d, 0xec, 0x00
-	.byte 0xcd, 0x01, 0x08, 0x0d, 0xec, 0x00, 0xd3, 0x01
-	.long NakaInst_Gospel_Organ_66
-	.byte 0xd0, 0x01, 0xc4, 0x0c
-	.byte 0xec, 0x00, 0xc4, 0x01, 0xa2, 0x0c, 0xec, 0x00
-	.byte 0xc8, 0x01, 0x80, 0x0c, 0xec, 0x00, 0x20, 0x03
-	.long NakaInst_Grand_Finale_132
-	.byte 0x53, 0x02, 0x3c, 0x0c
-	.byte 0xec, 0x00, 0xfd, 0x01, 0x1a, 0x0c, 0xec, 0x00
-	.byte 0xac, 0x02, 0xf8, 0x0b, 0xec, 0x00, 0x2d, 0x02
-	.long NakaInst_Greasepaint_Time_132
-	.byte 0x50, 0x02, 0xb4, 0x0b
-	.byte 0xec, 0x00, 0x27, 0x03, 0x92, 0x0b, 0xec, 0x00
-	.byte 0x76, 0x02, 0x70, 0x0b, 0xec, 0x00, 0xec, 0x00
-	.long NakaInst_Groovin_Horns_97
-	.byte 0xfb, 0x00, 0x2c, 0x0b
-	.byte 0xec, 0x00, 0xc4, 0x00, 0x0a, 0x0b, 0xec, 0x00
-	.byte 0x51, 0x00, 0xe8, 0x0a, 0xec, 0x00, 0x6c, 0x02
-	.long NakaInst_Gypsy_Jazz_Frets_210
-	.byte 0x20, 0x02, 0xa4, 0x0a
-	.byte 0xec, 0x00, 0x21, 0x03, 0x82, 0x0a, 0xec, 0x00
-	.byte 0xbd, 0x01, 0x60, 0x0a, 0xec, 0x00, 0x75, 0x03
-	.long NakaInst_Ham_Rock_155
-	.byte 0x7c, 0x00, 0x1c, 0x0a
-	.byte 0xec, 0x00, 0x7d, 0x02, 0xfa, 0x09, 0xec, 0x00
-	.byte 0xa5, 0x00, 0xd8, 0x09, 0xec, 0x00, 0x50, 0x01
-	.long NakaInst_Hard_Analogue_148
-	.byte 0xd5, 0x00, 0x94, 0x09
-	.byte 0xec, 0x00, 0x82, 0x00, 0x72, 0x09, 0xec, 0x00
-	.byte 0x72, 0x03, 0x50, 0x09, 0xec, 0x00, 0x36, 0x03
-	.long NakaInst_Hard_Sax_Blues_124
-	.byte 0xb5, 0x01, 0x0c, 0x09
-	.byte 0xec, 0x00, 0x7c, 0x02, 0xea, 0x08, 0xec, 0x00
-	.byte 0xe7, 0x02, 0xc8, 0x08, 0xec, 0x00, 0x5c, 0x03
-	.long NakaInst_Harry_J_Co_86
-	.byte 0xe7, 0x01, 0x84, 0x08
-	.byte 0xec, 0x00, 0xf3, 0x01, 0x62, 0x08, 0xec, 0x00
-	.byte 0x29, 0x03, 0x40, 0x08, 0xec, 0x00, 0xc3, 0x03
-	.long NakaInst_Heavy_Harmonica_74
-	.byte 0xd8, 0x00, 0xfc, 0x07
-	.byte 0xec, 0x00, 0x0d, 0x02, 0xda, 0x07, 0xec, 0x00
-	.byte 0xcd, 0x02, 0xb8, 0x07, 0xec, 0x00, 0x21, 0x01
-	.long NakaInst_Hip_Keys_108
-	.byte 0x20, 0x01, 0x74, 0x07
-	.byte 0xec, 0x00, 0x22, 0x01, 0x52, 0x07, 0xec, 0x00
-	.byte 0x2a, 0x01, 0x30, 0x07, 0xec, 0x00, 0x7e, 0x01
-	.long NakaInst_Hoedown_Strings_123
-	.byte 0x3b, 0x03, 0xec, 0x06
-	.byte 0xec, 0x00, 0x8e, 0x02, 0xca, 0x06, 0xec, 0x00
-	.byte 0x92, 0x03, 0xa8, 0x06, 0xec, 0x00, 0xb1, 0x02
-	.long NakaInst_Honky_Tonk_Band_196
-	.byte 0x13, 0x03, 0x64, 0x06
-	.byte 0xec, 0x00, 0x07, 0x03, 0x42, 0x06, 0xec, 0x00
-	.byte 0x5a, 0x03, 0x20, 0x06, 0xec, 0x00, 0xd9, 0x03
-	.long NakaInst_House_Garden_125
-	.byte 0x0a, 0x01, 0xdc, 0x05
-	.byte 0xec, 0x00, 0x0b, 0x01, 0xba, 0x05, 0xec, 0x00
-	.byte 0x08, 0x01, 0x98, 0x05, 0xec, 0x00, 0x33, 0x02
-	.long NakaInst_Hugo_s_Revival_120
-	.byte 0x74, 0x02, 0x54, 0x05
-	.byte 0xec, 0x00, 0x05, 0x03, 0x32, 0x05, 0xec, 0x00
-	.byte 0x22, 0x03, 0x10, 0x05, 0xec, 0x00, 0xc2, 0x01
-	.long NakaInst_I_Got_The_Blues_83
-	.byte 0xb8, 0x01, 0xcc, 0x04
-	.byte 0xec, 0x00, 0x9f, 0x00, 0xaa, 0x04, 0xec, 0x00
-	.byte 0x4c, 0x01, 0x88, 0x04, 0xec, 0x00, 0x57, 0x03
-	.long NakaInst_In_Sax_Country_115
-	.byte 0x6e, 0x03, 0x44, 0x04
-	.byte 0xec, 0x00, 0x52, 0x02, 0x22, 0x04, 0xec, 0x00
-	.byte 0xc6, 0x01, 0x00, 0x04, 0xec, 0x00, 0x7c, 0x03
-	.long NakaInst_Island_Delight_101
-	.byte 0x01, 0x03, 0xbc, 0x03
-	.byte 0xec, 0x00, 0xaa, 0x03, 0x9a, 0x03, 0xec, 0x00
-	.byte 0x06, 0x03, 0x78, 0x03, 0xec, 0x00, 0x00, 0x03
-	.long NakaInst_Island_Strings_101
-	.byte 0x03, 0x03, 0x34, 0x03
-	.byte 0xec, 0x00, 0x04, 0x03, 0x12, 0x03, 0xec, 0x00
-	.byte 0xb0, 0x02, 0xf0, 0x02, 0xec, 0x00, 0xbf, 0x00
-	.long NakaInst_Jailhouse_Brass_158
-	.byte 0x8b, 0x00, 0xac, 0x02
-	.byte 0xec, 0x00, 0x28, 0x03, 0x8a, 0x02, 0xec, 0x00
-	.byte 0xe3, 0x03, 0x68, 0x02, 0xec, 0x00, 0xc8, 0x03
-	.long NakaInst_Jamaican_Voices_83
-	.byte 0xab, 0x03, 0x24, 0x02
-	.byte 0xec, 0x00, 0x47, 0x01, 0x02, 0x02, 0xec, 0x00
-	.byte 0x4a, 0x01, 0xe0, 0x01, 0xec, 0x00, 0x07, 0x02
-	.long NakaInst_Jazz_Blocks_146
-	.byte 0x04, 0x02, 0x9c, 0x01
-	.byte 0xec, 0x00, 0xbe, 0x02, 0x7a, 0x01, 0xec, 0x00
-	.byte 0x0a, 0x02, 0x58, 0x01, 0xec, 0x00, 0x40, 0x02
-	.long NakaInst_Jazz_To_The_Bone_180
-	.byte 0x4a, 0x02, 0x14, 0x01
-	.byte 0xec, 0x00, 0x81, 0x00, 0xf2, 0x00, 0xec, 0x00
-	.byte 0xec, 0x02, 0xd0, 0x00, 0xec, 0x00, 0x10, 0x02
-	.long NakaInst_Jive_Ivories_176
-	.byte 0x94, 0x02, 0x8c, 0x00
-	.byte 0xec, 0x00, 0x96, 0x02, 0x6a, 0x00, 0xec, 0x00
-	.byte 0x36, 0x01, 0x48, 0x00, 0xec, 0x00, 0x77, 0x03
-	.long NakaInst_Joplin_Rag_130
-	.byte 0x09, 0x03, 0x04, 0x00
-	.byte 0xec, 0x00, 0xce, 0x03, 0xe2, 0xff, 0xeb, 0x00
-	.byte 0x82, 0x03, 0xc0, 0xff, 0xeb, 0x00, 0xb6, 0x00
-	.long LABEL_EBFF9E
-	.byte 0x2c, 0x00, 0x7c, 0xff
-	.byte 0xeb, 0x00, 0x48, 0x03, 0x5a, 0xff, 0xeb, 0x00
-	.byte 0x4f, 0x03, 0x38, 0xff, 0xeb, 0x00, 0xd4, 0x03
-	.long LABEL_EBFF16
-	.byte 0xef, 0x00, 0xf4, 0xfe
-	.byte 0xeb, 0x00, 0xa2, 0x01, 0xd2, 0xfe, 0xeb, 0x00
-	.byte 0x53, 0x01, 0xb0, 0xfe, 0xeb, 0x00, 0xfc, 0x02
-	.long LABEL_EBFE8E
-	.byte 0xae, 0x00, 0x6c, 0xfe
-	.byte 0xeb, 0x00, 0x50, 0x03, 0x4a, 0xfe, 0xeb, 0x00
-	.byte 0xe7, 0x00, 0x28, 0xfe, 0xeb, 0x00, 0xf2, 0x00
-	.long LABEL_EBFE06
-	.byte 0xdd, 0x00, 0xe4, 0xfd
-	.byte 0xeb, 0x00, 0xfc, 0x01, 0xc2, 0xfd, 0xeb, 0x00
-	.byte 0x44, 0x01, 0xa0, 0xfd, 0xeb, 0x00, 0x9b, 0x03
-	.long LABEL_EBFD7E
-	.byte 0x45, 0x01, 0x5c, 0xfd
-	.byte 0xeb, 0x00, 0x3c, 0x02, 0x3a, 0xfd, 0xeb, 0x00
-	.byte 0x1e, 0x02, 0x18, 0xfd, 0xeb, 0x00, 0x5f, 0x00
-	.long LABEL_EBFCF6
-	.byte 0x9c, 0x02, 0xd4, 0xfc
-	.byte 0xeb, 0x00, 0xa3, 0x02, 0xb2, 0xfc, 0xeb, 0x00
-	.byte 0xca, 0x03, 0x90, 0xfc, 0xeb, 0x00, 0x8e, 0x03
-	.long LABEL_EBFC6E
-	ldw	(xiz), 0xfc4c
-	.byte 0xeb, 0x00, 0x93, 0x03, 0x2a, 0xfc, 0xeb, 0x00
-	.byte 0x86, 0x03, 0x08, 0xfc, 0xeb, 0x00, 0x78, 0x03
-	.long LABEL_EBFBE6
-	.byte 0xc5, 0x03, 0xc4, 0xfb
-	.byte 0xeb, 0x00, 0xde, 0x02, 0xa2, 0xfb, 0xeb, 0x00
-	.byte 0x73, 0x02, 0x80, 0xfb, 0xeb, 0x00, 0x25, 0x02
-	.long LABEL_EBFB5E
-	.byte 0x69, 0x03, 0x3c, 0xfb
-	.byte 0xeb, 0x00, 0xd0, 0x02, 0x1a, 0xfb, 0xeb, 0x00
-	.byte 0xa3, 0x00, 0xf8, 0xfa, 0xeb, 0x00, 0x4e, 0x00
-	.long LABEL_EBFAD6
-	.byte 0xe1, 0x00, 0xb4, 0xfa
-	.byte 0xeb, 0x00, 0xbc, 0x03, 0x92, 0xfa, 0xeb, 0x00
-	.byte 0x2c, 0x01, 0x70, 0xfa, 0xeb, 0x00, 0x0b, 0x02
-	.long LABEL_EBFA4E
-	.byte 0x14, 0x02, 0x2c, 0xfa
-	.byte 0xeb, 0x00, 0x15, 0x03, 0x0a, 0xfa, 0xeb, 0x00
-	.byte 0x9b, 0x00, 0xe8, 0xf9, 0xeb, 0x00, 0x00, 0x01
-	.long LABEL_EBF9C6
-	.byte 0x77, 0x01, 0xa4, 0xf9
-	.byte 0xeb, 0x00, 0xfb, 0x01, 0x82, 0xf9, 0xeb, 0x00
-	.byte 0xb2, 0x02, 0x60, 0xf9, 0xeb, 0x00, 0x2d, 0x01
-	.long LABEL_EBF93E
-	.byte 0xe8, 0x00, 0x1c, 0xf9
-	.byte 0xeb, 0x00, 0xe2, 0x01, 0xfa, 0xf8, 0xeb, 0x00
-	.byte 0x58, 0x02, 0xd8, 0xf8, 0xeb, 0x00, 0x98, 0x03
-	.long LABEL_EBF8B6
-	.byte 0xa1, 0x03, 0x94, 0xf8
-	.byte 0xeb, 0x00, 0x9e, 0x03, 0x72, 0xf8, 0xeb, 0x00
-	.byte 0x31, 0x00, 0x50, 0xf8, 0xeb, 0x00, 0x0f, 0x03
-	.long LABEL_EBF82E
-	.byte 0xdf, 0x02, 0x0c, 0xf8
-	.byte 0xeb, 0x00, 0xce, 0x02, 0xea, 0xf7, 0xeb, 0x00
-	.byte 0xe5, 0x03, 0xc8, 0xf7, 0xeb, 0x00, 0xf5, 0x02
-	.long LABEL_EBF7A6
-	.byte 0x77, 0x02, 0x84, 0xf7
-	.byte 0xeb, 0x00, 0xf8, 0x02, 0x62, 0xf7, 0xeb, 0x00
-	.byte 0x7d, 0x03, 0x40, 0xf7, 0xeb, 0x00, 0x84, 0x03
-	.long LABEL_EBF71E
-	.byte 0xb0, 0x00, 0xfc, 0xf6
-	.byte 0xeb, 0x00, 0x5e, 0x03, 0xda, 0xf6, 0xeb, 0x00
-	.byte 0xe0, 0x00, 0xb8, 0xf6, 0xeb, 0x00, 0x7a, 0x00
-	.long LABEL_EBF696
-	.byte 0x37, 0x02, 0x74, 0xf6
-	.byte 0xeb, 0x00, 0x99, 0x03, 0x52, 0xf6, 0xeb, 0x00
-	.byte 0x62, 0x00, 0x30, 0xf6, 0xeb, 0x00, 0x80, 0x03
-	.long LABEL_EBF60E
-	.byte 0xe6, 0x01, 0xec, 0xf5
-	.byte 0xeb, 0x00, 0x49, 0x00, 0xca, 0xf5, 0xeb, 0x00
-	.byte 0x9c, 0x00, 0xa8, 0xf5, 0xeb, 0x00, 0xb3, 0x03
-	.long LABEL_EBF586
-	.byte 0xb1, 0x03, 0x64, 0xf5
-	.byte 0xeb, 0x00, 0x9a, 0x00, 0x42, 0xf5, 0xeb, 0x00
-	.byte 0x05, 0x01, 0x20, 0xf5, 0xeb, 0x00, 0x6f, 0x02
-	.long LABEL_EBF4FE
-	.byte 0x64, 0x00, 0xdc, 0xf4
-	.byte 0xeb, 0x00, 0xe5, 0x01, 0xba, 0xf4, 0xeb, 0x00
-	.byte 0xe3, 0x01, 0x98, 0xf4, 0xeb, 0x00, 0xde, 0x03
-	.long LABEL_EBF476
-	.byte 0xcc, 0x03, 0x54, 0xf4
-	.byte 0xeb, 0x00, 0x13, 0x01, 0x32, 0xf4, 0xeb, 0x00
-	.byte 0x8f, 0x01, 0x10, 0xf4, 0xeb, 0x00, 0x9f, 0x03
-	.long LABEL_EBF3EE
-	.byte 0x87, 0x00, 0xcc, 0xf3
-	.byte 0xeb, 0x00, 0x7f, 0x03, 0xaa, 0xf3, 0xeb, 0x00
-	.byte 0xd6, 0x01, 0x88, 0xf3, 0xeb, 0x00, 0x49, 0x02
-	.long LABEL_EBF366
-	.byte 0xdb, 0x02, 0x44, 0xf3
-	.byte 0xeb, 0x00, 0x98, 0x00, 0x22, 0xf3, 0xeb, 0x00
-	.byte 0xaa, 0x01, 0x00, 0xf3, 0xeb, 0x00, 0x2b, 0x02
-	.long LABEL_EBF2DE
-	.byte 0xd9, 0x02, 0xbc, 0xf2
-	.byte 0xeb, 0x00, 0x1d, 0x03, 0x9a, 0xf2, 0xeb, 0x00
-	.byte 0x97, 0x01, 0x78, 0xf2, 0xeb, 0x00, 0xbf, 0x01
-	.long LABEL_EBF256
-	.byte 0x1e, 0x00, 0x34, 0xf2
-	.byte 0xeb, 0x00, 0x7e, 0x02, 0x12, 0xf2, 0xeb, 0x00
-	.byte 0x8a, 0x01, 0xf0, 0xf1, 0xeb, 0x00, 0xd4, 0x02
-	.long LABEL_EBF1CE
-	jr	pl, 0
-	or	(xix-15), xhl
-	nop
-	jr	ge, 2
-	or	(xde-15), c
-	nop
-	jrl	c, 26624
-	stda32	235, xwa
-	push_sr
-	.long LABEL_EBF146
-	.byte 0xe9, 0x01, 0x24, 0xf1
-	.byte 0xeb, 0x00, 0xf0, 0x01, 0x02, 0xf1, 0xeb, 0x00
-	.byte 0x73, 0x03, 0xe0, 0xf0, 0xeb, 0x00, 0x4e, 0x03
-	.long LABEL_EBF0BE
-	.byte 0x42, 0x03, 0x9c, 0xf0
-	.byte 0xeb, 0x00, 0x62, 0x03, 0x7a, 0xf0, 0xeb, 0x00
-	.byte 0x1c, 0x02, 0x58, 0xf0, 0xeb, 0x00, 0x18, 0x03
-	.long LABEL_EBF036
-	.byte 0x3b, 0x02, 0x14, 0xf0
-	.byte 0xeb, 0x00, 0x25, 0x00, 0xf2, 0xef, 0xeb, 0x00
-	.byte 0xd2, 0x03, 0xd0, 0xef, 0xeb, 0x00, 0xf6, 0x00
-	.long LABEL_EBEFAE
-	.byte 0x41, 0x01, 0x8c, 0xef
-	.byte 0xeb, 0x00, 0x03, 0x00, 0x6a, 0xef, 0xeb, 0x00
-	.byte 0xc0, 0x02, 0x48, 0xef, 0xeb, 0x00, 0x15, 0x01
-	.long LABEL_EBEF26
-	.byte 0xd5, 0x03, 0x04, 0xef
-	.byte 0xeb, 0x00, 0x5a, 0x01, 0xe2, 0xee, 0xeb, 0x00
-	.byte 0x8d, 0x02, 0xc0, 0xee, 0xeb, 0x00, 0x46, 0x01
-	.long LABEL_EBEE9E
-	.byte 0x8c, 0x03, 0x7c, 0xee
-	.byte 0xeb, 0x00, 0xc2, 0x02, 0x5a, 0xee, 0xeb, 0x00
-	.byte 0x63, 0x02, 0x38, 0xee, 0xeb, 0x00, 0x20, 0x00
-	.long LABEL_EBEE16
-	.byte 0x94, 0x00, 0xf4, 0xed
-	.byte 0xeb, 0x00, 0xad, 0x02, 0xd2, 0xed, 0xeb, 0x00
-	.byte 0xa7, 0x02, 0xb0, 0xed, 0xeb, 0x00, 0x84, 0x00
-	.long LABEL_EBED8E
-	.byte 0x7d, 0x01, 0x6c, 0xed
-	.byte 0xeb, 0x00, 0x87, 0x01, 0x4a, 0xed, 0xeb, 0x00
-	.byte 0xd5, 0x02, 0x28, 0xed, 0xeb, 0x00, 0x4b, 0x00
-	.long LABEL_EBED06
-	.byte 0xf7, 0x00, 0xe4, 0xec
-	.byte 0xeb, 0x00, 0x04, 0x01, 0xc2, 0xec, 0xeb, 0x00
-	.byte 0x6d, 0x01, 0xa0, 0xec, 0xeb, 0x00, 0xf9, 0x02
-	.long LABEL_EBEC7E
-	.byte 0x5d, 0x02, 0x5c, 0xec
-	.byte 0xeb, 0x00, 0x7f, 0x02, 0x3a, 0xec, 0xeb, 0x00
-	.byte 0x56, 0x00, 0x18, 0xec, 0xeb, 0x00, 0x55, 0x00
-	.long LABEL_EBEBF6
-	.byte 0x24, 0x03, 0xd4, 0xeb
-	.byte 0xeb, 0x00, 0x33, 0x01, 0xb2, 0xeb, 0xeb, 0x00
-	.byte 0xfe, 0x00, 0x90, 0xeb, 0xeb, 0x00, 0x3e, 0x03
-	.long LABEL_EBEB6E
-	.byte 0x71, 0x00, 0x4c, 0xeb
-	.byte 0xeb, 0x00, 0xda, 0x03, 0x2a, 0xeb, 0xeb, 0x00
-	.byte 0xb9, 0x02, 0x08, 0xeb, 0xeb, 0x00, 0x32, 0x00
-	.long LABEL_EBEAE6
-	.byte 0x02, 0x00, 0xc4, 0xea
-	.byte 0xeb, 0x00, 0x21, 0x00, 0xa2, 0xea, 0xeb, 0x00
-	.byte 0xa4, 0x02, 0x80, 0xea, 0xeb, 0x00, 0x8f, 0x02
-	.long LABEL_EBEA5E
-	.byte 0x01, 0x02, 0x3c, 0xea
-	.byte 0xeb, 0x00, 0xba, 0x02, 0x1a, 0xea, 0xeb, 0x00
-	.byte 0x62, 0x01, 0xf8, 0xe9, 0xeb, 0x00, 0x09, 0x02
-	.long LABEL_EBE9D6
-	.byte 0xd3, 0x00, 0xb4, 0xe9
-	.byte 0xeb, 0x00, 0xd6, 0x03, 0x92, 0xe9, 0xeb, 0x00
-	.byte 0xdf, 0x03, 0x70, 0xe9, 0xeb, 0x00, 0x50, 0x00
-	.long LABEL_EBE94E
-	.byte 0x15, 0x00, 0x2c, 0xe9
-	.byte 0xeb, 0x00, 0x2e, 0x02, 0x0a, 0xe9, 0xeb, 0x00
-	.byte 0x6e, 0x00, 0xe8, 0xe8, 0xeb, 0x00, 0x17, 0x02
-	.long LABEL_EBE8C6
-	.byte 0x5d, 0x01, 0xa4, 0xe8
-	.byte 0xeb, 0x00, 0x48, 0x01, 0x82, 0xe8, 0xeb, 0x00
-	.byte 0x3d, 0x01, 0x60, 0xe8, 0xeb, 0x00, 0x6b, 0x01
-	.long LABEL_EBE83E
-	.byte 0x61, 0x01, 0x1c, 0xe8
-	.byte 0xeb, 0x00, 0x68, 0x01, 0xfa, 0xe7, 0xeb, 0x00
-	.byte 0x5f, 0x01, 0xd8, 0xe7, 0xeb, 0x00, 0x31, 0x03
-	.long LABEL_EBE7B6
-	.byte 0x2e, 0x03, 0x94, 0xe7
-	.byte 0xeb, 0x00, 0x95, 0x03, 0x72, 0xe7, 0xeb, 0x00
-	.byte 0x3e, 0x01, 0x50, 0xe7, 0xeb, 0x00, 0x54, 0x01
-	.long LABEL_EBE72E
-	.byte 0x19, 0x03, 0x0c, 0xe7
-	.byte 0xeb, 0x00, 0xaa, 0x00, 0xea, 0xe6, 0xeb, 0x00
-	.byte 0x0a, 0x03, 0xc8, 0xe6, 0xeb, 0x00, 0xdc, 0x02
-	.long LABEL_EBE6A6
-	.byte 0x09, 0x01, 0x84, 0xe6
-	.byte 0xeb, 0x00, 0x5c, 0x01, 0x62, 0xe6, 0xeb, 0x00
-	.byte 0xbe, 0x00, 0x40, 0xe6, 0xeb, 0x00, 0xc9, 0x00
-	.long LABEL_EBE61E
-	.byte 0xc3, 0x00, 0xfc, 0xe5
-	.byte 0xeb, 0x00, 0x3d, 0x00, 0xda, 0xe5, 0xeb, 0x00
-	.byte 0xc0, 0x00, 0xb8, 0xe5, 0xeb, 0x00, 0xc2, 0x00
-	.long LABEL_EBE596
-	.byte 0xb5, 0x00, 0x74, 0xe5
-	.byte 0xeb, 0x00, 0x55, 0x01, 0x52, 0xe5, 0xeb, 0x00
-	.byte 0xcb, 0x00, 0x30, 0xe5, 0xeb, 0x00, 0xca, 0x00
-	.long LABEL_EBE50E
-	.byte 0xf6, 0x01, 0xec, 0xe4
-	.byte 0xeb, 0x00, 0xc7, 0x01, 0xca, 0xe4, 0xeb, 0x00
-	.byte 0xc5, 0x01, 0xa8, 0xe4, 0xeb, 0x00, 0x76, 0x01
-	.long LABEL_EBE486
-	.byte 0x97, 0x03, 0x64, 0xe4
-	.byte 0xeb, 0x00, 0x28, 0x01, 0x42, 0xe4, 0xeb, 0x00
-	.byte 0x58, 0x01, 0x20, 0xe4, 0xeb, 0x00, 0x80, 0x02
-	.long LABEL_EBE3FE
-	.byte 0x8b, 0x02, 0xdc, 0xe3
-	.byte 0xeb, 0x00, 0x0d, 0x03, 0xba, 0xe3, 0xeb, 0x00
-	.byte 0x0e, 0x03, 0x98, 0xe3, 0xeb, 0x00, 0x67, 0x03
-	.long LABEL_EBE376
-	.byte 0x32, 0x01, 0x54, 0xe3
-	.byte 0xeb, 0x00, 0xe2, 0x03, 0x32, 0xe3, 0xeb, 0x00
-	.byte 0x0e, 0x01, 0x10, 0xe3, 0xeb, 0x00, 0xa9, 0x01
-	.long LABEL_EBE2EE
-	.byte 0x03, 0x02, 0xcc, 0xe2
-	.byte 0xeb, 0x00, 0xf5, 0x01, 0xaa, 0xe2, 0xeb, 0x00
-	.byte 0xcb, 0x01, 0x88, 0xe2, 0xeb, 0x00, 0xdf, 0x01
-	.long LABEL_EBE266
-	.byte 0x38, 0x01, 0x44, 0xe2
-	.byte 0xeb, 0x00, 0xe6, 0x03, 0x22, 0xe2, 0xeb, 0x00
-	.byte 0xe1, 0x03, 0x00, 0xe2, 0xeb, 0x00, 0x39, 0x01
-	.long LABEL_EBE1DE
-	.byte 0x23, 0x02, 0xbc, 0xe1
-	.byte 0xeb, 0x00, 0x69, 0x00, 0x9a, 0xe1, 0xeb, 0x00
-	.byte 0x06, 0x00, 0x78, 0xe1, 0xeb, 0x00, 0x07, 0x01
-	.long LABEL_EBE156
-	.byte 0x02, 0x01, 0x34, 0xe1
-	.byte 0xeb, 0x00, 0x4d, 0x01, 0x12, 0xe1, 0xeb, 0x00
-	.byte 0x59, 0x00, 0xf0, 0xe0, 0xeb, 0x00, 0x65, 0x03
-	.long LABEL_EBE0CE
-	.byte 0xad, 0x00, 0xac, 0xe0
-	.byte 0xeb, 0x00, 0x66, 0x00, 0x8a, 0xe0, 0xeb, 0x00
-	.byte 0xfa, 0x01, 0x68, 0xe0, 0xeb, 0x00, 0xac, 0x03
-	.long LABEL_EBE046
-	.byte 0xb6, 0x03, 0x24, 0xe0
-	.byte 0xeb, 0x00, 0x4b, 0x03, 0x02, 0xe0, 0xeb, 0x00
-	.byte 0x29, 0x02, 0xe0, 0xdf, 0xeb, 0x00, 0xd6, 0x00
-	.long LABEL_EBDFBE
-	.byte 0x7f, 0x00, 0x9c, 0xdf
-	.byte 0xeb, 0x00, 0x89, 0x00, 0x7a, 0xdf, 0xeb, 0x00
-	.byte 0xd9, 0x00, 0x58, 0xdf, 0xeb, 0x00, 0xd7, 0x00
-	.long LABEL_EBDF36
-	.byte 0x0e, 0x00, 0x14, 0xdf
-	.byte 0xeb, 0x00, 0x6d, 0x03, 0xf2, 0xde, 0xeb, 0x00
-	.byte 0xc6, 0x00, 0xd0, 0xde, 0xeb, 0x00, 0x5b, 0x03
-	.long LABEL_EBDEAE
-	.byte 0xce, 0x00, 0x8c, 0xde
-	.byte 0xeb, 0x00, 0x5d, 0x00, 0x6a, 0xde, 0xeb, 0x00
-	.byte 0x0c, 0x00, 0x48, 0xde, 0xeb, 0x00, 0x23, 0x00
-	.long LABEL_EBDE26
-	.byte 0x95, 0x01, 0x04, 0xde
-	.byte 0xeb, 0x00, 0x97, 0x00, 0xe2, 0xdd, 0xeb, 0x00
-	.byte 0xc0, 0x03, 0xc0, 0xdd, 0xeb, 0x00, 0xc6, 0x03
-	.long LABEL_EBDD9E
-	.byte 0xd3, 0x03, 0x7c, 0xdd
-	.byte 0xeb, 0x00, 0xae, 0x03, 0x5a, 0xdd, 0xeb, 0x00
-	.byte 0xd0, 0x03, 0x38, 0xdd, 0xeb, 0x00, 0xa5, 0x02
-	.long LABEL_EBDD16
-	.byte 0xcf, 0x03, 0xf4, 0xdc
-	.byte 0xeb, 0x00, 0x4d, 0x02, 0xd2, 0xdc, 0xeb, 0x00
-	.byte 0xa0, 0x00, 0xb0, 0xdc, 0xeb, 0x00, 0xa2, 0x00
-	.long LABEL_EBDC8E
-	.byte 0x8c, 0x01, 0x6c, 0xdc
-	.byte 0xeb, 0x00, 0xb0, 0x01, 0x4a, 0xdc, 0xeb, 0x00
-	.byte 0x14, 0x01, 0x28, 0xdc, 0xeb, 0x00, 0x1f, 0x00
-	.long LABEL_EBDC06
-	.byte 0x9c, 0x03, 0xe4, 0xdb
-	.byte 0xeb, 0x00, 0xbb, 0x00, 0xc2, 0xdb, 0xeb, 0x00
-	.byte 0xc5, 0x00, 0xa0, 0xdb, 0xeb, 0x00, 0xe1, 0x01
-	.long LABEL_EBDB7E
-	.byte 0x9e, 0x00, 0x5c, 0xdb
-	.byte 0xeb, 0x00, 0xb9, 0x03, 0x3a, 0xdb, 0xeb, 0x00
-	.byte 0x96, 0x03, 0x18, 0xdb, 0xeb, 0x00, 0x15, 0x02
-	.long LABEL_EBDAF6
-	.byte 0xa2, 0x03, 0xd4, 0xda
-	.byte 0xeb, 0x00, 0x91, 0x01, 0xb2, 0xda, 0xeb, 0x00
-	.byte 0x86, 0x01, 0x90, 0xda, 0xeb, 0x00, 0xef, 0x02
-	.long LABEL_EBDA6E
-	.byte 0xe4, 0x01, 0x4c, 0xda
-	.byte 0xeb, 0x00, 0x88, 0x01, 0x2a, 0xda, 0xeb, 0x00
-	.byte 0xc6, 0x02, 0x08, 0xda, 0xeb, 0x00, 0x9f, 0x02
-	.long LABEL_EBD9E6
-	.byte 0xa0, 0x03, 0xc4, 0xd9
-	.byte 0xeb, 0x00, 0x99, 0x00, 0xa2, 0xd9, 0xeb, 0x00
-	.byte 0x6f, 0x01, 0x80, 0xd9, 0xeb, 0x00, 0x9a, 0x02
-	.long LABEL_EBD95E
-	.byte 0x1d, 0x02, 0x3c, 0xd9
-	.byte 0xeb, 0x00, 0x51, 0x02, 0x1a, 0xd9, 0xeb, 0x00
-	.byte 0x48, 0x00, 0xf8, 0xd8, 0xeb, 0x00, 0x8e, 0x00
-	.long LABEL_EBD8D6
-	.byte 0xb7, 0x00, 0xb4, 0xd8
-	.byte 0xeb, 0x00, 0xb4, 0x00, 0x92, 0xd8, 0xeb, 0x00
-	.byte 0xa0, 0x02, 0x70, 0xd8, 0xeb, 0x00, 0x74, 0x03
-	.long LABEL_EBD84E
-	.byte 0x74, 0x00, 0x2c, 0xd8
-	.byte 0xeb, 0x00, 0x0e, 0x02, 0x0a, 0xd8, 0xeb, 0x00
-	.byte 0x5c, 0x02, 0xe8, 0xd7, 0xeb, 0x00, 0x67, 0x00
-	.long LABEL_EBD7C6
-	.byte 0xf9, 0x01, 0xa4, 0xd7
-	.byte 0xeb, 0x00, 0x6a, 0x00, 0x82, 0xd7, 0xeb, 0x00
-	.byte 0x26, 0x03, 0x60, 0xd7, 0xeb, 0x00, 0xc9, 0x01
-	.long LABEL_EBD73E
-	.byte 0xd5, 0x01, 0x1c, 0xd7
-	.byte 0xeb, 0x00, 0xd7, 0x01, 0xfa, 0xd6, 0xeb, 0x00
-	.byte 0x9d, 0x00, 0xd8, 0xd6, 0xeb, 0x00, 0x96, 0x00
-	.long LABEL_EBD6B6
-	.byte 0x62, 0x02, 0x94, 0xd6
-	.byte 0xeb, 0x00, 0xf7, 0x02, 0x72, 0xd6, 0xeb, 0x00
-	.byte 0x83, 0x00, 0x50, 0xd6, 0xeb, 0x00, 0x7d, 0x00
-	.long LABEL_EBD62E
-	.byte 0x80, 0x00, 0x0c, 0xd6
-	.byte 0xeb, 0x00, 0x67, 0x02, 0xea, 0xd5, 0xeb, 0x00
-	.byte 0x38, 0x02, 0xc8, 0xd5, 0xeb, 0x00, 0x36, 0x00
-	.long LABEL_EBD5A6
-	.byte 0x1a, 0x02, 0x84, 0xd5
-	.byte 0xeb, 0x00, 0x4b, 0x02, 0x62, 0xd5, 0xeb, 0x00
-	.byte 0x93, 0x00, 0x40, 0xd5, 0xeb, 0x00, 0x41, 0x00
-	.long LABEL_EBD51E
-	.byte 0x63, 0x00, 0xfc, 0xd4
-	.byte 0xeb, 0x00, 0x89, 0x03, 0xda, 0xd4, 0xeb, 0x00
-	.byte 0x0d, 0x00, 0xb8, 0xd4, 0xeb, 0x00, 0x66, 0x02
-	.long LABEL_EBD496
-	.byte 0x0a, 0x00, 0x74, 0xd4
-	.byte 0xeb, 0x00, 0x24, 0x02, 0x52, 0xd4, 0xeb, 0x00
-	.byte 0x3a, 0x03, 0x30, 0xd4, 0xeb, 0x00, 0xb2, 0x01
-	.long LABEL_EBD40E
-	.byte 0x2f, 0x03, 0xec, 0xd3
-	.byte 0xeb, 0x00, 0xd0, 0x00, 0xca, 0xd3, 0xeb, 0x00
-	.byte 0x66, 0x01, 0xa8, 0xd3, 0xeb, 0x00, 0xac, 0x01
-	.long LABEL_EBD386
-	.byte 0x28, 0x00, 0x64, 0xd3
-	.byte 0xeb, 0x00, 0x95, 0x00, 0x42, 0xd3, 0xeb, 0x00
-	.byte 0x92, 0x02, 0x20, 0xd3, 0xeb, 0x00, 0x59, 0x01
-	.long LABEL_EBD2FE
-	.byte 0x48, 0x02, 0xdc, 0xd2
-	.byte 0xeb, 0x00, 0xcc, 0x01, 0xba, 0xd2, 0xeb, 0x00
-	.byte 0x60, 0x00, 0x98, 0xd2, 0xeb, 0x00, 0x9e, 0x01
-	.long LABEL_EBD276
-	.byte 0xa1, 0x01, 0x54, 0xd2
-	.byte 0xeb, 0x00, 0xa8, 0x01, 0x32, 0xd2, 0xeb, 0x00
-	.byte 0x9a, 0x01, 0x10, 0xd2, 0xeb, 0x00, 0x9f, 0x01
-	.long LABEL_EBD1EE
-	.byte 0xa7, 0x01, 0xcc, 0xd1
-	.byte 0xeb, 0x00, 0xa4, 0x01, 0xaa, 0xd1, 0xeb, 0x00
-	.byte 0xa3, 0x01, 0x88, 0xd1, 0xeb, 0x00, 0x9d, 0x01
-	.long LABEL_EBD166
-	.byte 0x93, 0x01, 0x44, 0xd1
-	.byte 0xeb, 0x00, 0x39, 0x00, 0x22, 0xd1, 0xeb, 0x00
-	.byte 0x55, 0x03, 0x00, 0xd1, 0xeb, 0x00, 0x1d, 0x00
-	.long LABEL_EBD0DE
-	.byte 0x54, 0x03, 0xbc, 0xd0
-	.byte 0xeb, 0x00, 0x47, 0x03, 0x9a, 0xd0, 0xeb, 0x00
-	.byte 0x03, 0x01, 0x78, 0xd0, 0xeb, 0x00, 0x52, 0x00
-	.long LABEL_EBD056
-	.byte 0xae, 0x02, 0x34, 0xd0
-	.byte 0xeb, 0x00, 0x90, 0x03, 0x12, 0xd0, 0xeb, 0x00
-	.byte 0x83, 0x01, 0xf0, 0xcf, 0xeb, 0x00, 0x25, 0x03
-	.long LABEL_EBCFCE
-	.byte 0xc9, 0x03, 0xac, 0xcf
-	.byte 0xeb, 0x00, 0x2f, 0x02, 0x8a, 0xcf, 0xeb, 0x00
-	.byte 0xcc, 0x00, 0x68, 0xcf, 0xeb, 0x00, 0x5b, 0x00
-	.long LABEL_EBCF46
-	.byte 0x6b, 0x03, 0x24, 0xcf
-	.byte 0xeb, 0x00, 0x45, 0x03, 0x02, 0xcf, 0xeb, 0x00
-	.byte 0x2d, 0x03, 0xe0, 0xce, 0xeb, 0x00, 0xe6, 0x02
-	.long LABEL_EBCEBE
-	.byte 0x22, 0x02, 0x9c, 0xce
-	.byte 0xeb, 0x00, 0x1b, 0x00, 0x7a, 0xce, 0xeb, 0x00
-	.byte 0x75, 0x02, 0x58, 0xce, 0xeb, 0x00, 0xf1, 0x02
-	.long LABEL_EBCE36
-	.byte 0x29, 0x01, 0x14, 0xce
-	.byte 0xeb, 0x00, 0x5e, 0x01, 0xf2, 0xcd, 0xeb, 0x00
-	.byte 0x45, 0x00, 0xd0, 0xcd, 0xeb, 0x00, 0x78, 0x00
-	.long LABEL_EBCDAE
-	.byte 0xaa, 0x02, 0x8c, 0xcd
-	.byte 0xeb, 0x00, 0xa4, 0x03, 0x6a, 0xcd, 0xeb, 0x00
-	.byte 0xb2, 0x03, 0x48, 0xcd, 0xeb, 0x00, 0x94, 0x01
-	.long LABEL_EBCD26
-	.byte 0xff, 0x00, 0x04, 0xcd
-	.byte 0xeb, 0x00, 0xa5, 0x01, 0xe2, 0xcc, 0xeb, 0x00
-	.byte 0x17, 0x00, 0xc0, 0xcc, 0xeb, 0x00, 0x64, 0x02
-	.long LABEL_EBCC9E
-	.byte 0x91, 0x00, 0x7c, 0xcc
-	.byte 0xeb, 0x00, 0xa0, 0x01, 0x5a, 0xcc, 0xeb, 0x00
-	.byte 0x65, 0x00, 0x38, 0xcc, 0xeb, 0x00, 0xd9, 0x01
-	.long LABEL_EBCC16
-	.byte 0x79, 0x00, 0xf4, 0xcb
-	.byte 0xeb, 0x00, 0x5c, 0x00, 0xd2, 0xcb, 0xeb, 0x00
-	.byte 0xec, 0x01, 0xb0, 0xcb, 0xeb, 0x00, 0xf4, 0x01
-	.long LABEL_EBCB8E
-	.byte 0x5e, 0x00, 0x6c, 0xcb
-	.byte 0xeb, 0x00, 0x02, 0x02, 0x4a, 0xcb, 0xeb, 0x00
-	.byte 0xff, 0x01, 0x28, 0xcb, 0xeb, 0x00, 0xf8, 0x01
-	.long LABEL_EBCB06
-	.byte 0x00, 0x02, 0xe4, 0xca
-	.byte 0xeb, 0x00, 0x3e, 0x00, 0xc2, 0xca, 0xeb, 0x00
-	.byte 0x0b, 0x00, 0xa0, 0xca, 0xeb, 0x00, 0xbf, 0x02
-	.long LABEL_EBCA7E
-	.byte 0x2e, 0x00, 0x5c, 0xca
-	.byte 0xeb, 0x00, 0x7f, 0x01, 0x3a, 0xca, 0xeb, 0x00
-	.byte 0x08, 0x03, 0x18, 0xca, 0xeb, 0x00, 0xda, 0x00
-	.long LABEL_EBC9F6
-	.byte 0x9c, 0x01, 0xd4, 0xc9
-	.long MidiCC_VoiceParam_11_MidEntry
-	.byte 0xb2, 0xc9, 0xeb, 0x00
-	.byte 0xe5, 0x00, 0x90, 0xc9, 0xeb, 0x00, 0x42, 0x00
-	.long LABEL_EBC96E
-	.byte 0x60, 0x01, 0x4c, 0xc9
-	.byte 0xeb, 0x00, 0x2b, 0x01, 0x2a, 0xc9, 0xeb, 0x00
-	.byte 0x9b, 0x01, 0x08, 0xc9, 0xeb, 0x00, 0x25, 0x01
-	.long LABEL_EBC8E6
-	.byte 0xe3, 0x00, 0xc4, 0xc8
-	.byte 0xeb, 0x00, 0x68, 0x02, 0xa2, 0xc8, 0xeb, 0x00
-	.byte 0xdc, 0x03, 0x80, 0xc8, 0xeb, 0x00, 0xb7, 0x02
-	.long LABEL_EBC85E
-	.byte 0xaf, 0x02, 0x3c, 0xc8
-	.byte 0xeb, 0x00, 0xb3, 0x02, 0x1a, 0xc8, 0xeb, 0x00
-	.byte 0x5e, 0x02, 0xf8, 0xc7, 0xeb, 0x00, 0x0f, 0x01
-	.long LABEL_EBC7D6
-	.byte 0x43, 0x01, 0xb4, 0xc7
-	.byte 0xeb, 0x00, 0x82, 0x01, 0x92, 0xc7, 0xeb, 0x00
-	.byte 0x7e, 0x00, 0x70, 0xc7, 0xeb, 0x00, 0x13, 0x00
-	.long LABEL_EBC74E
-	.byte 0x5f, 0x03, 0x2c, 0xc7
-	.byte 0xeb, 0x00, 0x6c, 0x03, 0x0a, 0xc7, 0xeb, 0x00
-	.byte 0x2b, 0x03, 0xe8, 0xc6, 0xeb, 0x00, 0xfe, 0x01
-	.long LABEL_EBC6C6
-	.byte 0xd8, 0x01, 0xa4, 0xc6
-	.byte 0xeb, 0x00, 0x49, 0x01, 0x82, 0xc6, 0xeb, 0x00
-	.byte 0xc3, 0x02, 0x60, 0xc6, 0xeb, 0x00, 0x64, 0x01
-	.long LABEL_EBC63E
-	.byte 0x4b, 0x01, 0x1c, 0xc6
-	.byte 0xeb, 0x00, 0x2f, 0x00, 0xfa, 0xc5, 0xeb, 0x00
-	.byte 0xeb, 0x01, 0xd8, 0xc5, 0xeb, 0x00, 0x85, 0x01
-	.long LABEL_EBC5B6
-	.byte 0x5b, 0x02, 0x94, 0xc5
-	.byte 0xeb, 0x00, 0x72, 0x00, 0x72, 0xc5, 0xeb, 0x00
-	.byte 0xcd, 0x03, 0x50, 0xc5, 0xeb, 0x00, 0xb0, 0x03
-	.long LABEL_EBC52E
-	.byte 0xff, 0x02, 0x0c, 0xc5
-	.byte 0xeb, 0x00, 0x3d, 0x02, 0xea, 0xc4, 0xeb, 0x00
-	.byte 0x45, 0x02, 0xc8, 0xc4, 0xeb, 0x00, 0x7b, 0x00
-	.long LABEL_EBC4A6
-	.byte 0x97, 0x02, 0x84, 0xc4
-	.byte 0xeb, 0x00, 0xbb, 0x03, 0x62, 0xc4, 0xeb, 0x00
-	.byte 0xb8, 0x03, 0x40, 0xc4, 0xeb, 0x00, 0x10, 0x03
-	.long LABEL_EBC41E
-	.byte 0x16, 0x01, 0xfc, 0xc3
-	.byte 0xeb, 0x00, 0xb7, 0x03, 0xda, 0xc3, 0xeb, 0x00
-	.byte 0x3c, 0x03, 0xb8, 0xc3, 0xeb, 0x00, 0x6c, 0x01
-	.long LABEL_EBC396
-	.byte 0x44, 0x00, 0x74, 0xc3
-	.byte 0xeb, 0x00, 0x92, 0x00, 0x52, 0xc3, 0xeb, 0x00
-	.byte 0x9b, 0x02, 0x30, 0xc3, 0xeb, 0x00, 0x94, 0x03
-	.long LABEL_EBC30E
-	.byte 0x41, 0x03, 0xec, 0xc2
-	.byte 0xeb, 0x00, 0x83, 0x02, 0xca, 0xc2, 0xeb, 0x00
-	.byte 0x3f, 0x02, 0xa8, 0xc2, 0xeb, 0x00, 0x09, 0x00
-	.long LABEL_EBC286
-	.byte 0xeb, 0x00, 0x64, 0xc2
-	.byte 0xeb, 0x00, 0x5a, 0x02, 0x42, 0xc2, 0xeb, 0x00
-	.byte 0x61, 0x02, 0x20, 0xc2, 0xeb, 0x00, 0x5f, 0x02
-	.long LABEL_EBC1FE
-	.byte 0x72, 0x02, 0xdc, 0xc1
-	.byte 0xeb, 0x00, 0xcb, 0x02, 0xba, 0xc1, 0xeb, 0x00
-	.byte 0xca, 0x02, 0x98, 0xc1, 0xeb, 0x00, 0xc1, 0x02
-	.long LABEL_EBC176
-	.byte 0xf0, 0x02, 0x54, 0xc1
-	.byte 0xeb, 0x00, 0xad, 0x01, 0x32, 0xc1, 0xeb, 0x00
-	.byte 0x76, 0x00, 0x10, 0xc1, 0xeb, 0x00, 0x1c, 0x03
-	.long LABEL_EBC0EE
-	.byte 0x08, 0x00, 0xcc, 0xc0
-	.byte 0xeb, 0x00, 0x23, 0x01, 0xaa, 0xc0, 0xeb, 0x00
-	.byte 0xbb, 0x01, 0x88, 0xc0, 0xeb, 0x00, 0x02, 0x03
-	.long LABEL_EBC066
-	.byte 0xe4, 0x03, 0x44, 0xc0
-	.byte 0xeb, 0x00, 0x2a, 0x02, 0x22, 0xc0, 0xeb, 0x00
-	.byte 0x47, 0x02, 0x00, 0xc0, 0xeb, 0x00, 0xfd, 0x02
-	.long LABEL_EBBFDE
-	.byte 0xf2, 0x02, 0xbc, 0xbf
-	.byte 0xeb, 0x00, 0xbd, 0x02, 0x9a, 0xbf, 0xeb, 0x00
-	.byte 0x73, 0x00, 0x78, 0xbf, 0xeb, 0x00, 0xa6, 0x02
-	.long LABEL_EBBF56
-	.byte 0x58, 0x03, 0x34, 0xbf
-	.byte 0xeb, 0x00, 0x11, 0x00, 0x12, 0xbf, 0xeb, 0x00
-	.byte 0x22, 0x00, 0xf0, 0xbe, 0xeb, 0x00, 0x6d, 0x02
-	.long LABEL_EBBECE
-	.byte 0xe2, 0x02, 0xac, 0xbe
-	.byte 0xeb, 0x00, 0x4c, 0x02, 0x8a, 0xbe, 0xeb, 0x00
-	.byte 0xf1, 0x00, 0x68, 0xbe, 0xeb, 0x00, 0x70, 0x03
-	.long LABEL_EBBE46
-	.byte 0xc3, 0x01, 0x24, 0xbe
-	.byte 0xeb, 0x00, 0xa1, 0x02, 0x02, 0xbe, 0xeb, 0x00
-	.byte 0xea, 0x00, 0xe0, 0xbd, 0xeb, 0x00, 0xc1, 0x03
-	.long LABEL_EBBDBE
-	.byte 0x0f, 0x02, 0x9c, 0xbd
-	.byte 0xeb, 0x00, 0xcb, 0x03, 0x7a, 0xbd, 0xeb, 0x00
-	.byte 0x14, 0x00, 0x58, 0xbd, 0xeb, 0x00, 0xce, 0x01
-	.long LABEL_EBBD36
-	.byte 0xa4, 0x00, 0x14, 0xbd
-	.byte 0xeb, 0x00, 0x88, 0x02, 0xf2, 0xbc, 0xeb, 0x00
-	.byte 0x68, 0x00, 0xd0, 0xbc, 0xeb, 0x00, 0x65, 0x02
-	.long LABEL_EBBCAE
-	.byte 0x37, 0x03, 0x8c, 0xbc
-	.byte 0xeb, 0x00, 0x40, 0x03, 0x6a, 0xbc, 0xeb, 0x00
-	.byte 0x8d, 0x01, 0x48, 0xbc, 0xeb, 0x00, 0xf8, 0x00
-	.long LABEL_EBBC26
-	.byte 0x0c, 0x02, 0x04, 0xbc
-	.byte 0xeb, 0x00, 0x1a, 0x03
-	aligned_string "Zorba's Band                 120"
-	aligned_string "Zacharias Swing              200"
-	aligned_string "Yuppie Keys                   97"
-	aligned_string "Yuletide Strings              75"
-	aligned_string "Yee Ha Geetar                147"
-	aligned_string "Yee Ha Fiddles               235"
-	aligned_string "Yankee Doodle It             182"
-	aligned_string "Wunderlich Combo             180"
-	aligned_string "Wunder-Fox                   168"
-	aligned_string "Wunder Pops                  129"
-	aligned_string "Worship Groove               151"
-	aligned_string "Wonder Harmonica              90"
-	aligned_string "Windies Mallets              102"
-	aligned_string "Wild Side Organ              200"
-	aligned_string "Wide Salsa                   110"
-	aligned_string "Wide Hornsection             100"
-	aligned_string "When They Begin?             118"
-	aligned_string "Wheels of Life                88"
-	aligned_string "Western Keys                 160"
-	aligned_string "West Coast Sax                85"
-	aligned_string "West Coast Flute              98"
-	aligned_string "Wedding Party                135"
-	aligned_string "Warm Up Act                  162"
-	aligned_string "Warm Horn Duet                72"
-	aligned_string "Warm Guitars                 114"
-	aligned_string "Wandrin' Keys                 75"
-	aligned_string "Wanderley Samba              115"
-	aligned_string "Waltzing Wheels              110"
-	aligned_string "Waltzing Flugel              130"
-	aligned_string "Waltzing Concert             169"
-	aligned_string "Waltzer Band                 190"
-	aligned_string "Waltz Groove                 150"
-	aligned_string "Wall St. Jazz                184"
-	aligned_string "Wailers' Guitar               90"
-	aligned_string "Waikiki Voices               101"
-	aligned_string "Wah Wah Blues                 83"
-	aligned_string "Voco-Dance                   108"
-	aligned_string "Vocal Beats                  108"
-	aligned_string "Vladivar Strings             141"
-	aligned_string "Vive La France!              175"
-	aligned_string "Vintage R&B                  112"
-	aligned_string "Vienna Woods                 169"
-	aligned_string "Vienna Waves                 180"
-	aligned_string "Vienna Strings               171"
-	aligned_string "Vienna Finale                171"
-	aligned_string "Vegas Showman                 75"
-	aligned_string "Vaudeville Bones             124"
-	aligned_string "Variety Showband             165"
-	aligned_string "Variety Reeds                135"
-	aligned_string "Uptown Horns                 100"
-	aligned_string "Upright Rock                 108"
-	aligned_string "Unwind To This                72"
-	aligned_string "Unison Fox Band              170"
-	aligned_string "Two Step Duo                 147"
-	aligned_string "Two Cups Of Cha!             130"
-	aligned_string "Twisting Guitars             155"
-	aligned_string "Twin E.P.Ballad               67"
-	aligned_string "Twilight Piano                72"
-	aligned_string "Turn                         162"
-	aligned_string "Trucker's Stop               206"
-	aligned_string "Tropical Bridge              108"
-	aligned_string "Travolta Dance               115"
-	aligned_string "Trad Jazz Band               196"
-	aligned_string "Torero's Trumpet             125"
-	aligned_string "Toreador Band                125"
-	aligned_string "Top Brass Jive               176"
-	aligned_string "Toots' Way                   150"
-	aligned_string "Toots' Trick!                150"
-	aligned_string "Too Late For Sax              72"
-	aligned_string "Tiroler Harp                 190"
-	aligned_string "Time To Merengue             120"
-	aligned_string "Tico Tabs                    110"
-	aligned_string "Three Four Vibes             110"
-	aligned_string "Theatre Band                 135"
-	aligned_string "The Zillertaler              150"
-	aligned_string "The Whole Band!               90"
-	aligned_string "The Way It Is                 70"
-	aligned_string "The Party Band               111"
-	aligned_string "The Old Bars                 133"
-	aligned_string "The New Danube!              180"
-	aligned_string "The Last Brass               111"
-	aligned_string "The Duke's Piano             170"
-	aligned_string "The Band Leader              158"
-	aligned_string "Tex Mex Mix                  112"
-	aligned_string "Tennessee Rock               115"
-	aligned_string "Tennessee Guitar              88"
-	aligned_string "Tender Rock Sax              114"
-	aligned_string "Teddy Boy Brass              155"
-	aligned_string "Techno Ranger                138"
-	aligned_string "Techno Fiddle                124"
-	aligned_string "Techno Angle                 146"
-	aligned_string "Tap Dance Mutes              124"
-	aligned_string "Tango Orchestra              130"
-	aligned_string "Tango Marcato                120"
-	aligned_string "Tango Grandioso!             120"
-	aligned_string "Talempong                     98"
-	aligned_string "Take Your Seat!              118"
-	aligned_string "Take It Easy!                 62"
-	aligned_string "Synth of The 90s             108"
-	aligned_string "Synth Soul Horns             114"
-	aligned_string "Synth Rapper                  96"
-	aligned_string "Synth Party                  111"
-	aligned_string "Synth Love Song               84"
-	aligned_string "Synth Guitar Pop              92"
-	aligned_string "Synth Funk                   110"
-	aligned_string "Synth For Soul                70"
-	aligned_string "Synth For Rock                74"
-	aligned_string "Syncopated Wood              130"
-	aligned_string "Symphony Hoedown             206"
-	aligned_string "Symphony Ballad               70"
-	aligned_string "Symphonic Waltz              130"
-	aligned_string "Symphonic Rock               108"
-	aligned_string "Symphonic Pop                 80"
-	aligned_string "Swinging Keys                140"
-	aligned_string "Swingin' Frets               142"
-	aligned_string "Swing Unison                 158"
-	aligned_string "Swing Sparkle                140"
-	aligned_string "Swing Serenade               117"
-	aligned_string "Swing Reedle                 127"
-	aligned_string "Swing Orchestra               90"
-	aligned_string "Swing Flautist               117"
-	aligned_string "Swing B3 Threes              150"
-	aligned_string "Swing Alto Solo              170"
-	aligned_string "Sweet Swing                   90"
-	aligned_string "Sweet Soul                    88"
-	aligned_string "Sweet Soprano                 67"
-	aligned_string "Sweet Georgia                182"
-	aligned_string "Sweet Distortion              90"
-	aligned_string "Sweet 16 Sax                  66"
-	aligned_string "Sweeping Bridge              110"
-	aligned_string "Supreme Tenor                142"
-	aligned_string "Sunshine Sax                 120"
-	aligned_string "Sunshine Alto                 90"
-	aligned_string "Sunny Spain Mood             118"
-	aligned_string "Suited To Jazz!              150"
-	aligned_string "String Romance                72"
-	aligned_string "String Pops                  120"
-	aligned_string "Street Talk                   96"
-	aligned_string "Strauss & Co                 169"
-	aligned_string "Strasser & More              120"
-	aligned_string "Stevie's Solo                 86"
-	aligned_string "Stephane&Django              210"
-	aligned_string "Steirish Keys                125"
-	aligned_string "Steeleye Guitar              122"
-	aligned_string "Steel City Blues             128"
-	aligned_string "Steel & Strings              113"
-	aligned_string "Starlight Ballad              68"
-	aligned_string "Stage Rock Band              131"
-	aligned_string "Squeeze Box Jazz             190"
-	aligned_string "Spyra Steel                  102"
-	aligned_string "Spider Dance                 128"
-	aligned_string "Speedy Fiddle                138"
-	aligned_string "Spanish Romance              115"
-	aligned_string "Spanish Moments              120"
-	aligned_string "Spacy Ballad                  64"
-	aligned_string "Space Dance                  127"
-	aligned_string "Southern Unison              128"
-	aligned_string "Southern Style               170"
-	aligned_string "Southern Nights               84"
-	aligned_string "South Concertina             170"
-	aligned_string "Sounds Of Quincy              75"
-	aligned_string "Soulful Wha Wha              140"
-	aligned_string "Soulful Sax                   70"
-	aligned_string "Soulful Groove                88"
-	aligned_string "Soulful Flute                 66"
-	aligned_string "Soul Vocal Duo                66"
-	aligned_string "Soul Suitcase                 70"
-	aligned_string "Soul Solo                    114"
-	aligned_string "Soul On My Mind               64"
-	aligned_string "Soul Horn                     88"
-	aligned_string "Soul Drawbars                 70"
-	aligned_string "Soprano Soloist               83"
-	aligned_string "Soprano Prayer               151"
-	aligned_string "Soprano Groove               180"
-	aligned_string "Song Contest Hit             116"
-	aligned_string "Solid Twist                  168"
-	aligned_string "Solid Surfin'                144"
-	aligned_string "Solid Sixteen                 74"
-	aligned_string "Solid R&B                    112"
-	aligned_string "Solid Gold Oldie             133"
-	aligned_string "Solid Feedback               142"
-	aligned_string "Solid Distortion             122"
-	aligned_string "Solid Blues                   78"
-	aligned_string "Solid Bluegrass              123"
-	aligned_string "Soft Squeeze                 158"
-	aligned_string "Soft Rock                    108"
-	aligned_string "Soft Da-Dance                182"
-	aligned_string "Society Rock                 106"
-	aligned_string "Society Beguine              117"
-	aligned_string "Smooth Lips                   83"
-	aligned_string "Smooth & Saxy                 84"
-	aligned_string "Smoochy Vocals                67"
-	aligned_string "Smokin' B-3 Jazz             180"
-	aligned_string "Slow Spin Groove             170"
-	aligned_string "Slow Ballad B3                67"
-	aligned_string "Slide Scale Jazz              70"
-	aligned_string "Slapstick Show               182"
-	aligned_string "Slap Back Rock               150"
-	aligned_string "Skiffle Keys                 155"
-	aligned_string "Skiffle Horns                150"
-	aligned_string "Ski Lodge Waltz              197"
-	aligned_string "Skeleton Dance               165"
-	aligned_string "Sixties Strings              144"
-	aligned_string "Sixties Strat                150"
-	aligned_string "Sing Praises                  92"
-	aligned_string "Sing It, Play It              92"
-	aligned_string "Sing Hallelujah              124"
-	aligned_string "Sing Along!                  128"
-	aligned_string "Sine Of The Time             180"
-	aligned_string "Sinatra Strings              142"
-	aligned_string "Simply Romantic               90"
-	aligned_string "Simple Stride                124"
-	aligned_string "Simple Jimmy                 200"
-	aligned_string "Simple Band                  175"
-	aligned_string "Siesta Guitars                66"
-	aligned_string "Siesta Beguine               118"
-	aligned_string "Shuffle Synth                144"
-	aligned_string "Shuffle Organ                144"
-	aligned_string "Shuffle Horns                150"
-	aligned_string "Shuffle Chanson              100"
-	aligned_string "Show Stopper                 132"
-	aligned_string "Shearing Combo               126"
-	aligned_string "Shakin' Saxes                155"
-	aligned_string "Shake It All....             162"
-	aligned_string "Shadows' Frets               154"
-	aligned_string "Seville Octaves              132"
-	aligned_string "Sequin Dance                 128"
-	aligned_string "Seppel-Dance                 183"
-	aligned_string "Sepp's Clarinet              195"
-	aligned_string "Sentimental Solo              86"
-	aligned_string "Scottish Band                172"
-	aligned_string "Schurzenjager                150"
-	aligned_string "Saxy Soul                    140"
-	aligned_string "Saxy Mambo                   132"
-	aligned_string "Saxy Jazz                    145"
-	aligned_string "Saxes Of Tito                130"
-	aligned_string "Saxadoble!                   125"
-	aligned_string "Sax,Drums+R&Roll             150"
-	aligned_string "Sax Tracks                   150"
-	aligned_string "Sax Rock                     116"
-	aligned_string "Sax Production               106"
-	aligned_string "Sax Mamboist                 134"
-	aligned_string "Sax For Whitney               84"
-	aligned_string "Saturday Night               115"
-	aligned_string "Satchmo's Blues               78"
-	aligned_string "Santa's Helpers               75"
-	aligned_string "Santa Monica Way             150"
-	aligned_string "San Jose Route               150"
-	aligned_string "Sample Piano                  98"
-	aligned_string "Samba Union                  110"
-	aligned_string "Samba Testamento             115"
-	aligned_string "Samba Strategy               110"
-	aligned_string "Samba Soloist                114"
-	aligned_string "Samba Party                  110"
-	aligned_string "Samba Accordion              110"
-	aligned_string "Salsa Keys                   110"
-	aligned_string "Runaway Organ                144"
-	aligned_string "Ross Vocals                  142"
-	aligned_string "Romantic Voices               72"
-	aligned_string "Romantic Rock                106"
-	aligned_string "Romantic Duet                117"
-	aligned_string "Rolling Wheels               131"
-	aligned_string "Rodeo Organ                   75"
-	aligned_string "Rockin' Synth                116"
-	aligned_string "Rockin' Country              115"
-	aligned_string "Rock Symphony                106"
-	aligned_string "Rock Fanfare                 148"
-	aligned_string "Rock B3 Ballad                74"
-	aligned_string "Rock Around It!              158"
-	aligned_string "Rock & Fall!                 155"
-	aligned_string "Roaring Tubes                148"
-	aligned_string "Roaring Trumpet              184"
-	aligned_string "Roads to Country             173"
-	aligned_string "Rio Horns                    108"
-	aligned_string "Rio De Samba                 114"
-	aligned_string "Riddle Orchestra             142"
-	aligned_string "Riddle Me This!               90"
-	aligned_string "Ricky's Strat                138"
-	aligned_string "Ricky's Guitar               128"
-	aligned_string "Ricky's Ballad                68"
-	aligned_string "Ricky K.Pop                  120"
-	aligned_string "Retro Groove                 127"
-	aligned_string "Retro Dance                  121"
-	aligned_string "Reson-Eight                   90"
-	aligned_string "Relax With Klaus             180"
-	aligned_string "Reinhardt's Solo             210"
-	aligned_string "Reggae Talk                  101"
-	aligned_string "Reggae Saw                    89"
-	aligned_string "Reggae Horns                  90"
-	aligned_string "Reggae Dance Hit             101"
-	aligned_string "Reeds in Unison              110"
-	aligned_string "Reed The Word                124"
-	aligned_string "Reed It, Mute It             127"
-	aligned_string "Reed It & Swing!             140"
-	aligned_string "Ray's Ballad                  64"
-	aligned_string "Rave Pad                     146"
-	aligned_string "Rasta Voice                   89"
-	aligned_string "Rasta Jambo                  101"
-	aligned_string "Ranch Rock                   128"
-	aligned_string "Ragtime Duet                 180"
-	aligned_string "Ragedy Sax                   180"
-	aligned_string "Radio Orchestra              168"
-	aligned_string "Quick Fox Keys               170"
-	aligned_string "Puppet March                 116"
-	aligned_string "Pump The Bass                 96"
-	aligned_string "Puente's Bigband             130"
-	aligned_string "Pub Piano                    134"
-	aligned_string "Preach The Word              128"
-	aligned_string "Praise The Lord              128"
-	aligned_string "Power Sax Swing              127"
-	aligned_string "Pop Starts                    78"
-	aligned_string "Pop Orchestra                 78"
-	aligned_string "Pop Of The Bells             125"
-	aligned_string "Pop Leader                   144"
-	aligned_string "Pop Horns                    111"
-	aligned_string "Pop Guitar FX                111"
-	aligned_string "Pop Concerto                  80"
-	aligned_string "Pop Bridge                   111"
-	aligned_string "Pop Atmosphere                78"
-	aligned_string "Pop Angel                    118"
-	aligned_string "Pop Accordion                120"
-	aligned_string "Poly Dance                   125"
-	aligned_string "Polka Partners               124"
-	aligned_string "Play The Sting!              130"
-	aligned_string "Platform Wheels              136"
-	aligned_string "Plate Dance                  120"
-	aligned_string "Piccolo Pop                  125"
-	aligned_string "Piano Cabana                 116"
-	aligned_string "Pepito For Pepe              130"
-	aligned_string "Penny Folk Song              122"
-	aligned_string "Pedal Steel Duel             124"
-	aligned_string "Party Space                  120"
-	aligned_string "Party Register               115"
-	aligned_string "Party Pop Stack              111"
-	aligned_string "Party Partners               115"
-	aligned_string "Party In Rio                 116"
-	aligned_string "Party Flautist               111"
-	aligned_string "Party Accordion              120"
-	aligned_string "Partners in Jazz             145"
-	aligned_string "Paris Singers                 92"
-	aligned_string "Paris Jazz Duet              190"
-	aligned_string "Paradise Keys                 90"
-	aligned_string "Pan Muzak                     64"
-	aligned_string "Padang Beat                   98"
-	aligned_string "Pacific Strings               67"
-	aligned_string "Over The Top Wah             142"
-	aligned_string "Oscar's Gig                  174"
-	aligned_string "Orgel Pops                   111"
-	aligned_string "Organist's Waltz              96"
-	aligned_string "Organist's Swing             140"
-	aligned_string "Organ Quickstep              200"
-	aligned_string "Organ De Janeiro             115"
-	aligned_string "Orchestral Keys               72"
-	aligned_string "Orchestral Eight             108"
-	aligned_string "Orchestral 16                 82"
-	aligned_string "Orchestra Waltz               96"
-	aligned_string "Orch.Dangdut                 150"
-	aligned_string "One,Two,Three                110"
-	aligned_string "On The Highway               206"
-	aligned_string "Olympic Groove               110"
-	aligned_string "Olympic Dance                101"
-	aligned_string "Ole Guitar                   128"
-	aligned_string "Oldie's Parade               125"
-	aligned_string "Oldie's Jazz                 125"
-	aligned_string "Old Wheels Dance             190"
-	aligned_string "Old Time Saloon              124"
-	aligned_string "Old Time Dance               150"
-	aligned_string "Old Party Dance              162"
-	aligned_string "Old Dance Hit                121"
-	aligned_string "Old & New Funk                96"
-	aligned_string "Old & New Ballad             100"
-	aligned_string "OktoberFest                  109"
-	aligned_string "Oktober Party                150"
-	aligned_string "Oklahoma Dance               206"
-	aligned_string "Oh Boy Vocals                154"
-	aligned_string "Ogerman-Unisono              115"
-	aligned_string "Octave Tango                 120"
-	aligned_string "Ocean Vocals                 144"
-	aligned_string "Oboe Ballad                   72"
-	aligned_string "Novelty Number               165"
-	aligned_string "Not Strauss!                 180"
-	aligned_string "Not Ravel's.....             120"
-	aligned_string "Nonstop Dancing              120"
-	aligned_string "No Twirling!                 200"
-	aligned_string "No Lyrics Needed             116"
-	aligned_string "Nice Keroncong                67"
-	aligned_string "New York Disco               115"
-	aligned_string "New Vienna                   180"
-	aligned_string "New Unison Eight             108"
-	aligned_string "New Square Dance             124"
-	aligned_string "New Scat Funk                 96"
-	aligned_string "New Organ Samba              110"
-	aligned_string "New Muzak                     82"
-	aligned_string "New Jazz Ballad               70"
-	aligned_string "Never On A?                  120"
-	aligned_string "Nat's Piano                  126"
-	aligned_string "Nashville Steel              116"
-	aligned_string "Nashville Dance              147"
-	aligned_string "Nashville Ballad              88"
-	aligned_string "Muted Country                160"
-	aligned_string "Muted Big Band                92"
-	aligned_string "Mute Soloist                  90"
-	aligned_string "Music Hall Piano             165"
-	aligned_string "Musette Symphony             175"
-	aligned_string "Musette Rouge                118"
-	aligned_string "Musette Ballad                92"
-	aligned_string "Munich Horns                 109"
-	aligned_string "Munich Brass                 195"
-	aligned_string "Mr.Wunderbar                 190"
-	aligned_string "Movie Ballad                  84"
-	aligned_string "Mournful Tenor               120"
-	aligned_string "Motor Town Brass             142"
-	aligned_string "Moscow Mandolins             141"
-	aligned_string "Mosch's Military             120"
-	aligned_string "Moonshine Combo              184"
-	aligned_string "Moody Drawbars                64"
-	aligned_string "Monkeying About              154"
-	aligned_string "Moik's Marchshow             120"
-	aligned_string "Modern Vibes                 180"
-	aligned_string "Modern Gospel                 92"
-	aligned_string "Modern Bossa                  74"
-	aligned_string "Modern Boogie                154"
-	aligned_string "Modern Ballroom              134"
-	aligned_string "Miseltoe Melody               75"
-	aligned_string "Mirrorball Dance             118"
-	aligned_string "Miranda Mallets              110"
-	aligned_string "Minangkabau                   98"
-	aligned_string "Miller Station               150"
-	aligned_string "Miller Reeds                  86"
-	aligned_string "Midnight Tunes                90"
-	aligned_string "Midnight Soloist             162"
-	aligned_string "Metalic Dance                121"
-	aligned_string "Mersey Beat                  154"
-	aligned_string "Merengue Party               120"
-	aligned_string "Merengue Amigos              120"
-	aligned_string "Memphis Keys                 150"
-	aligned_string "Mellow Shuffle               100"
-	aligned_string "Mellow Section                86"
-	aligned_string "Mellow Rhumba                119"
-	aligned_string "Mellow Mood                   83"
-	aligned_string "Mellow Mambo                 129"
-	aligned_string "Mellow Jazz Tabs             147"
-	aligned_string "Mellow Jazz 3/4              150"
-	aligned_string "Mellow Groove                 62"
-	aligned_string "Mellow Country                88"
-	aligned_string "Mellow & Shuffle             145"
-	aligned_string "Mediterranean!               120"
-	aligned_string "Meditating Sax                74"
-	aligned_string "Mazurka Clarinet             150"
-	aligned_string "Max's Orchestra              120"
-	aligned_string "Matterhorn Waltz             197"
-	aligned_string "Marley's Drums                90"
-	aligned_string "Marching Sax                 115"
-	aligned_string "Marching Polka               124"
-	aligned_string "Maple Leaf Piano             180"
-	aligned_string "Mangione Mood                 82"
-	aligned_string "Mambo Mania!                 134"
-	aligned_string "Mambo Jambo!                 132"
-	aligned_string "Mambo Bravisimo              129"
-	aligned_string "Mallets On Stage             135"
-	aligned_string "Main Line Brass              150"
-	aligned_string "Mad Tabs                     100"
-	aligned_string "Macadancer                   104"
-	aligned_string "Lush Tango                   130"
-	aligned_string "Lush Swing                   142"
-	aligned_string "London's Bigbone             134"
-	aligned_string "London Scene                 127"
-	aligned_string "Liverpool Roads              154"
-	aligned_string "Liquorice Dixie              185"
-	aligned_string "Lionel's Jazz                145"
-	aligned_string "Lionel Meets Wes             174"
-	aligned_string "Line Up Dance                104"
-	aligned_string "Limbo Flautist               152"
-	aligned_string "Like Sunday?                  62"
-	aligned_string "Like A Dream                  63"
-	aligned_string "Life's A Beach!              150"
-	aligned_string "Liberty March                115"
-	aligned_string "Let It Shine!                113"
-	aligned_string "Let It Register!             158"
-	aligned_string "Lee's Finale                  75"
-	aligned_string "Lederhosen Dance             124"
-	aligned_string "Latino Piccolo               110"
-	aligned_string "Latin Tines                   68"
-	aligned_string "Latin Symphony               120"
-	aligned_string "Latin Relaxation             115"
-	aligned_string "Latin Passion                120"
-	aligned_string "Latin Love Song              120"
-	aligned_string "Latin Fusion                 102"
-	aligned_string "Latin Elegance               118"
-	aligned_string "Latin Ballroom               128"
-	aligned_string "Late Night Tenor             117"
-	aligned_string "Late Night Sax               126"
-	aligned_string "Late Night Frets              72"
-	aligned_string "Last Starparade!             120"
-	aligned_string "Last Latin Brass             129"
-	aligned_string "Last At First                120"
-	aligned_string "Laid Back Jazz               158"
-	aligned_string "L.A. Warmth                   92"
-	aligned_string "L.A. Synth                    85"
-	aligned_string "L.A. Strings                  92"
-	aligned_string "Kramer Country                85"
-	aligned_string "Knopfler Tribute             138"
-	aligned_string "Klarinette Waltz             190"
-	aligned_string "KirmesMusikanten             125"
-	aligned_string "Keys To Soul                  88"
-	aligned_string "Key Grooves                  102"
-	aligned_string "Keroncong Flute               67"
-	aligned_string "Kentucky Vocals               88"
-	aligned_string "Karen's Country              173"
-	aligned_string "Just The Flute                70"
-	aligned_string "Jump Brass                   144"
-	aligned_string "Julio's Romance              119"
-	.ascii "Juli"
-NakaInst_o_s_Guitar_110:	aligned_string "o's Guitar               110"
-NakaInst_Joplin_Rag_130:	aligned_string "Joplin Rag                   130"
-NakaInst_Jobim_Strings_66:	aligned_string "Jobim Strings                 66"
-	.ascii "Joao's"
-NakaInst_Rio_Disco_125:	aligned_string " Rio-Disco             125"
-	.ascii "Jive Reeds  "
-NakaInst_176:	aligned_string "                 176"
-NakaInst_Jive_Ivories_176:
-	.byte 0x4a, 0x69
-	.ascii "ve Ivories      "
-NakaInst_176_EC00C0:	aligned_string "           176"
-	.ascii "Jitterbug Vocals        "
-NakaInst_160:	aligned_string "     160"
-	aligned_string "Jimmy's Reel                 172"
-	aligned_string "Jerry Lee's Keys             150"
-NakaInst_Jazz_To_The_Bone_180:	aligned_string "Jazz To The Bone             180"
-	aligned_string "Jazz Partners                158"
-	aligned_string "Jazz From Wes                174"
-	aligned_string "Jazz Flute Gtr               130"
-NakaInst_Jazz_Blocks_146:	aligned_string "Jazz Blocks                  146"
-	aligned_string "Jazz Bars                    146"
-	aligned_string "James' Orchestra             111"
-	aligned_string "James At Last                120"
-NakaInst_Jamaican_Voices_83:	aligned_string "Jamaican Voices               83"
-	aligned_string "Jamaican Bars                102"
-	aligned_string "Jamaica Synth                 89"
-	aligned_string "Jalapeno Bellows             112"
-NakaInst_Jailhouse_Brass_158:	aligned_string "Jailhouse Brass              158"
-	aligned_string "Italy Pop Organ              118"
-	aligned_string "Italian Tango                130"
-	aligned_string "Island Whistle               130"
-NakaInst_Island_Strings_101:	aligned_string "Island Strings               101"
-	aligned_string "Island Flute                 101"
-	aligned_string "Island Duo                   130"
-	aligned_string "Island Duet                   83"
-NakaInst_Island_Delight_101:	aligned_string "Island Delight               101"
-	aligned_string "Ipenema Flute                 74"
-	aligned_string "Inspirational!               128"
-	aligned_string "In The Limelight             132"
-NakaInst_In_Sax_Country_115:	aligned_string "In Sax Country               115"
-	aligned_string "In Daa Country               170"
-	aligned_string "Ibo To Ibiza!                120"
-	aligned_string "I Want To B3                 150"
-NakaInst_I_Got_The_Blues_83:	aligned_string "I Got The Blues               83"
-	aligned_string "Hymn Band                     88"
-	aligned_string "Hungarian Duet               115"
-	aligned_string "Hula Dance                   130"
-NakaInst_Hugo_s_Revival_120:	aligned_string "Hugo's Revival               120"
-	aligned_string "Hubert & Klaus               190"
-	aligned_string "House Piano                  125"
-	aligned_string "House Keys                   125"
-NakaInst_House_Garden_125:	aligned_string "House & Garden               125"
-	aligned_string "Hot Dangdut                  150"
-	aligned_string "Horseback Duo                 75"
-	aligned_string "Honolulu Strings             130"
-NakaInst_Honky_Tonk_Band_196:	aligned_string "Honky-Tonk Band              196"
-	aligned_string "Holiday Tango                130"
-	aligned_string "Holiday Rhumba               115"
-	aligned_string "Holiday Dance                200"
-NakaInst_Hoedown_Strings_123:	aligned_string "Hoedown Strings              123"
-	aligned_string "Hoedown Frets                206"
-	aligned_string "Hit The Groove                96"
-	aligned_string "Hip-Hop-Echoes               108"
-NakaInst_Hip_Keys_108:	aligned_string "Hip Keys                     108"
-	aligned_string "Hip - Pad                    108"
-	aligned_string "Highschool Band              115"
-	aligned_string "Helmut & Strings             200"
-NakaInst_Heavy_Harmonica_74:	aligned_string "Heavy Harmonica               74"
-	aligned_string "Havana Section               110"
-	aligned_string "Hat Dance Frets              112"
-	aligned_string "Harry's Solo                  92"
-NakaInst_Harry_J_Co_86:	aligned_string "Harry J.& Co.                 86"
-	aligned_string "Harmonica Waltz               88"
-	aligned_string "Harmonic Tirol               125"
-	aligned_string "Harmonic Foxtrot             190"
-NakaInst_Hard_Sax_Blues_124:	aligned_string "Hard Sax Blues               124"
-	aligned_string "Hard Country Sax             235"
-	aligned_string "Hard Country                 160"
-	aligned_string "Hard Blown R&R               150"
-NakaInst_Hard_Analogue_148:	aligned_string "Hard Analogue                148"
-	aligned_string "Happy Woodpecker             125"
-	aligned_string "Handbag Dance!               129"
-	aligned_string "Ham & T Dance                190"
-NakaInst_Ham_Rock_155:	aligned_string "Ham & Rock                   155"
-	aligned_string "Ham & Bossa                   66"
-	aligned_string "Ham & Blues                  120"
-	aligned_string "Gypsy Melody                 115"
-NakaInst_Gypsy_Jazz_Frets_210:	aligned_string "Gypsy Jazz Frets             210"
-	aligned_string "Guitar Cocktail              162"
-	aligned_string "Guitar Ballad                 64"
-	aligned_string "Groovy Keys                  116"
-NakaInst_Groovin_Horns_97:	aligned_string "Groovin' Horns                97"
-	aligned_string "Groove Harp                  102"
-	aligned_string "Greger Saxes                 120"
-	aligned_string "Great Accordions             128"
-NakaInst_Greasepaint_Time_132:	aligned_string "Greasepaint Time             132"
-	aligned_string "Grapelli Jazz                190"
-	aligned_string "Grand Tango                  120"
-	aligned_string "Grand Swing!                 158"
-NakaInst_Grand_Finale_132:	aligned_string "Grand Finale                 132"
-	aligned_string "Goulash Dance                115"
-	aligned_string "Gospel Standard              124"
-	aligned_string "Gospel Sax                   128"
-NakaInst_Gospel_Organ_66:	aligned_string "Gospel Organ                  66"
-	aligned_string "Gospel Lead                   66"
-	aligned_string "Gospel Drawbars              151"
-	aligned_string "Gospel Choir                  88"
-NakaInst_Golden_Movie_Era_120:	aligned_string "Golden Movie Era             120"
-	aligned_string "Glitter Bars                 129"
-	aligned_string "Glenn's Big Band              90"
-	aligned_string "Gitarero-Ole!!               125"
-NakaInst_Girls_On_Stage_118:	aligned_string "Girls On Stage!              118"
-	aligned_string "Getz Bossa                    68"
-	aligned_string "Getting Up Steam             150"
-	aligned_string "German-HitParade             120"
-NakaInst_German_Party_Hit_111:	aligned_string "German Party Hit             111"
-	aligned_string "German Oldies                125"
-	aligned_string "German FolkParty             125"
-	aligned_string "German Clarinet              125"
-NakaInst_Georgia_Brass_64:	aligned_string "Georgia Brass                 64"
-	aligned_string "George B Unison              102"
-	aligned_string "Gentle Sax Eight              90"
-	aligned_string "Gentle Reeds                  92"
-NakaInst_Gentle_Ballad_75:	aligned_string "Gentle Ballad                 75"
-	aligned_string "Gentle 8 Piano               114"
-	aligned_string "Gene's Dance                 120"
-	aligned_string "Geetar Man                   113"
-NakaInst_Galombang_98:	aligned_string "Galombang                     98"
-	aligned_string "Gaelic Dance                 120"
-NakaInst_Fusion_Tines_98:	aligned_string "Fusion Tines                  98"
-	aligned_string "Fusion Talk                   92"
-NakaInst_Funky_Talk_110:	aligned_string "Funky Talk                   110"
-	aligned_string "Funky Stuff                  124"
-	aligned_string "Funky Reggae                  89"
-	aligned_string "Funk Keys                     96"
-NakaInst_Full_Tilt_Swing_127:	aligned_string "Full Tilt Swing!             127"
-	aligned_string "Full Organ Rock              145"
-	aligned_string "Full Mute Brass              110"
-	aligned_string "Full Dance Band               90"
-NakaInst_Full_Brass_Band_115:	aligned_string "Full Brass Band              115"
-	aligned_string "French Clavier                92"
-	aligned_string "Fred & Ginger                120"
-	aligned_string "Franz L's Organ              125"
-NakaInst_Foxy_Squeezebox_154:	aligned_string "Foxy Squeezebox              154"
-	aligned_string "Foxy Reeds                   154"
-	aligned_string "Foxy Combo                   120"
-	aligned_string "Foxy & Brassy                170"
-NakaInst_Foxtrot_Sparkle_120:	aligned_string "Foxtrot Sparkle              120"
-	aligned_string "Foxtrot Serenade             154"
-	aligned_string "Foxtrot Partners             168"
-	aligned_string "Fox Accordingly              170"
-NakaInst_Folklore_Brass_115:	aligned_string "Folklore Brass               115"
-	aligned_string "Folk Waltz                   150"
-	aligned_string "Folk Polka                   124"
-	aligned_string "Folk Fiddles                 122"
-NakaInst_Fogerty_s_Stomp_206:	aligned_string "Fogerty's Stomp              206"
-	aligned_string "Flute Nocturne                63"
-	aligned_string "Flugel Samba                 110"
-	aligned_string "Flugel Pop                   108"
-NakaInst_Flugel_Ballad_63:	aligned_string "Flugel Ballad                 63"
-	aligned_string "Flippers-Guitars             120"
-	aligned_string "Flautist's Jazz              150"
-	aligned_string "Flamenco Dancers             118"
-NakaInst_Finale_Salute_115:	aligned_string "Finale Salute                115"
-	aligned_string "Fife & Drums                 115"
-	aligned_string "Fiesta Grande                132"
-	aligned_string "Fiddle Rock                  116"
-NakaInst_Fiddle_For_Jazz_210:	aligned_string "Fiddle For Jazz              210"
-	aligned_string "Fiddle Dance                 132"
-	aligned_string "Festive March                109"
-	aligned_string "Festival Horns               114"
-NakaInst_Festival_Amigos_116:	aligned_string "Festival Amigos              116"
-	aligned_string "Feelin' Good                 140"
-	aligned_string "Father Time Solo             110"
-	aligned_string "Fast Reeds                   170"
-NakaInst_Fantasy_Rhumba_115:	aligned_string "Fantasy Rhumba               115"
-	aligned_string "Fantasy Beat                  82"
-	aligned_string "Fantasia Eight                90"
-	aligned_string "Fall For Cumbia               90"
-NakaInst_Fair_Sea_Organ_125:	aligned_string "Fair Sea Organ               125"
-	aligned_string "Fade Guitar Pop              118"
-	aligned_string "Everybody Rock!              131"
-	aligned_string "Even Jazz                    170"
-NakaInst_Euro_Squeezebox_147:	aligned_string "Euro Squeezebox              147"
-	aligned_string "Euro Boogie                  154"
-	aligned_string "Euro Ballroom                154"
-	aligned_string "Espana Two Step              118"
-NakaInst_Ernst_Friends_120:	aligned_string "Ernst & Friends              120"
-	aligned_string "Entertaining Rag             130"
-	aligned_string "Ensemble Ballad              100"
-	aligned_string "English Hits                 121"
-NakaInst_Emerson_Keys_145:	aligned_string "Emerson Keys                 145"
-	aligned_string "Emerald Flute                120"
-	aligned_string "Elton's Piano                136"
-	aligned_string "Elegant Keys                 120"
-NakaInst_Electric_Gospel_88:	aligned_string "Electric Gospel               88"
-	aligned_string "El Toro's Rhumba             119"
-	aligned_string "Eire Squeezebox              120"
-	aligned_string "Echoing Organ                125"
-NakaInst_Easy_Threesy_110:	aligned_string "Easy Threesy                 110"
-	aligned_string "Easy Reeding                  74"
-	aligned_string "Easy EP!                      90"
-	aligned_string "Easy Dangdut                 150"
-NakaInst_Easy_Bacharach_150:	aligned_string "Easy Bacharach!              150"
-	aligned_string "EZ Steel Country             173"
-	aligned_string "EP Of The 80's               106"
-	aligned_string "E.P. Romance                  70"
-NakaInst_E_P_Does_It_82:	aligned_string "E.P. Does It!                 82"
-	aligned_string "Duelling Reeds               147"
-	aligned_string "Duelling Guitars             116"
-	aligned_string "Driving Pop                  111"
-NakaInst_Dreamy_Orchestra_67:	aligned_string "Dreamy Orchestra              67"
-	aligned_string "Dreamy Harmonica              68"
-	aligned_string "Dream Beat                   114"
-	aligned_string "Drawbar Service               66"
-NakaInst_Drawbar_Funk_85:	aligned_string "Drawbar Funk                  85"
-	aligned_string "Down Mexico Way               90"
-	aligned_string "Down & Dirty                 124"
-	aligned_string "Dorsey Band                  110"
-NakaInst_Doo_You_Dance_200:	aligned_string "Doo You Dance?               200"
-	aligned_string "Don't Fret!                  106"
-	aligned_string "Don't Fiddle It!             124"
-	aligned_string "Don't Do It!                 158"
-NakaInst_Dolly_s_Strings_128:	aligned_string "Dolly's Strings              128"
-	aligned_string "Do You Reed It?              158"
-	aligned_string "Do The Twist                 168"
-	aligned_string "Do The Mambo!                134"
-NakaInst_Django_s_Solo_190:	aligned_string "Django's Solo                190"
-	aligned_string "Dixie Partners               185"
-	aligned_string "Dixie Bone                   185"
-	aligned_string "Distort It!                  142"
-NakaInst_Disco_Techni_118:	aligned_string "Disco-Techni                 118"
-	aligned_string "Disco Synths                 124"
-	aligned_string "Disco Strings                125"
-	aligned_string "Disco Pads                   118"
-NakaInst_Disco_Metal_124:	aligned_string "Disco Metal                  124"
-	aligned_string "Disco Horns                  108"
-	aligned_string "Disco Fever                  121"
-	aligned_string "Disco Agogo                  121"
-NakaInst_Dire_Strats_138:	aligned_string "Dire Strats                  138"
-	aligned_string "Digital Swing                 92"
-	aligned_string "Digital Sixteen               82"
-	aligned_string "Digi Dancefloor              108"
-NakaInst_Deuringer_Swing_190:	aligned_string "Deuringer Swing              190"
-	aligned_string "Detroit Strings              142"
-	aligned_string "Deep in Brazil               108"
-	aligned_string "Deep Hammond                 142"
-NakaInst_Dancing_Flutes_125:	aligned_string "Dancing Flutes               125"
-	aligned_string "Dancing Bellows              162"
-	aligned_string "Dance Vocals                 101"
-	aligned_string "Dance The Mazurka            150"
-NakaInst_Dance_Surround_124:	aligned_string "Dance Surround               124"
-	aligned_string "Dance Steel                  101"
-	aligned_string "Dance Squares                146"
-	aligned_string "Dance Leader                 124"
-NakaInst_Dance_Island_104:	aligned_string "Dance Island                 104"
-	aligned_string "Dance Floor                  127"
-	aligned_string "Dance Craze Sax              132"
-	aligned_string "Dance Cowboy                 138"
-NakaInst_Dance_Band_Jive_176:	aligned_string "Dance Band Jive              176"
-	aligned_string "Daa Daa Dance                101"
-	aligned_string "Curtain Up!                  135"
-	aligned_string "Cumbia Sol                    90"
-NakaInst_Cuckoo_Clock_3_4_183:	aligned_string "Cuckoo Clock 3/4             183"
-	aligned_string "Cucaracha Duo                112"
-	aligned_string "Cuban Reeds                  110"
-	aligned_string "Crocodile Sax                136"
-NakaInst_Crazy_Horse_Show_118:	aligned_string "Crazy Horse Show             118"
-	aligned_string "Cowboy Suite                 128"
-	aligned_string "Cowboy Saxes                  85"
-	aligned_string "Country Warmth               113"
-NakaInst_Country_Tenor_88:	aligned_string "Country Tenor                 88"
-	aligned_string "Country Rock                 116"
-	aligned_string "Country Radio                170"
-	aligned_string "Country Line                 132"
-NakaInst_Country_Licks_235:	aligned_string "Country Licks                235"
-	aligned_string "Country Keys                  88"
-	aligned_string "Country Ivories              128"
-	aligned_string "Country Horns                115"
-NakaInst_Country_Harp_88:	aligned_string "Country Harp                  88"
-	aligned_string "Country Fiddle               123"
-	aligned_string "Country Dance                206"
-	aligned_string "Country Blues                 75"
-NakaInst_Count_On_It_90:	aligned_string "Count On It!                  90"
-	aligned_string "Cottage 3/4                  183"
-	aligned_string "Cossack Strings              141"
-	aligned_string "Cosmic Ballad                 84"
-NakaInst_Cool_Soul_Frets_66:	aligned_string "Cool Soul Frets               66"
-	aligned_string "Cool Rock                    106"
-	aligned_string "Cool Pop Guitar              102"
-	aligned_string "Cool Midi Grand               92"
-NakaInst_Cool_Jazz_B3_145:	aligned_string "Cool Jazz B3                 145"
-	aligned_string "Cool Guitar Duet             100"
-	aligned_string "Cool Groove Sax               98"
-	aligned_string "Cool Disco Night             121"
-NakaInst_Convoy_Bluegrass_206:	aligned_string "Convoy Bluegrass             206"
-	aligned_string "Congregation!                151"
-	aligned_string "Concertina Waltz              96"
-	aligned_string "Come Waltzing                 96"
-NakaInst_Come_On_Baby_168:	aligned_string "Come On,Baby                 168"
-	aligned_string "Come Dancing!                120"
-	aligned_string "Combo Soloists               126"
-	aligned_string "Combo Romance                146"
-NakaInst_Coconut_Frets_152:	aligned_string "Coconut Frets                152"
-	aligned_string "Coco Dance                   101"
-	aligned_string "Cockney Clarinet             134"
-	aligned_string "Club Duet                    146"
-NakaInst_Clean_Metal_148:	aligned_string "Clean Metal                  148"
-	aligned_string "Clean Country                160"
-	aligned_string "Clayder Piano                 80"
-	aligned_string "Clavier Francais              80"
-NakaInst_Classical_Tango_120:	aligned_string "Classical Tango              120"
-	aligned_string "Classic Groove               170"
-	aligned_string "Cinema Magic                 120"
-	aligned_string "Church Grand                  66"
-NakaInst_Chuck_s_Late_Gig_72:	aligned_string "Chuck's Late Gig              72"
-	aligned_string "Chubby's Octaves             155"
-	aligned_string "Chubby's Best                168"
-	aligned_string "Chords & Birds               100"
-NakaInst_Chiff_Funk_97:	aligned_string "Chiff-Funk                    97"
-	aligned_string "Chieftain's Jig              120"
-	aligned_string "Chicago Piano                184"
-	aligned_string "Chet's Country                85"
-NakaInst_Chapel_Brass_124:	aligned_string "Chapel Brass                 124"
-	aligned_string "Cha Cha Band                 128"
-	aligned_string "Casino Sax                    75"
-	aligned_string "Carpenkeys                   173"
-NakaInst_Carol_Singers_75:	aligned_string "Carol Singers                 75"
-	aligned_string "Carnival Reed                110"
-	aligned_string "Carnival Horns               110"
-	aligned_string "Carmen's Octaves             119"
-NakaInst_Caribbean_Synth_90:	aligned_string "Caribbean Synth               90"
-	aligned_string "Caribbean Flute               83"
-	aligned_string "Caribbean Drive              104"
-	aligned_string "Candlelight Reed              75"
-NakaInst_Calypso_Steel_152:	aligned_string "Calypso Steel                152"
-	aligned_string "Cajun Hoedown                124"
-	aligned_string "Cafe Serenade                 92"
-	aligned_string "Cafe Atmosphere              175"
-NakaInst_Caber_Dance_172:	aligned_string "Caber Dance!                 172"
-	aligned_string "Cabaret Organ                162"
-	aligned_string "C.P. On Stage                145"
-	aligned_string "By The Left                  115"
-NakaInst_Bright_Keys_16_74:	aligned_string "Bright Keys 16                74"
-	aligned_string "Bright Dangdut               150"
-	aligned_string "Bridge Party                 116"
-	aligned_string "Breathy Vibes                 70"
-NakaInst_Breathy_Moments_83:	aligned_string "Breathy Moments               83"
-	aligned_string "Breathtaking                  72"
-	aligned_string "Breathless Sax                86"
-	aligned_string "Brazil Fanfare               114"
-NakaInst_Brassy_Dance_108:	aligned_string "Brassy Dance                 108"
-	aligned_string "Brassodoble                  118"
-	aligned_string "Brass For Two                128"
-	aligned_string "Brasilian Flute               66"
-NakaInst_Boxing_Jazzy_147:	aligned_string "Boxing Jazzy                 147"
-	aligned_string "Box Standards                168"
-	aligned_string "Bows & Brass                  72"
-	aligned_string "Bouzouki Masters             120"
-NakaInst_Bourbon_Street_196:	aligned_string "Bourbon Street               196"
-	aligned_string "Bossa Society                 68"
-	aligned_string "Bossa Duet                    74"
-	aligned_string "Bossa Cocktail                68"
-NakaInst_Boogie_Dance_160:	aligned_string "Boogie Dance                 160"
-	aligned_string "Boogie Bugles                160"
-	aligned_string "Boogie Band                  154"
-	aligned_string "Bonnie Whistles              172"
-NakaInst_Bolero_Orchestra_120:	aligned_string "Bolero Orchestra             120"
-	aligned_string "Bolero Keys                  120"
-	aligned_string "Bluesy Alto                  120"
-	aligned_string "Blues Steel                   83"
-NakaInst_Blues_Rock_Keys_124:	aligned_string "Blues Rock Keys              124"
-	aligned_string "Blues Horns                  112"
-	aligned_string "Blues Harp Swing              62"
-	aligned_string "Blues Bars                    83"
-NakaInst_Blues_Alley_124:	aligned_string "Blues Alley                  124"
-	aligned_string "Bluegrass Piano              235"
-	aligned_string "Bluegrass Harp               124"
-	aligned_string "Blueberry Saxes               85"
-NakaInst_Blue_Suede_Rock_158:	aligned_string "Blue Suede Rock              158"
-	aligned_string "Blue Harmonies               128"
-	aligned_string "Birdy-Accordion              100"
-	aligned_string "Bird-Voices                  100"
-NakaInst_Bigband_Shout_170:	aligned_string "Bigband Shout                170"
-	aligned_string "Big Band Sound                92"
-	aligned_string "Big Band Blues                78"
-	aligned_string "Besame Unison                117"
-NakaInst_Besame_Strings_120:	aligned_string "Besame Strings               120"
-	aligned_string "Benson Groove                 85"
-	aligned_string "Benson Frets                  74"
-	aligned_string "Bellows & Blocks             158"
-NakaInst_Bellow_Shake_Hit_135:	aligned_string "Bellow Shake Hit             135"
-	aligned_string "Beguine Romance              118"
-	aligned_string "Beguine Register             117"
-	aligned_string "Beat Brass                   116"
-NakaInst_Beach_Party_Song_152:	aligned_string "Beach Party Song             152"
-	aligned_string "Bavarian Zither              195"
-	aligned_string "Bavarian March               109"
-	aligned_string "Bavarian Flutes              183"
-NakaInst_Bavaria_To_Tyrol_195:	aligned_string "Bavaria To Tyrol             195"
-	aligned_string "Barry's Boogie               150"
-	aligned_string "Barn Dance Band              147"
-	aligned_string "Bari-Twist                   155"
-NakaInst_Barber_Shop_Jazz_196:	aligned_string "Barber Shop Jazz             196"
-	aligned_string "Barbados Beat                 83"
-	aligned_string "Banjo Sing Song              134"
-	aligned_string "Banjo Ragtime                180"
-NakaInst_Banjo_Dance_138:	aligned_string "Banjo Dance                  138"
-	aligned_string "Banjo Contest                123"
-	aligned_string "Bandoneon Waltz              190"
-	aligned_string "Band Leader Solo              90"
-NakaInst_Baltic_Reeds_141:	aligned_string "Baltic Reeds                 141"
-	aligned_string "Ballroom Keys                171"
-	aligned_string "Ballroom Bars                120"
-	aligned_string "Ballad Warmth                 78"
-NakaInst_Ballad_Romance_67:	aligned_string "Ballad Romance                67"
-	aligned_string "Ballad Piano                  63"
-	aligned_string "Ballad Overdrive              74"
-	aligned_string "Ballad Orchestra              84"
-NakaInst_Ballad_Guitar_67:	aligned_string "Ballad Guitar                 67"
-	aligned_string "Ballad Glitter                68"
-	aligned_string "Ballad Frets                  67"
-	aligned_string "Ballad Bridge                 75"
-NakaInst_Ballad_Acoustics_84:	aligned_string "Ballad Acoustics              84"
-	aligned_string "Ball Gown Waltz              171"
-	aligned_string "Bad Soul Bars                140"
-	aligned_string "Bad Blues Brass              120"
-NakaInst_Bad_B3_Blues_78:	aligned_string "Bad B3 Blues                  78"
-	aligned_string "B3 Blocks                     70"
-	aligned_string "Aye Aye Caramba              125"
-	aligned_string "Austrian Dance               135"
-NakaInst_Austria_Symphony_169:	aligned_string "Austria Symphony             169"
-	aligned_string "Auf Gehts!                   150"
-	aligned_string "Atmospheric 8                 86"
-	aligned_string "Atmo Boom Boom               146"
-NakaInst_At_The_Eger_120:	aligned_string "At The Eger                  120"
-	aligned_string "Astor's Tango                120"
-	aligned_string "Asian Gold                    67"
-	aligned_string "Art's Swing Box              190"
-NakaInst_Art_Meets_Lionel_190:	aligned_string "Art Meets Lionel             190"
-	aligned_string "Anka Rock                    133"
-	aligned_string "Analogue Blues               112"
-	aligned_string "Analogue Ballad              106"
-NakaInst_Amor_Reed_117:	aligned_string "Amor Reed                    117"
-	aligned_string "Ambros Saxes                 129"
-	aligned_string "Amazing Waltz!                92"
-	aligned_string "Alto Sax Shuffle             150"
-NakaInst_Alto_Samba_116:	aligned_string "Alto Samba                   116"
-	aligned_string "Alto Marchpast               115"
-	aligned_string "Alto Duet Party              115"
-	aligned_string "Alpine Guitar                197"
-NakaInst_Alpine_Combo_125:	aligned_string "Alpine Combo                 125"
-	aligned_string "Alpine Accordion             135"
-	aligned_string "Alphorn Movement             197"
-	aligned_string "All Out Jazz                 170"
-NakaInst_All_Out_Combo_180:	aligned_string "All Out Combo                180"
-	aligned_string "Alexander's Band             185"
-	aligned_string "Al's Lead                     92"
-	aligned_string "Al J's Synth                  96"
-NakaInst_Ady_s_PartyOrgan_125:	aligned_string "Ady's PartyOrgan             125"
-	aligned_string "Acoustic Jazz                174"
-	aligned_string "Acoustic Groove               92"
-	aligned_string "Acoustic Effects              86"
-NakaInst_Acoustic_Beat_108:	aligned_string "Acoustic Beat                108"
-	aligned_string "Acker's Solo                  90"
-	aligned_string "Accordion Rock               150"
-	aligned_string "Accordion Fun                115"
-NakaInst_Accordion_Dream_64:	aligned_string "Accordion Dream               64"
-	aligned_string "Accordion & Co!              158"
-	aligned_string "Accordiolas!!                100"
-	aligned_string "A Few Soulbars               114"
-NakaInst_A_Case_Of_Soul_114:	aligned_string "A Case Of Soul               114"
-	aligned_string "A Case For Dance             124"
-	aligned_string "90's Synth Dance             121"
-	aligned_string "88 Rock Keys                 131"
-NakaInst_88_Note_8_Beat_90:	aligned_string "88 Note 8 Beat                90"
-	aligned_string "88 In Line!                  132"
-	aligned_string "80's Synth Funk               97"
-	aligned_string "80's Production               75"
-NakaInst_80_s_Pop_Sax_118:	aligned_string "80's Pop Sax                 118"
-	aligned_string "80's Piano Disco             118"
-	aligned_string "80's Dancefloor              115"
-	aligned_string "70's Synth Rock              136"
-NakaInst_70_s_Glamour_129:	aligned_string "70's Glamour                 129"
-	aligned_string "70's Fantasy                 138"
-	aligned_string "50's Section                 133"
-	aligned_string "3/4 Sax Vibes                158"
-NakaInst_3_4_Romance_130:	aligned_string "3/4 Romance                  130"
-	aligned_string "3/4 Played by 4              150"
-	aligned_string "3 Quarter Duo                158"
-	aligned_string "16 Wheels                     82"
-NakaInst_16_On_Stage_82:	aligned_string "16 On Stage                   82"
-	aligned_string "12 String Samba              108"
-NakaInst_12_Boogie_Bars_160:	aligned_string "12 Boogie Bars               160"
-StyleVar_GermanSchlager:
-	.byte 0x58, 0x41, 0xec, 0x00
-	.byte 0x00, 0x00, 0x36, 0x41, 0xec, 0x00, 0x01, 0x00
-	.long NakaInst_Orchestral_Eight_108
-	.byte 0x02, 0x00, 0xf2, 0x40
-	.byte 0xec, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "New Unison Eight             108"
-NakaInst_Orchestral_Eight_108:	aligned_string "Orchestral Eight             108"
-	aligned_string "Flugel Pop                   108"
-	aligned_string "Acoustic Beat                108"
-StyleVar_EasyPlay8Beat:
-	.byte 0xfe, 0x41, 0xec, 0x00, 0x04, 0x00
-	.long NakaInst_Easy_EP_90
-	.byte 0x05, 0x00, 0xba, 0x41
-	.byte 0xec, 0x00, 0x06, 0x00, 0x98, 0x41, 0xec, 0x00
-	.byte 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Gentle Sax Eight              90"
-	aligned_string "Reson-Eight                   90"
-NakaInst_Easy_EP_90:	aligned_string "Easy EP!                      90"
-	aligned_string "88 Note 8 Beat                90"
-StyleVar_RockAfterEight:
-	.long NakaInst_Vocal_Beats_108
-	.byte 0x08, 0x00, 0x82, 0x42
-	.byte 0xec, 0x00, 0x09, 0x00, 0x60, 0x42, 0xec, 0x00
-	.byte 0x0a, 0x00, 0x3e, 0x42, 0xec, 0x00, 0x0b, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Symphonic Rock               108"
-	aligned_string "Soft Rock                    108"
-	aligned_string "Upright Rock                 108"
-NakaInst_Vocal_Beats_108:	aligned_string "Vocal Beats                  108"
-StyleVar_OrchestralBeat:
-	.byte 0x4a, 0x43
-	.byte 0xec, 0x00, 0x0c, 0x00, 0x28, 0x43, 0xec, 0x00
-	.byte 0x0d, 0x00, 0x06, 0x43, 0xec, 0x00, 0x0e, 0x00
-	.long NakaInst_Cool_Rock_106
-	.byte 0x0f, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Cool_Rock_106:	aligned_string "Cool Rock                    106"
-	aligned_string "Rock Symphony                106"
-	aligned_string "Society Rock                 106"
-	aligned_string "Romantic Rock                106"
-StyleVar_SmoothRock:
-	.byte 0xf0, 0x43, 0xec, 0x00
-	.byte 0x10, 0x00, 0xce, 0x43, 0xec, 0x00, 0x11, 0x00
-	.long NakaInst_Dream_Beat_114
-	.byte 0x12, 0x00, 0x8a, 0x43
-	.byte 0xec, 0x00, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Tender Rock Sax              114"
-NakaInst_Dream_Beat_114:	aligned_string "Dream Beat                   114"
-	aligned_string "Warm Guitars                 114"
-	aligned_string "Gentle 8 Piano               114"
-StyleVar_GreatestHits:
-	.byte 0x96, 0x44, 0xec, 0x00, 0x14, 0x00
-	.long NakaInst_Paradise_Keys_90
-	.byte 0x15, 0x00, 0x52, 0x44
-	.byte 0xec, 0x00, 0x16, 0x00, 0x30, 0x44, 0xec, 0x00
-	.byte 0x17, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Sweet Distortion              90"
-	aligned_string "Fantasia Eight                90"
-NakaInst_Paradise_Keys_90:	aligned_string "Paradise Keys                 90"
-	aligned_string "Wonder Harmonica              90"
-StyleVar_Studio8Beat:
-	.long NakaInst_Acoustic_Effects_86
-	.byte 0x18, 0x00, 0x1a, 0x45
-	.byte 0xec, 0x00, 0x19, 0x00, 0xf8, 0x44, 0xec, 0x00
-	.byte 0x1a, 0x00, 0xd6, 0x44, 0xec, 0x00, 0x1b, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Stevie's Solo                 86"
-	aligned_string "Atmospheric 8                 86"
-	aligned_string "Breathless Sax                86"
-NakaInst_Acoustic_Effects_86:	aligned_string "Acoustic Effects              86"
-StyleVar_BalladProducer:
-	.byte 0xe2, 0x45
-	.byte 0xec, 0x00, 0x1c, 0x00, 0xc0, 0x45, 0xec, 0x00
-	.byte 0x1d, 0x00, 0x9e, 0x45, 0xec, 0x00, 0x1e, 0x00
-	.long NakaInst_Sax_For_Whitney_84
-	.byte 0x1f, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Sax_For_Whitney_84:	aligned_string "Sax For Whitney               84"
-	aligned_string "Movie Ballad                  84"
-	aligned_string "Southern Nights               84"
-	aligned_string "Cosmic Ballad                 84"
-StyleVar_LoveSongs:
-	.byte 0x88, 0x46, 0xec, 0x00
-	.byte 0x20, 0x00, 0x66, 0x46, 0xec, 0x00, 0x21, 0x00
-	.long NakaInst_Warm_Horn_Duet_72
-	.byte 0x22, 0x00, 0x22, 0x46
-	.byte 0xec, 0x00, 0x23, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Romantic Voices               72"
-NakaInst_Warm_Horn_Duet_72:	aligned_string "Warm Horn Duet                72"
-	aligned_string "Orchestral Keys               72"
-	aligned_string "Oboe Ballad                   72"
-StyleVar_16BeatGroove:
-	.byte 0x2e, 0x47, 0xec, 0x00, 0x24, 0x00
-	.long NakaInst_New_Muzak_82
-	.byte 0x25, 0x00, 0xea, 0x46
-	.byte 0xec, 0x00, 0x26, 0x00, 0xc8, 0x46, 0xec, 0x00
-	.byte 0x27, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Fantasy Beat                  82"
-	aligned_string "Digital Sixteen               82"
-NakaInst_New_Muzak_82:	aligned_string "New Muzak                     82"
-	aligned_string "16 Wheels                     82"
-StyleVar_EasyPlay16Beat:
-	.long NakaInst_Solid_Sixteen_74
-	.byte 0x28, 0x00, 0xb2, 0x47
-	.byte 0xec, 0x00, 0x29, 0x00, 0x90, 0x47, 0xec, 0x00
-	.byte 0x2a, 0x00, 0x6e, 0x47, 0xec, 0x00, 0x2b, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Easy Reeding                  74"
-	aligned_string "Benson Frets                  74"
-	aligned_string "Bright Keys 16                74"
-NakaInst_Solid_Sixteen_74:	aligned_string "Solid Sixteen                 74"
-StyleVar_EPMoments:
-	.byte 0x7a, 0x48
-	.byte 0xec, 0x00, 0x2c, 0x00, 0x58, 0x48, 0xec, 0x00
-	.byte 0x2d, 0x00, 0x36, 0x48, 0xec, 0x00, 0x2e, 0x00
-	.long NakaInst_The_Way_It_Is_70
-	.byte 0x2f, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_The_Way_It_Is_70:	aligned_string "The Way It Is                 70"
-	aligned_string "Symphony Ballad               70"
-	aligned_string "E.P. Romance                  70"
-	aligned_string "Just The Flute                70"
-StyleVar_Gentle16Beat:
-	.byte 0x20, 0x49, 0xec, 0x00
-	.byte 0x30, 0x00, 0xfe, 0x48, 0xec, 0x00, 0x31, 0x00
-	.long NakaInst_Orchestral_16_82
-	.byte 0x32, 0x00, 0xba, 0x48
-	.byte 0xec, 0x00, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "16 On Stage                   82"
-NakaInst_Orchestral_16_82:	aligned_string "Orchestral 16                 82"
-	aligned_string "Mangione Mood                 82"
-	aligned_string "E.P. Does It!                 82"
-StyleVar_Atmospheric16:
-	.byte 0xc6, 0x49, 0xec, 0x00, 0x34, 0x00
-	.long NakaInst_Ballad_Romance_67_EC49A4
-	.byte 0x35, 0x00, 0x82, 0x49
-	.byte 0xec, 0x00, 0x36, 0x00, 0x60, 0x49, 0xec, 0x00
-	.byte 0x37, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Dreamy Orchestra              67"
-	aligned_string "Slow Ballad B3                67"
-NakaInst_Ballad_Romance_67_EC49A4:	aligned_string "Ballad Romance                67"
-	aligned_string "Ballad Frets                  67"
-StyleVar_SynthBallad:
-	.long NakaInst_Gentle_Ballad_75_EC4A6C
-	.byte 0x38, 0x00, 0x4a, 0x4a
-	.byte 0xec, 0x00, 0x39, 0x00, 0x28, 0x4a, 0xec, 0x00
-	.byte 0x3a, 0x00, 0x06, 0x4a, 0xec, 0x00, 0x3b, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Ballad Bridge                 75"
-	aligned_string "80's Production               75"
-	aligned_string "Sounds Of Quincy              75"
-NakaInst_Gentle_Ballad_75_EC4A6C:	aligned_string "Gentle Ballad                 75"
-StyleVar_GrandsOnStage:
-	.byte 0x12, 0x4b
-	.byte 0xec, 0x00, 0x3c, 0x00, 0xf0, 0x4a, 0xec, 0x00
-	.byte 0x3d, 0x00, 0xce, 0x4a, 0xec, 0x00, 0x3e, 0x00
-	.long NakaInst_Clavier_Francais_80
-	.byte 0x3f, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Clavier_Francais_80:	aligned_string "Clavier Francais              80"
-	aligned_string "Symphonic Pop                 80"
-	aligned_string "Pop Concerto                  80"
-	aligned_string "Clayder Piano                 80"
-StyleVar_ModernBallads:
-	.byte 0xb8, 0x4b, 0xec, 0x00
-	.byte 0x40, 0x00, 0x96, 0x4b, 0xec, 0x00, 0x41, 0x00
-	.long NakaInst_Synth_Love_Song_84
-	.byte 0x42, 0x00, 0x52, 0x4b
-	.byte 0xec, 0x00, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Ballad Orchestra              84"
-NakaInst_Synth_Love_Song_84:	aligned_string "Synth Love Song               84"
-	aligned_string "Smooth & Saxy                 84"
-	aligned_string "Ballad Acoustics              84"
-StyleVar_NightClubDance:
-	.byte 0x5e, 0x4c, 0xec, 0x00, 0x44, 0x00
-	.long NakaInst_String_Romance_72
-	.byte 0x45, 0x00, 0x1a, 0x4c
-	.byte 0xec, 0x00, 0x46, 0x00, 0xf8, 0x4b, 0xec, 0x00
-	.byte 0x47, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Bows & Brass                  72"
-	aligned_string "Breathtaking                  72"
-NakaInst_String_Romance_72:	aligned_string "String Romance                72"
-	aligned_string "Twilight Piano                72"
-StyleVar_50sLoveSongs:
-	.long NakaInst_Shuffle_Chanson_100
-	.byte 0x48, 0x00, 0xe2, 0x4c
-	.byte 0xec, 0x00, 0x49, 0x00, 0xc0, 0x4c, 0xec, 0x00
-	.byte 0x4a, 0x00, 0x9e, 0x4c, 0xec, 0x00, 0x4b, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Old & New Ballad             100"
-	aligned_string "Ensemble Ballad              100"
-	aligned_string "Mellow Shuffle               100"
-NakaInst_Shuffle_Chanson_100:	aligned_string "Shuffle Chanson              100"
-StyleVar_OldieBallads:
-	.byte 0xaa, 0x4d
-	.byte 0xec, 0x00, 0x4c, 0x00, 0x88, 0x4d, 0xec, 0x00
-	.byte 0x4d, 0x00, 0x66, 0x4d, 0xec, 0x00, 0x4e, 0x00
-	.long NakaInst_Flute_Nocturne_63
-	.byte 0x4f, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Flute_Nocturne_63:	aligned_string "Flute Nocturne                63"
-	aligned_string "Like A Dream                  63"
-	aligned_string "Ballad Piano                  63"
-	aligned_string "Flugel Ballad                 63"
-StyleVar_SoftSchlager:
-	.byte 0x50, 0x4e, 0xec, 0x00
-	.byte 0x50, 0x00, 0x2e, 0x4e, 0xec, 0x00, 0x51, 0x00
-	.long NakaInst_Spacy_Ballad_64
-	.byte 0x52, 0x00, 0xea, 0x4d
-	.byte 0xec, 0x00, 0x53, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Accordion Dream               64"
-NakaInst_Spacy_Ballad_64:	aligned_string "Spacy Ballad                  64"
-	aligned_string "Guitar Ballad                 64"
-	aligned_string "Pan Muzak                     64"
-StyleVar_OldieDrawbars:
-	.byte 0xf6, 0x4e, 0xec, 0x00, 0x54, 0x00
-	.long NakaInst_Oldie_s_Parade_125
-	.byte 0x55, 0x00, 0xb2, 0x4e
-	.byte 0xec, 0x00, 0x56, 0x00, 0x90, 0x4e, 0xec, 0x00
-	.byte 0x57, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "German Oldies                125"
-	aligned_string "Oldie's Jazz                 125"
-NakaInst_Oldie_s_Parade_125:	aligned_string "Oldie's Parade               125"
-	aligned_string "Echoing Organ                125"
-StyleVar_EuroBallads:
-	.long NakaInst_Dreamy_Harmonica_68
-	.byte 0x58, 0x00, 0x7a, 0x4f
-	.byte 0xec, 0x00, 0x59, 0x00, 0x58, 0x4f, 0xec, 0x00
-	.byte 0x5a, 0x00, 0x36, 0x4f, 0xec, 0x00, 0x5b, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Starlight Ballad              68"
-	aligned_string "Ballad Glitter                68"
-	aligned_string "Ricky's Ballad                68"
-NakaInst_Dreamy_Harmonica_68:	aligned_string "Dreamy Harmonica              68"
-StyleVar_RomanticBand:
-	.byte 0x42, 0x50
-	.byte 0xec, 0x00, 0x5c, 0x00, 0x20, 0x50, 0xec, 0x00
-	.byte 0x5d, 0x00, 0xfe, 0x4f, 0xec, 0x00, 0x5e, 0x00
-	.long NakaInst_Late_Night_Tenor_117
-	.byte 0x5f, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Late_Night_Tenor_117:	aligned_string "Late Night Tenor             117"
-	aligned_string "Swing Serenade               117"
-	aligned_string "Romantic Duet                117"
-	aligned_string "Swing Flautist               117"
-StyleVar_JazzSerenade:
-	.byte 0xe8, 0x50, 0xec, 0x00
-	.byte 0x60, 0x00, 0xc6, 0x50, 0xec, 0x00, 0x61, 0x00
-	.long NakaInst_Mellow_Mood_83
-	.byte 0x62, 0x00, 0x82, 0x50
-	.byte 0xec, 0x00, 0x63, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Smooth Lips                   83"
-NakaInst_Mellow_Mood_83:	aligned_string "Mellow Mood                   83"
-	aligned_string "Breathy Moments               83"
-	aligned_string "Soprano Soloist               83"
-StyleVar_NatsBallads:
-	.byte 0x8e, 0x51, 0xec, 0x00, 0x64, 0x00
-	.long NakaInst_Sweet_Swing_90
-	.byte 0x65, 0x00, 0x4a, 0x51
-	.byte 0xec, 0x00, 0x66, 0x00, 0x28, 0x51, 0xec, 0x00
-	.byte 0x67, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Simply Romantic               90"
-	aligned_string "Riddle Me This!               90"
-NakaInst_Sweet_Swing_90:	aligned_string "Sweet Swing                   90"
-	aligned_string "Midnight Tunes                90"
-StyleVar_DrawbarCombo:
-	.long NakaInst_Wunderlich_Combo_180
-	.byte 0x68, 0x00, 0x12, 0x52
-	.byte 0xec, 0x00, 0x69, 0x00, 0xf0, 0x51, 0xec, 0x00
-	.byte 0x6a, 0x00, 0xce, 0x51, 0xec, 0x00, 0x6b, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "All Out Combo                180"
-	aligned_string "Sine Of The Time             180"
-	aligned_string "Relax With Klaus             180"
-NakaInst_Wunderlich_Combo_180:	aligned_string "Wunderlich Combo             180"
-StyleVar_ParisRomance:
-	.byte 0xda, 0x52
-	.byte 0xec, 0x00, 0x6c, 0x00, 0xb8, 0x52, 0xec, 0x00
-	.byte 0x6d, 0x00, 0x96, 0x52, 0xec, 0x00, 0x6e, 0x00
-	.long NakaInst_French_Clavier_92
-	.byte 0x6f, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_French_Clavier_92:	aligned_string "French Clavier                92"
-	aligned_string "Paris Singers                 92"
-	aligned_string "Musette Ballad                92"
-	aligned_string "Cafe Serenade                 92"
-StyleVar_EasyPlayWaltz:
-	.byte 0x80, 0x53, 0xec, 0x00
-	.byte 0x70, 0x00, 0x5e, 0x53, 0xec, 0x00, 0x71, 0x00
-	.long NakaInst_Three_Four_Vibes_110
-	.byte 0x72, 0x00, 0x1a, 0x53
-	.byte 0xec, 0x00, 0x73, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Waltzing Wheels              110"
-NakaInst_Three_Four_Vibes_110:	aligned_string "Three Four Vibes             110"
-	aligned_string "One,Two,Three                110"
-	aligned_string "Easy Threesy                 110"
-StyleVar_ParisianNights:
-	.byte 0x26, 0x54, 0xec, 0x00, 0x74, 0x00
-	.long NakaInst_Cafe_Atmosphere_175
-	.byte 0x75, 0x00, 0xe2, 0x53
-	.byte 0xec, 0x00, 0x76, 0x00, 0xc0, 0x53, 0xec, 0x00
-	.byte 0x77, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Musette Symphony             175"
-	aligned_string "Vive La France!              175"
-NakaInst_Cafe_Atmosphere_175:	aligned_string "Cafe Atmosphere              175"
-	aligned_string "Simple Band                  175"
-StyleVar_EasyJazzWaltz:
-	.long NakaInst_Suited_To_Jazz_150
-	.byte 0x78, 0x00, 0xaa, 0x54
-	.byte 0xec, 0x00, 0x79, 0x00, 0x88, 0x54, 0xec, 0x00
-	.byte 0x7a, 0x00, 0x66, 0x54, 0xec, 0x00, 0x7b, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Toots' Way                   150"
-	aligned_string "Mellow Jazz 3/4              150"
-	aligned_string "Swing B3 Threes              150"
-NakaInst_Suited_To_Jazz_150:	aligned_string "Suited To Jazz!              150"
-	.byte 0x72, 0x55
-	.byte 0xec, 0x00, 0x7c, 0x00, 0x50, 0x55, 0xec, 0x00
-	.byte 0x7d, 0x00, 0x2e, 0x55, 0xec, 0x00, 0x7e, 0x00
-	.long NakaInst_Rock_Fall_155
-	.byte 0x7f, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Rock_Fall_155:	aligned_string "Rock & Fall!                 155"
-	aligned_string "Teddy Boy Brass              155"
-	aligned_string "Skiffle Keys                 155"
-	aligned_string "Ham & Rock                   155"
-	.byte 0x18, 0x56, 0xec, 0x00
-	.byte 0x80, 0x00, 0xf6, 0x55, 0xec, 0x00, 0x81, 0x00
-	.long NakaInst_Hard_Blown_R_R_150
-	.byte 0x82, 0x00, 0xb2, 0x55
-	.byte 0xec, 0x00, 0x83, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Skiffle Horns                150"
-NakaInst_Hard_Blown_R_R_150:	aligned_string "Hard Blown R&R               150"
-	aligned_string "Jerry Lee's Keys             150"
-	aligned_string "Slap Back Rock               150"
-	.byte 0xbe, 0x56, 0xec, 0x00, 0x84, 0x00
-	.long NakaInst_Boogie_Band_154
-	.byte 0x85, 0x00, 0x7a, 0x56
-	.byte 0xec, 0x00, 0x86, 0x00, 0x58, 0x56, 0xec, 0x00
-	.byte 0x87, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Modern Boogie                154"
-	aligned_string "Euro Boogie                  154"
-NakaInst_Boogie_Band_154:	aligned_string "Boogie Band                  154"
-	aligned_string "Oh Boy Vocals                154"
-	.long NakaInst_Don_t_Do_It_158
-	.byte 0x88, 0x00, 0x42, 0x57
-	.byte 0xec, 0x00, 0x89, 0x00, 0x20, 0x57, 0xec, 0x00
-	.byte 0x8a, 0x00, 0xfe, 0x56, 0xec, 0x00, 0x8b, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Jailhouse Brass              158"
-	aligned_string "Blue Suede Rock              158"
-	aligned_string "Rock Around It!              158"
-NakaInst_Don_t_Do_It_158:	aligned_string "Don't Do It!                 158"
-	.byte 0x0a, 0x58
-	.byte 0xec, 0x00, 0x8c, 0x00, 0xe8, 0x57, 0xec, 0x00
-	.byte 0x8d, 0x00, 0xc6, 0x57, 0xec, 0x00, 0x8e, 0x00
-	.long NakaInst_Barry_s_Boogie_150
-	.byte 0x8f, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Barry_s_Boogie_150:	aligned_string "Barry's Boogie               150"
-	aligned_string "Shuffle Horns                150"
-	aligned_string "Accordion Rock               150"
-	aligned_string "Alto Sax Shuffle             150"
-	.byte 0xb0, 0x58, 0xec, 0x00
-	.byte 0x90, 0x00, 0x8e, 0x58, 0xec, 0x00, 0x91, 0x00
-	.long NakaInst_Twin_E_P_Ballad_67
-	.byte 0x92, 0x00, 0x4a, 0x58
-	.byte 0xec, 0x00, 0x93, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Smoochy Vocals                67"
-NakaInst_Twin_E_P_Ballad_67:	aligned_string "Twin E.P.Ballad               67"
-	aligned_string "Sweet Soprano                 67"
-	aligned_string "Ballad Guitar                 67"
-	.byte 0x56, 0x59, 0xec, 0x00, 0x94, 0x00
-	.long NakaInst_Solid_Surfin_144
-	.byte 0x95, 0x00, 0x12, 0x59
-	.byte 0xec, 0x00, 0x96, 0x00, 0xf0, 0x58, 0xec, 0x00
-	.byte 0x97, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Runaway Organ                144"
-	aligned_string "Sixties Strings              144"
-NakaInst_Solid_Surfin_144:	aligned_string "Solid Surfin'                144"
-	aligned_string "Ocean Vocals                 144"
-	.long NakaInst_Monkeying_About_154
-	.byte 0x98, 0x00, 0xda, 0x59
-	.byte 0xec, 0x00, 0x99, 0x00, 0xb8, 0x59, 0xec, 0x00
-	.byte 0x9a, 0x00, 0x96, 0x59, 0xec, 0x00, 0x9b, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Liverpool Roads              154"
-	aligned_string "Mersey Beat                  154"
-	aligned_string "Shadows' Frets               154"
-NakaInst_Monkeying_About_154:	aligned_string "Monkeying About              154"
-	.byte 0xa2, 0x5a
-	.byte 0xec, 0x00, 0x9c, 0x00, 0x80, 0x5a, 0xec, 0x00
-	.byte 0x9d, 0x00, 0x5e, 0x5a, 0xec, 0x00, 0x9e, 0x00
-	.long NakaInst_I_Want_To_B3_150
-	.byte 0x9f, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_I_Want_To_B3_150:	aligned_string "I Want To B3                 150"
-	aligned_string "Sax,Drums+R&Roll             150"
-	aligned_string "Sixties Strat                150"
-	aligned_string "Memphis Keys                 150"
-	.byte 0x48, 0x5b, 0xec, 0x00
-	.byte 0xa0, 0x00, 0x26, 0x5b, 0xec, 0x00, 0xa1, 0x00
-	.long NakaInst_Santa_Monica_Way_150
-	.byte 0xa2, 0x00, 0xe2, 0x5a
-	.byte 0xec, 0x00, 0xa3, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Life's A Beach!              150"
-NakaInst_Santa_Monica_Way_150:	aligned_string "Santa Monica Way             150"
-	aligned_string "Easy Bacharach!              150"
-	aligned_string "San Jose Route               150"
-	.byte 0xee, 0x5b, 0xec, 0x00, 0xa4, 0x00
-	.long NakaInst_Handbag_Dance_129
-	.byte 0xa5, 0x00, 0xaa, 0x5b
-	.byte 0xec, 0x00, 0xa6, 0x00, 0x88, 0x5b, 0xec, 0x00
-	.byte 0xa7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "70's Glamour                 129"
-	aligned_string "Glitter Bars                 129"
-NakaInst_Handbag_Dance_129:	aligned_string "Handbag Dance!               129"
-	aligned_string "Wunder Pops                  129"
-	.long NakaInst_Elton_s_Piano_136
-	.byte 0xa8, 0x00, 0x72, 0x5c
-	.byte 0xec, 0x00, 0xa9, 0x00, 0x50, 0x5c, 0xec, 0x00
-	.byte 0xaa, 0x00, 0x2e, 0x5c, 0xec, 0x00, 0xab, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "70's Synth Rock              136"
-	aligned_string "Platform Wheels              136"
-	aligned_string "Crocodile Sax                136"
-NakaInst_Elton_s_Piano_136:	aligned_string "Elton's Piano                136"
-	.byte 0x3a, 0x5d
-	.byte 0xec, 0x00, 0xac, 0x00, 0x18, 0x5d, 0xec, 0x00
-	.byte 0xad, 0x00, 0xf6, 0x5c, 0xec, 0x00, 0xae, 0x00
-	.long NakaInst_Dire_Strats_138_EC5CD4
-	.byte 0xaf, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Dire_Strats_138_EC5CD4:	aligned_string "Dire Strats                  138"
-	aligned_string "Knopfler Tribute             138"
-	aligned_string "Ricky's Strat                138"
-	aligned_string "70's Fantasy                 138"
-	.byte 0xe0, 0x5d, 0xec, 0x00
-	.byte 0xb0, 0x00, 0xbe, 0x5d, 0xec, 0x00, 0xb1, 0x00
-	.long NakaInst_C_P_On_Stage_145
-	.byte 0xb2, 0x00, 0x7a, 0x5d
-	.byte 0xec, 0x00, 0xb3, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Full Organ Rock              145"
-NakaInst_C_P_On_Stage_145:	aligned_string "C.P. On Stage                145"
-	aligned_string "Emerson Keys                 145"
-	aligned_string "Mellow & Shuffle             145"
-	.byte 0x86, 0x5e, 0xec, 0x00, 0xb4, 0x00
-	.long NakaInst_Pop_Leader_144
-	.byte 0xb5, 0x00, 0x42, 0x5e
-	.byte 0xec, 0x00, 0xb6, 0x00, 0x20, 0x5e, 0xec, 0x00
-	.byte 0xb7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Shuffle Organ                144"
-	aligned_string "Jump Brass                   144"
-NakaInst_Pop_Leader_144:	aligned_string "Pop Leader                   144"
-	aligned_string "Shuffle Synth                144"
-	.long NakaInst_Analogue_Ballad_106
-	.byte 0xb8, 0x00, 0x0a, 0x5f
-	.byte 0xec, 0x00, 0xb9, 0x00, 0xe8, 0x5e, 0xec, 0x00
-	.byte 0xba, 0x00, 0xc6, 0x5e, 0xec, 0x00, 0xbb, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Sax Production               106"
-	aligned_string "EP Of The 80's               106"
-	aligned_string "Don't Fret!                  106"
-NakaInst_Analogue_Ballad_106:	aligned_string "Analogue Ballad              106"
-	.byte 0xd2, 0x5f
-	.byte 0xec, 0x00, 0xbc, 0x00, 0xb0, 0x5f, 0xec, 0x00
-	.byte 0xbd, 0x00, 0x8e, 0x5f, 0xec, 0x00, 0xbe, 0x00
-	.long NakaInst_Italy_Pop_Organ_118
-	.byte 0xbf, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Italy_Pop_Organ_118:	aligned_string "Italy Pop Organ              118"
-	aligned_string "Pop Angel                    118"
-	aligned_string "80's Pop Sax                 118"
-	aligned_string "Fade Guitar Pop              118"
-	.byte 0x78, 0x60, 0xec, 0x00
-	.byte 0xc0, 0x00, 0x56, 0x60, 0xec, 0x00, 0xc1, 0x00
-	.long NakaInst_Pop_Horns_111
-	.byte 0xc2, 0x00, 0x12, 0x60
-	.byte 0xec, 0x00, 0xc3, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Pop Bridge                   111"
-NakaInst_Pop_Horns_111:	aligned_string "Pop Horns                    111"
-	aligned_string "Driving Pop                  111"
-	aligned_string "Pop Guitar FX                111"
-	.byte 0x1e, 0x61, 0xec, 0x00, 0xc4, 0x00
-	.long NakaInst_Sax_Rock_116
-	.byte 0xc5, 0x00, 0xda, 0x60
-	.byte 0xec, 0x00, 0xc6, 0x00, 0xb8, 0x60, 0xec, 0x00
-	.byte 0xc7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Beat Brass                   116"
-	aligned_string "Rockin' Synth                116"
-NakaInst_Sax_Rock_116:	aligned_string "Sax Rock                     116"
-	aligned_string "Groovy Keys                  116"
-	.long NakaInst_Ballad_Warmth_78
-	.byte 0xc8, 0x00, 0xa2, 0x61
-	.byte 0xec, 0x00, 0xc9, 0x00, 0x80, 0x61, 0xec, 0x00
-	.byte 0xca, 0x00, 0x5e, 0x61, 0xec, 0x00, 0xcb, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Pop Orchestra                 78"
-	aligned_string "Pop Starts                    78"
-	aligned_string "Pop Atmosphere                78"
-NakaInst_Ballad_Warmth_78:	aligned_string "Ballad Warmth                 78"
-	.byte 0x6a, 0x62
-	.byte 0xec, 0x00, 0xcc, 0x00, 0x48, 0x62, 0xec, 0x00
-	.byte 0xcd, 0x00, 0x26, 0x62, 0xec, 0x00, 0xce, 0x00
-	.long NakaInst_Everybody_Rock_131
-	.byte 0xcf, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Everybody_Rock_131:	aligned_string "Everybody Rock!              131"
-	aligned_string "Rolling Wheels               131"
-	aligned_string "88 Rock Keys                 131"
-	aligned_string "Stage Rock Band              131"
-	.byte 0x10, 0x63, 0xec, 0x00
-	.byte 0xd0, 0x00, 0xee, 0x62, 0xec, 0x00, 0xd1, 0x00
-	.long NakaInst_Deep_Hammond_142
-	.byte 0xd2, 0x00, 0xaa, 0x62
-	.byte 0xec, 0x00, 0xd3, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Over The Top Wah             142"
-NakaInst_Deep_Hammond_142:	aligned_string "Deep Hammond                 142"
-	aligned_string "Distort It!                  142"
-	aligned_string "Solid Feedback               142"
-	.byte 0xb6, 0x63, 0xec, 0x00, 0xd4, 0x00
-	.long NakaInst_Hard_Analogue_148_EC6394
-	.byte 0xd5, 0x00, 0x72, 0x63
-	.byte 0xec, 0x00, 0xd6, 0x00, 0x50, 0x63, 0xec, 0x00
-	.byte 0xd7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Rock Fanfare                 148"
-	aligned_string "Roaring Tubes                148"
-NakaInst_Hard_Analogue_148_EC6394:	aligned_string "Hard Analogue                148"
-	aligned_string "Clean Metal                  148"
-	.long NakaInst_Heavy_Harmonica_74_EC645C
-	.byte 0xd8, 0x00, 0x3a, 0x64
-	.byte 0xec, 0x00, 0xd9, 0x00, 0x18, 0x64, 0xec, 0x00
-	.byte 0xda, 0x00, 0xf6, 0x63, 0xec, 0x00, 0xdb, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Ballad Overdrive              74"
-	aligned_string "Synth For Rock                74"
-	aligned_string "Rock B3 Ballad                74"
-NakaInst_Heavy_Harmonica_74_EC645C:	aligned_string "Heavy Harmonica               74"
-	.byte 0x02, 0x65
-	.byte 0xec, 0x00, 0xdc, 0x00, 0xe0, 0x64, 0xec, 0x00
-	.byte 0xdd, 0x00, 0xbe, 0x64, 0xec, 0x00, 0xde, 0x00
-	.long NakaInst_Digital_Swing_92
-	.byte 0xdf, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Digital_Swing_92:	aligned_string "Digital Swing                 92"
-	aligned_string "Cool Midi Grand               92"
-	aligned_string "L.A. Warmth                   92"
-	aligned_string "Acoustic Groove               92"
-	.byte 0xa8, 0x65, 0xec, 0x00
-	.byte 0xe0, 0x00, 0x86, 0x65, 0xec, 0x00, 0xe1, 0x00
-	.long NakaInst_Blues_Harp_Swing_62
-	.byte 0xe2, 0x00, 0x42, 0x65
-	.long Naka_Help_567_E300EC
-	.zero 6
-	aligned_string "Take It Easy!                 62"
-NakaInst_Blues_Harp_Swing_62:	aligned_string "Blues Harp Swing              62"
-	aligned_string "Like Sunday?                  62"
-	aligned_string "Mellow Groove                 62"
-	.byte 0x4e, 0x66, 0xec, 0x00, 0xe4, 0x00
-	.long NakaInst_Synth_Guitar_Pop_92
-	.byte 0xe5, 0x00, 0x0a, 0x66
-	.long LABEL_E600EC
-	.long NakaInst_L_A_Strings_92
-	.byte 0xe7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-NakaInst_L_A_Strings_92:	aligned_string "L.A. Strings                  92"
-	aligned_string "Fusion Talk                   92"
-NakaInst_Synth_Guitar_Pop_92:	aligned_string "Synth Guitar Pop              92"
-	aligned_string "Al's Lead                     92"
-	.long NakaInst_Mad_Tabs_100
-	.byte 0xe8, 0x00, 0xd2, 0x66
-	.long LABEL_E900EC
-	.long NakaInst_Wide_Hornsection_100
-	.byte 0xea, 0x00, 0x8e, 0x66, 0xec, 0x00, 0xeb, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Uptown Horns                 100"
-NakaInst_Wide_Hornsection_100:	aligned_string "Wide Hornsection             100"
-	aligned_string "Cool Guitar Duet             100"
-NakaInst_Mad_Tabs_100:	aligned_string "Mad Tabs                     100"
-	.byte 0x9a, 0x67
-	.long LABEL_EC00EC
-	.long NakaInst_George_B_Unison_102
-	.byte 0xed, 0x00, 0x56, 0x67, 0xec, 0x00, 0xee, 0x00
-	.long NakaInst_Key_Grooves_102
-	.byte 0xef, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Key_Grooves_102:	aligned_string "Key Grooves                  102"
-	aligned_string "Cool Pop Guitar              102"
-NakaInst_George_B_Unison_102:	aligned_string "George B Unison              102"
-	aligned_string "Groove Harp                  102"
-	.byte 0x40, 0x68, 0xec, 0x00
-	.byte 0xf0, 0x00, 0x1e, 0x68, 0xec, 0x00, 0xf1, 0x00
-	.long NakaInst_L_A_Synth_85
-	.byte 0xf2, 0x00, 0xda, 0x67
-	.long EntGrid_PostMainEvent
-	.zero 6
-	aligned_string "Drawbar Funk                  85"
-NakaInst_L_A_Synth_85:	aligned_string "L.A. Synth                    85"
-	aligned_string "West Coast Sax                85"
-	aligned_string "Benson Groove                 85"
-	.byte 0xe6, 0x68, 0xec, 0x00, 0xf4, 0x00
-	.long NakaInst_Funk_Keys_96
-	.byte 0xf5, 0x00, 0xa2, 0x68
-	.byte 0xec, 0x00, 0xf6, 0x00, 0x80, 0x68, 0xec, 0x00
-	.byte 0xf7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Old & New Funk                96"
-	aligned_string "New Scat Funk                 96"
-NakaInst_Funk_Keys_96:	aligned_string "Funk Keys                     96"
-	aligned_string "Al J's Synth                  96"
-	.long NakaInst_Yuppie_Keys_97
-	.byte 0xf8, 0x00, 0x6a, 0x69
-	.byte 0xec, 0x00, 0xf9, 0x00, 0x48, 0x69, 0xec, 0x00
-	.byte 0xfa, 0x00, 0x26, 0x69, 0xec, 0x00, 0xfb, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Groovin' Horns                97"
-	aligned_string "80's Synth Funk               97"
-	aligned_string "Chiff-Funk                    97"
-NakaInst_Yuppie_Keys_97:	aligned_string "Yuppie Keys                   97"
-	.byte 0x32, 0x6a
-	.byte 0xec, 0x00, 0xfc, 0x00, 0x10, 0x6a, 0xec, 0x00
-	.byte 0xfd, 0x00, 0xee, 0x69, 0xec, 0x00, 0xfe, 0x00
-	.long NakaInst_Sweeping_Bridge_110
-	.byte 0xff, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Sweeping_Bridge_110:	aligned_string "Sweeping Bridge              110"
-	aligned_string "Olympic Groove               110"
-	aligned_string "Synth Funk                   110"
-	aligned_string "Funky Talk                   110"
-StyleVar_FunkyTalk:
-	.byte 0xd8, 0x6a, 0xec, 0x00
-	.byte 0x00, 0x01, 0xb6, 0x6a, 0xec, 0x00, 0x01, 0x01
-	.long NakaInst_Retro_Groove_127
-	.byte 0x02, 0x01, 0x72, 0x6a
-	.byte 0xec, 0x00, 0x03, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Space Dance                  127"
-NakaInst_Retro_Groove_127:	aligned_string "Retro Groove                 127"
-	aligned_string "Dance Floor                  127"
-	aligned_string "London Scene                 127"
-StyleVar_OldDanceHit:
-	.byte 0x7e, 0x6b, 0xec, 0x00, 0x04, 0x01
-	.long NakaInst_Metalic_Dance_121
-	.byte 0x05, 0x01, 0x3a, 0x6b
-	.byte 0xec, 0x00, 0x06, 0x01, 0x18, 0x6b, 0xec, 0x00
-	.byte 0x07, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Retro Dance                  121"
-	aligned_string "90's Synth Dance             121"
-NakaInst_Metalic_Dance_121:	aligned_string "Metalic Dance                121"
-	aligned_string "Old Dance Hit                121"
-StyleVar_PolyDance:
-	.long NakaInst_House_Piano_125
-	.byte 0x08, 0x01, 0x02, 0x6c
-	.byte 0xec, 0x00, 0x09, 0x01, 0xe0, 0x6b, 0xec, 0x00
-	.byte 0x0a, 0x01, 0xbe, 0x6b, 0xec, 0x00, 0x0b, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "House Keys                   125"
-	aligned_string "House & Garden               125"
-	aligned_string "Poly Dance                   125"
-NakaInst_House_Piano_125:	aligned_string "House Piano                  125"
-StyleVar_DanceSquares:
-	.byte 0xca, 0x6c
-	.byte 0xec, 0x00, 0x0c, 0x01, 0xa8, 0x6c, 0xec, 0x00
-	.byte 0x0d, 0x01, 0x86, 0x6c, 0xec, 0x00, 0x0e, 0x01
-	.long NakaInst_Techno_Angle_146
-	.byte 0x0f, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Techno_Angle_146:	aligned_string "Techno Angle                 146"
-	aligned_string "Rave Pad                     146"
-	aligned_string "Atmo Boom Boom               146"
-	aligned_string "Dance Squares                146"
-StyleVar_DiscoTechni:
-	.byte 0x70, 0x6d, 0xec, 0x00
-	.byte 0x10, 0x01, 0x4e, 0x6d, 0xec, 0x00, 0x11, 0x01
-	.long NakaInst_Disco_Techni_118_EC6D2C
-	.byte 0x12, 0x01, 0x0a, 0x6d
-	.byte 0xec, 0x00, 0x13, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Mirrorball Dance             118"
-NakaInst_Disco_Techni_118_EC6D2C:	aligned_string "Disco-Techni                 118"
-	aligned_string "Disco Pads                   118"
-	aligned_string "80's Piano Disco             118"
-StyleVar_EuroDiscoHit:
-	.byte 0x16, 0x6e, 0xec, 0x00, 0x14, 0x01
-	.long NakaInst_New_York_Disco_115
-	.byte 0x15, 0x01, 0xd2, 0x6d
-	.byte 0xec, 0x00, 0x16, 0x01, 0xb0, 0x6d, 0xec, 0x00
-	.byte 0x17, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "80's Dancefloor              115"
-	aligned_string "Travolta Dance               115"
-NakaInst_New_York_Disco_115:	aligned_string "New York Disco               115"
-	aligned_string "Saturday Night               115"
-StyleVar_DiscoTalk:
-	.long NakaInst_Disco_Agogo_121
-	.byte 0x18, 0x01, 0x9a, 0x6e
-	.byte 0xec, 0x00, 0x19, 0x01, 0x78, 0x6e, 0xec, 0x00
-	.byte 0x1a, 0x01, 0x56, 0x6e, 0xec, 0x00, 0x1b, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Disco Fever                  121"
-	aligned_string "Cool Disco Night             121"
-	aligned_string "English Hits                 121"
-NakaInst_Disco_Agogo_121:	aligned_string "Disco Agogo                  121"
-StyleVar_70sDanceHit:
-	.byte 0x62, 0x6f
-	.byte 0xec, 0x00, 0x1c, 0x01, 0x40, 0x6f, 0xec, 0x00
-	.byte 0x1d, 0x01, 0x1e, 0x6f, 0xec, 0x00, 0x1e, 0x01
-	.long NakaInst_Disco_Metal_124_EC6EFC
-	.byte 0x1f, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Disco_Metal_124_EC6EFC:	aligned_string "Disco Metal                  124"
-	aligned_string "Disco Synths                 124"
-	aligned_string "A Case For Dance             124"
-	aligned_string "Funky Stuff                  124"
-StyleVar_DiscoRanger:
-	.byte 0x08, 0x70, 0xec, 0x00
-	.byte 0x20, 0x01, 0xe6, 0x6f, 0xec, 0x00, 0x21, 0x01
-	.long NakaInst_Hip_Hop_Echoes_108
-	.byte 0x22, 0x01, 0xa2, 0x6f
-	.byte 0xec, 0x00, 0x23, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Voco-Dance                   108"
-NakaInst_Hip_Hop_Echoes_108:	aligned_string "Hip-Hop-Echoes               108"
-	aligned_string "Hip - Pad                    108"
-	aligned_string "Hip Keys                     108"
-StyleVar_GloryDisco:
-	.byte 0xae, 0x70, 0xec, 0x00, 0x24, 0x01
-	.long NakaInst_Synth_of_The_90s_108
-	.byte 0x25, 0x01, 0x6a, 0x70
-	.byte 0xec, 0x00, 0x26, 0x01, 0x48, 0x70, 0xec, 0x00
-	.byte 0x27, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Disco Horns                  108"
-	aligned_string "Digi Dancefloor              108"
-NakaInst_Synth_of_The_90s_108:	aligned_string "Synth of The 90s             108"
-	aligned_string "Brassy Dance                 108"
-StyleVar_NYRap:
-	.long NakaInst_Pump_The_Bass_96
-	.byte 0x28, 0x01, 0x32, 0x71
-	.byte 0xec, 0x00, 0x29, 0x01, 0x10, 0x71, 0xec, 0x00
-	.byte 0x2a, 0x01, 0xee, 0x70, 0xec, 0x00, 0x2b, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Synth Rapper                  96"
-	aligned_string "Hit The Groove                96"
-	aligned_string "Street Talk                   96"
-NakaInst_Pump_The_Bass_96:	aligned_string "Pump The Bass                 96"
-StyleVar_HipHop:
-	.byte 0xfa, 0x71
-	.byte 0xec, 0x00, 0x2c, 0x01, 0xd8, 0x71, 0xec, 0x00
-	.byte 0x2d, 0x01, 0xb6, 0x71, 0xec, 0x00, 0x2e, 0x01
-	.long NakaInst_Dance_Island_104_EC7194
-	.byte 0x2f, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Dance_Island_104_EC7194:	aligned_string "Dance Island                 104"
-	aligned_string "Caribbean Drive              104"
-	aligned_string "Macadancer                   104"
-	aligned_string "Line Up Dance                104"
-StyleVar_ReggaeHit:
-	.byte 0xa0, 0x72, 0xec, 0x00
-	.byte 0x30, 0x01, 0x7e, 0x72, 0xec, 0x00, 0x31, 0x01
-	.long NakaInst_Rasta_Jambo_101
-	.byte 0x32, 0x01, 0x3a, 0x72
-	.byte 0xec, 0x00, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Olympic Dance                101"
-NakaInst_Rasta_Jambo_101:	aligned_string "Rasta Jambo                  101"
-	aligned_string "Daa Daa Dance                101"
-	aligned_string "Coco Dance                   101"
-StyleVar_RioGosDisco:
-	.byte 0x46, 0x73, 0xec, 0x00, 0x34, 0x01
-	.long NakaInst_Dancing_Flutes_125_EC7324
-	.byte 0x35, 0x01, 0x02, 0x73
-	.byte 0xec, 0x00, 0x36, 0x01, 0xe0, 0x72, 0xec, 0x00
-	.byte 0x37, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Aye Aye Caramba              125"
-	aligned_string "Joao's Rio-Disco             125"
-NakaInst_Dancing_Flutes_125_EC7324:	aligned_string "Dancing Flutes               125"
-	aligned_string "Disco Strings                125"
-StyleVar_JamboDance:
-	.long NakaInst_Reggae_Dance_Hit_101
-	.byte 0x38, 0x01, 0xca, 0x73
-	.byte 0xec, 0x00, 0x39, 0x01, 0xa8, 0x73, 0xec, 0x00
-	.byte 0x3a, 0x01, 0x86, 0x73, 0xec, 0x00, 0x3b, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Dance Steel                  101"
-	aligned_string "Dance Vocals                 101"
-	aligned_string "Reggae Talk                  101"
-NakaInst_Reggae_Dance_Hit_101:	aligned_string "Reggae Dance Hit             101"
-StyleVar_SambaParty:
-	.byte 0x92, 0x74
-	.byte 0xec, 0x00, 0x3c, 0x01, 0x70, 0x74, 0xec, 0x00
-	.byte 0x3d, 0x01, 0x4e, 0x74, 0xec, 0x00, 0x3e, 0x01
-	.long NakaInst_Festival_Amigos_116_EC742C
-	.byte 0x3f, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Festival_Amigos_116_EC742C:	aligned_string "Festival Amigos              116"
-	aligned_string "Piano Cabana                 116"
-	aligned_string "Party In Rio                 116"
-	aligned_string "Alto Samba                   116"
-StyleVar_LatinFestival:
-	.byte 0x38, 0x75, 0xec, 0x00
-	.byte 0x40, 0x01, 0x16, 0x75, 0xec, 0x00, 0x41, 0x01
-	.long NakaInst_Dance_Surround_124_EC74F4
-	.byte 0x42, 0x01, 0xd2, 0x74
-	.byte 0xec, 0x00, 0x43, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Techno Fiddle                124"
-NakaInst_Dance_Surround_124_EC74F4:	aligned_string "Dance Surround               124"
-	aligned_string "New Square Dance             124"
-	aligned_string "Dance Leader                 124"
-	.byte 0xde, 0x75, 0xec, 0x00, 0x44, 0x01
-	.long NakaInst_Last_Starparade_120
-	.byte 0x45, 0x01, 0x9a, 0x75
-	.byte 0xec, 0x00, 0x46, 0x01, 0x78, 0x75, 0xec, 0x00
-	.byte 0x47, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "James At Last                120"
-	aligned_string "Nonstop Dancing              120"
-NakaInst_Last_Starparade_120:	aligned_string "Last Starparade!             120"
-	aligned_string "Last At First                120"
-	.long NakaInst_Party_Flautist_111
-	.byte 0x48, 0x01, 0x62, 0x76
-	.byte 0xec, 0x00, 0x49, 0x01, 0x40, 0x76, 0xec, 0x00
-	.byte 0x4a, 0x01, 0x1e, 0x76, 0xec, 0x00, 0x4b, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "The Party Band               111"
-	aligned_string "James' Orchestra             111"
-	aligned_string "The Last Brass               111"
-NakaInst_Party_Flautist_111:	aligned_string "Party Flautist               111"
-	.byte 0x2a, 0x77
-	.byte 0xec, 0x00, 0x4c, 0x01, 0x08, 0x77, 0xec, 0x00
-	.byte 0x4d, 0x01, 0xe6, 0x76, 0xec, 0x00, 0x4e, 0x01
-	.long NakaInst_German_HitParade_120
-	.byte 0x4f, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_German_HitParade_120:	aligned_string "German-HitParade             120"
-	aligned_string "Flippers-Guitars             120"
-	aligned_string "Ricky K.Pop                  120"
-	aligned_string "Ibo To Ibiza!                120"
-	.byte 0xd0, 0x77, 0xec, 0x00
-	.byte 0x50, 0x01, 0xae, 0x77, 0xec, 0x00, 0x51, 0x01
-	.long NakaInst_Ady_s_PartyOrgan_125_EC778C
-	.byte 0x52, 0x01, 0x6a, 0x77
-	.byte 0xec, 0x00, 0x53, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "KirmesMusikanten             125"
-NakaInst_Ady_s_PartyOrgan_125_EC778C:	aligned_string "Ady's PartyOrgan             125"
-	aligned_string "German FolkParty             125"
-	aligned_string "Happy Woodpecker             125"
-	.byte 0x76, 0x78, 0xec, 0x00, 0x54, 0x01
-	.long NakaInst_Pop_Of_The_Bells_125
-	.byte 0x55, 0x01, 0x32, 0x78
-	.byte 0xec, 0x00, 0x56, 0x01, 0x10, 0x78, 0xec, 0x00
-	.byte 0x57, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Fair Sea Organ               125"
-	aligned_string "Franz L's Organ              125"
-NakaInst_Pop_Of_The_Bells_125:	aligned_string "Pop Of The Bells             125"
-	aligned_string "Piccolo Pop                  125"
-	.long NakaInst_Puppet_March_116
-	.byte 0x58, 0x01, 0xfa, 0x78
-	.byte 0xec, 0x00, 0x59, 0x01, 0xd8, 0x78, 0xec, 0x00
-	.byte 0x5a, 0x01, 0xb6, 0x78, 0xec, 0x00, 0x5b, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Bridge Party                 116"
-	aligned_string "No Lyrics Needed             116"
-	aligned_string "Song Contest Hit             116"
-NakaInst_Puppet_March_116:	aligned_string "Puppet March                 116"
-	.byte 0xc2, 0x79
-	.byte 0xec, 0x00, 0x5c, 0x01, 0xa0, 0x79, 0xec, 0x00
-	.byte 0x5d, 0x01, 0x7e, 0x79, 0xec, 0x00, 0x5e, 0x01
-	.long NakaInst_Party_Space_120
-	.byte 0x5f, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Party_Space_120:	aligned_string "Party Space                  120"
-	aligned_string "String Pops                  120"
-	aligned_string "Party Accordion              120"
-	aligned_string "Pop Accordion                120"
-	.byte 0x68, 0x7a
+; Style Bitmaps, Presentation Data & UI Dispatch (2 widgets, 101962 bytes)
+; Source: maincpu/ui_widgets/naka_style_bitmaps.c (raw byte array)
+NakaData_StyleBitmaps:
+	.incbin "includes/generated/naka_style_bitmaps.bin"
 
-
-	naka_header NAKA_TYPE_0xEC
-	.byte 0x46, 0x7a, 0xec, 0x00, 0x61, 0x01
-	.long NakaInst_Orgel_Pops_111
-	.byte 0x62, 0x01, 0x02, 0x7a
-	.byte 0xec, 0x00, 0x63, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "German Party Hit             111"
-NakaInst_Orgel_Pops_111:	aligned_string "Orgel Pops                   111"
-	aligned_string "Party Pop Stack              111"
-	aligned_string "Synth Party                  111"
-	.byte 0x0e, 0x7b, 0xec, 0x00, 0x64, 0x01
-	.long NakaInst_Anka_Rock_133
-	.byte 0x65, 0x01, 0xca, 0x7a
-	.byte 0xec, 0x00, 0x66, 0x01, 0xa8, 0x7a, 0xec, 0x00
-	.byte 0x67, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "50's Section                 133"
-	aligned_string "Solid Gold Oldie             133"
-NakaInst_Anka_Rock_133:	aligned_string "Anka Rock                    133"
-	aligned_string "The Old Bars                 133"
-	.long NakaInst_Party_Register_115
-	.byte 0x68, 0x01, 0x92, 0x7b
-	.byte 0xec, 0x00, 0x69, 0x01, 0x70, 0x7b, 0xec, 0x00
-	.byte 0x6a, 0x01, 0x4e, 0x7b, 0xec, 0x00, 0x6b, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Party Partners               115"
-	aligned_string "Alto Duet Party              115"
-	aligned_string "Accordion Fun                115"
-NakaInst_Party_Register_115:	aligned_string "Party Register               115"
-	.byte 0x5a, 0x7c
-	.byte 0xec, 0x00, 0x6c, 0x01, 0x38, 0x7c, 0xec, 0x00
-	.byte 0x6d, 0x01, 0x16, 0x7c, 0xec, 0x00, 0x6e, 0x01
-	.long NakaInst_Shake_It_All_162
-	.byte 0x6f, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Shake_It_All_162:	aligned_string "Shake It All....             162"
-	aligned_string "Dancing Bellows              162"
-	aligned_string "Old Party Dance              162"
-	aligned_string "Turn                         162"
-	.byte 0x00, 0x7d, 0xec, 0x00
-	.byte 0x70, 0x01, 0xde, 0x7c, 0xec, 0x00, 0x71, 0x01
-	.long NakaInst_Chords_Birds_100
-	.byte 0x72, 0x01, 0x9a, 0x7c
-	.byte 0xec, 0x00, 0x73, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Accordiolas!!                100"
-NakaInst_Chords_Birds_100:	aligned_string "Chords & Birds               100"
-	aligned_string "Bird-Voices                  100"
-	aligned_string "Birdy-Accordion              100"
-	.byte 0xa6, 0x7d, 0xec, 0x00, 0x74, 0x01
-	.long NakaInst_Banjo_Sing_Song_134
-	jrl	mi, 25089
-	jrl	pl, 236
-	jrl	z, 16385
-	jrl	pl, 236
-	jrl	c, 1
-	nop
-	nop
-	nop
-	nop
-	nop
-	aligned_string "London's Bigbone             134"
-	aligned_string "Pub Piano                    134"
-NakaInst_Banjo_Sing_Song_134:	aligned_string "Banjo Sing Song              134"
-	aligned_string "Cockney Clarinet             134"
-	.long NakaInst_Fiddle_Dance_132
-	jrl	10753
-	jrl	nz, 236
-	jrl	ge, 2049
-	jrl	nz, 236
-	jrl	gt, -6655
-	jrl	pl, 236
-	jrl	ugt, 1
-	nop
-	nop
-	nop
-	nop
-	nop
-	aligned_string "Dance Craze Sax              132"
-	aligned_string "88 In Line!                  132"
-	aligned_string "Country Line                 132"
-NakaInst_Fiddle_Dance_132:	aligned_string "Fiddle Dance                 132"
-	.byte 0xf2, 0x7e
-	.byte 0xec, 0x00, 0x7c, 0x01, 0xd0, 0x7e, 0xec, 0x00
-	.byte 0x7d, 0x01, 0xae, 0x7e, 0xec, 0x00, 0x7e, 0x01
-	.long NakaInst_Symphony_Hoedown_206
-	.byte 0x7f, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Symphony_Hoedown_206:	aligned_string "Symphony Hoedown             206"
-	aligned_string "Hoedown Frets                206"
-	aligned_string "Oklahoma Dance               206"
-	aligned_string "Country Dance                206"
-	.byte 0x98, 0x7f, 0xec, 0x00
-	.byte 0x80, 0x01, 0x76, 0x7f, 0xec, 0x00, 0x81, 0x01
-	.long NakaInst_Techno_Ranger_138
-	.byte 0x82, 0x01, 0x32, 0x7f
-	.byte 0xec, 0x00, 0x83, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Speedy Fiddle                138"
-NakaInst_Techno_Ranger_138:	aligned_string "Techno Ranger                138"
-	aligned_string "Dance Cowboy                 138"
-	aligned_string "Banjo Dance                  138"
-	.byte 0x3e, 0x80, 0xec, 0x00, 0x84, 0x01
-	.long NakaInst_The_Zillertaler_150
-	.byte 0x85, 0x01, 0xfa, 0x7f
-	.byte 0xec, 0x00, 0x86, 0x01, 0xd8, 0x7f, 0xec, 0x00
-	.byte 0x87, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Oktober Party                150"
-	aligned_string "Schurzenjager                150"
-NakaInst_The_Zillertaler_150:	aligned_string "The Zillertaler              150"
-	aligned_string "Auf Gehts!                   150"
-	.long NakaInst_Sepp_s_Clarinet_195
-	.byte 0x88, 0x01, 0xc2, 0x80
-	.byte 0xec, 0x00, 0x89, 0x01, 0xa0, 0x80, 0xec, 0x00
-	.byte 0x8a, 0x01, 0x7e, 0x80, 0xec, 0x00, 0x8b, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Bavaria To Tyrol             195"
-	aligned_string "Munich Brass                 195"
-	aligned_string "Bavarian Zither              195"
-NakaInst_Sepp_s_Clarinet_195:	aligned_string "Sepp's Clarinet              195"
-	.byte 0x8a, 0x81
-	.byte 0xec, 0x00, 0x8c, 0x01, 0x68, 0x81, 0xec, 0x00
-	.byte 0x8d, 0x01, 0x46, 0x81, 0xec, 0x00, 0x8e, 0x01
-	.long NakaInst_Miseltoe_Melody_75
-	.byte 0x8f, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Miseltoe_Melody_75:	aligned_string "Miseltoe Melody               75"
-	aligned_string "Carol Singers                 75"
-	aligned_string "Yuletide Strings              75"
-	aligned_string "Santa's Helpers               75"
-StyleVar_KingOfSoul:
-	.byte 0x30, 0x82, 0xec, 0x00
-	.byte 0x90, 0x01, 0x0e, 0x82, 0xec, 0x00, 0x91, 0x01
-	.long NakaInst_Bad_Soul_Bars_140
-	.byte 0x92, 0x01, 0xca, 0x81
-	.byte 0xec, 0x00, 0x93, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Soulful Wha Wha              140"
-NakaInst_Bad_Soul_Bars_140:	aligned_string "Bad Soul Bars                140"
-	aligned_string "Saxy Soul                    140"
-	aligned_string "Feelin' Good                 140"
-StyleVar_DetroitPop:
-	.byte 0xd6, 0x82, 0xec, 0x00, 0x94, 0x01
-	.long NakaInst_Ross_Vocals_142
-	.byte 0x95, 0x01, 0x92, 0x82
-	.byte 0xec, 0x00, 0x96, 0x01, 0x70, 0x82, 0xec, 0x00
-	.byte 0x97, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Motor Town Brass             142"
-	aligned_string "Detroit Strings              142"
-NakaInst_Ross_Vocals_142:	aligned_string "Ross Vocals                  142"
-	aligned_string "Supreme Tenor                142"
-StyleVar_SoftSoul:
-	.long NakaInst_A_Case_Of_Soul_114_EC837C
-	.byte 0x98, 0x01, 0x5a, 0x83
-	.byte 0xec, 0x00, 0x99, 0x01, 0x38, 0x83, 0xec, 0x00
-	.byte 0x9a, 0x01, 0x16, 0x83, 0xec, 0x00, 0x9b, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Synth Soul Horns             114"
-	aligned_string "Soul Solo                    114"
-	aligned_string "A Few Soulbars               114"
-NakaInst_A_Case_Of_Soul_114_EC837C:	aligned_string "A Case Of Soul               114"
-StyleVar_NewSoulBallad:
-	.byte 0x22, 0x84
-	.byte 0xec, 0x00, 0x9c, 0x01, 0x00, 0x84, 0xec, 0x00
-	.byte 0x9d, 0x01, 0xde, 0x83, 0xec, 0x00, 0x9e, 0x01
-	.long NakaInst_Soul_Suitcase_70
-	.byte 0x9f, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Soul_Suitcase_70:	aligned_string "Soul Suitcase                 70"
-	aligned_string "Soul Drawbars                 70"
-	aligned_string "Soulful Sax                   70"
-	aligned_string "Synth For Soul                70"
-StyleVar_SoulToSun:
-	.byte 0xc8, 0x84, 0xec, 0x00
-	.byte 0xa0, 0x01, 0xa6, 0x84, 0xec, 0x00, 0xa1, 0x01
-	.long NakaInst_Keys_To_Soul_88
-	.byte 0xa2, 0x01, 0x62, 0x84
-	.byte 0xec, 0x00, 0xa3, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Soulful Groove                88"
-NakaInst_Keys_To_Soul_88:	aligned_string "Keys To Soul                  88"
-	aligned_string "Soul Horn                     88"
-	aligned_string "Sweet Soul                    88"
-StyleVar_MellowSoul:
-	.byte 0x6e, 0x85, 0xec, 0x00, 0xa4, 0x01
-	.long NakaInst_Sweet_16_Sax_66
-	.byte 0xa5, 0x01, 0x2a, 0x85
-	.byte 0xec, 0x00, 0xa6, 0x01, 0x08, 0x85, 0xec, 0x00
-	.byte 0xa7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Soul Vocal Duo                66"
-	aligned_string "Cool Soul Frets               66"
-NakaInst_Sweet_16_Sax_66:	aligned_string "Sweet 16 Sax                  66"
-	aligned_string "Soulful Flute                 66"
-StyleVar_SlowSoulMood:
-	.long NakaInst_Soul_On_My_Mind_64
-	.byte 0xa8, 0x01, 0xf2, 0x85
-	.byte 0xec, 0x00, 0xa9, 0x01, 0xd0, 0x85, 0xec, 0x00
-	.byte 0xaa, 0x01, 0xae, 0x85, 0xec, 0x00, 0xab, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Georgia Brass                 64"
-	aligned_string "Moody Drawbars                64"
-	aligned_string "Ray's Ballad                  64"
-NakaInst_Soul_On_My_Mind_64:	aligned_string "Soul On My Mind               64"
-StyleVar_RBGroove:
-	.byte 0xba, 0x86
-	.byte 0xec, 0x00, 0xac, 0x01, 0x98, 0x86, 0xec, 0x00
-	.byte 0xad, 0x01, 0x76, 0x86, 0xec, 0x00, 0xae, 0x01
-	.long NakaInst_Blues_Horns_112
-	.byte 0xaf, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Blues_Horns_112:	aligned_string "Blues Horns                  112"
-	aligned_string "Analogue Blues               112"
-	aligned_string "Vintage R&B                  112"
-	aligned_string "Solid R&B                    112"
-StyleVar_DownDirtyBlues:
-	.byte 0x60, 0x87, 0xec, 0x00
-	.byte 0xb0, 0x01, 0x3e, 0x87, 0xec, 0x00, 0xb1, 0x01
-	.long NakaInst_Solid_Blues_78
-	.byte 0xb2, 0x01, 0xfa, 0x86
-	.byte 0xec, 0x00, 0xb3, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Big Band Blues                78"
-NakaInst_Solid_Blues_78:	aligned_string "Solid Blues                   78"
-	aligned_string "Bad B3 Blues                  78"
-	aligned_string "Satchmo's Blues               78"
-StyleVar_RockBlues:
-	.byte 0x06, 0x88, 0xec, 0x00, 0xb4, 0x01
-	.long NakaInst_Hard_Sax_Blues_124_EC87E4
-	.byte 0xb5, 0x01, 0xc2, 0x87
-	.byte 0xec, 0x00, 0xb6, 0x01, 0xa0, 0x87, 0xec, 0x00
-	.byte 0xb7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Down & Dirty                 124"
-	aligned_string "Blues Alley                  124"
-NakaInst_Hard_Sax_Blues_124_EC87E4:	aligned_string "Hard Sax Blues               124"
-	aligned_string "Blues Rock Keys              124"
-StyleVar_PlayTheBlues:
-	.long NakaInst_I_Got_The_Blues_83_EC88AC
-	.byte 0xb8, 0x01, 0x8a, 0x88
-	.byte 0xec, 0x00, 0xb9, 0x01, 0x68, 0x88, 0xec, 0x00
-	.byte 0xba, 0x01, 0x46, 0x88, 0xec, 0x00, 0xbb, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Wah Wah Blues                 83"
-	aligned_string "Blues Bars                    83"
-	aligned_string "Blues Steel                   83"
-NakaInst_I_Got_The_Blues_83_EC88AC:	aligned_string "I Got The Blues               83"
-StyleVar_BluesAlley:
-	.byte 0x52, 0x89
-	.byte 0xec, 0x00, 0xbc, 0x01, 0x30, 0x89, 0xec, 0x00
-	.byte 0xbd, 0x01, 0x0e, 0x89, 0xec, 0x00, 0xbe, 0x01
-	.long LABEL_EC88EC
-	ld	(xsp+1), 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-	aligned_string "Mournful Tenor               120"
-	aligned_string "Bad Blues Brass              120"
-	aligned_string "Ham & Blues                  120"
-	aligned_string "Bluesy Alto                  120"
-	.byte 0xf8, 0x89, 0xec, 0x00
-	.byte 0xc0, 0x01, 0xd6, 0x89, 0xec, 0x00, 0xc1, 0x01
-	.long LABEL_EC89B4
-	.byte 0xc2, 0x01, 0x92, 0x89
-	.byte 0xec, 0x00, 0xc3, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Wheels of Life                88"
-	aligned_string "Hymn Band                     88"
-	aligned_string "Gospel Choir                  88"
-	aligned_string "Electric Gospel               88"
-	.byte 0x9e, 0x8a, 0xec, 0x00, 0xc4, 0x01
-	.long LABEL_EC8A7C
-	.byte 0xc5, 0x01, 0x5a, 0x8a
-	.byte 0xec, 0x00, 0xc6, 0x01, 0x38, 0x8a, 0xec, 0x00
-	.byte 0xc7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Praise The Lord              128"
-	aligned_string "Inspirational!               128"
-	aligned_string "Preach The Word              128"
-	aligned_string "Gospel Sax                   128"
-StyleVar_DayOfRest:
-	.long NakaInst_Gospel_Standard_124
-	.byte 0xc8, 0x01, 0x22, 0x8b
-	.byte 0xec, 0x00, 0xc9, 0x01, 0x00, 0x8b, 0xec, 0x00
-	.byte 0xca, 0x01, 0xde, 0x8a, 0xec, 0x00, 0xcb, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Reed The Word                124"
-	aligned_string "Chapel Brass                 124"
-	aligned_string "Sing Hallelujah              124"
-NakaInst_Gospel_Standard_124:	aligned_string "Gospel Standard              124"
-StyleVar_PowerGospel:
-	.byte 0xea, 0x8b
-	.byte 0xec, 0x00, 0xcc, 0x01, 0xc8, 0x8b, 0xec, 0x00
-	.byte 0xcd, 0x01, 0xa6, 0x8b, 0xec, 0x00, 0xce, 0x01
-	.long NakaInst_Congregation_151
-	.byte 0xcf, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Congregation_151:	aligned_string "Congregation!                151"
-	aligned_string "Worship Groove               151"
-	aligned_string "Gospel Drawbars              151"
-	aligned_string "Soprano Prayer               151"
-StyleVar_GospelBlues:
-	.byte 0x90, 0x8c, 0xec, 0x00
-	.byte 0xd0, 0x01, 0x6e, 0x8c, 0xec, 0x00, 0xd1, 0x01
-	.long NakaInst_Drawbar_Service_66
-	.byte 0xd2, 0x01, 0x2a, 0x8c
-	.byte 0xec, 0x00, 0xd3, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Gospel Lead                   66"
-NakaInst_Drawbar_Service_66:	aligned_string "Drawbar Service               66"
-	aligned_string "Church Grand                  66"
-	aligned_string "Gospel Organ                  66"
-StyleVar_GospelInThrees:
-	.byte 0x36, 0x8d, 0xec, 0x00, 0xd4, 0x01
-	.long NakaInst_Sing_It_Play_It_92
-	.byte 0xd5, 0x01, 0xf2, 0x8c
-	.byte 0xec, 0x00, 0xd6, 0x01, 0xd0, 0x8c, 0xec, 0x00
-	.byte 0xd7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Sing Praises                  92"
-	aligned_string "Modern Gospel                 92"
-NakaInst_Sing_It_Play_It_92:	aligned_string "Sing It, Play It              92"
-	aligned_string "Amazing Waltz!                92"
-StyleVar_UpTempoBigband:
-	.long NakaInst_The_Duke_s_Piano_170
-	.byte 0xd8, 0x01, 0xba, 0x8d
-	.byte 0xec, 0x00, 0xd9, 0x01, 0x98, 0x8d, 0xec, 0x00
-	.byte 0xda, 0x01, 0x76, 0x8d, 0xec, 0x00, 0xdb, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Bigband Shout                170"
-	aligned_string "Fast Reeds                   170"
-	aligned_string "Swing Alto Solo              170"
-NakaInst_The_Duke_s_Piano_170:	aligned_string "The Duke's Piano             170"
-StyleVar_SteadySwingband:
-	.byte 0x82, 0x8e
-	.byte 0xec, 0x00, 0xdc, 0x01, 0x60, 0x8e, 0xec, 0x00
-	.byte 0xdd, 0x01, 0x3e, 0x8e, 0xec, 0x00, 0xde, 0x01
-	.long NakaInst_Reeds_in_Unison_110
-	.byte 0xdf, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Reeds_in_Unison_110:	aligned_string "Reeds in Unison              110"
-	aligned_string "Full Mute Brass              110"
-	aligned_string "Dorsey Band                  110"
-	aligned_string "Father Time Solo             110"
-StyleVar_AllAboard:
-	.byte 0x28, 0x8f, 0xec, 0x00
-	.byte 0xe0, 0x01, 0x06, 0x8f, 0xec, 0x00, 0xe1, 0x01
-	.long NakaInst_Main_Line_Brass_150
-	.byte 0xe2, 0x01, 0xc2, 0x8e
-	.byte 0xec, 0x00, 0xe3, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Miller Station               150"
-NakaInst_Main_Line_Brass_150:	aligned_string "Main Line Brass              150"
-	aligned_string "Sax Tracks                   150"
-	aligned_string "Getting Up Steam             150"
-StyleVar_40sDanceBand:
-	.byte 0xce, 0x8f, 0xec, 0x00, 0xe4, 0x01
-	.long NakaInst_Miller_Reeds_86
-	.byte 0xe5, 0x01, 0x8a, 0x8f
-	.byte 0xec, 0x00, 0xe6, 0x01, 0x68, 0x8f, 0xec, 0x00
-	.byte 0xe7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Harry J.& Co.                 86"
-	aligned_string "Mellow Section                86"
-NakaInst_Miller_Reeds_86:	aligned_string "Miller Reeds                  86"
-	aligned_string "Sentimental Solo              86"
-StyleVar_SentimentalBand:
-	.long NakaInst_Acker_s_Solo_90
-	.byte 0xe8, 0x01, 0x52, 0x90
-	.byte 0xec, 0x00, 0xe9, 0x01, 0x30, 0x90, 0xec, 0x00
-	.byte 0xea, 0x01, 0x0e, 0x90, 0xec, 0x00, 0xeb, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "The Whole Band!               90"
-	aligned_string "Count On It!                  90"
-	aligned_string "Mute Soloist                  90"
-NakaInst_Acker_s_Solo_90:	aligned_string "Acker's Solo                  90"
-StyleVar_MoonlightDance:
-	.byte 0x1a, 0x91
-	.byte 0xec, 0x00, 0xec, 0x01, 0xf8, 0x90, 0xec, 0x00
-	.byte 0xed, 0x01, 0xd6, 0x90, 0xec, 0x00, 0xee, 0x01
-	.long NakaInst_Glenn_s_Big_Band_90
-	.byte 0xef, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Glenn_s_Big_Band_90:	aligned_string "Glenn's Big Band              90"
-	aligned_string "Band Leader Solo              90"
-	aligned_string "Full Dance Band               90"
-	aligned_string "Swing Orchestra               90"
-StyleVar_40sLoveSongs:
-	.byte 0xc0, 0x91, 0xec, 0x00
-	.byte 0xf0, 0x01, 0x9e, 0x91, 0xec, 0x00, 0xf1, 0x01
-	.long NakaInst_Big_Band_Sound_92
-	.byte 0xf2, 0x01, 0x5a, 0x91
-	.byte 0xec, 0x00, 0xf3, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Harry's Solo                  92"
-NakaInst_Big_Band_Sound_92:	aligned_string "Big Band Sound                92"
-	aligned_string "Gentle Reeds                  92"
-	aligned_string "Muted Big Band                92"
-StyleVar_MidSwingband:
-	.byte 0x66, 0x92, 0xec, 0x00, 0xf4, 0x01
-	.long NakaInst_Reed_It_Mute_It_127
-	.byte 0xf5, 0x01, 0x22, 0x92
-	.byte 0xec, 0x00, 0xf6, 0x01, 0x00, 0x92, 0xec, 0x00
-	.byte 0xf7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Full Tilt Swing!             127"
-	aligned_string "Power Sax Swing              127"
-NakaInst_Reed_It_Mute_It_127:	aligned_string "Reed It, Mute It             127"
-	aligned_string "Swing Reedle                 127"
-StyleVar_SwingOrchestra:
-	.long NakaInst_Swingin_Frets_142
-	.byte 0xf8, 0x01, 0xea, 0x92
-	.byte 0xec, 0x00, 0xf9, 0x01, 0xc8, 0x92, 0xec, 0x00
-	.byte 0xfa, 0x01, 0xa6, 0x92, 0xec, 0x00, 0xfb, 0x01
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Lush Swing                   142"
-	aligned_string "Riddle Orchestra             142"
-	aligned_string "Sinatra Strings              142"
-NakaInst_Swingin_Frets_142:	aligned_string "Swingin' Frets               142"
-StyleVar_NightClubCombo:
-	.byte 0xb2, 0x93
-	.byte 0xec, 0x00, 0xfc, 0x01, 0x90, 0x93, 0xec, 0x00
-	.byte 0xfd, 0x01, 0x6e, 0x93, 0xec, 0x00, 0xfe, 0x01
-	.long NakaInst_Swing_Unison_158
-	.byte 0xff, 0x01, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Swing_Unison_158:	aligned_string "Swing Unison                 158"
-	aligned_string "The Band Leader              158"
-	aligned_string "Grand Swing!                 158"
-	aligned_string "Laid Back Jazz               158"
-StyleVar_EasyPlaySwing:
-	.byte 0x58, 0x94, 0xec, 0x00
-	.byte 0x00, 0x02, 0x36, 0x94, 0xec, 0x00, 0x01, 0x02
-	.long NakaInst_Swing_Sparkle_140
-	.byte 0x02, 0x02, 0xf2, 0x93
-	.byte 0xec, 0x00, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Reed It & Swing!             140"
-NakaInst_Swing_Sparkle_140:	aligned_string "Swing Sparkle                140"
-	aligned_string "Organist's Swing             140"
-	aligned_string "Swinging Keys                140"
-StyleVar_JazzClub:
-	.byte 0xfe, 0x94, 0xec, 0x00, 0x04, 0x02
-	.long NakaInst_Club_Duet_146
-	.byte 0x05, 0x02, 0xba, 0x94
-	.byte 0xec, 0x00, 0x06, 0x02, 0x98, 0x94, 0xec, 0x00
-	.byte 0x07, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Jazz Bars                    146"
-	aligned_string "Combo Romance                146"
-NakaInst_Club_Duet_146:	aligned_string "Club Duet                    146"
-	aligned_string "Jazz Blocks                  146"
-StyleVar_UpTempoCombo:
-	.long NakaInst_Acoustic_Jazz_174
-	.byte 0x08, 0x02, 0x82, 0x95
-	.byte 0xec, 0x00, 0x09, 0x02, 0x60, 0x95, 0xec, 0x00
-	.byte 0x0a, 0x02, 0x3e, 0x95, 0xec, 0x00, 0x0b, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Lionel Meets Wes             174"
-	aligned_string "Jazz From Wes                174"
-	aligned_string "Oscar's Gig                  174"
-NakaInst_Acoustic_Jazz_174:	aligned_string "Acoustic Jazz                174"
-StyleVar_SimpleJazz:
-	.byte 0x4a, 0x96
-	.byte 0xec, 0x00, 0x0c, 0x02, 0x28, 0x96, 0xec, 0x00
-	.byte 0x0d, 0x02, 0x06, 0x96, 0xec, 0x00, 0x0e, 0x02
-	.long NakaInst_Wild_Side_Organ_200
-	.byte 0x0f, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Wild_Side_Organ_200:	aligned_string "Wild Side Organ              200"
-	aligned_string "Simple Jimmy                 200"
-	aligned_string "Helmut & Strings             200"
-	aligned_string "Zacharias Swing              200"
-StyleVar_40sBoogie:
-	.byte 0xf0, 0x96, 0xec, 0x00
-	.byte 0x10, 0x02, 0xce, 0x96, 0xec, 0x00, 0x11, 0x02
-	.long NakaInst_Boogie_Dance_160_EC96AC
-	.byte 0x12, 0x02, 0x8a, 0x96
-	.byte 0xec, 0x00, 0x13, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Boogie Bugles                160"
-NakaInst_Boogie_Dance_160_EC96AC:	aligned_string "Boogie Dance                 160"
-	aligned_string "12 Boogie Bars               160"
-	aligned_string "Jitterbug Vocals             160"
-StyleVar_JazzStandards:
-	.byte 0x96, 0x97, 0xec, 0x00, 0x14, 0x02
-	.long NakaInst_Saxy_Jazz_145
-	.byte 0x15, 0x02, 0x52, 0x97
-	.byte 0xec, 0x00, 0x16, 0x02, 0x30, 0x97, 0xec, 0x00
-	.byte 0x17, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Partners in Jazz             145"
-	aligned_string "Cool Jazz B3                 145"
-NakaInst_Saxy_Jazz_145:	aligned_string "Saxy Jazz                    145"
-	aligned_string "Lionel's Jazz                145"
-StyleVar_ComboDrawbars:
-	.long NakaInst_Even_Jazz_170
-	.byte 0x18, 0x02, 0x1a, 0x98
-	.byte 0xec, 0x00, 0x19, 0x02, 0xf8, 0x97, 0xec, 0x00
-	.byte 0x1a, 0x02, 0xd6, 0x97, 0xec, 0x00, 0x1b, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "All Out Jazz                 170"
-	aligned_string "Slow Spin Groove             170"
-	aligned_string "Classic Groove               170"
-NakaInst_Even_Jazz_170:	aligned_string "Even Jazz                    170"
-StyleVar_GentleJazz:
-	.byte 0xe2, 0x98
-	.byte 0xec, 0x00, 0x1c, 0x02, 0xc0, 0x98, 0xec, 0x00
-	.byte 0x1d, 0x02, 0x9e, 0x98, 0xec, 0x00, 0x1e, 0x02
-	.long NakaInst_Combo_Soloists_126
-	.byte 0x1f, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Combo_Soloists_126:	aligned_string "Combo Soloists               126"
-	aligned_string "Late Night Sax               126"
-	aligned_string "Shearing Combo               126"
-	aligned_string "Nat's Piano                  126"
-StyleVar_GypsyJazzers:
-	.byte 0x88, 0x99, 0xec, 0x00
-	.byte 0x20, 0x02, 0x66, 0x99, 0xec, 0x00, 0x21, 0x02
-	.long NakaInst_Stephane_Django_210
-	.byte 0x22, 0x02, 0x22, 0x99
-	.byte 0xec, 0x00, 0x23, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Reinhardt's Solo             210"
-NakaInst_Stephane_Django_210:	aligned_string "Stephane&Django              210"
-	aligned_string "Fiddle For Jazz              210"
-	aligned_string "Gypsy Jazz Frets             210"
-StyleVar_JazzAccordion:
-	.byte 0x2e, 0x9a, 0xec, 0x00, 0x24, 0x02
-	.long NakaInst_Let_It_Register_158
-	.byte 0x25, 0x02, 0xea, 0x99
-	.byte 0xec, 0x00, 0x26, 0x02, 0xc8, 0x99, 0xec, 0x00
-	.byte 0x27, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Bellows & Blocks             158"
-	aligned_string "Accordion & Co!              158"
-NakaInst_Let_It_Register_158:	aligned_string "Let It Register!             158"
-	aligned_string "Soft Squeeze                 158"
-StyleVar_SpeakeasyJazz:
-	.long NakaInst_Chicago_Piano_184
-	.byte 0x28, 0x02, 0xb2, 0x9a
-	.byte 0xec, 0x00, 0x29, 0x02, 0x90, 0x9a, 0xec, 0x00
-	.byte 0x2a, 0x02, 0x6e, 0x9a, 0xec, 0x00, 0x2b, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Moonshine Combo              184"
-	aligned_string "Wall St. Jazz                184"
-	aligned_string "Roaring Trumpet              184"
-NakaInst_Chicago_Piano_184:	aligned_string "Chicago Piano                184"
-StyleVar_JazzFrancais:
-	.byte 0x7a, 0x9b
-	.byte 0xec, 0x00, 0x2c, 0x02, 0x58, 0x9b, 0xec, 0x00
-	.byte 0x2d, 0x02, 0x36, 0x9b, 0xec, 0x00, 0x2e, 0x02
-	.long NakaInst_Squeeze_Box_Jazz_190
-	.byte 0x2f, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Squeeze_Box_Jazz_190:	aligned_string "Squeeze Box Jazz             190"
-	aligned_string "Paris Jazz Duet              190"
-	aligned_string "Grapelli Jazz                190"
-	aligned_string "Django's Solo                190"
-StyleVar_VanDammeJazz:
-	.byte 0x20, 0x9c, 0xec, 0x00
-	.byte 0x30, 0x02, 0xfe, 0x9b, 0xec, 0x00, 0x31, 0x02
-	.long NakaInst_Deuringer_Swing_190_EC9BDC
-	.byte 0x32, 0x02, 0xba, 0x9b
-	.byte 0xec, 0x00, 0x33, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Hubert & Klaus               190"
-NakaInst_Deuringer_Swing_190_EC9BDC:	aligned_string "Deuringer Swing              190"
-	aligned_string "Art Meets Lionel             190"
-	aligned_string "Art's Swing Box              190"
-StyleVar_EuroJazz:
-	.byte 0xc6, 0x9c, 0xec, 0x00, 0x34, 0x02
-	.long NakaInst_Duelling_Reeds_147
-	.byte 0x35, 0x02, 0x82, 0x9c
-	.byte 0xec, 0x00, 0x36, 0x02, 0x60, 0x9c, 0xec, 0x00
-	.byte 0x37, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Mellow Jazz Tabs             147"
-	aligned_string "Euro Squeezebox              147"
-NakaInst_Duelling_Reeds_147:	aligned_string "Duelling Reeds               147"
-	aligned_string "Boxing Jazzy                 147"
-StyleVar_SmokeyJazzClub:
-	.long NakaInst_Slide_Scale_Jazz_70
-	.byte 0x38, 0x02, 0x4a, 0x9d
-	.byte 0xec, 0x00, 0x39, 0x02, 0x28, 0x9d, 0xec, 0x00
-	.byte 0x3a, 0x02, 0x06, 0x9d, 0xec, 0x00, 0x3b, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "New Jazz Ballad               70"
-	aligned_string "B3 Blocks                     70"
-	aligned_string "Breathy Vibes                 70"
-NakaInst_Slide_Scale_Jazz_70:	aligned_string "Slide Scale Jazz              70"
-StyleVar_JazzAt3am:
-	.byte 0x12, 0x9e
-	.byte 0xec, 0x00, 0x3c, 0x02, 0xf0, 0x9d, 0xec, 0x00
-	.byte 0x3d, 0x02, 0xce, 0x9d, 0xec, 0x00, 0x3e, 0x02
-	.long NakaInst_Unwind_To_This_72
-	.byte 0x3f, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Unwind_To_This_72:	aligned_string "Unwind To This                72"
-	aligned_string "Chuck's Late Gig              72"
-	aligned_string "Too Late For Sax              72"
-	aligned_string "Late Night Frets              72"
-StyleVar_SteadyJazz34:
-	.byte 0xb8, 0x9e, 0xec, 0x00
-	.byte 0x40, 0x02, 0x96, 0x9e, 0xec, 0x00, 0x41, 0x02
-	.long NakaInst_Do_You_Reed_It_158
-	.byte 0x42, 0x02, 0x52, 0x9e
-	.byte 0xec, 0x00, 0x43, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "3/4 Sax Vibes                158"
-NakaInst_Do_You_Reed_It_158:	aligned_string "Do You Reed It?              158"
-	aligned_string "3 Quarter Duo                158"
-	aligned_string "Jazz Partners                158"
-StyleVar_SlowJazz34:
-	.byte 0x5e, 0x9f, 0xec, 0x00, 0x44, 0x02
-	.long NakaInst_Toots_Trick_150
-	.byte 0x45, 0x02, 0x1a, 0x9f
-	.byte 0xec, 0x00, 0x46, 0x02, 0xf8, 0x9e, 0xec, 0x00
-	.byte 0x47, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Waltz Groove                 150"
-	aligned_string "3/4 Played by 4              150"
-NakaInst_Toots_Trick_150:	aligned_string "Toots' Trick!                150"
-	aligned_string "Flautist's Jazz              150"
-StyleVar_TheGroove:
-	.long NakaInst_Soprano_Groove_180
-	.byte 0x48, 0x02, 0xe2, 0x9f
-	.byte 0xec, 0x00, 0x49, 0x02, 0xc0, 0x9f, 0xec, 0x00
-	.byte 0x4a, 0x02, 0x9e, 0x9f, 0xec, 0x00, 0x4b, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Smokin' B-3 Jazz             180"
-	aligned_string "Jazz To The Bone             180"
-	aligned_string "Modern Vibes                 180"
-NakaInst_Soprano_Groove_180:	aligned_string "Soprano Groove               180"
-StyleVar_LAFusion:
-	.byte 0xaa, 0xa0
-	.byte 0xec, 0x00, 0x4c, 0x02, 0x88, 0xa0, 0xec, 0x00
-	.byte 0x4d, 0x02, 0x66, 0xa0, 0xec, 0x00, 0x4e, 0x02
-	.long NakaInst_Fusion_Tines_98_ECA044
-	.byte 0x4f, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Fusion_Tines_98_ECA044:	aligned_string "Fusion Tines                  98"
-	aligned_string "Cool Groove Sax               98"
-	aligned_string "Sample Piano                  98"
-	aligned_string "West Coast Flute              98"
-StyleVar_MusicalOverture:
-	.byte 0x50, 0xa1, 0xec, 0x00
-	.byte 0x50, 0x02, 0x2e, 0xa1, 0xec, 0x00, 0x51, 0x02
-	.long NakaInst_In_The_Limelight_132
-	.byte 0x52, 0x02, 0xea, 0xa0
-	.byte 0xec, 0x00, 0x53, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Grand Finale                 132"
-NakaInst_In_The_Limelight_132:	aligned_string "In The Limelight             132"
-	aligned_string "Show Stopper                 132"
-	aligned_string "Greasepaint Time             132"
-StyleVar_Tinseltown:
-	.byte 0xf6, 0xa1, 0xec, 0x00, 0x54, 0x02
-	.long NakaInst_Fred_Ginger_120
-	.byte 0x55, 0x02, 0xb2, 0xa1
-	.byte 0xec, 0x00, 0x56, 0x02, 0x90, 0xa1, 0xec, 0x00
-	.byte 0x57, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Golden Movie Era             120"
-	aligned_string "Cinema Magic                 120"
-NakaInst_Fred_Ginger_120:	aligned_string "Fred & Ginger                120"
-	aligned_string "Gene's Dance                 120"
-StyleVar_Showband:
-	.long NakaInst_Mallets_On_Stage_135
-	.byte 0x58, 0x02, 0x7a, 0xa2
-	.byte 0xec, 0x00, 0x59, 0x02, 0x58, 0xa2, 0xec, 0x00
-	.byte 0x5a, 0x02, 0x36, 0xa2, 0xec, 0x00, 0x5b, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Theatre Band                 135"
-	aligned_string "Variety Reeds                135"
-	aligned_string "Curtain Up!                  135"
-NakaInst_Mallets_On_Stage_135:	aligned_string "Mallets On Stage             135"
-StyleVar_TheatreStride:
-	.byte 0x42, 0xa3
-	.byte 0xec, 0x00, 0x5c, 0x02, 0x20, 0xa3, 0xec, 0x00
-	.byte 0x5d, 0x02, 0xfe, 0xa2, 0xec, 0x00, 0x5e, 0x02
-	.long NakaInst_Vaudeville_Bones_124
-	.byte 0x5f, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Vaudeville_Bones_124:	aligned_string "Vaudeville Bones             124"
-	aligned_string "Tap Dance Mutes              124"
-	aligned_string "Old Time Saloon              124"
-	aligned_string "Simple Stride                124"
-StyleVar_VaudevilleAct:
-	.byte 0xe8, 0xa3, 0xec, 0x00
-	.byte 0x60, 0x02, 0xc6, 0xa3, 0xec, 0x00, 0x61, 0x02
-	.long NakaInst_Skeleton_Dance_165
-	.byte 0x62, 0x02, 0x82, 0xa3
-	.byte 0xec, 0x00, 0x63, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Novelty Number               165"
-NakaInst_Skeleton_Dance_165:	aligned_string "Skeleton Dance               165"
-	aligned_string "Variety Showband             165"
-	aligned_string "Music Hall Piano             165"
-StyleVar_TapDancer:
-	.byte 0x8e, 0xa4, 0xec, 0x00, 0x64, 0x02
-	.long NakaInst_Yankee_Doodle_It_182
-	.byte 0x65, 0x02, 0x4a, 0xa4
-	.byte 0xec, 0x00, 0x66, 0x02, 0x28, 0xa4, 0xec, 0x00
-	.byte 0x67, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Slapstick Show               182"
-	aligned_string "Soft Da-Dance                182"
-NakaInst_Yankee_Doodle_It_182:	aligned_string "Yankee Doodle It             182"
-	aligned_string "Sweet Georgia                182"
-StyleVar_ParisClub:
-	.long NakaInst_Take_Your_Seat_118
-	.byte 0x68, 0x02, 0x12, 0xa5
-	.byte 0xec, 0x00, 0x69, 0x02, 0xf0, 0xa4, 0xec, 0x00
-	.byte 0x6a, 0x02, 0xce, 0xa4, 0xec, 0x00, 0x6b, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Crazy Horse Show             118"
-	aligned_string "Girls On Stage!              118"
-	aligned_string "Musette Rouge                118"
-NakaInst_Take_Your_Seat_118:	aligned_string "Take Your Seat!              118"
-StyleVar_CabaretBand:
-	.byte 0xda, 0xa5
-	.byte 0xec, 0x00, 0x6c, 0x02, 0xb8, 0xa5, 0xec, 0x00
-	.byte 0x6d, 0x02, 0x96, 0xa5, 0xec, 0x00, 0x6e, 0x02
-	.long NakaInst_Midnight_Soloist_162
-	.byte 0x6f, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Midnight_Soloist_162:	aligned_string "Midnight Soloist             162"
-	aligned_string "Cabaret Organ                162"
-	aligned_string "Warm Up Act                  162"
-	aligned_string "Guitar Cocktail              162"
-StyleVar_VivaLasVegas:
-	.byte 0x80, 0xa6, 0xec, 0x00
-	.byte 0x70, 0x02, 0x5e, 0xa6, 0xec, 0x00, 0x71, 0x02
-	.long NakaInst_Vegas_Showman_75
-	.byte 0x72, 0x02, 0x1a, 0xa6
-	.byte 0xec, 0x00, 0x73, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Lee's Finale                  75"
-NakaInst_Vegas_Showman_75:	aligned_string "Vegas Showman                 75"
-	aligned_string "Casino Sax                    75"
-	aligned_string "Candlelight Reed              75"
-StyleVar_MagicBallroom:
-	.byte 0x26, 0xa7, 0xec, 0x00, 0x74, 0x02
-	.long NakaInst_Strasser_More_120
-	.byte 0x75, 0x02, 0xe2, 0xa6
-	.byte 0xec, 0x00, 0x76, 0x02, 0xc0, 0xa6, 0xec, 0x00
-	.byte 0x77, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Max's Orchestra              120"
-	aligned_string "Greger Saxes                 120"
-NakaInst_Strasser_More_120:	aligned_string "Strasser & More              120"
-	aligned_string "Hugo's Revival               120"
-StyleVar_GentleFoxtrot:
-	.long NakaInst_Foxy_Squeezebox_154_ECA7CC
-	.byte 0x78, 0x02, 0xaa, 0xa7
-	.byte 0xec, 0x00, 0x79, 0x02, 0x88, 0xa7, 0xec, 0x00
-	.byte 0x7a, 0x02, 0x66, 0xa7, 0xec, 0x00, 0x7b, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Foxtrot Serenade             154"
-	aligned_string "Foxy Reeds                   154"
-	aligned_string "Euro Ballroom                154"
-NakaInst_Foxy_Squeezebox_154_ECA7CC:	aligned_string "Foxy Squeezebox              154"
-StyleVar_OrganistsDance:
-	.byte 0x72, 0xa8
-	.byte 0xec, 0x00, 0x7c, 0x02, 0x50, 0xa8, 0xec, 0x00
-	.byte 0x7d, 0x02, 0x2e, 0xa8, 0xec, 0x00, 0x7e, 0x02
-	.long NakaInst_Old_Wheels_Dance_190
-	.byte 0x7f, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Old_Wheels_Dance_190:	aligned_string "Old Wheels Dance             190"
-	aligned_string "Mr.Wunderbar                 190"
-	aligned_string "Ham & T Dance                190"
-	aligned_string "Harmonic Foxtrot             190"
-StyleVar_UpTempoFoxtrot:
-	.byte 0x18, 0xa9, 0xec, 0x00
-	.byte 0x80, 0x02, 0xf6, 0xa8, 0xec, 0x00, 0x81, 0x02
-	.long NakaInst_Foxy_Brassy_170
-	.byte 0x82, 0x02, 0xb2, 0xa8
-	.byte 0xec, 0x00, 0x83, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Unison Fox Band              170"
-NakaInst_Foxy_Brassy_170:	aligned_string "Foxy & Brassy                170"
-	aligned_string "Fox Accordingly              170"
-	aligned_string "Quick Fox Keys               170"
-StyleVar_StrictlyFoxtrot:
-	.byte 0xbe, 0xa9, 0xec, 0x00, 0x84, 0x02
-	.long NakaInst_Come_Dancing_120
-	.byte 0x85, 0x02, 0x7a, 0xa9
-	.byte 0xec, 0x00, 0x86, 0x02, 0x58, 0xa9, 0xec, 0x00
-	.byte 0x87, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Ballroom Bars                120"
-	aligned_string "Foxtrot Sparkle              120"
-NakaInst_Come_Dancing_120:	aligned_string "Come Dancing!                120"
-	aligned_string "Foxy Combo                   120"
-StyleVar_RadioFoxtrot:
-	.long NakaInst_Wunder_Fox_168
-	.byte 0x88, 0x02, 0x42, 0xaa
-	.byte 0xec, 0x00, 0x89, 0x02, 0x20, 0xaa, 0xec, 0x00
-	.byte 0x8a, 0x02, 0xfe, 0xa9, 0xec, 0x00, 0x8b, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Radio Orchestra              168"
-	aligned_string "Box Standards                168"
-	aligned_string "Foxtrot Partners             168"
-NakaInst_Wunder_Fox_168:	aligned_string "Wunder-Fox                   168"
-StyleVar_StrictlyQuick:
-	.byte 0x0a, 0xab
-	.byte 0xec, 0x00, 0x8c, 0x02, 0xe8, 0xaa, 0xec, 0x00
-	.byte 0x8d, 0x02, 0xc6, 0xaa, 0xec, 0x00, 0x8e, 0x02
-	.long NakaInst_Organ_Quickstep_200
-	.byte 0x8f, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Organ_Quickstep_200:	aligned_string "Organ Quickstep              200"
-	aligned_string "Holiday Dance                200"
-	aligned_string "No Twirling!                 200"
-	aligned_string "Doo You Dance?               200"
-StyleVar_LetsTwist:
-	.byte 0xb0, 0xab, 0xec, 0x00
-	.byte 0x90, 0x02, 0x8e, 0xab, 0xec, 0x00, 0x91, 0x02
-	.long NakaInst_Solid_Twist_168
-	.byte 0x92, 0x02, 0x4a, 0xab
-	.byte 0xec, 0x00, 0x93, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Chubby's Best                168"
-NakaInst_Solid_Twist_168:	aligned_string "Solid Twist                  168"
-	aligned_string "Come On,Baby                 168"
-	aligned_string "Do The Twist                 168"
-StyleVar_JiveDance:
-	.byte 0x56, 0xac, 0xec, 0x00, 0x94, 0x02
-	.long NakaInst_Dance_Band_Jive_176_ECAC34
-	.byte 0x95, 0x02, 0x12, 0xac
-	.byte 0xec, 0x00, 0x96, 0x02, 0xf0, 0xab, 0xec, 0x00
-	.byte 0x97, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Top Brass Jive               176"
-	aligned_string "Jive Reeds                   176"
-NakaInst_Dance_Band_Jive_176_ECAC34:	aligned_string "Dance Band Jive              176"
-	aligned_string "Jive Ivories                 176"
-StyleVar_DoTheTwist:
-	.long NakaInst_Bari_Twist_155
-	.byte 0x98, 0x02, 0xda, 0xac
-	.byte 0xec, 0x00, 0x99, 0x02, 0xb8, 0xac, 0xec, 0x00
-	.byte 0x9a, 0x02, 0x96, 0xac, 0xec, 0x00, 0x9b, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Twisting Guitars             155"
-	aligned_string "Shakin' Saxes                155"
-	aligned_string "Chubby's Octaves             155"
-NakaInst_Bari_Twist_155:	aligned_string "Bari-Twist                   155"
-StyleVar_12ChaChaCha:
-	.byte 0xa2, 0xad
-	.byte 0xec, 0x00, 0x9c, 0x02, 0x80, 0xad, 0xec, 0x00
-	.byte 0x9d, 0x02, 0x5e, 0xad, 0xec, 0x00, 0x9e, 0x02
-	.long NakaInst_Sequin_Dance_128
-	.byte 0x9f, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Sequin_Dance_128:	aligned_string "Sequin Dance                 128"
-	aligned_string "Brass For Two                128"
-	aligned_string "Cha Cha Band                 128"
-	aligned_string "Latin Ballroom               128"
-StyleVar_LetsBeguine:
-	.byte 0x48, 0xae, 0xec, 0x00
-	.byte 0xa0, 0x02, 0x26, 0xae, 0xec, 0x00, 0xa1, 0x02
-	.long NakaInst_Beguine_Romance_118
-	.byte 0xa2, 0x02, 0xe2, 0xad
-	.byte 0xec, 0x00, 0xa3, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Latin Elegance               118"
-NakaInst_Beguine_Romance_118:	aligned_string "Beguine Romance              118"
-	aligned_string "When They Begin?             118"
-	aligned_string "Siesta Beguine               118"
-StyleVar_SambaFelicidade:
-	.byte 0xee, 0xae, 0xec, 0x00, 0xa4, 0x02
-	.long NakaInst_Samba_Testamento_115
-	.byte 0xa5, 0x02, 0xaa, 0xae
-	.byte 0xec, 0x00, 0xa6, 0x02, 0x88, 0xae, 0xec, 0x00
-	.byte 0xa7, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Ogerman-Unisono              115"
-	aligned_string "Wanderley Samba              115"
-NakaInst_Samba_Testamento_115:	aligned_string "Samba Testamento             115"
-	aligned_string "Organ De Janeiro             115"
-StyleVar_VivaPasodoble:
-	.long NakaInst_Espana_Two_Step_118
-	.byte 0xa8, 0x02, 0x72, 0xaf
-	.byte 0xec, 0x00, 0xa9, 0x02, 0x50, 0xaf, 0xec, 0x00
-	.byte 0xaa, 0x02, 0x2e, 0xaf, 0xec, 0x00, 0xab, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Brassodoble                  118"
-	aligned_string "Sunny Spain Mood             118"
-	aligned_string "Flamenco Dancers             118"
-NakaInst_Espana_Two_Step_118:	aligned_string "Espana Two Step              118"
-StyleVar_StrictTango:
-	.byte 0x3a, 0xb0
-	.byte 0xec, 0x00, 0xac, 0x02, 0x18, 0xb0, 0xec, 0x00
-	.byte 0xad, 0x02, 0xf6, 0xaf, 0xec, 0x00, 0xae, 0x02
-	.long NakaInst_Tango_Marcato_120
-	.byte 0xaf, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Tango_Marcato_120:	aligned_string "Tango Marcato                120"
-	aligned_string "Spanish Moments              120"
-	aligned_string "Octave Tango                 120"
-	aligned_string "Grand Tango                  120"
-StyleVar_TangoDAmour:
-	.byte 0xe0, 0xb0, 0xec, 0x00
-	.byte 0xb0, 0x02, 0xbe, 0xb0, 0xec, 0x00, 0xb1, 0x02
-	.long LABEL_ECB09C
-	ldw	(xde), 0xb07a
-	.byte 0xec, 0x00, 0xb3, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Tango Orchestra              130"
-	aligned_string "Lush Tango                   130"
-	aligned_string "Holiday Tango                130"
-	aligned_string "Italian Tango                130"
-	.byte 0x86, 0xb1, 0xec, 0x00, 0xb4, 0x02
-	.long LABEL_ECB164
-	ldw	(xiy), 0xb142
-	.byte 0xec, 0x00, 0xb6, 0x02, 0x20, 0xb1, 0xec, 0x00
-	.byte 0xb7, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Tango Grandioso!             120"
-	aligned_string "Latin Passion                120"
-	aligned_string "Astor's Tango                120"
-	aligned_string "Classical Tango              120"
-StyleVar_LastDanceWaltz:
-	.long NakaInst_Concertina_Waltz_96
-	.byte 0xb8, 0x02, 0x0a, 0xb2
-	.byte 0xec, 0x00, 0xb9, 0x02, 0xe8, 0xb1, 0xec, 0x00
-	.byte 0xba, 0x02, 0xc6, 0xb1, 0xec, 0x00, 0xbb, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Come Waltzing                 96"
-	aligned_string "Organist's Waltz              96"
-	aligned_string "Orchestra Waltz               96"
-NakaInst_Concertina_Waltz_96:	aligned_string "Concertina Waltz              96"
-StyleVar_QuickWaltz:
-	.byte 0xd2, 0xb2
-	.byte 0xec, 0x00, 0xbc, 0x02, 0xb0, 0xb2, 0xec, 0x00
-	.byte 0xbd, 0x02, 0x8e, 0xb2, 0xec, 0x00, 0xbe, 0x02
-	.long LABEL_ECB26C
-	ld	(xsp+2), 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-	aligned_string "Symphonic Waltz              130"
-	aligned_string "Jazz Flute Gtr               130"
-	aligned_string "Waltzing Flugel              130"
-	aligned_string "3/4 Romance                  130"
-	.byte 0x78, 0xb3, 0xec, 0x00
-	.byte 0xc0, 0x02, 0x56, 0xb3, 0xec, 0x00, 0xc1, 0x02
-	.long LABEL_ECB334
-	.byte 0xc2, 0x02, 0x12, 0xb3
-	.byte 0xec, 0x00, 0xc3, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "The New Danube!              180"
-	aligned_string "Not Strauss!                 180"
-	aligned_string "Vienna Waves                 180"
-	aligned_string "New Vienna                   180"
-	.byte 0x1e, 0xb4, 0xec, 0x00, 0xc4, 0x02
-	.long LABEL_ECB3FC
-	.byte 0xc5, 0x02, 0xda, 0xb3
-	.byte 0xec, 0x00, 0xc6, 0x02, 0xb8, 0xb3, 0xec, 0x00
-	.byte 0xc7, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Cuckoo Clock 3/4             183"
-	aligned_string "Seppel-Dance                 183"
-	aligned_string "Bavarian Flutes              183"
-	aligned_string "Cottage 3/4                  183"
-StyleVar_PartyVienna:
-	.long NakaInst_Ball_Gown_Waltz_171
-	.byte 0xc8, 0x02, 0xa2, 0xb4
-	.byte 0xec, 0x00, 0xc9, 0x02, 0x80, 0xb4, 0xec, 0x00
-	.byte 0xca, 0x02, 0x5e, 0xb4, 0xec, 0x00, 0xcb, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Vienna Finale                171"
-	aligned_string "Vienna Strings               171"
-	aligned_string "Ballroom Keys                171"
-NakaInst_Ball_Gown_Waltz_171:	aligned_string "Ball Gown Waltz              171"
-	.byte 0x6a, 0xb5
-	.byte 0xec, 0x00, 0xcc, 0x02, 0x48, 0xb5, 0xec, 0x00
-	.byte 0xcd, 0x02, 0x26, 0xb5, 0xec, 0x00, 0xce, 0x02
-	.long NakaInst_Full_Brass_Band_115_ECB504
-	.byte 0xcf, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Full_Brass_Band_115_ECB504:	aligned_string "Full Brass Band              115"
-	aligned_string "Marching Sax                 115"
-	aligned_string "Highschool Band              115"
-	aligned_string "Fife & Drums                 115"
-	.byte 0x10, 0xb6, 0xec, 0x00
-	.byte 0xd0, 0x02, 0xee, 0xb5, 0xec, 0x00, 0xd1, 0x02
-	.long NakaInst_Alto_Marchpast_115
-	.byte 0xd2, 0x02, 0xaa, 0xb5
-	.byte 0xec, 0x00, 0xd3, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Finale Salute                115"
-NakaInst_Alto_Marchpast_115:	aligned_string "Alto Marchpast               115"
-	aligned_string "By The Left                  115"
-	aligned_string "Liberty March                115"
-	.byte 0xb6, 0xb6, 0xec, 0x00, 0xd4, 0x02
-	.long NakaInst_OktoberFest_109
-	.byte 0xd5, 0x02, 0x72, 0xb6
-	.byte 0xec, 0x00, 0xd6, 0x02, 0x50, 0xb6, 0xec, 0x00
-	.byte 0xd7, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Festive March                109"
-	aligned_string "Bavarian March               109"
-NakaInst_OktoberFest_109:	aligned_string "OktoberFest                  109"
-	aligned_string "Munich Horns                 109"
-	.long NakaInst_At_The_Eger_120_ECB75C
-	.byte 0xd8, 0x02, 0x3a, 0xb7
-	.byte 0xec, 0x00, 0xd9, 0x02, 0x18, 0xb7, 0xec, 0x00
-	.byte 0xda, 0x02, 0xf6, 0xb6, 0xec, 0x00, 0xdb, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Moik's Marchshow             120"
-	aligned_string "Ernst & Friends              120"
-	aligned_string "Mosch's Military             120"
-NakaInst_At_The_Eger_120_ECB75C:	aligned_string "At The Eger                  120"
-	.byte 0x02, 0xb8
-	.byte 0xec, 0x00, 0xdc, 0x02, 0xe0, 0xb7, 0xec, 0x00
-	.byte 0xdd, 0x02, 0xbe, 0xb7, 0xec, 0x00, 0xde, 0x02
-	.long NakaInst_Marching_Polka_124
-	.byte 0xdf, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Marching_Polka_124:	aligned_string "Marching Polka               124"
-	aligned_string "Lederhosen Dance             124"
-	aligned_string "Folk Polka                   124"
-	aligned_string "Polka Partners               124"
-	.byte 0xa8, 0xb8, 0xec, 0x00
-	.byte 0xe0, 0x02, 0x86, 0xb8, 0xec, 0x00, 0xe1, 0x02
-	.long NakaInst_Wedding_Party_135
-	.byte 0xe2, 0x02, 0x42, 0xb8
-	.byte 0xec, 0x00, 0xe3, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Austrian Dance               135"
-NakaInst_Wedding_Party_135:	aligned_string "Wedding Party                135"
-	aligned_string "Bellow Shake Hit             135"
-	aligned_string "Alpine Accordion             135"
-	.byte 0x4e, 0xb9, 0xec, 0x00, 0xe4, 0x02
-	.long NakaInst_Alpine_Combo_125_ECB92C
-	.byte 0xe5, 0x02, 0x0a, 0xb9
-	.byte 0xec, 0x00, 0xe6, 0x02, 0xe8, 0xb8, 0xec, 0x00
-	.byte 0xe7, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Harmonic Tirol               125"
-	aligned_string "Steirish Keys                125"
-NakaInst_Alpine_Combo_125_ECB92C:	aligned_string "Alpine Combo                 125"
-	aligned_string "German Clarinet              125"
-	.long NakaInst_Emerald_Flute_120
-	.byte 0xe8, 0x02, 0xd2, 0xb9
-	.byte 0xec, 0x00, 0xe9, 0x02, 0xb0, 0xb9, 0xec, 0x00
-	.byte 0xea, 0x02, 0x8e, 0xb9, 0xec, 0x00, 0xeb, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Eire Squeezebox              120"
-	aligned_string "Chieftain's Jig              120"
-	aligned_string "Gaelic Dance                 120"
-NakaInst_Emerald_Flute_120:	aligned_string "Emerald Flute                120"
-	.byte 0x9a, 0xba
-	.byte 0xec, 0x00, 0xec, 0x02, 0x78, 0xba, 0xec, 0x00
-	.byte 0xed, 0x02, 0x56, 0xba, 0xec, 0x00, 0xee, 0x02
-	.long NakaInst_Scottish_Band_172
-	.byte 0xef, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Scottish_Band_172:	aligned_string "Scottish Band                172"
-	aligned_string "Bonnie Whistles              172"
-	aligned_string "Caber Dance!                 172"
-	aligned_string "Jimmy's Reel                 172"
-	.byte 0x40, 0xbb, 0xec, 0x00
-	.byte 0xf0, 0x02, 0x1e, 0xbb, 0xec, 0x00, 0xf1, 0x02
-	.long NakaInst_Waltzing_Concert_169
-	.byte 0xf2, 0x02, 0xda, 0xba
-	.byte 0xec, 0x00, 0xf3, 0x02, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Austria Symphony             169"
-NakaInst_Waltzing_Concert_169:	aligned_string "Waltzing Concert             169"
-	aligned_string "Strauss & Co                 169"
-	aligned_string "Vienna Woods                 169"
-	.byte 0xe6, 0xbb, 0xec, 0x00, 0xf4, 0x02
-	.long NakaInst_Matterhorn_Waltz_197
-	.byte 0xf5, 0x02, 0xa2, 0xbb
-	.byte 0xec, 0x00, 0xf6, 0x02, 0x80, 0xbb, 0xec, 0x00
-	.byte 0xf7, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Ski Lodge Waltz              197"
-	aligned_string "Alphorn Movement             197"
-NakaInst_Matterhorn_Waltz_197:	aligned_string "Matterhorn Waltz             197"
-	aligned_string "Alpine Guitar                197"
-	.long NakaInst_Mazurka_Clarinet_150
-	.byte 0xf8, 0x02, 0x6a, 0xbc
-	.byte 0xec, 0x00, 0xf9, 0x02, 0x48, 0xbc, 0xec, 0x00
-	.byte 0xfa, 0x02, 0x26, 0xbc, 0xec, 0x00, 0xfb, 0x02
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Dance The Mazurka            150"
-	aligned_string "Folk Waltz                   150"
-	aligned_string "Old Time Dance               150"
-NakaInst_Mazurka_Clarinet_150:	aligned_string "Mazurka Clarinet             150"
-	.byte 0x32, 0xbd
-	.byte 0xec, 0x00, 0xfc, 0x02, 0x10, 0xbd, 0xec, 0x00
-	.byte 0xfd, 0x02, 0xee, 0xbc, 0xec, 0x00, 0xfe, 0x02
-	.long NakaInst_Tiroler_Harp_190
-	.byte 0xff, 0x02, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Tiroler_Harp_190:	aligned_string "Tiroler Harp                 190"
-	aligned_string "Bandoneon Waltz              190"
-	aligned_string "Waltzer Band                 190"
-	aligned_string "Klarinette Waltz             190"
-	.byte 0xd8, 0xbd, 0xec, 0x00
-	.byte 0x00, 0x03, 0xb6, 0xbd, 0xec, 0x00, 0x01, 0x03
-	.long NakaInst_Waikiki_Voices_101
-	.byte 0x02, 0x03, 0x72, 0xbd
-	.byte 0xec, 0x00, 0x03, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Island Strings               101"
-NakaInst_Waikiki_Voices_101:	aligned_string "Waikiki Voices               101"
-	aligned_string "Island Delight               101"
-	aligned_string "Island Flute                 101"
-	.byte 0x7e, 0xbe, 0xec, 0x00, 0x04, 0x03
-	.long NakaInst_Hula_Dance_130
-	.byte 0x05, 0x03, 0x3a, 0xbe
-	.byte 0xec, 0x00, 0x06, 0x03, 0x18, 0xbe, 0xec, 0x00
-	.byte 0x07, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Honolulu Strings             130"
-	aligned_string "Island Duo                   130"
-NakaInst_Hula_Dance_130:	aligned_string "Hula Dance                   130"
-	aligned_string "Island Whistle               130"
-	.long NakaInst_Syncopated_Wood_130
-	.byte 0x08, 0x03, 0x02, 0xbf
-	.byte 0xec, 0x00, 0x09, 0x03, 0xe0, 0xbe, 0xec, 0x00
-	.byte 0x0a, 0x03, 0xbe, 0xbe, 0xec, 0x00, 0x0b, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Entertaining Rag             130"
-	aligned_string "Play The Sting!              130"
-	aligned_string "Joplin Rag                   130"
-NakaInst_Syncopated_Wood_130:	aligned_string "Syncopated Wood              130"
-	.byte 0xca, 0xbf
-	.byte 0xec, 0x00, 0x0c, 0x03, 0xa8, 0xbf, 0xec, 0x00
-	.byte 0x0d, 0x03, 0x86, 0xbf, 0xec, 0x00, 0x0e, 0x03
-	.long NakaInst_Maple_Leaf_Piano_180
-	.byte 0x0f, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Maple_Leaf_Piano_180:	aligned_string "Maple Leaf Piano             180"
-	aligned_string "Ragtime Duet                 180"
-	aligned_string "Ragedy Sax                   180"
-	aligned_string "Banjo Ragtime                180"
-	.byte 0x70, 0xc0, 0xec, 0x00
-	.byte 0x10, 0x03, 0x4e, 0xc0, 0xec, 0x00, 0x11, 0x03
-	.long NakaInst_Barber_Shop_Jazz_196_ECC02C
-	.byte 0x12, 0x03, 0x0a, 0xc0
-	.byte 0xec, 0x00, 0x13, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Honky-Tonk Band              196"
-NakaInst_Barber_Shop_Jazz_196_ECC02C:	aligned_string "Barber Shop Jazz             196"
-	aligned_string "Bourbon Street               196"
-	aligned_string "Trad Jazz Band               196"
-	.byte 0x16, 0xc1, 0xec, 0x00, 0x14, 0x03
-	.long NakaInst_Liquorice_Dixie_185
-	.byte 0x15, 0x03, 0xd2, 0xc0
-	.byte 0xec, 0x00, 0x16, 0x03, 0xb0, 0xc0, 0xec, 0x00
-	.byte 0x17, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Alexander's Band             185"
-	aligned_string "Dixie Partners               185"
-NakaInst_Liquorice_Dixie_185:	aligned_string "Liquorice Dixie              185"
-	aligned_string "Dixie Bone                   185"
-	.long NakaInst_Never_On_A_120
-	.byte 0x18, 0x03, 0x9a, 0xc1
-	.byte 0xec, 0x00, 0x19, 0x03, 0x78, 0xc1, 0xec, 0x00
-	.byte 0x1a, 0x03, 0x56, 0xc1, 0xec, 0x00, 0x1b, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Bouzouki Masters             120"
-	aligned_string "Zorba's Band                 120"
-	aligned_string "Plate Dance                  120"
-NakaInst_Never_On_A_120:	aligned_string "Never On A?                  120"
-	.byte 0x62, 0xc2
-	.byte 0xec, 0x00, 0x1c, 0x03, 0x40, 0xc2, 0xec, 0x00
-	.byte 0x1d, 0x03, 0x1e, 0xc2, 0xec, 0x00, 0x1e, 0x03
-	.long NakaInst_Cossack_Strings_141
-	.byte 0x1f, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Cossack_Strings_141:	aligned_string "Cossack Strings              141"
-	aligned_string "Baltic Reeds                 141"
-	aligned_string "Moscow Mandolins             141"
-	aligned_string "Vladivar Strings             141"
-	.byte 0x08, 0xc3, 0xec, 0x00
-	.byte 0x20, 0x03, 0xe6, 0xc2, 0xec, 0x00, 0x21, 0x03
-	.long NakaInst_Hungarian_Duet_115
-	.byte 0x22, 0x03, 0xa2, 0xc2
-	.byte 0xec, 0x00, 0x23, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Folklore Brass               115"
-NakaInst_Hungarian_Duet_115:	aligned_string "Hungarian Duet               115"
-	aligned_string "Gypsy Melody                 115"
-	aligned_string "Goulash Dance                115"
-	.byte 0xae, 0xc3, 0xec, 0x00, 0x24, 0x03
-	.long NakaInst_Spider_Dance_128
-	.byte 0x25, 0x03, 0x6a, 0xc3
-	.byte 0xec, 0x00, 0x26, 0x03, 0x48, 0xc3, 0xec, 0x00
-	.byte 0x27, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Great Accordions             128"
-	aligned_string "Sing Along!                  128"
-NakaInst_Spider_Dance_128:	aligned_string "Spider Dance                 128"
-	aligned_string "Ole Guitar                   128"
-	.long NakaInst_Jalapeno_Bellows_112
-	.byte 0x28, 0x03, 0x32, 0xc4
-	.byte 0xec, 0x00, 0x29, 0x03, 0x10, 0xc4, 0xec, 0x00
-	.byte 0x2a, 0x03, 0xee, 0xc3, 0xec, 0x00, 0x2b, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Tex Mex Mix                  112"
-	aligned_string "Cucaracha Duo                112"
-	aligned_string "Hat Dance Frets              112"
-NakaInst_Jalapeno_Bellows_112:	aligned_string "Jalapeno Bellows             112"
-	.byte 0xfa, 0xc4
-	.byte 0xec, 0x00, 0x2c, 0x03, 0xd8, 0xc4, 0xec, 0x00
-	.byte 0x2d, 0x03, 0xb6, 0xc4, 0xec, 0x00, 0x2e, 0x03
-	.long NakaInst_Solid_Distortion_122
-	.byte 0x2f, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Solid_Distortion_122:	aligned_string "Solid Distortion             122"
-	aligned_string "Penny Folk Song              122"
-	aligned_string "Steeleye Guitar              122"
-	aligned_string "Folk Fiddles                 122"
-StyleVar_BluegrassTime:
-	.byte 0xa0, 0xc5, 0xec, 0x00
-	.byte 0x30, 0x03, 0x7e, 0xc5, 0xec, 0x00, 0x31, 0x03
-	.long NakaInst_Cajun_Hoedown_124
-	.byte 0x32, 0x03, 0x3a, 0xc5
-	.byte 0xec, 0x00, 0x33, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Don't Fiddle It!             124"
-NakaInst_Cajun_Hoedown_124:	aligned_string "Cajun Hoedown                124"
-	aligned_string "Pedal Steel Duel             124"
-	aligned_string "Bluegrass Harp               124"
-StyleVar_ModernHoedown:
-	.byte 0x46, 0xc6, 0xec, 0x00, 0x34, 0x03
-	.long NakaInst_Country_Licks_235_ECC624
-	.byte 0x35, 0x03, 0x02, 0xc6
-	.byte 0xec, 0x00, 0x36, 0x03, 0xe0, 0xc5, 0xec, 0x00
-	.byte 0x37, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Yee Ha Fiddles               235"
-	aligned_string "Hard Country Sax             235"
-NakaInst_Country_Licks_235_ECC624:	aligned_string "Country Licks                235"
-	aligned_string "Bluegrass Piano              235"
-StyleVar_KentuckyBlue:
-	.long NakaInst_Country_Fiddle_123
-	.byte 0x38, 0x03, 0xca, 0xc6
-	.byte 0xec, 0x00, 0x39, 0x03, 0xa8, 0xc6, 0xec, 0x00
-	.byte 0x3a, 0x03, 0x86, 0xc6, 0xec, 0x00, 0x3b, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Hoedown Strings              123"
-	aligned_string "Solid Bluegrass              123"
-	aligned_string "Banjo Contest                123"
-NakaInst_Country_Fiddle_123:	aligned_string "Country Fiddle               123"
-StyleVar_TruckerCountry:
-	.byte 0x92, 0xc7
-	.byte 0xec, 0x00, 0x3c, 0x03, 0x70, 0xc7, 0xec, 0x00
-	.byte 0x3d, 0x03, 0x4e, 0xc7, 0xec, 0x00, 0x3e, 0x03
-	.long NakaInst_Fogerty_s_Stomp_206_ECC72C
-	.byte 0x3f, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Fogerty_s_Stomp_206_ECC72C:	aligned_string "Fogerty's Stomp              206"
-	aligned_string "On The Highway               206"
-	aligned_string "Convoy Bluegrass             206"
-	aligned_string "Trucker's Stop               206"
-StyleVar_CountryDance:
-	.byte 0x38, 0xc8, 0xec, 0x00
-	.byte 0x40, 0x03, 0x16, 0xc8, 0xec, 0x00, 0x41, 0x03
-	.long NakaInst_Nashville_Dance_147
-	.byte 0x42, 0x03, 0xd2, 0xc7
-	.byte 0xec, 0x00, 0x43, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Barn Dance Band              147"
-NakaInst_Nashville_Dance_147:	aligned_string "Nashville Dance              147"
-	aligned_string "Two Step Duo                 147"
-	aligned_string "Yee Ha Geetar                147"
-StyleVar_HillbillyBlues:
-	.byte 0xde, 0xc8, 0xec, 0x00, 0x44, 0x03
-	.long NakaInst_Steel_City_Blues_128
-	.byte 0x45, 0x03, 0x9a, 0xc8
-	.byte 0xec, 0x00, 0x46, 0x03, 0x78, 0xc8, 0xec, 0x00
-	.byte 0x47, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Southern Unison              128"
-	aligned_string "Country Ivories              128"
-NakaInst_Steel_City_Blues_128:	aligned_string "Steel City Blues             128"
-	aligned_string "Blue Harmonies               128"
-StyleVar_70sCountryPop:
-	.long NakaInst_Karen_s_Country_173
-	.byte 0x48, 0x03, 0x62, 0xc9
-	.byte 0xec, 0x00, 0x49, 0x03, 0x40, 0xc9, 0xec, 0x00
-	.byte 0x4a, 0x03, 0x1e, 0xc9, 0xec, 0x00, 0x4b, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Roads to Country             173"
-	aligned_string "EZ Steel Country             173"
-	aligned_string "Carpenkeys                   173"
-NakaInst_Karen_s_Country_173:	aligned_string "Karen's Country              173"
-StyleVar_CountryRomance:
-	.byte 0x2a, 0xca
-	.byte 0xec, 0x00, 0x4c, 0x03, 0x08, 0xca, 0xec, 0x00
-	.byte 0x4d, 0x03, 0xe6, 0xc9, 0xec, 0x00, 0x4e, 0x03
-	.long NakaInst_Kentucky_Vocals_88
-	.byte 0x4f, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Kentucky_Vocals_88:	aligned_string "Kentucky Vocals               88"
-	aligned_string "Nashville Ballad              88"
-	aligned_string "Country Harp                  88"
-	aligned_string "Country Tenor                 88"
-StyleVar_WesternBallads:
-	.byte 0xd0, 0xca, 0xec, 0x00
-	.byte 0x50, 0x03, 0xae, 0xca, 0xec, 0x00, 0x51, 0x03
-	.long NakaInst_Cowboy_Saxes_85
-	.byte 0x52, 0x03, 0x6a, 0xca
-	.byte 0xec, 0x00, 0x53, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Chet's Country                85"
-NakaInst_Cowboy_Saxes_85:	aligned_string "Cowboy Saxes                  85"
-	aligned_string "Blueberry Saxes               85"
-	aligned_string "Kramer Country                85"
-StyleVar_CountryFolks:
-	.byte 0x76, 0xcb, 0xec, 0x00, 0x54, 0x03
-	.long NakaInst_South_Concertina_170
-	.byte 0x55, 0x03, 0x32, 0xcb
-	.byte 0xec, 0x00, 0x56, 0x03, 0x10, 0xcb, 0xec, 0x00
-	.byte 0x57, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "In Daa Country               170"
-	aligned_string "Country Radio                170"
-NakaInst_South_Concertina_170:	aligned_string "South Concertina             170"
-	aligned_string "Southern Style               170"
-StyleVar_Country88:
-	.long NakaInst_Wandrin_Keys_75
-	.byte 0x58, 0x03, 0xfa, 0xcb
-	.byte 0xec, 0x00, 0x59, 0x03, 0xd8, 0xcb, 0xec, 0x00
-	.byte 0x5a, 0x03, 0xb6, 0xcb, 0xec, 0x00, 0x5b, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Rodeo Organ                   75"
-	aligned_string "Horseback Duo                 75"
-	aligned_string "Country Blues                 75"
-NakaInst_Wandrin_Keys_75:	aligned_string "Wandrin' Keys                 75"
-StyleVar_CountryLove:
-	.byte 0xc2, 0xcc
-	.byte 0xec, 0x00, 0x5c, 0x03, 0xa0, 0xcc, 0xec, 0x00
-	.byte 0x5d, 0x03, 0x7e, 0xcc, 0xec, 0x00, 0x5e, 0x03
-	.long NakaInst_Tennessee_Guitar_88
-	.byte 0x5f, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Tennessee_Guitar_88:	aligned_string "Tennessee Guitar              88"
-	aligned_string "Mellow Country                88"
-	aligned_string "Country Keys                  88"
-	aligned_string "Harmonica Waltz               88"
-StyleVar_ModernCountry:
-	.byte 0x68, 0xcd, 0xec, 0x00
-	.byte 0x60, 0x03, 0x46, 0xcd, 0xec, 0x00, 0x61, 0x03
-	.long NakaInst_Nashville_Steel_116
-	.byte 0x62, 0x03, 0x02, 0xcd
-	.byte 0xec, 0x00, 0x63, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Country Rock                 116"
-NakaInst_Nashville_Steel_116:	aligned_string "Nashville Steel              116"
-	aligned_string "Duelling Guitars             116"
-	aligned_string "Fiddle Rock                  116"
-StyleVar_EZCountryRock:
-	.byte 0x0e, 0xce, 0xec, 0x00, 0x64, 0x03
-	.long NakaInst_Ricky_s_Guitar_128
-	.byte 0x65, 0x03, 0xca, 0xcd
-	.byte 0xec, 0x00, 0x66, 0x03, 0xa8, 0xcd, 0xec, 0x00
-	.byte 0x67, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Ranch Rock                   128"
-	aligned_string "Dolly's Strings              128"
-NakaInst_Ricky_s_Guitar_128:	aligned_string "Ricky's Guitar               128"
-	aligned_string "Cowboy Suite                 128"
-StyleVar_OldCountryHits:
-	.long NakaInst_Geetar_Man_113
-	.byte 0x68, 0x03, 0x92, 0xce
-	.byte 0xec, 0x00, 0x69, 0x03, 0x70, 0xce, 0xec, 0x00
-	.byte 0x6a, 0x03, 0x4e, 0xce, 0xec, 0x00, 0x6b, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Steel & Strings              113"
-	aligned_string "Country Warmth               113"
-	aligned_string "Let It Shine!                113"
-NakaInst_Geetar_Man_113:	aligned_string "Geetar Man                   113"
-StyleVar_NewCountryRock:
-	.byte 0x5a, 0xcf
-	.byte 0xec, 0x00, 0x6c, 0x03, 0x38, 0xcf, 0xec, 0x00
-	.byte 0x6d, 0x03, 0x16, 0xcf, 0xec, 0x00, 0x6e, 0x03
-	.long NakaInst_Country_Horns_115
-	.byte 0x6f, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Country_Horns_115:	aligned_string "Country Horns                115"
-	aligned_string "In Sax Country               115"
-	aligned_string "Rockin' Country              115"
-	aligned_string "Tennessee Rock               115"
-StyleVar_CountryHits:
-	.byte 0x00, 0xd0, 0xec, 0x00
-	.byte 0x70, 0x03, 0xde, 0xcf, 0xec, 0x00, 0x71, 0x03
-	.long NakaInst_Hard_Country_160
-	.byte 0x72, 0x03, 0x9a, 0xcf
-	.byte 0xec, 0x00, 0x73, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Muted Country                160"
-NakaInst_Hard_Country_160:	aligned_string "Hard Country                 160"
-	aligned_string "Clean Country                160"
-	aligned_string "Western Keys                 160"
-	.byte 0xa6, 0xd0, 0xec, 0x00, 0x74, 0x03
-	.long NakaInst_Ham_Bossa_66
-	.byte 0x75, 0x03, 0x62, 0xd0
-	.byte 0xec, 0x00, 0x76, 0x03, 0x40, 0xd0, 0xec, 0x00
-	.byte 0x77, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Jobim Strings                 66"
-	aligned_string "Brasilian Flute               66"
-NakaInst_Ham_Bossa_66:	aligned_string "Ham & Bossa                   66"
-	aligned_string "Siesta Guitars                66"
-	.long NakaInst_Latin_Tines_68
-	.byte 0x78, 0x03, 0x2a, 0xd1
-	.byte 0xec, 0x00, 0x79, 0x03, 0x08, 0xd1, 0xec, 0x00
-	.byte 0x7a, 0x03, 0xe6, 0xd0, 0xec, 0x00, 0x7b, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Bossa Society                 68"
-	aligned_string "Getz Bossa                    68"
-	aligned_string "Bossa Cocktail                68"
-NakaInst_Latin_Tines_68:	aligned_string "Latin Tines                   68"
-	.byte 0xf2, 0xd1
-	.byte 0xec, 0x00, 0x7c, 0x03, 0xd0, 0xd1, 0xec, 0x00
-	.byte 0x7d, 0x03, 0xae, 0xd1, 0xec, 0x00, 0x7e, 0x03
-	.long NakaInst_Modern_Bossa_74
-	.byte 0x7f, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Modern_Bossa_74:	aligned_string "Modern Bossa                  74"
-	aligned_string "Bossa Duet                    74"
-	aligned_string "Meditating Sax                74"
-	aligned_string "Ipenema Flute                 74"
-	.byte 0x98, 0xd2, 0xec, 0x00
-	.byte 0x80, 0x03, 0x76, 0xd2, 0xec, 0x00, 0x81, 0x03
-	.long NakaInst_Julio_s_Romance_119
-	.byte 0x82, 0x03, 0x32, 0xd2
-	.byte 0xec, 0x00, 0x83, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "El Toro's Rhumba             119"
-NakaInst_Julio_s_Romance_119:	aligned_string "Julio's Romance              119"
-	aligned_string "Carmen's Octaves             119"
-	aligned_string "Mellow Rhumba                119"
-	.byte 0x3e, 0xd3, 0xec, 0x00, 0x84, 0x03
-	.long NakaInst_Besame_Strings_120_ECD31C
-	.byte 0x85, 0x03, 0xfa, 0xd2
-	.byte 0xec, 0x00, 0x86, 0x03, 0xd8, 0xd2, 0xec, 0x00
-	.byte 0x87, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Elegant Keys                 120"
-	aligned_string "Latin Symphony               120"
-NakaInst_Besame_Strings_120_ECD31C:	aligned_string "Besame Strings               120"
-	aligned_string "Mediterranean!               120"
-	.long NakaInst_Amor_Reed_117_ECD3E4
-	.byte 0x88, 0x03, 0xc2, 0xd3
-	.byte 0xec, 0x00, 0x89, 0x03, 0xa0, 0xd3, 0xec, 0x00
-	.byte 0x8a, 0x03, 0x7e, 0xd3, 0xec, 0x00, 0x8b, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Beguine Register             117"
-	aligned_string "Besame Unison                117"
-	aligned_string "Society Beguine              117"
-NakaInst_Amor_Reed_117_ECD3E4:	aligned_string "Amor Reed                    117"
-	.byte 0x8a, 0xd4
-	.byte 0xec, 0x00, 0x8c, 0x03, 0x68, 0xd4, 0xec, 0x00
-	.byte 0x8d, 0x03, 0x46, 0xd4, 0xec, 0x00, 0x8e, 0x03
-	.long NakaInst_Bolero_Orchestra_120_ECD424
-	.byte 0x8f, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Bolero_Orchestra_120_ECD424:	aligned_string "Bolero Orchestra             120"
-	aligned_string "Latin Love Song              120"
-	aligned_string "Bolero Keys                  120"
-	aligned_string "Not Ravel's.....             120"
-	.byte 0x30, 0xd5, 0xec, 0x00
-	.byte 0x90, 0x03, 0x0e, 0xd5, 0xec, 0x00, 0x91, 0x03
-	.long NakaInst_Holiday_Rhumba_115
-	.byte 0x92, 0x03, 0xca, 0xd4
-	.byte 0xec, 0x00, 0x93, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Latin Relaxation             115"
-NakaInst_Holiday_Rhumba_115:	aligned_string "Holiday Rhumba               115"
-	aligned_string "Fantasy Rhumba               115"
-	aligned_string "Spanish Romance              115"
-	.byte 0xd6, 0xd5, 0xec, 0x00, 0x94, 0x03
-	.long NakaInst_Pepito_For_Pepe_130
-	.byte 0x95, 0x03, 0x92, 0xd5
-	.byte 0xec, 0x00, 0x96, 0x03, 0x70, 0xd5, 0xec, 0x00
-	.byte 0x97, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Puente's Bigband             130"
-	aligned_string "Saxes Of Tito                130"
-NakaInst_Pepito_For_Pepe_130:	aligned_string "Pepito For Pepe              130"
-	aligned_string "Two Cups Of Cha!             130"
-	.long NakaInst_Mambo_Bravisimo_129
-	.byte 0x98, 0x03, 0x5a, 0xd6
-	.byte 0xec, 0x00, 0x99, 0x03, 0x38, 0xd6, 0xec, 0x00
-	.byte 0x9a, 0x03, 0x16, 0xd6, 0xec, 0x00, 0x9b, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Last Latin Brass             129"
-	aligned_string "Ambros Saxes                 129"
-	aligned_string "Mellow Mambo                 129"
-NakaInst_Mambo_Bravisimo_129:	aligned_string "Mambo Bravisimo              129"
-	.byte 0x22, 0xd7
-	.byte 0xec, 0x00, 0x9c, 0x03, 0x00, 0xd7, 0xec, 0x00
-	.byte 0x9d, 0x03, 0xde, 0xd6, 0xec, 0x00, 0x9e, 0x03
-	.long NakaInst_Modern_Ballroom_134
-	.byte 0x9f, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Modern_Ballroom_134:	aligned_string "Modern Ballroom              134"
-	aligned_string "Mambo Mania!                 134"
-	aligned_string "Do The Mambo!                134"
-	aligned_string "Sax Mamboist                 134"
-	.byte 0xc8, 0xd7, 0xec, 0x00
-	.byte 0xa0, 0x03, 0xa6, 0xd7, 0xec, 0x00, 0xa1, 0x03
-	.long NakaInst_Saxy_Mambo_132
-	.byte 0xa2, 0x03, 0x62, 0xd7
-	.byte 0xec, 0x00, 0xa3, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Fiesta Grande                132"
-NakaInst_Saxy_Mambo_132:	aligned_string "Saxy Mambo                   132"
-	aligned_string "Mambo Jambo!                 132"
-	aligned_string "Seville Octaves              132"
-	.byte 0x6e, 0xd8, 0xec, 0x00, 0xa4, 0x03
-	.long NakaInst_Cumbia_Sol_90
-	.byte 0xa5, 0x03, 0x2a, 0xd8
-	.byte 0xec, 0x00, 0xa6, 0x03, 0x08, 0xd8, 0xec, 0x00
-	.byte 0xa7, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Fall For Cumbia               90"
-	aligned_string "Down Mexico Way               90"
-NakaInst_Cumbia_Sol_90:	aligned_string "Cumbia Sol                    90"
-	aligned_string "Sunshine Alto                 90"
-	.long NakaInst_Caribbean_Flute_83
-	.byte 0xa8, 0x03, 0xf2, 0xd8
-	.byte 0xec, 0x00, 0xa9, 0x03, 0xd0, 0xd8, 0xec, 0x00
-	.byte 0xaa, 0x03, 0xae, 0xd8, 0xec, 0x00, 0xab, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Jamaican Voices               83"
-	aligned_string "Island Duet                   83"
-	aligned_string "Barbados Beat                 83"
-NakaInst_Caribbean_Flute_83:	aligned_string "Caribbean Flute               83"
-	.byte 0xba, 0xd9
-	.byte 0xec, 0x00, 0xac, 0x03, 0x98, 0xd9, 0xec, 0x00
-	.byte 0xad, 0x03, 0x76, 0xd9, 0xec, 0x00, 0xae, 0x03
-	.long NakaInst_Brazil_Fanfare_114
-	.byte 0xaf, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-NakaInst_Brazil_Fanfare_114:	aligned_string "Brazil Fanfare               114"
-	aligned_string "Samba Soloist                114"
-	aligned_string "Festival Horns               114"
-	aligned_string "Rio De Samba                 114"
-	.byte 0x60, 0xda, 0xec, 0x00
-	.byte 0xb0, 0x03, 0x3e, 0xda, 0xec, 0x00, 0xb1, 0x03
-	.long NakaInst_Sunshine_Sax_120
-	.byte 0xb2, 0x03, 0xfa, 0xd9
-	.byte 0xec, 0x00, 0xb3, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Merengue Amigos              120"
-NakaInst_Sunshine_Sax_120:	aligned_string "Sunshine Sax                 120"
-	aligned_string "Merengue Party               120"
-	aligned_string "Time To Merengue             120"
-	.byte 0x06, 0xdb, 0xec, 0x00, 0xb4, 0x03
-	.long NakaInst_12_String_Samba_108
-	.byte 0xb5, 0x03, 0xc2, 0xda
-	.byte 0xec, 0x00, 0xb6, 0x03, 0xa0, 0xda, 0xec, 0x00
-	.byte 0xb7, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Tropical Bridge              108"
-	aligned_string "Rio Horns                    108"
-NakaInst_12_String_Samba_108:	aligned_string "12 String Samba              108"
-	aligned_string "Deep in Brazil               108"
-	.long NakaInst_Torero_s_Trumpet_125
-	.byte 0xb8, 0x03, 0x8a, 0xdb
-	.byte 0xec, 0x00, 0xb9, 0x03, 0x68, 0xdb, 0xec, 0x00
-	.byte 0xba, 0x03, 0x46, 0xdb, 0xec, 0x00, 0xbb, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Toreador Band                125"
-	aligned_string "Gitarero-Ole!!               125"
-	aligned_string "Saxadoble!                   125"
-NakaInst_Torero_s_Trumpet_125:	aligned_string "Torero's Trumpet             125"
-	.byte 0x52, 0xdc
-	.byte 0xec, 0x00, 0xbc, 0x03, 0x30, 0xdc, 0xec, 0x00
-	.byte 0xbd, 0x03, 0x0e, 0xdc, 0xec, 0x00, 0xbe, 0x03
-	.long LABEL_ECDBEC
-	ld	(xsp+3), 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-	aligned_string "Beach Party Song             152"
-	aligned_string "Coconut Frets                152"
-	aligned_string "Calypso Steel                152"
-	aligned_string "Limbo Flautist               152"
-	.byte 0xf8, 0xdc, 0xec, 0x00
-	.byte 0xc0, 0x03, 0xd6, 0xdc, 0xec, 0x00, 0xc1, 0x03
-	.long LABEL_ECDCB4
-	.byte 0xc2, 0x03, 0x92, 0xdc
-	.byte 0xec, 0x00, 0xc3, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Havana Section               110"
-	aligned_string "Cuban Reeds                  110"
-	aligned_string "Wide Salsa                   110"
-	aligned_string "Salsa Keys                   110"
-	.byte 0x9e, 0xdd, 0xec, 0x00, 0xc4, 0x03
-	.long LABEL_ECDD7C
-	.byte 0xc5, 0x03, 0x5a, 0xdd
-	.byte 0xec, 0x00, 0xc6, 0x03, 0x38, 0xdd, 0xec, 0x00
-	.byte 0xc7, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Carnival Horns               110"
-	aligned_string "Samba Accordion              110"
-	aligned_string "Latino Piccolo               110"
-	aligned_string "Flugel Samba                 110"
-	.long LABEL_ECDE44
-	.byte 0xc8, 0x03, 0x22, 0xde
-	.byte 0xec, 0x00, 0xc9, 0x03, 0x00, 0xde, 0xec, 0x00
-	.byte 0xca, 0x03, 0xde, 0xdd, 0xec, 0x00, 0xcb, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Windies Mallets              102"
-	aligned_string "Latin Fusion                 102"
-	aligned_string "Spyra Steel                  102"
-	aligned_string "Jamaican Bars                102"
-	.byte 0xea, 0xde
-	.byte 0xec, 0x00, 0xcc, 0x03, 0xc8, 0xde, 0xec, 0x00
-	.byte 0xcd, 0x03, 0xa6, 0xde, 0xec, 0x00, 0xce, 0x03
-	.long LABEL_ECDE84
-	.byte 0xcf, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-	aligned_string "Samba Union                  110"
-	aligned_string "Julio's Guitar               110"
-	aligned_string "Tico Tabs                    110"
-	aligned_string "Miranda Mallets              110"
-	.byte 0x90, 0xdf, 0xec, 0x00
-	.byte 0xd0, 0x03, 0x6e, 0xdf, 0xec, 0x00, 0xd1, 0x03
-	.long LABEL_ECDF4C
-	.byte 0xd2, 0x03, 0x2a, 0xdf
-	.byte 0xec, 0x00, 0xd3, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Samba Party                  110"
-	aligned_string "New Organ Samba              110"
-	aligned_string "Carnival Reed                110"
-	aligned_string "Samba Strategy               110"
-	.byte 0x36, 0xe0, 0xec, 0x00, 0xd4, 0x03
-	.long LABEL_ECE014
-	.byte 0xd5, 0x03, 0xf2, 0xdf
-	.byte 0xec, 0x00, 0xd6, 0x03, 0xd0, 0xdf, 0xec, 0x00
-	.byte 0xd7, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Asian Gold                    67"
-	aligned_string "Pacific Strings               67"
-	aligned_string "Nice Keroncong                67"
-	aligned_string "Keroncong Flute               67"
-	.long LABEL_ECE0DC
-	ld	wa, 0xe0ba
-	.byte 0xec, 0x00, 0xd9, 0x03, 0x98, 0xe0, 0xec, 0x00
-	.byte 0xda, 0x03, 0x76, 0xe0, 0xec, 0x00, 0xdb, 0x03
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Bright Dangdut               150"
-	aligned_string "Orch.Dangdut                 150"
-	aligned_string "Hot Dangdut                  150"
-	aligned_string "Easy Dangdut                 150"
-	.byte 0x82, 0xe1
-	.byte 0xec, 0x00, 0xdc, 0x03, 0x60, 0xe1, 0xec, 0x00
-	.byte 0xdd, 0x03, 0x3e, 0xe1, 0xec, 0x00, 0xde, 0x03
-	.long LABEL_ECE11C
-	.byte 0xdf, 0x03, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-	aligned_string "Padang Beat                   98"
-	aligned_string "Minangkabau                   98"
-	aligned_string "Galombang                     98"
-	aligned_string "Talempong                     98"
-	.byte 0x28, 0xe2, 0xec, 0x00
-	.byte 0xe0, 0x03, 0x06, 0xe2, 0xec, 0x00, 0xe1, 0x03
-	.long LABEL_ECE1E4
-	.byte 0xe2, 0x03, 0xc2, 0xe1
-	.byte 0xec, 0x00, 0xe3, 0x03, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Jamaica Synth                 89"
-	aligned_string "Rasta Voice                   89"
-	aligned_string "Reggae Saw                    89"
-	aligned_string "Funky Reggae                  89"
-	.byte 0xce, 0xe2, 0xec, 0x00, 0xe4, 0x03
-	.long LABEL_ECE2AC
-	.byte 0xe5, 0x03, 0x8a, 0xe2
-	.byte 0xec, 0x00, 0xe6, 0x03, 0x68, 0xe2, 0xec, 0x00
-	.byte 0xe7, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Caribbean Synth               90"
-	aligned_string "Reggae Horns                  90"
-	aligned_string "Marley's Drums                90"
-	aligned_string "Wailers' Guitar               90"
-StyleGroup_ModernDance_Table:
-	.long NakaInst_German_Schlager
-	.long StyleVar_GermanSchlager
-	.long NakaInst_Easy_Play_8_Beat
-	.long StyleVar_EasyPlay8Beat
-	.long NakaInst_Rock_After_Eight
-	.long StyleVar_RockAfterEight
-	.long NakaInst_Orchestral_Beat
-	.long StyleVar_OrchestralBeat
-	.long NakaInst_Smooth_Rock
-	.long StyleVar_SmoothRock
-	.long NakaInst_Greatest_Hits
-	.long StyleVar_GreatestHits
-	.long NakaInst_Studio_8_Beat
-	.long StyleVar_Studio8Beat
-	.long NakaInst_Ballad_Producer
-	.long StyleVar_BalladProducer
-	.long NakaInst_Love_Songs
-	.long StyleVar_LoveSongs
-	.long NakaInst_16_Beat_Groove
-	.long StyleVar_16BeatGroove
-	.long NakaInst_Easy_Play_16Beat
-	.long StyleVar_EasyPlay16Beat
-	.long NakaInst_E_P_Moments
-	.long StyleVar_EPMoments
-	.long NakaInst_Gentle_16_Beat
-	.long StyleVar_Gentle16Beat
-	.long NakaInst_Atmospheric_16
-	.long StyleVar_Atmospheric16
-	.long NakaInst_Synth_Ballad
-	.long StyleVar_SynthBallad
-	.long NakaInst_Grands_on_Stage
-	.long StyleVar_GrandsOnStage
-	.long NakaInst_Modern_Ballads
-	.long StyleVar_ModernBallads
-	.long NakaInst_Night_Club_Dance
-	.long StyleVar_NightClubDance
-	.long NakaInst_50_s_Love_Songs
-	.long StyleVar_50sLoveSongs
-	.long NakaInst_Oldie_Ballads
-	.long StyleVar_OldieBallads
-	.long NakaInst_Soft_Schlager
-	.long StyleVar_SoftSchlager
-	.long NakaInst_Oldie_Drawbars
-	.long StyleVar_OldieDrawbars
-	.long NakaInst_Euro_Ballads
-	.long StyleVar_EuroBallads
-	.long NakaInst_Romantic_Band
-	.long StyleVar_RomanticBand
-	.long NakaInst_Jazz_Serenade
-	.long StyleVar_JazzSerenade
-	.long NakaInst_Nat_s_Ballads
-	.long StyleVar_NatsBallads
-	.long NakaInst_Drawbar_Combo
-	.long StyleVar_DrawbarCombo
-	.long NakaInst_Paris_Romance
-	.long StyleVar_ParisRomance
-	.long NakaInst_Easy_Play_Waltz
-	.long StyleVar_EasyPlayWaltz
-	.long NakaInst_Parisian_Nights
-	.long StyleVar_ParisianNights
-	.long NakaInst_Easy_Jazz_Waltz
-	.long StyleVar_EasyJazzWaltz
-	.zero 8
-NakaInst_Easy_Jazz_Waltz:	aligned_string "Easy Jazz Waltz "
-NakaInst_Parisian_Nights:	aligned_string "Parisian Nights "
-NakaInst_Easy_Play_Waltz:	aligned_string "Easy Play Waltz "
-NakaInst_Paris_Romance:	aligned_string "Paris Romance   "
-NakaInst_Drawbar_Combo:	aligned_string "Drawbar Combo   "
-NakaInst_Nat_s_Ballads:	aligned_string "Nat's Ballads   "
-NakaInst_Jazz_Serenade:	aligned_string "Jazz Serenade   "
-NakaInst_Romantic_Band:	aligned_string "Romantic Band   "
-NakaInst_Euro_Ballads:	aligned_string "Euro Ballads    "
-NakaInst_Oldie_Drawbars:	aligned_string "Oldie Drawbars  "
-NakaInst_Soft_Schlager:	aligned_string "Soft Schlager   "
-NakaInst_Oldie_Ballads:	aligned_string "Oldie Ballads   "
-NakaInst_50_s_Love_Songs:	aligned_string "50's Love Songs "
-NakaInst_Night_Club_Dance:	aligned_string "Night Club Dance"
-NakaInst_Modern_Ballads:	aligned_string "Modern Ballads  "
-NakaInst_Grands_on_Stage:	aligned_string "Grands on Stage "
-NakaInst_Synth_Ballad:	aligned_string "Synth Ballad    "
-NakaInst_Atmospheric_16:	aligned_string "Atmospheric 16  "
-NakaInst_Gentle_16_Beat:	aligned_string "Gentle 16 Beat  "
-NakaInst_E_P_Moments:	aligned_string "E.P. Moments    "
-NakaInst_Easy_Play_16Beat:	aligned_string "Easy Play 16Beat"
-NakaInst_16_Beat_Groove:	aligned_string "16 Beat Groove  "
-NakaInst_Love_Songs:	aligned_string "Love Songs      "
-NakaInst_Ballad_Producer:	aligned_string "Ballad Producer "
-NakaInst_Studio_8_Beat:	aligned_string "Studio 8 Beat   "
-NakaInst_Greatest_Hits:	aligned_string "Greatest Hits   "
-NakaInst_Smooth_Rock:	aligned_string "Smooth Rock     "
-NakaInst_Orchestral_Beat:	aligned_string "Orchestral Beat "
-NakaInst_Rock_After_Eight:	aligned_string "Rock After Eight"
-NakaInst_Easy_Play_8_Beat:	aligned_string "Easy Play 8 Beat"
-NakaInst_German_Schlager:	aligned_string "German Schlager "
-StyleGroup_RockPop_PairTable:
-	.byte 0x6e, 0xe9
-	.byte 0xec, 0x00, 0xee, 0x54, 0xec, 0x00, 0x5c, 0xe9
-	.byte 0xec, 0x00, 0x94, 0x55, 0xec, 0x00, 0x4a, 0xe9
-	.byte 0xec, 0x00, 0x3a, 0x56, 0xec, 0x00, 0x38, 0xe9
-	.byte 0xec, 0x00, 0xe0, 0x56, 0xec, 0x00, 0x26, 0xe9
-	.byte 0xec, 0x00, 0x86, 0x57, 0xec, 0x00, 0x14, 0xe9
-	.byte 0xec, 0x00, 0x2c, 0x58, 0xec, 0x00, 0x02, 0xe9
-	.byte 0xec, 0x00, 0xd2, 0x58, 0xec, 0x00, 0xf0, 0xe8
-	.byte 0xec, 0x00, 0x78, 0x59, 0xec, 0x00, 0xde, 0xe8
-	.byte 0xec, 0x00, 0x1e, 0x5a, 0xec, 0x00, 0xcc, 0xe8
-	.byte 0xec, 0x00, 0xc4, 0x5a, 0xec, 0x00, 0xba, 0xe8
-	.byte 0xec, 0x00, 0x6a, 0x5b, 0xec, 0x00, 0xa8, 0xe8
-	.byte 0xec, 0x00, 0x10, 0x5c, 0xec, 0x00, 0x96, 0xe8
-	.byte 0xec, 0x00, 0xb6, 0x5c, 0xec, 0x00, 0x84, 0xe8
-	.byte 0xec, 0x00, 0x5c, 0x5d, 0xec, 0x00, 0x72, 0xe8
-	.byte 0xec, 0x00, 0x02, 0x5e, 0xec, 0x00, 0x60, 0xe8
-	.byte 0xec, 0x00, 0xa8, 0x5e, 0xec, 0x00, 0x4e, 0xe8
-	.byte 0xec, 0x00, 0x4e, 0x5f, 0xec, 0x00, 0x3c, 0xe8
-	.byte 0xec, 0x00, 0xf4, 0x5f, 0xec, 0x00, 0x2a, 0xe8
-	.byte 0xec, 0x00, 0x9a, 0x60, 0xec, 0x00, 0x18, 0xe8
-	.byte 0xec, 0x00, 0x40, 0x61, 0xec, 0x00, 0x06, 0xe8
-	.byte 0xec, 0x00, 0xe6, 0x61, 0xec, 0x00, 0xf4, 0xe7
-	.byte 0xec, 0x00, 0x8c, 0x62, 0xec, 0x00, 0xe2, 0xe7
-	.byte 0xec, 0x00, 0x32, 0x63, 0xec, 0x00, 0xd0, 0xe7
-	.byte 0xec, 0x00, 0xd8, 0x63, 0xec, 0x00, 0xbe, 0xe7
-	.byte 0xec, 0x00, 0x7e, 0x64, 0xec, 0x00, 0xac, 0xe7
-	.byte 0xec, 0x00, 0x24, 0x65, 0xec, 0x00, 0x9a, 0xe7
-	.byte 0xec, 0x00, 0xca, 0x65, 0xec, 0x00, 0x88, 0xe7
-	.byte 0xec, 0x00, 0x70, 0x66, 0xec, 0x00, 0x76, 0xe7
-	.byte 0xec, 0x00, 0x16, 0x67, 0xec, 0x00, 0x64, 0xe7
-	.byte 0xec, 0x00, 0xbc, 0x67, 0xec, 0x00, 0x52, 0xe7
-	.byte 0xec, 0x00, 0x62, 0x68, 0xec, 0x00, 0x40, 0xe7
-	.byte 0xec, 0x00, 0x08, 0x69, 0xec, 0x00, 0x2e, 0xe7
-	.byte 0xec, 0x00, 0xae, 0x69, 0xec, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "Straight Funk   "
-	aligned_string "Cool Funk       "
-	aligned_string "Chart Fusion    "
-	aligned_string "Easy Groovin'   "
-	aligned_string "Pop Fusion      "
-	aligned_string "Jazz Pop        "
-	aligned_string "Cool Fusion     "
-	aligned_string "Gentle SwingRock"
-	aligned_string "L.A. Pop        "
-	aligned_string "Power Ballad    "
-	aligned_string "Heavy Shuffle   "
-	aligned_string "Heavy Metal     "
-	aligned_string "Rock Gig        "
-	.ascii "80's Pop"
-NakaInst_Ballads:	aligned_string " Ballads"
-	aligned_string "8 Beat Groove   "
-	aligned_string "Pop Beat        "
-	aligned_string "In The Eighties "
-	aligned_string "80's Love Songs "
-	aligned_string "Euro Pop Shuffle"
-	aligned_string "70's Power Rock "
-	aligned_string "70's Hits       "
-	aligned_string "Glamrock Piano  "
-	aligned_string "70's Fox Dance  "
-	aligned_string "California Pop  "
-	aligned_string "60's Rock       "
-	aligned_string "Liverpool Beat  "
-	aligned_string "Swinging Sixties"
-	aligned_string "Slow Dance      "
-	aligned_string "Boogie Time     "
-	aligned_string "Rockabilly Band "
-	aligned_string "It's Boogie Time"
-	aligned_string "Piano R&Roll    "
-	aligned_string "Fifties Rock    "
-
-
-StyleGroup_PopBallad_Table:
-	.long NakaInst_British_DancePop
-	.long StyleVar_FunkyTalk
-	.long NakaInst_Straight_Dance
-	.long StyleVar_OldDanceHit
-	.long NakaInst_House_Party
-	.long StyleVar_PolyDance
-	.long NakaInst_Techno_World
-	.long StyleVar_DanceSquares
-	.long NakaInst_Glory_Disco
-	.long StyleVar_DiscoTechni
-	.long NakaInst_80_s_Disco
-	.long StyleVar_EuroDiscoHit
-	.long NakaInst_Dance_Floor
-	.long StyleVar_DiscoTalk
-	.long NakaInst_70_s_Dance_Craze
-	.long StyleVar_70sDanceHit
-	.long NakaInst_Hip_Hop
-	.long StyleVar_DiscoRanger
-	.long NakaInst_80_s_90_s
-	.long StyleVar_GloryDisco
-	.long NakaInst_N_Y_Rap
-	.long StyleVar_NYRap
-	.long NakaInst_The_Big_Hit
-	.long StyleVar_HipHop
-	.long NakaInst_Reggae_Hit
-	.long StyleVar_ReggaeHit
-	.long NakaInst_Rio_Goes_Disco
-	.long StyleVar_RioGosDisco
-	.long NakaInst_Jambo_Dance
-	.long StyleVar_JamboDance
-	.long NakaInst_Samba_Party
-	.long StyleVar_SambaParty
-	.long NakaInst_Western_Techno
-	.long StyleVar_LatinFestival
-	.zero 8
-NakaInst_Western_Techno:	aligned_string "Western Techno  "
-NakaInst_Samba_Party:	aligned_string "Samba Party     "
-NakaInst_Jambo_Dance:	aligned_string "Jambo Dance     "
-NakaInst_Rio_Goes_Disco:	aligned_string "Rio Goes Disco  "
-NakaInst_Reggae_Hit:	aligned_string "Reggae Hit      "
-NakaInst_The_Big_Hit:	aligned_string "The Big Hit     "
-NakaInst_N_Y_Rap:	aligned_string "N.Y. Rap        "
-NakaInst_80_s_90_s:	aligned_string "80's & 90's     "
-NakaInst_Hip_Hop:	aligned_string "Hip Hop         "
-NakaInst_70_s_Dance_Craze:	aligned_string "70's Dance Craze"
-NakaInst_Dance_Floor:	aligned_string "Dance Floor     "
-NakaInst_80_s_Disco:	aligned_string "80's Disco      "
-NakaInst_Glory_Disco:	aligned_string "Glory Disco     "
-NakaInst_Techno_World:	aligned_string "Techno World    "
-NakaInst_House_Party:	aligned_string "House Party     "
-NakaInst_Straight_Dance:	aligned_string "Straight Dance  "
-NakaInst_British_DancePop:	aligned_string "British DancePop"
-StyleGroup_PartyMusic_PairTable:
-	.byte 0x26, 0xed, 0xec, 0x00, 0x5a, 0x75
-	.byte 0xec, 0x00, 0x14, 0xed, 0xec, 0x00, 0x00, 0x76
-	.byte 0xec, 0x00, 0x02, 0xed, 0xec, 0x00, 0xa6, 0x76
-	.byte 0xec, 0x00, 0xf0, 0xec, 0xec, 0x00, 0x4c, 0x77
-	.byte 0xec, 0x00, 0xde, 0xec, 0xec, 0x00, 0xf2, 0x77
-	.byte 0xec, 0x00, 0xcc, 0xec, 0xec, 0x00, 0x98, 0x78
-	.byte 0xec, 0x00, 0xba, 0xec, 0xec, 0x00, 0x3e, 0x79
-	.byte 0xec, 0x00, 0xa8, 0xec, 0xec, 0x00, 0xe4, 0x79
-	.byte 0xec, 0x00, 0x96, 0xec, 0xec, 0x00, 0x8a, 0x7a
-	.byte 0xec, 0x00, 0x84, 0xec, 0xec, 0x00, 0x30, 0x7b
-	.byte 0xec, 0x00, 0x72, 0xec, 0xec, 0x00, 0xd6, 0x7b
-	.byte 0xec, 0x00, 0x60, 0xec, 0xec, 0x00, 0x7c, 0x7c
-	.byte 0xec, 0x00, 0x4e, 0xec, 0xec, 0x00, 0x22, 0x7d
-	.byte 0xec, 0x00, 0x3c, 0xec, 0xec, 0x00, 0xc8, 0x7d
-	.byte 0xec, 0x00, 0x2a, 0xec, 0xec, 0x00, 0x6e, 0x7e
-	.byte 0xec, 0x00, 0x18, 0xec, 0xec, 0x00, 0x14, 0x7f
-	.byte 0xec, 0x00, 0x06, 0xec, 0xec, 0x00, 0xba, 0x7f
-	.byte 0xec, 0x00, 0xf4, 0xeb, 0xec, 0x00, 0x60, 0x80
-	.byte 0xec, 0x00, 0xe2, 0xeb, 0xec, 0x00, 0x06, 0x81
-	.byte 0xec, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Merry Christmas!"
-	aligned_string "Munich Festival "
-	aligned_string "Bavarian Party  "
-	aligned_string "Hillbilly Joe   "
-	aligned_string "Barn Dance      "
-	aligned_string "Line Dance Craze"
-	aligned_string "Pub Singalong   "
-	aligned_string "Dancing Birdies "
-	aligned_string "Do The Hokie...."
-	aligned_string "BeerBarrel Polka"
-	aligned_string "Golden Oldies   "
-	aligned_string "German Oldies   "
-	aligned_string "Euro Party Pop  "
-	aligned_string "Eurovision Hits "
-	aligned_string "Pop Organ March "
-	aligned_string "All Night Party "
-	aligned_string "German Schlager "
-	aligned_string "Last Arrangement"
-	aligned_string "J.Last Hitparade"
-
-
-StyleGroup_Swing_Table:
-	.long NakaInst_King_Of_Soul
-	.long StyleVar_KingOfSoul
-	.long NakaInst_Detroit_Pop
-	.long StyleVar_DetroitPop
-	.long NakaInst_Soft_Soul
-	.long StyleVar_SoftSoul
-	.long NakaInst_New_Soul_Ballad
-	.long StyleVar_NewSoulBallad
-	.long NakaInst_Soul_To_Sun
-	.long StyleVar_SoulToSun
-	.long NakaInst_Mellow_Soul
-	.long StyleVar_MellowSoul
-	.long NakaInst_Slow_Soul_Mood
-	.long StyleVar_SlowSoulMood
-	.long NakaInst_R_B_Groove
-	.long StyleVar_RBGroove
-	.long NakaInst_Down_Dirty_Blues
-	.long StyleVar_DownDirtyBlues
-	.long NakaInst_Rock_Blues
-	.long StyleVar_RockBlues
-	.long NakaInst_Blues_Alley
-	.long StyleVar_PlayTheBlues
-	.long NakaInst_Play_The_Blues
-	.long StyleVar_BluesAlley
-	.long NakaInst_Sunday_Service
-	.long LABEL_EC8974
-	.long NakaInst_Lift_Your_Soul
-	.long LABEL_EC8A1A
-	.long NakaInst_Day_Of_Rest
-	.long StyleVar_DayOfRest
-	.long NakaInst_Power_Gospel
-	.long StyleVar_PowerGospel
-	.long NakaInst_Gospel_Blues
-	.long StyleVar_GospelBlues
-	.long NakaInst_Gospel_In_Threes
-	.long StyleVar_GospelInThrees
-	.zero 8
-NakaInst_Gospel_In_Threes:	aligned_string "Gospel In Threes"
-NakaInst_Gospel_Blues:	aligned_string "Gospel Blues    "
-NakaInst_Power_Gospel:	aligned_string "Power Gospel    "
-NakaInst_Day_Of_Rest:	aligned_string "Day Of Rest     "
-NakaInst_Lift_Your_Soul:	aligned_string "Lift Your Soul  "
-NakaInst_Sunday_Service:	aligned_string "Sunday Service  "
-NakaInst_Play_The_Blues:	aligned_string "Play The Blues  "
-NakaInst_Blues_Alley:	aligned_string "Blues Alley     "
-NakaInst_Rock_Blues:	aligned_string "Rock Blues      "
-NakaInst_Down_Dirty_Blues:	aligned_string "Down&Dirty Blues"
-NakaInst_R_B_Groove:	aligned_string "R&B Groove      "
-NakaInst_Slow_Soul_Mood:	aligned_string "Slow Soul Mood  "
-NakaInst_Mellow_Soul:	aligned_string "Mellow Soul     "
-NakaInst_Soul_To_Sun:	aligned_string "Soul To Sun     "
-NakaInst_New_Soul_Ballad:	aligned_string "New Soul Ballad "
-NakaInst_Soft_Soul:	aligned_string "Soft Soul       "
-NakaInst_Detroit_Pop:	aligned_string "Detroit Pop     "
-NakaInst_King_Of_Soul:	aligned_string "King Of Soul    "
-StyleGroup_FunkFusion_Separator:
-	.byte 0x16, 0xf2, 0xec, 0x00
-StyleGroup_FunkFusion_Table:
-	.long StyleVar_UpTempoBigband
-	.long NakaInst_Steady_Swingband
-	.long StyleVar_SteadySwingband
-	.long NakaInst_All_Aboard
-	.long StyleVar_AllAboard
-	.long NakaInst_40_s_Dance_Band
-	.long StyleVar_40sDanceBand
-	.long NakaInst_Sentimental_Band
-	.long StyleVar_SentimentalBand
-	.long NakaInst_Moonlight_Dance
-	.long StyleVar_MoonlightDance
-	.long NakaInst_40_s_Love_Songs
-	.long StyleVar_40sLoveSongs
-	.long NakaInst_Mid_Swingband
-	.long StyleVar_MidSwingband
-	.long NakaInst_Swing_Orchestra
-	.long StyleVar_SwingOrchestra
-	.long NakaInst_Night_Club_Combo
-	.long StyleVar_NightClubCombo
-	.long NakaInst_Easy_Play_Swing
-	.long StyleVar_EasyPlaySwing
-	.long NakaInst_Jazz_Club
-	.long StyleVar_JazzClub
-	.long NakaInst_Up_Tempo_Combo
-	.long StyleVar_UpTempoCombo
-	.long NakaInst_Simple_Jazz
-	.long StyleVar_SimpleJazz
-	.long NakaInst_40_s_Boogie
-	.long StyleVar_40sBoogie
-	.long NakaInst_Jazz_Standards
-	.long StyleVar_JazzStandards
-	.long NakaInst_Combo_Drawbars
-	.long StyleVar_ComboDrawbars
-	.long NakaInst_Gentle_Jazz
-	.long StyleVar_GentleJazz
-	.long NakaInst_Gypsy_Jazzers
-	.long StyleVar_GypsyJazzers
-	.long NakaInst_Jazz_Accordion
-	.long StyleVar_JazzAccordion
-	.long NakaInst_Speakeasy_Jazz
-	.long StyleVar_SpeakeasyJazz
-	.long NakaInst_Jazz_Francais
-	.long StyleVar_JazzFrancais
-	.long NakaInst_Van_Damme_Jazz
-	.long StyleVar_VanDammeJazz
-	.long NakaInst_Euro_Jazz
-	.long StyleVar_EuroJazz
-	.long NakaInst_Smokey_Jazz_Club
-	.long StyleVar_SmokeyJazzClub
-	.long NakaInst_Jazz_At_3_00am
-	.long StyleVar_JazzAt3am
-	.long NakaInst_Steady_Jazz_3_4
-	.long StyleVar_SteadyJazz34
-	.long NakaInst_Slow_Jazz_3_4
-	.long StyleVar_SlowJazz34
-	.long NakaInst_The_Groove
-	.long StyleVar_TheGroove
-	.long NakaInst_L_A_Fusion
-	.long StyleVar_LAFusion
-	.byte 0x00, 0x00, 0x00
-StyleGroup_FunkFusion_Pad:
-	.zero 5
-NakaInst_L_A_Fusion:	aligned_string "L.A. Fusion     "
-NakaInst_The_Groove:	aligned_string "The Groove      "
-NakaInst_Slow_Jazz_3_4:	aligned_string "Slow Jazz 3/4   "
-NakaInst_Steady_Jazz_3_4:	aligned_string "Steady Jazz 3/4 "
-NakaInst_Jazz_At_3_00am:	aligned_string "Jazz At 3:00am  "
-NakaInst_Smokey_Jazz_Club:	aligned_string "Smokey Jazz Club"
-NakaInst_Euro_Jazz:	aligned_string "Euro Jazz       "
-NakaInst_Van_Damme_Jazz:	aligned_string "Van Damme Jazz  "
-NakaInst_Jazz_Francais:	aligned_string "Jazz Francais   "
-NakaInst_Speakeasy_Jazz:	aligned_string "Speakeasy Jazz  "
-NakaInst_Jazz_Accordion:	aligned_string "Jazz Accordion  "
-NakaInst_Gypsy_Jazzers:	aligned_string "Gypsy Jazzers   "
-NakaInst_Gentle_Jazz:	aligned_string "Gentle Jazz     "
-NakaInst_Combo_Drawbars:	aligned_string "Combo Drawbars  "
-NakaInst_Jazz_Standards:	aligned_string "Jazz Standards  "
-NakaInst_40_s_Boogie:	aligned_string "40's Boogie     "
-NakaInst_Simple_Jazz:	aligned_string "Simple Jazz     "
-NakaInst_Up_Tempo_Combo:	aligned_string "Up Tempo Combo  "
-NakaInst_Jazz_Club:	aligned_string "Jazz Club       "
-NakaInst_Easy_Play_Swing:	aligned_string "Easy Play Swing "
-NakaInst_Night_Club_Combo:	aligned_string "Night Club Combo"
-NakaInst_Swing_Orchestra:	aligned_string "Swing Orchestra "
-NakaInst_Mid_Swingband:	aligned_string "Mid Swingband   "
-NakaInst_40_s_Love_Songs:	aligned_string "40's Love Songs "
-NakaInst_Moonlight_Dance:	aligned_string "Moonlight Dance "
-NakaInst_Sentimental_Band:	aligned_string "Sentimental Band"
-NakaInst_40_s_Dance_Band:	aligned_string "40's Dance Band "
-NakaInst_All_Aboard:	aligned_string "All Aboard!     "
-NakaInst_Steady_Swingband:	aligned_string "Steady Swingband"
-	aligned_string "Up Tempo Bigband"
-
-
-StyleGroup_JazzCombo_Table:
-	.long NakaInst_Musical_Overture
-	.long StyleVar_MusicalOverture
-	.long NakaInst_Tinseltown
-	.long StyleVar_Tinseltown
-	.long NakaInst_Showband
-	.long StyleVar_Showband
-	.long NakaInst_Theatre_Stride
-	.long StyleVar_TheatreStride
-	.long NakaInst_Vaudeville_Act
-	.long StyleVar_VaudevilleAct
-	.long NakaInst_Tap_Dancer
-	.long StyleVar_TapDancer
-	.long NakaInst_Paris_Club
-	.long StyleVar_ParisClub
-	.long NakaInst_Cabaret_Band
-	.long StyleVar_CabaretBand
-	.long NakaInst_Viva_Las_Vegas
-	.long StyleVar_VivaLasVegas
-	.long NakaInst_Magic_Ballroom
-	.long StyleVar_MagicBallroom
-	.long NakaInst_Gentle_Foxtrot
-	.long StyleVar_GentleFoxtrot
-	.long NakaInst_Organist_s_Dance
-	.long StyleVar_OrganistsDance
-	.long NakaInst_Up_Tempo_Foxtrot
-	.long StyleVar_UpTempoFoxtrot
-	.long NakaInst_Strictly_Foxtrot
-	.long StyleVar_StrictlyFoxtrot
-	.long NakaInst_Radio_Foxtrot
-	.long StyleVar_RadioFoxtrot
-	.long NakaInst_Strictly_Quick
-	.long StyleVar_StrictlyQuick
-	.long NakaInst_Let_s_Twist
-	.long StyleVar_LetsTwist
-	.long NakaInst_Jive_Dance
-	.long StyleVar_JiveDance
-	.long NakaInst_Do_The_Twist
-	.long StyleVar_DoTheTwist
-	.long NakaInst_1_2_Cha_Cha_Cha
-	.long StyleVar_12ChaChaCha
-	.long NakaInst_Let_s_Beguine
-	.long StyleVar_LetsBeguine
-	.long NakaInst_Samba_Felicidade
-	.long StyleVar_SambaFelicidade
-	.long NakaInst_Viva_Pasodoble
-	.long StyleVar_VivaPasodoble
-	.long NakaInst_Strict_Tango
-	.long StyleVar_StrictTango
-	.long NakaInst_Tango_D_Amour
-	.long StyleVar_TangoDAmour
-	.long NakaInst_Tango_Pianist
-	.long LABEL_ECB102
-	.long NakaInst_Last_Dance_Waltz
-	.long StyleVar_LastDanceWaltz
-	.long NakaInst_Quick_Waltz
-	.long StyleVar_QuickWaltz
-	.long NakaInst_Austrian_Waltz
-	.long LABEL_ECB2F4
-	.long NakaInst_Walzer_Time
-	.long LABEL_ECB39A
-	.long NakaInst_Party_Vienna
-	.long StyleVar_PartyVienna
-	.zero 8
-NakaInst_Party_Vienna:	aligned_string "Party Vienna    "
-NakaInst_Walzer_Time:	aligned_string "Walzer-Time     "
-NakaInst_Austrian_Waltz:	aligned_string "Austrian Waltz  "
-NakaInst_Quick_Waltz:	aligned_string "Quick Waltz     "
-NakaInst_Last_Dance_Waltz:	aligned_string "Last Dance Waltz"
-NakaInst_Tango_Pianist:	aligned_string "Tango Pianist   "
-NakaInst_Tango_D_Amour:	aligned_string "Tango D'Amour   "
-NakaInst_Strict_Tango:	aligned_string "Strict Tango    "
-NakaInst_Viva_Pasodoble:	aligned_string "Viva Pasodoble! "
-NakaInst_Samba_Felicidade:	aligned_string "Samba Felicidade"
-NakaInst_Let_s_Beguine:	aligned_string "Let's Beguine!  "
-NakaInst_1_2_Cha_Cha_Cha:	aligned_string "1,2,Cha Cha Cha "
-NakaInst_Do_The_Twist:	aligned_string "Do The Twist!   "
-NakaInst_Jive_Dance:	aligned_string "Jive Dance      "
-NakaInst_Let_s_Twist:	aligned_string "Let's Twist     "
-NakaInst_Strictly_Quick:	aligned_string "Strictly Quick! "
-NakaInst_Radio_Foxtrot:	aligned_string "Radio Foxtrot   "
-NakaInst_Strictly_Foxtrot:	aligned_string "Strictly Foxtrot"
-NakaInst_Up_Tempo_Foxtrot:	aligned_string "Up Tempo Foxtrot"
-NakaInst_Organist_s_Dance:	aligned_string "Organist's Dance"
-NakaInst_Gentle_Foxtrot:	aligned_string "Gentle Foxtrot  "
-NakaInst_Magic_Ballroom:	aligned_string "Magic Ballroom  "
-NakaInst_Viva_Las_Vegas:	aligned_string "Viva Las Vegas  "
-NakaInst_Cabaret_Band:	aligned_string "Cabaret Band    "
-NakaInst_Paris_Club:	aligned_string "Paris Club      "
-NakaInst_Tap_Dancer:	aligned_string "Tap Dancer      "
-NakaInst_Vaudeville_Act:	aligned_string "Vaudeville Act  "
-NakaInst_Theatre_Stride:	aligned_string "Theatre Stride  "
-NakaInst_Showband:	aligned_string "Showband        "
-NakaInst_Tinseltown:	aligned_string "Tinseltown      "
-NakaInst_Musical_Overture:	aligned_string "Musical Overture"
-StyleGroup_TradFolk_PairTable:
-	.byte 0xd6, 0xf7
-	.byte 0xec, 0x00, 0xe6, 0xb4, 0xec, 0x00, 0xc4, 0xf7
-	.byte 0xec, 0x00, 0x8c, 0xb5, 0xec, 0x00, 0xb2, 0xf7
-	.byte 0xec, 0x00, 0x32, 0xb6, 0xec, 0x00, 0xa0, 0xf7
-	.byte 0xec, 0x00, 0xd8, 0xb6, 0xec, 0x00, 0x8e, 0xf7
-	.byte 0xec, 0x00, 0x7e, 0xb7, 0xec, 0x00, 0x7c, 0xf7
-	.byte 0xec, 0x00, 0x24, 0xb8, 0xec, 0x00, 0x6a, 0xf7
-	.byte 0xec, 0x00, 0xca, 0xb8, 0xec, 0x00, 0x58, 0xf7
-	.byte 0xec, 0x00, 0x70, 0xb9, 0xec, 0x00, 0x46, 0xf7
-	.byte 0xec, 0x00, 0x16, 0xba, 0xec, 0x00, 0x34, 0xf7
-	.byte 0xec, 0x00, 0xbc, 0xba, 0xec, 0x00, 0x22, 0xf7
-	.byte 0xec, 0x00, 0x62, 0xbb, 0xec, 0x00, 0x10, 0xf7
-	.byte 0xec, 0x00, 0x08, 0xbc, 0xec, 0x00, 0xfe, 0xf6
-	.byte 0xec, 0x00, 0xae, 0xbc, 0xec, 0x00, 0xec, 0xf6
-	.byte 0xec, 0x00, 0x54, 0xbd, 0xec, 0x00, 0xda, 0xf6
-	.byte 0xec, 0x00, 0xfa, 0xbd, 0xec, 0x00, 0xc8, 0xf6
-	.byte 0xec, 0x00, 0xa0, 0xbe, 0xec, 0x00, 0xb6, 0xf6
-	.byte 0xec, 0x00, 0x46, 0xbf, 0xec, 0x00, 0xa4, 0xf6
-	.byte 0xec, 0x00, 0xec, 0xbf, 0xec, 0x00, 0x92, 0xf6
-	.byte 0xec, 0x00, 0x92, 0xc0, 0xec, 0x00, 0x80, 0xf6
-	.byte 0xec, 0x00, 0x38, 0xc1, 0xec, 0x00, 0x6e, 0xf6
-	.byte 0xec, 0x00, 0xde, 0xc1, 0xec, 0x00, 0x5c, 0xf6
-	.byte 0xec, 0x00, 0x84, 0xc2, 0xec, 0x00, 0x4a, 0xf6
-	.byte 0xec, 0x00, 0x2a, 0xc3, 0xec, 0x00, 0x38, 0xf6
-	.byte 0xec, 0x00, 0xd0, 0xc3, 0xec, 0x00, 0x26, 0xf6
-	.byte 0xec, 0x00, 0x76, 0xc4, 0xec, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	aligned_string "70's Folk Music "
-	aligned_string "Mariachi band   "
-	aligned_string "Spanish Folklore"
-	aligned_string "Kings of Gypsy  "
-	aligned_string "Moscow At Night "
-	aligned_string "Greek Dance     "
-	aligned_string "Sounds of Dixie "
-	aligned_string "New Orleans Jazz"
-	aligned_string "Ragtime Band    "
-	aligned_string "Old Ragtime     "
-	aligned_string "Hawaiian Dance  "
-	aligned_string "Island Romance  "
-	aligned_string "German Waltz    "
-	aligned_string "East Euro Waltz "
-	aligned_string "Munich Waltz    "
-	aligned_string "3/4 Concert Time"
-	aligned_string "Highland Dance  "
-	aligned_string "Ceilidh Band    "
-	aligned_string "German Polka    "
-	aligned_string "Modern Polka    "
-	aligned_string "Standard Polka  "
-	aligned_string "Musikantenstadl "
-	aligned_string "German Tradition"
-	aligned_string "Sousa Marches   "
-	aligned_string "Stadium Events  "
-
-
-StyleGroup_WorldMusic_Table:
-	.long NakaInst_Bluegrass_Time
-	.long StyleVar_BluegrassTime
-	.long NakaInst_Modern_Hoedown
-	.long StyleVar_ModernHoedown
-	.long NakaInst_Kentucky_Blue
-	.long StyleVar_KentuckyBlue
-	.long NakaInst_Trucker_Country
-	.long StyleVar_TruckerCountry
-	.long NakaInst_Country_Dance
-	.long StyleVar_CountryDance
-	.long NakaInst_Hillbilly_Blues
-	.long StyleVar_HillbillyBlues
-	.long NakaInst_70_s_Country_Pop
-	.long StyleVar_70sCountryPop
-	.long NakaInst_Country_Romance
-	.long StyleVar_CountryRomance
-	.long NakaInst_Western_Ballads
-	.long StyleVar_WesternBallads
-	.long NakaInst_Country_Folks
-	.long StyleVar_CountryFolks
-	.long NakaInst_Country_88
-	.long StyleVar_Country88
-	.long NakaInst_Country_Love
-	.long StyleVar_CountryLove
-	.long NakaInst_Modern_Country
-	.long StyleVar_ModernCountry
-	.long NakaInst_EZ_Country_Rock
-	.long StyleVar_EZCountryRock
-	.long NakaInst_Old_Country_Hits
-	.long StyleVar_OldCountryHits
-	.long NakaInst_New_Country_Rock
-	.long StyleVar_NewCountryRock
-	.long NakaInst_Country_Hits
-	.long StyleVar_CountryHits
-	.zero 8
-NakaInst_Country_Hits:	aligned_string "Country Hits    "
-NakaInst_New_Country_Rock:	aligned_string "New Country Rock"
-NakaInst_Old_Country_Hits:	aligned_string "Old Country Hits"
-NakaInst_EZ_Country_Rock:	aligned_string "EZ Country Rock "
-NakaInst_Modern_Country:	aligned_string "Modern Country  "
-NakaInst_Country_Love:	aligned_string "Country Love    "
-NakaInst_Country_88:	aligned_string "Country 88      "
-NakaInst_Country_Folks:	aligned_string "Country Folks   "
-NakaInst_Western_Ballads:	aligned_string "Western Ballads "
-NakaInst_Country_Romance:	aligned_string "Country Romance "
-NakaInst_70_s_Country_Pop:	aligned_string "70's Country Pop"
-NakaInst_Hillbilly_Blues:	aligned_string "Hillbilly Blues "
-NakaInst_Country_Dance:	aligned_string "Country Dance   "
-NakaInst_Trucker_Country:	aligned_string "Trucker Country "
-NakaInst_Kentucky_Blue:	aligned_string "Kentucky Blue   "
-NakaInst_Modern_Hoedown:	aligned_string "Modern Hoedown  "
-NakaInst_Bluegrass_Time:	aligned_string "Bluegrass Time  "
-StyleGroup_LatinWorld_PairTable:
-	.byte 0x92, 0xfc, 0xec, 0x00, 0x22, 0xd0
-	.byte 0xec, 0x00, 0x80, 0xfc, 0xec, 0x00, 0xc8, 0xd0
-	.byte 0xec, 0x00, 0x6e, 0xfc, 0xec, 0x00, 0x6e, 0xd1
-	.byte 0xec, 0x00, 0x5c, 0xfc, 0xec, 0x00, 0x14, 0xd2
-	.byte 0xec, 0x00, 0x4a, 0xfc, 0xec, 0x00, 0xba, 0xd2
-	.byte 0xec, 0x00, 0x38, 0xfc, 0xec, 0x00, 0x60, 0xd3
-	.byte 0xec, 0x00, 0x26, 0xfc, 0xec, 0x00, 0x06, 0xd4
-	.byte 0xec, 0x00, 0x14, 0xfc, 0xec, 0x00, 0xac, 0xd4
-	.byte 0xec, 0x00, 0x02, 0xfc, 0xec, 0x00, 0x52, 0xd5
-	.byte 0xec, 0x00, 0xf0, 0xfb, 0xec, 0x00, 0xf8, 0xd5
-	.byte 0xec, 0x00, 0xde, 0xfb, 0xec, 0x00, 0x9e, 0xd6
-	.byte 0xec, 0x00, 0xcc, 0xfb, 0xec, 0x00, 0x44, 0xd7
-	.byte 0xec, 0x00, 0xba, 0xfb, 0xec, 0x00, 0xea, 0xd7
-	.byte 0xec, 0x00, 0xa8, 0xfb, 0xec, 0x00, 0x90, 0xd8
-	.byte 0xec, 0x00, 0x96, 0xfb, 0xec, 0x00, 0x36, 0xd9
-	.byte 0xec, 0x00, 0x84, 0xfb, 0xec, 0x00, 0xdc, 0xd9
-	.byte 0xec, 0x00, 0x72, 0xfb, 0xec, 0x00, 0x82, 0xda
-	.byte 0xec, 0x00, 0x60, 0xfb, 0xec, 0x00, 0x28, 0xdb
-	.byte 0xec, 0x00, 0x4e, 0xfb, 0xec, 0x00, 0xce, 0xdb
-	.byte 0xec, 0x00, 0x3c, 0xfb, 0xec, 0x00, 0x74, 0xdc
-	.byte 0xec, 0x00, 0x2a, 0xfb, 0xec, 0x00, 0x1a, 0xdd
-	.byte 0xec, 0x00, 0x18, 0xfb, 0xec, 0x00, 0xc0, 0xdd
-	.byte 0xec, 0x00, 0x06, 0xfb, 0xec, 0x00, 0x66, 0xde
-	.byte 0xec, 0x00, 0xf4, 0xfa, 0xec, 0x00, 0x0c, 0xdf
-	.byte 0xec, 0x00, 0xe2, 0xfa, 0xec, 0x00, 0xb2, 0xdf
-	.byte 0xec, 0x00, 0xd0, 0xfa, 0xec, 0x00, 0x58, 0xe0
-	.byte 0xec, 0x00, 0xbe, 0xfa, 0xec, 0x00, 0xfe, 0xe0
-	.byte 0xec, 0x00, 0xac, 0xfa, 0xec, 0x00, 0xa4, 0xe1
-	.byte 0xec, 0x00, 0x9a, 0xfa, 0xec, 0x00, 0x4a, 0xe2
-	.byte 0xec, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	aligned_string "Jamaican Swing  "
-	aligned_string "Synth Reggae    "
-	aligned_string "Talempong       "
-	aligned_string "Dangdut         "
-	aligned_string "Indonesian Folk "
-	aligned_string "Samba Fusion    "
-	aligned_string "Modern Samba    "
-	aligned_string "Modern Caribbean"
-	aligned_string "Samba Amor      "
-	aligned_string "Salsa Picante   "
-	aligned_string "Caribbean Nights"
-	aligned_string "Castanet Dance  "
-	aligned_string "Modern Rio      "
-	aligned_string "Latin Festival  "
-	aligned_string "Samba Parade    "
-	aligned_string "Holiday Mood    "
-	aligned_string "Cumbia Band     "
-	aligned_string "It's Mambo Time!"
-	aligned_string "New Mambo Mood  "
-	aligned_string "Mambo Band      "
-	aligned_string "Tito's Cha Cha  "
-	aligned_string "Latin Lounge Bar"
-	aligned_string "Romantic Dance  "
-	aligned_string "Romantic Beguine"
-	aligned_string "Cocktail Pianist"
-	aligned_string "Rhumba Espana   "
-	aligned_string "Mellow Bossa    "
-	aligned_string "Bossa Pianist   "
-	aligned_string "Romantic Bossa  "
-	.byte 0x96, 0xfd, 0xec, 0x00
-StyleGroup_LatinDance_Table:
-	.long StyleGroup_ModernDance_Table
-	.long NakaInst_Rock_Pop
-	.long StyleGroup_RockPop_PairTable
-	.long NakaInst_Dance_Pop
-	.long StyleGroup_PopBallad_Table
-	.long NakaInst_Party_Music
-	.long StyleGroup_PartyMusic_PairTable
-	.long NakaInst_Gospel_Blues_R_B
-	.long StyleGroup_Swing_Table
-	.long NakaInst_Jazz_Swing
-	.long StyleGroup_FunkFusion_Separator
-	.long NakaInst_Show_Trad_Dance
-	.long StyleGroup_JazzCombo_Table
-	.long NakaInst_Trad_Folk
-	.long StyleGroup_TradFolk_PairTable
-	.long NakaInst_Country
-	.long StyleGroup_WorldMusic_Table
-	.long NakaInst_Latin_World
-	.long StyleGroup_LatinWorld_PairTable
-NakaInst_Latin_World:	aligned_string "Latin / World   "
-NakaInst_Country:	aligned_string "Country         "
-NakaInst_Trad_Folk:	aligned_string "Trad & Folk     "
-NakaInst_Show_Trad_Dance:	aligned_string "Show/Trad Dance "
-NakaInst_Jazz_Swing:	aligned_string "Jazz & Swing    "
-NakaInst_Gospel_Blues_R_B:	aligned_string "Gospel/Blues/R&B"
-NakaInst_Party_Music:	aligned_string "Party Music     "
-NakaInst_Dance_Pop:	aligned_string "Dance Pop       "
-NakaInst_Rock_Pop:	aligned_string "Rock & Pop      "
-	aligned_string "Easy Listening  "
-	.byte 0x09, 0x0a, 0x0b, 0x0c, 0x89, 0x8a, 0x8b, 0xff
-	.byte 0x89, 0x89, 0x8a, 0x8b, 0x89, 0x8b
-SeqChan_Map_10ch:
-	.byte 0x88, 0x89
-	.byte 0x8a, 0x8b, 0x8c, 0x08, 0x09, 0x0a, 0x0b, 0x0c
-SeqChan_Map_8ch:
-	.byte 0x88, 0x89, 0x8a, 0x8b, 0x08, 0x09, 0x0a, 0x0b
-SeqChan_Map_6ch:
-	.byte 0x88, 0x89, 0x8a, 0x08, 0x09, 0x0a
-SeqChan_Map_4ch:
-	.byte 0x88, 0x89
-	.byte 0x08, 0x09
-SeqChan_Map_2ch:
-	.byte 0x88, 0x08, 0xf4, 0xfd, 0xec, 0x00
-	.long NakaInst_MEMORY_B_ECFDEA
-	.long NakaInst_MEMORY_C_ECFDE0
-NakaInst_MEMORY_C_ECFDE0:	aligned_string "MEMORY-C"
-NakaInst_MEMORY_B_ECFDEA:	aligned_string "MEMORY-B"
-NakaInst_MEMORY_A_ECFDF4:	aligned_string "MEMORY-A"
-	aligned_string "RIGHT1 RIGHT2 LEFT   PART4  PART5  PART6  PART7  PART8  PART9  PART10 PART11 PART12 PART13 PART14 PART15 PART16 ACCOMP1ACCOMP2ACCOMP3BASS   DRUMS  CHORD  R.BASS MSP    MSP    CONTROLPART27 PART28 PART29 PART30 PART31 PART32 "
-Naka_MemoryC_Screens:
-	.long MemScreen_Blank
-	.long MemScreen_NoteC
-	.long NakaInst_D_a0_ECFF5C
-	.long MemScreen_NoteD
-	.long NakaInst_E_a0_ECFF52
-	.long MemScreen_NoteE_Str
-	.long MemScreen_NoteF
-	.long NakaInst_F_9e_ECFF44
-	.long MemScreen_NoteG
-	.long NakaInst_A_a0
-	.long MemScreen_NoteA_Str
-	.long NakaInst_B_a0
-	.long MemScreen_NoteB
-	.long MemScreen_Space3
-	.long MemScreen_Space2
-	.long MemScreen_Space1
-MemScreen_Space1:
-	.byte 0x20, 0x20, 0x00, 0xff
-MemScreen_Space2:
-	.byte 0x20, 0x20, 0x00, 0xff
-MemScreen_Space3:
-	.byte 0x20, 0x20, 0x00, 0xff
-MemScreen_NoteB:
-	.byte 0x42, 0x20, 0x00, 0xff
-NakaInst_B_a0:	aligned_string "B~a0"
-MemScreen_NoteA_Str:	aligned_string "A "
-NakaInst_A_a0:	aligned_string "A~a0"
-MemScreen_NoteG:
-	.byte 0x47, 0x20, 0x00, 0xff
-NakaInst_F_9e_ECFF44:	aligned_string "F~9e"
-MemScreen_NoteF:
-	.byte 0x46, 0x20, 0x00, 0xff
-MemScreen_NoteE_Str:	aligned_string "E "
-NakaInst_E_a0_ECFF52:	aligned_string "E~a0"
-MemScreen_NoteD:
-	.byte 0x44, 0x20, 0x00, 0xff
-NakaInst_D_a0_ECFF5C:	aligned_string "D~a0"
-MemScreen_NoteC:
-	.byte 0x43, 0x20, 0x00, 0xff
-MemScreen_Blank:
-	.byte 0x20, 0x20
-	.byte 0x00, 0xff, 0x0c, 0x02, 0xed, 0x00, 0x06, 0x02
-	.byte 0xed, 0x00, 0x00, 0x02, 0xed, 0x00, 0xfa, 0x01
-	.byte 0xed, 0x00, 0xf4, 0x01, 0xed, 0x00, 0xee, 0x01
-	.byte 0xed, 0x00, 0xe8, 0x01, 0xed, 0x00, 0xe2, 0x01
-	.byte 0xed, 0x00, 0xda, 0x01, 0xed, 0x00, 0xd4, 0x01
-	.byte 0xed, 0x00, 0xce, 0x01, 0xed, 0x00, 0xc8, 0x01
-	.byte 0xed, 0x00, 0xc2, 0x01, 0xed, 0x00, 0xba, 0x01
-	.byte 0xed, 0x00, 0xb2, 0x01, 0xed, 0x00, 0xac, 0x01
-	.byte 0xed, 0x00, 0xa4, 0x01, 0xed, 0x00, 0x9e, 0x01
-	.byte 0xed, 0x00, 0x98, 0x01, 0xed, 0x00, 0x92, 0x01
-	.byte 0xed, 0x00, 0x8a, 0x01, 0xed, 0x00, 0x84, 0x01
-	.byte 0xed, 0x00, 0x7e, 0x01, 0xed, 0x00, 0x78, 0x01
-	.byte 0xed, 0x00, 0x70, 0x01, 0xed, 0x00, 0x68, 0x01
-
-
-	naka_header NAKA_TYPE_0xED
-	.byte 0xed, 0x00, 0x58, 0x01
-	.byte 0xed, 0x00, 0x52, 0x01, 0xed, 0x00, 0x4a, 0x01
-	.byte 0xed, 0x00, 0x42, 0x01, 0xed, 0x00, 0x3a, 0x01
-	.byte 0xed, 0x00, 0x32, 0x01, 0xed, 0x00, 0x28, 0x01
-	.byte 0xed, 0x00, 0x1e, 0x01, 0xed, 0x00, 0x18, 0x01
-	.byte 0xed, 0x00, 0x10, 0x01, 0xed, 0x00, 0x08, 0x01
-	.byte 0xed, 0x00, 0x02, 0x01, 0xed, 0x00, 0xfa, 0x00
+; External label offsets within the binary blob above.
+	.equ NakaInst_iduMurai, NakaData_StyleBitmaps + 0x0000A
+	.equ NakaInst_iduRoot, NakaData_StyleBitmaps + 0x00014
+	.equ NakaInst_False_EB71DA, NakaData_StyleBitmaps + 0x0001C
+	.equ NakaInst_pSword_EmptyStr, NakaData_StyleBitmaps + 0x0004A
+	.equ NakaInst_pUword_FormatData, NakaData_StyleBitmaps + 0x0004C
+	.equ NakaInst_pUchar_FormatData, NakaData_StyleBitmaps + 0x00060
+	.equ NakaInst_pSlong_EmptyStr, NakaData_StyleBitmaps + 0x00072
+	.equ NakaInst_pUlong_FormatData, NakaData_StyleBitmaps + 0x00074
+	.equ NakaInst_PartID_EnumTable, NakaData_StyleBitmaps + 0x00088
+	.equ NakaInst_TrackID_EmptyStr, NakaData_StyleBitmaps + 0x0033A
+	.equ NakaInst_TR_All, NakaData_StyleBitmaps + 0x0033C
+	.equ NakaInst_TR_Track16, NakaData_StyleBitmaps + 0x00344
+	.equ NakaInst_TR_Track15, NakaData_StyleBitmaps + 0x00350
+	.equ NakaInst_TR_Track14, NakaData_StyleBitmaps + 0x0035C
+	.equ NakaInst_TR_Track13, NakaData_StyleBitmaps + 0x00368
+	.equ NakaInst_TR_Track12, NakaData_StyleBitmaps + 0x00374
+	.equ NakaInst_TR_Track11, NakaData_StyleBitmaps + 0x00380
+	.equ NakaInst_TR_Track10, NakaData_StyleBitmaps + 0x0038C
+	.equ NakaInst_TR_Track9, NakaData_StyleBitmaps + 0x00398
+	.equ NakaInst_TR_Track8, NakaData_StyleBitmaps + 0x003A2
+	.equ NakaInst_TR_Track7, NakaData_StyleBitmaps + 0x003AC
+	.equ NakaInst_TR_Track6, NakaData_StyleBitmaps + 0x003B6
+	.equ NakaInst_TR_Track5, NakaData_StyleBitmaps + 0x003C0
+	.equ NakaInst_TR_Track4, NakaData_StyleBitmaps + 0x003CA
+	.equ NakaInst_TR_Track3, NakaData_StyleBitmaps + 0x003D4
+	.equ NakaInst_TR_Track2, NakaData_StyleBitmaps + 0x003DE
+	.equ NakaInst_TR_Track1, NakaData_StyleBitmaps + 0x003E8
+	.equ NakaInst_IntTimeID_EnumTable, NakaData_StyleBitmaps + 0x003F2
+	.equ NakaInst_IntTimeID_EmptyStr, NakaData_StyleBitmaps + 0x00462
+	.equ NakaInst_IT_10Sec, NakaData_StyleBitmaps + 0x00464
+	.equ NakaInst_IT_9Sec, NakaData_StyleBitmaps + 0x0046E
+	.equ NakaInst_IT_8Sec, NakaData_StyleBitmaps + 0x00476
+	.equ NakaInst_IT_7Sec, NakaData_StyleBitmaps + 0x0047E
+	.equ NakaInst_IT_6Sec, NakaData_StyleBitmaps + 0x00486
+	.equ NakaInst_IT_5Sec, NakaData_StyleBitmaps + 0x0048E
+	.equ NakaInst_IT_4Sec, NakaData_StyleBitmaps + 0x00496
+	.equ NakaInst_IT_3Sec, NakaData_StyleBitmaps + 0x0049E
+	.equ NakaInst_IT_2Sec, NakaData_StyleBitmaps + 0x004A6
+	.equ NakaInst_IT_1Sec, NakaData_StyleBitmaps + 0x004AE
+	.equ NakaInst_IT_Hold, NakaData_StyleBitmaps + 0x004B6
+	.equ NakaInst_IT_Default, NakaData_StyleBitmaps + 0x004BE
+	.equ NakaInst_IT_Off, NakaData_StyleBitmaps + 0x004CA
+	.equ NakaInst_WindowID_Cont, NakaData_StyleBitmaps + 0x00741
+	.equ WidgetStyleDataTable, NakaData_StyleBitmaps + 0x00774
+	.equ Bitmap_FadeInPicture, NakaData_StyleBitmaps + 0x00EB4
+	.equ Bitmap_FadeInText, NakaData_StyleBitmaps + 0x019A4
+	.equ Bitmap_FadeOutPicture, NakaData_StyleBitmaps + 0x01F44
+	.equ Bitmap_FadeOutText, NakaData_StyleBitmaps + 0x02A66
+	.equ StyleSong_MasterTable, NakaData_StyleBitmaps + 0x032D6
+	.equ NakaInst_o_s_Guitar_110, NakaData_StyleBitmaps + 0x08E4A
+	.equ NakaInst_Joplin_Rag_130, NakaData_StyleBitmaps + 0x08E68
+	.equ NakaInst_Jobim_Strings_66, NakaData_StyleBitmaps + 0x08E8A
+	.equ NakaInst_Rio_Disco_125, NakaData_StyleBitmaps + 0x08EB2
+	.equ NakaInst_176, NakaData_StyleBitmaps + 0x08EDA
+	.equ NakaInst_Jive_Ivories_176, NakaData_StyleBitmaps + 0x08EF0
+	.equ NakaInst_176_EC00C0, NakaData_StyleBitmaps + 0x08F02
+	.equ NakaInst_160, NakaData_StyleBitmaps + 0x08F2A
+	.equ NakaInst_Jazz_To_The_Bone_180, NakaData_StyleBitmaps + 0x08F78
+	.equ NakaInst_Jazz_Blocks_146, NakaData_StyleBitmaps + 0x09000
+	.equ NakaInst_Jamaican_Voices_83, NakaData_StyleBitmaps + 0x09088
+	.equ NakaInst_Jailhouse_Brass_158, NakaData_StyleBitmaps + 0x09110
+	.equ NakaInst_Island_Strings_101, NakaData_StyleBitmaps + 0x09198
+	.equ NakaInst_Island_Delight_101, NakaData_StyleBitmaps + 0x09220
+	.equ NakaInst_In_Sax_Country_115, NakaData_StyleBitmaps + 0x092A8
+	.equ NakaInst_I_Got_The_Blues_83, NakaData_StyleBitmaps + 0x09330
+	.equ NakaInst_Hugo_s_Revival_120, NakaData_StyleBitmaps + 0x093B8
+	.equ NakaInst_House_Garden_125, NakaData_StyleBitmaps + 0x09440
+	.equ NakaInst_Honky_Tonk_Band_196, NakaData_StyleBitmaps + 0x094C8
+	.equ NakaInst_Hoedown_Strings_123, NakaData_StyleBitmaps + 0x09550
+	.equ NakaInst_Hip_Keys_108, NakaData_StyleBitmaps + 0x095D8
+	.equ NakaInst_Heavy_Harmonica_74, NakaData_StyleBitmaps + 0x09660
+	.equ NakaInst_Harry_J_Co_86, NakaData_StyleBitmaps + 0x096E8
+	.equ NakaInst_Hard_Sax_Blues_124, NakaData_StyleBitmaps + 0x09770
+	.equ NakaInst_Hard_Analogue_148, NakaData_StyleBitmaps + 0x097F8
+	.equ NakaInst_Ham_Rock_155, NakaData_StyleBitmaps + 0x09880
+	.equ NakaInst_Gypsy_Jazz_Frets_210, NakaData_StyleBitmaps + 0x09908
+	.equ NakaInst_Groovin_Horns_97, NakaData_StyleBitmaps + 0x09990
+	.equ NakaInst_Greasepaint_Time_132, NakaData_StyleBitmaps + 0x09A18
+	.equ NakaInst_Grand_Finale_132, NakaData_StyleBitmaps + 0x09AA0
+	.equ NakaInst_Gospel_Organ_66, NakaData_StyleBitmaps + 0x09B28
+	.equ NakaInst_Golden_Movie_Era_120, NakaData_StyleBitmaps + 0x09BB0
+	.equ NakaInst_Girls_On_Stage_118, NakaData_StyleBitmaps + 0x09C38
+	.equ NakaInst_German_Party_Hit_111, NakaData_StyleBitmaps + 0x09CC0
+	.equ NakaInst_Georgia_Brass_64, NakaData_StyleBitmaps + 0x09D48
+	.equ NakaInst_Gentle_Ballad_75, NakaData_StyleBitmaps + 0x09DD0
+	.equ NakaInst_Galombang_98, NakaData_StyleBitmaps + 0x09E58
+	.equ NakaInst_Fusion_Tines_98, NakaData_StyleBitmaps + 0x09E9C
+	.equ NakaInst_Funky_Talk_110, NakaData_StyleBitmaps + 0x09EE0
+	.equ NakaInst_Full_Tilt_Swing_127, NakaData_StyleBitmaps + 0x09F68
+	.equ NakaInst_Full_Brass_Band_115, NakaData_StyleBitmaps + 0x09FF0
+	.equ NakaInst_Foxy_Squeezebox_154, NakaData_StyleBitmaps + 0x0A078
+	.equ NakaInst_Foxtrot_Sparkle_120, NakaData_StyleBitmaps + 0x0A100
+	.equ NakaInst_Folklore_Brass_115, NakaData_StyleBitmaps + 0x0A188
+	.equ NakaInst_Fogerty_s_Stomp_206, NakaData_StyleBitmaps + 0x0A210
+	.equ NakaInst_Flugel_Ballad_63, NakaData_StyleBitmaps + 0x0A298
+	.equ NakaInst_Finale_Salute_115, NakaData_StyleBitmaps + 0x0A320
+	.equ NakaInst_Fiddle_For_Jazz_210, NakaData_StyleBitmaps + 0x0A3A8
+	.equ NakaInst_Festival_Amigos_116, NakaData_StyleBitmaps + 0x0A430
+	.equ NakaInst_Fantasy_Rhumba_115, NakaData_StyleBitmaps + 0x0A4B8
+	.equ NakaInst_Fair_Sea_Organ_125, NakaData_StyleBitmaps + 0x0A540
+	.equ NakaInst_Euro_Squeezebox_147, NakaData_StyleBitmaps + 0x0A5C8
+	.equ NakaInst_Ernst_Friends_120, NakaData_StyleBitmaps + 0x0A650
+	.equ NakaInst_Emerson_Keys_145, NakaData_StyleBitmaps + 0x0A6D8
+	.equ NakaInst_Electric_Gospel_88, NakaData_StyleBitmaps + 0x0A760
+	.equ NakaInst_Easy_Threesy_110, NakaData_StyleBitmaps + 0x0A7E8
+	.equ NakaInst_Easy_Bacharach_150, NakaData_StyleBitmaps + 0x0A870
+	.equ NakaInst_E_P_Does_It_82, NakaData_StyleBitmaps + 0x0A8F8
+	.equ NakaInst_Dreamy_Orchestra_67, NakaData_StyleBitmaps + 0x0A980
+	.equ NakaInst_Drawbar_Funk_85, NakaData_StyleBitmaps + 0x0AA08
+	.equ NakaInst_Doo_You_Dance_200, NakaData_StyleBitmaps + 0x0AA90
+	.equ NakaInst_Dolly_s_Strings_128, NakaData_StyleBitmaps + 0x0AB18
+	.equ NakaInst_Django_s_Solo_190, NakaData_StyleBitmaps + 0x0ABA0
+	.equ NakaInst_Disco_Techni_118, NakaData_StyleBitmaps + 0x0AC28
+	.equ NakaInst_Disco_Metal_124, NakaData_StyleBitmaps + 0x0ACB0
+	.equ NakaInst_Dire_Strats_138, NakaData_StyleBitmaps + 0x0AD38
+	.equ NakaInst_Deuringer_Swing_190, NakaData_StyleBitmaps + 0x0ADC0
+	.equ NakaInst_Dancing_Flutes_125, NakaData_StyleBitmaps + 0x0AE48
+	.equ NakaInst_Dance_Surround_124, NakaData_StyleBitmaps + 0x0AED0
+	.equ NakaInst_Dance_Island_104, NakaData_StyleBitmaps + 0x0AF58
+	.equ NakaInst_Dance_Band_Jive_176, NakaData_StyleBitmaps + 0x0AFE0
+	.equ NakaInst_Cuckoo_Clock_3_4_183, NakaData_StyleBitmaps + 0x0B068
+	.equ NakaInst_Crazy_Horse_Show_118, NakaData_StyleBitmaps + 0x0B0F0
+	.equ NakaInst_Country_Tenor_88, NakaData_StyleBitmaps + 0x0B178
+	.equ NakaInst_Country_Licks_235, NakaData_StyleBitmaps + 0x0B200
+	.equ NakaInst_Country_Harp_88, NakaData_StyleBitmaps + 0x0B288
+	.equ NakaInst_Count_On_It_90, NakaData_StyleBitmaps + 0x0B310
+	.equ NakaInst_Cool_Soul_Frets_66, NakaData_StyleBitmaps + 0x0B398
+	.equ NakaInst_Cool_Jazz_B3_145, NakaData_StyleBitmaps + 0x0B420
+	.equ NakaInst_Convoy_Bluegrass_206, NakaData_StyleBitmaps + 0x0B4A8
+	.equ NakaInst_Come_On_Baby_168, NakaData_StyleBitmaps + 0x0B530
+	.equ NakaInst_Coconut_Frets_152, NakaData_StyleBitmaps + 0x0B5B8
+	.equ NakaInst_Clean_Metal_148, NakaData_StyleBitmaps + 0x0B640
+	.equ NakaInst_Classical_Tango_120, NakaData_StyleBitmaps + 0x0B6C8
+	.equ NakaInst_Chuck_s_Late_Gig_72, NakaData_StyleBitmaps + 0x0B750
+	.equ NakaInst_Chiff_Funk_97, NakaData_StyleBitmaps + 0x0B7D8
+	.equ NakaInst_Chapel_Brass_124, NakaData_StyleBitmaps + 0x0B860
+	.equ NakaInst_Carol_Singers_75, NakaData_StyleBitmaps + 0x0B8E8
+	.equ NakaInst_Caribbean_Synth_90, NakaData_StyleBitmaps + 0x0B970
+	.equ NakaInst_Calypso_Steel_152, NakaData_StyleBitmaps + 0x0B9F8
+	.equ NakaInst_Caber_Dance_172, NakaData_StyleBitmaps + 0x0BA80
+	.equ NakaInst_Bright_Keys_16_74, NakaData_StyleBitmaps + 0x0BB08
+	.equ NakaInst_Breathy_Moments_83, NakaData_StyleBitmaps + 0x0BB90
+	.equ NakaInst_Brassy_Dance_108, NakaData_StyleBitmaps + 0x0BC18
+	.equ NakaInst_Boxing_Jazzy_147, NakaData_StyleBitmaps + 0x0BCA0
+	.equ NakaInst_Bourbon_Street_196, NakaData_StyleBitmaps + 0x0BD28
+	.equ NakaInst_Boogie_Dance_160, NakaData_StyleBitmaps + 0x0BDB0
+	.equ NakaInst_Bolero_Orchestra_120, NakaData_StyleBitmaps + 0x0BE38
+	.equ NakaInst_Blues_Rock_Keys_124, NakaData_StyleBitmaps + 0x0BEC0
+	.equ NakaInst_Blues_Alley_124, NakaData_StyleBitmaps + 0x0BF48
+	.equ NakaInst_Blue_Suede_Rock_158, NakaData_StyleBitmaps + 0x0BFD0
+	.equ NakaInst_Bigband_Shout_170, NakaData_StyleBitmaps + 0x0C058
+	.equ NakaInst_Besame_Strings_120, NakaData_StyleBitmaps + 0x0C0E0
+	.equ NakaInst_Bellow_Shake_Hit_135, NakaData_StyleBitmaps + 0x0C168
+	.equ NakaInst_Beach_Party_Song_152, NakaData_StyleBitmaps + 0x0C1F0
+	.equ NakaInst_Bavaria_To_Tyrol_195, NakaData_StyleBitmaps + 0x0C278
+	.equ NakaInst_Barber_Shop_Jazz_196, NakaData_StyleBitmaps + 0x0C300
+	.equ NakaInst_Banjo_Dance_138, NakaData_StyleBitmaps + 0x0C388
+	.equ NakaInst_Baltic_Reeds_141, NakaData_StyleBitmaps + 0x0C410
+	.equ NakaInst_Ballad_Romance_67, NakaData_StyleBitmaps + 0x0C498
+	.equ NakaInst_Ballad_Guitar_67, NakaData_StyleBitmaps + 0x0C520
+	.equ NakaInst_Ballad_Acoustics_84, NakaData_StyleBitmaps + 0x0C5A8
+	.equ NakaInst_Bad_B3_Blues_78, NakaData_StyleBitmaps + 0x0C630
+	.equ NakaInst_Austria_Symphony_169, NakaData_StyleBitmaps + 0x0C6B8
+	.equ NakaInst_At_The_Eger_120, NakaData_StyleBitmaps + 0x0C740
+	.equ NakaInst_Art_Meets_Lionel_190, NakaData_StyleBitmaps + 0x0C7C8
+	.equ NakaInst_Amor_Reed_117, NakaData_StyleBitmaps + 0x0C850
+	.equ NakaInst_Alto_Samba_116, NakaData_StyleBitmaps + 0x0C8D8
+	.equ NakaInst_Alpine_Combo_125, NakaData_StyleBitmaps + 0x0C960
+	.equ NakaInst_All_Out_Combo_180, NakaData_StyleBitmaps + 0x0C9E8
+	.equ NakaInst_Ady_s_PartyOrgan_125, NakaData_StyleBitmaps + 0x0CA70
+	.equ NakaInst_Acoustic_Beat_108, NakaData_StyleBitmaps + 0x0CAF8
+	.equ NakaInst_Accordion_Dream_64, NakaData_StyleBitmaps + 0x0CB80
+	.equ NakaInst_A_Case_Of_Soul_114, NakaData_StyleBitmaps + 0x0CC08
+	.equ NakaInst_88_Note_8_Beat_90, NakaData_StyleBitmaps + 0x0CC90
+	.equ NakaInst_80_s_Pop_Sax_118, NakaData_StyleBitmaps + 0x0CD18
+	.equ NakaInst_70_s_Glamour_129, NakaData_StyleBitmaps + 0x0CDA0
+	.equ NakaInst_3_4_Romance_130, NakaData_StyleBitmaps + 0x0CE28
+	.equ NakaInst_16_On_Stage_82, NakaData_StyleBitmaps + 0x0CEB0
+	.equ NakaInst_12_Boogie_Bars_160, NakaData_StyleBitmaps + 0x0CEF4
+	.equ StyleVar_GermanSchlager, NakaData_StyleBitmaps + 0x0CF16
+	.equ NakaInst_Orchestral_Eight_108, NakaData_StyleBitmaps + 0x0CF56
+	.equ StyleVar_EasyPlay8Beat, NakaData_StyleBitmaps + 0x0CFBC
+	.equ NakaInst_Easy_EP_90, NakaData_StyleBitmaps + 0x0D01E
+	.equ StyleVar_RockAfterEight, NakaData_StyleBitmaps + 0x0D062
+	.equ NakaInst_Vocal_Beats_108, NakaData_StyleBitmaps + 0x0D0E6
+	.equ StyleVar_OrchestralBeat, NakaData_StyleBitmaps + 0x0D108
+	.equ NakaInst_Cool_Rock_106, NakaData_StyleBitmaps + 0x0D126
+	.equ StyleVar_SmoothRock, NakaData_StyleBitmaps + 0x0D1AE
+	.equ NakaInst_Dream_Beat_114, NakaData_StyleBitmaps + 0x0D1EE
+	.equ StyleVar_GreatestHits, NakaData_StyleBitmaps + 0x0D254
+	.equ NakaInst_Paradise_Keys_90, NakaData_StyleBitmaps + 0x0D2B6
+	.equ StyleVar_Studio8Beat, NakaData_StyleBitmaps + 0x0D2FA
+	.equ NakaInst_Acoustic_Effects_86, NakaData_StyleBitmaps + 0x0D37E
+	.equ StyleVar_BalladProducer, NakaData_StyleBitmaps + 0x0D3A0
+	.equ NakaInst_Sax_For_Whitney_84, NakaData_StyleBitmaps + 0x0D3BE
+	.equ StyleVar_LoveSongs, NakaData_StyleBitmaps + 0x0D446
+	.equ NakaInst_Warm_Horn_Duet_72, NakaData_StyleBitmaps + 0x0D486
+	.equ StyleVar_16BeatGroove, NakaData_StyleBitmaps + 0x0D4EC
+	.equ NakaInst_New_Muzak_82, NakaData_StyleBitmaps + 0x0D54E
+	.equ StyleVar_EasyPlay16Beat, NakaData_StyleBitmaps + 0x0D592
+	.equ NakaInst_Solid_Sixteen_74, NakaData_StyleBitmaps + 0x0D616
+	.equ StyleVar_EPMoments, NakaData_StyleBitmaps + 0x0D638
+	.equ NakaInst_The_Way_It_Is_70, NakaData_StyleBitmaps + 0x0D656
+	.equ StyleVar_Gentle16Beat, NakaData_StyleBitmaps + 0x0D6DE
+	.equ NakaInst_Orchestral_16_82, NakaData_StyleBitmaps + 0x0D71E
+	.equ StyleVar_Atmospheric16, NakaData_StyleBitmaps + 0x0D784
+	.equ NakaInst_Ballad_Romance_67_EC49A4, NakaData_StyleBitmaps + 0x0D7E6
+	.equ StyleVar_SynthBallad, NakaData_StyleBitmaps + 0x0D82A
+	.equ NakaInst_Gentle_Ballad_75_EC4A6C, NakaData_StyleBitmaps + 0x0D8AE
+	.equ StyleVar_GrandsOnStage, NakaData_StyleBitmaps + 0x0D8D0
+	.equ NakaInst_Clavier_Francais_80, NakaData_StyleBitmaps + 0x0D8EE
+	.equ StyleVar_ModernBallads, NakaData_StyleBitmaps + 0x0D976
+	.equ NakaInst_Synth_Love_Song_84, NakaData_StyleBitmaps + 0x0D9B6
+	.equ StyleVar_NightClubDance, NakaData_StyleBitmaps + 0x0DA1C
+	.equ NakaInst_String_Romance_72, NakaData_StyleBitmaps + 0x0DA7E
+	.equ StyleVar_50sLoveSongs, NakaData_StyleBitmaps + 0x0DAC2
+	.equ NakaInst_Shuffle_Chanson_100, NakaData_StyleBitmaps + 0x0DB46
+	.equ StyleVar_OldieBallads, NakaData_StyleBitmaps + 0x0DB68
+	.equ NakaInst_Flute_Nocturne_63, NakaData_StyleBitmaps + 0x0DB86
+	.equ StyleVar_SoftSchlager, NakaData_StyleBitmaps + 0x0DC0E
+	.equ NakaInst_Spacy_Ballad_64, NakaData_StyleBitmaps + 0x0DC4E
+	.equ StyleVar_OldieDrawbars, NakaData_StyleBitmaps + 0x0DCB4
+	.equ NakaInst_Oldie_s_Parade_125, NakaData_StyleBitmaps + 0x0DD16
+	.equ StyleVar_EuroBallads, NakaData_StyleBitmaps + 0x0DD5A
+	.equ NakaInst_Dreamy_Harmonica_68, NakaData_StyleBitmaps + 0x0DDDE
+	.equ StyleVar_RomanticBand, NakaData_StyleBitmaps + 0x0DE00
+	.equ NakaInst_Late_Night_Tenor_117, NakaData_StyleBitmaps + 0x0DE1E
+	.equ StyleVar_JazzSerenade, NakaData_StyleBitmaps + 0x0DEA6
+	.equ NakaInst_Mellow_Mood_83, NakaData_StyleBitmaps + 0x0DEE6
+	.equ StyleVar_NatsBallads, NakaData_StyleBitmaps + 0x0DF4C
+	.equ NakaInst_Sweet_Swing_90, NakaData_StyleBitmaps + 0x0DFAE
+	.equ StyleVar_DrawbarCombo, NakaData_StyleBitmaps + 0x0DFF2
+	.equ NakaInst_Wunderlich_Combo_180, NakaData_StyleBitmaps + 0x0E076
+	.equ StyleVar_ParisRomance, NakaData_StyleBitmaps + 0x0E098
+	.equ NakaInst_French_Clavier_92, NakaData_StyleBitmaps + 0x0E0B6
+	.equ StyleVar_EasyPlayWaltz, NakaData_StyleBitmaps + 0x0E13E
+	.equ NakaInst_Three_Four_Vibes_110, NakaData_StyleBitmaps + 0x0E17E
+	.equ StyleVar_ParisianNights, NakaData_StyleBitmaps + 0x0E1E4
+	.equ NakaInst_Cafe_Atmosphere_175, NakaData_StyleBitmaps + 0x0E246
+	.equ StyleVar_EasyJazzWaltz, NakaData_StyleBitmaps + 0x0E28A
+	.equ NakaInst_Suited_To_Jazz_150, NakaData_StyleBitmaps + 0x0E30E
+	.equ NakaInst_Rock_Fall_155, NakaData_StyleBitmaps + 0x0E34E
+	.equ NakaInst_Hard_Blown_R_R_150, NakaData_StyleBitmaps + 0x0E416
+	.equ NakaInst_Boogie_Band_154, NakaData_StyleBitmaps + 0x0E4DE
+	.equ NakaInst_Don_t_Do_It_158, NakaData_StyleBitmaps + 0x0E5A6
+	.equ NakaInst_Barry_s_Boogie_150, NakaData_StyleBitmaps + 0x0E5E6
+	.equ NakaInst_Twin_E_P_Ballad_67, NakaData_StyleBitmaps + 0x0E6AE
+	.equ NakaInst_Solid_Surfin_144, NakaData_StyleBitmaps + 0x0E776
+	.equ NakaInst_Monkeying_About_154, NakaData_StyleBitmaps + 0x0E83E
+	.equ NakaInst_I_Want_To_B3_150, NakaData_StyleBitmaps + 0x0E87E
+	.equ NakaInst_Santa_Monica_Way_150, NakaData_StyleBitmaps + 0x0E946
+	.equ NakaInst_Handbag_Dance_129, NakaData_StyleBitmaps + 0x0EA0E
+	.equ NakaInst_Elton_s_Piano_136, NakaData_StyleBitmaps + 0x0EAD6
+	.equ NakaInst_Dire_Strats_138_EC5CD4, NakaData_StyleBitmaps + 0x0EB16
+	.equ NakaInst_C_P_On_Stage_145, NakaData_StyleBitmaps + 0x0EBDE
+	.equ NakaInst_Pop_Leader_144, NakaData_StyleBitmaps + 0x0ECA6
+	.equ NakaInst_Analogue_Ballad_106, NakaData_StyleBitmaps + 0x0ED6E
+	.equ NakaInst_Italy_Pop_Organ_118, NakaData_StyleBitmaps + 0x0EDAE
+	.equ NakaInst_Pop_Horns_111, NakaData_StyleBitmaps + 0x0EE76
+	.equ NakaInst_Sax_Rock_116, NakaData_StyleBitmaps + 0x0EF3E
+	.equ NakaInst_Ballad_Warmth_78, NakaData_StyleBitmaps + 0x0F006
+	.equ NakaInst_Everybody_Rock_131, NakaData_StyleBitmaps + 0x0F046
+	.equ NakaInst_Deep_Hammond_142, NakaData_StyleBitmaps + 0x0F10E
+	.equ NakaInst_Hard_Analogue_148_EC6394, NakaData_StyleBitmaps + 0x0F1D6
+	.equ NakaInst_Heavy_Harmonica_74_EC645C, NakaData_StyleBitmaps + 0x0F29E
+	.equ NakaInst_Digital_Swing_92, NakaData_StyleBitmaps + 0x0F2DE
+	.equ NakaInst_Blues_Harp_Swing_62, NakaData_StyleBitmaps + 0x0F3A6
+	.equ NakaInst_L_A_Strings_92, NakaData_StyleBitmaps + 0x0F42A
+	.equ NakaInst_Synth_Guitar_Pop_92, NakaData_StyleBitmaps + 0x0F46E
+	.equ NakaInst_Wide_Hornsection_100, NakaData_StyleBitmaps + 0x0F4F2
+	.equ NakaInst_Mad_Tabs_100, NakaData_StyleBitmaps + 0x0F536
+	.equ NakaInst_Key_Grooves_102, NakaData_StyleBitmaps + 0x0F576
+	.equ NakaInst_George_B_Unison_102, NakaData_StyleBitmaps + 0x0F5BA
+	.equ NakaInst_L_A_Synth_85, NakaData_StyleBitmaps + 0x0F63E
+	.equ NakaInst_Funk_Keys_96, NakaData_StyleBitmaps + 0x0F706
+	.equ NakaInst_Yuppie_Keys_97, NakaData_StyleBitmaps + 0x0F7CE
+	.equ NakaInst_Sweeping_Bridge_110, NakaData_StyleBitmaps + 0x0F80E
+	.equ StyleVar_FunkyTalk, NakaData_StyleBitmaps + 0x0F896
+	.equ NakaInst_Retro_Groove_127, NakaData_StyleBitmaps + 0x0F8D6
+	.equ StyleVar_OldDanceHit, NakaData_StyleBitmaps + 0x0F93C
+	.equ NakaInst_Metalic_Dance_121, NakaData_StyleBitmaps + 0x0F99E
+	.equ StyleVar_PolyDance, NakaData_StyleBitmaps + 0x0F9E2
+	.equ NakaInst_House_Piano_125, NakaData_StyleBitmaps + 0x0FA66
+	.equ StyleVar_DanceSquares, NakaData_StyleBitmaps + 0x0FA88
+	.equ NakaInst_Techno_Angle_146, NakaData_StyleBitmaps + 0x0FAA6
+	.equ StyleVar_DiscoTechni, NakaData_StyleBitmaps + 0x0FB2E
+	.equ NakaInst_Disco_Techni_118_EC6D2C, NakaData_StyleBitmaps + 0x0FB6E
+	.equ StyleVar_EuroDiscoHit, NakaData_StyleBitmaps + 0x0FBD4
+	.equ NakaInst_New_York_Disco_115, NakaData_StyleBitmaps + 0x0FC36
+	.equ StyleVar_DiscoTalk, NakaData_StyleBitmaps + 0x0FC7A
+	.equ NakaInst_Disco_Agogo_121, NakaData_StyleBitmaps + 0x0FCFE
+	.equ StyleVar_70sDanceHit, NakaData_StyleBitmaps + 0x0FD20
+	.equ NakaInst_Disco_Metal_124_EC6EFC, NakaData_StyleBitmaps + 0x0FD3E
+	.equ StyleVar_DiscoRanger, NakaData_StyleBitmaps + 0x0FDC6
+	.equ NakaInst_Hip_Hop_Echoes_108, NakaData_StyleBitmaps + 0x0FE06
+	.equ StyleVar_GloryDisco, NakaData_StyleBitmaps + 0x0FE6C
+	.equ NakaInst_Synth_of_The_90s_108, NakaData_StyleBitmaps + 0x0FECE
+	.equ StyleVar_NYRap, NakaData_StyleBitmaps + 0x0FF12
+	.equ NakaInst_Pump_The_Bass_96, NakaData_StyleBitmaps + 0x0FF96
+	.equ StyleVar_HipHop, NakaData_StyleBitmaps + 0x0FFB8
+	.equ NakaInst_Dance_Island_104_EC7194, NakaData_StyleBitmaps + 0x0FFD6
+	.equ StyleVar_ReggaeHit, NakaData_StyleBitmaps + 0x1005E
+	.equ NakaInst_Rasta_Jambo_101, NakaData_StyleBitmaps + 0x1009E
+	.equ StyleVar_RioGosDisco, NakaData_StyleBitmaps + 0x10104
+	.equ NakaInst_Dancing_Flutes_125_EC7324, NakaData_StyleBitmaps + 0x10166
+	.equ StyleVar_JamboDance, NakaData_StyleBitmaps + 0x101AA
+	.equ NakaInst_Reggae_Dance_Hit_101, NakaData_StyleBitmaps + 0x1022E
+	.equ StyleVar_SambaParty, NakaData_StyleBitmaps + 0x10250
+	.equ NakaInst_Festival_Amigos_116_EC742C, NakaData_StyleBitmaps + 0x1026E
+	.equ StyleVar_LatinFestival, NakaData_StyleBitmaps + 0x102F6
+	.equ NakaInst_Dance_Surround_124_EC74F4, NakaData_StyleBitmaps + 0x10336
+	.equ NakaInst_Last_Starparade_120, NakaData_StyleBitmaps + 0x103FE
+	.equ NakaInst_Party_Flautist_111, NakaData_StyleBitmaps + 0x104C6
+	.equ NakaInst_German_HitParade_120, NakaData_StyleBitmaps + 0x10506
+	.equ NakaInst_Ady_s_PartyOrgan_125_EC778C, NakaData_StyleBitmaps + 0x105CE
+	.equ NakaInst_Pop_Of_The_Bells_125, NakaData_StyleBitmaps + 0x10696
+	.equ NakaInst_Puppet_March_116, NakaData_StyleBitmaps + 0x1075E
+	.equ NakaInst_Party_Space_120, NakaData_StyleBitmaps + 0x1079E
+	.equ NakaInst_Orgel_Pops_111, NakaData_StyleBitmaps + 0x10866
+	.equ NakaInst_Anka_Rock_133, NakaData_StyleBitmaps + 0x1092E
+	.equ NakaInst_Party_Register_115, NakaData_StyleBitmaps + 0x109F6
+	.equ NakaInst_Shake_It_All_162, NakaData_StyleBitmaps + 0x10A36
+	.equ NakaInst_Chords_Birds_100, NakaData_StyleBitmaps + 0x10AFE
+	.equ NakaInst_Banjo_Sing_Song_134, NakaData_StyleBitmaps + 0x10BC6
+	.equ NakaInst_Fiddle_Dance_132, NakaData_StyleBitmaps + 0x10C8E
+	.equ NakaInst_Symphony_Hoedown_206, NakaData_StyleBitmaps + 0x10CCE
+	.equ NakaInst_Techno_Ranger_138, NakaData_StyleBitmaps + 0x10D96
+	.equ NakaInst_The_Zillertaler_150, NakaData_StyleBitmaps + 0x10E5E
+	.equ NakaInst_Sepp_s_Clarinet_195, NakaData_StyleBitmaps + 0x10F26
+	.equ NakaInst_Miseltoe_Melody_75, NakaData_StyleBitmaps + 0x10F66
+	.equ StyleVar_KingOfSoul, NakaData_StyleBitmaps + 0x10FEE
+	.equ NakaInst_Bad_Soul_Bars_140, NakaData_StyleBitmaps + 0x1102E
+	.equ StyleVar_DetroitPop, NakaData_StyleBitmaps + 0x11094
+	.equ NakaInst_Ross_Vocals_142, NakaData_StyleBitmaps + 0x110F6
+	.equ StyleVar_SoftSoul, NakaData_StyleBitmaps + 0x1113A
+	.equ NakaInst_A_Case_Of_Soul_114_EC837C, NakaData_StyleBitmaps + 0x111BE
+	.equ StyleVar_NewSoulBallad, NakaData_StyleBitmaps + 0x111E0
+	.equ NakaInst_Soul_Suitcase_70, NakaData_StyleBitmaps + 0x111FE
+	.equ StyleVar_SoulToSun, NakaData_StyleBitmaps + 0x11286
+	.equ NakaInst_Keys_To_Soul_88, NakaData_StyleBitmaps + 0x112C6
+	.equ StyleVar_MellowSoul, NakaData_StyleBitmaps + 0x1132C
+	.equ NakaInst_Sweet_16_Sax_66, NakaData_StyleBitmaps + 0x1138E
+	.equ StyleVar_SlowSoulMood, NakaData_StyleBitmaps + 0x113D2
+	.equ NakaInst_Soul_On_My_Mind_64, NakaData_StyleBitmaps + 0x11456
+	.equ StyleVar_RBGroove, NakaData_StyleBitmaps + 0x11478
+	.equ NakaInst_Blues_Horns_112, NakaData_StyleBitmaps + 0x11496
+	.equ StyleVar_DownDirtyBlues, NakaData_StyleBitmaps + 0x1151E
+	.equ NakaInst_Solid_Blues_78, NakaData_StyleBitmaps + 0x1155E
+	.equ StyleVar_RockBlues, NakaData_StyleBitmaps + 0x115C4
+	.equ NakaInst_Hard_Sax_Blues_124_EC87E4, NakaData_StyleBitmaps + 0x11626
+	.equ StyleVar_PlayTheBlues, NakaData_StyleBitmaps + 0x1166A
+	.equ NakaInst_I_Got_The_Blues_83_EC88AC, NakaData_StyleBitmaps + 0x116EE
+	.equ StyleVar_BluesAlley, NakaData_StyleBitmaps + 0x11710
+	.equ StyleVar_DayOfRest, NakaData_StyleBitmaps + 0x11902
+	.equ NakaInst_Gospel_Standard_124, NakaData_StyleBitmaps + 0x11986
+	.equ StyleVar_PowerGospel, NakaData_StyleBitmaps + 0x119A8
+	.equ NakaInst_Congregation_151, NakaData_StyleBitmaps + 0x119C6
+	.equ StyleVar_GospelBlues, NakaData_StyleBitmaps + 0x11A4E
+	.equ NakaInst_Drawbar_Service_66, NakaData_StyleBitmaps + 0x11A8E
+	.equ StyleVar_GospelInThrees, NakaData_StyleBitmaps + 0x11AF4
+	.equ NakaInst_Sing_It_Play_It_92, NakaData_StyleBitmaps + 0x11B56
+	.equ StyleVar_UpTempoBigband, NakaData_StyleBitmaps + 0x11B9A
+	.equ NakaInst_The_Duke_s_Piano_170, NakaData_StyleBitmaps + 0x11C1E
+	.equ StyleVar_SteadySwingband, NakaData_StyleBitmaps + 0x11C40
+	.equ NakaInst_Reeds_in_Unison_110, NakaData_StyleBitmaps + 0x11C5E
+	.equ StyleVar_AllAboard, NakaData_StyleBitmaps + 0x11CE6
+	.equ NakaInst_Main_Line_Brass_150, NakaData_StyleBitmaps + 0x11D26
+	.equ StyleVar_40sDanceBand, NakaData_StyleBitmaps + 0x11D8C
+	.equ NakaInst_Miller_Reeds_86, NakaData_StyleBitmaps + 0x11DEE
+	.equ StyleVar_SentimentalBand, NakaData_StyleBitmaps + 0x11E32
+	.equ NakaInst_Acker_s_Solo_90, NakaData_StyleBitmaps + 0x11EB6
+	.equ StyleVar_MoonlightDance, NakaData_StyleBitmaps + 0x11ED8
+	.equ NakaInst_Glenn_s_Big_Band_90, NakaData_StyleBitmaps + 0x11EF6
+	.equ StyleVar_40sLoveSongs, NakaData_StyleBitmaps + 0x11F7E
+	.equ NakaInst_Big_Band_Sound_92, NakaData_StyleBitmaps + 0x11FBE
+	.equ StyleVar_MidSwingband, NakaData_StyleBitmaps + 0x12024
+	.equ NakaInst_Reed_It_Mute_It_127, NakaData_StyleBitmaps + 0x12086
+	.equ StyleVar_SwingOrchestra, NakaData_StyleBitmaps + 0x120CA
+	.equ NakaInst_Swingin_Frets_142, NakaData_StyleBitmaps + 0x1214E
+	.equ StyleVar_NightClubCombo, NakaData_StyleBitmaps + 0x12170
+	.equ NakaInst_Swing_Unison_158, NakaData_StyleBitmaps + 0x1218E
+	.equ StyleVar_EasyPlaySwing, NakaData_StyleBitmaps + 0x12216
+	.equ NakaInst_Swing_Sparkle_140, NakaData_StyleBitmaps + 0x12256
+	.equ StyleVar_JazzClub, NakaData_StyleBitmaps + 0x122BC
+	.equ NakaInst_Club_Duet_146, NakaData_StyleBitmaps + 0x1231E
+	.equ StyleVar_UpTempoCombo, NakaData_StyleBitmaps + 0x12362
+	.equ NakaInst_Acoustic_Jazz_174, NakaData_StyleBitmaps + 0x123E6
+	.equ StyleVar_SimpleJazz, NakaData_StyleBitmaps + 0x12408
+	.equ NakaInst_Wild_Side_Organ_200, NakaData_StyleBitmaps + 0x12426
+	.equ StyleVar_40sBoogie, NakaData_StyleBitmaps + 0x124AE
+	.equ NakaInst_Boogie_Dance_160_EC96AC, NakaData_StyleBitmaps + 0x124EE
+	.equ StyleVar_JazzStandards, NakaData_StyleBitmaps + 0x12554
+	.equ NakaInst_Saxy_Jazz_145, NakaData_StyleBitmaps + 0x125B6
+	.equ StyleVar_ComboDrawbars, NakaData_StyleBitmaps + 0x125FA
+	.equ NakaInst_Even_Jazz_170, NakaData_StyleBitmaps + 0x1267E
+	.equ StyleVar_GentleJazz, NakaData_StyleBitmaps + 0x126A0
+	.equ NakaInst_Combo_Soloists_126, NakaData_StyleBitmaps + 0x126BE
+	.equ StyleVar_GypsyJazzers, NakaData_StyleBitmaps + 0x12746
+	.equ NakaInst_Stephane_Django_210, NakaData_StyleBitmaps + 0x12786
+	.equ StyleVar_JazzAccordion, NakaData_StyleBitmaps + 0x127EC
+	.equ NakaInst_Let_It_Register_158, NakaData_StyleBitmaps + 0x1284E
+	.equ StyleVar_SpeakeasyJazz, NakaData_StyleBitmaps + 0x12892
+	.equ NakaInst_Chicago_Piano_184, NakaData_StyleBitmaps + 0x12916
+	.equ StyleVar_JazzFrancais, NakaData_StyleBitmaps + 0x12938
+	.equ NakaInst_Squeeze_Box_Jazz_190, NakaData_StyleBitmaps + 0x12956
+	.equ StyleVar_VanDammeJazz, NakaData_StyleBitmaps + 0x129DE
+	.equ NakaInst_Deuringer_Swing_190_EC9BDC, NakaData_StyleBitmaps + 0x12A1E
+	.equ StyleVar_EuroJazz, NakaData_StyleBitmaps + 0x12A84
+	.equ NakaInst_Duelling_Reeds_147, NakaData_StyleBitmaps + 0x12AE6
+	.equ StyleVar_SmokeyJazzClub, NakaData_StyleBitmaps + 0x12B2A
+	.equ NakaInst_Slide_Scale_Jazz_70, NakaData_StyleBitmaps + 0x12BAE
+	.equ StyleVar_JazzAt3am, NakaData_StyleBitmaps + 0x12BD0
+	.equ NakaInst_Unwind_To_This_72, NakaData_StyleBitmaps + 0x12BEE
+	.equ StyleVar_SteadyJazz34, NakaData_StyleBitmaps + 0x12C76
+	.equ NakaInst_Do_You_Reed_It_158, NakaData_StyleBitmaps + 0x12CB6
+	.equ StyleVar_SlowJazz34, NakaData_StyleBitmaps + 0x12D1C
+	.equ NakaInst_Toots_Trick_150, NakaData_StyleBitmaps + 0x12D7E
+	.equ StyleVar_TheGroove, NakaData_StyleBitmaps + 0x12DC2
+	.equ NakaInst_Soprano_Groove_180, NakaData_StyleBitmaps + 0x12E46
+	.equ StyleVar_LAFusion, NakaData_StyleBitmaps + 0x12E68
+	.equ NakaInst_Fusion_Tines_98_ECA044, NakaData_StyleBitmaps + 0x12E86
+	.equ StyleVar_MusicalOverture, NakaData_StyleBitmaps + 0x12F0E
+	.equ NakaInst_In_The_Limelight_132, NakaData_StyleBitmaps + 0x12F4E
+	.equ StyleVar_Tinseltown, NakaData_StyleBitmaps + 0x12FB4
+	.equ NakaInst_Fred_Ginger_120, NakaData_StyleBitmaps + 0x13016
+	.equ StyleVar_Showband, NakaData_StyleBitmaps + 0x1305A
+	.equ NakaInst_Mallets_On_Stage_135, NakaData_StyleBitmaps + 0x130DE
+	.equ StyleVar_TheatreStride, NakaData_StyleBitmaps + 0x13100
+	.equ NakaInst_Vaudeville_Bones_124, NakaData_StyleBitmaps + 0x1311E
+	.equ StyleVar_VaudevilleAct, NakaData_StyleBitmaps + 0x131A6
+	.equ NakaInst_Skeleton_Dance_165, NakaData_StyleBitmaps + 0x131E6
+	.equ StyleVar_TapDancer, NakaData_StyleBitmaps + 0x1324C
+	.equ NakaInst_Yankee_Doodle_It_182, NakaData_StyleBitmaps + 0x132AE
+	.equ StyleVar_ParisClub, NakaData_StyleBitmaps + 0x132F2
+	.equ NakaInst_Take_Your_Seat_118, NakaData_StyleBitmaps + 0x13376
+	.equ StyleVar_CabaretBand, NakaData_StyleBitmaps + 0x13398
+	.equ NakaInst_Midnight_Soloist_162, NakaData_StyleBitmaps + 0x133B6
+	.equ StyleVar_VivaLasVegas, NakaData_StyleBitmaps + 0x1343E
+	.equ NakaInst_Vegas_Showman_75, NakaData_StyleBitmaps + 0x1347E
+	.equ StyleVar_MagicBallroom, NakaData_StyleBitmaps + 0x134E4
+	.equ NakaInst_Strasser_More_120, NakaData_StyleBitmaps + 0x13546
+	.equ StyleVar_GentleFoxtrot, NakaData_StyleBitmaps + 0x1358A
+	.equ NakaInst_Foxy_Squeezebox_154_ECA7CC, NakaData_StyleBitmaps + 0x1360E
+	.equ StyleVar_OrganistsDance, NakaData_StyleBitmaps + 0x13630
+	.equ NakaInst_Old_Wheels_Dance_190, NakaData_StyleBitmaps + 0x1364E
+	.equ StyleVar_UpTempoFoxtrot, NakaData_StyleBitmaps + 0x136D6
+	.equ NakaInst_Foxy_Brassy_170, NakaData_StyleBitmaps + 0x13716
+	.equ StyleVar_StrictlyFoxtrot, NakaData_StyleBitmaps + 0x1377C
+	.equ NakaInst_Come_Dancing_120, NakaData_StyleBitmaps + 0x137DE
+	.equ StyleVar_RadioFoxtrot, NakaData_StyleBitmaps + 0x13822
+	.equ NakaInst_Wunder_Fox_168, NakaData_StyleBitmaps + 0x138A6
+	.equ StyleVar_StrictlyQuick, NakaData_StyleBitmaps + 0x138C8
+	.equ NakaInst_Organ_Quickstep_200, NakaData_StyleBitmaps + 0x138E6
+	.equ StyleVar_LetsTwist, NakaData_StyleBitmaps + 0x1396E
+	.equ NakaInst_Solid_Twist_168, NakaData_StyleBitmaps + 0x139AE
+	.equ StyleVar_JiveDance, NakaData_StyleBitmaps + 0x13A14
+	.equ NakaInst_Dance_Band_Jive_176_ECAC34, NakaData_StyleBitmaps + 0x13A76
+	.equ StyleVar_DoTheTwist, NakaData_StyleBitmaps + 0x13ABA
+	.equ NakaInst_Bari_Twist_155, NakaData_StyleBitmaps + 0x13B3E
+	.equ StyleVar_12ChaChaCha, NakaData_StyleBitmaps + 0x13B60
+	.equ NakaInst_Sequin_Dance_128, NakaData_StyleBitmaps + 0x13B7E
+	.equ StyleVar_LetsBeguine, NakaData_StyleBitmaps + 0x13C06
+	.equ NakaInst_Beguine_Romance_118, NakaData_StyleBitmaps + 0x13C46
+	.equ StyleVar_SambaFelicidade, NakaData_StyleBitmaps + 0x13CAC
+	.equ NakaInst_Samba_Testamento_115, NakaData_StyleBitmaps + 0x13D0E
+	.equ StyleVar_VivaPasodoble, NakaData_StyleBitmaps + 0x13D52
+	.equ NakaInst_Espana_Two_Step_118, NakaData_StyleBitmaps + 0x13DD6
+	.equ StyleVar_StrictTango, NakaData_StyleBitmaps + 0x13DF8
+	.equ NakaInst_Tango_Marcato_120, NakaData_StyleBitmaps + 0x13E16
+	.equ StyleVar_TangoDAmour, NakaData_StyleBitmaps + 0x13E9E
+	.equ StyleVar_LastDanceWaltz, NakaData_StyleBitmaps + 0x13FEA
+	.equ NakaInst_Concertina_Waltz_96, NakaData_StyleBitmaps + 0x1406E
+	.equ StyleVar_QuickWaltz, NakaData_StyleBitmaps + 0x14090
+	.equ StyleVar_PartyVienna, NakaData_StyleBitmaps + 0x14282
+	.equ NakaInst_Ball_Gown_Waltz_171, NakaData_StyleBitmaps + 0x14306
+	.equ NakaInst_Full_Brass_Band_115_ECB504, NakaData_StyleBitmaps + 0x14346
+	.equ NakaInst_Alto_Marchpast_115, NakaData_StyleBitmaps + 0x1440E
+	.equ NakaInst_OktoberFest_109, NakaData_StyleBitmaps + 0x144D6
+	.equ NakaInst_At_The_Eger_120_ECB75C, NakaData_StyleBitmaps + 0x1459E
+	.equ NakaInst_Marching_Polka_124, NakaData_StyleBitmaps + 0x145DE
+	.equ NakaInst_Wedding_Party_135, NakaData_StyleBitmaps + 0x146A6
+	.equ NakaInst_Alpine_Combo_125_ECB92C, NakaData_StyleBitmaps + 0x1476E
+	.equ NakaInst_Emerald_Flute_120, NakaData_StyleBitmaps + 0x14836
+	.equ NakaInst_Scottish_Band_172, NakaData_StyleBitmaps + 0x14876
+	.equ NakaInst_Waltzing_Concert_169, NakaData_StyleBitmaps + 0x1493E
+	.equ NakaInst_Matterhorn_Waltz_197, NakaData_StyleBitmaps + 0x14A06
+	.equ NakaInst_Mazurka_Clarinet_150, NakaData_StyleBitmaps + 0x14ACE
+	.equ NakaInst_Tiroler_Harp_190, NakaData_StyleBitmaps + 0x14B0E
+	.equ NakaInst_Waikiki_Voices_101, NakaData_StyleBitmaps + 0x14BD6
+	.equ NakaInst_Hula_Dance_130, NakaData_StyleBitmaps + 0x14C9E
+	.equ NakaInst_Syncopated_Wood_130, NakaData_StyleBitmaps + 0x14D66
+	.equ NakaInst_Maple_Leaf_Piano_180, NakaData_StyleBitmaps + 0x14DA6
+	.equ NakaInst_Barber_Shop_Jazz_196_ECC02C, NakaData_StyleBitmaps + 0x14E6E
+	.equ NakaInst_Liquorice_Dixie_185, NakaData_StyleBitmaps + 0x14F36
+	.equ NakaInst_Never_On_A_120, NakaData_StyleBitmaps + 0x14FFE
+	.equ NakaInst_Cossack_Strings_141, NakaData_StyleBitmaps + 0x1503E
+	.equ NakaInst_Hungarian_Duet_115, NakaData_StyleBitmaps + 0x15106
+	.equ NakaInst_Spider_Dance_128, NakaData_StyleBitmaps + 0x151CE
+	.equ NakaInst_Jalapeno_Bellows_112, NakaData_StyleBitmaps + 0x15296
+	.equ NakaInst_Solid_Distortion_122, NakaData_StyleBitmaps + 0x152D6
+	.equ StyleVar_BluegrassTime, NakaData_StyleBitmaps + 0x1535E
+	.equ NakaInst_Cajun_Hoedown_124, NakaData_StyleBitmaps + 0x1539E
+	.equ StyleVar_ModernHoedown, NakaData_StyleBitmaps + 0x15404
+	.equ NakaInst_Country_Licks_235_ECC624, NakaData_StyleBitmaps + 0x15466
+	.equ StyleVar_KentuckyBlue, NakaData_StyleBitmaps + 0x154AA
+	.equ NakaInst_Country_Fiddle_123, NakaData_StyleBitmaps + 0x1552E
+	.equ StyleVar_TruckerCountry, NakaData_StyleBitmaps + 0x15550
+	.equ NakaInst_Fogerty_s_Stomp_206_ECC72C, NakaData_StyleBitmaps + 0x1556E
+	.equ StyleVar_CountryDance, NakaData_StyleBitmaps + 0x155F6
+	.equ NakaInst_Nashville_Dance_147, NakaData_StyleBitmaps + 0x15636
+	.equ StyleVar_HillbillyBlues, NakaData_StyleBitmaps + 0x1569C
+	.equ NakaInst_Steel_City_Blues_128, NakaData_StyleBitmaps + 0x156FE
+	.equ StyleVar_70sCountryPop, NakaData_StyleBitmaps + 0x15742
+	.equ NakaInst_Karen_s_Country_173, NakaData_StyleBitmaps + 0x157C6
+	.equ StyleVar_CountryRomance, NakaData_StyleBitmaps + 0x157E8
+	.equ NakaInst_Kentucky_Vocals_88, NakaData_StyleBitmaps + 0x15806
+	.equ StyleVar_WesternBallads, NakaData_StyleBitmaps + 0x1588E
+	.equ NakaInst_Cowboy_Saxes_85, NakaData_StyleBitmaps + 0x158CE
+	.equ StyleVar_CountryFolks, NakaData_StyleBitmaps + 0x15934
+	.equ NakaInst_South_Concertina_170, NakaData_StyleBitmaps + 0x15996
+	.equ StyleVar_Country88, NakaData_StyleBitmaps + 0x159DA
+	.equ NakaInst_Wandrin_Keys_75, NakaData_StyleBitmaps + 0x15A5E
+	.equ StyleVar_CountryLove, NakaData_StyleBitmaps + 0x15A80
+	.equ NakaInst_Tennessee_Guitar_88, NakaData_StyleBitmaps + 0x15A9E
+	.equ StyleVar_ModernCountry, NakaData_StyleBitmaps + 0x15B26
+	.equ NakaInst_Nashville_Steel_116, NakaData_StyleBitmaps + 0x15B66
+	.equ StyleVar_EZCountryRock, NakaData_StyleBitmaps + 0x15BCC
+	.equ NakaInst_Ricky_s_Guitar_128, NakaData_StyleBitmaps + 0x15C2E
+	.equ StyleVar_OldCountryHits, NakaData_StyleBitmaps + 0x15C72
+	.equ NakaInst_Geetar_Man_113, NakaData_StyleBitmaps + 0x15CF6
+	.equ StyleVar_NewCountryRock, NakaData_StyleBitmaps + 0x15D18
+	.equ NakaInst_Country_Horns_115, NakaData_StyleBitmaps + 0x15D36
+	.equ StyleVar_CountryHits, NakaData_StyleBitmaps + 0x15DBE
+	.equ NakaInst_Hard_Country_160, NakaData_StyleBitmaps + 0x15DFE
+	.equ NakaInst_Ham_Bossa_66, NakaData_StyleBitmaps + 0x15EC6
+	.equ NakaInst_Latin_Tines_68, NakaData_StyleBitmaps + 0x15F8E
+	.equ NakaInst_Modern_Bossa_74, NakaData_StyleBitmaps + 0x15FCE
+	.equ NakaInst_Julio_s_Romance_119, NakaData_StyleBitmaps + 0x16096
+	.equ NakaInst_Besame_Strings_120_ECD31C, NakaData_StyleBitmaps + 0x1615E
+	.equ NakaInst_Amor_Reed_117_ECD3E4, NakaData_StyleBitmaps + 0x16226
+	.equ NakaInst_Bolero_Orchestra_120_ECD424, NakaData_StyleBitmaps + 0x16266
+	.equ NakaInst_Holiday_Rhumba_115, NakaData_StyleBitmaps + 0x1632E
+	.equ NakaInst_Pepito_For_Pepe_130, NakaData_StyleBitmaps + 0x163F6
+	.equ NakaInst_Mambo_Bravisimo_129, NakaData_StyleBitmaps + 0x164BE
+	.equ NakaInst_Modern_Ballroom_134, NakaData_StyleBitmaps + 0x164FE
+	.equ NakaInst_Saxy_Mambo_132, NakaData_StyleBitmaps + 0x165C6
+	.equ NakaInst_Cumbia_Sol_90, NakaData_StyleBitmaps + 0x1668E
+	.equ NakaInst_Caribbean_Flute_83, NakaData_StyleBitmaps + 0x16756
+	.equ NakaInst_Brazil_Fanfare_114, NakaData_StyleBitmaps + 0x16796
+	.equ NakaInst_Sunshine_Sax_120, NakaData_StyleBitmaps + 0x1685E
+	.equ NakaInst_12_String_Samba_108, NakaData_StyleBitmaps + 0x16926
+	.equ NakaInst_Torero_s_Trumpet_125, NakaData_StyleBitmaps + 0x169EE
+	.equ StyleGroup_ModernDance_Table, NakaData_StyleBitmaps + 0x17132
+	.equ NakaInst_Easy_Jazz_Waltz, NakaData_StyleBitmaps + 0x17232
+	.equ NakaInst_Parisian_Nights, NakaData_StyleBitmaps + 0x17244
+	.equ NakaInst_Easy_Play_Waltz, NakaData_StyleBitmaps + 0x17256
+	.equ NakaInst_Paris_Romance, NakaData_StyleBitmaps + 0x17268
+	.equ NakaInst_Drawbar_Combo, NakaData_StyleBitmaps + 0x1727A
+	.equ NakaInst_Nat_s_Ballads, NakaData_StyleBitmaps + 0x1728C
+	.equ NakaInst_Jazz_Serenade, NakaData_StyleBitmaps + 0x1729E
+	.equ NakaInst_Romantic_Band, NakaData_StyleBitmaps + 0x172B0
+	.equ NakaInst_Euro_Ballads, NakaData_StyleBitmaps + 0x172C2
+	.equ NakaInst_Oldie_Drawbars, NakaData_StyleBitmaps + 0x172D4
+	.equ NakaInst_Soft_Schlager, NakaData_StyleBitmaps + 0x172E6
+	.equ NakaInst_Oldie_Ballads, NakaData_StyleBitmaps + 0x172F8
+	.equ NakaInst_50_s_Love_Songs, NakaData_StyleBitmaps + 0x1730A
+	.equ NakaInst_Night_Club_Dance, NakaData_StyleBitmaps + 0x1731C
+	.equ NakaInst_Modern_Ballads, NakaData_StyleBitmaps + 0x1732E
+	.equ NakaInst_Grands_on_Stage, NakaData_StyleBitmaps + 0x17340
+	.equ NakaInst_Synth_Ballad, NakaData_StyleBitmaps + 0x17352
+	.equ NakaInst_Atmospheric_16, NakaData_StyleBitmaps + 0x17364
+	.equ NakaInst_Gentle_16_Beat, NakaData_StyleBitmaps + 0x17376
+	.equ NakaInst_E_P_Moments, NakaData_StyleBitmaps + 0x17388
+	.equ NakaInst_Easy_Play_16Beat, NakaData_StyleBitmaps + 0x1739A
+	.equ NakaInst_16_Beat_Groove, NakaData_StyleBitmaps + 0x173AC
+	.equ NakaInst_Love_Songs, NakaData_StyleBitmaps + 0x173BE
+	.equ NakaInst_Ballad_Producer, NakaData_StyleBitmaps + 0x173D0
+	.equ NakaInst_Studio_8_Beat, NakaData_StyleBitmaps + 0x173E2
+	.equ NakaInst_Greatest_Hits, NakaData_StyleBitmaps + 0x173F4
+	.equ NakaInst_Smooth_Rock, NakaData_StyleBitmaps + 0x17406
+	.equ NakaInst_Orchestral_Beat, NakaData_StyleBitmaps + 0x17418
+	.equ NakaInst_Rock_After_Eight, NakaData_StyleBitmaps + 0x1742A
+	.equ NakaInst_Easy_Play_8_Beat, NakaData_StyleBitmaps + 0x1743C
+	.equ NakaInst_German_Schlager, NakaData_StyleBitmaps + 0x1744E
+	.equ StyleGroup_RockPop_PairTable, NakaData_StyleBitmaps + 0x17460
+	.equ NakaInst_Ballads, NakaData_StyleBitmaps + 0x17662
+	.equ StyleGroup_PopBallad_Table, NakaData_StyleBitmaps + 0x177C2
+	.equ NakaInst_Western_Techno, NakaData_StyleBitmaps + 0x17852
+	.equ NakaInst_Samba_Party, NakaData_StyleBitmaps + 0x17864
+	.equ NakaInst_Jambo_Dance, NakaData_StyleBitmaps + 0x17876
+	.equ NakaInst_Rio_Goes_Disco, NakaData_StyleBitmaps + 0x17888
+	.equ NakaInst_Reggae_Hit, NakaData_StyleBitmaps + 0x1789A
+	.equ NakaInst_The_Big_Hit, NakaData_StyleBitmaps + 0x178AC
+	.equ NakaInst_N_Y_Rap, NakaData_StyleBitmaps + 0x178BE
+	.equ NakaInst_80_s_90_s, NakaData_StyleBitmaps + 0x178D0
+	.equ NakaInst_Hip_Hop, NakaData_StyleBitmaps + 0x178E2
+	.equ NakaInst_70_s_Dance_Craze, NakaData_StyleBitmaps + 0x178F4
+	.equ NakaInst_Dance_Floor, NakaData_StyleBitmaps + 0x17906
+	.equ NakaInst_80_s_Disco, NakaData_StyleBitmaps + 0x17918
+	.equ NakaInst_Glory_Disco, NakaData_StyleBitmaps + 0x1792A
+	.equ NakaInst_Techno_World, NakaData_StyleBitmaps + 0x1793C
+	.equ NakaInst_House_Party, NakaData_StyleBitmaps + 0x1794E
+	.equ NakaInst_Straight_Dance, NakaData_StyleBitmaps + 0x17960
+	.equ NakaInst_British_DancePop, NakaData_StyleBitmaps + 0x17972
+	.equ StyleGroup_PartyMusic_PairTable, NakaData_StyleBitmaps + 0x17984
+	.equ StyleGroup_Swing_Table, NakaData_StyleBitmaps + 0x17B7A
+	.equ NakaInst_Gospel_In_Threes, NakaData_StyleBitmaps + 0x17C12
+	.equ NakaInst_Gospel_Blues, NakaData_StyleBitmaps + 0x17C24
+	.equ NakaInst_Power_Gospel, NakaData_StyleBitmaps + 0x17C36
+	.equ NakaInst_Day_Of_Rest, NakaData_StyleBitmaps + 0x17C48
+	.equ NakaInst_Lift_Your_Soul, NakaData_StyleBitmaps + 0x17C5A
+	.equ NakaInst_Sunday_Service, NakaData_StyleBitmaps + 0x17C6C
+	.equ NakaInst_Play_The_Blues, NakaData_StyleBitmaps + 0x17C7E
+	.equ NakaInst_Blues_Alley, NakaData_StyleBitmaps + 0x17C90
+	.equ NakaInst_Rock_Blues, NakaData_StyleBitmaps + 0x17CA2
+	.equ NakaInst_Down_Dirty_Blues, NakaData_StyleBitmaps + 0x17CB4
+	.equ NakaInst_R_B_Groove, NakaData_StyleBitmaps + 0x17CC6
+	.equ NakaInst_Slow_Soul_Mood, NakaData_StyleBitmaps + 0x17CD8
+	.equ NakaInst_Mellow_Soul, NakaData_StyleBitmaps + 0x17CEA
+	.equ NakaInst_Soul_To_Sun, NakaData_StyleBitmaps + 0x17CFC
+	.equ NakaInst_New_Soul_Ballad, NakaData_StyleBitmaps + 0x17D0E
+	.equ NakaInst_Soft_Soul, NakaData_StyleBitmaps + 0x17D20
+	.equ NakaInst_Detroit_Pop, NakaData_StyleBitmaps + 0x17D32
+	.equ NakaInst_King_Of_Soul, NakaData_StyleBitmaps + 0x17D44
+	.equ StyleGroup_FunkFusion_Separator, NakaData_StyleBitmaps + 0x17D56
+	.equ StyleGroup_FunkFusion_Table, NakaData_StyleBitmaps + 0x17D5A
+	.equ StyleGroup_FunkFusion_Pad, NakaData_StyleBitmaps + 0x17E49
+	.equ NakaInst_L_A_Fusion, NakaData_StyleBitmaps + 0x17E4E
+	.equ NakaInst_The_Groove, NakaData_StyleBitmaps + 0x17E60
+	.equ NakaInst_Slow_Jazz_3_4, NakaData_StyleBitmaps + 0x17E72
+	.equ NakaInst_Steady_Jazz_3_4, NakaData_StyleBitmaps + 0x17E84
+	.equ NakaInst_Jazz_At_3_00am, NakaData_StyleBitmaps + 0x17E96
+	.equ NakaInst_Smokey_Jazz_Club, NakaData_StyleBitmaps + 0x17EA8
+	.equ NakaInst_Euro_Jazz, NakaData_StyleBitmaps + 0x17EBA
+	.equ NakaInst_Van_Damme_Jazz, NakaData_StyleBitmaps + 0x17ECC
+	.equ NakaInst_Jazz_Francais, NakaData_StyleBitmaps + 0x17EDE
+	.equ NakaInst_Speakeasy_Jazz, NakaData_StyleBitmaps + 0x17EF0
+	.equ NakaInst_Jazz_Accordion, NakaData_StyleBitmaps + 0x17F02
+	.equ NakaInst_Gypsy_Jazzers, NakaData_StyleBitmaps + 0x17F14
+	.equ NakaInst_Gentle_Jazz, NakaData_StyleBitmaps + 0x17F26
+	.equ NakaInst_Combo_Drawbars, NakaData_StyleBitmaps + 0x17F38
+	.equ NakaInst_Jazz_Standards, NakaData_StyleBitmaps + 0x17F4A
+	.equ NakaInst_40_s_Boogie, NakaData_StyleBitmaps + 0x17F5C
+	.equ NakaInst_Simple_Jazz, NakaData_StyleBitmaps + 0x17F6E
+	.equ NakaInst_Up_Tempo_Combo, NakaData_StyleBitmaps + 0x17F80
+	.equ NakaInst_Jazz_Club, NakaData_StyleBitmaps + 0x17F92
+	.equ NakaInst_Easy_Play_Swing, NakaData_StyleBitmaps + 0x17FA4
+	.equ NakaInst_Night_Club_Combo, NakaData_StyleBitmaps + 0x17FB6
+	.equ NakaInst_Swing_Orchestra, NakaData_StyleBitmaps + 0x17FC8
+	.equ NakaInst_Mid_Swingband, NakaData_StyleBitmaps + 0x17FDA
+	.equ NakaInst_40_s_Love_Songs, NakaData_StyleBitmaps + 0x17FEC
+	.equ NakaInst_Moonlight_Dance, NakaData_StyleBitmaps + 0x17FFE
+	.equ NakaInst_Sentimental_Band, NakaData_StyleBitmaps + 0x18010
+	.equ NakaInst_40_s_Dance_Band, NakaData_StyleBitmaps + 0x18022
+	.equ NakaInst_All_Aboard, NakaData_StyleBitmaps + 0x18034
+	.equ NakaInst_Steady_Swingband, NakaData_StyleBitmaps + 0x18046
+	.equ StyleGroup_JazzCombo_Table, NakaData_StyleBitmaps + 0x1806A
+	.equ NakaInst_Party_Vienna, NakaData_StyleBitmaps + 0x1816A
+	.equ NakaInst_Walzer_Time, NakaData_StyleBitmaps + 0x1817C
+	.equ NakaInst_Austrian_Waltz, NakaData_StyleBitmaps + 0x1818E
+	.equ NakaInst_Quick_Waltz, NakaData_StyleBitmaps + 0x181A0
+	.equ NakaInst_Last_Dance_Waltz, NakaData_StyleBitmaps + 0x181B2
+	.equ NakaInst_Tango_Pianist, NakaData_StyleBitmaps + 0x181C4
+	.equ NakaInst_Tango_D_Amour, NakaData_StyleBitmaps + 0x181D6
+	.equ NakaInst_Strict_Tango, NakaData_StyleBitmaps + 0x181E8
+	.equ NakaInst_Viva_Pasodoble, NakaData_StyleBitmaps + 0x181FA
+	.equ NakaInst_Samba_Felicidade, NakaData_StyleBitmaps + 0x1820C
+	.equ NakaInst_Let_s_Beguine, NakaData_StyleBitmaps + 0x1821E
+	.equ NakaInst_1_2_Cha_Cha_Cha, NakaData_StyleBitmaps + 0x18230
+	.equ NakaInst_Do_The_Twist, NakaData_StyleBitmaps + 0x18242
+	.equ NakaInst_Jive_Dance, NakaData_StyleBitmaps + 0x18254
+	.equ NakaInst_Let_s_Twist, NakaData_StyleBitmaps + 0x18266
+	.equ NakaInst_Strictly_Quick, NakaData_StyleBitmaps + 0x18278
+	.equ NakaInst_Radio_Foxtrot, NakaData_StyleBitmaps + 0x1828A
+	.equ NakaInst_Strictly_Foxtrot, NakaData_StyleBitmaps + 0x1829C
+	.equ NakaInst_Up_Tempo_Foxtrot, NakaData_StyleBitmaps + 0x182AE
+	.equ NakaInst_Organist_s_Dance, NakaData_StyleBitmaps + 0x182C0
+	.equ NakaInst_Gentle_Foxtrot, NakaData_StyleBitmaps + 0x182D2
+	.equ NakaInst_Magic_Ballroom, NakaData_StyleBitmaps + 0x182E4
+	.equ NakaInst_Viva_Las_Vegas, NakaData_StyleBitmaps + 0x182F6
+	.equ NakaInst_Cabaret_Band, NakaData_StyleBitmaps + 0x18308
+	.equ NakaInst_Paris_Club, NakaData_StyleBitmaps + 0x1831A
+	.equ NakaInst_Tap_Dancer, NakaData_StyleBitmaps + 0x1832C
+	.equ NakaInst_Vaudeville_Act, NakaData_StyleBitmaps + 0x1833E
+	.equ NakaInst_Theatre_Stride, NakaData_StyleBitmaps + 0x18350
+	.equ NakaInst_Showband, NakaData_StyleBitmaps + 0x18362
+	.equ NakaInst_Tinseltown, NakaData_StyleBitmaps + 0x18374
+	.equ NakaInst_Musical_Overture, NakaData_StyleBitmaps + 0x18386
+	.equ StyleGroup_TradFolk_PairTable, NakaData_StyleBitmaps + 0x18398
+	.equ StyleGroup_WorldMusic_Table, NakaData_StyleBitmaps + 0x1862A
+	.equ NakaInst_Country_Hits, NakaData_StyleBitmaps + 0x186BA
+	.equ NakaInst_New_Country_Rock, NakaData_StyleBitmaps + 0x186CC
+	.equ NakaInst_Old_Country_Hits, NakaData_StyleBitmaps + 0x186DE
+	.equ NakaInst_EZ_Country_Rock, NakaData_StyleBitmaps + 0x186F0
+	.equ NakaInst_Modern_Country, NakaData_StyleBitmaps + 0x18702
+	.equ NakaInst_Country_Love, NakaData_StyleBitmaps + 0x18714
+	.equ NakaInst_Country_88, NakaData_StyleBitmaps + 0x18726
+	.equ NakaInst_Country_Folks, NakaData_StyleBitmaps + 0x18738
+	.equ NakaInst_Western_Ballads, NakaData_StyleBitmaps + 0x1874A
+	.equ NakaInst_Country_Romance, NakaData_StyleBitmaps + 0x1875C
+	.equ NakaInst_70_s_Country_Pop, NakaData_StyleBitmaps + 0x1876E
+	.equ NakaInst_Hillbilly_Blues, NakaData_StyleBitmaps + 0x18780
+	.equ NakaInst_Country_Dance, NakaData_StyleBitmaps + 0x18792
+	.equ NakaInst_Trucker_Country, NakaData_StyleBitmaps + 0x187A4
+	.equ NakaInst_Kentucky_Blue, NakaData_StyleBitmaps + 0x187B6
+	.equ NakaInst_Modern_Hoedown, NakaData_StyleBitmaps + 0x187C8
+	.equ NakaInst_Bluegrass_Time, NakaData_StyleBitmaps + 0x187DA
+	.equ StyleGroup_LatinWorld_PairTable, NakaData_StyleBitmaps + 0x187EC
+	.equ StyleGroup_LatinDance_Table, NakaData_StyleBitmaps + 0x18AEA
+	.equ NakaInst_Latin_World, NakaData_StyleBitmaps + 0x18B36
+	.equ NakaInst_Country, NakaData_StyleBitmaps + 0x18B48
+	.equ NakaInst_Trad_Folk, NakaData_StyleBitmaps + 0x18B5A
+	.equ NakaInst_Show_Trad_Dance, NakaData_StyleBitmaps + 0x18B6C
+	.equ NakaInst_Jazz_Swing, NakaData_StyleBitmaps + 0x18B7E
+	.equ NakaInst_Gospel_Blues_R_B, NakaData_StyleBitmaps + 0x18B90
+	.equ NakaInst_Party_Music, NakaData_StyleBitmaps + 0x18BA2
+	.equ NakaInst_Dance_Pop, NakaData_StyleBitmaps + 0x18BB4
+	.equ NakaInst_Rock_Pop, NakaData_StyleBitmaps + 0x18BC6
+	.equ SeqChan_Map_10ch, NakaData_StyleBitmaps + 0x18BF8
+	.equ SeqChan_Map_8ch, NakaData_StyleBitmaps + 0x18C02
+	.equ SeqChan_Map_6ch, NakaData_StyleBitmaps + 0x18C0A
+	.equ SeqChan_Map_4ch, NakaData_StyleBitmaps + 0x18C10
+	.equ SeqChan_Map_2ch, NakaData_StyleBitmaps + 0x18C14
+	.equ NakaInst_MEMORY_C_ECFDE0, NakaData_StyleBitmaps + 0x18C22
+	.equ NakaInst_MEMORY_B_ECFDEA, NakaData_StyleBitmaps + 0x18C2C
+	.equ NakaInst_MEMORY_A_ECFDF4, NakaData_StyleBitmaps + 0x18C36
+	.equ Naka_MemoryC_Screens, NakaData_StyleBitmaps + 0x18D22
+	.equ MemScreen_Space1, NakaData_StyleBitmaps + 0x18D62
+	.equ MemScreen_Space2, NakaData_StyleBitmaps + 0x18D66
+	.equ MemScreen_Space3, NakaData_StyleBitmaps + 0x18D6A
+	.equ MemScreen_NoteB, NakaData_StyleBitmaps + 0x18D6E
+	.equ NakaInst_B_a0, NakaData_StyleBitmaps + 0x18D72
+	.equ MemScreen_NoteA_Str, NakaData_StyleBitmaps + 0x18D78
+	.equ NakaInst_A_a0, NakaData_StyleBitmaps + 0x18D7C
+	.equ MemScreen_NoteG, NakaData_StyleBitmaps + 0x18D82
+	.equ NakaInst_F_9e_ECFF44, NakaData_StyleBitmaps + 0x18D86
+	.equ MemScreen_NoteF, NakaData_StyleBitmaps + 0x18D8C
+	.equ MemScreen_NoteE_Str, NakaData_StyleBitmaps + 0x18D90
+	.equ NakaInst_E_a0_ECFF52, NakaData_StyleBitmaps + 0x18D94
+	.equ MemScreen_NoteD, NakaData_StyleBitmaps + 0x18D9A
+	.equ NakaInst_D_a0_ECFF5C, NakaData_StyleBitmaps + 0x18D9E
+	.equ MemScreen_NoteC, NakaData_StyleBitmaps + 0x18DA4
+	.equ MemScreen_Blank, NakaData_StyleBitmaps + 0x18DA8
 .include "extensions/extension_data.s"

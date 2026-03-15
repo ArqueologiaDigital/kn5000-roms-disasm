@@ -1,1643 +1,383 @@
-; =============================================================================
-; NAKA Widget Pointer Tables - Part 2 (1.7K lines)
-; =============================================================================
-;
-; Widget data tables including CtlMsgGridBox, MidiControlMessage,
-; and additional NAKA type headers. Continuation of widget
-; definition data.
-; =============================================================================
 
-	sub	hl, iz
-	.byte 0xe5, 0x00, 0xdc, 0xa3, 0xe5, 0x00, 0xce, 0xa3
-	.byte 0xe5, 0x00, 0xcc, 0xa3, 0xe5, 0x00, 0xca, 0xa3
-	.byte 0xe5, 0x00, 0xc8, 0xa3, 0xe5, 0x00, 0xc6, 0xa3
-	.byte 0xe5, 0x00, 0xc4, 0xa3, 0xe5, 0x00, 0xc2, 0xa3
-	.byte 0xe5, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	aligned_string "CtlMsgGridBox"
-	.byte 0x00, 0xff
-	aligned_string "MidiControlMessage"
-	.byte 0x34, 0xa4, 0xe5, 0x00, 0x32, 0xa4
-	.byte 0xe5, 0x00, 0x1e, 0xa4, 0xe5, 0x00, 0x14, 0xa4
-	.byte 0xe5, 0x00, 0x12, 0xa4, 0xe5, 0x00, 0x10, 0xa4
-	.byte 0xe5, 0x00, 0x0e, 0xa4, 0xe5, 0x00, 0x00, 0xff
-	.byte 0x00, 0xff, 0x00, 0xff
-	aligned_string "ClockBox"
-	aligned_string "RealtimeCommandBox"
-	.byte 0x00, 0xff
-	aligned_string "MidiRealtimeMessage"
-
-
-NakaObj_MidiCommonSetting_Table:
-	.long NakaObj_MidiCommonSetting_Name
-	.long NakaObj_MidiCommonSetting_GridBox
-	.long NakaObj_MidiCommonSetting_Null4
-	.long NakaObj_MidiCommonSetting_Null3
-	.long NakaObj_MidiCommonSetting_Null2
-	.long NakaObj_MidiCommonSetting_Null1
-NakaObj_MidiCommonSetting_Null1:	aligned_string ""
-NakaObj_MidiCommonSetting_Null2:	aligned_string ""
-NakaObj_MidiCommonSetting_Null3:	aligned_string ""
-NakaObj_MidiCommonSetting_Null4:	aligned_string ""
-NakaObj_MidiCommonSetting_GridBox:	aligned_string "ComSetGridBox"
-NakaObj_MidiCommonSetting_Name:		aligned_string "MidiCommonSetting"
-NakaObj_MidiInOutSetting_Table:
-	.long NakaObj_MidiInOutSetting_Name
-	.long NakaObj_MidiInOutSetting_GridBox
-	.long NakaObj_MidiInOutSetting_Null4
-	.long NakaObj_MidiInOutSetting_Null3
-	.long NakaObj_MidiInOutSetting_Null2
-	.long NakaObj_MidiInOutSetting_Null1
-NakaObj_MidiInOutSetting_Null1:		aligned_string ""
-NakaObj_MidiInOutSetting_Null2:		aligned_string ""
-NakaObj_MidiInOutSetting_Null3:		aligned_string ""
-NakaObj_MidiInOutSetting_Null4:		aligned_string ""
-NakaObj_MidiInOutSetting_GridBox:	aligned_string "InOutGridBox"
-NakaObj_MidiInOutSetting_Name:		aligned_string "MidiInOutSetting"
-NakaObj_MidiPresets_Table:
-	.long NakaObj_MidiPresets_Name
-	.long NakaObj_MidiPresets_PageBox
-	.long NakaObj_MidiPresets_PageBoxNull2
-	.long NakaObj_MidiPresets_PageBoxNull1
-	.long NakaObj_MidiPresets_PageCtl1
-	.long NakaObj_MidiPresets_PageCtl2
-	.long NakaObj_MidiPresets_PageCtlNull
-	.long NakaObj_MidiPresets_SlaveWithout
-	.long NakaObj_MidiPresets_SlaveWithoutNull4
-	.long NakaObj_MidiPresets_SlaveWithoutNull3
-	.long NakaObj_MidiPresets_SlaveWithoutNull2
-	.long NakaObj_MidiPresets_SlaveWithoutNull1
-	.long NakaObj_MidiPresets_SlaveWithoutList
-	.long NakaObj_MidiPresets_SW_Null6
-	.long NakaObj_MidiPresets_SW_Null5
-	.long NakaObj_MidiPresets_SW_Null4
-	.long NakaObj_MidiPresets_SW_Null3
-	.long NakaObj_MidiPresets_SW_Null2
-	.long NakaObj_MidiPresets_SW_Null1
-	.long NakaObj_MidiPresets_SlaveWith
-	.long NakaObj_MidiPresets_SlaveWithNull
-	.long NakaObj_MidiPresets_SlaveWithList
-	.long NakaObj_MidiPresets_SWO_Null9
-	.long NakaObj_MidiPresets_SWO_Null8
-	.long NakaObj_MidiPresets_SWO_Null7
-	.long NakaObj_MidiPresets_SWO_Null6
-	.long NakaObj_MidiPresets_SWO_Null5
-	.long NakaObj_MidiPresets_SWO_Null4
-	.long NakaObj_MidiPresets_SWO_Null3
-	.long NakaObj_MidiPresets_SWO_Null2
-	.long NakaObj_MidiPresets_SWO_Null1
-	.long NakaObj_MidiPresets_Page3
-	.long NakaObj_MidiPresets_UserLoadList
-	.long NakaObj_MidiPresets_Page3_Null3
-	.long NakaObj_MidiPresets_Page3_Null2
-	.long NakaObj_MidiPresets_Page3_Null1
-	.long NakaObj_MidiPresets_Page4
-	.long NakaObj_MidiPresets_UserWriteList
-	.long NakaObj_MidiPresets_Page4_Null3
-	.long NakaObj_MidiPresets_Page4_Null2
-	.long NakaObj_MidiPresets_Page4_Null1
-	.long NakaObj_MidiPresets_SplitBox
-	.long NakaObj_MidiPresets_SplitNull
-	.long NakaObj_MidiPresets_MasterWithout
-	.long NakaObj_MidiPresets_MasterWithoutNull
-	.long NakaObj_MidiPresets_MasterWithoutList
-	.long NakaObj_MidiPresets_MWO_Null9
-	.long NakaObj_MidiPresets_MWO_Null8
-	.long NakaObj_MidiPresets_MWO_Null7
-	.long NakaObj_MidiPresets_MWO_Null6
-	.long NakaObj_MidiPresets_MWO_Null5
-	.long NakaObj_MidiPresets_MWO_Null4
-	.long NakaObj_MidiPresets_MWO_Null3
-	.long NakaObj_MidiPresets_MWO_Null2
-	.long NakaObj_MidiPresets_MWO_Null1
-	.long NakaObj_MidiPresets_MasterWith
-	.long NakaObj_MidiPresets_MasterWithNull
-	.long NakaObj_MidiPresets_MasterWithList
-	.long NakaObj_MidiPresets_Null10
-	.long NakaObj_MidiPresets_Null9
-	.long NakaObj_MidiPresets_Null8
-	.long NakaObj_MidiPresets_Null7
-	.long NakaObj_MidiPresets_Null6
-	.long NakaObj_MidiPresets_Null5
-	.long NakaObj_MidiPresets_Null4
-	.long NakaObj_MidiPresets_Null3
-	.long NakaObj_MidiPresets_Null2
-	.long NakaObj_MidiPresets_Null1
-NakaObj_MidiPresets_Null1:		aligned_string ""
-NakaObj_MidiPresets_Null2:		aligned_string ""
-NakaObj_MidiPresets_Null3:		aligned_string ""
-NakaObj_MidiPresets_Null4:		aligned_string ""
-NakaObj_MidiPresets_Null5:		aligned_string ""
-NakaObj_MidiPresets_Null6:		aligned_string ""
-NakaObj_MidiPresets_Null7:		aligned_string ""
-NakaObj_MidiPresets_Null8:		aligned_string ""
-NakaObj_MidiPresets_Null9:		aligned_string ""
-NakaObj_MidiPresets_Null10:		aligned_string ""
-NakaObj_MidiPresets_MasterWithList:	aligned_string "MpstMasterWithList"
-NakaObj_MidiPresets_MasterWithNull:	aligned_string ""
-NakaObj_MidiPresets_MasterWith:		aligned_string "MidiPresetMasterWith"
-NakaObj_MidiPresets_MWO_Null1:		aligned_string ""
-NakaObj_MidiPresets_MWO_Null2:		aligned_string ""
-NakaObj_MidiPresets_MWO_Null3:		aligned_string ""
-NakaObj_MidiPresets_MWO_Null4:		aligned_string ""
-NakaObj_MidiPresets_MWO_Null5:		aligned_string ""
-NakaObj_MidiPresets_MWO_Null6:		aligned_string ""
-NakaObj_MidiPresets_MWO_Null7:		aligned_string ""
-NakaObj_MidiPresets_MWO_Null8:		aligned_string ""
-NakaObj_MidiPresets_MWO_Null9:		aligned_string ""
-NakaObj_MidiPresets_MasterWithoutList:	aligned_string "MpstMasterWithoutList"
-NakaObj_MidiPresets_MasterWithoutNull:	aligned_string ""
-NakaObj_MidiPresets_MasterWithout:	aligned_string "MidiPresetMasterWithout"
-NakaObj_MidiPresets_SplitNull:		aligned_string ""
-NakaObj_MidiPresets_SplitBox:		aligned_string "MdpstSplitBox"
-NakaObj_MidiPresets_Page4_Null1:	aligned_string ""
-NakaObj_MidiPresets_Page4_Null2:	aligned_string ""
-NakaObj_MidiPresets_Page4_Null3:	aligned_string ""
-NakaObj_MidiPresets_UserWriteList:	aligned_string "MdPresetUserWriteList"
-NakaObj_MidiPresets_Page4:		aligned_string "MidiPresetPage4"
-NakaObj_MidiPresets_Page3_Null1:	aligned_string ""
-NakaObj_MidiPresets_Page3_Null2:	aligned_string ""
-NakaObj_MidiPresets_Page3_Null3:	aligned_string ""
-NakaObj_MidiPresets_UserLoadList:	aligned_string "MdPresetUserLoadList"
-NakaObj_MidiPresets_Page3:		aligned_string "MidiPresetPage3"
-NakaObj_MidiPresets_SWO_Null1:		aligned_string ""
-NakaObj_MidiPresets_SWO_Null2:		aligned_string ""
-NakaObj_MidiPresets_SWO_Null3:		aligned_string ""
-NakaObj_MidiPresets_SWO_Null4:		aligned_string ""
-NakaObj_MidiPresets_SWO_Null5:		aligned_string ""
-NakaObj_MidiPresets_SWO_Null6:		aligned_string ""
-NakaObj_MidiPresets_SWO_Null7:		aligned_string ""
-NakaObj_MidiPresets_SWO_Null8:		aligned_string ""
-NakaObj_MidiPresets_SWO_Null9:		aligned_string ""
-NakaObj_MidiPresets_SlaveWithList:	aligned_string "MpstSlaveWithList"
-NakaObj_MidiPresets_SlaveWithNull:	aligned_string ""
-NakaObj_MidiPresets_SlaveWith:		aligned_string "MidiPresetSlaveWith"
-NakaObj_MidiPresets_SW_Null1:		aligned_string ""
-NakaObj_MidiPresets_SW_Null2:		aligned_string ""
-NakaObj_MidiPresets_SW_Null3:		aligned_string ""
-NakaObj_MidiPresets_SW_Null4:		aligned_string ""
-NakaObj_MidiPresets_SW_Null5:		aligned_string ""
-NakaObj_MidiPresets_SW_Null6:		aligned_string ""
-NakaObj_MidiPresets_SlaveWithoutList:	aligned_string "MpstSlaveWithoutList"
-NakaObj_MidiPresets_SlaveWithoutNull1:	aligned_string ""
-NakaObj_MidiPresets_SlaveWithoutNull2:	aligned_string ""
-NakaObj_MidiPresets_SlaveWithoutNull3:	aligned_string ""
-NakaObj_MidiPresets_SlaveWithoutNull4:	aligned_string ""
-NakaObj_MidiPresets_SlaveWithout:	aligned_string "MidiPresetSlaveWithout"
-NakaObj_MidiPresets_PageCtlNull:	aligned_string ""
-NakaObj_MidiPresets_PageCtl2:		aligned_string "MpstPageCtl2"
-NakaObj_MidiPresets_PageCtl1:		aligned_string "MpstPageCtl1"
-NakaObj_MidiPresets_PageBoxNull1:	aligned_string ""
-NakaObj_MidiPresets_PageBoxNull2:	aligned_string ""
-NakaObj_MidiPresets_PageBox:		aligned_string "MdPresetPageBox"
-NakaObj_MidiPresets_Name:		aligned_string "MidiPresets"
-	.long NakaObj_MidiExclusive_Name
-NakaObj_MidiExclusive_Table:
-	.long NakaObj_MidiExclusive_NameNull2
-	.long NakaObj_MidiExclusive_NameNull1
-	.long NakaObj_MidiExclusive_ListBox
-	.long NakaObj_MidiExclusive_ListNull2
-	.long NakaObj_MidiExclusive_ListNull1
-	.long NakaObj_MidiExclusive_SendWindow
-	.long NakaObj_MidiExclusive_SendWinNull3
-	.long NakaObj_MidiExclusive_SendWinNull2
-	.long NakaObj_MidiExclusive_SendWinNull1
-	.long NakaObj_MidiExclusive_SendShow
-	.long NakaObj_MidiExclusive_SendPmem
-	.long NakaObj_MidiExclusive_SendSmem
-	.long NakaObj_MidiExclusive_SendCmp
-	.long NakaObj_MidiExclusive_SendSeq
-	.long NakaObj_MidiExclusive_SendMsp
-	.long NakaObj_MidiExclusive_SendDot
-	.long NakaObj_MidiExclusive_RcvWindow
-	.long NakaObj_MidiExclusive_RcvWinNull3
-	.long NakaObj_MidiExclusive_RcvWinNull2
-	.long NakaObj_MidiExclusive_RcvWinNull1
-	.long NakaObj_MidiExclusive_RcvShow
-	.long NakaObj_MidiExclusive_RcvPmem
-	.long NakaObj_MidiExclusive_RcvSmem
-	.long NakaObj_MidiExclusive_RcvCmp
-	.long NakaObj_MidiExclusive_RcvSeq
-	.long NakaObj_MidiExclusive_RcvMsp
-	.long NakaObj_MidiExclusive_RcvDot
-	.long NakaObj_MidiExclusive_RcvDotNull
-NakaObj_MidiExclusive_RcvDotNull:	aligned_string ""
-NakaObj_MidiExclusive_RcvDot:		aligned_string "ExcRcvDotBox"
-NakaObj_MidiExclusive_RcvMsp:		aligned_string "ExcRcvMspBox"
-NakaObj_MidiExclusive_RcvSeq:		aligned_string "ExcRcvSeqBox"
-NakaObj_MidiExclusive_RcvCmp:		aligned_string "ExcRcvCmpBox"
-NakaObj_MidiExclusive_RcvSmem:		aligned_string "ExcRcvSmemBox"
-NakaObj_MidiExclusive_RcvPmem:		aligned_string "ExcRcvPmemBox"
-NakaObj_MidiExclusive_RcvShow:		aligned_string "ExcRcvShowBox"
-NakaObj_MidiExclusive_RcvWinNull1:	aligned_string ""
-NakaObj_MidiExclusive_RcvWinNull2:	aligned_string ""
-NakaObj_MidiExclusive_RcvWinNull3:	aligned_string ""
-NakaObj_MidiExclusive_RcvWindow:	aligned_string "ExcRcvWindow"
-NakaObj_MidiExclusive_SendDot:		aligned_string "ExcSendDotBox"
-NakaObj_MidiExclusive_SendMsp:		aligned_string "ExcSendMspBox"
-NakaObj_MidiExclusive_SendSeq:		aligned_string "ExcSendSeqBox"
-NakaObj_MidiExclusive_SendCmp:		aligned_string "ExcSendCmpBox"
-NakaObj_MidiExclusive_SendSmem:		aligned_string "ExcSendSmemBox"
-NakaObj_MidiExclusive_SendPmem:		aligned_string "ExcSendPmemBox"
-NakaObj_MidiExclusive_SendShow:		aligned_string "ExcSendShowBox"
-NakaObj_MidiExclusive_SendWinNull1:	aligned_string ""
-NakaObj_MidiExclusive_SendWinNull2:	aligned_string ""
-NakaObj_MidiExclusive_SendWinNull3:	aligned_string ""
-NakaObj_MidiExclusive_SendWindow:	aligned_string "ExcSendWindow"
-NakaObj_MidiExclusive_ListNull1:	aligned_string ""
-NakaObj_MidiExclusive_ListNull2:	aligned_string ""
-NakaObj_MidiExclusive_ListBox:		aligned_string "ExcListBox"
-NakaObj_MidiExclusive_NameNull1:	aligned_string ""
-NakaObj_MidiExclusive_NameNull2:	aligned_string ""
-NakaObj_MidiExclusive_Name:		aligned_string "MidiExclusive"
-	sub	(xde), xbc
-	.byte 0xe5, 0x00, 0x96, 0xa9, 0xe5, 0x00, 0x94, 0xa9
-	.byte 0xe5, 0x00, 0x92, 0xa9, 0xe5, 0x00, 0x90, 0xa9
-	.byte 0xe5, 0x00, 0x86, 0xa9, 0xe5, 0x00, 0x84, 0xa9
-	.byte 0xe5, 0x00, 0x82, 0xa9, 0xe5, 0x00, 0x80, 0xa9
-	.byte 0xe5, 0x00, 0x7e, 0xa9, 0xe5, 0x00, 0x7c, 0xa9
-	.byte 0xe5, 0x00, 0x7a, 0xa9, 0xe5, 0x00, 0x78, 0xa9
-	.byte 0xe5, 0x00, 0x6e, 0xa9, 0xe5, 0x00, 0x6c, 0xa9
-	.byte 0xe5, 0x00, 0x6a, 0xa9, 0xe5, 0x00, 0x68, 0xa9
-	.byte 0xe5, 0x00, 0x66, 0xa9, 0xe5, 0x00, 0x64, 0xa9
-	.byte 0xe5, 0x00, 0x62, 0xa9, 0xe5, 0x00, 0x60, 0xa9
-	.byte 0xe5, 0x00, 0x5e, 0xa9, 0xe5, 0x00, 0x00, 0xff
-	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	aligned_string "GMOFFSure"
-	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	aligned_string "GMONSure"
-	.byte 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	aligned_string "GMOnOffBox"
-	aligned_string "MidiGmMode"
-	.byte 0xe2, 0xa9
-	.byte 0xe5, 0x00, 0xd4, 0xa9, 0xe5, 0x00, 0xd2, 0xa9
-	.byte 0xe5, 0x00, 0xd0, 0xa9, 0xe5, 0x00, 0xce, 0xa9
-	.byte 0xe5, 0x00, 0xcc, 0xa9, 0xe5, 0x00, 0xca, 0xa9
-	.byte 0xe5, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff
-	.byte 0x00, 0xff, 0x00, 0xff
-	aligned_string "PcgOutGridBox"
-	aligned_string "MidiPcgOutput"
-
-
-NakaObj_MidiComputerConn_Table:
-	.long NakaObj_MidiComputerConn_Name
-	.long NakaObj_MidiComputerConn_Null6
-	.long NakaObj_MidiComputerConn_Null5
-	.long NakaObj_MidiComputerConn_Null4
-	.long NakaObj_MidiComputerConn_Null3
-	.long NakaObj_MidiComputerConn_Null2
-	.long NakaObj_MidiComputerConn_Null1
-NakaObj_MidiComputerConn_Null1:	aligned_string ""
-NakaObj_MidiComputerConn_Null2:	aligned_string ""
-NakaObj_MidiComputerConn_Null3:	aligned_string ""
-NakaObj_MidiComputerConn_Null4:	aligned_string ""
-NakaObj_MidiComputerConn_Null5:	aligned_string ""
-NakaObj_MidiComputerConn_Null6:	aligned_string ""
-NakaObj_MidiComputerConn_Name:	aligned_string "MidiComputerConnection"
-NakaObj_MidiPmemOutput_Table:
-	.long NakaObj_MidiPmemOutput_Name
-	.long NakaObj_MidiPmemOutput_RNull7
-	.long NakaObj_MidiPmemOutput_RNull6
-	.long NakaObj_MidiPmemOutput_RNull5
-	.long NakaObj_MidiPmemOutput_RNull4
-	.long NakaObj_MidiPmemOutput_RNull3
-	.long NakaObj_MidiPmemOutput_RNull2
-	.long NakaObj_MidiPmemOutput_RNull1
-	.long NakaObj_MidiPmemOutput_Left
-	.long NakaObj_MidiPmemOutput_Right
-	.long NakaObj_MidiPmemOutput_Null8
-	.long NakaObj_MidiPmemOutput_Null7
-	.long NakaObj_MidiPmemOutput_Null6
-	.long NakaObj_MidiPmemOutput_Null5
-	.long NakaObj_MidiPmemOutput_Null4
-	.long NakaObj_MidiPmemOutput_Null3
-	.long NakaObj_MidiPmemOutput_Null2
-	.long NakaObj_MidiPmemOutput_Null1
-NakaObj_MidiPmemOutput_Null1:	aligned_string ""
-NakaObj_MidiPmemOutput_Null2:	aligned_string ""
-NakaObj_MidiPmemOutput_Null3:	aligned_string ""
-NakaObj_MidiPmemOutput_Null4:	aligned_string ""
-NakaObj_MidiPmemOutput_Null5:	aligned_string ""
-NakaObj_MidiPmemOutput_Null6:	aligned_string ""
-NakaObj_MidiPmemOutput_Null7:	aligned_string ""
-NakaObj_MidiPmemOutput_Null8:	aligned_string ""
-NakaObj_MidiPmemOutput_Right:	aligned_string "PmemOutRight"
-NakaObj_MidiPmemOutput_Left:	aligned_string "PmemOutLeft"
-NakaObj_MidiPmemOutput_RNull1:	aligned_string ""
-NakaObj_MidiPmemOutput_RNull2:	aligned_string ""
-NakaObj_MidiPmemOutput_RNull3:	aligned_string ""
-NakaObj_MidiPmemOutput_RNull4:	aligned_string ""
-NakaObj_MidiPmemOutput_RNull5:	aligned_string ""
-NakaObj_MidiPmemOutput_RNull6:	aligned_string ""
-NakaObj_MidiPmemOutput_RNull7:	aligned_string ""
-NakaObj_MidiPmemOutput_Name:	aligned_string "MidiPanelMemoryOutput"
-	.byte 0x08, 0xab
-	.byte 0xe5, 0x00, 0xf8, 0xaa, 0xe5, 0x00, 0xf6, 0xaa
-	.byte 0xe5, 0x00, 0xf4, 0xaa, 0xe5, 0x00, 0xf2, 0xaa
-	.byte 0xe5, 0x00, 0xf0, 0xaa, 0xe5, 0x00, 0xee, 0xaa
-	.byte 0xe5, 0x00, 0xec, 0xaa, 0xe5, 0x00, 0xea, 0xaa
-	.byte 0xe5, 0x00
-NakaObj_MidiSetup_Null1:
-	.byte 0x00, 0xff
-NakaObj_MidiSetup_Null2:
-	.byte 0x00, 0xff
-NakaObj_MidiSetup_Null3:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-NakaObj_MidiSetup_Null4:
-	.byte 0x00, 0xff
-NakaObj_MidiSetup_Null5:
-	.byte 0x00, 0xff
-NakaObj_MidiSetup_Null6:
-	.byte 0x00, 0xff
-NakaObj_MidiSetup_GridBox:	aligned_string "MdSetOptGridBox"
-NakaObj_MidiSetup_Name:		aligned_string "MidiSetup"
-	.byte 0xf4, 0xab, 0xe5, 0x00, 0xf2, 0xab
-	.byte 0xe5, 0x00, 0xf0, 0xab, 0xe5, 0x00, 0xe2, 0xab
-	.byte 0xe5, 0x00, 0xe0, 0xab, 0xe5, 0x00, 0xd2, 0xab
-	.byte 0xe5, 0x00, 0xd0, 0xab, 0xe5, 0x00, 0xce, 0xab
-	.byte 0xe5, 0x00, 0xcc, 0xab, 0xe5, 0x00, 0xca, 0xab
-	.byte 0xe5, 0x00, 0xba, 0xab, 0xe5, 0x00, 0xb8, 0xab
-	.byte 0xe5, 0x00, 0xaa, 0xab, 0xe5, 0x00, 0x9c, 0xab
-	.byte 0xe5, 0x00, 0x8a, 0xab, 0xe5, 0x00, 0x88, 0xab
-	.byte 0xe5, 0x00, 0x86, 0xab, 0xe5, 0x00, 0x84, 0xab
-	.byte 0xe5, 0x00, 0x82, 0xab, 0xe5, 0x00, 0x80, 0xab
-	.byte 0xe5, 0x00, 0x7e, 0xab, 0xe5, 0x00, 0x7c, 0xab
-	.byte 0xe5, 0x00, 0x7a, 0xab, 0xe5, 0x00, 0x78, 0xab
-	.byte 0xe5, 0x00, 0x76, 0xab, 0xe5, 0x00
-NakaObj_EntertainerVocal_Null1:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_Null2:
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_Null3:
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_Null4:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_Null5:
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_Null6:
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_Null7:
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_Page2Null:	aligned_string ""
-NakaObj_EntertainerVocal_Page2Box:	aligned_string "VocalistPage2Box"
-NakaObj_EntertainerVocal_Page2:		aligned_string "VocalistPage2"
-NakaObj_EntertainerVocal_HarmOnOff:	aligned_string "HarmOnOffBox"
-NakaObj_EntertainerVocal_ListNull:	aligned_string ""
-NakaObj_EntertainerVocal_ListBox:	aligned_string "VocalistListBox"
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_Page1Null1:
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_Page1Null2:
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_Page1Null3:	aligned_string ""
-NakaObj_EntertainerVocal_Page1:		aligned_string "VocalistPage1"
-NakaObj_EntertainerVocal_PageNull:	aligned_string ""
-NakaObj_EntertainerVocal_Page:		aligned_string "VocalistPage"
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_NameNull:
-	.byte 0x00, 0xff
-NakaObj_EntertainerVocal_Name:	aligned_string "EntertainerVocal"
-	.byte 0x4a, 0xac
-	.byte 0xe5, 0x00, 0x38, 0xac, 0xe5, 0x00, 0x36, 0xac
-	.byte 0xe5, 0x00, 0x34, 0xac, 0xe5, 0x00, 0x32, 0xac
-	.byte 0xe5, 0x00, 0x30, 0xac, 0xe5, 0x00, 0x2e, 0xac
-	.byte 0xe5, 0x00, 0x2c, 0xac, 0xe5, 0x00, 0x2a, 0xac
-	.byte 0xe5, 0x00
-NakaObj_EntertainerFade_Null1:
-	.byte 0x00, 0xff
-NakaObj_EntertainerFade_Null2:
-	.byte 0x00, 0xff
-NakaObj_EntertainerFade_Null3:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-NakaObj_EntertainerFade_Null4:
-	.byte 0x00, 0xff
-NakaObj_EntertainerFade_Null5:
-	.byte 0x00, 0xff
-NakaObj_EntertainerFade_Null6:
-	.byte 0x00, 0xff
-NakaObj_EntertainerFade_GridBox:	aligned_string "FadeInOutGridBox"
-NakaObj_EntertainerFade_Name:		aligned_string "EntertainerFade"
-	.byte 0x82, 0xac, 0xe5, 0x00, 0x80, 0xac
-	.byte 0xe5, 0x00, 0x7e, 0xac, 0xe5, 0x00, 0x7c, 0xac
-	.byte 0xe5, 0x00, 0x7a, 0xac, 0xe5, 0x00, 0x78, 0xac
-	.byte 0xe5, 0x00, 0x76, 0xac, 0xe5, 0x00
-NakaObj_SplitSetting_Null1:
-	.byte 0x00, 0xff
-	.byte 0x00, 0xff
-NakaObj_SplitSetting_Null2:
-	.byte 0x00, 0xff
-NakaObj_SplitSetting_Null3:
-	.byte 0x00, 0xff
-NakaObj_SplitSetting_Null4:
-	.byte 0x00, 0xff
-NakaObj_SplitSetting_NameNull:	aligned_string ""
-NakaObj_SplitSetting_Name:	aligned_string "SplitSetting"
-	aligned_string "MD_MIDI"
-	aligned_string "TT_REVEQMENU"
-	aligned_string "TT_SDOCT"
-	aligned_string "TT_REVPRESET"
-	aligned_string "TT_EQPRESET"
-	aligned_string "TT_REVEQPRESET"
-	aligned_string "TT_MDMENU"
-	aligned_string "TT_MDPART"
-	aligned_string "TT_MDCTRL"
-	aligned_string "TT_MDREAL"
-	aligned_string "TT_MDCOM"
-	aligned_string "TT_MDINOUT"
-	aligned_string "TT_MDPRESET"
-	aligned_string "TT_MDEXC"
-	aligned_string "TT_MDGMMODE"
-	aligned_string "TT_MDTXPCG"
-	aligned_string "TT_MDCOMP"
-	aligned_string "TT_MDPMLCTL"
-	aligned_string "TT_MDSETUP"
-	aligned_string "TT_ETVOCAL"
-	aligned_string "TT_ETFADEIN"
-	aligned_string "TT_SPLITSEL"
-	.byte 0xda, 0x7d, 0xf7, 0x00
-	.byte 0x4a, 0x66, 0xf7, 0x00, 0x5f, 0x65, 0xf7, 0x00
-	.byte 0x4b, 0x73, 0xf7, 0x00, 0x01, 0x42, 0xf7, 0x00
-	.byte 0x65, 0x43, 0xf7, 0x00, 0xdd, 0x46, 0xf7, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x3a, 0xae, 0xe5, 0x00
-MainFunc_DispatchTable:
-	.long MainFunc_ExcSend
-	.long MainFunc_MpstFunc
-	.long MainFunc_FlashFunc
-	.long MainFunc_VocalistPage1OKFunc
-	.long MainFunc_VocalistPage2OKFunc
-	.long MainFunc_RevEqPresetLoad
-	.long MainFunc_NullEntry
-MainFunc_NullEntry:		aligned_string ""
-MainFunc_RevEqPresetLoad:	aligned_string "MainRevEqPresetLoad"
-MainFunc_VocalistPage2OKFunc:	aligned_string "MainVocalistPage2OKFunc"
-MainFunc_VocalistPage1OKFunc:	aligned_string "MainVocalistPage1OKFunc"
-MainFunc_FlashFunc:		aligned_string "MainFlashFunc"
-MainFunc_MpstFunc:		aligned_string "MainMpstFunc"
-MainFunc_ExcSend:		aligned_string "MainExcSend"
-MainFunc_PcgOutSend:		aligned_string "MainPcgOutSend"
-
-Bitmap_SplitPoint_no_split:	.incbin "images/BitmapSplitPoint_no_split.bin"
-Bitmap_SplitPoint_C:		.incbin "images/BitmapSplitPoint_C.bin"
-Bitmap_SplitPoint_Db:		.incbin "images/BitmapSplitPoint_Db.bin"
-Bitmap_SplitPoint_D:		.incbin "images/BitmapSplitPoint_D.bin"
-Bitmap_SplitPoint_Eb:		.incbin "images/BitmapSplitPoint_Eb.bin"
-Bitmap_SplitPoint_E:		.incbin "images/BitmapSplitPoint_E.bin"
-Bitmap_SplitPoint_F:		.incbin "images/BitmapSplitPoint_F.bin"
-Bitmap_SplitPoint_Gb:		.incbin "images/BitmapSplitPoint_Gb.bin"
-Bitmap_SplitPoint_G:		.incbin "images/BitmapSplitPoint_G.bin"
-Bitmap_SplitPoint_Ab:		.incbin "images/BitmapSplitPoint_Ab.bin"
-Bitmap_SplitPoint_A:		.incbin "images/BitmapSplitPoint_A.bin"
-Bitmap_SplitPoint_Bb:		.incbin "images/BitmapSplitPoint_Bb.bin"
-Bitmap_SplitPoint_B:		.incbin "images/BitmapSplitPoint_B.bin"
-Bitmap_MIDIConnections_1:	.incbin "images/BitmapMIDIConnections_1.bin"
-Bitmap_MIDIConnections_2:	.incbin "images/BitmapMIDIConnections_2.bin"
-Bitmap_MIDIConnections_3:	.incbin "images/BitmapMIDIConnections_3.bin"
-Bitmap_Bmphk:			.incbin "images/BitmapBmphk.bin"
-MidiPart_PageDisplay_Data:
-	.byte 0xf5, 0x00, 0x06, 0x00, 0x3a, 0x01
-	.byte 0x17, 0x00, 0x18, 0x01, 0x0f, 0x00, 0x10, 0xed
-	.byte 0xe7, 0x00, 0x06, 0xed, 0xe7, 0x00
-MidiPart_PageStr_2of2:	aligned_string "PAGE 2/2"
-MidiPart_PageStr_1of2:	aligned_string "PAGE 1/2"
-	.byte 0x3a, 0xed, 0xe7, 0x00, 0x30, 0xed
-	.byte 0xe7, 0x00, 0x26, 0xed, 0xe7, 0x00
-MidiPart_PageStr_3of3:	aligned_string "PAGE 3/3"
-MidiPart_PageStr_2of3:	aligned_string "PAGE 2/3"
-MidiPart_PageStr_1of3:	aligned_string "PAGE 1/3"
-	.byte 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x6a, 0x00, 0x1c, 0x01
-	.byte 0x6a, 0x00, 0x1c, 0x01, 0x1e, 0x02, 0xf6, 0x01
-	.byte 0xf6, 0x01, 0x98, 0xed, 0xe7, 0x00, 0x92, 0xed
-	.byte 0xe7, 0x00
-MidiPart_AboveStr:	aligned_string "ABOVE"
-MidiPart_BelowStr:	aligned_string "BELOW"
-MidiPart_NoteNameTable:
-	.long MidiPart_NoteEntry_C_Code
-	.long MidiPart_NoteStr_D
-	.long MidiPart_NoteEntry_D_Code
-	.long MidiPart_NoteStr_E
-	.long MidiPart_NoteEntry_E_Code
-	.long MidiPart_NoteEntry_F_Code
-	.long MidiPart_NoteStr_G
-	.long MidiPart_NoteEntry_G_Code
-	.long MidiPart_NoteStr_A
-	.long MidiPart_NoteEntry_A_Code
-	.long MidiPart_NoteStr_B
-	.long MidiPart_NoteEntry_B_Code
-MidiPart_NoteEntry_B_Code:
-	.byte 0x42, 0x20, 0x00, 0xff
-MidiPart_NoteStr_B:	aligned_string "B~a0"
-MidiPart_NoteEntry_A_Code:
-	.byte 0x41, 0x20, 0x00, 0xff
-MidiPart_NoteStr_A:	aligned_string "A~a0"
-MidiPart_NoteEntry_G_Code:
-	.byte 0x47, 0x20, 0x00, 0xff
-MidiPart_NoteStr_G:	aligned_string "F~9e"
-MidiPart_NoteEntry_F_Code:
-	.byte 0x46, 0x20, 0x00, 0xff
-MidiPart_NoteEntry_E_Code:
-	.byte 0x45, 0x20, 0x00, 0xff
-MidiPart_NoteStr_E:	aligned_string "E~a0"
-MidiPart_NoteEntry_D_Code:
-	.byte 0x44, 0x20, 0x00, 0xff
-MidiPart_NoteStr_D:	aligned_string "D~a0"
-MidiPart_NoteEntry_C_Code:
-	.byte 0x43, 0x20, 0x00, 0xff
-MidiPart_OctaveTable:
-	.long MidiPart_OctaveStr_m2
-	.long MidiPart_OctaveStr_m1
-	.long MidiPart_OctaveStr_0
-	.long MidiPart_OctaveStr_p1
-	.long MidiPart_OctaveStr_p2
-	.long MidiPart_OctaveStr_p3
-	.long MidiPart_OctaveStr_p4
-	.long MidiPart_OctaveStr_p5
-	.long MidiPart_OctaveStr_p6
-	.long MidiPart_OctaveStr_p7
-	.long MidiPart_OctaveStr_p8
-MidiPart_OctaveStr_p8:
-	.byte 0x20, 0x38, 0x00, 0xff
-MidiPart_OctaveStr_p7:
-	.byte 0x20, 0x37, 0x00, 0xff
-MidiPart_OctaveStr_p6:
-	.byte 0x20, 0x36, 0x00, 0xff
-MidiPart_OctaveStr_p5:
-	.byte 0x20, 0x35, 0x00, 0xff
-MidiPart_OctaveStr_p4:
-	.byte 0x20, 0x34, 0x00, 0xff
-MidiPart_OctaveStr_p3:
-	.byte 0x20, 0x33, 0x00, 0xff
-MidiPart_OctaveStr_p2:
-	.byte 0x20, 0x32, 0x00, 0xff
-MidiPart_OctaveStr_p1:
-	.byte 0x20, 0x31, 0x00, 0xff
-MidiPart_OctaveStr_0:
-	.byte 0x20, 0x30, 0x00, 0xff
-MidiPart_OctaveStr_m1:
-	.byte 0x2d, 0x31, 0x00, 0xff
-MidiPart_OctaveStr_m2:
-	.byte 0x2d, 0x32, 0x00, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0x00, 0x2d, 0x00, 0x00, 0x01, 0x2d, 0x00, 0x00
-	.byte 0x02, 0x2d, 0x00, 0x00, 0x03, 0x2d, 0x00, 0x00
-	.byte 0x04, 0x2d, 0x00, 0x00, 0x05, 0x2d, 0x00, 0x00
-	.byte 0x06, 0x2d, 0x00, 0x00, 0x07, 0x2d, 0x00, 0x00
-	.byte 0x08, 0x2d, 0x00, 0x00, 0x09, 0x2d, 0x00, 0x00
-	.byte 0x0a, 0x2d, 0x00, 0x00, 0x0b, 0x2d, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0x0c, 0x2d, 0x00, 0x00, 0x0f, 0x2d, 0x00, 0x00
-	.byte 0x10, 0x2d, 0x00, 0x00, 0x13, 0x2d, 0x00, 0x00
-	.zero 32
-	aligned_string "   OFF    "
-	aligned_string "   OMNI   "
-	aligned_string "    %2d    "
-	aligned_string "   %3d    "
-	aligned_string "     %d    "
-	aligned_string "     %s   "
-	aligned_string "   OFF    "
-	aligned_string "   Recv   "
-	aligned_string "  Trans   "
-	aligned_string "Recv+Trans"
-	aligned_string "   NONE   "
-	aligned_string "  AFTER   "
-	aligned_string "  CC%3d   "
-	aligned_string "%s %s%s"
-	aligned_string " ON  "
-	aligned_string " OFF "
-	aligned_string "   OFF    "
-	aligned_string "   OMNI   "
-	aligned_string "    %2d    "
-	aligned_string "   %3d    "
-	aligned_string "     %d    "
-	aligned_string "     %s   "
-	aligned_string "   OFF    "
-	aligned_string "   Recv   "
-	aligned_string "  Trans   "
-MidiPart_RecvTransStr:	aligned_string "Recv+Trans"
-	aligned_string "   NONE   "
-MidiPart_AfterStr:	aligned_string "  AFTER   "
-	aligned_string "  CC%3d   "
-	aligned_string "%s %s%s"
-	aligned_string "%s %s%s"
-	aligned_string " ON  "
-	aligned_string " OFF "
-	.byte 0x00, 0x00, 0x85, 0x02, 0x5c, 0x00, 0x85, 0x02
-	.byte 0x8a, 0x00, 0x85, 0x02, 0xb8, 0x00, 0x85, 0x02
-	.byte 0xf1, 0x00, 0x85, 0x02, 0x40, 0x01, 0x85, 0x02
-	.byte 0x9a, 0x01, 0xc5, 0x02, 0xc5, 0x02, 0x85, 0x02
-	.byte 0x10, 0x02, 0xc5, 0x02, 0xc5, 0x02, 0x85, 0x02
-MidiPart_ColWidthData:
-	.byte 0x00, 0x00, 0xca, 0x01, 0x4c, 0x00, 0xca, 0x01
-	.byte 0x73, 0x00, 0xca, 0x01, 0x9a, 0x00, 0xca, 0x01
-	.byte 0xcc, 0x00, 0xca, 0x01, 0x14, 0x01, 0xca, 0x01
-	.byte 0x5e, 0x01, 0x16, 0x05, 0x16, 0x05, 0xca, 0x01
-	.byte 0x5e, 0x01, 0x16, 0x05, 0x16, 0x05, 0xca, 0x01
-	.byte 0x00, 0x00, 0x67, 0x00, 0x00, 0x00, 0x67, 0x00
-	.byte 0x76, 0x06, 0xd4, 0x00, 0x76, 0x06, 0x00, 0x00
-	.byte 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00
-	.byte 0x0e, 0x00, 0xb6, 0xf0, 0xe7, 0x00
-MidiPart_HarmLocalStr:	aligned_string "HARMONY PART LOCAL: ---"
-	.zero 10
-	.byte 0x00, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
-	.byte 0x60, 0x00, 0xab, 0x00, 0x06, 0x01, 0x43, 0x63
-	.byte 0x45, 0x76, 0x00, 0xff
-	aligned_string "CcEv"
-	aligned_string "CcEv"
-GMMode_AttentionTable:
-	.long GMMode_Attention_English2
-	.long GMMode_Attention_German
-	.long GMMode_Attention_French
-	.long GMMode_Attention_Spanish
-	.long GMMode_Attention_English
-	.long GMMode_Attention_Indonesian
-GMMode_Attention_Indonesian:	aligned_string "Perhatian !"
-GMMode_Attention_English:	aligned_string "ATTENTION!"
-GMMode_Attention_Spanish:	aligned_string "¡ATENCIÓN!"
-GMMode_Attention_French:	aligned_string "ATTENTION!"
-GMMode_Attention_German:	aligned_string "ACHTUNG !"
-GMMode_Attention_English2:	aligned_string "ATTENTION!"
-	aligned_string "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!"
-	.asciz "Durch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen geändert!"
-	aligned_string "L'activation du mode GENERAL MIDI MODE remplacera tous les réglages actuels par les réglages GENERAL MIDI!"
-	.byte 0xa1
-	aligned_string "Al activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!"
-	aligned_string "Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang."
-	.byte 0x56, 0xf1
-	.byte 0xe7, 0x00, 0xb2, 0xf1, 0xe7, 0x00, 0x20, 0xf2
-	.byte 0xe7, 0x00, 0x8c, 0xf2, 0xe7, 0x00, 0x56, 0xf1
-	.byte 0xe7, 0x00, 0xfc, 0xf2, 0xe7, 0x00
-	aligned_string "Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"
-	aligned_string "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt."
-	.ascii "La désactivation du mode GENERAL MIDI MODE remplacera tous les réglages GENERAL MIDI par les r"
-	inc	7, xbc
-	aligned_string "lages d'usines!"
-	.byte 0xa1
-	aligned_string "Al desconectar el modo MIDI General se reemplazan las configuraciones MIDI Generales por las configuraciones originales de fábrica!"
-	aligned_string "Non-aktifkan fungsi GENERAL MIDI MODE bila akan kembali ke susunan GENERAL MIDI sesuai susunan dari pabrik(originil factory settings)."
-	.byte 0x66, 0xf3
-	.byte 0xe7, 0x00, 0xd0, 0xf3, 0xe7, 0x00, 0x48, 0xf4
-	.byte 0xe7, 0x00, 0xb8, 0xf4, 0xe7, 0x00, 0x66, 0xf3
-	.byte 0xe7, 0x00, 0x3e, 0xf5, 0xe7, 0x00, 0x50, 0xf6
-	.byte 0xe7, 0x00, 0x3e, 0xf6, 0xe7, 0x00, 0x2e, 0xf6
-	.byte 0xe7, 0x00, 0x20, 0xf6, 0xe7, 0x00, 0x12, 0xf6
-	.byte 0xe7, 0x00, 0xf6, 0xf5, 0xe7, 0x00
-	aligned_string "Apakah yakin akan dihapus ?"
-	aligned_string "Are You Sure?"
-	.byte 0xbf, 0x45, 0x73, 0x74, 0xe1
-	aligned_string " seguro?"
-	.byte 0x45, 0x74
-	.ascii "es vous s"
-	.byte 0xfb, 0x72, 0x3f, 0x00, 0xff
-	aligned_string "Sind Sie sicher ?"
-	aligned_string "Are You Sure?"
-	.byte 0x50, 0xf7
-	.byte 0xe7, 0x00, 0x16, 0xf7, 0xe7, 0x00, 0xee, 0xf6
-	.byte 0xe7, 0x00, 0xc6, 0xf6, 0xe7, 0x00, 0x9e, 0xf6
-	.byte 0xe7, 0x00, 0x76, 0xf6, 0xe7, 0x00
-	aligned_string "Press a key to select the split point."
-	aligned_string "Press a key to select the split point."
-	aligned_string "Press a key to select the split point."
-	aligned_string "Press a key to select the split point."
-	aligned_string "Dr~fcken Sie eine Taste, um den Split-Punkt zu bestimmen."
-	aligned_string "Press a key to select the split point."
-
-
-SplitPoint_NoteNameTable:
-	.long SplitPoint_NoteEntry_C_Code
-	.long NakaInst_D_a0
-	.long SplitPoint_NoteEntry_D_Code
-	.long NakaInst_E_a0
-	.long SplitPoint_NoteEntry_E_Code
-	.long SplitPoint_NoteStr_F
-	.long NakaInst_F_9e
-	.long SplitPoint_NoteEntry_G_Code
-	.long SplitPoint_NoteStr_A
-	.long SplitPoint_NoteEntry_A_Code
-	.long SplitPoint_NoteStr_B
-	.long SplitPoint_NoteEntry_B_Code
-SplitPoint_NoteEntry_B_Code:
-	.byte 0x42, 0x20, 0x00, 0xff
-SplitPoint_NoteStr_B:	aligned_string "B~a0"
-SplitPoint_NoteEntry_A_Code:
-	.byte 0x41, 0x20, 0x00, 0xff
-SplitPoint_NoteStr_A:	aligned_string "A~a0"
-SplitPoint_NoteEntry_G_Code:
-	.byte 0x47, 0x20, 0x00, 0xff
-NakaInst_F_9e:	aligned_string "F~9e"
-SplitPoint_NoteStr_F:	aligned_string "F "
-SplitPoint_NoteEntry_E_Code:
-	.byte 0x45, 0x20, 0x00, 0xff
-NakaInst_E_a0:	aligned_string "E~a0"
-SplitPoint_NoteEntry_D_Code:
-	.byte 0x44, 0x20, 0x00, 0xff
-NakaInst_D_a0:	aligned_string "D~a0"
-SplitPoint_NoteEntry_C_Code:
-	.byte 0x43, 0x20
-	.byte 0x00, 0xff, 0x4a, 0xae, 0xe5, 0x00, 0x12, 0xba
-	.byte 0xe5, 0x00, 0xda, 0xc5, 0xe5, 0x00, 0xa2, 0xd1
-	.byte 0xe5, 0x00, 0x6a, 0xdd, 0xe5, 0x00, 0x32, 0xe9
-	.byte 0xe5, 0x00, 0xfa, 0xf4, 0xe5, 0x00, 0xc2, 0x00
-	.byte 0xe6, 0x00, 0x8a, 0x0c, 0xe6, 0x00, 0x52, 0x18
-	.byte 0xe6, 0x00, 0x1a, 0x24, 0xe6, 0x00, 0xe2, 0x2f
-	.byte 0xe6, 0x00, 0xaa, 0x3b, 0xe6, 0x00, 0x0f, 0x00
-	.byte 0x9c, 0x00
-	aligned_string "%s%2d"
-	aligned_string " - 2 "
-	ldb	w, 0x2d
-	.byte 0x20, 0x31, 0x20, 0x00
-	aligned_string "   0 "
-	aligned_string " + 1 "
-	aligned_string " + 2 "
-	.byte 0x45, 0x72
-	.byte 0x72, 0x6f, 0x72, 0x00, 0x0a, 0x00, 0x52, 0x00
-	aligned_string "         NORMAL         "
-	aligned_string "      KN as master      "
-	aligned_string "      KN as slave       "
-	aligned_string "         Error!         "
-	aligned_string " NORMAL "
-	aligned_string "  TECH  "
-	aligned_string "   GM   "
-	aligned_string " Error! "
-	aligned_string " NORMAL "
-	aligned_string "  TECH  "
-	aligned_string "   GM   "
-	aligned_string " Error! "
-
-
-DisplayMode_OnOff_Table:
-	.long DisplayMode_FormatStr2
-	.long DisplayMode_FormatStr1
-	.long NakaInst_OFF_WidgetTbl2
-	.long NakaInst_ON
-NakaInst_ON:	aligned_string " ON  "
-NakaInst_OFF_WidgetTbl2:
-	ldb	w, 0x4f
-	.byte 0x4e, 0x20, 0x20, 0x00
-	aligned_string " OFF "
-	aligned_string " OFF "
-	.byte 0x22, 0x00, 0x22, 0x00, 0x2a, 0x00, 0x2a, 0x00
-	.byte 0x2a, 0x00, 0x26, 0x00, 0x2a, 0x00, 0x2e, 0x00
-	.byte 0x35, 0x00, 0x00, 0x00
-	.asciz "Error"
-	aligned_string "Error"
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x6a, 0x00, 0x21, 0x01
-	.byte 0x6a, 0x00, 0x21, 0x01, 0x23, 0x02, 0xfb, 0x01
-	.byte 0xfb, 0x01, 0xff, 0xff, 0xff, 0xff, 0x00, 0x2a
-	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x01, 0x2a
-	.byte 0x00, 0x00, 0x12, 0x2a, 0x00, 0x00, 0x10, 0x2a
-	.byte 0x00, 0x00, 0x11, 0x2a, 0x00, 0x00, 0x00, 0x00
-	.zero 14
-	aligned_string " %2d measure "
-	aligned_string " ON  "
-	aligned_string " OFF "
-	aligned_string " %2d measure "
-	ldb	w, 0x4f
-	.byte 0x4e, 0x20, 0x20, 0x00
-	aligned_string " OFF "
-	.byte 0x00, 0x00, 0x4b, 0x00, 0x00, 0x00
-	.byte 0x4b, 0x00, 0xfe, 0x01, 0x9c, 0x00, 0x9c, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x03, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	aligned_string " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| |-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"
-	aligned_string " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY OFFSET VALUE  :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"
-	aligned_string " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY FIXED VALUE   :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"
-	jr	nov, 0x00
-	.byte 0x5b, 0x01, 0x6c, 0x00, 0x5b, 0x01, 0xb5, 0x02
-	.byte 0x8b, 0x02, 0x8b, 0x02, 0xa2, 0xfc, 0xe7, 0x00
-	.long NakaInst_ON_E7FC9C
-NakaInst_ON_E7FC9C:	aligned_string " ON  "
-NakaInst_OFF_E7FCA2:	aligned_string " OFF "
-	.long ControlMode_Option_Table
-	.long NakaInst_DIRECT
-NakaInst_DIRECT:			aligned_string " DIRECT  "
-ControlMode_Option_Table:	aligned_string "CONDUCTOR"
-	.long NakaInst_DIRECT_E7FCE4
-	.long NakaInst_OFFSET
-	.long NakaInst_FIX
-NakaInst_FIX:	aligned_string "  FIX   "
-NakaInst_OFFSET:	aligned_string " OFFSET "
-NakaInst_DIRECT_E7FCE4:	aligned_string " DIRECT "
-	.zero 10
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x25
-	.byte 0x33, 0x64, 0x20, 0x00
-	aligned_string "     "
-	aligned_string " %3d "
-	aligned_string "     "
-	ldb	w, 0x20
-	.byte 0x20, 0x20, 0x20, 0x00
-	aligned_string " %3d "
-	aligned_string " %3d "
-	aligned_string "     "
-	ldb	w, 0x25
-	.byte 0x33, 0x64, 0x20, 0x00
-	aligned_string " %3d "
-	.byte 0x00, 0x00, 0x32, 0x00, 0x64, 0x00, 0x38, 0x01
-	.byte 0x90, 0x02, 0xc9, 0x01, 0xfb, 0x01, 0x2c, 0x02
-	.byte 0x5d, 0x02, 0x00, 0x00, 0x0c, 0x00, 0x18, 0x00
-	.byte 0x24, 0x00, 0x00, 0x06, 0x4e, 0x00, 0x5a, 0x00
-	.byte 0x66, 0x00, 0x72, 0x00, 0x00, 0x00, 0x0c, 0x00
-	.byte 0x18, 0x00, 0x24, 0x00, 0xcc, 0x06, 0x4e, 0x00
-	.byte 0x5a, 0x00, 0x66, 0x00, 0x72, 0x00, 0x00, 0x00
-	.byte 0xcc, 0x00, 0x00, 0x00, 0xcc, 0x00, 0x1a, 0x07
-	.byte 0x9d, 0x01, 0x1a, 0x07, 0x50, 0x41, 0x47, 0x45
-	.byte 0x00, 0xff, 0x00, 0x04, 0x01, 0x02, 0x06, 0x03
-	.byte 0x31, 0x00, 0x31, 0x00, 0x3a, 0x00, 0x3a, 0x00
-	.byte 0x3a, 0x00, 0x34, 0x00, 0x3a, 0x00, 0x3d, 0x00
-	.byte 0x31, 0x00, 0x00, 0x00
-FileTransfer_Status_Table:
-	.long FileTransfer_BlankStatus
-	.long NakaInst_SENDING
-	.long NakaInst_RECIEVING
-	.long NakaInst_COMPLETED
-NakaInst_COMPLETED:	aligned_string "COMPLETED"
-NakaInst_RECIEVING:	aligned_string "RECIEVING"
-NakaInst_SENDING:	aligned_string " SENDING "
-FileTransfer_BlankStatus:	aligned_string "         "
-	.byte 0x1e, 0x00
-	.byte 0x1e, 0x00, 0x26, 0x00, 0x26, 0x00, 0x26, 0x00
-	.byte 0x22, 0x00, 0x26, 0x00, 0x2a, 0x00, 0x1e, 0x00
-	.byte 0x00, 0x00, 0x1e, 0x00, 0x1e, 0x00, 0x26, 0x00
-	.byte 0x26, 0x00, 0x26, 0x00, 0x22, 0x00, 0x26, 0x00
-	.byte 0x2a, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x1e, 0x00
-	.byte 0x1e, 0x00, 0x26, 0x00, 0x26, 0x00, 0x26, 0x00
-	.byte 0x22, 0x00, 0x26, 0x00, 0x2a, 0x00, 0x1e, 0x00
-	.byte 0x00, 0x00, 0x1e, 0x00, 0x1e, 0x00, 0x26, 0x00
-	.byte 0x26, 0x00, 0x26, 0x00, 0x22, 0x00, 0x26, 0x00
-	.byte 0x2a, 0x00, 0x1e, 0x00, 0x00, 0x00, 0x1e, 0x00
-	.byte 0x1e, 0x00, 0x26, 0x00, 0x26, 0x00, 0x26, 0x00
-	.byte 0x22, 0x00, 0x26, 0x00, 0x2a, 0x00, 0x1e, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x2d, 0x00, 0x42, 0x00
-	.byte 0x57, 0x00, 0x6c, 0x00, 0x80, 0x00, 0x94, 0x00
-	.byte 0xa8, 0x00, 0xbc, 0x00, 0xfa, 0x00, 0xfa, 0x00
-	.long NakaData_UserMemoryConfig
-	.byte 0x00, 0x00, 0x2d, 0x00
-	.byte 0x42, 0x00, 0x57, 0x00, 0x6c, 0x00, 0x80, 0x00
-	.byte 0x94, 0x00, 0xa8, 0x00, 0xbc, 0x00, 0xfa, 0x00
-	.byte 0xfa, 0x00, 0xd0, 0x00, 0xe4, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x04, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x04, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0xd5, 0x00, 0x87, 0x01, 0xd5, 0x00
-	.byte 0x87, 0x01, 0x89, 0x02, 0x61, 0x02, 0x61, 0x02
-UserMemory_ConfirmData:
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0xff, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc4, 0xfe
-	.byte 0xe7, 0x00, 0xbe, 0xfe, 0xe7, 0x00
-UserMemory_String_YES:	.asciz " YES "
-NakaInst_NO:	aligned_string " NO  "
-UserMemory_Config_Table:
-	.long NakaInst_INITIAL
-	.long NakaInst_USER1
-	.long NakaInst_USER2
-	.long NakaInst_USER3
-NakaInst_USER3:	aligned_string "  USER3  "
-NakaInst_USER2:	aligned_string "  USER2  "
-NakaInst_USER1:	aligned_string "  USER1  "
-NakaInst_INITIAL:	aligned_string " INITIAL "
-	.zero 14
-	.byte 0x00, 0x00, 0x00, 0x00, 0xb7, 0x00, 0x00, 0x00
-	.byte 0xb7, 0x00, 0x49, 0x03, 0x49, 0x03, 0x90, 0x01
-	.byte 0x6a, 0x00, 0x0e, 0x01, 0x6a, 0x00, 0x0e, 0x01
-	.byte 0x07, 0x02, 0xdf, 0x01, 0xdf, 0x01
-UserMemory_FormatStrings:
-	.byte 0x00, 0x00
-	.byte 0x00, 0x00, 0x01, 0x00, 0xff, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x25
-	.byte 0x33, 0x64, 0x20, 0x00
-	aligned_string " %3d "
-	aligned_string " --- "
-	aligned_string "  OFF  "
-	aligned_string " %3d "
-	ldb	w, 0x25
-	aligned_string "5d )"
-	.byte 0x20, 0x2d
-	.byte 0x2d, 0x2d, 0x20, 0x00
-	aligned_string " OFF "
-	aligned_string "  OFF  "
-	aligned_string " %3d "
-	aligned_string " %3d "
-	ldb	w, 0x25
-	aligned_string "5d )"
-	.byte 0x20, 0x25
-	.byte 0x33, 0x64, 0x20, 0x00
-	aligned_string " %3d "
-	aligned_string " --- "
-	aligned_string "  OFF  "
-	aligned_string " %3d "
-	ldb	w, 0x25
-	aligned_string "5d )"
-	.byte 0x20, 0x2d
-	.byte 0x2d, 0x2d, 0x20, 0x00
-	aligned_string " OFF "
-	aligned_string "  OFF  "
-	aligned_string " %3d "
-	aligned_string " %3d "
-	ldb	w, 0x25
-	aligned_string "5d )"
-	.byte 0x00, 0x00
-	.byte 0x0e, 0x01, 0x00, 0x00, 0x0e, 0x01, 0xc6, 0x06
-	.byte 0xc6, 0x06, 0x58, 0x02, 0x0e, 0x01, 0xa0, 0x00
-	.byte 0x35, 0x01, 0xb2, 0x00, 0x22, 0x01, 0xaa, 0x00
-NakaData_ModeConfig1:
-	.byte 0x21, 0x01, 0xa9, 0x00, 0x00, 0x00
-NakaData_ModeConfig2:
-	.byte 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x22
-	.byte 0x00, 0x00, 0x02, 0x22, 0x00, 0x00, 0x82, 0x22
-	.byte 0x00, 0x00, 0x01, 0xa0, 0x02, 0x00, 0x00, 0xa0
-	.byte 0x02, 0x00, 0x9a, 0x22, 0x00, 0x00, 0x01, 0x22
-	.byte 0x00, 0x00, 0x05, 0x22, 0x00, 0x00, 0x80, 0x22
-	.zero 8
-NakaToggle_OnOff_Data:
-	.byte 0x00, 0x00, 0x00, 0x00
-	.ascii " ON "
-NakaInst_OFF_E80048:	aligned_string " "
-	aligned_string " OFF "
-	aligned_string "  ----  "
-NakaInst_NORMAL:	aligned_string " NORMAL "
-	aligned_string "  TECH  "
-	.byte 0x20, 0x20
-NakaInst_GM:	aligned_string " GM   "
-	aligned_string " Error! "
-	aligned_string " ON  "
-	aligned_string " OFF "
-	ldb	w, 0x20
-	aligned_string "----  "
-	aligned_string " NORMAL "
-	aligned_string "  TECH  "
-	aligned_string "   GM   "
-	aligned_string " Error! "
-	.byte 0x00, 0x00, 0x74, 0x00, 0x00, 0x00, 0x74, 0x00
-	.long Naka_MainDispatch_Table
-	.byte 0xee, 0x00, 0xb1, 0x00
-	.byte 0xb1, 0x00, 0xb1, 0x00, 0xb1, 0x00, 0xdf, 0x02
-	.byte 0xb5, 0x02, 0xb5, 0x02, 0x6a, 0x00, 0x6a, 0x00
-	.byte 0x6a, 0x00, 0x6a, 0x00, 0x98, 0x02, 0x6e, 0x02
-NakaInst_NEXT_E800E8:
-	.byte 0x6e, 0x02, 0x06, 0x01, 0xe8
-NakaData_PartConfig:
-	.byte 0x00, 0xfe, 0x00
-	.byte 0xe8, 0x00, 0xf6, 0x00, 0xe8, 0x00
-NakaInst_LEFT:	aligned_string " LEFT  "
-NakaInst_RIGHT_2:	aligned_string "RIGHT 2"
-NakaInst_RIGHT_1:	aligned_string "RIGHT 1"
-NakaData_PartFlags:
-	.byte 0x00, 0x00
-	.byte 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01
-NakaInst_2d_d:
-	.zero 23
-	aligned_string " %2d-%d "
-	.byte 0x20, 0x4f
-	.byte 0x4e, 0x20, 0x20, 0x00
-NakaInst_OFF_E80144:	aligned_string " OFF "
-	aligned_string " OFF "
-	aligned_string " %3d "
-	ldb	w, 0x25
-	.byte 0x33, 0x64, 0x20, 0x00
-	aligned_string " OFF "
-	aligned_string " %3d "
-NakaInst_ON_E80168:	aligned_string " ON  "
-	ldb	w, 0x4f
-	.byte 0x46, 0x46, 0x20, 0x00
-	aligned_string " OFF "
-	aligned_string " %3d "
-	aligned_string " %3d "
-	ldb	w, 0x4f
-	.byte 0x46, 0x46, 0x20, 0x00
-	aligned_string " %3d "
-	aligned_string " OFF "
-	aligned_string " %3d "
-	ldb	w, 0x25
-	.byte 0x33, 0x64, 0x20, 0x00
-	aligned_string " OFF "
-	aligned_string " %3d "
-	aligned_string " %2d-%d "
-	aligned_string " ON  "
-	aligned_string " OFF "
-	.byte 0x00, 0x00
-	.byte 0xc7, 0x00, 0x00, 0x00, 0xc7, 0x00, 0xcc, 0x07
-	.byte 0xcc, 0x07, 0xa6, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 18
-	aligned_string " OFF "
-	aligned_string " %3d "
-	ldb	w, 0x25
-	.byte 0x33, 0x64, 0x20, 0x00
-	aligned_string " OFF "
-	aligned_string " %3d "
-	aligned_string " OFF "
-	ldb	w, 0x25
-	.byte 0x33, 0x64, 0x20, 0x00
-	aligned_string " %3d "
-	aligned_string " OFF "
-	aligned_string " %3d "
-	ldb	w, 0x4f
-	.byte 0x46, 0x46, 0x20, 0x00
-	aligned_string " %3d "
-	aligned_string " %3d "
-	aligned_string " OFF "
-	ldb	w, 0x25
-	.byte 0x33, 0x64, 0x20, 0x00
-	aligned_string " OFF "
-	aligned_string " %3d "
-	aligned_string " %3d "
-	ldb	w, 0x4f
-	.byte 0x46, 0x46, 0x20, 0x00
-	aligned_string " %3d "
-	.byte 0x00, 0x00, 0x69, 0x01, 0x00, 0x00
-	.byte 0x69, 0x01, 0x31, 0x08, 0x31, 0x08, 0x02, 0x03
-	.byte 0x08, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.zero 10
-	aligned_string " |-| PRG.CHANGE     | BANK SELECT    | PITCH BEND     | VOLUME         | EXPRESSION     | PAN            | SUSTAIN        "
-	aligned_string " |-| EFFECT & REVERB| MODULATION     | TUNING         | BEND RANGE     | AFTER TOUCH    | RESET ALL CONT."
-	.byte 0x7e, 0x01, 0x9c, 0x02, 0x7e, 0x01, 0x9c, 0x02
-	.byte 0x19, 0x04, 0xef, 0x03, 0xef, 0x03, 0xff, 0xff
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x8a, 0x22
-	.byte 0x00, 0x00, 0x8d, 0x22, 0x00, 0x00, 0x8c, 0x22
-	.byte 0x00, 0x00, 0x8e, 0x22, 0x00, 0x00, 0x8f, 0x22
-	.byte 0x00, 0x00, 0x90, 0x22, 0x00, 0x00, 0x91, 0x22
-	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte 0xff, 0xff, 0x94, 0x22, 0x00, 0x00, 0x95, 0x22
-	.byte 0x00, 0x00, 0x96, 0x22, 0x00, 0x00, 0x98, 0x22
-	.byte 0x00, 0x00, 0x8b, 0x22, 0x00, 0x00, 0x99, 0x22
-	.byte 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00
-	.zero 8
-	aligned_string " ON  "
-	ldb	w, 0x4f
-	.byte 0x46, 0x46, 0x20, 0x00
-	aligned_string " ON  "
-	aligned_string " OFF "
-	.byte 0x00, 0x00, 0x53, 0x00, 0x00, 0x00, 0x53, 0x00
-	.byte 0x94, 0x01, 0xac, 0x00, 0x94, 0x01, 0x00, 0x00
-	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07
-	.byte 0x00, 0x00, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d
-	.byte 0x0e, 0x0f, 0x00, 0x00, 0x19, 0x00, 0x10, 0x11
-	.byte 0x12, 0x13, 0x14, 0x15, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x09, 0x09, 0x09, 0xff, 0x00, 0x00
-	.zero 14
-	aligned_string "|-| RIGHT1| RIGHT2| LEFT| PART4| PART5| PART6| PART7| PART8"
-	aligned_string "|-| PART9| PART10| PART11| PART12| PART13| PART14| PART15| PART16"
-	aligned_string "|-| CONTROL| | ACCOMP1| ACCOMP2| ACCOMP3| BASS| DRUMS| CHORD"
-	.byte 0xc8, 0x01, 0xb3, 0x03, 0xc8, 0x01
-	.byte 0xb3, 0x03, 0xe2, 0x05, 0xb8, 0x05, 0xde, 0x05
-	.byte 0x01, 0x80, 0x01, 0x00, 0x04, 0x80, 0x01, 0x00
-	.byte 0x00, 0x80, 0x01, 0x00, 0x01, 0x84, 0x01, 0x00
-	.byte 0x04, 0x84, 0x01, 0x00, 0x00, 0x84, 0x01, 0x00
-	.byte 0x01, 0x88, 0x01, 0x00, 0x04, 0x88, 0x01, 0x00
-	.byte 0x00, 0x88, 0x01, 0x00, 0x01, 0x8c, 0x01, 0x00
-	.byte 0x04, 0x8c, 0x01, 0x00, 0x00, 0x8c, 0x01, 0x00
-	.byte 0x01, 0x90, 0x01, 0x00, 0x04, 0x90, 0x01, 0x00
-	.byte 0x00, 0x90, 0x01, 0x00, 0x01, 0x94, 0x01, 0x00
-	.byte 0x04, 0x94, 0x01, 0x00, 0x00, 0x94, 0x01, 0x00
-	.byte 0x01, 0x98, 0x01, 0x00, 0x04, 0x98, 0x01, 0x00
-	.byte 0x00, 0x98, 0x01, 0x00, 0x01, 0x9c, 0x01, 0x00
-	.byte 0x04, 0x9c, 0x01, 0x00, 0x00, 0x9c, 0x01, 0x00
-	.byte 0x01, 0xa0, 0x01, 0x00, 0x04, 0xa0, 0x01, 0x00
-	.byte 0x00, 0xa0, 0x01, 0x00, 0x01, 0xa4, 0x01, 0x00
-	.byte 0x04, 0xa4, 0x01, 0x00, 0x00, 0xa4, 0x01, 0x00
-	.byte 0x01, 0xa8, 0x01, 0x00, 0x04, 0xa8, 0x01, 0x00
-	.byte 0x00, 0xa8, 0x01, 0x00, 0x01, 0xac, 0x01, 0x00
-	.byte 0x04, 0xac, 0x01, 0x00, 0x00, 0xac, 0x01, 0x00
-	.byte 0x01, 0xb0, 0x01, 0x00, 0x04, 0xb0, 0x01, 0x00
-	.byte 0x00, 0xb0, 0x01, 0x00, 0x01, 0xb4, 0x01, 0x00
-	.byte 0x04, 0xb4, 0x01, 0x00, 0x00, 0xb4, 0x01, 0x00
-	.byte 0x01, 0xb8, 0x01, 0x00, 0x04, 0xb8, 0x01, 0x00
-	.byte 0x00, 0xb8, 0x01, 0x00, 0x01, 0xbc, 0x01, 0x00
-	.byte 0x04, 0xbc, 0x01, 0x00, 0x00, 0xbc, 0x01, 0x00
-	.byte 0x01, 0xe4, 0x01, 0x00, 0x04, 0xe4, 0x01, 0x00
-	.byte 0x00, 0xe4, 0x01, 0x00, 0xff, 0xff, 0xff, 0xff
-	.fill 8, 1, 0xff
-	.byte 0x01, 0xc0, 0x01, 0x00, 0x04, 0xc0, 0x01, 0x00
-	.byte 0x00, 0xc0, 0x01, 0x00, 0x01, 0xc4, 0x01, 0x00
-	.byte 0x04, 0xc4, 0x01, 0x00, 0x00, 0xc4, 0x01, 0x00
-	.byte 0x01, 0xc8, 0x01, 0x00, 0x04, 0xc8, 0x01, 0x00
-	.byte 0x00, 0xc8, 0x01, 0x00, 0x01, 0xcc, 0x01, 0x00
-	.byte 0x04, 0xcc, 0x01, 0x00, 0x00, 0xcc, 0x01, 0x00
-	.byte 0x01, 0xd0, 0x01, 0x00, 0x04, 0xd0, 0x01, 0x00
-	.byte 0x00, 0xd0, 0x01, 0x00, 0x01, 0xd4, 0x01, 0x00
-	.byte 0x04, 0xd4, 0x01, 0x00, 0x00, 0xd4, 0x01, 0x00
-	.byte 0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x03, 0x00
-	.byte 0x00, 0x00, 0x06, 0x00, 0x07, 0x00, 0x00, 0x00
-	.byte 0x07, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x00
-	.byte 0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x06, 0x00
-Transpose_ValueDisplay_Table:
-	.long Transpose_String_Zero
-	.long Transpose_String_Plus1
-	.long Transpose_String_Plus2
-	.long Transpose_String_Plus3
-	.long Transpose_String_Error
-	.long Transpose_String_Minus3
-	.long Transpose_String_Minus2
-	.long Transpose_String_Minus1
-Transpose_String_Minus1:	aligned_string " -1  "
-Transpose_String_Minus2:
-	ldb	w, 0x2d
-	.byte 0x32, 0x20, 0x20, 0x00
-	aligned_string " -3  "
-	.asciz "Error"
-Transpose_String_Plus3:	aligned_string "  3  "
-Transpose_String_Plus2:
-	ldb	w, 0x20
-	.byte 0x32, 0x20, 0x20, 0x00
-	aligned_string "  1  "
-	aligned_string "  0  "
-	.zero 10
-	aligned_string " OFF "
-	aligned_string " %2d  "
-	aligned_string " OFF "
-	ldb	w, 0x25
-	aligned_string "2d  "
-	.byte 0x20, 0x4f
-	.byte 0x4e, 0x20, 0x20, 0x00
-	aligned_string " OFF "
-	aligned_string " OFF "
-	aligned_string " %2d  "
-	aligned_string " ON  "
-	ldb	w, 0x4f
-	.byte 0x46, 0x46, 0x20, 0x00, 0x00, 0x00, 0xe4, 0x00
-	.long NakaData_ExternalBase
-	.byte 0x6e, 0x04, 0xd0, 0x01
-	.byte 0x6e, 0x04, 0x1e, 0xb6, 0xf7, 0x00, 0xb8, 0xb6
-	.byte 0xf7, 0x00, 0x7a, 0xcc, 0xf7, 0x00, 0x91, 0xce
-	.byte 0xf7, 0x00, 0xa5, 0xcf, 0xf7, 0x00, 0xa8, 0xd0
-	.byte 0xf7, 0x00, 0x7e, 0xd1, 0xf7, 0x00, 0x57, 0xd2
-	.byte 0xf7, 0x00, 0x30, 0xd3, 0xf7, 0x00, 0x0a, 0xd4
-	.byte 0xf7, 0x00, 0x0e, 0xd5, 0xf7, 0x00, 0x12, 0xd6
-	.byte 0xf7, 0x00, 0xe8, 0xd6, 0xf7, 0x00, 0xc5, 0xd7
-	.byte 0xf7, 0x00, 0xa2, 0xd8, 0xf7, 0x00, 0x7f, 0xd9
-	.byte 0xf7, 0x00, 0x5c, 0xda, 0xf7, 0x00, 0x88, 0xcd
-	.byte 0xf7, 0x00, 0xa3, 0xdf, 0xf7, 0x00, 0x48, 0xe0
-	.byte 0xf7, 0x00, 0x73, 0xe1, 0xf7, 0x00, 0x24, 0xe1
-	.byte 0xf7, 0x00, 0xba, 0xea, 0xf7, 0x00, 0x70, 0xed
-	.byte 0xf7, 0x00, 0x85, 0xf0, 0xf7, 0x00, 0x08, 0xf1
-	.byte 0xf7, 0x00, 0xd2, 0xf1, 0xf7, 0x00, 0x6d, 0xf1
-	.byte 0xf7, 0x00, 0x37, 0xf2, 0xf7, 0x00, 0x61, 0xee
-	.byte 0xf7, 0x00, 0x3b, 0xdb, 0xf7, 0x00, 0x11, 0xdc
-	.byte 0xf7, 0x00, 0x9a, 0xb4, 0xf7, 0x00, 0x6d, 0xb4
-	.byte 0xf7, 0x00, 0x9d, 0x2f, 0xf8, 0x00, 0xac, 0x30
-	.byte 0xf8, 0x00, 0x8d, 0x31, 0xf8, 0x00, 0x6e, 0x32
-	.byte 0xf8, 0x00, 0xc7, 0xb4, 0xf7, 0x00, 0xad, 0xcb
-	.byte 0xf7, 0x00, 0x94, 0x66, 0xf8, 0x00, 0x78, 0xb5
-	.byte 0xf7, 0x00, 0xa5, 0xb5, 0xf7, 0x00, 0xef, 0x46
-	.byte 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc8, 0x0a
-	.byte 0xe8, 0x00, 0xbc, 0x0a, 0xe8, 0x00, 0xb2, 0x0a
-	.byte 0xe8, 0x00, 0xaa, 0x0a, 0xe8, 0x00, 0xa0, 0x0a
-	.byte 0xe8, 0x00, 0x92, 0x0a, 0xe8, 0x00, 0x80, 0x0a
-	.byte 0xe8, 0x00, 0x74, 0x0a, 0xe8, 0x00, 0x62, 0x0a
-	.byte 0xe8, 0x00, 0x56, 0x0a, 0xe8, 0x00, 0x4c, 0x0a
-	.byte 0xe8, 0x00, 0x3e, 0x0a, 0xe8, 0x00, 0x30, 0x0a
-	.byte 0xe8, 0x00, 0x20, 0x0a, 0xe8, 0x00, 0x12, 0x0a
-	.byte 0xe8, 0x00, 0x04, 0x0a, 0xe8, 0x00, 0xf8, 0x09
-	.byte 0xe8, 0x00, 0xf0, 0x09, 0xe8, 0x00, 0xe2, 0x09
-	.byte 0xe8, 0x00, 0xd4, 0x09, 0xe8, 0x00, 0xc6, 0x09
-	.byte 0xe8, 0x00, 0xba, 0x09, 0xe8, 0x00, 0xaa, 0x09
-	.byte 0xe8, 0x00, 0x9a, 0x09, 0xe8, 0x00, 0x8a, 0x09
-	.byte 0xe8, 0x00, 0x7a, 0x09, 0xe8, 0x00, 0x6a, 0x09
-	.byte 0xe8, 0x00, 0x58, 0x09, 0xe8, 0x00, 0x48, 0x09
-	.byte 0xe8, 0x00, 0x3c, 0x09, 0xe8, 0x00, 0x2c, 0x09
-	.byte 0xe8, 0x00, 0x1c, 0x09, 0xe8, 0x00, 0x0c, 0x09
-	.byte 0xe8, 0x00, 0xfc, 0x08, 0xe8, 0x00, 0xee, 0x08
-	.byte 0xe8, 0x00, 0xe0, 0x08, 0xe8, 0x00, 0xd2, 0x08
-	.byte 0xe8, 0x00, 0xc2, 0x08, 0xe8, 0x00, 0xb4, 0x08
-	.byte 0xe8, 0x00, 0xaa, 0x08, 0xe8, 0x00, 0x9c, 0x08
-	.byte 0xe8, 0x00, 0x8c, 0x08, 0xe8, 0x00, 0x7e, 0x08
-	.byte 0xe8, 0x00, 0x74, 0x08, 0xe8, 0x00, 0x72, 0x08
-	.byte 0xe8, 0x00, 0x00, 0xff
-	aligned_string "FDemoText"
-	aligned_string "BitmapKn5000"
-	aligned_string "BitmapTechnics"
-	aligned_string "ApPreControl"
-	aligned_string "LswSound"
-	aligned_string "BitmapDrawsw"
-	aligned_string "LswDrawRelease"
-	aligned_string "LswDrawAttack"
-	aligned_string "LswPercLevel"
-	aligned_string "LswPercDecay"
-	aligned_string "BitmapAccita16"
-	aligned_string "BitmapAccger16"
-	aligned_string "LswMidiChannel"
-	aligned_string "LswLocalControl"
-	aligned_string "TtSdscltyp"
-	aligned_string "LswScalingKeyX"
-	aligned_string "LswScalingShift2"
-	aligned_string "LswScalingMode"
-	aligned_string "LswScalingShift"
-	aligned_string "LswScalingType"
-	aligned_string "LswMasterTuning"
-	aligned_string "LswOrchestrator"
-	aligned_string "MessageText"
-	aligned_string "MessageHeader"
-	aligned_string "CheckMessage"
-	aligned_string "CheckLanguage"
-	aligned_string "LswMute"
-	aligned_string "LswPartExp"
-	aligned_string "LswAfterTouch"
-	aligned_string "LswKeyScaling"
-	aligned_string "LswSustainPedal"
-	aligned_string "LswGlidePedal"
-	aligned_string "LswBendRange"
-	aligned_string "LswTuning"
-	aligned_string "LswKeyShift"
-	aligned_string "LswSustainLength"
-	aligned_string "LswSustain"
-	aligned_string "LswDigitalEffect"
-	aligned_string "LswDSPEffect"
-	aligned_string "LswReverb"
-	aligned_string "LswPan"
-	aligned_string "LswVolume"
-	aligned_string "LswLeftHold"
-	aligned_string "TtSdmenu"
-	.byte 0xd6, 0x0a, 0xe8, 0x00, 0x00, 0xff
-	.long NakaInst_func
-	.long NakaInst_data
-	.long NakaObj_FuncData_Null
-NakaObj_FuncData_Null:	aligned_string ""
-NakaInst_data:	aligned_string "data"
-NakaInst_func:	aligned_string "func"
-	.byte 0x10, 0x0b, 0xe8, 0x00, 0x0a, 0x0b
-	.byte 0xe8, 0x00, 0x04, 0x0b, 0xe8, 0x00, 0x02, 0x0b
-NakaObj_FmuteVol_DataEntry:
-	.byte 0xe8, 0x00
-NakaObj_FmuteVol_NullTerm:
-	.byte 0x00, 0xff
-NakaInst_data_E80B04:	aligned_string "data"
-NakaInst_fmute:	aligned_string "fmute"
-NakaInst_fvol:	aligned_string "fvol"
-	.byte 0x1a
-NakaObj_FmuteVol_LinkEntry1:
-	.byte 0x0b
-	.byte 0xe8, 0x00
-NakaObj_FmuteVol_LinkEntry2:
-	.byte 0x00, 0xff, 0x20, 0x0b, 0xe8, 0x00
-	.byte 0x00, 0xff, 0x26, 0x0b, 0xe8, 0x00
-NakaObj_FmuteVol_LinkEntry3:
-	.byte 0x00, 0xff
-AudioStream_Property_Table:
-	.long NakaInst_str1
-	.long NakaInst_str3
-	.long AudioStream_Prop_Null
-AudioStream_Prop_Null:	aligned_string ""
-NakaInst_str3:	aligned_string "str3"
-NakaInst_str1:	aligned_string "str1"
-UIElement_Property_Table:
-	.long UIElement_Prop_StrEntry
-	.long NakaInst_font
-	.long NakaInst_fontcolor
-	.long NakaInst_align
-	.long NakaInst_selected
-	.long NakaInst_dialfocus
-	.long UIElement_Prop_NullTerm
-UIElement_Prop_NullTerm:
-	.byte 0x00, 0xff
-NakaInst_dialfocus:	aligned_string "dialfocus"
-NakaInst_selected:	aligned_string "selected"
-NakaInst_align:	aligned_string "align"
-NakaInst_fontcolor:	aligned_string "fontcolor"
-NakaInst_font:	aligned_string "font"
-UIElement_Prop_StrEntry:
-	.byte 0x73, 0x74, 0x72, 0x00, 0x92, 0x0b
-	.byte 0xe8, 0x00
-UIElement_PropChain_Null1:
-	.byte 0x00, 0xff, 0x98, 0x0b, 0xe8, 0x00
-	.byte 0x00, 0xff, 0x9e, 0x0b, 0xe8, 0x00
-UIElement_PropChain_Null2:
-	.byte 0x00, 0xff
-	.long UIElement_PropChain_Null3
-UIElement_PropChain_Null3:
-	.byte 0x00, 0xff, 0xaa, 0x0b
-	.byte 0xe8, 0x00
-UIElement_PropChain_Null4:
-	.byte 0x00, 0xff, 0xb0, 0x0b, 0xe8, 0x00
-	.byte 0x00, 0xff, 0xb6, 0x0b, 0xe8, 0x00
-UIElement_PropChain_Null5:
-	.byte 0x00, 0xff
-	.long UIElement_PropChain_Group1
-UIElement_PropChain_Group1:
-	.byte 0x00, 0xff, 0xd4, 0x0b
-	.byte 0xe8, 0x00, 0xcc, 0x0b, 0xe8, 0x00, 0xca, 0x0b
-	.byte 0xe8, 0x00
-UIElement_PropChain_Null6:
-	.byte 0x00, 0xff
-NakaInst_window:	aligned_string "window"
-NakaInst_page:	aligned_string "page"
-	.byte 0xde, 0x0b, 0xe8, 0x00
-UIElement_PropChain_Null7:
-	.byte 0x00, 0xff
-	.long UIElement_PropChain_Null8
-UIElement_PropChain_Null8:
-	.byte 0x00, 0xff, 0xea, 0x0b
-	.byte 0xe8, 0x00
-UIElement_PropChain_Null9:
-	.byte 0x00, 0xff, 0xf0, 0x0b, 0xe8, 0x00
-	.byte 0x00, 0xff, 0xf6, 0x0b, 0xe8, 0x00
-UIElement_PropChain_Null10:
-	.byte 0x00, 0xff
-	.long UIElement_PropChain_NullEnd
-UIElement_PropChain_NullEnd:	aligned_string ""
-TextInput_Property_Table:
-	.long NakaInst_font_E80C3A
-	.long NakaInst_fontcolor_E80C30
-	.long NakaInst_align_E80C2A
-	.long NakaInst_editsw
-	.long NakaInst_selected_E80C18
-	.long TextInput_Prop_NullTerm
-TextInput_Prop_NullTerm:
-	.byte 0x00, 0xff
-NakaInst_selected_E80C18:	aligned_string "selected"
-NakaInst_editsw:	aligned_string "editsw"
-NakaInst_align_E80C2A:	aligned_string "align"
-NakaInst_fontcolor_E80C30:	aligned_string "fontcolor"
-NakaInst_font_E80C3A:	aligned_string "font"
-	.long TextInput_PropChain_Start
-TextInput_PropChain_Start:
-	.byte 0x00, 0xff, 0x4a, 0x0c
-	.byte 0xe8, 0x00
-TextInput_PropChain_Null1:
-	.byte 0x00, 0xff, 0x50, 0x0c, 0xe8, 0x00
-	.byte 0x00, 0xff, 0x56, 0x0c, 0xe8, 0x00
-TextInput_PropChain_Null2:
-	.byte 0x00, 0xff
-	.long NakaInst_func_E80C6C
-	.long NakaInst_data_E80C66
-	.long TextInput_FuncData_Null
-TextInput_FuncData_Null:	aligned_string ""
-NakaInst_data_E80C66:	aligned_string "data"
-NakaInst_func_E80C6C:	aligned_string "func"
-Widget_DataProperty_Table:
-	.long WidgetData_Prop_StrEntry
-	.long NakaInst_editsw_E80C98
-	.long NakaInst_selected_E80C8E
-	.long NakaInst_song
-	.long WidgetData_Prop_NullTerm
-WidgetData_Prop_NullTerm:
-	.byte 0x00, 0xff
-NakaInst_song:	aligned_string "song"
-NakaInst_selected_E80C8E:	aligned_string "selected"
-NakaInst_editsw_E80C98:	aligned_string "editsw"
-WidgetData_Prop_StrEntry:
-	.byte 0x73, 0x74, 0x72, 0x00, 0xa8, 0x0c, 0xe8, 0x00
-	.byte 0x00, 0xff, 0xae, 0x0c, 0xe8, 0x00
-WidgetData_PropChain_Null1:
-	.byte 0x00, 0xff
-	.long WidgetData_PropChain_Null2
-WidgetData_PropChain_Null2:
-	.byte 0x00, 0xff, 0xba, 0x0c
-	.byte 0xe8, 0x00
-WidgetData_PropChain_Null3:
-	.byte 0x00, 0xff, 0xce, 0x0c, 0xe8, 0x00
-	.long WidgetData_TagEntry
-	.long WidgetData_TagIndex_Null
-WidgetData_TagIndex_Null:	aligned_string ""
-WidgetData_TagEntry:
-	.byte 0x74, 0x61, 0x67, 0x00
-WidgetData_IndexEntry:
-	.byte 0x69, 0x6e
-	.byte 0x64, 0x65, 0x78, 0x00, 0xea, 0x0c, 0xe8, 0x00
-	.long NakaInst_editsw_E80CE2
-	.long WidgetData_EditswPart_Null
-WidgetData_EditswPart_Null:	aligned_string ""
-NakaInst_editsw_E80CE2:	aligned_string "editsw"
-NakaInst_part:	aligned_string "part"
-	.long WidgetData_TrailingData
-WidgetData_TrailingData:
-	.byte 0x00, 0xff, 0x25, 0xb7
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0xd8, 0x12, 0xe8, 0x00, 0xd6, 0x12
-	.byte 0xe8, 0x00, 0xd2, 0x0a, 0xe8, 0x00, 0x6f, 0xbb
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x15
-	.byte 0x3a, 0x00
-	.byte 0x08, 0x00, 0xc4, 0x12, 0xe8, 0x00, 0xc0, 0x12
-	.byte 0xe8, 0x00, 0xd8, 0x0a, 0xe8, 0x00, 0x9e, 0xc0
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x15
-	.byte 0x3e, 0x00
-	.byte 0x0c, 0x00, 0xae, 0x12, 0xe8, 0x00, 0xaa, 0x12
-	.byte 0xe8, 0x00, 0xf2, 0x0a, 0xe8, 0x00, 0x23, 0xdd
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0xa0, 0x12, 0xe8, 0x00, 0x9e, 0x12
-	.byte 0xe8, 0x00, 0x16, 0x0b, 0xe8, 0x00, 0x50, 0xe2
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0x92, 0x12, 0xe8, 0x00, 0x90, 0x12
-	.byte 0xe8, 0x00, 0x1c, 0x0b, 0xe8, 0x00, 0x54, 0xe6
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0x82, 0x12, 0xe8, 0x00, 0x80, 0x12
-	.byte 0xe8, 0x00, 0x22, 0x0b, 0xe8, 0x00, 0xd6, 0xe6
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x4E
-	.byte 0x34, 0x00
-	.byte 0x08, 0x00, 0x70, 0x12, 0xe8, 0x00, 0x6c, 0x12
-	.byte 0xe8, 0x00, 0x28, 0x0b, 0xe8, 0x00, 0x2d, 0xeb
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x11
-	.byte 0x30, 0x00
-	.byte 0x14, 0x00, 0x60, 0x12, 0xe8, 0x00, 0x58, 0x12
-	.byte 0xe8, 0x00, 0x42, 0x0b, 0xe8, 0x00, 0xdb, 0xe7
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0x4e, 0x12, 0xe8, 0x00, 0x4c, 0x12
-	.byte 0xe8, 0x00, 0x8e, 0x0b, 0xe8, 0x00, 0xa1, 0xe8
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0x42, 0x12, 0xe8, 0x00, 0x40, 0x12
-	.byte 0xe8, 0x00, 0x94, 0x0b, 0xe8, 0x00, 0xcf, 0xee
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0x34, 0x12, 0xe8, 0x00, 0x32, 0x12
-	.byte 0xe8, 0x00, 0x9a, 0x0b, 0xe8, 0x00, 0xa6, 0xf4
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x33
-	.byte 0x22, 0x00
-	.byte 0x00, 0x00, 0x22, 0x12, 0xe8, 0x00, 0x20, 0x12
-	.byte 0xe8, 0x00, 0xa0, 0x0b, 0xe8, 0x00, 0x5a, 0xfa
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00, 0x10, 0x12, 0xe8, 0x00, 0x0e, 0x12
-	.byte 0xe8, 0x00, 0xa6, 0x0b, 0xe8, 0x00, 0x39, 0x07
-	.byte 0xf8, 0x00, 0x0c, 0x00, 0x61, 0x01, 0x24, 0x00
-	.byte 0x00, 0x00, 0x02, 0x12, 0xe8, 0x00, 0x00, 0x12
-	.byte 0xe8, 0x00, 0xac, 0x0b, 0xe8, 0x00, 0x7f, 0x07
-	.byte 0xf8, 0x00, 0x0c, 0x00, 0x61, 0x01, 0x24, 0x00
-	.byte 0x00, 0x00, 0xf2, 0x11, 0xe8, 0x00, 0xf0, 0x11
-	.byte 0xe8, 0x00, 0xb2, 0x0b, 0xe8, 0x00, 0x28, 0xf3
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0xe6, 0x11, 0xe8, 0x00, 0xe4, 0x11
-	.byte 0xe8, 0x00, 0xb8, 0x0b, 0xe8, 0x00, 0xde, 0x2d
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x1c, 0x00
-	.byte 0x06, 0x00, 0xd4, 0x11, 0xe8, 0x00, 0xd0, 0x11
-	.byte 0xe8, 0x00, 0xbe, 0x0b, 0xe8, 0x00, 0xc4, 0x24
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0xc6, 0x11, 0xe8, 0x00, 0xc4, 0x11
-	.byte 0xe8, 0x00, 0xda, 0x0b, 0xe8, 0x00, 0x4f, 0x33
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0xb8, 0x11, 0xe8, 0x00, 0xb6, 0x11
-	.byte 0xe8, 0x00, 0xe0, 0x0b, 0xe8, 0x00, 0xe8, 0x37
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0xaa, 0x11, 0xe8, 0x00, 0xa8, 0x11
-	.byte 0xe8, 0x00, 0xe6, 0x0b, 0xe8, 0x00, 0xe5, 0x39
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0x9a, 0x11, 0xe8, 0x00, 0x98, 0x11
-	.byte 0xe8, 0x00, 0xec, 0x0b, 0xe8, 0x00, 0x51, 0x3b
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0x8a, 0x11, 0xe8, 0x00, 0x88, 0x11
-	.byte 0xe8, 0x00, 0xf2, 0x0b, 0xe8, 0x00, 0x6b, 0x08
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x25
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00, 0x7c, 0x11, 0xe8, 0x00, 0x7a, 0x11
-	.byte 0xe8, 0x00, 0xf8, 0x0b, 0xe8, 0x00, 0x7d, 0x3e
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x11
-	.byte 0x2a, 0x00
-	.byte 0x0e, 0x00, 0x70, 0x11, 0xe8, 0x00, 0x6a, 0x11
-	.byte 0xe8, 0x00, 0xfe, 0x0b, 0xe8, 0x00, 0x0b, 0x45
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x35
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00, 0x54, 0x11, 0xe8, 0x00, 0x52, 0x11
-	.byte 0xe8, 0x00, 0x40, 0x0c, 0xe8, 0x00, 0xee, 0x41
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0x42, 0x11, 0xe8, 0x00, 0x40, 0x11
-	.byte 0xe8, 0x00, 0x46, 0x0c, 0xe8, 0x00, 0x2f, 0x42
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00
-	.byte 0x00, 0x00, 0x30, 0x11, 0xe8, 0x00, 0x2e, 0x11
-	.byte 0xe8, 0x00, 0x4c, 0x0c, 0xe8, 0x00, 0xed, 0x2e
-	.byte 0xf8, 0x00, 0x01, 0x00, 0x61, 0x01, 0x3a, 0x00
-	.byte 0x00, 0x00, 0x20, 0x11, 0xe8, 0x00, 0x1e, 0x11
-	.byte 0xe8, 0x00, 0x52, 0x0c, 0xe8, 0x00, 0x0e, 0xc8
-	.byte 0xf7, 0x00
-
-
-	naka_header NAKA_TYPE_0x11
-	.byte 0x24, 0x00
-	.byte 0x08, 0x00, 0x10, 0x11, 0xe8, 0x00, 0x0c, 0x11
-	.byte 0xe8, 0x00, 0x58, 0x0c, 0xe8, 0x00, 0xb4, 0x42
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x12
-	.byte 0x30, 0x00
-	.byte 0x0c, 0x00, 0xfa, 0x10, 0xe8, 0x00, 0xf4, 0x10
-	.byte 0xe8, 0x00, 0x72, 0x0c, 0xe8, 0x00, 0xcc, 0x40
-	.byte 0xf8, 0x00
-
-
-	naka_header NAKA_TYPE_0x69
-	.byte 0x1a, 0x00
-	.byte 0x00, 0x00, 0xe4, 0x10, 0xe8, 0x00, 0xe2, 0x10
-	.byte 0xe8, 0x00, 0xa4, 0x0c, 0xe8, 0x00, 0x49, 0x41
-	.byte 0xf8, 0x00
+; NAKA Widget Pointer Tables - Part 2 (28 widgets, 158788 bytes)
+; Source: maincpu/ui_widgets/naka_widget_tables_2.c (raw byte array)
+NakaData_WidgetTables2:
+	.incbin "includes/generated/naka_widget_tables_2.bin"
+
+; External label offsets within the binary blob above.
+	.equ NakaObj_MidiCommonSetting_Table, NakaData_WidgetTables2 + 0x000AA
+	.equ NakaObj_MidiCommonSetting_Null1, NakaData_WidgetTables2 + 0x000C2
+	.equ NakaObj_MidiCommonSetting_Null2, NakaData_WidgetTables2 + 0x000C4
+	.equ NakaObj_MidiCommonSetting_Null3, NakaData_WidgetTables2 + 0x000C6
+	.equ NakaObj_MidiCommonSetting_Null4, NakaData_WidgetTables2 + 0x000C8
+	.equ NakaObj_MidiCommonSetting_GridBox, NakaData_WidgetTables2 + 0x000CA
+	.equ NakaObj_MidiCommonSetting_Name, NakaData_WidgetTables2 + 0x000D8
+	.equ NakaObj_MidiInOutSetting_Table, NakaData_WidgetTables2 + 0x000EA
+	.equ NakaObj_MidiInOutSetting_Null1, NakaData_WidgetTables2 + 0x00102
+	.equ NakaObj_MidiInOutSetting_Null2, NakaData_WidgetTables2 + 0x00104
+	.equ NakaObj_MidiInOutSetting_Null3, NakaData_WidgetTables2 + 0x00106
+	.equ NakaObj_MidiInOutSetting_Null4, NakaData_WidgetTables2 + 0x00108
+	.equ NakaObj_MidiInOutSetting_GridBox, NakaData_WidgetTables2 + 0x0010A
+	.equ NakaObj_MidiInOutSetting_Name, NakaData_WidgetTables2 + 0x00118
+	.equ NakaObj_MidiPresets_Table, NakaData_WidgetTables2 + 0x0012A
+	.equ NakaObj_MidiPresets_Null1, NakaData_WidgetTables2 + 0x0023A
+	.equ NakaObj_MidiPresets_Null2, NakaData_WidgetTables2 + 0x0023C
+	.equ NakaObj_MidiPresets_Null3, NakaData_WidgetTables2 + 0x0023E
+	.equ NakaObj_MidiPresets_Null4, NakaData_WidgetTables2 + 0x00240
+	.equ NakaObj_MidiPresets_Null5, NakaData_WidgetTables2 + 0x00242
+	.equ NakaObj_MidiPresets_Null6, NakaData_WidgetTables2 + 0x00244
+	.equ NakaObj_MidiPresets_Null7, NakaData_WidgetTables2 + 0x00246
+	.equ NakaObj_MidiPresets_Null8, NakaData_WidgetTables2 + 0x00248
+	.equ NakaObj_MidiPresets_Null9, NakaData_WidgetTables2 + 0x0024A
+	.equ NakaObj_MidiPresets_Null10, NakaData_WidgetTables2 + 0x0024C
+	.equ NakaObj_MidiPresets_MasterWithList, NakaData_WidgetTables2 + 0x0024E
+	.equ NakaObj_MidiPresets_MasterWithNull, NakaData_WidgetTables2 + 0x00262
+	.equ NakaObj_MidiPresets_MasterWith, NakaData_WidgetTables2 + 0x00264
+	.equ NakaObj_MidiPresets_MWO_Null1, NakaData_WidgetTables2 + 0x0027A
+	.equ NakaObj_MidiPresets_MWO_Null2, NakaData_WidgetTables2 + 0x0027C
+	.equ NakaObj_MidiPresets_MWO_Null3, NakaData_WidgetTables2 + 0x0027E
+	.equ NakaObj_MidiPresets_MWO_Null4, NakaData_WidgetTables2 + 0x00280
+	.equ NakaObj_MidiPresets_MWO_Null5, NakaData_WidgetTables2 + 0x00282
+	.equ NakaObj_MidiPresets_MWO_Null6, NakaData_WidgetTables2 + 0x00284
+	.equ NakaObj_MidiPresets_MWO_Null7, NakaData_WidgetTables2 + 0x00286
+	.equ NakaObj_MidiPresets_MWO_Null8, NakaData_WidgetTables2 + 0x00288
+	.equ NakaObj_MidiPresets_MWO_Null9, NakaData_WidgetTables2 + 0x0028A
+	.equ NakaObj_MidiPresets_MasterWithoutList, NakaData_WidgetTables2 + 0x0028C
+	.equ NakaObj_MidiPresets_MasterWithoutNull, NakaData_WidgetTables2 + 0x002A2
+	.equ NakaObj_MidiPresets_MasterWithout, NakaData_WidgetTables2 + 0x002A4
+	.equ NakaObj_MidiPresets_SplitNull, NakaData_WidgetTables2 + 0x002BC
+	.equ NakaObj_MidiPresets_SplitBox, NakaData_WidgetTables2 + 0x002BE
+	.equ NakaObj_MidiPresets_Page4_Null1, NakaData_WidgetTables2 + 0x002CC
+	.equ NakaObj_MidiPresets_Page4_Null2, NakaData_WidgetTables2 + 0x002CE
+	.equ NakaObj_MidiPresets_Page4_Null3, NakaData_WidgetTables2 + 0x002D0
+	.equ NakaObj_MidiPresets_UserWriteList, NakaData_WidgetTables2 + 0x002D2
+	.equ NakaObj_MidiPresets_Page4, NakaData_WidgetTables2 + 0x002E8
+	.equ NakaObj_MidiPresets_Page3_Null1, NakaData_WidgetTables2 + 0x002F8
+	.equ NakaObj_MidiPresets_Page3_Null2, NakaData_WidgetTables2 + 0x002FA
+	.equ NakaObj_MidiPresets_Page3_Null3, NakaData_WidgetTables2 + 0x002FC
+	.equ NakaObj_MidiPresets_UserLoadList, NakaData_WidgetTables2 + 0x002FE
+	.equ NakaObj_MidiPresets_Page3, NakaData_WidgetTables2 + 0x00314
+	.equ NakaObj_MidiPresets_SWO_Null1, NakaData_WidgetTables2 + 0x00324
+	.equ NakaObj_MidiPresets_SWO_Null2, NakaData_WidgetTables2 + 0x00326
+	.equ NakaObj_MidiPresets_SWO_Null3, NakaData_WidgetTables2 + 0x00328
+	.equ NakaObj_MidiPresets_SWO_Null4, NakaData_WidgetTables2 + 0x0032A
+	.equ NakaObj_MidiPresets_SWO_Null5, NakaData_WidgetTables2 + 0x0032C
+	.equ NakaObj_MidiPresets_SWO_Null6, NakaData_WidgetTables2 + 0x0032E
+	.equ NakaObj_MidiPresets_SWO_Null7, NakaData_WidgetTables2 + 0x00330
+	.equ NakaObj_MidiPresets_SWO_Null8, NakaData_WidgetTables2 + 0x00332
+	.equ NakaObj_MidiPresets_SWO_Null9, NakaData_WidgetTables2 + 0x00334
+	.equ NakaObj_MidiPresets_SlaveWithList, NakaData_WidgetTables2 + 0x00336
+	.equ NakaObj_MidiPresets_SlaveWithNull, NakaData_WidgetTables2 + 0x00348
+	.equ NakaObj_MidiPresets_SlaveWith, NakaData_WidgetTables2 + 0x0034A
+	.equ NakaObj_MidiPresets_SW_Null1, NakaData_WidgetTables2 + 0x0035E
+	.equ NakaObj_MidiPresets_SW_Null2, NakaData_WidgetTables2 + 0x00360
+	.equ NakaObj_MidiPresets_SW_Null3, NakaData_WidgetTables2 + 0x00362
+	.equ NakaObj_MidiPresets_SW_Null4, NakaData_WidgetTables2 + 0x00364
+	.equ NakaObj_MidiPresets_SW_Null5, NakaData_WidgetTables2 + 0x00366
+	.equ NakaObj_MidiPresets_SW_Null6, NakaData_WidgetTables2 + 0x00368
+	.equ NakaObj_MidiPresets_SlaveWithoutList, NakaData_WidgetTables2 + 0x0036A
+	.equ NakaObj_MidiPresets_SlaveWithoutNull1, NakaData_WidgetTables2 + 0x00380
+	.equ NakaObj_MidiPresets_SlaveWithoutNull2, NakaData_WidgetTables2 + 0x00382
+	.equ NakaObj_MidiPresets_SlaveWithoutNull3, NakaData_WidgetTables2 + 0x00384
+	.equ NakaObj_MidiPresets_SlaveWithoutNull4, NakaData_WidgetTables2 + 0x00386
+	.equ NakaObj_MidiPresets_SlaveWithout, NakaData_WidgetTables2 + 0x00388
+	.equ NakaObj_MidiPresets_PageCtlNull, NakaData_WidgetTables2 + 0x003A0
+	.equ NakaObj_MidiPresets_PageCtl2, NakaData_WidgetTables2 + 0x003A2
+	.equ NakaObj_MidiPresets_PageCtl1, NakaData_WidgetTables2 + 0x003B0
+	.equ NakaObj_MidiPresets_PageBoxNull1, NakaData_WidgetTables2 + 0x003BE
+	.equ NakaObj_MidiPresets_PageBoxNull2, NakaData_WidgetTables2 + 0x003C0
+	.equ NakaObj_MidiPresets_PageBox, NakaData_WidgetTables2 + 0x003C2
+	.equ NakaObj_MidiPresets_Name, NakaData_WidgetTables2 + 0x003D2
+	.equ NakaObj_MidiExclusive_Table, NakaData_WidgetTables2 + 0x003E2
+	.equ NakaObj_MidiExclusive_RcvDotNull, NakaData_WidgetTables2 + 0x00452
+	.equ NakaObj_MidiExclusive_RcvDot, NakaData_WidgetTables2 + 0x00454
+	.equ NakaObj_MidiExclusive_RcvMsp, NakaData_WidgetTables2 + 0x00462
+	.equ NakaObj_MidiExclusive_RcvSeq, NakaData_WidgetTables2 + 0x00470
+	.equ NakaObj_MidiExclusive_RcvCmp, NakaData_WidgetTables2 + 0x0047E
+	.equ NakaObj_MidiExclusive_RcvSmem, NakaData_WidgetTables2 + 0x0048C
+	.equ NakaObj_MidiExclusive_RcvPmem, NakaData_WidgetTables2 + 0x0049A
+	.equ NakaObj_MidiExclusive_RcvShow, NakaData_WidgetTables2 + 0x004A8
+	.equ NakaObj_MidiExclusive_RcvWinNull1, NakaData_WidgetTables2 + 0x004B6
+	.equ NakaObj_MidiExclusive_RcvWinNull2, NakaData_WidgetTables2 + 0x004B8
+	.equ NakaObj_MidiExclusive_RcvWinNull3, NakaData_WidgetTables2 + 0x004BA
+	.equ NakaObj_MidiExclusive_RcvWindow, NakaData_WidgetTables2 + 0x004BC
+	.equ NakaObj_MidiExclusive_SendDot, NakaData_WidgetTables2 + 0x004CA
+	.equ NakaObj_MidiExclusive_SendMsp, NakaData_WidgetTables2 + 0x004D8
+	.equ NakaObj_MidiExclusive_SendSeq, NakaData_WidgetTables2 + 0x004E6
+	.equ NakaObj_MidiExclusive_SendCmp, NakaData_WidgetTables2 + 0x004F4
+	.equ NakaObj_MidiExclusive_SendSmem, NakaData_WidgetTables2 + 0x00502
+	.equ NakaObj_MidiExclusive_SendPmem, NakaData_WidgetTables2 + 0x00512
+	.equ NakaObj_MidiExclusive_SendShow, NakaData_WidgetTables2 + 0x00522
+	.equ NakaObj_MidiExclusive_SendWinNull1, NakaData_WidgetTables2 + 0x00532
+	.equ NakaObj_MidiExclusive_SendWinNull2, NakaData_WidgetTables2 + 0x00534
+	.equ NakaObj_MidiExclusive_SendWinNull3, NakaData_WidgetTables2 + 0x00536
+	.equ NakaObj_MidiExclusive_SendWindow, NakaData_WidgetTables2 + 0x00538
+	.equ NakaObj_MidiExclusive_ListNull1, NakaData_WidgetTables2 + 0x00546
+	.equ NakaObj_MidiExclusive_ListNull2, NakaData_WidgetTables2 + 0x00548
+	.equ NakaObj_MidiExclusive_ListBox, NakaData_WidgetTables2 + 0x0054A
+	.equ NakaObj_MidiExclusive_NameNull1, NakaData_WidgetTables2 + 0x00556
+	.equ NakaObj_MidiExclusive_NameNull2, NakaData_WidgetTables2 + 0x00558
+	.equ NakaObj_MidiExclusive_Name, NakaData_WidgetTables2 + 0x0055A
+	.equ NakaObj_MidiComputerConn_Table, NakaData_WidgetTables2 + 0x00652
+	.equ NakaObj_MidiComputerConn_Null1, NakaData_WidgetTables2 + 0x0066E
+	.equ NakaObj_MidiComputerConn_Null2, NakaData_WidgetTables2 + 0x00670
+	.equ NakaObj_MidiComputerConn_Null3, NakaData_WidgetTables2 + 0x00672
+	.equ NakaObj_MidiComputerConn_Null4, NakaData_WidgetTables2 + 0x00674
+	.equ NakaObj_MidiComputerConn_Null5, NakaData_WidgetTables2 + 0x00676
+	.equ NakaObj_MidiComputerConn_Null6, NakaData_WidgetTables2 + 0x00678
+	.equ NakaObj_MidiComputerConn_Name, NakaData_WidgetTables2 + 0x0067A
+	.equ NakaObj_MidiPmemOutput_Table, NakaData_WidgetTables2 + 0x00692
+	.equ NakaObj_MidiPmemOutput_Null1, NakaData_WidgetTables2 + 0x006DA
+	.equ NakaObj_MidiPmemOutput_Null2, NakaData_WidgetTables2 + 0x006DC
+	.equ NakaObj_MidiPmemOutput_Null3, NakaData_WidgetTables2 + 0x006DE
+	.equ NakaObj_MidiPmemOutput_Null4, NakaData_WidgetTables2 + 0x006E0
+	.equ NakaObj_MidiPmemOutput_Null5, NakaData_WidgetTables2 + 0x006E2
+	.equ NakaObj_MidiPmemOutput_Null6, NakaData_WidgetTables2 + 0x006E4
+	.equ NakaObj_MidiPmemOutput_Null7, NakaData_WidgetTables2 + 0x006E6
+	.equ NakaObj_MidiPmemOutput_Null8, NakaData_WidgetTables2 + 0x006E8
+	.equ NakaObj_MidiPmemOutput_Right, NakaData_WidgetTables2 + 0x006EA
+	.equ NakaObj_MidiPmemOutput_Left, NakaData_WidgetTables2 + 0x006F8
+	.equ NakaObj_MidiPmemOutput_RNull1, NakaData_WidgetTables2 + 0x00704
+	.equ NakaObj_MidiPmemOutput_RNull2, NakaData_WidgetTables2 + 0x00706
+	.equ NakaObj_MidiPmemOutput_RNull3, NakaData_WidgetTables2 + 0x00708
+	.equ NakaObj_MidiPmemOutput_RNull4, NakaData_WidgetTables2 + 0x0070A
+	.equ NakaObj_MidiPmemOutput_RNull5, NakaData_WidgetTables2 + 0x0070C
+	.equ NakaObj_MidiPmemOutput_RNull6, NakaData_WidgetTables2 + 0x0070E
+	.equ NakaObj_MidiPmemOutput_RNull7, NakaData_WidgetTables2 + 0x00710
+	.equ NakaObj_MidiPmemOutput_Name, NakaData_WidgetTables2 + 0x00712
+	.equ NakaObj_MidiSetup_Null1, NakaData_WidgetTables2 + 0x0074C
+	.equ NakaObj_MidiSetup_Null2, NakaData_WidgetTables2 + 0x0074E
+	.equ NakaObj_MidiSetup_Null3, NakaData_WidgetTables2 + 0x00750
+	.equ NakaObj_MidiSetup_Null4, NakaData_WidgetTables2 + 0x00754
+	.equ NakaObj_MidiSetup_Null5, NakaData_WidgetTables2 + 0x00756
+	.equ NakaObj_MidiSetup_Null6, NakaData_WidgetTables2 + 0x00758
+	.equ NakaObj_MidiSetup_GridBox, NakaData_WidgetTables2 + 0x0075A
+	.equ NakaObj_MidiSetup_Name, NakaData_WidgetTables2 + 0x0076A
+	.equ NakaObj_EntertainerVocal_Null1, NakaData_WidgetTables2 + 0x007D8
+	.equ NakaObj_EntertainerVocal_Null2, NakaData_WidgetTables2 + 0x007DC
+	.equ NakaObj_EntertainerVocal_Null3, NakaData_WidgetTables2 + 0x007DE
+	.equ NakaObj_EntertainerVocal_Null4, NakaData_WidgetTables2 + 0x007E0
+	.equ NakaObj_EntertainerVocal_Null5, NakaData_WidgetTables2 + 0x007E4
+	.equ NakaObj_EntertainerVocal_Null6, NakaData_WidgetTables2 + 0x007E6
+	.equ NakaObj_EntertainerVocal_Null7, NakaData_WidgetTables2 + 0x007E8
+	.equ NakaObj_EntertainerVocal_Page2Null, NakaData_WidgetTables2 + 0x007EA
+	.equ NakaObj_EntertainerVocal_Page2Box, NakaData_WidgetTables2 + 0x007EC
+	.equ NakaObj_EntertainerVocal_Page2, NakaData_WidgetTables2 + 0x007FE
+	.equ NakaObj_EntertainerVocal_HarmOnOff, NakaData_WidgetTables2 + 0x0080C
+	.equ NakaObj_EntertainerVocal_ListNull, NakaData_WidgetTables2 + 0x0081A
+	.equ NakaObj_EntertainerVocal_ListBox, NakaData_WidgetTables2 + 0x0081C
+	.equ NakaObj_EntertainerVocal_Page1Null1, NakaData_WidgetTables2 + 0x0082E
+	.equ NakaObj_EntertainerVocal_Page1Null2, NakaData_WidgetTables2 + 0x00830
+	.equ NakaObj_EntertainerVocal_Page1Null3, NakaData_WidgetTables2 + 0x00832
+	.equ NakaObj_EntertainerVocal_Page1, NakaData_WidgetTables2 + 0x00834
+	.equ NakaObj_EntertainerVocal_PageNull, NakaData_WidgetTables2 + 0x00842
+	.equ NakaObj_EntertainerVocal_Page, NakaData_WidgetTables2 + 0x00844
+	.equ NakaObj_EntertainerVocal_NameNull, NakaData_WidgetTables2 + 0x00854
+	.equ NakaObj_EntertainerVocal_Name, NakaData_WidgetTables2 + 0x00856
+	.equ NakaObj_EntertainerFade_Null1, NakaData_WidgetTables2 + 0x0088C
+	.equ NakaObj_EntertainerFade_Null2, NakaData_WidgetTables2 + 0x0088E
+	.equ NakaObj_EntertainerFade_Null3, NakaData_WidgetTables2 + 0x00890
+	.equ NakaObj_EntertainerFade_Null4, NakaData_WidgetTables2 + 0x00894
+	.equ NakaObj_EntertainerFade_Null5, NakaData_WidgetTables2 + 0x00896
+	.equ NakaObj_EntertainerFade_Null6, NakaData_WidgetTables2 + 0x00898
+	.equ NakaObj_EntertainerFade_GridBox, NakaData_WidgetTables2 + 0x0089A
+	.equ NakaObj_EntertainerFade_Name, NakaData_WidgetTables2 + 0x008AC
+	.equ NakaObj_SplitSetting_Null1, NakaData_WidgetTables2 + 0x008D8
+	.equ NakaObj_SplitSetting_Null2, NakaData_WidgetTables2 + 0x008DC
+	.equ NakaObj_SplitSetting_Null3, NakaData_WidgetTables2 + 0x008DE
+	.equ NakaObj_SplitSetting_Null4, NakaData_WidgetTables2 + 0x008E0
+	.equ NakaObj_SplitSetting_NameNull, NakaData_WidgetTables2 + 0x008E2
+	.equ NakaObj_SplitSetting_Name, NakaData_WidgetTables2 + 0x008E4
+	.equ MainFunc_DispatchTable, NakaData_WidgetTables2 + 0x00A12
+	.equ MainFunc_NullEntry, NakaData_WidgetTables2 + 0x00A2E
+	.equ MainFunc_RevEqPresetLoad, NakaData_WidgetTables2 + 0x00A30
+	.equ MainFunc_VocalistPage2OKFunc, NakaData_WidgetTables2 + 0x00A44
+	.equ MainFunc_VocalistPage1OKFunc, NakaData_WidgetTables2 + 0x00A5C
+	.equ MainFunc_FlashFunc, NakaData_WidgetTables2 + 0x00A74
+	.equ MainFunc_MpstFunc, NakaData_WidgetTables2 + 0x00A82
+	.equ MainFunc_ExcSend, NakaData_WidgetTables2 + 0x00A90
+	.equ MainFunc_PcgOutSend, NakaData_WidgetTables2 + 0x00A9C
+	.equ Bitmap_SplitPoint_no_split, NakaData_WidgetTables2 + 0x00AAC
+	.equ Bitmap_SplitPoint_C, NakaData_WidgetTables2 + 0x01674
+	.equ Bitmap_SplitPoint_Db, NakaData_WidgetTables2 + 0x0223C
+	.equ Bitmap_SplitPoint_D, NakaData_WidgetTables2 + 0x02E04
+	.equ Bitmap_SplitPoint_Eb, NakaData_WidgetTables2 + 0x039CC
+	.equ Bitmap_SplitPoint_E, NakaData_WidgetTables2 + 0x04594
+	.equ Bitmap_SplitPoint_F, NakaData_WidgetTables2 + 0x0515C
+	.equ Bitmap_SplitPoint_Gb, NakaData_WidgetTables2 + 0x05D24
+	.equ Bitmap_SplitPoint_G, NakaData_WidgetTables2 + 0x068EC
+	.equ Bitmap_SplitPoint_Ab, NakaData_WidgetTables2 + 0x074B4
+	.equ Bitmap_SplitPoint_A, NakaData_WidgetTables2 + 0x0807C
+	.equ Bitmap_SplitPoint_Bb, NakaData_WidgetTables2 + 0x08C44
+	.equ Bitmap_SplitPoint_B, NakaData_WidgetTables2 + 0x0980C
+	.equ Bitmap_MIDIConnections_1, NakaData_WidgetTables2 + 0x0A3D4
+	.equ Bitmap_MIDIConnections_2, NakaData_WidgetTables2 + 0x120B4
+	.equ Bitmap_MIDIConnections_3, NakaData_WidgetTables2 + 0x19D94
+	.equ Bitmap_Bmphk, NakaData_WidgetTables2 + 0x21A74
+	.equ MidiPart_PageDisplay_Data, NakaData_WidgetTables2 + 0x24954
+	.equ MidiPart_PageStr_2of2, NakaData_WidgetTables2 + 0x24968
+	.equ MidiPart_PageStr_1of2, NakaData_WidgetTables2 + 0x24972
+	.equ MidiPart_PageStr_3of3, NakaData_WidgetTables2 + 0x24988
+	.equ MidiPart_PageStr_2of3, NakaData_WidgetTables2 + 0x24992
+	.equ MidiPart_PageStr_1of3, NakaData_WidgetTables2 + 0x2499C
+	.equ MidiPart_AboveStr, NakaData_WidgetTables2 + 0x249F4
+	.equ MidiPart_BelowStr, NakaData_WidgetTables2 + 0x249FA
+	.equ MidiPart_NoteNameTable, NakaData_WidgetTables2 + 0x24A00
+	.equ MidiPart_NoteEntry_B_Code, NakaData_WidgetTables2 + 0x24A30
+	.equ MidiPart_NoteStr_B, NakaData_WidgetTables2 + 0x24A34
+	.equ MidiPart_NoteEntry_A_Code, NakaData_WidgetTables2 + 0x24A3A
+	.equ MidiPart_NoteStr_A, NakaData_WidgetTables2 + 0x24A3E
+	.equ MidiPart_NoteEntry_G_Code, NakaData_WidgetTables2 + 0x24A44
+	.equ MidiPart_NoteStr_G, NakaData_WidgetTables2 + 0x24A48
+	.equ MidiPart_NoteEntry_F_Code, NakaData_WidgetTables2 + 0x24A4E
+	.equ MidiPart_NoteEntry_E_Code, NakaData_WidgetTables2 + 0x24A52
+	.equ MidiPart_NoteStr_E, NakaData_WidgetTables2 + 0x24A56
+	.equ MidiPart_NoteEntry_D_Code, NakaData_WidgetTables2 + 0x24A5C
+	.equ MidiPart_NoteStr_D, NakaData_WidgetTables2 + 0x24A60
+	.equ MidiPart_NoteEntry_C_Code, NakaData_WidgetTables2 + 0x24A66
+	.equ MidiPart_OctaveTable, NakaData_WidgetTables2 + 0x24A6A
+	.equ MidiPart_OctaveStr_p8, NakaData_WidgetTables2 + 0x24A96
+	.equ MidiPart_OctaveStr_p7, NakaData_WidgetTables2 + 0x24A9A
+	.equ MidiPart_OctaveStr_p6, NakaData_WidgetTables2 + 0x24A9E
+	.equ MidiPart_OctaveStr_p5, NakaData_WidgetTables2 + 0x24AA2
+	.equ MidiPart_OctaveStr_p4, NakaData_WidgetTables2 + 0x24AA6
+	.equ MidiPart_OctaveStr_p3, NakaData_WidgetTables2 + 0x24AAA
+	.equ MidiPart_OctaveStr_p2, NakaData_WidgetTables2 + 0x24AAE
+	.equ MidiPart_OctaveStr_p1, NakaData_WidgetTables2 + 0x24AB2
+	.equ MidiPart_OctaveStr_0, NakaData_WidgetTables2 + 0x24AB6
+	.equ MidiPart_OctaveStr_m1, NakaData_WidgetTables2 + 0x24ABA
+	.equ MidiPart_OctaveStr_m2, NakaData_WidgetTables2 + 0x24ABE
+	.equ MidiPart_RecvTransStr, NakaData_WidgetTables2 + 0x24C5E
+	.equ MidiPart_AfterStr, NakaData_WidgetTables2 + 0x24C76
+	.equ MidiPart_ColWidthData, NakaData_WidgetTables2 + 0x24CD2
+	.equ MidiPart_HarmLocalStr, NakaData_WidgetTables2 + 0x24D18
+	.equ GMMode_AttentionTable, NakaData_WidgetTables2 + 0x24D5A
+	.equ GMMode_Attention_Indonesian, NakaData_WidgetTables2 + 0x24D72
+	.equ GMMode_Attention_English, NakaData_WidgetTables2 + 0x24D7E
+	.equ GMMode_Attention_Spanish, NakaData_WidgetTables2 + 0x24D8A
+	.equ GMMode_Attention_French, NakaData_WidgetTables2 + 0x24D96
+	.equ GMMode_Attention_German, NakaData_WidgetTables2 + 0x24DA2
+	.equ GMMode_Attention_English2, NakaData_WidgetTables2 + 0x24DAC
+	.equ SplitPoint_NoteNameTable, NakaData_WidgetTables2 + 0x253DA
+	.equ SplitPoint_NoteEntry_B_Code, NakaData_WidgetTables2 + 0x2540A
+	.equ SplitPoint_NoteStr_B, NakaData_WidgetTables2 + 0x2540E
+	.equ SplitPoint_NoteEntry_A_Code, NakaData_WidgetTables2 + 0x25414
+	.equ SplitPoint_NoteStr_A, NakaData_WidgetTables2 + 0x25418
+	.equ SplitPoint_NoteEntry_G_Code, NakaData_WidgetTables2 + 0x2541E
+	.equ NakaInst_F_9e, NakaData_WidgetTables2 + 0x25422
+	.equ SplitPoint_NoteStr_F, NakaData_WidgetTables2 + 0x25428
+	.equ SplitPoint_NoteEntry_E_Code, NakaData_WidgetTables2 + 0x2542C
+	.equ NakaInst_E_a0, NakaData_WidgetTables2 + 0x25430
+	.equ SplitPoint_NoteEntry_D_Code, NakaData_WidgetTables2 + 0x25436
+	.equ NakaInst_D_a0, NakaData_WidgetTables2 + 0x2543A
+	.equ SplitPoint_NoteEntry_C_Code, NakaData_WidgetTables2 + 0x25440
+	.equ DisplayMode_OnOff_Table, NakaData_WidgetTables2 + 0x25562
+	.equ NakaInst_ON, NakaData_WidgetTables2 + 0x25572
+	.equ NakaInst_OFF_WidgetTbl2, NakaData_WidgetTables2 + 0x25578
+	.equ NakaInst_ON_E7FC9C, NakaData_WidgetTables2 + 0x258FE
+	.equ NakaInst_OFF_E7FCA2, NakaData_WidgetTables2 + 0x25904
+	.equ NakaInst_DIRECT, NakaData_WidgetTables2 + 0x25912
+	.equ ControlMode_Option_Table, NakaData_WidgetTables2 + 0x2591C
+	.equ NakaInst_FIX, NakaData_WidgetTables2 + 0x25932
+	.equ NakaInst_OFFSET, NakaData_WidgetTables2 + 0x2593C
+	.equ NakaInst_DIRECT_E7FCE4, NakaData_WidgetTables2 + 0x25946
+	.equ FileTransfer_Status_Table, NakaData_WidgetTables2 + 0x25A00
+	.equ NakaInst_COMPLETED, NakaData_WidgetTables2 + 0x25A10
+	.equ NakaInst_RECIEVING, NakaData_WidgetTables2 + 0x25A1A
+	.equ NakaInst_SENDING, NakaData_WidgetTables2 + 0x25A24
+	.equ FileTransfer_BlankStatus, NakaData_WidgetTables2 + 0x25A2E
+	.equ UserMemory_ConfirmData, NakaData_WidgetTables2 + 0x25B02
+	.equ UserMemory_String_YES, NakaData_WidgetTables2 + 0x25B20
+	.equ NakaInst_NO, NakaData_WidgetTables2 + 0x25B26
+	.equ UserMemory_Config_Table, NakaData_WidgetTables2 + 0x25B2C
+	.equ NakaInst_USER3, NakaData_WidgetTables2 + 0x25B3C
+	.equ NakaInst_USER2, NakaData_WidgetTables2 + 0x25B46
+	.equ NakaInst_USER1, NakaData_WidgetTables2 + 0x25B50
+	.equ NakaInst_INITIAL, NakaData_WidgetTables2 + 0x25B5A
+	.equ UserMemory_FormatStrings, NakaData_WidgetTables2 + 0x25B90
+	.equ NakaData_ModeConfig1, NakaData_WidgetTables2 + 0x25C6A
+	.equ NakaData_ModeConfig2, NakaData_WidgetTables2 + 0x25C70
+	.equ NakaToggle_OnOff_Data, NakaData_WidgetTables2 + 0x25CA2
+	.equ NakaInst_OFF_E80048, NakaData_WidgetTables2 + 0x25CAA
+	.equ NakaInst_NORMAL, NakaData_WidgetTables2 + 0x25CBC
+	.equ NakaInst_GM, NakaData_WidgetTables2 + 0x25CD2
+	.equ NakaInst_NEXT_E800E8, NakaData_WidgetTables2 + 0x25D4A
+	.equ NakaData_PartConfig, NakaData_WidgetTables2 + 0x25D4F
+	.equ NakaInst_LEFT, NakaData_WidgetTables2 + 0x25D58
+	.equ NakaInst_RIGHT_2, NakaData_WidgetTables2 + 0x25D60
+	.equ NakaInst_RIGHT_1, NakaData_WidgetTables2 + 0x25D68
+	.equ NakaData_PartFlags, NakaData_WidgetTables2 + 0x25D70
+	.equ NakaInst_2d_d, NakaData_WidgetTables2 + 0x25D7F
+	.equ NakaInst_OFF_E80144, NakaData_WidgetTables2 + 0x25DA6
+	.equ NakaInst_ON_E80168, NakaData_WidgetTables2 + 0x25DCA
+	.equ Transpose_ValueDisplay_Table, NakaData_WidgetTables2 + 0x262C2
+	.equ Transpose_String_Minus1, NakaData_WidgetTables2 + 0x262E2
+	.equ Transpose_String_Minus2, NakaData_WidgetTables2 + 0x262E8
+	.equ Transpose_String_Plus3, NakaData_WidgetTables2 + 0x262FA
+	.equ Transpose_String_Plus2, NakaData_WidgetTables2 + 0x26300
+	.equ NakaObj_FuncData_Null, NakaData_WidgetTables2 + 0x26746
+	.equ NakaInst_data, NakaData_WidgetTables2 + 0x26748
+	.equ NakaInst_func, NakaData_WidgetTables2 + 0x2674E
+	.equ NakaObj_FmuteVol_DataEntry, NakaData_WidgetTables2 + 0x26762
+	.equ NakaObj_FmuteVol_NullTerm, NakaData_WidgetTables2 + 0x26764
+	.equ NakaInst_data_E80B04, NakaData_WidgetTables2 + 0x26766
+	.equ NakaInst_fmute, NakaData_WidgetTables2 + 0x2676C
+	.equ NakaInst_fvol, NakaData_WidgetTables2 + 0x26772
+	.equ NakaObj_FmuteVol_LinkEntry1, NakaData_WidgetTables2 + 0x26779
+	.equ NakaObj_FmuteVol_LinkEntry2, NakaData_WidgetTables2 + 0x2677C
+	.equ NakaObj_FmuteVol_LinkEntry3, NakaData_WidgetTables2 + 0x26788
+	.equ AudioStream_Property_Table, NakaData_WidgetTables2 + 0x2678A
+	.equ AudioStream_Prop_Null, NakaData_WidgetTables2 + 0x26796
+	.equ NakaInst_str3, NakaData_WidgetTables2 + 0x26798
+	.equ NakaInst_str1, NakaData_WidgetTables2 + 0x2679E
+	.equ UIElement_Property_Table, NakaData_WidgetTables2 + 0x267A4
+	.equ UIElement_Prop_NullTerm, NakaData_WidgetTables2 + 0x267C0
+	.equ NakaInst_dialfocus, NakaData_WidgetTables2 + 0x267C2
+	.equ NakaInst_selected, NakaData_WidgetTables2 + 0x267CC
+	.equ NakaInst_align, NakaData_WidgetTables2 + 0x267D6
+	.equ NakaInst_fontcolor, NakaData_WidgetTables2 + 0x267DC
+	.equ NakaInst_font, NakaData_WidgetTables2 + 0x267E6
+	.equ UIElement_Prop_StrEntry, NakaData_WidgetTables2 + 0x267EC
+	.equ UIElement_PropChain_Null1, NakaData_WidgetTables2 + 0x267F4
+	.equ UIElement_PropChain_Null2, NakaData_WidgetTables2 + 0x26800
+	.equ UIElement_PropChain_Null3, NakaData_WidgetTables2 + 0x26806
+	.equ UIElement_PropChain_Null4, NakaData_WidgetTables2 + 0x2680C
+	.equ UIElement_PropChain_Null5, NakaData_WidgetTables2 + 0x26818
+	.equ UIElement_PropChain_Group1, NakaData_WidgetTables2 + 0x2681E
+	.equ UIElement_PropChain_Null6, NakaData_WidgetTables2 + 0x2682C
+	.equ NakaInst_window, NakaData_WidgetTables2 + 0x2682E
+	.equ NakaInst_page, NakaData_WidgetTables2 + 0x26836
+	.equ UIElement_PropChain_Null7, NakaData_WidgetTables2 + 0x26840
+	.equ UIElement_PropChain_Null8, NakaData_WidgetTables2 + 0x26846
+	.equ UIElement_PropChain_Null9, NakaData_WidgetTables2 + 0x2684C
+	.equ UIElement_PropChain_Null10, NakaData_WidgetTables2 + 0x26858
+	.equ UIElement_PropChain_NullEnd, NakaData_WidgetTables2 + 0x2685E
+	.equ TextInput_Property_Table, NakaData_WidgetTables2 + 0x26860
+	.equ TextInput_Prop_NullTerm, NakaData_WidgetTables2 + 0x26878
+	.equ NakaInst_selected_E80C18, NakaData_WidgetTables2 + 0x2687A
+	.equ NakaInst_editsw, NakaData_WidgetTables2 + 0x26884
+	.equ NakaInst_align_E80C2A, NakaData_WidgetTables2 + 0x2688C
+	.equ NakaInst_fontcolor_E80C30, NakaData_WidgetTables2 + 0x26892
+	.equ NakaInst_font_E80C3A, NakaData_WidgetTables2 + 0x2689C
+	.equ TextInput_PropChain_Start, NakaData_WidgetTables2 + 0x268A6
+	.equ TextInput_PropChain_Null1, NakaData_WidgetTables2 + 0x268AC
+	.equ TextInput_PropChain_Null2, NakaData_WidgetTables2 + 0x268B8
+	.equ TextInput_FuncData_Null, NakaData_WidgetTables2 + 0x268C6
+	.equ NakaInst_data_E80C66, NakaData_WidgetTables2 + 0x268C8
+	.equ NakaInst_func_E80C6C, NakaData_WidgetTables2 + 0x268CE
+	.equ Widget_DataProperty_Table, NakaData_WidgetTables2 + 0x268D4
+	.equ WidgetData_Prop_NullTerm, NakaData_WidgetTables2 + 0x268E8
+	.equ NakaInst_song, NakaData_WidgetTables2 + 0x268EA
+	.equ NakaInst_selected_E80C8E, NakaData_WidgetTables2 + 0x268F0
+	.equ NakaInst_editsw_E80C98, NakaData_WidgetTables2 + 0x268FA
+	.equ WidgetData_Prop_StrEntry, NakaData_WidgetTables2 + 0x26902
+	.equ WidgetData_PropChain_Null1, NakaData_WidgetTables2 + 0x26910
+	.equ WidgetData_PropChain_Null2, NakaData_WidgetTables2 + 0x26916
+	.equ WidgetData_PropChain_Null3, NakaData_WidgetTables2 + 0x2691C
+	.equ WidgetData_TagIndex_Null, NakaData_WidgetTables2 + 0x2692A
+	.equ WidgetData_TagEntry, NakaData_WidgetTables2 + 0x2692C
+	.equ WidgetData_IndexEntry, NakaData_WidgetTables2 + 0x26930
+	.equ WidgetData_EditswPart_Null, NakaData_WidgetTables2 + 0x26942
+	.equ NakaInst_editsw_E80CE2, NakaData_WidgetTables2 + 0x26944
+	.equ NakaInst_part, NakaData_WidgetTables2 + 0x2694C
+	.equ WidgetData_TrailingData, NakaData_WidgetTables2 + 0x26956
