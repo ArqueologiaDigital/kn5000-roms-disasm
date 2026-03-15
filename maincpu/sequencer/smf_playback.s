@@ -154,8 +154,14 @@ SoundBank_InitTrack_ClearTail:
 	ret
 
 SoundBank_DefaultTrackData:	.asciz "ZZZZ"
-	.byte 0x01, 0x08, 0x00
-	.byte 0x00, 0x00, 0x00, 0x01, 0x2e, 0x00, 0x20, 0x05
+	.byte 0x01
+	ldio	0, 0
+	nop
+	nop
+	.byte 0x01
+	pushw	iz
+	nop
+	ldb	w, 5
 
 SoundBank_CopyChannelData:
 	push xhl
