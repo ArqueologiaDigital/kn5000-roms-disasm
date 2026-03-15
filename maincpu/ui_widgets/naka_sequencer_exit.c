@@ -45,18 +45,6 @@ extern const char IvAutoPunchExitProc;
 extern const char AcPanicEditSwProc;
 extern const char IvRealRecExitProc;
 
-/* ── Compact dispatch widget (24 bytes) ─────────────────────── */
-
-typedef struct __attribute__((packed)) {
-    naka_header_t header;      /*  +0: widget type + marker */
-    uint16_t field_04;         /*  +4: screen/widget index */
-    uint16_t field_06;         /*  +6: child count or flags */
-    uint32_t name_ptr;         /*  +8: → instance name string */
-    uint32_t inst_ptr;         /* +12: → instance block (code string) */
-    uint32_t link_ptr;         /* +16: → linked widget (external) */
-    uint32_t proc_addr;        /* +20: → Proc handler function */
-} naka_dispatch_t;             /* 24 bytes */
-
 /* ── Struct layout ──────────────────────────────────────────── */
 
 typedef struct __attribute__((packed)) {

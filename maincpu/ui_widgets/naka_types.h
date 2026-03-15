@@ -208,6 +208,23 @@ typedef struct __attribute__((packed)) {
     uint16_t field_18;         /* +24: */
 } naka_type_0x48_t;            /* 26 bytes */
 
+/* ── DISPATCH (compact 24-byte widget) ─────────────────────── */
+
+/**
+ * Compact dispatch widget used in several NAKA data blocks.
+ * Contains a type header, two index fields, and four pointers:
+ * instance name string, instance code string, linked widget, and handler.
+ */
+typedef struct __attribute__((packed)) {
+    naka_header_t header;      /*  +0: widget type + marker */
+    uint16_t field_04;         /*  +4: screen/widget index */
+    uint16_t field_06;         /*  +6: child count or flags */
+    uint32_t name_ptr;         /*  +8: → instance name string */
+    uint32_t inst_ptr;         /* +12: → instance block (code string) */
+    uint32_t link_ptr;         /* +16: → linked widget (external) */
+    uint32_t proc_addr;        /* +20: → Proc handler function */
+} naka_dispatch_t;             /* 24 bytes */
+
 /* ── String alignment helper ────────────────────────────────── */
 
 /**

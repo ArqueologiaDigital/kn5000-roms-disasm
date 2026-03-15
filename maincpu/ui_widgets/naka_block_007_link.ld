@@ -6,3 +6,23 @@ SECTIONS {
     .text : { *(.text*) *(.rodata*) }
     /DISCARD/ : { *(.comment) *(.note*) *(.eh_frame*) }
 }
+
+/* Linked widget descriptors */
+NakaDesc_OnOffStyle_Table           = 0x00E55790;
+NakaDesc_PageGridBox1_Table         = 0x00E5597E;
+NakaDesc_PmanOnOff1_Table           = 0x00E557C2;
+NakaDesc_PmanOnOff2_Table           = 0x00E55806;
+
+/* Proc handler functions */
+AcCtlMsgGridBoxProc                 = 0x00F79ADC;
+AcFadeSetGridBoxProc                = 0x00F75229;
+AcGMOnOffBoxProc                    = 0x00F74710;
+AcInOutGridBoxProc                  = 0x00F7575A;
+AcLswFuncBoxProc                    = 0x00F74D8C;
+AcLswFuncEditBoxProc                = 0x00F74FDF;
+AcMidiPartGridBoxProc               = 0x00F7A1F4;
+AcParaLoadOptGridBoxProc            = 0x00F76C5E;
+AcPcgOutGridBoxProc                 = 0x00F773DA;
+AcPmemOutLGridBoxProc               = 0x00F78329;
+AcPmemOutRGridBoxProc               = 0x00F7867C;
+AcVocalGridBoxProc                  = 0x00F73642;
