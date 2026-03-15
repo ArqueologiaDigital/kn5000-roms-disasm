@@ -12,6 +12,39 @@
 
 #include "naka_types.h"
 
+/* ── External symbols (addresses resolved by linker script) ── */
+
+/* Linked widget descriptors */
+extern const char NakaDesc_FuncTtlNo_B;
+extern const char NakaDesc_Empty_C;
+extern const char NakaDesc_Empty_D;
+extern const char NakaDesc_FuncIndex;
+extern const char NakaDesc_Mode;
+extern const char NakaDesc_ColorFontPageFunc;
+extern const char LABEL_E2713C;
+extern const char NakaDesc_Empty_E;
+extern const char NakaDesc_Empty_F;
+extern const char NakaDesc_Empty_G;
+extern const char NakaDesc_Empty_H;
+extern const char NakaDesc_Empty_I;
+extern const char NakaDesc_StyleFunc;
+extern const char NakaDesc_Empty_J;
+
+/* Proc handler functions */
+extern const char EqOnOffFuncToggleProc;
+extern const char MsgToTtlProc;
+extern const char AcIndexWideToggleProc;
+extern const char IvPlayExitProc;
+extern const char HelpTtlProc;
+extern const char IvPnlWrExitProc;
+extern const char IvSdrevProc;
+extern const char IvSddspProc;
+extern const char IvSdaccProc;
+extern const char IvPunchExitProc;
+extern const char IvAutoPunchExitProc;
+extern const char AcPanicEditSwProc;
+extern const char IvRealRecExitProc;
+
 /* ── Compact dispatch widget (24 bytes) ─────────────────────── */
 
 typedef struct __attribute__((packed)) {
@@ -111,8 +144,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0006,
         .name_ptr  = SELF(NoteEditBox_name),
         .inst_ptr  = SELF(NoteEditBox_code),
-        .link_ptr  = 0x00E270A6,
-        .proc_addr = 0x00F345E4,
+        .link_ptr  = NAKA_ADDR(NakaDesc_FuncTtlNo_B),
+        .proc_addr = NAKA_ADDR(EqOnOffFuncToggleProc),
     },
 
     /* w1: TYPE_0x44 — EqOnOffFuncToggle */
@@ -122,8 +155,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0000,
         .name_ptr  = SELF(EqOnOffFuncToggle_name),
         .inst_ptr  = SELF(EqOnOffFuncToggle_code),
-        .link_ptr  = 0x00E270C2,
-        .proc_addr = 0x00F2EFFA,
+        .link_ptr  = NAKA_ADDR(NakaDesc_Empty_C),
+        .proc_addr = NAKA_ADDR(MsgToTtlProc),
     },
 
     /* w2: TYPE_0x10 — MsgToTtl */
@@ -133,8 +166,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0000,
         .name_ptr  = SELF(MsgToTtl_name),
         .inst_ptr  = SELF(MsgToTtl_code),
-        .link_ptr  = 0x00E270C8,
-        .proc_addr = 0x00F2ECF1,
+        .link_ptr  = NAKA_ADDR(NakaDesc_Empty_D),
+        .proc_addr = NAKA_ADDR(AcIndexWideToggleProc),
     },
 
     /* w3: TYPE_0x45 — AcIndexWideToggle */
@@ -144,8 +177,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0008,
         .name_ptr  = SELF(AcIndexWideToggle_name),
         .inst_ptr  = SELF(AcIndexWideToggle_code),
-        .link_ptr  = 0x00E270CE,
-        .proc_addr = 0x00F2EB76,
+        .link_ptr  = NAKA_ADDR(NakaDesc_FuncIndex),
+        .proc_addr = NAKA_ADDR(IvPlayExitProc),
     },
 
     /* w4: TYPE_0x47 — IvPlayExit */
@@ -155,8 +188,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0004,
         .name_ptr  = SELF(IvPlayExit_name),
         .inst_ptr  = SELF(IvPlayExit_code),
-        .link_ptr  = 0x00E270F0,
-        .proc_addr = 0x00F2E8A4,
+        .link_ptr  = NAKA_ADDR(NakaDesc_Mode),
+        .proc_addr = NAKA_ADDR(HelpTtlProc),
     },
 
     /* w5: TYPE_0x10 — HelpTtl */
@@ -166,8 +199,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x000E,
         .name_ptr  = SELF(HelpTtl_name),
         .inst_ptr  = SELF(HelpTtl_code),
-        .link_ptr  = 0x00E27100,
-        .proc_addr = 0x00F309D7,
+        .link_ptr  = NAKA_ADDR(NakaDesc_ColorFontPageFunc),
+        .proc_addr = NAKA_ADDR(IvPnlWrExitProc),
     },
 
     /* w6: TYPE_0x47 — IvPnlWrExit */
@@ -177,8 +210,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0000,
         .name_ptr  = SELF(IvPnlWrExit_name),
         .inst_ptr  = SELF(IvPnlWrExit_code),
-        .link_ptr  = 0x00E2713C,
-        .proc_addr = 0x00F2E97E,
+        .link_ptr  = NAKA_ADDR(LABEL_E2713C),
+        .proc_addr = NAKA_ADDR(IvSdrevProc),
     },
 
     /* w7: TYPE_0x27 — IvSdrev */
@@ -188,8 +221,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0000,
         .name_ptr  = SELF(IvSdrev_name),
         .inst_ptr  = SELF(IvSdrev_code),
-        .link_ptr  = 0x00E27142,
-        .proc_addr = 0x00F2EA1D,
+        .link_ptr  = NAKA_ADDR(NakaDesc_Empty_E),
+        .proc_addr = NAKA_ADDR(IvSddspProc),
     },
 
     /* w8: TYPE_0x27 — IvSddsp */
@@ -199,8 +232,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0000,
         .name_ptr  = SELF(IvSddsp_name),
         .inst_ptr  = SELF(IvSddsp_code),
-        .link_ptr  = 0x00E27148,
-        .proc_addr = 0x00F2EAD8,
+        .link_ptr  = NAKA_ADDR(NakaDesc_Empty_F),
+        .proc_addr = NAKA_ADDR(IvSdaccProc),
     },
 
     /* w9: TYPE_0x27 — IvSdacc */
@@ -210,8 +243,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0000,
         .name_ptr  = SELF(IvSdacc_name),
         .inst_ptr  = SELF(IvSdacc_code),
-        .link_ptr  = 0x00E2714E,
-        .proc_addr = 0x00F2EBFF,
+        .link_ptr  = NAKA_ADDR(NakaDesc_Empty_G),
+        .proc_addr = NAKA_ADDR(IvPunchExitProc),
     },
 
     /* w10: TYPE_0x47 — IvPunchExit */
@@ -221,8 +254,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0000,
         .name_ptr  = SELF(IvPunchExit_name),
         .inst_ptr  = SELF(IvPunchExit_code),
-        .link_ptr  = 0x00E27154,
-        .proc_addr = 0x00F2EC74,
+        .link_ptr  = NAKA_ADDR(NakaDesc_Empty_H),
+        .proc_addr = NAKA_ADDR(IvAutoPunchExitProc),
     },
 
     /* w11: TYPE_0x47 — IvAutoPunchExit */
@@ -232,8 +265,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0000,
         .name_ptr  = SELF(IvAutoPunchExit_name),
         .inst_ptr  = SELF(IvAutoPunchExit_code),
-        .link_ptr  = 0x00E2715A,
-        .proc_addr = 0x00F2E532,
+        .link_ptr  = NAKA_ADDR(NakaDesc_Empty_I),
+        .proc_addr = NAKA_ADDR(AcPanicEditSwProc),
     },
 
     /* w12: TYPE_0x21 — AcPanicEditSw */
@@ -243,8 +276,8 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0006,
         .name_ptr  = SELF(AcPanicEditSw_name),
         .inst_ptr  = SELF(AcPanicEditSw_code),
-        .link_ptr  = 0x00E27160,
-        .proc_addr = 0x00F2E490,
+        .link_ptr  = NAKA_ADDR(NakaDesc_StyleFunc),
+        .proc_addr = NAKA_ADDR(IvRealRecExitProc),
     },
 
     /* w13: TYPE_0x47 — IvRealRecExit */
@@ -254,7 +287,7 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0000,
         .name_ptr  = SELF(IvRealRecExit_name),
         .inst_ptr  = SELF(IvRealRecExit_code),
-        .link_ptr  = 0x00E2717A,
+        .link_ptr  = NAKA_ADDR(NakaDesc_Empty_J),
         .proc_addr = 0x00000000,
     },
 
