@@ -9,6 +9,70 @@
 #include "naka_types.h"
 
 /* External symbol addresses (resolved by linker script) */
+extern const char Proc_03DF18;
+extern const char Proc_03DF1C;
+extern const char Proc_03DF20;
+extern const char Proc_03DF26;
+extern const char Proc_03DF2A;
+extern const char Proc_03DF2E;
+extern const char Proc_03DF32;
+extern const char Proc_03DF34;
+extern const char Proc_03DF42;
+extern const char Proc_03DF4C;
+extern const char Proc_03DF56;
+extern const char Proc_03DF5A;
+extern const char Proc_03DF7A;
+extern const char Proc_03DF7E;
+extern const char Proc_03DF80;
+extern const char Proc_03DF82;
+extern const char Proc_03DF84;
+extern const char Proc_03DF86;
+extern const char Proc_03DF88;
+extern const char Proc_03DF8E;
+extern const char Proc_03DF90;
+extern const char Proc_03DFA0;
+extern const char Proc_03DFAC;
+extern const char Proc_03DFB4;
+extern const char Proc_03DFC0;
+extern const char Proc_03DFC4;
+extern const char Proc_03DFC8;
+extern const char Proc_03DFD6;
+extern const char Proc_03DFE4;
+extern const char Proc_03DFF2;
+extern const char Proc_03DFF4;
+extern const char Proc_03DFF6;
+extern const char Proc_03DFF8;
+extern const char Proc_03DFFA;
+extern const char Proc_03DFFC;
+extern const char Proc_03DFFE;
+extern const char Proc_03E000;
+extern const char Proc_03E002;
+extern const char Proc_03E004;
+extern const char Proc_03E00E;
+extern const char Proc_03E010;
+extern const char Proc_03E012;
+extern const char Proc_03E014;
+extern const char Proc_03E016;
+extern const char Proc_03E01A;
+extern const char Proc_03E01E;
+extern const char Proc_03E028;
+extern const char Proc_03E02C;
+extern const char Proc_03E030;
+extern const char Proc_03E03A;
+extern const char Proc_03E048;
+extern const char Proc_03E05C;
+extern const char Proc_03E076;
+extern const char Proc_03E08C;
+extern const char Proc_03E0A2;
+extern const char Proc_03E0BA;
+extern const char Proc_03E0D0;
+extern const char Proc_03E0E6;
+extern const char Proc_03E0F4;
+extern const char Proc_03E108;
+extern const char Proc_03E116;
+extern const char Proc_03E11A;
+extern const char Proc_03E138;
+
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00E27FA4u
@@ -1114,7 +1178,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DF18,
+        .proc_addr      = NAKA_ADDR(Proc_03DF18),
         .string_ptr     = SELF(w0_text),
         .string_id      = 0x0017,
         .reserved       = 0x0000,
@@ -1269,7 +1333,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DF1C,
+        .proc_addr      = NAKA_ADDR(Proc_03DF1C),
         .string_ptr     = SELF(w10_text),
         .string_id      = 0x000C,
         .reserved       = 0x0000,
@@ -1424,7 +1488,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DF20,
+        .proc_addr      = NAKA_ADDR(Proc_03DF20),
         .string_ptr     = SELF(w20_text),
         .string_id      = 0x000D,
         .reserved       = 0x0000,
@@ -1939,7 +2003,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DF26,
+        .proc_addr      = NAKA_ADDR(Proc_03DF26),
         .string_ptr     = SELF(w55_text),
         .string_id      = 0x0092,
         .reserved       = 0x0000,
@@ -2103,7 +2167,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 2,
         .field_1a       = 1,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DF2A,
+        .proc_addr      = NAKA_ADDR(Proc_03DF2A),
         .string_ptr     = SELF(w65_text),
         .string_id      = 0x0033,
         .reserved       = 0x0000,
@@ -2130,7 +2194,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0089,
-        .proc_addr      = 0x0003DF2E,
+        .proc_addr      = NAKA_ADDR(Proc_03DF2E),
         .string_ptr     = SELF(w66_text),
         .ui_class       = 0x0084,
         .screen_id      = 0x01A0,
@@ -2259,7 +2323,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x000B,
-        .proc_addr      = 0x0003DF32,
+        .proc_addr      = NAKA_ADDR(Proc_03DF32),
         .string_ptr     = SELF(w75_text),
         .ui_class       = 0x00AA,
         .screen_id      = 0x01A0,
@@ -2283,7 +2347,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 1,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DF34,
+        .proc_addr      = NAKA_ADDR(Proc_03DF34),
         .string_ptr     = SELF(w76_text),
         .string_id      = 0x007E,
         .reserved       = 0x0000,
@@ -2504,7 +2568,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 9,
-        .proc_addr      = 0x0003DF42,
+        .proc_addr      = NAKA_ADDR(Proc_03DF42),
         .string_ptr     = SELF(w92_text),
         .ui_class       = 0x0079,
         .screen_id      = 0x01A0,
@@ -2608,7 +2672,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0081,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DF4C,
+        .proc_addr      = NAKA_ADDR(Proc_03DF4C),
         .string_ptr     = SELF(w100_text),
         .string_id      = 0x007E,
         .reserved       = 0x0000,
@@ -2714,7 +2778,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DF56,
+        .proc_addr      = NAKA_ADDR(Proc_03DF56),
         .string_ptr     = SELF(w107_text),
         .string_id      = 0x007F,
         .reserved       = 0x0000,
@@ -2776,7 +2840,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 10,
-        .proc_addr      = 0x0003DF5A,
+        .proc_addr      = NAKA_ADDR(Proc_03DF5A),
         .string_ptr     = SELF(w110_text),
         .ui_class       = 0x00A7,
         .screen_id      = 0x01A0,
@@ -2902,7 +2966,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 2,
         .field_1a       = 0x0080,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DF7A,
+        .proc_addr      = NAKA_ADDR(Proc_03DF7A),
         .string_ptr     = SELF(w122_text),
         .string_id      = 0x008A,
         .reserved       = 0x0000,
@@ -2929,7 +2993,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008B,
-        .proc_addr      = 0x0003DF7E,
+        .proc_addr      = NAKA_ADDR(Proc_03DF7E),
         .string_ptr     = SELF(w123_text),
         .ui_class       = 0x008B,
         .screen_id      = 0x01A0,
@@ -2958,7 +3022,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008C,
-        .proc_addr      = 0x0003DF80,
+        .proc_addr      = NAKA_ADDR(Proc_03DF80),
         .string_ptr     = SELF(w124_text),
         .ui_class       = 0x008D,
         .screen_id      = 0x01A0,
@@ -2987,7 +3051,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 8,
-        .proc_addr      = 0x0003DF82,
+        .proc_addr      = NAKA_ADDR(Proc_03DF82),
         .string_ptr     = SELF(w125_text),
         .ui_class       = 0x008E,
         .screen_id      = 0x01A0,
@@ -3016,7 +3080,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 9,
-        .proc_addr      = 0x0003DF84,
+        .proc_addr      = NAKA_ADDR(Proc_03DF84),
         .string_ptr     = SELF(w126_text),
         .ui_class       = 0x0090,
         .screen_id      = 0x01A0,
@@ -3045,7 +3109,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 10,
-        .proc_addr      = 0x0003DF86,
+        .proc_addr      = NAKA_ADDR(Proc_03DF86),
         .string_ptr     = SELF(w127_text),
         .ui_class       = 0x00A8,
         .screen_id      = 0x01A0,
@@ -3074,7 +3138,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x000B,
-        .proc_addr      = 0x0003DF88,
+        .proc_addr      = NAKA_ADDR(Proc_03DF88),
         .string_ptr     = SELF(w128_text),
         .ui_class       = 0x0092,
         .screen_id      = 0x01A0,
@@ -3125,7 +3189,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0089,
-        .proc_addr      = 0x0003DF8E,
+        .proc_addr      = NAKA_ADDR(Proc_03DF8E),
         .string_ptr     = SELF(w131_text),
         .ui_class       = 0x0087,
         .screen_id      = 0x01A0,
@@ -3149,7 +3213,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0084,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DF90,
+        .proc_addr      = NAKA_ADDR(Proc_03DF90),
         .string_ptr     = SELF(w132_text),
         .string_id      = 0x0034,
         .reserved       = 0x0000,
@@ -3434,7 +3498,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0085,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DFA0,
+        .proc_addr      = NAKA_ADDR(Proc_03DFA0),
         .string_ptr     = SELF(w152_text),
         .string_id      = 0x0034,
         .reserved       = 0x0000,
@@ -3578,7 +3642,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0084,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DFAC,
+        .proc_addr      = NAKA_ADDR(Proc_03DFAC),
         .string_ptr     = SELF(w162_text),
         .string_id      = 0x0035,
         .reserved       = 0x0000,
@@ -3883,7 +3947,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0087,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DFB4,
+        .proc_addr      = NAKA_ADDR(Proc_03DFB4),
         .string_ptr     = SELF(w183_text),
         .string_id      = 0x0035,
         .reserved       = 0x0000,
@@ -4008,7 +4072,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0087,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DFC0,
+        .proc_addr      = NAKA_ADDR(Proc_03DFC0),
         .string_ptr     = SELF(w192_text),
         .string_id      = 0x0035,
         .reserved       = 0x0000,
@@ -4030,7 +4094,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0084,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DFC4,
+        .proc_addr      = NAKA_ADDR(Proc_03DFC4),
         .string_ptr     = SELF(w193_text),
         .string_id      = 0x0046,
         .reserved       = 0x0000,
@@ -4071,7 +4135,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0084,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DFC8,
+        .proc_addr      = NAKA_ADDR(Proc_03DFC8),
         .string_ptr     = SELF(w196_text),
         .string_id      = 0x003F,
         .reserved       = 0x0000,
@@ -4269,7 +4333,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0084,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DFD6,
+        .proc_addr      = NAKA_ADDR(Proc_03DFD6),
         .string_ptr     = SELF(w211_text),
         .string_id      = 0x0043,
         .reserved       = 0x0000,
@@ -4440,7 +4504,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 2,
         .field_1a       = 0x0080,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DFE4,
+        .proc_addr      = NAKA_ADDR(Proc_03DFE4),
         .string_ptr     = SELF(w225_text),
         .string_id      = 0x0012,
         .reserved       = 0x0000,
@@ -4520,7 +4584,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0088,
-        .proc_addr      = 0x0003DFF2,
+        .proc_addr      = NAKA_ADDR(Proc_03DFF2),
         .string_ptr     = SELF(w232_text),
         .ui_class       = 0x0094,
         .screen_id      = 0x01A0,
@@ -4549,7 +4613,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0089,
-        .proc_addr      = 0x0003DFF4,
+        .proc_addr      = NAKA_ADDR(Proc_03DFF4),
         .string_ptr     = SELF(w233_text),
         .ui_class       = 0x0097,
         .screen_id      = 0x01A0,
@@ -4578,7 +4642,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008A,
-        .proc_addr      = 0x0003DFF6,
+        .proc_addr      = NAKA_ADDR(Proc_03DFF6),
         .string_ptr     = SELF(w234_text),
         .ui_class       = 0x0091,
         .screen_id      = 0x01A0,
@@ -4607,7 +4671,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008B,
-        .proc_addr      = 0x0003DFF8,
+        .proc_addr      = NAKA_ADDR(Proc_03DFF8),
         .string_ptr     = SELF(w235_text),
         .ui_class       = 0x009A,
         .screen_id      = 0x01A0,
@@ -4636,7 +4700,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008C,
-        .proc_addr      = 0x0003DFFA,
+        .proc_addr      = NAKA_ADDR(Proc_03DFFA),
         .string_ptr     = SELF(w236_text),
         .ui_class       = 0x009B,
         .screen_id      = 0x01A0,
@@ -4665,7 +4729,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 8,
-        .proc_addr      = 0x0003DFFC,
+        .proc_addr      = NAKA_ADDR(Proc_03DFFC),
         .string_ptr     = SELF(w237_text),
         .ui_class       = 0x009C,
         .screen_id      = 0x01A0,
@@ -4694,7 +4758,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 9,
-        .proc_addr      = 0x0003DFFE,
+        .proc_addr      = NAKA_ADDR(Proc_03DFFE),
         .string_ptr     = SELF(w238_text),
         .ui_class       = 0x009D,
         .screen_id      = 0x01A0,
@@ -4723,7 +4787,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 10,
-        .proc_addr      = 0x0003E000,
+        .proc_addr      = NAKA_ADDR(Proc_03E000),
         .string_ptr     = SELF(w239_text),
         .ui_class       = 0x009E,
         .screen_id      = 0x01A0,
@@ -4752,7 +4816,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x000B,
-        .proc_addr      = 0x0003E002,
+        .proc_addr      = NAKA_ADDR(Proc_03E002),
         .string_ptr     = SELF(w240_text),
         .ui_class       = 0x009F,
         .screen_id      = 0x01A0,
@@ -4781,7 +4845,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x000C,
-        .proc_addr      = 0x0003E004,
+        .proc_addr      = NAKA_ADDR(Proc_03E004),
         .string_ptr     = SELF(w241_text),
         .ui_class       = 0x00A0,
         .screen_id      = 0x01A0,
@@ -4818,7 +4882,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0088,
-        .proc_addr      = 0x0003E00E,
+        .proc_addr      = NAKA_ADDR(Proc_03E00E),
         .string_ptr     = SELF(w243_text),
         .ui_class       = 0x00A2,
         .screen_id      = 0x01A0,
@@ -4854,7 +4918,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0089,
-        .proc_addr      = 0x0003E010,
+        .proc_addr      = NAKA_ADDR(Proc_03E010),
         .string_ptr     = SELF(w245_text),
         .ui_class       = 0x00A1,
         .screen_id      = 0x01A0,
@@ -4883,7 +4947,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008A,
-        .proc_addr      = 0x0003E012,
+        .proc_addr      = NAKA_ADDR(Proc_03E012),
         .string_ptr     = SELF(w246_text),
         .ui_class       = 0x00A3,
         .screen_id      = 0x01A0,
@@ -4912,7 +4976,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008B,
-        .proc_addr      = 0x0003E014,
+        .proc_addr      = NAKA_ADDR(Proc_03E014),
         .string_ptr     = SELF(w247_text),
         .ui_class       = 0x00A4,
         .screen_id      = 0x01A0,
@@ -4969,7 +5033,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E016,
+        .proc_addr      = NAKA_ADDR(Proc_03E016),
         .string_ptr     = SELF(w251_text),
         .string_id      = 4,
         .reserved       = 0x0000,
@@ -5026,7 +5090,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0094,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E01A,
+        .proc_addr      = NAKA_ADDR(Proc_03E01A),
         .string_ptr     = SELF(w255_text),
         .string_id      = 4,
         .reserved       = 0x0000,
@@ -5369,7 +5433,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0095,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E01E,
+        .proc_addr      = NAKA_ADDR(Proc_03E01E),
         .string_ptr     = SELF(w281_text),
         .string_id      = 0x007E,
         .reserved       = 0x0000,
@@ -5475,7 +5539,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E028,
+        .proc_addr      = NAKA_ADDR(Proc_03E028),
         .string_ptr     = SELF(w288_text),
         .string_id      = 0x0011,
         .reserved       = 0x0000,
@@ -5532,7 +5596,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0097,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E02C,
+        .proc_addr      = NAKA_ADDR(Proc_03E02C),
         .string_ptr     = SELF(w292_text),
         .string_id      = 0x0011,
         .reserved       = 0x0000,
@@ -5867,7 +5931,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0098,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E030,
+        .proc_addr      = NAKA_ADDR(Proc_03E030),
         .string_ptr     = SELF(w317_text),
         .string_id      = 0x007E,
         .reserved       = 0x0000,
@@ -5973,7 +6037,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E03A,
+        .proc_addr      = NAKA_ADDR(Proc_03E03A),
         .string_ptr     = SELF(w324_text),
         .string_id      = 0x0040,
         .reserved       = 0x0000,
@@ -6099,7 +6163,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E048,
+        .proc_addr      = NAKA_ADDR(Proc_03E048),
         .string_ptr     = SELF(w337_text),
         .string_id      = 0x0045,
         .reserved       = 0x0000,
@@ -6312,7 +6376,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E05C,
+        .proc_addr      = NAKA_ADDR(Proc_03E05C),
         .string_ptr     = SELF(w357_text),
         .string_id      = 0x003D,
         .reserved       = 0x0000,
@@ -6553,7 +6617,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E076,
+        .proc_addr      = NAKA_ADDR(Proc_03E076),
         .string_ptr     = SELF(w376_text),
         .string_id      = 0x003E,
         .reserved       = 0x0000,
@@ -6718,7 +6782,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E08C,
+        .proc_addr      = NAKA_ADDR(Proc_03E08C),
         .string_ptr     = SELF(w390_text),
         .string_id      = 0x008B,
         .reserved       = 0x0000,
@@ -6883,7 +6947,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E0A2,
+        .proc_addr      = NAKA_ADDR(Proc_03E0A2),
         .string_ptr     = SELF(w404_text),
         .string_id      = 0x0041,
         .reserved       = 0x0000,
@@ -7147,7 +7211,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E0BA,
+        .proc_addr      = NAKA_ADDR(Proc_03E0BA),
         .string_ptr     = SELF(w427_text),
         .string_id      = 0x0042,
         .reserved       = 0x0000,
@@ -7315,7 +7379,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E0D0,
+        .proc_addr      = NAKA_ADDR(Proc_03E0D0),
         .string_ptr     = SELF(w441_text),
         .string_id      = 0x0048,
         .reserved       = 0x0000,
@@ -7483,7 +7547,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E0E6,
+        .proc_addr      = NAKA_ADDR(Proc_03E0E6),
         .string_ptr     = SELF(w455_text),
         .string_id      = 0x0047,
         .reserved       = 0x0000,
@@ -7647,7 +7711,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E0F4,
+        .proc_addr      = NAKA_ADDR(Proc_03E0F4),
         .string_ptr     = SELF(w469_text),
         .string_id      = 0x0049,
         .reserved       = 0x0000,
@@ -7801,7 +7865,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0093,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E108,
+        .proc_addr      = NAKA_ADDR(Proc_03E108),
         .string_ptr     = SELF(w482_text),
         .string_id      = 0x004A,
         .reserved       = 0x0000,
@@ -7965,7 +8029,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E116,
+        .proc_addr      = NAKA_ADDR(Proc_03E116),
         .string_ptr     = SELF(w496_text),
         .string_id      = 0x008F,
         .reserved       = 0x0000,
@@ -7995,7 +8059,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E11A,
+        .proc_addr      = NAKA_ADDR(Proc_03E11A),
         .string_ptr     = SELF(w498_text),
         .string_id      = 0x009B,
         .reserved       = 0x0000,
@@ -8167,7 +8231,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E138,
+        .proc_addr      = NAKA_ADDR(Proc_03E138),
         .string_ptr     = SELF(w507_text),
         .string_id      = 0x005B,
         .reserved       = 0x0000,

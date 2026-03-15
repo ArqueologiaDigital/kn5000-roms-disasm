@@ -10,3 +10,33 @@ SECTIONS {
 }
 
 Naka_PresentationRootState = 0x00EF013F;
+
+/* Additional symbolic references */
+Proc_03D618                                   = 0x0003D618;
+Proc_03D61C                                   = 0x0003D61C;
+Proc_03D622                                   = 0x0003D622;
+Proc_03D628                                   = 0x0003D628;
+Proc_03D632                                   = 0x0003D632;
+Proc_03D636                                   = 0x0003D636;
+Proc_03D63C                                   = 0x0003D63C;
+Proc_03D640                                   = 0x0003D640;
+Proc_03D644                                   = 0x0003D644;
+Proc_03D646                                   = 0x0003D646;
+Proc_03D648                                   = 0x0003D648;
+Proc_03D64A                                   = 0x0003D64A;
+Proc_03D64C                                   = 0x0003D64C;
+Proc_03D64E                                   = 0x0003D64E;
+Proc_03D656                                   = 0x0003D656;
+Proc_03D66E                                   = 0x0003D66E;
+Proc_03D680                                   = 0x0003D680;
+Proc_03D684                                   = 0x0003D684;
+Proc_03D6BA                                   = 0x0003D6BA;
+Proc_03D6BE                                   = 0x0003D6BE;
+Proc_03D6C0                                   = 0x0003D6C0;
+Proc_03D6D0                                   = 0x0003D6D0;
+Proc_03D6D4                                   = 0x0003D6D4;
+Proc_03D6D8                                   = 0x0003D6D8;
+Proc_03D6EC                                   = 0x0003D6EC;
+Proc_03D702                                   = 0x0003D702;
+Proc_03D70A                                   = 0x0003D70A;
+Proc_03D712                                   = 0x0003D712;

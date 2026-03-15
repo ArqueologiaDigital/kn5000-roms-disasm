@@ -9,6 +9,10 @@
 #include "naka_types.h"
 
 /* External symbol addresses (resolved by linker script) */
+extern const char Proc_03F0B0;
+extern const char Proc_03F150;
+extern const char Proc_03F158;
+
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00EB2AFEu
@@ -172,7 +176,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x000C,
-        .proc_addr      = 0x0003F0B0,
+        .proc_addr      = NAKA_ADDR(Proc_03F0B0),
         .string_ptr     = SELF(w1_text),
         .ui_class       = 0x00FF,
         .screen_id      = 0x01A0,
@@ -626,7 +630,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .field_18       = 2,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F150,
+        .proc_addr      = NAKA_ADDR(Proc_03F150),
         .string_ptr     = SELF(w46_text),
         .string_id      = 1,
         .reserved       = 0x0000,
@@ -675,7 +679,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .field_18       = 0x0000,
         .field_1a       = 0x00FF,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F158,
+        .proc_addr      = NAKA_ADDR(Proc_03F158),
         .string_ptr     = SELF(w50_text),
         .string_id      = 1,
         .reserved       = 0x0000,

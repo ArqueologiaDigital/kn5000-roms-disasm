@@ -10,3 +10,17 @@ SECTIONS {
 }
 
 Naka_PresentationRootState = 0x00EF013F;
+
+/* Additional symbolic references */
+Proc_03E68E                                   = 0x0003E68E;
+Proc_03E758                                   = 0x0003E758;
+Proc_03E760                                   = 0x0003E760;
+Proc_03E7B4                                   = 0x0003E7B4;
+Proc_03E7BC                                   = 0x0003E7BC;
+Proc_03E7C2                                   = 0x0003E7C2;
+Proc_03E814                                   = 0x0003E814;
+Proc_03E842                                   = 0x0003E842;
+Proc_03E87E                                   = 0x0003E87E;
+Proc_03E910                                   = 0x0003E910;
+Handler_81                                    = 0x00E850A8;
+Handler_81_512C                               = 0x00E8512C;

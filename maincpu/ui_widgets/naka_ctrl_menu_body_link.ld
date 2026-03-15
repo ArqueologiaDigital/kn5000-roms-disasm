@@ -12,3 +12,37 @@ SECTIONS {
 LABEL_ED46D2 = 0x00ED46D2;
 LABEL_ED4A82 = 0x00ED4A82;
 Naka_PresentationRootState = 0x00EF013F;
+
+/* Additional symbolic references */
+Proc_03F446                                   = 0x0003F446;
+Proc_03F44C                                   = 0x0003F44C;
+Proc_03F454                                   = 0x0003F454;
+Proc_03F468                                   = 0x0003F468;
+Proc_03F48C                                   = 0x0003F48C;
+Proc_03F4BE                                   = 0x0003F4BE;
+Proc_03F4D2                                   = 0x0003F4D2;
+Proc_03F4D6                                   = 0x0003F4D6;
+Proc_03F4D8                                   = 0x0003F4D8;
+Proc_03F4DC                                   = 0x0003F4DC;
+Proc_03F4F4                                   = 0x0003F4F4;
+Proc_03F4FC                                   = 0x0003F4FC;
+Proc_03F500                                   = 0x0003F500;
+Proc_03F502                                   = 0x0003F502;
+Proc_03F504                                   = 0x0003F504;
+Proc_03F564                                   = 0x0003F564;
+Proc_03F5AE                                   = 0x0003F5AE;
+Proc_03F5D0                                   = 0x0003F5D0;
+Proc_03F5FA                                   = 0x0003F5FA;
+Proc_03F606                                   = 0x0003F606;
+Proc_03F60A                                   = 0x0003F60A;
+Proc_03F62E                                   = 0x0003F62E;
+Handler_7f                                    = 0x00ED46A6;
+Handler_7f_46FE                               = 0x00ED46FE;
+Handler_7f_4850                               = 0x00ED4850;
+Handler_7f_487C                               = 0x00ED487C;
+Handler_7f_48A8                               = 0x00ED48A8;
+Handler_7f_4A56                               = 0x00ED4A56;
+Handler_80                                    = 0x00ED61C4;
+Handler_80_61F0                               = 0x00ED61F0;
+Handler_80_62FE                               = 0x00ED62FE;
+Handler_80_6408                               = 0x00ED6408;

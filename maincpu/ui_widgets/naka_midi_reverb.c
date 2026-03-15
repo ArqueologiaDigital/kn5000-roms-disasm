@@ -9,6 +9,43 @@
 #include "naka_types.h"
 
 /* External symbol addresses (resolved by linker script) */
+extern const char Proc_03E3F2;
+extern const char Proc_03E3F6;
+extern const char Proc_03E3F8;
+extern const char Proc_03E3FA;
+extern const char Proc_03E3FC;
+extern const char Proc_03E404;
+extern const char Proc_03E41C;
+extern const char Proc_03E434;
+extern const char Proc_03E44C;
+extern const char Proc_03E45A;
+extern const char Proc_03E45C;
+extern const char Proc_03E45E;
+extern const char Proc_03E460;
+extern const char Proc_03E462;
+extern const char Proc_03E464;
+extern const char Proc_03E466;
+extern const char Proc_03E468;
+extern const char Proc_03E46A;
+extern const char Proc_03E46C;
+extern const char Proc_03E476;
+extern const char Proc_03E478;
+extern const char Proc_03E47A;
+extern const char Proc_03E490;
+extern const char Proc_03E4A8;
+extern const char Proc_03E4B4;
+extern const char Proc_03E4C8;
+extern const char Proc_03E4DC;
+extern const char Proc_03E520;
+extern const char Proc_03E57A;
+extern const char Proc_03E592;
+extern const char Proc_03E5A8;
+extern const char Proc_03E5B0;
+extern const char Proc_03E5D4;
+extern const char Proc_03E5E8;
+extern const char Proc_03E612;
+extern const char Proc_03E626;
+
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00E55E38u
@@ -604,7 +641,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E3F2,
+        .proc_addr      = NAKA_ADDR(Proc_03E3F2),
         .string_ptr     = SELF(w0_text),
         .string_id      = 0x0091,
         .reserved       = 0x0000,
@@ -631,7 +668,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0089,
-        .proc_addr      = 0x0003E3F6,
+        .proc_addr      = NAKA_ADDR(Proc_03E3F6),
         .string_ptr     = SELF(w1_text),
         .ui_class       = 0x0018,
         .screen_id      = 0x01A0,
@@ -660,7 +697,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 9,
-        .proc_addr      = 0x0003E3F8,
+        .proc_addr      = NAKA_ADDR(Proc_03E3F8),
         .string_ptr     = SELF(w2_text),
         .ui_class       = 0x0019,
         .screen_id      = 0x01A0,
@@ -689,7 +726,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008B,
-        .proc_addr      = 0x0003E3FA,
+        .proc_addr      = NAKA_ADDR(Proc_03E3FA),
         .string_ptr     = SELF(w3_text),
         .ui_class       = 0x001A,
         .screen_id      = 0x01A0,
@@ -713,7 +750,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E3FC,
+        .proc_addr      = NAKA_ADDR(Proc_03E3FC),
         .string_ptr     = SELF(w4_text),
         .string_id      = 0x009D,
         .reserved       = 0x0000,
@@ -755,7 +792,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 9,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E404,
+        .proc_addr      = NAKA_ADDR(Proc_03E404),
         .string_ptr     = SELF(w7_text),
         .string_id      = 0x0091,
         .reserved       = 0x0000,
@@ -884,7 +921,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 9,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E41C,
+        .proc_addr      = NAKA_ADDR(Proc_03E41C),
         .string_ptr     = SELF(w19_text),
         .string_id      = 0x0091,
         .reserved       = 0x0000,
@@ -1014,7 +1051,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 9,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E434,
+        .proc_addr      = NAKA_ADDR(Proc_03E434),
         .string_ptr     = SELF(w31_text),
         .string_id      = 0x0091,
         .reserved       = 0x0000,
@@ -1143,7 +1180,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 1,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E44C,
+        .proc_addr      = NAKA_ADDR(Proc_03E44C),
         .string_ptr     = SELF(w43_text),
         .string_id      = 0x0019,
         .reserved       = 0x0000,
@@ -1223,7 +1260,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0088,
-        .proc_addr      = 0x0003E45A,
+        .proc_addr      = NAKA_ADDR(Proc_03E45A),
         .string_ptr     = SELF(w50_text),
         .ui_class       = 0x0051,
         .screen_id      = 0x01A0,
@@ -1252,7 +1289,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0089,
-        .proc_addr      = 0x0003E45C,
+        .proc_addr      = NAKA_ADDR(Proc_03E45C),
         .string_ptr     = SELF(w51_text),
         .ui_class       = 0x0052,
         .screen_id      = 0x01A0,
@@ -1281,7 +1318,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008A,
-        .proc_addr      = 0x0003E45E,
+        .proc_addr      = NAKA_ADDR(Proc_03E45E),
         .string_ptr     = SELF(w52_text),
         .ui_class       = 0x0053,
         .screen_id      = 0x01A0,
@@ -1310,7 +1347,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008B,
-        .proc_addr      = 0x0003E460,
+        .proc_addr      = NAKA_ADDR(Proc_03E460),
         .string_ptr     = SELF(w53_text),
         .ui_class       = 0x0054,
         .screen_id      = 0x01A0,
@@ -1339,7 +1376,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008C,
-        .proc_addr      = 0x0003E462,
+        .proc_addr      = NAKA_ADDR(Proc_03E462),
         .string_ptr     = SELF(w54_text),
         .ui_class       = 0x0055,
         .screen_id      = 0x01A0,
@@ -1368,7 +1405,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 8,
-        .proc_addr      = 0x0003E464,
+        .proc_addr      = NAKA_ADDR(Proc_03E464),
         .string_ptr     = SELF(w55_text),
         .ui_class       = 0x0056,
         .screen_id      = 0x01A0,
@@ -1397,7 +1434,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 9,
-        .proc_addr      = 0x0003E466,
+        .proc_addr      = NAKA_ADDR(Proc_03E466),
         .string_ptr     = SELF(w56_text),
         .ui_class       = 0x0057,
         .screen_id      = 0x01A0,
@@ -1426,7 +1463,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 10,
-        .proc_addr      = 0x0003E468,
+        .proc_addr      = NAKA_ADDR(Proc_03E468),
         .string_ptr     = SELF(w57_text),
         .ui_class       = 0x0058,
         .screen_id      = 0x01A0,
@@ -1455,7 +1492,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x000B,
-        .proc_addr      = 0x0003E46A,
+        .proc_addr      = NAKA_ADDR(Proc_03E46A),
         .string_ptr     = SELF(w58_text),
         .ui_class       = 0x0059,
         .screen_id      = 0x01A0,
@@ -1484,7 +1521,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x000C,
-        .proc_addr      = 0x0003E46C,
+        .proc_addr      = NAKA_ADDR(Proc_03E46C),
         .string_ptr     = SELF(w59_text),
         .ui_class       = 0x005B,
         .screen_id      = 0x01A0,
@@ -1521,7 +1558,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008A,
-        .proc_addr      = 0x0003E476,
+        .proc_addr      = NAKA_ADDR(Proc_03E476),
         .string_ptr     = SELF(w61_text),
         .ui_class       = 0x005A,
         .screen_id      = 0x01A0,
@@ -1550,7 +1587,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 10,
-        .proc_addr      = 0x0003E478,
+        .proc_addr      = NAKA_ADDR(Proc_03E478),
         .string_ptr     = SELF(w62_text),
         .ui_class       = 0x005C,
         .screen_id      = 0x01A0,
@@ -1574,7 +1611,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E47A,
+        .proc_addr      = NAKA_ADDR(Proc_03E47A),
         .string_ptr     = SELF(w63_text),
         .string_id      = 0x0067,
         .reserved       = 0x0000,
@@ -1655,7 +1692,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E490,
+        .proc_addr      = NAKA_ADDR(Proc_03E490),
         .string_ptr     = SELF(w69_text),
         .string_id      = 0x0086,
         .reserved       = 0x0000,
@@ -1762,7 +1799,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E4A8,
+        .proc_addr      = NAKA_ADDR(Proc_03E4A8),
         .string_ptr     = SELF(w76_text),
         .string_id      = 0x001B,
         .reserved       = 0x0000,
@@ -1837,7 +1874,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E4B4,
+        .proc_addr      = NAKA_ADDR(Proc_03E4B4),
         .string_ptr     = SELF(w80_text),
         .string_id      = 0x001A,
         .reserved       = 0x0000,
@@ -1913,7 +1950,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E4C8,
+        .proc_addr      = NAKA_ADDR(Proc_03E4C8),
         .string_ptr     = SELF(w85_text),
         .string_id      = 0x0068,
         .reserved       = 0x0000,
@@ -1986,7 +2023,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E4DC,
+        .proc_addr      = NAKA_ADDR(Proc_03E4DC),
         .string_ptr     = SELF(w89_text),
         .string_id      = 0x001E,
         .reserved       = 0x0000,
@@ -2799,7 +2836,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E520,
+        .proc_addr      = NAKA_ADDR(Proc_03E520),
         .string_ptr     = SELF(w154_text),
         .string_id      = 0x001F,
         .reserved       = 0x0000,
@@ -3164,7 +3201,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E57A,
+        .proc_addr      = NAKA_ADDR(Proc_03E57A),
         .string_ptr     = SELF(w182_text),
         .string_id      = 0x0020,
         .reserved       = 0x0000,
@@ -3354,7 +3391,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E592,
+        .proc_addr      = NAKA_ADDR(Proc_03E592),
         .string_ptr     = SELF(w202_text),
         .string_id      = 0x001D,
         .reserved       = 0x0000,
@@ -3419,7 +3456,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E5A8,
+        .proc_addr      = NAKA_ADDR(Proc_03E5A8),
         .string_ptr     = SELF(w206_text),
         .string_id      = 0x0087,
         .reserved       = 0x0000,
@@ -3494,7 +3531,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E5B0,
+        .proc_addr      = NAKA_ADDR(Proc_03E5B0),
         .string_ptr     = SELF(w212_text),
         .string_id      = 0x0069,
         .reserved       = 0x0000,
@@ -3723,7 +3760,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0050,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E5D4,
+        .proc_addr      = NAKA_ADDR(Proc_03E5D4),
         .string_ptr     = SELF(w227_text),
         .string_id      = 0x0088,
         .reserved       = 0x0000,
@@ -3837,7 +3874,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x00D6,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E5E8,
+        .proc_addr      = NAKA_ADDR(Proc_03E5E8),
         .string_ptr     = SELF(w234_text),
         .string_id      = 0x008E,
         .reserved       = 0x0000,
@@ -4143,7 +4180,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x00D6,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E612,
+        .proc_addr      = NAKA_ADDR(Proc_03E612),
         .string_ptr     = SELF(w255_text),
         .string_id      = 0x009C,
         .reserved       = 0x0000,
@@ -4254,7 +4291,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_18       = 2,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E626,
+        .proc_addr      = NAKA_ADDR(Proc_03E626),
         .string_ptr     = SELF(w262_text),
         .string_id      = 0x009E,
         .reserved       = 0x0000,

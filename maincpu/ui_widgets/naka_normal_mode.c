@@ -8,6 +8,8 @@
 
 #include "naka_types.h"
 
+extern const char Proc_03F3F8;
+
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00ED333Cu
@@ -94,7 +96,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F3F8,
+        .proc_addr      = NAKA_ADDR(Proc_03F3F8),
         .string_ptr     = SELF(w0_text),
         .string_id      = 1,
         .reserved       = 0x0000,

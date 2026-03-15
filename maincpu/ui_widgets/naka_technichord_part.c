@@ -9,6 +9,19 @@
 #include "naka_types.h"
 
 /* External symbol addresses (resolved by linker script) */
+extern const char Handler_81;
+extern const char Handler_81_512C;
+extern const char Proc_03E68E;
+extern const char Proc_03E758;
+extern const char Proc_03E760;
+extern const char Proc_03E7B4;
+extern const char Proc_03E7BC;
+extern const char Proc_03E7C2;
+extern const char Proc_03E814;
+extern const char Proc_03E842;
+extern const char Proc_03E87E;
+extern const char Proc_03E910;
+
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00E81CCEu
@@ -485,7 +498,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E68E,
+        .proc_addr      = NAKA_ADDR(Proc_03E68E),
         .string_ptr     = SELF(w0_text),
         .string_id      = 2,
         .reserved       = 0x0000,
@@ -1137,7 +1150,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_18       = 0x0000,
         .field_1a       = 2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E758,
+        .proc_addr      = NAKA_ADDR(Proc_03E758),
         .string_ptr     = SELF(w55_text),
         .string_id      = 9,
         .reserved       = 0x0000,
@@ -1198,7 +1211,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_18       = 0x0000,
         .field_1a       = 2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E760,
+        .proc_addr      = NAKA_ADDR(Proc_03E760),
         .string_ptr     = SELF(w59_text),
         .string_id      = 0x0084,
         .reserved       = 0x0000,
@@ -1659,7 +1672,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_18       = 0x0000,
         .field_1a       = 2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E7B4,
+        .proc_addr      = NAKA_ADDR(Proc_03E7B4),
         .string_ptr     = SELF(w112_text),
         .string_id      = 0x0016,
         .reserved       = 0x0000,
@@ -1701,7 +1714,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_18       = 0x0000,
         .field_1a       = 2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E7BC,
+        .proc_addr      = NAKA_ADDR(Proc_03E7BC),
         .string_ptr     = SELF(w115_text),
         .string_id      = 7,
         .reserved       = 0x0000,
@@ -1738,7 +1751,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_18       = 0x0000,
         .field_1a       = 2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E7C2,
+        .proc_addr      = NAKA_ADDR(Proc_03E7C2),
         .string_ptr     = SELF(w117_text),
         .string_id      = 0x0018,
         .reserved       = 0x0000,
@@ -1940,7 +1953,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E814,
+        .proc_addr      = NAKA_ADDR(Proc_03E814),
         .string_ptr     = SELF(w130_text),
         .string_id      = 7,
         .reserved       = 0x0000,
@@ -2096,7 +2109,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_18       = 1,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E842,
+        .proc_addr      = NAKA_ADDR(Proc_03E842),
         .string_ptr     = SELF(w141_text),
         .string_id      = 0x0000,
         .reserved       = 0x0000,
@@ -2492,7 +2505,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0088,
-        .proc_addr      = 0x0003E87E,
+        .proc_addr      = NAKA_ADDR(Proc_03E87E),
         .string_ptr     = SELF(w167_text),
         .ui_class       = 0x003E,
         .screen_id      = 0x01A0,
@@ -2956,7 +2969,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_10       = 0x00E5,
         .field_12       = 0x0132,
         .field_14       = 0x00F7,
-        .handler        = 0x00E850A8,
+        .handler        = NAKA_ADDR(Handler_81),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -2998,7 +3011,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_10       = 0x00E5,
         .field_12       = 0x00E2,
         .field_14       = 0x00EF,
-        .handler        = 0x00E8512C,
+        .handler        = NAKA_ADDR(Handler_81_512C),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -3126,7 +3139,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_18       = 1,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E910,
+        .proc_addr      = NAKA_ADDR(Proc_03E910),
         .string_ptr     = SELF(w216_text),
         .string_id      = 1,
         .reserved       = 0x0000,

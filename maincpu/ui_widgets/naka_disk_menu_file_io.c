@@ -9,6 +9,38 @@
 #include "naka_types.h"
 
 /* External symbol addresses (resolved by linker script) */
+extern const char Proc_03EC50;
+extern const char Proc_03EC54;
+extern const char Proc_03EC58;
+extern const char Proc_03EC5A;
+extern const char Proc_03EC64;
+extern const char Proc_03EC76;
+extern const char Proc_03EC7A;
+extern const char Proc_03EC92;
+extern const char Proc_03EC96;
+extern const char Proc_03ECBC;
+extern const char Proc_03ECD2;
+extern const char Proc_03ED1E;
+extern const char Proc_03ED22;
+extern const char Proc_03ED54;
+extern const char Proc_03ED84;
+extern const char Proc_03ED8C;
+extern const char Proc_03ED9E;
+extern const char Proc_03EDC8;
+extern const char Proc_03EDD6;
+extern const char Proc_03EDEC;
+extern const char Proc_03EE1A;
+extern const char Proc_03EE2E;
+extern const char Proc_03EE40;
+extern const char Proc_03EE5E;
+extern const char Proc_03EE62;
+extern const char Proc_03EE64;
+extern const char Proc_03EE78;
+extern const char Proc_03EE7C;
+extern const char Proc_03EE80;
+extern const char Proc_03EE8A;
+extern const char Proc_03EEE0;
+
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00EA13CCu
@@ -826,7 +858,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 2,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EC50,
+        .proc_addr      = NAKA_ADDR(Proc_03EC50),
         .string_ptr     = SELF(w0_text),
         .string_id      = 0x0095,
         .reserved       = 0x0000,
@@ -853,7 +885,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008A,
-        .proc_addr      = 0x0003EC54,
+        .proc_addr      = NAKA_ADDR(Proc_03EC54),
         .string_ptr     = SELF(w1_text),
         .ui_class       = 0x0010,
         .screen_id      = 0x01A0,
@@ -886,7 +918,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0089,
-        .proc_addr      = 0x0003EC58,
+        .proc_addr      = NAKA_ADDR(Proc_03EC58),
         .string_ptr     = SELF(w2_text),
         .ui_class       = 0x007E,
         .screen_id      = 0x01A0,
@@ -915,7 +947,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 9,
-        .proc_addr      = 0x0003EC5A,
+        .proc_addr      = NAKA_ADDR(Proc_03EC5A),
         .string_ptr     = SELF(w3_text),
         .ui_class       = 0x0065,
         .screen_id      = 0x01A0,
@@ -980,7 +1012,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0081,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EC64,
+        .proc_addr      = NAKA_ADDR(Proc_03EC64),
         .string_ptr     = SELF(w5_text),
         .string_id      = 0x0089,
         .reserved       = 0x0000,
@@ -1136,7 +1168,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0067,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EC76,
+        .proc_addr      = NAKA_ADDR(Proc_03EC76),
         .string_ptr     = SELF(w15_text),
         .string_id      = 0x0099,
         .reserved       = 0x0000,
@@ -1174,7 +1206,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EC7A,
+        .proc_addr      = NAKA_ADDR(Proc_03EC7A),
         .string_ptr     = SELF(w18_text),
         .string_id      = 0x002C,
         .reserved       = 0x0000,
@@ -1310,7 +1342,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x006B,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EC92,
+        .proc_addr      = NAKA_ADDR(Proc_03EC92),
         .string_ptr     = SELF(w27_text),
         .string_id      = 0x0099,
         .reserved       = 0x0000,
@@ -1348,7 +1380,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0048,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EC96,
+        .proc_addr      = NAKA_ADDR(Proc_03EC96),
         .string_ptr     = SELF(w30_text),
         .string_id      = 0x002C,
         .reserved       = 0x0000,
@@ -1656,7 +1688,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003ECBC,
+        .proc_addr      = NAKA_ADDR(Proc_03ECBC),
         .string_ptr     = SELF(w58_text),
         .string_id      = 0x0000,
         .reserved       = 0x0000,
@@ -1790,7 +1822,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .bg_color       = 0x00FF,
         .field_22       = 2,
         .handler_id     = 0x000C,
-        .proc_addr      = 0x0003ECD2,
+        .proc_addr      = NAKA_ADDR(Proc_03ECD2),
         .string_ptr     = SELF(w69_text),
         .ui_class       = 0x0064,
         .screen_id      = 0x01A0,
@@ -2458,7 +2490,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003ED1E,
+        .proc_addr      = NAKA_ADDR(Proc_03ED1E),
         .string_ptr     = SELF(w112_text),
         .string_id      = 0x002C,
         .reserved       = 0x0000,
@@ -2485,7 +2517,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .bg_color       = 0x00FF,
         .field_22       = 2,
         .handler_id     = 0x000C,
-        .proc_addr      = 0x0003ED22,
+        .proc_addr      = NAKA_ADDR(Proc_03ED22),
         .string_ptr     = SELF(w113_text),
         .ui_class       = 0x0061,
         .screen_id      = 0x01A0,
@@ -2782,7 +2814,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B0,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003ED54,
+        .proc_addr      = NAKA_ADDR(Proc_03ED54),
         .string_ptr     = SELF(w133_text),
         .string_id      = 0x0054,
         .reserved       = 0x0000,
@@ -2990,7 +3022,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003ED84,
+        .proc_addr      = NAKA_ADDR(Proc_03ED84),
         .string_ptr     = SELF(w145_text),
         .string_id      = 0x002D,
         .reserved       = 0x0000,
@@ -3025,7 +3057,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003ED8C,
+        .proc_addr      = NAKA_ADDR(Proc_03ED8C),
         .string_ptr     = SELF(w146_text),
         .string_id      = 0x0000,
         .reserved       = 0x0000,
@@ -3157,7 +3189,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0088,
-        .proc_addr      = 0x0003ED9E,
+        .proc_addr      = NAKA_ADDR(Proc_03ED9E),
         .string_ptr     = SELF(w158_text),
         .ui_class       = 0x0066,
         .screen_id      = 0x01A0,
@@ -3879,7 +3911,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EDC8,
+        .proc_addr      = NAKA_ADDR(Proc_03EDC8),
         .string_ptr     = SELF(w206_text),
         .string_id      = 0x002D,
         .reserved       = 0x0000,
@@ -4005,7 +4037,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0088,
-        .proc_addr      = 0x0003EDD6,
+        .proc_addr      = NAKA_ADDR(Proc_03EDD6),
         .string_ptr     = SELF(w213_text),
         .ui_class       = 0x006A,
         .screen_id      = 0x01A0,
@@ -4145,7 +4177,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EDEC,
+        .proc_addr      = NAKA_ADDR(Proc_03EDEC),
         .string_ptr     = SELF(w220_text),
         .string_id      = 0x002E,
         .reserved       = 0x0000,
@@ -4561,7 +4593,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EE1A,
+        .proc_addr      = NAKA_ADDR(Proc_03EE1A),
         .string_ptr     = SELF(w247_text),
         .string_id      = 0x002E,
         .reserved       = 0x0000,
@@ -4819,7 +4851,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EE2E,
+        .proc_addr      = NAKA_ADDR(Proc_03EE2E),
         .string_ptr     = SELF(w265_text),
         .string_id      = 0x002E,
         .reserved       = 0x0000,
@@ -5072,7 +5104,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EE40,
+        .proc_addr      = NAKA_ADDR(Proc_03EE40),
         .string_ptr     = SELF(w283_text),
         .string_id      = 0x003A,
         .reserved       = 0x0000,
@@ -5300,7 +5332,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EE5E,
+        .proc_addr      = NAKA_ADDR(Proc_03EE5E),
         .string_ptr     = SELF(w297_text),
         .string_id      = 0x0096,
         .reserved       = 0x0000,
@@ -5352,7 +5384,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .bg_color       = 0x00FF,
         .field_22       = 2,
         .handler_id     = 0x000C,
-        .proc_addr      = 0x0003EE62,
+        .proc_addr      = NAKA_ADDR(Proc_03EE62),
         .string_ptr     = SELF(w301_text),
         .ui_class       = 0x007C,
         .screen_id      = 0x01A0,
@@ -5454,7 +5486,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 10,
-        .proc_addr      = 0x0003EE64,
+        .proc_addr      = NAKA_ADDR(Proc_03EE64),
         .string_ptr     = SELF(w307_text),
         .ui_class       = 0x007D,
         .screen_id      = 0x01A0,
@@ -5586,7 +5618,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EE78,
+        .proc_addr      = NAKA_ADDR(Proc_03EE78),
         .string_ptr     = SELF(w316_text),
         .string_id      = 0x0096,
         .reserved       = 0x0000,
@@ -5608,7 +5640,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EE7C,
+        .proc_addr      = NAKA_ADDR(Proc_03EE7C),
         .string_ptr     = SELF(w317_text),
         .string_id      = 0x0096,
         .reserved       = 0x0000,
@@ -5635,7 +5667,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .bg_color       = 0x00FF,
         .field_22       = 2,
         .handler_id     = 0x000C,
-        .proc_addr      = 0x0003EE80,
+        .proc_addr      = NAKA_ADDR(Proc_03EE80),
         .string_ptr     = SELF(w318_text),
         .ui_class       = 0x007B,
         .screen_id      = 0x01A0,
@@ -5758,7 +5790,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 10,
-        .proc_addr      = 0x0003EE8A,
+        .proc_addr      = NAKA_ADDR(Proc_03EE8A),
         .string_ptr     = SELF(w325_text),
         .ui_class       = 0x007D,
         .screen_id      = 0x01A0,
@@ -6333,7 +6365,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003EEE0,
+        .proc_addr      = NAKA_ADDR(Proc_03EEE0),
         .string_ptr     = SELF(w374_text),
         .string_id      = 0x0097,
         .reserved       = 0x0000,

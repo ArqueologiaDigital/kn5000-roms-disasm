@@ -9,6 +9,42 @@
 #include "naka_types.h"
 
 /* External symbol addresses (resolved by linker script) */
+extern const char Proc_03DD06;
+extern const char Proc_03DD0A;
+extern const char Proc_03DD18;
+extern const char Proc_03DD1C;
+extern const char Proc_03DD1E;
+extern const char Proc_03DD20;
+extern const char Proc_03DD3A;
+extern const char Proc_03DD48;
+extern const char Proc_03DD54;
+extern const char Proc_03DD5A;
+extern const char Proc_03DD5E;
+extern const char Proc_03DD6C;
+extern const char Proc_03DD70;
+extern const char Proc_03DD7E;
+extern const char Proc_03DD8A;
+extern const char Proc_03DD90;
+extern const char Proc_03DDFE;
+extern const char Proc_03DE04;
+extern const char Proc_03DE0C;
+extern const char Proc_03DE10;
+extern const char Proc_03DE22;
+extern const char Proc_03DE26;
+extern const char Proc_03DE36;
+extern const char Proc_03DE3A;
+extern const char Proc_03DE3E;
+extern const char Proc_03DE42;
+extern const char Proc_03DE48;
+extern const char Proc_03DE4C;
+extern const char Proc_03DE54;
+extern const char Proc_03DE58;
+extern const char Proc_03DE5C;
+extern const char Proc_03DE5E;
+extern const char Proc_03DE60;
+extern const char Proc_03DE76;
+extern const char Proc_03DE8C;
+
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00E2107Cu
@@ -470,7 +506,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x006C,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DD06,
+        .proc_addr      = NAKA_ADDR(Proc_03DD06),
         .string_ptr     = SELF(w0_text),
         .string_id      = 0x002E,
         .reserved       = 0x0000,
@@ -505,7 +541,7 @@ const naka_direct_play_t naka_direct_play_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008B,
-        .proc_addr      = 0x0003DD0A,
+        .proc_addr      = NAKA_ADDR(Proc_03DD0A),
         .string_ptr     = SELF(w2_text),
         .ui_class       = 0x0072,
         .screen_id      = 0x01A0,
@@ -629,7 +665,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DD18,
+        .proc_addr      = NAKA_ADDR(Proc_03DD18),
         .string_ptr     = SELF(w11_text),
         .string_id      = 0x003A,
         .reserved       = 0x0000,
@@ -656,7 +692,7 @@ const naka_direct_play_t naka_direct_play_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 8,
-        .proc_addr      = 0x0003DD1C,
+        .proc_addr      = NAKA_ADDR(Proc_03DD1C),
         .string_ptr     = SELF(w12_text),
         .ui_class       = 0x00A5,
         .screen_id      = 0x01A0,
@@ -685,7 +721,7 @@ const naka_direct_play_t naka_direct_play_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 9,
-        .proc_addr      = 0x0003DD1E,
+        .proc_addr      = NAKA_ADDR(Proc_03DD1E),
         .string_ptr     = SELF(w13_text),
         .ui_class       = 0x00A5,
         .screen_id      = 0x01A0,
@@ -714,7 +750,7 @@ const naka_direct_play_t naka_direct_play_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008B,
-        .proc_addr      = 0x0003DD20,
+        .proc_addr      = NAKA_ADDR(Proc_03DD20),
         .string_ptr     = SELF(w14_text),
         .ui_class       = 0x00A5,
         .screen_id      = 0x01A0,
@@ -955,7 +991,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x006D,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DD3A,
+        .proc_addr      = NAKA_ADDR(Proc_03DD3A),
         .string_ptr     = SELF(w37_text),
         .string_id      = 0x002E,
         .reserved       = 0x0000,
@@ -1057,7 +1093,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x006E,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DD48,
+        .proc_addr      = NAKA_ADDR(Proc_03DD48),
         .string_ptr     = SELF(w44_text),
         .string_id      = 0x002E,
         .reserved       = 0x0000,
@@ -1154,7 +1190,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x006F,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DD54,
+        .proc_addr      = NAKA_ADDR(Proc_03DD54),
         .string_ptr     = SELF(w51_text),
         .string_id      = 0x002E,
         .reserved       = 0x0000,
@@ -1217,7 +1253,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x006C,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DD5A,
+        .proc_addr      = NAKA_ADDR(Proc_03DD5A),
         .string_ptr     = SELF(w57_text),
         .string_id      = 0x002E,
         .reserved       = 0x0000,
@@ -1244,7 +1280,7 @@ const naka_direct_play_t naka_direct_play_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008B,
-        .proc_addr      = 0x0003DD5E,
+        .proc_addr      = NAKA_ADDR(Proc_03DD5E),
         .string_ptr     = SELF(w58_text),
         .ui_class       = 0x0076,
         .screen_id      = 0x01A0,
@@ -1403,7 +1439,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x006C,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DD6C,
+        .proc_addr      = NAKA_ADDR(Proc_03DD6C),
         .string_ptr     = SELF(w70_text),
         .string_id      = 0x003A,
         .reserved       = 0x0000,
@@ -1425,7 +1461,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x006D,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DD70,
+        .proc_addr      = NAKA_ADDR(Proc_03DD70),
         .string_ptr     = SELF(w71_text),
         .string_id      = 0x002E,
         .reserved       = 0x0000,
@@ -1554,7 +1590,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x006E,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DD7E,
+        .proc_addr      = NAKA_ADDR(Proc_03DD7E),
         .string_ptr     = SELF(w80_text),
         .string_id      = 0x002E,
         .reserved       = 0x0000,
@@ -1679,7 +1715,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x0073,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DD8A,
+        .proc_addr      = NAKA_ADDR(Proc_03DD8A),
         .string_ptr     = SELF(w89_text),
         .string_id      = 0x002E,
         .reserved       = 0x0000,
@@ -1768,7 +1804,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x0077,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DD90,
+        .proc_addr      = NAKA_ADDR(Proc_03DD90),
         .string_ptr     = SELF(w97_text),
         .string_id      = 0x003A,
         .reserved       = 0x0000,
@@ -2026,7 +2062,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x0079,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DDFE,
+        .proc_addr      = NAKA_ADDR(Proc_03DDFE),
         .string_ptr     = SELF(w124_text),
         .string_id      = 0x0089,
         .reserved       = 0x0000,
@@ -2145,7 +2181,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x0084,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE04,
+        .proc_addr      = NAKA_ADDR(Proc_03DE04),
         .string_ptr     = SELF(w134_text),
         .string_id      = 0x0036,
         .reserved       = 0x0000,
@@ -2211,7 +2247,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x0084,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE0C,
+        .proc_addr      = NAKA_ADDR(Proc_03DE0C),
         .string_ptr     = SELF(w139_text),
         .string_id      = 0x0039,
         .reserved       = 0x0000,
@@ -2238,7 +2274,7 @@ const naka_direct_play_t naka_direct_play_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 8,
-        .proc_addr      = 0x0003DE10,
+        .proc_addr      = NAKA_ADDR(Proc_03DE10),
         .string_ptr     = SELF(w140_text),
         .ui_class       = 0x008C,
         .screen_id      = 0x01A0,
@@ -2339,7 +2375,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x008B,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE22,
+        .proc_addr      = NAKA_ADDR(Proc_03DE22),
         .string_ptr     = SELF(w148_text),
         .string_id      = 0x0039,
         .reserved       = 0x0000,
@@ -2436,7 +2472,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x008B,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE26,
+        .proc_addr      = NAKA_ADDR(Proc_03DE26),
         .string_ptr     = SELF(w157_text),
         .string_id      = 0x0039,
         .reserved       = 0x0000,
@@ -2539,7 +2575,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x008C,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE36,
+        .proc_addr      = NAKA_ADDR(Proc_03DE36),
         .string_ptr     = SELF(w164_text),
         .string_id      = 0x0039,
         .reserved       = 0x0000,
@@ -2636,7 +2672,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x008C,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE3A,
+        .proc_addr      = NAKA_ADDR(Proc_03DE3A),
         .string_ptr     = SELF(w173_text),
         .string_id      = 0x0039,
         .reserved       = 0x0000,
@@ -2733,7 +2769,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x0084,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE3E,
+        .proc_addr      = NAKA_ADDR(Proc_03DE3E),
         .string_ptr     = SELF(w182_text),
         .string_id      = 0x0037,
         .reserved       = 0x0000,
@@ -2760,7 +2796,7 @@ const naka_direct_play_t naka_direct_play_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 8,
-        .proc_addr      = 0x0003DE42,
+        .proc_addr      = NAKA_ADDR(Proc_03DE42),
         .string_ptr     = SELF(w183_text),
         .ui_class       = 0x008F,
         .screen_id      = 0x01A0,
@@ -2803,7 +2839,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x008E,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE48,
+        .proc_addr      = NAKA_ADDR(Proc_03DE48),
         .string_ptr     = SELF(w185_text),
         .string_id      = 0x0099,
         .reserved       = 0x0000,
@@ -2867,7 +2903,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x0084,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE4C,
+        .proc_addr      = NAKA_ADDR(Proc_03DE4C),
         .string_ptr     = SELF(w189_text),
         .string_id      = 0x006E,
         .reserved       = 0x0000,
@@ -2919,7 +2955,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x008A,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE54,
+        .proc_addr      = NAKA_ADDR(Proc_03DE54),
         .string_ptr     = SELF(w193_text),
         .string_id      = 0x008F,
         .reserved       = 0x0000,
@@ -2981,7 +3017,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 2,
         .field_1a       = 1,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE58,
+        .proc_addr      = NAKA_ADDR(Proc_03DE58),
         .string_ptr     = SELF(w199_text),
         .string_id      = 0x00A9,
         .reserved       = 0x0000,
@@ -3008,7 +3044,7 @@ const naka_direct_play_t naka_direct_play_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0089,
-        .proc_addr      = 0x0003DE5C,
+        .proc_addr      = NAKA_ADDR(Proc_03DE5C),
         .string_ptr     = SELF(w200_text),
         .ui_class       = 0x00E1,
         .screen_id      = 0x01A0,
@@ -3037,7 +3073,7 @@ const naka_direct_play_t naka_direct_play_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008B,
-        .proc_addr      = 0x0003DE5E,
+        .proc_addr      = NAKA_ADDR(Proc_03DE5E),
         .string_ptr     = SELF(w201_text),
         .ui_class       = 0x00E4,
         .screen_id      = 0x01A0,
@@ -3077,7 +3113,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x00E0,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE60,
+        .proc_addr      = NAKA_ADDR(Proc_03DE60),
         .string_ptr     = SELF(w203_text),
         .string_id      = 0x00AA,
         .reserved       = 0x0000,
@@ -3175,7 +3211,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x00E0,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE76,
+        .proc_addr      = NAKA_ADDR(Proc_03DE76),
         .string_ptr     = SELF(w208_text),
         .string_id      = 0x00AA,
         .reserved       = 0x0000,
@@ -3270,7 +3306,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_18       = 0x0000,
         .field_1a       = 0x00E0,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003DE8C,
+        .proc_addr      = NAKA_ADDR(Proc_03DE8C),
         .string_ptr     = SELF(w213_text),
         .string_id      = 0x00AA,
         .reserved       = 0x0000,

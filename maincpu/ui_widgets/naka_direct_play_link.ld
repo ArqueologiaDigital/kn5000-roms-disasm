@@ -10,3 +10,40 @@ SECTIONS {
 }
 
 Naka_PresentationRootState = 0x00EF013F;
+
+/* Additional symbolic references */
+Proc_03DD06                                   = 0x0003DD06;
+Proc_03DD0A                                   = 0x0003DD0A;
+Proc_03DD18                                   = 0x0003DD18;
+Proc_03DD1C                                   = 0x0003DD1C;
+Proc_03DD1E                                   = 0x0003DD1E;
+Proc_03DD20                                   = 0x0003DD20;
+Proc_03DD3A                                   = 0x0003DD3A;
+Proc_03DD48                                   = 0x0003DD48;
+Proc_03DD54                                   = 0x0003DD54;
+Proc_03DD5A                                   = 0x0003DD5A;
+Proc_03DD5E                                   = 0x0003DD5E;
+Proc_03DD6C                                   = 0x0003DD6C;
+Proc_03DD70                                   = 0x0003DD70;
+Proc_03DD7E                                   = 0x0003DD7E;
+Proc_03DD8A                                   = 0x0003DD8A;
+Proc_03DD90                                   = 0x0003DD90;
+Proc_03DDFE                                   = 0x0003DDFE;
+Proc_03DE04                                   = 0x0003DE04;
+Proc_03DE0C                                   = 0x0003DE0C;
+Proc_03DE10                                   = 0x0003DE10;
+Proc_03DE22                                   = 0x0003DE22;
+Proc_03DE26                                   = 0x0003DE26;
+Proc_03DE36                                   = 0x0003DE36;
+Proc_03DE3A                                   = 0x0003DE3A;
+Proc_03DE3E                                   = 0x0003DE3E;
+Proc_03DE42                                   = 0x0003DE42;
+Proc_03DE48                                   = 0x0003DE48;
+Proc_03DE4C                                   = 0x0003DE4C;
+Proc_03DE54                                   = 0x0003DE54;
+Proc_03DE58                                   = 0x0003DE58;
+Proc_03DE5C                                   = 0x0003DE5C;
+Proc_03DE5E                                   = 0x0003DE5E;
+Proc_03DE60                                   = 0x0003DE60;
+Proc_03DE76                                   = 0x0003DE76;
+Proc_03DE8C                                   = 0x0003DE8C;

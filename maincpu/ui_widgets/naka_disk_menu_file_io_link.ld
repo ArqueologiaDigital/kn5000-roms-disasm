@@ -10,3 +10,36 @@ SECTIONS {
 }
 
 Naka_PresentationRootState = 0x00EF013F;
+
+/* Additional symbolic references */
+Proc_03EC50                                   = 0x0003EC50;
+Proc_03EC54                                   = 0x0003EC54;
+Proc_03EC58                                   = 0x0003EC58;
+Proc_03EC5A                                   = 0x0003EC5A;
+Proc_03EC64                                   = 0x0003EC64;
+Proc_03EC76                                   = 0x0003EC76;
+Proc_03EC7A                                   = 0x0003EC7A;
+Proc_03EC92                                   = 0x0003EC92;
+Proc_03EC96                                   = 0x0003EC96;
+Proc_03ECBC                                   = 0x0003ECBC;
+Proc_03ECD2                                   = 0x0003ECD2;
+Proc_03ED1E                                   = 0x0003ED1E;
+Proc_03ED22                                   = 0x0003ED22;
+Proc_03ED54                                   = 0x0003ED54;
+Proc_03ED84                                   = 0x0003ED84;
+Proc_03ED8C                                   = 0x0003ED8C;
+Proc_03ED9E                                   = 0x0003ED9E;
+Proc_03EDC8                                   = 0x0003EDC8;
+Proc_03EDD6                                   = 0x0003EDD6;
+Proc_03EDEC                                   = 0x0003EDEC;
+Proc_03EE1A                                   = 0x0003EE1A;
+Proc_03EE2E                                   = 0x0003EE2E;
+Proc_03EE40                                   = 0x0003EE40;
+Proc_03EE5E                                   = 0x0003EE5E;
+Proc_03EE62                                   = 0x0003EE62;
+Proc_03EE64                                   = 0x0003EE64;
+Proc_03EE78                                   = 0x0003EE78;
+Proc_03EE7C                                   = 0x0003EE7C;
+Proc_03EE80                                   = 0x0003EE80;
+Proc_03EE8A                                   = 0x0003EE8A;
+Proc_03EEE0                                   = 0x0003EEE0;

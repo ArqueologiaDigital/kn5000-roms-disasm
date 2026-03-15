@@ -9,6 +9,12 @@
 #include "naka_types.h"
 
 /* External symbol addresses (resolved by linker script) */
+extern const char Proc_03F642;
+extern const char Proc_03F646;
+extern const char Proc_03F672;
+extern const char Proc_03F676;
+extern const char Proc_03F6AA;
+
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00ED67CCu
@@ -251,7 +257,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F642,
+        .proc_addr      = NAKA_ADDR(Proc_03F642),
         .string_ptr     = SELF(w0_text),
         .string_id      = 0x0000,
         .reserved       = 0x0000,
@@ -273,7 +279,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F646,
+        .proc_addr      = NAKA_ADDR(Proc_03F646),
         .string_ptr     = SELF(w1_text),
         .string_id      = 0x0000,
         .reserved       = 0x0000,
@@ -625,7 +631,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F672,
+        .proc_addr      = NAKA_ADDR(Proc_03F672),
         .string_ptr     = SELF(w24_text),
         .string_id      = 0x0000,
         .reserved       = 0x0000,
@@ -684,7 +690,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F676,
+        .proc_addr      = NAKA_ADDR(Proc_03F676),
         .string_ptr     = SELF(w27_text),
         .string_id      = 0x0000,
         .reserved       = 0x0000,
@@ -1774,7 +1780,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F6AA,
+        .proc_addr      = NAKA_ADDR(Proc_03F6AA),
         .string_ptr     = SELF(w94_text),
         .string_id      = 0x0000,
         .reserved       = 0x0000,

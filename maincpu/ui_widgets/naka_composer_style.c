@@ -9,6 +9,35 @@
 #include "naka_types.h"
 
 /* External symbol addresses (resolved by linker script) */
+extern const char Proc_03D618;
+extern const char Proc_03D61C;
+extern const char Proc_03D622;
+extern const char Proc_03D628;
+extern const char Proc_03D632;
+extern const char Proc_03D636;
+extern const char Proc_03D63C;
+extern const char Proc_03D640;
+extern const char Proc_03D644;
+extern const char Proc_03D646;
+extern const char Proc_03D648;
+extern const char Proc_03D64A;
+extern const char Proc_03D64C;
+extern const char Proc_03D64E;
+extern const char Proc_03D656;
+extern const char Proc_03D66E;
+extern const char Proc_03D680;
+extern const char Proc_03D684;
+extern const char Proc_03D6BA;
+extern const char Proc_03D6BE;
+extern const char Proc_03D6C0;
+extern const char Proc_03D6D0;
+extern const char Proc_03D6D4;
+extern const char Proc_03D6D8;
+extern const char Proc_03D6EC;
+extern const char Proc_03D702;
+extern const char Proc_03D70A;
+extern const char Proc_03D712;
+
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00E176E4u
@@ -517,7 +546,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D618,
+        .proc_addr      = NAKA_ADDR(Proc_03D618),
         .string_ptr     = SELF(w0_text),
         .string_id      = 0x0098,
         .reserved       = 0x0000,
@@ -555,7 +584,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x0060,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D61C,
+        .proc_addr      = NAKA_ADDR(Proc_03D61C),
         .string_ptr     = SELF(w3_text),
         .string_id      = 0x0098,
         .reserved       = 0x0000,
@@ -627,7 +656,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x0010,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D622,
+        .proc_addr      = NAKA_ADDR(Proc_03D622),
         .string_ptr     = SELF(w9_text),
         .string_id      = 0x0098,
         .reserved       = 0x0000,
@@ -696,7 +725,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x0010,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D628,
+        .proc_addr      = NAKA_ADDR(Proc_03D628),
         .string_ptr     = SELF(w15_text),
         .string_id      = 0x0098,
         .reserved       = 0x0000,
@@ -748,7 +777,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x0010,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D632,
+        .proc_addr      = NAKA_ADDR(Proc_03D632),
         .string_ptr     = SELF(w19_text),
         .string_id      = 0x0098,
         .reserved       = 0x0000,
@@ -788,7 +817,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x0010,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D636,
+        .proc_addr      = NAKA_ADDR(Proc_03D636),
         .string_ptr     = SELF(w22_text),
         .string_id      = 0x0098,
         .reserved       = 0x0000,
@@ -860,7 +889,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x0010,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D63C,
+        .proc_addr      = NAKA_ADDR(Proc_03D63C),
         .string_ptr     = SELF(w28_text),
         .string_id      = 0x0098,
         .reserved       = 0x0000,
@@ -952,7 +981,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 2,
         .field_1a       = 1,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D640,
+        .proc_addr      = NAKA_ADDR(Proc_03D640),
         .string_ptr     = SELF(w35_text),
         .string_id      = 0x004D,
         .reserved       = 0x0000,
@@ -979,7 +1008,7 @@ const naka_composer_style_t naka_composer_style_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008B,
-        .proc_addr      = 0x0003D644,
+        .proc_addr      = NAKA_ADDR(Proc_03D644),
         .string_ptr     = SELF(w36_text),
         .ui_class       = 0x00BB,
         .screen_id      = 0x01A0,
@@ -1008,7 +1037,7 @@ const naka_composer_style_t naka_composer_style_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 8,
-        .proc_addr      = 0x0003D646,
+        .proc_addr      = NAKA_ADDR(Proc_03D646),
         .string_ptr     = SELF(w37_text),
         .ui_class       = 0x00BA,
         .screen_id      = 0x01A0,
@@ -1037,7 +1066,7 @@ const naka_composer_style_t naka_composer_style_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 9,
-        .proc_addr      = 0x0003D648,
+        .proc_addr      = NAKA_ADDR(Proc_03D648),
         .string_ptr     = SELF(w38_text),
         .ui_class       = 0x00B8,
         .screen_id      = 0x01A0,
@@ -1066,7 +1095,7 @@ const naka_composer_style_t naka_composer_style_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 10,
-        .proc_addr      = 0x0003D64A,
+        .proc_addr      = NAKA_ADDR(Proc_03D64A),
         .string_ptr     = SELF(w39_text),
         .ui_class       = 0x00BE,
         .screen_id      = 0x01A0,
@@ -1095,7 +1124,7 @@ const naka_composer_style_t naka_composer_style_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x000B,
-        .proc_addr      = 0x0003D64C,
+        .proc_addr      = NAKA_ADDR(Proc_03D64C),
         .string_ptr     = SELF(w40_text),
         .ui_class       = 0x00B9,
         .screen_id      = 0x01A0,
@@ -1124,7 +1153,7 @@ const naka_composer_style_t naka_composer_style_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x000C,
-        .proc_addr      = 0x0003D64E,
+        .proc_addr      = NAKA_ADDR(Proc_03D64E),
         .string_ptr     = SELF(w41_text),
         .ui_class       = 0x0062,
         .screen_id      = 0x01A0,
@@ -1264,7 +1293,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B0,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D656,
+        .proc_addr      = NAKA_ADDR(Proc_03D656),
         .string_ptr     = SELF(w53_text),
         .string_id      = 0x004D,
         .reserved       = 0x0000,
@@ -1395,7 +1424,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B1,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D66E,
+        .proc_addr      = NAKA_ADDR(Proc_03D66E),
         .string_ptr     = SELF(w65_text),
         .string_id      = 0x004D,
         .reserved       = 0x0000,
@@ -1617,7 +1646,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D680,
+        .proc_addr      = NAKA_ADDR(Proc_03D680),
         .string_ptr     = SELF(w85_text),
         .string_id      = 0x0099,
         .reserved       = 0x0000,
@@ -1679,7 +1708,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D684,
+        .proc_addr      = NAKA_ADDR(Proc_03D684),
         .string_ptr     = SELF(w89_text),
         .string_id      = 0x009F,
         .reserved       = 0x0000,
@@ -1888,7 +1917,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B2,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D6BA,
+        .proc_addr      = NAKA_ADDR(Proc_03D6BA),
         .string_ptr     = SELF(w106_text),
         .string_id      = 0x00A0,
         .reserved       = 0x0000,
@@ -2105,7 +2134,7 @@ const naka_composer_style_t naka_composer_style_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0088,
-        .proc_addr      = 0x0003D6BE,
+        .proc_addr      = NAKA_ADDR(Proc_03D6BE),
         .string_ptr     = SELF(w120_text),
         .ui_class       = 0x00B7,
         .screen_id      = 0x01A0,
@@ -2134,7 +2163,7 @@ const naka_composer_style_t naka_composer_style_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0089,
-        .proc_addr      = 0x0003D6C0,
+        .proc_addr      = NAKA_ADDR(Proc_03D6C0),
         .string_ptr     = SELF(w121_text),
         .ui_class       = 0x00B6,
         .screen_id      = 0x01A0,
@@ -2227,7 +2256,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B5,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D6D0,
+        .proc_addr      = NAKA_ADDR(Proc_03D6D0),
         .string_ptr     = SELF(w128_text),
         .string_id      = 0x008F,
         .reserved       = 0x0000,
@@ -2289,7 +2318,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B0,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D6D4,
+        .proc_addr      = NAKA_ADDR(Proc_03D6D4),
         .string_ptr     = SELF(w134_text),
         .string_id      = 0x0052,
         .reserved       = 0x0000,
@@ -2646,7 +2675,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B0,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D6D8,
+        .proc_addr      = NAKA_ADDR(Proc_03D6D8),
         .string_ptr     = SELF(w161_text),
         .string_id      = 0x0053,
         .reserved       = 0x0000,
@@ -3069,7 +3098,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B0,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D6EC,
+        .proc_addr      = NAKA_ADDR(Proc_03D6EC),
         .string_ptr     = SELF(w191_text),
         .string_id      = 0x0051,
         .reserved       = 0x0000,
@@ -3224,7 +3253,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B0,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D702,
+        .proc_addr      = NAKA_ADDR(Proc_03D702),
         .string_ptr     = SELF(w203_text),
         .string_id      = 0x000B,
         .reserved       = 0x0000,
@@ -3286,7 +3315,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B0,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D70A,
+        .proc_addr      = NAKA_ADDR(Proc_03D70A),
         .string_ptr     = SELF(w207_text),
         .string_id      = 0x0055,
         .reserved       = 0x0000,
@@ -3475,7 +3504,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_18       = 0x0000,
         .field_1a       = 0x00B0,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003D712,
+        .proc_addr      = NAKA_ADDR(Proc_03D712),
         .string_ptr     = SELF(w216_text),
         .string_id      = 0x00A1,
         .reserved       = 0x0000,

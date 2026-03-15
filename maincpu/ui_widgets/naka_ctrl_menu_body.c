@@ -9,6 +9,39 @@
 #include "naka_types.h"
 
 /* External symbol addresses (resolved by linker script) */
+extern const char Handler_7f;
+extern const char Handler_7f_46FE;
+extern const char Handler_7f_4850;
+extern const char Handler_7f_487C;
+extern const char Handler_7f_48A8;
+extern const char Handler_7f_4A56;
+extern const char Handler_80;
+extern const char Handler_80_61F0;
+extern const char Handler_80_62FE;
+extern const char Handler_80_6408;
+extern const char Proc_03F446;
+extern const char Proc_03F44C;
+extern const char Proc_03F454;
+extern const char Proc_03F468;
+extern const char Proc_03F48C;
+extern const char Proc_03F4BE;
+extern const char Proc_03F4D2;
+extern const char Proc_03F4D6;
+extern const char Proc_03F4D8;
+extern const char Proc_03F4DC;
+extern const char Proc_03F4F4;
+extern const char Proc_03F4FC;
+extern const char Proc_03F500;
+extern const char Proc_03F502;
+extern const char Proc_03F504;
+extern const char Proc_03F564;
+extern const char Proc_03F5AE;
+extern const char Proc_03F5D0;
+extern const char Proc_03F5FA;
+extern const char Proc_03F606;
+extern const char Proc_03F60A;
+extern const char Proc_03F62E;
+
 extern const char LABEL_ED46D2;
 extern const char LABEL_ED4A82;
 extern const char Naka_PresentationRootState;
@@ -389,7 +422,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0040,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F446,
+        .proc_addr      = NAKA_ADDR(Proc_03F446),
         .string_ptr     = SELF(w0_text),
         .string_id      = 0x000E,
         .reserved       = 0x0000,
@@ -468,7 +501,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F44C,
+        .proc_addr      = NAKA_ADDR(Proc_03F44C),
         .string_ptr     = SELF(w6_text),
         .string_id      = 1,
         .reserved       = 0x0000,
@@ -592,7 +625,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0040,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F454,
+        .proc_addr      = NAKA_ADDR(Proc_03F454),
         .string_ptr     = SELF(w17_text),
         .string_id      = 0x0081,
         .reserved       = 0x0000,
@@ -691,7 +724,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0040,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F468,
+        .proc_addr      = NAKA_ADDR(Proc_03F468),
         .string_ptr     = SELF(w22_text),
         .string_id      = 10,
         .reserved       = 0x0000,
@@ -857,7 +890,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_10       = 0x004D,
         .field_12       = 7,
         .field_14       = 0x005D,
-        .handler        = 0x00ED46A6,
+        .handler        = NAKA_ADDR(Handler_7f),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -905,7 +938,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_10       = 0x00A1,
         .field_12       = 7,
         .field_14       = 0x00B1,
-        .handler        = 0x00ED46FE,
+        .handler        = NAKA_ADDR(Handler_7f_46FE),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -1023,7 +1056,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_10       = 0x0054,
         .field_12       = 7,
         .field_14       = 0x0064,
-        .handler        = 0x00ED4850,
+        .handler        = NAKA_ADDR(Handler_7f_4850),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -1047,7 +1080,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_10       = 0x007E,
         .field_12       = 7,
         .field_14       = 0x008E,
-        .handler        = 0x00ED487C,
+        .handler        = NAKA_ADDR(Handler_7f_487C),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -1071,7 +1104,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_10       = 0x00A8,
         .field_12       = 7,
         .field_14       = 0x00B8,
-        .handler        = 0x00ED48A8,
+        .handler        = NAKA_ADDR(Handler_7f_48A8),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -1155,7 +1188,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F48C,
+        .proc_addr      = NAKA_ADDR(Proc_03F48C),
         .string_ptr     = SELF(w46_text),
         .string_id      = 0x0031,
         .reserved       = 0x0000,
@@ -1213,7 +1246,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_10       = 0x004D,
         .field_12       = 7,
         .field_14       = 0x005D,
-        .handler        = 0x00ED4A56,
+        .handler        = NAKA_ADDR(Handler_7f_4A56),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -1382,7 +1415,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0040,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F4BE,
+        .proc_addr      = NAKA_ADDR(Proc_03F4BE),
         .string_ptr     = SELF(w62_text),
         .string_id      = 0x0094,
         .reserved       = 0x0000,
@@ -1487,7 +1520,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F4D2,
+        .proc_addr      = NAKA_ADDR(Proc_03F4D2),
         .string_ptr     = SELF(w68_text),
         .string_id      = 1,
         .reserved       = 0x0000,
@@ -1514,7 +1547,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .bg_color       = 0x00FF,
         .field_22       = 2,
         .handler_id     = 9,
-        .proc_addr      = 0x0003F4D6,
+        .proc_addr      = NAKA_ADDR(Proc_03F4D6),
         .string_ptr     = SELF(w69_text),
         .ui_class       = 0x0063,
         .screen_id      = 0x01A0,
@@ -1538,7 +1571,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0040,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F4D8,
+        .proc_addr      = NAKA_ADDR(Proc_03F4D8),
         .string_ptr     = SELF(w70_text),
         .string_id      = 0x0085,
         .reserved       = 0x0000,
@@ -1565,7 +1598,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 9,
-        .proc_addr      = 0x0003F4DC,
+        .proc_addr      = NAKA_ADDR(Proc_03F4DC),
         .string_ptr     = SELF(w71_text),
         .ui_class       = 0x0063,
         .screen_id      = 0x01A0,
@@ -1837,7 +1870,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 1,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F4F4,
+        .proc_addr      = NAKA_ADDR(Proc_03F4F4),
         .string_ptr     = SELF(w93_text),
         .string_id      = 0x0000,
         .reserved       = 0x0000,
@@ -1903,7 +1936,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 2,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F4FC,
+        .proc_addr      = NAKA_ADDR(Proc_03F4FC),
         .string_ptr     = SELF(w97_text),
         .string_id      = 0x00A2,
         .reserved       = 0x0000,
@@ -1930,7 +1963,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x0089,
-        .proc_addr      = 0x0003F500,
+        .proc_addr      = NAKA_ADDR(Proc_03F500),
         .string_ptr     = SELF(w98_text),
         .ui_class       = 0x00C2,
         .screen_id      = 0x01A0,
@@ -1975,7 +2008,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .bg_color       = 0x00FF,
         .field_22       = 0x0000,
         .handler_id     = 0x008B,
-        .proc_addr      = 0x0003F502,
+        .proc_addr      = NAKA_ADDR(Proc_03F502),
         .string_ptr     = SELF(w100_text),
         .ui_class       = 0x00C5,
         .screen_id      = 0x01A0,
@@ -1999,7 +2032,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F504,
+        .proc_addr      = NAKA_ADDR(Proc_03F504),
         .string_ptr     = SELF(w101_text),
         .string_id      = 0x00A3,
         .reserved       = 0x0000,
@@ -2243,7 +2276,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F564,
+        .proc_addr      = NAKA_ADDR(Proc_03F564),
         .string_ptr     = SELF(w117_text),
         .string_id      = 1,
         .reserved       = 0x0000,
@@ -2447,7 +2480,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x00C1,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F5AE,
+        .proc_addr      = NAKA_ADDR(Proc_03F5AE),
         .string_ptr     = SELF(w131_text),
         .string_id      = 1,
         .reserved       = 0x0000,
@@ -2574,7 +2607,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x00C1,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F5D0,
+        .proc_addr      = NAKA_ADDR(Proc_03F5D0),
         .string_ptr     = SELF(w138_text),
         .string_id      = 0x00A4,
         .reserved       = 0x0000,
@@ -2739,7 +2772,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 1,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F5FA,
+        .proc_addr      = NAKA_ADDR(Proc_03F5FA),
         .string_ptr     = SELF(w149_text),
         .string_id      = 0x009A,
         .reserved       = 0x0000,
@@ -2896,7 +2929,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_10       = 0x004D,
         .field_12       = 0x013F,
         .field_14       = 0x005D,
-        .handler        = 0x00ED61C4,
+        .handler        = NAKA_ADDR(Handler_80),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -2920,7 +2953,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_10       = 0x0077,
         .field_12       = 0x013F,
         .field_14       = 0x0087,
-        .handler        = 0x00ED61F0,
+        .handler        = NAKA_ADDR(Handler_80_61F0),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -2954,7 +2987,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F606,
+        .proc_addr      = NAKA_ADDR(Proc_03F606),
         .string_ptr     = SELF(w161_text),
         .string_id      = 0x0099,
         .reserved       = 0x0000,
@@ -3014,7 +3047,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_10       = 0x00AD,
         .field_12       = 0xF267,
         .field_14       = 0x00BF,
-        .handler        = 0x00ED62FE,
+        .handler        = NAKA_ADDR(Handler_80_62FE),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -3048,7 +3081,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F60A,
+        .proc_addr      = NAKA_ADDR(Proc_03F60A),
         .string_ptr     = SELF(w167_text),
         .string_id      = 0x0099,
         .reserved       = 0x0000,
@@ -3107,7 +3140,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_10       = 0x00AD,
         .field_12       = 0xF267,
         .field_14       = 0x00BF,
-        .handler        = 0x00ED6408,
+        .handler        = NAKA_ADDR(Handler_80_6408),
         .field_1a       = 0x0000,
         .field_1c       = 0x0000,
         .field_1e       = 0x00F4,
@@ -3175,7 +3208,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F62E,
+        .proc_addr      = NAKA_ADDR(Proc_03F62E),
         .string_ptr     = SELF(w176_text),
         .string_id      = 0x0000,
         .reserved       = 0x0000,
