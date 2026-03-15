@@ -42,7 +42,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -61,7 +61,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -80,7 +80,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -99,7 +99,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -118,7 +118,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	lda	xsp, (xsp-20)
@@ -397,7 +397,8 @@ Scoop_SoundEditorData:
 	.asciz "080,"
 	lds	bc, 3
 	call	15757111
-	.byte 0xcf, 0xd9, 0x6e, 0x1d, 0xbf, 0x0c, 0x31
+	cps	l, 1
+	.byte 0x6e, 0x1d, 0xbf, 0x0c, 0x31
 	lds	wa, 3
 	call	15756091
 	ld	c, (xsp+12)
@@ -425,7 +426,8 @@ Scoop_SoundEditorData:
 	lds	bc, 1
 	lds	de, 0
 	call	15767527
-	.byte 0xcf, 0xd9, 0x6e, 0x34, 0xbf, 0x04, 0x30
+	cps	l, 1
+	.byte 0x6e, 0x34, 0xbf, 0x04, 0x30
 	call	15755834
 	.byte 0xb7, 0x31
 	lds	wa, 1
@@ -466,7 +468,8 @@ Scoop_SoundEditorData:
 	pushw bc
 	lds	bc, 0
 	call	15767527
-	.byte 0xcf, 0xd9, 0x6e, 0x34, 0xbf, 0x06, 0x30
+	cps	l, 1
+	.byte 0x6e, 0x34, 0xbf, 0x06, 0x30
 	call	15755834
 	.byte 0xb7, 0x31
 	lds	wa, 0
@@ -501,7 +504,8 @@ Scoop_SoundEditorData:
 	pushw 127
 	lds	bc, 2
 	call	15767527
-	.byte 0xcf, 0xd9, 0x6e, 0x34, 0xbf, 0x04, 0x30
+	cps	l, 1
+	.byte 0x6e, 0x34, 0xbf, 0x04, 0x30
 	call	15755834
 	.byte 0xb7, 0x31
 	lds	wa, 2
@@ -523,59 +527,61 @@ Scoop_SoundEditorData:
 	call	15758489
 	inc	0, xsp
 	ret
-	.byte 0xc9, 0xd8, 0xf2, 0x01, 0x6d, 0xf0, 0xde
+	cps	a, 0
+	.byte 0xf2, 0x01, 0x6d, 0xf0, 0xde
 	ldw	wa, 45
 	lds	bc, 0
 	jp	15753584
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 1
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8, 0x6e, 0x07
+	cps	a, 0
+	.byte 0x6e, 0x07
 	ldw	wa, 47
 	lds	bc, 0
 	.byte 0x68, 0x0f
 	lds	wa, 2
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 3
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 4
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	ldw	wa, 43
 	lds	bc, 0
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	nz
 	lds	wa, 0
 	call	15755567
@@ -926,7 +932,8 @@ Scoop_SoundEditorData:
 	lds	bc, 3
 	lds	de, 0
 	call	15767527
-	.byte 0xcf, 0xd9, 0x6e, 0x34, 0xbf, 0x04, 0x30
+	cps	l, 1
+	.byte 0x6e, 0x34, 0xbf, 0x04, 0x30
 	call	15755834
 	.byte 0xb7, 0x31
 	lds	wa, 3
@@ -967,7 +974,8 @@ Scoop_SoundEditorData:
 	pushw bc
 	lds	bc, 2
 	call	15767527
-	.byte 0xcf, 0xd9, 0x6e, 0x34, 0xbf, 0x06, 0x30
+	cps	l, 1
+	.byte 0x6e, 0x34, 0xbf, 0x06, 0x30
 	call	15755834
 	.byte 0xb7, 0x31
 	lds	wa, 2
@@ -1002,7 +1010,8 @@ Scoop_SoundEditorData:
 	pushw 127
 	lds	bc, 4
 	call	15767527
-	.byte 0xcf, 0xd9, 0x6e, 0x34, 0xbf, 0x04, 0x30
+	cps	l, 1
+	.byte 0x6e, 0x34, 0xbf, 0x04, 0x30
 	call	15755834
 	.byte 0xb7, 0x31
 	lds	wa, 4
@@ -1080,61 +1089,63 @@ Scoop_SoundEditorData:
 	call	15758489
 	.byte 0xbf, 0x10, 0x37
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	call	15756545
 	ret
-	.byte 0xc9, 0xd8, 0x6e, 0x07
+	cps	a, 0
+	.byte 0x6e, 0x07
 	ldw	wa, 43
 	lds	bc, 0
 	.byte 0x68, 0x0f
 	lds	wa, 1
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8, 0x6e, 0x07
+	cps	a, 0
+	.byte 0x6e, 0x07
 	ldw	wa, 47
 	lds	bc, 0
 	.byte 0x68, 0x0f
 	lds	wa, 2
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 3
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 4
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	ldw	wa, 45
 	lds	bc, 0
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	nz
 	lds	wa, 0
 	call	15755567
@@ -1163,36 +1174,38 @@ Scoop_SoundEditorData:
 	extz	wa
 	lds	bc, 0
 	jp	15759614
-	.byte 0xc9, 0xd8, 0xf2, 0x01, 0x6d, 0xf0, 0xde
+	cps	a, 0
+	.byte 0xf2, 0x01, 0x6d, 0xf0, 0xde
 	ldw	wa, 45
 	lds	bc, 0
 	jp	15753584
-	.byte 0xc9, 0xd8, 0x6e, 0x09
+	cps	a, 0
+	.byte 0x6e, 0x09
 	ldw	wa, 43
 	lds	bc, 0
 	jp	15753584
 	lds	wa, 0
 	lds	bc, 1
 	jp	15757276
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 0
 	lds	bc, 2
 	call	15757276
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 0
 	lds	bc, 3
 	call	15757276
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 0
 	lds	bc, 4
 	call	15757276
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	nz
 	lds	wa, 0
 	call	15755567
@@ -1215,7 +1228,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -1233,7 +1246,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -1251,7 +1264,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -1269,7 +1282,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -1287,7 +1300,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -1305,7 +1318,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -1323,7 +1336,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -1341,7 +1354,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -1359,7 +1372,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -1377,7 +1390,7 @@ Scoop_SoundEditorData:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	extz	wa
@@ -1604,7 +1617,9 @@ Scoop_SoundEditorData:
 	ld	(xbc+9), 0
 	ld	e, (xsp+16)
 	res	7, e
-	.byte 0xb9, 0x0a, 0x30, 0xcd, 0xd8, 0x6e, 0x05
+	.byte 0xb9, 0x0a, 0x30
+	cps	e, 0
+	.byte 0x6e, 0x05
 	ld	(xwa), 1
 	.byte 0x68, 0x03
 	ld	(xwa), 255
@@ -1627,7 +1642,8 @@ Scoop_SoundEditorData:
 	ldw	wa, 48
 	lds	bc, 5
 	call	15757111
-	.byte 0xcf, 0xd9, 0xf2, 0x29, 0x90, 0xf0, 0xe6
+	cps	l, 1
+	.byte 0xf2, 0x29, 0x90, 0xf0, 0xe6
 	lds	wa, 6
 	call	15758489
 	.byte 0xbf, 0x12, 0x37
@@ -1687,7 +1703,8 @@ Scoop_SoundEditorData:
 	.asciz "0800"
 	lds	bc, 5
 	call	15757111
-	.byte 0xcf, 0xd9, 0xf2, 0x29, 0x90, 0xf0, 0xe6
+	cps	l, 1
+	.byte 0xf2, 0x29, 0x90, 0xf0, 0xe6
 	ldw	wa, 8
 	call	15758489
 	.byte 0xbf, 0x12, 0x37
@@ -1707,11 +1724,11 @@ Scoop_SoundEditorData:
 	call	15756545
 	inc	4, xsp
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 1
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
@@ -1730,7 +1747,8 @@ Scoop_SoundEditorData:
 	.byte 0x68, 0x0f
 	lds	wa, 2
 	call	15757230
-	.byte 0xcf, 0xd8, 0x66, 0x09
+	cps	l, 0
+	.byte 0x66, 0x09
 	ldw	wa, 48
 	lds	bc, 0
 	call	15753584
@@ -1755,7 +1773,8 @@ Scoop_SoundEditorData:
 	.byte 0x66, 0x13
 	lds	wa, 3
 	call	15757230
-	.byte 0xcf, 0xd8, 0x66, 0x09
+	cps	l, 0
+	.byte 0x66, 0x09
 	ldw	wa, 48
 	lds	bc, 0
 	call	15753584
@@ -1771,7 +1790,8 @@ Scoop_SoundEditorData:
 	.byte 0x66, 0x13
 	lds	wa, 4
 	call	15757230
-	.byte 0xcf, 0xd8, 0x66, 0x09
+	cps	l, 0
+	.byte 0x66, 0x09
 	ldw	wa, 48
 	lds	bc, 0
 	call	15753584
@@ -1861,7 +1881,8 @@ Scoop_SoundEditorData:
 	.byte 0x6e, 0x13
 	lds	wa, 3
 	call	15757230
-	.byte 0xcf, 0xd8, 0x66, 0x09
+	cps	l, 0
+	.byte 0x66, 0x09
 	ldw	wa, 48
 	lds	bc, 0
 	call	15753584
@@ -1937,11 +1958,11 @@ Scoop_SoundEditorData:
 	call	15756545
 	inc	4, xsp
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 1
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
@@ -1960,7 +1981,8 @@ Scoop_SoundEditorData:
 	.byte 0x68, 0x0f
 	lds	wa, 2
 	call	15757230
-	.byte 0xcf, 0xd8, 0x66, 0x09
+	cps	l, 0
+	.byte 0x66, 0x09
 	ldw	wa, 48
 	lds	bc, 0
 	call	15753584
@@ -1985,7 +2007,8 @@ Scoop_SoundEditorData:
 	.byte 0x66, 0x13
 	lds	wa, 3
 	call	15757230
-	.byte 0xcf, 0xd8, 0x66, 0x09
+	cps	l, 0
+	.byte 0x66, 0x09
 	ldw	wa, 48
 	lds	bc, 0
 	call	15753584
@@ -2001,7 +2024,8 @@ Scoop_SoundEditorData:
 	.byte 0x66, 0x13
 	lds	wa, 4
 	call	15757230
-	.byte 0xcf, 0xd8, 0x66, 0x09
+	cps	l, 0
+	.byte 0x66, 0x09
 	ldw	wa, 48
 	lds	bc, 0
 	call	15753584
@@ -2085,7 +2109,8 @@ Scoop_SoundEditorData:
 	.byte 0x66, 0x13
 	lds	wa, 3
 	call	15757230
-	.byte 0xcf, 0xd8, 0x66, 0x09
+	cps	l, 0
+	.byte 0x66, 0x09
 	ldw	wa, 48
 	lds	bc, 0
 	call	15753584
@@ -2296,7 +2321,8 @@ Scoop_SoundEditorData:
 	.asciz "0806"
 	lds	bc, 3
 	call	15757111
-	.byte 0xcf, 0xd9, 0x6e, 0x1d, 0xbf, 0x0c, 0x31
+	cps	l, 1
+	.byte 0x6e, 0x1d, 0xbf, 0x0c, 0x31
 	lds	wa, 3
 	call	15756091
 	ld	c, (xsp+12)
@@ -2324,7 +2350,8 @@ Scoop_SoundEditorData:
 	lds	bc, 1
 	lds	de, 0
 	call	15767527
-	.byte 0xcf, 0xd9, 0x6e, 0x34, 0xbf, 0x04, 0x30
+	cps	l, 1
+	.byte 0x6e, 0x34, 0xbf, 0x04, 0x30
 	call	15755834
 	.byte 0xb7, 0x31
 	lds	wa, 1
@@ -2365,7 +2392,8 @@ Scoop_SoundEditorData:
 	pushw bc
 	lds	bc, 0
 	call	15767527
-	.byte 0xcf, 0xd9, 0x6e, 0x34, 0xbf, 0x06, 0x30
+	cps	l, 1
+	.byte 0x6e, 0x34, 0xbf, 0x06, 0x30
 	call	15755834
 	.byte 0xb7, 0x31
 	lds	wa, 0
@@ -2400,7 +2428,8 @@ Scoop_SoundEditorData:
 	pushw 127
 	lds	bc, 2
 	call	15767527
-	.byte 0xcf, 0xd9, 0x6e, 0x34, 0xbf, 0x04, 0x30
+	cps	l, 1
+	.byte 0x6e, 0x34, 0xbf, 0x04, 0x30
 	call	15755834
 	.byte 0xb7, 0x31
 	lds	wa, 2
@@ -2422,59 +2451,61 @@ Scoop_SoundEditorData:
 	call	15758489
 	inc	0, xsp
 	ret
-	.byte 0xc9, 0xd8, 0xf2, 0x01, 0x6d, 0xf0, 0xde
+	cps	a, 0
+	.byte 0xf2, 0x01, 0x6d, 0xf0, 0xde
 	ldw	wa, 55
 	lds	bc, 0
 	jp	15753584
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 1
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8, 0x6e, 0x07
+	cps	a, 0
+	.byte 0x6e, 0x07
 	ldw	wa, 57
 	lds	bc, 0
 	.byte 0x68, 0x0f
 	lds	wa, 2
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 3
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 4
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	nz
 	lds	wa, 0
 	call	15755567
@@ -2510,63 +2541,67 @@ Scoop_SoundEditorData:
 	ldw	bc, 61
 	ldw	de, 69
 	jp	15760494
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	call	15756545
 	ret
-	.byte 0xc9, 0xd8, 0x6e, 0x07
+	cps	a, 0
+	.byte 0x6e, 0x07
 	ldw	wa, 48
 	lds	bc, 0
 	.byte 0x68, 0x0f
 	lds	wa, 1
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8, 0x6e, 0x07
+	cps	a, 0
+	.byte 0x6e, 0x07
 	ldw	wa, 57
 	lds	bc, 0
 	.byte 0x68, 0x0f
 	lds	wa, 2
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8, 0x6e, 0x06
+	cps	a, 0
+	.byte 0x6e, 0x06
 	lds	wa, 0
 	jp	15759718
 	lds	wa, 3
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8, 0x6e, 0x06
+	cps	a, 0
+	.byte 0x6e, 0x06
 	lds	wa, 1
 	jp	15759718
 	lds	wa, 4
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	nz
 	ldw	wa, 56
 	lds	bc, 0
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	nz
 	lds	wa, 0
 	call	15755567
@@ -2592,61 +2627,63 @@ Scoop_SoundEditorData:
 	extz	wa
 	ldw	bc, 72
 	jp	15761248
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	call	15756545
 	ret
-	.byte 0xc9, 0xd8, 0x6e, 0x07
+	cps	a, 0
+	.byte 0x6e, 0x07
 	ldw	wa, 48
 	lds	bc, 0
 	.byte 0x68, 0x0f
 	lds	wa, 1
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8, 0x6e, 0x07
+	cps	a, 0
+	.byte 0x6e, 0x07
 	ldw	wa, 57
 	lds	bc, 0
 	.byte 0x68, 0x0f
 	lds	wa, 2
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 3
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 4
 	call	15757230
-	.byte 0xcf, 0xd8
+	cps	l, 0
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	ldw	wa, 55
 	lds	bc, 0
 	call	15753584
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	nz
 	lds	wa, 0
 	call	15755567
@@ -2675,36 +2712,38 @@ Scoop_SoundEditorData:
 	extz	wa
 	lds	bc, 2
 	jp	15759614
-	.byte 0xc9, 0xd8, 0xf2, 0x01, 0x6d, 0xf0, 0xde
+	cps	a, 0
+	.byte 0xf2, 0x01, 0x6d, 0xf0, 0xde
 	ldw	wa, 55
 	lds	bc, 0
 	jp	15753584
-	.byte 0xc9, 0xd8, 0x6e, 0x09
+	cps	a, 0
+	.byte 0x6e, 0x09
 	ldw	wa, 48
 	lds	bc, 0
 	jp	15753584
 	lds	wa, 2
 	lds	bc, 1
 	jp	15757276
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 2
 	lds	bc, 2
 	call	15757276
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 2
 	lds	bc, 3
 	call	15757276
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
 	lds	wa, 2
 	lds	bc, 4
 	call	15757276
 	ret
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	nz
 	lds	wa, 0
 	call	15755567

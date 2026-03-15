@@ -240,6 +240,30 @@ def translate_unidasm_to_llvm(mnemonic):
     if mnem == 'zcf':
         return 'zcf'
 
+    # ── Block transfer instructions — try prefix variants ──
+    # ROM may use 0x83 or 0x85 prefix instead of standard 0x80
+    BLOCK_VARIANTS = {
+        'ldi':  ['ldi', 'ldi85'],
+        'ldir': ['ldir', 'ldir85', 'ldir83'],
+        'ldd':  ['ldd'],
+        'lddr': ['lddr', 'lddr85', 'lddr83'],
+        'cpi':  ['cpi'],
+        'cpir': ['cpir', 'cpir83'],
+        'cpd':  ['cpd'],
+        'cpdr': ['cpdr'],
+        'ldx':  ['ldx'],
+    }
+    if mnem in BLOCK_VARIANTS:
+        return BLOCK_VARIANTS[mnem]
+
+    # ── 16-bit block transfer variants ──
+    BLOCK_W_VARIANTS = {
+        'ldiw':  ['ldiw'],
+        'ldirw': ['ldirw', 'ldirw93'],
+    }
+    if mnem in BLOCK_W_VARIANTS:
+        return BLOCK_W_VARIANTS[mnem]
+
     # ── LDF instruction: "ldf 0xNN" → "ldf N" ──
     m = re.match(r'^ldf\s+0x([0-9a-fA-F]+)$', mnem)
     if m:
@@ -268,11 +292,27 @@ def translate_unidasm_to_llvm(mnemonic):
         if reg:
             return f'{op}\t{reg}, {count}'
 
-    # ── Push immediate: "push 0xNNNN" ──
+    # ── Push immediate: "push 0xNNNN" — try 8-bit (0x09) then 16-bit (0x0B) ──
     m = re.match(r'^push\s+0x([0-9a-fA-F]+)$', mnem)
     if m:
         val = int(m.group(1), 16)
-        return f'pushw {val}'
+        return [f'push {val}', f'pushw {val}']
+
+    # ── Call T,XRR — unconditional call to register-indirect ──
+    # "call T,XHL" → "call (xhl)" (T = always true, implicit)
+    m = re.match(r'^call\s+T\s*,\s*([A-Z]+)$', mnem)
+    if m:
+        reg = UNIDASM_REG_MAP.get(m.group(1))
+        if reg:
+            return f'call\t({reg})'
+
+    # ── JP T,XRR — unconditional jump to register-indirect ──
+    # "jp T,XHL" → "jp (xhl)" (T = always true, implicit)
+    m = re.match(r'^jp\s+T\s*,\s*([A-Z]+)$', mnem)
+    if m:
+        reg = UNIDASM_REG_MAP.get(m.group(1))
+        if reg:
+            return f'jp\t({reg})'
 
     # ── Push register — try both compact (pushw) and extended (push) ──
     # 16-bit regs: pushw wa (0x28) is 1-byte compact, push wa (0xd8 0x04) is 2-byte
@@ -448,16 +488,31 @@ def translate_unidasm_to_llvm(mnemonic):
     # For CP with register: try compact cps form
     if op == 'cp' and len(translated_ops) == 2:
         reg16 = {'wa', 'bc', 'de', 'hl', 'ix', 'iy', 'iz', 'sp'}
+        reg8 = {'a', 'w', 'b', 'c', 'd', 'e', 'h', 'l'}
+        reg32 = {'xwa', 'xbc', 'xde', 'xhl', 'xix', 'xiy', 'xiz', 'xsp'}
         imm_str = translated_ops[1]
         is_imm = imm_str.lstrip('-').isdigit()
-        if is_imm and translated_ops[0] in reg16:
+        if is_imm:
             imm_val = int(imm_str)
-            forms = []
-            if 0 <= imm_val <= 7:
-                forms.append(f'cps\t{translated_ops[0]}, {imm_val}')
-            forms.append(f'cpw\t{translated_ops[0]}, {imm_str}')
-            forms.append(f'cp\t{translated_ops[0]}, {imm_str}')
-            return forms
+            if translated_ops[0] in reg16:
+                forms = []
+                if 0 <= imm_val <= 7:
+                    forms.append(f'cps\t{translated_ops[0]}, {imm_val}')
+                forms.append(f'cpw\t{translated_ops[0]}, {imm_str}')
+                forms.append(f'cp\t{translated_ops[0]}, {imm_str}')
+                return forms
+            elif translated_ops[0] in reg8:
+                forms = []
+                if 0 <= imm_val <= 7:
+                    forms.append(f'cps\t{translated_ops[0]}, {imm_val}')
+                forms.append(f'cp\t{translated_ops[0]}, {imm_str}')
+                return forms
+            elif translated_ops[0] in reg32:
+                forms = []
+                if 0 <= imm_val <= 7:
+                    forms.append(f'cps\t{translated_ops[0]}, {imm_val}')
+                forms.append(f'cp\t{translated_ops[0]}, {imm_str}')
+                return forms
 
     if translated_ops:
         return f'{llvm_op}\t{", ".join(translated_ops)}'

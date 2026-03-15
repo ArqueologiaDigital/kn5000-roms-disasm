@@ -22132,15 +22132,8 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	popw ix                                 ; pop IX
 	popw iy                                 ; pop IY
 	popw iz                                 ; pop IZ
-	.byte 0x4f                             ; pop SP
-	.byte 0x50                             ; db
-	.byte 0x51                             ; db
-	.byte 0x52                             ; db
-	.byte 0x53                             ; db
-	.byte 0x54                             ; db
-	.byte 0x55                             ; db
-	.byte 0x56                             ; db
-	.byte 0x57                             ; db
+	popw sp
+	.byte 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57
 	pop xwa                                 ; pop XWA
 	pop xbc                                 ; pop XBC
 	pop xde                                 ; pop XDE
@@ -22168,11 +22161,9 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	jrl	mi, 0x6f74
 	jr	ge, 0x75
 	jrl	le, 0x5574
-	.byte 0x50                             ; db
-	.byte 0x4f                             ; pop SP
-	.byte 0x54                             ; db
-	.byte 0x52                             ; db
-	.byte 0x55                             ; db
+	.byte 0x50
+	popw sp
+	.byte 0x54, 0x52, 0x55
 	popw de                                 ; pop DE
 	.byte 0x52                             ; db
 	popw iz                                 ; pop IZ

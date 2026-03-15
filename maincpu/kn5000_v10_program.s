@@ -1620,7 +1620,7 @@ SepaOut_FormatData_Tail:
 	ei	0
 	nop
 	nop
-	.byte 0x09, 0x00
+	push 0
 	ldb	c, 0
 	ldw	wa, 5632
 	nop
@@ -2645,7 +2645,8 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	aligned_string "MT_PCGSEND"
 	incf
 	nop
-	.byte 0xb5, 0x3f, 0xf7
+	.byte 0xb5, 0x3f
+	ldx
 	nop
 	pop_f
 	ld	xwa, 1647706359
@@ -2657,25 +2658,30 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	ld	xsp, 1301020919
 	.byte 0xf7
 	nop
-	.byte 0xdf, 0x4f, 0xf7
+	.byte 0xdf, 0x4f
+	ldx
 	nop
 	pushw bc
-	.byte 0x52, 0xf7
+	.byte 0x52
+	ldx
 	nop
 	ld	xde, 1510012726
-	.byte 0x57, 0xf7
+	.byte 0x57
+	ldx
 	nop
 	pop xiz
 	.byte 0x6c, 0xf7
 	nop
-	.byte 0xda, 0x73, 0xf7
+	.byte 0xda, 0x73
+	ldx
 	nop
 	pushw bc
 	cp	l, (xhl)
 	nop
 	.byte 0x7c, 0x86, 0xf7
 	nop
-	.byte 0xdc, 0x9a, 0xf7
+	.byte 0xdc, 0x9a
+	ldx
 	nop
 	.byte 0xf4, 0xa1, 0xf7
 	nop
@@ -2942,7 +2948,8 @@ NakaMenuItem_MasterTuning:
 	nop
 	.byte 0x50, 0x1a, 0xe8, 0x00, 0x04
 	nop
-	.byte 0xa0, 0x01, 0x09, 0x00
+	.byte 0xa0, 0x01
+	push 0
 	nop
 	nop
 	aligned_string "MASTER TUNING"
@@ -3009,7 +3016,8 @@ NakaMenuItem_ReverbEqPresets:
 	.byte 0x08, 0x00
 	.long 0x3E676
 	.long MenuStr_ReverbEqPresets
-	.byte 0x09, 0x00, 0xa0, 0x01, 0x91, 0x00
+	push 0
+	.byte 0xa0, 0x01, 0x91, 0x00
 	nop
 	nop
 
@@ -3043,7 +3051,8 @@ NakaMenuItem_Reverb:
 	nop
 	nop
 	nop
-	.byte 0x09, 0x00, 0x78, 0xe6, 0x03
+	push 0
+	.byte 0x78, 0xe6, 0x03
 	nop
 	ldb	w, 27
 	.byte 0xe8, 0x00, 0x0a, 0x00, 0xa0, 0x01
@@ -3208,7 +3217,8 @@ NakaWidget_SoundMenu_PageControl2:
 	nop
 	.byte 0x78, 0x00, 0x5b
 	nop
-	.byte 0x87, 0x00, 0xf7
+	.byte 0x87, 0x00
+	ldx
 	nop
 	nop
 	nop
@@ -3352,7 +3362,7 @@ CharEncoding_ExtendedHi:
 	reti
 	ei	0x08
 	reti
-	.byte 0x09, 0x08
+	push 8
 	ldwio	9, 2571
 	incf
 	pushw 3085
@@ -3868,7 +3878,7 @@ VoiceSynth_CmdCase0:
 	.byte 0xc2, 0x04, 0xdd, 0x03, 0x3f, 0x00
 	ret	z
 	ld	xhl, 2621460
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	ret
 ; VoiceSynth command handler case 1
 VoiceSynth_CmdCase1:

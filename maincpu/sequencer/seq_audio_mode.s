@@ -648,7 +648,7 @@ AccVoice_ComputeParamOffset:
 AccVoice_PartOffsetTable2:
 	nop
 	popw	wa
-	.byte 0x09, 0x00
+	push 0
 	nop
 	nop
 	ldw	wa, 0

@@ -383,7 +383,8 @@ Str_AreYouSure_IT:	aligned_string "Italian"
 	swi	7
 	aligned_string "SIND SIE SICHER?"
 	aligned_string "Are You Sure?"
-	.byte 0x04, 0x0a, 0xed, 0x00, 0x8e, 0x09, 0xed
+	.byte 0x04, 0x0a, 0xed, 0x00, 0x8e
+	push 237
 	nop
 Str_FactoryResetDesc_Multilingual:
 	.long Str_FactoryResetDesc_EN3
@@ -548,7 +549,8 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	incf
 	push_sr
 	ldb	e, 51
-	.byte 0x64, 0x00, 0x4f
+	.byte 0x64, 0x00
+	popw sp
 	popw iz
 	ldb	w, 0
 	.byte 0x4f
@@ -557,7 +559,8 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	ldb	e, 51
 	.byte 0x64, 0x00
 	ldb	e, 51
-	.byte 0x64, 0x00, 0x4f
+	.byte 0x64, 0x00
+	popw sp
 	ld	xiz, 1313800262
 	ldb	w, 0
 	ldb	e, 51
@@ -707,7 +710,8 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	aligned_string "FILTER TYPE"
 	.byte 0x4f
 	popw iz
-	.byte 0x2f, 0x4f
+	pushw sp
+	popw sp
 	ld	xiz, 637468742
 	.byte 0x73, 0x00, 0xff
 	aligned_string "PAGE 2/3"
@@ -774,7 +778,7 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	pushw bc
 	nop
 	nop
-	.byte 0x09, 0x29
+	push 41
 	nop
 	nop
 	ei	41
@@ -918,7 +922,9 @@ FadeTimeStr_Off:	aligned_string "  OFF  "
 	nop
 	nop
 	swi	7
-	.byte 0x53, 0x4f, 0x55
+	.byte 0x53
+	popw sp
+	.byte 0x55
 	popw iz
 	ld	xix, 979641600
 	nop
@@ -1819,7 +1825,9 @@ EventNameStr_EV_PMNAME:	aligned_string "EV_PMNAME"
 EventNameStr_EV_PMBKNAME:	aligned_string "EV_PMBKNAME"
 EventNameStr_EV_CHORDDSP:	aligned_string "EV_CHORDDSP"
 	aligned_string "EV_CHORDSHOW"
-	.byte 0x08, 0x00, 0x56, 0x2f, 0xed, 0x00
+	.byte 0x08, 0x00, 0x56
+	pushw sp
+	.byte 0xed, 0x00
 NoteNameStr_Table_6:
 	.long MethodNameStr_MT_SvariIni
 	.long MethodNameStr_MT_SvariSet
@@ -2603,7 +2611,7 @@ NakaInstTable8_NullTerm:
 	nop
 	swi	7
 	swi	7
-	.byte 0x09, 0x00
+	push 0
 	swi	7
 	swi	7
 	.byte 0x08, 0x00, 0x4e

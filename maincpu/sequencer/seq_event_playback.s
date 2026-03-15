@@ -440,7 +440,7 @@ SeqEvtBuf_AdvanceRet:
 SeqEvt_RotationOffsetTable:
 	nop
 	nop
-	.byte 0x09, 0x00
+	push 0
 	ccf
 	nop
 	jp	9216
@@ -622,21 +622,21 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x09, 0x03
+	push 3
 	nop
 	nop
 	nop
 	nop
 	nop
 	nop
-	.byte 0x09, 0x01
+	push 1
 	nop
 	nop
 	nop
 	nop
 	nop
 	nop
-	.byte 0x09, 0x02
+	push 2
 	nop
 	nop
 	nop
@@ -645,19 +645,19 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x09, 0x04
+	push 4
 	nop
 	nop
 	nop
 	nop
 	nop
 	nop
-	.byte 0x09, 0x05
+	push 5
 	nop
 	nop
 	nop
 	nop
-	.byte 0x09, 0x00
+	push 0
 	nop
 	nop
 	.zero 16
@@ -1672,7 +1672,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	.byte 0x09, 0x00
+	push 0
 	nop
 	nop
 	nop

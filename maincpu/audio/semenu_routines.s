@@ -2662,8 +2662,9 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+24)
 	extz	wa
 	.byte 0xb9, 0x0a, 0x31, 0x1e, 0xb1, 0xf4, 0xbf, 0x02
-	.byte 0x30, 0x1e, 0x61, 0xeb, 0xcf, 0xd8, 0x66, 0x6d
-	.byte 0xc7, 0xfb, 0x89
+	.byte 0x30, 0x1e, 0x61, 0xeb
+	cps	l, 0
+	.byte 0x66, 0x6d, 0xc7, 0xfb, 0x89
 	extz	wa
 	ld	c, (xsp+5)
 	extz	bc
@@ -2726,7 +2727,8 @@ SeMenu_ApplyPartEdit_Data2:
 	dec	2, xsp
 	ld	(xsp), a
 	res	7, c
-	.byte 0xcb, 0xd8, 0xcb, 0x7e
+	cps	c, 0
+	.byte 0xcb, 0x7e
 	ld	a, (xsp)
 	extz	wa
 	extz	bc
@@ -3128,8 +3130,8 @@ SeMenu_ApplyPartEdit_Data2:
 	ldb	a, 100
 	sub	a, c
 	ld	c, a
-	.byte 0xcb, 0xd8, 0x6e, 0x0d, 0x9f, 0x08, 0x38, 0x10
-	.byte 0x27
+	cps	c, 0
+	.byte 0x6e, 0x0d, 0x9f, 0x08, 0x38, 0x10, 0x27
 	ld	wa, (xsp+6)
 	ld	(xsp+10), wa
 	.byte 0x68, 0x0c
@@ -3174,8 +3176,8 @@ SeMenu_ApplyPartEdit_Data2:
 	ldb	a, 100
 	sub	a, c
 	ld	c, a
-	.byte 0xcb, 0xd8, 0x6e, 0x0d, 0x9f, 0x0c, 0x38, 0x10
-	.byte 0x27
+	cps	c, 0
+	.byte 0x6e, 0x0d, 0x9f, 0x0c, 0x38, 0x10, 0x27
 	ld	wa, (xsp+10)
 	ld	(xsp+14), wa
 	.byte 0x68, 0x0c
@@ -3220,8 +3222,8 @@ SeMenu_ApplyPartEdit_Data2:
 	ldb	a, 100
 	sub	a, c
 	ld	c, a
-	.byte 0xcb, 0xd8, 0x6e, 0x0d, 0x9f, 0x10, 0x38, 0x10
-	.byte 0x27
+	cps	c, 0
+	.byte 0x6e, 0x0d, 0x9f, 0x10, 0x38, 0x10, 0x27
 	ld	wa, (xsp+14)
 	ld	(xsp+18), wa
 	.byte 0x68, 0x0c
@@ -3266,8 +3268,8 @@ SeMenu_ApplyPartEdit_Data2:
 	ldb	a, 100
 	sub	a, c
 	ld	c, a
-	.byte 0xcb, 0xd8, 0x6e, 0x0d, 0xd7, 0xfa, 0xc8, 0x10
-	.byte 0x27
+	cps	c, 0
+	.byte 0x6e, 0x0d, 0xd7, 0xfa, 0xc8, 0x10, 0x27
 	ld	wa, (xsp+18)
 	ld	(xsp+20), wa
 	.byte 0x68, 0x0c
@@ -3388,8 +3390,8 @@ SeMenu_ApplyPartEdit_Data2:
 	ldb	a, 100
 	sub	a, c
 	ld	c, a
-	.byte 0xcb, 0xd8, 0x6e, 0x0d, 0xd7, 0xfa, 0xc8, 0x10
-	.byte 0x27
+	cps	c, 0
+	.byte 0x6e, 0x0d, 0xd7, 0xfa, 0xc8, 0x10, 0x27
 	ld	wa, (xsp+18)
 	ld	(xsp+20), wa
 	.byte 0x68, 0x0c
@@ -4673,11 +4675,11 @@ SeMenu_StoreEffectCoeff_Data:
 	lda	xsp, (xsp-40)
 	ld	xiy, 14737898
 	lda	xix, (xsp+22)
-	.byte 0x85, 0x10
+	ldi85
 	ldiw
 	ld	xiy, 14737901
 	lda	xix, (xsp+18)
-	.byte 0x85, 0x10
+	ldi85
 	ldiw
 	ld	(xsp), 0
 	ld	a, (xsp)
@@ -4830,7 +4832,7 @@ SeMenu_RefreshPartDisplay_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -4849,7 +4851,7 @@ SeMenu_RefreshPartDisplay_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -4868,7 +4870,7 @@ SeMenu_RefreshPartDisplay_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -4887,7 +4889,7 @@ SeMenu_RefreshPartDisplay_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	inc	4, xsp
 	ret
 	lda	xsp, (xsp-16)

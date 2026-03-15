@@ -8733,9 +8733,9 @@ FileIO_ErrorCodeByteBlock:
 	.byte 0xf1, 0x1f, 0x04, 0xca
 	ret	nz
 	ld	c, a
-	.byte 0xc9, 0xd8
+	cps	a, 0
 	ret	z
-	.byte 0xcb, 0xdd
+	cps	c, 5
 	ret	nc
 	lds	wa, 6
 	call	16356451

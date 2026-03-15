@@ -501,7 +501,7 @@ Rhythm_InstrMapTable_Default:
 	halt
 	nop
 	pop_sr
-	.byte 0x09, 0x0a
+	push 10
 	reti
 	.byte 0x04
 	push_sr
@@ -535,7 +535,7 @@ Rhythm_InstrMapTable_Default:
 	halt
 	nop
 	pop_sr
-	.byte 0x09, 0x0a
+	push 10
 	reti
 	.byte 0x04
 	push_sr
@@ -574,7 +574,7 @@ Rhythm_InstrMapTable_Default:
 	halt
 	nop
 	pop_sr
-	.byte 0x09, 0x0a
+	push 10
 	reti
 	.byte 0x04
 	push_sr

@@ -588,7 +588,7 @@ SndParam_ResolveWidgetEx_Data:
 	exts	xde
 	add	xde, xhl
 	ld	xix, (xde)
-	.byte 0xb4, 0xe8
+	call	(xix)
 	ld	xwa, (xsp+14)
 	ld	(xwa+2), l
 	jr	33

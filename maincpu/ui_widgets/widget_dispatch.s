@@ -7555,7 +7555,7 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	.byte 0x04
 	pop_sr
 	ei	3
-	.byte 0x09, 0x0a
+	push 10
 	reti
 	pop_sr
 	.byte 0x04

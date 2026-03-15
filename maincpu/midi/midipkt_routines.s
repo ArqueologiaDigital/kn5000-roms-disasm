@@ -143,7 +143,7 @@ MidiPkt_BuildControl:
 	ld	(xsp+16), xwa
 	ld	xiy, 15609928
 	lda	xix, (xsp+6)
-	.byte 0x85, 0x10
+	ldi85
 	ldiw
 	ld	xwa, (xsp+16)
 	cp	(xwa+14), 1
@@ -668,7 +668,7 @@ MidiPkt_EnqueueExtended_Data:
 	ld	xiz, xwa
 	ld	xiy, 15610704
 	lda	xix, (xsp+4)
-	.byte 0x85, 0x10
+	ldi85
 	ldiw
 	ld	xwa, (xiz+4)
 	calr	1118
@@ -1057,7 +1057,7 @@ MidiPkt_EnqueueExtended2_Data:
 	ld	xiz, xwa
 	ld	xiy, 15610732
 	lda	xix, (xsp+4)
-	.byte 0x85, 0x10
+	ldi85
 	ldiw
 	ld	xwa, (xiz+4)
 	calr	145

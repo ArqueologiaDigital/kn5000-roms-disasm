@@ -88,7 +88,8 @@ MidiSerial_ParseStatus_Data:
 	sla	l, 2
 	extz	hl
 	ld	xiz, 16579175
-	.byte 0xe3, 0x07, 0xf8, 0xec, 0x26, 0xb6, 0xe8
+	.byte 0xe3, 0x07, 0xf8, 0xec, 0x26
+	call	(xiz)
 	ret
 	swi	7
 
@@ -152,7 +153,8 @@ MidiSerial_HandleDefault_Data:
 	and	l, 112
 	srl	hl, 2
 	ld	xix, 16579389
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24, 0xb4, 0xe8
+	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	call	(xix)
 	decdi8	1, 38507
 	jr	nz, -54
 	ret
@@ -192,7 +194,8 @@ MidiCC_Handler_CC3_TableLookup:
 	ldda8	a, 38487
 	sla	wa, 2
 	ld	xix, 16579507
-	.byte 0xe3, 0x07, 0xf0, 0xe0, 0x24, 0xb4, 0xe8
+	.byte 0xe3, 0x07, 0xf0, 0xe0, 0x24
+	call	(xix)
 	ret
 
 
@@ -1382,7 +1385,8 @@ PanelEvt_Dispatch3Entry_A:
 PanelEvt_Dispatch3_TableAndHandlers_A:
 	jrl	ule, -772
 	nop
-	.byte 0x4f, 0x09, 0xfd
+	popw sp
+	push 253
 	nop
 	jrl	ule, -772
 	nop
@@ -2439,7 +2443,7 @@ MidiCC_ChannelMappingData:
 	sub	(xiy+6), xiy
 	reti
 	sub	(xiy+8), xiy
-	.byte 0x09, 0xad
+	push 173
 	ldwio	173, 44299
 	incf
 	sub	(xiy+13), xiy
@@ -2464,7 +2468,7 @@ MidiCC_ChannelMappingData:
 	sub	(xiz+6), xiz
 	reti
 	sub	(xiz+8), xiz
-	.byte 0x09, 0xae
+	push 174
 	ldwio	174, 44555
 	incf
 	sub	(xiz+13), xiz
@@ -13092,7 +13096,8 @@ MidiPkt_ArpExtHandler_N_Data:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, 15609352
-	.byte 0xe3, 0x07, 0xe4, 0xec, 0x23, 0xb3, 0xe8
+	.byte 0xe3, 0x07, 0xe4, 0xec, 0x23
+	call	(xhl)
 	ret
 SeqChan_ProcessStepCmd:
 	ldda32	xwa, 48300
@@ -13334,7 +13339,9 @@ SeqChan_DispatchByType_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15609440
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23, 0xb3, 0xe8, 0xf1, 0x1c, 0xbd, 0xb7
+	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23
+	call	(xhl)
+	.byte 0xf1, 0x1c, 0xbd, 0xb7
 	ret
 SeqChan_DefaultHandler:
 	ldda32	xwa, 48300
@@ -13541,7 +13548,8 @@ MidiSysEx_ProcessBlock:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15609534
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23, 0xb3, 0xe8
+	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23
+	call	(xhl)
 	ret
 	ret
 	jp	16614065
@@ -13556,7 +13564,7 @@ MidiSysEx_ProcessBlock:
 	push	xix
 	push	xiz
 	ld32_24	xhl, 15577836
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	call	16548166
 	call	16556824
 	pop	xiz
@@ -15092,7 +15100,7 @@ SeqData_FormatOutput_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 	push qiz
@@ -15122,7 +15130,7 @@ SeqData_FormatOutput_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 	push qiz
@@ -15152,7 +15160,7 @@ SeqData_FormatOutput_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 	ret
@@ -15183,7 +15191,7 @@ SeqData_FormatOutput_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 	push qiz
@@ -15213,7 +15221,7 @@ SeqData_FormatOutput_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 	push qiz
@@ -15243,7 +15251,7 @@ SeqData_FormatOutput_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 
@@ -16192,7 +16200,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 	push qiz
@@ -16222,7 +16230,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 	push qiz
@@ -16252,7 +16260,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 	ret
@@ -16283,7 +16291,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 	push qiz
@@ -16313,7 +16321,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 	push qiz
@@ -16343,7 +16351,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	pop qiz
 	ret
 

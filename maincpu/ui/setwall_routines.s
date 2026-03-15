@@ -71,7 +71,7 @@ SetWall_InlineCodeBlock:
 	halt
 	ei	0x07
 	scf
-	.byte 0x09, 0x0a
+	push 10
 	pop_sr
 	ldio	13, 14
 	retd	0x1010
@@ -1979,7 +1979,7 @@ SetWall_MiscDataAndCode:
 	ld	xix, 62080
 	ld	xiy, 4441
 	ldw	bc, 16
-	.byte 0x85, 0x11
+	ldir85
 	xor	xwa, xwa
 	ld8_24	a, 65507
 	sla	xwa, 11
@@ -1989,7 +1989,7 @@ SetWall_MiscDataAndCode:
 	add	xix, xwa
 	ld	xiy, 4441
 	ldw	bc, 16
-	.byte 0x85, 0x11
+	ldir85
 	cpdi8	36150, 143
 	jr	z, 7
 	cpdi8	36150, 167

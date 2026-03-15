@@ -327,7 +327,8 @@ FDTest_Container_DebugHDAE2:
 	nop
 	nop
 	nop
-	.byte 0xa0, 0x01, 0xce, 0xdc
+	.byte 0xa0, 0x01
+	cps	h, 4
 	pop_sr
 	nop
 	cp	(xiz), xde
