@@ -2817,7 +2817,7 @@ TrAsGridChk_ByteData:
 	ld	xbc, 31457421
 	call	16422496
 	jrl	1087
-	.byte 0xf1, 0xe0, 0x0c, 0xc8
+	bitda	0, 3296
 	jr	nz, 8
 	dec	2, e
 	extz	de
@@ -2837,7 +2837,7 @@ TrAsGridChk_ByteData:
 	ld	xbc, 31916042
 	ld	xde, xiz
 	jrl	412
-	.byte 0xf1, 0xe0, 0x0c, 0xc8
+	bitda	0, 3296
 	jr	nz, 27
 	dec	2, e
 	extz	de
@@ -2916,7 +2916,7 @@ TrAsGridChk_ByteData:
 	ld	xbc, 31457421
 	call	16422496
 	jrl	771
-	.byte 0xf1, 0xe0, 0x0c, 0xc8
+	bitda	0, 3296
 	jr	nz, 8
 	dec	2, e
 	extz	de
@@ -2937,7 +2937,7 @@ TrAsGridChk_ByteData:
 	ld	xbc, 31916042
 	ld	xde, xiz
 	jr	95
-	.byte 0xf1, 0xe0, 0x0c, 0xc8
+	bitda	0, 3296
 	jr	nz, 29
 	dec	2, e
 	extz	de
@@ -13381,7 +13381,7 @@ SqplyFunc_ParamFormatData:
 	lda	xbc, (xwa+18)
 	cp	l, 130
 	jr	nz, 24
-	.byte 0xf1, 0xb1, 0x28, 0xc8
+	bitda	0, 10417
 	jr	z, 7
 	ld	xwa, 14895794
 	jr	5
@@ -14082,7 +14082,7 @@ Sqedt_ParamDispatch:
 	.ascii "'!h\""
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	.byte 0xc1, 0x0a, 0x27, 0x21
+	ldda8	a, 9994
 	extz	wa
 	pushw wa
 	ld	xwa, 14896214
@@ -14090,7 +14090,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw 3
-	.byte 0xc1, 0x0e, 0x27, 0x21
+	ldda8	a, 9998
 	extz	wa
 	muls	wa, 3
 	ld	xbc, 14895518
@@ -14379,23 +14379,24 @@ SeqFormat_DispatchA:
 	lda_24	xix, 14896240
 	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
 	lda_24	xix, 15946157
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8, 0xc2, 0xe0, 0xe2, 0x03, 0x3f, 0x00
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	cpi8_24	254688, 0
 	jrl	nz, -433
 	ld	xwa, 15
 	jr	62
-	.byte 0xc2, 0xe0, 0xe2, 0x03, 0x3f, 0x01
+	cpi8_24	254688, 1
 	jrl	nz, -449
 	ld	xwa, 18
 	jr	80
-	.byte 0xc2, 0xe0, 0xe2, 0x03, 0x3f, 0x00
+	cpi8_24	254688, 0
 	jrl	nz, -465
 	ld	xwa, 21
 	jr	30
-	.byte 0xc2, 0xe0, 0xe2, 0x03, 0x3f, 0x01
+	cpi8_24	254688, 1
 	jrl	nz, -481
 	ld	xwa, 24
 	jr	48
-	.byte 0xc2, 0xe0, 0xe2, 0x03, 0x3f, 0x00
+	cpi8_24	254688, 0
 	jrl	nz, -497
 	ld	xwa, 27
 	ld	xbc, (xsp+8)
@@ -14406,7 +14407,7 @@ SeqFormat_DispatchA:
 	scc16	z, hl
 	extz	xhl
 	jr	42
-	.byte 0xc2, 0xe0, 0xe2, 0x03, 0x3f, 0x01
+	cpi8_24	254688, 1
 	jrl	nz, -531
 	ld	xwa, 29
 	ld	xbc, (xsp+8)

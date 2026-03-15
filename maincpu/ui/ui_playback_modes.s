@@ -27,14 +27,14 @@ UIStateEvt_VoiceParamHandler:
 	ldda8	w, 49279
 	cp	w, 255
 	jr	nz, 8
-	.byte 0xc1, 0xea, 0x10, 0x3c, 0xfe
+	anddi8	4330, 254
 	jrl	132
 	bit	2, w
 	jr	nz, 2
 	jr	125
-	.byte 0xf1, 0xea, 0x10, 0xc8
+	bitda	0, 4330
 	jr	z, 7
-	.byte 0xc1, 0xea, 0x10, 0x3c, 0xfe
+	anddi8	4330, 254
 	jr	112
 	and	a, w
 	and	a, 4
@@ -49,9 +49,9 @@ UIStateEvt_VoiceParamHandler:
 	call	16095929
 	call	15672407
 	stdi8	1073, 0
-	.byte 0xc1, 0xb3, 0x28, 0x3e, 0x10
+	ordi8	10419, 16
 	stdi16	61854, 0
-	.byte 0xc1, 0xa5, 0x28, 0x3c, 0xfe
+	anddi8	10405, 254
 	ldb	a, 76
 	call	16546109
 	jr	49
@@ -64,7 +64,7 @@ UIStateEvt_VoiceParamHandler:
 	call	16095929
 	call	15672407
 	stdi8	1073, 0
-	.byte 0xc1, 0xb3, 0x28, 0x3e, 0x10
+	ordi8	10419, 16
 	stdi16	61854, 0
 	stdi8	4596, 0
 	call	15976707
@@ -129,15 +129,15 @@ PlayMode_SetupAndDispatch:
 	stda16	10357, wa
 	stdi8	3424, 0
 	call AccWrap_PlayModeDispatch
-	.byte 0xc1, 0xa7, 0x28, 0x3e, 0x04		; or (0x28A7), 0x04  [C1 prefix]
+	ordi8	10407, 4
 	ret
 PlayMode_TeardownAndRestore:
 	; --- Teardown: load/store/clear flags ---
 	ldda16	wa, 10357
 	stda16	61854, wa
-	.byte 0xc1, 0xa7, 0x28, 0x3c, 0xfb		; and (0x28A7), 0xFB  [C1 prefix]
-	.byte 0xc1, 0xb3, 0x28, 0x3e, 0x10		; or (0x28B3), 0x10  [C1 prefix]
-	.byte 0xc1, 0xa7, 0x28, 0x3c, 0xf7		; and (0x28A7), 0xF7  [C1 prefix]
+	anddi8	10407, 251
+	ordi8	10419, 16
+	anddi8	10407, 247
 	ret
 PartLookup_NullRet:
 	ret
@@ -340,7 +340,7 @@ PlayMode_InitFlagBlock:
 	stdi8	3380, 1
 	call	15861327
 	ret
-	.byte 0xc1, 0xac, 0x28, 0x3e, 0x04
+	ordi8	10412, 4
 	stdi8	4420, 10
 	ret
 
@@ -502,7 +502,7 @@ SongMode_InitFlagBlock:
 	stdi8	3380, 1
 	call	15861644
 	ret
-	.byte 0xc1, 0xac, 0x28, 0x3e, 0x04
+	ordi8	10412, 4
 	stdi8	4420, 10
 	ret
 	stdi8	3380, 0
@@ -651,7 +651,7 @@ PartFormat_InitFlagBlock:
 	stdi8	3380, 1
 	call	15862002
 	ret
-	.byte 0xc1, 0xac, 0x28, 0x3e, 0x04
+	ordi8	10412, 4
 	stdi8	4420, 10
 	ret
 	stdi8	3380, 0
@@ -708,7 +708,7 @@ PlayModeStop_InitFlagBlock:
 	stdi8	3380, 1
 	call	15862139
 	ret
-	.byte 0xc1, 0xac, 0x28, 0x3e, 0x04
+	ordi8	10412, 4
 	stdi8	4420, 10
 	ret
 	cpdi8	36150, 108

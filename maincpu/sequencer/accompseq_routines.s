@@ -1000,9 +1000,9 @@ AccompSeq_LargeCodeBlock1:
 	stda8	32354, w
 	cp	a, w
 	jr	z, 66
-	.byte 0xf1, 0x5f, 0x7e, 0xc8
+	bitda	0, 32351
 	jr	z, 60
-	.byte 0xc1, 0x5f, 0x7e, 0x3c, 0xfe
+	anddi8	32351, 254
 	ldda8	l, 32352
 	ldda8	h, 32353
 	ldda8	a, 32292
@@ -1110,7 +1110,7 @@ AccompSeq_LargeCodeBlock2:
 	jr	z, 25
 	cpdi8	32523, 0
 	jr	nz, 18
-	.byte 0xf1, 0x7a, 0x7e, 0xc8
+	bitda	0, 32378
 	jr	z, 5
 	calr	684
 	jr	7
@@ -1491,9 +1491,9 @@ AccompSeq_WriteMidi_CodeBlock:
 	ldda8	a, 49278
 	bit	7, a
 	jr	nz, 7
-	.byte 0xc1, 0x7a, 0x7e, 0x3c, 0xfe
+	anddi8	32378, 254
 	jr	60
-	.byte 0xc1, 0x7a, 0x7e, 0x3e, 0x01
+	ordi8	32378, 1
 	ldda8	a, 32523
 	cps	a, 0
 	jr	z, 8
@@ -1504,12 +1504,12 @@ AccompSeq_WriteMidi_CodeBlock:
 	and	a, 3
 	cps	a, 0
 	jr	z, 28
-	.byte 0xf1, 0x27, 0x7e, 0xca
+	bitda	2, 32295
 	jr	z, 19
-	.byte 0xf1, 0x24, 0x7e, 0xcf
+	bitda	7, 32292
 	jr	nz, 13
 	stdi16	32368, 2048
-	.byte 0xc1, 0x24, 0x7e, 0x3e, 0x80
+	ordi8	32292, 128
 	jr	3
 	calr	124
 	ret
@@ -1641,7 +1641,7 @@ AccompSeq_SendAllOff_Loop2:
 	ret
 
 AccompSeq_MidiFilterCodeBlock:
-	.byte 0xc1, 0xe2, 0xe3, 0x3e, 0x08
+	ordi8	58338, 8
 	ret
 	ret
 	cpdi8	32523, 0
@@ -1662,13 +1662,13 @@ AccompSeq_MidiFilterCodeBlock:
 	ldb	a, 0
 	stda8	64786, a
 	stdi8	32376, 0
-	.byte 0xc1, 0xe0, 0xe3, 0x3e, 0x10
+	ordi8	58336, 16
 	jr	57
 	cpdi8	32376, 0
 	jr	nz, 16
 	stda8	32377, a
 	stdi8	32376, 1
-	.byte 0xc1, 0xde, 0xe3, 0x3e, 0x10
+	ordi8	58334, 16
 	jr	34
 	.byte 0xc1
 	.ascii "y~! "

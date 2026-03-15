@@ -12,7 +12,7 @@ SetWall_X:
 	ret
 
 SetWall_JumpStubData:
-	.byte 0xc1, 0xe0, 0x0c, 0x3c, 0xfe
+	anddi8	3296, 254
 	stdi8	3295, 0
 	call	15870299
 	call	15855140
@@ -1931,7 +1931,7 @@ SetWall_ForwardSkip_Return:
 SetWall_InlineCodeBlock3:
 	ret
 	call	16095929
-	.byte 0xc1, 0xa7, 0x28, 0x3e, 0x04
+	ordi8	10407, 4
 	ld16_24	wa, 65516
 	stda16	61854, wa
 	push	xix
@@ -1952,7 +1952,7 @@ SetWall_InlineCodeBlock3:
 	popw	bc
 	pop	xix
 	ret
-	.byte 0xc1, 0xa7, 0x28, 0x3c, 0xfb
+	anddi8	10407, 251
 	xor	wa, wa
 	ldb	a, 76
 	call	16546109
@@ -2004,7 +2004,7 @@ SetWall_MiscDataAndCode:
 	push	xwa
 	xor	xwa, xwa
 	ldda8	a, 10347
-	.byte 0xc2, 0xe3, 0xff, 0x00, 0xf1
+	cpda8_24	a, 65507
 	jr	nz, 7
 	ld	xix, 62032
 	jr	16

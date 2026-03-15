@@ -724,7 +724,7 @@ ParaLoadOpt_GridDispatch:
 	nop
 	ldirw
 	lda	xwa, (xsp+44)
-	.byte 0xf2, 0xf9, 0x40, 0x03, 0x31
+	lda_24	xbc, 213241
 	ld	(xwa), xbc
 	lds32	xbc, 3
 	ld	(xwa+6), xbc

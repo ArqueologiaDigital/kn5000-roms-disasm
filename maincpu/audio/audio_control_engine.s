@@ -178,7 +178,8 @@ FileIO_BytecodeData:
 	ret
 	push xiz
 	ld	xiz, xwa
-	.byte 0xc1, 0x34, 0x8d, 0x3f, 0x13, 0x6e, 0x0f
+	cpdi8	36148, 19
+	.byte 0x6e, 0x0f
 	ld	a, (xiz+2)
 	cp	a, 19
 	.byte 0x66, 0x07
@@ -209,21 +210,26 @@ FileIO_BytecodeData:
 	ld	(xiz), 255
 	lda	xwa, (xiz+2)
 	cp	(xwa), 9
-	.byte 0x6e, 0x0c, 0xc1, 0xfc, 0x26, 0x3f, 0x01, 0x6e
-	.byte 0x05
+	.byte 0x6e, 0x0c
+	cpdi8	9980, 1
+	.byte 0x6e, 0x05
 	ld	(xwa), 8
 	.byte 0x68, 0x05
 	cp	(xwa), 8
-	.byte 0x6e, 0x09, 0xf1, 0x6a, 0x26, 0xc8, 0x66, 0x03
+	.byte 0x6e, 0x09
+	bitda	0, 9834
+	.byte 0x66, 0x03
 	ld	(xwa), 10
-	.byte 0xd1, 0xa8, 0x28, 0x3f, 0x00, 0x00, 0x66, 0x11
+	cpdi16	10408, 0
+	.byte 0x66, 0x11
 	ld	a, (xwa)
 	cp	a, 19
 	.byte 0x66, 0x05
 	cp	a, 20
 	.byte 0x6e, 0x05
 	ld	(xiz), 255
-	.byte 0x68, 0x04, 0xf1, 0x6a, 0x26, 0xb0
+	.byte 0x68, 0x04
+	resda	0, 9834
 	pop xiz
 	ret
 	push xiz
@@ -231,12 +237,16 @@ FileIO_BytecodeData:
 	lda	xbc, (xiz+2)
 	ld	a, (xbc)
 	cps	a, 0
-	.byte 0x66, 0x7a, 0xc1, 0x34, 0x8d, 0x21
+	.byte 0x66, 0x7a
+	ldda8	a, 36148
 	cp	a, 19
-	.byte 0x66, 0x71, 0xf1, 0x21, 0x04, 0xca, 0x6e, 0x51
-	.byte 0xc1, 0xa5, 0x28, 0x21
+	.byte 0x66, 0x71
+	bitda	2, 1057
+	.byte 0x6e, 0x51
+	ldda8	a, 10405
 	xor	a, 1
-	.byte 0xf1, 0xa5, 0x28, 0x41, 0xc1, 0x34, 0x8d, 0x23
+	stda8	10405, a
+	ldda8	c, 36148
 	cp	c, 13
 	.byte 0x6b, 0x24
 	cp	c, 8
@@ -468,7 +478,7 @@ FileIO_BytecodeData:
 	ldda8	a, 36148
 	cp	a, 19
 	jrl	z, 143
-	.byte 0xf1, 0xd3, 0x33, 0xc8
+	bitda	0, 13267
 	jrl	nz, 136
 	cp	a, 14
 	jr	nz, 27
@@ -477,7 +487,7 @@ FileIO_BytecodeData:
 	jr	z, 18
 	cp	a, 180
 	jr	nz, 117
-	.byte 0xf1, 0xd3, 0x34, 0xc8
+	bitda	0, 13523
 	jr	nz, 111
 	cpdi8	13526, 12
 	jr	nc, 104
@@ -759,7 +769,7 @@ FileIO_BytecodeData:
 	.byte 0x04, 0xcf, 0x69, 0xb0, 0x47, 0xbe, 0x03, 0x00
 	.byte 0x7f, 0xee, 0x88, 0x1e, 0x22, 0xf3, 0x5e, 0x0e
 ExtDev_SndParam_Block48_Var40:
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xwa), 72
 	ld	(xwa+1), 5
 	lda	xde, (xwa+2)
@@ -773,7 +783,7 @@ ExtDev_SndParam_Block48_Var40:
 	ld	(xhl), 64
 	jrl	-3333
 ExtDev_SndParam_Block48_Var80:
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xwa), 72
 	ld	(xwa+1), 5
 	lda	xde, (xwa+2)
@@ -787,7 +797,7 @@ ExtDev_SndParam_Block48_Var80:
 	ld	(xhl), 128
 	jrl	-3370
 ExtDev_SndParam_Block48_Var04:
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xwa), 72
 	ld	(xwa+1), 5
 	lda	xde, (xwa+2)
@@ -801,7 +811,7 @@ ExtDev_SndParam_Block48_Var04:
 	ld	(xhl), 4
 	jrl	-3407
 ExtDev_SndParam_Block48_Var04_B:
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xwa), 72
 	ld	(xwa+1), 6
 	lda	xde, (xwa+2)
@@ -823,7 +833,7 @@ ExtDev_SndParam_Write98_Block:
 	call	16569591
 	cps	hl, 1
 	jr	nz, 39
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xiz), 152
 	ld	(xiz+1), 2
 	lda	xbc, (xiz+2)
@@ -840,7 +850,7 @@ ExtDev_SndParam_Write98_Block:
 	pop	xiz
 	ret
 ExtDev_SndParam_Block98_Var40:
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xwa), 152
 	ld	(xwa+1), 2
 	lda	xde, (xwa+2)
@@ -856,7 +866,7 @@ ExtDev_SndParam_Block98_Var40:
 ExtDev_SndParam_BlockA9_Var02:
 	cpdi8	36150, 135
 	ret	nz
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xwa), 169
 	ld	(xwa+1), 10
 	lda	xde, (xwa+2)
@@ -871,7 +881,7 @@ ExtDev_SndParam_BlockA9_Var02:
 	calr	-3586
 	ret
 ExtDev_SndParam_Block98_Var80:
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xwa), 152
 	ld	(xwa+1), 11
 	lda	xde, (xwa+2)
@@ -885,7 +895,7 @@ ExtDev_SndParam_Block98_Var80:
 	ld	(xhl), 128
 	jrl	-3624
 ExtDev_SndParam_Block98_Var40_B:
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xwa), 152
 	ld	(xwa+1), 11
 	lda	xde, (xwa+2)
@@ -904,7 +914,8 @@ ExtDev_SndParam_ConfigAndWrite:
 	ld	a, (xiz+3)
 	and	a, (xiz+2)
 	jr	z, 64
-	.byte 0xf1, 0xf9, 0x90, 0xb9, 0xb6, 0x14, 0x3a, 0x8d
+	setda	1, 37113
+	.byte 0xb6, 0x14, 0x3a, 0x8d
 	ld	(xiz+1), 5
 	ldda8	a, 36154
 	extz	wa
@@ -934,7 +945,8 @@ ExtDev_SndParam_Block14_Dual:
 	ld	c, (xix)
 	and	c, e
 	ret	z
-	.byte 0xf1, 0xf9, 0x90, 0xb9, 0xb0, 0x14, 0x3a, 0x8d
+	setda	1, 37113
+	.byte 0xb0, 0x14, 0x3a, 0x8d
 	ld	(xwa+1), 4
 	ld	(xhl), 64
 	ld	(xix), 64
@@ -947,7 +959,7 @@ ExtDev_SndParam_Write48_Block:
 	call	16569399
 	cps	hl, 0
 	jr	nz, 39
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xiz), 72
 	ld	(xiz+1), 4
 	lda	xbc, (xiz+2)
@@ -966,7 +978,7 @@ ExtDev_SndParam_Write48_Block:
 ExtDev_SndParam_Block48_Var02:
 	cpdi8	36148, 16
 	ret	z
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xwa), 72
 	ld	(xwa+1), 5
 	lda	xde, (xwa+2)
@@ -980,7 +992,7 @@ ExtDev_SndParam_Block48_Var02:
 	ld	(xhl), 2
 	jrl	-3875
 ExtDev_SndParam_Block70_Var04:
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xwa), 112
 	ld	(xwa+1), 0
 	lda	xde, (xwa+2)
@@ -1014,7 +1026,7 @@ ExtDev_SndParam_DispatchAndWriteA8:
 	call	16569399
 	cps	hl, 1
 	jr	z, 36
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xiz), 168
 	ld	(xiz+1), 4
 	lda	xde, (xiz+2)
@@ -1050,7 +1062,7 @@ ExtDev_SndParam_DispatchAndWriteA8_Alt:
 	call	16569399
 	cps	hl, 1
 	jr	z, 36
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xiz), 168
 	ld	(xiz+1), 4
 	lda	xde, (xiz+2)
@@ -1066,7 +1078,7 @@ ExtDev_SndParam_DispatchAndWriteA8_Alt:
 	pop	xiz
 	ret
 ExtDev_SndParam_MultiReg_Iterate:
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	lda	xix, (xwa+2)
 	ld	l, (xwa+3)
 	ld	d, (xix)
@@ -1104,7 +1116,7 @@ ExtDev_SndParam_DispatchComplex:
 	ld	a, (xiz+3)
 	and	a, (xiz+2)
 	jr	z, 38
-	.byte 0xf1, 0xf9, 0x90, 0xb9
+	setda	1, 37113
 	ld	(xiz), 152
 	ld	(xiz+1), 1
 	call	16474137
@@ -2186,14 +2198,14 @@ SndParam_GuardedNibbleSet_028103:
 	; --- Routine 3: complex bit checks, and (xiz+0x0E), set 0 in A (59 bytes) ---
 	push xiz
 	ldada	xiz, 36632
-	.byte 0xf1, 0x1e, 0x04, 0xca			; bit 2, (0x041E)  [F1 prefix]
+	bitda	2, 1054
 	jr nz, MidiCtrl_PopIzRet
 	ld xwa, 0x00028103
 	call SndParam_LookupReadOnly
 	cps	hl, 0
 	jr nz, MidiCtrl_PopIzRet
 	andmi8	(xiz+14), 240
-	.byte 0xf1, 0x21, 0x04, 0xca
+	bitda	2, 1057
 	jr z, MidiCtrl_PopIzRet
 	lds32	xwa, 1
 	call SndParam_LookupReadOnly
@@ -2296,7 +2308,7 @@ SndParam_MaskShiftMerge_8F58:
 	ldda8	a, 36696
 	and a, 0x07
 	sla	a, 4
-	.byte 0xc1, 0x1c, 0x8f, 0x3c, 0x8f		; and (0x8F1C), 0x8F  [C1 prefix]
+	anddi8	36636, 143
 	orddm8	36636, a
 	ret
 SndParam_DecrLookup_Via0300:
@@ -2497,7 +2509,7 @@ CtrlPanel_BitManip_Ret:
 CtrlPanel_SyncBit0_From8F5C:
 	; --- Sub 3: set/res bit 0 at (0x8F1D) based on bit 0 of (0x8F5C) (16 bytes) ---
 	ldada	xwa, 36637
-	.byte 0xf1, 0x5c, 0x8f, 0xc8			; bit 0, (0x8F5C)  [F1 prefix]
+	bitda	0, 36700
 	jr z, CtrlPanel_ResBit0_8F5C
 	.byte 0xb0, 0xb8				; set 0, (xwa)  [not in LLVM]
 	ret
@@ -2596,7 +2608,7 @@ CtrlPanel_GuardedNibbleSet_8F4E:
 	; --- Sub 9: guarded nibble set/res at (XIZ+0x0E) via (0x8F4E) lookup (76 bytes) ---
 	push xiz
 	ldada	xiz, 36632
-	.byte 0xf1, 0x1e, 0x04, 0xca			; bit 2, (0x041E)  [F1 prefix]
+	bitda	2, 1054
 	jr nz, CtrlPanel_BitOp_Cleanup
 	ld xwa, 0x00028103
 	call SndParam_LookupReadOnly
@@ -2929,11 +2941,11 @@ UIState_UpdateControlBits:
 	jr	z, 11
 	cps	a, 0
 	ret	nz
-	.byte 0xd1, 0x3a, 0x8f, 0x3e, 0x69, 0x00
+	ordi16	36666, 105
 	ret
-	.byte 0xd1, 0x3a, 0x8f, 0x3e, 0x28, 0x00
+	ordi16	36666, 40
 	ret
-	.byte 0xd1, 0x3a, 0x8f, 0x3e, 0x40, 0x00
+	ordi16	36666, 64
 	ret
 UIState_SwitchOnDisplayMode:
 	; --- Switch on A = (0xC07D): or bits into (0x8F3A)/(0x8F42) (53 bytes) ---
@@ -2948,16 +2960,16 @@ UIState_SwitchOnDisplayMode:
 	jr z, UIState_Mode0or1
 	cp a, 0x10
 	ret nz
-	.byte 0xd1, 0x3a, 0x8f, 0x3e, 0x6b, 0x00	; or (0x8F3A), 0x006B  [D1 prefix]
+	ordi16	36666, 107
 	ret
 UIState_Mode0or1:
-	.byte 0xd1, 0x3a, 0x8f, 0x3e, 0x6f, 0x00	; or (0x8F3A), 0x006F  [D1 prefix]
+	ordi16	36666, 111
 	ret
 UIState_Mode3:
-	.byte 0xd1, 0x42, 0x8f, 0x3e, 0x00, 0x02	; or (0x8F42), 0x0200  [D1 prefix]
+	ordi16	36674, 512
 	ret
 UIState_Mode4:
-	.byte 0xd1, 0x42, 0x8f, 0x3e, 0x00, 0x80	; or (0x8F42), 0x8000  [D1 prefix]
+	ordi16	36674, 32768
 	ret
 
 
@@ -2972,20 +2984,21 @@ UIState_ProcessExtendedMode:
 	lda_24	xix, 15574620
 	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
 	lda_24	xix, 16546693
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8, 0xd1, 0x3e, 0x8f, 0x3e, 0x03, 0x02
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	ordi16	36670, 515
 	ret
-	.byte 0xd1, 0x3e, 0x8f, 0x3e, 0xfc, 0x00
+	ordi16	36670, 252
 	ret
 	ld	xwa, 163968
 	call	16569399
 	cps	l, 0
 	jr	z, 5
 	st8_24	65480, l
-	.byte 0xd1, 0x3e, 0x8f, 0x3e, 0x00, 0x01
+	ordi16	36670, 256
 	ret
-	.byte 0xd1, 0x42, 0x8f, 0x3e, 0x10, 0x00
+	ordi16	36674, 16
 	ret
-	.byte 0xd1, 0x3e, 0x8f, 0x3e, 0x00, 0x02
+	ordi16	36670, 512
 	ret
 UIStateEvt_NullHandler:
 	.byte 0x0e
@@ -3001,16 +3014,16 @@ UIState_SwitchForMidiFlags:
 	cps	a, 6
 	ret nz
 UIState_MidiMode6:
-	.byte 0xd1, 0x42, 0x8f, 0x3e, 0x00, 0x04	; or (0x8F42), 0x0400  [D1 prefix]
+	ordi16	36674, 1024
 	ret
 UIState_MidiMode3F:
-	.byte 0xd1, 0x42, 0x8f, 0x3e, 0x00, 0x08	; or (0x8F42), 0x0800  [D1 prefix]
+	ordi16	36674, 2048
 	ret
 UIState_MidiMode4:
-	.byte 0xd1, 0x42, 0x8f, 0x3e, 0x02, 0x00	; or (0x8F42), 0x0002  [D1 prefix]
+	ordi16	36674, 2
 	ret
 UIState_MidiMode14:
-	.byte 0xd1, 0x42, 0x8f, 0x3e, 0x00, 0x10	; or (0x8F42), 0x1000  [D1 prefix]
+	ordi16	36674, 4096
 	ret
 UIState_NullReturn:
 	ret
@@ -3024,17 +3037,17 @@ UIState_ProcessAltMode:
 	jr	z, 11
 	cps	a, 1
 	ret	nz
-	.byte 0xd1, 0x42, 0x8f, 0x3e, 0x03, 0x00
+	ordi16	36674, 3
 	ret
-	.byte 0xd1, 0x42, 0x8f, 0x3e, 0x08, 0x00
+	ordi16	36674, 8
 	ret
-	.byte 0xd1, 0x42, 0x8f, 0x3e, 0x00, 0x60
+	ordi16	36674, 24576
 	ret
 UIState_ProcessSimpleMode:
 	ldda8	a, 49277
 	cps	a, 1
 	ret	nz
-	.byte 0xd1, 0x3a, 0x8f, 0x3e, 0x90, 0x00
+	ordi16	36666, 144
 	ret
 
 CtrlPanel_LookupIndicatorEntry:
@@ -3419,7 +3432,7 @@ VoiceData_ExtendedParamSetup:
 	incm8	1, (xsp+2)
 	cp	(xsp+2), 24
 	jrl	c, -190
-	.byte 0xf2, 0xc0, 0xff, 0x00, 0xb9
+	setda_24	1, 65472
 	pushw 14
 	ld	xwa, (xsp+6)
 	lda	xwa, (xwa+944)
@@ -4395,7 +4408,9 @@ MidiCh_ConfigVoiceAndParts:
 	jr	c, 17
 	res	7, e
 	stda8	10414, e
-	.byte 0xc1, 0xe4, 0x8e, 0x19, 0xe0, 0x8e, 0xf1, 0xe4, 0x8e, 0xbf, 0xf1, 0xe4, 0x8e, 0xcf
+	.byte 0xc1, 0xe4, 0x8e, 0x19, 0xe0, 0x8e
+	setda	7, 36580
+	bitda	7, 36580
 	ret	z
 	calr	2929
 	stdi8	37159, 176
@@ -5079,9 +5094,9 @@ UIState_RenderBitmapData:
 	ld	(xwa), c
 	cpdi8	49277, 12
 	jr	nz, 30
-	.byte 0xf1, 0x7f, 0xc0, 0xcc
+	bitda	4, 49279
 	jr	z, 24
-	.byte 0xf1, 0x7e, 0xc0, 0xcc
+	bitda	4, 49278
 	jr	nz, 18
 	ldda8	a, 49280
 	extz	wa
@@ -5091,9 +5106,9 @@ UIState_RenderBitmapData:
 	call	16569115
 	cpdi8	49277, 4
 	ret	nz
-	.byte 0xf1, 0x7f, 0xc0, 0xcd
+	bitda	5, 49279
 	ret	z
-	.byte 0xf1, 0x7e, 0xc0, 0xcd
+	bitda	5, 49278
 	ret	nz
 	ldda8	a, 49280
 	extz	wa
@@ -5271,7 +5286,7 @@ VoiceParam_CompareAndUpdate:
 	stda8	37170, c
 	stda8	37161, c
 	ld	a, (xsp)
-	.byte 0xc1, 0x2a, 0x91, 0xe9
+	orddm8	37162, a
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -5299,7 +5314,7 @@ VoiceParam_CompareAndUpdate:
 	stda8	37170, c
 	stda8	37161, c
 	ld	a, (xsp)
-	.byte 0xc1, 0x2a, 0x91, 0xe9
+	orddm8	37162, a
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -5331,7 +5346,7 @@ VoiceParam_CompareAndUpdate:
 	stda8	37170, e
 	stda8	37161, e
 	ld	a, (xsp)
-	.byte 0xc1, 0x2a, 0x91, 0xe9
+	orddm8	37162, a
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -5360,7 +5375,7 @@ VoiceParam_CompareAndUpdate:
 	stda8	37170, e
 	stda8	37161, e
 	ld	a, (xsp)
-	.byte 0xc1, 0x2a, 0x91, 0xe9
+	orddm8	37162, a
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -5400,7 +5415,7 @@ VoiceParam_CompareAndUpdate:
 	stda8	37170, e
 	stda8	37161, e
 	ld	a, (xsp)
-	.byte 0xc1, 0x2a, 0x91, 0xe9
+	orddm8	37162, a
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -5427,7 +5442,7 @@ VoiceParam_CompareAndUpdate:
 	stda8	37170, a
 	stda8	37161, a
 	ld	a, (xsp)
-	.byte 0xc1, 0x2a, 0x91, 0xe9
+	orddm8	37162, a
 	inc	2, xsp
 	ret
 
@@ -5543,13 +5558,14 @@ UIWidget_MidiStreamControl:
 	ret	nz
 	ldda8	a, 49279
 	and	a, 3
-	.byte 0xf2, 0x6c, 0x9a, 0xfc, 0xee, 0xf1, 0x7f, 0xc0, 0xca
+	.byte 0xf2, 0x6c, 0x9a, 0xfc, 0xee
+	bitda	2, 49279
 	ret	z
-	.byte 0xf1, 0x7e, 0xc0, 0xca
+	bitda	2, 49278
 	ret	nz
-	.byte 0xf1, 0xf9, 0x90, 0xbc
+	setda	4, 37113
 	call	16556824
-	.byte 0xf1, 0xf9, 0x90, 0xb4
+	resda	4, 37113
 	ret
 	lds	wa, 0
 	ldada	xbc, 37842
@@ -6719,7 +6735,7 @@ RegisterBit_Manipulate_Table:
 	.long RegBitManip_Handler_4
 	.long RegBitManip_Handler_4
 RegBitManip_Handler_1:
-	.byte 0xf1, 0x69, 0xfc, 0xc8
+	bitda	0, 64617
 	jr	nz, 3
 RegBitManip_Handler_3:
 	and	w, 0xfd
@@ -6956,7 +6972,7 @@ MidiStream_ProcessHandler_3:
 	ldda8	w, 37321
 	.byte 0xf5, 0xf1, 0x50
 	ldb	a, 0
-	.byte 0xf1, 0xbf, 0x91, 0xcb
+	bitda	3, 37311
 	jr	z, 2
 	ldb	a, 127
 	ldb	w, 255
@@ -7358,11 +7374,12 @@ TempoCC_TransmitBytecodeBlock:
 	bit	7, a
 	jr	z, 7
 	res	7, a
-	.byte 0xf1, 0xad, 0x91, 0xb8
+	setda	0, 37293
 	bit	7, w
 	jr	z, 7
 	res	7, w
-	.byte 0xf1, 0xad, 0x91, 0xb9, 0xf5, 0xf1, 0x50
+	setda	1, 37293
+	.byte 0xf5, 0xf1, 0x50
 	ldda8	a, 37319
 	ldb	w, 255
 	.byte 0xf5, 0xf1, 0x50
@@ -7377,16 +7394,18 @@ TempoCC_TransmitBytecodeBlock:
 	bit	7, a
 	jr	z, 7
 	res	7, a
-	.byte 0xf1, 0xad, 0x91, 0xba, 0xf5, 0xf1, 0x50
+	setda	2, 37293
+	.byte 0xf5, 0xf1, 0x50
 	ldda16	wa, 37311
 	bit	7, a
 	jr	z, 7
 	res	7, a
-	.byte 0xf1, 0xad, 0x91, 0xb8
+	setda	0, 37293
 	bit	7, w
 	jr	z, 7
 	res	7, w
-	.byte 0xf1, 0xad, 0x91, 0xb9, 0xf5, 0xf1, 0x50
+	setda	1, 37293
+	.byte 0xf5, 0xf1, 0x50
 	ldda8	a, 37319
 	ldb	w, 255
 	.byte 0xf5, 0xf1, 0x50
@@ -7428,7 +7447,7 @@ TempoCC_TransmitBytecodeBlock:
 	stdi8	37322, 4
 	calr	291
 	ret
-	.byte 0xf2, 0xc2, 0xff, 0x00, 0xc8
+	bitda_24	0, 65474
 	jr	z, 36
 	ld	xix, 37293
 	ldb	a, 208
@@ -7915,7 +7934,7 @@ MidiCtrl_ModeDispatch_Table:
 	ldda8	b, 37211
 	ldb	c, 129
 	xor	d, d
-	.byte 0xf1, 0x5d, 0x91, 0xcf
+	bitda	7, 37213
 	jr	z, 2
 	ldb	d, 1
 	ldda8	e, 37214
@@ -8027,7 +8046,12 @@ VoiceMode3_DispatchTable:
 	nop
 	cp	(xhl-79), d
 	nop
-	.byte 0xf2, 0xb0, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00
+	chgda_24	3, 64688
+	.byte 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3
+	.byte 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3
+	.byte 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3
+	.byte 0xad, 0xfc, 0x00, 0xc3, 0xad, 0xfc, 0x00, 0xc3
+	.byte 0xad, 0xfc, 0x00
 	call	16562576
 	jr	nc, 69
 	ldda8	a, 37306
@@ -8094,7 +8118,7 @@ VoiceMode3_DispatchTable:
 	call	16556371
 	cpdi16	37303, 920
 	jr	nz, 4
-	.byte 0xf1, 0x52, 0x8d, 0xbb
+	setda	3, 36178
 	extz	hl
 	ldda8	l, 37320
 	ld	xix, 61856
@@ -8172,7 +8196,7 @@ MidiVoice_DataBlockHandler:
 	stdi8	37092, 0
 	call	16562576
 	jr	nc, 18
-	.byte 0xc1, 0xe4, 0x90, 0x3e, 0x20
+	ordi8	37092, 32
 	ld	wa, (xiy)
 	stda16	37159, wa
 	ld	wa, (xiy+2)
@@ -8183,9 +8207,10 @@ MidiVoice_DataBlockHandler:
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
 	cp	a, 16
 	jr	z, 28
-	.byte 0xf1, 0x50, 0xfd, 0xcc
+	bitda	4, 64848
 	jr	nz, 22
-	.byte 0xc1, 0xe4, 0x90, 0xe9, 0xc1, 0xe4, 0x90, 0x3e, 0xc0
+	orddm8	37092, a
+	ordi8	37092, 192
 	ld	wa, (xiy)
 	stda16	37159, wa
 	ld	wa, (xiy+2)
@@ -8728,7 +8753,7 @@ MidiNote_VelocityHandler_Table:
 MidiNoteVel_Handler_0:
 	ldw	bc, 5249
 	xor	de, de
-	.byte 0xf1, 0xcf, 0x91, 0xcf
+	bitda	7, 37327
 	jr	z, 2
 	inc	1, e
 	call	16556547
@@ -8748,7 +8773,7 @@ MidiNoteVel_Handler_0:
 MidiNoteVel_Handler_1:
 	ldw	bc, 5249
 	xor	d, d
-	.byte 0xf1, 0x5d, 0x91, 0xcf
+	bitda	7, 37213
 	jr	z, 2
 	ldb	d, 1
 	ldda8	e, 37214
@@ -10767,7 +10792,7 @@ MidiStream_HandleChanPressure:
 	and	e, d
 	bit	3, d
 	jr	z, 9
-	.byte 0xf1, 0xf9, 0x90, 0xc9
+	bitda	1, 37113
 	jr	z, 3
 	or	e, 8
 	ld	a, e
@@ -10884,7 +10909,7 @@ MidiStream_CmdPedalNotify:
 	; --- Routine 2: conditional E/D setup, dec E, call FCA1FE (36 bytes) ---
 	cpdi8	36148, 14
 	jr z, MidiStream_CmdPedalDone
-	.byte 0xf1, 0x50, 0xfd, 0xcb			; bit 3, (0xFD50)  [F1 prefix]
+	bitda	3, 64848
 	jr z, MidiStream_CmdPedalDone
 	and e, 0x7f
 	jr z, MidiStream_CmdPedalDone
@@ -10948,7 +10973,7 @@ MidiStream_ExtendedDispatch:
 	stdi8	37112, 255
 	cps	c, 0
 	jr	nz, 45
-	.byte 0xf1, 0x50, 0xfd, 0xcb
+	bitda	3, 64848
 	jr	z, 39
 	cpdi8	36148, 14
 	jr	z, 27
@@ -11081,9 +11106,9 @@ MidiStream_ExtendedDispatch:
 	pushw	hl
 	pushw	bc
 	pushw	de
-	.byte 0xf1, 0xfa, 0x90, 0xb8
+	setda	0, 37114
 	calr	105
-	.byte 0xf1, 0xfa, 0x90, 0xc9
+	bitda	1, 37114
 	jr	nz, 94
 	stda8	37111, c
 	xor	h, h
@@ -11126,9 +11151,10 @@ MidiStream_ExtendedDispatch:
 	pushw	hl
 	pushw	bc
 	pushw	de
-	.byte 0xc1, 0xfa, 0x90, 0x3c, 0xfd, 0xf1, 0xfa, 0x90, 0xc8
+	anddi8	37114, 253
+	bitda	0, 37114
 	jr	z, 38
-	.byte 0xc1, 0xfa, 0x90, 0x3c, 0xfe
+	anddi8	37114, 254
 	stda8	37111, c
 	ld	l, e
 	ld	h, b
@@ -11244,7 +11270,7 @@ MidiStream_ExtendedDispatch:
 	calr	-844
 	ret
 MidiStream_HandleRunningStatus:
-	.byte 0xf1, 0x50, 0xfd, 0xcb
+	bitda	3, 64848
 	jr	z, 4
 	cps	c, 0
 	jr	z, 22

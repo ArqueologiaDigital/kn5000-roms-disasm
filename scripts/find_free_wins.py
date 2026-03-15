@@ -506,10 +506,11 @@ def translate_unidasm_to_llvm(mnemonic):
         if m:
             return None  # LLVM doesn't support R+R addressing
 
-        # Direct memory address: (0xNNNN)
+        # Direct memory address: (0xNNNN) → return as DIRECT:nnn marker
         m = re.match(r'^\((0x[0-9a-fA-F]+)\)$', operand)
         if m:
-            return None  # May need special handling
+            addr = int(m.group(1), 16)
+            return f'DIRECT:{addr}'
 
         # Bare register+displacement: XRR+0xNN (used by lda)
         m = re.match(r'^([A-Z]+)\+(0x[0-9a-fA-F]+)$', operand)
@@ -576,6 +577,272 @@ def translate_unidasm_to_llvm(mnemonic):
         if is_mem and is_imm:
             mi_mnem = MEM_IMM_OPS[op]
             return [f'{mi_mnem}\t{mem_op}, {imm_str}', f'{op}\t{mem_op}, {imm_str}']
+
+    # ── Direct address operations (C1/D1/E1/F1/F2 prefix) ──
+    # Detect DIRECT:nnn markers from translate_operand
+    def _is_direct(s):
+        return s.startswith('DIRECT:')
+
+    def _direct_addr(s):
+        return int(s.split(':')[1])
+
+    def _direct_forms(addr, mnemonics_16, mnemonics_24, *extra_args):
+        """Generate alternatives for 16-bit and 24-bit address forms."""
+        forms = []
+        args_str = ', '.join(str(a) for a in extra_args)
+        comma = ', ' if args_str else ''
+        if addr <= 0xFFFF and mnemonics_16:
+            forms.append(f'{mnemonics_16}\t{args_str}{comma}{addr}' if extra_args
+                         else f'{mnemonics_16}\t{addr}')
+        if mnemonics_24:
+            forms.append(f'{mnemonics_24}\t{args_str}{comma}{addr}' if extra_args
+                         else f'{mnemonics_24}\t{addr}')
+        return forms
+
+    REG8_SET = {'a', 'w', 'b', 'c', 'd', 'e', 'h', 'l'}
+    REG16_SET = {'wa', 'bc', 'de', 'hl', 'ix', 'iy', 'iz', 'sp'}
+    REG32_SET = {'xwa', 'xbc', 'xde', 'xhl', 'xix', 'xiy', 'xiz', 'xsp'}
+
+    def _reg_size(r):
+        if r in REG8_SET: return 8
+        if r in REG16_SET: return 16
+        if r in REG32_SET: return 32
+        return None
+
+    if len(translated_ops) == 2:
+        op0, op1 = translated_ops
+
+        # ── LD/LDW reg, (direct_addr) — load from direct address ──
+        if op in ('ld', 'ldw') and not _is_direct(op0) and _is_direct(op1):
+            reg = op0
+            addr = _direct_addr(op1)
+            sz = _reg_size(reg)
+            da16_map = {8: 'ldda8', 16: 'ldda16', 32: 'ldda32'}
+            da24_map = {8: 'ld8_24', 16: 'ld16_24', 32: 'ld32_24'}
+            if sz:
+                forms = []
+                if addr <= 0xFFFF and sz in da16_map:
+                    forms.append(f'{da16_map[sz]}\t{reg}, {addr}')
+                if sz in da24_map:
+                    forms.append(f'{da24_map[sz]}\t{reg}, {addr}')
+                if forms:
+                    return forms
+
+        # ── LD/LDW (direct_addr), reg — store to direct address ──
+        if op in ('ld', 'ldw') and _is_direct(op0) and not _is_direct(op1):
+            addr = _direct_addr(op0)
+            reg = op1
+            sz = _reg_size(reg)
+            if sz and not reg.lstrip('-').isdigit():
+                da16_map = {8: 'stda8', 16: 'stda16', 32: 'stda32'}
+                da24_map = {8: 'st8_24', 16: 'st16_24', 32: 'st32_24'}
+                forms = []
+                if addr <= 0xFFFF and sz in da16_map:
+                    forms.append(f'{da16_map[sz]}\t{addr}, {reg}')
+                if sz in da24_map:
+                    forms.append(f'{da24_map[sz]}\t{addr}, {reg}')
+                if forms:
+                    return forms
+
+        # ── LD/LDW (direct_addr), imm — store immediate to direct address ──
+        if op in ('ld', 'ldw') and _is_direct(op0) and op1.lstrip('-').isdigit():
+            addr = _direct_addr(op0)
+            imm = op1
+            forms = []
+            if op == 'ld':
+                if addr <= 0xFFFF:
+                    forms.append(f'stdi8\t{addr}, {imm}')
+                forms.append(f'sti8_24\t{addr}, {imm}')
+            else:  # ldw
+                if addr <= 0xFFFF:
+                    forms.append(f'stdi16\t{addr}, {imm}')
+                forms.append(f'sti16_24\t{addr}, {imm}')
+            if forms:
+                return forms
+
+        # ── ALU reg, (direct_addr) — load direction ──
+        ALU_DA_OPS = {'add', 'adc', 'sub', 'sbc', 'and', 'xor', 'or', 'cp'}
+        if op in ALU_DA_OPS and not _is_direct(op0) and _is_direct(op1):
+            reg = op0
+            addr = _direct_addr(op1)
+            sz = _reg_size(reg)
+            da8_16 = {'add': 'addda8', 'adc': 'adcda8', 'sub': 'subda8',
+                      'sbc': 'sbcda8', 'and': 'andda8', 'xor': 'xorda8',
+                      'or': 'orda8', 'cp': 'cpda8'}
+            da16_16 = {'add': 'addda16', 'sub': 'subda16', 'and': 'andda16',
+                       'or': 'orda16', 'cp': 'cpda16'}
+            da32_16 = {'add': 'addda32', 'sub': 'subda32', 'cp': 'cpda32'}
+            # 24-bit addr variants
+            # 24-bit addr load-direction mnemonics (exact names from InstrInfo.td)
+            da8_24_map = {'add': 'addda8_24', 'adc': 'addcda8_24', 'sub': 'subda8_24',
+                          'sbc': 'sbcda8_24', 'and': 'andda8_24', 'xor': 'xorda8_24',
+                          'or': 'orda8_24', 'cp': 'cpda8_24'}
+            da16_24_map = {'add': 'addda16_24', 'sub': 'subda16_24', 'and': 'andda16_24',
+                           'xor': 'xorda16_24', 'or': 'orda16_24', 'cp': 'cpda16_24'}
+            da32_24_map = {'add': 'addda32_24', 'sub': 'sub32_24', 'and': 'andda32_24',
+                           'or': 'orda32_24', 'cp': 'cpda32_24'}
+            forms = []
+            if sz == 8:
+                if addr <= 0xFFFF and op in da8_16:
+                    forms.append(f'{da8_16[op]}\t{reg}, {addr}')
+                if op in da8_24_map:
+                    forms.append(f'{da8_24_map[op]}\t{reg}, {addr}')
+            elif sz == 16:
+                if addr <= 0xFFFF and op in da16_16:
+                    forms.append(f'{da16_16[op]}\t{reg}, {addr}')
+                if op in da16_24_map:
+                    forms.append(f'{da16_24_map[op]}\t{reg}, {addr}')
+            elif sz == 32:
+                if addr <= 0xFFFF and op in da32_16:
+                    forms.append(f'{da32_16[op]}\t{reg}, {addr}')
+                if op in da32_24_map:
+                    forms.append(f'{da32_24_map[op]}\t{reg}, {addr}')
+            if forms:
+                return forms
+
+        # ── ALU (direct_addr), reg — store direction ──
+        if op in ALU_DA_OPS and _is_direct(op0) and not op1.lstrip('-').isdigit():
+            addr = _direct_addr(op0)
+            reg = op1
+            sz = _reg_size(reg)
+            dm8_16 = {'add': 'adddm8', 'sub': 'subdm8', 'and': 'anddm8',
+                      'xor': 'xordm8', 'or': 'orddm8', 'cp': 'cpdm8'}
+            dm16_16 = {'add': 'adddm16', 'sub': 'subdm16', 'and': 'anddm16',
+                       'xor': 'xordm16', 'or': 'orddm16', 'cp': 'cpdm16'}
+            dm32_16 = {'add': 'adddm32', 'sub': 'subdm32', 'cp': 'cpdm32'}
+            # 24-bit addr store-direction mnemonics (exact names from InstrInfo.td)
+            dm8_24 = {'add': 'adddm8_24', 'sub': 'subdm8_24', 'and': 'anddm8_24',
+                      'xor': 'xordm8_24', 'or': 'ordm8_24', 'cp': 'cpdm8_24'}
+            dm16_24 = {'add': 'adddm16_24', 'sub': 'subdm16_24', 'and': 'anddm16_24',
+                       'xor': 'xordm16_24', 'or': 'orddm16_24', 'cp': 'cpdm16_24'}
+            dm32_24 = {'add': 'addm32_24', 'sub': 'subdm32_24', 'and': 'anddm32_24',
+                       'or': 'ordm32_24', 'cp': 'cpdm32_24'}
+            forms = []
+            if sz == 8:
+                if addr <= 0xFFFF and op in dm8_16:
+                    forms.append(f'{dm8_16[op]}\t{addr}, {reg}')
+                if op in dm8_24:
+                    forms.append(f'{dm8_24[op]}\t{addr}, {reg}')
+            elif sz == 16:
+                if addr <= 0xFFFF and op in dm16_16:
+                    forms.append(f'{dm16_16[op]}\t{addr}, {reg}')
+                if op in dm16_24:
+                    forms.append(f'{dm16_24[op]}\t{addr}, {reg}')
+            elif sz == 32:
+                if addr <= 0xFFFF and op in dm32_16:
+                    forms.append(f'{dm32_16[op]}\t{addr}, {reg}')
+                if op in dm32_24:
+                    forms.append(f'{dm32_24[op]}\t{addr}, {reg}')
+            if forms:
+                return forms
+
+        # ── ALU (direct_addr), imm — immediate to direct memory ──
+        if op in ALU_DA_OPS and _is_direct(op0) and op1.lstrip('-').isdigit():
+            addr = _direct_addr(op0)
+            imm = op1
+            # 8-bit op variants (C1 prefix)
+            di8_16 = {'add': 'adddi8', 'adc': 'adcdi8', 'sub': 'subdi8',
+                      'sbc': 'sbcdi8', 'and': 'anddi8', 'xor': 'xordi8',
+                      'or': 'ordi8', 'cp': 'cpdi8'}
+            # 16-bit op variants (D1 prefix) — for ldw/cpw
+            di16_16 = {'add': 'adddi16', 'sub': 'subdi16', 'and': 'anddi16',
+                       'or': 'ordi16', 'cp': 'cpdi16'}
+            # 24-bit addr immediate mnemonics (exact names from InstrInfo.td)
+            di8_24 = {'add': 'adddi8_24', 'adc': 'addci8_24', 'sub': 'subdi8_24',
+                      'sbc': 'sbcdi8_24', 'and': 'anddi8_24', 'xor': 'xordi8_24',
+                      'or': 'ordi8_24', 'cp': 'cpi8_24'}
+            di16_24 = {'add': 'adddi16_24', 'sub': 'subdi16_24', 'and': 'anddi16_24',
+                       'or': 'ordi16_24', 'cp': 'cpdi16_24'}
+            forms = []
+            # Try 8-bit immediate first (shorter encoding)
+            if addr <= 0xFFFF and op in di8_16:
+                forms.append(f'{di8_16[op]}\t{addr}, {imm}')
+            if op in di8_24:
+                forms.append(f'{di8_24[op]}\t{addr}, {imm}')
+            # Also try 16-bit immediate forms
+            if addr <= 0xFFFF and op in di16_16:
+                forms.append(f'{di16_16[op]}\t{addr}, {imm}')
+            if op in di16_24:
+                forms.append(f'{di16_24[op]}\t{addr}, {imm}')
+            if forms:
+                return forms
+
+        # ── INC/DEC N, (direct_addr) ──
+        # Source direction (C1/D1): incdi8/decdi8, incdi16/decdi16
+        # Dest direction (F1): incdd8/decdd8, incdd16/decdd16
+        if op in ('inc', 'dec') and not _is_direct(op0) and _is_direct(op1):
+            count = op0
+            addr = _direct_addr(op1)
+            forms = []
+            if op == 'inc':
+                if addr <= 0xFFFF:
+                    forms += [f'incdi8\t{count}, {addr}', f'incdi16\t{count}, {addr}',
+                              f'incdd8\t{count}, {addr}', f'incdd16\t{count}, {addr}']
+                forms += [f'incdi8_24\t{count}, {addr}', f'incdi16_24\t{count}, {addr}',
+                          f'incdd8_24\t{count}, {addr}', f'incdd16_24\t{count}, {addr}']
+            else:
+                if addr <= 0xFFFF:
+                    forms += [f'decdi8\t{count}, {addr}', f'decdi16\t{count}, {addr}',
+                              f'decdd8\t{count}, {addr}', f'decdd16\t{count}, {addr}']
+                forms += [f'decdi8_24\t{count}, {addr}', f'decdi16_24\t{count}, {addr}',
+                          f'decdd8_24\t{count}, {addr}', f'decdd16_24\t{count}, {addr}']
+            if forms:
+                return forms
+
+        # ── BIT/SET/RES/TSET N, (direct_addr) ──
+        BIT_DA_OPS = {'bit': ('bitda', 'bitda_24'), 'set': ('setda', 'setda_24'),
+                      'res': ('resda', 'resda_24'), 'tset': ('tsetda', 'tsetda_24'),
+                      'chg': ('chgda', 'chgda_24')}
+        if op in BIT_DA_OPS and not _is_direct(op0) and _is_direct(op1):
+            bit = op0
+            addr = _direct_addr(op1)
+            mn16, mn24 = BIT_DA_OPS[op]
+            forms = []
+            if addr <= 0xFFFF:
+                forms.append(f'{mn16}\t{bit}, {addr}')
+            forms.append(f'{mn24}\t{bit}, {addr}')
+            if forms:
+                return forms
+
+        # ── LDA reg, direct_addr ──
+        # Unidasm may show (0xNNNN) → DIRECT:nnn or bare 0xNNNN → decimal
+        if op == 'lda':
+            reg = op0
+            addr_val = None
+            if _is_direct(op1):
+                addr_val = _direct_addr(op1)
+            elif op1.isdigit():
+                addr_val = int(op1)
+            if addr_val is not None:
+                forms = []
+                if addr_val <= 0xFFFF:
+                    forms.append(f'ldada\t{reg}, {addr_val}')
+                forms.append(f'lda_24\t{reg}, {addr_val}')
+                if forms:
+                    return forms
+
+    # ── Single operand direct address operations ──
+    if len(translated_ops) == 1 and _is_direct(translated_ops[0]):
+        addr = _direct_addr(translated_ops[0])
+        # PUSH (direct_addr) — only 24-bit form exists (pushdi_24, D2 prefix)
+        if op == 'push':
+            return [f'pushdi_24\t{addr}']
+
+    # ── JP cc, (direct_addr) — conditional jump via direct address ──
+    # Only 24-bit form exists (jp_24, F2 prefix)
+    if op == 'jp' and len(translated_ops) == 2:
+        cc, target = translated_ops
+        if _is_direct(target):
+            addr = _direct_addr(target)
+            return [f'jp_24\t{cc}, {addr}']
+
+    # ── CALL cc, (direct_addr) — conditional call via direct address ──
+    # Only 24-bit form exists (call_24, F2 prefix)
+    if op == 'call' and len(translated_ops) == 2:
+        cc, target = translated_ops
+        if _is_direct(target):
+            addr = _direct_addr(target)
+            return [f'call_24\t{cc}, {addr}']
 
     # ── Generate alternative forms for compact encodings ──
 

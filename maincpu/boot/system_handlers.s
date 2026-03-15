@@ -1662,7 +1662,7 @@ TempoRingBuf_Consume_Done:
 	ret
 
 TempoRingBuf_BytecodeSnippet:
-	.byte 0xf1, 0x59, 0x04, 0xc8
+	bitda	0, 1113
 	jr	nz, 6
 	ldb	e, 129
 	calr	24
@@ -3407,7 +3407,7 @@ SeqBuf_WriteBytes_Loop:
 
 SeqBuf_InlineBytecode:
 	ld16_24	hl, 124229
-	.byte 0xd2, 0x41, 0xe5, 0x01, 0xf3
+	cpda16_24	hl, 124225
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -3698,7 +3698,7 @@ AltEvtBuf_WriteBytes_Loop:
 
 AltEvtBuf_InlineBytecode:
 	ld16_24	hl, 127331
-	.byte 0xd2, 0x5f, 0xf1, 0x01, 0xf3
+	cpda16_24	hl, 127327
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -3783,7 +3783,7 @@ SeqEvtBuf_InlineBytecode:
 	.byte 0xee, 0x0d
 	ret
 	ld16_24	hl, 127597
-	.byte 0xd2, 0x69, 0xf2, 0x01, 0xf3
+	cpda16_24	hl, 127593
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -4088,7 +4088,7 @@ SeqBuf2_WriteBytes_Loop:
 
 SeqBuf2_InlineBytecode:
 	ld16_24	hl, 129163
-	.byte 0xd2, 0x87, 0xf8, 0x01, 0xf3
+	cpda16_24	hl, 129159
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -4189,7 +4189,7 @@ SeqBuf3_WriteBytes_Loop:
 
 SeqBuf3_InlineBytecode:
 	ld16_24	hl, 129685
-	.byte 0xd2, 0x91, 0xfa, 0x01, 0xf3
+	cpda16_24	hl, 129681
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -4375,7 +4375,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	.byte 0xee, 0x0d
 	ret
 	ld16_24	hl, 131241
-	.byte 0xd2, 0xa5, 0x00, 0x02, 0xf3
+	cpda16_24	hl, 131237
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -4458,7 +4458,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	.byte 0xee, 0x0d
 	ret
 	ld16_24	hl, 131379
-	.byte 0xd2, 0x2f, 0x01, 0x02, 0xf3
+	cpda16_24	hl, 131375
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -4649,7 +4649,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	.byte 0xee, 0x0d
 	ret
 	ld16_24	hl, 131783
-	.byte 0xd2, 0xc3, 0x02, 0x02, 0xf3
+	cpda16_24	hl, 131779
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -4733,7 +4733,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	.byte 0xee, 0x0d
 	ret
 	ld16_24	hl, 132049
-	.byte 0xd2, 0xcd, 0x03, 0x02, 0xf3
+	cpda16_24	hl, 132045
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 65535
@@ -5932,7 +5932,7 @@ E1DMA_ISR_BytecodeBlock:
 	incdi8	1, 58206
 	ret
 	ldda16	de, 1033
-	.byte 0xf1, 0x20, 0x06, 0xcf
+	bitda	7, 1568
 	jr	nz, 3
 	lds	hl, 0
 	ret
@@ -5943,7 +5943,8 @@ E1DMA_ISR_BytecodeBlock:
 	jr	le, -23
 	stdi8	256, 0
 	stdi8	1506, 0
-	.byte 0xf0, 0x68, 0xb9, 0xf1, 0x20, 0x06, 0xb7
+	.byte 0xf0, 0x68, 0xb9
+	resda	7, 1568
 	incdi8	1, 58212
 	ldw	hl, 65535
 	ret
@@ -7998,13 +7999,13 @@ HDAE5000_Init_BytecodeBlock:
 	call	15678734
 	cp	xhl, 4294967295
 	jr	nz, 8
-	.byte 0xf2, 0x04, 0x00, 0x16, 0xba
+	setda_24	2, 1441796
 	ldi_berp	251, 1
 	lds	wa, 1
 	call	15677338
 	cp	hl, 65535
 	jr	nz, 10
-	.byte 0xf2, 0x04, 0x00, 0x16, 0xbb
+	setda_24	3, 1441796
 	ldi_berp	251, 1
 	jr	8
 	cpi_berp	251, 1
@@ -8033,15 +8034,15 @@ HDAE5000_Init_BytecodeBlock:
 	cp	hl, 65535
 	jr	z, -13
 	sti8_24	1441796, 0
-	.byte 0xf2, 0x04, 0x00, 0x16, 0xb8
+	setda_24	0, 1441796
 	calr	-381
-	.byte 0xf2, 0x04, 0x00, 0x16, 0xb0
+	resda_24	0, 1441796
 	ld	xwa, 900000
 	calr	-666
-	.byte 0xf2, 0x04, 0x00, 0x16, 0xb8
+	setda_24	0, 1441796
 	calr	-484
-	.byte 0xf2, 0x04, 0x00, 0x16, 0xb0, 0xf2, 0x04, 0x00
-	.byte 0x16, 0xb9
+	resda_24	0, 1441796
+	setda_24	1, 1441796
 	pushw 3
 	ld	xwa, 8388608
 	ld	xbc, 2621440

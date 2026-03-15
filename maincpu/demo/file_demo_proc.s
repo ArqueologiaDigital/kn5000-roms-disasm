@@ -173,7 +173,7 @@ FDemo_DispatchEventPost:
 	stdi8	10404, 19
 	call Demo_SelectEntry_ProcessSongList			; additional handler
 	jr MainPreControl_ReturnNull
-	.byte 0xd2, 0xd8, 0x51, 0x02, 0x3f, 0x00, 0x00	; cp (0x0251D8), 0x0000  [16-bit direct]
+	cpdi16_24	152024, 0
 	jr z, MainPreControl_Dispatch			; if zero, clear state
 	call Part_InitFromPreset			; process display state
 	jr MainPreControl_Dispatch
@@ -320,7 +320,7 @@ FDemo_MultiGuardCheck:
 	jr nz, Banner_ReturnZero
 	cpdi8	3375, 0
 	jr nz, Banner_ReturnZero
-	.byte 0xf1, 0xad, 0x28, 0xcb			; bit 3, (0x28AD)  [F1 prefix]
+	bitda	3, 10413
 	jr nz, Banner_ReturnZero
 	lds	hl, 1
 	ret
@@ -629,7 +629,7 @@ Demo_SelectEntry_ExitDispatch:
 	ret
 
 Demo_SelectEntry_ByteTable:
-	.byte 0xf1, 0x66, 0x29, 0xcf
+	bitda	7, 10598
 	ret	nz
 	ldda8	a, 1057
 	and	a, 3
@@ -643,13 +643,13 @@ Demo_SelectEntry_ByteTable:
 	ret	nz
 	cpdi8	36148, 19
 	ret	nz
-	.byte 0xf1, 0x7e, 0xc0, 0xc8
+	bitda	0, 49278
 	ret	z
 	cpdi16	10420, 0
 	jr	nz, 6
-	.byte 0xf1, 0x83, 0x32, 0xc8
+	bitda	0, 12931
 	jr	z, 52
-	.byte 0xf1, 0xad, 0x28, 0xb3
+	resda	3, 10413
 	cpdi8	36152, 228
 	.byte 0xf2, 0xf1, 0x29, 0xf2, 0xee
 	calr	827
@@ -661,7 +661,7 @@ Demo_SelectEntry_ByteTable:
 	ldda8	a, 10404
 	extz	wa
 	jp	16271021
-	.byte 0xf1, 0xad, 0x28, 0xbb
+	setda	3, 10413
 	cpdi8	36152, 228
 	jr	z, 11
 	call	15870395
@@ -8694,14 +8694,14 @@ FileIO_ErrorCodeByteBlock:
 	ret	z
 	cpdi8	49277, 65
 	ret	nz
-	.byte 0xf1, 0x7f, 0xc0, 0xc8
+	bitda	0, 49279
 	ret	z
 	ldda8	c, 36150
 	cp	c, 16
 	jr	c, 5
 	cp	c, 22
 	ret	ule
-	.byte 0xf1, 0x7e, 0xc0, 0xc8
+	bitda	0, 49278
 	jr	z, 68
 	cpdi8	36148, 6
 	jr	nz, 15
@@ -8728,10 +8728,12 @@ FileIO_ErrorCodeByteBlock:
 	call	16356496
 	.byte 0x1e, 0x64, 0xfc
 	ret
-	.byte 0xc2, 0xf2, 0x40, 0x03, 0x21, 0xc1, 0x34, 0x8d
-	.byte 0x3f, 0x01, 0x6e, 0x4b, 0xf1, 0x20, 0x04, 0xca
+	ld8_24	a, 213234
+	cpdi8	36148, 1
+	.byte 0x6e, 0x4b
+	bitda	2, 1056
 	ret	nz
-	.byte 0xf1, 0x1f, 0x04, 0xca
+	bitda	2, 1055
 	ret	nz
 	ld	c, a
 	cps	a, 0
@@ -8740,10 +8742,10 @@ FileIO_ErrorCodeByteBlock:
 	ret	nc
 	lds	wa, 6
 	call	16356451
-	.byte 0xc2, 0xf2, 0x40, 0x03, 0x21
+	ld8_24	a, 213234
 	extz	wa
-	.byte 0xf2, 0x52, 0x05, 0xea, 0x31, 0xc3, 0x07, 0xe4
-	.byte 0xe0, 0x21
+	lda_24	xbc, 15336786
+	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21
 	cp	a, 119
 	.byte 0x66, 0x15
 	cp	a, 108

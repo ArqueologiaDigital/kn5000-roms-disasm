@@ -3682,7 +3682,7 @@ SeqStep_ByteBlockF245:
 	sti16_24	124220, 21
 	ldw	hl, 65535
 	jr	75
-	.byte 0xd2, 0x3c, 0xe5, 0x01, 0x3f, 0x05, 0x00
+	cpdi16_24	124220, 5
 	jr	z, 5
 	ldw	hl, 65535
 	jr	61
@@ -6877,7 +6877,8 @@ SeqChan_ValidateAndDispatch:
 	or	xwa, xwa
 	jr	z, 6
 	ld	xwa, (xiz+34)
-	.byte 0xb8, 0x16, 0xb3, 0xc2, 0xe2, 0xe2, 0x03, 0x3f, 0x00
+	.byte 0xb8, 0x16, 0xb3
+	cpi8_24	254690, 0
 	jr	nz, 4
 	lds	hl, 0
 	jr	31
@@ -7434,7 +7435,8 @@ SeqChan_ByteBlockD:
 	jr	z, 5
 	ld	(xiz+20), hl
 	jr	5
-	.byte 0xbf, 0x04, 0x02, 0x01, 0x00, 0xd2, 0x1e, 0x27, 0x02, 0x3f, 0x01, 0x00
+	.byte 0xbf, 0x04, 0x02, 0x01, 0x00
+	cpdi16_24	141086, 1
 	jr	lt, 4
 	lds	hl, 0
 	jr	3
@@ -9343,7 +9345,7 @@ FileIO_ReadDirEntry_Return:
 	ret
 
 SndTable_ByteBlock_ReadOps:
-	.byte 0xc2, 0xec, 0xe3, 0x03, 0x3f, 0x00
+	cpi8_24	254956, 0
 	jr	nz, 48
 	ld32_24	xbc, 144762
 	push	xbc
@@ -9364,7 +9366,7 @@ SndTable_ByteBlock_ReadOps:
 	ret
 	ldw	hl, 65535
 	ret
-	.byte 0xc2, 0xec, 0xe3, 0x03, 0x3f, 0x01
+	cpi8_24	254956, 1
 	jr	nz, 6
 	calr	759
 	extz	hl
@@ -9391,7 +9393,7 @@ SndTable_ByteBlock_ReadOps:
 	.byte 0xbf, 0x04, 0x02, 0x00, 0x00
 	ld	wa, (xsp+4)
 	extz	xwa
-	.byte 0xe2, 0x2e, 0x27, 0x02, 0xf0
+	cpda32_24	xwa, 141102
 	jrl	ugt, 134
 	lds	wa, 2
 	call	15671777
@@ -9434,7 +9436,7 @@ SndTable_ByteBlock_ReadOps:
 	.byte 0x9f, 0x04, 0x38, 0x00, 0x04
 	ld	wa, (xsp+4)
 	extz	xwa
-	.byte 0xe2, 0x2e, 0x27, 0x02, 0xf0
+	cpda32_24	xwa, 141102
 	jrl	ule, -134
 	sti8_24	144766, 0
 	call	15670294

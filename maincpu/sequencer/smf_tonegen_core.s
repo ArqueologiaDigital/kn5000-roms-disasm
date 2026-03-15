@@ -5083,7 +5083,7 @@ VoiceSynth_Algo_ChannelConfig:
 	ret
 VoiceSynth_Algo_ConditionalUpdate:
 	; --- Main routine: bit test, store, conditional call (49 bytes) ---
-	.byte 0xf1, 0x8c, 0x10, 0xc8			; bit 0, (0x108C)  [F1 prefix]
+	bitda	0, 4236
 	jr nz, VoiceSynth_ConditionalUpdate_SetParams
 	call 0xF26C9E
 	stdi8	4323, 0
@@ -5289,7 +5289,7 @@ VoiceParam_ReadUpdate_6:
 	call	15886795
 	ret
 VoiceParam_ReadUpdate_7:
-	.byte 0xf1, 0x8c, 0x10, 0xc8
+	bitda	0, 4236
 	jr	nz, 9
 	call	15887518
 	stdi8	4323, 0

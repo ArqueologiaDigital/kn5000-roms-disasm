@@ -2018,7 +2018,7 @@ FDC_ByteTransfer_PIO:
 	ld	(xhl), c
 	inc	1, xhl
 	stda32	35406, xhl
-	.byte 0xd1, 0x1c, 0x8a, 0x3a, 0x01, 0x00
+	subdi16	35356, 1
 	ret	nz
 	calr	-3548
 	calr	-3536

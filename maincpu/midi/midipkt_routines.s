@@ -1246,13 +1246,13 @@ MidiPkt_SysExValidator_Data:
 	jr	c, 5
 	cp	a, 118
 	jr	ule, 6
-	.byte 0xf1, 0x50, 0xfd, 0xcc
+	bitda	4, 64848
 	ret	nz
 	cp	a, 153
 	jr	ugt, 5
 	cp	a, 148
 	ret	nc
-	.byte 0xf1, 0xf9, 0x90, 0xbf
+	setda	7, 37113
 	ldada	xbc, 64941
 	ld	e, (xbc)
 	set	2, e
@@ -1272,7 +1272,7 @@ MidiPkt_SysExProcessor_Data:
 	jr	c, 5
 	cp	a, 118
 	jr	ule, 6
-	.byte 0xf1, 0x50, 0xfd, 0xcc
+	bitda	4, 64848
 	ret	nz
 	cp	a, 153
 	jr	ugt, 5
@@ -1282,7 +1282,7 @@ MidiPkt_SysExProcessor_Data:
 	ld	a, (xbc)
 	bit	2, a
 	ret	z
-	.byte 0xf1, 0xf9, 0x90, 0xbf
+	setda	7, 37113
 	ld	e, (xbc)
 	res	2, e
 	ld	(xbc), e

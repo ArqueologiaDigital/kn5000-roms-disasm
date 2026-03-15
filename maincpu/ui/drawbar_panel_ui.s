@@ -12779,7 +12779,7 @@ AudioCtrl_DataBlock:
 	.byte 0xe3, 0x07, 0xe0, 0xe8, 0x22
 	lda	xwa, (xsp+20)
 	ld	hl, (xsp+14)
-	.byte 0xd2, 0x90, 0x47, 0x02, 0xf3
+	cpda16_24	hl, 149392
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl
@@ -12922,7 +12922,7 @@ AudioCtrl_DataBlock:
 	.byte 0xe3, 0x07, 0xe0, 0xe8, 0x22
 	lda	xwa, (xsp+20)
 	ld	hl, (xsp+14)
-	.byte 0xd2, 0x90, 0x47, 0x02, 0xf3
+	cpda16_24	hl, 149392
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl
@@ -13121,10 +13121,10 @@ AudioCtrl_DataBlock:
 	lda	xde, (xsp+14)
 	lda	xbc, (xsp+58)
 	ld	hl, (xsp+10)
-	.byte 0xd2, 0x92, 0x47, 0x02, 0xf3
+	cpda16_24	hl, 149394
 	jr	nz, 27
 	ld	hl, (xsp+12)
-	.byte 0xd2, 0x90, 0x47, 0x02, 0xf3
+	cpda16_24	hl, 149392
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl
@@ -13428,10 +13428,10 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+60)
 	lda	xde, (xsp+16)
 	ld	hl, (xsp+12)
-	.byte 0xd2, 0x92, 0x47, 0x02, 0xf3
+	cpda16_24	hl, 149394
 	jr	nz, 27
 	ld	hl, (xsp+14)
-	.byte 0xd2, 0x90, 0x47, 0x02, 0xf3
+	cpda16_24	hl, 149392
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl
@@ -13693,10 +13693,10 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+62)
 	lda	xde, (xsp+14)
 	ld	hl, (xsp+10)
-	.byte 0xd2, 0x92, 0x47, 0x02, 0xf3
+	cpda16_24	hl, 149394
 	jr	nz, 27
 	ld	hl, (xsp+12)
-	.byte 0xd2, 0x90, 0x47, 0x02, 0xf3
+	cpda16_24	hl, 149392
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl
@@ -13914,10 +13914,10 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+64)
 	lda	xbc, (xsp+60)
 	ld	hl, (xsp+12)
-	.byte 0xd2, 0x92, 0x47, 0x02, 0xf3
+	cpda16_24	hl, 149394
 	jr	nz, 27
 	ld	hl, (xsp+14)
-	.byte 0xd2, 0x90, 0x47, 0x02, 0xf3
+	cpda16_24	hl, 149392
 	jr	nz, 17
 	lds32	xhl, 3
 	push	xhl

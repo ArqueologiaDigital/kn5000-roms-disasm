@@ -51,13 +51,13 @@ AudioMode_CopyAccentFlags:
 AccPedal_BytecodeBlock1:
 	pushw	wa
 	push	xiy
-	.byte 0xc1, 0x63, 0x33, 0x3c, 0xfe
+	anddi8	13155, 254
 	ld	xiy, 608256
 	add	xiy, 16
 	ld	a, (xiy)
 	bit	0, a
 	jr	z, 5
-	.byte 0xc1, 0x63, 0x33, 0x3e, 0x01
+	ordi8	13155, 1
 	pop	xiy
 	popw	wa
 	ret
@@ -1397,7 +1397,8 @@ AccVoice_BytecodeBlock3:
 	stdi8	12899, 0
 	ret
 	stdi8	13045, 15
-	.byte 0xc1, 0xf7, 0x32, 0x3c, 0xf8, 0xc1, 0xf7, 0x32, 0x3e, 0x00
+	anddi8	13047, 248
+	ordi8	13047, 0
 	ret
 	ret
 	call	16079849

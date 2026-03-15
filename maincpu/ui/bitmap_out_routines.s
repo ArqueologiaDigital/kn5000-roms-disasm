@@ -306,21 +306,21 @@ BitMapOut_ByteData_TransitionSeq:
 	jr	z, 30
 	cp	a, 128
 	jr	nz, 50
-	.byte 0xf1, 0x5c, 0x8f, 0xb0
+	resda	0, 36700
 	ldw	wa, 96
 	call	16546109
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
 	lds32	xde, 5
 	jr	75
-	.byte 0xf1, 0x5c, 0x8f, 0xb0
+	resda	0, 36700
 	ldw	wa, 96
 	call	16546109
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
 	lds32	xde, 6
 	jr	50
-	.byte 0xf1, 0x5c, 0x8f, 0xb8
+	setda	0, 36700
 	ldw	wa, 96
 	call	16546109
 	ld	xwa, 192
@@ -340,7 +340,7 @@ BitMapOut_ByteData_PresetCopy:
 	push qiz
 	cpdi8	36148, 14
 	jr	z, 87
-	.byte 0xf1, 0x46, 0x8d, 0xcb
+	bitda	3, 36166
 	jr	nz, 81
 	cpdi8	49277, 1
 	jr	nz, 74
@@ -369,7 +369,7 @@ BitMapOut_ByteData_PresetCopy:
 	calr	14
 	ldw	wa, 130
 	calr	7268
-	.byte 0xf1, 0x46, 0x8d, 0xb3
+	resda	3, 36166
 	pop qiz
 	ret
 
@@ -3850,7 +3850,7 @@ OneTchFUNC:
 	lda_24 xix, 0xfb632e
 	jp_dri 8, 0x07, 0xF0, 0xE8
 BitMapOut_ByteData_WidgetTable:
-	.byte 0xf1, 0xe2, 0xb7, 0xb7
+	resda	7, 47074
 	push	xde
 	push	xhl
 	push	xix

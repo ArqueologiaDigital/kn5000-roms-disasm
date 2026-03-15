@@ -348,7 +348,7 @@ PcgOutGridCheckJumpTable:
 	lds32	xbc, 4
 	ld	(xwa+14), xbc
 	jrl	434
-	.byte 0xc2, 0x70, 0x47, 0x02, 0x3f, 0xff
+	cpi8_24	149360, 255
 	jrl	z, 1566
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)
@@ -441,7 +441,7 @@ PcgOutGridCheckJumpTable:
 	ld	xbc, 4294967295
 	ld	(xhl), xbc
 	jrl	135
-	.byte 0xc2, 0x70, 0x47, 0x02, 0x3f, 0xff
+	cpi8_24	149360, 255
 	jrl	z, 1267
 	ld	xiy, 15204142
 	lda	xix, (xsp+22)

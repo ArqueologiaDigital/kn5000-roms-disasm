@@ -447,7 +447,7 @@ WndEvt_EventCodeDispatch:
 	jrl	1389
 	ld16_24	iz, 160982
 	dec	1, iz
-	.byte 0xd2, 0xd8, 0x74, 0x02, 0xf6
+	cpda16_24	iz, 160984
 	jr	ule, 47
 	lda_24	xde, 160944
 	ld	bc, iz
@@ -466,7 +466,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	dec	1, iz
 	dec	1, xbc
-	.byte 0xd2, 0xd8, 0x74, 0x02, 0xf6
+	cpda16_24	iz, 160984
 	jr	ugt, -31
 	ld16_24	wa, 160984
 	extz	xwa
@@ -485,7 +485,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 31457408
 	jrl	1267
 	ld16_24	iz, 160984
-	.byte 0xd2, 0xd6, 0x74, 0x02, 0xf6
+	cpda16_24	iz, 160982
 	jr	nc, 47
 	lda_24	xde, 160944
 	ld	bc, iz
@@ -504,7 +504,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	inc	1, iz
 	inc	1, xbc
-	.byte 0xd2, 0xd6, 0x74, 0x02, 0xf6
+	cpda16_24	iz, 160982
 	jr	c, -34
 	ld16_24	wa, 160982
 	dec	1, wa
@@ -631,7 +631,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	inc	1, iz
 	inc	1, xbc
-	.byte 0xd2, 0xd6, 0x74, 0x02, 0xf6
+	cpda16_24	iz, 160982
 	jr	c, -21
 	ld	xwa, 22
 	ld	xbc, 29360143
@@ -643,7 +643,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 31457408
 	jrl	820
 	lds	iz, 0
-	.byte 0xd2, 0xd6, 0x74, 0x02, 0x3f, 0x00, 0x00
+	cpdi16_24	160982, 0
 	jr	ule, 30
 	lda_24	xde, 160944
 	ld	xhl, xbc
@@ -655,7 +655,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	inc	1, iz
 	inc	1, xbc
-	.byte 0xd2, 0xd6, 0x74, 0x02, 0xf6
+	cpda16_24	iz, 160982
 	jr	c, -21
 	ld	xwa, 22
 	ld	xbc, 31457408
@@ -3842,7 +3842,7 @@ DrawDesignBox_ByteData:
 	calr	-11516
 	cps	hl, 0
 	jr	z, 22
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	jr	z, 58
 	ld	xwa, xiz
 	ld	xbc, (xsp+6)
@@ -3872,7 +3872,7 @@ DrawDesignBox_ByteData:
 	lda	xhl, (xwa+4)
 	lda	xbc, (xwa+8)
 	ld	de, (xwa+12)
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xwa, xhl
 	calr	1
@@ -4179,7 +4179,7 @@ DrawDesignBox_QueueCallback:
 	lda	xhl, (xwa+4)
 	ld	bc, (xwa+12)
 	ld	de, (xwa+14)
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xwa, xhl
 	calr	1
@@ -7484,7 +7484,7 @@ ColorBlit_CallbackBlock:
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
 	st8_24	257962, c
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	bc, de
 	calr	1
@@ -7780,7 +7780,7 @@ ColorBlit2_CallbackBlock:
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
 	st8_24	257962, c
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	bc, de
 	calr	1
@@ -8073,7 +8073,7 @@ ColorBlit2_LargeCodeBlock:
 	jr	z, 32
 	ld8_24	a, 257960
 	st8_24	257962, a
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	jr	z, 60
 	ld	xwa, xiz
 	ld	xbc, (xsp+6)
@@ -8105,7 +8105,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	de, (xbc+16)
 	ld	c, (xbc+18)
 	st8_24	257962, c
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xbc, xhl
 	calr	1
@@ -8411,7 +8411,7 @@ ColorBlit2_LargeCodeBlock:
 	jr	z, 32
 	ld8_24	a, 257960
 	st8_24	257962, a
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	jr	z, 66
 	ld	xwa, xiz
 	ld	xbc, (xsp+6)
@@ -8446,7 +8446,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
 	st8_24	257962, c
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xbc, xhl
 	calr	1

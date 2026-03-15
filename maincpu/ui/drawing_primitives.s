@@ -74,7 +74,7 @@ DrawLine_ParamBlock:
 	lda	xhl, (xwa+4)
 	lda	xbc, (xwa+8)
 	ld	de, (xwa+12)
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xwa, xhl
 	calr	1
@@ -1041,7 +1041,7 @@ DrawBox_Return:
 DrawBox_ParamBlock:
 	lda	xde, (xwa+4)
 	ld	bc, (xwa+12)
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xwa, xde
 	calr	1
@@ -1213,7 +1213,7 @@ DrawFrame_Return:
 DrawFrame_ParamBlock:
 	lda	xde, (xwa+4)
 	ld	bc, (xwa+12)
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xwa, xde
 	calr	1
@@ -1969,7 +1969,7 @@ MovePixels_Return:
 MovePixels_ParamBlock:
 	lda	xde, (xwa+4)
 	lda	xbc, (xwa+12)
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xwa, xde
 	calr	1
@@ -2199,7 +2199,7 @@ DrawBitmap_Return:
 DrawBitmap_ParamBlock:
 	lda	xde, (xwa+4)
 	ld	xbc, (xwa+8)
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xwa, xde
 	calr	1
@@ -2429,7 +2429,7 @@ DrawBitmapFast_Return:
 DrawBitmapFast_ParamBlock:
 	lda	xde, (xwa+4)
 	ld	xbc, (xwa+8)
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xwa, xde
 	calr	1
@@ -2572,7 +2572,7 @@ DrawIcons_Return:
 DrawIcons_ParamBlock:
 	lda	xde, (xwa+4)
 	ld	xbc, (xwa+8)
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xwa, xde
 	calr	1
@@ -2716,7 +2716,7 @@ DrawFrameSP_ParamBlock:
 	lda	xhl, (xwa+4)
 	ld	bc, (xwa+8)
 	ld	de, (xwa+10)
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xwa, xhl
 	calr	1
@@ -3414,7 +3414,7 @@ DrawBitmapFile_Return:
 DrawBitmapFile_ParamBlock:
 	lda	xde, (xwa+4)
 	ld	xbc, (xwa+8)
-	.byte 0xd2, 0x4e, 0x04, 0x03, 0x3f, 0x00, 0x00
+	cpdi16_24	197710, 0
 	ret	z
 	ld	xwa, xde
 	calr	1

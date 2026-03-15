@@ -379,7 +379,7 @@ CDlikeSwTtl_DispatchData:
 	ret
 	lds32	xhl, 0
 	ret
-	.byte 0xf1, 0xe0, 0x0c, 0xc8
+	bitda	0, 3296
 	jr	nz, 30
 	ldda8	a, 3295
 	inc	2, a

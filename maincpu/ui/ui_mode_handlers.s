@@ -128,9 +128,9 @@ EffectMode_ByteData_Block3:
 	jr	nz, 95
 	cpdi8	49279, 0
 	jr	z, 83
-	.byte 0xf1, 0x7e, 0xc0, 0xcf
+	bitda	7, 49278
 	jr	nz, 77
-	.byte 0xf1, 0x52, 0x8d, 0xcc
+	bitda	4, 36178
 	jr	nz, 71
 	cpdi8	36150, 192
 	jr	nz, 6
@@ -149,9 +149,11 @@ EffectMode_ByteData_Block3:
 	ld	xwa, 163842
 	call	16569399
 	stda8	36180, l
-	.byte 0xf1, 0xe2, 0xb7, 0xbf, 0xf1, 0x52, 0x8d, 0xbb
+	setda	7, 47074
+	setda	3, 36178
 	calr	1623
-	.byte 0xf1, 0x52, 0x8d, 0xb3, 0xf1, 0x52, 0x8d, 0xb4
+	resda	3, 36178
+	resda	4, 36178
 	ret
 	cps	a, 7
 	jr	nz, 59
@@ -187,9 +189,9 @@ EffectMode_ByteData_Block4:
 	ld	xwa, 163842
 	call	16569399
 	stda8	36180, l
-	.byte 0xf1, 0xe2, 0xb7, 0xbf
+	setda	7, 47074
 	calr	1470
-	.byte 0xc1, 0x52, 0x8d, 0x3c, 0xd7
+	anddi8	36178, 215
 	ret
 
 

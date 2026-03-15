@@ -346,7 +346,7 @@ SLSrcBankList_FuncBody:
 	ld	a, l
 	ld	c, e
 	add	a, e
-	.byte 0xc2, 0x54, 0x09, 0xea, 0xf1
+	cpda8_24	a, 15337812
 	jr	nc, 25
 	add	c, l
 	stda8	35324, c
@@ -392,7 +392,7 @@ SLSrcBankList_FuncBody:
 	ld	c, e
 	ld	a, e
 	inc	1, a
-	.byte 0xc2, 0x54, 0x09, 0xea, 0xf1
+	cpda8_24	a, 15337812
 	jr	nc, 36
 	ld8_24	e, 15337810
 	ld	l, e
@@ -709,7 +709,7 @@ SLSrcBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	.byte 0xc2, 0x76, 0x09, 0xea, 0xf1
+	cpda8_24	a, 15337846
 	jr	nc, 25
 	add	c, e
 	stda8	35326, c
@@ -754,7 +754,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0x76, 0x09, 0xea, 0xf1
+	cpda8_24	a, 15337846
 	jr	nc, 36
 	ld8_24	e, 15337844
 	ld	l, e
@@ -1135,7 +1135,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0x94, 0x09, 0xea, 0xf1
+	cpda8_24	a, 15337876
 	jr	nc, 105
 	ld8_24	e, 15337874
 	ld	a, e
@@ -1609,7 +1609,7 @@ SLDstBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	.byte 0xc2, 0xca, 0x09, 0xea, 0xf1
+	cpda8_24	a, 15337930
 	jr	nc, 25
 	add	c, e
 	stda8	35330, c
@@ -1657,7 +1657,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0xca, 0x09, 0xea, 0xf1
+	cpda8_24	a, 15337930
 	jr	nc, 36
 	ld8_24	e, 15337928
 	ld	l, e
@@ -1830,7 +1830,7 @@ SLDstBankList_FuncBody:
 	ld	c, w
 	ld	a, w
 	inc	1, a
-	.byte 0xc2, 0xd0, 0x09, 0xea, 0xf1
+	cpda8_24	a, 15337936
 	jr	nc, 15
 	inc	1, c
 	stda8	35332, c
@@ -1999,7 +1999,7 @@ SLDstBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	.byte 0xc2, 0xee, 0x09, 0xea, 0xf1
+	cpda8_24	a, 15337966
 	jr	nc, 25
 	add	c, e
 	stda8	35334, c
@@ -2047,7 +2047,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0xee, 0x09, 0xea, 0xf1
+	cpda8_24	a, 15337966
 	jr	nc, 36
 	ld8_24	e, 15337964
 	ld	l, e
@@ -2387,7 +2387,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0x14, 0x0a, 0xea, 0xf1
+	cpda8_24	a, 15338004
 	jr	nc, 105
 	ld8_24	e, 15338002
 	ld	a, e

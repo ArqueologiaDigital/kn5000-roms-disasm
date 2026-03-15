@@ -1234,7 +1234,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	.byte 0xf2, 0x1e, 0xde, 0xe0, 0x32
+	lda_24	xde, 14736926
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1253,7 +1253,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	.byte 0xf2, 0x66, 0xde, 0xe0, 0x32
+	lda_24	xde, 14736998
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1272,7 +1272,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	.byte 0xf2, 0xae, 0xde, 0xe0, 0x32
+	lda_24	xde, 14737070
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1291,7 +1291,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	.byte 0xf2, 0xf6, 0xde, 0xe0, 0x32
+	lda_24	xde, 14737142
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1310,7 +1310,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	.byte 0xf2, 0x3e, 0xdf, 0xe0, 0x32
+	lda_24	xde, 14737214
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1329,7 +1329,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	.byte 0xf2, 0x86, 0xdf, 0xe0, 0x32
+	lda_24	xde, 14737286
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1348,7 +1348,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	.byte 0xf2, 0xce, 0xdf, 0xe0, 0x32
+	lda_24	xde, 14737358
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1367,7 +1367,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	.byte 0xf2, 0x16, 0xe0, 0xe0, 0x32
+	lda_24	xde, 14737430
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1386,7 +1386,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	.byte 0xf2, 0x5e, 0xe0, 0xe0, 0x32
+	lda_24	xde, 14737502
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1405,7 +1405,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	.byte 0xf2, 0xa6, 0xe0, 0xe0, 0x32
+	lda_24	xde, 14737574
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)

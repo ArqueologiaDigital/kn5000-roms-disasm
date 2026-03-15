@@ -579,7 +579,7 @@ FlashWrite_BlockRef_Type6:
 	nop
 	ldf	207
 	pushw ix
-	.byte 0xf1, 0x00, 0x02, 0x00, 0x3d
+	stdi8	512, 61
 	nop
 	.byte 0x7a, 0x00, 0x07
 	scf
@@ -619,7 +619,7 @@ FlashWrite_BlockRef_Type6:
 	nop
 	ldf	207
 	pushw ix
-	.byte 0xf1, 0x00, 0x02, 0x00, 0x3d
+	stdi8	512, 61
 	nop
 	.byte 0x98, 0x00, 0x07
 	scf
@@ -1373,7 +1373,7 @@ Flash_InitBytecodeBlock:
 	stda32	14766, xwa
 	ldda32	xwa, 3186
 	stda32	14770, xwa
-	.byte 0xf1, 0xb0, 0x35, 0xb0
+	resda	0, 13744
 	ldi_berp	251, 0
 	ld	e, (xsp+12)
 	extz	de
@@ -1482,7 +1482,7 @@ Flash_InitBytecodeBlock:
 	stda32	14766, xhl
 	ldda32	xwa, 3186
 	stda32	14770, xwa
-	.byte 0xf1, 0xb0, 0x35, 0xb0
+	resda	0, 13744
 	ldi_berp	251, 0
 	ld	e, (xsp+6)
 	extz	de
@@ -4275,7 +4275,7 @@ ToneParam_ExtendedOpsBlock:
 	ret
 	pushw	iz
 	lds	iz, 0
-	.byte 0xf1, 0xb0, 0x35, 0xb0
+	resda	0, 13744
 	call	16134719
 	ldda8	a, 13744
 	extz	wa
@@ -4415,7 +4415,7 @@ ToneParam_ExtendedOpsBlock:
 	ret
 	pushw	iz
 	ld	iz, wa
-	.byte 0xf1, 0xd1, 0x34, 0xb8
+	setda	0, 13521
 	call	16134473
 	ldda8	a, 13744
 	extz	wa

@@ -307,7 +307,7 @@ SeqStep_EventPosConsumeAdvance:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 SeqStep_EventPosFinish:
-	.byte 0xf1, 0x1e, 0x27, 0xc8
+	bitda	0, 10014
 	jrl	z, -285
 	jr	56
 
@@ -3054,7 +3054,7 @@ SeqStep_ByteBlockEA5F:
 	st16_24	65516, wa
 	stdi16	62024, 0
 	stdi16	9832, 1
-	.byte 0xf1, 0xa7, 0x28, 0xb3
+	resda	3, 10407
 	jrl	-813
 
 SeqStep_ReinitPartTable:

@@ -2889,7 +2889,7 @@ SMF_SlotParam_PortamentoTime:
 	ormi8	(xiy), 4
 	ld	(xiy+2), a
 	ld	(xiy+3), 2
-	.byte 0xc1, 0x3b, 0x11, 0x3e, 0x01
+	ordi8	4411, 1
 	ret
 
 SMF_SlotParam_Sustain:
