@@ -7,7 +7,7 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: cb6bd3b07345 (cb6bd3b073454877efcff6b63432ab58a991727e)
-Date: 2026-03-15 19:52:54 +0000
-Subject: Add SRI R+R (Register+Register) addressing mode instructions
+Commit: 0a4079b3eb8e (0a4079b3eb8ebf74e859ff60adc78020958fd7dc)
+Date: 2026-03-15 20:22:14 +0000
+Subject: Add LINK/UNLK stack frame instructions for TLCS-900
 Repository: /mnt/shared/llvm-project

@@ -196,6 +196,7 @@ UNIDASM_REG_MAP = {
     'T': 't', 'GE': 'ge', 'GT': 'gt', 'UGT': 'ugt',
     'PO': 'po', 'PL': 'pl', 'NZ': 'nz', 'NC': 'nc',
     'EQ': 'z', 'NE': 'nz',
+    'PE/OV': 'pe', 'PO/NOV': 'po',  # unidasm uses slash notation for parity/overflow
     'SR': 'sr',
 }
 
@@ -451,6 +452,21 @@ def translate_unidasm_to_llvm(mnemonic):
         reg = UNIDASM_REG_MAP.get(regname)
         if reg:
             return f'pop {reg}'
+
+    # ── LINK reg, disp — stack frame creation ──
+    m = re.match(r'^link\s+([A-Z]+)\s*,\s*(0x[0-9a-fA-F]+|\d+)$', mnem)
+    if m:
+        reg = UNIDASM_REG_MAP.get(m.group(1))
+        disp = int(m.group(2), 0)
+        if reg:
+            return f'link\t{reg}, {disp}'
+
+    # ── UNLK reg — stack frame destruction ──
+    m = re.match(r'^unlk\s+([A-Z]+)$', mnem)
+    if m:
+        reg = UNIDASM_REG_MAP.get(m.group(1))
+        if reg:
+            return f'unlk\t{reg}'
 
     # Generic instruction translation:
     # 1. Lowercase the mnemonic

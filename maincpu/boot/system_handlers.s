@@ -3584,7 +3584,7 @@ RhythmBuf_WriteByte:
 	ret
 
 RhythmBuf_InlineBytecode:
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -3598,7 +3598,7 @@ RhythmBuf_InlineBytecode:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
 
 RhythmBuf_CheckEmpty:
@@ -3665,7 +3665,7 @@ RhythmBuf_InlineBytecode2:
 	pop	xde
 	popw	ix
 	ret
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
@@ -3673,7 +3673,7 @@ RhythmBuf_InlineBytecode2:
 	calr	2485
 	pop	xde
 	popw	ix
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
 
 AltEvtBuf_WriteBytes:
@@ -3766,7 +3766,7 @@ SeqEvtBuf_WriteByte:
 	ret
 
 SeqEvtBuf_InlineBytecode:
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -3780,7 +3780,7 @@ SeqEvtBuf_InlineBytecode:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
 	ld16_24	hl, 127597
 	cpda16_24	hl, 127593
@@ -4348,7 +4348,7 @@ Seq_DataHandler:
 
 
 SeqBuf_TimerEvent_BytecodeBlock:
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
@@ -4356,9 +4356,9 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	calr	1124
 	pop	xde
 	popw	ix
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -4372,7 +4372,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
 	ld16_24	hl, 131241
 	cpda16_24	hl, 131237
@@ -4441,7 +4441,7 @@ Seq_TimerEventLoop:
 
 
 SeqBuf_TimerEvent_BytecodeBlock2:
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -4455,7 +4455,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
 	ld16_24	hl, 131379
 	cpda16_24	hl, 131375
@@ -4622,7 +4622,7 @@ SeqBuf_NoteEvent_ReadByte:
 	ret
 
 SeqBuf_NoteEvent_WriteByte_Data:
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
@@ -4630,9 +4630,9 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	calr	745
 	pop	xde
 	popw	ix
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -4646,7 +4646,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
 	ld16_24	hl, 131783
 	cpda16_24	hl, 131779
@@ -4706,7 +4706,7 @@ SeqBuf_NoteEvent_SaveWritePtr:
 	ret
 
 SeqBuf_NoteEvent_WriteByte_Block:
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
@@ -4714,9 +4714,9 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	calr	571
 	pop	xde
 	popw	ix
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -4730,7 +4730,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
 	ld16_24	hl, 132049
 	cpda16_24	hl, 132045
@@ -4801,7 +4801,7 @@ SeqBuf_SoundEdit_ReadByte:
 	ret
 
 SeqBuf_SoundEdit_BytecodeBlock:
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
@@ -4809,9 +4809,9 @@ SeqBuf_SoundEdit_BytecodeBlock:
 	calr	397
 	pop	xde
 	popw	ix
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
-	.byte 0xee, 0x0c, 0x00, 0x00
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -4825,7 +4825,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee, 0x0d
+	unlk	xiz
 	ret
 
 SeqBuf_NoteEvent_CheckSongEnd:

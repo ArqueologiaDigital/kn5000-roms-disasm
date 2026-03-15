@@ -27789,7 +27789,7 @@ HDAE5000_GFX_DATA_1:	; 0x2A5D2C
 	nop                                     ; nop
 	ld_s	(xix+12), de
 	nop                                     ; nop
-	.byte 0xee, 0x0c, 0x2a, 0x00           ; link XIZ,0x002a
+	link	xiz, 42
 	ld	xwa, 0x92002a0d
 	.byte 0x0d                             ; decf
 	pushw de                                ; push DE
