@@ -17980,7 +17980,7 @@ DeleteSpecEvent_Prologue:
 	srl xwa, 8				; shift right 8 bits
 	and xwa, 0x000000FF			; isolate byte
 	ld (xsp + 10), a			; param byte 1 = (XDE >> 8) & 0xFF
-	.byte 0xc7, 0xfb, 0xa8			; ld qizh, 0  [QIZH not in LLVM]
+	ldi_berp	251, 0
 	ld (xsp + 8), 0x00			; clear accumulator byte
 	; --- Scan registration table ---
 	ld ix, de				; IX = write position (start)
@@ -18016,13 +18016,13 @@ DeleteSpecEvent_ScanLoop:
 	ld e, a					; E = filter byte 1
 	ld c, b					; C = filter byte 0
 	cpl c					; C = ~filter byte 0 (complement)
-	.byte 0xc7, 0xfb, 0x89			; ld a, qizh
+	ldto_berp	a, 251
 	and a, c				; clear bits in QIZH where filter has 1s
-	.byte 0xc7, 0xfb, 0x99			; ld qizh, a
+	ldfr_berp	a, 251
 	and e, b				; E = filter & filter (= filter)
-	.byte 0xc7, 0xfb, 0x89			; ld a, qizh
+	ldto_berp	a, 251
 	add a, e				; set bits in QIZH where filter has 1s
-	.byte 0xc7, 0xfb, 0x99			; ld qizh, a
+	ldfr_berp	a, 251
 	or (xsp + 8), b				; accumulate filter byte 0 into (xsp+8)
 DeleteSpecEvent_Match:
 	; --- Advance to next registration entry ---
@@ -18043,21 +18043,21 @@ DeleteSpecEvent_Epilogue:
 	call TaskSched_SignalEvent				; release lock/semaphore
 	ld c, (xsp + 6)				; C = param byte 0
 	cpl c					; C = ~param byte 0
-	.byte 0xc7, 0xfb, 0x89			; ld a, qizh
+	ldto_berp	a, 251
 	and a, c				; clear bits
-	.byte 0xc7, 0xfb, 0x99			; ld qizh, a
+	ldfr_berp	a, 251
 	ld c, (xsp + 10)			; C = param byte 1
 	and c, (xsp + 6)			; C = byte1 & byte0
-	.byte 0xc7, 0xfb, 0x89			; ld a, qizh
+	ldto_berp	a, 251
 	add a, c				; accumulate
-	.byte 0xc7, 0xfb, 0x99			; ld qizh, a
+	ldfr_berp	a, 251
 	ld a, (xsp + 6)				; A = param byte 0
 	or (xsp + 8), a				; accumulate into (xsp+8)
 	; --- Build final XDE from accumulated data ---
 	ld xwa, 0xFFFF0000			; mask for upper 16 bits
 	and (xsp + 2), xwa			; keep upper 16 bits of working param
 	lds32	xbc, 0
-	.byte 0xc7, 0xfb, 0x8b			; ld c, qizh
+	ldto_berp	c, 251
 	sll xbc, 8				; shift QIZH value into byte 1 position
 	lds32	xwa, 0
 	ld a, (xsp + 8)				; A = accumulator byte

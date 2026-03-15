@@ -1346,10 +1346,10 @@ Flash_InitBytecodeBlock:
 	ld	(xsp+6), a
 	ldda32	xwa, 3186
 	stda32	14766, xwa
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	ld	c, (xsp+6)
 	extz	bc
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 3
 	ld	de, wa
@@ -1357,16 +1357,18 @@ Flash_InitBytecodeBlock:
 	lda_24	xwa, 14770368
 	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x19, 0xac, 0x39
 	call	16117240
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x0a
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x0a
 	jr	c, -43
 	ldda32	xwa, 3182
 	stda32	14766, xwa
 	ldda32	xwa, 3186
 	stda32	14770, xwa
-	.byte 0xf1, 0xb0, 0x35, 0xb0, 0xc7, 0xfb, 0xa8
+	.byte 0xf1, 0xb0, 0x35, 0xb0
+	ldi_berp	251, 0
 	ld	e, (xsp+12)
 	extz	de
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 3
 	ld	bc, wa
@@ -1384,7 +1386,8 @@ Flash_InitBytecodeBlock:
 	jr	z, 6
 	ld	(xsp+8), 1
 	jr	9
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x0a
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x0a
 	jr	c, -74
 	call	16115993
 	cp	(xsp+8), 0
@@ -1450,10 +1453,10 @@ Flash_InitBytecodeBlock:
 	ld	(xsp+6), a
 	ldda32	xwa, 3186
 	stda32	14766, xwa
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	ld	c, (xsp+10)
 	extz	bc
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 3
 	ld	de, wa
@@ -1461,7 +1464,8 @@ Flash_InitBytecodeBlock:
 	lda_24	xwa, 14770368
 	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x19, 0xac, 0x39
 	call	16117240
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x0a
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x0a
 	jr	c, -43
 	ld	a, (xsp+12)
 	extz	wa
@@ -1469,10 +1473,11 @@ Flash_InitBytecodeBlock:
 	stda32	14766, xhl
 	ldda32	xwa, 3186
 	stda32	14770, xwa
-	.byte 0xf1, 0xb0, 0x35, 0xb0, 0xc7, 0xfb, 0xa8
+	.byte 0xf1, 0xb0, 0x35, 0xb0
+	ldi_berp	251, 0
 	ld	e, (xsp+6)
 	extz	de
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	muls	wa, 3
 	ld	bc, wa
@@ -1494,7 +1499,8 @@ Flash_InitBytecodeBlock:
 	.byte 0xc1, 0xad, 0x39, 0x19, 0xac, 0x39
 	call	16117240
 	jr	9
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x0a
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x0a
 	jr	c, -92
 	cp	(xsp+8), 0
 	jrl	nz, -229
@@ -2158,7 +2164,8 @@ Flash_ExtendedOpsBlock:
 	jr	c, -47
 	ldb	h, 0
 	ldb	l, 0
-	.byte 0xc7, 0xea, 0xa8, 0xc7, 0xea, 0x89
+	ldi_berp	234, 0
+	ldto_berp	a, 234
 	extz	wa
 	add	wa, wa
 	inc	2, wa
@@ -2195,7 +2202,8 @@ Flash_ExtendedOpsBlock:
 	inc	1, l
 	cp	l, 40
 	jr	c, -79
-	.byte 0xc7, 0xea, 0x61, 0xc7, 0xea, 0xcf, 0x32
+	inc_berp	234, 1
+	.byte 0xc7, 0xea, 0xcf, 0x32
 	jr	c, -113
 	popw	iz
 	inc	2, xsp
@@ -2233,7 +2241,7 @@ Flash_ExtendedOpsBlock:
 	ldada	xix, 3074
 	.byte 0xf3, 0x07, 0xf0, 0xe0, 0x32
 	ld	wa, (xde)
-	.byte 0xc7, 0xe2, 0x99
+	ldfr_berp	a, 226
 	ld	a, (xsp+2)
 	extz	wa
 	.byte 0xc7, 0xe2, 0xcf, 0xff
@@ -2263,7 +2271,8 @@ Flash_ExtendedOpsBlock:
 	inc	2, wa
 	.byte 0xf3, 0x07, 0xf0, 0xe0, 0x32
 	ld	wa, (xde)
-	.byte 0xc7, 0xe2, 0x99, 0xc7, 0xe2, 0xd9
+	ldfr_berp	a, 226
+	cpi_berp	226, 1
 	jr	nz, 43
 	ld	wa, iy
 	sla	wa, 2
@@ -3053,19 +3062,19 @@ Flash_SlotUpdateOpsBlock:
 	dec	2, xsp
 	push qiz
 	ld	(xsp+2), a
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	ld	a, (xsp+2)
 	extz	wa
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	lds	de, 0
 	calr	-5582
-	.byte 0xc7, 0xfa, 0xa9
+	ldi_berp	250, 1
 	ld	a, (xsp+2)
 	extz	wa
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
-	.byte 0xc7, 0xfa, 0x8d
+	ldto_berp	e, 250
 	extz	de
 	calr	-5603
 	ldb	h, 0
@@ -3077,9 +3086,12 @@ Flash_SlotUpdateOpsBlock:
 	add	wa, wa
 	inc	2, wa
 	ldada	xbc, 3074
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x02, 0x01, 0x00, 0xc7, 0xfa, 0x61, 0xc7, 0xfa, 0xdc
+	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x02, 0x01, 0x00
+	inc_berp	250, 1
+	cpi_berp	250, 4
 	jr	ule, -55
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x0a
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x0a
 	jr	c, -82
 	pop qiz
 	inc	2, xsp
@@ -3185,7 +3197,8 @@ Flash_SlotUpdateOpsBlock:
 	ld	(xbc), wa
 	ld	wa, (xhl+4)
 	ld	(xbc+2), wa
-	.byte 0xc7, 0xe2, 0xa8, 0xc7, 0xe2, 0x8b
+	ldi_berp	226, 0
+	ldto_berp	c, 226
 	extz	bc
 	sla	bc, 2
 	ld	wa, bc
@@ -3200,7 +3213,10 @@ Flash_SlotUpdateOpsBlock:
 	ld	ix, bc
 	inc	6, ix
 	add	bc, 108
-	.byte 0xd3, 0x07, 0xec, 0xe4, 0x20, 0xf3, 0x07, 0xe8, 0xf0, 0x50, 0xc7, 0xe2, 0x61, 0xc7, 0xe2, 0xcf, 0x32
+	.byte 0xd3, 0x07, 0xec, 0xe4, 0x20, 0xf3, 0x07, 0xe8
+	.byte 0xf0, 0x50
+	inc_berp	226, 1
+	.byte 0xc7, 0xe2, 0xcf, 0x32
 	jr	c, -65
 	ld	a, (xsp)
 	extz	wa
@@ -3240,7 +3256,8 @@ Flash_SlotUpdateOpsBlock:
 	ld	(xbc), wa
 	ld	wa, (xhl+4)
 	ld	(xbc+2), wa
-	.byte 0xc7, 0xe2, 0xa8, 0xc7, 0xe2, 0x8b
+	ldi_berp	226, 0
+	ldto_berp	c, 226
 	extz	bc
 	sla	bc, 2
 	ld	wa, bc
@@ -3255,7 +3272,10 @@ Flash_SlotUpdateOpsBlock:
 	ld	ix, bc
 	inc	6, ix
 	add	bc, 108
-	.byte 0xd3, 0x07, 0xec, 0xe4, 0x20, 0xf3, 0x07, 0xe8, 0xf0, 0x50, 0xc7, 0xe2, 0x61, 0xc7, 0xe2, 0xcf, 0x32
+	.byte 0xd3, 0x07, 0xec, 0xe4, 0x20, 0xf3, 0x07, 0xe8
+	.byte 0xf0, 0x50
+	inc_berp	226, 1
+	.byte 0xc7, 0xe2, 0xcf, 0x32
 	jr	c, -65
 	ld	a, (xsp)
 	extz	wa
@@ -3387,7 +3407,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xbc+46)
 	ld	a, (xbc+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	lda	xbc, (xsp+16)
 	lda	xwa, (xbc+68)
 	ld	(xsp+12), xwa
@@ -3401,7 +3421,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xde+46)
 	ld	a, (xde+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	lda	xwa, (xbc+72)
 	ld	(xsp+8), xwa
 	sll	xix, 8
@@ -3414,7 +3434,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xde+46)
 	ld	a, (xde+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	lda	xwa, (xbc+76)
 	ld	(xsp+4), xwa
 	sll	xix, 8
@@ -3427,7 +3447,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xde+46)
 	ld	a, (xde+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	lda	xde, (xbc+80)
 	sll	xix, 8
 	add	xix, xhl
@@ -3438,7 +3458,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xix+46)
 	ld	a, (xix+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	lda	xiy, (xbc+84)
 	sll	xix, 8
 	add	xix, xhl
@@ -3449,7 +3469,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xix+46)
 	ld	a, (xix+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	lda	xiz, (xbc+88)
 	sll	xix, 8
 	add	xix, xhl
@@ -3460,7 +3480,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	l, (xix+46)
 	ld	a, (xix+47)
 	lds32	xix, 0
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	sll	xix, 8
 	add	xix, xhl
 	ld	xhl, xix
@@ -4031,7 +4051,7 @@ ToneParam_ExtendedOpsBlock:
 	calr	-9391
 	ldda32	xde, 3182
 	ld	a, (xde)
-	.byte 0xc7, 0xee, 0x99
+	ldfr_berp	a, 238
 	lda	xwa, (xde+1)
 	ld	h, (xwa)
 	lda	xbc, (xde+2)
@@ -4283,11 +4303,11 @@ ToneParam_ExtendedOpsBlock:
 	push	xiz
 	ld	hl, wa
 	ldda8	c, 13549
-	.byte 0xc7, 0xfb, 0x9b
+	ldfr_berp	c, 251
 	ldda8	c, 13550
-	.byte 0xc7, 0xfa, 0x9b
+	ldfr_berp	c, 250
 	ldda8	c, 13551
-	.byte 0xc7, 0xf9, 0x9b
+	ldfr_berp	c, 249
 	ldda32	xbc, 3182
 	.byte 0x89, 0x70, 0x19, 0xed, 0x34
 	ldda32	xbc, 3182
@@ -4372,11 +4392,11 @@ ToneParam_ExtendedOpsBlock:
 	stdi8	13526, 27
 	ld	wa, hl
 	calr	23
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	stda8	13549, c
-	.byte 0xc7, 0xfa, 0x8b
+	ldto_berp	c, 250
 	stda8	13550, c
-	.byte 0xc7, 0xf9, 0x8b
+	ldto_berp	c, 249
 	stda8	13551, c
 	pop	xiz
 	ret

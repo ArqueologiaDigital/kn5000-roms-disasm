@@ -200,6 +200,45 @@ UNIDASM_REG_MAP = {
 }
 
 
+# ERP bank register name → C7/D7/E7 bank index byte
+# These are registers accessible via the Extended Register Prefix (C7=8-bit, D7=16-bit, E7=32-bit)
+# Mapping from unidasm register names to bank index bytes
+ERP_BANK_REGS = {
+    # Bank 0 registers
+    'RA0': 0x00, 'RW0': 0x01, 'QA0': 0x02, 'QW0': 0x03,
+    'RC0': 0x04, 'RB0': 0x05, 'QC0': 0x06, 'QB0': 0x07,
+    'RE0': 0x08, 'RD0': 0x09, 'QE0': 0x0A, 'QD0': 0x0B,
+    'RL0': 0x0C, 'RH0': 0x0D, 'QL0': 0x0E, 'QH0': 0x0F,
+    # Bank 1 registers
+    'RA1': 0x10, 'RW1': 0x11, 'QA1': 0x12, 'QW1': 0x13,
+    'RC1': 0x14, 'RB1': 0x15, 'QC1': 0x16, 'QB1': 0x17,
+    'RE1': 0x18, 'RD1': 0x19, 'QE1': 0x1A, 'QD1': 0x1B,
+    'RL1': 0x1C, 'RH1': 0x1D, 'QL1': 0x1E, 'QH1': 0x1F,
+    # Bank 2 registers
+    'RA2': 0x20, 'RW2': 0x21, 'QA2': 0x22, 'QW2': 0x23,
+    'RC2': 0x24, 'RB2': 0x25, 'QC2': 0x26, 'QB2': 0x27,
+    'RE2': 0x28, 'RD2': 0x29, 'QE2': 0x2A, 'QD2': 0x2B,
+    'RL2': 0x2C, 'RH2': 0x2D, 'QL2': 0x2E, 'QH2': 0x2F,
+    # Bank 3 registers
+    'RA3': 0x30, 'RW3': 0x31, 'QA3': 0x32, 'QW3': 0x33,
+    'RC3': 0x34, 'RB3': 0x35, 'QC3': 0x36, 'QB3': 0x37,
+    'RE3': 0x38, 'RD3': 0x39, 'QE3': 0x3A, 'QD3': 0x3B,
+    'RL3': 0x3C, 'RH3': 0x3D, 'QL3': 0x3E, 'QH3': 0x3F,
+    # Current bank named registers (0xE0-0xEF)
+    # 'A': 0xE0, 'W': 0xE1 — these are in normal register set, skip
+    'QA': 0xE2, 'QW': 0xE3, 'QC': 0xE6, 'QB': 0xE7,
+    'QE': 0xEA, 'QD': 0xEB, 'QL': 0xEE, 'QH': 0xEF,
+    # Index/stack pointer bytes (0xF0-0xFF)
+    'IXL': 0xF0, 'IXH': 0xF1, 'QIXL': 0xF2, 'QIXH': 0xF3,
+    'IYL': 0xF4, 'IYH': 0xF5, 'QIYL': 0xF6, 'QIYH': 0xF7,
+    'IZL': 0xF8, 'IZH': 0xF9, 'QIZL': 0xFA, 'QIZH': 0xFB,
+    'SPL': 0xFC, 'SPH': 0xFD, 'QSPL': 0xFE, 'QSPH': 0xFF,
+}
+
+# 8-bit register names used in LDTO/LDFR ERP instructions
+ERP_REG8 = {'A', 'W', 'B', 'C', 'D', 'E', 'H', 'L'}
+
+
 def translate_unidasm_to_llvm(mnemonic):
     """Attempt to translate unidasm mnemonic to LLVM assembly syntax.
 
@@ -211,6 +250,63 @@ def translate_unidasm_to_llvm(mnemonic):
     # Skip known untranslatable patterns
     if mnem.startswith('db') or mnem == 'max' or mnem == 'normal':
         return None
+
+    # ── ERP bank register operations (C7 prefix) ──
+    # Pattern: "ld REG8, BANK_REG" → ldto_berp reg8, bank_idx
+    m = re.match(r'^ld\s+([A-Z])\s*,\s*([A-Z][A-Z0-9]+)$', mnem)
+    if m and m.group(1) in ERP_REG8 and m.group(2) in ERP_BANK_REGS:
+        reg = m.group(1).lower()
+        bank_idx = ERP_BANK_REGS[m.group(2)]
+        return f'ldto_berp\t{reg}, {bank_idx}'
+
+    # Pattern: "ld BANK_REG, REG8" → ldfr_berp reg8, bank_idx
+    m = re.match(r'^ld\s+([A-Z][A-Z0-9]+)\s*,\s*([A-Z])$', mnem)
+    if m and m.group(1) in ERP_BANK_REGS and m.group(2) in ERP_REG8:
+        reg = m.group(2).lower()
+        bank_idx = ERP_BANK_REGS[m.group(1)]
+        return f'ldfr_berp\t{reg}, {bank_idx}'
+
+    # Pattern: "ld BANK_REG, imm" → ldi_berp bank_idx, imm (compact 0-7)
+    m = re.match(r'^ld\s+([A-Z][A-Z0-9]+)\s*,\s*(0x[0-9a-fA-F]+|\d+)$', mnem)
+    if m and m.group(1) in ERP_BANK_REGS:
+        bank_idx = ERP_BANK_REGS[m.group(1)]
+        val = int(m.group(2), 16) if m.group(2).startswith('0x') else int(m.group(2))
+        if 0 <= val <= 7:
+            return f'ldi_berp\t{bank_idx}, {val}'
+        return None  # ERP only supports small immediates directly
+
+    # Pattern: "inc N, BANK_REG" → inc_berp bank_idx, N
+    m = re.match(r'^inc\s+(0x[0-9a-fA-F]+|\d+)\s*,\s*([A-Z][A-Z0-9]+)$', mnem)
+    if m and m.group(2) in ERP_BANK_REGS:
+        bank_idx = ERP_BANK_REGS[m.group(2)]
+        val = int(m.group(1), 16) if m.group(1).startswith('0x') else int(m.group(1))
+        return f'inc_berp\t{bank_idx}, {val}'
+
+    # Pattern: "dec N, BANK_REG" → dec_berp bank_idx, N
+    m = re.match(r'^dec\s+(0x[0-9a-fA-F]+|\d+)\s*,\s*([A-Z][A-Z0-9]+)$', mnem)
+    if m and m.group(2) in ERP_BANK_REGS:
+        bank_idx = ERP_BANK_REGS[m.group(2)]
+        val = int(m.group(1), 16) if m.group(1).startswith('0x') else int(m.group(1))
+        return f'dec_berp\t{bank_idx}, {val}'
+
+    # Pattern: "cp BANK_REG, imm" → cpi_berp bank_idx, imm
+    m = re.match(r'^cp\s+([A-Z][A-Z0-9]+)\s*,\s*(0x[0-9a-fA-F]+|\d+)$', mnem)
+    if m and m.group(1) in ERP_BANK_REGS:
+        bank_idx = ERP_BANK_REGS[m.group(1)]
+        val = int(m.group(2), 16) if m.group(2).startswith('0x') else int(m.group(2))
+        if 0 <= val <= 7:
+            return f'cpi_berp\t{bank_idx}, {val}'
+        return None
+
+    # Pattern: "add REG8, BANK_REG" / "sub REG8, BANK_REG" / "and REG8, BANK_REG" etc.
+    # → add_berp/sub_berp/and_berp/or_berp/cp_berp reg8, bank_idx
+    ALU_OPS = {'add', 'sub', 'and', 'or', 'xor', 'cp'}
+    m = re.match(r'^(\w+)\s+([A-Z])\s*,\s*([A-Z][A-Z0-9]+)$', mnem)
+    if m and m.group(1).lower() in ALU_OPS and m.group(2) in ERP_REG8 and m.group(3) in ERP_BANK_REGS:
+        op = m.group(1).lower()
+        reg = m.group(2).lower()
+        bank_idx = ERP_BANK_REGS[m.group(3)]
+        return f'{op}_berp\t{reg}, {bank_idx}'
 
     # ── Special single-byte instructions (LLVM uses underscored mnemonics) ──
     if mnem == 'push SR':

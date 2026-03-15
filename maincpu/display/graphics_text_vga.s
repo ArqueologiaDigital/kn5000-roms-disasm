@@ -986,7 +986,7 @@ DrawText_LayoutAndRender_Variant1:
 	sll	bc, 3
 	ld	(xhl), bc
 	ld	a, (xwa+2)
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	lda	xwa, (xsp+2)
 	ld	bc, (xhl)
@@ -1024,13 +1024,13 @@ DrawText_LayoutAndRender_Variant1:
 	ld	wa, (xwa+8)
 	ld	(xbc+6), wa
 	ld8_24	a, 257960
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	sti8_24	257960, 1
 	ld16_24	de, 257956
 	ld	xwa, xbc
 	ld	bc, de
 	calr	-10104
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	st8_24	257960, a
 	pop qiz
 	inc	8, xsp
@@ -2804,13 +2804,14 @@ VGA_CRTCTiming_ByteData:
 	dec	4, xsp
 	push qiz
 	ld	(xsp+2), xwa
-	.byte 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0x89
+	ldi_berp	251, 0
+	ldto_berp	a, 251
 	extz	wa
 	ld	xbc, (xsp+2)
 	calr	-175
 	lds32	xwa, 4
 	add	(xsp+2), xwa
-	.byte 0xc7, 0xfb, 0x61
+	inc_berp	251, 1
 	jr	-21
 	ldw	wa, 964
 	lds	bc, 6

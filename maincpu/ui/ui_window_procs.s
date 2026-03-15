@@ -9022,7 +9022,7 @@ ColorBlit2_LargeCodeBlock:
 	cp	(xsp+24), 1
 	jrl	ugt, 192
 	ld8_24	a, 257962
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	ld	wa, (xbc+2)
 	exts	xwa
 	ld	xhl, xwa
@@ -9030,11 +9030,11 @@ ColorBlit2_LargeCodeBlock:
 	add	xhl, xwa
 	sll	xhl, 6
 	lda_24	xde, 277504
-	.byte 0xc7, 0xf0, 0xda
+	cpi_berp	240, 2
 	jrl	z, 140
-	.byte 0xc7, 0xf0, 0xd9
+	cpi_berp	240, 1
 	jr	z, 115
-	.byte 0xc7, 0xf0, 0xd8
+	cpi_berp	240, 0
 	jrl	nz, 147
 	ld	xiz, xbc
 	ld	iy, (xsp+50)

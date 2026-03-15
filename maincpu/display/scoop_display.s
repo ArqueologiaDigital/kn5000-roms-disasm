@@ -2544,23 +2544,29 @@ PerfMode_Handler_EvtB:
 	ret
 	ldda8	a, 49278
 	andda8	a, 49279
-	.byte 0xc7, 0x3c, 0x99
+	ldfr_berp	a, 60
 	and	a, 3
-	.byte 0xc7, 0x3c, 0x89
+	ldto_berp	a, 60
 	jrl	nz, 64
 	ldda8	a, 49278
 	xor	c, c
-	.byte 0xc7, 0x3c, 0x99, 0xc7, 0x3d, 0x99
+	ldfr_berp	a, 60
+	ldfr_berp	a, 61
 	ld	a, c
 	.byte 0xc7, 0x3d, 0x2b
 	ccf
-	.byte 0xc7, 0x3d, 0x2c, 0xc7, 0x3c, 0x89, 0xc7, 0x3d, 0x89
+	.byte 0xc7, 0x3d, 0x2c
+	ldto_berp	a, 60
+	ldto_berp	a, 61
 	inc	1, c
-	.byte 0xc7, 0x3c, 0x99, 0xc7, 0x3d, 0x99
+	ldfr_berp	a, 60
+	ldfr_berp	a, 61
 	ld	a, c
 	.byte 0xc7, 0x3d, 0x2b
 	ccf
-	.byte 0xc7, 0x3d, 0x2c, 0xc7, 0x3c, 0x89, 0xc7, 0x3d, 0x89
+	.byte 0xc7, 0x3d, 0x2c
+	ldto_berp	a, 60
+	ldto_berp	a, 61
 	andda8	a, 49279
 	stda8	3520, a
 	push	xhl
@@ -2749,11 +2755,13 @@ Timer_ModeHandler_0:
 	cp	c, 15
 	jrl	ule, 4
 	add	iy, 2
-	.byte 0xc7, 0x3c, 0x99, 0xd7, 0x3e, 0x9a
+	ldfr_berp	a, 60
+	.byte 0xd7, 0x3e, 0x9a
 	ld	de, (xiy)
 	ld	a, c
 	scf
-	.byte 0xda, 0x2c, 0xc7, 0x3c, 0x89
+	.byte 0xda, 0x2c
+	ldto_berp	a, 60
 	ld	(xiy), de
 	.byte 0xd7, 0x3e, 0x8a, 0xf1, 0x57, 0x0f, 0xc8
 	jrl	nz, 4
@@ -3451,9 +3459,9 @@ ToneParam_HandlerTable_BC:
 	cp	a, 72
 	jrl	nz, 63
 	call	15713305
-	.byte 0xc7, 0x3c, 0x99
+	ldfr_berp	a, 60
 	and	a, 31
-	.byte 0xc7, 0x3c, 0x89
+	ldto_berp	a, 60
 	jrl	nz, 47
 	srl	a, 5
 	and	a, 3
@@ -4427,7 +4435,7 @@ VoiceCtrl_BytecodeHandler:
 	cp	a, 72
 	jrl	nz, 82
 	call	15713305
-	.byte 0xc7, 0x38, 0x99
+	ldfr_berp	a, 56
 	cps	a, 6
 	jrl	z, 5
 	cps	a, 5
@@ -4442,10 +4450,12 @@ VoiceCtrl_BytecodeHandler:
 	jrl	z, 3
 	or	a, 128
 	ldb	c, 7
-	.byte 0xc7, 0x3c, 0x99, 0xc7, 0x3d, 0x99
+	ldfr_berp	a, 60
+	ldfr_berp	a, 61
 	ld	a, c
 	scf
-	.byte 0xc7, 0x3d, 0x2a, 0xc7, 0x3c, 0x89
+	.byte 0xc7, 0x3d, 0x2a
+	ldto_berp	a, 60
 	jrl	nc, 23
 	cps	c, 0
 	jrl	z, 6
@@ -4456,16 +4466,17 @@ VoiceCtrl_BytecodeHandler:
 	call	15716619
 	jp	15701892
 	ld	b, c
-	.byte 0xc7, 0x3c, 0x99
+	ldfr_berp	a, 60
 	ld	a, c
 	scf
-	.byte 0xf1, 0xc7, 0x0d, 0x2a, 0xc7, 0x3c, 0x89
+	.byte 0xf1, 0xc7, 0x0d, 0x2a
+	ldto_berp	a, 60
 	jrl	c, 13
-	.byte 0xc7, 0x38, 0xde
+	cpi_berp	56, 6
 	jrl	nz, -34
 	add	b, 8
 	jp	15701835
-	.byte 0xc7, 0x38, 0xde
+	cpi_berp	56, 6
 	jrl	nz, 3
 	add	b, 8
 	set	4, b
@@ -4615,10 +4626,10 @@ VoiceCtrl_ParamSetupBytecode:
 	cps	w, 4
 	jrl	z, 23
 	jp	15702396
-	.byte 0xc7, 0x3c, 0x99
+	ldfr_berp	a, 60
 	ld	a, (xiy+4)
 	and	a, 127
-	.byte 0xc7, 0x3c, 0x89
+	ldto_berp	a, 60
 	jrl	z, 86
 	jp	15702436
 	cp	a, 152
@@ -4655,10 +4666,10 @@ VoiceCtrl_ParamSetupBytecode:
 	ld	xhl, 15702469
 	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
 	jp	15702442
-	.byte 0xc7, 0x3c, 0x99
+	ldfr_berp	a, 60
 	ld	a, (xiy)
 	and	a, 3
-	.byte 0xc7, 0x3c, 0x89
+	ldto_berp	a, 60
 	jrl	nz, -34
 	ldb	a, 27
 	jp	15702442
@@ -5785,10 +5796,13 @@ ClockConfig_Handler_0:
 	jrl	nz, 24
 	ldda8	c, 3822
 	dec	1, c
-	.byte 0xc7, 0x3c, 0x99, 0xd7, 0x3e, 0x9a
+	ldfr_berp	a, 60
+	.byte 0xd7, 0x3e, 0x9a
 	ld	a, c
 	scf
-	.byte 0xd7, 0x3e, 0x2c, 0xc7, 0x3c, 0x89, 0xd7, 0x3e, 0x8a
+	.byte 0xd7, 0x3e, 0x2c
+	ldto_berp	a, 60
+	.byte 0xd7, 0x3e, 0x8a
 	stda16	61854, de
 	st16_24	65516, de
 	.byte 0xc1, 0xa5, 0x28, 0x3e, 0x01
@@ -8154,9 +8168,9 @@ VoiceSlot_StatusRet:
 	.byte 0xce, 0xe9, 0x02
 	or	a, h
 	stda8	4341, a
-	.byte 0xc7, 0x3c, 0x99
+	ldfr_berp	a, 60
 	and	a, 7
-	.byte 0xc7, 0x3c, 0x89
+	ldto_berp	a, 60
 	jrl	z, 8
 	call	15728230
 	jp	15716434
@@ -8164,9 +8178,9 @@ VoiceSlot_StatusRet:
 	jrl	z, 8
 	call	15728433
 	jp	15716434
-	.byte 0xc7, 0x3c, 0x99
+	ldfr_berp	a, 60
 	and	a, 224
-	.byte 0xc7, 0x3c, 0x89
+	ldto_berp	a, 60
 	jrl	z, 4
 	call	15728520
 	jp	15716434
@@ -8193,7 +8207,7 @@ VoiceSlot_StatusRet:
 	call	15728747
 	jp	15716434
 	jp	15714679
-	.byte 0xc7, 0x38, 0x99
+	ldfr_berp	a, 56
 	stda8	4338, a
 	call	15713305
 	ld	c, a
@@ -8207,22 +8221,22 @@ VoiceSlot_StatusRet:
 	jrl	z, 3
 	or	a, 128
 	ld	xiy, 14120
-	.byte 0xc7, 0x3c, 0x99
+	ldfr_berp	a, 60
 	and	a, 192
-	.byte 0xc7, 0x3c, 0x89
+	ldto_berp	a, 60
 	jrl	nz, 28
-	.byte 0xc7, 0x3c, 0x99
+	ldfr_berp	a, 60
 	and	a, 48
-	.byte 0xc7, 0x3c, 0x89
+	ldto_berp	a, 60
 	jrl	nz, 60
 	bit	2, a
 	jrl	nz, 86
 	bit	3, a
 	jrl	nz, 102
 	jp	15714679
-	.byte 0xc7, 0x3c, 0x9b
+	ldfr_berp	c, 60
 	and	c, 192
-	.byte 0xc7, 0x3c, 0x8b
+	ldto_berp	c, 60
 	jrl	z, 24
 	bit	6, c
 	jrl	z, 7
@@ -8233,9 +8247,9 @@ VoiceSlot_StatusRet:
 	jp	15716434
 	.byte 0xf1, 0x54, 0x0d, 0xbd
 	jp	15716434
-	.byte 0xc7, 0x3c, 0x9b
+	ldfr_berp	c, 60
 	and	c, 48
-	.byte 0xc7, 0x3c, 0x8b
+	ldto_berp	c, 60
 	jrl	z, -20
 	ld	(xiy), 7
 	bit	4, c
@@ -13333,7 +13347,7 @@ Scoop_EnvCalc_Handler3:
 	sll	bc, 3
 	ld	(xsp+10), bc
 	ld	a, (xwa+2)
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, (xsp+10)
 	dec	2, wa

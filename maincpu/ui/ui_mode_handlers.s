@@ -1940,11 +1940,11 @@ EffectMode_ByteData_DiagEvents:
 	pop	xde
 	ldda8	a, 36220
 	cpl	a
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	and	a, 9
 	extz	wa
 	calr	-2183
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	and	a, 9
 	jr	nz, 14
 	ld	xwa, 16056331

@@ -67,9 +67,9 @@ SeqStep_NoteByteBlock:
 	ldda8	a, 9688
 	extz	wa
 	jr	-44
-	.byte 0xc7, 0xf9, 0xa8
+	ldi_berp	249, 0
 	jr	18
-	.byte 0xc7, 0xf9, 0xa9
+	ldi_berp	249, 1
 	jr	13
 
 SeqStep_NoteSetD1:

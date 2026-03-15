@@ -415,7 +415,7 @@ DSPCfg_InitDispatchData:
 	ld	(xsp+2), xbc
 	ld	c, (xbc)
 	ld	(xsp+6), c
-	.byte 0xc7, 0xf8, 0x9b
+	ldfr_berp	c, 248
 	extz	iz
 	ld	l, (xde+2)
 	ld	h, l
@@ -455,7 +455,7 @@ DSPCfg_InitDispatchData:
 	lda	xbc, (xde+3)
 	ld	(xsp+2), xbc
 	ld	c, (xbc)
-	.byte 0xc7, 0xf8, 0x9b
+	ldfr_berp	c, 248
 	extz	iz
 	ld	l, (xde+2)
 	ld	h, l

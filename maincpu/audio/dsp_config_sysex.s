@@ -99,7 +99,7 @@ SysEx_ApplyToSlot49_Data:
 	jr	le, 42
 	ld	a, (xsp+4)
 	extz	wa
-	.byte 0xc7, 0xf8, 0x8b
+	ldto_berp	c, 248
 	extz	bc
 	calr	191
 	ld	bc, hl

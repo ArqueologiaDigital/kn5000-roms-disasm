@@ -187,7 +187,7 @@ FDC_WaitReady:
 	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
 	stdi8	35436, 0
 	stdi16	35362, 0
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	lds	wa, 2
 	calr	-443
 	jr	127
@@ -211,22 +211,22 @@ FDC_WaitReady:
 	jr	61
 	stdi8	35436, 4
 	stdi16	35362, 0
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	lds	wa, 2
 	calr	-530
 	jr	40
 	stdi8	35436, 5
 	stdi16	35362, 0
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	lds	wa, 2
 	calr	-551
 	jr	19
 	stdi8	35436, 0
 	stdi16	35362, 0
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	lds	wa, 2
 	calr	-572
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	or	a, 11
 	extz	wa
 	calr	1421
@@ -1253,7 +1253,7 @@ FDC_InitSequence_Full:
 FDC_SeekRecalibrate:
 	push qiz
 	ldda8	a, 35382
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	stdi8	35382, 5
 	stdi8	35588, 255
 	calr	45
@@ -1265,7 +1265,7 @@ FDC_SeekRecalibrate:
 	cpdi8	35364, 0
 	jr	z, 5
 	stdi8	35588, 255
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	stda8	35382, a
 	ldw	wa, 16
 	calr	-128
@@ -1326,10 +1326,10 @@ FDC_CMD_EXEC:
 	cpdi8	35364, 0
 	jr	z, 22
 	ldda8	a, 35364
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	exts	iz
 	calr	-2902
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	stda8	35364, a
 	jrl	259
 	ldda16	wa, 35400
@@ -1415,10 +1415,10 @@ FDC_CMD_EXEC:
 	cpdi8	35364, 0
 	jr	z, 22
 	ldda8	a, 35364
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	exts	iz
 	calr	-3209
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	stda8	35364, a
 	jrl	260
 	ldda16	wa, 35400
@@ -1812,7 +1812,8 @@ FDC_INTERRUPT_HANDLER:
 	cpdi8	35364, 0
 	jr	nz, 42
 	calr	-4486
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0x33, 0x07
+	ldfr_berp	l, 251
+	.byte 0xc7, 0xfb, 0x33, 0x07
 	jr	z, 6
 	ldw	wa, 50
 	calr	-1793

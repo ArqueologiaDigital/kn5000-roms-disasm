@@ -349,16 +349,17 @@ BitMapOut_ByteData_PresetCopy:
 	jr	nz, 60
 	ldda8	a, 49278
 	res	7, a
-	.byte 0xc7, 0xfb, 0x99, 0xc7, 0xfb, 0xd8
+	ldfr_berp	a, 251
+	cpi_berp	251, 0
 	jr	z, 45
-	.byte 0xc7, 0xfb, 0x69
+	dec_berp	251, 1
 	ldda8	a, 49279
 	res	7, a
 	cps	a, 0
 	jr	z, 31
 	ld	xwa, 769
 	call	16569399
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	cps	hl, 0
 	jr	nz, 5
@@ -3592,21 +3593,26 @@ BitMapOut_ByteData_RenderState:
 	cps	a, 2
 	jr	nz, 48
 	calr	-68
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x09
+	ldfr_berp	l, 251
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x09
 	jr	le, 3
-	.byte 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0x89
+	ldi_berp	251, 0
+	ldto_berp	a, 251
 	extz	wa
 	jr	20
 	calr	-93
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0x69
+	ldfr_berp	l, 251
+	dec_berp	251, 1
 	jr	ge, 4
-	.byte 0xc7, 0xfb, 0x03, 0x09, 0xc7, 0xfb, 0x89
+	.byte 0xc7, 0xfb, 0x03, 0x09
+	ldto_berp	a, 251
 	extz	wa
 	calr	-108
 	call	16406631
 	cp	xhl, 27263184
 	jr	nz, 19
-	.byte 0xc7, 0xfb, 0x8d
+	ldto_berp	e, 251
 	exts	de
 	exts	xde
 	ld	xwa, 4294967295
@@ -3815,14 +3821,16 @@ BitMapOut_UpdateWidget_Done:
 	extz	wa
 	call	16547458
 	jr	31
-	.byte 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0x8b
+	ldi_berp	251, 0
+	ldto_berp	c, 251
 	extz	bc
 	ld	a, (xsp+2)
 	extz	wa
 	sll	wa, 3
 	add	wa, bc
 	call	16534664
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x08
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x08
 	jr	c, -28
 	pop qiz
 	inc	2, xsp

@@ -1007,7 +1007,7 @@ SndParam_RegisterEntry_Data:
 	ld	(xsp+12), de
 	ld	xde, xwa
 	ld	a, c
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	lda	xwa, (xde+4)
 	ld	(xsp+4), xwa
 	ld	a, (xwa)
@@ -1018,23 +1018,23 @@ SndParam_RegisterEntry_Data:
 	or	xhl, xhl
 	jrl	z, 187
 	ld	a, (xde+7)
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	extz	ix
 	cp	ix, bc
 	jr	le, 3
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	ld	a, (xde+8)
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	extz	ix
 	cp	ix, bc
 	jr	ge, 3
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	ld	xiy, 15579692
 	ld	xix, 38624
 	lds	bc, 6
 	ldirw
 	ld	b, (xde+10)
-	.byte 0xc7, 0xe6, 0x8b
+	ldto_berp	c, 230
 	ld	a, (xde+9)
 	and	a, 15
 	jr	z, 2
@@ -1055,11 +1055,12 @@ SndParam_RegisterEntry_Data:
 	extz	wa
 	.byte 0xf3, 0x07, 0xec, 0xe0, 0x36
 	ld	w, (xiz)
-	.byte 0xc7, 0xe7, 0x98
+	ldfr_berp	w, 231
 	ld	c, (xix)
-	.byte 0xc7, 0xe6, 0x9b, 0xc7, 0xe6, 0x89
+	ldfr_berp	c, 230
+	ldto_berp	a, 230
 	and	a, b
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	cpl	c
 	and	w, c
 	ld	(xiz), w
@@ -1067,12 +1068,12 @@ SndParam_RegisterEntry_Data:
 	extz	wa
 	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33
 	ld	c, (xhl)
-	.byte 0xc7, 0xe6, 0xe3
+	or_berp	c, 230
 	ld	(xhl), c
 	ld	xwa, (xsp+8)
 	ld	(xwa), c
 	ldada	xhl, 38624
-	.byte 0xc7, 0xe7, 0x89
+	ldto_berp	a, 231
 	cp	a, (xhl+6)
 	jr	nz, 7
 	.byte 0x9f, 0x0c, 0x3f, 0x04, 0x00
@@ -1096,7 +1097,7 @@ SndParam_RegisterEntryAlt_Data:
 	ld	hl, de
 	ld	xde, xwa
 	ld	a, c
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	lda	xwa, (xde+4)
 	ld	(xsp+6), xwa
 	ld	a, (xwa)
@@ -1108,23 +1109,23 @@ SndParam_RegisterEntryAlt_Data:
 	or	xwa, xwa
 	jrl	z, 156
 	ld	a, (xde+7)
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	extz	ix
 	cp	ix, bc
 	jr	le, 3
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	ld	a, (xde+8)
-	.byte 0xc7, 0xf0, 0x99
+	ldfr_berp	a, 240
 	extz	ix
 	cp	ix, bc
 	jr	ge, 3
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	ld	xiy, 15579692
 	ld	xix, 38636
 	lds	bc, 6
 	ldirw
 	ld	b, (xde+10)
-	.byte 0xc7, 0xe6, 0x8b
+	ldto_berp	c, 230
 	ld	a, (xde+9)
 	and	a, 15
 	jr	z, 2
@@ -1139,9 +1140,10 @@ SndParam_RegisterEntryAlt_Data:
 	ld	(xiy), a
 	jr	50
 	ld	c, (xix)
-	.byte 0xc7, 0xe6, 0x9b, 0xc7, 0xe6, 0x89
+	ldfr_berp	c, 230
+	ldto_berp	a, 230
 	and	a, b
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	lda	xhl, (xde+5)
 	ld	a, (xhl)
 	extz	wa
@@ -1153,7 +1155,7 @@ SndParam_RegisterEntryAlt_Data:
 	extz	bc
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x33
 	ld	a, (xhl)
-	.byte 0xc7, 0xe6, 0xe1
+	or_berp	a, 230
 	ld	(xhl), a
 	ld	(xiy), a
 	ldada	xbc, 38636
@@ -1183,12 +1185,12 @@ SndParam_UpdateEntry_Data:
 	ld	c, (xwa+5)
 	ld	(xhl+5), c
 	ld	c, e
-	.byte 0xc7, 0xea, 0x9b
+	ldfr_berp	c, 234
 	lda	xbc, (xhl+6)
 	lda	xix, (xhl+7)
 	cp	(xiy), 177
 	jr	nz, 15
-	.byte 0xc7, 0xea, 0x89
+	ldto_berp	a, 234
 	res	7, a
 	ld	(xbc), a
 	sra	de, 7
@@ -1196,7 +1198,7 @@ SndParam_UpdateEntry_Data:
 	jr	16
 	lda	xiy, (xwa+6)
 	ld	e, (xiy)
-	.byte 0xc7, 0xea, 0x89
+	ldto_berp	a, 234
 	and	a, e
 	ld	(xbc), a
 	ld	a, (xiy)
@@ -1249,13 +1251,13 @@ SndParam_RegisterMultiField_Data:
 	jr	56
 	lda	xiy, (xde+5)
 	ld	a, (xiy)
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	xwa, (xsp+4)
 	exts	xiz
 	add	xiz, xwa
 	ld	w, (xiz)
-	.byte 0xc7, 0xee, 0x98
+	ldfr_berp	w, 238
 	ld	a, (xix)
 	ld	l, a
 	and	l, h
@@ -1263,7 +1265,7 @@ SndParam_RegisterMultiField_Data:
 	and	w, a
 	ld	(xiz), w
 	ld	a, (xiy)
-	.byte 0xc7, 0xf4, 0x99
+	ldfr_berp	a, 244
 	extz	iy
 	ld	xwa, (xsp+4)
 	exts	xiy
@@ -1273,7 +1275,7 @@ SndParam_RegisterMultiField_Data:
 	ld	(xiy), a
 	ld	(xbc), a
 	ldada	xbc, 38660
-	.byte 0xc7, 0xee, 0x89
+	ldto_berp	a, 238
 	cp	a, (xbc+6)
 	jr	nz, 7
 	.byte 0x9f, 0x0c, 0x3f, 0x04, 0x00
@@ -1369,7 +1371,7 @@ SndParam_RegisterLinked_Data:
 	ld	de, bc
 	ld	xhl, xwa
 	ld	a, e
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	lda	xwa, (xhl+4)
 	ld	(xsp+4), xwa
 	ld	a, (xwa)
@@ -1385,13 +1387,13 @@ SndParam_RegisterLinked_Data:
 	extz	bc
 	cp	bc, de
 	jr	le, 3
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	ld	a, (xhl+8)
 	ld	c, a
 	extz	bc
 	cp	bc, de
 	jr	ge, 3
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	ld	xiy, 15579692
 	ld	xix, 38684
 	lds	bc, 6
@@ -1405,19 +1407,20 @@ SndParam_RegisterLinked_Data:
 	jr	nz, 9
 	inc	1, a
 	ld	(xix), a
-	.byte 0xc7, 0xe6, 0xa9
+	ldi_berp	230, 1
 	jr	26
-	.byte 0xc7, 0xe6, 0xd8
+	cpi_berp	230, 0
 	jr	z, 21
 	ld	c, (xhl+6)
 	ld	a, (xhl+9)
 	and	a, 15
 	jr	z, 2
-	.byte 0xcb, 0xff, 0xc7, 0xe6, 0x89
+	.byte 0xcb, 0xff
+	ldto_berp	a, 230
 	xor	a, c
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	ld	e, (xhl+10)
-	.byte 0xc7, 0xe6, 0x8b
+	ldto_berp	c, 230
 	ld	a, (xhl+9)
 	and	a, 15
 	jr	z, 2
@@ -1436,7 +1439,7 @@ SndParam_RegisterLinked_Data:
 	ld	(xwa), c
 	jr	59
 	ld	a, (xix)
-	.byte 0xc7, 0xf4, 0x99
+	ldfr_berp	a, 244
 	extz	iy
 	ld	xwa, (xsp)
 	exts	xiy
@@ -1444,9 +1447,10 @@ SndParam_RegisterLinked_Data:
 	ld	w, (xiy)
 	ld	e, w
 	ld	c, (xbc)
-	.byte 0xc7, 0xe6, 0x9b, 0xc7, 0xe6, 0x89
+	ldfr_berp	c, 230
+	ldto_berp	a, 230
 	and	a, d
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	cpl	c
 	and	w, c
 	ld	(xiy), w
@@ -1455,7 +1459,7 @@ SndParam_RegisterLinked_Data:
 	ld	xwa, (xsp)
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x34
 	ld	c, (xix)
-	.byte 0xc7, 0xe6, 0xe3
+	or_berp	c, 230
 	ld	(xix), c
 	ld	xwa, (xsp+12)
 	ld	(xwa), c
@@ -1559,13 +1563,13 @@ SndParam_RegisterLinked2_Data:
 	jr	56
 	lda	xiy, (xde+5)
 	ld	a, (xiy)
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	xwa, (xsp+4)
 	exts	xiz
 	add	xiz, xwa
 	ld	w, (xiz)
-	.byte 0xc7, 0xee, 0x98
+	ldfr_berp	w, 238
 	ld	a, (xbc)
 	ld	l, a
 	and	l, h
@@ -1573,7 +1577,7 @@ SndParam_RegisterLinked2_Data:
 	and	w, a
 	ld	(xiz), w
 	ld	a, (xiy)
-	.byte 0xc7, 0xf4, 0x99
+	ldfr_berp	a, 244
 	extz	iy
 	ld	xwa, (xsp+4)
 	exts	xiy
@@ -1583,7 +1587,7 @@ SndParam_RegisterLinked2_Data:
 	ld	(xiy), a
 	ld	(xix), a
 	ldada	xix, 38696
-	.byte 0xc7, 0xee, 0x89
+	ldto_berp	a, 238
 	cp	a, (xix+6)
 	jr	nz, 7
 	.byte 0x9f, 0x0c, 0x3f, 0x04, 0x00
@@ -1627,7 +1631,7 @@ SndParam_RegisterSimple_Data:
 	jr	le, 3
 	ldw	de, 300
 	ld	a, e
-	.byte 0xc7, 0xea, 0x99
+	ldfr_berp	a, 234
 	ldada	xwa, 38708
 	lda	xbc, (xwa+4)
 	lda	xhl, (xwa+5)
@@ -1639,7 +1643,7 @@ SndParam_RegisterSimple_Data:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	(xhl), 8
-	.byte 0xc7, 0xea, 0x89
+	ldto_berp	a, 234
 	ld	(xix), a
 	sra	de, 8
 	ld	(xiy), e
@@ -1653,7 +1657,7 @@ SndParam_RegisterSimple_Data:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	(xhl), 8
-	.byte 0xc7, 0xea, 0x89
+	ldto_berp	a, 234
 	ld	(xix), a
 	ld	(xiy), 255
 	jr	6
@@ -1695,7 +1699,7 @@ SndParam_RegisterChained_Data:
 	extz	wa
 	.byte 0xf3, 0x07, 0xf8, 0xe0, 0x34
 	ld	a, (xix)
-	.byte 0xc7, 0xea, 0x99
+	ldfr_berp	a, 234
 	extz	wa
 	ld	(xsp+4), wa
 	ld	bc, wa
@@ -1703,7 +1707,7 @@ SndParam_RegisterChained_Data:
 	lda	xwa, (xhl+6)
 	ld	(xsp+6), xwa
 	ld	a, (xwa)
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	extz	wa
 	ld	qwa, wa
 	and	wa, bc
@@ -1725,12 +1729,12 @@ SndParam_RegisterChained_Data:
 	jr	ge, 2
 	ld	bc, wa
 	ld	w, c
-	.byte 0xc7, 0xe6, 0x8d
+	ldto_berp	e, 230
 	cpl	e
 	ldada	xbc, 38738
 	.byte 0x9f, 0x12, 0x3f, 0x04, 0x00
 	jr	nz, 24
-	.byte 0xc7, 0xea, 0xc5
+	and_berp	e, 234
 	ld	l, e
 	ld	(xbc), l
 	ld	e, w
@@ -1741,9 +1745,9 @@ SndParam_RegisterChained_Data:
 	or	l, e
 	ld	(xbc), l
 	jr	41
-	.byte 0xc7, 0xea, 0x89
+	ldto_berp	a, 234
 	and	a, e
-	.byte 0xc7, 0xea, 0x99
+	ldfr_berp	a, 234
 	ld	(xix), a
 	ld	e, w
 	ld	a, (xiy)
@@ -1802,13 +1806,14 @@ SndParam_RegisterChained2_Data:
 	extz	wa
 	.byte 0xf3, 0x07, 0xf8, 0xe0, 0x34
 	ld	a, (xix)
-	.byte 0xc7, 0xee, 0x99, 0xc7, 0xee, 0x8b
+	ldfr_berp	a, 238
+	ldto_berp	c, 238
 	extz	bc
 	lda	xiy, (xde+9)
 	lda	xwa, (xde+6)
 	ld	(xsp+4), xwa
 	ld	a, (xwa)
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	extz	wa
 	ld	qwa, wa
 	and	wa, bc
@@ -1830,12 +1835,12 @@ SndParam_RegisterChained2_Data:
 	jr	ge, 2
 	ld	bc, wa
 	ld	w, c
-	.byte 0xc7, 0xe6, 0x8d
+	ldto_berp	e, 230
 	cpl	e
 	ldada	xbc, 38750
 	.byte 0x9f, 0x10, 0x3f, 0x04, 0x00
 	jr	nz, 24
-	.byte 0xc7, 0xee, 0xc5
+	and_berp	e, 238
 	ld	l, e
 	ld	(xbc), l
 	ld	e, w
@@ -1846,9 +1851,9 @@ SndParam_RegisterChained2_Data:
 	or	l, e
 	ld	(xbc), l
 	jr	41
-	.byte 0xc7, 0xee, 0x89
+	ldto_berp	a, 238
 	and	a, e
-	.byte 0xc7, 0xee, 0x99
+	ldfr_berp	a, 238
 	ld	(xix), a
 	ld	e, w
 	ld	a, (xiy)
@@ -1940,10 +1945,11 @@ SndParam_RegisterComplex_Data:
 	ld	l, (xwa)
 	extz	hl
 	ld	xwa, (xsp)
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21, 0xc7, 0xea, 0x99
+	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21
+	ldfr_berp	a, 234
 	ldada	xix, 38756
 	lda	xhl, (xix+6)
-	.byte 0xc7, 0xea, 0x8d
+	ldto_berp	e, 234
 	ld	a, e
 	ld	(xhl), a
 	ld	a, (xiy+9)
@@ -1952,18 +1958,18 @@ SndParam_RegisterComplex_Data:
 	.byte 0xcc, 0xfe
 	ld	a, (xiy+10)
 	xor	a, d
-	.byte 0xc7, 0xeb, 0x99
+	ldfr_berp	a, 235
 	inc	6, xiy
 	ld	w, (xiy)
 	ld	d, w
-	.byte 0xc7, 0xeb, 0xc4
+	and_berp	d, 235
 	cpl	w
 	and	e, w
 	ld	a, e
 	ld	(xhl), a
 	or	e, d
 	ld	(xhl), e
-	.byte 0xc7, 0xea, 0x89
+	ldto_berp	a, 234
 	cp	a, e
 	jr	z, 63
 	.byte 0x9f, 0x08, 0x3f, 0x04, 0x00
@@ -2054,7 +2060,9 @@ SndParam_RegisterDual_Data:
 	ld	l, (xwa)
 	ld	h, l
 	ld	xwa, (xsp)
-	.byte 0xc3, 0x07, 0xe0, 0xe4, 0x21, 0xc7, 0xee, 0x99, 0xc7, 0xee, 0xc6
+	.byte 0xc3, 0x07, 0xe0, 0xe4, 0x21
+	ldfr_berp	a, 238
+	and_berp	h, 238
 	ld	c, h
 	ld	h, (xde+9)
 	ld	a, h
@@ -2103,19 +2111,23 @@ SndParam_RegisterDual_Data:
 	ld	bc, wa
 	dec	1, bc
 	ld	xwa, (xde)
-	.byte 0xc3, 0x07, 0xe0, 0xe4, 0x25, 0xc7, 0xee, 0x8a, 0xc7, 0xee, 0x89, 0xc7, 0xe6, 0x99
+	.byte 0xc3, 0x07, 0xe0, 0xe4, 0x25
+	ldto_berp	b, 238
+	ldto_berp	a, 238
+	ldfr_berp	a, 230
 	cpl	l
-	.byte 0xc7, 0xe6, 0x89
+	ldto_berp	a, 230
 	and	a, l
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	ld	a, h
 	and	a, 15
 	jr	z, 2
-	.byte 0xcd, 0xfe, 0xc7, 0xe6, 0x89
+	.byte 0xcd, 0xfe
+	ldto_berp	a, 230
 	or	a, e
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	ldada	xde, 38772
-	.byte 0xc7, 0xe6, 0x89
+	ldto_berp	a, 230
 	ld	(xde+6), a
 	.byte 0x9f, 0x10, 0x3f, 0x04, 0x00
 	jr	z, 17
@@ -2123,7 +2135,9 @@ SndParam_RegisterDual_Data:
 	ld	l, (xwa)
 	extz	hl
 	ld	xwa, (xsp)
-	.byte 0xc7, 0xe6, 0x8b, 0xf3, 0x07, 0xe0, 0xec, 0x43, 0xc7, 0xe6, 0x89
+	ldto_berp	c, 230
+	.byte 0xf3, 0x07, 0xe0, 0xec, 0x43
+	ldto_berp	a, 230
 	cp	a, b
 	jr	z, 32
 	ld	xwa, (xsp+12)
@@ -2172,7 +2186,7 @@ SndParam_RegisterOffset_Data:
 	ld	a, c
 	ld	(xsp+2), a
 	ld	a, (xde)
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	ldada	xwa, 38784
 	lda	xde, (xwa+4)
 	lda	xhl, (xwa+5)
@@ -2183,7 +2197,7 @@ SndParam_RegisterOffset_Data:
 	jr	nz, 31
 	cp	iz, bc
 	jr	z, 60
-	.byte 0xc7, 0xe6, 0x89
+	ldto_berp	a, 230
 	ld	(xde), a
 	ld	(xhl), 8
 	ld	a, (xsp+2)
@@ -2196,7 +2210,7 @@ SndParam_RegisterOffset_Data:
 	ld	(xiy), bc
 	cp	iz, bc
 	jr	z, 27
-	.byte 0xc7, 0xe6, 0x89
+	ldto_berp	a, 230
 	ld	(xde), a
 	ld	(xhl), 8
 	ld	a, (xsp+2)
@@ -2243,7 +2257,7 @@ SndParam_RegisterWide_Data:
 	lda	xwa, (xde+6)
 	ld	(xsp+10), xwa
 	ld	a, (xwa)
-	.byte 0xc7, 0xe6, 0x99
+	ldfr_berp	a, 230
 	extz	wa
 	ld	iz, wa
 	and	iz, bc
@@ -2288,7 +2302,7 @@ SndParam_RegisterWide_Data:
 	.byte 0xb1, 0x02, 0xff, 0xff
 	ld	xhl, xbc
 	jr	79
-	.byte 0xc7, 0xe6, 0x88
+	ldto_berp	w, 230
 	cpl	w
 	and	l, w
 	ld	(xix), l
@@ -2540,7 +2554,9 @@ SndParam_BatchUpdate_Data:
 	push	xiz
 	ld	(xsp+20), bc
 	ld	(xsp+22), xwa
-	.byte 0xc7, 0xfa, 0xa8, 0xc7, 0xf9, 0xa8, 0xc7, 0xfb, 0xa8
+	ldi_berp	250, 0
+	ldi_berp	249, 0
+	ldi_berp	251, 0
 	ld	xwa, 8705
 	calr	-5923
 	ld	wa, (xsp+20)
@@ -2567,13 +2583,16 @@ SndParam_BatchUpdate_Data:
 	call	16705514
 	lda	xbc, (xsp+10)
 	ld	a, (xbc+1)
-	.byte 0xc7, 0xfa, 0x99, 0xc7, 0xfa, 0x30, 0x07
+	ldfr_berp	a, 250
+	.byte 0xc7, 0xfa, 0x30, 0x07
 	srl	a, 7
-	.byte 0xc7, 0xf9, 0x99
+	ldfr_berp	a, 249
 	ld	a, (xbc)
-	.byte 0xc7, 0xfb, 0x99, 0xc7, 0xfb, 0x33, 0x07
+	ldfr_berp	a, 251
+	.byte 0xc7, 0xfb, 0x33, 0x07
 	jr	z, 103
-	.byte 0xc7, 0xfb, 0x30, 0x07, 0xc7, 0xfa, 0x61
+	.byte 0xc7, 0xfb, 0x30, 0x07
+	inc_berp	250, 1
 	jr	94
 	ld	a, (xbc)
 	extz	wa
@@ -2581,11 +2600,13 @@ SndParam_BatchUpdate_Data:
 	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
 	and	wa, 7
 	sll	a, 4
-	.byte 0xc7, 0xfa, 0x99, 0xc7, 0xf9, 0xa8, 0xc7, 0xfb
-	.byte 0x9c
+	ldfr_berp	a, 250
+	ldi_berp	249, 0
+	ldfr_berp	d, 251
 	bit	7, d
 	jr	z, 62
-	.byte 0xc7, 0xfb, 0x30, 0x07, 0xc7, 0xf9, 0xa9
+	.byte 0xc7, 0xfb, 0x30, 0x07
+	ldi_berp	249, 1
 	jr	53
 	lda	xwa, (xsp+4)
 	ld	e, (xbc)
@@ -2600,19 +2621,19 @@ SndParam_BatchUpdate_Data:
 	call	16705747
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
-	.byte 0xc7, 0xfa, 0x99
+	ldfr_berp	a, 250
 	ld	a, (xbc+1)
-	.byte 0xc7, 0xf9, 0x99
+	ldfr_berp	a, 249
 	ld	a, (xbc+2)
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	lda	xwa, (xsp+16)
 	ld	(xwa), 129
 	ld	xbc, (xsp+22)
 	ld	c, (xbc+4)
 	ld	(xwa+1), c
-	.byte 0xc7, 0xfa, 0x8b
+	ldto_berp	c, 250
 	ld	(xwa+2), c
-	.byte 0xc7, 0xf9, 0x8b
+	ldto_berp	c, 249
 	ld	(xwa+3), c
 	calr	35
 	lda	xwa, (xsp+16)
@@ -2620,7 +2641,7 @@ SndParam_BatchUpdate_Data:
 	ld	c, (xbc+4)
 	ld	(xwa), c
 	ld	(xwa+1), 0
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	ld	(xwa+2), c
 	ld	(xwa+3), 255
 	calr	7

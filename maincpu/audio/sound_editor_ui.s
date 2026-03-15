@@ -612,16 +612,18 @@ UpdSeSel_ExtendedOps_Data:
 	jr	nz, 63
 	lda	xwa, (xsp+2)
 	call	15757820
-	.byte 0xc7, 0xfb, 0xa9, 0xc7, 0xfb, 0x89
+	ldi_berp	251, 1
+	ldto_berp	a, 251
 	extz	wa
-	.byte 0xc7, 0xfb, 0x8d
+	ldto_berp	e, 251
 	dec	1, e
 	extz	de
 	lda	xbc, (xsp+2)
 	.byte 0xc3, 0x07, 0xe4, 0xe8, 0x23
 	extz	bc
 	call	15756078
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x08
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x08
 	jr	ule, -35
 	pushw 33
 	lds	wa, 0
@@ -677,16 +679,20 @@ UpdSeSel_ExtendedOps_Data:
 	call	15757703
 	cp	(xsp+10), 0
 	jr	nz, 114
-	.byte 0xc7, 0xfa, 0xa9, 0xc7, 0xfb, 0xa8, 0xc7, 0xfa, 0x89
+	ldi_berp	250, 1
+	ldi_berp	251, 0
+	ldto_berp	a, 250
 	extz	wa
 	ldb	c, 4
-	.byte 0xc7, 0xfb, 0x83
+	add_berp	c, 251
 	pushw 39
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xdb
+	inc_berp	251, 1
+	cpi_berp	251, 3
 	jr	c, -27
-	.byte 0xc7, 0xfa, 0x61, 0xc7, 0xfa, 0xdc
+	inc_berp	250, 1
+	cpi_berp	250, 4
 	jr	ule, -38
 	pushw 39
 	lds	wa, 0
@@ -768,15 +774,16 @@ UpdSeSel_ExtendedOps_Data:
 	jr	nz, 58
 	lda	xwa, (xsp+2)
 	call	15755834
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	ld	a, (xsp+2)
 	extz	wa
 	ldb	c, 7
-	.byte 0xc7, 0xfb, 0x83
+	add_berp	c, 251
 	pushw 40
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x0a
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x0a
 	jr	c, -28
 	lds	wa, 1
 	call	15757708
@@ -817,15 +824,16 @@ UpdSeSel_ExtendedOps_Data:
 	jr	nz, 45
 	lda	xwa, (xsp+2)
 	call	15755834
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	ld	a, (xsp+2)
 	extz	wa
 	ldb	c, 17
-	.byte 0xc7, 0xfb, 0x83
+	add_berp	c, 251
 	pushw 41
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xde
+	inc_berp	251, 1
+	cpi_berp	251, 6
 	jr	c, -27
 	lds	wa, 1
 	call	15757708
@@ -873,24 +881,24 @@ UpdSeSel_ExtendedOps_Data:
 	ld	(xsp+14), a
 	cp	(xsp+14), 42
 	jrl	nz, 147
-	.byte 0xc7, 0xfb, 0xa9
+	ldi_berp	251, 1
 	lda	xwa, (xsp+12)
 	call	15757703
 	cp	(xsp+12), 0
 	jrl	nz, 154
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+4)
 	call	15756750
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	ld	c, (xsp+4)
 	extz	bc
 	lda	xde, (xsp+2)
 	call	15756657
-	.byte 0xc7, 0xfa, 0xa8
+	ldi_berp	250, 0
 	ld	c, (xsp+2)
-	.byte 0xc7, 0xfa, 0x83
+	add_berp	c, 250
 	extz	bc
 	ld	a, (xsp+14)
 	extz	wa
@@ -898,13 +906,15 @@ UpdSeSel_ExtendedOps_Data:
 	lds	wa, 0
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfa, 0x61, 0xc7, 0xfa, 0xdc
+	inc_berp	250, 1
+	cpi_berp	250, 4
 	jr	c, -30
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	15756719
-	.byte 0xc7, 0xfa, 0xa9, 0xc7, 0xfa, 0x89
+	ldi_berp	250, 1
+	ldto_berp	a, 250
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
@@ -913,7 +923,8 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	de
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfa, 0x61, 0xc7, 0xfa, 0xdc
+	inc_berp	250, 1
+	cpi_berp	250, 4
 	jr	ule, -30
 	lds	wa, 1
 	call	15757708
@@ -925,7 +936,7 @@ UpdSeSel_ExtendedOps_Data:
 	jr	89
 	cp	(xsp+14), 47
 	jr	nz, 6
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	jrl	-156
 	.byte 0x8f, 0x0e
 	.ascii "?9nG"
@@ -1381,21 +1392,25 @@ SeMenu_AltUpdate_Data:
 	ldw	bc, 18
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfb, 0xa9, 0xc7, 0xfb, 0x89
+	ldi_berp	251, 1
+	ldto_berp	a, 251
 	extz	wa
 	pushw 35
 	lds	bc, 0
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xdc
+	inc_berp	251, 1
+	cpi_berp	251, 4
 	jr	ule, -24
-	.byte 0xc7, 0xfb, 0xa9, 0xc7, 0xfb, 0x89
+	ldi_berp	251, 1
+	ldto_berp	a, 251
 	extz	wa
 	pushw 35
 	lds	bc, 1
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xdc
+	inc_berp	251, 1
+	cpi_berp	251, 4
 	jr	ule, -24
 	pushw 35
 	lds	wa, 0
@@ -1424,10 +1439,12 @@ SeMenu_AltUpdate_Data:
 	call	15757719
 	cp	l, 10
 	jr	ule, 45
-	.byte 0xc7, 0xfb, 0xa9, 0xc7, 0xfb, 0x89
+	ldi_berp	251, 1
+	ldto_berp	a, 251
 	extz	wa
 	call	15758731
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xdc
+	inc_berp	251, 1
+	cpi_berp	251, 4
 	jr	ule, -17
 	pushw 35
 	call	15789674
@@ -1448,26 +1465,31 @@ SeMenu_AltUpdate_Data:
 	jr	nz, 101
 	lda	xwa, (xsp+2)
 	call	15755834
-	.byte 0xc7, 0xfa, 0xa8
+	ldi_berp	250, 0
 	ld	a, (xsp+2)
 	extz	wa
 	ldb	c, 30
-	.byte 0xc7, 0xfa, 0x83
+	add_berp	c, 250
 	pushw 36
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfa, 0x61, 0xc7, 0xfa, 0xdc
+	inc_berp	250, 1
+	cpi_berp	250, 4
 	jr	c, -27
-	.byte 0xc7, 0xfb, 0xa9, 0xc7, 0xfa, 0xa8, 0xc7, 0xfb, 0x89
+	ldi_berp	251, 1
+	ldi_berp	250, 0
+	ldto_berp	a, 251
 	extz	wa
 	ldb	c, 30
-	.byte 0xc7, 0xfa, 0x83
+	add_berp	c, 250
 	pushw 36
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfa, 0x61, 0xc7, 0xfa, 0xdc
+	inc_berp	250, 1
+	cpi_berp	250, 4
 	jr	c, -27
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xdc
+	inc_berp	251, 1
+	cpi_berp	251, 4
 	jr	ule, -38
 	lds	wa, 1
 	call	15757708
@@ -1492,16 +1514,18 @@ SeMenu_AltUpdate_Data:
 	pushw 36
 	call	15789674
 	inc	2, xsp
-	.byte 0xc7, 0xfa, 0xa9, 0xc7, 0xfa, 0x8b
+	ldi_berp	250, 1
+	ldto_berp	c, 250
 	extz	bc
-	.byte 0xc7, 0xfa, 0x89
+	ldto_berp	a, 250
 	sll	a, 2
 	inc	1, a
 	ld	e, a
 	extz	de
 	lds	wa, 0
 	call	15764632
-	.byte 0xc7, 0xfa, 0x61, 0xc7, 0xfa, 0xdc
+	inc_berp	250, 1
+	cpi_berp	250, 4
 	jr	ule, -31
 	lds	wa, 1
 	call	15755567
@@ -1519,26 +1543,31 @@ SeMenu_AltUpdate_Data:
 	jr	nz, 101
 	lda	xwa, (xsp+2)
 	call	15755834
-	.byte 0xc7, 0xfa, 0xa8
+	ldi_berp	250, 0
 	ld	a, (xsp+2)
 	extz	wa
 	ldb	c, 34
-	.byte 0xc7, 0xfa, 0x83
+	add_berp	c, 250
 	pushw 37
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfa, 0x61, 0xc7, 0xfa, 0xdc
+	inc_berp	250, 1
+	cpi_berp	250, 4
 	jr	c, -27
-	.byte 0xc7, 0xfb, 0xa9, 0xc7, 0xfa, 0xa8, 0xc7, 0xfb, 0x89
+	ldi_berp	251, 1
+	ldi_berp	250, 0
+	ldto_berp	a, 251
 	extz	wa
 	ldb	c, 34
-	.byte 0xc7, 0xfa, 0x83
+	add_berp	c, 250
 	pushw 37
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfa, 0x61, 0xc7, 0xfa, 0xdc
+	inc_berp	250, 1
+	cpi_berp	250, 4
 	jr	c, -27
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xdc
+	inc_berp	251, 1
+	cpi_berp	251, 4
 	jr	ule, -38
 	lds	wa, 1
 	call	15757708
@@ -1563,16 +1592,18 @@ SeMenu_AltUpdate_Data:
 	pushw 37
 	call	15789674
 	inc	2, xsp
-	.byte 0xc7, 0xfa, 0xa9, 0xc7, 0xfa, 0x8b
+	ldi_berp	250, 1
+	ldto_berp	c, 250
 	extz	bc
-	.byte 0xc7, 0xfa, 0x89
+	ldto_berp	a, 250
 	sll	a, 2
 	inc	1, a
 	ld	e, a
 	extz	de
 	lds	wa, 1
 	call	15764632
-	.byte 0xc7, 0xfa, 0x61, 0xc7, 0xfa, 0xdc
+	inc_berp	250, 1
+	cpi_berp	250, 4
 	jr	ule, -31
 	lds	wa, 1
 	call	15755567
@@ -1817,13 +1848,15 @@ SeMenu_CopyWriteUpdate_Data:
 	jrl	173
 	lda	xwa, (xsp+6)
 	call	15757766
-	.byte 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0x89
+	ldi_berp	251, 0
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+6)
 	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31
 	ld	xwa, xbc
 	call	16459841
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x10
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x10
 	jr	c, -28
 	lda	xbc, (xsp+6)
 	lds	wa, 1
@@ -1895,14 +1928,15 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nz, 42
 	lds	wa, 1
 	call	15767821
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	ldb	c, 93
-	.byte 0xc7, 0xfb, 0x83
+	add_berp	c, 251
 	pushw 58
 	lds	wa, 0
 	lds	de, 1
 	call	15753785
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x09
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x09
 	jr	c, -25
 	lds	wa, 1
 	call	15757708
@@ -2366,7 +2400,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 68
 	ld	a, (xsp+6)
 	res	7, a
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	lda	xbc, (xsp+4)
 	lds	wa, 0
 	call	15756091
@@ -2377,11 +2411,11 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	cps	hl, 0
 	jr	z, 9
-	.byte 0xc7, 0xfb, 0xd8
+	cpi_berp	251, 0
 	jr	z, 27
 	lds	bc, 0
 	jr	7
-	.byte 0xc7, 0xfb, 0xd8
+	cpi_berp	251, 0
 	jr	nz, 18
 	lds	bc, 1
 	call	15755941
@@ -2502,7 +2536,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15756091
 	ld	a, (xsp+16)
 	inc	2, a
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	15756091
@@ -2515,7 +2549,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	15758524
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	ld	a, (xsp+16)
 	dec	1, a

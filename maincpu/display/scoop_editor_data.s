@@ -195,11 +195,12 @@ Scoop_SoundEditorData:
 	jr	nz, 10
 	ld	a, (xsp+16)
 	inc	4, a
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	jr	8
 	ld	a, (xsp+16)
 	inc	2, a
-	.byte 0xc7, 0xfb, 0x99, 0xc7, 0xfb, 0x89
+	ldfr_berp	a, 251
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	15756091
@@ -232,7 +233,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xwa+16)
 	inc	7, xwa
 	ld	(xsp+16), 0
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -258,7 +259,7 @@ Scoop_SoundEditorData:
 	call	15755834
 	ld	a, (xsp+16)
 	inc	8, a
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	15756091
@@ -271,7 +272,7 @@ Scoop_SoundEditorData:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	15758524
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -597,7 +598,8 @@ Scoop_SoundEditorData:
 	.byte 0xbf, 0x0e, 0x30
 	call	15766955
 	cp	(xsp+14), 0
-	.byte 0xc9, 0x7e, 0xc7, 0xfb, 0x99
+	.byte 0xc9, 0x7e
+	ldfr_berp	a, 251
 	extz	wa
 	.byte 0xbf, 0x02, 0x31
 	call	15756091
@@ -622,7 +624,7 @@ Scoop_SoundEditorData:
 	.byte 0xb8, 0x10, 0x30
 	inc	0, xwa
 	ld	(xsp+16), 0
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de

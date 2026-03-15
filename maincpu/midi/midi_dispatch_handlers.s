@@ -9758,7 +9758,7 @@ MidiStream_PrevBankCheck:
 	push qiz
 	.byte 0xf1, 0x18, 0xbd, 0xcf
 	jr	z, 56
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	calr	60
 	ldda32	xwa, 48300
 	cp	(xwa), 1
@@ -9769,9 +9769,10 @@ MidiStream_PrevBankCheck:
 	jr	36
 	ldda32	xwa, 48224
 	calr	3797
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xdb
+	inc_berp	251, 1
+	cpi_berp	251, 3
 	jr	c, -38
-	.byte 0xc7, 0xfb, 0xdb
+	cpi_berp	251, 3
 	jr	c, 16
 	ldda32	xwa, 48300
 	ld	(xwa+4), 24
@@ -11514,7 +11515,7 @@ SeqVoice_DispatchProcess_Data:
 	ldw	bc, 12
 	calr	-3690
 	lds32	xiz, 0
-	.byte 0xc7, 0xf8, 0x9f
+	ldfr_berp	l, 248
 	sll	xiz, 14
 	ldda32	xwa, 48300
 	ldw	bc, 13
@@ -12010,13 +12011,13 @@ AssSwb_ProcessLoop_Data:
 	and	(xix), wa
 	lda	xde, (xiz+1)
 	ld	a, (xde)
-	.byte 0xc7, 0xf4, 0x99
+	ldfr_berp	a, 244
 	extz	iy
 	ld	wa, (xhl)
 	cpl	a
 	.byte 0xc3, 0x07, 0xe4, 0xf4, 0xc9
 	ld	a, (xde)
-	.byte 0xc7, 0xf4, 0x99
+	ldfr_berp	a, 244
 	extz	iy
 	ld	wa, (xix)
 	.byte 0xc3, 0x07, 0xe4, 0xf4, 0xe9
@@ -15077,9 +15078,10 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xcf, 0x0b
+	ldfr_berp	l, 251
+	.byte 0xc7, 0xfb, 0xcf, 0x0b
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617578
@@ -15087,7 +15089,7 @@ SeqData_FormatOutput_Data:
 	calr	6074
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617578
@@ -15107,9 +15109,10 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xd9
+	ldfr_berp	l, 251
+	cpi_berp	251, 1
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617666
@@ -15117,7 +15120,7 @@ SeqData_FormatOutput_Data:
 	calr	5981
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617666
@@ -15137,9 +15140,10 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xcf, 0x0c
+	ldfr_berp	l, 251
+	.byte 0xc7, 0xfb, 0xcf, 0x0c
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617674
@@ -15147,7 +15151,7 @@ SeqData_FormatOutput_Data:
 	calr	5887
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617674
@@ -15168,9 +15172,10 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xd9
+	ldfr_berp	l, 251
+	cpi_berp	251, 1
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617770
@@ -15178,7 +15183,7 @@ SeqData_FormatOutput_Data:
 	calr	5793
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617770
@@ -15198,9 +15203,10 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xd9
+	ldfr_berp	l, 251
+	cpi_berp	251, 1
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617778
@@ -15208,7 +15214,7 @@ SeqData_FormatOutput_Data:
 	calr	5700
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617778
@@ -15228,9 +15234,10 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xcf, 0x0e
+	ldfr_berp	l, 251
+	.byte 0xc7, 0xfb, 0xcf, 0x0e
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617786
@@ -15238,7 +15245,7 @@ SeqData_FormatOutput_Data:
 	calr	5606
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617786
@@ -15585,7 +15592,7 @@ SeqAlt_DescriptorBlock_Data:
 	jr	ugt, 125
 	ldda32	xwa, 48212
 	call	16609558
-	.byte 0xc7, 0xf8, 0x9f
+	ldfr_berp	l, 248
 	extz	iz
 	sll	iz, 8
 	ldda32	xwa, 48212
@@ -15603,17 +15610,17 @@ SeqAlt_DescriptorBlock_Data:
 	ld	xwa, (xsp+10)
 	ld	a, (xwa+6)
 	or	a, l
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	lda	xwa, (xsp+6)
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	ld	(xwa), c
 	ld	(xwa+1), 1
-	.byte 0xc7, 0xf8, 0x8b
+	ldto_berp	c, 248
 	ld	(xwa+2), c
 	ld	(xwa+3), 127
 	call	16609665
 	lda	xwa, (xsp+6)
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	ld	(xwa), c
 	ld	xde, (xsp+10)
 	ld	c, (xde+7)
@@ -16177,9 +16184,10 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xcf, 0x0b
+	ldfr_berp	l, 251
+	.byte 0xc7, 0xfb, 0xcf, 0x0b
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617622
@@ -16187,7 +16195,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	calr	3322
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617622
@@ -16207,9 +16215,10 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xd9
+	ldfr_berp	l, 251
+	cpi_berp	251, 1
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617670
@@ -16217,7 +16226,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	calr	3229
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617670
@@ -16237,9 +16246,10 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xcf, 0x0c
+	ldfr_berp	l, 251
+	.byte 0xc7, 0xfb, 0xcf, 0x0c
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617722
@@ -16247,7 +16257,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	calr	3135
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617722
@@ -16268,9 +16278,10 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xd9
+	ldfr_berp	l, 251
+	cpi_berp	251, 1
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617774
@@ -16278,7 +16289,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	calr	3041
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617774
@@ -16298,9 +16309,10 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xd9
+	ldfr_berp	l, 251
+	cpi_berp	251, 1
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617782
@@ -16308,7 +16320,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	calr	2948
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617782
@@ -16328,9 +16340,10 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, 48300
 	lds	bc, 2
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xcf, 0x08
+	ldfr_berp	l, 251
+	.byte 0xc7, 0xfb, 0xcf, 0x08
 	jr	nc, 68
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, 15617842
@@ -16338,7 +16351,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	calr	2854
 	cp	hl, 65535
 	jr	z, 41
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617842

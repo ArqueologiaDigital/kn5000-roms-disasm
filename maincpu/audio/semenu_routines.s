@@ -385,7 +385,7 @@ SeMenu_RegisterParamDisplay_Data:
 	srl	wa, 8
 	ld	(xhl), a
 	lda	xde, (xhl+1)
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	and	a, 255
 	ld	(xde), a
 	lda	xwa, (xsp+2)
@@ -429,7 +429,7 @@ SeMenu_RegisterParamDisplay_Data:
 	srl	wa, 8
 	ld	(xhl), a
 	lda	xde, (xhl+1)
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	and	a, 255
 	ld	(xde), a
 	lda	xwa, (xsp+2)
@@ -506,7 +506,7 @@ SeMenu_SetupDisplayObject_Data:
 	srl	wa, 8
 	ld	(xhl), a
 	lda	xde, (xhl+1)
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	and	a, 255
 	ld	(xde), a
 	lda	xwa, (xsp+2)
@@ -1576,11 +1576,11 @@ SeMenu_TransferPartValues_EndData:
 	jr	z, 69
 	ld	a, (xsp+22)
 	inc	2, a
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	ldw	wa, 127
 	lds	bc, 0
 	calr	-944
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	extz	hl
 	lda	xde, (xsp+5)
@@ -1764,37 +1764,39 @@ SeMenu_TransferPartValues_EndData:
 	ld	c, (xsp+2)
 	extz	bc
 	calr	-1387
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0x89
+	ldfr_berp	l, 251
+	ldto_berp	a, 251
 	and	a, 3
-	.byte 0xc7, 0xfa, 0x99
+	ldfr_berp	a, 250
 	cp	(xsp+10), 0
 	jr	nz, 22
-	.byte 0xc7, 0xfa, 0xd8
+	cpi_berp	250, 0
 	jr	z, 27
-	.byte 0xc7, 0xfa, 0xd9
+	cpi_berp	250, 1
 	jr	nz, 5
-	.byte 0xc7, 0xfa, 0xab
+	ldi_berp	250, 3
 	jr	30
-	.byte 0xc7, 0xfa, 0xdb
+	cpi_berp	250, 3
 	jr	nz, 25
 	jr	116
-	.byte 0xc7, 0xfa, 0xd8
+	cpi_berp	250, 0
 	jr	z, 111
-	.byte 0xc7, 0xfa, 0xdb
+	cpi_berp	250, 3
 	jr	nz, 5
-	.byte 0xc7, 0xfa, 0xa9
+	ldi_berp	250, 1
 	jr	8
-	.byte 0xc7, 0xfa, 0xd9
+	cpi_berp	250, 1
 	jr	nz, 3
-	.byte 0xc7, 0xfa, 0xa8
+	ldi_berp	250, 0
 	ld	c, (xsp+2)
 	extz	bc
 	lds	wa, 3
 	calr	-1479
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0x89
+	ldfr_berp	l, 251
+	ldto_berp	a, 251
 	cpl	a
 	and	(xsp+8), a
-	.byte 0xc7, 0xfa, 0x89
+	ldto_berp	a, 250
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
@@ -1802,7 +1804,7 @@ SeMenu_TransferPartValues_EndData:
 	or	(xsp+8), l
 	ld	c, (xsp+6)
 	extz	bc
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	lda	xde, (xsp+8)
 	cp	(xsp+4), 0
@@ -2104,7 +2106,7 @@ SeMenu_SetupPartDisplay_End:
 	call	16705514
 	lda	xbc, (xsp+8)
 	ld	a, (xbc)
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	ld	a, (xbc+1)
 	ld	(xsp+2), a
 	.byte 0xc7, 0xfb, 0xcf, 0x10
@@ -2645,7 +2647,7 @@ SeMenu_ApplyPartEdit_Data2:
 	lds	wa, 0
 	.byte 0x1e, 0x6d, 0xeb, 0xbf, 0x12, 0x31
 	ld	a, (xbc)
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	extz	wa
 	.byte 0x1e, 0x60, 0xeb, 0xbf, 0x02, 0x31
 	ld	a, (xsp+18)
@@ -2664,11 +2666,13 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0xb9, 0x0a, 0x31, 0x1e, 0xb1, 0xf4, 0xbf, 0x02
 	.byte 0x30, 0x1e, 0x61, 0xeb
 	cps	l, 0
-	.byte 0x66, 0x6d, 0xc7, 0xfb, 0x89
+	.byte 0x66, 0x6d
+	ldto_berp	a, 251
 	extz	wa
 	ld	c, (xsp+5)
 	extz	bc
-	.byte 0x1e, 0x0c, 0xeb, 0xc7, 0xfb, 0x89
+	.byte 0x1e, 0x0c, 0xeb
+	ldto_berp	a, 251
 	extz	wa
 	cp	(xsp+22), 2
 	.byte 0x6e, 0x06
@@ -2862,7 +2866,7 @@ SeMenu_ApplyPartEdit_Data2:
 	div	wa, 100
 	ld	qiz, wa
 	ld	e, (xbc+4)
-	.byte 0xc7, 0xf8, 0x9d
+	ldfr_berp	e, 248
 	extz	iz
 	ld	wa, qiz
 	cp	wa, (xsp+10)
@@ -3785,7 +3789,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	(xsp+20), 80
 	.byte 0xbf, 0x06, 0x02, 0x82, 0x00, 0xbf, 0x0a, 0x02, 0x1a, 0x00, 0x9f, 0x0a, 0x38, 0x4d, 0x00
 	ld	a, (xsp+24)
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	add	iz, 86
 	ld	a, (xsp+20)
@@ -4168,17 +4172,19 @@ SeMenu_ApplySynthParam_Data:
 	jr	nz, 4
 	.byte 0xc7, 0xfa, 0x03, 0x11
 	lds	iz, 0
-	.byte 0xc7, 0xfb, 0xa8
+	ldi_berp	251, 0
 	cp	(xsp+10), 0
 	jr	ule, 32
-	.byte 0xc7, 0xfa, 0x89, 0xc7, 0xfb, 0x81
+	ldto_berp	a, 250
+	add_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+4)
 	calr	-10769
 	ld	a, (xsp+4)
 	extz	wa
 	add	iz, wa
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0x89
+	inc_berp	251, 1
+	ldto_berp	a, 251
 	cp	a, (xsp+10)
 	jr	c, -32
 	ld	xwa, (xsp+6)
@@ -4721,17 +4727,19 @@ SeMenu_StoreEffectCoeff_Data:
 	extz	hl
 	.byte 0xf3, 0x07, 0xe8, 0xec, 0x35
 	ld	a, (xiy)
-	.byte 0xc7, 0xee, 0x99
+	ldfr_berp	a, 238
 	lda	xwa, (xsp+26)
 	.byte 0xf3, 0x07, 0xe0, 0xec, 0x34
 	ld	w, (xix)
 	sla	w, 1
-	.byte 0xc7, 0xee, 0x89
+	ldto_berp	a, 238
 	add	a, w
-	.byte 0xc7, 0xee, 0x99, 0xc7, 0xee, 0x99
+	ldfr_berp	a, 238
+	ldfr_berp	a, 238
 	ld	(xiy), a
 	lda	xwa, (xsp+22)
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x27, 0xc7, 0xee, 0x89
+	.byte 0xc3, 0x07, 0xe0, 0xec, 0x27
+	ldto_berp	a, 238
 	cp	a, l
 	jr	ule, 12
 	cp	(xix), 0
@@ -4899,7 +4907,9 @@ SeMenu_RefreshPartDisplay_Data:
 	call	15755834
 	ld	a, (xsp+14)
 	mul	a, 3
-	.byte 0xc7, 0xfb, 0x99, 0xc7, 0xfb, 0x6a, 0xc7, 0xfb, 0x89
+	ldfr_berp	a, 251
+	dec_berp	251, 2
+	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	15756091
@@ -4912,7 +4922,7 @@ SeMenu_RefreshPartDisplay_Data:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	15758524
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de

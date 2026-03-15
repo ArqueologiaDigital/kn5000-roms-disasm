@@ -3069,7 +3069,7 @@ FileIO_ByteBlock_F8817E:
 	ldw	hl, 65432
 	jrl	187
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	call	16291363
@@ -3240,7 +3240,7 @@ FileIO_ByteBlock_F8817E:
 	ldw	hl, 65432
 	jrl	204
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	call	16291363
@@ -3323,7 +3323,7 @@ FileIO_ByteBlock_F8817E:
 	ldw	hl, 65432
 	jr	92
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	call	16291363
@@ -3368,7 +3368,7 @@ FileIO_ByteBlock_F8817E:
 	ldw	hl, 65432
 	jrl	313
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	call	16291363
@@ -3443,7 +3443,7 @@ FileIO_ByteBlock_F8817E:
 	ld	xwa, 19111
 	add	(xsp+6), xwa
 	ld	(xsp+12), 64
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	ld	(xsp+14), a
 	ld	xwa, (xsp+2)
 	lds	bc, 0
@@ -3484,7 +3484,7 @@ FileIO_ByteBlock_F8817E:
 	.byte 0x33, 0x98
 	.long LABEL_E678FF
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	call	16291363
@@ -6619,7 +6619,7 @@ FileIO_ByteBlock_F8A0E1:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	calr	-2821
@@ -6661,7 +6661,7 @@ FileIO_ByteBlock_F8A0E1:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	calr	-2943
@@ -6709,7 +6709,7 @@ FileIO_ByteBlock_F8A0E1:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	calr	-3090
@@ -6751,7 +6751,7 @@ FileIO_ByteBlock_F8A0E1:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	calr	-3215
@@ -6794,7 +6794,7 @@ FileIO_ByteBlock_F8A0E1:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	calr	-3344
@@ -6835,7 +6835,7 @@ FileIO_ByteBlock_F8A0E1:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	calr	-3464
@@ -6874,7 +6874,7 @@ FileIO_ByteBlock_F8A0E1:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7, 0xf8, 0x99
+	ldfr_berp	a, 248
 	extz	iz
 	ld	wa, hl
 	calr	-3579

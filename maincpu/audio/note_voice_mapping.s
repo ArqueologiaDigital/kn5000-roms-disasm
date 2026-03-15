@@ -4385,21 +4385,23 @@ AllocCheckNoteOn_Data:
 	ldda16	wa, 50584
 	bit	9, wa
 	jrl	z, 355
-	.byte 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0xcf, 0x10
+	ldi_berp	251, 0
+	.byte 0xc7, 0xfb, 0xcf, 0x10
 	jrl	nc, 345
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	add	wa, 132
 	extz	xwa
 	add	xwa, (xsp+4)
 	cp	(xwa), 21
 	jr	nz, 14
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	ld	c, a
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	16667147
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x10
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x10
 	jr	c, -42
 	jrl	300
 	ld	xwa, (xsp+4)
@@ -4464,9 +4466,10 @@ AllocCheckNoteOn_Data:
 	ldda16	wa, 50584
 	bit	9, wa
 	jr	z, 53
-	.byte 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0xcf, 0x10
+	ldi_berp	251, 0
+	.byte 0xc7, 0xfb, 0xcf, 0x10
 	jr	nc, 44
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	add	wa, 132
 	extz	xwa
@@ -4474,12 +4477,13 @@ AllocCheckNoteOn_Data:
 	ld	a, (xwa)
 	cp	a, (xsp+2)
 	jr	nz, 14
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	ld	c, a
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	16667147
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x10
+	inc_berp	251, 1
+	.byte 0xc7, 0xfb, 0xcf, 0x10
 	jr	c, -44
 	ld	a, (xsp+2)
 	extz	wa
@@ -4487,10 +4491,10 @@ AllocCheckNoteOn_Data:
 	extz	xwa
 	add	xwa, (xsp+4)
 	ld	a, (xwa)
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	cp	a, 255
 	jr	z, 14
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	ld	c, a
 	extz	bc
 	ld	xwa, (xsp+8)
@@ -4501,10 +4505,10 @@ AllocCheckNoteOn_Data:
 	extz	xwa
 	add	xwa, (xsp+4)
 	ld	a, (xwa)
-	.byte 0xc7, 0xfb, 0x99
+	ldfr_berp	a, 251
 	cp	a, 255
 	jr	z, 14
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	ld	c, a
 	extz	bc
 	ld	xwa, (xsp+8)
@@ -15579,10 +15583,11 @@ ComputeNoteBitPositi_Data:
 	ld	xiz, 16687958
 	.byte 0xc3, 0x07, 0xf8, 0xec, 0x23
 	dec	1, c
-	.byte 0xc7, 0x3c, 0x99
+	ldfr_berp	a, 60
 	ld	a, c
 	scf
-	.byte 0xda, 0x2c, 0xc7, 0x3c, 0x89
+	.byte 0xda, 0x2c
+	ldto_berp	a, 60
 	cp	a, c
 	jr	nc, 2
 	ld	a, c
@@ -18150,7 +18155,7 @@ SendEpilogue_Data:
 	cps	wa, 0
 	jrl	nz, 1530
 	add	iz, 64
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18158,13 +18163,13 @@ SendEpilogue_Data:
 	calr	2290
 	jrl	1507
 	dec	5, iz
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
 	ldw	bc, 131
 	calr	2269
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	cpda8	a, 59842
 	jrl	z, 1479
 	ldda16	wa, 50582
@@ -18183,7 +18188,7 @@ SendEpilogue_Data:
 	ldw	wa, 255
 	ldw	bc, 22
 	call	16653225
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	stda8	59842, a
 	jrl	1417
 	lds	wa, 1
@@ -18191,7 +18196,7 @@ SendEpilogue_Data:
 	jr	nz, 2
 	lds	wa, 2
 	ld	iz, wa
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 127
@@ -18203,7 +18208,7 @@ SendEpilogue_Data:
 	jr	nz, 2
 	lds	wa, 0
 	ld	iz, wa
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18223,11 +18228,12 @@ SendEpilogue_Data:
 	lda_24	xix, 15646860
 	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
 	lda_24	xix, 16692237
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8, 0xc7, 0xf8, 0x89
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	ldto_berp	a, 248
 	extz	wa
 	call	16709486
 	jrl	1297
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	call	16709510
 	jrl	1285
@@ -18237,15 +18243,15 @@ SendEpilogue_Data:
 	jrl	1271
 	stda16	53196, iz
 	jrl	1264
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	call	16709534
 	jrl	1252
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	call	16709714
 	jrl	1240
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18266,7 +18272,7 @@ SendEpilogue_Data:
 	cps	hl, 1
 	jr	nz, 2
 	lds	iz, 0
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	call	16709558
 	jrl	1166
@@ -18299,14 +18305,14 @@ SendEpilogue_Data:
 	jr	nz, 2
 	lds	wa, 0
 	ld	iz, wa
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
 	ldw	bc, 177
 	calr	1837
 	jrl	1054
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	calr	2042
 	ld	qiz, hl
@@ -18318,7 +18324,7 @@ SendEpilogue_Data:
 	ld	wa, qiz
 	and	wa, 65280
 	jrl	nz, 1019
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	extz	wa
 	calr	1823
 	ld	(xsp+4), xhl
@@ -26022,14 +26028,16 @@ SendPartDataBlock_Data:
 	ld	(xiz+92), a
 	ld	a, (xbc+32)
 	ld	(xiz+93), a
-	.byte 0xc7, 0xe6, 0xa8
+	ldi_berp	230, 0
 	lds	bc, 0
 	ld	hl, bc
 	add	hl, 94
 	ld	de, bc
 	add	de, 33
 	ld	xwa, (xsp+10)
-	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x21, 0xf3, 0x07, 0xf8, 0xec, 0x41, 0xc7, 0xe6, 0x61
+	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x21, 0xf3, 0x07, 0xf8
+	.byte 0xec, 0x41
+	inc_berp	230, 1
 	inc	1, bc
 	.byte 0xc7, 0xe6, 0xcf, 0x08
 	jr	c, -36
@@ -26200,26 +26208,30 @@ SendPartDataBlock_Data:
 	.byte 0xb3, 0xbb
 	ld	c, (xwa+18)
 	and	c, 240
-	.byte 0xc7, 0xf0, 0x9b
+	ldfr_berp	c, 240
 	srl	c, 4
 	extz	bc
 	lda_24	xhl, 15652237
-	.byte 0xc3, 0x07, 0xec, 0xe4, 0x23, 0xc7, 0xf0, 0x9b
-	.byte 0xc7, 0xf0, 0x8c
+	.byte 0xc3, 0x07, 0xec, 0xe4, 0x23
+	ldfr_berp	c, 240
+	ldto_berp	d, 240
 	sll	d, 6
 	ld	e, (xwa+19)
 	ld	c, e
 	and	c, 240
-	.byte 0xc7, 0xf0, 0x9b
+	ldfr_berp	c, 240
 	srl	c, 4
 	extz	bc
-	.byte 0xc3, 0x07, 0xec, 0xe4, 0x23, 0xc7, 0xf0, 0x9b
+	.byte 0xc3, 0x07, 0xec, 0xe4, 0x23
+	ldfr_berp	c, 240
 	sll	c, 4
 	or	d, c
 	and	e, 15
-	.byte 0xc7, 0xf0, 0x9d, 0xc7, 0xf0, 0x8b
+	ldfr_berp	e, 240
+	ldto_berp	c, 240
 	extz	bc
-	.byte 0xc3, 0x07, 0xec, 0xe4, 0x23, 0xc7, 0xf0, 0x9b
+	.byte 0xc3, 0x07, 0xec, 0xe4, 0x23
+	ldfr_berp	c, 240
 	sll	c, 2
 	or	d, c
 	ld	(xwa+17), d
@@ -26236,7 +26248,9 @@ SendPartDataBlock_Data:
 	add	de, 40
 	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x31
 	ld	c, (xbc+17)
-	.byte 0xc7, 0xf0, 0x9b, 0xf3, 0x07, 0xe0, 0xe8, 0x35, 0xf3, 0x07, 0xe0, 0xe8, 0x31
+	ldfr_berp	c, 240
+	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x35, 0xf3, 0x07, 0xe0
+	.byte 0xe8, 0x31
 	ld	c, (xbc+16)
 	ld	(xiy+17), c
 	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x35, 0xf3, 0x07, 0xe0, 0xe8, 0x31
@@ -26253,7 +26267,7 @@ SendPartDataBlock_Data:
 	ld	(xiy+13), c
 	exts	xde
 	add	xde, xwa
-	.byte 0xc7, 0xf0, 0x8b
+	ldto_berp	c, 240
 	ld	(xde+12), c
 	add	hl, 34
 	cp	hl, 102
@@ -26916,14 +26930,15 @@ HdaeRom_DataDispatch_Block3:
 	cp	xix, xhl
 	jr	nc, -13
 	ld	(xhl), 1
-	.byte 0xc7, 0xea, 0xa8
+	ldi_berp	234, 0
 	lds	de, 0
 	ld	bc, de
 	add	bc, 18855
 	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x33, 0x8b, 0x01, 0x3c, 0xcf
 	exts	xbc
 	add	xbc, xwa
-	.byte 0xb9, 0x01, 0xbd, 0xc7, 0xea, 0x61
+	.byte 0xb9, 0x01, 0xbd
+	inc_berp	234, 1
 	inc	2, de
 	.byte 0xc7, 0xea, 0xcf, 0x80
 	jr	c, -33

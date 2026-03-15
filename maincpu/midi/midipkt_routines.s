@@ -1355,12 +1355,14 @@ MidiPkt_SysExBulkTransfer_Data:
 	ldda32	xwa, 48300
 	ldw	bc, 9
 	call	16604854
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0xca, 0x10, 0xc7, 0xfb, 0xcf, 0x10
+	ldfr_berp	l, 251
+	.byte 0xc7, 0xfb, 0xca, 0x10, 0xc7, 0xfb, 0xcf, 0x10
 	jrl	nc, 244
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	lda_24	xbc, 15610748
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21, 0xc7, 0xfb, 0x99
+	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21
+	ldfr_berp	a, 251
 	ldda32	xwa, 48300
 	ldw	bc, 11
 	call	16604854
@@ -1368,7 +1370,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	jrl	ugt, 210
 	.byte 0xc7, 0xfb, 0xcf, 0x0f
 	jrl	z, 203
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	cps	l, 0
 	jr	z, 97
@@ -1376,7 +1378,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	lds	bc, 0
 	lds	de, 0
 	call	16569115
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	pushw 0
 	ldw	bc, 32
@@ -1387,7 +1389,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+10)
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	-215
 	ld	xiy, 15610768
@@ -1395,7 +1397,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+6)
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	-238
 	ld	xiy, 15610772
@@ -1403,14 +1405,14 @@ MidiPkt_SysExBulkTransfer_Data:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+2)
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	ld	(xwa), c
 	jr	94
 	pushw 0
 	lds	bc, 0
 	lds	de, 0
 	call	16569115
-	.byte 0xc7, 0xfb, 0x89
+	ldto_berp	a, 251
 	extz	wa
 	pushw 0
 	ldw	bc, 32
@@ -1421,7 +1423,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+10)
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	-311
 	ld	xiy, 15610780
@@ -1429,7 +1431,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+6)
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	-334
 	ld	xiy, 15610784
@@ -1437,7 +1439,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	ldiw
 	ldiw
 	lda	xwa, (xsp+2)
-	.byte 0xc7, 0xfb, 0x8b
+	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	-318
 	pop qiz
@@ -1469,7 +1471,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	jr	le, 42
 	ld	a, (xsp+4)
 	extz	wa
-	.byte 0xc7, 0xf8, 0x8b
+	ldto_berp	c, 248
 	extz	bc
 	calr	596
 	ld	bc, hl

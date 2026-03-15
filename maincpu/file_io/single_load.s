@@ -1274,7 +1274,7 @@ SLSrcBankList_FuncBody:
 	ld	hl, de
 	extz	xhl
 	add	xhl, xbc
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	ld	(xhl), a
 	lds	wa, 1
 	add	wa, de
@@ -2528,7 +2528,7 @@ SLDstBankList_FuncBody:
 	ld	hl, de
 	extz	xhl
 	add	xhl, xbc
-	.byte 0xc7, 0xf8, 0x89
+	ldto_berp	a, 248
 	ld	(xhl), a
 	lds	wa, 1
 	add	wa, de
