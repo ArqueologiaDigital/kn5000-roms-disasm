@@ -301,7 +301,8 @@ def compute_assembly_byte_count(filepath, start_line=0, end_line=None):
 def scan_rom_for_widgets(rom, start_addr, expected_count, max_bytes=None):
     """Scan ROM bytes for NAKA headers starting at start_addr.
 
-    Returns list of (rom_addr, type_code, body_bytes_until_next_header).
+    Returns (leading_bytes, list of (rom_addr, type_code, body_bytes)).
+    leading_bytes: bytes before the first widget header (may be empty).
     max_bytes limits the scan range (from assembly byte count).
     """
     offset = start_addr - ROM_BASE
@@ -325,6 +326,11 @@ def scan_rom_for_widgets(rom, start_addr, expected_count, max_bytes=None):
     # Take only expected_count headers
     header_positions = header_positions[:expected_count]
 
+    # Extract leading bytes (before first widget header)
+    leading = b''
+    if header_positions and header_positions[0][0] > 0:
+        leading = bytes(rom[offset: offset + header_positions[0][0]])
+
     # Second pass: extract body bytes between consecutive headers
     widgets = []
     for idx, (pos, type_code) in enumerate(header_positions):
@@ -337,7 +343,7 @@ def scan_rom_for_widgets(rom, start_addr, expected_count, max_bytes=None):
         body = rom[offset + body_start: offset + body_end]
         widgets.append((widget_addr, type_code, bytes(body)))
 
-    return widgets
+    return leading, widgets
 
 
 def format_u16(val):
@@ -466,7 +472,8 @@ def compute_string_alloc(text_bytes):
 
 
 def generate_c_file(widgets_parsed, rom_widgets, symbols, names,
-                     block_base, output_name, extern_symbols):
+                     block_base, output_name, extern_symbols,
+                     leading_data=b'', trailing_data=b''):
     """Generate the C source file content."""
     lines = []
     lines.append(f'/**')
@@ -494,6 +501,9 @@ def generate_c_file(widgets_parsed, rom_widgets, symbols, names,
     # Struct typedef
     lines.append(f'typedef struct __attribute__((packed)) {{')
     total_size = 0
+    if leading_data:
+        lines.append(f'    uint8_t leading[{len(leading_data)}];')
+        total_size += len(leading_data)
     for i, (addr, type_code, body) in enumerate(rom_widgets):
         type_name = TYPE_NAMES.get(type_code, f"0x{type_code:02X}")
         body_size = len(body)
@@ -514,6 +524,10 @@ def generate_c_file(widgets_parsed, rom_widgets, symbols, names,
                 lines.append(f'    uint8_t w{i}_body[{body_size}];')
             total_size += 4 + body_size
 
+    if trailing_data:
+        lines.append(f'    uint8_t trailing[{len(trailing_data)}];')
+        total_size += len(trailing_data)
+
     lines.append(f'}} {output_name}_t;')
     lines.append(f'')
     lines.append(f'#define SELF(field) (BASE + __builtin_offsetof({output_name}_t, field))')
@@ -526,6 +540,10 @@ def generate_c_file(widgets_parsed, rom_widgets, symbols, names,
     lines.append(f'const {output_name}_t {output_name}_data')
     lines.append(f'    __attribute__((section(".text"), used)) = {{')
     lines.append(f'')
+
+    if leading_data:
+        lines.append(f'    .leading = {format_raw_bytes(leading_data)},')
+        lines.append(f'')
 
     for i, (addr, type_code, body) in enumerate(rom_widgets):
         type_name = TYPE_NAMES.get(type_code, f"0x{type_code:02X}")
@@ -574,6 +592,10 @@ def generate_c_file(widgets_parsed, rom_widgets, symbols, names,
             if body:
                 lines.append(f'    .w{i}_body = {format_raw_bytes(body)},')
             lines.append(f'')
+
+    if trailing_data:
+        lines.append(f'    .trailing = {format_raw_bytes(trailing_data)},')
+        lines.append(f'')
 
     lines.append(f'}};')
     lines.append(f'')
@@ -665,9 +687,11 @@ def main():
 
     # Scan ROM for widgets
     print(f"Scanning ROM at 0x{block_base:06X}...")
-    rom_widgets = scan_rom_for_widgets(rom, block_base, len(widgets_parsed),
-                                        max_bytes=scan_bytes)
+    leading_data, rom_widgets = scan_rom_for_widgets(rom, block_base, len(widgets_parsed),
+                                                      max_bytes=scan_bytes)
     print(f"  {len(rom_widgets)} widgets found in ROM")
+    if leading_data:
+        print(f"  {len(leading_data)} leading bytes before first widget")
 
     if len(rom_widgets) != len(widgets_parsed):
         print(f"  WARNING: assembly has {len(widgets_parsed)} widgets, ROM scan found {len(rom_widgets)}")
@@ -698,10 +722,22 @@ def main():
 
     print(f"  {len(extern_symbols)} extern symbols")
 
+    # Compute trailing data (bytes after last widget but before end_addr)
+    widget_total = len(leading_data) + sum(4 + len(b) for _, _, b in rom_widgets)
+    trailing_data = b''
+    if args.end_addr:
+        expected_total = int(args.end_addr, 16) - block_base
+        if widget_total < expected_total:
+            trail_offset = block_base - ROM_BASE + widget_total
+            trailing_data = rom[trail_offset:trail_offset + (expected_total - widget_total)]
+            if trailing_data:
+                print(f"  {len(trailing_data)} trailing bytes after last widget")
+
     # Generate C file
     c_content = generate_c_file(
         widgets_parsed, rom_widgets, symbols, names,
-        block_base, output_name, extern_symbols
+        block_base, output_name, extern_symbols,
+        leading_data=leading_data, trailing_data=trailing_data
     )
 
     # Generate linker script
@@ -726,8 +762,12 @@ def main():
         print(f"  Written: {ld_path}")
 
     # Compute total size
-    total = sum(4 + len(body) for _, _, body in rom_widgets)
-    print(f"\nTotal data size: {total} bytes ({len(rom_widgets)} widgets)")
+    total = len(leading_data) + sum(4 + len(body) for _, _, body in rom_widgets) + len(trailing_data)
+    extras = []
+    if leading_data: extras.append(f"{len(leading_data)} leading")
+    if trailing_data: extras.append(f"{len(trailing_data)} trailing")
+    extra_str = f", {', '.join(extras)}" if extras else ""
+    print(f"\nTotal data size: {total} bytes ({len(rom_widgets)} widgets{extra_str})")
     end_addr = block_base + total
     print(f"Address range: 0x{block_base:06X} - 0x{end_addr:06X}")
 
