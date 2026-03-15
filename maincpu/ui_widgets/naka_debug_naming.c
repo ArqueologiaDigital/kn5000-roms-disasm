@@ -150,7 +150,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w0_text = ASTR("Panel Simulator for HK"),
+    .w0_text = ALIGNED_STRING("Panel Simulator for HK"),
 
     /* w1: MENU_ITEM */
     .w1 = {
@@ -241,7 +241,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w6_text = ASTR("DEBUG TIME !"),
+    .w6_text = ALIGNED_STRING("DEBUG TIME !"),
 
     /* w7: TYPE_0x57 */
     .w7_hdr = NAKA_HDR(0x57),
@@ -401,7 +401,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w19_text = ASTR("POSITION"),
+    .w19_text = ALIGNED_STRING("POSITION"),
 
     /* w20: TYPE_0x4C */
     .w20_hdr = NAKA_HDR(0x4C),
@@ -680,7 +680,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .string_id      = 1,
         .reserved       = 0x0000,
     },
-    .w50_text = ASTR("Check Naming"),
+    .w50_text = ALIGNED_STRING("Check Naming"),
 
     /* w51: TYPE_0x4D */
     .w51_hdr = NAKA_HDR(0x4D),

@@ -637,7 +637,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w18_text = ASTR("CONTROLLER"),
+    .w18_text = ALIGNED_STRING("CONTROLLER"),
 
     /* w19: LABEL */
     .w19 = {
@@ -656,7 +656,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w19_text = ASTR("FUNCTION"),
+    .w19_text = ALIGNED_STRING("FUNCTION"),
 
     /* w20: TYPE_0x22 */
     .w20_hdr = NAKA_HDR(0x22),
@@ -792,7 +792,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w27_text = ASTR("ITEM"),
+    .w27_text = ALIGNED_STRING("ITEM"),
 
     /* w28: LABEL */
     .w28 = {
@@ -934,7 +934,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w34_text = ASTR("RHYTHM"),
+    .w34_text = ALIGNED_STRING("RHYTHM"),
 
     /* w35: LABEL */
     .w35 = {
@@ -953,7 +953,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w35_text = ASTR("SOUND & RHYTHM"),
+    .w35_text = ALIGNED_STRING("SOUND & RHYTHM"),
 
     /* w36: LABEL */
     .w36 = {
@@ -972,7 +972,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w36_text = ASTR("PANEL MEMORY"),
+    .w36_text = ALIGNED_STRING("PANEL MEMORY"),
 
     /* w37: TYPE_0x63 */
     .w37_hdr = NAKA_HDR(0x63),
@@ -1100,7 +1100,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w43_text = ASTR("RHYTHM"),
+    .w43_text = ALIGNED_STRING("RHYTHM"),
 
     /* w44: LABEL */
     .w44 = {
@@ -1119,7 +1119,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w44_text = ASTR("SOUND&RHYTHM"),
+    .w44_text = ALIGNED_STRING("SOUND&RHYTHM"),
 
     /* w45: LABEL */
     .w45 = {
@@ -1138,7 +1138,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w45_text = ASTR("PANEL MEMORY"),
+    .w45_text = ALIGNED_STRING("PANEL MEMORY"),
 
     /* w46: CONTAINER */
     .w46 = {
@@ -1266,7 +1266,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w53_text = ASTR("NORMAL"),
+    .w53_text = ALIGNED_STRING("NORMAL"),
 
     /* w54: LABEL */
     .w54 = {
@@ -1285,7 +1285,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w54_text = ASTR("EXPAND"),
+    .w54_text = ALIGNED_STRING("EXPAND"),
 
     /* w55: TYPE_LIST */
     .w55_hdr = NAKA_HDR(0x66),
@@ -1424,7 +1424,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w63_text = ASTR("DISPLAY TYPE"),
+    .w63_text = ALIGNED_STRING("DISPLAY TYPE"),
 
     /* w64: LABEL */
     .w64 = {
@@ -1443,7 +1443,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w64_text = ASTR("TIME"),
+    .w64_text = ALIGNED_STRING("TIME"),
 
     /* w65: TYPE_0x22 */
     .w65_hdr = NAKA_HDR(0x22),
@@ -1521,7 +1521,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w69_text = ASTR("LOAD"),
+    .w69_text = ALIGNED_STRING("LOAD"),
 
     /* w70: CONTAINER */
     .w70 = {
@@ -1572,7 +1572,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w71_text = ASTR("LOAD"),
+    .w71_text = ALIGNED_STRING("LOAD"),
 
     /* w72: TYPE_0x1B */
     .w72_hdr = NAKA_HDR(0x1B),
@@ -1603,7 +1603,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w73_text = ASTR("HOME PAGE/"),
+    .w73_text = ALIGNED_STRING("HOME PAGE/"),
 
     /* w74: LABEL */
     .w74 = {
@@ -1674,7 +1674,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w78_text = ASTR("USER INITIAL"),
+    .w78_text = ALIGNED_STRING("USER INITIAL"),
 
     /* w79: TYPE_0x22 */
     .w79_hdr = NAKA_HDR(0x22),
@@ -1842,7 +1842,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w93_text = ASTR(""),
+    .w93_text = ALIGNED_STRING(""),
 
     /* w94: LABEL */
     .w94 = {
@@ -1861,7 +1861,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w94_text = ASTR("ONE TOUCH PLAY"),
+    .w94_text = ALIGNED_STRING("ONE TOUCH PLAY"),
 
     /* w95: TYPE_0x4F */
     .w95_hdr = NAKA_HDR(0x4F),
@@ -1937,7 +1937,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_len     = 0x00A3,
         .reserved       = 0x0000,
     },
-    .w98_text = ASTR("STYLE EXPLORER"),
+    .w98_text = ALIGNED_STRING("STYLE EXPLORER"),
 
     /* w99: 0x48 */
     .w99 = {
@@ -1982,7 +1982,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_len     = 0x00A4,
         .reserved       = 0x0000,
     },
-    .w100_text = ASTR("STYLE ALPHABETICAL"),
+    .w100_text = ALIGNED_STRING("STYLE ALPHABETICAL"),
 
     /* w101: CONTAINER */
     .w101 = {
@@ -2117,7 +2117,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w109_text = ASTR("SUB CATEGORY"),
+    .w109_text = ALIGNED_STRING("SUB CATEGORY"),
 
     /* w110: TYPE_0x35 */
     .w110_hdr = NAKA_HDR(0x35),
@@ -2198,7 +2198,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w114_text = ASTR("CATEGORY :"),
+    .w114_text = ALIGNED_STRING("CATEGORY :"),
 
     /* w115: TYPE_0x3E */
     .w115_hdr = NAKA_HDR(0x3E),
@@ -2226,7 +2226,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w116_text = ASTR("SKIP"),
+    .w116_text = ALIGNED_STRING("SKIP"),
 
     /* w117: CONTAINER */
     .w117 = {
@@ -2402,7 +2402,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w128_text = ASTR("CATEGORY :"),
+    .w128_text = ALIGNED_STRING("CATEGORY :"),
 
     /* w129: TYPE_0x3E */
     .w129_hdr = NAKA_HDR(0x3E),
@@ -2430,7 +2430,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w130_text = ASTR("SKIP"),
+    .w130_text = ALIGNED_STRING("SKIP"),
 
     /* w131: CONTAINER */
     .w131 = {
@@ -2557,7 +2557,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w137_text = ASTR("SKIP"),
+    .w137_text = ALIGNED_STRING("SKIP"),
 
     /* w138: CONTAINER */
     .w138 = {
@@ -2715,7 +2715,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w147_text = ASTR("PAGE 1/2"),
+    .w147_text = ALIGNED_STRING("PAGE 1/2"),
 
     /* w148: TYPE_0x63 */
     .w148_hdr = NAKA_HDR(0x63),
@@ -2787,7 +2787,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w152_text = ASTR("PAGE 2/2"),
+    .w152_text = ALIGNED_STRING("PAGE 2/2"),
 
     /* w153: LABEL */
     .w153 = {
@@ -2806,7 +2806,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w153_text = ASTR("BANK"),
+    .w153_text = ALIGNED_STRING("BANK"),
 
     /* w154: LABEL */
     .w154 = {
@@ -2825,7 +2825,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w154_text = ASTR("BANK"),
+    .w154_text = ALIGNED_STRING("BANK"),
 
     /* w155: LABEL */
     .w155 = {
@@ -2844,7 +2844,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w155_text = ASTR("NAMING"),
+    .w155_text = ALIGNED_STRING("NAMING"),
 
     /* w156: LABEL */
     .w156 = {
@@ -2863,7 +2863,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w156_text = ASTR("MEMORY"),
+    .w156_text = ALIGNED_STRING("MEMORY"),
 
     /* w157: LABEL */
     .w157 = {
@@ -2882,7 +2882,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w157_text = ASTR("NAMING"),
+    .w157_text = ALIGNED_STRING("NAMING"),
 
     /* w158: SLIDER */
     .w158 = {
@@ -2959,7 +2959,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_id      = 0x0099,
         .reserved       = 0x0000,
     },
-    .w161_text = ASTR("NAMING"),
+    .w161_text = ALIGNED_STRING("NAMING"),
 
     /* w162: TYPE_0x4D */
     .w162_hdr = NAKA_HDR(0x4D),
@@ -3053,7 +3053,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_id      = 0x0099,
         .reserved       = 0x0000,
     },
-    .w167_text = ASTR("NAMING"),
+    .w167_text = ALIGNED_STRING("NAMING"),
 
     /* w168: TYPE_0x4D */
     .w168_hdr = NAKA_HDR(0x4D),
@@ -3180,7 +3180,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w176_text = ASTR(""),
+    .w176_text = ALIGNED_STRING(""),
 
     /* w177: TYPE_0x35 */
     .w177_hdr = NAKA_HDR(0x35),
@@ -3245,7 +3245,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w180_text = ASTR("Please try turning off and on again."),
+    .w180_text = ALIGNED_STRING("Please try turning off and on again."),
 
     /* w181: LABEL */
     .w181 = {
@@ -3283,7 +3283,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w182_text = ASTR("this unit needs repairing."),
+    .w182_text = ALIGNED_STRING("this unit needs repairing."),
 
     /* w183: TYPE_0x35 */
     .w183_hdr = NAKA_HDR(0x35),

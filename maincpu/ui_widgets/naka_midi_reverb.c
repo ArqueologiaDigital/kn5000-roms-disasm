@@ -609,7 +609,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_id      = 0x0091,
         .reserved       = 0x0000,
     },
-    .w0_text = ASTR("REVERB & EQUALIZER PRESETS"),
+    .w0_text = ALIGNED_STRING("REVERB & EQUALIZER PRESETS"),
 
     /* w1: MENU_ITEM */
     .w1 = {
@@ -638,7 +638,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w1_text = ASTR("REVERB PRESETS"),
+    .w1_text = ALIGNED_STRING("REVERB PRESETS"),
 
     /* w2: MENU_ITEM */
     .w2 = {
@@ -696,7 +696,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w3_text = ASTR("REVERB + EQUALIZER PRESETS"),
+    .w3_text = ALIGNED_STRING("REVERB + EQUALIZER PRESETS"),
 
     /* w4: CONTAINER */
     .w4 = {
@@ -718,7 +718,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_id      = 0x009D,
         .reserved       = 0x0000,
     },
-    .w4_text = ASTR("RIGHT1/RIGHT2 OCTAVE"),
+    .w4_text = ALIGNED_STRING("RIGHT1/RIGHT2 OCTAVE"),
 
     /* w5: TYPE_0x1A */
     .w5_hdr = NAKA_HDR(0x1A),
@@ -760,7 +760,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_id      = 0x0091,
         .reserved       = 0x0000,
     },
-    .w7_text = ASTR("REVERB PRESETS"),
+    .w7_text = ALIGNED_STRING("REVERB PRESETS"),
 
     /* w8: TYPE_0x51 */
     .w8_hdr = NAKA_HDR(0x51),
@@ -1019,7 +1019,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_id      = 0x0091,
         .reserved       = 0x0000,
     },
-    .w31_text = ASTR("REVERB + EQUALIZER PRESETS"),
+    .w31_text = ALIGNED_STRING("REVERB + EQUALIZER PRESETS"),
 
     /* w32: TYPE_0x51 */
     .w32_hdr = NAKA_HDR(0x51),
@@ -1230,7 +1230,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_len     = 0x0067,
         .reserved       = 0x0000,
     },
-    .w50_text = ASTR("PART SETTING"),
+    .w50_text = ALIGNED_STRING("PART SETTING"),
 
     /* w51: MENU_ITEM */
     .w51 = {
@@ -1259,7 +1259,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_len     = 0x0086,
         .reserved       = 0x0000,
     },
-    .w51_text = ASTR("CONTROL MESSAGES"),
+    .w51_text = ALIGNED_STRING("CONTROL MESSAGES"),
 
     /* w52: MENU_ITEM */
     .w52 = {
@@ -1317,7 +1317,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_len     = 0x001A,
         .reserved       = 0x0000,
     },
-    .w53_text = ASTR("COMMON SETTING"),
+    .w53_text = ALIGNED_STRING("COMMON SETTING"),
 
     /* w54: MENU_ITEM */
     .w54 = {
@@ -1346,7 +1346,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_len     = 0x0068,
         .reserved       = 0x0000,
     },
-    .w54_text = ASTR("INPUT/OUTPUT SETTING"),
+    .w54_text = ALIGNED_STRING("INPUT/OUTPUT SETTING"),
 
     /* w55: MENU_ITEM */
     .w55 = {
@@ -1375,7 +1375,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_len     = 0x001E,
         .reserved       = 0x0000,
     },
-    .w55_text = ASTR("MIDI PRESETS"),
+    .w55_text = ALIGNED_STRING("MIDI PRESETS"),
 
     /* w56: MENU_ITEM */
     .w56 = {
@@ -1433,7 +1433,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_len     = 0x0020,
         .reserved       = 0x0000,
     },
-    .w57_text = ASTR("GENERAL MIDI"),
+    .w57_text = ALIGNED_STRING("GENERAL MIDI"),
 
     /* w58: MENU_ITEM */
     .w58 = {
@@ -1462,7 +1462,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_len     = 0x001D,
         .reserved       = 0x0000,
     },
-    .w58_text = ASTR("PROG.CHANGE MIDI OUT"),
+    .w58_text = ALIGNED_STRING("PROG.CHANGE MIDI OUT"),
 
     /* w59: MENU_ITEM */
     .w59 = {
@@ -1491,7 +1491,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_len     = 0x0069,
         .reserved       = 0x0000,
     },
-    .w59_text = ASTR("P.MEM OUTPUT"),
+    .w59_text = ALIGNED_STRING("P.MEM OUTPUT"),
 
     /* w60: TYPE_0x35 */
     .w60_hdr = NAKA_HDR(0x35),
@@ -1660,7 +1660,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_id      = 0x0086,
         .reserved       = 0x0000,
     },
-    .w69_text = ASTR("CONTROL MESSAGES"),
+    .w69_text = ALIGNED_STRING("CONTROL MESSAGES"),
 
     /* w70: TYPE_0x24 */
     .w70_hdr = NAKA_HDR(0x24),
@@ -1729,7 +1729,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w73_text = ASTR("ON/OFF"),
+    .w73_text = ALIGNED_STRING("ON/OFF"),
 
     /* w74: TYPE_0x22 */
     .w74_hdr = NAKA_HDR(0x22),
@@ -1842,7 +1842,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_id      = 0x001A,
         .reserved       = 0x0000,
     },
-    .w80_text = ASTR("COMMON SETTING"),
+    .w80_text = ALIGNED_STRING("COMMON SETTING"),
 
     /* w81: TYPE_0x56 */
     .w81_hdr = NAKA_HDR(0x56),
@@ -1991,7 +1991,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_id      = 0x001E,
         .reserved       = 0x0000,
     },
-    .w89_text = ASTR("MIDI PRESETS"),
+    .w89_text = ALIGNED_STRING("MIDI PRESETS"),
 
     /* w90: TYPE_0x25 */
     .w90_hdr = NAKA_HDR(0x25),
@@ -2154,7 +2154,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w103_text = ASTR("WITH APC"),
+    .w103_text = ALIGNED_STRING("WITH APC"),
 
     /* w104: TYPE_0x69 */
     .w104_hdr = NAKA_HDR(0x69),
@@ -2180,7 +2180,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w105_text = ASTR("KN5000"),
+    .w105_text = ALIGNED_STRING("KN5000"),
 
     /* w106: TYPE_0x35 */
     .w106_hdr = NAKA_HDR(0x35),
@@ -2247,7 +2247,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w110_text = ASTR("KN5000"),
+    .w110_text = ALIGNED_STRING("KN5000"),
 
     /* w111: TYPE_0x20 */
     .w111_hdr = NAKA_HDR(0x20),
@@ -2293,7 +2293,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w114_text = ASTR("WITH APC"),
+    .w114_text = ALIGNED_STRING("WITH APC"),
 
     /* w115: TYPE_0x23 */
     .w115_hdr = NAKA_HDR(0x23),
@@ -2542,7 +2542,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w134_text = ASTR("KN5000"),
+    .w134_text = ALIGNED_STRING("KN5000"),
 
     /* w135: TYPE_0x22 */
     .w135_hdr = NAKA_HDR(0x22),
@@ -2588,7 +2588,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w138_text = ASTR("WITH APC"),
+    .w138_text = ALIGNED_STRING("WITH APC"),
 
     /* w139: TYPE_0x23 */
     .w139_hdr = NAKA_HDR(0x23),
@@ -2709,7 +2709,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w148_text = ASTR("WITH APC"),
+    .w148_text = ALIGNED_STRING("WITH APC"),
 
     /* w149: TYPE_0x23 */
     .w149_hdr = NAKA_HDR(0x23),
@@ -2782,7 +2782,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w153_text = ASTR("KN5000"),
+    .w153_text = ALIGNED_STRING("KN5000"),
 
     /* w154: CONTAINER */
     .w154 = {
@@ -2832,7 +2832,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w156_text = ASTR("SEND"),
+    .w156_text = ALIGNED_STRING("SEND"),
 
     /* w157: TYPE_0x55 */
     .w157_hdr = NAKA_HDR(0x55),
@@ -2892,7 +2892,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w161_text = ASTR("SYSTEM EXCLUSIVE"),
+    .w161_text = ALIGNED_STRING("SYSTEM EXCLUSIVE"),
 
     /* w162: LABEL */
     .w162 = {
@@ -2930,7 +2930,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w163_text = ASTR("PLEASE WAIT!"),
+    .w163_text = ALIGNED_STRING("PLEASE WAIT!"),
 
     /* w164: TYPE_0x11 */
     .w164_hdr = NAKA_HDR(0x11),
@@ -3033,7 +3033,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w172_text = ASTR("SYSTEM EXCLUSIVE"),
+    .w172_text = ALIGNED_STRING("SYSTEM EXCLUSIVE"),
 
     /* w173: LABEL */
     .w173 = {
@@ -3071,7 +3071,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w174_text = ASTR("PLEASE WAIT!"),
+    .w174_text = ALIGNED_STRING("PLEASE WAIT!"),
 
     /* w175: TYPE_0x11 */
     .w175_hdr = NAKA_HDR(0x11),
@@ -3537,7 +3537,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w214_text = ASTR("ON/OFF"),
+    .w214_text = ALIGNED_STRING("ON/OFF"),
 
     /* w215: LABEL */
     .w215 = {
@@ -3556,7 +3556,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w215_text = ASTR("PART"),
+    .w215_text = ALIGNED_STRING("PART"),
 
     /* w216: LABEL */
     .w216 = {
@@ -3594,7 +3594,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w217_text = ASTR("BANK"),
+    .w217_text = ALIGNED_STRING("BANK"),
 
     /* w218: LABEL */
     .w218 = {
@@ -3786,7 +3786,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w229_text = ASTR("Use these settings when:"),
+    .w229_text = ALIGNED_STRING("Use these settings when:"),
 
     /* w230: TYPE_0x22 */
     .w230_hdr = NAKA_HDR(0x22),
@@ -3842,7 +3842,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .string_id      = 0x008E,
         .reserved       = 0x0000,
     },
-    .w234_text = ASTR("VOCALIST WORKSTATION"),
+    .w234_text = ALIGNED_STRING("VOCALIST WORKSTATION"),
 
     /* w235: TYPE_0x28 */
     .w235_hdr = NAKA_HDR(0x28),
@@ -4014,7 +4014,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w246_text = ASTR("ITEM"),
+    .w246_text = ALIGNED_STRING("ITEM"),
 
     /* w247: LABEL */
     .w247 = {
@@ -4052,7 +4052,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w248_text = ASTR("SEND"),
+    .w248_text = ALIGNED_STRING("SEND"),
 
     /* w249: LABEL */
     .w249 = {
@@ -4090,7 +4090,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w250_text = ASTR("IGNORE"),
+    .w250_text = ALIGNED_STRING("IGNORE"),
 
     /* w251: TYPE_0x22 */
     .w251_hdr = NAKA_HDR(0x22),
@@ -4205,7 +4205,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w257_text = ASTR("FADE OUT"),
+    .w257_text = ALIGNED_STRING("FADE OUT"),
 
     /* w258: TYPE_0x22 */
     .w258_hdr = NAKA_HDR(0x22),

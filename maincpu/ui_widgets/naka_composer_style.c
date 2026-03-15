@@ -701,7 +701,7 @@ const naka_composer_style_t naka_composer_style_data
         .string_id      = 0x0098,
         .reserved       = 0x0000,
     },
-    .w15_text = ASTR("STORAGE DATA"),
+    .w15_text = ALIGNED_STRING("STORAGE DATA"),
 
     /* w16: TYPE_0x1B */
     .w16_hdr = NAKA_HDR(0x1B),
@@ -898,7 +898,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w31_text = ASTR("Continue"),
+    .w31_text = ALIGNED_STRING("Continue"),
 
     /* w32: LABEL */
     .w32 = {
@@ -917,7 +917,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w32_text = ASTR("Next ?"),
+    .w32_text = ALIGNED_STRING("Next ?"),
 
     /* w33: TYPE_0x3E */
     .w33_hdr = NAKA_HDR(0x3E),
@@ -986,7 +986,7 @@ const naka_composer_style_t naka_composer_style_data
         .string_len     = 0x000B,
         .reserved       = 0x0000,
     },
-    .w36_text = ASTR("BEND RANGE SET"),
+    .w36_text = ALIGNED_STRING("BEND RANGE SET"),
 
     /* w37: MENU_ITEM */
     .w37 = {
@@ -1044,7 +1044,7 @@ const naka_composer_style_t naka_composer_style_data
         .string_len     = 0x0052,
         .reserved       = 0x0000,
     },
-    .w38_text = ASTR("PATTERN COPY"),
+    .w38_text = ALIGNED_STRING("PATTERN COPY"),
 
     /* w39: MENU_ITEM */
     .w39 = {
@@ -1102,7 +1102,7 @@ const naka_composer_style_t naka_composer_style_data
         .string_len     = 0x0053,
         .reserved       = 0x0000,
     },
-    .w40_text = ASTR("SEQ TO COMPOSER COPY"),
+    .w40_text = ALIGNED_STRING("SEQ TO COMPOSER COPY"),
 
     /* w41: MENU_ITEM */
     .w41 = {
@@ -1131,7 +1131,7 @@ const naka_composer_style_t naka_composer_style_data
         .string_len     = 0x0054,
         .reserved       = 0x0000,
     },
-    .w41_text = ASTR("LOAD SINGLE COMPOSER"),
+    .w41_text = ALIGNED_STRING("LOAD SINGLE COMPOSER"),
 
     /* w42: TYPE_VALUE */
     .w42_hdr = NAKA_HDR(0x2E),
@@ -1197,7 +1197,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w47_text = ASTR("MEMORY"),
+    .w47_text = ALIGNED_STRING("MEMORY"),
 
     /* w48: TYPE_0x29 */
     .w48_hdr = NAKA_HDR(0x29),
@@ -1622,7 +1622,7 @@ const naka_composer_style_t naka_composer_style_data
         .string_id      = 0x0099,
         .reserved       = 0x0000,
     },
-    .w85_text = ASTR("VARIATION NAMING"),
+    .w85_text = ALIGNED_STRING("VARIATION NAMING"),
 
     /* w86: TYPE_0x4D */
     .w86_hdr = NAKA_HDR(0x4D),
@@ -1684,7 +1684,7 @@ const naka_composer_style_t naka_composer_style_data
         .string_id      = 0x009F,
         .reserved       = 0x0000,
     },
-    .w89_text = ASTR("RECORD SETTING"),
+    .w89_text = ALIGNED_STRING("RECORD SETTING"),
 
     /* w90: TYPE_0x29 */
     .w90_hdr = NAKA_HDR(0x29),
@@ -1764,7 +1764,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F1,
     },
-    .w96_text = ASTR("RECORD SETTING"),
+    .w96_text = ALIGNED_STRING("RECORD SETTING"),
 
     /* w97: TYPE_0x22 */
     .w97_hdr = NAKA_HDR(0x22),
@@ -1801,7 +1801,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w99_text = ASTR("ITEM"),
+    .w99_text = ALIGNED_STRING("ITEM"),
 
     /* w100: LABEL */
     .w100 = {
@@ -1893,7 +1893,7 @@ const naka_composer_style_t naka_composer_style_data
         .string_id      = 0x00A0,
         .reserved       = 0x0000,
     },
-    .w106_text = ASTR("REALTIME RECORDING"),
+    .w106_text = ALIGNED_STRING("REALTIME RECORDING"),
 
     /* w107: GROUP */
     .w107 = {
@@ -2232,7 +2232,7 @@ const naka_composer_style_t naka_composer_style_data
         .string_id      = 0x008F,
         .reserved       = 0x0000,
     },
-    .w128_text = ASTR("PART BALANCE"),
+    .w128_text = ALIGNED_STRING("PART BALANCE"),
 
     /* w129: TYPE_0x3C */
     .w129_hdr = NAKA_HDR(0x3C),
@@ -2294,7 +2294,7 @@ const naka_composer_style_t naka_composer_style_data
         .string_id      = 0x0052,
         .reserved       = 0x0000,
     },
-    .w134_text = ASTR("PATTERN COPY"),
+    .w134_text = ALIGNED_STRING("PATTERN COPY"),
 
     /* w135: TYPE_0x29 */
     .w135_hdr = NAKA_HDR(0x29),
@@ -2375,7 +2375,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w141_text = ASTR("FROM"),
+    .w141_text = ALIGNED_STRING("FROM"),
 
     /* w142: TYPE_VALUE */
     .w142_hdr = NAKA_HDR(0x2E),
@@ -2422,7 +2422,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w146_text = ASTR("TO"),
+    .w146_text = ALIGNED_STRING("TO"),
 
     /* w147: TYPE_VALUE */
     .w147_hdr = NAKA_HDR(0x2E),
@@ -2485,7 +2485,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F1,
     },
-    .w152_text = ASTR("GROUP:"),
+    .w152_text = ALIGNED_STRING("GROUP:"),
 
     /* w153: LABEL */
     .w153 = {
@@ -2523,7 +2523,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F1,
     },
-    .w154_text = ASTR("PATTERN:"),
+    .w154_text = ALIGNED_STRING("PATTERN:"),
 
     /* w155: LABEL */
     .w155 = {
@@ -2542,7 +2542,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w155_text = ASTR("FROM"),
+    .w155_text = ALIGNED_STRING("FROM"),
 
     /* w156: LABEL */
     .w156 = {
@@ -2561,7 +2561,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w156_text = ASTR("TO"),
+    .w156_text = ALIGNED_STRING("TO"),
 
     /* w157: TYPE_0x3E */
     .w157_hdr = NAKA_HDR(0x3E),
@@ -2651,7 +2651,7 @@ const naka_composer_style_t naka_composer_style_data
         .string_id      = 0x0053,
         .reserved       = 0x0000,
     },
-    .w161_text = ASTR("SEQ TO COMPOSER COPY"),
+    .w161_text = ALIGNED_STRING("SEQ TO COMPOSER COPY"),
 
     /* w162: TYPE_0x3E */
     .w162_hdr = NAKA_HDR(0x3E),
@@ -2731,7 +2731,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w169_text = ASTR("FIRST LAST"),
+    .w169_text = ALIGNED_STRING("FIRST LAST"),
 
     /* w170: LABEL */
     .w170 = {
@@ -2915,7 +2915,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w182_text = ASTR("LAST"),
+    .w182_text = ALIGNED_STRING("LAST"),
 
     /* w183: LABEL */
     .w183 = {
@@ -3348,7 +3348,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F1,
     },
-    .w210_text = ASTR("be copied from any preset pattern."),
+    .w210_text = ALIGNED_STRING("be copied from any preset pattern."),
 
     /* w211: LABEL */
     .w211 = {
@@ -3424,7 +3424,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F1,
     },
-    .w214_text = ASTR("so you can create your own"),
+    .w214_text = ALIGNED_STRING("so you can create your own"),
 
     /* w215: LABEL */
     .w215 = {
@@ -3499,7 +3499,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w217_text = ASTR("FROM"),
+    .w217_text = ALIGNED_STRING("FROM"),
 
     /* w218: TYPE_0x11 */
     .w218_hdr = NAKA_HDR(0x11),
@@ -3532,7 +3532,7 @@ const naka_composer_style_t naka_composer_style_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w219_text = ASTR("TO"),
+    .w219_text = ALIGNED_STRING("TO"),
 
     /* w220: TYPE_0x11 */
     .w220_hdr = NAKA_HDR(0x11),

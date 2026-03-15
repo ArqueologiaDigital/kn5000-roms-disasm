@@ -985,7 +985,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_id      = 0x0089,
         .reserved       = 0x0000,
     },
-    .w5_text = ASTR("INTERNAL SONG MEDLEY"),
+    .w5_text = ALIGNED_STRING("INTERNAL SONG MEDLEY"),
 
     /* w6: TYPE_0x22 */
     .w6_hdr = NAKA_HDR(0x22),
@@ -1119,7 +1119,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w14_text = ASTR("LOOP"),
+    .w14_text = ALIGNED_STRING("LOOP"),
 
     /* w15: CONTAINER */
     .w15 = {
@@ -1141,7 +1141,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_id      = 0x0099,
         .reserved       = 0x0000,
     },
-    .w15_text = ASTR("SAVE FILE NAMING"),
+    .w15_text = ALIGNED_STRING("SAVE FILE NAMING"),
 
     /* w16: TYPE_0x20 */
     .w16_hdr = NAKA_HDR(0x20),
@@ -1265,7 +1265,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w24_text = ASTR("LOAD"),
+    .w24_text = ALIGNED_STRING("LOAD"),
 
     /* w25: 0x48 */
     .w25 = {
@@ -1315,7 +1315,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_id      = 0x0099,
         .reserved       = 0x0000,
     },
-    .w27_text = ASTR("SAVE FILE NAMING"),
+    .w27_text = ALIGNED_STRING("SAVE FILE NAMING"),
 
     /* w28: TYPE_0x20 */
     .w28_hdr = NAKA_HDR(0x20),
@@ -1353,7 +1353,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_id      = 0x002C,
         .reserved       = 0x0000,
     },
-    .w30_text = ASTR("WALLPAPER LOAD"),
+    .w30_text = ALIGNED_STRING("WALLPAPER LOAD"),
 
     /* w31: TYPE_0x1F */
     .w31_hdr = NAKA_HDR(0x1F),
@@ -1380,7 +1380,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w32_text = ASTR("PREV"),
+    .w32_text = ALIGNED_STRING("PREV"),
 
     /* w33: TYPE_0x22 */
     .w33_hdr = NAKA_HDR(0x22),
@@ -1416,7 +1416,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w35_text = ASTR("NEXT"),
+    .w35_text = ALIGNED_STRING("NEXT"),
 
     /* w36: LABEL */
     .w36 = {
@@ -1661,7 +1661,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w58_text = ASTR(""),
+    .w58_text = ALIGNED_STRING(""),
 
     /* w59: TYPE_0x25 */
     .w59_hdr = NAKA_HDR(0x25),
@@ -1768,7 +1768,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w68_text = ASTR("DISK NAME:"),
+    .w68_text = ALIGNED_STRING("DISK NAME:"),
 
     /* w69: MENU_ITEM */
     .w69 = {
@@ -1981,7 +1981,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w85_text = ASTR("COMP"),
+    .w85_text = ALIGNED_STRING("COMP"),
 
     /* w86: LABEL */
     .w86 = {
@@ -2038,7 +2038,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w88_text = ASTR("CUSTOM"),
+    .w88_text = ALIGNED_STRING("CUSTOM"),
 
     /* w89: LABEL */
     .w89 = {
@@ -2108,7 +2108,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w92_text = ASTR("USER MIDI SETTINGS"),
+    .w92_text = ALIGNED_STRING("USER MIDI SETTINGS"),
 
     /* w93: LABEL */
     .w93 = {
@@ -2165,7 +2165,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w95_text = ASTR("SOUND MEMORY"),
+    .w95_text = ALIGNED_STRING("SOUND MEMORY"),
 
     /* w96: LABEL */
     .w96 = {
@@ -2184,7 +2184,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w96_text = ASTR("COMPOSER"),
+    .w96_text = ALIGNED_STRING("COMPOSER"),
 
     /* w97: LABEL */
     .w97 = {
@@ -2268,7 +2268,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w101_text = ASTR("LOAD"),
+    .w101_text = ALIGNED_STRING("LOAD"),
 
     /* w102: TYPE_0x35 */
     .w102_hdr = NAKA_HDR(0x35),
@@ -2463,7 +2463,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_id      = 0x002C,
         .reserved       = 0x0000,
     },
-    .w112_text = ASTR("SMF LOAD"),
+    .w112_text = ALIGNED_STRING("SMF LOAD"),
 
     /* w113: MENU_ITEM */
     .w113 = {
@@ -2492,7 +2492,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w113_text = ASTR("TECH"),
+    .w113_text = ALIGNED_STRING("TECH"),
 
     /* w114: TYPE_0x22 */
     .w114_hdr = NAKA_HDR(0x22),
@@ -2528,7 +2528,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w116_text = ASTR("PREV"),
+    .w116_text = ALIGNED_STRING("PREV"),
 
     /* w117: TYPE_0x1F */
     .w117_hdr = NAKA_HDR(0x1F),
@@ -2701,7 +2701,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w128_text = ASTR("LOAD"),
+    .w128_text = ALIGNED_STRING("LOAD"),
 
     /* w129: TYPE_0x35 */
     .w129_hdr = NAKA_HDR(0x35),
@@ -2765,7 +2765,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w132_text = ASTR("LOAD"),
+    .w132_text = ALIGNED_STRING("LOAD"),
 
     /* w133: CONTAINER */
     .w133 = {
@@ -2787,7 +2787,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_id      = 0x0054,
         .reserved       = 0x0000,
     },
-    .w133_text = ASTR("LOAD SINGLE COMPOSER"),
+    .w133_text = ALIGNED_STRING("LOAD SINGLE COMPOSER"),
 
     /* w134: TYPE_0x22 */
     .w134_hdr = NAKA_HDR(0x22),
@@ -2883,7 +2883,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w140_text = ASTR("TO"),
+    .w140_text = ALIGNED_STRING("TO"),
 
     /* w141: LABEL */
     .w141 = {
@@ -2902,7 +2902,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w141_text = ASTR("FROM"),
+    .w141_text = ALIGNED_STRING("FROM"),
 
     /* w142: TYPE_0x1F */
     .w142_hdr = NAKA_HDR(0x1F),
@@ -3030,7 +3030,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w146_text = ASTR(""),
+    .w146_text = ALIGNED_STRING(""),
 
     /* w147: TYPE_0x25 */
     .w147_hdr = NAKA_HDR(0x25),
@@ -3267,7 +3267,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w165_text = ASTR("USER MIDI SETTINGS"),
+    .w165_text = ALIGNED_STRING("USER MIDI SETTINGS"),
 
     /* w166: LABEL */
     .w166 = {
@@ -3324,7 +3324,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w168_text = ASTR("SOUND MEMORY"),
+    .w168_text = ALIGNED_STRING("SOUND MEMORY"),
 
     /* w169: LABEL */
     .w169 = {
@@ -3343,7 +3343,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w169_text = ASTR("COMPOSER"),
+    .w169_text = ALIGNED_STRING("COMPOSER"),
 
     /* w170: LABEL */
     .w170 = {
@@ -3501,7 +3501,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w179_text = ASTR("BACKUP"),
+    .w179_text = ALIGNED_STRING("BACKUP"),
 
     /* w180: TYPE_0x1F */
     .w180_hdr = NAKA_HDR(0x1F),
@@ -3648,7 +3648,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w192_text = ASTR("COMP"),
+    .w192_text = ALIGNED_STRING("COMP"),
 
     /* w193: LABEL */
     .w193 = {
@@ -3705,7 +3705,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w195_text = ASTR("CUSTOM"),
+    .w195_text = ALIGNED_STRING("CUSTOM"),
 
     /* w196: LABEL */
     .w196 = {
@@ -3810,7 +3810,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w202_text = ASTR("SAVE"),
+    .w202_text = ALIGNED_STRING("SAVE"),
 
     /* w203: LABEL */
     .w203 = {
@@ -3829,7 +3829,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w203_text = ASTR(" AS:"),
+    .w203_text = ALIGNED_STRING(" AS:"),
 
     /* w204: LABEL */
     .w204 = {
@@ -3927,7 +3927,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w209_text = ASTR("PREV"),
+    .w209_text = ALIGNED_STRING("PREV"),
 
     /* w210: TYPE_0x1F */
     .w210_hdr = NAKA_HDR(0x1F),
@@ -3983,7 +3983,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w212_text = ASTR("PANEL HEADER"),
+    .w212_text = ALIGNED_STRING("PANEL HEADER"),
 
     /* w213: MENU_ITEM */
     .w213 = {
@@ -4045,7 +4045,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w215_text = ASTR("SAVE"),
+    .w215_text = ALIGNED_STRING("SAVE"),
 
     /* w216: LABEL */
     .w216 = {
@@ -4109,7 +4109,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w218_text = ASTR("SAVE"),
+    .w218_text = ALIGNED_STRING("SAVE"),
 
     /* w219: LABEL */
     .w219 = {
@@ -4128,7 +4128,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w219_text = ASTR(" AS:"),
+    .w219_text = ALIGNED_STRING(" AS:"),
 
     /* w220: CONTAINER */
     .w220 = {
@@ -4198,7 +4198,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w223_text = ASTR("PREV"),
+    .w223_text = ALIGNED_STRING("PREV"),
 
     /* w224: TYPE_0x1F */
     .w224_hdr = NAKA_HDR(0x1F),
@@ -4225,7 +4225,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w225_text = ASTR("NEXT"),
+    .w225_text = ALIGNED_STRING("NEXT"),
 
     /* w226: LABEL */
     .w226 = {
@@ -4342,7 +4342,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w234_text = ASTR("LOOP"),
+    .w234_text = ALIGNED_STRING("LOOP"),
 
     /* w235: LABEL */
     .w235 = {
@@ -4605,7 +4605,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w249_text = ASTR("PREV"),
+    .w249_text = ALIGNED_STRING("PREV"),
 
     /* w250: TYPE_0x22 */
     .w250_hdr = NAKA_HDR(0x22),
@@ -4641,7 +4641,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w252_text = ASTR("NEXT"),
+    .w252_text = ALIGNED_STRING("NEXT"),
 
     /* w253: LABEL */
     .w253 = {
@@ -4873,7 +4873,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w268_text = ASTR("PREV"),
+    .w268_text = ALIGNED_STRING("PREV"),
 
     /* w269: TYPE_0x1F */
     .w269_hdr = NAKA_HDR(0x1F),
@@ -4900,7 +4900,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w270_text = ASTR("NEXT"),
+    .w270_text = ALIGNED_STRING("NEXT"),
 
     /* w271: TYPE_0x1F */
     .w271_hdr = NAKA_HDR(0x1F),
@@ -4943,7 +4943,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w273_text = ASTR("LOOP"),
+    .w273_text = ALIGNED_STRING("LOOP"),
 
     /* w274: TYPE_0x1F */
     .w274_hdr = NAKA_HDR(0x1F),
@@ -4989,7 +4989,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w276_text = ASTR("MEDLEY"),
+    .w276_text = ALIGNED_STRING("MEDLEY"),
 
     /* w277: TYPE_VALUE */
     .w277_hdr = NAKA_HDR(0x2E),
@@ -5257,7 +5257,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w294_text = ASTR("MODE"),
+    .w294_text = ALIGNED_STRING("MODE"),
 
     /* w295: TYPE_0x64 */
     .w295_hdr = NAKA_HDR(0x64),
@@ -5283,7 +5283,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w296_text = ASTR("LOOP"),
+    .w296_text = ALIGNED_STRING("LOOP"),
 
     /* w297: CONTAINER */
     .w297 = {
@@ -5305,7 +5305,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_id      = 0x0096,
         .reserved       = 0x0000,
     },
-    .w297_text = ASTR("DISK TOOLS"),
+    .w297_text = ALIGNED_STRING("DISK TOOLS"),
 
     /* w298: TYPE_0x22 */
     .w298_hdr = NAKA_HDR(0x22),
@@ -5378,7 +5378,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w302_text = ASTR("DISK NAME:"),
+    .w302_text = ALIGNED_STRING("DISK NAME:"),
 
     /* w303: TYPE_0x1F */
     .w303_hdr = NAKA_HDR(0x1F),
@@ -5432,7 +5432,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w306_text = ASTR("MOVE"),
+    .w306_text = ALIGNED_STRING("MOVE"),
 
     /* w307: MENU_ITEM */
     .w307 = {
@@ -5461,7 +5461,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w307_text = ASTR(""),
+    .w307_text = ALIGNED_STRING(""),
 
     /* w308: LABEL */
     .w308 = {
@@ -5480,7 +5480,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w308_text = ASTR("FORMAT"),
+    .w308_text = ALIGNED_STRING("FORMAT"),
 
     /* w309: TYPE_0x41 */
     .w309_hdr = NAKA_HDR(0x41),
@@ -5509,7 +5509,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w310_text = ASTR("RENAME"),
+    .w310_text = ALIGNED_STRING("RENAME"),
 
     /* w311: TYPE_0x1F */
     .w311_hdr = NAKA_HDR(0x1F),
@@ -5591,7 +5591,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_id      = 0x0096,
         .reserved       = 0x0000,
     },
-    .w316_text = ASTR("FLOPPY DISK FORMAT"),
+    .w316_text = ALIGNED_STRING("FLOPPY DISK FORMAT"),
 
     /* w317: CONTAINER */
     .w317 = {
@@ -5613,7 +5613,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_id      = 0x0096,
         .reserved       = 0x0000,
     },
-    .w317_text = ASTR("SMF DISK TOOLS"),
+    .w317_text = ALIGNED_STRING("SMF DISK TOOLS"),
 
     /* w318: MENU_ITEM */
     .w318 = {
@@ -5642,7 +5642,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w318_text = ASTR("TECH"),
+    .w318_text = ALIGNED_STRING("TECH"),
 
     /* w319: TYPE_0x1F */
     .w319_hdr = NAKA_HDR(0x1F),
@@ -5669,7 +5669,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w320_text = ASTR("PREV"),
+    .w320_text = ALIGNED_STRING("PREV"),
 
     /* w321: TYPE_0x22 */
     .w321_hdr = NAKA_HDR(0x22),
@@ -5705,7 +5705,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w323_text = ASTR("NEXT"),
+    .w323_text = ALIGNED_STRING("NEXT"),
 
     /* w324: LABEL */
     .w324 = {
@@ -5765,7 +5765,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w325_text = ASTR(""),
+    .w325_text = ALIGNED_STRING(""),
 
     /* w326: LABEL */
     .w326 = {
@@ -5784,7 +5784,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w326_text = ASTR("FORMAT"),
+    .w326_text = ALIGNED_STRING("FORMAT"),
 
     /* w327: TYPE_0x1F */
     .w327_hdr = NAKA_HDR(0x1F),
@@ -6136,7 +6136,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w355_text = ASTR("FROM"),
+    .w355_text = ALIGNED_STRING("FROM"),
 
     /* w356: TYPE_0x22 */
     .w356_hdr = NAKA_HDR(0x22),
@@ -6316,7 +6316,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w373_text = ASTR("OVERWRITE SURE"),
+    .w373_text = ALIGNED_STRING("OVERWRITE SURE"),
 
     /* w374: CONTAINER */
     .w374 = {

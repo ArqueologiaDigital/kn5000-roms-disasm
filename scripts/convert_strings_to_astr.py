@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Convert char-by-char string initializers in NAKA C files to ASTR() macros.
+"""Convert char-by-char string initializers in NAKA C files to ALIGNED_STRING() macros.
 
 Transforms:
   .w18_text = { 'C', 'O', 'N', 'T', 'R', 'O', 'L', 'L', 'E', 'R', 0, 0xFF },
 into:
-  .w18_text = ASTR("CONTROLLER"),
+  .w18_text = ALIGNED_STRING("CONTROLLER"),
 
 Only converts pure aligned_string patterns (chars + NUL + optional 0xFF).
 Mixed data fields (string + binary) are left unchanged.
@@ -16,7 +16,7 @@ import os
 
 
 def try_convert_initializer(init_text):
-    """Try to convert a { ... } initializer to ASTR() or bare string.
+    """Try to convert a { ... } initializer to ALIGNED_STRING() or bare string.
 
     Returns (new_text, converted) or (None, False) if not convertible.
     """
@@ -70,7 +70,7 @@ def try_convert_initializer(init_text):
                 s += f'\\x{ord(ch):02X}'
 
     if has_pad:
-        return f'ASTR("{s}")', True
+        return f'ALIGNED_STRING("{s}")', True
     else:
         return f'"{s}"', True
 

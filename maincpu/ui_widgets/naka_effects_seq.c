@@ -1119,7 +1119,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x0017,
         .reserved       = 0x0000,
     },
-    .w0_text = ASTR("REVERB"),
+    .w0_text = ALIGNED_STRING("REVERB"),
 
     /* w1: TYPE_0x22 */
     .w1_hdr = NAKA_HDR(0x22),
@@ -1165,7 +1165,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w4_text = ASTR("TYPE"),
+    .w4_text = ALIGNED_STRING("TYPE"),
 
     /* w5: LABEL */
     .w5 = {
@@ -1274,7 +1274,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x000C,
         .reserved       = 0x0000,
     },
-    .w10_text = ASTR("DSP EFFECT"),
+    .w10_text = ALIGNED_STRING("DSP EFFECT"),
 
     /* w11: LABEL */
     .w11 = {
@@ -1293,7 +1293,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w11_text = ASTR("TYPE :"),
+    .w11_text = ALIGNED_STRING("TYPE :"),
 
     /* w12: TYPE_0x22 */
     .w12_hdr = NAKA_HDR(0x22),
@@ -1321,7 +1321,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w13_text = ASTR("TYPE"),
+    .w13_text = ALIGNED_STRING("TYPE"),
 
     /* w14: TYPE_0x22 */
     .w14_hdr = NAKA_HDR(0x22),
@@ -1512,7 +1512,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w29_text = ASTR("FREQ"),
+    .w29_text = ALIGNED_STRING("FREQ"),
 
     /* w30: LABEL */
     .w30 = {
@@ -1531,7 +1531,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w30_text = ASTR("GAIN"),
+    .w30_text = ALIGNED_STRING("GAIN"),
 
     /* w31: LABEL */
     .w31 = {
@@ -1550,7 +1550,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w31_text = ASTR("FREQ"),
+    .w31_text = ALIGNED_STRING("FREQ"),
 
     /* w32: LABEL */
     .w32 = {
@@ -1569,7 +1569,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w32_text = ASTR("FREQ"),
+    .w32_text = ALIGNED_STRING("FREQ"),
 
     /* w33: LABEL */
     .w33 = {
@@ -1588,7 +1588,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w33_text = ASTR("FREQ"),
+    .w33_text = ALIGNED_STRING("FREQ"),
 
     /* w34: LABEL */
     .w34 = {
@@ -1607,7 +1607,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w34_text = ASTR("GAIN"),
+    .w34_text = ALIGNED_STRING("GAIN"),
 
     /* w35: LABEL */
     .w35 = {
@@ -1626,7 +1626,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w35_text = ASTR("GAIN"),
+    .w35_text = ALIGNED_STRING("GAIN"),
 
     /* w36: LABEL */
     .w36 = {
@@ -1645,7 +1645,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w36_text = ASTR("GAIN"),
+    .w36_text = ALIGNED_STRING("GAIN"),
 
     /* w37: LABEL */
     .w37 = {
@@ -1702,7 +1702,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w39_text = ASTR("MID-HIGH"),
+    .w39_text = ALIGNED_STRING("MID-HIGH"),
 
     /* w40: LABEL */
     .w40 = {
@@ -1721,7 +1721,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w40_text = ASTR("HIGH"),
+    .w40_text = ALIGNED_STRING("HIGH"),
 
     /* w41: TYPE_VALUE */
     .w41_hdr = NAKA_HDR(0x2E),
@@ -1787,7 +1787,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F1,
     },
-    .w46_text = ASTR("FREQ(Hz)"),
+    .w46_text = ALIGNED_STRING("FREQ(Hz)"),
 
     /* w47: LABEL */
     .w47 = {
@@ -1806,7 +1806,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F1,
     },
-    .w47_text = ASTR("GAIN(dB)"),
+    .w47_text = ALIGNED_STRING("GAIN(dB)"),
 
     /* w48: LABEL */
     .w48 = {
@@ -1863,7 +1863,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F1,
     },
-    .w50_text = ASTR("MID-HIGH"),
+    .w50_text = ALIGNED_STRING("MID-HIGH"),
 
     /* w51: LABEL */
     .w51 = {
@@ -1882,7 +1882,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F1,
     },
-    .w51_text = ASTR("HIGH"),
+    .w51_text = ALIGNED_STRING("HIGH"),
 
     /* w52: TYPE_VALUE */
     .w52_hdr = NAKA_HDR(0x2E),
@@ -1981,7 +1981,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w58_text = ASTR("TYPE"),
+    .w58_text = ALIGNED_STRING("TYPE"),
 
     /* w59: LABEL */
     .w59 = {
@@ -2108,7 +2108,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x0033,
         .reserved       = 0x0000,
     },
-    .w65_text = ASTR("SEQUENCER MENU"),
+    .w65_text = ALIGNED_STRING("SEQUENCER MENU"),
 
     /* w66: MENU_ITEM */
     .w66 = {
@@ -2137,7 +2137,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_len     = 0x008A,
         .reserved       = 0x0000,
     },
-    .w66_text = ASTR("CREATE"),
+    .w66_text = ALIGNED_STRING("CREATE"),
 
     /* w67: LABEL */
     .w67 = {
@@ -2156,7 +2156,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w67_text = ASTR("SONG"),
+    .w67_text = ALIGNED_STRING("SONG"),
 
     /* w68: TYPE_0x40 */
     .w68_hdr = NAKA_HDR(0x40),
@@ -2288,7 +2288,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x007E,
         .reserved       = 0x0000,
     },
-    .w76_text = ASTR("SEQUENCER PLAY"),
+    .w76_text = ALIGNED_STRING("SEQUENCER PLAY"),
 
     /* w77: LABEL */
     .w77 = {
@@ -2307,7 +2307,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w77_text = ASTR("MEAS"),
+    .w77_text = ALIGNED_STRING("MEAS"),
 
     /* w78: TYPE_0x5B */
     .w78_hdr = NAKA_HDR(0x5B),
@@ -2396,7 +2396,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w84_text = ASTR("MEASURE  ="),
+    .w84_text = ALIGNED_STRING("MEASURE  ="),
 
     /* w85: LABEL */
     .w85 = {
@@ -2511,7 +2511,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w92_text = ASTR("MEDLEY"),
+    .w92_text = ALIGNED_STRING("MEDLEY"),
 
     /* w93: TYPE_0x20 */
     .w93_hdr = NAKA_HDR(0x20),
@@ -2539,7 +2539,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w94_text = ASTR("SONG"),
+    .w94_text = ALIGNED_STRING("SONG"),
 
     /* w95: TYPE_0x35 */
     .w95_hdr = NAKA_HDR(0x35),
@@ -2582,7 +2582,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w98_text = ASTR("SONG"),
+    .w98_text = ALIGNED_STRING("SONG"),
 
     /* w99: TYPE_0x64 */
     .w99_hdr = NAKA_HDR(0x64),
@@ -2738,7 +2738,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w108_text = ASTR("SONG"),
+    .w108_text = ALIGNED_STRING("SONG"),
 
     /* w109: 0x48 */
     .w109 = {
@@ -2783,7 +2783,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w110_text = ASTR("NAMING"),
+    .w110_text = ALIGNED_STRING("NAMING"),
 
     /* w111: GROUP */
     .w111 = {
@@ -2907,7 +2907,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x008A,
         .reserved       = 0x0000,
     },
-    .w122_text = ASTR("CREATE"),
+    .w122_text = ALIGNED_STRING("CREATE"),
 
     /* w123: MENU_ITEM */
     .w123 = {
@@ -2936,7 +2936,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_len     = 0x0039,
         .reserved       = 0x0000,
     },
-    .w123_text = ASTR("TRACK ASSIGN"),
+    .w123_text = ALIGNED_STRING("TRACK ASSIGN"),
 
     /* w124: MENU_ITEM */
     .w124 = {
@@ -3023,7 +3023,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_len     = 0x003F,
         .reserved       = 0x0000,
     },
-    .w126_text = ASTR("SONG CLEAR"),
+    .w126_text = ALIGNED_STRING("SONG CLEAR"),
 
     /* w127: MENU_ITEM */
     .w127 = {
@@ -3132,7 +3132,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_len     = 0x0035,
         .reserved       = 0x0000,
     },
-    .w131_text = ASTR("PUNCH RECORD"),
+    .w131_text = ALIGNED_STRING("PUNCH RECORD"),
 
     /* w132: CONTAINER */
     .w132 = {
@@ -3189,7 +3189,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w135_text = ASTR("REC STOP"),
+    .w135_text = ALIGNED_STRING("REC STOP"),
 
     /* w136: TYPE_0x44 */
     .w136_hdr = NAKA_HDR(0x44),
@@ -3263,7 +3263,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w140_text = ASTR("MEASURE  ="),
+    .w140_text = ALIGNED_STRING("MEASURE  ="),
 
     /* w141: LABEL */
     .w141 = {
@@ -3301,7 +3301,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w142_text = ASTR("MEMORY   ="),
+    .w142_text = ALIGNED_STRING("MEMORY   ="),
 
     /* w143: TYPE_0x14 */
     .w143_hdr = NAKA_HDR(0x14),
@@ -3583,7 +3583,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x0035,
         .reserved       = 0x0000,
     },
-    .w162_text = ASTR("PUNCH RECORD"),
+    .w162_text = ALIGNED_STRING("PUNCH RECORD"),
 
     /* w163: TYPE_0x5B */
     .w163_hdr = NAKA_HDR(0x5B),
@@ -3646,7 +3646,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w166_text = ASTR("MEASURE  ="),
+    .w166_text = ALIGNED_STRING("MEASURE  ="),
 
     /* w167: LABEL */
     .w167 = {
@@ -3684,7 +3684,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w168_text = ASTR("MEMORY   ="),
+    .w168_text = ALIGNED_STRING("MEMORY   ="),
 
     /* w169: TYPE_0x14 */
     .w169_hdr = NAKA_HDR(0x14),
@@ -3771,7 +3771,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w175_text = ASTR("MEAS"),
+    .w175_text = ALIGNED_STRING("MEAS"),
 
     /* w176: TYPE_0x1F */
     .w176_hdr = NAKA_HDR(0x1F),
@@ -3847,7 +3847,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w181_text = ASTR("AUTO"),
+    .w181_text = ALIGNED_STRING("AUTO"),
 
     /* w182: LABEL */
     .w182 = {
@@ -3916,7 +3916,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w185_text = ASTR("MEAS"),
+    .w185_text = ALIGNED_STRING("MEAS"),
 
     /* w186: LABEL */
     .w186 = {
@@ -4076,7 +4076,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x003F,
         .reserved       = 0x0000,
     },
-    .w196_text = ASTR("SONG CLEAR"),
+    .w196_text = ALIGNED_STRING("SONG CLEAR"),
 
     /* w197: TYPE_0x22 */
     .w197_hdr = NAKA_HDR(0x22),
@@ -4445,7 +4445,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x0012,
         .reserved       = 0x0000,
     },
-    .w225_text = ASTR("EDIT"),
+    .w225_text = ALIGNED_STRING("EDIT"),
 
     /* w226: TYPE_0x28 */
     .w226_hdr = NAKA_HDR(0x28),
@@ -4672,7 +4672,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_len     = 0x003D,
         .reserved       = 0x0000,
     },
-    .w237_text = ASTR("QUANTIZE"),
+    .w237_text = ALIGNED_STRING("QUANTIZE"),
 
     /* w238: MENU_ITEM */
     .w238 = {
@@ -4825,7 +4825,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_len     = 0x0047,
         .reserved       = 0x0000,
     },
-    .w243_text = ASTR("COPY"),
+    .w243_text = ALIGNED_STRING("COPY"),
 
     /* w244: TYPE_VALUE */
     .w244_hdr = NAKA_HDR(0x2E),
@@ -4890,7 +4890,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_len     = 0x0049,
         .reserved       = 0x0000,
     },
-    .w246_text = ASTR("DELETE"),
+    .w246_text = ALIGNED_STRING("DELETE"),
 
     /* w247: MENU_ITEM */
     .w247 = {
@@ -4919,7 +4919,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_len     = 0x004A,
         .reserved       = 0x0000,
     },
-    .w247_text = ASTR("INSERT"),
+    .w247_text = ALIGNED_STRING("INSERT"),
 
     /* w248: LABEL */
     .w248 = {
@@ -4993,7 +4993,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w252_text = ASTR(":PART SELECT"),
+    .w252_text = ALIGNED_STRING(":PART SELECT"),
 
     /* w253: TYPE_0x5B */
     .w253_hdr = NAKA_HDR(0x5B),
@@ -5098,7 +5098,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w262_text = ASTR("MEAS"),
+    .w262_text = ALIGNED_STRING("MEAS"),
 
     /* w263: LABEL */
     .w263 = {
@@ -5136,7 +5136,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w264_text = ASTR("NOTE"),
+    .w264_text = ALIGNED_STRING("NOTE"),
 
     /* w265: LABEL */
     .w265 = {
@@ -5212,7 +5212,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w268_text = ASTR("CURSOR"),
+    .w268_text = ALIGNED_STRING("CURSOR"),
 
     /* w269: TYPE_0x1F */
     .w269_hdr = NAKA_HDR(0x1F),
@@ -5336,7 +5336,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w278_text = ASTR("PLAY"),
+    .w278_text = ALIGNED_STRING("PLAY"),
 
     /* w279: TYPE_0x1F */
     .w279_hdr = NAKA_HDR(0x1F),
@@ -5374,7 +5374,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x007E,
         .reserved       = 0x0000,
     },
-    .w281_text = ASTR("CYCLE PLAY"),
+    .w281_text = ALIGNED_STRING("CYCLE PLAY"),
 
     /* w282: LABEL */
     .w282 = {
@@ -5499,7 +5499,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w289_text = ASTR(":PART SELECT"),
+    .w289_text = ALIGNED_STRING(":PART SELECT"),
 
     /* w290: TYPE_0x5B */
     .w290_hdr = NAKA_HDR(0x5B),
@@ -5604,7 +5604,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w299_text = ASTR("MEAS"),
+    .w299_text = ALIGNED_STRING("MEAS"),
 
     /* w300: LABEL */
     .w300 = {
@@ -5699,7 +5699,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w304_text = ASTR("CURSOR"),
+    .w304_text = ALIGNED_STRING("CURSOR"),
 
     /* w305: LABEL */
     .w305 = {
@@ -5834,7 +5834,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w314_text = ASTR("PLAY"),
+    .w314_text = ALIGNED_STRING("PLAY"),
 
     /* w315: TYPE_0x1F */
     .w315_hdr = NAKA_HDR(0x1F),
@@ -5872,7 +5872,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x007E,
         .reserved       = 0x0000,
     },
-    .w317_text = ASTR("CYCLE PLAY"),
+    .w317_text = ALIGNED_STRING("CYCLE PLAY"),
 
     /* w318: LABEL */
     .w318 = {
@@ -6317,7 +6317,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x003D,
         .reserved       = 0x0000,
     },
-    .w357_text = ASTR("QUANTIZE"),
+    .w357_text = ALIGNED_STRING("QUANTIZE"),
 
     /* w358: LABEL */
     .w358 = {
@@ -7488,7 +7488,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x0047,
         .reserved       = 0x0000,
     },
-    .w455_text = ASTR("MEASURE COPY"),
+    .w455_text = ALIGNED_STRING("MEASURE COPY"),
 
     /* w456: TYPE_0x22 */
     .w456_hdr = NAKA_HDR(0x22),
@@ -7652,7 +7652,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x0049,
         .reserved       = 0x0000,
     },
-    .w469_text = ASTR("MEASURE DELETE"),
+    .w469_text = ALIGNED_STRING("MEASURE DELETE"),
 
     /* w470: LABEL */
     .w470 = {
@@ -7806,7 +7806,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .string_id      = 0x004A,
         .reserved       = 0x0000,
     },
-    .w482_text = ASTR("MEASURE INSERT"),
+    .w482_text = ALIGNED_STRING("MEASURE INSERT"),
 
     /* w483: TYPE_0x22 */
     .w483_hdr = NAKA_HDR(0x22),
@@ -8081,7 +8081,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w502_text = ASTR("ITEM"),
+    .w502_text = ALIGNED_STRING("ITEM"),
 
     /* w503: LABEL */
     .w503 = {

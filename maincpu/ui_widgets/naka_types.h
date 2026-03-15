@@ -221,13 +221,13 @@ typedef struct __attribute__((packed)) {
 #define NAKA_STR_ALLOC(n)  (((n) + 2) & ~1)
 
 /**
- * ASTR("text") — Aligned string initializer for char array fields.
+ * ALIGNED_STRING("text") — Aligned string initializer for char array fields.
  *
  * Equivalent to the assembly `aligned_string` macro: NUL-terminated,
  * then 0xFF-padded to even byte count.
  *
  * Use for even-length strings (which need 0xFF pad after NUL):
- *   char text[NAKA_STR_ALLOC(10)] = ASTR("CONTROLLER");
+ *   char text[NAKA_STR_ALLOC(10)] = ALIGNED_STRING("CONTROLLER");
  *   // → { 'C','O','N','T','R','O','L','L','E','R', 0x00, 0xFF }
  *
  * For odd-length strings (NUL already at even boundary), use bare literal:
@@ -238,6 +238,6 @@ typedef struct __attribute__((packed)) {
  * char array is exactly NAKA_STR_ALLOC(n) bytes, the compiler drops
  * the trailing NUL from the literal, leaving { chars..., 0x00, 0xFF }.
  */
-#define ASTR(s)  (s "\0\xFF")
+#define ALIGNED_STRING(s)  (s "\0\xFF")
 
 #endif /* NAKA_TYPES_H */
