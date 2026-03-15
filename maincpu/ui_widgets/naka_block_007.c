@@ -47,6 +47,42 @@ typedef struct __attribute__((packed)) {
     uint8_t trailing[90];
 } naka_block_007_t;
 
+extern const char NakaLink_E557BC;
+extern const char NakaLink_E5584A;
+extern const char NakaLink_E55876;
+extern const char NakaLink_E558A2;
+extern const char NakaLink_E558CE;
+extern const char NakaLink_E558FA;
+extern const char NakaLink_E55926;
+extern const char NakaLink_E55952;
+extern const char NakaLink_E559B4;
+extern const char NakaCode_XXjn_5B82;
+extern const char NakaName_AcMidiPartGridBox;
+extern const char NakaCode_XXjn;
+extern const char NakaName_AcCtlMsgGridBox;
+extern const char NakaCode_XXj_5BB0;
+extern const char NakaName_AcPmemOutRGridBox;
+extern const char NakaCode_XXj_5BC6;
+extern const char NakaName_AcPmemOutLGridBox;
+extern const char NakaCode_XXj_5BDC;
+extern const char NakaName_AcPcgOutGridBox;
+extern const char NakaCode_XXj_5BF0;
+extern const char NakaName_AcParaLoadOptGridBox;
+extern const char NakaCode_XXj_5C0A;
+extern const char NakaName_AcInOutGridBox;
+extern const char NakaCode_XXj_5C1E;
+extern const char NakaName_AcVocalGridBox;
+extern const char NakaCode_XXj;
+extern const char NakaName_AcFadeSetGridBox;
+extern const char NakaCode_nXXFB_5C48;
+extern const char NakaName_AcLswFuncBox;
+extern const char NakaCode_nXXFB;
+extern const char NakaName_AcLswFuncEditBox;
+extern const char NakaCode_E55C74;
+extern const char NakaName_AcGMOnOffBox;
+extern const char NakaCode_fjXn;
+extern const char NakaName_AcSendEditSw;
+
 #define BASE  0x00E55A36u
 #define SELF(field) \
     ((uint32_t)(BASE + __builtin_offsetof(naka_block_007_t, field)))
@@ -62,8 +98,8 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x1E),
         .field_04  = 0x0034,
         .field_06  = 0x000E,
-        .name_ptr  = 0x00E55C8A,
-        .inst_ptr  = 0x00E55C84,
+        .name_ptr  = NAKA_ADDR(NakaName_AcSendEditSw),
+        .inst_ptr  = NAKA_ADDR(NakaCode_fjXn),
         .link_ptr  = NAKA_ADDR(NakaDesc_OnOffStyle_Table),
         .proc_addr = NAKA_ADDR(AcGMOnOffBoxProc),
     },
@@ -73,9 +109,9 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x18),
         .field_04  = 0x0036,
         .field_06  = 0x0000,
-        .name_ptr  = 0x00E55C76,
-        .inst_ptr  = 0x00E55C74,
-        .link_ptr  = 0x00E557BC,
+        .name_ptr  = NAKA_ADDR(NakaName_AcGMOnOffBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_E55C74),
+        .link_ptr  = NAKA_ADDR(NakaLink_E557BC),
         .proc_addr = NAKA_ADDR(AcLswFuncEditBoxProc),
     },
 
@@ -84,8 +120,8 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x15),
         .field_04  = 0x0044,
         .field_06  = 0x0012,
-        .name_ptr  = 0x00E55C62,
-        .inst_ptr  = 0x00E55C5C,
+        .name_ptr  = NAKA_ADDR(NakaName_AcLswFuncEditBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_nXXFB),
         .link_ptr  = NAKA_ADDR(NakaDesc_PmanOnOff1_Table),
         .proc_addr = NAKA_ADDR(AcLswFuncBoxProc),
     },
@@ -95,8 +131,8 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x12),
         .field_04  = 0x0036,
         .field_06  = 0x0012,
-        .name_ptr  = 0x00E55C4E,
-        .inst_ptr  = 0x00E55C48,
+        .name_ptr  = NAKA_ADDR(NakaName_AcLswFuncBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_nXXFB_5C48),
         .link_ptr  = NAKA_ADDR(NakaDesc_PmanOnOff2_Table),
         .proc_addr = NAKA_ADDR(AcFadeSetGridBoxProc),
     },
@@ -106,9 +142,9 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x54),
         .field_04  = 0x004A,
         .field_06  = 0x000C,
-        .name_ptr  = 0x00E55C36,
-        .inst_ptr  = 0x00E55C32,
-        .link_ptr  = 0x00E5584A,
+        .name_ptr  = NAKA_ADDR(NakaName_AcFadeSetGridBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_XXj),
+        .link_ptr  = NAKA_ADDR(NakaLink_E5584A),
         .proc_addr = NAKA_ADDR(AcVocalGridBoxProc),
     },
 
@@ -117,9 +153,9 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x54),
         .field_04  = 0x004A,
         .field_06  = 0x000C,
-        .name_ptr  = 0x00E55C22,
-        .inst_ptr  = 0x00E55C1E,
-        .link_ptr  = 0x00E55876,
+        .name_ptr  = NAKA_ADDR(NakaName_AcVocalGridBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_XXj_5C1E),
+        .link_ptr  = NAKA_ADDR(NakaLink_E55876),
         .proc_addr = NAKA_ADDR(AcInOutGridBoxProc),
     },
 
@@ -128,9 +164,9 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x54),
         .field_04  = 0x004A,
         .field_06  = 0x000C,
-        .name_ptr  = 0x00E55C0E,
-        .inst_ptr  = 0x00E55C0A,
-        .link_ptr  = 0x00E558A2,
+        .name_ptr  = NAKA_ADDR(NakaName_AcInOutGridBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_XXj_5C0A),
+        .link_ptr  = NAKA_ADDR(NakaLink_E558A2),
         .proc_addr = NAKA_ADDR(AcParaLoadOptGridBoxProc),
     },
 
@@ -139,9 +175,9 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x54),
         .field_04  = 0x004A,
         .field_06  = 0x000C,
-        .name_ptr  = 0x00E55BF4,
-        .inst_ptr  = 0x00E55BF0,
-        .link_ptr  = 0x00E558CE,
+        .name_ptr  = NAKA_ADDR(NakaName_AcParaLoadOptGridBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_XXj_5BF0),
+        .link_ptr  = NAKA_ADDR(NakaLink_E558CE),
         .proc_addr = NAKA_ADDR(AcPcgOutGridBoxProc),
     },
 
@@ -150,9 +186,9 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x54),
         .field_04  = 0x004A,
         .field_06  = 0x000C,
-        .name_ptr  = 0x00E55BE0,
-        .inst_ptr  = 0x00E55BDC,
-        .link_ptr  = 0x00E558FA,
+        .name_ptr  = NAKA_ADDR(NakaName_AcPcgOutGridBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_XXj_5BDC),
+        .link_ptr  = NAKA_ADDR(NakaLink_E558FA),
         .proc_addr = NAKA_ADDR(AcPmemOutLGridBoxProc),
     },
 
@@ -161,9 +197,9 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x54),
         .field_04  = 0x004A,
         .field_06  = 0x000C,
-        .name_ptr  = 0x00E55BCA,
-        .inst_ptr  = 0x00E55BC6,
-        .link_ptr  = 0x00E55926,
+        .name_ptr  = NAKA_ADDR(NakaName_AcPmemOutLGridBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_XXj_5BC6),
+        .link_ptr  = NAKA_ADDR(NakaLink_E55926),
         .proc_addr = NAKA_ADDR(AcPmemOutRGridBoxProc),
     },
 
@@ -172,9 +208,9 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x54),
         .field_04  = 0x004A,
         .field_06  = 0x000C,
-        .name_ptr  = 0x00E55BB4,
-        .inst_ptr  = 0x00E55BB0,
-        .link_ptr  = 0x00E55952,
+        .name_ptr  = NAKA_ADDR(NakaName_AcPmemOutRGridBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_XXj_5BB0),
+        .link_ptr  = NAKA_ADDR(NakaLink_E55952),
         .proc_addr = NAKA_ADDR(AcCtlMsgGridBoxProc),
     },
 
@@ -183,8 +219,8 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x54),
         .field_04  = 0x004E,
         .field_06  = 0x0010,
-        .name_ptr  = 0x00E55BA0,
-        .inst_ptr  = 0x00E55B9A,
+        .name_ptr  = NAKA_ADDR(NakaName_AcCtlMsgGridBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_XXjn),
         .link_ptr  = NAKA_ADDR(NakaDesc_PageGridBox1_Table),
         .proc_addr = NAKA_ADDR(AcMidiPartGridBoxProc),
     },
@@ -194,9 +230,9 @@ const naka_block_007_t naka_block_007_data
         .header    = NAKA_HDR(0x54),
         .field_04  = 0x004E,
         .field_06  = 0x0010,
-        .name_ptr  = 0x00E55B88,
-        .inst_ptr  = 0x00E55B82,
-        .link_ptr  = 0x00E559B4,
+        .name_ptr  = NAKA_ADDR(NakaName_AcMidiPartGridBox),
+        .inst_ptr  = NAKA_ADDR(NakaCode_XXjn_5B82),
+        .link_ptr  = NAKA_ADDR(NakaLink_E559B4),
         .proc_addr = 0x00000000,
     },
 
