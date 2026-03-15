@@ -678,7 +678,7 @@ MidiPkt_EnqueueExtended_Data:
 	cp	xwa, (xiz+4)
 	jr	z, 92
 	ld	xwa, (xiz)
-	.byte 0x98, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xwa+4), 0
 	jr	z, 83
 	ld	xwa, 15611356
 	lds	bc, 6

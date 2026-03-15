@@ -2064,7 +2064,7 @@ FDC_CommandAndPostEvent:
 	; --- Stack-frame: alloc 16, conditional XDE setup, call dispatch (59 bytes) ---
 	lda	xsp, (xsp-16)
 	lda	xwa, (xsp)
-	.byte 0xb0, 0x02, 0x03, 0x00			; ld (xwa), 0x0003  [16-bit store]
+	ldw	(xwa), 3
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -6642,7 +6642,7 @@ TchSensGrid_EventDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 16
 	cps	de, 1
 	jr	nz, 12
@@ -6650,7 +6650,7 @@ TchSensGrid_EventDispatch:
 	lds	bc, 1
 	lds	de, 2
 	jrl	190
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 16
 	cps	de, 4
 	jr	nz, 12
@@ -6658,7 +6658,7 @@ TchSensGrid_EventDispatch:
 	lds	bc, 1
 	lds	de, 2
 	jrl	168
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 16
 	cps	de, 5
 	jr	nz, 12
@@ -6666,7 +6666,7 @@ TchSensGrid_EventDispatch:
 	lds	bc, 1
 	lds	de, 2
 	jrl	146
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 652
 	cps	de, 6
 	jrl	nz, 647
@@ -6686,7 +6686,7 @@ TchSensGrid_EventDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 16
 	cps	de, 1
 	jr	nz, 12
@@ -6694,7 +6694,7 @@ TchSensGrid_EventDispatch:
 	ldw	bc, 65535
 	lds	de, 2
 	jr	66
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 16
 	cps	de, 4
 	jr	nz, 12
@@ -6702,7 +6702,7 @@ TchSensGrid_EventDispatch:
 	ldw	bc, 65535
 	lds	de, 2
 	jr	44
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 16
 	cps	de, 5
 	jr	nz, 12
@@ -6710,7 +6710,7 @@ TchSensGrid_EventDispatch:
 	ldw	bc, 65535
 	lds	de, 2
 	jr	22
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 528
 	cps	de, 6
 	jrl	nz, 523
@@ -6724,7 +6724,8 @@ TchSensGrid_EventDispatch:
 	cp	xwa, 256
 	jr	nz, 51
 	lda	xwa, (xsp+14)
-	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x01, 0x00
+	ldw	(xwa), 1
+	ldw	(xwa+2), 1
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
 	.byte 0x94, 0x04
@@ -6742,11 +6743,12 @@ TchSensGrid_EventDispatch:
 	cp	xwa, 260
 	jr	nz, 59
 	lda	xwa, (xsp+14)
-	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x04, 0x00
+	ldw	(xwa), 1
+	ldw	(xwa+2), 4
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
 	ld	xwa, 15535848
-	.byte 0x94, 0x3f, 0x00, 0x00
+	cpw	(xix), 0
 	jr	z, 5
 	ld	xwa, 15535844
 	push	xwa
@@ -6765,7 +6767,8 @@ TchSensGrid_EventDispatch:
 	ld	xwa, (xde)
 	cp	xwa, 258
 	jr	nz, 43
-	.byte 0xb5, 0x02, 0x01, 0x00, 0xb1, 0x02, 0x05, 0x00
+	ldw	(xiy), 1
+	ldw	(xbc), 5
 	ld	(xhl), xiz
 	.byte 0x94, 0x04
 	pushw 237
@@ -6781,7 +6784,8 @@ TchSensGrid_EventDispatch:
 	ld	xwa, (xde)
 	cp	xwa, 259
 	jrl	nz, 297
-	.byte 0xb5, 0x02, 0x01, 0x00, 0xb1, 0x02, 0x06, 0x00
+	ldw	(xiy), 1
+	ldw	(xbc), 6
 	ld	(xhl), xiz
 	.byte 0x94, 0x04
 	pushw 237
@@ -7156,7 +7160,7 @@ FSWAssGrid_EventDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 68
 	cps	de, 2
 	jr	nz, 64
@@ -7180,7 +7184,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10374
 	lds	de, 2
 	jrl	997
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 68
 	cps	de, 3
 	jr	nz, 64
@@ -7204,7 +7208,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10376
 	lds	de, 2
 	jrl	923
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 68
 	cps	de, 4
 	jr	nz, 64
@@ -7228,7 +7232,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10378
 	lds	de, 2
 	jrl	849
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 68
 	cps	de, 5
 	jr	nz, 64
@@ -7252,7 +7256,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10380
 	lds	de, 2
 	jrl	775
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 68
 	cps	de, 6
 	jr	nz, 64
@@ -7276,7 +7280,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10382
 	lds	de, 2
 	jrl	701
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 68
 	cps	de, 7
 	jr	nz, 64
@@ -7300,7 +7304,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10384
 	lds	de, 2
 	jrl	627
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 1794
 	cp	de, 8
 	jrl	nz, 1787
@@ -7336,7 +7340,7 @@ FSWAssGrid_EventDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 67
 	cps	de, 2
 	jr	nz, 63
@@ -7360,7 +7364,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10374
 	lds	de, 2
 	jrl	439
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 67
 	cps	de, 3
 	jr	nz, 63
@@ -7384,7 +7388,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10376
 	lds	de, 2
 	jrl	366
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 67
 	cps	de, 4
 	jr	nz, 63
@@ -7408,7 +7412,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10378
 	lds	de, 2
 	jrl	293
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 67
 	cps	de, 5
 	jr	nz, 63
@@ -7432,7 +7436,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10380
 	lds	de, 2
 	jrl	220
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 67
 	cps	de, 6
 	jr	nz, 63
@@ -7456,7 +7460,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10382
 	lds	de, 2
 	jrl	147
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 66
 	cps	de, 7
 	jr	nz, 62
@@ -7480,7 +7484,7 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10384
 	lds	de, 2
 	jr	75
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 1242
 	cp	de, 8
 	jrl	nz, 1235
@@ -7511,7 +7515,8 @@ FSWAssGrid_EventDispatch:
 	cp	xwa, 10374
 	jr	nz, 76
 	lda	xwa, (xsp+260)
-	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x02, 0x00
+	ldw	(xwa), 1
+	ldw	(xwa+2), 2
 	ld	(xwa+4), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7537,7 +7542,8 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, (xde)
 	cp	xwa, 10376
 	jr	nz, 70
-	.byte 0xb3, 0x02, 0x01, 0x00, 0xbb, 0x02, 0x02, 0x03, 0x00
+	ldw	(xhl), 1
+	ldw	(xhl+2), 3
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7561,7 +7567,8 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, (xde)
 	cp	xwa, 10378
 	jr	nz, 70
-	.byte 0xb3, 0x02, 0x01, 0x00, 0xbb, 0x02, 0x02, 0x04, 0x00
+	ldw	(xhl), 1
+	ldw	(xhl+2), 4
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7585,7 +7592,8 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, (xde)
 	cp	xwa, 10380
 	jr	nz, 70
-	.byte 0xb3, 0x02, 0x01, 0x00, 0xbb, 0x02, 0x02, 0x05, 0x00
+	ldw	(xhl), 1
+	ldw	(xhl+2), 5
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7610,7 +7618,8 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, (xde)
 	cp	xwa, 10382
 	jr	nz, 69
-	.byte 0xb3, 0x02, 0x01, 0x00, 0xb6, 0x02, 0x06, 0x00
+	ldw	(xhl), 1
+	ldw	(xiz), 6
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7634,7 +7643,8 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, (xde)
 	cp	xwa, 10384
 	jr	nz, 69
-	.byte 0xb3, 0x02, 0x01, 0x00, 0xb6, 0x02, 0x07, 0x00
+	ldw	(xhl), 1
+	ldw	(xiz), 7
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7658,7 +7668,8 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, (xde)
 	cp	xwa, 10368
 	jrl	nz, 655
-	.byte 0xb3, 0x02, 0x01, 0x00, 0xb6, 0x02, 0x08, 0x00
+	ldw	(xhl), 1
+	ldw	(xiz), 8
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -8630,7 +8641,7 @@ PmExpFilter_EventDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 619
 	ld8_24	c, 213218
 	ld	wa, de
@@ -8673,7 +8684,7 @@ PmExpFilter_EventDispatch:
 	ld	wa, de
 	sla	wa, 2
 	dec	8, wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, 488
 	ld8_24	c, 213218
 	cps	c, 2
@@ -8712,14 +8723,15 @@ PmExpFilter_EventDispatch:
 	sla	bc, 2
 	.byte 0xe3, 0x07, 0xf0, 0xe4, 0xf0
 	jr	nz, 65
-	.byte 0xf3, 0xfd, 0x00, 0x01, 0x31, 0xb1, 0x02, 0x01, 0x00
+	.byte 0xf3, 0xfd, 0x00, 0x01, 0x31
+	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
 	ld	(xbc+2), hl
 	lda	xhl, (xsp)
 	ld	(xbc+4), xhl
 	ld	xwa, 15537274
-	.byte 0x9a, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xde+4), 0
 	jr	z, 5
 	ld	xwa, 15537270
 	push	xwa
@@ -8743,14 +8755,15 @@ PmExpFilter_EventDispatch:
 	sla	bc, 2
 	.byte 0xe3, 0x07, 0xf0, 0xe4, 0xf0
 	jr	nz, 65
-	.byte 0xf3, 0xfd, 0x00, 0x01, 0x31, 0xb1, 0x02, 0x01, 0x00
+	.byte 0xf3, 0xfd, 0x00, 0x01, 0x31
+	ldw	(xbc), 1
 	inc	2, l
 	extz	hl
 	ld	(xbc+2), hl
 	lda	xhl, (xsp)
 	ld	(xbc+4), xhl
 	ld	xwa, 15537282
-	.byte 0x9a, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xde+4), 0
 	jr	z, 5
 	ld	xwa, 15537278
 	push	xwa
@@ -9146,14 +9159,14 @@ DispTimeSet_EventDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 40
 	cps	de, 2
 	jr	nz, 36
 	lda	xwa, (xsp+8)
 	lda_24	xbc, 213222
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04, 0x02, 0x01, 0x00
+	ldw	(xwa+4), 1
 	lds32	xbc, 1
 	ld	(xwa+14), xbc
 	ld	xbc, 12
@@ -9161,14 +9174,14 @@ DispTimeSet_EventDispatch:
 	lds32	xbc, 0
 	ld	(xwa+10), xbc
 	jrl	555
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 40
 	cps	de, 3
 	jr	nz, 36
 	lda	xwa, (xsp+8)
 	lda_24	xbc, 213224
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04, 0x02, 0x01, 0x00
+	ldw	(xwa+4), 1
 	lds32	xbc, 1
 	ld	(xwa+14), xbc
 	ld	xbc, 12
@@ -9176,14 +9189,14 @@ DispTimeSet_EventDispatch:
 	lds32	xbc, 0
 	ld	(xwa+10), xbc
 	jrl	509
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 37
 	cps	de, 4
 	jr	nz, 33
 	lda	xwa, (xsp+8)
 	lda_24	xbc, 213226
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04, 0x02, 0x01, 0x00
+	ldw	(xwa+4), 1
 	lds32	xbc, 1
 	ld	(xwa+14), xbc
 	lds32	xbc, 2
@@ -9191,14 +9204,14 @@ DispTimeSet_EventDispatch:
 	lds32	xbc, 0
 	ld	(xwa+10), xbc
 	jrl	466
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 40
 	cps	de, 5
 	jr	nz, 36
 	lda	xwa, (xsp+8)
 	lda_24	xbc, 213228
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04, 0x02, 0x01, 0x00
+	ldw	(xwa+4), 1
 	lds32	xbc, 1
 	ld	(xwa+14), xbc
 	ld	xbc, 12
@@ -9206,14 +9219,14 @@ DispTimeSet_EventDispatch:
 	lds32	xbc, 1
 	ld	(xwa+10), xbc
 	jrl	420
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 40
 	cps	de, 6
 	jr	nz, 36
 	lda	xwa, (xsp+8)
 	lda_24	xbc, 213230
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04, 0x02, 0x01, 0x00
+	ldw	(xwa+4), 1
 	lds32	xbc, 1
 	ld	(xwa+14), xbc
 	ld	xbc, 12
@@ -9221,14 +9234,14 @@ DispTimeSet_EventDispatch:
 	lds32	xbc, 1
 	ld	(xwa+10), xbc
 	jrl	374
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 1199
 	cps	de, 7
 	jrl	nz, 1194
 	lda	xwa, (xsp+8)
 	lda_24	xbc, 213232
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04, 0x02, 0x01, 0x00
+	ldw	(xwa+4), 1
 	lds32	xbc, 1
 	ld	(xwa+14), xbc
 	ld	xbc, 12
@@ -9249,14 +9262,14 @@ DispTimeSet_EventDispatch:
 	ld	(xiy), wa
 	ld	iz, de
 	ld	(xiy+2), iz
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jr	nz, 43
 	cps	iz, 2
 	jr	nz, 39
 	lda	xwa, (xsp+8)
 	lda_24	xbc, 213222
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04, 0x02, 0x01, 0x00
+	ldw	(xwa+4), 1
 	ld	xbc, 4294967295
 	ld	(xwa+14), xbc
 	ld	xbc, 12
@@ -9264,14 +9277,14 @@ DispTimeSet_EventDispatch:
 	lds32	xbc, 0
 	ld	(xwa+10), xbc
 	jrl	240
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jr	nz, 43
 	cps	iz, 3
 	jr	nz, 39
 	lda	xwa, (xsp+8)
 	lda_24	xbc, 213224
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04, 0x02, 0x01, 0x00
+	ldw	(xwa+4), 1
 	ld	xbc, 4294967295
 	ld	(xwa+14), xbc
 	ld	xbc, 12
@@ -9279,14 +9292,14 @@ DispTimeSet_EventDispatch:
 	lds32	xbc, 0
 	ld	(xwa+10), xbc
 	jrl	191
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jr	nz, 40
 	cps	iz, 4
 	jr	nz, 36
 	lda	xwa, (xsp+8)
 	lda_24	xbc, 213226
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04, 0x02, 0x01, 0x00
+	ldw	(xwa+4), 1
 	ld	xbc, 4294967295
 	ld	(xwa+14), xbc
 	lds32	xbc, 2
@@ -9294,14 +9307,14 @@ DispTimeSet_EventDispatch:
 	lds32	xbc, 0
 	ld	(xwa+10), xbc
 	jrl	145
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jr	nz, 42
 	cps	iz, 5
 	jr	nz, 38
 	lda	xwa, (xsp+8)
 	lda_24	xbc, 213228
 	ld	(xwa), xbc
-	.byte 0xb8, 0x04, 0x02, 0x01, 0x00
+	ldw	(xwa+4), 1
 	ld	xbc, 4294967295
 	ld	(xwa+14), xbc
 	ld	xbc, 12
@@ -9314,13 +9327,13 @@ DispTimeSet_EventDispatch:
 	lda	xhl, (xwa+6)
 	lda	xde, (xwa+10)
 	lda	xix, (xwa+14)
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jr	nz, 35
 	cps	iz, 6
 	jr	nz, 31
 	lda_24	xiy, 213230
 	ld	(xwa), xiy
-	.byte 0xb1, 0x02, 0x01, 0x00
+	ldw	(xbc), 1
 	ld	xbc, 4294967295
 	ld	(xix), xbc
 	ld	xbc, 12
@@ -9328,13 +9341,13 @@ DispTimeSet_EventDispatch:
 	lds32	xbc, 1
 	ld	(xde), xbc
 	jr	41
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jrl	nz, 866
 	cps	iz, 7
 	jrl	nz, 861
 	lda_24	xiy, 213232
 	ld	(xwa), xiy
-	.byte 0xb1, 0x02, 0x01, 0x00
+	ldw	(xbc), 1
 	ld	xbc, 4294967295
 	ld	(xix), xbc
 	ld	xbc, 12
@@ -9348,7 +9361,8 @@ DispTimeSet_EventDispatch:
 	cp	xwa, (xde)
 	jr	nz, 64
 	lda	xwa, (xsp+40)
-	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x02, 0x00
+	ldw	(xwa), 1
+	ldw	(xwa+2), 2
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
@@ -9371,7 +9385,8 @@ DispTimeSet_EventDispatch:
 	cp	xwa, (xde)
 	jr	nz, 64
 	lda	xwa, (xsp+40)
-	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x03, 0x00
+	ldw	(xwa), 1
+	ldw	(xwa+2), 3
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
@@ -9396,7 +9411,8 @@ DispTimeSet_EventDispatch:
 	cp	xbc, (xde)
 	jr	nz, 62
 	lda	xwa, (xsp+40)
-	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x04, 0x00
+	ldw	(xwa), 1
+	ldw	(xwa+2), 4
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
@@ -9419,7 +9435,8 @@ DispTimeSet_EventDispatch:
 	cp	xwa, (xde)
 	jr	nz, 62
 	lda	xwa, (xsp+40)
-	.byte 0xb0, 0x02, 0x01, 0x00, 0xb8, 0x02, 0x02, 0x05, 0x00
+	ldw	(xwa), 1
+	ldw	(xwa+2), 5
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
@@ -9445,7 +9462,8 @@ DispTimeSet_EventDispatch:
 	lda	xbc, (xhl+4)
 	cp	xiz, (xde)
 	jr	nz, 54
-	.byte 0xb3, 0x02, 0x01, 0x00, 0xb0, 0x02, 0x06, 0x00
+	ldw	(xhl), 1
+	ldw	(xwa), 6
 	ld	(xbc), xix
 	ld	xwa, (xiy)
 	sll	xwa, 2
@@ -9466,7 +9484,8 @@ DispTimeSet_EventDispatch:
 	lda_24	xiz, 213232
 	cp	xiz, (xde)
 	jrl	nz, 441
-	.byte 0xb3, 0x02, 0x01, 0x00, 0xb0, 0x02, 0x07, 0x00
+	ldw	(xhl), 1
+	ldw	(xwa), 7
 	ld	(xbc), xix
 	ld	xwa, (xiy)
 	sll	xwa, 2

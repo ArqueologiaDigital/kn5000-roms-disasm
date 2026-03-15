@@ -3813,7 +3813,7 @@ DSPCfg_Data_ParamDispatch:
 	ld	xde, xbc
 	ld	xbc, xwa
 	ld	qiz, 0
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00
+	ldw	(xsp+8), 0
 	ld	l, (xbc+1)
 	extz	hl
 	ld	a, (xbc)

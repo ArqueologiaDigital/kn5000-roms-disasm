@@ -950,6 +950,40 @@ def translate_unidasm_to_llvm(mnemonic):
                 forms.append(f'cp\t{translated_ops[0]}, {imm_str}')
                 return forms
 
+    # ── Memory+immediate: try both 8-bit and 16-bit mnemonic variants ──
+    # For ops like cp/ld/add/sub/etc with (mem), imm — ROM may use 16-bit encoding
+    MEM_IMM_16BIT = {'cp': 'cpw', 'ld': 'ldw', 'add': 'add', 'sub': 'sub',
+                     'adc': 'adc', 'sbc': 'sbc'}
+    if op in MEM_IMM_16BIT and len(translated_ops) == 2:
+        mem_op = translated_ops[0]
+        imm_str = translated_ops[1]
+        is_mem = mem_op.startswith('(') and not _is_direct(mem_op)
+        is_imm = imm_str.lstrip('-').isdigit()
+        if is_mem and is_imm:
+            w_mnem = MEM_IMM_16BIT[op]
+            forms = [f'{llvm_op}\t{mem_op}, {imm_str}']
+            if w_mnem != llvm_op:
+                forms.append(f'{w_mnem}\t{mem_op}, {imm_str}')
+            return forms
+
+    # ── Memory+register: try both 8-bit and 16-bit mnemonic variants ──
+    # For ops like xor/add/etc with (mem), reg — ROM may use 16-bit encoding
+    MEM_REG_OPS = {'xor', 'and', 'or', 'add', 'sub', 'adc', 'sbc', 'cp',
+                   'ld'}
+    if op in MEM_REG_OPS and len(translated_ops) == 2:
+        op0, op1 = translated_ops
+        is_mem0 = op0.startswith('(') and not _is_direct(op0)
+        is_mem1 = op1.startswith('(') and not _is_direct(op1)
+        if (is_mem0 or is_mem1) and not (is_mem0 and is_mem1):
+            forms = [f'{llvm_op}\t{op0}, {op1}']
+            # For ld: also try ldw/ldb
+            if op == 'ld':
+                forms.append(f'ldw\t{op0}, {op1}')
+                forms.append(f'ldb\t{op0}, {op1}')
+            elif op == 'cp':
+                forms.append(f'cpw\t{op0}, {op1}')
+            return forms
+
     if translated_ops:
         return f'{llvm_op}\t{", ".join(translated_ops)}'
     else:

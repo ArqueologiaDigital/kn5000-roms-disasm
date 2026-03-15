@@ -309,7 +309,7 @@ PcgOutGridCheckJumpTable:
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 1690
 	ld	xde, (xsp+44)
 	cps	bc, 3
@@ -394,7 +394,7 @@ PcgOutGridCheckJumpTable:
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 1420
 	ld	xde, (xsp+44)
 	cps	bc, 3

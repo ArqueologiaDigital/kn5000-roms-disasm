@@ -4794,7 +4794,7 @@ Voice_FactoryPresetData:
 	add	xwa, xde
 	lda_24	xix, 277504
 	add	xix, xwa
-	.byte 0x9f, 0x32, 0x3f, 0xf5, 0x00
+	cpw	(xsp+50), 245
 	jr	z, 30
 	andmi8	(xix), 96
 	ld	wa, iy
@@ -4932,24 +4932,24 @@ Voice_FactoryPresetData:
 	ld	xwa, (xsp+16)
 	inc	2, xwa
 	ld	(xsp+2), xwa
-	.byte 0x90, 0x3f, 0x00, 0x00
+	cpw	(xwa), 0
 	jr	ge, 7
 	ld	xwa, (xsp+2)
-	.byte 0xb0, 0x02, 0x00, 0x00
+	ldw	(xwa), 0
 	ld	xwa, (xsp+16)
-	.byte 0x90, 0x3f, 0x00, 0x00
+	cpw	(xwa), 0
 	jr	ge, 4
-	.byte 0xb0, 0x02, 0x00, 0x00
+	ldw	(xwa), 0
 	ld	xwa, (xsp+16)
 	lda	xhl, (xwa+4)
-	.byte 0x93, 0x3f, 0x40, 0x01
+	cpw	(xhl), 320
 	jr	lt, 4
-	.byte 0xb3, 0x02, 0x3f, 0x01
+	ldw	(xhl), 319
 	ld	xwa, (xsp+16)
 	lda	xix, (xwa+6)
-	.byte 0x94, 0x3f, 0xf0, 0x00
+	cpw	(xix), 240
 	jr	lt, 4
-	.byte 0xb4, 0x02, 0xef, 0x00
+	ldw	(xix), 239
 	ld	de, (xix)
 	ld	xwa, (xsp+2)
 	ld	iz, (xwa)

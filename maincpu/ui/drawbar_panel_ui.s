@@ -198,7 +198,7 @@ ComSetGridCheck_JumpTable:
 	ld	(xbc), wa
 	ld	xwa, (xsp+22)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, 737
 	ld	xwa, 192
 	call	16569399
@@ -232,7 +232,7 @@ ComSetGridCheck_JumpTable:
 	ld	(xbc), wa
 	ld	xwa, (xsp+22)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, 621
 	ld	xwa, 192
 	call	16569399
@@ -255,9 +255,9 @@ ComSetGridCheck_JumpTable:
 	call	16382274
 	jrl	546
 	lda	xhl, (xsp+4)
-	.byte 0xb3, 0x02, 0x01, 0x00
+	ldw	(xhl), 1
 	lda	xde, (xhl+2)
-	.byte 0xb2, 0x02, 0x00, 0x00
+	ldw	(xde), 0
 	lda_24	xix, 15204374
 	ld	xiz, (xsp+22)
 	jr	18
@@ -295,7 +295,7 @@ ComSetGridCheck_JumpTable:
 	jrl	nz, 412
 	ld	xbc, 15204426
 	ld	xwa, (xsp+22)
-	.byte 0x98, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xwa+4), 0
 	jr	z, 5
 	ld	xbc, 15204420
 	push	xbc
@@ -1137,7 +1137,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 1956
 	cps	hl, 3
 	jr	z, 124
@@ -1204,7 +1204,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 1757
 	cps	hl, 3
 	jrl	z, 135
@@ -1270,13 +1270,13 @@ PmemOutLGridCheck_JumpTable:
 	push	xwa
 	call	16715597
 	inc	8, xsp
-	.byte 0xbf, 0x26, 0x02, 0x01, 0x00
+	ldw	(xsp+38), 1
 	call	16401616
 	ld	xwa, xhl
 	lda	xde, (xsp+36)
 	ld	xbc, 31457420
 	call	16422496
-	.byte 0xbf, 0x26, 0x02, 0x00, 0x00
+	ldw	(xsp+38), 0
 	ldada	xwa, 63940
 	sub	xwa, 63904
 	ld	(xsp+32), xwa
@@ -1316,7 +1316,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	xwa, 5963785
 	ld	xbc, 31457420
 	call	16422496
-	.byte 0xbf, 0x26, 0x02, 0x01, 0x00
+	ldw	(xsp+38), 1
 	ldada	xwa, 63941
 	sub	xwa, 63904
 	ld	(xsp+32), xwa
@@ -1347,7 +1347,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	xwa, 5963785
 	ld	xbc, 31457420
 	call	16422496
-	.byte 0xbf, 0x26, 0x02, 0x02, 0x00
+	ldw	(xsp+38), 2
 	ldada	xwa, 63943
 	sub	xwa, 63904
 	ld	(xsp+32), xwa
@@ -1404,7 +1404,7 @@ PmemOutLGridCheck_JumpTable:
 	cp	(xwa), xbc
 	jr	nz, 57
 	ld	xwa, (xsp+16)
-	.byte 0xb0, 0x02, 0x01, 0x00
+	ldw	(xwa), 1
 	ld	xwa, (xsp+28)
 	ld	xwa, (xwa)
 	bit	1, wa
@@ -1428,7 +1428,7 @@ PmemOutLGridCheck_JumpTable:
 	cp	xbc, (xwa)
 	jrl	nz, 397
 	ld	xwa, (xsp+16)
-	.byte 0xb0, 0x02, 0x03, 0x00
+	ldw	(xwa), 3
 	ld	xwa, (xsp+28)
 	ld	xwa, (xwa)
 	sll	xwa, 2
@@ -1445,7 +1445,7 @@ PmemOutLGridCheck_JumpTable:
 	lda	xde, (xsp+36)
 	ld	xbc, 31457420
 	call	16422496
-	.byte 0xbf, 0x26, 0x02, 0x00, 0x00
+	ldw	(xsp+38), 0
 	ldada	xwa, 63940
 	sub	xwa, 63904
 	ld	(xsp+32), xwa
@@ -1483,7 +1483,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	xwa, 5963785
 	ld	xbc, 31457420
 	call	16422496
-	.byte 0xbf, 0x26, 0x02, 0x01, 0x00
+	ldw	(xsp+38), 1
 	ldada	xwa, 63941
 	sub	xwa, 63904
 	ld	(xsp+32), xwa
@@ -1514,7 +1514,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	xwa, 5963785
 	ld	xbc, 31457420
 	call	16422496
-	.byte 0xbf, 0x26, 0x02, 0x02, 0x00
+	ldw	(xsp+38), 2
 	ldada	xwa, 63943
 	sub	xwa, 63904
 	ld	(xsp+32), xwa
@@ -1571,7 +1571,7 @@ PmemOutLGridCheck_JumpTable:
 	cp	(xwa), xde
 	jr	nz, 69
 	ld	xwa, (xsp+16)
-	.byte 0xb0, 0x02, 0x00, 0x00
+	ldw	(xwa), 0
 	ld	xwa, (xsp+28)
 	ld	xwa, (xwa)
 	bit	7, wa
@@ -1603,7 +1603,7 @@ PmemOutLGridCheck_JumpTable:
 	cp	(xwa), xde
 	jr	nz, 46
 	ld	xwa, (xsp+16)
-	.byte 0xb0, 0x02, 0x01, 0x00
+	ldw	(xwa), 1
 	ld	xwa, (xsp+28)
 	ld	xwa, (xwa)
 	push	xwa
@@ -1625,7 +1625,7 @@ PmemOutLGridCheck_JumpTable:
 	cp	(xwa), xbc
 	jrl	nz, 288
 	ld	xwa, (xsp+16)
-	.byte 0xb0, 0x02, 0x02, 0x00
+	ldw	(xwa), 2
 	ld	xwa, (xsp+28)
 	ld	xwa, (xwa)
 	bit	7, wa
@@ -1808,7 +1808,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 2053
 	cps	bc, 2
 	jrl	z, 205
@@ -1924,7 +1924,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 1692
 	cps	bc, 2
 	jrl	z, 229
@@ -2051,7 +2051,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
 	call	16422496
-	.byte 0xbf, 0x22, 0x02, 0x01, 0x00
+	ldw	(xsp+34), 1
 	ldada	xwa, 63941
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -2083,7 +2083,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
 	call	16422496
-	.byte 0xbf, 0x22, 0x02, 0x02, 0x00
+	ldw	(xsp+34), 2
 	ldada	xwa, 63943
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -2131,7 +2131,7 @@ TtMdCtlMsg_EventDispatch:
 	cp	xde, (xiz)
 	jrl	nz, 336
 	ld	xwa, (xsp+24)
-	.byte 0xb0, 0x02, 0x00, 0x00
+	ldw	(xwa), 0
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
@@ -2169,7 +2169,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
 	call	16422496
-	.byte 0xbf, 0x22, 0x02, 0x01, 0x00
+	ldw	(xsp+34), 1
 	ldada	xwa, 63941
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -2201,7 +2201,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
 	call	16422496
-	.byte 0xbf, 0x22, 0x02, 0x02, 0x00
+	ldw	(xsp+34), 2
 	ldada	xwa, 63943
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -2261,7 +2261,7 @@ TtMdCtlMsg_EventDispatch:
 	cp	(xiz), xwa
 	jr	nz, 68
 	ld	xwa, (xsp+24)
-	.byte 0xb0, 0x02, 0x00, 0x00
+	ldw	(xwa), 0
 	ld	xwa, (xiz+14)
 	bit	7, wa
 	.byte 0x66
@@ -2294,7 +2294,7 @@ TtMdCtlMsg_EventDispatch:
 	cp	(xwa), xhl
 	jr	nz, 44
 	ld	xwa, (xsp+24)
-	.byte 0xb0, 0x02, 0x01, 0x00
+	ldw	(xwa), 1
 	ld	xwa, (xde)
 	push	xwa
 	pushw 232
@@ -2316,7 +2316,7 @@ TtMdCtlMsg_EventDispatch:
 	cp	(xwa), xbc
 	jrl	nz, 381
 	ld	xwa, (xsp+24)
-	.byte 0xb0, 0x02, 0x02, 0x00
+	ldw	(xwa), 2
 	ld	xwa, (xde)
 	bit	7, wa
 	jr	z, 18
@@ -2975,7 +2975,7 @@ CtlMsgGridCheck_JumpTable:
 	ld	(xbc), wa
 	ld	xwa, (xsp+30)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, 357
 	ld	bc, wa
 	sla	bc, 2
@@ -3002,7 +3002,7 @@ CtlMsgGridCheck_JumpTable:
 	ld	(xbc), wa
 	ld	xwa, (xsp+30)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, 274
 	ld	bc, wa
 	sla	bc, 2
@@ -3018,9 +3018,9 @@ CtlMsgGridCheck_JumpTable:
 	.byte 0x1d, 0x42, 0xf9
 	.long LABEL_E878F9
 	ld	(xsp+4), xhl
-	.byte 0xb3, 0x02, 0x01, 0x00
+	ldw	(xhl), 1
 	ld	xde, xbc
-	.byte 0xb1, 0x02, 0x00, 0x00
+	ldw	(xbc), 0
 	ld8_24	a, 149366
 	extz	wa
 	muls	wa, 36
@@ -3040,7 +3040,7 @@ CtlMsgGridCheck_JumpTable:
 	ld	(xwa+4), xde
 	ld	xbc, 15205342
 	ld	xwa, (xsp+30)
-	.byte 0x98, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xwa+4), 0
 	jr	z, 5
 	ld	xbc, 15205336
 	push	xbc
@@ -3925,7 +3925,7 @@ MidiPartGridCheck_JumpTable:
 	ld	(xsp+8), xhl
 	ld	(xde), xhl
 	ld	(xsp+12), xbc
-	.byte 0xb1, 0x02, 0x02, 0x00
+	ldw	(xbc), 2
 	jrl	344
 	ld	de, bc
 	muls	de, 12
@@ -3941,7 +3941,7 @@ MidiPartGridCheck_JumpTable:
 	cp	(xde), xiz
 	jr	nz, 80
 	ld	xwa, (xsp+4)
-	.byte 0xb0, 0x02, 0x01, 0x00
+	ldw	(xwa), 1
 	ld	xwa, (xde)
 	inc	1, xwa
 	call	16569399
@@ -3975,7 +3975,8 @@ MidiPartGridCheck_JumpTable:
 	cp	xwa, xiz
 	jr	nz, 79
 	ld	xwa, (xsp+4)
-	.byte 0xb0, 0x02, 0x01, 0x00, 0x92, 0x3f, 0x00, 0x00
+	ldw	(xwa), 1
+	cpw	(xde), 0
 	jr	nz, 18
 	pushw 232
 	pushw 1736
@@ -4007,7 +4008,7 @@ MidiPartGridCheck_JumpTable:
 	.byte 0xe3, 0x07, 0xec, 0xf8, 0xf0
 	jr	nz, 50
 	ld	xwa, (xsp+4)
-	.byte 0xb0, 0x02, 0x02, 0x00
+	ldw	(xwa), 2
 	ld	wa, (xde)
 	sla	wa, 2
 	lda_24	xbc, 15205984
@@ -4027,9 +4028,9 @@ MidiPartGridCheck_JumpTable:
 	.byte 0xe3, 0x07, 0xec, 0xf4, 0xf0
 	jr	nz, 51
 	ld	xwa, (xsp+4)
-	.byte 0xb0, 0x02, 0x03, 0x00
+	ldw	(xwa), 3
 	ld	xwa, 15206108
-	.byte 0x92, 0x3f, 0x00, 0x00
+	cpw	(xde), 0
 	jr	z, 5
 	ld	xwa, 15206102
 	push	xwa
@@ -10810,7 +10811,8 @@ AcWelcomScreen_RenderBytecode:
 	ld	bc, iz
 	muls	bc, 12
 	lda_24	xwa, 256524
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30, 0x98, 0x0a, 0x3f, 0xff, 0xff
+	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30
+	cpw	(xwa+10), 65535
 	jr	z, 26
 	cp	iz, 65535
 	jr	z, 20
@@ -10929,7 +10931,7 @@ AcWelcomScreen_RenderBytecode:
 	call	16434441
 	jrl	510
 	lda_24	xhl, 256548
-	.byte 0x9b, 0x0a, 0x3f, 0xff, 0xff
+	cpw	(xhl+10), 65535
 	jr	z, 77
 	lda	xwa, (xsp+4)
 	lda	xde, (xwa+2)
@@ -10952,7 +10954,7 @@ AcWelcomScreen_RenderBytecode:
 	sll	xde, 2
 	ld32_24	xbc, 149382
 	add	xde, xbc
-	.byte 0x9a, 0x08, 0x3f, 0x0c, 0x00
+	cpw	(xde+8), 12
 	jr	nz, 4
 	.byte 0x93, 0x38, 0x10, 0x00
 	ldw	bc, 245
@@ -11035,7 +11037,7 @@ AcWelcomScreen_RenderBytecode:
 	sll	xbc, 2
 	ld32_24	xwa, 149382
 	add	xbc, xwa
-	.byte 0x99, 0x08, 0x3f, 0x0c, 0x00
+	cpw	(xbc+8), 12
 	jr	nz, 51
 	lda	xwa, (xsp+12)
 	.byte 0x90, 0x38, 0x10, 0x00
@@ -12502,13 +12504,13 @@ AudioCtrl_DataBlock:
 	ld	de, (xsp+24)
 	call	16438617
 	lda	xde, (xsp+12)
-	.byte 0xb2, 0x02, 0x2d, 0x00
+	ldw	(xde), 45
 	lda	xbc, (xsp+16)
 	ld	wa, (xbc+2)
 	inc	2, wa
 	ld	(xde+2), wa
 	lda	xde, (xsp+8)
-	.byte 0xb2, 0x02, 0x2d, 0x00
+	ldw	(xde), 45
 	ld	wa, (xbc+6)
 	dec	2, wa
 	ld	(xde+2), wa
@@ -12566,7 +12568,7 @@ AudioCtrl_DataBlock:
 	ld	(xwa), bc
 	ld	bc, (xiz+2)
 	ld	(xwa+2), bc
-	.byte 0x9f, 0x18, 0x3f, 0x00, 0x00
+	cpw	(xsp+24), 0
 	jr	z, 8
 	ldw	bc, 52
 	ldw	de, 242
@@ -12625,7 +12627,8 @@ AudioCtrl_DataBlock:
 	sub	wa, 9
 	sub	wa, (xsp+6)
 	ld	(xde), wa
-	.byte 0xb6, 0x02, 0x08, 0x00, 0xbe, 0x04, 0x02, 0x37, 0x01
+	ldw	(xiz), 8
+	ldw	(xiz+4), 311
 	lda	xhl, (xiz+6)
 	ld	wa, (xbc)
 	add	wa, 31
@@ -13722,7 +13725,7 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+58)
 	or	xhl, xhl
 	jr	z, 7
-	.byte 0x9f, 0x32, 0x3f, 0x00, 0x00
+	cpw	(xsp+50), 0
 	jr	nz, 7
 	ld	xbc, 30
 	jr	5
@@ -14092,7 +14095,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, xiz
 	call	16569399
 	ld	(xsp+16), hl
-	.byte 0x9f, 0x10, 0x3f, 0x00, 0x00
+	cpw	(xsp+16), 0
 	jr	z, 80
 	lda	xwa, (xsp+22)
 	ld	bc, (xsp+8)
@@ -14154,7 +14157,7 @@ AudioCtrl_DataBlock:
 	ld	bc, (xsp+14)
 	call	16569591
 	ld	(xsp+16), hl
-	.byte 0x9f, 0x10, 0x3f, 0x00, 0x00
+	cpw	(xsp+16), 0
 	jr	z, 63
 	.byte 0x9f, 0x0a, 0x04
 	ld	wa, (xsp+6)
@@ -14171,13 +14174,13 @@ AudioCtrl_DataBlock:
 	ld	xwa, xiz
 	call	16569399
 	ld	(xsp+16), hl
-	.byte 0x9f, 0x10, 0x3f, 0x00, 0x00
+	cpw	(xsp+16), 0
 	jr	z, 11
 	ld	xwa, xiz
 	lds	bc, 0
 	ld	de, (xsp+10)
 	call	16382090
-	.byte 0x9f, 0x10, 0x3f, 0x00, 0x00
+	cpw	(xsp+16), 0
 	jrl	nz, -187
 	ld	wa, (xsp+8)
 	calr	-5284

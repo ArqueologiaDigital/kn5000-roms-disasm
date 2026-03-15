@@ -615,7 +615,7 @@ ParaLoadOpt_GridDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 801
 	cp	hl, 8
 	jr	z, 106
@@ -676,7 +676,7 @@ ParaLoadOpt_GridDispatch:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 618
 	cp	hl, 8
 	jrl	z, 127
@@ -733,14 +733,15 @@ ParaLoadOpt_GridDispatch:
 	call	16383626
 	.byte 0x78, 0xb9, 0x01
 	ld	xix, xhl
-	.byte 0xb5, 0x02, 0x01, 0x00
+	ldw	(xiy), 1
 	ld	(xsp+16), xbc
 	ld	xde, (xsp+12)
 	ld	(xde), xbc
 	ld	xbc, xiz
 	lda	xde, (xhl+14)
 	cp	xiz, (xhl)
-	.byte 0x6e, 0x2c, 0xb0, 0x02, 0x02, 0x00
+	.byte 0x6e, 0x2c
+	ldw	(xwa), 2
 	ld	xwa, (xde)
 	sll	xwa, 2
 	ld	xbc, (xsp+8)
@@ -758,7 +759,8 @@ ParaLoadOpt_GridDispatch:
 	.byte 0x78, 0x72, 0x01
 	lda	xhl, (xbc+1)
 	cp	xhl, (xix)
-	.byte 0x6e, 0x2c, 0xb0, 0x02, 0x03, 0x00
+	.byte 0x6e, 0x2c
+	ldw	(xwa), 3
 	ld	xwa, (xde)
 	sll	xwa, 2
 	ld	xbc, (xsp+8)
@@ -776,7 +778,8 @@ ParaLoadOpt_GridDispatch:
 	.byte 0x78, 0x3f, 0x01
 	lda	xhl, (xbc+2)
 	cp	xhl, (xix)
-	.byte 0x6e, 0x2c, 0xb0, 0x02, 0x07, 0x00
+	.byte 0x6e, 0x2c
+	ldw	(xwa), 7
 	ld	xwa, (xde)
 	sll	xwa, 2
 	ld	xbc, (xsp+4)
@@ -794,7 +797,8 @@ ParaLoadOpt_GridDispatch:
 	.byte 0x78, 0x0c, 0x01
 	inc	3, xbc
 	cp	xbc, (xix)
-	.byte 0x7e, 0x09, 0x01, 0xb0, 0x02, 0x08, 0x00
+	.byte 0x7e, 0x09, 0x01
+	ldw	(xwa), 8
 	ld	xwa, (xde)
 	sll	xwa, 2
 	ld	xbc, (xsp+4)

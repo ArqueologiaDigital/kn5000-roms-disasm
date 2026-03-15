@@ -3163,7 +3163,7 @@ PsEditSwBox_InlineData:
 	lda	xbc, (xsp+4)
 	calr	-25036
 	lda	xwa, (xsp+4)
-	.byte 0x90, 0x3f, 0x00, 0x00
+	cpw	(xwa), 0
 	jr	nz, 41
 	lda	xbc, (xwa+2)
 	ld	wa, (xbc)
@@ -3179,9 +3179,9 @@ PsEditSwBox_InlineData:
 	jr	z, 2
 	lds	wa, 0
 	ld	(xiz), wa
-	.byte 0xbe, 0x04, 0x02, 0x26, 0x00
+	ldw	(xiz+4), 38
 	lda	xwa, (xsp+4)
-	.byte 0x90, 0x3f, 0x3f, 0x01
+	cpw	(xwa), 319
 	jr	nz, 46
 	lda	xbc, (xwa+2)
 	ld	wa, (xbc)
@@ -3190,19 +3190,20 @@ PsEditSwBox_InlineData:
 	ld	wa, (xbc)
 	inc	8, wa
 	ld	(xiz+6), wa
-	.byte 0xb6, 0x02, 0x19, 0x01
+	ldw	(xiz), 281
 	ld	wa, (xsp+8)
 	calr	-29482
 	lda	xwa, (xiz+4)
 	cps	hl, 0
 	jr	z, 6
-	.byte 0xb0, 0x02, 0x3f, 0x01
+	ldw	(xwa), 319
 	jr	4
-	.byte 0xb0, 0x02, 0x37, 0x01
+	ldw	(xwa), 311
 	lda	xbc, (xsp+4)
-	.byte 0x99, 0x02, 0x3f, 0xef, 0x00
+	cpw	(xbc+2), 239
 	jr	nz, 27
-	.byte 0xbe, 0x02, 0x02, 0xd8, 0x00, 0xbe, 0x06, 0x02, 0xee, 0x00
+	ldw	(xiz+2), 216
+	ldw	(xiz+6), 238
 	ld	wa, (xbc)
 	sub	wa, 16
 	ld	(xiz), wa
@@ -3225,10 +3226,11 @@ PsEditSwBox_InlineData:
 	ld	wa, iz
 	calr	-25211
 	lda	xbc, (xsp+6)
-	.byte 0x99, 0x02, 0x3f, 0xef, 0x00
+	cpw	(xbc+2), 239
 	jr	nz, 31
 	ld	xwa, (xsp+10)
-	.byte 0xb8, 0x02, 0x02, 0xd8, 0x00, 0xb8
+	ldw	(xwa+2), 216
+	.byte 0xb8
 	.long LABEL_EE0206
 	ld	bc, (xbc)
 	sub	bc, 16
@@ -7906,11 +7908,11 @@ PsTrkSw_TrailingData:
 	lda	xde, (xhl+22)
 	lda	xbc, (xsp+4)
 	lda	xwa, (xbc+2)
-	.byte 0x92, 0x3f, 0x08, 0x00
+	cpw	(xde), 8
 	jr	nc, 6
-	.byte 0xb0, 0x02, 0xa4, 0x00
+	ldw	(xwa), 164
 	jr	4
-	.byte 0xb0, 0x02, 0xc4, 0x00
+	ldw	(xwa), 196
 	ld	wa, (xde)
 	and	wa, 7
 	mul	wa, 40

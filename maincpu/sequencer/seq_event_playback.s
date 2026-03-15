@@ -4460,9 +4460,9 @@ VocalistGrid_DispatchData:
 	ld	(xhl), wa
 	ld	bc, de
 	ld	(xhl+2), bc
-	.byte 0x93, 0x3f, 0x01, 0x00
+	cpw	(xhl), 1
 	jr	z, 7
-	.byte 0x93, 0x3f, 0x02, 0x00
+	cpw	(xhl), 2
 	jrl	nz, 1604
 	ld	wa, (xhl)
 	sla	wa, 2
@@ -4495,9 +4495,9 @@ VocalistGrid_DispatchData:
 	ld	(xhl), wa
 	ld	bc, de
 	ld	(xhl+2), bc
-	.byte 0x93, 0x3f, 0x01, 0x00
+	cpw	(xhl), 1
 	jr	z, 7
-	.byte 0x93, 0x3f, 0x02, 0x00
+	cpw	(xhl), 2
 	jrl	nz, 1501
 	ld	wa, (xhl)
 	sla	wa, 2
@@ -4520,7 +4520,7 @@ VocalistGrid_DispatchData:
 	jrl	1442
 	ld	(xsp+4), xbc
 	ld	xhl, xiy
-	.byte 0xb5, 0x02, 0x00, 0x00
+	ldw	(xiy), 0
 	ld	xix, (xsp+8)
 	ld	xiz, xde
 	ld	xiy, xde

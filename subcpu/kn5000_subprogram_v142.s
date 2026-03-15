@@ -24384,7 +24384,8 @@ VoiceAlloc_WithRoutingFlag_ExtData:
 	lds	de, 0
 	call	137870
 	ld	(xsp+4), xhl
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00, 0x68, 0x69
+	ldw	(xsp+8), 0
+	.byte 0x68, 0x69
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
@@ -27267,7 +27268,7 @@ DSP_SetCoeff_MasterConfig:
 	dec	6, xsp
 	pushw iz
 	ld	(xsp+4), xwa
-	.byte 0xbf, 0x02, 0x02, 0x00, 0x00
+	ldw	(xsp+2), 0
 	lds	iz, 0
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+2)
@@ -40510,7 +40511,7 @@ DSP_State_InlineData:
 	ld	xiz, xhl
 	ld	xwa, xiz
 	call	224829
-	.byte 0xf3, 0xf9, 0x20, 0x01, 0x02, 0x00, 0x00
+	ldw	(xiz+288), 0
 	ld	xwa, xiz
 	ld	xbc, xwa
 	lds	wa, 1

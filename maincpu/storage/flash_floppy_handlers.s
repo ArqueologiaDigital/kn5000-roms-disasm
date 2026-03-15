@@ -1402,18 +1402,18 @@ Flash_InitBytecodeBlock:
 	cp	(xsp+8), 0
 	jrl	nz, 128
 	ldada	xwa, 1748
-	.byte 0x90, 0x3f, 0xff, 0xff
+	cpw	(xwa), 65535
 	jr	nz, 42
-	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
+	cpw	(xwa+2), 65535
 	jr	nz, 35
 	calr	1748
 	ld	a, (xsp+4)
 	extz	wa
 	calr	1449
 	ldada	xwa, 1850
-	.byte 0x90, 0x3f, 0xff, 0xff
+	cpw	(xwa), 65535
 	jr	nz, 8
-	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
+	cpw	(xwa+2), 65535
 	jrl	z, 341
 	calr	5909
 	jrl	335
@@ -1514,9 +1514,9 @@ Flash_InitBytecodeBlock:
 	cp	(xsp+8), 0
 	jrl	nz, -229
 	ldada	xwa, 1748
-	.byte 0x90, 0x3f, 0xff, 0xff
+	cpw	(xwa), 65535
 	jr	nz, 55
-	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
+	cpw	(xwa+2), 65535
 	jr	nz, 48
 	ldda32	xix, 3182
 	ldda32	xiy, 3186
@@ -2149,7 +2149,7 @@ Flash_ExtendedOpsBlock:
 	ld	(xsp+2), a
 	calr	3601
 	ldada	xix, 1748
-	.byte 0x94, 0x3f, 0xff, 0xff
+	cpw	(xix), 65535
 	jr	z, 53
 	ldb	l, 0
 	ldda32	xbc, 3218
@@ -2178,7 +2178,8 @@ Flash_ExtendedOpsBlock:
 	extz	wa
 	add	wa, wa
 	inc	2, wa
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0x31, 0x91, 0x3f, 0xff, 0xff
+	.byte 0xf3, 0x07, 0xf0, 0xe0, 0x31
+	cpw	(xbc), 65535
 	jr	z, 93
 	cp	l, 40
 	jr	nc, 79
@@ -2221,12 +2222,12 @@ Flash_ExtendedOpsBlock:
 	ld	(xsp+4), a
 	calr	3406
 	ldada	xwa, 1748
-	.byte 0x90, 0x3f, 0xff, 0xff
+	cpw	(xwa), 65535
 	jr	z, 13
 	ldada	xbc, 1952
 	ld	wa, (xwa)
 	ld	(xbc), wa
-	.byte 0xb9, 0x02, 0x02, 0x00, 0x06
+	ldw	(xbc+2), 1536
 	ld	a, (xsp+4)
 	extz	wa
 	calr	3950
@@ -2265,7 +2266,8 @@ Flash_ExtendedOpsBlock:
 	set	7, h
 	ld	l, h
 	extz	hl
-	.byte 0xf3, 0x07, 0xf0, 0xe4, 0x53, 0xb2, 0x02, 0x02, 0x00
+	.byte 0xf3, 0x07, 0xf0, 0xe4, 0x53
+	ldw	(xde), 2
 	jr	76
 	inc	1, l
 	cp	l, 40
@@ -2294,7 +2296,8 @@ Flash_ExtendedOpsBlock:
 	set	7, h
 	ld	l, h
 	extz	hl
-	.byte 0xf3, 0x07, 0xf0, 0xe4, 0x53, 0xb2, 0x02, 0x02, 0x00
+	.byte 0xf3, 0x07, 0xf0, 0xe4, 0x53
+	ldw	(xde), 2
 	incm8	1, (xsp+2)
 	jr	7
 	inc	1, l
@@ -2848,7 +2851,8 @@ SlotTable_InitBank1850_Loop:
 
 SlotTable_ExtendedOpsBlock:
 	ldada	xde, 1952
-	.byte 0xb2, 0x02, 0xff, 0xff, 0xba, 0x02, 0x02, 0xff, 0xff
+	ldw	(xde), 65535
+	ldw	(xde+2), 65535
 	lda	xbc, (xde+6)
 	ld	xwa, xbc
 	inc	4, xde
@@ -2859,7 +2863,8 @@ SlotTable_ExtendedOpsBlock:
 	jr	c, -14
 	ret
 	ldada	xde, 2156
-	.byte 0xb2, 0x02, 0xff, 0xff, 0xba, 0x02, 0x02, 0xff, 0xff
+	ldw	(xde), 65535
+	ldw	(xde+2), 65535
 	lda	xbc, (xde+6)
 	ld	xwa, xbc
 	inc	4, xde
@@ -2870,7 +2875,9 @@ SlotTable_ExtendedOpsBlock:
 	jr	c, -14
 	ret
 	ldada	xix, 2360
-	.byte 0xb4, 0x02, 0xff, 0xff, 0xbc, 0x02, 0x02, 0xff, 0xff, 0xbc, 0x04, 0x02, 0xff, 0xff
+	ldw	(xix), 65535
+	ldw	(xix+2), 65535
+	ldw	(xix+4), 65535
 	lda	xbc, (xix+108)
 	ld	xwa, xbc
 	lda	xde, (xix+106)
@@ -2884,7 +2891,9 @@ SlotTable_ExtendedOpsBlock:
 	jr	c, -27
 	ret
 	ldada	xix, 2666
-	.byte 0xb4, 0x02, 0xff, 0xff, 0xbc, 0x02, 0x02, 0xff, 0xff, 0xbc, 0x04, 0x02, 0xff, 0xff
+	ldw	(xix), 65535
+	ldw	(xix+2), 65535
+	ldw	(xix+4), 65535
 	lda	xbc, (xix+108)
 	ld	xwa, xbc
 	lda	xde, (xix+106)
@@ -2898,7 +2907,7 @@ SlotTable_ExtendedOpsBlock:
 	jr	c, -27
 	ret
 	ldada	xbc, 3074
-	.byte 0xb1, 0x02, 0xff, 0xff
+	ldw	(xbc), 65535
 	ldb	l, 0
 	lds	wa, 0
 	ld	de, wa
@@ -2910,7 +2919,7 @@ SlotTable_ExtendedOpsBlock:
 	jr	c, -20
 	ret
 	ldada	xbc, 2972
-	.byte 0xb1, 0x02, 0xff, 0xff
+	ldw	(xbc), 65535
 	ldb	l, 0
 	lds	wa, 0
 	ld	de, wa
@@ -3017,7 +3026,8 @@ Flash_WriteBackSlot_Erase:
 Flash_SlotUpdateOpsBlock:
 	dec	6, xsp
 	ld	(xsp+4), a
-	.byte 0xb7, 0x02, 0x00, 0x00, 0xbf, 0x02, 0x02, 0x00, 0x00
+	ldw	(xsp), 0
+	ldw	(xsp+2), 0
 	cpdi16	1748, 65535
 	jr	z, 18
 	ld	c, (xsp+4)
@@ -3026,7 +3036,7 @@ Flash_SlotUpdateOpsBlock:
 	calr	-1071
 	cps	l, 0
 	jr	nz, 4
-	.byte 0xb7, 0x02, 0x01, 0x00
+	ldw	(xsp), 1
 	cpdi16	1750, 65535
 	jr	z, 51
 	ld	c, (xsp+4)
@@ -3128,7 +3138,7 @@ Flash_SlotUpdateOpsBlock:
 	calr	-3290
 	call	16713356
 	ldada	xwa, 2360
-	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
+	cpw	(xwa+2), 65535
 	jr	z, 67
 	ld	wa, (xwa)
 	ld	(xsp), a
@@ -3142,7 +3152,7 @@ Flash_SlotUpdateOpsBlock:
 	ldada	xbc, 1952
 	ldda16	wa, 2362
 	ld	(xbc), wa
-	.byte 0xb9, 0x02, 0x02, 0x00, 0x00
+	ldw	(xbc+2), 0
 	ld	a, (xsp)
 	extz	wa
 	lda_24	xbc, 14770428
@@ -3182,7 +3192,7 @@ Flash_SlotUpdateOpsBlock:
 	ldada	xwa, 2466
 	.byte 0xd3, 0x07, 0xe0, 0xe8, 0x20
 	ld	(xbc+4), wa
-	.byte 0xb9, 0x06, 0x02, 0x00, 0x00
+	ldw	(xbc+6), 0
 	ld	a, (xsp)
 	extz	wa
 	lda_24	xbc, 14770428
@@ -3242,9 +3252,9 @@ Flash_SlotUpdateOpsBlock:
 	ld	wa, hl
 	calr	-5235
 	ldada	xwa, 1850
-	.byte 0x90, 0x3f, 0xff, 0xff
+	cpw	(xwa), 65535
 	jr	nz, 7
-	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
+	cpw	(xwa+2), 65535
 	jr	z, 3
 	calr	-774
 	inc	4, xsp
@@ -4128,7 +4138,7 @@ ToneParam_ExtendedOpsBlock:
 	popw	iz
 	ret
 	dec	6, xsp
-	.byte 0xbf, 0x04, 0x02, 0x00, 0x00
+	ldw	(xsp+4), 0
 	ldda32	xhl, 3182
 	ldda32	xde, 3186
 	ld	a, (xhl+16)

@@ -14081,7 +14081,8 @@ Not_sure_maybe_SOFT_VERSION_related:
 	calr	753
 	andmi8	(xix), 127
 	ld	hl, (xix+3)
-	.byte 0xbc, 0x01, 0x02, 0xff, 0xff, 0xbc, 0x03, 0x02, 0xff, 0xff
+	ldw	(xix+1), 65535
+	ldw	(xix+3), 65535
 	jr	-27
 	ret
 
@@ -16092,7 +16093,7 @@ AccPatch_ComplexDataBlock:
 	ret
 	push	xiy
 	calr	-3736
-	.byte 0xbc, 0x03, 0x02, 0xff, 0xff
+	ldw	(xix+3), 65535
 	pushw	hl
 	ld	l, (xiy+12)
 	xor	h, h
@@ -34522,7 +34523,8 @@ AccPatch_VoiceAssignDataBlock:
 	ret
 	xor	xbc, xbc
 	ld	(xiy), 0
-	.byte 0xbd, 0x01, 0x02, 0xff, 0xff, 0xbd, 0x03, 0x02, 0xff, 0xff
+	ldw	(xiy+1), 65535
+	ldw	(xiy+3), 65535
 	ldb	c, 249
 	add	xiy, 6
 	.byte 0xf5, 0xf4, 0x00, 0x00
@@ -34539,7 +34541,7 @@ AccPatch_VoiceAssignDataBlock:
 	ldda8	c, 14654
 	cp	(xiy+1), wa
 	jr	nz, 31
-	.byte 0x9d, 0x03, 0x3f, 0xff, 0xff
+	cpw	(xiy+3), 65535
 	jr	nz, 6
 	.byte 0xc1
 	.ascii "=9ah"
@@ -34575,8 +34577,9 @@ AccPatch_VoiceAssignDataBlock:
 	ld	(xiy+3), de
 	ldda16	de, 14660
 	ld	(xix+1), de
-	.byte 0xf1, 0x4c, 0x39, 0x02, 0x00, 0x00, 0x9c, 0x03
-	.byte 0x3f, 0xff, 0xff, 0x66, 0x3d
+	.byte 0xf1, 0x4c, 0x39, 0x02, 0x00, 0x00
+	cpw	(xix+3), 65535
+	.byte 0x66, 0x3d
 	ldda16	de, 14668
 	cps	de, 0
 	.byte 0x6e, 0x19, 0xd1, 0x46, 0x39, 0x61
@@ -34895,7 +34898,8 @@ AccPatch_VoiceAssignDataBlock:
 	.ascii "x9Ph‰Ñv"
 	push xbc
 	ldb	c, 30
-	.byte 0xda, 0xf9, 0xbe, 0x03, 0x02, 0xff, 0xff
+	.byte 0xda, 0xf9
+	ldw	(xiz+3), 65535
 	nop
 	nop
 	ret

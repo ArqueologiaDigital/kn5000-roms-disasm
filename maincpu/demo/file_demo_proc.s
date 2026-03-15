@@ -10,7 +10,7 @@ FDemo_DisplayResourceData:
 	.byte 0xf3, 0xfd, 0xdc, 0xfe, 0x37
 	push	xiz
 	ld	xiz, xwa
-	.byte 0xbf, 0x06, 0x02, 0x00, 0x00
+	ldw	(xsp+6), 0
 	lda	xbc, (xsp+264)
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
@@ -35,7 +35,7 @@ FDemo_DisplayResourceData:
 	ld	xbc, 15335542
 	call	16288711
 	ld	(xsp+4), hl
-	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xsp+4), 0
 	jrl	lt, 187
 	calr	194
 	lda	xwa, (xsp+8)
@@ -71,7 +71,7 @@ FDemo_DisplayResourceData:
 	inc	1, iz
 	cp	iz, 8
 	jr	lt, -47
-	.byte 0x9f, 0x06, 0x3f, 0x01, 0x00
+	cpw	(xsp+6), 1
 	jr	nz, 22
 	lds	iz, 0
 	lda	xwa, (xsp+8)
@@ -3399,7 +3399,7 @@ FileIO_ByteBlock_F8817E:
 	ld	iz, (xsp+40)
 	cp	wa, 40
 	jr	nc, 78
-	.byte 0xbf, 0x0a, 0x02, 0xd6, 0x01
+	ldw	(xsp+10), 470
 	extz	xwa
 	ld	xbc, 470
 	call	16714332
@@ -3425,7 +3425,7 @@ FileIO_ByteBlock_F8817E:
 	jr	71
 	sub	wa, 40
 	sub	iz, 40
-	.byte 0xbf, 0x0a, 0x02, 0x50, 0x00
+	ldw	(xsp+10), 80
 	extz	xwa
 	ld	xbc, xwa
 	sll	xbc, 2
@@ -3511,9 +3511,9 @@ FileIO_ByteBlock_F8817E:
 	call	16288840
 	ldw	hl, 65434
 	jrl	152
-	.byte 0x9f, 0x26, 0x3f, 0x02, 0x00
+	cpw	(xsp+38), 2
 	jr	nc, 60
-	.byte 0xbf, 0x08, 0x02, 0xb8, 0x24
+	ldw	(xsp+8), 9400
 	ld	wa, (xsp+38)
 	extz	xwa
 	ld	xbc, 9400
@@ -3530,7 +3530,7 @@ FileIO_ByteBlock_F8817E:
 	ld	wa, (xsp+36)
 	ld	(xsp+10), a
 	jr	22
-	.byte 0xbf, 0x08, 0x02, 0x27, 0x29
+	ldw	(xsp+8), 10535
 	ld	xiz, 18816
 	ld	xwa, 18816
 	ld	(xsp+4), xwa

@@ -394,7 +394,7 @@ DrawText_LayoutAndRender_Variant1:
 	sll	hl, 3
 	ld	(xbc), hl
 	lds	iy, 0
-	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xsp+4), 0
 	jr	ule, 35
 	lda	xhl, (xsp+10)
 	lds32	xde, 4
@@ -449,7 +449,7 @@ DrawText_LayoutAndRender_Variant1:
 	sll	hl, 3
 	ld	(xbc), hl
 	lds	iy, 0
-	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xsp+4), 0
 	jr	ule, 35
 	lda	xhl, (xsp+10)
 	lds32	xde, 4
@@ -499,7 +499,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xwa+2)
 	ld	(xbc), de
 	lds	iy, 0
-	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xsp+4), 0
 	jr	ule, 35
 	lda	xhl, (xsp+10)
 	lds32	xde, 6
@@ -549,7 +549,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xwa+2)
 	ld	(xbc), de
 	lds	iy, 0
-	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xsp+4), 0
 	jr	ule, 35
 	lda	xhl, (xsp+10)
 	lds32	xde, 6
@@ -604,7 +604,7 @@ DrawText_LayoutAndRender_Variant1:
 	sll	hl, 3
 	ld	(xbc), hl
 	lds	iy, 0
-	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xsp+4), 0
 	jr	ule, 35
 	lda	xhl, (xsp+10)
 	lds32	xde, 4
@@ -1209,7 +1209,7 @@ DrawText_ExtLayout_Variant1:
 	ld	wa, (xde+11)
 	ld	(xsp+4), wa
 	lds	hl, 0
-	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xsp+4), 0
 	jr	ule, 51
 	ld	xbc, xde
 	lda	xwa, (xbc+7)

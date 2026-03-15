@@ -2505,7 +2505,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nc, 45
 	incm	1, (xsp+2)
 	jr	10
-	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00
+	cpw	(xsp+2), 0
 	jr	z, 33
 	decm	1, (xsp+2)
 	ld	a, (xsp+4)
@@ -10559,7 +10559,7 @@ S2c_GridCheck_DataBlock:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 164
 	exts	xde
 	ld	xwa, 21233678
@@ -10577,7 +10577,7 @@ S2c_GridCheck_DataBlock:
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jr	nz, 109
 	exts	xde
 	ld	xwa, 21233678
@@ -14623,7 +14623,7 @@ StylCnvStorOkFunc_ReturnZero:
 StylCnvStorOkFunc_DataBlock:
 	dec	8, xsp
 	ld	xhl, xbc
-	.byte 0x9f, 0x0c, 0x3f, 0x00, 0x00
+	cpw	(xsp+12), 0
 	jr	z, 29
 	lda	xix, (xsp+4)
 	ld	bc, (xwa+2)
@@ -14652,7 +14652,7 @@ StylCnvStorOkFunc_DataBlock:
 	cps	bc, 1
 	scc16	nz, bc
 	ld	(xsp+8), bc
-	.byte 0xbf, 0x0a, 0x02, 0x00, 0x00
+	ldw	(xsp+10), 0
 	ld	xiy, xwa
 	lda	xix, (xsp+24)
 	lds	bc, 4
@@ -14679,14 +14679,15 @@ StylCnvStorOkFunc_DataBlock:
 	sub	wa, (xhl)
 	ld	(xsp+4), wa
 	sub	(xsp+4), iz
-	.byte 0x9f, 0x08, 0x3f, 0x00, 0x00
+	cpw	(xsp+8), 0
 	jr	z, 54
 	ld	(xsp+20), bc
-	.byte 0xbf, 0x06, 0x02, 0xff, 0xff
+	ldw	(xsp+6), 65535
 	jr	54
-	.byte 0xbf, 0x08, 0x02, 0x01, 0x00
+	ldw	(xsp+8), 1
 	jr	5
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00, 0xbf, 0x0a, 0x02, 0x01, 0x00
+	ldw	(xsp+8), 0
+	ldw	(xsp+10), 1
 	lda	xhl, (xsp+24)
 	ld	bc, (xwa+2)
 	ld	(xhl), bc
@@ -14699,7 +14700,7 @@ StylCnvStorOkFunc_DataBlock:
 	jr	-118
 	ld	wa, (xhl)
 	ld	(xsp+20), wa
-	.byte 0xbf, 0x06, 0x02, 0x01, 0x00
+	ldw	(xsp+6), 1
 	lda	xhl, (xsp+16)
 	lda	xiy, (xsp+20)
 	ld	wa, (xiy)
@@ -14724,7 +14725,7 @@ StylCnvStorOkFunc_DataBlock:
 	add	bc, wa
 	sub	bc, ix
 	ld	(xhl+2), bc
-	.byte 0xbf, 0x0e, 0x02, 0x00, 0x00
+	ldw	(xsp+14), 0
 	cps	iz, 0
 	jr	ule, 32
 	lda	xwa, (xsp+20)
@@ -14740,17 +14741,17 @@ StylCnvStorOkFunc_DataBlock:
 	jr	c, -32
 	lda	xwa, (xsp+24)
 	lda	xbc, (xsp+20)
-	.byte 0x9f, 0x08, 0x3f, 0x00, 0x00
+	cpw	(xsp+8), 0
 	jr	z, 14
 	ld	wa, (xwa+4)
 	sub	wa, iz
 	ld	(xbc), wa
-	.byte 0xbf, 0x06, 0x02, 0xff, 0xff
+	ldw	(xsp+6), 65535
 	jr	11
 	ld	wa, (xwa)
 	add	wa, iz
 	ld	(xbc), wa
-	.byte 0xbf, 0x06, 0x02, 0x01, 0x00
+	ldw	(xsp+6), 1
 	lda	xix, (xsp+16)
 	lda	xhl, (xsp+20)
 	ld	wa, (xhl)
@@ -14766,7 +14767,8 @@ StylCnvStorOkFunc_DataBlock:
 	divs	wa, 2
 	add	bc, wa
 	ld	(xix+2), bc
-	.byte 0xbf, 0x0e, 0x02, 0x00, 0x00, 0x9f, 0x04, 0x3f, 0x00, 0x00
+	ldw	(xsp+14), 0
+	cpw	(xsp+4), 0
 	jr	ule, 32
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
@@ -14794,7 +14796,8 @@ StylCnvStorOkFunc_DataBlock:
 	divs	wa, 2
 	sub	bc, wa
 	ld	(xix+2), bc
-	.byte 0xbf, 0x0e, 0x02, 0x00, 0x00, 0x9f, 0x04, 0x3f, 0x00, 0x00
+	ldw	(xsp+14), 0
+	cpw	(xsp+4), 0
 	jr	ule, 32
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
@@ -14821,7 +14824,7 @@ StylCnvStorOkFunc_DataBlock:
 	cps	bc, 1
 	scc16	nz, bc
 	ld	(xsp+6), bc
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00
+	ldw	(xsp+8), 0
 	ld	xiy, xwa
 	lda	xix, (xsp+26)
 	lds	bc, 4
@@ -14850,16 +14853,17 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xsp+4), wa
 	ld	wa, qiz
 	sub	(xsp+4), wa
-	.byte 0x9f, 0x06, 0x3f, 0x00, 0x00
+	cpw	(xsp+6), 0
 	jr	z, 57
 	ld	(xsp+22), bc
 	ld	wa, (xix)
 	sub	wa, qiz
 	ld	(xsp+18), wa
 	jr	57
-	.byte 0xbf, 0x06, 0x02, 0x01, 0x00
+	ldw	(xsp+6), 1
 	jr	5
-	.byte 0xbf, 0x06, 0x02, 0x00, 0x00, 0xbf, 0x08, 0x02, 0x01, 0x00
+	ldw	(xsp+6), 0
+	ldw	(xsp+8), 1
 	lda	xhl, (xsp+26)
 	ld	bc, (xwa+2)
 	ld	(xhl), bc
@@ -14954,7 +14958,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xwa, (xsp+26)
 	lda	xbc, (xsp+22)
 	lda	xde, (xsp+18)
-	.byte 0x9f, 0x06, 0x3f, 0x00, 0x00
+	cpw	(xsp+6), 0
 	jr	z, 17
 	ld	wa, (xwa+4)
 	sub	wa, qiz
@@ -15028,7 +15032,7 @@ StylCnvStorBnk_ProcDataBlock:
 	lda	xix, (xbc+30)
 	ld	de, (xbc+28)
 	ld	bc, (xiz+22)
-	.byte 0x9e, 0x18, 0x3f, 0x00, 0x00
+	cpw	(xiz+24), 0
 	jr	z, 9
 	.byte 0x94, 0x04, 0x93, 0x04
 	calr	-608

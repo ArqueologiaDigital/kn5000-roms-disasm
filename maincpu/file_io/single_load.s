@@ -625,7 +625,7 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (xsp+8)
 	ld	xbc, 29360143
 	jr	39
-	.byte 0x9f, 0x04, 0x3f, 0x04, 0x00
+	cpw	(xsp+4), 4
 	jr	c, 36
 	ldda8	c, 35326
 	extz	bc

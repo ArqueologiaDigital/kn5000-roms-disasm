@@ -798,7 +798,7 @@ Data_FadeSetGridDispatch:
 	ld	(xbc), wa
 	ld	xwa, (xsp+28)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, 463
 	sla	wa, 2
 	lda_24	xbc, 15202674
@@ -821,7 +821,7 @@ Data_FadeSetGridDispatch:
 	ld	(xbc), wa
 	ld	xwa, (xsp+28)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, 388
 	sla	wa, 2
 	lda_24	xbc, 15202674
@@ -833,9 +833,9 @@ Data_FadeSetGridDispatch:
 	call	16382274
 	jrl	354
 	lda	xhl, (xsp+4)
-	.byte 0xb3, 0x02, 0x01, 0x00
+	ldw	(xhl), 1
 	lda	xde, (xhl+2)
-	.byte 0xb2, 0x02, 0x00, 0x00
+	ldw	(xde), 0
 	lda_24	xix, 15202674
 	ld	xiz, (xsp+28)
 	jr	18
@@ -876,7 +876,7 @@ Data_FadeSetGridDispatch:
 	ld	xbc, 31457420
 	jrl	214
 	ld	xwa, 15202738
-	.byte 0x92, 0x3f, 0x00, 0x00
+	cpw	(xde), 0
 	jr	z, 5
 	.byte 0x40
 	.long Data_AcGridParamTable
@@ -1315,7 +1315,7 @@ Data_InOutGridDispatch:
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 1774
 	cps	bc, 0
 	jrl	mi, 1769
@@ -1381,7 +1381,7 @@ Data_InOutGridDispatch:
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, 1570
 	cps	bc, 0
 	jrl	mi, 1565
@@ -1436,7 +1436,7 @@ Data_InOutGridDispatch:
 	call	16382274
 	jrl	1405
 	lda	xwa, (xsp+4)
-	.byte 0xb0, 0x02, 0x01, 0x00
+	ldw	(xwa), 1
 	ld	xde, xbc
 	ld	(xwa+4), xbc
 	ld	xix, (xiz)
@@ -1461,7 +1461,7 @@ Data_InOutGridDispatch:
 	jr	z, 53
 	cp	xix, 8448
 	jrl	nz, 1301
-	.byte 0xb1, 0x02, 0x00, 0x00
+	ldw	(xbc), 0
 	ld	wa, (xwa)
 	sla	wa, 2
 	lda_24	xbc, 15203496
@@ -1475,7 +1475,7 @@ Data_InOutGridDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	1253
-	.byte 0xb1, 0x02, 0x01, 0x00
+	ldw	(xbc), 1
 	ld	wa, (xwa)
 	sla	wa, 2
 	.byte 0xe3, 0x07, 0xec, 0xe0, 0x20
@@ -1497,7 +1497,7 @@ Data_InOutGridDispatch:
 	jr	z, 61
 	cps	wa, 0
 	jrl	nz, 1196
-	.byte 0xb1, 0x02, 0x02, 0x00
+	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
 	.byte 0xe3, 0x07, 0xec, 0xe0, 0x20
@@ -1515,7 +1515,7 @@ Data_InOutGridDispatch:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	jrl	1136
-	.byte 0xb1, 0x02, 0x02, 0x00
+	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
 	.byte 0xe3, 0x07, 0xec, 0xe0, 0x20
@@ -1533,7 +1533,7 @@ Data_InOutGridDispatch:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	jrl	1080
-	.byte 0xb1, 0x02, 0x02, 0x00
+	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
 	.byte 0xe3, 0x07, 0xec, 0xe0, 0x20
@@ -1551,7 +1551,7 @@ Data_InOutGridDispatch:
 	ld	xbc, 29360140
 	lds32	xde, 0
 	jrl	1024
-	.byte 0xb1, 0x02, 0x03, 0x00
+	ldw	(xbc), 3
 	ld	xwa, 20480
 	call	16569399
 	cps	hl, 1
@@ -1577,7 +1577,7 @@ Data_InOutGridDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	949
-	.byte 0xb1, 0x02, 0x03, 0x00
+	ldw	(xbc), 3
 	ld	xwa, 20480
 	call	16569399
 	cps	hl, 2
@@ -1601,7 +1601,7 @@ Data_InOutGridDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	877
-	.byte 0xb1, 0x02, 0x05, 0x00
+	ldw	(xbc), 5
 	ld	wa, (xwa)
 	sla	wa, 2
 	.byte 0xe3, 0x07, 0xec, 0xe0, 0x20
@@ -1614,7 +1614,7 @@ Data_InOutGridDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	838
-	.byte 0xb1, 0x02, 0x06, 0x00
+	ldw	(xbc), 6
 	ld	wa, (xiz+4)
 	sla	wa, 2
 	.byte 0xe3, 0x07, 0xec, 0xe0, 0x20
@@ -1627,7 +1627,7 @@ Data_InOutGridDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	798
-	.byte 0xb1, 0x02, 0x07, 0x00
+	ldw	(xbc), 7
 	ld	wa, (xiz+4)
 	sla	wa, 2
 	.byte 0xe3, 0x07, 0xec, 0xe0, 0x20
@@ -1640,7 +1640,7 @@ Data_InOutGridDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	758
-	.byte 0xb1, 0x02, 0x08, 0x00
+	ldw	(xbc), 8
 	ld	bc, (xiz+4)
 	sla	bc, 2
 	.byte 0xe3, 0x07, 0xec, 0xe4, 0x20
@@ -1733,7 +1733,7 @@ Data_ParaLoadOptDispatch:
 	jr	z, 42
 	cps	hl, 0
 	jrl	nz, 480
-	.byte 0xb0, 0x02, 0x03, 0x00
+	ldw	(xwa), 3
 	pushw 231
 	pushw 64790
 	lda	xwa, (xsp+16)
@@ -1745,7 +1745,7 @@ Data_ParaLoadOptDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	439
-	.byte 0xb0, 0x02, 0x03, 0x00
+	ldw	(xwa), 3
 	ld	xwa, 20481
 	call	16569399
 	exts	hl
@@ -1761,7 +1761,7 @@ Data_ParaLoadOptDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	389
-	.byte 0xbf, 0x06, 0x02, 0x03, 0x00
+	ldw	(xsp+6), 3
 	ld	xwa, 20482
 	call	16569399
 	pushw	hl

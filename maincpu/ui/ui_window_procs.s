@@ -543,7 +543,7 @@ WndEvt_EventCodeDispatch:
 	ld	wa, qiz
 	cp	wa, de
 	jrl	z, 1103
-	.byte 0xbf, 0x04, 0x02, 0x00, 0x00
+	ldw	(xsp+4), 0
 	lds	iz, 0
 	cps	de, 0
 	jr	ule, 37
@@ -598,7 +598,7 @@ WndEvt_EventCodeDispatch:
 	call	16714482
 	lda	xsp, (xsp+22)
 	lds	iz, 0
-	.byte 0x9f, 0x06, 0x3f, 0x00, 0x00
+	cpw	(xsp+6), 0
 	jr	ule, 31
 	lda_24	xde, 160944
 	ld32_24	xhl, 160996
@@ -1817,9 +1817,9 @@ EditSw_ByteData:
 	calr	-8253
 	lda	xwa, (xsp+18)
 	lda	xbc, (xsp+12)
-	.byte 0x98, 0x02, 0x3f, 0xef, 0x00
+	cpw	(xwa+2), 239
 	jr	z, 20
-	.byte 0x90, 0x3f, 0x00, 0x00
+	cpw	(xwa), 0
 	jr	nz, 7
 	ld	xwa, 15376742
 	jr	12
@@ -1869,13 +1869,13 @@ EditSw_ByteData:
 	exts	xwa
 	divs	wa, 2
 	lda	xix, (xsp+22)
-	.byte 0x91, 0x3f, 0x00, 0x00
+	cpw	(xbc), 0
 	jr	nz, 12
-	.byte 0xb4, 0x02, 0xfe, 0xff
+	ldw	(xix), 65534
 	ld	de, (xbc+2)
 	sub	de, wa
 	ld	(xix+2), de
-	.byte 0x91, 0x3f, 0x3f, 0x01
+	cpw	(xbc), 319
 	jr	nz, 16
 	ldw	de, 318
 	sub	de, (xsp+6)
@@ -1883,7 +1883,7 @@ EditSw_ByteData:
 	ld	de, (xbc+2)
 	sub	de, wa
 	ld	(xix+2), de
-	.byte 0x99, 0x02, 0x3f, 0xef, 0x00
+	cpw	(xbc+2), 239
 	jr	nz, 25
 	ld	wa, (xsp+6)
 	exts	xwa
@@ -8122,9 +8122,9 @@ ColorBlit2_LargeCodeBlock:
 	jrl	z, 381
 	cps	a, 0
 	jrl	nz, 722
-	.byte 0xbf, 0x06, 0x02, 0x00, 0x00
+	ldw	(xsp+6), 0
 	jrl	351
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00
+	ldw	(xsp+8), 0
 	jrl	321
 	lda	xwa, (xsp+18)
 	ld	(xsp+10), xwa
@@ -8264,9 +8264,9 @@ ColorBlit2_LargeCodeBlock:
 	cp	(xsp+6), bc
 	jrl	c, -365
 	jrl	346
-	.byte 0xbf, 0x06, 0x02, 0x00, 0x00
+	ldw	(xsp+6), 0
 	jrl	149
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00
+	ldw	(xsp+8), 0
 	jr	120
 	lda	xde, (xsp+18)
 	ld	xwa, (xsp+28)
@@ -8331,9 +8331,9 @@ ColorBlit2_LargeCodeBlock:
 	cp	(xsp+6), bc
 	jrl	c, -163
 	jrl	172
-	.byte 0xbf, 0x06, 0x02, 0x00, 0x00
+	ldw	(xsp+6), 0
 	jrl	150
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00
+	ldw	(xsp+8), 0
 	jr	121
 	lda	xde, (xsp+18)
 	ld	xwa, (xsp+28)
@@ -8568,7 +8568,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xwa, xbc
 	ld	xhl, (xsp+30)
 	add	xhl, xwa
-	.byte 0x9f, 0x42, 0x3f, 0xf5, 0x00
+	cpw	(xsp+66), 245
 	jr	z, 71
 	lds32	xbc, 0
 	ld	xwa, (xsp+8)
@@ -8642,7 +8642,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xwa, xbc
 	ld	xhl, (xsp+30)
 	add	xhl, xwa
-	.byte 0x9f, 0x42, 0x3f, 0xf5, 0x00
+	cpw	(xsp+66), 245
 	jr	z, 60
 	lds32	xbc, 0
 	ld	xwa, (xsp+4)
@@ -8726,7 +8726,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xwa, xix
 	ld	xix, (xsp+38)
 	add	xix, xwa
-	.byte 0x9f, 0x42, 0x3f, 0xf5, 0x00
+	cpw	(xsp+66), 245
 	jr	z, 28
 	andmi8	(xix), 96
 	ld	wa, hl
@@ -9043,7 +9043,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xwa, xhl
 	ld	xix, xde
 	add	xix, xwa
-	.byte 0x9f, 0x32, 0x3f, 0xf5, 0x00
+	cpw	(xsp+50), 245
 	jr	z, 30
 	andmi8	(xix), 96
 	ld	wa, iy

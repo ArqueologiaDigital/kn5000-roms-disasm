@@ -3689,12 +3689,14 @@ DisplayMode_Handler_3:
 	ret
 	push	xiy
 	ld	(xiy), 84
-	.byte 0xbd, 0x01, 0x02, 0x52, 0x41, 0xbd, 0x03, 0x02, 0x43, 0x4b
+	ldw	(xiy+1), 16722
+	ldw	(xiy+3), 19267
 	pop	xiy
 	ret
 	push	xiy
 	ld	(xiy), 32
-	.byte 0xbd, 0x01, 0x02, 0x20, 0x20, 0xbd, 0x03, 0x02, 0x20, 0x20
+	ldw	(xiy+1), 8224
+	ldw	(xiy+3), 8224
 	pop	xiy
 	ret
 	ordi8	3539, 1
@@ -7961,15 +7963,15 @@ VoiceSlot_IndexDone:
 	stda16	3426, wa
 	call	15725704
 	jp	15714175
-	.byte 0x95, 0x3f, 0x01, 0x00
+	cpw	(xiy), 1
 	jrl	z, 13
-	.byte 0x95, 0x3f, 0x00, 0x00
+	cpw	(xiy), 0
 	jrl	z, 6
 	decm	1, (xiy)
 	jp	15714126
 	ld	(xix), 8
 	jp	15714171
-	.byte 0x95, 0x3f, 0x00, 0x00
+	cpw	(xiy), 0
 	jrl	nz, -42
 	ld	(xix), 9
 	call	15724664
@@ -8679,7 +8681,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	ld	iy, wa
 	call	15713952
 	ldda32	xhl, 4349
-	.byte 0x9b, 0x01, 0x3f, 0x00, 0x00
+	cpw	(xhl+1), 0
 	jrl	z, 10
 	.ascii "]\\[H "
 	.byte 0xff, 0x1b, 0x85
@@ -10664,7 +10666,7 @@ Display_BytecodeBlock_F:
 	call	15686539
 	call	15725681
 	ld	xix, 3786
-	.byte 0xbc, 0x09, 0x02, 0x20, 0x56
+	ldw	(xix+9), 22048
 	call	15686738
 	call	15726647
 	call	15726361
@@ -10727,7 +10729,7 @@ Display_BytecodeBlock_F:
 	jrl	nz, 20
 	cpdi8	4540, 3
 	jrl	nz, 12
-	.byte 0xb4, 0x02, 0x4f, 0x46
+	ldw	(xix), 17999
 	ld	(xix+2), 70
 	jp	15725111
 	ldw	bc, 16

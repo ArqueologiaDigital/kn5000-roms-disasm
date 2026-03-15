@@ -2037,7 +2037,7 @@ IvNamingExit_ScreenData:
 	ld	xwa, (xiz+34)
 	ld	xbc, 31916034
 	call	16403043
-	.byte 0x9e, 0x2e, 0x3f, 0x00, 0x00
+	cpw	(xiz+46), 0
 	jrl	z, 628
 	ld	xwa, (xsp+178)
 	ld	xbc, 29360152
@@ -2063,7 +2063,7 @@ IvNamingExit_ScreenData:
 	ld	xde, (xsp+170)
 	call	16403043
 	ld	xwa, (xsp+22)
-	.byte 0x98, 0x26, 0x3f, 0x02, 0x00
+	cpw	(xwa+38), 2
 	jrl	lt, 525
 	lda	xbc, (xsp+154)
 	ld	xwa, (xsp+178)
@@ -2081,7 +2081,7 @@ IvNamingExit_ScreenData:
 	ld	wa, (xde+6)
 	dec	1, wa
 	ld	(xsp+164), wa
-	.byte 0xbf, 0x14, 0x02, 0x01, 0x00
+	ldw	(xsp+20), 1
 	jr	40
 	ld	wa, (xsp+8)
 	.byte 0x9f, 0x14, 0x40
@@ -2229,7 +2229,7 @@ IvNamingExit_ScreenData:
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
 	call	16403043
-	.byte 0x9e, 0x30, 0x3f, 0x00, 0x00
+	cpw	(xiz+48), 0
 	jr	z, 19
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
@@ -5896,7 +5896,7 @@ NoteEditBox_EventDispatch2:
 	call	16402871
 	lda	xix, (xsp+28)
 	ld	(xix), hl
-	.byte 0x94, 0x3f, 0x00, 0x00
+	cpw	(xix), 0
 	jr	z, 120
 	lda	xde, (xix+2)
 	ld	a, (xsp+10)
@@ -6030,7 +6030,7 @@ NoteEditBox_EventDispatch2:
 	lds32	xde, 0
 	call	16402871
 	ld	(xsp+8), hl
-	.byte 0xbf, 0x0a, 0x02, 0x01, 0x00
+	ldw	(xsp+10), 1
 	ldi_berp	251, 0
 	ldto_berp	a, 251
 	extz	wa
@@ -6049,8 +6049,8 @@ NoteEditBox_EventDispatch2:
 	lds32	xwa, 0
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
-	.byte 0xb8, 0x02, 0x02, 0x20, 0x00, 0xb8, 0x06, 0x02
-	.byte 0x2b, 0x00
+	ldw	(xwa+2), 32
+	ldw	(xwa+6), 43
 	cpi_berp	251, 0
 	jr	nz, 10
 	.byte 0x9f, 0x08, 0x04, 0x40
@@ -6069,13 +6069,14 @@ NoteEditBox_EventDispatch2:
 	call	16714354
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+8)
-	.byte 0xbf, 0x0a, 0x02, 0x02, 0x00
+	ldw	(xsp+10), 2
 	jr	41
 	lds32	xwa, 3
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
-	.byte 0xb8, 0x02, 0x02, 0x21, 0x00, 0xb8, 0x06, 0x02
-	.byte 0x2a, 0x00, 0x9f, 0x0a, 0x04
+	ldw	(xwa+2), 33
+	ldw	(xwa+6), 42
+	.byte 0x9f, 0x0a, 0x04
 	pushw 227
 	pushw 17948
 	lda	xwa, (xsp+42)
@@ -6117,7 +6118,7 @@ NoteEditBox_EventDispatch2:
 	lds32	xde, 0
 	call	16402871
 	ld	(xsp+8), hl
-	.byte 0xbf, 0x0a, 0x02, 0x01, 0x00
+	ldw	(xsp+10), 1
 	ldi_berp	251, 0
 	ldto_berp	a, 251
 	extz	wa
@@ -6139,7 +6140,8 @@ NoteEditBox_EventDispatch2:
 	jr	z, 68
 	lds32	xwa, 0
 	ld	(xsp+4), xwa
-	.byte 0xb1, 0x02, 0x26, 0x00, 0xb4, 0x02, 0x31, 0x00
+	ldw	(xbc), 38
+	ldw	(xix), 49
 	cpi_berp	251, 0
 	jr	nz, 10
 	.byte 0x9f, 0x08, 0x04
@@ -6157,11 +6159,12 @@ NoteEditBox_EventDispatch2:
 	call	16714354
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+8)
-	.byte 0xbf, 0x0a, 0x02, 0x02, 0x00
+	ldw	(xsp+10), 2
 	jr	33
 	lds32	xwa, 3
 	ld	(xsp+4), xwa
-	.byte 0xb1, 0x02, 0x28, 0x00, 0xb4, 0x02, 0x31, 0x00
+	ldw	(xbc), 40
+	ldw	(xix), 49
 	.byte 0x9f, 0x0a, 0x04
 	pushw 227
 	pushw 17960
@@ -6214,9 +6217,9 @@ NoteEditBox_EventDispatch2:
 	call	16402871
 	jrl	906
 	lda	xix, (xsp+28)
-	.byte 0xb4, 0x02, 0x05, 0x00
+	ldw	(xix), 5
 	lda	xbc, (xix+2)
-	.byte 0xb1, 0x02, 0x63, 0x00
+	ldw	(xbc), 99
 	lda	xde, (xix+4)
 	ld	wa, (xix)
 	add	wa, 16
@@ -6268,9 +6271,9 @@ NoteEditBox_EventDispatch2:
 	call	16437066
 	lda	xhl, (xsp+28)
 	lda	xbc, (xhl+2)
-	.byte 0xb1, 0x02, 0x9b, 0x00
+	ldw	(xbc), 155
 	lda	xde, (xhl+6)
-	.byte 0xb2, 0x02, 0xa1, 0x00
+	ldw	(xde), 161
 	ld	wa, (xhl+4)
 	sub	wa, (xhl)
 	exts	xwa
@@ -6324,7 +6327,7 @@ NoteEditBox_EventDispatch2:
 	jr	c, -8
 	sti8_24	135318, 0
 	lda	xix, (xsp+28)
-	.byte 0xb4, 0x02, 0x02, 0x00
+	ldw	(xix), 2
 	lda	xde, (xix+4)
 	ld	wa, (xix)
 	add	wa, 24
@@ -6377,7 +6380,7 @@ NoteEditBox_EventDispatch2:
 	pushw 255
 	call	16437066
 	lda	xix, (xsp+28)
-	.byte 0xb4, 0x02, 0x17, 0x00
+	ldw	(xix), 23
 	lda	xde, (xix+4)
 	ld	wa, (xix)
 	add	wa, 70
@@ -7485,7 +7488,7 @@ SndParam_Dispatch:
 	ld	(xbc), wa
 	ld	xde, (xsp+58)
 	ld	(xbc+2), de
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, 1331
 	ld	wa, de
 	cps	wa, 0
@@ -7535,7 +7538,7 @@ SndParam_Dispatch:
 	ld	(xbc), wa
 	ld	xhl, (xsp+58)
 	ld	(xbc+2), hl
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, 1159
 	ld	wa, hl
 	cps	wa, 0
@@ -7573,9 +7576,9 @@ SndParam_Dispatch:
 	call	16423773
 	jrl	1034
 	lda	xhl, (xsp+40)
-	.byte 0xb3, 0x02, 0x01, 0x00
+	ldw	(xhl), 1
 	lda	xde, (xhl+2)
-	.byte 0xb2, 0x02, 0x00, 0x00
+	ldw	(xde), 0
 	lda_24	xix, 14894928
 	ld	xiz, (xsp+58)
 	jr	18
@@ -7610,7 +7613,7 @@ SndParam_Dispatch:
 	ld	xbc, 31457420
 	jrl	916
 	ld	xwa, 14894994
-	.byte 0x92, 0x3f, 0x00, 0x00
+	cpw	(xde), 0
 	jr	z, 5
 	ld	xwa, 14894984
 	push	xwa
@@ -10470,9 +10473,9 @@ AccIll_Dispatch:
 	cp	xwa, 27
 	jrl	nz, 3047
 	lda	xiy, (xsp+58)
-	.byte 0xb5, 0x02, 0x0e, 0x00
+	ldw	(xiy), 14
 	lda	xde, (xiy+2)
-	.byte 0xb2, 0x02, 0x5f, 0x00
+	ldw	(xde), 95
 	lda	xhl, (xiy+4)
 	ld	wa, (xiy)
 	add	wa, 160
@@ -10516,9 +10519,9 @@ AccIll_Dispatch:
 	pushw 255
 	jr	100
 	lda	xiy, (xsp+58)
-	.byte 0xb5, 0x02, 0xae, 0x00
+	ldw	(xiy), 174
 	lda	xde, (xiy+2)
-	.byte 0xb2, 0x02, 0x5f, 0x00
+	ldw	(xde), 95
 	lda	xhl, (xiy+4)
 	ld	wa, (xiy)
 	add	wa, 160
