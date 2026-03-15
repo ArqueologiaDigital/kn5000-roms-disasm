@@ -1594,7 +1594,7 @@ DrawFunc_Init_Variant1:
 	jr	5
 	ld	xwa, 15380880
 	.ascii "89h#¿"
-	.byte 0x04
+	max
 	ldw	bc, 11
 	nop
 	cps	l, 2

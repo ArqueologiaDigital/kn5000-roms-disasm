@@ -1645,7 +1645,7 @@ DisplayMode_BatchEventSend:
 	ld	xbc, 31457339
 	lds32	xde, 0
 	call	16424280
-	.byte 0x0e
+	ret
 
 DisplayMode_RefreshState:
 	ld16_24 xwa, 0x021086

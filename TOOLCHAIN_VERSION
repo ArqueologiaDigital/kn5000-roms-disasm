@@ -7,7 +7,7 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 9d1fbffbf6a1 (9d1fbffbf6a1179993c2f93ca556c67bcc60ed3b)
-Date: 2026-03-15 21:16:19 +0000
-Subject: Add CP/AND/XOR/ADC/SBC prevbank register-register instructions
+Commit: b445964ec4b4 (b445964ec4b47cbe203cc8c62c040cd817c3af6b)
+Date: 2026-03-15 21:40:00 +0000
+Subject: Add NORMAL, MAX, JP16, and CALL16 instructions for TLCS-900
 Repository: /mnt/shared/llvm-project

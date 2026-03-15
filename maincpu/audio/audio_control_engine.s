@@ -8958,14 +8958,14 @@ VoiceMode_ParamConfigTables:
 	pop_sr
 	.byte 0xb3, 0x17
 	jrl	nc, -20476
-	.byte 0x01
+	normal
 	jrl	nc, 5892
 	nop
 	swi	7
 	nop
 	ldf	4
 	popw	wa
-	.byte 0x01
+	normal
 	ldf	8
 	jrl	nc, -255
 	swi	7
@@ -8977,7 +8977,7 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	reti
 	ldio	9, 10
 	pushw 1284
@@ -8990,7 +8990,7 @@ VoiceMode_ParamConfigTables:
 	ret
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	ldio	9, 10
 	pushw 1027
 	halt
@@ -9000,7 +9000,7 @@ VoiceMode_ParamConfigTables:
 	zcf
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	ldio	9, 10
 	pushw 1027
 	halt
@@ -9010,7 +9010,7 @@ VoiceMode_ParamConfigTables:
 	zcf
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	ldio	9, 10
 	pushw 1027
 	halt
@@ -9052,13 +9052,13 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	nop
 	nop
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	nop
-	.byte 0x04
+	max
 	popw	wa
-	.byte 0x01
+	normal
 	nop
 	halt
 	jrl	nc, 1
@@ -9070,14 +9070,14 @@ VoiceMode_ParamConfigTables:
 	nop
 	ldwio	255, 1
 	push 127
-	.byte 0x01
+	normal
 	ld	xix, 1140981507
-	.byte 0x04
+	max
 	swi	7
-	.byte 0x01
+	normal
 	ld	xix, 1140981509
 	ei	0xff
-	.byte 0x01
+	normal
 	ld	xix, 2902540039
 	nop
 	jrl	nc, -20991
@@ -9086,43 +9086,47 @@ VoiceMode_ParamConfigTables:
 	.fill 8, 1, 0xff
 	.byte 0xb4, 0x01
 	jrl	nc, -20218
-	.byte 0x01
+	normal
 	jrl	nc, -19965
-	.byte 0x01
+	normal
 	jrl	nc, -19708
-	.byte 0x01
+	normal
 	jrl	nc, 261
 	nop
 	swi	7
 	nop
-	.byte 0x01
+	normal
 	pop_sr
 	swi	7
-	.byte 0x01, 0x01, 0x04
+	normal
+	normal
+	max
 	popw	wa
-	.byte 0x01, 0x01
+	normal
+	normal
 	halt
 	jrl	nc, 257
 	reti
 	jrl	nc, 257
 	ldio	127, 1
-	.byte 0x01
+	normal
 	pushw 383
-	.byte 0x01
+	normal
 	ldwio	255, 257
 	push 127
-	.byte 0x01
+	normal
 	ld	xiy, 1157758723
-	.byte 0x04
+	max
 	swi	7
-	.byte 0x01
+	normal
 	ld	xiy, 1157758725
 	ei	0xff
-	.byte 0x01
+	normal
 	ld	xiy, 2902540039
-	.byte 0x01
+	normal
 	jrl	nc, -20991
-	.byte 0x01, 0x7f, 0x01
+	normal
+	.byte 0x7f, 0x01
 	.fill 8, 1, 0xff
 	ldw	(xix), 1663
 	ldw	(xbc), 895
@@ -9135,11 +9139,11 @@ VoiceMode_ParamConfigTables:
 	push_sr
 	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	push_sr
-	.byte 0x04
+	max
 	popw	wa
-	.byte 0x01
+	normal
 	push_sr
 	halt
 	jrl	nc, 513
@@ -9151,27 +9155,27 @@ VoiceMode_ParamConfigTables:
 	push_sr
 	ldwio	255, 513
 	push 127
-	.byte 0x01
+	normal
 	ld	xiz, 1174535939
-	.byte 0x04
+	max
 	swi	7
-	.byte 0x01
+	normal
 	ld	xiz, 1174535941
 	ei	0xff
-	.byte 0x01
+	normal
 	ld	xiz, 2902540039
-	.byte 0x02
+	push_sr
 	jrl	nc, -20991
 	push_sr
 	.byte 0x7f, 0x01
 	.fill 8, 1, 0xff
 	.byte 0xb4, 0x03
 	jrl	nc, -20218
-	.byte 0x03
+	pop_sr
 	jrl	nc, -19965
-	.byte 0x03
+	pop_sr
 	jrl	nc, -19708
-	.byte 0x03
+	pop_sr
 	jrl	nc, 773
 	nop
 	swi	7
@@ -9179,11 +9183,11 @@ VoiceMode_ParamConfigTables:
 	pop_sr
 	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	pop_sr
-	.byte 0x04
+	max
 	popw	wa
-	.byte 0x01
+	normal
 	pop_sr
 	halt
 	jrl	nc, 769
@@ -9195,8 +9199,11 @@ VoiceMode_ParamConfigTables:
 	pop_sr
 	ldwio	255, 769
 	push 127
-	.byte 0x01, 0xad, 0x03, 0x7f, 0x01, 0xae, 0x03, 0x7f
-	.byte 0x01
+	normal
+	.byte 0xad, 0x03, 0x7f
+	normal
+	.byte 0xae, 0x03, 0x7f
+	normal
 	swi	7
 	swi	7
 	swi	7
@@ -9207,33 +9214,39 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	.byte 0xb4, 0x04
 	jrl	nc, -20218
-	.byte 0x04
+	max
 	jrl	nc, -19965
-	.byte 0x04
+	max
 	jrl	nc, -19708
-	.byte 0x04
+	max
 	jrl	nc, 1029
 	nop
 	swi	7
 	nop
-	.byte 0x04
+	max
 	pop_sr
 	swi	7
-	.byte 0x01, 0x04, 0x04
+	normal
+	max
+	max
 	popw	wa
-	.byte 0x01, 0x04
+	normal
+	max
 	halt
 	jrl	nc, 1025
 	reti
 	jrl	nc, 1025
 	ldio	127, 1
-	.byte 0x04
+	max
 	pushw 383
-	.byte 0x04
+	max
 	ldwio	255, 1025
 	push 127
-	.byte 0x01, 0xad, 0x04, 0x7f, 0x01, 0xae, 0x04, 0x7f
-	.byte 0x01
+	normal
+	.byte 0xad, 0x04, 0x7f
+	normal
+	.byte 0xae, 0x04, 0x7f
+	normal
 	.fill 8, 1, 0xff
 	.byte 0xb4, 0x05
 	jrl	nc, -20218
@@ -9247,13 +9260,13 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	nop
 	halt
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	halt
-	.byte 0x04
+	max
 	popw	wa
-	.byte 0x01
+	normal
 	halt
 	halt
 	jrl	nc, 1281
@@ -9265,8 +9278,11 @@ VoiceMode_ParamConfigTables:
 	halt
 	ldwio	255, 1281
 	push 127
-	.byte 0x01, 0xad, 0x05, 0x7f, 0x01, 0xae, 0x05, 0x7f
-	.byte 0x01
+	normal
+	.byte 0xad, 0x05, 0x7f
+	normal
+	.byte 0xae, 0x05, 0x7f
+	normal
 	swi	7
 	swi	7
 	swi	7
@@ -9288,10 +9304,10 @@ VoiceMode_ParamConfigTables:
 	nop
 	ei	0x03
 	swi	7
-	.byte 0x01
+	normal
 	ei	0x04
 	popw	wa
-	.byte 0x01
+	normal
 	ei	0x05
 	jrl	nc, 1537
 	reti
@@ -9301,8 +9317,11 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 1537
 	ldwio	255, 1537
 	push 127
-	.byte 0x01, 0xad, 0x06, 0x7f, 0x01, 0xae, 0x06, 0x7f
-	.byte 0x01
+	normal
+	.byte 0xad, 0x06, 0x7f
+	normal
+	.byte 0xae, 0x06, 0x7f
+	normal
 	.fill 8, 1, 0xff
 	.byte 0xb4, 0x07
 	jrl	nc, -20218
@@ -9316,13 +9335,13 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	nop
 	reti
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	reti
-	.byte 0x04
+	max
 	popw	wa
-	.byte 0x01
+	normal
 	reti
 	halt
 	jrl	nc, 1793
@@ -9334,8 +9353,11 @@ VoiceMode_ParamConfigTables:
 	reti
 	ldwio	255, 1793
 	push 127
-	.byte 0x01, 0xad, 0x07, 0x7f, 0x01, 0xae, 0x07, 0x7f
-	.byte 0x01
+	normal
+	.byte 0xad, 0x07, 0x7f
+	normal
+	.byte 0xae, 0x07, 0x7f
+	normal
 	swi	7
 	swi	7
 	swi	7
@@ -9353,21 +9375,25 @@ VoiceMode_ParamConfigTables:
 	ldio	0, 255
 	nop
 	ldio	3, 255
-	.byte 0x01
+	normal
 	ldio	4, 72
-	.byte 0x01
+	normal
 	ldio	5, 127
-	.byte 0x01
+	normal
 	ldio	7, 127
-	.byte 0x01
+	normal
 	ldio	8, 127
-	.byte 0x01
+	normal
 	ldio	11, 127
-	.byte 0x01
+	normal
 	ldio	10, 255
-	.byte 0x01
+	normal
 	ldio	9, 127
-	.byte 0x01, 0xad, 0x08, 0x7f, 0x01, 0xae, 0x08, 0x7f, 0x01
+	normal
+	.byte 0xad, 0x08, 0x7f
+	normal
+	.byte 0xae, 0x08, 0x7f
+	normal
 	.fill 8, 1, 0xff
 	.byte 0xb4, 0x09
 	jrl	nc, -20218
@@ -9382,10 +9408,10 @@ VoiceMode_ParamConfigTables:
 	nop
 	push 3
 	swi	7
-	.byte 0x01
+	normal
 	push 4
 	popw	wa
-	.byte 0x01
+	normal
 	push 5
 	jrl	nc, 2305
 	reti
@@ -9395,8 +9421,11 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, 2305
 	ldwio	255, 2305
 	push 127
-	.byte 0x01, 0xad, 0x09, 0x7f, 0x01, 0xae, 0x09, 0x7f
-	.byte 0x01
+	normal
+	.byte 0xad, 0x09, 0x7f
+	normal
+	.byte 0xae, 0x09, 0x7f
+	normal
 	swi	7
 	swi	7
 	swi	7
@@ -9421,7 +9450,10 @@ VoiceMode_ParamConfigTables:
 	ldwio	11, 383
 	ldwio	10, 511
 	ldwio	9, 383
-	.byte 0xad, 0x0a, 0x7f, 0x01, 0xae, 0x0a, 0x7f, 0x01
+	.byte 0xad, 0x0a, 0x7f
+	normal
+	.byte 0xae, 0x0a, 0x7f
+	normal
 	.fill 8, 1, 0xff
 	.byte 0xb4, 0x0b
 	jrl	nc, -20218
@@ -9432,22 +9464,25 @@ VoiceMode_ParamConfigTables:
 	pushw 65280
 	nop
 	pushw 65283
-	.byte 0x01
+	normal
 	pushw 18436
-	.byte 0x01
+	normal
 	pushw 32517
-	.byte 0x01
+	normal
 	pushw 32519
-	.byte 0x01
+	normal
 	pushw 32520
-	.byte 0x01
+	normal
 	pushw 32523
-	.byte 0x01
+	normal
 	pushw 65290
-	.byte 0x01
+	normal
 	pushw 32521
-	.byte 0x01, 0xad, 0x0b, 0x7f, 0x01, 0xae, 0x0b, 0x7f
-	.byte 0x01
+	normal
+	.byte 0xad, 0x0b, 0x7f
+	normal
+	.byte 0xae, 0x0b, 0x7f
+	normal
 	swi	7
 	swi	7
 	swi	7
@@ -9468,13 +9503,13 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	nop
 	incf
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	incf
-	.byte 0x04
+	max
 	popw	wa
-	.byte 0x01
+	normal
 	incf
 	halt
 	jrl	nc, 3073
@@ -9486,8 +9521,11 @@ VoiceMode_ParamConfigTables:
 	incf
 	ldwio	255, 3073
 	push 127
-	.byte 0x01, 0xad, 0x0c, 0x7f, 0x01, 0xae, 0x0c, 0x7f
-	.byte 0x01
+	normal
+	.byte 0xad, 0x0c, 0x7f
+	normal
+	.byte 0xae, 0x0c, 0x7f
+	normal
 	.fill 8, 1, 0xff
 	.byte 0xb4, 0x0d
 	jrl	nc, -20218
@@ -9501,13 +9539,13 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	nop
 	decf
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	decf
-	.byte 0x04
+	max
 	popw	wa
-	.byte 0x01
+	normal
 	decf
 	halt
 	jrl	nc, 3329
@@ -9519,8 +9557,11 @@ VoiceMode_ParamConfigTables:
 	decf
 	ldwio	255, 3329
 	push 127
-	.byte 0x01, 0xad, 0x0d, 0x7f, 0x01, 0xae, 0x0d, 0x7f
-	.byte 0x01
+	normal
+	.byte 0xad, 0x0d, 0x7f
+	normal
+	.byte 0xae, 0x0d, 0x7f
+	normal
 	swi	7
 	swi	7
 	swi	7
@@ -9541,13 +9582,13 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	nop
 	ret
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	ret
-	.byte 0x04
+	max
 	popw	wa
-	.byte 0x01
+	normal
 	ret
 	halt
 	jrl	nc, 3585
@@ -9559,8 +9600,11 @@ VoiceMode_ParamConfigTables:
 	ret
 	ldwio	255, 3585
 	push 127
-	.byte 0x01, 0xad, 0x0e, 0x7f, 0x01, 0xae, 0x0e, 0x7f
-	.byte 0x01
+	normal
+	.byte 0xad, 0x0e, 0x7f
+	normal
+	.byte 0xae, 0x0e, 0x7f
+	normal
 	.fill 8, 1, 0xff
 	.byte 0xb3, 0x0f
 	jrl	nc, 3845
@@ -9568,41 +9612,45 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	nop
 	retd	0xff03
-	.byte 0x01
+	normal
 	retd	0x4804
-	.byte 0x01
+	normal
 	retd	0x7f05
-	.byte 0x01
+	normal
 	retd	0x7f07
-	.byte 0x01, 0xad, 0x0f, 0x7f, 0x01, 0xae, 0x0f, 0x7f, 0x01
+	normal
+	.byte 0xad, 0x0f, 0x7f
+	normal
+	.byte 0xae, 0x0f, 0x7f
+	normal
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	popw	wa
-	.byte 0x03
+	pop_sr
 	retd	0x9001
 	pop_sr
 	push_sr
-	.byte 0x01
+	normal
 	rcf
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	scf
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	ccf
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	zcf
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	push_a
 	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	swi	7
 	swi	7
 	swi	7
@@ -9622,9 +9670,11 @@ VoiceMode_ParamConfigTables:
 	.byte 0x30, 0x01
 	.fill 8, 1, 0xff
 	popw	wa
-	.byte 0x03
+	pop_sr
 	retd	0x4801
-	.byte 0x04, 0x50, 0x01
+	max
+	.byte 0x50
+	normal
 	popw	wa
 	nop
 	swi	7
@@ -9633,43 +9683,51 @@ VoiceMode_ParamConfigTables:
 	reti
 	ldw	wa, 18433
 	ldio	255, 2
-	.byte 0x90, 0x00, 0x1f, 0x01, 0x90, 0x01, 0x1f, 0x01
+	.byte 0x90, 0x00, 0x1f
+	normal
+	.byte 0x90, 0x01, 0x1f
+	normal
 	.byte 0x90, 0x03
 	push_sr
-	.byte 0x01
+	normal
 	jr	f, 1
 	.byte 0xc0, 0x01, 0x70
 	nop
 	reti
-	.byte 0x01
+	normal
 	jrl	f, -254
-	.byte 0x01
+	normal
 	and	wa, (xwa+11)
-	.byte 0x01, 0x98, 0x01, 0x7f, 0x01
+	normal
+	.byte 0x98, 0x01, 0x7f
+	normal
 	add	wa, (xwa+2)
-	.byte 0x01, 0x98, 0x03, 0x01, 0x01, 0xb0, 0x01
+	normal
+	.byte 0x98, 0x03, 0x01
+	normal
+	.byte 0xb0, 0x01
 	jrl	nc, 4101
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	scf
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	ccf
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	zcf
-	.byte 0x03
+	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	push_a
 	pop_sr
 	swi	7
-	.byte 0x01
+	normal
 	jrl	le, -253
-	.byte 0x01
+	normal
 	jrl	le, 32519
 	ei	0xff
 	swi	7
@@ -9724,11 +9782,11 @@ VoiceMode_ParamConfigTables:
 	cp	(xsp-61), d
 	nop
 	nop
-	.byte 0x03
+	pop_sr
 	swi	7
 	halt
 	nop
-	.byte 0x04
+	max
 	popw	wa
 	ei	0x00
 	halt
@@ -9742,10 +9800,10 @@ VoiceMode_ParamConfigTables:
 	ldwio	255, 6
 	push 127
 	ei	0x44
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x44
-	.byte 0x04
+	max
 	swi	7
 	ei	0x44
 	halt
@@ -9760,7 +9818,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, -20989
 	nop
 	jrl	nc, -26108
-	.byte 0x04
+	max
 	swi	7
 	ei	0x9a
 	halt
@@ -9797,11 +9855,12 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	.byte 0x06
 	.fill 8, 1, 0xff
-	.byte 0x01
+	normal
 	pop_sr
 	swi	7
 	halt
-	.byte 0x01, 0x04
+	normal
+	max
 	popw	wa
 	ei	0x01
 	halt
@@ -9809,16 +9868,16 @@ VoiceMode_ParamConfigTables:
 	reti
 	jrl	nc, 262
 	ldio	127, 6
-	.byte 0x01
+	normal
 	pushw 1663
-	.byte 0x01
+	normal
 	ldwio	255, 262
 	push 127
 	ei	0x45
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x45
-	.byte 0x04
+	max
 	swi	7
 	ei	0x45
 	halt
@@ -9829,11 +9888,11 @@ VoiceMode_ParamConfigTables:
 	reti
 	push	xsp
 	ei	0xad
-	.byte 0x01
+	normal
 	jrl	nc, -20989
-	.byte 0x01
+	normal
 	jrl	nc, -26108
-	.byte 0x04
+	max
 	swi	7
 	ei	0x9a
 	halt
@@ -9881,7 +9940,7 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	halt
 	push_sr
-	.byte 0x04
+	max
 	popw	wa
 	ei	0x02
 	halt
@@ -9895,10 +9954,10 @@ VoiceMode_ParamConfigTables:
 	ldwio	255, 518
 	push 127
 	ei	0x46
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x46
-	.byte 0x04
+	max
 	swi	7
 	ei	0x46
 	halt
@@ -9909,11 +9968,11 @@ VoiceMode_ParamConfigTables:
 	reti
 	push	xsp
 	ei	0xad
-	.byte 0x02
+	push_sr
 	jrl	nc, -20989
-	.byte 0x02
+	push_sr
 	jrl	nc, -26108
-	.byte 0x04
+	max
 	swi	7
 	ei	0x9a
 	halt
@@ -9955,7 +10014,7 @@ VoiceMode_ParamConfigTables:
 	swi	7
 	halt
 	pop_sr
-	.byte 0x04
+	max
 	popw	wa
 	ei	0x03
 	halt
@@ -9969,16 +10028,17 @@ VoiceMode_ParamConfigTables:
 	ldwio	255, 774
 	push 127
 	ei	0xad
-	.byte 0x03
+	pop_sr
 	jrl	nc, -20989
 	pop_sr
 	.byte 0x7f, 0x04
 	.fill 8, 1, 0xff
-	.byte 0x04
+	max
 	pop_sr
 	swi	7
 	halt
-	.byte 0x04, 0x04
+	max
+	max
 	popw	wa
 	ei	0x04
 	halt
@@ -9986,22 +10046,23 @@ VoiceMode_ParamConfigTables:
 	reti
 	jrl	nc, 1030
 	ldio	127, 6
-	.byte 0x04
+	max
 	pushw 1663
-	.byte 0x04
+	max
 	ldwio	255, 1030
 	push 127
 	ei	0xad
-	.byte 0x04
+	max
 	jrl	nc, -20989
-	.byte 0x04, 0x7f, 0x04
+	max
+	.byte 0x7f, 0x04
 	.fill 8, 1, 0xff
 	halt
-	.byte 0x03
+	pop_sr
 	swi	7
 	halt
 	halt
-	.byte 0x04
+	max
 	popw	wa
 	ei	0x05
 	halt
@@ -10038,14 +10099,15 @@ VoiceMode_ParamConfigTables:
 	ei	0xad
 	ei	0x7f
 	pop_sr
-	.byte 0xae, 0x06, 0x7f, 0x04
+	.byte 0xae, 0x06, 0x7f
+	max
 	.fill 8, 1, 0xff
 	reti
-	.byte 0x03
+	pop_sr
 	swi	7
 	halt
 	reti
-	.byte 0x04
+	max
 	popw	wa
 	ei	0x07
 	halt
@@ -10079,7 +10141,8 @@ VoiceMode_ParamConfigTables:
 	push 127
 	ei	0xad
 	ldio	127, 3
-	.byte 0xae, 0x08, 0x7f, 0x04
+	.byte 0xae, 0x08, 0x7f
+	max
 	.fill 8, 1, 0xff
 	push 3
 	swi	7
@@ -10099,7 +10162,8 @@ VoiceMode_ParamConfigTables:
 	ei	0xad
 	push 127
 	pop_sr
-	.byte 0xae, 0x09, 0x7f, 0x04
+	.byte 0xae, 0x09, 0x7f
+	max
 	.fill 8, 1, 0xff
 	ldwio	3, 1535
 	ldwio	4, 1608
@@ -10111,7 +10175,8 @@ VoiceMode_ParamConfigTables:
 	ldwio	9, 1663
 	.byte 0xad, 0x0a, 0x7f
 	pop_sr
-	.byte 0xae, 0x0a, 0x7f, 0x04
+	.byte 0xae, 0x0a, 0x7f
+	max
 	.fill 8, 1, 0xff
 	pushw 65283
 	halt
@@ -10128,14 +10193,15 @@ VoiceMode_ParamConfigTables:
 	push 127
 	ei	0xad
 	pushw 895
-	.byte 0xae, 0x0b, 0x7f, 0x04
+	.byte 0xae, 0x0b, 0x7f
+	max
 	.fill 8, 1, 0xff
 	incf
-	.byte 0x03
+	pop_sr
 	swi	7
 	halt
 	incf
-	.byte 0x04
+	max
 	popw	wa
 	ei	0x0c
 	halt
@@ -10155,11 +10221,11 @@ VoiceMode_ParamConfigTables:
 	.byte 0x7f, 0x04
 	.fill 8, 1, 0xff
 	decf
-	.byte 0x03
+	pop_sr
 	swi	7
 	halt
 	decf
-	.byte 0x04
+	max
 	popw	wa
 	ei	0x0d
 	halt
@@ -10179,11 +10245,11 @@ VoiceMode_ParamConfigTables:
 	.byte 0x7f, 0x04
 	.fill 8, 1, 0xff
 	ret
-	.byte 0x03
+	pop_sr
 	swi	7
 	halt
 	ret
-	.byte 0x04
+	max
 	popw	wa
 	ei	0x0e
 	halt
@@ -10211,42 +10277,43 @@ VoiceMode_ParamConfigTables:
 	reti
 	jrl	nc, -21242
 	retd	0x037f
-	.byte 0xae, 0x0f, 0x7f, 0x04
+	.byte 0xae, 0x0f, 0x7f
+	max
 	.fill 8, 1, 0xff
 	popw	wa
 	halt
 	swi	4
-	.byte 0x01
+	normal
 	popw	wa
 	ei	0xfc
-	.byte 0x01
+	normal
 	.fill 8, 1, 0xff
 	popw	wa
 	halt
 	swi	4
-	.byte 0x01
+	normal
 	popw	wa
 	ei	0xfc
-	.byte 0x01
+	normal
 	popw	wa
-	.byte 0x03
+	pop_sr
 	retd	0x9000
 	pop_sr
 	push_sr
 	ei	0x10
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x11
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x12
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x13
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x14
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0xff
 	swi	7
@@ -10259,10 +10326,10 @@ VoiceMode_ParamConfigTables:
 	popw	wa
 	halt
 	swi	4
-	.byte 0x01
+	normal
 	popw	wa
 	ei	0xfc
-	.byte 0x01
+	normal
 	popw	wa
 	reti
 	.byte 0x30, 0x06
@@ -10270,30 +10337,33 @@ VoiceMode_ParamConfigTables:
 	popw	wa
 	halt
 	swi	4
-	.byte 0x01
+	normal
 	popw	wa
 	ei	0xfc
-	.byte 0x01
+	normal
 	popw	wa
-	.byte 0x03
+	pop_sr
 	retd	0x4800
-	.byte 0x04, 0x50
+	max
+	.byte 0x50
 	ei	0x48
 	reti
 	ldw	wa, 36870
 	nop
 	.byte 0x1f
 	ei	0x90
-	.byte 0x01, 0x1f
+	normal
+	.byte 0x1f
 	ei	0x90
 	pop_sr
 	push_sr
 	ei	0x60
-	.byte 0x01, 0xc0, 0x06, 0x70
+	normal
+	.byte 0xc0, 0x06, 0x70
 	nop
 	reti
 	ei	0x70
-	.byte 0x02
+	push_sr
 	swi	7
 	ei	0x98
 	pushw 1728
@@ -10302,22 +10372,22 @@ VoiceMode_ParamConfigTables:
 	push_sr
 	.byte 0x80, 0x06, 0x98, 0x03, 0x01
 	ei	0x10
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x11
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x12
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x13
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x14
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x72
-	.byte 0x03
+	pop_sr
 	swi	7
 	ei	0x72
 	reti
@@ -10358,7 +10428,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, -19712
 	rcf
 	jrl	nc, 4098
-	.byte 0x04
+	max
 	ldio	3, 16
 	ldio	127, 4
 	swi	7
@@ -10375,7 +10445,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, -19712
 	scf
 	jrl	nc, 4354
-	.byte 0x04
+	max
 	ldio	3, 17
 	ldio	127, 4
 	.fill 8, 1, 0xff
@@ -10385,7 +10455,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, -19712
 	ccf
 	jrl	nc, 4610
-	.byte 0x04
+	max
 	ldio	3, 18
 	ldio	127, 4
 	swi	7
@@ -10402,7 +10472,7 @@ VoiceMode_ParamConfigTables:
 	jrl	nc, -19712
 	zcf
 	jrl	nc, 4866
-	.byte 0x04
+	max
 	ldio	3, 19
 	ldio	127, 4
 	.fill 8, 1, 0xff
@@ -11193,10 +11263,10 @@ MidiStream_ExtendedDispatch:
 	jr	nc, 16
 	cp	c, 15
 	jr	z, 15
-	.byte 0x14
+	push_a
 	ldda8	a, 14235
 	and	a, 31
-	.byte 0x15
+	pop_a
 	jr	nz, 4
 	.byte 0xf1, 0xfa
 	sbc	(xwa), bc

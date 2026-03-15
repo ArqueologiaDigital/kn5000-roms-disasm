@@ -383,7 +383,7 @@ Str_AreYouSure_IT:	aligned_string "Italian"
 	swi	7
 	aligned_string "SIND SIE SICHER?"
 	aligned_string "Are You Sure?"
-	.byte 0x04
+	max
 	ldwio	237, 36352
 	push 237
 	nop
@@ -443,7 +443,7 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	.zero 8
 	.byte 0xf1, 0x01, 0xf1, 0x01
 	stdi8	22785, 101
-	.byte 0x01
+	normal
 	pop xbc
 	nop
 	.byte 0x65, 0x01
@@ -494,7 +494,7 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	nop
 	nop
 	pop xiz
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
@@ -581,9 +581,10 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	nop
 	.byte 0x6a, 0x00
 	ret
-	.byte 0x01, 0x6a, 0x00
+	normal
+	.byte 0x6a, 0x00
 	ret
-	.byte 0x01
+	normal
 	push_sr
 	push_sr
 	.byte 0xda, 0x01, 0xda, 0x01
@@ -734,11 +735,11 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	pushw bc
 	nop
 	nop
-	.byte 0x01
+	normal
 	pushw bc
 	nop
 	nop
-	.byte 0x04
+	max
 	pushw bc
 	nop
 	nop
@@ -816,7 +817,10 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	nop
 	swi	2
 	nop
-	.byte 0xd5, 0x00, 0x79, 0x01, 0xd5, 0x00, 0x79, 0x01
+	.byte 0xd5, 0x00, 0x79
+	normal
+	.byte 0xd5, 0x00, 0x79
+	normal
 	.byte 0x6d, 0x02, 0x45, 0x02, 0x45, 0x02
 ParamStr_Table_03:
 	.long FadeTimeStr_Off
@@ -914,12 +918,13 @@ FadeTimeStr_Off:	aligned_string "  OFF  "
 	ldb	e, 100
 	push xde
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0x0a, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x04, 0x00
-	.byte 0x0a, 0x00, 0x0d, 0x00, 0x01
+	.byte 0x0a, 0x00, 0x0d, 0x00
+	normal
 	nop
 	nop
 	nop
@@ -989,14 +994,15 @@ VariationStr_V1:
 	push xiz
 	nop
 	pushw iz
-	.byte 0x01
+	normal
 	pop xiy
 	nop
 	push_sr
 	nop
 	.byte 0x62, 0x00
 	push xix
-	.byte 0x01, 0x81, 0x00
+	normal
+	.byte 0x81, 0x00
 	push_sr
 	nop
 	.long NakaInst_Param_EmptyStr
@@ -1057,7 +1063,7 @@ TransposeNoteStr_C:
 	.byte 0xae, 0x00, 0xdd
 	nop
 	pushw 14593
-	.byte 0x01
+	normal
 	aligned_string "DEFAULT"
 	ldb	w, 0x55
 	aligned_string "SER  "
@@ -1283,7 +1289,8 @@ KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20
 	.byte 0xa4, 0x7e
 	swi	3
 	nop
-	.byte 0xd1, 0x7e, 0xfb, 0x00, 0x01
+	.byte 0xd1, 0x7e, 0xfb, 0x00
+	normal
 	cpdm32	251, xwa
 	.byte 0xcc, 0xfb
 	nop
@@ -1885,7 +1892,8 @@ MethodNameStr_MT_GetSndName:	aligned_string "MT_GetSndName"
 MethodNameStr_MT_SvariSet:	aligned_string "MT_SvariSet"
 MethodNameStr_MT_SvariIni:	aligned_string "MT_SvariIni"
 	aligned_string "MT_VariWrite"
-	.byte 0x1a, 0x00, 0x62, 0xcd, 0xfb
+	jp16	25088
+	.byte 0xcd, 0xfb
 	nop
 	.byte 0xe7, 0xe1, 0xfb
 	nop
@@ -2049,20 +2057,22 @@ NakaInstTable8_NullTerm:
 	stib_dpi 0x00, 0x00
 	nop
 	nop
-	.byte 0x04, 0xf4, 0x03, 0x00, 0x08, 0xf4, 0x03, 0x00
-	.byte 0x3c
+	max
+	.byte 0xf4, 0x03, 0x00, 0x08, 0xf4, 0x03, 0x00, 0x3c
 	nop
 	.byte 0x60, 0x01
 	push_f
 	nop
 	swi	7
 	swi	7
-	.byte 0x1a, 0x00, 0xff
+	jp16	65280
 	swi	7
 	ldio	0, 21
-	.byte 0x01, 0x80, 0x00
+	normal
+	.byte 0x80, 0x00
 	push xhl
-	.byte 0x01, 0xeb, 0x00
+	normal
+	.byte 0xeb, 0x00
 	reti
 	nop
 	cpdm8	65280, l
@@ -2082,11 +2092,12 @@ NakaInstTable8_NullTerm:
 	nop
 	.byte 0x80, 0x00
 	push_a
-	.byte 0x01, 0xeb, 0x00
+	normal
+	.byte 0xeb, 0x00
 	reti
 	nop
 	cpdm8	65280, l
-	.byte 0x01
+	normal
 	nop
 	ei	0
 	push xix
@@ -2096,7 +2107,7 @@ NakaInstTable8_NullTerm:
 	nop
 	swi	7
 	swi	7
-	.byte 0x1c, 0x00, 0x1a
+	call16	6656
 	nop
 	ldio	0, 199
 	nop
@@ -2126,7 +2137,7 @@ NakaInstTable8_NullTerm:
 	cpdm8	65280, l
 	zcf
 	nop
-	.byte 0x04
+	max
 	nop
 	push xix
 	nop
@@ -2189,7 +2200,7 @@ NakaInstTable8_NullTerm:
 	cpdm8	65280, l
 	ccf
 	nop
-	.byte 0x01
+	normal
 	nop
 	push xix
 	nop
@@ -2216,7 +2227,7 @@ NakaInstTable8_NullTerm:
 	nop
 	nop
 	ldw	iy, 24576
-	.byte 0x01
+	normal
 	swi	7
 	swi	7
 	ldb	b, 0
@@ -2226,8 +2237,9 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ldio	0, 0
 	nop
-	.byte 0x7f, 0x00, 0x3f, 0x01, 0xef, 0x00, 0xf5, 0x00
-	.byte 0x00, 0x00
+	.byte 0x7f, 0x00, 0x3f
+	normal
+	.byte 0xef, 0x00, 0xf5, 0x00, 0x00, 0x00
 	nop
 	nop
 	incf
@@ -2344,9 +2356,9 @@ NakaInstTable8_NullTerm:
 	reti
 	nop
 	cpdm8	65280, l
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	push xix
 	nop
@@ -2408,9 +2420,9 @@ NakaInstTable8_NullTerm:
 	reti
 	nop
 	cpdm8	65280, l
-	.byte 0x04
+	max
 	nop
-	.byte 0x04
+	max
 	nop
 	push xix
 	nop
@@ -2446,7 +2458,8 @@ NakaInstTable8_NullTerm:
 	nop
 	.byte 0x80, 0x00
 	push_a
-	.byte 0x01, 0xeb, 0x00
+	normal
+	.byte 0xeb, 0x00
 	reti
 	nop
 	cpdm8	65280, l
@@ -2463,9 +2476,11 @@ NakaInstTable8_NullTerm:
 	pushw iz
 	nop
 	ldio	0, 21
-	.byte 0x01, 0x80, 0x00
+	normal
+	.byte 0x80, 0x00
 	push xhl
-	.byte 0x01, 0xeb, 0x00
+	normal
+	.byte 0xeb, 0x00
 	reti
 	nop
 	cpdm8	65280, l
@@ -2474,7 +2489,7 @@ NakaInstTable8_NullTerm:
 	reti
 	nop
 	ldw	iy, 24576
-	.byte 0x01
+	normal
 	swi	7
 	swi	7
 	ldw	bc, 65280
@@ -2483,11 +2498,12 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ldio	0, 0
 	nop
-	.byte 0x7f, 0x00, 0x3f, 0x01, 0xef, 0x00, 0xf5, 0x00
-	.byte 0x00, 0x00
+	.byte 0x7f, 0x00, 0x3f
+	normal
+	.byte 0xef, 0x00, 0xf5, 0x00, 0x00, 0x00
 	nop
 	nop
-	.byte 0x1c, 0xf4, 0x03
+	call16	1012
 	nop
 	ldb	w, 244
 	pop_sr
@@ -2679,7 +2695,9 @@ ErrorDialog_RecoveryLine1:
 	nop
 	ldio	0, 46
 	nop
-	.byte 0xae, 0x00, 0x09, 0x01, 0xb8, 0x00
+	.byte 0xae, 0x00, 0x09
+	normal
+	.byte 0xb8, 0x00
 	.long Str_ErrorDialog_TryTurningOff
 	.byte 0x03, 0x00, 0x00, 0x00	; String flags
 	.byte 0x00, 0x00	; Text attributes
@@ -3661,7 +3679,7 @@ Naka_ToshiParam_Table:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop

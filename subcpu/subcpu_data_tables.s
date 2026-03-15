@@ -669,10 +669,10 @@ PitchDetune_OffsetTable:
 	swi	6
 	swi	7
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	6
 	reti
@@ -688,7 +688,9 @@ PitchDetune_OffsetTable:
 	ex_ff
 	ldf	24
 	pop_f
-	.byte 0x1a, 0x1b, 0x1c, 0x1c, 0x1d, 0x1e, 0x1f, 0x20
+	jp16	7195
+	call16	7709
+	.byte 0x1f, 0x20
 	.ascii "!\"#$%&''()*+,-./01223456789:;<==>?@ABCDEFGHHIJKLMNOPQRSSTUVWXYZ[\\]^^_`abcdefghiijklmnopqrsttuvwxyz{|}~"
 	.byte 0x7f, 0x7f
 	.byte 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87
@@ -851,7 +853,7 @@ PitchDetune_OffsetTable:
 	swi	6
 	swi	6
 	swi	7
-	.byte 0x01
+	normal
 	pop xhl
 	pop xsp
 	.byte 0x62
@@ -1869,7 +1871,7 @@ Audio_DSP_StateTable_Packed:
 	.byte 0x6c, 0x95
 	nop
 	nop
-	.byte 0x1c, 0xa0, 0x00
+	call16	160
 	nop
 	.byte 0x8f, 0xab, 0x00
 	nop
@@ -1887,24 +1889,25 @@ Audio_DSP_StateTable_Packed:
 	nop
 	push xiy
 	ex_ff
-	.byte 0x01
+	normal
 	nop
 	ldb	c, 42
-	.byte 0x01
+	normal
 	nop
 	.byte 0x76, 0x3f, 0x01
 	nop
 	popw sp
-	.byte 0x56, 0x01
+	.byte 0x56
+	normal
 	nop
 	dec	6, b
-	.byte 0x01
+	normal
 	nop
 	ei	137
-	.byte 0x01
+	normal
 	nop
 	ldb	b, 165
-	.byte 0x01
+	normal
 	nop
 	ld	xwa, 2248147395
 	.byte 0xe3, 0x01, 0x00, 0x1b, 0x06
@@ -1934,13 +1937,13 @@ Audio_DSP_StateTable_Packed:
 	push 4
 	nop
 	ld	(xbc), hl
-	.byte 0x04
+	max
 	nop
 	sub	xde, xde
-	.byte 0x04
+	max
 	nop
 	cp	l, e
-	.byte 0x04
+	max
 	nop
 	.byte 0xc3, 0x52, 0x05
 	nop
@@ -2069,7 +2072,8 @@ Audio_DSP_StateTable_Packed:
 	nop
 	.byte 0x37, 0x58, 0x58
 	nop
-	.byte 0x04, 0x67, 0x5a
+	max
+	.byte 0x67, 0x5a
 	nop
 	nop
 	nop
@@ -2145,7 +2149,7 @@ Audio_DSP_StateTable_Packed:
 	nop
 	.byte 0x79, 0x13, 0x10
 	nop
-	.byte 0x1a, 0xa4, 0x10
+	jp16	4260
 	nop
 	.byte 0xcf, 0x39
 	scf
@@ -2170,9 +2174,11 @@ Audio_DSP_StateTable_Packed:
 	nop
 	.byte 0xec, 0x2f, 0x19
 	nop
-	.byte 0x84, 0x12, 0x1a, 0x00, 0x13
+	.byte 0x84, 0x12
+	jp16	4864
 	swi	5
-	.byte 0x1a, 0x00, 0xe0, 0xef, 0x1b
+	jp16	57344
+	.byte 0xef, 0x1b
 	nop
 	ldw	iy, 7403
 	nop
@@ -2291,17 +2297,20 @@ Audio_DSP_StateTable_Packed:
 	nop
 	zcf
 	pop_a
-	.byte 0x04
+	max
 	nop
-	.byte 0x95, 0x34, 0x04
+	.byte 0x95, 0x34
+	max
 	nop
 	pushw 1109
 	nop
 	.byte 0x7a, 0x76, 0x04
 	nop
-	.byte 0xec, 0x98, 0x04
+	.byte 0xec, 0x98
+	max
 	nop
-	.byte 0x68, 0xbc, 0x04
+	.byte 0x68, 0xbc
+	max
 	nop
 	.byte 0xf5, 0xe0, 0x04
 	nop
@@ -2355,7 +2364,7 @@ Audio_DSP_StateTable_Packed:
 	popw de
 	.byte 0xd6
 	ldio	0, 127
-	.byte 0x1a, 0x09, 0x00
+	jp16	9
 	ld8_24	c, 2400
 	.byte 0xa9, 0x09, 0x00, 0xb3, 0xf3
 	push 0
@@ -2426,9 +2435,10 @@ Audio_DSP_StateTable_Packed:
 	pop xiz
 	.byte 0x52
 	jp	2440448
-	.byte 0x1c, 0x00, 0x78
+	call16	30720
 	swi	6
-	.byte 0x1c, 0x00, 0x40, 0xde, 0x1d
+	call16	16384
+	.byte 0xde, 0x1d
 	nop
 	.byte 0xc6, 0xc4, 0x1e, 0x00
 	ld	xwa, 3808436146
@@ -2528,7 +2538,8 @@ Audio_DSP_StateTable_Packed:
 	.byte 0x63, 0x07
 	nop
 	push xiy
-	.byte 0x9b, 0x07, 0x00, 0x1a, 0xd4, 0x07
+	.byte 0x9b, 0x07, 0x00
+	jp16	2004
 	nop
 	.byte 0x9f, 0x0e, 0x08
 	nop
@@ -2542,7 +2553,7 @@ Audio_DSP_StateTable_Packed:
 	push 0
 	.byte 0x6e, 0x93
 	push 0
-	.byte 0x04
+	max
 	muls	hl, 45056
 	ldb	d, 10
 	nop
@@ -2620,13 +2631,15 @@ Audio_DSP_StateTable_Packed:
 	nop
 	decf
 	push xbc
-	.byte 0x1a, 0x00, 0x13
+	jp16	4864
 	swi	5
-	.byte 0x1a, 0x00, 0xd3, 0xc6
+	jp16	54016
+	.byte 0xc6
 	jp	9860608
-	.byte 0x1c, 0x00, 0x2a, 0x6c, 0x1d
+	call16	10752
+	.byte 0x6c, 0x1d
 	nop
-	.byte 0x1c, 0x48, 0x1e
+	call16	7752
 	nop
 	.byte 0x79, 0x2a, 0x1f
 	nop
@@ -2708,7 +2721,8 @@ Audio_DSP_StateTable_Packed:
 	nop
 	.byte 0x66, 0xd6, 0x57
 	nop
-	.byte 0x04, 0x67, 0x5a
+	max
+	.byte 0x67, 0x5a
 	nop
 	div	e, 93
 	nop
@@ -2767,11 +2781,11 @@ Audio_DSP_StateTable_Packed:
 	ldio	1, 0
 	nop
 	pushw wa
-	.byte 0x01
+	normal
 	nop
 	nop
 	popw iy
-	.byte 0x01
+	normal
 	nop
 	nop
 	.byte 0x75, 0x01, 0x00
@@ -2779,7 +2793,8 @@ Audio_DSP_StateTable_Packed:
 	.byte 0xa3, 0x01
 	nop
 	nop
-	.byte 0xd6, 0x01
+	.byte 0xd6
+	normal
 	nop
 	nop
 	rcf
@@ -2896,7 +2911,7 @@ Audio_DSP_StateTable_Packed:
 	.byte 0xe7, 0x46, 0x01
 	nop
 	dec	6, b
-	.byte 0x01
+	normal
 	nop
 	.byte 0x8c, 0x9b, 0x01
 	nop
@@ -2973,7 +2988,8 @@ Audio_DSP_StateTable_Packed:
 	push xix
 	.byte 0x92, 0x50
 	nop
-	.byte 0x04, 0x67, 0x5a
+	max
+	.byte 0x67, 0x5a
 	nop
 	ld	xix, 4226247819
 	.byte 0xa9, 0xe1, 0x3f
@@ -3173,7 +3189,7 @@ Audio_DSP_StateTable_Packed:
 	nop
 	nop
 	nop
-	.byte 0x1c, 0xc0, 0x00
+	call16	192
 	nop
 	nop
 	nop
@@ -3766,15 +3782,17 @@ Audio_DSP_StateTable_Packed:
 	nop
 	push xde
 	ld	xhl, 3786932471
-	.byte 0x1c, 0x01, 0x6a
+	call16	27137
 	push xbc
 	popw wa
-	.byte 0x01
+	normal
 	push xix
 	pushw bc
 	.byte 0x7a, 0x01, 0x04
 	resm	3, (xde)
-	.byte 0x01, 0xac, 0xfb, 0xf5, 0x01
+	normal
+	.byte 0xac, 0xfb, 0xf5
+	normal
 	ldb	w, 91
 	ld	xde, 2589536258
 	push_sr
@@ -3852,7 +3870,9 @@ Audio_DSP_StateTable_Packed:
 	push xsp
 	.byte 0x53
 	jp	3426784
-	.byte 0x1c, 0x60, 0x91, 0x1c, 0x1d, 0xc0, 0x51
+	call16	37216
+	call16	49181
+	.byte 0x51
 	incf
 	.byte 0x1e, 0xa0, 0xc8
 	pop_sr
@@ -3861,7 +3881,8 @@ Audio_DSP_StateTable_Packed:
 	ldb	w, 0
 	div	de, 49185
 	swi	1
-	.byte 0x1a, 0x22, 0x80, 0xda, 0x33, 0x23
+	jp16	32802
+	.byte 0xda, 0x33, 0x23
 	and	d, (xwa)
 	.byte 0x55
 	ldb	d, 64
@@ -10282,11 +10303,12 @@ ToneGen_WorkArea:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0xc0, 0xff, 0xff
 	swi	7
-	.byte 0xdf, 0xc1, 0x01
+	.byte 0xdf, 0xc1
+	normal
 	nop
 	.byte 0xc0, 0xff, 0xff
 	swi	7

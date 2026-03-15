@@ -249,8 +249,14 @@ def translate_unidasm_to_llvm(mnemonic):
     mnem = mnemonic.strip()
 
     # Skip known untranslatable patterns
-    if mnem.startswith('db') or mnem == 'max' or mnem == 'normal':
+    if mnem.startswith('db'):
         return None
+
+    # NORMAL and MAX — single-byte CPU mode instructions
+    if mnem == 'normal':
+        return 'normal'
+    if mnem == 'max':
+        return 'max'
 
     # ── ERP bank register operations (C7 prefix) ──
     # Pattern: "ld REG8, BANK_REG" → ldto_berp reg8, bank_idx
@@ -409,6 +415,23 @@ def translate_unidasm_to_llvm(mnemonic):
     if m:
         val = int(m.group(1), 16)
         return [f'push {val}', f'pushw {val}']
+
+    # ── JP/CALL to absolute numeric address — try both 16-bit and 24-bit forms ──
+    m = re.match(r'^jp\s+(0x[0-9a-fA-F]+)$', mnem)
+    if m:
+        addr = int(m.group(1), 16)
+        forms = [f'jp\t{addr}']
+        if addr <= 0xFFFF:
+            forms.append(f'jp16\t{addr}')
+        return forms
+
+    m = re.match(r'^call\s+(0x[0-9a-fA-F]+)$', mnem)
+    if m:
+        addr = int(m.group(1), 16)
+        forms = [f'call\t{addr}']
+        if addr <= 0xFFFF:
+            forms.append(f'call16\t{addr}')
+        return forms
 
     # ── Call T,XRR — unconditional call to register-indirect ──
     # "call T,XHL" → "call (xhl)" (T = always true, implicit)
@@ -1251,7 +1274,11 @@ def main():
         rel = fpath.relative_to(REPO_ROOT)
 
         for file_path, start_line, end_line, raw_bytes in blocks:
-            if len(raw_bytes) < 2:
+            # Skip single-byte blocks unless they're known 1-byte instructions
+            SINGLE_BYTE_INSTRS = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05,
+                                  0x06, 0x0E, 0x10, 0x11, 0x12, 0x13,
+                                  0x14, 0x15, 0x16, 0x18, 0x19}
+            if len(raw_bytes) < 2 and raw_bytes[0] not in SINGLE_BYTE_INSTRS:
                 data_blocks += 1
                 continue
 
@@ -1270,7 +1297,7 @@ def main():
             block_instructions = []
 
             for offset, length, mnem in decoded:
-                if mnem.startswith('db') or mnem == 'max' or mnem == 'normal':
+                if mnem.startswith('db'):
                     block_free = False
                     failure_categories['unidasm_failed'] += 1
                     continue

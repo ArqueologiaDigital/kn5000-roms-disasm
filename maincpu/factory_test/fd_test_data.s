@@ -33,7 +33,7 @@ FDTest_DiagList_NG:
 	swi	7
 	pop_sr
 	nop
-	.byte 0x01
+	normal
 	nop
 	ldio	0, 8
 	nop
@@ -48,13 +48,13 @@ FDTest_DiagList_NG:
 	nop
 	swi	1
 	nop
-	.byte 0x01
+	normal
 	nop
 	pop_sr
 	nop
 	swi	7
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0xc0, 0xdc, 0x03
 	nop
@@ -69,7 +69,7 @@ FDTest_DiagList_OK:
 	nop
 	swi	7
 	swi	7
-	.byte 0x04
+	max
 	nop
 	push_sr
 	nop
@@ -87,13 +87,13 @@ FDTest_DiagList_OK:
 	nop
 	push_sr
 	nop
-	.byte 0x01
+	normal
 	nop
 	pop_sr
 	nop
 	swi	7
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0xc2, 0xdc, 0x03, 0x00, 0x03
 	nop
@@ -113,7 +113,7 @@ FDTest_Panel_Param:
 	ei	0
 	reti
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 84
 	nop
@@ -169,7 +169,7 @@ FDTest_Panel_SubElements:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 FDTest_Group_OnOff:
 
@@ -320,7 +320,8 @@ FDTest_Container_DebugHDAE2:
 	nop
 	nop
 	push xsp
-	.byte 0x01, 0xef, 0x00
+	normal
+	.byte 0xef, 0x00
 	swi	7
 	nop
 	nop

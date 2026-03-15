@@ -173,7 +173,7 @@ SMF_PopReturn:
 SMF_HeaderConstants:
 	nop
 	swi	7
-	.byte 0x03
+	pop_sr
 	rcf
 	.asciz "MThd"
 	.byte 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01
@@ -1232,7 +1232,7 @@ SMF_EventLoop_Return:
 SMF_PartAssignTable:
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	pushw 2312
 	ldwio	3, 1284
 	ei	0x07
@@ -1852,10 +1852,10 @@ SMF_Translate_Return:
 
 SMF_ChannelTranslationTable:
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	9, 10
@@ -3205,10 +3205,10 @@ SMF_SlotParam_RPNDone:
 
 SMF_SlotParam_RPNReturn:
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	9, 10
@@ -3228,10 +3228,10 @@ SMF_SlotParam_RPNReturn:
 	pop_a
 	ex_ff
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	9, 10

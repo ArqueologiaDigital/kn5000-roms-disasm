@@ -932,7 +932,7 @@ OFFSETS_FCF90C:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	push_sr
 	pop_sr

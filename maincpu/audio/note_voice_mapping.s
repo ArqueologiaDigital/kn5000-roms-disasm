@@ -15373,7 +15373,7 @@ NullRet2_Block:
 NullRet2_Data:
 	nop
 	incf
-	.byte 0x18
+	push_f
 	ldb	d, 0
 	.byte 0xdc, 0xe8, 0xf4
 
@@ -15519,17 +15519,19 @@ __jrt_nop_FE9709_LoadReg5:
 	ret
 
 __jrt_nop_FE9709_Data:
-	.byte 0x01
+	normal
 	push_sr
-	.byte 0x01
+	normal
 	push_sr
-	.byte 0x01, 0x01
+	normal
+	normal
 	push_sr
-	.byte 0x01
+	normal
 	push_sr
-	.byte 0x01
+	normal
 	push_sr
-	.byte 0x01, 0x01
+	normal
+	normal
 	push_sr
 	halt
 	.byte 0x06
@@ -16724,42 +16726,43 @@ __jrt_nop_FEA344_Data:
 	.byte 0x04, 0x04, 0x04, 0x04, 0x03, 0x04, 0x04, 0x03
 	.fill 8, 1, 0x04
 	.fill 8, 1, 0x04
-	.byte 0x04, 0x04
+	max
+	max
 	nop
-	.byte 0x04
+	max
 	reti
 	nop
 	nop
-	.byte 0x04
+	max
 	reti
 	ldwio	0, 1796
 	pushw 1024
 	ldio	0, 0
-	.byte 0x03
+	pop_sr
 	reti
 	nop
 	nop
-	.byte 0x03
+	pop_sr
 	reti
 	ldwio	0, 1539
 	push 0
 	pop_sr
 	ei	0x0a
 	nop
-	.byte 0x03
+	pop_sr
 	reti
 	pushw 1280
 	reti
 	ldwio	0, 1796
 	push 0
-	.byte 0x04
+	max
 	ldio	10, 0
-	.byte 0x04
+	max
 	ei	0x00
 	nop
-	.byte 0x04
+	max
 	ei	0x0a
-	.byte 0x04
+	max
 	reti
 	ldwio	2, 1796
 	ldwio	1, 1796
@@ -16767,36 +16770,36 @@ __jrt_nop_FEA344_Data:
 	reti
 	push 2
 	nop
-	.byte 0x03
+	pop_sr
 	reti
 	push 0
 	pop_sr
 	ei	0x00
-	.byte 0x03
+	pop_sr
 	reti
 	ldwio	2, 2307
-	.byte 0x02
+	push_sr
 	reti
 	nop
 	halt
 	reti
 	nop
-	.byte 0x04
+	max
 	reti
 	ldwio	3, 1024
 	ei	0x0b
 	nop
-	.byte 0x04
+	max
 	ldio	11, 0
-	.byte 0x03
+	pop_sr
 	ei	0x0b
 	nop
-	.byte 0x04
+	max
 	push 10
 	nop
-	.byte 0x04
+	max
 	ldio	10, 0
-	.byte 0x04
+	max
 	push 10
 	nop
 	nop
@@ -16812,18 +16815,18 @@ __jrt_nop_FEA344_Data:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	reti
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x03
+	pop_sr
 	reti
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	9, 10
@@ -16837,36 +16840,36 @@ __jrt_nop_FEA344_Data:
 	ex_ff
 	ldf	24
 	pop_f
-	.byte 0x1a, 0x1b, 0x1c
+	jp16	7195
 	call	2105118
 	.byte 0x21
 	.asciz "\"#$%&'()* "
 	ld	xwa, 0x00008000
-	.byte 0x01
+	normal
 	nop
 	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	1, 0
 	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 32768
-	.byte 0x01
+	normal
 	nop
 	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	1, 0
 	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
@@ -16880,21 +16883,21 @@ __jrt_nop_FEA344_LoadReg:
 	ret
 
 __jrt_nop_FEA344_Data2:
-	.byte 0x01
+	normal
 	nop
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 32768
-	.byte 0x01
+	normal
 	nop
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
@@ -25848,7 +25851,7 @@ SendPartDataBlock_Block9:
 	ret
 	st16_24	246016, wa
 	lds	hl, 0
-	.byte 0x0e
+	ret
 
 SendPartDataBlock_InitVal:
 	lds hl, 0
@@ -26523,7 +26526,7 @@ SendPartDataBlock_Data2:
 	ld	a, (xde+15)
 	.byte 0xc9, 0xee
 SendPartDataBlock_Data3:
-	.byte 0x01
+	normal
 	ld	(xbc+43), a
 	ld	a, (xde+16)
 	sla	a, 1

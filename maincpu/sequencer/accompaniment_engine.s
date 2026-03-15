@@ -74,7 +74,7 @@ AccStyle_LookupTempo_AddAndStore:
 AccStyle_TempoMultiplierTable:
 	nop
 	nop
-	.byte 0x14
+	push_a
 	nop
 	pushw	wa
 	nop
@@ -88,9 +88,10 @@ AccStyle_TempoMultiplierTable:
 	.byte 0xa0, 0x00
 	ld	(xix), 200
 	nop
-	.byte 0xdc, 0x00, 0xf0, 0x00, 0x04, 0x01
+	.byte 0xdc, 0x00, 0xf0, 0x00, 0x04
+	normal
 	push_f
-	.byte 0x01
+	normal
 	jr	1
 
 AccStyle_LookupVelocityTable:
@@ -809,7 +810,7 @@ AccVoice_LookupParamIndex:
 AccVoice_ParamIndexData:
 	nop
 	pop_sr
-	.byte 0x04
+	max
 	reti
 	add	hl, 994
 	extz	wa
@@ -824,22 +825,46 @@ AccVoice_ParamIndexData:
 	ret
 	nop
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	push_sr
-	.byte 0x01, 0x01
+	normal
+	normal
 	push_sr
-	.byte 0x01, 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
 	push_sr
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
-	.byte 0x01, 0x01, 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
 	nop
-	.byte 0x02
+	push_sr
 	.zero 8
 	ldio	4, 12
 	nop
@@ -911,30 +936,43 @@ AccPart_VoiceParamOffsets_BaseA:
 	nop
 	nop
 	jr	le, 0
-	.byte 0xc4, 0x00, 0x26, 0x01
+	.byte 0xc4, 0x00, 0x26
+	normal
 	ldb	h, 5
-	.byte 0x57, 0x01, 0x57
+	.byte 0x57
+	normal
+	.byte 0x57
 	halt
 AccPart_VoiceParamOffsets_BaseB:
 	ldw	bc, 37632
 	nop
-	.byte 0xf5, 0x00, 0x26, 0x01
+	.byte 0xf5, 0x00, 0x26
+	normal
 	ldb	h, 5
-	.byte 0x57, 0x01, 0x57
+	.byte 0x57
+	normal
+	.byte 0x57
 	halt
 AccPart_VoiceParamOffsets_ChordA:
 	nop
-	.byte 0x04
+	max
 	jr	le, 4
-	.byte 0xc4, 0x04, 0x26, 0x01
+	.byte 0xc4, 0x04, 0x26
+	normal
 	ldb	h, 5
-	.byte 0x57, 0x01, 0x57
+	.byte 0x57
+	normal
+	.byte 0x57
 	halt
 AccPart_VoiceParamOffsets_ChordB:
 	ldw	bc, 37636
-	.byte 0x04, 0xf5, 0x04, 0x26, 0x01
+	max
+	.byte 0xf5, 0x04, 0x26
+	normal
 	ldb	h, 5
-	.byte 0x57, 0x01, 0x57
+	.byte 0x57
+	normal
+	.byte 0x57
 	halt
 
 AccPart_LookupBoundVoiceParam:
@@ -3824,7 +3862,7 @@ AccTick_Return:
 
 AccVelocity_CurveTable:
 	decf
-	.byte 0x1a, 0x33, 0x4d
+	jp16	19763
 	jr	z, -128
 	and	(xde-77), ix
 	.byte 0xe6
@@ -5270,19 +5308,19 @@ AccWave_BankTable:
 	pop	xix
 	push 0
 	nop
-	.byte 0x14
+	push_a
 	ldw	wa, 0
 	.byte 0xac, 0x31, 0x00
 	nop
-	.byte 0x14
+	push_a
 	ldw	hl, 0
 	.byte 0xac, 0x34, 0x00
 	nop
-	.byte 0x14
+	push_a
 	ldw	iz, 0
 	.byte 0xac, 0x37, 0x00
 	nop
-	.byte 0x14
+	push_a
 	push	xbc
 	nop
 
@@ -5591,25 +5629,25 @@ AccState_CollectReturn:
 
 AccState_ScanLookupTable:
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -8558,7 +8596,8 @@ AccPlayMode_Dispatch_Table:
 	popw	iy
 	.byte 0xaf, 0xf5, 0x00, 0xd0, 0xaf, 0xf5
 	nop
-	.byte 0x04, 0xb0, 0xf5
+	max
+	.byte 0xb0, 0xf5
 	nop
 	tsetm	7, (xsp)
 	.byte 0xf5, 0x00, 0x3c, 0xaf, 0xf5, 0x00
@@ -10291,7 +10330,7 @@ AccTiming_SlotOffsetTables:
 	nop
 	nop
 	nop
-	.byte 0x18
+	push_f
 	nop
 	nop
 	nop
@@ -10748,7 +10787,7 @@ AccVoice_ROMLookup_OffsetTable:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 
 
 	naka_header NAKA_TYPE_0x00
@@ -10769,7 +10808,7 @@ AccVoice_ROMLookup_OffsetTable:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	.byte 0x60, 0x04
@@ -11002,7 +11041,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 
 
 	naka_header NAKA_TYPE_0x00
@@ -11023,7 +11062,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	.byte 0x60, 0x04
@@ -11035,7 +11074,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 
 
 	naka_header NAKA_TYPE_0x00
@@ -11056,7 +11095,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	.byte 0x60, 0x04
@@ -11068,7 +11107,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 
 
 	naka_header NAKA_TYPE_0x00
@@ -11089,7 +11128,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	.byte 0x60, 0x04
@@ -11101,7 +11140,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 
 
 	naka_header NAKA_TYPE_0x00
@@ -11122,7 +11161,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	.byte 0x60, 0x04
@@ -11134,7 +11173,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 
 
 	naka_header NAKA_TYPE_0x00
@@ -11155,7 +11194,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	.byte 0x60, 0x04
@@ -11167,7 +11206,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 
 
 	naka_header NAKA_TYPE_0x00
@@ -11188,7 +11227,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	.byte 0x60, 0x04
@@ -11200,7 +11239,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 
 
 	naka_header NAKA_TYPE_0x00
@@ -11221,7 +11260,7 @@ AccVoice_IndexedTableLookup_BaseOffsets:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	.byte 0x60, 0x04
@@ -11350,28 +11389,29 @@ AccVoice_CopyFromROM_DataBlock:
 	pop_sr
 	push_sr
 	nop
-	.byte 0x04
+	max
 	pop_sr
 	nop
-	.byte 0x04, 0x04
+	max
+	max
 	nop
 	halt
-	.byte 0x02
+	push_sr
 	nop
 	ei	0x04
 	nop
 	ei	0x06
-	.byte 0x01
+	normal
 	pushw 3
 	pushw 4
 	decf
-	.byte 0x02
+	push_sr
 	nop
 	decf
 	reti
-	.byte 0x01
+	normal
 	ret
-	.byte 0x01
+	normal
 	nop
 	swi	7
 	swi	7
@@ -11382,18 +11422,18 @@ AccVoice_CopyFromROM_DataBlock:
 	pop_sr
 	push_sr
 	nop
-	.byte 0x04
+	max
 	push_sr
 	nop
-	.byte 0x04
+	max
 	ei	0x00
 	halt
-	.byte 0x02
+	push_sr
 	nop
 	pushw 2
 	pushw 261
 	decf
-	.byte 0x02
+	push_sr
 	nop
 	ret
 	reti
@@ -11690,7 +11730,7 @@ AccStyle_InlinedBlock:
 	ret
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	rcf
 	nop
@@ -11702,7 +11742,7 @@ AccStyle_InlinedBlock:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -11711,7 +11751,7 @@ AccStyle_InlinedBlock:
 	nop
 	nop
 	.zero 8
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	nop
@@ -11721,7 +11761,7 @@ AccStyle_InlinedBlock:
 	nop
 	.zero 24
 	nop
-	.byte 0x14
+	push_a
 	zcf
 	nop
 	rcf
@@ -12039,7 +12079,7 @@ AccVoiceState_PartLookupTable:
 	nop
 	nop
 	nop
-	.byte 0x1a, 0xff, 0x00
+	jp16	255
 	nop
 	nop
 	nop
@@ -12265,7 +12305,7 @@ AccDemo_Init_DataBlock:
 	ld	(xix+2977), 1
 	ld	(xix+2978), 2
 	ld	(xix+2979), 3
-	.byte 0x0e
+	ret
 
 AccDemo_LoadRhythm:
 	ld xiy, 0xF5CFCC
@@ -12418,7 +12458,10 @@ Demo_StyleRhythmData:
 	nop
 	nop
 	nop
-	.byte 0x01, 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
+	normal
 	push_sr
 	push_sr
 	push_sr
@@ -12428,9 +12471,11 @@ Demo_StyleRhythmData:
 	jr	f, 0
 	jr	f, 0
 	calr	0
-	.byte 0x01, 0x54, 0x01
+	normal
+	.byte 0x54
+	normal
 	ld	xwa, 2147483648
-	.byte 0x16
+	ex_ff
 	.zero 48
 	.ascii "a-variation1    a-variation2    a-variation3    a-variation4    b-variation1    b-variation2    b-variation3    b-variation4    c-variation1    c-variation2    c-variation3    c-variation4     a-intro 1       a-intro 2       a-fill in 1     a-fill in 2     a-ending 1      a-ending 2      b-intro 1       b-intro 2       b-fill in 1     b-fill in 2     b-ending 1      b-ending 2      c-intro 1       c-intro 2       c-fill in 1     c-fill in 2     c-ending 1      c-ending 2     "
 	.byte 0x07, 0x03, 0x20, 0x00, 0x58, 0x02, 0x00, 0x00
@@ -13474,7 +13519,7 @@ AccTuning_ComplexBytecodeData:
 	.byte 0xc1, 0x13, 0x33
 	and	xbc, xbc
 	.ascii "k3%h"
-	.byte 0x04
+	max
 	ldda8	e, 13345
 	ldda8	a, 13268
 	cps	a, 2
@@ -13874,7 +13919,7 @@ AccTone_JumpTableData:
 	call	16081537
 	pop	xiz
 	ret
-	.byte 0x18
+	push_f
 	cp	xiy, xbc
 	nop
 	ldf	233
@@ -13949,7 +13994,7 @@ AccPatch_MultiCallWrapper:
 	push	xiz
 	calr	2
 	pop	xiz
-	.byte 0x0e
+	ret
 
 AccPatch_ClearModeFlag:
 	stdi8 13781, 0
@@ -14165,15 +14210,15 @@ AccPatch_SlotScanByteData:
 	jr	z, 19
 	cp	a, 131
 	jr	z, 22
-	.byte 0x14
+	push_a
 	call	16121389
 	pop_a
 	bitda	0, 13846
 	jr	nz, 2
 	jr	-28
-	.byte 0x14
+	push_a
 	call	16121389
-	.byte 0x15
+	pop_a
 	jr	0
 	ret
 	calr	435
@@ -14222,9 +14267,9 @@ AccPatch_SlotScanByteData:
 	ret
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
@@ -14379,14 +14424,22 @@ RhythmProc_ChannelMapTable:
 	nop
 	nop
 	nop
-	.byte 0x04, 0x04, 0x04, 0x04
+	max
+	max
+	max
+	max
 	ldio	8, 8
 	ldio	0, 0
 	nop
 	nop
 	nop
 	nop
-	.byte 0x04, 0x04, 0x04, 0x04, 0x04, 0x04
+	max
+	max
+	max
+	max
+	max
+	max
 	.fill 6, 1, 0x08
 
 ; ============================================================================
@@ -14688,10 +14741,10 @@ AccPatch_CopyDefaults_InitDone:
 
 AccPatch_DefaultSlotData:
 	reti
-	.byte 0x01
+	normal
 	ldb	w, 128
 	pop	xwa
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	.zero 8
@@ -14777,16 +14830,16 @@ AccPatch_VoiceStrideTable:
 	nop
 	nop
 	pop	xwa
-	.byte 0x02
+	push_sr
 	ldio	2, 24
-	.byte 0x03
+	pop_sr
 	nop
 	nop
 	nop
 	nop
 	push 1
 	pop	xwa
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	ldio	2, 0
@@ -14799,7 +14852,7 @@ AccPatch_VoiceStrideTable:
 	nop
 	push 1
 	pop	xwa
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	ldio	2, 0
@@ -15165,9 +15218,9 @@ AccPatch_WriteRhythmParam_Done:
 	ret
 
 AccPatch_RhythmParamDefaults:
-	.byte 0x01
+	normal
 	nop
-	.byte 0x02
+	push_sr
 	ld	xwa, 1074003971
 	halt
 	jrl	nc, 6
@@ -15411,7 +15464,7 @@ AccPatch_PartNumberTable:
 	nop
 	nop
 	nop
-	.byte 0x14
+	push_a
 	nop
 	nop
 	nop
@@ -17598,7 +17651,7 @@ AccPatch_TransposeNoteTable:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	.zero 8
@@ -17609,10 +17662,10 @@ AccPatch_TransposeNoteTable:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	scf
-	.byte 0x01
+	normal
 	nop
 	scf
 	nop
@@ -17626,7 +17679,7 @@ AccPatch_TransposeNoteTable:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	scf
 	scf
 
@@ -19223,9 +19276,9 @@ ToneGen_MapNoteToOctaveBitmask:
 	ld_srib3 C, 0x07, 0xF0, 0xE4
 	jr ToneGen_MapNote_OrMask
 	; Bit mask lookup table (powers of 2):
-	.byte 0x01
+	normal
 	push_sr
-	.byte 0x04
+	max
 	ldio	16, 32
 	.byte 0x40, 0x80
 
@@ -20322,7 +20375,7 @@ __pad_F62002:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	.zero 8
@@ -20333,10 +20386,10 @@ __pad_F62002:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	scf
-	.byte 0x01
+	normal
 	nop
 	scf
 	nop
@@ -20350,7 +20403,7 @@ __pad_F62002:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	scf
 	scf
 
@@ -20988,13 +21041,14 @@ ToneGen_CalcTempo_DataTable:
 	nop
 	rcf
 	nop
-	.byte 0x18
+	push_f
 	nop
 	ldb	w, 0
 	ldw	wa, 16384
 	nop
 	jr	f, 0
-	.byte 0xc0, 0x00, 0x80, 0x01
+	.byte 0xc0, 0x00, 0x80
+	normal
 	nop
 	pop_sr
 	.byte 0x80, 0x04
@@ -22219,7 +22273,7 @@ AccPlayback_PartAssign_DataBlock:
 	ld	hl, wa
 	ret
 	nop
-	.byte 0x00
+	nop
 	.ascii "0123456789ABCDEF"
 	.byte 0x0e
 
@@ -22770,22 +22824,22 @@ RhythmROM_PatternDisp_ReadByte:
 
 RhythmROM_PatternDisp_CheckCmd:
 	popw	wa
-	.byte 0x02
+	push_sr
 	jrl	ge, 18434
 	ei	0x79
 	ei	0x6e
-	.byte 0x03
+	pop_sr
 	jr	nz, 7
 	.byte 0x9f, 0x03, 0x9f
 	reti
 	incf
-	.byte 0x03
+	pop_sr
 	incf
-	.byte 0x03
+	pop_sr
 	push	xiy
-	.byte 0x03
+	pop_sr
 	push	xiy
-	.byte 0x03
+	pop_sr
 	incf
 	reti
 	incf
@@ -23238,17 +23292,17 @@ VoiceSlot_ResolveIndex:
 	nop
 	nop
 	push	xwa
-	.byte 0x01
+	normal
 	push	xwa
 	halt
 	push	xix
-	.byte 0x01
+	normal
 	push	xix
 	halt
 	ldw	wa, 12801
-	.byte 0x01
+	normal
 	ldw	ix, 13825
-	.byte 0x01
+	normal
 	ldw	wa, 12805
 	halt
 	ldw	ix, 13829
@@ -23619,17 +23673,17 @@ __pad_F63EC6:
 	nop
 	nop
 	push_sr
-	.byte 0x04
+	max
 	ei	0x08
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	1, 2
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	.byte 0x08
@@ -23740,9 +23794,9 @@ __pad_F63F8F:
 	reti
 	nop
 	reti
-	.byte 0x01
+	normal
 	reti
-	.byte 0x02
+	push_sr
 	swi	7
 	swi	7
 	swi	7
@@ -23780,9 +23834,9 @@ __pad_F63F8F:
 	ret
 	nop
 	nop
-	.byte 0x04
+	max
 	ldio	9, 6
-	.byte 0x04
+	max
 	ldio	9, 6
 	ret
 	bitda	0, 13521
@@ -24163,7 +24217,10 @@ DrumKit_GroupAssignTable:
 	nop
 	nop
 	nop
-	.byte 0x01, 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
+	normal
 	push_sr
 	push_sr
 	push_sr
@@ -24174,7 +24231,12 @@ DrumKit_GroupAssignTable:
 	nop
 	nop
 	nop
-	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
 	push_sr
 	push_sr
 	push_sr
@@ -24185,26 +24247,34 @@ DrumKit_GroupAssignTable:
 	nop
 	nop
 	nop
-	.byte 0x04, 0x04, 0x04, 0x04
+	max
+	max
+	max
+	max
 	ldio	8, 8
 	ldio	0, 0
 	nop
 	nop
 	nop
 	nop
-	.byte 0x04, 0x04, 0x04, 0x04, 0x04, 0x04
+	max
+	max
+	max
+	max
+	max
+	max
 	ldio	8, 8
 	ldio	8, 8
 	nop
-	.byte 0x04
+	max
 	ldio	12, 18
-	.byte 0x18
+	push_f
 	decf
 	zcf
-	.byte 0x19
+	pop_f
 	ret
 	push_a
-	.byte 0x1a, 0x0f, 0x15
+	jp16	5391
 	jp	1840656
 	scf
 	ldf	29
@@ -24352,14 +24422,14 @@ DrumKit_Epilogue:
 
 DrumKit_FallbackSlotTable:
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
 	incf
 	decf
 	ret
 	retd	0x1110
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ccf
@@ -24370,7 +24440,8 @@ DrumKit_FallbackSlotTable:
 	ldf	8
 	push 10
 	pushw 6424
-	.byte 0x1a, 0x1b, 0x1d, 0x1d
+	jp16	7451
+	.byte 0x1d
 
 DrumParam_Wrapper:
 	calr DrumParam_Lookup
@@ -24949,17 +25020,17 @@ RhythmPatInit_CopyChannels:
 
 RhythmPatInit_KitIndexTable:
 	push_sr
-	.byte 0x04
+	max
 	ei	0x08
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	1, 2
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	62, 29
@@ -25035,9 +25106,9 @@ RhythmFillIn_LookupAndApply:
 
 RhythmFillIn_PatternTable:
 	rcf
-	.byte 0x04
+	max
 	push_sr
-	.byte 0x01
+	normal
 	ldio	16, 16
 	rcf
 	push	xiz
@@ -25210,7 +25281,7 @@ RhythmVariation_InlineCode:
 	ret
 	nop
 	ldio	1, 0
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	nop
@@ -25220,7 +25291,7 @@ RhythmVariation_InlineCode:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -25245,13 +25316,13 @@ RhythmVariation_InlineCode:
 	ret
 	nop
 	push_sr
-	.byte 0x04
+	max
 	nop
 	rcf
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
@@ -25711,9 +25782,9 @@ DrumVoice_Handler7:
 	ret
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x02
+	push_sr
 	nop
 	push	xiz
 	call	16143869
@@ -25741,9 +25812,9 @@ DrumVoice_Handler7:
 	.byte 0xd3, 0x03, 0xf0, 0xe0, 0x23
 	call	16143937
 	ret
-	.byte 0x03
+	pop_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	push	xiz
 	call	16143937
@@ -27964,9 +28035,9 @@ DrumParam_LookupChannelBit:
 	ret
 
 PatIdx_Lookup_Return:
-	.byte 0x01
+	normal
 	push_sr
-	.byte 0x04
+	max
 	ldio	16, 32
 	.byte 0x40
 
@@ -28077,14 +28148,14 @@ MultiVoice_Setup_NextChan:
 
 MultiVoice_Setup_Done:
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -28244,31 +28315,31 @@ __pad_F671E7:
 RegPreset_LoadVoiceData:
 	nop
 	pop_sr
-	.byte 0x04
+	max
 	reti
 	nop
 	nop
 	retd	0x0f04
-	.byte 0x04
+	max
 	retd	0x0000
-	.byte 0x04
+	max
 	retd	0x0f04
-	.byte 0x04
+	max
 	retd	0x0004
 	nop
 	ldw	bc, 12548
-	.byte 0x04
+	max
 	ldw	bc, 0
-	.byte 0x04
+	max
 	ldw	bc, 12548
-	.byte 0x04
+	max
 	ldw	bc, 4
 	nop
 	ei	0x04
 	ei	0x04
 	ei	0x00
 	nop
-	.byte 0x04
+	max
 	ei	0x04
 	ei	0x04
 	ei	0x04
@@ -28929,9 +29000,9 @@ AccVoice_SetupSlots_DataBlock:
 	pop	xbc
 	ldb	a, 129
 	jr	5
-	.byte 0x14
+	push_a
 	calr	101
-	.byte 0x15
+	pop_a
 	cp	a, 129
 	jr	z, 2
 	jr	-50
@@ -29076,7 +29147,7 @@ AccVoice_SetupSlots_DataBlock:
 	calr	-265
 	ret
 	ld	a, (xhl)
-	.byte 0x01
+	normal
 	stda8	14281, a
 	calr	-605
 	calr	7
@@ -29263,9 +29334,9 @@ AccVoice_SetupSlots_DataBlock:
 	add	xhl, 16153545
 	ld	l, (xhl)
 	ret
-	.byte 0x01
+	normal
 	push_sr
-	.byte 0x04
+	max
 	ldio	16, 32
 	ld	xwa, 4109049408
 	push xbc
@@ -32969,7 +33040,7 @@ AccScreen_DataBlock:
 	nop
 	.byte 0xe4, 0xa5, 0xf6
 	nop
-	.byte 0x04
+	max
 	cp	xiz, (xiz)
 	nop
 	ldb	d, 166
@@ -33032,41 +33103,15 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	nop
-	.byte 0x04
-	nop
-	nop
-	nop
-	ldio	0, 0
-	nop
-	rcf
-	nop
-	nop
-	nop
-	ldb	w, 0
-	nop
-	nop
-	ld	xwa, 2147483648
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01
-	nop
-	nop
-	nop
-	.byte 0x02
-	nop
-	nop
-	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -33084,15 +33129,15 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -33110,15 +33155,41 @@ AccScreen_DataBlock:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
+	nop
+	nop
+	nop
+	ldio	0, 0
+	nop
+	rcf
+	nop
+	nop
+	nop
+	ldb	w, 0
+	nop
+	nop
+	ld	xwa, 2147483648
+	nop
+	nop
+	nop
+	nop
+	normal
+	nop
+	nop
+	nop
+	push_sr
+	nop
+	nop
+	nop
+	max
 	nop
 	nop
 	nop
@@ -33549,40 +33620,42 @@ AccScreen_UIDataBlock:
 	ldw	iy, 15906
 	push 10
 	pop_a
-	.byte 0x01
+	normal
 	ldb	c, 0
 	ldw	hl, 12801
 	nop
 	push 10
 	zcf
-	.byte 0x01
+	normal
 	ldb	a, 0
 	ldw	iy, 13313
 	nop
 	push 10
 	pop_a
-	.byte 0x01
+	normal
 	ld	xsp, 1442919168
 	nop
 	push 10
 	zcf
-	.byte 0x01
+	normal
 	ld	xiy, 1476474112
 	nop
 	push 10
 	pop_a
-	.byte 0x01
+	normal
 	jr	nz, 0
 	ldw	hl, 32001
 	nop
 	push 10
 	zcf
-	.byte 0x01, 0x6c, 0x00
+	normal
+	.byte 0x6c, 0x00
 	ldw	iy, 32513
 	nop
 	push 10
 	decf
-	.byte 0x01, 0x96, 0x00
+	normal
+	.byte 0x96, 0x00
 	ldw	hl, 42241
 	nop
 	push 10
@@ -33607,11 +33680,12 @@ AccScreen_UIDataBlock:
 	ldwio	10, 285
 	ordm16_24	80640, ix
 	nop
-	.byte 0x01
+	normal
 	ldwio	5, 57088
 	nop
 	ldb	c, 0
-	.byte 0xdf, 0x00, 0x01
+	.byte 0xdf, 0x00
+	normal
 	ldwio	205, 57088
 	nop
 	.byte 0xeb, 0x00, 0xdf, 0x00
@@ -33654,27 +33728,28 @@ AccScreen_UIDataBlock:
 	ldwio	10, 165
 	ordm16_24	49920, ix
 	nop
-	.byte 0x01
+	normal
 	ldwio	45, 57088
 	nop
 	popw	hl
 	nop
-	.byte 0xdf, 0x00, 0x01
+	.byte 0xdf, 0x00
+	normal
 	ldwio	85, 57088
 	nop
 	jrl	ule, -8448
 	nop
-	.byte 0x01
+	normal
 	ldwio	125, 57088
 	nop
 	.byte 0x9b, 0x00, 0xdf
 	nop
-	.byte 0x01
+	normal
 	ldwio	165, 57088
 	nop
 	.byte 0xc3, 0x00, 0xdf
 	nop
-	.byte 0x02
+	push_sr
 	retd	0x39bb
 	swi	7
 	nop
@@ -33683,35 +33758,36 @@ AccScreen_UIDataBlock:
 	nop
 	reti
 	nop
-	.byte 0x1a, 0x04, 0x02
+	jp16	516
 	retd	0x39b8
 	reti
 	nop
 	ldb	w, 92
 	.byte 0xae, 0xf6, 0x00
 	ldio	0, 40
-	.byte 0x04
+	max
 	push_sr
 	retd	0x39bc
 	retd	0x0600
 	sub	(xix), h
 	.byte 0xf6
 	nop
-	.byte 0x01
+	normal
 	nop
 	ldb	a, 8
-	.byte 0x02
+	push_sr
 	retd	0x39bd
 	retd	0x0600
 	sub	(xix), h
 	.byte 0xf6
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0xd1, 0x0c, 0x02, 0x0f, 0xbe, 0x39, 0x0f
 	nop
 	ei	0x84
-	.byte 0xae, 0xf6, 0x00, 0x01
+	.byte 0xae, 0xf6, 0x00
+	normal
 	nop
 	.byte 0x81, 0x11
 	push_sr
@@ -33720,7 +33796,7 @@ AccScreen_UIDataBlock:
 	sub	(xix), h
 	.byte 0xf6
 	nop
-	.byte 0x01
+	normal
 	nop
 	ldw	bc, 1046
 	pushw 0
@@ -33744,9 +33820,9 @@ AccScreen_UIDataBlock:
 	call	5151
 	pushw	wa
 	nop
-	.byte 0x02
+	push_sr
 	retd	0x39bb
-	.byte 0x01
+	normal
 	nop
 	ei	0x4d
 	.byte 0xac, 0xf6, 0x00
@@ -33776,7 +33852,7 @@ AccScreen_UIDataBlock:
 	.byte 0x51
 	ldwio	33, 2304
 	nop
-	.byte 0x01
+	normal
 	retd	0x0021
 	push 0
 	.byte 0xb1, 0x13
@@ -33787,7 +33863,7 @@ AccScreen_UIDataBlock:
 	push 0
 	.byte 0xb9, 0x1a, 0x1f
 	nop
-	.byte 0x16
+	ex_ff
 	nop
 
 ; accomp_section_widget: 15 bytes (compiled from C)
@@ -33928,7 +34004,7 @@ AccScreen_UIDataBlock:
 	pushw	de
 	pushw	de
 	pushw	de
-	.byte 0x01
+	normal
 	ldwio	7, 12288
 	nop
 	ld	xiz, 33566720
@@ -33941,7 +34017,8 @@ AccScreen_UIDataBlock:
 	nop
 	ld	xiz, 100676864
 	halt
-	.byte 0xbd, 0x06, 0x15, 0x01
+	.byte 0xbd, 0x06, 0x15
+	normal
 	ldwio	74, 12288
 	nop
 	.byte 0x86, 0x00
@@ -33956,7 +34033,8 @@ AccScreen_UIDataBlock:
 	.byte 0x86, 0x00
 	ldw	iy, 1536
 	halt
-	.byte 0xc5, 0x06, 0x15, 0x01
+	.byte 0xc5, 0x06, 0x15
+	normal
 	ldwio	138, 12288
 	nop
 	.byte 0xc6
@@ -33966,7 +34044,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0x8a, 0x00, 0x35
 	nop
-	.byte 0x02
+	push_sr
 	ldwio	198, 12288
 	nop
 	.byte 0xc6
@@ -33975,7 +34053,7 @@ AccScreen_UIDataBlock:
 	halt
 	cpl	e
 	pop_a
-	.byte 0x01
+	normal
 	ldwio	202, 12288
 	nop
 	push 1
@@ -33997,103 +34075,103 @@ AccScreen_UIDataBlock:
 	nop
 	popw	ix
 	nop
-	.byte 0x01
+	normal
 	ldwio	7, 19456
 	nop
 	popw	wa
 	nop
 	popw	ix
 	nop
-	.byte 0x02
+	push_sr
 	ldwio	72, 17664
 	nop
 	popw	wa
 	nop
 	popw	ix
 	nop
-	.byte 0x01
+	normal
 	ldwio	73, 19456
 	nop
 	.byte 0x88, 0x00, 0x4c
 	nop
-	.byte 0x02
+	push_sr
 	ldwio	136, 17664
 	nop
 	.byte 0x88, 0x00, 0x4c
 	nop
-	.byte 0x01
+	normal
 	ldwio	137, 19456
 	nop
 	.byte 0xc8, 0x00
 	popw	ix
 	nop
-	.byte 0x02
+	push_sr
 	ldwio	200, 17664
 	nop
 	.byte 0xc8, 0x00
 	popw	ix
 	nop
-	.byte 0x01
+	normal
 	ldwio	201, 19456
 	nop
 	push 1
 	popw	ix
 	nop
-	.byte 0x02
+	push_sr
 	ldwio	9, 17665
 	nop
 	push 1
 	popw	ix
 	nop
-	.byte 0x02
+	push_sr
 	ldwio	7, 25344
 	nop
 	reti
 	nop
 	jr	gt, 0
-	.byte 0x01
+	normal
 	ldwio	7, 27136
 	nop
 	popw	wa
 	nop
 	jr	gt, 0
-	.byte 0x02
+	push_sr
 	ldwio	72, 25344
 	nop
 	popw	wa
 	nop
 	jr	gt, 0
-	.byte 0x01
+	normal
 	ldwio	73, 27136
 	nop
 	.byte 0x88, 0x00, 0x6a
 	nop
-	.byte 0x02
+	push_sr
 	ldwio	136, 25344
 	nop
 	.byte 0x88, 0x00, 0x6a
 	nop
-	.byte 0x01
+	normal
 	ldwio	137, 27136
 	nop
 	.byte 0xc8, 0x00
 	jr	gt, 0
-	.byte 0x02
+	push_sr
 	ldwio	200, 25344
 	nop
 	.byte 0xc8, 0x00
 	jr	gt, 0
-	.byte 0x01
+	normal
 	ldwio	201, 27136
 	nop
 	push 1
 	jr	gt, 0
-	.byte 0x02
+	push_sr
 	ldwio	9, 25345
 	nop
 	push 1
 	jr	gt, 0
-	.byte 0x02
+	push_sr
 	ldwio	7, 33024
 	nop
 	reti
@@ -34113,12 +34191,12 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0x88, 0x00, 0x88
 	nop
-	.byte 0x02
+	push_sr
 	ldwio	136, 33024
 	nop
 	.byte 0x88, 0x00, 0x88
 	nop
-	.byte 0x01
+	normal
 	ldwio	137, 34816
 	nop
 	.byte 0xc8, 0x00, 0x88, 0x00, 0x02
@@ -34137,7 +34215,8 @@ AccScreen_UIDataBlock:
 	nop
 	reti
 	nop
-	.byte 0xa6, 0x00, 0x01
+	.byte 0xa6, 0x00
+	normal
 	ldwio	7, 42496
 	nop
 	popw	wa
@@ -34148,24 +34227,26 @@ AccScreen_UIDataBlock:
 	nop
 	popw	wa
 	nop
-	.byte 0xa6, 0x00, 0x01
+	.byte 0xa6, 0x00
+	normal
 	ldwio	73, 42496
 	nop
 	.byte 0x88, 0x00, 0xa6
 	nop
-	.byte 0x02
+	push_sr
 	ldwio	136, 40704
 	nop
 	.byte 0x88, 0x00, 0xa6
 	nop
-	.byte 0x01
+	normal
 	ldwio	137, 42496
 	nop
 	.byte 0xc8, 0x00, 0xa6, 0x00
 	push_sr
 	ldwio	200, 40704
 	nop
-	.byte 0xc8, 0x00, 0xa6, 0x00, 0x01
+	.byte 0xc8, 0x00, 0xa6, 0x00
+	normal
 	ldwio	201, 42496
 	nop
 	push 1
@@ -34178,7 +34259,7 @@ AccScreen_UIDataBlock:
 	push 0
 	scf
 	nop
-	.byte 0x19
+	pop_f
 	nop
 	ldb	a, 0
 	pushw	bc
@@ -34203,7 +34284,7 @@ AccScreen_UIDataBlock:
 	nop
 	.byte 0xc9, 0x00, 0xd1, 0x00, 0xd9, 0x00, 0xe1, 0x00, 0xe9, 0x00
 	stdi8	63744, 1
-	.byte 0x01
+	normal
 	ld	xde, 2113953792
 	nop
 	.byte 0x9c, 0x00, 0x41
@@ -34273,14 +34354,14 @@ AccScreen_UIDataBlock:
 	pop	xhl
 	ret
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
 	incf
 	decf
 	ret
 	retd	0x1110
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ccf
@@ -34291,7 +34372,7 @@ AccScreen_UIDataBlock:
 	ldf	8
 	push 10
 	pushw 6424
-	.byte 0x1a, 0x1b, 0x1c
+	jp16	7195
 	call	3981627
 	ldw	iy, 23329
 	ret
@@ -34551,7 +34632,8 @@ AccPatch_VoiceAssignDataBlock:
 	.ascii "=9ah"
 	.byte 0x1e, 0xc1, 0x3d
 	push xbc
-	.byte 0x61, 0xed, 0xc8, 0x00, 0x01
+	.byte 0x61, 0xed, 0xc8, 0x00
+	normal
 	nop
 	nop
 	dec	1, c

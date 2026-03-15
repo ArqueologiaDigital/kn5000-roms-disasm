@@ -55,7 +55,7 @@ SetWall_InlineCodeBlock:
 	call	15855140
 	ret
 	nop
-	.byte 0x02
+	push_sr
 	nop
 	ldwio	3, 1284
 	ei	0x0b
@@ -645,7 +645,7 @@ SetWall_CrossTypeChange:
 SetWall_SlotTypeMap:
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	reti
 	ldio	9, 10
 	pushw 1284
@@ -727,7 +727,7 @@ SetWall_CrossType_Reset:
 SetWall_SlotOrderTable:
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	decf
 	retd	0x0c10
 	pushw 2312
@@ -735,7 +735,7 @@ SetWall_SlotOrderTable:
 	ei	0x07
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	pushw 2312
 	ldwio	3, 1284
 	ei	0x07
@@ -745,7 +745,7 @@ SetWall_SlotOrderTable:
 	incf
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	pushw 2312
 	ldwio	3, 3076
 	ei	0x07

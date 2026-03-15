@@ -338,7 +338,7 @@ MidiCC_Handler_RangeCheck:
 	swi	7
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	pop_sr
 MidiCC_Handler_ChannelMapping:
 	ldda8	a, 38506
@@ -383,7 +383,8 @@ MidiCC_Handler_ChannelMapping:
 	rcf
 	popw	wa
 	halt
-	.byte 0x04, 0x04
+	max
+	max
 	popw	wa
 	halt
 	nop
@@ -410,7 +411,7 @@ MidiCC_Handler_ChannelMapping:
 	swi	4
 	popw	wa
 	ei	0x04
-	.byte 0x04
+	max
 MidiCC_VoiceParam_0:
 	ldda8	a, 38506
 	cp	a, 31
@@ -1474,7 +1475,7 @@ PanelEvt_Dispatch11_TableAndHandlers:
 	ret
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	nop
 
 PanelEvent_DispatchByIndex:
@@ -1935,7 +1936,7 @@ Periodic_TimestampCompare_Done:
 
 MidiCC_ChannelMappingData:
 	push_f
-	.byte 0x01
+	normal
 	swi	7
 	swi	7
 	swi	7
@@ -1943,7 +1944,7 @@ MidiCC_ChannelMappingData:
 	ldb	w, 2
 	swi	7
 	swi	7
-	.byte 0x04
+	max
 	pop_sr
 	swi	7
 	swi	7
@@ -1951,7 +1952,7 @@ MidiCC_ChannelMappingData:
 	swi	7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-	.byte 0x19
+	pop_f
 	swi	7
 	swi	7
 	swi	7
@@ -2002,24 +2003,27 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x01, 0x01
+	normal
+	normal
 	push_sr
-	.byte 0x01, 0x04, 0x01
+	normal
+	max
+	normal
 	ldio	1, 16
-	.byte 0x01
+	normal
 	ldb	w, 1
 	ldb	w, 1
 	ldb	w, 1
-	.byte 0x04
+	max
 	push_sr
 	push_sr
 	push_sr
 	ld	xwa, 134381569
-	.byte 0x02
+	push_sr
 	ldio	2, 16
-	.byte 0x02
+	push_sr
 	rcf
-	.byte 0x02
+	push_sr
 	ldb	w, 2
 	ld	xwa, 4294967042
 	swi	7
@@ -2032,7 +2036,7 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-	.byte 0x01
+	normal
 	push_sr
 	swi	7
 	swi	7
@@ -2042,7 +2046,7 @@ MidiCC_ChannelMappingData:
 	swi	7
 	.fill 8, 1, 0xff
 	nop
-	.byte 0x04
+	max
 	ldio	1, 4
 	ldio	2, 4
 	ldio	3, 4
@@ -2060,7 +2064,7 @@ MidiCC_ChannelMappingData:
 	ldio	255, 255
 	swi	7
 	rcf
-	.byte 0x04
+	max
 	ldio	17, 4
 	ldio	18, 4
 	ldio	19, 4
@@ -2176,7 +2180,7 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
-	.byte 0x03
+	pop_sr
 	jrl	nc, 769
 	jrl	nc, 770
 	jrl	nc, 771
@@ -2301,32 +2305,33 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
-	.byte 0x04
+	max
 	ld	xwa, 37749761
-	.byte 0x04
+	max
 	ld	xwa, 71304195
-	.byte 0x04
+	max
 	ld	xwa, 104858629
-	.byte 0x04
+	max
 	ld	xwa, 138413063
-	.byte 0x04
+	max
 	ld	xwa, 171967497
-	.byte 0x04
+	max
 	ld	xwa, 205521931
-	.byte 0x04
+	max
 	ld	xwa, 239076365
-	.byte 0x04
+	max
 	ld	xwa, 285212671
-	.byte 0x04
+	max
 	ld	xwa, 306185233
-	.byte 0x04
+	max
 	ld	xwa, 4282385427
 	swi	7
 	swi	7
 	pop_a
-	.byte 0x04
+	max
 	ld	xwa, 402653183
-	.byte 0x04, 0x40
+	max
+	.byte 0x40
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -2435,9 +2440,10 @@ MidiCC_ChannelMappingData:
 	swi	7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-	.byte 0xad, 0x00, 0xad, 0x01
+	.byte 0xad, 0x00, 0xad
+	normal
 	sub	(xiy+2), xiy
-	.byte 0x03
+	pop_sr
 	sub	(xiy+4), xiy
 	halt
 	sub	(xiy+6), xiy
@@ -2453,16 +2459,17 @@ MidiCC_ChannelMappingData:
 	sub	(xiy+17), xiy
 	ccf
 	sub	(xiy+19), xiy
-	.byte 0x14
+	push_a
 	cp	(xiy+21), xsp
 	swi	7
 	swi	7
 	swi	7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-	.byte 0xae, 0x00, 0xae, 0x01
+	.byte 0xae, 0x00, 0xae
+	normal
 	sub	(xiz+2), xiz
-	.byte 0x03
+	pop_sr
 	sub	(xiz+4), xiz
 	halt
 	sub	(xiz+6), xiz
@@ -2478,7 +2485,7 @@ MidiCC_ChannelMappingData:
 	sub	(xiz+17), xiz
 	ccf
 	sub	(xiz+19), xiz
-	.byte 0x14
+	push_a
 	cp	(xiz+21), xsp
 	swi	7
 	swi	7
@@ -2487,13 +2494,13 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x03
+	pop_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	halt
 	nop
@@ -2517,9 +2524,9 @@ MidiCC_ChannelMappingData:
 	nop
 	zcf
 	nop
-	.byte 0x14
+	push_a
 	nop
-	.byte 0x15
+	pop_a
 	nop
 	swi	7
 	swi	7
@@ -2527,7 +2534,7 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xbc), 177
-	.byte 0x01
+	normal
 	ldw	(xbc), 945
 	.byte 0xb1, 0x04, 0xb1, 0x05, 0xb1, 0x06, 0xb1, 0x07
 	.byte 0xb1, 0x08, 0xb1, 0x09, 0xb1, 0x0a, 0xb1, 0x0b
@@ -2544,7 +2551,7 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xix), 180
-	.byte 0x01
+	normal
 	ldw	(xix), 948
 	.byte 0xb4, 0x04, 0xb4, 0x05, 0xb4, 0x06, 0xb4, 0x07
 	.byte 0xb4, 0x08, 0xb4, 0x09, 0xb4, 0x0a, 0xb4, 0x0b
@@ -2556,10 +2563,10 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	9, 10
@@ -2570,13 +2577,13 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x03
+	pop_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	halt
 	nop
@@ -2600,9 +2607,9 @@ MidiCC_ChannelMappingData:
 	nop
 	zcf
 	nop
-	.byte 0x14
+	push_a
 	nop
-	.byte 0x15
+	pop_a
 	nop
 	swi	7
 	nop
@@ -3105,7 +3112,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3179,7 +3186,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3253,7 +3260,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3314,7 +3321,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3389,7 +3396,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3422,7 +3429,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x19
+	pop_f
 	swi	4
 	nop
 	nop
@@ -3464,7 +3471,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3527,7 +3534,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3581,7 +3588,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3635,7 +3642,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3689,61 +3696,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
-	swi	3
-	nop
-	nop
-	.byte 0x2f
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3, 0xf9, 0x00, 0x00, 0xdd
-	swi	1
-	nop
-	nop
-	.byte 0xf7
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 1593835770
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad, 0xfa, 0x00
-	nop
-	.byte 0xc7, 0xfa, 0x00
-	nop
-	.byte 0xe1, 0xfa, 0x00, 0x00
-	swi	3
-	swi	2
-	nop
-	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3797,7 +3750,61 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
+	swi	3
+	nop
+	nop
+	.byte 0x2f
+	swi	3
+	nop
+	nop
+	popw	bc
+	swi	3
+	nop
+	nop
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.byte 0xc3, 0xf9, 0x00, 0x00, 0xdd
+	swi	1
+	nop
+	nop
+	.byte 0xf7
+	swi	1
+	nop
+	nop
+	scf
+	swi	2
+	nop
+	nop
+	pushw	hl
+	swi	2
+	nop
+	nop
+	ld	xiy, 1593835770
+	swi	2
+	nop
+	nop
+	jrl	ge, 250
+	nop
+	cp	(xhl), de
+	nop
+	nop
+	.byte 0xad, 0xfa, 0x00
+	nop
+	.byte 0xc7, 0xfa, 0x00
+	nop
+	.byte 0xe1, 0xfa, 0x00, 0x00
+	swi	3
+	swi	2
+	nop
+	nop
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3865,7 +3872,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3933,7 +3940,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -3962,7 +3969,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x19
+	pop_f
 	swi	4
 	nop
 	nop
@@ -4003,7 +4010,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -4057,75 +4064,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
-	swi	3
-	nop
-	nop
-	.byte 0x2f
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
-	.byte 0xb1, 0xfb
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5, 0xfb, 0x00
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3, 0xf9, 0x00, 0x00, 0xdd
-	swi	1
-	nop
-	nop
-	.byte 0xf7
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 1593835770
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
-	.byte 0xad, 0xfa, 0x00
-	nop
-	.byte 0xc7, 0xfa, 0x00
-	nop
-	.byte 0xe1, 0xfa, 0x00, 0x00
-	swi	3
-	swi	2
-	nop
-	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -4193,7 +4132,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -4261,7 +4200,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -4290,19 +4229,8 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	7
 	.byte 0xe5, 0xfb, 0x00
 	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89, 0xfd, 0x00
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -4340,7 +4268,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -4419,7 +4347,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -4498,7 +4426,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -4577,7 +4505,7 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	swi	3
 	nop
 	nop
@@ -4656,7 +4584,86 @@ PanelEvt_Handler_4_DualValueCheck:
 	swi	2
 	nop
 	nop
-	.byte 0x15
+	pop_a
+	swi	3
+	nop
+	nop
+	.byte 0x2f
+	swi	3
+	nop
+	nop
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	jr	ule, -5
+	nop
+	nop
+	jrl	pl, 251
+	nop
+	cp	(xsp), hl
+	nop
+	nop
+	.byte 0xb1, 0xfb
+	nop
+	nop
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	.byte 0xe5, 0xfb, 0x00
+	nop
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	jr	nc, -3
+	nop
+	nop
+	.byte 0x89, 0xfd, 0x00
+	nop
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.byte 0xc3, 0xf9, 0x00, 0x00, 0xdd
+	swi	1
+	nop
+	nop
+	.byte 0xf7
+	swi	1
+	nop
+	nop
+	scf
+	swi	2
+	nop
+	nop
+	pushw	hl
+	swi	2
+	nop
+	nop
+	ld	xiy, 1593835770
+	swi	2
+	nop
+	nop
+	jrl	ge, 250
+	nop
+	cp	(xhl), de
+	nop
+	nop
+	.byte 0xad, 0xfa, 0x00
+	nop
+	.byte 0xc7, 0xfa, 0x00
+	nop
+	.byte 0xe1, 0xfa, 0x00, 0x00
+	swi	3
+	swi	2
+	nop
+	nop
+	pop_a
 	swi	3
 	nop
 	nop
@@ -13206,7 +13213,7 @@ SeqChan_StepCmd_Field2to3:
 	lds	bc, 3
 	lds	de, 3
 	call	16604730
-	.byte 0x0e
+	ret
 SeqChan_StepCmd_Field4to5:
 	ldda32	xwa, 48300
 	lds	bc, 3

@@ -564,7 +564,7 @@ Voice_NoteChannelTable1:
 	ei	0x00
 	ei	0x01
 	reti
-	.byte 0x01
+	normal
 	nop
 	nop
 	ei	0x04
@@ -575,7 +575,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	reti
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -585,7 +585,7 @@ Voice_NoteChannelTable1:
 	reti
 	nop
 	reti
-	.byte 0x02
+	push_sr
 	.zero 8
 	nop
 	nop
@@ -616,7 +616,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	reti
-	.byte 0x03
+	pop_sr
 	.zero 24
 	nop
 	nop
@@ -672,13 +672,13 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	ldio	0, 8
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
 	nop
 	ldio	3, 8
-	.byte 0x04
+	max
 	ldio	5, 0
 	nop
 	nop
@@ -755,7 +755,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
@@ -764,7 +764,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	halt
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	nop
@@ -772,75 +772,76 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	halt
-	.byte 0x03
-	halt
-	.byte 0x04
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	halt
-	nop
-	.zero 8
-	nop
-	nop
-	nop
-	nop
-	incf
-	nop
-	incf
-	.byte 0x03
-	nop
-	nop
-	nop
-	nop
-	.byte 0x04
-	halt
-	incf
-	.byte 0x02
-	nop
-	nop
-	nop
-	nop
-	incf
-	.byte 0x04
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	incf
-	halt
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	nop
-	nop
-	halt
-	.byte 0x01
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	halt
-	halt
-	nop
-	nop
-	.zero 8
-	nop
-	nop
-	nop
-	nop
-	.byte 0x04
 	pop_sr
-	.byte 0x04, 0x04
+	halt
+	max
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	halt
+	nop
+	.zero 8
+	nop
+	nop
+	nop
+	nop
+	incf
+	nop
+	incf
+	pop_sr
+	nop
+	nop
+	nop
+	nop
+	max
+	halt
+	incf
+	push_sr
+	nop
+	nop
+	nop
+	nop
+	incf
+	max
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	incf
+	halt
+	nop
+	nop
+	.zero 8
+	nop
+	nop
+	nop
+	nop
+	halt
+	normal
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	halt
+	halt
+	nop
+	nop
+	.zero 8
+	nop
+	nop
+	nop
+	nop
+	max
+	pop_sr
+	max
+	max
 	.zero 16
 	nop
 	nop
@@ -848,7 +849,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x02
+	push_sr
 	nop
 	.zero 16
 	nop
@@ -857,7 +858,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x02
+	push_sr
 	halt
 	.zero 32
 	nop
@@ -867,16 +868,16 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	push_sr
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	nop
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	nop
 	nop
@@ -885,7 +886,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	pop_sr
-	.byte 0x01
+	normal
 	nop
 	nop
 	push_sr
@@ -909,14 +910,14 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	pop_sr
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
 	nop
 	nop
 	nop
-	.byte 0x03
+	pop_sr
 	halt
 	nop
 	nop
@@ -925,12 +926,12 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	.zero 24
-	.byte 0x04
+	max
 	push_sr
 	nop
 	nop
 	incf
-	.byte 0x01
+	normal
 	nop
 	nop
 	.zero 8
@@ -938,7 +939,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -946,7 +947,8 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x04, 0x01
+	max
+	normal
 	nop
 	nop
 	.zero 80
@@ -955,7 +957,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
@@ -963,7 +965,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	.zero 8
@@ -972,7 +974,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -988,7 +990,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	pop_sr
 	nop
 	nop
@@ -996,7 +998,8 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	nop
 	nop
@@ -1004,14 +1007,14 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	nop
 	nop
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	nop
@@ -1019,7 +1022,7 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	nop
 	nop
@@ -1027,7 +1030,8 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	nop
 	.zero 16
@@ -1036,25 +1040,25 @@ Voice_NoteChannelTable1:
 	decf
 	nop
 	decf
-	.byte 0x01
+	normal
 	decf
-	.byte 0x02
+	push_sr
 	decf
-	.byte 0x03
+	pop_sr
 	decf
-	.byte 0x04
+	max
 	decf
 	halt
 	ret
 	nop
 	ret
-	.byte 0x01
+	normal
 	ret
-	.byte 0x02
+	push_sr
 	ret
-	.byte 0x03
+	pop_sr
 	ret
-	.byte 0x04
+	max
 	ret
 	halt
 	incf
@@ -1077,17 +1081,19 @@ Voice_NoteChannelTable1:
 	pop	xix
 	ret
 	jrl	f, 28929
-	.byte 0x01
+	normal
 	jrl	le, 31233
-	.byte 0x01, 0x74, 0x01, 0x75, 0x01
+	normal
+	.byte 0x74, 0x01, 0x75
+	normal
 	nop
 	nop
 	nop
 	nop
 	ld	xwa, 2080471297
-	.byte 0x01
+	normal
 	jrl	32001
-	.byte 0x01
+	normal
 	jrl	ugt, 1
 	nop
 	nop
@@ -1095,11 +1101,11 @@ Voice_NoteChannelTable1:
 	.byte 0x50
 	push_sr
 	pop	xbc
-	.byte 0x01
+	normal
 	pop	xde
-	.byte 0x01
+	normal
 	pop	xhl
-	.byte 0x01
+	normal
 	pop	xwa
 	push_sr
 	.byte 0x53
@@ -1109,17 +1115,17 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	pop	xbc
-	.byte 0x03
+	pop_sr
 	pop	xde
-	.byte 0x03
+	pop_sr
 	pop	xhl
-	.byte 0x03
+	pop_sr
 	pop	xix
-	.byte 0x03
+	pop_sr
 	pop	xiy
-	.byte 0x03
+	pop_sr
 	pop	xiz
-	.byte 0x03
+	pop_sr
 	nop
 	nop
 	nop
@@ -1128,43 +1134,43 @@ Voice_NoteChannelTable1:
 	jr	z, 1
 	jr	le, 3
 	popw	iy
-	.byte 0x01
+	normal
 	popw	iy
-	.byte 0x02
+	push_sr
 	ld	xiz, 1
 	nop
 	ld	xhl, 1090603522
-	.byte 0x01
+	normal
 	ld	xde, 1258439169
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
 	nop
 	pop_sr
-	.byte 0x01
+	normal
 	pop_sr
 	push_sr
-	.byte 0x04
+	max
 	push_sr
 	ldwio	1, 260
 	incf
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	nop
 	nop
 	ldio	1, 3
-	.byte 0x03
+	pop_sr
 	ldio	2, 13
-	.byte 0x02
+	push_sr
 	reti
-	.byte 0x01
+	normal
 	pushw 2
 	nop
 	nop
 	nop
-	.byte 0x1a, 0x01, 0x1a
+	jp16	6657
 	push_sr
 	pop_f
 	push_sr
@@ -1173,13 +1179,13 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	ex_ff
-	.byte 0x01
+	normal
 	ccf
-	.byte 0x01
+	normal
 	zcf
-	.byte 0x01
+	normal
 	scf
-	.byte 0x01
+	normal
 	push_a
 	push_sr
 	pop_a
@@ -1199,19 +1205,19 @@ Voice_NoteChannelTable1:
 	nop
 	nop
 	ldw	iz, 13569
-	.byte 0x01
+	normal
 	ldw	ix, 12290
-	.byte 0x01
+	normal
 	ldw	iz, 12547
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	nop
 	nop
 	ld	xiy, 1174496001
-	.byte 0x02
+	push_sr
 	ld	xiy, 1208043266
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
@@ -1223,9 +1229,9 @@ Voice_NoteChannelTable1:
 	nop
 	.byte 0x86, 0x01, 0x87, 0x01
 	add	(xwa+1), a
-	.byte 0x01
+	normal
 	add	(xde+1), c
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
@@ -1578,7 +1584,7 @@ Voice_NoteChannelTable2:
 	nop
 	retd	0x0000
 	nop
-	.byte 0x14
+	push_a
 	nop
 	nop
 	nop
@@ -1586,7 +1592,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	.byte 0x15
+	pop_a
 	nop
 	nop
 	nop
@@ -1594,7 +1600,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	.byte 0x16
+	ex_ff
 	nop
 	nop
 	nop
@@ -1610,7 +1616,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	.zero 24
-	.byte 0x1a, 0x00, 0x00
+	jp16	0
 	nop
 	popw	bc
 	nop
@@ -1621,7 +1627,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	.byte 0x18
+	push_f
 	nop
 	nop
 	nop
@@ -1629,7 +1635,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	.byte 0x19
+	pop_f
 	nop
 	nop
 	nop
@@ -1638,7 +1644,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
@@ -1646,7 +1652,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	nop
@@ -1655,7 +1661,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -1687,7 +1693,7 @@ Voice_NoteChannelTable2:
 	nop
 	nop
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	nop
 	nop
@@ -1777,146 +1783,149 @@ Voice_NoteParamTable:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	pop_sr
-	.byte 0x01
-	pop_sr
-	push_sr
-	pop_sr
-	pop_sr
-	nop
-	.byte 0x01
-	pop_sr
-	.byte 0x01
+	normal
 	pop_sr
 	push_sr
 	pop_sr
 	pop_sr
 	nop
-	.byte 0x01
+	normal
 	pop_sr
-	.byte 0x01
-	pop_sr
-	push_sr
-	pop_sr
-	pop_sr
-	nop
-	.byte 0x01
-	pop_sr
-	.byte 0x01
+	normal
 	pop_sr
 	push_sr
 	pop_sr
 	pop_sr
 	nop
-	.byte 0x01, 0x04, 0x01, 0x04
-	push_sr
-	.byte 0x04
-	push_sr
-	nop
-	.byte 0x01
+	normal
 	pop_sr
-	.byte 0x01
+	normal
 	pop_sr
 	push_sr
 	pop_sr
 	pop_sr
 	nop
-	.byte 0x01
+	normal
 	pop_sr
-	.byte 0x01
+	normal
 	pop_sr
 	push_sr
 	pop_sr
 	pop_sr
 	nop
-	.byte 0x01
+	normal
+	max
+	normal
+	max
+	push_sr
+	max
+	push_sr
+	nop
+	normal
+	pop_sr
+	normal
+	pop_sr
+	push_sr
+	pop_sr
+	pop_sr
+	nop
+	normal
+	pop_sr
+	normal
+	pop_sr
+	push_sr
+	pop_sr
+	pop_sr
+	nop
+	normal
 	reti
-	.byte 0x01
+	normal
 	reti
-	.byte 0x01
+	normal
 	reti
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	ldio	1, 8
-	.byte 0x02
+	push_sr
 	ldio	2, 0
-	.byte 0x01
+	normal
 	ldio	1, 8
-	.byte 0x02
+	push_sr
 	ldio	2, 0
-	.byte 0x01
+	normal
 	ldwio	1, 266
 	ldwio	1, 256
 	pushw 2818
 	push_sr
 	pushw 2
-	.byte 0x01
+	normal
 	incf
-	.byte 0x02
+	push_sr
 	incf
-	.byte 0x02
+	push_sr
 	incf
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x01
+	normal
 	decf
-	.byte 0x02
+	push_sr
 	decf
-	.byte 0x02
+	push_sr
 	decf
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x01
+	normal
 	decf
-	.byte 0x02
+	push_sr
 	decf
-	.byte 0x02
+	push_sr
 	decf
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x01
+	normal
 	decf
-	.byte 0x02
+	push_sr
 	decf
-	.byte 0x02
+	push_sr
 	decf
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x01
+	normal
 	scf
-	.byte 0x01
+	normal
 	scf
-	.byte 0x01
+	normal
 	scf
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	scf
-	.byte 0x01
+	normal
 	scf
-	.byte 0x01
+	normal
 	scf
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	ccf
-	.byte 0x01
+	normal
 	ccf
-	.byte 0x01
+	normal
 	ccf
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	zcf
-	.byte 0x01
+	normal
 	zcf
-	.byte 0x01
+	normal
 	zcf
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	push_a
 	push_sr
 	push_a
@@ -1924,7 +1933,7 @@ Voice_NoteParamTable:
 	push_a
 	push_sr
 	nop
-	.byte 0x01
+	normal
 	pop_a
 	push_sr
 	pop_a
@@ -1932,31 +1941,31 @@ Voice_NoteParamTable:
 	pop_a
 	push_sr
 	nop
-	.byte 0x01
+	normal
 	ex_ff
-	.byte 0x01
+	normal
 	ex_ff
-	.byte 0x01
+	normal
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	ex_ff
-	.byte 0x01
+	normal
 	ex_ff
-	.byte 0x01
+	normal
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	ex_ff
-	.byte 0x01
+	normal
 	ex_ff
-	.byte 0x01
+	normal
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	pop_f
 	push_sr
 	pop_f
@@ -1964,9 +1973,11 @@ Voice_NoteParamTable:
 	pop_f
 	push_sr
 	nop
-	.byte 0x01, 0x1a, 0x01, 0x1a
+	normal
+	jp16	6657
 	push_sr
-	.byte 0x1a, 0x02, 0x00, 0x01
+	jp16	2
+	normal
 	jp	137985
 	jp	65539
 	jp	137985
@@ -1981,496 +1992,513 @@ Voice_NoteParamTable:
 	ldb	a, 2
 	ldb	a, 2
 	nop
-	.byte 0x01
+	normal
 	ldb	a, 2
 	ldb	a, 2
 	ldb	a, 2
 	nop
-	.byte 0x01
+	normal
 	ldb	a, 2
 	ldb	a, 2
 	ldb	a, 2
 	nop
-	.byte 0x01
+	normal
 	ldb	c, 1
 	ldb	c, 1
 	ldb	c, 3
 	nop
-	.byte 0x01
+	normal
 	ldb	d, 1
 	ldb	d, 1
 	ldb	d, 1
 	nop
-	.byte 0x01
+	normal
 	ldb	e, 1
 	ldb	e, 1
 	ldb	e, 1
 	nop
-	.byte 0x01
+	normal
 	ldb	h, 1
 	ldb	h, 1
 	ldb	h, 1
 	nop
-	.byte 0x01
+	normal
 	ldb	h, 1
 	ldb	h, 1
 	ldb	h, 1
 	nop
-	.byte 0x01
+	normal
 	ldb	h, 1
 	ldb	h, 1
 	ldb	h, 1
 	nop
-	.byte 0x01
+	normal
 	ldb	h, 1
 	ldb	h, 1
 	ldb	h, 1
 	nop
-	.byte 0x01
+	normal
 	ldb	h, 1
 	ldb	h, 1
 	ldb	h, 1
 	nop
-	.byte 0x01
+	normal
 	ldb	h, 1
 	ldb	h, 1
 	ldb	h, 1
 	nop
-	.byte 0x01
+	normal
 	ldb	h, 1
 	ldb	h, 1
 	ldb	h, 1
 	nop
-	.byte 0x01
+	normal
 	ldb	h, 1
 	ldb	h, 1
 	ldb	h, 1
 	nop
-	.byte 0x01
+	normal
 	ldb	h, 1
 	ldb	h, 1
 	ldb	h, 1
 	nop
-	.byte 0x01
+	normal
 	ldb	h, 1
 	ldb	h, 1
 	ldb	h, 1
 	nop
-	.byte 0x01
+	normal
 	ldw	wa, 12289
-	.byte 0x01
+	normal
 	ldw	wa, 1
-	.byte 0x01
+	normal
 	ldw	bc, 12546
-	.byte 0x02
+	push_sr
 	ldw	bc, 2
-	.byte 0x01
+	normal
 	ldw	bc, 12546
-	.byte 0x02
+	push_sr
 	ldw	bc, 2
-	.byte 0x01
+	normal
 	ldw	bc, 12546
-	.byte 0x02
+	push_sr
 	ldw	bc, 2
-	.byte 0x01
+	normal
 	ldw	ix, 13314
-	.byte 0x02
+	push_sr
 	ldw	ix, 2
-	.byte 0x01
+	normal
 	ldw	iy, 13569
-	.byte 0x01
+	normal
 	ldw	iy, 1
-	.byte 0x01
+	normal
 	ldw	iz, 13825
-	.byte 0x01
+	normal
 	ldw	iz, 3
-	.byte 0x01
+	normal
 	ldw	iz, 13825
-	.byte 0x01
+	normal
 	ldw	iz, 3
-	.byte 0x01
+	normal
 	ldw	iz, 13825
-	.byte 0x01
+	normal
 	ldw	iz, 3
-	.byte 0x01
+	normal
 	ldw	iz, 13825
-	.byte 0x01
+	normal
 	ldw	iz, 3
-	.byte 0x01
+	normal
 	ldw	iz, 13825
-	.byte 0x01
+	normal
 	ldw	iz, 3
-	.byte 0x01
+	normal
 	ldw	iz, 13825
-	.byte 0x01
+	normal
 	ldw	iz, 3
-	.byte 0x01
+	normal
 	ldw	iz, 13825
-	.byte 0x01
+	normal
 	ldw	iz, 3
-	.byte 0x01
+	normal
 	ldw	iz, 13825
-	.byte 0x01
+	normal
 	ldw	iz, 3
-	.byte 0x01
+	normal
 	ldw	iz, 13825
-	.byte 0x01
+	normal
 	ldw	iz, 3
-	.byte 0x01
+	normal
 	ldw	iz, 13825
-	.byte 0x01
+	normal
 	ldw	iz, 3
-	.byte 0x01
+	normal
 	ld	xwa, 1073823745
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	ld	xbc, 1090601217
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	ld	xde, 1107444225
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x01
+	normal
 	ld	xhl, 1124221698
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x01
+	normal
 	ld	xiy, 1157776641
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x01
+	normal
 	ld	xiy, 1157776641
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x01
+	normal
 	ld	xiz, 1174554113
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x01
+	normal
 	ld	xsp, 1191266049
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	popw	wa
-	.byte 0x01
+	normal
 	popw	wa
-	.byte 0x01
+	normal
 	popw	wa
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	popw	wa
-	.byte 0x01
+	normal
 	popw	wa
-	.byte 0x01
+	normal
 	popw	wa
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	popw	de
-	.byte 0x01
+	normal
 	popw	de
-	.byte 0x01
+	normal
 	popw	de
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	popw	hl
-	.byte 0x01
+	normal
 	popw	hl
-	.byte 0x01
+	normal
 	popw	hl
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	popw	hl
-	.byte 0x01
+	normal
 	popw	hl
-	.byte 0x01
+	normal
 	popw	hl
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	popw	iy
-	.byte 0x01
+	normal
 	popw	iy
-	.byte 0x02
-	popw	iy
-	.byte 0x02
-	nop
-	.byte 0x01
-	popw	iy
-	.byte 0x01
-	popw	iy
-	.byte 0x02
-	popw	iy
-	.byte 0x02
-	nop
-	.byte 0x01
-	popw	iy
-	.byte 0x01
-	popw	iy
-	.byte 0x02
-	popw	iy
-	.byte 0x02
-	nop
-	.byte 0x01, 0x50
 	push_sr
+	popw	iy
+	push_sr
+	nop
+	normal
+	popw	iy
+	normal
+	popw	iy
+	push_sr
+	popw	iy
+	push_sr
+	nop
+	normal
+	popw	iy
+	normal
+	popw	iy
+	push_sr
+	popw	iy
+	push_sr
+	nop
+	normal
 	.byte 0x50
-	push_sr
-	.byte 0x50
-	push_sr
-	nop
-	.byte 0x01, 0x50
 	push_sr
 	.byte 0x50
 	push_sr
 	.byte 0x50
 	push_sr
 	nop
-	.byte 0x01, 0x50
-	push_sr
+	normal
 	.byte 0x50
 	push_sr
 	.byte 0x50
 	push_sr
-	nop
-	.byte 0x01, 0x53
-	push_sr
-	.byte 0x53
-	push_sr
-	.byte 0x53
+	.byte 0x50
 	push_sr
 	nop
-	.byte 0x01, 0x53
+	normal
+	.byte 0x50
 	push_sr
-	.byte 0x53
+	.byte 0x50
 	push_sr
-	.byte 0x53
+	.byte 0x50
 	push_sr
 	nop
-	.byte 0x01, 0x53
+	normal
+	.byte 0x53
 	push_sr
 	.byte 0x53
 	push_sr
 	.byte 0x53
 	push_sr
 	nop
-	.byte 0x01, 0x53
-	push_sr
+	normal
 	.byte 0x53
-	push_sr
-	.byte 0x53
-	push_sr
-	nop
-	.byte 0x01, 0x53
 	push_sr
 	.byte 0x53
 	push_sr
 	.byte 0x53
 	push_sr
 	nop
-	.byte 0x01
+	normal
+	.byte 0x53
+	push_sr
+	.byte 0x53
+	push_sr
+	.byte 0x53
+	push_sr
+	nop
+	normal
+	.byte 0x53
+	push_sr
+	.byte 0x53
+	push_sr
+	.byte 0x53
+	push_sr
+	nop
+	normal
+	.byte 0x53
+	push_sr
+	.byte 0x53
+	push_sr
+	.byte 0x53
+	push_sr
+	nop
+	normal
 	pop	xwa
-	.byte 0x02
+	push_sr
 	pop	xwa
-	.byte 0x02
+	push_sr
 	pop	xwa
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x01
+	normal
 	pop	xbc
-	.byte 0x01
+	normal
 	pop	xbc
-	.byte 0x01
+	normal
 	pop	xbc
-	.byte 0x03
+	pop_sr
 	nop
-	.byte 0x01
+	normal
 	pop	xde
-	.byte 0x01
+	normal
 	pop	xde
-	.byte 0x01
+	normal
 	pop	xde
-	.byte 0x03
+	pop_sr
 	nop
-	.byte 0x01
+	normal
 	pop	xhl
-	.byte 0x01
+	normal
 	pop	xhl
-	.byte 0x01
+	normal
 	pop	xhl
-	.byte 0x03
+	pop_sr
 	nop
-	.byte 0x01
+	normal
 	pop	xix
-	.byte 0x03
+	pop_sr
 	pop	xix
-	.byte 0x03
+	pop_sr
 	pop	xix
-	.byte 0x03
+	pop_sr
 	nop
-	.byte 0x01
+	normal
 	pop	xiy
-	.byte 0x03
+	pop_sr
 	pop	xiy
-	.byte 0x03
+	pop_sr
 	pop	xiy
-	.byte 0x03
+	pop_sr
 	nop
-	.byte 0x01
+	normal
 	pop	xiz
-	.byte 0x03
+	pop_sr
 	pop	xiz
-	.byte 0x03
+	pop_sr
 	pop	xiz
-	.byte 0x03
+	pop_sr
 	nop
-	.byte 0x01
+	normal
 	pop	xiz
-	.byte 0x03
+	pop_sr
 	pop	xiz
-	.byte 0x03
+	pop_sr
 	pop	xiz
-	.byte 0x03
+	pop_sr
 	nop
-	.byte 0x01
-	jr	le, 3
-	jr	le, 3
-	jr	le, 3
-	nop
-	.byte 0x01
+	normal
 	jr	le, 3
 	jr	le, 3
 	jr	le, 3
 	nop
-	.byte 0x01
+	normal
 	jr	le, 3
 	jr	le, 3
 	jr	le, 3
 	nop
-	.byte 0x01
+	normal
+	jr	le, 3
+	jr	le, 3
+	jr	le, 3
+	nop
+	normal
 	jr	ule, 1
 	jr	ule, 1
 	jr	ule, 1
 	nop
-	.byte 0x01
+	normal
 	jr	ule, 1
 	jr	ule, 1
 	jr	ule, 1
 	nop
-	.byte 0x01
+	normal
 	jr	mi, 1
 	jr	mi, 1
 	jr	mi, 1
 	nop
-	.byte 0x01
+	normal
 	jr	z, 1
 	jr	z, 1
 	jr	z, 1
 	nop
-	.byte 0x01
+	normal
 	jr	z, 1
 	jr	z, 1
 	jr	z, 1
 	nop
-	.byte 0x01
+	normal
 	jr	z, 1
 	jr	z, 1
 	jr	z, 1
 	nop
-	.byte 0x01
+	normal
 	jr	z, 1
 	jr	z, 1
 	jr	z, 1
 	nop
-	.byte 0x01
+	normal
 	jr	z, 1
 	jr	z, 1
 	jr	z, 1
 	nop
-	.byte 0x01
+	normal
 	jr	z, 1
 	jr	z, 1
 	jr	z, 1
 	nop
-	.byte 0x01
+	normal
 	jr	z, 1
 	jr	z, 1
 	jr	z, 1
 	nop
-	.byte 0x01
+	normal
 	jr	z, 1
 	jr	z, 1
 	jr	z, 1
 	nop
-	.byte 0x01
+	normal
 	jr	z, 1
 	jr	z, 1
 	jr	z, 1
 	nop
-	.byte 0x01
+	normal
 	jr	z, 1
 	jr	z, 1
 	jr	z, 1
 	nop
-	.byte 0x01
+	normal
 	jrl	f, 28673
-	.byte 0x01
+	normal
 	jrl	f, 1
-	.byte 0x01
+	normal
 	jrl	lt, 28929
-	.byte 0x01
+	normal
 	jrl	lt, 1
-	.byte 0x01
+	normal
 	jrl	le, 29185
-	.byte 0x01
+	normal
 	jrl	le, 1
-	.byte 0x01
+	normal
 	jrl	le, 29185
-	.byte 0x01
+	normal
 	jrl	le, 1
-	.byte 0x01, 0x74, 0x01, 0x74, 0x01, 0x74, 0x01, 0x00, 0x01
+	normal
+	.byte 0x74, 0x01, 0x74
+	normal
+	.byte 0x74, 0x01, 0x00
+	normal
 	jrl	mi, 29953
-	.byte 0x01
+	normal
 	jrl	mi, 1
-	.byte 0x01
+	normal
 	jrl	mi, 29953
-	.byte 0x01
+	normal
 	jrl	mi, 1
-	.byte 0x01
+	normal
 	jrl	mi, 29953
-	.byte 0x01
+	normal
 	jrl	mi, 1
-	.byte 0x01
+	normal
 	jrl	30721
-	.byte 0x01
+	normal
 	jrl	1
-	.byte 0x01
+	normal
 	jrl	ge, 30977
-	.byte 0x01
+	normal
 	jrl	ge, 1
-	.byte 0x01
+	normal
 	jrl	gt, 31233
-	.byte 0x01
+	normal
 	jrl	gt, 1
-	.byte 0x01
+	normal
 	jrl	ugt, 31489
-	.byte 0x01
+	normal
 	jrl	ugt, 1
-	.byte 0x01, 0x7c, 0x01, 0x7c, 0x01, 0x7c, 0x01, 0x00, 0x01
+	normal
+	.byte 0x7c, 0x01, 0x7c
+	normal
+	.byte 0x7c, 0x01, 0x00
+	normal
 	jrl	pl, 32001
-	.byte 0x01
+	normal
 	jrl	pl, 1
-	.byte 0x01
+	normal
 	jrl	pl, 32001
-	.byte 0x01
+	normal
 	jrl	pl, 1
-	.byte 0x01
+	normal
 	jrl	pl, 32001
-	.byte 0x01, 0x7d, 0x01
+	normal
+	.byte 0x7d, 0x01
 
 AccPlay_Entry:
 	jp AccPlay_MainDispatch
@@ -3101,11 +3129,11 @@ AccPlay_NoteParamTable:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	scf
 	nop
-	.byte 0x01
+	normal
 	nop
 	scf
 	nop
@@ -3117,7 +3145,7 @@ AccPlay_NoteParamTable:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	pop_sr
 	nop
 	nop
@@ -3126,7 +3154,7 @@ AccPlay_NoteParamTable:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	scf
 	scf
 	nop

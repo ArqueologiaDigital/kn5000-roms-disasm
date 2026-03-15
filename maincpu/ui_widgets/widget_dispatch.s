@@ -4532,7 +4532,7 @@ WidgetParam_Config_002:
 	ldb	a, 0
 	nop
 	nop
-	.byte 0x00
+	nop
 	.asciz "&ffz"
 	.byte 0x06, 0x74
 	.byte 0x00, 0x01, 0x7a, 0xf0
@@ -7310,26 +7310,26 @@ SystemConfig_PointerTable:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	swi	7
-	.byte 0x01
+	normal
 	nop
 	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 32768
-	.byte 0x01
+	normal
 	nop
 	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
@@ -7447,7 +7447,7 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	.long CharMap_ValueData_B
 	ldb	w, 0xff
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
 	nop
@@ -7462,7 +7462,7 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	swi	7
 	nop
 	ldb	w, 0
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -7474,13 +7474,13 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	ldio	8, 0
 	nop
 	push_sr
-	.byte 0x04
+	max
 	nop
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	nop
-	.byte 0x01
+	normal
 	nop
 	swi	7
 	swi	7
@@ -7517,7 +7517,7 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	push_sr
 	nop
 	nop
-	.byte 0x1c, 0x00, 0x55
+	call16	21760
 	nop
 	.byte 0x73, 0x00, 0x91
 	nop
@@ -7525,59 +7525,65 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	pop_sr
 	pop_sr
 	pop_sr
-	.byte 0x04
+	max
 	pop_sr
 	pop_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	pop_sr
-	.byte 0x04
+	max
 	ldio	3, 4
 	pop_sr
-	.byte 0x04
+	max
 	pop_sr
 	pop_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	pop_sr
-	.byte 0x04
+	max
 	ldio	6, 3
-	.byte 0x04, 0x04
+	max
+	max
 	pop_sr
 	pop_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	pop_sr
-	.byte 0x04, 0x04, 0x04, 0x04, 0x04, 0x04
+	max
+	max
+	max
+	max
+	max
+	max
 	pop_sr
 	pop_sr
 	pop_sr
-	.byte 0x04
+	max
 	pop_sr
 	ei	3
 	push 10
 	reti
 	pop_sr
-	.byte 0x04
+	max
 	pop_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	3
-	.byte 0x04
+	max
 	halt
 	ei	4
 	pop_sr
-	.byte 0x04
+	max
 	pop_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	3
-	.byte 0x04
+	max
 	pop_sr
 	pop_sr
 	.fill 8, 1, 0x03
@@ -8829,21 +8835,21 @@ SoundEffect_Dispatch_Table:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 32768
-	.byte 0x01
+	normal
 	nop
 	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
@@ -8851,17 +8857,17 @@ SoundEffect_Dispatch_Table:
 	ld	xwa, 98304
 	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 32768
-	.byte 0x01
+	normal
 	nop
 	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
@@ -8889,30 +8895,33 @@ SoundEffect_Dispatch_Table:
 	nop
 	.byte 0x6f, 0x00
 	pop xiy
-	.byte 0x01
+	normal
 	pop xiy
-	.byte 0x01
+	normal
 	pop xiy
-	.byte 0x01
+	normal
 	pop xiy
-	.byte 0x01, 0xa4, 0x00
+	normal
+	.byte 0xa4, 0x00
 	pop xiy
-	.byte 0x01, 0xc1, 0x00, 0x5d, 0x01
+	normal
+	.byte 0xc1, 0x00, 0x5d, 0x01
 	pop xiy
-	.byte 0x01, 0xec, 0x00
+	normal
+	.byte 0xec, 0x00
 	ei	1
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
 	pushw 3340
 	ret
 	retd	512
-	.byte 0x01
+	normal
 	pushw 2312
 	ldwio	3, 1284
 	ei	7
@@ -8921,10 +8930,10 @@ SoundEffect_Dispatch_Table:
 	zcf
 	incf
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	10, 11
@@ -8933,7 +8942,7 @@ SoundEffect_Dispatch_Table:
 	ret
 	retd	9
 	push_sr
-	.byte 0x01
+	normal
 	pushw 2312
 	ldwio	3, 3076
 	ei	7
@@ -8942,17 +8951,17 @@ SoundEffect_Dispatch_Table:
 	zcf
 	halt
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
 	pushw 3340
 	retd	14
 	push_sr
-	.byte 0x01
+	normal
 	pushw 2312
 	ldwio	3, 1284
 	ei	7
@@ -9443,10 +9452,10 @@ CharMap_Mode17:
 ; Character mapping table - full permutation variant G
 CharMap_Mode18:
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
@@ -9473,10 +9482,10 @@ CharMap_Mode18:
 ; Character mapping table - full permutation variant H
 CharMap_Mode19:
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
@@ -9506,10 +9515,10 @@ CharMap_Mode19:
 ; Character mapping table - full permutation variant I
 CharMap_Mode20:
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
@@ -9691,7 +9700,7 @@ CharMap_FullPermutation:
 	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x20, 0x20, 0x20
 	.ascii " Initial     "
 	rcf
-	.byte 0x01
+	normal
 	nop
 	nop
 	.byte 0x55, 0x81, 0x40, 0x55
@@ -9734,7 +9743,8 @@ CharMap_FullPermutation:
 	nop
 	nop
 	ld	xwa, 169085507
-	.byte 0x01, 0x64, 0x00
+	normal
+	.byte 0x64, 0x00
 	nop
 	nop
 	nop
@@ -9800,13 +9810,15 @@ CharMap_FullPermutation:
 	nop
 	nop
 	decf
-	.byte 0x01
+	normal
 	add	(xde+6), b
 	ei	138
 	ei	225
 	ei	13
-	.byte 0x01, 0xe1, 0x06, 0xe1, 0x06, 0xe1, 0x06, 0xe1
-	.byte 0x06, 0x66, 0x06, 0x1a, 0x05, 0xaf
+	normal
+	.byte 0xe1, 0x06, 0xe1, 0x06, 0xe1, 0x06, 0xe1, 0x06
+	.byte 0x66, 0x06
+	jp16	44805
 	pop_sr
 	.byte 0xe1, 0x06, 0xe1, 0x06, 0x69, 0x00, 0xe1, 0x06
 	.byte 0xb9, 0x02, 0xe1, 0x06, 0xe1, 0x06, 0xb2, 0x03

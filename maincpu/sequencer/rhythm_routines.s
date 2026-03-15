@@ -497,25 +497,25 @@ Rhythm_InstrMapTable_Default:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	pop_sr
 	push 10
 	reti
-	.byte 0x04
+	max
 	push_sr
 	halt
 	ei	0x06
 	nop
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	ldio	10, 3
 	ldio	4, 0
 	ccf
 	zcf
-	.byte 0x14
+	push_a
 	nop
 	halt
 	nop
@@ -523,7 +523,8 @@ Rhythm_InstrMapTable_Default:
 	halt
 	nop
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	ei	0x04
 	halt
 	.zero 8
@@ -531,13 +532,13 @@ Rhythm_InstrMapTable_Default:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	pop_sr
 	push 10
 	reti
-	.byte 0x04
+	max
 	push_sr
 	halt
 	ei	0x06
@@ -545,11 +546,11 @@ Rhythm_InstrMapTable_Default:
 	retd	0x0a08
 	rcf
 	scf
-	.byte 0x04
+	max
 	decf
 	ccf
 	zcf
-	.byte 0x14
+	push_a
 	nop
 	halt
 	incf
@@ -557,7 +558,8 @@ Rhythm_InstrMapTable_Default:
 	halt
 	incf
 	decf
-	.byte 0x01, 0x01
+	normal
+	normal
 	ei	0x04
 	halt
 	pushw 16
@@ -570,25 +572,25 @@ Rhythm_InstrMapTable_Default:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	pop_sr
 	push 10
 	reti
-	.byte 0x04
+	max
 	push_sr
 	halt
 	ei	0x06
 	nop
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	ldio	10, 3
 	ldio	4, 0
 	ccf
 	zcf
-	.byte 0x14
+	push_a
 	nop
 	halt
 	nop
@@ -596,7 +598,8 @@ Rhythm_InstrMapTable_Default:
 	halt
 	nop
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	ei	0x04
 	halt
 	nop
@@ -751,47 +754,81 @@ Rhythm_VoiceMap_Done:
 Rhythm_PitchShiftTable_Default:
 	nop
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	push_sr
-	.byte 0x01, 0x01
+	normal
+	normal
 	push_sr
-	.byte 0x01, 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
 	push_sr
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
-	.byte 0x01, 0x01, 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	.fill 8, 1, 0x01
 	nop
-	.byte 0x02
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	.byte 0x01, 0x01, 0x01
 	push_sr
-	.byte 0x01, 0x01
-	push_sr
-	.byte 0x01, 0x01, 0x01, 0x01
 	nop
-	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
-	push_sr
-	.byte 0x01, 0x01
 	nop
-	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	normal
+	normal
+	normal
+	push_sr
+	normal
+	normal
+	push_sr
+	normal
+	normal
+	normal
+	normal
+	nop
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
+	push_sr
+	normal
+	normal
+	nop
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
 	.fill 8, 1, 0x01
-	.byte 0x01
+	normal
 	nop
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	nop
@@ -848,23 +885,23 @@ Rhythm_VelocityTable_A:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	ldwio	7, 516
 	halt
 	ei	0x06
 	nop
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	ldio	10, 3
 	ldio	4, 0
 	ccf
 	zcf
-	.byte 0x14
+	push_a
 	nop
 	halt
 	nop
@@ -872,7 +909,8 @@ Rhythm_VelocityTable_A:
 	halt
 	nop
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	ei	0x04
 	halt
 	.zero 8
@@ -880,10 +918,10 @@ Rhythm_VelocityTable_A:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	ldwio	7, 516
 	halt
@@ -892,11 +930,11 @@ Rhythm_VelocityTable_A:
 	retd	0x0a08
 	rcf
 	scf
-	.byte 0x04
+	max
 	decf
 	ccf
 	zcf
-	.byte 0x14
+	push_a
 	nop
 	halt
 	incf
@@ -904,7 +942,8 @@ Rhythm_VelocityTable_A:
 	halt
 	incf
 	decf
-	.byte 0x01, 0x01
+	normal
+	normal
 	ei	0x04
 	halt
 	pushw 16

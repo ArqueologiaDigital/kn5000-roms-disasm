@@ -5605,7 +5605,7 @@ SeMenu_Utility_End:
 	ld	xix, 15806275
 	call	15789069
 	call	15793688
-	.byte 0x0e
+	ret
 SeMenu_NameEdit_DataBlock1:
 	ldda8	a, 1632
 	and	a, 15
@@ -6038,9 +6038,9 @@ SeMenu_PresetInit_Loop1:
 	; --- Loop 1: iterate A from 2 to 5, call table lookup (15 bytes) ---
 	ldb a, 0x02
 SeMenu_PresetInit_Loop1Body:
-	.byte 0x14					; push a  [compact 1-byte]
+	push_a
 	call SeMenu_PresetInit_TableLookup1
-	.byte 0x15					; pop a  [compact 1-byte]
+	pop_a
 	inc 1, a
 	cps	a, 6
 	jr c, SeMenu_PresetInit_Loop1Body
@@ -6064,9 +6064,9 @@ SeMenu_PresetInit_Loop2:
 	; --- Loop 2: iterate A from 0x0C to 0x0F, call table lookup (16 bytes) ---
 	ldb a, 0x0C
 SeMenu_PresetInit_Loop2Body:
-	.byte 0x14					; push a  [compact 1-byte]
+	push_a
 	call SeMenu_PresetInit_TableLookup2
-	.byte 0x15					; pop a  [compact 1-byte]
+	pop_a
 	inc 1, a
 	cp a, 0x10
 	jr c, SeMenu_PresetInit_Loop2Body
@@ -6399,7 +6399,7 @@ SeBitmap_EnvCurve1:
 	nop
 	nop
 	pop_sr
-	.byte 0x04
+	max
 	push_f
 	ldw	wa, 49248
 	.byte 0x80, 0x00
@@ -6479,9 +6479,9 @@ SeBitmap_EnvCurve2:
 	.byte 0xc0, 0xc0, 0xc0, 0xc0, 0xff, 0x7f
 	swi	7
 	.zero 8
-	.byte 0x01
+	normal
 	push_sr
-	.byte 0x04
+	max
 	ldio	16, 32
 	ld	xwa, 32832
 	nop
@@ -6501,7 +6501,7 @@ SeBitmap_EnvCurve2:
 	nop
 	nop
 	nop
-	.byte 0x03
+	pop_sr
 	incf
 	rcf
 	ldb	w, 192
@@ -6514,7 +6514,7 @@ SeBitmap_EnvCurve2:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x01
+	normal
 	ret
 	jrl	f, 128
 	nop
@@ -6567,7 +6567,7 @@ SeBitmap_EnvCurve3:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	pop_sr
 	ei	0x0c
 	ldio	24, 48
@@ -6595,7 +6595,7 @@ SeBitmap_EnvCurve3:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	pop_sr
 	ei	0x0c
 	push	xwa
@@ -6614,7 +6614,8 @@ SeBitmap_EnvCurve3:
 	nop
 	nop
 	pop_sr
-	.byte 0x1c, 0x30, 0x60, 0xc0
+	call16	24624
+	.byte 0xc0
 	.zero 24
 	nop
 	nop
@@ -6652,10 +6653,10 @@ SeBitmap_EnvCurve4:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	reti
 	incf
-	.byte 0x18
+	push_f
 	jrl	f, 128
 	nop
 	nop
@@ -6668,7 +6669,7 @@ SeBitmap_EnvCurve4:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	pop_sr
 	ei	0x0c
 	push	xwa
@@ -6688,11 +6689,11 @@ SeBitmap_EnvCurve4:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	pop_sr
 	push_sr
 	ei	0x0c
-	.byte 0x18
+	push_f
 	ldw	wa, 24608
 	.byte 0xc0, 0x80, 0x00
 	nop
@@ -6736,7 +6737,7 @@ SeBitmap_EnvCurve5:
 	.zero 32
 	nop
 	pop_sr
-	.byte 0x1c, 0xe0, 0x00
+	call16	224
 	swi	7
 	swi	7
 	swi	7
@@ -6745,7 +6746,7 @@ SeBitmap_EnvCurve5:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	ei	0x08
 	rcf
 	jr	f, -128
@@ -6758,9 +6759,11 @@ SeBitmap_EnvCurve5:
 	.zero 16
 	nop
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	push_sr
-	.byte 0x04, 0x04
+	max
+	max
 	ldio	16, 32
 	ld	xwa, 128
 	nop
@@ -6810,17 +6813,17 @@ SeBitmap_EnvCurve5:
 	.byte 0x1f, 0xe0, 0xff, 0xff
 	swi	7
 	.zero 32
-	.byte 0x01
+	normal
 	ei	0x38
 	.byte 0xc0, 0x00, 0xff
 	swi	7
 	swi	7
 	.zero 24
 	nop
-	.byte 0x01
+	normal
 	pop_sr
 	ei	0x0c
-	.byte 0x18
+	push_f
 	ldw	wa, 32832
 	nop
 	nop
@@ -6829,7 +6832,7 @@ SeBitmap_EnvCurve5:
 	swi	7
 	swi	7
 	swi	6
-	.byte 0x02
+	push_sr
 	reti
 	reti
 	reti
@@ -6858,13 +6861,13 @@ SeBitmap_EnvCurve5:
 	swi	7
 	swi	7
 	jp	778
-	.byte 0x02
+	push_sr
 	nop
 	push	xwa
-	.byte 0x01
+	normal
 	pop_sr
 	nop
-	.byte 0x1c, 0x10, 0x6e
+	call16	28176
 	nop
 	halt
 	nop
@@ -7028,7 +7031,7 @@ SeBitmap_EnvCurve5:
 	ldb	c, 5
 	.byte 0x64, 0x83
 	nop
-	.byte 0x1c, 0x11, 0x72
+	call16	29201
 	nop
 	halt
 	nop
@@ -7255,7 +7258,8 @@ SeBitmap_EnvCurve5:
 	ldb	b, 10
 	.byte 0xd1, 0x00
 	.long LABEL_E600DA
-	.byte 0xee, 0x00, 0x01
+	.byte 0xee, 0x00
+	normal
 	ldwio	179, 16640
 	nop
 	swi	3
@@ -7266,33 +7270,34 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0xa8, 0x00, 0x4a
 	nop
-	.byte 0x01
+	normal
 	ldwio	179, 26880
 	nop
 	swi	3
 	nop
 	jr	ge, 0
-	.byte 0x01
+	normal
 	ldwio	11, 27136
 	nop
 	.byte 0xa8, 0x00, 0x6a
 	nop
-	.byte 0x01
+	normal
 	ldwio	11, 35328
 	nop
 	.byte 0xa8, 0x00, 0x8a
 	nop
-	.byte 0x01
+	normal
 	ldwio	179, 37120
 	nop
 	swi	3
 	nop
-	.byte 0x91, 0x00, 0x01
+	.byte 0x91, 0x00
+	normal
 	ldwio	11, 43520
 	nop
 	.byte 0xa8, 0x00, 0xaa
 	nop
-	.byte 0x01
+	normal
 	ldwio	179, 47360
 	nop
 	swi	3
@@ -7300,7 +7305,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xb9, 0x00, 0x01, 0x0a
 	.long LABEL_E40031
 	.long LABEL_E40046
-	.byte 0x01
+	normal
 	ldwio	89, 58368
 	nop
 	jr	nz, 0
@@ -7345,12 +7350,12 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0xb2, 0x00
 	ld	xix, 0x48545045
-	.byte 0x02
+	push_sr
 	ldwio	213, 44544
 	nop
 	.byte 0xd5, 0x00, 0xcb
 	nop
-	.byte 0x1c, 0x0f, 0x7a
+	call16	31247
 	nop
 	halt
 	nop
@@ -7417,7 +7422,8 @@ SeBitmap_EnvCurve5:
 	ldwio	224, 42496
 	nop
 	ei	1
-	.byte 0xcc, 0x00, 0x01
+	.byte 0xcc, 0x00
+	normal
 	ldwio	214, 47616
 	nop
 	.byte 0xe0, 0x00, 0xba
@@ -7434,7 +7440,7 @@ SeBitmap_EnvCurve5:
 	ld	xiy, 11012642
 	ld	xiz, 1811992064
 	nop
-	.byte 0x01
+	normal
 	ldwio	158, 23040
 	nop
 	.byte 0xa8, 0x00, 0x5a
@@ -7535,37 +7541,37 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0xbe, 0x00, 0xee
 	nop
-	.byte 0x01
+	normal
 	ldwio	11, 18944
 	nop
 	.byte 0xd4, 0x00, 0x4a
 	nop
-	.byte 0x01
+	normal
 	ldwio	11, 27136
 	nop
 	.byte 0xd4, 0x00, 0x6a
 	nop
-	.byte 0x01
+	normal
 	ldwio	11, 35328
 	nop
 	.byte 0xd4, 0x00, 0x8a
 	nop
-	.byte 0x01
+	normal
 	ldwio	11, 43520
 	nop
 	.byte 0xd4, 0x00, 0xaa
 	nop
-	.byte 0x01
+	normal
 	ldwio	81, 58368
 	nop
 	.long LABEL_E40066
-	.byte 0x01
+	normal
 	ldwio	129, 58368
 	nop
 	.byte 0x96, 0x00, 0xe4, 0x00, 0x01, 0x0a
 	.long LABEL_E400A9
 	.long LABEL_E400BE
-	.byte 0x02
+	push_sr
 	ldwio	46, 13568
 	nop
 	pushw	iz
@@ -7578,7 +7584,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ei	0x0b
 	rcf
-	.byte 0x01
+	normal
 	.ascii "PAGE2/2"
 	.byte 0x17
 	.byte 0x10, 0x76, 0x00, 0x3e, 0x00, 0x4b, 0x45, 0x59
@@ -7642,14 +7648,14 @@ SeBitmap_EnvCurve5:
 	.byte 0x07, 0x05, 0x33, 0x24, 0x12, 0x07, 0x05, 0x39
 	.byte 0x24, 0x12, 0x09, 0x0a, 0x03, 0x00, 0xcb, 0x00
 	.long NakaInst_2d_d
-	.byte 0x01
+	normal
 	ldwio	3, 55552
 	nop
 	call	55553
 	halt
 	ldwio	4, 55808
 	nop
-	.byte 0x1c, 0x01, 0xe7
+	call16	59137
 	nop
 	halt
 	ldwio	22, 9985
@@ -7658,7 +7664,8 @@ SeBitmap_EnvCurve5:
 	nop
 	ei	11
 	rcf
-	.byte 0x01, 0x50, 0x41
+	normal
+	.byte 0x50, 0x41
 	ld	xsp, 0x322f3245
 	ldf	18
 	.byte 0x55
@@ -7739,41 +7746,44 @@ SeBitmap_EnvCurve5:
 	nop
 	push 10
 	incf
-	.byte 0x01
+	normal
 	ld	xbc, 1577137152
 	nop
 	push 10
 	push_a
-	.byte 0x01, 0x69, 0x00
+	normal
+	.byte 0x69, 0x00
 	ldw	ix, 31233
 	nop
-	.byte 0x01
+	normal
 	ldwio	32, 15617
 	nop
 	ldb	l, 1
 	push xiy
 	nop
-	.byte 0x01
+	normal
 	ldwio	33, 15873
 	nop
 	ldb	h, 1
 	push xiz
 	nop
-	.byte 0x01
+	normal
 	ldwio	34, 16129
 	nop
 	ldb	e, 1
 	push xsp
 	nop
-	.byte 0x01
+	normal
 	ldwio	34, 24577
 	nop
 	ldb	e, 1
-	.byte 0x60, 0x00, 0x01
+	.byte 0x60, 0x00
+	normal
 	ldwio	33, 24833
 	nop
 	ldb	h, 1
-	.byte 0x61, 0x00, 0x01
+	.byte 0x61, 0x00
+	normal
 	ldwio	32, 25089
 	nop
 	ldb	l, 1
@@ -7781,9 +7791,9 @@ SeBitmap_EnvCurve5:
 	push 10
 	ldb	c, 1
 	ldw	iz, 9216
-	.byte 0x01
+	normal
 	ld	xbc, 587860224
-	.byte 0x01
+	normal
 	pop xiz
 	nop
 	ldb	d, 1
@@ -7865,7 +7875,8 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0xd1, 0x00, 0x46, 0x52
 	ld	xiy, 403314513
-	.byte 0x01, 0xd1, 0x00, 0x47, 0x41
+	normal
+	.byte 0xd1, 0x00, 0x47, 0x41
 	popw bc
 	popw iz
 	ei	5
@@ -7916,27 +7927,31 @@ SeBitmap_EnvCurve5:
 	.byte 0xbb, 0x00, 0xcd
 	nop
 	push xix
-	.byte 0x01, 0xe9, 0x00, 0x01
+	normal
+	.byte 0xe9, 0x00
+	normal
 	ldwio	146, 28928
 	nop
 	.byte 0x99, 0x00, 0x71
 	nop
-	.byte 0x01
+	normal
 	ldwio	147, 29184
 	nop
 	.byte 0x98, 0x00, 0x72
 	nop
-	.byte 0x01
+	normal
 	ldwio	148, 29440
 	nop
 	.byte 0x97, 0x00, 0x73, 0x00, 0x01
 	ldwio	2, 56064
 	nop
-	.byte 0xa0, 0x00, 0xdb, 0x00, 0x01
+	.byte 0xa0, 0x00, 0xdb, 0x00
+	normal
 	ldwio	187, 56064
 	nop
 	push xix
-	.byte 0x01, 0xdb, 0x00
+	normal
+	.byte 0xdb, 0x00
 	push 10
 	.byte 0x95, 0x00, 0x60, 0x00, 0x96, 0x00, 0x75, 0x00
 	.byte 0x05
@@ -7948,7 +7963,8 @@ SeBitmap_EnvCurve5:
 	ldwio	188, 56320
 	nop
 	push xhl
-	.byte 0x01, 0xe8, 0x00
+	normal
+	.byte 0xe8, 0x00
 	ldf	21
 	.byte 0x6d, 0x00, 0x1e, 0x00, 0x48
 	popw bc
@@ -8015,7 +8031,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0xcd, 0x00, 0xf0, 0x00, 0xe9
 	nop
-	.byte 0x01
+	normal
 	ldwio	77, 56064
 	nop
 	.byte 0xf0, 0x00, 0xdb
@@ -8116,16 +8132,19 @@ SeBitmap_EnvCurve5:
 	.byte 0x7a, 0x00, 0xcd
 	nop
 	push_f
-	.byte 0x01, 0xe9, 0x00, 0x01
+	normal
+	.byte 0xe9, 0x00
+	normal
 	ldwio	29, 56064
 	nop
 	.byte 0x75, 0x00, 0xdb
 	nop
-	.byte 0x01
+	normal
 	ldwio	122, 56064
 	nop
 	push_f
-	.byte 0x01, 0xdb, 0x00
+	normal
+	.byte 0xdb, 0x00
 	halt
 	ldwio	30, 56320
 	nop
@@ -8135,7 +8154,8 @@ SeBitmap_EnvCurve5:
 	ldwio	123, 56320
 	nop
 	ldf	1
-	.byte 0xe8, 0x00, 0x1c, 0x0d, 0x70
+	.byte 0xe8, 0x00
+	call16	28685
 	nop
 	.byte 0x60, 0x00, 0x54
 	.ascii "HROUGH\""
@@ -8153,7 +8173,8 @@ SeBitmap_EnvCurve5:
 	nop
 	ei	11
 	rcf
-	.byte 0x01, 0x50, 0x41
+	normal
+	.byte 0x50, 0x41
 	ld	xsp, 0x322f3145
 	ldf	14
 	.byte 0x7f, 0x00, 0x30
@@ -8224,7 +8245,8 @@ SeBitmap_EnvCurve5:
 	.byte 0xca, 0x00, 0xcb, 0x00
 	ei	11
 	rcf
-	.byte 0x01, 0x50
+	normal
+	.byte 0x50
 	ld	xbc, 791823687
 	ldw	de, 2327
 	.byte 0x55
@@ -8280,7 +8302,8 @@ SeBitmap_EnvCurve5:
 	.byte 0x57
 	ldf	11
 	nop
-	.byte 0x01, 0xc3, 0x00, 0x54
+	normal
+	.byte 0xc3, 0x00, 0x54
 	popw sp
 	.byte 0x55
 	ld	xhl, 571217736
@@ -8342,14 +8365,18 @@ SeBitmap_EnvCurve5:
 	.long LABEL_E40A09
 	.byte 0xcd, 0x00
 	push	xiy
-	.byte 0x01, 0xe9, 0x00, 0x01
+	normal
+	.byte 0xe9, 0x00
+	normal
 	ldwio	30, 55808
 	nop
-	.byte 0xce, 0x00, 0xda, 0x00, 0x01
+	.byte 0xce, 0x00, 0xda, 0x00
+	normal
 	ldwio	228, 55808
 	nop
 	push	xiy
-	.byte 0x01, 0xda, 0x00
+	normal
+	.byte 0xda, 0x00
 	push_sr
 	ldwio	158, 52480
 	nop
@@ -8368,7 +8395,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ldw	de, 13313
 	nop
-	.byte 0x01
+	normal
 	ldwio	47, 24832
 	nop
 	swi	7
@@ -8383,7 +8410,7 @@ SeBitmap_EnvCurve5:
 	retd	0x2000
 	.byte 0xd4, 0x2a, 0xf1
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0xd8, 0x0c
 	push_sr
@@ -8400,7 +8427,7 @@ SeBitmap_EnvCurve5:
 	retd	0x2000
 	.byte 0xd4, 0x2a, 0xf1
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0xd8, 0x11
 	push_sr
@@ -8409,7 +8436,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ldb	w, 3
 	incf
-	.byte 0x02
+	push_sr
 	nop
 	decf
 	nop
@@ -8419,7 +8446,7 @@ SeBitmap_EnvCurve5:
 	retd	0x2000
 	.byte 0xd4, 0x2a, 0xf1
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0xd8, 0x16
 	push_sr
@@ -8428,7 +8455,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ldb	w, 19
 	incf
-	.byte 0x02
+	push_sr
 	nop
 	decf
 	nop
@@ -8438,7 +8465,7 @@ SeBitmap_EnvCurve5:
 	retd	0x2000
 	.byte 0xd4, 0x2a, 0xf1
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0xd8, 0x1b
 	push_sr
@@ -8447,7 +8474,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ldb	w, 35
 	incf
-	.byte 0x02
+	push_sr
 	nop
 	decf
 	nop
@@ -8457,14 +8484,14 @@ SeBitmap_EnvCurve5:
 	nop
 	ldb	w, 233
 	incf
-	.byte 0x03
+	pop_sr
 	halt
 	pushw 1635
 	swi	7
 	nop
 	ldb	w, 238
 	incf
-	.byte 0x02
+	push_sr
 	nop
 	halt
 	pushw 1636
@@ -8472,21 +8499,21 @@ SeBitmap_EnvCurve5:
 	nop
 	ldb	w, 242
 	incf
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	ldwio	101, 32518
 	nop
 	ldb	w, 233
 	scf
-	.byte 0x03
+	pop_sr
 	halt
 	pushw 1638
 	swi	7
 	nop
 	ldb	w, 238
 	scf
-	.byte 0x02
+	push_sr
 	nop
 	halt
 	pushw 1639
@@ -8494,7 +8521,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ldb	w, 242
 	scf
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	ldwio	104, 32518
@@ -8576,10 +8603,14 @@ SeBitmap_EnvCurve5:
 	nop
 	decf
 	nop
-	.byte 0x89, 0x00, 0x33, 0x01, 0xa5, 0x00
+	.byte 0x89, 0x00, 0x33
+	normal
+	.byte 0xa5, 0x00
 	decf
 	nop
-	.byte 0xa9, 0x00, 0x33, 0x01, 0xc5, 0x00, 0x03
+	.byte 0xa9, 0x00, 0x33
+	normal
+	.byte 0xc5, 0x00, 0x03
 	pushw 1632
 	retd	1280
 	pushw 61741
@@ -8646,14 +8677,21 @@ SeBitmap_EnvCurve5:
 SeMenu_CompareScreen_DataTable:
 	push	xiy
 	nop
-	.byte 0xbd, 0x00, 0x1c, 0x01, 0xca, 0x00, 0x04
+	.byte 0xbd, 0x00, 0x1c
+	normal
+	.byte 0xca, 0x00
+	max
 	nop
-	.byte 0xda, 0x00, 0x1c, 0x01, 0xe7
+	.byte 0xda, 0x00
+	call16	59137
 	nop
 	jp	15626
-	.byte 0xbd, 0x00, 0x1c, 0x01, 0xca, 0x00
+	.byte 0xbd, 0x00, 0x1c
+	normal
+	.byte 0xca, 0x00
 	jp	1034
-	.byte 0xda, 0x00, 0x1c, 0x01, 0xe7
+	.byte 0xda, 0x00
+	call16	59137
 	nop
 	push	xwa
 	pushw sp
@@ -8666,7 +8704,7 @@ SeMenu_CompareScreen_DataTable:
 ; se_compare_screen: 139 bytes (13 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_compare_screen.c)
 	.incbin "includes/generated/se_compare_screen.bin"
-	.byte 0x15
+	pop_a
 	ldw	wa, 241
 	.byte 0x95, 0x2f, 0xf1, 0x00, 0x9f, 0x2f, 0xf1, 0x00, 0xa9, 0x2f, 0xf1, 0x00, 0xb3, 0x2f, 0xf1, 0x00, 0xbd, 0x2f, 0xf1, 0x00, 0xc8, 0x2f, 0xf1, 0x00, 0xd3, 0x2f, 0xf1, 0x00, 0xde, 0x2f, 0xf1, 0x00, 0xe9, 0x2f, 0xf1, 0x00, 0xf4, 0x2f, 0xf1, 0x00, 0xff, 0x2f
 	ldada	xwa, 2560
@@ -8701,26 +8739,26 @@ SeMenu_CompareScreen_DataTable:
 	ldb	w, 147
 	ldb	b, 2
 	nop
-	.byte 0x02
+	push_sr
 	retd	0x0661
 	jrl	nc, 8192
 	jrl	le, -3781
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	.byte 0x98, 0x22, 0x02
 	retd	0x0660
 	jrl	nc, 8192
 	jrl	le, -3781
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	.byte 0x9d, 0x22, 0x02
 	retd	0x0662
 	jrl	nc, 8192
 	jrl	le, -3781
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	ld	xde, (xde)
 	.byte 0xa0, 0x30
@@ -8731,7 +8769,7 @@ SeMenu_CompareScreen_DataTable:
 	jr	f, 6
 	jrl	nc, 8192
 	jr	lt, 34
-	.byte 0x03
+	pop_sr
 	nop
 	ldwio	97, 32518
 	nop
@@ -8787,27 +8825,27 @@ SeMenu_CompareScreen_DataTable:
 	ldb	w, 172
 	ldb	b, 2
 	nop
-	.byte 0x02
+	push_sr
 	retd	0x0662
 	jrl	nc, 1536
 	jrl	le, -3781
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	.byte 0x9c, 0x22, 0x02
 	retd	0x0663
 	jrl	nc, 1536
 	jrl	le, -3781
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	ld	de, (xsp)
-	.byte 0x02
+	push_sr
 	retd	0x0664
 	jrl	nc, 1536
 	jrl	le, -3781
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	ld	xde, (xbc)
 	halt
@@ -8834,7 +8872,7 @@ SeMenu_CompareScreen_DataTable:
 	reti
 	scf
 	jr	ge, 6
-	.byte 0x03
+	pop_sr
 	nop
 	ldf	165
 	ldw	bc, 241
@@ -8897,12 +8935,12 @@ TuningSystem_Handler_Table:
 	.long TuningSys_Param_ModeSelect
 	.long TuningSys_Param_13
 	.long TuningSys_Param_NamesAndCoords
-	.byte 0x02
+	push_sr
 	retd	0x0664
 	ld_sd8b	w, 6
 	ldw	iz, 61749
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	ld	de, (xix)
 	nop
@@ -8925,11 +8963,11 @@ TuningSystem_Handler_Table:
 	nop
 	ldb	w, 166
 	ldb	b, 2
-	.byte 0x02
+	push_sr
 	retd	0x0663
 	.byte 0x80, 0x07
 	ldb	w, 209
-	.byte 0x14
+	push_a
 	stdi8	768, 171
 	ldb	b, 3
 	pushw 1632
@@ -8939,33 +8977,33 @@ TuningSystem_Handler_Table:
 	ld	xde, 33616181
 	retd	0x0665
 	rcf
-	.byte 0x04
+	max
 	ldb	w, 16
 	ldw	iy, 241
-	.byte 0x01
+	normal
 	nop
 	ldw	de, 522
 	retd	0x0666
 	rcf
-	.byte 0x04
+	max
 	ldb	w, 16
 	ldw	iy, 241
-	.byte 0x01
+	normal
 	nop
 	ldwio	15, 3842
 	jr	c, 6
 	rcf
-	.byte 0x04
+	max
 	ldb	w, 16
 	ldw	iy, 241
-	.byte 0x01
+	normal
 	nop
 	.byte 0xe2, 0x13, 0x02, 0x0f, 0x68
 	ei	0x10
-	.byte 0x04
+	max
 	ldb	w, 16
 	ldw	iy, 241
-	.byte 0x01
+	normal
 	nop
 	.byte 0xba, 0x18, 0x2b
 	pushw	iy
@@ -9143,7 +9181,8 @@ TuningSystem_Handler_Table:
 	swi	0
 	ldb	b, 142
 	ldwio	10, 277
-	.byte 0x1c, 0x00, 0x32, 0x01
+	call16	12800
+	normal
 	ldw	ix, 2560
 	ldwio	21, 16897
 	nop
@@ -9153,7 +9192,8 @@ TuningSystem_Handler_Table:
 	ldwio	15, 25088
 	nop
 	pushw ix
-	.byte 0x01, 0xc2, 0x00, 0x0a, 0x0a, 0x05
+	normal
+	.byte 0xc2, 0x00, 0x0a, 0x0a, 0x05
 	nop
 	.byte 0xd2, 0x00, 0x22, 0x00, 0xea
 	nop
@@ -9178,15 +9218,17 @@ TuningSystem_Handler_Table:
 	ldwio	10, 285
 	.byte 0xd2, 0x00, 0x3a, 0x01, 0xea
 	nop
-	.byte 0x01
+	normal
 	ldwio	245, 56832
 	nop
 	ccf
-	.byte 0x01, 0xde, 0x00, 0x0a, 0x0a, 0x4d, 0x00
+	normal
+	.byte 0xde, 0x00, 0x0a, 0x0a, 0x4d, 0x00
 	push xhl
 	nop
 	halt
-	.byte 0x01, 0x51
+	normal
+	.byte 0x51
 	nop
 	.byte 0x0a, 0x0a, 0x4d, 0x00
 	push xhl
@@ -9204,7 +9246,7 @@ TuningSystem_Handler_Table:
 	nop
 	nop
 	nop
-	.byte 0x1c, 0xf3, 0x0b
+	call16	3059
 	push_sr
 	nop
 	rcf
@@ -9223,7 +9265,7 @@ TuningSystem_Handler_Table:
 	nop
 	nop
 	nop
-	.byte 0x1c, 0xf3, 0x0b
+	call16	3059
 	push_sr
 	nop
 	decf
@@ -9242,7 +9284,7 @@ TuningSystem_Handler_Table:
 	nop
 	nop
 	nop
-	.byte 0x1c, 0xf3, 0x0b
+	call16	3059
 	push_sr
 	nop
 	push_sr
@@ -9260,13 +9302,15 @@ TuningSystem_Handler_Table:
 	nop
 	push xiz
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	popw sp
 	nop
 	jp	8202
 	.byte 0x67, 0x00
 	push_f
-	.byte 0x01, 0xc0, 0x00, 0x51
+	normal
+	.byte 0xc0, 0x00, 0x51
 	nop
 	push xiz
 	nop
@@ -9344,7 +9388,8 @@ TuningSystem_Handler_Table:
 	nop
 	push xiz
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	popw sp
 	nop
 	ldb	w, 0
@@ -9361,7 +9406,8 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0xf0, 0x00, 0x00, 0x01
 	rcf
-	.byte 0x01, 0x67, 0x00, 0x76, 0x00, 0x85
+	normal
+	.byte 0x67, 0x00, 0x76, 0x00, 0x85
 	nop
 	.byte 0x94, 0x00, 0xa3, 0x00
 	ld	(xde), 67
@@ -9464,22 +9510,26 @@ TuningSystem_Handler_Table:
 	.byte 0xee, 0x00, 0x22, 0x0a, 0xc9, 0x00, 0xda, 0x00
 	.long NakaInst_Param_Val01_07
 	ldb	b, 10
-	.byte 0x01, 0x01, 0xda, 0x00
+	normal
+	normal
+	.byte 0xda, 0x00
 	ex_ff
-	.byte 0x01, 0xee, 0x00, 0x01
+	normal
+	.byte 0xee, 0x00
+	normal
 	ldwio	11, 18944
 	nop
 	.byte 0xe6
 	nop
 	popw	de
 	nop
-	.byte 0x01
+	normal
 	ldwio	11, 27136
 	nop
 	.byte 0xe6
 	nop
 	jr	gt, 0
-	.byte 0x01
+	normal
 	ldwio	11, 35328
 	nop
 	.byte 0xe6
@@ -9497,13 +9547,13 @@ TuningSystem_Handler_Table:
 	ldwio	129, 58368
 	nop
 	.long LABEL_E40096
-	.byte 0x01
+	normal
 	ldwio	201, 58368
 	nop
 	.byte 0xde, 0x00, 0xe4, 0x00, 0x01, 0x0a
 	.long LABEL_E40101
 	.long LABEL_E40116
-	.byte 0x02
+	push_sr
 	ldwio	44, 14336
 	nop
 	pushw	ix
@@ -9514,7 +9564,7 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0x7c, 0x00, 0xca
 	nop
-	.byte 0x02
+	push_sr
 	ldwio	174, 14336
 	nop
 	.byte 0xae, 0x00, 0xca
@@ -9522,7 +9572,9 @@ TuningSystem_Handler_Table:
 	halt
 	ldwio	244, 46080
 	nop
-	.byte 0x1f, 0x01, 0xc8, 0x00
+	.byte 0x1f
+	normal
+	.byte 0xc8, 0x00
 	push 10
 	ld	xiy, 4211133440
 	nop
@@ -9620,7 +9672,8 @@ TuningSystem_Handler_Table:
 	popw sp
 	.byte 0x55
 	ld	xhl, 235738952
-	.byte 0x01, 0xd0, 0x00, 0x4b
+	normal
+	.byte 0xd0, 0x00, 0x4b
 	ld	xiy, 1314476889
 	.byte 0x43, 0x06, 0x0a, 0x64
 	.ascii "\"SELECT"
@@ -9655,7 +9708,7 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0x4f
 	nop
-	.byte 0x18
+	push_f
 	nop
 	.byte 0x4f
 	nop
@@ -9668,7 +9721,7 @@ TuningSystem_Handler_Table:
 	scf
 	ldwio	8, 29952
 	nop
-	.byte 0x18
+	push_f
 	nop
 	jrl	mi, 4352
 	ldwio	24, 33280
@@ -9679,7 +9732,7 @@ TuningSystem_Handler_Table:
 	scf
 	ldwio	8, 39936
 	nop
-	.byte 0x18
+	push_f
 	nop
 	.byte 0x9c, 0x00, 0x11
 	ldwio	31, 41472
@@ -9699,12 +9752,12 @@ TuningSystem_Handler_Table:
 	ccf
 	ldwio	24, 25600
 	nop
-	.byte 0x18
+	push_f
 	nop
 	jrl	mi, 4608
 	ldwio	24, 33280
 	nop
-	.byte 0x18
+	push_f
 	nop
 	.byte 0x9c, 0x00, 0x12
 	ldwio	31, 41472
@@ -9715,7 +9768,8 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0xdb, 0x00
 	push	xiy
-	.byte 0x01, 0xdb, 0x00
+	normal
+	.byte 0xdb, 0x00
 	halt
 	ldwio	22, 27393
 	nop
@@ -9755,7 +9809,7 @@ TuningSystem_Handler_Table:
 	ld	xiz, 458993
 	.byte 0x4f
 	decf
-	.byte 0x02
+	push_sr
 	retd	0x0663
 	.byte 0x80, 0x07
 	ldb	w, 118
@@ -9772,7 +9826,7 @@ TuningSystem_Handler_Table:
 	ldb	w, 118
 	ld	xiz, 458993
 	popw sp
-	.byte 0x1c, 0x04, 0x46
+	call16	17924
 	stda8	1024, h
 	stda8	1024, h
 	stda8	4864, h
@@ -9834,9 +9888,9 @@ TuningSystem_Handler_Table:
 	.byte 0x17, 0x10, 0x06, 0x00, 0x07, 0x00
 	.ascii "SOUND EDIT"
 	push 10
-	.byte 0x04
+	max
 	nop
-	.byte 0x04
+	max
 	nop
 	ld	xix, 587206656
 	halt
@@ -9928,7 +9982,7 @@ TuningSystem_Handler_Table:
 	.byte 0xee, 0x00, 0x01, 0x0a
 	.long LABEL_E40059
 	.long LABEL_E4006E
-	.byte 0x01
+	normal
 	ldwio	209, 58368
 	nop
 	.byte 0xe6
@@ -10341,7 +10395,7 @@ TuningSystem_Handler_Table:
 	ei	0x05
 	.byte 0xb9, 0x0f, 0x3a
 	ei	0x0a
-	.byte 0x03
+	pop_sr
 	ccf
 	.byte 0x53, 0x50
 	ld	xiy, 103957573
@@ -10424,7 +10478,7 @@ TuningSystem_Handler_Table:
 	ld	xiy, 303105286
 	push	xde
 	ldf	11
-	.byte 0x04
+	max
 	nop
 	.byte 0xd1, 0x00, 0x53, 0x50
 	ld	xiy, 186074181
@@ -10485,14 +10539,14 @@ TuningSystem_Handler_Table:
 	.byte 0xf1, 0x00, 0x42, 0x57, 0xf1, 0x00, 0x42, 0x57, 0xf1, 0x00, 0xae, 0x57, 0xf1, 0x00, 0xae, 0x57, 0xf1, 0x00, 0x04, 0x58, 0xf1, 0x00, 0xae, 0x57, 0xf1, 0x00, 0x04, 0x58, 0xf1, 0x00, 0x02, 0x0f
 	jr	f, 6
 	retd	0x2000
-	.byte 0x01
+	normal
 	pop	xhl
 	stdi8	3328, 9
 	ldio	2, 15
 	jr	f, 6
 	.byte 0x80, 0x07
 	ldb	w, 215
-	.byte 0x14
+	push_a
 	stdi8	768, 186
 	pushw 3842
 	jr	f, 6

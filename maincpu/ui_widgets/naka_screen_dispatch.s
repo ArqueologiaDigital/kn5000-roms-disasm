@@ -1243,45 +1243,47 @@ NoteStepDisplayData:
 	nop
 	ld	xiy, 16798290
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	push_sr
 	nop
 	pop_sr
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	pop_sr
 	nop
 	push_sr
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x6a, 0x00, 0x1c, 0x01, 0x6a
+	.byte 0x6a, 0x00
+	call16	27137
 	nop
-	.byte 0x1c, 0x01, 0x0c
+	call16	3073
 	push_sr
-	.byte 0xf5, 0x01, 0xf5, 0x01
+	.byte 0xf5, 0x01, 0xf5
+	normal
 NoteDataB_Natural:
 	.byte 0x42, 0x20, 0x00, 0xff
 NoteDataB_Flat:
@@ -1351,7 +1353,7 @@ StrTimeSig_1_2:
 	aligned_string "%s (%s)"
 	nop
 	nop
-	.byte 0x1a, 0x00, 0xa4
+	jp16	41984
 	nop
 	.byte 0xa4, 0x00, 0x55
 	nop
@@ -1365,7 +1367,9 @@ StrTimeSig_1_2:
 	nop
 	push xwa
 	nop
-	.byte 0x72, 0x01, 0x72, 0x01, 0x72, 0x01
+	.byte 0x72, 0x01, 0x72
+	normal
+	.byte 0x72, 0x01
 StrPanRight63:	aligned_string "Right 63"
 StrPanRight62:	aligned_string "Right 62"
 StrPanRight61:	aligned_string "Right 61"

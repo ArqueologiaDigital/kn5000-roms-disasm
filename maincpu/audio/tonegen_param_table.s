@@ -79,7 +79,7 @@
 	popw	de
 	jr	ugt, -16
 	nop
-	.byte 0x16
+	ex_ff
 	cp	w, e
 	nop
 	.byte 0x1f
@@ -331,7 +331,7 @@
 	.byte 0xe2, 0xf0, 0x00, 0x4a, 0x6b, 0xf0, 0x00, 0x00, 0x00
 	nop
 	nop
-	.byte 0x19
+	pop_f
 	cp	wa, hl
 	nop
 	xor	(xwa), xhl
@@ -354,7 +354,8 @@
 	push	xhl
 	.byte 0xdf, 0xf0
 	nop
-	.byte 0x01, 0xe0, 0xf0, 0x00
+	normal
+	.byte 0xe0, 0xf0, 0x00
 	popw	de
 	jr	ugt, -16
 	nop
@@ -541,10 +542,10 @@
 	cpda32_24	xhl, 61799
 	jr	c, -15
 	nop
-	.byte 0x04
+	max
 	jr	-15
 	nop
-	.byte 0x15
+	pop_a
 	jr	-15
 	nop
 	ldb	h, 104
@@ -556,7 +557,7 @@
 	pushw	wa
 	or	xwa, xbc
 	nop
-	.byte 0x1a, 0xe9, 0xe0
+	jp16	57577
 	nop
 	incf
 	or	xwa, xbc

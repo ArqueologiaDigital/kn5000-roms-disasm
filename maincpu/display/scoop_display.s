@@ -452,7 +452,8 @@ UIRender_DescriptorTable1:
 	zcf
 	nop
 	jp	68362
-	.byte 0x9e, 0x00, 0x35, 0x01
+	.byte 0x9e, 0x00, 0x35
+	normal
 	ld	(xbc), 7
 	halt
 	jrl	c, 8217
@@ -823,7 +824,8 @@ SoundEvt_LongPacketHandler:
 ScoopDisp_HandlerData2:
 	.byte 0x97, 0x97, 0xef, 0x00
 	jr	lt, 122
-	.byte 0xef, 0x00, 0x1c, 0x7a, 0xef
+	.byte 0xef, 0x00
+	call16	61306
 	nop
 	inc	1, xwa
 	.byte 0xef, 0x00
@@ -1643,7 +1645,7 @@ PerfMode_Evt04_VolumeHandler:
 	call	16557917
 	ret
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	reti
 	ldio	9, 10
@@ -2631,7 +2633,7 @@ ScoopDisp_DispatchTable_Extended:
 	pop_sr
 	pop_sr
 	nop
-	.byte 0x01
+	normal
 	pop_sr
 	pop_sr
 	nop
@@ -4693,10 +4695,10 @@ VoiceCtrl_ParamSetupBytecode:
 	ldb	a, 1
 	ret
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	9, 10
@@ -5104,13 +5106,14 @@ ScoopParam_ValueTable:
 	nop
 	rcf
 	nop
-	.byte 0x18
+	push_f
 	nop
 	ldb	w, 0
 	ldw	wa, 16384
 	nop
 	jr	f, 0
-	.byte 0xc0, 0x00, 0x80, 0x01
+	.byte 0xc0, 0x00, 0x80
+	normal
 	nop
 	pop_sr
 	.byte 0x80, 0x04
@@ -5621,12 +5624,20 @@ PortConfig_Handler_0:
 PortConfig_DataTable_A:
 	.byte 0x01, 0x01
 	.fill 8, 1, 0x01
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	push_sr
 	pop_sr
-	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
+	normal
 	call	15713972
 	srl	xiz, 1
 	push	xix
@@ -5655,7 +5666,7 @@ PortConfig_DataTable_A:
 PortConfig_DataTable_B:
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	reti
 	ldio	9, 10
 	pushw 1284
@@ -5698,10 +5709,10 @@ ClockConfig_Handler_0:
 	anddi8	58338, 253
 	ret
 	ret
-	.byte 0x04
+	max
 	push_sr
 	push_sr
-	.byte 0x04
+	max
 	cpdi8	3429, 3
 	jrl	nz, 139
 	lds	bc, 6
@@ -7083,29 +7094,29 @@ SystemInit_StepHandler_0:
 	jp	15710447
 	ret
 	nop
-	.byte 0x04
+	max
 	jr	f, 4
 	nop
-	.byte 0x03
+	pop_sr
 	jr	f, 3
 	nop
-	.byte 0x02
+	push_sr
 	jr	f, 2
 	ldw	wa, 36865
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	jr	f, 1
 	ldw	wa, 12288
-	.byte 0x01
+	normal
 SysInit_BytecodeBlock:
 	.byte 0x50
 	ld	xwa, 1056816
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
 	halt
-	.byte 0x04
+	max
 	ei	0xc1
 	bitda	2, 8910
 	.byte 0xec, 0x01
@@ -8514,13 +8525,13 @@ VoiceState_SaveAndRestore:
 	halt
 	halt
 	retd	0x0600
-	.byte 0x04
+	max
 	halt
-	.byte 0x03
+	pop_sr
 	reti
-	.byte 0x02
+	push_sr
 	reti
-	.byte 0x01
+	normal
 	reti
 	reti
 	reti
@@ -8580,7 +8591,7 @@ VoiceState_DataBlock1:	.ascii "(;>="
 	pop	xiz
 	pop	xhl
 	popw	wa
-	.byte 0x0e
+	ret
 
 VoiceState_RestoreEntry:
 	xor w, w
@@ -9077,7 +9088,7 @@ SubCPU_ToneDispatch:
 	swi	2
 	nop
 	nop
-	.byte 0x04
+	max
 	swi	2
 	nop
 	nop
@@ -10750,10 +10761,10 @@ Display_BytecodeBlock_F:
 	ldir85
 	ret
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	9, 10
@@ -10917,7 +10928,7 @@ StringData_KeyNames:	.ascii "  C D"
 	ldb	w, 24
 	.byte 0x1f
 	ldb	w, 32
-	.byte 0x18
+	push_f
 	ldb	w, 32
 	ldb	w, 23
 	.byte 0x1f
@@ -10927,12 +10938,12 @@ StringData_KeyNames:	.ascii "  C D"
 	ex_ff
 	.byte 0x1f
 	ldb	w, 32
-	.byte 0x16
+	ex_ff
 	ldb	w, 32
 	ldb	w, 21
 	.byte 0x1f
 	ldb	w, 32
-	.byte 0x15
+	pop_a
 	ldb	w, 32
 	ldb	w, 20
 	ldb	w, 32
@@ -11669,7 +11680,7 @@ Scoop_DisplayData_ButtonLayout:
 	ret
 	jp	2058
 	ldw	de, 4096
-	.byte 0x01
+	normal
 	ld	xde, 3022669056
 	.byte 0xe0, 0x00, 0x44
 	ldw	de, 57524
@@ -11687,7 +11698,7 @@ Scoop_DrawGridLines:
 Scoop_GridLineData:
 	jp	2058
 	ldw	de, 4096
-	.byte 0x01
+	normal
 	ld	xde, 84548352
 	nop
 	popw	hl
@@ -11730,10 +11741,12 @@ Scoop_GridLineData:
 	pop	xsp
 	nop
 	rcf
-	.byte 0x01
+	normal
 	jr	nc, 0
 	jp	2058
-	.byte 0x8c, 0x00, 0x10, 0x01, 0x9c, 0x00
+	.byte 0x8c, 0x00, 0x10
+	normal
+	.byte 0x9c, 0x00
 
 Scoop_DrawGridDividers:
 	ld xiy, 0xF00B4F

@@ -232,7 +232,7 @@ FloppyIO_SwitchboardChannelPtrs:
 	.byte 0xf4, 0x00, 0x00, 0x18, 0xf5, 0x00, 0x00, 0x32, 0xf5, 0x00, 0x00, 0x4c, 0xf5, 0x00, 0x00, 0x66, 0xf5, 0x00, 0x00, 0x80, 0xf5, 0x00, 0x00, 0x9a, 0xf5, 0x00, 0x00, 0xb4, 0xf5, 0x00, 0x00, 0xce, 0xf5, 0x00, 0x00, 0xe8, 0xf5, 0x00, 0x00, 0x02, 0xf6
 	nop
 	nop
-	.byte 0x1c, 0xf6, 0x00
+	call16	246
 	nop
 
 FloppyIO_ConfigureSwitchboard:
@@ -976,7 +976,7 @@ VoiceChannels_LoadPartMap_Mode1:
 VoiceChannels_PartMapTable:
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	pushw 2312
 	ldwio	3, 1284
 	ei	0x07
@@ -986,7 +986,7 @@ VoiceChannels_PartMapTable:
 	incf
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	pushw 2312
 	ldwio	3, 3076
 	ei	0x07
@@ -1581,10 +1581,10 @@ SoundGen_ResetBitmapDone:
 
 SeqTrack_ChannelMapIdentity:
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	9, 10
@@ -1593,7 +1593,7 @@ SeqTrack_ChannelMapIdentity:
 	retd	0x0100
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	15, 10
@@ -4029,10 +4029,10 @@ VoiceParam_NullReturn:
 
 VoiceParam_ChannelMapRemapped:
 	nop
-	.byte 0x01
+	normal
 	push_sr
 	pop_sr
-	.byte 0x04
+	max
 	halt
 	ei	0x07
 	ldio	15, 10
@@ -4469,7 +4469,7 @@ VoiceSynth_DataEntry_Done:
 VoiceSynth_DataEntry_PtrTable:
 	jp	26
 	swi	3
-	.byte 0x19
+	pop_f
 	nop
 	nop
 	pushw 26

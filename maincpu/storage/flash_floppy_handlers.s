@@ -42,7 +42,7 @@ FlashWrite_BlockData_Type0:
 	nop
 	ldb	w, 100
 	decf
-	.byte 0x02
+	push_sr
 	halt
 	pushw 1635
 	swi	7
@@ -54,7 +54,7 @@ FlashWrite_BlockData_Type0:
 	nop
 	ldb	w, 20
 	ccf
-	.byte 0x02
+	push_sr
 	nop
 	ldwio	101, 65286
 	nop
@@ -77,7 +77,7 @@ FlashRead_BlockData_Field2:
 	nop
 	ldb	w, 100
 	decf
-	.byte 0x02
+	push_sr
 FlashRead_BlockData_Field3:
 	nop
 	ldwio	99, 65286
@@ -90,7 +90,7 @@ FlashRead_BlockData_Field4:
 	nop
 	ldb	w, 20
 	ccf
-	.byte 0x02
+	push_sr
 FlashRead_BlockData_Field5:
 	halt
 	pushw 1637
@@ -140,7 +140,7 @@ FlashWrite_BlockData_Type3:
 	nop
 	ldb	w, 19
 	ccf
-	.byte 0x03
+	pop_sr
 FlashWrite_BlockRef_Type3:
 	.byte 0xb3, 0x59, 0xf1, 0x00, 0xb3, 0x59, 0xf1
 	.byte 0x00, 0xbd, 0x59, 0xf1, 0x00, 0xc7, 0x59, 0xf1
@@ -155,7 +155,7 @@ FlashWrite_BlockData_Type4:
 	nop
 	ldb	w, 100
 	decf
-	.byte 0x02
+	push_sr
 	nop
 	ldwio	99, 65286
 	nop
@@ -165,7 +165,7 @@ FlashWrite_BlockData_Type4:
 	nop
 	ldb	w, 20
 	ccf
-	.byte 0x02
+	push_sr
 FlashWrite_BlockRef_Type4:
 	.byte 0xf4, 0x59, 0xf1
 	nop
@@ -185,7 +185,7 @@ FlashWrite_BlockData_Type5:
 	nop
 	ldb	w, 99
 	decf
-	.byte 0x02
+	push_sr
 	nop
 	halt
 	pushw 1635
@@ -198,7 +198,7 @@ FlashWrite_BlockData_Type5:
 	nop
 	ldb	w, 19
 	ccf
-	.byte 0x03
+	pop_sr
 FlashWrite_BlockRef_Type5:
 	ldw	wa, 61786
 	nop
@@ -208,12 +208,12 @@ FlashWrite_BlockRef_Type5:
 	pop	xde
 	.byte 0xf1, 0x00, 0x45, 0x5a, 0xf1, 0x00, 0x50, 0x5a, 0xf1, 0x00
 FlashWrite_BlockData_Type6:
-	.byte 0x02
+	push_sr
 	retd	0x0661
-	.byte 0x01
+	normal
 	nop
 	ldb	w, 209
-	.byte 0x14
+	push_a
 	stdi8	768, 11
 	pushw 2560
 	jr	le, 6
@@ -221,7 +221,7 @@ FlashWrite_BlockData_Type6:
 	nop
 	ldb	w, 100
 	decf
-	.byte 0x02
+	push_sr
 	nop
 	ldwio	99, 65286
 	nop
@@ -372,7 +372,8 @@ FlashWrite_BlockRef_Type6:
 	ldb	b, 141
 	ei	5
 	ldf	34
-	.byte 0x8d, 0x06, 0x05, 0x1c, 0x22, 0x8d
+	.byte 0x8d, 0x06, 0x05
+	call16	36130
 	ei	5
 	ldb	a, 34
 	.byte 0x8d, 0x06, 0x05
@@ -398,9 +399,9 @@ FlashWrite_BlockRef_Type6:
 	ei	5
 	.byte 0xc5, 0x23, 0x8e
 	push 10
-	.byte 0x04
+	max
 	nop
-	.byte 0x04
+	max
 	nop
 	ld	xix, 150999040
 	ldwio	18, 7681
@@ -409,7 +410,7 @@ FlashWrite_BlockRef_Type6:
 	nop
 	push 10
 	push_a
-	.byte 0x01
+	normal
 	ldb	w, 0
 	ldw	hl, 12033
 	nop
@@ -426,12 +427,12 @@ FlashWrite_BlockRef_Type6:
 	ldw	wa, 64256
 	nop
 	ld	xsp, 302647552
-	.byte 0x01
+	normal
 	ld	xiy, 1476474112
 	nop
 	push 10
 	push_a
-	.byte 0x01
+	normal
 	ld	xsp, 1442919168
 	nop
 	ldb	b, 10
@@ -448,7 +449,9 @@ FlashWrite_BlockRef_Type6:
 	nop
 	.byte 0xc8, 0x00
 	push 10
-	.byte 0xd2, 0x00, 0xb5, 0x00, 0x35, 0x01, 0xca, 0x00
+	.byte 0xd2, 0x00, 0xb5, 0x00, 0x35
+	normal
+	.byte 0xca, 0x00
 	push 10
 	.byte 0xd4, 0x00, 0xb7
 	nop
@@ -481,27 +484,29 @@ FlashWrite_BlockRef_Type6:
 	nop
 	.byte 0xda, 0x00
 	ret
-	.byte 0x01, 0xee, 0x00
+	normal
+	.byte 0xee, 0x00
 	ldb	b, 10
 	ldb	a, 1
 	.byte 0xda, 0x00
 	ldw	iz, 60929
 	nop
-	.byte 0x01
+	normal
 	ldwio	11, 28416
 	nop
 	ldw	iy, 28417
 	nop
-	.byte 0x01
+	normal
 	ldwio	11, 35840
 	nop
 	pop_f
-	.byte 0x01, 0x8c, 0x00, 0x01
+	normal
+	.byte 0x8c, 0x00, 0x01
 	ldwio	9, 58368
 	nop
 	.byte 0x1e, 0x00, 0xe4
 	nop
-	.byte 0x01
+	normal
 	ldwio	49, 58368
 	nop
 	ld	xiz, 16835584
@@ -515,7 +520,7 @@ FlashWrite_BlockRef_Type6:
 	nop
 	.byte 0xbe, 0x00, 0xe4
 	nop
-	.byte 0x01
+	normal
 	ldwio	209, 58368
 	nop
 	.byte 0xe6
@@ -524,7 +529,8 @@ FlashWrite_BlockRef_Type6:
 	ldwio	249, 58368
 	nop
 	ret
-	.byte 0x01, 0xe4, 0x00, 0x01
+	normal
+	.byte 0xe4, 0x00, 0x01
 	ldwio	33, 58369
 	nop
 	ldw	iz, 58369
@@ -543,7 +549,8 @@ FlashWrite_BlockRef_Type6:
 	ldwio	25, 24065
 	nop
 	pop_f
-	.byte 0x01, 0xaa, 0x00, 0x1b
+	normal
+	.byte 0xaa, 0x00, 0x1b
 	ldwio	25, 28929
 	nop
 	ldw	hl, 43009
@@ -567,7 +574,7 @@ FlashWrite_BlockRef_Type6:
 	nop
 	nop
 	nop
-	.byte 0x1c, 0xf3, 0x0b
+	call16	3059
 	push_sr
 	nop
 	decf
@@ -654,7 +661,8 @@ FlashWrite_BlockRef_Type6:
 	.byte 0x98, 0x00, 0x02
 	nop
 	push 12
-	.byte 0x6b, 0x06, 0x7f, 0x00, 0x17, 0x1c, 0x01, 0x89
+	.byte 0x6b, 0x06, 0x7f, 0x00, 0x17
+	call16	35073
 	nop
 	pop_sr
 	reti
@@ -665,7 +673,8 @@ FlashWrite_BlockRef_Type6:
 	ldf	88
 	ld	xiz, 196849
 	pop_sr
-	.byte 0x01, 0x7a, 0x00, 0x07
+	normal
+	.byte 0x7a, 0x00, 0x07
 	scf
 	.byte 0x6c, 0x06
 	incf
@@ -673,7 +682,8 @@ FlashWrite_BlockRef_Type6:
 	ldf	88
 	ld	xiz, 196849
 	pop_sr
-	.byte 0x01, 0x98, 0x00, 0x03
+	normal
+	.byte 0x98, 0x00, 0x03
 	pushw 1632
 	pop_sr
 	nop
@@ -689,15 +699,22 @@ FlashWrite_BlockRef_Type6:
 	.byte 0x98, 0x00, 0x02
 	decf
 	nop
-	.byte 0x71, 0x00, 0x18, 0x01, 0x8a, 0x00, 0x0d
+	.byte 0x71, 0x00, 0x18
+	normal
+	.byte 0x8a, 0x00, 0x0d
 	nop
-	.byte 0x71, 0x00, 0x18, 0x01, 0x8a, 0x00, 0x0d
+	.byte 0x71, 0x00, 0x18
+	normal
+	.byte 0x8a, 0x00, 0x0d
 	nop
-	.byte 0x8d, 0x00, 0x18, 0x01, 0xa8, 0x00, 0x1b
+	.byte 0x8d, 0x00, 0x18
+	normal
+	.byte 0xa8, 0x00, 0x1b
 	ldwio	13, 28928
 	nop
 	push_f
-	.byte 0x01, 0xa8, 0x00, 0xe6, 0x60, 0xf1
+	normal
+	.byte 0xa8, 0x00, 0xe6, 0x60, 0xf1
 	nop
 DrumDetailEdit_Menu_Table:
 	.long LABEL_F16006
@@ -726,7 +743,8 @@ DrumDetailEdit_Menu_Table:
 	.byte 0xbb, 0x10, 0x23
 	halt
 	pop	xsp
-	.byte 0xda, 0x10, 0x1c, 0x16, 0x58
+	.byte 0xda, 0x10
+	call16	22550
 	nop
 	ldio	0, 68
 	.ascii "RUM DETAIL EDIT"
@@ -759,9 +777,13 @@ DrumDetailEdit_Menu_Table:
 	ldw	bc, 36609
 	nop
 	push 10
-	.byte 0xa3, 0x00, 0xba, 0x00, 0x35, 0x01, 0xcf, 0x00
+	.byte 0xa3, 0x00, 0xba, 0x00, 0x35
+	normal
+	.byte 0xcf, 0x00
 	push 10
-	.byte 0xa5, 0x00, 0xbc, 0x00, 0x33, 0x01, 0xcd, 0x00
+	.byte 0xa5, 0x00, 0xbc, 0x00, 0x33
+	normal
+	.byte 0xcd, 0x00
 	ldf	11
 	push xhl
 	nop
@@ -784,7 +806,7 @@ DrumDetailEdit_Menu_Table:
 	.byte 0xd1, 0x00
 	ld	xhl, 0x45565255
 	ei	0x05
-	.byte 0x1c, 0x22, 0x8d
+	call16	36130
 	ei	0x05
 	ldb	a, 34
 	.byte 0x8d, 0x06, 0x05
@@ -802,24 +824,25 @@ DrumDetailEdit_Menu_Table:
 	jr	nz, 0
 	.byte 0xee, 0x00
 	ldb	b, 10
-	.byte 0x81, 0x00, 0xda, 0x00, 0x96, 0x00, 0xee, 0x00, 0x01
+	.byte 0x81, 0x00, 0xda, 0x00, 0x96, 0x00, 0xee, 0x00
+	normal
 	ldwio	11, 18944
 	nop
 	.byte 0x9c, 0x00, 0x4a
 	nop
-	.byte 0x01
+	normal
 	ldwio	11, 27136
 	nop
 	.byte 0x9c, 0x00, 0x6a
 	nop
-	.byte 0x01
+	normal
 	ldwio	89, 58368
 	nop
 	jr	nz, 0
 	.byte 0xe4, 0x00, 0x01, 0x0a
 	.long LABEL_E40081
 	.long LABEL_E40096
-	.byte 0x02
+	push_sr
 	ldwio	46, 14336
 	nop
 	pushw	iz
@@ -899,11 +922,11 @@ DrumDetailEdit_Menu_Table:
 	nop
 	.byte 0x6c, 0x00, 0x9a, 0x00, 0x88
 	nop
-	.byte 0x02
+	push_sr
 	retd	0x0660
 	ldb	w, 5
 	ldb	w, 209
-	.byte 0x14
+	push_a
 	stdi8	768, 112
 	call	6359552
 	ei	0x7f
@@ -1017,9 +1040,12 @@ EffectParam_Edit_Table:
 	jr	le, 0
 	ldw	hl, 32513
 	nop
-	.byte 0xa4, 0x00, 0x8a, 0x00, 0x33, 0x01, 0xa7, 0x00, 0xa4, 0x00
+	.byte 0xa4, 0x00, 0x8a, 0x00, 0x33
+	normal
+	.byte 0xa7, 0x00, 0xa4, 0x00
 	ld	(xhl), 51
-	.byte 0x01, 0xd0, 0x00, 0x1b
+	normal
+	.byte 0xd0, 0x00, 0x1b
 	ldwio	12, 15104
 	nop
 	ldw	hl, 53249

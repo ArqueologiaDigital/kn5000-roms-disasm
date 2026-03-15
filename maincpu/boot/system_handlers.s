@@ -1994,7 +1994,11 @@ TaskSched_ScreenGroupTable:
 	ldw	de, 464
 	nop
 	nop
-	.byte 0x88, 0x03, 0x00, 0x01, 0x01, 0x01, 0x01
+	.byte 0x88, 0x03, 0x00
+	normal
+	normal
+	normal
+	normal
 	.fill 8, 1, 0x01
 	.fill 8, 1, 0x01
 	.byte 0x01, 0x01
@@ -2139,9 +2143,9 @@ TaskSched_InitMsgQueues:
 	ld xwa, 0xEF1A7E
 	jr TaskSched_PostInit
 
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0x64, 0x19, 0xef, 0x00
 

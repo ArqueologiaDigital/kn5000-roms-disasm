@@ -20820,7 +20820,7 @@ AppEvent_SubDispatch:
 	.byte 0x21, 0xb0, 0x51, 0xe1
 	.ascii "r) A"
 	retd	49152
-	.byte 0x01
+	normal
 	lds32	xde, 2
 	call	16424455
 	ldda8	a, 36150
@@ -20910,7 +20910,7 @@ AppEvent_SubDispatch:
 	.byte 0x04, 0xc9, 0x69, 0xf1, 0x58, 0x26, 0x41, 0xe1
 	.ascii "r) A"
 	retd	49152
-	.byte 0x01
+	normal
 	ld	xde, 11
 	.byte 0x78, 0x18, 0x04, 0xc1
 	xor	(xix-14047), bc
@@ -21071,7 +21071,7 @@ AppEvent_SubDispatch:
 	.byte 0xe1
 	.ascii "r) A"
 	retd	49152
-	.byte 0x01
+	normal
 	ld	xde, 33
 	.byte 0x1d, 0x07
 	or	bc, (xiz-6)
@@ -22511,7 +22511,7 @@ SeqAccomp_SubHandlerB:
 	.byte 0x15, 0xd1, 0x22, 0x25, 0x19, 0x20, 0x25, 0xe1
 	.ascii "r) A"
 	retd	49152
-	.byte 0x01
+	normal
 	lds32	xde, 5
 	call	16424455
 	.byte 0xd1, 0x20
@@ -22540,7 +22540,7 @@ SeqAccomp_SubHandlerB:
 	.byte 0x59, 0x8d, 0xf3, 0xe1
 	.ascii "r) A"
 	retd	49152
-	.byte 0x01
+	normal
 	lds32	xde, 7
 	.byte 0x1d, 0x07
 	or	bc, (xiz-6)

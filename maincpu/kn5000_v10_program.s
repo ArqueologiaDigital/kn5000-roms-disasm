@@ -53,7 +53,7 @@ LED_patterns_indicating_firmware_version:
 	rcf
 	push_f
 	push_a
-	.byte 0x1c, 0x12, 0x1a
+	call16	6674
 	ex_ff
 	.byte 0x1e
 LED_patterns_firmware_v8_plus:
@@ -922,11 +922,11 @@ MTStr_CmpNameSet:	aligned_string "MT_CmpNameSet"
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0xa0, 0x01
 	ldb	h, 215
-	.byte 0x03
+	pop_sr
 	nop
 	.long String_MSP_BANK_SELECT
 	.long 0xA5
@@ -948,14 +948,15 @@ NakaNode_Accomp7_Widget01:
 	nop
 	ei	0
 	push xhl
-	.byte 0x01
+	normal
 	ldf	0
 	.byte 0xf3, 0x00, 0xc1
 	nop
 	swi	7
 	swi	7
 	pushw de
-	.byte 0xd7, 0x03, 0x00, 0x01
+	.byte 0xd7, 0x03, 0x00
+	normal
 	nop
 	push_sr
 	nop
@@ -969,7 +970,7 @@ NakaNode_Accomp7_Widget02:
 	swi	7
 	pop_sr
 	nop
-	.byte 0x01
+	normal
 	nop
 	push_f
 	nop
@@ -981,7 +982,7 @@ NakaNode_Accomp7_Widget02:
 	nop
 	.byte 0x1f
 	nop
-	.byte 0x01
+	normal
 	nop
 	ei	0
 	.byte 0xc8, 0x00
@@ -993,7 +994,7 @@ NakaNode_Accomp7_Widget03:
 	nop
 	swi	7
 	swi	7
-	.byte 0x04
+	max
 	nop
 	push_sr
 	nop
@@ -1047,7 +1048,7 @@ NakaNode_Accomp7_Widget05:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x04
+	max
 	nop
 	push_f
 	nop
@@ -1059,7 +1060,7 @@ NakaNode_Accomp7_Widget05:
 	nop
 	.byte 0x1f
 	nop
-	.byte 0x01
+	normal
 	nop
 NakaNode_Accomp7_Widget06:
 
@@ -1075,8 +1076,9 @@ NakaNode_Accomp7_Widget06:
 	swi	7
 	ldio	0, 0
 	nop
-	.byte 0x1e, 0x00, 0x3f, 0x01, 0xef, 0x00, 0xf5, 0x00
-	.byte 0x00, 0x00
+	.byte 0x1e, 0x00, 0x3f
+	normal
+	.byte 0xef, 0x00, 0xf5, 0x00, 0x00, 0x00
 	nop
 	nop
 	pushw ix
@@ -1276,7 +1278,7 @@ SepaOut_LayoutParams_0:
 	nop
 	ret
 	nop
-	.byte 0x1a, 0x00, 0x1a
+	jp16	6656
 SepaOut_LayoutByte_0:
 	.byte 0x00
 SepaOut_LayoutByte_1:
@@ -1292,9 +1294,9 @@ SepaOut_LayoutByte_5:
 	nop
 	ret
 	nop
-	.byte 0x1a, 0x00, 0x1a
+	jp16	6656
 	nop
-	.byte 0x1a, 0x00, 0x1a
+	jp16	6656
 	nop
 	nop
 	nop
@@ -1315,14 +1317,16 @@ SepaOut_LayoutByte_5:
 	nop
 	nop
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 SepaOut_LayoutParams_1:
 	nop
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	incf
 	nop
@@ -1352,34 +1356,34 @@ SepaOut_LayoutParams_1:
 	nop
 	pop	xde
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x02
+	push_sr
 	nop
 SepaOut_BitMaskTable:
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 32768
-	.byte 0x01
+	normal
 	nop
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 32768
-	.byte 0x01
+	normal
 	nop
-	.byte 0x02
+	push_sr
 	nop
-	.byte 0x03
+	pop_sr
 	nop
-	.byte 0x04
+	max
 	nop
 	halt
 	nop
@@ -1403,20 +1407,20 @@ SepaOut_BitMaskTable:
 	nop
 	zcf
 	nop
-	.byte 0x14
+	push_a
 	nop
-	.byte 0x15
+	pop_a
 	nop
-	.byte 0x16
+	ex_ff
 	nop
 	ldf	0
 	push_f
 	nop
-	.byte 0x19
+	pop_f
 	nop
-	.byte 0x1a, 0x00, 0x1b
+	jp16	6912
 	nop
-	.byte 0x1c, 0x00, 0x1d
+	call16	7424
 	nop
 	calr	7936
 	nop
@@ -1463,12 +1467,14 @@ SepaOut_FormatData_Tail:
 	nop
 	.byte 0x81, 0x00, 0xc1, 0x00, 0xb9, 0x02
 	push xhl
-	.byte 0x01
+	normal
 	decf
-	.byte 0x01, 0xb5, 0x01, 0x87, 0x01
+	normal
+	.byte 0xb5, 0x01, 0x87, 0x01
 	setm	1, (xbc+2)
 	push_sr
-	.byte 0xb9, 0x02, 0xfd, 0x01
+	.byte 0xb9, 0x02, 0xfd
+	normal
 	pop xbc
 	push_sr
 	nop
@@ -1521,13 +1527,13 @@ SepaOut_FormatData_Tail:
 	nop
 	ldb	a, 0
 	reti
-	.byte 0x01
+	normal
 	reti
-	.byte 0x01
+	normal
 	reti
-	.byte 0x01
+	normal
 	reti
-	.byte 0x01
+	normal
 	nop
 	nop
 	ret
@@ -1542,9 +1548,9 @@ SepaOut_FormatData_Tail:
 	nop
 	ret
 	nop
-	.byte 0x1a, 0x00, 0x1a
+	jp16	6656
 	nop
-	.byte 0x1a, 0x00, 0x1a
+	jp16	6656
 	nop
 	jr	le, 34
 	.byte 0xf2, 0x00, 0x88, 0x22, 0xf2
@@ -1587,7 +1593,7 @@ SepaOut_FormatData_Tail:
 	.byte 0x82, 0x00, 0x88, 0x00, 0x8d
 	nop
 	aligned_string "%3d%%"
-	.byte 0x01
+	normal
 	nop
 	.byte 0xe1, 0x00, 0x02, 0x00, 0xe1, 0x00, 0x03, 0x00
 	.byte 0xe1, 0x00, 0x04, 0x00, 0xe1, 0x00, 0x05, 0x00
@@ -1602,7 +1608,7 @@ SepaOut_FormatData_Tail:
 	nop
 	orda32_24	xde, 1536
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0xe3, 0x00, 0x02
 	nop
@@ -1703,7 +1709,7 @@ SepaOut_FormatData_Tail:
 	resm	4, (xix)
 	.byte 0xf2, 0x00, 0x3c, 0xd0, 0xf2
 	nop
-	.byte 0x1a, 0xd2, 0xf2
+	jp16	62162
 	nop
 	nop
 	nop
@@ -2219,7 +2225,7 @@ EvtName_SmfSongName:	aligned_string "EV_SMFSONGNAME"
 EvtName_SmfFileName:	aligned_string "EV_SMFFILENAME"
 EvtName_DiskFileName:	aligned_string "EV_DISKFILENAME"
 EvtName_CurSongName:	aligned_string "EV_CURSONGNAME"
-	.byte 0x14
+	push_a
 	nop
 	pop	xde
 	rcf
@@ -2733,7 +2739,7 @@ NakaWidget_SoundMenu_ScrollBar1:
 	swi	7
 	pop_sr
 	nop
-	.byte 0x01
+	normal
 	nop
 	push_f
 	nop
@@ -2745,7 +2751,7 @@ NakaWidget_SoundMenu_ScrollBar1:
 	nop
 	.byte 0x1f
 	nop
-	.byte 0x01
+	normal
 	nop
 	ei	0
 	push_sr
@@ -2758,7 +2764,7 @@ NakaWidget_SoundMenu_ScrollBar2:
 	nop
 	swi	7
 	swi	7
-	.byte 0x04
+	max
 	nop
 	push_sr
 	nop
@@ -2795,7 +2801,7 @@ NakaWidget_SoundMenu_ListBox:
 	nop
 	.byte 0x1f
 	nop
-	.byte 0x01
+	normal
 	nop
 	.byte 0x80, 0x01
 NakaWidget_SoundMenu_ValueEdit:
@@ -2808,7 +2814,7 @@ NakaWidget_SoundMenu_ValueEdit:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x04
+	max
 	nop
 	push_f
 	nop
@@ -2949,7 +2955,9 @@ NakaMenuItem_MasterTuning:
 	.byte 0x8b, 0x00, 0x72, 0xe6
 	pop_sr
 	nop
-	.byte 0x50, 0x1a, 0xe8, 0x00, 0x04
+	.byte 0x50
+	jp16	232
+	max
 	nop
 	.byte 0xa0, 0x01
 	push 0
@@ -3002,7 +3010,9 @@ NakaMenuItem_ReverbEqPresets:
 	incf
 	nop
 	.byte 0x0a, 0x00, 0x08, 0x00, 0xa3, 0x00, 0x1e, 0x00
-	.byte 0x37, 0x01, 0x37, 0x00, 0xf7
+	.byte 0x37
+	normal
+	.byte 0x37, 0x00, 0xf7
 	nop
 	nop
 	nop
@@ -3076,7 +3086,9 @@ NakaMenuItem_Equalizer:
 	nop
 	ldio	0, 163
 	nop
-	.byte 0x72, 0x00, 0x37, 0x01, 0x8b, 0x00, 0xf7
+	.byte 0x72, 0x00, 0x37
+	normal
+	.byte 0x8b, 0x00, 0xf7
 	nop
 	nop
 	nop
@@ -3112,7 +3124,8 @@ NakaMenuItem_DspEffect:
 	nop
 	ldio	0, 163
 	nop
-	.byte 0x9c, 0x00, 0x37, 0x01
+	.byte 0x9c, 0x00, 0x37
+	normal
 	ld	(xiy), 247
 	nop
 	nop
@@ -3134,7 +3147,7 @@ NakaMenuItem_DspEffect:
 	or	(xiz+27), wa
 	nop
 	pushw 40960
-	.byte 0x01
+	normal
 	incf
 	nop
 	nop
@@ -3199,7 +3212,7 @@ NakaWidget_SoundEdit:
 	.byte 0x8a, 0x00
 	.long 0x3E680
 	.long MenuStr_SoundEdit
-	.byte 0x03
+	pop_sr
 	nop
 	.byte 0x80, 0x01
 	retd	0x0000
@@ -3289,7 +3302,9 @@ NakaMenuItem_TechniChord:
 	nop
 	ldio	0, 163
 	nop
-	.byte 0x72, 0x00, 0x37, 0x01, 0x8b, 0x00, 0xf7
+	.byte 0x72, 0x00, 0x37
+	normal
+	.byte 0x8b, 0x00, 0xf7
 	nop
 	nop
 	nop
@@ -3355,13 +3370,13 @@ CharEncoding_ExtendedHi:
 	ldb	w, 1
 	nop
 	push_sr
-	.byte 0x01
+	normal
 	pop_sr
 	push_sr
-	.byte 0x04
+	max
 	pop_sr
 	halt
-	.byte 0x04
+	max
 	ei	0x05
 	reti
 	ei	0x08
@@ -3378,7 +3393,7 @@ CharEncoding_ExtendedHi:
 	scf
 	zcf
 	ccf
-	.byte 0x14
+	push_a
 	zcf
 	pop_a
 	push_a
@@ -3388,7 +3403,8 @@ CharEncoding_ExtendedHi:
 	push_f
 	ldf	25
 	push_f
-	.byte 0x1a, 0x19, 0x1b, 0x1a, 0x1c, 0x1b
+	jp16	6937
+	jp16	6940
 	call	1908252
 	.byte 0x1f
 	calr	7968
@@ -4415,7 +4431,7 @@ Voice_BankHeaderDefaults:
 	rcf
 	nop
 	calr	0
-	.byte 0x01
+	normal
 	push	xbc
 	nop
 	incf
@@ -4578,25 +4594,25 @@ Voice_FactoryPresetData:
 	nop
 	nop
 	nop
-	.byte 0x1a, 0x00, 0x7f
+	jp16	32512
 	ld	xwa, 285212673
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
 	nop
 	nop
-	.byte 0x16
+	ex_ff
 	nop
 	jrl	nc, 64
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
-	.byte 0x02
+	push_sr
 	nop
 	nop
 	nop
@@ -4609,7 +4625,7 @@ Voice_FactoryPresetData:
 	scf
 	nop
 	nop
-	.byte 0x03
+	pop_sr
 	nop
 	nop
 	nop
@@ -4643,7 +4659,7 @@ Voice_FactoryPresetData:
 	jrl	nc, 64
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	retd	0x0000
@@ -4694,7 +4710,7 @@ Voice_FactoryPresetData:
 	ld	xwa, 16777216
 	nop
 	nop
-	.byte 0x14
+	push_a
 	nop
 	nop
 	nop
@@ -6051,7 +6067,7 @@ Debug_PrintHexByte:
 	calr	24
 	calr	34
 	pop	xiz
-	.byte 0x0e
+	ret
 
 Debug_PrintString:
 	push xiz
