@@ -7,7 +7,7 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 59277bffe1ce (59277bffe1cea83069c8e21363688e087f335f5a)
-Date: 2026-03-08 13:56:26 +0000
-Subject: [TLCS900] Fix large displacements: handle MemStore/MemLoadDst and d16 overflow
+Commit: 8fc5d2193a01 (8fc5d2193a01f4ad7cd545579cff28bb6b5b3241)
+Date: 2026-03-15 17:26:03 +0000
+Subject: Add CHGm, TSETm, ORCFN_RI memory-indirect instructions
 Repository: /mnt/shared/llvm-project
