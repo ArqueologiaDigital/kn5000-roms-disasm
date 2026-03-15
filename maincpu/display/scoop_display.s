@@ -5528,7 +5528,7 @@ PortConfig_Handler_0:
 	ld	xix, 3786
 	ldw	wa, 8224
 	ldw	bc, 15
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	djnz16	bc, -6
 	pop	xix
 	popw	bc
@@ -5783,7 +5783,7 @@ ClockConfig_Handler_0:
 	push	xix
 	ld	xix, 3439
 	ldw	bc, 16
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	djnz16	bc, -6
 	pop	xix
 	popw	bc
@@ -10083,19 +10083,19 @@ OscScope_RenderBlock:
 	ld	xix, 3669
 	ldw	bc, 16
 	xor	wa, wa
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	djnz16	bc, -6
 	ret
 	ld	xix, 3701
 	ldw	bc, 16
 	xor	wa, wa
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	djnz16	bc, -6
 	ret
 	ld	xix, 3733
 	ldw	bc, 16
 	xor	wa, wa
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	djnz16	bc, -6
 	ret
 	ld	xiy, 3669
@@ -10418,7 +10418,7 @@ DisplayStr_BytecodeBlock_B:
 	ld	xix, 3786
 	ldw	wa, 8224
 	ldw	bc, 15
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	djnz16	bc, -6
 	ld	xiy, 15723886
 	ld	xix, 3791
@@ -10633,7 +10633,8 @@ DisplayStr_BytecodeBlock_E:
 	lds	bc, 4
 	ldirw
 	ldw	wa, 8224
-	.byte 0xf5, 0xf1, 0x50, 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
+	st_dpiw	wa, 241
 	call	15686663
 	ret
 DisplayStr_StyleSectionNames:	.ascii "        START   STOP    FILL IN1FILL IN2INTRO1  COUNT INENDING1 END     REPEAT  CLEAR   ENDING2 INTRO2  "

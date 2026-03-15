@@ -85,10 +85,10 @@ ExcDotFunc_HandlerJumpTable:
 	jr	ule, 22
 	cps	l, 0
 	jr	z, 8
-	.byte 0xf5, 0xf0, 0x00, 0x9d
+	stib_dpi	240, 157
 	dec	1, l
 	jr	4
-	.byte 0xf5, 0xf0, 0x00, 0x2e
+	stib_dpi	240, 46
 	inc	1, de
 	cp	de, bc
 	jr	c, -22

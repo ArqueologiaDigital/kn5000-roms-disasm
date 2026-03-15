@@ -973,7 +973,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	ld	xix, 38292
 	ldw	wa, 65535
 	ldw	bc, 16
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	djnz16	bc, -6
 	ld	xix, 38164
 	cpdi8	38509, 128
@@ -981,7 +981,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	ld	xix, 38324
 	xor	wa, wa
 	ldw	bc, 64
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	djnz16	bc, -6
 	ld	xix, 38132
 	ld	xiy, 38164
@@ -8303,7 +8303,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	res	7, a
 	.byte 0x8c, 0xff, 0x3c, 0x80
 	or	(xix-1), a
-	.byte 0xc5, 0xec, 0x21
+	ld_spib	a, 236
 	ld	(xix), a
 	lda	xix, (xix+26)
 	cp	xhl, xiy
@@ -10012,7 +10012,7 @@ MidiChan_NibbleLookup_Data:
 	ld	xwa, (xix)
 	.byte 0xf5, 0xe0, 0x35
 	ld	(xix), xwa
-	.byte 0xc5, 0xe4, 0x21
+	ld_spib	a, 228
 	ld	(xiy), a
 	ld	wa, hl
 	dec	1, hl
@@ -12160,7 +12160,8 @@ Part_ProcessEntry_Data:
 	dec	1, bc
 	cps	wa, 0
 	ret	z
-	.byte 0xc5, 0xec, 0x21, 0xf5, 0xe8, 0x41
+	ld_spib	a, 236
+	.byte 0xf5, 0xe8, 0x41
 	ld	wa, bc
 	dec	1, bc
 	cps	wa, 0

@@ -5569,13 +5569,14 @@ UIWidget_MidiStreamControl:
 	ret
 	lds	wa, 0
 	ldada	xbc, 37842
-	.byte 0xf5, 0xe4, 0x00, 0x00, 0xf5, 0xe4, 0x00, 0x00
+	stib_dpi	228, 0
+	stib_dpi	228, 0
 	inc	1, wa
 	cp	wa, 32
 	jr	c, -16
 	lds	wa, 0
 	ldada	xbc, 37906
-	.byte 0xf5, 0xe4, 0x00, 0x00
+	stib_dpi	228, 0
 	inc	1, wa
 	cp	wa, 32
 	jr	c, -12
@@ -6937,7 +6938,7 @@ MidiStream_ProcessHandler_0:
 	ld	xix, 37293
 	ldb	a, 209
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda8	a, 37311
 	ldb	w, 255
 	ld	(xix), wa
@@ -6948,7 +6949,7 @@ MidiStream_ProcessHandler_1:
 	ld	xix, 37293
 	ldb	a, 210
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda8	a, 37312
 	ldb	w, 255
 	ld	(xix), wa
@@ -6959,7 +6960,7 @@ MidiStream_ProcessHandler_2:
 	ld	xix, 37293
 	ldb	a, 211
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda8	a, 37311
 	ldb	w, 255
 	ld	(xix), wa
@@ -6970,7 +6971,7 @@ MidiStream_ProcessHandler_3:
 	ld	xix, 37293
 	ldb	a, 212
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldb	a, 0
 	bitda	3, 37311
 	jr	z, 2
@@ -6984,7 +6985,7 @@ MidiStream_ProcessHandler_4:
 	ld	xix, 37293
 	ldb	a, 213
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda8	a, 37311
 	ldb	w, 255
 	ld	(xix), wa
@@ -7364,9 +7365,9 @@ TempoCC_TransmitBytecodeBlock:
 	ld	xix, 37293
 	ldb	a, 192
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda16	wa, 37309
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda32	xiy, 37106
 	extz	wa
 	sll	wa, 2
@@ -7380,23 +7381,23 @@ TempoCC_TransmitBytecodeBlock:
 	jr	z, 7
 	res	7, w
 	setda	1, 37293
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda8	a, 37319
 	ldb	w, 255
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	stdi8	37322, 7
 	calr	490
 	ret
 	ld	xix, 37293
 	ldb	a, 176
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda16	wa, 37309
 	bit	7, a
 	jr	z, 7
 	res	7, a
 	setda	2, 37293
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda16	wa, 37311
 	bit	7, a
 	jr	z, 7
@@ -7406,33 +7407,33 @@ TempoCC_TransmitBytecodeBlock:
 	jr	z, 7
 	res	7, w
 	setda	1, 37293
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda8	a, 37319
 	ldb	w, 255
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	stdi8	37322, 7
 	calr	408
 	ret
 	ld	xix, 37293
 	ldb	a, 210
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda16	wa, 37311
 	and	wa, 32639
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda8	a, 37319
 	ldb	w, 255
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	stdi8	37322, 37
 	calr	365
 	ret
 	ld	xix, 37293
 	ldb	a, 209
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda8	a, 37311
 	ldda8	w, 37319
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ld	(xix), 255
 	stdi8	37322, 20
 	calr	328
@@ -7440,10 +7441,10 @@ TempoCC_TransmitBytecodeBlock:
 	ld	xix, 37293
 	ldb	a, 211
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda8	a, 37311
 	ldda8	w, 37319
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ld	(xix), 255
 	stdi8	37322, 4
 	calr	291
@@ -7453,10 +7454,10 @@ TempoCC_TransmitBytecodeBlock:
 	ld	xix, 37293
 	ldb	a, 208
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda8	a, 37311
 	ldda8	w, 37319
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ld	(xix), 255
 	stdi8	37322, 4
 	calr	247
@@ -7464,7 +7465,7 @@ TempoCC_TransmitBytecodeBlock:
 	ld	xix, 37293
 	ldb	a, 128
 	ldda8	w, 37321
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ldda16	wa, 64610
 	and	wa, 511
 	sll	w, 1
@@ -7472,7 +7473,7 @@ TempoCC_TransmitBytecodeBlock:
 	jr	z, 3
 	set	0, w
 	res	7, a
-	.byte 0xf5, 0xf1, 0x50
+	st_dpiw	wa, 241
 	ld	(xix), 255
 	stdi8	37322, 4
 	calr	196

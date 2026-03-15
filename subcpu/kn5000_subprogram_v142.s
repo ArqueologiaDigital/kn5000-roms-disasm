@@ -542,7 +542,7 @@ DSP_BlockCopyWords:
 ; Notes: ld (xwa+),bc stores BC then increments XWA
 ; ----------------------------------------------------------------------------
 DSP_FillMemWords:
-	.byte 0xf5, 0xe1, 0x51		; ld (xwa+), bc  (store + auto-increment)
+	st_dpiw	bc, 225
 	djnz16 de, DSP_FillMemWords
 	ret
 

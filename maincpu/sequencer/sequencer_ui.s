@@ -6254,7 +6254,7 @@ NoteEditBox_EventDispatch2:
 	ld	(xde+18), xbc
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	cp	xwa, xbc
 	jr	c, -8
 	ld	xwa, (xsp+12)
@@ -6322,7 +6322,7 @@ NoteEditBox_EventDispatch2:
 	ld	(xwa+18), xbc
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	cp	xwa, xbc
 	jr	c, -8
 	sti8_24	135318, 0

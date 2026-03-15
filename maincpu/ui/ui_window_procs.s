@@ -8132,7 +8132,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	bc, (xwa)
 	add	bc, (xsp+6)
 	ld	xwa, (xsp+10)
-	.byte 0xf5, 0xe1, 0x51
+	st_dpiw	bc, 225
 	ld	(xsp+14), xwa
 	ld	bc, (xde)
 	add	bc, (xsp+8)

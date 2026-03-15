@@ -882,7 +882,7 @@ FDemoText_ByteData_ProbeHelper:
 	extz	wa
 	calr	-2147
 	lda	xbc, (xsp)
-	.byte 0xc5, 0xec, 0x21
+	ld_spib	a, 236
 	ld	(xbc+3), a
 	ld	a, (xhl)
 	ld	(xbc+4), a
@@ -1889,7 +1889,7 @@ FDemoText_ByteData_LayoutEngine:
 	inc	4, xsp
 	ld	iz, hl
 	jr	50
-	.byte 0xc5, 0xe0, 0x23
+	ld_spib	c, 224
 	cp	c, 82
 	jr	z, 29
 	cp	c, 67
@@ -2272,7 +2272,7 @@ FDemoText_ByteData_LayoutEngine:
 	lda	xbc, (xbc+2400)
 	ld	xde, xwa
 	lda	xhl, (xwa+40)
-	.byte 0xf5, 0xe8, 0x00, 0x54
+	stib_dpi	232, 84
 	cp	xde, xhl
 	jr	c, -8
 	lda	xwa, (xwa+40)
@@ -2290,7 +2290,9 @@ FDemoText_ByteData_LayoutEngine:
 	ld	xbc, xwa
 	lda	xix, (xwa+8)
 	lds32	xwa, 5
-	.byte 0xf5, 0xee, 0x60, 0xf5, 0xe9, 0x02, 0xff, 0x00, 0xf5, 0xe4, 0x00, 0x01
+	st_dpil	xwa, 238
+	stiw_dpi	233, 255, 0
+	stib_dpi	228, 1
 	cp	xbc, xix
 	jr	c, -18
 	ret
@@ -2864,7 +2866,7 @@ Seq_LoadNamedResource:
 	ld xwa, xbc				; XWA = buffer pointer
 	lda xbc, (xbc + 32)			; XBC = end of buffer
 Seq_FillBufferLoop:
-	.byte 0xf5, 0xe0, 0x00, 0x20		; ld (xwa+), 0x20  [auto-inc store, not in LLVM]
+	stib_dpi	224, 32
 	cp xwa, xbc				; reached end?
 	jr c, Seq_FillBufferLoop			; no, continue filling
 	push xiz				; push name arg

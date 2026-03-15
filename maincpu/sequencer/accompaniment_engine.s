@@ -30751,7 +30751,10 @@ CmEsyTtl_Dispatch:
 	ldada	xhl, 14272
 	ldada	xde, 14258
 	lds32	xbc, 0
-	.byte 0xc5, 0xf4, 0x21, 0xf5, 0xf0, 0x41, 0xc5, 0xec, 0x21, 0xf5, 0xe8, 0x41
+	ld_spib	a, 244
+	.byte 0xf5, 0xf0, 0x41
+	ld_spib	a, 236
+	.byte 0xf5, 0xe8, 0x41
 	inc	1, xbc
 	cp	xbc, 7
 	jr	c, -22
@@ -30850,10 +30853,10 @@ CmpEsy_DeliverEventAndCheck:
 	lds32	xbc, 0
 ; CmpEsyTtl sub-mode B
 CmpEsyTtl_SubModeB:
-	.byte 0xc5, 0xf4, 0x21			; ld a, (xiy+)  [post-increment]
-	.byte 0xf5, 0xf0, 0x41			; ld (xix+), a  [post-increment]
-	.byte 0xc5, 0xec, 0x21			; ld a, (xhl+)  [post-increment]
-	.byte 0xf5, 0xe8, 0x41			; ld (xde+), a  [post-increment]
+	ld_spib	a, 244
+	.byte 0xf5, 0xf0, 0x41
+	ld_spib	a, 236
+	.byte 0xf5, 0xe8, 0x41
 	inc 1, xbc
 	cp xbc, 0x00000007
 	jr c, CmpEsyTtl_SubModeB
@@ -34527,7 +34530,7 @@ AccPatch_VoiceAssignDataBlock:
 	ldw	(xiy+3), 65535
 	ldb	c, 249
 	add	xiy, 6
-	.byte 0xf5, 0xf4, 0x00, 0x00
+	stib_dpi	244, 0
 	dec	1, c
 	cps	c, 0
 	jr	ugt, -10
@@ -35355,7 +35358,7 @@ AccBankData_CopyDataBlock:
 	ldada	xbc, 18614
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	cp	xwa, xbc
 	jr	c, -8
 	ret

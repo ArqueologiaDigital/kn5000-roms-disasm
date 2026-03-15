@@ -1118,7 +1118,8 @@ PanelDisplay_DispatchData:
 	ld	xde, 4011008
 	lda_24	xhl, 213220
 	lds	bc, 0
-	.byte 0xc5, 0xec, 0x21, 0xc5, 0xe8, 0xf1
+	ld_spib	a, 236
+	.byte 0xc5, 0xe8, 0xf1
 	jr	nz, 114
 	inc	1, bc
 	cps	bc, 2
@@ -1127,7 +1128,8 @@ PanelDisplay_DispatchData:
 	ld	xde, 4011024
 	lda_24	xhl, 213222
 	lds	bc, 0
-	.byte 0xc5, 0xec, 0x21, 0xc5, 0xe8, 0xf1
+	ld_spib	a, 236
+	.byte 0xc5, 0xe8, 0xf1
 	jr	nz, 86
 	inc	1, bc
 	cp	bc, 12
@@ -1140,7 +1142,8 @@ PanelDisplay_DispatchData:
 	.asciz "h9B04="
 	lda_24	xhl, 213238
 	lds	bc, 0
-	.byte 0xc5, 0xec, 0x21, 0xc5, 0xe8, 0xf1, 0x6e, 0x1c
+	ld_spib	a, 236
+	.byte 0xc5, 0xe8, 0xf1, 0x6e, 0x1c
 	inc	1, bc
 	cps	bc, 4
 	.byte 0x67, 0xf2

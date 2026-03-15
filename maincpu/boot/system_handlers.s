@@ -7932,7 +7932,7 @@ HDAE5000_FlashVerify_BytecodeBlock:
 	ld	(xsp+8), xwa
 	ld	xwa, xbc
 	ld	xde, (xsp+4)
-	.byte 0xe5, 0xea, 0x21
+	ld_spil	xbc, 234
 	ld	(xsp+4), xde
 	call	15678843
 	inc	1, xiz

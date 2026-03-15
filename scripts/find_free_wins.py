@@ -491,10 +491,13 @@ def translate_unidasm_to_llvm(mnemonic):
             if reg:
                 return f'({reg})'
 
-        # Post-increment: (XRR+)
+        # Post-increment: (XRR+) → return POSTINC:reg_name marker
         m = re.match(r'^\(([A-Z]+)\+\)$', operand)
         if m:
-            return None  # LLVM doesn't support this syntax
+            reg = UNIDASM_REG_MAP.get(m.group(1))
+            if reg:
+                return f'POSTINC:{reg}'
+            return None
 
         # Pre-decrement: (-XRR)
         m = re.match(r'^\(-([A-Z]+)\)$', operand)
@@ -877,6 +880,67 @@ def translate_unidasm_to_llvm(mnemonic):
         if bit_num.isdigit() and mem_op.startswith('(') and not _is_direct(mem_op):
             llvm_mnem = MEM_CF_OPS2[op]
             return [f'{llvm_mnem}\t{bit_num}, {mem_op}']
+
+    # ── Post-increment addressing: ld (R+),reg / ld reg,(R+) / ld (R+),imm ──
+    # The addr_byte encodes which register is the base pointer. The hardware only
+    # uses bits 2:0 to select the register (0=XWA..7=XSP), but the upper nibble
+    # varies by assembler. We generate all common upper-nibble variants and let
+    # byte matching find the ROM's exact encoding.
+    _PI_REG_NUM = {'xwa': 0, 'xbc': 1, 'xde': 2, 'xhl': 3,
+                   'xix': 4, 'xiy': 5, 'xiz': 6, 'xsp': 7}
+    def _is_postinc(s):
+        return s.startswith('POSTINC:')
+    def _postinc_reg(s):
+        return s.split(':')[1]
+    def _pi_addr_variants(reg_name):
+        """Generate all plausible addr_byte values for post-increment base.
+        Unidasm often misidentifies the register, so we try all 8 registers
+        with common upper nibble variants and let byte matching find the right one."""
+        variants = []
+        for n in range(8):
+            for base in [0xF0, 0xE8, 0xE0, 0xD0, 0x00]:
+                variants.append(base + n)
+        return variants
+
+    if len(translated_ops) == 2 and op == 'ld':
+        op0, op1 = translated_ops
+        # Store to post-increment: ld (R+), reg → st_dpib/st_dpiw/st_dpil
+        if _is_postinc(op0) and not _is_postinc(op1):
+            base_reg = _postinc_reg(op0)
+            data_reg = op1
+            addr_variants = _pi_addr_variants(base_reg)
+            sz = _reg_size(data_reg)
+            if addr_variants and sz:
+                forms = []
+                mnem = {8: 'st_dpib', 16: 'st_dpiw', 32: 'st_dpil'}[sz]
+                for ab in addr_variants:
+                    forms.append(f'{mnem}\t{data_reg}, {ab}')
+                return forms
+            # Store immediate to post-increment: ld (R+), imm → stib_dpi/stiw_dpi
+            imm_str = op1
+            is_imm = imm_str.lstrip('-').isdigit()
+            if is_imm and addr_variants:
+                imm_val = int(imm_str)
+                forms = []
+                for ab in addr_variants:
+                    forms.append(f'stib_dpi\t{ab}, {imm_val}')
+                    if 0 <= imm_val <= 0xFFFF:
+                        lo = imm_val & 0xFF
+                        hi = (imm_val >> 8) & 0xFF
+                        forms.append(f'stiw_dpi\t{ab}, {lo}, {hi}')
+                return forms
+        # Load from post-increment: ld reg, (R+) → ld_spib/ld_spiw/ld_spil
+        if _is_postinc(op1) and not _is_postinc(op0):
+            data_reg = op0
+            base_reg = _postinc_reg(op1)
+            addr_variants = _pi_addr_variants(base_reg)
+            sz = _reg_size(data_reg)
+            if addr_variants and sz:
+                forms = []
+                mnem = {8: 'ld_spib', 16: 'ld_spiw', 32: 'ld_spil'}[sz]
+                for ab in addr_variants:
+                    forms.append(f'{mnem}\t{data_reg}, {ab}')
+                return forms
 
     # ── Generate alternative forms for compact encodings ──
 

@@ -375,7 +375,7 @@ SeMenu_RegisterParamDisplay_Data:
 	lda	xbc, (xsp+2)
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	cp	xwa, xbc
 	jr	c, -8
 	lda	xwa, (xsp+14)
@@ -419,7 +419,7 @@ SeMenu_RegisterParamDisplay_Data:
 	lda	xbc, (xsp+2)
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	cp	xwa, xbc
 	jr	c, -8
 	lda	xwa, (xsp+14)
@@ -496,7 +496,7 @@ SeMenu_SetupDisplayObject_Data:
 	lda	xbc, (xsp+2)
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	cp	xwa, xbc
 	jr	c, -8
 	lda	xwa, (xsp+12)
@@ -655,7 +655,7 @@ SeMenu_InitDisplayColumn_Data:
 	lda	xbc, (xsp)
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	cp	xwa, xbc
 	jr	c, -8
 	lda	xwa, (xsp+10)
@@ -2076,7 +2076,8 @@ SeMenu_SetupPartDisplay_End:
 	ldb	b, 0
 	cps	e, 0
 	ret	ule
-	.byte 0xc5, 0xec, 0x23, 0xf5, 0xe0, 0x43
+	ld_spib	c, 236
+	.byte 0xf5, 0xe0, 0x43
 	inc	1, b
 	cp	b, e
 	jr	c, -12
@@ -4436,7 +4437,8 @@ SeMenu_ComputeParamTableAddr_Data:
 	add	xwa, 132595
 	ld	xde, xwa
 	lda	xhl, (xwa+10)
-	.byte 0xc5, 0xe8, 0x21, 0xf5, 0xe4, 0x41
+	ld_spib	a, 232
+	.byte 0xf5, 0xe4, 0x41
 	cp	xde, xhl
 	jr	c, -10
 	ret

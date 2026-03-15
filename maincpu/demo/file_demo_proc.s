@@ -14,7 +14,7 @@ FDemo_DisplayResourceData:
 	lda	xbc, (xsp+264)
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
-	.byte 0xf5, 0xe0, 0x00, 0x20
+	stib_dpi	224, 32
 	cp	xwa, xbc
 	jr	c, -8
 	push	xiz

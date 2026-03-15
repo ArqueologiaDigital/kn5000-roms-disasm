@@ -168,7 +168,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
 	ldada	xwa, 35150
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	ldda8	c, 35320
 	extz	bc
 	sla	bc, 2
@@ -481,7 +481,7 @@ SLSrcBankList_FuncBody:
 	cp	xbc, 29360139
 	jrl	nz, 196
 	ldada	xwa, 35150
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	-5419
@@ -543,7 +543,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	xiz, xwa
 	ldada	xwa, 35150
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	ldda8	c, 35320
 	extz	bc
 	sla	bc, 2
@@ -867,7 +867,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp), c
 	ld	(xsp+2), xwa
 	ldada	xwa, 35150
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	ldda8	c, 35320
 	extz	bc
 	sla	bc, 2
@@ -1468,7 +1468,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
 	ldada	xwa, 35234
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	ldda8	c, 35320
 	extz	bc
 	sla	bc, 2
@@ -1800,7 +1800,7 @@ SLDstBankList_FuncBody:
 	cp	xbc, 29360139
 	jr	nz, 122
 	ldada	xwa, 35234
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	-9493
@@ -1873,7 +1873,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	xiz, xwa
 	ldada	xwa, 35234
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	ldda8	c, 35320
 	extz	bc
 	sla	bc, 2
@@ -2137,7 +2137,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp), c
 	ld	(xsp+2), xwa
 	ldada	xwa, 35234
-	.byte 0xf5, 0xe0, 0x00, 0x00
+	stib_dpi	224, 0
 	ldda8	c, 35320
 	extz	bc
 	sla	bc, 2

@@ -6587,7 +6587,7 @@ SeqByteBlock_ChannelContainer:
 	jr	40
 	decm	1, (xsp+18)
 	incm	1, (xsp+2)
-	.byte 0xc5, 0xe4, 0x25
+	ld_spib	e, 228
 	ld	xwa, (xsp+14)
 	.byte 0xf5, 0xe0, 0x45
 	ld	(xsp+14), xwa
@@ -6800,7 +6800,7 @@ SeqChan_InitChannelState:
 	jr	z, 79
 	cpw	(xsp+6), 0
 	jr	z, 28
-	.byte 0xf5, 0xe8, 0x00, 0x0a
+	stib_dpi	232, 10
 	ldw	(xsp+6), 0
 	decm	1, (xsp+20)
 	cpw	(xsp+22), 0
@@ -6811,19 +6811,20 @@ SeqChan_InitChannelState:
 	ld	xwa, (xsp+16)
 	cp	(xwa), 10
 	jr	nz, 16
-	.byte 0xf5, 0xe8, 0x00, 0x0d
+	stib_dpi	232, 13
 	lds32	xwa, 1
 	add	(xsp+16), xwa
 	ldw	(xsp+6), 1
 	jr	15
 	ld	xwa, (xsp+16)
-	.byte 0xc5, 0xe0, 0x23, 0xf5, 0xe8, 0x43
+	ld_spib	c, 224
+	.byte 0xf5, 0xe8, 0x43
 	ld	(xsp+16), xwa
 	decm	1, (xsp+20)
 	incm	1, (xsp+2)
 	jr	42
 	ld	xwa, (xsp+16)
-	.byte 0xc5, 0xe0, 0x23
+	ld_spib	c, 224
 	ld	(xde), c
 	ld	(xsp+16), xwa
 	decm	1, (xsp+20)
