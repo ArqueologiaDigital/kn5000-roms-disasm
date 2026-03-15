@@ -220,7 +220,7 @@ FloppyIO_SwitchboardChannelPtrs:
 	cp	ix, (xiz)
 	nop
 	nop
-	.byte 0xb0, 0xf4
+	ret	pe
 	nop
 	nop
 	cp	d, b
