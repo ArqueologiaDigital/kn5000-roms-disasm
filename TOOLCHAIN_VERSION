@@ -7,7 +7,7 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 0a4079b3eb8e (0a4079b3eb8ebf74e859ff60adc78020958fd7dc)
-Date: 2026-03-15 20:22:14 +0000
-Subject: Add LINK/UNLK stack frame instructions for TLCS-900
+Commit: 9d1fbffbf6a1 (9d1fbffbf6a1179993c2f93ca556c67bcc60ed3b)
+Date: 2026-03-15 21:16:19 +0000
+Subject: Add CP/AND/XOR/ADC/SBC prevbank register-register instructions
 Repository: /mnt/shared/llvm-project
