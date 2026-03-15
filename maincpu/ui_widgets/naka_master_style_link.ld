@@ -3,7 +3,7 @@
 ENTRY(0)
 
 SECTIONS {
-    .text 0xED27E8 : { *(.text*) *(.rodata*) }
+    .text 0xED27E8 : SUBALIGN(1) { *(.text*) *(.rodata*) }
     /DISCARD/ : { *(.comment) *(.note*) *(.eh_frame*) }
 }
 
