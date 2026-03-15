@@ -31,6 +31,9 @@ maincpu/llvm/*.elf
 extracted_fonts/*.pgm
 extracted_fonts/*.png
 
+# Generated binary blobs (compiled from C, .incbin'd by assembly)
+maincpu/includes/generated/*.bin
+
 # Cruft and temporary files
 cruft_please_ignore/
 mame_driver/build_error.txt
