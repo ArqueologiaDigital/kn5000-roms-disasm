@@ -4386,7 +4386,7 @@ AllocCheckNoteOn_Data:
 	bit	9, wa
 	jrl	z, 355
 	ldi_berp	251, 0
-	.byte 0xc7, 0xfb, 0xcf, 0x10
+	cp_erpb	251, 16
 	jrl	nc, 345
 	ldto_berp	a, 251
 	extz	wa
@@ -4401,7 +4401,7 @@ AllocCheckNoteOn_Data:
 	ld	xwa, (xsp+8)
 	call	16667147
 	inc_berp	251, 1
-	.byte 0xc7, 0xfb, 0xcf, 0x10
+	cp_erpb	251, 16
 	jr	c, -42
 	jrl	300
 	ld	xwa, (xsp+4)
@@ -4467,7 +4467,7 @@ AllocCheckNoteOn_Data:
 	bit	9, wa
 	jr	z, 53
 	ldi_berp	251, 0
-	.byte 0xc7, 0xfb, 0xcf, 0x10
+	cp_erpb	251, 16
 	jr	nc, 44
 	ldto_berp	a, 251
 	extz	wa
@@ -4483,7 +4483,7 @@ AllocCheckNoteOn_Data:
 	ld	xwa, (xsp+8)
 	call	16667147
 	inc_berp	251, 1
-	.byte 0xc7, 0xfb, 0xcf, 0x10
+	cp_erpb	251, 16
 	jr	c, -44
 	ld	a, (xsp+2)
 	extz	wa
@@ -16844,12 +16844,12 @@ __jrt_nop_FEA344_Data:
 	nop
 	.byte 0x04
 	nop
-	.byte 0x08, 0x01, 0x00
+	ldio	1, 0
 	push_sr
 	nop
 	.byte 0x04
 	nop
-	.byte 0x08, 0x00, 0x10
+	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 32768
@@ -16859,12 +16859,12 @@ __jrt_nop_FEA344_Data:
 	nop
 	.byte 0x04
 	nop
-	.byte 0x08, 0x01, 0x00
+	ldio	1, 0
 	push_sr
 	nop
 	.byte 0x04
 	nop
-	.byte 0x08, 0x00, 0x10
+	ldio	0, 16
 	nop
 
 __jrt_nop_FEA344_LoadReg:
@@ -26039,7 +26039,7 @@ SendPartDataBlock_Data:
 	.byte 0xec, 0x41
 	inc_berp	230, 1
 	inc	1, bc
-	.byte 0xc7, 0xe6, 0xcf, 0x08
+	cp_erpb	230, 8
 	jr	c, -36
 	ld	(xsp+4), 0
 	.byte 0xbf, 0x08, 0x02, 0x00, 0x00, 0xbf, 0x06, 0x02, 0x00, 0x00
@@ -26940,7 +26940,7 @@ HdaeRom_DataDispatch_Block3:
 	.byte 0xb9, 0x01, 0xbd
 	inc_berp	234, 1
 	inc	2, de
-	.byte 0xc7, 0xea, 0xcf, 0x80
+	cp_erpb	234, 128
 	jr	c, -33
 	ret
 

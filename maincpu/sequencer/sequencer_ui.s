@@ -6108,7 +6108,7 @@ NoteEditBox_EventDispatch2:
 	pushw 245
 	call	16437066
 	inc_berp	251, 1
-	.byte 0xc7, 0xfb, 0xcf, 0x0b
+	cp_erpb	251, 11
 	jrl	c, -236
 	jrl	1219
 	ld	xwa, (xsp+12)
@@ -6194,7 +6194,7 @@ NoteEditBox_EventDispatch2:
 	pushw 245
 	call	16437066
 	inc_berp	251, 1
-	.byte 0xc7, 0xfb, 0xcf, 0x08
+	cp_erpb	251, 8
 	jrl	c, -232
 	jrl	956
 	ld	xwa, (xsp+12)

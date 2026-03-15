@@ -2109,9 +2109,9 @@ SeMenu_SetupPartDisplay_End:
 	ldfr_berp	a, 251
 	ld	a, (xbc+1)
 	ld	(xsp+2), a
-	.byte 0xc7, 0xfb, 0xcf, 0x10
+	cp_erpb	251, 16
 	jr	z, 20
-	.byte 0xc7, 0xfb, 0xcf, 0x11
+	cp_erpb	251, 17
 	jr	z, 14
 	ld	xwa, (xsp+14)
 	.byte 0xb0, 0x14, 0xad, 0x06, 0x80
@@ -4165,12 +4165,12 @@ SeMenu_ApplySynthParam_Data:
 	ld	(xsp+10), c
 	cps	a, 1
 	jr	nz, 6
-	.byte 0xc7, 0xfa, 0x03, 0x0c
+	ldi_erpb	250, 12
 	jr	12
-	.byte 0xc7, 0xfa, 0x03, 0x12
+	ldi_erpb	250, 18
 	cps	a, 3
 	jr	nz, 4
-	.byte 0xc7, 0xfa, 0x03, 0x11
+	ldi_erpb	250, 17
 	lds	iz, 0
 	ldi_berp	251, 0
 	cp	(xsp+10), 0

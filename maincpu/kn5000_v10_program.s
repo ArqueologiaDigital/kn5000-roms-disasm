@@ -944,7 +944,7 @@ NakaNode_Accomp7_Widget01:
 	nop
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0xf5
+	ldio	0, 245
 	nop
 	ei	0
 	push xhl
@@ -1073,7 +1073,7 @@ NakaNode_Accomp7_Widget06:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x00
+	ldio	0, 0
 	nop
 	.byte 0x1e, 0x00, 0x3f, 0x01, 0xef, 0x00, 0xf5, 0x00
 	.byte 0x00, 0x00
@@ -1165,7 +1165,7 @@ NakaNode_Accomp7_Widget17:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x00
+	ldio	0, 0
 	nop
 	.byte 0x1e, 0x00
 	.long Naka_PresentationRootState
@@ -2831,7 +2831,7 @@ NakaWidget_SoundMenu_PageControl:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x84
+	ldio	0, 132
 	nop
 	ld	xwa, 1392552704
 	nop
@@ -2925,7 +2925,8 @@ NakaMenuItem_MasterTuning:
 	ei	0
 	swi	7
 	swi	7
-	.byte 0x0a, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08
+	.byte 0x0a, 0x00, 0x08, 0x00
+	ldio	0, 8
 	nop
 	.byte 0x9c, 0x00, 0x9c
 	nop
@@ -2961,7 +2962,7 @@ NakaMenuItem_KeyScaling:
 	swi	7
 	pushw 2304
 	nop
-	.byte 0x08, 0x00, 0x08
+	ldio	0, 8
 	nop
 	.byte 0xc6
 	nop
@@ -3055,7 +3056,8 @@ NakaMenuItem_Reverb:
 	.byte 0x78, 0xe6, 0x03
 	nop
 	ldb	w, 27
-	.byte 0xe8, 0x00, 0x0a, 0x00, 0xa0, 0x01
+	.byte 0xe8, 0x00
+	ldwio	0, 416
 	ldf	0
 	nop
 	nop
@@ -3070,7 +3072,7 @@ NakaMenuItem_Equalizer:
 	nop
 	incf
 	nop
-	.byte 0x08, 0x00, 0xa3
+	ldio	0, 163
 	nop
 	.byte 0x72, 0x00, 0x37, 0x01, 0x8b, 0x00, 0xf7
 	nop
@@ -3086,7 +3088,7 @@ NakaMenuItem_Equalizer:
 	nop
 	nop
 	nop
-	.byte 0x0a, 0x00, 0x7a, 0xe6
+	ldwio	0, 59002
 	pop_sr
 	nop
 	pop xiz
@@ -3106,7 +3108,7 @@ NakaMenuItem_DspEffect:
 	swi	7
 	retd	3328
 	nop
-	.byte 0x08, 0x00, 0xa3
+	ldio	0, 163
 	nop
 	.byte 0x9c, 0x00, 0x37, 0x01
 	ld	(xiy), 247
@@ -3146,7 +3148,7 @@ NakaMenuItem_AcousticIllusion:
 	nop
 	ret
 	nop
-	.byte 0x08, 0x00, 0xa3
+	ldio	0, 163
 	nop
 	.byte 0xc6
 	nop
@@ -3213,7 +3215,7 @@ NakaWidget_SoundMenu_PageControl2:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x38
+	ldio	0, 56
 	nop
 	.byte 0x78, 0x00, 0x5b
 	nop
@@ -3241,7 +3243,7 @@ NakaMenuItem_LeftHold:
 	nop
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x08
+	ldio	0, 8
 	nop
 	.byte 0x72, 0x00, 0x9c
 	nop
@@ -3283,7 +3285,7 @@ NakaMenuItem_TechniChord:
 	swi	7
 	ccf
 	nop
-	.byte 0x08, 0x00, 0xa3
+	ldio	0, 163
 	nop
 	.byte 0x72, 0x00, 0x37, 0x01, 0x8b, 0x00, 0xf7
 	nop

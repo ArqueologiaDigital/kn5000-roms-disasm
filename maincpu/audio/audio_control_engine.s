@@ -413,15 +413,15 @@ FileIO_BytecodeData:
 	jr	ule, 5
 	cp	(xwa), 12
 	jr	z, 125
-	.byte 0xc7, 0xfb, 0xcf, 0x0f
+	cp_erpb	251, 15
 	jr	z, 6
-	.byte 0xc7, 0xfb, 0xcf, 0x14
+	cp_erpb	251, 20
 	jr	nz, 5
 	cp	(xwa), 15
 	jr	nz, 108
-	.byte 0xc7, 0xfb, 0xcf, 0x10
+	cp_erpb	251, 16
 	jr	c, 15
-	.byte 0xc7, 0xfb, 0xcf, 0x13
+	cp_erpb	251, 19
 	jr	ugt, 9
 	ld	xwa, (xsp+2)
 	cp	(xwa+2), 15
@@ -437,7 +437,7 @@ FileIO_BytecodeData:
 	cp	a, 16
 	jr	nz, 2
 	jr	56
-	.byte 0xc7, 0xfb, 0xcf, 0x0e
+	cp_erpb	251, 14
 	jr	ugt, 5
 	cp	a, 15
 	jr	z, 45
@@ -3395,7 +3395,7 @@ VoiceData_ExtendedParamSetup:
 	push	xwa
 	call	16715161
 	lda	xsp, (xsp+10)
-	.byte 0xc7, 0xfb, 0x03, 0x0d
+	ldi_erpb	251, 13
 	ld	a, (xsp+2)
 	extz	wa
 	muls	wa, 26
@@ -3414,7 +3414,7 @@ VoiceData_ExtendedParamSetup:
 	pushw 255
 	calr	929
 	inc_berp	251, 1
-	.byte 0xc7, 0xfb, 0xcf, 0x15
+	cp_erpb	251, 21
 	jr	ule, -59
 	incm8	1, (xsp+2)
 	cp	(xsp+2), 24
@@ -3504,7 +3504,7 @@ VoiceData_ExtendedParamSetup:
 	call	16715161
 	lda	xsp, (xsp+10)
 	inc_berp	251, 1
-	.byte 0xc7, 0xfb, 0xcf, 0x18
+	cp_erpb	251, 24
 	jr	c, -77
 	pushw 14
 	ld	xwa, (xsp+6)

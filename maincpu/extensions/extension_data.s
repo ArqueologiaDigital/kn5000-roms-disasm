@@ -383,7 +383,8 @@ Str_AreYouSure_IT:	aligned_string "Italian"
 	swi	7
 	aligned_string "SIND SIE SICHER?"
 	aligned_string "Are You Sure?"
-	.byte 0x04, 0x0a, 0xed, 0x00, 0x8e
+	.byte 0x04
+	ldwio	237, 36352
 	push 237
 	nop
 Str_FactoryResetDesc_Multilingual:
@@ -770,7 +771,7 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	pushw bc
 	nop
 	nop
-	.byte 0x08, 0x29, 0x00
+	ldio	41, 0
 	nop
 	retd	41
 	nop
@@ -1825,7 +1826,7 @@ EventNameStr_EV_PMNAME:	aligned_string "EV_PMNAME"
 EventNameStr_EV_PMBKNAME:	aligned_string "EV_PMBKNAME"
 EventNameStr_EV_CHORDDSP:	aligned_string "EV_CHORDDSP"
 	aligned_string "EV_CHORDSHOW"
-	.byte 0x08, 0x00, 0x56
+	ldio	0, 86
 	pushw sp
 	.byte 0xed, 0x00
 NoteNameStr_Table_6:
@@ -2055,7 +2056,8 @@ NakaInstTable8_NullTerm:
 	swi	7
 	.byte 0x1a, 0x00, 0xff
 	swi	7
-	.byte 0x08, 0x00, 0x15, 0x01, 0x80, 0x00
+	ldio	0, 21
+	.byte 0x01, 0x80, 0x00
 	push xhl
 	.byte 0x01, 0xeb, 0x00
 	reti
@@ -2073,7 +2075,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	jp	6400
-	.byte 0x08, 0x00, 0xee
+	ldio	0, 238
 	nop
 	.byte 0x80, 0x00
 	push_a
@@ -2092,7 +2094,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	.byte 0x1c, 0x00, 0x1a
 	nop
-	.byte 0x08, 0x00, 0xc7
+	ldio	0, 199
 	nop
 	.byte 0x80, 0x00, 0xed, 0x00, 0xeb, 0x00
 	reti
@@ -2110,7 +2112,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	call	6912
-	.byte 0x08, 0x00, 0xa0
+	ldio	0, 160
 	nop
 	.byte 0x80, 0x00, 0xc6
 	nop
@@ -2131,7 +2133,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	.byte 0x1e, 0x00, 0x1c
 	nop
-	.byte 0x08, 0x00, 0x79
+	ldio	0, 121
 	nop
 	.byte 0x80, 0x00, 0x9f, 0x00, 0xeb
 	nop
@@ -2196,7 +2198,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	.byte 0x1f
 	nop
-	.byte 0x08, 0x00, 0x04
+	ldio	0, 4
 	nop
 	.byte 0x80, 0x00
 	pushw de
@@ -2218,7 +2220,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x00
+	ldio	0, 0
 	nop
 	.byte 0x7f, 0x00, 0x3f, 0x01, 0xef, 0x00, 0xf5, 0x00
 	.byte 0x00, 0x00
@@ -2234,7 +2236,7 @@ NakaInstTable8_NullTerm:
 	ldb	c, 0
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0xa0
+	ldio	0, 160
 	nop
 	.byte 0x80, 0x00
 
@@ -2307,7 +2309,7 @@ NakaInstTable8_NullTerm:
 	nop
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x04
+	ldio	0, 4
 	nop
 	.byte 0x80, 0x00
 	pushw de
@@ -2330,7 +2332,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw wa
 	nop
-	.byte 0x08, 0x00, 0x2b
+	ldio	0, 43
 	nop
 	.byte 0x80, 0x00, 0x51
 	nop
@@ -2351,7 +2353,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw bc
 	nop
-	.byte 0x08, 0x00, 0x52
+	ldio	0, 82
 	nop
 	.byte 0x80, 0x00, 0x78, 0x00, 0xeb
 	nop
@@ -2372,7 +2374,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw de
 	nop
-	.byte 0x08, 0x00, 0x79
+	ldio	0, 121
 	nop
 	.byte 0x80, 0x00, 0x9f, 0x00, 0xeb
 	nop
@@ -2393,7 +2395,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw hl
 	nop
-	.byte 0x08, 0x00, 0xa0
+	ldio	0, 160
 	nop
 	.byte 0x80, 0x00, 0xc6
 	nop
@@ -2414,7 +2416,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw ix
 	nop
-	.byte 0x08, 0x00, 0xc7
+	ldio	0, 199
 	nop
 	.byte 0x80, 0x00, 0xed, 0x00, 0xeb, 0x00
 	reti
@@ -2434,7 +2436,7 @@ NakaInstTable8_NullTerm:
 	nop
 	pushw iy
 	nop
-	.byte 0x08, 0x00, 0xee
+	ldio	0, 238
 	nop
 	.byte 0x80, 0x00
 	push_a
@@ -2454,7 +2456,8 @@ NakaInstTable8_NullTerm:
 	swi	7
 	pushw iz
 	nop
-	.byte 0x08, 0x00, 0x15, 0x01, 0x80, 0x00
+	ldio	0, 21
+	.byte 0x01, 0x80, 0x00
 	push xhl
 	.byte 0x01, 0xeb, 0x00
 	reti
@@ -2472,7 +2475,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x00
+	ldio	0, 0
 	nop
 	.byte 0x7f, 0x00, 0x3f, 0x01, 0xef, 0x00, 0xf5, 0x00
 	.byte 0x00, 0x00
@@ -2490,7 +2493,7 @@ NakaInstTable8_NullTerm:
 	swi	7
 	ldw	de, 65280
 	swi	7
-	.byte 0x08, 0x00, 0x04
+	ldio	0, 4
 	nop
 	.byte 0x80, 0x00
 
@@ -2614,7 +2617,7 @@ NakaInstTable8_NullTerm:
 	push 0
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x4e
+	ldio	0, 78
 	nop
 	.byte 0x80, 0x00, 0xe1, 0x00, 0x92, 0x00
 	.long Str_ErrorDialog_Caution
@@ -2636,7 +2639,8 @@ ErrorDialog_CPUTransmissionError:
 	nop
 	swi	7
 	swi	7
-	.byte 0x0a, 0x00, 0x08, 0x00, 0x08, 0x00, 0x0e
+	.byte 0x0a, 0x00, 0x08, 0x00
+	ldio	0, 14
 	nop
 	.byte 0x96, 0x00
 	ldw	bc, 43009
@@ -2667,7 +2671,7 @@ ErrorDialog_RecoveryLine1:
 	swi	7
 	pushw 2304
 	nop
-	.byte 0x08, 0x00, 0x2e
+	ldio	0, 46
 	nop
 	.byte 0xae, 0x00, 0x09, 0x01, 0xb8, 0x00
 	.long Str_ErrorDialog_TryTurningOff
@@ -3677,7 +3681,7 @@ Naka_ToshiParam_Table:
 	pop_sr
 	halt
 	reti
-	.byte 0x08, 0x0a, 0x0c
+	ldio	10, 12
 	decf
 	retd	4625
 	push_a

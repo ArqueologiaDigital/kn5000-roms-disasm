@@ -7321,7 +7321,7 @@ SystemConfig_PointerTable:
 	nop
 	.byte 0x04
 	nop
-	.byte 0x08, 0x00, 0x10
+	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 32768
@@ -7331,7 +7331,7 @@ SystemConfig_PointerTable:
 	nop
 	.byte 0x04
 	nop
-	.byte 0x08, 0x00, 0x10
+	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 3920527360
@@ -7455,7 +7455,7 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	nop
 	swi	7
 	nop
-	.byte 0x08, 0x00, 0x00
+	ldio	0, 0
 	nop
 	nop
 	nop
@@ -7471,7 +7471,7 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	rcf
 	nop
 	nop
-	.byte 0x08, 0x08, 0x00
+	ldio	8, 0
 	nop
 	push_sr
 	.byte 0x04
@@ -7532,7 +7532,8 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	.byte 0x04
 	halt
 	pop_sr
-	.byte 0x04, 0x08, 0x03, 0x04
+	.byte 0x04
+	ldio	3, 4
 	pop_sr
 	.byte 0x04
 	pop_sr
@@ -7541,7 +7542,9 @@ CharMap_ValueData_B:	.ascii "!\"#$"
 	.byte 0x04
 	halt
 	pop_sr
-	.byte 0x04, 0x08, 0x06, 0x03, 0x04, 0x04
+	.byte 0x04
+	ldio	6, 3
+	.byte 0x04, 0x04
 	pop_sr
 	pop_sr
 	pop_sr
@@ -8832,7 +8835,7 @@ SoundEffect_Dispatch_Table:
 	nop
 	.byte 0x04
 	nop
-	.byte 0x08, 0x00, 0x10
+	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 32768
@@ -8842,7 +8845,7 @@ SoundEffect_Dispatch_Table:
 	nop
 	.byte 0x04
 	nop
-	.byte 0x08, 0x00, 0x10
+	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 98304
@@ -8850,7 +8853,7 @@ SoundEffect_Dispatch_Table:
 	nop
 	.byte 0x04
 	nop
-	.byte 0x08, 0x00, 0x10
+	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 32768
@@ -8860,7 +8863,7 @@ SoundEffect_Dispatch_Table:
 	nop
 	.byte 0x04
 	nop
-	.byte 0x08, 0x00, 0x10
+	ldio	0, 16
 	nop
 	ldb	w, 0
 	.byte 0x40, 0x00, 0x80
@@ -8905,13 +8908,13 @@ SoundEffect_Dispatch_Table:
 	.byte 0x04
 	halt
 	ei	7
-	.byte 0x08, 0x09, 0x0a
+	ldio	9, 10
 	pushw 3340
 	ret
 	retd	512
 	.byte 0x01
 	pushw 2312
-	.byte 0x0a, 0x03, 0x04, 0x05
+	ldwio	3, 1284
 	ei	7
 	scf
 	ccf
@@ -8924,7 +8927,7 @@ SoundEffect_Dispatch_Table:
 	.byte 0x04
 	halt
 	ei	7
-	.byte 0x08, 0x0a, 0x0b
+	ldio	10, 11
 	incf
 	decf
 	ret
@@ -8932,7 +8935,7 @@ SoundEffect_Dispatch_Table:
 	push_sr
 	.byte 0x01
 	pushw 2312
-	.byte 0x0a, 0x03, 0x04, 0x0c
+	ldwio	3, 3076
 	ei	7
 	scf
 	ccf
@@ -8945,13 +8948,13 @@ SoundEffect_Dispatch_Table:
 	.byte 0x04
 	halt
 	ei	7
-	.byte 0x08, 0x09, 0x0a
+	ldio	9, 10
 	pushw 3340
 	retd	14
 	push_sr
 	.byte 0x01
 	pushw 2312
-	.byte 0x0a, 0x03, 0x04, 0x05
+	ldwio	3, 1284
 	ei	7
 	scf
 	ccf
@@ -9446,7 +9449,7 @@ CharMap_Mode18:
 	.byte 0x04
 	halt
 	ei	7
-	.byte 0x08, 0x09, 0x0a
+	ldio	9, 10
 	pushw 3340
 	ret
 	scf
@@ -9476,7 +9479,7 @@ CharMap_Mode19:
 	.byte 0x04
 	halt
 	ei	7
-	.byte 0x08, 0x09, 0x0a
+	ldio	9, 10
 	pushw 3340
 	ret
 	scf
@@ -9509,7 +9512,7 @@ CharMap_Mode20:
 	.byte 0x04
 	halt
 	ei	7
-	.byte 0x08, 0x09, 0x0a
+	ldio	9, 10
 	pushw 3340
 	ret
 	scf

@@ -266,14 +266,16 @@ def translate_unidasm_to_llvm(mnemonic):
         bank_idx = ERP_BANK_REGS[m.group(1)]
         return f'ldfr_berp\t{reg}, {bank_idx}'
 
-    # Pattern: "ld BANK_REG, imm" → ldi_berp bank_idx, imm (compact 0-7)
+    # Pattern: "ld BANK_REG, imm" → ldi_berp (compact 0-7) or ldi_erpb (extended)
     m = re.match(r'^ld\s+([A-Z][A-Z0-9]+)\s*,\s*(0x[0-9a-fA-F]+|\d+)$', mnem)
     if m and m.group(1) in ERP_BANK_REGS:
         bank_idx = ERP_BANK_REGS[m.group(1)]
         val = int(m.group(2), 16) if m.group(2).startswith('0x') else int(m.group(2))
+        forms = []
         if 0 <= val <= 7:
-            return f'ldi_berp\t{bank_idx}, {val}'
-        return None  # ERP only supports small immediates directly
+            forms.append(f'ldi_berp\t{bank_idx}, {val}')
+        forms.append(f'ldi_erpb\t{bank_idx}, {val}')
+        return forms
 
     # Pattern: "inc N, BANK_REG" → inc_berp bank_idx, N
     m = re.match(r'^inc\s+(0x[0-9a-fA-F]+|\d+)\s*,\s*([A-Z][A-Z0-9]+)$', mnem)
@@ -289,14 +291,16 @@ def translate_unidasm_to_llvm(mnemonic):
         val = int(m.group(1), 16) if m.group(1).startswith('0x') else int(m.group(1))
         return f'dec_berp\t{bank_idx}, {val}'
 
-    # Pattern: "cp BANK_REG, imm" → cpi_berp bank_idx, imm
+    # Pattern: "cp BANK_REG, imm" → cpi_berp (0-7) or cp_erpb (any)
     m = re.match(r'^cp\s+([A-Z][A-Z0-9]+)\s*,\s*(0x[0-9a-fA-F]+|\d+)$', mnem)
     if m and m.group(1) in ERP_BANK_REGS:
         bank_idx = ERP_BANK_REGS[m.group(1)]
         val = int(m.group(2), 16) if m.group(2).startswith('0x') else int(m.group(2))
+        forms = []
         if 0 <= val <= 7:
-            return f'cpi_berp\t{bank_idx}, {val}'
-        return None
+            forms.append(f'cpi_berp\t{bank_idx}, {val}')
+        forms.append(f'cp_erpb\t{bank_idx}, {val}')
+        return forms
 
     # Pattern: "add REG8, BANK_REG" / "sub REG8, BANK_REG" / "and REG8, BANK_REG" etc.
     # → add_berp/sub_berp/and_berp/or_berp/cp_berp reg8, bank_idx
@@ -307,6 +311,17 @@ def translate_unidasm_to_llvm(mnemonic):
         reg = m.group(2).lower()
         bank_idx = ERP_BANK_REGS[m.group(3)]
         return f'{op}_berp\t{reg}, {bank_idx}'
+
+    # ── Direct I/O address operations: ld (0xNN), 0xNN → ldio/ldwio ──
+    # 8-bit: "ld (0xNN),0xNN" → ldio addr, val
+    m = re.match(r'^ld\s+\((0x[0-9a-fA-F]+)\)\s*,\s*(0x[0-9a-fA-F]+)$', mnem)
+    if m:
+        addr = int(m.group(1), 16)
+        val = int(m.group(2), 16)
+        if addr <= 0xFF and val <= 0xFF:
+            return f'ldio\t{addr}, {val}'
+        elif addr <= 0xFF and val <= 0xFFFF:
+            return [f'ldio\t{addr}, {val}', f'ldwio\t{addr}, {val}']
 
     # ── Special single-byte instructions (LLVM uses underscored mnemonics) ──
     if mnem == 'push SR':

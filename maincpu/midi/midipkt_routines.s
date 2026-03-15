@@ -1356,7 +1356,8 @@ MidiPkt_SysExBulkTransfer_Data:
 	ldw	bc, 9
 	call	16604854
 	ldfr_berp	l, 251
-	.byte 0xc7, 0xfb, 0xca, 0x10, 0xc7, 0xfb, 0xcf, 0x10
+	.byte 0xc7, 0xfb, 0xca, 0x10
+	cp_erpb	251, 16
 	jrl	nc, 244
 	ldto_berp	a, 251
 	extz	wa
@@ -1368,7 +1369,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	call	16604854
 	cps	l, 2
 	jrl	ugt, 210
-	.byte 0xc7, 0xfb, 0xcf, 0x0f
+	cp_erpb	251, 15
 	jrl	z, 203
 	ldto_berp	a, 251
 	extz	wa

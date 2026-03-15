@@ -193,19 +193,19 @@ FDC_WaitReady:
 	jr	127
 	stdi8	35436, 0
 	stdi16	35362, 0
-	.byte 0xc7, 0xfb, 0x03, 0xc0
+	ldi_erpb	251, 192
 	lds	wa, 2
 	calr	-465
 	jr	105
 	stdi8	35436, 2
 	stdi16	35362, 0
-	.byte 0xc7, 0xfb, 0x03, 0x40
+	ldi_erpb	251, 64
 	lds	wa, 0
 	calr	-487
 	jr	83
 	stdi8	35436, 3
 	stdi16	35362, 0
-	.byte 0xc7, 0xfb, 0x03, 0x40
+	ldi_erpb	251, 64
 	lds	wa, 0
 	calr	-509
 	jr	61

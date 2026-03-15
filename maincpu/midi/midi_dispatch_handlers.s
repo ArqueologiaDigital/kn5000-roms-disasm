@@ -15079,7 +15079,7 @@ SeqData_FormatOutput_Data:
 	lds	bc, 2
 	call	16604854
 	ldfr_berp	l, 251
-	.byte 0xc7, 0xfb, 0xcf, 0x0b
+	cp_erpb	251, 11
 	jr	nc, 68
 	ldto_berp	c, 251
 	extz	bc
@@ -15141,7 +15141,7 @@ SeqData_FormatOutput_Data:
 	lds	bc, 2
 	call	16604854
 	ldfr_berp	l, 251
-	.byte 0xc7, 0xfb, 0xcf, 0x0c
+	cp_erpb	251, 12
 	jr	nc, 68
 	ldto_berp	c, 251
 	extz	bc
@@ -15235,7 +15235,7 @@ SeqData_FormatOutput_Data:
 	lds	bc, 2
 	call	16604854
 	ldfr_berp	l, 251
-	.byte 0xc7, 0xfb, 0xcf, 0x0e
+	cp_erpb	251, 14
 	jr	nc, 68
 	ldto_berp	c, 251
 	extz	bc
@@ -16185,7 +16185,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	lds	bc, 2
 	call	16604854
 	ldfr_berp	l, 251
-	.byte 0xc7, 0xfb, 0xcf, 0x0b
+	cp_erpb	251, 11
 	jr	nc, 68
 	ldto_berp	c, 251
 	extz	bc
@@ -16247,7 +16247,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	lds	bc, 2
 	call	16604854
 	ldfr_berp	l, 251
-	.byte 0xc7, 0xfb, 0xcf, 0x0c
+	cp_erpb	251, 12
 	jr	nc, 68
 	ldto_berp	c, 251
 	extz	bc
@@ -16341,7 +16341,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	lds	bc, 2
 	call	16604854
 	ldfr_berp	l, 251
-	.byte 0xc7, 0xfb, 0xcf, 0x08
+	cp_erpb	251, 8
 	jr	nc, 68
 	ldto_berp	c, 251
 	extz	bc

@@ -10,7 +10,7 @@ FDTest_DiagList_Total:
 	nop
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x08
+	ldio	0, 8
 	nop
 	ldb	c, 0
 	.byte 0x9c, 0x00, 0x42
@@ -35,7 +35,7 @@ FDTest_DiagList_NG:
 	nop
 	.byte 0x01
 	nop
-	.byte 0x08, 0x00, 0x08
+	ldio	0, 8
 	nop
 	.byte 0xa1, 0x00, 0x9c, 0x00, 0xc0
 	nop
@@ -73,7 +73,7 @@ FDTest_DiagList_OK:
 	nop
 	push_sr
 	nop
-	.byte 0x08, 0x00, 0x08
+	ldio	0, 8
 	nop
 	.byte 0x77, 0x00, 0x9c
 	nop
@@ -115,7 +115,7 @@ FDTest_Panel_Param:
 	nop
 	.byte 0x04
 	nop
-	.byte 0x08, 0x00, 0x54
+	ldio	0, 84
 	nop
 	.byte 0xd8, 0x00
 	.long NakaInst_Param_TermFF
@@ -133,7 +133,7 @@ FDTest_Label_Tilde80:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x5e
+	ldio	0, 94
 	nop
 	.byte 0xdd, 0x00
 	.long CharEncoding_ExtendedHi
@@ -146,11 +146,11 @@ FDTest_Panel_SubElements:
 	naka_header NAKA_TYPE_PANEL
 	nop
 	nop
-	.byte 0x08, 0x00, 0x09
+	ldio	0, 9
 	nop
 	halt
 	nop
-	.byte 0x08, 0x00, 0x2c
+	ldio	0, 44
 	nop
 	.byte 0xd8, 0x00
 	popw hl
@@ -183,7 +183,7 @@ FDTest_Group_OnOff:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x36
+	ldio	0, 54
 	nop
 	.byte 0xde, 0x00
 	.long NakaToggle_OnOff_Data
@@ -199,7 +199,7 @@ FDTest_Label_RunningTest:
 	swi	7
 	reti
 	nop
-	.byte 0x08, 0x00, 0x1e
+	ldio	0, 30
 	nop
 	.byte 0xc5, 0x00, 0x81
 	nop
@@ -285,7 +285,7 @@ FDTest_Label_MemoryDump:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x08, 0x00, 0x86
+	ldio	0, 134
 	nop
 	pushw de
 	nop
@@ -382,7 +382,7 @@ FDTest_ConsoleArea2:
 	nop
 	pop_a
 	nop
-	.byte 0x08, 0x00, 0x08
+	ldio	0, 8
 	nop
 	ldb	c, 0
 	.byte 0x9c, 0x00, 0x42
@@ -428,7 +428,7 @@ FDTest_Label_Console2:
 	swi	7
 	push_f
 	nop
-	.byte 0x08, 0x00, 0x8e
+	ldio	0, 142
 	nop
 	pushw de
 	nop
@@ -567,7 +567,7 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	aligned_string "STOP FDD TEST"
 	.byte 0x0a
 	aligned_string "START FDD TEST LOOP"
-	.byte 0x0a, 0x44, 0x49, 0x52
+	ldwio	68, 21065
 	nop
 	swi	7
 	.byte 0x0a

@@ -3595,7 +3595,7 @@ BitMapOut_ByteData_RenderState:
 	calr	-68
 	ldfr_berp	l, 251
 	inc_berp	251, 1
-	.byte 0xc7, 0xfb, 0xcf, 0x09
+	cp_erpb	251, 9
 	jr	le, 3
 	ldi_berp	251, 0
 	ldto_berp	a, 251
@@ -3605,7 +3605,7 @@ BitMapOut_ByteData_RenderState:
 	ldfr_berp	l, 251
 	dec_berp	251, 1
 	jr	ge, 4
-	.byte 0xc7, 0xfb, 0x03, 0x09
+	ldi_erpb	251, 9
 	ldto_berp	a, 251
 	extz	wa
 	calr	-108
@@ -3830,7 +3830,7 @@ BitMapOut_UpdateWidget_Done:
 	add	wa, bc
 	call	16534664
 	inc_berp	251, 1
-	.byte 0xc7, 0xfb, 0xcf, 0x08
+	cp_erpb	251, 8
 	jr	c, -28
 	pop qiz
 	inc	2, xsp

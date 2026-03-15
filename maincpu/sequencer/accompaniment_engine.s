@@ -1010,7 +1010,7 @@ AccStyle_ByteDataBlock:
 	.byte 0x8b
 	.ascii "<!h&ат3"
 	push xsp
-	.byte 0x08, 0x6e, 0x05
+	ldio	110, 5
 	ld	a, (xhl+100)
 	.byte 0x68, 0x1a, 0xc1, 0xd4, 0x33, 0x3f, 0x10, 0x6e
 	.byte 0x07
@@ -29187,7 +29187,8 @@ AccVoice_SetupSlots_DataBlock:
 	ret
 	.byte 0x01
 	push_sr
-	.byte 0x04, 0x08, 0x10, 0x20
+	.byte 0x04
+	ldio	16, 32
 	ld	xwa, 4109049408
 	push xbc
 	add	xbc, 13357
@@ -37766,23 +37767,23 @@ AccStyle_TableDataEntry:
 	ldfr_berp	a, 250
 	ld	a, (xbc+2)
 	ldfr_berp	a, 251
-	.byte 0xc7, 0xf9, 0xcf, 0x48
+	cp_erpb	249, 72
 	jr	nz, 11
 	cpi_berp	250, 0
 	jr	nz, 6
-	.byte 0xc7, 0xfb, 0xcf, 0x4b
+	cp_erpb	251, 75
 	jr	z, 38
-	.byte 0xc7, 0xf9, 0xcf, 0x47
+	cp_erpb	249, 71
 	jr	nz, 11
 	cpi_berp	250, 0
 	jr	nz, 6
-	.byte 0xc7, 0xfb, 0xcf, 0x4b
+	cp_erpb	251, 75
 	jr	z, 21
-	.byte 0xc7, 0xf9, 0xcf, 0x4c
+	cp_erpb	249, 76
 	jrl	nz, 336
-	.byte 0xc7, 0xfa, 0xcf, 0x4b
+	cp_erpb	250, 75
 	jrl	nz, 329
-	.byte 0xc7, 0xfb, 0xcf, 0x45
+	cp_erpb	251, 69
 	jrl	nz, 322
 	ldda32	xwa, 31460
 	ld	(xwa), 72
@@ -37805,11 +37806,11 @@ AccStyle_TableDataEntry:
 	ldda32	xwa, 31460
 	ld	a, (xwa+15)
 	ld	(xbc+15), a
-	.byte 0xc7, 0xf9, 0xcf, 0x48
+	cp_erpb	249, 72
 	jr	nz, 12
 	cpi_berp	250, 0
 	jr	nz, 7
-	.byte 0xc7, 0xfb, 0xcf, 0x4b
+	cp_erpb	251, 75
 	jrl	z, 147
 	ld	a, (xsp+36)
 	sub	a, 30
@@ -37894,11 +37895,11 @@ AccStyle_TableDataEntry:
 	lda	xwa, (xsp+4)
 	.byte 0xc3, 0x07, 0xe0, 0xe4, 0x19, 0xac, 0x39
 	call	16117240
-	.byte 0xc7, 0xf9, 0xcf, 0x48
+	cp_erpb	249, 72
 	jr	nz, 11
 	cpi_berp	250, 0
 	jr	nz, 6
-	.byte 0xc7, 0xfb, 0xcf, 0x4b
+	cp_erpb	251, 75
 	jr	z, 121
 	ld	a, (xsp+36)
 	extz	wa
@@ -37969,7 +37970,7 @@ AccStyle_TableDataEntry:
 	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x19, 0xac, 0x39
 	call	16117240
 	inc_berp	251, 1
-	.byte 0xc7, 0xfb, 0xcf, 0x0a
+	cp_erpb	251, 10
 	jr	c, -46
 	cpdi8	14672, 131
 	jr	nz, 5
@@ -37999,7 +38000,7 @@ AccStyle_TableDataEntry:
 	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x19, 0xac, 0x39
 	call	16117240
 	inc_berp	251, 1
-	.byte 0xc7, 0xfb, 0xcf, 0x0a
+	cp_erpb	251, 10
 	jr	c, -46
 	ldda32	xwa, 31460
 	stda32	14766, xwa
@@ -38031,7 +38032,7 @@ AccStyle_TableDataEntry:
 	stdi8	14672, 131
 	jr	9
 	inc_berp	251, 1
-	.byte 0xc7, 0xfb, 0xcf, 0x0a
+	cp_erpb	251, 10
 	jr	c, -81
 	pop qiz
 	inc	4, xsp
