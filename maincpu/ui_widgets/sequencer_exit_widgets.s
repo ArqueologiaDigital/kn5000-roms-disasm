@@ -1,151 +1,30 @@
 
+; Sequencer Exit / Mode Widgets (14 widgets, 692 bytes)
+; Source: maincpu/ui_widgets/naka_sequencer_exit.c (C struct with named fields)
+NakaData_SequencerExit:
+	.incbin "includes/generated/naka_sequencer_exit.bin"
 
-	naka_header NAKA_TYPE_GROUP
-	.byte 0x20, 0x00, 0x06, 0x00, 0xcc, 0x74, 0xe2, 0x00
-	.long NakaInst_NoteEditBox
-	.long NakaDesc_FuncTtlNo_B
-	.byte 0xe4, 0x45, 0xf3, 0x00
-
-
-	naka_header NAKA_TYPE_0x44
-	.byte 0x2c, 0x00, 0x00, 0x00, 0xb6, 0x74, 0xe2, 0x00
-	.long NakaInst_EqOnOffFuncToggle
-	.long NakaDesc_Empty_C
-	.byte 0xfa, 0xef, 0xf2, 0x00
-
-
-	naka_header NAKA_TYPE_0x10
-	.byte 0x16, 0x00, 0x00, 0x00, 0xaa, 0x74, 0xe2, 0x00
-	.long NakaInst_MsgToTtl
-	.long NakaDesc_Empty_D
-	.byte 0xf1, 0xec, 0xf2, 0x00
-
-
-	naka_header NAKA_TYPE_0x45
-	.byte 0x32, 0x00, 0x08, 0x00, 0x96, 0x74, 0xe2, 0x00
-	.long NakaInst_AcIndexWideToggle
-	.long NakaDesc_FuncIndex
-	.byte 0x76, 0xeb, 0xf2, 0x00
-
-
-	naka_header NAKA_TYPE_0x47
-	.byte 0x1a, 0x00, 0x04, 0x00, 0x86, 0x74, 0xe2, 0x00
-	.long NakaInst_IvPlayExit
-	.long NakaDesc_Mode
-	.byte 0xa4, 0xe8, 0xf2, 0x00
-
-
-	naka_header NAKA_TYPE_0x10
-	.byte 0x24, 0x00, 0x0e, 0x00, 0x7c, 0x74, 0xe2, 0x00
-	.long NakaInst_HelpTtl
-	.long NakaDesc_ColorFontPageFunc
-	.byte 0xd7, 0x09, 0xf3, 0x00
-
-
-	naka_header NAKA_TYPE_0x47
-	.byte 0x16, 0x00, 0x00, 0x00, 0x6a, 0x74, 0xe2, 0x00
-	.long NakaInst_IvPnlWrExit
-	.long LABEL_E2713C
-	.byte 0x7e, 0xe9, 0xf2, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00, 0x00, 0x00, 0x60, 0x74, 0xe2, 0x00
-	.long NakaInst_IvSdrev
-	.long NakaDesc_Empty_E
-	.byte 0x1d, 0xea, 0xf2, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00, 0x00, 0x00, 0x56, 0x74, 0xe2, 0x00
-	.long NakaInst_IvSddsp
-	.long NakaDesc_Empty_F
-	.byte 0xd8, 0xea, 0xf2, 0x00
-
-
-	naka_header NAKA_TYPE_0x27
-	.byte 0x16, 0x00, 0x00, 0x00, 0x4c, 0x74, 0xe2, 0x00
-	.long NakaInst_IvSdacc
-	.long NakaDesc_Empty_G
-	.byte 0xff, 0xeb, 0xf2, 0x00
-
-
-	naka_header NAKA_TYPE_0x47
-	.byte 0x16, 0x00, 0x00, 0x00, 0x3e, 0x74, 0xe2, 0x00
-	.long NakaInst_IvPunchExit
-	.long NakaDesc_Empty_H
-	.byte 0x74, 0xec, 0xf2, 0x00
-
-
-	naka_header NAKA_TYPE_0x47
-	.byte 0x16, 0x00, 0x00, 0x00, 0x2c, 0x74, 0xe2, 0x00
-	.long NakaInst_IvAutoPunchExit
-	.long NakaDesc_Empty_I
-	.byte 0x32, 0xe5, 0xf2, 0x00
-
-
-	naka_header NAKA_TYPE_0x21
-	.byte 0x2e, 0x00, 0x06, 0x00, 0x1c, 0x74, 0xe2, 0x00
-	.long NakaInst_AcPanicEditSw
-	.long NakaDesc_StyleFunc
-	.byte 0x90, 0xe4, 0xf2, 0x00
-
-
-	naka_header NAKA_TYPE_0x47
-	.byte 0x16, 0x00, 0x00, 0x00, 0x0a, 0x74, 0xe2, 0x00
-	.long NakaInst_IvRealRecExit
-	.long NakaDesc_Empty_J
-	.zero 24
-NakaInst_IvRealRecExit:	aligned_string ""
-	aligned_string "IvRealRecExit"
-NakaInst_AcPanicEditSw:
-	.byte 0x66, 0x6a, 0x00, 0xff
-	aligned_string "AcPanicEditSw"
-NakaInst_IvAutoPunchExit:	aligned_string ""
-	aligned_string "IvAutoPunchExit"
-NakaInst_IvPunchExit:	aligned_string ""
-	aligned_string "IvPunchExit"
-NakaInst_IvSdacc:	aligned_string ""
-	aligned_string "IvSdacc"
-NakaInst_IvSddsp:	aligned_string ""
-	aligned_string "IvSddsp"
-NakaInst_IvSdrev:	aligned_string ""
-	aligned_string "IvSdrev"
-NakaInst_IvPnlWrExit:	aligned_string ""
-	aligned_string "IvPnlWrExit"
-NakaInst_HelpTtl:	.asciz "^^cGj"
-	aligned_string "HelpTtl"
-NakaInst_IvPlayExit:
-	.byte 0x60, 0x00
-	aligned_string "IvPlayExit"
-NakaInst_AcIndexWideToggle:
-	.byte 0x41, 0x41, 0x6a, 0x00
-	aligned_string "AcIndexWideToggle"
-NakaInst_MsgToTtl:	aligned_string ""
-	aligned_string "MsgToTtl"
-NakaInst_EqOnOffFuncToggle:	aligned_string ""
-	aligned_string "EqOnOffFuncToggle"
-NakaInst_NoteEditBox:
-	.byte 0x6a, 0x43, 0x00, 0xff
-	aligned_string "NoteEditBox"
-NakaInst_SngSel2:	aligned_string ""
-	aligned_string "SngSel2"
-NakaInst_SngSel:	aligned_string "c^^jC"
-	aligned_string "SngSel"
-NakaInst_AcEntertainerGridBox:
-	.byte 0x58, 0x58, 0x6a, 0x00
-	aligned_string "AcEntertainerGridBox"
-NakaInst_AccIll:	aligned_string "^^jC"
-	aligned_string "AccIll"
-NakaInst_SqedtVal3:
-	.byte 0x5e, 0x5e, 0x6a, 0x00
-	aligned_string "SqedtVal3"
-NakaInst_SqplyVal:	aligned_string "^^jC"
-	aligned_string "SqplyVal"
-NakaInst_IvSongCopyExit:	aligned_string ""
-	aligned_string "IvSongCopyExit"
-NakaInst_SqedtFix:
-	.byte 0x5e, 0x5e, 0x5f, 0x00
-	aligned_string "SqedtFix"
-NakaInst_SqedtVal2_End:
-	.byte 0x5e, 0x5e
+; External label offsets within the binary blob above.
+	.equ NakaInst_IvRealRecExit, NakaData_SequencerExit + 0x0164
+	.equ NakaInst_AcPanicEditSw, NakaData_SequencerExit + 0x0174
+	.equ NakaInst_IvAutoPunchExit, NakaData_SequencerExit + 0x0186
+	.equ NakaInst_IvPunchExit, NakaData_SequencerExit + 0x0198
+	.equ NakaInst_IvSdacc, NakaData_SequencerExit + 0x01A6
+	.equ NakaInst_IvSddsp, NakaData_SequencerExit + 0x01B0
+	.equ NakaInst_IvSdrev, NakaData_SequencerExit + 0x01BA
+	.equ NakaInst_IvPnlWrExit, NakaData_SequencerExit + 0x01C4
+	.equ NakaInst_HelpTtl, NakaData_SequencerExit + 0x01D2
+	.equ NakaInst_IvPlayExit, NakaData_SequencerExit + 0x01E0
+	.equ NakaInst_AcIndexWideToggle, NakaData_SequencerExit + 0x01EE
+	.equ NakaInst_MsgToTtl, NakaData_SequencerExit + 0x0204
+	.equ NakaInst_EqOnOffFuncToggle, NakaData_SequencerExit + 0x0210
+	.equ NakaInst_NoteEditBox, NakaData_SequencerExit + 0x0224
+	.equ NakaInst_SngSel2, NakaData_SequencerExit + 0x0234
+	.equ NakaInst_SngSel, NakaData_SequencerExit + 0x023E
+	.equ NakaInst_AcEntertainerGridBox, NakaData_SequencerExit + 0x024C
+	.equ NakaInst_AccIll, NakaData_SequencerExit + 0x0266
+	.equ NakaInst_SqedtVal3, NakaData_SequencerExit + 0x0274
+	.equ NakaInst_SqplyVal, NakaData_SequencerExit + 0x0282
+	.equ NakaInst_IvSongCopyExit, NakaData_SequencerExit + 0x0292
+	.equ NakaInst_SqedtFix, NakaData_SequencerExit + 0x02A4
+	.equ NakaInst_SqedtVal2_End, NakaData_SequencerExit + 0x02B2
