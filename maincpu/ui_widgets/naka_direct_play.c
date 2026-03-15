@@ -512,7 +512,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w2_text = { 'L', 'Y', 'R', 'I', 'C', 'S', 0, 0xFF },
+    .w2_text = ASTR("LYRICS"),
 
     /* w3: GROUP */
     .w3 = {
@@ -721,7 +721,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w14_text = { 'L', 'Y', 'R', 'I', 'C', 'S', 0, 0xFF },
+    .w14_text = ASTR("LYRICS"),
 
     /* w15: TYPE_0x14 */
     .w15_hdr = NAKA_HDR(0x14),
@@ -757,7 +757,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w17_text = { 'S', 'K', 'I', 'P', 0, 0xFF },
+    .w17_text = ASTR("SKIP"),
 
     /* w18: TYPE_0x1F */
     .w18_hdr = NAKA_HDR(0x1F),
@@ -784,7 +784,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w19_text = { 'C', 'H', 0, 0xFF },
+    .w19_text = ASTR("CH"),
 
     /* w20: GROUP */
     .w20 = {
@@ -1062,7 +1062,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_id      = 0x002E,
         .reserved       = 0x0000,
     },
-    .w44_text = { 'P', 'I', 'A', 'N', 'O', ' ', 'D', 'I', 'S', 'C', ' ', 'D', 'I', 'R', 'E', 'C', 'T', ' ', 'P', 'L', 'A', 'Y', ' ', ' ', ' ', ' ', 0, 0xFF },
+    .w44_text = ASTR("PIANO DISC DIRECT PLAY    "),
 
     /* w45: TYPE_0x14 */
     .w45_hdr = NAKA_HDR(0x14),
@@ -1222,7 +1222,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_id      = 0x002E,
         .reserved       = 0x0000,
     },
-    .w57_text = { 'S', 'M', 'F', ' ', 'M', 'E', 'D', 'L', 'E', 'Y', 0, 0xFF },
+    .w57_text = ASTR("SMF MEDLEY"),
 
     /* w58: MENU_ITEM */
     .w58 = {
@@ -1251,7 +1251,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w58_text = { 'L', 'Y', 'R', 'I', 'C', 'S', 0, 0xFF },
+    .w58_text = ASTR("LYRICS"),
 
     /* w59: TYPE_0x14 */
     .w59_hdr = NAKA_HDR(0x14),
@@ -1319,7 +1319,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w63_text = { 'S', 'K', 'I', 'P', 0, 0xFF },
+    .w63_text = ASTR("SKIP"),
 
     /* w64: TYPE_0x1B */
     .w64_hdr = NAKA_HDR(0x1B),
@@ -1408,7 +1408,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_id      = 0x003A,
         .reserved       = 0x0000,
     },
-    .w70_text = { 'S', 'M', 'F', ' ', 'M', 'E', 'D', 'L', 'E', 'Y', 0, 0xFF },
+    .w70_text = ASTR("SMF MEDLEY"),
 
     /* w71: CONTAINER */
     .w71 = {
@@ -1430,7 +1430,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_id      = 0x002E,
         .reserved       = 0x0000,
     },
-    .w71_text = { 'D', 'O', 'C', ' ', 'M', 'E', 'D', 'L', 'E', 'Y', 0, 0xFF },
+    .w71_text = ASTR("DOC MEDLEY"),
 
     /* w72: GROUP */
     .w72 = {
@@ -1490,7 +1490,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w75_text = { 'S', 'K', 'I', 'P', 0, 0xFF },
+    .w75_text = ASTR("SKIP"),
 
     /* w76: TYPE_0x29 */
     .w76_hdr = NAKA_HDR(0x29),
@@ -1619,7 +1619,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w84_text = { 'S', 'K', 'I', 'P', 0, 0xFF },
+    .w84_text = ASTR("SKIP"),
 
     /* w85: TYPE_0x29 */
     .w85_hdr = NAKA_HDR(0x29),
@@ -1684,7 +1684,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_id      = 0x002E,
         .reserved       = 0x0000,
     },
-    .w89_text = { 'S', 'M', 'F', ' ', 'M', 'E', 'D', 'L', 'E', 'Y', 0, 0xFF },
+    .w89_text = ASTR("SMF MEDLEY"),
 
     /* w90: TYPE_0x14 */
     .w90_hdr = NAKA_HDR(0x14),
@@ -1720,7 +1720,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w92_text = { 'S', 'K', 'I', 'P', 0, 0xFF },
+    .w92_text = ASTR("SKIP"),
 
     /* w93: TYPE_0x29 */
     .w93_hdr = NAKA_HDR(0x29),
@@ -1773,7 +1773,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_id      = 0x003A,
         .reserved       = 0x0000,
     },
-    .w97_text = { 'S', 'O', 'N', 'G', ' ', 'M', 'E', 'D', 'L', 'E', 'Y', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 0, 0xFF },
+    .w97_text = ASTR("SONG MEDLEY       "),
 
     /* w98: GROUP */
     .w98 = {
@@ -1856,7 +1856,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w104_text = { 'S', 'K', 'I', 'P', 0, 0xFF },
+    .w104_text = ASTR("SKIP"),
 
     /* w105: TYPE_0x47 */
     .w105_hdr = NAKA_HDR(0x47),
@@ -2094,7 +2094,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w129_text = { 'S', 'K', 'I', 'P', 0, 0xFF },
+    .w129_text = ASTR("SKIP"),
 
     /* w130: TYPE_0x29 */
     .w130_hdr = NAKA_HDR(0x29),
@@ -2150,7 +2150,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_id      = 0x0036,
         .reserved       = 0x0000,
     },
-    .w134_text = { 'S', 'T', 'E', 'P', ' ', 'R', 'E', 'C', 'O', 'R', 'D', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 0, 0xFF },
+    .w134_text = ASTR("STEP RECORD       "),
 
     /* w135: LABEL */
     .w135 = {
@@ -2344,7 +2344,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_id      = 0x0039,
         .reserved       = 0x0000,
     },
-    .w148_text = { 'T', 'R', 'A', 'C', 'K', ' ', 'A', 'S', 'S', 'I', 'G', 'N', 0, 0xFF },
+    .w148_text = ASTR("TRACK ASSIGN"),
 
     /* w149: GROUP */
     .w149 = {
@@ -2460,7 +2460,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w158_text = { 'S', 'O', 'N', 'G', 0, 0xFF },
+    .w158_text = ASTR("SONG"),
 
     /* w159: TYPE_0x22 */
     .w159_hdr = NAKA_HDR(0x22),
@@ -2738,7 +2738,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_id      = 0x0037,
         .reserved       = 0x0000,
     },
-    .w182_text = { 'S', 'O', 'N', 'G', ' ', 'S', 'E', 'L', 'E', 'C', 'T', '/', 'N', 'A', 'M', 'I', 'N', 'G', 0, 0xFF },
+    .w182_text = ASTR("SONG SELECT/NAMING"),
 
     /* w183: MENU_ITEM */
     .w183 = {
@@ -2924,7 +2924,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_id      = 0x008F,
         .reserved       = 0x0000,
     },
-    .w193_text = { 'P', 'A', 'R', 'T', ' ', 'B', 'A', 'L', 'A', 'N', 'C', 'E', 0, 0xFF },
+    .w193_text = ASTR("PART BALANCE"),
 
     /* w194: TYPE_0x3C */
     .w194_hdr = NAKA_HDR(0x3C),
@@ -3015,7 +3015,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_len     = 0x00AA,
         .reserved       = 0x0000,
     },
-    .w200_text = { 'P', 'E', 'R', 'F', 'O', 'R', 'M', 'A', 'N', 'C', 'E', 'S', 0, 0xFF },
+    .w200_text = ASTR("PERFORMANCES"),
 
     /* w201: MENU_ITEM */
     .w201 = {
@@ -3044,7 +3044,7 @@ const naka_direct_play_t naka_direct_play_data
         .string_len     = 0x00AB,
         .reserved       = 0x0000,
     },
-    .w201_text = { 'F', 'E', 'A', 'T', 'U', 'R', 'E', ' ', 'P', 'R', 'E', 'S', 'E', 'N', 'T', 'A', 'T', 'I', 'O', 'N', 0, 0xFF },
+    .w201_text = ASTR("FEATURE PRESENTATION"),
 
     /* w202: 0x48 */
     .w202 = {

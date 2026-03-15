@@ -490,7 +490,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .string_id      = 2,
         .reserved       = 0x0000,
     },
-    .w0_text = { 'S', 'O', 'U', 'N', 'D', ' ', 'P', 'A', 'R', 'T', ' ', 'S', 'E', 'T', 'T', 'I', 'N', 'G', 0, 0xFF },
+    .w0_text = ASTR("SOUND PART SETTING"),
 
     /* w1: TYPE_0x1F */
     .w1_hdr = NAKA_HDR(0x1F),
@@ -1172,7 +1172,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w57_text = { 'H', 'z', 0, 0xFF },
+    .w57_text = ASTR("Hz"),
 
     /* w58: TYPE_0x22 */
     .w58_hdr = NAKA_HDR(0x22),
@@ -1318,7 +1318,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w71_text = { 'U', 'S', 'E', 'R', ' ', 'K', 'E', 'Y', ' ', 'S', 'C', 'A', 'L', 'I', 'N', 'G', 0, 0xFF },
+    .w71_text = ASTR("USER KEY SCALING"),
 
     /* w72: TYPE_0x2D */
     .w72_hdr = NAKA_HDR(0x2D),
@@ -1743,7 +1743,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .string_id      = 0x0018,
         .reserved       = 0x0000,
     },
-    .w117_text = { 'T', 'E', 'C', 'H', 'N', 'I', '-', 'C', 'H', 'O', 'R', 'D', 0, 0xFF },
+    .w117_text = ASTR("TECHNI-CHORD"),
 
     /* w118: TYPE_0x25 */
     .w118_hdr = NAKA_HDR(0x25),
@@ -2101,7 +2101,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w141_text = { 0, 0xFF },
+    .w141_text = ASTR(""),
 
     /* w142: TYPE_0x62 */
     .w142_hdr = NAKA_HDR(0x62),
@@ -2184,7 +2184,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w147_text = { 'P', 'E', 'R', 'C', 'U', 'S', 'S', 'I', 'V', 'E', 0, 0xFF },
+    .w147_text = ASTR("PERCUSSIVE"),
 
     /* w148: TYPE_0x47 */
     .w148_hdr = NAKA_HDR(0x47),
@@ -2532,7 +2532,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w170_text = { 'D', 'R', 'A', 'W', 'B', 'A', 'R', ' ', 'E', 'D', 'I', 'T', 0, 0xFF },
+    .w170_text = ASTR("DRAWBAR EDIT"),
 
     /* w171: TYPE_0x33 */
     .w171_hdr = NAKA_HDR(0x33),
@@ -2573,7 +2573,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w174_text = { 'A', 'C', 'C', 'O', 'R', 'D', 'I', 'O', 'N', ' ', 'R', 'E', 'G', 'I', 'S', 'T', 'E', 'R', 0, 0xFF },
+    .w174_text = ASTR("ACCORDION REGISTER"),
 
     /* w175: TYPE_0x1F */
     .w175_hdr = NAKA_HDR(0x1F),
@@ -2608,7 +2608,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w177_text = { 'T', 'Y', 'P', 'E', 0, 0xFF },
+    .w177_text = ASTR("TYPE"),
 
     /* w178: TYPE_0x12 */
     .w178_hdr = NAKA_HDR(0x12),
@@ -3077,7 +3077,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w211_text = { 'A', 'L', 'L', ' ', 'I', 'N', 'I', 'T', 'I', 'A', 'L', ' ', 'S', 'E', 'T', 'T', 'I', 'N', 'G', '!', 0, 0xFF },
+    .w211_text = ASTR("ALL INITIAL SETTING!"),
 
     /* w212: TYPE_0x6B */
     .w212_hdr = NAKA_HDR(0x6B),
@@ -3131,7 +3131,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .string_id      = 1,
         .reserved       = 0x0000,
     },
-    .w216_text = { 'S', 'O', 'F', 'T', ' ', 'V', 'E', 'R', 'S', 'I', 'O', 'N', 0, 0xFF },
+    .w216_text = ASTR("SOFT VERSION"),
 
     /* w217: TYPE_0x15 */
     .w217_hdr = NAKA_HDR(0x15),

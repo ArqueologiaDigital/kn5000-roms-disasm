@@ -637,7 +637,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w18_text = { 'C', 'O', 'N', 'T', 'R', 'O', 'L', 'L', 'E', 'R', 0, 0xFF },
+    .w18_text = ASTR("CONTROLLER"),
 
     /* w19: LABEL */
     .w19 = {
@@ -656,7 +656,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w19_text = { 'F', 'U', 'N', 'C', 'T', 'I', 'O', 'N', 0, 0xFF },
+    .w19_text = ASTR("FUNCTION"),
 
     /* w20: TYPE_0x22 */
     .w20_hdr = NAKA_HDR(0x22),
@@ -792,7 +792,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w27_text = { 'I', 'T', 'E', 'M', 0, 0xFF },
+    .w27_text = ASTR("ITEM"),
 
     /* w28: LABEL */
     .w28 = {
@@ -934,7 +934,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w34_text = { 'R', 'H', 'Y', 'T', 'H', 'M', 0, 0xFF },
+    .w34_text = ASTR("RHYTHM"),
 
     /* w35: LABEL */
     .w35 = {
@@ -953,7 +953,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w35_text = { 'S', 'O', 'U', 'N', 'D', ' ', '&', ' ', 'R', 'H', 'Y', 'T', 'H', 'M', 0, 0xFF },
+    .w35_text = ASTR("SOUND & RHYTHM"),
 
     /* w36: LABEL */
     .w36 = {
@@ -972,7 +972,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w36_text = { 'P', 'A', 'N', 'E', 'L', ' ', 'M', 'E', 'M', 'O', 'R', 'Y', 0, 0xFF },
+    .w36_text = ASTR("PANEL MEMORY"),
 
     /* w37: TYPE_0x63 */
     .w37_hdr = NAKA_HDR(0x63),
@@ -1100,7 +1100,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w43_text = { 'R', 'H', 'Y', 'T', 'H', 'M', 0, 0xFF },
+    .w43_text = ASTR("RHYTHM"),
 
     /* w44: LABEL */
     .w44 = {
@@ -1119,7 +1119,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w44_text = { 'S', 'O', 'U', 'N', 'D', '&', 'R', 'H', 'Y', 'T', 'H', 'M', 0, 0xFF },
+    .w44_text = ASTR("SOUND&RHYTHM"),
 
     /* w45: LABEL */
     .w45 = {
@@ -1138,7 +1138,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w45_text = { 'P', 'A', 'N', 'E', 'L', ' ', 'M', 'E', 'M', 'O', 'R', 'Y', 0, 0xFF },
+    .w45_text = ASTR("PANEL MEMORY"),
 
     /* w46: CONTAINER */
     .w46 = {
@@ -1266,7 +1266,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w53_text = { 'N', 'O', 'R', 'M', 'A', 'L', 0, 0xFF },
+    .w53_text = ASTR("NORMAL"),
 
     /* w54: LABEL */
     .w54 = {
@@ -1285,7 +1285,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w54_text = { 'E', 'X', 'P', 'A', 'N', 'D', 0, 0xFF },
+    .w54_text = ASTR("EXPAND"),
 
     /* w55: TYPE_LIST */
     .w55_hdr = NAKA_HDR(0x66),
@@ -1424,7 +1424,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w63_text = { 'D', 'I', 'S', 'P', 'L', 'A', 'Y', ' ', 'T', 'Y', 'P', 'E', 0, 0xFF },
+    .w63_text = ASTR("DISPLAY TYPE"),
 
     /* w64: LABEL */
     .w64 = {
@@ -1443,7 +1443,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w64_text = { 'T', 'I', 'M', 'E', 0, 0xFF },
+    .w64_text = ASTR("TIME"),
 
     /* w65: TYPE_0x22 */
     .w65_hdr = NAKA_HDR(0x22),
@@ -1521,7 +1521,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w69_text = { 'L', 'O', 'A', 'D', 0, 0xFF },
+    .w69_text = ASTR("LOAD"),
 
     /* w70: CONTAINER */
     .w70 = {
@@ -1572,7 +1572,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_len     = 0x0000,
         .reserved       = 0x0000,
     },
-    .w71_text = { 'L', 'O', 'A', 'D', 0, 0xFF },
+    .w71_text = ASTR("LOAD"),
 
     /* w72: TYPE_0x1B */
     .w72_hdr = NAKA_HDR(0x1B),
@@ -1603,7 +1603,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w73_text = { 'H', 'O', 'M', 'E', ' ', 'P', 'A', 'G', 'E', '/', 0, 0xFF },
+    .w73_text = ASTR("HOME PAGE/"),
 
     /* w74: LABEL */
     .w74 = {
@@ -1674,7 +1674,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w78_text = { 'U', 'S', 'E', 'R', ' ', 'I', 'N', 'I', 'T', 'I', 'A', 'L', 0, 0xFF },
+    .w78_text = ASTR("USER INITIAL"),
 
     /* w79: TYPE_0x22 */
     .w79_hdr = NAKA_HDR(0x22),
@@ -1842,7 +1842,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w93_text = { 0, 0xFF },
+    .w93_text = ASTR(""),
 
     /* w94: LABEL */
     .w94 = {
@@ -1861,7 +1861,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w94_text = { 'O', 'N', 'E', ' ', 'T', 'O', 'U', 'C', 'H', ' ', 'P', 'L', 'A', 'Y', 0, 0xFF },
+    .w94_text = ASTR("ONE TOUCH PLAY"),
 
     /* w95: TYPE_0x4F */
     .w95_hdr = NAKA_HDR(0x4F),
@@ -1937,7 +1937,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_len     = 0x00A3,
         .reserved       = 0x0000,
     },
-    .w98_text = { 'S', 'T', 'Y', 'L', 'E', ' ', 'E', 'X', 'P', 'L', 'O', 'R', 'E', 'R', 0, 0xFF },
+    .w98_text = ASTR("STYLE EXPLORER"),
 
     /* w99: 0x48 */
     .w99 = {
@@ -1982,7 +1982,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_len     = 0x00A4,
         .reserved       = 0x0000,
     },
-    .w100_text = { 'S', 'T', 'Y', 'L', 'E', ' ', 'A', 'L', 'P', 'H', 'A', 'B', 'E', 'T', 'I', 'C', 'A', 'L', 0, 0xFF },
+    .w100_text = ASTR("STYLE ALPHABETICAL"),
 
     /* w101: CONTAINER */
     .w101 = {
@@ -2117,7 +2117,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w109_text = { 'S', 'U', 'B', ' ', 'C', 'A', 'T', 'E', 'G', 'O', 'R', 'Y', 0, 0xFF },
+    .w109_text = ASTR("SUB CATEGORY"),
 
     /* w110: TYPE_0x35 */
     .w110_hdr = NAKA_HDR(0x35),
@@ -2198,7 +2198,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w114_text = { 'C', 'A', 'T', 'E', 'G', 'O', 'R', 'Y', ' ', ':', 0, 0xFF },
+    .w114_text = ASTR("CATEGORY :"),
 
     /* w115: TYPE_0x3E */
     .w115_hdr = NAKA_HDR(0x3E),
@@ -2226,7 +2226,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w116_text = { 'S', 'K', 'I', 'P', 0, 0xFF },
+    .w116_text = ASTR("SKIP"),
 
     /* w117: CONTAINER */
     .w117 = {
@@ -2402,7 +2402,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w128_text = { 'C', 'A', 'T', 'E', 'G', 'O', 'R', 'Y', ' ', ':', 0, 0xFF },
+    .w128_text = ASTR("CATEGORY :"),
 
     /* w129: TYPE_0x3E */
     .w129_hdr = NAKA_HDR(0x3E),
@@ -2430,7 +2430,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w130_text = { 'S', 'K', 'I', 'P', 0, 0xFF },
+    .w130_text = ASTR("SKIP"),
 
     /* w131: CONTAINER */
     .w131 = {
@@ -2557,7 +2557,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FB,
     },
-    .w137_text = { 'S', 'K', 'I', 'P', 0, 0xFF },
+    .w137_text = ASTR("SKIP"),
 
     /* w138: CONTAINER */
     .w138 = {
@@ -2715,7 +2715,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w147_text = { 'P', 'A', 'G', 'E', ' ', '1', '/', '2', 0, 0xFF },
+    .w147_text = ASTR("PAGE 1/2"),
 
     /* w148: TYPE_0x63 */
     .w148_hdr = NAKA_HDR(0x63),
@@ -2787,7 +2787,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w152_text = { 'P', 'A', 'G', 'E', ' ', '2', '/', '2', 0, 0xFF },
+    .w152_text = ASTR("PAGE 2/2"),
 
     /* w153: LABEL */
     .w153 = {
@@ -2806,7 +2806,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w153_text = { 'B', 'A', 'N', 'K', 0, 0xFF },
+    .w153_text = ASTR("BANK"),
 
     /* w154: LABEL */
     .w154 = {
@@ -2825,7 +2825,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w154_text = { 'B', 'A', 'N', 'K', 0, 0xFF },
+    .w154_text = ASTR("BANK"),
 
     /* w155: LABEL */
     .w155 = {
@@ -2844,7 +2844,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w155_text = { 'N', 'A', 'M', 'I', 'N', 'G', 0, 0xFF },
+    .w155_text = ASTR("NAMING"),
 
     /* w156: LABEL */
     .w156 = {
@@ -2863,7 +2863,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w156_text = { 'M', 'E', 'M', 'O', 'R', 'Y', 0, 0xFF },
+    .w156_text = ASTR("MEMORY"),
 
     /* w157: LABEL */
     .w157 = {
@@ -2882,7 +2882,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w157_text = { 'N', 'A', 'M', 'I', 'N', 'G', 0, 0xFF },
+    .w157_text = ASTR("NAMING"),
 
     /* w158: SLIDER */
     .w158 = {
@@ -2959,7 +2959,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_id      = 0x0099,
         .reserved       = 0x0000,
     },
-    .w161_text = { 'N', 'A', 'M', 'I', 'N', 'G', 0, 0xFF },
+    .w161_text = ASTR("NAMING"),
 
     /* w162: TYPE_0x4D */
     .w162_hdr = NAKA_HDR(0x4D),
@@ -3053,7 +3053,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_id      = 0x0099,
         .reserved       = 0x0000,
     },
-    .w167_text = { 'N', 'A', 'M', 'I', 'N', 'G', 0, 0xFF },
+    .w167_text = ASTR("NAMING"),
 
     /* w168: TYPE_0x4D */
     .w168_hdr = NAKA_HDR(0x4D),
@@ -3180,7 +3180,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w176_text = { 0, 0xFF },
+    .w176_text = ASTR(""),
 
     /* w177: TYPE_0x35 */
     .w177_hdr = NAKA_HDR(0x35),
@@ -3245,7 +3245,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w180_text = { 'P', 'l', 'e', 'a', 's', 'e', ' ', 't', 'r', 'y', ' ', 't', 'u', 'r', 'n', 'i', 'n', 'g', ' ', 'o', 'f', 'f', ' ', 'a', 'n', 'd', ' ', 'o', 'n', ' ', 'a', 'g', 'a', 'i', 'n', '.', 0, 0xFF },
+    .w180_text = ASTR("Please try turning off and on again."),
 
     /* w181: LABEL */
     .w181 = {
@@ -3283,7 +3283,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w182_text = { 't', 'h', 'i', 's', ' ', 'u', 'n', 'i', 't', ' ', 'n', 'e', 'e', 'd', 's', ' ', 'r', 'e', 'p', 'a', 'i', 'r', 'i', 'n', 'g', '.', 0, 0xFF },
+    .w182_text = ASTR("this unit needs repairing."),
 
     /* w183: TYPE_0x35 */
     .w183_hdr = NAKA_HDR(0x35),

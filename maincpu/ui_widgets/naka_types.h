@@ -220,11 +220,24 @@ typedef struct __attribute__((packed)) {
  */
 #define NAKA_STR_ALLOC(n)  (((n) + 2) & ~1)
 
-/** Fill the pad byte (if any) with 0xFF.
- *  For even-length strings (odd alloc): no padding.
- *  For odd-length strings (even alloc with padding):
- *    the compiler's string literal fills chars, NUL terminator,
- *    then we need 0xFF in the last byte.
+/**
+ * ASTR("text") — Aligned string initializer for char array fields.
+ *
+ * Equivalent to the assembly `aligned_string` macro: NUL-terminated,
+ * then 0xFF-padded to even byte count.
+ *
+ * Use for even-length strings (which need 0xFF pad after NUL):
+ *   char text[NAKA_STR_ALLOC(10)] = ASTR("CONTROLLER");
+ *   // → { 'C','O','N','T','R','O','L','L','E','R', 0x00, 0xFF }
+ *
+ * For odd-length strings (NUL already at even boundary), use bare literal:
+ *   char text[NAKA_STR_ALLOC(1)] = "a";
+ *   // → { 'a', 0x00 }
+ *
+ * Implementation: appends "\0\xFF" to the literal. When the enclosing
+ * char array is exactly NAKA_STR_ALLOC(n) bytes, the compiler drops
+ * the trailing NUL from the literal, leaving { chars..., 0x00, 0xFF }.
  */
+#define ASTR(s)  (s "\0\xFF")
 
 #endif /* NAKA_TYPES_H */

@@ -256,7 +256,7 @@ const naka_extension_device_t naka_extension_device_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w0_text = { 0, 0xFF },
+    .w0_text = ASTR(""),
 
     /* w1: CONTAINER */
     .w1 = {
@@ -278,7 +278,7 @@ const naka_extension_device_t naka_extension_device_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w1_text = { 0, 0xFF },
+    .w1_text = ASTR(""),
 
     /* w2: TYPE_0x36 */
     .w2_hdr = NAKA_HDR(0x36),
@@ -314,7 +314,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w3_text = { 'P', 'A', 'N', 'E', 'L', ' ', 'C', 'P', 'U', ' ', 'C', 'H', 'E', 'C', 'K', 'I', 'N', 'G', 0, 0xFF },
+    .w3_text = ASTR("PANEL CPU CHECKING"),
 
     /* w4: LABEL */
     .w4 = {
@@ -333,7 +333,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w4_text = { 'R', 'E', 'S', 'U', 'L', 'T', ':', ' ', 'C', 'P', 'U', ' ', 'o', 'f', ' ', 'C', 'P', 'R', ' ', '=', 0, 0xFF },
+    .w4_text = ASTR("RESULT: CPU of CPR ="),
 
     /* w5: LABEL */
     .w5 = {
@@ -352,7 +352,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w5_text = { 'C', 'P', 'U', ' ', 'o', 'f', ' ', 'C', 'P', 'L', ' ', '=', 0, 0xFF },
+    .w5_text = ASTR("CPU of CPL ="),
 
     /* w6: LABEL */
     .w6 = {
@@ -445,7 +445,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FA,
     },
-    .w13_text = { 'O', 'K', 0, 0xFF },
+    .w13_text = ASTR("OK"),
 
     /* w14: LABEL */
     .w14 = {
@@ -464,7 +464,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FA,
     },
-    .w14_text = { 'O', 'K', 0, 0xFF },
+    .w14_text = ASTR("OK"),
 
     /* w15: TYPE_0x35 */
     .w15_hdr = NAKA_HDR(0x35),
@@ -491,7 +491,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F9,
     },
-    .w16_text = { 'N', 'O', 0, 0xFF },
+    .w16_text = ASTR("NO"),
 
     /* w17: LABEL */
     .w17 = {
@@ -510,7 +510,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F9,
     },
-    .w17_text = { 'N', 'O', 0, 0xFF },
+    .w17_text = ASTR("NO"),
 
     /* w18: TYPE_0x35 */
     .w18_hdr = NAKA_HDR(0x35),
@@ -537,7 +537,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00F9,
     },
-    .w19_text = { 'N', 'O', 0, 0xFF },
+    .w19_text = ASTR("NO"),
 
     /* w20: LABEL */
     .w20 = {
@@ -556,7 +556,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FA,
     },
-    .w20_text = { 'O', 'K', 0, 0xFF },
+    .w20_text = ASTR("OK"),
 
     /* w21: TYPE_0x35 */
     .w21_hdr = NAKA_HDR(0x35),
@@ -583,7 +583,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FA,
     },
-    .w22_text = { 'O', 'K', 0, 0xFF },
+    .w22_text = ASTR("OK"),
 
     /* w23: LABEL */
     .w23 = {
@@ -630,7 +630,7 @@ const naka_extension_device_t naka_extension_device_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w24_text = { 0, 0xFF },
+    .w24_text = ASTR(""),
 
     /* w25: TYPE_0x36 */
     .w25_hdr = NAKA_HDR(0x36),
@@ -667,7 +667,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w26_text = { 'P', 'A', 'N', 'E', 'L', ' ', 'S', 'W', '&', 'L', 'E', 'D', ' ', 'C', 'H', 'E', 'C', 'K', 0, 0xFF },
+    .w26_text = ASTR("PANEL SW&LED CHECK"),
 
     /* w27: CONTAINER */
     .w27 = {
@@ -689,7 +689,7 @@ const naka_extension_device_t naka_extension_device_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w27_text = { 0, 0xFF },
+    .w27_text = ASTR(""),
 
     /* w28: TYPE_0x28 */
     .w28_hdr = NAKA_HDR(0x28),
@@ -751,7 +751,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w34_text = { 'L', 'C', 'D', ' ', 'P', 'A', 'N', 'E', 'L', ' ', 'T', 'E', 'S', 'T', 0, 0xFF },
+    .w34_text = ASTR("LCD PANEL TEST"),
 
     /* w35: TYPE_0x35 */
     .w35_hdr = NAKA_HDR(0x35),
@@ -778,7 +778,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w36_text = { 'L', 'C', 'D', ' ', 'P', 'A', 'N', 'E', 'L', ' ', 'T', 'E', 'S', 'T', 0, 0xFF },
+    .w36_text = ASTR("LCD PANEL TEST"),
 
     /* w37: TYPE_0x35 */
     .w37_hdr = NAKA_HDR(0x35),
@@ -805,7 +805,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w38_text = { 'L', 'C', 'D', ' ', 'P', 'A', 'N', 'E', 'L', ' ', 'T', 'E', 'S', 'T', 0, 0xFF },
+    .w38_text = ASTR("LCD PANEL TEST"),
 
     /* w39: TYPE_0x35 */
     .w39_hdr = NAKA_HDR(0x35),
@@ -832,7 +832,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x0000,
     },
-    .w40_text = { 'L', 'C', 'D', ' ', 'P', 'A', 'N', 'E', 'L', ' ', 'T', 'E', 'S', 'T', 0, 0xFF },
+    .w40_text = ASTR("LCD PANEL TEST"),
 
     /* w41: TYPE_0x35 */
     .w41_hdr = NAKA_HDR(0x35),
@@ -859,7 +859,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w42_text = { 'L', 'C', 'D', ' ', 'P', 'A', 'N', 'E', 'L', ' ', 'T', 'E', 'S', 'T', 0, 0xFF },
+    .w42_text = ASTR("LCD PANEL TEST"),
 
     /* w43: TYPE_0x35 */
     .w43_hdr = NAKA_HDR(0x35),
@@ -1779,7 +1779,7 @@ const naka_extension_device_t naka_extension_device_data
         .string_id      = 0x0000,
         .reserved       = 0x0000,
     },
-    .w94_text = { 0, 0xFF },
+    .w94_text = ASTR(""),
 
     /* w95: LABEL */
     .w95 = {
@@ -1817,7 +1817,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w96_text = { 'F', 'L', 'O', 'P', 'P', 'Y', ' ', 'D', 'I', 'S', 'K', ' ', 'C', 'O', 'N', 'T', 'R', 'O', 'L', 'L', 'E', 'R', '(', 'F', 'D', 'C', ')', ' ', 0, 0xFF },
+    .w96_text = ASTR("FLOPPY DISK CONTROLLER(FDC) "),
 
     /* w97: TYPE_0x28 */
     .w97_hdr = NAKA_HDR(0x28),
@@ -1885,7 +1885,7 @@ const naka_extension_device_t naka_extension_device_data
         .field_1a       = 0x0000,
         .bg_color       = 0x00FF,
     },
-    .w102_text = { '=', ' ', 'N', 'O', 0, 0xFF },
+    .w102_text = ASTR("= NO"),
 
     /* w103: TYPE_0x6A */
     .w103_hdr = NAKA_HDR(0x6A),
