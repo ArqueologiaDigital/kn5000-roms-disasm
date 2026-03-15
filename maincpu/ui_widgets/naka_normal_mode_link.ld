@@ -5,7 +5,9 @@
 ENTRY(0)
 
 SECTIONS {
-    .text : { *(.text*) }
+    .text : { *(.text*) *(.rodata*) }
     /DISCARD/ : { *(.comment) *(.note*) *(.eh_frame*) }
 }
+
+Naka_PresentationRootState = 0x00EF013F;
 

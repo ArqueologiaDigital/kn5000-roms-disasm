@@ -8,6 +8,8 @@
 
 #include "naka_types.h"
 
+extern const char Naka_PresentationRootState;
+
 #define BASE  0x00ED333Cu
 
 typedef struct __attribute__((packed)) {
@@ -87,7 +89,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .child_count    = 10,
         .field_0e       = 0x0000,
         .field_10       = 0x0000,
-        .handler        = 0x00EF013F,
+        .handler        = NAKA_ADDR(Naka_PresentationRootState),
         .style          = 0x00FF,
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
