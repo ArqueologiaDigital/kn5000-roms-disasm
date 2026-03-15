@@ -20097,7 +20097,7 @@ SendSinglePacket_Data:	.asciz "¿Þ7>éŽ¿$PØ©E¨Áî"
 	jr	ugt, 16
 	ei	0x06
 	push	xiz
-	.byte 0x9f, 0x28, 0x04
+	pushm	(xsp+40)
 	call	15673567
 	inc	6, xsp
 	ei	0x00
@@ -20112,7 +20112,7 @@ SendSinglePacket_Data:	.asciz "¿Þ7>éŽ¿$PØ©E¨Áî"
 	jr	nz, 14
 	ei	0x06
 	push	xiz
-	.byte 0x9f, 0x28, 0x04
+	pushm	(xsp+40)
 	call	15673219
 	inc	6, xsp
 	ei	0x00
@@ -26300,7 +26300,7 @@ SendPartDataBlock_Data:
 	cp	hl, 102
 	jr	lt, -117
 	ret
-	.byte 0xf3, 0xfd, 0x56, 0xfe, 0x37
+	lda	xsp, (xsp-426)
 	ld	xde, xwa
 	ld	xiy, 15652253
 	ld	xix, xsp

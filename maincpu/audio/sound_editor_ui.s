@@ -14732,7 +14732,7 @@ StylCnvStorOkFunc_DataBlock:
 	jr	ule, 32
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
-	.byte 0x9f, 0x0a, 0x04
+	pushm	(xsp+10)
 	ld	de, (xsp+34)
 	calr	-301
 	ld	wa, (xsp+6)
@@ -14774,7 +14774,7 @@ StylCnvStorOkFunc_DataBlock:
 	jr	ule, 32
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
-	.byte 0x9f, 0x0a, 0x04
+	pushm	(xsp+10)
 	ld	de, (xsp+34)
 	calr	-422
 	ld	wa, (xsp+6)
@@ -14803,7 +14803,7 @@ StylCnvStorOkFunc_DataBlock:
 	jr	ule, 32
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
-	.byte 0x9f, 0x0a, 0x04
+	pushm	(xsp+10)
 	ld	de, (xsp+34)
 	calr	-505
 	ld	wa, (xsp+6)
@@ -14898,7 +14898,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xix, (xsp+14)
 	ldiw
 	ldiw
-	.byte 0x9f, 0x08, 0x04
+	pushm	(xsp+8)
 	ld	xbc, xde
 	ld	de, (xsp+36)
 	calr	-761
@@ -14908,7 +14908,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xwa), de
 	ld	de, (xsp+28)
 	ld	(xwa+2), de
-	.byte 0x9f, 0x08, 0x04
+	pushm	(xsp+8)
 	ld	de, (xsp+36)
 	calr	-786
 	lda	xwa, (xsp+22)
@@ -14931,7 +14931,7 @@ StylCnvStorOkFunc_DataBlock:
 	lda	xix, (xsp+10)
 	ldiw
 	ldiw
-	.byte 0x9f, 0x08, 0x04
+	pushm	(xsp+8)
 	ld	xbc, xde
 	ld	de, (xsp+36)
 	calr	-850
@@ -14941,7 +14941,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xwa), de
 	ld	de, (xsp+32)
 	ld	(xwa+2), de
-	.byte 0x9f, 0x08, 0x04
+	pushm	(xsp+8)
 	ld	de, (xsp+36)
 	calr	-875
 	lda	xiy, (xsp+14)
@@ -14954,7 +14954,7 @@ StylCnvStorOkFunc_DataBlock:
 	ldiw
 	lda	xwa, (xsp+22)
 	lda	xbc, (xsp+18)
-	.byte 0x9f, 0x08, 0x04
+	pushm	(xsp+8)
 	ld	de, (xsp+36)
 	calr	-910
 	lda	xwa, (xsp+26)
@@ -14988,7 +14988,7 @@ StylCnvStorOkFunc_DataBlock:
 	add	de, bc
 	lda	xbc, (xsp+18)
 	ld	(xbc+2), de
-	.byte 0x9f, 0x08, 0x04
+	pushm	(xsp+8)
 	ld	de, (xsp+36)
 	calr	-1001
 	lda	xwa, (xsp+22)
@@ -15004,7 +15004,7 @@ StylCnvStorOkFunc_DataBlock:
 	sub	de, bc
 	lda	xbc, (xsp+18)
 	ld	(xbc+2), de
-	.byte 0x9f, 0x08, 0x04
+	pushm	(xsp+8)
 	ld	de, (xsp+36)
 	calr	-1045
 	pop	xiz
@@ -15036,10 +15036,12 @@ StylCnvStorBnk_ProcDataBlock:
 	ld	bc, (xiz+22)
 	cpw	(xiz+24), 0
 	jr	z, 9
-	.byte 0x94, 0x04, 0x93, 0x04
+	pushm	(xix)
+	pushm	(xhl)
 	calr	-608
 	jr	7
-	.byte 0x94, 0x04, 0x93, 0x04
+	pushm	(xix)
+	pushm	(xhl)
 	calr	-1095
 	lds32	xhl, 0
 	pop	xiz

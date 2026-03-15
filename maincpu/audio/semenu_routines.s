@@ -2981,14 +2981,15 @@ SeMenu_ApplyPartEdit_Data2:
 	ldw	wa, 146
 	sub	wa, qiz
 	ld	qiz, wa
-	.byte 0x9f, 0x06, 0x04
+	pushm	(xsp+6)
 	ldw	wa, 51
 	ldw	bc, 146
 	ld	de, (xsp+6)
 	.byte 0x1e, 0x7f, 0x00
 	ld	bc, hl
 	cps	bc, 0
-	.byte 0x6e, 0x3a, 0x9f, 0x0a, 0x04
+	.byte 0x6e, 0x3a
+	pushm	(xsp+10)
 	ld	wa, (xsp+6)
 	ld	bc, (xsp+8)
 	ld	de, (xsp+10)
@@ -3769,16 +3770,16 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+10)
 	and	a, (xsp+4)
 	jr	z, 49
-	.byte 0x9f, 0x08, 0x04
+	pushm	(xsp+8)
 	ld	wa, qiz
 	dec	6, wa
 	pushw	wa
-	.byte 0x9f, 0x0c, 0x04
+	pushm	(xsp+12)
 	pushw 67
 	call	15789564
 	pushw	iz
 	push qiz
-	.byte 0x9f, 0x14, 0x04
+	pushm	(xsp+20)
 	ld	wa, qiz
 	dec	6, wa
 	pushw	wa
@@ -3793,7 +3794,7 @@ SeMenu_ApplyPartEdit_Data2:
 	push	xiz
 	pushw 67
 	call	15789564
-	.byte 0x9f, 0x10, 0x04
+	pushm	(xsp+16)
 	ld	wa, qiz
 	inc	6, wa
 	pushw	wa
@@ -3803,13 +3804,13 @@ SeMenu_ApplyPartEdit_Data2:
 	lda	xsp, (xsp+16)
 	.byte 0x9f, 0x08
 	.long NakaInst_data_E80B04
-	.byte 0x9f, 0x0c, 0x04
+	pushm	(xsp+12)
 	ld	wa, qiz
 	inc	6, wa
 	pushw	wa
 	call	15789564
 	inc	8, xsp
-	.byte 0x9f, 0x06, 0x04
+	pushm	(xsp+6)
 	push	xiz
 	push qiz
 	call	15789619
@@ -3899,7 +3900,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ldw	de, 67
 	ld	wa, (xsp+12)
 	add	wa, bc
-	.byte 0x9f, 0x0c, 0x04
+	pushm	(xsp+12)
 	pushw	iz
 	pushw	wa
 	pushw	de
@@ -3907,27 +3908,31 @@ SeMenu_ApplyPartEdit_Data2:
 	inc	8, xsp
 	cp	(xsp+4), 1
 	jr	nz, 12
-	.byte 0x9f, 0x0e, 0x04, 0x9f, 0x0a, 0x04, 0x9f, 0x10, 0x04
+	pushm	(xsp+14)
+	pushm	(xsp+10)
+	pushm	(xsp+16)
 	pushw	iz
 	jr	63
-	.byte 0x9f, 0x0a, 0x04
+	pushm	(xsp+10)
 	ld	wa, iz
 	add	wa, 10
 	pushw	wa
-	.byte 0x9f, 0x10, 0x04
+	pushm	(xsp+16)
 	pushw	iz
 	call	15789564
-	.byte 0x9f, 0x12, 0x04
+	pushm	(xsp+18)
 	ld	wa, (xsp+18)
 	sub	wa, 10
 	pushw	wa
-	.byte 0x9f, 0x16, 0x04
+	pushm	(xsp+22)
 	ld	wa, iz
 	add	wa, 10
 	pushw	wa
 	call	15789564
 	lda	xsp, (xsp+16)
-	.byte 0x9f, 0x0e, 0x04, 0x9f, 0x0a, 0x04, 0x9f, 0x0e, 0x04
+	pushm	(xsp+14)
+	pushm	(xsp+10)
+	pushm	(xsp+14)
 	ld	wa, (xsp+14)
 	sub	wa, 10
 	pushw	wa
@@ -3946,14 +3951,18 @@ SeMenu_ApplyPartEdit_Data2:
 	add	wa, bc
 	pushw	wa
 	pushw	de
-	.byte 0x9f, 0x12, 0x04, 0x9f, 0x0e, 0x04
+	pushm	(xsp+18)
+	pushm	(xsp+14)
 	call	15789564
-	.byte 0x9f, 0x0e, 0x04
+	pushm	(xsp+14)
 	pushw	iz
-	.byte 0x9f, 0x18, 0x04
+	pushm	(xsp+24)
 	pushw	iz
 	call	15789619
-	.byte 0x9f, 0x16, 0x04, 0x9f, 0x1a, 0x04, 0x9f, 0x22, 0x04, 0x9f, 0x1e, 0x04
+	pushm	(xsp+22)
+	pushm	(xsp+26)
+	pushm	(xsp+34)
+	pushm	(xsp+30)
 	call	15789619
 	lda	xsp, (xsp+24)
 	pop	xiz

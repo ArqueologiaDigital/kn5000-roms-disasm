@@ -6728,7 +6728,7 @@ TchSensGrid_EventDispatch:
 	ldw	(xwa+2), 1
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
-	.byte 0x94, 0x04
+	pushm	(xix)
 	pushw 237
 	pushw 3808
 	push	xbc
@@ -6770,7 +6770,7 @@ TchSensGrid_EventDispatch:
 	ldw	(xiy), 1
 	ldw	(xbc), 5
 	ld	(xhl), xiz
-	.byte 0x94, 0x04
+	pushm	(xix)
 	pushw 237
 	pushw 3820
 	push	xiz
@@ -6787,7 +6787,7 @@ TchSensGrid_EventDispatch:
 	ldw	(xiy), 1
 	ldw	(xbc), 6
 	ld	(xhl), xiz
-	.byte 0x94, 0x04
+	pushm	(xix)
 	pushw 237
 	pushw 3824
 	push	xiz

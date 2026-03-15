@@ -371,7 +371,7 @@ DrawText_NullTerminate:
 	ret
 
 DrawText_LayoutAndRender_Variant1:
-	.byte 0xf3, 0xfd, 0xee, 0xfe, 0x37
+	lda	xsp, (xsp-274)
 	push	xiz
 	ld	xiy, 15380444
 	lda	xix, (xsp+270)
@@ -420,13 +420,14 @@ DrawText_LayoutAndRender_Variant1:
 	lda	xwa, (xsp+270)
 	lds32	xbc, 1
 	push	xbc
-	.byte 0xd2, 0xa4, 0xef, 0x03, 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04
+	pushdi_24	257956
+	pushdi_24	257954
 	ld	xbc, (xsp+14)
 	calr	-2302
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
-	.byte 0xf3, 0xfd, 0xee, 0xfe, 0x37
+	lda	xsp, (xsp-274)
 	push	xiz
 	ld	xiy, 15380452
 	lda	xix, (xsp+270)
@@ -475,13 +476,14 @@ DrawText_LayoutAndRender_Variant1:
 	lda	xwa, (xsp+270)
 	lds32	xbc, 2
 	push	xbc
-	.byte 0xd2, 0xa4, 0xef, 0x03, 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04
+	pushdi_24	257956
+	pushdi_24	257954
 	ld	xbc, (xsp+14)
 	calr	-2457
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
-	.byte 0xf3, 0xfd, 0xee, 0xfe, 0x37
+	lda	xsp, (xsp-274)
 	push	xiz
 	ld	xiy, 15380460
 	lda	xix, (xsp+270)
@@ -525,13 +527,14 @@ DrawText_LayoutAndRender_Variant1:
 	lda	xwa, (xsp+270)
 	lds32	xbc, 3
 	push	xbc
-	.byte 0xd2, 0xa4, 0xef, 0x03, 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04
+	pushdi_24	257956
+	pushdi_24	257954
 	ld	xbc, (xsp+14)
 	calr	-2598
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
-	.byte 0xf3, 0xfd, 0xee, 0xfe, 0x37
+	lda	xsp, (xsp-274)
 	push	xiz
 	ld	xiy, 15380468
 	lda	xix, (xsp+270)
@@ -575,13 +578,14 @@ DrawText_LayoutAndRender_Variant1:
 	lda	xwa, (xsp+270)
 	lds32	xbc, 4
 	push	xbc
-	.byte 0xd2, 0xa4, 0xef, 0x03, 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04
+	pushdi_24	257956
+	pushdi_24	257954
 	ld	xbc, (xsp+14)
 	calr	-2739
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
-	.byte 0xf3, 0xfd, 0xee, 0xfe, 0x37
+	lda	xsp, (xsp-274)
 	push	xiz
 	ld	xiy, 15380476
 	lda	xix, (xsp+270)
@@ -630,7 +634,8 @@ DrawText_LayoutAndRender_Variant1:
 	lda	xwa, (xsp+270)
 	lds32	xbc, 6
 	push	xbc
-	.byte 0xd2, 0xa4, 0xef, 0x03, 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04
+	pushdi_24	257956
+	pushdi_24	257954
 	ld	xbc, (xsp+14)
 	calr	-2894
 	pop	xiz
@@ -1177,7 +1182,7 @@ DrawText_ExtLayout_NullAndDraw:
 	ret
 
 DrawText_ExtLayout_Variant1:
-	.byte 0xf3, 0xfd, 0xe4, 0xfe, 0x37
+	lda	xsp, (xsp-284)
 	push	xiz
 	ld	(xsp+284), xwa
 	ld	xiy, 15380764
@@ -1248,7 +1253,8 @@ DrawText_ExtLayout_Variant1:
 	extz	xbc
 	lda	xwa, (xsp+276)
 	push	xbc
-	.byte 0xd2, 0xa4, 0xef, 0x03, 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04
+	pushdi_24	257956
+	pushdi_24	257954
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
 	calr	-4542
@@ -1329,7 +1335,7 @@ DrawFunc_Init_PushFontAndDraw:
 	ret
 
 DrawFunc_Init_Variant1:
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, 15380792
@@ -1417,12 +1423,13 @@ DrawFunc_Init_Variant1:
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	.byte 0xd2, 0xa4, 0xef, 0x03, 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04
+	pushdi_24	257956
+	pushdi_24	257954
 	calr	-4987
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, 15380824
@@ -1448,13 +1455,13 @@ DrawFunc_Init_Variant1:
 	jr	z, 13
 	cps	hl, 1
 	jr	nz, 18
-	.byte 0x94, 0x04
+	pushm	(xix)
 	ld	xwa, 15380832
 	jr	16
-	.byte 0x94, 0x04
+	pushm	(xix)
 	ld	xwa, 15380836
 	jr	7
-	.byte 0x94, 0x04
+	pushm	(xix)
 	ld	xwa, 15380840
 	push	xwa
 	push	xbc
@@ -1470,12 +1477,13 @@ DrawFunc_Init_Variant1:
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	.byte 0xd2, 0xa4, 0xef, 0x03, 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04
+	pushdi_24	257956
+	pushdi_24	257954
 	calr	-5149
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, 15380844
@@ -1525,12 +1533,13 @@ DrawFunc_Init_Variant1:
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	.byte 0xd2, 0xa4, 0xef, 0x03, 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04
+	pushdi_24	257956
+	pushdi_24	257954
 	calr	-5312
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, 15380864
@@ -1611,12 +1620,13 @@ DrawFunc_Init_Variant1:
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	.byte 0xd2, 0xa4, 0xef, 0x03, 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04
+	pushdi_24	257956
+	pushdi_24	257954
 	calr	-5554
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	.byte 0x45
@@ -1637,15 +1647,15 @@ DrawFunc_Init_Variant1:
 	jr	z, 13
 	cps	l, 1
 	jr	nz, 20
-	.byte 0x92, 0x04
+	pushm	(xde)
 	ld	xwa, 15380904
 	jr	18
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw 234
 	pushw 45484
 	push	xbc
 	jr	9
-	.byte 0x92, 0x04
+	pushm	(xde)
 	ld	xwa, 15380912
 	push	xwa
 	push	xbc
@@ -1661,7 +1671,8 @@ DrawFunc_Init_Variant1:
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	.byte 0xd2, 0xa4, 0xef, 0x03, 0x04, 0xd2, 0xa2, 0xef, 0x03, 0x04
+	pushdi_24	257956
+	pushdi_24	257954
 	calr	-5701
 	pop	xiz
 	lda	xsp, (xsp+268)

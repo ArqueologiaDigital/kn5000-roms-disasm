@@ -10862,7 +10862,7 @@ AcWelcomScreen_RenderBytecode:
 	ldiw
 	lda	xwa, (xsp+12)
 	pushw 17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw 247
 	ld	xbc, 15326816
 	ldw	de, 16
@@ -10872,7 +10872,7 @@ AcWelcomScreen_RenderBytecode:
 	ldiw
 	lda	xwa, (xsp+12)
 	pushw 17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw 247
 	ld	xbc, 15326952
 	ldw	de, 16
@@ -10882,7 +10882,7 @@ AcWelcomScreen_RenderBytecode:
 	ldiw
 	lda	xwa, (xsp+12)
 	pushw 17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw 247
 	.byte 0x41
 	.long Bitmap_DigitL
@@ -10893,7 +10893,7 @@ AcWelcomScreen_RenderBytecode:
 	ldiw
 	lda	xwa, (xsp+12)
 	pushw 17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw 247
 	ld	xbc, 15327020
 	ldw	de, 16
@@ -10903,7 +10903,7 @@ AcWelcomScreen_RenderBytecode:
 	ldiw
 	lda	xwa, (xsp+12)
 	pushw 17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw 247
 	.byte 0x41
 	.long Bitmap_DigitR
@@ -10979,7 +10979,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xbc
 	sll	xde, 2
 	addda32_24	xde, 149382
-	.byte 0x9a, 0x0a, 0x04
+	pushm	(xde+10)
 	pushw 247
 	ld	xbc, 15326816
 	ldw	de, 16
@@ -10994,7 +10994,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xbc
 	sll	xde, 2
 	addda32_24	xde, 149382
-	.byte 0x9a, 0x0a, 0x04
+	pushm	(xde+10)
 	pushw 247
 	ld	xbc, 15326952
 	ldw	de, 16
@@ -11009,7 +11009,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xbc
 	sll	xde, 2
 	addda32_24	xde, 149382
-	.byte 0x9a, 0x0a, 0x04
+	pushm	(xde+10)
 	pushw 247
 	ld	xbc, 15326884
 	ldw	de, 16
@@ -11024,7 +11024,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xbc
 	sll	xde, 2
 	addda32_24	xde, 149382
-	.byte 0x9a, 0x0a, 0x04
+	pushm	(xde+10)
 	pushw 247
 	ld	xbc, 15326952
 	ldw	de, 16
@@ -11050,7 +11050,7 @@ AcWelcomScreen_RenderBytecode:
 	sll	xde, 2
 	ld32_24	xbc, 149382
 	add	xde, xbc
-	.byte 0x9a, 0x0a, 0x04
+	pushm	(xde+10)
 	pushw 247
 	.byte 0x41
 	.long Bitmap_DigitD
@@ -11066,7 +11066,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xbc
 	sll	xde, 2
 	addda32_24	xde, 149382
-	.byte 0x9a, 0x0a, 0x04
+	pushm	(xde+10)
 	pushw 247
 	ld	xbc, 15326986
 	ldw	de, 16
@@ -12848,7 +12848,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	16402871
-	.byte 0x9f, 0x08, 0x04
+	pushm	(xsp+8)
 	ld	wa, (xsp+8)
 	ld	bc, hl
 	ld	de, (xsp+12)
@@ -12991,7 +12991,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	16402871
-	.byte 0x9f, 0x08, 0x04
+	pushm	(xsp+8)
 	ld	wa, (xsp+8)
 	ld	bc, hl
 	ld	de, (xsp+12)
@@ -13237,7 +13237,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, 31522817
 	call	16402871
 	ld	iz, hl
-	.byte 0x9f, 0x0c, 0x04
+	pushm	(xsp+12)
 	ld	wa, (xsp+4)
 	ld	bc, iz
 	ld	de, (xsp+12)
@@ -13298,7 +13298,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, 31522817
 	call	16402871
 	ld	iz, hl
-	.byte 0x9f, 0x0c, 0x04
+	pushm	(xsp+12)
 	ld	wa, (xsp+4)
 	ld	bc, iz
 	ld	de, (xsp+12)
@@ -13502,7 +13502,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, 31522817
 	call	16402871
 	ld	iz, hl
-	.byte 0x9f, 0x0e, 0x04
+	pushm	(xsp+14)
 	ld	wa, (xsp+6)
 	ld	bc, iz
 	ld	de, (xsp+14)
@@ -13561,7 +13561,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, 31522817
 	call	16402871
 	ld	iz, hl
-	.byte 0x9f, 0x0e, 0x04
+	pushm	(xsp+14)
 	ld	wa, (xsp+6)
 	ld	bc, iz
 	ld	de, (xsp+14)
@@ -13780,7 +13780,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, 31522817
 	call	16402871
 	ld	qiz, hl
-	.byte 0x9f, 0x0a, 0x04
+	pushm	(xsp+10)
 	ld	wa, iz
 	ld	bc, qiz
 	ld	de, (xsp+14)
@@ -14006,7 +14006,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, 31522817
 	call	16402871
 	ld	(xsp+4), hl
-	.byte 0x9f, 0x0c, 0x04
+	pushm	(xsp+12)
 	ld	wa, iz
 	ld	bc, (xsp+6)
 	ld	de, (xsp+16)
@@ -14159,7 +14159,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+16), hl
 	cpw	(xsp+16), 0
 	jr	z, 63
-	.byte 0x9f, 0x0a, 0x04
+	pushm	(xsp+10)
 	ld	wa, (xsp+6)
 	ld	bc, (xsp+16)
 	lds	de, 0
@@ -14228,7 +14228,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, 31522817
 	call	16402871
 	ld	(xsp+14), hl
-	.byte 0x9f, 0x0a, 0x04
+	pushm	(xsp+10)
 	ld	wa, (xsp+6)
 	ld	bc, (xsp+16)
 	ld	de, (xsp+10)
@@ -14269,7 +14269,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, 31522817
 	call	16402871
 	ld	(xsp+14), hl
-	.byte 0x9f, 0x0a, 0x04
+	pushm	(xsp+10)
 	ld	wa, (xsp+6)
 	ld	bc, (xsp+16)
 	lds	de, 1

@@ -2008,7 +2008,7 @@ IvNamingExit_Epilogue:
 	ret
 
 IvNamingExit_ScreenData:
-	.byte 0xf3, 0xfd, 0x4e, 0xff, 0x37
+	lda	xsp, (xsp-178)
 	push	xiz
 	ld	(xsp+170), xde
 	ld	(xsp+174), xbc
@@ -2203,9 +2203,9 @@ IvNamingExit_ScreenData:
 	ld	xhl, (xhl)
 	push	xhl
 	ld	xhl, (xsp+14)
-	.byte 0x9b, 0x20, 0x04
+	pushm	(xhl+32)
 	ld	xhl, (xsp+10)
-	.byte 0x9b, 0x16, 0x04
+	pushm	(xhl+22)
 	call	16435914
 	ld	xwa, (xsp+178)
 	call	16409190
@@ -6053,7 +6053,8 @@ NoteEditBox_EventDispatch2:
 	ldw	(xwa+6), 43
 	cpi_berp	251, 0
 	jr	nz, 10
-	.byte 0x9f, 0x08, 0x04, 0x40
+	pushm	(xsp+8)
+	.byte 0x40
 	.long LABEL_E34614
 	jr	21
 	ld	wa, (xsp+8)
@@ -6076,7 +6077,7 @@ NoteEditBox_EventDispatch2:
 	lda	xwa, (xsp+28)
 	ldw	(xwa+2), 33
 	ldw	(xwa+6), 42
-	.byte 0x9f, 0x0a, 0x04
+	pushm	(xsp+10)
 	pushw 227
 	pushw 17948
 	lda	xwa, (xsp+42)
@@ -6144,7 +6145,7 @@ NoteEditBox_EventDispatch2:
 	ldw	(xix), 49
 	cpi_berp	251, 0
 	jr	nz, 10
-	.byte 0x9f, 0x08, 0x04
+	pushm	(xsp+8)
 	ld	xwa, 14894624
 	jr	21
 	ld	wa, (xsp+8)
@@ -6165,7 +6166,7 @@ NoteEditBox_EventDispatch2:
 	ld	(xsp+4), xwa
 	ldw	(xbc), 40
 	ldw	(xix), 49
-	.byte 0x9f, 0x0a, 0x04
+	pushm	(xsp+10)
 	pushw 227
 	pushw 17960
 	push	xde
@@ -7601,7 +7602,7 @@ SndParam_Dispatch:
 	jr	z, 42
 	cp	xhl, 16705
 	jrl	nz, 953
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw 227
 	pushw 18302
 	push	xbc
@@ -8353,7 +8354,8 @@ SqplyVal_ExtraParamsData:
 	lds32	xhl, 0
 	push	xhl
 	ld	xhl, (xsp+10)
-	.byte 0x9b, 0x16, 0x04, 0x9b, 0x18, 0x04
+	pushm	(xhl+22)
+	pushm	(xhl+24)
 	call	16437066
 	ld	xwa, (xsp+68)
 	ld	xbc, 29360151
@@ -8820,7 +8822,8 @@ SqedtVal_DrawParamsData:
 	lds32	xhl, 0
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b, 0x16, 0x04, 0x9b, 0x18, 0x04
+	pushm	(xhl+22)
+	pushm	(xhl+24)
 	call	16437066
 	ld	xwa, (xsp+74)
 	ld	xbc, 29360151
@@ -10461,7 +10464,8 @@ AccIll_Dispatch:
 	lds32	xhl, 0
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b, 0x16, 0x04, 0x9b, 0x18, 0x04
+	pushm	(xhl+22)
+	pushm	(xhl+24)
 	call	16437066
 	ld	xwa, (xsp+4)
 	lda	xbc, (xwa+26)
@@ -10553,7 +10557,8 @@ AccIll_Dispatch:
 	lds32	xhl, 0
 	push	xhl
 	ld	xhl, (xsp+8)
-	.byte 0x9b, 0x16, 0x04, 0x9b, 0x18, 0x04
+	pushm	(xhl+22)
+	pushm	(xhl+24)
 	call	16437066
 	jrl	2812
 

@@ -864,7 +864,7 @@ Data_FadeSetGridDispatch:
 	jr	z, 9
 	cp	xhl, 10752
 	jrl	nz, 251
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw 231
 	pushw 63902
 	push	xbc
@@ -1582,7 +1582,7 @@ Data_InOutGridDispatch:
 	call	16569399
 	cps	hl, 2
 	jr	nz, 22
-	.byte 0x9e, 0x04, 0x04
+	pushm	(xiz+4)
 	pushw 231
 	pushw 64778
 	lda	xwa, (xsp+18)

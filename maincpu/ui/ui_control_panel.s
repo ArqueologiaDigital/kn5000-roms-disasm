@@ -2622,7 +2622,7 @@ MainPmanCtrl_DispatchTable:
 	srl	xwa, 0
 	ld	qwa, 0
 	ld	xbc, (xiz)
-	.byte 0x9e, 0x06, 0x04
+	pushm	(xiz+6)
 	ld	de, (xiz+4)
 	call	16569115
 	jrl	193
@@ -2631,7 +2631,7 @@ MainPmanCtrl_DispatchTable:
 	.long OscScope_UpdateDisplay
 	ld	qwa, 0
 	ld	xbc, (xiz)
-	.byte 0x9e, 0x06, 0x04
+	pushm	(xiz+6)
 	ld	de, (xiz+4)
 	call	16569379
 	jrl	168

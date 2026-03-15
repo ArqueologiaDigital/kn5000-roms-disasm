@@ -490,6 +490,10 @@ def translate_unidasm_to_llvm(mnemonic):
             reg = UNIDASM_REG_MAP.get(m.group(1))
             disp = int(m.group(2), 16)
             if reg:
+                # Sign-extend d16 values: 32768..65535 → -32768..-1
+                if disp > 32767 and disp <= 65535:
+                    disp = disp - 65536
+                    return f'({reg}{disp})'  # negative sign included
                 return f'({reg}+{disp})'
 
         # Memory indirect with negative disp: (XRR-0xNN)
@@ -541,6 +545,10 @@ def translate_unidasm_to_llvm(mnemonic):
             reg = UNIDASM_REG_MAP.get(m.group(1))
             disp = int(m.group(2), 16)
             if reg:
+                # Sign-extend d16 values: 32768..65535 → -32768..-1
+                if disp > 32767 and disp <= 65535:
+                    disp = disp - 65536
+                    return f'({reg}{disp})'  # negative sign included
                 return f'({reg}+{disp})'
 
         # Bare register+register: XRR+RR (used by jp T, XRR+RR and lda)
@@ -1082,6 +1090,19 @@ def translate_unidasm_to_llvm(mnemonic):
             elif op == 'cp':
                 forms.append(f'cpw\t{op0}, {op1}')
             return forms
+
+    # ── PUSH (mem) — memory push: pushw → pushm for memory operands ──
+    if op in ('push', 'pushw') and len(translated_ops) == 1:
+        mem_op = translated_ops[0]
+        if mem_op.startswith('(') and not _is_direct(mem_op):
+            return [f'pushm\t{mem_op}']
+
+    # ── PUSH (direct_addr) — push from direct address ──
+    if op in ('push', 'pushw') and len(translated_ops) == 1:
+        mem_op = translated_ops[0]
+        if _is_direct(mem_op):
+            addr = _direct_addr(mem_op)
+            return [f'pushdi_24\t{addr}']
 
     # ── R+R addressing: ld reg, (base+idx) / ld (base+idx), reg / lda / jp ──
     def _is_regpair(s):

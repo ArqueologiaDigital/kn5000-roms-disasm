@@ -1236,7 +1236,7 @@ FDemoText_ByteData_DisplayRefresh:
 	lda_24	xhl, 149494
 	pop	xiz
 	ret
-	.byte 0xf3, 0xfd, 0x78, 0xff, 0x37
+	lda	xsp, (xsp-136)
 	push	xiz
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -1715,7 +1715,7 @@ FDemoText_TextDispatch_Return:
 	ret
 
 FDemoText_ByteData_LayoutEngine:
-	.byte 0xf3, 0xfd, 0x22, 0xff, 0x37
+	lda	xsp, (xsp-222)
 	push	xiz
 	ld	(xsp+218), de
 	ld	(xsp+220), xbc
@@ -1855,7 +1855,7 @@ FDemoText_ByteData_LayoutEngine:
 	pop	xiz
 	lda	xsp, (xsp+222)
 	ret
-	.byte 0xf3, 0xfd, 0x72, 0xff, 0x37
+	lda	xsp, (xsp-142)
 	push	xiz
 	ld	(xsp+138), de
 	ld	(xsp+140), xbc
@@ -2004,7 +2004,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x00, 0x01
 	lds	hl, 0
 	ret
-	.byte 0xf3, 0xfd, 0x6e, 0xff, 0x37
+	lda	xsp, (xsp-146)
 	push	xiz
 	ld	(xsp+142), de
 	ld	(xsp+144), xbc
@@ -2121,7 +2121,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x02, 0xff, 0x00
 	lds	hl, 0
 	ret
-	.byte 0xf3, 0xfd, 0xf0, 0xfe, 0x37
+	lda	xsp, (xsp-272)
 	push	xiz
 	ld	(xsp+268), de
 	ld	(xsp+270), xbc
@@ -2199,7 +2199,7 @@ FDemoText_ByteData_LayoutEngine:
 	pop xiz
 	lda	xsp, (xsp+272)
 	ret
-	.byte 0xf3, 0xfd, 0x32, 0xff, 0x37
+	lda	xsp, (xsp-206)
 	push xiz
 	ld	(xsp+202), de
 	ld	(xsp+204), xbc

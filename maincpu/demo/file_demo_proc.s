@@ -7,7 +7,7 @@
 ; =============================================================================
 
 FDemo_DisplayResourceData:
-	.byte 0xf3, 0xfd, 0xdc, 0xfe, 0x37
+	lda	xsp, (xsp-292)
 	push	xiz
 	ld	xiz, xwa
 	ldw	(xsp+6), 0
@@ -5717,7 +5717,7 @@ GetEncFileSize_Return:
 ; lookups and copies. Uses div-by-10 to extract decimal digits.
 ; =============================================================================
 IndexToRecordLookup:
-	.byte 0xf3, 0xfd, 0xe0, 0xfe, 0x37	; lda xsp, (xsp + 0xFEE0)  [R+d16, not in LLVM]
+	lda	xsp, (xsp-288)
 	pushw iz
 	ld xde, xbc
 	ld iz, wa				; IZ = index parameter
@@ -6055,7 +6055,7 @@ GetRecordPtr_Return:
 
 ValidateAndSearchFile:
 	; --- Configuration/validation function (84 bytes) ---
-	.byte 0xf3, 0xfd, 0xe6, 0xfe, 0x37	; lda xsp, (xsp + 0xFEE6)  [R+d16]
+	lda	xsp, (xsp-282)
 	pushw iz
 	ld iz, wa
 	ld xiy, 0x00EA049C

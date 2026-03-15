@@ -13101,7 +13101,7 @@ Scoop_EnvelopeCalc:
 	ret
 
 Scoop_EnvelopeCalc_Data:
-	.byte 0xf3, 0xfd, 0xee, 0xfe, 0x37
+	lda	xsp, (xsp-274)
 	push	xiz
 	ld	xbc, xwa
 	ld	iz, (xbc+2)
@@ -13298,7 +13298,7 @@ Scoop_EnvCalc_Handler0:
 	inc	8, xsp
 	ret
 Scoop_EnvCalc_Handler1:
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	ld	xiy, 14732314
 	lda	xix, (xsp+260)
 	lds	bc, 4
@@ -13500,7 +13500,7 @@ Scoop_GlideParam_End:
 	ret
 
 Scoop_GlideParam_Data:
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	ld	xiy, 14732322
 	lda	xix, (xsp+260)
 	lds	bc, 4
@@ -13558,7 +13558,7 @@ Scoop_GlideParam_Data:
 	lda	xsp, (xsp+268)
 	ret
 Scoop_GlideCalc_Handler0:
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	ld	xiy, 14732330
 	lda	xix, (xsp+260)
 	lds	bc, 4
@@ -13801,7 +13801,7 @@ Scoop_EventLoop_12Entry_End:
 	ret
 
 Scoop_EnvProcessor_Data:
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, 14732482
@@ -13883,7 +13883,7 @@ Scoop_EnvProcessor_Data:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, 14732502
@@ -14126,7 +14126,7 @@ Scoop_EventLoop_36Entry_Branch3:
 	ret
 
 Scoop_EventLoop_36Entry_Data:
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, 14732554
@@ -14203,7 +14203,7 @@ Scoop_EventLoop_36Entry_Data:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	.byte 0x45
@@ -14333,7 +14333,7 @@ Scoop_EventLoop_36Entry_Data:
 	pop xiz
 	lda	xsp, (xsp+268)
 	ret
-	.byte 0xf3, 0xfd, 0xf4, 0xfe, 0x37
+	lda	xsp, (xsp-268)
 	push xiz
 	ld	xiz, xwa
 	ld	xiy, 14732606
@@ -14352,7 +14352,7 @@ Scoop_EventLoop_36Entry_Data:
 	jr	z, 25
 	cps	a, 1
 	jr	nz, 42
-	.byte 0x91, 0x04
+	pushm	(xbc)
 	pushw 224
 	pushw 52550
 	lda	xwa, (xsp+10)
@@ -14360,7 +14360,7 @@ Scoop_EventLoop_36Entry_Data:
 	call	16714354
 	lda	xsp, (xsp+10)
 	jr	40
-	.byte 0x91, 0x04
+	pushm	(xbc)
 	pushw 224
 	pushw 52554
 	lda	xwa, (xsp+10)
@@ -14395,7 +14395,7 @@ Scoop_EventLoop_36Entry_Data:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
-	.byte 0xf3, 0xfd, 0xf2, 0xfe, 0x37
+	lda	xsp, (xsp-270)
 	push	xiz
 	ld	xde, xwa
 	ld	xiy, 14732626

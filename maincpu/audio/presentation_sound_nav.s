@@ -1286,9 +1286,9 @@ DirmdEmu_CaseF:
 	ld	xwa, 15375234
 	call	16395937
 	jp	16262337
-	.byte 0xf3, 0xfd, 0x00, 0xff, 0x37
+	lda	xsp, (xsp-256)
 	pushw	iz
-	.byte 0xd3, 0xfd, 0x08, 0x01, 0x04
+	pushm	(xsp+264)
 	ld	iz, (xsp+264)
 	pushw	iz
 	pushw 234

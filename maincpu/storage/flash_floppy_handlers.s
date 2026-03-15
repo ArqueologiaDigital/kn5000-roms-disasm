@@ -3313,7 +3313,7 @@ Flash_SlotUpdateOpsBlock:
 	ldirw
 	inc	2, xsp
 	ret
-	.byte 0xf3, 0xfd, 0x00, 0xfc, 0x37
+	lda	xsp, (xsp-1024)
 	pushw	iz
 	calr	-7259
 	lda	xwa, (xsp+2)
@@ -3422,7 +3422,7 @@ Flash_SlotUpdateOpsBlock:
 	popw	iz
 	lda	xsp, (xsp+1024)
 	ret
-	.byte 0xf3, 0xfd, 0xf4, 0xfb, 0x37
+	lda	xsp, (xsp-1036)
 	push	xiz
 	calr	-7589
 	ld	xiy, 14769344
