@@ -233,7 +233,7 @@ SysEx_ChannelHandler_4B_Data:
 	cps	c, 7
 	ret	nc
 	ld	xwa, 15611154
-	.byte 0xd3, 0x07, 0xe0, 0xe8, 0x23
+	ld_rrw	hl, xwa, de
 	ret
 
 SysEx_DispatchByChannel_49:
@@ -284,7 +284,7 @@ SysEx_ChannelHandler_49_Data:
 	cps	c, 6
 	ret	nc
 	ld	xwa, 15611256
-	.byte 0xd3, 0x07, 0xe0, 0xe8, 0x23
+	ld_rrw	hl, xwa, de
 	ret
 
 SysEx_ValidateRolandHeader:
@@ -5578,9 +5578,9 @@ UIStateEvt_ParamEdit_Data:
 	jrl	gt, 601
 	add	wa, wa
 	lda_24	xix, 15633992
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16638671
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	ldda8	a, 49279
 	and	a, 7
 	jrl	z, 183
@@ -5592,7 +5592,7 @@ UIStateEvt_ParamEdit_Data:
 	extz	wa
 	add	wa, wa
 	lda_24	xbc, 15633960
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x26
+	ld_rrw	iz, xbc, wa
 	ldda8	a, 64605
 	and	a, 8
 	extz	wa
@@ -5617,7 +5617,7 @@ UIStateEvt_ParamEdit_Data:
 	extz	wa
 	add	wa, wa
 	lda_24	xbc, 15633960
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x26
+	ld_rrw	iz, xbc, wa
 	ldda16	wa, 50582
 	and	wa, 6
 	jr	z, 18
@@ -5676,7 +5676,7 @@ UIStateEvt_ParamEdit_Data:
 	extz	wa
 	add	wa, wa
 	lda_24	xbc, 15633960
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x26
+	ld_rrw	iz, xbc, wa
 	ldda8	a, 64605
 	and	a, 8
 	extz	wa
@@ -5700,7 +5700,7 @@ UIStateEvt_ParamEdit_Data:
 	extz	wa
 	add	wa, wa
 	lda_24	xbc, 15633960
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x26
+	ld_rrw	iz, xbc, wa
 	anddi16	50582, 65512
 	.byte 0xd1, 0x96, 0xc5, 0xee
 	ordi16	50580, 4
@@ -5755,9 +5755,9 @@ UIStateEvt_VolumeMixer_Data:
 	ret	gt
 	add	wa, wa
 	lda_24	xix, 15634006
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16639288
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	ldda8	a, 49279
 	and	a, 31
 	jr	z, 22
@@ -5822,7 +5822,7 @@ UIStateEvt_VolumeMixer_Data:
 	ld	wa, de
 	sla	wa, 2
 	lda_24	xbc, 15633780
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	bitm	0, (xwa+22)
 	jr	z, 32
 	ld	wa, de
@@ -5917,7 +5917,7 @@ UIStateEvt_EffectSelect_Data:
 	and	a, 255
 	extz	wa
 	lda_24	xbc, 15633948
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x25
+	ld_rrb	e, xbc, wa
 	lds	hl, 0
 	cp	hl, 26
 	jr	nc, 37
@@ -6012,7 +6012,7 @@ UIStateEvt_ChannelConfig_Data:
 	and	a, 255
 	extz	wa
 	lda_24	xbc, 15633948
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21
+	ld_rrb	a, xbc, wa
 	and	a, 15
 	sla	a, 4
 	andmi8	(xhl), 15

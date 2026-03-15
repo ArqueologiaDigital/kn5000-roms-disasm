@@ -815,12 +815,12 @@ AccVoice_ParamIndexData:
 	extz	wa
 	.byte 0xd7, 0x30, 0x98
 	add	hl, wa
-	.byte 0xc3, 0x07, 0xf4, 0xec, 0x21
+	ld_rrb	a, xiy, hl
 	cp	a, 255
 	jr	nz, 12
 	.byte 0xd7, 0x30, 0x88
 	add	wa, 994
-	.byte 0xc3, 0x07, 0xf4, 0xe0, 0x21
+	ld_rrb	a, xiy, wa
 	ret
 	nop
 	nop
@@ -5885,25 +5885,25 @@ AccBuf_ResetByteData:
 	ldb	a, 0
 	ld	xhl, 12532
 	xor	iy, iy
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41
+	st_rrb	a, xhl, iy
 	add	iy, 9
 	cp	iy, 72
 	jr	c, -15
 	ld	xhl, 12604
 	xor	iy, iy
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41
+	st_rrb	a, xhl, iy
 	add	iy, 9
 	cp	iy, 72
 	jr	c, -15
 	ld	xhl, 12676
 	xor	iy, iy
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41
+	st_rrb	a, xhl, iy
 	add	iy, 9
 	cp	iy, 72
 	jr	c, -15
 	ld	xhl, 12748
 	xor	iy, iy
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41
+	st_rrb	a, xhl, iy
 	add	iy, 9
 	cp	iy, 72
 	jr	c, -15
@@ -11507,7 +11507,7 @@ AccStyle_IndexedLookup:
 	and l, 0x1f
 	extz hl
 	ld xwa, 0x00F5C8B4
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21		; ld a, (xwa+hl)  [register-indexed]
+	ld_rrb	a, xwa, hl
 	cpdm8	36154, a
 	jr z, AccStyle_IndexedLookup_Ret
 	stda8	36154, a
@@ -12833,11 +12833,11 @@ AccTone_InlineBytecodeData:
 	ldda8	a, 13016
 	extz	wa
 	lda_24	xbc, 14983112
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21
+	ld_rrb	a, xbc, wa
 	stda8	13355, a
 	ldda32	xbc, 13006
 	extz	wa
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21
+	ld_rrb	a, xbc, wa
 	stda8	13354, a
 	cp	a, 255
 	ret	nz
@@ -12890,7 +12890,7 @@ AccTone_InlineBytecodeData:
 	add	xbc, xwa
 	sll	xbc, 5
 	add	xbc, 611392
-	.byte 0xd3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrw	hl, xbc, hl
 	ret
 	extz	de
 	sla	de, 2
@@ -12905,7 +12905,7 @@ AccTone_InlineBytecodeData:
 	add	xbc, xwa
 	sll	xbc, 5
 	add	xbc, 611392
-	.byte 0xf3, 0x07, 0xe4, 0xec, 0x30
+	lda_rr	xwa, xbc, hl
 	ld	hl, (xwa+2)
 	ret
 	dec	2, xsp
@@ -12915,7 +12915,7 @@ AccTone_InlineBytecodeData:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 14983092
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	stda32	13006, xwa
 	ld	a, (xwa)
 	stda8	13297, a
@@ -13004,7 +13004,7 @@ AccTone_InlineBytecodeData:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 14983092
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	stda32	13006, xwa
 	ld	a, (xwa)
 	stda8	13297, a
@@ -16099,7 +16099,7 @@ AccPatch_ComplexDataBlock:
 	xor	h, h
 	lds32	xwa, 0
 	ld	xbc, 14969738
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x21
+	ld_rrb	a, xbc, hl
 	lds32	xbc, 0
 	ld	b, (xiy+13)
 	inc	1, b
@@ -17675,7 +17675,7 @@ AccPatch_FetchStepEntry:
 AccPatch_FetchStepData:
 	ld	xiy, 13994
 	ldda16	hl, 13838
-	.byte 0xf3, 0x07, 0xf4, 0xec, 0x41
+	st_rrb	a, xiy, hl
 	inc	1, hl
 	stda16	13838, hl
 	ret
@@ -22254,7 +22254,7 @@ AccPat_InlineFunctions_DataBlock:
 	and	wa, 61440
 	srl	wa, 10
 	ld	xix, 16134437
-	.byte 0xe3, 0x07, 0xf0, 0xe0, 0x24
+	ld_rrl	xix, xix, wa
 	add	xhl, xix
 	pop	xix
 	pop	xwa
@@ -22437,7 +22437,7 @@ AccPat_DualVoice_DataBlock:
 	sla	l, 2
 	xor	h, h
 	ld	xix, 14967570
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x25
+	ld_rrl	xiy, xix, hl
 	add	xiy, 608256
 	add	xiy, 96
 	stda32	13660, xiy
@@ -22449,7 +22449,7 @@ AccPat_DualVoice_DataBlock:
 	xor	h, h
 	.byte 0x44
 	.long LABEL_E46312
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x25
+	ld_rrl	xiy, xix, hl
 	add	xiy, 608256
 	add	xiy, 96
 	.byte 0xf1, 0x60, 0x35
@@ -23720,7 +23720,7 @@ __pad_F63F8F:
 	ld	de, hl
 	ld	xiy, 16138178
 	xor	hl, hl
-	.byte 0xd3, 0x07, 0xf4, 0xec, 0x20
+	ld_rrw	wa, xiy, hl
 	cp	wa, 65535
 	jr	z, 14
 	cp	wa, de
@@ -24972,7 +24972,7 @@ RhythmPatInit_KitIndexTable:
 	ld	xix, 16142024
 	and	hl, 3
 	sll	hl, 2
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
+	ld_rrl	xhl, xix, hl
 	call	(xhl)
 	ret
 	muls	xiz, xbc
@@ -25897,10 +25897,10 @@ DrumVoice_Handler7:
 	sll	l, 1
 	sll	hl, 1
 	ld	xiy, 14963010
-	.byte 0xd3, 0x07, 0xf4, 0xec, 0x20
+	ld_rrw	wa, xiy, hl
 	add	hl, 2
 	lds32	xde, 0
-	.byte 0xd3, 0x07, 0xf4, 0xec, 0x22
+	ld_rrw	de, xiy, hl
 	ld	w, a
 	and	xwa, 65280
 	sll	xwa, 8
@@ -25953,14 +25953,14 @@ DrumVoice_Handler7:
 	sll	hl, 3
 	ld	xbc, 16144649
 	add	xbc, 7
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x20
+	ld_rrb	w, xbc, hl
 	ldda8	l, 13528
 	and	l, 31
 	xor	h, h
 	sll	hl, 3
 	ld	xbc, 16144649
 	add	xbc, 7
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x21
+	ld_rrb	a, xbc, hl
 	cp	a, w
 	jr	nz, 34
 	call	16117130
@@ -28867,7 +28867,7 @@ AccVoice_SetupSlots_DataBlock:
 	calr	-116
 	calr	-1013
 	sll	bc, 1
-	.byte 0xd3, 0x07, 0xf0, 0xe4, 0x23
+	ld_rrw	hl, xix, bc
 	stda16	13842, hl
 	stdi16	13844, 6
 	ret
@@ -29351,7 +29351,7 @@ AccVoice_SetupSlots_DataBlock:
 	push_a
 	.byte 0x1e, 0x18, 0xf4
 	ld	xwa, 14465
-	.byte 0xc3, 0x07, 0xe0, 0xe4, 0x25
+	ld_rrb	e, xwa, bc
 	push e
 	lds32	xde, 0
 	pop e
@@ -33293,13 +33293,14 @@ AccScreen_DataBlock:
 	.ascii "fW8;9:<=>"
 	.byte 0x1d, 0x47, 0xa3, 0xf6
 	.ascii "^]\\ZY[XÛ"
-	.byte 0xd3, 0xcb, 0x8f, 0xc3, 0x07, 0xf4, 0xec, 0x27
+	.byte 0xd3, 0xcb, 0x8f
+	ld_rrb	l, xiy, hl
 	and	l, 15
 	.byte 0x1e, 0x54, 0x00
 	add	xix, 4
 	xor	hl, hl
 	ld	l, c
-	.byte 0xc3, 0x07, 0xf4, 0xec, 0x27
+	ld_rrb	l, xiy, hl
 	and	l, 240
 	srl	l, 4
 	.byte 0x1e, 0x3c, 0x00
@@ -34842,7 +34843,7 @@ AccPatch_VoiceAssignDataBlock:
 	.asciz "z9%C"
 	.byte 0x98, 0x06, 0x00
 	add	xhl, 3
-	.byte 0xd3, 0x07, 0xec, 0xf4, 0x20
+	ld_rrw	wa, xhl, iy
 	stda16	14708, wa
 	xor	xhl, xhl
 	ldda16	hl, 14710
@@ -37963,7 +37964,7 @@ AccStyle_TableDataEntry:
 	ld	iz, wa
 	add	iz, 96
 	ldda32	xwa, 31460
-	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x30
+	lda_rr	xwa, xwa, iz
 	ld	(xwa+34), 64
 	ld	a, (xhl)
 	extz	wa
@@ -37971,7 +37972,7 @@ AccStyle_TableDataEntry:
 	ld	iz, wa
 	add	iz, 96
 	ldda32	xwa, 31460
-	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x30
+	lda_rr	xwa, xwa, iz
 	ld	(xwa+42), 12
 	ld	a, (xde)
 	extz	wa
@@ -37979,7 +37980,7 @@ AccStyle_TableDataEntry:
 	ld	iz, wa
 	add	iz, 96
 	ldda32	xwa, 31460
-	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x30
+	lda_rr	xwa, xwa, iz
 	ld	(xwa+50), 116
 	ld	a, (xbc)
 	extz	wa
@@ -37987,7 +37988,7 @@ AccStyle_TableDataEntry:
 	ld	iz, wa
 	add	iz, 96
 	ldda32	xwa, 31460
-	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x30
+	lda_rr	xwa, xwa, iz
 	ld	(xwa+58), 64
 	inc	3, xix
 	inc	3, xhl
@@ -38039,14 +38040,14 @@ AccStyle_TableDataEntry:
 	ld	a, (xsp+36)
 	extz	wa
 	lda	xbc, (xsp+4)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31
+	lda_rr	xbc, xbc, wa
 	ld	a, (xbc)
 	extz	wa
 	muls	wa, 96
 	ld	de, wa
 	add	de, 96
 	ldda32	xwa, 31460
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x30
+	lda_rr	xwa, xwa, de
 	ld	(xwa+34), 64
 	ld	a, (xbc)
 	extz	wa
@@ -38054,7 +38055,7 @@ AccStyle_TableDataEntry:
 	ld	de, wa
 	add	de, 96
 	ldda32	xwa, 31460
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x30
+	lda_rr	xwa, xwa, de
 	ld	(xwa+42), 12
 	ld	a, (xbc)
 	extz	wa
@@ -38062,7 +38063,7 @@ AccStyle_TableDataEntry:
 	ld	de, wa
 	add	de, 96
 	ldda32	xwa, 31460
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x30
+	lda_rr	xwa, xwa, de
 	ld	(xwa+50), 116
 	ld	a, (xbc)
 	extz	wa
@@ -38070,7 +38071,7 @@ AccStyle_TableDataEntry:
 	ld	bc, wa
 	add	bc, 96
 	ldda32	xwa, 31460
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30
+	lda_rr	xwa, xwa, bc
 	ld	(xwa+58), 64
 	ldda32	xwa, 31460
 	stda32	14766, xwa

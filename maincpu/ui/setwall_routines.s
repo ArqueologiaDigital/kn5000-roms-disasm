@@ -94,7 +94,7 @@ SetWall_InlineCodeBlock:
 	xor	w, w
 	ldda8	a, 3295
 	ld	iy, wa
-	.byte 0xc3, 0x07, 0xec, 0xf4, 0x21
+	ld_rrb	a, xhl, iy
 	cp	a, 13
 	jr	z, 17
 	cp	a, 16
@@ -599,7 +599,7 @@ SetWall_InlineCodeBlock2:
 	ld	iy, wa
 	push	xde
 	ld	xde, 61856
-	.byte 0xc3, 0x07, 0xe8, 0xf4, 0x21
+	ld_rrb	a, xde, iy
 	pop	xde
 	cpda8	a, 10355
 	jr	nz, 4
@@ -609,14 +609,14 @@ SetWall_InlineCodeBlock2:
 	ld	iy, wa
 	push	xde
 	ld	xde, 15855368
-	.byte 0xc3, 0x07, 0xe8, 0xf4, 0x23
+	ld_rrb	c, xde, iy
 	ldda8	a, 3295
 	ld	iy, wa
 	ld	xde, 61856
-	.byte 0xc3, 0x07, 0xe8, 0xf4, 0x21
+	ld_rrb	a, xde, iy
 	ld	iy, wa
 	ld	xde, 15855368
-	.byte 0xc3, 0x07, 0xe8, 0xf4, 0x21
+	ld_rrb	a, xde, iy
 	pop	xde
 	and	a, c
 	cps	a, 0
@@ -1945,7 +1945,7 @@ SetWall_InlineCodeBlock3:
 	xor	bc, bc
 	ldda8	c, 10347
 	ldda8	a, 10348
-	.byte 0xf3, 0x07, 0xf0, 0xe4, 0x41
+	st_rrb	a, xix, bc
 	inc	1, bc
 	cp	bc, 10
 	jr	lt, -33
@@ -2014,7 +2014,7 @@ SetWall_MiscDataAndCode:
 	add	xix, 208
 	xor	xbc, xbc
 	xor	de, de
-	.byte 0xc3, 0x07, 0xf0, 0xe8, 0x21
+	ld_rrb	a, xix, de
 	bit	7, a
 	jr	z, 13
 	push	xbc

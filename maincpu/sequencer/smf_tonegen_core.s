@@ -5022,7 +5022,7 @@ VoiceSynth_Algo_MultiPath:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
+	ld_rrw	wa, xix, iy
 	pop	xix
 	srl	xiy, 1
 	push	xiy
@@ -5050,7 +5050,7 @@ VoiceSynth_Algo_ChannelConfig:
 	and	iy, 15
 	push	xix
 	ld	xix, 4275
-	.byte 0xc3, 0x07, 0xf0, 0xf4, 0x27
+	ld_rrb	l, xix, iy
 	pop	xix
 	cp	l, 255
 	jr	z, 66
@@ -5059,14 +5059,14 @@ VoiceSynth_Algo_ChannelConfig:
 	sla	hl, 2
 	push	xix
 	ld	xix, 15883948
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
+	ld_rrl	xhl, xix, hl
 	pop	xix
 	ldda8	a, 4013
 	xor	b, b
 	ld	ix, bc
 	push	xiy
 	ld	xiy, 15884169
-	.byte 0xc3, 0x07, 0xf4, 0xf0, 0x25
+	ld_rrb	e, xiy, ix
 	pop	xiy
 	cp	a, e
 	jr	ule, 2
@@ -5078,7 +5078,7 @@ VoiceSynth_Algo_ChannelConfig:
 	call	15886726
 	pop	xiy
 	pop	xhl
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41
+	st_rrb	a, xhl, iy
 	call	15886795
 	ret
 VoiceSynth_Algo_ConditionalUpdate:
@@ -5119,7 +5119,7 @@ VoiceSynth_Algo_MultiStage:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
+	ld_rrw	wa, xix, iy
 	pop	xix
 	srl	xiy, 1
 	push	xiy
@@ -5136,11 +5136,11 @@ VoiceSynth_Algo_MultiStage:
 	extz	xhl
 	push	xix
 	ld	xix, 15876955
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cpdi8	4600, 1
 	jr	z, 10
 	ld	xix, 15876971
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	pop	xix
 	push	xiy
 	call	15879151
@@ -5183,7 +5183,7 @@ VoiceSynth_Algo_PitchModulated:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
+	ld_rrw	wa, xix, iy
 	pop	xix
 	srl	xiy, 1
 	push	xiy
@@ -5231,7 +5231,7 @@ VoiceSynth_Algo_PitchShift:
 	sla	iy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
+	ld_rrw	wa, xix, iy
 	pop	xix
 	srl	iy, 1
 	push	xiy
@@ -5257,7 +5257,7 @@ VoiceParam_ReadUpdate_6:
 	and	iy, 15
 	push	xix
 	ld	xix, 4275
-	.byte 0xc3, 0x07, 0xf0, 0xf4, 0x27
+	ld_rrb	l, xix, iy
 	pop	xix
 	cp	l, 255
 	jr	z, 66
@@ -5266,14 +5266,14 @@ VoiceParam_ReadUpdate_6:
 	sla	hl, 2
 	push	xix
 	ld	xix, 15883948
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x23
+	ld_rrl	xhl, xix, hl
 	pop	xix
 	ldda8	a, 4013
 	xor	b, b
 	ld	ix, bc
 	push	xiy
 	ld	xiy, 15884169
-	.byte 0xc3, 0x07, 0xf4, 0xf0, 0x25
+	ld_rrb	e, xiy, ix
 	pop	xiy
 	cp	a, e
 	jr	ule, 2
@@ -5285,7 +5285,7 @@ VoiceParam_ReadUpdate_6:
 	call	15886726
 	popw	iy
 	pop	xhl
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41
+	st_rrb	a, xhl, iy
 	call	15886795
 	ret
 VoiceParam_ReadUpdate_7:
@@ -5316,7 +5316,7 @@ VoiceParam_ReadUpdate_10:
 	sla	iy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
+	ld_rrw	wa, xix, iy
 	pop	xix
 	srl	iy, 1
 	push	xiy
@@ -5373,7 +5373,7 @@ VoiceParam_ReadUpdate_11:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x20
+	ld_rrw	wa, xix, iy
 	pop	xix
 	srl	xiy, 1
 	push	xiy

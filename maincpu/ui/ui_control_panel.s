@@ -1933,7 +1933,7 @@ UIState_KeyScan_Dispatch:
 	extz wa					; Zero-extend to 16-bit
 	sla wa, 2				; state * 4 (pointer table stride)
 	lda_24 xbc, 0xE01F80			; Base of state->key-map pointer table
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x24	; ld xix, (xbc + wa)  [not in LLVM]
+	ld_rrl	xix, xbc, wa
 	or xix, xix				; Test if pointer is null
 	ret z					; Return if no key map for this state
 	cpw (xix), 0xFFFE			; Check for PASS-THROUGH marker

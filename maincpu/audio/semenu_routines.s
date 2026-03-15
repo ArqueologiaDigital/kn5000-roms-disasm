@@ -2000,7 +2000,8 @@ SeMenu_SetupPartDisplay_End:
 	ret	ule
 	lda_24	xix, 134131
 	lds	hl, 0
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21, 0xf3, 0x07, 0xe4, 0xec, 0x41
+	ld_rrb	a, xix, hl
+	st_rrb	a, xbc, hl
 	inc	1, w
 	inc	1, hl
 	cp	w, e
@@ -2013,7 +2014,8 @@ SeMenu_SetupPartDisplay_End:
 	ret	ule
 	lda_24	xix, 134147
 	lds	hl, 0
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21, 0xf3, 0x07, 0xe4, 0xec, 0x41
+	ld_rrb	a, xix, hl
+	st_rrb	a, xbc, hl
 	inc	1, w
 	inc	1, hl
 	cp	w, e
@@ -2026,7 +2028,8 @@ SeMenu_SetupPartDisplay_End:
 	ret	ule
 	lda_24	xix, 134163
 	lds	hl, 0
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21, 0xf3, 0x07, 0xe4, 0xec, 0x41
+	ld_rrb	a, xix, hl
+	st_rrb	a, xbc, hl
 	inc	1, w
 	inc	1, hl
 	cp	w, e
@@ -2039,7 +2042,8 @@ SeMenu_SetupPartDisplay_End:
 	ret	ule
 	lda_24	xix, 134179
 	lds	hl, 0
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21, 0xf3, 0x07, 0xe4, 0xec, 0x41
+	ld_rrb	a, xix, hl
+	st_rrb	a, xbc, hl
 	inc	1, w
 	inc	1, hl
 	cp	w, e
@@ -3965,7 +3969,7 @@ SeMenu_ApplyPartEdit_Data2:
 	extz	wa
 	add	wa, wa
 	ldada	xde, 1698
-	.byte 0xd3, 0x07, 0xe8, 0xe0, 0x20
+	ld_rrw	wa, xde, wa
 	ld	(xbc), wa
 	ret
 	stda16	1706, wa
@@ -4750,12 +4754,12 @@ SeMenu_StoreEffectCoeff_Data:
 	ld	a, (xsp)
 	extz	wa
 	lda	xbc, (xsp+34)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31
+	lda_rr	xbc, xbc, wa
 	calr	-88
 	ld	a, (xsp)
 	extz	wa
 	lda	xbc, (xsp+26)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31
+	lda_rr	xbc, xbc, wa
 	calr	-75
 	incm8	1, (xsp)
 	cp	(xsp), 2
@@ -4784,11 +4788,11 @@ SeMenu_StoreEffectCoeff_Data:
 	ld	(xsp), 0
 	ld	l, (xsp)
 	extz	hl
-	.byte 0xf3, 0x07, 0xe8, 0xec, 0x35
+	lda_rr	xiy, xde, hl
 	ld	a, (xiy)
 	ldfr_berp	a, 238
 	lda	xwa, (xsp+26)
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x34
+	lda_rr	xix, xwa, hl
 	ld	w, (xix)
 	sla	w, 1
 	ldto_berp	a, 238
@@ -4797,7 +4801,7 @@ SeMenu_StoreEffectCoeff_Data:
 	ldfr_berp	a, 238
 	ld	(xiy), a
 	lda	xwa, (xsp+22)
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x27
+	ld_rrb	l, xwa, hl
 	ldto_berp	a, 238
 	cp	a, l
 	jr	ule, 12

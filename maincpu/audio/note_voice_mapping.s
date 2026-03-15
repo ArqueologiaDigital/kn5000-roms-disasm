@@ -15577,11 +15577,11 @@ ComputeNoteBitPositi_Data:
 	pushw	bc
 	ld	xiz, 52966
 	ld	l, (xiz)
-	.byte 0xc3, 0x07, 0xf8, 0xf4, 0x20
+	ld_rrb	w, xiz, iy
 	sub	l, h
 	xor	h, h
 	ld	xiz, 16687958
-	.byte 0xc3, 0x07, 0xf8, 0xec, 0x23
+	ld_rrb	c, xiz, hl
 	dec	1, c
 	ldfr_berp	a, 60
 	ld	a, c
@@ -15813,9 +15813,9 @@ __jrt_nop_FE9A0A_Data2:
 	xor	h, h
 	dec	1, hl
 	ld	xiz, 52966
-	.byte 0xc3, 0x07, 0xf8, 0xec, 0x27
+	ld_rrb	l, xiz, hl
 	ld	xiz, 16687958
-	.byte 0xc3, 0x07, 0xf8, 0xec, 0x20
+	ld_rrb	w, xiz, hl
 	ordi8_24	52958, 16
 	anddi8_24	52958, 127
 	ret
@@ -17124,9 +17124,9 @@ UIState_ProcessKeyEvent:
 	jrl	gt, 476
 	add	wa, wa
 	lda_24	xix, 15646788
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16689231
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	ld	a, (xsp+3)
 	and	a, 255
 	jrl	z, 445
@@ -17477,9 +17477,9 @@ HdaeRom_TableEntry2:
 	jrl	gt, 128
 	add	wa, wa
 	lda_24	xix, 15646814
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16690196
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	ld	a, (xsp+3)
 	and	a, 255
 	jr	z, 98
@@ -18230,9 +18230,9 @@ SendEpilogue_Data:
 	jrl	ugt, 1331
 	add	wa, wa
 	lda_24	xix, 15646860
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16692237
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	ldto_berp	a, 248
 	extz	wa
 	call	16709486
@@ -18301,9 +18301,9 @@ SendEpilogue_Data:
 	jrl	ugt, 1106
 	add	wa, wa
 	lda_24	xix, 15646830
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16692462
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	ldw	wa, 127
 	cps	iz, 0
 	jr	nz, 2
@@ -18348,7 +18348,7 @@ SendEpilogue_Data:
 	add	wa, 164
 	ld	bc, wa
 	ld	xwa, (xsp+4)
-	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x21
+	ld_rrb	a, xwa, iz
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18388,7 +18388,7 @@ SendEpilogue_Data:
 	add	wa, 164
 	ld	bc, wa
 	ld	xwa, (xsp+4)
-	.byte 0xc3, 0x07, 0xe0, 0xf8, 0x21
+	ld_rrb	a, xwa, iz
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19033,9 +19033,9 @@ SeqVoice_CheckAndRet_Data:
 	jr	gt, 126
 	add	wa, wa
 	lda_24	xix, 15647066
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16694432
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	lda_24	xhl, 15646874
 	jr	102
 	lda_24	xhl, 15646886
@@ -19092,9 +19092,9 @@ SeqVoice_CheckAndRet_Data:
 	jr	gt, 93
 	add	wa, wa
 	lda_24	xix, 15647080
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16694615
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	lds	hl, 0
 	.ascii "hE3@ÿh@3Aÿh;3Bÿh6Û«h2Û¬h.Û­h*"
 	ldw	hl, 16
@@ -19304,9 +19304,9 @@ MIDI_WriteChannelData_Block:
 	ret	gt
 	add	wa, wa
 	lda_24	xix, 15647094
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16695109
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	ldb	l, 1
 	ret
 
@@ -22066,7 +22066,7 @@ MidiSysMsg_Dispatch:
 	ldw	hl, 65535
 	jrl	272
 	lda	xwa, (xsp+4)
-	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x47
+	st_rrb	l, xwa, iz
 	inc	1, iz
 	cps	iz, 1
 	jr	lt, -29
@@ -22086,7 +22086,7 @@ MidiSysMsg_Dispatch:
 	ldw	hl, 65535
 	jrl	219
 	lda	xwa, (xsp+4)
-	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x47
+	st_rrb	l, xwa, iz
 	inc	1, iz
 	cps	iz, 2
 	jr	lt, -29
@@ -22118,7 +22118,7 @@ MidiSysMsg_Dispatch:
 	ldw	hl, 65535
 	jrl	137
 	lda	xwa, (xsp+4)
-	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x47
+	st_rrb	l, xwa, iz
 	inc	1, iz
 	cps	iz, 2
 	jr	lt, -29
@@ -23290,7 +23290,7 @@ CalcAddrOffset_Data:
 	ldw	hl, 65535
 	jr	19
 	ld	xwa, (xsp+2)
-	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x47
+	st_rrb	l, xwa, iz
 	inc	1, iz
 	ld	wa, iz
 	cp	wa, (xsp+6)
@@ -24424,7 +24424,7 @@ SndParam_LookupByPartAndNote:
 SndParam_CompactLookupStub:
 	extz	wa
 	lda_24	xbc, 15651654
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21
+	ld_rrb	a, xbc, wa
 	extz	wa
 	ld	l, a
 	ret
@@ -24713,7 +24713,7 @@ Param_SignExtendRetu_Data:
 	add	xhl, 15652004
 	ld	hl, (xhl)
 	lda_24	xix, 16706692
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0xd8
+	jp_rr	8, xix, hl
 	ld	a, (xsp)
 	exts	wa
 	pushw 127
@@ -24734,9 +24734,9 @@ Param_SignExtendRetu_Data:
 	extz	hl
 	sll	hl, 1
 	ld	xix, 15651990
-	.byte 0xd3, 0x07, 0xf0, 0xec, 0x23
+	ld_rrw	hl, xix, hl
 	lda_24	xix, 16706778
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0xd8
+	jp_rr	8, xix, hl
 	ld	a, (xsp)
 	exts	wa
 	pushw 50
@@ -24794,9 +24794,9 @@ Param_SignExtendRetu_Data:
 	extz	bc
 	sll	bc, 1
 	ld	xix, 15651899
-	.byte 0xd3, 0x07, 0xf0, 0xe4, 0x21
+	ld_rrw	bc, xix, bc
 	lda_24	xix, 16706961
-	.byte 0xf3, 0x07, 0xf0, 0xe4, 0xd8
+	jp_rr	8, xix, bc
 	ld	a, (xsp)
 	exts	wa
 	pushw 127
@@ -24883,7 +24883,7 @@ Param_SignExtendRetu_Data:
 	add	xhl, 15652108
 	ld	hl, (xhl)
 	lda_24	xix, 16707199
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0xd8
+	jp_rr	8, xix, hl
 	pushw 127
 	pushw 0
 	ld	wa, (xsp+10)
@@ -24910,9 +24910,9 @@ Param_SignExtendRetu_Data:
 	extz	wa
 	sll	wa, 1
 	ld	xix, 15652094
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16707307
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	pushw 127
 	pushw 32
 	ld	wa, (xsp+8)
@@ -24970,9 +24970,9 @@ Param_SignExtendRetu_Data:
 	extz	bc
 	sll	bc, 1
 	ld	xix, 15652047
-	.byte 0xd3, 0x07, 0xf0, 0xe4, 0x21
+	ld_rrw	bc, xix, bc
 	lda_24	xix, 16707498
-	.byte 0xf3, 0x07, 0xf0, 0xe4, 0xd8
+	jp_rr	8, xix, bc
 	pushw 127
 	pushw 32
 	ld	wa, (xsp+8)
@@ -26057,8 +26057,8 @@ SendPartDataBlock_Data:
 	ld	de, bc
 	add	de, 33
 	ld	xwa, (xsp+10)
-	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x21, 0xf3, 0x07, 0xf8
-	.byte 0xec, 0x41
+	ld_rrb	a, xwa, de
+	st_rrb	a, xiz, hl
 	inc_berp	230, 1
 	inc	1, bc
 	cp_erpb	230, 8
@@ -26068,7 +26068,7 @@ SendPartDataBlock_Data:
 	ldw	(xsp+6), 0
 	ld	wa, (xsp+6)
 	add	wa, 102
-	.byte 0xf3, 0x07, 0xf8, 0xe0, 0x31
+	lda_rr	xbc, xiz, wa
 	ld	de, (xsp+8)
 	add	de, 41
 	ld	xwa, (xsp+10)
@@ -26235,7 +26235,7 @@ SendPartDataBlock_Data:
 	srl	c, 4
 	extz	bc
 	lda_24	xhl, 15652237
-	.byte 0xc3, 0x07, 0xec, 0xe4, 0x23
+	ld_rrb	c, xhl, bc
 	ldfr_berp	c, 240
 	ldto_berp	d, 240
 	sll	d, 6
@@ -26245,7 +26245,7 @@ SendPartDataBlock_Data:
 	ldfr_berp	c, 240
 	srl	c, 4
 	extz	bc
-	.byte 0xc3, 0x07, 0xec, 0xe4, 0x23
+	ld_rrb	c, xhl, bc
 	ldfr_berp	c, 240
 	sll	c, 4
 	or	d, c
@@ -26253,7 +26253,7 @@ SendPartDataBlock_Data:
 	ldfr_berp	e, 240
 	ldto_berp	c, 240
 	extz	bc
-	.byte 0xc3, 0x07, 0xec, 0xe4, 0x23
+	ld_rrb	c, xhl, bc
 	ldfr_berp	c, 240
 	sll	c, 2
 	or	d, c
@@ -26269,23 +26269,27 @@ SendPartDataBlock_Data:
 	lds	hl, 0
 	ld	de, hl
 	add	de, 40
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x31
+	lda_rr	xbc, xwa, de
 	ld	c, (xbc+17)
 	ldfr_berp	c, 240
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x35, 0xf3, 0x07, 0xe0
-	.byte 0xe8, 0x31
+	lda_rr	xiy, xwa, de
+	lda_rr	xbc, xwa, de
 	ld	c, (xbc+16)
 	ld	(xiy+17), c
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x35, 0xf3, 0x07, 0xe0, 0xe8, 0x31
+	lda_rr	xiy, xwa, de
+	lda_rr	xbc, xwa, de
 	ld	c, (xbc+15)
 	ld	(xiy+16), c
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x35, 0xf3, 0x07, 0xe0, 0xe8, 0x31
+	lda_rr	xiy, xwa, de
+	lda_rr	xbc, xwa, de
 	ld	c, (xbc+14)
 	ld	(xiy+15), c
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x35, 0xf3, 0x07, 0xe0, 0xe8, 0x31
+	lda_rr	xiy, xwa, de
+	lda_rr	xbc, xwa, de
 	ld	c, (xbc+13)
 	ld	(xiy+14), c
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x35, 0xf3, 0x07, 0xe0, 0xe8, 0x31
+	lda_rr	xiy, xwa, de
+	lda_rr	xbc, xwa, de
 	ld	c, (xbc+12)
 	ld	(xiy+13), c
 	exts	xde
@@ -26458,7 +26462,8 @@ SendPartDataBlock_Data:
 	add	hl, 32
 	ld	xwa, (xsp+22)
 	ld	xbc, (xsp+26)
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21, 0xf3, 0x07, 0xe4, 0xf0, 0x41
+	ld_rrb	a, xwa, hl
+	st_rrb	a, xbc, ix
 	incm8	1, (xsp+4)
 	inc	1, de
 	cp	(xsp+4), 8
@@ -26958,7 +26963,7 @@ HdaeRom_DataDispatch_Block3:
 	lds	de, 0
 	ld	bc, de
 	add	bc, 18855
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x33
+	lda_rr	xhl, xwa, bc
 	andmi8	(xhl+1), 207
 	exts	xbc
 	add	xbc, xwa

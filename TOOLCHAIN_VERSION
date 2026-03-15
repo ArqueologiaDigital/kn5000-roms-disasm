@@ -7,7 +7,7 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 8fc5d2193a01 (8fc5d2193a01f4ad7cd545579cff28bb6b5b3241)
-Date: 2026-03-15 17:26:03 +0000
-Subject: Add CHGm, TSETm, ORCFN_RI memory-indirect instructions
+Commit: cb6bd3b07345 (cb6bd3b073454877efcff6b63432ab58a991727e)
+Date: 2026-03-15 19:52:54 +0000
+Subject: Add SRI R+R (Register+Register) addressing mode instructions
 Repository: /mnt/shared/llvm-project

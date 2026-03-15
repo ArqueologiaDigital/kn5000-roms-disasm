@@ -227,7 +227,7 @@ Part_LookupParam:
 	xor b, b
 	ld iy, bc
 	ld e, c
-	.byte 0xc3, 0x07, 0xec, 0xf4, 0x21		; ld a, (xhl + iy)  [R+R addressing]
+	ld_rrb	a, xhl, iy
 	stda8	3423, a
 	inc 1, e
 	stda8	3424, e
@@ -1364,13 +1364,13 @@ SqTrAsPsTtl_CaseF:
 	cp	wa, 13
 	jr	gt, 35
 	lda_24	xix, 14811178
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	extz	wa
 	sll	wa, 1
 	ld	xix, 14811192
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 15863692
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	push	xde
 	push	xhl
 	push	xix
@@ -2097,7 +2097,7 @@ NameGetFuncCall_Dispatch:
 	ldada	xwa, 7304
 	ld	(xwa+20), 0
 	ldw	de, 19
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x31
+	lda_rr	xbc, xwa, de
 	cp	(xbc), 32
 	jr	nz, 9
 	ld	(xbc), 0
@@ -2134,7 +2134,7 @@ NameGetFuncCall_Dispatch:
 	ldada	xwa, 7326
 	ld	(xwa+12), 0
 	ldw	de, 11
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x31
+	lda_rr	xbc, xwa, de
 	cp	(xbc), 32
 	jr	nz, 9
 	ld	(xbc), 0
@@ -2170,7 +2170,7 @@ NameGetFuncCall_Dispatch:
 	ldada	xwa, 7340
 	ld	(xwa+20), 0
 	ldw	de, 19
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x31
+	lda_rr	xbc, xwa, de
 	cp	(xbc), 32
 	jr	nz, 9
 	ld	(xbc), 0
@@ -2198,7 +2198,7 @@ NameGetFuncCall_Dispatch:
 	lda_24	xwa, 135246
 	ld	(xwa+20), 0
 	ldw	de, 19
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x31
+	lda_rr	xbc, xwa, de
 	cp	(xbc), 32
 	jr	nz, 9
 	ld	(xbc), 0

@@ -2704,7 +2704,7 @@ TrAsGrid_LookupTable:
 TrAsGrid_ByteData1:
 	extz	wa
 	lda_24	xde, 14836840
-	.byte 0xc3, 0x07, 0xe8, 0xe0, 0x21
+	ld_rrb	a, xde, wa
 	cps	c, 0
 	jr	nz, 9
 	cp	a, 19
@@ -2716,7 +2716,7 @@ TrAsGrid_ByteData1:
 	dec	1, a
 	extz	wa
 	ld	xbc, 14836860
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x27
+	ld_rrb	l, xbc, wa
 	ret
 
 TrAsGrid_CheckTrackType:
@@ -5869,7 +5869,7 @@ NoteEditBox_EventDispatch2:
 	extz	bc
 	sla	bc, 3
 	lda_24	xde, 14890864
-	.byte 0xf3, 0x07, 0xe8, 0xe4, 0x32
+	lda_rr	xde, xde, bc
 	ld	bc, (xde)
 	ld	(xwa), bc
 	lda	xhl, (xwa+2)
@@ -5903,7 +5903,7 @@ NoteEditBox_EventDispatch2:
 	extz	wa
 	sla	wa, 3
 	lda_24	xbc, 14890864
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31
+	lda_rr	xbc, xbc, wa
 	ld	wa, (xbc+2)
 	ld	(xde), wa
 	ld	hl, (xix)
@@ -5955,7 +5955,7 @@ NoteEditBox_EventDispatch2:
 	extz	wa
 	sla	wa, 3
 	lda_24	xbc, 14890864
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31
+	lda_rr	xbc, xbc, wa
 	ld	wa, (xbc+2)
 	ld	(xde), wa
 	ld	hl, (xix)
@@ -6036,7 +6036,7 @@ NoteEditBox_EventDispatch2:
 	extz	wa
 	add	wa, wa
 	lda_24	xbc, 14890936
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrw	wa, xbc, wa
 	ld	(xsp+28), wa
 	lds32	xde, 0
 	ldto_berp	e, 251
@@ -6124,7 +6124,7 @@ NoteEditBox_EventDispatch2:
 	extz	wa
 	add	wa, wa
 	lda_24	xbc, 14890960
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrw	wa, xbc, wa
 	ld	(xsp+28), wa
 	lds32	xde, 0
 	ldto_berp	e, 251
@@ -7497,20 +7497,20 @@ SndParam_Dispatch:
 	jrl	gt, 1317
 	add	wa, wa
 	lda_24	xix, 14895072
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 15926313
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	ld	xbc, (xsp+62)
 	sla	de, 2
 	cp	xbc, 29360153
 	jr	nz, 16
 	lda_24	xbc, 14894928
-	.byte 0xe3, 0x07, 0xe4, 0xe8, 0x20
+	ld_rrl	xwa, xbc, de
 	lds	bc, 4
 	lds	de, 4
 	jr	14
 	lda_24	xbc, 14894928
-	.byte 0xe3, 0x07, 0xe4, 0xe8, 0x20
+	ld_rrl	xwa, xbc, de
 	lds	bc, 1
 	lds	de, 4
 	call	16382274
@@ -7547,13 +7547,13 @@ SndParam_Dispatch:
 	jrl	gt, 1145
 	add	wa, wa
 	lda_24	xix, 14895054
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 15926485
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	ld	xde, (xsp+62)
 	sla	hl, 2
 	lda_24	xwa, 14894928
-	.byte 0xe3, 0x07, 0xe0, 0xec, 0x20
+	ld_rrl	xwa, xwa, hl
 	cp	xde, 29360154
 	jr	nz, 7
 	ldw	bc, 65532
@@ -13701,9 +13701,9 @@ Sqedt_ParamDispatch:
 	jr	gt, 58
 	add	hl, hl
 	lda_24	xix, 14896400
-	.byte 0xd3, 0x07, 0xf0, 0xec, 0x23
+	ld_rrw	hl, xix, hl
 	lda_24	xix, 15944329
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0xd8
+	jp_rr	8, xix, hl
 	ldda8	a, 9742
 	jr	34
 	ldda8	a, 9756
@@ -13728,9 +13728,10 @@ Sqedt_ParamDispatch:
 	jr	gt, 88
 	add	hl, hl
 	lda_24	xix, 14896384
-	.byte 0xd3, 0x07, 0xf0, 0xec, 0x23
+	ld_rrw	hl, xix, hl
 	lda_24	xix, 15944414
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0xd8, 0xd1, 0x10, 0x26, 0x04
+	jp_rr	8, xix, hl
+	.byte 0xd1, 0x10, 0x26, 0x04
 	ld	xwa, 14895948
 	jr	64
 	.byte 0xd1, 0x1e, 0x26, 0x04
@@ -13761,9 +13762,10 @@ Sqedt_ParamDispatch:
 	jr	gt, 88
 	add	hl, hl
 	lda_24	xix, 14896368
-	.byte 0xd3, 0x07, 0xf0, 0xec, 0x23
+	ld_rrw	hl, xix, hl
 	lda_24	xix, 15944534
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0xd8, 0xd1, 0x12, 0x26, 0x04
+	jp_rr	8, xix, hl
+	.byte 0xd1, 0x12, 0x26, 0x04
 	ld	xwa, 14895990
 	jr	64
 	.byte 0xd1, 0x20, 0x26, 0x04
@@ -14244,9 +14246,9 @@ Sqedt_ValueDispatch:
 	jrl	gt, 183
 	add	hl, hl
 	lda_24	xix, 14896336
-	.byte 0xd3, 0x07, 0xf0, 0xec, 0x23
+	ld_rrw	hl, xix, hl
 	lda_24	xix, 15945812
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0xd8
+	jp_rr	8, xix, hl
 	ldb	l, 0
 	jrl	158
 	ldb	l, 12
@@ -14259,9 +14261,9 @@ Sqedt_ValueDispatch:
 	jrl	gt, 135
 	add	hl, hl
 	lda_24	xix, 14896320
-	.byte 0xd3, 0x07, 0xf0, 0xec, 0x23
+	ld_rrw	hl, xix, hl
 	lda_24	xix, 15945860
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0xd8
+	jp_rr	8, xix, hl
 	ldb	l, 1
 	jr	111
 	extz	hl
@@ -14272,9 +14274,9 @@ Sqedt_ValueDispatch:
 	jr	gt, 93
 	add	hl, hl
 	lda_24	xix, 14896302
-	.byte 0xd3, 0x07, 0xf0, 0xec, 0x23
+	ld_rrw	hl, xix, hl
 	lda_24	xix, 15945902
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0xd8
+	jp_rr	8, xix, hl
 	ldb	l, 2
 	jr	69
 	ldb	l, 13
@@ -14380,9 +14382,9 @@ SeqFormat_DispatchA:
 	jrl	gt, -402
 	add	wa, wa
 	lda_24	xix, 14896240
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 15946157
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	cpi8_24	254688, 0
 	jrl	nz, -433
 	ld	xwa, 15

@@ -1763,7 +1763,7 @@ BmDrEdit_ByteData_ScrollParams:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 14959758
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	cp	(xwa), 240
 	jr	c, 3
 	lds	hl, 0

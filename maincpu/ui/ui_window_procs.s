@@ -7272,11 +7272,11 @@ ClipBlit_Replace_ScanlineLoop:
 	call Math_AbsInt16
 	add hl, hl
 	lda_24	xwa, 15380116
-	.byte 0xd3, 0x07, 0xe0, 0xec, 0x22	; ld de, (xwa + hl)  [R+R addressing]
+	ld_rrw	de, xwa, hl
 	ldw bc, 0x001E
 	sub bc, de
 	ld xwa, (xsp + 18)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x33	; lda xhl, (xwa + bc)  [R+R addressing]
+	lda_rr	xhl, xwa, bc
 	ld xwa, (xsp + 14)
 	exts xbc
 	add xbc, xwa
@@ -7393,7 +7393,7 @@ ClipBlit_Direct_CalcVRAMAddr:
 	add xbc, xde
 	sll xbc, 6
 	ld wa, (xsp + 2)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x33		; lda xhl, (xbc + wa)  [R+R addressing]
+	lda_rr	xhl, xbc, wa
 	lda_24	xwa, 277504
 	add xwa, xhl
 	ld (xsp + 16), xwa

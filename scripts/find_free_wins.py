@@ -504,10 +504,14 @@ def translate_unidasm_to_llvm(mnemonic):
         if m:
             return None  # LLVM doesn't support this syntax
 
-        # Register+Register: (XRR+RR)
+        # Register+Register: (XRR+RR) → REGPAIR:base:index marker
         m = re.match(r'^\(([A-Z]+)\+([A-Z]+)\)$', operand)
         if m:
-            return None  # LLVM doesn't support R+R addressing
+            base = UNIDASM_REG_MAP.get(m.group(1))
+            idx = UNIDASM_REG_MAP.get(m.group(2))
+            if base and idx:
+                return f'REGPAIR:{base}:{idx}'
+            return None
 
         # Direct memory address: (0xNNNN) → return as DIRECT:nnn marker
         m = re.match(r'^\((0x[0-9a-fA-F]+)\)$', operand)
@@ -523,10 +527,14 @@ def translate_unidasm_to_llvm(mnemonic):
             if reg:
                 return f'({reg}+{disp})'
 
-        # Bare register+register: XRR+RR (used by jp T, XRR+RR)
+        # Bare register+register: XRR+RR (used by jp T, XRR+RR and lda)
         m = re.match(r'^([A-Z]+)\+([A-Z]+)$', operand)
         if m:
-            return None  # LLVM doesn't support R+R addressing
+            base = UNIDASM_REG_MAP.get(m.group(1))
+            idx = UNIDASM_REG_MAP.get(m.group(2))
+            if base and idx:
+                return f'REGPAIR:{base}:{idx}'
+            return None
 
         # Register
         reg = UNIDASM_REG_MAP.get(operand)
@@ -988,11 +996,11 @@ def translate_unidasm_to_llvm(mnemonic):
                 forms.append(f'ldb\t{translated_ops[0]}, {imm_str}')
                 forms.append(f'ld\t{translated_ops[0]}, {imm_str}')
                 return forms
-        elif translated_ops[0] in reg16:
-            # Non-immediate second operand (register)
+        elif translated_ops[0] in reg16 and not translated_ops[1].startswith('REGPAIR:'):
+            # Non-immediate second operand (register, not R+R)
             return [f'ldw\t{translated_ops[0]}, {translated_ops[1]}',
                     f'ld\t{translated_ops[0]}, {translated_ops[1]}']
-        elif translated_ops[0] in reg8:
+        elif translated_ops[0] in reg8 and not translated_ops[1].startswith('REGPAIR:'):
             return [f'ldb\t{translated_ops[0]}, {translated_ops[1]}',
                     f'ld\t{translated_ops[0]}, {translated_ops[1]}']
 
@@ -1058,6 +1066,75 @@ def translate_unidasm_to_llvm(mnemonic):
             elif op == 'cp':
                 forms.append(f'cpw\t{op0}, {op1}')
             return forms
+
+    # ── R+R addressing: ld reg, (base+idx) / ld (base+idx), reg / lda / jp ──
+    def _is_regpair(s):
+        return s.startswith('REGPAIR:')
+
+    def _regpair_parts(s):
+        """Extract (base, index) from REGPAIR:base:index marker."""
+        _, base, idx = s.split(':')
+        return base, idx
+
+    if len(translated_ops) == 2:
+        op0, op1 = translated_ops
+
+        # ld reg, (base+idx) — source R+R load
+        if op in ('ld', 'ldw') and not _is_regpair(op0) and _is_regpair(op1):
+            base, idx = _regpair_parts(op1)
+            dest = op0
+            forms = []
+            if dest in REG8_SET:
+                forms.append(f'ld_rrb\t{dest}, {base}, {idx}')
+            elif dest in REG16_SET:
+                forms.append(f'ld_rrw\t{dest}, {base}, {idx}')
+            elif dest in REG32_SET:
+                forms.append(f'ld_rrl\t{dest}, {base}, {idx}')
+            if forms:
+                return forms
+
+        # ld (base+idx), reg — destination R+R store
+        if op in ('ld', 'ldw') and _is_regpair(op0) and not _is_regpair(op1):
+            base, idx = _regpair_parts(op0)
+            src = op1
+            forms = []
+            if src in REG8_SET:
+                forms.append(f'st_rrb\t{src}, {base}, {idx}')
+            elif src in REG16_SET:
+                forms.append(f'st_rrw\t{src}, {base}, {idx}')
+            elif src in REG32_SET:
+                forms.append(f'st_rrl\t{src}, {base}, {idx}')
+            if forms:
+                return forms
+
+        # lda reg, (base+idx) — load effective address
+        if op == 'lda' and not _is_regpair(op0) and _is_regpair(op1):
+            base, idx = _regpair_parts(op1)
+            dest = op0
+            if dest in REG32_SET:
+                return [f'lda_rr\t{dest}, {base}, {idx}']
+
+        # lda reg, base+idx (bare, no parens — unidasm format for lda)
+        if op == 'lda' and _is_regpair(op0) and op1 in REG32_SET:
+            # unidasm: lda XBC, XBC+WA → ops: REGPAIR:xbc:wa, xbc
+            # Actually unidasm puts dest first: lda dest, src
+            # But regpair marker on op0 means it was parsed as base+idx
+            base, idx = _regpair_parts(op0)
+            dest = op1
+            return [f'lda_rr\t{dest}, {base}, {idx}']
+
+        # jp cc, (base+idx) — jump through R+R
+        if op == 'jp' and not _is_regpair(op0) and _is_regpair(op1):
+            cc_str = op0
+            base, idx = _regpair_parts(op1)
+            # Convert condition name to number
+            CC_MAP = {'f': 0, 'lt': 1, 'le': 2, 'ule': 3,
+                      'pe': 4, 'mi': 5, 'z': 6, 'c': 7,
+                      't': 8, 'ge': 9, 'gt': 10, 'ugt': 11,
+                      'po': 12, 'pl': 13, 'nz': 14, 'nc': 15}
+            cc_num = CC_MAP.get(cc_str)
+            if cc_num is not None:
+                return [f'jp_rr\t{cc_num}, {base}, {idx}']
 
     if translated_ops:
         return f'{llvm_op}\t{", ".join(translated_ops)}'

@@ -1243,7 +1243,7 @@ DrawText_ExtLayout_Variant1:
 	and	a, 15
 	extz	wa
 	lda_24	xbc, 15380740
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x23
+	ld_rrb	c, xbc, wa
 	extz	bc
 	extz	xbc
 	lda	xwa, (xsp+276)
@@ -1412,7 +1412,7 @@ DrawFunc_Init_Variant1:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15380484
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23
+	ld_rrl	xhl, xbc, wa
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1465,7 +1465,7 @@ DrawFunc_Init_Variant1:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15380484
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23
+	ld_rrl	xhl, xbc, wa
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1520,7 +1520,7 @@ DrawFunc_Init_Variant1:
 	extz	wa
 	lda_24	xbc, 15380740
 	lds32	xhl, 0
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x27
+	ld_rrb	l, xbc, wa
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1606,7 +1606,7 @@ DrawFunc_Init_Variant1:
 	extz	wa
 	lda_24	xbc, 15380740
 	lds32	xhl, 0
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x27
+	ld_rrb	l, xbc, wa
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1656,7 +1656,7 @@ DrawFunc_Init_Variant1:
 	extz	wa
 	lda_24	xbc, 15380740
 	lds32	xhl, 0
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x27
+	ld_rrb	l, xbc, wa
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1770,7 +1770,7 @@ ColorBlit_Variant_ByteData:
 	extz	hl
 	add	hl, hl
 	ld	xbc, (xbc+7)
-	.byte 0xf3, 0x07, 0xe4, 0xec, 0x32
+	lda_rr	xde, xbc, hl
 	lda	xwa, (xsp)
 	ld	bc, (xde)
 	ld	(xwa), bc
@@ -2159,7 +2159,7 @@ FontGlyph_ByteData:
 	ld	a, (xwa)
 	extz	wa
 	lda_24	xde, 15380916
-	.byte 0xc3, 0x07, 0xe8, 0xe0, 0x21
+	ld_rrb	a, xde, wa
 	ld	(xbc), a
 	ret
 	ld	e, (xwa)

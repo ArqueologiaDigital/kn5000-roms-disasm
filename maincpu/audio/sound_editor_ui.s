@@ -619,7 +619,7 @@ UpdSeSel_ExtendedOps_Data:
 	dec	1, e
 	extz	de
 	lda	xbc, (xsp+2)
-	.byte 0xc3, 0x07, 0xe4, 0xe8, 0x23
+	ld_rrb	c, xbc, de
 	extz	bc
 	call	15756078
 	inc_berp	251, 1
@@ -1852,7 +1852,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+6)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31
+	lda_rr	xbc, xbc, wa
 	ld	xwa, xbc
 	call	16459841
 	inc_berp	251, 1
@@ -5033,9 +5033,9 @@ SeMenu_PresetManager_Data:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, 15800316
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
+	ld_rrl	xiy, xiz, bc
 	add	bc, 4
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
+	ld_rrl	xix, xiz, bc
 	call	15789056
 	pop c
 	jr	32
@@ -5043,9 +5043,9 @@ SeMenu_PresetManager_Data:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, 15800244
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
+	ld_rrl	xiy, xiz, bc
 	add	bc, 4
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
+	ld_rrl	xix, xiz, bc
 	call	15789056
 	pop c
 	djnz8	c, -84
@@ -5066,9 +5066,9 @@ SeMenu_PresetManager_Data:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, 15800536
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
+	ld_rrl	xiy, xiz, bc
 	add	bc, 4
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
+	ld_rrl	xix, xiz, bc
 	call	15789056
 	pop c
 	jr	32
@@ -5076,9 +5076,9 @@ SeMenu_PresetManager_Data:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, 15800416
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
+	ld_rrl	xiy, xiz, bc
 	add	bc, 4
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
+	ld_rrl	xix, xiz, bc
 	call	15789056
 	pop c
 	djnz8	c, -84
@@ -5095,9 +5095,9 @@ SeMenu_PresetManager_Data:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, 15800660
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
+	ld_rrl	xiy, xiz, bc
 	add	bc, 4
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
+	ld_rrl	xix, xiz, bc
 	call	15789056
 	pop c
 	jr	32
@@ -5105,9 +5105,9 @@ SeMenu_PresetManager_Data:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, 15800602
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
+	ld_rrl	xiy, xiz, bc
 	add	bc, 4
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
+	ld_rrl	xix, xiz, bc
 	call	15789056
 	pop c
 	djnz8	c, -84
@@ -5185,9 +5185,9 @@ SeMenu_PresetBrowser_Data:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, 15811695
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
+	ld_rrl	xiy, xiz, bc
 	add	bc, 4
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
+	ld_rrl	xix, xiz, bc
 	call	15789056
 	pop c
 	jr	32
@@ -5195,9 +5195,9 @@ SeMenu_PresetBrowser_Data:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, 15811623
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
+	ld_rrl	xiy, xiz, bc
 	add	bc, 4
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
+	ld_rrl	xix, xiz, bc
 	call	15789056
 	pop c
 	djnz8	c, -84
@@ -5231,10 +5231,10 @@ SeMenu_PresetBrowser_Data:
 	xor	d, d
 	sla	de, 2
 	ld	xiz, 15807910
-	.byte 0xe3, 0x07, 0xf8, 0xe8, 0x25
+	ld_rrl	xiy, xiz, de
 	pushw	de
 	add	de, 4
-	.byte 0xe3, 0x07, 0xf8, 0xe8, 0x24
+	ld_rrl	xix, xiz, de
 	call	15789056
 	popw	de
 	pop	xiy
@@ -5244,7 +5244,7 @@ SeMenu_PresetBrowser_Data:
 	push c
 	push	xiy
 	ld	xiz, 15808264
-	.byte 0xe3, 0x07, 0xf8, 0xe8, 0x25
+	ld_rrl	xiy, xiz, de
 	ld	xix, xiy
 	add	xix, 7
 	pushw	de
@@ -5260,7 +5260,7 @@ SeMenu_PresetBrowser_Data:
 	xor	w, w
 	mul	a, 10
 	ld	xiz, 15808220
-	.byte 0xe3, 0x07, 0xf8, 0xe8, 0x25
+	ld_rrl	xiy, xiz, de
 	extz	xwa
 	add	xiy, xwa
 	ld	xix, xiy
@@ -5273,7 +5273,7 @@ SeMenu_PresetBrowser_Data:
 	push c
 	push	xiy
 	ld	xiz, 15807782
-	.byte 0xe3, 0x07, 0xf8, 0xe8, 0x25
+	ld_rrl	xiy, xiz, de
 	pushw	de
 	call	15789082
 	popw	de
@@ -5283,7 +5283,7 @@ SeMenu_PresetBrowser_Data:
 	push c
 	push	xiy
 	ld	xiz, 15811719
-	.byte 0xe3, 0x07, 0xf8, 0xe8, 0x25
+	ld_rrl	xiy, xiz, de
 	ld	xix, xiy
 	add	xix, 20
 	call	15789056
@@ -5630,7 +5630,7 @@ SeMenu_NameEdit_DataBlock1:
 	ld	xiz, 15817425
 	ldda8	c, 1648
 	sla	bc, 2
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x24
+	ld_rrl	xix, xiz, bc
 	call	15789056
 	ldda8	a, 1648
 	cp	a, 10
@@ -5710,7 +5710,7 @@ SeMenu_PatchEdit_DataBlock:
 	ld	xiz, 15817377
 	ldda8	c, 1648
 	sla	bc, 2
-	.byte 0xe3, 0x07, 0xf8, 0xe4, 0x25
+	ld_rrl	xiy, xiz, bc
 	jr	21
 	ld	xiy, 15816819
 	ld	xix, 15816849

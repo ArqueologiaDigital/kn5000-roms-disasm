@@ -166,7 +166,7 @@ FileIO_BytecodeData:
 	ld	xwa, 15572278
 	.byte 0x68, 0x05
 	ld	xwa, 15572280
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21
+	ld_rrb	a, xwa, hl
 	ld	(xde), a
 	.byte 0x68, 0x8e
 	ld	xwa, xiz
@@ -402,7 +402,7 @@ FileIO_BytecodeData:
 	cp	a, 12
 	jrl	nz, 193
 	ld	xwa, 15572284
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21
+	ld_rrb	a, xwa, hl
 	ld	(xde), a
 	cp	a, 17
 	jr	ule, 17
@@ -1145,11 +1145,11 @@ ExtDev_SndParam_DispatchComplex:
 	extz	wa
 	sla	wa, 2
 	lda_24	xde, 15572900
-	.byte 0xe3, 0x07, 0xe8, 0xe0, 0x22
+	ld_rrl	xde, xde, wa
 	or	xde, xde
 	jr	z, 23
 	extz	hl
-	.byte 0xc3, 0x07, 0xe8, 0xec, 0x21
+	ld_rrb	a, xde, hl
 	ld	(xbc), a
 	cp	a, 255
 	jr	z, 9
@@ -2121,7 +2121,7 @@ SndParam_TableLookup_Via4100:
 	ld xwa, 0x00004100
 	call SndParam_LookupReadOnly
 	lda_24 xwa, 0xEDA626
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21		; ld a, (xwa+hl)  [register-indexed]
+	ld_rrb	a, xwa, hl
 	and a, 0x07
 	sla	a, 4
 	andmi8	(xiz+10), 143
@@ -2982,9 +2982,9 @@ UIState_ProcessExtendedMode:
 	ret	gt
 	add	wa, wa
 	lda_24	xix, 15574620
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16546693
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	ordi16	36670, 515
 	ret
 	ordi16	36670, 252
@@ -3374,13 +3374,13 @@ VoiceData_ExtendedParamSetup:
 	ld	ix, wa
 	add	ix, 20
 	ld	xwa, (xsp+8)
-	.byte 0xf3, 0x07, 0xe0, 0xf0, 0x33
+	lda_rr	xhl, xwa, ix
 	lda	xde, (xhl+14)
 	ld	c, (xde)
 	and	c, 248
 	ld	(xde), c
 	ld	xwa, (xsp+4)
-	.byte 0xf3, 0x07, 0xe0, 0xf0, 0x30
+	lda_rr	xwa, xwa, ix
 	ld	a, (xwa+14)
 	and	a, 7
 	or	c, a
@@ -3399,11 +3399,11 @@ VoiceData_ExtendedParamSetup:
 	ld	bc, wa
 	add	bc, 20
 	ld	xwa, (xsp+6)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30
+	lda_rr	xwa, xwa, bc
 	lda	xwa, (xwa+15)
 	push	xwa
 	ld	xwa, (xsp+14)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30
+	lda_rr	xwa, xwa, bc
 	lda	xwa, (xwa+15)
 	push	xwa
 	call	16715161
@@ -3416,12 +3416,12 @@ VoiceData_ExtendedParamSetup:
 	ld	bc, hl
 	add	bc, 20
 	ld	xde, (xsp+8)
-	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrb	a, xde, bc
 	extz	wa
 	ldto_berp	c, 251
 	extz	bc
 	add	hl, bc
-	.byte 0xf3, 0x07, 0xe8, 0xec, 0x32
+	lda_rr	xde, xde, hl
 	ld	e, (xde+22)
 	extz	de
 	pushw 255
@@ -3448,7 +3448,7 @@ VoiceData_ExtendedParamSetup:
 	ld	de, bc
 	add	de, 944
 	ld	xwa, (xsp+8)
-	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x25
+	ld_rrb	e, xwa, de
 	extz	de
 	pushw 255
 	ldw	wa, 128
@@ -3497,7 +3497,7 @@ VoiceData_ExtendedParamSetup:
 	ld	hl, wa
 	add	hl, 20
 	ld	xwa, (xsp+8)
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x34
+	lda_rr	xix, xwa, hl
 	lda	xde, (xix+14)
 	ld	c, (xde)
 	and	c, 248
@@ -5273,7 +5273,7 @@ VoiceParam_CompareAndUpdate:
 	jr	z, 47
 	ldda8	a, 37167
 	extz	wa
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33
+	lda_rr	xhl, xhl, wa
 	ld	a, (xsp)
 	cpl	a
 	and	a, (xhl)
@@ -5301,7 +5301,7 @@ VoiceParam_CompareAndUpdate:
 	jr	z, 47
 	ldda8	a, 37167
 	extz	wa
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33
+	lda_rr	xhl, xhl, wa
 	ld	a, (xsp)
 	cpl	a
 	and	a, (xhl)
@@ -5332,7 +5332,7 @@ VoiceParam_CompareAndUpdate:
 	jr	z, 49
 	ldda8	a, 37167
 	extz	wa
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33
+	lda_rr	xhl, xhl, wa
 	ld	c, (xsp)
 	cpl	c
 	ld	e, c
@@ -5361,7 +5361,7 @@ VoiceParam_CompareAndUpdate:
 	jr	z, 49
 	ldda8	a, 37167
 	extz	wa
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33
+	lda_rr	xhl, xhl, wa
 	ld	c, (xsp)
 	cpl	c
 	ld	e, c
@@ -5393,7 +5393,7 @@ VoiceParam_CompareAndUpdate:
 	jr	z, 69
 	ldda8	a, 37167
 	extz	wa
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33
+	lda_rr	xhl, xhl, wa
 	ld	e, (xhl)
 	and	e, (xsp)
 	ldda8	c, 37203
@@ -5430,7 +5430,7 @@ VoiceParam_CompareAndUpdate:
 	jr	z, 43
 	ldda8	a, 37167
 	extz	wa
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33
+	lda_rr	xhl, xhl, wa
 	ld	a, (xsp)
 	cpl	a
 	and	a, (xhl)
@@ -5898,7 +5898,7 @@ VoiceData_DistributeToChannels:
 	cp	a, (xsp)
 	jr	ugt, 10
 	extz	wa
-	.byte 0xc3, 0x07, 0xec, 0xe0, 0x21
+	ld_rrb	a, xhl, wa
 	ld	(xsp+2), a
 	ld	l, (xsp+2)
 	jr	13
@@ -7371,7 +7371,7 @@ TempoCC_TransmitBytecodeBlock:
 	ldda32	xiy, 37106
 	extz	wa
 	sll	wa, 2
-	.byte 0xe3, 0x07, 0xf4, 0xe0, 0x25
+	ld_rrl	xiy, xiy, wa
 	ld	wa, (xiy)
 	bit	7, a
 	jr	z, 7
@@ -7925,7 +7925,7 @@ MidiCtrl_ModeDispatch_Table:
 	xor	h, h
 	ldda8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	set	7, a
 	stda8	37093, a
 	ldda16	bc, 37211
@@ -7945,7 +7945,7 @@ MidiCtrl_ModeDispatch_Table:
 	extz	hl
 	ldda8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	set	7, a
 	stda8	37093, a
 	ldda8	c, 37211
@@ -7975,7 +7975,7 @@ MidiCtrl_ModeDispatch_Table:
 	extz	hl
 	ldda8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	set	7, a
 	stda8	37093, a
 	ldda8	c, 37211
@@ -8063,7 +8063,7 @@ VoiceMode3_DispatchTable:
 	extz	hl
 	ldda8	l, 37320
 	ld	xix, 61856
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 14
 	jr	nz, 2
 	ldb	b, 4
@@ -8085,7 +8085,7 @@ VoiceMode3_DispatchTable:
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x3f, 0x0f
 	jr	nz, 37
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 22
 	set	7, a
@@ -8103,18 +8103,18 @@ VoiceMode3_DispatchTable:
 	ld	l, c
 	sll	hl, 2
 	ldda32	xix, 37106
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	cp	xix, 4294967295
 	jr	z, 114
 	extz	hl
 	ld	l, b
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	ld	w, d
 	xor	w, 255
 	and	a, w
 	and	e, d
 	or	e, a
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0x45
+	st_rrb	e, xix, hl
 	stda16	37159, bc
 	stda16	37161, de
 	call	16556371
@@ -8124,7 +8124,7 @@ VoiceMode3_DispatchTable:
 	extz	hl
 	ldda8	l, 37320
 	ld	xix, 61856
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 15
 	jr	z, 44
 	cp	a, 14
@@ -8132,7 +8132,7 @@ VoiceMode3_DispatchTable:
 	cp	a, 13
 	jr	z, 34
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 19
 	set	7, a
@@ -8152,7 +8152,7 @@ VoiceMode3_DispatchTable:
 	jr	z, 52
 	set	7, e
 	ld	xix, 38066
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0x45
+	st_rrb	e, xix, hl
 	ret
 
 MidiPartCC_WriteAndDispatch:
@@ -8206,7 +8206,7 @@ MidiVoice_DataBlockHandler:
 	extz	hl
 	ldda8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 28
 	bitda	4, 64848
@@ -8234,7 +8234,7 @@ MidiVoice_DataBlockHandler:
 	extz	hl
 	ldda8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 20
 	set	7, a
@@ -8258,7 +8258,7 @@ MidiVoice_DataBlockHandler:
 	extz	hl
 	ldda8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 19
 	set	7, a
@@ -8277,7 +8277,7 @@ MidiVoice_DataBlockHandler:
 	extz	hl
 	ldda8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 19
 	set	7, a
@@ -8762,7 +8762,7 @@ MidiNoteVel_Handler_0:
 	xor	h, h
 	ldda8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	set	7, a
 	stda8	37093, a
 	ldw	bc, 20
@@ -8784,7 +8784,7 @@ MidiNoteVel_Handler_1:
 	extz	hl
 	ldda8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	set	7, a
 	stda8	37093, a
 	ldw	bc, 20
@@ -10724,7 +10724,7 @@ MidiStream_StatusPrecheck:
 	jr	ugt, 63
 	sll	hl, 2
 	ld	xix, 16566476
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	jp	(xix)
 
 
@@ -10750,7 +10750,7 @@ MidiStream_HandleNoteCC:
 	ld l, c
 	sll	hl, 2
 	ldda32	xix, 37106
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24		; ld xix, (xix+hl)  [register-indexed]
+	ld_rrl	xix, xix, hl
 	ld wa, (xix)
 	stda16	37098, wa
 	pushw wa
@@ -10784,7 +10784,7 @@ MidiStream_HandlePgmChange:
 	ld	l, c
 	sll	hl, 2
 	ldda32	xix, 37106
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	ld	l, b
 	.byte 0xc3, 0x03, 0xf0, 0xec, 0x25
 	and	e, 127
@@ -10806,7 +10806,7 @@ MidiStream_HandleChanPressure:
 	ld	l, c
 	sll	hl, 2
 	ldda32	xix, 37106
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	ld	l, b
 	.byte 0xc3, 0x03, 0xf0, 0xec, 0x25
 	and	d, 72
@@ -10819,7 +10819,7 @@ MidiStream_HandleSysMsg:
 	ld	l, c
 	sll	hl, 2
 	ldda32	xix, 37106
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	ld	l, b
 	.byte 0xc3, 0x03, 0xf0, 0xec, 0x25
 	call	16556542
@@ -10830,7 +10830,7 @@ MidiStream_HandleSysMsg:
 	jr	ugt, 31
 	sll	hl, 2
 	ld	xix, 16566754
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	jp	(xix)
 
 
@@ -10857,7 +10857,7 @@ MidiStream_SysExData:
 	jr	ugt, 23
 	sll	hl, 2
 	ld	xix, 16566820
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	jp	(xix)
 MidiStream_CtrlJumpTable:
 	.long MidiStream_CtrlNop
@@ -10880,7 +10880,7 @@ MidiStream_CtrlData:
 	jr	ugt, 63
 	sll	hl, 2
 	ld	xix, 16566877
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	jp	(xix)
 MidiStream_CmdJumpTable:
 	.long MidiStream_CmdNop
@@ -11019,7 +11019,7 @@ MidiStream_ExtendedDispatch:
 	ld	l, c
 	sll	hl, 2
 	ldda32	xix, 37106
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	cp	xix, 4294967295
 	jr	z, 78
 	ldb	a, 17
@@ -11045,7 +11045,7 @@ MidiStream_ExtendedDispatch:
 	jr	nz, 2
 	ldb	l, 20
 	ld	xiy, 37906
-	.byte 0xc3, 0x07, 0xf4, 0xec, 0x26
+	ld_rrb	h, xiy, hl
 	cp	h, a
 	jr	ugt, 15
 	ld	l, e
@@ -11062,7 +11062,7 @@ MidiStream_ExtendedDispatch:
 	ld	l, c
 	sll	hl, 2
 	ldda32	xix, 37106
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	cp	xix, 4294967295
 	jr	z, 39
 	extz	hl
@@ -11071,7 +11071,7 @@ MidiStream_ExtendedDispatch:
 	jr	nz, 2
 	ldb	l, 20
 	ld	xiy, 37906
-	.byte 0xc3, 0x07, 0xf4, 0xec, 0x24
+	ld_rrb	d, xiy, hl
 	bit	7, d
 	jr	z, 6
 	res	7, d
@@ -11088,7 +11088,7 @@ MidiStream_ExtendedDispatch:
 	ld	l, c
 	sll	hl, 2
 	ldda32	xix, 37106
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	cp	xix, 4294967295
 	jr	z, 47
 	extz	hl
@@ -11096,7 +11096,7 @@ MidiStream_ExtendedDispatch:
 	ld	d, c
 	sll	hl, 1
 	ld	xiy, 37842
-	.byte 0xd3, 0x07, 0xf4, 0xec, 0x20
+	ld_rrw	wa, xiy, hl
 	stda16	37098, wa
 	stda16	37100, de
 	call	16557086
@@ -11119,7 +11119,7 @@ MidiStream_ExtendedDispatch:
 	ld	l, c
 	sll	hl, 2
 	ldda32	xix, 37106
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	ld	(xix), e
 	andmi8	(xix+1), 128
 	or	(xix+1), b
@@ -11226,13 +11226,13 @@ MidiStream_ExtendedDispatch:
 	cp	e, 255
 	jr	z, 10
 	res	7, e
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0x45
+	st_rrb	e, xix, hl
 	jr	12
 	res	7, d
 	inc	1, xix
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0x44
+	st_rrb	d, xix, hl
 	dec	1, xix
-	.byte 0xd3, 0x07, 0xf0, 0xec, 0x20
+	ld_rrw	wa, xix, hl
 	and	wa, 32639
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x50
 	srl	hl, 1
@@ -11269,7 +11269,7 @@ MidiStream_ExtendedDispatch:
 	and	a, 15
 	jr	3
 	srl	wa, 8
-	.byte 0xf3, 0x07, 0xf8, 0xec, 0x41
+	st_rrb	a, xiz, hl
 	ret
 	calr	-844
 	ret
@@ -11316,7 +11316,7 @@ MidiStream_HandleRunningStatus:
 	ldda8	l, 37211
 	sll	hl, 2
 	ldda32	xix, 37106
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	cp	xix, 4294967295
 	jr	z, 38
 	ld	e, (xix)

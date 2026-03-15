@@ -182,9 +182,9 @@ FDC_WaitReady:
 	jrl	gt, 151
 	add	wa, wa
 	lda_24	xix, 15374502
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16346317
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr	8, xix, wa
 	stdi8	35436, 0
 	stdi16	35362, 0
 	ldi_berp	251, 0

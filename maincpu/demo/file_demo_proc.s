@@ -2239,7 +2239,7 @@ LoadRegion4_ReadByteLoop:
 	cps hl, 0
 	jr lt, LoadRegion4_ReadDone
 	lda xwa, (xsp + 2)
-	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x47	; ld (xwa + iz), l  [reg+reg indexed, not in LLVM]
+	st_rrb	l, xwa, iz
 	inc 1, iz
 	cp iz, 0x0010				; loop 16 times
 	jr lt, LoadRegion4_ReadByteLoop
@@ -8745,7 +8745,7 @@ FileIO_ErrorCodeByteBlock:
 	ld8_24	a, 213234
 	extz	wa
 	lda_24	xbc, 15336786
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21
+	ld_rrb	a, xbc, wa
 	cp	a, 119
 	.byte 0x66, 0x15
 	cp	a, 108

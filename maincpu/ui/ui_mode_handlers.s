@@ -3349,7 +3349,7 @@ MstStyleAlp_EventDispatch:
 	add	de, wa
 	muls	de, 6
 	lda_24	xbc, 15443096
-	.byte 0xd3, 0x07, 0xe4, 0xe8, 0x22
+	ld_rrw	de, xbc, de
 	extz	xde
 	ld	xwa, 21102605
 	ld	xbc, 31588376
@@ -7179,7 +7179,7 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10374
 	lds	de, 2
@@ -7203,7 +7203,7 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10376
 	lds	de, 2
@@ -7227,7 +7227,7 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10378
 	lds	de, 2
@@ -7251,7 +7251,7 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10380
 	lds	de, 2
@@ -7275,7 +7275,7 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10382
 	lds	de, 2
@@ -7299,7 +7299,7 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10384
 	lds	de, 2
@@ -7323,7 +7323,7 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10368
 	lds	de, 2
@@ -7359,7 +7359,7 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10374
 	lds	de, 2
@@ -7383,7 +7383,7 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10376
 	lds	de, 2
@@ -7407,7 +7407,7 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10378
 	lds	de, 2
@@ -7431,7 +7431,7 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10380
 	lds	de, 2
@@ -7455,7 +7455,7 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10382
 	lds	de, 2
@@ -7479,7 +7479,7 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10384
 	lds	de, 2
@@ -7503,7 +7503,7 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, 15535908
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x23
+	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10368
 	lds	de, 2
@@ -7524,7 +7524,7 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, 15535940
-	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
+	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
 	pushw 4590
@@ -7551,7 +7551,7 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, 15535940
-	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
+	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
 	pushw 4594
@@ -7576,7 +7576,7 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, 15535940
-	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
+	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
 	pushw 4598
@@ -7601,7 +7601,7 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, 15535940
-	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
+	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
 	pushw 4602
@@ -7627,7 +7627,7 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, 15535940
-	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
+	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
 	pushw 4606
@@ -7652,7 +7652,7 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, 15535940
-	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
+	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
 	pushw 4610
@@ -7677,7 +7677,7 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, 15535940
-	.byte 0xe3, 0x07, 0xe4, 0xec, 0x20
+	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
 	pushw 4614
@@ -8656,7 +8656,7 @@ PmExpFilter_EventDispatch:
 	cp	de, 10
 	jrl	gt, 586
 	lda_24	xbc, 15537198
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	ldw	bc, 65535
 	lds	de, 2
 	jrl	148
@@ -8665,7 +8665,7 @@ PmExpFilter_EventDispatch:
 	cp	de, 10
 	jrl	gt, 556
 	lda_24	xbc, 15537234
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	ldw	bc, 65535
 	lds	de, 2
 	jr	119
@@ -8696,7 +8696,7 @@ PmExpFilter_EventDispatch:
 	cp	de, 10
 	jrl	gt, 462
 	lda_24	xbc, 15537198
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	lds	bc, 1
 	lds	de, 2
 	jr	26
@@ -8705,7 +8705,7 @@ PmExpFilter_EventDispatch:
 	cp	de, 10
 	jrl	gt, 434
 	lda_24	xbc, 15537234
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	lds	bc, 1
 	lds	de, 2
 	call	16382274

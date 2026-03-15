@@ -369,7 +369,7 @@ DSPCfg_InitDispatchData:
 	ld	xde, xwa
 	ld	a, (xbc+1)
 	extz	wa
-	.byte 0xf3, 0x07, 0xe8, 0xe0, 0x32
+	lda_rr	xde, xde, wa
 	ld	l, (xbc+2)
 	ld	a, l
 	and	a, (xde)
@@ -388,7 +388,7 @@ DSPCfg_InitDispatchData:
 	ld	xde, xwa
 	ld	a, (xbc+1)
 	extz	wa
-	.byte 0xf3, 0x07, 0xe8, 0xe0, 0x32
+	lda_rr	xde, xde, wa
 	ld	l, (xbc+2)
 	ld	a, l
 	and	a, (xde)
@@ -409,7 +409,7 @@ DSPCfg_InitDispatchData:
 	ld	xde, xbc
 	ld	c, (xde+1)
 	extz	bc
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30
+	lda_rr	xwa, xwa, bc
 	lds	ix, 0
 	lda	xbc, (xde+3)
 	ld	(xsp+2), xbc
@@ -450,7 +450,7 @@ DSPCfg_InitDispatchData:
 	ld	xde, xbc
 	ld	c, (xde+1)
 	extz	bc
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30
+	lda_rr	xwa, xwa, bc
 	lds	iy, 0
 	lda	xbc, (xde+3)
 	ld	(xsp+2), xbc
@@ -487,7 +487,7 @@ DSPCfg_InitDispatchData:
 	ld	l, (xde+1)
 	extz	hl
 	ld	c, (xde+2)
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x43
+	st_rrb	c, xwa, hl
 	lds	hl, 3
 	ret
 	ld	c, (xbc+1)

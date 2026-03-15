@@ -169,7 +169,7 @@ MidiPkt_BuildControl:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617568
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x26
+	ld_rrl	xiz, xbc, wa
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xiz+1)
@@ -231,7 +231,7 @@ MidiPkt_BuildControl:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, 15617574
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x26
+	ld_rrl	xiz, xbc, wa
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xde+7)
@@ -1307,9 +1307,9 @@ MidiPkt_SysExBulkTransfer_Data:
 	ret	gt
 	add	hl, hl
 	lda_24	xix, 15610736
-	.byte 0xd3, 0x07, 0xf0, 0xec, 0x23
+	ld_rrw	hl, xix, hl
 	lda_24	xix, 16623949
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0xd8
+	jp_rr	8, xix, hl
 	jr	98
 	jrl	377
 	jrl	377
@@ -1362,7 +1362,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	ldto_berp	a, 251
 	extz	wa
 	lda_24	xbc, 15610748
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21
+	ld_rrb	a, xbc, wa
 	ldfr_berp	a, 251
 	ldda32	xwa, 48300
 	ldw	bc, 11

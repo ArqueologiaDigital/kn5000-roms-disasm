@@ -15669,7 +15669,7 @@ Part_VoiceSearchBlock:
 	lda_24	xde, 700416
 	add	xde, xwa
 	extz	bc
-	.byte 0xf3, 0x07, 0xe8, 0xe4, 0x30
+	lda_rr	xwa, xde, bc
 	ld	l, (xwa-1)
 	ret
 
@@ -20788,7 +20788,7 @@ AppEvent_SubDispatch:
 	ldw	wa, 8
 	sll	wa, 2
 	lda_24	xix, 14961006
-	.byte 0xe3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrl	xwa, xix, wa
 	cp	(xwa), 1
 	jrl	ule, 1740
 	decm8	1, (xwa)
@@ -20837,9 +20837,10 @@ AppEvent_SubDispatch:
 	.byte 0x6a, 0x52
 	add	wa, wa
 	lda_24	xix, 14960974
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20
+	ld_rrw	wa, xix, wa
 	lda_24	xix, 16009657
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8, 0xf1, 0x10, 0x26
+	jp_rr	8, xix, wa
+	.byte 0xf1, 0x10, 0x26
 	ldw	iz, 0x12f1
 	.ascii "&0h:с)т6съ%0h"
 	.byte 0x30, 0xf1, 0x1e, 0x26, 0x36, 0xf1, 0x20, 0x26
@@ -24687,7 +24688,7 @@ HelpLang_DispatchDataBlock:
 	.long FontPalette_Gradient7
 	jr	5
 	ld	xwa, 14961322
-	.byte 0xc3, 0x07, 0xe0, 0xe4, 0x21
+	ld_rrb	a, xwa, bc
 	cps	a, 1
 	jr	nz, 30
 	ld	xwa, 15138830

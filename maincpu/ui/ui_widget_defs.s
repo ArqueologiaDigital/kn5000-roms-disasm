@@ -17993,7 +17993,7 @@ DeleteSpecEvent_ScanLoop:
 	ld bc, ix				; BC = current index
 	muls bc, 0x000C				; BC = index * 12 (entry size)
 	lda_24 xwa, 0x02BC34			; XWA = base of registration table
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; lda xwa, (xwa + bc)  [reg+reg, not in LLVM]
+	lda_rr	xwa, xwa, bc
 	lda xbc, (xwa + 4)			; XBC = pointer to entry+4 (event code)
 	ld xde, (xbc)				; XDE = registered event code
 	cp xde, 0x01C00038			; compare with key press event

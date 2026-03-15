@@ -3565,13 +3565,13 @@ SeqStep_FileCloseExit:
 	ld	wa, qiz
 	sla	wa, 2
 	lda_24	xbc, 135348
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	or	xwa, xwa
 	jr	z, 77
 	ld	wa, qiz
 	sla	wa, 2
 	lda_24	xbc, 135348
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	cp	xwa, 4294967295
 	jr	z, 53
 	ld	xwa, (xsp+4)
@@ -3580,12 +3580,12 @@ SeqStep_FileCloseExit:
 	ld	wa, qiz
 	sla	wa, 2
 	lda_24	xbc, 135348
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	wa, qiz
 	sla	wa, 2
 	lda_24	xbc, 135348
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20
+	ld_rrl	xwa, xbc, wa
 	ld	xwa, (xwa+14)
 	ld	xwa, (xwa+36)
 	call	(xwa)
@@ -5504,7 +5504,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	bc, wa
 	add	bc, 26
 	ld	xwa, (xsp+4)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30
+	lda_rr	xwa, xwa, bc
 	push xwa
 	lda	xwa, (xiz+52)
 	push xwa
@@ -6726,7 +6726,7 @@ SeqChan_InitChannelState:
 	add	bc, 26
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x32
+	lda_rr	xde, xwa, bc
 	ld	xwa, (xsp+12)
 	bitm	2, (xwa+3)
 	jrl	nz, 157
@@ -6746,7 +6746,7 @@ SeqChan_InitChannelState:
 	lda	xsp, (xsp+10)
 	sub	(xsp+20), iz
 	ld	xwa, (xsp+16)
-	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x30
+	lda_rr	xwa, xwa, iz
 	ld	(xsp+16), xwa
 	add	(xsp+2), iz
 	ld	bc, iz
@@ -6779,7 +6779,7 @@ SeqChan_InitChannelState:
 	jrl	263
 	sub	(xsp+20), iz
 	ld	xwa, (xsp+16)
-	.byte 0xf3, 0x07, 0xe0, 0xf8, 0x30
+	lda_rr	xwa, xwa, iz
 	ld	(xsp+16), xwa
 	add	(xsp+2), iz
 	ld	bc, iz

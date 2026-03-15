@@ -173,7 +173,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336946
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35151
@@ -235,7 +235,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336996
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35193
@@ -492,7 +492,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336996
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35172
@@ -548,7 +548,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336946
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35151
@@ -592,7 +592,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336996
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35193
@@ -872,7 +872,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336946
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35151
@@ -937,7 +937,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336996
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35193
@@ -1473,7 +1473,7 @@ SLDstBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336946
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35235
@@ -1527,7 +1527,7 @@ SLDstBankList_FuncBody:
 	ld	bc, wa
 	sla	bc, 2
 	lda	xwa, (xde+43)
-	.byte 0xe3, 0x07, 0xec, 0xe4, 0x21
+	ld_rrl	xbc, xhl, bc
 	inc	1, xbc
 	cpdi8	35322, 0
 	jr	z, 42
@@ -1753,7 +1753,7 @@ SLDstBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336996
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35256
@@ -1878,7 +1878,7 @@ SLDstBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336946
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35235
@@ -1916,7 +1916,7 @@ SLDstBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336996
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35277
@@ -2142,7 +2142,7 @@ SLDstBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda_24	xde, 15336946
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35235
@@ -2189,7 +2189,7 @@ SLDstBankList_FuncBody:
 	ldda8	c, 35320
 	extz	bc
 	sla	bc, 2
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35277
@@ -2214,7 +2214,7 @@ SLDstBankList_FuncBody:
 	ldda8	c, 35320
 	extz	bc
 	sla	bc, 2
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35277
@@ -2247,7 +2247,7 @@ SLDstBankList_FuncBody:
 	ldda8	c, 35320
 	extz	bc
 	sla	bc, 2
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21
+	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16290012
 	ldada	xwa, 35277

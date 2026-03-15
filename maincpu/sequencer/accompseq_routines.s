@@ -979,11 +979,11 @@ AccompSeq_LargeCodeBlock1:
 	ei	0x06
 	ld	iy, (xhl+4)
 	ld	bc, (xhl+2)
-	.byte 0xf3, 0x07, 0xf4, 0xec, 0x45
+	st_rrb	e, xiy, hl
 	calr	-372
-	.byte 0xf3, 0x07, 0xf4, 0xec, 0x44
+	st_rrb	d, xiy, hl
 	calr	-380
-	.byte 0xf3, 0x07, 0xf4, 0xec, 0x41
+	st_rrb	a, xiy, hl
 	calr	-388
 	ld	(xhl+4), iy
 	ei	0x00
@@ -1085,7 +1085,7 @@ AccompSeq_LargeCodeBlock2:
 	xor	w, w
 	ld	hl, wa
 	ld	xix, 16182330
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x26
+	ld_rrb	h, xix, hl
 	ldda8	l, 64786
 	cp	l, 17
 	jr	z, 84
