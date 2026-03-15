@@ -7,7 +7,7 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: b445964ec4b4 (b445964ec4b47cbe203cc8c62c040cd817c3af6b)
-Date: 2026-03-15 21:40:00 +0000
-Subject: Add NORMAL, MAX, JP16, and CALL16 instructions for TLCS-900
+Commit: d0fb23124021 (d0fb23124021afbe1854ee99592e6ef3dc48b627)
+Date: 2026-03-15 22:12:43 +0000
+Subject: Add R+R 8-bit index addressing mode and 16-bit JP/CALL for TLCS-900
 Repository: /mnt/shared/llvm-project
