@@ -9,4 +9,3 @@ SECTIONS {
     /DISCARD/ : { *(.comment) *(.note*) *(.eh_frame*) }
 }
 
-Naka_PresentationRootState = 0x00EF013F;
