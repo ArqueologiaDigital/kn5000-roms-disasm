@@ -1,12 +1,12 @@
 ; =============================================================================
-; FD SAVE/LOAD TEST — Factory Diagnostic for Floppy Disk I/O
+; FD SAVE/LOAD TEST -- Factory Diagnostic for Floppy Disk I/O
 ; =============================================================================
 ;
 ; Activation path:
 ;   1. InitializeHama (called during boot) registers the HAMA (file/disk)
 ;      subsystem's object tables and two diagnostic "Titles":
-;        - "TT_HDDEXT" (FDD/HD extension test) → widget table 0x7f
-;        - "TT_EXTAPR" (extension APR test)     → widget table 0xfc
+;        - "TT_HDDEXT" (FDD/HD extension test) -> widget table 0x7f
+;        - "TT_EXTAPR" (extension APR test)     -> widget table 0xfc
 ;      Both are registered via RegTitleHama with RegisterTitle, linking them
 ;      to the TestTitleFunc callback.
 ;
@@ -38,7 +38,7 @@
 ;
 ; =============================================================================
 
-; FDLoadSaveTest — Floppy disk save/load diagnostic test
+; FDLoadSaveTest -- Floppy disk save/load diagnostic test
 ; Allocates a 2KB buffer, fills it with a counting pattern (0..0x3FF),
 ; opens a test file via FileOpen, writes the buffer (FileWrite),
 ; closes and reopens the file, reads it back (FileRead), then
@@ -286,11 +286,11 @@ FDListDir_Return:
 ; FDTestDialogEventHandler (FDTestDialogProc)
 ; Event handler for the FD SAVE/LOAD TEST dialog.
 ; Dispatches on the 32-bit event ID in xbc:
-;   0x1E0008D  → Format and display event parameter (xde) via 0xFA44D0,
+;   0x1E0008D  -> Format and display event parameter (xde) via 0xFA44D0,
 ;                 then send event 0x1E0008C via 0xFA9660.
-;   0x1C00017..0x1C0001D (7 entries) → Jump table at 0xE1FF34 (word offsets
+;   0x1C00017..0x1C0001D (7 entries) -> Jump table at 0xE1FF34 (word offsets
 ;                 added to xix base, dispatched via jp_dri).
-;   All others → Return 0 (unhandled).
+;   All others -> Return 0 (unhandled).
 ; Args: xbc = event ID, xde = event parameter
 ; Returns: xhl = 0
 ; Stack frame: 264 bytes
@@ -340,7 +340,7 @@ FDTestDlg_Return:
 	lda xsp, (xsp + 264)
 	ret
 
-; HamaListProc — Event handler for the FD test list widget
+; HamaListProc -- Event handler for the FD test list widget
 ; Handles event 0x1E00086 (list item selection): calls 0xFA6266 to get
 ; the widget state, reads the data pointer at offset 42, then calls
 ; Strcpy to load/save the selected file.

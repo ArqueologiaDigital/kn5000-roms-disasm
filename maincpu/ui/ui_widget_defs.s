@@ -19684,11 +19684,11 @@ ReadPixel_Calculate:
 ;   BC  = color index (low byte)
 ;   DE  = drawing mode:
 ;         < 0x201: use translated buffer pointer
-;         0x201: direct write  — buffer[y*320+x] = color
-;         0x202: clear pixel   — buffer[y*320+x] = 0x00
-;         0x203: OR operation  — buffer[y*320+x] |= color
-;         0x204: AND operation — buffer[y*320+x] &= color
-;         0x205: XOR operation — buffer[y*320+x] ^= color
+;         0x201: direct write  -- buffer[y*320+x] = color
+;         0x202: clear pixel   -- buffer[y*320+x] = 0x00
+;         0x203: OR operation  -- buffer[y*320+x] |= color
+;         0x204: AND operation -- buffer[y*320+x] &= color
+;         0x205: XOR operation -- buffer[y*320+x] ^= color
 ;
 ; Special colors:
 ;   0xF7 = transparent (no-op)

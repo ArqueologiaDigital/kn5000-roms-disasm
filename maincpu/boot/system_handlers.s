@@ -5065,8 +5065,8 @@ SeqDMA_WriteMidi_NoteOn_Done:
 ; Entry: None
 ; Exit:  DMA channels configured for Sub-CPU payload transfer
 ; Notes: Sets up MicroDMA channels 0 and 2 for inter-CPU latch communication
-;        - DMA channel 2 destination = latch at 0x140000 (Main→Sub)
-;        - DMA channel 0 source = latch at 0x140000 (Sub→Main)
+;        - DMA channel 2 destination = latch at 0x140000 (Main->Sub)
+;        - DMA channel 0 source = latch at 0x140000 (Sub->Main)
 ;        - Configures interrupt priorities for DMA completion
 ;        - Clears transfer state variables at 0x05E0 and 0x05E2
 ;        Called during boot after Sub-CPU is released from reset

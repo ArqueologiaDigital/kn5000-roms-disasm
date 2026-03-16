@@ -232,7 +232,7 @@ TitleFunc_Return:
 	pop xiz
 	ret
 
-; ListDirectoryEntries2 — Opens directory, iterates all entries via
+; ListDirectoryEntries2 -- Opens directory, iterates all entries via
 ; ReadNextEntry, logging each via FDTest_PrintDiag. Similar to FDListDirectory
 ; but uses format string at 0xE1FE1A and compares dir handle against xiz directly.
 ; Args: (xsp+4) = directory path string pointer
@@ -274,7 +274,7 @@ ListDir2_Return:
 	lda xsp, (xsp + 266)
 	ret
 
-; RunTestAndUpdateCounters — Checks FD status (0xF525EC), runs FDLoadSaveTest
+; RunTestAndUpdateCounters -- Checks FD status (0xF525EC), runs FDLoadSaveTest
 ; if status is 2 or 3, increments TOTAL/OK/NG counters at 0x03DCFE-0x03DD02,
 ; then displays updated counts via NAKA widget system (0xFA9D58).
 ; Returns: l = 0xFF if status invalid, otherwise falls through to display
@@ -315,7 +315,7 @@ RunTestCounters_Display:
 	ld xbc, 0x01c0000f
 	jp ApPostEvent
 
-; CreateAndRunFDOperation — Builds a 16-byte parameter struct on the stack,
+; CreateAndRunFDOperation -- Builds a 16-byte parameter struct on the stack,
 ; calls 0xF97CCA to execute the FD operation, then prints success/failure.
 CreateRunFDOp_Entry:
 	lda xsp, (xsp - 16)
@@ -347,7 +347,7 @@ CreateRunFDOp_Return:
 
 .include "factory_test/fd_test_code.s"
 
-; RegisterHamaTitle1 — Registers title with widget table 0x7F (FDD/HD test)
+; RegisterHamaTitle1 -- Registers title with widget table 0x7F (FDD/HD test)
 ; Calls 0xF51E4F with WA=2, then 0xF5289C with string at 0xE1FF42
 RegHamaTitle1_Entry:
 	lds wa, 2
@@ -357,7 +357,7 @@ RegHamaTitle1_Entry:
 	lds hl, 0
 	ret
 
-; RegisterHamaTitle2 — Registers title with widget table 0xFC (extension APR test)
+; RegisterHamaTitle2 -- Registers title with widget table 0xFC (extension APR test)
 ; Calls 0xF51E4F with WA=3, then 0xF5289C with string at 0xE1FF4C
 RegHamaTitle2_Entry:
 	lds wa, 3
@@ -367,7 +367,7 @@ RegHamaTitle2_Entry:
 	lds hl, 0
 	ret
 
-; SendEventWithParam — Sends event 0x1C00025 with xwa as parameter via 0xFA9660
+; SendEventWithParam -- Sends event 0x1C00025 with xwa as parameter via 0xFA9660
 ; Args: xwa = event parameter (moved to xde)
 SendEvent_Entry:
 	ld xde, xwa
@@ -375,7 +375,7 @@ SendEvent_Entry:
 	ld xbc, 0x01c00025
 	jp SendEvent
 
-; HamaEventDispatcher — Dispatches events for HAMA subsystem
+; HamaEventDispatcher -- Dispatches events for HAMA subsystem
 ; Handles 0x1C00007 (title lifecycle) and 0x1E00085 (extension event)
 ; For 0x1C00007: dispatches on xde (0x8A=file ops, 0x8B=extension bootstrap)
 HamaEvtDisp_Entry:
@@ -406,7 +406,7 @@ HamaEvtDisp_Return:
 	lds32 xhl, 0
 	ret
 
-; CheckFDStatusAndLoadFile — Checks FD status, loads file from disk into
+; CheckFDStatusAndLoadFile -- Checks FD status, loads file from disk into
 ; extension DRAM (0x200000) if status is 2 or 3
 CheckFDStatusLoad_Entry:
 	push xiz
@@ -446,7 +446,7 @@ CheckFDStatusLoad_Return:
 	pop xiz
 	ret
 
-; LoadExtensionROM — Loads 4 bytes from extension ROM path at 0xE1FF9C
+; LoadExtensionROM -- Loads 4 bytes from extension ROM path at 0xE1FF9C
 ; into DRAM at 0x200000, checks result, jumps to extension entry point
 LoadExtROM_Entry:
 	pushw 0x4

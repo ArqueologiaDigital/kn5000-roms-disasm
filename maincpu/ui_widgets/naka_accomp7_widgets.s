@@ -1,4 +1,4 @@
-; naka_accomp7_widgets.s — Accompaniment screen 7 widget descriptors
+; naka_accomp7_widgets.s -- Accompaniment screen 7 widget descriptors
 ;
 ; 27 widgets for the accompaniment parameter editing screen.
 ; Two CONTAINER groups (0x35) with MENU_ITEM children, plus

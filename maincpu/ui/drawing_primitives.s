@@ -2143,7 +2143,7 @@ DrawWall_DoCopy:
 ;   SetChangeRect called with bitmap bounding box
 ;
 ; Returns immediately if bitmap index is 0xFFFFFFFF (no bitmap).
-; Clips against screen bottom edge (y >= 240 → skip row).
+; Clips against screen bottom edge (y >= 240 -> skip row).
 ; =============================================================================
 DrawBitmap:
 	dec 4, xsp

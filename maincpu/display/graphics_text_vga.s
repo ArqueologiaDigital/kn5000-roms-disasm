@@ -1183,7 +1183,7 @@ GetCenteredDelta_Return:
 ; Processes a null-terminated input string (XWA) and outputs displayable
 ; characters to the buffer (XBC). Handles:
 ;   - 0x7E escape prefix: next two bytes are hex digits forming a char code
-;     e.g., 0x7E 0x33 0x41 → character 0x3A (colon)
+;     e.g., 0x7E 0x33 0x41 -> character 0x3A (colon)
 ;   - Characters < 0x20: mapped to 0x20 (space)
 ;   - Characters >= 0x20: copied as-is
 ;   - 0x00: null terminator (copied and returns)
@@ -1459,7 +1459,7 @@ HexCharToNibble:
 	jr c, HexCharToNibble_CheckLower
 	cp a, 0x39		; '9'
 	jr ugt, HexCharToNibble_CheckLower
-	sub a, 0x30		; '0'-'9' → 0-9
+	sub a, 0x30		; '0'-'9' -> 0-9
 	ld l, a
 	ret
 
@@ -1468,7 +1468,7 @@ HexCharToNibble_CheckLower:
 	jr c, HexCharToNibble_CheckUpper
 	cp a, 0x66		; 'f'
 	jr ugt, HexCharToNibble_CheckUpper
-	sub a, 0x57		; 'a'-'f' → 10-15
+	sub a, 0x57		; 'a'-'f' -> 10-15
 	ld l, a
 	ret
 
@@ -1477,12 +1477,12 @@ HexCharToNibble_CheckUpper:
 	jr c, HexCharToNibble_Invalid
 	cp a, 0x46		; 'F'
 	jr ugt, HexCharToNibble_Invalid
-	sub a, 0x37		; 'A'-'F' → 10-15
+	sub a, 0x37		; 'A'-'F' -> 10-15
 	ld l, a
 	ret
 
 HexCharToNibble_Invalid:
-	ldb l, 0x0		; Invalid → 0
+	ldb l, 0x0		; Invalid -> 0
 	ret
 
 FontGlyph_ByteData:

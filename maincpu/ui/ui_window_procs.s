@@ -6766,12 +6766,12 @@ UIRender_RetStub2:
 ; The KN5000 uses 16 palette banks of 16 colors each (0x00-0x0F, 0x10-0x1F,
 ; ..., 0xE0-0xEF). This function:
 ;
-; 1. Saves OFFSCREEN_BUFFER_1 (0x43C00) → temp buffer at 0x56800 (full screen)
-; 2. Saves next 38400 words → temp at 0x5FE00
+; 1. Saves OFFSCREEN_BUFFER_1 (0x43C00) -> temp buffer at 0x56800 (full screen)
+; 2. Saves next 38400 words -> temp at 0x5FE00
 ; 3. Iterates over all 76800 pixels (320×240):
 ;    - If pixel >= 0xE0: subtract 0x90 (wrap to lower bank)
 ;    - If pixel < 0xE0: add 0x10 (shift to next higher bank)
-; 4. Saves modified buffer → 0x69800 and 0x72E00
+; 4. Saves modified buffer -> 0x69800 and 0x72E00
 ;
 ; This shifts all pixels one palette bank forward, creating a brightness
 ; or color transition when combined with palette interpolation. The effect

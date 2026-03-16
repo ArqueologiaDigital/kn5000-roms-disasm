@@ -377,9 +377,9 @@ Boot_ClearAllInterruptEnables:
 ; Entry: None (reads from 0xFFFEEF to check if transfer should proceed)
 ; Exit:  XIZ restored, payload transferred to Sub-CPU RAM
 ; Notes: Sends the Sub-CPU firmware payload in multiple 64KB chunks:
-;        - 0x830000-0x870000 (5 x 64KB) → Sub-CPU 0x050000-0x090000
-;        - Additional data from Table Data ROM → Sub-CPU 0x00F000-0x02F000
-;        - Final 256 bytes → Sub-CPU 0x000400 (entry point area)
+;        - 0x830000-0x870000 (5 x 64KB) -> Sub-CPU 0x050000-0x090000
+;        - Additional data from Table Data ROM -> Sub-CPU 0x00F000-0x02F000
+;        - Final 256 bytes -> Sub-CPU 0x000400 (entry point area)
 ;        Uses E1 bulk transfer protocol via InterCPU_E1_Bulk_Transfer
 ;        Includes 0x2000 and 0x100000 iteration delay loops for timing
 ;        Called during boot sequence after SubCPU_Init_DMA_Channels
@@ -535,9 +535,9 @@ Boot_ParseSubCPUTimestamp:
 ; ===========================================================================
 Boot_HandleFactoryReset:
 	cpdi16_24 65482, 23205	; DRAM[0xFFCA] == 0x5AA5 (valid checksums)?
-	ret z			; Yes → checksums valid, skip reset
+	ret z			; Yes -> checksums valid, skip reset
 	cps a, 1		; Combo code == 1 (Initial Setting)?
-	ret nz			; No → not requesting reset, return
+	ret nz			; No -> not requesting reset, return
 	; --- Factory Reset: clear all DRAM and SRAM ---
 	call ToneGen_FlashReadAndRestore
 	ei 7

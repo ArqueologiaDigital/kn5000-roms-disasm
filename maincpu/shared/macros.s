@@ -15,7 +15,7 @@
 ; =============================================================================
 
 ; Widget type bytes (used in the 4-byte header: type, 0x00, 0x60, 0x01)
-; Named types — semantics confirmed from context:
+; Named types -- semantics confirmed from context:
 .equ NAKA_TYPE_DIAGLIST,  0x16  ; Diagnostic list item (3 instances, FD test only)
 .equ NAKA_TYPE_PANEL,     0x1e  ; Panel/dialog (31 instances)
 .equ NAKA_TYPE_LABEL,     0x2b  ; Label/button with text (765 instances)
@@ -28,7 +28,7 @@
 .equ NAKA_TYPE_BITMAP,    0x6c  ; Bitmap/image (6 instances)
 .equ NAKA_TYPE_MENU_ITEM, 0x1d  ; Menu item with title (97 instances)
 
-; Numeric types — semantics unknown, named by hex value:
+; Numeric types -- semantics unknown, named by hex value:
 .equ NAKA_TYPE_0x00, 0x00  ; (22 instances)
 .equ NAKA_TYPE_0x01, 0x01  ; (2 instances)
 .equ NAKA_TYPE_0x10, 0x10  ; (28 instances)

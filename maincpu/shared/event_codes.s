@@ -4,7 +4,7 @@
 ; =============================================================================
 
 ; ClassProc getter events (handled by jump table at 0xEAA8F8)
-.equ EVT_IDENTITY, 0x1E00000	; Identity query — returns XWA unchanged
+.equ EVT_IDENTITY, 0x1E00000	; Identity query -- returns XWA unchanged
 .equ EVT_GET_HL, 0x1E00001	; Returns *(XHL)
 .equ EVT_GET_IZ, 0x1E00002	; Returns *(XIZ)
 .equ EVT_GET_CONFIG, 0x1E00003	; Returns *(XHL+0x0C)

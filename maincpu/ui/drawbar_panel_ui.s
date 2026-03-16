@@ -14767,7 +14767,7 @@ DemoMenu_ReturnZero:
 ;   2. Reads the current "part select" index from DRAM address 0x8D3A via
 ;      GetPartSelect(), let R = that byte.
 ;   3. Computes workspace[0] = table[0xE9F88C + iz*2] + R*1024.
-;      The table values are all in the 0x82xx–0x82CC range; this formula
+;      The table values are all in the 0x82xx--0x82CC range; this formula
 ;      CANNOT produce 0xB80A for any R.
 ;   4. Posts event 0x1C0001C (queued via PostEventWithParam/FA9D58) to
 ;      target 0xFFFFFFFF, with the workspace pointer as the event parameter.

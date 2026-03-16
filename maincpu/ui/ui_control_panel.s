@@ -1875,7 +1875,7 @@ EditControlProc:
 
 
 ; =============================================================================
-; GroupBoxNotify_SendSSFEvent (0xF98697)  [UNDECODED — still in .byte form]
+; GroupBoxNotify_SendSSFEvent (0xF98697)  [UNDECODED -- still in .byte form]
 ; =============================================================================
 ; Sends event 0x1C00038 to trigger GroupBoxProc_StartSSFPresentation.
 ;
@@ -1884,11 +1884,11 @@ EditControlProc:
 ; It fires when a widget in one of those chains processes user-interaction events.
 ;
 ; Logic (decoded via unidasm):
-;   1. Call 0xEF0797 — check bit 7 of DRAM 0x0406 (set once after boot by
+;   1. Call 0xEF0797 -- check bit 7 of DRAM 0x0406 (set once after boot by
 ;      Boot_DisplayScreen, cleared only during flash update). Returns HL=1
 ;      if set; returns early (HL=0) if not.
 ;   2. Read *(0x8D38) = index R into SSF_PresentationGateTable (ROM 0xE01F80).
-;   3. Read P = SSF_PresentationGateTable[R] — base of a ROM state-value array.
+;   3. Read P = SSF_PresentationGateTable[R] -- base of a ROM state-value array.
 ;   4. If P == 0 (null), return.
 ;   5. Walk the 16-bit array at P:
 ;      - If first entry == 0xFFFE: send event unconditionally.
@@ -3251,8 +3251,8 @@ BoxRightCheck_ReturnZero:
 ; and interactive item events.
 ;
 ; Key event dispatch entries relevant to the Feature Demo / SSF system:
-;   0x1C00038 → GroupBoxProc_StartSSFPresentation (direct)
-;   0x1C00030 → GroupBoxProc_Ev1C00030 → GroupBoxProc_StartSSFPresentation
+;   0x1C00038 -> GroupBoxProc_StartSSFPresentation (direct)
+;   0x1C00030 -> GroupBoxProc_Ev1C00030 -> GroupBoxProc_StartSSFPresentation
 ;
 ; GroupBoxProc_StartSSFPresentation (0xF9A273) is the CORRECT code path that
 ; initiates SSF presentation playback: it builds a workspace with type-tag

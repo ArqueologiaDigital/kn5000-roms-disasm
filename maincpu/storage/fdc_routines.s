@@ -1135,8 +1135,8 @@ FDC_STATUS_COPY:
 ; Enables interrupts via prevbank (D7 FA 04 = ei 4).
 ; Checks FDC status register, reads result data.
 ; Tests status bits to determine result type:
-;   bit 7 → status 0x32 (overrun), bit 5 → status 0x31 (no data),
-;   bit 6 → status 0x2F (bad cylinder).
+;   bit 7 -> status 0x32 (overrun), bit 5 -> status 0x31 (no data),
+;   bit 6 -> status 0x2F (bad cylinder).
 ; Disables interrupts (D7 FA 05 = di 4) before return.
 FDC_INTERRUPT_HANDLER:
 	.byte 0xd7, 0xfa, 0x04, 0xc1, 0x24, 0x8a, 0x3f, 0x00
@@ -1221,34 +1221,34 @@ FDC_CommandEntry_CopyParams:
 ; =============================================================================
 
 ; FDC routine labels (code is in raw byte sections)
-	; (EQU→inline label) FDC_INIT = 0xF96BBF
-	; (EQU→inline label) FDC_CONFIG_VERIFY = 0xF96BD0
-	; (EQU→inline label) FDC_CMD_DISPATCH_SUB = 0xF96D95
-	; (EQU→inline label) FDC_STATUS_HANDLER = 0xF97696
-	; (EQU→inline label) FDC_CMD_EXEC = 0xF976E4
-	; (EQU→inline label) FDC_SECTOR_XFER = 0xF97835
-	; (EQU→inline label) FDC_MODE_CONFIG = 0xF97984
-	; (EQU→inline label) FDC_CMD_ENABLE = 0xF97C21
-	; (EQU→inline label) FDC_CMD_DISABLE = 0xF97C4B
-	; (EQU→inline label) FDC_STATUS_COPY = 0xF97C54
-	; (EQU→inline label) FDC_OUTPUT_CTRL = 0xF97C5B
-	; (EQU→inline label) FDC_INTERRUPT_HANDLER = 0xF97C7C
+	; (EQU->inline label) FDC_INIT = 0xF96BBF
+	; (EQU->inline label) FDC_CONFIG_VERIFY = 0xF96BD0
+	; (EQU->inline label) FDC_CMD_DISPATCH_SUB = 0xF96D95
+	; (EQU->inline label) FDC_STATUS_HANDLER = 0xF97696
+	; (EQU->inline label) FDC_CMD_EXEC = 0xF976E4
+	; (EQU->inline label) FDC_SECTOR_XFER = 0xF97835
+	; (EQU->inline label) FDC_MODE_CONFIG = 0xF97984
+	; (EQU->inline label) FDC_CMD_ENABLE = 0xF97C21
+	; (EQU->inline label) FDC_CMD_DISABLE = 0xF97C4B
+	; (EQU->inline label) FDC_STATUS_COPY = 0xF97C54
+	; (EQU->inline label) FDC_OUTPUT_CTRL = 0xF97C5B
+	; (EQU->inline label) FDC_INTERRUPT_HANDLER = 0xF97C7C
 
 ; Forward references to helper routines in raw byte sections
-	; (EQU→inline label) FDC_DRIVE_DETECT = 0xF97544
-	; (EQU→inline label) FDC_DRIVE_STATUS = 0xF97592
-	; (EQU→inline label) FDC_PRE_OP_CHECK = 0xF975AC
-	; (EQU→inline label) FDC_TIMING_DELAY = 0xF975DC
-	; (EQU→inline label) FDC_POST_OP = 0xF975E2
-	; (EQU→inline label) FDC_CMD_SEND = 0xF972F9
-	; (EQU→inline label) FDC_DETECT_CHECK = 0xF974FE
+	; (EQU->inline label) FDC_DRIVE_DETECT = 0xF97544
+	; (EQU->inline label) FDC_DRIVE_STATUS = 0xF97592
+	; (EQU->inline label) FDC_PRE_OP_CHECK = 0xF975AC
+	; (EQU->inline label) FDC_TIMING_DELAY = 0xF975DC
+	; (EQU->inline label) FDC_POST_OP = 0xF975E2
+	; (EQU->inline label) FDC_CMD_SEND = 0xF972F9
+	; (EQU->inline label) FDC_DETECT_CHECK = 0xF974FE
 
 ; Jump targets within FDC routines
-	; (EQU→inline label) FDC_CE_DISPATCH = 0xF9782A
-	; (EQU→inline label) FDC_CE_EXIT = 0xF97833
-	; (EQU→inline label) FDC_SX_MAIN = 0xF9795E
-	; (EQU→inline label) FDC_SX_EXIT = 0xF97967
-	; (EQU→inline label) FDC_MC_EXIT = 0xF97A3C
+	; (EQU->inline label) FDC_CE_DISPATCH = 0xF9782A
+	; (EQU->inline label) FDC_CE_EXIT = 0xF97833
+	; (EQU->inline label) FDC_SX_MAIN = 0xF9795E
+	; (EQU->inline label) FDC_SX_EXIT = 0xF97967
+	; (EQU->inline label) FDC_MC_EXIT = 0xF97A3C
 
 
 	.org 0xF97D8D - 0xE00000, 0xFF
@@ -1323,8 +1323,8 @@ FDC_Handler_Return:
 ; --- FDC_ByteTransfer_PIO: Byte-at-a-time PIO data transfer ---
 ; Checks if byte count (35356) is zero; returns immediately if so.
 ; Dispatches by command type (35392):
-;   Command 3 (READ):  read from I/O port 0x120000 → buffer at 35406
-;   Command 4 (WRITE): read from buffer at 35406 → I/O port 0x120000
+;   Command 3 (READ):  read from I/O port 0x120000 -> buffer at 35406
+;   Command 4 (WRITE): read from buffer at 35406 -> I/O port 0x120000
 ; Increments buffer pointer (35406) after each byte.
 ; Falls through to transfer completion handlers.
 FDC_ByteTransfer_PIO:
