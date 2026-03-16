@@ -2446,7 +2446,7 @@ EMPTY_ROUTINE__FC3EE4:
 	.long MidiStream_CtrlEntry		; MIDI stream handler entry +0x0D8
 	.fill 220, 1, 0xFF
 	.long MidiStream_CmdEntry		; MIDI stream handler entry +0x1B8
-	.fill 156, 1, 0xFF
+	.fill 80, 1, 0xFF
 
 ; =============================================================================
 ; SoundParam_NotifyChange -- Notify UI of sound parameter change
