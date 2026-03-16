@@ -704,28 +704,11 @@ MIDI_CHANNEL_MESSAGE_DISPATCHER:
 	ld_sril3 XIX, 0x07, 0xF0, 0xE0
 	jp (xix)
 MIDI_CHANNEL_HANDLER_JUMP_TABLE:
-	swi	7
-	cp	(xwa-9), xix
-	nop
-	cp	(xwa-9), xix
-	nop
-	cp	l, (xbc)
-	swi	4
-	nop
-	cp	(xwa-9), xix
-	nop
-	cp	l, (xde)
-	swi	4
-	nop
-	cp	l, (xde)
-	swi	4
-	nop
-	cp	(xwa-9), xix
-	nop
-	nop
-	swi	0
-	swi	4
-	nop
+	.byte 0xff, 0xa8, 0xf7, 0xfc, 0x00, 0xa8, 0xf7, 0xfc
+	.byte 0x00, 0x81, 0xf7, 0xfc, 0x00, 0xa8, 0xf7, 0xfc
+	.byte 0x00, 0x82, 0xf7, 0xfc, 0x00, 0x82, 0xf7, 0xfc
+	.byte 0x00, 0xa8, 0xf7, 0xfc, 0x00, 0x00, 0xf8, 0xfc
+	.byte 0x00
 
 ChanDisp_NoStatusReturn:
 	ret
@@ -921,22 +904,22 @@ READ_COM_SELECT_SWITCH:
 ;       is treated as MIDI selection.
 ;
 OFFSETS_FCF90C:
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	normal
-	nop
-	push_sr
-	pop_sr
-	nop
+	.byte 0x00
+	.byte 0x00
+	.byte 0x00
+	.byte 0x00
+	.byte 0x00
+	.byte 0x00
+	.byte 0x00
+	.byte 0x00	; MIDI
+	.byte 0x00
+	.byte 0x00
+	.byte 0x00
+	.byte 0x01	; MAC
+	.byte 0x00
+	.byte 0x02	; PC1
+	.byte 0x03	; PC2
+	.byte 0x00
 
 SC0Init_ClearContextSlots:
 	stdi8 1080, 0
@@ -963,18 +946,8 @@ SC0Init_PaddingStub:
 	ret
 
 MIDI_SC0_DISPATCH_TABLE:
-	cp	(xsp), wa
-	swi	4
-	nop
-	jr	lt, -7
-	swi	4
-	nop
-	jr	lt, -7
-	swi	4
-	nop
-	jr	lt, -7
-	swi	4
-	nop
+	.byte 0x97, 0xf8, 0xfc, 0x00, 0x61, 0xf9, 0xfc, 0x00
+	.byte 0x61, 0xf9, 0xfc, 0x00, 0x61, 0xf9, 0xfc, 0x00
 
 MIDI_SC0_TX_DISPATCH:
 	push xwa

@@ -1769,10 +1769,8 @@ GetPlayState2:
 	ret
 
 SmfMedley_RawData:
-	cps	a, 0
-	scc16	nz, wa
-	stda8	35140, a
-	ret
+	.byte 0xc9, 0xd8, 0xd8, 0x7e, 0xf1, 0x44, 0x89, 0x41
+	.byte 0x0e
 
 NavigateSongList_Entry:
 NavigateSongList:
@@ -4085,13 +4083,8 @@ CheckSongSlotHasData:
 
 SongSlot_RawData_Start:
 SongSlot_RawData:
-	pushw	iz
-	ld	iz, bc
-	calr	-43
-	cp	hl, iz
-	scc16	z, hl
-	popw	iz
-	ret
+	.byte 0x2e, 0xd9, 0x8e, 0x1e, 0xd5, 0xff, 0xde, 0xf3
+	.byte 0xdb, 0x76, 0x4e, 0x0e
 
 FindFirstEmptySlot_Entry:
 FindFirstEmptySlot:
