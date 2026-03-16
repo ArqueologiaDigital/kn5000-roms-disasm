@@ -10,7 +10,7 @@ SECTIONS {
 }
 
 ExtData_ChordTypeTable_Top = 0x00ED0008;
-LABEL_E30006 = 0x00E30006;
+NakaData_EffectsStringPtrs = 0x00E30006;
 NakaInst_176 = 0x00EC0098;
 NakaInst_176_EC00C0 = 0x00EC00C0;
 NakaInst_NEXT = 0x00EE00C3;

@@ -11,7 +11,7 @@
 /* ── External symbols (resolved by linker script) ── */
 
 extern const char CRTC_LINE_COMPARE;
-extern const char LABEL_EC013F;
+extern const char NakaStr_SoundPresetBone;
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00ED333Cu
@@ -1240,7 +1240,7 @@ const naka_normal_mode_t naka_normal_mode_data
 
     .field_048a = 0x007F,
 
-    .ptr_048c = NAKA_ADDR(LABEL_EC013F),
+    .ptr_048c = NAKA_ADDR(NakaStr_SoundPresetBone),
 
 };
 

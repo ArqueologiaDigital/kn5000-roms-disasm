@@ -44,8 +44,8 @@ extern const char GMYesFunc;
 extern const char HarmOnOffFunc;
 extern const char InOutGridCheck;
 extern const char IvMpstPageControlProc;
-extern const char LABEL_E0019E;
-extern const char LABEL_FFFFFF;
+extern const char NakaData_FileScreenConfig;
+extern const char NakaData_RomEnd;
 extern const char LED_patterns_indicating_firmware_version;
 extern const char MdCmptCnctFunc;
 extern const char MdDrumTypeFunc;
@@ -76307,7 +76307,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4022 = NAKA_NONE,
 
-    .ptr_4024 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4024 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4028 = NAKA_NONE,
 
@@ -76321,7 +76321,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4032 = NAKA_NONE,
 
-    .ptr_4034 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4034 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4038 = NAKA_NONE,
 
@@ -76335,7 +76335,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4042 = NAKA_NONE,
 
-    .ptr_4044 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4044 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4048 = NAKA_NONE,
 
@@ -76349,7 +76349,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4052 = NAKA_NONE,
 
-    .ptr_4054 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4054 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4058 = NAKA_NONE,
 
@@ -76363,7 +76363,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4062 = NAKA_NONE,
 
-    .ptr_4064 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4064 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_37 = { 0 },
 
@@ -76373,7 +76373,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4072 = NAKA_NONE,
 
-    .ptr_4074 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4074 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_38 = { 0 },
 
@@ -76384,7 +76384,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4082 = NAKA_NONE,
 
     .ptrs_3 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -76400,7 +76400,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_40a2 = NAKA_NONE,
 
-    .ptr_40a4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_40a4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_40 = { 0 },
 
@@ -76410,7 +76410,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_40b2 = NAKA_NONE,
 
-    .ptr_40b4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_40b4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_40b8 = NAKA_NONE,
 
@@ -76424,7 +76424,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_40c2 = NAKA_NONE,
 
-    .ptr_40c4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_40c4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_40c8 = NAKA_NONE,
 
@@ -76438,7 +76438,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_40d2 = NAKA_NONE,
 
-    .ptr_40d4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_40d4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_40d8 = NAKA_NONE,
 
@@ -76452,7 +76452,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_40e2 = NAKA_NONE,
 
-    .ptr_40e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_40e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_41 = { 0 },
 
@@ -76462,7 +76462,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_40f2 = NAKA_NONE,
 
-    .ptr_40f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_40f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_42 = { 0 },
 
@@ -76473,7 +76473,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4102 = NAKA_NONE,
 
     .ptrs_4 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -76489,7 +76489,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4122 = NAKA_NONE,
 
-    .ptr_4124 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4124 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_44 = { 0 },
 
@@ -76499,7 +76499,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4132 = NAKA_NONE,
 
-    .ptr_4134 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4134 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4138 = NAKA_NONE,
 
@@ -76513,7 +76513,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4142 = NAKA_NONE,
 
-    .ptr_4144 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4144 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4148 = NAKA_NONE,
 
@@ -76527,7 +76527,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4152 = NAKA_NONE,
 
-    .ptr_4154 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4154 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4158 = NAKA_NONE,
 
@@ -76541,7 +76541,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4162 = NAKA_NONE,
 
-    .ptr_4164 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4164 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_45 = { 0 },
 
@@ -76551,7 +76551,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4172 = NAKA_NONE,
 
-    .ptr_4174 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4174 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_46 = { 0 },
 
@@ -76562,7 +76562,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4182 = NAKA_NONE,
 
     .ptrs_5 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -76578,7 +76578,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_41a2 = NAKA_NONE,
 
-    .ptr_41a4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41a4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_48 = { 0 },
 
@@ -76588,7 +76588,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_41b2 = NAKA_NONE,
 
-    .ptr_41b4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41b4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41b8 = NAKA_NONE,
 
@@ -76602,7 +76602,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_41c2 = NAKA_NONE,
 
-    .ptr_41c4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41c4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41c8 = NAKA_NONE,
 
@@ -76616,7 +76616,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_41d2 = NAKA_NONE,
 
-    .ptr_41d4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41d4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41d8 = NAKA_NONE,
 
@@ -76630,7 +76630,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_41e2 = NAKA_NONE,
 
-    .ptr_41e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41e8 = NAKA_NONE,
 
@@ -76644,7 +76644,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_41f2 = NAKA_NONE,
 
-    .ptr_41f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41f8 = NAKA_NONE,
 
@@ -76659,7 +76659,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4202 = NAKA_NONE,
 
     .ptrs_6 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -76678,7 +76678,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4222 = NAKA_NONE,
 
-    .ptr_4224 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4224 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4228 = NAKA_NONE,
 
@@ -76692,7 +76692,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4232 = NAKA_NONE,
 
-    .ptr_4234 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4234 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4238 = NAKA_NONE,
 
@@ -76706,7 +76706,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4242 = NAKA_NONE,
 
-    .ptr_4244 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4244 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4248 = NAKA_NONE,
 
@@ -76720,7 +76720,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4252 = NAKA_NONE,
 
-    .ptr_4254 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4254 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4258 = NAKA_NONE,
 
@@ -76734,7 +76734,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4262 = NAKA_NONE,
 
-    .ptr_4264 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4264 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_49 = { 0 },
 
@@ -76744,7 +76744,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4272 = NAKA_NONE,
 
-    .ptr_4274 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4274 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_50 = { 0 },
 
@@ -76755,7 +76755,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4282 = NAKA_NONE,
 
     .ptrs_7 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -76771,7 +76771,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_42a2 = NAKA_NONE,
 
-    .ptr_42a4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42a4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_52 = { 0 },
 
@@ -76781,7 +76781,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_42b2 = NAKA_NONE,
 
-    .ptr_42b4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42b4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_42b8 = NAKA_NONE,
 
@@ -76795,7 +76795,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_42c2 = NAKA_NONE,
 
-    .ptr_42c4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42c4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_42c8 = NAKA_NONE,
 
@@ -76809,7 +76809,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_42d2 = NAKA_NONE,
 
-    .ptr_42d4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42d4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_42d8 = NAKA_NONE,
 
@@ -76823,7 +76823,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_42e2 = NAKA_NONE,
 
-    .ptr_42e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_53 = { 0 },
 
@@ -76833,7 +76833,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_42f2 = NAKA_NONE,
 
-    .ptr_42f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_54 = { 0 },
 
@@ -76844,7 +76844,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4302 = NAKA_NONE,
 
     .ptrs_8 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -76860,7 +76860,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4322 = NAKA_NONE,
 
-    .ptr_4324 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4324 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_56 = { 0 },
 
@@ -76870,7 +76870,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4332 = NAKA_NONE,
 
-    .ptr_4334 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4334 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4338 = NAKA_NONE,
 
@@ -76884,7 +76884,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4342 = NAKA_NONE,
 
-    .ptr_4344 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4344 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4348 = NAKA_NONE,
 
@@ -76898,7 +76898,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4352 = NAKA_NONE,
 
-    .ptr_4354 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4354 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4358 = NAKA_NONE,
 
@@ -76912,7 +76912,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4362 = NAKA_NONE,
 
-    .ptr_4364 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4364 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4368 = NAKA_NONE,
 
@@ -76926,7 +76926,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4372 = NAKA_NONE,
 
-    .ptr_4374 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4374 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4378 = NAKA_NONE,
 
@@ -76941,7 +76941,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4382 = NAKA_NONE,
 
     .ptrs_9 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -76960,7 +76960,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_43a2 = NAKA_NONE,
 
-    .ptr_43a4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43a4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43a8 = NAKA_NONE,
 
@@ -76974,7 +76974,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_43b2 = NAKA_NONE,
 
-    .ptr_43b4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43b4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43b8 = NAKA_NONE,
 
@@ -76988,7 +76988,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_43c2 = NAKA_NONE,
 
-    .ptr_43c4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43c4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43c8 = NAKA_NONE,
 
@@ -77002,7 +77002,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_43d2 = NAKA_NONE,
 
-    .ptr_43d4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43d4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43d8 = NAKA_NONE,
 
@@ -77016,7 +77016,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_43e2 = NAKA_NONE,
 
-    .ptr_43e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_57 = { 0 },
 
@@ -77026,7 +77026,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_43f2 = NAKA_NONE,
 
-    .ptr_43f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_58 = { 0 },
 
@@ -77037,7 +77037,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4402 = NAKA_NONE,
 
     .ptrs_10 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -77053,7 +77053,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4422 = NAKA_NONE,
 
-    .ptr_4424 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4424 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_60 = { 0 },
 
@@ -77063,7 +77063,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4432 = NAKA_NONE,
 
-    .ptr_4434 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4434 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4438 = NAKA_NONE,
 
@@ -77077,7 +77077,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4442 = NAKA_NONE,
 
-    .ptr_4444 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4444 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4448 = NAKA_NONE,
 
@@ -77091,7 +77091,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4452 = NAKA_NONE,
 
-    .ptr_4454 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4454 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4458 = NAKA_NONE,
 
@@ -77105,7 +77105,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4462 = NAKA_NONE,
 
-    .ptr_4464 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4464 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_61 = { 0 },
 
@@ -77115,7 +77115,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4472 = NAKA_NONE,
 
-    .ptr_4474 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4474 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_62 = { 0 },
 
@@ -77126,7 +77126,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4482 = NAKA_NONE,
 
     .ptrs_11 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -77142,7 +77142,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_44a2 = NAKA_NONE,
 
-    .ptr_44a4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44a4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_64 = { 0 },
 
@@ -77152,7 +77152,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_44b2 = NAKA_NONE,
 
-    .ptr_44b4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44b4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_44b8 = NAKA_NONE,
 
@@ -77166,7 +77166,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_44c2 = NAKA_NONE,
 
-    .ptr_44c4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44c4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_44c8 = NAKA_NONE,
 
@@ -77180,7 +77180,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_44d2 = NAKA_NONE,
 
-    .ptr_44d4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44d4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_44d8 = NAKA_NONE,
 
@@ -77194,7 +77194,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_44e2 = NAKA_NONE,
 
-    .ptr_44e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_65 = { 0 },
 
@@ -77204,7 +77204,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_44f2 = NAKA_NONE,
 
-    .ptr_44f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_66 = { 0 },
 
@@ -77215,7 +77215,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4502 = NAKA_NONE,
 
     .ptrs_12 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -77231,7 +77231,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4522 = NAKA_NONE,
 
-    .ptr_4524 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4524 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_68 = { 0 },
 
@@ -77241,7 +77241,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4532 = NAKA_NONE,
 
-    .ptr_4534 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4534 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4538 = NAKA_NONE,
 
@@ -77255,7 +77255,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4542 = NAKA_NONE,
 
-    .ptr_4544 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4544 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4548 = NAKA_NONE,
 
@@ -77269,7 +77269,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4552 = NAKA_NONE,
 
-    .ptr_4554 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4554 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4558 = NAKA_NONE,
 
@@ -77283,7 +77283,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4562 = NAKA_NONE,
 
-    .ptr_4564 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4564 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4568 = NAKA_NONE,
 
@@ -77297,7 +77297,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4572 = NAKA_NONE,
 
-    .ptr_4574 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4574 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4578 = NAKA_NONE,
 
@@ -77312,7 +77312,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4582 = NAKA_NONE,
 
     .ptrs_13 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -77331,7 +77331,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_45a2 = NAKA_NONE,
 
-    .ptr_45a4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_45a4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_45a8 = NAKA_NONE,
 
@@ -77345,7 +77345,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_45b2 = NAKA_NONE,
 
-    .ptr_45b4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_45b4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_45b8 = NAKA_NONE,
 
@@ -77359,7 +77359,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_45c2 = NAKA_NONE,
 
-    .ptr_45c4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_45c4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_45c8 = NAKA_NONE,
 
@@ -77373,7 +77373,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_45d2 = NAKA_NONE,
 
-    .ptr_45d4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_45d4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_45d8 = NAKA_NONE,
 
@@ -77387,7 +77387,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_45e2 = NAKA_NONE,
 
-    .ptr_45e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_45e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_69 = { 0 },
 
@@ -77397,7 +77397,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_45f2 = NAKA_NONE,
 
-    .ptr_45f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_45f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_70 = { 0 },
 
@@ -77408,7 +77408,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4602 = NAKA_NONE,
 
     .ptrs_14 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -77424,7 +77424,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4622 = NAKA_NONE,
 
-    .ptr_4624 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4624 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_72 = { 0 },
 
@@ -77434,7 +77434,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4632 = NAKA_NONE,
 
-    .ptr_4634 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4634 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4638 = NAKA_NONE,
 
@@ -77448,7 +77448,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4642 = NAKA_NONE,
 
-    .ptr_4644 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4644 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4648 = NAKA_NONE,
 
@@ -77462,7 +77462,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4652 = NAKA_NONE,
 
-    .ptr_4654 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4654 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4658 = NAKA_NONE,
 
@@ -77476,7 +77476,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4662 = NAKA_NONE,
 
-    .ptr_4664 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4664 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_73 = { 0 },
 
@@ -77486,7 +77486,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4672 = NAKA_NONE,
 
-    .ptr_4674 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4674 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_74 = { 0 },
 
@@ -77497,7 +77497,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4682 = NAKA_NONE,
 
     .ptrs_15 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -77513,7 +77513,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_46a2 = NAKA_NONE,
 
-    .ptr_46a4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_46a4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_76 = { 0 },
 
@@ -77523,7 +77523,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_46b2 = NAKA_NONE,
 
-    .ptr_46b4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_46b4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_46b8 = NAKA_NONE,
 
@@ -77537,7 +77537,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_46c2 = NAKA_NONE,
 
-    .ptr_46c4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_46c4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_46c8 = NAKA_NONE,
 
@@ -77551,7 +77551,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_46d2 = NAKA_NONE,
 
-    .ptr_46d4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_46d4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_46d8 = NAKA_NONE,
 
@@ -77565,7 +77565,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_46e2 = NAKA_NONE,
 
-    .ptr_46e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_46e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_46e8 = NAKA_NONE,
 
@@ -77579,7 +77579,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_46f2 = NAKA_NONE,
 
-    .ptr_46f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_46f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_46f8 = NAKA_NONE,
 
@@ -77594,7 +77594,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4702 = NAKA_NONE,
 
     .ptrs_16 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -77613,7 +77613,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4722 = NAKA_NONE,
 
-    .ptr_4724 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4724 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4728 = NAKA_NONE,
 
@@ -77627,7 +77627,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4732 = NAKA_NONE,
 
-    .ptr_4734 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4734 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4738 = NAKA_NONE,
 
@@ -77641,7 +77641,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4742 = NAKA_NONE,
 
-    .ptr_4744 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4744 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4748 = NAKA_NONE,
 
@@ -77655,7 +77655,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4752 = NAKA_NONE,
 
-    .ptr_4754 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4754 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4758 = NAKA_NONE,
 
@@ -77669,7 +77669,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4762 = NAKA_NONE,
 
-    .ptr_4764 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4764 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_77 = { 0 },
 
@@ -77679,7 +77679,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4772 = NAKA_NONE,
 
-    .ptr_4774 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4774 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_78 = { 0 },
 
@@ -77690,7 +77690,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_4782 = NAKA_NONE,
 
     .ptrs_17 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -77706,7 +77706,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_47a2 = NAKA_NONE,
 
-    .ptr_47a4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_47a4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_80 = { 0 },
 
@@ -77716,7 +77716,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_47b2 = NAKA_NONE,
 
-    .ptr_47b4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_47b4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_47b8 = NAKA_NONE,
 
@@ -77730,7 +77730,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_47c2 = NAKA_NONE,
 
-    .ptr_47c4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_47c4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_47c8 = NAKA_NONE,
 
@@ -77744,7 +77744,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_47d2 = NAKA_NONE,
 
-    .ptr_47d4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_47d4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_47d8 = NAKA_NONE,
 
@@ -77758,7 +77758,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_47e2 = NAKA_NONE,
 
-    .ptr_47e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_47e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_47e8 = NAKA_NONE,
 
@@ -77772,7 +77772,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_47f2 = NAKA_NONE,
 
-    .ptr_47f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_47f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_47f8 = NAKA_NONE,
 
@@ -77786,7 +77786,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4802 = NAKA_NONE,
 
-    .ptr_4804 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4804 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4808 = NAKA_NONE,
 
@@ -79468,7 +79468,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_4e96 = NAKA_NONE,
 
-    .ptr_4e98 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e98 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4e9c = NAKA_NONE,
 
@@ -81386,7 +81386,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_5616 = NAKA_NONE,
 
-    .ptr_5618 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5618 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_561c = NAKA_NONE,
 
@@ -83304,7 +83304,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_5d96 = NAKA_NONE,
 
-    .ptr_5d98 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5d98 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5d9c = NAKA_NONE,
 
@@ -85222,7 +85222,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_6516 = NAKA_NONE,
 
-    .ptr_6518 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6518 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_651c = NAKA_NONE,
 
@@ -87140,7 +87140,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_6c96 = NAKA_NONE,
 
-    .ptr_6c98 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6c98 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6c9c = NAKA_NONE,
 
@@ -89058,7 +89058,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_7416 = NAKA_NONE,
 
-    .ptr_7418 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7418 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_741c = NAKA_NONE,
 
@@ -90976,7 +90976,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_7b96 = NAKA_NONE,
 
-    .ptr_7b98 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7b98 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7b9c = NAKA_NONE,
 
@@ -92894,7 +92894,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_8316 = NAKA_NONE,
 
-    .ptr_8318 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8318 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_831c = NAKA_NONE,
 
@@ -94812,7 +94812,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_8a96 = NAKA_NONE,
 
-    .ptr_8a98 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8a98 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_8a9c = NAKA_NONE,
 
@@ -96730,7 +96730,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_9216 = NAKA_NONE,
 
-    .ptr_9218 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9218 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_921c = NAKA_NONE,
 
@@ -98648,7 +98648,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_9996 = NAKA_NONE,
 
-    .ptr_9998 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9998 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_999c = NAKA_NONE,
 
@@ -100566,7 +100566,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_a116 = NAKA_NONE,
 
-    .ptr_a118 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_a118 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_a11c = NAKA_NONE,
 
@@ -102484,7 +102484,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_a896 = NAKA_NONE,
 
-    .ptr_a898 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_a898 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_a89c = NAKA_NONE,
 
@@ -104402,7 +104402,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_b016 = NAKA_NONE,
 
-    .ptr_b018 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b018 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_b01c = NAKA_NONE,
 
@@ -106320,7 +106320,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_b796 = NAKA_NONE,
 
-    .ptr_b798 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b798 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_b79c = NAKA_NONE,
 
@@ -108322,7 +108322,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_bf6a = NAKA_NONE,
 
-    .ptr_bf6c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bf6c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_bf70 = NAKA_NONE,
 
@@ -108408,7 +108408,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_bfc2 = NAKA_NONE,
 
-    .ptr_bfc4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bfc4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_bfc8 = NAKA_NONE,
 
@@ -108494,7 +108494,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c01a = NAKA_NONE,
 
-    .ptr_c01c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c01c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c020 = NAKA_NONE,
 
@@ -108580,7 +108580,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c072 = NAKA_NONE,
 
-    .ptr_c074 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c074 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c078 = NAKA_NONE,
 
@@ -108666,7 +108666,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c0ca = NAKA_NONE,
 
-    .ptr_c0cc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c0cc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c0d0 = NAKA_NONE,
 
@@ -108752,7 +108752,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c122 = NAKA_NONE,
 
-    .ptr_c124 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c124 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c128 = NAKA_NONE,
 
@@ -108838,7 +108838,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c17a = NAKA_NONE,
 
-    .ptr_c17c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c17c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c180 = NAKA_NONE,
 
@@ -108924,7 +108924,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c1d2 = NAKA_NONE,
 
-    .ptr_c1d4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c1d4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c1d8 = NAKA_NONE,
 
@@ -109011,7 +109011,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_c22a = NAKA_NONE,
 
     .ptrs_18 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -109120,7 +109120,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c2da = NAKA_NONE,
 
-    .ptr_c2dc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c2dc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c2e0 = NAKA_NONE,
 
@@ -109206,7 +109206,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c332 = NAKA_NONE,
 
-    .ptr_c334 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c334 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c338 = NAKA_NONE,
 
@@ -109292,7 +109292,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c38a = NAKA_NONE,
 
-    .ptr_c38c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c38c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c390 = NAKA_NONE,
 
@@ -109378,7 +109378,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c3e2 = NAKA_NONE,
 
-    .ptr_c3e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c3e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c3e8 = NAKA_NONE,
 
@@ -109464,7 +109464,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c43a = NAKA_NONE,
 
-    .ptr_c43c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c43c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c440 = NAKA_NONE,
 
@@ -109550,7 +109550,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c492 = NAKA_NONE,
 
-    .ptr_c494 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c494 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c498 = NAKA_NONE,
 
@@ -109636,7 +109636,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c4ea = NAKA_NONE,
 
-    .ptr_c4ec = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c4ec = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c4f0 = NAKA_NONE,
 
@@ -109722,7 +109722,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c542 = NAKA_NONE,
 
-    .ptr_c544 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c544 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c548 = NAKA_NONE,
 
@@ -109809,7 +109809,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_c59a = NAKA_NONE,
 
     .ptrs_19 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -109918,7 +109918,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c64a = NAKA_NONE,
 
-    .ptr_c64c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c64c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c650 = NAKA_NONE,
 
@@ -110004,7 +110004,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c6a2 = NAKA_NONE,
 
-    .ptr_c6a4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c6a4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c6a8 = NAKA_NONE,
 
@@ -110090,7 +110090,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c6fa = NAKA_NONE,
 
-    .ptr_c6fc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c6fc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c700 = NAKA_NONE,
 
@@ -110176,7 +110176,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c752 = NAKA_NONE,
 
-    .ptr_c754 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c754 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c758 = NAKA_NONE,
 
@@ -110262,7 +110262,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c7aa = NAKA_NONE,
 
-    .ptr_c7ac = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c7ac = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c7b0 = NAKA_NONE,
 
@@ -110348,7 +110348,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c802 = NAKA_NONE,
 
-    .ptr_c804 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c804 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c808 = NAKA_NONE,
 
@@ -110434,7 +110434,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c85a = NAKA_NONE,
 
-    .ptr_c85c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c85c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c860 = NAKA_NONE,
 
@@ -110520,7 +110520,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c8b2 = NAKA_NONE,
 
-    .ptr_c8b4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c8b4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c8b8 = NAKA_NONE,
 
@@ -110607,7 +110607,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_c90a = NAKA_NONE,
 
     .ptrs_20 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -110716,7 +110716,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_c9ba = NAKA_NONE,
 
-    .ptr_c9bc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c9bc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_c9c0 = NAKA_NONE,
 
@@ -110802,7 +110802,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_ca12 = NAKA_NONE,
 
-    .ptr_ca14 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ca14 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ca18 = NAKA_NONE,
 
@@ -110888,7 +110888,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_ca6a = NAKA_NONE,
 
-    .ptr_ca6c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ca6c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ca70 = NAKA_NONE,
 
@@ -110974,7 +110974,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_cac2 = NAKA_NONE,
 
-    .ptr_cac4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cac4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_cac8 = NAKA_NONE,
 
@@ -111060,7 +111060,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_cb1a = NAKA_NONE,
 
-    .ptr_cb1c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cb1c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_cb20 = NAKA_NONE,
 
@@ -111146,7 +111146,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_cb72 = NAKA_NONE,
 
-    .ptr_cb74 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cb74 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_cb78 = NAKA_NONE,
 
@@ -111232,7 +111232,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_cbca = NAKA_NONE,
 
-    .ptr_cbcc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cbcc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_cbd0 = NAKA_NONE,
 
@@ -111318,7 +111318,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_cc22 = NAKA_NONE,
 
-    .ptr_cc24 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cc24 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_cc28 = NAKA_NONE,
 
@@ -111405,7 +111405,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_cc7a = NAKA_NONE,
 
     .ptrs_21 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -111514,7 +111514,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_cd2a = NAKA_NONE,
 
-    .ptr_cd2c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cd2c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_cd30 = NAKA_NONE,
 
@@ -111600,7 +111600,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_cd82 = NAKA_NONE,
 
-    .ptr_cd84 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cd84 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_cd88 = NAKA_NONE,
 
@@ -111686,7 +111686,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_cdda = NAKA_NONE,
 
-    .ptr_cddc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cddc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_cde0 = NAKA_NONE,
 
@@ -111772,7 +111772,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_ce32 = NAKA_NONE,
 
-    .ptr_ce34 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ce34 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ce38 = NAKA_NONE,
 
@@ -111858,7 +111858,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_ce8a = NAKA_NONE,
 
-    .ptr_ce8c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ce8c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ce90 = NAKA_NONE,
 
@@ -111944,7 +111944,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_cee2 = NAKA_NONE,
 
-    .ptr_cee4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cee4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_cee8 = NAKA_NONE,
 
@@ -112030,7 +112030,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_cf3a = NAKA_NONE,
 
-    .ptr_cf3c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cf3c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_cf40 = NAKA_NONE,
 
@@ -112116,7 +112116,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_cf92 = NAKA_NONE,
 
-    .ptr_cf94 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cf94 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_cf98 = NAKA_NONE,
 
@@ -112203,7 +112203,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_cfea = NAKA_NONE,
 
     .ptrs_22 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -112312,7 +112312,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d09a = NAKA_NONE,
 
-    .ptr_d09c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d09c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d0a0 = NAKA_NONE,
 
@@ -112398,7 +112398,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d0f2 = NAKA_NONE,
 
-    .ptr_d0f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d0f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d0f8 = NAKA_NONE,
 
@@ -112484,7 +112484,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d14a = NAKA_NONE,
 
-    .ptr_d14c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d14c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d150 = NAKA_NONE,
 
@@ -112570,7 +112570,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d1a2 = NAKA_NONE,
 
-    .ptr_d1a4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d1a4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d1a8 = NAKA_NONE,
 
@@ -112656,7 +112656,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d1fa = NAKA_NONE,
 
-    .ptr_d1fc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d1fc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d200 = NAKA_NONE,
 
@@ -112742,7 +112742,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d252 = NAKA_NONE,
 
-    .ptr_d254 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d254 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d258 = NAKA_NONE,
 
@@ -112828,7 +112828,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d2aa = NAKA_NONE,
 
-    .ptr_d2ac = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d2ac = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d2b0 = NAKA_NONE,
 
@@ -112914,7 +112914,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d302 = NAKA_NONE,
 
-    .ptr_d304 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d304 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d308 = NAKA_NONE,
 
@@ -113001,7 +113001,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_d35a = NAKA_NONE,
 
     .ptrs_23 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -113110,7 +113110,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d40a = NAKA_NONE,
 
-    .ptr_d40c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d40c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d410 = NAKA_NONE,
 
@@ -113196,7 +113196,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d462 = NAKA_NONE,
 
-    .ptr_d464 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d464 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d468 = NAKA_NONE,
 
@@ -113282,7 +113282,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d4ba = NAKA_NONE,
 
-    .ptr_d4bc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d4bc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d4c0 = NAKA_NONE,
 
@@ -113368,7 +113368,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d512 = NAKA_NONE,
 
-    .ptr_d514 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d514 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d518 = NAKA_NONE,
 
@@ -113454,7 +113454,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d56a = NAKA_NONE,
 
-    .ptr_d56c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d56c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d570 = NAKA_NONE,
 
@@ -113540,7 +113540,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d5c2 = NAKA_NONE,
 
-    .ptr_d5c4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d5c4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d5c8 = NAKA_NONE,
 
@@ -113626,7 +113626,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d61a = NAKA_NONE,
 
-    .ptr_d61c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d61c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d620 = NAKA_NONE,
 
@@ -113712,7 +113712,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d672 = NAKA_NONE,
 
-    .ptr_d674 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d674 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d678 = NAKA_NONE,
 
@@ -113799,7 +113799,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_d6ca = NAKA_NONE,
 
     .ptrs_24 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -113908,7 +113908,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d77a = NAKA_NONE,
 
-    .ptr_d77c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d77c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d780 = NAKA_NONE,
 
@@ -113994,7 +113994,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d7d2 = NAKA_NONE,
 
-    .ptr_d7d4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d7d4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d7d8 = NAKA_NONE,
 
@@ -114080,7 +114080,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d82a = NAKA_NONE,
 
-    .ptr_d82c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d82c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d830 = NAKA_NONE,
 
@@ -114166,7 +114166,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d882 = NAKA_NONE,
 
-    .ptr_d884 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d884 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d888 = NAKA_NONE,
 
@@ -114252,7 +114252,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d8da = NAKA_NONE,
 
-    .ptr_d8dc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d8dc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d8e0 = NAKA_NONE,
 
@@ -114338,7 +114338,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d932 = NAKA_NONE,
 
-    .ptr_d934 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d934 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d938 = NAKA_NONE,
 
@@ -114424,7 +114424,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d98a = NAKA_NONE,
 
-    .ptr_d98c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d98c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d990 = NAKA_NONE,
 
@@ -114510,7 +114510,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_d9e2 = NAKA_NONE,
 
-    .ptr_d9e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d9e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_d9e8 = NAKA_NONE,
 
@@ -114597,7 +114597,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_da3a = NAKA_NONE,
 
     .ptrs_25 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -114706,7 +114706,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_daea = NAKA_NONE,
 
-    .ptr_daec = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_daec = NAKA_ADDR(NakaData_RomEnd),
 
     .field_daf0 = NAKA_NONE,
 
@@ -114792,7 +114792,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_db42 = NAKA_NONE,
 
-    .ptr_db44 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_db44 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_db48 = NAKA_NONE,
 
@@ -114878,7 +114878,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_db9a = NAKA_NONE,
 
-    .ptr_db9c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_db9c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dba0 = NAKA_NONE,
 
@@ -114964,7 +114964,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_dbf2 = NAKA_NONE,
 
-    .ptr_dbf4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dbf4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dbf8 = NAKA_NONE,
 
@@ -115050,7 +115050,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_dc4a = NAKA_NONE,
 
-    .ptr_dc4c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dc4c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dc50 = NAKA_NONE,
 
@@ -115136,7 +115136,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_dca2 = NAKA_NONE,
 
-    .ptr_dca4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dca4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dca8 = NAKA_NONE,
 
@@ -115222,7 +115222,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_dcfa = NAKA_NONE,
 
-    .ptr_dcfc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dcfc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dd00 = NAKA_NONE,
 
@@ -115308,7 +115308,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_dd52 = NAKA_NONE,
 
-    .ptr_dd54 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dd54 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dd58 = NAKA_NONE,
 
@@ -115395,7 +115395,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_ddaa = NAKA_NONE,
 
     .ptrs_26 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -115504,7 +115504,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_de5a = NAKA_NONE,
 
-    .ptr_de5c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_de5c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_de60 = NAKA_NONE,
 
@@ -115590,7 +115590,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_deb2 = NAKA_NONE,
 
-    .ptr_deb4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_deb4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_deb8 = NAKA_NONE,
 
@@ -115676,7 +115676,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_df0a = NAKA_NONE,
 
-    .ptr_df0c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_df0c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_df10 = NAKA_NONE,
 
@@ -115762,7 +115762,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_df62 = NAKA_NONE,
 
-    .ptr_df64 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_df64 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_df68 = NAKA_NONE,
 
@@ -115848,7 +115848,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_dfba = NAKA_NONE,
 
-    .ptr_dfbc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dfbc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dfc0 = NAKA_NONE,
 
@@ -115934,7 +115934,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e012 = NAKA_NONE,
 
-    .ptr_e014 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e014 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e018 = NAKA_NONE,
 
@@ -116020,7 +116020,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e06a = NAKA_NONE,
 
-    .ptr_e06c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e06c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e070 = NAKA_NONE,
 
@@ -116106,7 +116106,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e0c2 = NAKA_NONE,
 
-    .ptr_e0c4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e0c4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e0c8 = NAKA_NONE,
 
@@ -116193,7 +116193,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_e11a = NAKA_NONE,
 
     .ptrs_27 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -116302,7 +116302,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e1ca = NAKA_NONE,
 
-    .ptr_e1cc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e1cc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e1d0 = NAKA_NONE,
 
@@ -116388,7 +116388,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e222 = NAKA_NONE,
 
-    .ptr_e224 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e224 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e228 = NAKA_NONE,
 
@@ -116474,7 +116474,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e27a = NAKA_NONE,
 
-    .ptr_e27c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e27c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e280 = NAKA_NONE,
 
@@ -116560,7 +116560,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e2d2 = NAKA_NONE,
 
-    .ptr_e2d4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e2d4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e2d8 = NAKA_NONE,
 
@@ -116646,7 +116646,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e32a = NAKA_NONE,
 
-    .ptr_e32c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e32c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e330 = NAKA_NONE,
 
@@ -116732,7 +116732,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e382 = NAKA_NONE,
 
-    .ptr_e384 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e384 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e388 = NAKA_NONE,
 
@@ -116818,7 +116818,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e3da = NAKA_NONE,
 
-    .ptr_e3dc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e3dc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e3e0 = NAKA_NONE,
 
@@ -116904,7 +116904,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e432 = NAKA_NONE,
 
-    .ptr_e434 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e434 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e438 = NAKA_NONE,
 
@@ -116991,7 +116991,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     .field_e48a = NAKA_NONE,
 
     .ptrs_28 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -117100,7 +117100,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e53a = NAKA_NONE,
 
-    .ptr_e53c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e53c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e540 = NAKA_NONE,
 
@@ -117186,7 +117186,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e592 = NAKA_NONE,
 
-    .ptr_e594 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e594 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e598 = NAKA_NONE,
 
@@ -117272,7 +117272,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e5ea = NAKA_NONE,
 
-    .ptr_e5ec = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e5ec = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e5f0 = NAKA_NONE,
 
@@ -117358,7 +117358,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e642 = NAKA_NONE,
 
-    .ptr_e644 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e644 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e648 = NAKA_NONE,
 
@@ -117444,7 +117444,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e69a = NAKA_NONE,
 
-    .ptr_e69c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e69c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e6a0 = NAKA_NONE,
 
@@ -117530,7 +117530,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e6f2 = NAKA_NONE,
 
-    .ptr_e6f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e6f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e6f8 = NAKA_NONE,
 
@@ -117616,7 +117616,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e74a = NAKA_NONE,
 
-    .ptr_e74c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e74c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e750 = NAKA_NONE,
 
@@ -117702,7 +117702,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e7a2 = NAKA_NONE,
 
-    .ptr_e7a4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e7a4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e7a8 = NAKA_NONE,
 
@@ -117788,7 +117788,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_e7fa = NAKA_NONE,
 
-    .ptr_e7fc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e7fc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e800 = NAKA_NONE,
 
@@ -119302,7 +119302,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_ede6 = NAKA_NONE,
 
-    .ptr_ede8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ede8 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_edec = NAKA_NONE,
 
@@ -120980,7 +120980,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_f476 = NAKA_NONE,
 
-    .ptr_f478 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f478 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_f47c = NAKA_NONE,
 
@@ -122658,7 +122658,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_fb06 = NAKA_NONE,
 
-    .ptr_fb08 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_fb08 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_fb0c = NAKA_NONE,
 
@@ -124336,7 +124336,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_10196 = NAKA_NONE,
 
-    .ptr_10198 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10198 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1019c = NAKA_NONE,
 
@@ -126014,7 +126014,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_10826 = NAKA_NONE,
 
-    .ptr_10828 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10828 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1082c = NAKA_NONE,
 
@@ -127692,7 +127692,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_10eb6 = NAKA_NONE,
 
-    .ptr_10eb8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10eb8 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_10ebc = NAKA_NONE,
 
@@ -129370,7 +129370,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_11546 = NAKA_NONE,
 
-    .ptr_11548 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11548 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1154c = NAKA_NONE,
 
@@ -131048,7 +131048,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_11bd6 = NAKA_NONE,
 
-    .ptr_11bd8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11bd8 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11bdc = NAKA_NONE,
 
@@ -132726,7 +132726,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_12266 = NAKA_NONE,
 
-    .ptr_12268 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12268 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1226c = NAKA_NONE,
 
@@ -134404,7 +134404,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_128f6 = NAKA_NONE,
 
-    .ptr_128f8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_128f8 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_128fc = NAKA_NONE,
 
@@ -136082,7 +136082,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_12f86 = NAKA_NONE,
 
-    .ptr_12f88 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f88 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12f8c = NAKA_NONE,
 
@@ -138290,7 +138290,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_13878 = NAKA_NONE,
 
-    .ptr_1387a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1387a = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1387e = 0x0201,
 
@@ -138710,7 +138710,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .field_13a1e = 0x01FD,
 
-    .ptr_13a20 = NAKA_ADDR(LABEL_E0019E),
+    .ptr_13a20 = NAKA_ADDR(NakaData_FileScreenConfig),
 
     .field_13a24 = 0x00A5,
 

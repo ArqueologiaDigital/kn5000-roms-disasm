@@ -48,11 +48,11 @@ extern const char FmmSmfSaveTitleFunc;
 extern const char FmmSmfUtilityTitleFunc;
 extern const char FmmUtilityTitleFunc;
 extern const char FmmWallpaperLoadFunc;
-extern const char LABEL_E60008;
-extern const char LABEL_EA8CAC;
-extern const char LABEL_EA8CBC;
-extern const char LABEL_EF001F;
-extern const char LABEL_F5001F;
+extern const char NakaData_DescriptorPad1;
+extern const char DiskWarning_ConfirmStrings;
+extern const char DiskWarning_GermanConfirm;
+extern const char NakaData_NormalModeMap;
+extern const char NakaData_PerfStyleCode;
 extern const char LED_patterns_firmware_v8_plus;
 extern const char LoadTtlJgFunc;
 extern const char NakaInst_NEXT;
@@ -9623,7 +9623,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_1062 = 0x00F4,
 
-    .ptr_1064 = NAKA_ADDR(LABEL_F5001F),
+    .ptr_1064 = NAKA_ADDR(NakaData_PerfStyleCode),
 
     .pad_124 = { 0 },
 
@@ -10419,7 +10419,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_1546 = 0x00F4,
 
-    .ptr_1548 = NAKA_ADDR(LABEL_F5001F),
+    .ptr_1548 = NAKA_ADDR(NakaData_PerfStyleCode),
 
     .pad_145 = { 0 },
 
@@ -10504,7 +10504,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_15c2 = 0x00F4,
 
-    .ptr_15c4 = NAKA_ADDR(LABEL_F5001F),
+    .ptr_15c4 = NAKA_ADDR(NakaData_PerfStyleCode),
 
     .pad_150 = { 0 },
 
@@ -13644,7 +13644,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_2644 = 0x00D0,
 
-    .ptr_2646 = NAKA_ADDR(LABEL_EF001F),
+    .ptr_2646 = NAKA_ADDR(NakaData_NormalModeMap),
 
     .field_264a = 0x0016,
 
@@ -13668,7 +13668,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_2660 = 0x00F4,
 
-    .ptr_2662 = NAKA_ADDR(LABEL_F5001F),
+    .ptr_2662 = NAKA_ADDR(NakaData_PerfStyleCode),
 
     .pad_304 = { 0 },
 
@@ -14245,7 +14245,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_2a12 = 0x00D0,
 
-    .ptr_2a14 = NAKA_ADDR(LABEL_EF001F),
+    .ptr_2a14 = NAKA_ADDR(NakaData_NormalModeMap),
 
     .field_2a18 = 0x0016,
 
@@ -14628,7 +14628,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_2c4e = 0x00F4,
 
-    .ptr_2c50 = NAKA_ADDR(LABEL_F5001F),
+    .ptr_2c50 = NAKA_ADDR(NakaData_PerfStyleCode),
 
     .pad_329 = { 0 },
 
@@ -14954,7 +14954,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_2e1e = 0x00F4,
 
-    .ptr_2e20 = NAKA_ADDR(LABEL_F5001F),
+    .ptr_2e20 = NAKA_ADDR(NakaData_PerfStyleCode),
 
     .pad_342 = { 0 },
 
@@ -14988,7 +14988,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_2e56 = 0x00D0,
 
-    .ptr_2e58 = NAKA_ADDR(LABEL_EF001F),
+    .ptr_2e58 = NAKA_ADDR(NakaData_NormalModeMap),
 
     .field_2e5c = 0x0016,
 
@@ -18265,7 +18265,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .field_4014 = NAKA_NONE,
 
     .ptrs_1 = {
-        NAKA_ADDR(LABEL_E60008),
+        NAKA_ADDR(NakaData_DescriptorPad1),
         0x00FD0047,
         0x00F500D3,
     },
@@ -19438,7 +19438,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_466c = 0x013F,
 
-    .ptr_466e = NAKA_ADDR(LABEL_F5001F),
+    .ptr_466e = NAKA_ADDR(NakaData_PerfStyleCode),
 
     .pad_551 = { 0 },
 
@@ -20834,7 +20834,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_4e7a = 0x013F,
 
-    .ptr_4e7c = NAKA_ADDR(LABEL_F5001F),
+    .ptr_4e7c = NAKA_ADDR(NakaData_PerfStyleCode),
 
     .pad_614 = { 0 },
 
@@ -21106,7 +21106,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_4fee = 0x013F,
 
-    .ptr_4ff0 = NAKA_ADDR(LABEL_F5001F),
+    .ptr_4ff0 = NAKA_ADDR(NakaData_PerfStyleCode),
 
     .pad_625 = { 0 },
 
@@ -24448,8 +24448,8 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .ptrs_19 = {
         0x00EA8CCE,
-        NAKA_ADDR(LABEL_EA8CBC),
-        NAKA_ADDR(LABEL_EA8CAC),
+        NAKA_ADDR(DiskWarning_GermanConfirm),
+        NAKA_ADDR(DiskWarning_ConfirmStrings),
         SELF(field_78d2),
         SELF(str_1483),
         SELF(str_1482),

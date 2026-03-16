@@ -14,9 +14,9 @@ extern const char CheckTitleFunc;
 extern const char DefMainFunction;
 extern const char DirmdTitleFunc;
 extern const char FDC_CMD_READ_ID;
-extern const char LABEL_E000C3;
-extern const char LABEL_E00113;
-extern const char LABEL_FFFFFF;
+extern const char NakaStr_DataFile1of2;
+extern const char NakaStr_DataFilePck;
+extern const char NakaData_RomEnd;
 extern const char MainAutoFree;
 extern const char MainBitControl;
 extern const char MainGetPmemName;
@@ -3057,7 +3057,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_0646 = 0x00C4,
 
-    .ptr_0648 = NAKA_ADDR(LABEL_E000C3),
+    .ptr_0648 = NAKA_ADDR(NakaStr_DataFile1of2),
 
     .field_064c = 0x000C,
 
@@ -3123,7 +3123,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_068e = 0x00C4,
 
-    .ptr_0690 = NAKA_ADDR(LABEL_E00113),
+    .ptr_0690 = NAKA_ADDR(NakaStr_DataFilePck),
 
     .field_0694 = 0x000E,
 
@@ -4019,7 +4019,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_10da = 0x00FF,
 
-    .ptr_10dc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10dc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_10e0 = 0x1F1F,
 

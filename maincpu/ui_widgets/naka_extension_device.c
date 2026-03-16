@@ -52,11 +52,11 @@ extern const char ExtDev_SndParam_MultiReg_Iterate;
 extern const char ExtDev_SndParam_Write48_Block;
 extern const char ExtDev_SndParam_Write98_Block;
 extern const char FileIO_BytecodeData;
-extern const char LABEL_E00302;
-extern const char LABEL_E41807;
-extern const char LABEL_FC645A;
-extern const char LABEL_FC647F;
-extern const char LABEL_FC64EA;
+extern const char NakaData_FileScreenDispatch;
+extern const char NakaData_StyleBitmapPad;
+extern const char NakaData_WidgetInit1;
+extern const char NakaData_WidgetInit2;
+extern const char NakaData_WidgetInit3;
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00ED67CCu
@@ -8095,7 +8095,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2592 = 0xEF03,
 
-    .ptr_2594 = NAKA_ADDR(LABEL_E00302),
+    .ptr_2594 = NAKA_ADDR(NakaData_FileScreenDispatch),
 
     .field_2598 = 0x4704,
 
@@ -8797,7 +8797,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .ptr_2868 = SELF(field_2376),
 
-    .ptr_286c = NAKA_ADDR(LABEL_E41807),
+    .ptr_286c = NAKA_ADDR(NakaData_StyleBitmapPad),
 
     .pad_73 = { 0 },
 
@@ -11275,9 +11275,9 @@ const naka_extension_device_t naka_extension_device_data
         NAKA_ADDR(ExtDev_SndParam_Block70_Var04),
         NAKA_ADDR(ExtDev_SndParam_DispatchAndWriteA8),
         NAKA_ADDR(ExtDev_SndParam_Write98_Block),
-        NAKA_ADDR(LABEL_FC64EA),
+        NAKA_ADDR(NakaData_WidgetInit3),
         NAKA_ADDR(ExtDev_SndParam_DispatchAndWriteA8_Alt),
-        NAKA_ADDR(LABEL_FC647F),
+        NAKA_ADDR(NakaData_WidgetInit2),
     },
 
     .field_35b0 = 0xB3AD,
@@ -11292,7 +11292,7 @@ const naka_extension_device_t naka_extension_device_data
         NAKA_ADDR(ExtDev_SndParam_Block48_Var02),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var80),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var04_B),
-        NAKA_ADDR(LABEL_FC645A),
+        NAKA_ADDR(NakaData_WidgetInit1),
     },
 
     .field_35ce = 0x9492,
@@ -11563,9 +11563,9 @@ const naka_extension_device_t naka_extension_device_data
 
     .ptrs_29 = {
         0x00FC63DE,
-        NAKA_ADDR(LABEL_FC645A),
-        NAKA_ADDR(LABEL_FC647F),
-        NAKA_ADDR(LABEL_FC64EA),
+        NAKA_ADDR(NakaData_WidgetInit1),
+        NAKA_ADDR(NakaData_WidgetInit2),
+        NAKA_ADDR(NakaData_WidgetInit3),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var40),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var80),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var04),

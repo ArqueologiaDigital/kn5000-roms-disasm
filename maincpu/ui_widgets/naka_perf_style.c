@@ -11,7 +11,7 @@
 /* ── External symbols (resolved by linker script) ── */
 
 extern const char ExtData_ChordTypeTable_Top;
-extern const char LABEL_E30006;
+extern const char NakaData_EffectsStringPtrs;
 extern const char NakaInst_176;
 extern const char NakaInst_176_EC00C0;
 extern const char NakaInst_NEXT;
@@ -11005,7 +11005,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .field_3396 = 0x0008,
 
-    .ptr_3398 = NAKA_ADDR(LABEL_E30006),
+    .ptr_3398 = NAKA_ADDR(NakaData_EffectsStringPtrs),
 
     .str_341 = "!",
 
@@ -11480,7 +11480,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .field_37fe = 0x0008,
 
-    .ptr_3800 = NAKA_ADDR(LABEL_E30006),
+    .ptr_3800 = NAKA_ADDR(NakaData_EffectsStringPtrs),
 
     .str_348 = "!",
 
@@ -12066,7 +12066,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .field_3d10 = 0x0008,
 
-    .ptr_3d12 = NAKA_ADDR(LABEL_E30006),
+    .ptr_3d12 = NAKA_ADDR(NakaData_EffectsStringPtrs),
 
     .str_358 = "!",
 
@@ -12503,7 +12503,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .field_40e4 = 0x0008,
 
-    .ptr_40e6 = NAKA_ADDR(LABEL_E30006),
+    .ptr_40e6 = NAKA_ADDR(NakaData_EffectsStringPtrs),
 
     .str_367 = "!",
 
@@ -12940,7 +12940,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .field_44b8 = 0x0008,
 
-    .ptr_44ba = NAKA_ADDR(LABEL_E30006),
+    .ptr_44ba = NAKA_ADDR(NakaData_EffectsStringPtrs),
 
     .str_376 = "!",
 

@@ -10,5 +10,5 @@ SECTIONS {
 }
 
 CRTC_LINE_COMPARE = 0x00000018;
-LABEL_EC013F = 0x00EC013F;
+NakaStr_SoundPresetBone = 0x00EC013F;
 Naka_PresentationRootState = 0x00EF013F;

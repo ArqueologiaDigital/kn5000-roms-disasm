@@ -21,10 +21,10 @@ extern const char HelpFlashFunc;
 extern const char HelpLangChkMain;
 extern const char HelpModeFunc;
 extern const char HelpTitleFunc;
-extern const char LABEL_E50117;
-extern const char LABEL_E600DF;
-extern const char LABEL_E70015;
-extern const char LABEL_E7001E;
+extern const char NakaData_TechnichordParams;
+extern const char NakaData_DescriptorZero;
+extern const char NakaData_Tables2Pad1;
+extern const char NakaData_Tables2Pad2;
 extern const char LED_patterns_firmware_v8_plus;
 extern const char MainExeCall;
 extern const char MainPanic;
@@ -13517,7 +13517,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_2912 = 0x00C8,
 
-    .ptr_2914 = NAKA_ADDR(LABEL_E50117),
+    .ptr_2914 = NAKA_ADDR(NakaData_TechnichordParams),
 
     .field_2918 = 0x00F9,
 
@@ -17226,7 +17226,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_3fbe = 0x00C8,
 
-    .ptr_3fc0 = NAKA_ADDR(LABEL_E50117),
+    .ptr_3fc0 = NAKA_ADDR(NakaData_TechnichordParams),
 
     .field_3fc4 = 0x00F9,
 
@@ -17791,7 +17791,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_436a = 0x00C8,
 
-    .ptr_436c = NAKA_ADDR(LABEL_E50117),
+    .ptr_436c = NAKA_ADDR(NakaData_TechnichordParams),
 
     .field_4370 = 0x00F9,
 
@@ -18239,7 +18239,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_463e = 0x00C8,
 
-    .ptr_4640 = NAKA_ADDR(LABEL_E50117),
+    .ptr_4640 = NAKA_ADDR(NakaData_TechnichordParams),
 
     .field_4644 = 0x00F9,
 
@@ -18687,7 +18687,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_4918 = 0x00C8,
 
-    .ptr_491a = NAKA_ADDR(LABEL_E50117),
+    .ptr_491a = NAKA_ADDR(NakaData_TechnichordParams),
 
     .field_491e = 0x00F9,
 
@@ -19346,7 +19346,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_4d08 = 0x00C8,
 
-    .ptr_4d0a = NAKA_ADDR(LABEL_E50117),
+    .ptr_4d0a = NAKA_ADDR(NakaData_TechnichordParams),
 
     .field_4d0e = 0x00F9,
 
@@ -19794,7 +19794,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_4fe2 = 0x00C8,
 
-    .ptr_4fe4 = NAKA_ADDR(LABEL_E50117),
+    .ptr_4fe4 = NAKA_ADDR(NakaData_TechnichordParams),
 
     .field_4fe8 = 0x00F9,
 
@@ -20242,7 +20242,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_52bc = 0x00C8,
 
-    .ptr_52be = NAKA_ADDR(LABEL_E50117),
+    .ptr_52be = NAKA_ADDR(NakaData_TechnichordParams),
 
     .field_52c2 = 0x00F9,
 
@@ -20617,7 +20617,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_54fa = 0x00C8,
 
-    .ptr_54fc = NAKA_ADDR(LABEL_E50117),
+    .ptr_54fc = NAKA_ADDR(NakaData_TechnichordParams),
 
     .field_5500 = 0x00F9,
 
@@ -21079,7 +21079,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_57cc = 0x00C8,
 
-    .ptr_57ce = NAKA_ADDR(LABEL_E50117),
+    .ptr_57ce = NAKA_ADDR(NakaData_TechnichordParams),
 
     .field_57d2 = 0x00F9,
 
@@ -21454,7 +21454,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_5a0c = 0x00C8,
 
-    .ptr_5a0e = NAKA_ADDR(LABEL_E50117),
+    .ptr_5a0e = NAKA_ADDR(NakaData_TechnichordParams),
 
     .field_5a12 = 0x00F9,
 
@@ -22792,7 +22792,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_621a = 0x0002,
 
-    .ptr_621c = NAKA_ADDR(LABEL_E70015),
+    .ptr_621c = NAKA_ADDR(NakaData_Tables2Pad1),
 
     .w348 = {
         .header    = NAKA_HDR(0x25),
@@ -23180,7 +23180,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_63e2 = 0x0001,
 
-    .ptr_63e4 = NAKA_ADDR(LABEL_E7001E),
+    .ptr_63e4 = NAKA_ADDR(NakaData_Tables2Pad2),
 
     .str_668 = "(",
 
@@ -26948,7 +26948,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_8e52 = 0x00D8,
 
-    .ptr_8e54 = NAKA_ADDR(LABEL_E600DF),
+    .ptr_8e54 = NAKA_ADDR(NakaData_DescriptorZero),
 
     .field_8e58 = 0x00E6,
 

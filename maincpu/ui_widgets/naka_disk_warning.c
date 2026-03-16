@@ -40,7 +40,7 @@ extern const char DrawText_LayoutAndRender_Variant1;
 extern const char FunctionProc;
 extern const char GraphicsRender_RetStub;
 extern const char GridCheck;
-extern const char LABEL_FFFFFF;
+extern const char NakaData_RomEnd;
 extern const char LanguageCheck;
 extern const char LswEditCheck;
 extern const char MainFunctionProc;
@@ -5470,11 +5470,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_86 = { 0 },
 
-    .ptr_1324 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1324 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_87 = { 0 },
 
-    .ptr_132b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_132b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_88 = { 0 },
 

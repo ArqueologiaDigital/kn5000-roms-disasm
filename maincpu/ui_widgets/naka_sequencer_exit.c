@@ -21,7 +21,7 @@ extern const char NakaDesc_Empty_D;
 extern const char NakaDesc_FuncIndex;
 extern const char NakaDesc_Mode;
 extern const char NakaDesc_ColorFontPageFunc;
-extern const char LABEL_E2713C;
+extern const char NakaDesc_SeqExitWidgets;
 extern const char NakaDesc_Empty_E;
 extern const char NakaDesc_Empty_F;
 extern const char NakaDesc_Empty_G;
@@ -198,7 +198,7 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
         .field_06  = 0x0000,
         .name_ptr  = SELF(IvPnlWrExit_name),
         .inst_ptr  = SELF(IvPnlWrExit_code),
-        .link_ptr  = NAKA_ADDR(LABEL_E2713C),
+        .link_ptr  = NAKA_ADDR(NakaDesc_SeqExitWidgets),
         .proc_addr = NAKA_ADDR(IvSdrevProc),
     },
 

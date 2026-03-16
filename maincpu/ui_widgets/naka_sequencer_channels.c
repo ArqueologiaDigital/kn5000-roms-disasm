@@ -24,16 +24,16 @@ extern const char Bitmap_DrawbarNumberedSlider_3;
 extern const char FDC_ReturnAndPop;
 extern const char FDC_ReturnZeroLong;
 extern const char INTETC45;
-extern const char LABEL_EA2D36;
-extern const char LABEL_EA2D3E;
-extern const char LABEL_EADA96;
-extern const char LABEL_EADB1A;
-extern const char LABEL_EADB26;
-extern const char LABEL_EADB32;
-extern const char LABEL_EADB3E;
-extern const char LABEL_EADB4A;
-extern const char LABEL_EADB56;
-extern const char LABEL_FFFFFF;
+extern const char NakaStr_Single;
+extern const char NakaStr_Bank;
+extern const char NakaData_CharaFontTable;
+extern const char NakaStr_Chara1pFnt;
+extern const char NakaStr_Chara5Fnt;
+extern const char NakaStr_Chara4Fnt;
+extern const char NakaStr_Chara3Fnt;
+extern const char NakaStr_Chara2Fnt;
+extern const char NakaStr_Chara1Fnt;
+extern const char NakaData_RomEnd;
 extern const char MidiParam_PanelCfgTable;
 extern const char Midi_PartToChMappingTable;
 extern const char MixerPartTable_Start;
@@ -2724,7 +2724,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0031 = NAKA_NONE,
 
-    .ptr_0033 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0033 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_0037 = 0x0100,
 
@@ -3900,7 +3900,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .str_3 = ALIGNED_STRING(""),
 
-    .ptr_071f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_071f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_103 = { 0 },
 
@@ -5651,9 +5651,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_238 = { 0 },
 
-    .ptr_126a = NAKA_ADDR(LABEL_EA2D3E),
+    .ptr_126a = NAKA_ADDR(NakaStr_Bank),
 
-    .ptr_126e = NAKA_ADDR(LABEL_EA2D36),
+    .ptr_126e = NAKA_ADDR(NakaStr_Single),
 
     .field_1272 = 0xED1C,
 
@@ -5728,7 +5728,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
         NAKA_ADDR(NakaInst_CHARA1W),
         NAKA_ADDR(NakaInst_CHARA2W),
         NAKA_ADDR(NakaInst_CHARA5W),
-        NAKA_ADDR(LABEL_EADA96),
+        NAKA_ADDR(NakaData_CharaFontTable),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -5750,12 +5750,12 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
         0x00000000,
         0x00000000,
         0x00000000,
-        NAKA_ADDR(LABEL_EADB56),
-        NAKA_ADDR(LABEL_EADB4A),
-        NAKA_ADDR(LABEL_EADB3E),
-        NAKA_ADDR(LABEL_EADB32),
-        NAKA_ADDR(LABEL_EADB26),
-        NAKA_ADDR(LABEL_EADB1A),
+        NAKA_ADDR(NakaStr_Chara1Fnt),
+        NAKA_ADDR(NakaStr_Chara2Fnt),
+        NAKA_ADDR(NakaStr_Chara3Fnt),
+        NAKA_ADDR(NakaStr_Chara4Fnt),
+        NAKA_ADDR(NakaStr_Chara5Fnt),
+        NAKA_ADDR(NakaStr_Chara1pFnt),
         NAKA_ADDR(NakaInst_ara6_fnt),
         NAKA_ADDR(NakaInst_chara1w_fnt),
         NAKA_ADDR(NakaInst_chara2w_fnt),
@@ -6710,7 +6710,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_18b7 = NAKA_NONE,
 
-    .ptr_18b9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18b9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_291 = { 0 },
 
@@ -7062,7 +7062,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1a73 = NAKA_NONE,
 
-    .ptr_1a75 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a75 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_306 = { 0 },
 
@@ -7972,7 +7972,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1e72 = 0x00FF,
 
-    .ptr_1e74 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e74 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e78 = 0x0120,
 

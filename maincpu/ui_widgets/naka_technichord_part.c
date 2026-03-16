@@ -12,11 +12,11 @@
 
 extern const char CRTC_LINE_COMPARE;
 extern const char FDC_CMD_READ_ID;
-extern const char LABEL_E60008;
-extern const char LABEL_E700DE;
-extern const char LABEL_E9013D;
-extern const char LABEL_EC00C7;
-extern const char LABEL_F5001F;
+extern const char NakaData_DescriptorPad1;
+extern const char NakaData_Tables2Pad3;
+extern const char NakaData_TechnichordBitmap2;
+extern const char NakaStr_SoundPreset176;
+extern const char NakaData_PerfStyleCode;
 extern const char LED_patterns_firmware_v8_plus;
 extern const char NAKA_TYPE_0x5D;
 extern const char NAKA_TYPE_0x61;
@@ -5360,7 +5360,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .field_02c0 = 0x00CC,
 
-    .ptr_02c2 = NAKA_ADDR(LABEL_EC00C7),
+    .ptr_02c2 = NAKA_ADDR(NakaStr_SoundPreset176),
 
     .ptr_02c6 = NAKA_ADDR(SeqByteBlock_TechnichordCfgA),
 
@@ -8350,7 +8350,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .field_134c = 0x00EF,
 
-    .ptr_134e = NAKA_ADDR(LABEL_F5001F),
+    .ptr_134e = NAKA_ADDR(NakaData_PerfStyleCode),
 
     .pad_189 = { 0 },
 
@@ -11517,7 +11517,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .field_247c = 0x0006,
 
-    .ptr_247e = NAKA_ADDR(LABEL_E60008),
+    .ptr_247e = NAKA_ADDR(NakaData_DescriptorPad1),
 
     .str_423 = ">",
 
@@ -12291,7 +12291,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .name_ptr   = 0x0022FFFF,
         .inst_ptr   = 0x00460008,
         .link_ptr   = 0x01070000,
-        .proc_addr  = NAKA_ADDR(LABEL_F5001F),
+        .proc_addr  = NAKA_ADDR(NakaData_PerfStyleCode),
     },
 
     .pad_336 = { 0 },
@@ -12433,7 +12433,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .name_ptr   = 0x0028FFFF,
         .inst_ptr   = 0x00340008,
         .link_ptr   = 0x01230000,
-        .proc_addr  = NAKA_ADDR(LABEL_F5001F),
+        .proc_addr  = NAKA_ADDR(NakaData_PerfStyleCode),
     },
 
     .pad_340 = { 0 },
@@ -14408,7 +14408,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .field_33ee = 0x00DE,
 
-    .ptr_33f0 = NAKA_ADDR(LABEL_E9013D),
+    .ptr_33f0 = NAKA_ADDR(NakaData_TechnichordBitmap2),
 
     .field_33f4 = 0x00F5,
 
@@ -14448,7 +14448,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .field_3418 = 0x0088,
 
-    .ptr_341a = NAKA_ADDR(LABEL_E700DE),
+    .ptr_341a = NAKA_ADDR(NakaData_Tables2Pad3),
 
     .ptr_341e = NAKA_ADDR(SeqByteBlock_TechnichordCfgB),
 

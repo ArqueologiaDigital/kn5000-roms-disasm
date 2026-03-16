@@ -5338,11 +5338,11 @@ FIRMWARE_VERSION:
 	.set LABEL_E00065, 0xE00065
 	.set LABEL_E00073, 0xE00073
 	.set LABEL_E0007C, 0xE0007C
-	.set LABEL_E000C3, 0xE000C3
+	.set NakaStr_DataFile1of2, 0xE000C3
 	.set LABEL_E00111, 0xE00111
-	.set LABEL_E00113, 0xE00113
-	.set LABEL_E0019E, 0xE0019E
-	.set LABEL_E00302, 0xE00302
+	.set NakaStr_DataFilePck, 0xE00113
+	.set NakaData_FileScreenConfig, 0xE0019E
+	.set NakaData_FileScreenDispatch, 0xE00302
 	.set LABEL_E00800, 0xE00800
 	.set LABEL_E00B04, 0xE00B04
 	.set LABEL_E00B28, 0xE00B28
@@ -5390,9 +5390,9 @@ FIRMWARE_VERSION:
 	.set NakaWidget_Perf3BigBand, 0xE23EF6
 	.set LABEL_E23F2C, 0xE23F2C
 	.set NakaWidget_Perf3SymphOrch, 0xE23F3A
-	.set LABEL_E2405E, 0xE2405E
+	.set NakaStr_Rhythm, 0xE2405E
 	.set NakaFld_TabIndexFunc, 0xE270EA
-	.set LABEL_E2713C, 0xE2713C
+	.set NakaDesc_SeqExitWidgets, 0xE2713C
 	.set NakaInst_SqedtVal, 0xE27564
 	.set NakaInst_SqedtVal_B, 0xE27574
 	.set NakaInst_EqualizerBox, 0xE27586
@@ -5405,7 +5405,7 @@ FIRMWARE_VERSION:
 	.set LABEL_E30002, 0xE30002
 	.set LABEL_E30003, 0xE30003
 	.set LABEL_E30005, 0xE30005
-	.set LABEL_E30006, 0xE30006
+	.set NakaData_EffectsStringPtrs, 0xE30006
 	.set LABEL_E30B2A, 0xE30B2A
 	.set LABEL_E30B51, 0xE30B51
 	.set TableData_NullDialogText, 0xE33824
@@ -5443,14 +5443,14 @@ FIRMWARE_VERSION:
 	.set LABEL_E40101, 0xE40101
 	.set LABEL_E40116, 0xE40116
 	.set LABEL_E40A09, 0xE40A09
-	.set LABEL_E41807, 0xE41807
+	.set NakaData_StyleBitmapPad, 0xE41807
 	.set LABEL_E46312, 0xE46312
 	.set LABEL_E5002D, 0xE5002D
 	.set LABEL_E5006E, 0xE5006E
 	.set LABEL_E500BE, 0xE500BE
 	.set LABEL_E500CE, 0xE500CE
 	.set LABEL_E500FE, 0xE500FE
-	.set LABEL_E50117, 0xE50117
+	.set NakaData_TechnichordParams, 0xE50117
 	.set NakaHandler_CtrlMessages, 0xE56ACC
 	.set NakaHandler_RealtimeMessages, 0xE56B14
 	.set NakaHandler_CommonSetting, 0xE56B5C
@@ -5476,18 +5476,18 @@ FIRMWARE_VERSION:
 	.set NakaInst_PresetSettingsLabel, 0xE59532
 	.set NakaInst_ItemLabel_RevEqPreset, 0xE5985A
 	.set LABEL_E60000, 0xE60000
-	.set LABEL_E60008, 0xE60008
+	.set NakaData_DescriptorPad1, 0xE60008
 	.set LABEL_E6009A, 0xE6009A
 	.set LABEL_E600AA, 0xE600AA
 	.set LABEL_E600DA, 0xE600DA
-	.set LABEL_E600DF, 0xE600DF
+	.set NakaData_DescriptorZero, 0xE600DF
 	.set LABEL_E600E4, 0xE600E4
 	.set LABEL_E600EC, 0xE600EC
 	.set LABEL_E678FF, 0xE678FF
-	.set LABEL_E70015, 0xE70015
-	.set LABEL_E7001E, 0xE7001E
+	.set NakaData_Tables2Pad1, 0xE70015
+	.set NakaData_Tables2Pad2, 0xE7001E
 	.set LABEL_E70022, 0xE70022
-	.set LABEL_E700DE, 0xE700DE
+	.set NakaData_Tables2Pad3, 0xE700DE
 	.set LABEL_E70B28, 0xE70B28
 	.set DisplayMode_FormatStr1, 0xE7F91C
 	.set DisplayMode_FormatStr2, 0xE7F922
@@ -5507,12 +5507,12 @@ FIRMWARE_VERSION:
 	.set LABEL_E878F9, 0xE878F9
 	.set LABEL_E8CFEB, 0xE8CFEB
 	.set LABEL_E90077, 0xE90077
-	.set LABEL_E900D8, 0xE900D8
+	.set NakaData_TechnichordBitmap1, 0xE900D8
 	.set LABEL_E900E1, 0xE900E1
 	.set LABEL_E900EC, 0xE900EC
 	.set NakaInst_SequencerComboBox, 0xE90130
 	.set LABEL_E90133, 0xE90133
-	.set LABEL_E9013D, 0xE9013D
+	.set NakaData_TechnichordBitmap2, 0xE9013D
 	.set LABEL_E90B3B, 0xE90B3B
 	.set LABEL_E96344, 0xE96344
 	.set LABEL_E97114, 0xE97114
@@ -5540,8 +5540,8 @@ FIRMWARE_VERSION:
 	.set LABEL_EA2822, 0xEA2822
 	.set LABEL_EA2952, 0xEA2952
 	.set LABEL_EA29A2, 0xEA29A2
-	.set LABEL_EA2D36, 0xEA2D36
-	.set LABEL_EA2D3E, 0xEA2D3E
+	.set NakaStr_Single, 0xEA2D36
+	.set NakaStr_Bank, 0xEA2D3E
 	.set LABEL_EA2E26, 0xEA2E26
 	.set LABEL_EA2F0E, 0xEA2F0E
 	.set LABEL_EA2F3A, 0xEA2F3A
@@ -5561,19 +5561,18 @@ FIRMWARE_VERSION:
 	.set LABEL_EA471A, 0xEA471A
 	.set LABEL_EA66B6, 0xEA66B6
 	.set LABEL_EA6706, 0xEA6706
-	.set LABEL_EA8CAC, 0xEA8CAC
-	.set LABEL_EA8CBC, 0xEA8CBC
+	.set DiskWarning_GermanConfirm, 0xEA8CBC
 	.set LABEL_EAAEF4, 0xEAAEF4
 	.set LABEL_EAB18C, 0xEAB18C
 	.set WidgetPropStr_Max, 0xEAC1BA
 	.set WidgetPropStr_RangeFigures, 0xEAC1BE
-	.set LABEL_EADA96, 0xEADA96
-	.set LABEL_EADB1A, 0xEADB1A
-	.set LABEL_EADB26, 0xEADB26
-	.set LABEL_EADB32, 0xEADB32
-	.set LABEL_EADB3E, 0xEADB3E
-	.set LABEL_EADB4A, 0xEADB4A
-	.set LABEL_EADB56, 0xEADB56
+	.set NakaData_CharaFontTable, 0xEADA96
+	.set NakaStr_Chara1pFnt, 0xEADB1A
+	.set NakaStr_Chara5Fnt, 0xEADB26
+	.set NakaStr_Chara4Fnt, 0xEADB32
+	.set NakaStr_Chara3Fnt, 0xEADB3E
+	.set NakaStr_Chara2Fnt, 0xEADB4A
+	.set NakaStr_Chara1Fnt, 0xEADB56
 	.set IconBitmapName_i96o, 0xEB2796
 	.set LABEL_EB287E, 0xEB287E
 	.set LABEL_EB2886, 0xEB2886
@@ -5775,11 +5774,11 @@ FIRMWARE_VERSION:
 	.set LABEL_EBFE8E, 0xEBFE8E
 	.set LABEL_EBFF16, 0xEBFF16
 	.set LABEL_EBFF9E, 0xEBFF9E
-	.set LABEL_EC00C7, 0xEC00C7
+	.set NakaStr_SoundPreset176, 0xEC00C7
 	.set LABEL_EC00EC, 0xEC00EC
 	.set LABEL_EC0113, 0xEC0113
 	.set LABEL_EC013B, 0xEC013B
-	.set LABEL_EC013F, 0xEC013F
+	.set NakaStr_SoundPresetBone, 0xEC013F
 	.set LABEL_EC0A1B, 0xEC0A1B
 	.set LABEL_EC88EC, 0xEC88EC
 	.set LABEL_EC8974, 0xEC8974
@@ -5808,7 +5807,7 @@ FIRMWARE_VERSION:
 	.set EffSeqScreen_ChordTypePtr_A, 0xED0072
 	.set EffSeqScreen_ChordTypePtr_B, 0xED009C
 	.set NakaInst_WITH_APC, 0xED00D5
-	.set LABEL_ED013B, 0xED013B
+	.set NakaStr_CtrlParam9e9, 0xED013B
 	.set SeqChanContainer_ChordTypeRef_A, 0xED0212
 	.set SeqChanContainer_ChordTypeRef_B, 0xED029C
 	.set ParamStr08_varisupart, 0xED210E
@@ -5910,7 +5909,7 @@ FIRMWARE_VERSION:
 	.set LABEL_EED3DE, 0xEED3DE
 	.set LABEL_EED52B, 0xEED52B
 	.set LABEL_EEE812, 0xEEE812
-	.set LABEL_EF001F, 0xEF001F
+	.set NakaData_NormalModeMap, 0xEF001F
 	.set LABEL_EF0026, 0xEF0026
 	.set LABEL_EF7779, 0xEF7779
 	.set LABEL_EF8B6D, 0xEF8B6D
@@ -5957,7 +5956,7 @@ FIRMWARE_VERSION:
 	.set LABEL_F164E1, 0xF164E1
 	.set LABEL_F164EC, 0xF164EC
 	.set LABEL_F400EC, 0xF400EC
-	.set LABEL_F5001F, 0xF5001F
+	.set NakaData_PerfStyleCode, 0xF5001F
 	.set LABEL_F5002F, 0xF5002F
 	.set LABEL_F50039, 0xF50039
 	.set LABEL_F50052, 0xF50052
@@ -5985,9 +5984,9 @@ FIRMWARE_VERSION:
 	.set FDC_CMD_DISABLE, 0xF97C4B
 	.set FDC_OUTPUT_CTRL, 0xF97C5B
 	.set LABEL_FC0012, 0xFC0012
-	.set LABEL_FC645A, 0xFC645A
-	.set LABEL_FC647F, 0xFC647F
-	.set LABEL_FC64EA, 0xFC64EA
+	.set NakaData_WidgetInit1, 0xFC645A
+	.set NakaData_WidgetInit2, 0xFC647F
+	.set NakaData_WidgetInit3, 0xFC64EA
 	.set SeqChan_UnhandledCmd, 0xFD8261
 	.set LABEL_FD8262, 0xFD8262
 	.set LABEL_FD8263, 0xFD8263
@@ -5995,4 +5994,4 @@ FIRMWARE_VERSION:
 	.set LABEL_FD8273, 0xFD8273
 	.set LABEL_FE0053, 0xFE0053
 	.set LABEL_FF0270, 0xFF0270
-	.set LABEL_FFFFFF, 0xFFFFFF
+	.set NakaData_RomEnd, 0xFFFFFF

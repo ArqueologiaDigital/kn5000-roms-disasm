@@ -62,7 +62,7 @@ extern const char IvIndexSwDelayProc;
 extern const char IvOneShotTimerProc;
 extern const char IvWaitWinCtlProc;
 extern const char JumpInsertFunc;
-extern const char LABEL_FFFFFF;
+extern const char NakaData_RomEnd;
 extern const char MainMemDrawControl;
 extern const char MainPreControl;
 extern const char NakaInst_AcFileSfxBoxProc;
@@ -40380,7 +40380,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_0c63 = NAKA_NONE,
 
-    .ptr_0c65 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0c65 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_0c69 = 0x0AFF,
 
@@ -40480,7 +40480,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_0cd6 = NAKA_NONE,
 
-    .ptr_0cd8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0cd8 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_78 = { 0 },
 
@@ -40573,7 +40573,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_0d48 = NAKA_NONE,
 
     .ptrs_10 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -40767,7 +40767,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_0e37 = NAKA_NONE,
 
-    .ptr_0e39 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0e39 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_101 = { 0 },
 
@@ -40879,7 +40879,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_0eb7 = NAKA_NONE,
 
-    .ptr_0eb9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0eb9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_111 = { 0 },
 
@@ -40974,7 +40974,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_0f29 = NAKA_NONE,
 
     .ptrs_11 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -41072,7 +41072,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_0fa0 = NAKA_NONE,
 
     .ptrs_12 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -41171,7 +41171,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1018 = NAKA_NONE,
 
-    .ptr_101a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_101a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_140 = { 0 },
 
@@ -41480,7 +41480,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_1181 = NAKA_NONE,
 
     .ptrs_13 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -41581,7 +41581,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_11f9 = NAKA_NONE,
 
-    .ptr_11fb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11fb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_179 = { 0 },
 
@@ -41917,7 +41917,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_136a = NAKA_NONE,
 
-    .ptr_136c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_136c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_118 = ALIGNED_STRING(""),
 
@@ -42020,7 +42020,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_13db = NAKA_NONE,
 
     .ptrs_14 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -42235,7 +42235,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_14d4 = NAKA_NONE,
 
-    .ptr_14d6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14d6 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_14da = 0x0AFF,
 
@@ -42333,7 +42333,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1546 = NAKA_NONE,
 
-    .ptr_1548 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1548 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_242 = { 0 },
 
@@ -42525,7 +42525,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1633 = NAKA_NONE,
 
-    .ptr_1635 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1635 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_254 = { 0 },
 
@@ -42955,7 +42955,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_1816 = NAKA_NONE,
 
     .ptrs_23 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -43048,7 +43048,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_188c = NAKA_NONE,
 
     .ptrs_26 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -43247,7 +43247,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_197f = NAKA_NONE,
 
-    .ptr_1981 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1981 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_289 = { 0 },
 
@@ -43453,7 +43453,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a6c = NAKA_NONE,
 
-    .ptr_1a6e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a6e = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_303 = { 0 },
 
@@ -43763,7 +43763,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1bd5 = NAKA_NONE,
 
-    .ptr_1bd7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1bd7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_323 = { 0 },
 
@@ -44490,7 +44490,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1f21 = NAKA_NONE,
 
-    .ptr_1f23 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f23 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_349 = { 0 },
 
@@ -44698,7 +44698,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_200e = NAKA_NONE,
 
-    .ptr_2010 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2010 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_359 = { 0 },
 
@@ -45046,7 +45046,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_217f = NAKA_NONE,
 
-    .ptr_2181 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2181 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_120 = ALIGNED_STRING(""),
 
@@ -45269,7 +45269,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_2267 = NAKA_NONE,
 
     .ptrs_45 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -45380,7 +45380,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_22df = NAKA_NONE,
 
-    .ptr_22e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_22e1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_393 = { 0 },
 
@@ -45502,7 +45502,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_2360 = NAKA_NONE,
 
-    .ptr_2362 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2362 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_123 = ALIGNED_STRING(""),
 
@@ -45723,7 +45723,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_2447 = NAKA_NONE,
 
     .ptrs_46 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -45834,7 +45834,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_24c0 = NAKA_NONE,
 
-    .ptr_24c2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_24c2 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_414 = { 0 },
 
@@ -46067,7 +46067,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_25b0 = NAKA_NONE,
 
     .ptrs_47 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -46178,7 +46178,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_2628 = NAKA_NONE,
 
-    .ptr_262a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_262a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_431 = { 0 },
 
@@ -46636,7 +46636,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_280d = NAKA_NONE,
 
-    .ptr_280f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_280f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_445 = { 0 },
 
@@ -46745,7 +46745,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_2881 = NAKA_NONE,
 
     .ptrs_48 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -46856,7 +46856,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_28f9 = NAKA_NONE,
 
-    .ptr_28fb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_28fb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_453 = { 0 },
 
@@ -47306,7 +47306,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_2ada = NAKA_NONE,
 
-    .ptr_2adc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2adc = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_468 = { 0 },
 
@@ -47750,7 +47750,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_2cbb = NAKA_NONE,
 
-    .ptr_2cbd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2cbd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_477 = { 0 },
 
@@ -47971,7 +47971,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_2dab = NAKA_NONE,
 
     .ptrs_51 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -48073,7 +48073,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_2e23 = NAKA_NONE,
 
-    .ptr_2e25 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2e25 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_481 = { 0 },
 
@@ -50679,7 +50679,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_38eb = NAKA_NONE,
 
-    .ptr_38ed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_38ed = NAKA_ADDR(NakaData_RomEnd),
 
     .field_38f1 = 0xF8FF,
 
@@ -50779,7 +50779,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_395e = NAKA_NONE,
 
-    .ptr_3960 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3960 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_571 = { 0 },
 
@@ -50872,7 +50872,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_39d0 = NAKA_NONE,
 
     .ptrs_54 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -51066,7 +51066,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_3abf = NAKA_NONE,
 
-    .ptr_3ac1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3ac1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_594 = { 0 },
 
@@ -51178,7 +51178,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_3b3f = NAKA_NONE,
 
-    .ptr_3b41 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3b41 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_604 = { 0 },
 
@@ -51273,7 +51273,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_3bb1 = NAKA_NONE,
 
     .ptrs_55 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -51371,7 +51371,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_3c28 = NAKA_NONE,
 
     .ptrs_56 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -51470,7 +51470,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_3ca0 = NAKA_NONE,
 
-    .ptr_3ca2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3ca2 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_633 = { 0 },
 
@@ -51779,7 +51779,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_3e09 = NAKA_NONE,
 
     .ptrs_57 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -51880,7 +51880,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_3e81 = NAKA_NONE,
 
-    .ptr_3e83 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3e83 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_672 = { 0 },
 
@@ -52216,7 +52216,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_3ff2 = NAKA_NONE,
 
-    .ptr_3ff4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3ff4 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_146 = ALIGNED_STRING(""),
 
@@ -52319,7 +52319,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_4063 = NAKA_NONE,
 
     .ptrs_58 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -52534,7 +52534,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_415c = NAKA_NONE,
 
-    .ptr_415e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_415e = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4162 = 0xF8FF,
 
@@ -52632,7 +52632,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_41ce = NAKA_NONE,
 
-    .ptr_41d0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41d0 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_735 = { 0 },
 
@@ -52824,7 +52824,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_42bb = NAKA_NONE,
 
-    .ptr_42bd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42bd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_747 = { 0 },
 
@@ -53254,7 +53254,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_449e = NAKA_NONE,
 
     .ptrs_67 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -53347,7 +53347,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_4514 = NAKA_NONE,
 
     .ptrs_70 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -53546,7 +53546,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_4607 = NAKA_NONE,
 
-    .ptr_4609 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4609 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_782 = { 0 },
 
@@ -53752,7 +53752,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_46f4 = NAKA_NONE,
 
-    .ptr_46f6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_46f6 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_796 = { 0 },
 
@@ -54062,7 +54062,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_485d = NAKA_NONE,
 
-    .ptr_485f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_485f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_816 = { 0 },
 
@@ -54789,7 +54789,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_4ba9 = NAKA_NONE,
 
-    .ptr_4bab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4bab = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_842 = { 0 },
 
@@ -54997,7 +54997,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_4c96 = NAKA_NONE,
 
-    .ptr_4c98 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4c98 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_852 = { 0 },
 
@@ -55345,7 +55345,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_4e07 = NAKA_NONE,
 
-    .ptr_4e09 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e09 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_148 = ALIGNED_STRING(""),
 
@@ -55568,7 +55568,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_4eef = NAKA_NONE,
 
     .ptrs_89 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -55679,7 +55679,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_4f67 = NAKA_NONE,
 
-    .ptr_4f69 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f69 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_886 = { 0 },
 
@@ -55801,7 +55801,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_4fe8 = NAKA_NONE,
 
-    .ptr_4fea = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4fea = NAKA_ADDR(NakaData_RomEnd),
 
     .str_151 = ALIGNED_STRING(""),
 
@@ -56022,7 +56022,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_50cf = NAKA_NONE,
 
     .ptrs_90 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -56133,7 +56133,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_5148 = NAKA_NONE,
 
-    .ptr_514a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_514a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_907 = { 0 },
 
@@ -56366,7 +56366,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_5238 = NAKA_NONE,
 
     .ptrs_91 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -56477,7 +56477,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_52b0 = NAKA_NONE,
 
-    .ptr_52b2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_52b2 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_924 = { 0 },
 
@@ -56935,7 +56935,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_5495 = NAKA_NONE,
 
-    .ptr_5497 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5497 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_938 = { 0 },
 
@@ -57044,7 +57044,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_5509 = NAKA_NONE,
 
     .ptrs_92 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -57155,7 +57155,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_5581 = NAKA_NONE,
 
-    .ptr_5583 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5583 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_946 = { 0 },
 
@@ -57605,7 +57605,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_5762 = NAKA_NONE,
 
-    .ptr_5764 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5764 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_961 = { 0 },
 
@@ -58049,7 +58049,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_5943 = NAKA_NONE,
 
-    .ptr_5945 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5945 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_970 = { 0 },
 
@@ -58270,7 +58270,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_5a33 = NAKA_NONE,
 
     .ptrs_95 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -58372,7 +58372,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_5aab = NAKA_NONE,
 
-    .ptr_5aad = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5aad = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_974 = { 0 },
 
@@ -61528,7 +61528,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_673a = NAKA_NONE,
 
-    .ptr_673c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_673c = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_987 = { 0 },
 
@@ -61544,7 +61544,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6751 = NAKA_NONE,
 
-    .ptr_6753 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6753 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_989 = { 0 },
 
@@ -61590,7 +61590,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6792 = NAKA_NONE,
 
-    .ptr_6794 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6794 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_997 = { 0 },
 
@@ -61604,7 +61604,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_67a8 = NAKA_NONE,
 
-    .ptr_67aa = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_67aa = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_999 = { 0 },
 
@@ -61652,7 +61652,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_67eb = NAKA_NONE,
 
-    .ptr_67ed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_67ed = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1007 = { 0 },
 
@@ -61666,7 +61666,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6800 = NAKA_NONE,
 
-    .ptr_6802 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6802 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1009 = { 0 },
 
@@ -61718,7 +61718,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6859 = NAKA_NONE,
 
-    .ptr_685b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_685b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1013 = { 0 },
 
@@ -61734,7 +61734,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_686f = NAKA_NONE,
 
-    .ptr_6871 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6871 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1015 = { 0 },
 
@@ -61760,7 +61760,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1017 = { 0 },
 
-    .ptr_689d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_689d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1018 = { 0 },
 
@@ -61772,7 +61772,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1019 = { 0 },
 
-    .ptr_68b2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_68b2 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1020 = { 0 },
 
@@ -61797,7 +61797,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1023 = { 0 },
 
     .ptrs_100 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },
@@ -61884,7 +61884,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6976 = NAKA_NONE,
 
-    .ptr_6978 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6978 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1031 = { 0 },
 
@@ -61900,7 +61900,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_698d = NAKA_NONE,
 
-    .ptr_698f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_698f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1033 = { 0 },
 
@@ -61960,7 +61960,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_69e5 = NAKA_NONE,
 
-    .ptr_69e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_69e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1042 = { 0 },
 
@@ -62008,7 +62008,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6a27 = NAKA_NONE,
 
-    .ptr_6a29 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6a29 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1050 = { 0 },
 
@@ -62022,7 +62022,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6a3c = NAKA_NONE,
 
-    .ptr_6a3e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6a3e = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1052 = { 0 },
 
@@ -62074,7 +62074,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6a95 = NAKA_NONE,
 
-    .ptr_6a97 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6a97 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1056 = { 0 },
 
@@ -62090,7 +62090,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6aab = NAKA_NONE,
 
-    .ptr_6aad = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6aad = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1058 = { 0 },
 
@@ -62146,7 +62146,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6b03 = NAKA_NONE,
 
-    .ptr_6b05 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6b05 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1066 = { 0 },
 
@@ -62192,7 +62192,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6b45 = NAKA_NONE,
 
-    .ptr_6b47 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6b47 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1072 = { 0 },
 
@@ -62206,7 +62206,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6b5a = NAKA_NONE,
 
-    .ptr_6b5c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6b5c = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1074 = { 0 },
 
@@ -62266,7 +62266,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1079 = { 0 },
 
-    .ptr_6bca = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6bca = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1080 = { 0 },
 
@@ -62342,7 +62342,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6c37 = NAKA_NONE,
 
-    .ptr_6c39 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6c39 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1090 = { 0 },
 
@@ -62358,7 +62358,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6c4d = NAKA_NONE,
 
-    .ptr_6c4f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6c4f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1092 = { 0 },
 
@@ -62432,7 +62432,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6cd0 = NAKA_NONE,
 
-    .ptr_6cd2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6cd2 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1100 = { 0 },
 
@@ -62448,7 +62448,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6ce7 = NAKA_NONE,
 
-    .ptr_6ce9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6ce9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1102 = { 0 },
 
@@ -62490,7 +62490,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1107 = { 0 },
 
-    .ptr_6d2a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6d2a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1108 = { 0 },
 
@@ -62502,7 +62502,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1109 = { 0 },
 
-    .ptr_6d40 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6d40 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1110 = { 0 },
 
@@ -62548,7 +62548,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6d81 = NAKA_NONE,
 
-    .ptr_6d83 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6d83 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1116 = { 0 },
 
@@ -62562,7 +62562,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6d96 = NAKA_NONE,
 
-    .ptr_6d98 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6d98 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1118 = { 0 },
 
@@ -62612,7 +62612,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6dee = NAKA_NONE,
 
-    .ptr_6df0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6df0 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1122 = { 0 },
 
@@ -62628,7 +62628,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6e05 = NAKA_NONE,
 
-    .ptr_6e07 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6e07 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1124 = { 0 },
 
@@ -62670,7 +62670,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1129 = { 0 },
 
-    .ptr_6e49 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6e49 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1130 = { 0 },
 
@@ -62682,7 +62682,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1131 = { 0 },
 
-    .ptr_6e5e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6e5e = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1132 = { 0 },
 
@@ -62695,7 +62695,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1133 = { 0 },
 
     .ptrs_117 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },
@@ -62706,7 +62706,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1134 = { 0 },
 
-    .ptr_6e88 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6e88 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1135 = { 0 },
 
@@ -62722,7 +62722,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6e9f = NAKA_NONE,
 
-    .ptr_6ea1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6ea1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1137 = { 0 },
 
@@ -62738,7 +62738,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_6eb5 = NAKA_NONE,
 
-    .ptr_6eb7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6eb7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1139 = { 0 },
 
@@ -62799,7 +62799,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1144 = { 0 },
 
     .ptrs_120 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },
@@ -62811,7 +62811,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1145 = { 0 },
 
     .ptrs_121 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },
@@ -65517,7 +65517,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7a4e = NAKA_NONE,
 
-    .ptr_7a50 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7a50 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1166 = { 0 },
 
@@ -65533,7 +65533,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7a65 = NAKA_NONE,
 
-    .ptr_7a67 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7a67 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1168 = { 0 },
 
@@ -65579,7 +65579,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7aa6 = NAKA_NONE,
 
-    .ptr_7aa8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7aa8 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1176 = { 0 },
 
@@ -65593,7 +65593,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7abc = NAKA_NONE,
 
-    .ptr_7abe = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7abe = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1178 = { 0 },
 
@@ -65641,7 +65641,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7aff = NAKA_NONE,
 
-    .ptr_7b01 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7b01 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1186 = { 0 },
 
@@ -65655,7 +65655,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7b14 = NAKA_NONE,
 
-    .ptr_7b16 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7b16 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1188 = { 0 },
 
@@ -65707,7 +65707,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7b6d = NAKA_NONE,
 
-    .ptr_7b6f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7b6f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1192 = { 0 },
 
@@ -65723,7 +65723,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7b83 = NAKA_NONE,
 
-    .ptr_7b85 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7b85 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1194 = { 0 },
 
@@ -65749,7 +65749,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1196 = { 0 },
 
-    .ptr_7bb1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7bb1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1197 = { 0 },
 
@@ -65761,7 +65761,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1198 = { 0 },
 
-    .ptr_7bc6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7bc6 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1199 = { 0 },
 
@@ -65786,7 +65786,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1202 = { 0 },
 
     .ptrs_128 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },
@@ -65873,7 +65873,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7c8a = NAKA_NONE,
 
-    .ptr_7c8c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7c8c = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1210 = { 0 },
 
@@ -65889,7 +65889,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7ca1 = NAKA_NONE,
 
-    .ptr_7ca3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7ca3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1212 = { 0 },
 
@@ -65949,7 +65949,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7cf9 = NAKA_NONE,
 
-    .ptr_7cfb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7cfb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1221 = { 0 },
 
@@ -65997,7 +65997,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7d3b = NAKA_NONE,
 
-    .ptr_7d3d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7d3d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1229 = { 0 },
 
@@ -66011,7 +66011,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7d50 = NAKA_NONE,
 
-    .ptr_7d52 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7d52 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1231 = { 0 },
 
@@ -66063,7 +66063,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7da9 = NAKA_NONE,
 
-    .ptr_7dab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7dab = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1235 = { 0 },
 
@@ -66079,7 +66079,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7dbf = NAKA_NONE,
 
-    .ptr_7dc1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7dc1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1237 = { 0 },
 
@@ -66135,7 +66135,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7e17 = NAKA_NONE,
 
-    .ptr_7e19 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7e19 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1245 = { 0 },
 
@@ -66181,7 +66181,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7e59 = NAKA_NONE,
 
-    .ptr_7e5b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7e5b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1251 = { 0 },
 
@@ -66195,7 +66195,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7e6e = NAKA_NONE,
 
-    .ptr_7e70 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7e70 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1253 = { 0 },
 
@@ -66255,7 +66255,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1258 = { 0 },
 
-    .ptr_7ede = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7ede = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1259 = { 0 },
 
@@ -66331,7 +66331,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7f4b = NAKA_NONE,
 
-    .ptr_7f4d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7f4d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1269 = { 0 },
 
@@ -66347,7 +66347,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7f61 = NAKA_NONE,
 
-    .ptr_7f63 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7f63 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1271 = { 0 },
 
@@ -66421,7 +66421,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7fe4 = NAKA_NONE,
 
-    .ptr_7fe6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7fe6 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1279 = { 0 },
 
@@ -66437,7 +66437,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_7ffb = NAKA_NONE,
 
-    .ptr_7ffd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7ffd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1281 = { 0 },
 
@@ -66479,7 +66479,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1286 = { 0 },
 
-    .ptr_803e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_803e = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1287 = { 0 },
 
@@ -66491,7 +66491,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1288 = { 0 },
 
-    .ptr_8054 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8054 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1289 = { 0 },
 
@@ -66537,7 +66537,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8095 = NAKA_NONE,
 
-    .ptr_8097 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8097 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1295 = { 0 },
 
@@ -66551,7 +66551,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_80aa = NAKA_NONE,
 
-    .ptr_80ac = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_80ac = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1297 = { 0 },
 
@@ -66601,7 +66601,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8102 = NAKA_NONE,
 
-    .ptr_8104 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8104 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1301 = { 0 },
 
@@ -66617,7 +66617,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8119 = NAKA_NONE,
 
-    .ptr_811b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_811b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1303 = { 0 },
 
@@ -66659,7 +66659,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1308 = { 0 },
 
-    .ptr_815d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_815d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1309 = { 0 },
 
@@ -66671,7 +66671,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1310 = { 0 },
 
-    .ptr_8172 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8172 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1311 = { 0 },
 
@@ -66684,7 +66684,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1312 = { 0 },
 
     .ptrs_145 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },
@@ -66695,7 +66695,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1313 = { 0 },
 
-    .ptr_819c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_819c = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1314 = { 0 },
 
@@ -66711,7 +66711,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_81b3 = NAKA_NONE,
 
-    .ptr_81b5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_81b5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1316 = { 0 },
 
@@ -66727,7 +66727,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_81c9 = NAKA_NONE,
 
-    .ptr_81cb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_81cb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1318 = { 0 },
 
@@ -66788,7 +66788,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1323 = { 0 },
 
     .ptrs_148 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },
@@ -66800,7 +66800,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1324 = { 0 },
 
     .ptrs_149 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },
@@ -69512,7 +69512,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8d62 = NAKA_NONE,
 
-    .ptr_8d64 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8d64 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1343 = { 0 },
 
@@ -69528,7 +69528,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8d79 = NAKA_NONE,
 
-    .ptr_8d7b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8d7b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1345 = { 0 },
 
@@ -69574,7 +69574,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8dba = NAKA_NONE,
 
-    .ptr_8dbc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8dbc = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1353 = { 0 },
 
@@ -69588,7 +69588,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8dd0 = NAKA_NONE,
 
-    .ptr_8dd2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8dd2 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1355 = { 0 },
 
@@ -69636,7 +69636,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8e13 = NAKA_NONE,
 
-    .ptr_8e15 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8e15 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1363 = { 0 },
 
@@ -69650,7 +69650,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8e28 = NAKA_NONE,
 
-    .ptr_8e2a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8e2a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1365 = { 0 },
 
@@ -69702,7 +69702,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8e81 = NAKA_NONE,
 
-    .ptr_8e83 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8e83 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1369 = { 0 },
 
@@ -69718,7 +69718,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8e97 = NAKA_NONE,
 
-    .ptr_8e99 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8e99 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1371 = { 0 },
 
@@ -69744,7 +69744,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1373 = { 0 },
 
-    .ptr_8ec5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8ec5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1374 = { 0 },
 
@@ -69756,7 +69756,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1375 = { 0 },
 
-    .ptr_8eda = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8eda = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1376 = { 0 },
 
@@ -69781,7 +69781,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1379 = { 0 },
 
     .ptrs_156 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },
@@ -69868,7 +69868,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8f9e = NAKA_NONE,
 
-    .ptr_8fa0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8fa0 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1387 = { 0 },
 
@@ -69884,7 +69884,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_8fb5 = NAKA_NONE,
 
-    .ptr_8fb7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8fb7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1389 = { 0 },
 
@@ -69944,7 +69944,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_900d = NAKA_NONE,
 
-    .ptr_900f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_900f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1398 = { 0 },
 
@@ -69992,7 +69992,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_904f = NAKA_NONE,
 
-    .ptr_9051 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9051 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1406 = { 0 },
 
@@ -70006,7 +70006,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_9064 = NAKA_NONE,
 
-    .ptr_9066 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9066 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1408 = { 0 },
 
@@ -70058,7 +70058,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_90bd = NAKA_NONE,
 
-    .ptr_90bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_90bf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1412 = { 0 },
 
@@ -70074,7 +70074,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_90d3 = NAKA_NONE,
 
-    .ptr_90d5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_90d5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1414 = { 0 },
 
@@ -70130,7 +70130,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_912b = NAKA_NONE,
 
-    .ptr_912d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_912d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1422 = { 0 },
 
@@ -70176,7 +70176,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_916d = NAKA_NONE,
 
-    .ptr_916f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_916f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1428 = { 0 },
 
@@ -70190,7 +70190,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_9182 = NAKA_NONE,
 
-    .ptr_9184 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9184 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1430 = { 0 },
 
@@ -70250,7 +70250,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1435 = { 0 },
 
-    .ptr_91f2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_91f2 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1436 = { 0 },
 
@@ -70326,7 +70326,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_925f = NAKA_NONE,
 
-    .ptr_9261 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9261 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1446 = { 0 },
 
@@ -70342,7 +70342,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_9275 = NAKA_NONE,
 
-    .ptr_9277 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9277 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1448 = { 0 },
 
@@ -70416,7 +70416,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_92f8 = NAKA_NONE,
 
-    .ptr_92fa = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_92fa = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1456 = { 0 },
 
@@ -70432,7 +70432,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_930f = NAKA_NONE,
 
-    .ptr_9311 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9311 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1458 = { 0 },
 
@@ -70474,7 +70474,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1463 = { 0 },
 
-    .ptr_9352 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9352 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1464 = { 0 },
 
@@ -70486,7 +70486,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1465 = { 0 },
 
-    .ptr_9368 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9368 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1466 = { 0 },
 
@@ -70532,7 +70532,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_93a9 = NAKA_NONE,
 
-    .ptr_93ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_93ab = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1472 = { 0 },
 
@@ -70546,7 +70546,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_93be = NAKA_NONE,
 
-    .ptr_93c0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_93c0 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1474 = { 0 },
 
@@ -70596,7 +70596,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_9416 = NAKA_NONE,
 
-    .ptr_9418 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9418 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1478 = { 0 },
 
@@ -70612,7 +70612,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_942d = NAKA_NONE,
 
-    .ptr_942f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_942f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1480 = { 0 },
 
@@ -70654,7 +70654,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1485 = { 0 },
 
-    .ptr_9471 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9471 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1486 = { 0 },
 
@@ -70666,7 +70666,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1487 = { 0 },
 
-    .ptr_9486 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9486 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1488 = { 0 },
 
@@ -70679,7 +70679,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1489 = { 0 },
 
     .ptrs_173 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },
@@ -70690,7 +70690,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1490 = { 0 },
 
-    .ptr_94b0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_94b0 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1491 = { 0 },
 
@@ -70706,7 +70706,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_94c7 = NAKA_NONE,
 
-    .ptr_94c9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_94c9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1493 = { 0 },
 
@@ -70722,7 +70722,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_94dd = NAKA_NONE,
 
-    .ptr_94df = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_94df = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1495 = { 0 },
 
@@ -70783,7 +70783,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1500 = { 0 },
 
     .ptrs_176 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },
@@ -70795,7 +70795,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .pad_1501 = { 0 },
 
     .ptrs_177 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00F80700,
     },

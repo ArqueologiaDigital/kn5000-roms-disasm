@@ -12,7 +12,7 @@
 
 extern const char CRTC_LINE_COMPARE;
 extern const char FDC_CMD_READ_ID;
-extern const char LABEL_ED013B;
+extern const char NakaStr_CtrlParam9e9;
 extern const char NakaInst_RHYTHM_SELECT_TEMPO_APC_MEMORY_SPLIT_POINT;
 extern const char NakaState_ZeroBlock_3;
 extern const char NakaState_ZeroBlock_4;
@@ -7787,7 +7787,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .str_155 = "x",
 
-    .ptr_27a2 = NAKA_ADDR(LABEL_ED013B),
+    .ptr_27a2 = NAKA_ADDR(NakaStr_CtrlParam9e9),
 
     .field_27a6 = 0x0007,
 

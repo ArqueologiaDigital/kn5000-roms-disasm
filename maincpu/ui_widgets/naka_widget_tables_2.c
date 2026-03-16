@@ -48,7 +48,7 @@ extern const char IvSdscltyp2Proc;
 extern const char IvSdtecd1Proc;
 extern const char IvSdtecdProc;
 extern const char IvSoftverProc;
-extern const char LABEL_FFFFFF;
+extern const char NakaData_RomEnd;
 extern const char LswAfterTouch;
 extern const char LswBendRange;
 extern const char LswDSPEffect;
@@ -63343,7 +63343,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1 = { 0 },
 
-    .ptr_0af1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0af1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2 = { 0 },
 
@@ -63354,7 +63354,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_183 = ALIGNED_STRING(""),
 
     .ptrs_15 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63376,7 +63376,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_4 = { 0 },
 
-    .ptr_0b2b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0b2b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_5 = { 0 },
 
@@ -63387,7 +63387,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_185 = ALIGNED_STRING(""),
 
     .ptrs_16 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63409,7 +63409,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_7 = { 0 },
 
-    .ptr_0b65 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0b65 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_8 = { 0 },
 
@@ -63420,7 +63420,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_187 = ALIGNED_STRING(""),
 
     .ptrs_17 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63442,7 +63442,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_10 = { 0 },
 
-    .ptr_0b9f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0b9f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_11 = { 0 },
 
@@ -63453,7 +63453,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_189 = ALIGNED_STRING(""),
 
     .ptrs_18 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63475,7 +63475,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_13 = { 0 },
 
-    .ptr_0bd9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0bd9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_14 = { 0 },
 
@@ -63486,7 +63486,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_191 = ALIGNED_STRING(""),
 
     .ptrs_19 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63508,7 +63508,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_16 = { 0 },
 
-    .ptr_0c13 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0c13 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_17 = { 0 },
 
@@ -63519,7 +63519,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_193 = ALIGNED_STRING(""),
 
     .ptrs_20 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63541,7 +63541,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_19 = { 0 },
 
-    .ptr_0c4d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0c4d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_20 = { 0 },
 
@@ -63552,7 +63552,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_195 = ALIGNED_STRING(""),
 
     .ptrs_21 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63574,7 +63574,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_22 = { 0 },
 
-    .ptr_0c87 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0c87 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_23 = { 0 },
 
@@ -63585,7 +63585,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_197 = ALIGNED_STRING(""),
 
     .ptrs_22 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63607,7 +63607,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_25 = { 0 },
 
-    .ptr_0cc1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0cc1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_26 = { 0 },
 
@@ -63618,7 +63618,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_199 = ALIGNED_STRING(""),
 
     .ptrs_23 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63640,7 +63640,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_28 = { 0 },
 
-    .ptr_0cfb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0cfb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_29 = { 0 },
 
@@ -63651,7 +63651,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_201 = ALIGNED_STRING(""),
 
     .ptrs_24 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63673,7 +63673,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_31 = { 0 },
 
-    .ptr_0d35 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0d35 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_32 = { 0 },
 
@@ -63684,7 +63684,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_203 = ALIGNED_STRING(""),
 
     .ptrs_25 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63706,7 +63706,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_34 = { 0 },
 
-    .ptr_0d6f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0d6f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_35 = { 0 },
 
@@ -63717,7 +63717,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_205 = ALIGNED_STRING(""),
 
     .ptrs_26 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63739,7 +63739,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_37 = { 0 },
 
-    .ptr_0da9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0da9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_38 = { 0 },
 
@@ -63750,7 +63750,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_207 = ALIGNED_STRING(""),
 
     .ptrs_27 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63772,7 +63772,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_40 = { 0 },
 
-    .ptr_0de3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0de3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_41 = { 0 },
 
@@ -63783,7 +63783,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_209 = ALIGNED_STRING(""),
 
     .ptrs_28 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63805,7 +63805,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_43 = { 0 },
 
-    .ptr_0e1d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0e1d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_44 = { 0 },
 
@@ -63816,7 +63816,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_211 = ALIGNED_STRING(""),
 
     .ptrs_29 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63838,7 +63838,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_46 = { 0 },
 
-    .ptr_0e57 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0e57 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_47 = { 0 },
 
@@ -63849,7 +63849,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_213 = ALIGNED_STRING(""),
 
     .ptrs_30 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63871,7 +63871,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_49 = { 0 },
 
-    .ptr_0e91 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0e91 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_50 = { 0 },
 
@@ -63882,7 +63882,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_215 = ALIGNED_STRING(""),
 
     .ptrs_31 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63904,7 +63904,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_52 = { 0 },
 
-    .ptr_0ecb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0ecb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_53 = { 0 },
 
@@ -63915,7 +63915,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_217 = ALIGNED_STRING(""),
 
     .ptrs_32 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63937,7 +63937,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_55 = { 0 },
 
-    .ptr_0f05 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0f05 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_56 = { 0 },
 
@@ -63948,7 +63948,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_219 = ALIGNED_STRING(""),
 
     .ptrs_33 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -63970,7 +63970,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_58 = { 0 },
 
-    .ptr_0f3f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0f3f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_59 = { 0 },
 
@@ -63981,7 +63981,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_221 = ALIGNED_STRING(""),
 
     .ptrs_34 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -64003,7 +64003,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_61 = { 0 },
 
-    .ptr_0f79 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0f79 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_62 = { 0 },
 
@@ -64014,7 +64014,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_223 = ALIGNED_STRING(""),
 
     .ptrs_35 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -64036,7 +64036,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_64 = { 0 },
 
-    .ptr_0fb3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0fb3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_65 = { 0 },
 
@@ -64047,7 +64047,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_225 = ALIGNED_STRING(""),
 
     .ptrs_36 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -64069,7 +64069,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_67 = { 0 },
 
-    .ptr_0fed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_0fed = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_68 = { 0 },
 
@@ -64080,7 +64080,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_227 = ALIGNED_STRING(""),
 
     .ptrs_37 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -64102,7 +64102,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_70 = { 0 },
 
-    .ptr_1027 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1027 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_71 = { 0 },
 
@@ -64113,7 +64113,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_229 = ALIGNED_STRING(""),
 
     .ptrs_38 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -64135,7 +64135,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_73 = { 0 },
 
-    .ptr_1061 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1061 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_74 = { 0 },
 
@@ -64146,7 +64146,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_231 = ALIGNED_STRING(""),
 
     .ptrs_39 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -64168,7 +64168,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_76 = { 0 },
 
-    .ptr_109b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_109b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_77 = { 0 },
 
@@ -64179,7 +64179,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_233 = ALIGNED_STRING(""),
 
     .ptrs_40 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -64201,7 +64201,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_79 = { 0 },
 
-    .ptr_10d5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10d5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_80 = { 0 },
 
@@ -64212,7 +64212,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_235 = ALIGNED_STRING(""),
 
     .ptrs_41 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -64234,7 +64234,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_82 = { 0 },
 
-    .ptr_110f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_110f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_83 = { 0 },
 
@@ -64245,7 +64245,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_237 = ALIGNED_STRING(""),
 
     .ptrs_42 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -64267,7 +64267,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_85 = { 0 },
 
-    .ptr_1149 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1149 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_86 = { 0 },
 
@@ -64278,7 +64278,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_239 = ALIGNED_STRING(""),
 
     .ptrs_43 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -64300,7 +64300,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_88 = { 0 },
 
-    .ptr_1183 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1183 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_89 = { 0 },
 
@@ -64311,7 +64311,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_241 = ALIGNED_STRING(""),
 
     .ptrs_44 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -64331,43 +64331,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_11b5 = NAKA_NONE,
 
-    .ptr_11b7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11b7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11bb = NAKA_NONE,
 
     .field_11bd = NAKA_NONE,
 
-    .ptr_11bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11bf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11c3 = NAKA_NONE,
 
     .field_11c5 = NAKA_NONE,
 
-    .ptr_11c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11cb = NAKA_NONE,
 
     .field_11cd = NAKA_NONE,
 
-    .ptr_11cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11cf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11d3 = NAKA_NONE,
 
     .field_11d5 = NAKA_NONE,
 
-    .ptr_11d7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11d7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11db = NAKA_NONE,
 
     .field_11dd = NAKA_NONE,
 
-    .ptr_11df = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11df = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11e3 = NAKA_NONE,
 
     .field_11e5 = NAKA_NONE,
 
-    .ptr_11e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_91 = { 0 },
 
@@ -64375,43 +64375,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_11ef = NAKA_NONE,
 
-    .ptr_11f1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11f1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11f5 = NAKA_NONE,
 
     .field_11f7 = NAKA_NONE,
 
-    .ptr_11f9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11f9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11fd = NAKA_NONE,
 
     .field_11ff = NAKA_NONE,
 
-    .ptr_1201 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1201 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1205 = NAKA_NONE,
 
     .field_1207 = NAKA_NONE,
 
-    .ptr_1209 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1209 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_120d = NAKA_NONE,
 
     .field_120f = NAKA_NONE,
 
-    .ptr_1211 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1211 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1215 = NAKA_NONE,
 
     .field_1217 = NAKA_NONE,
 
-    .ptr_1219 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1219 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_121d = NAKA_NONE,
 
     .field_121f = NAKA_NONE,
 
-    .ptr_1221 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1221 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_92 = { 0 },
 
@@ -64419,43 +64419,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1229 = NAKA_NONE,
 
-    .ptr_122b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_122b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_122f = NAKA_NONE,
 
     .field_1231 = NAKA_NONE,
 
-    .ptr_1233 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1233 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1237 = NAKA_NONE,
 
     .field_1239 = NAKA_NONE,
 
-    .ptr_123b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_123b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_123f = NAKA_NONE,
 
     .field_1241 = NAKA_NONE,
 
-    .ptr_1243 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1243 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1247 = NAKA_NONE,
 
     .field_1249 = NAKA_NONE,
 
-    .ptr_124b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_124b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_124f = NAKA_NONE,
 
     .field_1251 = NAKA_NONE,
 
-    .ptr_1253 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1253 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1257 = NAKA_NONE,
 
     .field_1259 = NAKA_NONE,
 
-    .ptr_125b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_125b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_93 = { 0 },
 
@@ -64463,43 +64463,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1263 = NAKA_NONE,
 
-    .ptr_1265 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1265 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1269 = NAKA_NONE,
 
     .field_126b = NAKA_NONE,
 
-    .ptr_126d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_126d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1271 = NAKA_NONE,
 
     .field_1273 = NAKA_NONE,
 
-    .ptr_1275 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1275 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1279 = NAKA_NONE,
 
     .field_127b = NAKA_NONE,
 
-    .ptr_127d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_127d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1281 = NAKA_NONE,
 
     .field_1283 = NAKA_NONE,
 
-    .ptr_1285 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1285 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1289 = NAKA_NONE,
 
     .field_128b = NAKA_NONE,
 
-    .ptr_128d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_128d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1291 = NAKA_NONE,
 
     .field_1293 = NAKA_NONE,
 
-    .ptr_1295 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1295 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_94 = { 0 },
 
@@ -64507,43 +64507,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_129d = NAKA_NONE,
 
-    .ptr_129f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_129f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12a3 = NAKA_NONE,
 
     .field_12a5 = NAKA_NONE,
 
-    .ptr_12a7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12a7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12ab = NAKA_NONE,
 
     .field_12ad = NAKA_NONE,
 
-    .ptr_12af = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12af = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12b3 = NAKA_NONE,
 
     .field_12b5 = NAKA_NONE,
 
-    .ptr_12b7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12b7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12bb = NAKA_NONE,
 
     .field_12bd = NAKA_NONE,
 
-    .ptr_12bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12bf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12c3 = NAKA_NONE,
 
     .field_12c5 = NAKA_NONE,
 
-    .ptr_12c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12cb = NAKA_NONE,
 
     .field_12cd = NAKA_NONE,
 
-    .ptr_12cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12cf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_95 = { 0 },
 
@@ -64551,43 +64551,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12d7 = NAKA_NONE,
 
-    .ptr_12d9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12d9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12dd = NAKA_NONE,
 
     .field_12df = NAKA_NONE,
 
-    .ptr_12e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12e1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12e5 = NAKA_NONE,
 
     .field_12e7 = NAKA_NONE,
 
-    .ptr_12e9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12e9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12ed = NAKA_NONE,
 
     .field_12ef = NAKA_NONE,
 
-    .ptr_12f1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12f5 = NAKA_NONE,
 
     .field_12f7 = NAKA_NONE,
 
-    .ptr_12f9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12fd = NAKA_NONE,
 
     .field_12ff = NAKA_NONE,
 
-    .ptr_1301 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1301 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1305 = NAKA_NONE,
 
     .field_1307 = NAKA_NONE,
 
-    .ptr_1309 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1309 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_96 = { 0 },
 
@@ -64595,43 +64595,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1311 = NAKA_NONE,
 
-    .ptr_1313 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1313 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1317 = NAKA_NONE,
 
     .field_1319 = NAKA_NONE,
 
-    .ptr_131b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_131b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_131f = NAKA_NONE,
 
     .field_1321 = NAKA_NONE,
 
-    .ptr_1323 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1323 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1327 = NAKA_NONE,
 
     .field_1329 = NAKA_NONE,
 
-    .ptr_132b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_132b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_132f = NAKA_NONE,
 
     .field_1331 = NAKA_NONE,
 
-    .ptr_1333 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1333 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1337 = NAKA_NONE,
 
     .field_1339 = NAKA_NONE,
 
-    .ptr_133b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_133b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_133f = NAKA_NONE,
 
     .field_1341 = NAKA_NONE,
 
-    .ptr_1343 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1343 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_97 = { 0 },
 
@@ -64639,43 +64639,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_134b = NAKA_NONE,
 
-    .ptr_134d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_134d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1351 = NAKA_NONE,
 
     .field_1353 = NAKA_NONE,
 
-    .ptr_1355 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1355 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1359 = NAKA_NONE,
 
     .field_135b = NAKA_NONE,
 
-    .ptr_135d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_135d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1361 = NAKA_NONE,
 
     .field_1363 = NAKA_NONE,
 
-    .ptr_1365 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1365 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1369 = NAKA_NONE,
 
     .field_136b = NAKA_NONE,
 
-    .ptr_136d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_136d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1371 = NAKA_NONE,
 
     .field_1373 = NAKA_NONE,
 
-    .ptr_1375 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1375 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1379 = NAKA_NONE,
 
     .field_137b = NAKA_NONE,
 
-    .ptr_137d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_137d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_98 = { 0 },
 
@@ -64683,43 +64683,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1385 = NAKA_NONE,
 
-    .ptr_1387 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1387 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_138b = NAKA_NONE,
 
     .field_138d = NAKA_NONE,
 
-    .ptr_138f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_138f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1393 = NAKA_NONE,
 
     .field_1395 = NAKA_NONE,
 
-    .ptr_1397 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1397 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_139b = NAKA_NONE,
 
     .field_139d = NAKA_NONE,
 
-    .ptr_139f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_139f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13a3 = NAKA_NONE,
 
     .field_13a5 = NAKA_NONE,
 
-    .ptr_13a7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13a7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13ab = NAKA_NONE,
 
     .field_13ad = NAKA_NONE,
 
-    .ptr_13af = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13af = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13b3 = NAKA_NONE,
 
     .field_13b5 = NAKA_NONE,
 
-    .ptr_13b7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13b7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_99 = { 0 },
 
@@ -64727,43 +64727,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13bf = NAKA_NONE,
 
-    .ptr_13c1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13c1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13c5 = NAKA_NONE,
 
     .field_13c7 = NAKA_NONE,
 
-    .ptr_13c9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13c9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13cd = NAKA_NONE,
 
     .field_13cf = NAKA_NONE,
 
-    .ptr_13d1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13d1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13d5 = NAKA_NONE,
 
     .field_13d7 = NAKA_NONE,
 
-    .ptr_13d9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13d9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13dd = NAKA_NONE,
 
     .field_13df = NAKA_NONE,
 
-    .ptr_13e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13e1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13e5 = NAKA_NONE,
 
     .field_13e7 = NAKA_NONE,
 
-    .ptr_13e9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13e9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13ed = NAKA_NONE,
 
     .field_13ef = NAKA_NONE,
 
-    .ptr_13f1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13f1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_100 = { 0 },
 
@@ -64771,43 +64771,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13f9 = NAKA_NONE,
 
-    .ptr_13fb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13fb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13ff = NAKA_NONE,
 
     .field_1401 = NAKA_NONE,
 
-    .ptr_1403 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1403 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1407 = NAKA_NONE,
 
     .field_1409 = NAKA_NONE,
 
-    .ptr_140b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_140b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_140f = NAKA_NONE,
 
     .field_1411 = NAKA_NONE,
 
-    .ptr_1413 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1413 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1417 = NAKA_NONE,
 
     .field_1419 = NAKA_NONE,
 
-    .ptr_141b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_141b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_141f = NAKA_NONE,
 
     .field_1421 = NAKA_NONE,
 
-    .ptr_1423 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1423 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1427 = NAKA_NONE,
 
     .field_1429 = NAKA_NONE,
 
-    .ptr_142b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_142b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_101 = { 0 },
 
@@ -64815,43 +64815,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1433 = NAKA_NONE,
 
-    .ptr_1435 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1435 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1439 = NAKA_NONE,
 
     .field_143b = NAKA_NONE,
 
-    .ptr_143d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_143d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1441 = NAKA_NONE,
 
     .field_1443 = NAKA_NONE,
 
-    .ptr_1445 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1445 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1449 = NAKA_NONE,
 
     .field_144b = NAKA_NONE,
 
-    .ptr_144d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_144d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1451 = NAKA_NONE,
 
     .field_1453 = NAKA_NONE,
 
-    .ptr_1455 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1455 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1459 = NAKA_NONE,
 
     .field_145b = NAKA_NONE,
 
-    .ptr_145d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_145d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1461 = NAKA_NONE,
 
     .field_1463 = NAKA_NONE,
 
-    .ptr_1465 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1465 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_102 = { 0 },
 
@@ -64859,43 +64859,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_146d = NAKA_NONE,
 
-    .ptr_146f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_146f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1473 = NAKA_NONE,
 
     .field_1475 = NAKA_NONE,
 
-    .ptr_1477 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1477 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_147b = NAKA_NONE,
 
     .field_147d = NAKA_NONE,
 
-    .ptr_147f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_147f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1483 = NAKA_NONE,
 
     .field_1485 = NAKA_NONE,
 
-    .ptr_1487 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1487 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_148b = NAKA_NONE,
 
     .field_148d = NAKA_NONE,
 
-    .ptr_148f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_148f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1493 = NAKA_NONE,
 
     .field_1495 = NAKA_NONE,
 
-    .ptr_1497 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1497 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_149b = NAKA_NONE,
 
     .field_149d = NAKA_NONE,
 
-    .ptr_149f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_149f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_103 = { 0 },
 
@@ -64903,43 +64903,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_14a7 = NAKA_NONE,
 
-    .ptr_14a9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14a9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_14ad = NAKA_NONE,
 
     .field_14af = NAKA_NONE,
 
-    .ptr_14b1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14b1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_14b5 = NAKA_NONE,
 
     .field_14b7 = NAKA_NONE,
 
-    .ptr_14b9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14b9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_14bd = NAKA_NONE,
 
     .field_14bf = NAKA_NONE,
 
-    .ptr_14c1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14c1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_14c5 = NAKA_NONE,
 
     .field_14c7 = NAKA_NONE,
 
-    .ptr_14c9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14c9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_14cd = NAKA_NONE,
 
     .field_14cf = NAKA_NONE,
 
-    .ptr_14d1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14d1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_14d5 = NAKA_NONE,
 
     .field_14d7 = NAKA_NONE,
 
-    .ptr_14d9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14d9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_104 = { 0 },
 
@@ -64947,43 +64947,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_14e1 = NAKA_NONE,
 
-    .ptr_14e3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14e3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_14e7 = NAKA_NONE,
 
     .field_14e9 = NAKA_NONE,
 
-    .ptr_14eb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14eb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_14ef = NAKA_NONE,
 
     .field_14f1 = NAKA_NONE,
 
-    .ptr_14f3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14f3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_14f7 = NAKA_NONE,
 
     .field_14f9 = NAKA_NONE,
 
-    .ptr_14fb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14fb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_14ff = NAKA_NONE,
 
     .field_1501 = NAKA_NONE,
 
-    .ptr_1503 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1503 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1507 = NAKA_NONE,
 
     .field_1509 = NAKA_NONE,
 
-    .ptr_150b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_150b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_150f = NAKA_NONE,
 
     .field_1511 = NAKA_NONE,
 
-    .ptr_1513 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1513 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_105 = { 0 },
 
@@ -64991,43 +64991,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_151b = NAKA_NONE,
 
-    .ptr_151d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_151d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1521 = NAKA_NONE,
 
     .field_1523 = NAKA_NONE,
 
-    .ptr_1525 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1525 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1529 = NAKA_NONE,
 
     .field_152b = NAKA_NONE,
 
-    .ptr_152d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_152d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1531 = NAKA_NONE,
 
     .field_1533 = NAKA_NONE,
 
-    .ptr_1535 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1535 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1539 = NAKA_NONE,
 
     .field_153b = NAKA_NONE,
 
-    .ptr_153d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_153d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1541 = NAKA_NONE,
 
     .field_1543 = NAKA_NONE,
 
-    .ptr_1545 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1545 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1549 = NAKA_NONE,
 
     .field_154b = NAKA_NONE,
 
-    .ptr_154d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_154d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_106 = { 0 },
 
@@ -65035,43 +65035,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1555 = NAKA_NONE,
 
-    .ptr_1557 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1557 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_155b = NAKA_NONE,
 
     .field_155d = NAKA_NONE,
 
-    .ptr_155f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_155f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1563 = NAKA_NONE,
 
     .field_1565 = NAKA_NONE,
 
-    .ptr_1567 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1567 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_156b = NAKA_NONE,
 
     .field_156d = NAKA_NONE,
 
-    .ptr_156f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_156f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1573 = NAKA_NONE,
 
     .field_1575 = NAKA_NONE,
 
-    .ptr_1577 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1577 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_157b = NAKA_NONE,
 
     .field_157d = NAKA_NONE,
 
-    .ptr_157f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_157f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1583 = NAKA_NONE,
 
     .field_1585 = NAKA_NONE,
 
-    .ptr_1587 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1587 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_107 = { 0 },
 
@@ -65079,43 +65079,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_158f = NAKA_NONE,
 
-    .ptr_1591 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1591 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1595 = NAKA_NONE,
 
     .field_1597 = NAKA_NONE,
 
-    .ptr_1599 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1599 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_159d = NAKA_NONE,
 
     .field_159f = NAKA_NONE,
 
-    .ptr_15a1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15a1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15a5 = NAKA_NONE,
 
     .field_15a7 = NAKA_NONE,
 
-    .ptr_15a9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15a9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15ad = NAKA_NONE,
 
     .field_15af = NAKA_NONE,
 
-    .ptr_15b1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15b1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15b5 = NAKA_NONE,
 
     .field_15b7 = NAKA_NONE,
 
-    .ptr_15b9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15b9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15bd = NAKA_NONE,
 
     .field_15bf = NAKA_NONE,
 
-    .ptr_15c1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15c1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_108 = { 0 },
 
@@ -65123,43 +65123,43 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15c9 = NAKA_NONE,
 
-    .ptr_15cb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15cb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15cf = NAKA_NONE,
 
     .field_15d1 = NAKA_NONE,
 
-    .ptr_15d3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15d3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15d7 = NAKA_NONE,
 
     .field_15d9 = NAKA_NONE,
 
-    .ptr_15db = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15db = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15df = NAKA_NONE,
 
     .field_15e1 = NAKA_NONE,
 
-    .ptr_15e3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15e3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15e7 = NAKA_NONE,
 
     .field_15e9 = NAKA_NONE,
 
-    .ptr_15eb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15eb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15ef = NAKA_NONE,
 
     .field_15f1 = NAKA_NONE,
 
-    .ptr_15f3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15f3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15f7 = NAKA_NONE,
 
     .field_15f9 = NAKA_NONE,
 
-    .ptr_15fb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15fb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_109 = { 0 },
 
@@ -65167,44 +65167,44 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1603 = NAKA_NONE,
 
-    .ptr_1605 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1605 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1609 = NAKA_NONE,
 
     .field_160b = NAKA_NONE,
 
-    .ptr_160d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_160d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1611 = NAKA_NONE,
 
     .field_1613 = NAKA_NONE,
 
-    .ptr_1615 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1615 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1619 = NAKA_NONE,
 
     .field_161b = NAKA_NONE,
 
-    .ptr_161d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_161d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1621 = NAKA_NONE,
 
     .field_1623 = NAKA_NONE,
 
-    .ptr_1625 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1625 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1629 = NAKA_NONE,
 
     .field_162b = NAKA_NONE,
 
-    .ptr_162d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_162d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1631 = NAKA_NONE,
 
     .field_1633 = NAKA_NONE,
 
     .ptrs_45 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -65244,7 +65244,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_111 = { 0 },
 
-    .ptr_16b9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16b9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_112 = { 0 },
 
@@ -65255,7 +65255,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_243 = ALIGNED_STRING(""),
 
     .ptrs_46 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65277,7 +65277,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_114 = { 0 },
 
-    .ptr_16f3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16f3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_115 = { 0 },
 
@@ -65288,7 +65288,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_245 = ALIGNED_STRING(""),
 
     .ptrs_47 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65310,7 +65310,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_117 = { 0 },
 
-    .ptr_172d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_172d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_118 = { 0 },
 
@@ -65321,7 +65321,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_247 = ALIGNED_STRING(""),
 
     .ptrs_48 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65343,7 +65343,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_120 = { 0 },
 
-    .ptr_1767 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1767 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_121 = { 0 },
 
@@ -65354,7 +65354,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_249 = ALIGNED_STRING(""),
 
     .ptrs_49 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65376,7 +65376,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_123 = { 0 },
 
-    .ptr_17a1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17a1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_124 = { 0 },
 
@@ -65387,7 +65387,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_251 = ALIGNED_STRING(""),
 
     .ptrs_50 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65409,7 +65409,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_126 = { 0 },
 
-    .ptr_17db = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17db = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_127 = { 0 },
 
@@ -65420,7 +65420,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_253 = ALIGNED_STRING(""),
 
     .ptrs_51 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65442,7 +65442,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_129 = { 0 },
 
-    .ptr_1815 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1815 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_130 = { 0 },
 
@@ -65453,7 +65453,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_255 = ALIGNED_STRING(""),
 
     .ptrs_52 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65475,7 +65475,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_132 = { 0 },
 
-    .ptr_184f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_184f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_133 = { 0 },
 
@@ -65486,7 +65486,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_257 = ALIGNED_STRING(""),
 
     .ptrs_53 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65508,7 +65508,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_135 = { 0 },
 
-    .ptr_1889 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1889 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_136 = { 0 },
 
@@ -65519,7 +65519,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_259 = ALIGNED_STRING(""),
 
     .ptrs_54 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65541,7 +65541,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_138 = { 0 },
 
-    .ptr_18c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_139 = { 0 },
 
@@ -65552,7 +65552,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_261 = ALIGNED_STRING(""),
 
     .ptrs_55 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65574,7 +65574,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_141 = { 0 },
 
-    .ptr_18fd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18fd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_142 = { 0 },
 
@@ -65585,7 +65585,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_263 = ALIGNED_STRING(""),
 
     .ptrs_56 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65607,7 +65607,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_144 = { 0 },
 
-    .ptr_1937 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1937 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_145 = { 0 },
 
@@ -65618,7 +65618,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_265 = ALIGNED_STRING(""),
 
     .ptrs_57 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65640,7 +65640,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_147 = { 0 },
 
-    .ptr_1971 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1971 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_148 = { 0 },
 
@@ -65651,7 +65651,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_267 = ALIGNED_STRING(""),
 
     .ptrs_58 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65673,7 +65673,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_150 = { 0 },
 
-    .ptr_19ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_19ab = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_151 = { 0 },
 
@@ -65684,7 +65684,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_269 = ALIGNED_STRING(""),
 
     .ptrs_59 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65706,7 +65706,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_153 = { 0 },
 
-    .ptr_19e5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_19e5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_154 = { 0 },
 
@@ -65717,7 +65717,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_271 = ALIGNED_STRING(""),
 
     .ptrs_60 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65739,7 +65739,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_156 = { 0 },
 
-    .ptr_1a1f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a1f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_157 = { 0 },
 
@@ -65750,7 +65750,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_273 = ALIGNED_STRING(""),
 
     .ptrs_61 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65772,7 +65772,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_159 = { 0 },
 
-    .ptr_1a59 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a59 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_160 = { 0 },
 
@@ -65783,7 +65783,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_275 = ALIGNED_STRING(""),
 
     .ptrs_62 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65805,7 +65805,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_162 = { 0 },
 
-    .ptr_1a93 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a93 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_163 = { 0 },
 
@@ -65816,7 +65816,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_277 = ALIGNED_STRING(""),
 
     .ptrs_63 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65838,7 +65838,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_165 = { 0 },
 
-    .ptr_1acd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1acd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_166 = { 0 },
 
@@ -65849,7 +65849,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_279 = ALIGNED_STRING(""),
 
     .ptrs_64 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65871,7 +65871,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_168 = { 0 },
 
-    .ptr_1b07 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b07 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_169 = { 0 },
 
@@ -65882,7 +65882,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_281 = ALIGNED_STRING(""),
 
     .ptrs_65 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65904,7 +65904,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_171 = { 0 },
 
-    .ptr_1b41 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b41 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_172 = { 0 },
 
@@ -65915,7 +65915,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_283 = ALIGNED_STRING(""),
 
     .ptrs_66 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65937,7 +65937,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_174 = { 0 },
 
-    .ptr_1b7b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b7b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_175 = { 0 },
 
@@ -65948,7 +65948,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_285 = ALIGNED_STRING(""),
 
     .ptrs_67 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -65970,7 +65970,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_177 = { 0 },
 
-    .ptr_1bb5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1bb5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_178 = { 0 },
 
@@ -65981,7 +65981,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_287 = ALIGNED_STRING(""),
 
     .ptrs_68 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -66003,7 +66003,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_180 = { 0 },
 
-    .ptr_1bef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1bef = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_181 = { 0 },
 
@@ -66014,7 +66014,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_289 = ALIGNED_STRING(""),
 
     .ptrs_69 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -66036,7 +66036,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_183 = { 0 },
 
-    .ptr_1c29 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c29 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_184 = { 0 },
 
@@ -66047,7 +66047,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_291 = ALIGNED_STRING(""),
 
     .ptrs_70 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -66069,7 +66069,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_186 = { 0 },
 
-    .ptr_1c63 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c63 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_187 = { 0 },
 
@@ -66080,7 +66080,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_293 = ALIGNED_STRING(""),
 
     .ptrs_71 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -66102,7 +66102,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_189 = { 0 },
 
-    .ptr_1c9d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c9d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_190 = { 0 },
 
@@ -66113,7 +66113,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_295 = ALIGNED_STRING(""),
 
     .ptrs_72 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -66135,7 +66135,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_192 = { 0 },
 
-    .ptr_1cd7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1cd7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_193 = { 0 },
 
@@ -66146,7 +66146,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_297 = ALIGNED_STRING(""),
 
     .ptrs_73 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -66168,7 +66168,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_195 = { 0 },
 
-    .ptr_1d11 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d11 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_196 = { 0 },
 
@@ -66179,7 +66179,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_299 = ALIGNED_STRING(""),
 
     .ptrs_74 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -66201,7 +66201,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_198 = { 0 },
 
-    .ptr_1d4b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d4b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_199 = { 0 },
 
@@ -66212,7 +66212,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_301 = ALIGNED_STRING(""),
 
     .ptrs_75 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -66238,37 +66238,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d85 = NAKA_NONE,
 
-    .ptr_1d87 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d87 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d8b = NAKA_NONE,
 
     .field_1d8d = NAKA_NONE,
 
-    .ptr_1d8f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d8f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d93 = NAKA_NONE,
 
     .field_1d95 = NAKA_NONE,
 
-    .ptr_1d97 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d97 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d9b = NAKA_NONE,
 
     .field_1d9d = NAKA_NONE,
 
-    .ptr_1d9f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d9f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1da3 = NAKA_NONE,
 
     .field_1da5 = NAKA_NONE,
 
-    .ptr_1da7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1da7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1dab = NAKA_NONE,
 
     .field_1dad = NAKA_NONE,
 
-    .ptr_1daf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1daf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_201 = { 0 },
 
@@ -66282,37 +66282,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1dbf = NAKA_NONE,
 
-    .ptr_1dc1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dc1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1dc5 = NAKA_NONE,
 
     .field_1dc7 = NAKA_NONE,
 
-    .ptr_1dc9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dc9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1dcd = NAKA_NONE,
 
     .field_1dcf = NAKA_NONE,
 
-    .ptr_1dd1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1dd5 = NAKA_NONE,
 
     .field_1dd7 = NAKA_NONE,
 
-    .ptr_1dd9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ddd = NAKA_NONE,
 
     .field_1ddf = NAKA_NONE,
 
-    .ptr_1de1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1de1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1de5 = NAKA_NONE,
 
     .field_1de7 = NAKA_NONE,
 
-    .ptr_1de9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1de9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_202 = { 0 },
 
@@ -66326,37 +66326,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1df9 = NAKA_NONE,
 
-    .ptr_1dfb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dfb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1dff = NAKA_NONE,
 
     .field_1e01 = NAKA_NONE,
 
-    .ptr_1e03 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e03 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e07 = NAKA_NONE,
 
     .field_1e09 = NAKA_NONE,
 
-    .ptr_1e0b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e0b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e0f = NAKA_NONE,
 
     .field_1e11 = NAKA_NONE,
 
-    .ptr_1e13 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e13 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e17 = NAKA_NONE,
 
     .field_1e19 = NAKA_NONE,
 
-    .ptr_1e1b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e1b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e1f = NAKA_NONE,
 
     .field_1e21 = NAKA_NONE,
 
-    .ptr_1e23 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e23 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_203 = { 0 },
 
@@ -66370,37 +66370,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e33 = NAKA_NONE,
 
-    .ptr_1e35 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e35 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e39 = NAKA_NONE,
 
     .field_1e3b = NAKA_NONE,
 
-    .ptr_1e3d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e3d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e41 = NAKA_NONE,
 
     .field_1e43 = NAKA_NONE,
 
-    .ptr_1e45 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e45 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e49 = NAKA_NONE,
 
     .field_1e4b = NAKA_NONE,
 
-    .ptr_1e4d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e4d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e51 = NAKA_NONE,
 
     .field_1e53 = NAKA_NONE,
 
-    .ptr_1e55 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e55 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e59 = NAKA_NONE,
 
     .field_1e5b = NAKA_NONE,
 
-    .ptr_1e5d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e5d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_204 = { 0 },
 
@@ -66414,37 +66414,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e6d = NAKA_NONE,
 
-    .ptr_1e6f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e6f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e73 = NAKA_NONE,
 
     .field_1e75 = NAKA_NONE,
 
-    .ptr_1e77 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e77 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e7b = NAKA_NONE,
 
     .field_1e7d = NAKA_NONE,
 
-    .ptr_1e7f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e7f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e83 = NAKA_NONE,
 
     .field_1e85 = NAKA_NONE,
 
-    .ptr_1e87 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e87 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e8b = NAKA_NONE,
 
     .field_1e8d = NAKA_NONE,
 
-    .ptr_1e8f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e8f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e93 = NAKA_NONE,
 
     .field_1e95 = NAKA_NONE,
 
-    .ptr_1e97 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e97 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_205 = { 0 },
 
@@ -66458,37 +66458,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ea7 = NAKA_NONE,
 
-    .ptr_1ea9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ea9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ead = NAKA_NONE,
 
     .field_1eaf = NAKA_NONE,
 
-    .ptr_1eb1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1eb1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1eb5 = NAKA_NONE,
 
     .field_1eb7 = NAKA_NONE,
 
-    .ptr_1eb9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1eb9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ebd = NAKA_NONE,
 
     .field_1ebf = NAKA_NONE,
 
-    .ptr_1ec1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ec1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ec5 = NAKA_NONE,
 
     .field_1ec7 = NAKA_NONE,
 
-    .ptr_1ec9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ec9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ecd = NAKA_NONE,
 
     .field_1ecf = NAKA_NONE,
 
-    .ptr_1ed1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ed1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_206 = { 0 },
 
@@ -66502,37 +66502,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ee1 = NAKA_NONE,
 
-    .ptr_1ee3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ee3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ee7 = NAKA_NONE,
 
     .field_1ee9 = NAKA_NONE,
 
-    .ptr_1eeb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1eeb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1eef = NAKA_NONE,
 
     .field_1ef1 = NAKA_NONE,
 
-    .ptr_1ef3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ef3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ef7 = NAKA_NONE,
 
     .field_1ef9 = NAKA_NONE,
 
-    .ptr_1efb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1efb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1eff = NAKA_NONE,
 
     .field_1f01 = NAKA_NONE,
 
-    .ptr_1f03 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f03 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f07 = NAKA_NONE,
 
     .field_1f09 = NAKA_NONE,
 
-    .ptr_1f0b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f0b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_207 = { 0 },
 
@@ -66546,37 +66546,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f1b = NAKA_NONE,
 
-    .ptr_1f1d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f1d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f21 = NAKA_NONE,
 
     .field_1f23 = NAKA_NONE,
 
-    .ptr_1f25 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f25 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f29 = NAKA_NONE,
 
     .field_1f2b = NAKA_NONE,
 
-    .ptr_1f2d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f2d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f31 = NAKA_NONE,
 
     .field_1f33 = NAKA_NONE,
 
-    .ptr_1f35 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f35 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f39 = NAKA_NONE,
 
     .field_1f3b = NAKA_NONE,
 
-    .ptr_1f3d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f3d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f41 = NAKA_NONE,
 
     .field_1f43 = NAKA_NONE,
 
-    .ptr_1f45 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f45 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_208 = { 0 },
 
@@ -66590,37 +66590,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f55 = NAKA_NONE,
 
-    .ptr_1f57 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f57 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f5b = NAKA_NONE,
 
     .field_1f5d = NAKA_NONE,
 
-    .ptr_1f5f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f5f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f63 = NAKA_NONE,
 
     .field_1f65 = NAKA_NONE,
 
-    .ptr_1f67 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f67 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f6b = NAKA_NONE,
 
     .field_1f6d = NAKA_NONE,
 
-    .ptr_1f6f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f6f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f73 = NAKA_NONE,
 
     .field_1f75 = NAKA_NONE,
 
-    .ptr_1f77 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f77 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f7b = NAKA_NONE,
 
     .field_1f7d = NAKA_NONE,
 
-    .ptr_1f7f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f7f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_209 = { 0 },
 
@@ -66634,37 +66634,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f8f = NAKA_NONE,
 
-    .ptr_1f91 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f91 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f95 = NAKA_NONE,
 
     .field_1f97 = NAKA_NONE,
 
-    .ptr_1f99 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f99 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f9d = NAKA_NONE,
 
     .field_1f9f = NAKA_NONE,
 
-    .ptr_1fa1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fa1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fa5 = NAKA_NONE,
 
     .field_1fa7 = NAKA_NONE,
 
-    .ptr_1fa9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fa9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fad = NAKA_NONE,
 
     .field_1faf = NAKA_NONE,
 
-    .ptr_1fb1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fb1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fb5 = NAKA_NONE,
 
     .field_1fb7 = NAKA_NONE,
 
-    .ptr_1fb9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fb9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_210 = { 0 },
 
@@ -66678,37 +66678,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1fc9 = NAKA_NONE,
 
-    .ptr_1fcb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fcb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fcf = NAKA_NONE,
 
     .field_1fd1 = NAKA_NONE,
 
-    .ptr_1fd3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fd3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fd7 = NAKA_NONE,
 
     .field_1fd9 = NAKA_NONE,
 
-    .ptr_1fdb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fdb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fdf = NAKA_NONE,
 
     .field_1fe1 = NAKA_NONE,
 
-    .ptr_1fe3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fe3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fe7 = NAKA_NONE,
 
     .field_1fe9 = NAKA_NONE,
 
-    .ptr_1feb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1feb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fef = NAKA_NONE,
 
     .field_1ff1 = NAKA_NONE,
 
-    .ptr_1ff3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ff3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_211 = { 0 },
 
@@ -66722,37 +66722,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2003 = NAKA_NONE,
 
-    .ptr_2005 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2005 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2009 = NAKA_NONE,
 
     .field_200b = NAKA_NONE,
 
-    .ptr_200d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_200d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2011 = NAKA_NONE,
 
     .field_2013 = NAKA_NONE,
 
-    .ptr_2015 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2015 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2019 = NAKA_NONE,
 
     .field_201b = NAKA_NONE,
 
-    .ptr_201d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_201d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2021 = NAKA_NONE,
 
     .field_2023 = NAKA_NONE,
 
-    .ptr_2025 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2025 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2029 = NAKA_NONE,
 
     .field_202b = NAKA_NONE,
 
-    .ptr_202d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_202d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_212 = { 0 },
 
@@ -66766,37 +66766,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_203d = NAKA_NONE,
 
-    .ptr_203f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_203f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2043 = NAKA_NONE,
 
     .field_2045 = NAKA_NONE,
 
-    .ptr_2047 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2047 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_204b = NAKA_NONE,
 
     .field_204d = NAKA_NONE,
 
-    .ptr_204f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_204f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2053 = NAKA_NONE,
 
     .field_2055 = NAKA_NONE,
 
-    .ptr_2057 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2057 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_205b = NAKA_NONE,
 
     .field_205d = NAKA_NONE,
 
-    .ptr_205f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_205f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2063 = NAKA_NONE,
 
     .field_2065 = NAKA_NONE,
 
-    .ptr_2067 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2067 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_213 = { 0 },
 
@@ -66810,37 +66810,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2077 = NAKA_NONE,
 
-    .ptr_2079 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2079 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_207d = NAKA_NONE,
 
     .field_207f = NAKA_NONE,
 
-    .ptr_2081 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2081 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2085 = NAKA_NONE,
 
     .field_2087 = NAKA_NONE,
 
-    .ptr_2089 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2089 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_208d = NAKA_NONE,
 
     .field_208f = NAKA_NONE,
 
-    .ptr_2091 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2091 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2095 = NAKA_NONE,
 
     .field_2097 = NAKA_NONE,
 
-    .ptr_2099 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2099 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_209d = NAKA_NONE,
 
     .field_209f = NAKA_NONE,
 
-    .ptr_20a1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20a1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_214 = { 0 },
 
@@ -66854,37 +66854,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20b1 = NAKA_NONE,
 
-    .ptr_20b3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20b3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20b7 = NAKA_NONE,
 
     .field_20b9 = NAKA_NONE,
 
-    .ptr_20bb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20bb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20bf = NAKA_NONE,
 
     .field_20c1 = NAKA_NONE,
 
-    .ptr_20c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20c7 = NAKA_NONE,
 
     .field_20c9 = NAKA_NONE,
 
-    .ptr_20cb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20cb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20cf = NAKA_NONE,
 
     .field_20d1 = NAKA_NONE,
 
-    .ptr_20d3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20d3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20d7 = NAKA_NONE,
 
     .field_20d9 = NAKA_NONE,
 
-    .ptr_20db = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20db = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_215 = { 0 },
 
@@ -66898,37 +66898,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20eb = NAKA_NONE,
 
-    .ptr_20ed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20ed = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20f1 = NAKA_NONE,
 
     .field_20f3 = NAKA_NONE,
 
-    .ptr_20f5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20f5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20f9 = NAKA_NONE,
 
     .field_20fb = NAKA_NONE,
 
-    .ptr_20fd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20fd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2101 = NAKA_NONE,
 
     .field_2103 = NAKA_NONE,
 
-    .ptr_2105 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2105 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2109 = NAKA_NONE,
 
     .field_210b = NAKA_NONE,
 
-    .ptr_210d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_210d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2111 = NAKA_NONE,
 
     .field_2113 = NAKA_NONE,
 
-    .ptr_2115 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2115 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_216 = { 0 },
 
@@ -66942,37 +66942,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2125 = NAKA_NONE,
 
-    .ptr_2127 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2127 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_212b = NAKA_NONE,
 
     .field_212d = NAKA_NONE,
 
-    .ptr_212f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_212f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2133 = NAKA_NONE,
 
     .field_2135 = NAKA_NONE,
 
-    .ptr_2137 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2137 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_213b = NAKA_NONE,
 
     .field_213d = NAKA_NONE,
 
-    .ptr_213f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_213f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2143 = NAKA_NONE,
 
     .field_2145 = NAKA_NONE,
 
-    .ptr_2147 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2147 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_214b = NAKA_NONE,
 
     .field_214d = NAKA_NONE,
 
-    .ptr_214f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_214f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_217 = { 0 },
 
@@ -66986,37 +66986,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_215f = NAKA_NONE,
 
-    .ptr_2161 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2161 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2165 = NAKA_NONE,
 
     .field_2167 = NAKA_NONE,
 
-    .ptr_2169 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2169 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_216d = NAKA_NONE,
 
     .field_216f = NAKA_NONE,
 
-    .ptr_2171 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2171 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2175 = NAKA_NONE,
 
     .field_2177 = NAKA_NONE,
 
-    .ptr_2179 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2179 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_217d = NAKA_NONE,
 
     .field_217f = NAKA_NONE,
 
-    .ptr_2181 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2181 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2185 = NAKA_NONE,
 
     .field_2187 = NAKA_NONE,
 
-    .ptr_2189 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2189 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_218 = { 0 },
 
@@ -67030,37 +67030,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2199 = NAKA_NONE,
 
-    .ptr_219b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_219b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_219f = NAKA_NONE,
 
     .field_21a1 = NAKA_NONE,
 
-    .ptr_21a3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_21a3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_21a7 = NAKA_NONE,
 
     .field_21a9 = NAKA_NONE,
 
-    .ptr_21ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_21ab = NAKA_ADDR(NakaData_RomEnd),
 
     .field_21af = NAKA_NONE,
 
     .field_21b1 = NAKA_NONE,
 
-    .ptr_21b3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_21b3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_21b7 = NAKA_NONE,
 
     .field_21b9 = NAKA_NONE,
 
-    .ptr_21bb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_21bb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_21bf = NAKA_NONE,
 
     .field_21c1 = NAKA_NONE,
 
-    .ptr_21c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_21c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_219 = { 0 },
 
@@ -67074,38 +67074,38 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_21d3 = NAKA_NONE,
 
-    .ptr_21d5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_21d5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_21d9 = NAKA_NONE,
 
     .field_21db = NAKA_NONE,
 
-    .ptr_21dd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_21dd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_21e1 = NAKA_NONE,
 
     .field_21e3 = NAKA_NONE,
 
-    .ptr_21e5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_21e5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_21e9 = NAKA_NONE,
 
     .field_21eb = NAKA_NONE,
 
-    .ptr_21ed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_21ed = NAKA_ADDR(NakaData_RomEnd),
 
     .field_21f1 = NAKA_NONE,
 
     .field_21f3 = NAKA_NONE,
 
-    .ptr_21f5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_21f5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_21f9 = NAKA_NONE,
 
     .field_21fb = NAKA_NONE,
 
     .ptrs_76 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -67147,13 +67147,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_77 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_303 = ALIGNED_STRING(""),
 
-    .ptr_228b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_228b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_228f = NAKA_NONE,
 
@@ -67171,7 +67171,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_22a9 = NAKA_NONE,
 
-    .ptr_22ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_22ab = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_224 = { 0 },
 
@@ -67183,13 +67183,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_78 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_304 = ALIGNED_STRING(""),
 
-    .ptr_22c5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_22c5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_22c9 = NAKA_NONE,
 
@@ -67207,7 +67207,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_22e3 = NAKA_NONE,
 
-    .ptr_22e5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_22e5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_228 = { 0 },
 
@@ -67219,13 +67219,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_79 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_305 = ALIGNED_STRING(""),
 
-    .ptr_22ff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_22ff = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2303 = NAKA_NONE,
 
@@ -67243,7 +67243,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_231d = NAKA_NONE,
 
-    .ptr_231f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_231f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_232 = { 0 },
 
@@ -67255,13 +67255,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_80 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_306 = ALIGNED_STRING(""),
 
-    .ptr_2339 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2339 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_233d = NAKA_NONE,
 
@@ -67279,7 +67279,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2357 = NAKA_NONE,
 
-    .ptr_2359 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2359 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_236 = { 0 },
 
@@ -67291,13 +67291,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_81 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_307 = ALIGNED_STRING(""),
 
-    .ptr_2373 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2373 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2377 = NAKA_NONE,
 
@@ -67315,7 +67315,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2391 = NAKA_NONE,
 
-    .ptr_2393 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2393 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_240 = { 0 },
 
@@ -67327,13 +67327,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_82 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_308 = ALIGNED_STRING(""),
 
-    .ptr_23ad = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_23ad = NAKA_ADDR(NakaData_RomEnd),
 
     .field_23b1 = NAKA_NONE,
 
@@ -67351,7 +67351,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_23cb = NAKA_NONE,
 
-    .ptr_23cd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_23cd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_244 = { 0 },
 
@@ -67363,13 +67363,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_83 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_309 = ALIGNED_STRING(""),
 
-    .ptr_23e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_23e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_23eb = NAKA_NONE,
 
@@ -67387,7 +67387,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2405 = NAKA_NONE,
 
-    .ptr_2407 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2407 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_248 = { 0 },
 
@@ -67399,13 +67399,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_84 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_310 = ALIGNED_STRING(""),
 
-    .ptr_2421 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2421 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2425 = NAKA_NONE,
 
@@ -67423,7 +67423,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_243f = NAKA_NONE,
 
-    .ptr_2441 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2441 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_252 = { 0 },
 
@@ -67435,13 +67435,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_85 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_311 = ALIGNED_STRING(""),
 
-    .ptr_245b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_245b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_245f = NAKA_NONE,
 
@@ -67459,7 +67459,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2479 = NAKA_NONE,
 
-    .ptr_247b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_247b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_256 = { 0 },
 
@@ -67471,13 +67471,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_86 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_312 = ALIGNED_STRING(""),
 
-    .ptr_2495 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2495 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2499 = NAKA_NONE,
 
@@ -67495,7 +67495,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_24b3 = NAKA_NONE,
 
-    .ptr_24b5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_24b5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_260 = { 0 },
 
@@ -67507,13 +67507,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_87 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_313 = ALIGNED_STRING(""),
 
-    .ptr_24cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_24cf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_24d3 = NAKA_NONE,
 
@@ -67531,7 +67531,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_24ed = NAKA_NONE,
 
-    .ptr_24ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_24ef = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_264 = { 0 },
 
@@ -67543,13 +67543,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_88 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_314 = ALIGNED_STRING(""),
 
-    .ptr_2509 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2509 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_250d = NAKA_NONE,
 
@@ -67567,7 +67567,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2527 = NAKA_NONE,
 
-    .ptr_2529 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2529 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_268 = { 0 },
 
@@ -67579,13 +67579,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_89 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_315 = ALIGNED_STRING(""),
 
-    .ptr_2543 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2543 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2547 = NAKA_NONE,
 
@@ -67603,7 +67603,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2561 = NAKA_NONE,
 
-    .ptr_2563 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2563 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_272 = { 0 },
 
@@ -67615,13 +67615,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_90 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_316 = ALIGNED_STRING(""),
 
-    .ptr_257d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_257d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2581 = NAKA_NONE,
 
@@ -67639,7 +67639,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_259b = NAKA_NONE,
 
-    .ptr_259d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_259d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_276 = { 0 },
 
@@ -67651,13 +67651,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_91 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_317 = ALIGNED_STRING(""),
 
-    .ptr_25b7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_25b7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_25bb = NAKA_NONE,
 
@@ -67675,7 +67675,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_25d5 = NAKA_NONE,
 
-    .ptr_25d7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_25d7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_280 = { 0 },
 
@@ -67687,13 +67687,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_92 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_318 = ALIGNED_STRING(""),
 
-    .ptr_25f1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_25f1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_25f5 = NAKA_NONE,
 
@@ -67711,7 +67711,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_260f = NAKA_NONE,
 
-    .ptr_2611 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2611 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_284 = { 0 },
 
@@ -67723,13 +67723,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_93 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_319 = ALIGNED_STRING(""),
 
-    .ptr_262b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_262b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_262f = NAKA_NONE,
 
@@ -67747,7 +67747,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2649 = NAKA_NONE,
 
-    .ptr_264b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_264b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_288 = { 0 },
 
@@ -67759,13 +67759,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_94 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_320 = ALIGNED_STRING(""),
 
-    .ptr_2665 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2665 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2669 = NAKA_NONE,
 
@@ -67783,7 +67783,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2683 = NAKA_NONE,
 
-    .ptr_2685 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2685 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_292 = { 0 },
 
@@ -67795,13 +67795,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_95 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_321 = ALIGNED_STRING(""),
 
-    .ptr_269f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_269f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_26a3 = NAKA_NONE,
 
@@ -67819,7 +67819,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_26bd = NAKA_NONE,
 
-    .ptr_26bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_26bf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_296 = { 0 },
 
@@ -67831,13 +67831,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_96 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_322 = ALIGNED_STRING(""),
 
-    .ptr_26d9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_26d9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_26dd = NAKA_NONE,
 
@@ -67855,7 +67855,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_26f7 = NAKA_NONE,
 
-    .ptr_26f9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_26f9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_300 = { 0 },
 
@@ -67867,13 +67867,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_97 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_323 = ALIGNED_STRING(""),
 
-    .ptr_2713 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2713 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2717 = NAKA_NONE,
 
@@ -67891,7 +67891,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2731 = NAKA_NONE,
 
-    .ptr_2733 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2733 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_304 = { 0 },
 
@@ -67903,13 +67903,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_98 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_324 = ALIGNED_STRING(""),
 
-    .ptr_274d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_274d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2751 = NAKA_NONE,
 
@@ -67927,7 +67927,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_276b = NAKA_NONE,
 
-    .ptr_276d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_276d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_308 = { 0 },
 
@@ -67939,13 +67939,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_99 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_325 = ALIGNED_STRING(""),
 
-    .ptr_2787 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2787 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_278b = NAKA_NONE,
 
@@ -67963,7 +67963,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_27a5 = NAKA_NONE,
 
-    .ptr_27a7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_27a7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_312 = { 0 },
 
@@ -67975,13 +67975,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_100 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_326 = ALIGNED_STRING(""),
 
-    .ptr_27c1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_27c1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_27c5 = NAKA_NONE,
 
@@ -67999,7 +67999,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_27df = NAKA_NONE,
 
-    .ptr_27e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_27e1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_316 = { 0 },
 
@@ -68011,13 +68011,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_101 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_327 = ALIGNED_STRING(""),
 
-    .ptr_27fb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_27fb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_27ff = NAKA_NONE,
 
@@ -68035,7 +68035,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2819 = NAKA_NONE,
 
-    .ptr_281b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_281b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_320 = { 0 },
 
@@ -68047,13 +68047,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_102 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_328 = ALIGNED_STRING(""),
 
-    .ptr_2835 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2835 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2839 = NAKA_NONE,
 
@@ -68071,7 +68071,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2853 = NAKA_NONE,
 
-    .ptr_2855 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2855 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_324 = { 0 },
 
@@ -68083,13 +68083,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_103 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_329 = ALIGNED_STRING(""),
 
-    .ptr_286f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_286f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2873 = NAKA_NONE,
 
@@ -68107,7 +68107,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_288d = NAKA_NONE,
 
-    .ptr_288f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_288f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_328 = { 0 },
 
@@ -68119,13 +68119,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_104 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_330 = ALIGNED_STRING(""),
 
-    .ptr_28a9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_28a9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_28ad = NAKA_NONE,
 
@@ -68143,7 +68143,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_28c7 = NAKA_NONE,
 
-    .ptr_28c9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_28c9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_332 = { 0 },
 
@@ -68155,13 +68155,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .ptrs_105 = {
         0x00FCFCFC,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
     .str_331 = ALIGNED_STRING(""),
 
-    .ptr_28e3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_28e3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_28e7 = NAKA_NONE,
 
@@ -68179,7 +68179,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2901 = NAKA_NONE,
 
-    .ptr_2903 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2903 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_336 = { 0 },
 
@@ -68189,7 +68189,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_337 = { 0 },
 
-    .ptr_2913 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2913 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_338 = { 0 },
 
@@ -68200,7 +68200,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_332 = ALIGNED_STRING(""),
 
     .ptrs_106 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -68226,37 +68226,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_294d = NAKA_NONE,
 
-    .ptr_294f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_294f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2953 = NAKA_NONE,
 
     .field_2955 = NAKA_NONE,
 
-    .ptr_2957 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2957 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_295b = NAKA_NONE,
 
     .field_295d = NAKA_NONE,
 
-    .ptr_295f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_295f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2963 = NAKA_NONE,
 
     .field_2965 = NAKA_NONE,
 
-    .ptr_2967 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2967 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_296b = NAKA_NONE,
 
     .field_296d = NAKA_NONE,
 
-    .ptr_296f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_296f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2973 = NAKA_NONE,
 
     .field_2975 = NAKA_NONE,
 
-    .ptr_2977 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2977 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_340 = { 0 },
 
@@ -68270,37 +68270,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2987 = NAKA_NONE,
 
-    .ptr_2989 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2989 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_298d = NAKA_NONE,
 
     .field_298f = NAKA_NONE,
 
-    .ptr_2991 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2991 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2995 = NAKA_NONE,
 
     .field_2997 = NAKA_NONE,
 
-    .ptr_2999 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2999 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_299d = NAKA_NONE,
 
     .field_299f = NAKA_NONE,
 
-    .ptr_29a1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_29a1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_29a5 = NAKA_NONE,
 
     .field_29a7 = NAKA_NONE,
 
-    .ptr_29a9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_29a9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_29ad = NAKA_NONE,
 
     .field_29af = NAKA_NONE,
 
-    .ptr_29b1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_29b1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_341 = { 0 },
 
@@ -68314,37 +68314,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_29c1 = NAKA_NONE,
 
-    .ptr_29c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_29c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_29c7 = NAKA_NONE,
 
     .field_29c9 = NAKA_NONE,
 
-    .ptr_29cb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_29cb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_29cf = NAKA_NONE,
 
     .field_29d1 = NAKA_NONE,
 
-    .ptr_29d3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_29d3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_29d7 = NAKA_NONE,
 
     .field_29d9 = NAKA_NONE,
 
-    .ptr_29db = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_29db = NAKA_ADDR(NakaData_RomEnd),
 
     .field_29df = NAKA_NONE,
 
     .field_29e1 = NAKA_NONE,
 
-    .ptr_29e3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_29e3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_29e7 = NAKA_NONE,
 
     .field_29e9 = NAKA_NONE,
 
-    .ptr_29eb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_29eb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_342 = { 0 },
 
@@ -68358,37 +68358,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_29fb = NAKA_NONE,
 
-    .ptr_29fd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_29fd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a01 = NAKA_NONE,
 
     .field_2a03 = NAKA_NONE,
 
-    .ptr_2a05 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a05 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a09 = NAKA_NONE,
 
     .field_2a0b = NAKA_NONE,
 
-    .ptr_2a0d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a0d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a11 = NAKA_NONE,
 
     .field_2a13 = NAKA_NONE,
 
-    .ptr_2a15 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a15 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a19 = NAKA_NONE,
 
     .field_2a1b = NAKA_NONE,
 
-    .ptr_2a1d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a1d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a21 = NAKA_NONE,
 
     .field_2a23 = NAKA_NONE,
 
-    .ptr_2a25 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a25 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_343 = { 0 },
 
@@ -68402,37 +68402,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2a35 = NAKA_NONE,
 
-    .ptr_2a37 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a37 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a3b = NAKA_NONE,
 
     .field_2a3d = NAKA_NONE,
 
-    .ptr_2a3f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a3f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a43 = NAKA_NONE,
 
     .field_2a45 = NAKA_NONE,
 
-    .ptr_2a47 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a47 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a4b = NAKA_NONE,
 
     .field_2a4d = NAKA_NONE,
 
-    .ptr_2a4f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a4f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a53 = NAKA_NONE,
 
     .field_2a55 = NAKA_NONE,
 
-    .ptr_2a57 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a57 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a5b = NAKA_NONE,
 
     .field_2a5d = NAKA_NONE,
 
-    .ptr_2a5f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a5f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_344 = { 0 },
 
@@ -68446,37 +68446,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2a6f = NAKA_NONE,
 
-    .ptr_2a71 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a71 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a75 = NAKA_NONE,
 
     .field_2a77 = NAKA_NONE,
 
-    .ptr_2a79 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a79 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a7d = NAKA_NONE,
 
     .field_2a7f = NAKA_NONE,
 
-    .ptr_2a81 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a81 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a85 = NAKA_NONE,
 
     .field_2a87 = NAKA_NONE,
 
-    .ptr_2a89 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a89 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a8d = NAKA_NONE,
 
     .field_2a8f = NAKA_NONE,
 
-    .ptr_2a91 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a91 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2a95 = NAKA_NONE,
 
     .field_2a97 = NAKA_NONE,
 
-    .ptr_2a99 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2a99 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_345 = { 0 },
 
@@ -68490,37 +68490,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2aa9 = NAKA_NONE,
 
-    .ptr_2aab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2aab = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2aaf = NAKA_NONE,
 
     .field_2ab1 = NAKA_NONE,
 
-    .ptr_2ab3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2ab3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2ab7 = NAKA_NONE,
 
     .field_2ab9 = NAKA_NONE,
 
-    .ptr_2abb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2abb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2abf = NAKA_NONE,
 
     .field_2ac1 = NAKA_NONE,
 
-    .ptr_2ac3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2ac3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2ac7 = NAKA_NONE,
 
     .field_2ac9 = NAKA_NONE,
 
-    .ptr_2acb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2acb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2acf = NAKA_NONE,
 
     .field_2ad1 = NAKA_NONE,
 
-    .ptr_2ad3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2ad3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_346 = { 0 },
 
@@ -68534,37 +68534,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2ae3 = NAKA_NONE,
 
-    .ptr_2ae5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2ae5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2ae9 = NAKA_NONE,
 
     .field_2aeb = NAKA_NONE,
 
-    .ptr_2aed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2aed = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2af1 = NAKA_NONE,
 
     .field_2af3 = NAKA_NONE,
 
-    .ptr_2af5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2af5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2af9 = NAKA_NONE,
 
     .field_2afb = NAKA_NONE,
 
-    .ptr_2afd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2afd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b01 = NAKA_NONE,
 
     .field_2b03 = NAKA_NONE,
 
-    .ptr_2b05 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b05 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b09 = NAKA_NONE,
 
     .field_2b0b = NAKA_NONE,
 
-    .ptr_2b0d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b0d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_347 = { 0 },
 
@@ -68578,37 +68578,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2b1d = NAKA_NONE,
 
-    .ptr_2b1f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b1f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b23 = NAKA_NONE,
 
     .field_2b25 = NAKA_NONE,
 
-    .ptr_2b27 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b27 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b2b = NAKA_NONE,
 
     .field_2b2d = NAKA_NONE,
 
-    .ptr_2b2f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b2f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b33 = NAKA_NONE,
 
     .field_2b35 = NAKA_NONE,
 
-    .ptr_2b37 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b37 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b3b = NAKA_NONE,
 
     .field_2b3d = NAKA_NONE,
 
-    .ptr_2b3f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b3f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b43 = NAKA_NONE,
 
     .field_2b45 = NAKA_NONE,
 
-    .ptr_2b47 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b47 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_348 = { 0 },
 
@@ -68622,37 +68622,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2b57 = NAKA_NONE,
 
-    .ptr_2b59 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b59 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b5d = NAKA_NONE,
 
     .field_2b5f = NAKA_NONE,
 
-    .ptr_2b61 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b61 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b65 = NAKA_NONE,
 
     .field_2b67 = NAKA_NONE,
 
-    .ptr_2b69 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b69 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b6d = NAKA_NONE,
 
     .field_2b6f = NAKA_NONE,
 
-    .ptr_2b71 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b71 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b75 = NAKA_NONE,
 
     .field_2b77 = NAKA_NONE,
 
-    .ptr_2b79 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b79 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b7d = NAKA_NONE,
 
     .field_2b7f = NAKA_NONE,
 
-    .ptr_2b81 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b81 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_349 = { 0 },
 
@@ -68666,37 +68666,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2b91 = NAKA_NONE,
 
-    .ptr_2b93 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b93 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b97 = NAKA_NONE,
 
     .field_2b99 = NAKA_NONE,
 
-    .ptr_2b9b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2b9b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2b9f = NAKA_NONE,
 
     .field_2ba1 = NAKA_NONE,
 
-    .ptr_2ba3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2ba3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2ba7 = NAKA_NONE,
 
     .field_2ba9 = NAKA_NONE,
 
-    .ptr_2bab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2bab = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2baf = NAKA_NONE,
 
     .field_2bb1 = NAKA_NONE,
 
-    .ptr_2bb3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2bb3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2bb7 = NAKA_NONE,
 
     .field_2bb9 = NAKA_NONE,
 
-    .ptr_2bbb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2bbb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_350 = { 0 },
 
@@ -68710,37 +68710,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2bcb = NAKA_NONE,
 
-    .ptr_2bcd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2bcd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2bd1 = NAKA_NONE,
 
     .field_2bd3 = NAKA_NONE,
 
-    .ptr_2bd5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2bd5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2bd9 = NAKA_NONE,
 
     .field_2bdb = NAKA_NONE,
 
-    .ptr_2bdd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2bdd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2be1 = NAKA_NONE,
 
     .field_2be3 = NAKA_NONE,
 
-    .ptr_2be5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2be5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2be9 = NAKA_NONE,
 
     .field_2beb = NAKA_NONE,
 
-    .ptr_2bed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2bed = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2bf1 = NAKA_NONE,
 
     .field_2bf3 = NAKA_NONE,
 
-    .ptr_2bf5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2bf5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_351 = { 0 },
 
@@ -68754,37 +68754,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2c05 = NAKA_NONE,
 
-    .ptr_2c07 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c07 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c0b = NAKA_NONE,
 
     .field_2c0d = NAKA_NONE,
 
-    .ptr_2c0f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c0f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c13 = NAKA_NONE,
 
     .field_2c15 = NAKA_NONE,
 
-    .ptr_2c17 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c17 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c1b = NAKA_NONE,
 
     .field_2c1d = NAKA_NONE,
 
-    .ptr_2c1f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c1f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c23 = NAKA_NONE,
 
     .field_2c25 = NAKA_NONE,
 
-    .ptr_2c27 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c27 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c2b = NAKA_NONE,
 
     .field_2c2d = NAKA_NONE,
 
-    .ptr_2c2f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c2f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_352 = { 0 },
 
@@ -68798,37 +68798,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2c3f = NAKA_NONE,
 
-    .ptr_2c41 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c41 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c45 = NAKA_NONE,
 
     .field_2c47 = NAKA_NONE,
 
-    .ptr_2c49 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c49 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c4d = NAKA_NONE,
 
     .field_2c4f = NAKA_NONE,
 
-    .ptr_2c51 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c51 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c55 = NAKA_NONE,
 
     .field_2c57 = NAKA_NONE,
 
-    .ptr_2c59 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c59 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c5d = NAKA_NONE,
 
     .field_2c5f = NAKA_NONE,
 
-    .ptr_2c61 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c61 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c65 = NAKA_NONE,
 
     .field_2c67 = NAKA_NONE,
 
-    .ptr_2c69 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c69 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_353 = { 0 },
 
@@ -68842,37 +68842,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2c79 = NAKA_NONE,
 
-    .ptr_2c7b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c7b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c7f = NAKA_NONE,
 
     .field_2c81 = NAKA_NONE,
 
-    .ptr_2c83 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c83 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c87 = NAKA_NONE,
 
     .field_2c89 = NAKA_NONE,
 
-    .ptr_2c8b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c8b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c8f = NAKA_NONE,
 
     .field_2c91 = NAKA_NONE,
 
-    .ptr_2c93 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c93 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c97 = NAKA_NONE,
 
     .field_2c99 = NAKA_NONE,
 
-    .ptr_2c9b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2c9b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2c9f = NAKA_NONE,
 
     .field_2ca1 = NAKA_NONE,
 
-    .ptr_2ca3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2ca3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_354 = { 0 },
 
@@ -68886,37 +68886,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2cb3 = NAKA_NONE,
 
-    .ptr_2cb5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2cb5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2cb9 = NAKA_NONE,
 
     .field_2cbb = NAKA_NONE,
 
-    .ptr_2cbd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2cbd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2cc1 = NAKA_NONE,
 
     .field_2cc3 = NAKA_NONE,
 
-    .ptr_2cc5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2cc5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2cc9 = NAKA_NONE,
 
     .field_2ccb = NAKA_NONE,
 
-    .ptr_2ccd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2ccd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2cd1 = NAKA_NONE,
 
     .field_2cd3 = NAKA_NONE,
 
-    .ptr_2cd5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2cd5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2cd9 = NAKA_NONE,
 
     .field_2cdb = NAKA_NONE,
 
-    .ptr_2cdd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2cdd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_355 = { 0 },
 
@@ -68930,37 +68930,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2ced = NAKA_NONE,
 
-    .ptr_2cef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2cef = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2cf3 = NAKA_NONE,
 
     .field_2cf5 = NAKA_NONE,
 
-    .ptr_2cf7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2cf7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2cfb = NAKA_NONE,
 
     .field_2cfd = NAKA_NONE,
 
-    .ptr_2cff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2cff = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d03 = NAKA_NONE,
 
     .field_2d05 = NAKA_NONE,
 
-    .ptr_2d07 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d07 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d0b = NAKA_NONE,
 
     .field_2d0d = NAKA_NONE,
 
-    .ptr_2d0f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d0f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d13 = NAKA_NONE,
 
     .field_2d15 = NAKA_NONE,
 
-    .ptr_2d17 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d17 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_356 = { 0 },
 
@@ -68974,37 +68974,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2d27 = NAKA_NONE,
 
-    .ptr_2d29 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d29 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d2d = NAKA_NONE,
 
     .field_2d2f = NAKA_NONE,
 
-    .ptr_2d31 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d31 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d35 = NAKA_NONE,
 
     .field_2d37 = NAKA_NONE,
 
-    .ptr_2d39 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d39 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d3d = NAKA_NONE,
 
     .field_2d3f = NAKA_NONE,
 
-    .ptr_2d41 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d41 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d45 = NAKA_NONE,
 
     .field_2d47 = NAKA_NONE,
 
-    .ptr_2d49 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d49 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d4d = NAKA_NONE,
 
     .field_2d4f = NAKA_NONE,
 
-    .ptr_2d51 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d51 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_357 = { 0 },
 
@@ -69018,37 +69018,37 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2d61 = NAKA_NONE,
 
-    .ptr_2d63 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d63 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d67 = NAKA_NONE,
 
     .field_2d69 = NAKA_NONE,
 
-    .ptr_2d6b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d6b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d6f = NAKA_NONE,
 
     .field_2d71 = NAKA_NONE,
 
-    .ptr_2d73 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d73 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d77 = NAKA_NONE,
 
     .field_2d79 = NAKA_NONE,
 
-    .ptr_2d7b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d7b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d7f = NAKA_NONE,
 
     .field_2d81 = NAKA_NONE,
 
-    .ptr_2d83 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d83 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2d87 = NAKA_NONE,
 
     .field_2d89 = NAKA_NONE,
 
-    .ptr_2d8b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d8b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_358 = { 0 },
 
@@ -69062,38 +69062,38 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2d9b = NAKA_NONE,
 
-    .ptr_2d9d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2d9d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2da1 = NAKA_NONE,
 
     .field_2da3 = NAKA_NONE,
 
-    .ptr_2da5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2da5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2da9 = NAKA_NONE,
 
     .field_2dab = NAKA_NONE,
 
-    .ptr_2dad = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2dad = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2db1 = NAKA_NONE,
 
     .field_2db3 = NAKA_NONE,
 
-    .ptr_2db5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2db5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2db9 = NAKA_NONE,
 
     .field_2dbb = NAKA_NONE,
 
-    .ptr_2dbd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2dbd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2dc1 = NAKA_NONE,
 
     .field_2dc3 = NAKA_NONE,
 
     .ptrs_107 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -69141,7 +69141,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_334 = ALIGNED_STRING(""),
 
-    .ptr_2e53 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2e53 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2e57 = NAKA_NONE,
 
@@ -69159,7 +69159,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2e71 = NAKA_NONE,
 
-    .ptr_2e73 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2e73 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_363 = { 0 },
 
@@ -69177,7 +69177,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_335 = ALIGNED_STRING(""),
 
-    .ptr_2e8d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2e8d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2e91 = NAKA_NONE,
 
@@ -69195,7 +69195,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2eab = NAKA_NONE,
 
-    .ptr_2ead = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2ead = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_367 = { 0 },
 
@@ -69213,7 +69213,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_336 = ALIGNED_STRING(""),
 
-    .ptr_2ec7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2ec7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2ecb = NAKA_NONE,
 
@@ -69231,7 +69231,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2ee5 = NAKA_NONE,
 
-    .ptr_2ee7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2ee7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_371 = { 0 },
 
@@ -69249,7 +69249,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_337 = ALIGNED_STRING(""),
 
-    .ptr_2f01 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2f01 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2f05 = NAKA_NONE,
 
@@ -69267,7 +69267,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2f1f = NAKA_NONE,
 
-    .ptr_2f21 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2f21 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_375 = { 0 },
 
@@ -69285,7 +69285,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_338 = ALIGNED_STRING(""),
 
-    .ptr_2f3b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2f3b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2f3f = NAKA_NONE,
 
@@ -69303,7 +69303,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2f59 = NAKA_NONE,
 
-    .ptr_2f5b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2f5b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_379 = { 0 },
 
@@ -69321,7 +69321,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_339 = ALIGNED_STRING(""),
 
-    .ptr_2f75 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2f75 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2f79 = NAKA_NONE,
 
@@ -69339,7 +69339,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2f93 = NAKA_NONE,
 
-    .ptr_2f95 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2f95 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_383 = { 0 },
 
@@ -69357,7 +69357,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_340 = ALIGNED_STRING(""),
 
-    .ptr_2faf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2faf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2fb3 = NAKA_NONE,
 
@@ -69375,7 +69375,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2fcd = NAKA_NONE,
 
-    .ptr_2fcf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2fcf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_387 = { 0 },
 
@@ -69393,7 +69393,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_341 = ALIGNED_STRING(""),
 
-    .ptr_2fe9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2fe9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2fed = NAKA_NONE,
 
@@ -69411,7 +69411,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3007 = NAKA_NONE,
 
-    .ptr_3009 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3009 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_391 = { 0 },
 
@@ -69429,7 +69429,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_342 = ALIGNED_STRING(""),
 
-    .ptr_3023 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3023 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3027 = NAKA_NONE,
 
@@ -69447,7 +69447,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3041 = NAKA_NONE,
 
-    .ptr_3043 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3043 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_395 = { 0 },
 
@@ -69465,7 +69465,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_343 = ALIGNED_STRING(""),
 
-    .ptr_305d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_305d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3061 = NAKA_NONE,
 
@@ -69483,7 +69483,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_307b = NAKA_NONE,
 
-    .ptr_307d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_307d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_399 = { 0 },
 
@@ -69501,7 +69501,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_344 = ALIGNED_STRING(""),
 
-    .ptr_3097 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3097 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_309b = NAKA_NONE,
 
@@ -69519,7 +69519,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_30b5 = NAKA_NONE,
 
-    .ptr_30b7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_30b7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_403 = { 0 },
 
@@ -69537,7 +69537,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_345 = ALIGNED_STRING(""),
 
-    .ptr_30d1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_30d1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_30d5 = NAKA_NONE,
 
@@ -69555,7 +69555,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_30ef = NAKA_NONE,
 
-    .ptr_30f1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_30f1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_407 = { 0 },
 
@@ -69573,7 +69573,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_346 = ALIGNED_STRING(""),
 
-    .ptr_310b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_310b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_310f = NAKA_NONE,
 
@@ -69591,7 +69591,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3129 = NAKA_NONE,
 
-    .ptr_312b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_312b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_411 = { 0 },
 
@@ -69609,7 +69609,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_347 = ALIGNED_STRING(""),
 
-    .ptr_3145 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3145 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3149 = NAKA_NONE,
 
@@ -69627,7 +69627,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3163 = NAKA_NONE,
 
-    .ptr_3165 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3165 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_415 = { 0 },
 
@@ -69645,7 +69645,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_348 = ALIGNED_STRING(""),
 
-    .ptr_317f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_317f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3183 = NAKA_NONE,
 
@@ -69663,7 +69663,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_319d = NAKA_NONE,
 
-    .ptr_319f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_319f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_419 = { 0 },
 
@@ -69681,7 +69681,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_349 = ALIGNED_STRING(""),
 
-    .ptr_31b9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_31b9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_31bd = NAKA_NONE,
 
@@ -69699,7 +69699,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_31d7 = NAKA_NONE,
 
-    .ptr_31d9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_31d9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_423 = { 0 },
 
@@ -69717,7 +69717,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_350 = ALIGNED_STRING(""),
 
-    .ptr_31f3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_31f3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_31f7 = NAKA_NONE,
 
@@ -69735,7 +69735,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3211 = NAKA_NONE,
 
-    .ptr_3213 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3213 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_427 = { 0 },
 
@@ -69753,7 +69753,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_351 = ALIGNED_STRING(""),
 
-    .ptr_322d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_322d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3231 = NAKA_NONE,
 
@@ -69771,7 +69771,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_324b = NAKA_NONE,
 
-    .ptr_324d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_324d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_431 = { 0 },
 
@@ -69789,7 +69789,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_352 = ALIGNED_STRING(""),
 
-    .ptr_3267 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3267 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_326b = NAKA_NONE,
 
@@ -69807,7 +69807,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3285 = NAKA_NONE,
 
-    .ptr_3287 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3287 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_435 = { 0 },
 
@@ -69825,7 +69825,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_353 = ALIGNED_STRING(""),
 
-    .ptr_32a1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_32a1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_32a5 = NAKA_NONE,
 
@@ -69843,7 +69843,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_32bf = NAKA_NONE,
 
-    .ptr_32c1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_32c1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_439 = { 0 },
 
@@ -69861,7 +69861,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_354 = ALIGNED_STRING(""),
 
-    .ptr_32db = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_32db = NAKA_ADDR(NakaData_RomEnd),
 
     .field_32df = NAKA_NONE,
 
@@ -69879,7 +69879,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_32f9 = NAKA_NONE,
 
-    .ptr_32fb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_32fb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_443 = { 0 },
 
@@ -69897,7 +69897,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_355 = ALIGNED_STRING(""),
 
-    .ptr_3315 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3315 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3319 = NAKA_NONE,
 
@@ -69915,7 +69915,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3333 = NAKA_NONE,
 
-    .ptr_3335 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3335 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_447 = { 0 },
 
@@ -69933,7 +69933,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_356 = ALIGNED_STRING(""),
 
-    .ptr_334f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_334f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3353 = NAKA_NONE,
 
@@ -69951,7 +69951,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_336d = NAKA_NONE,
 
-    .ptr_336f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_336f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_451 = { 0 },
 
@@ -69969,7 +69969,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_357 = ALIGNED_STRING(""),
 
-    .ptr_3389 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3389 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_338d = NAKA_NONE,
 
@@ -69987,7 +69987,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_33a7 = NAKA_NONE,
 
-    .ptr_33a9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_33a9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_455 = { 0 },
 
@@ -70005,7 +70005,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_358 = ALIGNED_STRING(""),
 
-    .ptr_33c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_33c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_33c7 = NAKA_NONE,
 
@@ -70023,7 +70023,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_33e1 = NAKA_NONE,
 
-    .ptr_33e3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_33e3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_459 = { 0 },
 
@@ -70041,7 +70041,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_359 = ALIGNED_STRING(""),
 
-    .ptr_33fd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_33fd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3401 = NAKA_NONE,
 
@@ -70059,7 +70059,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_341b = NAKA_NONE,
 
-    .ptr_341d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_341d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_463 = { 0 },
 
@@ -70077,7 +70077,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_360 = ALIGNED_STRING(""),
 
-    .ptr_3437 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3437 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_343b = NAKA_NONE,
 
@@ -70095,7 +70095,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3455 = NAKA_NONE,
 
-    .ptr_3457 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3457 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_467 = { 0 },
 
@@ -70113,7 +70113,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_361 = ALIGNED_STRING(""),
 
-    .ptr_3471 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3471 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3475 = NAKA_NONE,
 
@@ -70131,7 +70131,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_348f = NAKA_NONE,
 
-    .ptr_3491 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3491 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_471 = { 0 },
 
@@ -70149,7 +70149,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_362 = ALIGNED_STRING(""),
 
-    .ptr_34ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_34ab = NAKA_ADDR(NakaData_RomEnd),
 
     .field_34af = NAKA_NONE,
 
@@ -70167,7 +70167,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_34c9 = NAKA_NONE,
 
-    .ptr_34cb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_34cb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_475 = { 0 },
 
@@ -70188,7 +70188,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_363 = ALIGNED_STRING(""),
 
     .ptrs_137 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -70220,31 +70220,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_351d = NAKA_NONE,
 
-    .ptr_351f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_351f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3523 = NAKA_NONE,
 
     .field_3525 = NAKA_NONE,
 
-    .ptr_3527 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3527 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_352b = NAKA_NONE,
 
     .field_352d = NAKA_NONE,
 
-    .ptr_352f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_352f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3533 = NAKA_NONE,
 
     .field_3535 = NAKA_NONE,
 
-    .ptr_3537 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3537 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_353b = NAKA_NONE,
 
     .field_353d = NAKA_NONE,
 
-    .ptr_353f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_353f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_479 = { 0 },
 
@@ -70264,31 +70264,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3557 = NAKA_NONE,
 
-    .ptr_3559 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3559 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_355d = NAKA_NONE,
 
     .field_355f = NAKA_NONE,
 
-    .ptr_3561 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3561 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3565 = NAKA_NONE,
 
     .field_3567 = NAKA_NONE,
 
-    .ptr_3569 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3569 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_356d = NAKA_NONE,
 
     .field_356f = NAKA_NONE,
 
-    .ptr_3571 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3571 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3575 = NAKA_NONE,
 
     .field_3577 = NAKA_NONE,
 
-    .ptr_3579 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3579 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_480 = { 0 },
 
@@ -70308,31 +70308,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3591 = NAKA_NONE,
 
-    .ptr_3593 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3593 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3597 = NAKA_NONE,
 
     .field_3599 = NAKA_NONE,
 
-    .ptr_359b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_359b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_359f = NAKA_NONE,
 
     .field_35a1 = NAKA_NONE,
 
-    .ptr_35a3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_35a3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_35a7 = NAKA_NONE,
 
     .field_35a9 = NAKA_NONE,
 
-    .ptr_35ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_35ab = NAKA_ADDR(NakaData_RomEnd),
 
     .field_35af = NAKA_NONE,
 
     .field_35b1 = NAKA_NONE,
 
-    .ptr_35b3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_35b3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_481 = { 0 },
 
@@ -70352,31 +70352,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_35cb = NAKA_NONE,
 
-    .ptr_35cd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_35cd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_35d1 = NAKA_NONE,
 
     .field_35d3 = NAKA_NONE,
 
-    .ptr_35d5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_35d5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_35d9 = NAKA_NONE,
 
     .field_35db = NAKA_NONE,
 
-    .ptr_35dd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_35dd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_35e1 = NAKA_NONE,
 
     .field_35e3 = NAKA_NONE,
 
-    .ptr_35e5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_35e5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_35e9 = NAKA_NONE,
 
     .field_35eb = NAKA_NONE,
 
-    .ptr_35ed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_35ed = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_482 = { 0 },
 
@@ -70396,31 +70396,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3605 = NAKA_NONE,
 
-    .ptr_3607 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3607 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_360b = NAKA_NONE,
 
     .field_360d = NAKA_NONE,
 
-    .ptr_360f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_360f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3613 = NAKA_NONE,
 
     .field_3615 = NAKA_NONE,
 
-    .ptr_3617 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3617 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_361b = NAKA_NONE,
 
     .field_361d = NAKA_NONE,
 
-    .ptr_361f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_361f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3623 = NAKA_NONE,
 
     .field_3625 = NAKA_NONE,
 
-    .ptr_3627 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3627 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_483 = { 0 },
 
@@ -70440,31 +70440,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_363f = NAKA_NONE,
 
-    .ptr_3641 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3641 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3645 = NAKA_NONE,
 
     .field_3647 = NAKA_NONE,
 
-    .ptr_3649 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3649 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_364d = NAKA_NONE,
 
     .field_364f = NAKA_NONE,
 
-    .ptr_3651 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3651 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3655 = NAKA_NONE,
 
     .field_3657 = NAKA_NONE,
 
-    .ptr_3659 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3659 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_365d = NAKA_NONE,
 
     .field_365f = NAKA_NONE,
 
-    .ptr_3661 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3661 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_484 = { 0 },
 
@@ -70484,31 +70484,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3679 = NAKA_NONE,
 
-    .ptr_367b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_367b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_367f = NAKA_NONE,
 
     .field_3681 = NAKA_NONE,
 
-    .ptr_3683 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3683 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3687 = NAKA_NONE,
 
     .field_3689 = NAKA_NONE,
 
-    .ptr_368b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_368b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_368f = NAKA_NONE,
 
     .field_3691 = NAKA_NONE,
 
-    .ptr_3693 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3693 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3697 = NAKA_NONE,
 
     .field_3699 = NAKA_NONE,
 
-    .ptr_369b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_369b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_485 = { 0 },
 
@@ -70528,31 +70528,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_36b3 = NAKA_NONE,
 
-    .ptr_36b5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_36b5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_36b9 = NAKA_NONE,
 
     .field_36bb = NAKA_NONE,
 
-    .ptr_36bd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_36bd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_36c1 = NAKA_NONE,
 
     .field_36c3 = NAKA_NONE,
 
-    .ptr_36c5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_36c5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_36c9 = NAKA_NONE,
 
     .field_36cb = NAKA_NONE,
 
-    .ptr_36cd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_36cd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_36d1 = NAKA_NONE,
 
     .field_36d3 = NAKA_NONE,
 
-    .ptr_36d5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_36d5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_486 = { 0 },
 
@@ -70572,31 +70572,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_36ed = NAKA_NONE,
 
-    .ptr_36ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_36ef = NAKA_ADDR(NakaData_RomEnd),
 
     .field_36f3 = NAKA_NONE,
 
     .field_36f5 = NAKA_NONE,
 
-    .ptr_36f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_36f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_36fb = NAKA_NONE,
 
     .field_36fd = NAKA_NONE,
 
-    .ptr_36ff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_36ff = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3703 = NAKA_NONE,
 
     .field_3705 = NAKA_NONE,
 
-    .ptr_3707 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3707 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_370b = NAKA_NONE,
 
     .field_370d = NAKA_NONE,
 
-    .ptr_370f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_370f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_487 = { 0 },
 
@@ -70616,31 +70616,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3727 = NAKA_NONE,
 
-    .ptr_3729 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3729 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_372d = NAKA_NONE,
 
     .field_372f = NAKA_NONE,
 
-    .ptr_3731 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3731 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3735 = NAKA_NONE,
 
     .field_3737 = NAKA_NONE,
 
-    .ptr_3739 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3739 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_373d = NAKA_NONE,
 
     .field_373f = NAKA_NONE,
 
-    .ptr_3741 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3741 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3745 = NAKA_NONE,
 
     .field_3747 = NAKA_NONE,
 
-    .ptr_3749 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3749 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_488 = { 0 },
 
@@ -70660,31 +70660,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3761 = NAKA_NONE,
 
-    .ptr_3763 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3763 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3767 = NAKA_NONE,
 
     .field_3769 = NAKA_NONE,
 
-    .ptr_376b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_376b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_376f = NAKA_NONE,
 
     .field_3771 = NAKA_NONE,
 
-    .ptr_3773 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3773 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3777 = NAKA_NONE,
 
     .field_3779 = NAKA_NONE,
 
-    .ptr_377b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_377b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_377f = NAKA_NONE,
 
     .field_3781 = NAKA_NONE,
 
-    .ptr_3783 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3783 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_489 = { 0 },
 
@@ -70704,31 +70704,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_379b = NAKA_NONE,
 
-    .ptr_379d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_379d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_37a1 = NAKA_NONE,
 
     .field_37a3 = NAKA_NONE,
 
-    .ptr_37a5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_37a5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_37a9 = NAKA_NONE,
 
     .field_37ab = NAKA_NONE,
 
-    .ptr_37ad = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_37ad = NAKA_ADDR(NakaData_RomEnd),
 
     .field_37b1 = NAKA_NONE,
 
     .field_37b3 = NAKA_NONE,
 
-    .ptr_37b5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_37b5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_37b9 = NAKA_NONE,
 
     .field_37bb = NAKA_NONE,
 
-    .ptr_37bd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_37bd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_490 = { 0 },
 
@@ -70748,31 +70748,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_37d5 = NAKA_NONE,
 
-    .ptr_37d7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_37d7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_37db = NAKA_NONE,
 
     .field_37dd = NAKA_NONE,
 
-    .ptr_37df = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_37df = NAKA_ADDR(NakaData_RomEnd),
 
     .field_37e3 = NAKA_NONE,
 
     .field_37e5 = NAKA_NONE,
 
-    .ptr_37e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_37e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_37eb = NAKA_NONE,
 
     .field_37ed = NAKA_NONE,
 
-    .ptr_37ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_37ef = NAKA_ADDR(NakaData_RomEnd),
 
     .field_37f3 = NAKA_NONE,
 
     .field_37f5 = NAKA_NONE,
 
-    .ptr_37f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_37f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_491 = { 0 },
 
@@ -70792,31 +70792,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_380f = NAKA_NONE,
 
-    .ptr_3811 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3811 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3815 = NAKA_NONE,
 
     .field_3817 = NAKA_NONE,
 
-    .ptr_3819 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3819 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_381d = NAKA_NONE,
 
     .field_381f = NAKA_NONE,
 
-    .ptr_3821 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3821 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3825 = NAKA_NONE,
 
     .field_3827 = NAKA_NONE,
 
-    .ptr_3829 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3829 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_382d = NAKA_NONE,
 
     .field_382f = NAKA_NONE,
 
-    .ptr_3831 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3831 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_492 = { 0 },
 
@@ -70836,31 +70836,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3849 = NAKA_NONE,
 
-    .ptr_384b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_384b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_384f = NAKA_NONE,
 
     .field_3851 = NAKA_NONE,
 
-    .ptr_3853 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3853 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3857 = NAKA_NONE,
 
     .field_3859 = NAKA_NONE,
 
-    .ptr_385b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_385b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_385f = NAKA_NONE,
 
     .field_3861 = NAKA_NONE,
 
-    .ptr_3863 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3863 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3867 = NAKA_NONE,
 
     .field_3869 = NAKA_NONE,
 
-    .ptr_386b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_386b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_493 = { 0 },
 
@@ -70880,31 +70880,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3883 = NAKA_NONE,
 
-    .ptr_3885 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3885 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3889 = NAKA_NONE,
 
     .field_388b = NAKA_NONE,
 
-    .ptr_388d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_388d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3891 = NAKA_NONE,
 
     .field_3893 = NAKA_NONE,
 
-    .ptr_3895 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3895 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3899 = NAKA_NONE,
 
     .field_389b = NAKA_NONE,
 
-    .ptr_389d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_389d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_38a1 = NAKA_NONE,
 
     .field_38a3 = NAKA_NONE,
 
-    .ptr_38a5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_38a5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_494 = { 0 },
 
@@ -70924,31 +70924,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_38bd = NAKA_NONE,
 
-    .ptr_38bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_38bf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_38c3 = NAKA_NONE,
 
     .field_38c5 = NAKA_NONE,
 
-    .ptr_38c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_38c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_38cb = NAKA_NONE,
 
     .field_38cd = NAKA_NONE,
 
-    .ptr_38cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_38cf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_38d3 = NAKA_NONE,
 
     .field_38d5 = NAKA_NONE,
 
-    .ptr_38d7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_38d7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_38db = NAKA_NONE,
 
     .field_38dd = NAKA_NONE,
 
-    .ptr_38df = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_38df = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_495 = { 0 },
 
@@ -70968,31 +70968,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_38f7 = NAKA_NONE,
 
-    .ptr_38f9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_38f9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_38fd = NAKA_NONE,
 
     .field_38ff = NAKA_NONE,
 
-    .ptr_3901 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3901 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3905 = NAKA_NONE,
 
     .field_3907 = NAKA_NONE,
 
-    .ptr_3909 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3909 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_390d = NAKA_NONE,
 
     .field_390f = NAKA_NONE,
 
-    .ptr_3911 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3911 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3915 = NAKA_NONE,
 
     .field_3917 = NAKA_NONE,
 
-    .ptr_3919 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3919 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_496 = { 0 },
 
@@ -71012,31 +71012,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3931 = NAKA_NONE,
 
-    .ptr_3933 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3933 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3937 = NAKA_NONE,
 
     .field_3939 = NAKA_NONE,
 
-    .ptr_393b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_393b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_393f = NAKA_NONE,
 
     .field_3941 = NAKA_NONE,
 
-    .ptr_3943 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3943 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3947 = NAKA_NONE,
 
     .field_3949 = NAKA_NONE,
 
-    .ptr_394b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_394b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_394f = NAKA_NONE,
 
     .field_3951 = NAKA_NONE,
 
-    .ptr_3953 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3953 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_497 = { 0 },
 
@@ -71056,32 +71056,32 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_396b = NAKA_NONE,
 
-    .ptr_396d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_396d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3971 = NAKA_NONE,
 
     .field_3973 = NAKA_NONE,
 
-    .ptr_3975 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3975 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3979 = NAKA_NONE,
 
     .field_397b = NAKA_NONE,
 
-    .ptr_397d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_397d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3981 = NAKA_NONE,
 
     .field_3983 = NAKA_NONE,
 
-    .ptr_3985 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3985 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3989 = NAKA_NONE,
 
     .field_398b = NAKA_NONE,
 
     .ptrs_138 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -71131,7 +71131,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_365 = ALIGNED_STRING(""),
 
-    .ptr_3a1b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3a1b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3a1f = NAKA_NONE,
 
@@ -71149,7 +71149,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3a39 = NAKA_NONE,
 
-    .ptr_3a3b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3a3b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_502 = { 0 },
 
@@ -71169,7 +71169,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_366 = ALIGNED_STRING(""),
 
-    .ptr_3a55 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3a55 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3a59 = NAKA_NONE,
 
@@ -71187,7 +71187,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3a73 = NAKA_NONE,
 
-    .ptr_3a75 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3a75 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_506 = { 0 },
 
@@ -71207,7 +71207,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_367 = ALIGNED_STRING(""),
 
-    .ptr_3a8f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3a8f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3a93 = NAKA_NONE,
 
@@ -71225,7 +71225,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3aad = NAKA_NONE,
 
-    .ptr_3aaf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3aaf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_510 = { 0 },
 
@@ -71245,7 +71245,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_368 = ALIGNED_STRING(""),
 
-    .ptr_3ac9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3ac9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3acd = NAKA_NONE,
 
@@ -71263,7 +71263,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3ae7 = NAKA_NONE,
 
-    .ptr_3ae9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3ae9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_514 = { 0 },
 
@@ -71283,7 +71283,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_369 = ALIGNED_STRING(""),
 
-    .ptr_3b03 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3b03 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3b07 = NAKA_NONE,
 
@@ -71301,7 +71301,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3b21 = NAKA_NONE,
 
-    .ptr_3b23 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3b23 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_518 = { 0 },
 
@@ -71321,7 +71321,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_370 = ALIGNED_STRING(""),
 
-    .ptr_3b3d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3b3d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3b41 = NAKA_NONE,
 
@@ -71339,7 +71339,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3b5b = NAKA_NONE,
 
-    .ptr_3b5d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3b5d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_522 = { 0 },
 
@@ -71359,7 +71359,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_371 = ALIGNED_STRING(""),
 
-    .ptr_3b77 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3b77 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3b7b = NAKA_NONE,
 
@@ -71377,7 +71377,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3b95 = NAKA_NONE,
 
-    .ptr_3b97 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3b97 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_526 = { 0 },
 
@@ -71397,7 +71397,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_372 = ALIGNED_STRING(""),
 
-    .ptr_3bb1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3bb1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3bb5 = NAKA_NONE,
 
@@ -71415,7 +71415,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3bcf = NAKA_NONE,
 
-    .ptr_3bd1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3bd1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_530 = { 0 },
 
@@ -71435,7 +71435,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_373 = ALIGNED_STRING(""),
 
-    .ptr_3beb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3beb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3bef = NAKA_NONE,
 
@@ -71453,7 +71453,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3c09 = NAKA_NONE,
 
-    .ptr_3c0b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3c0b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_534 = { 0 },
 
@@ -71473,7 +71473,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_374 = ALIGNED_STRING(""),
 
-    .ptr_3c25 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3c25 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3c29 = NAKA_NONE,
 
@@ -71491,7 +71491,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3c43 = NAKA_NONE,
 
-    .ptr_3c45 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3c45 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_538 = { 0 },
 
@@ -71511,7 +71511,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_375 = ALIGNED_STRING(""),
 
-    .ptr_3c5f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3c5f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3c63 = NAKA_NONE,
 
@@ -71529,7 +71529,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3c7d = NAKA_NONE,
 
-    .ptr_3c7f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3c7f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_542 = { 0 },
 
@@ -71549,7 +71549,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_376 = ALIGNED_STRING(""),
 
-    .ptr_3c99 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3c99 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3c9d = NAKA_NONE,
 
@@ -71567,7 +71567,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3cb7 = NAKA_NONE,
 
-    .ptr_3cb9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3cb9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_546 = { 0 },
 
@@ -71587,7 +71587,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_377 = ALIGNED_STRING(""),
 
-    .ptr_3cd3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3cd3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3cd7 = NAKA_NONE,
 
@@ -71605,7 +71605,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3cf1 = NAKA_NONE,
 
-    .ptr_3cf3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3cf3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_550 = { 0 },
 
@@ -71625,7 +71625,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_378 = ALIGNED_STRING(""),
 
-    .ptr_3d0d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3d0d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3d11 = NAKA_NONE,
 
@@ -71643,7 +71643,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3d2b = NAKA_NONE,
 
-    .ptr_3d2d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3d2d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_554 = { 0 },
 
@@ -71663,7 +71663,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_379 = ALIGNED_STRING(""),
 
-    .ptr_3d47 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3d47 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3d4b = NAKA_NONE,
 
@@ -71681,7 +71681,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3d65 = NAKA_NONE,
 
-    .ptr_3d67 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3d67 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_558 = { 0 },
 
@@ -71701,7 +71701,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_380 = ALIGNED_STRING(""),
 
-    .ptr_3d81 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3d81 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3d85 = NAKA_NONE,
 
@@ -71719,7 +71719,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3d9f = NAKA_NONE,
 
-    .ptr_3da1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3da1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_562 = { 0 },
 
@@ -71739,7 +71739,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_381 = ALIGNED_STRING(""),
 
-    .ptr_3dbb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3dbb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3dbf = NAKA_NONE,
 
@@ -71757,7 +71757,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3dd9 = NAKA_NONE,
 
-    .ptr_3ddb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3ddb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_566 = { 0 },
 
@@ -71777,7 +71777,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_382 = ALIGNED_STRING(""),
 
-    .ptr_3df5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3df5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3df9 = NAKA_NONE,
 
@@ -71795,7 +71795,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3e13 = NAKA_NONE,
 
-    .ptr_3e15 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3e15 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_570 = { 0 },
 
@@ -71815,7 +71815,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_383 = ALIGNED_STRING(""),
 
-    .ptr_3e2f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3e2f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3e33 = NAKA_NONE,
 
@@ -71833,7 +71833,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3e4d = NAKA_NONE,
 
-    .ptr_3e4f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3e4f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_574 = { 0 },
 
@@ -71853,7 +71853,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_384 = ALIGNED_STRING(""),
 
-    .ptr_3e69 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3e69 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3e6d = NAKA_NONE,
 
@@ -71871,7 +71871,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3e87 = NAKA_NONE,
 
-    .ptr_3e89 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3e89 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_578 = { 0 },
 
@@ -71891,7 +71891,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_385 = ALIGNED_STRING(""),
 
-    .ptr_3ea3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3ea3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3ea7 = NAKA_NONE,
 
@@ -71909,7 +71909,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3ec1 = NAKA_NONE,
 
-    .ptr_3ec3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3ec3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_582 = { 0 },
 
@@ -71929,7 +71929,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_386 = ALIGNED_STRING(""),
 
-    .ptr_3edd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3edd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3ee1 = NAKA_NONE,
 
@@ -71947,7 +71947,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3efb = NAKA_NONE,
 
-    .ptr_3efd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3efd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_586 = { 0 },
 
@@ -71967,7 +71967,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_387 = ALIGNED_STRING(""),
 
-    .ptr_3f17 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3f17 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3f1b = NAKA_NONE,
 
@@ -71985,7 +71985,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3f35 = NAKA_NONE,
 
-    .ptr_3f37 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3f37 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_590 = { 0 },
 
@@ -72005,7 +72005,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_388 = ALIGNED_STRING(""),
 
-    .ptr_3f51 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3f51 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3f55 = NAKA_NONE,
 
@@ -72023,7 +72023,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3f6f = NAKA_NONE,
 
-    .ptr_3f71 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3f71 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_594 = { 0 },
 
@@ -72043,7 +72043,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_389 = ALIGNED_STRING(""),
 
-    .ptr_3f8b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3f8b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3f8f = NAKA_NONE,
 
@@ -72061,7 +72061,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3fa9 = NAKA_NONE,
 
-    .ptr_3fab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3fab = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_598 = { 0 },
 
@@ -72081,7 +72081,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_390 = ALIGNED_STRING(""),
 
-    .ptr_3fc5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3fc5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_3fc9 = NAKA_NONE,
 
@@ -72099,7 +72099,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_3fe3 = NAKA_NONE,
 
-    .ptr_3fe5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3fe5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_602 = { 0 },
 
@@ -72119,7 +72119,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_391 = ALIGNED_STRING(""),
 
-    .ptr_3fff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_3fff = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4003 = NAKA_NONE,
 
@@ -72137,7 +72137,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_401d = NAKA_NONE,
 
-    .ptr_401f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_401f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_606 = { 0 },
 
@@ -72157,7 +72157,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_392 = ALIGNED_STRING(""),
 
-    .ptr_4039 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4039 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_403d = NAKA_NONE,
 
@@ -72175,7 +72175,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4057 = NAKA_NONE,
 
-    .ptr_4059 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4059 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_610 = { 0 },
 
@@ -72195,7 +72195,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_393 = ALIGNED_STRING(""),
 
-    .ptr_4073 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4073 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4077 = NAKA_NONE,
 
@@ -72213,7 +72213,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4091 = NAKA_NONE,
 
-    .ptr_4093 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4093 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_614 = { 0 },
 
@@ -72234,7 +72234,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_394 = ALIGNED_STRING(""),
 
     .ptrs_139 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -72266,31 +72266,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_40e5 = NAKA_NONE,
 
-    .ptr_40e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_40e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_40eb = NAKA_NONE,
 
     .field_40ed = NAKA_NONE,
 
-    .ptr_40ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_40ef = NAKA_ADDR(NakaData_RomEnd),
 
     .field_40f3 = NAKA_NONE,
 
     .field_40f5 = NAKA_NONE,
 
-    .ptr_40f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_40f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_40fb = NAKA_NONE,
 
     .field_40fd = NAKA_NONE,
 
-    .ptr_40ff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_40ff = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4103 = NAKA_NONE,
 
     .field_4105 = NAKA_NONE,
 
-    .ptr_4107 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4107 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_618 = { 0 },
 
@@ -72310,31 +72310,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_411f = NAKA_NONE,
 
-    .ptr_4121 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4121 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4125 = NAKA_NONE,
 
     .field_4127 = NAKA_NONE,
 
-    .ptr_4129 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4129 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_412d = NAKA_NONE,
 
     .field_412f = NAKA_NONE,
 
-    .ptr_4131 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4131 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4135 = NAKA_NONE,
 
     .field_4137 = NAKA_NONE,
 
-    .ptr_4139 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4139 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_413d = NAKA_NONE,
 
     .field_413f = NAKA_NONE,
 
-    .ptr_4141 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4141 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_619 = { 0 },
 
@@ -72354,31 +72354,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4159 = NAKA_NONE,
 
-    .ptr_415b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_415b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_415f = NAKA_NONE,
 
     .field_4161 = NAKA_NONE,
 
-    .ptr_4163 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4163 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4167 = NAKA_NONE,
 
     .field_4169 = NAKA_NONE,
 
-    .ptr_416b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_416b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_416f = NAKA_NONE,
 
     .field_4171 = NAKA_NONE,
 
-    .ptr_4173 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4173 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4177 = NAKA_NONE,
 
     .field_4179 = NAKA_NONE,
 
-    .ptr_417b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_417b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_620 = { 0 },
 
@@ -72398,31 +72398,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4193 = NAKA_NONE,
 
-    .ptr_4195 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4195 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4199 = NAKA_NONE,
 
     .field_419b = NAKA_NONE,
 
-    .ptr_419d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_419d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41a1 = NAKA_NONE,
 
     .field_41a3 = NAKA_NONE,
 
-    .ptr_41a5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41a5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41a9 = NAKA_NONE,
 
     .field_41ab = NAKA_NONE,
 
-    .ptr_41ad = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41ad = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41b1 = NAKA_NONE,
 
     .field_41b3 = NAKA_NONE,
 
-    .ptr_41b5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41b5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_621 = { 0 },
 
@@ -72442,31 +72442,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_41cd = NAKA_NONE,
 
-    .ptr_41cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41cf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41d3 = NAKA_NONE,
 
     .field_41d5 = NAKA_NONE,
 
-    .ptr_41d7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41d7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41db = NAKA_NONE,
 
     .field_41dd = NAKA_NONE,
 
-    .ptr_41df = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41df = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41e3 = NAKA_NONE,
 
     .field_41e5 = NAKA_NONE,
 
-    .ptr_41e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_41eb = NAKA_NONE,
 
     .field_41ed = NAKA_NONE,
 
-    .ptr_41ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_41ef = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_622 = { 0 },
 
@@ -72486,31 +72486,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4207 = NAKA_NONE,
 
-    .ptr_4209 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4209 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_420d = NAKA_NONE,
 
     .field_420f = NAKA_NONE,
 
-    .ptr_4211 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4211 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4215 = NAKA_NONE,
 
     .field_4217 = NAKA_NONE,
 
-    .ptr_4219 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4219 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_421d = NAKA_NONE,
 
     .field_421f = NAKA_NONE,
 
-    .ptr_4221 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4221 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4225 = NAKA_NONE,
 
     .field_4227 = NAKA_NONE,
 
-    .ptr_4229 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4229 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_623 = { 0 },
 
@@ -72530,31 +72530,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4241 = NAKA_NONE,
 
-    .ptr_4243 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4243 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4247 = NAKA_NONE,
 
     .field_4249 = NAKA_NONE,
 
-    .ptr_424b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_424b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_424f = NAKA_NONE,
 
     .field_4251 = NAKA_NONE,
 
-    .ptr_4253 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4253 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4257 = NAKA_NONE,
 
     .field_4259 = NAKA_NONE,
 
-    .ptr_425b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_425b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_425f = NAKA_NONE,
 
     .field_4261 = NAKA_NONE,
 
-    .ptr_4263 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4263 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_624 = { 0 },
 
@@ -72574,31 +72574,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_427b = NAKA_NONE,
 
-    .ptr_427d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_427d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4281 = NAKA_NONE,
 
     .field_4283 = NAKA_NONE,
 
-    .ptr_4285 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4285 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4289 = NAKA_NONE,
 
     .field_428b = NAKA_NONE,
 
-    .ptr_428d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_428d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4291 = NAKA_NONE,
 
     .field_4293 = NAKA_NONE,
 
-    .ptr_4295 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4295 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4299 = NAKA_NONE,
 
     .field_429b = NAKA_NONE,
 
-    .ptr_429d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_429d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_625 = { 0 },
 
@@ -72618,31 +72618,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_42b5 = NAKA_NONE,
 
-    .ptr_42b7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42b7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_42bb = NAKA_NONE,
 
     .field_42bd = NAKA_NONE,
 
-    .ptr_42bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42bf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_42c3 = NAKA_NONE,
 
     .field_42c5 = NAKA_NONE,
 
-    .ptr_42c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_42cb = NAKA_NONE,
 
     .field_42cd = NAKA_NONE,
 
-    .ptr_42cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42cf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_42d3 = NAKA_NONE,
 
     .field_42d5 = NAKA_NONE,
 
-    .ptr_42d7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42d7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_626 = { 0 },
 
@@ -72662,31 +72662,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_42ef = NAKA_NONE,
 
-    .ptr_42f1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42f1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_42f5 = NAKA_NONE,
 
     .field_42f7 = NAKA_NONE,
 
-    .ptr_42f9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_42f9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_42fd = NAKA_NONE,
 
     .field_42ff = NAKA_NONE,
 
-    .ptr_4301 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4301 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4305 = NAKA_NONE,
 
     .field_4307 = NAKA_NONE,
 
-    .ptr_4309 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4309 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_430d = NAKA_NONE,
 
     .field_430f = NAKA_NONE,
 
-    .ptr_4311 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4311 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_627 = { 0 },
 
@@ -72706,31 +72706,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4329 = NAKA_NONE,
 
-    .ptr_432b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_432b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_432f = NAKA_NONE,
 
     .field_4331 = NAKA_NONE,
 
-    .ptr_4333 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4333 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4337 = NAKA_NONE,
 
     .field_4339 = NAKA_NONE,
 
-    .ptr_433b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_433b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_433f = NAKA_NONE,
 
     .field_4341 = NAKA_NONE,
 
-    .ptr_4343 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4343 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4347 = NAKA_NONE,
 
     .field_4349 = NAKA_NONE,
 
-    .ptr_434b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_434b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_628 = { 0 },
 
@@ -72750,31 +72750,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4363 = NAKA_NONE,
 
-    .ptr_4365 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4365 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4369 = NAKA_NONE,
 
     .field_436b = NAKA_NONE,
 
-    .ptr_436d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_436d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4371 = NAKA_NONE,
 
     .field_4373 = NAKA_NONE,
 
-    .ptr_4375 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4375 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4379 = NAKA_NONE,
 
     .field_437b = NAKA_NONE,
 
-    .ptr_437d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_437d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4381 = NAKA_NONE,
 
     .field_4383 = NAKA_NONE,
 
-    .ptr_4385 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4385 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_629 = { 0 },
 
@@ -72794,31 +72794,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_439d = NAKA_NONE,
 
-    .ptr_439f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_439f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43a3 = NAKA_NONE,
 
     .field_43a5 = NAKA_NONE,
 
-    .ptr_43a7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43a7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43ab = NAKA_NONE,
 
     .field_43ad = NAKA_NONE,
 
-    .ptr_43af = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43af = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43b3 = NAKA_NONE,
 
     .field_43b5 = NAKA_NONE,
 
-    .ptr_43b7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43b7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43bb = NAKA_NONE,
 
     .field_43bd = NAKA_NONE,
 
-    .ptr_43bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43bf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_630 = { 0 },
 
@@ -72838,31 +72838,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_43d7 = NAKA_NONE,
 
-    .ptr_43d9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43d9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43dd = NAKA_NONE,
 
     .field_43df = NAKA_NONE,
 
-    .ptr_43e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43e1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43e5 = NAKA_NONE,
 
     .field_43e7 = NAKA_NONE,
 
-    .ptr_43e9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43e9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43ed = NAKA_NONE,
 
     .field_43ef = NAKA_NONE,
 
-    .ptr_43f1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43f1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_43f5 = NAKA_NONE,
 
     .field_43f7 = NAKA_NONE,
 
-    .ptr_43f9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_43f9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_631 = { 0 },
 
@@ -72882,31 +72882,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4411 = NAKA_NONE,
 
-    .ptr_4413 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4413 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4417 = NAKA_NONE,
 
     .field_4419 = NAKA_NONE,
 
-    .ptr_441b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_441b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_441f = NAKA_NONE,
 
     .field_4421 = NAKA_NONE,
 
-    .ptr_4423 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4423 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4427 = NAKA_NONE,
 
     .field_4429 = NAKA_NONE,
 
-    .ptr_442b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_442b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_442f = NAKA_NONE,
 
     .field_4431 = NAKA_NONE,
 
-    .ptr_4433 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4433 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_632 = { 0 },
 
@@ -72926,31 +72926,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_444b = NAKA_NONE,
 
-    .ptr_444d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_444d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4451 = NAKA_NONE,
 
     .field_4453 = NAKA_NONE,
 
-    .ptr_4455 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4455 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4459 = NAKA_NONE,
 
     .field_445b = NAKA_NONE,
 
-    .ptr_445d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_445d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4461 = NAKA_NONE,
 
     .field_4463 = NAKA_NONE,
 
-    .ptr_4465 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4465 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4469 = NAKA_NONE,
 
     .field_446b = NAKA_NONE,
 
-    .ptr_446d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_446d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_633 = { 0 },
 
@@ -72970,31 +72970,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4485 = NAKA_NONE,
 
-    .ptr_4487 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4487 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_448b = NAKA_NONE,
 
     .field_448d = NAKA_NONE,
 
-    .ptr_448f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_448f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4493 = NAKA_NONE,
 
     .field_4495 = NAKA_NONE,
 
-    .ptr_4497 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4497 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_449b = NAKA_NONE,
 
     .field_449d = NAKA_NONE,
 
-    .ptr_449f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_449f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_44a3 = NAKA_NONE,
 
     .field_44a5 = NAKA_NONE,
 
-    .ptr_44a7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44a7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_634 = { 0 },
 
@@ -73014,31 +73014,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_44bf = NAKA_NONE,
 
-    .ptr_44c1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44c1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_44c5 = NAKA_NONE,
 
     .field_44c7 = NAKA_NONE,
 
-    .ptr_44c9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44c9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_44cd = NAKA_NONE,
 
     .field_44cf = NAKA_NONE,
 
-    .ptr_44d1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44d1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_44d5 = NAKA_NONE,
 
     .field_44d7 = NAKA_NONE,
 
-    .ptr_44d9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44d9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_44dd = NAKA_NONE,
 
     .field_44df = NAKA_NONE,
 
-    .ptr_44e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44e1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_635 = { 0 },
 
@@ -73058,31 +73058,31 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_44f9 = NAKA_NONE,
 
-    .ptr_44fb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_44fb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_44ff = NAKA_NONE,
 
     .field_4501 = NAKA_NONE,
 
-    .ptr_4503 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4503 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4507 = NAKA_NONE,
 
     .field_4509 = NAKA_NONE,
 
-    .ptr_450b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_450b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_450f = NAKA_NONE,
 
     .field_4511 = NAKA_NONE,
 
-    .ptr_4513 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4513 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4517 = NAKA_NONE,
 
     .field_4519 = NAKA_NONE,
 
-    .ptr_451b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_451b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_636 = { 0 },
 
@@ -73102,32 +73102,32 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4533 = NAKA_NONE,
 
-    .ptr_4535 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4535 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4539 = NAKA_NONE,
 
     .field_453b = NAKA_NONE,
 
-    .ptr_453d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_453d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4541 = NAKA_NONE,
 
     .field_4543 = NAKA_NONE,
 
-    .ptr_4545 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4545 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4549 = NAKA_NONE,
 
     .field_454b = NAKA_NONE,
 
-    .ptr_454d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_454d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4551 = NAKA_NONE,
 
     .field_4553 = NAKA_NONE,
 
     .ptrs_140 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -73195,7 +73195,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4601 = NAKA_NONE,
 
-    .ptr_4603 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4603 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_641 = { 0 },
 
@@ -73233,7 +73233,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_463b = NAKA_NONE,
 
-    .ptr_463d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_463d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_645 = { 0 },
 
@@ -73271,7 +73271,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4675 = NAKA_NONE,
 
-    .ptr_4677 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4677 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_649 = { 0 },
 
@@ -73309,7 +73309,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_46af = NAKA_NONE,
 
-    .ptr_46b1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_46b1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_653 = { 0 },
 
@@ -73347,7 +73347,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_46e9 = NAKA_NONE,
 
-    .ptr_46eb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_46eb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_657 = { 0 },
 
@@ -73385,7 +73385,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4723 = NAKA_NONE,
 
-    .ptr_4725 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4725 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_661 = { 0 },
 
@@ -73423,7 +73423,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_475d = NAKA_NONE,
 
-    .ptr_475f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_475f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_665 = { 0 },
 
@@ -73461,7 +73461,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4797 = NAKA_NONE,
 
-    .ptr_4799 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4799 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_669 = { 0 },
 
@@ -73499,7 +73499,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_47d1 = NAKA_NONE,
 
-    .ptr_47d3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_47d3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_673 = { 0 },
 
@@ -73537,7 +73537,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_480b = NAKA_NONE,
 
-    .ptr_480d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_480d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_677 = { 0 },
 
@@ -73575,7 +73575,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4845 = NAKA_NONE,
 
-    .ptr_4847 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4847 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_681 = { 0 },
 
@@ -73613,7 +73613,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_487f = NAKA_NONE,
 
-    .ptr_4881 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4881 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_685 = { 0 },
 
@@ -73651,7 +73651,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_48b9 = NAKA_NONE,
 
-    .ptr_48bb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_48bb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_689 = { 0 },
 
@@ -73689,7 +73689,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_48f3 = NAKA_NONE,
 
-    .ptr_48f5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_48f5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_693 = { 0 },
 
@@ -73727,7 +73727,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_492d = NAKA_NONE,
 
-    .ptr_492f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_492f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_697 = { 0 },
 
@@ -73765,7 +73765,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4967 = NAKA_NONE,
 
-    .ptr_4969 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4969 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_701 = { 0 },
 
@@ -73803,7 +73803,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_49a1 = NAKA_NONE,
 
-    .ptr_49a3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_49a3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_705 = { 0 },
 
@@ -73841,7 +73841,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_49db = NAKA_NONE,
 
-    .ptr_49dd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_49dd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_709 = { 0 },
 
@@ -73879,7 +73879,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4a15 = NAKA_NONE,
 
-    .ptr_4a17 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4a17 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_713 = { 0 },
 
@@ -73917,7 +73917,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4a4f = NAKA_NONE,
 
-    .ptr_4a51 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4a51 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_717 = { 0 },
 
@@ -73955,7 +73955,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4a89 = NAKA_NONE,
 
-    .ptr_4a8b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4a8b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_721 = { 0 },
 
@@ -73993,7 +73993,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4ac3 = NAKA_NONE,
 
-    .ptr_4ac5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4ac5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_725 = { 0 },
 
@@ -74031,7 +74031,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4afd = NAKA_NONE,
 
-    .ptr_4aff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4aff = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_729 = { 0 },
 
@@ -74069,7 +74069,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4b37 = NAKA_NONE,
 
-    .ptr_4b39 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4b39 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_733 = { 0 },
 
@@ -74107,7 +74107,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4b71 = NAKA_NONE,
 
-    .ptr_4b73 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4b73 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_737 = { 0 },
 
@@ -74145,7 +74145,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4bab = NAKA_NONE,
 
-    .ptr_4bad = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4bad = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_741 = { 0 },
 
@@ -74183,7 +74183,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4be5 = NAKA_NONE,
 
-    .ptr_4be7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4be7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_745 = { 0 },
 
@@ -74221,7 +74221,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4c1f = NAKA_NONE,
 
-    .ptr_4c21 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4c21 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_749 = { 0 },
 
@@ -74259,7 +74259,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4c59 = NAKA_NONE,
 
-    .ptr_4c5b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4c5b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_753 = { 0 },
 
@@ -74280,7 +74280,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_396 = ALIGNED_STRING(""),
 
     .ptrs_141 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -74318,25 +74318,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4cb5 = NAKA_NONE,
 
-    .ptr_4cb7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4cb7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4cbb = NAKA_NONE,
 
     .field_4cbd = NAKA_NONE,
 
-    .ptr_4cbf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4cbf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4cc3 = NAKA_NONE,
 
     .field_4cc5 = NAKA_NONE,
 
-    .ptr_4cc7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4cc7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4ccb = NAKA_NONE,
 
     .field_4ccd = NAKA_NONE,
 
-    .ptr_4ccf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4ccf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_757 = { 0 },
 
@@ -74362,25 +74362,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4cef = NAKA_NONE,
 
-    .ptr_4cf1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4cf1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4cf5 = NAKA_NONE,
 
     .field_4cf7 = NAKA_NONE,
 
-    .ptr_4cf9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4cf9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4cfd = NAKA_NONE,
 
     .field_4cff = NAKA_NONE,
 
-    .ptr_4d01 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4d01 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4d05 = NAKA_NONE,
 
     .field_4d07 = NAKA_NONE,
 
-    .ptr_4d09 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4d09 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_758 = { 0 },
 
@@ -74406,25 +74406,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4d29 = NAKA_NONE,
 
-    .ptr_4d2b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4d2b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4d2f = NAKA_NONE,
 
     .field_4d31 = NAKA_NONE,
 
-    .ptr_4d33 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4d33 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4d37 = NAKA_NONE,
 
     .field_4d39 = NAKA_NONE,
 
-    .ptr_4d3b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4d3b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4d3f = NAKA_NONE,
 
     .field_4d41 = NAKA_NONE,
 
-    .ptr_4d43 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4d43 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_759 = { 0 },
 
@@ -74450,25 +74450,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4d63 = NAKA_NONE,
 
-    .ptr_4d65 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4d65 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4d69 = NAKA_NONE,
 
     .field_4d6b = NAKA_NONE,
 
-    .ptr_4d6d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4d6d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4d71 = NAKA_NONE,
 
     .field_4d73 = NAKA_NONE,
 
-    .ptr_4d75 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4d75 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4d79 = NAKA_NONE,
 
     .field_4d7b = NAKA_NONE,
 
-    .ptr_4d7d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4d7d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_760 = { 0 },
 
@@ -74494,25 +74494,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4d9d = NAKA_NONE,
 
-    .ptr_4d9f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4d9f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4da3 = NAKA_NONE,
 
     .field_4da5 = NAKA_NONE,
 
-    .ptr_4da7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4da7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4dab = NAKA_NONE,
 
     .field_4dad = NAKA_NONE,
 
-    .ptr_4daf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4daf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4db3 = NAKA_NONE,
 
     .field_4db5 = NAKA_NONE,
 
-    .ptr_4db7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4db7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_761 = { 0 },
 
@@ -74538,25 +74538,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4dd7 = NAKA_NONE,
 
-    .ptr_4dd9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4dd9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4ddd = NAKA_NONE,
 
     .field_4ddf = NAKA_NONE,
 
-    .ptr_4de1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4de1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4de5 = NAKA_NONE,
 
     .field_4de7 = NAKA_NONE,
 
-    .ptr_4de9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4de9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4ded = NAKA_NONE,
 
     .field_4def = NAKA_NONE,
 
-    .ptr_4df1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4df1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_762 = { 0 },
 
@@ -74582,25 +74582,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4e11 = NAKA_NONE,
 
-    .ptr_4e13 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e13 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4e17 = NAKA_NONE,
 
     .field_4e19 = NAKA_NONE,
 
-    .ptr_4e1b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e1b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4e1f = NAKA_NONE,
 
     .field_4e21 = NAKA_NONE,
 
-    .ptr_4e23 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e23 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4e27 = NAKA_NONE,
 
     .field_4e29 = NAKA_NONE,
 
-    .ptr_4e2b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e2b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_763 = { 0 },
 
@@ -74626,25 +74626,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4e4b = NAKA_NONE,
 
-    .ptr_4e4d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e4d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4e51 = NAKA_NONE,
 
     .field_4e53 = NAKA_NONE,
 
-    .ptr_4e55 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e55 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4e59 = NAKA_NONE,
 
     .field_4e5b = NAKA_NONE,
 
-    .ptr_4e5d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e5d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4e61 = NAKA_NONE,
 
     .field_4e63 = NAKA_NONE,
 
-    .ptr_4e65 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e65 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_764 = { 0 },
 
@@ -74670,25 +74670,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4e85 = NAKA_NONE,
 
-    .ptr_4e87 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e87 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4e8b = NAKA_NONE,
 
     .field_4e8d = NAKA_NONE,
 
-    .ptr_4e8f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e8f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4e93 = NAKA_NONE,
 
     .field_4e95 = NAKA_NONE,
 
-    .ptr_4e97 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e97 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4e9b = NAKA_NONE,
 
     .field_4e9d = NAKA_NONE,
 
-    .ptr_4e9f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4e9f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_765 = { 0 },
 
@@ -74714,25 +74714,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4ebf = NAKA_NONE,
 
-    .ptr_4ec1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4ec1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4ec5 = NAKA_NONE,
 
     .field_4ec7 = NAKA_NONE,
 
-    .ptr_4ec9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4ec9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4ecd = NAKA_NONE,
 
     .field_4ecf = NAKA_NONE,
 
-    .ptr_4ed1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4ed1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4ed5 = NAKA_NONE,
 
     .field_4ed7 = NAKA_NONE,
 
-    .ptr_4ed9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4ed9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_766 = { 0 },
 
@@ -74758,25 +74758,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4ef9 = NAKA_NONE,
 
-    .ptr_4efb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4efb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4eff = NAKA_NONE,
 
     .field_4f01 = NAKA_NONE,
 
-    .ptr_4f03 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f03 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4f07 = NAKA_NONE,
 
     .field_4f09 = NAKA_NONE,
 
-    .ptr_4f0b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f0b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4f0f = NAKA_NONE,
 
     .field_4f11 = NAKA_NONE,
 
-    .ptr_4f13 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f13 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_767 = { 0 },
 
@@ -74802,25 +74802,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4f33 = NAKA_NONE,
 
-    .ptr_4f35 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f35 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4f39 = NAKA_NONE,
 
     .field_4f3b = NAKA_NONE,
 
-    .ptr_4f3d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f3d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4f41 = NAKA_NONE,
 
     .field_4f43 = NAKA_NONE,
 
-    .ptr_4f45 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f45 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4f49 = NAKA_NONE,
 
     .field_4f4b = NAKA_NONE,
 
-    .ptr_4f4d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f4d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_768 = { 0 },
 
@@ -74846,25 +74846,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4f6d = NAKA_NONE,
 
-    .ptr_4f6f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f6f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4f73 = NAKA_NONE,
 
     .field_4f75 = NAKA_NONE,
 
-    .ptr_4f77 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f77 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4f7b = NAKA_NONE,
 
     .field_4f7d = NAKA_NONE,
 
-    .ptr_4f7f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f7f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4f83 = NAKA_NONE,
 
     .field_4f85 = NAKA_NONE,
 
-    .ptr_4f87 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4f87 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_769 = { 0 },
 
@@ -74890,25 +74890,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4fa7 = NAKA_NONE,
 
-    .ptr_4fa9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4fa9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4fad = NAKA_NONE,
 
     .field_4faf = NAKA_NONE,
 
-    .ptr_4fb1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4fb1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4fb5 = NAKA_NONE,
 
     .field_4fb7 = NAKA_NONE,
 
-    .ptr_4fb9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4fb9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4fbd = NAKA_NONE,
 
     .field_4fbf = NAKA_NONE,
 
-    .ptr_4fc1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4fc1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_770 = { 0 },
 
@@ -74934,25 +74934,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_4fe1 = NAKA_NONE,
 
-    .ptr_4fe3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4fe3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4fe7 = NAKA_NONE,
 
     .field_4fe9 = NAKA_NONE,
 
-    .ptr_4feb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4feb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4fef = NAKA_NONE,
 
     .field_4ff1 = NAKA_NONE,
 
-    .ptr_4ff3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4ff3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_4ff7 = NAKA_NONE,
 
     .field_4ff9 = NAKA_NONE,
 
-    .ptr_4ffb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_4ffb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_771 = { 0 },
 
@@ -74978,25 +74978,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_501b = NAKA_NONE,
 
-    .ptr_501d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_501d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5021 = NAKA_NONE,
 
     .field_5023 = NAKA_NONE,
 
-    .ptr_5025 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5025 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5029 = NAKA_NONE,
 
     .field_502b = NAKA_NONE,
 
-    .ptr_502d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_502d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5031 = NAKA_NONE,
 
     .field_5033 = NAKA_NONE,
 
-    .ptr_5035 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5035 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_772 = { 0 },
 
@@ -75022,25 +75022,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5055 = NAKA_NONE,
 
-    .ptr_5057 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5057 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_505b = NAKA_NONE,
 
     .field_505d = NAKA_NONE,
 
-    .ptr_505f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_505f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5063 = NAKA_NONE,
 
     .field_5065 = NAKA_NONE,
 
-    .ptr_5067 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5067 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_506b = NAKA_NONE,
 
     .field_506d = NAKA_NONE,
 
-    .ptr_506f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_506f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_773 = { 0 },
 
@@ -75066,25 +75066,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_508f = NAKA_NONE,
 
-    .ptr_5091 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5091 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5095 = NAKA_NONE,
 
     .field_5097 = NAKA_NONE,
 
-    .ptr_5099 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5099 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_509d = NAKA_NONE,
 
     .field_509f = NAKA_NONE,
 
-    .ptr_50a1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_50a1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_50a5 = NAKA_NONE,
 
     .field_50a7 = NAKA_NONE,
 
-    .ptr_50a9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_50a9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_774 = { 0 },
 
@@ -75110,25 +75110,25 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_50c9 = NAKA_NONE,
 
-    .ptr_50cb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_50cb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_50cf = NAKA_NONE,
 
     .field_50d1 = NAKA_NONE,
 
-    .ptr_50d3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_50d3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_50d7 = NAKA_NONE,
 
     .field_50d9 = NAKA_NONE,
 
-    .ptr_50db = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_50db = NAKA_ADDR(NakaData_RomEnd),
 
     .field_50df = NAKA_NONE,
 
     .field_50e1 = NAKA_NONE,
 
-    .ptr_50e3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_50e3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_775 = { 0 },
 
@@ -75154,26 +75154,26 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5103 = NAKA_NONE,
 
-    .ptr_5105 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5105 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5109 = NAKA_NONE,
 
     .field_510b = NAKA_NONE,
 
-    .ptr_510d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_510d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5111 = NAKA_NONE,
 
     .field_5113 = NAKA_NONE,
 
-    .ptr_5115 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5115 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5119 = NAKA_NONE,
 
     .field_511b = NAKA_NONE,
 
     .ptrs_142 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -75241,7 +75241,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_51c9 = NAKA_NONE,
 
-    .ptr_51cb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_51cb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_780 = { 0 },
 
@@ -75279,7 +75279,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5203 = NAKA_NONE,
 
-    .ptr_5205 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5205 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_784 = { 0 },
 
@@ -75317,7 +75317,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_523d = NAKA_NONE,
 
-    .ptr_523f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_523f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_788 = { 0 },
 
@@ -75355,7 +75355,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5277 = NAKA_NONE,
 
-    .ptr_5279 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5279 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_792 = { 0 },
 
@@ -75393,7 +75393,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_52b1 = NAKA_NONE,
 
-    .ptr_52b3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_52b3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_796 = { 0 },
 
@@ -75431,7 +75431,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_52eb = NAKA_NONE,
 
-    .ptr_52ed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_52ed = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_800 = { 0 },
 
@@ -75469,7 +75469,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5325 = NAKA_NONE,
 
-    .ptr_5327 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5327 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_804 = { 0 },
 
@@ -75507,7 +75507,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_535f = NAKA_NONE,
 
-    .ptr_5361 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5361 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_808 = { 0 },
 
@@ -75545,7 +75545,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5399 = NAKA_NONE,
 
-    .ptr_539b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_539b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_812 = { 0 },
 
@@ -75583,7 +75583,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_53d3 = NAKA_NONE,
 
-    .ptr_53d5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_53d5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_816 = { 0 },
 
@@ -75621,7 +75621,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_540d = NAKA_NONE,
 
-    .ptr_540f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_540f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_820 = { 0 },
 
@@ -75659,7 +75659,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5447 = NAKA_NONE,
 
-    .ptr_5449 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5449 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_824 = { 0 },
 
@@ -75697,7 +75697,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5481 = NAKA_NONE,
 
-    .ptr_5483 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5483 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_828 = { 0 },
 
@@ -75735,7 +75735,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_54bb = NAKA_NONE,
 
-    .ptr_54bd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_54bd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_832 = { 0 },
 
@@ -75773,7 +75773,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_54f5 = NAKA_NONE,
 
-    .ptr_54f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_54f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_836 = { 0 },
 
@@ -75811,7 +75811,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_552f = NAKA_NONE,
 
-    .ptr_5531 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5531 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_840 = { 0 },
 
@@ -75849,7 +75849,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5569 = NAKA_NONE,
 
-    .ptr_556b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_556b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_844 = { 0 },
 
@@ -75887,7 +75887,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_55a3 = NAKA_NONE,
 
-    .ptr_55a5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_55a5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_848 = { 0 },
 
@@ -75925,7 +75925,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_55dd = NAKA_NONE,
 
-    .ptr_55df = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_55df = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_852 = { 0 },
 
@@ -75963,7 +75963,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5617 = NAKA_NONE,
 
-    .ptr_5619 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5619 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_856 = { 0 },
 
@@ -76001,7 +76001,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5651 = NAKA_NONE,
 
-    .ptr_5653 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5653 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_860 = { 0 },
 
@@ -76039,7 +76039,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_568b = NAKA_NONE,
 
-    .ptr_568d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_568d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_864 = { 0 },
 
@@ -76077,7 +76077,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_56c5 = NAKA_NONE,
 
-    .ptr_56c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_56c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_868 = { 0 },
 
@@ -76115,7 +76115,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_56ff = NAKA_NONE,
 
-    .ptr_5701 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5701 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_872 = { 0 },
 
@@ -76153,7 +76153,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5739 = NAKA_NONE,
 
-    .ptr_573b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_573b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_876 = { 0 },
 
@@ -76191,7 +76191,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5773 = NAKA_NONE,
 
-    .ptr_5775 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5775 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_880 = { 0 },
 
@@ -76229,7 +76229,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_57ad = NAKA_NONE,
 
-    .ptr_57af = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_57af = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_884 = { 0 },
 
@@ -76267,7 +76267,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_57e7 = NAKA_NONE,
 
-    .ptr_57e9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_57e9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_888 = { 0 },
 
@@ -76305,7 +76305,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5821 = NAKA_NONE,
 
-    .ptr_5823 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5823 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_892 = { 0 },
 
@@ -76370,19 +76370,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5885 = NAKA_NONE,
 
-    .ptr_5887 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5887 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_588b = NAKA_NONE,
 
     .field_588d = NAKA_NONE,
 
-    .ptr_588f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_588f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5893 = NAKA_NONE,
 
     .field_5895 = NAKA_NONE,
 
-    .ptr_5897 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5897 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_896 = { 0 },
 
@@ -76414,19 +76414,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_58bf = NAKA_NONE,
 
-    .ptr_58c1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_58c1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_58c5 = NAKA_NONE,
 
     .field_58c7 = NAKA_NONE,
 
-    .ptr_58c9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_58c9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_58cd = NAKA_NONE,
 
     .field_58cf = NAKA_NONE,
 
-    .ptr_58d1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_58d1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_897 = { 0 },
 
@@ -76458,19 +76458,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_58f9 = NAKA_NONE,
 
-    .ptr_58fb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_58fb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_58ff = NAKA_NONE,
 
     .field_5901 = NAKA_NONE,
 
-    .ptr_5903 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5903 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5907 = NAKA_NONE,
 
     .field_5909 = NAKA_NONE,
 
-    .ptr_590b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_590b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_898 = { 0 },
 
@@ -76502,19 +76502,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5933 = NAKA_NONE,
 
-    .ptr_5935 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5935 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5939 = NAKA_NONE,
 
     .field_593b = NAKA_NONE,
 
-    .ptr_593d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_593d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5941 = NAKA_NONE,
 
     .field_5943 = NAKA_NONE,
 
-    .ptr_5945 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5945 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_899 = { 0 },
 
@@ -76546,19 +76546,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_596d = NAKA_NONE,
 
-    .ptr_596f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_596f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5973 = NAKA_NONE,
 
     .field_5975 = NAKA_NONE,
 
-    .ptr_5977 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5977 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_597b = NAKA_NONE,
 
     .field_597d = NAKA_NONE,
 
-    .ptr_597f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_597f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_900 = { 0 },
 
@@ -76590,19 +76590,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_59a7 = NAKA_NONE,
 
-    .ptr_59a9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_59a9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_59ad = NAKA_NONE,
 
     .field_59af = NAKA_NONE,
 
-    .ptr_59b1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_59b1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_59b5 = NAKA_NONE,
 
     .field_59b7 = NAKA_NONE,
 
-    .ptr_59b9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_59b9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_901 = { 0 },
 
@@ -76634,19 +76634,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_59e1 = NAKA_NONE,
 
-    .ptr_59e3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_59e3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_59e7 = NAKA_NONE,
 
     .field_59e9 = NAKA_NONE,
 
-    .ptr_59eb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_59eb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_59ef = NAKA_NONE,
 
     .field_59f1 = NAKA_NONE,
 
-    .ptr_59f3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_59f3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_902 = { 0 },
 
@@ -76678,19 +76678,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5a1b = NAKA_NONE,
 
-    .ptr_5a1d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5a1d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5a21 = NAKA_NONE,
 
     .field_5a23 = NAKA_NONE,
 
-    .ptr_5a25 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5a25 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5a29 = NAKA_NONE,
 
     .field_5a2b = NAKA_NONE,
 
-    .ptr_5a2d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5a2d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_903 = { 0 },
 
@@ -76722,19 +76722,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5a55 = NAKA_NONE,
 
-    .ptr_5a57 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5a57 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5a5b = NAKA_NONE,
 
     .field_5a5d = NAKA_NONE,
 
-    .ptr_5a5f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5a5f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5a63 = NAKA_NONE,
 
     .field_5a65 = NAKA_NONE,
 
-    .ptr_5a67 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5a67 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_904 = { 0 },
 
@@ -76766,19 +76766,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5a8f = NAKA_NONE,
 
-    .ptr_5a91 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5a91 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5a95 = NAKA_NONE,
 
     .field_5a97 = NAKA_NONE,
 
-    .ptr_5a99 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5a99 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5a9d = NAKA_NONE,
 
     .field_5a9f = NAKA_NONE,
 
-    .ptr_5aa1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5aa1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_905 = { 0 },
 
@@ -76810,19 +76810,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5ac9 = NAKA_NONE,
 
-    .ptr_5acb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5acb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5acf = NAKA_NONE,
 
     .field_5ad1 = NAKA_NONE,
 
-    .ptr_5ad3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5ad3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5ad7 = NAKA_NONE,
 
     .field_5ad9 = NAKA_NONE,
 
-    .ptr_5adb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5adb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_906 = { 0 },
 
@@ -76854,19 +76854,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5b03 = NAKA_NONE,
 
-    .ptr_5b05 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5b05 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5b09 = NAKA_NONE,
 
     .field_5b0b = NAKA_NONE,
 
-    .ptr_5b0d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5b0d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5b11 = NAKA_NONE,
 
     .field_5b13 = NAKA_NONE,
 
-    .ptr_5b15 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5b15 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_907 = { 0 },
 
@@ -76898,19 +76898,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5b3d = NAKA_NONE,
 
-    .ptr_5b3f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5b3f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5b43 = NAKA_NONE,
 
     .field_5b45 = NAKA_NONE,
 
-    .ptr_5b47 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5b47 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5b4b = NAKA_NONE,
 
     .field_5b4d = NAKA_NONE,
 
-    .ptr_5b4f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5b4f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_908 = { 0 },
 
@@ -76942,19 +76942,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5b77 = NAKA_NONE,
 
-    .ptr_5b79 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5b79 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5b7d = NAKA_NONE,
 
     .field_5b7f = NAKA_NONE,
 
-    .ptr_5b81 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5b81 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5b85 = NAKA_NONE,
 
     .field_5b87 = NAKA_NONE,
 
-    .ptr_5b89 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5b89 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_909 = { 0 },
 
@@ -76986,19 +76986,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5bb1 = NAKA_NONE,
 
-    .ptr_5bb3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5bb3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5bb7 = NAKA_NONE,
 
     .field_5bb9 = NAKA_NONE,
 
-    .ptr_5bbb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5bbb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5bbf = NAKA_NONE,
 
     .field_5bc1 = NAKA_NONE,
 
-    .ptr_5bc3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5bc3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_910 = { 0 },
 
@@ -77030,19 +77030,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5beb = NAKA_NONE,
 
-    .ptr_5bed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5bed = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5bf1 = NAKA_NONE,
 
     .field_5bf3 = NAKA_NONE,
 
-    .ptr_5bf5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5bf5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5bf9 = NAKA_NONE,
 
     .field_5bfb = NAKA_NONE,
 
-    .ptr_5bfd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5bfd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_911 = { 0 },
 
@@ -77074,19 +77074,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5c25 = NAKA_NONE,
 
-    .ptr_5c27 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5c27 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5c2b = NAKA_NONE,
 
     .field_5c2d = NAKA_NONE,
 
-    .ptr_5c2f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5c2f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5c33 = NAKA_NONE,
 
     .field_5c35 = NAKA_NONE,
 
-    .ptr_5c37 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5c37 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_912 = { 0 },
 
@@ -77118,19 +77118,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5c5f = NAKA_NONE,
 
-    .ptr_5c61 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5c61 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5c65 = NAKA_NONE,
 
     .field_5c67 = NAKA_NONE,
 
-    .ptr_5c69 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5c69 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5c6d = NAKA_NONE,
 
     .field_5c6f = NAKA_NONE,
 
-    .ptr_5c71 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5c71 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_913 = { 0 },
 
@@ -77162,19 +77162,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5c99 = NAKA_NONE,
 
-    .ptr_5c9b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5c9b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5c9f = NAKA_NONE,
 
     .field_5ca1 = NAKA_NONE,
 
-    .ptr_5ca3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5ca3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5ca7 = NAKA_NONE,
 
     .field_5ca9 = NAKA_NONE,
 
-    .ptr_5cab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5cab = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_914 = { 0 },
 
@@ -77206,20 +77206,20 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5cd3 = NAKA_NONE,
 
-    .ptr_5cd5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5cd5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5cd9 = NAKA_NONE,
 
     .field_5cdb = NAKA_NONE,
 
-    .ptr_5cdd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5cdd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_5ce1 = NAKA_NONE,
 
     .field_5ce3 = NAKA_NONE,
 
     .ptrs_144 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -77289,7 +77289,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5d91 = NAKA_NONE,
 
-    .ptr_5d93 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5d93 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_918 = { 0 },
 
@@ -77329,7 +77329,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5dcb = NAKA_NONE,
 
-    .ptr_5dcd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5dcd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_921 = { 0 },
 
@@ -77369,7 +77369,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5e05 = NAKA_NONE,
 
-    .ptr_5e07 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5e07 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_924 = { 0 },
 
@@ -77409,7 +77409,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5e3f = NAKA_NONE,
 
-    .ptr_5e41 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5e41 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_927 = { 0 },
 
@@ -77449,7 +77449,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5e79 = NAKA_NONE,
 
-    .ptr_5e7b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5e7b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_930 = { 0 },
 
@@ -77489,7 +77489,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5eb3 = NAKA_NONE,
 
-    .ptr_5eb5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5eb5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_933 = { 0 },
 
@@ -77529,7 +77529,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5eed = NAKA_NONE,
 
-    .ptr_5eef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5eef = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_936 = { 0 },
 
@@ -77569,7 +77569,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5f27 = NAKA_NONE,
 
-    .ptr_5f29 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5f29 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_939 = { 0 },
 
@@ -77609,7 +77609,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5f61 = NAKA_NONE,
 
-    .ptr_5f63 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5f63 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_942 = { 0 },
 
@@ -77649,7 +77649,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5f9b = NAKA_NONE,
 
-    .ptr_5f9d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5f9d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_945 = { 0 },
 
@@ -77689,7 +77689,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_5fd5 = NAKA_NONE,
 
-    .ptr_5fd7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_5fd7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_948 = { 0 },
 
@@ -77729,7 +77729,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_600f = NAKA_NONE,
 
-    .ptr_6011 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6011 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_951 = { 0 },
 
@@ -77769,7 +77769,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6049 = NAKA_NONE,
 
-    .ptr_604b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_604b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_954 = { 0 },
 
@@ -77809,7 +77809,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6083 = NAKA_NONE,
 
-    .ptr_6085 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6085 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_957 = { 0 },
 
@@ -77849,7 +77849,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_60bd = NAKA_NONE,
 
-    .ptr_60bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_60bf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_960 = { 0 },
 
@@ -77889,7 +77889,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_60f7 = NAKA_NONE,
 
-    .ptr_60f9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_60f9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_963 = { 0 },
 
@@ -77929,7 +77929,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6131 = NAKA_NONE,
 
-    .ptr_6133 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6133 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_966 = { 0 },
 
@@ -77969,7 +77969,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_616b = NAKA_NONE,
 
-    .ptr_616d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_616d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_969 = { 0 },
 
@@ -78009,7 +78009,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_61a5 = NAKA_NONE,
 
-    .ptr_61a7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_61a7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_972 = { 0 },
 
@@ -78049,7 +78049,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_61df = NAKA_NONE,
 
-    .ptr_61e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_61e1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_975 = { 0 },
 
@@ -78089,7 +78089,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6219 = NAKA_NONE,
 
-    .ptr_621b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_621b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_978 = { 0 },
 
@@ -78129,7 +78129,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6253 = NAKA_NONE,
 
-    .ptr_6255 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6255 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_981 = { 0 },
 
@@ -78169,7 +78169,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_628d = NAKA_NONE,
 
-    .ptr_628f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_628f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_984 = { 0 },
 
@@ -78209,7 +78209,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_62c7 = NAKA_NONE,
 
-    .ptr_62c9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_62c9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_987 = { 0 },
 
@@ -78249,7 +78249,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6301 = NAKA_NONE,
 
-    .ptr_6303 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6303 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_990 = { 0 },
 
@@ -78289,7 +78289,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_633b = NAKA_NONE,
 
-    .ptr_633d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_633d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_993 = { 0 },
 
@@ -78329,7 +78329,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6375 = NAKA_NONE,
 
-    .ptr_6377 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6377 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_996 = { 0 },
 
@@ -78369,7 +78369,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_63af = NAKA_NONE,
 
-    .ptr_63b1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_63b1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_999 = { 0 },
 
@@ -78409,7 +78409,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_63e9 = NAKA_NONE,
 
-    .ptr_63eb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_63eb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1002 = { 0 },
 
@@ -78474,19 +78474,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_644d = NAKA_NONE,
 
-    .ptr_644f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_644f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6453 = NAKA_NONE,
 
     .field_6455 = NAKA_NONE,
 
-    .ptr_6457 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6457 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_645b = NAKA_NONE,
 
     .field_645d = NAKA_NONE,
 
-    .ptr_645f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_645f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1006 = { 0 },
 
@@ -78518,19 +78518,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6487 = NAKA_NONE,
 
-    .ptr_6489 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6489 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_648d = NAKA_NONE,
 
     .field_648f = NAKA_NONE,
 
-    .ptr_6491 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6491 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6495 = NAKA_NONE,
 
     .field_6497 = NAKA_NONE,
 
-    .ptr_6499 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6499 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1007 = { 0 },
 
@@ -78562,19 +78562,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_64c1 = NAKA_NONE,
 
-    .ptr_64c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_64c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_64c7 = NAKA_NONE,
 
     .field_64c9 = NAKA_NONE,
 
-    .ptr_64cb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_64cb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_64cf = NAKA_NONE,
 
     .field_64d1 = NAKA_NONE,
 
-    .ptr_64d3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_64d3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1008 = { 0 },
 
@@ -78606,19 +78606,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_64fb = NAKA_NONE,
 
-    .ptr_64fd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_64fd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6501 = NAKA_NONE,
 
     .field_6503 = NAKA_NONE,
 
-    .ptr_6505 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6505 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6509 = NAKA_NONE,
 
     .field_650b = NAKA_NONE,
 
-    .ptr_650d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_650d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1009 = { 0 },
 
@@ -78650,19 +78650,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6535 = NAKA_NONE,
 
-    .ptr_6537 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6537 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_653b = NAKA_NONE,
 
     .field_653d = NAKA_NONE,
 
-    .ptr_653f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_653f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6543 = NAKA_NONE,
 
     .field_6545 = NAKA_NONE,
 
-    .ptr_6547 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6547 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1010 = { 0 },
 
@@ -78694,19 +78694,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_656f = NAKA_NONE,
 
-    .ptr_6571 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6571 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6575 = NAKA_NONE,
 
     .field_6577 = NAKA_NONE,
 
-    .ptr_6579 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6579 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_657d = NAKA_NONE,
 
     .field_657f = NAKA_NONE,
 
-    .ptr_6581 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6581 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1011 = { 0 },
 
@@ -78738,19 +78738,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_65a9 = NAKA_NONE,
 
-    .ptr_65ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_65ab = NAKA_ADDR(NakaData_RomEnd),
 
     .field_65af = NAKA_NONE,
 
     .field_65b1 = NAKA_NONE,
 
-    .ptr_65b3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_65b3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_65b7 = NAKA_NONE,
 
     .field_65b9 = NAKA_NONE,
 
-    .ptr_65bb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_65bb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1012 = { 0 },
 
@@ -78782,19 +78782,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_65e3 = NAKA_NONE,
 
-    .ptr_65e5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_65e5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_65e9 = NAKA_NONE,
 
     .field_65eb = NAKA_NONE,
 
-    .ptr_65ed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_65ed = NAKA_ADDR(NakaData_RomEnd),
 
     .field_65f1 = NAKA_NONE,
 
     .field_65f3 = NAKA_NONE,
 
-    .ptr_65f5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_65f5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1013 = { 0 },
 
@@ -78826,19 +78826,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_661d = NAKA_NONE,
 
-    .ptr_661f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_661f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6623 = NAKA_NONE,
 
     .field_6625 = NAKA_NONE,
 
-    .ptr_6627 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6627 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_662b = NAKA_NONE,
 
     .field_662d = NAKA_NONE,
 
-    .ptr_662f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_662f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1014 = { 0 },
 
@@ -78870,19 +78870,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6657 = NAKA_NONE,
 
-    .ptr_6659 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6659 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_665d = NAKA_NONE,
 
     .field_665f = NAKA_NONE,
 
-    .ptr_6661 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6661 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6665 = NAKA_NONE,
 
     .field_6667 = NAKA_NONE,
 
-    .ptr_6669 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6669 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1015 = { 0 },
 
@@ -78914,19 +78914,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6691 = NAKA_NONE,
 
-    .ptr_6693 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6693 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6697 = NAKA_NONE,
 
     .field_6699 = NAKA_NONE,
 
-    .ptr_669b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_669b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_669f = NAKA_NONE,
 
     .field_66a1 = NAKA_NONE,
 
-    .ptr_66a3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_66a3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1016 = { 0 },
 
@@ -78958,19 +78958,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_66cb = NAKA_NONE,
 
-    .ptr_66cd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_66cd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_66d1 = NAKA_NONE,
 
     .field_66d3 = NAKA_NONE,
 
-    .ptr_66d5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_66d5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_66d9 = NAKA_NONE,
 
     .field_66db = NAKA_NONE,
 
-    .ptr_66dd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_66dd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1017 = { 0 },
 
@@ -79002,19 +79002,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6705 = NAKA_NONE,
 
-    .ptr_6707 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6707 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_670b = NAKA_NONE,
 
     .field_670d = NAKA_NONE,
 
-    .ptr_670f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_670f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6713 = NAKA_NONE,
 
     .field_6715 = NAKA_NONE,
 
-    .ptr_6717 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6717 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1018 = { 0 },
 
@@ -79046,19 +79046,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_673f = NAKA_NONE,
 
-    .ptr_6741 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6741 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6745 = NAKA_NONE,
 
     .field_6747 = NAKA_NONE,
 
-    .ptr_6749 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6749 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_674d = NAKA_NONE,
 
     .field_674f = NAKA_NONE,
 
-    .ptr_6751 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6751 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1019 = { 0 },
 
@@ -79090,19 +79090,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6779 = NAKA_NONE,
 
-    .ptr_677b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_677b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_677f = NAKA_NONE,
 
     .field_6781 = NAKA_NONE,
 
-    .ptr_6783 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6783 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6787 = NAKA_NONE,
 
     .field_6789 = NAKA_NONE,
 
-    .ptr_678b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_678b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1020 = { 0 },
 
@@ -79134,19 +79134,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_67b3 = NAKA_NONE,
 
-    .ptr_67b5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_67b5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_67b9 = NAKA_NONE,
 
     .field_67bb = NAKA_NONE,
 
-    .ptr_67bd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_67bd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_67c1 = NAKA_NONE,
 
     .field_67c3 = NAKA_NONE,
 
-    .ptr_67c5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_67c5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1021 = { 0 },
 
@@ -79178,19 +79178,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_67ed = NAKA_NONE,
 
-    .ptr_67ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_67ef = NAKA_ADDR(NakaData_RomEnd),
 
     .field_67f3 = NAKA_NONE,
 
     .field_67f5 = NAKA_NONE,
 
-    .ptr_67f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_67f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_67fb = NAKA_NONE,
 
     .field_67fd = NAKA_NONE,
 
-    .ptr_67ff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_67ff = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1022 = { 0 },
 
@@ -79222,19 +79222,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6827 = NAKA_NONE,
 
-    .ptr_6829 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6829 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_682d = NAKA_NONE,
 
     .field_682f = NAKA_NONE,
 
-    .ptr_6831 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6831 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6835 = NAKA_NONE,
 
     .field_6837 = NAKA_NONE,
 
-    .ptr_6839 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6839 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1023 = { 0 },
 
@@ -79266,19 +79266,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6861 = NAKA_NONE,
 
-    .ptr_6863 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6863 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_6867 = NAKA_NONE,
 
     .field_6869 = NAKA_NONE,
 
-    .ptr_686b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_686b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_686f = NAKA_NONE,
 
     .field_6871 = NAKA_NONE,
 
-    .ptr_6873 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6873 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1024 = { 0 },
 
@@ -79310,20 +79310,20 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_689b = NAKA_NONE,
 
-    .ptr_689d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_689d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_68a1 = NAKA_NONE,
 
     .field_68a3 = NAKA_NONE,
 
-    .ptr_68a5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_68a5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_68a9 = NAKA_NONE,
 
     .field_68ab = NAKA_NONE,
 
     .ptrs_146 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -79393,7 +79393,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6959 = NAKA_NONE,
 
-    .ptr_695b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_695b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1028 = { 0 },
 
@@ -79433,7 +79433,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6993 = NAKA_NONE,
 
-    .ptr_6995 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6995 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1031 = { 0 },
 
@@ -79473,7 +79473,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_69cd = NAKA_NONE,
 
-    .ptr_69cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_69cf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1034 = { 0 },
 
@@ -79513,7 +79513,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6a07 = NAKA_NONE,
 
-    .ptr_6a09 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6a09 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1037 = { 0 },
 
@@ -79553,7 +79553,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6a41 = NAKA_NONE,
 
-    .ptr_6a43 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6a43 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1040 = { 0 },
 
@@ -79593,7 +79593,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6a7b = NAKA_NONE,
 
-    .ptr_6a7d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6a7d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1043 = { 0 },
 
@@ -79633,7 +79633,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6ab5 = NAKA_NONE,
 
-    .ptr_6ab7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6ab7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1046 = { 0 },
 
@@ -79673,7 +79673,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6aef = NAKA_NONE,
 
-    .ptr_6af1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6af1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1049 = { 0 },
 
@@ -79713,7 +79713,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6b29 = NAKA_NONE,
 
-    .ptr_6b2b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6b2b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1052 = { 0 },
 
@@ -79753,7 +79753,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6b63 = NAKA_NONE,
 
-    .ptr_6b65 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6b65 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1055 = { 0 },
 
@@ -79793,7 +79793,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6b9d = NAKA_NONE,
 
-    .ptr_6b9f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6b9f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1058 = { 0 },
 
@@ -79833,7 +79833,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6bd7 = NAKA_NONE,
 
-    .ptr_6bd9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6bd9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1061 = { 0 },
 
@@ -79873,7 +79873,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6c11 = NAKA_NONE,
 
-    .ptr_6c13 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6c13 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1064 = { 0 },
 
@@ -79913,7 +79913,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6c4b = NAKA_NONE,
 
-    .ptr_6c4d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6c4d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1067 = { 0 },
 
@@ -79953,7 +79953,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6c85 = NAKA_NONE,
 
-    .ptr_6c87 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6c87 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1070 = { 0 },
 
@@ -79993,7 +79993,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6cbf = NAKA_NONE,
 
-    .ptr_6cc1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6cc1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1073 = { 0 },
 
@@ -80033,7 +80033,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6cf9 = NAKA_NONE,
 
-    .ptr_6cfb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6cfb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1076 = { 0 },
 
@@ -80073,7 +80073,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6d33 = NAKA_NONE,
 
-    .ptr_6d35 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6d35 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1079 = { 0 },
 
@@ -80113,7 +80113,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6d6d = NAKA_NONE,
 
-    .ptr_6d6f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6d6f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1082 = { 0 },
 
@@ -80153,7 +80153,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6da7 = NAKA_NONE,
 
-    .ptr_6da9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6da9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1085 = { 0 },
 
@@ -80193,7 +80193,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6de1 = NAKA_NONE,
 
-    .ptr_6de3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6de3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1088 = { 0 },
 
@@ -80233,7 +80233,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6e1b = NAKA_NONE,
 
-    .ptr_6e1d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6e1d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1091 = { 0 },
 
@@ -80273,7 +80273,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6e55 = NAKA_NONE,
 
-    .ptr_6e57 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6e57 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1094 = { 0 },
 
@@ -80313,7 +80313,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6e8f = NAKA_NONE,
 
-    .ptr_6e91 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6e91 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1097 = { 0 },
 
@@ -80353,7 +80353,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6ec9 = NAKA_NONE,
 
-    .ptr_6ecb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6ecb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1100 = { 0 },
 
@@ -80393,7 +80393,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6f03 = NAKA_NONE,
 
-    .ptr_6f05 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6f05 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1103 = { 0 },
 
@@ -80433,7 +80433,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6f3d = NAKA_NONE,
 
-    .ptr_6f3f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6f3f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1106 = { 0 },
 
@@ -80473,7 +80473,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6f77 = NAKA_NONE,
 
-    .ptr_6f79 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6f79 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1109 = { 0 },
 
@@ -80513,7 +80513,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_6fb1 = NAKA_NONE,
 
-    .ptr_6fb3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_6fb3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1112 = { 0 },
 
@@ -80584,13 +80584,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_701d = NAKA_NONE,
 
-    .ptr_701f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_701f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7023 = NAKA_NONE,
 
     .field_7025 = NAKA_NONE,
 
-    .ptr_7027 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7027 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1116 = { 0 },
 
@@ -80628,13 +80628,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7057 = NAKA_NONE,
 
-    .ptr_7059 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7059 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_705d = NAKA_NONE,
 
     .field_705f = NAKA_NONE,
 
-    .ptr_7061 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7061 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1117 = { 0 },
 
@@ -80672,13 +80672,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7091 = NAKA_NONE,
 
-    .ptr_7093 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7093 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7097 = NAKA_NONE,
 
     .field_7099 = NAKA_NONE,
 
-    .ptr_709b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_709b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1118 = { 0 },
 
@@ -80716,13 +80716,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_70cb = NAKA_NONE,
 
-    .ptr_70cd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_70cd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_70d1 = NAKA_NONE,
 
     .field_70d3 = NAKA_NONE,
 
-    .ptr_70d5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_70d5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1119 = { 0 },
 
@@ -80760,13 +80760,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7105 = NAKA_NONE,
 
-    .ptr_7107 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7107 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_710b = NAKA_NONE,
 
     .field_710d = NAKA_NONE,
 
-    .ptr_710f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_710f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1120 = { 0 },
 
@@ -80804,13 +80804,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_713f = NAKA_NONE,
 
-    .ptr_7141 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7141 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7145 = NAKA_NONE,
 
     .field_7147 = NAKA_NONE,
 
-    .ptr_7149 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7149 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1121 = { 0 },
 
@@ -80848,13 +80848,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7179 = NAKA_NONE,
 
-    .ptr_717b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_717b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_717f = NAKA_NONE,
 
     .field_7181 = NAKA_NONE,
 
-    .ptr_7183 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7183 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1122 = { 0 },
 
@@ -80892,13 +80892,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_71b3 = NAKA_NONE,
 
-    .ptr_71b5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_71b5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_71b9 = NAKA_NONE,
 
     .field_71bb = NAKA_NONE,
 
-    .ptr_71bd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_71bd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1123 = { 0 },
 
@@ -80936,13 +80936,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_71ed = NAKA_NONE,
 
-    .ptr_71ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_71ef = NAKA_ADDR(NakaData_RomEnd),
 
     .field_71f3 = NAKA_NONE,
 
     .field_71f5 = NAKA_NONE,
 
-    .ptr_71f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_71f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1124 = { 0 },
 
@@ -80980,13 +80980,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7227 = NAKA_NONE,
 
-    .ptr_7229 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7229 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_722d = NAKA_NONE,
 
     .field_722f = NAKA_NONE,
 
-    .ptr_7231 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7231 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1125 = { 0 },
 
@@ -81024,13 +81024,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7261 = NAKA_NONE,
 
-    .ptr_7263 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7263 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7267 = NAKA_NONE,
 
     .field_7269 = NAKA_NONE,
 
-    .ptr_726b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_726b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1126 = { 0 },
 
@@ -81068,13 +81068,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_729b = NAKA_NONE,
 
-    .ptr_729d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_729d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_72a1 = NAKA_NONE,
 
     .field_72a3 = NAKA_NONE,
 
-    .ptr_72a5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_72a5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1127 = { 0 },
 
@@ -81112,13 +81112,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_72d5 = NAKA_NONE,
 
-    .ptr_72d7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_72d7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_72db = NAKA_NONE,
 
     .field_72dd = NAKA_NONE,
 
-    .ptr_72df = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_72df = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1128 = { 0 },
 
@@ -81156,13 +81156,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_730f = NAKA_NONE,
 
-    .ptr_7311 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7311 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7315 = NAKA_NONE,
 
     .field_7317 = NAKA_NONE,
 
-    .ptr_7319 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7319 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1129 = { 0 },
 
@@ -81200,13 +81200,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7349 = NAKA_NONE,
 
-    .ptr_734b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_734b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_734f = NAKA_NONE,
 
     .field_7351 = NAKA_NONE,
 
-    .ptr_7353 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7353 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1130 = { 0 },
 
@@ -81244,13 +81244,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7383 = NAKA_NONE,
 
-    .ptr_7385 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7385 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7389 = NAKA_NONE,
 
     .field_738b = NAKA_NONE,
 
-    .ptr_738d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_738d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1131 = { 0 },
 
@@ -81288,13 +81288,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_73bd = NAKA_NONE,
 
-    .ptr_73bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_73bf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_73c3 = NAKA_NONE,
 
     .field_73c5 = NAKA_NONE,
 
-    .ptr_73c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_73c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1132 = { 0 },
 
@@ -81332,13 +81332,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_73f7 = NAKA_NONE,
 
-    .ptr_73f9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_73f9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_73fd = NAKA_NONE,
 
     .field_73ff = NAKA_NONE,
 
-    .ptr_7401 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7401 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1133 = { 0 },
 
@@ -81376,13 +81376,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7431 = NAKA_NONE,
 
-    .ptr_7433 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7433 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7437 = NAKA_NONE,
 
     .field_7439 = NAKA_NONE,
 
-    .ptr_743b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_743b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1134 = { 0 },
 
@@ -81420,14 +81420,14 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_746b = NAKA_NONE,
 
-    .ptr_746d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_746d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7471 = NAKA_NONE,
 
     .field_7473 = NAKA_NONE,
 
     .ptrs_148 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -81499,7 +81499,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7521 = NAKA_NONE,
 
-    .ptr_7523 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7523 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1137 = { 0 },
 
@@ -81541,7 +81541,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_755b = NAKA_NONE,
 
-    .ptr_755d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_755d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1139 = { 0 },
 
@@ -81583,7 +81583,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7595 = NAKA_NONE,
 
-    .ptr_7597 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7597 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1141 = { 0 },
 
@@ -81625,7 +81625,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_75cf = NAKA_NONE,
 
-    .ptr_75d1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_75d1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1143 = { 0 },
 
@@ -81667,7 +81667,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7609 = NAKA_NONE,
 
-    .ptr_760b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_760b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1145 = { 0 },
 
@@ -81709,7 +81709,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7643 = NAKA_NONE,
 
-    .ptr_7645 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7645 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1147 = { 0 },
 
@@ -81751,7 +81751,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_767d = NAKA_NONE,
 
-    .ptr_767f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_767f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1149 = { 0 },
 
@@ -81793,7 +81793,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_76b7 = NAKA_NONE,
 
-    .ptr_76b9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_76b9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1151 = { 0 },
 
@@ -81835,7 +81835,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_76f1 = NAKA_NONE,
 
-    .ptr_76f3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_76f3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1153 = { 0 },
 
@@ -81877,7 +81877,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_772b = NAKA_NONE,
 
-    .ptr_772d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_772d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1155 = { 0 },
 
@@ -81919,7 +81919,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7765 = NAKA_NONE,
 
-    .ptr_7767 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7767 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1157 = { 0 },
 
@@ -81961,7 +81961,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_779f = NAKA_NONE,
 
-    .ptr_77a1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_77a1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1159 = { 0 },
 
@@ -82003,7 +82003,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_77d9 = NAKA_NONE,
 
-    .ptr_77db = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_77db = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1161 = { 0 },
 
@@ -82045,7 +82045,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7813 = NAKA_NONE,
 
-    .ptr_7815 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7815 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1163 = { 0 },
 
@@ -82087,7 +82087,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_784d = NAKA_NONE,
 
-    .ptr_784f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_784f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1165 = { 0 },
 
@@ -82129,7 +82129,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7887 = NAKA_NONE,
 
-    .ptr_7889 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7889 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1167 = { 0 },
 
@@ -82171,7 +82171,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_78c1 = NAKA_NONE,
 
-    .ptr_78c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_78c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1169 = { 0 },
 
@@ -82213,7 +82213,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_78fb = NAKA_NONE,
 
-    .ptr_78fd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_78fd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1171 = { 0 },
 
@@ -82255,7 +82255,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7935 = NAKA_NONE,
 
-    .ptr_7937 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7937 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1173 = { 0 },
 
@@ -82297,7 +82297,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_796f = NAKA_NONE,
 
-    .ptr_7971 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7971 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1175 = { 0 },
 
@@ -82339,7 +82339,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_79a9 = NAKA_NONE,
 
-    .ptr_79ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_79ab = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1177 = { 0 },
 
@@ -82381,7 +82381,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_79e3 = NAKA_NONE,
 
-    .ptr_79e5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_79e5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1179 = { 0 },
 
@@ -82423,7 +82423,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7a1d = NAKA_NONE,
 
-    .ptr_7a1f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7a1f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1181 = { 0 },
 
@@ -82465,7 +82465,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7a57 = NAKA_NONE,
 
-    .ptr_7a59 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7a59 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1183 = { 0 },
 
@@ -82507,7 +82507,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7a91 = NAKA_NONE,
 
-    .ptr_7a93 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7a93 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1185 = { 0 },
 
@@ -82549,7 +82549,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7acb = NAKA_NONE,
 
-    .ptr_7acd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7acd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1187 = { 0 },
 
@@ -82591,7 +82591,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7b05 = NAKA_NONE,
 
-    .ptr_7b07 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7b07 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1189 = { 0 },
 
@@ -82633,7 +82633,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7b3f = NAKA_NONE,
 
-    .ptr_7b41 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7b41 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1191 = { 0 },
 
@@ -82675,7 +82675,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7b79 = NAKA_NONE,
 
-    .ptr_7b7b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7b7b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1193 = { 0 },
 
@@ -82746,13 +82746,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7be5 = NAKA_NONE,
 
-    .ptr_7be7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7be7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7beb = NAKA_NONE,
 
     .field_7bed = NAKA_NONE,
 
-    .ptr_7bef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7bef = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1197 = { 0 },
 
@@ -82790,13 +82790,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7c1f = NAKA_NONE,
 
-    .ptr_7c21 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7c21 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7c25 = NAKA_NONE,
 
     .field_7c27 = NAKA_NONE,
 
-    .ptr_7c29 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7c29 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1198 = { 0 },
 
@@ -82834,13 +82834,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7c59 = NAKA_NONE,
 
-    .ptr_7c5b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7c5b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7c5f = NAKA_NONE,
 
     .field_7c61 = NAKA_NONE,
 
-    .ptr_7c63 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7c63 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1199 = { 0 },
 
@@ -82878,13 +82878,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7c93 = NAKA_NONE,
 
-    .ptr_7c95 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7c95 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7c99 = NAKA_NONE,
 
     .field_7c9b = NAKA_NONE,
 
-    .ptr_7c9d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7c9d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1200 = { 0 },
 
@@ -82922,13 +82922,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7ccd = NAKA_NONE,
 
-    .ptr_7ccf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7ccf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7cd3 = NAKA_NONE,
 
     .field_7cd5 = NAKA_NONE,
 
-    .ptr_7cd7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7cd7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1201 = { 0 },
 
@@ -82966,13 +82966,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7d07 = NAKA_NONE,
 
-    .ptr_7d09 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7d09 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7d0d = NAKA_NONE,
 
     .field_7d0f = NAKA_NONE,
 
-    .ptr_7d11 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7d11 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1202 = { 0 },
 
@@ -83010,13 +83010,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7d41 = NAKA_NONE,
 
-    .ptr_7d43 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7d43 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7d47 = NAKA_NONE,
 
     .field_7d49 = NAKA_NONE,
 
-    .ptr_7d4b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7d4b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1203 = { 0 },
 
@@ -83054,13 +83054,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7d7b = NAKA_NONE,
 
-    .ptr_7d7d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7d7d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7d81 = NAKA_NONE,
 
     .field_7d83 = NAKA_NONE,
 
-    .ptr_7d85 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7d85 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1204 = { 0 },
 
@@ -83098,13 +83098,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7db5 = NAKA_NONE,
 
-    .ptr_7db7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7db7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7dbb = NAKA_NONE,
 
     .field_7dbd = NAKA_NONE,
 
-    .ptr_7dbf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7dbf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1205 = { 0 },
 
@@ -83142,13 +83142,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7def = NAKA_NONE,
 
-    .ptr_7df1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7df1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7df5 = NAKA_NONE,
 
     .field_7df7 = NAKA_NONE,
 
-    .ptr_7df9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7df9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1206 = { 0 },
 
@@ -83186,13 +83186,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7e29 = NAKA_NONE,
 
-    .ptr_7e2b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7e2b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7e2f = NAKA_NONE,
 
     .field_7e31 = NAKA_NONE,
 
-    .ptr_7e33 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7e33 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1207 = { 0 },
 
@@ -83230,13 +83230,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7e63 = NAKA_NONE,
 
-    .ptr_7e65 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7e65 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7e69 = NAKA_NONE,
 
     .field_7e6b = NAKA_NONE,
 
-    .ptr_7e6d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7e6d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1208 = { 0 },
 
@@ -83274,13 +83274,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7e9d = NAKA_NONE,
 
-    .ptr_7e9f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7e9f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7ea3 = NAKA_NONE,
 
     .field_7ea5 = NAKA_NONE,
 
-    .ptr_7ea7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7ea7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1209 = { 0 },
 
@@ -83318,13 +83318,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7ed7 = NAKA_NONE,
 
-    .ptr_7ed9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7ed9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7edd = NAKA_NONE,
 
     .field_7edf = NAKA_NONE,
 
-    .ptr_7ee1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7ee1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1210 = { 0 },
 
@@ -83362,13 +83362,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7f11 = NAKA_NONE,
 
-    .ptr_7f13 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7f13 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7f17 = NAKA_NONE,
 
     .field_7f19 = NAKA_NONE,
 
-    .ptr_7f1b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7f1b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1211 = { 0 },
 
@@ -83406,13 +83406,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7f4b = NAKA_NONE,
 
-    .ptr_7f4d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7f4d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7f51 = NAKA_NONE,
 
     .field_7f53 = NAKA_NONE,
 
-    .ptr_7f55 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7f55 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1212 = { 0 },
 
@@ -83450,13 +83450,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7f85 = NAKA_NONE,
 
-    .ptr_7f87 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7f87 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7f8b = NAKA_NONE,
 
     .field_7f8d = NAKA_NONE,
 
-    .ptr_7f8f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7f8f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1213 = { 0 },
 
@@ -83494,13 +83494,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7fbf = NAKA_NONE,
 
-    .ptr_7fc1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7fc1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7fc5 = NAKA_NONE,
 
     .field_7fc7 = NAKA_NONE,
 
-    .ptr_7fc9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7fc9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1214 = { 0 },
 
@@ -83538,13 +83538,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_7ff9 = NAKA_NONE,
 
-    .ptr_7ffb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_7ffb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_7fff = NAKA_NONE,
 
     .field_8001 = NAKA_NONE,
 
-    .ptr_8003 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8003 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1215 = { 0 },
 
@@ -83582,14 +83582,14 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8033 = NAKA_NONE,
 
-    .ptr_8035 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8035 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_8039 = NAKA_NONE,
 
     .field_803b = NAKA_NONE,
 
     .ptrs_150 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -83661,7 +83661,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_80e9 = NAKA_NONE,
 
-    .ptr_80eb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_80eb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1218 = { 0 },
 
@@ -83703,7 +83703,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8123 = NAKA_NONE,
 
-    .ptr_8125 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8125 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1220 = { 0 },
 
@@ -83745,7 +83745,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_815d = NAKA_NONE,
 
-    .ptr_815f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_815f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1222 = { 0 },
 
@@ -83787,7 +83787,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8197 = NAKA_NONE,
 
-    .ptr_8199 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8199 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1224 = { 0 },
 
@@ -83829,7 +83829,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_81d1 = NAKA_NONE,
 
-    .ptr_81d3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_81d3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1226 = { 0 },
 
@@ -83871,7 +83871,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_820b = NAKA_NONE,
 
-    .ptr_820d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_820d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1228 = { 0 },
 
@@ -83913,7 +83913,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8245 = NAKA_NONE,
 
-    .ptr_8247 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8247 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1230 = { 0 },
 
@@ -83955,7 +83955,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_827f = NAKA_NONE,
 
-    .ptr_8281 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8281 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1232 = { 0 },
 
@@ -83997,7 +83997,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_82b9 = NAKA_NONE,
 
-    .ptr_82bb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_82bb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1234 = { 0 },
 
@@ -84039,7 +84039,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_82f3 = NAKA_NONE,
 
-    .ptr_82f5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_82f5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1236 = { 0 },
 
@@ -84081,7 +84081,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_832d = NAKA_NONE,
 
-    .ptr_832f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_832f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1238 = { 0 },
 
@@ -84123,7 +84123,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8367 = NAKA_NONE,
 
-    .ptr_8369 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8369 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1240 = { 0 },
 
@@ -84165,7 +84165,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_83a1 = NAKA_NONE,
 
-    .ptr_83a3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_83a3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1242 = { 0 },
 
@@ -84207,7 +84207,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_83db = NAKA_NONE,
 
-    .ptr_83dd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_83dd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1244 = { 0 },
 
@@ -84249,7 +84249,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8415 = NAKA_NONE,
 
-    .ptr_8417 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8417 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1246 = { 0 },
 
@@ -84291,7 +84291,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_844f = NAKA_NONE,
 
-    .ptr_8451 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8451 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1248 = { 0 },
 
@@ -84333,7 +84333,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8489 = NAKA_NONE,
 
-    .ptr_848b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_848b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1250 = { 0 },
 
@@ -84375,7 +84375,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_84c3 = NAKA_NONE,
 
-    .ptr_84c5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_84c5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1252 = { 0 },
 
@@ -84417,7 +84417,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_84fd = NAKA_NONE,
 
-    .ptr_84ff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_84ff = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1254 = { 0 },
 
@@ -84459,7 +84459,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8537 = NAKA_NONE,
 
-    .ptr_8539 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8539 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1256 = { 0 },
 
@@ -84501,7 +84501,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8571 = NAKA_NONE,
 
-    .ptr_8573 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8573 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1258 = { 0 },
 
@@ -84543,7 +84543,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_85ab = NAKA_NONE,
 
-    .ptr_85ad = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_85ad = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1260 = { 0 },
 
@@ -84585,7 +84585,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_85e5 = NAKA_NONE,
 
-    .ptr_85e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_85e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1262 = { 0 },
 
@@ -84627,7 +84627,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_861f = NAKA_NONE,
 
-    .ptr_8621 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8621 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1264 = { 0 },
 
@@ -84669,7 +84669,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8659 = NAKA_NONE,
 
-    .ptr_865b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_865b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1266 = { 0 },
 
@@ -84711,7 +84711,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8693 = NAKA_NONE,
 
-    .ptr_8695 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8695 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1268 = { 0 },
 
@@ -84753,7 +84753,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_86cd = NAKA_NONE,
 
-    .ptr_86cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_86cf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1270 = { 0 },
 
@@ -84795,7 +84795,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8707 = NAKA_NONE,
 
-    .ptr_8709 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8709 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1272 = { 0 },
 
@@ -84837,7 +84837,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8741 = NAKA_NONE,
 
-    .ptr_8743 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8743 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1274 = { 0 },
 
@@ -84914,7 +84914,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_87b5 = NAKA_NONE,
 
-    .ptr_87b7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_87b7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1278 = { 0 },
 
@@ -84958,7 +84958,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_87ef = NAKA_NONE,
 
-    .ptr_87f1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_87f1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1279 = { 0 },
 
@@ -85002,7 +85002,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8829 = NAKA_NONE,
 
-    .ptr_882b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_882b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1280 = { 0 },
 
@@ -85046,7 +85046,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8863 = NAKA_NONE,
 
-    .ptr_8865 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8865 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1281 = { 0 },
 
@@ -85090,7 +85090,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_889d = NAKA_NONE,
 
-    .ptr_889f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_889f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1282 = { 0 },
 
@@ -85134,7 +85134,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_88d7 = NAKA_NONE,
 
-    .ptr_88d9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_88d9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1283 = { 0 },
 
@@ -85178,7 +85178,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8911 = NAKA_NONE,
 
-    .ptr_8913 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8913 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1284 = { 0 },
 
@@ -85222,7 +85222,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_894b = NAKA_NONE,
 
-    .ptr_894d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_894d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1285 = { 0 },
 
@@ -85266,7 +85266,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8985 = NAKA_NONE,
 
-    .ptr_8987 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8987 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1286 = { 0 },
 
@@ -85310,7 +85310,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_89bf = NAKA_NONE,
 
-    .ptr_89c1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_89c1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1287 = { 0 },
 
@@ -85354,7 +85354,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_89f9 = NAKA_NONE,
 
-    .ptr_89fb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_89fb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1288 = { 0 },
 
@@ -85398,7 +85398,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8a33 = NAKA_NONE,
 
-    .ptr_8a35 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8a35 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1289 = { 0 },
 
@@ -85442,7 +85442,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8a6d = NAKA_NONE,
 
-    .ptr_8a6f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8a6f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1290 = { 0 },
 
@@ -85486,7 +85486,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8aa7 = NAKA_NONE,
 
-    .ptr_8aa9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8aa9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1291 = { 0 },
 
@@ -85530,7 +85530,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8ae1 = NAKA_NONE,
 
-    .ptr_8ae3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8ae3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1292 = { 0 },
 
@@ -85574,7 +85574,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8b1b = NAKA_NONE,
 
-    .ptr_8b1d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8b1d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1293 = { 0 },
 
@@ -85618,7 +85618,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8b55 = NAKA_NONE,
 
-    .ptr_8b57 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8b57 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1294 = { 0 },
 
@@ -85662,7 +85662,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8b8f = NAKA_NONE,
 
-    .ptr_8b91 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8b91 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1295 = { 0 },
 
@@ -85706,7 +85706,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8bc9 = NAKA_NONE,
 
-    .ptr_8bcb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8bcb = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1296 = { 0 },
 
@@ -85751,7 +85751,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_8c03 = NAKA_NONE,
 
     .ptrs_152 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -85825,7 +85825,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8cb1 = NAKA_NONE,
 
-    .ptr_8cb3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8cb3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1298 = { 0 },
 
@@ -85869,7 +85869,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8ceb = NAKA_NONE,
 
-    .ptr_8ced = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8ced = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1299 = { 0 },
 
@@ -85913,7 +85913,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8d25 = NAKA_NONE,
 
-    .ptr_8d27 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8d27 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1300 = { 0 },
 
@@ -85957,7 +85957,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8d5f = NAKA_NONE,
 
-    .ptr_8d61 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8d61 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1301 = { 0 },
 
@@ -86001,7 +86001,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8d99 = NAKA_NONE,
 
-    .ptr_8d9b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8d9b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1302 = { 0 },
 
@@ -86045,7 +86045,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8dd3 = NAKA_NONE,
 
-    .ptr_8dd5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8dd5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1303 = { 0 },
 
@@ -86089,7 +86089,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8e0d = NAKA_NONE,
 
-    .ptr_8e0f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8e0f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1304 = { 0 },
 
@@ -86133,7 +86133,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8e47 = NAKA_NONE,
 
-    .ptr_8e49 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8e49 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1305 = { 0 },
 
@@ -86177,7 +86177,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8e81 = NAKA_NONE,
 
-    .ptr_8e83 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8e83 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1306 = { 0 },
 
@@ -86221,7 +86221,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8ebb = NAKA_NONE,
 
-    .ptr_8ebd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8ebd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1307 = { 0 },
 
@@ -86265,7 +86265,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8ef5 = NAKA_NONE,
 
-    .ptr_8ef7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8ef7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1308 = { 0 },
 
@@ -86309,7 +86309,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8f2f = NAKA_NONE,
 
-    .ptr_8f31 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8f31 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1309 = { 0 },
 
@@ -86353,7 +86353,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8f69 = NAKA_NONE,
 
-    .ptr_8f6b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8f6b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1310 = { 0 },
 
@@ -86397,7 +86397,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8fa3 = NAKA_NONE,
 
-    .ptr_8fa5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8fa5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1311 = { 0 },
 
@@ -86441,7 +86441,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_8fdd = NAKA_NONE,
 
-    .ptr_8fdf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_8fdf = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1312 = { 0 },
 
@@ -86485,7 +86485,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9017 = NAKA_NONE,
 
-    .ptr_9019 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9019 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1313 = { 0 },
 
@@ -86529,7 +86529,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9051 = NAKA_NONE,
 
-    .ptr_9053 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9053 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1314 = { 0 },
 
@@ -86573,7 +86573,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_908b = NAKA_NONE,
 
-    .ptr_908d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_908d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1315 = { 0 },
 
@@ -86617,7 +86617,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_90c5 = NAKA_NONE,
 
-    .ptr_90c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_90c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1316 = { 0 },
 
@@ -86661,7 +86661,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_90ff = NAKA_NONE,
 
-    .ptr_9101 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9101 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1317 = { 0 },
 
@@ -86705,7 +86705,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9139 = NAKA_NONE,
 
-    .ptr_913b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_913b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1318 = { 0 },
 
@@ -86749,7 +86749,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9173 = NAKA_NONE,
 
-    .ptr_9175 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9175 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1319 = { 0 },
 
@@ -86793,7 +86793,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_91ad = NAKA_NONE,
 
-    .ptr_91af = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_91af = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1320 = { 0 },
 
@@ -86837,7 +86837,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_91e7 = NAKA_NONE,
 
-    .ptr_91e9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_91e9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1321 = { 0 },
 
@@ -86881,7 +86881,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9221 = NAKA_NONE,
 
-    .ptr_9223 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9223 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1322 = { 0 },
 
@@ -86925,7 +86925,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_925b = NAKA_NONE,
 
-    .ptr_925d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_925d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1323 = { 0 },
 
@@ -86969,7 +86969,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9295 = NAKA_NONE,
 
-    .ptr_9297 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9297 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1324 = { 0 },
 
@@ -87013,7 +87013,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_92cf = NAKA_NONE,
 
-    .ptr_92d1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_92d1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1325 = { 0 },
 
@@ -87057,7 +87057,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9309 = NAKA_NONE,
 
-    .ptr_930b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_930b = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1326 = { 0 },
 
@@ -87134,7 +87134,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_937d = NAKA_NONE,
 
-    .ptr_937f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_937f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1330 = { 0 },
 
@@ -87178,7 +87178,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_93b7 = NAKA_NONE,
 
-    .ptr_93b9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_93b9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1331 = { 0 },
 
@@ -87222,7 +87222,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_93f1 = NAKA_NONE,
 
-    .ptr_93f3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_93f3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1332 = { 0 },
 
@@ -87266,7 +87266,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_942b = NAKA_NONE,
 
-    .ptr_942d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_942d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1333 = { 0 },
 
@@ -87310,7 +87310,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9465 = NAKA_NONE,
 
-    .ptr_9467 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9467 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1334 = { 0 },
 
@@ -87354,7 +87354,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_949f = NAKA_NONE,
 
-    .ptr_94a1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_94a1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1335 = { 0 },
 
@@ -87398,7 +87398,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_94d9 = NAKA_NONE,
 
-    .ptr_94db = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_94db = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1336 = { 0 },
 
@@ -87442,7 +87442,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9513 = NAKA_NONE,
 
-    .ptr_9515 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9515 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1337 = { 0 },
 
@@ -87486,7 +87486,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_954d = NAKA_NONE,
 
-    .ptr_954f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_954f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1338 = { 0 },
 
@@ -87530,7 +87530,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9587 = NAKA_NONE,
 
-    .ptr_9589 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9589 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1339 = { 0 },
 
@@ -87574,7 +87574,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_95c1 = NAKA_NONE,
 
-    .ptr_95c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_95c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1340 = { 0 },
 
@@ -87618,7 +87618,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_95fb = NAKA_NONE,
 
-    .ptr_95fd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_95fd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1341 = { 0 },
 
@@ -87662,7 +87662,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9635 = NAKA_NONE,
 
-    .ptr_9637 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9637 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1342 = { 0 },
 
@@ -87706,7 +87706,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_966f = NAKA_NONE,
 
-    .ptr_9671 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9671 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1343 = { 0 },
 
@@ -87750,7 +87750,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_96a9 = NAKA_NONE,
 
-    .ptr_96ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_96ab = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1344 = { 0 },
 
@@ -87794,7 +87794,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_96e3 = NAKA_NONE,
 
-    .ptr_96e5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_96e5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1345 = { 0 },
 
@@ -87838,7 +87838,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_971d = NAKA_NONE,
 
-    .ptr_971f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_971f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1346 = { 0 },
 
@@ -87882,7 +87882,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9757 = NAKA_NONE,
 
-    .ptr_9759 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9759 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1347 = { 0 },
 
@@ -87926,7 +87926,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_9791 = NAKA_NONE,
 
-    .ptr_9793 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_9793 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1348 = { 0 },
 
@@ -87971,7 +87971,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_97cb = NAKA_NONE,
 
     .ptrs_154 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -90505,7 +90505,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_a4f8 = NAKA_NONE,
 
     .ptrs_157 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -90639,7 +90639,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_a5d9 = NAKA_NONE,
 
     .ptrs_158 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -91607,13 +91607,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_aa0a = NAKA_NONE,
 
-    .ptr_aa0c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_aa0c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_aa10 = NAKA_NONE,
 
-    .ptr_aa12 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_aa12 = NAKA_ADDR(NakaData_RomEnd),
 
-    .ptr_aa16 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_aa16 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1408 = { 0 },
 
@@ -91643,7 +91643,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_aa43 = NAKA_NONE,
 
-    .ptr_aa45 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_aa45 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_aa49 = NAKA_NONE,
 
@@ -91695,7 +91695,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_aa79 = NAKA_NONE,
 
-    .ptr_aa7b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_aa7b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_aa7f = NAKA_NONE,
 
@@ -91723,11 +91723,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1414 = { 0 },
 
-    .ptr_aab0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_aab0 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1415 = { 0 },
 
-    .ptr_aab6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_aab6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_421 = ALIGNED_STRING(""),
 
@@ -91829,7 +91829,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ab32 = NAKA_NONE,
 
-    .ptr_ab34 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ab34 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_425 = ALIGNED_STRING(""),
 
@@ -91961,7 +91961,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_abe5 = NAKA_NONE,
 
-    .ptr_abe7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_abe7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_abeb = NAKA_NONE,
 
@@ -91989,7 +91989,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ac03 = NAKA_NONE,
 
-    .ptr_ac05 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ac05 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_430 = ALIGNED_STRING(""),
 
@@ -92063,7 +92063,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ac4f = NAKA_NONE,
 
-    .ptr_ac51 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ac51 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ac55 = NAKA_NONE,
 
@@ -92091,17 +92091,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1431 = { 0 },
 
-    .ptr_ac76 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ac76 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_433 = ALIGNED_STRING(""),
 
-    .ptr_ac7c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ac7c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_434 = ALIGNED_STRING(""),
 
     .field_ac82 = NAKA_NONE,
 
-    .ptr_ac84 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ac84 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_435 = ALIGNED_STRING(""),
 
@@ -92181,7 +92181,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_acd4 = NAKA_NONE,
 
-    .ptr_acd6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_acd6 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1433 = { 0 },
 
@@ -92189,17 +92189,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1434 = { 0 },
 
-    .ptr_ace0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ace0 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_439 = ALIGNED_STRING(""),
 
-    .ptr_ace6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ace6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_440 = ALIGNED_STRING(""),
 
     .field_acec = NAKA_NONE,
 
-    .ptr_acee = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_acee = NAKA_ADDR(NakaData_RomEnd),
 
     .str_441 = ALIGNED_STRING(""),
 
@@ -92342,7 +92342,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_ad82 = NAKA_NONE,
 
     .ptrs_163 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -92361,17 +92361,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ad9c = NAKA_NONE,
 
-    .ptr_ad9e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ad9e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_449 = ALIGNED_STRING(""),
 
-    .ptr_ada4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ada4 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_450 = ALIGNED_STRING(""),
 
     .field_adaa = NAKA_NONE,
 
-    .ptr_adac = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_adac = NAKA_ADDR(NakaData_RomEnd),
 
     .str_451 = ALIGNED_STRING(""),
 
@@ -92477,7 +92477,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1444 = { 0 },
 
-    .ptr_ae1b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ae1b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_455 = ALIGNED_STRING(""),
 
@@ -92489,7 +92489,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1446 = { 0 },
 
-    .ptr_ae2b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ae2b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_457 = ALIGNED_STRING(""),
 
@@ -92499,7 +92499,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ae35 = NAKA_NONE,
 
-    .ptr_ae37 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ae37 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ae3b = NAKA_NONE,
 
@@ -92509,11 +92509,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1449 = { 0 },
 
-    .ptr_ae43 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ae43 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1450 = { 0 },
 
-    .ptr_ae4c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ae4c = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1451 = { 0 },
 
@@ -92606,7 +92606,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_aeaa = NAKA_NONE,
 
     .ptrs_164 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -92715,12 +92715,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_af2e = NAKA_NONE,
 
-    .ptr_af30 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_af30 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_462 = ALIGNED_STRING(""),
 
     .ptrs_165 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -92763,7 +92763,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1463 = { 0 },
 
-    .ptr_af7d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_af7d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_468 = ALIGNED_STRING(""),
 
@@ -92837,7 +92837,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_afc7 = NAKA_NONE,
 
-    .ptr_afc9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_afc9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_afcd = NAKA_NONE,
 
@@ -92861,12 +92861,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1466 = { 0 },
 
-    .ptr_afee = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_afee = NAKA_ADDR(NakaData_RomEnd),
 
     .str_471 = ALIGNED_STRING(""),
 
     .ptrs_166 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -92952,12 +92952,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b056 = NAKA_NONE,
 
-    .ptr_b058 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b058 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_475 = ALIGNED_STRING(""),
 
     .ptrs_167 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -92990,13 +92990,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1469 = { 0 },
 
-    .ptr_b098 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b098 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_480 = ALIGNED_STRING(""),
 
     .pad_1470 = { 0 },
 
-    .ptr_b0a0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b0a0 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_481 = ALIGNED_STRING(""),
 
@@ -93086,7 +93086,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b0fa = NAKA_NONE,
 
-    .ptr_b0fc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b0fc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_483 = ALIGNED_STRING(""),
 
@@ -93106,17 +93106,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1475 = { 0 },
 
-    .ptr_b116 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b116 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_484 = ALIGNED_STRING(""),
 
-    .ptr_b11c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b11c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_485 = ALIGNED_STRING(""),
 
     .field_b122 = NAKA_NONE,
 
-    .ptr_b124 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b124 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1476 = { 0 },
 
@@ -93220,7 +93220,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1480 = { 0 },
 
-    .ptr_b196 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b196 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_489 = ALIGNED_STRING(""),
 
@@ -93254,7 +93254,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1483 = { 0 },
 
-    .ptr_b1c0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b1c0 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_494 = ALIGNED_STRING(""),
 
@@ -93352,7 +93352,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b222 = NAKA_NONE,
 
-    .ptr_b224 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b224 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_496 = ALIGNED_STRING(""),
 
@@ -93376,17 +93376,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1489 = { 0 },
 
-    .ptr_b23e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b23e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_499 = ALIGNED_STRING(""),
 
-    .ptr_b244 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b244 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_500 = ALIGNED_STRING(""),
 
     .field_b24a = NAKA_NONE,
 
-    .ptr_b24c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b24c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_501 = ALIGNED_STRING(""),
 
@@ -93400,7 +93400,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b25b = NAKA_NONE,
 
-    .ptr_b25d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b25d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_b261 = NAKA_NONE,
 
@@ -93452,7 +93452,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b291 = NAKA_NONE,
 
-    .ptr_b293 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b293 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_b297 = NAKA_NONE,
 
@@ -93470,17 +93470,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1493 = { 0 },
 
-    .ptr_b2a8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b2a8 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_502 = ALIGNED_STRING(""),
 
-    .ptr_b2ae = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b2ae = NAKA_ADDR(NakaData_RomEnd),
 
     .str_503 = ALIGNED_STRING(""),
 
     .field_b2b4 = NAKA_NONE,
 
-    .ptr_b2b6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b2b6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_504 = ALIGNED_STRING(""),
 
@@ -93534,7 +93534,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b2f3 = NAKA_NONE,
 
-    .ptr_b2f5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b2f5 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_511 = ALIGNED_STRING(""),
 
@@ -93608,7 +93608,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b33f = NAKA_NONE,
 
-    .ptr_b341 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b341 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_b345 = NAKA_NONE,
 
@@ -93622,24 +93622,24 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1499 = { 0 },
 
-    .ptr_b351 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b351 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_513 = ALIGNED_STRING(""),
 
     .pad_1500 = { 0 },
 
-    .ptr_b359 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b359 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_514 = ALIGNED_STRING(""),
 
     .pad_1501 = { 0 },
 
-    .ptr_b366 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b366 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_515 = ALIGNED_STRING(""),
 
     .ptrs_168 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(InterruptVectorTable),
@@ -93725,12 +93725,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1504 = { 0 },
 
-    .ptr_b3d0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b3d0 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_519 = ALIGNED_STRING(""),
 
     .ptrs_169 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(InterruptVectorTable),
@@ -93867,7 +93867,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b472 = NAKA_NONE,
 
-    .ptr_b474 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b474 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_526 = ALIGNED_STRING(""),
 
@@ -93985,12 +93985,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1519 = { 0 },
 
-    .ptr_b4f8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b4f8 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_532 = ALIGNED_STRING(""),
 
     .ptrs_170 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -94005,7 +94005,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_534 = ALIGNED_STRING(""),
 
-    .ptr_b514 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b514 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_b518 = 0x00FF,
 
@@ -94339,7 +94339,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1528 = { 0 },
 
-    .ptr_b668 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b668 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_545 = ALIGNED_STRING(""),
 
@@ -94633,7 +94633,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1532 = { 0 },
 
-    .ptr_b795 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b795 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_552 = ALIGNED_STRING(""),
 
@@ -94707,13 +94707,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b7df = NAKA_NONE,
 
-    .ptr_b7e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b7e1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_b7e5 = NAKA_NONE,
 
     .pad_1533 = { 0 },
 
-    .ptr_b7e9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b7e9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_554 = ALIGNED_STRING(""),
 
@@ -94731,7 +94731,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1535 = { 0 },
 
-    .ptr_b805 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b805 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1536 = { 0 },
 
@@ -94742,7 +94742,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .pad_1537 = { 0 },
 
     .ptrs_171 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -94814,11 +94814,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b864 = NAKA_NONE,
 
-    .ptr_b866 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b866 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_b86a = NAKA_NONE,
 
-    .ptr_b86c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b86c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_b870 = NAKA_NONE,
 
@@ -94828,7 +94828,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1539 = { 0 },
 
-    .ptr_b87e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b87e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_559 = ALIGNED_STRING(""),
 
@@ -94842,7 +94842,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b88c = NAKA_NONE,
 
-    .ptr_b88e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b88e = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1541 = { 0 },
 
@@ -94874,7 +94874,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b8b2 = NAKA_NONE,
 
-    .ptr_b8b4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b8b4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1543 = { 0 },
 
@@ -94991,7 +94991,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1549 = { 0 },
 
-    .ptr_b94d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b94d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_b951 = NAKA_NONE,
 
@@ -95043,7 +95043,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_b981 = NAKA_NONE,
 
-    .ptr_b983 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b983 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_b987 = NAKA_NONE,
 
@@ -95057,7 +95057,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1550 = { 0 },
 
-    .ptr_b993 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b993 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_566 = ALIGNED_STRING(""),
 
@@ -95071,7 +95071,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1553 = { 0 },
 
-    .ptr_b9ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_b9ab = NAKA_ADDR(NakaData_RomEnd),
 
     .str_567 = ALIGNED_STRING(""),
 
@@ -95229,13 +95229,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1562 = { 0 },
 
-    .ptr_ba51 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ba51 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_573 = ALIGNED_STRING(""),
 
     .pad_1563 = { 0 },
 
-    .ptr_ba59 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ba59 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_574 = ALIGNED_STRING(""),
 
@@ -95326,7 +95326,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_bab4 = NAKA_NONE,
 
     .ptrs_173 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -95353,7 +95353,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_badc = NAKA_NONE,
 
-    .ptr_bade = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bade = NAKA_ADDR(NakaData_RomEnd),
 
     .str_582 = ALIGNED_STRING(""),
 
@@ -95483,14 +95483,14 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1571 = { 0 },
 
-    .ptr_bb64 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bb64 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_587 = ALIGNED_STRING(""),
 
     .field_bb6a = NAKA_NONE,
 
     .ptrs_175 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         NAKA_ADDR(InterruptVectorTable),
         NAKA_ADDR(InterruptVectorTable),
     },
@@ -95598,7 +95598,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_bbdc = NAKA_NONE,
 
     .ptrs_176 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -95631,7 +95631,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_bc04 = NAKA_NONE,
 
-    .ptr_bc06 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bc06 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_599 = ALIGNED_STRING(""),
 
@@ -95740,7 +95740,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .pad_1582 = { 0 },
 
     .ptrs_177 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -95838,7 +95838,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_bd04 = NAKA_NONE,
 
     .ptrs_179 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -95871,7 +95871,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_bd2c = NAKA_NONE,
 
-    .ptr_bd2e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bd2e = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1588 = { 0 },
 
@@ -95883,7 +95883,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_bd3d = NAKA_NONE,
 
-    .ptr_bd3f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bd3f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_bd43 = NAKA_NONE,
 
@@ -95979,12 +95979,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1593 = { 0 },
 
-    .ptr_bdbd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bdbd = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1594 = { 0 },
 
     .ptrs_180 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
     },
@@ -96071,7 +96071,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_be2c = NAKA_NONE,
 
-    .ptr_be2e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_be2e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_617 = ALIGNED_STRING(""),
 
@@ -96109,7 +96109,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_be54 = NAKA_NONE,
 
-    .ptr_be56 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_be56 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1600 = { 0 },
 
@@ -96121,7 +96121,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_be65 = NAKA_NONE,
 
-    .ptr_be67 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_be67 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_be6b = NAKA_NONE,
 
@@ -96153,7 +96153,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_be87 = NAKA_NONE,
 
-    .ptr_be89 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_be89 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_623 = ALIGNED_STRING(""),
 
@@ -96223,13 +96223,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_becf = NAKA_NONE,
 
-    .ptr_bed1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bed1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_bed5 = NAKA_NONE,
 
     .pad_1602 = { 0 },
 
-    .ptr_bedc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bedc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_624 = ALIGNED_STRING(""),
 
@@ -96237,11 +96237,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_bee4 = NAKA_NONE,
 
-    .ptr_bee6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bee6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_625 = ALIGNED_STRING(""),
 
-    .ptr_beec = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_beec = NAKA_ADDR(NakaData_RomEnd),
 
     .str_626 = ALIGNED_STRING(""),
 
@@ -96260,7 +96260,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
     },
 
     .str_628 = ALIGNED_STRING(""),
@@ -96333,7 +96333,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_bf54 = NAKA_NONE,
 
-    .ptr_bf56 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bf56 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_631 = ALIGNED_STRING(""),
 
@@ -96371,7 +96371,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_bf7c = NAKA_NONE,
 
-    .ptr_bf7e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_bf7e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_636 = ALIGNED_STRING(""),
 
@@ -96523,19 +96523,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1613 = { 0 },
 
-    .ptr_c019 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c019 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_641 = ALIGNED_STRING(""),
 
     .pad_1614 = { 0 },
 
-    .ptr_c021 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c021 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_642 = ALIGNED_STRING(""),
 
     .pad_1615 = { 0 },
 
-    .ptr_c029 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c029 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_643 = ALIGNED_STRING(""),
 
@@ -96617,7 +96617,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_c07c = NAKA_NONE,
 
-    .ptr_c07e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c07e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_646 = ALIGNED_STRING(""),
 
@@ -96649,7 +96649,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_c0a4 = NAKA_NONE,
 
-    .ptr_c0a6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c0a6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_650 = ALIGNED_STRING(""),
 
@@ -96688,7 +96688,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_c0cc = NAKA_NONE,
 
     .ptrs_184 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -96781,12 +96781,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1624 = { 0 },
 
-    .ptr_c136 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c136 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_655 = ALIGNED_STRING(""),
 
     .ptrs_185 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         0x00000000,
@@ -96870,7 +96870,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_c1a4 = NAKA_NONE,
 
-    .ptr_c1a6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c1a6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_660 = ALIGNED_STRING(""),
 
@@ -96922,7 +96922,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_c1f4 = NAKA_NONE,
 
     .ptrs_188 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -97015,15 +97015,15 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1628 = { 0 },
 
-    .ptr_c25e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c25e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_665 = ALIGNED_STRING(""),
 
-    .ptr_c264 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c264 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1629 = { 0 },
 
-    .ptr_c26d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c26d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1630 = { 0 },
 
@@ -97031,13 +97031,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1631 = { 0 },
 
-    .ptr_c279 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c279 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_666 = ALIGNED_STRING(""),
 
     .pad_1632 = { 0 },
 
-    .ptr_c281 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c281 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_667 = ALIGNED_STRING(""),
 
@@ -97109,7 +97109,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_c2cc = NAKA_NONE,
 
-    .ptr_c2ce = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c2ce = NAKA_ADDR(NakaData_RomEnd),
 
     .str_670 = ALIGNED_STRING(""),
 
@@ -98136,7 +98136,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_c761 = NAKA_NONE,
 
     .ptrs_189 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -98460,7 +98460,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_c8d9 = NAKA_NONE,
 
-    .ptr_c8db = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c8db = NAKA_ADDR(NakaData_RomEnd),
 
     .str_686 = ALIGNED_STRING(""),
 
@@ -98472,7 +98472,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_c8e7 = NAKA_NONE,
 
-    .ptr_c8e9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_c8e9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_687 = ALIGNED_STRING(""),
 
@@ -98752,7 +98752,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ca01 = NAKA_NONE,
 
-    .ptr_ca03 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ca03 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_688 = ALIGNED_STRING(""),
 
@@ -98986,7 +98986,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_caef = NAKA_NONE,
 
-    .ptr_caf1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_caf1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1647 = { 0 },
 
@@ -99274,7 +99274,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_cc16 = NAKA_NONE,
 
-    .ptr_cc18 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cc18 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1650 = { 0 },
 
@@ -99328,7 +99328,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_cc51 = NAKA_NONE,
 
-    .ptr_cc53 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cc53 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_689 = ALIGNED_STRING(""),
 
@@ -99556,7 +99556,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_cd3d = NAKA_NONE,
 
-    .ptr_cd3f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cd3f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1652 = { 0 },
 
@@ -99837,7 +99837,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_ce64 = NAKA_NONE,
 
     .ptrs_190 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -100130,7 +100130,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_cf90 = NAKA_NONE,
 
-    .ptr_cf92 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_cf92 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_691 = ALIGNED_STRING(""),
 
@@ -100424,7 +100424,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_d0b8 = NAKA_NONE,
 
-    .ptr_d0ba = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d0ba = NAKA_ADDR(NakaData_RomEnd),
 
     .str_692 = ALIGNED_STRING(""),
 
@@ -100710,7 +100710,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_d1e0 = NAKA_NONE,
 
-    .ptr_d1e2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d1e2 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_693 = ALIGNED_STRING(""),
 
@@ -100762,7 +100762,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_d216 = NAKA_NONE,
 
-    .ptr_d218 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d218 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1661 = { 0 },
 
@@ -100772,7 +100772,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_d227 = NAKA_NONE,
 
-    .ptr_d229 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d229 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_694 = ALIGNED_STRING(""),
 
@@ -101050,7 +101050,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_d33f = NAKA_NONE,
 
-    .ptr_d341 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d341 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1663 = { 0 },
 
@@ -101286,7 +101286,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_d430 = NAKA_NONE,
 
-    .ptr_d432 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d432 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_695 = ALIGNED_STRING(""),
 
@@ -101340,7 +101340,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_d468 = NAKA_NONE,
 
-    .ptr_d46a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d46a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1665 = { 0 },
 
@@ -101352,7 +101352,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_d477 = NAKA_NONE,
 
-    .ptr_d479 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d479 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_696 = ALIGNED_STRING(""),
 
@@ -101632,7 +101632,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_d591 = NAKA_NONE,
 
-    .ptr_d593 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d593 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_697 = ALIGNED_STRING(""),
 
@@ -101644,7 +101644,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_d59f = NAKA_NONE,
 
-    .ptr_d5a1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_d5a1 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_698 = ALIGNED_STRING(""),
 
@@ -102508,7 +102508,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_da25 = NAKA_NONE,
 
-    .ptr_da27 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_da27 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_da2b = NAKA_NONE,
 
@@ -102802,7 +102802,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_db4d = NAKA_NONE,
 
-    .ptr_db4f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_db4f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_db53 = NAKA_NONE,
 
@@ -102936,7 +102936,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_dbd8 = NAKA_NONE,
 
-    .ptr_dbda = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dbda = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1670 = { 0 },
 
@@ -102966,7 +102966,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_dbff = NAKA_NONE,
 
-    .ptr_dc01 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dc01 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1673 = { 0 },
 
@@ -103066,11 +103066,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_dc6e = NAKA_NONE,
 
-    .ptr_dc70 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dc70 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1677 = { 0 },
 
-    .ptr_dc77 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dc77 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dc7b = NAKA_NONE,
 
@@ -103090,7 +103090,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_dc8b = NAKA_NONE,
 
-    .ptr_dc8d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dc8d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_707 = ALIGNED_STRING(""),
 
@@ -103210,13 +103210,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_dd05 = NAKA_NONE,
 
-    .ptr_dd07 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dd07 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_708 = ALIGNED_STRING(""),
 
     .field_dd0d = NAKA_NONE,
 
-    .ptr_dd0f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dd0f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_709 = ALIGNED_STRING(""),
 
@@ -103224,7 +103224,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1680 = { 0 },
 
-    .ptr_dd19 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dd19 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1681 = { 0 },
 
@@ -103308,13 +103308,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_dd74 = NAKA_NONE,
 
-    .ptr_dd76 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dd76 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_710 = ALIGNED_STRING(""),
 
     .field_dd7c = NAKA_NONE,
 
-    .ptr_dd7e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dd7e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_711 = ALIGNED_STRING(""),
 
@@ -103322,7 +103322,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1685 = { 0 },
 
-    .ptr_dd88 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dd88 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1686 = { 0 },
 
@@ -103336,7 +103336,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1688 = { 0 },
 
-    .ptr_dd9f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dd9f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dda3 = NAKA_NONE,
 
@@ -103348,7 +103348,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ddab = NAKA_NONE,
 
-    .ptr_ddad = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ddad = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ddb1 = NAKA_NONE,
 
@@ -103356,7 +103356,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ddb5 = NAKA_NONE,
 
-    .ptr_ddb7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ddb7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ddbb = NAKA_NONE,
 
@@ -103466,7 +103466,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_de25 = NAKA_NONE,
 
-    .ptr_de27 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_de27 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_de2b = NAKA_NONE,
 
@@ -103474,11 +103474,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_de2f = NAKA_NONE,
 
-    .ptr_de31 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_de31 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_de35 = NAKA_NONE,
 
-    .ptr_de37 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_de37 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1689 = { 0 },
 
@@ -103492,7 +103492,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1691 = { 0 },
 
-    .ptr_de47 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_de47 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_713 = ALIGNED_STRING(""),
 
@@ -103600,7 +103600,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1696 = { 0 },
 
-    .ptr_deb6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_deb6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_716 = ALIGNED_STRING(""),
 
@@ -103628,7 +103628,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ded2 = NAKA_NONE,
 
-    .ptr_ded4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ded4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ded8 = NAKA_NONE,
 
@@ -103638,7 +103638,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_dede = NAKA_NONE,
 
-    .ptr_dee0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dee0 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dee4 = NAKA_NONE,
 
@@ -103746,7 +103746,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_df4c = NAKA_NONE,
 
-    .ptr_df4e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_df4e = NAKA_ADDR(NakaData_RomEnd),
 
     .field_df52 = NAKA_NONE,
 
@@ -103756,7 +103756,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_df58 = NAKA_NONE,
 
-    .ptr_df5a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_df5a = NAKA_ADDR(NakaData_RomEnd),
 
     .field_df5e = NAKA_NONE,
 
@@ -103770,7 +103770,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1700 = { 0 },
 
-    .ptr_df6f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_df6f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_718 = ALIGNED_STRING(""),
 
@@ -103846,7 +103846,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_dfbb = NAKA_NONE,
 
-    .ptr_dfbd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dfbd = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dfc1 = NAKA_NONE,
 
@@ -103856,7 +103856,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_dfc7 = NAKA_NONE,
 
-    .ptr_dfc9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dfc9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_dfcd = NAKA_NONE,
 
@@ -103870,7 +103870,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1704 = { 0 },
 
-    .ptr_dfde = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_dfde = NAKA_ADDR(NakaData_RomEnd),
 
     .str_719 = ALIGNED_STRING(""),
 
@@ -103917,9 +103917,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_722 = ALIGNED_STRING(""),
 
     .ptrs_191 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -103939,7 +103939,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1708 = { 0 },
 
-    .ptr_e032 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e032 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_725 = ALIGNED_STRING(""),
 
@@ -104021,7 +104021,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1713 = { 0 },
 
-    .ptr_e097 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e097 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_728 = ALIGNED_STRING(""),
 
@@ -104125,7 +104125,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1717 = { 0 },
 
-    .ptr_e106 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e106 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_731 = ALIGNED_STRING(""),
 
@@ -104244,7 +104244,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e19b = NAKA_NONE,
 
-    .ptr_e19d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e19d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e1a1 = NAKA_NONE,
 
@@ -104256,9 +104256,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e1a9 = NAKA_NONE,
 
-    .ptr_e1ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e1ab = NAKA_ADDR(NakaData_RomEnd),
 
-    .ptr_e1af = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e1af = NAKA_ADDR(NakaData_RomEnd),
 
     .str_737 = ALIGNED_STRING(""),
 
@@ -104272,7 +104272,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1724 = { 0 },
 
-    .ptr_e1bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e1bf = NAKA_ADDR(NakaData_RomEnd),
 
     .str_739 = ALIGNED_STRING(""),
 
@@ -104374,7 +104374,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_742 = ALIGNED_STRING(""),
 
-    .ptr_e229 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e229 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_743 = ALIGNED_STRING(""),
 
@@ -104382,15 +104382,15 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1728 = { 0 },
 
-    .ptr_e233 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e233 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_744 = ALIGNED_STRING(""),
 
-    .ptr_e239 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e239 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_745 = ALIGNED_STRING(""),
 
-    .ptr_e23f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e23f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e243 = NAKA_NONE,
 
@@ -104454,17 +104454,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1731 = { 0 },
 
-    .ptr_e287 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e287 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_753 = ALIGNED_STRING(""),
 
-    .ptr_e28d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e28d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_754 = ALIGNED_STRING(""),
 
     .field_e293 = NAKA_NONE,
 
-    .ptr_e295 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e295 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_755 = ALIGNED_STRING(""),
 
@@ -104544,7 +104544,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1734 = { 0 },
 
-    .ptr_e2e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e2e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_759 = ALIGNED_STRING(""),
 
@@ -104618,7 +104618,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e331 = NAKA_NONE,
 
-    .ptr_e333 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e333 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e337 = NAKA_NONE,
 
@@ -104632,17 +104632,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e341 = NAKA_NONE,
 
-    .ptr_e343 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e343 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e347 = NAKA_NONE,
 
     .pad_1737 = { 0 },
 
-    .ptr_e34b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e34b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_760 = ALIGNED_STRING(""),
 
-    .ptr_e351 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e351 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_761 = ALIGNED_STRING(""),
 
@@ -104650,15 +104650,15 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1738 = { 0 },
 
-    .ptr_e35b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e35b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_762 = ALIGNED_STRING(""),
 
-    .ptr_e361 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e361 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_763 = ALIGNED_STRING(""),
 
-    .ptr_e367 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e367 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e36b = NAKA_NONE,
 
@@ -104694,7 +104694,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e38b = NAKA_NONE,
 
-    .ptr_e38d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e38d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_768 = ALIGNED_STRING(""),
 
@@ -104720,17 +104720,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1740 = { 0 },
 
-    .ptr_e3af = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e3af = NAKA_ADDR(NakaData_RomEnd),
 
     .str_771 = ALIGNED_STRING(""),
 
-    .ptr_e3b5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e3b5 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_772 = ALIGNED_STRING(""),
 
     .field_e3bb = NAKA_NONE,
 
-    .ptr_e3bd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e3bd = NAKA_ADDR(NakaData_RomEnd),
 
     .str_773 = ALIGNED_STRING(""),
 
@@ -104810,7 +104810,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1743 = { 0 },
 
-    .ptr_e40f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e40f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_777 = ALIGNED_STRING(""),
 
@@ -104884,7 +104884,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e459 = NAKA_NONE,
 
-    .ptr_e45b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e45b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e45f = NAKA_NONE,
 
@@ -104898,17 +104898,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e469 = NAKA_NONE,
 
-    .ptr_e46b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e46b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e46f = NAKA_NONE,
 
     .pad_1746 = { 0 },
 
-    .ptr_e473 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e473 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_778 = ALIGNED_STRING(""),
 
-    .ptr_e479 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e479 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_779 = ALIGNED_STRING(""),
 
@@ -104938,7 +104938,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e498 = NAKA_NONE,
 
-    .ptr_e49a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e49a = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e49e = NAKA_NONE,
 
@@ -104952,7 +104952,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e4a8 = NAKA_NONE,
 
-    .ptr_e4aa = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e4aa = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e4ae = NAKA_NONE,
 
@@ -104966,7 +104966,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1751 = { 0 },
 
-    .ptr_e4ba = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e4ba = NAKA_ADDR(NakaData_RomEnd),
 
     .str_781 = ALIGNED_STRING(""),
 
@@ -104984,12 +104984,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1754 = { 0 },
 
-    .ptr_e4d7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e4d7 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_783 = ALIGNED_STRING(""),
 
     .ptrs_196 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -105063,7 +105063,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1756 = { 0 },
 
-    .ptr_e531 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e531 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1757 = { 0 },
 
@@ -105165,7 +105165,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1760 = { 0 },
 
-    .ptr_e5a0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e5a0 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1761 = { 0 },
 
@@ -105179,7 +105179,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1763 = { 0 },
 
-    .ptr_e5b7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e5b7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e5bb = NAKA_NONE,
 
@@ -105215,7 +105215,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e5db = NAKA_NONE,
 
-    .ptr_e5dd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e5dd = NAKA_ADDR(NakaData_RomEnd),
 
     .str_794 = ALIGNED_STRING(""),
 
@@ -105241,12 +105241,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1765 = { 0 },
 
-    .ptr_e5ff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e5ff = NAKA_ADDR(NakaData_RomEnd),
 
     .str_798 = ALIGNED_STRING(""),
 
     .ptrs_198 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -105320,7 +105320,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1766 = { 0 },
 
-    .ptr_e659 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e659 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1767 = { 0 },
 
@@ -105330,7 +105330,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e667 = NAKA_NONE,
 
-    .ptr_e669 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e669 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1769 = { 0 },
 
@@ -105422,7 +105422,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1770 = { 0 },
 
-    .ptr_e6c8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e6c8 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1771 = { 0 },
 
@@ -105432,11 +105432,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e6d6 = NAKA_NONE,
 
-    .ptr_e6d8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e6d8 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1773 = { 0 },
 
-    .ptr_e6df = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e6df = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e6e3 = NAKA_NONE,
 
@@ -105472,7 +105472,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e703 = NAKA_NONE,
 
-    .ptr_e705 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e705 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_810 = ALIGNED_STRING(""),
 
@@ -105494,7 +105494,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e71b = NAKA_NONE,
 
-    .ptr_e71d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e71d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_813 = ALIGNED_STRING(""),
 
@@ -105502,17 +105502,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1776 = { 0 },
 
-    .ptr_e727 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e727 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_814 = ALIGNED_STRING(""),
 
-    .ptr_e72d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e72d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_815 = ALIGNED_STRING(""),
 
     .field_e733 = NAKA_NONE,
 
-    .ptr_e735 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e735 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1777 = { 0 },
 
@@ -105666,7 +105666,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e7d1 = NAKA_NONE,
 
-    .ptr_e7d3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e7d3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e7d7 = NAKA_NONE,
 
@@ -105680,7 +105680,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e7e1 = NAKA_NONE,
 
-    .ptr_e7e3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e7e3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e7e7 = NAKA_NONE,
 
@@ -105714,7 +105714,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e805 = NAKA_NONE,
 
-    .ptr_e807 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e807 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e80b = NAKA_NONE,
 
@@ -105724,7 +105724,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e811 = NAKA_NONE,
 
-    .ptr_e813 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e813 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e817 = NAKA_NONE,
 
@@ -105736,9 +105736,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e81f = NAKA_NONE,
 
-    .ptr_e821 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e821 = NAKA_ADDR(NakaData_RomEnd),
 
-    .ptr_e825 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e825 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_819 = ALIGNED_STRING(""),
 
@@ -105768,7 +105768,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e843 = NAKA_NONE,
 
-    .ptr_e845 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e845 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_823 = ALIGNED_STRING(""),
 
@@ -105776,17 +105776,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1781 = { 0 },
 
-    .ptr_e84f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e84f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_824 = ALIGNED_STRING(""),
 
-    .ptr_e855 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e855 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_825 = ALIGNED_STRING(""),
 
     .field_e85b = NAKA_NONE,
 
-    .ptr_e85d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e85d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_826 = ALIGNED_STRING(""),
 
@@ -105942,7 +105942,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e8fa = NAKA_NONE,
 
-    .ptr_e8fc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e8fc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e900 = NAKA_NONE,
 
@@ -105954,7 +105954,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e908 = NAKA_NONE,
 
-    .ptr_e90a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e90a = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e90e = NAKA_NONE,
 
@@ -106042,16 +106042,16 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e96b = NAKA_NONE,
 
-    .ptr_e96d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e96d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1786 = { 0 },
 
-    .ptr_e977 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e977 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_834 = ALIGNED_STRING(""),
 
     .ptrs_199 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(InterruptVectorTable),
@@ -106097,7 +106097,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e9b3 = NAKA_NONE,
 
-    .ptr_e9b5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e9b5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e9b9 = NAKA_NONE,
 
@@ -106109,7 +106109,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e9c1 = NAKA_NONE,
 
-    .ptr_e9c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e9c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_e9c7 = NAKA_NONE,
 
@@ -106121,7 +106121,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_e9cf = NAKA_NONE,
 
-    .ptr_e9d1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e9d1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1788 = { 0 },
 
@@ -106129,7 +106129,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_835 = ALIGNED_STRING(""),
 
-    .ptr_e9dc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_e9dc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_836 = ALIGNED_STRING(""),
 
@@ -106199,7 +106199,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ea22 = NAKA_NONE,
 
-    .ptr_ea24 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ea24 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ea28 = NAKA_NONE,
 
@@ -106211,7 +106211,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ea30 = NAKA_NONE,
 
-    .ptr_ea32 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ea32 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ea36 = NAKA_NONE,
 
@@ -106219,7 +106219,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ea3a = NAKA_NONE,
 
-    .ptr_ea3c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ea3c = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1789 = { 0 },
 
@@ -106227,7 +106227,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1790 = { 0 },
 
-    .ptr_ea48 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ea48 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_837 = ALIGNED_STRING(""),
 
@@ -106249,7 +106249,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ea62 = NAKA_NONE,
 
-    .ptr_ea64 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ea64 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ea68 = NAKA_NONE,
 
@@ -106259,14 +106259,14 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ea6e = NAKA_NONE,
 
-    .ptr_ea70 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ea70 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ea74 = NAKA_NONE,
 
     .ptrs_200 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -106274,7 +106274,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1792 = { 0 },
 
-    .ptr_ea8a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ea8a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_839 = ALIGNED_STRING(""),
 
@@ -106284,7 +106284,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ea94 = NAKA_NONE,
 
-    .ptr_ea96 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ea96 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1794 = { 0 },
 
@@ -106374,7 +106374,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_eaf7 = NAKA_NONE,
 
-    .ptr_eaf9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_eaf9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1798 = { 0 },
 
@@ -106382,7 +106382,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1799 = { 0 },
 
-    .ptr_eb04 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_eb04 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_843 = ALIGNED_STRING(""),
 
@@ -106658,7 +106658,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ec20 = NAKA_NONE,
 
-    .ptr_ec22 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ec22 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_852 = ALIGNED_STRING(""),
 
@@ -106760,7 +106760,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ec89 = NAKA_NONE,
 
-    .ptr_ec8b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ec8b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_855 = ALIGNED_STRING(""),
 
@@ -106776,7 +106776,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1806 = { 0 },
 
-    .ptr_ec9d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ec9d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_857 = ALIGNED_STRING(""),
 
@@ -106784,7 +106784,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_eca5 = NAKA_NONE,
 
-    .ptr_eca7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_eca7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ecab = NAKA_NONE,
 
@@ -106804,7 +106804,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ecbb = NAKA_NONE,
 
-    .ptr_ecbd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ecbd = NAKA_ADDR(NakaData_RomEnd),
 
     .str_859 = ALIGNED_STRING(""),
 
@@ -106924,7 +106924,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ed35 = NAKA_NONE,
 
-    .ptr_ed37 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ed37 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_860 = ALIGNED_STRING(""),
 
@@ -106946,7 +106946,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1809 = { 0 },
 
-    .ptr_ed4f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ed4f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1810 = { 0 },
 
@@ -107030,7 +107030,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_eda4 = NAKA_NONE,
 
-    .ptr_eda6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_eda6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_862 = ALIGNED_STRING(""),
 
@@ -107046,13 +107046,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1812 = { 0 },
 
-    .ptr_edb8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_edb8 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_863 = ALIGNED_STRING(""),
 
     .pad_1813 = { 0 },
 
-    .ptr_edc0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_edc0 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_864 = ALIGNED_STRING(""),
 
@@ -107082,7 +107082,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_edde = NAKA_NONE,
 
-    .ptr_ede0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ede0 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1815 = { 0 },
 
@@ -107200,7 +107200,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ee58 = NAKA_NONE,
 
-    .ptr_ee5a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ee5a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1816 = { 0 },
 
@@ -107220,7 +107220,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ee70 = NAKA_NONE,
 
-    .ptr_ee72 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ee72 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_866 = ALIGNED_STRING(""),
 
@@ -107300,7 +107300,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_eec7 = NAKA_NONE,
 
-    .ptr_eec9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_eec9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1818 = { 0 },
 
@@ -107314,7 +107314,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_eed9 = NAKA_NONE,
 
-    .ptr_eedb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_eedb = NAKA_ADDR(NakaData_RomEnd),
 
     .str_867 = ALIGNED_STRING(""),
 
@@ -107330,7 +107330,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1820 = { 0 },
 
-    .ptr_eeed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_eeed = NAKA_ADDR(NakaData_RomEnd),
 
     .str_869 = ALIGNED_STRING(""),
 
@@ -107338,7 +107338,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_eef5 = NAKA_NONE,
 
-    .ptr_eef7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_eef7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_eefb = NAKA_NONE,
 
@@ -107504,7 +107504,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1821 = { 0 },
 
-    .ptr_ef9f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ef9f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1822 = { 0 },
 
@@ -107598,7 +107598,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f001 = NAKA_NONE,
 
-    .ptr_f003 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f003 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_871 = ALIGNED_STRING(""),
 
@@ -107614,7 +107614,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1824 = { 0 },
 
-    .ptr_f015 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f015 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_873 = ALIGNED_STRING(""),
 
@@ -107622,7 +107622,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f01d = NAKA_NONE,
 
-    .ptr_f01f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f01f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_f023 = NAKA_NONE,
 
@@ -107632,7 +107632,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f029 = NAKA_NONE,
 
-    .ptr_f02b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f02b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_875 = ALIGNED_STRING(""),
 
@@ -107644,7 +107644,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f037 = NAKA_NONE,
 
-    .ptr_f039 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f039 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_876 = ALIGNED_STRING(""),
 
@@ -107784,7 +107784,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1825 = { 0 },
 
-    .ptr_f0c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f0c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_877 = ALIGNED_STRING(""),
 
@@ -107880,7 +107880,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f129 = NAKA_NONE,
 
-    .ptr_f12b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f12b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_878 = ALIGNED_STRING(""),
 
@@ -107896,7 +107896,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1829 = { 0 },
 
-    .ptr_f13d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f13d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_880 = ALIGNED_STRING(""),
 
@@ -107904,7 +107904,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f145 = NAKA_NONE,
 
-    .ptr_f147 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f147 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_f14b = NAKA_NONE,
 
@@ -107914,7 +107914,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f151 = NAKA_NONE,
 
-    .ptr_f153 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f153 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_882 = ALIGNED_STRING(""),
 
@@ -108066,7 +108066,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1831 = { 0 },
 
-    .ptr_f1ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f1ef = NAKA_ADDR(NakaData_RomEnd),
 
     .str_883 = ALIGNED_STRING(""),
 
@@ -108146,7 +108146,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f23f = NAKA_NONE,
 
-    .ptr_f241 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f241 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1833 = { 0 },
 
@@ -108166,13 +108166,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1834 = { 0 },
 
-    .ptr_f258 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f258 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_884 = ALIGNED_STRING(""),
 
     .pad_1835 = { 0 },
 
-    .ptr_f260 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f260 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_885 = ALIGNED_STRING(""),
 
@@ -108352,7 +108352,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1840 = { 0 },
 
-    .ptr_f31c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f31c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_887 = ALIGNED_STRING(""),
 
@@ -108426,7 +108426,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f366 = NAKA_NONE,
 
-    .ptr_f368 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f368 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1841 = { 0 },
 
@@ -108441,7 +108441,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_f379 = NAKA_NONE,
 
     .ptrs_201 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         0x00000000,
@@ -108449,7 +108449,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1842 = { 0 },
 
-    .ptr_f38d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f38d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_888 = ALIGNED_STRING(""),
 
@@ -108457,7 +108457,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f395 = NAKA_NONE,
 
-    .ptr_f397 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f397 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_f39b = NAKA_NONE,
 
@@ -108467,7 +108467,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f3a1 = NAKA_NONE,
 
-    .ptr_f3a3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f3a3 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_890 = ALIGNED_STRING(""),
 
@@ -108609,7 +108609,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f437 = NAKA_NONE,
 
-    .ptr_f439 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f439 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1844 = { 0 },
 
@@ -108708,9 +108708,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_f4a2 = NAKA_NONE,
 
     .ptrs_202 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -108965,7 +108965,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_f5b4 = NAKA_NONE,
 
     .ptrs_203 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -109258,7 +109258,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f6e0 = NAKA_NONE,
 
-    .ptr_f6e2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f6e2 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_895 = ALIGNED_STRING(""),
 
@@ -109552,7 +109552,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f808 = NAKA_NONE,
 
-    .ptr_f80a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f80a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_897 = ALIGNED_STRING(""),
 
@@ -109846,7 +109846,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_f930 = NAKA_NONE,
 
-    .ptr_f932 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_f932 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_899 = ALIGNED_STRING(""),
 
@@ -110140,7 +110140,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_fa58 = NAKA_NONE,
 
-    .ptr_fa5a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_fa5a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_901 = ALIGNED_STRING(""),
 
@@ -110434,7 +110434,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_fb80 = NAKA_NONE,
 
-    .ptr_fb82 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_fb82 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_903 = ALIGNED_STRING(""),
 
@@ -110488,7 +110488,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_fbb8 = NAKA_NONE,
 
-    .ptr_fbba = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_fbba = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1860 = { 0 },
 
@@ -110500,7 +110500,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_fbc7 = NAKA_NONE,
 
-    .ptr_fbc9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_fbc9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_905 = ALIGNED_STRING(""),
 
@@ -110768,7 +110768,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_fcd5 = NAKA_NONE,
 
-    .ptr_fcd7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_fcd7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_fcdb = NAKA_NONE,
 
@@ -110777,7 +110777,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_fcdf = NAKA_NONE,
 
     .ptrs_204 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -110882,7 +110882,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_fdfd = NAKA_NONE,
 
-    .ptr_fdff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_fdff = NAKA_ADDR(NakaData_RomEnd),
 
     .field_fe03 = NAKA_NONE,
 
@@ -110891,7 +110891,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_fe07 = NAKA_NONE,
 
     .ptrs_205 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -110996,7 +110996,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ff25 = NAKA_NONE,
 
-    .ptr_ff27 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ff27 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_ff2b = NAKA_NONE,
 
@@ -111018,7 +111018,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_ff3f = NAKA_NONE,
 
-    .ptr_ff41 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_ff41 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_909 = ALIGNED_STRING(""),
 
@@ -111286,7 +111286,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1004d = NAKA_NONE,
 
-    .ptr_1004f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1004f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_10053 = NAKA_NONE,
 
@@ -111296,7 +111296,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10059 = NAKA_NONE,
 
-    .ptr_1005b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1005b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_911 = ALIGNED_STRING(""),
 
@@ -111308,7 +111308,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10067 = NAKA_NONE,
 
-    .ptr_10069 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10069 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_912 = ALIGNED_STRING(""),
 
@@ -111576,7 +111576,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10175 = NAKA_NONE,
 
-    .ptr_10177 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10177 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1017b = NAKA_NONE,
 
@@ -111586,7 +111586,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10181 = NAKA_NONE,
 
-    .ptr_10183 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10183 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_914 = ALIGNED_STRING(""),
 
@@ -111598,7 +111598,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1018f = NAKA_NONE,
 
-    .ptr_10191 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10191 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_915 = ALIGNED_STRING(""),
 
@@ -111866,7 +111866,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1029d = NAKA_NONE,
 
-    .ptr_1029f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1029f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_102a3 = NAKA_NONE,
 
@@ -111876,7 +111876,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_102a9 = NAKA_NONE,
 
-    .ptr_102ab = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_102ab = NAKA_ADDR(NakaData_RomEnd),
 
     .str_917 = ALIGNED_STRING(""),
 
@@ -111888,7 +111888,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_102b7 = NAKA_NONE,
 
-    .ptr_102b9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_102b9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_918 = ALIGNED_STRING(""),
 
@@ -112156,7 +112156,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_103c5 = NAKA_NONE,
 
-    .ptr_103c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_103c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_103cb = NAKA_NONE,
 
@@ -112166,7 +112166,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_103d1 = NAKA_NONE,
 
-    .ptr_103d3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_103d3 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_920 = ALIGNED_STRING(""),
 
@@ -112178,7 +112178,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_103df = NAKA_NONE,
 
-    .ptr_103e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_103e1 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_921 = ALIGNED_STRING(""),
 
@@ -112446,14 +112446,14 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_104ed = NAKA_NONE,
 
-    .ptr_104ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_104ef = NAKA_ADDR(NakaData_RomEnd),
 
     .field_104f3 = NAKA_NONE,
 
     .str_922 = ALIGNED_STRING(""),
 
     .ptrs_206 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -112464,7 +112464,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10507 = NAKA_NONE,
 
-    .ptr_10509 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10509 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_924 = ALIGNED_STRING(""),
 
@@ -112732,7 +112732,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10615 = NAKA_NONE,
 
-    .ptr_10617 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10617 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1061b = NAKA_NONE,
 
@@ -112750,7 +112750,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1062f = NAKA_NONE,
 
-    .ptr_10631 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10631 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_926 = ALIGNED_STRING(""),
 
@@ -113018,7 +113018,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1073d = NAKA_NONE,
 
-    .ptr_1073f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1073f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_10743 = NAKA_NONE,
 
@@ -113026,7 +113026,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10747 = NAKA_NONE,
 
-    .ptr_10749 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10749 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1866 = { 0 },
 
@@ -113318,7 +113318,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10870 = NAKA_NONE,
 
-    .ptr_10872 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10872 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1868 = { 0 },
 
@@ -113330,7 +113330,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1087f = NAKA_NONE,
 
-    .ptr_10881 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10881 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_929 = ALIGNED_STRING(""),
 
@@ -113598,7 +113598,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1098d = NAKA_NONE,
 
-    .ptr_1098f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1098f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_10993 = NAKA_NONE,
 
@@ -113608,7 +113608,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10999 = NAKA_NONE,
 
-    .ptr_1099b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1099b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_931 = ALIGNED_STRING(""),
 
@@ -113620,7 +113620,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_109a7 = NAKA_NONE,
 
-    .ptr_109a9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_109a9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_932 = ALIGNED_STRING(""),
 
@@ -113888,7 +113888,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10ab5 = NAKA_NONE,
 
-    .ptr_10ab7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10ab7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_10abb = NAKA_NONE,
 
@@ -114182,7 +114182,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10bdd = NAKA_NONE,
 
-    .ptr_10bdf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10bdf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_10be3 = NAKA_NONE,
 
@@ -114480,7 +114480,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10e2d = NAKA_NONE,
 
-    .ptr_10e2f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10e2f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_10e33 = NAKA_NONE,
 
@@ -114774,7 +114774,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_10f55 = NAKA_NONE,
 
-    .ptr_10f57 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10f57 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_10f5b = NAKA_NONE,
 
@@ -114896,13 +114896,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1870 = { 0 },
 
-    .ptr_10fd3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10fd3 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_937 = ALIGNED_STRING(""),
 
     .str_938 = ALIGNED_STRING(""),
 
-    .ptr_10fdb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_10fdb = NAKA_ADDR(NakaData_RomEnd),
 
     .str_939 = ALIGNED_STRING(""),
 
@@ -114913,9 +114913,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .pad_1872 = { 0 },
 
     .ptrs_207 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -115047,7 +115047,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1107d = NAKA_NONE,
 
-    .ptr_1107f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1107f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11083 = NAKA_NONE,
 
@@ -115438,7 +115438,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1121c = NAKA_NONE,
 
-    .ptr_1121e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1121e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_943 = ALIGNED_STRING(""),
 
@@ -115458,7 +115458,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_11234 = NAKA_NONE,
 
-    .ptr_11236 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11236 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_945 = ALIGNED_STRING(""),
 
@@ -115729,9 +115729,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_11344 = NAKA_NONE,
 
     .ptrs_209 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
     },
 
     .pad_1882 = { 0 },
@@ -115750,19 +115750,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1884 = { 0 },
 
-    .ptr_11363 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11363 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_950 = ALIGNED_STRING(""),
 
     .pad_1885 = { 0 },
 
-    .ptr_1136b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1136b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_951 = ALIGNED_STRING(""),
 
     .pad_1886 = { 0 },
 
-    .ptr_11373 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11373 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_952 = ALIGNED_STRING(""),
 
@@ -115892,7 +115892,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_113f5 = NAKA_NONE,
 
-    .ptr_113f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_113f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_113fb = NAKA_NONE,
 
@@ -116028,19 +116028,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1890 = { 0 },
 
-    .ptr_1148b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1148b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_954 = ALIGNED_STRING(""),
 
     .pad_1891 = { 0 },
 
-    .ptr_11493 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11493 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_955 = ALIGNED_STRING(""),
 
     .pad_1892 = { 0 },
 
-    .ptr_1149b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1149b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_956 = ALIGNED_STRING(""),
 
@@ -116170,7 +116170,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1151d = NAKA_NONE,
 
-    .ptr_1151f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1151f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11523 = NAKA_NONE,
 
@@ -116573,9 +116573,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_116bc = NAKA_NONE,
 
     .ptrs_210 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
     },
 
     .str_962 = ALIGNED_STRING(""),
@@ -116860,7 +116860,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_117e4 = NAKA_NONE,
 
-    .ptr_117e6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_117e6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_967 = ALIGNED_STRING(""),
 
@@ -117153,7 +117153,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1190c = NAKA_NONE,
 
     .ptrs_211 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         NAKA_ADDR(InterruptVectorTable),
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -117421,7 +117421,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_11a34 = NAKA_NONE,
 
-    .ptr_11a36 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11a36 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_975 = ALIGNED_STRING(""),
 
@@ -117433,18 +117433,18 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_976 = ALIGNED_STRING(""),
 
-    .ptr_11a44 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11a44 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11a48 = NAKA_NONE,
 
     .pad_1913 = { 0 },
 
     .ptrs_213 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -117576,7 +117576,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_11ae5 = NAKA_NONE,
 
-    .ptr_11ae7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11ae7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11aeb = NAKA_NONE,
 
@@ -117870,7 +117870,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_11c0d = NAKA_NONE,
 
-    .ptr_11c0f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11c0f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11c13 = NAKA_NONE,
 
@@ -118164,7 +118164,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_11d35 = NAKA_NONE,
 
-    .ptr_11d37 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_11d37 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_11d3b = NAKA_NONE,
 
@@ -119185,7 +119185,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_122b9 = NAKA_NONE,
 
     .ptrs_214 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -120153,13 +120153,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_126ea = NAKA_NONE,
 
-    .ptr_126ec = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_126ec = NAKA_ADDR(NakaData_RomEnd),
 
     .field_126f0 = NAKA_NONE,
 
-    .ptr_126f2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_126f2 = NAKA_ADDR(NakaData_RomEnd),
 
-    .ptr_126f6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_126f6 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1922 = { 0 },
 
@@ -120189,7 +120189,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12723 = NAKA_NONE,
 
-    .ptr_12725 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12725 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12729 = NAKA_NONE,
 
@@ -120241,7 +120241,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12759 = NAKA_NONE,
 
-    .ptr_1275b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1275b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1275f = NAKA_NONE,
 
@@ -120269,11 +120269,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1928 = { 0 },
 
-    .ptr_12790 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12790 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1929 = { 0 },
 
-    .ptr_12796 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12796 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_996 = ALIGNED_STRING(""),
 
@@ -120375,7 +120375,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12812 = NAKA_NONE,
 
-    .ptr_12814 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12814 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1000 = ALIGNED_STRING(""),
 
@@ -120507,7 +120507,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_128c5 = NAKA_NONE,
 
-    .ptr_128c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_128c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_128cb = NAKA_NONE,
 
@@ -120535,7 +120535,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_128e3 = NAKA_NONE,
 
-    .ptr_128e5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_128e5 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1005 = ALIGNED_STRING(""),
 
@@ -120609,7 +120609,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1292f = NAKA_NONE,
 
-    .ptr_12931 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12931 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12935 = NAKA_NONE,
 
@@ -120637,17 +120637,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1945 = { 0 },
 
-    .ptr_12956 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12956 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1008 = ALIGNED_STRING(""),
 
-    .ptr_1295c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1295c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1009 = ALIGNED_STRING(""),
 
     .field_12962 = NAKA_NONE,
 
-    .ptr_12964 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12964 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1010 = ALIGNED_STRING(""),
 
@@ -120727,7 +120727,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_129b4 = NAKA_NONE,
 
-    .ptr_129b6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_129b6 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1947 = { 0 },
 
@@ -120735,17 +120735,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1948 = { 0 },
 
-    .ptr_129c0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_129c0 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1014 = ALIGNED_STRING(""),
 
-    .ptr_129c6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_129c6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1015 = ALIGNED_STRING(""),
 
     .field_129cc = NAKA_NONE,
 
-    .ptr_129ce = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_129ce = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1016 = ALIGNED_STRING(""),
 
@@ -120888,7 +120888,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_12a62 = NAKA_NONE,
 
     .ptrs_219 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -120907,17 +120907,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12a7c = NAKA_NONE,
 
-    .ptr_12a7e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12a7e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1024 = ALIGNED_STRING(""),
 
-    .ptr_12a84 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12a84 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1025 = ALIGNED_STRING(""),
 
     .field_12a8a = NAKA_NONE,
 
-    .ptr_12a8c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12a8c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1026 = ALIGNED_STRING(""),
 
@@ -121023,7 +121023,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1958 = { 0 },
 
-    .ptr_12afb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12afb = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1030 = ALIGNED_STRING(""),
 
@@ -121035,7 +121035,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1960 = { 0 },
 
-    .ptr_12b0b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12b0b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1032 = ALIGNED_STRING(""),
 
@@ -121045,7 +121045,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12b15 = NAKA_NONE,
 
-    .ptr_12b17 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12b17 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12b1b = NAKA_NONE,
 
@@ -121055,11 +121055,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1963 = { 0 },
 
-    .ptr_12b23 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12b23 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1964 = { 0 },
 
-    .ptr_12b2c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12b2c = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1965 = { 0 },
 
@@ -121152,7 +121152,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_12b8a = NAKA_NONE,
 
     .ptrs_220 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -121261,12 +121261,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12c0e = NAKA_NONE,
 
-    .ptr_12c10 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12c10 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1037 = ALIGNED_STRING(""),
 
     .ptrs_221 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -121309,7 +121309,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1977 = { 0 },
 
-    .ptr_12c5d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12c5d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1043 = ALIGNED_STRING(""),
 
@@ -121383,7 +121383,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12ca7 = NAKA_NONE,
 
-    .ptr_12ca9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12ca9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12cad = NAKA_NONE,
 
@@ -121407,12 +121407,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1980 = { 0 },
 
-    .ptr_12cce = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12cce = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1046 = ALIGNED_STRING(""),
 
     .ptrs_222 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -121498,12 +121498,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12d36 = NAKA_NONE,
 
-    .ptr_12d38 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12d38 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1050 = ALIGNED_STRING(""),
 
     .ptrs_223 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -121536,13 +121536,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1983 = { 0 },
 
-    .ptr_12d78 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12d78 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1055 = ALIGNED_STRING(""),
 
     .pad_1984 = { 0 },
 
-    .ptr_12d80 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12d80 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1056 = ALIGNED_STRING(""),
 
@@ -121632,7 +121632,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12dda = NAKA_NONE,
 
-    .ptr_12ddc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12ddc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1058 = ALIGNED_STRING(""),
 
@@ -121652,17 +121652,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1989 = { 0 },
 
-    .ptr_12df6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12df6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1059 = ALIGNED_STRING(""),
 
-    .ptr_12dfc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12dfc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1060 = ALIGNED_STRING(""),
 
     .field_12e02 = NAKA_NONE,
 
-    .ptr_12e04 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12e04 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_1990 = { 0 },
 
@@ -121766,7 +121766,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1994 = { 0 },
 
-    .ptr_12e76 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12e76 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1064 = ALIGNED_STRING(""),
 
@@ -121800,7 +121800,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_1997 = { 0 },
 
-    .ptr_12ea0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12ea0 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1069 = ALIGNED_STRING(""),
 
@@ -121898,7 +121898,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12f02 = NAKA_NONE,
 
-    .ptr_12f04 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f04 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1071 = ALIGNED_STRING(""),
 
@@ -121922,17 +121922,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2003 = { 0 },
 
-    .ptr_12f1e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f1e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1074 = ALIGNED_STRING(""),
 
-    .ptr_12f24 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f24 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1075 = ALIGNED_STRING(""),
 
     .field_12f2a = NAKA_NONE,
 
-    .ptr_12f2c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f2c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1076 = ALIGNED_STRING(""),
 
@@ -121946,7 +121946,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12f3b = NAKA_NONE,
 
-    .ptr_12f3d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f3d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12f41 = NAKA_NONE,
 
@@ -121998,7 +121998,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12f71 = NAKA_NONE,
 
-    .ptr_12f73 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f73 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_12f77 = NAKA_NONE,
 
@@ -122016,17 +122016,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2007 = { 0 },
 
-    .ptr_12f88 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f88 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1077 = ALIGNED_STRING(""),
 
-    .ptr_12f8e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f8e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1078 = ALIGNED_STRING(""),
 
     .field_12f94 = NAKA_NONE,
 
-    .ptr_12f96 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12f96 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1079 = ALIGNED_STRING(""),
 
@@ -122080,7 +122080,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_12fd3 = NAKA_NONE,
 
-    .ptr_12fd5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_12fd5 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1086 = ALIGNED_STRING(""),
 
@@ -122154,7 +122154,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1301f = NAKA_NONE,
 
-    .ptr_13021 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13021 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13025 = NAKA_NONE,
 
@@ -122168,24 +122168,24 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2013 = { 0 },
 
-    .ptr_13031 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13031 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1088 = ALIGNED_STRING(""),
 
     .pad_2014 = { 0 },
 
-    .ptr_13039 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13039 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1089 = ALIGNED_STRING(""),
 
     .pad_2015 = { 0 },
 
-    .ptr_13046 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13046 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1090 = ALIGNED_STRING(""),
 
     .ptrs_224 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(InterruptVectorTable),
@@ -122271,12 +122271,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2018 = { 0 },
 
-    .ptr_130b0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_130b0 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1094 = ALIGNED_STRING(""),
 
     .ptrs_225 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(InterruptVectorTable),
@@ -122413,7 +122413,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13152 = NAKA_NONE,
 
-    .ptr_13154 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13154 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1101 = ALIGNED_STRING(""),
 
@@ -122531,12 +122531,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2033 = { 0 },
 
-    .ptr_131d8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_131d8 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1107 = ALIGNED_STRING(""),
 
     .ptrs_226 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -122551,7 +122551,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_1109 = ALIGNED_STRING(""),
 
-    .ptr_131f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_131f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_131f8 = 0x00FF,
 
@@ -122885,7 +122885,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2042 = { 0 },
 
-    .ptr_13348 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13348 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1120 = ALIGNED_STRING(""),
 
@@ -123179,7 +123179,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2046 = { 0 },
 
-    .ptr_13475 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13475 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1127 = ALIGNED_STRING(""),
 
@@ -123253,13 +123253,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_134bf = NAKA_NONE,
 
-    .ptr_134c1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_134c1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_134c5 = NAKA_NONE,
 
     .pad_2047 = { 0 },
 
-    .ptr_134c9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_134c9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1129 = ALIGNED_STRING(""),
 
@@ -123277,7 +123277,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2049 = { 0 },
 
-    .ptr_134e5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_134e5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2050 = { 0 },
 
@@ -123288,7 +123288,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .pad_2051 = { 0 },
 
     .ptrs_227 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -123360,11 +123360,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13544 = NAKA_NONE,
 
-    .ptr_13546 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13546 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1354a = NAKA_NONE,
 
-    .ptr_1354c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1354c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13550 = NAKA_NONE,
 
@@ -123374,7 +123374,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2053 = { 0 },
 
-    .ptr_1355e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1355e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1134 = ALIGNED_STRING(""),
 
@@ -123388,7 +123388,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1356c = NAKA_NONE,
 
-    .ptr_1356e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1356e = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2055 = { 0 },
 
@@ -123420,7 +123420,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13592 = NAKA_NONE,
 
-    .ptr_13594 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13594 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2057 = { 0 },
 
@@ -123537,7 +123537,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2063 = { 0 },
 
-    .ptr_1362d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1362d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13631 = NAKA_NONE,
 
@@ -123589,7 +123589,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13661 = NAKA_NONE,
 
-    .ptr_13663 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13663 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13667 = NAKA_NONE,
 
@@ -123603,7 +123603,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2064 = { 0 },
 
-    .ptr_13673 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13673 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1141 = ALIGNED_STRING(""),
 
@@ -123617,7 +123617,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2067 = { 0 },
 
-    .ptr_1368b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1368b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1142 = ALIGNED_STRING(""),
 
@@ -123775,13 +123775,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2076 = { 0 },
 
-    .ptr_13731 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13731 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1148 = ALIGNED_STRING(""),
 
     .pad_2077 = { 0 },
 
-    .ptr_13739 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13739 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1149 = ALIGNED_STRING(""),
 
@@ -123872,7 +123872,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_13794 = NAKA_NONE,
 
     .ptrs_229 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -123899,7 +123899,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_137bc = NAKA_NONE,
 
-    .ptr_137be = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_137be = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1157 = ALIGNED_STRING(""),
 
@@ -124029,14 +124029,14 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2085 = { 0 },
 
-    .ptr_13844 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13844 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1162 = ALIGNED_STRING(""),
 
     .field_1384a = NAKA_NONE,
 
     .ptrs_231 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         NAKA_ADDR(InterruptVectorTable),
         NAKA_ADDR(InterruptVectorTable),
     },
@@ -124144,7 +124144,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_138bc = NAKA_NONE,
 
     .ptrs_232 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -124177,7 +124177,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_138e4 = NAKA_NONE,
 
-    .ptr_138e6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_138e6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1174 = ALIGNED_STRING(""),
 
@@ -124286,7 +124286,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .pad_2096 = { 0 },
 
     .ptrs_233 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -124384,7 +124384,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_139e4 = NAKA_NONE,
 
     .ptrs_235 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -124417,7 +124417,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13a0c = NAKA_NONE,
 
-    .ptr_13a0e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13a0e = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2102 = { 0 },
 
@@ -124429,7 +124429,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13a1d = NAKA_NONE,
 
-    .ptr_13a1f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13a1f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13a23 = NAKA_NONE,
 
@@ -124525,12 +124525,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2107 = { 0 },
 
-    .ptr_13a9d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13a9d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2108 = { 0 },
 
     .ptrs_236 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
     },
@@ -124617,7 +124617,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13b0c = NAKA_NONE,
 
-    .ptr_13b0e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13b0e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1192 = ALIGNED_STRING(""),
 
@@ -124655,7 +124655,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13b34 = NAKA_NONE,
 
-    .ptr_13b36 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13b36 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2114 = { 0 },
 
@@ -124667,7 +124667,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13b45 = NAKA_NONE,
 
-    .ptr_13b47 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13b47 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13b4b = NAKA_NONE,
 
@@ -124699,7 +124699,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13b67 = NAKA_NONE,
 
-    .ptr_13b69 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13b69 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1198 = ALIGNED_STRING(""),
 
@@ -124769,13 +124769,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13baf = NAKA_NONE,
 
-    .ptr_13bb1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13bb1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_13bb5 = NAKA_NONE,
 
     .pad_2116 = { 0 },
 
-    .ptr_13bbc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13bbc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1199 = ALIGNED_STRING(""),
 
@@ -124783,11 +124783,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13bc4 = NAKA_NONE,
 
-    .ptr_13bc6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13bc6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1200 = ALIGNED_STRING(""),
 
-    .ptr_13bcc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13bcc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1201 = ALIGNED_STRING(""),
 
@@ -124806,7 +124806,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
     },
 
     .str_1203 = ALIGNED_STRING(""),
@@ -124879,7 +124879,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13c34 = NAKA_NONE,
 
-    .ptr_13c36 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13c36 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1206 = ALIGNED_STRING(""),
 
@@ -124917,7 +124917,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13c5c = NAKA_NONE,
 
-    .ptr_13c5e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13c5e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1211 = ALIGNED_STRING(""),
 
@@ -125069,19 +125069,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2127 = { 0 },
 
-    .ptr_13cf9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13cf9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1216 = ALIGNED_STRING(""),
 
     .pad_2128 = { 0 },
 
-    .ptr_13d01 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13d01 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1217 = ALIGNED_STRING(""),
 
     .pad_2129 = { 0 },
 
-    .ptr_13d09 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13d09 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1218 = ALIGNED_STRING(""),
 
@@ -125163,7 +125163,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13d5c = NAKA_NONE,
 
-    .ptr_13d5e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13d5e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1221 = ALIGNED_STRING(""),
 
@@ -125195,7 +125195,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13d84 = NAKA_NONE,
 
-    .ptr_13d86 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13d86 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1225 = ALIGNED_STRING(""),
 
@@ -125234,7 +125234,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_13dac = NAKA_NONE,
 
     .ptrs_240 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -125327,12 +125327,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2138 = { 0 },
 
-    .ptr_13e16 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13e16 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1230 = ALIGNED_STRING(""),
 
     .ptrs_241 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         0x00000000,
@@ -125416,7 +125416,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13e84 = NAKA_NONE,
 
-    .ptr_13e86 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13e86 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1235 = ALIGNED_STRING(""),
 
@@ -125468,7 +125468,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_13ed4 = NAKA_NONE,
 
     .ptrs_244 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -125561,15 +125561,15 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2142 = { 0 },
 
-    .ptr_13f3e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13f3e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1240 = ALIGNED_STRING(""),
 
-    .ptr_13f44 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13f44 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2143 = { 0 },
 
-    .ptr_13f4d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13f4d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2144 = { 0 },
 
@@ -125577,13 +125577,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2145 = { 0 },
 
-    .ptr_13f59 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13f59 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1241 = ALIGNED_STRING(""),
 
     .pad_2146 = { 0 },
 
-    .ptr_13f61 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13f61 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1242 = ALIGNED_STRING(""),
 
@@ -125655,7 +125655,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_13fac = NAKA_NONE,
 
-    .ptr_13fae = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_13fae = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1245 = ALIGNED_STRING(""),
 
@@ -126682,7 +126682,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_14441 = NAKA_NONE,
 
     .ptrs_245 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -127006,7 +127006,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_145b9 = NAKA_NONE,
 
-    .ptr_145bb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_145bb = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1261 = ALIGNED_STRING(""),
 
@@ -127018,7 +127018,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_145c7 = NAKA_NONE,
 
-    .ptr_145c9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_145c9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1262 = ALIGNED_STRING(""),
 
@@ -127298,7 +127298,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_146e1 = NAKA_NONE,
 
-    .ptr_146e3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_146e3 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1263 = ALIGNED_STRING(""),
 
@@ -127532,7 +127532,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_147cf = NAKA_NONE,
 
-    .ptr_147d1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_147d1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2161 = { 0 },
 
@@ -127820,7 +127820,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_148f6 = NAKA_NONE,
 
-    .ptr_148f8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_148f8 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2164 = { 0 },
 
@@ -127874,7 +127874,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_14931 = NAKA_NONE,
 
-    .ptr_14933 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14933 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1264 = ALIGNED_STRING(""),
 
@@ -128102,7 +128102,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_14a1d = NAKA_NONE,
 
-    .ptr_14a1f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14a1f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2166 = { 0 },
 
@@ -128383,7 +128383,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_14b44 = NAKA_NONE,
 
     .ptrs_246 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -128676,7 +128676,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_14c70 = NAKA_NONE,
 
-    .ptr_14c72 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14c72 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1266 = ALIGNED_STRING(""),
 
@@ -128970,7 +128970,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_14d98 = NAKA_NONE,
 
-    .ptr_14d9a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14d9a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1267 = ALIGNED_STRING(""),
 
@@ -129256,7 +129256,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_14ec0 = NAKA_NONE,
 
-    .ptr_14ec2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14ec2 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1268 = ALIGNED_STRING(""),
 
@@ -129308,7 +129308,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_14ef6 = NAKA_NONE,
 
-    .ptr_14ef8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14ef8 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2175 = { 0 },
 
@@ -129318,7 +129318,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_14f07 = NAKA_NONE,
 
-    .ptr_14f09 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_14f09 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1269 = ALIGNED_STRING(""),
 
@@ -129596,7 +129596,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1501f = NAKA_NONE,
 
-    .ptr_15021 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15021 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2177 = { 0 },
 
@@ -129832,7 +129832,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15110 = NAKA_NONE,
 
-    .ptr_15112 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15112 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1270 = ALIGNED_STRING(""),
 
@@ -129886,7 +129886,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15148 = NAKA_NONE,
 
-    .ptr_1514a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1514a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2179 = { 0 },
 
@@ -129898,7 +129898,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15157 = NAKA_NONE,
 
-    .ptr_15159 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15159 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1271 = ALIGNED_STRING(""),
 
@@ -130178,7 +130178,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15271 = NAKA_NONE,
 
-    .ptr_15273 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15273 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1272 = ALIGNED_STRING(""),
 
@@ -130190,7 +130190,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1527f = NAKA_NONE,
 
-    .ptr_15281 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15281 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1273 = ALIGNED_STRING(""),
 
@@ -131054,7 +131054,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15705 = NAKA_NONE,
 
-    .ptr_15707 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15707 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1570b = NAKA_NONE,
 
@@ -131348,7 +131348,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1582d = NAKA_NONE,
 
-    .ptr_1582f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1582f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15833 = NAKA_NONE,
 
@@ -131482,7 +131482,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_158b8 = NAKA_NONE,
 
-    .ptr_158ba = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_158ba = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2184 = { 0 },
 
@@ -131512,7 +131512,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_158df = NAKA_NONE,
 
-    .ptr_158e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_158e1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2187 = { 0 },
 
@@ -131612,11 +131612,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1594e = NAKA_NONE,
 
-    .ptr_15950 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15950 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2191 = { 0 },
 
-    .ptr_15957 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15957 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1595b = NAKA_NONE,
 
@@ -131636,7 +131636,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1596b = NAKA_NONE,
 
-    .ptr_1596d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1596d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1282 = ALIGNED_STRING(""),
 
@@ -131756,13 +131756,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_159e5 = NAKA_NONE,
 
-    .ptr_159e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_159e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1283 = ALIGNED_STRING(""),
 
     .field_159ed = NAKA_NONE,
 
-    .ptr_159ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_159ef = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1284 = ALIGNED_STRING(""),
 
@@ -131770,7 +131770,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2194 = { 0 },
 
-    .ptr_159f9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_159f9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2195 = { 0 },
 
@@ -131854,13 +131854,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15a54 = NAKA_NONE,
 
-    .ptr_15a56 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15a56 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1285 = ALIGNED_STRING(""),
 
     .field_15a5c = NAKA_NONE,
 
-    .ptr_15a5e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15a5e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1286 = ALIGNED_STRING(""),
 
@@ -131868,7 +131868,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2199 = { 0 },
 
-    .ptr_15a68 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15a68 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2200 = { 0 },
 
@@ -131882,7 +131882,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2202 = { 0 },
 
-    .ptr_15a7f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15a7f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15a83 = NAKA_NONE,
 
@@ -131894,7 +131894,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15a8b = NAKA_NONE,
 
-    .ptr_15a8d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15a8d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15a91 = NAKA_NONE,
 
@@ -131902,7 +131902,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15a95 = NAKA_NONE,
 
-    .ptr_15a97 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15a97 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15a9b = NAKA_NONE,
 
@@ -132012,7 +132012,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15b05 = NAKA_NONE,
 
-    .ptr_15b07 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15b07 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15b0b = NAKA_NONE,
 
@@ -132020,11 +132020,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15b0f = NAKA_NONE,
 
-    .ptr_15b11 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15b11 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15b15 = NAKA_NONE,
 
-    .ptr_15b17 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15b17 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2203 = { 0 },
 
@@ -132038,7 +132038,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2205 = { 0 },
 
-    .ptr_15b27 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15b27 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1288 = ALIGNED_STRING(""),
 
@@ -132146,7 +132146,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2210 = { 0 },
 
-    .ptr_15b96 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15b96 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1291 = ALIGNED_STRING(""),
 
@@ -132174,7 +132174,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15bb2 = NAKA_NONE,
 
-    .ptr_15bb4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15bb4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15bb8 = NAKA_NONE,
 
@@ -132184,7 +132184,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15bbe = NAKA_NONE,
 
-    .ptr_15bc0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15bc0 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15bc4 = NAKA_NONE,
 
@@ -132292,7 +132292,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15c2c = NAKA_NONE,
 
-    .ptr_15c2e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15c2e = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15c32 = NAKA_NONE,
 
@@ -132302,7 +132302,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15c38 = NAKA_NONE,
 
-    .ptr_15c3a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15c3a = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15c3e = NAKA_NONE,
 
@@ -132316,7 +132316,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2214 = { 0 },
 
-    .ptr_15c4f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15c4f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1293 = ALIGNED_STRING(""),
 
@@ -132392,7 +132392,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15c9b = NAKA_NONE,
 
-    .ptr_15c9d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15c9d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15ca1 = NAKA_NONE,
 
@@ -132402,7 +132402,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15ca7 = NAKA_NONE,
 
-    .ptr_15ca9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15ca9 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15cad = NAKA_NONE,
 
@@ -132416,7 +132416,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2218 = { 0 },
 
-    .ptr_15cbe = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15cbe = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1294 = ALIGNED_STRING(""),
 
@@ -132463,9 +132463,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_1297 = ALIGNED_STRING(""),
 
     .ptrs_247 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -132485,7 +132485,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2222 = { 0 },
 
-    .ptr_15d12 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15d12 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1300 = ALIGNED_STRING(""),
 
@@ -132567,7 +132567,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2227 = { 0 },
 
-    .ptr_15d77 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15d77 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1303 = ALIGNED_STRING(""),
 
@@ -132671,7 +132671,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2231 = { 0 },
 
-    .ptr_15de6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15de6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1306 = ALIGNED_STRING(""),
 
@@ -132790,7 +132790,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15e7b = NAKA_NONE,
 
-    .ptr_15e7d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15e7d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15e81 = NAKA_NONE,
 
@@ -132802,9 +132802,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_15e89 = NAKA_NONE,
 
-    .ptr_15e8b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15e8b = NAKA_ADDR(NakaData_RomEnd),
 
-    .ptr_15e8f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15e8f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1312 = ALIGNED_STRING(""),
 
@@ -132818,7 +132818,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2238 = { 0 },
 
-    .ptr_15e9f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15e9f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1314 = ALIGNED_STRING(""),
 
@@ -132920,7 +132920,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_1317 = ALIGNED_STRING(""),
 
-    .ptr_15f09 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15f09 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1318 = ALIGNED_STRING(""),
 
@@ -132928,15 +132928,15 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2242 = { 0 },
 
-    .ptr_15f13 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15f13 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1319 = ALIGNED_STRING(""),
 
-    .ptr_15f19 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15f19 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1320 = ALIGNED_STRING(""),
 
-    .ptr_15f1f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15f1f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_15f23 = NAKA_NONE,
 
@@ -133000,17 +133000,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2245 = { 0 },
 
-    .ptr_15f67 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15f67 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1328 = ALIGNED_STRING(""),
 
-    .ptr_15f6d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15f6d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1329 = ALIGNED_STRING(""),
 
     .field_15f73 = NAKA_NONE,
 
-    .ptr_15f75 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15f75 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1330 = ALIGNED_STRING(""),
 
@@ -133090,7 +133090,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2248 = { 0 },
 
-    .ptr_15fc7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_15fc7 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1334 = ALIGNED_STRING(""),
 
@@ -133164,7 +133164,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16011 = NAKA_NONE,
 
-    .ptr_16013 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16013 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_16017 = NAKA_NONE,
 
@@ -133178,17 +133178,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16021 = NAKA_NONE,
 
-    .ptr_16023 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16023 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_16027 = NAKA_NONE,
 
     .pad_2251 = { 0 },
 
-    .ptr_1602b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1602b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1335 = ALIGNED_STRING(""),
 
-    .ptr_16031 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16031 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1336 = ALIGNED_STRING(""),
 
@@ -133196,15 +133196,15 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2252 = { 0 },
 
-    .ptr_1603b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1603b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1337 = ALIGNED_STRING(""),
 
-    .ptr_16041 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16041 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1338 = ALIGNED_STRING(""),
 
-    .ptr_16047 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16047 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1604b = NAKA_NONE,
 
@@ -133240,7 +133240,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1606b = NAKA_NONE,
 
-    .ptr_1606d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1606d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1343 = ALIGNED_STRING(""),
 
@@ -133266,17 +133266,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2254 = { 0 },
 
-    .ptr_1608f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1608f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1346 = ALIGNED_STRING(""),
 
-    .ptr_16095 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16095 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1347 = ALIGNED_STRING(""),
 
     .field_1609b = NAKA_NONE,
 
-    .ptr_1609d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1609d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1348 = ALIGNED_STRING(""),
 
@@ -133356,7 +133356,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2257 = { 0 },
 
-    .ptr_160ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_160ef = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1352 = ALIGNED_STRING(""),
 
@@ -133430,7 +133430,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16139 = NAKA_NONE,
 
-    .ptr_1613b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1613b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1613f = NAKA_NONE,
 
@@ -133444,17 +133444,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16149 = NAKA_NONE,
 
-    .ptr_1614b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1614b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1614f = NAKA_NONE,
 
     .pad_2260 = { 0 },
 
-    .ptr_16153 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16153 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1353 = ALIGNED_STRING(""),
 
-    .ptr_16159 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16159 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1354 = ALIGNED_STRING(""),
 
@@ -133484,7 +133484,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16178 = NAKA_NONE,
 
-    .ptr_1617a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1617a = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1617e = NAKA_NONE,
 
@@ -133498,7 +133498,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16188 = NAKA_NONE,
 
-    .ptr_1618a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1618a = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1618e = NAKA_NONE,
 
@@ -133512,7 +133512,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2265 = { 0 },
 
-    .ptr_1619a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1619a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1356 = ALIGNED_STRING(""),
 
@@ -133530,12 +133530,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2268 = { 0 },
 
-    .ptr_161b7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_161b7 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1358 = ALIGNED_STRING(""),
 
     .ptrs_252 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -133609,7 +133609,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2270 = { 0 },
 
-    .ptr_16211 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16211 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2271 = { 0 },
 
@@ -133711,7 +133711,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2274 = { 0 },
 
-    .ptr_16280 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16280 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2275 = { 0 },
 
@@ -133725,7 +133725,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2277 = { 0 },
 
-    .ptr_16297 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16297 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1629b = NAKA_NONE,
 
@@ -133761,7 +133761,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_162bb = NAKA_NONE,
 
-    .ptr_162bd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_162bd = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1369 = ALIGNED_STRING(""),
 
@@ -133787,12 +133787,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2279 = { 0 },
 
-    .ptr_162df = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_162df = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1373 = ALIGNED_STRING(""),
 
     .ptrs_254 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -133866,7 +133866,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2280 = { 0 },
 
-    .ptr_16339 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16339 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2281 = { 0 },
 
@@ -133876,7 +133876,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16347 = NAKA_NONE,
 
-    .ptr_16349 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16349 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2283 = { 0 },
 
@@ -133968,7 +133968,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2284 = { 0 },
 
-    .ptr_163a8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_163a8 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2285 = { 0 },
 
@@ -133978,11 +133978,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_163b6 = NAKA_NONE,
 
-    .ptr_163b8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_163b8 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2287 = { 0 },
 
-    .ptr_163bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_163bf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_163c3 = NAKA_NONE,
 
@@ -134018,7 +134018,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_163e3 = NAKA_NONE,
 
-    .ptr_163e5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_163e5 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1385 = ALIGNED_STRING(""),
 
@@ -134040,7 +134040,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_163fb = NAKA_NONE,
 
-    .ptr_163fd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_163fd = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1388 = ALIGNED_STRING(""),
 
@@ -134048,17 +134048,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2290 = { 0 },
 
-    .ptr_16407 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16407 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1389 = ALIGNED_STRING(""),
 
-    .ptr_1640d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1640d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1390 = ALIGNED_STRING(""),
 
     .field_16413 = NAKA_NONE,
 
-    .ptr_16415 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16415 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2291 = { 0 },
 
@@ -134212,7 +134212,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_164b1 = NAKA_NONE,
 
-    .ptr_164b3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_164b3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_164b7 = NAKA_NONE,
 
@@ -134226,7 +134226,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_164c1 = NAKA_NONE,
 
-    .ptr_164c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_164c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_164c7 = NAKA_NONE,
 
@@ -134260,7 +134260,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_164e5 = NAKA_NONE,
 
-    .ptr_164e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_164e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_164eb = NAKA_NONE,
 
@@ -134270,7 +134270,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_164f1 = NAKA_NONE,
 
-    .ptr_164f3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_164f3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_164f7 = NAKA_NONE,
 
@@ -134282,9 +134282,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_164ff = NAKA_NONE,
 
-    .ptr_16501 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16501 = NAKA_ADDR(NakaData_RomEnd),
 
-    .ptr_16505 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16505 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1394 = ALIGNED_STRING(""),
 
@@ -134314,7 +134314,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16523 = NAKA_NONE,
 
-    .ptr_16525 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16525 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1398 = ALIGNED_STRING(""),
 
@@ -134322,17 +134322,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2295 = { 0 },
 
-    .ptr_1652f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1652f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1399 = ALIGNED_STRING(""),
 
-    .ptr_16535 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16535 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1400 = ALIGNED_STRING(""),
 
     .field_1653b = NAKA_NONE,
 
-    .ptr_1653d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1653d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1401 = ALIGNED_STRING(""),
 
@@ -134488,7 +134488,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_165da = NAKA_NONE,
 
-    .ptr_165dc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_165dc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_165e0 = NAKA_NONE,
 
@@ -134500,7 +134500,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_165e8 = NAKA_NONE,
 
-    .ptr_165ea = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_165ea = NAKA_ADDR(NakaData_RomEnd),
 
     .field_165ee = NAKA_NONE,
 
@@ -134588,16 +134588,16 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1664b = NAKA_NONE,
 
-    .ptr_1664d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1664d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2300 = { 0 },
 
-    .ptr_16657 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16657 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1409 = ALIGNED_STRING(""),
 
     .ptrs_255 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(InterruptVectorTable),
@@ -134643,7 +134643,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16693 = NAKA_NONE,
 
-    .ptr_16695 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16695 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_16699 = NAKA_NONE,
 
@@ -134655,7 +134655,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_166a1 = NAKA_NONE,
 
-    .ptr_166a3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_166a3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_166a7 = NAKA_NONE,
 
@@ -134667,7 +134667,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_166af = NAKA_NONE,
 
-    .ptr_166b1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_166b1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2302 = { 0 },
 
@@ -134675,7 +134675,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_1410 = ALIGNED_STRING(""),
 
-    .ptr_166bc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_166bc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1411 = ALIGNED_STRING(""),
 
@@ -134745,7 +134745,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16702 = NAKA_NONE,
 
-    .ptr_16704 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16704 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_16708 = NAKA_NONE,
 
@@ -134757,7 +134757,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16710 = NAKA_NONE,
 
-    .ptr_16712 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16712 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_16716 = NAKA_NONE,
 
@@ -134765,7 +134765,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1671a = NAKA_NONE,
 
-    .ptr_1671c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1671c = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2303 = { 0 },
 
@@ -134773,7 +134773,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2304 = { 0 },
 
-    .ptr_16728 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16728 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1412 = ALIGNED_STRING(""),
 
@@ -134795,7 +134795,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16742 = NAKA_NONE,
 
-    .ptr_16744 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16744 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_16748 = NAKA_NONE,
 
@@ -134805,14 +134805,14 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1674e = NAKA_NONE,
 
-    .ptr_16750 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16750 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_16754 = NAKA_NONE,
 
     .ptrs_256 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -134820,7 +134820,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2306 = { 0 },
 
-    .ptr_1676a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1676a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1414 = ALIGNED_STRING(""),
 
@@ -134830,7 +134830,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16774 = NAKA_NONE,
 
-    .ptr_16776 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16776 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2308 = { 0 },
 
@@ -134920,7 +134920,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_167d7 = NAKA_NONE,
 
-    .ptr_167d9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_167d9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2312 = { 0 },
 
@@ -134928,7 +134928,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2313 = { 0 },
 
-    .ptr_167e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_167e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1418 = ALIGNED_STRING(""),
 
@@ -135204,7 +135204,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16900 = NAKA_NONE,
 
-    .ptr_16902 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16902 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1427 = ALIGNED_STRING(""),
 
@@ -135306,7 +135306,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16969 = NAKA_NONE,
 
-    .ptr_1696b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1696b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1430 = ALIGNED_STRING(""),
 
@@ -135322,7 +135322,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2320 = { 0 },
 
-    .ptr_1697d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1697d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1432 = ALIGNED_STRING(""),
 
@@ -135330,7 +135330,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16985 = NAKA_NONE,
 
-    .ptr_16987 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16987 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1698b = NAKA_NONE,
 
@@ -135350,7 +135350,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1699b = NAKA_NONE,
 
-    .ptr_1699d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1699d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1434 = ALIGNED_STRING(""),
 
@@ -135470,7 +135470,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16a15 = NAKA_NONE,
 
-    .ptr_16a17 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16a17 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1435 = ALIGNED_STRING(""),
 
@@ -135492,7 +135492,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2323 = { 0 },
 
-    .ptr_16a2f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16a2f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2324 = { 0 },
 
@@ -135576,7 +135576,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16a84 = NAKA_NONE,
 
-    .ptr_16a86 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16a86 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1437 = ALIGNED_STRING(""),
 
@@ -135592,13 +135592,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2326 = { 0 },
 
-    .ptr_16a98 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16a98 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1438 = ALIGNED_STRING(""),
 
     .pad_2327 = { 0 },
 
-    .ptr_16aa0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16aa0 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1439 = ALIGNED_STRING(""),
 
@@ -135628,7 +135628,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16abe = NAKA_NONE,
 
-    .ptr_16ac0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16ac0 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2329 = { 0 },
 
@@ -135746,7 +135746,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16b38 = NAKA_NONE,
 
-    .ptr_16b3a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16b3a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2330 = { 0 },
 
@@ -135766,7 +135766,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16b50 = NAKA_NONE,
 
-    .ptr_16b52 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16b52 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1441 = ALIGNED_STRING(""),
 
@@ -135846,7 +135846,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16ba7 = NAKA_NONE,
 
-    .ptr_16ba9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16ba9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2332 = { 0 },
 
@@ -135860,7 +135860,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16bb9 = NAKA_NONE,
 
-    .ptr_16bbb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16bbb = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1442 = ALIGNED_STRING(""),
 
@@ -135876,7 +135876,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2334 = { 0 },
 
-    .ptr_16bcd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16bcd = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1444 = ALIGNED_STRING(""),
 
@@ -135884,7 +135884,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16bd5 = NAKA_NONE,
 
-    .ptr_16bd7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16bd7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_16bdb = NAKA_NONE,
 
@@ -136050,7 +136050,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2335 = { 0 },
 
-    .ptr_16c7f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16c7f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2336 = { 0 },
 
@@ -136144,7 +136144,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16ce1 = NAKA_NONE,
 
-    .ptr_16ce3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16ce3 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1446 = ALIGNED_STRING(""),
 
@@ -136160,7 +136160,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2338 = { 0 },
 
-    .ptr_16cf5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16cf5 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1448 = ALIGNED_STRING(""),
 
@@ -136168,7 +136168,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16cfd = NAKA_NONE,
 
-    .ptr_16cff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16cff = NAKA_ADDR(NakaData_RomEnd),
 
     .field_16d03 = NAKA_NONE,
 
@@ -136178,7 +136178,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16d09 = NAKA_NONE,
 
-    .ptr_16d0b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16d0b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1450 = ALIGNED_STRING(""),
 
@@ -136190,7 +136190,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16d17 = NAKA_NONE,
 
-    .ptr_16d19 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16d19 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1451 = ALIGNED_STRING(""),
 
@@ -136330,7 +136330,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2339 = { 0 },
 
-    .ptr_16da7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16da7 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1452 = ALIGNED_STRING(""),
 
@@ -136426,7 +136426,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16e09 = NAKA_NONE,
 
-    .ptr_16e0b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16e0b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1453 = ALIGNED_STRING(""),
 
@@ -136442,7 +136442,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2343 = { 0 },
 
-    .ptr_16e1d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16e1d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1455 = ALIGNED_STRING(""),
 
@@ -136450,7 +136450,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16e25 = NAKA_NONE,
 
-    .ptr_16e27 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16e27 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_16e2b = NAKA_NONE,
 
@@ -136460,7 +136460,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16e31 = NAKA_NONE,
 
-    .ptr_16e33 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16e33 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1457 = ALIGNED_STRING(""),
 
@@ -136612,7 +136612,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2345 = { 0 },
 
-    .ptr_16ecf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16ecf = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1458 = ALIGNED_STRING(""),
 
@@ -136692,7 +136692,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_16f1f = NAKA_NONE,
 
-    .ptr_16f21 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16f21 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2347 = { 0 },
 
@@ -136712,13 +136712,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2348 = { 0 },
 
-    .ptr_16f38 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16f38 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1459 = ALIGNED_STRING(""),
 
     .pad_2349 = { 0 },
 
-    .ptr_16f40 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16f40 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1460 = ALIGNED_STRING(""),
 
@@ -136898,7 +136898,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2354 = { 0 },
 
-    .ptr_16ffc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_16ffc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1462 = ALIGNED_STRING(""),
 
@@ -136972,7 +136972,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17046 = NAKA_NONE,
 
-    .ptr_17048 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17048 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2355 = { 0 },
 
@@ -136987,7 +136987,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_17059 = NAKA_NONE,
 
     .ptrs_257 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         0x00000000,
@@ -136995,7 +136995,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2356 = { 0 },
 
-    .ptr_1706d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1706d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1463 = ALIGNED_STRING(""),
 
@@ -137003,7 +137003,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17075 = NAKA_NONE,
 
-    .ptr_17077 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17077 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1707b = NAKA_NONE,
 
@@ -137013,7 +137013,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17081 = NAKA_NONE,
 
-    .ptr_17083 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17083 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1465 = ALIGNED_STRING(""),
 
@@ -137155,7 +137155,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17117 = NAKA_NONE,
 
-    .ptr_17119 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17119 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2358 = { 0 },
 
@@ -137254,9 +137254,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_17182 = NAKA_NONE,
 
     .ptrs_258 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -137511,7 +137511,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_17294 = NAKA_NONE,
 
     .ptrs_259 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -137804,7 +137804,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_173c0 = NAKA_NONE,
 
-    .ptr_173c2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_173c2 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1470 = ALIGNED_STRING(""),
 
@@ -138098,7 +138098,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_174e8 = NAKA_NONE,
 
-    .ptr_174ea = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_174ea = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1472 = ALIGNED_STRING(""),
 
@@ -138392,7 +138392,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17610 = NAKA_NONE,
 
-    .ptr_17612 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17612 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1474 = ALIGNED_STRING(""),
 
@@ -138686,7 +138686,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17738 = NAKA_NONE,
 
-    .ptr_1773a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1773a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1476 = ALIGNED_STRING(""),
 
@@ -138980,7 +138980,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17860 = NAKA_NONE,
 
-    .ptr_17862 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17862 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1478 = ALIGNED_STRING(""),
 
@@ -139274,7 +139274,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17988 = NAKA_NONE,
 
-    .ptr_1798a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1798a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1480 = ALIGNED_STRING(""),
 
@@ -139374,7 +139374,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17add = NAKA_NONE,
 
-    .ptr_17adf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17adf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_17ae3 = NAKA_NONE,
 
@@ -139385,7 +139385,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_17ae9 = NAKA_NONE,
 
     .ptrs_260 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -139488,7 +139488,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17c05 = NAKA_NONE,
 
-    .ptr_17c07 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17c07 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_17c0b = NAKA_NONE,
 
@@ -139512,7 +139512,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17c1f = NAKA_NONE,
 
-    .ptr_17c21 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17c21 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1484 = ALIGNED_STRING(""),
 
@@ -139780,7 +139780,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17d2d = NAKA_NONE,
 
-    .ptr_17d2f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17d2f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_17d33 = NAKA_NONE,
 
@@ -139804,7 +139804,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17d47 = NAKA_NONE,
 
-    .ptr_17d49 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17d49 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1486 = ALIGNED_STRING(""),
 
@@ -140072,7 +140072,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17e55 = NAKA_NONE,
 
-    .ptr_17e57 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17e57 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_17e5b = NAKA_NONE,
 
@@ -140096,7 +140096,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17e6f = NAKA_NONE,
 
-    .ptr_17e71 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17e71 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1488 = ALIGNED_STRING(""),
 
@@ -140364,7 +140364,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17f7d = NAKA_NONE,
 
-    .ptr_17f7f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17f7f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_17f83 = NAKA_NONE,
 
@@ -140388,7 +140388,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_17f97 = NAKA_NONE,
 
-    .ptr_17f99 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_17f99 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1490 = ALIGNED_STRING(""),
 
@@ -140656,7 +140656,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_180a5 = NAKA_NONE,
 
-    .ptr_180a7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_180a7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_180ab = NAKA_NONE,
 
@@ -140680,7 +140680,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_180bf = NAKA_NONE,
 
-    .ptr_180c1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_180c1 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1492 = ALIGNED_STRING(""),
 
@@ -140948,7 +140948,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_181cd = NAKA_NONE,
 
-    .ptr_181cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_181cf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_181d3 = NAKA_NONE,
 
@@ -140972,7 +140972,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_181e7 = NAKA_NONE,
 
-    .ptr_181e9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_181e9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1494 = ALIGNED_STRING(""),
 
@@ -141240,7 +141240,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_182f5 = NAKA_NONE,
 
-    .ptr_182f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_182f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_182fb = NAKA_NONE,
 
@@ -141264,7 +141264,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1830f = NAKA_NONE,
 
-    .ptr_18311 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18311 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1496 = ALIGNED_STRING(""),
 
@@ -141532,7 +141532,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1841d = NAKA_NONE,
 
-    .ptr_1841f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1841f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_18423 = NAKA_NONE,
 
@@ -141556,7 +141556,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_18437 = NAKA_NONE,
 
-    .ptr_18439 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18439 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1498 = ALIGNED_STRING(""),
 
@@ -141824,7 +141824,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_18545 = NAKA_NONE,
 
-    .ptr_18547 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18547 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1854b = NAKA_NONE,
 
@@ -141848,7 +141848,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1855f = NAKA_NONE,
 
-    .ptr_18561 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18561 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1500 = ALIGNED_STRING(""),
 
@@ -142116,7 +142116,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1866d = NAKA_NONE,
 
-    .ptr_1866f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1866f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_18673 = NAKA_NONE,
 
@@ -142140,7 +142140,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_18687 = NAKA_NONE,
 
-    .ptr_18689 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18689 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1502 = ALIGNED_STRING(""),
 
@@ -142408,7 +142408,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_18795 = NAKA_NONE,
 
-    .ptr_18797 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18797 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1879b = NAKA_NONE,
 
@@ -142702,7 +142702,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_188bd = NAKA_NONE,
 
-    .ptr_188bf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_188bf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_188c3 = NAKA_NONE,
 
@@ -143000,7 +143000,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_18b0d = NAKA_NONE,
 
-    .ptr_18b0f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18b0f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_18b13 = NAKA_NONE,
 
@@ -143294,7 +143294,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_18c35 = NAKA_NONE,
 
-    .ptr_18c37 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18c37 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_18c3b = NAKA_NONE,
 
@@ -143416,13 +143416,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2378 = { 0 },
 
-    .ptr_18cb3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18cb3 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1507 = ALIGNED_STRING(""),
 
     .str_1508 = ALIGNED_STRING(""),
 
-    .ptr_18cbb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18cbb = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1509 = ALIGNED_STRING(""),
 
@@ -143433,9 +143433,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .pad_2380 = { 0 },
 
     .ptrs_261 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -143567,7 +143567,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_18d5d = NAKA_NONE,
 
-    .ptr_18d5f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18d5f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_18d63 = NAKA_NONE,
 
@@ -143958,7 +143958,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_18efc = NAKA_NONE,
 
-    .ptr_18efe = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18efe = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1513 = ALIGNED_STRING(""),
 
@@ -143978,7 +143978,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_18f14 = NAKA_NONE,
 
-    .ptr_18f16 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_18f16 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1515 = ALIGNED_STRING(""),
 
@@ -144249,9 +144249,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_19024 = NAKA_NONE,
 
     .ptrs_263 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
     },
 
     .pad_2390 = { 0 },
@@ -144270,19 +144270,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2392 = { 0 },
 
-    .ptr_19043 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_19043 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1520 = ALIGNED_STRING(""),
 
     .pad_2393 = { 0 },
 
-    .ptr_1904b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1904b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1521 = ALIGNED_STRING(""),
 
     .pad_2394 = { 0 },
 
-    .ptr_19053 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_19053 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1522 = ALIGNED_STRING(""),
 
@@ -144412,7 +144412,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_190d5 = NAKA_NONE,
 
-    .ptr_190d7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_190d7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_190db = NAKA_NONE,
 
@@ -144548,19 +144548,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2398 = { 0 },
 
-    .ptr_1916b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1916b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1524 = ALIGNED_STRING(""),
 
     .pad_2399 = { 0 },
 
-    .ptr_19173 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_19173 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1525 = ALIGNED_STRING(""),
 
     .pad_2400 = { 0 },
 
-    .ptr_1917b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1917b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1526 = ALIGNED_STRING(""),
 
@@ -144690,7 +144690,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_191fd = NAKA_NONE,
 
-    .ptr_191ff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_191ff = NAKA_ADDR(NakaData_RomEnd),
 
     .field_19203 = NAKA_NONE,
 
@@ -145093,9 +145093,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1939c = NAKA_NONE,
 
     .ptrs_264 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
     },
 
     .str_1532 = ALIGNED_STRING(""),
@@ -145380,7 +145380,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_194c4 = NAKA_NONE,
 
-    .ptr_194c6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_194c6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1537 = ALIGNED_STRING(""),
 
@@ -145673,7 +145673,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_195ec = NAKA_NONE,
 
     .ptrs_265 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         NAKA_ADDR(InterruptVectorTable),
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -145941,7 +145941,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_19714 = NAKA_NONE,
 
-    .ptr_19716 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_19716 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1545 = ALIGNED_STRING(""),
 
@@ -145953,18 +145953,18 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_1546 = ALIGNED_STRING(""),
 
-    .ptr_19724 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_19724 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_19728 = NAKA_NONE,
 
     .pad_2421 = { 0 },
 
     .ptrs_267 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -146096,7 +146096,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_197c5 = NAKA_NONE,
 
-    .ptr_197c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_197c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_197cb = NAKA_NONE,
 
@@ -146390,7 +146390,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_198ed = NAKA_NONE,
 
-    .ptr_198ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_198ef = NAKA_ADDR(NakaData_RomEnd),
 
     .field_198f3 = NAKA_NONE,
 
@@ -146684,7 +146684,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_19a15 = NAKA_NONE,
 
-    .ptr_19a17 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_19a17 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_19a1b = NAKA_NONE,
 
@@ -147705,7 +147705,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_19f99 = NAKA_NONE,
 
     .ptrs_268 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -148673,13 +148673,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a3ca = NAKA_NONE,
 
-    .ptr_1a3cc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a3cc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1a3d0 = NAKA_NONE,
 
-    .ptr_1a3d2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a3d2 = NAKA_ADDR(NakaData_RomEnd),
 
-    .ptr_1a3d6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a3d6 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2430 = { 0 },
 
@@ -148709,7 +148709,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a403 = NAKA_NONE,
 
-    .ptr_1a405 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a405 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1a409 = NAKA_NONE,
 
@@ -148761,7 +148761,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a439 = NAKA_NONE,
 
-    .ptr_1a43b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a43b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1a43f = NAKA_NONE,
 
@@ -148789,11 +148789,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2436 = { 0 },
 
-    .ptr_1a470 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a470 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2437 = { 0 },
 
-    .ptr_1a476 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a476 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1566 = ALIGNED_STRING(""),
 
@@ -148895,7 +148895,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a4f2 = NAKA_NONE,
 
-    .ptr_1a4f4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a4f4 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1570 = ALIGNED_STRING(""),
 
@@ -149027,7 +149027,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a5a5 = NAKA_NONE,
 
-    .ptr_1a5a7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a5a7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1a5ab = NAKA_NONE,
 
@@ -149055,7 +149055,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a5c3 = NAKA_NONE,
 
-    .ptr_1a5c5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a5c5 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1575 = ALIGNED_STRING(""),
 
@@ -149129,7 +149129,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a60f = NAKA_NONE,
 
-    .ptr_1a611 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a611 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1a615 = NAKA_NONE,
 
@@ -149157,17 +149157,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2453 = { 0 },
 
-    .ptr_1a636 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a636 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1578 = ALIGNED_STRING(""),
 
-    .ptr_1a63c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a63c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1579 = ALIGNED_STRING(""),
 
     .field_1a642 = NAKA_NONE,
 
-    .ptr_1a644 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a644 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1580 = ALIGNED_STRING(""),
 
@@ -149247,7 +149247,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a694 = NAKA_NONE,
 
-    .ptr_1a696 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a696 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2455 = { 0 },
 
@@ -149255,17 +149255,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2456 = { 0 },
 
-    .ptr_1a6a0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a6a0 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1584 = ALIGNED_STRING(""),
 
-    .ptr_1a6a6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a6a6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1585 = ALIGNED_STRING(""),
 
     .field_1a6ac = NAKA_NONE,
 
-    .ptr_1a6ae = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a6ae = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1586 = ALIGNED_STRING(""),
 
@@ -149408,7 +149408,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1a742 = NAKA_NONE,
 
     .ptrs_273 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -149427,17 +149427,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a75c = NAKA_NONE,
 
-    .ptr_1a75e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a75e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1594 = ALIGNED_STRING(""),
 
-    .ptr_1a764 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a764 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1595 = ALIGNED_STRING(""),
 
     .field_1a76a = NAKA_NONE,
 
-    .ptr_1a76c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a76c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1596 = ALIGNED_STRING(""),
 
@@ -149543,7 +149543,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2466 = { 0 },
 
-    .ptr_1a7db = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a7db = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1600 = ALIGNED_STRING(""),
 
@@ -149555,7 +149555,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2468 = { 0 },
 
-    .ptr_1a7eb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a7eb = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1602 = ALIGNED_STRING(""),
 
@@ -149565,7 +149565,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a7f5 = NAKA_NONE,
 
-    .ptr_1a7f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a7f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1a7fb = NAKA_NONE,
 
@@ -149575,11 +149575,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2471 = { 0 },
 
-    .ptr_1a803 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a803 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2472 = { 0 },
 
-    .ptr_1a80c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a80c = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2473 = { 0 },
 
@@ -149672,7 +149672,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1a86a = NAKA_NONE,
 
     .ptrs_274 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -149781,12 +149781,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a8ee = NAKA_NONE,
 
-    .ptr_1a8f0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a8f0 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1607 = ALIGNED_STRING(""),
 
     .ptrs_275 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -149829,7 +149829,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2485 = { 0 },
 
-    .ptr_1a93d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a93d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1613 = ALIGNED_STRING(""),
 
@@ -149903,7 +149903,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1a987 = NAKA_NONE,
 
-    .ptr_1a989 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a989 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1a98d = NAKA_NONE,
 
@@ -149927,12 +149927,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2488 = { 0 },
 
-    .ptr_1a9ae = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1a9ae = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1616 = ALIGNED_STRING(""),
 
     .ptrs_276 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -150018,12 +150018,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1aa16 = NAKA_NONE,
 
-    .ptr_1aa18 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1aa18 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1620 = ALIGNED_STRING(""),
 
     .ptrs_277 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -150056,13 +150056,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2491 = { 0 },
 
-    .ptr_1aa58 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1aa58 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1625 = ALIGNED_STRING(""),
 
     .pad_2492 = { 0 },
 
-    .ptr_1aa60 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1aa60 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1626 = ALIGNED_STRING(""),
 
@@ -150152,7 +150152,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1aaba = NAKA_NONE,
 
-    .ptr_1aabc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1aabc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1628 = ALIGNED_STRING(""),
 
@@ -150172,17 +150172,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2497 = { 0 },
 
-    .ptr_1aad6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1aad6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1629 = ALIGNED_STRING(""),
 
-    .ptr_1aadc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1aadc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1630 = ALIGNED_STRING(""),
 
     .field_1aae2 = NAKA_NONE,
 
-    .ptr_1aae4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1aae4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2498 = { 0 },
 
@@ -150286,7 +150286,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2502 = { 0 },
 
-    .ptr_1ab56 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ab56 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1634 = ALIGNED_STRING(""),
 
@@ -150320,7 +150320,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2505 = { 0 },
 
-    .ptr_1ab80 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ab80 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1639 = ALIGNED_STRING(""),
 
@@ -150418,7 +150418,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1abe2 = NAKA_NONE,
 
-    .ptr_1abe4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1abe4 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1641 = ALIGNED_STRING(""),
 
@@ -150442,17 +150442,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2511 = { 0 },
 
-    .ptr_1abfe = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1abfe = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1644 = ALIGNED_STRING(""),
 
-    .ptr_1ac04 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ac04 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1645 = ALIGNED_STRING(""),
 
     .field_1ac0a = NAKA_NONE,
 
-    .ptr_1ac0c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ac0c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1646 = ALIGNED_STRING(""),
 
@@ -150466,7 +150466,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ac1b = NAKA_NONE,
 
-    .ptr_1ac1d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ac1d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ac21 = NAKA_NONE,
 
@@ -150518,7 +150518,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ac51 = NAKA_NONE,
 
-    .ptr_1ac53 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ac53 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ac57 = NAKA_NONE,
 
@@ -150536,17 +150536,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2515 = { 0 },
 
-    .ptr_1ac68 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ac68 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1647 = ALIGNED_STRING(""),
 
-    .ptr_1ac6e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ac6e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1648 = ALIGNED_STRING(""),
 
     .field_1ac74 = NAKA_NONE,
 
-    .ptr_1ac76 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ac76 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1649 = ALIGNED_STRING(""),
 
@@ -150600,7 +150600,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1acb3 = NAKA_NONE,
 
-    .ptr_1acb5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1acb5 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1656 = ALIGNED_STRING(""),
 
@@ -150674,7 +150674,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1acff = NAKA_NONE,
 
-    .ptr_1ad01 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ad01 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ad05 = NAKA_NONE,
 
@@ -150688,24 +150688,24 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2521 = { 0 },
 
-    .ptr_1ad11 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ad11 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1658 = ALIGNED_STRING(""),
 
     .pad_2522 = { 0 },
 
-    .ptr_1ad19 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ad19 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1659 = ALIGNED_STRING(""),
 
     .pad_2523 = { 0 },
 
-    .ptr_1ad26 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ad26 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1660 = ALIGNED_STRING(""),
 
     .ptrs_278 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(InterruptVectorTable),
@@ -150791,12 +150791,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2526 = { 0 },
 
-    .ptr_1ad90 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ad90 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1664 = ALIGNED_STRING(""),
 
     .ptrs_279 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(InterruptVectorTable),
@@ -150933,7 +150933,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ae32 = NAKA_NONE,
 
-    .ptr_1ae34 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ae34 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1671 = ALIGNED_STRING(""),
 
@@ -151051,12 +151051,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2541 = { 0 },
 
-    .ptr_1aeb8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1aeb8 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1677 = ALIGNED_STRING(""),
 
     .ptrs_280 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -151071,7 +151071,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_1679 = ALIGNED_STRING(""),
 
-    .ptr_1aed4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1aed4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1aed8 = 0x00FF,
 
@@ -151405,7 +151405,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2550 = { 0 },
 
-    .ptr_1b028 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b028 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1690 = ALIGNED_STRING(""),
 
@@ -151699,7 +151699,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2554 = { 0 },
 
-    .ptr_1b155 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b155 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1697 = ALIGNED_STRING(""),
 
@@ -151773,13 +151773,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b19f = NAKA_NONE,
 
-    .ptr_1b1a1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b1a1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1b1a5 = NAKA_NONE,
 
     .pad_2555 = { 0 },
 
-    .ptr_1b1a9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b1a9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1699 = ALIGNED_STRING(""),
 
@@ -151797,7 +151797,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2557 = { 0 },
 
-    .ptr_1b1c5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b1c5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2558 = { 0 },
 
@@ -151808,7 +151808,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .pad_2559 = { 0 },
 
     .ptrs_281 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -151880,11 +151880,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b224 = NAKA_NONE,
 
-    .ptr_1b226 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b226 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1b22a = NAKA_NONE,
 
-    .ptr_1b22c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b22c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1b230 = NAKA_NONE,
 
@@ -151894,7 +151894,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2561 = { 0 },
 
-    .ptr_1b23e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b23e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1704 = ALIGNED_STRING(""),
 
@@ -151908,7 +151908,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b24c = NAKA_NONE,
 
-    .ptr_1b24e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b24e = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2563 = { 0 },
 
@@ -151940,7 +151940,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b272 = NAKA_NONE,
 
-    .ptr_1b274 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b274 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2565 = { 0 },
 
@@ -152057,7 +152057,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2571 = { 0 },
 
-    .ptr_1b30d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b30d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1b311 = NAKA_NONE,
 
@@ -152109,7 +152109,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b341 = NAKA_NONE,
 
-    .ptr_1b343 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b343 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1b347 = NAKA_NONE,
 
@@ -152123,7 +152123,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2572 = { 0 },
 
-    .ptr_1b353 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b353 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1711 = ALIGNED_STRING(""),
 
@@ -152137,7 +152137,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2575 = { 0 },
 
-    .ptr_1b36b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b36b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1712 = ALIGNED_STRING(""),
 
@@ -152295,13 +152295,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2584 = { 0 },
 
-    .ptr_1b411 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b411 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1718 = ALIGNED_STRING(""),
 
     .pad_2585 = { 0 },
 
-    .ptr_1b419 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b419 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1719 = ALIGNED_STRING(""),
 
@@ -152392,7 +152392,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1b474 = NAKA_NONE,
 
     .ptrs_283 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -152419,7 +152419,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b49c = NAKA_NONE,
 
-    .ptr_1b49e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b49e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1727 = ALIGNED_STRING(""),
 
@@ -152549,14 +152549,14 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2593 = { 0 },
 
-    .ptr_1b524 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b524 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1732 = ALIGNED_STRING(""),
 
     .field_1b52a = NAKA_NONE,
 
     .ptrs_285 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         NAKA_ADDR(InterruptVectorTable),
         NAKA_ADDR(InterruptVectorTable),
     },
@@ -152664,7 +152664,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1b59c = NAKA_NONE,
 
     .ptrs_286 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -152697,7 +152697,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b5c4 = NAKA_NONE,
 
-    .ptr_1b5c6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b5c6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1744 = ALIGNED_STRING(""),
 
@@ -152806,7 +152806,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .pad_2604 = { 0 },
 
     .ptrs_287 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -152904,7 +152904,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1b6c4 = NAKA_NONE,
 
     .ptrs_289 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -152937,7 +152937,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b6ec = NAKA_NONE,
 
-    .ptr_1b6ee = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b6ee = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2610 = { 0 },
 
@@ -152949,7 +152949,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b6fd = NAKA_NONE,
 
-    .ptr_1b6ff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b6ff = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1b703 = NAKA_NONE,
 
@@ -153045,12 +153045,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2615 = { 0 },
 
-    .ptr_1b77d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b77d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2616 = { 0 },
 
     .ptrs_290 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
     },
@@ -153137,7 +153137,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b7ec = NAKA_NONE,
 
-    .ptr_1b7ee = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b7ee = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1762 = ALIGNED_STRING(""),
 
@@ -153175,7 +153175,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b814 = NAKA_NONE,
 
-    .ptr_1b816 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b816 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2622 = { 0 },
 
@@ -153187,7 +153187,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b825 = NAKA_NONE,
 
-    .ptr_1b827 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b827 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1b82b = NAKA_NONE,
 
@@ -153219,7 +153219,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b847 = NAKA_NONE,
 
-    .ptr_1b849 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b849 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1768 = ALIGNED_STRING(""),
 
@@ -153289,13 +153289,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b88f = NAKA_NONE,
 
-    .ptr_1b891 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b891 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1b895 = NAKA_NONE,
 
     .pad_2624 = { 0 },
 
-    .ptr_1b89c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b89c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1769 = ALIGNED_STRING(""),
 
@@ -153303,11 +153303,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b8a4 = NAKA_NONE,
 
-    .ptr_1b8a6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b8a6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1770 = ALIGNED_STRING(""),
 
-    .ptr_1b8ac = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b8ac = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1771 = ALIGNED_STRING(""),
 
@@ -153326,7 +153326,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
     },
 
     .str_1773 = ALIGNED_STRING(""),
@@ -153399,7 +153399,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b914 = NAKA_NONE,
 
-    .ptr_1b916 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b916 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1776 = ALIGNED_STRING(""),
 
@@ -153437,7 +153437,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1b93c = NAKA_NONE,
 
-    .ptr_1b93e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b93e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1781 = ALIGNED_STRING(""),
 
@@ -153589,19 +153589,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2635 = { 0 },
 
-    .ptr_1b9d9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b9d9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1786 = ALIGNED_STRING(""),
 
     .pad_2636 = { 0 },
 
-    .ptr_1b9e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b9e1 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1787 = ALIGNED_STRING(""),
 
     .pad_2637 = { 0 },
 
-    .ptr_1b9e9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1b9e9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1788 = ALIGNED_STRING(""),
 
@@ -153683,7 +153683,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ba3c = NAKA_NONE,
 
-    .ptr_1ba3e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ba3e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1791 = ALIGNED_STRING(""),
 
@@ -153715,7 +153715,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ba64 = NAKA_NONE,
 
-    .ptr_1ba66 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ba66 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1795 = ALIGNED_STRING(""),
 
@@ -153754,7 +153754,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1ba8c = NAKA_NONE,
 
     .ptrs_294 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -153847,12 +153847,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2646 = { 0 },
 
-    .ptr_1baf6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1baf6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1800 = ALIGNED_STRING(""),
 
     .ptrs_295 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         0x00000000,
@@ -153936,7 +153936,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1bb64 = NAKA_NONE,
 
-    .ptr_1bb66 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1bb66 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1805 = ALIGNED_STRING(""),
 
@@ -153988,7 +153988,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1bbb4 = NAKA_NONE,
 
     .ptrs_298 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -154081,15 +154081,15 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2650 = { 0 },
 
-    .ptr_1bc1e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1bc1e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1810 = ALIGNED_STRING(""),
 
-    .ptr_1bc24 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1bc24 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2651 = { 0 },
 
-    .ptr_1bc2d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1bc2d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2652 = { 0 },
 
@@ -154097,13 +154097,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2653 = { 0 },
 
-    .ptr_1bc39 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1bc39 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1811 = ALIGNED_STRING(""),
 
     .pad_2654 = { 0 },
 
-    .ptr_1bc41 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1bc41 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1812 = ALIGNED_STRING(""),
 
@@ -154175,7 +154175,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1bc8c = NAKA_NONE,
 
-    .ptr_1bc8e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1bc8e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1815 = ALIGNED_STRING(""),
 
@@ -155202,7 +155202,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1c121 = NAKA_NONE,
 
     .ptrs_299 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -155526,7 +155526,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1c299 = NAKA_NONE,
 
-    .ptr_1c29b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c29b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1831 = ALIGNED_STRING(""),
 
@@ -155538,7 +155538,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1c2a7 = NAKA_NONE,
 
-    .ptr_1c2a9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c2a9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1832 = ALIGNED_STRING(""),
 
@@ -155650,7 +155650,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1c319 = NAKA_NONE,
 
-    .ptr_1c31b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c31b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1833 = ALIGNED_STRING(""),
 
@@ -155816,7 +155816,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1c3c1 = NAKA_NONE,
 
-    .ptr_1c3c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c3c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1834 = ALIGNED_STRING(""),
 
@@ -155940,7 +155940,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1c441 = NAKA_NONE,
 
-    .ptr_1c443 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c443 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1835 = ALIGNED_STRING(""),
 
@@ -156048,7 +156048,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1c4af = NAKA_NONE,
 
-    .ptr_1c4b1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c4b1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2669 = { 0 },
 
@@ -156336,7 +156336,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1c5d6 = NAKA_NONE,
 
-    .ptr_1c5d8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c5d8 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2673 = { 0 },
 
@@ -156390,7 +156390,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1c611 = NAKA_NONE,
 
-    .ptr_1c613 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c613 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1836 = ALIGNED_STRING(""),
 
@@ -156510,7 +156510,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1c691 = NAKA_NONE,
 
-    .ptr_1c693 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c693 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1837 = ALIGNED_STRING(""),
 
@@ -156616,7 +156616,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1c6fd = NAKA_NONE,
 
-    .ptr_1c6ff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c6ff = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2675 = { 0 },
 
@@ -156897,7 +156897,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1c824 = NAKA_NONE,
 
     .ptrs_300 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -157190,7 +157190,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1c950 = NAKA_NONE,
 
-    .ptr_1c952 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1c952 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1839 = ALIGNED_STRING(""),
 
@@ -157484,7 +157484,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ca78 = NAKA_NONE,
 
-    .ptr_1ca7a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ca7a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1840 = ALIGNED_STRING(""),
 
@@ -157762,7 +157762,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1cba0 = NAKA_NONE,
 
-    .ptr_1cba2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1cba2 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1841 = ALIGNED_STRING(""),
 
@@ -157814,7 +157814,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1cbd6 = NAKA_NONE,
 
-    .ptr_1cbd8 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1cbd8 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2688 = { 0 },
 
@@ -157824,7 +157824,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1cbe7 = NAKA_NONE,
 
-    .ptr_1cbe9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1cbe9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1842 = ALIGNED_STRING(""),
 
@@ -158096,7 +158096,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ccff = NAKA_NONE,
 
-    .ptr_1cd01 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1cd01 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2691 = { 0 },
 
@@ -158328,7 +158328,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1cdf0 = NAKA_NONE,
 
-    .ptr_1cdf2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1cdf2 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1843 = ALIGNED_STRING(""),
 
@@ -158382,7 +158382,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ce28 = NAKA_NONE,
 
-    .ptr_1ce2a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ce2a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2694 = { 0 },
 
@@ -158394,7 +158394,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ce37 = NAKA_NONE,
 
-    .ptr_1ce39 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ce39 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1844 = ALIGNED_STRING(""),
 
@@ -158672,7 +158672,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1cf51 = NAKA_NONE,
 
-    .ptr_1cf53 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1cf53 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1845 = ALIGNED_STRING(""),
 
@@ -158684,7 +158684,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1cf5f = NAKA_NONE,
 
-    .ptr_1cf61 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1cf61 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1846 = ALIGNED_STRING(""),
 
@@ -158796,7 +158796,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1cfd1 = NAKA_NONE,
 
-    .ptr_1cfd3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1cfd3 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1847 = ALIGNED_STRING(""),
 
@@ -159546,7 +159546,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d3e5 = NAKA_NONE,
 
-    .ptr_1d3e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d3e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d3eb = NAKA_NONE,
 
@@ -159840,7 +159840,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d50d = NAKA_NONE,
 
-    .ptr_1d50f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d50f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d513 = NAKA_NONE,
 
@@ -159974,7 +159974,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d598 = NAKA_NONE,
 
-    .ptr_1d59a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d59a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2700 = { 0 },
 
@@ -160004,7 +160004,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d5bf = NAKA_NONE,
 
-    .ptr_1d5c1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d5c1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2703 = { 0 },
 
@@ -160104,11 +160104,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d62e = NAKA_NONE,
 
-    .ptr_1d630 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d630 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2707 = { 0 },
 
-    .ptr_1d637 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d637 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d63b = NAKA_NONE,
 
@@ -160128,7 +160128,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d64b = NAKA_NONE,
 
-    .ptr_1d64d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d64d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1856 = ALIGNED_STRING(""),
 
@@ -160248,13 +160248,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d6c5 = NAKA_NONE,
 
-    .ptr_1d6c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d6c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1857 = ALIGNED_STRING(""),
 
     .field_1d6cd = NAKA_NONE,
 
-    .ptr_1d6cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d6cf = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1858 = ALIGNED_STRING(""),
 
@@ -160262,7 +160262,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2710 = { 0 },
 
-    .ptr_1d6d9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d6d9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2711 = { 0 },
 
@@ -160346,13 +160346,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d734 = NAKA_NONE,
 
-    .ptr_1d736 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d736 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1859 = ALIGNED_STRING(""),
 
     .field_1d73c = NAKA_NONE,
 
-    .ptr_1d73e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d73e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1860 = ALIGNED_STRING(""),
 
@@ -160360,7 +160360,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2715 = { 0 },
 
-    .ptr_1d748 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d748 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2716 = { 0 },
 
@@ -160374,7 +160374,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2718 = { 0 },
 
-    .ptr_1d75f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d75f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d763 = NAKA_NONE,
 
@@ -160386,7 +160386,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d76b = NAKA_NONE,
 
-    .ptr_1d76d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d76d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d771 = NAKA_NONE,
 
@@ -160394,7 +160394,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d775 = NAKA_NONE,
 
-    .ptr_1d777 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d777 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d77b = NAKA_NONE,
 
@@ -160504,7 +160504,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d7e5 = NAKA_NONE,
 
-    .ptr_1d7e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d7e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d7eb = NAKA_NONE,
 
@@ -160512,11 +160512,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d7ef = NAKA_NONE,
 
-    .ptr_1d7f1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d7f1 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d7f5 = NAKA_NONE,
 
-    .ptr_1d7f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d7f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2719 = { 0 },
 
@@ -160530,7 +160530,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2721 = { 0 },
 
-    .ptr_1d807 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d807 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1862 = ALIGNED_STRING(""),
 
@@ -160638,7 +160638,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2726 = { 0 },
 
-    .ptr_1d876 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d876 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1865 = ALIGNED_STRING(""),
 
@@ -160666,7 +160666,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d892 = NAKA_NONE,
 
-    .ptr_1d894 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d894 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d898 = NAKA_NONE,
 
@@ -160676,7 +160676,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d89e = NAKA_NONE,
 
-    .ptr_1d8a0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d8a0 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d8a4 = NAKA_NONE,
 
@@ -160784,7 +160784,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d90c = NAKA_NONE,
 
-    .ptr_1d90e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d90e = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d912 = NAKA_NONE,
 
@@ -160794,7 +160794,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d918 = NAKA_NONE,
 
-    .ptr_1d91a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d91a = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d91e = NAKA_NONE,
 
@@ -160808,7 +160808,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2730 = { 0 },
 
-    .ptr_1d92f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d92f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1867 = ALIGNED_STRING(""),
 
@@ -160884,7 +160884,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d97b = NAKA_NONE,
 
-    .ptr_1d97d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d97d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d981 = NAKA_NONE,
 
@@ -160894,7 +160894,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1d987 = NAKA_NONE,
 
-    .ptr_1d989 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d989 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1d98d = NAKA_NONE,
 
@@ -160908,7 +160908,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2734 = { 0 },
 
-    .ptr_1d99e = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d99e = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1868 = ALIGNED_STRING(""),
 
@@ -160955,9 +160955,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .str_1871 = ALIGNED_STRING(""),
 
     .ptrs_301 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -160977,7 +160977,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2738 = { 0 },
 
-    .ptr_1d9f2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1d9f2 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1874 = ALIGNED_STRING(""),
 
@@ -161059,7 +161059,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2743 = { 0 },
 
-    .ptr_1da57 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1da57 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1877 = ALIGNED_STRING(""),
 
@@ -161163,7 +161163,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2747 = { 0 },
 
-    .ptr_1dac6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dac6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1880 = ALIGNED_STRING(""),
 
@@ -161282,7 +161282,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1db5b = NAKA_NONE,
 
-    .ptr_1db5d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1db5d = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1db61 = NAKA_NONE,
 
@@ -161294,9 +161294,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1db69 = NAKA_NONE,
 
-    .ptr_1db6b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1db6b = NAKA_ADDR(NakaData_RomEnd),
 
-    .ptr_1db6f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1db6f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1886 = ALIGNED_STRING(""),
 
@@ -161310,7 +161310,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2754 = { 0 },
 
-    .ptr_1db7f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1db7f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1888 = ALIGNED_STRING(""),
 
@@ -161412,7 +161412,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_1891 = ALIGNED_STRING(""),
 
-    .ptr_1dbe9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dbe9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1892 = ALIGNED_STRING(""),
 
@@ -161420,15 +161420,15 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2758 = { 0 },
 
-    .ptr_1dbf3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dbf3 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1893 = ALIGNED_STRING(""),
 
-    .ptr_1dbf9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dbf9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1894 = ALIGNED_STRING(""),
 
-    .ptr_1dbff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dbff = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1dc03 = NAKA_NONE,
 
@@ -161492,17 +161492,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2761 = { 0 },
 
-    .ptr_1dc47 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dc47 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1902 = ALIGNED_STRING(""),
 
-    .ptr_1dc4d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dc4d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1903 = ALIGNED_STRING(""),
 
     .field_1dc53 = NAKA_NONE,
 
-    .ptr_1dc55 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dc55 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1904 = ALIGNED_STRING(""),
 
@@ -161582,7 +161582,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2764 = { 0 },
 
-    .ptr_1dca7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dca7 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1908 = ALIGNED_STRING(""),
 
@@ -161656,7 +161656,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1dcf1 = NAKA_NONE,
 
-    .ptr_1dcf3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dcf3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1dcf7 = NAKA_NONE,
 
@@ -161670,17 +161670,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1dd01 = NAKA_NONE,
 
-    .ptr_1dd03 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd03 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1dd07 = NAKA_NONE,
 
     .pad_2767 = { 0 },
 
-    .ptr_1dd0b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd0b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1909 = ALIGNED_STRING(""),
 
-    .ptr_1dd11 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd11 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1910 = ALIGNED_STRING(""),
 
@@ -161688,15 +161688,15 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2768 = { 0 },
 
-    .ptr_1dd1b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd1b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1911 = ALIGNED_STRING(""),
 
-    .ptr_1dd21 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd21 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1912 = ALIGNED_STRING(""),
 
-    .ptr_1dd27 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd27 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1dd2b = NAKA_NONE,
 
@@ -161732,7 +161732,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1dd4b = NAKA_NONE,
 
-    .ptr_1dd4d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd4d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1917 = ALIGNED_STRING(""),
 
@@ -161758,17 +161758,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2770 = { 0 },
 
-    .ptr_1dd6f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd6f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1920 = ALIGNED_STRING(""),
 
-    .ptr_1dd75 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd75 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1921 = ALIGNED_STRING(""),
 
     .field_1dd7b = NAKA_NONE,
 
-    .ptr_1dd7d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dd7d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1922 = ALIGNED_STRING(""),
 
@@ -161848,7 +161848,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2773 = { 0 },
 
-    .ptr_1ddcf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ddcf = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1926 = ALIGNED_STRING(""),
 
@@ -161922,7 +161922,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1de19 = NAKA_NONE,
 
-    .ptr_1de1b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1de1b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1de1f = NAKA_NONE,
 
@@ -161936,17 +161936,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1de29 = NAKA_NONE,
 
-    .ptr_1de2b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1de2b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1de2f = NAKA_NONE,
 
     .pad_2776 = { 0 },
 
-    .ptr_1de33 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1de33 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1927 = ALIGNED_STRING(""),
 
-    .ptr_1de39 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1de39 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1928 = ALIGNED_STRING(""),
 
@@ -161976,7 +161976,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1de58 = NAKA_NONE,
 
-    .ptr_1de5a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1de5a = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1de5e = NAKA_NONE,
 
@@ -161990,7 +161990,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1de68 = NAKA_NONE,
 
-    .ptr_1de6a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1de6a = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1de6e = NAKA_NONE,
 
@@ -162004,7 +162004,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2781 = { 0 },
 
-    .ptr_1de7a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1de7a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1930 = ALIGNED_STRING(""),
 
@@ -162022,12 +162022,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2784 = { 0 },
 
-    .ptr_1de97 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1de97 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1932 = ALIGNED_STRING(""),
 
     .ptrs_306 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -162101,7 +162101,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2786 = { 0 },
 
-    .ptr_1def1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1def1 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2787 = { 0 },
 
@@ -162203,7 +162203,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2790 = { 0 },
 
-    .ptr_1df60 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1df60 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2791 = { 0 },
 
@@ -162217,7 +162217,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2793 = { 0 },
 
-    .ptr_1df77 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1df77 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1df7b = NAKA_NONE,
 
@@ -162253,7 +162253,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1df9b = NAKA_NONE,
 
-    .ptr_1df9d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1df9d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1943 = ALIGNED_STRING(""),
 
@@ -162279,12 +162279,12 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2795 = { 0 },
 
-    .ptr_1dfbf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1dfbf = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1947 = ALIGNED_STRING(""),
 
     .ptrs_308 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(InterruptVectorTable),
         0x00000000,
@@ -162358,7 +162358,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2796 = { 0 },
 
-    .ptr_1e019 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e019 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2797 = { 0 },
 
@@ -162368,7 +162368,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e027 = NAKA_NONE,
 
-    .ptr_1e029 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e029 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2799 = { 0 },
 
@@ -162460,7 +162460,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2800 = { 0 },
 
-    .ptr_1e088 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e088 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2801 = { 0 },
 
@@ -162470,11 +162470,11 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e096 = NAKA_NONE,
 
-    .ptr_1e098 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e098 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2803 = { 0 },
 
-    .ptr_1e09f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e09f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e0a3 = NAKA_NONE,
 
@@ -162510,7 +162510,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e0c3 = NAKA_NONE,
 
-    .ptr_1e0c5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e0c5 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1959 = ALIGNED_STRING(""),
 
@@ -162532,7 +162532,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e0db = NAKA_NONE,
 
-    .ptr_1e0dd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e0dd = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1962 = ALIGNED_STRING(""),
 
@@ -162540,17 +162540,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2806 = { 0 },
 
-    .ptr_1e0e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e0e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1963 = ALIGNED_STRING(""),
 
-    .ptr_1e0ed = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e0ed = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1964 = ALIGNED_STRING(""),
 
     .field_1e0f3 = NAKA_NONE,
 
-    .ptr_1e0f5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e0f5 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2807 = { 0 },
 
@@ -162704,7 +162704,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e191 = NAKA_NONE,
 
-    .ptr_1e193 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e193 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e197 = NAKA_NONE,
 
@@ -162718,7 +162718,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e1a1 = NAKA_NONE,
 
-    .ptr_1e1a3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e1a3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e1a7 = NAKA_NONE,
 
@@ -162752,7 +162752,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e1c5 = NAKA_NONE,
 
-    .ptr_1e1c7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e1c7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e1cb = NAKA_NONE,
 
@@ -162762,7 +162762,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e1d1 = NAKA_NONE,
 
-    .ptr_1e1d3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e1d3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e1d7 = NAKA_NONE,
 
@@ -162774,9 +162774,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e1df = NAKA_NONE,
 
-    .ptr_1e1e1 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e1e1 = NAKA_ADDR(NakaData_RomEnd),
 
-    .ptr_1e1e5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e1e5 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1968 = ALIGNED_STRING(""),
 
@@ -162806,7 +162806,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e203 = NAKA_NONE,
 
-    .ptr_1e205 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e205 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1972 = ALIGNED_STRING(""),
 
@@ -162814,17 +162814,17 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2811 = { 0 },
 
-    .ptr_1e20f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e20f = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1973 = ALIGNED_STRING(""),
 
-    .ptr_1e215 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e215 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1974 = ALIGNED_STRING(""),
 
     .field_1e21b = NAKA_NONE,
 
-    .ptr_1e21d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e21d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1975 = ALIGNED_STRING(""),
 
@@ -162980,7 +162980,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e2ba = NAKA_NONE,
 
-    .ptr_1e2bc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e2bc = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e2c0 = NAKA_NONE,
 
@@ -162992,7 +162992,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e2c8 = NAKA_NONE,
 
-    .ptr_1e2ca = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e2ca = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e2ce = NAKA_NONE,
 
@@ -163080,16 +163080,16 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e32b = NAKA_NONE,
 
-    .ptr_1e32d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e32d = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2816 = { 0 },
 
-    .ptr_1e337 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e337 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1983 = ALIGNED_STRING(""),
 
     .ptrs_309 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         NAKA_ADDR(InterruptVectorTable),
@@ -163135,7 +163135,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e373 = NAKA_NONE,
 
-    .ptr_1e375 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e375 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e379 = NAKA_NONE,
 
@@ -163147,7 +163147,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e381 = NAKA_NONE,
 
-    .ptr_1e383 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e383 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e387 = NAKA_NONE,
 
@@ -163159,7 +163159,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e38f = NAKA_NONE,
 
-    .ptr_1e391 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e391 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2818 = { 0 },
 
@@ -163167,7 +163167,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_1984 = ALIGNED_STRING(""),
 
-    .ptr_1e39c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e39c = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1985 = ALIGNED_STRING(""),
 
@@ -163237,7 +163237,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e3e2 = NAKA_NONE,
 
-    .ptr_1e3e4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e3e4 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e3e8 = NAKA_NONE,
 
@@ -163249,7 +163249,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e3f0 = NAKA_NONE,
 
-    .ptr_1e3f2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e3f2 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e3f6 = NAKA_NONE,
 
@@ -163257,7 +163257,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e3fa = NAKA_NONE,
 
-    .ptr_1e3fc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e3fc = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2819 = { 0 },
 
@@ -163265,7 +163265,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2820 = { 0 },
 
-    .ptr_1e408 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e408 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1986 = ALIGNED_STRING(""),
 
@@ -163287,7 +163287,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e422 = NAKA_NONE,
 
-    .ptr_1e424 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e424 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e428 = NAKA_NONE,
 
@@ -163297,14 +163297,14 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e42e = NAKA_NONE,
 
-    .ptr_1e430 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e430 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e434 = NAKA_NONE,
 
     .ptrs_310 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -163312,7 +163312,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2822 = { 0 },
 
-    .ptr_1e44a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e44a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1988 = ALIGNED_STRING(""),
 
@@ -163322,7 +163322,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e454 = NAKA_NONE,
 
-    .ptr_1e456 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e456 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2824 = { 0 },
 
@@ -163412,7 +163412,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e4b7 = NAKA_NONE,
 
-    .ptr_1e4b9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e4b9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2828 = { 0 },
 
@@ -163420,7 +163420,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2829 = { 0 },
 
-    .ptr_1e4c4 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e4c4 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_1992 = ALIGNED_STRING(""),
 
@@ -163696,7 +163696,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e5e0 = NAKA_NONE,
 
-    .ptr_1e5e2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e5e2 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2001 = ALIGNED_STRING(""),
 
@@ -163798,7 +163798,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e649 = NAKA_NONE,
 
-    .ptr_1e64b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e64b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2004 = ALIGNED_STRING(""),
 
@@ -163814,7 +163814,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2836 = { 0 },
 
-    .ptr_1e65d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e65d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2006 = ALIGNED_STRING(""),
 
@@ -163822,7 +163822,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e665 = NAKA_NONE,
 
-    .ptr_1e667 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e667 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e66b = NAKA_NONE,
 
@@ -163842,7 +163842,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e67b = NAKA_NONE,
 
-    .ptr_1e67d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e67d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2008 = ALIGNED_STRING(""),
 
@@ -163962,7 +163962,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e6f5 = NAKA_NONE,
 
-    .ptr_1e6f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e6f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2009 = ALIGNED_STRING(""),
 
@@ -163984,7 +163984,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2839 = { 0 },
 
-    .ptr_1e70f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e70f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2840 = { 0 },
 
@@ -164068,7 +164068,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e764 = NAKA_NONE,
 
-    .ptr_1e766 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e766 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2011 = ALIGNED_STRING(""),
 
@@ -164084,13 +164084,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2842 = { 0 },
 
-    .ptr_1e778 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e778 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2012 = ALIGNED_STRING(""),
 
     .pad_2843 = { 0 },
 
-    .ptr_1e780 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e780 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2013 = ALIGNED_STRING(""),
 
@@ -164120,7 +164120,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e79e = NAKA_NONE,
 
-    .ptr_1e7a0 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e7a0 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2845 = { 0 },
 
@@ -164238,7 +164238,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e818 = NAKA_NONE,
 
-    .ptr_1e81a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e81a = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2846 = { 0 },
 
@@ -164258,7 +164258,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e830 = NAKA_NONE,
 
-    .ptr_1e832 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e832 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2015 = ALIGNED_STRING(""),
 
@@ -164338,7 +164338,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e887 = NAKA_NONE,
 
-    .ptr_1e889 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e889 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2848 = { 0 },
 
@@ -164352,7 +164352,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e899 = NAKA_NONE,
 
-    .ptr_1e89b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e89b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2016 = ALIGNED_STRING(""),
 
@@ -164368,7 +164368,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2850 = { 0 },
 
-    .ptr_1e8ad = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e8ad = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2018 = ALIGNED_STRING(""),
 
@@ -164376,7 +164376,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e8b5 = NAKA_NONE,
 
-    .ptr_1e8b7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e8b7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e8bb = NAKA_NONE,
 
@@ -164542,7 +164542,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2851 = { 0 },
 
-    .ptr_1e95f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e95f = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2852 = { 0 },
 
@@ -164636,7 +164636,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e9c1 = NAKA_NONE,
 
-    .ptr_1e9c3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e9c3 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2020 = ALIGNED_STRING(""),
 
@@ -164652,7 +164652,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2854 = { 0 },
 
-    .ptr_1e9d5 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e9d5 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2022 = ALIGNED_STRING(""),
 
@@ -164660,7 +164660,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e9dd = NAKA_NONE,
 
-    .ptr_1e9df = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e9df = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e9e3 = NAKA_NONE,
 
@@ -164670,7 +164670,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e9e9 = NAKA_NONE,
 
-    .ptr_1e9eb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e9eb = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2024 = ALIGNED_STRING(""),
 
@@ -164682,7 +164682,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1e9f7 = NAKA_NONE,
 
-    .ptr_1e9f9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1e9f9 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2025 = ALIGNED_STRING(""),
 
@@ -164822,7 +164822,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2855 = { 0 },
 
-    .ptr_1ea87 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ea87 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2026 = ALIGNED_STRING(""),
 
@@ -164918,7 +164918,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1eae9 = NAKA_NONE,
 
-    .ptr_1eaeb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1eaeb = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2027 = ALIGNED_STRING(""),
 
@@ -164934,7 +164934,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2859 = { 0 },
 
-    .ptr_1eafd = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1eafd = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2029 = ALIGNED_STRING(""),
 
@@ -164942,7 +164942,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1eb05 = NAKA_NONE,
 
-    .ptr_1eb07 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1eb07 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1eb0b = NAKA_NONE,
 
@@ -164952,7 +164952,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1eb11 = NAKA_NONE,
 
-    .ptr_1eb13 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1eb13 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2031 = ALIGNED_STRING(""),
 
@@ -165076,7 +165076,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1eb91 = NAKA_NONE,
 
-    .ptr_1eb93 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1eb93 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2032 = ALIGNED_STRING(""),
 
@@ -165102,7 +165102,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2861 = { 0 },
 
-    .ptr_1ebaf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ebaf = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2033 = ALIGNED_STRING(""),
 
@@ -165182,7 +165182,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ebff = NAKA_NONE,
 
-    .ptr_1ec01 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ec01 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2863 = { 0 },
 
@@ -165202,13 +165202,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2864 = { 0 },
 
-    .ptr_1ec18 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ec18 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2034 = ALIGNED_STRING(""),
 
     .pad_2865 = { 0 },
 
-    .ptr_1ec20 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ec20 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2035 = ALIGNED_STRING(""),
 
@@ -165388,7 +165388,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2871 = { 0 },
 
-    .ptr_1ecdc = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ecdc = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2037 = ALIGNED_STRING(""),
 
@@ -165462,7 +165462,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ed26 = NAKA_NONE,
 
-    .ptr_1ed28 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ed28 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2872 = { 0 },
 
@@ -165477,7 +165477,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1ed39 = NAKA_NONE,
 
     .ptrs_311 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         NAKA_ADDR(SendPartDataBlock_Data2),
         0x00000000,
@@ -165485,7 +165485,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2873 = { 0 },
 
-    .ptr_1ed4d = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ed4d = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2038 = ALIGNED_STRING(""),
 
@@ -165493,7 +165493,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ed55 = NAKA_NONE,
 
-    .ptr_1ed57 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ed57 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ed5b = NAKA_NONE,
 
@@ -165503,7 +165503,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ed61 = NAKA_NONE,
 
-    .ptr_1ed63 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ed63 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2040 = ALIGNED_STRING(""),
 
@@ -165623,7 +165623,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ede1 = NAKA_NONE,
 
-    .ptr_1ede3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ede3 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2041 = ALIGNED_STRING(""),
 
@@ -165643,7 +165643,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1edf7 = NAKA_NONE,
 
-    .ptr_1edf9 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1edf9 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2875 = { 0 },
 
@@ -165742,9 +165742,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1ee62 = NAKA_NONE,
 
     .ptrs_312 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -165999,7 +165999,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1ef74 = NAKA_NONE,
 
     .ptrs_313 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -166292,7 +166292,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f0a0 = NAKA_NONE,
 
-    .ptr_1f0a2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f0a2 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2046 = ALIGNED_STRING(""),
 
@@ -166586,7 +166586,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f1c8 = NAKA_NONE,
 
-    .ptr_1f1ca = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f1ca = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2048 = ALIGNED_STRING(""),
 
@@ -166880,7 +166880,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f2f0 = NAKA_NONE,
 
-    .ptr_1f2f2 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f2f2 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2050 = ALIGNED_STRING(""),
 
@@ -167060,7 +167060,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f418 = NAKA_NONE,
 
-    .ptr_1f41a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f41a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2052 = ALIGNED_STRING(""),
 
@@ -167240,7 +167240,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f540 = NAKA_NONE,
 
-    .ptr_1f542 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f542 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2054 = ALIGNED_STRING(""),
 
@@ -167534,7 +167534,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f668 = NAKA_NONE,
 
-    .ptr_1f66a = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f66a = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2056 = ALIGNED_STRING(""),
 
@@ -167828,7 +167828,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f790 = NAKA_NONE,
 
-    .ptr_1f792 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f792 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2058 = ALIGNED_STRING(""),
 
@@ -167882,7 +167882,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f7c8 = NAKA_NONE,
 
-    .ptr_1f7ca = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f7ca = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2897 = { 0 },
 
@@ -168164,7 +168164,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1f8e5 = NAKA_NONE,
 
-    .ptr_1f8e7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1f8e7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1f8eb = NAKA_NONE,
 
@@ -168173,7 +168173,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1f8ef = NAKA_NONE,
 
     .ptrs_314 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -168278,7 +168278,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1fa0d = NAKA_NONE,
 
-    .ptr_1fa0f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fa0f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fa13 = NAKA_NONE,
 
@@ -168287,7 +168287,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_1fa17 = NAKA_NONE,
 
     .ptrs_315 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -168392,7 +168392,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1fb35 = NAKA_NONE,
 
-    .ptr_1fb37 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fb37 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fb3b = NAKA_NONE,
 
@@ -168684,7 +168684,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1fc5d = NAKA_NONE,
 
-    .ptr_1fc5f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fc5f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fc63 = NAKA_NONE,
 
@@ -168694,7 +168694,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1fc69 = NAKA_NONE,
 
-    .ptr_1fc6b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fc6b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2064 = ALIGNED_STRING(""),
 
@@ -168976,7 +168976,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1fd85 = NAKA_NONE,
 
-    .ptr_1fd87 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fd87 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1fd8b = NAKA_NONE,
 
@@ -168986,7 +168986,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1fd91 = NAKA_NONE,
 
-    .ptr_1fd93 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1fd93 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2066 = ALIGNED_STRING(""),
 
@@ -169268,14 +169268,14 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1fead = NAKA_NONE,
 
-    .ptr_1feaf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1feaf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1feb3 = NAKA_NONE,
 
     .str_2067 = ALIGNED_STRING(""),
 
     .ptrs_316 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -169556,7 +169556,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_1ffd5 = NAKA_NONE,
 
-    .ptr_1ffd7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_1ffd7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1ffdb = NAKA_NONE,
 
@@ -169844,7 +169844,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_200fd = NAKA_NONE,
 
-    .ptr_200ff = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_200ff = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20103 = NAKA_NONE,
 
@@ -169852,7 +169852,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20107 = NAKA_NONE,
 
-    .ptr_20109 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20109 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2903 = { 0 },
 
@@ -170144,7 +170144,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20230 = NAKA_NONE,
 
-    .ptr_20232 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20232 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_2904 = { 0 },
 
@@ -170426,7 +170426,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2034d = NAKA_NONE,
 
-    .ptr_2034f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2034f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20353 = NAKA_NONE,
 
@@ -170436,7 +170436,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20359 = NAKA_NONE,
 
-    .ptr_2035b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2035b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2073 = ALIGNED_STRING(""),
 
@@ -170718,7 +170718,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20475 = NAKA_NONE,
 
-    .ptr_20477 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20477 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2047b = NAKA_NONE,
 
@@ -171012,7 +171012,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2059d = NAKA_NONE,
 
-    .ptr_2059f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2059f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_205a3 = NAKA_NONE,
 
@@ -171310,7 +171310,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_207ed = NAKA_NONE,
 
-    .ptr_207ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_207ef = NAKA_ADDR(NakaData_RomEnd),
 
     .field_207f3 = NAKA_NONE,
 
@@ -171604,7 +171604,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20915 = NAKA_NONE,
 
-    .ptr_20917 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20917 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2091b = NAKA_NONE,
 
@@ -171726,13 +171726,13 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2906 = { 0 },
 
-    .ptr_20993 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20993 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2078 = ALIGNED_STRING(""),
 
     .str_2079 = ALIGNED_STRING(""),
 
-    .ptr_2099b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2099b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2080 = ALIGNED_STRING(""),
 
@@ -171743,9 +171743,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .pad_2908 = { 0 },
 
     .ptrs_317 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -171877,7 +171877,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20a3d = NAKA_NONE,
 
-    .ptr_20a3f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20a3f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20a43 = NAKA_NONE,
 
@@ -172268,7 +172268,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20bdc = NAKA_NONE,
 
-    .ptr_20bde = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20bde = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2084 = ALIGNED_STRING(""),
 
@@ -172288,7 +172288,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20bf4 = NAKA_NONE,
 
-    .ptr_20bf6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20bf6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2086 = ALIGNED_STRING(""),
 
@@ -172559,9 +172559,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_20d04 = NAKA_NONE,
 
     .ptrs_319 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
     },
 
     .pad_2918 = { 0 },
@@ -172580,19 +172580,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2920 = { 0 },
 
-    .ptr_20d23 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20d23 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2091 = ALIGNED_STRING(""),
 
     .pad_2921 = { 0 },
 
-    .ptr_20d2b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20d2b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2092 = ALIGNED_STRING(""),
 
     .pad_2922 = { 0 },
 
-    .ptr_20d33 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20d33 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2093 = ALIGNED_STRING(""),
 
@@ -172722,7 +172722,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20db5 = NAKA_NONE,
 
-    .ptr_20db7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20db7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20dbb = NAKA_NONE,
 
@@ -172858,19 +172858,19 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2926 = { 0 },
 
-    .ptr_20e4b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20e4b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2095 = ALIGNED_STRING(""),
 
     .pad_2927 = { 0 },
 
-    .ptr_20e53 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20e53 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2096 = ALIGNED_STRING(""),
 
     .pad_2928 = { 0 },
 
-    .ptr_20e5b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20e5b = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2097 = ALIGNED_STRING(""),
 
@@ -173000,7 +173000,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_20edd = NAKA_NONE,
 
-    .ptr_20edf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_20edf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_20ee3 = NAKA_NONE,
 
@@ -173403,9 +173403,9 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_2107c = NAKA_NONE,
 
     .ptrs_320 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
     },
 
     .str_2103 = ALIGNED_STRING(""),
@@ -173690,7 +173690,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_211a4 = NAKA_NONE,
 
-    .ptr_211a6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_211a6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2108 = ALIGNED_STRING(""),
 
@@ -173983,7 +173983,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_212cc = NAKA_NONE,
 
     .ptrs_321 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         NAKA_ADDR(InterruptVectorTable),
         NAKA_ADDR(SendPartDataBlock_Data2),
     },
@@ -174251,7 +174251,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_213f4 = NAKA_NONE,
 
-    .ptr_213f6 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_213f6 = NAKA_ADDR(NakaData_RomEnd),
 
     .str_2116 = ALIGNED_STRING(""),
 
@@ -174263,18 +174263,18 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .str_2117 = ALIGNED_STRING(""),
 
-    .ptr_21404 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_21404 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_21408 = NAKA_NONE,
 
     .pad_2949 = { 0 },
 
     .ptrs_323 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
     },
 
@@ -174406,7 +174406,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_214a5 = NAKA_NONE,
 
-    .ptr_214a7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_214a7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_214ab = NAKA_NONE,
 
@@ -174700,7 +174700,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_215cd = NAKA_NONE,
 
-    .ptr_215cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_215cf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_215d3 = NAKA_NONE,
 
@@ -174994,7 +174994,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_216f5 = NAKA_NONE,
 
-    .ptr_216f7 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_216f7 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_216fb = NAKA_NONE,
 
@@ -178495,7 +178495,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
     .field_2260e = NAKA_NONE,
 
     .ptrs_324 = {
-        NAKA_ADDR(LABEL_FFFFFF),
+        NAKA_ADDR(NakaData_RomEnd),
         0x00000000,
         0x00000000,
     },
@@ -178612,7 +178612,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .pad_2959 = { 0 },
 
-    .ptr_2269c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2269c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_226a0 = 0xF8F8,
 
@@ -178780,7 +178780,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_2274a = 0x0707,
 
-    .ptr_2274c = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2274c = NAKA_ADDR(NakaData_RomEnd),
 
     .field_22750 = 0x0600,
 
@@ -180536,7 +180536,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_22ef9 = 0x00FF,
 
-    .ptr_22efb = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_22efb = NAKA_ADDR(NakaData_RomEnd),
 
     .field_22eff = 0x00FF,
 
@@ -180626,7 +180626,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_22f5d = 0x00FF,
 
-    .ptr_22f5f = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_22f5f = NAKA_ADDR(NakaData_RomEnd),
 
     .field_22f63 = 0x00FF,
 
@@ -180716,7 +180716,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_22fc1 = 0x00FF,
 
-    .ptr_22fc3 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_22fc3 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_22fc7 = 0x00FF,
 
@@ -180804,7 +180804,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_23025 = 0x00FF,
 
-    .ptr_23027 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_23027 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2302b = 0x00FF,
 
@@ -180894,7 +180894,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_23089 = 0x00FF,
 
-    .ptr_2308b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2308b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2308f = 0x00FF,
 
@@ -180982,7 +180982,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_230ed = 0x00FF,
 
-    .ptr_230ef = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_230ef = NAKA_ADDR(NakaData_RomEnd),
 
     .field_230f3 = 0x00FF,
 
@@ -181100,7 +181100,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_23169 = NAKA_NONE,
 
-    .ptr_2316b = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_2316b = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2316f = 0x0707,
 
@@ -181198,7 +181198,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_231cd = NAKA_NONE,
 
-    .ptr_231cf = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_231cf = NAKA_ADDR(NakaData_RomEnd),
 
     .field_231d3 = 0x0707,
 
@@ -181296,7 +181296,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_23231 = NAKA_NONE,
 
-    .ptr_23233 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_23233 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_23237 = 0x0707,
 
@@ -181394,7 +181394,7 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
 
     .field_23295 = NAKA_NONE,
 
-    .ptr_23297 = NAKA_ADDR(LABEL_FFFFFF),
+    .ptr_23297 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_2329b = 0x0707,
 

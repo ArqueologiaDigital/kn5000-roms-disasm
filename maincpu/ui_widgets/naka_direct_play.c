@@ -12,10 +12,10 @@
 
 extern const char CRTC_LINE_COMPARE;
 extern const char INTETC45;
-extern const char LABEL_E000C3;
-extern const char LABEL_E00113;
-extern const char LABEL_E2405E;
-extern const char LABEL_E900D8;
+extern const char NakaStr_DataFile1of2;
+extern const char NakaStr_DataFilePck;
+extern const char NakaStr_Rhythm;
+extern const char NakaData_TechnichordBitmap1;
 extern const char NakaInst_176;
 extern const char NakaInst_176_EC00C0;
 extern const char NakaInst_NEXT;
@@ -7866,7 +7866,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_180a = 0x00C4,
 
-    .ptr_180c = NAKA_ADDR(LABEL_E000C3),
+    .ptr_180c = NAKA_ADDR(NakaStr_DataFile1of2),
 
     .field_1810 = 0x000C,
 
@@ -7932,7 +7932,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1852 = 0x00C4,
 
-    .ptr_1854 = NAKA_ADDR(LABEL_E00113),
+    .ptr_1854 = NAKA_ADDR(NakaStr_DataFilePck),
 
     .field_1858 = 0x000E,
 
@@ -10017,7 +10017,7 @@ const naka_direct_play_t naka_direct_play_data
         .field_06   = NAKA_NONE,
         .name_ptr   = 0x0002FFFF,
         .inst_ptr   = 0x00520008,
-        .link_ptr   = NAKA_ADDR(LABEL_E900D8),
+        .link_ptr   = NAKA_ADDR(NakaData_TechnichordBitmap1),
         .proc_addr  = 0x000700EE,
     },
 
@@ -11863,7 +11863,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .ptr_2fd2 = 0x00E24066,
 
-    .ptr_2fd6 = NAKA_ADDR(LABEL_E2405E),
+    .ptr_2fd6 = NAKA_ADDR(NakaStr_Rhythm),
 
 };
 
