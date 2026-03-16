@@ -257,9 +257,7 @@ def generate_conversion(c_path, dry_run=False, overrides=None):
         is_ptr, resolved, total = is_pointer_table(region_data, syms, threshold=0.3)
         if is_ptr and len(region_data) >= 16:
             ptr_table_regions.add(name)
-            # Collect extern symbols
-            for i in range(0, len(region_data) - 3, 4):
-                val = struct.unpack_from('<I', region_data, i * 4 // 4 * 4)[0]  # 4-byte aligned
+            # Collect extern symbols from this pointer table
             for i in range(total):
                 val = struct.unpack_from('<I', region_data, i * 4)[0]
                 if val in syms and val != 0 and val != 0xFFFFFFFF:
