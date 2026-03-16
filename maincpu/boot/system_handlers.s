@@ -9,9 +9,9 @@
 
 
 ; Alias labels for backward compatibility with existing code
-.equ LABEL_EF086F, Boot_CallInitHandlers
-.equ LABEL_EF07A2, Boot_HandleComboDisplay
-.equ LABEL_EF07F3, Boot_HandleFactoryReset
+.equ SeqData_EF086F, Boot_CallInitHandlers
+.equ SeqData_EF07A2, Boot_HandleComboDisplay
+.equ SeqData_EF07F3, Boot_HandleFactoryReset
 
 INTT2_HANDLER:
 	reti
@@ -1115,7 +1115,7 @@ Seq_InitFuncTable:
 ; =============================================================================
 MainLoop:
 	ei 0
-	call LABEL_EF086F
+	call SeqData_EF086F
 	call MidiChannel_ProcessOutputState
 	call AccWrap_FlagSync
 	tset_dd16 2, 0x13, 0x04
@@ -7602,7 +7602,7 @@ HDAE5000_TableData_WordLoop:
 
 HDAE5000_Init_BytecodeBlock:
 	.byte 0xd7, 0xfa, 0x04, 0xc7, 0xfb, 0xa8, 0x08, 0xe4
-	.long LABEL_E00800
+	.long Data_E00800
 	.byte 0x08, 0xed, 0x00, 0x08
 	.byte 0xe3, 0x00, 0x08, 0xeb, 0x00, 0xf1, 0x54, 0x01
 	.byte 0x00, 0x66, 0xf2, 0x06, 0x00, 0x16, 0x00, 0x82

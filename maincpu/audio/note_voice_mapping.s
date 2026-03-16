@@ -11665,7 +11665,7 @@ ReallocEnabledVoices_LoadAddr2:
 	add wa, 0xC4
 	ldada xbc, 49662
 
-ReallocEnabledVoices_WriteReg2:	; NOTE: nothing seems to call here, but I saw this value on VGA undocumented registers at routine EF5163. It may be just a coincidence, though.  (was LABEL_FE730F - off by 1 byte)
+ReallocEnabledVoices_WriteReg2:	; NOTE: nothing seems to call here, but I saw this value on VGA undocumented registers at routine EF5163. It may be just a coincidence, though.  (was ReallocEnabledVoices_LoadAddr2_0x1D - off by 1 byte)
 	st_dri3b B, 0x07, 0xE4, 0xE0
 	ld xwa, xix
 	ld xbc, xhl

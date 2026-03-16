@@ -1220,7 +1220,7 @@ SSF_GateStates_ModeFF:
 ; pointer to a 16-bit value array (terminated by 0xFFFF) that lists the panel
 ; states in which the Feature Demo button should trigger event 0x1C00038.
 ;
-; Index: DRAM byte at 0x8D38, loaded by LABEL_F0618F. Represents the current
+; Index: DRAM byte at 0x8D38, loaded by AudioData_F0618F. Represents the current
 ; UI mode (e.g., 0x00 = boot/init, 0x01 = normal operation, 0xE0 = demo menu,
 ; 0xE4 = Feature Presentation sub-menu).
 ;

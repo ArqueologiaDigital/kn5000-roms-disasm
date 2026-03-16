@@ -158,7 +158,7 @@ GraphicsRender_ByteData:
 	sub	wa, 192
 	extz	xwa
 	.byte 0x41
-	.long LABEL_EAAEF4
+	.long PadFF_EAAEF4
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa

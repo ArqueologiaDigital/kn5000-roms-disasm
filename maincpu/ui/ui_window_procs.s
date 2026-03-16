@@ -1054,7 +1054,7 @@ StringBox_Epilogue:
 	lda xsp, (xsp + 20)
 	ret
 
-LabelProc:	; LABEL_F9C4B6
+LabelProc:	; SysData_F9C4B6
 	lda xsp, (xsp - 12)
 	push xiz
 	ld xiz, xwa
@@ -3853,7 +3853,7 @@ DrawDesignBox_ByteData:
 	lda	xsp, (xsp+52)
 	ret
 
-DrawDesignBox:	; LABEL_FAD559
+DrawDesignBox:	; SysData_FAD559
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), de

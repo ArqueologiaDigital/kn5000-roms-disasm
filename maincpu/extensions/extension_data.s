@@ -644,7 +644,7 @@ VariationStr_V1:
 	.byte 0x62, 0x00, 0x3c, 0x01, 0x81, 0x00, 0x02, 0x00
 	.long NakaInst_Param_EmptyStr
 	.byte 0x99, 0x00, 0x02, 0x00
-	.long LABEL_E6009A
+	.long ZeroData_E6009A
 	.byte 0xad, 0x00, 0x02, 0x00, 0xae, 0x00, 0x06, 0x01
 	.byte 0xc1, 0x00, 0x02, 0x00, 0xc2, 0x00, 0x16, 0x01
 	.byte 0xd5, 0x00
@@ -1858,7 +1858,7 @@ ErrorDialog_RecoveryLine2:
 	.byte 0x0a, 0x00	; Reserved/flags
 	.byte 0x08, 0x00	; Font ID
 	.byte 0x2e, 0x00	; X position: 46
-	.long LABEL_E500BE
+	.long Data_E500BE
 	.byte 0xc8, 0x00	; Width: 200
 	.byte 0x70, 0x67, 0xed, 0x00	; Multilingual string ptr
 	.byte 0x03, 0x00, 0x00, 0x00	; String flags
@@ -2578,33 +2578,33 @@ SoundProgram_DispatchTable:
 	.byte 0x04, 0x05, 0x06, 0x03, 0x0f, 0x15, 0x15, 0x19
 	.byte 0x14, 0x0c, 0x0d, 0x0e, 0xec, 0xa6, 0xed, 0x00
 Naka_ToshiParam_Table:
-	.long LABEL_EDA704
-	.long LABEL_EDA71C
-	.long LABEL_EDA734
-	.long LABEL_EDA74C
-	.long LABEL_EDA764
-	.long LABEL_EDA77C
-	.long LABEL_EDA794
-	.long LABEL_EDA7AC
-	.long LABEL_EDA7C4
-	.long LABEL_EDA7DC
-	.long LABEL_EDA7F4
-	.long LABEL_EDA80C
-	.long LABEL_EDA824
-	.long LABEL_EDA83C
-	.long LABEL_EDA854
-	.long LABEL_EDA86C
-	.long LABEL_EDA884
-	.long LABEL_EDA89C
-	.long LABEL_EDA8B4
-	.long LABEL_EDA8E4
-	.long LABEL_EDA914
-	.long LABEL_EDA944
-	.long LABEL_EDA974
-	.long LABEL_EDA9A4
-	.long LABEL_EDA9D4
-	.long LABEL_EDAA04
-	.long LABEL_EDAA34
+	.long SoundData_EDA704
+	.long SoundData_EDA71C
+	.long SoundData_EDA734
+	.long SoundData_EDA74C
+	.long SoundData_EDA764
+	.long SoundData_EDA77C
+	.long SoundData_EDA794
+	.long SoundData_EDA7AC
+	.long SoundData_EDA7C4
+	.long SoundData_EDA7DC
+	.long SoundData_EDA7F4
+	.long SoundData_EDA80C
+	.long SoundData_EDA824
+	.long SoundData_EDA83C
+	.long SoundData_EDA854
+	.long SoundData_EDA86C
+	.long SoundData_EDA884
+	.long SoundData_EDA89C
+	.long SoundData_EDA8B4
+	.long SoundData_EDA8E4
+	.long SoundData_EDA914
+	.long SoundData_EDA944
+	.long SoundData_EDA974
+	.long SoundData_EDA9A4
+	.long SoundData_EDA9D4
+	.long SoundData_EDAA04
+	.long SoundData_EDAA34
 	.byte 0x5a, 0x5a, 0x00, 0x00
 	.byte 0x48, 0x4b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 16

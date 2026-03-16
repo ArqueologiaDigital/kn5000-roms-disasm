@@ -577,7 +577,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.byte 0x26, 0x00
 	.byte 0x02, 0x00
 	.long StrName_PsCstmCpNameBox
-	.long LABEL_E1711E
+	.long NakaInst_AcApcToggle_0x0C
 	.long StrDesc_CstmCpNameBox
 	.long AcApcToggleProc
 	naka_header NAKA_TYPE_0x26
@@ -606,7 +606,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.byte 0x00, 0x00
 	.long StrName_PsSCTxtBox
 	.long StrEmpty_PsSCTxtBox
-	.long LABEL_E16BAC
+	.long StrFld_ParaList_Font_0x06
 	.long PsSCTxtBox2Proc
 	naka_header NAKA_TYPE_0x65
 	.byte 0x26, 0x00
@@ -1594,7 +1594,7 @@ NakaWidgetList_AcModeBoxes:
 	.byte 0x26, 0x00, 0x0a, 0x00
 	.long NakaBoxName_ComporserNameBox
 	.long NakaBoxData_ComporserNameBox
-	.long LABEL_E208A4
+	.long PtrTable_E208A4
 	.long LyricsBoxFuncProc
 	naka_header NAKA_TYPE_0x27
 	.byte 0x16, 0x00, 0x00, 0x00
@@ -5333,8 +5333,8 @@ FIRMWARE_VERSION:
 	.fill 23, 1, 0xff
 
 ; Labels emitted as .set (exact addresses from ORG/name)
-	.set LABEL_E00023, 0xE00023
-	.set LABEL_E00028, 0xE00028
+	.set SeqRingBuf_WriteDispatch_Table_0x11, 0xE00023
+	.set SeqRingBuf_WriteDispatch_Table_0x16, 0xE00028
 	.set LongStr_ics_KN5000_Program, 0xE00065
 	.set Str_gramDATAFILE22, 0xE00073
 	.set Str_AFILE22, 0xE0007C
@@ -5343,16 +5343,16 @@ FIRMWARE_VERSION:
 	.set NakaStr_DataFilePck, 0xE00113
 	.set NakaData_FileScreenConfig, 0xE0019E
 	.set NakaData_FileScreenDispatch, 0xE00302
-	.set LABEL_E00800, 0xE00800
-	.set LABEL_E00B04, 0xE00B04
-	.set LABEL_E00B28, 0xE00B28
-	.set LABEL_E14C32, 0xE14C32
+	.set Data_E00800, 0xE00800
+	.set Data_E00B04, 0xE00B04
+	.set ZeroData_E00B28, 0xE00B28
+	.set UIData_E14C32, 0xE14C32
 	.set LongStr_Explore_1000_Musical, 0xE14C86
-	.set LABEL_E16BAC, 0xE16BAC
+	.set StrFld_ParaList_Font_0x06, 0xE16BAC
 	.set Str_S2cGridBox, 0xE1708A
 	.set AlignedStr_CmpNameMenuBox, 0xE17096
 	.set NakaInst_AcApcToggle, 0xE17112
-	.set LABEL_E1711E, 0xE1711E
+	.set NakaInst_AcApcToggle_0x0C, 0xE1711E
 	.set Str_TEMPO, 0xE18D4C
 	.set Str_FROM, 0xE1A224
 	.set NumStr_11, 0xE1CDE2
@@ -5370,8 +5370,8 @@ FIRMWARE_VERSION:
 	.set StrNotePos_FlatAlt, 0xE1DD4C
 	.set StrNotePos_FlatAltB8, 0xE1DD52
 	.set StrNotePos_AcNatural, 0xE1DD5A
-	.set LABEL_E1FFB6, 0xE1FFB6
-	.set LABEL_E208A4, 0xE208A4
+	.set PtrTable_E1FFB6, 0xE1FFB6
+	.set PtrTable_E208A4, 0xE208A4
 	.set NakaStr_LyricsBox, 0xE20B7C
 	.set AlignedStr_AcMuteToggleBox, 0xE20B86
 	.set Str_ORCH, 0xE21AD2
@@ -5397,66 +5397,66 @@ FIRMWARE_VERSION:
 	.set NakaInst_SqedtVal_B, 0xE27574
 	.set NakaInst_EqualizerBox, 0xE27586
 	.set Data_NakaPresetConfig, 0xE278A9
-	.set LABEL_E2DF22, 0xE2DF22
+	.set Data_E2DF22, 0xE2DF22
 	.set Str_ENGLISH, 0xE2DF54
-	.set LABEL_E2DF64, 0xE2DF64
-	.set LABEL_E2DFA6, 0xE2DFA6
-	.set LABEL_E30001, 0xE30001
-	.set LABEL_E30002, 0xE30002
-	.set LABEL_E30003, 0xE30003
-	.set LABEL_E30005, 0xE30005
+	.set Str_ENGLISH_0x10, 0xE2DF64
+	.set Str_ENGLISH_0x52, 0xE2DFA6
+	.set Data_E30001, 0xE30001
+	.set Data_E30002, 0xE30002
+	.set Data_E30003, 0xE30003
+	.set Data_E30005, 0xE30005
 	.set NakaData_EffectsStringPtrs, 0xE30006
-	.set LABEL_E30B2A, 0xE30B2A
-	.set LABEL_E30B51, 0xE30B51
+	.set Str_20469e32473220, 0xE30B2A
+	.set Str_42a03242322043, 0xE30B51
 	.set TableData_NullDialogText, 0xE33824
 	.set Str_ATTENTION, 0xE3382C
 	.set Str_Apakahyakinakandihapus, 0xE338A6
 	.set WarnStr_Featuresforcreatingas, 0xE338C2
 	.set LongStr_Funktionen_zur_Erstellung, 0xE338E2
-	.set LABEL_E33EE4, 0xE33EE4
+	.set Data_E33EE4, 0xE33EE4
 	.set LongStr_Gunakan_SONG_CLEAR, 0xE33F22
-	.set LABEL_E3405E, 0xE3405E
+	.set Data_E3405E, 0xE3405E
 	.set LongStr_Gunakan_TRACK_CLEAR, 0xE340A6
 	.set WarnStr_PresstheSTARTSTOPbutt, 0xE34104
-	.set LABEL_E3412A, 0xE3412A
+	.set WarnStr_PresstheSTARTSTOPbutt_0x26, 0xE3412A
 	.set FmtStr_pct3d, 0xE34614
 	.set LongStr_1_2_3, 0xE34944
 	.set FmtStr_pct3d_4B5E, 0xE34B5E
 	.set FmtStr_pluspct3d, 0xE34BB6
 	.set FmtStr_minuspct3d, 0xE34BBE
-	.set LABEL_E3DEF1, 0xE3DEF1
-	.set LABEL_E3E0F1, 0xE3E0F1
-	.set LABEL_E3E2F2, 0xE3E2F2
+	.set PadFF_E3DEF1, 0xE3DEF1
+	.set PadFF_E3E0F1, 0xE3E0F1
+	.set PadFF_E3E2F2, 0xE3E2F2
 	.set NakaData_ExternalBase, 0xE40000
-	.set LABEL_E40002, 0xE40002
-	.set LABEL_E40005, 0xE40005
-	.set LABEL_E40031, 0xE40031
-	.set LABEL_E40046, 0xE40046
-	.set LABEL_E40059, 0xE40059
-	.set LABEL_E40066, 0xE40066
-	.set LABEL_E4006E, 0xE4006E
-	.set LABEL_E40081, 0xE40081
-	.set LABEL_E40096, 0xE40096
-	.set LABEL_E400A9, 0xE400A9
-	.set LABEL_E400BE, 0xE400BE
+	.set PadFF_E40002, 0xE40002
+	.set PadFF_E40005, 0xE40005
+	.set PadFF_E40031, 0xE40031
+	.set PadFF_E40046, 0xE40046
+	.set PadFF_E40059, 0xE40059
+	.set NakaData_ExternalBase_0x66, 0xE40066
+	.set PadFF_E4006E, 0xE4006E
+	.set PadFF_E40081, 0xE40081
+	.set Data_E40096, 0xE40096
+	.set Data_E400A9, 0xE400A9
+	.set PadFF_E400BE, 0xE400BE
 	.set NakaData_UserMemoryConfig, 0xE400D0
-	.set LABEL_E40101, 0xE40101
-	.set LABEL_E40116, 0xE40116
-	.set LABEL_E40A09, 0xE40A09
+	.set PadFF_E40101, 0xE40101
+	.set PadFF_E40116, 0xE40116
+	.set Data_E40A09, 0xE40A09
 	.set NakaData_StyleBitmapPad, 0xE41807
-	.set LABEL_E46312, 0xE46312
-	.set LABEL_E5002D, 0xE5002D
-	.set LABEL_E5006E, 0xE5006E
-	.set LABEL_E500BE, 0xE500BE
-	.set LABEL_E500CE, 0xE500CE
-	.set LABEL_E500FE, 0xE500FE
+	.set Data_E46312, 0xE46312
+	.set Data_E5002D, 0xE5002D
+	.set Data_E5006E, 0xE5006E
+	.set Data_E500BE, 0xE500BE
+	.set Data_E500CE, 0xE500CE
+	.set Data_E500FE, 0xE500FE
 	.set NakaData_TechnichordParams, 0xE50117
 	.set NakaHandler_CtrlMessages, 0xE56ACC
 	.set NakaHandler_RealtimeMessages, 0xE56B14
 	.set NakaHandler_CommonSetting, 0xE56B5C
 	.set NakaHandler_ProgChangeMidiOut, 0xE56CBC
 	.set NakaInst_InOutSettingGrid, 0xE57504
-	.set LABEL_E578AA, 0xE578AA
+	.set Data_E578AA, 0xE578AA
 	.set NakaInst_KN5000_MidiPresets, 0xE57982
 	.set NakaInst_UserSettingSelector, 0xE57C8E
 	.set NakaHandler_SplitPointDialog, 0xE57E6E
@@ -5475,62 +5475,62 @@ FIRMWARE_VERSION:
 	.set NakaInst_P_MEM_ON_OFF_PART, 0xE5904A
 	.set NakaInst_PresetSettingsLabel, 0xE59532
 	.set NakaInst_ItemLabel_RevEqPreset, 0xE5985A
-	.set LABEL_E60000, 0xE60000
+	.set Data_E60000, 0xE60000
 	.set NakaData_DescriptorPad1, 0xE60008
-	.set LABEL_E6009A, 0xE6009A
-	.set LABEL_E600AA, 0xE600AA
-	.set LABEL_E600DA, 0xE600DA
+	.set ZeroData_E6009A, 0xE6009A
+	.set ZeroData_E600AA, 0xE600AA
+	.set ZeroData_E600DA, 0xE600DA
 	.set NakaData_DescriptorZero, 0xE600DF
-	.set LABEL_E600E4, 0xE600E4
-	.set LABEL_E600EC, 0xE600EC
-	.set LABEL_E678FF, 0xE678FF
+	.set ZeroData_E600E4, 0xE600E4
+	.set ZeroData_E600EC, 0xE600EC
+	.set PadFF_E678FF, 0xE678FF
 	.set NakaData_Tables2Pad1, 0xE70015
 	.set NakaData_Tables2Pad2, 0xE7001E
-	.set LABEL_E70022, 0xE70022
+	.set PadFF_E70022, 0xE70022
 	.set NakaData_Tables2Pad3, 0xE700DE
-	.set LABEL_E70B28, 0xE70B28
+	.set Data_E70B28, 0xE70B28
 	.set DisplayMode_FormatStr1, 0xE7F91C
 	.set DisplayMode_FormatStr2, 0xE7F922
 	.set Data_AcGridParamTable, 0xE7F9AC
-	.set LABEL_E8005F, 0xE8005F
-	.set LABEL_E800CA, 0xE800CA
-	.set LABEL_E800CE, 0xE800CE
-	.set LABEL_E800DE, 0xE800DE
-	.set LABEL_E800FA, 0xE800FA
+	.set Str_AL, 0xE8005F
+	.set NakaInst_GM_0x5A, 0xE800CA
+	.set NakaInst_GM_0x5E, 0xE800CE
+	.set NakaInst_GM_0x6E, 0xE800DE
+	.set NakaInst_LEFT_0x04, 0xE800FA
 	.set AlignedStr_ON, 0xE8013C
-	.set LABEL_E801D4, 0xE801D4
+	.set NakaInst_ON_E80168_0x6C, 0xE801D4
 	.set Transpose_String_Minus3, 0xE8068C
 	.set Transpose_String_Error, 0xE80692
 	.set Transpose_String_Plus1, 0xE806A4
 	.set Transpose_String_Zero, 0xE806AA
-	.set LABEL_E80B12, 0xE80B12
-	.set LABEL_E878F9, 0xE878F9
-	.set LABEL_E8CFEB, 0xE8CFEB
-	.set LABEL_E90077, 0xE90077
+	.set Str_ol, 0xE80B12
+	.set Data_E878F9, 0xE878F9
+	.set Data_E8CFEB, 0xE8CFEB
+	.set Data_E90077, 0xE90077
 	.set NakaData_TechnichordBitmap1, 0xE900D8
-	.set LABEL_E900E1, 0xE900E1
-	.set LABEL_E900EC, 0xE900EC
+	.set NakaData_TechnichordBitmap1_0x09, 0xE900E1
+	.set NakaData_TechnichordBitmap1_0x14, 0xE900EC
 	.set NakaInst_SequencerComboBox, 0xE90130
-	.set LABEL_E90133, 0xE90133
+	.set NakaInst_SequencerComboBox_0x03, 0xE90133
 	.set NakaData_TechnichordBitmap2, 0xE9013D
-	.set LABEL_E90B3B, 0xE90B3B
-	.set LABEL_E96344, 0xE96344
-	.set LABEL_E97114, 0xE97114
-	.set LABEL_E971DE, 0xE971DE
-	.set LABEL_E97BDE, 0xE97BDE
-	.set LABEL_E97DC2, 0xE97DC2
-	.set LABEL_E98676, 0xE98676
-	.set LABEL_E9871A, 0xE9871A
-	.set LABEL_E98AEE, 0xE98AEE
-	.set LABEL_E99A0E, 0xE99A0E
-	.set LABEL_E99CD4, 0xE99CD4
-	.set LABEL_E99EDC, 0xE99EDC
-	.set LABEL_E9A2C4, 0xE9A2C4
-	.set LABEL_E9B92A, 0xE9B92A
-	.set LABEL_E9BF3A, 0xE9BF3A
-	.set LABEL_E9C524, 0xE9C524
+	.set Data_E90B3B, 0xE90B3B
+	.set PtrTable_E96344, 0xE96344
+	.set Str_DiskErr12_French_0x5A, 0xE97114
+	.set PtrTable_E971DE, 0xE971DE
+	.set PtrTable_E97BDE, 0xE97BDE
+	.set PtrTable_E97DC2, 0xE97DC2
+	.set Str_Err24APC_French_0x62, 0xE98676
+	.set PtrTable_E9871A, 0xE9871A
+	.set PtrTable_E98AEE, 0xE98AEE
+	.set PtrTable_E99A0E, 0xE99A0E
+	.set PtrTable_E99CD4, 0xE99CD4
+	.set Str_BeimEmpfangderSys, 0xE99EDC
+	.set PtrTable_E9A2C4, 0xE9A2C4
+	.set PtrTable_E9B92A, 0xE9B92A
+	.set PtrTable_E9BF3A, 0xE9BF3A
+	.set PtrTable_E9C524, 0xE9C524
 	.set LongStr_RKB_und_LKB, 0xE9C6FC
-	.set LABEL_E9CF14, 0xE9CF14
+	.set PtrTable_E9CF14, 0xE9CF14
 	.set Str_DISKNAME, 0xEA1D7A
 	.set Str_LOAD, 0xEA2442
 	.set Str_COMP, 0xEA263A
@@ -5562,7 +5562,7 @@ FIRMWARE_VERSION:
 	.set Str_DISKINSERTOPTION, 0xEA66B6
 	.set Str_FILETYPEPRIORITY, 0xEA6706
 	.set DiskWarning_GermanConfirm, 0xEA8CBC
-	.set LABEL_EAAEF4, 0xEAAEF4
+	.set PadFF_EAAEF4, 0xEAAEF4
 	.set FmtStr_pct2d, 0xEAB18C
 	.set WidgetPropStr_Max, 0xEAC1BA
 	.set WidgetPropStr_RangeFigures, 0xEAC1BE
@@ -5776,22 +5776,22 @@ FIRMWARE_VERSION:
 	.set StyleBmp_JustTheFlute, 0xEBFF9E
 	.set NakaStr_SoundPreset176, 0xEC00C7
 	.set SoundName_160, 0xEC00EC
-	.set LABEL_EC0113, 0xEC0113
+	.set SoundName_160_0x27, 0xEC0113
 	.set SoundName_ToTheBone, 0xEC013B
 	.set NakaStr_SoundPresetBone, 0xEC013F
-	.set LABEL_EC0A1B, 0xEC0A1B
+	.set NakaInst_Hard_Analogue_148_0x65, 0xEC0A1B
 	.set SoundName_MournfulTenor, 0xEC88EC
-	.set LABEL_EC8974, 0xEC8974
+	.set SoundData_EC8974, 0xEC8974
 	.set SoundName_HymnBand, 0xEC89B4
-	.set LABEL_EC8A1A, 0xEC8A1A
+	.set SoundName_HymnBand_0x66, 0xEC8A1A
 	.set SoundName_PreachTheWord, 0xEC8A7C
 	.set SoundName_LushTango, 0xECB09C
-	.set LABEL_ECB102, 0xECB102
+	.set SoundName_LushTango_0x66, 0xECB102
 	.set SoundName_AstorsTango, 0xECB164
 	.set SoundName_SymphonicWaltz, 0xECB26C
-	.set LABEL_ECB2F4, 0xECB2F4
+	.set SoundData_ECB2F4, 0xECB2F4
 	.set SoundName_NotStrauss, 0xECB334
-	.set LABEL_ECB39A, 0xECB39A
+	.set SoundName_NotStrauss_0x66, 0xECB39A
 	.set SoundName_BavarianFlutes, 0xECB3FC
 	.set SoundName_BeachPartySong, 0xECDBEC
 	.set SoundName_CubanReeds, 0xECDCB4
@@ -5829,12 +5829,12 @@ FIRMWARE_VERSION:
 	.set NakaDesc_IvPmemWindowPageCtl, 0xED2C22
 	.set NakaInst_IvPmemWindowPageCtl, 0xED2C24
 	.set NakaInst_MsaModeScreen, 0xED2C62
-	.set LABEL_ED46D2, 0xED46D2
+	.set Str_7f, 0xED46D2
 	.set Str_RHYTHM, 0xED4722
 	.set SoundName_SOUNDRHYTHM, 0xED474A
 	.set Str_PANEL_MEMORY, 0xED477A
 	.set Str_PANEL_MEMORY_4922, 0xED4922
-	.set LABEL_ED4A82, 0xED4A82
+	.set Str_7f_4A82, 0xED4A82
 	.set Str_DISPLAY_TYPE, 0xED4DE2
 	.set Str_USER_INITIAL, 0xED5122
 	.set Str_VALUE, 0xED517A
@@ -5864,106 +5864,106 @@ FIRMWARE_VERSION:
 	.set ENCODER_LUT_BREATH_OFFSET, 0xEDA3EA
 	.set ENCODER_LUT_FOOT, 0xEDA402
 	.set ENCODER_LUT_EXPRESSION, 0xEDA482
-	.set LABEL_EDA704, 0xEDA704
-	.set LABEL_EDA71C, 0xEDA71C
-	.set LABEL_EDA734, 0xEDA734
-	.set LABEL_EDA74C, 0xEDA74C
-	.set LABEL_EDA764, 0xEDA764
-	.set LABEL_EDA77C, 0xEDA77C
-	.set LABEL_EDA794, 0xEDA794
-	.set LABEL_EDA7AC, 0xEDA7AC
-	.set LABEL_EDA7C4, 0xEDA7C4
-	.set LABEL_EDA7DC, 0xEDA7DC
-	.set LABEL_EDA7F4, 0xEDA7F4
-	.set LABEL_EDA80C, 0xEDA80C
-	.set LABEL_EDA824, 0xEDA824
-	.set LABEL_EDA83C, 0xEDA83C
-	.set LABEL_EDA854, 0xEDA854
-	.set LABEL_EDA86C, 0xEDA86C
-	.set LABEL_EDA884, 0xEDA884
-	.set LABEL_EDA89C, 0xEDA89C
-	.set LABEL_EDA8B4, 0xEDA8B4
-	.set LABEL_EDA8E4, 0xEDA8E4
-	.set LABEL_EDA914, 0xEDA914
-	.set LABEL_EDA944, 0xEDA944
-	.set LABEL_EDA974, 0xEDA974
-	.set LABEL_EDA9A4, 0xEDA9A4
-	.set LABEL_EDA9D4, 0xEDA9D4
-	.set LABEL_EDAA04, 0xEDAA04
-	.set LABEL_EDAA34, 0xEDAA34
-	.set LABEL_EDB2E4, 0xEDB2E4
+	.set SoundData_EDA704, 0xEDA704
+	.set SoundData_EDA71C, 0xEDA71C
+	.set SoundData_EDA734, 0xEDA734
+	.set SoundData_EDA74C, 0xEDA74C
+	.set SoundData_EDA764, 0xEDA764
+	.set SoundData_EDA77C, 0xEDA77C
+	.set SoundData_EDA794, 0xEDA794
+	.set SoundData_EDA7AC, 0xEDA7AC
+	.set SoundData_EDA7C4, 0xEDA7C4
+	.set SoundData_EDA7DC, 0xEDA7DC
+	.set SoundData_EDA7F4, 0xEDA7F4
+	.set SoundData_EDA80C, 0xEDA80C
+	.set SoundData_EDA824, 0xEDA824
+	.set SoundData_EDA83C, 0xEDA83C
+	.set SoundData_EDA854, 0xEDA854
+	.set SoundData_EDA86C, 0xEDA86C
+	.set SoundData_EDA884, 0xEDA884
+	.set SoundData_EDA89C, 0xEDA89C
+	.set SoundData_EDA8B4, 0xEDA8B4
+	.set SoundData_EDA8E4, 0xEDA8E4
+	.set SoundData_EDA914, 0xEDA914
+	.set SoundData_EDA944, 0xEDA944
+	.set SoundData_EDA974, 0xEDA974
+	.set SoundData_EDA9A4, 0xEDA9A4
+	.set SoundData_EDA9D4, 0xEDA9D4
+	.set SoundData_EDAA04, 0xEDAA04
+	.set SoundData_EDAA34, 0xEDAA34
+	.set PtrTable_EDB2E4, 0xEDB2E4
 	.set WidgetParam_TestMode_Entry, 0xEDBA44
 	.set WidgetParam_SineWave_Entry, 0xEDBAAE
-	.set LABEL_EE0206, 0xEE0206
-	.set LABEL_EE3023, 0xEE3023
-	.set LABEL_EE3025, 0xEE3025
-	.set LABEL_EE45D2, 0xEE45D2
-	.set LABEL_EE45EA, 0xEE45EA
-	.set LABEL_EE4662, 0xEE4662
-	.set LABEL_EE4692, 0xEE4692
-	.set LABEL_EE46DA, 0xEE46DA
-	.set LABEL_EE470A, 0xEE470A
-	.set LABEL_EE4752, 0xEE4752
-	.set LABEL_EE4782, 0xEE4782
-	.set LABEL_EE479A, 0xEE479A
-	.set LABEL_EED3DE, 0xEED3DE
-	.set LABEL_EED52B, 0xEED52B
-	.set LABEL_EEE812, 0xEEE812
+	.set Naka_SubDispatch_B_Table_0x6E, 0xEE0206
+	.set SeqData_EE3023, 0xEE3023
+	.set SeqData_EE3025, 0xEE3025
+	.set WidgetParam_Entry_002_0x18, 0xEE45D2
+	.set WidgetParam_Entry_002_0x30, 0xEE45EA
+	.set WidgetParam_Entry_006_0x18, 0xEE4662
+	.set WidgetParam_Entry_006_0x48, 0xEE4692
+	.set WidgetParam_Entry_008_0x18, 0xEE46DA
+	.set WidgetParam_Entry_009_0x18, 0xEE470A
+	.set WidgetParam_Entry_011_0x18, 0xEE4752
+	.set WidgetParam_Entry_011_0x48, 0xEE4782
+	.set WidgetParam_Entry_011_0x60, 0xEE479A
+	.set PtrTable_EED3DE, 0xEED3DE
+	.set PtrTable_EED52B, 0xEED52B
+	.set PadFF_EEE812, 0xEEE812
 	.set NakaData_NormalModeMap, 0xEF001F
-	.set LABEL_EF0026, 0xEF0026
-	.set LABEL_EF7779, 0xEF7779
-	.set LABEL_EF8B6D, 0xEF8B6D
-	.set LABEL_EF8DFB, 0xEF8DFB
-	.set LABEL_EF9554, 0xEF9554
-	.set LABEL_EF955D, 0xEF955D
+	.set NakaData_NormalModeMap_0x07, 0xEF0026
+	.set ScoopDisp_DispatchTable_Extended_0x20, 0xEF7779
+	.set SeqData_EF8B6D, 0xEF8B6D
+	.set SeqData_EF8DFB, 0xEF8DFB
+	.set SeqData_EF9554, 0xEF9554
+	.set SeqData_EF955D, 0xEF955D
 	.set MemConfig_Handler_2, 0xEFACF7
-	.set LABEL_EFDB94, 0xEFDB94
-	.set LABEL_EFF827, 0xEFF827
-	.set LABEL_F1039E, 0xF1039E
-	.set LABEL_F1040D, 0xF1040D
-	.set LABEL_F1041D, 0xF1041D
-	.set LABEL_F10454, 0xF10454
-	.set LABEL_F10464, 0xF10464
-	.set LABEL_F1048E, 0xF1048E
-	.set LABEL_F104B8, 0xF104B8
-	.set LABEL_F104C8, 0xF104C8
-	.set LABEL_F104D8, 0xF104D8
-	.set LABEL_F104E8, 0xF104E8
-	.set LABEL_F10512, 0xF10512
-	.set LABEL_F105C4, 0xF105C4
-	.set LABEL_F10676, 0xF10676
-	.set LABEL_F10689, 0xF10689
-	.set LABEL_F15891, 0xF15891
-	.set LABEL_F1589C, 0xF1589C
-	.set LABEL_F16006, 0xF16006
-	.set LABEL_F16028, 0xF16028
-	.set LABEL_F1604A, 0xF1604A
-	.set LABEL_F16056, 0xF16056
-	.set LABEL_F16063, 0xF16063
-	.set LABEL_F16070, 0xF16070
-	.set LABEL_F16092, 0xF16092
-	.set LABEL_F1609E, 0xF1609E
-	.set LABEL_F160AB, 0xF160AB
+	.set SubCPU_ToneDispatch_0x54, 0xEFDB94
+	.set SeqData_EFF827, 0xEFF827
+	.set AudioData_F1039E, 0xF1039E
+	.set AudioData_F1040D, 0xF1040D
+	.set AudioData_F1041D, 0xF1041D
+	.set AudioData_F10454, 0xF10454
+	.set AudioData_F10464, 0xF10464
+	.set AudioData_F1048E, 0xF1048E
+	.set AudioData_F104B8, 0xF104B8
+	.set AudioData_F104C8, 0xF104C8
+	.set AudioData_F104D8, 0xF104D8
+	.set AudioData_F104E8, 0xF104E8
+	.set AudioData_F10512, 0xF10512
+	.set AudioData_F105C4, 0xF105C4
+	.set AudioData_F10676, 0xF10676
+	.set AudioData_F10689, 0xF10689
+	.set AudioData_F15891, 0xF15891
+	.set AudioData_F1589C, 0xF1589C
+	.set AudioData_F16006, 0xF16006
+	.set AudioData_F16028, 0xF16028
+	.set AudioData_F1604A, 0xF1604A
+	.set AudioData_F16056, 0xF16056
+	.set AudioData_F16063, 0xF16063
+	.set AudioData_F16070, 0xF16070
+	.set AudioData_F16092, 0xF16092
+	.set AudioData_F1609E, 0xF1609E
+	.set AudioData_F160AB, 0xF160AB
 	.set Data_Dispatch_Entry, 0xF160B8
-	.set LABEL_F160F1, 0xF160F1
-	.set LABEL_F160FD, 0xF160FD
-	.set LABEL_F1649B, 0xF1649B
-	.set LABEL_F164A6, 0xF164A6
-	.set LABEL_F164B5, 0xF164B5
-	.set LABEL_F164C0, 0xF164C0
-	.set LABEL_F164CB, 0xF164CB
-	.set LABEL_F164D6, 0xF164D6
-	.set LABEL_F164E1, 0xF164E1
-	.set LABEL_F164EC, 0xF164EC
-	.set LABEL_F400EC, 0xF400EC
+	.set Data_Dispatch_Entry_0x39, 0xF160F1
+	.set Data_Dispatch_Entry_0x45, 0xF160FD
+	.set AudioData_F1649B, 0xF1649B
+	.set AudioData_F164A6, 0xF164A6
+	.set AudioData_F164B5, 0xF164B5
+	.set AudioData_F164C0, 0xF164C0
+	.set AudioData_F164CB, 0xF164CB
+	.set AudioData_F164D6, 0xF164D6
+	.set AudioData_F164E1, 0xF164E1
+	.set AudioData_F164EC, 0xF164EC
+	.set SeqVoice_ValidateAndProcessState_0x13, 0xF400EC
 	.set NakaData_PerfStyleCode, 0xF5001F
-	.set LABEL_F5002F, 0xF5002F
-	.set LABEL_F50039, 0xF50039
-	.set LABEL_F50052, 0xF50052
-	.set LABEL_F50078, 0xF50078
-	.set LABEL_F700BB, 0xF700BB
-	.set LABEL_F900B9, 0xF900B9
-	.set LABEL_F900F1, 0xF900F1
+	.set NakaData_PerfStyleCode_0x10, 0xF5002F
+	.set NakaData_PerfStyleCode_0x1A, 0xF50039
+	.set NakaData_PerfStyleCode_0x33, 0xF50052
+	.set NakaData_PerfStyleCode_0x59, 0xF50078
+	.set Data_F700BB, 0xF700BB
+	.set SLDstBankList_FuncBody_0x44, 0xF900B9
+	.set SLDstBankList_FuncBody_0x7C, 0xF900F1
 	.set FDC_INIT, 0xF96BBF
 	.set FDC_CONFIG_VERIFY, 0xF96BD0
 	.set FDC_CMD_DISPATCH_SUB, 0xF96D95
@@ -5983,15 +5983,15 @@ FIRMWARE_VERSION:
 	.set FDC_CMD_ENABLE, 0xF97C21
 	.set FDC_CMD_DISABLE, 0xF97C4B
 	.set FDC_OUTPUT_CTRL, 0xF97C5B
-	.set LABEL_FC0012, 0xFC0012
+	.set RVari_SelectO_SecondItem_Draw_0x32, 0xFC0012
 	.set NakaData_WidgetInit1, 0xFC645A
 	.set NakaData_WidgetInit2, 0xFC647F
 	.set NakaData_WidgetInit3, 0xFC64EA
 	.set SeqChan_UnhandledCmd, 0xFD8261
-	.set LABEL_FD8262, 0xFD8262
-	.set LABEL_FD8263, 0xFD8263
-	.set LABEL_FD8264, 0xFD8264
-	.set LABEL_FD8273, 0xFD8273
-	.set LABEL_FE0053, 0xFE0053
-	.set LABEL_FF0270, 0xFF0270
+	.set SeqChan_UnhandledCmd_0x01, 0xFD8262
+	.set SeqChan_UnhandledCmd_0x02, 0xFD8263
+	.set SeqChan_UnhandledCmd_0x03, 0xFD8264
+	.set SeqChan_UnhandledCmd_0x12, 0xFD8273
+	.set AudioInit_PartConfig_Loop_0x26, 0xFE0053
+	.set HdaeRom_DataHandler_0x22, 0xFF0270
 	.set NakaData_RomEnd, 0xFFFFFF

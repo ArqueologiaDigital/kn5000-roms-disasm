@@ -3231,7 +3231,7 @@ PsEditSwBox_InlineData:
 	ld	xwa, (xsp+10)
 	ldw	(xwa+2), 216
 	.byte 0xb8
-	.long LABEL_EE0206
+	.long Naka_SubDispatch_B_Table_0x6E
 	ld	bc, (xbc)
 	sub	bc, 16
 	ld	(xwa), bc
@@ -17508,7 +17508,7 @@ IDCursorAdvance_Check:
 InitializeEventQueue:
 	ret
 
-DispatchEvent:	; LABEL_FA9585
+DispatchEvent:	; SysData_FA9585
 	lda xsp, (xsp - 12)
 	lda xwa, (xsp + 8)
 	lda xbc, (xsp + 4)

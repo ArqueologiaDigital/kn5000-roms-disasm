@@ -819,7 +819,7 @@ ScoopDisp_DispatchTable_Small:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long LABEL_EF7779
+	.long ScoopDisp_DispatchTable_Extended_0x20
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -924,8 +924,8 @@ PerfMode_ParamHandler_0:
 	.byte 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 PerfMode_EventTable_0:
 	.long UIDisp_DefaultInputHandler
-	.long LABEL_EF8B6D
-	.long LABEL_EF8DFB
+	.long SeqData_EF8B6D
+	.long SeqData_EF8DFB
 	.long PerfMode_Evt03_FlagHandler_A
 	.long PerfMode_Evt03_FlagHandler_B
 	.long PerfMode_Evt03_ClampAndUpdate
@@ -941,8 +941,8 @@ PerfMode_EventTable_0:
 	.long ToneParam_Evt0F_BytecodeHandler
 	.long DefaultHandler_Ret
 	.long UIDisp_DefaultInputHandler
-	.long LABEL_EF8B6D
-	.long LABEL_EF8DFB
+	.long SeqData_EF8B6D
+	.long SeqData_EF8DFB
 	.long PerfMode_Evt03_FlagHandler_A
 	.long PerfMode_Evt03_FlagHandler_B
 	.long PerfMode_Evt03_ClampAndUpdate
@@ -1570,13 +1570,13 @@ UIState_EventTable:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long LABEL_EF955D
-	.long LABEL_EF9554
+	.long SeqData_EF955D
+	.long SeqData_EF9554
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long ToneParam_ShortCallHandler
 	.long DefaultHandler_Ret
-	.long LABEL_EF7779
+	.long ScoopDisp_DispatchTable_Extended_0x20
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -1587,8 +1587,8 @@ UIState_EventTable:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long LABEL_EF955D
-	.long LABEL_EF9554
+	.long SeqData_EF955D
+	.long SeqData_EF9554
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -2083,13 +2083,13 @@ PerfMode_DispatchTable_B:
 	.long DefaultHandler_Ret
 	.long PerfMode_ParamHandler_Data
 	.long DefaultHandler_Ret
-	.long LABEL_EF955D
-	.long LABEL_EF9554
+	.long SeqData_EF955D
+	.long SeqData_EF9554
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long ToneParam_ShortCallHandler
 	.long DefaultHandler_Ret
-	.long LABEL_EF7779
+	.long ScoopDisp_DispatchTable_Extended_0x20
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -2100,8 +2100,8 @@ PerfMode_DispatchTable_B:
 	.long DefaultHandler_Ret
 	.long PerfMode_ParamHandler_Data
 	.long DefaultHandler_Ret
-	.long LABEL_EF955D
-	.long LABEL_EF9554
+	.long SeqData_EF955D
+	.long SeqData_EF9554
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -6790,7 +6790,7 @@ PerfMode_ParamHandler_11:
 	.byte 0xf0, 0xec, 0x23, 0x5c, 0xb3, 0xe8, 0x0e
 SubCPU_ToneParamRet:
 	.long UIDisp_DefaultInputHandler
-	.long LABEL_EFDB94
+	.long SubCPU_ToneDispatch_0x54
 	.long DefaultHandler_Ret
 	.long SubCPU_ToneHandler_A
 	.long DefaultHandler_Ret
@@ -6807,7 +6807,7 @@ SubCPU_ToneParamRet:
 	.long ToneParam_Evt0F_BytecodeHandler
 	.long DefaultHandler_Ret
 	.long UIDisp_DefaultInputHandler
-	.long LABEL_EFDB94
+	.long SubCPU_ToneDispatch_0x54
 	.long DefaultHandler_Ret
 	.long SubCPU_ToneHandler_A
 	.long DefaultHandler_Ret
@@ -7825,7 +7825,7 @@ StringData_KeyNames:	.ascii "  C D"
 	.byte 0x8d, 0x04, 0x21, 0xbc, 0x04, 0x41, 0x44, 0xe3
 	.byte 0x0e, 0x00, 0x00, 0xdb, 0xd3, 0xc1, 0x16, 0x37
 	.byte 0x27, 0xcf, 0xcc, 0x03, 0xdb, 0xec, 0x02, 0x45
-	.long LABEL_EFF827
+	.long SeqData_EFF827
 	.byte 0xf3, 0x07, 0xf4, 0xec
 	.byte 0x35, 0x9d, 0x00, 0x20, 0xbc, 0x00, 0x50, 0x9d
 	.byte 0x02, 0x20, 0xbc, 0x02, 0x50, 0x0e, 0x20, 0x20
@@ -10207,7 +10207,7 @@ Scoop_EnvProcessor_Data:
 	jr	nz, 48
 	ld	a, e
 	extz	wa
-	.long LABEL_E00B28
+	.long ZeroData_E00B28
 	pushw	52426
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -10216,7 +10216,7 @@ Scoop_EnvProcessor_Data:
 	jr	46
 	ld	a, e
 	extz	wa
-	.long LABEL_E00B28
+	.long ZeroData_E00B28
 	pushw	52430
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -10225,7 +10225,7 @@ Scoop_EnvProcessor_Data:
 	jr	22
 	ld	a, e
 	extz	wa
-	.long LABEL_E00B28
+	.long ZeroData_E00B28
 	pushw 52434
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -10306,7 +10306,7 @@ Scoop_EnvProcessor_Data:
 	jr	nz, 49
 	ld	a, e
 	extz	wa
-	.long LABEL_E00B28
+	.long ZeroData_E00B28
 	pushw	52446
 	lda	xwa, (xsp+11)
 	push	xwa
@@ -10579,7 +10579,7 @@ Scoop_EventLoop_36Entry_Data:
 	.byte 0x68, 0x28, 0x91, 0x04, 0x0b, 0xe0, 0x00, 0x0b
 	.byte 0x4a, 0xcd, 0xbf, 0x0a, 0x30, 0x38, 0x1d, 0x72
 	.byte 0x0a, 0xff, 0xbf, 0x0a, 0x37, 0x68, 0x13, 0x91
-	.long LABEL_E00B04
+	.long Data_E00B04
 	.byte 0x0b, 0x4e, 0xcd, 0xbf
 	.byte 0x0a, 0x30, 0x38, 0x1d, 0x72, 0x0a, 0xff, 0xbf
 	.byte 0x0a, 0x37, 0x8e, 0x06, 0x21, 0xc9, 0xcc, 0x0f

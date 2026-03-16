@@ -3097,7 +3097,7 @@ SeMenu_OrPartConfig:
 	ret
 
 SeMenu_OrPartConfig_Data:
-	.long LABEL_E3E2F2
+	.long PadFF_E3E2F2
 	chgm	2, (xhl+14)
 	anddm32_24	2556131, xsp
 	mul	d, 14
