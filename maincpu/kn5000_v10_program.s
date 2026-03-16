@@ -634,7 +634,7 @@ NakaDesc_VwVariBox_DataPtrs:
 	.byte 0x32, 0x00
 	.byte 0x00, 0x00
 	.long StrName_CmpNameMenuBox
-	.long LABEL_E17096
+	.long AlignedStr_CmpNameMenuBox
 	.long StrDesc_CmpNameMenuBox
 	.long S2cGridBoxProc
 	naka_header NAKA_TYPE_0x54
@@ -1575,7 +1575,7 @@ NakaWidgetList_AcModeBoxes:
 	naka_header NAKA_TYPE_0x44
 	.byte 0x2c, 0x00, 0x00, 0x00
 	.long NakaBoxName_AcMuteToggleBox
-	.long LABEL_E20B86
+	.long AlignedStr_AcMuteToggleBox
 	.long NakaPropTbl_LyricsBox
 	.long LyricsBoxProc
 	naka_header NAKA_TYPE_0x11
@@ -5335,11 +5335,11 @@ FIRMWARE_VERSION:
 ; Labels emitted as .set (exact addresses from ORG/name)
 	.set LABEL_E00023, 0xE00023
 	.set LABEL_E00028, 0xE00028
-	.set LABEL_E00065, 0xE00065
-	.set LABEL_E00073, 0xE00073
-	.set LABEL_E0007C, 0xE0007C
+	.set LongStr_ics_KN5000_Program, 0xE00065
+	.set Str_gramDATAFILE22, 0xE00073
+	.set Str_AFILE22, 0xE0007C
 	.set NakaStr_DataFile1of2, 0xE000C3
-	.set LABEL_E00111, 0xE00111
+	.set Str_ableDATAFILEPCK, 0xE00111
 	.set NakaStr_DataFilePck, 0xE00113
 	.set NakaData_FileScreenConfig, 0xE0019E
 	.set NakaData_FileScreenDispatch, 0xE00302
@@ -5347,13 +5347,13 @@ FIRMWARE_VERSION:
 	.set LABEL_E00B04, 0xE00B04
 	.set LABEL_E00B28, 0xE00B28
 	.set LABEL_E14C32, 0xE14C32
-	.set LABEL_E14C86, 0xE14C86
+	.set LongStr_Explore_1000_Musical, 0xE14C86
 	.set LABEL_E16BAC, 0xE16BAC
 	.set Str_S2cGridBox, 0xE1708A
-	.set LABEL_E17096, 0xE17096
+	.set AlignedStr_CmpNameMenuBox, 0xE17096
 	.set NakaInst_AcApcToggle, 0xE17112
 	.set LABEL_E1711E, 0xE1711E
-	.set LABEL_E18D4C, 0xE18D4C
+	.set Str_TEMPO, 0xE18D4C
 	.set Str_FROM, 0xE1A224
 	.set NumStr_11, 0xE1CDE2
 	.set NumStr_10, 0xE1CDE6
@@ -5373,22 +5373,22 @@ FIRMWARE_VERSION:
 	.set LABEL_E1FFB6, 0xE1FFB6
 	.set LABEL_E208A4, 0xE208A4
 	.set NakaStr_LyricsBox, 0xE20B7C
-	.set LABEL_E20B86, 0xE20B86
+	.set AlignedStr_AcMuteToggleBox, 0xE20B86
 	.set Str_ORCH, 0xE21AD2
 	.set NakaStr_PdMdlyOrcha, 0xE22322
 	.set Str_AFTER_TOUCH_SETTING, 0xE2364A
 	.set NakaStr_Gamelan, 0xE23C12
 	.set NakaWidget_Perf2Flute, 0xE23C1A
-	.set LABEL_E23CCA, 0xE23CCA
+	.set Str_SaxBrass, 0xE23CCA
 	.set NakaWidget_Perf2Piano, 0xE23CD4
 	.set NakaStr_Organ, 0xE23D0A
-	.set LABEL_E23E62, 0xE23E62
+	.set Str_HokieDance, 0xE23E62
 	.set NakaWidget_Perf3JazzBand, 0xE23E6E
-	.set LABEL_E23EA4, 0xE23EA4
+	.set Str_GospelRevival, 0xE23EA4
 	.set NakaWidget_Perf3LatinOrch, 0xE23EB4
-	.set LABEL_E23EEA, 0xE23EEA
+	.set Str_OrganCombo, 0xE23EEA
 	.set NakaWidget_Perf3BigBand, 0xE23EF6
-	.set LABEL_E23F2C, 0xE23F2C
+	.set Str_BigBandMid, 0xE23F2C
 	.set NakaWidget_Perf3SymphOrch, 0xE23F3A
 	.set NakaStr_Rhythm, 0xE2405E
 	.set NakaFld_TabIndexFunc, 0xE270EA
@@ -5409,18 +5409,18 @@ FIRMWARE_VERSION:
 	.set LABEL_E30B2A, 0xE30B2A
 	.set LABEL_E30B51, 0xE30B51
 	.set TableData_NullDialogText, 0xE33824
-	.set LABEL_E3382C, 0xE3382C
-	.set LABEL_E338A6, 0xE338A6
+	.set Str_ATTENTION, 0xE3382C
+	.set Str_Apakahyakinakandihapus, 0xE338A6
 	.set WarnStr_Featuresforcreatingas, 0xE338C2
-	.set LABEL_E338E2, 0xE338E2
+	.set LongStr_Funktionen_zur_Erstellung, 0xE338E2
 	.set LABEL_E33EE4, 0xE33EE4
-	.set LABEL_E33F22, 0xE33F22
+	.set LongStr_Gunakan_SONG_CLEAR, 0xE33F22
 	.set LABEL_E3405E, 0xE3405E
-	.set LABEL_E340A6, 0xE340A6
+	.set LongStr_Gunakan_TRACK_CLEAR, 0xE340A6
 	.set WarnStr_PresstheSTARTSTOPbutt, 0xE34104
 	.set LABEL_E3412A, 0xE3412A
 	.set FmtStr_pct3d, 0xE34614
-	.set LABEL_E34944, 0xE34944
+	.set LongStr_1_2_3, 0xE34944
 	.set FmtStr_pct3d_4B5E, 0xE34B5E
 	.set FmtStr_pluspct3d, 0xE34BB6
 	.set FmtStr_minuspct3d, 0xE34BBE
@@ -5497,7 +5497,7 @@ FIRMWARE_VERSION:
 	.set LABEL_E800CE, 0xE800CE
 	.set LABEL_E800DE, 0xE800DE
 	.set LABEL_E800FA, 0xE800FA
-	.set LABEL_E8013C, 0xE8013C
+	.set AlignedStr_ON, 0xE8013C
 	.set LABEL_E801D4, 0xE801D4
 	.set Transpose_String_Minus3, 0xE8068C
 	.set Transpose_String_Error, 0xE80692
@@ -5529,9 +5529,9 @@ FIRMWARE_VERSION:
 	.set LABEL_E9B92A, 0xE9B92A
 	.set LABEL_E9BF3A, 0xE9BF3A
 	.set LABEL_E9C524, 0xE9C524
-	.set LABEL_E9C6FC, 0xE9C6FC
+	.set LongStr_RKB_und_LKB, 0xE9C6FC
 	.set LABEL_E9CF14, 0xE9CF14
-	.set LABEL_EA1D7A, 0xEA1D7A
+	.set Str_DISKNAME, 0xEA1D7A
 	.set Str_LOAD, 0xEA2442
 	.set Str_COMP, 0xEA263A
 	.set Str_CUSTOM, 0xEA26AA
@@ -5559,8 +5559,8 @@ FIRMWARE_VERSION:
 	.set Str_OFF, 0xEA43BC
 	.set Str_SAVE_44A2, 0xEA44A2
 	.set Str_PREV_471A, 0xEA471A
-	.set LABEL_EA66B6, 0xEA66B6
-	.set LABEL_EA6706, 0xEA6706
+	.set Str_DISKINSERTOPTION, 0xEA66B6
+	.set Str_FILETYPEPRIORITY, 0xEA6706
 	.set DiskWarning_GermanConfirm, 0xEA8CBC
 	.set LABEL_EAAEF4, 0xEAAEF4
 	.set FmtStr_pct2d, 0xEAB18C

@@ -5,7 +5,7 @@ NakaStr_PaintArrowProc_Empty:
 	.incbin "includes/generated/naka_composer_style.bin"
 
 ; External label offsets within the binary blob above.
-	.equ LABEL_E18D4C, NakaStr_PaintArrowProc_Empty + 0x1668
+	.equ Str_TEMPO, NakaStr_PaintArrowProc_Empty + 0x1668
 	.equ NakaLabel_PatternCopy_MemoryLabel, NakaStr_PaintArrowProc_Empty + 0x1EBA
 	.equ NakaLabel_PatternCopy_PatMemLabel, NakaStr_PaintArrowProc_Empty + 0x1EE2
 	.equ NakaNode_PatternCopy_ProgressBar, NakaStr_PaintArrowProc_Empty + 0x1F0C

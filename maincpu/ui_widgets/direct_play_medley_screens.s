@@ -262,7 +262,7 @@ NakaBoxData_PsSongSelBox:
 	.equ NakaStr_Gamelan, NakaBoxData_PsSongSelBox + 0x2B96
 	.equ NakaWidget_Perf2Guitar, NakaBoxData_PsSongSelBox + 0x2BDC
 	.equ NakaWidget_Perf2SaxBrass, NakaBoxData_PsSongSelBox + 0x2C18
-	.equ LABEL_E23CCA, NakaBoxData_PsSongSelBox + 0x2C4E
+	.equ Str_SaxBrass, NakaBoxData_PsSongSelBox + 0x2C4E
 	.equ NakaStr_Organ, NakaBoxData_PsSongSelBox + 0x2C8E
 	.equ NakaWidget_Perf2StyleSel, NakaBoxData_PsSongSelBox + 0x2C94
 	.equ NakaWidget_Perf2SoundSel, NakaBoxData_PsSongSelBox + 0x2CCA
@@ -270,10 +270,10 @@ NakaBoxData_PsSongSelBox:
 	.equ NakaWidget_Perf2MeasureBox, NakaBoxData_PsSongSelBox + 0x2D3A
 	.equ NakaWidget_Perf2FileList, NakaBoxData_PsSongSelBox + 0x2D54
 	.equ NakaWidget_Perf3HokieDance, NakaBoxData_PsSongSelBox + 0x2DB0
-	.equ LABEL_E23E62, NakaBoxData_PsSongSelBox + 0x2DE6
-	.equ LABEL_E23EA4, NakaBoxData_PsSongSelBox + 0x2E28
-	.equ LABEL_E23EEA, NakaBoxData_PsSongSelBox + 0x2E6E
-	.equ LABEL_E23F2C, NakaBoxData_PsSongSelBox + 0x2EB0
+	.equ Str_HokieDance, NakaBoxData_PsSongSelBox + 0x2DE6
+	.equ Str_GospelRevival, NakaBoxData_PsSongSelBox + 0x2E28
+	.equ Str_OrganCombo, NakaBoxData_PsSongSelBox + 0x2E6E
+	.equ Str_BigBandMid, NakaBoxData_PsSongSelBox + 0x2EB0
 	.equ NakaWidget_Perf3ModernBluegrass, NakaBoxData_PsSongSelBox + 0x2F04
 	.equ NakaWidget_Perf3StyleSel, NakaBoxData_PsSongSelBox + 0x2F4C
 	.equ NakaWidget_Perf3SoundSel, NakaBoxData_PsSongSelBox + 0x2F82

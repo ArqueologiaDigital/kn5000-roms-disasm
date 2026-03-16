@@ -17,7 +17,7 @@ NakaInst_IvWaitWinCtlProc:
 	.equ NakaInst_AcTtlJgBoxProc, NakaInst_IvWaitWinCtlProc + 0x00B2
 	.equ NakaInst_PsWindowToggleProc, NakaInst_IvWaitWinCtlProc + 0x00C2
 	.equ NakaInst_PsFileNameBoxProc, NakaInst_IvWaitWinCtlProc + 0x00D6
-	.equ LABEL_EA1D7A, NakaInst_IvWaitWinCtlProc + 0x09AE
+	.equ Str_DISKNAME, NakaInst_IvWaitWinCtlProc + 0x09AE
 	.equ Str_LOAD, NakaInst_IvWaitWinCtlProc + 0x1076
 	.equ Str_COMP, NakaInst_IvWaitWinCtlProc + 0x126E
 	.equ Str_CUSTOM, NakaInst_IvWaitWinCtlProc + 0x12DE
@@ -43,6 +43,6 @@ NakaInst_IvWaitWinCtlProc:
 	.equ Str_OFF, NakaInst_IvWaitWinCtlProc + 0x2FF0
 	.equ Str_SAVE_44A2, NakaInst_IvWaitWinCtlProc + 0x30D6
 	.equ Str_PREV_471A, NakaInst_IvWaitWinCtlProc + 0x334E
-	.equ LABEL_EA66B6, NakaInst_IvWaitWinCtlProc + 0x52EA
-	.equ LABEL_EA6706, NakaInst_IvWaitWinCtlProc + 0x533A
+	.equ Str_DISKINSERTOPTION, NakaInst_IvWaitWinCtlProc + 0x52EA
+	.equ Str_FILETYPEPRIORITY, NakaInst_IvWaitWinCtlProc + 0x533A
 	.equ NakaInst_WaitWinCtlSmf, NakaInst_IvWaitWinCtlProc + 0x6A34
