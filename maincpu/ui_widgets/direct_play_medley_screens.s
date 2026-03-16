@@ -67,7 +67,7 @@ NakaBoxData_PsSongSelBox:
 	.equ NakaWidget_PdDpFileSelector, NakaBoxData_PsSongSelBox + 0x09DC
 	.equ NakaWidget_PdDpFileList, NakaBoxData_PsSongSelBox + 0x09F6
 	.equ NakaWidget_PdDpOrchSelector, NakaBoxData_PsSongSelBox + 0x0A2A
-	.equ LABEL_E21AD2, NakaBoxData_PsSongSelBox + 0x0A56
+	.equ Str_ORCH, NakaBoxData_PsSongSelBox + 0x0A56
 	.equ NakaWidget_PdDpMixer, NakaBoxData_PsSongSelBox + 0x0A62
 	.equ NakaWidget_PdDpMic, NakaBoxData_PsSongSelBox + 0x0A9A
 	.equ NakaWidget_SmfMdlyContainer, NakaBoxData_PsSongSelBox + 0x0AD0
@@ -232,7 +232,7 @@ NakaBoxData_PsSongSelBox:
 	.equ NakaWidget_NamingMeasureBox, NakaBoxData_PsSongSelBox + 0x2548
 	.equ NakaWidget_NamingDisplayMode, NakaBoxData_PsSongSelBox + 0x2562
 	.equ NakaWidget_NamingOrchRow, NakaBoxData_PsSongSelBox + 0x258E
-	.equ LABEL_E2364A, NakaBoxData_PsSongSelBox + 0x25CE
+	.equ Str_AFTER_TOUCH_SETTING, NakaBoxData_PsSongSelBox + 0x25CE
 	.equ NakaWidget_AftTouchDuration, NakaBoxData_PsSongSelBox + 0x25E2
 	.equ NakaWidget_AftTouchChSel, NakaBoxData_PsSongSelBox + 0x260C
 	.equ NakaWidget_AftTouchList, NakaBoxData_PsSongSelBox + 0x265E
@@ -259,11 +259,11 @@ NakaBoxData_PsSongSelBox:
 	.equ NakaWidget_Perf2Container, NakaBoxData_PsSongSelBox + 0x2AEA
 	.equ NakaWidget_Perf2Strings, NakaBoxData_PsSongSelBox + 0x2B22
 	.equ NakaWidget_Perf2Gamelan, NakaBoxData_PsSongSelBox + 0x2B60
-	.equ LABEL_E23C12, NakaBoxData_PsSongSelBox + 0x2B96
+	.equ NakaStr_Gamelan, NakaBoxData_PsSongSelBox + 0x2B96
 	.equ NakaWidget_Perf2Guitar, NakaBoxData_PsSongSelBox + 0x2BDC
 	.equ NakaWidget_Perf2SaxBrass, NakaBoxData_PsSongSelBox + 0x2C18
 	.equ LABEL_E23CCA, NakaBoxData_PsSongSelBox + 0x2C4E
-	.equ LABEL_E23D0A, NakaBoxData_PsSongSelBox + 0x2C8E
+	.equ NakaStr_Organ, NakaBoxData_PsSongSelBox + 0x2C8E
 	.equ NakaWidget_Perf2StyleSel, NakaBoxData_PsSongSelBox + 0x2C94
 	.equ NakaWidget_Perf2SoundSel, NakaBoxData_PsSongSelBox + 0x2CCA
 	.equ NakaWidget_Perf2RhythmSel, NakaBoxData_PsSongSelBox + 0x2D00

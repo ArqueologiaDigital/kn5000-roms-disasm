@@ -583,7 +583,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	naka_header NAKA_TYPE_0x26
 	.byte 0x30, 0x00
 	.byte 0x08, 0x00
-	.long LABEL_E17112
+	.long NakaInst_AcApcToggle
 	.long StrPrefix_AcApcToggle
 	.long StrDesc_AcApcToggle
 	.long AcSndArgGridBoxProc
@@ -1580,7 +1580,7 @@ NakaWidgetList_AcModeBoxes:
 	.long LyricsBoxProc
 	naka_header NAKA_TYPE_0x11
 	.byte 0x28, 0x00, 0x0c, 0x00
-	.long LABEL_E20B7C
+	.long NakaStr_LyricsBox
 	.long NakaBoxData_LyricsBox
 	.long NakaPropTbl_TextLabel
 	.long SongNameBoxProc
@@ -5351,10 +5351,10 @@ FIRMWARE_VERSION:
 	.set LABEL_E16BAC, 0xE16BAC
 	.set LABEL_E1708A, 0xE1708A
 	.set LABEL_E17096, 0xE17096
-	.set LABEL_E17112, 0xE17112
+	.set NakaInst_AcApcToggle, 0xE17112
 	.set LABEL_E1711E, 0xE1711E
 	.set LABEL_E18D4C, 0xE18D4C
-	.set LABEL_E1A224, 0xE1A224
+	.set Str_FROM, 0xE1A224
 	.set LABEL_E1CDE2, 0xE1CDE2
 	.set LABEL_E1CDE6, 0xE1CDE6
 	.set LABEL_E1CDEA, 0xE1CDEA
@@ -5372,16 +5372,16 @@ FIRMWARE_VERSION:
 	.set StrNotePos_AcNatural, 0xE1DD5A
 	.set LABEL_E1FFB6, 0xE1FFB6
 	.set LABEL_E208A4, 0xE208A4
-	.set LABEL_E20B7C, 0xE20B7C
+	.set NakaStr_LyricsBox, 0xE20B7C
 	.set LABEL_E20B86, 0xE20B86
-	.set LABEL_E21AD2, 0xE21AD2
+	.set Str_ORCH, 0xE21AD2
 	.set NakaStr_PdMdlyOrcha, 0xE22322
-	.set LABEL_E2364A, 0xE2364A
-	.set LABEL_E23C12, 0xE23C12
+	.set Str_AFTER_TOUCH_SETTING, 0xE2364A
+	.set NakaStr_Gamelan, 0xE23C12
 	.set NakaWidget_Perf2Flute, 0xE23C1A
 	.set LABEL_E23CCA, 0xE23CCA
 	.set NakaWidget_Perf2Piano, 0xE23CD4
-	.set LABEL_E23D0A, 0xE23D0A
+	.set NakaStr_Organ, 0xE23D0A
 	.set LABEL_E23E62, 0xE23E62
 	.set NakaWidget_Perf3JazzBand, 0xE23E6E
 	.set LABEL_E23EA4, 0xE23EA4
@@ -5398,7 +5398,7 @@ FIRMWARE_VERSION:
 	.set NakaInst_EqualizerBox, 0xE27586
 	.set Data_NakaPresetConfig, 0xE278A9
 	.set LABEL_E2DF22, 0xE2DF22
-	.set LABEL_E2DF54, 0xE2DF54
+	.set Str_ENGLISH, 0xE2DF54
 	.set LABEL_E2DF64, 0xE2DF64
 	.set LABEL_E2DFA6, 0xE2DFA6
 	.set LABEL_E30001, 0xE30001
@@ -5532,33 +5532,33 @@ FIRMWARE_VERSION:
 	.set LABEL_E9C6FC, 0xE9C6FC
 	.set LABEL_E9CF14, 0xE9CF14
 	.set LABEL_EA1D7A, 0xEA1D7A
-	.set LABEL_EA2442, 0xEA2442
-	.set LABEL_EA263A, 0xEA263A
-	.set LABEL_EA26AA, 0xEA26AA
-	.set LABEL_EA26D2, 0xEA26D2
-	.set LABEL_EA27A2, 0xEA27A2
-	.set LABEL_EA2822, 0xEA2822
-	.set LABEL_EA2952, 0xEA2952
-	.set LABEL_EA29A2, 0xEA29A2
+	.set Str_LOAD, 0xEA2442
+	.set Str_COMP, 0xEA263A
+	.set Str_CUSTOM, 0xEA26AA
+	.set Str_MIDI, 0xEA26D2
+	.set Str_RHYTHM_CUSTOM, 0xEA27A2
+	.set Str_COMPOSER, 0xEA2822
+	.set Str_LOAD_2952, 0xEA2952
+	.set Str_SINGLE_LOAD, 0xEA29A2
 	.set NakaStr_Single, 0xEA2D36
 	.set NakaStr_Bank, 0xEA2D3E
-	.set LABEL_EA2E26, 0xEA2E26
-	.set LABEL_EA2F0E, 0xEA2F0E
-	.set LABEL_EA2F3A, 0xEA2F3A
-	.set LABEL_EA3B5A, 0xEA3B5A
-	.set LABEL_EA3BB2, 0xEA3BB2
-	.set LABEL_EA3D2A, 0xEA3D2A
-	.set LABEL_EA3D7A, 0xEA3D7A
+	.set Str_PREV, 0xEA2E26
+	.set Str_DISK, 0xEA2F0E
+	.set Str_LOAD_AS, 0xEA2F3A
+	.set Str_SOUND_MEMORY, 0xEA3B5A
+	.set Str_SEQUENCER, 0xEA3BB2
+	.set Str_PERFORM, 0xEA3D2A
+	.set Str_BACKUP, 0xEA3D7A
 	.set LABEL_EA3DCA, 0xEA3DCA
-	.set LABEL_EA3F6A, 0xEA3F6A
-	.set LABEL_EA3FDA, 0xEA3FDA
-	.set LABEL_EA4002, 0xEA4002
-	.set LABEL_EA4082, 0xEA4082
-	.set LABEL_EA41D2, 0xEA41D2
-	.set LABEL_EA435A, 0xEA435A
+	.set Str_COMP_3F6A, 0xEA3F6A
+	.set Str_CUSTOM_3FDA, 0xEA3FDA
+	.set Str_MIDI_4002, 0xEA4002
+	.set Str_ALL_OFF, 0xEA4082
+	.set Str_SAVE, 0xEA41D2
+	.set Str_NEXT, 0xEA435A
 	.set LABEL_EA43BC, 0xEA43BC
-	.set LABEL_EA44A2, 0xEA44A2
-	.set LABEL_EA471A, 0xEA471A
+	.set Str_SAVE_44A2, 0xEA44A2
+	.set Str_PREV_471A, 0xEA471A
 	.set LABEL_EA66B6, 0xEA66B6
 	.set LABEL_EA6706, 0xEA6706
 	.set DiskWarning_GermanConfirm, 0xEA8CBC
@@ -5830,14 +5830,14 @@ FIRMWARE_VERSION:
 	.set NakaInst_IvPmemWindowPageCtl, 0xED2C24
 	.set NakaInst_MsaModeScreen, 0xED2C62
 	.set LABEL_ED46D2, 0xED46D2
-	.set LABEL_ED4722, 0xED4722
+	.set Str_RHYTHM, 0xED4722
 	.set LABEL_ED474A, 0xED474A
-	.set LABEL_ED477A, 0xED477A
-	.set LABEL_ED4922, 0xED4922
+	.set Str_PANEL_MEMORY, 0xED477A
+	.set Str_PANEL_MEMORY_4922, 0xED4922
 	.set LABEL_ED4A82, 0xED4A82
-	.set LABEL_ED4DE2, 0xED4DE2
-	.set LABEL_ED5122, 0xED5122
-	.set LABEL_ED517A, 0xED517A
+	.set Str_DISPLAY_TYPE, 0xED4DE2
+	.set Str_USER_INITIAL, 0xED5122
+	.set Str_VALUE, 0xED517A
 	.set ExtDevScreen_SndParamBank_Desc, 0xED690A
 	.set ExtDevScreen_SndParamPage_Desc, 0xED69A2
 	.set ExtDevScreen_VoiceParamBank_Desc, 0xED6A7A

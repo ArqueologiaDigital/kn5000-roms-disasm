@@ -74,7 +74,7 @@ NakaStr_PaintArrowProc_Empty:
 	.equ NakaNode_ModeSelect_ExpandMode, NakaStr_PaintArrowProc_Empty + 0x2AA8
 	.equ NakaNode_CustomCopy_RootOuter, NakaStr_PaintArrowProc_Empty + 0x2AEA
 	.equ NakaLabel_CustomCopy_FromLabel, NakaStr_PaintArrowProc_Empty + 0x2B20
-	.equ LABEL_E1A224, NakaStr_PaintArrowProc_Empty + 0x2B40
+	.equ Str_FROM, NakaStr_PaintArrowProc_Empty + 0x2B40
 	.equ Naka0x11_CustomCopy_FromFrame, NakaStr_PaintArrowProc_Empty + 0x2B46
 	.equ NakaNode_CustomCopy_FromField, NakaStr_PaintArrowProc_Empty + 0x2B62
 	.equ NakaNode_CustomCopy_ToFieldTop, NakaStr_PaintArrowProc_Empty + 0x2B88
