@@ -9549,18 +9549,18 @@ CharMap_FullPermutation:
 	.byte 0xf5, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
 	.byte 0x00, 0x00, 0xff, 0x00, 0x00, 0x00
 ScaleNote_Display_Table:
-	.long LABEL_E1CE0E
-	.long LABEL_E1CE0A
-	.long LABEL_E1CE06
-	.long LABEL_E1CE02
-	.long LABEL_E1CDFE
-	.long LABEL_E1CDFA
-	.long LABEL_E1CDF6
-	.long LABEL_E1CDF2
-	.long LABEL_E1CDEE
-	.long LABEL_E1CDEA
-	.long LABEL_E1CDE6
-	.long LABEL_E1CDE2
+	.long NumStr_0
+	.long NumStr_1
+	.long NumStr_2
+	.long NumStr_3
+	.long NumStr_4
+	.long NumStr_5
+	.long NumStr_6
+	.long NumStr_7
+	.long NumStr_8
+	.long NumStr_9
+	.long NumStr_10
+	.long NumStr_11
 	.long NoteStepDisplayData
 	.long NoteDataC_Natural
 	.long NoteDataD_Flat

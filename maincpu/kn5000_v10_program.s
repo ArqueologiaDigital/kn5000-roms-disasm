@@ -5355,18 +5355,18 @@ FIRMWARE_VERSION:
 	.set LABEL_E1711E, 0xE1711E
 	.set LABEL_E18D4C, 0xE18D4C
 	.set Str_FROM, 0xE1A224
-	.set LABEL_E1CDE2, 0xE1CDE2
-	.set LABEL_E1CDE6, 0xE1CDE6
-	.set LABEL_E1CDEA, 0xE1CDEA
-	.set LABEL_E1CDEE, 0xE1CDEE
-	.set LABEL_E1CDF2, 0xE1CDF2
-	.set LABEL_E1CDF6, 0xE1CDF6
-	.set LABEL_E1CDFA, 0xE1CDFA
-	.set LABEL_E1CDFE, 0xE1CDFE
-	.set LABEL_E1CE02, 0xE1CE02
-	.set LABEL_E1CE06, 0xE1CE06
-	.set LABEL_E1CE0A, 0xE1CE0A
-	.set LABEL_E1CE0E, 0xE1CE0E
+	.set NumStr_11, 0xE1CDE2
+	.set NumStr_10, 0xE1CDE6
+	.set NumStr_9, 0xE1CDEA
+	.set NumStr_8, 0xE1CDEE
+	.set NumStr_7, 0xE1CDF2
+	.set NumStr_6, 0xE1CDF6
+	.set NumStr_5, 0xE1CDFA
+	.set NumStr_4, 0xE1CDFE
+	.set NumStr_3, 0xE1CE02
+	.set NumStr_2, 0xE1CE06
+	.set NumStr_1, 0xE1CE0A
+	.set NumStr_0, 0xE1CE0E
 	.set StrNotePos_FlatAlt, 0xE1DD4C
 	.set StrNotePos_FlatAltB8, 0xE1DD52
 	.set StrNotePos_AcNatural, 0xE1DD5A
@@ -5419,11 +5419,11 @@ FIRMWARE_VERSION:
 	.set LABEL_E340A6, 0xE340A6
 	.set LABEL_E34104, 0xE34104
 	.set LABEL_E3412A, 0xE3412A
-	.set LABEL_E34614, 0xE34614
+	.set FmtStr_pct3d, 0xE34614
 	.set LABEL_E34944, 0xE34944
-	.set LABEL_E34B5E, 0xE34B5E
-	.set LABEL_E34BB6, 0xE34BB6
-	.set LABEL_E34BBE, 0xE34BBE
+	.set FmtStr_pct3d_4B5E, 0xE34B5E
+	.set FmtStr_pluspct3d, 0xE34BB6
+	.set FmtStr_minuspct3d, 0xE34BBE
 	.set LABEL_E3DEF1, 0xE3DEF1
 	.set LABEL_E3E0F1, 0xE3E0F1
 	.set LABEL_E3E2F2, 0xE3E2F2
@@ -5563,7 +5563,7 @@ FIRMWARE_VERSION:
 	.set LABEL_EA6706, 0xEA6706
 	.set DiskWarning_GermanConfirm, 0xEA8CBC
 	.set LABEL_EAAEF4, 0xEAAEF4
-	.set LABEL_EAB18C, 0xEAB18C
+	.set FmtStr_pct2d, 0xEAB18C
 	.set WidgetPropStr_Max, 0xEAC1BA
 	.set WidgetPropStr_RangeFigures, 0xEAC1BE
 	.set NakaData_CharaFontTable, 0xEADA96
@@ -5775,35 +5775,35 @@ FIRMWARE_VERSION:
 	.set LABEL_EBFF16, 0xEBFF16
 	.set LABEL_EBFF9E, 0xEBFF9E
 	.set NakaStr_SoundPreset176, 0xEC00C7
-	.set LABEL_EC00EC, 0xEC00EC
+	.set SoundName_160, 0xEC00EC
 	.set LABEL_EC0113, 0xEC0113
-	.set LABEL_EC013B, 0xEC013B
+	.set SoundName_ToTheBone, 0xEC013B
 	.set NakaStr_SoundPresetBone, 0xEC013F
 	.set LABEL_EC0A1B, 0xEC0A1B
-	.set LABEL_EC88EC, 0xEC88EC
+	.set SoundName_MournfulTenor, 0xEC88EC
 	.set LABEL_EC8974, 0xEC8974
-	.set LABEL_EC89B4, 0xEC89B4
+	.set SoundName_HymnBand, 0xEC89B4
 	.set LABEL_EC8A1A, 0xEC8A1A
-	.set LABEL_EC8A7C, 0xEC8A7C
-	.set LABEL_ECB09C, 0xECB09C
+	.set SoundName_PreachTheWord, 0xEC8A7C
+	.set SoundName_LushTango, 0xECB09C
 	.set LABEL_ECB102, 0xECB102
-	.set LABEL_ECB164, 0xECB164
-	.set LABEL_ECB26C, 0xECB26C
+	.set SoundName_AstorsTango, 0xECB164
+	.set SoundName_SymphonicWaltz, 0xECB26C
 	.set LABEL_ECB2F4, 0xECB2F4
-	.set LABEL_ECB334, 0xECB334
+	.set SoundName_NotStrauss, 0xECB334
 	.set LABEL_ECB39A, 0xECB39A
-	.set LABEL_ECB3FC, 0xECB3FC
-	.set LABEL_ECDBEC, 0xECDBEC
-	.set LABEL_ECDCB4, 0xECDCB4
-	.set LABEL_ECDD7C, 0xECDD7C
-	.set LABEL_ECDE44, 0xECDE44
-	.set LABEL_ECDE84, 0xECDE84
-	.set LABEL_ECDF4C, 0xECDF4C
-	.set LABEL_ECE014, 0xECE014
-	.set LABEL_ECE0DC, 0xECE0DC
-	.set LABEL_ECE11C, 0xECE11C
-	.set LABEL_ECE1E4, 0xECE1E4
-	.set LABEL_ECE2AC, 0xECE2AC
+	.set SoundName_BavarianFlutes, 0xECB3FC
+	.set SoundName_BeachPartySong, 0xECDBEC
+	.set SoundName_CubanReeds, 0xECDCB4
+	.set SoundName_LatinoPiccolo, 0xECDD7C
+	.set SoundName_JamaicanBars, 0xECDE44
+	.set SoundName_SambaUnion, 0xECDE84
+	.set SoundName_NewOrganSamba, 0xECDF4C
+	.set SoundName_NiceKeroncong, 0xECE014
+	.set SoundName_EasyDangdut, 0xECE0DC
+	.set SoundName_PadangBeat, 0xECE11C
+	.set SoundName_RastaVoice, 0xECE1E4
+	.set SoundName_MarleysDrums, 0xECE2AC
 	.set EffSeqScreen_ChordTypePtr_A, 0xED0072
 	.set EffSeqScreen_ChordTypePtr_B, 0xED009C
 	.set NakaInst_WITH_APC, 0xED00D5
@@ -5831,7 +5831,7 @@ FIRMWARE_VERSION:
 	.set NakaInst_MsaModeScreen, 0xED2C62
 	.set LABEL_ED46D2, 0xED46D2
 	.set Str_RHYTHM, 0xED4722
-	.set LABEL_ED474A, 0xED474A
+	.set SoundName_SOUNDRHYTHM, 0xED474A
 	.set Str_PANEL_MEMORY, 0xED477A
 	.set Str_PANEL_MEMORY_4922, 0xED4922
 	.set LABEL_ED4A82, 0xED4A82
