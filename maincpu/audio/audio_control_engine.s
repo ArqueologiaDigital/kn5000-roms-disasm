@@ -8405,17 +8405,8 @@ VoiceParam_DispatchDone:
 	ret
 
 VoiceParam_ModeDispatch_Table:
-	jrl	nc, -844
-	nop
-	push 181
-	swi	4
-	nop
-	sbc	iy, (xhl)
-	swi	4
-	nop
-	ldb	h, 182
-	swi	4
-	nop
+	.byte 0x7f, 0xb4, 0xfc, 0x00, 0x09, 0xb5, 0xfc, 0x00
+	.byte 0x93, 0xb5, 0xfc, 0x00, 0x26, 0xb6, 0xfc, 0x00
 
 VoiceParam_StoreExpression:
 	extz hl
