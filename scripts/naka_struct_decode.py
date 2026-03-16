@@ -52,7 +52,7 @@ CONTAINER_FIELDS = [
     ("child_count", 2, False), ("field_0e", 2, False), ("field_10", 2, False),
     ("handler", 4, True), ("style", 2, False), ("field_18", 2, False),
     ("field_1a", 2, False), ("screen_id", 2, False),
-    ("proc_addr", 4, True), ("string_ptr", 4, True),
+    ("handler_table", 4, False), ("string_ptr", 4, True),
     ("string_id", 2, False), ("reserved", 2, False),
 ]
 CONTAINER_BODY_SIZE = 38
@@ -66,7 +66,7 @@ MENU_ITEM_FIELDS = [
     ("flags", 2, False), ("link_idx", 2, False),
     ("field_1c", 2, False), ("field_1e", 2, False),
     ("bg_color", 2, False), ("field_22", 2, False),
-    ("handler_id", 2, False), ("proc_addr", 4, True),
+    ("handler_id", 2, False), ("handler_table", 4, False),
     ("string_ptr", 4, True), ("ui_class", 2, False),
     ("screen_id", 2, False), ("string_len", 2, False),
     ("reserved", 2, False),

@@ -478,7 +478,7 @@ const naka_normal_mode_t naka_normal_mode_data
         .field_18       = 0x0000,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003F3F8,
+        .handler_table  = 0x0003F3F8,
         .string_ptr     = SELF(w2_text),
         .string_id      = 0x0001,
         .reserved       = 0x0000,

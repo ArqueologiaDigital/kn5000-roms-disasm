@@ -686,7 +686,7 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
         .field_18       = 0x0002,
         .field_1a       = 0x0000,
         .screen_id      = 0x01A0,
-        .proc_addr      = 0x0003E660,
+        .handler_table  = 0x0003E660,
         .string_ptr     = SELF(w43_text),
         .string_id      = 0x0015,
         .reserved       = 0x0000,

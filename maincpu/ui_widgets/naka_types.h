@@ -74,7 +74,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_18;         /* +24: */
     uint16_t field_1a;         /* +26: */
     uint16_t screen_id;        /* +28: screen identifier (e.g. 0x01A0) */
-    uint32_t proc_addr;        /* +30: Proc handler address */
+    uint32_t handler_table;    /* +30: event handler dispatch table (DRAM address) */
     uint32_t string_ptr;       /* +34: pointer to title string */
     uint16_t string_id;        /* +38: string length or identifier */
     uint16_t reserved;         /* +40: padding (always 0) */
@@ -108,7 +108,7 @@ typedef struct __attribute__((packed)) {
     uint16_t bg_color;         /* +32: background color */
     uint16_t field_22;         /* +34: */
     uint16_t handler_id;       /* +36: handler function ID */
-    uint32_t proc_addr;        /* +38: Proc handler address */
+    uint32_t handler_table;    /* +38: event handler dispatch table (DRAM address) */
     uint32_t string_ptr;       /* +42: pointer to display string */
     uint16_t ui_class;         /* +46: UI class/category */
     uint16_t screen_id;        /* +48: screen identifier */
