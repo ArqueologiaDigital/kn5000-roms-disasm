@@ -591,7 +591,7 @@ Boot_ReadFDCStatus:
 ; --- VGA Initialization & Display Subsystem ---
 	.include "shared/vga_init.s"
 	.include "display/scoop_display.s"
-.include "display/scoop_editor_data.s"
+	.include "display/scoop_editor_data.s"
 	.include "audio/semenu_routines.s"
 	.include "audio/sound_editor_ui.s"
 
@@ -1042,14 +1042,14 @@ free_X:
 
 ; --- Wallpaper & Demo Routines ---
 	.include "ui/setwall_routines.s"
-.include "ui/ui_playback_modes.s"
+	.include "ui/ui_playback_modes.s"
 	.include "demo/demo_routines.s"
-.include "demo/demo_seq_bridge.s"
+	.include "demo/demo_seq_bridge.s"
 	.include "sequencer/smf_playback.s"
-.include "sequencer/smf_tonegen_core.s"
+	.include "sequencer/smf_tonegen_core.s"
 ; --- SMF Event Processing, Sequencer UI & Engine ---
 	.include "sequencer/smf_event_processor.s"
-.include "sequencer/seq_audio_mode.s"
+	.include "sequencer/seq_audio_mode.s"
 	.include "sequencer/rhythm_routines.s"
 	.include "sequencer/accompaniment_engine.s"
 Voice_InitBankDataSafe:
@@ -1266,13 +1266,13 @@ Voice_FactoryPresetData:
 
 ; MSP_FACTORY_DEFAULTS:	
 	.include "msp_factory_defaults.s"
-.include "sequencer/seq_event_playback.s"
+	.include "sequencer/seq_event_playback.s"
 	.include "midi/computer_interface_config.s"
-.include "midi/ac_listener_handlers.s"
+	.include "midi/ac_listener_handlers.s"
 	.include "midi/sysex_routines.s"
-.include "midi/param_load_routines.s"
+	.include "midi/param_load_routines.s"
 	.include "ui/ui_control_panel.s"
-.include "audio/presentation_sound_nav.s"
+	.include "audio/presentation_sound_nav.s"
 	.include "ui/ui_window_procs.s"
 	exts	xwa
 	add	xwa, xhl
@@ -2288,7 +2288,7 @@ MainChordPre_ReturnDefaultResult:
 ; =============================================================================
 ; Extension Device Initialization (TOSHI) & Control Panel (ROM FC3114-FFFFFF)
 ; =============================================================================
-.include "extensions/extension_init.s"
+	.include "extensions/extension_init.s"
 
 InitializeKSS:
 	ret
@@ -2436,7 +2436,7 @@ EMPTY_ROUTINE__FC3EE4:
 	.include "ui/cpanel_routines.s"
 
 
-.include "audio/tonegen_fileio_handlers.s"
+	.include "audio/tonegen_fileio_handlers.s"
 	.include "audio/audio_control_engine.s"
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
