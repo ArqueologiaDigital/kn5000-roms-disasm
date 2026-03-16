@@ -2441,11 +2441,11 @@ EMPTY_ROUTINE__FC3EE4:
 ; Sparse pointer table in flash padding (600 bytes, 3 pointers)
 ; Three ROM addresses at fixed offsets within 0xFF-filled unused space
 	.fill 120, 1, 0xFF
-	.long 0x00FCC9CB		; MIDI stream handler entry +0x078
+	.long MidiStream_SysExEntry		; MIDI stream handler entry +0x078
 	.fill 92, 1, 0xFF
-	.long 0x00FCCA0D		; MIDI stream handler entry +0x0D8
+	.long MidiStream_CtrlEntry		; MIDI stream handler entry +0x0D8
 	.fill 220, 1, 0xFF
-	.long 0x00FCCA45		; MIDI stream handler entry +0x1B8
+	.long MidiStream_CmdEntry		; MIDI stream handler entry +0x1B8
 	.fill 156, 1, 0xFF
 
 ; =============================================================================

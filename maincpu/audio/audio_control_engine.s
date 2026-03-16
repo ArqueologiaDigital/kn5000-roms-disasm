@@ -8330,6 +8330,12 @@ MidiStream_CmdJumpTable:
 	.long MidiStream_CmdMaskedNotify
 MidiStream_CmdNop:
 	ret
+
+; Entry points for sparse pointer table in flash padding
+	.equ MidiStream_SysExEntry, MidiStream_HandleSysMsg + 32
+	.equ MidiStream_CtrlEntry, MidiStream_SysExData + 26
+	.equ MidiStream_CmdEntry, MidiStream_CtrlData + 24
+
 MidiStream_CmdMaskedNotify:
 	; --- Routine 1: D/E bit masking, call FCA1FE (23 bytes) ---
 	and d, 0xc0
