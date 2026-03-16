@@ -60,24 +60,44 @@ def parse_c_file(c_path):
     with open(c_path, 'rb') as f:
         content = f.read().decode('latin-1')
 
-    # Find address range from comment
+    # Find address range from comment (multiple formats)
     m = re.search(r'ROM data at (0x[0-9A-Fa-f]+)-(0x[0-9A-Fa-f]+)', content)
     if m:
         start_addr = int(m.group(1), 16)
         end_addr = int(m.group(2), 16)
     else:
-        raise ValueError(f"Cannot find ROM address range in {c_path}")
+        # Try "Base ROM address:" format
+        m = re.search(r'Base ROM address:\s*(0x[0-9A-Fa-f]+)', content)
+        if m:
+            start_addr = int(m.group(1), 16)
+            end_addr = None  # will use array_size
+        else:
+            # Try "ROM address range:" format
+            m = re.search(r'ROM address range:\s*(0x[0-9A-Fa-f]+)-(0x[0-9A-Fa-f]+)', content)
+            if m:
+                start_addr = int(m.group(1), 16)
+                end_addr = int(m.group(2), 16)
+            else:
+                raise ValueError(f"Cannot find ROM address range in {c_path}")
 
-    # Find array size
+    # Find array size from various patterns
     m = re.search(r'\[(\d+)\]\s*=\s*\{', content)
     if m:
         array_size = int(m.group(1))
     else:
-        raise ValueError(f"Cannot find array size in {c_path}")
+        # Try _Static_assert sizeof
+        m = re.search(r'sizeof\([^)]+\)\s*==\s*(\d+)', content)
+        if m:
+            array_size = int(m.group(1))
+        else:
+            # Try #define BASE ... then compute from _Static_assert
+            raise ValueError(f"Cannot find array size in {c_path}")
 
-    # Find variable name
+    # Find variable name (raw byte array or struct)
     m = re.search(r'(?:const\s+)?unsigned\s+char\s+(\w+)\s*\[', content)
     if m:
+        var_name = m.group(1)
+    elif (m := re.search(r'const\s+\w+_t\s+(\w+)\s', content)):
         var_name = m.group(1)
     else:
         var_name = 'data'
