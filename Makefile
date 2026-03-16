@@ -35,7 +35,7 @@ ACCOMP_LINK_LD = maincpu/sequencer/accomp_screens/accomp_screens_link.ld
 
 NAKA_LINK_LD = maincpu/ui_widgets/naka_ctrl_menu_link.ld
 NAKA_TYPES_H = maincpu/ui_widgets/naka_types.h
-NAKA_BINS = maincpu/includes/generated/naka_control_menu_header.bin maincpu/includes/generated/naka_ctrl_menu_body.bin maincpu/includes/generated/naka_perf_style.bin maincpu/includes/generated/naka_msp_recording.bin maincpu/includes/generated/naka_effects_seq.bin maincpu/includes/generated/naka_midi_reverb.bin maincpu/includes/generated/naka_composer_style.bin maincpu/includes/generated/naka_direct_play.bin maincpu/includes/generated/naka_technichord_part.bin maincpu/includes/generated/naka_disk_menu_file_io.bin maincpu/includes/generated/naka_debug_naming.bin maincpu/includes/generated/naka_disk_warning.bin maincpu/includes/generated/naka_extension_device.bin maincpu/includes/generated/naka_normal_mode.bin maincpu/includes/generated/naka_widget_tables_1.bin maincpu/includes/generated/naka_master_style.bin maincpu/includes/generated/naka_sound_menu_drawbar.bin maincpu/includes/generated/naka_sequencer_exit.bin maincpu/includes/generated/naka_sequencer_channels.bin maincpu/includes/generated/naka_block_007.bin maincpu/includes/generated/naka_block_012.bin maincpu/includes/generated/naka_widget_names_charmap.bin maincpu/includes/generated/naka_technichord_strings.bin maincpu/includes/generated/naka_widget_tables_2.bin maincpu/includes/generated/naka_style_bitmaps.bin maincpu/includes/generated/naka_widget_descriptors.bin
+NAKA_BINS = maincpu/includes/generated/naka_control_menu_header.bin maincpu/includes/generated/naka_ctrl_menu_body.bin maincpu/includes/generated/naka_perf_style.bin maincpu/includes/generated/naka_msp_recording.bin maincpu/includes/generated/naka_effects_seq.bin maincpu/includes/generated/naka_midi_reverb.bin maincpu/includes/generated/naka_composer_style.bin maincpu/includes/generated/naka_direct_play.bin maincpu/includes/generated/naka_technichord_part.bin maincpu/includes/generated/naka_disk_menu_file_io.bin maincpu/includes/generated/naka_debug_naming.bin maincpu/includes/generated/naka_disk_warning.bin maincpu/includes/generated/naka_extension_device.bin maincpu/includes/generated/naka_normal_mode.bin maincpu/includes/generated/naka_widget_tables_1.bin maincpu/includes/generated/naka_master_style.bin maincpu/includes/generated/naka_sound_menu_drawbar.bin maincpu/includes/generated/naka_sequencer_exit.bin maincpu/includes/generated/naka_sequencer_channels.bin maincpu/includes/generated/naka_block_007.bin maincpu/includes/generated/naka_block_012.bin maincpu/includes/generated/naka_widget_names_charmap.bin maincpu/includes/generated/naka_technichord_strings.bin maincpu/includes/generated/naka_widget_tables_2.bin maincpu/includes/generated/naka_style_bitmaps.bin maincpu/includes/generated/naka_widget_descriptors.bin maincpu/includes/generated/naka_accomp7_widgets.bin
 
 C_DATA_BINS = $(PARAMBLOCK_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS)
 
@@ -255,6 +255,14 @@ maincpu/includes/generated/naka_widget_descriptors.bin: maincpu/ui_widgets/naka_
 	@mkdir -p maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/ui_widgets -o $@.o $<
 	$(LLVM_LLD) -T maincpu/ui_widgets/naka_widget_descriptors_link.ld -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
+
+
+maincpu/includes/generated/naka_accomp7_widgets.bin: maincpu/ui_widgets/naka_accomp7_widgets.c $(NAKA_TYPES_H) maincpu/ui_widgets/naka_accomp7_widgets_link.ld
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I maincpu/ui_widgets -o $@.o $<
+	$(LLVM_LLD) -T maincpu/ui_widgets/naka_accomp7_widgets_link.ld -o $@.elf $@.o
 	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
 	@rm -f $@.o $@.elf
 
