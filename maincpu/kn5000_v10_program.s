@@ -140,13 +140,16 @@ Bitmap_1bit_Turn_On_AGAIN:		.incbin "images/Bitmap_1bit_Turn_On_AGAIN.bin"
 GUI_FormatStrings:		.include "includes/gui_format_strings.s"
 GUI_DisplayStructData:		.include "includes/gui_display_struct_data.s"
 ToneGen_ParamTable:		.include "audio/tonegen_param_table.s"
+
+
 ; =============================================================================
 ; NAKA UI Descriptor Blocks (ROM E0E974-EEF587)
 ; Screen layouts, style selection, sequencer UI, effect editors,
 ; chord recognition, MIDI control, language dialogs, style bitmaps
 ; =============================================================================
-.include "ui_widgets/performance_style_screens.s"
+	.include "ui_widgets/performance_style_screens.s"
 	.include "ui_widgets/naka_property_descriptors.s"
+
 	ldw	de, 45312
 	.byte 0xdf, 0xf1
 	nop
@@ -157,7 +160,9 @@ ToneGen_ParamTable:		.include "audio/tonegen_param_table.s"
 	.byte 0xe6
 	jrl	z, 225
 	.long NakaStr_PaintArrowProc_Empty
-.include "ui_widgets/composer_style_convert_screens.s"
+
+	.include "ui_widgets/composer_style_convert_screens.s"
+
 	.short 0x0
 	.long Naka_PresentationRootState
 	swi	7
