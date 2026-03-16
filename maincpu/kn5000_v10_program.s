@@ -14,7 +14,6 @@
 	.include "cpanel_constants.s"
 	.include "midi_encoder_constants.s"
 
-
 ; --- Boot Dispatch Tables, LED Patterns & Dialog Bitmaps ---
 ; =============================================================================
 ; Constants for shared boot routines
@@ -125,14 +124,11 @@ Bitmap_1bit_Change_FD_2_of_2:		.incbin "images/Bitmap_1bit_Change_FD_2_of_2.bin"
 Bitmap_1bit_Illegal_Disk:		.incbin "images/Bitmap_1bit_Illegal_Disk.bin"
 Bitmap_1bit_Turn_On_AGAIN:		.incbin "images/Bitmap_1bit_Turn_On_AGAIN.bin"
 
-
 ; --- SSF (Style Synthesis Format) Gate State Data ---
 	.include "sequencer/ssf_gate_states.s"
 
-
 ; --- Instrument Sound Data & Category Metadata ---
 	.include "audio/sound_data.s"
-
 
 ; --- Style UI Parameter Blocks & Screen Data ---
 	.include "ui_widgets/style_ui_params.s"
@@ -140,7 +136,6 @@ Bitmap_1bit_Turn_On_AGAIN:		.incbin "images/Bitmap_1bit_Turn_On_AGAIN.bin"
 GUI_FormatStrings:		.include "includes/gui_format_strings.s"
 GUI_DisplayStructData:		.include "includes/gui_display_struct_data.s"
 ToneGen_ParamTable:		.include "audio/tonegen_param_table.s"
-
 
 ; =============================================================================
 ; NAKA UI Descriptor Blocks (ROM E0E974-EEF587)
