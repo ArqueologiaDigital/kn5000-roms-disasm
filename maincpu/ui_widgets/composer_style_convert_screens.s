@@ -107,3 +107,4 @@ NakaStr_PaintArrowProc_Empty:
 	.equ Naka0x3E_CustomCopy_ExecuteBtn2, NakaStr_PaintArrowProc_Empty + 0x2FBA
 	.equ Naka0x3E_CustomCopy_AbortBtn2, NakaStr_PaintArrowProc_Empty + 0x2FEE
 	.equ NakaContainer_CustomCopy_FinalRoot, NakaStr_PaintArrowProc_Empty + 0x3020
+	.equ String_MSP_BANK_SELECT, NakaStr_PaintArrowProc_Empty + 0x304A

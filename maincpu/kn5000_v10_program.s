@@ -150,36 +150,8 @@ ToneGen_ParamTable:		.include "audio/tonegen_param_table.s"
 	.include "ui_widgets/performance_style_screens.s"
 	.include "ui_widgets/naka_property_descriptors.s"
 
-	ldw	de, 45312
-	.byte 0xdf, 0xf1
-	nop
-	nop
-	nop
-	nop
-	nop
-	.byte 0xe6
-	jrl	z, 225
-	.long NakaStr_PaintArrowProc_Empty
 
 	.include "ui_widgets/composer_style_convert_screens.s"
-
-	.short 0x0
-	.long Naka_PresentationRootState
-	swi	7
-	nop
-	nop
-	nop
-	normal
-	nop
-	.byte 0xa0, 0x01
-	ldb	h, 215
-	pop_sr
-	nop
-	.long String_MSP_BANK_SELECT
-	.long 0xA5
-
-String_MSP_BANK_SELECT:
-	aligned_string "MSP BANK SELECT"
 
 	.include "ui_widgets/naka_accomp7_widgets.s"
 
