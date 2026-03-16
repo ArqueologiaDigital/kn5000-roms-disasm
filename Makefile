@@ -4,6 +4,10 @@ LLVM_LLD=$(LLVM_BIN)/ld.lld
 LLVM_OBJCOPY=$(LLVM_BIN)/llvm-objcopy
 CLANG=$(LLVM_BIN)/clang
 
+.PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
+.PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website
+.PHONY: rebuild-preset-data recompress-lzss clean-preset-data
+
 # Primary build: LLVM assembly (authoritative source)
 all: llvm-all
 	python scripts/compare_roms.py
@@ -298,8 +302,8 @@ rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf: rebuilt_ROMs/kn5000_subprogram_v14
 
 rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom: rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@.full
-	dd if=$@.full of=$@.part_a bs=1 count=256 2>/dev/null
-	dd if=$@.full of=$@.part_b bs=1 skip=60416 2>/dev/null
+	dd if=$@.full of=$@.part_a bs=1 count=256 2>/dev/null || exit 1
+	dd if=$@.full of=$@.part_b bs=1 skip=60416 2>/dev/null || exit 1
 	sync
 	cat $@.part_a $@.part_b > $@
 	rm -f $@.full $@.part_a $@.part_b
