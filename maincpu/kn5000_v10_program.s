@@ -640,7 +640,7 @@ NakaDesc_VwVariBox_DataPtrs:
 	naka_header NAKA_TYPE_0x54
 	.byte 0x4a, 0x00
 	.byte 0x0c, 0x00
-	.long LABEL_E1708A
+	.long Str_S2cGridBox
 	.long StrPrefix_S2cGridBox
 	.long StrDesc_S2cGridBox
 	.long PsStylCnvVerProc
@@ -5349,7 +5349,7 @@ FIRMWARE_VERSION:
 	.set LABEL_E14C32, 0xE14C32
 	.set LABEL_E14C86, 0xE14C86
 	.set LABEL_E16BAC, 0xE16BAC
-	.set LABEL_E1708A, 0xE1708A
+	.set Str_S2cGridBox, 0xE1708A
 	.set LABEL_E17096, 0xE17096
 	.set NakaInst_AcApcToggle, 0xE17112
 	.set LABEL_E1711E, 0xE1711E
@@ -5411,13 +5411,13 @@ FIRMWARE_VERSION:
 	.set TableData_NullDialogText, 0xE33824
 	.set LABEL_E3382C, 0xE3382C
 	.set LABEL_E338A6, 0xE338A6
-	.set LABEL_E338C2, 0xE338C2
+	.set WarnStr_Featuresforcreatingas, 0xE338C2
 	.set LABEL_E338E2, 0xE338E2
 	.set LABEL_E33EE4, 0xE33EE4
 	.set LABEL_E33F22, 0xE33F22
 	.set LABEL_E3405E, 0xE3405E
 	.set LABEL_E340A6, 0xE340A6
-	.set LABEL_E34104, 0xE34104
+	.set WarnStr_PresstheSTARTSTOPbutt, 0xE34104
 	.set LABEL_E3412A, 0xE3412A
 	.set FmtStr_pct3d, 0xE34614
 	.set LABEL_E34944, 0xE34944
@@ -5549,14 +5549,14 @@ FIRMWARE_VERSION:
 	.set Str_SEQUENCER, 0xEA3BB2
 	.set Str_PERFORM, 0xEA3D2A
 	.set Str_BACKUP, 0xEA3D7A
-	.set LABEL_EA3DCA, 0xEA3DCA
+	.set Str_PNL, 0xEA3DCA
 	.set Str_COMP_3F6A, 0xEA3F6A
 	.set Str_CUSTOM_3FDA, 0xEA3FDA
 	.set Str_MIDI_4002, 0xEA4002
 	.set Str_ALL_OFF, 0xEA4082
 	.set Str_SAVE, 0xEA41D2
 	.set Str_NEXT, 0xEA435A
-	.set LABEL_EA43BC, 0xEA43BC
+	.set Str_OFF, 0xEA43BC
 	.set Str_SAVE_44A2, 0xEA44A2
 	.set Str_PREV_471A, 0xEA471A
 	.set LABEL_EA66B6, 0xEA66B6
@@ -5637,143 +5637,143 @@ FIRMWARE_VERSION:
 	.set BmpFile_i9_bmp, 0xEB2A5E
 	.set BmpFile_i8_bmp, 0xEB2A66
 	.set BmpFile_i7_bmp, 0xEB2A6E
-	.set LABEL_EB2A76, 0xEB2A76
+	.set StyleBmp_i6obmp, 0xEB2A76
 	.set BmpFile_i5_bmp, 0xEB2A7E
-	.set LABEL_EB2A86, 0xEB2A86
-	.set LABEL_EB2A8E, 0xEB2A8E
+	.set StyleBmp_i4obmp, 0xEB2A86
+	.set StyleBmp_i3obmp, 0xEB2A8E
 	.set BmpFile_i2_bmp, 0xEB2A96
 	.set BmpFile_i1_bmp, 0xEB2A9E
 	.set BmpFile_i0_bmp, 0xEB2AA6
-	.set LABEL_EB2AAE, 0xEB2AAE
+	.set StyleBmp_trashbmp, 0xEB2AAE
 	.set Palette_8bit_RGBA, 0xEB37DE
-	.set LABEL_EBBC26, 0xEBBC26
-	.set LABEL_EBBCAE, 0xEBBCAE
-	.set LABEL_EBBD36, 0xEBBD36
-	.set LABEL_EBBDBE, 0xEBBDBE
-	.set LABEL_EBBE46, 0xEBBE46
-	.set LABEL_EBBECE, 0xEBBECE
-	.set LABEL_EBBF56, 0xEBBF56
-	.set LABEL_EBBFDE, 0xEBBFDE
-	.set LABEL_EBC066, 0xEBC066
-	.set LABEL_EBC0EE, 0xEBC0EE
-	.set LABEL_EBC176, 0xEBC176
-	.set LABEL_EBC1FE, 0xEBC1FE
-	.set LABEL_EBC286, 0xEBC286
-	.set LABEL_EBC30E, 0xEBC30E
-	.set LABEL_EBC396, 0xEBC396
-	.set LABEL_EBC41E, 0xEBC41E
-	.set LABEL_EBC4A6, 0xEBC4A6
-	.set LABEL_EBC52E, 0xEBC52E
-	.set LABEL_EBC5B6, 0xEBC5B6
-	.set LABEL_EBC63E, 0xEBC63E
-	.set LABEL_EBC6C6, 0xEBC6C6
-	.set LABEL_EBC74E, 0xEBC74E
-	.set LABEL_EBC7D6, 0xEBC7D6
-	.set LABEL_EBC85E, 0xEBC85E
-	.set LABEL_EBC8E6, 0xEBC8E6
-	.set LABEL_EBC96E, 0xEBC96E
-	.set LABEL_EBC9F6, 0xEBC9F6
-	.set LABEL_EBCA7E, 0xEBCA7E
-	.set LABEL_EBCB06, 0xEBCB06
-	.set LABEL_EBCB8E, 0xEBCB8E
-	.set LABEL_EBCC16, 0xEBCC16
-	.set LABEL_EBCC9E, 0xEBCC9E
-	.set LABEL_EBCD26, 0xEBCD26
-	.set LABEL_EBCDAE, 0xEBCDAE
-	.set LABEL_EBCE36, 0xEBCE36
-	.set LABEL_EBCEBE, 0xEBCEBE
-	.set LABEL_EBCF46, 0xEBCF46
-	.set LABEL_EBCFCE, 0xEBCFCE
-	.set LABEL_EBD056, 0xEBD056
-	.set LABEL_EBD0DE, 0xEBD0DE
-	.set LABEL_EBD166, 0xEBD166
-	.set LABEL_EBD1EE, 0xEBD1EE
-	.set LABEL_EBD276, 0xEBD276
-	.set LABEL_EBD2FE, 0xEBD2FE
-	.set LABEL_EBD386, 0xEBD386
-	.set LABEL_EBD40E, 0xEBD40E
-	.set LABEL_EBD496, 0xEBD496
-	.set LABEL_EBD51E, 0xEBD51E
-	.set LABEL_EBD5A6, 0xEBD5A6
-	.set LABEL_EBD62E, 0xEBD62E
-	.set LABEL_EBD6B6, 0xEBD6B6
-	.set LABEL_EBD73E, 0xEBD73E
-	.set LABEL_EBD7C6, 0xEBD7C6
-	.set LABEL_EBD84E, 0xEBD84E
-	.set LABEL_EBD8D6, 0xEBD8D6
-	.set LABEL_EBD95E, 0xEBD95E
-	.set LABEL_EBD9E6, 0xEBD9E6
-	.set LABEL_EBDA6E, 0xEBDA6E
-	.set LABEL_EBDAF6, 0xEBDAF6
-	.set LABEL_EBDB7E, 0xEBDB7E
-	.set LABEL_EBDC06, 0xEBDC06
-	.set LABEL_EBDC8E, 0xEBDC8E
-	.set LABEL_EBDD16, 0xEBDD16
-	.set LABEL_EBDD9E, 0xEBDD9E
-	.set LABEL_EBDE26, 0xEBDE26
-	.set LABEL_EBDEAE, 0xEBDEAE
-	.set LABEL_EBDF36, 0xEBDF36
-	.set LABEL_EBDFBE, 0xEBDFBE
-	.set LABEL_EBE046, 0xEBE046
-	.set LABEL_EBE0CE, 0xEBE0CE
-	.set LABEL_EBE156, 0xEBE156
-	.set LABEL_EBE1DE, 0xEBE1DE
-	.set LABEL_EBE266, 0xEBE266
-	.set LABEL_EBE2EE, 0xEBE2EE
-	.set LABEL_EBE376, 0xEBE376
-	.set LABEL_EBE3FE, 0xEBE3FE
-	.set LABEL_EBE486, 0xEBE486
-	.set LABEL_EBE50E, 0xEBE50E
-	.set LABEL_EBE596, 0xEBE596
-	.set LABEL_EBE61E, 0xEBE61E
-	.set LABEL_EBE6A6, 0xEBE6A6
-	.set LABEL_EBE72E, 0xEBE72E
-	.set LABEL_EBE7B6, 0xEBE7B6
-	.set LABEL_EBE83E, 0xEBE83E
-	.set LABEL_EBE8C6, 0xEBE8C6
-	.set LABEL_EBE94E, 0xEBE94E
-	.set LABEL_EBE9D6, 0xEBE9D6
-	.set LABEL_EBEA5E, 0xEBEA5E
-	.set LABEL_EBEAE6, 0xEBEAE6
-	.set LABEL_EBEB6E, 0xEBEB6E
-	.set LABEL_EBEBF6, 0xEBEBF6
-	.set LABEL_EBEC7E, 0xEBEC7E
-	.set LABEL_EBED06, 0xEBED06
-	.set LABEL_EBED8E, 0xEBED8E
-	.set LABEL_EBEE16, 0xEBEE16
-	.set LABEL_EBEE9E, 0xEBEE9E
-	.set LABEL_EBEF26, 0xEBEF26
-	.set LABEL_EBEFAE, 0xEBEFAE
-	.set LABEL_EBF036, 0xEBF036
-	.set LABEL_EBF0BE, 0xEBF0BE
-	.set LABEL_EBF146, 0xEBF146
-	.set LABEL_EBF1CE, 0xEBF1CE
-	.set LABEL_EBF256, 0xEBF256
-	.set LABEL_EBF2DE, 0xEBF2DE
-	.set LABEL_EBF366, 0xEBF366
-	.set LABEL_EBF3EE, 0xEBF3EE
-	.set LABEL_EBF476, 0xEBF476
-	.set LABEL_EBF4FE, 0xEBF4FE
-	.set LABEL_EBF586, 0xEBF586
-	.set LABEL_EBF60E, 0xEBF60E
-	.set LABEL_EBF696, 0xEBF696
-	.set LABEL_EBF71E, 0xEBF71E
-	.set LABEL_EBF7A6, 0xEBF7A6
-	.set LABEL_EBF82E, 0xEBF82E
-	.set LABEL_EBF8B6, 0xEBF8B6
-	.set LABEL_EBF93E, 0xEBF93E
-	.set LABEL_EBF9C6, 0xEBF9C6
-	.set LABEL_EBFA4E, 0xEBFA4E
-	.set LABEL_EBFAD6, 0xEBFAD6
-	.set LABEL_EBFB5E, 0xEBFB5E
-	.set LABEL_EBFBE6, 0xEBFBE6
-	.set LABEL_EBFC6E, 0xEBFC6E
-	.set LABEL_EBFCF6, 0xEBFCF6
-	.set LABEL_EBFD7E, 0xEBFD7E
-	.set LABEL_EBFE06, 0xEBFE06
-	.set LABEL_EBFE8E, 0xEBFE8E
-	.set LABEL_EBFF16, 0xEBFF16
-	.set LABEL_EBFF9E, 0xEBFF9E
+	.set StyleBmp_ZachariasSwing, 0xEBBC26
+	.set StyleBmp_YeeHaFiddles, 0xEBBCAE
+	.set StyleBmp_WunderPops, 0xEBBD36
+	.set StyleBmp_WildSideOrgan, 0xEBBDBE
+	.set StyleBmp_WheelsofLife, 0xEBBE46
+	.set StyleBmp_WeddingParty, 0xEBBECE
+	.set StyleBmp_WandrinKeys, 0xEBBF56
+	.set StyleBmp_WaltzingConcert, 0xEBBFDE
+	.set StyleBmp_WailersGuitar, 0xEBC066
+	.set StyleBmp_VocalBeats, 0xEBC0EE
+	.set StyleBmp_ViennaWoods, 0xEBC176
+	.set StyleBmp_VegasShowman, 0xEBC1FE
+	.set StyleBmp_UptownHorns, 0xEBC286
+	.set StyleBmp_TwoStepDuo, 0xEBC30E
+	.set StyleBmp_TwilightPiano, 0xEBC396
+	.set StyleBmp_TravoltaDance, 0xEBC41E
+	.set StyleBmp_TopBrassJive, 0xEBC4A6
+	.set StyleBmp_TirolerHarp, 0xEBC52E
+	.set StyleBmp_TheatreBand, 0xEBC5B6
+	.set StyleBmp_ThePartyBand, 0xEBC63E
+	.set StyleBmp_TheDukesPiano, 0xEBC6C6
+	.set StyleBmp_TennesseeGuitar, 0xEBC74E
+	.set StyleBmp_TechnoFiddle, 0xEBC7D6
+	.set StyleBmp_TangoMarcato, 0xEBC85E
+	.set StyleBmp_TakeItEasy, 0xEBC8E6
+	.set StyleBmp_SynthParty, 0xEBC96E
+	.set StyleBmp_SynthForSoul, 0xEBC9F6
+	.set StyleBmp_SymphonyBallad, 0xEBCA7E
+	.set StyleBmp_SwingingKeys, 0xEBCB06
+	.set StyleBmp_SwingSerenade, 0xEBCB8E
+	.set StyleBmp_SwingB3Threes, 0xEBCC16
+	.set StyleBmp_SweetSoprano, 0xEBCC9E
+	.set StyleBmp_SweepingBridge, 0xEBCD26
+	.set StyleBmp_SunnySpainMood, 0xEBCDAE
+	.set StyleBmp_StreetTalk, 0xEBCE36
+	.set StyleBmp_StephaneDjango, 0xEBCEBE
+	.set StyleBmp_SteelStrings, 0xEBCF46
+	.set StyleBmp_SpyraSteel, 0xEBCFCE
+	.set StyleBmp_SpanishMoments, 0xEBD056
+	.set StyleBmp_SouthernStyle, 0xEBD0DE
+	.set StyleBmp_SoulfulWhaWha, 0xEBD166
+	.set StyleBmp_SoulVocalDuo, 0xEBD1EE
+	.set StyleBmp_SoulHorn, 0xEBD276
+	.set StyleBmp_SopranoGroove, 0xEBD2FE
+	.set StyleBmp_SolidSixteen, 0xEBD386
+	.set StyleBmp_SolidDistortion, 0xEBD40E
+	.set StyleBmp_SoftRock, 0xEBD496
+	.set StyleBmp_SmoothLips, 0xEBD51E
+	.set StyleBmp_SlowSpinGroove, 0xEBD5A6
+	.set StyleBmp_SlapBackRock, 0xEBD62E
+	.set StyleBmp_SkeletonDance, 0xEBD6B6
+	.set StyleBmp_SingItPlayIt, 0xEBD73E
+	.set StyleBmp_SinatraStrings, 0xEBD7C6
+	.set StyleBmp_SimpleBand, 0xEBD84E
+	.set StyleBmp_ShuffleOrgan, 0xEBD8D6
+	.set StyleBmp_ShearingCombo, 0xEBD95E
+	.set StyleBmp_SevilleOctaves, 0xEBD9E6
+	.set StyleBmp_SentimentalSolo, 0xEBDA6E
+	.set StyleBmp_SaxyMambo, 0xEBDAF6
+	.set StyleBmp_SaxDrumsRRoll, 0xEBDB7E
+	.set StyleBmp_SaxMamboist, 0xEBDC06
+	.set StyleBmp_SantasHelpers, 0xEBDC8E
+	.set StyleBmp_SambaUnion, 0xEBDD16
+	.set StyleBmp_SambaParty, 0xEBDD9E
+	.set StyleBmp_RossVocals, 0xEBDE26
+	.set StyleBmp_RollingWheels, 0xEBDEAE
+	.set StyleBmp_RockSymphony, 0xEBDF36
+	.set StyleBmp_RockFall, 0xEBDFBE
+	.set StyleBmp_RioHorns, 0xEBE046
+	.set StyleBmp_RickysStrat, 0xEBE0CE
+	.set StyleBmp_RetroGroove, 0xEBE156
+	.set StyleBmp_ReinhardtsSolo, 0xEBE1DE
+	.set StyleBmp_ReggaeDanceHit, 0xEBE266
+	.set StyleBmp_ReedItSwing, 0xEBE2EE
+	.set StyleBmp_RastaJambo, 0xEBE376
+	.set StyleBmp_RadioOrchestra, 0xEBE3FE
+	.set StyleBmp_PuentesBigband, 0xEBE486
+	.set StyleBmp_PowerSaxSwing, 0xEBE50E
+	.set StyleBmp_PopLeader, 0xEBE596
+	.set StyleBmp_PopBridge, 0xEBE61E
+	.set StyleBmp_PolyDance, 0xEBE6A6
+	.set StyleBmp_PlateDance, 0xEBE72E
+	.set StyleBmp_PennyFolkSong, 0xEBE7B6
+	.set StyleBmp_PartyPopStack, 0xEBE83E
+	.set StyleBmp_PartyAccordion, 0xEBE8C6
+	.set StyleBmp_ParadiseKeys, 0xEBE94E
+	.set StyleBmp_OverTheTopWah, 0xEBE9D6
+	.set StyleBmp_OrganistsSwing, 0xEBEA5E
+	.set StyleBmp_OrchestralEight, 0xEBEAE6
+	.set StyleBmp_OneTwoThree, 0xEBEB6E
+	.set StyleBmp_OleGuitar, 0xEBEBF6
+	.set StyleBmp_OldTimeSaloon, 0xEBEC7E
+	.set StyleBmp_OldNewFunk, 0xEBED06
+	.set StyleBmp_OklahomaDance, 0xEBED8E
+	.set StyleBmp_OceanVocals, 0xEBEE16
+	.set StyleBmp_NotRavels, 0xEBEE9E
+	.set StyleBmp_NiceKeroncong, 0xEBEF26
+	.set StyleBmp_NewSquareDance, 0xEBEFAE
+	.set StyleBmp_NewJazzBallad, 0xEBF036
+	.set StyleBmp_NashvilleDance, 0xEBF0BE
+	.set StyleBmp_MuteSoloist, 0xEBF146
+	.set StyleBmp_MusetteBallad, 0xEBF1CE
+	.set StyleBmp_MovieBallad, 0xEBF256
+	.set StyleBmp_MoschsMilitary, 0xEBF2DE
+	.set StyleBmp_MoiksMarchshow, 0xEBF366
+	.set StyleBmp_ModernBoogie, 0xEBF3EE
+	.set StyleBmp_MirandaMallets, 0xEBF476
+	.set StyleBmp_MidnightTunes, 0xEBF4FE
+	.set StyleBmp_MerengueParty, 0xEBF586
+	.set StyleBmp_MellowSection, 0xEBF60E
+	.set StyleBmp_MellowJazzTabs, 0xEBF696
+	.set StyleBmp_MellowShuffle, 0xEBF71E
+	.set StyleBmp_MaxsOrchestra, 0xEBF7A6
+	.set StyleBmp_MarchingPolka, 0xEBF82E
+	.set StyleBmp_MamboJambo, 0xEBF8B6
+	.set StyleBmp_MadTabs, 0xEBF93E
+	.set StyleBmp_LondonsBigbone, 0xEBF9C6
+	.set StyleBmp_LionelsJazz, 0xEBFA4E
+	.set StyleBmp_LikeSunday, 0xEBFAD6
+	.set StyleBmp_LetItShine, 0xEBFB5E
+	.set StyleBmp_LatinoPiccolo, 0xEBFBE6
+	.set StyleBmp_LatinPassion, 0xEBFC6E
+	.set StyleBmp_LatinBallroom, 0xEBFCF6
+	.set StyleBmp_LastStarparade, 0xEBFD7E
+	.set StyleBmp_LAWarmth, 0xEBFE06
+	.set StyleBmp_KnopflerTribute, 0xEBFE8E
+	.set StyleBmp_KeyGrooves, 0xEBFF16
+	.set StyleBmp_JustTheFlute, 0xEBFF9E
 	.set NakaStr_SoundPreset176, 0xEC00C7
 	.set SoundName_160, 0xEC00EC
 	.set LABEL_EC0113, 0xEC0113

@@ -33,14 +33,14 @@ NakaInst_IvWaitWinCtlProc:
 	.equ Str_SEQUENCER, NakaInst_IvWaitWinCtlProc + 0x27E6
 	.equ Str_PERFORM, NakaInst_IvWaitWinCtlProc + 0x295E
 	.equ Str_BACKUP, NakaInst_IvWaitWinCtlProc + 0x29AE
-	.equ LABEL_EA3DCA, NakaInst_IvWaitWinCtlProc + 0x29FE
+	.equ Str_PNL, NakaInst_IvWaitWinCtlProc + 0x29FE
 	.equ Str_COMP_3F6A, NakaInst_IvWaitWinCtlProc + 0x2B9E
 	.equ Str_CUSTOM_3FDA, NakaInst_IvWaitWinCtlProc + 0x2C0E
 	.equ Str_MIDI_4002, NakaInst_IvWaitWinCtlProc + 0x2C36
 	.equ Str_ALL_OFF, NakaInst_IvWaitWinCtlProc + 0x2CB6
 	.equ Str_SAVE, NakaInst_IvWaitWinCtlProc + 0x2E06
 	.equ Str_NEXT, NakaInst_IvWaitWinCtlProc + 0x2F8E
-	.equ LABEL_EA43BC, NakaInst_IvWaitWinCtlProc + 0x2FF0
+	.equ Str_OFF, NakaInst_IvWaitWinCtlProc + 0x2FF0
 	.equ Str_SAVE_44A2, NakaInst_IvWaitWinCtlProc + 0x30D6
 	.equ Str_PREV_471A, NakaInst_IvWaitWinCtlProc + 0x334E
 	.equ LABEL_EA66B6, NakaInst_IvWaitWinCtlProc + 0x52EA
