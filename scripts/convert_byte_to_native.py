@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Convert .byte code blocks to native TLCS-900 instructions in audio_control_engine.s.
+"""Convert .byte code blocks to native TLCS-900 instructions.
+
+Usage: convert_byte_to_native.py [filename]
+  If no filename given, defaults to maincpu/audio/audio_control_engine.s
 
 Uses llvm-mc to disassemble and verify round-trip encoding.
 Uses binary I/O to preserve Latin-1 bytes.
@@ -11,24 +14,33 @@ import sys
 import os
 
 LLVM_MC = "/mnt/shared/llvm-project/build/bin/llvm-mc"
-TARGET_FILE = "maincpu/audio/audio_control_engine.s"
+DEFAULT_TARGET = "maincpu/audio/audio_control_engine.s"
 
-# Labels that mark DATA sections - skip conversion
-DATA_LABELS = {
-    "FileIO_BytecodeData",
-    "VoiceMode_ParamConfigTables",
-    "MidiStream_SysExJumpTable",
-    "MidiStream_CtrlJumpTable",
-    "MidiStream_CmdJumpTable",
-    "MidiSeqBuf_ProcessorTable",
-    "TempoRing_ProcessorTable",
-    "MidiCtrl_ModeDispatch_Table",
-    "VoiceMode3_DispatchTable",
-    "VoiceParam_ModeDispatch_Table",
-    "MidiVoiceNote_Dispatch_Table",
-    "MidiStream_Processor_Table",
-    "RegisterBit_Manipulate_Table",
+# Labels that mark DATA sections - skip conversion (per-file)
+DATA_LABELS_BY_FILE = {
+    "maincpu/audio/audio_control_engine.s": {
+        "FileIO_BytecodeData",
+        "VoiceMode_ParamConfigTables",
+        "MidiStream_SysExJumpTable",
+        "MidiStream_CtrlJumpTable",
+        "MidiStream_CmdJumpTable",
+        "MidiSeqBuf_ProcessorTable",
+        "TempoRing_ProcessorTable",
+        "MidiCtrl_ModeDispatch_Table",
+        "VoiceMode3_DispatchTable",
+        "VoiceParam_ModeDispatch_Table",
+        "MidiVoiceNote_Dispatch_Table",
+        "MidiStream_Processor_Table",
+        "RegisterBit_Manipulate_Table",
+    },
 }
+
+# Auto-detect data labels: labels containing these substrings
+# followed by .byte blocks are likely data tables
+DATA_LABEL_PATTERNS = [
+    "Table", "JumpTable", "DispatchTable", "ProcessorTable",
+    "BytecodeData", "ConfigTable",
+]
 
 # Cache for assembly results
 _asm_cache = {}
@@ -173,7 +185,18 @@ def process_byte_block(byte_list):
     return result
 
 
-def find_byte_blocks(lines_text):
+def is_data_label(label, data_labels_set):
+    """Check if a label is a known data label (explicit set or pattern match)."""
+    if label in data_labels_set:
+        return True
+    # Auto-detect: labels ending with Table, JumpTable, etc.
+    for pattern in DATA_LABEL_PATTERNS:
+        if label.endswith(pattern):
+            return True
+    return False
+
+
+def find_byte_blocks(lines_text, data_labels_set):
     """Find all contiguous .byte blocks."""
     blocks = []
     in_block = False
@@ -188,7 +211,7 @@ def find_byte_blocks(lines_text):
         label_match = re.match(r'^([A-Za-z_]\w*):', stripped)
         if label_match:
             current_label = label_match.group(1)
-            in_data = current_label in DATA_LABELS
+            in_data = is_data_label(current_label, data_labels_set)
 
         byte_vals = parse_byte_line(stripped)
 
@@ -214,11 +237,16 @@ def find_byte_blocks(lines_text):
 def main():
     os.chdir("/mnt/shared/kn5000-roms-disasm")
 
-    data = read_file_binary(TARGET_FILE)
+    target_file = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_TARGET
+    print(f"Processing: {target_file}")
+
+    data_labels_set = DATA_LABELS_BY_FILE.get(target_file, set())
+
+    data = read_file_binary(target_file)
     lines_raw = data.split(b'\n')
     lines_text = [l.decode('latin-1') for l in lines_raw]
 
-    blocks = find_byte_blocks(lines_text)
+    blocks = find_byte_blocks(lines_text, data_labels_set)
 
     print(f"Found {len(blocks)} .byte blocks")
 
@@ -299,9 +327,9 @@ def main():
         new_lines_text[start:end] = new_lines
 
     output = '\n'.join(new_lines_text)
-    write_file_binary(TARGET_FILE, output.encode('latin-1'))
+    write_file_binary(target_file, output.encode('latin-1'))
 
-    print(f"\nWrote {len(new_lines_text)} lines to {TARGET_FILE}")
+    print(f"\nWrote {len(new_lines_text)} lines to {target_file}")
 
 
 if __name__ == "__main__":
