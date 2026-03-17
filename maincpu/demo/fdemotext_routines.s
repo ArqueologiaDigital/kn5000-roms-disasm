@@ -1253,7 +1253,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	xwa, xiz
 	.byte 0xd7, 0xe2, 0xa8
 	pushw	wa
-	.long Data_E90B3B
+	.long Bitmap_TechnichordBackground_2
 	pushw	64982
 	pushw	2
 	pushw	18422
@@ -1941,22 +1941,22 @@ FDemoText_ByteData_LayoutEngine:
 	call	16715597
 	lda	xsp, (xsp+28)
 	.byte 0x40
-	.long PadFF_E40002
+	.long Pad_AfterNakaData_ExternalBase
 	ld	xbc, 29360130
 	lds32	xde, 5
 	call	16422496
 	.byte 0x40
-	.long PadFF_E40005
+	.long Pad_NakaExternal_Block1
 	ld	xbc, 29360130
 	lds32	xde, 5
 	call	16422496
 	.byte 0x40
-	.long PadFF_E40005
+	.long Pad_NakaExternal_Block1
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16422496
 	.byte 0x40
-	.long PadFF_E40005
+	.long Pad_NakaExternal_Block1
 	ld	xbc, 29425669
 	ld	xde, 19
 	call	16422496

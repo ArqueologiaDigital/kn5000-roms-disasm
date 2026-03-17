@@ -3523,7 +3523,7 @@ FileIO_ByteBlock_F8817E:
 	cps	hl, 0
 	jr	ge, 6
 	.byte 0x33, 0x98
-	.long PadFF_E678FF
+	.long Pad_AfterBitmap_MIDIConnections_1
 	ld	a, l
 	.byte 0xc7
 	swi	0

@@ -132,8 +132,8 @@ FlashRead_BlockHandler_Table:
 	.long FlashRead_BlockData_Field4
 	.long FlashRead_BlockData_Field5
 	.long FlashRead_BlockData_Field6
-	.long AudioData_F1589C
-	.long AudioData_F15891
+	.long FlashRead_BlockData_Field7
+	.long FlashRead_BlockData_Field8
 FlashWrite_BlockData_Type3:
 	nop
 	ldwio	97, 65286
@@ -1123,22 +1123,22 @@ FlashWrite_BlockRef_Type6:
 	jr	f, -15
 	nop
 DrumDetailEdit_Menu_Table:
-	.long AudioData_F16006
-	.long AudioData_F16006
-	.long AudioData_F1604A
-	.long AudioData_F16092
-	.long AudioData_F16056
-	.long AudioData_F1609E
-	.long AudioData_F16063
-	.long AudioData_F160AB
+	.long DrumDetailEdit_Entry_01
+	.long DrumDetailEdit_Entry_01
+	.long DrumDetailEdit_Entry_03
+	.long DrumDetailEdit_Entry_07
+	.long DrumDetailEdit_Entry_04
+	.long DrumDetailEdit_Entry_08
+	.long DrumDetailEdit_Entry_05
+	.long DrumDetailEdit_Entry_09
 	.long Data_Dispatch_Entry
 	.long Data_Dispatch_Entry
 	.long Data_Dispatch_Entry
 	.long Data_Dispatch_Entry_0x39
 	.long Data_Dispatch_Entry_0x39
 	.long Data_Dispatch_Entry_0x45
-	.long AudioData_F16028
-	.long AudioData_F16070
+	.long DrumDetailEdit_Entry_02
+	.long DrumDetailEdit_Entry_06
 	.byte 0x23, 0x05, 0x10, 0x7f, 0x00, 0x23, 0x05, 0x63
 	.byte 0xa3, 0x0a, 0x23, 0x05, 0x61, 0xc2, 0x0a, 0x23
 	.byte 0x05, 0x21, 0xbb, 0x10, 0x23, 0x05, 0x5f, 0xda
@@ -1188,8 +1188,8 @@ DrumDetailEdit_Menu_Table:
 	.byte 0x4a, 0x00, 0x01, 0x0a, 0x0b, 0x00, 0x6a, 0x00
 	.byte 0x9c, 0x00, 0x6a, 0x00, 0x01, 0x0a, 0x59, 0x00
 	.byte 0xe4, 0x00, 0x6e, 0x00, 0xe4, 0x00, 0x01, 0x0a
-	.long PadFF_E40081
-	.long Data_E40096
+	.long Pad_NakaExternal_Block4
+	.long NakaData_ExternalPadBlock_A
 	.byte 0x02, 0x0a, 0x2e, 0x00, 0x38, 0x00, 0x2e, 0x00
 	.byte 0x8a, 0x00, 0x05, 0x0a, 0x16, 0x01, 0x43, 0x00
 	.byte 0x32, 0x01, 0x5c, 0x00, 0x06, 0x13, 0x60, 0x1d
@@ -1273,16 +1273,16 @@ DrumDetailEdit_Menu_Table:
 	.byte 0xf1, 0x00, 0x0d, 0x00, 0x8e, 0x1e, 0x4f, 0x46
 	.ascii "F          OFF          "
 EffectParam_Edit_Table:
-	.long AudioData_F164EC
-	.long AudioData_F1649B
-	.long AudioData_F164A6
-	.long AudioData_F164B5
-	.long AudioData_F164C0
-	.long AudioData_F164C0
-	.long AudioData_F164D6
-	.long AudioData_F164E1
-	.long AudioData_F164E1
-	.long AudioData_F164CB
+	.long EffectParamEdit_Entry_08
+	.long EffectParamEdit_Entry_01
+	.long EffectParamEdit_Entry_02
+	.long EffectParamEdit_Entry_03
+	.long EffectParamEdit_Entry_04
+	.long EffectParamEdit_Entry_04
+	.long EffectParamEdit_Entry_06
+	.long EffectParamEdit_Entry_07
+	.long EffectParamEdit_Entry_07
+	.long EffectParamEdit_Entry_05
 	.byte 0x0c, 0x00, 0x3b, 0x00, 0x9b, 0x00, 0x58, 0x00
 	.byte 0x0c, 0x00, 0x3b, 0x00, 0x9b, 0x00, 0x58, 0x00
 	.byte 0x0c, 0x00, 0x62, 0x00, 0x9b, 0x00, 0x7f, 0x00

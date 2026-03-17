@@ -1219,8 +1219,8 @@ PerfMode_ParamHandler_0:
 	ret
 PerfMode_EventTable_0:
 	.long UIDisp_DefaultInputHandler
-	.long SeqData_EF8B6D
-	.long SeqData_EF8DFB
+	.long PerfMode_Evt01_Handler
+	.long PerfMode_Evt02_Handler
 	.long PerfMode_Evt03_FlagHandler_A
 	.long PerfMode_Evt03_FlagHandler_B
 	.long PerfMode_Evt03_ClampAndUpdate
@@ -1236,8 +1236,8 @@ PerfMode_EventTable_0:
 	.long ToneParam_Evt0F_BytecodeHandler
 	.long DefaultHandler_Ret
 	.long UIDisp_DefaultInputHandler
-	.long SeqData_EF8B6D
-	.long SeqData_EF8DFB
+	.long PerfMode_Evt01_Handler
+	.long PerfMode_Evt02_Handler
 	.long PerfMode_Evt03_FlagHandler_A
 	.long PerfMode_Evt03_FlagHandler_B
 	.long PerfMode_Evt03_ClampAndUpdate
@@ -2043,8 +2043,8 @@ UIState_EventTable:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long SeqData_EF955D
-	.long SeqData_EF9554
+	.long UIState_Evt05_Handler
+	.long UIState_Evt06_Handler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long ToneParam_ShortCallHandler
@@ -2060,8 +2060,8 @@ UIState_EventTable:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long SeqData_EF955D
-	.long SeqData_EF9554
+	.long UIState_Evt05_Handler
+	.long UIState_Evt06_Handler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -2566,8 +2566,8 @@ PerfMode_DispatchTable_B:
 	.long DefaultHandler_Ret
 	.long PerfMode_ParamHandler_Data
 	.long DefaultHandler_Ret
-	.long SeqData_EF955D
-	.long SeqData_EF9554
+	.long UIState_Evt05_Handler
+	.long UIState_Evt06_Handler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long ToneParam_ShortCallHandler
@@ -2583,8 +2583,8 @@ PerfMode_DispatchTable_B:
 	.long DefaultHandler_Ret
 	.long PerfMode_ParamHandler_Data
 	.long DefaultHandler_Ret
-	.long SeqData_EF955D
-	.long SeqData_EF9554
+	.long UIState_Evt05_Handler
+	.long UIState_Evt06_Handler
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -15187,7 +15187,7 @@ StringData_KeyNames:	.ascii "  C D"
 	and	l, 3
 	sla	hl, 2
 	.byte 0x45
-	.long SeqData_EFF827
+	.long StringData_PartModeNames
 	.byte 0xf3
 	reti
 	.byte 0xf4, 0xec
@@ -19370,7 +19370,7 @@ Scoop_EnvProcessor_Data:
 	jr	nz, 48
 	ld	a, e
 	extz	wa
-	.long ZeroData_E00B28
+	.long ScoopDisp_EmptyBitmapData
 	pushw	52426
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -19379,7 +19379,7 @@ Scoop_EnvProcessor_Data:
 	jr	46
 	ld	a, e
 	extz	wa
-	.long ZeroData_E00B28
+	.long ScoopDisp_EmptyBitmapData
 	pushw	52430
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -19388,7 +19388,7 @@ Scoop_EnvProcessor_Data:
 	jr	22
 	ld	a, e
 	extz	wa
-	.long ZeroData_E00B28
+	.long ScoopDisp_EmptyBitmapData
 	pushw 52434
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -19470,7 +19470,7 @@ Scoop_EnvProcessor_Data:
 	jr	nz, 49
 	ld	a, e
 	extz	wa
-	.long ZeroData_E00B28
+	.long ScoopDisp_EmptyBitmapData
 	pushw	52446
 	lda	xwa, (xsp+11)
 	push	xwa
@@ -19953,7 +19953,7 @@ Scoop_EventLoop_36Entry_Data:
 	lda	xsp, (xsp+10)
 	jr	19
 	.byte 0x91
-	.long Data_E00B04
+	.long ScoopDisp_BitmapDataBlock
 	pushw	52558
 	lda	xwa, (xsp+10)
 	push	xwa

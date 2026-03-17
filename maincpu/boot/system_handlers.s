@@ -8010,7 +8010,7 @@ HDAE5000_Init_BytecodeBlock:
 	.byte 0x04, 0xc7
 	swi	3
 	.byte 0xa8, 0x08, 0xe4
-	.long Data_E00800
+	.long Bitmap_1bit_FlashStatus_Icon
 	ldio	237, 0
 	ldio	227, 0
 	ldio	235, 0

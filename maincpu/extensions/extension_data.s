@@ -1299,7 +1299,7 @@ VariationStr_V1:
 	nop
 	push_sr
 	nop
-	.long ZeroData_E6009A
+	.long NakaData_DescriptorPad_ZeroA
 	.byte 0xad
 	nop
 	push_sr
@@ -3603,7 +3603,7 @@ ErrorDialog_RecoveryLine2:
 	ldwio	0, 8
 	pushw	iz
 	nop
-	.long Data_E500BE
+	.long TechnichordParam_Block3
 	.byte 0xc8
 	nop
 	jrl	f, -4761
@@ -5120,33 +5120,33 @@ SoundProgram_DispatchTable:
 	.byte 0x04, 0x05, 0x06, 0x03, 0x0f, 0x15, 0x15, 0x19
 	.byte 0x14, 0x0c, 0x0d, 0x0e, 0xec, 0xa6, 0xed, 0x00
 Naka_ToshiParam_Table:
-	.long SoundData_EDA704
-	.long SoundData_EDA71C
-	.long SoundData_EDA734
-	.long SoundData_EDA74C
-	.long SoundData_EDA764
-	.long SoundData_EDA77C
-	.long SoundData_EDA794
-	.long SoundData_EDA7AC
-	.long SoundData_EDA7C4
-	.long SoundData_EDA7DC
-	.long SoundData_EDA7F4
-	.long SoundData_EDA80C
-	.long SoundData_EDA824
-	.long SoundData_EDA83C
-	.long SoundData_EDA854
-	.long SoundData_EDA86C
-	.long SoundData_EDA884
-	.long SoundData_EDA89C
-	.long SoundData_EDA8B4
-	.long SoundData_EDA8E4
-	.long SoundData_EDA914
-	.long SoundData_EDA944
-	.long SoundData_EDA974
-	.long SoundData_EDA9A4
-	.long SoundData_EDA9D4
-	.long SoundData_EDAA04
-	.long SoundData_EDAA34
+	.long ToshiParam_Entry_01
+	.long ToshiParam_Entry_02
+	.long ToshiParam_Entry_03
+	.long ToshiParam_Entry_04
+	.long ToshiParam_Entry_05
+	.long ToshiParam_Entry_06
+	.long ToshiParam_Entry_07
+	.long ToshiParam_Entry_08
+	.long ToshiParam_Entry_09
+	.long ToshiParam_Entry_10
+	.long ToshiParam_Entry_11
+	.long ToshiParam_Entry_12
+	.long ToshiParam_Entry_13
+	.long ToshiParam_Entry_14
+	.long ToshiParam_Entry_15
+	.long ToshiParam_Entry_16
+	.long ToshiParam_Entry_17
+	.long ToshiParam_Entry_18
+	.long ToshiParam_Entry_19
+	.long ToshiParam_Entry_20
+	.long ToshiParam_Entry_21
+	.long ToshiParam_Entry_22
+	.long ToshiParam_Entry_23
+	.long ToshiParam_Entry_24
+	.long ToshiParam_Entry_25
+	.long ToshiParam_Entry_26
+	.long ToshiParam_Entry_27
 	.byte 0x5a, 0x5a, 0x00, 0x00
 	.byte 0x48, 0x4b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.zero 16

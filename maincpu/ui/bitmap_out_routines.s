@@ -183,7 +183,7 @@ BitMapOut_ByteData_RenderD:
 	cps	hl, 0
 	jr	z, 120
 	call	16406631
-	.long Data_E8CFEB
+	.long DrawbarSlider_ConfigData
 	.byte 0xa0, 0x01
 	jr	nz, 108
 	.byte 0xc1, 0x80, 0xc0

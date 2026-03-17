@@ -12154,7 +12154,7 @@ AccStyle_InitVRAM:
 	ret
 
 AccStyle_SC0ByteSelect:
-	.long PadFF_E3E0F1
+	.long Pad_AfterBitmap_Dredt0k_2
 	rcf
 	ldda8	a, 13198
 	and	a, 31
@@ -12173,7 +12173,7 @@ AccStyle_SC0ByteSelect:
 	ldda8	a, 13198
 	and	a, 31
 	jr	nz, 5
-	.long PadFF_E3DEF1
+	.long Pad_AfterBitmap_Dredt0k
 	rcf
 	stdi8	13198, 8
 	ret
@@ -22325,7 +22325,7 @@ AccPat_DualVoice_DataBlock:
 	sla	l, 2
 	xor	h, h
 	.byte 0x44
-	.long Data_E46312
+	.long RhythmTiming_OffsetTable
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xec
@@ -27436,7 +27436,7 @@ Tempo_DisplayParamSkipClear:
 	ldw wa, 0xEE
 	jp SoundCtrl_SendCommand
 Tempo_DisplayParamFormat:
-	.long PadFF_E3DEF1
+	.long Pad_AfterBitmap_Dredt0k
 	cp	a, (xwa)
 	or	hl, ix
 	.byte 0x41
@@ -32484,7 +32484,7 @@ CstmCpTtl_Dispatch2:
 	jr	nc, 12
 	.byte 0xf1, 0x42, 0x7f
 	nop
-	.long SeqData_EE3025
+	.long SeqData_SubDispatch_ParamB
 	call	16356541
 	ldda8	a, 14774
 	extz	wa
@@ -32499,7 +32499,7 @@ CstmCpTtl_Dispatch2:
 	jr	nz, 120
 	.byte 0xf1, 0x42, 0x7f
 	nop
-	.long SeqData_EE3023
+	.long SeqData_SubDispatch_ParamA
 	jr	106
 	stdi8	32578, 15
 	ldw	wa, 238
@@ -32553,7 +32553,7 @@ CstmCp_StyleDataBlock:
 	jr	nz, 12
 	.byte 0xf1, 0x42, 0x7f
 	nop
-	.long SeqData_EE3023
+	.long SeqData_SubDispatch_ParamA
 	call	16356541
 	lds32	xhl, 0
 	ret

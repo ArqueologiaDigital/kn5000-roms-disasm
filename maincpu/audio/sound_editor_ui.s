@@ -8528,8 +8528,8 @@ SeMenu_ShowPopupDialog_Draw:
 	.long SeMenu_FilterEdit_DataBlock5
 	.long SeMenu_EqEdit_Init
 	.long SeMenu_PresetManager_Load
-	.long AudioData_F10512
-	.long AudioData_F105C4
+	.long SeMenu_DataBlock_11
+	.long SeMenu_DataBlock_12
 	.long SeMenu_WaveformSelect_End
 	.long SeMenu_WaveformSelect_End
 	.long SeMenu_WaveformSelect_End
@@ -8583,30 +8583,30 @@ SeMenu_ShowConfirmDialog_Data:
 	.long SeMenu_FilterEdit_DataBlock3
 	.long SeMenu_BankEdit_Dispatch
 	.long SeMenu_DrumKit_Dispatch
-	.long AudioData_F104E8
+	.long SeMenu_DataBlock_10
 	.long SeMenu_FilterEdit_DataBlock4
 	.long Data_UnknownBlock
-	.long AudioData_F1039E
-	.long AudioData_F1040D
-	.long AudioData_F1041D
-	.long AudioData_F10454
+	.long SeMenu_DataBlock_01
+	.long SeMenu_DataBlock_02
+	.long SeMenu_DataBlock_03
+	.long SeMenu_DataBlock_04
 	.long Data_UnknownBlock
-	.long AudioData_F10464
-	.long AudioData_F1048E
-	.long AudioData_F104B8
-	.long AudioData_F104C8
-	.long AudioData_F104D8
+	.long SeMenu_DataBlock_05
+	.long SeMenu_DataBlock_06
+	.long SeMenu_DataBlock_07
+	.long SeMenu_DataBlock_08
+	.long SeMenu_DataBlock_09
 	.long SeMenu_WaveformSelect_End
-	.long AudioData_F1040D
-	.long AudioData_F104E8
+	.long SeMenu_DataBlock_02
+	.long SeMenu_DataBlock_10
 	.long SeMenu_FilterEdit_DataBlock4
 	.long Data_UnknownBlock
 	.long SeMenu_PatchEdit_DataBlock
 	.long SeMenu_EqEdit_Dispatch
 	.long SeMenu_EqEdit_DrawInit
 	.long SeMenu_WaveformSelect_End
-	.long AudioData_F10676
-	.long AudioData_F10689
+	.long SeMenu_DataBlock_13
+	.long SeMenu_DataBlock_14
 	.long SeMenu_WaveformSelect_End
 	.long SeMenu_WaveformSelect_End
 	.long SeMenu_WaveformSelect_End
@@ -13054,7 +13054,7 @@ SeBitmap_EnvCurve5:
 	ldb	b, 10
 	.byte 0xd1
 	nop
-	.long ZeroData_E600DA
+	.long NakaData_DescriptorPad_ZeroC
 	.byte 0xee
 	nop
 	.byte 0x01
@@ -13111,8 +13111,8 @@ SeBitmap_EnvCurve5:
 	.byte 0xb9
 	nop
 	.byte 0x01, 0x0a
-	.long PadFF_E40031
-	.long PadFF_E40046
+	.long Pad_NakaExternal_Block2
+	.long Pad_NakaExternal_Block3
 	.byte 0x01
 	ldwio	89, 58368
 	nop
@@ -13122,10 +13122,10 @@ SeBitmap_EnvCurve5:
 	.byte 0x01
 	ldwio	129, 58368
 	nop
-	.long Data_E40096
+	.long NakaData_ExternalPadBlock_A
 	.byte 0x01, 0x0a, 0xd1
 	nop
-	.long ZeroData_E600E4
+	.long NakaData_DescriptorZero_PadA
 	.byte 0xe4
 	nop
 	push_sr
@@ -13561,8 +13561,8 @@ SeBitmap_EnvCurve5:
 	.byte 0xe4
 	nop
 	.byte 0x01, 0x0a
-	.long Data_E400A9
-	.long PadFF_E400BE
+	.long NakaData_ExternalPadBlock_B
+	.long Pad_BeforeNakaData_UserMemoryConfig
 	push_sr
 	ldwio	46, 13568
 	nop
@@ -13665,7 +13665,7 @@ SeBitmap_EnvCurve5:
 	push_sr
 	ldwio	119, 52480
 	nop
-	.long Data_E90077
+	.long Bitmap_TechnichordBackground_1
 	halt
 	ldwio	22, 17153
 	nop
@@ -14924,7 +14924,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0x7a
 	nop
-	.long Data_E40A09
+	.long NakaData_ExternalBitmapBlock
 	.byte 0xcd
 	nop
 	push	xiy
@@ -16259,7 +16259,7 @@ TuningSystem_Handler_Table:
 	.byte 0xe6
 	nop
 	.byte 0x8a, 0x00, 0x01, 0x0a, 0x0b, 0x00
-	.long ZeroData_E600AA
+	.long NakaData_DescriptorPad_ZeroB
 	.byte 0xaa, 0x00, 0x01
 	ldwio	242, 45568
 	nop
@@ -16270,13 +16270,13 @@ TuningSystem_Handler_Table:
 	ld	xiz, 16835584
 	ldwio	129, 58368
 	nop
-	.long Data_E40096
+	.long NakaData_ExternalPadBlock_A
 	normal
 	ldwio	201, 58368
 	nop
 	.byte 0xde, 0x00, 0xe4, 0x00, 0x01, 0x0a
-	.long PadFF_E40101
-	.long PadFF_E40116
+	.long Pad_AfterNakaData_UserMemoryConfig
+	.long Pad_BeforeNakaData_StyleBitmapPad
 	push_sr
 	ldwio	44, 14336
 	nop
@@ -16702,10 +16702,10 @@ TuningSystem_Handler_Table:
 	.byte 0x84, 0x00, 0x22, 0x0a, 0x59, 0x00, 0xda, 0x00
 	.long NakaInst_Param_Field48
 	.byte 0x22, 0x0a, 0xd1, 0x00
-	.long ZeroData_E600DA
+	.long NakaData_DescriptorPad_ZeroC
 	.byte 0xee, 0x00, 0x01, 0x0a
-	.long PadFF_E40059
-	.long PadFF_E4006E
+	.long Pad_BeforeNakaData_ExternalBase_0x66
+	.long Pad_AfterNakaData_ExternalBase_0x66
 	normal
 	ldwio	209, 58368
 	nop

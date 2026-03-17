@@ -4033,7 +4033,7 @@ VocalistGrid_DispatchData:
 	jrl	1222
 	ld	wa, (xbc)
 	inc	1, wa
-	.long Data_E70B28
+	.long Bitmap_MIDIConnections_Header
 	pushw	61188
 	ld	xwa, (xsp+14)
 	push	xwa

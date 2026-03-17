@@ -7288,17 +7288,17 @@ UIState_DefaultConfig_C:
 	.fill 6, 1, 0xff
 SystemConfig_PointerTable:
 	.long Seq_InitFuncTable
-	.long PtrTable_EED52B
-	.long PtrTable_E1FFB6
+	.long CharMap_PermutationPtrTable_B
+	.long WidgetDispatch_FDTestPtrTable
 	.long MIDI_SC0_DISPATCH_TABLE
 	.long SeqFormat_ReferenceData
 	.long NakaInst_SoundConfig_LookupTable
-	.long PtrTable_EDB2E4
+	.long SoundProgram_ParamPtrTable
 	.long DiskOp_ChannelCfgTable
 	.long WidgetStyleDataTable
 	.long EffectMode_DispatchTable
 	.long SoundParam_EncoderMappingData
-	.long PtrTable_EED3DE
+	.long CharMap_PermutationPtrTable_A
 	.long WidgetData_CharsetMappingTable
 	.long SeqByteBlock_DispatchJumpTable
 	jr	t, 0xf0

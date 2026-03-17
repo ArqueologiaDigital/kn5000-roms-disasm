@@ -121,7 +121,7 @@ NakaWidgetList_AcModeBoxes:
 	.byte 0x26, 0x00, 0x0a, 0x00
 	.long NakaBoxName_ComporserNameBox
 	.long NakaBoxData_ComporserNameBox
-	.long PtrTable_E208A4
+	.long NakaDirectPlay_PropPtrTable
 	.long LyricsBoxFuncProc
 	naka_header NAKA_TYPE_0x27
 	.byte 0x16, 0x00, 0x00, 0x00
