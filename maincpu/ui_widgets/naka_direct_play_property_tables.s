@@ -114,10 +114,10 @@ NakaPropStr_TextLabel2_FontColor:			aligned_string "fontcolor"
 NakaPropStr_TextLabel2_Font:
 	jr	z, 0x6f
 	jr	nz, 116
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 	.byte 0xd4, 0x08, 0xe2
-	nop
+	.byte 0x00			; padding
 
 
 NakaPropTbl_LyricsBoxFunc:

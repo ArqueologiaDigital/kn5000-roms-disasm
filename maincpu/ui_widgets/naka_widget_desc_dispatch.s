@@ -29,27 +29,27 @@
 	aligned_string "AcLswFuncBox"
 	aligned_string "nXXFB"
 	aligned_string "AcLswFuncEditBox"
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 	aligned_string "AcGMOnOffBox"
 	aligned_string "fjXn"
 	aligned_string "AcSendEditSw"
 	.byte 0x41, 0x74, 0x74, 0x00
 	aligned_string "IvMpstPageControl"
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 	aligned_string "AcVocalistListBox"
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 	aligned_string "PsHarmOnOffBox"
 	rcf
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 	.byte 0xa0, 0x5d, 0xe5, 0x00
 
 
@@ -65,10 +65,10 @@ MidiMenu_MsgType_Table:
 	.long MsgType_RevLoad
 	.long MsgType_EqLoad
 	.long MsgType_RevEqLoad
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 MsgType_RevEqLoad:	aligned_string "MT_REVEQLOAD"
 MsgType_EqLoad:		aligned_string "MT_EQLOAD"
 MsgType_RevLoad:	aligned_string "MT_REVLOAD"
@@ -82,51 +82,51 @@ MsgType_DrawKey:	aligned_string "MT_DRAWKEY"
 MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	aligned_string "MT_PCGSEND"
 	incf
-	nop
+	.byte 0x00			; padding
 	.byte 0xb5, 0x3f
 	ldx
-	nop
+	.byte 0x00			; padding
 	pop_f
 	ld	xwa, 1647706359
 	.byte 0xf7
-	nop
+	.byte 0x00			; padding
 	.byte 0xf5, 0x7d, 0xf7
-	nop
+	.byte 0x00			; padding
 	rcf
 	ld	xsp, 1301020919
 	.byte 0xf7
-	nop
+	.byte 0x00			; padding
 	muls	xsp, xsp
 	ldx
-	nop
+	.byte 0x00			; padding
 	pushw bc
 	.byte 0x52
 	ldx
-	nop
+	.byte 0x00			; padding
 	ld	xde, 1510012726
 	.byte 0x57
 	ldx
-	nop
+	.byte 0x00			; padding
 	pop xiz
 	jr	po, 16777207
-	nop
+	.byte 0x00			; padding
 	.byte 0xda, 0x73
 	ldx
-	nop
+	.byte 0x00			; padding
 	pushw bc
 	cp	l, (xhl)
-	nop
+	.byte 0x00			; padding
 	jrl	po, 16775046
-	nop
+	.byte 0x00			; padding
 	.byte 0xdc, 0x9a
 	ldx
-	nop
+	.byte 0x00			; padding
 	.byte 0xf4, 0xa1, 0xf7
-	nop
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 MidiMenu_NakaProcName_Table:
 	.long NakaInst_AcVocalistListBoxProc
 	.long NakaInst_PsHarmOnOffBoxProc

@@ -207,34 +207,34 @@ NakaMenuItem_AcousticIllusion:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	ei	0
-	swi	7
-	swi	7
+	.byte 0xFF			; padding
+	.byte 0xFF			; padding
 	rcf
-	nop
+	.byte 0x00			; padding
 	ret
-	nop
+	.byte 0x00			; padding
 	ldio	0, 163
-	nop
+	.byte 0x00			; padding
 	.byte 0xc6
-	nop
+	.byte 0x00			; padding
 	.byte 0x37, 0x01, 0xdf
-	nop
+	.byte 0x00			; padding
 	.byte 0xf7
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
+	.byte 0xFF			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 	incf
-	nop
+	.byte 0x00			; padding
 	.long 0x3E67E
 	.long MenuStr_AcousticIllusion
 	.byte 0x0e, 0x00, 0xa0, 0x01, 0x92, 0x00, 0x00, 0x00
@@ -285,31 +285,31 @@ NakaMenuItem_TechniChord:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	scf
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
+	.byte 0xFF			; padding
+	.byte 0xFF			; padding
+	.byte 0xFF			; padding
 	ccf
-	nop
+	.byte 0x00			; padding
 	ldio	0, 163
-	nop
+	.byte 0x00			; padding
 	jrl	le, 14080
 	normal
 	.byte 0x8b, 0x00, 0xf7
-	nop
-	nop
-	nop
-	swi	7
-	swi	7
-	nop
-	nop
-	nop
-	nop
-	swi	7
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
+	.byte 0xFF			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 	.byte 0x0a, 0x00
 	.long 0x3E68C
 	.long NakaInst_TECHNI_CHORD

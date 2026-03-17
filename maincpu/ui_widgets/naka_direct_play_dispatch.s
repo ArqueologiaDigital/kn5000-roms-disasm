@@ -7,9 +7,9 @@
 
 	naka_header NAKA_TYPE_0x47
 	ex_ff
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 NakaWidgetList_AcModeBoxes:
 	.long NakaBoxName_IvNamingExit
 	.long NakaBoxData_IvNamingExit
@@ -155,10 +155,10 @@ NakaBoxData_LyricsBox:
 	jr	ule, 0x5e
 	pop xiz
 	jr	pe, 66
-	nop
+	.byte 0x00			; padding
 	aligned_string "LyricsBox"
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 NakaBoxName_AcMuteToggleBox:	aligned_string "AcMuteToggleBox"
 NakaBoxData_MeasureBox:
 	.byte 0x5e, 0x5e, 0x6a, 0x00
@@ -216,10 +216,10 @@ EvtName_PtrTable:
 	.long EvtName_PlayRequest
 	.long EvtName_GetEvent
 	.long EvtName_ChangeColor
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 EvtName_ChangeColor:	aligned_string "EV_ChangeColor"
 EvtName_GetEvent:	aligned_string "EV_GetEvent"
 EvtName_PlayRequest:	aligned_string "EV_PlayRequest"
@@ -241,7 +241,7 @@ EvtName_SmfFileName:	aligned_string "EV_SMFFILENAME"
 EvtName_DiskFileName:	aligned_string "EV_DISKFILENAME"
 EvtName_CurSongName:	aligned_string "EV_CURSONGNAME"
 	push_a
-	nop
+	.byte 0x00			; padding
 	pop	xde
 	rcf
 	.byte 0xe2, 0x00
@@ -272,10 +272,10 @@ MtName_PtrTable:
 	.long MtName_LyricsCharaReq
 	.long MtName_GetLyricsSongName
 	.long MtName_GetComporserName
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 MtName_GetComporserName:	aligned_string "MT_GetComporserName"
 MtName_GetLyricsSongName:	aligned_string "MT_GetLyricsSongName"
 MtName_LyricsCharaReq:		aligned_string "MT_LyricsCharaReq"
@@ -306,5 +306,5 @@ MtName_SongNameSet:		aligned_string "MT_SongNameSet"
 	jp	12318976
 	.byte 0xf2, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7e, 0x10
 	.byte 0xe2
-	nop
+	.byte 0x00			; padding
 	.long NakaBoxData_PsSongSelBox

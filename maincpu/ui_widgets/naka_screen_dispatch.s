@@ -9,14 +9,14 @@
 
 	xor	(xiz), wa
 	pop_sr
-	nop
+	.byte 0x00			; padding
 	.byte 0xba, 0xd8, 0x03
-	nop
+	.byte 0x00			; padding
 	.long NakaLabel_PatternCopy_MemoryLabel
 	.long NakaLabel_PatternCopy_PatMemLabel
 	cps	iz, 0
 	pop_sr
-	nop
+	.byte 0x00			; padding
 	push_sr
 	.byte 0xd9, 0x03, 0x00
 	.long NakaNode_PatternCopy_ProgressBar
@@ -1290,28 +1290,28 @@ StrTimeSig_2_2:
 	.byte 0x32, 0x2f, 0x32, 0x00
 StrTimeSig_1_2:
 	ldw	bc, 12847
-	nop
+	.byte 0x00			; padding
 	ldb	e, 100
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 	aligned_string "%s (%s)"
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 	jp16	41984
-	nop
+	.byte 0x00			; padding
 	.byte 0xa4, 0x00, 0x55
-	nop
+	.byte 0x00			; padding
 	jr	f, 0
 	jrl	nz, 16744960
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 	push xwa
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 	push xwa
-	nop
+	.byte 0x00			; padding
 	jrl	le, 29185
 	normal
 	.byte 0x72, 0x01
@@ -1814,15 +1814,15 @@ StrRhySlot_MemoryA:		aligned_string "MEMORY A "
 	aligned_string "CUSTOM"
 	popw iy
 	ld	xiy, 1498566477
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 	ld	xhl, 1330926421
 	popw iy
-	nop
-	swi	7
-	nop
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
+	.byte 0x00			; padding
 	or	bc, iy
-	nop
+	.byte 0x00			; padding
 PtrTbl_StyleSectShortNames2:
 	.long StrStyleSect2_A_Vari2
 	.long StrStyleSect2_A_Vari3
@@ -2133,8 +2133,8 @@ StrCompileBank1:	aligned_string "COMPILE BANK:1"
 	aligned_string "MEASURE = %d"
 	aligned_string "MEMORY = %2d"
 	ldb	e, 100
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 	.long StrInstantStart
 	.long StrSyncToRhythm
 StrSyncToRhythm:	aligned_string "SYNC TO RHYTHM   "

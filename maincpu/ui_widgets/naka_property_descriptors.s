@@ -163,14 +163,14 @@ StrVal_Empty_PsParaList:	aligned_string ""
 StrFld_ParaList_SelNum:		aligned_string "sel_num"
 StrFld_ParaList_Row:
 	jrl	le, 30575
-	nop
+	.byte 0x00			; padding
 StrFld_ParaList_Column:		aligned_string "column"
 StrFld_ParaList_FontColor:	aligned_string "fontcolor"
 StrFld_ParaList_Font:
 	jr	z, 0x6f
 	jr	nz, 116
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 	.byte 0xb0, 0x6b
 	cpdm32	0, xsp
 StrDesc_PsSCTxtBox2:
@@ -518,8 +518,8 @@ StrPrefix_S2cGridBox:
 	pop xwa
 	jr	gt, 0x00
 	aligned_string "S2cGridBox"
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 StrName_CmpNameMenuBox:		aligned_string "CmpNameMenuBox"
 StrExtra_Yajirushi_JpChars:	aligned_string "^GBBB"
 StrName_YajirushiBox:		aligned_string "Yajirushi"
@@ -538,8 +538,8 @@ StrPrefix_AcSndArgGrid:
 StrName_AcSndArgGridBox:	aligned_string "AcSndArgGridBox"
 StrPrefix_AcApcToggle:
 	jr	gt, 0x46
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 	aligned_string "AcApcToggle"
 	.byte 0x43, 0x00
 StrName_PsCstmCpNameBox:	aligned_string "PsCstmCpNameBox"
@@ -617,13 +617,13 @@ StrName_AcCmpRecBox:	aligned_string "AcCmpRecBox"
 StrEmpty_AcMemNoBox:	aligned_string ""
 StrName_AcMemNoBox:	aligned_string "AcMemNoBox"
 	pushw	bc
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 NakaMethodTable_PtrsStart:
 	.long MTStr_CmpNameSet
 	.long MTStr_MspNameSet
@@ -675,10 +675,10 @@ NakaMethodTable_PtrsStart:
 	.long MTStr_SetSelectedLine
 	.long MTStr_StylCnvStor
 	.long MTStr_ClrGridHanten
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 MTStr_ClrGridHanten:	aligned_string "MT_ClrGridHanten"
 MTStr_StylCnvStor:	aligned_string "MT_StylCnvStor"
 MTStr_SetSelectedLine:	aligned_string "MT_SetSelectedLine"

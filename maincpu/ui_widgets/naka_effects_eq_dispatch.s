@@ -9,8 +9,8 @@
 	aligned_string "^^jC"
 	aligned_string "SqedtVal"
 	jr	gt, 67
-	nop
-	swi	7
+	.byte 0x00			; padding
+	.byte 0xFF			; padding
 	aligned_string "EqualizerBox"
 	jr	gt, 66
 	.byte 0x42, 0x43, 0x00, 0xff
@@ -22,10 +22,10 @@ EvtEffDraw_PtrTable:
 	.long EvtName_EqLineDraw
 	.long EvtName_EqStrDraw
 	.long EvtName_GraphDraw
-	nop
-	nop
-	nop
-	nop
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
+	.byte 0x00			; padding
 EvtName_GraphDraw:	aligned_string "EV_GRAPHDRAW"
 EvtName_EqStrDraw:	aligned_string "EV_EQSTRDRAW"
 EvtName_EqLineDraw:	aligned_string "EV_EQLINEDRAW"
