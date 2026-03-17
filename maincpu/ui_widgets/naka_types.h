@@ -254,7 +254,11 @@ typedef struct __attribute__((packed)) {
  * Implementation: appends "\0\xFF" to the literal. When the enclosing
  * char array is exactly NAKA_STR_ALLOC(n) bytes, the compiler drops
  * the trailing NUL from the literal, leaving { chars..., 0x00, 0xFF }.
+ * The pragma suppresses the -Wexcess-initializers warning for this
+ * intentional one-byte overflow (applied to the entire translation unit
+ * since the warning fires at each usage site, not the macro definition).
  */
+#pragma GCC diagnostic ignored "-Wexcess-initializers"
 #define ALIGNED_STRING(s)  (s "\0\xFF")
 
 #endif /* NAKA_TYPES_H */
