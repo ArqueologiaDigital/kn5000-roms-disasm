@@ -2438,15 +2438,107 @@ EMPTY_ROUTINE__FC3EE4:
 
 	.include "audio/tonegen_fileio_handlers.s"
 	.include "audio/audio_control_engine.s"
-; Sparse pointer table in flash padding (600 bytes, 3 pointers)
-; Three ROM addresses at fixed offsets within 0xFF-filled unused space
-	.fill 120, 1, 0xFF
-	.long MidiStream_SysExEntry		; MIDI stream handler entry +0x078
-	.fill 92, 1, 0xFF
-	.long MidiStream_CtrlEntry		; MIDI stream handler entry +0x0D8
-	.fill 220, 1, 0xFF
-	.long MidiStream_CmdEntry		; MIDI stream handler entry +0x1B8
-	.fill 80, 1, 0xFF
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	adc	c, 252
+	nop
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	decf
+	.byte 0xca, 0xfc
+	nop
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	ld	xiy, 4278254794
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	swi	7
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 8, 1, 0xff
+	.fill 5, 1, 0xff
 
 ; =============================================================================
 ; SoundParam_NotifyChange -- Notify UI of sound parameter change
