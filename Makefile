@@ -43,8 +43,9 @@ NAKA_BINS = maincpu/includes/generated/naka_control_menu_header.bin maincpu/incl
 
 VOICE_BINS = maincpu/includes/generated/voice_factory_presets.bin
 AUDIO_BINS = maincpu/includes/generated/tonegen_param_table.bin
-SOUND_DATA_BINS = maincpu/includes/generated/sound_data_organ_accordion.bin maincpu/includes/generated/sound_data_orchestral_pad.bin maincpu/includes/generated/sound_data_synth.bin maincpu/includes/generated/sound_data_bass.bin maincpu/includes/generated/sound_data_accordion_reg.bin maincpu/includes/generated/sound_data_digital_drawbar.bin maincpu/includes/generated/sound_data_gm_special.bin maincpu/includes/generated/sound_data_guitar.bin maincpu/includes/generated/sound_data_sax_reed.bin maincpu/includes/generated/sound_data_drum_kits.bin maincpu/includes/generated/sound_data_piano.bin maincpu/includes/generated/sound_data_strings_vocal.bin
-C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS)
+SOUND_DATA_BINS = maincpu/includes/generated/sound_data_organ_accordion.bin maincpu/includes/generated/sound_data_orchestral_pad.bin maincpu/includes/generated/sound_data_synth.bin maincpu/includes/generated/sound_data_bass.bin maincpu/includes/generated/sound_data_accordion_reg.bin maincpu/includes/generated/sound_data_digital_drawbar.bin maincpu/includes/generated/sound_data_gm_special.bin maincpu/includes/generated/sound_data_guitar.bin maincpu/includes/generated/sound_data_sax_reed.bin maincpu/includes/generated/sound_data_drum_kits.bin maincpu/includes/generated/sound_data_piano.bin maincpu/includes/generated/sound_data_strings_vocal.bin maincpu/includes/generated/sound_data_flute.bin maincpu/includes/generated/sound_data_flute_extra.bin maincpu/includes/generated/sound_data_mallet_orch_perc.bin
+SEPAOUT_BINS = maincpu/includes/generated/sepaout_config.bin
+C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS) $(SEPAOUT_BINS)
 
 maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/paramblock/%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
@@ -291,6 +292,14 @@ maincpu/includes/generated/sound_data_%.bin: maincpu/audio/sound_data_%.c
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
 	@rm -f $@.o
+
+# SepaOut config — compiled C struct with linker script for symbol resolution
+maincpu/includes/generated/sepaout_config.bin: maincpu/ui/sepaout_config.c maincpu/ui/sepaout_config_link.ld
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_LLD) -T maincpu/ui/sepaout_config_link.ld -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
 
 paramblocks: $(PARAMBLOCK_BINS)
 screendata: $(SCREENDATA_BINS)

@@ -84,11 +84,14 @@ SOUND_DATA_GUITAR:
 SOUND_DATA_STRINGS_VOCAL:
 	.incbin "includes/generated/sound_data_strings_vocal.bin"
 SOUND_DATA_BRASS_PTRS:		.include "audio/sound_data_brass.s"
-SOUND_DATA_FLUTE:		.include "audio/sound_data_flute.s"
-SOUND_DATA_FLUTE_EXTRA:		.include "audio/sound_data_flute_extra.s"
+SOUND_DATA_FLUTE:
+	.incbin "includes/generated/sound_data_flute.bin"
+SOUND_DATA_FLUTE_EXTRA:
+	.incbin "includes/generated/sound_data_flute_extra.bin"
 SOUND_DATA_SAX_REED:
 	.incbin "includes/generated/sound_data_sax_reed.bin"
-SOUND_DATA_MALLET_ORCH_PERC:	.include "audio/sound_data_mallet_orch_perc.s"
+SOUND_DATA_MALLET_ORCH_PERC:
+	.incbin "includes/generated/sound_data_mallet_orch_perc.bin"
 SOUND_DATA_WORLD_PERC:		.include "audio/sound_data_world_perc.s"
 SOUND_DATA_ORGAN_ACCORDION:
 	.incbin "includes/generated/sound_data_organ_accordion.bin"
