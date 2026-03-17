@@ -7,7 +7,7 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: d0fb23124021 (d0fb23124021afbe1854ee99592e6ef3dc48b627)
-Date: 2026-03-15 22:12:43 +0000
-Subject: Add R+R 8-bit index addressing mode and 16-bit JP/CALL for TLCS-900
+Commit: 8f0500a845ac (8f0500a845ac3d8b7ee84c276c60c116bb9210c9)
+Date: 2026-03-17 11:07:30 +0000
+Subject: Revert "Fix PC-relative offset computation for numeric branch targets"
 Repository: /mnt/shared/llvm-project
