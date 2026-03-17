@@ -47,7 +47,8 @@ SOUND_DATA_BINS = maincpu/includes/generated/sound_data_organ_accordion.bin main
 SEPAOUT_BINS = maincpu/includes/generated/sepaout_config.bin
 GUI_BINS = maincpu/includes/generated/gui_display_struct_data.bin
 TONEKIT_BINS = maincpu/includes/generated/tonekit_param_blocks.bin
-C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS) $(SEPAOUT_BINS) $(GUI_BINS) $(TONEKIT_BINS)
+SOUNDCFG_BINS = maincpu/includes/generated/sound_config_lookup.bin
+C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS) $(SEPAOUT_BINS) $(GUI_BINS) $(TONEKIT_BINS) $(SOUNDCFG_BINS)
 
 maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/paramblock/%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
@@ -278,6 +279,13 @@ maincpu/includes/generated/naka_accomp7_widgets.bin: maincpu/ui_widgets/naka_acc
 
 # ToneKit parameter blocks — 118 blocks of 6-byte sound parameter records
 maincpu/includes/generated/tonekit_param_blocks.bin: maincpu/ui_widgets/tonekit_param_blocks.c
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+# Sound config lookup — 25 x 234-byte channel configuration records
+maincpu/includes/generated/sound_config_lookup.bin: maincpu/ui_widgets/sound_config_lookup.c
 	@mkdir -p maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
