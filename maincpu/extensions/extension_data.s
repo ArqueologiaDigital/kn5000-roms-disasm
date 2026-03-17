@@ -5353,7 +5353,7 @@ Naka_ToshiParam_Table:
 	.byte 0x4e, 0x00, 0x00, 0x26, 0x00, 0xff, 0x01, 0x00
 	.byte 0x00, 0x00, 0x48, 0x05, 0x01, 0x00, 0x01, 0x00
 	.byte 0x00, 0xff, 0x01, 0x01, 0x01, 0x00, 0x00, 0xff
-VoiceCtrlR1_EDBAC0:
+VoiceCtrlR1_Entry_001:
 	pop_sr
 	nop
 	nop
@@ -5367,7 +5367,7 @@ VoiceCtrlR1_EDBAC0:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBAD2:
+VoiceCtrlR1_Entry_002:
 	.byte 0x04
 	nop
 	nop
@@ -5382,7 +5382,7 @@ VoiceCtrlR1_EDBAD2:
 	ldio	6, 2
 	nop
 	swi	7
-VoiceCtrlR1_EDBAE4:
+VoiceCtrlR1_Entry_003:
 	halt
 	nop
 	nop
@@ -5398,7 +5398,7 @@ VoiceCtrlR1_EDBAE4:
 	ldio	6, 2
 	nop
 	swi	7
-VoiceCtrlR1_EDBAF6:
+VoiceCtrlR1_Entry_004:
 	.byte 0xc0
 	nop
 	nop
@@ -5415,7 +5415,7 @@ VoiceCtrlR1_EDBAF6:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBB08:
+VoiceCtrlR1_Entry_005:
 	.byte 0xc1
 	nop
 	nop
@@ -5432,7 +5432,7 @@ VoiceCtrlR1_EDBB08:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBB1A:
+VoiceCtrlR1_Entry_006:
 	nop
 	.byte 0x01
 	nop
@@ -5447,7 +5447,7 @@ VoiceCtrlR1_EDBB1A:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBB2C:
+VoiceCtrlR1_Entry_007:
 	push_sr
 	.byte 0x01
 	nop
@@ -5461,7 +5461,7 @@ VoiceCtrlR1_EDBB2C:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBB3E:
+VoiceCtrlR1_Entry_008:
 	pop_sr
 	.byte 0x01
 	nop
@@ -5475,7 +5475,7 @@ VoiceCtrlR1_EDBB3E:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBB50:
+VoiceCtrlR1_Entry_009:
 	.byte 0x04, 0x01
 	nop
 	nop
@@ -5489,7 +5489,7 @@ VoiceCtrlR1_EDBB50:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBB62:
+VoiceCtrlR1_Entry_010:
 	nop
 	pop_sr
 	nop
@@ -5503,7 +5503,7 @@ VoiceCtrlR1_EDBB62:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBB74:
+VoiceCtrlR1_Entry_011:
 	.byte 0x01
 	pop_sr
 	nop
@@ -5518,7 +5518,7 @@ VoiceCtrlR1_EDBB74:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBB86:
+VoiceCtrlR1_Entry_012:
 	push_sr
 	pop_sr
 	nop
@@ -5531,7 +5531,7 @@ VoiceCtrlR1_EDBB86:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBB98:
+VoiceCtrlR1_Entry_013:
 	nop
 	.byte 0x04
 	nop
@@ -5548,7 +5548,7 @@ VoiceCtrlR1_EDBB98:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBBAA:
+VoiceCtrlR1_Entry_014:
 	.byte 0x01, 0x04
 	nop
 	nop
@@ -5562,7 +5562,7 @@ VoiceCtrlR1_EDBBAA:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBBBC:
+VoiceCtrlR1_Entry_015:
 	nop
 	ldb	a, 0
 	nop
@@ -5578,7 +5578,7 @@ VoiceCtrlR1_EDBBBC:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBBCE:
+VoiceCtrlR1_Entry_016:
 	.byte 0x01
 	ldb	a, 0
 	nop
@@ -5594,7 +5594,7 @@ VoiceCtrlR1_EDBBCE:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBBE0:
+VoiceCtrlR1_Entry_017:
 	ld	a, (xbc)
 	nop
 	nop
@@ -5610,7 +5610,7 @@ VoiceCtrlR1_EDBBE0:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBBF2:
+VoiceCtrlR1_Entry_018:
 	ld	a, (xde)
 	nop
 	nop
@@ -5622,7 +5622,7 @@ VoiceCtrlR1_EDBBF2:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBC04:
+VoiceCtrlR1_Entry_019:
 	ld	a, (xhl)
 	nop
 	nop
@@ -5634,7 +5634,7 @@ VoiceCtrlR1_EDBC04:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBC16:
+VoiceCtrlR1_Entry_020:
 	ld	a, (xix)
 	nop
 	nop
@@ -5649,7 +5649,7 @@ VoiceCtrlR1_EDBC16:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBC28:
+VoiceCtrlR1_Entry_021:
 	nop
 	ldb	b, 0
 	nop
@@ -5665,7 +5665,7 @@ VoiceCtrlR1_EDBC28:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBC3A:
+VoiceCtrlR1_Entry_022:
 	.byte 0x01
 	ldb	b, 0
 	nop
@@ -5682,20 +5682,20 @@ VoiceCtrlR1_EDBC3A:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBC4C:
+VoiceCtrlR1_Entry_023:
 	nop
 	.byte 0x01
 	pop_sr
 	swi	7
 WidgetParam_MidiCC_Program:
-	.long VoiceCtrlR1_EDBC4C
+	.long VoiceCtrlR1_Entry_023
 	pop_sr
 	nop
 	nop
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBC5A:
+VoiceCtrlR1_Entry_024:
 	push_sr
 	ldb	b, 0
 	nop
@@ -5709,7 +5709,7 @@ VoiceCtrlR1_EDBC5A:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBC6C:
+VoiceCtrlR1_Entry_025:
 	pop_sr
 	ldb	b, 0
 	nop
@@ -5724,7 +5724,7 @@ VoiceCtrlR1_EDBC6C:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBC7E:
+VoiceCtrlR1_Entry_026:
 	halt
 	ldb	b, 0
 	nop
@@ -5754,7 +5754,7 @@ WidgetParam_MidiCC_BankSelect:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBC9E:
+VoiceCtrlR1_Entry_027:
 	ld	b, (xwa)
 	nop
 	nop
@@ -5767,7 +5767,7 @@ VoiceCtrlR1_EDBC9E:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBCB0:
+VoiceCtrlR1_Entry_028:
 	ld	b, (xbc)
 	nop
 	nop
@@ -5783,7 +5783,7 @@ VoiceCtrlR1_EDBCB0:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBCC2:
+VoiceCtrlR1_Entry_029:
 	ld	b, (xde)
 	nop
 	nop
@@ -5796,7 +5796,7 @@ VoiceCtrlR1_EDBCC2:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBCD4:
+VoiceCtrlR1_Entry_030:
 	.byte 0x8a
 	ldb	b, 0
 	nop
@@ -5811,7 +5811,7 @@ VoiceCtrlR1_EDBCD4:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBCE6:
+VoiceCtrlR1_Entry_031:
 	.byte 0x8b
 	ldb	b, 0
 	nop
@@ -5826,7 +5826,7 @@ VoiceCtrlR1_EDBCE6:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBCF8:
+VoiceCtrlR1_Entry_032:
 	.byte 0x8c
 	ldb	b, 0
 	nop
@@ -5838,7 +5838,7 @@ VoiceCtrlR1_EDBCF8:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBD0A:
+VoiceCtrlR1_Entry_033:
 	.byte 0x8d
 	ldb	b, 0
 	nop
@@ -5852,7 +5852,7 @@ VoiceCtrlR1_EDBD0A:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBD1C:
+VoiceCtrlR1_Entry_034:
 	.byte 0x8e
 	ldb	b, 0
 	nop
@@ -5866,7 +5866,7 @@ VoiceCtrlR1_EDBD1C:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBD2E:
+VoiceCtrlR1_Entry_035:
 	.byte 0x8f
 	ldb	b, 0
 	nop
@@ -5880,7 +5880,7 @@ VoiceCtrlR1_EDBD2E:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBD40:
+VoiceCtrlR1_Entry_036:
 	ld	de, (xwa)
 	nop
 	nop
@@ -5893,7 +5893,7 @@ VoiceCtrlR1_EDBD40:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBD52:
+VoiceCtrlR1_Entry_037:
 	ld	de, (xbc)
 	nop
 	nop
@@ -5907,7 +5907,7 @@ VoiceCtrlR1_EDBD52:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBD64:
+VoiceCtrlR1_Entry_038:
 	ld	de, (xix)
 	nop
 	nop
@@ -5921,7 +5921,7 @@ VoiceCtrlR1_EDBD64:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBD76:
+VoiceCtrlR1_Entry_039:
 	ld	de, (xiy)
 	nop
 	nop
@@ -5934,7 +5934,7 @@ VoiceCtrlR1_EDBD76:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBD88:
+VoiceCtrlR1_Entry_040:
 	ld	de, (xiz)
 	nop
 	nop
@@ -5949,7 +5949,7 @@ VoiceCtrlR1_EDBD88:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBD9A:
+VoiceCtrlR1_Entry_041:
 	.byte 0x98
 	ldb	b, 0
 	nop
@@ -5965,7 +5965,7 @@ VoiceCtrlR1_EDBD9A:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBDAC:
+VoiceCtrlR1_Entry_042:
 	.byte 0x99
 	ldb	b, 0
 	nop
@@ -5980,7 +5980,7 @@ VoiceCtrlR1_EDBDAC:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBDBE:
+VoiceCtrlR1_Entry_043:
 	.byte 0x9a
 	ldb	b, 0
 	nop
@@ -5994,7 +5994,7 @@ VoiceCtrlR1_EDBDBE:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBDD0:
+VoiceCtrlR1_Entry_044:
 	.byte 0x80
 	pushw	wa
 	nop
@@ -6011,7 +6011,7 @@ VoiceCtrlR1_EDBDD0:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBDE2:
+VoiceCtrlR1_Entry_045:
 	.byte 0x82
 	pushw	wa
 	nop
@@ -6026,7 +6026,7 @@ VoiceCtrlR1_EDBDE2:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBDF4:
+VoiceCtrlR1_Entry_046:
 	.byte 0x81
 	pushw	wa
 	nop
@@ -6043,7 +6043,7 @@ VoiceCtrlR1_EDBDF4:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBE06:
+VoiceCtrlR1_Entry_047:
 	.byte 0x86
 	pushw	wa
 	nop
@@ -6059,7 +6059,7 @@ VoiceCtrlR1_EDBE06:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBE18:
+VoiceCtrlR1_Entry_048:
 	.byte 0x87
 	pushw	wa
 	nop
@@ -6076,7 +6076,7 @@ VoiceCtrlR1_EDBE18:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBE2A:
+VoiceCtrlR1_Entry_049:
 	.byte 0x88
 	pushw	wa
 	nop
@@ -6093,7 +6093,7 @@ VoiceCtrlR1_EDBE2A:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBE3C:
+VoiceCtrlR1_Entry_050:
 	.byte 0x89
 	pushw	wa
 	nop
@@ -6109,7 +6109,7 @@ VoiceCtrlR1_EDBE3C:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBE4E:
+VoiceCtrlR1_Entry_051:
 	.byte 0x8a
 	pushw	wa
 	nop
@@ -6125,7 +6125,7 @@ VoiceCtrlR1_EDBE4E:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBE60:
+VoiceCtrlR1_Entry_052:
 	.byte 0x8b
 	pushw	wa
 	nop
@@ -6142,7 +6142,7 @@ VoiceCtrlR1_EDBE60:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBE72:
+VoiceCtrlR1_Entry_053:
 	.byte 0x8c
 	pushw	wa
 	nop
@@ -6159,7 +6159,7 @@ VoiceCtrlR1_EDBE72:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBE84:
+VoiceCtrlR1_Entry_054:
 	.byte 0x8d
 	pushw	wa
 	nop
@@ -6174,7 +6174,7 @@ VoiceCtrlR1_EDBE84:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBE96:
+VoiceCtrlR1_Entry_055:
 	.byte 0x8e
 	pushw	wa
 	nop
@@ -6189,7 +6189,7 @@ VoiceCtrlR1_EDBE96:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBEA8:
+VoiceCtrlR1_Entry_056:
 	.byte 0x8f
 	pushw	wa
 	nop
@@ -6205,7 +6205,7 @@ VoiceCtrlR1_EDBEA8:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBEBA:
+VoiceCtrlR1_Entry_057:
 	.byte 0x90
 	pushw	wa
 	nop
@@ -6221,7 +6221,7 @@ VoiceCtrlR1_EDBEBA:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBECC:
+VoiceCtrlR1_Entry_058:
 	.byte 0x91
 	pushw	wa
 	nop
@@ -6237,7 +6237,7 @@ VoiceCtrlR1_EDBECC:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBEDE:
+VoiceCtrlR1_Entry_059:
 	.byte 0x92
 	pushw	wa
 	nop
@@ -6251,7 +6251,7 @@ VoiceCtrlR1_EDBEDE:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBEF0:
+VoiceCtrlR1_Entry_060:
 	.byte 0x93
 	pushw	wa
 	nop
@@ -6264,7 +6264,7 @@ VoiceCtrlR1_EDBEF0:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBF02:
+VoiceCtrlR1_Entry_061:
 	.byte 0x94
 	pushw	wa
 	nop
@@ -6279,7 +6279,7 @@ VoiceCtrlR1_EDBF02:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBF14:
+VoiceCtrlR1_Entry_062:
 	.byte 0x95
 	pushw	wa
 	nop
@@ -6296,7 +6296,7 @@ VoiceCtrlR1_EDBF14:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBF26:
+VoiceCtrlR1_Entry_063:
 	.byte 0x96
 	pushw	wa
 	nop
@@ -6313,7 +6313,7 @@ VoiceCtrlR1_EDBF26:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBF38:
+VoiceCtrlR1_Entry_064:
 	.byte 0x97
 	pushw	wa
 	nop
@@ -6328,7 +6328,7 @@ VoiceCtrlR1_EDBF38:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBF4A:
+VoiceCtrlR1_Entry_065:
 	.byte 0x98
 	pushw	wa
 	nop
@@ -6345,7 +6345,7 @@ VoiceCtrlR1_EDBF4A:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBF5C:
+VoiceCtrlR1_Entry_066:
 	.byte 0x99
 	pushw	wa
 	nop
@@ -6360,7 +6360,7 @@ VoiceCtrlR1_EDBF5C:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBF6E:
+VoiceCtrlR1_Entry_067:
 	.byte 0x9a
 	pushw	wa
 	nop
@@ -6377,7 +6377,7 @@ VoiceCtrlR1_EDBF6E:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBF80:
+VoiceCtrlR1_Entry_068:
 	.byte 0x9b
 	pushw	wa
 	nop
@@ -6392,7 +6392,7 @@ VoiceCtrlR1_EDBF80:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBF92:
+VoiceCtrlR1_Entry_069:
 	.byte 0x9c
 	pushw	wa
 	nop
@@ -6407,7 +6407,7 @@ VoiceCtrlR1_EDBF92:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBFA4:
+VoiceCtrlR1_Entry_070:
 	.byte 0x9d
 	pushw	wa
 	nop
@@ -6421,7 +6421,7 @@ VoiceCtrlR1_EDBFA4:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBFB6:
+VoiceCtrlR1_Entry_071:
 	nop
 	pushw	bc
 	nop
@@ -6438,7 +6438,7 @@ VoiceCtrlR1_EDBFB6:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBFC8:
+VoiceCtrlR1_Entry_072:
 	.byte 0x01
 	pushw	bc
 	nop
@@ -6454,7 +6454,7 @@ VoiceCtrlR1_EDBFC8:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBFDA:
+VoiceCtrlR1_Entry_073:
 	push_sr
 	pushw	bc
 	nop
@@ -6471,7 +6471,7 @@ VoiceCtrlR1_EDBFDA:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBFEC:
+VoiceCtrlR1_Entry_074:
 	pop_sr
 	pushw	bc
 	nop
@@ -6486,7 +6486,7 @@ VoiceCtrlR1_EDBFEC:
 	nop
 	nop
 	swi	7
-VoiceCtrlR1_EDBFFE:
+VoiceCtrlR1_Entry_075:
 	.byte 0x04
 	pushw	bc
 	nop
@@ -6502,7 +6502,7 @@ VoiceCtrlR1_EDBFFE:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC010:
+MidiChParam_Entry_001:
 	halt
 	pushw	bc
 	nop
@@ -6517,7 +6517,7 @@ MidiChParam_EDC010:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC022:
+MidiChParam_Entry_002:
 	ei	41
 	nop
 	nop
@@ -6529,7 +6529,7 @@ MidiChParam_EDC022:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC034:
+MidiChParam_Entry_003:
 	reti
 	pushw	bc
 	nop
@@ -6546,7 +6546,7 @@ MidiChParam_EDC034:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC046:
+MidiChParam_Entry_004:
 	ldio	41, 0
 	nop
 	.byte 0x98
@@ -6559,7 +6559,7 @@ MidiChParam_EDC046:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC058:
+MidiChParam_Entry_005:
 	push	41
 	nop
 	nop
@@ -6572,7 +6572,7 @@ MidiChParam_EDC058:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC06A:
+MidiChParam_Entry_006:
 	ldwio	41, 0
 	.byte 0x98
 	ldio	4, 0
@@ -6584,7 +6584,7 @@ MidiChParam_EDC06A:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC07C:
+MidiChParam_Entry_007:
 	pushw	41
 	nop
 	.byte 0x98
@@ -6597,7 +6597,7 @@ MidiChParam_EDC07C:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC08E:
+MidiChParam_Entry_008:
 	incf
 	pushw	bc
 	nop
@@ -6611,7 +6611,7 @@ MidiChParam_EDC08E:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC0A0:
+MidiChParam_Entry_009:
 	decf
 	pushw	bc
 	nop
@@ -6626,7 +6626,7 @@ MidiChParam_EDC0A0:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC0B2:
+MidiChParam_Entry_010:
 	ret
 	pushw	bc
 	nop
@@ -6640,7 +6640,7 @@ MidiChParam_EDC0B2:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC0C4:
+MidiChParam_Entry_011:
 	retd	41
 	nop
 	.byte 0x98
@@ -6653,7 +6653,7 @@ MidiChParam_EDC0C4:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC0D6:
+MidiChParam_Entry_012:
 	rcf
 	pushw	bc
 	nop
@@ -6669,7 +6669,7 @@ MidiChParam_EDC0D6:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC0E8:
+MidiChParam_Entry_013:
 	scf
 	pushw	bc
 	nop
@@ -6684,7 +6684,7 @@ MidiChParam_EDC0E8:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC0FA:
+MidiChParam_Entry_014:
 	nop
 	pushw	de
 	nop
@@ -6699,7 +6699,7 @@ MidiChParam_EDC0FA:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC10C:
+MidiChParam_Entry_015:
 	.byte 0x01
 	pushw	de
 	nop
@@ -6714,7 +6714,7 @@ MidiChParam_EDC10C:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC11E:
+MidiChParam_Entry_016:
 	rcf
 	pushw	de
 	nop
@@ -6729,7 +6729,7 @@ MidiChParam_EDC11E:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC130:
+MidiChParam_Entry_017:
 	scf
 	pushw	de
 	nop
@@ -6743,7 +6743,7 @@ MidiChParam_EDC130:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC142:
+MidiChParam_Entry_018:
 	ccf
 	pushw	de
 	nop
@@ -6758,7 +6758,7 @@ MidiChParam_EDC142:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC154:
+MidiChParam_Entry_019:
 	nop
 	pushw	ix
 	nop
@@ -6775,7 +6775,7 @@ MidiChParam_EDC154:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC166:
+MidiChParam_Entry_020:
 	nop
 	pushw	iy
 	nop
@@ -6788,7 +6788,7 @@ MidiChParam_EDC166:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC178:
+MidiChParam_Entry_021:
 	.byte 0x01
 	pushw	iy
 	nop
@@ -6801,7 +6801,7 @@ MidiChParam_EDC178:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC18A:
+MidiChParam_Entry_022:
 	push_sr
 	pushw	iy
 	nop
@@ -6814,7 +6814,7 @@ MidiChParam_EDC18A:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC19C:
+MidiChParam_Entry_023:
 	pop_sr
 	pushw	iy
 	nop
@@ -6827,7 +6827,7 @@ MidiChParam_EDC19C:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC1AE:
+MidiChParam_Entry_024:
 	.byte 0x04
 	pushw	iy
 	nop
@@ -6840,7 +6840,7 @@ MidiChParam_EDC1AE:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC1C0:
+MidiChParam_Entry_025:
 	halt
 	pushw	iy
 	nop
@@ -6853,7 +6853,7 @@ MidiChParam_EDC1C0:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC1D2:
+MidiChParam_Entry_026:
 	ei	45
 	nop
 	nop
@@ -6865,7 +6865,7 @@ MidiChParam_EDC1D2:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC1E4:
+MidiChParam_Entry_027:
 	reti
 	pushw	iy
 	nop
@@ -6878,7 +6878,7 @@ MidiChParam_EDC1E4:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC1F6:
+MidiChParam_Entry_028:
 	ldio	45, 0
 	nop
 	ld	xsp, 50380804
@@ -6888,7 +6888,7 @@ MidiChParam_EDC1F6:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC208:
+MidiChParam_Entry_029:
 	push	45
 	nop
 	nop
@@ -6900,7 +6900,7 @@ MidiChParam_EDC208:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC21A:
+MidiChParam_Entry_030:
 	ldwio	45, 0
 	ld	xsp, 2030075653
 	nop
@@ -6931,7 +6931,7 @@ WidgetParam_MidiCC_NameEdit:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC2A4:
+MidiChParam_Entry_031:
 	pushw	45
 	nop
 	ld	xsp, 16785408
@@ -6942,7 +6942,7 @@ MidiChParam_EDC2A4:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC2B6:
+MidiChParam_Entry_032:
 	incf
 	pushw	iy
 	nop
@@ -6955,7 +6955,7 @@ MidiChParam_EDC2B6:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC2C8:
+MidiChParam_Entry_033:
 	decf
 	pushw	iy
 	nop
@@ -6968,7 +6968,7 @@ MidiChParam_EDC2C8:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC2DA:
+MidiChParam_Entry_034:
 	ret
 	pushw	iy
 	nop
@@ -6981,7 +6981,7 @@ MidiChParam_EDC2DA:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC2EC:
+MidiChParam_Entry_035:
 	retd	45
 	nop
 	ld	xsp, 16793600
@@ -6991,7 +6991,7 @@ MidiChParam_EDC2EC:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC2FE:
+MidiChParam_Entry_036:
 	rcf
 	pushw	iy
 	nop
@@ -7004,7 +7004,7 @@ MidiChParam_EDC2FE:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC310:
+MidiChParam_Entry_037:
 	scf
 	pushw	iy
 	nop
@@ -7017,7 +7017,7 @@ MidiChParam_EDC310:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC322:
+MidiChParam_Entry_038:
 	ccf
 	pushw	iy
 	nop
@@ -7030,7 +7030,7 @@ MidiChParam_EDC322:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC334:
+MidiChParam_Entry_039:
 	zcf
 	pushw	iy
 	nop
@@ -7043,7 +7043,7 @@ MidiChParam_EDC334:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC346:
+MidiChParam_Entry_040:
 	nop
 	ld	xwa, 11534336
 	jrl	nc, 32512
@@ -7056,7 +7056,7 @@ MidiChParam_EDC346:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC358:
+MidiChParam_Entry_041:
 	.byte 0x01
 	ld	xwa, 28311552
 	jrl	nc, 32512
@@ -7069,7 +7069,7 @@ MidiChParam_EDC358:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC36A:
+MidiChParam_Entry_042:
 	push_sr
 	.byte 0x40
 
@@ -7087,7 +7087,7 @@ MidiChParam_EDC36A:
 	.byte 0x01
 	nop
 	swi	7
-MidiChParam_EDC37C:
+MidiChParam_Entry_043:
 	pop_sr
 	ld	xwa, 7340032
 	.byte 0x04
@@ -7100,7 +7100,7 @@ MidiChParam_EDC37C:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC38E:
+MidiChParam_Entry_044:
 	.byte 0x04, 0x40
 
 
@@ -7113,7 +7113,7 @@ MidiChParam_EDC38E:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC3A0:
+MidiChParam_Entry_045:
 	halt
 	ld	xwa, 61865984
 	jrl	nc, 32512
@@ -7126,7 +7126,7 @@ MidiChParam_EDC3A0:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC3B2:
+MidiChParam_Entry_046:
 	.byte 0x06, 0x40
 
 
@@ -7142,7 +7142,7 @@ MidiChParam_EDC3B2:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC3C4:
+MidiChParam_Entry_047:
 	.byte 0x80
 	ld	xwa, 43515904
 	.byte 0x80
@@ -7157,7 +7157,7 @@ MidiChParam_EDC3C4:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC3D6:
+MidiChParam_Entry_048:
 	.byte 0x81
 	ld	xwa, 43515904
 	ld	xwa, 393472
@@ -7168,7 +7168,7 @@ MidiChParam_EDC3D6:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC3E8:
+MidiChParam_Entry_049:
 	.byte 0xc0
 	ld	xwa, 194510848
 	.byte 0x80
@@ -7181,7 +7181,7 @@ MidiChParam_EDC3E8:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC3FA:
+MidiChParam_Entry_050:
 	.byte 0xc1
 	ld	xwa, 194510848
 	ld	xwa, 393472
@@ -7190,7 +7190,7 @@ MidiChParam_EDC3FA:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC40C:
+MidiChParam_Entry_051:
 	.byte 0xe0
 	ld	xwa, 76546048
 	swi	7
@@ -7204,7 +7204,7 @@ MidiChParam_EDC40C:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC41E:
+MidiChParam_Entry_052:
 	nop
 	ld	xbc, 9437184
 	.byte 0x1f
@@ -7232,7 +7232,7 @@ WidgetParam_MidiCC_SysExcl:
 	push_sr
 	push_sr
 	push_sr
-MidiChParam_EDC43C:
+MidiChParam_Entry_053:
 	ld	xwa, 1124073537
 	nop
 	.byte 0x80
@@ -7245,7 +7245,7 @@ MidiChParam_EDC43C:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC44E:
+MidiChParam_Entry_054:
 	ld	xbc, 1124073537
 	.byte 0x01
 	jrl	nc, 32512
@@ -7256,7 +7256,7 @@ MidiChParam_EDC44E:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC460:
+MidiChParam_Entry_055:
 	ld	xde, 1124073537
 	.byte 0x01, 0x80
 	nop
@@ -7268,7 +7268,7 @@ MidiChParam_EDC460:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC472:
+MidiChParam_Entry_056:
 	.byte 0x80
 	ld	xbc, 7340032
 	pop_sr
@@ -7281,7 +7281,7 @@ MidiChParam_EDC472:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC484:
+MidiChParam_Entry_057:
 	.byte 0x81
 	ld	xbc, 24117248
 	jrl	nc, 27669
@@ -7292,7 +7292,7 @@ MidiChParam_EDC484:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC496:
+MidiChParam_Entry_058:
 	nop
 	ld	xde, 71827456
 	ld	xwa, 393472
@@ -7301,7 +7301,7 @@ MidiChParam_EDC496:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC4A8:
+MidiChParam_Entry_059:
 	.byte 0x01
 	ld	xde, 57671680
 	swi	7
@@ -7333,7 +7333,7 @@ WidgetParam_MidiCC_Volume:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC4D4:
+MidiChParam_Entry_060:
 	push_sr
 	ld	xde, 74448896
 	retd	3328
@@ -7362,7 +7362,7 @@ WidgetParam_MidiCC_Pan:
 	nop
 	reti
 	ldio	0, 255
-MidiChParam_EDC4FE:
+MidiChParam_Entry_061:
 	.byte 0x80
 	ld	xde, 26345472
 	.byte 0x80
@@ -7375,7 +7375,7 @@ MidiChParam_EDC4FE:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC510:
+MidiChParam_Entry_062:
 	.byte 0x81
 	ld	xde, 9568256
 	swi	7
@@ -7408,7 +7408,7 @@ WidgetParam_MidiCC_Expression:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC53C:
+MidiChParam_Entry_063:
 	.byte 0x82
 	ld	xde, 26345472
 	retd	2816
@@ -7419,7 +7419,7 @@ MidiChParam_EDC53C:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC54E:
+MidiChParam_Entry_064:
 	.byte 0x83
 	ld	xde, 43122688
 	swi	7
@@ -7486,7 +7486,7 @@ WidgetParam_MidiCC_Sustain:
 	incm8	4, (xwa)
 	nop
 	swi	7
-MidiChParam_EDC634:
+MidiChParam_Entry_065:
 	.byte 0x84
 	ld	xde, 59899904
 	swi	7
@@ -7501,7 +7501,7 @@ MidiChParam_EDC634:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC646:
+MidiChParam_Entry_066:
 	.byte 0x85
 	ld	xde, 76677120
 	swi	7
@@ -7516,7 +7516,7 @@ MidiChParam_EDC646:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC658:
+MidiChParam_Entry_067:
 	.byte 0x86
 	ld	xde, 93454336
 	swi	7
@@ -7531,7 +7531,7 @@ MidiChParam_EDC658:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC66A:
+MidiChParam_Entry_068:
 	.byte 0x87
 	ld	xde, 110231552
 	swi	7
@@ -7546,7 +7546,7 @@ MidiChParam_EDC66A:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC67C:
+MidiChParam_Entry_069:
 	.byte 0x88
 	ld	xde, 127008768
 	swi	7
@@ -7561,7 +7561,7 @@ MidiChParam_EDC67C:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC68E:
+MidiChParam_Entry_070:
 	.byte 0x89
 	ld	xde, 143785984
 	swi	7
@@ -7576,7 +7576,7 @@ MidiChParam_EDC68E:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC6A0:
+MidiChParam_Entry_071:
 	.byte 0x8a
 	ld	xde, 160563200
 	swi	7
@@ -7591,7 +7591,7 @@ MidiChParam_EDC6A0:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC6B2:
+MidiChParam_Entry_072:
 	.byte 0x8b
 	ld	xde, 177340416
 	swi	7
@@ -7606,7 +7606,7 @@ MidiChParam_EDC6B2:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC6C4:
+MidiChParam_Entry_073:
 	.byte 0x8c
 	ld	xde, 194117632
 	swi	7
@@ -7621,7 +7621,7 @@ MidiChParam_EDC6C4:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC6D6:
+MidiChParam_Entry_074:
 	.byte 0x8d
 	ld	xde, 210894848
 	swi	7
@@ -7636,7 +7636,7 @@ MidiChParam_EDC6D6:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC6E8:
+MidiChParam_Entry_075:
 	.byte 0x8e
 	ld	xde, 227672064
 	swi	7
@@ -7651,7 +7651,7 @@ MidiChParam_EDC6E8:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC6FA:
+MidiChParam_Entry_076:
 	nop
 	popw	bc
 	nop
@@ -7667,7 +7667,7 @@ MidiChParam_EDC6FA:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC70C:
+MidiChParam_Entry_077:
 	nop
 	popw	de
 	nop
@@ -7683,7 +7683,7 @@ MidiChParam_EDC70C:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC71E:
+MidiChParam_Entry_078:
 	nop
 	popw	hl
 	nop
@@ -7699,7 +7699,7 @@ MidiChParam_EDC71E:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC730:
+MidiChParam_Entry_079:
 	nop
 	popw	ix
 	nop
@@ -7715,7 +7715,7 @@ MidiChParam_EDC730:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC742:
+MidiChParam_Entry_080:
 	nop
 	popw	iy
 	nop
@@ -7731,7 +7731,7 @@ MidiChParam_EDC742:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC754:
+MidiChParam_Entry_081:
 	nop
 	popw	iz
 	nop
@@ -7747,7 +7747,7 @@ MidiChParam_EDC754:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC766:
+MidiChParam_Entry_082:
 	nop
 	.byte 0x50
 	nop
@@ -7761,7 +7761,7 @@ MidiChParam_EDC766:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC778:
+MidiChParam_Entry_083:
 	.byte 0x01, 0x50
 	nop
 	nop
@@ -7777,7 +7777,7 @@ MidiChParam_EDC778:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC78A:
+MidiChParam_Entry_084:
 	cp	h, 208
 	.byte 0xd1, 0xd2, 0xd3, 0xd4, 0xd5, 0xd6, 0xd7
 	cps	wa, 1
@@ -7822,13 +7822,13 @@ MidiChParam_EDC78A:
 	.byte 0x1f
 	.ascii " !\"#$%&'()*+,-./012ÿ"
 WidgetParam_MidiCC_Reverb:
-	.long MidiChParam_EDC78A
+	.long MidiChParam_Entry_084
 	jr	mi, 0
 	nop
 	nop
 	nop
 	swi	7
-MidiChParam_EDC7FA:
+MidiChParam_Entry_085:
 	push_sr
 	.byte 0x50
 	nop
@@ -7843,7 +7843,7 @@ MidiChParam_EDC7FA:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC80C:
+MidiChParam_Entry_086:
 	nop
 	.byte 0x80
 	nop
@@ -7860,7 +7860,7 @@ MidiChParam_EDC80C:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC81E:
+MidiChParam_Entry_087:
 	.byte 0x01, 0x80
 	nop
 	nop
@@ -7874,7 +7874,7 @@ MidiChParam_EDC81E:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC830:
+MidiChParam_Entry_088:
 	reti
 	.byte 0x80
 	nop
@@ -7889,7 +7889,7 @@ MidiChParam_EDC830:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC842:
+MidiChParam_Entry_089:
 	ldio	128, 0
 	nop
 	nop
@@ -7904,7 +7904,7 @@ MidiChParam_EDC842:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC854:
+MidiChParam_Entry_090:
 	ldwio	128, 0
 	nop
 	ldio	127, 0
@@ -7914,7 +7914,7 @@ MidiChParam_EDC854:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC866:
+MidiChParam_Entry_091:
 	pushw	128
 	nop
 	ld	(xhl), 127
@@ -7927,7 +7927,7 @@ MidiChParam_EDC866:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC878:
+MidiChParam_Entry_092:
 	ldb	w, 128
 	nop
 	nop
@@ -7941,7 +7941,7 @@ MidiChParam_EDC878:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC88A:
+MidiChParam_Entry_093:
 	ld	xwa, 128
 	.byte 0x04
 	ldio	0, 127
@@ -7959,7 +7959,7 @@ WidgetParam_MidiCC_Chorus:
 	nop
 	.byte 0x01
 	swi	7
-MidiChParam_EDC8A4:
+MidiChParam_Entry_094:
 	pop	xhl
 	.byte 0x80
 	nop
@@ -7974,7 +7974,7 @@ MidiChParam_EDC8A4:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC8B6:
+MidiChParam_Entry_095:
 	pop	xiy
 	.byte 0x80
 	nop
@@ -7989,7 +7989,7 @@ MidiChParam_EDC8B6:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC8C8:
+MidiChParam_Entry_096:
 	pop	xiz
 	.byte 0x80
 	nop
@@ -8004,7 +8004,7 @@ MidiChParam_EDC8C8:
 	.byte 0x01
 	nop
 	swi	7
-MidiChParam_EDC8DA:
+MidiChParam_Entry_097:
 	jrl	128
 	nop
 	.byte 0xae
@@ -8019,7 +8019,7 @@ MidiChParam_EDC8DA:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC8EC:
+MidiChParam_Entry_098:
 	.byte 0x80, 0x80
 	nop
 	nop
@@ -8033,7 +8033,7 @@ MidiChParam_EDC8EC:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC8FE:
+MidiChParam_Entry_099:
 	.byte 0x81, 0x80
 	nop
 	nop
@@ -8046,7 +8046,7 @@ MidiChParam_EDC8FE:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC910:
+MidiChParam_Entry_100:
 	.byte 0x82, 0x80
 	nop
 	nop
@@ -8059,7 +8059,7 @@ MidiChParam_EDC910:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC922:
+MidiChParam_Entry_101:
 	.byte 0xb0, 0x81
 	nop
 	nop
@@ -8073,7 +8073,7 @@ MidiChParam_EDC922:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC934:
+MidiChParam_Entry_102:
 	.byte 0xb2, 0x81
 	nop
 	nop
@@ -8087,7 +8087,7 @@ MidiChParam_EDC934:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC946:
+MidiChParam_Entry_103:
 	ldb	a, 130
 	nop
 	nop
@@ -8099,7 +8099,7 @@ MidiChParam_EDC946:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC958:
+MidiChParam_Entry_104:
 	add	b, d
 	nop
 	nop
@@ -8128,7 +8128,7 @@ WidgetParam_MidiCC_DspEffect:
 	halt
 	nop
 	swi	7
-MidiChParam_EDC980:
+MidiChParam_Entry_105:
 	add	b, c
 	nop
 	nop
@@ -8141,7 +8141,7 @@ MidiChParam_EDC980:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC992:
+MidiChParam_Entry_106:
 	.byte 0x93, 0x82
 	nop
 	nop
@@ -8154,7 +8154,7 @@ MidiChParam_EDC992:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC9A4:
+MidiChParam_Entry_107:
 	.byte 0x94, 0x82
 	nop
 	nop
@@ -8167,7 +8167,7 @@ MidiChParam_EDC9A4:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC9B6:
+MidiChParam_Entry_108:
 	.byte 0x80, 0x82
 	nop
 	nop
@@ -8179,7 +8179,7 @@ MidiChParam_EDC9B6:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC9C8:
+MidiChParam_Entry_109:
 	.byte 0x81, 0x82
 	nop
 	nop
@@ -8191,7 +8191,7 @@ MidiChParam_EDC9C8:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC9DA:
+MidiChParam_Entry_110:
 	.byte 0x82, 0x82
 	nop
 	nop
@@ -8203,7 +8203,7 @@ MidiChParam_EDC9DA:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC9EC:
+MidiChParam_Entry_111:
 	.byte 0x83, 0x82
 	nop
 	nop
@@ -8215,7 +8215,7 @@ MidiChParam_EDC9EC:
 	nop
 	nop
 	swi	7
-MidiChParam_EDC9FE:
+MidiChParam_Entry_112:
 	.byte 0x84, 0x82
 	nop
 	nop
@@ -8227,7 +8227,7 @@ MidiChParam_EDC9FE:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCA10:
+VoiceParamEx_Entry_001:
 	.byte 0x85, 0x82
 	nop
 	nop
@@ -8239,7 +8239,7 @@ VoiceParamEx_EDCA10:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCA22:
+VoiceParamEx_Entry_002:
 	.byte 0x86, 0x82
 	nop
 	nop
@@ -8251,7 +8251,7 @@ VoiceParamEx_EDCA22:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCA34:
+VoiceParamEx_Entry_003:
 	.byte 0x87, 0x82
 	nop
 	nop
@@ -8263,7 +8263,7 @@ VoiceParamEx_EDCA34:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCA46:
+VoiceParamEx_Entry_004:
 	.byte 0x88, 0x82
 	nop
 	nop
@@ -8275,7 +8275,7 @@ VoiceParamEx_EDCA46:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCA58:
+VoiceParamEx_Entry_005:
 	.byte 0xc0, 0x82
 	nop
 	nop
@@ -8287,7 +8287,7 @@ VoiceParamEx_EDCA58:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCA6A:
+VoiceParamEx_Entry_006:
 	.byte 0xc1, 0x82
 	nop
 	nop
@@ -8299,7 +8299,7 @@ VoiceParamEx_EDCA6A:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCA7C:
+VoiceParamEx_Entry_007:
 	nop
 	.byte 0x84
 	nop
@@ -8316,7 +8316,7 @@ VoiceParamEx_EDCA7C:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCA8E:
+VoiceParamEx_Entry_008:
 	.byte 0x01, 0x84
 	nop
 	nop
@@ -8331,7 +8331,7 @@ VoiceParamEx_EDCA8E:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCAA0:
+VoiceParamEx_Entry_009:
 	reti
 	.byte 0x84
 	nop
@@ -8346,7 +8346,7 @@ VoiceParamEx_EDCAA0:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCAB2:
+VoiceParamEx_Entry_010:
 	ldio	132, 0
 	nop
 	.byte 0x01
@@ -8361,7 +8361,7 @@ VoiceParamEx_EDCAB2:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCAC4:
+VoiceParamEx_Entry_011:
 	ldwio	132, 0
 	.byte 0x01
 	ldio	127, 0
@@ -8371,7 +8371,7 @@ VoiceParamEx_EDCAC4:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCAD6:
+VoiceParamEx_Entry_012:
 	pushw	132
 	nop
 	.byte 0xb3, 0x01
@@ -8385,7 +8385,7 @@ VoiceParamEx_EDCAD6:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCAE8:
+VoiceParamEx_Entry_013:
 	ldb	w, 132
 	nop
 	nop
@@ -8398,7 +8398,7 @@ VoiceParamEx_EDCAE8:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCAFA:
+VoiceParamEx_Entry_014:
 	ld	xwa, 16777348
 	.byte 0x04
 	ldio	0, 127
@@ -8411,7 +8411,7 @@ VoiceParamEx_EDCAFA:
 	.byte 0x01
 	nop
 	swi	7
-VoiceParamEx_EDCB0C:
+VoiceParamEx_Entry_015:
 	pop	xhl
 	.byte 0x84
 	nop
@@ -8426,7 +8426,7 @@ VoiceParamEx_EDCB0C:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCB1E:
+VoiceParamEx_Entry_016:
 	pop	xiy
 	.byte 0x84
 	nop
@@ -8441,7 +8441,7 @@ VoiceParamEx_EDCB1E:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCB30:
+VoiceParamEx_Entry_017:
 	pop	xiz
 	.byte 0x84
 	nop
@@ -8455,7 +8455,7 @@ VoiceParamEx_EDCB30:
 	.byte 0x01
 	nop
 	swi	7
-VoiceParamEx_EDCB42:
+VoiceParamEx_Entry_018:
 	jrl	132
 	nop
 	.byte 0xae, 0x01
@@ -8469,7 +8469,7 @@ VoiceParamEx_EDCB42:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCB54:
+VoiceParamEx_Entry_019:
 	.byte 0x80, 0x84
 	nop
 	nop
@@ -8483,7 +8483,7 @@ VoiceParamEx_EDCB54:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCB66:
+VoiceParamEx_Entry_020:
 	.byte 0x81, 0x84
 	nop
 	nop
@@ -8496,7 +8496,7 @@ VoiceParamEx_EDCB66:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCB78:
+VoiceParamEx_Entry_021:
 	.byte 0x82, 0x84
 	nop
 	nop
@@ -8509,7 +8509,7 @@ VoiceParamEx_EDCB78:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCB8A:
+VoiceParamEx_Entry_022:
 	.byte 0xb0, 0x85
 	nop
 	nop
@@ -8524,7 +8524,7 @@ VoiceParamEx_EDCB8A:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCB9C:
+VoiceParamEx_Entry_023:
 	.byte 0xb2, 0x85
 	nop
 	nop
@@ -8539,7 +8539,7 @@ VoiceParamEx_EDCB9C:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCBAE:
+VoiceParamEx_Entry_024:
 	ldb	a, 134
 	nop
 	nop
@@ -8551,7 +8551,7 @@ VoiceParamEx_EDCBAE:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCBC0:
+VoiceParamEx_Entry_025:
 	add	h, d
 	nop
 	nop
@@ -8564,7 +8564,7 @@ VoiceParamEx_EDCBC0:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCBD2:
+VoiceParamEx_Entry_026:
 	add	h, c
 	nop
 	nop
@@ -8577,7 +8577,7 @@ VoiceParamEx_EDCBD2:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCBE4:
+VoiceParamEx_Entry_027:
 	.byte 0x93, 0x86
 	nop
 	nop
@@ -8590,7 +8590,7 @@ VoiceParamEx_EDCBE4:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCBF6:
+VoiceParamEx_Entry_028:
 	.byte 0x94, 0x86
 	nop
 	nop
@@ -8603,7 +8603,7 @@ VoiceParamEx_EDCBF6:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCC08:
+VoiceParamEx_Entry_029:
 	.byte 0x80, 0x86
 	nop
 	nop
@@ -8615,7 +8615,7 @@ VoiceParamEx_EDCC08:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCC1A:
+VoiceParamEx_Entry_030:
 	.byte 0x81, 0x86
 	nop
 	nop
@@ -8627,7 +8627,7 @@ VoiceParamEx_EDCC1A:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCC2C:
+VoiceParamEx_Entry_031:
 	.byte 0x82, 0x86
 	nop
 	nop
@@ -8639,7 +8639,7 @@ VoiceParamEx_EDCC2C:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCC3E:
+VoiceParamEx_Entry_032:
 	.byte 0x83, 0x86
 	nop
 	nop
@@ -8651,7 +8651,7 @@ VoiceParamEx_EDCC3E:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCC50:
+VoiceParamEx_Entry_033:
 	.byte 0x84, 0x86
 	nop
 	nop
@@ -8663,7 +8663,7 @@ VoiceParamEx_EDCC50:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCC62:
+VoiceParamEx_Entry_034:
 	.byte 0x85, 0x86
 	nop
 	nop
@@ -8675,7 +8675,7 @@ VoiceParamEx_EDCC62:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCC74:
+VoiceParamEx_Entry_035:
 	.byte 0x86, 0x86
 	nop
 	nop
@@ -8687,7 +8687,7 @@ VoiceParamEx_EDCC74:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCC86:
+VoiceParamEx_Entry_036:
 	.byte 0x87, 0x86
 	nop
 	nop
@@ -8699,7 +8699,7 @@ VoiceParamEx_EDCC86:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCC98:
+VoiceParamEx_Entry_037:
 	.byte 0x88, 0x86
 	nop
 	nop
@@ -8711,7 +8711,7 @@ VoiceParamEx_EDCC98:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCCAA:
+VoiceParamEx_Entry_038:
 	.byte 0xc0, 0x86
 	nop
 	nop
@@ -8723,7 +8723,7 @@ VoiceParamEx_EDCCAA:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCCBC:
+VoiceParamEx_Entry_039:
 	.byte 0xc1, 0x86
 	nop
 	nop
@@ -8735,7 +8735,7 @@ VoiceParamEx_EDCCBC:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCCCE:
+VoiceParamEx_Entry_040:
 	nop
 	.byte 0x88
 	nop
@@ -8752,7 +8752,7 @@ VoiceParamEx_EDCCCE:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCCE0:
+VoiceParamEx_Entry_041:
 	.byte 0x01, 0x88
 	nop
 	nop
@@ -8768,7 +8768,7 @@ VoiceParamEx_EDCCE0:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCCF2:
+VoiceParamEx_Entry_042:
 	reti
 	.byte 0x88
 	nop
@@ -8783,7 +8783,7 @@ VoiceParamEx_EDCCF2:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCD04:
+VoiceParamEx_Entry_043:
 	ldio	136, 0
 	nop
 	push_sr
@@ -8798,7 +8798,7 @@ VoiceParamEx_EDCD04:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCD16:
+VoiceParamEx_Entry_044:
 	ldwio	136, 0
 	push_sr
 	ldio	127, 0
@@ -8808,7 +8808,7 @@ VoiceParamEx_EDCD16:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCD28:
+VoiceParamEx_Entry_045:
 	pushw	136
 	nop
 	.byte 0xb3
@@ -8823,7 +8823,7 @@ VoiceParamEx_EDCD28:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCD3A:
+VoiceParamEx_Entry_046:
 	ldb	w, 136
 	nop
 	nop
@@ -8837,7 +8837,7 @@ VoiceParamEx_EDCD3A:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCD4C:
+VoiceParamEx_Entry_047:
 	ld	xwa, 33554568
 	.byte 0x04
 	ldio	0, 127
@@ -8850,7 +8850,7 @@ VoiceParamEx_EDCD4C:
 	.byte 0x01
 	nop
 	swi	7
-VoiceParamEx_EDCD5E:
+VoiceParamEx_Entry_048:
 	pop	xhl
 	.byte 0x88
 	nop
@@ -8865,7 +8865,7 @@ VoiceParamEx_EDCD5E:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCD70:
+VoiceParamEx_Entry_049:
 	pop	xiy
 	.byte 0x88
 	nop
@@ -8880,7 +8880,7 @@ VoiceParamEx_EDCD70:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCD82:
+VoiceParamEx_Entry_050:
 	pop	xiz
 	.byte 0x88
 	nop
@@ -8895,7 +8895,7 @@ VoiceParamEx_EDCD82:
 	.byte 0x01
 	nop
 	swi	7
-VoiceParamEx_EDCD94:
+VoiceParamEx_Entry_051:
 	jrl	136
 	nop
 	.byte 0xae
@@ -8910,7 +8910,7 @@ VoiceParamEx_EDCD94:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCDA6:
+VoiceParamEx_Entry_052:
 	add	(xwa), w
 	nop
 	nop
@@ -8924,7 +8924,7 @@ VoiceParamEx_EDCDA6:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCDB8:
+VoiceParamEx_Entry_053:
 	add	(xbc), w
 	nop
 	nop
@@ -8937,7 +8937,7 @@ VoiceParamEx_EDCDB8:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCDCA:
+VoiceParamEx_Entry_054:
 	add	(xde), w
 	nop
 	nop
@@ -8950,7 +8950,7 @@ VoiceParamEx_EDCDCA:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCDDC:
+VoiceParamEx_Entry_055:
 	.byte 0xb0, 0x89
 	nop
 	nop
@@ -8966,7 +8966,7 @@ VoiceParamEx_EDCDDC:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCDEE:
+VoiceParamEx_Entry_056:
 	.byte 0xb2, 0x89
 	nop
 	nop
@@ -8982,7 +8982,7 @@ VoiceParamEx_EDCDEE:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCE00:
+VoiceParamEx_Entry_057:
 	ldb	a, 138
 	nop
 	nop
@@ -8994,7 +8994,7 @@ VoiceParamEx_EDCE00:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCE12:
+VoiceParamEx_Entry_058:
 	ld	b, d
 	nop
 	nop
@@ -9007,7 +9007,7 @@ VoiceParamEx_EDCE12:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCE24:
+VoiceParamEx_Entry_059:
 	ld	b, c
 	nop
 	nop
@@ -9020,7 +9020,7 @@ VoiceParamEx_EDCE24:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCE36:
+VoiceParamEx_Entry_060:
 	add	(xhl), de
 	nop
 	nop
@@ -9033,7 +9033,7 @@ VoiceParamEx_EDCE36:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCE48:
+VoiceParamEx_Entry_061:
 	add	(xix), de
 	nop
 	nop
@@ -9046,7 +9046,7 @@ VoiceParamEx_EDCE48:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCE5A:
+VoiceParamEx_Entry_062:
 	add	(xwa), b
 	nop
 	nop
@@ -9058,7 +9058,7 @@ VoiceParamEx_EDCE5A:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCE6C:
+VoiceParamEx_Entry_063:
 	add	(xbc), b
 	nop
 	nop
@@ -9070,7 +9070,7 @@ VoiceParamEx_EDCE6C:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCE7E:
+VoiceParamEx_Entry_064:
 	add	(xde), b
 	nop
 	nop
@@ -9082,7 +9082,7 @@ VoiceParamEx_EDCE7E:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCE90:
+VoiceParamEx_Entry_065:
 	add	(xhl), b
 	nop
 	nop
@@ -9094,7 +9094,7 @@ VoiceParamEx_EDCE90:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCEA2:
+VoiceParamEx_Entry_066:
 	add	(xix), b
 	nop
 	nop
@@ -9106,7 +9106,7 @@ VoiceParamEx_EDCEA2:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCEB4:
+VoiceParamEx_Entry_067:
 	add	(xiy), b
 	nop
 	nop
@@ -9118,7 +9118,7 @@ VoiceParamEx_EDCEB4:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCEC6:
+VoiceParamEx_Entry_068:
 	add	(xiz), b
 	nop
 	nop
@@ -9130,7 +9130,7 @@ VoiceParamEx_EDCEC6:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCED8:
+VoiceParamEx_Entry_069:
 	add	(xsp), b
 	nop
 	nop
@@ -9142,7 +9142,7 @@ VoiceParamEx_EDCED8:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCEEA:
+VoiceParamEx_Entry_070:
 	.byte 0x88, 0x8a
 	nop
 	nop
@@ -9154,7 +9154,7 @@ VoiceParamEx_EDCEEA:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCEFC:
+VoiceParamEx_Entry_071:
 	.byte 0xc0, 0x8a
 	nop
 	nop
@@ -9166,7 +9166,7 @@ VoiceParamEx_EDCEFC:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCF0E:
+VoiceParamEx_Entry_072:
 	.byte 0xc1, 0x8a
 	nop
 	nop
@@ -9178,7 +9178,7 @@ VoiceParamEx_EDCF0E:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCF20:
+VoiceParamEx_Entry_073:
 	nop
 	.byte 0x8c
 	nop
@@ -9195,7 +9195,7 @@ VoiceParamEx_EDCF20:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCF32:
+VoiceParamEx_Entry_074:
 	.byte 0x01, 0x8c
 	nop
 	nop
@@ -9211,7 +9211,7 @@ VoiceParamEx_EDCF32:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCF44:
+VoiceParamEx_Entry_075:
 	reti
 	.byte 0x8c
 	nop
@@ -9226,7 +9226,7 @@ VoiceParamEx_EDCF44:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCF56:
+VoiceParamEx_Entry_076:
 	ldio	140, 0
 	nop
 	pop_sr
@@ -9241,7 +9241,7 @@ VoiceParamEx_EDCF56:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCF68:
+VoiceParamEx_Entry_077:
 	ldwio	140, 0
 	pop_sr
 	ldio	127, 0
@@ -9251,7 +9251,7 @@ VoiceParamEx_EDCF68:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCF7A:
+VoiceParamEx_Entry_078:
 	pushw	140
 	nop
 	.byte 0xb3
@@ -9266,7 +9266,7 @@ VoiceParamEx_EDCF7A:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCF8C:
+VoiceParamEx_Entry_079:
 	ldb	w, 140
 	nop
 	nop
@@ -9280,7 +9280,7 @@ VoiceParamEx_EDCF8C:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCF9E:
+VoiceParamEx_Entry_080:
 	ld	xwa, 50331788
 	.byte 0x04
 	ldio	0, 127
@@ -9293,7 +9293,7 @@ VoiceParamEx_EDCF9E:
 	.byte 0x01
 	nop
 	swi	7
-VoiceParamEx_EDCFB0:
+VoiceParamEx_Entry_081:
 	pop	xhl
 	.byte 0x8c
 	nop
@@ -9308,7 +9308,7 @@ VoiceParamEx_EDCFB0:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCFC2:
+VoiceParamEx_Entry_082:
 	pop	xiy
 	.byte 0x8c
 	nop
@@ -9323,7 +9323,7 @@ VoiceParamEx_EDCFC2:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCFD4:
+VoiceParamEx_Entry_083:
 	pop	xiz
 	.byte 0x8c
 	nop
@@ -9338,7 +9338,7 @@ VoiceParamEx_EDCFD4:
 	.byte 0x01
 	nop
 	swi	7
-VoiceParamEx_EDCFE6:
+VoiceParamEx_Entry_084:
 	jrl	140
 	nop
 	.byte 0xae
@@ -9353,7 +9353,7 @@ VoiceParamEx_EDCFE6:
 	nop
 	nop
 	swi	7
-VoiceParamEx_EDCFF8:
+VoiceParamEx_Entry_085:
 	add	(xwa), d
 	nop
 	nop
@@ -9367,7 +9367,7 @@ VoiceParamEx_EDCFF8:
 	nop
 	nop
 	swi	7
-PartParam_EDD00A:
+PartParam_Entry_001:
 	add	(xbc), d
 	nop
 	nop
@@ -9380,7 +9380,7 @@ PartParam_EDD00A:
 	nop
 	nop
 	swi	7
-PartParam_EDD01C:
+PartParam_Entry_002:
 	add	(xde), d
 	nop
 	nop
@@ -9393,7 +9393,7 @@ PartParam_EDD01C:
 	nop
 	nop
 	swi	7
-PartParam_EDD02E:
+PartParam_Entry_003:
 	.byte 0xb0, 0x8d
 	nop
 	nop
@@ -9409,7 +9409,7 @@ PartParam_EDD02E:
 	nop
 	nop
 	swi	7
-PartParam_EDD040:
+PartParam_Entry_004:
 	.byte 0xb2, 0x8d
 	nop
 	nop
@@ -9425,7 +9425,7 @@ PartParam_EDD040:
 	nop
 	nop
 	swi	7
-PartParam_EDD052:
+PartParam_Entry_005:
 	nop
 	.byte 0x90
 	nop
@@ -9442,7 +9442,7 @@ PartParam_EDD052:
 	nop
 	nop
 	swi	7
-PartParam_EDD064:
+PartParam_Entry_006:
 	.byte 0x01, 0x90
 	nop
 	nop
@@ -9457,7 +9457,7 @@ PartParam_EDD064:
 	nop
 	nop
 	swi	7
-PartParam_EDD076:
+PartParam_Entry_007:
 	reti
 	.byte 0x90
 	nop
@@ -9472,7 +9472,7 @@ PartParam_EDD076:
 	nop
 	nop
 	swi	7
-PartParam_EDD088:
+PartParam_Entry_008:
 	ldio	144, 0
 	nop
 	.byte 0x04
@@ -9487,7 +9487,7 @@ PartParam_EDD088:
 	nop
 	nop
 	swi	7
-PartParam_EDD09A:
+PartParam_Entry_009:
 	ldwio	144, 0
 	.byte 0x04
 	ldio	127, 0
@@ -9497,7 +9497,7 @@ PartParam_EDD09A:
 	nop
 	nop
 	swi	7
-PartParam_EDD0AC:
+PartParam_Entry_010:
 	pushw	144
 	nop
 	.byte 0xb3, 0x04
@@ -9511,7 +9511,7 @@ PartParam_EDD0AC:
 	nop
 	nop
 	swi	7
-PartParam_EDD0BE:
+PartParam_Entry_011:
 	ldb	w, 144
 	nop
 	nop
@@ -9524,7 +9524,7 @@ PartParam_EDD0BE:
 	nop
 	nop
 	swi	7
-PartParam_EDD0D0:
+PartParam_Entry_012:
 	ld	xwa, 67109008
 	.byte 0x04
 	ldio	0, 127
@@ -9537,7 +9537,7 @@ PartParam_EDD0D0:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD0E2:
+PartParam_Entry_013:
 	pop	xhl
 	.byte 0x90
 	nop
@@ -9552,7 +9552,7 @@ PartParam_EDD0E2:
 	nop
 	nop
 	swi	7
-PartParam_EDD0F4:
+PartParam_Entry_014:
 	pop	xiy
 	.byte 0x90
 	nop
@@ -9567,7 +9567,7 @@ PartParam_EDD0F4:
 	nop
 	nop
 	swi	7
-PartParam_EDD106:
+PartParam_Entry_015:
 	pop	xiz
 	.byte 0x90
 	nop
@@ -9581,7 +9581,7 @@ PartParam_EDD106:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD118:
+PartParam_Entry_016:
 	jrl	144
 	nop
 	.byte 0xae, 0x04
@@ -9595,7 +9595,7 @@ PartParam_EDD118:
 	nop
 	nop
 	swi	7
-PartParam_EDD12A:
+PartParam_Entry_017:
 	.byte 0x80, 0x90
 	nop
 	nop
@@ -9609,7 +9609,7 @@ PartParam_EDD12A:
 	nop
 	nop
 	swi	7
-PartParam_EDD13C:
+PartParam_Entry_018:
 	.byte 0x81, 0x90
 	nop
 	nop
@@ -9622,7 +9622,7 @@ PartParam_EDD13C:
 	nop
 	nop
 	swi	7
-PartParam_EDD14E:
+PartParam_Entry_019:
 	.byte 0x82, 0x90
 	nop
 	nop
@@ -9635,7 +9635,7 @@ PartParam_EDD14E:
 	nop
 	nop
 	swi	7
-PartParam_EDD160:
+PartParam_Entry_020:
 	.byte 0xb0, 0x91
 	nop
 	nop
@@ -9650,7 +9650,7 @@ PartParam_EDD160:
 	nop
 	nop
 	swi	7
-PartParam_EDD172:
+PartParam_Entry_021:
 	.byte 0xb2, 0x91
 	nop
 	nop
@@ -9665,7 +9665,7 @@ PartParam_EDD172:
 	nop
 	nop
 	swi	7
-PartParam_EDD184:
+PartParam_Entry_022:
 	nop
 	.byte 0x94
 	nop
@@ -9682,7 +9682,7 @@ PartParam_EDD184:
 	nop
 	nop
 	swi	7
-PartParam_EDD196:
+PartParam_Entry_023:
 	.byte 0x01, 0x94
 	nop
 	nop
@@ -9698,7 +9698,7 @@ PartParam_EDD196:
 	nop
 	nop
 	swi	7
-PartParam_EDD1A8:
+PartParam_Entry_024:
 	reti
 	.byte 0x94
 	nop
@@ -9713,7 +9713,7 @@ PartParam_EDD1A8:
 	nop
 	nop
 	swi	7
-PartParam_EDD1BA:
+PartParam_Entry_025:
 	ldio	148, 0
 	nop
 	halt
@@ -9728,7 +9728,7 @@ PartParam_EDD1BA:
 	nop
 	nop
 	swi	7
-PartParam_EDD1CC:
+PartParam_Entry_026:
 	ldwio	148, 0
 	halt
 	ldio	127, 0
@@ -9738,7 +9738,7 @@ PartParam_EDD1CC:
 	nop
 	nop
 	swi	7
-PartParam_EDD1DE:
+PartParam_Entry_027:
 	pushw	148
 	nop
 	.byte 0xb3
@@ -9753,7 +9753,7 @@ PartParam_EDD1DE:
 	nop
 	nop
 	swi	7
-PartParam_EDD1F0:
+PartParam_Entry_028:
 	ldb	w, 148
 	nop
 	nop
@@ -9767,7 +9767,7 @@ PartParam_EDD1F0:
 	nop
 	nop
 	swi	7
-PartParam_EDD202:
+PartParam_Entry_029:
 	ld	xwa, 83886228
 	.byte 0x04
 	ldio	0, 127
@@ -9780,7 +9780,7 @@ PartParam_EDD202:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD214:
+PartParam_Entry_030:
 	pop	xhl
 	.byte 0x94
 	nop
@@ -9795,7 +9795,7 @@ PartParam_EDD214:
 	nop
 	nop
 	swi	7
-PartParam_EDD226:
+PartParam_Entry_031:
 	pop	xiy
 	.byte 0x94
 	nop
@@ -9810,7 +9810,7 @@ PartParam_EDD226:
 	nop
 	nop
 	swi	7
-PartParam_EDD238:
+PartParam_Entry_032:
 	pop	xiz
 	.byte 0x94
 	nop
@@ -9825,7 +9825,7 @@ PartParam_EDD238:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD24A:
+PartParam_Entry_033:
 	jrl	148
 	nop
 	.byte 0xae
@@ -9840,7 +9840,7 @@ PartParam_EDD24A:
 	nop
 	nop
 	swi	7
-PartParam_EDD25C:
+PartParam_Entry_034:
 	.byte 0x80, 0x94
 	nop
 	nop
@@ -9854,7 +9854,7 @@ PartParam_EDD25C:
 	nop
 	nop
 	swi	7
-PartParam_EDD26E:
+PartParam_Entry_035:
 	.byte 0x81, 0x94
 	nop
 	nop
@@ -9867,7 +9867,7 @@ PartParam_EDD26E:
 	nop
 	nop
 	swi	7
-PartParam_EDD280:
+PartParam_Entry_036:
 	.byte 0x82, 0x94
 	nop
 	nop
@@ -9880,7 +9880,7 @@ PartParam_EDD280:
 	nop
 	nop
 	swi	7
-PartParam_EDD292:
+PartParam_Entry_037:
 	.byte 0xb0, 0x95
 	nop
 	nop
@@ -9896,7 +9896,7 @@ PartParam_EDD292:
 	nop
 	nop
 	swi	7
-PartParam_EDD2A4:
+PartParam_Entry_038:
 	.byte 0xb2, 0x95
 	nop
 	nop
@@ -9912,7 +9912,7 @@ PartParam_EDD2A4:
 	nop
 	nop
 	swi	7
-PartParam_EDD2B6:
+PartParam_Entry_039:
 	nop
 	.byte 0x98
 	nop
@@ -9928,7 +9928,7 @@ PartParam_EDD2B6:
 	nop
 	nop
 	swi	7
-PartParam_EDD2C8:
+PartParam_Entry_040:
 	.byte 0x01, 0x98
 	nop
 	nop
@@ -9943,7 +9943,7 @@ PartParam_EDD2C8:
 	nop
 	nop
 	swi	7
-PartParam_EDD2DA:
+PartParam_Entry_041:
 	reti
 	.byte 0x98
 	nop
@@ -9957,7 +9957,7 @@ PartParam_EDD2DA:
 	nop
 	nop
 	swi	7
-PartParam_EDD2EC:
+PartParam_Entry_042:
 	ldio	152, 0
 	nop
 	ei	3
@@ -9971,7 +9971,7 @@ PartParam_EDD2EC:
 	nop
 	nop
 	swi	7
-PartParam_EDD2FE:
+PartParam_Entry_043:
 	ldwio	152, 0
 	.byte 0x06
 	ldio	127, 0
@@ -9981,7 +9981,7 @@ PartParam_EDD2FE:
 	nop
 	nop
 	swi	7
-PartParam_EDD310:
+PartParam_Entry_044:
 	pushw	152
 	nop
 	.byte 0xb3, 0x06
@@ -9995,7 +9995,7 @@ PartParam_EDD310:
 	nop
 	nop
 	swi	7
-PartParam_EDD322:
+PartParam_Entry_045:
 	ldb	w, 152
 	nop
 	nop
@@ -10008,7 +10008,7 @@ PartParam_EDD322:
 	nop
 	nop
 	swi	7
-PartParam_EDD334:
+PartParam_Entry_046:
 	ld	xwa, 100663448
 	.byte 0x04
 	ldio	0, 127
@@ -10021,7 +10021,7 @@ PartParam_EDD334:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD346:
+PartParam_Entry_047:
 	pop	xhl
 	.byte 0x98
 	nop
@@ -10035,7 +10035,7 @@ PartParam_EDD346:
 	nop
 	nop
 	swi	7
-PartParam_EDD358:
+PartParam_Entry_048:
 	pop	xiy
 	.byte 0x98
 	nop
@@ -10049,7 +10049,7 @@ PartParam_EDD358:
 	nop
 	nop
 	swi	7
-PartParam_EDD36A:
+PartParam_Entry_049:
 	pop	xiz
 	.byte 0x98
 	nop
@@ -10063,7 +10063,7 @@ PartParam_EDD36A:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD37C:
+PartParam_Entry_050:
 	jrl	152
 	nop
 	.byte 0xae, 0x06
@@ -10077,7 +10077,7 @@ PartParam_EDD37C:
 	nop
 	nop
 	swi	7
-PartParam_EDD38E:
+PartParam_Entry_051:
 	.byte 0x80, 0x98
 	nop
 	nop
@@ -10091,7 +10091,7 @@ PartParam_EDD38E:
 	nop
 	nop
 	swi	7
-PartParam_EDD3A0:
+PartParam_Entry_052:
 	.byte 0x81, 0x98
 	nop
 	nop
@@ -10104,7 +10104,7 @@ PartParam_EDD3A0:
 	nop
 	nop
 	swi	7
-PartParam_EDD3B2:
+PartParam_Entry_053:
 	.byte 0x82, 0x98
 	nop
 	nop
@@ -10117,7 +10117,7 @@ PartParam_EDD3B2:
 	nop
 	nop
 	swi	7
-PartParam_EDD3C4:
+PartParam_Entry_054:
 	.byte 0xb0, 0x99
 	nop
 	nop
@@ -10132,7 +10132,7 @@ PartParam_EDD3C4:
 	nop
 	nop
 	swi	7
-PartParam_EDD3D6:
+PartParam_Entry_055:
 	.byte 0xb2, 0x99
 	nop
 	nop
@@ -10147,7 +10147,7 @@ PartParam_EDD3D6:
 	nop
 	nop
 	swi	7
-PartParam_EDD3E8:
+PartParam_Entry_056:
 	nop
 	.byte 0x9c
 	nop
@@ -10164,7 +10164,7 @@ PartParam_EDD3E8:
 	nop
 	nop
 	swi	7
-PartParam_EDD3FA:
+PartParam_Entry_057:
 	.byte 0x01, 0x9c
 	nop
 	nop
@@ -10180,7 +10180,7 @@ PartParam_EDD3FA:
 	nop
 	nop
 	swi	7
-PartParam_EDD40C:
+PartParam_Entry_058:
 	reti
 	.byte 0x9c
 	nop
@@ -10195,7 +10195,7 @@ PartParam_EDD40C:
 	nop
 	nop
 	swi	7
-PartParam_EDD41E:
+PartParam_Entry_059:
 	ldio	156, 0
 	nop
 	reti
@@ -10210,7 +10210,7 @@ PartParam_EDD41E:
 	nop
 	nop
 	swi	7
-PartParam_EDD430:
+PartParam_Entry_060:
 	ldwio	156, 0
 	reti
 	ldio	127, 0
@@ -10220,7 +10220,7 @@ PartParam_EDD430:
 	nop
 	nop
 	swi	7
-PartParam_EDD442:
+PartParam_Entry_061:
 	pushw	156
 	nop
 	.byte 0xb3
@@ -10235,7 +10235,7 @@ PartParam_EDD442:
 	nop
 	nop
 	swi	7
-PartParam_EDD454:
+PartParam_Entry_062:
 	ldb	w, 156
 	nop
 	nop
@@ -10249,7 +10249,7 @@ PartParam_EDD454:
 	nop
 	nop
 	swi	7
-PartParam_EDD466:
+PartParam_Entry_063:
 	ld	xwa, 117440668
 	.byte 0x04
 	ldio	0, 127
@@ -10262,7 +10262,7 @@ PartParam_EDD466:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD478:
+PartParam_Entry_064:
 	pop	xhl
 	.byte 0x9c
 	nop
@@ -10277,7 +10277,7 @@ PartParam_EDD478:
 	nop
 	nop
 	swi	7
-PartParam_EDD48A:
+PartParam_Entry_065:
 	pop	xiy
 	.byte 0x9c
 	nop
@@ -10292,7 +10292,7 @@ PartParam_EDD48A:
 	nop
 	nop
 	swi	7
-PartParam_EDD49C:
+PartParam_Entry_066:
 	pop	xiz
 	.byte 0x9c
 	nop
@@ -10307,7 +10307,7 @@ PartParam_EDD49C:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD4AE:
+PartParam_Entry_067:
 	jrl	156
 	nop
 	.byte 0xae
@@ -10322,7 +10322,7 @@ PartParam_EDD4AE:
 	nop
 	nop
 	swi	7
-PartParam_EDD4C0:
+PartParam_Entry_068:
 	.byte 0x80, 0x9c
 	nop
 	nop
@@ -10336,7 +10336,7 @@ PartParam_EDD4C0:
 	nop
 	nop
 	swi	7
-PartParam_EDD4D2:
+PartParam_Entry_069:
 	.byte 0x81, 0x9c
 	nop
 	nop
@@ -10349,7 +10349,7 @@ PartParam_EDD4D2:
 	nop
 	nop
 	swi	7
-PartParam_EDD4E4:
+PartParam_Entry_070:
 	.byte 0x82, 0x9c
 	nop
 	nop
@@ -10362,7 +10362,7 @@ PartParam_EDD4E4:
 	nop
 	nop
 	swi	7
-PartParam_EDD4F6:
+PartParam_Entry_071:
 	.byte 0xb0, 0x9d
 	nop
 	nop
@@ -10378,7 +10378,7 @@ PartParam_EDD4F6:
 	nop
 	nop
 	swi	7
-PartParam_EDD508:
+PartParam_Entry_072:
 	.byte 0xb2, 0x9d
 	nop
 	nop
@@ -10394,7 +10394,7 @@ PartParam_EDD508:
 	nop
 	nop
 	swi	7
-PartParam_EDD51A:
+PartParam_Entry_073:
 	nop
 	.byte 0xa0
 	nop
@@ -10409,7 +10409,7 @@ PartParam_EDD51A:
 	nop
 	nop
 	swi	7
-PartParam_EDD52C:
+PartParam_Entry_074:
 	.byte 0x01, 0xa0
 	nop
 	nop
@@ -10423,7 +10423,7 @@ PartParam_EDD52C:
 	nop
 	nop
 	swi	7
-PartParam_EDD53E:
+PartParam_Entry_075:
 	reti
 	.byte 0xa0
 	nop
@@ -10436,7 +10436,7 @@ PartParam_EDD53E:
 	nop
 	nop
 	swi	7
-PartParam_EDD550:
+PartParam_Entry_076:
 	ldio	160, 0
 	nop
 	ldio	3, 128
@@ -10449,7 +10449,7 @@ PartParam_EDD550:
 	nop
 	nop
 	swi	7
-PartParam_EDD562:
+PartParam_Entry_077:
 	ldwio	160, 0
 	ldio	8, 127
 	nop
@@ -10459,7 +10459,7 @@ PartParam_EDD562:
 	nop
 	nop
 	swi	7
-PartParam_EDD574:
+PartParam_Entry_078:
 	pushw	160
 	nop
 	.byte 0xb3
@@ -10472,7 +10472,7 @@ PartParam_EDD574:
 	nop
 	nop
 	swi	7
-PartParam_EDD586:
+PartParam_Entry_079:
 	ldb	w, 160
 	nop
 	nop
@@ -10486,7 +10486,7 @@ PartParam_EDD586:
 	nop
 	nop
 	swi	7
-PartParam_EDD598:
+PartParam_Entry_080:
 	ld	xwa, 134217888
 	.byte 0x04
 	ldio	0, 127
@@ -10499,7 +10499,7 @@ PartParam_EDD598:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD5AA:
+PartParam_Entry_081:
 	pop	xhl
 	.byte 0xa0
 	nop
@@ -10512,7 +10512,7 @@ PartParam_EDD5AA:
 	nop
 	nop
 	swi	7
-PartParam_EDD5BC:
+PartParam_Entry_082:
 	pop	xiy
 	.byte 0xa0
 	nop
@@ -10525,7 +10525,7 @@ PartParam_EDD5BC:
 	nop
 	nop
 	swi	7
-PartParam_EDD5CE:
+PartParam_Entry_083:
 	pop	xiz
 	.byte 0xa0
 	nop
@@ -10540,7 +10540,7 @@ PartParam_EDD5CE:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD5E0:
+PartParam_Entry_084:
 	jrl	160
 	nop
 	.byte 0xae
@@ -10553,7 +10553,7 @@ PartParam_EDD5E0:
 	nop
 	nop
 	swi	7
-PartParam_EDD5F2:
+PartParam_Entry_085:
 	.byte 0x80, 0xa0
 	nop
 	nop
@@ -10567,7 +10567,7 @@ PartParam_EDD5F2:
 	nop
 	nop
 	swi	7
-PartParam_EDD604:
+PartParam_Entry_086:
 	.byte 0x81, 0xa0
 	nop
 	nop
@@ -10581,7 +10581,7 @@ PartParam_EDD604:
 	nop
 	nop
 	swi	7
-PartParam_EDD616:
+PartParam_Entry_087:
 	.byte 0x82, 0xa0
 	nop
 	nop
@@ -10593,7 +10593,7 @@ PartParam_EDD616:
 	nop
 	nop
 	swi	7
-PartParam_EDD628:
+PartParam_Entry_088:
 	.byte 0xb0, 0xa1
 	nop
 	nop
@@ -10607,7 +10607,7 @@ PartParam_EDD628:
 	nop
 	nop
 	swi	7
-PartParam_EDD63A:
+PartParam_Entry_089:
 	.byte 0xb2, 0xa1
 	nop
 	nop
@@ -10621,7 +10621,7 @@ PartParam_EDD63A:
 	nop
 	nop
 	swi	7
-PartParam_EDD64C:
+PartParam_Entry_090:
 	nop
 	.byte 0xa4
 	nop
@@ -10637,7 +10637,7 @@ PartParam_EDD64C:
 	nop
 	nop
 	swi	7
-PartParam_EDD65E:
+PartParam_Entry_091:
 	.byte 0x01, 0xa4
 	nop
 	nop
@@ -10652,7 +10652,7 @@ PartParam_EDD65E:
 	nop
 	nop
 	swi	7
-PartParam_EDD670:
+PartParam_Entry_092:
 	reti
 	.byte 0xa4
 	nop
@@ -10666,7 +10666,7 @@ PartParam_EDD670:
 	nop
 	nop
 	swi	7
-PartParam_EDD682:
+PartParam_Entry_093:
 	ldio	164, 0
 	nop
 	push	3
@@ -10680,7 +10680,7 @@ PartParam_EDD682:
 	nop
 	nop
 	swi	7
-PartParam_EDD694:
+PartParam_Entry_094:
 	ldwio	164, 0
 	push	8
 	jrl	nc, 32512
@@ -10691,7 +10691,7 @@ PartParam_EDD694:
 	nop
 	nop
 	swi	7
-PartParam_EDD6A6:
+PartParam_Entry_095:
 	pushw	164
 	nop
 	.byte 0xb3
@@ -10705,7 +10705,7 @@ PartParam_EDD6A6:
 	nop
 	nop
 	swi	7
-PartParam_EDD6B8:
+PartParam_Entry_096:
 	ldb	w, 164
 	nop
 	nop
@@ -10718,7 +10718,7 @@ PartParam_EDD6B8:
 	nop
 	nop
 	swi	7
-PartParam_EDD6CA:
+PartParam_Entry_097:
 	ld	xwa, 150995108
 	.byte 0x04
 	ldio	0, 127
@@ -10731,7 +10731,7 @@ PartParam_EDD6CA:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD6DC:
+PartParam_Entry_098:
 	pop	xhl
 	.byte 0xa4
 	nop
@@ -10745,7 +10745,7 @@ PartParam_EDD6DC:
 	nop
 	nop
 	swi	7
-PartParam_EDD6EE:
+PartParam_Entry_099:
 	pop	xiy
 	.byte 0xa4
 	nop
@@ -10759,7 +10759,7 @@ PartParam_EDD6EE:
 	nop
 	nop
 	swi	7
-PartParam_EDD700:
+PartParam_Entry_100:
 	pop	xiz
 	.byte 0xa4
 	nop
@@ -10773,7 +10773,7 @@ PartParam_EDD700:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD712:
+PartParam_Entry_101:
 	jrl	164
 	nop
 	.byte 0xae
@@ -10787,7 +10787,7 @@ PartParam_EDD712:
 	nop
 	nop
 	swi	7
-PartParam_EDD724:
+PartParam_Entry_102:
 	.byte 0x80, 0xa4
 	nop
 	nop
@@ -10800,7 +10800,7 @@ PartParam_EDD724:
 	nop
 	nop
 	swi	7
-PartParam_EDD736:
+PartParam_Entry_103:
 	.byte 0x81, 0xa4
 	nop
 	nop
@@ -10815,7 +10815,7 @@ PartParam_EDD736:
 	nop
 	nop
 	swi	7
-PartParam_EDD748:
+PartParam_Entry_104:
 	.byte 0x82, 0xa4
 	nop
 	nop
@@ -10828,7 +10828,7 @@ PartParam_EDD748:
 	nop
 	nop
 	swi	7
-PartParam_EDD75A:
+PartParam_Entry_105:
 	.byte 0xb0, 0xa5
 	nop
 	nop
@@ -10843,7 +10843,7 @@ PartParam_EDD75A:
 	nop
 	nop
 	swi	7
-PartParam_EDD76C:
+PartParam_Entry_106:
 	.byte 0xb2, 0xa5
 	nop
 	nop
@@ -10858,7 +10858,7 @@ PartParam_EDD76C:
 	nop
 	nop
 	swi	7
-PartParam_EDD77E:
+PartParam_Entry_107:
 	nop
 	.byte 0xa8
 	nop
@@ -10872,7 +10872,7 @@ PartParam_EDD77E:
 	nop
 	nop
 	swi	7
-PartParam_EDD790:
+PartParam_Entry_108:
 	.byte 0x01, 0xa8
 	nop
 	nop
@@ -10887,7 +10887,7 @@ PartParam_EDD790:
 	nop
 	nop
 	swi	7
-PartParam_EDD7A2:
+PartParam_Entry_109:
 	reti
 	.byte 0xa8
 	nop
@@ -10899,7 +10899,7 @@ PartParam_EDD7A2:
 	nop
 	nop
 	swi	7
-PartParam_EDD7B4:
+PartParam_Entry_110:
 	ldio	168, 0
 	nop
 	ldwio	3, 128
@@ -10911,7 +10911,7 @@ PartParam_EDD7B4:
 	nop
 	nop
 	swi	7
-PartParam_EDD7C6:
+PartParam_Entry_111:
 	ldwio	168, 0
 	ldwio	8, 127
 	jrl	nc, 0
@@ -10920,7 +10920,7 @@ PartParam_EDD7C6:
 	nop
 	nop
 	swi	7
-PartParam_EDD7D8:
+PartParam_Entry_112:
 	pushw	168
 	nop
 	.byte 0xb3
@@ -10934,7 +10934,7 @@ PartParam_EDD7D8:
 	nop
 	nop
 	swi	7
-PartParam_EDD7EA:
+PartParam_Entry_113:
 	ldb	w, 168
 	nop
 	nop
@@ -10947,7 +10947,7 @@ PartParam_EDD7EA:
 	nop
 	nop
 	swi	7
-PartParam_EDD7FC:
+PartParam_Entry_114:
 	ld	xwa, 167772328
 	.byte 0x04
 	ldio	0, 127
@@ -10960,7 +10960,7 @@ PartParam_EDD7FC:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD80E:
+PartParam_Entry_115:
 	pop	xhl
 	.byte 0xa8
 	nop
@@ -10972,7 +10972,7 @@ PartParam_EDD80E:
 	nop
 	nop
 	swi	7
-PartParam_EDD820:
+PartParam_Entry_116:
 	pop	xiy
 	.byte 0xa8
 	nop
@@ -10984,7 +10984,7 @@ PartParam_EDD820:
 	nop
 	nop
 	swi	7
-PartParam_EDD832:
+PartParam_Entry_117:
 	pop	xiz
 	.byte 0xa8
 	nop
@@ -10998,7 +10998,7 @@ PartParam_EDD832:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD844:
+PartParam_Entry_118:
 	jrl	168
 	nop
 	.byte 0xae
@@ -11012,7 +11012,7 @@ PartParam_EDD844:
 	nop
 	nop
 	swi	7
-PartParam_EDD856:
+PartParam_Entry_119:
 	sub	(xwa), w
 	nop
 	nop
@@ -11025,7 +11025,7 @@ PartParam_EDD856:
 	nop
 	nop
 	swi	7
-PartParam_EDD868:
+PartParam_Entry_120:
 	sub	(xbc), w
 	nop
 	nop
@@ -11038,7 +11038,7 @@ PartParam_EDD868:
 	nop
 	nop
 	swi	7
-PartParam_EDD87A:
+PartParam_Entry_121:
 	sub	(xde), w
 	nop
 	nop
@@ -11051,7 +11051,7 @@ PartParam_EDD87A:
 	nop
 	nop
 	swi	7
-PartParam_EDD88C:
+PartParam_Entry_122:
 	.byte 0xb0, 0xa9
 	nop
 	nop
@@ -11066,7 +11066,7 @@ PartParam_EDD88C:
 	nop
 	nop
 	swi	7
-PartParam_EDD89E:
+PartParam_Entry_123:
 	.byte 0xb2, 0xa9
 	nop
 	nop
@@ -11081,7 +11081,7 @@ PartParam_EDD89E:
 	nop
 	nop
 	swi	7
-PartParam_EDD8B0:
+PartParam_Entry_124:
 	nop
 	.byte 0xac
 	nop
@@ -11096,7 +11096,7 @@ PartParam_EDD8B0:
 	nop
 	nop
 	swi	7
-PartParam_EDD8C2:
+PartParam_Entry_125:
 	.byte 0x01, 0xac
 	nop
 	nop
@@ -11110,7 +11110,7 @@ PartParam_EDD8C2:
 	nop
 	nop
 	swi	7
-PartParam_EDD8D4:
+PartParam_Entry_126:
 	reti
 	.byte 0xac
 	nop
@@ -11123,7 +11123,7 @@ PartParam_EDD8D4:
 	nop
 	nop
 	swi	7
-PartParam_EDD8E6:
+PartParam_Entry_127:
 	ldio	172, 0
 	nop
 	pushw	32771
@@ -11136,7 +11136,7 @@ PartParam_EDD8E6:
 	nop
 	nop
 	swi	7
-PartParam_EDD8F8:
+PartParam_Entry_128:
 	ldwio	172, 0
 	pushw	32520
 	nop
@@ -11146,7 +11146,7 @@ PartParam_EDD8F8:
 	nop
 	nop
 	swi	7
-PartParam_EDD90A:
+PartParam_Entry_129:
 	pushw	172
 	nop
 	.byte 0xb3
@@ -11159,7 +11159,7 @@ PartParam_EDD90A:
 	nop
 	nop
 	swi	7
-PartParam_EDD91C:
+PartParam_Entry_130:
 	ldb	w, 172
 	nop
 	nop
@@ -11173,7 +11173,7 @@ PartParam_EDD91C:
 	nop
 	nop
 	swi	7
-PartParam_EDD92E:
+PartParam_Entry_131:
 	ld	xwa, 184549548
 	.byte 0x04
 	ldio	0, 127
@@ -11186,7 +11186,7 @@ PartParam_EDD92E:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD940:
+PartParam_Entry_132:
 	pop	xhl
 	.byte 0xac
 	nop
@@ -11199,7 +11199,7 @@ PartParam_EDD940:
 	nop
 	nop
 	swi	7
-PartParam_EDD952:
+PartParam_Entry_133:
 	pop	xiy
 	.byte 0xac
 	nop
@@ -11212,7 +11212,7 @@ PartParam_EDD952:
 	nop
 	nop
 	swi	7
-PartParam_EDD964:
+PartParam_Entry_134:
 	pop	xiz
 	.byte 0xac
 	nop
@@ -11227,7 +11227,7 @@ PartParam_EDD964:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDD976:
+PartParam_Entry_135:
 	jrl	172
 	nop
 	.byte 0xae
@@ -11240,7 +11240,7 @@ PartParam_EDD976:
 	nop
 	nop
 	swi	7
-PartParam_EDD988:
+PartParam_Entry_136:
 	sub	(xwa), d
 	nop
 	nop
@@ -11254,7 +11254,7 @@ PartParam_EDD988:
 	nop
 	nop
 	swi	7
-PartParam_EDD99A:
+PartParam_Entry_137:
 	sub	(xbc), d
 	nop
 	nop
@@ -11268,7 +11268,7 @@ PartParam_EDD99A:
 	nop
 	nop
 	swi	7
-PartParam_EDD9AC:
+PartParam_Entry_138:
 	sub	(xde), d
 	nop
 	nop
@@ -11280,7 +11280,7 @@ PartParam_EDD9AC:
 	nop
 	nop
 	swi	7
-PartParam_EDD9BE:
+PartParam_Entry_139:
 	.byte 0xb0, 0xad
 	nop
 	nop
@@ -11294,7 +11294,7 @@ PartParam_EDD9BE:
 	nop
 	nop
 	swi	7
-PartParam_EDD9D0:
+PartParam_Entry_140:
 	.byte 0xb2, 0xad
 	nop
 	nop
@@ -11308,7 +11308,7 @@ PartParam_EDD9D0:
 	nop
 	nop
 	swi	7
-PartParam_EDD9E2:
+PartParam_Entry_141:
 	nop
 	ld	(xwa), 0
 	incf
@@ -11323,7 +11323,7 @@ PartParam_EDD9E2:
 	nop
 	nop
 	swi	7
-PartParam_EDD9F4:
+PartParam_Entry_142:
 	.byte 0x01
 	ld	(xwa), 0
 	.byte 0xb2
@@ -11338,7 +11338,7 @@ PartParam_EDD9F4:
 	nop
 	nop
 	swi	7
-PartParam_EDDA06:
+PartParam_Entry_143:
 	reti
 	ld	(xwa), 0
 	incf
@@ -11351,7 +11351,7 @@ PartParam_EDDA06:
 	nop
 	nop
 	swi	7
-PartParam_EDDA18:
+PartParam_Entry_144:
 	ldio	176, 0
 	nop
 	incf
@@ -11366,7 +11366,7 @@ PartParam_EDDA18:
 	nop
 	nop
 	swi	7
-PartParam_EDDA2A:
+PartParam_Entry_145:
 	ldwio	176, 0
 	incf
 	ldio	127, 0
@@ -11376,7 +11376,7 @@ PartParam_EDDA2A:
 	nop
 	nop
 	swi	7
-PartParam_EDDA3C:
+PartParam_Entry_146:
 	pushw	176
 	nop
 	.byte 0xb3
@@ -11391,7 +11391,7 @@ PartParam_EDDA3C:
 	nop
 	nop
 	swi	7
-PartParam_EDDA4E:
+PartParam_Entry_147:
 	ldb	w, 176
 	nop
 	nop
@@ -11405,7 +11405,7 @@ PartParam_EDDA4E:
 	nop
 	nop
 	swi	7
-PartParam_EDDA60:
+PartParam_Entry_148:
 	ld	xwa, 201326768
 	.byte 0x04
 	ldio	0, 127
@@ -11418,7 +11418,7 @@ PartParam_EDDA60:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDDA72:
+PartParam_Entry_149:
 	pop	xhl
 	ld	(xwa), 0
 	incf
@@ -11431,7 +11431,7 @@ PartParam_EDDA72:
 	nop
 	nop
 	swi	7
-PartParam_EDDA84:
+PartParam_Entry_150:
 	pop	xiy
 	ld	(xwa), 0
 	incf
@@ -11444,7 +11444,7 @@ PartParam_EDDA84:
 	nop
 	nop
 	swi	7
-PartParam_EDDA96:
+PartParam_Entry_151:
 	pop	xiz
 	ld	(xwa), 0
 	incf
@@ -11457,7 +11457,7 @@ PartParam_EDDA96:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDDAA8:
+PartParam_Entry_152:
 	jrl	176
 	nop
 	.byte 0xae
@@ -11472,7 +11472,7 @@ PartParam_EDDAA8:
 	nop
 	nop
 	swi	7
-PartParam_EDDABA:
+PartParam_Entry_153:
 	.byte 0x80
 	ld	(xwa), 0
 	incf
@@ -11485,7 +11485,7 @@ PartParam_EDDABA:
 	nop
 	nop
 	swi	7
-PartParam_EDDACC:
+PartParam_Entry_154:
 	.byte 0x81
 	ld	(xwa), 0
 	incf
@@ -11497,7 +11497,7 @@ PartParam_EDDACC:
 	nop
 	nop
 	swi	7
-PartParam_EDDADE:
+PartParam_Entry_155:
 	.byte 0x82
 	ld	(xwa), 0
 	incf
@@ -11509,7 +11509,7 @@ PartParam_EDDADE:
 	nop
 	nop
 	swi	7
-PartParam_EDDAF0:
+PartParam_Entry_156:
 	.byte 0xb0
 	ld	(xbc), 0
 	.byte 0xb1
@@ -11524,7 +11524,7 @@ PartParam_EDDAF0:
 	nop
 	nop
 	swi	7
-PartParam_EDDB02:
+PartParam_Entry_157:
 	.byte 0xb2
 	ld	(xbc), 0
 	.byte 0xb4
@@ -11539,7 +11539,7 @@ PartParam_EDDB02:
 	nop
 	nop
 	swi	7
-PartParam_EDDB14:
+PartParam_Entry_158:
 	nop
 	ld	(xix), 0
 	decf
@@ -11554,7 +11554,7 @@ PartParam_EDDB14:
 	nop
 	nop
 	swi	7
-PartParam_EDDB26:
+PartParam_Entry_159:
 	.byte 0x01
 	ld	(xix), 0
 	.byte 0xb2
@@ -11569,7 +11569,7 @@ PartParam_EDDB26:
 	nop
 	nop
 	swi	7
-PartParam_EDDB38:
+PartParam_Entry_160:
 	reti
 	ld	(xix), 0
 	decf
@@ -11582,7 +11582,7 @@ PartParam_EDDB38:
 	nop
 	nop
 	swi	7
-PartParam_EDDB4A:
+PartParam_Entry_161:
 	ldio	180, 0
 	nop
 	decf
@@ -11597,7 +11597,7 @@ PartParam_EDDB4A:
 	nop
 	nop
 	swi	7
-PartParam_EDDB5C:
+PartParam_Entry_162:
 	ldwio	180, 0
 	decf
 	ldio	127, 0
@@ -11607,7 +11607,7 @@ PartParam_EDDB5C:
 	nop
 	nop
 	swi	7
-PartParam_EDDB6E:
+PartParam_Entry_163:
 	pushw	180
 	nop
 	.byte 0xb3
@@ -11622,7 +11622,7 @@ PartParam_EDDB6E:
 	nop
 	nop
 	swi	7
-PartParam_EDDB80:
+PartParam_Entry_164:
 	ldb	w, 180
 	nop
 	nop
@@ -11636,7 +11636,7 @@ PartParam_EDDB80:
 	nop
 	nop
 	swi	7
-PartParam_EDDB92:
+PartParam_Entry_165:
 	ld	xwa, 218103988
 	.byte 0x04
 	ldio	0, 127
@@ -11649,7 +11649,7 @@ PartParam_EDDB92:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDDBA4:
+PartParam_Entry_166:
 	pop	xhl
 	ld	(xix), 0
 	decf
@@ -11662,7 +11662,7 @@ PartParam_EDDBA4:
 	nop
 	nop
 	swi	7
-PartParam_EDDBB6:
+PartParam_Entry_167:
 	pop	xiy
 	ld	(xix), 0
 	decf
@@ -11675,7 +11675,7 @@ PartParam_EDDBB6:
 	nop
 	nop
 	swi	7
-PartParam_EDDBC8:
+PartParam_Entry_168:
 	pop	xiz
 	ld	(xix), 0
 	decf
@@ -11688,7 +11688,7 @@ PartParam_EDDBC8:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDDBDA:
+PartParam_Entry_169:
 	jrl	180
 	nop
 	.byte 0xae
@@ -11703,7 +11703,7 @@ PartParam_EDDBDA:
 	nop
 	nop
 	swi	7
-PartParam_EDDBEC:
+PartParam_Entry_170:
 	.byte 0x80
 	ld	(xix), 0
 	decf
@@ -11716,7 +11716,7 @@ PartParam_EDDBEC:
 	nop
 	nop
 	swi	7
-PartParam_EDDBFE:
+PartParam_Entry_171:
 	.byte 0x81
 	ld	(xix), 0
 	decf
@@ -11728,7 +11728,7 @@ PartParam_EDDBFE:
 	nop
 	nop
 	swi	7
-PartParam_EDDC10:
+PartParam_Entry_172:
 	.byte 0x82
 	ld	(xix), 0
 	decf
@@ -11740,7 +11740,7 @@ PartParam_EDDC10:
 	nop
 	nop
 	swi	7
-PartParam_EDDC22:
+PartParam_Entry_173:
 	.byte 0xb0
 	ld	(xiy), 0
 	.byte 0xb1
@@ -11755,7 +11755,7 @@ PartParam_EDDC22:
 	nop
 	nop
 	swi	7
-PartParam_EDDC34:
+PartParam_Entry_174:
 	.byte 0xb2
 	ld	(xiy), 0
 	.byte 0xb4
@@ -11770,7 +11770,7 @@ PartParam_EDDC34:
 	nop
 	nop
 	swi	7
-PartParam_EDDC46:
+PartParam_Entry_175:
 	nop
 	.byte 0xb8
 	nop
@@ -11787,7 +11787,7 @@ PartParam_EDDC46:
 	nop
 	nop
 	swi	7
-PartParam_EDDC58:
+PartParam_Entry_176:
 	.byte 0x01, 0xb8
 	nop
 	nop
@@ -11803,7 +11803,7 @@ PartParam_EDDC58:
 	nop
 	nop
 	swi	7
-PartParam_EDDC6A:
+PartParam_Entry_177:
 	reti
 	.byte 0xb8
 	nop
@@ -11818,7 +11818,7 @@ PartParam_EDDC6A:
 	nop
 	nop
 	swi	7
-PartParam_EDDC7C:
+PartParam_Entry_178:
 	ldio	184, 0
 	nop
 	ret
@@ -11833,7 +11833,7 @@ PartParam_EDDC7C:
 	nop
 	nop
 	swi	7
-PartParam_EDDC8E:
+PartParam_Entry_179:
 	ldwio	184, 0
 	ret
 	ldio	127, 0
@@ -11843,7 +11843,7 @@ PartParam_EDDC8E:
 	nop
 	nop
 	swi	7
-PartParam_EDDCA0:
+PartParam_Entry_180:
 	pushw	184
 	nop
 	.byte 0xb3
@@ -11858,7 +11858,7 @@ PartParam_EDDCA0:
 	nop
 	nop
 	swi	7
-PartParam_EDDCB2:
+PartParam_Entry_181:
 	ldb	w, 184
 	nop
 	nop
@@ -11872,7 +11872,7 @@ PartParam_EDDCB2:
 	nop
 	nop
 	swi	7
-PartParam_EDDCC4:
+PartParam_Entry_182:
 	ld	xwa, 234881208
 	.byte 0x04
 	ldio	0, 127
@@ -11885,7 +11885,7 @@ PartParam_EDDCC4:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDDCD6:
+PartParam_Entry_183:
 	pop	xhl
 	.byte 0xb8
 	nop
@@ -11900,7 +11900,7 @@ PartParam_EDDCD6:
 	nop
 	nop
 	swi	7
-PartParam_EDDCE8:
+PartParam_Entry_184:
 	pop	xiy
 	.byte 0xb8
 	nop
@@ -11915,7 +11915,7 @@ PartParam_EDDCE8:
 	nop
 	nop
 	swi	7
-PartParam_EDDCFA:
+PartParam_Entry_185:
 	pop	xiz
 	.byte 0xb8
 	nop
@@ -11930,7 +11930,7 @@ PartParam_EDDCFA:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDDD0C:
+PartParam_Entry_186:
 	jrl	184
 	nop
 	.byte 0xae
@@ -11945,7 +11945,7 @@ PartParam_EDDD0C:
 	nop
 	nop
 	swi	7
-PartParam_EDDD1E:
+PartParam_Entry_187:
 	.byte 0x80, 0xb8
 	nop
 	nop
@@ -11959,7 +11959,7 @@ PartParam_EDDD1E:
 	nop
 	nop
 	swi	7
-PartParam_EDDD30:
+PartParam_Entry_188:
 	.byte 0x81, 0xb8
 	nop
 	nop
@@ -11972,7 +11972,7 @@ PartParam_EDDD30:
 	nop
 	nop
 	swi	7
-PartParam_EDDD42:
+PartParam_Entry_189:
 	.byte 0x82, 0xb8
 	nop
 	nop
@@ -11985,7 +11985,7 @@ PartParam_EDDD42:
 	nop
 	nop
 	swi	7
-PartParam_EDDD54:
+PartParam_Entry_190:
 	.byte 0xb0, 0xb9
 	nop
 	nop
@@ -12001,7 +12001,7 @@ PartParam_EDDD54:
 	nop
 	nop
 	swi	7
-PartParam_EDDD66:
+PartParam_Entry_191:
 	.byte 0xb2, 0xb9
 	nop
 	nop
@@ -12017,7 +12017,7 @@ PartParam_EDDD66:
 	nop
 	nop
 	swi	7
-PartParam_EDDD78:
+PartParam_Entry_192:
 	nop
 	.byte 0xbc
 	nop
@@ -12032,7 +12032,7 @@ PartParam_EDDD78:
 	nop
 	nop
 	swi	7
-PartParam_EDDD8A:
+PartParam_Entry_193:
 	.byte 0x01, 0xbc
 	nop
 	nop
@@ -12046,7 +12046,7 @@ PartParam_EDDD8A:
 	nop
 	nop
 	swi	7
-PartParam_EDDD9C:
+PartParam_Entry_194:
 	reti
 	.byte 0xbc
 	nop
@@ -12059,7 +12059,7 @@ PartParam_EDDD9C:
 	nop
 	nop
 	swi	7
-PartParam_EDDDAE:
+PartParam_Entry_195:
 	ldio	188, 0
 	nop
 	retd	32771
@@ -12072,7 +12072,7 @@ PartParam_EDDDAE:
 	nop
 	nop
 	swi	7
-PartParam_EDDDC0:
+PartParam_Entry_196:
 	ldwio	188, 0
 	retd	32520
 	nop
@@ -12082,7 +12082,7 @@ PartParam_EDDDC0:
 	nop
 	nop
 	swi	7
-PartParam_EDDDD2:
+PartParam_Entry_197:
 	pushw	188
 	nop
 	.byte 0xb3
@@ -12095,7 +12095,7 @@ PartParam_EDDDD2:
 	nop
 	nop
 	swi	7
-PartParam_EDDDE4:
+PartParam_Entry_198:
 	ldb	w, 188
 	nop
 	nop
@@ -12109,7 +12109,7 @@ PartParam_EDDDE4:
 	nop
 	nop
 	swi	7
-PartParam_EDDDF6:
+PartParam_Entry_199:
 	ld	xwa, 251658428
 	.byte 0x04
 	ldio	0, 127
@@ -12122,7 +12122,7 @@ PartParam_EDDDF6:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDDE08:
+PartParam_Entry_200:
 	pop	xhl
 	.byte 0xbc
 	nop
@@ -12135,7 +12135,7 @@ PartParam_EDDE08:
 	nop
 	nop
 	swi	7
-PartParam_EDDE1A:
+PartParam_Entry_201:
 	pop	xiy
 	.byte 0xbc
 	nop
@@ -12148,7 +12148,7 @@ PartParam_EDDE1A:
 	nop
 	nop
 	swi	7
-PartParam_EDDE2C:
+PartParam_Entry_202:
 	pop	xiz
 	.byte 0xbc
 	nop
@@ -12163,7 +12163,7 @@ PartParam_EDDE2C:
 	.byte 0x01
 	nop
 	swi	7
-PartParam_EDDE3E:
+PartParam_Entry_203:
 	jrl	188
 	nop
 	.byte 0xae
@@ -12176,7 +12176,7 @@ PartParam_EDDE3E:
 	nop
 	nop
 	swi	7
-PartParam_EDDE50:
+PartParam_Entry_204:
 	.byte 0x80, 0xbc
 	nop
 	nop
@@ -12190,7 +12190,7 @@ PartParam_EDDE50:
 	nop
 	nop
 	swi	7
-PartParam_EDDE62:
+PartParam_Entry_205:
 	.byte 0x81, 0xbc
 	nop
 	nop
@@ -12204,7 +12204,7 @@ PartParam_EDDE62:
 	nop
 	nop
 	swi	7
-PartParam_EDDE74:
+PartParam_Entry_206:
 	.byte 0x82, 0xbc
 	nop
 	nop
@@ -12216,7 +12216,7 @@ PartParam_EDDE74:
 	nop
 	nop
 	swi	7
-PartParam_EDDE86:
+PartParam_Entry_207:
 	.byte 0xb0, 0xbd
 	nop
 	nop
@@ -12230,7 +12230,7 @@ PartParam_EDDE86:
 	nop
 	nop
 	swi	7
-PartParam_EDDE98:
+PartParam_Entry_208:
 	.byte 0xb2, 0xbd
 	nop
 	nop
@@ -12244,7 +12244,7 @@ PartParam_EDDE98:
 	nop
 	nop
 	swi	7
-PartParam_EDDEAA:
+PartParam_Entry_209:
 	nop
 	.byte 0xc0
 	nop
@@ -12261,7 +12261,7 @@ PartParam_EDDEAA:
 	nop
 	halt
 	swi	7
-PartParam_EDDEBC:
+PartParam_Entry_210:
 	.byte 0x01, 0xc0
 	nop
 	nop
@@ -12277,7 +12277,7 @@ PartParam_EDDEBC:
 	nop
 	.byte 0x01
 	swi	7
-PartParam_EDDECE:
+PartParam_Entry_211:
 	reti
 	.byte 0xc0
 	nop
@@ -12292,7 +12292,7 @@ PartParam_EDDECE:
 	nop
 	nop
 	swi	7
-PartParam_EDDEE0:
+PartParam_Entry_212:
 	ldio	192, 0
 	nop
 	rcf
@@ -12307,7 +12307,7 @@ PartParam_EDDEE0:
 	nop
 	nop
 	swi	7
-PartParam_EDDEF2:
+PartParam_Entry_213:
 	ldwio	192, 0
 	rcf
 	ldio	127, 0
@@ -12317,7 +12317,7 @@ PartParam_EDDEF2:
 	nop
 	.byte 0x01
 	swi	7
-PartParam_EDDF04:
+PartParam_Entry_214:
 	pushw	192
 	nop
 	.byte 0xb3
@@ -12330,7 +12330,7 @@ PartParam_EDDF04:
 	nop
 	.byte 0x01
 	swi	7
-PartParam_EDDF16:
+PartParam_Entry_215:
 	ldb	w, 192
 	nop
 	nop
@@ -12344,7 +12344,7 @@ PartParam_EDDF16:
 	nop
 	.byte 0x04
 	swi	7
-PartParam_EDDF28:
+PartParam_Entry_216:
 	ld	xwa, 268435648
 	.byte 0x04
 	ldio	0, 127
@@ -12357,7 +12357,7 @@ PartParam_EDDF28:
 	.byte 0x01
 	push_sr
 	swi	7
-PartParam_EDDF3A:
+PartParam_Entry_217:
 	pop	xhl
 	.byte 0xc0
 	nop
@@ -12372,7 +12372,7 @@ PartParam_EDDF3A:
 	nop
 	nop
 	swi	7
-PartParam_EDDF4C:
+PartParam_Entry_218:
 	pop	xiy
 	.byte 0xc0
 	nop
@@ -12387,7 +12387,7 @@ PartParam_EDDF4C:
 	nop
 	nop
 	swi	7
-PartParam_EDDF5E:
+PartParam_Entry_219:
 	pop	xiz
 	.byte 0xc0
 	nop
@@ -12402,7 +12402,7 @@ PartParam_EDDF5E:
 	.byte 0x01
 	push_sr
 	swi	7
-PartParam_EDDF70:
+PartParam_Entry_220:
 	jrl	192
 	nop
 	.byte 0xae
@@ -12417,7 +12417,7 @@ PartParam_EDDF70:
 	nop
 	nop
 	swi	7
-PartParam_EDDF82:
+PartParam_Entry_221:
 	.byte 0x80, 0xc0
 	nop
 	nop
@@ -12431,7 +12431,7 @@ PartParam_EDDF82:
 	nop
 	nop
 	swi	7
-PartParam_EDDF94:
+PartParam_Entry_222:
 	.byte 0x81, 0xc0
 	nop
 	nop
@@ -12444,7 +12444,7 @@ PartParam_EDDF94:
 	nop
 	nop
 	swi	7
-PartParam_EDDFA6:
+PartParam_Entry_223:
 	.byte 0x82, 0xc0
 	nop
 	nop
@@ -12457,7 +12457,7 @@ PartParam_EDDFA6:
 	nop
 	nop
 	swi	7
-PartParam_EDDFB8:
+PartParam_Entry_224:
 	.byte 0xb0, 0xc1
 	nop
 	nop
@@ -12473,7 +12473,7 @@ PartParam_EDDFB8:
 	nop
 	pop_sr
 	swi	7
-PartParam_EDDFCA:
+PartParam_Entry_225:
 	.byte 0xb2, 0xc1
 	nop
 	nop
@@ -12489,7 +12489,7 @@ PartParam_EDDFCA:
 	nop
 	nop
 	swi	7
-PartParam_EDDFDC:
+PartParam_Entry_226:
 	nop
 	.byte 0xc4
 	nop
@@ -12506,7 +12506,7 @@ PartParam_EDDFDC:
 	nop
 	halt
 	swi	7
-PartParam_EDDFEE:
+PartParam_Entry_227:
 	.byte 0x01, 0xc4
 	nop
 	nop
@@ -12522,7 +12522,7 @@ PartParam_EDDFEE:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE000:
+ExtPartParam_Entry_228:
 	reti
 	.byte 0xc4
 	nop
@@ -12537,7 +12537,7 @@ ExtPartParam_EDE000:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE012:
+ExtPartParam_Entry_229:
 	ldio	196, 0
 	nop
 	scf
@@ -12552,7 +12552,7 @@ ExtPartParam_EDE012:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE024:
+ExtPartParam_Entry_230:
 	ldwio	196, 0
 	scf
 	ldio	127, 0
@@ -12562,7 +12562,7 @@ ExtPartParam_EDE024:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE036:
+ExtPartParam_Entry_231:
 	pushw	196
 	nop
 	.byte 0xb3
@@ -12575,7 +12575,7 @@ ExtPartParam_EDE036:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE048:
+ExtPartParam_Entry_232:
 	ldb	w, 196
 	nop
 	nop
@@ -12589,7 +12589,7 @@ ExtPartParam_EDE048:
 	nop
 	.byte 0x04
 	swi	7
-ExtPartParam_EDE05A:
+ExtPartParam_Entry_233:
 	ld	xwa, 285212868
 	.byte 0x04
 	ldio	0, 127
@@ -12602,7 +12602,7 @@ ExtPartParam_EDE05A:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE06C:
+ExtPartParam_Entry_234:
 	pop	xhl
 	.byte 0xc4
 	nop
@@ -12617,7 +12617,7 @@ ExtPartParam_EDE06C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE07E:
+ExtPartParam_Entry_235:
 	pop	xiy
 	.byte 0xc4
 	nop
@@ -12632,7 +12632,7 @@ ExtPartParam_EDE07E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE090:
+ExtPartParam_Entry_236:
 	pop	xiz
 	.byte 0xc4
 	nop
@@ -12647,7 +12647,7 @@ ExtPartParam_EDE090:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE0A2:
+ExtPartParam_Entry_237:
 	jrl	196
 	nop
 	.byte 0xae
@@ -12662,7 +12662,7 @@ ExtPartParam_EDE0A2:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE0B4:
+ExtPartParam_Entry_238:
 	.byte 0x80, 0xc4
 	nop
 	nop
@@ -12676,7 +12676,7 @@ ExtPartParam_EDE0B4:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE0C6:
+ExtPartParam_Entry_239:
 	.byte 0x81, 0xc4
 	nop
 	nop
@@ -12689,7 +12689,7 @@ ExtPartParam_EDE0C6:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE0D8:
+ExtPartParam_Entry_240:
 	.byte 0x82, 0xc4
 	nop
 	nop
@@ -12702,7 +12702,7 @@ ExtPartParam_EDE0D8:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE0EA:
+ExtPartParam_Entry_241:
 	.byte 0xb0, 0xc5
 	nop
 	nop
@@ -12718,7 +12718,7 @@ ExtPartParam_EDE0EA:
 	nop
 	pop_sr
 	swi	7
-ExtPartParam_EDE0FC:
+ExtPartParam_Entry_242:
 	.byte 0xb2, 0xc5
 	nop
 	nop
@@ -12734,7 +12734,7 @@ ExtPartParam_EDE0FC:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE10E:
+ExtPartParam_Entry_243:
 	nop
 	.byte 0xc8
 	nop
@@ -12751,7 +12751,7 @@ ExtPartParam_EDE10E:
 	nop
 	halt
 	swi	7
-ExtPartParam_EDE120:
+ExtPartParam_Entry_244:
 	.byte 0x01, 0xc8
 	nop
 	nop
@@ -12767,7 +12767,7 @@ ExtPartParam_EDE120:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE132:
+ExtPartParam_Entry_245:
 	reti
 	.byte 0xc8
 	nop
@@ -12782,7 +12782,7 @@ ExtPartParam_EDE132:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE144:
+ExtPartParam_Entry_246:
 	ldio	200, 0
 	nop
 	ccf
@@ -12797,7 +12797,7 @@ ExtPartParam_EDE144:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE156:
+ExtPartParam_Entry_247:
 	ldwio	200, 0
 	ccf
 	ldio	127, 0
@@ -12807,7 +12807,7 @@ ExtPartParam_EDE156:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE168:
+ExtPartParam_Entry_248:
 	pushw	200
 	nop
 	.byte 0xb3
@@ -12820,7 +12820,7 @@ ExtPartParam_EDE168:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE17A:
+ExtPartParam_Entry_249:
 	ldb	w, 200
 	nop
 	nop
@@ -12834,7 +12834,7 @@ ExtPartParam_EDE17A:
 	nop
 	.byte 0x04
 	swi	7
-ExtPartParam_EDE18C:
+ExtPartParam_Entry_250:
 	ld	xwa, 301990088
 	.byte 0x04
 	ldio	0, 127
@@ -12847,7 +12847,7 @@ ExtPartParam_EDE18C:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE19E:
+ExtPartParam_Entry_251:
 	pop	xhl
 	.byte 0xc8
 	nop
@@ -12862,7 +12862,7 @@ ExtPartParam_EDE19E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE1B0:
+ExtPartParam_Entry_252:
 	pop	xiy
 	.byte 0xc8
 	nop
@@ -12877,7 +12877,7 @@ ExtPartParam_EDE1B0:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE1C2:
+ExtPartParam_Entry_253:
 	pop	xiz
 	.byte 0xc8
 	nop
@@ -12892,7 +12892,7 @@ ExtPartParam_EDE1C2:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE1D4:
+ExtPartParam_Entry_254:
 	jrl	200
 	nop
 	.byte 0xae
@@ -12907,7 +12907,7 @@ ExtPartParam_EDE1D4:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE1E6:
+ExtPartParam_Entry_255:
 	and	(xwa), w
 	nop
 	nop
@@ -12921,7 +12921,7 @@ ExtPartParam_EDE1E6:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE1F8:
+ExtPartParam_Entry_256:
 	and	(xbc), w
 	nop
 	nop
@@ -12934,7 +12934,7 @@ ExtPartParam_EDE1F8:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE20A:
+ExtPartParam_Entry_257:
 	and	(xde), w
 	nop
 	nop
@@ -12947,7 +12947,7 @@ ExtPartParam_EDE20A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE21C:
+ExtPartParam_Entry_258:
 	.byte 0xb0, 0xc9
 	nop
 	nop
@@ -12963,7 +12963,7 @@ ExtPartParam_EDE21C:
 	nop
 	pop_sr
 	swi	7
-ExtPartParam_EDE22E:
+ExtPartParam_Entry_259:
 	.byte 0xb2, 0xc9
 	nop
 	nop
@@ -12979,7 +12979,7 @@ ExtPartParam_EDE22E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE240:
+ExtPartParam_Entry_260:
 	nop
 	.byte 0xcc
 	nop
@@ -12996,7 +12996,7 @@ ExtPartParam_EDE240:
 	nop
 	halt
 	swi	7
-ExtPartParam_EDE252:
+ExtPartParam_Entry_261:
 	.byte 0x01, 0xcc
 	nop
 	nop
@@ -13012,7 +13012,7 @@ ExtPartParam_EDE252:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE264:
+ExtPartParam_Entry_262:
 	reti
 	.byte 0xcc
 	nop
@@ -13027,7 +13027,7 @@ ExtPartParam_EDE264:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE276:
+ExtPartParam_Entry_263:
 	ldio	204, 0
 	nop
 	zcf
@@ -13042,7 +13042,7 @@ ExtPartParam_EDE276:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE288:
+ExtPartParam_Entry_264:
 	ldwio	204, 0
 	zcf
 	ldio	127, 0
@@ -13052,7 +13052,7 @@ ExtPartParam_EDE288:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE29A:
+ExtPartParam_Entry_265:
 	pushw	204
 	nop
 	.byte 0xb3
@@ -13065,7 +13065,7 @@ ExtPartParam_EDE29A:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE2AC:
+ExtPartParam_Entry_266:
 	ldb	w, 204
 	nop
 	nop
@@ -13079,7 +13079,7 @@ ExtPartParam_EDE2AC:
 	nop
 	.byte 0x04
 	swi	7
-ExtPartParam_EDE2BE:
+ExtPartParam_Entry_267:
 	ld	xwa, 318767308
 	.byte 0x04
 	ldio	0, 127
@@ -13092,7 +13092,7 @@ ExtPartParam_EDE2BE:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE2D0:
+ExtPartParam_Entry_268:
 	pop	xhl
 	.byte 0xcc
 	nop
@@ -13107,7 +13107,7 @@ ExtPartParam_EDE2D0:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE2E2:
+ExtPartParam_Entry_269:
 	pop	xiy
 	.byte 0xcc
 	nop
@@ -13122,7 +13122,7 @@ ExtPartParam_EDE2E2:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE2F4:
+ExtPartParam_Entry_270:
 	pop	xiz
 	.byte 0xcc
 	nop
@@ -13137,7 +13137,7 @@ ExtPartParam_EDE2F4:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE306:
+ExtPartParam_Entry_271:
 	jrl	204
 	nop
 	.byte 0xae
@@ -13152,7 +13152,7 @@ ExtPartParam_EDE306:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE318:
+ExtPartParam_Entry_272:
 	and	(xwa), d
 	nop
 	nop
@@ -13166,7 +13166,7 @@ ExtPartParam_EDE318:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE32A:
+ExtPartParam_Entry_273:
 	and	(xbc), d
 	nop
 	nop
@@ -13179,7 +13179,7 @@ ExtPartParam_EDE32A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE33C:
+ExtPartParam_Entry_274:
 	and	(xde), d
 	nop
 	nop
@@ -13192,7 +13192,7 @@ ExtPartParam_EDE33C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE34E:
+ExtPartParam_Entry_275:
 	.byte 0xb0, 0xcd
 	nop
 	nop
@@ -13208,7 +13208,7 @@ ExtPartParam_EDE34E:
 	nop
 	pop_sr
 	swi	7
-ExtPartParam_EDE360:
+ExtPartParam_Entry_276:
 	.byte 0xb2, 0xcd
 	nop
 	nop
@@ -13224,7 +13224,7 @@ ExtPartParam_EDE360:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE372:
+ExtPartParam_Entry_277:
 	nop
 	.byte 0xd0
 	nop
@@ -13241,7 +13241,7 @@ ExtPartParam_EDE372:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE384:
+ExtPartParam_Entry_278:
 	.byte 0x01, 0xd0
 	nop
 	nop
@@ -13257,7 +13257,7 @@ ExtPartParam_EDE384:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE396:
+ExtPartParam_Entry_279:
 	reti
 	.byte 0xd0
 	nop
@@ -13272,7 +13272,7 @@ ExtPartParam_EDE396:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE3A8:
+ExtPartParam_Entry_280:
 	ldio	208, 0
 	nop
 	push_a
@@ -13287,7 +13287,7 @@ ExtPartParam_EDE3A8:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE3BA:
+ExtPartParam_Entry_281:
 	ldwio	208, 0
 	push_a
 	ldio	127, 0
@@ -13297,7 +13297,7 @@ ExtPartParam_EDE3BA:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE3CC:
+ExtPartParam_Entry_282:
 	pushw	208
 	nop
 	.byte 0xb3
@@ -13310,7 +13310,7 @@ ExtPartParam_EDE3CC:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE3DE:
+ExtPartParam_Entry_283:
 	ldb	w, 208
 	nop
 	nop
@@ -13324,7 +13324,7 @@ ExtPartParam_EDE3DE:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE3F0:
+ExtPartParam_Entry_284:
 	ld	xwa, 335544528
 	.byte 0x04
 	ldio	0, 127
@@ -13337,7 +13337,7 @@ ExtPartParam_EDE3F0:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE402:
+ExtPartParam_Entry_285:
 	pop	xhl
 	.byte 0xd0
 	nop
@@ -13352,7 +13352,7 @@ ExtPartParam_EDE402:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE414:
+ExtPartParam_Entry_286:
 	pop	xiy
 	.byte 0xd0
 	nop
@@ -13367,7 +13367,7 @@ ExtPartParam_EDE414:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE426:
+ExtPartParam_Entry_287:
 	pop	xiz
 	.byte 0xd0
 	nop
@@ -13382,7 +13382,7 @@ ExtPartParam_EDE426:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE438:
+ExtPartParam_Entry_288:
 	jrl	208
 	nop
 	.byte 0xae
@@ -13397,7 +13397,7 @@ ExtPartParam_EDE438:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE44A:
+ExtPartParam_Entry_289:
 	.byte 0x80, 0xd0
 	nop
 	nop
@@ -13411,7 +13411,7 @@ ExtPartParam_EDE44A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE45C:
+ExtPartParam_Entry_290:
 	.byte 0x81, 0xd0
 	nop
 	nop
@@ -13424,7 +13424,7 @@ ExtPartParam_EDE45C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE46E:
+ExtPartParam_Entry_291:
 	.byte 0x82, 0xd0
 	nop
 	nop
@@ -13437,7 +13437,7 @@ ExtPartParam_EDE46E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE480:
+ExtPartParam_Entry_292:
 	.byte 0xb0, 0xd1
 	nop
 	nop
@@ -13453,7 +13453,7 @@ ExtPartParam_EDE480:
 	nop
 	pop_sr
 	swi	7
-ExtPartParam_EDE492:
+ExtPartParam_Entry_293:
 	.byte 0xb2, 0xd1
 	nop
 	nop
@@ -13469,7 +13469,7 @@ ExtPartParam_EDE492:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE4A4:
+ExtPartParam_Entry_294:
 	nop
 	.byte 0xd4
 	nop
@@ -13486,7 +13486,7 @@ ExtPartParam_EDE4A4:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE4B6:
+ExtPartParam_Entry_295:
 	.byte 0x01, 0xd4
 	nop
 	nop
@@ -13502,7 +13502,7 @@ ExtPartParam_EDE4B6:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE4C8:
+ExtPartParam_Entry_296:
 	reti
 	.byte 0xd4
 	nop
@@ -13517,7 +13517,7 @@ ExtPartParam_EDE4C8:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE4DA:
+ExtPartParam_Entry_297:
 	ldio	212, 0
 	nop
 	pop_a
@@ -13532,7 +13532,7 @@ ExtPartParam_EDE4DA:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE4EC:
+ExtPartParam_Entry_298:
 	ldwio	212, 0
 	pop_a
 	ldio	127, 0
@@ -13542,7 +13542,7 @@ ExtPartParam_EDE4EC:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE4FE:
+ExtPartParam_Entry_299:
 	pushw	212
 	nop
 	.byte 0xb3
@@ -13555,7 +13555,7 @@ ExtPartParam_EDE4FE:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE510:
+ExtPartParam_Entry_300:
 	ldb	w, 212
 	nop
 	nop
@@ -13569,7 +13569,7 @@ ExtPartParam_EDE510:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE522:
+ExtPartParam_Entry_301:
 	ld	xwa, 352321748
 	.byte 0x04
 	ldio	0, 127
@@ -13582,7 +13582,7 @@ ExtPartParam_EDE522:
 	.byte 0x01
 	nop
 	swi	7
-ExtPartParam_EDE534:
+ExtPartParam_Entry_302:
 	pop	xhl
 	.byte 0xd4
 	nop
@@ -13597,7 +13597,7 @@ ExtPartParam_EDE534:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE546:
+ExtPartParam_Entry_303:
 	pop	xiy
 	.byte 0xd4
 	nop
@@ -13612,7 +13612,7 @@ ExtPartParam_EDE546:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE558:
+ExtPartParam_Entry_304:
 	pop	xiz
 	.byte 0xd4
 	nop
@@ -13627,7 +13627,7 @@ ExtPartParam_EDE558:
 	.byte 0x01
 	nop
 	swi	7
-ExtPartParam_EDE56A:
+ExtPartParam_Entry_305:
 	jrl	212
 	nop
 	.byte 0xae
@@ -13642,7 +13642,7 @@ ExtPartParam_EDE56A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE57C:
+ExtPartParam_Entry_306:
 	.byte 0x80, 0xd4
 	nop
 	nop
@@ -13656,7 +13656,7 @@ ExtPartParam_EDE57C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE58E:
+ExtPartParam_Entry_307:
 	.byte 0x81, 0xd4
 	nop
 	nop
@@ -13669,7 +13669,7 @@ ExtPartParam_EDE58E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE5A0:
+ExtPartParam_Entry_308:
 	.byte 0x82, 0xd4
 	nop
 	nop
@@ -13682,7 +13682,7 @@ ExtPartParam_EDE5A0:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE5B2:
+ExtPartParam_Entry_309:
 	.byte 0xb0, 0xd5
 	nop
 	nop
@@ -13698,7 +13698,7 @@ ExtPartParam_EDE5B2:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE5C4:
+ExtPartParam_Entry_310:
 	.byte 0xb2, 0xd5
 	nop
 	nop
@@ -13714,7 +13714,7 @@ ExtPartParam_EDE5C4:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE5D6:
+ExtPartParam_Entry_311:
 	nop
 	.byte 0xd8
 	nop
@@ -13731,7 +13731,7 @@ ExtPartParam_EDE5D6:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE5E8:
+ExtPartParam_Entry_312:
 	.byte 0x01, 0xd8
 	nop
 	nop
@@ -13747,7 +13747,7 @@ ExtPartParam_EDE5E8:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE5FA:
+ExtPartParam_Entry_313:
 	reti
 	.byte 0xd8
 	nop
@@ -13762,7 +13762,7 @@ ExtPartParam_EDE5FA:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE60C:
+ExtPartParam_Entry_314:
 	ldio	216, 0
 	nop
 	ex_ff
@@ -13777,7 +13777,7 @@ ExtPartParam_EDE60C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE61E:
+ExtPartParam_Entry_315:
 	ldwio	216, 0
 	ex_ff
 	ldio	127, 0
@@ -13787,7 +13787,7 @@ ExtPartParam_EDE61E:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE630:
+ExtPartParam_Entry_316:
 	pushw	216
 	nop
 	.byte 0xb3
@@ -13800,7 +13800,7 @@ ExtPartParam_EDE630:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE642:
+ExtPartParam_Entry_317:
 	ldb	w, 216
 	nop
 	nop
@@ -13814,7 +13814,7 @@ ExtPartParam_EDE642:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE654:
+ExtPartParam_Entry_318:
 	ld	xwa, 369098968
 	.byte 0x04
 	ldio	0, 127
@@ -13827,7 +13827,7 @@ ExtPartParam_EDE654:
 	.byte 0x01
 	nop
 	swi	7
-ExtPartParam_EDE666:
+ExtPartParam_Entry_319:
 	pop	xhl
 	.byte 0xd8
 	nop
@@ -13842,7 +13842,7 @@ ExtPartParam_EDE666:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE678:
+ExtPartParam_Entry_320:
 	pop	xiy
 	.byte 0xd8
 	nop
@@ -13857,7 +13857,7 @@ ExtPartParam_EDE678:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE68A:
+ExtPartParam_Entry_321:
 	pop	xiz
 	.byte 0xd8
 	nop
@@ -13872,7 +13872,7 @@ ExtPartParam_EDE68A:
 	.byte 0x01
 	nop
 	swi	7
-ExtPartParam_EDE69C:
+ExtPartParam_Entry_322:
 	jrl	216
 	nop
 	.byte 0xae
@@ -13887,7 +13887,7 @@ ExtPartParam_EDE69C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE6AE:
+ExtPartParam_Entry_323:
 	xor	(xwa), w
 	nop
 	nop
@@ -13901,7 +13901,7 @@ ExtPartParam_EDE6AE:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE6C0:
+ExtPartParam_Entry_324:
 	xor	(xbc), w
 	nop
 	nop
@@ -13914,7 +13914,7 @@ ExtPartParam_EDE6C0:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE6D2:
+ExtPartParam_Entry_325:
 	xor	(xde), w
 	nop
 	nop
@@ -13927,7 +13927,7 @@ ExtPartParam_EDE6D2:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE6E4:
+ExtPartParam_Entry_326:
 	.byte 0xb0, 0xd9
 	nop
 	nop
@@ -13943,7 +13943,7 @@ ExtPartParam_EDE6E4:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE6F6:
+ExtPartParam_Entry_327:
 	.byte 0xb2, 0xd9
 	nop
 	nop
@@ -13959,7 +13959,7 @@ ExtPartParam_EDE6F6:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE708:
+ExtPartParam_Entry_328:
 	nop
 	.byte 0xdc
 	nop
@@ -13975,7 +13975,7 @@ ExtPartParam_EDE708:
 	nop
 	halt
 	swi	7
-ExtPartParam_EDE71A:
+ExtPartParam_Entry_329:
 	.byte 0x01, 0xdc
 	nop
 	nop
@@ -13990,7 +13990,7 @@ ExtPartParam_EDE71A:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE72C:
+ExtPartParam_Entry_330:
 	reti
 	.byte 0xdc
 	nop
@@ -14004,7 +14004,7 @@ ExtPartParam_EDE72C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE73E:
+ExtPartParam_Entry_331:
 	ldio	220, 0
 	nop
 	.byte 0x17
@@ -14019,7 +14019,7 @@ ExtPartParam_EDE73E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE750:
+ExtPartParam_Entry_332:
 	ldwio	220, 0
 	.byte 0x17
 	ldio	127, 0
@@ -14029,7 +14029,7 @@ ExtPartParam_EDE750:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE762:
+ExtPartParam_Entry_333:
 	pushw	220
 	nop
 	.byte 0xb3, 0x17
@@ -14041,7 +14041,7 @@ ExtPartParam_EDE762:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE774:
+ExtPartParam_Entry_334:
 	ldb	w, 220
 	nop
 	nop
@@ -14054,7 +14054,7 @@ ExtPartParam_EDE774:
 	nop
 	.byte 0x04
 	swi	7
-ExtPartParam_EDE786:
+ExtPartParam_Entry_335:
 	ld	xwa, 385876188
 	.byte 0x04
 	ldio	0, 127
@@ -14067,7 +14067,7 @@ ExtPartParam_EDE786:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE798:
+ExtPartParam_Entry_336:
 	pop	xhl
 	.byte 0xdc
 	nop
@@ -14081,7 +14081,7 @@ ExtPartParam_EDE798:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE7AA:
+ExtPartParam_Entry_337:
 	pop	xiy
 	.byte 0xdc
 	nop
@@ -14095,7 +14095,7 @@ ExtPartParam_EDE7AA:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE7BC:
+ExtPartParam_Entry_338:
 	pop	xiz
 	.byte 0xdc
 	nop
@@ -14109,7 +14109,7 @@ ExtPartParam_EDE7BC:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE7CE:
+ExtPartParam_Entry_339:
 	jrl	220
 	nop
 	.byte 0xae, 0x17
@@ -14123,7 +14123,7 @@ ExtPartParam_EDE7CE:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE7E0:
+ExtPartParam_Entry_340:
 	xor	(xwa), d
 	nop
 	nop
@@ -14137,7 +14137,7 @@ ExtPartParam_EDE7E0:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE7F2:
+ExtPartParam_Entry_341:
 	xor	(xbc), d
 	nop
 	nop
@@ -14150,7 +14150,7 @@ ExtPartParam_EDE7F2:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE804:
+ExtPartParam_Entry_342:
 	xor	(xde), d
 	nop
 	nop
@@ -14163,7 +14163,7 @@ ExtPartParam_EDE804:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE816:
+ExtPartParam_Entry_343:
 	.byte 0xb0, 0xdd
 	nop
 	nop
@@ -14178,7 +14178,7 @@ ExtPartParam_EDE816:
 	nop
 	pop_sr
 	swi	7
-ExtPartParam_EDE828:
+ExtPartParam_Entry_344:
 	.byte 0xb2, 0xdd
 	nop
 	nop
@@ -14193,7 +14193,7 @@ ExtPartParam_EDE828:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE83A:
+ExtPartParam_Entry_345:
 	nop
 	.byte 0xe0
 	nop
@@ -14210,7 +14210,7 @@ ExtPartParam_EDE83A:
 	nop
 	halt
 	swi	7
-ExtPartParam_EDE84C:
+ExtPartParam_Entry_346:
 	.byte 0x01, 0xe0
 	nop
 	nop
@@ -14226,7 +14226,7 @@ ExtPartParam_EDE84C:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE85E:
+ExtPartParam_Entry_347:
 	reti
 	.byte 0xe0
 	nop
@@ -14241,7 +14241,7 @@ ExtPartParam_EDE85E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE870:
+ExtPartParam_Entry_348:
 	ldio	224, 0
 	nop
 	push_f
@@ -14256,7 +14256,7 @@ ExtPartParam_EDE870:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE882:
+ExtPartParam_Entry_349:
 	ldwio	224, 0
 	push_f
 	ldio	127, 0
@@ -14266,7 +14266,7 @@ ExtPartParam_EDE882:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE894:
+ExtPartParam_Entry_350:
 	pushw	224
 	nop
 	.byte 0xb3
@@ -14279,7 +14279,7 @@ ExtPartParam_EDE894:
 	nop
 	.byte 0x01
 	swi	7
-ExtPartParam_EDE8A6:
+ExtPartParam_Entry_351:
 	ldb	w, 224
 	nop
 	nop
@@ -14293,7 +14293,7 @@ ExtPartParam_EDE8A6:
 	nop
 	.byte 0x04
 	swi	7
-ExtPartParam_EDE8B8:
+ExtPartParam_Entry_352:
 	ld	xwa, 402653408
 	.byte 0x04
 	ldio	0, 127
@@ -14306,7 +14306,7 @@ ExtPartParam_EDE8B8:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE8CA:
+ExtPartParam_Entry_353:
 	pop	xhl
 	.byte 0xe0
 	nop
@@ -14321,7 +14321,7 @@ ExtPartParam_EDE8CA:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE8DC:
+ExtPartParam_Entry_354:
 	pop	xiy
 	.byte 0xe0
 	nop
@@ -14336,7 +14336,7 @@ ExtPartParam_EDE8DC:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE8EE:
+ExtPartParam_Entry_355:
 	pop	xiz
 	.byte 0xe0
 	nop
@@ -14351,7 +14351,7 @@ ExtPartParam_EDE8EE:
 	.byte 0x01
 	push_sr
 	swi	7
-ExtPartParam_EDE900:
+ExtPartParam_Entry_356:
 	jrl	224
 	nop
 	.byte 0xae
@@ -14366,7 +14366,7 @@ ExtPartParam_EDE900:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE912:
+ExtPartParam_Entry_357:
 	.byte 0x80, 0xe0
 	nop
 	nop
@@ -14380,7 +14380,7 @@ ExtPartParam_EDE912:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE924:
+ExtPartParam_Entry_358:
 	.byte 0x81, 0xe0
 	nop
 	nop
@@ -14393,7 +14393,7 @@ ExtPartParam_EDE924:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE936:
+ExtPartParam_Entry_359:
 	.byte 0x82, 0xe0
 	nop
 	nop
@@ -14406,7 +14406,7 @@ ExtPartParam_EDE936:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE948:
+ExtPartParam_Entry_360:
 	.byte 0xb0, 0xe1
 	nop
 	nop
@@ -14422,7 +14422,7 @@ ExtPartParam_EDE948:
 	nop
 	pop_sr
 	swi	7
-ExtPartParam_EDE95A:
+ExtPartParam_Entry_361:
 	.byte 0xb2, 0xe1
 	nop
 	nop
@@ -14438,7 +14438,7 @@ ExtPartParam_EDE95A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE96C:
+ExtPartParam_Entry_362:
 	reti
 	.byte 0xe8
 	nop
@@ -14452,7 +14452,7 @@ ExtPartParam_EDE96C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE97E:
+ExtPartParam_Entry_363:
 	ldio	232, 0
 	nop
 	.byte 0x98, 0x04, 0x80
@@ -14465,7 +14465,7 @@ ExtPartParam_EDE97E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE990:
+ExtPartParam_Entry_364:
 	nop
 	.byte 0x80, 0x01
 	nop
@@ -14480,7 +14480,7 @@ ExtPartParam_EDE990:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE9A2:
+ExtPartParam_Entry_365:
 	.byte 0x01, 0x80, 0x01
 	nop
 	nop
@@ -14493,7 +14493,7 @@ ExtPartParam_EDE9A2:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE9B4:
+ExtPartParam_Entry_366:
 	push_sr
 	.byte 0x80, 0x01
 	nop
@@ -14505,7 +14505,7 @@ ExtPartParam_EDE9B4:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE9C6:
+ExtPartParam_Entry_367:
 	pop_sr
 	.byte 0x80, 0x01
 	nop
@@ -14521,7 +14521,7 @@ ExtPartParam_EDE9C6:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDE9D8:
+ExtPartParam_Entry_368:
 	.byte 0x04, 0x80, 0x01
 	nop
 	nop
@@ -14552,7 +14552,7 @@ WidgetParam_MidiCC_PitchBend:
 	pop_sr
 	nop
 	swi	7
-ExtPartParam_EDE9FC:
+ExtPartParam_Entry_369:
 	nop
 	.byte 0x82, 0x01
 	nop
@@ -14569,7 +14569,7 @@ ExtPartParam_EDE9FC:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEA0E:
+ExtPartParam_Entry_370:
 	.byte 0x01, 0x82, 0x01
 	nop
 	nop
@@ -14583,7 +14583,7 @@ ExtPartParam_EDEA0E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEA20:
+ExtPartParam_Entry_371:
 	push_sr
 	.byte 0x82, 0x01
 	nop
@@ -14597,7 +14597,7 @@ ExtPartParam_EDEA20:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEA32:
+ExtPartParam_Entry_372:
 	pop_sr
 	.byte 0x82, 0x01
 	nop
@@ -14612,7 +14612,7 @@ ExtPartParam_EDEA32:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEA44:
+ExtPartParam_Entry_373:
 	.byte 0x04, 0x82, 0x01
 	nop
 	nop
@@ -14626,7 +14626,7 @@ ExtPartParam_EDEA44:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEA56:
+ExtPartParam_Entry_374:
 	halt
 	.byte 0x82, 0x01
 	nop
@@ -14642,7 +14642,7 @@ ExtPartParam_EDEA56:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEA68:
+ExtPartParam_Entry_375:
 	.byte 0x06, 0x82, 0x01
 	nop
 	nop
@@ -14656,7 +14656,7 @@ ExtPartParam_EDEA68:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEA7A:
+ExtPartParam_Entry_376:
 	nop
 	.byte 0x84, 0x01
 	nop
@@ -14671,7 +14671,7 @@ ExtPartParam_EDEA7A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEA8C:
+ExtPartParam_Entry_377:
 	.byte 0x01, 0x84, 0x01
 	nop
 	.byte 0x01
@@ -14684,7 +14684,7 @@ ExtPartParam_EDEA8C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEA9E:
+ExtPartParam_Entry_378:
 	push_sr
 	.byte 0x84, 0x01
 	nop
@@ -14696,7 +14696,7 @@ ExtPartParam_EDEA9E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEAB0:
+ExtPartParam_Entry_379:
 	pop_sr
 	.byte 0x84, 0x01
 	nop
@@ -14712,7 +14712,7 @@ ExtPartParam_EDEAB0:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEAC2:
+ExtPartParam_Entry_380:
 	.byte 0x04, 0x84, 0x01
 	nop
 	.byte 0x01
@@ -14727,7 +14727,7 @@ ExtPartParam_EDEAC2:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEAD4:
+ExtPartParam_Entry_381:
 	nop
 	.byte 0x86, 0x01
 	nop
@@ -14742,7 +14742,7 @@ ExtPartParam_EDEAD4:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEAE6:
+ExtPartParam_Entry_382:
 	.byte 0x01, 0x86, 0x01
 	nop
 	.byte 0x01, 0x04
@@ -14755,7 +14755,7 @@ ExtPartParam_EDEAE6:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEAF8:
+ExtPartParam_Entry_383:
 	push_sr
 	.byte 0x86, 0x01
 	nop
@@ -14769,7 +14769,7 @@ ExtPartParam_EDEAF8:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEB0A:
+ExtPartParam_Entry_384:
 	pop_sr
 	.byte 0x86, 0x01
 	nop
@@ -14784,7 +14784,7 @@ ExtPartParam_EDEB0A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEB1C:
+ExtPartParam_Entry_385:
 	.byte 0x04, 0x86, 0x01
 	nop
 	.byte 0x01, 0x04
@@ -14797,7 +14797,7 @@ ExtPartParam_EDEB1C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEB2E:
+ExtPartParam_Entry_386:
 	halt
 	.byte 0x86, 0x01
 	nop
@@ -14813,7 +14813,7 @@ ExtPartParam_EDEB2E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEB40:
+ExtPartParam_Entry_387:
 	.byte 0x06, 0x86, 0x01
 	nop
 	.byte 0x01
@@ -14827,7 +14827,7 @@ ExtPartParam_EDEB40:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEB52:
+ExtPartParam_Entry_388:
 	nop
 	.byte 0x88, 0x01
 	nop
@@ -14842,7 +14842,7 @@ ExtPartParam_EDEB52:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEB64:
+ExtPartParam_Entry_389:
 	.byte 0x01, 0x88, 0x01
 	nop
 	push_sr
@@ -14855,7 +14855,7 @@ ExtPartParam_EDEB64:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEB76:
+ExtPartParam_Entry_390:
 	push_sr
 	.byte 0x88, 0x01
 	nop
@@ -14867,7 +14867,7 @@ ExtPartParam_EDEB76:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEB88:
+ExtPartParam_Entry_391:
 	pop_sr
 	.byte 0x88, 0x01
 	nop
@@ -14883,7 +14883,7 @@ ExtPartParam_EDEB88:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEB9A:
+ExtPartParam_Entry_392:
 	.byte 0x04, 0x88, 0x01
 	nop
 	push_sr
@@ -14898,7 +14898,7 @@ ExtPartParam_EDEB9A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEBAC:
+ExtPartParam_Entry_393:
 	nop
 	.byte 0x8a, 0x01
 	nop
@@ -14914,7 +14914,7 @@ ExtPartParam_EDEBAC:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEBBE:
+ExtPartParam_Entry_394:
 	.byte 0x01, 0x8a, 0x01
 	nop
 	push_sr
@@ -14928,7 +14928,7 @@ ExtPartParam_EDEBBE:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEBD0:
+ExtPartParam_Entry_395:
 	push_sr
 	.byte 0x8a, 0x01
 	nop
@@ -14942,7 +14942,7 @@ ExtPartParam_EDEBD0:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEBE2:
+ExtPartParam_Entry_396:
 	pop_sr
 	.byte 0x8a, 0x01
 	nop
@@ -14957,7 +14957,7 @@ ExtPartParam_EDEBE2:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEBF4:
+ExtPartParam_Entry_397:
 	.byte 0x04, 0x8a, 0x01
 	nop
 	push_sr
@@ -14971,7 +14971,7 @@ ExtPartParam_EDEBF4:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEC06:
+ExtPartParam_Entry_398:
 	halt
 	.byte 0x8a, 0x01
 	nop
@@ -14987,7 +14987,7 @@ ExtPartParam_EDEC06:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEC18:
+ExtPartParam_Entry_399:
 	.byte 0x06, 0x8a, 0x01
 	nop
 	push_sr
@@ -15001,7 +15001,7 @@ ExtPartParam_EDEC18:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEC2A:
+ExtPartParam_Entry_400:
 	nop
 	.byte 0x8c, 0x01
 	nop
@@ -15016,7 +15016,7 @@ ExtPartParam_EDEC2A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEC3C:
+ExtPartParam_Entry_401:
 	.byte 0x01, 0x8c, 0x01
 	nop
 	pop_sr
@@ -15029,7 +15029,7 @@ ExtPartParam_EDEC3C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEC4E:
+ExtPartParam_Entry_402:
 	push_sr
 	.byte 0x8c, 0x01
 	nop
@@ -15041,7 +15041,7 @@ ExtPartParam_EDEC4E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEC60:
+ExtPartParam_Entry_403:
 	pop_sr
 	.byte 0x8c, 0x01
 	nop
@@ -15057,7 +15057,7 @@ ExtPartParam_EDEC60:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEC72:
+ExtPartParam_Entry_404:
 	.byte 0x04, 0x8c, 0x01
 	nop
 	pop_sr
@@ -15072,7 +15072,7 @@ ExtPartParam_EDEC72:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEC84:
+ExtPartParam_Entry_405:
 	nop
 	.byte 0x8e, 0x01
 	nop
@@ -15088,7 +15088,7 @@ ExtPartParam_EDEC84:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEC96:
+ExtPartParam_Entry_406:
 	.byte 0x01, 0x8e, 0x01
 	nop
 	pop_sr
@@ -15102,7 +15102,7 @@ ExtPartParam_EDEC96:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDECA8:
+ExtPartParam_Entry_407:
 	push_sr
 	.byte 0x8e, 0x01
 	nop
@@ -15116,7 +15116,7 @@ ExtPartParam_EDECA8:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDECBA:
+ExtPartParam_Entry_408:
 	pop_sr
 	.byte 0x8e, 0x01
 	nop
@@ -15131,7 +15131,7 @@ ExtPartParam_EDECBA:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDECCC:
+ExtPartParam_Entry_409:
 	.byte 0x04, 0x8e, 0x01
 	nop
 	pop_sr
@@ -15145,7 +15145,7 @@ ExtPartParam_EDECCC:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDECDE:
+ExtPartParam_Entry_410:
 	halt
 	.byte 0x8e, 0x01
 	nop
@@ -15161,7 +15161,7 @@ ExtPartParam_EDECDE:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDECF0:
+ExtPartParam_Entry_411:
 	.byte 0x06, 0x8e, 0x01
 	nop
 	pop_sr
@@ -15175,7 +15175,7 @@ ExtPartParam_EDECF0:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDED02:
+ExtPartParam_Entry_412:
 	nop
 	.byte 0x90, 0x01
 	nop
@@ -15190,7 +15190,7 @@ ExtPartParam_EDED02:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDED14:
+ExtPartParam_Entry_413:
 	.byte 0x01, 0x90, 0x01
 	nop
 	.byte 0x04
@@ -15203,7 +15203,7 @@ ExtPartParam_EDED14:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDED26:
+ExtPartParam_Entry_414:
 	push_sr
 	.byte 0x90, 0x01
 	nop
@@ -15215,7 +15215,7 @@ ExtPartParam_EDED26:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDED38:
+ExtPartParam_Entry_415:
 	pop_sr
 	.byte 0x90, 0x01
 	nop
@@ -15231,7 +15231,7 @@ ExtPartParam_EDED38:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDED4A:
+ExtPartParam_Entry_416:
 	.byte 0x04, 0x90, 0x01
 	nop
 	.byte 0x04
@@ -15246,7 +15246,7 @@ ExtPartParam_EDED4A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDED5C:
+ExtPartParam_Entry_417:
 	nop
 	.byte 0x92, 0x01
 	nop
@@ -15261,7 +15261,7 @@ ExtPartParam_EDED5C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDED6E:
+ExtPartParam_Entry_418:
 	.byte 0x01, 0x92, 0x01
 	nop
 	.byte 0x04, 0x04
@@ -15274,7 +15274,7 @@ ExtPartParam_EDED6E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDED80:
+ExtPartParam_Entry_419:
 	push_sr
 	.byte 0x92, 0x01
 	nop
@@ -15288,7 +15288,7 @@ ExtPartParam_EDED80:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDED92:
+ExtPartParam_Entry_420:
 	pop_sr
 	.byte 0x92, 0x01
 	nop
@@ -15303,7 +15303,7 @@ ExtPartParam_EDED92:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEDA4:
+ExtPartParam_Entry_421:
 	.byte 0x04, 0x92, 0x01
 	nop
 	.byte 0x04, 0x04
@@ -15316,7 +15316,7 @@ ExtPartParam_EDEDA4:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEDB6:
+ExtPartParam_Entry_422:
 	halt
 	.byte 0x92, 0x01
 	nop
@@ -15332,7 +15332,7 @@ ExtPartParam_EDEDB6:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEDC8:
+ExtPartParam_Entry_423:
 	.byte 0x06, 0x92, 0x01
 	nop
 	.byte 0x04
@@ -15346,7 +15346,7 @@ ExtPartParam_EDEDC8:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEDDA:
+ExtPartParam_Entry_424:
 	nop
 	.byte 0x94, 0x01
 	nop
@@ -15361,7 +15361,7 @@ ExtPartParam_EDEDDA:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEDEC:
+ExtPartParam_Entry_425:
 	.byte 0x01, 0x94, 0x01
 	nop
 	halt
@@ -15374,7 +15374,7 @@ ExtPartParam_EDEDEC:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEDFE:
+ExtPartParam_Entry_426:
 	push_sr
 	.byte 0x94, 0x01
 	nop
@@ -15386,7 +15386,7 @@ ExtPartParam_EDEDFE:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEE10:
+ExtPartParam_Entry_427:
 	pop_sr
 	.byte 0x94, 0x01
 	nop
@@ -15402,7 +15402,7 @@ ExtPartParam_EDEE10:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEE22:
+ExtPartParam_Entry_428:
 	.byte 0x04, 0x94, 0x01
 	nop
 	halt
@@ -15417,7 +15417,7 @@ ExtPartParam_EDEE22:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEE34:
+ExtPartParam_Entry_429:
 	nop
 	.byte 0x96, 0x01
 	nop
@@ -15433,7 +15433,7 @@ ExtPartParam_EDEE34:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEE46:
+ExtPartParam_Entry_430:
 	.byte 0x01, 0x96, 0x01
 	nop
 	halt
@@ -15447,7 +15447,7 @@ ExtPartParam_EDEE46:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEE58:
+ExtPartParam_Entry_431:
 	push_sr
 	.byte 0x96, 0x01
 	nop
@@ -15461,7 +15461,7 @@ ExtPartParam_EDEE58:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEE6A:
+ExtPartParam_Entry_432:
 	pop_sr
 	.byte 0x96, 0x01
 	nop
@@ -15476,7 +15476,7 @@ ExtPartParam_EDEE6A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEE7C:
+ExtPartParam_Entry_433:
 	.byte 0x04, 0x96, 0x01
 	nop
 	halt
@@ -15490,7 +15490,7 @@ ExtPartParam_EDEE7C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEE8E:
+ExtPartParam_Entry_434:
 	halt
 	.byte 0x96, 0x01
 	nop
@@ -15506,7 +15506,7 @@ ExtPartParam_EDEE8E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEEA0:
+ExtPartParam_Entry_435:
 	.byte 0x06, 0x96, 0x01
 	nop
 	halt
@@ -15520,7 +15520,7 @@ ExtPartParam_EDEEA0:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEEB2:
+ExtPartParam_Entry_436:
 	nop
 	.byte 0x98, 0x01
 	nop
@@ -15534,7 +15534,7 @@ ExtPartParam_EDEEB2:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEEC4:
+ExtPartParam_Entry_437:
 	.byte 0x01, 0x98, 0x01
 	nop
 	ei	13
@@ -15546,7 +15546,7 @@ ExtPartParam_EDEEC4:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEED6:
+ExtPartParam_Entry_438:
 	push_sr
 	.byte 0x98, 0x01
 	nop
@@ -15557,7 +15557,7 @@ ExtPartParam_EDEED6:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEEE8:
+ExtPartParam_Entry_439:
 	pop_sr
 	.byte 0x98, 0x01
 	nop
@@ -15572,7 +15572,7 @@ ExtPartParam_EDEEE8:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEEFA:
+ExtPartParam_Entry_440:
 	.byte 0x04, 0x98, 0x01
 	nop
 	ei	12
@@ -15586,7 +15586,7 @@ ExtPartParam_EDEEFA:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEF0C:
+ExtPartParam_Entry_441:
 	nop
 	.byte 0x9a, 0x01
 	nop
@@ -15601,7 +15601,7 @@ ExtPartParam_EDEF0C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEF1E:
+ExtPartParam_Entry_442:
 	.byte 0x01, 0x9a, 0x01
 	nop
 	ei	4
@@ -15614,7 +15614,7 @@ ExtPartParam_EDEF1E:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEF30:
+ExtPartParam_Entry_443:
 	push_sr
 	.byte 0x9a, 0x01
 	nop
@@ -15627,7 +15627,7 @@ ExtPartParam_EDEF30:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEF42:
+ExtPartParam_Entry_444:
 	pop_sr
 	.byte 0x9a, 0x01
 	nop
@@ -15641,7 +15641,7 @@ ExtPartParam_EDEF42:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEF54:
+ExtPartParam_Entry_445:
 	.byte 0x04, 0x9a, 0x01
 	nop
 	ei	4
@@ -15654,7 +15654,7 @@ ExtPartParam_EDEF54:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEF66:
+ExtPartParam_Entry_446:
 	halt
 	.byte 0x9a, 0x01
 	nop
@@ -15669,7 +15669,7 @@ ExtPartParam_EDEF66:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEF78:
+ExtPartParam_Entry_447:
 	.byte 0x06, 0x9a, 0x01
 	nop
 	ei	12
@@ -15682,7 +15682,7 @@ ExtPartParam_EDEF78:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEF8A:
+ExtPartParam_Entry_448:
 	nop
 	.byte 0x9c, 0x01
 	nop
@@ -15697,7 +15697,7 @@ ExtPartParam_EDEF8A:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEF9C:
+ExtPartParam_Entry_449:
 	.byte 0x01, 0x9c, 0x01
 	nop
 	reti
@@ -15710,7 +15710,7 @@ ExtPartParam_EDEF9C:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEFAE:
+ExtPartParam_Entry_450:
 	push_sr
 	.byte 0x9c, 0x01
 	nop
@@ -15722,7 +15722,7 @@ ExtPartParam_EDEFAE:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEFC0:
+ExtPartParam_Entry_451:
 	pop_sr
 	.byte 0x9c, 0x01
 	nop
@@ -15738,7 +15738,7 @@ ExtPartParam_EDEFC0:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEFD2:
+ExtPartParam_Entry_452:
 	.byte 0x04, 0x9c, 0x01
 	nop
 	reti
@@ -15753,7 +15753,7 @@ ExtPartParam_EDEFD2:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEFE4:
+ExtPartParam_Entry_453:
 	nop
 	.byte 0x9e, 0x01
 	nop
@@ -15769,7 +15769,7 @@ ExtPartParam_EDEFE4:
 	nop
 	nop
 	swi	7
-ExtPartParam_EDEFF6:
+ExtPartParam_Entry_454:
 	.byte 0x01, 0x9e, 0x01
 	nop
 	reti
@@ -15783,7 +15783,7 @@ ExtPartParam_EDEFF6:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF008:
+SeqMixParam_Entry_001:
 	push_sr
 	.byte 0x9e, 0x01
 	nop
@@ -15797,7 +15797,7 @@ SeqMixParam_EDF008:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF01A:
+SeqMixParam_Entry_002:
 	pop_sr
 	.byte 0x9e, 0x01
 	nop
@@ -15812,7 +15812,7 @@ SeqMixParam_EDF01A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF02C:
+SeqMixParam_Entry_003:
 	.byte 0x04, 0x9e, 0x01
 	nop
 	reti
@@ -15826,7 +15826,7 @@ SeqMixParam_EDF02C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF03E:
+SeqMixParam_Entry_004:
 	halt
 	.byte 0x9e, 0x01
 	nop
@@ -15842,7 +15842,7 @@ SeqMixParam_EDF03E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF050:
+SeqMixParam_Entry_005:
 	.byte 0x06, 0x9e, 0x01
 	nop
 	reti
@@ -15856,7 +15856,7 @@ SeqMixParam_EDF050:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF062:
+SeqMixParam_Entry_006:
 	nop
 	.byte 0xa0, 0x01
 	nop
@@ -15870,7 +15870,7 @@ SeqMixParam_EDF062:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF074:
+SeqMixParam_Entry_007:
 	.byte 0x01, 0xa0, 0x01
 	nop
 	ldio	13, 15
@@ -15881,7 +15881,7 @@ SeqMixParam_EDF074:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF086:
+SeqMixParam_Entry_008:
 	push_sr
 	.byte 0xa0, 0x01
 	nop
@@ -15894,7 +15894,7 @@ SeqMixParam_EDF086:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF098:
+SeqMixParam_Entry_009:
 	pop_sr
 	.byte 0xa0, 0x01
 	nop
@@ -15908,7 +15908,7 @@ SeqMixParam_EDF098:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF0AA:
+SeqMixParam_Entry_010:
 	.byte 0x04, 0xa0, 0x01
 	nop
 	ldio	12, 7
@@ -15921,7 +15921,7 @@ SeqMixParam_EDF0AA:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF0BC:
+SeqMixParam_Entry_011:
 	nop
 	.byte 0xa2, 0x01
 	nop
@@ -15935,7 +15935,7 @@ SeqMixParam_EDF0BC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF0CE:
+SeqMixParam_Entry_012:
 	.byte 0x01, 0xa2, 0x01
 	nop
 	ldio	4, 16
@@ -15947,7 +15947,7 @@ SeqMixParam_EDF0CE:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF0E0:
+SeqMixParam_Entry_013:
 	push_sr
 	.byte 0xa2, 0x01
 	nop
@@ -15961,7 +15961,7 @@ SeqMixParam_EDF0E0:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF0F2:
+SeqMixParam_Entry_014:
 	pop_sr
 	.byte 0xa2, 0x01
 	nop
@@ -15975,7 +15975,7 @@ SeqMixParam_EDF0F2:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF104:
+SeqMixParam_Entry_015:
 	.byte 0x04, 0xa2, 0x01
 	nop
 	ldio	4, 32
@@ -15988,7 +15988,7 @@ SeqMixParam_EDF104:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF116:
+SeqMixParam_Entry_016:
 	halt
 	.byte 0xa2, 0x01
 	nop
@@ -16002,7 +16002,7 @@ SeqMixParam_EDF116:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF128:
+SeqMixParam_Entry_017:
 	.byte 0x06, 0xa2, 0x01
 	nop
 	ldio	12, 16
@@ -16014,7 +16014,7 @@ SeqMixParam_EDF128:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF13A:
+SeqMixParam_Entry_018:
 	nop
 	.byte 0xa4, 0x01
 	nop
@@ -16028,7 +16028,7 @@ SeqMixParam_EDF13A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF14C:
+SeqMixParam_Entry_019:
 	.byte 0x01, 0xa4, 0x01
 	nop
 	push	13
@@ -16040,7 +16040,7 @@ SeqMixParam_EDF14C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF15E:
+SeqMixParam_Entry_020:
 	push_sr
 	.byte 0xa4, 0x01
 	nop
@@ -16051,7 +16051,7 @@ SeqMixParam_EDF15E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF170:
+SeqMixParam_Entry_021:
 	pop_sr
 	.byte 0xa4, 0x01
 	nop
@@ -16066,7 +16066,7 @@ SeqMixParam_EDF170:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF182:
+SeqMixParam_Entry_022:
 	.byte 0x04, 0xa4, 0x01
 	nop
 	push	12
@@ -16080,7 +16080,7 @@ SeqMixParam_EDF182:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF194:
+SeqMixParam_Entry_023:
 	nop
 	.byte 0xa6, 0x01
 	nop
@@ -16095,7 +16095,7 @@ SeqMixParam_EDF194:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF1A6:
+SeqMixParam_Entry_024:
 	.byte 0x01, 0xa6, 0x01
 	nop
 	push	4
@@ -16108,7 +16108,7 @@ SeqMixParam_EDF1A6:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF1B8:
+SeqMixParam_Entry_025:
 	push_sr
 	.byte 0xa6, 0x01
 	nop
@@ -16121,7 +16121,7 @@ SeqMixParam_EDF1B8:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF1CA:
+SeqMixParam_Entry_026:
 	pop_sr
 	.byte 0xa6, 0x01
 	nop
@@ -16135,7 +16135,7 @@ SeqMixParam_EDF1CA:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF1DC:
+SeqMixParam_Entry_027:
 	.byte 0x04, 0xa6, 0x01
 	nop
 	push	4
@@ -16148,7 +16148,7 @@ SeqMixParam_EDF1DC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF1EE:
+SeqMixParam_Entry_028:
 	halt
 	.byte 0xa6, 0x01
 	nop
@@ -16163,7 +16163,7 @@ SeqMixParam_EDF1EE:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF200:
+SeqMixParam_Entry_029:
 	.byte 0x06, 0xa6, 0x01
 	nop
 	push	12
@@ -16176,7 +16176,7 @@ SeqMixParam_EDF200:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF212:
+SeqMixParam_Entry_030:
 	nop
 	.byte 0xa8, 0x01
 	nop
@@ -16189,7 +16189,7 @@ SeqMixParam_EDF212:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF224:
+SeqMixParam_Entry_031:
 	.byte 0x01, 0xa8, 0x01
 	nop
 	ldwio	13, 15
@@ -16199,7 +16199,7 @@ SeqMixParam_EDF224:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF236:
+SeqMixParam_Entry_032:
 	push_sr
 	.byte 0xa8, 0x01
 	nop
@@ -16211,7 +16211,7 @@ SeqMixParam_EDF236:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF248:
+SeqMixParam_Entry_033:
 	pop_sr
 	.byte 0xa8, 0x01
 	nop
@@ -16224,7 +16224,7 @@ SeqMixParam_EDF248:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF25A:
+SeqMixParam_Entry_034:
 	.byte 0x04, 0xa8, 0x01
 	nop
 	ldwio	12, 7
@@ -16236,7 +16236,7 @@ SeqMixParam_EDF25A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF26C:
+SeqMixParam_Entry_035:
 	nop
 	.byte 0xaa, 0x01
 	nop
@@ -16249,7 +16249,7 @@ SeqMixParam_EDF26C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF27E:
+SeqMixParam_Entry_036:
 	.byte 0x01, 0xaa, 0x01
 	nop
 	ldwio	4, 16
@@ -16260,7 +16260,7 @@ SeqMixParam_EDF27E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF290:
+SeqMixParam_Entry_037:
 	push_sr
 	.byte 0xaa, 0x01
 	nop
@@ -16273,7 +16273,7 @@ SeqMixParam_EDF290:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF2A2:
+SeqMixParam_Entry_038:
 	pop_sr
 	.byte 0xaa, 0x01
 	nop
@@ -16286,7 +16286,7 @@ SeqMixParam_EDF2A2:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF2B4:
+SeqMixParam_Entry_039:
 	.byte 0x04, 0xaa, 0x01
 	nop
 	ldwio	4, 32
@@ -16298,7 +16298,7 @@ SeqMixParam_EDF2B4:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF2C6:
+SeqMixParam_Entry_040:
 	halt
 	.byte 0xaa, 0x01
 	nop
@@ -16311,7 +16311,7 @@ SeqMixParam_EDF2C6:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF2D8:
+SeqMixParam_Entry_041:
 	.byte 0x06, 0xaa, 0x01
 	nop
 	ldwio	12, 16
@@ -16322,7 +16322,7 @@ SeqMixParam_EDF2D8:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF2EA:
+SeqMixParam_Entry_042:
 	nop
 	.byte 0xac, 0x01
 	nop
@@ -16336,7 +16336,7 @@ SeqMixParam_EDF2EA:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF2FC:
+SeqMixParam_Entry_043:
 	.byte 0x01, 0xac, 0x01
 	nop
 	pushw	3853
@@ -16347,7 +16347,7 @@ SeqMixParam_EDF2FC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF30E:
+SeqMixParam_Entry_044:
 	push_sr
 	.byte 0xac, 0x01
 	nop
@@ -16360,7 +16360,7 @@ SeqMixParam_EDF30E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF320:
+SeqMixParam_Entry_045:
 	pop_sr
 	.byte 0xac, 0x01
 	nop
@@ -16374,7 +16374,7 @@ SeqMixParam_EDF320:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF332:
+SeqMixParam_Entry_046:
 	.byte 0x04, 0xac, 0x01
 	nop
 	pushw	1804
@@ -16387,7 +16387,7 @@ SeqMixParam_EDF332:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF344:
+SeqMixParam_Entry_047:
 	nop
 	.byte 0xae, 0x01
 	nop
@@ -16401,7 +16401,7 @@ SeqMixParam_EDF344:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF356:
+SeqMixParam_Entry_048:
 	.byte 0x01, 0xae, 0x01
 	nop
 	pushw	4100
@@ -16413,7 +16413,7 @@ SeqMixParam_EDF356:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF368:
+SeqMixParam_Entry_049:
 	push_sr
 	.byte 0xae, 0x01
 	nop
@@ -16427,7 +16427,7 @@ SeqMixParam_EDF368:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF37A:
+SeqMixParam_Entry_050:
 	pop_sr
 	.byte 0xae, 0x01
 	nop
@@ -16441,7 +16441,7 @@ SeqMixParam_EDF37A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF38C:
+SeqMixParam_Entry_051:
 	.byte 0x04, 0xae, 0x01
 	nop
 	pushw	8196
@@ -16454,7 +16454,7 @@ SeqMixParam_EDF38C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF39E:
+SeqMixParam_Entry_052:
 	halt
 	.byte 0xae, 0x01
 	nop
@@ -16468,7 +16468,7 @@ SeqMixParam_EDF39E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF3B0:
+SeqMixParam_Entry_053:
 	.byte 0x06, 0xae, 0x01
 	nop
 	pushw	4108
@@ -16480,7 +16480,7 @@ SeqMixParam_EDF3B0:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF3C2:
+SeqMixParam_Entry_054:
 	nop
 	.byte 0xb0, 0x01
 	nop
@@ -16495,7 +16495,7 @@ SeqMixParam_EDF3C2:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF3D4:
+SeqMixParam_Entry_055:
 	.byte 0x01, 0xb0, 0x01
 	nop
 	incf
@@ -16508,7 +16508,7 @@ SeqMixParam_EDF3D4:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF3E6:
+SeqMixParam_Entry_056:
 	push_sr
 	.byte 0xb0, 0x01
 	nop
@@ -16520,7 +16520,7 @@ SeqMixParam_EDF3E6:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF3F8:
+SeqMixParam_Entry_057:
 	pop_sr
 	.byte 0xb0, 0x01
 	nop
@@ -16536,7 +16536,7 @@ SeqMixParam_EDF3F8:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF40A:
+SeqMixParam_Entry_058:
 	.byte 0x04, 0xb0, 0x01
 	nop
 	incf
@@ -16551,7 +16551,7 @@ SeqMixParam_EDF40A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF41C:
+SeqMixParam_Entry_059:
 	nop
 	.byte 0xb2, 0x01
 	nop
@@ -16567,7 +16567,7 @@ SeqMixParam_EDF41C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF42E:
+SeqMixParam_Entry_060:
 	.byte 0x01, 0xb2, 0x01
 	nop
 	incf
@@ -16581,7 +16581,7 @@ SeqMixParam_EDF42E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF440:
+SeqMixParam_Entry_061:
 	push_sr
 	.byte 0xb2, 0x01
 	nop
@@ -16595,7 +16595,7 @@ SeqMixParam_EDF440:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF452:
+SeqMixParam_Entry_062:
 	pop_sr
 	.byte 0xb2, 0x01
 	nop
@@ -16610,7 +16610,7 @@ SeqMixParam_EDF452:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF464:
+SeqMixParam_Entry_063:
 	.byte 0x04, 0xb2, 0x01
 	nop
 	incf
@@ -16624,7 +16624,7 @@ SeqMixParam_EDF464:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF476:
+SeqMixParam_Entry_064:
 	halt
 	.byte 0xb2, 0x01
 	nop
@@ -16640,7 +16640,7 @@ SeqMixParam_EDF476:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF488:
+SeqMixParam_Entry_065:
 	.byte 0x06, 0xb2, 0x01
 	nop
 	incf
@@ -16654,7 +16654,7 @@ SeqMixParam_EDF488:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF49A:
+SeqMixParam_Entry_066:
 	nop
 	.byte 0xb4, 0x01
 	nop
@@ -16669,7 +16669,7 @@ SeqMixParam_EDF49A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF4AC:
+SeqMixParam_Entry_067:
 	.byte 0x01, 0xb4, 0x01
 	nop
 	decf
@@ -16682,7 +16682,7 @@ SeqMixParam_EDF4AC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF4BE:
+SeqMixParam_Entry_068:
 	push_sr
 	.byte 0xb4, 0x01
 	nop
@@ -16694,7 +16694,7 @@ SeqMixParam_EDF4BE:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF4D0:
+SeqMixParam_Entry_069:
 	pop_sr
 	.byte 0xb4, 0x01
 	nop
@@ -16710,7 +16710,7 @@ SeqMixParam_EDF4D0:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF4E2:
+SeqMixParam_Entry_070:
 	.byte 0x04, 0xb4, 0x01
 	nop
 	decf
@@ -16725,7 +16725,7 @@ SeqMixParam_EDF4E2:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF4F4:
+SeqMixParam_Entry_071:
 	nop
 	.byte 0xb6, 0x01
 	nop
@@ -16741,7 +16741,7 @@ SeqMixParam_EDF4F4:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF506:
+SeqMixParam_Entry_072:
 	.byte 0x01, 0xb6, 0x01
 	nop
 	decf
@@ -16755,7 +16755,7 @@ SeqMixParam_EDF506:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF518:
+SeqMixParam_Entry_073:
 	push_sr
 	.byte 0xb6, 0x01
 	nop
@@ -16769,7 +16769,7 @@ SeqMixParam_EDF518:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF52A:
+SeqMixParam_Entry_074:
 	pop_sr
 	.byte 0xb6, 0x01
 	nop
@@ -16784,7 +16784,7 @@ SeqMixParam_EDF52A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF53C:
+SeqMixParam_Entry_075:
 	.byte 0x04, 0xb6, 0x01
 	nop
 	decf
@@ -16798,7 +16798,7 @@ SeqMixParam_EDF53C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF54E:
+SeqMixParam_Entry_076:
 	halt
 	.byte 0xb6, 0x01
 	nop
@@ -16814,7 +16814,7 @@ SeqMixParam_EDF54E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF560:
+SeqMixParam_Entry_077:
 	.byte 0x06, 0xb6, 0x01
 	nop
 	decf
@@ -16828,7 +16828,7 @@ SeqMixParam_EDF560:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF572:
+SeqMixParam_Entry_078:
 	nop
 	ld	(xwa+1), 14
 	decf
@@ -16841,7 +16841,7 @@ SeqMixParam_EDF572:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF584:
+SeqMixParam_Entry_079:
 	.byte 0x01
 	ld	(xwa+1), 14
 	decf
@@ -16853,7 +16853,7 @@ SeqMixParam_EDF584:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF596:
+SeqMixParam_Entry_080:
 	push_sr
 	ld	(xwa+1), 14
 	decf
@@ -16863,7 +16863,7 @@ SeqMixParam_EDF596:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF5A8:
+SeqMixParam_Entry_081:
 	pop_sr
 	ld	(xwa+1), 14
 	decf
@@ -16877,7 +16877,7 @@ SeqMixParam_EDF5A8:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF5BA:
+SeqMixParam_Entry_082:
 	.byte 0x04
 	ld	(xwa+1), 14
 	incf
@@ -16891,7 +16891,7 @@ SeqMixParam_EDF5BA:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF5CC:
+SeqMixParam_Entry_083:
 	nop
 	ld	(xde+1), 14
 	.byte 0x04
@@ -16905,7 +16905,7 @@ SeqMixParam_EDF5CC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF5DE:
+SeqMixParam_Entry_084:
 	.byte 0x01
 	ld	(xde+1), 14
 	.byte 0x04
@@ -16918,7 +16918,7 @@ SeqMixParam_EDF5DE:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF5F0:
+SeqMixParam_Entry_085:
 	push_sr
 	ld	(xde+1), 14
 	incf
@@ -16930,7 +16930,7 @@ SeqMixParam_EDF5F0:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF602:
+SeqMixParam_Entry_086:
 	pop_sr
 	ld	(xde+1), 14
 	incf
@@ -16943,7 +16943,7 @@ SeqMixParam_EDF602:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF614:
+SeqMixParam_Entry_087:
 	.byte 0x04
 	ld	(xde+1), 14
 	.byte 0x04
@@ -16956,7 +16956,7 @@ SeqMixParam_EDF614:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF626:
+SeqMixParam_Entry_088:
 	halt
 	ld	(xde+1), 14
 	ex_ff
@@ -16970,7 +16970,7 @@ SeqMixParam_EDF626:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF638:
+SeqMixParam_Entry_089:
 	.byte 0x06
 	ld	(xde+1), 14
 	incf
@@ -16983,7 +16983,7 @@ SeqMixParam_EDF638:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF64A:
+SeqMixParam_Entry_090:
 	nop
 	ld	(xix+1), 15
 	decf
@@ -16996,7 +16996,7 @@ SeqMixParam_EDF64A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF65C:
+SeqMixParam_Entry_091:
 	.byte 0x01
 	ld	(xix+1), 15
 	decf
@@ -17008,7 +17008,7 @@ SeqMixParam_EDF65C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF66E:
+SeqMixParam_Entry_092:
 	push_sr
 	ld	(xix+1), 15
 	decf
@@ -17018,7 +17018,7 @@ SeqMixParam_EDF66E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF680:
+SeqMixParam_Entry_093:
 	pop_sr
 	ld	(xix+1), 15
 	decf
@@ -17032,7 +17032,7 @@ SeqMixParam_EDF680:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF692:
+SeqMixParam_Entry_094:
 	.byte 0x04
 	ld	(xix+1), 15
 	incf
@@ -17046,7 +17046,7 @@ SeqMixParam_EDF692:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF6A4:
+SeqMixParam_Entry_095:
 	nop
 	ld	(xiz+1), 15
 	.byte 0x04
@@ -17061,7 +17061,7 @@ SeqMixParam_EDF6A4:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF6B6:
+SeqMixParam_Entry_096:
 	.byte 0x01
 	ld	(xiz+1), 15
 	.byte 0x04
@@ -17074,7 +17074,7 @@ SeqMixParam_EDF6B6:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF6C8:
+SeqMixParam_Entry_097:
 	push_sr
 	ld	(xiz+1), 15
 	incf
@@ -17086,7 +17086,7 @@ SeqMixParam_EDF6C8:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF6DA:
+SeqMixParam_Entry_098:
 	pop_sr
 	ld	(xiz+1), 15
 	incf
@@ -17099,7 +17099,7 @@ SeqMixParam_EDF6DA:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF6EC:
+SeqMixParam_Entry_099:
 	.byte 0x04
 	ld	(xiz+1), 15
 	.byte 0x04
@@ -17112,7 +17112,7 @@ SeqMixParam_EDF6EC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF6FE:
+SeqMixParam_Entry_100:
 	halt
 	ld	(xiz+1), 15
 	ex_ff
@@ -17126,7 +17126,7 @@ SeqMixParam_EDF6FE:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF710:
+SeqMixParam_Entry_101:
 	.byte 0x06
 	ld	(xiz+1), 15
 	incf
@@ -17139,7 +17139,7 @@ SeqMixParam_EDF710:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF722:
+SeqMixParam_Entry_102:
 	nop
 	.byte 0xc0, 0x01
 	nop
@@ -17154,7 +17154,7 @@ SeqMixParam_EDF722:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF734:
+SeqMixParam_Entry_103:
 	.byte 0x01, 0xc0, 0x01
 	nop
 	rcf
@@ -17167,7 +17167,7 @@ SeqMixParam_EDF734:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF746:
+SeqMixParam_Entry_104:
 	push_sr
 	.byte 0xc0, 0x01
 	nop
@@ -17179,7 +17179,7 @@ SeqMixParam_EDF746:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF758:
+SeqMixParam_Entry_105:
 	pop_sr
 	.byte 0xc0, 0x01
 	nop
@@ -17195,7 +17195,7 @@ SeqMixParam_EDF758:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF76A:
+SeqMixParam_Entry_106:
 	.byte 0x04, 0xc0, 0x01
 	nop
 	rcf
@@ -17210,7 +17210,7 @@ SeqMixParam_EDF76A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF77C:
+SeqMixParam_Entry_107:
 	nop
 	.byte 0xc2, 0x01
 	nop
@@ -17227,7 +17227,7 @@ SeqMixParam_EDF77C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF78E:
+SeqMixParam_Entry_108:
 	.byte 0x01, 0xc2, 0x01
 	nop
 	rcf
@@ -17241,7 +17241,7 @@ SeqMixParam_EDF78E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF7A0:
+SeqMixParam_Entry_109:
 	push_sr
 	.byte 0xc2, 0x01
 	nop
@@ -17255,7 +17255,7 @@ SeqMixParam_EDF7A0:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF7B2:
+SeqMixParam_Entry_110:
 	pop_sr
 	.byte 0xc2, 0x01
 	nop
@@ -17270,7 +17270,7 @@ SeqMixParam_EDF7B2:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF7C4:
+SeqMixParam_Entry_111:
 	.byte 0x04, 0xc2, 0x01
 	nop
 	rcf
@@ -17284,7 +17284,7 @@ SeqMixParam_EDF7C4:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF7D6:
+SeqMixParam_Entry_112:
 	halt
 	.byte 0xc2, 0x01
 	nop
@@ -17300,7 +17300,7 @@ SeqMixParam_EDF7D6:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF7E8:
+SeqMixParam_Entry_113:
 	.byte 0x06, 0xc2, 0x01
 	nop
 	rcf
@@ -17314,7 +17314,7 @@ SeqMixParam_EDF7E8:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF7FA:
+SeqMixParam_Entry_114:
 	nop
 	.byte 0xc4, 0x01
 	nop
@@ -17329,7 +17329,7 @@ SeqMixParam_EDF7FA:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF80C:
+SeqMixParam_Entry_115:
 	.byte 0x01, 0xc4, 0x01
 	nop
 	scf
@@ -17342,7 +17342,7 @@ SeqMixParam_EDF80C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF81E:
+SeqMixParam_Entry_116:
 	push_sr
 	.byte 0xc4, 0x01
 	nop
@@ -17354,7 +17354,7 @@ SeqMixParam_EDF81E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF830:
+SeqMixParam_Entry_117:
 	pop_sr
 	.byte 0xc4, 0x01
 	nop
@@ -17370,7 +17370,7 @@ SeqMixParam_EDF830:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF842:
+SeqMixParam_Entry_118:
 	.byte 0x04, 0xc4, 0x01
 	nop
 	scf
@@ -17385,7 +17385,7 @@ SeqMixParam_EDF842:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF854:
+SeqMixParam_Entry_119:
 	nop
 	.byte 0xc6, 0x01
 	nop
@@ -17401,7 +17401,7 @@ SeqMixParam_EDF854:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF866:
+SeqMixParam_Entry_120:
 	.byte 0x01, 0xc6, 0x01
 	nop
 	scf
@@ -17415,7 +17415,7 @@ SeqMixParam_EDF866:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF878:
+SeqMixParam_Entry_121:
 	push_sr
 	.byte 0xc6, 0x01
 	nop
@@ -17429,7 +17429,7 @@ SeqMixParam_EDF878:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF88A:
+SeqMixParam_Entry_122:
 	pop_sr
 	.byte 0xc6, 0x01
 	nop
@@ -17444,7 +17444,7 @@ SeqMixParam_EDF88A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF89C:
+SeqMixParam_Entry_123:
 	.byte 0x04, 0xc6, 0x01
 	nop
 	scf
@@ -17458,7 +17458,7 @@ SeqMixParam_EDF89C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF8AE:
+SeqMixParam_Entry_124:
 	halt
 	.byte 0xc6, 0x01
 	nop
@@ -17474,7 +17474,7 @@ SeqMixParam_EDF8AE:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF8C0:
+SeqMixParam_Entry_125:
 	.byte 0x06, 0xc6, 0x01
 	nop
 	scf
@@ -17488,7 +17488,7 @@ SeqMixParam_EDF8C0:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF8D2:
+SeqMixParam_Entry_126:
 	nop
 	.byte 0xc8, 0x01
 	nop
@@ -17503,7 +17503,7 @@ SeqMixParam_EDF8D2:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF8E4:
+SeqMixParam_Entry_127:
 	.byte 0x01, 0xc8, 0x01
 	nop
 	ccf
@@ -17516,7 +17516,7 @@ SeqMixParam_EDF8E4:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF8F6:
+SeqMixParam_Entry_128:
 	push_sr
 	.byte 0xc8, 0x01
 	nop
@@ -17528,7 +17528,7 @@ SeqMixParam_EDF8F6:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF908:
+SeqMixParam_Entry_129:
 	pop_sr
 	.byte 0xc8, 0x01
 	nop
@@ -17544,7 +17544,7 @@ SeqMixParam_EDF908:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF91A:
+SeqMixParam_Entry_130:
 	.byte 0x04, 0xc8, 0x01
 	nop
 	ccf
@@ -17559,7 +17559,7 @@ SeqMixParam_EDF91A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF92C:
+SeqMixParam_Entry_131:
 	nop
 	.byte 0xca, 0x01
 	nop
@@ -17575,7 +17575,7 @@ SeqMixParam_EDF92C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF93E:
+SeqMixParam_Entry_132:
 	.byte 0x01, 0xca, 0x01
 	nop
 	ccf
@@ -17589,7 +17589,7 @@ SeqMixParam_EDF93E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF950:
+SeqMixParam_Entry_133:
 	push_sr
 	.byte 0xca, 0x01
 	nop
@@ -17603,7 +17603,7 @@ SeqMixParam_EDF950:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF962:
+SeqMixParam_Entry_134:
 	pop_sr
 	.byte 0xca, 0x01
 	nop
@@ -17618,7 +17618,7 @@ SeqMixParam_EDF962:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF974:
+SeqMixParam_Entry_135:
 	.byte 0x04, 0xca, 0x01
 	nop
 	ccf
@@ -17632,7 +17632,7 @@ SeqMixParam_EDF974:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF986:
+SeqMixParam_Entry_136:
 	halt
 	.byte 0xca, 0x01
 	nop
@@ -17648,7 +17648,7 @@ SeqMixParam_EDF986:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF998:
+SeqMixParam_Entry_137:
 	.byte 0x06, 0xca, 0x01
 	nop
 	ccf
@@ -17662,7 +17662,7 @@ SeqMixParam_EDF998:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF9AA:
+SeqMixParam_Entry_138:
 	nop
 	.byte 0xcc, 0x01
 	nop
@@ -17677,7 +17677,7 @@ SeqMixParam_EDF9AA:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF9BC:
+SeqMixParam_Entry_139:
 	.byte 0x01, 0xcc, 0x01
 	nop
 	zcf
@@ -17690,7 +17690,7 @@ SeqMixParam_EDF9BC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF9CE:
+SeqMixParam_Entry_140:
 	push_sr
 	.byte 0xcc, 0x01
 	nop
@@ -17702,7 +17702,7 @@ SeqMixParam_EDF9CE:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF9E0:
+SeqMixParam_Entry_141:
 	pop_sr
 	.byte 0xcc, 0x01
 	nop
@@ -17718,7 +17718,7 @@ SeqMixParam_EDF9E0:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDF9F2:
+SeqMixParam_Entry_142:
 	.byte 0x04, 0xcc, 0x01
 	nop
 	zcf
@@ -17733,7 +17733,7 @@ SeqMixParam_EDF9F2:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFA04:
+SeqMixParam_Entry_143:
 	nop
 	.byte 0xce, 0x01
 	nop
@@ -17749,7 +17749,7 @@ SeqMixParam_EDFA04:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFA16:
+SeqMixParam_Entry_144:
 	.byte 0x01, 0xce, 0x01
 	nop
 	zcf
@@ -17763,7 +17763,7 @@ SeqMixParam_EDFA16:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFA28:
+SeqMixParam_Entry_145:
 	push_sr
 	.byte 0xce, 0x01
 	nop
@@ -17777,7 +17777,7 @@ SeqMixParam_EDFA28:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFA3A:
+SeqMixParam_Entry_146:
 	pop_sr
 	.byte 0xce, 0x01
 	nop
@@ -17792,7 +17792,7 @@ SeqMixParam_EDFA3A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFA4C:
+SeqMixParam_Entry_147:
 	.byte 0x04, 0xce, 0x01
 	nop
 	zcf
@@ -17806,7 +17806,7 @@ SeqMixParam_EDFA4C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFA5E:
+SeqMixParam_Entry_148:
 	halt
 	.byte 0xce, 0x01
 	nop
@@ -17822,7 +17822,7 @@ SeqMixParam_EDFA5E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFA70:
+SeqMixParam_Entry_149:
 	.byte 0x06, 0xce, 0x01
 	nop
 	zcf
@@ -17836,7 +17836,7 @@ SeqMixParam_EDFA70:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFA82:
+SeqMixParam_Entry_150:
 	nop
 	.byte 0xd0, 0x01
 	nop
@@ -17851,7 +17851,7 @@ SeqMixParam_EDFA82:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFA94:
+SeqMixParam_Entry_151:
 	.byte 0x01, 0xd0, 0x01
 	nop
 	push_a
@@ -17864,7 +17864,7 @@ SeqMixParam_EDFA94:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFAA6:
+SeqMixParam_Entry_152:
 	push_sr
 	.byte 0xd0, 0x01
 	nop
@@ -17876,7 +17876,7 @@ SeqMixParam_EDFAA6:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFAB8:
+SeqMixParam_Entry_153:
 	pop_sr
 	.byte 0xd0, 0x01
 	nop
@@ -17892,7 +17892,7 @@ SeqMixParam_EDFAB8:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFACA:
+SeqMixParam_Entry_154:
 	.byte 0x04, 0xd0, 0x01
 	nop
 	push_a
@@ -17907,7 +17907,7 @@ SeqMixParam_EDFACA:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFADC:
+SeqMixParam_Entry_155:
 	nop
 	.byte 0xd2, 0x01
 	nop
@@ -17923,7 +17923,7 @@ SeqMixParam_EDFADC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFAEE:
+SeqMixParam_Entry_156:
 	.byte 0x01, 0xd2, 0x01
 	nop
 	push_a
@@ -17937,7 +17937,7 @@ SeqMixParam_EDFAEE:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFB00:
+SeqMixParam_Entry_157:
 	push_sr
 	.byte 0xd2, 0x01
 	nop
@@ -17951,7 +17951,7 @@ SeqMixParam_EDFB00:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFB12:
+SeqMixParam_Entry_158:
 	pop_sr
 	.byte 0xd2, 0x01
 	nop
@@ -17966,7 +17966,7 @@ SeqMixParam_EDFB12:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFB24:
+SeqMixParam_Entry_159:
 	.byte 0x04, 0xd2, 0x01
 	nop
 	push_a
@@ -17980,7 +17980,7 @@ SeqMixParam_EDFB24:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFB36:
+SeqMixParam_Entry_160:
 	halt
 	.byte 0xd2, 0x01
 	nop
@@ -17996,7 +17996,7 @@ SeqMixParam_EDFB36:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFB48:
+SeqMixParam_Entry_161:
 	.byte 0x06, 0xd2, 0x01
 	nop
 	push_a
@@ -18010,7 +18010,7 @@ SeqMixParam_EDFB48:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFB5A:
+SeqMixParam_Entry_162:
 	nop
 	.byte 0xd4, 0x01
 	nop
@@ -18025,7 +18025,7 @@ SeqMixParam_EDFB5A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFB6C:
+SeqMixParam_Entry_163:
 	.byte 0x01, 0xd4, 0x01
 	nop
 	pop_a
@@ -18038,7 +18038,7 @@ SeqMixParam_EDFB6C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFB7E:
+SeqMixParam_Entry_164:
 	push_sr
 	.byte 0xd4, 0x01
 	nop
@@ -18050,7 +18050,7 @@ SeqMixParam_EDFB7E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFB90:
+SeqMixParam_Entry_165:
 	pop_sr
 	.byte 0xd4, 0x01
 	nop
@@ -18066,7 +18066,7 @@ SeqMixParam_EDFB90:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFBA2:
+SeqMixParam_Entry_166:
 	.byte 0x04, 0xd4, 0x01
 	nop
 	pop_a
@@ -18081,7 +18081,7 @@ SeqMixParam_EDFBA2:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFBB4:
+SeqMixParam_Entry_167:
 	nop
 	.byte 0xd6, 0x01
 	nop
@@ -18097,7 +18097,7 @@ SeqMixParam_EDFBB4:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFBC6:
+SeqMixParam_Entry_168:
 	.byte 0x01, 0xd6, 0x01
 	nop
 	pop_a
@@ -18111,7 +18111,7 @@ SeqMixParam_EDFBC6:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFBD8:
+SeqMixParam_Entry_169:
 	push_sr
 	.byte 0xd6, 0x01
 	nop
@@ -18125,7 +18125,7 @@ SeqMixParam_EDFBD8:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFBEA:
+SeqMixParam_Entry_170:
 	pop_sr
 	.byte 0xd6, 0x01
 	nop
@@ -18140,7 +18140,7 @@ SeqMixParam_EDFBEA:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFBFC:
+SeqMixParam_Entry_171:
 	.byte 0x04, 0xd6, 0x01
 	nop
 	pop_a
@@ -18154,7 +18154,7 @@ SeqMixParam_EDFBFC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFC0E:
+SeqMixParam_Entry_172:
 	halt
 	.byte 0xd6, 0x01
 	nop
@@ -18170,7 +18170,7 @@ SeqMixParam_EDFC0E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFC20:
+SeqMixParam_Entry_173:
 	.byte 0x06, 0xd6, 0x01
 	nop
 	pop_a
@@ -18184,7 +18184,7 @@ SeqMixParam_EDFC20:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFC32:
+SeqMixParam_Entry_174:
 	nop
 	.byte 0xd8, 0x01
 	nop
@@ -18199,7 +18199,7 @@ SeqMixParam_EDFC32:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFC44:
+SeqMixParam_Entry_175:
 	.byte 0x01, 0xd8, 0x01
 	nop
 	ex_ff
@@ -18212,7 +18212,7 @@ SeqMixParam_EDFC44:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFC56:
+SeqMixParam_Entry_176:
 	push_sr
 	.byte 0xd8, 0x01
 	nop
@@ -18224,7 +18224,7 @@ SeqMixParam_EDFC56:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFC68:
+SeqMixParam_Entry_177:
 	pop_sr
 	.byte 0xd8, 0x01
 	nop
@@ -18240,7 +18240,7 @@ SeqMixParam_EDFC68:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFC7A:
+SeqMixParam_Entry_178:
 	.byte 0x04, 0xd8, 0x01
 	nop
 	ex_ff
@@ -18255,7 +18255,7 @@ SeqMixParam_EDFC7A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFC8C:
+SeqMixParam_Entry_179:
 	nop
 	.byte 0xda, 0x01
 	nop
@@ -18271,7 +18271,7 @@ SeqMixParam_EDFC8C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFC9E:
+SeqMixParam_Entry_180:
 	.byte 0x01, 0xda, 0x01
 	nop
 	ex_ff
@@ -18285,7 +18285,7 @@ SeqMixParam_EDFC9E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFCB0:
+SeqMixParam_Entry_181:
 	push_sr
 	.byte 0xda, 0x01
 	nop
@@ -18299,7 +18299,7 @@ SeqMixParam_EDFCB0:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFCC2:
+SeqMixParam_Entry_182:
 	pop_sr
 	.byte 0xda, 0x01
 	nop
@@ -18314,7 +18314,7 @@ SeqMixParam_EDFCC2:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFCD4:
+SeqMixParam_Entry_183:
 	.byte 0x04, 0xda, 0x01
 	nop
 	ex_ff
@@ -18328,7 +18328,7 @@ SeqMixParam_EDFCD4:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFCE6:
+SeqMixParam_Entry_184:
 	halt
 	.byte 0xda, 0x01
 	nop
@@ -18344,7 +18344,7 @@ SeqMixParam_EDFCE6:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFCF8:
+SeqMixParam_Entry_185:
 	.byte 0x06, 0xda, 0x01
 	nop
 	ex_ff
@@ -18358,7 +18358,7 @@ SeqMixParam_EDFCF8:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFD0A:
+SeqMixParam_Entry_186:
 	nop
 	.byte 0xdc, 0x01
 	nop
@@ -18372,7 +18372,7 @@ SeqMixParam_EDFD0A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFD1C:
+SeqMixParam_Entry_187:
 	.byte 0x01, 0xdc, 0x01
 	nop
 	ldf	13
@@ -18384,7 +18384,7 @@ SeqMixParam_EDFD1C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFD2E:
+SeqMixParam_Entry_188:
 	push_sr
 	.byte 0xdc, 0x01
 	nop
@@ -18395,7 +18395,7 @@ SeqMixParam_EDFD2E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFD40:
+SeqMixParam_Entry_189:
 	pop_sr
 	.byte 0xdc, 0x01
 	nop
@@ -18410,7 +18410,7 @@ SeqMixParam_EDFD40:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFD52:
+SeqMixParam_Entry_190:
 	.byte 0x04, 0xdc, 0x01
 	nop
 	ldf	12
@@ -18424,7 +18424,7 @@ SeqMixParam_EDFD52:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFD64:
+SeqMixParam_Entry_191:
 	nop
 	.byte 0xde, 0x01
 	nop
@@ -18439,7 +18439,7 @@ SeqMixParam_EDFD64:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFD76:
+SeqMixParam_Entry_192:
 	.byte 0x01, 0xde, 0x01
 	nop
 	.byte 0x17, 0x04
@@ -18452,7 +18452,7 @@ SeqMixParam_EDFD76:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFD88:
+SeqMixParam_Entry_193:
 	push_sr
 	.byte 0xde, 0x01
 	nop
@@ -18465,7 +18465,7 @@ SeqMixParam_EDFD88:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFD9A:
+SeqMixParam_Entry_194:
 	pop_sr
 	.byte 0xde, 0x01
 	nop
@@ -18479,7 +18479,7 @@ SeqMixParam_EDFD9A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFDAC:
+SeqMixParam_Entry_195:
 	.byte 0x04, 0xde, 0x01
 	nop
 	.byte 0x17, 0x04
@@ -18492,7 +18492,7 @@ SeqMixParam_EDFDAC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFDBE:
+SeqMixParam_Entry_196:
 	halt
 	.byte 0xde, 0x01
 	nop
@@ -18507,7 +18507,7 @@ SeqMixParam_EDFDBE:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFDD0:
+SeqMixParam_Entry_197:
 	.byte 0x06, 0xde, 0x01
 	nop
 	ldf	12
@@ -18520,7 +18520,7 @@ SeqMixParam_EDFDD0:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFDE2:
+SeqMixParam_Entry_198:
 	nop
 	.byte 0xe0, 0x01
 	nop
@@ -18535,7 +18535,7 @@ SeqMixParam_EDFDE2:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFDF4:
+SeqMixParam_Entry_199:
 	.byte 0x01, 0xe0, 0x01
 	nop
 	push_f
@@ -18548,7 +18548,7 @@ SeqMixParam_EDFDF4:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFE06:
+SeqMixParam_Entry_200:
 	push_sr
 	.byte 0xe0, 0x01
 	nop
@@ -18560,7 +18560,7 @@ SeqMixParam_EDFE06:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFE18:
+SeqMixParam_Entry_201:
 	pop_sr
 	.byte 0xe0, 0x01
 	nop
@@ -18576,7 +18576,7 @@ SeqMixParam_EDFE18:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFE2A:
+SeqMixParam_Entry_202:
 	.byte 0x04, 0xe0, 0x01
 	nop
 	push_f
@@ -18591,7 +18591,7 @@ SeqMixParam_EDFE2A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFE3C:
+SeqMixParam_Entry_203:
 	nop
 	.byte 0xe2, 0x01
 	nop
@@ -18607,7 +18607,7 @@ SeqMixParam_EDFE3C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFE4E:
+SeqMixParam_Entry_204:
 	.byte 0x01, 0xe2, 0x01
 	nop
 	push_f
@@ -18621,7 +18621,7 @@ SeqMixParam_EDFE4E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFE60:
+SeqMixParam_Entry_205:
 	push_sr
 	.byte 0xe2, 0x01
 	nop
@@ -18635,7 +18635,7 @@ SeqMixParam_EDFE60:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFE72:
+SeqMixParam_Entry_206:
 	pop_sr
 	.byte 0xe2, 0x01
 	nop
@@ -18650,7 +18650,7 @@ SeqMixParam_EDFE72:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFE84:
+SeqMixParam_Entry_207:
 	.byte 0x04, 0xe2, 0x01
 	nop
 	push_f
@@ -18664,7 +18664,7 @@ SeqMixParam_EDFE84:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFE96:
+SeqMixParam_Entry_208:
 	halt
 	.byte 0xe2, 0x01
 	nop
@@ -18680,7 +18680,7 @@ SeqMixParam_EDFE96:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFEA8:
+SeqMixParam_Entry_209:
 	.byte 0x06, 0xe2, 0x01
 	nop
 	push_f
@@ -18694,7 +18694,7 @@ SeqMixParam_EDFEA8:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFEBA:
+SeqMixParam_Entry_210:
 	nop
 	.byte 0xe4, 0x01
 	nop
@@ -18709,7 +18709,7 @@ SeqMixParam_EDFEBA:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFECC:
+SeqMixParam_Entry_211:
 	.byte 0x01, 0xe4, 0x01
 	nop
 	pop_f
@@ -18722,7 +18722,7 @@ SeqMixParam_EDFECC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFEDE:
+SeqMixParam_Entry_212:
 	push_sr
 	.byte 0xe4, 0x01
 	nop
@@ -18734,7 +18734,7 @@ SeqMixParam_EDFEDE:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFEF0:
+SeqMixParam_Entry_213:
 	pop_sr
 	.byte 0xe4, 0x01
 	nop
@@ -18750,7 +18750,7 @@ SeqMixParam_EDFEF0:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFF02:
+SeqMixParam_Entry_214:
 	.byte 0x04, 0xe4, 0x01
 	nop
 	pop_f
@@ -18765,7 +18765,7 @@ SeqMixParam_EDFF02:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFF14:
+SeqMixParam_Entry_215:
 	nop
 	.byte 0xe6, 0x01
 	nop
@@ -18781,7 +18781,7 @@ SeqMixParam_EDFF14:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFF26:
+SeqMixParam_Entry_216:
 	.byte 0x01, 0xe6, 0x01
 	nop
 	pop_f
@@ -18795,7 +18795,7 @@ SeqMixParam_EDFF26:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFF38:
+SeqMixParam_Entry_217:
 	push_sr
 	.byte 0xe6, 0x01
 	nop
@@ -18809,7 +18809,7 @@ SeqMixParam_EDFF38:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFF4A:
+SeqMixParam_Entry_218:
 	pop_sr
 	.byte 0xe6, 0x01
 	nop
@@ -18824,7 +18824,7 @@ SeqMixParam_EDFF4A:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFF5C:
+SeqMixParam_Entry_219:
 	.byte 0x04, 0xe6, 0x01
 	nop
 	pop_f
@@ -18838,7 +18838,7 @@ SeqMixParam_EDFF5C:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFF6E:
+SeqMixParam_Entry_220:
 	halt
 	.byte 0xe6, 0x01
 	nop
@@ -18854,7 +18854,7 @@ SeqMixParam_EDFF6E:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFF80:
+SeqMixParam_Entry_221:
 	.byte 0x06, 0xe6, 0x01
 	nop
 	pop_f
@@ -18868,7 +18868,7 @@ SeqMixParam_EDFF80:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFF92:
+SeqMixParam_Entry_222:
 	nop
 	.byte 0x80
 	push_sr
@@ -18885,7 +18885,7 @@ SeqMixParam_EDFF92:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFFA4:
+SeqMixParam_Entry_223:
 	.byte 0x01, 0x80
 	push_sr
 	nop
@@ -18899,7 +18899,7 @@ SeqMixParam_EDFFA4:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFFB6:
+SeqMixParam_Entry_224:
 	push_sr
 	.byte 0x80
 	push_sr
@@ -18914,7 +18914,7 @@ SeqMixParam_EDFFB6:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFFC8:
+SeqMixParam_Entry_225:
 	.byte 0x80, 0x80
 	push_sr
 	nop
@@ -18930,7 +18930,7 @@ SeqMixParam_EDFFC8:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFFDA:
+SeqMixParam_Entry_226:
 	.byte 0x81, 0x80
 	push_sr
 	nop
@@ -18944,7 +18944,7 @@ SeqMixParam_EDFFDA:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFFEC:
+SeqMixParam_Entry_227:
 	.byte 0x82, 0x80
 	push_sr
 	nop
@@ -18960,7 +18960,7 @@ SeqMixParam_EDFFEC:
 	nop
 	nop
 	swi	7
-SeqMixParam_EDFFFE:
+SeqMixParam_Entry_228:
 	.byte 0x83, 0x80
 	push_sr
 	nop
