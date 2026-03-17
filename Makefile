@@ -46,7 +46,8 @@ AUDIO_BINS = maincpu/includes/generated/tonegen_param_table.bin
 SOUND_DATA_BINS = maincpu/includes/generated/sound_data_organ_accordion.bin maincpu/includes/generated/sound_data_orchestral_pad.bin maincpu/includes/generated/sound_data_synth.bin maincpu/includes/generated/sound_data_bass.bin maincpu/includes/generated/sound_data_accordion_reg.bin maincpu/includes/generated/sound_data_digital_drawbar.bin maincpu/includes/generated/sound_data_gm_special.bin maincpu/includes/generated/sound_data_guitar.bin maincpu/includes/generated/sound_data_sax_reed.bin maincpu/includes/generated/sound_data_drum_kits.bin maincpu/includes/generated/sound_data_piano.bin maincpu/includes/generated/sound_data_strings_vocal.bin maincpu/includes/generated/sound_data_flute.bin maincpu/includes/generated/sound_data_flute_extra.bin maincpu/includes/generated/sound_data_mallet_orch_perc.bin
 SEPAOUT_BINS = maincpu/includes/generated/sepaout_config.bin
 GUI_BINS = maincpu/includes/generated/gui_display_struct_data.bin
-C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS) $(SEPAOUT_BINS) $(GUI_BINS)
+TONEKIT_BINS = maincpu/includes/generated/tonekit_param_blocks.bin
+C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS) $(SEPAOUT_BINS) $(GUI_BINS) $(TONEKIT_BINS)
 
 maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/paramblock/%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
@@ -274,6 +275,13 @@ maincpu/includes/generated/naka_accomp7_widgets.bin: maincpu/ui_widgets/naka_acc
 	$(LLVM_LLD) -T maincpu/ui_widgets/naka_accomp7_widgets_link.ld -o $@.elf $@.o
 	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
 	@rm -f $@.o $@.elf
+
+# ToneKit parameter blocks — 118 blocks of 6-byte sound parameter records
+maincpu/includes/generated/tonekit_param_blocks.bin: maincpu/ui_widgets/tonekit_param_blocks.c
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
 
 maincpu/includes/generated/voice_factory_presets.bin: maincpu/audio/voice_factory_presets.c
 	@mkdir -p maincpu/includes/generated
