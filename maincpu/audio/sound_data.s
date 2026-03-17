@@ -77,10 +77,12 @@ SOUND_CATEGORY_NAMES:
 	.ascii "    MEMORY A    "	; 16: Memory A
 	.ascii "    MEMORY B    "	; 17: Memory B
 
-SOUND_DATA_PIANO:		.include "audio/sound_data_piano.s"
+SOUND_DATA_PIANO:
+	.incbin "includes/generated/sound_data_piano.bin"
 SOUND_DATA_GUITAR:
 	.incbin "includes/generated/sound_data_guitar.bin"
-SOUND_DATA_STRINGS_VOCAL:	.include "audio/sound_data_strings_vocal.s"
+SOUND_DATA_STRINGS_VOCAL:
+	.incbin "includes/generated/sound_data_strings_vocal.bin"
 SOUND_DATA_BRASS_PTRS:		.include "audio/sound_data_brass.s"
 SOUND_DATA_FLUTE:		.include "audio/sound_data_flute.s"
 SOUND_DATA_FLUTE_EXTRA:		.include "audio/sound_data_flute_extra.s"
