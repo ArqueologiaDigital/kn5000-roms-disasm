@@ -23677,7 +23677,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 	ret
 
 .LSFC_a87f:
-	.byte 0xc5, 0xe0, 0x3f, 0x30           ; cp (XWA+),0x30 (auto-increment — needs LLVM backend support)
+	cp_spib_im	224, 48                 ; cp (XWA+), 0x30
 	jr z, .LSFC_a877                       ; [66 f2] jr Z,0x29a877
 	lds	hl, 0
 	ret
