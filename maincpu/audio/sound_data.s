@@ -102,4 +102,5 @@ SOUND_DATA_ACCORDION_REG:
 	.incbin "includes/generated/sound_data_accordion_reg.bin"
 SOUND_DATA_GM_SPECIAL:
 	.incbin "includes/generated/sound_data_gm_special.bin"
-SOUND_DATA_DRUM_KITS:		.include "audio/sound_data_drum_kits.s"
+SOUND_DATA_DRUM_KITS:
+	.incbin "includes/generated/sound_data_drum_kits.bin"

@@ -43,7 +43,7 @@ NAKA_BINS = maincpu/includes/generated/naka_control_menu_header.bin maincpu/incl
 
 VOICE_BINS = maincpu/includes/generated/voice_factory_presets.bin
 AUDIO_BINS = maincpu/includes/generated/tonegen_param_table.bin
-SOUND_DATA_BINS = maincpu/includes/generated/sound_data_organ_accordion.bin maincpu/includes/generated/sound_data_orchestral_pad.bin maincpu/includes/generated/sound_data_synth.bin maincpu/includes/generated/sound_data_bass.bin maincpu/includes/generated/sound_data_accordion_reg.bin maincpu/includes/generated/sound_data_digital_drawbar.bin maincpu/includes/generated/sound_data_gm_special.bin maincpu/includes/generated/sound_data_guitar.bin maincpu/includes/generated/sound_data_sax_reed.bin
+SOUND_DATA_BINS = maincpu/includes/generated/sound_data_organ_accordion.bin maincpu/includes/generated/sound_data_orchestral_pad.bin maincpu/includes/generated/sound_data_synth.bin maincpu/includes/generated/sound_data_bass.bin maincpu/includes/generated/sound_data_accordion_reg.bin maincpu/includes/generated/sound_data_digital_drawbar.bin maincpu/includes/generated/sound_data_gm_special.bin maincpu/includes/generated/sound_data_guitar.bin maincpu/includes/generated/sound_data_sax_reed.bin maincpu/includes/generated/sound_data_drum_kits.bin
 C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS)
 
 maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/paramblock/%.c maincpu/style_ui/screendata_types.h
