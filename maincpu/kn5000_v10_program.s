@@ -2255,14 +2255,14 @@ InitializeUser30:
 InitializeUser31:
 	ret
 
-EMPTY_ROUTINE__FC3E64:
+EmptyRoutine_01:
 	ret
 
 CPanel_InitDispatchTable:
 	.long CPanel_InitSequence
-	.long EMPTY_ROUTINE__FC3EE4
-	.long EMPTY_ROUTINE__FC3EE4
-	.long EMPTY_ROUTINE__FC3E93
+	.long EmptyRoutine_03
+	.long EmptyRoutine_03
+	.long EmptyRoutine_02
 
 CPanel_InitSequence:
 	ei 0
@@ -2278,7 +2278,7 @@ CPanel_InitSequence:
 	ret
 
 
-EMPTY_ROUTINE__FC3E93:
+EmptyRoutine_02:
 	ret
 
 
@@ -2331,7 +2331,7 @@ CPanel_KeyProcessing_Wrapper:
 	ret
 
 
-EMPTY_ROUTINE__FC3EE4:
+EmptyRoutine_03:
 	ret
 
 

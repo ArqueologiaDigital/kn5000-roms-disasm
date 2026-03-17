@@ -8160,8 +8160,8 @@ HDAE5000_Init_DetectAndVerify:
 	jr nz, HDAE5000_Init_VerifyROM
 	setda_24 2, 1441796
 
-Infinite_Loop_at_EF4B6B:
-	jr Infinite_Loop_at_EF4B6B
+Infinite_Loop_FlashVerifyFail:
+	jr Infinite_Loop_FlashVerifyFail
 
 HDAE5000_Init_VerifyROM:
 	ld xwa, 0x800000

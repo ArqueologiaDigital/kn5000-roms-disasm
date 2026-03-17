@@ -2845,7 +2845,7 @@ DSPCfg_LookupAndExtract:
 	inc 8, xsp
 	ret
 
-DSPCfg_Data_FDC448:
+DSPCfg_Data_001:
 	extz	xwa
 	ld	xbc, 15623012
 	add	xbc, xwa
@@ -2861,7 +2861,7 @@ DSPCfg_GetSlotCount:
 	extz hl
 	ret
 
-DSPCfg_Data_FDC464:
+DSPCfg_Data_002:
 	extz	xwa
 	ld	xbc, 15623016
 	add	xbc, xwa
@@ -2905,7 +2905,7 @@ DSPCfg_FindSlot63_Return:
 	inc 2, xsp
 	ret
 
-DSPCfg_Data_FDC4B7:
+DSPCfg_Data_003:
 	dec	8, xsp
 	push	xiz
 	ld	iz, wa

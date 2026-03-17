@@ -1746,7 +1746,7 @@ SndParam028100_ResBit0:
 SndParam028100_Done:
 	pop xiz
 	ret
-SndParam_SetResBit1_Via028100_028101:
+SndParam_SetResBit1_ViaRegs0100_0101:
 	; --- Routine 2: 2x FCD437, set/res bit 1 at (xiz+4) (41 bytes) ---
 	push xiz
 	ldada	xiz, 36632
@@ -1766,7 +1766,7 @@ SndParam028101_ResBit1:
 SndParam028101_Done:
 	pop xiz
 	ret
-SndParam_SetResBit2_Via028101_028102:
+SndParam_SetResBit2_ViaRegs0101_0102:
 	; --- Routine 3: 2x FCD437, set/res bit 2 at (xiz+4) (41 bytes) ---
 	push xiz
 	ldada	xiz, 36632
@@ -1788,7 +1788,7 @@ SndParam028102_Done:
 	ret
 
 
-SndParam_SetResBit3_Via028101_028102:
+SndParam_SetResBit3_ViaRegs0101_0102:
 	; --- Routine 1: 2x FCD437, set/res bit 3 at (xiz+4) (41 bytes) ---
 	push xiz
 	ldada	xiz, 36632
@@ -1922,7 +1922,7 @@ SndParamCC40_ResBit0:
 SndParamCC40_Done:
 	pop xiz
 	ret
-SndParam_GuardedNibbleSet_028103:
+SndParam_GuardedNibbleSet_ViaReg0103:
 	; --- Routine 3: complex bit checks, and (xiz+0x0E), set 0 in A (59 bytes) ---
 	push xiz
 	ldada	xiz, 36632
@@ -1981,7 +1981,7 @@ SndParam028080_Done:
 	ret
 
 
-SndParam_VoiceEntryLookup_028000:
+SndParam_VoiceEntryLookup_ViaReg8000:
 	; --- Routine 1: stack frame, 3x FCD437 lookup, nibble merge (91 bytes) ---
 	dec 6, xsp
 	push xiz

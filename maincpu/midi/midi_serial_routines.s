@@ -903,7 +903,7 @@ READ_COM_SELECT_SWITCH:
 ; Note: Bad switch positioning data (more than a single low-bit)
 ;       is treated as MIDI selection.
 ;
-OFFSETS_FCF90C:
+MidiSerial_OffsetTable:
 	nop
 	nop
 	nop

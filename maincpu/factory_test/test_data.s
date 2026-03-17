@@ -5,10 +5,10 @@
 Hama_ModeInit_Table:
 	.long NakaInst_Select_the_sound_for_each_part
 	.long NakaInst_Select_the_sound_for_each_part
-	.long NakaInst_Select_the_sound_for_each_part_E1EFB2
-	.long NakaInst_Select_the_sound_for_each_part_E1EFD2
-	.long NakaInst_Select_the_sound_for_each_part_E1EFF2
-	.long NakaInst_Select_the_sound_for_each_part_E1F012
+	.long NakaInst_SelectSoundForPart_A
+	.long NakaInst_SelectSoundForPart_B
+	.long NakaInst_SelectSoundForPart_C
+	.long NakaInst_SelectSoundForPart_D
 	.byte 0xf8, 0xe7, 0xf1, 0x00, 0xce, 0xe8
 	.byte 0xf1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6c, 0xf0
 	.byte 0xe1, 0x00

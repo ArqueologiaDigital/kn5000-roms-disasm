@@ -60,7 +60,7 @@ Display_MarkClean:
 	ret
 
 ; Undisassembled data block (18 bytes) - possibly lookup table
-Display_Data_EF5B79:
+Display_Data_ScoopInit:
 	ldb	a, 255
 	st8_24	132586, a
 	st8_24	132584, a
@@ -729,7 +729,7 @@ Display_CopyToneTableToRAM:
 
 Display_InitScreenLayout:
 	; --- Init/setup function (29 bytes) ---
-	call Display_Data_EF5B79
+	call Display_Data_ScoopInit
 	call Display_ResetDirtyFlags
 	calr Display_InitParamLoader1
 	call Display_CallMenuInit

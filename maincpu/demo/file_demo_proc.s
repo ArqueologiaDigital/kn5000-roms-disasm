@@ -3087,7 +3087,7 @@ MultiPass_Return:
 	lda xsp, (xsp + 28)
 	ret
 
-FileIO_ByteBlock_F8817E:
+FileIO_ByteBlock_DemoProc1:
 	lda	xsp, (xsp-36)
 	push	xiz
 	ld	(xsp+36), bc
@@ -6637,7 +6637,7 @@ GetEntry_Return:
 	popw iz
 	ret
 
-FileIO_ByteBlock_F8A0E1:
+FileIO_ByteBlock_DemoProc2:
 	pushw	iz
 	ld	iz, wa
 	ld	wa, iz

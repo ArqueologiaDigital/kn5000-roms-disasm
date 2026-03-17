@@ -2336,7 +2336,7 @@ NakaInst_Select_the_sound_for_each_part:
 	aligned_string "Select the sound for each part."
 	.byte 0x57, 0xe4
 	aligned_string "hlen Sie einen Klang für jede gewünschte Klanggruppe"
-NakaInst_Select_the_sound_for_each_part_E1EFB2:	aligned_string "Select the sound for each part."
-NakaInst_Select_the_sound_for_each_part_E1EFD2:	aligned_string "Select the sound for each part."
-NakaInst_Select_the_sound_for_each_part_E1EFF2:	aligned_string "Select the sound for each part."
-NakaInst_Select_the_sound_for_each_part_E1F012:	aligned_string "Select the sound for each part."
+NakaInst_SelectSoundForPart_A:	aligned_string "Select the sound for each part."
+NakaInst_SelectSoundForPart_B:	aligned_string "Select the sound for each part."
+NakaInst_SelectSoundForPart_C:	aligned_string "Select the sound for each part."
+NakaInst_SelectSoundForPart_D:	aligned_string "Select the sound for each part."

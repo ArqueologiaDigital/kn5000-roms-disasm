@@ -20475,12 +20475,12 @@ APP_EVENT_HANDLER_TABLE:
 	extz wa
 	sub wa, 0x9C
 	cps wa, 0
-	jr lt, APP_EVENT_HANDLER_F4417B
+	jr lt, AppEvtHandler_Branch_001
 	cps wa, 7
-	jr le, APP_EVENT_HANDLER_F4417E
-APP_EVENT_HANDLER_F4417B:
+	jr le, AppEvtHandler_Branch_002
+AppEvtHandler_Branch_001:
 	ldw wa, 0x8
-APP_EVENT_HANDLER_F4417E:
+AppEvtHandler_Branch_002:
 	sll wa, 2
 	lda_24 xix, 0xe448d2
 	ld_sril3 XWA, 0x07, 0xF0, 0xE0
@@ -20490,14 +20490,14 @@ APP_EVENT_HANDLER_F4417E:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 0
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 36150
 	extz wa
 	sub wa, 0x9C
 	cps wa, 0
-	jr lt, APP_EVENT_HANDLER_F44205
+	jr lt, AppEvtHandler_Branch_003
 	cps wa, 7
-	jr gt, APP_EVENT_HANDLER_F44205
+	jr gt, AppEvtHandler_Branch_003
 	add wa, wa
 	lda_24 xix, 0xe448c2
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -20505,59 +20505,59 @@ APP_EVENT_HANDLER_F4417E:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 	ldada xiz, 9744
 	ldada xwa, 9746
-	jr APP_EVENT_HANDLER_F4420D
+	jr AppEvtHandler_Branch_004
 	ldada xiz, 61993
 	ldada xwa, 9722
-	jr APP_EVENT_HANDLER_F4420D
+	jr AppEvtHandler_Branch_004
 	ldada xiz, 9758
 	ldada xwa, 9760
-	jr APP_EVENT_HANDLER_F4420D
+	jr AppEvtHandler_Branch_004
 	ldada xiz, 61911
 	ldada xwa, 9772
-	jr APP_EVENT_HANDLER_F4420D
+	jr AppEvtHandler_Branch_004
 	ldada xiz, 61916
 	ldada xwa, 9766
-	jr APP_EVENT_HANDLER_F4420D
+	jr AppEvtHandler_Branch_004
 	ldada xiz, 61938
 	ldada xwa, 9724
-	jr APP_EVENT_HANDLER_F4420D
-APP_EVENT_HANDLER_F44205:
+	jr AppEvtHandler_Branch_004
+AppEvtHandler_Branch_003:
 	ldada xiz, 9734
 	ldada xwa, 9736
-APP_EVENT_HANDLER_F4420D:
+AppEvtHandler_Branch_004:
 	ld (xsp + 4), xwa
 	cpw (xiz), 0x3E7
-	jr nc, APP_EVENT_HANDLER_F44227
+	jr nc, AppEvtHandler_Branch_005
 	incm 1, (xiz)
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 1
 	call ApDeliveryEvent
-APP_EVENT_HANDLER_F44227:
+AppEvtHandler_Branch_005:
 	ld bc, (xiz)
 	ld xwa, (xsp + 4)
 	cp bc, (xwa)
-	jr ule, APP_EVENT_HANDLER_F44243
+	jr ule, AppEvtHandler_Branch_006
 	ld bc, (xiz)
 	ld (xwa), bc
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 2
 	call ApDeliveryEvent
-APP_EVENT_HANDLER_F44243:
+AppEvtHandler_Branch_006:
 	ldda8 a, 36150
 	cp a, 0xA3
-	jrl z, APP_EVENT_HANDLER_F44304
+	jrl z, AppEvtHandler_Branch_011
 	cp a, 0xA1
-	jrl z, APP_EVENT_HANDLER_F4431B
+	jrl z, AppEvtHandler_Branch_013
 	jrl AppEvent_Epilogue
 	ldda8 a, 36150
 	extz wa
 	sub wa, 0x9C
 	cps wa, 0
-	jr lt, APP_EVENT_HANDLER_F442BA
+	jr lt, AppEvtHandler_Branch_007
 	cps wa, 7
-	jr gt, APP_EVENT_HANDLER_F442BA
+	jr gt, AppEvtHandler_Branch_007
 	add wa, wa
 	lda_24 xix, 0xe448b2
 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
@@ -20565,60 +20565,60 @@ APP_EVENT_HANDLER_F44243:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 	ldada xiz, 9744
 	ldada xwa, 9746
-	jr APP_EVENT_HANDLER_F442C2
+	jr AppEvtHandler_Branch_008
 	ldada xiz, 61993
 	ldada xwa, 9722
-	jr APP_EVENT_HANDLER_F442C2
+	jr AppEvtHandler_Branch_008
 	ldada xiz, 9758
 	ldada xwa, 9760
-	jr APP_EVENT_HANDLER_F442C2
+	jr AppEvtHandler_Branch_008
 	ldada xiz, 61911
 	ldada xwa, 9772
-	jr APP_EVENT_HANDLER_F442C2
+	jr AppEvtHandler_Branch_008
 	ldada xiz, 61916
 	ldada xwa, 9766
-	jr APP_EVENT_HANDLER_F442C2
+	jr AppEvtHandler_Branch_008
 	ldada xiz, 61938
 	ldada xwa, 9724
-	jr APP_EVENT_HANDLER_F442C2
-APP_EVENT_HANDLER_F442BA:
+	jr AppEvtHandler_Branch_008
+AppEvtHandler_Branch_007:
 	ldada xiz, 9734
 	ldada xwa, 9736
-APP_EVENT_HANDLER_F442C2:
+AppEvtHandler_Branch_008:
 	ld (xsp + 4), xwa
 	cpw (xwa), 0x3E7
-	jr nc, APP_EVENT_HANDLER_F442DF
+	jr nc, AppEvtHandler_Branch_009
 	ld xwa, (xsp + 4)
 	incm 1, (xwa)
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 2
 	call ApDeliveryEvent
-APP_EVENT_HANDLER_F442DF:
+AppEvtHandler_Branch_009:
 	ld bc, (xiz)
 	ld xwa, (xsp + 4)
 	cp bc, (xwa)
-	jr ule, APP_EVENT_HANDLER_F442FB
+	jr ule, AppEvtHandler_Branch_010
 	ld wa, (xwa)
 	ld (xiz), wa
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 1
 	call ApDeliveryEvent
-APP_EVENT_HANDLER_F442FB:
+AppEvtHandler_Branch_010:
 	ldda8 a, 36150
 	cp a, 0xA3
-	jr nz, APP_EVENT_HANDLER_F44315
-APP_EVENT_HANDLER_F44304:
+	jr nz, AppEvtHandler_Branch_012
+AppEvtHandler_Branch_011:
 	ldda16 xwa, 9772
 	subda16 xwa, 61911
 	inc 1, wa
 	stda16 61913, xwa
 	jrl AppEvent_Epilogue
-APP_EVENT_HANDLER_F44315:
+AppEvtHandler_Branch_012:
 	cp a, 0xA1
 	jrl nz, AppEvent_Epilogue
-APP_EVENT_HANDLER_F4431B:
+AppEvtHandler_Branch_013:
 	ldda16 xwa, 9766
 	subda16 xwa, 61916
 	inc 1, wa
@@ -20632,7 +20632,7 @@ APP_EVENT_HANDLER_F4431B:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 3
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 9762
 	cp a, 0x7F
 	jrl ge, AppEvent_Epilogue
@@ -20641,7 +20641,7 @@ APP_EVENT_HANDLER_F4431B:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 4
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 61998
 	cp a, 0x7F
 	jrl ge, AppEvent_Epilogue
@@ -20650,7 +20650,7 @@ APP_EVENT_HANDLER_F4431B:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 5
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 61920
 	cps a, 2
 	jrl nc, AppEvent_Epilogue
@@ -20659,7 +20659,7 @@ APP_EVENT_HANDLER_F4431B:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 6
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 61942
 	cps a, 6
 	jrl nc, AppEvent_Epilogue
@@ -20668,7 +20668,7 @@ APP_EVENT_HANDLER_F4431B:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	lds32 xde, 7
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 9728
 	cp a, 0x64
 	jrl nc, AppEvent_Epilogue
@@ -20677,7 +20677,7 @@ APP_EVENT_HANDLER_F4431B:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0x8
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 9730
 	cp a, 0x64
 	jrl ge, AppEvent_Epilogue
@@ -20686,7 +20686,7 @@ APP_EVENT_HANDLER_F4431B:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0x9
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 9750
 	cp a, 0x7F
 	jrl nc, AppEvent_Epilogue
@@ -20695,7 +20695,7 @@ APP_EVENT_HANDLER_F4431B:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0xA
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 9816
 	cp a, 0x7F
 	jrl nc, AppEvent_Epilogue
@@ -20704,55 +20704,55 @@ APP_EVENT_HANDLER_F4431B:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0xB
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 61907
 	cp a, 0x10
-	jr nc, APP_EVENT_HANDLER_F44455
+	jr nc, AppEvtHandler_Branch_014
 	inc 1, a
 	stda8 61907, a
-	jr APP_EVENT_HANDLER_F4445E
-APP_EVENT_HANDLER_F44455:
+	jr AppEvtHandler_Branch_015
+AppEvtHandler_Branch_014:
 	stdi8 61907, 1
 	ldda8 a, 61907
-APP_EVENT_HANDLER_F4445E:
+AppEvtHandler_Branch_015:
 	cpda8 a, 61908
-	jr nz, APP_EVENT_HANDLER_F44476
+	jr nz, AppEvtHandler_Branch_017
 	cp a, 0x10
-	jr nc, APP_EVENT_HANDLER_F44471
+	jr nc, AppEvtHandler_Branch_016
 	inc 1, a
 	stda8 61907, a
-	jr APP_EVENT_HANDLER_F44476
-APP_EVENT_HANDLER_F44471:
+	jr AppEvtHandler_Branch_017
+AppEvtHandler_Branch_016:
 	stdi8 61907, 1
-APP_EVENT_HANDLER_F44476:
+AppEvtHandler_Branch_017:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0xC
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 61908
 	cp a, 0x10
-	jr nc, APP_EVENT_HANDLER_F44498
+	jr nc, AppEvtHandler_Branch_018
 	inc 1, a
 	stda8 61908, a
-	jr APP_EVENT_HANDLER_F444A1
-APP_EVENT_HANDLER_F44498:
+	jr AppEvtHandler_Branch_019
+AppEvtHandler_Branch_018:
 	stdi8 61908, 1
 	ldda8 a, 61908
-APP_EVENT_HANDLER_F444A1:
+AppEvtHandler_Branch_019:
 	cpda8 a, 61907
-	jr nz, APP_EVENT_HANDLER_F444B9
+	jr nz, AppEvtHandler_Branch_021
 	cp a, 0x10
-	jr nc, APP_EVENT_HANDLER_F444B4
+	jr nc, AppEvtHandler_Branch_020
 	inc 1, a
 	stda8 61908, a
-	jr APP_EVENT_HANDLER_F444B9
-APP_EVENT_HANDLER_F444B4:
+	jr AppEvtHandler_Branch_021
+AppEvtHandler_Branch_020:
 	stdi8 61908, 1
-APP_EVENT_HANDLER_F444B9:
+AppEvtHandler_Branch_021:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0xD
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	ldda8 a, 61909
 	cp a, 0x10
 	jrl nc, AppEvent_Epilogue
@@ -20761,12 +20761,12 @@ APP_EVENT_HANDLER_F444B9:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0xE
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	sub xwa, 0xF
 	cp xwa, 0x0
-	jrl c, APP_EVENT_HANDLER_F445B0
+	jrl c, AppEvtHandler_Branch_024
 	cp xwa, 0x5
-	jrl ugt, APP_EVENT_HANDLER_F445B0
+	jrl ugt, AppEvtHandler_Branch_024
 	add xwa, xwa
 	add xwa, 0xE448A6
 	ld wa, (xwa)
@@ -20774,56 +20774,56 @@ APP_EVENT_HANDLER_F444B9:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 	ldda8 a, 61929
 	cp a, 0x11
-	jrl nc, APP_EVENT_HANDLER_F445B0
+	jrl nc, AppEvtHandler_Branch_024
 	inc 1, a
 	stda8 61929, a
 	cp a, 0x11
-	jrl nz, APP_EVENT_HANDLER_F445B0
+	jrl nz, AppEvtHandler_Branch_024
 	stdi8 61934, 17
-	jr APP_EVENT_HANDLER_F445B0
+	jr AppEvtHandler_Branch_024
 	ldda16 xwa, 61930
 	cp wa, 0x3E7
-	jr nc, APP_EVENT_HANDLER_F44544
+	jr nc, AppEvtHandler_Branch_022
 	inc 1, wa
 	stda16 61930, xwa
-APP_EVENT_HANDLER_F44544:
+AppEvtHandler_Branch_022:
 	ldda16 xwa, 61930
 	cpda16 xwa, 9768
-	jr ule, APP_EVENT_HANDLER_F44564
+	jr ule, AppEvtHandler_Branch_023
 	stda16 9768, xwa
-	jr APP_EVENT_HANDLER_F44564
+	jr AppEvtHandler_Branch_023
 	ldda16 xwa, 9768
 	cp wa, 0x3E7
-	jr nc, APP_EVENT_HANDLER_F44564
+	jr nc, AppEvtHandler_Branch_023
 	inc 1, wa
 	stda16 9768, xwa
-APP_EVENT_HANDLER_F44564:
+AppEvtHandler_Branch_023:
 	ldda16 xwa, 9768
 	subda16 xwa, 61930
 	inc 1, wa
 	stda16 61932, xwa
-	jr APP_EVENT_HANDLER_F445B0
+	jr AppEvtHandler_Branch_024
 	ldda8 a, 61934
 	cp a, 0x11
-	jr nc, APP_EVENT_HANDLER_F445B0
+	jr nc, AppEvtHandler_Branch_024
 	inc 1, a
 	stda8 61934, a
 	cp a, 0x11
-	jr nz, APP_EVENT_HANDLER_F445B0
+	jr nz, AppEvtHandler_Branch_024
 	stdi8 61929, 17
-	jr APP_EVENT_HANDLER_F445B0
+	jr AppEvtHandler_Branch_024
 	ldda16 xwa, 61935
 	cp wa, 0x3E7
-	jr nc, APP_EVENT_HANDLER_F445B0
+	jr nc, AppEvtHandler_Branch_024
 	inc 1, wa
 	stda16 61935, xwa
-	jr APP_EVENT_HANDLER_F445B0
+	jr AppEvtHandler_Branch_024
 	ldda8 a, 9770
 	cp a, 0x7F
-	jr nc, APP_EVENT_HANDLER_F445B0
+	jr nc, AppEvtHandler_Branch_024
 	inc 1, a
 	stda8 9770, a
-APP_EVENT_HANDLER_F445B0:
+AppEvtHandler_Branch_024:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0xF
@@ -20847,12 +20847,12 @@ APP_EVENT_HANDLER_F445B0:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0x14
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	sub xwa, 0x15
 	cp xwa, 0x0
-	jrl c, APP_EVENT_HANDLER_F446E0
+	jrl c, AppEvtHandler_Branch_027
 	cp xwa, 0x5
-	jrl ugt, APP_EVENT_HANDLER_F446E0
+	jrl ugt, AppEvtHandler_Branch_027
 	add xwa, xwa
 	add xwa, 0xE4489A
 	ld wa, (xwa)
@@ -20860,56 +20860,56 @@ APP_EVENT_HANDLER_F445B0:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 	ldda8 a, 61921
 	cp a, 0x11
-	jrl nc, APP_EVENT_HANDLER_F446E0
+	jrl nc, AppEvtHandler_Branch_027
 	inc 1, a
 	stda8 61921, a
 	cp a, 0x11
-	jrl nz, APP_EVENT_HANDLER_F446E0
+	jrl nz, AppEvtHandler_Branch_027
 	stdi8 61926, 17
-	jr APP_EVENT_HANDLER_F446E0
+	jr AppEvtHandler_Branch_027
 	ldda16 xwa, 61922
 	cp wa, 0x3E7
-	jr nc, APP_EVENT_HANDLER_F44674
+	jr nc, AppEvtHandler_Branch_025
 	inc 1, wa
 	stda16 61922, xwa
-APP_EVENT_HANDLER_F44674:
+AppEvtHandler_Branch_025:
 	ldda16 xwa, 61922
 	cpda16 xwa, 9774
-	jr ule, APP_EVENT_HANDLER_F44694
+	jr ule, AppEvtHandler_Branch_026
 	stda16 9774, xwa
-	jr APP_EVENT_HANDLER_F44694
+	jr AppEvtHandler_Branch_026
 	ldda16 xwa, 9774
 	cp wa, 0x3E7
-	jr nc, APP_EVENT_HANDLER_F44694
+	jr nc, AppEvtHandler_Branch_026
 	inc 1, wa
 	stda16 9774, xwa
-APP_EVENT_HANDLER_F44694:
+AppEvtHandler_Branch_026:
 	ldda16 xwa, 9774
 	subda16 xwa, 61922
 	inc 1, wa
 	stda16 61924, xwa
-	jr APP_EVENT_HANDLER_F446E0
+	jr AppEvtHandler_Branch_027
 	ldda8 a, 61926
 	cp a, 0x11
-	jr nc, APP_EVENT_HANDLER_F446E0
+	jr nc, AppEvtHandler_Branch_027
 	inc 1, a
 	stda8 61926, a
 	cp a, 0x11
-	jr nz, APP_EVENT_HANDLER_F446E0
+	jr nz, AppEvtHandler_Branch_027
 	stdi8 61921, 17
-	jr APP_EVENT_HANDLER_F446E0
+	jr AppEvtHandler_Branch_027
 	ldda16 xwa, 61927
 	cp wa, 0x3E7
-	jr nc, APP_EVENT_HANDLER_F446E0
+	jr nc, AppEvtHandler_Branch_027
 	inc 1, wa
 	stda16 61927, xwa
-	jr APP_EVENT_HANDLER_F446E0
+	jr AppEvtHandler_Branch_027
 	ldda8 a, 9776
 	cp a, 0x7F
-	jr nc, APP_EVENT_HANDLER_F446E0
+	jr nc, AppEvtHandler_Branch_027
 	inc 1, a
 	stda8 9776, a
-APP_EVENT_HANDLER_F446E0:
+AppEvtHandler_Branch_027:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0x15
@@ -20933,54 +20933,54 @@ APP_EVENT_HANDLER_F446E0:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0x1A
-	jrl APP_EVENT_HANDLER_F4487A
+	jrl AppEvtHandler_Branch_033
 	cp xwa, 0x1E
-	jr z, APP_EVENT_HANDLER_F447BA
+	jr z, AppEvtHandler_Branch_031
 	cp xwa, 0x1D
-	jr z, APP_EVENT_HANDLER_F4479E
+	jr z, AppEvtHandler_Branch_029
 	cp xwa, 0x1C
-	jr z, APP_EVENT_HANDLER_F44783
+	jr z, AppEvtHandler_Branch_028
 	cp xwa, 0x1B
-	jr nz, APP_EVENT_HANDLER_F447D3
+	jr nz, AppEvtHandler_Branch_032
 	ldda8 a, 9992
 	cp a, 0xA
-	jr nc, APP_EVENT_HANDLER_F447D3
+	jr nc, AppEvtHandler_Branch_032
 	inc 1, a
 	stda8 9992, a
 	extz wa
 	ld xbc, 0x2842
-	jr APP_EVENT_HANDLER_F447B4
-APP_EVENT_HANDLER_F44783:
+	jr AppEvtHandler_Branch_030
+AppEvtHandler_Branch_028:
 	ldda8 a, 9996
 	cp a, 0x11
-	jr nc, APP_EVENT_HANDLER_F447D3
+	jr nc, AppEvtHandler_Branch_032
 	inc 1, a
 	stda8 9996, a
 	cp a, 0x11
-	jr nz, APP_EVENT_HANDLER_F447D3
+	jr nz, AppEvtHandler_Branch_032
 	stdi8 9998, 17
-	jr APP_EVENT_HANDLER_F447D3
-APP_EVENT_HANDLER_F4479E:
+	jr AppEvtHandler_Branch_032
+AppEvtHandler_Branch_029:
 	ldda8 a, 9994
 	cp a, 0xA
-	jr nc, APP_EVENT_HANDLER_F447D3
+	jr nc, AppEvtHandler_Branch_032
 	inc 1, a
 	stda8 9994, a
 	extz wa
 	ld xbc, 0x2852
-APP_EVENT_HANDLER_F447B4:
+AppEvtHandler_Branch_030:
 	call SeqData_CopyBlock2K
-	jr APP_EVENT_HANDLER_F447D3
-APP_EVENT_HANDLER_F447BA:
+	jr AppEvtHandler_Branch_032
+AppEvtHandler_Branch_031:
 	ldda8 a, 9998
 	cp a, 0x11
-	jr nc, APP_EVENT_HANDLER_F447D3
+	jr nc, AppEvtHandler_Branch_032
 	inc 1, a
 	stda8 9998, a
 	cp a, 0x11
-	jr nz, APP_EVENT_HANDLER_F447D3
+	jr nz, AppEvtHandler_Branch_032
 	stdi8 9996, 17
-APP_EVENT_HANDLER_F447D3:
+AppEvtHandler_Branch_032:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0x1B
@@ -20996,7 +20996,7 @@ APP_EVENT_HANDLER_F447D3:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0x1E
-	jr APP_EVENT_HANDLER_F4487A
+	jr AppEvtHandler_Branch_033
 	ldda8 a, 10360
 	cp a, 0xA
 	jr nc, AppEvent_Epilogue
@@ -21021,7 +21021,7 @@ APP_EVENT_HANDLER_F447D3:
 	ldda32 xwa, 10610
 	ld xbc, 0x1C0000F
 	ld xde, 0x22
-APP_EVENT_HANDLER_F4487A:
+AppEvtHandler_Branch_033:
 	call ApDeliveryEvent
 AppEvent_Epilogue:
 	pop xiz

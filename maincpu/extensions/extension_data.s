@@ -3901,7 +3901,7 @@ ErrorDialog_RecoveryLine3:
 	jrl	z, 252
 	push_sr
 	nop
-	.long SndParam_VoiceEntryLookup_028000
+	.long SndParam_VoiceEntryLookup_ViaReg8000
 	.byte 0x04
 	nop
 	cp	(xiz+115), ix
@@ -3914,7 +3914,7 @@ ErrorDialog_RecoveryLine3:
 	swi	4
 	nop
 	ldb	w, 0
-	.long SndParam_SetResBit3_Via028101_028102
+	.long SndParam_SetResBit3_ViaRegs0101_0102
 	ld	xwa, 4235338752
 	nop
 	.byte 0x80
@@ -3924,7 +3924,7 @@ ErrorDialog_RecoveryLine3:
 	jrl	ule, 252
 	nop
 	push_sr
-	.long SndParam_VoiceEntryLookup_028000
+	.long SndParam_VoiceEntryLookup_ViaReg8000
 	swi	7
 	swi	7
 	swi	7
