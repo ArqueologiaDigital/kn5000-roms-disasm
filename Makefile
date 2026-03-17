@@ -1,6 +1,6 @@
 LLVM_BIN=/mnt/shared/llvm-project/build/bin
 LLVM_MC=$(LLVM_BIN)/llvm-mc
-LLVM_LLD=$(LLVM_BIN)/ld.lld
+LLVM_LLD=$(LLVM_BIN)/ld.lld -e 0
 LLVM_OBJCOPY=$(LLVM_BIN)/llvm-objcopy
 CLANG=$(LLVM_BIN)/clang
 
