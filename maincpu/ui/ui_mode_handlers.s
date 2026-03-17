@@ -6693,10 +6693,7 @@ TchSensGrid_EventDispatch:
 	.byte 0xd7, 0xe6, 0xa8
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xwa), 1
 	jr	nz, 16
 	cps	de, 1
 	jr	nz, 12
@@ -6704,10 +6701,7 @@ TchSensGrid_EventDispatch:
 	lds	bc, 1
 	lds	de, 2
 	jrl	190
-	.byte 0x90
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xwa), 1
 	jr	nz, 16
 	cps	de, 4
 	jr	nz, 12
@@ -9432,10 +9426,7 @@ DispTimeSet_EventDispatch:
 	.byte 0xd7, 0xe6, 0xa8
 	ld	(xwa), bc
 	ld	(xwa+2), de
-	.byte 0x90
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xwa), 1
 	jr	nz, 40
 	cps	de, 2
 	jr	nz, 36
@@ -9453,10 +9444,7 @@ DispTimeSet_EventDispatch:
 	lds32	xbc, 0
 	ld	(xwa+10), xbc
 	jrl	555
-	.byte 0x90
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xwa), 1
 	jr	nz, 40
 	cps	de, 3
 	jr	nz, 36

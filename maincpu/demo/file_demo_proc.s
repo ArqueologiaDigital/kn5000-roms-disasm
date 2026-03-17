@@ -3437,8 +3437,7 @@ FileIO_ByteBlock_F8817E:
 	ld	iz, (xsp+40)
 	cp	wa, 40
 	jr	nc, 78
-	.byte 0xbf
-	ldwio	2, 470
+	ldw	(xsp+10), 470
 	extz	xwa
 	ld	xbc, 470
 	call	16714332
@@ -3464,8 +3463,7 @@ FileIO_ByteBlock_F8817E:
 	jr	71
 	sub	wa, 40
 	sub	iz, 40
-	.byte 0xbf
-	ldwio	2, 80
+	ldw	(xsp+10), 80
 	extz	xwa
 	ld	xbc, xwa
 	sll	xbc, 2
@@ -3555,10 +3553,7 @@ FileIO_ByteBlock_F8817E:
 	call	16288840
 	ldw	hl, 65434
 	jrl	152
-	.byte 0x9f
-	ldb	h, 63
-	push_sr
-	nop
+	cpw	(xsp+38), 2
 	jr	nc, 60
 	.byte 0xbf
 	ldio	2, 184
@@ -3579,9 +3574,7 @@ FileIO_ByteBlock_F8817E:
 	ld	wa, (xsp+36)
 	ld	(xsp+10), a
 	jr	22
-	.byte 0xbf
-	ldio	2, 39
-	pushw	bc
+	ldw	(xsp+8), 10535
 	ld	xiz, 18816
 	ld	xwa, 18816
 	ld	(xsp+4), xwa
@@ -8869,9 +8862,7 @@ FileIO_ErrorCodeByteBlock:
 	ret	z
 	.byte 0xd1
 	nop
-	.byte 0x85
-	push	xsp
-	nop
+	cp	(xiy), 0
 	nop
 	jr	ge, 10
 	call	16291104

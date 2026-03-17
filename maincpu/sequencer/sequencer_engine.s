@@ -17670,9 +17670,7 @@ PartCtrl_SwapAndRelinkBlock:
 	nop
 	jr	z, 9
 	ld	wa, (xsp+6)
-	.byte 0xd7
-	swi	2
-	.byte 0x89
+	ld	bc, qiz
 	calr	63004
 	ld	wa, (xsp+8)
 	lds	bc, 0
@@ -18434,17 +18432,12 @@ SeqEvt3Ch_ReturnResult:
 SeqEvt_ProcessBlock:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
-	.byte 0xb7
-	push_sr
-	nop
-	nop
+	ldw	(xsp), 0
 	ld	(xsp+2), 1
 	ld	xiy, 14960174
 	lda	xix, (xsp+4)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	ld	c, (xsp+8)
 	extz	bc
 	lds	wa, 0
@@ -21113,10 +21106,7 @@ AppEvent_SubDispatch:
 	ldada	xiz, 9734
 	ldada	xwa, 9736
 	ld	(xsp+4), xwa
-	.byte 0x96
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xiz), 1
 	jr	ule, 17
 	decm	1, (xiz)
 	.byte 0xe1
@@ -21184,10 +21174,7 @@ AppEvent_SubDispatch:
 	ldada	xiz, 9734
 	ldada	xwa, 9736
 	ld	(xsp+4), xwa
-	.byte 0x90
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xwa), 1
 	jr	ule, 20
 	ld	xwa, (xsp+4)
 	decm	1, (xwa)
@@ -25593,9 +25580,7 @@ HelpLang_DispatchDataBlock:
 	stda8	10608, a
 	.byte 0xc1
 	push	xwa
-	.byte 0x8d
-	push	xsp
-	.byte 0xe7
+	or	l, (xiy+63)
 	ret	nz
 	ld8_24	e, 213220
 	ldda8	c, 10606
@@ -31169,9 +31154,7 @@ SeqPart_ByteBlockA95A:
 	.byte 0xf1, 0x9d
 	pushw	wa
 	ret	lt
-	.byte 0x9d
-	pushw	wa
-	.byte 0xb2
+	sbc	de, (xiy+40)
 	call	15990523
 	call	15988262
 	cps	hl, 0

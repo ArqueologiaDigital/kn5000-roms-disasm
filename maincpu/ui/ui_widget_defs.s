@@ -6873,7 +6873,7 @@ DbMemo_DrawContent_Loop:
 	ret
 
 DbMemo_TrailingData:
-	.byte 0x0e
+	ret
 
 DbMemoryDumpProc:
 	lda xsp, (xsp - 120)
@@ -19046,7 +19046,7 @@ DisplayCmd_ScanQueue_Match:
 	ret
 
 DisplayCmd_ScanQueue_MatchDone:
-	.byte 0x0e
+	ret
 
 DisplayCmd_ScanQueue_Continue:
 	lda_24 xde, 0x03247c

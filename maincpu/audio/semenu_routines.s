@@ -1105,8 +1105,7 @@ SeMenu_PartMask_Data:
 	.byte 0xb0
 	push_a
 	pop	xiz
-	.byte 0x06
-	ret
+	ei	14
 	dec	8, xsp
 	ld	(xsp+4), c
 	ld	(xsp+6), a
@@ -1316,9 +1315,7 @@ SeMenu_BitShiftMask_End:
 	lds	hl, 1
 	jr	9
 	ld	a, (xiz)
-	.byte 0x8f
-	rcf
-	.byte 0xf1
+	cp	a, (xsp+16)
 	jr	nz, 7
 	lds	hl, 0
 	pop	xiz
@@ -1397,9 +1394,7 @@ SeMenu_BitShiftMask_End:
 	lds	hl, 1
 	jr	9
 	ld	a, (xiz)
-	.byte 0x8f
-	rcf
-	.byte 0xf1
+	cp	a, (xsp+16)
 	jr	nz, 7
 	lds	hl, 0
 	pop	xiz
@@ -1837,10 +1832,7 @@ SeMenu_TransferPartValues_EndData:
 	.byte 0x04
 	ld	(xsp+10), c
 	ld	(xsp+12), a
-	.byte 0x8f
-	incf
-	push	xsp
-	.byte 0x01
+	cp	(xsp+12), 1
 	jr	c, 6
 	.byte 0x8f
 	incf
@@ -3404,10 +3396,7 @@ SeMenu_ApplyPartEdit_Data2:
 	lda	xbc, (xsp+12)
 	ldw	wa, 9
 	calr	60720
-	.byte 0x8f
-	incf
-	push	xsp
-	.byte 0x01
+	cp	(xsp+12), 1
 	jr	z, 20
 	ldw	wa, 9
 	lds	bc, 1
@@ -3998,14 +3987,10 @@ SeMenu_ApplyPartEdit_Data2:
 	swi	2
 	.byte 0x04
 	ld	wa, iz
-	.byte 0xd7
-	swi	2
-	.byte 0x89
+	ld	bc, qiz
 	ldw	de, 213
 	calr	66
-	.byte 0xd7
-	swi	2
-	.byte 0x89
+	ld	bc, qiz
 	ld	l, (xsp+22)
 	ld	e, l
 	extz	de
@@ -5394,9 +5379,7 @@ SeMenu_ApplyPartEdit_Data2:
 	jr	nz, 21
 	cp	iz, de
 	jr	ugt, 7
-	.byte 0xd7
-	swi	2
-	.byte 0x89
+	ld	bc, qiz
 	add	bc, iz
 	jr	22
 	ldw	bc, 232
@@ -5431,9 +5414,7 @@ SeMenu_ApplyPartEdit_Data2:
 	jr	nz, 21
 	cp	iz, de
 	jr	ugt, 7
-	.byte 0xd7
-	swi	2
-	.byte 0x89
+	ld	bc, qiz
 	sub	bc, iz
 	jr	24
 	ldw	bc, 67
@@ -5444,9 +5425,7 @@ SeMenu_ApplyPartEdit_Data2:
 	srl	wa, 1
 	cp	wa, de
 	jr	ugt, 10
-	.byte 0xd7
-	swi	2
-	.byte 0x89
+	ld	bc, qiz
 	sub	bc, wa
 	ld	wa, (xsp+6)
 	jr	10
@@ -6534,9 +6513,7 @@ SeMenu_PatchBank_Data:
 	push	xsp
 	jrl	nc, 31855
 	ld	a, (xsp+4)
-	.byte 0x8f
-	rcf
-	.byte 0xf1
+	cp	a, (xsp+16)
 	jr	nc, 116
 	.byte 0x8f, 0x04
 	push	xsp
@@ -6568,9 +6545,7 @@ SeMenu_PatchBank_Data:
 	ld	a, (xsp+6)
 	ld	(xsp+4), a
 	ld	a, (xsp+4)
-	.byte 0x8f
-	rcf
-	.byte 0xf1
+	cp	a, (xsp+16)
 	jr	ule, 6
 	ld	a, (xsp+16)
 	ld	(xsp+4), a
@@ -6659,8 +6634,7 @@ SeMenu_DisplayState_Data:
 	.byte 0xb0
 	push_a
 	pop	xde
-	.byte 0x06
-	ret
+	ei	14
 
 SeMenu_StoreEffectParam:
 	extz wa
@@ -6700,14 +6674,12 @@ SeMenu_StoreEffectCoeff_Data:
 	lda	xix, (xsp+22)
 	.byte 0x85
 	rcf
-	.byte 0x95
-	rcf
+	ldiw
 	ld	xiy, 14737901
 	lda	xix, (xsp+18)
 	.byte 0x85
 	rcf
-	.byte 0x95
-	rcf
+	ldiw
 	ld	(xsp), 0
 	ld	a, (xsp)
 	extz	wa

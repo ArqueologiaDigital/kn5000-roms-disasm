@@ -991,9 +991,7 @@ SwbtWr_QueuePostEvent_Done:
 
 SwbtWr_TrailingBytecode:
 	ld	xhl, 49209
-	.byte 0x83
-	push	xsp
-	swi	7
+	cp	(xhl), 255
 	jr	z, 6
 	add	hl, 4
 	jr	-11
@@ -3865,9 +3863,7 @@ DSPCfg_Data_ParamDispatch:
 	swi	2
 	cp	(xbc+37), xsp
 	ld	xwa, (xsp+14)
-	.byte 0xd7
-	swi	2
-	.byte 0x89
+	ld	bc, qiz
 	ld	(xwa), bc
 	ld	xwa, (xsp+34)
 	ld	c, (xsp+4)
@@ -3898,9 +3894,7 @@ DSPCfg_Data_ParamDispatch:
 	and	wa, 31
 	ld	hl, wa
 	ldb	e, 7
-	.byte 0x9f
-	ldio	63, 1
-	nop
+	cpw	(xsp+8), 1
 	jr	nz, -90
 	.byte 0xd7
 	swi	2
@@ -3931,8 +3925,7 @@ DSPCfg_Data_ParamDispatch:
 	ld	hl, wa
 	ldb	e, 7
 	jrl	-161
-	.byte 0x9f
-	ldwio	63, 2
+	cpw	(xsp+10), 2
 	jr	nz, -55
 	ld	wa, iz
 	srl	wa, 8
@@ -3940,18 +3933,13 @@ DSPCfg_Data_ParamDispatch:
 	ld	hl, wa
 	.byte 0xd7
 	swi	2
-	.byte 0xa9
-	jr	-59
+	and	xiy, (xbc+104)
 	lda	xsp, (xsp-24)
 	pushw	iz
 	ld	(xsp+16), e
 	ld	(xsp+18), xbc
 	ld	(xsp+22), xwa
-	.byte 0xbf
-	ret
-	push_sr
-	nop
-	nop
+	ldw	(xsp+14), 0
 	ldw	iz, 65535
 	ld	(xsp+10), 0
 	ld	(xsp+8), 122
@@ -3976,31 +3964,21 @@ DSPCfg_Data_ParamDispatch:
 	ld	xbc, (xsp+34)
 	calr	65185
 	lds	bc, 0
-	.byte 0x9f
-	ret
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+14), 0
 	jr	ule, 12
 	lds32	xwa, 1
 	add	(xsp+22), xwa
 	inc	1, bc
-	.byte 0x9f
-	ret
-	.byte 0xf1
+	cp	bc, (xsp+14)
 	jr	c, -12
 	ld	xwa, (xsp+18)
 	calr	62201
 	ld	(xsp+18), xhl
 	ld	a, (xsp+10)
-	.byte 0x8f
-	rcf
-	.byte 0xf1
+	cp	a, (xsp+16)
 	jr	ugt, 16
 	ld	a, (xsp+10)
-	.byte 0x8f
-	rcf
-	.byte 0xf1
+	cp	a, (xsp+16)
 	jr	nz, -88
 	ld	a, (xsp+2)
 	.byte 0x8f
@@ -4079,15 +4057,9 @@ DSPCfg_Data_ParamDispatch:
 	push_sr
 	swi	7
 	swi	7
-	.byte 0x8f
-	incf
-	push	xsp
-	.byte 0x01
+	cp	(xsp+12), 1
 	jr	c, 75
-	.byte 0x8f
-	incf
-	push	xsp
-	scf
+	cp	(xsp+12), 17
 	jr	nc, 69
 	calr	61611
 	ld	(xsp+6), xhl
@@ -6192,8 +6164,7 @@ UIStateEvt_VolumeMixer_Data:
 	ex_ff
 	inc	6, w
 	ldb	w, 218
-	.byte 0x88
-	add	wa, wa
+	add	w, (xwa-40)
 	add	wa, 228
 	ldada	xbc, 49663
 	ld	hl, wa

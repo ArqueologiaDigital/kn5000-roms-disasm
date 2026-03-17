@@ -671,8 +671,7 @@ MidiPkt_EnqueueExtended_Data:
 	lda	xix, (xsp+4)
 	.byte 0x85
 	rcf
-	.byte 0x95
-	rcf
+	ldiw
 	ld	xwa, (xiz+4)
 	calr	1118
 	cp	hl, 65535
@@ -1067,8 +1066,7 @@ MidiPkt_EnqueueExtended2_Data:
 	lda	xix, (xsp+4)
 	.byte 0x85
 	rcf
-	.byte 0x95
-	rcf
+	ldiw
 	ld	xwa, (xiz+4)
 	calr	145
 	cp	hl, 65535
@@ -1079,9 +1077,7 @@ MidiPkt_EnqueueExtended2_Data:
 	jr	z, 121
 	ld	xbc, (xiz)
 	ld	a, (xwa+8)
-	.byte 0x89
-	pop_sr
-	.byte 0xc1
+	and	a, (xbc+3)
 	jr	z, 111
 	ld	xwa, 15611356
 	lds	bc, 6

@@ -3004,7 +3004,7 @@ AudioCmd_ItoaBaseN_Return:
 	ret
 
 AudioCmd_ItoaBaseN_Pad:
-	.byte 0xff
+	swi	7
 
 AudioCmd_CopyBytes10:
 	ld xix, (xbc)

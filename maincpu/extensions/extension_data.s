@@ -5148,7 +5148,7 @@ Naka_ToshiParam_Table:
 	.zero 16
 	.byte 0x00, 0x00, 0x00, 0x00, 0x78, 0x12, 0x20, 0x20
 	.asciz "              "
-	.byte 0x00
+	nop
 	.byte 0x00, 0x18, 0x00, 0x00, 0x00, 0x7f, 0x35, 0x00
 	.byte 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x38, 0x00
 	.byte 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00
@@ -6514,8 +6514,7 @@ MidiChParam_EDC010:
 	nop
 	swi	7
 MidiChParam_EDC022:
-	.byte 0x06
-	pushw	bc
+	ei	41
 	nop
 	nop
 	.byte 0x98
@@ -6851,8 +6850,7 @@ MidiChParam_EDC1C0:
 	nop
 	swi	7
 MidiChParam_EDC1D2:
-	.byte 0x06
-	pushw	iy
+	ei	45
 	nop
 	nop
 	ld	xsp, 184610819
@@ -13962,8 +13960,7 @@ ExtPartParam_EDE708:
 	.byte 0xdc
 	nop
 	nop
-	.byte 0x17
-	nop
+	ldf	0
 	swi	7
 	nop
 	swi	7
@@ -13994,8 +13991,7 @@ ExtPartParam_EDE72C:
 	.byte 0xdc
 	nop
 	nop
-	.byte 0x17
-	pop_sr
+	ldf	3
 	jrl	nc, 32512
 	nop
 	nop
@@ -14072,8 +14068,7 @@ ExtPartParam_EDE798:
 	.byte 0xdc
 	nop
 	nop
-	.byte 0x17
-	reti
+	ldf	7
 	jrl	nc, 32512
 	nop
 	nop
@@ -14087,8 +14082,7 @@ ExtPartParam_EDE7AA:
 	.byte 0xdc
 	nop
 	nop
-	.byte 0x17
-	halt
+	ldf	5
 	jrl	nc, 32512
 	nop
 	nop
@@ -15526,8 +15520,7 @@ ExtPartParam_EDEEB2:
 	nop
 	.byte 0x98, 0x01
 	nop
-	.byte 0x06
-	decf
+	ei	13
 	ldb	w, 0
 	.byte 0x01
 	halt
@@ -15540,8 +15533,7 @@ ExtPartParam_EDEEB2:
 ExtPartParam_EDEEC4:
 	.byte 0x01, 0x98, 0x01
 	nop
-	.byte 0x06
-	decf
+	ei	13
 	retd	3840
 	nop
 	nop
@@ -15554,8 +15546,7 @@ ExtPartParam_EDEED6:
 	push_sr
 	.byte 0x98, 0x01
 	nop
-	.byte 0x06
-	decf
+	ei	13
 	ld	xwa, 4278583552
 	swi	7
 	.byte 0x01, 0x01, 0x01
@@ -15566,8 +15557,7 @@ ExtPartParam_EDEEE8:
 	pop_sr
 	.byte 0x98, 0x01
 	nop
-	.byte 0x06
-	decf
+	ei	13
 	.byte 0x80
 	nop
 	.byte 0x01
@@ -15581,8 +15571,7 @@ ExtPartParam_EDEEE8:
 ExtPartParam_EDEEFA:
 	.byte 0x04, 0x98, 0x01
 	nop
-	.byte 0x06
-	incf
+	ei	12
 	reti
 	nop
 	jrl	nc, 0
@@ -15625,8 +15614,7 @@ ExtPartParam_EDEF30:
 	push_sr
 	.byte 0x9a, 0x01
 	nop
-	.byte 0x06
-	incf
+	ei	12
 	ldio	0, 1
 	pop_sr
 	nop
@@ -15639,8 +15627,7 @@ ExtPartParam_EDEF42:
 	pop_sr
 	.byte 0x9a, 0x01
 	nop
-	.byte 0x06
-	incf
+	ei	12
 	ldb	w, 0
 	.byte 0x01
 	halt
@@ -15667,8 +15654,7 @@ ExtPartParam_EDEF66:
 	halt
 	.byte 0x9a, 0x01
 	nop
-	.byte 0x06
-	ex_ff
+	ei	22
 	.byte 0x01
 	nop
 	.byte 0x01
@@ -15682,8 +15668,7 @@ ExtPartParam_EDEF66:
 ExtPartParam_EDEF78:
 	.byte 0x06, 0x9a, 0x01
 	nop
-	.byte 0x06
-	incf
+	ei	12
 	rcf
 	nop
 	.byte 0x01, 0x04
@@ -18373,8 +18358,7 @@ SeqMixParam_EDFD0A:
 	nop
 	.byte 0xdc, 0x01
 	nop
-	.byte 0x17
-	decf
+	ldf	13
 	ldb	w, 0
 	.byte 0x01
 	halt
@@ -18387,8 +18371,7 @@ SeqMixParam_EDFD0A:
 SeqMixParam_EDFD1C:
 	.byte 0x01, 0xdc, 0x01
 	nop
-	.byte 0x17
-	decf
+	ldf	13
 	retd	3840
 	nop
 	nop
@@ -18401,8 +18384,7 @@ SeqMixParam_EDFD2E:
 	push_sr
 	.byte 0xdc, 0x01
 	nop
-	.byte 0x17
-	decf
+	ldf	13
 	ld	xwa, 4278583552
 	swi	7
 	.byte 0x01, 0x01, 0x01
@@ -18413,8 +18395,7 @@ SeqMixParam_EDFD40:
 	pop_sr
 	.byte 0xdc, 0x01
 	nop
-	.byte 0x17
-	decf
+	ldf	13
 	.byte 0x80
 	nop
 	.byte 0x01
@@ -18428,8 +18409,7 @@ SeqMixParam_EDFD40:
 SeqMixParam_EDFD52:
 	.byte 0x04, 0xdc, 0x01
 	nop
-	.byte 0x17
-	incf
+	ldf	12
 	reti
 	nop
 	jrl	nc, 0
@@ -18472,8 +18452,7 @@ SeqMixParam_EDFD88:
 	push_sr
 	.byte 0xde, 0x01
 	nop
-	.byte 0x17
-	incf
+	ldf	12
 	ldio	0, 1
 	pop_sr
 	nop
@@ -18486,8 +18465,7 @@ SeqMixParam_EDFD9A:
 	pop_sr
 	.byte 0xde, 0x01
 	nop
-	.byte 0x17
-	incf
+	ldf	12
 	ldb	w, 0
 	.byte 0x01
 	halt
@@ -18514,8 +18492,7 @@ SeqMixParam_EDFDBE:
 	halt
 	.byte 0xde, 0x01
 	nop
-	.byte 0x17
-	ex_ff
+	ldf	22
 	.byte 0x01
 	nop
 	.byte 0x01
@@ -18529,8 +18506,7 @@ SeqMixParam_EDFDBE:
 SeqMixParam_EDFDD0:
 	.byte 0x06, 0xde, 0x01
 	nop
-	.byte 0x17
-	incf
+	ldf	12
 	rcf
 	nop
 	.byte 0x01, 0x04

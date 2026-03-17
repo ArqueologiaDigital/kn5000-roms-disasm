@@ -16980,8 +16980,7 @@ __jrt_nop_FEA344_Data:
 	push_a
 	pop_a
 	ex_ff
-	.byte 0x17
-	push_f
+	ldf	24
 	pop_f
 	.byte 0x1a
 	jp	1973532
@@ -26687,8 +26686,7 @@ SendPartDataBlock_Data:
 	ld	xiy, xde
 	ld	xix, xiz
 	ldw	bc, 8
-	.byte 0x95
-	scf
+	ldirw
 	ld	a, (xde+16)
 	ld	(xiz+16), a
 	ld	xbc, xde
@@ -27031,13 +27029,11 @@ SendPartDataBlock_Data:
 	ld	xiy, 15652253
 	ld	xix, xsp
 	ldw	bc, 213
-	.byte 0x95
-	scf
+	ldirw
 	ld	xiy, xsp
 	ld	xix, xde
 	ldw	bc, 213
-	.byte 0x95
-	scf
+	ldirw
 	lda	xwa, (xde+102)
 	ld	xiy, xwa
 	.byte 0xf3
@@ -27045,22 +27041,19 @@ SendPartDataBlock_Data:
 	nop
 	ldw	ix, 10289
 	nop
-	.byte 0x95
-	scf
+	ldirw
 	.byte 0x85
 	rcf
 	ld	xiy, xwa
 	lda	xix, (xde+264)
 	ldw	bc, 40
-	.byte 0x95
-	scf
+	ldirw
 	.byte 0x85
 	rcf
 	ld	xiy, xwa
 	lda	xix, (xde+345)
 	ldw	bc, 40
-	.byte 0x95
-	scf
+	ldirw
 	.byte 0x85
 	rcf
 	.byte 0xf3
@@ -27079,8 +27072,7 @@ SendPartDataBlock_Data:
 	ld	xiy, xwa
 	ld	xix, xde
 	ldw	bc, 8
-	.byte 0x95
-	scf
+	ldirw
 	lda	xwa, (xwa+16)
 	.byte 0xb0
 	inc	6, l
@@ -27651,17 +27643,9 @@ HdaeRom_DataHandler:
 ; HDAE5000 extension ROM data dispatch (6-entry, table 0xEED747)
 HdaeRom_DataDispatch:
 	ld	(xsp+6), xbc
-	.byte 0xc3
-	swi	5
-	.byte 0xba, 0x01
-	push	xsp
-	swi	7
+	cp	(xsp+442), 255
 	jrl	nz, 307
-	.byte 0xc3
-	swi	5
-	.byte 0xb8, 0x01
-	push	xsp
-	swi	7
+	cp	(xsp+440), 255
 	jrl	nz, 298
 	.byte 0xbf, 0x04
 	push_sr
@@ -27682,8 +27666,7 @@ HdaeRom_DataDispatch:
 	sub	(xiy), l
 	ldwio	36, 36913
 	nop
-	.byte 0x95
-	scf
+	ldirw
 	.byte 0x85
 	rcf
 	ld	xwa, xiz
@@ -27724,8 +27707,7 @@ HdaeRom_DataDispatch:
 	sub	(xiy), l
 	ldwio	36, 18481
 	nop
-	.byte 0x95
-	scf
+	ldirw
 	ld	xbc, 470
 	call	16714332
 	add	xhl, 16

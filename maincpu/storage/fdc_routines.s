@@ -60,10 +60,7 @@ FDC_WaitReady:
 	pop_sr
 	.byte 0x80
 	nop
-	.byte 0xd7
-	swi	2
-	add	w, l
-	nop
+	cpw	qiz, 128
 	jr	nz, 41
 	calr	65481
 	and	l, 31
@@ -83,10 +80,7 @@ FDC_WaitReady:
 	pop_sr
 	swi	7
 	swi	7
-	.byte 0xd7
-	swi	2
-	add	w, l
-	nop
+	cpw	qiz, 128
 	jr	z, -41
 	.byte 0xd7
 	swi	2
@@ -103,10 +97,7 @@ FDC_WaitReady:
 	pop_sr
 	.byte 0x80
 	nop
-	.byte 0xd7
-	swi	2
-	add	w, l
-	nop
+	cpw	qiz, 128
 	jr	nz, 38
 	calr	65411
 	and	l, 144
@@ -124,10 +115,7 @@ FDC_WaitReady:
 	pop_sr
 	swi	7
 	swi	7
-	.byte 0xd7
-	swi	2
-	add	w, l
-	nop
+	cpw	qiz, 128
 	jr	z, -38
 	.byte 0xd7
 	swi	2

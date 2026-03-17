@@ -559,7 +559,7 @@ FactoryReset_ClearSRAM:
 	sti16_24 0x00ffca, 0x5aa5
 	jp Boot_InitIOPorts
 FactoryReset_TrailingByte:
-	.byte 0x0e
+	ret
 
 Boot_ReadFDCStatus:
 	ldda8 l, 36458
@@ -1119,7 +1119,7 @@ Voice_BankSlotZeroInit:
 	.zero 16
 
 Voice_SlotTemplate:
-	.byte 0x00
+	nop
 	.long 0xFFFFFFFF
 	.byte 0x87
 	.zero 248
@@ -1154,7 +1154,7 @@ Voice_InitBankData:
 Voice_BankLookupCode:
 	.byte 0x45, 0x00, 0x88, 0x1e, 0x00, 0xb5, 0x00, 0x48
 	.byte 0xbd, 0x01, 0x00, 0x00, 0xbd, 0x02, 0x00, 0x4b
-	.byte 0x0e
+	ret
 
 Voice_RefreshBankData:
 	calr Voice_ComputeAllocSize

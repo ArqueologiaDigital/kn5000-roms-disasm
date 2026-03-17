@@ -1888,7 +1888,7 @@ AudioMix_BytecodeData:
 	.byte 0xc9, 0x61, 0xb5, 0x41, 0xd7, 0xea, 0x89, 0xbd
 	.byte 0x02, 0x43, 0xc9, 0x61, 0xb5, 0x41, 0xbd, 0x02
 	.byte 0x42, 0x49, 0x48, 0x5d
-	.byte 0x0e
+	ret
 
 ; =============================================================================
 ; Copy_DE_words_from_XBC_to_XWA - Block memory copy (word-granularity)
@@ -3547,10 +3547,7 @@ RhythmBuf_WriteByte:
 	ret
 
 RhythmBuf_InlineBytecode:
-	.byte 0xee
-	incf
-	nop
-	nop
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -3564,8 +3561,7 @@ RhythmBuf_InlineBytecode:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee
-	decf
+	unlk	xiz
 	ret
 
 RhythmBuf_CheckEmpty:
@@ -3632,10 +3628,7 @@ RhythmBuf_InlineBytecode2:
 	pop	xde
 	popw	ix
 	ret
-	.byte 0xee
-	incf
-	nop
-	nop
+	link	xiz, 0
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
@@ -3643,8 +3636,7 @@ RhythmBuf_InlineBytecode2:
 	calr	2485
 	pop	xde
 	popw	ix
-	.byte 0xee
-	decf
+	unlk	xiz
 	ret
 
 AltEvtBuf_WriteBytes:
@@ -4327,10 +4319,7 @@ Seq_DataHandler:
 
 
 SeqBuf_TimerEvent_BytecodeBlock:
-	.byte 0xee
-	incf
-	nop
-	nop
+	link	xiz, 0
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
@@ -4338,13 +4327,9 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	calr	1124
 	pop	xde
 	popw	ix
-	.byte 0xee
-	decf
+	unlk	xiz
 	ret
-	.byte 0xee
-	incf
-	nop
-	nop
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -4358,8 +4343,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee
-	decf
+	unlk	xiz
 	ret
 	ld16_24	hl, 131241
 	.byte 0xd2, 0xa5
@@ -4431,10 +4415,7 @@ Seq_TimerEventLoop:
 
 
 SeqBuf_TimerEvent_BytecodeBlock2:
-	.byte 0xee
-	incf
-	nop
-	nop
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -4448,8 +4429,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee
-	decf
+	unlk	xiz
 	ret
 	ld16_24	hl, 131379
 	.byte 0xd2
@@ -4620,10 +4600,7 @@ SeqBuf_NoteEvent_ReadByte:
 	ret
 
 SeqBuf_NoteEvent_WriteByte_Data:
-	.byte 0xee
-	incf
-	nop
-	nop
+	link	xiz, 0
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
@@ -4631,13 +4608,9 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	calr	745
 	pop	xde
 	popw	ix
-	.byte 0xee
-	decf
+	unlk	xiz
 	ret
-	.byte 0xee
-	incf
-	nop
-	nop
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -4651,8 +4624,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee
-	decf
+	unlk	xiz
 	ret
 	ld16_24	hl, 131783
 	.byte 0xd2, 0xc3
@@ -4715,10 +4687,7 @@ SeqBuf_NoteEvent_SaveWritePtr:
 	ret
 
 SeqBuf_NoteEvent_WriteByte_Block:
-	.byte 0xee
-	incf
-	nop
-	nop
+	link	xiz, 0
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
@@ -4726,13 +4695,9 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	calr	571
 	pop	xde
 	popw	ix
-	.byte 0xee
-	decf
+	unlk	xiz
 	ret
-	.byte 0xee
-	incf
-	nop
-	nop
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -4746,8 +4711,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee
-	decf
+	unlk	xiz
 	ret
 	ld16_24	hl, 132049
 	.byte 0xd2
@@ -4820,10 +4784,7 @@ SeqBuf_SoundEdit_ReadByte:
 	ret
 
 SeqBuf_SoundEdit_BytecodeBlock:
-	.byte 0xee
-	incf
-	nop
-	nop
+	link	xiz, 0
 	pushw	ix
 	push	xde
 	ld	a, (xiz+8)
@@ -4831,13 +4792,9 @@ SeqBuf_SoundEdit_BytecodeBlock:
 	calr	397
 	pop	xde
 	popw	ix
-	.byte 0xee
-	decf
+	unlk	xiz
 	ret
-	.byte 0xee
-	incf
-	nop
-	nop
+	link	xiz, 0
 	push	xiy
 	push	xix
 	push	xde
@@ -4851,8 +4808,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 	pop	xde
 	pop	xix
 	pop	xiy
-	.byte 0xee
-	decf
+	unlk	xiz
 	ret
 
 SeqBuf_NoteEvent_CheckSongEnd:
@@ -4924,26 +4880,10 @@ RingBuf_InitStructFields:
 	push_sr
 	nop
 	nop
-	.byte 0xba
-	swi	0
-	push_sr
-	nop
-	nop
-	.byte 0xba
-	swi	4
-	push_sr
-	nop
-	nop
-	.byte 0xba
-	swi	2
-	push_sr
-	nop
-	nop
-	.byte 0xba
-	swi	6
-	push_sr
-	.byte 0x7f
-	nop
+	ldw	(xde-8), 0
+	ldw	(xde-4), 0
+	ldw	(xde-6), 0
+	ldw	(xde-2), 127
 	ret
 
 
@@ -4966,9 +4906,7 @@ RingBuf128_ReadByte:
 RingBuf128_ReadAlt_CheckEmpty:
 	; --- Ring buffer read 1: ix=(xde-10), check vs (xde-6), read (xde+ix) (27 bytes) ---
 	ld ix, (xde-10)
-	.byte 0x9a
-	swi	2
-	.byte 0xf4
+	cp	ix, (xde-6)
 	jr nz, RingBuf128_ReadAlt_Dequeue
 	ldw hl, 0xFFFF
 	ret
@@ -4984,9 +4922,7 @@ RingBuf128_ReadAlt_Dequeue:
 RingBuf128_ReadAlt2_CheckEmpty:
 	; --- Ring buffer read 2: same structure, check vs (xde-4) (27 bytes) ---
 	ld ix, (xde-10)
-	.byte 0x9a
-	swi	4
-	.byte 0xf4
+	cp	ix, (xde-4)
 	jr nz, RingBuf128_ReadAlt2_Dequeue
 	ldw hl, 0xFFFF
 	ret
@@ -5122,9 +5058,7 @@ RingBuf256_CheckFull_Read:
 
 RingBuf512_ReadAlt_ByteBlock:
 	ld	ix, (xde-10)
-	.byte 0x9a
-	swi	4
-	.byte 0xf4
+	cp	ix, (xde-4)
 	jr	nz, 4
 	ldw	hl, 65535
 	ret
@@ -5193,9 +5127,7 @@ Seq_RingBuf_ReadData_Dequeue:
 
 RingBuf1024_ReadAlt_ByteBlock:
 	ld	ix, (xde-10)
-	.byte 0x9a
-	swi	4
-	.byte 0xf4
+	cp	ix, (xde-4)
 	jr	nz, 4
 	ldw	hl, 65535
 	ret
@@ -5250,9 +5182,7 @@ Seq_RingBuf_PeekByte_Read:
 
 Seq_RingBuf_WriteByte_Data:
 	ld	ix, (xde-10)
-	.byte 0x9a
-	swi	2
-	.byte 0xf4
+	cp	ix, (xde-6)
 	jr	nz, 4
 	ldw	hl, 65535
 	ret

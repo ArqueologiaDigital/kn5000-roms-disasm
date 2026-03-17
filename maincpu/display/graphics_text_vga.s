@@ -4412,8 +4412,7 @@ ToneGen_WriteParamByIndex:
 ToneGen_ParamWriteDispatch:
 	lda	xix, (xsp+6)
 	lds	bc, 4
-	.byte 0x95
-	scf
+	ldirw
 	lda	xde, (xsp+2)
 	lda	xbc, (xsp+6)
 	ld	hl, (xbc)

@@ -3476,11 +3476,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nc, 45
 	incm	1, (xsp+2)
 	jr	10
-	.byte 0x9f
-	push_sr
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+2), 0
 	jr	z, 33
 	decm	1, (xsp+2)
 	ld	a, (xsp+4)
@@ -3804,10 +3800,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 78
 	lda	xwa, (xsp+12)
 	call	15767401
-	.byte 0x8f
-	incf
-	push	xsp
-	.byte 0x01
+	cp	(xsp+12), 1
 	jr	z, 65
 	lda	xbc, (xsp)
 	ldw	wa, 11
@@ -3929,11 +3922,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nz, 37
 	lda	xwa, (xsp+2)
 	call	15766970
-	.byte 0x9f
-	push_sr
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+2), 0
 	jr	z, 23
 	decm	1, (xsp+2)
 	ld	wa, (xsp+2)
@@ -4333,11 +4322,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nc, 45
 	incm	1, (xsp+2)
 	jr	10
-	.byte 0x9f
-	push_sr
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+2), 0
 	jr	z, 33
 	decm	1, (xsp+2)
 	ld	a, (xsp+4)
@@ -5428,11 +5413,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nc, 55
 	incm	1, (xsp+2)
 	jr	10
-	.byte 0x9f
-	push_sr
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+2), 0
 	jr	z, 43
 	decm	1, (xsp+2)
 	ld	a, (xsp+6)
@@ -8652,8 +8633,7 @@ SeMenu_ShowConfirmDialog_Data:
 	call	15789056
 	.byte 0xc1
 	pop	xix
-	.byte 0x06
-	push	xsp
+	ei	63
 	nop
 	jr	z, 12
 	ld	xiy, 15799392
@@ -8662,9 +8642,7 @@ SeMenu_ShowConfirmDialog_Data:
 	sti8_24	257960, 1
 	ld	xiy, 15799402
 	ld	xix, 15799412
-	.byte 0x1d
-	nop
-	cp	xwa, xix
+	call	15789056
 	.ascii "^]\\[ZYX"
 	ret
 	.ascii "89:;<=>"
@@ -8998,8 +8976,7 @@ SeMenu_ShowConfirmDialog_Data:
 	nop
 	pop_a
 	nop
-	.byte 0x17
-	nop
+	ldf	0
 	pop_f
 	nop
 	.byte 0xc1, 0xae, 0x06
@@ -11339,8 +11316,7 @@ SeBitmap_EnvCurve3:
 	nop
 	.byte 0x01
 	pop_sr
-	.byte 0x06
-	incf
+	ei	12
 	ldio	24, 48
 	jr	f, -64
 	.byte 0x80, 0x80
@@ -11368,8 +11344,7 @@ SeBitmap_EnvCurve3:
 	nop
 	.byte 0x01
 	pop_sr
-	.byte 0x06
-	incf
+	ei	12
 	push	xwa
 	jr	f, -64
 	.byte 0x80
@@ -11398,8 +11373,7 @@ SeBitmap_EnvCurve3:
 	swi	7
 	swi	7
 	swi	6
-	.byte 0x06
-	push	xhl
+	ei	59
 	.byte 0xc3
 	pop_sr
 	pop_sr
@@ -11449,8 +11423,7 @@ SeBitmap_EnvCurve4:
 	nop
 	.byte 0x01
 	pop_sr
-	.byte 0x06
-	incf
+	ei	12
 	push	xwa
 	jr	f, -64
 	.byte 0x80
@@ -11472,8 +11445,7 @@ SeBitmap_EnvCurve4:
 	.byte 0x01
 	pop_sr
 	push_sr
-	.byte 0x06
-	incf
+	ei	12
 	push_f
 	ldw	wa, 24608
 	.byte 0xc0, 0x80
@@ -11607,8 +11579,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0x01
 	pop_sr
-	.byte 0x06
-	incf
+	ei	12
 	push_f
 	ldw	wa, 32832
 	nop
@@ -11671,8 +11642,7 @@ SeBitmap_EnvCurve5:
 	scf
 	ei	5
 	ldio	12, 16
-	.byte 0x06
-	decf
+	ei	13
 	.byte 0x1f
 	incf
 	.ascii "EASY EDIT"
@@ -11688,13 +11658,11 @@ SeBitmap_EnvCurve5:
 	swi	0
 	scf
 	rcf
-	.byte 0x06
-	decf
+	ei	13
 	.byte 0x77
 	ccf
 	.ascii "AMPLITUDE"
-	.byte 0x06
-	ret
+	ei	14
 	.byte 0x86
 	ccf
 	.byte 0x54
@@ -11705,8 +11673,7 @@ SeBitmap_EnvCurve5:
 	pushw 0x1786
 	ld	xix, 0x54494749
 	ld	xbc, 3204777548
-	.byte 0x17
-	scf
+	ldf	17
 	ei	5
 	push	xwa
 	push_f
@@ -11799,8 +11766,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ldw	ix, 12801
 	nop
-	.byte 0x06
-	ret
+	ei	14
 	.byte 0xbe
 	halt
 	.ascii "ORIGINAL "
@@ -11823,8 +11789,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ldw	ix, 12801
 	nop
-	.byte 0x06
-	incf
+	ei	12
 	.byte 0xc0
 	halt
 	.byte 0x45, 0x44
@@ -11852,8 +11817,7 @@ SeBitmap_EnvCurve5:
 	rcf
 	ei	5
 	popw	wa
-	.byte 0x17
-	rcf
+	ldf	16
 	ei	5
 	rcf
 	call	16
@@ -11973,8 +11937,7 @@ SeBitmap_EnvCurve5:
 	nop
 	pop_sr
 	incf
-	.byte 0x06
-	incf
+	ei	12
 	.byte 0xf1
 	nop
 	.byte 0x91
@@ -11989,8 +11952,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ldwio	0, 3075
 	ld	xde, 1224798476
-	.byte 0x17
-	pop_sr
+	ldf	3
 	nop
 	ldwio	0, 3075
 	jr	f, 12
@@ -12101,8 +12063,7 @@ SeBitmap_EnvCurve5:
 	jrl	ule, 1280
 	nop
 	.ascii "T0NE LAYER"
-	.byte 0x17
-	rcf
+	ldf	16
 	di
 	reti
 	nop
@@ -12139,8 +12100,7 @@ SeBitmap_EnvCurve5:
 	ei	5
 	jr	lt, 32
 	popw	ix
-	.byte 0x06
-	zcf
+	ei	19
 	.ascii "c FADE LOW HIGH H"
 	.byte 0x06, 0x08
 	.ascii "s FADE"
@@ -12207,8 +12167,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0x54
 	.ascii "0NE SELECT"
-	.byte 0x17
-	rcf
+	ldf	16
 	di
 	reti
 	nop
@@ -12490,8 +12449,7 @@ SeBitmap_EnvCurve5:
 	nop
 	pop_sr
 	incf
-	.byte 0x06
-	incf
+	ei	12
 	.byte 0xf1
 	nop
 	pop	xde
@@ -12619,8 +12577,7 @@ SeBitmap_EnvCurve5:
 	nop
 	pop_sr
 	incf
-	.byte 0x06
-	incf
+	ei	12
 	.byte 0xf1
 	nop
 	.byte 0xd4
@@ -12720,8 +12677,7 @@ SeBitmap_EnvCurve5:
 	jrl	nz, -3828
 	nop
 	popw	de
-	.byte 0x17
-	push_sr
+	ldf	2
 	nop
 	incf
 	nop
@@ -12771,8 +12727,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xf1
 	nop
 	popw	de
-	.byte 0x17
-	push_sr
+	ldf	2
 	nop
 	incf
 	nop
@@ -12951,8 +12906,7 @@ SeBitmap_EnvCurve5:
 	swi	0
 	scf
 	rcf
-	.byte 0x17
-	scf
+	ldf	17
 	ld	(xiz), 135
 	nop
 	.ascii "RIGHT SPLIT"
@@ -13186,8 +13140,7 @@ SeBitmap_EnvCurve5:
 	nop
 	ldw	de, 23553
 	nop
-	.byte 0x17
-	scf
+	ldf	17
 	.byte 0x43
 	nop
 	.byte 0xb2
@@ -13227,8 +13180,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x41
 	popw	iy
 	.ascii "PLITUDE"
-	.byte 0x17
-	rcf
+	ldf	16
 	di
 	reti
 	nop
@@ -13626,19 +13578,16 @@ SeBitmap_EnvCurve5:
 	.byte 0x06
 	pushw	272
 	.ascii "PAGE2/2"
-	.byte 0x17
-	rcf
+	ldf	16
 	jrl	z, 15872
 	nop
 	popw	hl
 	.byte 0x45
 	pop	xbc
 	.ascii " FOLLOW"
-	.byte 0x17
-	reti
+	ldf	7
 	ld	xde, 805339648
-	.byte 0x17
-	reti
+	ldf	7
 	pop	xiy
 	nop
 	.byte 0x82
@@ -13677,8 +13626,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xd1
 	nop
 	.ascii "RANGE "
-	.byte 0x06
-	.byte 0x9b
+	ei	155
 	.ascii "\"-- "
 	.byte 0x06
 	ld	xde, (xwa)
@@ -13756,8 +13704,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0xe9
 	nop
-	.byte 0x17
-	ret
+	ldf	14
 	jrl	nc, 12288
 	nop
 	.ascii "ENVELOPE\""
@@ -13765,8 +13712,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0x01, 0x01, 0x91
 	nop
-	.byte 0x17
-	incf
+	ldf	12
 	.byte 0xc3
 	nop
 	.byte 0x97
@@ -13863,18 +13809,15 @@ SeBitmap_EnvCurve5:
 	pushw	272
 	.byte 0x50, 0x41
 	ld	xsp, 0x322f3245
-	.byte 0x17
-	ccf
+	ldf	18
 	.byte 0x55
 	nop
 	push	xiz
 	nop
 	.ascii "KEY FOLLOW ("
-	.byte 0x17
-	reti
+	ldf	7
 	ld	xde, 805339648
-	.byte 0x17
-	reti
+	ldf	7
 	pop	xiy
 	nop
 	.byte 0x82
@@ -13935,8 +13878,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xd1
 	nop
 	ld	xix, 1497449285
-	.byte 0x17
-	decf
+	ldf	13
 	popw	bc
 	nop
 	.byte 0xd1
@@ -14204,8 +14146,7 @@ SeBitmap_EnvCurve5:
 	.byte 0x1e
 	nop
 	.ascii "FILTER:"
-	.byte 0x17
-	incf
+	ldf	12
 	.byte 0xd5
 	nop
 	jr	le, 0
@@ -14227,11 +14168,9 @@ SeBitmap_EnvCurve5:
 	halt
 	popw	bc
 	calr	1626
-	.byte 0x06
-	popw	de
+	ei	74
 	calr	21061
-	.byte 0x17
-	incf
+	ldf	12
 	di
 	.byte 0xd1
 	nop
@@ -14374,21 +14313,18 @@ SeBitmap_EnvCurve5:
 	push	xhl
 	.byte 0x01, 0xe8
 	nop
-	.byte 0x17
-	pop_a
+	ldf	21
 	jr	pl, 0
 	calr	18432
 	popw	bc
 	.byte 0x47
 	.ascii "H PASS -12dB"
-	.byte 0x17
-	push_a
+	ldf	20
 	jr	pl, 0
 	.byte 0x1e
 	nop
 	.ascii "LOW PASS -12dB"
-	.byte 0x17
-	decf
+	ldf	13
 	ld	xhl, 1174422272
 	popw	bc
 	popw	ix
@@ -14472,20 +14408,17 @@ SeBitmap_EnvCurve5:
 	.long NakaState_ZeroBlock_0
 	.byte 0xe8
 	nop
-	.byte 0x17
-	push_a
+	ldf	20
 	jr	pl, 0
 	.byte 0x43
 	nop
 	.ascii "LOW PASS -24dB"
-	.byte 0x17
-	pop_a
+	ldf	21
 	jr	pl, 0
 	.byte 0x43
 	nop
 	.ascii "HIGH PASS -24dB"
-	.byte 0x17
-	decf
+	ldf	13
 	ld	xhl, 1174422272
 	popw	bc
 	popw	ix
@@ -14501,8 +14434,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0x7f
 	.ascii " LOW"
-	.byte 0x17
-	incf
+	ldf	12
 	.byte 0xa9
 	nop
 	.byte 0x87
@@ -14645,8 +14577,7 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0x91
 	nop
-	.byte 0x17
-	incf
+	ldf	12
 	.byte 0xc3
 	nop
 	.byte 0x97
@@ -14663,8 +14594,7 @@ SeBitmap_EnvCurve5:
 	pushw	272
 	.byte 0x50, 0x41
 	ld	xsp, 0x322f3145
-	.byte 0x17
-	ret
+	ldf	14
 	jrl	nc, 12288
 	nop
 	ld	xiy, 0x4c45564e
@@ -14879,11 +14809,9 @@ SeBitmap_EnvCurve5:
 	push	xiz
 	nop
 	pushw	wa
-	.byte 0x17
-	reti
+	ldf	7
 	ld	xde, 805339648
-	.byte 0x17
-	reti
+	ldf	7
 	pop	xiy
 	nop
 	.byte 0x82
@@ -14945,8 +14873,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xd1
 	nop
 	ld	xix, 0x59414345
-	.byte 0x17
-	decf
+	ldf	13
 	jrl	f, -12032
 	nop
 	.byte 0x52
@@ -14955,8 +14882,7 @@ SeBitmap_EnvCurve5:
 	.byte 0xd1
 	nop
 	.ascii "CENTER"
-	.byte 0x17
-	ret
+	ldf	14
 	.byte 0xe6
 	nop
 	.byte 0xd1
@@ -15128,10 +15054,7 @@ SeBitmap_EnvCurve5:
 	jp	6425088
 	.byte 0x06
 	jrl	nc, 8192
-	.byte 0xe9
-	incf
-	pop_sr
-	halt
+	link	xbc, 1283
 	pushw	1635
 	swi	7
 	nop
@@ -21480,11 +21403,7 @@ StylCnvStorOkFunc_ReturnZero:
 StylCnvStorOkFunc_DataBlock:
 	dec	8, xsp
 	ld	xhl, xbc
-	.byte 0x9f
-	incf
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+12), 0
 	jr	z, 29
 	lda	xix, (xsp+4)
 	ld	bc, (xwa+2)
@@ -21518,8 +21437,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	xiy, xwa
 	lda	xix, (xsp+24)
 	lds	bc, 4
-	.byte 0x95
-	scf
+	ldirw
 	lda	xhl, (xsp+24)
 	ld	bc, (xhl+4)
 	ld	wa, bc
@@ -21599,11 +21517,7 @@ StylCnvStorOkFunc_DataBlock:
 	add	bc, wa
 	sub	bc, ix
 	ld	(xhl+2), bc
-	.byte 0xbf
-	ret
-	push_sr
-	nop
-	nop
+	ldw	(xsp+14), 0
 	cps	iz, 0
 	jr	ule, 32
 	lda	xwa, (xsp+20)
@@ -21655,11 +21569,7 @@ StylCnvStorOkFunc_DataBlock:
 	divs	wa, 2
 	add	bc, wa
 	ld	(xix+2), bc
-	.byte 0xbf
-	ret
-	push_sr
-	nop
-	nop
+	ldw	(xsp+14), 0
 	.byte 0x9f, 0x04
 	push	xsp
 	nop
@@ -21695,11 +21605,7 @@ StylCnvStorOkFunc_DataBlock:
 	divs	wa, 2
 	sub	bc, wa
 	ld	(xix+2), bc
-	.byte 0xbf
-	ret
-	push_sr
-	nop
-	nop
+	ldw	(xsp+14), 0
 	.byte 0x9f, 0x04
 	push	xsp
 	nop
@@ -21738,8 +21644,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	xiy, xwa
 	lda	xix, (xsp+26)
 	lds	bc, 4
-	.byte 0x95
-	scf
+	ldirw
 	lda	xhl, (xsp+26)
 	lda	xix, (xhl+4)
 	ld	bc, (xix)
@@ -21823,10 +21728,8 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xde+2), bc
 	lda	xiy, (xsp+22)
 	lda	xix, (xsp+14)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	.byte 0x9f
 	ldio	4, 234
 	ld	d, (xbc-97)
@@ -21861,10 +21764,8 @@ StylCnvStorOkFunc_DataBlock:
 	ld	(xde+2), bc
 	lda	xiy, (xsp+22)
 	lda	xix, (xsp+10)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	.byte 0x9f
 	ldio	4, 234
 	ld	d, (xbc-97)
@@ -21883,16 +21784,12 @@ StylCnvStorOkFunc_DataBlock:
 	calr	64661
 	lda	xiy, (xsp+14)
 	lda	xix, (xsp+22)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xiy, (xsp+10)
 	lda	xix, (xsp+18)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+22)
 	lda	xbc, (xsp+18)
 	.byte 0x9f

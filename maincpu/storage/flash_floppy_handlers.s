@@ -4580,15 +4580,8 @@ Flash_WriteBackSlot_Erase:
 Flash_SlotUpdateOpsBlock:
 	dec	6, xsp
 	ld	(xsp+4), a
-	.byte 0xb7
-	push_sr
-	nop
-	nop
-	.byte 0xbf
-	push_sr
-	push_sr
-	nop
-	nop
+	ldw	(xsp), 0
+	ldw	(xsp+2), 0
 	.byte 0xd1, 0xd4, 0x06
 	push	xsp
 	swi	7

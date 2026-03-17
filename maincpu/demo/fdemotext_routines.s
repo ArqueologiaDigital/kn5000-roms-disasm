@@ -45,9 +45,7 @@ FDemoText_ByteData_VoiceProbeA:
 	.byte 0xc7
 	swi	7
 	inc	5, xhl
-	.byte 0x83
-	push	xsp
-	nop
+	cp	(xhl), 0
 	ret	nz
 	ldda8	a, 49280
 	extz	wa
@@ -1242,9 +1240,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	xbc, 31457301
 	lds32	xde, 0
 	call	16422496
-	.byte 0x83
-	push	xsp
-	nop
+	cp	(xhl), 0
 	jr	nz, 58
 	ld	xwa, xiz
 	srl	xwa, 0
@@ -1345,11 +1341,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	(xsp+12), xde
 	ld	(xsp+16), xbc
 	ld	(xsp+20), xwa
-	.byte 0xbf
-	push_sr
-	push_sr
-	.byte 0x01
-	nop
+	ldw	(xsp+2), 1
 	jr	23
 	cp	hl, 60
 	jr	nz, 17
@@ -1357,20 +1349,12 @@ FDemoText_ByteData_DisplayRefresh:
 	call	16289020
 	cps	hl, 0
 	jr	ge, 28
-	.byte 0x9f
-	push_sr
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+2), 0
 	jr	z, 8
 	call	16289020
 	cps	hl, 0
 	jr	ge, -31
-	.byte 0x9f
-	push_sr
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+2), 0
 	jr	z, 35
 	ldw	hl, 65533
 	jrl	198
@@ -1391,21 +1375,13 @@ FDemoText_ByteData_DisplayRefresh:
 	push	xsp
 	nop
 	jr	nz, -60
-	.byte 0xbf
-	push_sr
-	push_sr
-	nop
-	nop
+	ldw	(xsp+2), 0
 	lds32	xwa, 0
 	ld	(xsp+4), xwa
 	call	16289020
 	cps	hl, 0
 	jr	ge, 14
-	.byte 0x9f
-	push_sr
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xsp+2), 1
 	jrl	z, 146
 	ldw	hl, 65532
 	jrl	142
@@ -1425,9 +1401,7 @@ FDemoText_ByteData_DisplayRefresh:
 	lds32	xwa, 1
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	.byte 0xaf
-	rcf
-	.byte 0xf0
+	cp	xwa, (xsp+16)
 	jr	nc, 48
 	cp	hl, 60
 	jr	nz, -75
@@ -1435,11 +1409,7 @@ FDemoText_ByteData_DisplayRefresh:
 	call	16289020
 	cps	hl, 0
 	jr	ge, 9
-	.byte 0x9f
-	push_sr
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xsp+2), 1
 	jr	z, -84
 	jr	-94
 	ld	xbc, (xsp+20)
@@ -1450,9 +1420,7 @@ FDemoText_ByteData_DisplayRefresh:
 	lds32	xwa, 1
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	.byte 0xaf
-	rcf
-	.byte 0xf0
+	cp	xwa, (xsp+16)
 	jr	c, 5
 	ldw	hl, 65531
 	jr	42
@@ -1473,11 +1441,7 @@ FDemoText_ByteData_DisplayRefresh:
 	push	xsp
 	nop
 	jr	nz, -69
-	.byte 0xbf
-	push_sr
-	push_sr
-	.byte 0x01
-	nop
+	ldw	(xsp+2), 1
 	ld	xwa, (xsp+20)
 	.byte 0xaf
 	ldio	128, 176
@@ -1759,9 +1723,7 @@ FDemoText_ByteData_TextRenderer:
 	ld	wa, iz
 	exts	xwa
 	sll	xwa, 2
-	.byte 0xaf
-	rcf
-	.byte 0x80
+	add	xwa, (xsp+16)
 	ld	xwa, (xwa)
 	push	xwa
 	ld	xwa, (xsp+12)
@@ -1823,9 +1785,7 @@ FDemoText_ByteData_TextRenderer:
 	lda	xsp, (xsp+12)
 	dec	1, hl
 	extz	xhl
-	.byte 0xaf
-	ccf
-	.byte 0x83
+	add	xhl, (xsp+18)
 	ld	(xhl), 0
 	jr	26
 	push	xbc
@@ -1877,25 +1837,17 @@ FDemoText_ByteData_LayoutEngine:
 	ld	xiy, 15334934
 	lda	xix, (xsp+20)
 	ldw	bc, 32
-	.byte 0x95
-	scf
+	ldirw
 	.byte 0x85
 	rcf
 	ld	xiy, 15335000
 	lda	xix, (xsp+6)
 	lds	bc, 6
-	.byte 0x95
-	scf
+	ldirw
 	.byte 0x85
 	rcf
 	lds	iz, 0
-	.byte 0xd3
-	swi	5
-	.byte 0xe0
-	nop
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+224), 0
 	jr	lt, 123
 	.byte 0xf3
 	swi	5
@@ -1963,18 +1915,10 @@ FDemoText_ByteData_LayoutEngine:
 	jr	le, -123
 	cpw	(xsp+218), 1
 	jrl	z, 225
-	.byte 0xd3
-	swi	5
-	.byte 0xda
-	nop
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+218), 0
 	jrl	nz, 215
 	lda	xbc, (xsp+6)
-	.byte 0x81
-	push	xsp
-	nop
+	cp	(xbc), 0
 	jrl	z, 206
 	ld	wa, (xsp+4)
 	dec	1, wa
@@ -2065,13 +2009,7 @@ FDemoText_ByteData_LayoutEngine:
 	push_sr
 	nop
 	nop
-	.byte 0xd3
-	swi	5
-	.byte 0x90
-	nop
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+144), 0
 	jrl	lt, 152
 	lda	xde, (xsp+72)
 	lda	xwa, (xsp+6)
@@ -2090,9 +2028,7 @@ FDemoText_ByteData_LayoutEngine:
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 76
-	.byte 0xd7
-	swi	2
-	.byte 0x89
+	ld	bc, qiz
 	lda	xwa, (xsp+6)
 	.byte 0xd7
 	swi	2
@@ -2147,13 +2083,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	z, 91
 	cpw	(xsp+138), 1
 	jr	z, 82
-	.byte 0xd3
-	swi	5
-	.byte 0x8a
-	nop
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+138), 0
 	jr	nz, 103
 	calr	1079
 	ld	xwa, 4294967295
@@ -2186,9 +2116,7 @@ FDemoText_ByteData_LayoutEngine:
 	reti
 	or	xix, xwa
 	jr	f, -37
-	.byte 0xa8
-	pop	xiz
-	.byte 0xf3
+	cp	xhl, (xwa+94)
 	swi	5
 	.byte 0x8e
 	nop
@@ -2301,9 +2229,7 @@ FDemoText_ByteData_LayoutEngine:
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 70
-	.byte 0xd7
-	swi	2
-	.byte 0x89
+	ld	bc, qiz
 	lda	xwa, (xsp+10)
 	.byte 0xd7
 	swi	2
@@ -2356,21 +2282,9 @@ FDemoText_ByteData_LayoutEngine:
 	nop
 	.byte 0xf6
 	jrl	le, -141
-	.byte 0xd3
-	swi	5
-	.byte 0x8e
-	nop
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xsp+142), 1
 	jr	z, 76
-	.byte 0xd3
-	swi	5
-	.byte 0x8e
-	nop
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+142), 0
 	jr	nz, 67
 	ld16_24	bc, 154430
 	inc	1, bc
@@ -2455,25 +2369,17 @@ FDemoText_ByteData_LayoutEngine:
 	ld	xiy, 15335208
 	.byte 0xbf
 	.asciz "F41 "
-	.byte 0x95
-	scf
+	ldirw
 	.byte 0x85
 	rcf
 	ld	xiy, 15335274
 	lda	xix, (xsp+4)
 	ldw	bc, 32
-	.byte 0x95
-	scf
+	ldirw
 	.byte 0x85
 	rcf
 	lds	iz, 0
-	.byte 0xd3
-	swi	5
-	ccf
-	.byte 0x01
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+274), 0
 	jr	lt, 123
 	.byte 0xf3
 	swi	5
@@ -2540,40 +2446,22 @@ FDemoText_ByteData_LayoutEngine:
 	cp	iz, (xsp+274)
 	jr	le, -123
 	lda	xbc, (xsp+70)
-	.byte 0xd3
-	swi	5
-	incf
-	.byte 0x01
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xsp+268), 1
 	jr	z, 21
-	.byte 0xd3
-	swi	5
-	incf
-	.byte 0x01
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+268), 0
 	jr	nz, 22
 	ld	xwa, xbc
-	.byte 0x81
-	push	xsp
-	nop
+	cp	(xbc), 0
 	jr	z, 15
 	calr	1096
 	jr	10
 	ld	xwa, xbc
-	.byte 0x81
-	push	xsp
-	nop
+	cp	(xbc), 0
 	.byte 0xf2
 	swi	5
 	jr	-8
 	cps	xiz, 3
-	.byte 0xa8
-	pop	xiz
-	.byte 0xf3
+	cp	xhl, (xwa+94)
 	swi	5
 	rcf
 	.byte 0x01, 0x37
@@ -2596,18 +2484,11 @@ FDemoText_ByteData_LayoutEngine:
 	ld	xiy, 15335354
 	lda	xix, (xsp+4)
 	ldw	bc, 32
-	.byte 0x95
-	scf
+	ldirw
 	.byte 0x85
 	rcf
 	lds	iz, 0
-	.byte 0xd3
-	swi	5
-	.byte 0xd0
-	nop
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+208), 0
 	jr	lt, 93
 	.byte 0xf3
 	swi	5
@@ -2657,21 +2538,9 @@ FDemoText_ByteData_LayoutEngine:
 	inc	1, iz
 	cp	iz, (xsp+208)
 	jr	le, -93
-	.byte 0xd3
-	swi	5
-	.byte 0xca
-	nop
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xsp+202), 1
 	jr	z, 57
-	.byte 0xd3
-	swi	5
-	.byte 0xca
-	nop
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+202), 0
 	jr	nz, 48
 	lda	xwa, (xsp+4)
 	.byte 0x80
@@ -2712,15 +2581,8 @@ FDemoText_ByteData_LayoutEngine:
 	cp	xwa, xbc
 	jr	c, -20
 	lda_24	xwa, 154426
-	.byte 0xb0
-	push_sr
-	nop
-	nop
-	.byte 0xb8
-	push_sr
-	push_sr
-	nop
-	nop
+	ldw	(xwa), 0
+	ldw	(xwa+2), 0
 	sti16_24	154430, 0
 	sti16_24	154464, 0
 	sti16_24	154482, 0
@@ -3090,17 +2952,11 @@ FDemoText_ByteData_LayoutB:
 	ld	xwa, (xwa+4)
 	ld	(xsp+2), wa
 	jr	5
-	.byte 0xbf
-	push_sr
-	push_sr
-	push_f
-	nop
+	ldw	(xsp+2), 24
 	ld	xiy, 154426
 	lda	xix, (xsp+8)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+8)
 	sub	(xwa+2), iz
 	calr	64683
@@ -3143,9 +2999,7 @@ FDemoText_ByteData_LayoutB:
 	lds32	xbc, 0
 	call	16432188
 	ld	wa, (xsp+8)
-	.byte 0x9f
-	push_sr
-	.byte 0x80
+	add	wa, (xsp+2)
 	st16_24	154426, wa
 	popw	iz
 	lda	xsp, (xsp+14)

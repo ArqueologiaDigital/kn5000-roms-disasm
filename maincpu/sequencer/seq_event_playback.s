@@ -3861,15 +3861,9 @@ VocalistGrid_DispatchData:
 	ld	(xhl), wa
 	ld	bc, de
 	ld	(xhl+2), bc
-	.byte 0x93
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xhl), 1
 	jr	z, 7
-	.byte 0x93
-	push	xsp
-	push_sr
-	nop
+	cpw	(xhl), 2
 	jrl	nz, 1604
 	ld	wa, (xhl)
 	sla	wa, 2

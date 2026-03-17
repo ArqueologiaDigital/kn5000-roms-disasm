@@ -635,9 +635,7 @@ DSPCfg_SyncBitmapData:
 	jrl	nz, -149
 	ld	wa, bc
 	extz	xwa
-	.byte 0xaf
-	ret
-	.byte 0x80
+	add	xwa, (xsp+14)
 	ld	(xwa), 255
 	stda16	37086, bc
 	pop	xiz

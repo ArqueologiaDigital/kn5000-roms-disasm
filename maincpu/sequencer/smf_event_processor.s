@@ -4149,8 +4149,7 @@ SeqStep_FileTellFinal:
 	.byte 0x8f
 	ldio	63, 0
 	jr	z, 47
-	.byte 0x8f
-	ldio	63, 229
+	cp	(xsp+8), 229
 	jr	z, 19
 	sti16_24	124220, 27
 	push	xiz
@@ -4984,9 +4983,7 @@ SeqStep_FileSectorPopReturn:
 	ld	(xsp+4), wa
 	ld	xiz, xbc
 	srl	xiz, 9
-	.byte 0xaa
-	push_f
-	.byte 0x86
+	add	xiz, (xde+24)
 	pushw	6
 	ld	xwa, (xsp+12)
 	.byte 0xa8
@@ -5444,14 +5441,10 @@ SeqByteBlock_TechnichordCfgB:
 SeqByteBlock_StyleBitmapRef:
 	jr	lt, -80
 	ld	xwa, (xiz)
-	.byte 0x80
-	push	xsp
-	pushw	sp
+	cp	(xwa), 47
 	jr	z, 7
 	ld	xwa, (xiz)
-	.byte 0x80
-	push	xsp
-	pop	xix
+	cp	(xwa), 92
 	jr	nz, 4
 	lds	hl, 1
 	jr	10
@@ -5462,9 +5455,7 @@ SeqByteBlock_StyleBitmapRef:
 	jr	z, 3
 	ldw	hl, 65535
 	ld	xwa, (xsp+8)
-	.byte 0x80
-	push	xsp
-	pushw	iz
+	cp	(xwa), 46
 	jr	nz, 10
 	ld	xwa, (xsp+8)
 	.byte 0x88, 0x01
@@ -7600,20 +7591,12 @@ SeqChan_InitChannelState:
 	ret
 	dec	6, xsp
 	pushw	iz
-	.byte 0xbf
-	push_sr
-	push_sr
-	nop
-	nop
+	ldw	(xsp+2), 0
 	.byte 0xbf
 	ei	2
 	nop
 	nop
-	.byte 0x9f
-	push_a
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+20), 0
 	jr	z, 12
 	ld	xwa, (xsp+12)
 	.byte 0xb8
@@ -7629,9 +7612,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xwa+30)
 	ld	xbc, (xwa+4)
 	ld	xwa, (xsp+12)
-	.byte 0xa8
-	ex_ff
-	.byte 0xc1
+	and	xbc, (xwa+22)
 	ld	(xsp+4), bc
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+30)
@@ -7642,8 +7623,7 @@ SeqChan_InitChannelState:
 	subdm8	10350, l
 	incf
 	ldb	w, 152
-	.byte 0x06
-	push	xsp
+	ei	63
 	ldb	c, 0
 	jr	z, 30
 	ld	xwa, (xsp+12)
@@ -7651,11 +7631,7 @@ SeqChan_InitChannelState:
 	pop_sr
 	dec	6, b
 	ex_ff
-	.byte 0x9f
-	ex_ff
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+22), 0
 	jr	nz, 15
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+30)
@@ -7985,9 +7961,7 @@ SeqChan_TraverseAndProcess:
 	nop
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+71)
-	.byte 0xaf
-	rcf
-	.byte 0xf0
+	cp	xwa, (xsp+16)
 	jr	nc, 116
 	ld	xwa, (xsp+12)
 	.byte 0xb8
@@ -8429,23 +8403,11 @@ SeqChan_ByteBlockC:
 	call	16064073
 	cps	l, 2
 	jr	nz, 97
-	.byte 0x9f
-	incf
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+12), 0
 	jr	nz, 90
-	.byte 0x9f
-	ret
-	push	xsp
-	nop
-	nop
+	cpw	(xsp+14), 0
 	jr	nz, 83
-	.byte 0x9f
-	rcf
-	push	xsp
-	.byte 0x01
-	nop
+	cpw	(xsp+16), 1
 	jr	nz, 76
 	stdi16	35344, 65535
 	push	xiz
@@ -8521,10 +8483,7 @@ SeqChan_ByteBlockD:
 	push_sr
 	nop
 	nop
-	.byte 0x91
-	push	xsp
-	nop
-	nop
+	cpw	(xbc), 0
 	jr	nz, 5
 	lds	hl, 0
 	jrl	220
@@ -8907,10 +8866,7 @@ SeqChan_ByteBlockF:
 	ret
 FDC_ReturnZeroLong:
 	ld	xwa, (xsp+4)
-	.byte 0xb0
-	push_sr
-	nop
-	nop
+	ldw	(xwa), 0
 	ret
 FDC_ReturnAndPop:
 	lds	hl, 1
@@ -10621,11 +10577,7 @@ SndTable_ByteBlock_ReadOps:
 	ld32_24	xwa, 254952
 	st32_24	141102, xwa
 	ld32_24	xwa, 254958
-	.byte 0xb8
-	push_sr
-	push_sr
-	nop
-	nop
+	ldw	(xwa+2), 0
 	ld32_24	xwa, 254958
 	.byte 0xf3, 0xe1
 	ei	4

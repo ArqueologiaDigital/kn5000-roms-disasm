@@ -818,7 +818,7 @@ EditSwParam_TempoTable:
 	ldw	wa, 300
 	ld	(xbc), wa
 	.long NakaState_PresentationTail
-	.byte 0x0e
+	ret
 
 ; GetEditSwPoint handler: default (value=0xA0/0x78)
 EditSwParam_Default:

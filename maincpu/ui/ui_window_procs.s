@@ -1946,16 +1946,9 @@ EditSw_ByteData:
 	calr	57283
 	lda	xwa, (xsp+18)
 	lda	xbc, (xsp+12)
-	.byte 0x98
-	push_sr
-	push	xsp
-	.byte 0xef
-	nop
+	cpw	(xwa+2), 239
 	jr	z, 20
-	.byte 0x90
-	push	xsp
-	nop
-	nop
+	cpw	(xwa), 0
 	jr	nz, 7
 	ld	xwa, 15376742
 	jr	12

@@ -48,7 +48,7 @@ MidiSerial_StatusTable:
 	.byte 0x00, 0xd5, 0xfa, 0xfc, 0x00, 0xd5, 0xfa, 0xfc
 	.byte 0x00, 0xd5, 0xfa, 0xfc, 0x00, 0xd5, 0xfa, 0xfc
 	.byte 0x00, 0xd5, 0xfa, 0xfc, 0x00, 0x4d, 0xfa, 0xfc
-	.byte 0x00
+	nop
 
 MidiSerial_WaitForData:
 	ld xiz, 0x1F37B
@@ -1687,8 +1687,7 @@ PanelEvt_Dispatch6Entry:
 PanelEvt_Dispatch6_TableAndHandlers:
 	swi	7
 	popw	bc
-	.byte 0x06
-	swi	5
+	ei	253
 	nop
 	jrl	ule, -772
 	nop
@@ -12790,10 +12789,7 @@ SeqVoice_DispatchProcess_Data:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ldda32	xiz, 48212
-	.byte 0x96
-	push	xsp
-	nop
-	nop
+	cpw	(xiz), 0
 	jr	z, 114
 	lda	xbc, (xiz+6)
 	ld	xix, xbc
@@ -14945,8 +14941,7 @@ MidiSysEx_ProcessBlock:
 	push	xhl
 	push	xix
 	push	xiz
-	.byte 0x1d
-	cp	iz, (xix-16)
+	call	16183452
 	pop	xiz
 	pop	xix
 	pop	xhl

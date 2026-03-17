@@ -2668,7 +2668,7 @@ SeqStep_PlaybackNop:
 	ret
 
 SeqStep_PlaybackMaxPart:
-	.byte 0x0e
+	ret
 
 SeqStep_FindLastUsedPart:
 	dec 4, xsp
