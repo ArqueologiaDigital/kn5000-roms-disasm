@@ -23090,7 +23090,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	jr z, .LDSR_a380                       ; [66 15] jr Z,0x29a380
 	ld	xwa, xbc
 	ld xde, (xsp + 0x56)                    ; ld XDE,(XSP+0x56)
-	.byte 0xf0, 0x0a, 0x31                 ; lda XBC,0x0a (8-bit direct addr mode — LLVM unsupported)
+	lda_dd8l	xbc, 10                          ; lda XBC,0x0a (F0 8-bit direct)
 	add	(xde), xbc
 	ld xbc, (xde)                           ; ld XBC,(XDE)
 	lda	xbc, (xbc-10)
@@ -23099,7 +23099,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 .LDSR_a380:
 	ld	xwa, xbc
 	ld xde, (xsp + 0x56)                    ; ld XDE,(XSP+0x56)
-	.byte 0xf0, 0x08, 0x31                 ; lda XBC,0x08 (8-bit direct addr mode — LLVM unsupported)
+	lda_dd8l	xbc, 8                           ; lda XBC,0x08 (F0 8-bit direct)
 	add	(xde), xbc
 	ld xbc, (xde)                           ; ld XBC,(XDE)
 	dec 0, xbc                              ; dec 0,XBC
@@ -23677,7 +23677,7 @@ HDAE5000_String_Format_Core:	; 0x29A563 (805 bytes)
 	ret
 
 .LSFC_a87f:
-	.byte 0xc5, 0xe0, 0x3f, 0x30           ; cp (XWA+),0x30 (auto-increment addr mode — LLVM unsupported)
+	.byte 0xc5, 0xe0, 0x3f, 0x30           ; cp (XWA+),0x30 (auto-increment — needs LLVM backend support)
 	jr z, .LSFC_a877                       ; [66 f2] jr Z,0x29a877
 	lds	hl, 0
 	ret
