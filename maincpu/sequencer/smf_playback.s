@@ -33,7 +33,7 @@ SoundBank_InitDefaults_Loop:
 	ld wa, bc
 	sla xwa, 11
 	add xde, xwa
-	ld xhl, 0x4	;	TODO: Fix ASL: LD XHL, 00000004h:32
+	ld xhl, 0x4
 	add xhl, xde
 	cp (xhl + 1), 0x0
 	jr nz, SoundBank_InitDefaults_Type1
@@ -111,7 +111,7 @@ SoundBank_InitTrack_Loop:
 	ld wa, bc
 	sla xwa, 11
 	add xde, xwa
-	ld xhl, 0x0	;	TODO: Fix ASL: LD XHL, 00000000h
+	ld xhl, 0x0
 	add xhl, xde
 	xor iy, iy
 
@@ -177,7 +177,7 @@ SoundBank_CopyCh_Loop:
 	ld wa, bc
 	sla xwa, 11
 	add xde, xwa
-	ld xhl, 0x4	;	TODO: Fix ASL: LD XHL, 00000004h:32
+	ld xhl, 0x4
 	add xhl, xde
 	cp (xhl + 1), 0x0
 	jr nz, SoundBank_CopyCh_Type1
@@ -260,7 +260,7 @@ SoundBank_InitFlags_Loop:
 	ld wa, bc
 	sla xwa, 11
 	add xde, xwa
-	ld xhl, 0x4	;	TODO: Fix ASL: LD XHL, 00000004h:32
+	ld xhl, 0x4
 	add xhl, xde
 	cp (xhl + 1), 0x0
 	jr nz, SoundBank_InitFlags_Type1

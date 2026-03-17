@@ -7221,13 +7221,11 @@ VoiceParam_PanDone:
 
 VoiceNote_StoreBankSelect:
 
-	; TODO: Review this.
 	ldda8 e, 37303
 	extz hl
 	ldda8 l, 37320
 	bitda 7, 10413
 
-	; TODO: Because it could also be something like:
 	; LD SP, (XBC)
 	; BIT 7, (28ADh)
 
