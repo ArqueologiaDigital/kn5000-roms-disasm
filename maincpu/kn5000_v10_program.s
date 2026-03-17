@@ -60,7 +60,8 @@
 	.include "ui_widgets/style_ui_params.s"
 
 GUI_FormatStrings:		.include "includes/gui_format_strings.s"
-GUI_DisplayStructData:		.include "includes/gui_display_struct_data.s"
+GUI_DisplayStructData:
+	.incbin "includes/generated/gui_display_struct_data.bin"
 ToneGen_ParamTable:
 	.incbin "includes/generated/tonegen_param_table.bin"
 
