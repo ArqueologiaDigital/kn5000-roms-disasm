@@ -43,7 +43,8 @@ NAKA_BINS = maincpu/includes/generated/naka_control_menu_header.bin maincpu/incl
 
 VOICE_BINS = maincpu/includes/generated/voice_factory_presets.bin
 AUDIO_BINS = maincpu/includes/generated/tonegen_param_table.bin
-C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS)
+SOUND_DATA_BINS = maincpu/includes/generated/sound_data_organ_accordion.bin maincpu/includes/generated/sound_data_orchestral_pad.bin maincpu/includes/generated/sound_data_synth.bin maincpu/includes/generated/sound_data_bass.bin maincpu/includes/generated/sound_data_accordion_reg.bin maincpu/includes/generated/sound_data_digital_drawbar.bin maincpu/includes/generated/sound_data_gm_special.bin
+C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS)
 
 maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/paramblock/%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
@@ -279,6 +280,13 @@ maincpu/includes/generated/voice_factory_presets.bin: maincpu/audio/voice_factor
 	@rm -f $@.o
 
 maincpu/includes/generated/tonegen_param_table.bin: maincpu/audio/tonegen_param_table.c
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+# Sound data C struct files — compiled to raw binaries, .incbin'd by assembly
+maincpu/includes/generated/sound_data_%.bin: maincpu/audio/sound_data_%.c
 	@mkdir -p maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@

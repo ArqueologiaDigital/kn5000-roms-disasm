@@ -86,11 +86,18 @@ SOUND_DATA_FLUTE_EXTRA:		.include "audio/sound_data_flute_extra.s"
 SOUND_DATA_SAX_REED:		.include "audio/sound_data_sax_reed.s"
 SOUND_DATA_MALLET_ORCH_PERC:	.include "audio/sound_data_mallet_orch_perc.s"
 SOUND_DATA_WORLD_PERC:		.include "audio/sound_data_world_perc.s"
-SOUND_DATA_ORGAN_ACCORDION:	.include "audio/sound_data_organ_accordion.s"
-SOUND_DATA_ORCHESTRAL_PAD:	.include "audio/sound_data_orchestral_pad.s"
-SOUND_DATA_SYNTH:		.include "audio/sound_data_synth.s"
-SOUND_DATA_BASS:		.include "audio/sound_data_bass.s"
-SOUND_DATA_DIGITAL_DRAWBAR:	.include "audio/sound_data_digital_drawbar.s"
-SOUND_DATA_ACCORDION_REG:	.include "audio/sound_data_accordion_reg.s"
-SOUND_DATA_GM_SPECIAL:		.include "audio/sound_data_gm_special.s"
+SOUND_DATA_ORGAN_ACCORDION:
+	.incbin "includes/generated/sound_data_organ_accordion.bin"
+SOUND_DATA_ORCHESTRAL_PAD:
+	.incbin "includes/generated/sound_data_orchestral_pad.bin"
+SOUND_DATA_SYNTH:
+	.incbin "includes/generated/sound_data_synth.bin"
+SOUND_DATA_BASS:
+	.incbin "includes/generated/sound_data_bass.bin"
+SOUND_DATA_DIGITAL_DRAWBAR:
+	.incbin "includes/generated/sound_data_digital_drawbar.bin"
+SOUND_DATA_ACCORDION_REG:
+	.incbin "includes/generated/sound_data_accordion_reg.bin"
+SOUND_DATA_GM_SPECIAL:
+	.incbin "includes/generated/sound_data_gm_special.bin"
 SOUND_DATA_DRUM_KITS:		.include "audio/sound_data_drum_kits.s"
