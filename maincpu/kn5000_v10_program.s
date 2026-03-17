@@ -61,7 +61,8 @@
 
 GUI_FormatStrings:		.include "includes/gui_format_strings.s"
 GUI_DisplayStructData:		.include "includes/gui_display_struct_data.s"
-ToneGen_ParamTable:		.include "audio/tonegen_param_table.s"
+ToneGen_ParamTable:
+	.incbin "includes/generated/tonegen_param_table.bin"
 
 ; =============================================================================
 ; NAKA UI Descriptor Blocks (ROM E0E974-EEF587)

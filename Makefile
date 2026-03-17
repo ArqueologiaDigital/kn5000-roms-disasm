@@ -42,7 +42,8 @@ NAKA_TYPES_H = maincpu/ui_widgets/naka_types.h
 NAKA_BINS = maincpu/includes/generated/naka_control_menu_header.bin maincpu/includes/generated/naka_ctrl_menu_body.bin maincpu/includes/generated/naka_perf_style.bin maincpu/includes/generated/naka_msp_recording.bin maincpu/includes/generated/naka_effects_seq.bin maincpu/includes/generated/naka_midi_reverb.bin maincpu/includes/generated/naka_composer_style.bin maincpu/includes/generated/naka_direct_play.bin maincpu/includes/generated/naka_technichord_part.bin maincpu/includes/generated/naka_disk_menu_file_io.bin maincpu/includes/generated/naka_debug_naming.bin maincpu/includes/generated/naka_disk_warning.bin maincpu/includes/generated/naka_extension_device.bin maincpu/includes/generated/naka_normal_mode.bin maincpu/includes/generated/naka_widget_tables_1.bin maincpu/includes/generated/naka_master_style.bin maincpu/includes/generated/naka_sound_menu_drawbar.bin maincpu/includes/generated/naka_sequencer_exit.bin maincpu/includes/generated/naka_sequencer_channels.bin maincpu/includes/generated/naka_block_007.bin maincpu/includes/generated/naka_block_012.bin maincpu/includes/generated/naka_widget_names_charmap.bin maincpu/includes/generated/naka_technichord_strings.bin maincpu/includes/generated/naka_widget_tables_2.bin maincpu/includes/generated/naka_style_bitmaps.bin maincpu/includes/generated/naka_widget_descriptors.bin maincpu/includes/generated/naka_accomp7_widgets.bin
 
 VOICE_BINS = maincpu/includes/generated/voice_factory_presets.bin
-C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS)
+AUDIO_BINS = maincpu/includes/generated/tonegen_param_table.bin
+C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS)
 
 maincpu/includes/generated/style_ui_paramblock_%.bin: maincpu/style_ui/paramblock/%.c maincpu/style_ui/screendata_types.h
 	@mkdir -p maincpu/includes/generated
@@ -272,6 +273,12 @@ maincpu/includes/generated/naka_accomp7_widgets.bin: maincpu/ui_widgets/naka_acc
 	@rm -f $@.o $@.elf
 
 maincpu/includes/generated/voice_factory_presets.bin: maincpu/audio/voice_factory_presets.c
+	@mkdir -p maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+maincpu/includes/generated/tonegen_param_table.bin: maincpu/audio/tonegen_param_table.c
 	@mkdir -p maincpu/includes/generated
 	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
