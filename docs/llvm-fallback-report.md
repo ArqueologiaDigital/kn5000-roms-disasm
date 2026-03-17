@@ -2,7 +2,7 @@
 
 **Date:** 2026-02-22
 **ROM:** KN5000 v1.0 Program ROM (2MB, `kn5000_v10_program`)
-**Converter:** `scripts/asl_to_llvm.py` → `maincpu/llvm/kn5000_v10_program.s`
+**Converter:** `scripts/converters/asl_to_llvm.py` → `maincpu/llvm/kn5000_v10_program.s`
 **Status:** 100% byte-identical ROM reconstruction via LLVM toolchain
 
 ## Executive Summary

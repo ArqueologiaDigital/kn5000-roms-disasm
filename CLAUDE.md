@@ -59,7 +59,7 @@ make clean-all          # All (LLVM + legacy ASL)
 make rebuild-preset-data
 
 # Verify rebuilt ROMs against originals (runs automatically after make all)
-python scripts/compare_roms.py
+python scripts/build/compare_roms.py
 
 # Update documentation website
 make gallery            # Convert images to PNG for gallery
@@ -74,7 +74,7 @@ make website            # All of the above (gallery + issues + rom-status)
   - `subcpu/kn5000_subprogram_v142.s`, `subcpu/boot/kn5000_subcpu_boot.s`
   - `hdae5000/hd-ae5000_v2_06i.s`, `table_data/kn5000_table_data.s` + shared includes
   - `custom_data/kn5000_custom_data.s`
-- **ASL sources** (archived in `archive/asl/`): Original ASL syntax, used by `scripts/asl_to_llvm.py`
+- **ASL sources** (archived in `archive/asl/`): Original ASL syntax, used by `scripts/converters/asl_to_llvm.py`
 - **Build pipeline**: `llvm-mc -triple=tlcs900` → `ld.lld` → `llvm-objcopy` → raw binary
 - **Binary data files**: `*/includes/*.bin`, `*/images/*.bin` — referenced via `.incbin`
 
@@ -112,14 +112,22 @@ After any work session, `git status` should show a clean working tree. This ensu
 
 ### Helper Scripts (STRICT POLICY)
 
-**All helper scripts must be placed in the `scripts/` directory and committed to the repo.**
+**All helper scripts must be placed in the `scripts/` directory (in the appropriate subdirectory) and committed to the repo.**
+
+The `scripts/` directory is organized into subdirectories:
+- `scripts/build/` — Build utilities (compare_roms.py, compress_lzss.py, convert_images.py, etc.)
+- `scripts/converters/` — Format converters (asl_to_llvm.py, convert_*.py, naka_to_c.py, transform_*.py)
+- `scripts/generators/` — Code generators (generate_*.py, gen_*.py, create_*.py)
+- `scripts/renaming/` — Label renaming scripts (rename_*.py)
+- `scripts/analysis/` — Analysis & extraction (extract_*.py, audit_*.py, disassemble_*.py, sync_docs_labels.py)
+- `scripts/tools/` — Standalone utilities (cleanup, formatting, fixups, splitting, annotation)
 
 This ensures:
 - Scripts are version-controlled and available to all contributors
 - Consistent location for automation tools
 - Easy discovery of available utilities
 
-When creating new scripts, place them in `scripts/` and add them to git immediately.
+When creating new scripts, place them in the appropriate `scripts/` subdirectory and add them to git immediately.
 
 ### Symbol Reference Files (STRICT POLICY)
 
@@ -168,11 +176,11 @@ $ASL -w -g map archive/asl/table_data/kn5000_table_data.asm -o /tmp/table_data.p
 $ASL -w -g map archive/asl/hdae5000/hd-ae5000_v2_06i.asm -o /tmp/hdae5000.p
 
 # Extract symbols from map files
-python scripts/extract_symbols_from_map.py archive/asl/maincpu/kn5000_v10_program.map symbols/maincpu_symbols_reference.txt
-python scripts/extract_symbols_from_map.py archive/asl/subcpu/kn5000_subprogram_v142.map symbols/subcpu_symbols_reference.txt
-python scripts/extract_symbols_from_map.py archive/asl/subcpu/boot/kn5000_subcpu_boot.map symbols/subcpu_boot_symbols_reference.txt
-python scripts/extract_symbols_from_map.py archive/asl/table_data/kn5000_table_data.map symbols/table_data_symbols_reference.txt
-python scripts/extract_symbols_from_map.py archive/asl/hdae5000/hd-ae5000_v2_06i.map symbols/hdae5000_symbols_reference.txt
+python scripts/analysis/extract_symbols_from_map.py archive/asl/maincpu/kn5000_v10_program.map symbols/maincpu_symbols_reference.txt
+python scripts/analysis/extract_symbols_from_map.py archive/asl/subcpu/kn5000_subprogram_v142.map symbols/subcpu_symbols_reference.txt
+python scripts/analysis/extract_symbols_from_map.py archive/asl/subcpu/boot/kn5000_subcpu_boot.map symbols/subcpu_boot_symbols_reference.txt
+python scripts/analysis/extract_symbols_from_map.py archive/asl/table_data/kn5000_table_data.map symbols/table_data_symbols_reference.txt
+python scripts/analysis/extract_symbols_from_map.py archive/asl/hdae5000/hd-ae5000_v2_06i.map symbols/hdae5000_symbols_reference.txt
 
 # Clean up intermediate files
 rm /tmp/*.p maincpu/*.map subcpu/*.map subcpu/boot/*.map table_data/*.map hdae5000/*.map
@@ -184,7 +192,7 @@ rm /tmp/*.p maincpu/*.map subcpu/*.map subcpu/boot/*.map table_data/*.map hdae50
 
 When new images are discovered and extracted as `.bin` files in `maincpu/images/` or `table_data/images/`:
 
-1. **Add metadata** to `scripts/convert_images.py` in the `IMAGE_METADATA` dictionary:
+1. **Add metadata** to `scripts/build/convert_images.py` in the `IMAGE_METADATA` dictionary:
    - Filename
    - Dimensions (width, height)
    - Bit depth (1, 4, or 8)
@@ -237,7 +245,7 @@ Always commit both repositories together when making website updates.
 
 **The ROM status diagram must be kept in sync with disassembly progress.**
 
-The file `scripts/generate_rom_status_diagram.py` generates an SVG visualization showing the disassembly status of each ROM component. This diagram provides an at-a-glance view of project progress.
+The file `scripts/build/generate_rom_status_diagram.py` generates an SVG visualization showing the disassembly status of each ROM component. This diagram provides an at-a-glance view of project progress.
 
 **Status categories:**
 | Color | Category | Description |
@@ -650,7 +658,7 @@ This is a strict policy to ensure the disassembly is maintainable and understand
 
 **When renaming symbols in assembly source files, ALWAYS write a sed script first and then run it.** Never use interactive editing tools (Edit tool) for batch symbol renames, as large files can hang the system.
 
-1. **Procedure:** Write a `scripts/rename_<topic>.sed` file with all `s/OLD_NAME/NEW_NAME/g` rules, then run: `sed -i -f scripts/rename_<topic>.sed <assembly_file>`
+1. **Procedure:** Write a `scripts/renaming/rename_<topic>.sed` file with all `s/OLD_NAME/NEW_NAME/g` rules, then run: `sed -i -f scripts/renaming/rename_<topic>.sed <assembly_file>`
 2. **Scope:** Apply the sed script to all files that reference the symbols (assembly, symbol reference files, etc.)
 3. **Verification:** After running, follow Assembly Edit Verification policy (build + compare_roms.py)
 4. **Cleanup:** The sed script may be deleted after successful commit, or kept for reference
@@ -823,7 +831,7 @@ If code references an address that lies **inside** a `binclude` file's address r
 6. **Verify the build** still produces identical ROM output:
    ```bash
    make all
-   python scripts/compare_roms.py
+   python scripts/build/compare_roms.py
    ```
 
 **Naming convention for split binaries:**
@@ -1054,15 +1062,15 @@ When encountering disputed interpretations:
 | table_data | `table_data/kn5000_table_data.asm` | ~33% |
 | hdae5000 | `hdae5000/hd-ae5000_v2_06i.asm` | ~5% |
 
-Run `python scripts/compare_roms.py` for current status. See `../kn5000-docs/rom-reconstruction.md` for detailed breakdown.
+Run `python scripts/build/compare_roms.py` for current status. See `../kn5000-docs/rom-reconstruction.md` for detailed breakdown.
 
 ### Key Files
 
 - **tmp94c241.inc**: Macros for TMP94C241F instructions not natively supported by ASL (which only supports TMP96C141). These encode raw byte sequences for unsupported opcodes like LDI, LDIR, MUL/DIV variants, and shift operations.
 
-- **scripts/compare_roms.py**: Post-build verification that compares rebuilt ROMs byte-by-byte against originals in `original_ROMs/` and reports match percentage.
+- **scripts/build/compare_roms.py**: Post-build verification that compares rebuilt ROMs byte-by-byte against originals in `original_ROMs/` and reports match percentage.
 
-- **scripts/extract_include_binaries.py**: Extracts embedded binary data (images, assets) from disassembled code for inclusion via assembly `include()` directives.
+- **scripts/analysis/extract_include_binaries.py**: Extracts embedded binary data (images, assets) from disassembled code for inclusion via assembly `include()` directives.
 
 ### Directory Structure
 
