@@ -1,3 +1,7 @@
+; Brass Sound Patch Data
+; Audio subsystem: pointer table + patch entries for brass instrument category
+; 35 patch entries (BrassSound_SamplePtr_Table), each a variable-length byte sequence
+
 BrassSound_SamplePtr_Table:
 	.long Brass_PatchEntry_000
 	.long Brass_PatchEntry_001

@@ -1,3 +1,6 @@
+; MSP (Music Style Preset) Factory Default Data
+; Binary blob containing default values for all MSP parameters
+; Loaded during initialization to reset styles to factory settings
 
 MSP_FACTORY_DEFAULTS:
 	.byte 0x80, 0xff, 0xff, 0xff, 0xff, 0x87

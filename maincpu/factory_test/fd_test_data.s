@@ -1,3 +1,7 @@
+; Floppy Disk Test Dialog Data
+; Factory diagnostics (codename "HAMA"): NAKA widget descriptors for
+; FDD test screens including diagnostic lists, console areas, and result display
+
 FDTest_DiagList_Total:
 
 

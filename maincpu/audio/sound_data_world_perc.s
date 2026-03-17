@@ -1,3 +1,7 @@
+; World Percussion Patch Data
+; Audio subsystem: pointer table + patch entries for world percussion category
+; 33 patch entries (WorldPerc_PatchPtrTable), each a variable-length byte sequence
+
 WorldPerc_PatchPtrTable:
 	.long WorldPerc_PatchEntry_000
 	.long WorldPerc_PatchEntry_001

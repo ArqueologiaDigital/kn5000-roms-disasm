@@ -1,3 +1,7 @@
+; Factory Test UI Configuration Data
+; Factory diagnostics (codename "HAMA"): mode initialization table,
+; debug page function names, RTOS command strings, and test list widgets
+
 Hama_ModeInit_Table:
 	.long NakaInst_Select_the_sound_for_each_part
 	.long NakaInst_Select_the_sound_for_each_part

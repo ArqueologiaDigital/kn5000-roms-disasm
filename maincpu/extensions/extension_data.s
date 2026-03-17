@@ -1,3 +1,7 @@
+; Extension Device Data Tables & NAKA Widget Descriptors
+; Extension subsystem (codename "TOSHI"): chord type tables, MSP configuration,
+; accompaniment parameters, and UI widget descriptors for expansion devices
+
 ExtData_ChordTypeTable_Top:
 	.long SeqVoice_ValidateState_StoreChannel
 	.byte 0xed

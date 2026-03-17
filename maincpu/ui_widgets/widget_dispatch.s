@@ -1,3 +1,7 @@
+; NAKA Widget Dispatch Parameters & Instruction Data
+; UI widget subsystem: parameter templates, bitmap descriptors,
+; field configurations, and bytecode instruction data for the widget engine
+
 NakaInst_Param_Bitmap80:
 	.byte 0x84, 0x80
 NakaInst_Param_Field02:
