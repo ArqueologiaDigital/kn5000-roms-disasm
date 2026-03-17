@@ -78,12 +78,14 @@ SOUND_CATEGORY_NAMES:
 	.ascii "    MEMORY B    "	; 17: Memory B
 
 SOUND_DATA_PIANO:		.include "audio/sound_data_piano.s"
-SOUND_DATA_GUITAR:		.include "audio/sound_data_guitar.s"
+SOUND_DATA_GUITAR:
+	.incbin "includes/generated/sound_data_guitar.bin"
 SOUND_DATA_STRINGS_VOCAL:	.include "audio/sound_data_strings_vocal.s"
 SOUND_DATA_BRASS_PTRS:		.include "audio/sound_data_brass.s"
 SOUND_DATA_FLUTE:		.include "audio/sound_data_flute.s"
 SOUND_DATA_FLUTE_EXTRA:		.include "audio/sound_data_flute_extra.s"
-SOUND_DATA_SAX_REED:		.include "audio/sound_data_sax_reed.s"
+SOUND_DATA_SAX_REED:
+	.incbin "includes/generated/sound_data_sax_reed.bin"
 SOUND_DATA_MALLET_ORCH_PERC:	.include "audio/sound_data_mallet_orch_perc.s"
 SOUND_DATA_WORLD_PERC:		.include "audio/sound_data_world_perc.s"
 SOUND_DATA_ORGAN_ACCORDION:
