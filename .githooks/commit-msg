@@ -1,0 +1,16 @@
+#!/bin/bash
+# Validate commit message contains LLVM version line
+# Per CLAUDE.md strict policy: every roms-disasm commit must record LLVM branch+hash
+
+COMMIT_MSG_FILE=$1
+MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Check for LLVM version line
+if ! echo "$MSG" | grep -q "^LLVM:"; then
+    echo "ERROR: Commit message must contain LLVM version line."
+    echo "Add: LLVM: <branch>@<short-hash> (<full-hash>)"
+    echo "Get it with: cd /mnt/shared/llvm-project && git log -1 --format=\"%D @ %h (%H)\""
+    exit 1
+fi
+
+exit 0
