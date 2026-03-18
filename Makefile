@@ -6,7 +6,7 @@ CLANG=$(LLVM_BIN)/clang
 
 .PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
 .PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website
-.PHONY: rebuild-preset-data recompress-lzss clean-preset-data
+.PHONY: rebuild-preset-data recompress-lzss clean-preset-data decompress-demo-presets
 
 # Primary build: LLVM assembly (authoritative source)
 all: llvm-all
@@ -451,6 +451,14 @@ rebuild-preset-data: $(PRESET_DATA_DIR)/preset_data_compressed.bin
 
 recompress-lzss:
 	python scripts/build/compress_lzss.py $(PRESET_DATA_DIR)/preset_data_uncompressed.bin $(PRESET_DATA_DIR)/preset_data_compressed.bin --reference original_ROMs/preset_data_compressed.original.bin
+
+# Decompress all 19 demo song preset SLIDE4K blocks from the built Table Data ROM.
+# Entry 18 = Feature Demo preset (same as preset_data_uncompressed.bin).
+# Entries 0-17 are inside icons_to_strings.bin at ROM addresses 0x9C4050-0x9F9FFF.
+# These decompressed files are for analysis; the build uses the original compressed data.
+DEMO_PRESET_DIR=table_data/includes/demo_presets
+decompress-demo-presets: rebuilt_ROMs/kn5000_table_data.llvm.rom
+	python3 scripts/build/decompress_demo_presets.py --rom $< --output-dir $(DEMO_PRESET_DIR)
 
 asl-all: rebuilt_ROMs/kn5000_v10_program.rebuilt.rom rebuilt_ROMs/kn5000_subprogram_v142.rebuilt.rom rebuilt_ROMs/kn5000_subcpu_boot.rebuilt.rom rebuilt_ROMs/kn5000_table_data.rebuilt.rom rebuilt_ROMs/kn5000_custom_data.rebuilt.rom rebuilt_ROMs/hd-ae5000_v2_06i.rebuilt.rom
 

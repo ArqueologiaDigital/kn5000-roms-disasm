@@ -37,8 +37,10 @@
 ; 0x99EC00-0x99FFFF  Demo Category Names ("Tour Of The 5000", "Accordion", etc.)
 ; 0x9A0000-0x9BFFFF  Tone Generator Configuration Data
 ; 0x9C0000-0x9C3FFF  Tone Generator Parameters
-; 0x9C4000-0x9C404F  Waveform Sample Pointer Table (19 entries x 4 bytes + null)
-; 0x9C4050-0x9F9FFF  Waveform Sample Data (18 variable-length PCM samples)
+; 0x9C4000-0x9C404F  Demo Song Preset Pointer Table (19 entries x 4 bytes + null)
+;                     Each 4-byte LE pointer -> SLIDE4K compressed preset block
+;                     Entry 18 (0x008E0000) = Feature Demo preset
+; 0x9C4050-0x9F9FFF  SLIDE4K Compressed Demo Song Presets (entries 0-17)
 ; 0x9FA000-0x9FA14F  File Identifier Strings (floppy disk format IDs)
 ; 0x9FA150-0x9FB495  Boot Screen Bitmaps (1bpp: "Flash Memory Update", etc.)
 ; 0x9FB496-0x9FB4D1  Boot Initialization Data Tables
@@ -47,7 +49,7 @@
 ;
 ; KEY TABLES (accessed by Main CPU ROM):
 ;   Font Glyph Table @ 0x945C00: 10 fonts, 16 bytes/entry (w,h,desc,asc,glyph_ptr,kern_ptr)
-;   Waveform Samples @ 0x9C4000: 19 entries, 4 bytes/entry (absolute pointer to PCM data)
+;   Demo Presets    @ 0x9C4000: 19 entries, 4 bytes/entry (pointers to SLIDE4K blocks)
 ;   Model Presets    @ 0x986000/0x987000: Selected by model code (0xC2/0xC5 vs others)
 ;   Demo Song Index  @ 0x988000: 12 entries, 4 bytes/entry (pointers to song data)
 ;   Section Directory@ 0x800000: 33 entries indexing preset data banks for floppy I/O
@@ -321,9 +323,11 @@ IconPixelData:
 ;                       "Special DSP FX", "World", "xPiano Atmosphere"
 ;   0x9A0000-0x9BFFFF  Tone Generator Configuration Data
 ;   0x9C0000-0x9C3FFF  Tone Generator Parameters
-;   0x9C4000-0x9C404F  Waveform Sample Pointer Table (19 x 4-byte LE pointers + null)
+;   0x9C4000-0x9C404F  Demo Song Preset Pointer Table (19 x 4-byte LE pointers + null)
 ;                       Accessed by main CPU: sla wa,2; add xwa,0x9C4000; ld xwa,(xwa)
-;   0x9C4050-0x9F9FFF  Waveform Sample Data (18 variable-length PCM samples)
+;                       Each pointer -> SLIDE4K compressed preset data
+;                       Entry 18 points to 0x8E0000 (Feature Demo, same as LZSS preset data)
+;   0x9C4050-0x9F9FFF  SLIDE4K Compressed Demo Song Presets (entries 0-17, variable size)
 ; =============================================================================
 	.incbin "includes/icons_to_strings.bin"
 
