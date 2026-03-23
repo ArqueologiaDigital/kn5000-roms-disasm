@@ -8,7 +8,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
 -	.fill 12710, 1, 0xff
 +	.fill 12696, 1, 0xff
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/audio_control_engine.s v10/maincpu/audio/audio_control_engine.s
---- v9/maincpu/audio/audio_control_engine.s	2026-03-23 12:35:25.573470974 +0000
+--- v9/maincpu/audio/audio_control_engine.s	2026-03-23 13:07:13.281899714 +0000
 +++ v10/maincpu/audio/audio_control_engine.s	2026-03-23 12:34:32.789078794 +0000
 @@ -3378,7 +3378,7 @@
  	.byte 0xe0, 0xe4
@@ -47,7 +47,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	pop	xix
  	pop	xhl
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/dsp_config_sysex.s v10/maincpu/audio/dsp_config_sysex.s
---- v9/maincpu/audio/dsp_config_sysex.s	2026-03-23 12:35:25.693471872 +0000
+--- v9/maincpu/audio/dsp_config_sysex.s	2026-03-23 13:07:13.285731542 +0000
 +++ v10/maincpu/audio/dsp_config_sysex.s	2026-03-23 12:34:32.915504750 +0000
 @@ -61,7 +61,7 @@
  	.byte 0xf6
@@ -77,7 +77,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	pop	xiz
  	inc	2, xsp
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
---- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 12:35:25.777472501 +0000
+--- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 13:07:13.288839739 +0000
 +++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 12:34:32.993079676 +0000
 @@ -24287,7 +24287,7 @@
  	ld	xde, 57668
@@ -1704,7 +1704,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	push	xwa
  	ld	xwa, (xsp+16)
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/tonegen_fileio_handlers.s v10/maincpu/audio/tonegen_fileio_handlers.s
---- v9/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 12:35:25.612460237 +0000
+--- v9/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 13:07:13.291557448 +0000
 +++ v10/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 12:34:32.831594209 +0000
 @@ -588,7 +588,7 @@
  	push	xhl
@@ -1746,7 +1746,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  ; RESERVED:
  	.fill 23, 1, 0xff
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/boot/system_handlers.s v10/maincpu/boot/system_handlers.s
---- v9/maincpu/boot/system_handlers.s	2026-03-23 12:35:25.050969033 +0000
+--- v9/maincpu/boot/system_handlers.s	2026-03-23 13:07:13.292369795 +0000
 +++ v10/maincpu/boot/system_handlers.s	2026-03-23 12:34:32.239136345 +0000
 @@ -6173,7 +6173,7 @@
  	ld xiz, xwa
@@ -1767,7 +1767,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lds iz, 0
  
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/demo/file_demo_proc.s v10/maincpu/demo/file_demo_proc.s
---- v9/maincpu/demo/file_demo_proc.s	2026-03-23 12:35:25.497909434 +0000
+--- v9/maincpu/demo/file_demo_proc.s	2026-03-23 13:07:13.295001680 +0000
 +++ v10/maincpu/demo/file_demo_proc.s	2026-03-23 12:34:32.717077635 +0000
 @@ -37,7 +37,7 @@
  	ccf
@@ -1915,7 +1915,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x39
  	push_sr
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/midi_dispatch_handlers.s v10/maincpu/midi/midi_dispatch_handlers.s
---- v9/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 12:35:25.437469957 +0000
+--- v9/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 13:07:13.338310143 +0000
 +++ v10/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 12:34:32.661077220 +0000
 @@ -14568,7 +14568,7 @@
  	lds	de, 5
@@ -1954,7 +1954,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	pop	xix
  	pop	xhl
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/midipkt_routines.s v10/maincpu/midi/midipkt_routines.s
---- v9/maincpu/midi/midipkt_routines.s	2026-03-23 12:35:25.460756345 +0000
+--- v9/maincpu/midi/midipkt_routines.s	2026-03-23 13:07:13.340189967 +0000
 +++ v10/maincpu/midi/midipkt_routines.s	2026-03-23 12:34:32.682597044 +0000
 @@ -1277,7 +1277,7 @@
  	lds	bc, 3
@@ -2012,7 +2012,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  
  AccentData_ComparePart1:
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/smf_event_processor.s v10/maincpu/sequencer/smf_event_processor.s
---- v9/maincpu/sequencer/smf_event_processor.s	2026-03-23 12:35:26.139614731 +0000
+--- v9/maincpu/sequencer/smf_event_processor.s	2026-03-23 13:07:13.345295632 +0000
 +++ v10/maincpu/sequencer/smf_event_processor.s	2026-03-23 12:34:33.386803137 +0000
 @@ -4680,7 +4680,7 @@
  	add	(xde), xwa
@@ -2304,7 +2304,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0xee, 0x8d, 0xe8, 0x8c, 0xd9, 0xae, 0x95, 0x11
  	.byte 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x1c, 0x00
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_mode_handlers.s v10/maincpu/ui/ui_mode_handlers.s
---- v9/maincpu/ui/ui_mode_handlers.s	2026-03-23 12:35:25.297468908 +0000
+--- v9/maincpu/ui/ui_mode_handlers.s	2026-03-23 13:07:13.349961968 +0000
 +++ v10/maincpu/ui/ui_mode_handlers.s	2026-03-23 12:34:32.513606163 +0000
 @@ -10652,7 +10652,7 @@
  	push	xwa
