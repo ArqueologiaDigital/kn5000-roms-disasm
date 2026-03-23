@@ -27759,8 +27759,14 @@ HdaeRom_DataDispatch_Block:
 	lda_24	xde, 0x1e0000
 	lda_24	xwa, 0xeed56c
 	ld	xbc, xwa
+	lda	xhl, (xwa + 16)
+
 HdaeRom_DataDispatch_Block2:
-	.byte 0xb8, 0x10, 0x33, 0xc5, 0xe4, 0x21, 0xf5, 0xe8, 0x41, 0xeb, 0xf1, 0x67, 0xf6, 0x78, 0x3b, 0xfe
+	ld_spib	A, 0xe4
+	lda_dpi	XBC, 0xe8
+	cp	xbc, xhl
+	jr	c, HdaeRom_DataDispatch_Block2
+	jrl	SendPartDataBlock_SetWord7
 HdaeRom_DataDispatch_Block3:
 	lda	xhl, (xwa+18833)
 	.byte 0xf3, 0xe1, 0xa7
