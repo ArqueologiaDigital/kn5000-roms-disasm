@@ -18,11 +18,11 @@
 .equ P1CR, 0x6
 .equ P1FC, 0x7
 .equ P2, 0x8
-.equ P2CR, 0xA
-.equ P2FC, 0xB
-.equ P3, 0xC
-.equ P3CR, 0xE
-.equ P3FC, 0xF
+.equ P2CR, 0xa
+.equ P2FC, 0xb
+.equ P3, 0xc
+.equ P3CR, 0xe
+.equ P3FC, 0xf
 .equ P4, 0x10
 .equ P4CR, 0x12
 .equ P4FC, 0x13
@@ -30,18 +30,18 @@
 .equ P5CR, 0x16
 .equ P5FC, 0x17
 .equ P6, 0x18
-.equ P6CR, 0x1A
-.equ P6FC, 0x1B
-.equ P7, 0x1C
-.equ P7CR, 0x1E
-.equ P7FC, 0x1F
+.equ P6CR, 0x1a
+.equ P6FC, 0x1b
+.equ P7, 0x1c
+.equ P7CR, 0x1e
+.equ P7FC, 0x1f
 .equ P8, 0x20
 .equ P8CR, 0x22
 .equ P8FC, 0x23
 .equ PA, 0x28
-.equ PAFC, 0x2B
-.equ PB, 0x2C
-.equ PBFC, 0x2F
+.equ PAFC, 0x2b
+.equ PB, 0x2c
+.equ PBFC, 0x2f
 .equ PC, 0x30
 .equ PCCR, 0x32
 .equ PCFC, 0x33
@@ -49,17 +49,17 @@
 .equ PDCR, 0x36
 .equ PDFC, 0x37
 .equ PE, 0x38
-.equ PECR, 0x3A
-.equ PEFC, 0x3B
-.equ PF, 0x3C
-.equ PFCR, 0x3E
-.equ PFFC, 0x3F
+.equ PECR, 0x3a
+.equ PEFC, 0x3b
+.equ PF, 0x3c
+.equ PFCR, 0x3e
+.equ PFFC, 0x3f
 .equ PG, 0x40
 .equ PH, 0x44
 .equ PHCR, 0x46
 .equ PHFC, 0x47
 .equ PZ, 0x68
-.equ PZCR, 0x6A
+.equ PZCR, 0x6a
 
 ; -----------------------------------------------------------------------------
 ; 8-bit Timers (T0-T3)
@@ -71,8 +71,8 @@
 .equ T23MOD, 0x85	; Timer 2/3 Mode
 .equ TREG0, 0x88	; Timer 0 Register
 .equ TREG1, 0x89	; Timer 1 Register
-.equ TREG2, 0x8A	; Timer 2 Register
-.equ TREG3, 0x8B	; Timer 3 Register
+.equ TREG2, 0x8a	; Timer 2 Register
+.equ TREG3, 0x8b	; Timer 3 Register
 
 ; -----------------------------------------------------------------------------
 ; 16-bit Timers (T4-TA)
@@ -87,77 +87,77 @@
 .equ CAP5H, 0x97
 .equ T4MOD, 0x98
 .equ T4FFCR, 0x99
-.equ T16RUN, 0x9E	; 16-bit Timer Run
-.equ T16CR, 0x9F	; 16-bit Timer Control
+.equ T16RUN, 0x9e	; 16-bit Timer Run
+.equ T16CR, 0x9f	; 16-bit Timer Control
 
-.equ TREG6L, 0xA0
-.equ TREG6H, 0xA1
-.equ TREG7L, 0xA2
-.equ TREG7H, 0xA3
-.equ CAP6L, 0xA4
-.equ CAP6H, 0xA5
-.equ CAP7L, 0xA6
-.equ CAP7H, 0xA7
-.equ T6MOD, 0xA8
-.equ T6FFCR, 0xA9
+.equ TREG6L, 0xa0
+.equ TREG6H, 0xa1
+.equ TREG7L, 0xa2
+.equ TREG7H, 0xa3
+.equ CAP6L, 0xa4
+.equ CAP6H, 0xa5
+.equ CAP7L, 0xa6
+.equ CAP7H, 0xa7
+.equ T6MOD, 0xa8
+.equ T6FFCR, 0xa9
 
-.equ TREG8L, 0xB0
-.equ TREG8H, 0xB1
-.equ TREG9L, 0xB2
-.equ TREG9H, 0xB3
-.equ CAP8L, 0xB4
-.equ CAP8H, 0xB5
-.equ CAP9L, 0xB6
-.equ CAP9H, 0xB7
-.equ T8MOD, 0xB8
-.equ T8FFCR, 0xB9
+.equ TREG8L, 0xb0
+.equ TREG8H, 0xb1
+.equ TREG9L, 0xb2
+.equ TREG9H, 0xb3
+.equ CAP8L, 0xb4
+.equ CAP8H, 0xb5
+.equ CAP9L, 0xb6
+.equ CAP9H, 0xb7
+.equ T8MOD, 0xb8
+.equ T8FFCR, 0xb9
 
-.equ TREGAL, 0xC0
-.equ TREGAH, 0xC1
-.equ TREGBL, 0xC2
-.equ TREGBH, 0xC3
-.equ CAPAL, 0xC4
-.equ CAPAH, 0xC5
-.equ CAPBL, 0xC6
-.equ CAPBH, 0xC7
-.equ TAMOD, 0xC8
-.equ TAFFCR, 0xC9
+.equ TREGAL, 0xc0
+.equ TREGAH, 0xc1
+.equ TREGBL, 0xc2
+.equ TREGBH, 0xc3
+.equ CAPAL, 0xc4
+.equ CAPAH, 0xc5
+.equ CAPBL, 0xc6
+.equ CAPBH, 0xc7
+.equ TAMOD, 0xc8
+.equ TAFFCR, 0xc9
 
 ; -----------------------------------------------------------------------------
 ; Serial Channels (SC0, SC1)
 ; -----------------------------------------------------------------------------
-.equ SC0BUF, 0xD0	; Serial Channel 0 Buffer
-.equ SC0CR, 0xD1	; Serial Channel 0 Control
-.equ SC0MOD, 0xD2	; Serial Channel 0 Mode
-.equ BR0CR, 0xD3	; Baud Rate 0 Control
-.equ SC1BUF, 0xD4	; Serial Channel 1 Buffer
-.equ SC1CR, 0xD5	; Serial Channel 1 Control
-.equ SC1MOD, 0xD6	; Serial Channel 1 Mode
-.equ BR1CR, 0xD7	; Baud Rate 1 Control
+.equ SC0BUF, 0xd0	; Serial Channel 0 Buffer
+.equ SC0CR, 0xd1	; Serial Channel 0 Control
+.equ SC0MOD, 0xd2	; Serial Channel 0 Mode
+.equ BR0CR, 0xd3	; Baud Rate 0 Control
+.equ SC1BUF, 0xd4	; Serial Channel 1 Buffer
+.equ SC1CR, 0xd5	; Serial Channel 1 Control
+.equ SC1MOD, 0xd6	; Serial Channel 1 Mode
+.equ BR1CR, 0xd7	; Baud Rate 1 Control
 
 ; -----------------------------------------------------------------------------
 ; Interrupt Control
 ; -----------------------------------------------------------------------------
-.equ INTE45, 0xE0
-.equ INTE67, 0xE1
-.equ INTE89, 0xE2
-.equ INTEAB, 0xE3
-.equ INTET01, 0xE4
-.equ INTET23, 0xE5
-.equ INTET45, 0xE6
-.equ INTET67, 0xE7
-.equ INTET89, 0xE8
-.equ INTETAB, 0xE9
-.equ INTES0, 0xEA
-.equ INTES1, 0xEB
-.equ INTETC01, 0xEC
-.equ INTETC23, 0xED
-.equ INTETC45, 0xEE
-.equ INTETC67, 0xEF
-.equ INTE0AD, 0xF0
-.equ IIMC, 0xF6	; Interrupt I/O Mode Control
-.equ INTNMWDT, 0xF7	; NMI/Watchdog Timer
-.equ INTCLR, 0xF8	; Interrupt Clear
+.equ INTE45, 0xe0
+.equ INTE67, 0xe1
+.equ INTE89, 0xe2
+.equ INTEAB, 0xe3
+.equ INTET01, 0xe4
+.equ INTET23, 0xe5
+.equ INTET45, 0xe6
+.equ INTET67, 0xe7
+.equ INTET89, 0xe8
+.equ INTETAB, 0xe9
+.equ INTES0, 0xea
+.equ INTES1, 0xeb
+.equ INTETC01, 0xec
+.equ INTETC23, 0xed
+.equ INTETC45, 0xee
+.equ INTETC67, 0xef
+.equ INTE0AD, 0xf0
+.equ IIMC, 0xf6	; Interrupt I/O Mode Control
+.equ INTNMWDT, 0xf7	; NMI/Watchdog Timer
+.equ INTCLR, 0xf8	; Interrupt Clear
 
 ; -----------------------------------------------------------------------------
 ; DMA Controller
@@ -176,7 +176,7 @@
 ; -----------------------------------------------------------------------------
 ; System Control
 ; -----------------------------------------------------------------------------
-.equ CLKMOD, 0x10A	; Clock Mode
+.equ CLKMOD, 0x10a	; Clock Mode
 .equ WDMOD, 0x110	; Watchdog Mode
 .equ WDCR, 0x111	; Watchdog Control
 
@@ -214,12 +214,12 @@
 .equ MSAR1, 0x147
 .equ B2CSL, 0x148
 .equ B2CSH, 0x149
-.equ MAMR2, 0x14A
-.equ MSAR2, 0x14B
-.equ B3CSL, 0x14C
-.equ B3CSH, 0x14D
-.equ MAMR3, 0x14E
-.equ MSAR3, 0x14F
+.equ MAMR2, 0x14a
+.equ MSAR2, 0x14b
+.equ B3CSL, 0x14c
+.equ B3CSH, 0x14d
+.equ MAMR3, 0x14e
+.equ MSAR3, 0x14f
 .equ B4CSL, 0x150
 .equ B4CSH, 0x151
 .equ MAMR4, 0x152

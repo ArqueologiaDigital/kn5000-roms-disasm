@@ -13,51 +13,51 @@
 ; =============================================================================
 
 ; =============================================================================
-; Control Panel State Machine Variables (RAM at 0x8Dxxh)
+; Control Panel State Machine Variables (RAM at 0x8dxxh)
 ; =============================================================================
 
-.equ CPANEL_STATE_MACHINE_INDEX, 0x8D8A	; (byte)
-.equ CPANEL_PACKET_BYTE_COUNT, 0x8D8B	; (byte) // range 0-17
+.equ CPANEL_STATE_MACHINE_INDEX, 0x8d8a	; (byte)
+.equ CPANEL_PACKET_BYTE_COUNT, 0x8d8b	; (byte) // range 0-17
 				   ;          (0, 1 or 2 + nibble)
-.equ CPANEL_TX_RX_FLAGS, 0x8D8C	; (8 bits)
+.equ CPANEL_TX_RX_FLAGS, 0x8d8c	; (8 bits)
 			;   8D8Dh: unused byte?
-.equ PFCR_VALUE, 0x8D8E	; (byte)
-.equ PFFC_VALUE, 0x8D8F	; (byte)
+.equ PFCR_VALUE, 0x8d8e	; (byte)
+.equ PFFC_VALUE, 0x8d8f	; (byte)
 			;   8D90h: unused byte?
-.equ CPANEL_UNUSED_1, 0x8D91	; (byte) // This one looks pointless...
-.equ CPANEL_PROTOCOL_FLAGS, 0x8D92	; (8 bits)
-.equ CPANEL_PANEL_DETECT_FLAGS, 0x8D93	; (8 bits)
-.equ CPANEL_RX_PACKET_BYTE_1, 0x8D94	; (byte) First byte from incoming panel packets
+.equ CPANEL_UNUSED_1, 0x8d91	; (byte) // This one looks pointless...
+.equ CPANEL_PROTOCOL_FLAGS, 0x8d92	; (8 bits)
+.equ CPANEL_PANEL_DETECT_FLAGS, 0x8d93	; (8 bits)
+.equ CPANEL_RX_PACKET_BYTE_1, 0x8d94	; (byte) First byte from incoming panel packets
 				   ; (1st Value saved to
 				   ;  XIZ + IX(mod 080h) array)
-.equ CPANEL_RX_PACKET_BYTE_2, 0x8D95	; (byte) Second byte from incoming panel packets
+.equ CPANEL_RX_PACKET_BYTE_2, 0x8d95	; (byte) Second byte from incoming panel packets
 				   ; (2nd Value saved to
 				   ;  XIZ + IX(mod 080h) array)
-.equ CPANEL_LAST_EVENT_VALUE, 0x8D96	; (byte) Last processed event value (stored to event queue)
-.equ CPANEL_COUNTER_DOWN_FROM_200, 0x8D97	; (byte) counts down
+.equ CPANEL_LAST_EVENT_VALUE, 0x8d96	; (byte) Last processed event value (stored to event queue)
+.equ CPANEL_COUNTER_DOWN_FROM_200, 0x8d97	; (byte) counts down
 				   ; from 0c8h (=200) to zero.
-.equ CPANEL_COUNTER_UP_TO_20, 0x8D98	; (byte) counts up to 014h (=20).
+.equ CPANEL_COUNTER_UP_TO_20, 0x8d98	; (byte) counts up to 014h (=20).
 			;   8D99h: unused byte?
-.equ CPANEL_COUNTER_UP_TO_42, 0x8D9A	; (byte) counts up to 02ah (=42).
-.equ TIMESTAMP_FOR_DELAY, 0x8D9B	; (word)
+.equ CPANEL_COUNTER_UP_TO_42, 0x8d9a	; (byte) counts up to 02ah (=42).
+.equ TIMESTAMP_FOR_DELAY, 0x8d9b	; (word)
 
 ; =============================================================================
-; Control Panel RX/TX Buffers (RAM at 0x8Dxxh-0x8Exxh)
+; Control Panel RX/TX Buffers (RAM at 0x8dxxh-0x8exxh)
 ; =============================================================================
 
-.equ CPANEL_RX_READ_PTR, 0x8D9D	; (word) NOTE: Used as index IY for
+.equ CPANEL_RX_READ_PTR, 0x8d9d	; (word) NOTE: Used as index IY for
 				   ;         CPANEL_RX_RING_BUFFER[IY MOD 05Ch]
 				   ; in code near CPanel_RX_ProcessWithFlag and CPanel_RX_SyncPacket
-.equ CPANEL_RX_WRITE_PTR, 0x8D9F	; (word)
-.equ CPANEL_RX_RING_BUFFER, 0x8DA1	; 05ch (=92) bytes
-.equ CPANEL_LED_READ_PTR, 0x8DFD	; (word)
-.equ CPANEL_LED_WRITE_PTR, 0x8DFF	; (word)
+.equ CPANEL_RX_WRITE_PTR, 0x8d9f	; (word)
+.equ CPANEL_RX_RING_BUFFER, 0x8da1	; 05ch (=92) bytes
+.equ CPANEL_LED_READ_PTR, 0x8dfd	; (word)
+.equ CPANEL_LED_WRITE_PTR, 0x8dff	; (word)
 			;   8E00h: unused byte?
-.equ CPANEL_LED_TX_BUFFER, 0x8E01	; 03ch (=60) bytes
+.equ CPANEL_LED_TX_BUFFER, 0x8e01	; 03ch (=60) bytes
 	;		... ? 8E3Dh
 
 ; =============================================================================
-; Control Panel Button State Arrays (RAM at 0x8E4Ah)
+; Control Panel Button State Arrays (RAM at 0x8e4ah)
 ; =============================================================================
 ; Two arrays of 11 bytes each (segments 0-10), one per panel.
 ; Each byte represents 8 buttons (1=pressed), active high.
@@ -101,15 +101,15 @@
 ;   SEG10: bit0=LEFT 2, bit1=LEFT 1, bit2=HELP, bit3=OTHER PARTS/TR,
 ;          bit4=DOWN 1, bit5=UP 1, bit6=DOWN 2, bit7=UP 2
 ; =============================================================================
-.equ STATE_OF_CPANEL_BUTTONS, 0x8E4A	; NOTE: 8E4Ah=Right / 8E5Ah=Left
+.equ STATE_OF_CPANEL_BUTTONS, 0x8e4a	; NOTE: 8E4Ah=Right / 8E5Ah=Left
 	STATE_OF_CPANEL_BUTTONS_RIGHT = STATE_OF_CPANEL_BUTTONS + 0
 	STATE_OF_CPANEL_BUTTONS_LEFT = STATE_OF_CPANEL_BUTTONS + 16
 
 ; =============================================================================
-; Control Panel LED Row/Pattern Output (RAM at 0x8F38h)
+; Control Panel LED Row/Pattern Output (RAM at 0x8f38h)
 ; =============================================================================
 ; LEDs are addressed via 2-byte sequences: [row_select, pattern]
-; row_select bits 7-6 select panel (0x00-0x0F=CPR, 0xC0-0xCF=CPL)
+; row_select bits 7-6 select panel (0x00-0x0f=CPR, 0xc0-0xcf=CPL)
 ;
 ; RIGHT PANEL (CPR) LED Rows:
 ;   Row 0x00: bit0=SUSTAIN, bit1=DIGITAL EFFECT, bit2=DSP EFFECT, bit3=DIGITAL REVERB,
@@ -122,24 +122,24 @@
 ;   Row 0x04: bit0=PART:LEFT, bit1=PART:RIGHT2, bit2=PART:RIGHT1, bit3=ENTERTAINER,
 ;             bit4=COND:LEFT, bit5=COND:RIGHT2, bit6=COND:RIGHT1, bit7=TECHNI CHORD
 ;   Row 0x08: bit0=MENU:SOUND, bit1=MENU:CONTROL, bit2=MENU:MIDI, bit3=MENU:DISK
-;   Row 0x0A: bit0=MEMORY A, bit1=MEMORY B
-;   Row 0x0B: bit0=SYNCHRO&BREAK, bit1=R1/R2 OCTAVE-, bit2=R1/R2 OCTAVE+, bit3=BANK VIEW
-;   Row 0x0C: bit0=START/STOP BEAT1, bit1=BEAT2, bit2=BEAT3, bit3=BEAT4
+;   Row 0x0a: bit0=MEMORY A, bit1=MEMORY B
+;   Row 0x0b: bit0=SYNCHRO&BREAK, bit1=R1/R2 OCTAVE-, bit2=R1/R2 OCTAVE+, bit3=BANK VIEW
+;   Row 0x0c: bit0=START/STOP BEAT1, bit1=BEAT2, bit2=BEAT3, bit3=BEAT4
 ;
 ; LEFT PANEL (CPL) LED Rows:
-;   Row 0xC0: bit0=COMPOSER:MEMORY, bit1=COMPOSER:MENU, bit2=SOUND ARR:SET, bit3=SOUND ARR:ON/OFF,
+;   Row 0xc0: bit0=COMPOSER:MEMORY, bit1=COMPOSER:MENU, bit2=SOUND ARR:SET, bit3=SOUND ARR:ON/OFF,
 ;             bit4=MUSIC STYLIST, bit5=FADE IN, bit6=FADE OUT, bit7=DISPLAY HOLD
-;   Row 0xC1: bit0=U.S. TRAD, bit1=COUNTRY, bit2=LATIN, bit3=MARCH&WALTZ,
+;   Row 0xc1: bit0=U.S. TRAD, bit1=COUNTRY, bit2=LATIN, bit3=MARCH&WALTZ,
 ;             bit4=PARTY TIME, bit5=SHOWTIME&TRAD DANCE, bit6=WORLD, bit7=CUSTOM
-;   Row 0xC2: bit0=STANDARD ROCK, bit1=R&ROLL&BLUES, bit2=POP&BALLAD, bit3=FUNK&FUSION,
+;   Row 0xc2: bit0=STANDARD ROCK, bit1=R&ROLL&BLUES, bit2=POP&BALLAD, bit3=FUNK&FUSION,
 ;             bit4=SOUL&MODERN DANCE, bit5=BIG BAND&SWING, bit6=JAZZ COMBO, bit7=MSP:MENU
-;   Row 0xC3: bit0=VARIATION1, bit1=VARIATION2, bit2=VARIATION3, bit3=VARIATION4,
+;   Row 0xc3: bit0=VARIATION1, bit1=VARIATION2, bit2=VARIATION3, bit3=VARIATION4,
 ;             bit4=MUSIC STYLE ARRANGER, bit5=AUTO PLAY CHORD
-;   Row 0xC4: bit0=FILL IN 1, bit1=FILL IN 2, bit2=INTRO&ENDING 1, bit3=INTRO&ENDING 2,
+;   Row 0xc4: bit0=FILL IN 1, bit1=FILL IN 2, bit2=INTRO&ENDING 1, bit3=INTRO&ENDING 2,
 ;             bit4=SPLIT POINT(L), bit5=SPLIT POINT(C), bit6=SPLIT POINT(R), bit7=TEMPO/PROGRAM
-;   Row 0xC8: bit0=OTHER PARTS/TR
+;   Row 0xc8: bit0=OTHER PARTS/TR
 ; =============================================================================
-.equ CPANEL_LEDS__ROW_AND_PATTERN_BYTES, 0x8F38	; (word) 8F38h=row_select 8F39h=pattern
+.equ CPANEL_LEDS__ROW_AND_PATTERN_BYTES, 0x8f38	; (word) 8F38h=row_select 8F39h=pattern
 
 ; =============================================================================
 ; Control Panel Event Queues (RAM at 0x200xxxh)
@@ -168,30 +168,30 @@
 ;   bits 7-5 = 100-111: Right panel (CPR)
 ;
 ; Initialization commands (sent during CPanel_InitHardware / CPanel_SendInitSequence):
-.equ CPANEL_CMD_INIT_HWRESET,     0x1F	; param 0xDA: hardware reset/sync left panel
-.equ CPANEL_CMD_INIT_CONFIGURE,   0x1F	; param 0x1A: configure left panel
-.equ CPANEL_CMD_INIT_LEFT,        0x1D	; param 0x00: initialize left panel
-.equ CPANEL_CMD_INIT_BOTH,        0xDD	; param 0x03: setup mode, configure both panels
-.equ CPANEL_CMD_INIT_FINAL,       0x1E	; param 0x80: final initialization
+.equ CPANEL_CMD_INIT_HWRESET,     0x1f	; param 0xda: hardware reset/sync left panel
+.equ CPANEL_CMD_INIT_CONFIGURE,   0x1f	; param 0x1a: configure left panel
+.equ CPANEL_CMD_INIT_LEFT,        0x1d	; param 0x00: initialize left panel
+.equ CPANEL_CMD_INIT_BOTH,        0xdd	; param 0x03: setup mode, configure both panels
+.equ CPANEL_CMD_INIT_FINAL,       0x1e	; param 0x80: final initialization
 ;
 ; Panel detection / ping commands:
 .equ CPANEL_CMD_PING_LEFT,        0x20	; param 0x00: test left panel communication
-.equ CPANEL_CMD_PING_RIGHT,       0xE0	; param 0x00: test right panel communication
+.equ CPANEL_CMD_PING_RIGHT,       0xe0	; param 0x00: test right panel communication
 ;
 ; Button/status query commands:
-.equ CPANEL_CMD_POLL_LEFT,        0x20	; param 0x0B: poll left panel buttons (seg 0x0B)
+.equ CPANEL_CMD_POLL_LEFT,        0x20	; param 0x0b: poll left panel buttons (seg 0x0b)
 .equ CPANEL_CMD_QUERY_LEFT,       0x20	; param 0x10: query left panel status/sync
-.equ CPANEL_CMD_QUERY_RIGHT_04,   0xE2	; param 0x04: query right panel register
-.equ CPANEL_CMD_QUERY_RIGHT_11,   0xE2	; param 0x11: query right panel register
-.equ CPANEL_CMD_QUERY_RIGHT_EXT,  0xE3	; param 0x10: extended read from right panel
+.equ CPANEL_CMD_QUERY_RIGHT_04,   0xe2	; param 0x04: query right panel register
+.equ CPANEL_CMD_QUERY_RIGHT_11,   0xe2	; param 0x11: query right panel register
+.equ CPANEL_CMD_QUERY_RIGHT_EXT,  0xe3	; param 0x10: extended read from right panel
 ;
 ; Data/configuration commands:
 .equ CPANEL_CMD_LEFT_DATA,        0x25	; param 0x01: set/request left panel data mode
-.equ CPANEL_CMD_INIT_LEFT_STATE,  0x2B	; param 0x00: init left button state array (22-byte response)
-.equ CPANEL_CMD_INIT_RIGHT_STATE, 0xEB	; param 0x00: init right button state array (22-byte response)
+.equ CPANEL_CMD_INIT_LEFT_STATE,  0x2b	; param 0x00: init left button state array (22-byte response)
+.equ CPANEL_CMD_INIT_RIGHT_STATE, 0xeb	; param 0x00: init right button state array (22-byte response)
 ;
 ; Steady-state polling (queued via LED TX buffer, every 42 main loop iterations):
 ; Command E0 13 = right panel segment 3 status query
-.equ CPANEL_CMD_STEADYPOLL_RIGHT, 0xE0	; param 0x13: poll right panel seg 3
+.equ CPANEL_CMD_STEADYPOLL_RIGHT, 0xe0	; param 0x13: poll right panel seg 3
 
 ; End of control panel constants

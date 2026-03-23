@@ -14,14 +14,14 @@ FmmPasswordFunc:
 	ld xiz, xde
 	ld (xsp + 4), xwa
 	ld wa, iz
-	cp xbc, 0x1E50010
+	cp xbc, 0x1e50010
 	jrl z, Password_HandleLoadEvent
 	ldada xde, 35340
-	cp xbc, 0x1E5000F
+	cp xbc, 0x1e5000f
 	jrl z, Password_HandleSaveEvent
-	cp xbc, 0x1E5000E
+	cp xbc, 0x1e5000e
 	jr z, Password_HandleDeleteEvent
-	cp xbc, 0x1E5000D
+	cp xbc, 0x1e5000d
 	jrl nz, Password_Return
 	call CheckAnySlotHasData
 	cps l, 0
@@ -32,7 +32,7 @@ FmmPasswordFunc:
 
 Password_ShowError:
 	stdi8 32578, 10
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jrl Password_Return
 
@@ -60,7 +60,7 @@ Password_HandleDeleteEvent:
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 4
 	jr Password_ForwardToFileName
 
@@ -73,7 +73,7 @@ Password_Delete_CheckLoadOnly:
 	jr z, Password_Delete_CheckSaveOnly
 	setda 7, 35341
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 4
 	jr Password_ForwardToFileName
 
@@ -86,7 +86,7 @@ Password_Delete_CheckSaveOnly:
 	jr z, Password_ShowErrorStatus
 	setda 6, 35341
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 4
 
 Password_ForwardToFileName:
@@ -95,7 +95,7 @@ Password_ForwardToFileName:
 
 Password_ShowErrorStatus:
 	stdi8 32578, 11
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jrl Password_CallStatusDisplay
 
 Password_HandleSaveEvent:
@@ -112,8 +112,8 @@ Password_HandleSaveEvent:
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1C00017
-	ld xde, 0xA
+	ld xbc, 0x1c00017
+	ld xde, 0xa
 	jr Password_ForwardToSaveFilter
 
 Password_Save_CheckLoadOnly:
@@ -125,8 +125,8 @@ Password_Save_CheckLoadOnly:
 	jr z, Password_Save_CheckSaveOnly
 	setda 7, 35341
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1C00017
-	ld xde, 0xA
+	ld xbc, 0x1c00017
+	ld xde, 0xa
 	jr Password_ForwardToSaveFilter
 
 Password_Save_CheckSaveOnly:
@@ -138,8 +138,8 @@ Password_Save_CheckSaveOnly:
 	jr z, Password_SaveErrorStatus
 	setda 6, 35341
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1C00017
-	ld xde, 0xA
+	ld xbc, 0x1c00017
+	ld xde, 0xa
 
 Password_ForwardToSaveFilter:
 	calr FmmSaveFilterFunc
@@ -147,7 +147,7 @@ Password_ForwardToSaveFilter:
 
 Password_SaveErrorStatus:
 	stdi8 32578, 11
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jr Password_CallStatusDisplay
 
 Password_HandleLoadEvent:
@@ -156,14 +156,14 @@ Password_HandleLoadEvent:
 	jr z, Password_LoadErrorStatus
 	setda 7, 35341
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 4
 	calr FmmSeqSongNameFunc
 	jr Password_Return
 
 Password_LoadErrorStatus:
 	stdi8 32578, 11
-	ldw wa, 0xEE
+	ldw wa, 0xee
 
 Password_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -176,8 +176,8 @@ Password_Return:
 
 SelectPasswordMode:
 	push xiz
-	ldi_berp 0xFB, 0
-	ldi_berp 0xFA, 0
+	ldi_berp 0xfb, 0
+	ldi_berp 0xfa, 0
 	lds wa, 2
 	call FileIO_FormatName_Return
 	cps l, 0
@@ -187,7 +187,7 @@ SelectPasswordMode:
 	jr z, SelectMode_CheckSaveAvail
 	bitda 7, 35341
 	jr nz, SelectMode_CheckSaveAvail
-	ldi_berp 0xFA, 1
+	ldi_berp 0xfa, 1
 
 SelectMode_CheckSaveAvail:
 	lds wa, 3
@@ -199,12 +199,12 @@ SelectMode_CheckSaveAvail:
 	jr z, SelectMode_DetermineMode
 	bitda 6, 35341
 	jr nz, SelectMode_DetermineMode
-	ldi_berp 0xFB, 1
+	ldi_berp 0xfb, 1
 
 SelectMode_DetermineMode:
-	cpi_berp 0xFA, 0
+	cpi_berp 0xfa, 0
 	jr z, SelectMode_SingleMode
-	cpi_berp 0xFB, 0
+	cpi_berp 0xfb, 0
 	jr z, SelectMode_SingleMode
 	call GetCurrentSlotIndex
 	ld iz, hl
@@ -220,14 +220,14 @@ SelectMode_SetBothMode:
 
 SelectMode_SingleMode:
 	ldada xbc, 35340
-	cpi_berp 0xFA, 0
+	cpi_berp 0xfa, 0
 	jr z, SelectMode_CheckSaveOnlyMode
 	ld (xbc), 0x1
 	jr SelectMode_Return
 
 SelectMode_CheckSaveOnlyMode:
 	ldb a, 0x0
-	cpi_berp 0xFB, 0
+	cpi_berp 0xfb, 0
 	jr z, SelectMode_StoreMode
 	ldb a, 0x2
 
@@ -247,15 +247,15 @@ FmmFileNameFunc:
 	ld (xsp + 8), xbc
 	ld xbc, xiz
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1E50000
+	cp xwa, 0x1e50000
 	jrl z, FileName_HandleRegister
-	cp xwa, 0x1C00018
+	cp xwa, 0x1c00018
 	jrl z, FileName_HandleScroll
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	jrl z, FileName_HandleScroll
-	cp xwa, 0x1C0000B
+	cp xwa, 0x1c0000b
 	jr z, FileName_HandleShow
-	cp xwa, 0x1E50004
+	cp xwa, 0x1e50004
 	jrl nz, FileName_Return
 	stda32 32626, xbc
 	call GetCurrentFileIndex
@@ -264,14 +264,14 @@ FmmFileNameFunc:
 	jr lt, FileName_ListSelect_Negative
 	exts xhl
 	ldda32 xwa, 32626
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	ld xde, xhl
 	jr FileName_ListSelect_Forward
 
 FileName_ListSelect_Negative:
 	stdi16 32634, 0
 	ldda32 xwa, 32626
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	lds32 xde, 0
 
 FileName_ListSelect_Forward:
@@ -313,7 +313,7 @@ FileName_DrawItemLoop:
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 32626
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	incm 1, (xsp + 6)
 	cpw (xsp + 6), 0x14
@@ -321,13 +321,13 @@ FileName_DrawItemLoop:
 	jrl FileName_Return
 
 FileName_HandleScroll:
-	ldmw2 (xsp + 6), 0x7F7A
+	ldmw2 (xsp + 6), 0x7f7a
 	ld wa, (xsp + 6)
 	ld (xsp + 4), wa
 	or xiz, xiz
 	jr nz, FileName_PageUp
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1C00018
+	cp xwa, 0x1c00018
 	jr nz, FileName_ScrollUp
 	cpw (xsp + 6), 0x13
 	jrl ge, FileName_GetSelection
@@ -335,7 +335,7 @@ FileName_HandleScroll:
 	jr FileName_ScrollApply
 
 FileName_ScrollUp:
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	jrl nz, FileName_GetSelection
 	cpw (xsp + 6), 0x0
 	jrl le, FileName_GetSelection
@@ -345,22 +345,22 @@ FileName_ScrollUp:
 FileName_PageUp:
 	cp xiz, 0x1
 	jr nz, FileName_PageDown
-	cpw (xsp + 6), 0xA
+	cpw (xsp + 6), 0xa
 	jrl lt, FileName_GetSelection
-	submi16 (xsp + 6), 0xA
+	submi16 (xsp + 6), 0xa
 	jr FileName_ScrollApply
 
 FileName_PageDown:
 	cp xiz, 0x2
 	jr nz, FileName_OpSave
 	ld wa, (xsp + 6)
-	add wa, 0xA
+	add wa, 0xa
 	cp wa, 0x13
 	jrl gt, FileName_GetSelection
-	addmi16 (xsp + 6), 0xA
+	addmi16 (xsp + 6), 0xa
 
 FileName_ScrollApply:
-	mrdw5 0x9F, 0x06, 0x19, 0x7A, 0x7F
+	mrdw5 0x9f, 0x06, 0x19, 0x7a, 0x7f
 	ld wa, (xsp + 6)
 	jrl FileName_UpdateDisplay
 
@@ -374,7 +374,7 @@ FileName_OpSave:
 	cps hl, 0
 	jrl z, FileName_OpLoad
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	ldda16 xwa, 32634
@@ -389,11 +389,11 @@ FileName_OpSave:
 	stda8 32578, l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	cpdi16 61854, 0
@@ -412,7 +412,7 @@ FileName_OpSave:
 	jr z, FileName_OpSave_ShowCode1
 
 FileName_OpSave_ShowCodeA:
-	ldw wa, 0xA
+	ldw wa, 0xa
 	jr FileName_OpSave_CallHandler
 
 FileName_OpSave_ShowCode1:
@@ -420,11 +420,11 @@ FileName_OpSave_ShowCode1:
 
 FileName_OpSave_CallHandler:
 	call UI_PostPartChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jrl FileName_CallStatusDisplay
 
 FileName_OpLoad:
@@ -438,8 +438,8 @@ FileName_OpLoad:
 	jr z, FileName_OpLoad_NoPwd
 	lds32 xde, 0
 	ldda8 e, 35340
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C50004
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c50004
 	jrl FileName_OpDispatch
 
 FileName_OpLoad_NoPwd:
@@ -448,18 +448,18 @@ FileName_OpLoad_NoPwd:
 	jr z, FileName_OpLoad_Execute
 	cpi8_24 0x0340ea, 0x00
 	jr z, FileName_OpLoad_Execute
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C50000
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c50000
 	lds32 xde, 1
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 0
 	jrl FileName_OpDispatch
 
 FileName_OpLoad_Execute:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -475,27 +475,27 @@ FileName_OpLoad_Execute:
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jrl FileName_CallStatusDisplay
 
 FileName_OpFormat:
 	cp xiz, 0x32
 	jr nz, FileName_OpDelete
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -511,20 +511,20 @@ FileName_OpFormat:
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jrl FileName_CallStatusDisplay
 
 FileName_OpDelete:
@@ -535,12 +535,12 @@ FileName_OpDelete:
 	jr z, FileName_OpFormatVariant
 	cpi8_24 0x0340ea, 0x00
 	jr z, FileName_OpDelete_Execute
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C50000
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c50000
 	lds32 xde, 1
 	call ApPostEvent
-	ld xwa, 0x7B0051
-	ld xbc, 0x1C00001
+	ld xwa, 0x7b0051
+	ld xbc, 0x1c00001
 	lds32 xde, 0
 
 FileName_OpDispatch:
@@ -549,7 +549,7 @@ FileName_OpDispatch:
 
 FileName_OpDelete_Execute:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -565,17 +565,17 @@ FileName_OpDelete_Execute:
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jrl FileName_CallStatusDisplay
 
 FileName_OpFormatVariant:
 	cp xiz, 0x33
 	jr nz, FileName_OpNavigate
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -591,10 +591,10 @@ FileName_OpFormatVariant:
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jrl FileName_CallStatusDisplay
 
 FileName_OpNavigate:
@@ -605,7 +605,7 @@ FileName_OpNavigate:
 	jrl z, FileName_GetSelection
 	ld xbc, (xsp + 8)
 	ldda16 xwa, 32634
-	cp xbc, 0x1C00018
+	cp xbc, 0x1c00018
 	jr nz, FileName_Navigate_ScrollUp
 	ld bc, wa
 	cp wa, 0x13
@@ -615,7 +615,7 @@ FileName_OpNavigate:
 	jr FileName_Navigate_CheckChanged
 
 FileName_Navigate_ScrollUp:
-	cp xbc, 0x1C00017
+	cp xbc, 0x1c00017
 	jr nz, FileName_Navigate_CheckChanged
 	ld bc, wa
 	cps wa, 0
@@ -628,7 +628,7 @@ FileName_Navigate_CheckChanged:
 	cpda16 xwa, 32634
 	jr z, FileName_GetSelection
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -643,10 +643,10 @@ FileName_Navigate_CheckChanged:
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 
 FileName_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -662,7 +662,7 @@ FileName_UpdateDisplay:
 	ldda16 xde, 32634
 	exts xde
 	ldda32 xwa, 32626
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	call ApPostEvent
 	ld de, (xsp + 4)
 	sll de, 5
@@ -670,7 +670,7 @@ FileName_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 32626
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	ldda16 xde, 32634
 	sll de, 5
@@ -678,7 +678,7 @@ FileName_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 32626
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	ldw (xsp + 6), 0x0
 
@@ -744,14 +744,14 @@ FileName_Callback_Send:
 	ld de, iz
 	extz xde
 	ldda32 xwa, 32630
-	ld xbc, 0x1E50001
+	ld xbc, 0x1e50001
 	jr FileName_DispatchWidget
 
 FileName_Callback_Simple:
 	call FileIO_FormatName_Done
 	extz xhl
 	ldda32 xwa, 32630
-	ld xbc, 0x1E50001
+	ld xbc, 0x1e50001
 	ld xde, xhl
 	jr FileName_DispatchWidget
 
@@ -786,14 +786,14 @@ FileName_Register_Send:
 	ld de, iz
 	extz xde
 	ldda32 xwa, 32630
-	ld xbc, 0x1E50001
+	ld xbc, 0x1e50001
 	jr FileName_DispatchWidget
 
 FileName_Register_Simple:
 	call FileIO_FormatName_Done
 	extz xhl
 	ldda32 xwa, 32630
-	ld xbc, 0x1E50001
+	ld xbc, 0x1e50001
 	ld xde, xhl
 
 FileName_DispatchWidget:

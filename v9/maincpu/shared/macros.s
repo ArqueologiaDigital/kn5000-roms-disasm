@@ -3,7 +3,7 @@
 ; =============================================================================
 
 ; aligned_string - Null-terminated string with 16-bit alignment padding
-; Emits the string with null terminator, then pads with 0xFF if needed
+; Emits the string with null terminator, then pads with 0xff if needed
 ; to align the next item to an even address.
 .macro aligned_string str:vararg
 	.asciz \str
@@ -115,7 +115,7 @@
 
 ; Common constants
 .equ NAKA_HEADER_HI,  0x0160  ; Fixed upper 16 bits of header
-.equ NAKA_INDEX_NONE, 0xFFFF  ; Unused index slot
+.equ NAKA_INDEX_NONE, 0xffff  ; Unused index slot
 
 ; naka_header - Emit the 4-byte NAKA widget header
 ; Usage: naka_header NAKA_TYPE_LABEL

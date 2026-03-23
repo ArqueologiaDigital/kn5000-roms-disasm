@@ -18,9 +18,9 @@
 ; =============================================================================
 
 SingleLoadModeFunc:
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, SLMode_HandleShow
-	cp xbc, 0x1E50004
+	cp xbc, 0x1e50004
 	jr nz, SLMode_Return
 	stda32 33206, xde
 	jr SLMode_Return
@@ -30,9 +30,9 @@ SLMode_HandleShow:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xea0598
-	ld_sril3 XDE, 0x07, 0xE4, 0xE0
+	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ldda32 xwa, 33206
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 
 SLMode_Return:
@@ -40,9 +40,9 @@ SLMode_Return:
 	ret
 
 SingleLoadDstBankFunc:
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, SLDstBank_HandleShow
-	cp xbc, 0x1E50004
+	cp xbc, 0x1e50004
 	jr nz, SLDstBank_Return
 	stda32 33210, xde
 	jr SLDstBank_Return
@@ -52,9 +52,9 @@ SLDstBank_HandleShow:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xea05f2
-	ld_sril3 XDE, 0x07, 0xE4, 0xE0
+	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ldda32 xwa, 33210
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 
 SLDstBank_Return:
@@ -62,9 +62,9 @@ SLDstBank_Return:
 	ret
 
 SingleLoadDstMemFunc:
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, SLDstMem_HandleShow
-	cp xbc, 0x1E50004
+	cp xbc, 0x1e50004
 	jr nz, SLDstMem_Return
 	stda32 33214, xde
 	jr SLDstMem_Return
@@ -77,15 +77,15 @@ SLDstMem_HandleShow:
 	cpdi8 35320, 1
 	jr z, SLDstMem_ShowFromBank
 	ld xde, (xde + 16)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	jr SLDstMem_DispatchShow
 
 SLDstMem_ShowFromBank:
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
-	ld_sril3 XDE, 0x07, 0xE8, 0xE4
-	ld xbc, 0x1C0000F
+	ld_sril3 XDE, 0x07, 0xe8, 0xe4
+	ld xbc, 0x1c0000f
 
 SLDstMem_DispatchShow:
 	call ApPostEvent
@@ -95,9 +95,9 @@ SLDstMem_Return:
 	ret
 
 SingleLoadSrcBankFunc:
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, SLSrcBank_HandleShow
-	cp xbc, 0x1E50004
+	cp xbc, 0x1e50004
 	jr nz, SLSrcBank_Return
 	stda32 33218, xde
 	jr SLSrcBank_Return
@@ -111,14 +111,14 @@ SLSrcBank_HandleShow:
 	cpdi8 35338, 0
 	jr z, SLSrcBank_ShowFromIndex
 	ld xde, (xde + 16)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	jr SLSrcBank_DispatchShow
 
 SLSrcBank_ShowFromIndex:
 	extz bc
 	sla bc, 2
-	ld_sril3 XDE, 0x07, 0xE8, 0xE4
-	ld xbc, 0x1C0000F
+	ld_sril3 XDE, 0x07, 0xe8, 0xe4
+	ld xbc, 0x1c0000f
 
 SLSrcBank_DispatchShow:
 	call ApPostEvent
@@ -128,9 +128,9 @@ SLSrcBank_Return:
 	ret
 
 SingleLoadSrcMemFunc:
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, SLSrcMem_HandleShow
-	cp xbc, 0x1E50004
+	cp xbc, 0x1e50004
 	jr nz, SLSrcMem_Return
 	stda32 33222, xde
 	jr SLSrcMem_Return
@@ -146,14 +146,14 @@ SLSrcMem_HandleShow:
 
 SLSrcMem_ShowDirect:
 	ld xde, (xde + 16)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	jr SLSrcMem_DispatchShow
 
 SLSrcMem_ShowFromIndex:
 	extz bc
 	sla bc, 2
-	ld_sril3 XDE, 0x07, 0xE8, 0xE4
-	ld xbc, 0x1C0000F
+	ld_sril3 XDE, 0x07, 0xe8, 0xe4
+	ld xbc, 0x1c0000f
 
 SLSrcMem_DispatchShow:
 	call ApPostEvent
@@ -1409,34 +1409,34 @@ SingleLoadSrcFunc:
 	ld xiz, xde
 	ld (xsp + 4), xbc
 	ld xwa, (xsp + 4)
-	cp xwa, 0x1E50003
+	cp xwa, 0x1e50003
 	jrl z, SLSrc_ReturnCapture
-	cp xwa, 0x1C00018
+	cp xwa, 0x1c00018
 	jr z, SLSrc_HandleScroll
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	jr z, SLSrc_HandleScroll
-	cp xwa, 0x1C0000B
+	cp xwa, 0x1c0000b
 	jr z, SLSrc_HandleShow
-	cp xwa, 0x1E50004
+	cp xwa, 0x1e50004
 	jrl nz, SLSrc_Return
 	ld xwa, xiz
 	stda32 33248, xwa
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	jrl SLSrc_Return
 
 SLSrc_HandleShow:
 	ldda32 xwa, 33248
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33248
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0996
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
 	ld xhl, (xhl)
@@ -1450,14 +1450,14 @@ SLSrc_HandleScroll:
 	cpdi8 35320, 1
 	jr z, SLSrc_ScrollMode5_Prev
 	ldda32 xwa, 33248
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	lds32 xde, 1
 	jr SLSrc_ScrollMode5_Dispatch
 
 SLSrc_ScrollMode5_Prev:
 	ldda32 xwa, 33248
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 
 SLSrc_ScrollMode5_Dispatch:
 	call ApPostEvent
@@ -1466,7 +1466,7 @@ SLSrc_ScrollMode5_Dispatch:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0996
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
 	ld xhl, (xhl)
@@ -1481,14 +1481,14 @@ SLSrc_ScrollMode6:
 	cpdi8 35322, 0
 	jr nz, SLSrc_ScrollMode6_NoStep
 	ldda32 xwa, 33248
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	lds32 xde, 3
 	jr SLSrc_ScrollMode6_Dispatch
 
 SLSrc_ScrollMode6_NoStep:
 	ldda32 xwa, 33248
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 
 SLSrc_ScrollMode6_Dispatch:
 	call ApPostEvent
@@ -1497,7 +1497,7 @@ SLSrc_ScrollMode6_Dispatch:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0996
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
 	ld xhl, (xhl)
@@ -1508,15 +1508,15 @@ SLSrc_ScrollMode7:
 	ldda32 xwa, 33248
 	cp xiz, 0x7
 	jr nz, SLSrc_ScrollMode8
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33248
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0996
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
 	ld xhl, (xhl)
@@ -1526,15 +1526,15 @@ SLSrc_ScrollMode7:
 SLSrc_ScrollMode8:
 	cp xiz, 0x8
 	jr nz, SLSrc_ScrollMode40
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33248
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0996
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
 	ld xhl, (xhl)
@@ -1548,7 +1548,7 @@ SLSrc_ScrollMode40:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0996
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
 	ld xhl, (xhl)
@@ -1559,7 +1559,7 @@ SLSrc_Return:
 	jr SLSrc_Epilogue
 
 SLSrc_ReturnCapture:
-	ld xhl, 0xFFFFFFFF
+	ld xhl, 0xffffffff
 
 SLSrc_Epilogue:
 	pop xiz
@@ -2750,17 +2750,17 @@ SingleLoadDstFunc:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1E50003
+	cp xwa, 0x1e50003
 	jrl z, SLDst_ReturnCapture
-	cp xwa, 0x1C00018
+	cp xwa, 0x1c00018
 	jrl z, SLDst_HandleScroll
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	jrl z, SLDst_HandleScroll
-	cp xwa, 0x1C0000F
+	cp xwa, 0x1c0000f
 	jrl z, SLDst_HandleConfirm
-	cp xwa, 0x1C0000B
+	cp xwa, 0x1c0000b
 	jr z, SLDst_HandleShow
-	cp xwa, 0x1E50004
+	cp xwa, 0x1e50004
 	jr nz, SLDst_Return
 	ld xwa, (xsp + 4)
 	stda32 33264, xwa
@@ -2771,21 +2771,21 @@ SingleLoadDstFunc:
 	calr SignalProgressUpdate
 	cpdi8 35320, 1
 	jr z, SLDst_ShowHide_Internal
-	ld xwa, 0x61004A
-	ld xbc, 0x1E0009C
+	ld xwa, 0x61004a
+	ld xbc, 0x1e0009c
 	lds32 xde, 1
 	jr SLDst_ShowHide_Dispatch
 
 SLDst_ShowHide_Internal:
-	ld xwa, 0x61004A
-	ld xbc, 0x1E0009C
+	ld xwa, 0x61004a
+	ld xbc, 0x1e0009c
 	lds32 xde, 0
 
 SLDst_ShowHide_Dispatch:
 	call ApPostEvent
 	ldda32 xwa, 33264
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	cpdi8 35320, 0
 	jr nz, SLDst_ClearFloppyFlag
@@ -2824,11 +2824,11 @@ SLDst_HandleShow:
 	ld xde, (xsp + 4)
 	calr SingleLoadDstMemFunc
 	ldda32 xwa, 33264
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, 0x610036
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	lds32 xde, 0
 	call ApPostEvent
 	ldda32 xwa, 33264
@@ -2836,7 +2836,7 @@ SLDst_HandleShow:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -2845,16 +2845,16 @@ SLDst_HandleShow:
 
 SLDst_HandleConfirm:
 	ldda32 xwa, 33264
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33264
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
-	ld xbc, 0x1C0000B
+	st_dri3b C, 0x07, 0xe8, 0xe4
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	ld xhl, (xhl)
 	call (xhl)
@@ -2867,23 +2867,23 @@ SLDst_HandleScroll:
 	cpdi8 35320, 1
 	jr z, SLDst_ScrollMode4
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	scc8 z, a
 	stda8 35322, a
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr SingleLoadSrcMemFunc
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr SingleLoadDstMemFunc
 	ldda32 xwa, 33264
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, 0x610036
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	lds32 xde, 0
 	call ApPostEvent
 	ldda32 xwa, 33264
@@ -2891,13 +2891,13 @@ SLDst_HandleScroll:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
-	ld xbc, 0x1C0000B
+	st_dri3b C, 0x07, 0xe8, 0xe4
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	ld xhl, (xhl)
 	call (xhl)
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	jrl SLDst_ScrollMode3_CallSrcMem
 
@@ -2910,44 +2910,44 @@ SLDst_ScrollMode4:
 	jrl z, SLDst_Return
 	cpdi8 35320, 1
 	jr z, SLDst_ScrollMode4_Internal
-	ld xwa, 0x61004A
-	ld xbc, 0x1E0009C
+	ld xwa, 0x61004a
+	ld xbc, 0x1e0009c
 	lds32 xde, 1
 	jr SLDst_ScrollMode4_Dispatch
 
 SLDst_ScrollMode4_Internal:
-	ld xwa, 0x61004A
-	ld xbc, 0x1E0009C
+	ld xwa, 0x61004a
+	ld xbc, 0x1e0009c
 	lds32 xde, 0
 
 SLDst_ScrollMode4_Dispatch:
 	call ApPostEvent
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr SingleLoadModeFunc
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr SingleLoadSrcBankFunc
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr SingleLoadSrcMemFunc
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr SingleLoadDstBankFunc
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr SingleLoadDstMemFunc
 	ldda32 xwa, 33264
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ld xwa, 0x610036
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	lds32 xde, 0
 	call ApPostEvent
 	ldda32 xwa, 33264
@@ -2955,13 +2955,13 @@ SLDst_ScrollMode4_Dispatch:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
-	ld xbc, 0x1C0000B
+	st_dri3b C, 0x07, 0xe8, 0xe4
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	ld xhl, (xhl)
 	call (xhl)
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 
 SLDst_ScrollMode3_CallSrcMem:
@@ -2970,12 +2970,12 @@ SLDst_ScrollMode3_CallSrcMem:
 
 SLDst_ScrollDispatch:
 	ld xwa, (xsp + 4)
-	cp xwa, 0xA
+	cp xwa, 0xa
 	jr nz, SLDst_Scroll_ChildReturn
 	cpdi8 35320, 4
 	jr z, SLDst_Scroll_ChildReturn
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -2985,7 +2985,7 @@ SLDst_ScrollDispatch:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xix, (xhl)
@@ -2995,10 +2995,10 @@ SLDst_ScrollDispatch:
 	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jrl SLDst_Return
 
@@ -3009,7 +3009,7 @@ SLDst_Scroll_ChildReturn:
 	cpdi8 35320, 1
 	jr z, SLDst_Scroll_SubMode
 	ldda32 xwa, 33264
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	lds32 xde, 1
 	call ApPostEvent
 	ldda32 xwa, 33264
@@ -3017,7 +3017,7 @@ SLDst_Scroll_ChildReturn:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3026,15 +3026,15 @@ SLDst_Scroll_ChildReturn:
 
 SLDst_Scroll_SubMode:
 	ldda32 xwa, 33264
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33264
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3048,7 +3048,7 @@ SLDst_Scroll_SubMode2:
 	jrl nz, SLDst_Scroll_SubMode5
 	cpdi8 35320, 1
 	jr nz, SLDst_Scroll_SubMode3
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	lds32 xde, 2
 	call ApPostEvent
 	ldda32 xwa, 33264
@@ -3056,7 +3056,7 @@ SLDst_Scroll_SubMode2:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3066,7 +3066,7 @@ SLDst_Scroll_SubMode2:
 SLDst_Scroll_SubMode3:
 	cpdi8 35322, 0
 	jr nz, SLDst_Scroll_SubMode4
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	lds32 xde, 3
 	call ApPostEvent
 	ldda32 xwa, 33264
@@ -3074,7 +3074,7 @@ SLDst_Scroll_SubMode3:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3082,15 +3082,15 @@ SLDst_Scroll_SubMode3:
 	jrl SLDst_Return
 
 SLDst_Scroll_SubMode4:
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33264
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3101,15 +3101,15 @@ SLDst_Scroll_SubMode5:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x5
 	jr nz, SLDst_Scroll_SubMode6
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33264
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3120,15 +3120,15 @@ SLDst_Scroll_SubMode6:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x6
 	jrl nz, SLDst_Return
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33264
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a16
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3136,7 +3136,7 @@ SLDst_Scroll_SubMode6:
 	jrl SLDst_Return
 
 SLDst_ReturnCapture:
-	ld xhl, 0xFFFFFFFF
+	ld xhl, 0xffffffff
 
 SLDst_Epilogue:
 	pop xiz
@@ -3148,34 +3148,34 @@ CmpSingleLoadSrcFunc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xbc
-	cp xiz, 0x1E50003
+	cp xiz, 0x1e50003
 	jrl z, CmpSrc_ReturnCapture
-	cp xiz, 0x1C00018
+	cp xiz, 0x1c00018
 	jr z, CmpSrc_HandleScroll
-	cp xiz, 0x1C00017
+	cp xiz, 0x1c00017
 	jr z, CmpSrc_HandleScroll
-	cp xiz, 0x1C0000B
+	cp xiz, 0x1c0000b
 	jr z, CmpSrc_HandleShow
-	cp xiz, 0x1E50004
+	cp xiz, 0x1e50004
 	jrl nz, CmpSrc_Return
 	ld xwa, (xsp + 4)
 	stda32 33268, xwa
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	jrl CmpSrc_Return
 
 CmpSrc_HandleShow:
 	ldda32 xwa, 33268
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33268
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a2a
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3187,7 +3187,7 @@ CmpSrc_HandleScroll:
 	cp xwa, 0x5
 	jr nz, CmpSrc_ScrollMode6
 	ldda32 xwa, 33268
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	lds32 xde, 1
 	call ApPostEvent
 	ldda32 xwa, 33268
@@ -3195,7 +3195,7 @@ CmpSrc_HandleScroll:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a2a
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3209,7 +3209,7 @@ CmpSrc_ScrollMode6:
 	cpdi8 35322, 0
 	jr nz, CmpSrc_ScrollMode6_NoStep
 	ldda32 xwa, 33268
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	lds32 xde, 3
 	call ApPostEvent
 	ldda32 xwa, 33268
@@ -3217,7 +3217,7 @@ CmpSrc_ScrollMode6:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a2a
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3226,15 +3226,15 @@ CmpSrc_ScrollMode6:
 
 CmpSrc_ScrollMode6_NoStep:
 	ldda32 xwa, 33268
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33268
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a2a
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3246,15 +3246,15 @@ CmpSrc_ScrollMode7:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x7
 	jr nz, CmpSrc_ScrollMode8
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33268
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a2a
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3267,15 +3267,15 @@ CmpSrc_ScrollMode8:
 	jr nz, CmpSrc_ScrollMode40
 	cpdi8 35322, 0
 	jr nz, CmpSrc_ScrollMode40
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33268
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a2a
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3290,7 +3290,7 @@ CmpSrc_ScrollMode40:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a2a
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3301,7 +3301,7 @@ CmpSrc_Return:
 	jr CmpSrc_Epilogue
 
 CmpSrc_ReturnCapture:
-	ld xhl, 0xFFFFFFFF
+	ld xhl, 0xffffffff
 
 CmpSrc_Epilogue:
 	pop xiz
@@ -3315,20 +3315,20 @@ CmpSingleLoadDstFunc:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1E50003
+	cp xwa, 0x1e50003
 	jrl z, CmpDst_ReturnCapture
-	cp xwa, 0x1C00018
+	cp xwa, 0x1c00018
 	jrl z, CmpDst_HandleScroll
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	jrl z, CmpDst_HandleScroll
-	cp xwa, 0x1C0000B
+	cp xwa, 0x1c0000b
 	jr z, CmpDst_HandleShow
-	cp xwa, 0x1E50004
+	cp xwa, 0x1e50004
 	jrl nz, CmpDst_Return
 	ld xwa, (xsp + 4)
 	stda32 33272, xwa
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	jrl CmpDst_Return
 
@@ -3350,11 +3350,11 @@ CmpDst_HandleShow:
 	ld xde, (xsp + 4)
 	calr SingleLoadDstBankFunc
 	ldda32 xwa, 33272
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
-	ld xwa, 0x61007E
-	ld xbc, 0x1E0003B
+	ld xwa, 0x61007e
+	ld xbc, 0x1e0003b
 	lds32 xde, 0
 	call ApPostEvent
 	ldda32 xwa, 33272
@@ -3362,7 +3362,7 @@ CmpDst_HandleShow:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a3e
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3374,23 +3374,23 @@ CmpDst_HandleScroll:
 	cp xwa, 0x3
 	jr nz, CmpDst_ScrollModeA
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	scc8 z, a
 	stda8 35322, a
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr SingleLoadSrcMemFunc
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr SingleLoadDstMemFunc
 	ldda32 xwa, 33272
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
-	ld xwa, 0x61007E
-	ld xbc, 0x1E0003B
+	ld xwa, 0x61007e
+	ld xbc, 0x1e0003b
 	lds32 xde, 0
 	call ApPostEvent
 	ldda32 xwa, 33272
@@ -3398,25 +3398,25 @@ CmpDst_HandleScroll:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a3e
-	st_dri3b C, 0x07, 0xE8, 0xE4
-	ld xbc, 0x1C0000B
+	st_dri3b C, 0x07, 0xe8, 0xe4
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	ld xhl, (xhl)
 	call (xhl)
 	ld xwa, xiz
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr CmpSingleLoadSrcFunc
 	jrl CmpDst_Return
 
 CmpDst_ScrollModeA:
 	ld xwa, (xsp + 4)
-	cp xwa, 0xA
+	cp xwa, 0xa
 	jr nz, CmpDst_ScrollMode7
 	cpdi8 35320, 4
 	jr z, CmpDst_ScrollMode7
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -3426,7 +3426,7 @@ CmpDst_ScrollModeA:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a3e
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xix, (xhl)
@@ -3436,10 +3436,10 @@ CmpDst_ScrollModeA:
 	calr FileIO_ValidateSignedValue
 	stda8 32578, l
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jrl CmpDst_Return
 
@@ -3448,7 +3448,7 @@ CmpDst_ScrollMode7:
 	cp xwa, 0x7
 	jr nz, CmpDst_ScrollMode8
 	ldda32 xwa, 33272
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	lds32 xde, 1
 	call ApPostEvent
 	ldda32 xwa, 33272
@@ -3456,7 +3456,7 @@ CmpDst_ScrollMode7:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a3e
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3470,7 +3470,7 @@ CmpDst_ScrollMode8:
 	jr nz, CmpDst_ScrollMode5
 	cpdi8 35322, 0
 	jr nz, CmpDst_ScrollMode8_NoStep
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	lds32 xde, 3
 	call ApPostEvent
 	ldda32 xwa, 33272
@@ -3478,7 +3478,7 @@ CmpDst_ScrollMode8:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a3e
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3486,15 +3486,15 @@ CmpDst_ScrollMode8:
 	jrl CmpDst_Return
 
 CmpDst_ScrollMode8_NoStep:
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33272
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a3e
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3505,15 +3505,15 @@ CmpDst_ScrollMode5:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x5
 	jr nz, CmpDst_ScrollMode6
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33272
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a3e
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3526,15 +3526,15 @@ CmpDst_ScrollMode6:
 	jr nz, CmpDst_Return
 	cpdi8 35322, 0
 	jr nz, CmpDst_Return
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	call ApPostEvent
 	ldda32 xwa, 33272
 	ldda8 c, 35320
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xea0a3e
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	ld xhl, (xhl)
@@ -3545,7 +3545,7 @@ CmpDst_Return:
 	jr CmpDst_Epilogue
 
 CmpDst_ReturnCapture:
-	ld xhl, 0xFFFFFFFF
+	ld xhl, 0xffffffff
 
 CmpDst_Epilogue:
 	pop xiz
@@ -3556,13 +3556,13 @@ CmpSingleLoadFileFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
-	cp xbc, 0x1C00018
+	cp xbc, 0x1c00018
 	jrl z, CmpFile_HandleScroll
-	cp xbc, 0x1C00017
+	cp xbc, 0x1c00017
 	jr z, CmpFile_HandleScroll
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, CmpFile_HandleShow
-	cp xbc, 0x1E50004
+	cp xbc, 0x1e50004
 	jrl nz, CmpFile_Return
 	stda32 33276, xde
 	call GetCurrentFileIndex
@@ -3573,8 +3573,8 @@ CmpSingleLoadFileFunc:
 
 CmpFile_Selection_Clamp:
 	ldda32 xwa, 33276
-	ld xbc, 0x1E50002
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e50002
+	ld xde, 0xffffffff
 	jr CmpFile_ShowDispatch
 
 CmpFile_HandleShow:
@@ -3598,7 +3598,7 @@ CmpFile_ShowDraw:
 	ld xbc, xiz
 	call FileIO_ReadHeader_ParseLoop
 	ldda32 xwa, 33276
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x8870
 
 CmpFile_ShowDispatch:
@@ -3656,15 +3656,15 @@ CmpFile_RedrawDispatch:
 	ld xbc, xiz
 	call FileIO_ReadHeader_ParseLoop
 	ldda32 xwa, 33276
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x8870
 	call ApPostEvent
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr CmpSingleLoadSrcFunc
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	calr CmpSingleLoadDstFunc
 
@@ -3675,7 +3675,7 @@ CmpFile_Return:
 	ret
 
 FmmCmpSingleLoadFunc:
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jrl nz, FmmCmpLoad_Return
 	cp xde, 0x3
 	jrl z, FmmCmpLoad_HandleAbort
@@ -3683,12 +3683,12 @@ FmmCmpSingleLoadFunc:
 	jrl nz, FmmCmpLoad_Return
 	lds wa, 1
 	calr InitializeOperationState
-	ld xwa, 0x61004A
-	ld xbc, 0x1E0009C
+	ld xwa, 0x61004a
+	ld xbc, 0x1e0009c
 	lds32 xde, 1
 	call ApPostEvent
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	cpdi16 34048, 0
@@ -3730,11 +3730,11 @@ FmmCmpLoad_SignalProgress:
 
 FmmCmpLoad_CloseProgress:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0000A
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 35326, 0
@@ -3743,34 +3743,34 @@ FmmCmpLoad_CloseProgress:
 
 FmmCmpLoad_HandleCancel:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xB0
+	ldw wa, 0xb0
 	call UI_PostModeChangeEvent
 	stdi8 32578, 0
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jr FmmCmpLoad_CallStatusDisplay
 
 FmmCmpLoad_HandleError:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0x7D
+	ldw wa, 0x7d
 	call UI_PostModeChangeEvent
 	jr FmmCmpLoad_Return
 
 FmmCmpLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xB0
+	ldw wa, 0xb0
 	call UI_PostModeChangeEvent
 	stdi8 32578, 2
-	ldw wa, 0xEE
+	ldw wa, 0xee
 
 FmmCmpLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -3793,31 +3793,31 @@ BuildSlotLabel:
 	extz xwa
 	sll xwa, 11
 	add xbc, xwa
-	st_dri3b A, 0xE5, 0x00, 0x01
+	st_dri3b A, 0xe5, 0x00, 0x01
 	ld wa, (xsp + 4)
 	mul wa, 0x15
 	ldada xix, 33282
 	ld iz, wa
 	extz xiz
 	add xiz, xix
-	lda_dpi XSP, 0xF8
+	lda_dpi XSP, 0xf8
 	cps e, 0
 	jr z, BuildSlotLabel_WriteContent
 	cpw (xsp + 4), 0x9
 	jr nz, BuildSlotLabel_WriteLetter
-	stib_dpi 0xF8, 0x31
+	stib_dpi 0xf8, 0x31
 	ld (xiz), 0x30
 	jr BuildSlotLabel_WriteColon
 
 BuildSlotLabel_WriteLetter:
-	stib_dpi 0xF8, 0x20
+	stib_dpi 0xf8, 0x20
 	ld wa, (xsp + 4)
 	add a, 0x31
 	ld (xiz), a
 
 BuildSlotLabel_WriteColon:
 	inc 1, xiz
-	stib_dpi 0xF8, 0x3A
+	stib_dpi 0xf8, 0x3a
 
 BuildSlotLabel_WriteContent:
 	ld xwa, xiz

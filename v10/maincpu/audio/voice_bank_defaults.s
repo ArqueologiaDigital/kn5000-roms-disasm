@@ -15,7 +15,7 @@ Voice_BankSlotZeroInit:
 
 Voice_SlotTemplate:
 	nop
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 	.byte 0x87
 	.zero 248
 	.byte 0x00, 0x87

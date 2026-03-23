@@ -19,7 +19,7 @@ MidiSerial_ProcessInput:
 	stdi16 37086, 0
 
 MidiSerial_PumpLoop:
-	ld xix, 0x1F37B
+	ld xix, 0x1f37b
 	ld wa, (xix - 10)
 	cp wa, (xix - 6)
 	jr z, MidiSerial_PumpDone
@@ -29,16 +29,16 @@ MidiSerial_PumpLoop:
 	stda8 38484, a
 	and a, 0x70
 	srl a, 2
-	ld xiz, 0xFCFA05
-	ld_sril3 XIZ, 0x03, 0xF8, 0xE0
+	ld xiz, 0xfcfa05
+	ld_sril3 XIZ, 0x03, 0xf8, 0xe0
 	call (xiz)
 	jr MidiSerial_PumpLoop
 
 MidiSerial_PumpDone:
 	call MidiStream_LoadAllPresets
-	ld xix, 0xBD3C
+	ld xix, 0xbd3c
 	ldda16 xhl, 37086
-	stib_dri 0x07, 0xF0, 0xEC, 0xFF
+	stib_dri 0x07, 0xf0, 0xec, 0xff
 
 MidiSerial_Return:
 	ret
@@ -51,17 +51,17 @@ MidiSerial_StatusTable:
 	nop
 
 MidiSerial_WaitForData:
-	ld xiz, 0x1F37B
+	ld xiz, 0x1f37b
 	ld xiy, 0x9634
 	ld (xiy + 3), 0x0
 
 MidiSerial_WaitLoop:
 	call SeqMain_ReadData
-	lda_dpi XSP, 0xF4
+	lda_dpi XSP, 0xf4
 	ld hl, (xiz - 10)
 	cp hl, (xiz - 6)
 	jr z, MidiSerial_WaitDone
-	ld_srib3 A, 0x07, 0xF8, 0xEC
+	ld_srib3 A, 0x07, 0xf8, 0xec
 	bit 7, a
 	jr z, MidiSerial_WaitLoop
 
@@ -1056,7 +1056,7 @@ MidiCC_Handler_TableDispatch:
 	cp a, 0x1f
 	jr ugt, MidiCC_Handler_TableDispatch_Ret
 	sll	a, 1
-	ld xix, 0x00FD1587
+	ld xix, 0x00fd1587
 	ld_rr8w	bc, xix, w
 	cp c, 0xff
 	jr z, MidiCC_Handler_TableDispatch_Ret
@@ -1066,7 +1066,7 @@ MidiCC_Handler_TableDispatch:
 	stda8	38472, a
 	stda16	38468, bc
 	stda16	38470, de
-	call 0xFCC726
+	call 0xfcc726
 MidiCC_Handler_TableDispatch_Ret:
 	ret
 MidiCC_Helper_ConditionalESetup:
@@ -1079,7 +1079,7 @@ MidiCC_Helper_ConditionalESetup:
 	ld e, d
 MidiCC_Helper_ConditionalESetup_Store:
 	stda16	38470, de
-	call 0xFCC5B7
+	call 0xfcc5b7
 	ret
 MidiCC_Helper_EntryWithEqA:
 	; --- Subroutine 3: entry variant with E=A (23 bytes) ---
@@ -1088,7 +1088,7 @@ MidiCC_Helper_EntryWithEqA:
 	stda8	38472, a
 	stda16	38468, bc
 	stda16	38470, de
-	call 0xFCC744
+	call 0xfcc744
 	ret
 
 
@@ -1301,13 +1301,13 @@ MIDI_DispatchCC:
 	jr nz, MidiCC_DispatchCleanupRet
 	stda16 38476, xbc
 	stda16 38478, xde
-	cp c, 0xBF
+	cp c, 0xbf
 	jr ugt, MidiCC_DispatchCleanupRet
 	ld l, c
 	extz hl
 	sll hl, 2
-	ld xix, 0xFD175E
-	ld_sril3 XIX, 0x07, 0xF0, 0xEC
+	ld xix, 0xfd175e
+	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	call (xix)
 
 MidiCC_DispatchCleanupRet:
@@ -1324,8 +1324,8 @@ PanelEvt_CheckFlag7_Dispatch_A:
 	jr nz, PanelEvt_CheckFlag7_Ret_A
 
 PanelEvt_CheckFlag7_DoDispatch_A:
-	ld xiy, 0xFD0609
-	ldb a, 0xF
+	ld xiy, 0xfd0609
+	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 
 PanelEvt_CheckFlag7_Ret_A:
@@ -1338,8 +1338,8 @@ PanelEvt_CheckFlag7_Dispatch_B:
 	jr nz, PanelEvt_CheckFlag7_Ret_B
 
 PanelEvt_CheckFlag7_DoDispatch_B:
-	ld xiy, 0xFD0609
-	ldb a, 0xF
+	ld xiy, 0xfd0609
+	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 
 PanelEvt_CheckFlag7_Ret_B:
@@ -1352,24 +1352,24 @@ PanelEvt_CheckFlag7_Dispatch_C:
 	jr nz, PanelEvt_CheckFlag7_Ret_C
 
 PanelEvt_CheckFlag7_DoDispatch_C:
-	ld xiy, 0xFD0609
-	ldb a, 0xF
+	ld xiy, 0xfd0609
+	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 
 PanelEvt_CheckFlag7_Ret_C:
 	ret
 
 PanelEvt_UnconditionalDispatch:
-	ld xiy, 0xFD0609
-	ldb a, 0xF
+	ld xiy, 0xfd0609
+	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 	ret
 
 PanelEvt_CheckFlag6_Dispatch:
 	bitda 6, 64851
 	jr z, PanelEvt_CheckFlag6_Ret
-	ld xiy, 0xFD0609
-	ldb a, 0xF
+	ld xiy, 0xfd0609
+	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 
 PanelEvt_CheckFlag6_Ret:
@@ -1382,8 +1382,8 @@ PanelEvt_CheckChanZero_Dispatch:
 	jr z, PanelEvt_CheckChanZero_Ret
 
 PanelEvt_CheckChanZero_DoDispatch:
-	ld xiy, 0xFD0609
-	ldb a, 0xF
+	ld xiy, 0xfd0609
+	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 
 PanelEvt_CheckChanZero_Ret:
@@ -1679,7 +1679,7 @@ PanelEvt_Handler_15_ConditionalSet:
 	ret
 
 PanelEvt_Dispatch6Entry:
-	ld xiy, 0xFD0877
+	ld xiy, 0xfd0877
 	ldb a, 0x6
 	calr PanelEvent_DispatchByIndex
 	ret
@@ -1793,7 +1793,7 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	nop
 
 PanelEvt_Dispatch3Entry_A:
-	ld xiy, 0xFD093F
+	ld xiy, 0xfd093f
 	ldb a, 0x3
 	calr PanelEvent_DispatchByIndex
 	ret
@@ -1843,7 +1843,7 @@ PanelEvt_Dispatch3_TableAndHandlers_A:
 	ret
 
 PanelEvt_Dispatch3Entry_B:
-	ld xiy, 0xFD098F
+	ld xiy, 0xfd098f
 	ldb a, 0x3
 	calr PanelEvent_DispatchByIndex
 	ret
@@ -1859,8 +1859,8 @@ PanelEvt_Dispatch3_Table_B:
 	nop
 
 PanelEvt_Dispatch11Entry:
-	ld xiy, 0xFD09AB
-	ldb a, 0xB
+	ld xiy, 0xfd09ab
+	ldb a, 0xb
 	calr PanelEvent_DispatchByIndex
 	ret
 
@@ -1919,19 +1919,19 @@ PanelEvent_DispatchByIndex:
 	jr ugt, PanelEvt_DispatchByIndex_Ret
 	extz hl
 	sll hl, 2
-	ld_sril3 XHL, 0x07, 0xF4, 0xEC
+	ld_sril3 XHL, 0x07, 0xf4, 0xec
 	call (xhl)
 
 PanelEvt_DispatchByIndex_Ret:
 	ret
 
 MidiCC_ChannelDispatch_TableA:
-	ld xix, 0xFD1A8E
+	ld xix, 0xfd1a8e
 	ldda8 l, 38477
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xF0, 0xEC
-	cp xix, 0xFFFFFFFF
+	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	cp xix, 0xffffffff
 	jr z, MidiCC_ChannelDispatch_TableA_Ret
 	ldda16 xde, 38478
 	call MidiCC_ChannelDispatch_DualSend
@@ -1941,13 +1941,13 @@ MidiCC_ChannelDispatch_TableA_Ret:
 
 MidiCC_ChannelDispatch_Ctrl40:
 	ldda8 l, 38477
-	cp l, 0x1F
+	cp l, 0x1f
 	jr ugt, BitMask_Ctrl40_ConfigExit
-	ld xix, 0xFD1F0F
+	ld xix, 0xfd1f0f
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xF0, 0xEC
-	cp xix, 0xFFFFFFFF
+	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl40_ConfigExit
 	bitda 0, 64857
 	jr z, BitMask_Ctrl40_ConfigExit
@@ -1960,13 +1960,13 @@ BitMask_Ctrl40_ConfigExit:
 
 MidiCC_ChannelDispatch_Ctrl41:
 	ldda8 l, 38477
-	cp l, 0x1F
+	cp l, 0x1f
 	jr ugt, MidiCC_ChannelDispatch_Ctrl41_Ret
-	ld xix, 0xFD1F8F
+	ld xix, 0xfd1f8f
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xF0, 0xEC
-	cp xix, 0xFFFFFFFF
+	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	cp xix, 0xffffffff
 	jr z, MidiCC_ChannelDispatch_Ctrl41_Ret
 	xor e, e
 	ldb w, 0x29
@@ -1979,7 +1979,7 @@ MidiCC_ChannelDispatch_SpecialCh1:
 	ldda8 l, 38477
 	cps l, 1
 	jr nz, MidiCC_ChannelDispatch_SpecialCh1_Ret
-	ld xix, 0xFC19
+	ld xix, 0xfc19
 	bitda 3, 64856
 	jr z, MidiCC_ChannelDispatch_SpecialCh1_Ret
 	ldda8 e, 38478
@@ -1991,13 +1991,13 @@ MidiCC_ChannelDispatch_SpecialCh1_Ret:
 
 MidiCC_ChannelDispatch_CtrlFlags:
 	ldda8 l, 38477
-	cp l, 0x1F
+	cp l, 0x1f
 	jr ugt, PanelEvent_NullRet
-	ld xix, 0xFD200F
+	ld xix, 0xfd200f
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xF0, 0xEC
-	cp xix, 0xFFFFFFFF
+	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	cp xix, 0xffffffff
 	jr z, PanelEvent_NullRet
 	bitda 6, 64855
 	jr z, PanelEvent_NullRet
@@ -2011,8 +2011,8 @@ MidiCC_ChannelDispatch_CtrlFlags:
 MidiCC_ChannelDispatch_BuildPacket:
 	ldw de, 0x300
 	stda16 38463, xde
-	and a, 0xF
-	or a, 0xE0
+	and a, 0xf
+	or a, 0xe0
 	ldda8 w, 38478
 	stda16 38460, xwa
 	ldda8 a, 38479
@@ -2024,13 +2024,13 @@ PanelEvent_NullRet:
 
 MidiCC_ChannelDispatch_Ctrl1:
 	ldda8 l, 38477
-	cp l, 0x1F
+	cp l, 0x1f
 	jr ugt, BitMask_Ctrl1_ConfigExit
-	ld xix, 0xFD208F
+	ld xix, 0xfd208f
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xF0, 0xEC
-	cp xix, 0xFFFFFFFF
+	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl1_ConfigExit
 	bitda 1, 64856
 	jr z, BitMask_Ctrl1_ConfigExit
@@ -2043,13 +2043,13 @@ BitMask_Ctrl1_ConfigExit:
 
 MidiCC_ChannelDispatch_Ctrl3:
 	ldda8 l, 38477
-	cp l, 0x1F
+	cp l, 0x1f
 	jr ugt, BitMask_Ctrl3_ConfigExit
-	ld xix, 0xFD210F
+	ld xix, 0xfd210f
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xF0, 0xEC
-	cp xix, 0xFFFFFFFF
+	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl3_ConfigExit
 	bitda 3, 64856
 	jr z, BitMask_Ctrl3_ConfigExit
@@ -2062,13 +2062,13 @@ BitMask_Ctrl3_ConfigExit:
 
 MidiCC_ChannelDispatch_CtrlFlags2:
 	ldda8 l, 38477
-	cp l, 0x1F
+	cp l, 0x1f
 	jr ugt, PanelEvent_NullRet2
-	ld xix, 0xFD218F
+	ld xix, 0xfd218f
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xF0, 0xEC
-	cp xix, 0xFFFFFFFF
+	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	cp xix, 0xffffffff
 	jr z, PanelEvent_NullRet2
 	bitda 5, 64855
 	jr z, PanelEvent_NullRet2
@@ -2082,8 +2082,8 @@ MidiCC_ChannelDispatch_CtrlFlags2:
 MidiCC_ChannelDispatch_BuildPacket2:
 	ldw de, 0x200
 	stda16 38463, xde
-	and a, 0xF
-	or a, 0xD0
+	and a, 0xf
+	or a, 0xd0
 	ldda8 w, 38478
 	stda16 38460, xwa
 	calr FileData_ValidateAndDispatch
@@ -2093,13 +2093,13 @@ PanelEvent_NullRet2:
 
 MidiCC_ChannelDispatch_Ctrl0:
 	ldda8 l, 38477
-	cp l, 0x1F
+	cp l, 0x1f
 	jr ugt, BitMask_Ctrl0_ConfigExit
-	ld xix, 0xFD220F
+	ld xix, 0xfd220f
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xF0, 0xEC
-	cp xix, 0xFFFFFFFF
+	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl0_ConfigExit
 	bitda 0, 64856
 	jr z, BitMask_Ctrl0_ConfigExit
@@ -2280,16 +2280,16 @@ MidiChannel_ConfigureController:
 	jr nz, MidiChannel_ConfigureExit
 
 MidiChanCfg_SetupParams:
-	ld xiy, 0x963C
+	ld xiy, 0x963c
 	ldw bc, 0x300
 	ld (xiy + 3), bc
-	and a, 0xF
-	or a, 0xB0
-	cp w, 0x2F
+	and a, 0xf
+	or a, 0xb0
+	cp w, 0x2f
 	jr ugt, MidiChannel_ConfigureExit
-	ld xiz, 0xFD1A5E
-	ld_srib3 W, 0x03, 0xF8, 0xE1
-	cp w, 0xFF
+	ld xiz, 0xfd1a5e
+	ld_srib3 W, 0x03, 0xf8, 0xe1
+	cp w, 0xff
 	jr z, MidiChannel_ConfigureExit
 	ld (xiy + 256), wa
 	ld (xiy + 2), e
@@ -2347,11 +2347,11 @@ MidiCC_ChannelDispatch_DualSend:
 	jr nz, FileData_DispatchExit
 
 MidiCC_DualSend_SetupParams:
-	ld xiy, 0x963C
+	ld xiy, 0x963c
 	ldw bc, 0x300
 	ld (xiy + 3), bc
-	and a, 0xF
-	or a, 0xB0
+	and a, 0xf
+	or a, 0xb0
 	ldb w, 0x0
 	ld (xiy + 256), wa
 	res 7, d
@@ -2374,17 +2374,17 @@ FileData_ValidateAndDispatch:
 	push xbc
 	push xde
 	push xhl
-	ld xix, 0x963C
+	ld xix, 0x963c
 	ld c, (xix + 4)
 	ld w, (xix + 256)
-	ld xiy, 0xFDB773
+	ld xiy, 0xfdb773
 	ld xiz, 0x424
 	pushw wa
 	ld a, w
 	extz wa
 	calr FileData_ValidateFormat
 	popw wa
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr z, FileData_DispatchHandler
 	inc 1, xix
 	dec 1, c
@@ -5771,9 +5771,9 @@ FileData_ValidateFormat:
 	dec 2, xsp
 	ld (xsp), a
 	call SeqState_GetFlags
-	and hl, 0xF
+	and hl, 0xf
 	jr z, FileData_ValidateFormat_CheckMatch
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	jr FileData_ValidateFormat_Return
 
 FileData_ValidateFormat_CheckMatch:
@@ -5781,7 +5781,7 @@ FileData_ValidateFormat_CheckMatch:
 	cp a, (xsp)
 	jr z, FileData_ValidateFormat_Match
 	mrib4 0x87, 0x19, 0x24, 0x04
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	jr FileData_ValidateFormat_Return
 
 FileData_ValidateFormat_Match:
@@ -5794,13 +5794,13 @@ FileData_ValidateFormat_Return:
 	ret
 
 ; --- FileData_LoadAndParse: Allocate buffer, load file, dispatch by format ---
-; Allocates 32-byte buffer via malloc (0xFF3E80). On failure returns 0xFF38.
-; Reads data into buffer via (0xF89A74), then dispatches based on format type:
+; Allocates 32-byte buffer via malloc (0xff3e80). On failure returns 0xff38.
+; Reads data into buffer via (0xf89a74), then dispatches based on format type:
 ;   type 1: calls local handler (+108 bytes)
 ;   type 2: calls local handler (+557 bytes), chains to secondary (+7610)
 ;   type 3: calls local handler (+7252 bytes), chains to secondary (+7610)
 ; On any sub-handler failure (negative result), returns error.
-; Frees buffer via (0xFF3AF2) before returning status in HL.
+; Frees buffer via (0xff3af2) before returning status in HL.
 FileData_AllocLoadAndParse:
 	dec	4, xsp
 	pushw	iz
@@ -5859,7 +5859,7 @@ FileData_LoadFromSlot:
 	extz bc
 	sla bc, 11
 	lda_24 xwa, 0x0ab000
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	calr DataBuf_CheckSubFormat
 	stda16 47082, xhl
 	ld a, (xsp)
@@ -5880,7 +5880,7 @@ FileData_LoadFromSlot_Type3:
 	jr FileData_LoadFromSlot_Return
 
 FileData_LoadFromSlot_UnknownFormat:
-	ldw hl, 0xFF9A
+	ldw hl, 0xff9a
 
 FileData_LoadFromSlot_Return:
 	inc 2, xsp
@@ -6310,7 +6310,7 @@ DataBuf_AllocAndLoadFormatted:
 	ld xwa, (xsp + 6)
 	or xwa, xwa
 	jr nz, DataBuf_AllocAndLoadFormatted_AllocOk
-	ldw hl, 0xFF38
+	ldw hl, 0xff38
 	jrl DataBuf_AllocAndLoadFormatted_Return
 
 DataBuf_AllocAndLoadFormatted_AllocOk:
@@ -6319,14 +6319,14 @@ DataBuf_AllocAndLoadFormatted_AllocOk:
 	extz bc
 	sla bc, 11
 	lda_24 xwa, 0x0ab000
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	push xwa
 	ld xwa, (xsp + 12)
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 6)
-	st_dri3b W, 0xE1, 0xE0, 0x02
+	st_dri3b W, 0xe1, 0xe0, 0x02
 	ld (xsp + 10), xwa
 	ld a, (xsp + 18)
 	extz wa
@@ -6336,9 +6336,9 @@ DataBuf_AllocAndLoadFormatted_AllocOk:
 	extz bc
 	sla bc, 11
 	lda_24 xwa, 0x0ab000
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld (xsp + 14), xwa
-	ld xwa, 0x2E0
+	ld xwa, 0x2e0
 	add (xsp + 14), xwa
 	ldw (xsp + 4), 0x0
 
@@ -6350,7 +6350,7 @@ DataBuf_TransferVoiceParams_Loop:
 	add xbc, 0x20
 	ld xiz, xbc
 	add xiz, (xsp + 10)
-	ld xbc, 0x1A
+	ld xbc, 0x1a
 	call Math_MultiplyAccumulate
 	add xhl, 0x34
 	add xhl, (xsp + 14)
@@ -6372,26 +6372,26 @@ DataBuf_TransferEffectParams_Loop:
 	ld xwa, xbc
 	add xwa, 0x320
 	add xwa, (xsp + 10)
-	add xbc, 0x2A4
+	add xbc, 0x2a4
 	add xbc, (xsp + 14)
 	calr DataBuf_CopyEffectBlock12
 	incm 1, (xsp + 4)
 	cpw (xsp + 4), 0x3
 	jr c, DataBuf_TransferEffectParams_Loop
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0x44, 0x03
+	st_dri3b W, 0xe1, 0x44, 0x03
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0xD8, 0x02
+	st_dri3b A, 0xe5, 0xd8, 0x02
 	calr DataBuf_CopyFilterBlock12
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0x54, 0x03
+	st_dri3b W, 0xe1, 0x54, 0x03
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0xE4, 0x02
+	st_dri3b A, 0xe5, 0xe4, 0x02
 	calr DataBuf_CopyReverbBlock6
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0x5C, 0x03
+	st_dri3b W, 0xe1, 0x5c, 0x03
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0xEC, 0x02
+	st_dri3b A, 0xe5, 0xec, 0x02
 	calr DataBuf_CopySimpleBlock4
 	ldw (xsp + 4), 0x0
 
@@ -6400,12 +6400,12 @@ DataBuf_TransferAuxParams_Loop:
 	extz xwa
 	ld xbc, xwa
 	sll xbc, 5
-	add xbc, 0x36A
+	add xbc, 0x36a
 	ld xiz, xbc
 	add xiz, (xsp + 10)
-	ld xbc, 0x1A
+	ld xbc, 0x1a
 	call Math_MultiplyAccumulate
-	add xhl, 0x2F2
+	add xhl, 0x2f2
 	add xhl, (xsp + 14)
 	ld xwa, xiz
 	ld xbc, xhl
@@ -6414,34 +6414,34 @@ DataBuf_TransferAuxParams_Loop:
 	cpw (xsp + 4), 0x2
 	jr c, DataBuf_TransferAuxParams_Loop
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0xAA, 0x03
+	st_dri3b W, 0xe1, 0xaa, 0x03
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0x80, 0x03
+	st_dri3b A, 0xe5, 0x80, 0x03
 	calr DataBuf_CopyEQBlock7
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0xB8, 0x03
+	st_dri3b W, 0xe1, 0xb8, 0x03
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0x8A, 0x03
+	st_dri3b A, 0xe5, 0x8a, 0x03
 	calr DataBuf_CopyChorusBlock16
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0xC8, 0x03
+	st_dri3b W, 0xe1, 0xc8, 0x03
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0x9A, 0x03
+	st_dri3b A, 0xe5, 0x9a, 0x03
 	calr DataBuf_CopyCompressorBlock16
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0xD8, 0x03
+	st_dri3b W, 0xe1, 0xd8, 0x03
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0xAA, 0x03
+	st_dri3b A, 0xe5, 0xaa, 0x03
 	calr DataBuf_CopyDelayBit2
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0xDE, 0x03
+	st_dri3b W, 0xe1, 0xde, 0x03
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0xCE, 0x03
+	st_dri3b A, 0xe5, 0xce, 0x03
 	calr DataBuf_CopyMixerBlock12
 	ld xwa, (xsp + 10)
 	ld xbc, (xsp + 14)
 	calr DataBuf_CopyBulkBitfields_Nop
-	ld xwa, 0xF980
+	ld xwa, 0xf980
 	ld xbc, (xsp + 14)
 	calr DataBuf_CopyBulkBitfields_F980
 	ld xwa, (xsp + 6)
@@ -6460,11 +6460,11 @@ DataBuf_CopyVoiceBlock24:
 	ld a, (xde + 2)
 	ld (xbc + 2), a
 	ld a, (xde + 3)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xbc + 3), 0x80
 	or (xbc + 3), a
 	ld a, (xde + 4)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xbc + 4), 0x80
 	or (xbc + 4), a
 	lda xix, (xbc + 5)
@@ -6473,10 +6473,10 @@ DataBuf_CopyVoiceBlock24:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ld a, (xhl)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xix), 0x80
 	or (xix), a
 	lda xix, (xbc + 6)
@@ -6485,32 +6485,32 @@ DataBuf_CopyVoiceBlock24:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ldcfm 6, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ldcfm 3, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), a
 	ld a, (xhl)
 	and a, 0x7
-	andmi8 (xix), 0xF8
+	andmi8 (xix), 0xf8
 	or (xix), a
 	ld a, (xde + 7)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xbc + 7), 0x80
 	or (xbc + 7), a
 	lda xix, (xbc + 8)
@@ -6519,28 +6519,28 @@ DataBuf_CopyVoiceBlock24:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ld a, (xhl)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xix), 0x80
 	or (xix), a
 	ld a, (xde + 9)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xbc + 9), 0x80
 	or (xbc + 9), a
 	ld a, (xde + 10)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xbc + 10), 0x80
 	or (xbc + 10), a
 	ld a, (xde + 11)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xbc + 11), 0x80
 	or (xbc + 11), a
 	ld a, (xde + 12)
 	ld (xbc + 12), a
 	ld a, (xde + 13)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xbc + 13), 0x80
 	or (xbc + 13), a
 	lda xix, (xbc + 14)
@@ -6549,29 +6549,29 @@ DataBuf_CopyVoiceBlock24:
 	srl a, 6
 	and a, 0x3
 	sla a, 6
-	andmi8 (xix), 0x3F
+	andmi8 (xix), 0x3f
 	or (xix), a
 	ldcfm 5, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ldcfm 3, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), a
 	ld a, (xhl)
 	and a, 0x7
-	andmi8 (xix), 0xF8
+	andmi8 (xix), 0xf8
 	or (xix), a
 	lda xix, (xbc + 15)
 	lda xhl, (xde + 15)
@@ -6579,29 +6579,29 @@ DataBuf_CopyVoiceBlock24:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ldcfm 6, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), a
 	ldcfm 5, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ld a, (xhl)
-	and a, 0xF
-	andmi8 (xix), 0xF0
+	and a, 0xf
+	andmi8 (xix), 0xf0
 	or (xix), a
 	lda xix, (xbc + 16)
 	lda xhl, (xde + 16)
@@ -6609,10 +6609,10 @@ DataBuf_CopyVoiceBlock24:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ld a, (xhl)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xix), 0x80
 	or (xix), a
 	ld a, (xde + 17)
@@ -6625,10 +6625,10 @@ DataBuf_CopyVoiceBlock24:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ld a, (xhl)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xix), 0x80
 	or (xix), a
 	lda xix, (xbc + 20)
@@ -6637,10 +6637,10 @@ DataBuf_CopyVoiceBlock24:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ld a, (xhl)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xix), 0x80
 	or (xix), a
 	lda xix, (xbc + 21)
@@ -6649,10 +6649,10 @@ DataBuf_CopyVoiceBlock24:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ld a, (xhl)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xix), 0x80
 	or (xix), a
 	lda xix, (xbc + 22)
@@ -6661,10 +6661,10 @@ DataBuf_CopyVoiceBlock24:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ld a, (xhl)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xix), 0x80
 	or (xix), a
 	ld a, (xde + 23)
@@ -6679,73 +6679,73 @@ DataBuf_CopyEffectBlock12:
 	lda xhl, (xde + 3)
 	ld a, (xhl)
 	srl a, 4
-	and a, 0xF
+	and a, 0xf
 	sla a, 4
-	andmi8 (xix), 0xF
+	andmi8 (xix), 0xf
 	or (xix), a
 	ld a, (xhl)
-	and a, 0xF
-	andmi8 (xix), 0xF0
+	and a, 0xf
+	andmi8 (xix), 0xf0
 	or (xix), a
 	lda xix, (xbc + 4)
 	lda xhl, (xde + 4)
 	ld a, (xhl)
 	srl a, 4
-	and a, 0xF
+	and a, 0xf
 	sla a, 4
-	andmi8 (xix), 0xF
+	andmi8 (xix), 0xf
 	or (xix), a
 	ld a, (xhl)
-	and a, 0xF
-	andmi8 (xix), 0xF0
+	and a, 0xf
+	andmi8 (xix), 0xf0
 	or (xix), a
 	lda xix, (xbc + 5)
 	lda xhl, (xde + 5)
 	ld a, (xhl)
 	srl a, 4
-	and a, 0xF
+	and a, 0xf
 	sla a, 4
-	andmi8 (xix), 0xF
+	andmi8 (xix), 0xf
 	or (xix), a
 	ld a, (xhl)
-	and a, 0xF
-	andmi8 (xix), 0xF0
+	and a, 0xf
+	andmi8 (xix), 0xf0
 	or (xix), a
 	lda xix, (xbc + 6)
 	lda xhl, (xde + 6)
 	ld a, (xhl)
 	srl a, 4
-	and a, 0xF
+	and a, 0xf
 	sla a, 4
-	andmi8 (xix), 0xF
+	andmi8 (xix), 0xf
 	or (xix), a
 	ld a, (xhl)
-	and a, 0xF
-	andmi8 (xix), 0xF0
+	and a, 0xf
+	andmi8 (xix), 0xf0
 	or (xix), a
 	lda xix, (xbc + 7)
 	lda xhl, (xde + 7)
 	ld a, (xhl)
 	srl a, 4
-	and a, 0xF
+	and a, 0xf
 	sla a, 4
-	andmi8 (xix), 0xF
+	andmi8 (xix), 0xf
 	or (xix), a
 	ld a, (xhl)
-	and a, 0xF
-	andmi8 (xix), 0xF0
+	and a, 0xf
+	andmi8 (xix), 0xf0
 	or (xix), a
 	lda xix, (xbc + 8)
 	lda xhl, (xde + 8)
 	ld a, (xhl)
 	srl a, 4
-	and a, 0xF
+	and a, 0xf
 	sla a, 4
-	andmi8 (xix), 0xF
+	andmi8 (xix), 0xf
 	or (xix), a
 	ld a, (xhl)
-	and a, 0xF
-	andmi8 (xix), 0xF0
+	and a, 0xf
+	andmi8 (xix), 0xf0
 	or (xix), a
 	lda xbc, (xbc + 9)
 	lda xwa, (xde + 9)
@@ -6754,8 +6754,8 @@ DataBuf_CopyEffectBlock12:
 	ldcfm 4, (xwa)
 	stcfm 4, (xbc)
 	ld a, (xwa)
-	and a, 0xF
-	andmi8 (xbc), 0xF0
+	and a, 0xf
+	andmi8 (xbc), 0xf0
 	or (xbc), a
 	ret
 
@@ -6764,7 +6764,7 @@ DataBuf_CopyFilterBlock12:
 	ld a, (xde + 2)
 	ld (xbc + 2), a
 	ld a, (xde + 3)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xbc + 3), 0x80
 	or (xbc + 3), a
 	ld a, (xde + 4)
@@ -6776,11 +6776,11 @@ DataBuf_CopyFilterBlock12:
 	scc8 c, a
 	and a, 0x1
 	sla a, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), a
 	ld a, (xhl)
 	and a, 0x7
-	andmi8 (xix), 0xF8
+	andmi8 (xix), 0xf8
 	or (xix), a
 	lda xix, (xbc + 6)
 	lda xhl, (xde + 6)
@@ -6788,29 +6788,29 @@ DataBuf_CopyFilterBlock12:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ldcfm 6, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), a
 	ldcfm 5, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ld a, (xhl)
 	and a, 0x7
-	andmi8 (xix), 0xF8
+	andmi8 (xix), 0xf8
 	or (xix), a
 	lda xix, (xbc + 7)
 	lda xhl, (xde + 7)
@@ -6818,43 +6818,43 @@ DataBuf_CopyFilterBlock12:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ldcfm 6, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), a
 	ldcfm 5, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ldcfm 3, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), a
 	ldcfm 2, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 2
-	andmi8 (xix), 0xFB
+	andmi8 (xix), 0xfb
 	or (xix), a
 	ldcfm 1, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 1
-	andmi8 (xix), 0xFD
+	andmi8 (xix), 0xfd
 	or (xix), a
 	ldcfm 0, (xhl)
 	stcfm 0, (xix)
@@ -6864,37 +6864,37 @@ DataBuf_CopyFilterBlock12:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ldcfm 6, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), a
 	ldcfm 5, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ldcfm 3, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), a
 	ldcfm 2, (xhl)
 	stcfm 2, (xix)
 	ld a, (xde + 9)
 	and a, 0x30
-	andmi8 (xbc + 9), 0xCF
+	andmi8 (xbc + 9), 0xcf
 	or (xbc + 9), a
 	ld a, (xde + 10)
 	ld (xbc + 10), a
@@ -6910,7 +6910,7 @@ DataBuf_CopyReverbBlock6:
 	scc8 c, a
 	and a, 0x1
 	sla a, 1
-	andmi8 (xix), 0xFD
+	andmi8 (xix), 0xfd
 	or (xix), a
 	ldcfm 0, (xhl)
 	stcfm 0, (xix)
@@ -6922,37 +6922,37 @@ DataBuf_CopyReverbBlock6:
 	scc8 c, a
 	and a, 0x1
 	sla a, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), a
 	ldcfm 5, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ldcfm 3, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), a
 	ldcfm 2, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 2
-	andmi8 (xix), 0xFB
+	andmi8 (xix), 0xfb
 	or (xix), a
 	ldcfm 1, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 1
-	andmi8 (xix), 0xFD
+	andmi8 (xix), 0xfd
 	or (xix), a
 	ldcfm 0, (xhl)
 	stcfm 0, (xix)
@@ -7023,11 +7023,11 @@ DataBuf_LoadAndDispatchFormat2:
 	ld (xbc), a
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xFA
-	cpi_werp 0xFA, 0
+	ldfr_werp HL, 0xfa
+	cpi_werp 0xfa, 0
 	jr lt, DataBuf_Format2_Type61_RestoreSlotId
 	lds iz, 0
-	cpi_werp 0xFA, 0
+	cpi_werp 0xfa, 0
 	jr le, DataBuf_Format2_Type61_RestoreSlotId
 
 DataBuf_Format2_Type61_UpdateLoop:
@@ -7043,7 +7043,7 @@ DataBuf_Format2_Type61_UpdateLoop:
 	inc 2, xde
 	call DSPCfg_WriteParamSimple
 	inc 1, iz
-	cp_werp IZ, 0xFA
+	cp_werp IZ, 0xfa
 	jr lt, DataBuf_Format2_Type61_UpdateLoop
 
 DataBuf_Format2_Type61_RestoreSlotId:
@@ -7051,7 +7051,7 @@ DataBuf_Format2_Type61_RestoreSlotId:
 	jrl DataBuf_StoreSlotId_Return
 
 DataBuf_Format2_Type63:
-	ld xwa, 0x4B00
+	ld xwa, 0x4b00
 	ldw bc, 0x14
 	call DSPCfg_WriteParamSimple
 	ld xbc, (xsp + 6)
@@ -7070,29 +7070,29 @@ DataBuf_Format2_Type63:
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 2)
 	ld (xbc), a
-	ld xwa, 0x4B04
+	ld xwa, 0x4b04
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xFA
-	cpi_werp 0xFA, 0
+	ldfr_werp HL, 0xfa
+	cpi_werp 0xfa, 0
 	jr lt, DataBuf_Format2_Type63_RestoreSlotId
 	lds iz, 0
-	cpi_werp 0xFA, 0
+	cpi_werp 0xfa, 0
 	jr le, DataBuf_Format2_Type63_RestoreSlotId
 
 DataBuf_Format2_Type63_UpdateLoop:
 	ld wa, iz
 	exts xwa
-	add xwa, 0x4B10
+	add xwa, 0x4b10
 	call DSPCfg_ReadParam_Map1
 	ld bc, hl
 	ld wa, iz
 	exts xwa
-	add xwa, 0x4B10
+	add xwa, 0x4b10
 	ld xde, (xsp + 6)
 	inc 2, xde
 	call DSPCfg_WriteParamSimple
 	inc 1, iz
-	cp_werp IZ, 0xFA
+	cp_werp IZ, 0xfa
 	jr lt, DataBuf_Format2_Type63_UpdateLoop
 
 DataBuf_Format2_Type63_RestoreSlotId:
@@ -7138,11 +7138,11 @@ DataBuf_Format2_FormatType2:
 	ld (xbc), a
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xFA
-	cpi_werp 0xFA, 0
+	ldfr_werp HL, 0xfa
+	cpi_werp 0xfa, 0
 	jr lt, DataBuf_FormatType2_RestoreSlotId
 	lds iz, 0
-	cpi_werp 0xFA, 0
+	cpi_werp 0xfa, 0
 	jr le, DataBuf_FormatType2_RestoreSlotId
 
 DataBuf_FormatType2_Type61_UpdateLoop:
@@ -7158,7 +7158,7 @@ DataBuf_FormatType2_Type61_UpdateLoop:
 	inc 2, xde
 	call DSPCfg_WriteParamSimple
 	inc 1, iz
-	cp_werp IZ, 0xFA
+	cp_werp IZ, 0xfa
 	jr lt, DataBuf_FormatType2_Type61_UpdateLoop
 
 DataBuf_FormatType2_RestoreSlotId:
@@ -7171,7 +7171,7 @@ DataBuf_StoreSlotId_Return:
 DataBuf_FormatType2_Type63:
 	ld xwa, (xsp + 6)
 	lda xde, (xwa + 2)
-	ld xwa, 0x4B00
+	ld xwa, 0x4b00
 	ldw bc, 0x14
 	call DSPCfg_WriteParamSimple
 	ld xbc, (xsp + 6)
@@ -7190,29 +7190,29 @@ DataBuf_FormatType2_Type63:
 	ld xwa, (xsp + 6)
 	ld a, (xwa + 2)
 	ld (xbc), a
-	ld xwa, 0x4B04
+	ld xwa, 0x4b04
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xFA
-	cpi_werp 0xFA, 0
+	ldfr_werp HL, 0xfa
+	cpi_werp 0xfa, 0
 	jr lt, DataBuf_FormatType2_Type63_RestoreSlotId
 	lds iz, 0
-	cpi_werp 0xFA, 0
+	cpi_werp 0xfa, 0
 	jr le, DataBuf_FormatType2_Type63_RestoreSlotId
 
 DataBuf_FormatType2_Type63_UpdateLoop:
 	ld wa, iz
 	exts xwa
-	add xwa, 0x4B10
+	add xwa, 0x4b10
 	call DSPCfg_ReadParam_Map1
 	ld bc, hl
 	ld wa, iz
 	exts xwa
-	add xwa, 0x4B10
+	add xwa, 0x4b10
 	ld xde, (xsp + 6)
 	inc 2, xde
 	call DSPCfg_WriteParamSimple
 	inc 1, iz
-	cp_werp IZ, 0xFA
+	cp_werp IZ, 0xfa
 	jr lt, DataBuf_FormatType2_Type63_UpdateLoop
 
 DataBuf_FormatType2_Type63_RestoreSlotId:
@@ -7235,33 +7235,33 @@ DataBuf_CopyEQBlock7:
 	srl a, 4
 	and a, 0x3
 	sla a, 4
-	andmi8 (xix), 0xCF
+	andmi8 (xix), 0xcf
 	or (xix), a
 	ldcfm 3, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), a
 	ldcfm 2, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 2
-	andmi8 (xix), 0xFB
+	andmi8 (xix), 0xfb
 	or (xix), a
 	ld a, (xhl)
 	and a, 0x3
-	andmi8 (xix), 0xFC
+	andmi8 (xix), 0xfc
 	or (xix), a
 	ld a, (xde + 3)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xbc + 3), 0x80
 	or (xbc + 3), a
 	ld a, (xde + 4)
 	ld (xbc + 4), a
 	ld a, (xde + 6)
-	and a, 0xF
-	andmi8 (xbc + 6), 0xF0
+	and a, 0xf
+	andmi8 (xbc + 6), 0xf0
 	or (xbc + 6), a
 	cpdi16 47082, 2
 	ret nz
@@ -7273,61 +7273,61 @@ DataBuf_CopyChorusBlock16:
 	ld e, (xwa + 2)
 	ld (xbc + 2), e
 	ld e, (xwa + 3)
-	and e, 0x7F
+	and e, 0x7f
 	andmi8 (xbc + 3), 0x80
 	or (xbc + 3), e
 	ld e, (xwa + 4)
 	res 7, e
 	ld (xbc + 4), e
 	ld e, (xwa + 5)
-	and e, 0x7F
+	and e, 0x7f
 	andmi8 (xbc + 5), 0x80
 	or (xbc + 5), e
 	ldcfm 6, (xwa + 6)
 	stcfm 6, (xbc + 6)
 	ld e, (xwa + 7)
-	and e, 0x7F
+	and e, 0x7f
 	andmi8 (xbc + 7), 0x80
 	or (xbc + 7), e
 	ld e, (xwa + 8)
 	ld (xbc + 8), e
 	ld e, (xwa + 9)
-	and e, 0x7F
+	and e, 0x7f
 	andmi8 (xbc + 9), 0x80
 	or (xbc + 9), e
 	lda xde, (xbc + 10)
 	ldcfm 7, (xwa + 11)
 	stcfm 7, (xde)
 	ld l, (xwa + 11)
-	and l, 0x7F
+	and l, 0x7f
 	andmi8 (xde), 0x80
 	or (xde), l
 	lda xde, (xbc + 11)
 	ldcfm 7, (xwa + 12)
 	stcfm 7, (xde)
 	ld l, (xwa + 12)
-	and l, 0x7F
+	and l, 0x7f
 	andmi8 (xde), 0x80
 	or (xde), l
 	lda xde, (xbc + 12)
 	ldcfm 7, (xwa + 13)
 	stcfm 7, (xde)
 	ld l, (xwa + 13)
-	and l, 0x7F
+	and l, 0x7f
 	andmi8 (xde), 0x80
 	or (xde), l
 	lda xde, (xbc + 13)
 	ldcfm 7, (xwa + 14)
 	stcfm 7, (xde)
 	ld l, (xwa + 14)
-	and l, 0x7F
+	and l, 0x7f
 	andmi8 (xde), 0x80
 	or (xde), l
 	lda xbc, (xbc + 14)
 	ldcfm 7, (xwa + 15)
 	stcfm 7, (xbc)
 	ld a, (xwa + 15)
-	and a, 0x7F
+	and a, 0x7f
 	andmi8 (xbc), 0x80
 	or (xbc), a
 	ret
@@ -7342,11 +7342,11 @@ DataBuf_CopyCompressorBlock16:
 	scc8 c, c
 	and c, 0x1
 	sla c, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), c
 	ld c, (xhl)
-	and c, 0xF
-	andmi8 (xix), 0xF0
+	and c, 0xf
+	andmi8 (xix), 0xf0
 	or (xix), c
 	ld c, (xwa + 4)
 	ld (xde + 4), c
@@ -7391,35 +7391,35 @@ DataBuf_CopyMixerBlock12:
 	scc8 c, a
 	and a, 0x1
 	sla a, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), a
 	ldcfm 5, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ldcfm 3, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), a
 	ldcfm 2, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 2
-	andmi8 (xix), 0xFB
+	andmi8 (xix), 0xfb
 	or (xix), a
 	ld a, (xhl)
 	and a, 0x3
-	andmi8 (xix), 0xFC
+	andmi8 (xix), 0xfc
 	or (xix), a
 	ldcfm 3, (xde + 3)
 	stcfm 3, (xbc + 3)
@@ -7430,7 +7430,7 @@ DataBuf_CopyMixerBlock12:
 	srl a, 3
 	and a, 0x3
 	sla a, 3
-	andmi8 (xix), 0xE7
+	andmi8 (xix), 0xe7
 	or (xix), a
 	ldcfm 2, (xhl)
 	stcfm 2, (xix)
@@ -7440,19 +7440,19 @@ DataBuf_CopyMixerBlock12:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ldcfm 6, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), a
 	ldcfm 2, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 2
-	andmi8 (xix), 0xFB
+	andmi8 (xix), 0xfb
 	or (xix), a
 	ldcfm 0, (xhl)
 	stcfm 0, (xix)
@@ -7462,11 +7462,11 @@ DataBuf_CopyMixerBlock12:
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ld a, (xhl)
-	and a, 0x1F
-	andmi8 (xix), 0xE0
+	and a, 0x1f
+	andmi8 (xix), 0xe0
 	or (xix), a
 	lda xix, (xbc + 7)
 	lda xhl, (xde + 7)
@@ -7474,17 +7474,17 @@ DataBuf_CopyMixerBlock12:
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ld a, (xhl)
-	and a, 0xF
-	andmi8 (xix), 0xF0
+	and a, 0xf
+	andmi8 (xix), 0xf0
 	or (xix), a
 	lda xix, (xbc + 8)
 	lda xhl, (xde + 8)
@@ -7492,43 +7492,43 @@ DataBuf_CopyMixerBlock12:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ldcfm 6, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), a
 	ldcfm 5, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ldcfm 3, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), a
 	ldcfm 2, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 2
-	andmi8 (xix), 0xFB
+	andmi8 (xix), 0xfb
 	or (xix), a
 	ldcfm 1, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 1
-	andmi8 (xix), 0xFD
+	andmi8 (xix), 0xfd
 	or (xix), a
 	ldcfm 0, (xhl)
 	stcfm 0, (xix)
@@ -7538,43 +7538,43 @@ DataBuf_CopyMixerBlock12:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ldcfm 6, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), a
 	ldcfm 5, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ldcfm 3, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), a
 	ldcfm 2, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 2
-	andmi8 (xix), 0xFB
+	andmi8 (xix), 0xfb
 	or (xix), a
 	ldcfm 1, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 1
-	andmi8 (xix), 0xFD
+	andmi8 (xix), 0xfd
 	or (xix), a
 	ldcfm 0, (xhl)
 	stcfm 0, (xix)
@@ -7584,43 +7584,43 @@ DataBuf_CopyMixerBlock12:
 	scc8 c, a
 	and a, 0x1
 	sla a, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), a
 	ldcfm 6, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), a
 	ldcfm 5, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), a
 	ldcfm 4, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), a
 	ldcfm 3, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), a
 	ldcfm 2, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 2
-	andmi8 (xix), 0xFB
+	andmi8 (xix), 0xfb
 	or (xix), a
 	ldcfm 1, (xhl)
 	scc8 c, a
 	and a, 0x1
 	sla a, 1
-	andmi8 (xix), 0xFD
+	andmi8 (xix), 0xfd
 	or (xix), a
 	ldcfm 0, (xhl)
 	stcfm 0, (xix)
@@ -7659,43 +7659,43 @@ DataBuf_CopyBulkBitfields_944:
 	scc8 c, a
 	and a, 0x01
 	sla a, 7
-	andmi8 (xhl), 0x7F
+	andmi8 (xhl), 0x7f
 	or (xhl), a
 	ldcfm 6, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 6
-	andmi8 (xhl), 0xBF
+	andmi8 (xhl), 0xbf
 	or (xhl), a
 	ldcfm 5, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 5
-	andmi8 (xhl), 0xDF
+	andmi8 (xhl), 0xdf
 	or (xhl), a
 	ldcfm 4, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 4
-	andmi8 (xhl), 0xEF
+	andmi8 (xhl), 0xef
 	or (xhl), a
 	ldcfm 3, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 3
-	andmi8 (xhl), 0xF7
+	andmi8 (xhl), 0xf7
 	or (xhl), a
 	ldcfm 2, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 2
-	andmi8 (xhl), 0xFB
+	andmi8 (xhl), 0xfb
 	or (xhl), a
 	ldcfm 1, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 1
-	andmi8 (xhl), 0xFD
+	andmi8 (xhl), 0xfd
 	or (xhl), a
 	ldcfm 0, (xix)
 	stcfm 0, (xhl)
@@ -7705,19 +7705,19 @@ DataBuf_CopyBulkBitfields_944:
 	scc8 c, a
 	and a, 0x01
 	sla a, 3
-	andmi8 (xhl), 0xF7
+	andmi8 (xhl), 0xf7
 	or (xhl), a
 	ldcfm 2, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 2
-	andmi8 (xhl), 0xFB
+	andmi8 (xhl), 0xfb
 	or (xhl), a
 	ldcfm 1, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 1
-	andmi8 (xhl), 0xFD
+	andmi8 (xhl), 0xfd
 	or (xhl), a
 	ldcfm 0, (xix)
 	stcfm 0, (xhl)
@@ -7771,43 +7771,43 @@ DataBuf_CopyBulkBitfields_960:
 	scc8 c, a
 	and a, 0x01
 	sla a, 7
-	andmi8 (xhl), 0x7F
+	andmi8 (xhl), 0x7f
 	or (xhl), a
 	ldcfm 6, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 6
-	andmi8 (xhl), 0xBF
+	andmi8 (xhl), 0xbf
 	or (xhl), a
 	ldcfm 5, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 5
-	andmi8 (xhl), 0xDF
+	andmi8 (xhl), 0xdf
 	or (xhl), a
 	ldcfm 4, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 4
-	andmi8 (xhl), 0xEF
+	andmi8 (xhl), 0xef
 	or (xhl), a
 	ldcfm 3, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 3
-	andmi8 (xhl), 0xF7
+	andmi8 (xhl), 0xf7
 	or (xhl), a
 	ldcfm 2, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 2
-	andmi8 (xhl), 0xFB
+	andmi8 (xhl), 0xfb
 	or (xhl), a
 	ldcfm 1, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 1
-	andmi8 (xhl), 0xFD
+	andmi8 (xhl), 0xfd
 	or (xhl), a
 	ldcfm 0, (xix)
 	stcfm 0, (xhl)
@@ -7817,19 +7817,19 @@ DataBuf_CopyBulkBitfields_960:
 	scc8 c, a
 	and a, 0x01
 	sla a, 3
-	andmi8 (xhl), 0xF7
+	andmi8 (xhl), 0xf7
 	or (xhl), a
 	ldcfm 2, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 2
-	andmi8 (xhl), 0xFB
+	andmi8 (xhl), 0xfb
 	or (xhl), a
 	ldcfm 1, (xix)
 	scc8 c, a
 	and a, 0x01
 	sla a, 1
-	andmi8 (xhl), 0xFD
+	andmi8 (xhl), 0xfd
 	or (xhl), a
 	ldcfm 0, (xix)
 	stcfm 0, (xhl)
@@ -7878,114 +7878,114 @@ DataBuf_CopyBulkBitfields_960:
 
 DataBuf_CopyBulkBitfields_F980:
 	ld xde, xbc
-	st_dri3b D, 0xE9, 0xB0, 0x03
-	st_dri3b C, 0xE1, 0xB0, 0x03
+	st_dri3b D, 0xe9, 0xb0, 0x03
+	st_dri3b C, 0xe1, 0xb0, 0x03
 	ldcfm 7, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 7
-	andmi8 (xix), 0x7F
+	andmi8 (xix), 0x7f
 	or (xix), c
 	ldcfm 6, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), c
 	ldcfm 5, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), c
 	ldcfm 4, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), c
 	ldcfm 3, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), c
 	ldcfm 2, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 2
-	andmi8 (xix), 0xFB
+	andmi8 (xix), 0xfb
 	or (xix), c
 	ldcfm 1, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 1
-	andmi8 (xix), 0xFD
+	andmi8 (xix), 0xfd
 	or (xix), c
 	ldcfm 0, (xhl)
 	stcfm 0, (xix)
-	st_dri3b D, 0xE9, 0xB1, 0x03
-	st_dri3b C, 0xE1, 0xB1, 0x03
+	st_dri3b D, 0xe9, 0xb1, 0x03
+	st_dri3b C, 0xe1, 0xb1, 0x03
 	ldcfm 3, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), c
-	ldcf_dri 2, 0xE1, 0xB1, 0x03
+	ldcf_dri 2, 0xe1, 0xb1, 0x03
 	scc8 c, c
 	and c, 0x1
 	sla c, 2
-	andmi8 (xix), 0xFB
+	andmi8 (xix), 0xfb
 	or (xix), c
 	ldcfm 1, (xhl)
 	stcfm 1, (xix)
-	ldcf_dri 0, 0xE1, 0xB1, 0x03
+	ldcf_dri 0, 0xe1, 0xb1, 0x03
 	stcfm 0, (xix)
 	ld_srib C, (xwa + 0x03b3)
-	lda_dri3 XHL, 0xE9, 0xB3, 0x03
+	lda_dri3 XHL, 0xe9, 0xb3, 0x03
 	ld_srib C, (xwa + 0x03b4)
-	lda_dri3 XHL, 0xE9, 0xB4, 0x03
+	lda_dri3 XHL, 0xe9, 0xb4, 0x03
 	ld_srib C, (xwa + 0x03b5)
-	lda_dri3 XHL, 0xE9, 0xB5, 0x03
+	lda_dri3 XHL, 0xe9, 0xb5, 0x03
 	ld_srib C, (xwa + 0x03ba)
-	lda_dri3 XHL, 0xE9, 0xBA, 0x03
+	lda_dri3 XHL, 0xe9, 0xba, 0x03
 	ld_srib C, (xwa + 0x03bb)
-	lda_dri3 XHL, 0xE9, 0xBB, 0x03
+	lda_dri3 XHL, 0xe9, 0xbb, 0x03
 	ld_srib C, (xwa + 0x03bc)
-	lda_dri3 XHL, 0xE9, 0xBC, 0x03
+	lda_dri3 XHL, 0xe9, 0xbc, 0x03
 	ld_srib C, (xwa + 0x03bd)
-	lda_dri3 XHL, 0xE9, 0xBD, 0x03
+	lda_dri3 XHL, 0xe9, 0xbd, 0x03
 	ld_srib C, (xwa + 0x03be)
-	lda_dri3 XHL, 0xE9, 0xBE, 0x03
+	lda_dri3 XHL, 0xe9, 0xbe, 0x03
 	ld_srib C, (xwa + 0x03bf)
-	lda_dri3 XHL, 0xE9, 0xBF, 0x03
+	lda_dri3 XHL, 0xe9, 0xbf, 0x03
 	ld_srib C, (xwa + 0x03c0)
-	lda_dri3 XHL, 0xE9, 0xC0, 0x03
+	lda_dri3 XHL, 0xe9, 0xc0, 0x03
 	ld_srib C, (xwa + 0x03c1)
-	lda_dri3 XHL, 0xE9, 0xC1, 0x03
+	lda_dri3 XHL, 0xe9, 0xc1, 0x03
 	ld_srib C, (xwa + 0x03c2)
-	lda_dri3 XHL, 0xE9, 0xC2, 0x03
+	lda_dri3 XHL, 0xe9, 0xc2, 0x03
 	ld_srib C, (xwa + 0x03c3)
-	lda_dri3 XHL, 0xE9, 0xC3, 0x03
+	lda_dri3 XHL, 0xe9, 0xc3, 0x03
 	ld_srib C, (xwa + 0x03c4)
-	lda_dri3 XHL, 0xE9, 0xC4, 0x03
+	lda_dri3 XHL, 0xe9, 0xc4, 0x03
 	ld_srib C, (xwa + 0x03c5)
-	lda_dri3 XHL, 0xE9, 0xC5, 0x03
+	lda_dri3 XHL, 0xe9, 0xc5, 0x03
 	ld_srib C, (xwa + 0x03c6)
-	lda_dri3 XHL, 0xE9, 0xC6, 0x03
+	lda_dri3 XHL, 0xe9, 0xc6, 0x03
 	ld_srib C, (xwa + 0x03c7)
-	lda_dri3 XHL, 0xE9, 0xC7, 0x03
+	lda_dri3 XHL, 0xe9, 0xc7, 0x03
 	ld_srib C, (xwa + 0x03c8)
-	lda_dri3 XHL, 0xE9, 0xC8, 0x03
+	lda_dri3 XHL, 0xe9, 0xc8, 0x03
 	ld_srib C, (xwa + 0x03c9)
-	lda_dri3 XHL, 0xE9, 0xC9, 0x03
+	lda_dri3 XHL, 0xe9, 0xc9, 0x03
 	ld_srib C, (xwa + 0x03ca)
-	lda_dri3 XHL, 0xE9, 0xCA, 0x03
+	lda_dri3 XHL, 0xe9, 0xca, 0x03
 	ld_srib A, (xwa + 0x0417)
-	and a, 0x7F
-	and_srib_im 0xE9, 0x17, 0x04, 0x80
-	or_srib_mr A, 0xE9, 0x17, 0x04
+	and a, 0x7f
+	and_srib_im 0xe9, 0x17, 0x04, 0x80
+	or_srib_mr A, 0xe9, 0x17, 0x04
 	ret
 
 DataBuf_CopyBulkBitfields_Large:
@@ -8694,7 +8694,7 @@ FileData_LoadAndParseType3:
 	push xwa
 	call Free
 	inc 4, xsp
-	ldw hl, 0xFF38
+	ldw hl, 0xff38
 	jrl DataBuf_TransferSlot_Epilogue
 
 FileData_LoadAndParseType3_Continue:
@@ -8703,14 +8703,14 @@ FileData_LoadAndParseType3_Continue:
 	extz bc
 	sla bc, 11
 	lda_24 xwa, 0x0ab000
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	push xwa
 	ld xwa, (xsp + 12)
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 6)
-	st_dri3b W, 0xE1, 0x00, 0x01
+	st_dri3b W, 0xe1, 0x00, 0x01
 	ld (xsp + 10), xwa
 	ld a, (xsp + 18)
 	extz wa
@@ -8720,9 +8720,9 @@ FileData_LoadAndParseType3_Continue:
 	extz bc
 	sla bc, 11
 	lda_24 xwa, 0x0ab000
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld (xsp + 14), xwa
-	ld xwa, 0x2E0
+	ld xwa, 0x2e0
 	add (xsp + 14), xwa
 	ldw (xsp + 4), 0x0
 
@@ -8736,7 +8736,7 @@ FileData_LoadAndParseType3_Error:
 	add xbc, 0x20
 	ld xiz, xbc
 	add xiz, (xsp + 10)
-	ld xbc, 0x1A
+	ld xbc, 0x1a
 	call Math_MultiplyAccumulate
 	add xhl, 0x34
 	add xhl, (xsp + 14)
@@ -8747,34 +8747,34 @@ FileData_LoadAndParseType3_Error:
 	cpw (xsp + 4), 0x18
 	jr c, FileData_LoadAndParseType3_Error
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0x34, 0x01
+	st_dri3b W, 0xe1, 0x34, 0x01
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0xD8, 0x02
+	st_dri3b A, 0xe5, 0xd8, 0x02
 	calr VoiceParam_CopyBitfields_TypeB
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0x46, 0x01
+	st_dri3b W, 0xe1, 0x46, 0x01
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0xE4, 0x02
+	st_dri3b A, 0xe5, 0xe4, 0x02
 	calr VoiceParam_CopyBitfields_TypeC
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0x4E, 0x01
+	st_dri3b W, 0xe1, 0x4e, 0x01
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0x80, 0x03
+	st_dri3b A, 0xe5, 0x80, 0x03
 	calr VoiceParam_CopyFields_TypeD
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0x60, 0x01
+	st_dri3b W, 0xe1, 0x60, 0x01
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0xAA, 0x03
+	st_dri3b A, 0xe5, 0xaa, 0x03
 	calr VoiceParam_CopyBits_TwoFlags
 	ld xwa, (xsp + 10)
-	st_dri3b W, 0xE1, 0x66, 0x01
+	st_dri3b W, 0xe1, 0x66, 0x01
 	ld xbc, (xsp + 14)
-	st_dri3b A, 0xE5, 0x8A, 0x03
+	st_dri3b A, 0xe5, 0x8a, 0x03
 	calr VoiceParam_CopyFields_TypeE
 	ld xwa, (xsp + 10)
 	ld xbc, (xsp + 14)
 	calr DSPCfg_ConfigureVoiceSlotA
-	ld xwa, 0xF980
+	ld xwa, 0xf980
 	ld xbc, (xsp + 14)
 	calr DataBuf_TransferSlotBitfields
 	ld xwa, (xsp + 6)
@@ -8794,11 +8794,11 @@ VoiceParam_CopyBitfields_TypeA:
 	ld (xde + 2), c
 	lda xix, (xwa + 6)
 	ld c, (xix)
-	and c, 0xF
+	and c, 0xf
 	andmi8 (xde + 3), 0x80
 	or (xde + 3), c
 	ld c, (xwa + 3)
-	and c, 0x7F
+	and c, 0x7f
 	andmi8 (xde + 5), 0x80
 	or (xde + 5), c
 	lda xiy, (xde + 6)
@@ -8807,24 +8807,24 @@ VoiceParam_CopyBitfields_TypeA:
 	scc8 c, c
 	and c, 0x1
 	sla c, 7
-	andmi8 (xiy), 0x7F
+	andmi8 (xiy), 0x7f
 	or (xiy), c
 	ldcfm 6, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 6
-	andmi8 (xiy), 0xBF
+	andmi8 (xiy), 0xbf
 	or (xiy), c
 	ldcfm 3, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 3
-	andmi8 (xiy), 0xF7
+	andmi8 (xiy), 0xf7
 	or (xiy), c
 	ld c, (xhl)
 	and c, 0x7
 	and c, 0x7
-	andmi8 (xiy), 0xF8
+	andmi8 (xiy), 0xf8
 	or (xiy), c
 	lda xbc, (xde + 7)
 	bitm 5, (xhl)
@@ -8844,7 +8844,7 @@ VoiceParam_CopyBitfields_TypeA_Cont:
 	jr z, VoiceParam_CopyBitfields_TypeA_NoHigh
 	ld c, (xhl)
 	and c, 0x80
-	or c, 0x5A
+	or c, 0x5a
 	ld (xhl), c
 	jr VoiceParam_CopyBitfields_TypeA_Final
 
@@ -8878,7 +8878,7 @@ VoiceParam_CopyBitfields_TypeB:
 	ld (xde + 2), c
 	lda xiy, (xwa + 12)
 	ld c, (xiy)
-	and c, 0xF
+	and c, 0xf
 	andmi8 (xde + 3), 0x80
 	or (xde + 3), c
 	lda xix, (xde + 5)
@@ -8886,7 +8886,7 @@ VoiceParam_CopyBitfields_TypeB:
 	ld c, (xhl)
 	and c, 0x3
 	and c, 0x7
-	andmi8 (xix), 0xF8
+	andmi8 (xix), 0xf8
 	or (xix), c
 	ldcfm 2, (xhl)
 	stcfm 3, (xix)
@@ -8895,7 +8895,7 @@ VoiceParam_CopyBitfields_TypeB:
 	ld c, (xhl)
 	and c, 0x3
 	and c, 0x7
-	andmi8 (xix), 0xF8
+	andmi8 (xix), 0xf8
 	or (xix), c
 	ldcfm 6, (xhl)
 	stcfm 6, (xix)
@@ -8904,43 +8904,43 @@ VoiceParam_CopyBitfields_TypeB:
 	ldcfm 0, (xhl)
 	scc8 c, c
 	and c, 0x1
-	andmi8 (xix), 0xFE
+	andmi8 (xix), 0xfe
 	or (xix), c
 	ldcfm 1, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 1
-	andmi8 (xix), 0xFD
+	andmi8 (xix), 0xfd
 	or (xix), c
 	ldcfm 2, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 2
-	andmi8 (xix), 0xFB
+	andmi8 (xix), 0xfb
 	or (xix), c
 	ldcfm 3, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 3
-	andmi8 (xix), 0xF7
+	andmi8 (xix), 0xf7
 	or (xix), c
 	ldcfm 4, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 4
-	andmi8 (xix), 0xEF
+	andmi8 (xix), 0xef
 	or (xix), c
 	ldcfm 5, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 5
-	andmi8 (xix), 0xDF
+	andmi8 (xix), 0xdf
 	or (xix), c
 	ldcfm 6, (xhl)
 	scc8 c, c
 	and c, 0x1
 	sla c, 6
-	andmi8 (xix), 0xBF
+	andmi8 (xix), 0xbf
 	or (xix), c
 	ldcfm 7, (xhl)
 	stcfm 7, (xix)
@@ -8948,13 +8948,13 @@ VoiceParam_CopyBitfields_TypeB:
 	bitm 4, (xiy)
 	jr z, VoiceParam_CopyBitfields_TypeB_NoBit4
 	ld l, (xbc)
-	and l, 0xCF
+	and l, 0xcf
 	set 5, l
 	ld (xbc), l
 	jr VoiceParam_CopyBitfields_TypeB_Cont
 
 VoiceParam_CopyBitfields_TypeB_NoBit4:
-	andmi8 (xbc), 0xCF
+	andmi8 (xbc), 0xcf
 
 VoiceParam_CopyBitfields_TypeB_Cont:
 	ldcfm 0, (xwa + 15)
@@ -8969,7 +8969,7 @@ VoiceParam_CopyBitfields_TypeB_Cont:
 	srl a, 7
 	and a, 0x1
 	and a, 0x1
-	andmi8 (xde + 11), 0xFE
+	andmi8 (xde + 11), 0xfe
 	or (xde + 11), a
 	ret
 
@@ -8980,7 +8980,7 @@ VoiceParam_CopyBitfields_TypeC:
 	ldcfm 0, (xhl)
 	scc8 c, c
 	and c, 0x1
-	andmi8 (xix), 0xFE
+	andmi8 (xix), 0xfe
 	or (xix), c
 	ldcfm 1, (xhl)
 	stcfm 1, (xix)
@@ -8997,13 +8997,13 @@ VoiceParam_CopyBitfields_TypeC:
 VoiceParam_CopyFields_TypeD:
 	ld e, (xwa + 2)
 	and e, 0x3
-	andmi8 (xbc + 2), 0xFC
+	andmi8 (xbc + 2), 0xfc
 	or (xbc + 2), e
 	ld e, (xwa + 3)
 	ld (xbc + 4), e
 	ld e, (xwa + 5)
-	and e, 0xF
-	andmi8 (xbc + 6), 0xF0
+	and e, 0xf
+	andmi8 (xbc + 6), 0xf0
 	or (xbc + 6), e
 	ld a, (xwa + 17)
 	res 7, a
@@ -9022,21 +9022,21 @@ VoiceParam_CopyBits_TwoFlags:
 
 VoiceParam_CopyFields_TypeE:
 	ld e, (xwa + 2)
-	and e, 0x7F
+	and e, 0x7f
 	andmi8 (xbc + 10), 0x80
 	or (xbc + 10), e
 	ld e, (xwa + 3)
-	and e, 0x7F
+	and e, 0x7f
 	andmi8 (xbc + 11), 0x80
 	or (xbc + 11), e
 	ld e, (xwa + 4)
-	and e, 0x7F
+	and e, 0x7f
 	andmi8 (xbc + 12), 0x80
 	or (xbc + 12), e
 	ld e, (xwa + 5)
 	ld (xbc + 2), e
 	ld e, (xwa + 6)
-	and e, 0x7F
+	and e, 0x7f
 	andmi8 (xbc + 5), 0x80
 	or (xbc + 5), e
 	ldcfm 6, (xwa + 7)
@@ -9348,20 +9348,20 @@ DSPCfg_ConfigureVoiceSlotA:
 	ld (xsp + 6), xbc
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 10)
-	ldcf_dri 7, 0xE1, 0x53, 0x01
+	ldcf_dri 7, 0xe1, 0x53, 0x01
 	scc8 c, c
 	ld xde, (xsp + 6)
 	and c, 0x1
 	sla c, 7
-	and_srib_im 0xE9, 0xEF, 0x02, 0x7F
-	or_srib_mr C, 0xE9, 0xEF, 0x02
+	and_srib_im 0xe9, 0xef, 0x02, 0x7f
+	or_srib_mr C, 0xe9, 0xef, 0x02
 	ld_srib A, (xwa + 0x0155)
-	and a, 0xF
+	and a, 0xf
 	extz wa
 	lda_24 xbc, 0xee159c
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ld_srib3 C, 0x07, 0xe4, 0xe0
 	extz bc
-	st_dri3b B, 0xE9, 0xF4, 0x02
+	st_dri3b B, 0xe9, 0xf4, 0x02
 	ld xwa, 0x4900
 	call DSPCfg_WriteParamSimple
 	cps hl, 0
@@ -9372,7 +9372,7 @@ DSPCfg_ConfigureVoiceSlotA:
 	extz wa
 	pushw wa
 	pushw 0x0
-	st_dri3b W, 0xE5, 0xF5, 0x02
+	st_dri3b W, 0xe5, 0xf5, 0x02
 	push xwa
 	call Memset
 	inc 8, xsp
@@ -9384,11 +9384,11 @@ DSPCfg_ConfigureVoiceSlotA:
 	ld (xbc), a
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xFA
-	cpi_werp 0xFA, 0
+	ldfr_werp HL, 0xfa
+	cpi_werp 0xfa, 0
 	jr lt, DSPCfg_VoiceSlotA_RestoreContext
 	lds iz, 0
-	cpi_werp 0xFA, 0
+	cpi_werp 0xfa, 0
 	jr le, DSPCfg_VoiceSlotA_RestoreContext
 
 DSPCfg_VoiceSlotA_ParamLoop:
@@ -9401,10 +9401,10 @@ DSPCfg_VoiceSlotA_ParamLoop:
 	exts xwa
 	add xwa, 0x4910
 	ld xde, (xsp + 6)
-	st_dri3b B, 0xE9, 0xF4, 0x02
+	st_dri3b B, 0xe9, 0xf4, 0x02
 	call DSPCfg_WriteParamSimple
 	inc 1, iz
-	cp_werp IZ, 0xFA
+	cp_werp IZ, 0xfa
 	jr lt, DSPCfg_VoiceSlotA_ParamLoop
 
 DSPCfg_VoiceSlotA_RestoreContext:
@@ -9417,11 +9417,11 @@ DSPCfg_ConfigureVoiceSlotB:
 	srl a, 4
 	extz wa
 	lda_24 xbc, 0xee15ac
-	ld_srib3 C, 0x07, 0xE4, 0xE0
+	ld_srib3 C, 0x07, 0xe4, 0xe0
 	extz bc
 	ld xwa, (xsp + 6)
-	st_dri3b B, 0xE1, 0x0E, 0x03
-	ld xwa, 0x4B00
+	st_dri3b B, 0xe1, 0x0e, 0x03
+	ld xwa, 0x4b00
 	call DSPCfg_WriteParamSimple
 	cps hl, 0
 	jrl lt, DSPCfg_VoiceSlotB_Epilog
@@ -9431,7 +9431,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	extz wa
 	pushw wa
 	pushw 0x0
-	st_dri3b W, 0xE5, 0x0F, 0x03
+	st_dri3b W, 0xe5, 0x0f, 0x03
 	push xwa
 	call Memset
 	inc 8, xsp
@@ -9441,23 +9441,23 @@ DSPCfg_ConfigureVoiceSlotB:
 	ld xwa, (xsp + 6)
 	ld_srib A, (xwa + 0x030e)
 	ld (xbc), a
-	ld xwa, 0x4B04
+	ld xwa, 0x4b04
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xFA
-	cpi_werp 0xFA, 0
+	ldfr_werp HL, 0xfa
+	cpi_werp 0xfa, 0
 	jr lt, DSPCfg_VoiceSlotB_RestorePort
 	lds iz, 0
-	cpi_werp 0xFA, 0
+	cpi_werp 0xfa, 0
 	jr le, DSPCfg_VoiceSlotB_RestorePort
 
 DSPCfg_VoiceSlotB_ParamLoop:
 	ld wa, iz
 	exts xwa
-	add xwa, 0x4B10
+	add xwa, 0x4b10
 	call DSPCfg_ResolveAndExtract
 	ld wa, iz
 	exts xwa
-	add xwa, 0x4B10
+	add xwa, 0x4b10
 	cps hl, 1
 	jr z, DSPCfg_VoiceSlotB_MapAndWrite
 	cps hl, 2
@@ -9466,14 +9466,14 @@ DSPCfg_VoiceSlotB_ParamLoop:
 DSPCfg_VoiceSlotB_MapAndWrite:
 	ld xbc, (xsp + 10)
 	ld_srib C, (xbc + 0x0152)
-	and c, 0xF
+	and c, 0xf
 	srl c, 1
 	extz bc
 	lda_24 xde, 0xee15bc
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ld_srib3 C, 0x07, 0xe8, 0xe4
 	extz bc
 	ld xde, (xsp + 6)
-	st_dri3b B, 0xE9, 0x0E, 0x03
+	st_dri3b B, 0xe9, 0x0e, 0x03
 	jr DSPCfg_VoiceSlotB_WriteAndLoop
 
 DSPCfg_VoiceSlotB_ReadAndWrite:
@@ -9481,14 +9481,14 @@ DSPCfg_VoiceSlotB_ReadAndWrite:
 	ld bc, hl
 	ld wa, iz
 	exts xwa
-	add xwa, 0x4B10
+	add xwa, 0x4b10
 	ld xde, (xsp + 6)
-	st_dri3b B, 0xE9, 0x0E, 0x03
+	st_dri3b B, 0xe9, 0x0e, 0x03
 
 DSPCfg_VoiceSlotB_WriteAndLoop:
 	call DSPCfg_WriteParamSimple
 	inc 1, iz
-	cp_werp IZ, 0xFA
+	cp_werp IZ, 0xfa
 	jr lt, DSPCfg_VoiceSlotB_ParamLoop
 
 DSPCfg_VoiceSlotB_RestorePort:
@@ -9850,12 +9850,12 @@ DataBuf_TransferSlotBitfields:
 	ld xde, xbc
 	ld_srib C, (xwa + 0x02e1)
 	and c, 0x30
-	and_srib_im 0xE9, 0xE1, 0x02, 0xCF
-	or_srib_mr C, 0xE9, 0xE1, 0x02
+	and_srib_im 0xe9, 0xe1, 0x02, 0xcf
+	or_srib_mr C, 0xe9, 0xe1, 0x02
 	lda xbc, (xwa + 64)
 	ld xhl, xbc
 	lda xix, (xde + 64)
-	st_dri3b E, 0xE5, 0xA0, 0x01
+	st_dri3b E, 0xe5, 0xa0, 0x01
 
 DataBuf_TransferSlotBitfields_Loop:
 	ld c, (xhl - 2)
@@ -9880,13 +9880,13 @@ DataBuf_TransferSlotBitfields_Loop:
 	cp xhl, xiy
 	jr c, DataBuf_TransferSlotBitfields_Loop
 	ld_srib A, (xwa + 0x0417)
-	and a, 0x7F
-	and_srib_im 0xE9, 0x17, 0x04, 0x80
-	or_srib_mr A, 0xE9, 0x17, 0x04
+	and a, 0x7f
+	and_srib_im 0xe9, 0x17, 0x04, 0x80
+	or_srib_mr A, 0xe9, 0x17, 0x04
 	ret
 
 DataBuf_CheckFormatPair:
-	; --- Multi-branch lookup: C=(XWA+4), check pairs, return HL=1/2/3/0xFFFF (52 bytes) ---
+	; --- Multi-branch lookup: C=(XWA+4), check pairs, return HL=1/2/3/0xffff (52 bytes) ---
 	ld c, (xwa+4)
 	inc 5, xwa
 	cp c, 0x4d
@@ -9912,7 +9912,7 @@ DataBuf_CheckFormatPair_NotM36:
 	lds	hl, 3
 	ret
 DataBuf_CheckFormatPair_NotN4E:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ret
 
 
@@ -9943,7 +9943,7 @@ DataBuf_CheckSubFormat_Not7:
 	ret
 
 DataBuf_CheckSubFormat_Not3:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ret
 
 DataBuf_Data_FormatDispatch:
@@ -10020,7 +10020,7 @@ DataBuf_InitSlotFromPreset:
 	cps iz, 0
 	jr nz, DataBuf_InitSlotFromPreset_Alt
 	lda_24 xbc, 0x00f180
-	add xbc, 0x2E0
+	add xbc, 0x2e0
 	pushw 0x20
 	push xwa
 	push xbc
@@ -10028,10 +10028,10 @@ DataBuf_InitSlotFromPreset:
 	lda_24 xbc, 0x00f180
 	add xbc, 0x300
 	ldada xwa, 64930
-	sub xwa, 0xF9A0
+	sub xwa, 0xf9a0
 	pushw wa
-	pushw 0xED
-	pushw 0xB3FC
+	pushw 0xed
+	pushw 0xb3fc
 	push xbc
 	call Mem_Copy
 	lda xsp, (xsp + 20)
@@ -10042,9 +10042,9 @@ DataBuf_InitSlotFromPreset_Alt:
 	dec 1, bc
 	extz xbc
 	sll xbc, 11
-	ld xde, 0xAB000
+	ld xde, 0xab000
 	add xde, xbc
-	add xde, 0x2E0
+	add xde, 0x2e0
 	pushw 0x20
 	push xwa
 	push xde
@@ -10053,14 +10053,14 @@ DataBuf_InitSlotFromPreset_Alt:
 	dec 1, wa
 	extz xwa
 	sll xwa, 11
-	ld xbc, 0xAB000
+	ld xbc, 0xab000
 	add xbc, xwa
 	add xbc, 0x300
 	ldada xwa, 64930
-	sub xwa, 0xF9A0
+	sub xwa, 0xf9a0
 	pushw wa
-	pushw 0xED
-	pushw 0xB3FC
+	pushw 0xed
+	pushw 0xb3fc
 	push xbc
 	call Mem_Copy
 	lda xsp, (xsp + 20)
@@ -10070,7 +10070,7 @@ SndParam_PopIzRet:
 	ret
 
 SndParam_SaturationClamp:
-	; --- Routine 1: saturation clamp C = max(0, C-0x7F+A), return L (22 bytes) ---
+	; --- Routine 1: saturation clamp C = max(0, C-0x7f+A), return L (22 bytes) ---
 	cps	a, 0
 	jr z, SndParam_SaturationClamp_Zero
 	cps	c, 0
@@ -10084,7 +10084,7 @@ SndParam_SaturationClamp_Zero:
 	ldb l, 0x00
 	ret
 SndParam_TableDispatch_Memset:
-	; --- Routine 2: table dispatch via 0x1ED360 + WA*16 (32 bytes) ---
+	; --- Routine 2: table dispatch via 0x1ed360 + WA*16 (32 bytes) ---
 	cp wa, 0x0009
 	ret ugt
 	lda_24	xbc, 2020192
@@ -10100,7 +10100,7 @@ SndParam_TableDispatch_Memset:
 
 
 SndParam_ApplyAndSync:
-	push_werp 0xFA
+	push_werp 0xfa
 	ldda8 a, 47084
 	bit 7, a
 	jr z, SndParam_CheckBit6
@@ -10118,12 +10118,12 @@ SndParam_SetMode2:
 
 SndParam_ReadAndApply:
 	ldda8 a, 47084
-	and a, 0x3F
-	ldfr_berp A, 0xFB
+	and a, 0x3f
+	ldfr_berp A, 0xfb
 	stda8 47084, a
 	cpdi8 47088, 0
 	jr nz, SndParam_CheckRangeForDisplay
-	ld xwa, 0xC0
+	ld xwa, 0xc0
 	lds bc, 0
 	lds de, 1
 	call SoundParam_NotifyChange
@@ -10136,7 +10136,7 @@ SndParam_ReadAndApply:
 	pop xix
 	pop xhl
 	pop xde
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	stda8 47084, a
 	stda8 47088, a
 
@@ -10144,9 +10144,9 @@ SndParam_CheckRangeForDisplay:
 	ldda8 a, 47084
 	cp a, 0x19
 	jr c, SndParam_CallDisplaySync
-	cp a, 0x1B
+	cp a, 0x1b
 	jr c, SoundParam_UpdateCleanupRet
-	cp a, 0x1D
+	cp a, 0x1d
 	jr ugt, SoundParam_UpdateCleanupRet
 
 SndParam_CallDisplaySync:
@@ -10190,7 +10190,7 @@ SndParam_ApplyAllBlocks:
 	pop xde
 
 SoundParam_UpdateCleanupRet:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	ret
 
 SndParam_ApplyMaskBlock:
@@ -10198,7 +10198,7 @@ SndParam_ApplyMaskBlock:
 	calr SndParam_GetBlockPointer
 	or xhl, xhl
 	ret z
-	st_dri3b W, 0xED, 0x8A, 0x00
+	st_dri3b W, 0xed, 0x8a, 0x00
 	ld xbc, xwa
 	lda xde, (xwa + 96)
 
@@ -10227,7 +10227,7 @@ SndParam_ApplyBaseBlock:
 	or xhl, xhl
 	ret z
 	ld xbc, xhl
-	st_dri3b B, 0xED, 0x8A, 0x00
+	st_dri3b B, 0xed, 0x8a, 0x00
 
 SndParam_ApplyBaseBlock_Loop:
 	ld xhl, xbc
@@ -10235,9 +10235,9 @@ SndParam_ApplyBaseBlock_Loop:
 	or xix, xix
 	jr z, SndParam_ApplyBaseBlock_Next
 	ld a, (xix)
-	and a, 0xF8
+	and a, 0xf8
 	or a, (xhl + 4)
-	lda_dpi XBC, 0xF0
+	lda_dpi XBC, 0xf0
 	ld a, (xhl + 5)
 	ld (xix), a
 
@@ -10257,21 +10257,21 @@ SndParam_ApplyModeSpecific:
 	cps c, 1
 	ret nz
 	ld c, (xwa)
-	and c, 0xF8
+	and c, 0xf8
 	ld (xwa), c
 	set 2, c
 	ld (xwa), c
 	ret
 
 SndParam_ClearBits:
-	andmi8 (xwa), 0xF8
+	andmi8 (xwa), 0xf8
 	ret
 
 SndParam_AllocAndCopyPreset:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), a
-	pushw 0xEA
+	pushw 0xea
 	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
@@ -10279,19 +10279,19 @@ SndParam_AllocAndCopyPreset:
 	jrl z, SoundData_FreeSoundPtr
 	cp (xsp + 4), 0x3
 	jrl nc, SoundData_FreeSoundPtr
-	pushw 0xEA
-	pushw 0xEE
-	pushw 0x15FE
+	pushw 0xea
+	pushw 0xee
+	pushw 0x15fe
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
 	lda xwa, (xiz + 5)
 	ld xbc, xwa
-	st_dri3b B, 0xE1, 0x8A, 0x00
+	st_dri3b B, 0xe1, 0x8a, 0x00
 
 SndParam_CopyPreset_FillLoop:
 	ld xhl, (xbc - 5)
-	ld_spib A, 0xEC
+	ld_spib A, 0xec
 	and a, 0x7
 	ld (xbc - 1), a
 	ld a, (xhl)
@@ -10299,7 +10299,7 @@ SndParam_CopyPreset_FillLoop:
 	inc 6, xbc
 	cp xbc, xde
 	jr c, SndParam_CopyPreset_FillLoop
-	st_dri3b W, 0xF9, 0x8F, 0x00
+	st_dri3b W, 0xf9, 0x8f, 0x00
 	ld xbc, xwa
 	lda xde, (xwa + 96)
 
@@ -10315,7 +10315,7 @@ SndParam_CopyPreset_MaskLoop:
 	cps l, 0
 	jr nz, SndParam_CopyPreset_SelectBank
 	lds32 xwa, 0
-	st_dri3l XWA, 0xF9, 0xD8, 0x00
+	st_dri3l XWA, 0xf9, 0xd8, 0x00
 
 SndParam_CopyPreset_SelectBank:
 	cp (xsp + 4), 0x2
@@ -10324,27 +10324,27 @@ SndParam_CopyPreset_SelectBank:
 	jr z, SndParam_CopyPreset_Bank1
 	cp (xsp + 4), 0x0
 	jr nz, SoundData_FreeSoundPtr
-	ld xwa, 0x3D3010
+	ld xwa, 0x3d3010
 	push xwa
 	lds wa, 1
 	ld xbc, xiz
-	ldw de, 0xEA
+	ldw de, 0xea
 	jr SndParam_CopyPreset_CallFlash
 
 SndParam_CopyPreset_Bank1:
-	ld xwa, 0x3D3110
+	ld xwa, 0x3d3110
 	push xwa
 	lds wa, 1
 	ld xbc, xiz
-	ldw de, 0xEA
+	ldw de, 0xea
 	jr SndParam_CopyPreset_CallFlash
 
 SndParam_CopyPreset_Bank2:
-	ld xwa, 0x3D3210
+	ld xwa, 0x3d3210
 	push xwa
 	lds wa, 1
 	ld xbc, xiz
-	ldw de, 0xEA
+	ldw de, 0xea
 
 SndParam_CopyPreset_CallFlash:
 	call FlashWrite_Entry
@@ -10361,31 +10361,31 @@ SndParam_GetBlockPointer:
 	cp a, 0x19
 	jr nc, SndParam_GetBlockPointer_Extended
 	extz wa
-	muls wa, 0xEA
+	muls wa, 0xea
 	lda_24 xbc, 0xee15fe
-	st_dri3b C, 0x07, 0xE4, 0xE0
+	st_dri3b C, 0x07, 0xe4, 0xe0
 	ret
 
 SndParam_GetBlockPointer_Extended:
-	cp a, 0x1D
+	cp a, 0x1d
 	jr z, SndParam_GetBlockPointer_Bank3
-	cp a, 0x1C
+	cp a, 0x1c
 	jr z, SndParam_GetBlockPointer_Bank2
-	cp a, 0x1B
+	cp a, 0x1b
 	jr z, SndParam_GetBlockPointer_Bank1
 	lds32 xhl, 0
 	ret
 
 SndParam_GetBlockPointer_Bank1:
-	ld xhl, 0x3D3010
+	ld xhl, 0x3d3010
 	ret
 
 SndParam_GetBlockPointer_Bank2:
-	ld xhl, 0x3D3110
+	ld xhl, 0x3d3110
 	ret
 
 SndParam_GetBlockPointer_Bank3:
-	ld xhl, 0x3D3210
+	ld xhl, 0x3d3210
 	ret
 
 SndParam_RelocateAndApply:
@@ -10397,7 +10397,7 @@ SndParam_RelocateAndApply:
 	calr SndParam_GetBlockPointer
 	or xhl, xhl
 	jr z, SndParam_RelocateApply_Epilog
-	st_dri3b A, 0xED, 0x8A, 0x00
+	st_dri3b A, 0xed, 0x8a, 0x00
 	ld xde, xbc
 	lda xiy, (xbc + 96)
 
@@ -10406,7 +10406,7 @@ SndParam_RelocateApply_MaskLoop:
 	ld xix, (xde)
 	or xix, xix
 	jr z, SndParam_RelocateApply_NextMask
-	sub xix, 0xF980
+	sub xix, 0xf980
 	add xix, (xsp + 4)
 	ld a, (xiz + 4)
 	cpl a
@@ -10426,12 +10426,12 @@ SndParam_RelocateApply_BaseLoop:
 	ld xix, (xhl)
 	or xix, xix
 	jr z, SndParam_RelocateApply_NextBase
-	sub xix, 0xF980
+	sub xix, 0xf980
 	add xix, (xsp + 4)
 	ld a, (xix)
-	and a, 0xF8
+	and a, 0xf8
 	or a, (xde + 4)
-	lda_dpi XBC, 0xF0
+	lda_dpi XBC, 0xf0
 	ld a, (xde + 5)
 	ld (xix), a
 
@@ -10449,7 +10449,7 @@ SndParam_UpdateChannels:
 	dec 2, xsp
 	pushw iz
 	ld (xsp + 2), c
-	cp a, 0xA
+	cp a, 0xa
 	jr nc, SndParam_UpdateAll_Loop
 	extz wa
 	ld c, (xsp + 2)
@@ -10458,18 +10458,18 @@ SndParam_UpdateChannels:
 	jr SndParam_UpdateChannels_Done
 
 SndParam_UpdateAll_Loop:
-	cp a, 0xA
+	cp a, 0xa
 	jr nz, SndParam_UpdateChannels_Done
 	lds iz, 0
 
 SndParam_UpdateAll_Body:
-	ldto_berp A, 0xF8
+	ldto_berp A, 0xf8
 	extz wa
 	ld c, (xsp + 2)
 	extz bc
 	calr SndParam_UpdateSingleChannel
 	inc 1, iz
-	cp iz, 0xA
+	cp iz, 0xa
 	jr c, SndParam_UpdateAll_Body
 
 SndParam_UpdateChannels_Done:
@@ -10516,7 +10516,7 @@ SndParam_UpdateChan_CopyMemory:
 	lda_24 xwa, 0x0ab000
 	add xwa, xbc
 	ld (xsp), xwa
-	ld xwa, 0x2E0
+	ld xwa, 0x2e0
 	add (xsp), xwa
 	ldada xbc, 63872
 	ldada xwa, 64930
@@ -10531,7 +10531,7 @@ SndParam_UpdateChan_CopyMemory:
 	sub xwa, xbc
 	pushw wa
 	pushw 0x3
-	pushw 0xC8E4
+	pushw 0xc8e4
 	push xbc
 	call Mem_Copy
 	lda xsp, (xsp + 20)
@@ -10550,7 +10550,7 @@ MidiSysEx_SendAllParams:
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jrl nz, MidiSysEx_PopIzAndReturn
-	pushw 0xE
+	pushw 0xe
 	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
@@ -10558,17 +10558,17 @@ MidiSysEx_SendAllParams:
 	jrl z, MidiSysEx_PopIzAndReturn
 	call GET_COMPUTER_INTERFACE_SELECTION
 	ld (xsp + 4), l
-	ld xwa, 0x2D03
+	ld xwa, 0x2d03
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jr z, MidiSysEx_SendReverbParam
-	pushw 0xE
-	pushw 0xEE
-	pushw 0x2CD8
+	pushw 0xe
+	pushw 0xee
+	pushw 0x2cd8
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	ld xwa, 0x2D00
+	ld xwa, 0x2d00
 	call SndParam_LookupReadOnly
 	ld (xiz + 4), l
 	ld (xiz + 9), 0x20
@@ -10576,44 +10576,44 @@ MidiSysEx_SendAllParams:
 	cp (xsp + 4), 0x0
 	jr nz, MidiSysEx_SendParamViaCOMM
 	push xiz
-	pushw 0xE
+	pushw 0xe
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr MidiSysEx_SendReverbParam
 
 MidiSysEx_SendParamViaCOMM:
 	lds wa, 4
-	ldw bc, 0xE
+	ldw bc, 0xe
 	ld xde, xiz
 	call sendCOMM
 
 MidiSysEx_SendReverbParam:
-	ld xwa, 0x2D01
+	ld xwa, 0x2d01
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jr z, MidiSysEx_SendProgramChange
-	pushw 0xE
-	pushw 0xEE
-	pushw 0x2CD8
+	pushw 0xe
+	pushw 0xee
+	pushw 0x2cd8
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	ldmi16 (xiz + 4), 0xB7F2
+	ldmi16 (xiz + 4), 0xb7f2
 	ld (xiz + 9), 0x11
-	ld xwa, 0x2D00
+	ld xwa, 0x2d00
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr nz, MidiSysEx_SendReverbViaCOMM
 	push xiz
-	pushw 0xE
+	pushw 0xe
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr MidiSysEx_SendReverbParam2
 
 MidiSysEx_SendReverbViaCOMM:
 	lds wa, 4
-	ldw bc, 0xE
+	ldw bc, 0xe
 	ld xde, xiz
 	call sendCOMM
 
@@ -10622,39 +10622,39 @@ MidiSysEx_SendReverbParam2:
 	cp (xsp + 4), 0x0
 	jr nz, MidiSysEx_SendReverb2ViaCOMM
 	push xiz
-	pushw 0xE
+	pushw 0xe
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr MidiSysEx_SendReverbFixup
 
 MidiSysEx_SendReverb2ViaCOMM:
 	lds wa, 4
-	ldw bc, 0xE
+	ldw bc, 0xe
 	ld xde, xiz
 	call sendCOMM
 
 MidiSysEx_SendReverbFixup:
-	mrdb5 0x8E, 0x0C, 0x19, 0xF2, 0xB7
+	mrdb5 0x8e, 0x0c, 0x19, 0xf2, 0xb7
 
 MidiSysEx_SendProgramChange:
-	ld xwa, 0x2D03
+	ld xwa, 0x2d03
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jr z, MidiSysEx_SendControlChange1
 	pushw 0x2
-	pushw 0xEE
-	pushw 0x2CEA
+	pushw 0xee
+	pushw 0x2cea
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	ld xwa, 0x2D00
+	ld xwa, 0x2d00
 	call SndParam_LookupReadOnly
-	cp hl, 0xF
+	cp hl, 0xf
 	jr gt, MidiSysEx_SendPCRegValue
 	or (xiz), l
 
 MidiSysEx_SendPCRegValue:
-	ld xwa, 0x2D02
+	ld xwa, 0x2d02
 	call SndParam_LookupReadOnly
 	ld (xiz + 1), l
 	cp (xsp + 4), 0x0
@@ -10672,24 +10672,24 @@ MidiSysEx_SendPCViaCOMM:
 	call sendCOMM
 
 MidiSysEx_SendControlChange1:
-	ld xwa, 0x2D05
+	ld xwa, 0x2d05
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jr z, MidiSysEx_SendControlChange2
 	pushw 0x3
-	pushw 0xEE
-	pushw 0x2CE6
+	pushw 0xee
+	pushw 0x2ce6
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	ld xwa, 0x2D00
+	ld xwa, 0x2d00
 	call SndParam_LookupReadOnly
-	cp hl, 0xF
+	cp hl, 0xf
 	jr gt, MidiSysEx_SendCC1RegValue
 	or (xiz), l
 
 MidiSysEx_SendCC1RegValue:
-	ld xwa, 0x2D04
+	ld xwa, 0x2d04
 	call SndParam_LookupReadOnly
 	ld (xiz + 2), l
 	cp (xsp + 4), 0x0
@@ -10707,26 +10707,26 @@ MidiSysEx_SendCC1ViaCOMM:
 	call sendCOMM
 
 MidiSysEx_SendControlChange2:
-	ld xwa, 0x2D07
+	ld xwa, 0x2d07
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jr z, MidiSysEx_CheckDelayAndSend
 	pushw 0x3
-	pushw 0xEE
-	pushw 0x2CE6
+	pushw 0xee
+	pushw 0x2ce6
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	ld xwa, 0x2D00
+	ld xwa, 0x2d00
 	call SndParam_LookupReadOnly
-	cp hl, 0xF
+	cp hl, 0xf
 	jr gt, MidiSysEx_SendCC2RegValue
 	or (xiz), l
 
 MidiSysEx_SendCC2RegValue:
-	ld xwa, 0x2D06
+	ld xwa, 0x2d06
 	call SndParam_LookupReadOnly
-	add hl, 0x3C
+	add hl, 0x3c
 	ld (xiz + 2), l
 	cp (xsp + 4), 0x0
 	jr nz, MidiSysEx_SendCC2ViaCOMM
@@ -10750,49 +10750,49 @@ MidiSysEx_CheckDelayAndSend:
 	call TaskSched_DelayTicks
 
 MidiSysEx_SendAfterDelay:
-	ld xwa, 0x2D09
+	ld xwa, 0x2d09
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jr z, MidiSysEx_SendBankData1
-	pushw 0xE
-	pushw 0xEE
-	pushw 0x2CD8
+	pushw 0xe
+	pushw 0xee
+	pushw 0x2cd8
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	ld xwa, 0x2D00
+	ld xwa, 0x2d00
 	call SndParam_LookupReadOnly
 	ld (xiz + 4), l
 	ld (xiz + 9), 0x20
-	ld xwa, 0x2D08
+	ld xwa, 0x2d08
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr nz, MidiSysEx_SendAfterDelayViaCOMM
 	push xiz
-	pushw 0xE
+	pushw 0xe
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr MidiSysEx_SendBankData1
 
 MidiSysEx_SendAfterDelayViaCOMM:
 	lds wa, 4
-	ldw bc, 0xE
+	ldw bc, 0xe
 	ld xde, xiz
 	call sendCOMM
 
 MidiSysEx_SendBankData1:
-	ld xwa, 0x2D0B
+	ld xwa, 0x2d0b
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jr z, MidiSysEx_SendBankData2
-	pushw 0xE
-	pushw 0xEE
-	pushw 0x2CD8
+	pushw 0xe
+	pushw 0xee
+	pushw 0x2cd8
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	ld xwa, 0x2D00
+	ld xwa, 0x2d00
 	call SndParam_LookupReadOnly
 	ld (xiz + 4), l
 	ld (xiz + 9), 0x16
@@ -10800,135 +10800,135 @@ MidiSysEx_SendBankData1:
 	cp (xsp + 4), 0x0
 	jr nz, MidiSysEx_SendBank1ViaCOMM
 	push xiz
-	pushw 0xE
+	pushw 0xe
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr MidiSysEx_SendBank1Param2
 
 MidiSysEx_SendBank1ViaCOMM:
 	lds wa, 4
-	ldw bc, 0xE
+	ldw bc, 0xe
 	ld xde, xiz
 	call sendCOMM
 
 MidiSysEx_SendBank1Param2:
 	ld (xiz + 9), 0x17
-	ld xwa, 0x2D0A
+	ld xwa, 0x2d0a
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr nz, MidiSysEx_SendBank1P2ViaCOMM
 	push xiz
-	pushw 0xE
+	pushw 0xe
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr MidiSysEx_SendBankData2
 
 MidiSysEx_SendBank1P2ViaCOMM:
 	lds wa, 4
-	ldw bc, 0xE
+	ldw bc, 0xe
 	ld xde, xiz
 	call sendCOMM
 
 MidiSysEx_SendBankData2:
-	ld xwa, 0x2D0F
+	ld xwa, 0x2d0f
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jr z, MidiSysEx_SendBankData3
-	pushw 0xE
-	pushw 0xEE
-	pushw 0x2CD8
+	pushw 0xe
+	pushw 0xee
+	pushw 0x2cd8
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	ld xwa, 0x2D00
+	ld xwa, 0x2d00
 	call SndParam_LookupReadOnly
 	ld (xiz + 4), l
 	ld (xiz + 9), 0x28
-	ld xwa, 0x2D0E
+	ld xwa, 0x2d0e
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr nz, MidiSysEx_SendBank2ViaCOMM
 	push xiz
-	pushw 0xE
+	pushw 0xe
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr MidiSysEx_SendBank2Param2
 
 MidiSysEx_SendBank2ViaCOMM:
 	lds wa, 4
-	ldw bc, 0xE
+	ldw bc, 0xe
 	ld xde, xiz
 	call sendCOMM
 
 MidiSysEx_SendBank2Param2:
 	ld (xiz + 9), 0x29
-	ld xwa, 0x2D0D
+	ld xwa, 0x2d0d
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr nz, MidiSysEx_SendBank2P2ViaCOMM
 	push xiz
-	pushw 0xE
+	pushw 0xe
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr MidiSysEx_SendBankData3
 
 MidiSysEx_SendBank2P2ViaCOMM:
 	lds wa, 4
-	ldw bc, 0xE
+	ldw bc, 0xe
 	ld xde, xiz
 	call sendCOMM
 
 MidiSysEx_SendBankData3:
-	ld xwa, 0x2D13
+	ld xwa, 0x2d13
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jr z, MidiSysEx_FreeAndReturn
-	pushw 0xE
-	pushw 0xEE
-	pushw 0x2CD8
+	pushw 0xe
+	pushw 0xee
+	pushw 0x2cd8
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	ld xwa, 0x2D00
+	ld xwa, 0x2d00
 	call SndParam_LookupReadOnly
 	ld (xiz + 4), l
-	ld (xiz + 9), 0x1B
-	ld xwa, 0x2D12
+	ld (xiz + 9), 0x1b
+	ld xwa, 0x2d12
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr nz, MidiSysEx_SendBank3ViaCOMM
 	push xiz
-	pushw 0xE
+	pushw 0xe
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr MidiSysEx_SendBank3Param2
 
 MidiSysEx_SendBank3ViaCOMM:
 	lds wa, 4
-	ldw bc, 0xE
+	ldw bc, 0xe
 	ld xde, xiz
 	call sendCOMM
 
 MidiSysEx_SendBank3Param2:
-	ld (xiz + 9), 0x1C
-	ld xwa, 0x2D11
+	ld (xiz + 9), 0x1c
+	ld xwa, 0x2d11
 	call SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr nz, MidiSysEx_SendBank3P2ViaCOMM
 	push xiz
-	pushw 0xE
+	pushw 0xe
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr MidiSysEx_FreeAndReturn
 
 MidiSysEx_SendBank3P2ViaCOMM:
 	lds wa, 4
-	ldw bc, 0xE
+	ldw bc, 0xe
 	ld xde, xiz
 	call sendCOMM
 
@@ -10963,7 +10963,7 @@ MidiSysEx_SendPartChanLoop:
 	ld	wa, (xsp+4)
 	ld (xiz+4), a
 	ld (xiz+9), 0x12
-	ld xwa, 0x00002D00
+	ld xwa, 0x00002d00
 	call SndParam_LookupReadOnly
 	ld (xiz+0x0c), l
 	push xiz
@@ -10984,7 +10984,7 @@ MidiSysEx_CopyParamToBuffer:
 	; --- Routine 2: sla+lda helper, push args + call FF0D99 (32 bytes) ---
 	extz wa
 	sla	wa, 3
-	lda_24 xbc, 0xEE2CFA
+	lda_24 xbc, 0xee2cfa
 	exts xwa
 	add xwa, xbc
 	pushw	8
@@ -10997,7 +10997,7 @@ MidiSysEx_CopyParamToBuffer:
 
 
 MidiPkt_SendControlPair:
-	ld xbc, 0xBD26
+	ld xbc, 0xbd26
 	ld (xbc), a
 	ld (xbc + 1), w
 	ld xwa, xbc
@@ -11114,7 +11114,7 @@ SeqAlt_ProcessAndFinalize:
 
 SeqBuf_WaitForEmpty:
 	pushw iz
-	ldw iz, 0xFFFE
+	ldw iz, 0xfffe
 
 SeqBuf_WaitLoop:
 	call SeqBuf_MidiOut_CheckEmpty
@@ -11131,7 +11131,7 @@ SeqBuf_WaitDone:
 
 MidiChan_ParseVoiceData:
 	push xiz
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 	resda 5, 48408
 	ldda16 xiz, 1033
 	jrl MidiChan_CheckSysExFlag
@@ -11143,19 +11143,19 @@ MidiChan_ReadNextByte:
 	cps l, 0
 	jrl nz, MidiChan_ParseVoiceDone
 	call SeqBuf2_ReadByte
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr z, MIDI_ProcessChannelPair
 	ldda16 xiz, 1033
 	ld c, l
 	extz bc
 	ldda32 xwa, 48300
-	cpi_berp 0xFB, 1
+	cpi_berp 0xfb, 1
 	jr z, MidiChan_CheckSysExData
-	cpi_berp 0xFB, 0
+	cpi_berp 0xfb, 0
 	jr nz, MidiChan_CheckHighBit
-	cp l, 0xF0
+	cp l, 0xf0
 	jr nz, MidiChan_SendFieldParam4
-	ldi_berp 0xFB, 1
+	ldi_berp 0xfb, 1
 	ld wa, bc
 	jr MidiChan_AppendAndContinue
 
@@ -11167,7 +11167,7 @@ MidiChan_SendFieldParam4:
 MidiChan_CheckSysExData:
 	cp l, 0x50
 	jr nz, MidiChan_SendFieldParam4_2
-	ldi_berp 0xFB, 2
+	ldi_berp 0xfb, 2
 	ld wa, bc
 	jr MidiChan_AppendAndContinue
 
@@ -11180,7 +11180,7 @@ MidiChan_CheckHighBit:
 	bit 7, l
 	jr nz, MidiChan_CheckSysExEnd
 	ldda32 xde, 48212
-	cpw (xde), 0xFF
+	cpw (xde), 0xff
 	jr nc, MidiChan_SendFieldParam6
 	ld wa, bc
 
@@ -11195,9 +11195,9 @@ MidiChan_SendFieldParam6:
 	jr MIDI_ProcessChannelPair
 
 MidiChan_CheckSysExEnd:
-	cp l, 0xF7
+	cp l, 0xf7
 	jr nz, MidiChan_SendFieldParam3
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 	ld wa, bc
 	calr VoiceQueue_Append
 	setda 5, 48408
@@ -11228,14 +11228,14 @@ VoiceQueue_Append:
 	ldda32 xbc, 48212
 	lda xde, (xbc + 10)
 	ld xbc, (xde)
-	st_dpib C, 0xE4
+	st_dpib C, 0xe4
 	ld (xde), xbc
 	ld (xhl), a
 	ldda32 xbc, 48212
 	ld xbc, (xbc + 10)
-	ld (xbc), 0xFF
+	ld (xbc), 0xff
 	ldda32 xbc, 48212
-	cp a, 0xF0
+	cp a, 0xf0
 	jr nz, VoiceQueue_IncrementCount
 	ldw (xbc), 0x1
 	ret
@@ -11245,12 +11245,12 @@ VoiceQueue_IncrementCount:
 	ret
 
 MidiChan_DequeueVoiceEntry:
-	ldb l, 0xFF
+	ldb l, 0xff
 	lda xbc, (xwa + 2)
 	ld xwa, (xbc)
-	cp (xwa), 0xFF
+	cp (xwa), 0xff
 	ret z
-	st_dpib B, 0xE0
+	st_dpib B, 0xe0
 	ld (xbc), xwa
 	ld l, (xde)
 	ret
@@ -11279,13 +11279,13 @@ MIDI_ReadChannelParam:
 	extz bc
 	cps bc, 0
 	ret mi
-	cp bc, 0xF
+	cp bc, 0xf
 	ret gt
 	add bc, bc
 	lda_24 xix, 0xee2d2a
-	ld_sriw3 BC, 0x07, 0xF0, 0xE4
+	ld_sriw3 BC, 0x07, 0xf0, 0xe4
 	lda_24 xix, 0xfd5e5c
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ; MIDI channel parameter read dispatch
 MidiChan_ParamDispatch:
 	ld	(xwa), e
@@ -11335,13 +11335,13 @@ SeqData_ReadFieldByIndex:
 	extz bc
 	cps bc, 0
 	jr mi, SeqData_ReturnZeroField
-	cp bc, 0xF
+	cp bc, 0xf
 	jr gt, SeqData_ReturnZeroField
 	add bc, bc
 	lda_24 xix, 0xee2d4a
-	ld_sriw3 BC, 0x07, 0xF0, 0xE4
+	ld_sriw3 BC, 0x07, 0xf0, 0xe4
 	lda_24 xix, 0xfd5ed8
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ; Sequence data field read dispatch
 SeqData_FieldDispatch:
 	ld	l, (xwa)
@@ -11399,22 +11399,22 @@ SeqData_InitPlaybackFromField:
 
 MidiSeq_AssignVoiceSlots:
 	dec 4, xsp
-	push_werp 0xFA
+	push_werp 0xfa
 	ldda32 xbc, 48212
 	lds32 xwa, 2
 	add (xbc + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 	lda_24 xbc, 0xee493e
 
 MidiSeq_ScanSlot0_Loop:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	exts xwa
 	add xwa, xbc
-	cp (xwa), 0xFF
+	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot0_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
@@ -11424,7 +11424,7 @@ MidiSeq_ScanSlot0_Loop:
 MidiSeq_Slot0_CheckMatch:
 	cp (xwa), l
 	jr z, MidiSeq_Slot0_WriteParams
-	cp (xwa), 0xFE
+	cp (xwa), 0xfe
 	jr nz, MidiSeq_Slot0_NextEntry
 
 MidiSeq_Slot0_WriteParams:
@@ -11433,7 +11433,7 @@ MidiSeq_Slot0_WriteParams:
 	lds bc, 5
 	ld de, hl
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	lda_24 xbc, 0xee493e
@@ -11445,22 +11445,22 @@ MidiSeq_Slot0_WriteParams:
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	lda_24 xwa, 0xee4940
-	ld_sril3 XWA, 0x07, 0xE0, 0xE4
+	ld_sril3 XWA, 0x07, 0xe0, 0xe4
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	lda_24 xwa, 0xee4940
-	ld_sril3 XWA, 0x07, 0xE0, 0xE4
+	ld_sril3 XWA, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 2
@@ -11472,23 +11472,23 @@ MidiSeq_Slot0_StorePtr:
 	jr MidiSeq_PrepSlot1
 
 MidiSeq_Slot0_NextEntry:
-	inc1_berp 0xFB
-	cp_erpb 0xFB, 0x10
+	inc1_berp 0xfb
+	cp_erpb 0xfb, 0x10
 	jrl c, MidiSeq_ScanSlot0_Loop
 
 MidiSeq_PrepSlot1:
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 
 MidiSeq_ScanSlot1_Loop:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
-	cp (xwa), 0xFF
+	st_dri3b W, 0x07, 0xe0, 0xe4
+	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot1_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
@@ -11498,7 +11498,7 @@ MidiSeq_ScanSlot1_Loop:
 MidiSeq_Slot1_CheckMatch:
 	cp l, (xwa)
 	jr z, MidiSeq_Slot1_WriteParams
-	cp (xwa), 0xFE
+	cp (xwa), 0xfe
 	jrl nz, MidiSeq_Slot1_NextEntry
 
 MidiSeq_Slot1_WriteParams:
@@ -11507,45 +11507,45 @@ MidiSeq_Slot1_WriteParams:
 	lds bc, 6
 	ld de, hl
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	cps e, 0
 	jr z, MidiSeq_Slot1_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
@@ -11557,16 +11557,16 @@ MidiSeq_Slot1_StorePtr:
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 
 MidiSeq_ScanSlot2_Loop:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
-	cp (xwa), 0xFF
+	st_dri3b W, 0x07, 0xe0, 0xe4
+	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot2_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
@@ -11574,13 +11574,13 @@ MidiSeq_ScanSlot2_Loop:
 	jrl MidiSeq_ChannelWriteEpilog
 
 MidiSeq_Slot1_NextEntry:
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	jrl MidiSeq_ScanSlot1_Loop
 
 MidiSeq_Slot2_CheckMatch:
 	cp l, (xwa)
 	jr z, MidiSeq_Slot2_WriteParams
-	cp (xwa), 0xFE
+	cp (xwa), 0xfe
 	jrl nz, MidiSeq_Slot2_NextEntry
 
 MidiSeq_Slot2_WriteParams:
@@ -11589,45 +11589,45 @@ MidiSeq_Slot2_WriteParams:
 	lds bc, 7
 	ld de, hl
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	cps e, 0
 	jr z, MidiSeq_Slot2_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
@@ -11639,30 +11639,30 @@ MidiSeq_Slot2_StorePtr:
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 
 MidiSeq_ScanSlot3_Loop:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
-	cp (xwa), 0xFF
+	st_dri3b W, 0x07, 0xe0, 0xe4
+	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot3_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
-	ldw de, 0xA
+	ldw de, 0xa
 	jrl MidiSeq_ChannelWriteEpilog
 
 MidiSeq_Slot2_NextEntry:
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	jrl MidiSeq_ScanSlot2_Loop
 
 MidiSeq_Slot3_CheckMatch:
 	cp l, (xwa)
 	jr z, MidiSeq_Slot3_WriteParams
-	cp (xwa), 0xFE
+	cp (xwa), 0xfe
 	jrl nz, MidiSeq_Slot3_NextEntry
 
 MidiSeq_Slot3_WriteParams:
@@ -11671,45 +11671,45 @@ MidiSeq_Slot3_WriteParams:
 	ldw bc, 0x8
 	ld de, hl
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	cps e, 0
 	jr z, MidiSeq_Slot3_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
@@ -11721,30 +11721,30 @@ MidiSeq_Slot3_StorePtr:
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 
 MidiSeq_ScanSlot4_Loop:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
-	cp (xwa), 0xFF
+	st_dri3b W, 0x07, 0xe0, 0xe4
+	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot4_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
-	ldw de, 0xB
+	ldw de, 0xb
 	jrl MidiSeq_ChannelWriteEpilog
 
 MidiSeq_Slot3_NextEntry:
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	jrl MidiSeq_ScanSlot3_Loop
 
 MidiSeq_Slot4_CheckMatch:
 	cp l, (xwa)
 	jr z, MidiSeq_Slot4_WriteParams
-	cp (xwa), 0xFE
+	cp (xwa), 0xfe
 	jrl nz, MidiSeq_Slot4_NextEntry
 
 MidiSeq_Slot4_WriteParams:
@@ -11753,45 +11753,45 @@ MidiSeq_Slot4_WriteParams:
 	ldw bc, 0x9
 	ld de, hl
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	cps e, 0
 	jr z, MidiSeq_Slot4_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
@@ -11803,77 +11803,77 @@ MidiSeq_Slot4_StorePtr:
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 
 MidiSeq_ScanSlot5_Loop:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
-	cp (xwa), 0xFF
+	st_dri3b W, 0x07, 0xe0, 0xe4
+	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot5_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
-	ldw de, 0xC
+	ldw de, 0xc
 	jrl MidiSeq_ChannelWriteEpilog
 
 MidiSeq_Slot4_NextEntry:
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	jrl MidiSeq_ScanSlot4_Loop
 
 MidiSeq_Slot5_CheckMatch:
 	cp l, (xwa)
 	jr z, MidiSeq_Slot5_WriteParams
-	cp (xwa), 0xFE
+	cp (xwa), 0xfe
 	jrl nz, MidiSeq_Slot5_NextEntry
 
 MidiSeq_Slot5_WriteParams:
 	extz hl
 	ldda32 xwa, 48300
-	ldw bc, 0xA
+	ldw bc, 0xa
 	ld de, hl
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	cps e, 0
 	jr z, MidiSeq_Slot5_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
@@ -11885,77 +11885,77 @@ MidiSeq_Slot5_StorePtr:
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 
 MidiSeq_ScanSlot6_Loop:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
-	cp (xwa), 0xFF
+	st_dri3b W, 0x07, 0xe0, 0xe4
+	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot6_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
-	ldw de, 0xD
+	ldw de, 0xd
 	jrl MidiSeq_ChannelWriteEpilog
 
 MidiSeq_Slot5_NextEntry:
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	jrl MidiSeq_ScanSlot5_Loop
 
 MidiSeq_Slot6_CheckMatch:
 	cp l, (xwa)
 	jr z, MidiSeq_Slot6_WriteParams
-	cp (xwa), 0xFE
+	cp (xwa), 0xfe
 	jrl nz, MidiSeq_Slot6_NextEntry
 
 MidiSeq_Slot6_WriteParams:
 	extz hl
 	ldda32 xwa, 48300
-	ldw bc, 0xB
+	ldw bc, 0xb
 	ld de, hl
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	cps e, 0
 	jr z, MidiSeq_Slot6_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
@@ -11967,77 +11967,77 @@ MidiSeq_Slot6_StorePtr:
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 
 MidiSeq_ScanSlot7_Loop:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
-	cp (xwa), 0xFF
+	st_dri3b W, 0x07, 0xe0, 0xe4
+	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot7_CheckMatch
 	ldda32 xwa, 48300
 	lds bc, 4
-	ldw de, 0xE
+	ldw de, 0xe
 	jrl MidiSeq_ChannelWriteEpilog
 
 MidiSeq_Slot6_NextEntry:
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	jrl MidiSeq_ScanSlot6_Loop
 
 MidiSeq_Slot7_CheckMatch:
 	cp l, (xwa)
 	jr z, MidiSeq_Slot7_WriteParams
-	cp (xwa), 0xFE
+	cp (xwa), 0xfe
 	jrl nz, MidiSeq_Slot7_NextEntry
 
 MidiSeq_Slot7_WriteParams:
 	extz hl
 	ldda32 xwa, 48300
-	ldw bc, 0xC
+	ldw bc, 0xc
 	ld de, hl
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	cps e, 0
 	jr z, MidiSeq_Slot7_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
@@ -12049,10 +12049,10 @@ MidiSeq_Slot7_StorePtr:
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 
 MidiSeq_ScanSlot8_Loop:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
@@ -12060,66 +12060,66 @@ MidiSeq_ScanSlot8_Loop:
 	exts xbc
 	add xbc, xwa
 	ldda32 xwa, 48300
-	cp (xbc), 0xFF
+	cp (xbc), 0xff
 	jr nz, MidiSeq_Slot8_CheckMatch
 	lds bc, 4
-	ldw de, 0xF
+	ldw de, 0xf
 	jrl MidiSeq_ChannelWriteEpilog
 
 MidiSeq_Slot7_NextEntry:
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	jrl MidiSeq_ScanSlot7_Loop
 
 MidiSeq_Slot8_CheckMatch:
 	cp l, (xbc)
 	jr z, MidiSeq_Slot8_WriteParams
-	cp (xbc), 0xFE
+	cp (xbc), 0xfe
 	jrl nz, MidiSeq_Slot8_NextEntry
 
 MidiSeq_Slot8_WriteParams:
 	extz hl
-	ldw bc, 0xD
+	ldw bc, 0xd
 	ld de, hl
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	cps e, 0
 	jr z, MidiSeq_Slot8_StorePtr
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
@@ -12131,76 +12131,76 @@ MidiSeq_Slot8_StorePtr:
 	ld (xsp + 2), xwa
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 	ldda32 xwa, 48300
 
 MidiSeq_ScanSlot9_Loop:
-	ldto_berp C, 0xFB
+	ldto_berp C, 0xfb
 	extz bc
 	muls bc, 0x6
 	ld de, bc
 	ld xbc, (xsp + 2)
-	st_dri3b A, 0x07, 0xE4, 0xE8
-	cp (xbc), 0xFF
+	st_dri3b A, 0x07, 0xe4, 0xe8
+	cp (xbc), 0xff
 	jr nz, MidiSeq_Slot9_CheckMatch
 	lds bc, 4
 	ldw de, 0x10
 	jrl MidiSeq_ChannelWriteEpilog
 
 MidiSeq_Slot8_NextEntry:
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	jrl MidiSeq_ScanSlot8_Loop
 
 MidiSeq_Slot9_CheckMatch:
 	cp l, (xbc)
 	jr z, MidiSeq_Slot9_WriteParams
-	cp (xbc), 0xFE
+	cp (xbc), 0xfe
 	jrl nz, MidiSeq_Slot9_NextEntry
 
 MidiSeq_Slot9_WriteParams:
 	extz hl
-	ldw bc, 0xE
+	ldw bc, 0xe
 	ld de, hl
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	cps e, 0
 	jr z, MidiSeq_RestoreAndReturn
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ldda32 xwa, 48300
 	lds bc, 1
 	calr MIDI_ReadChannelParam
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ldda32 xwa, 48300
@@ -12210,12 +12210,12 @@ MidiSeq_ChannelWriteEpilog:
 	calr MIDI_ReadChannelParam
 
 MidiSeq_RestoreAndReturn:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	inc 4, xsp
 	ret
 
 MidiSeq_Slot9_NextEntry:
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	jrl MidiSeq_ScanSlot9_Loop
 
 MidiSeq_NopRet:
@@ -12231,39 +12231,39 @@ MidiSeq_ValidateVoiceRange:
 	ldda32 xwa, 48300
 	lds bc, 0
 	calr SeqData_ReadFieldByIndex
-	ldfr_berp L, 0xFB
-	cp_erpb 0xFB, 0x11
+	ldfr_berp L, 0xfb
+	cp_erpb 0xfb, 0x11
 	jr z, MidiSeq_Dequeue3Voices
-	cp_erpb 0xFB, 0x14
+	cp_erpb 0xfb, 0x14
 	jr z, MidiSeq_Dequeue3Voices
-	cp_erpb 0xFB, 0x19
+	cp_erpb 0xfb, 0x19
 	jrl nz, MidiSeq_CheckBitfieldType
 
 MidiSeq_Dequeue3Voices:
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldfr_berp L, 0xF8
+	ldfr_berp L, 0xf8
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldfr_berp L, 0xF9
+	ldfr_berp L, 0xf9
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldfr_berp L, 0xFA
+	ldfr_berp L, 0xfa
 	lds32 xde, 0
-	ldto_berp E, 0xFA
+	ldto_berp E, 0xfa
 	lds32 xwa, 0
-	ldto_berp A, 0xF9
+	ldto_berp A, 0xf9
 	sll xwa, 7
 	or xde, xwa
 	lds32 xwa, 0
-	ldto_berp A, 0xF8
+	ldto_berp A, 0xf8
 	sll xwa, 14
 	or xde, xwa
-	cp_erpb 0xFB, 0x14
+	cp_erpb 0xfb, 0x14
 	jr z, MidiSeq_SetRange4D800
-	cp_erpb 0xFB, 0x19
+	cp_erpb 0xfb, 0x19
 	jr z, MidiSeq_SetRange3900
-	cp_erpb 0xFB, 0x11
+	cp_erpb 0xfb, 0x11
 	jr nz, MidiSeq_SetRange4D800
 	ld xbc, 0x15440
 	jr MidiSeq_CompareRange
@@ -12273,25 +12273,25 @@ MidiSeq_SetRange3900:
 	jr MidiSeq_CompareRange
 
 MidiSeq_SetRange4D800:
-	ld xbc, 0x4D800
+	ld xbc, 0x4d800
 
 MidiSeq_CompareRange:
 	ldda32 xwa, 48300
 	cp xde, xbc
 	jr ugt, MidiSeq_RangeOverflow
-	ldto_berp E, 0xF8
+	ldto_berp E, 0xf8
 	extz de
-	ldw bc, 0xC
+	ldw bc, 0xc
 	calr MIDI_ReadChannelParam
-	ldto_berp E, 0xF9
+	ldto_berp E, 0xf9
 	extz de
 	ldda32 xwa, 48300
-	ldw bc, 0xD
+	ldw bc, 0xd
 	calr MIDI_ReadChannelParam
-	ldto_berp E, 0xFA
+	ldto_berp E, 0xfa
 	extz de
 	ldda32 xwa, 48300
-	ldw bc, 0xE
+	ldw bc, 0xe
 	jr MidiSeq_WriteParamAndReturn
 
 MidiSeq_RangeOverflow:
@@ -12300,35 +12300,35 @@ MidiSeq_RangeOverflow:
 	jr MidiSeq_WriteParamAndReturn
 
 MidiSeq_CheckBitfieldType:
-	cp_erpb 0xFB, 0x1B
+	cp_erpb 0xfb, 0x1b
 	jr z, MidiSeq_ReadBitfield
-	cp_erpb 0xFB, 0x1D
+	cp_erpb 0xfb, 0x1d
 	jr nz, MidiSeq_PopIzRet
 
 MidiSeq_ReadBitfield:
 	ldda32 xwa, 48300
-	ldw bc, 0xC
+	ldw bc, 0xc
 	calr SeqData_ReadFieldByIndex
-	cp l, 0xFF
+	cp l, 0xff
 	jr nz, MidiSeq_PopIzRet
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldfr_berp L, 0xF8
+	ldfr_berp L, 0xf8
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldto_berp A, 0xF8
+	ldto_berp A, 0xf8
 	or a, l
-	ldfr_berp A, 0xF8
+	ldfr_berp A, 0xf8
 	ldda32 xwa, 48212
 	calr MidiChan_DequeueVoiceEntry
-	ldto_berp A, 0xF8
+	ldto_berp A, 0xf8
 	or a, l
-	ldfr_berp A, 0xF8
-	cpi_berp 0xF8, 1
+	ldfr_berp A, 0xf8
+	cpi_berp 0xf8, 1
 	jr z, MidiSeq_PopIzRet
 	ldda32 xwa, 48300
 	lds bc, 4
-	ldw de, 0xE
+	ldw de, 0xe
 
 MidiSeq_WriteParamAndReturn:
 	calr MIDI_ReadChannelParam
@@ -12338,39 +12338,39 @@ MidiSeq_PopIzRet:
 	ret
 
 MidiSeq_CheckQueuePosition:
-	push_werp 0xFA
+	push_werp 0xfa
 	ldda32 xwa, 48300
 	lds bc, 4
 	calr SeqData_ReadFieldByIndex
 	cps l, 0
 	jrl nz, MidiSeq_PopRetFA
 	ldda32 xwa, 48300
-	ldw bc, 0xC
+	ldw bc, 0xc
 	calr SeqData_ReadFieldByIndex
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 	ldda32 xwa, 48300
-	ldw bc, 0xD
+	ldw bc, 0xd
 	calr SeqData_ReadFieldByIndex
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	or a, l
-	ldfr_berp A, 0xFB
+	ldfr_berp A, 0xfb
 	ldda32 xwa, 48300
-	ldw bc, 0xE
+	ldw bc, 0xe
 	calr SeqData_ReadFieldByIndex
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	or a, l
-	ldfr_berp A, 0xFB
-	and a, 0xFF
+	ldfr_berp A, 0xfb
+	and a, 0xff
 	jr z, MidiSeq_PopRetFA
 	ldda32 xwa, 48300
 	lds bc, 5
 	calr SeqData_ReadFieldByIndex
-	ldfr_berp L, 0xFB
-	cp_erpb 0xFB, 0x7E
+	ldfr_berp L, 0xfb
+	cp_erpb 0xfb, 0x7e
 	jr z, MidiSeq_TrimQueue
-	cp_erpb 0xFB, 0x2D
+	cp_erpb 0xfb, 0x2d
 	jr z, MidiSeq_TrimQueue
-	cp_erpb 0xFB, 0x2C
+	cp_erpb 0xfb, 0x2c
 	jr nz, MidiSeq_PopRetFA
 
 MidiSeq_TrimQueue:
@@ -12401,12 +12401,12 @@ MidiSeq_TrimCheckDone:
 	calr MIDI_ReadChannelParam
 
 MidiSeq_PopRetFA:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	ret
 
 MidiSeq_ParseVoiceConfig:
-	push_werp 0xFA
-	ldi_berp 0xFB, 0
+	push_werp 0xfa
+	ldi_berp 0xfb, 0
 	ldda32 xwa, 48300
 	lds bc, 4
 	calr SeqData_ReadFieldByIndex
@@ -12415,13 +12415,13 @@ MidiSeq_ParseVoiceConfig:
 	ldda32 xwa, 48300
 	lds bc, 5
 	calr SeqData_ReadFieldByIndex
-	cp l, 0x7E
+	cp l, 0x7e
 	jr z, SeqData_ParseFieldAndDequeue
-	cp l, 0x2D
+	cp l, 0x2d
 	jr z, SeqData_ParseFieldAndDequeue
-	cp l, 0x2C
+	cp l, 0x2c
 	jr z, SeqData_ParseFieldAndDequeue
-	cp l, 0x2B
+	cp l, 0x2b
 	jr nz, MidiChan_DequeueExit
 
 SeqData_ParseFieldAndDequeue:
@@ -12435,7 +12435,7 @@ SeqData_ParseFieldAndDequeue:
 
 MidiSeq_DequeueWriteField15:
 	extz hl
-	ldw bc, 0xF
+	ldw bc, 0xf
 	ld de, hl
 	calr MIDI_ReadChannelParam
 	ldda32 xwa, 48212
@@ -12446,19 +12446,19 @@ MidiSeq_DequeueWriteField15:
 	jr z, MidiSeq_NegateAndCheck
 
 MidiSeq_CountEntriesLoop:
-	ldto_berp C, 0xFB
-	add_spib C, 0xEC
-	ldfr_berp C, 0xFB
+	ldto_berp C, 0xfb
+	add_spib C, 0xec
+	ldfr_berp C, 0xfb
 	cp xhl, xde
 	jr nz, MidiSeq_CountEntriesLoop
 
 MidiSeq_NegateAndCheck:
-	ldto_berp C, 0xFB
+	ldto_berp C, 0xfb
 	neg c
-	ldfr_berp C, 0xFB
-	res_erpb 0xFB, 0x07
+	ldfr_berp C, 0xfb
+	res_erpb 0xfb, 0x07
 	calr MidiChan_DequeueVoiceEntry
-	cp_berp L, 0xFB
+	cp_berp L, 0xfb
 	jr z, MidiChan_DequeueExit
 	ldda32 xwa, 48300
 	lds bc, 4
@@ -12473,7 +12473,7 @@ MidiSeq_WriteParamAndExit:
 	calr MIDI_ReadChannelParam
 
 MidiChan_DequeueExit:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	ret
 
 SeqBuf_FlushNoteOffs:
@@ -12486,9 +12486,9 @@ SeqBuf_FlushNoteOffs:
 
 SeqBuf_FlushLoop:
 	ld xde, (xix)
-	st_dpib E, 0xE8
+	st_dpib E, 0xe8
 	ld (xix), xde
-	ld_spib E, 0xE0
+	ld_spib E, 0xe0
 	ld (xiy), e
 	incm 1, (xhl)
 	ld de, bc
@@ -12499,10 +12499,10 @@ SeqBuf_FlushLoop:
 SeqBuf_FlushTerminate:
 	ldda32 xwa, 48220
 	ld xwa, (xwa + 10)
-	ld (xwa), 0xFF
+	ld (xwa), 0xff
 	ldda32 xwa, 48220
 	ld xbc, (xwa + 10)
-	cp (xbc - 1), 0xF7
+	cp (xbc - 1), 0xf7
 	ret nz
 
 	calr SeqOut_FlushWithChunking
@@ -12540,9 +12540,9 @@ ArpQueue_Enqueue:
 
 ArpQueue_EnqueueLoop:
 	ld xde, (xix)
-	st_dpib E, 0xE8
+	st_dpib E, 0xe8
 	ld (xix), xde
-	ld_spib E, 0xE0
+	ld_spib E, 0xe0
 	ld (xiy), e
 	incm 1, (xhl)
 	ld de, bc
@@ -12553,7 +12553,7 @@ ArpQueue_EnqueueLoop:
 ArpQueue_EnqueueDone:
 	ldda32 xwa, 48220
 	ld xwa, (xwa + 10)
-	ld (xwa), 0xFF
+	ld (xwa), 0xff
 	ret
 
 ArpQueue_ProcessAndSort_Data:
@@ -12656,7 +12656,7 @@ ArpQueue_ProcessAndSort_Data:
 ArpQueue_ComputeAndEnqueue:
 	dec 2, xsp
 	ldb e, 0x0
-	ld xiy, 0xEE2D6A
+	ld xiy, 0xee2d6a
 	ld xix, xsp
 	ldiw
 	ldda32 xwa, 48220
@@ -12667,7 +12667,7 @@ ArpQueue_ComputeAndEnqueue:
 	jr z, ArpQueue_ComputeSize
 
 ArpQueue_CountLoop:
-	add_spib E, 0xEC
+	add_spib E, 0xec
 	cp xhl, xwa
 	jr nz, ArpQueue_CountLoop
 
@@ -12769,13 +12769,13 @@ SeqVoice_StoreEntry:
 	dec 4, xsp
 	lda xbc, (xsp)
 	ld xde, (xsp + 8)
-	ld_spib A, 0xE8
+	ld_spib A, 0xe8
 	ld (xbc), a
-	cp a, 0xFF
+	cp a, 0xff
 	jr z, SeqVoice_StoreEntryDone
-	ld_spib A, 0xE8
+	ld_spib A, 0xe8
 	ld (xbc + 1), a
-	ld_spib A, 0xE8
+	ld_spib A, 0xe8
 	ld (xbc + 2), a
 	ld a, (xde)
 	ld (xbc + 3), a
@@ -13212,7 +13212,7 @@ SeqVoice_DispatchProcess_Data:
 MidiChan_CheckFlags:
 	ei 6
 	ldda8 a, 1063
-	and a, 0x2C
+	and a, 0x2c
 	jr z, MidiChan_EnableAndReturn
 	call SeqBuf2_InitWithInterrupts
 	ldda32 xwa, 48300
@@ -13226,10 +13226,10 @@ MidiChan_EnableAndReturn:
 	ret
 
 MidiChan_CheckTimeout:
-	ldw de, 0x9C4
+	ldw de, 0x9c4
 	bitda 2, 48408
 	jr z, MidiChan_ApplyTimeout
-	ldw de, 0x3E8
+	ldw de, 0x3e8
 
 MidiChan_ApplyTimeout:
 	ldda16 xbc, 1033
@@ -13262,20 +13262,20 @@ Part_LookupByIndex:
 	ldda32 xbc, 37106
 	extz wa
 	sla wa, 2
-	ld_sril3 XHL, 0x07, 0xE4, 0xE0
+	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ret
 
 MIDI_PackNibbleParam:
 	lda xbc, (xwa + 6)
 	ld xwa, (xbc)
-	st_dpib B, 0xE0
+	st_dpib B, 0xe0
 	ld (xbc), xwa
 	ld l, (xde)
 	sll l, 4
-	st_dpib B, 0xE0
+	st_dpib B, 0xe0
 	ld (xbc), xwa
 	ld a, (xde)
-	and a, 0xF
+	and a, 0xf
 	or l, a
 	ret
 
@@ -13287,7 +13287,7 @@ MidiTG_WriteRegByDescriptor:
 	ld a, (xiz)
 	extz wa
 	calr Part_LookupByIndex
-	cp xhl, 0xFFFFFFFF
+	cp xhl, 0xffffffff
 	jr z, MidiTG_WriteReg_NoEntry
 	lda xde, (xiz + 2)
 	lda xix, (xiz + 3)
@@ -13295,19 +13295,19 @@ MidiTG_WriteRegByDescriptor:
 	and (xde), a
 	lda xbc, (xiz + 1)
 	ld a, (xbc)
-	ldfr_berp A, 0xF4
+	ldfr_berp A, 0xf4
 	extz iy
 	ld a, (xix)
 	cpl a
-	and_srib_mr A, 0x07, 0xEC, 0xF4
+	and_srib_mr A, 0x07, 0xec, 0xf4
 	ld c, (xbc)
 	extz bc
 	ld a, (xde)
-	or_srib_mr A, 0x07, 0xEC, 0xE4
+	or_srib_mr A, 0x07, 0xec, 0xe4
 	jr MidiTG_WriteReg_Return
 
 MidiTG_WriteReg_NoEntry:
-	ldw (xsp + 4), 0xFFFF
+	ldw (xsp + 4), 0xffff
 
 MidiTG_WriteReg_Return:
 	ld hl, (xsp + 4)
@@ -13323,7 +13323,7 @@ AssSwb_ApplyBitDescriptor:
 	ld a, (xiz)
 	extz wa
 	calr Part_LookupByIndex
-	cp xhl, 0xFFFFFFFF
+	cp xhl, 0xffffffff
 	jr z, AssSwb_NoEntry
 	lda xde, (xiz + 2)
 	lda xix, (xiz + 3)
@@ -13331,21 +13331,21 @@ AssSwb_ApplyBitDescriptor:
 	and (xde), a
 	lda xbc, (xiz + 1)
 	ld a, (xbc)
-	ldfr_berp A, 0xF4
+	ldfr_berp A, 0xf4
 	extz iy
 	ld a, (xix)
 	cpl a
-	and_srib_mr A, 0x07, 0xEC, 0xF4
+	and_srib_mr A, 0x07, 0xec, 0xf4
 	ld a, (xbc)
-	ldfr_berp A, 0xF4
+	ldfr_berp A, 0xf4
 	extz iy
 	ld a, (xde)
-	or_srib_mr A, 0x07, 0xEC, 0xF4
+	or_srib_mr A, 0x07, 0xec, 0xf4
 	ld a, (xiz)
 	extz wa
 	ld c, (xbc)
 	extz bc
-	ld_srib3 E, 0x07, 0xEC, 0xE4
+	ld_srib3 E, 0x07, 0xec, 0xe4
 	extz de
 	ld l, (xix)
 	extz hl
@@ -13354,7 +13354,7 @@ AssSwb_ApplyBitDescriptor:
 	jr AssSwb_Return
 
 AssSwb_NoEntry:
-	ldw (xsp + 4), 0xFFFF
+	ldw (xsp + 4), 0xffff
 
 AssSwb_Return:
 	ld hl, (xsp + 4)
@@ -13466,11 +13466,11 @@ Part_LookupTableEntry:
 	ldda32 xde, 37106
 	extz wa
 	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xE8, 0xE0
-	cp xwa, 0xFFFFFFFF
+	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	cp xwa, 0xffffffff
 	jr z, Part_LookupReturnZero
 	extz bc
-	ld_srib3 L, 0x07, 0xE0, 0xE4
+	ld_srib3 L, 0x07, 0xe0, 0xe4
 	ret
 
 Part_LookupReturnZero:
@@ -13603,7 +13603,7 @@ MidiSeq_UpdateToneParam:
 	call SeqData_ReadFieldByIndex
 	extz hl
 	lda_24 xbc, 0xee499e
-	ld_srib3 C, 0x07, 0xE4, 0xEC
+	ld_srib3 C, 0x07, 0xe4, 0xec
 	ld a, c
 	stda8 48384, c
 	cpda8 c, 48386
@@ -13618,7 +13618,7 @@ MidiSeq_UpdateToneParam_Lower:
 	call SeqData_ReadFieldByIndex
 	extz hl
 	lda_24 xbc, 0xee499e
-	ld_srib3 C, 0x07, 0xE4, 0xEC
+	ld_srib3 C, 0x07, 0xe4, 0xec
 	ld a, c
 	stda8 48396, c
 	cpda8 c, 48398
@@ -13667,7 +13667,7 @@ MidiSeq_ComputeExpression:
 	call Math_DivideU32
 	sub xhl, 0x20
 	cpl hl
-	cpl_werp 0xEE
+	cpl_werp 0xee
 	inc 1, xhl
 	ld a, l
 	stda8 48392, l
@@ -13689,7 +13689,7 @@ MidiSeq_Expression_Lower:
 	call Math_DivideU32
 	sub xhl, 0x20
 	cpl hl
-	cpl_werp 0xEE
+	cpl_werp 0xee
 	inc 1, xhl
 	ld a, l
 	stda8 48404, l
@@ -13832,12 +13832,12 @@ MidiSeq_PartConfigure_Data:
 	jrl	796
 
 MidiPkt_ArpMultiPass:
-	push_werp 0xFA
+	push_werp 0xfa
 	resda 7, 48408
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 
 MidiPkt_ArpPassLoop:
-	ld xwa, 0xEE35BC
+	ld xwa, 0xee35bc
 	lds bc, 7
 	call SeqBuf_FlushNoteOffs
 	setda 2, 48408
@@ -13847,13 +13847,13 @@ MidiPkt_ArpPassLoop:
 	call SeqData_ReadFieldByIndex
 	cp l, 0x8
 	jr z, MidiPkt_ArpPassDone
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 3
+	inc1_berp 0xfb
+	cpi_berp 0xfb, 3
 	jr c, MidiPkt_ArpPassLoop
 
 MidiPkt_ArpPassDone:
 	ldda32 xwa, 48300
-	cpi_berp 0xFB, 3
+	cpi_berp 0xfb, 3
 	jr nz, MidiPkt_ArpStoreFieldValues
 	lds bc, 4
 	lds de, 0
@@ -13872,10 +13872,10 @@ MidiPkt_ArpStoreFieldValues:
 	ldw bc, 0x8
 	call SeqData_ReadFieldByIndex
 	stda8 48230, l
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 
 MidiPkt_ArpSecondLoop:
-	ld xwa, 0xEE35C4
+	ld xwa, 0xee35c4
 	lds bc, 7
 	call SeqBuf_FlushNoteOffs
 	setda 2, 48408
@@ -13889,12 +13889,12 @@ MidiPkt_ArpSecondLoop:
 	jr MidiPkt_ArpPopReturn
 
 MidiPkt_ArpSecondLoopNext:
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 3
+	inc1_berp 0xfb
+	cpi_berp 0xfb, 3
 	jr c, MidiPkt_ArpSecondLoop
 
 MidiPkt_ArpPopReturn:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	ret
 
 MidiPkt_ArpConfigChain_Data:
@@ -14235,12 +14235,12 @@ MidiTable_DispatchHelper:
 	ld a, (xwa)
 	extz wa
 	sla	wa, 2
-	lda_24 xbc, 0xEE2D6C
+	lda_24 xbc, 0xee2d6c
 	ld_rrl	xhl, xbc, wa
 	call	(xhl)
 	calr MidiTable_FlushArpNotes
 	call MidiSeq_UpdateAllParams
-	call 0xFD7316
+	call 0xfd7316
 	ret
 MidiTable_FlushArpNotes:
 	; --- Helper 2: conditional A-based 3-way pointer selection (56 bytes) ---
@@ -14251,17 +14251,17 @@ MidiTable_FlushArpNotes:
 	ld a, (xwa+4)
 	cps	a, 0
 	jr nz, MidiTable_CheckSpecialSlot
-	ld xwa, 0x00EE3594
+	ld xwa, 0x00ee3594
 	lds	bc, 5
 	jr t, MidiTable_CallFlush
 MidiTable_CheckSpecialSlot:
 	cp a, 0x16
 	jr nz, MidiTable_UseDefaultBuf
-	ld xwa, 0x00EE35B2
+	ld xwa, 0x00ee35b2
 	lds	bc, 5
 	jr t, MidiTable_CallFlush
 MidiTable_UseDefaultBuf:
-	ld xwa, 0x00EE359A
+	ld xwa, 0x00ee359a
 	lds	bc, 5
 MidiTable_CallFlush:
 	call SeqBuf_FlushNoteOffs
@@ -14721,24 +14721,24 @@ SeqChan_StepCmd_Field13Write:
 	; --- Section 1: load XWA, setup BC/DE, call, then compare HL ---
 	ldda32	xwa, 48300
 	lds	bc, 3
-	ldw de, 0x000D
+	ldw de, 0x000d
 	call MIDI_ReadChannelParam
 	lds	wa, 4
 	call AccWrap_ReturnZero
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	.byte 0xf2
 	cp	(xiy+108), e
 	.byte 0xee
 	; --- Section 2: reload XWA, setup BC, call, check L ---
 	ldda32	xwa, 48300
-	ldw bc, 0x000F
+	ldw bc, 0x000f
 	call SeqData_ReadFieldByIndex
 	cps	l, 0
 	ret nz
 	; --- Section 3: reload XWA, setup BC/DE, call ---
 	ldda32	xwa, 48300
 	lds	bc, 3
-	ldw de, 0x000E
+	ldw de, 0x000e
 	call MIDI_ReadChannelParam
 	ret
 
@@ -15079,13 +15079,13 @@ SeqBuf_Timing_Data:
 
 MidiChan_ClearStorageFields:
 	ldada xwa, 48232
-	ld (xwa), 0xFF
-	ld (xwa + 1), 0xFF
-	ld (xwa + 2), 0xFF
+	ld (xwa), 0xff
+	ld (xwa + 1), 0xff
+	ld (xwa + 2), 0xff
 	ldada xwa, 48228
-	ld (xwa), 0xFF
-	ld (xwa + 1), 0xFF
-	ld (xwa + 2), 0xFF
+	ld (xwa), 0xff
+	ld (xwa + 1), 0xff
+	ld (xwa + 2), 0xff
 	ret
 
 MidiChan_InitAllBufferPtrs:
@@ -15124,8 +15124,8 @@ ArpQueue_InitBuffer:
 	ld (xwa + 2), xbc
 	ld (xwa + 6), xbc
 	ld (xwa + 10), xbc
-	ld (xbc), 0xFF
-	ld xiy, 0xEE49D8
+	ld (xbc), 0xff
+	ld xiy, 0xee49d8
 	ld xix, xde
 	ldw bc, 0x8
 	ldirw
@@ -15186,20 +15186,20 @@ ArpQueue_ReinitCurrentBuffer:
 	jrl ArpQueue_InitBuffer
 
 MidiChan_InitSoundRegisters:
-	ld xiy, 0xEE2F16
-	ld xix, 0xBCBC
+	ld xiy, 0xee2f16
+	ld xix, 0xbcbc
 	ldw bc, 0x8
 	ldirw
-	ld xiy, 0xEE2F16
-	ld xix, 0xBCCC
+	ld xiy, 0xee2f16
+	ld xix, 0xbccc
 	ldw bc, 0x8
 	ldirw
-	ld xiy, 0xEE2F16
-	ld xix, 0xBCDC
+	ld xiy, 0xee2f16
+	ld xix, 0xbcdc
 	ldw bc, 0x8
 	ldirw
-	ld xiy, 0xEE2F16
-	ld xix, 0xBCEC
+	ld xiy, 0xee2f16
+	ld xix, 0xbcec
 	ldw bc, 0x8
 	ldirw
 	ret
@@ -15237,17 +15237,17 @@ SoundMode_RetStub_D:
 
 SoundMode_ApplyVoiceParams:
 	lds wa, 2
-	ld xbc, 0xF980
+	ld xbc, 0xf980
 	call SysEx_ApplyVoiceParam_49
 	lds wa, 4
-	ld xbc, 0xF980
+	ld xbc, 0xf980
 	call SysEx_ApplyVoiceParam_4B
 	ldada xbc, 37261
 	ld xwa, xbc
 	lda xbc, (xbc + 31)
 
 SoundMode_VoiceIterLoop:
-	stib_dpi 0xE0, 0x23
+	stib_dpi 0xe0, 0x23
 	cp xwa, xbc
 	jr ule, SoundMode_VoiceIterLoop
 	ret
@@ -15353,8 +15353,8 @@ SoundMode_PostRender:
 	jr z, SoundMode_CopyBitmapDone
 
 SoundMode_CopyBitmapLoop:
-	ld_spiw WA, 0xE9
-	st_dpiw WA, 0xED
+	ld_spiw WA, 0xe9
+	st_dpiw WA, 0xed
 	ld xwa, xbc
 	dec 1, xbc
 	or xwa, xwa
@@ -15408,7 +15408,7 @@ SoundMode_RenderWithNotify:
 	jr z, SoundMode_NotifyActiveVoices
 	cp a, 0x73
 	jr z, SoundMode_NotifyActiveVoices
-	cp a, 0x6F
+	cp a, 0x6f
 	jr nz, SoundMode_RenderPopRegs
 
 SoundMode_NotifyActiveVoices:
@@ -15503,7 +15503,7 @@ MidiCtrl_CheckAltCommand:
 	ret
 
 MidiCtrl_FullReconfigure:
-	push_werp 0xFA
+	push_werp 0xfa
 	push xde
 	push xhl
 	push xix
@@ -15515,7 +15515,7 @@ MidiCtrl_FullReconfigure:
 	pop xhl
 	pop xde
 	ldda8 a, 64607
-	ldfr_berp A, 0xFB
+	ldfr_berp A, 0xfb
 	bitda 2, 49278
 	jr z, MidiCtrl_RenderAndProcess
 	calr SoundMode_RetStub_E
@@ -15525,7 +15525,7 @@ MidiCtrl_FullReconfigure:
 	ldda8 a, 36150
 	cp a, 0x76
 	jr ugt, MidiCtrl_DeltaAndProcess
-	cp a, 0x6C
+	cp a, 0x6c
 	jr nc, SoundMode_ProcessToneAndParams
 
 MidiCtrl_DeltaAndProcess:
@@ -15573,19 +15573,19 @@ SoundMode_ProcessToneAndParams:
 	ld c, (xde)
 	res 0, c
 	ld (xde), c
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	and a, 0x1
 	or c, a
 	ld (xde), c
-	pop_werp 0xFA
+	pop_werp 0xfa
 	ret
 
 TGReg_ClearTerminator:
 	ldada xwa, 63926
-	sub xwa, 0xF9B4
+	sub xwa, 0xf9b4
 	lda_24 xbc, 0x03c8e4
 	add xwa, xbc
-	ld (xwa), 0xFF
+	ld (xwa), 0xff
 	ret
 
 TGReg_WriteCC0_Volume:
@@ -15596,12 +15596,12 @@ TGReg_WriteCC0_Volume:
 TGReg_WriteCC0_Body:
 	ld (xbc), 0x0
 	ld (xde), 0x0
-	ld (xhl), 0xFF
+	ld (xhl), 0xff
 	call MidiTG_WriteRegByDescriptor
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x1
 	ld (xwa + 2), 0x0
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
@@ -15610,18 +15610,18 @@ TGReg_WriteCC0_Check:
 	lda xbc, (xwa + 1)
 	lda xde, (xwa + 2)
 	lda xhl, (xwa + 3)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC0_Body
-	ld (xwa), 0xF
+	ld (xwa), 0xf
 	ld (xbc), 0x0
 	ld (xde), 0x0
-	ld (xhl), 0xFF
+	ld (xhl), 0xff
 	call MidiTG_WriteRegByDescriptor
 	lda xwa, (xsp)
-	ld (xwa), 0xF
+	ld (xwa), 0xf
 	ld (xwa + 1), 0x1
 	ld (xwa + 2), 0x78
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	call MidiTG_WriteRegByDescriptor
 	inc 4, xsp
 	ret
@@ -15634,12 +15634,12 @@ TGReg_WriteCC0_AltMask:
 TGReg_WriteCC0_AltBody:
 	ld (xbc), 0x0
 	ld (xde), 0x0
-	ld (xhl), 0xFF
+	ld (xhl), 0xff
 	call MidiTG_WriteRegByDescriptor
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x1
 	ld (xwa + 2), 0x0
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	call MidiTG_WriteRegByDescriptor
 	incm8 1, (xsp + 256)
 
@@ -15648,18 +15648,18 @@ TGReg_WriteCC0_AltCheck:
 	lda xbc, (xwa + 1)
 	lda xde, (xwa + 2)
 	lda xhl, (xwa + 3)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC0_AltBody
-	ld (xwa), 0xF
+	ld (xwa), 0xf
 	ld (xbc), 0x0
-	ld (xde), 0xF0
-	ld (xhl), 0xFF
+	ld (xde), 0xf0
+	ld (xhl), 0xff
 	call MidiTG_WriteRegByDescriptor
 	lda xwa, (xsp)
-	ld (xwa), 0xF
+	ld (xwa), 0xf
 	ld (xwa + 1), 0x1
 	ld (xwa + 2), 0x0
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	call MidiTG_WriteRegByDescriptor
 	inc 4, xsp
 	ret
@@ -15669,7 +15669,7 @@ TGReg_WriteCC3_Expression:
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x3
 	ld (xwa + 2), 0x64
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	ld (xwa), 0x0
 	jr TGReg_WriteCC3_Check
 
@@ -15679,7 +15679,7 @@ TGReg_WriteCC3_Body:
 
 TGReg_WriteCC3_Check:
 	lda xwa, (xsp)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC3_Body
 	inc 4, xsp
 	ret
@@ -15699,7 +15699,7 @@ TGReg_WriteCC4_Body:
 
 TGReg_WriteCC4_Check:
 	lda xwa, (xsp)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC4_Body
 	inc 4, xsp
 	ret
@@ -15709,7 +15709,7 @@ TGReg_WriteCC5_Modulation:
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x5
 	ld (xwa + 2), 0x0
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	ld (xwa), 0x0
 	jr TGReg_WriteCC5_Check
 
@@ -15719,7 +15719,7 @@ TGReg_WriteCC5_Body:
 
 TGReg_WriteCC5_Check:
 	lda xwa, (xsp)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC5_Body
 	inc 4, xsp
 	ret
@@ -15739,7 +15739,7 @@ TGReg_WriteCC4_SustainBody:
 
 TGReg_WriteCC4_SustainCheck:
 	lda xwa, (xsp)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC4_SustainBody
 	inc 4, xsp
 	ret
@@ -15752,7 +15752,7 @@ TGReg_WriteCC7_Reverb:
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x7
 	ld (xwa + 2), 0x28
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	ld (xwa), 0x0
 	jr TGReg_WriteCC7_Check
 
@@ -15762,7 +15762,7 @@ TGReg_WriteCC7_Body:
 
 TGReg_WriteCC7_Check:
 	lda xwa, (xsp)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC7_Body
 	inc 4, xsp
 	ret
@@ -15772,7 +15772,7 @@ TGReg_WriteCC8_Chorus:
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x8
 	ld (xwa + 2), 0x40
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	ld (xwa), 0x0
 	jr TGReg_WriteCC8_Check
 
@@ -15782,7 +15782,7 @@ TGReg_WriteCC8_Body:
 
 TGReg_WriteCC8_Check:
 	lda xwa, (xsp)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC8_Body
 	inc 4, xsp
 	ret
@@ -15792,7 +15792,7 @@ TGReg_WriteCC9_Variation:
 	lda xwa, (xsp)
 	ld (xwa + 1), 0x9
 	ld (xwa + 2), 0x40
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	ld (xwa), 0x0
 	jr TGReg_WriteCC9_Check
 
@@ -15802,7 +15802,7 @@ TGReg_WriteCC9_Body:
 
 TGReg_WriteCC9_Check:
 	lda xwa, (xsp)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC9_Body
 	inc 4, xsp
 	ret
@@ -15810,9 +15810,9 @@ TGReg_WriteCC9_Check:
 TGReg_WriteCC10_KeyShift:
 	dec 4, xsp
 	lda xwa, (xsp)
-	ld (xwa + 1), 0xA
+	ld (xwa + 1), 0xa
 	ld (xwa + 2), 0x80
-	ld (xwa + 3), 0xFF
+	ld (xwa + 3), 0xff
 	ld (xwa), 0x0
 	jr TGReg_WriteCC10_Check
 
@@ -15822,7 +15822,7 @@ TGReg_WriteCC10_Body:
 
 TGReg_WriteCC10_Check:
 	lda xwa, (xsp)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC10_Body
 	inc 4, xsp
 	ret
@@ -15830,9 +15830,9 @@ TGReg_WriteCC10_Check:
 TGReg_WriteCC11_PartMode:
 	dec 4, xsp
 	lda xwa, (xsp)
-	ld (xwa + 1), 0xB
+	ld (xwa + 1), 0xb
 	ld (xwa + 2), 0x2
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	ld (xwa), 0x0
 	jr TGReg_WriteCC11_Check
 
@@ -15842,7 +15842,7 @@ TGReg_WriteCC11_Body:
 
 TGReg_WriteCC11_Check:
 	lda xwa, (xsp)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC11_Body
 	inc 4, xsp
 	ret
@@ -15907,7 +15907,7 @@ VoiceData_ZeroFillOuter:
 	jr z, VoiceData_ZeroFillNext
 
 VoiceData_ZeroFillInner:
-	stib_dpi 0xEC, 0x00
+	stib_dpi 0xec, 0x00
 	ld e, d
 	dec 1, d
 	cps e, 0
@@ -15945,7 +15945,7 @@ TGReg_WriteCC12_Assign:
 	jr TGReg_WriteCC12_Check
 
 TGReg_WriteCC12_Body:
-	ld (xwa + 1), 0xC
+	ld (xwa + 1), 0xc
 	ld (xwa + 2), 0x0
 	ld (xwa + 3), 0x10
 	call MidiTG_WriteRegByDescriptor
@@ -15953,7 +15953,7 @@ TGReg_WriteCC12_Body:
 
 TGReg_WriteCC12_Check:
 	lda xwa, (xsp)
-	cp (xwa), 0xF
+	cp (xwa), 0xf
 	jr ule, TGReg_WriteCC12_Body
 	inc 4, xsp
 	ret
@@ -15977,7 +15977,7 @@ SwbtWr_WriteLoop_CC_B1:
 	ldda8 a, 37160
 	inc 1, a
 	stda8 37160, a
-	cp a, 0xF
+	cp a, 0xf
 	jr ule, SwbtWr_WriteLoop_CC_B1
 	ret
 
@@ -16003,7 +16003,7 @@ SwbtWr_WriteLoop_CC_B2:
 	ldda8 a, 37160
 	inc 1, a
 	stda8 37160, a
-	cp a, 0xF
+	cp a, 0xf
 	jr ule, SwbtWr_WriteLoop_CC_B2
 	ret
 
@@ -16026,7 +16026,7 @@ SwbtWr_WriteLoop_CC_B3:
 	ldda8 a, 37160
 	inc 1, a
 	stda8 37160, a
-	cp a, 0xF
+	cp a, 0xf
 	jr ule, SwbtWr_WriteLoop_CC_B3
 	ret
 
@@ -16084,7 +16084,7 @@ MidiBuf_CalcFillRange:
 	ret z
 
 MidiBuf_FillLoop:
-	stib_dpi 0xE8, 0x7F
+	stib_dpi 0xe8, 0x7f
 	ld a, c
 	dec 1, c
 	cps a, 0
@@ -16126,9 +16126,9 @@ MidiCtrl_SendControlPacket:
 	bit 7, a
 	jr nz, MidiCtrl_SendPacket_ClearFlag
 	lda xwa, (xsp)
-	ld (xwa), 0xB0
+	ld (xwa), 0xb0
 	ld (xwa + 2), 0x0
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	lda xde, (xwa + 1)
 	ld (xde), 0x11
 	bit 2, c
@@ -16154,13 +16154,13 @@ VoiceData_SyncAllToHardware:
 VoiceData_SyncLoop:
 	ld wa, iz
 	extz xwa
-	ld xbc, 0xEE2F76
+	ld xbc, 0xee2f76
 	add xbc, xwa
 	ld a, (xbc)
 	call VoiceData_LookupPtrByIndex
 	ld c, (xhl - 1)
 	ld xwa, xhl
-	sub xwa, 0xF9A0
+	sub xwa, 0xf9a0
 	lda_24 xde, 0x03c8e4
 	add xde, xwa
 	extz bc
@@ -16222,9 +16222,9 @@ SysEx_InitiateSend:
 	ret gt
 	add wa, wa
 	lda_24 xix, 0xee2f7e
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, 0xfd8cf1
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; SysEx send dispatch
 SysEx_SendDispatch:
@@ -16251,33 +16251,33 @@ SysEx_DispatchCalls_Data:
 	ret
 
 SysEx_ParseAndDispatch:
-	push_werp 0xFA
+	push_werp 0xfa
 	stdi8 48408, 0
 
 SysEx_ParserLoop:
 	call SeqBuf2_ReadByte
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr z, SysEx_ParseAndDispatch_Ret
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 	call SeqAlt_CheckInitBuffer
 	ldda8 c, 48414
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	cps c, 1
 	jr z, SysEx_ParseState1_CheckManufID
 	cps c, 0
 	jr nz, SysEx_ParseState2_CheckBit7
-	cp_erpb 0xFB, 0xF0
+	cp_erpb 0xfb, 0xf0
 	jr nz, SysEx_ParserLoop
 	stdi8 48414, 1
 	jr SysEx_ParseState_AppendToQueue
 
 SysEx_ParseState1_CheckManufID:
-	cp_erpb 0xFB, 0x50
+	cp_erpb 0xfb, 0x50
 	jr z, SysEx_ParseState1_SetState2
-	cp_erpb 0xFB, 0x7E
+	cp_erpb 0xfb, 0x7e
 	jr z, SysEx_ParseState1_SetState2
-	cp_erpb 0xFB, 0x41
+	cp_erpb 0xfb, 0x41
 	jr nz, SysEx_ParseState_Reset
 
 SysEx_ParseState1_SetState2:
@@ -16292,10 +16292,10 @@ SysEx_ParseState_DispatchByte:
 	jr SysEx_ParserLoop
 
 SysEx_ParseState2_CheckBit7:
-	bit_erpb 0xFB, 0x07
+	bit_erpb 0xfb, 0x07
 	jr nz, SysEx_ParseState2_EndOfSysEx
 	ldda32 xbc, 48212
-	cpw (xbc), 0xFF
+	cpw (xbc), 0xff
 	jr nc, SysEx_ParseState_Reset
 
 SysEx_ParseState_AppendToQueue:
@@ -16304,14 +16304,14 @@ SysEx_ParseState_AppendToQueue:
 
 SysEx_ParseState2_EndOfSysEx:
 	stdi8 48414, 0
-	cp_erpb 0xFB, 0xF7
+	cp_erpb 0xfb, 0xf7
 	jr nz, SysEx_ParseState_DispatchByte
 	call VoiceQueue_Append
 	calr SeqData_DispatchHandler
 	jr SysEx_ParserLoop
 
 SysEx_ParseAndDispatch_Ret:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	ret
 
 ; Sequencer data dispatch handler
@@ -16333,7 +16333,7 @@ SeqData_DispatchHandler:
 	extz hl
 	sla hl, 2
 	lda_24 xbc, 0xee2f8c
-	ld_sril3 XHL, 0x07, 0xE4, 0xEC
+	ld_sril3 XHL, 0x07, 0xe4, 0xec
 	call (xhl)
 
 SeqData_DispatchLoop:
@@ -16346,13 +16346,13 @@ SeqData_DispatchLoop_Check:
 
 SeqData_DispatchLoop_Done:
 	dec 4, xsp
-	ld xiy, 0xEE3028
+	ld xiy, 0xee3028
 	ld xix, xsp
 	ldi85
 	ldiw
 	lds wa, 0
 	call AccWrap_ReturnZero
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr z, ArpQueue_Flush_Return
 	bitda 0, 47079
 	jr nz, ArpQueue_Flush_Return
@@ -16361,7 +16361,7 @@ SeqData_DispatchLoop_Done:
 	ldda8 a, 64848
 	and a, 0x14
 	jr nz, ArpQueue_Flush_Return
-	ld xwa, 0xEE35CC
+	ld xwa, 0xee35cc
 	lds bc, 3
 	call SeqBuf_FlushNoteOffs
 	ldda16 xwa, 48442
@@ -16371,18 +16371,18 @@ SeqData_DispatchLoop_Done:
 	jr SeqData_FormatOutput_Loop
 
 SeqData_FormatOutput:
-	cp wa, 0x12C
+	cp wa, 0x12c
 	jr ule, SeqData_FormatOutput_Loop
 	stdi16 48442, 300
 
 SeqData_FormatOutput_Loop:
 	lda xwa, (xsp)
 	ldda16 xbc, 48442
-	and c, 0xF
+	and c, 0xf
 	ld (xwa), c
 	ldda16 xbc, 48442
 	srl bc, 4
-	and c, 0x1F
+	and c, 0x1f
 	ld (xwa + 1), c
 	lds bc, 3
 	call ArpQueue_Enqueue
@@ -16398,7 +16398,7 @@ SeqData_FormatOutput_Dispatch:
 	; --- Input validation and dispatch (106 bytes, 2 functions) ---
 	lds	wa, 0
 	call AccWrap_ReturnZero
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	ret z
 	cpdi8	36150, 87
 	ret z
@@ -16409,10 +16409,10 @@ SeqData_FormatOutput_Dispatch:
 	ld e, (xwa + 17)
 	ld c, (xwa + 18)
 	ld a, e
-	and a, 0xF0
+	and a, 0xf0
 	jr z, SeqData_FormatOutput_CaseA
 	ld a, c
-	and a, 0xE0
+	and a, 0xe0
 	ret nz
 SeqData_FormatOutput_CaseA:
 	extz bc
@@ -16421,7 +16421,7 @@ SeqData_FormatOutput_CaseA:
 	or de, bc
 	cp de, 0x0028
 	ret c
-	cp de, 0x012C
+	cp de, 0x012c
 	ret	ugt
 	ld wa, de
 	call SoundMode_SysExConfig_Data
@@ -16807,7 +16807,7 @@ SeqAlt_NibbleSearch:
 	jr z, SeqAlt_NibbleSearch_NotFound
 
 SeqAlt_NibbleSearch_CompareLoop:
-	cp_spib A, 0xE4
+	cp_spib A, 0xe4
 	jr nz, SeqAlt_NibbleSearch_DecLoop
 	lds hl, 0
 	ret
@@ -16819,7 +16819,7 @@ SeqAlt_NibbleSearch_DecLoop:
 	jr nz, SeqAlt_NibbleSearch_CompareLoop
 
 SeqAlt_NibbleSearch_NotFound:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ret
 
 SeqAlt_ApplyDescriptor_TypeA:
@@ -16836,7 +16836,7 @@ SeqAlt_ApplyDescriptor_TypeA:
 	cp l, (xiz + 10)
 	jrl ugt, SeqAlt_PopIzSkip4Ret
 	ld a, (xiz + 14)
-	cp a, 0xFF
+	cp a, 0xff
 	jr z, SeqAlt_ApplyDescA_DirectWrite
 	cps a, 1
 	jr nc, SeqAlt_PopIzSkip4Ret
@@ -16850,7 +16850,7 @@ SeqAlt_ApplyDescriptor_TypeA:
 	extz hl
 	ld wa, hl
 	calr SeqAlt_NibbleSearch
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr z, SeqAlt_PopIzSkip4Ret
 	lda xbc, (xsp + 4)
 	ld a, (xiz + 6)
@@ -16860,7 +16860,7 @@ SeqAlt_ApplyDescriptor_TypeA:
 	lda xhl, (xbc + 2)
 	ld e, (xhl)
 	ld a, (xiz + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, SeqAlt_ApplyDescA_NoShift
 	slla e
 
@@ -16880,7 +16880,7 @@ SeqAlt_ApplyDescA_DirectWrite:
 	ld (xbc + 1), a
 	ld e, (xix)
 	ld a, (xiz + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, SeqAlt_ApplyDescA_DirectNoShift
 	slla e
 
@@ -16916,7 +16916,7 @@ SeqAlt_ApplyDescriptor_TypeB:
 	lda xix, (xbc + 2)
 	ld (xix), l
 	ld a, (xiz + 14)
-	cp a, 0xFF
+	cp a, 0xff
 	jr z, SeqAlt_ApplyDescB_DirectWrite
 	cps a, 1
 	jr nc, SeqAlt_PopIzSkip4Ret2
@@ -16930,7 +16930,7 @@ SeqAlt_ApplyDescriptor_TypeB:
 	extz hl
 	ld wa, hl
 	calr SeqAlt_NibbleSearch
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr z, SeqAlt_PopIzSkip4Ret2
 	lda xbc, (xsp + 4)
 	ld a, (xiz + 6)
@@ -16940,7 +16940,7 @@ SeqAlt_ApplyDescriptor_TypeB:
 	lda xhl, (xbc + 2)
 	ld e, (xhl)
 	ld a, (xiz + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, SeqAlt_ApplyDescB_NoShift
 	slla e
 
@@ -16960,7 +16960,7 @@ SeqAlt_ApplyDescB_DirectWrite:
 	ld (xbc + 1), a
 	ld e, (xix)
 	ld a, (xiz + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, SeqAlt_ApplyDescB_DirectNoShift
 	slla e
 
@@ -17357,7 +17357,7 @@ SeqAlt_ApplyDescriptor_TypeC:
 	cp l, 0x40
 	scc16 nc, hl
 	ld a, (xix)
-	and a, 0xF
+	and a, 0xf
 	jr z, SeqAlt_ApplyDescC_NoShift
 	slaa hl
 
@@ -17389,7 +17389,7 @@ SeqAlt_ApplyDescriptor_TypeD:
 	ld e, (xiz + 6)
 	ld c, (xiz + 7)
 	ld a, (xiz + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, SeqAlt_ApplyDescD_NoShift
 	slla l
 
@@ -17412,29 +17412,29 @@ SeqAlt_StubRet_Pair:
 
 SeqAlt_ApplyDescriptor_WithAssSwb:
 	dec 8, xsp
-	push_werp 0xFA
+	push_werp 0xfa
 	ld (xsp + 6), xwa
 	ldda32 xwa, 48212
 	call MIDI_PackNibbleParam
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 	lda xbc, (xsp + 2)
 	lda xde, (xbc + 1)
 	lda xhl, (xbc + 2)
 	lda xix, (xbc + 3)
-	cpi_berp 0xFB, 0
+	cpi_berp 0xfb, 0
 	jr z, SeqAlt_AssSwb_ZeroPath
-	dec1_berp 0xFB
+	dec1_berp 0xfb
 	ld xiy, (xsp + 6)
 	ld a, (xiy + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, SeqAlt_AssSwb_NoShift
-	sll_a_berp 0xFB
+	sll_a_berp 0xfb
 
 SeqAlt_AssSwb_NoShift:
 	ld a, (xiy + 9)
-	cp_berp A, 0xFB
+	cp_berp A, 0xfb
 	jr ugt, SeqAlt_AssSwb_Cleanup
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	cp a, (xiy + 10)
 	jr ugt, SeqAlt_AssSwb_Cleanup
 	setda 3, 36178
@@ -17447,7 +17447,7 @@ SeqAlt_AssSwb_NoShift:
 	lda xwa, (xsp + 2)
 	ld (xwa), 0x48
 	ld (xwa + 1), 0x7
-	ldto_berp C, 0xFB
+	ldto_berp C, 0xfb
 	ld (xwa + 2), c
 	ld (xwa + 3), 0x30
 	jr SeqAlt_AssSwb_FinalCall
@@ -17463,7 +17463,7 @@ SeqAlt_AssSwb_FinalCall:
 	call AssSwb_ApplyBitDescriptor
 
 SeqAlt_AssSwb_Cleanup:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	inc 8, xsp
 	ret
 
@@ -17505,7 +17505,7 @@ DSPParam_StoreWithLoop:
 	cp l, (xiz + 10)
 	jr ugt, DSP_ParamLoop_Cleanup
 	ld a, (xiz + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, DSPParam_StoreWithLoop_NoShift
 	slla l
 
@@ -17527,11 +17527,11 @@ DSPParam_StoreWithLoop_NoShift:
 	ld xwa, (xsp + 4)
 	add xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
-	ldfr_werp HL, 0xFA
-	cpi_werp 0xFA, 0
+	ldfr_werp HL, 0xfa
+	cpi_werp 0xfa, 0
 	jr lt, DSP_ParamLoop_Cleanup
 	lds iz, 0
-	cpi_werp 0xFA, 0
+	cpi_werp 0xfa, 0
 	jr le, DSP_ParamLoop_Cleanup
 
 VoiceParam_ApplyRangeCheck:
@@ -17549,7 +17549,7 @@ VoiceParam_ApplyRangeCheck:
 	add xwa, xde
 	call DSPCfg_WriteParamFull
 	inc 1, iz
-	cp_werp IZ, 0xFA
+	cp_werp IZ, 0xfa
 	jr lt, VoiceParam_ApplyRangeCheck
 
 DSP_ParamLoop_Cleanup:
@@ -17559,10 +17559,10 @@ DSP_ParamLoop_Cleanup:
 
 VoiceParam_ApplyBoundsCheck:
 	dec 8, xsp
-	push_werp 0xFA
+	push_werp 0xfa
 	ld (xsp + 6), xwa
 	ldda8 a, 36148
-	cp a, 0xE
+	cp a, 0xe
 	jr nz, VoiceParam_ApplyBoundsValidated
 	cp a, 0x11
 	jr z, VoiceParam_ApplyCleanupRet
@@ -17570,24 +17570,24 @@ VoiceParam_ApplyBoundsCheck:
 VoiceParam_ApplyBoundsValidated:
 	ldda32 xwa, 48212
 	call MIDI_PackNibbleParam
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 	ldda32 xwa, 48212
 	call MIDI_PackNibbleParam
 	bit 7, l
 	jr z, VoiceParam_ApplyNibbleLookup
 	res 7, l
-	set_erpb 0xFB, 0x07
+	set_erpb 0xfb, 0x07
 
 VoiceParam_ApplyNibbleLookup:
 	ld xde, (xsp + 6)
 	ld a, (xde + 9)
-	cp_berp A, 0xFB
+	cp_berp A, 0xfb
 	jr ugt, VoiceParam_ApplyCleanupRet
-	ldto_berp C, 0xFB
+	ldto_berp C, 0xfb
 	cp c, (xde + 10)
 	jr ugt, VoiceParam_ApplyCleanupRet
 	and l, 0x7
-	bit_erpb 0xFB, 0x07
+	bit_erpb 0xfb, 0x07
 	jr z, VoiceParam_ApplyNibble_NoShiftBit
 	ldb l, 0x0
 
@@ -17598,7 +17598,7 @@ VoiceParam_ApplyNibble_NoShiftBit:
 	ld (xwa), c
 	ld (xwa + 1), 0x1
 	ld (xwa + 2), l
-	ld (xwa + 3), 0x7F
+	ld (xwa + 3), 0x7f
 	call AssSwb_ApplyBitDescriptor
 	lda xwa, (xsp + 2)
 	ld xde, (xsp + 6)
@@ -17606,14 +17606,14 @@ VoiceParam_ApplyNibble_NoShiftBit:
 	ld (xwa), c
 	ld c, (xde + 7)
 	ld (xwa + 1), c
-	ldto_berp C, 0xFB
+	ldto_berp C, 0xfb
 	ld (xwa + 2), c
 	ld c, (xde + 8)
 	ld (xwa + 3), c
 	call AssSwb_ApplyBitDescriptor
 
 VoiceParam_ApplyCleanupRet:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	inc 8, xsp
 	ret
 
@@ -17623,7 +17623,7 @@ VoiceParam_StoreToBuffer:
 	ldda32 xwa, 48212
 	call MIDI_PackNibbleParam
 	ld a, (xiz + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, VoiceParam_StoreToBuffer_NoShift
 	slla l
 
@@ -17632,7 +17632,7 @@ VoiceParam_StoreToBuffer_NoShift:
 	cp (xiz + 9), l
 	jr ugt, VoiceParam_StoreToBuffer_Ret
 	cp l, (xiz + 10)
-	call_24 ule, 0xFD5C80
+	call_24 ule, 0xfd5c80
 
 VoiceParam_StoreToBuffer_Ret:
 	pop xiz
@@ -17647,15 +17647,15 @@ VoiceParam_DirectHardwareWrite:
 	jr ugt, VoiceParam_DirectHW_Ret
 	cp l, (xiz + 10)
 	jr ugt, VoiceParam_DirectHW_Ret
-	mrdb5 0x8E, 0x07, 0x19, 0x89, 0x34
+	mrdb5 0x8e, 0x07, 0x19, 0x89, 0x34
 	ld a, (xiz + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, VoiceParam_DirectHW_NoShift
 	slla l
 
 VoiceParam_DirectHW_NoShift:
 	stda8 13436, l
-	mrdb5 0x8E, 0x08, 0x19, 0x7D, 0x34
+	mrdb5 0x8e, 0x08, 0x19, 0x7d, 0x34
 	call MidiStream_ReplaySavedExpr
 
 VoiceParam_DirectHW_Ret:
@@ -17691,7 +17691,7 @@ VoiceParam_MultiModeDispatch:
 VoiceParam_MultiMode_Case1:
 	stdi8 13449, 5
 	ld a, (xwa)
-	and a, 0xF
+	and a, 0xf
 	jr z, VoiceParam_MultiMode_Case1_NoShift
 	slla l
 
@@ -17703,7 +17703,7 @@ VoiceParam_MultiMode_Case2:
 	stdi8 13449, 6
 	ld a, (xwa)
 	dec 1, a
-	and a, 0xF
+	and a, 0xf
 	jr z, VoiceParam_MultiMode_Case2_NoShift
 	slla l
 
@@ -17711,7 +17711,7 @@ VoiceParam_MultiMode_Case2_NoShift:
 	stda8 13436, l
 
 VoiceParam_MultiMode_SetupHW:
-	mrib4 0x81, 0x19, 0x7D, 0x34
+	mrib4 0x81, 0x19, 0x7d, 0x34
 
 VoiceParam_MultiMode_Dispatch:
 	call MidiStream_ReplaySavedExpr

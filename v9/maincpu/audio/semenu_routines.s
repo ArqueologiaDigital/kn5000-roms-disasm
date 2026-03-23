@@ -27,7 +27,7 @@ SeMenu_SendEvent_StoreAndReturn:
 	ret
 
 SeMenu_LoadRawAddr:
-	ldmi16 (xwa), 0x8D38
+	ldmi16 (xwa), 0x8d38
 	ret
 
 SeMenu_TriggerNotification:
@@ -63,8 +63,8 @@ SeMenu_FlushDisplayObj:
 	lda xix, (xde + 9)
 
 SeMenu_FlushDisplayObj_CopyLoop:
-	ld_spib A, 0xE4
-	lda_dpi XBC, 0xEC
+	ld_spib A, 0xe4
+	lda_dpi XBC, 0xec
 	cp xbc, xix
 	jr c, SeMenu_FlushDisplayObj_CopyLoop
 	lds wa, 0
@@ -81,7 +81,7 @@ SeMenu_RegisterElement_Extended:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterElement_ClearLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterElement_ClearLoop
 	lda xwa, (xsp + 10)
@@ -120,7 +120,7 @@ SeMenu_RegisterElement_Type1:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterElement_Type1_ClearLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterElement_Type1_ClearLoop
 	lda xwa, (xsp + 10)
@@ -152,7 +152,7 @@ SeMenu_RegisterElement_Type1_ClearLoop:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterElement_Type1_AltLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterElement_Type1_AltLoop
 	lda xwa, (xsp + 10)
@@ -183,7 +183,7 @@ SeMenu_InitDisplayField:
 	lda xbc, (xbc + 9)
 
 SeMenu_InitDisplayField_ClearLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_InitDisplayField_ClearLoop
 	lda xwa, (xsp + 12)
@@ -224,7 +224,7 @@ SeMenu_InitDisplayField_Alt:
 	lda xbc, (xbc + 9)
 
 SeMenu_InitDisplayField_Alt_ClearLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_InitDisplayField_Alt_ClearLoop
 	lda xwa, (xsp + 12)
@@ -236,7 +236,7 @@ SeMenu_InitDisplayField_Alt_ClearLoop:
 	lda xbc, (xwa + 2)
 	cp (xsp), 0x0
 	jr nz, SeMenu_InitDisplayField_Alt_Branch1
-	ld (xbc), 0xA
+	ld (xbc), 0xa
 	jr SeMenu_InitDisplayField_Alt_Continue
 
 SeMenu_InitDisplayField_Alt_Branch1:
@@ -269,7 +269,7 @@ SeMenu_RegisterValueDisplay:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterValueDisplay_ClearLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterValueDisplay_ClearLoop
 	lda xwa, (xsp + 10)
@@ -298,7 +298,7 @@ SeMenu_RegisterElement_Type2:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterElement_Type2_ClearLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterElement_Type2_ClearLoop
 	lda xwa, (xsp + 10)
@@ -350,7 +350,7 @@ SeMenu_RegisterParamDisplay:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterParamDisplay_ClearLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterParamDisplay_ClearLoop
 	lda xwa, (xsp + 10)
@@ -486,7 +486,7 @@ SeMenu_SetupDisplayObject:
 	lda xbc, (xbc + 9)
 
 SeMenu_SetupDisplayObject_ClearLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_SetupDisplayObject_ClearLoop
 	lda xwa, (xsp + 14)
@@ -554,7 +554,7 @@ SeMenu_SetupDisplayObject_Alt1:
 	lda xbc, (xbc + 9)
 
 SeMenu_SetupDisplayObject_Alt1_ClearLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_SetupDisplayObject_Alt1_ClearLoop
 	lda xwa, (xsp + 10)
@@ -565,26 +565,26 @@ SeMenu_SetupDisplayObject_Alt1_ClearLoop:
 	ld (xde), c
 	cp (xsp + 18), 0x0
 	jr nz, SeMenu_SetupDisplayObject_Alt2
-	ld (xwa), 0x8E
+	ld (xwa), 0x8e
 	jr SeMenu_SetupDisplayObject_Alt2_Continue
 
 SeMenu_SetupDisplayObject_Alt2:
 	cp (xsp + 18), 0x1
 	jr nz, SeMenu_SetupDisplayObject_Alt2_ClearLoop
-	ld (xwa), 0x8F
+	ld (xwa), 0x8f
 	jr SeMenu_SetupDisplayObject_Alt2_Continue
 
 SeMenu_SetupDisplayObject_Alt2_ClearLoop:
 	cp (xsp + 18), 0x2
 	jr nz, SeMenu_SetupDisplayObject_Alt2_Branch
-	ld (xwa), 0x8F
+	ld (xwa), 0x8f
 	ld c, (xde)
 	set 6, c
 	ld (xde), c
 	jr SeMenu_SetupDisplayObject_Alt2_Continue
 
 SeMenu_SetupDisplayObject_Alt2_Branch:
-	ld (xwa), 0x8D
+	ld (xwa), 0x8d
 
 SeMenu_SetupDisplayObject_Alt2_Continue:
 	ld c, (xsp + 10)
@@ -605,7 +605,7 @@ SeMenu_SetupDisplayObject_Alt2_Continue:
 	lda xbc, (xbc + 9)
 
 SeMenu_SetupDisplayObject_Alt3:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_SetupDisplayObject_Alt3
 	lda xwa, (xsp + 10)
@@ -630,7 +630,7 @@ SeMenu_ClearDisplayBuffer:
 	lda xbc, (xbc + 9)
 
 SeMenu_ClearDisplayBuffer_Loop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_ClearDisplayBuffer_Loop
 	lda xwa, (xsp + 10)
@@ -639,7 +639,7 @@ SeMenu_ClearDisplayBuffer_Loop:
 	ld (xwa), 0x88
 	ld c, (xsp + 10)
 	ld (xwa + 1), c
-	ld (xwa + 2), 0xD
+	ld (xwa + 2), 0xd
 	ld (xwa + 3), 0x0
 	ld (xwa + 4), 0x0
 	ld (xwa + 5), 0x0
@@ -654,12 +654,12 @@ SeMenu_InitDisplayColumn:
 	lda xix, (xde + 9)
 
 SeMenu_InitDisplayColumn_Loop:
-	stib_dpi 0xEC, 0x00
+	stib_dpi 0xec, 0x00
 	cp xhl, xix
 	jr c, SeMenu_InitDisplayColumn_Loop
 	ld (xde), 0x80
 	ld (xde + 1), 0x0
-	ld (xde + 2), 0xB
+	ld (xde + 2), 0xb
 	ld (xde + 3), a
 	ld (xde + 4), 0x1
 	ld (xde + 5), c
@@ -706,7 +706,7 @@ SeMenu_SetDisplayValue:
 	lda xbc, (xbc + 9)
 
 SeMenu_SetDisplayValue_Loop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_SetDisplayValue_Loop
 	lda xwa, (xsp + 10)
@@ -715,7 +715,7 @@ SeMenu_SetDisplayValue_Loop:
 	ld (xwa), 0x80
 	ld c, (xsp + 10)
 	ld (xwa + 1), c
-	ld (xwa + 2), 0xC
+	ld (xwa + 2), 0xc
 	ld (xwa + 3), 0x0
 	ld (xwa + 4), 0x1
 	ld c, (xsp + 12)
@@ -785,8 +785,8 @@ SeMenu_InitTrackInfo:
 	lda xwa, (xsp)
 	calr SeMenu_LoadMasterPtr
 	lda xwa, (xsp + 2)
-	ld (xwa), 0xF
-	ld (xwa + 1), 0xF
+	ld (xwa), 0xf
+	ld (xwa + 1), 0xf
 	ld c, (xsp)
 	ld (xwa + 2), c
 	call SndParam_ApplyProgramChange
@@ -891,7 +891,7 @@ SeMenu_SetFlags_Type0x1x:
 
 SeMenu_SetFlags_SetCarryAndStore:
 	scf
-	mrid2 0xB1, 0x2C
+	mrid2 0xb1, 0x2c
 	ret
 
 SeMenu_SetFlags_Type0x2x:
@@ -904,7 +904,7 @@ SeMenu_SetFlags_Type0x3x:
 
 SeMenu_SetFlags_SetCarryAndStore_Alt:
 	scf
-	mrid2 0xB1, 0x2C
+	mrid2 0xb1, 0x2c
 
 SeMenu_SetFlags_SetBit7_DE:
 	setm 7, (xde)
@@ -912,12 +912,12 @@ SeMenu_SetFlags_SetBit7_DE:
 
 SeMenu_SetFlags_Type0x4x:
 	setm 2, (xbc)
-	ormi8 (xde), 0xC0
+	ormi8 (xde), 0xc0
 	ret
 
 SeMenu_SetupMenuDisplay:
 	lda xsp, (xsp - 14)
-	push_werp 0xFA
+	push_werp 0xfa
 	ld (xsp + 14), a
 	lda xwa, (xsp + 10)
 	calr SeMenu_LoadObjEntries
@@ -944,7 +944,7 @@ SeMenu_SetupMenuDisplay_ConfigObj:
 	lda xbc, (xde + 4)
 
 SeMenu_SetupMenuDisplay_ClearLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SeMenu_SetupMenuDisplay_ClearLoop
 	cp (xsp + 6), 0x0
@@ -953,20 +953,20 @@ SeMenu_SetupMenuDisplay_ClearLoop:
 	jr nz, SeMenu_SetupMenuDisplay_Section2
 
 SeMenu_SetupMenuDisplay_Data:
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 
 SeMenu_SetupMenuDisplay_Data2:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	inc 1, a
 	extz wa
-	ldto_berp C, 0xFB
+	ldto_berp C, 0xfb
 	extz bc
 	lda xde, (xsp + 2)
 	exts xbc
 	add xbc, xde
 	calr SeMenu_LoadParamByte
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1_berp 0xfb
+	cpi_berp 0xfb, 4
 	jr c, SeMenu_SetupMenuDisplay_Data2
 	jr SeMenu_SetupMenuDisplay_Section2_Loop
 
@@ -981,28 +981,28 @@ SeMenu_SetupMenuDisplay_Section2:
 	calr SeMenu_LoadParamByte
 
 SeMenu_SetupMenuDisplay_Section2_Loop:
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 	cp (xsp + 10), 0x0
 	jr nz, SeMenu_SetupMenuDisplay_Section3
 
 SeMenu_SetupMenuDisplay_Section2_End:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	inc 1, a
 	extz wa
-	ldto_berp C, 0xFB
+	ldto_berp C, 0xfb
 	extz bc
 	lda xde, (xsp + 2)
-	st_dri3b B, 0x07, 0xE8, 0xE4
-	pushw 0x7F
+	st_dri3b B, 0x07, 0xe8, 0xe4
+	pushw 0x7f
 	ldw bc, 0x17
 	calr SeMenu_RegisterElement_Extended
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1_berp 0xfb
+	cpi_berp 0xfb, 4
 	jr c, SeMenu_SetupMenuDisplay_Section2_End
 	jr SeMenu_SetupMenuDisplay_Section3_Loop
 
 SeMenu_SetupMenuDisplay_Section3:
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	extz de
 	ld wa, de
 	muls wa, 0x15
@@ -1013,15 +1013,15 @@ SeMenu_SetupMenuDisplay_Section3:
 	lda xwa, (xsp + 2)
 	exts xde
 	add xde, xwa
-	pushw 0x7F
+	pushw 0x7f
 	lds wa, 0
 	calr SeMenu_SetupDisplayObject_Alt1
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 2
+	inc1_berp 0xfb
+	cpi_berp 0xfb, 2
 	jr c, SeMenu_SetupMenuDisplay_Section3
 
 SeMenu_SetupMenuDisplay_Section3_Loop:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	lda xsp, (xsp + 14)
 	ret
 
@@ -1032,7 +1032,7 @@ SeMenu_SetupMenuDisplay_Section3_End:
 	ret
 
 SeMenu_SetupMenuDisplay_Finalize:
-	ldmi16 (xwa), 0x65C
+	ldmi16 (xwa), 0x65c
 	ret
 
 SeMenu_SetupMenuDisplay_Finalize_Data:
@@ -1047,7 +1047,7 @@ SeMenu_SetupMenuDisplay_Finalize_Data:
 
 SeMenu_ValidatePartNumber:
 	dec 4, xsp
-	push_werp 0xFA
+	push_werp 0xfa
 	ld (xsp + 2), xwa
 	ldda8 c, 1629
 	cps c, 1
@@ -1070,20 +1070,20 @@ SeMenu_ValidatePartNumber_CheckEnabled:
 	calr SeMenu_IsPartEnabled
 	cps hl, 0
 	jr nz, SeMenu_ValidatePartNumber_End
-	ldi_berp 0xFB, 1
+	ldi_berp 0xfb, 1
 
 SeMenu_ValidatePartNumber_ScanLoop:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	calr SeMenu_IsPartEnabled
 	cps hl, 0
 	jr z, SeMenu_ValidatePartNumber_NextPart
-	ldto_berp C, 0xFB
+	ldto_berp C, 0xfb
 	jr SeMenu_ValidatePartNumber_Store
 
 SeMenu_ValidatePartNumber_NextPart:
-	inc1_berp 0xFB
-	cpi_berp 0xFB, 4
+	inc1_berp 0xfb
+	cpi_berp 0xfb, 4
 	jr ule, SeMenu_ValidatePartNumber_ScanLoop
 	ldb c, 0x1
 
@@ -1093,7 +1093,7 @@ SeMenu_ValidatePartNumber_Store:
 	stda8 1629, c
 
 SeMenu_ValidatePartNumber_End:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	inc 4, xsp
 	ret
 
@@ -1468,7 +1468,7 @@ SeMenu_TransferPartValues:
 	jr ule, SeMenu_TransferPartValues_InnerLoop
 
 SeMenu_TransferPartValues_Loop:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ret
 
 SeMenu_TransferPartValues_InnerLoop:
@@ -1488,16 +1488,16 @@ SeMenu_TransferPartValues_Data:
 SeMenu_TransferPartValues_Data2:
 	cps a, 2
 	jr nz, SeMenu_TransferPartValues_AltEntry
-	ld xwa, 0x4B
+	ld xwa, 0x4b
 	jr SeMenu_TransferPartValues_AltLoop
 
 SeMenu_TransferPartValues_AltEntry:
 	cps a, 1
 	jr nz, SeMenu_TransferPartValues_Loop
-	ld xwa, 0x2B
+	ld xwa, 0x2b
 
 SeMenu_TransferPartValues_AltLoop:
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	ld (xde), a
 	jr SeMenu_TransferPartValues_Data
 	cps a, 1
@@ -1522,7 +1522,7 @@ SeMenu_TransferPartValues_End:
 	jr SeMenu_TransferPartValues_AltInner
 
 SeMenu_TransferPartValues_End2:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ret
 
 SeMenu_TransferPartValues_EndData:
@@ -1993,14 +1993,14 @@ SeMenu_ReadObjParam:
 	ret
 
 SeMenu_CheckObjEnabled:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	cpdm8_24 134195, a
 	ret nz
 	lds hl, 0
 	ret
 
 SeMenu_CheckObjValid:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	cpdm8_24 134197, a
 	ret nz
 	lds hl, 0
@@ -2009,23 +2009,23 @@ SeMenu_CheckObjValid:
 SeMenu_FillEntryTable:
 	lda_24 xhl, 0x020c33
 	ld c, (xhl + 3)
-	ldfr_berp C, 0xE6
-	ldi_berp 0xEA, 0
-	cpi_berp 0xE6, 0
+	ldfr_berp C, 0xe6
+	ldi_berp 0xea, 0
+	cpi_berp 0xe6, 0
 	ret ule
 	lds de, 6
 
 SeMenu_FillEntryTable_Loop:
 	ld ix, de
-	ldw bc, 0xFFFA
+	ldw bc, 0xfffa
 	add ix, bc
 	ld bc, de
-	ld_srib3 C, 0x07, 0xEC, 0xE4
-	lda_dri3 XHL, 0x07, 0xE0, 0xF0
-	inc1_berp 0xEA
+	ld_srib3 C, 0x07, 0xec, 0xe4
+	lda_dri3 XHL, 0x07, 0xe0, 0xf0
+	inc1_berp 0xea
 	inc 1, de
-	ldto_berp C, 0xEA
-	cp_berp C, 0xE6
+	ldto_berp C, 0xea
+	cp_berp C, 0xe6
 	jr c, SeMenu_FillEntryTable_Loop
 	ret
 
@@ -2036,8 +2036,8 @@ SeMenu_FillObjTable:
 	lda xde, (xde + 25)
 
 SeMenu_FillObjTable_Loop:
-	ld_spib A, 0xE4
-	lda_dpi XBC, 0xEC
+	ld_spib A, 0xe4
+	lda_dpi XBC, 0xec
 	cp xbc, xde
 	jr c, SeMenu_FillObjTable_Loop
 	ret
@@ -2052,8 +2052,8 @@ SeMenu_SetupPartDisplay:
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_Loop:
-	ld_srib3 A, 0x07, 0xE4, 0xEC
-	lda_dri3 XBC, 0x07, 0xF0, 0xEC
+	ld_srib3 A, 0x07, 0xe4, 0xec
+	lda_dri3 XBC, 0x07, 0xf0, 0xec
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2070,8 +2070,8 @@ SeMenu_SetupPartDisplay_Alt:
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_AltLoop:
-	ld_srib3 A, 0x07, 0xE4, 0xEC
-	lda_dri3 XBC, 0x07, 0xF0, 0xEC
+	ld_srib3 A, 0x07, 0xe4, 0xec
+	lda_dri3 XBC, 0x07, 0xf0, 0xec
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2088,8 +2088,8 @@ SeMenu_SetupPartDisplay_Mode2:
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_Mode2Loop:
-	ld_srib3 A, 0x07, 0xE4, 0xEC
-	lda_dri3 XBC, 0x07, 0xF0, 0xEC
+	ld_srib3 A, 0x07, 0xe4, 0xec
+	lda_dri3 XBC, 0x07, 0xf0, 0xec
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2106,8 +2106,8 @@ SeMenu_SetupPartDisplay_Mode3:
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_Mode3Loop:
-	ld_srib3 A, 0x07, 0xE4, 0xEC
-	lda_dri3 XBC, 0x07, 0xF0, 0xEC
+	ld_srib3 A, 0x07, 0xe4, 0xec
+	lda_dri3 XBC, 0x07, 0xf0, 0xec
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2477,7 +2477,7 @@ SeMenu_SetupPartDisplay_End:
 
 SeMenu_ApplyPartEdit:
 	lda xsp, (xsp - 14)
-	push_werp 0xFA
+	push_werp 0xfa
 	ld (xsp + 14), a
 	lda xwa, (xsp + 6)
 	calr SeMenu_LoadObjEntries
@@ -2486,18 +2486,18 @@ SeMenu_ApplyPartEdit:
 	ld c, (xsp + 14)
 	inc 5, c
 	ld a, (xsp + 14)
-	add a, 0xB
+	add a, 0xb
 	ld (xsp + 4), a
-	ld (xsp + 2), 0xB
+	ld (xsp + 2), 0xb
 	jr SeMenu_ApplyPartEdit_Data
 
 SeMenu_ApplyPartEdit_Store:
 	ld c, (xsp + 14)
 	inc 8, c
 	ld a, (xsp + 14)
-	add a, 0xC
+	add a, 0xc
 	ld (xsp + 4), a
-	ld (xsp + 2), 0xC
+	ld (xsp + 2), 0xc
 
 SeMenu_ApplyPartEdit_Data:
 	ld a, c
@@ -2553,13 +2553,13 @@ SeMenu_ApplyPartEdit_End:
 	extz bc
 	lds wa, 3
 	calr SeMenu_BitShiftMask
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 	ld a, (xsp + 2)
 	extz wa
 	lda xbc, (xsp + 11)
 	calr SeMenu_LoadPartParam
 	lda xde, (xsp + 11)
-	ldto_berp L, 0xFB
+	ldto_berp L, 0xfb
 	cpl l
 	ld c, (xde)
 	and c, l
@@ -2570,7 +2570,7 @@ SeMenu_ApplyPartEdit_End:
 	extz wa
 	extz bc
 	calr SeMenu_StorePartParam
-	pop_werp 0xFA
+	pop_werp 0xfa
 	lda xsp, (xsp + 14)
 	ret
 
@@ -5855,7 +5855,7 @@ SeMenu_ApplyPartEdit_Data2:
 
 SeMenu_ProcessEffect:
 	lda xsp, (xsp - 38)
-	push_werp 0xFA
+	push_werp 0xfa
 	ld (xsp + 38), a
 	lda xwa, (xsp + 2)
 	calr SeMenu_FillObjTable
@@ -5869,27 +5869,27 @@ SeMenu_ProcessEffect:
 	extz wa
 	add bc, wa
 	stda16 1706, xbc
-	mrdb5 0x8A, 0x02, 0x19, 0xAC, 0x06
-	ldi_berp 0xFB, 0
+	mrdb5 0x8a, 0x02, 0x19, 0xac, 0x06
+	ldi_berp 0xfb, 0
 	jr SeMenu_ProcessEffect_CompareLoop
 
 SeMenu_ProcessEffect_StoreLoop:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	add a, 0x12
 	extz wa
-	ldto_berp C, 0xFB
+	ldto_berp C, 0xfb
 	inc 3, c
 	extz bc
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ld_srib3 C, 0x07, 0xe8, 0xe4
 	extz bc
 	calr SeMenu_StorePartParam
-	cp_erpb 0xFB, 0x14
+	cp_erpb 0xfb, 0x14
 	jr ugt, SeMenu_ProcessEffect_LoopEnd
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 
 SeMenu_ProcessEffect_CompareLoop:
 	lda xde, (xsp + 2)
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	cp a, (xde + 2)
 	jr c, SeMenu_ProcessEffect_StoreLoop
 
@@ -5922,27 +5922,27 @@ SeMenu_ProcessEffect_AltStore:
 	extz wa
 	add hl, wa
 	stda16 1706, xhl
-	mrib4 0x81, 0x19, 0xAC, 0x06
-	ldi_berp 0xFB, 0
+	mrib4 0x81, 0x19, 0xac, 0x06
+	ldi_berp 0xfb, 0
 	jr SeMenu_ProcessEffect_AltData2
 
 SeMenu_ProcessEffect_AltData:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	add a, 0x11
 	extz wa
-	ldto_berp C, 0xFB
+	ldto_berp C, 0xfb
 	inc 3, c
 	extz bc
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ld_srib3 C, 0x07, 0xe8, 0xe4
 	extz bc
 	calr SeMenu_StorePartParam
-	cp_erpb 0xFB, 0x14
+	cp_erpb 0xfb, 0x14
 	jr ugt, SeMenu_ProcessEffect_AltBranch
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 
 SeMenu_ProcessEffect_AltData2:
 	lda xde, (xsp + 2)
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	cp a, (xde + 2)
 	jr c, SeMenu_ProcessEffect_AltData
 
@@ -5955,32 +5955,32 @@ SeMenu_ProcessEffect_AltEnd:
 	extz wa
 	add hl, wa
 	stda16 1706, xhl
-	mrib4 0x81, 0x19, 0xAC, 0x06
-	ldi_berp 0xFB, 0
+	mrib4 0x81, 0x19, 0xac, 0x06
+	ldi_berp 0xfb, 0
 	jr SeMenu_ProcessEffect_Section2_End
 
 SeMenu_ProcessEffect_Section2:
-	ldto_berp A, 0xFB
-	add a, 0xC
+	ldto_berp A, 0xfb
+	add a, 0xc
 	extz wa
-	ldto_berp C, 0xFB
+	ldto_berp C, 0xfb
 	inc 3, c
 	extz bc
-	ld_srib3 C, 0x07, 0xE8, 0xE4
+	ld_srib3 C, 0x07, 0xe8, 0xe4
 	extz bc
 	calr SeMenu_StorePartParam
-	cp_erpb 0xFB, 0x14
+	cp_erpb 0xfb, 0x14
 	jr ugt, SeMenu_ProcessEffect_Data3
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 
 SeMenu_ProcessEffect_Section2_End:
 	lda xde, (xsp + 2)
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	cp a, (xde + 2)
 	jr c, SeMenu_ProcessEffect_Section2
 
 SeMenu_ProcessEffect_Data3:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	lda xsp, (xsp + 38)
 	ret
 
@@ -5996,25 +5996,25 @@ SeMenu_ApplyFilter:
 	cp (xsp), 0x0
 	jr nz, SeMenu_ApplyFilter_AltPart
 	ld a, (xsp + 38)
-	add a, 0xD
+	add a, 0xd
 	extz wa
 	calr SeMenu_StorePartParam
 	ld a, (xsp + 38)
 	extz wa
 	lda xbc, (xsp + 2)
-	ldw de, 0xD
+	ldw de, 0xd
 	jr SeMenu_ApplyFilter_SetupDisplay
 
 SeMenu_ApplyFilter_AltPart:
 	ld a, (xsp + 38)
-	add a, 0xE
+	add a, 0xe
 	extz wa
 	calr SeMenu_StorePartParam
 	ld a, (xsp + 38)
 	inc 1, a
 	extz wa
 	lda xbc, (xsp + 2)
-	ldw de, 0xD
+	ldw de, 0xd
 
 SeMenu_ApplyFilter_SetupDisplay:
 	calr SeMenu_SetupPartDisplay
@@ -6023,7 +6023,7 @@ SeMenu_ApplyFilter_SetupDisplay:
 	extz wa
 	add wa, wa
 	ldada xbc, 1698
-	st_dri3b B, 0x07, 0xE4, 0xE0
+	st_dri3b B, 0x07, 0xe4, 0xe0
 	lda xhl, (xsp + 2)
 	ld c, (xhl + 15)
 	extz bc
@@ -6043,7 +6043,7 @@ SeMenu_ApplySynthParam:
 	calr SeMenu_FillObjTable
 	lda xbc, (xsp)
 	lds wa, 1
-	ldw de, 0xD
+	ldw de, 0xd
 	calr SeMenu_SetupPartDisplay
 	lda xde, (xsp)
 	ld c, (xde + 15)
@@ -6064,7 +6064,7 @@ SeMenu_ApplySynthParam_Alt:
 	ld a, (xsp + 36)
 	extz wa
 	lda xbc, (xsp)
-	ldw de, 0xD
+	ldw de, 0xd
 	calr SeMenu_SetupPartDisplay
 	ld a, (xsp + 36)
 	inc 7, a
@@ -6077,7 +6077,7 @@ SeMenu_ApplySynthParam_Alt:
 	extz wa
 	add wa, wa
 	ldada xbc, 1698
-	st_dri3b B, 0x07, 0xE4, 0xE0
+	st_dri3b B, 0x07, 0xe4, 0xe0
 	lda xhl, (xsp)
 	ld c, (xhl + 15)
 	extz bc
@@ -6177,7 +6177,7 @@ SeMenu_SetSelectedRow_Data:
 	ret
 
 SeMenu_LoadObjEntries:
-	ldmi16 (xwa), 0x6AE
+	ldmi16 (xwa), 0x6ae
 	ret
 
 SeMenu_SetMode:
@@ -6199,7 +6199,7 @@ SeMenu_SetMode_Data:
 	ret
 
 SeMenu_LoadSoundBankCfg:
-	ldmi16 (xwa), 0x6B4
+	ldmi16 (xwa), 0x6b4
 	ret
 
 SeMenu_SetSoundBank:
@@ -6207,7 +6207,7 @@ SeMenu_SetSoundBank:
 	ret
 
 SeMenu_LoadFilterType:
-	ldmi16 (xwa), 0x6B5
+	ldmi16 (xwa), 0x6b5
 	ret
 
 SeMenu_SetFilterParam1:
@@ -6215,7 +6215,7 @@ SeMenu_SetFilterParam1:
 	ret
 
 SeMenu_LoadFilterParam2:
-	ldmi16 (xwa), 0x6B6
+	ldmi16 (xwa), 0x6b6
 	ret
 
 SeMenu_SetFilterMode:
@@ -6227,7 +6227,7 @@ SeMenu_SetFilterCoeff:
 	ret
 
 SeMenu_LoadEditParam:
-	ldmi16 (xwa), 0x6B9
+	ldmi16 (xwa), 0x6b9
 	ret
 
 SeMenu_SetupSoundBankPair:
@@ -6273,7 +6273,7 @@ SeMenu_SetupSoundBankPair_NonZero:
 	call SndParam_UpdateChannelTuning
 	ld xwa, (xsp + 10)
 	ld (xwa), l
-	cp (xiz), 0xFF
+	cp (xiz), 0xff
 	jr nz, SeMenu_SetupSoundBankPair_CheckValid
 	ld a, (xsp + 8)
 	extz wa
@@ -6285,7 +6285,7 @@ SeMenu_SetupSoundBankPair_NonZero:
 	ld (xwa), l
 
 SeMenu_SetupSoundBankPair_CheckValid:
-	cp (xiz), 0xFF
+	cp (xiz), 0xff
 	jr z, SeMenu_SetupSoundBankPair_Invalid
 	ld a, (xiz)
 	extz wa
@@ -6314,16 +6314,16 @@ SeMenu_SetupSoundBankPair_End:
 SeMenu_ComputeParamTableAddr:
 	dec 1, a
 	extz wa
-	mul wa, 0xA
+	mul wa, 0xa
 	ld xde, xbc
 	extz xwa
-	add xwa, 0x205F3
+	add xwa, 0x205f3
 	ld xhl, xwa
 	lda xbc, (xbc + 10)
 
 SeMenu_ComputeParamTableAddr_ScanLoop:
-	ld_spib A, 0xE8
-	lda_dpi XBC, 0xEC
+	ld_spib A, 0xe8
+	lda_dpi XBC, 0xec
 	cp xde, xbc
 	jr c, SeMenu_ComputeParamTableAddr_ScanLoop
 	ret
@@ -6357,7 +6357,7 @@ SeMenu_HandleMenuChange:
 	pushw 0x10
 	lds wa, 0
 	lds bc, 0
-	ldw de, 0xA
+	ldw de, 0xa
 	calr SeMenu_RegisterElement_Type2
 	lds wa, 1
 	calr SeMenu_SetCurrentStep
@@ -6373,7 +6373,7 @@ SeMenu_HandleMenuChange_NonZero:
 	lda xbc, (xsp + 2)
 	calr SeMenu_ComputeParamTableAddr
 	calr SeMenu_AdvanceSubIndex
-	cp l, 0x7F
+	cp l, 0x7f
 	jr ugt, SeMenu_HandleMenuChange_Overflow
 	lda xwa, (xsp)
 	calr SeMenu_ReadObjParam
@@ -6382,7 +6382,7 @@ SeMenu_HandleMenuChange_NonZero:
 	pushw 0x10
 	lds wa, 0
 	lds bc, 0
-	ldw de, 0xA
+	ldw de, 0xa
 	calr SeMenu_RegisterElement_Type2
 	jr SeMenu_HandleMenuChange_End
 
@@ -6407,7 +6407,7 @@ SeMenu_HandleMenuChange_Data:
 	ret
 
 SeMenu_LoadPatchStatus:
-	ldmi16 (xwa), 0x6B8
+	ldmi16 (xwa), 0x6b8
 	ret
 
 SeMenu_SetPatchBank:
@@ -6613,7 +6613,7 @@ SeMenu_SetConfirmState:
 	ret
 
 SeMenu_LoadConfirmData:
-	ldmi16 (xwa), 0x6C4
+	ldmi16 (xwa), 0x6c4
 	ret
 
 SeMenu_ReturnZero:

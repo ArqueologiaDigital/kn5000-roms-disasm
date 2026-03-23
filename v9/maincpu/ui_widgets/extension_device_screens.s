@@ -7,5 +7,5 @@ NakaInst_ExtDevice_Screens:
 ; External label offsets within the binary blob above.
 	.equ SoundParam_EncoderMappingData, NakaInst_ExtDevice_Screens + 0x3552
 	.equ EffectMode_DispatchTable, NakaInst_ExtDevice_Screens + 0x3860
-	.equ ENCODER_HANDLER_TABLE, NakaInst_ExtDevice_Screens + 0x38F0
+	.equ ENCODER_HANDLER_TABLE, NakaInst_ExtDevice_Screens + 0x38f0
 	.equ ENCODER_LUT_MODWHEEL, NakaInst_ExtDevice_Screens + 0x3970

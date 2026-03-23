@@ -16,7 +16,7 @@ Rhythm_CompareAndTrigger:
 	ldda8 a, 12927
 	cp a, 0x12
 	jr ule, Rhythm_CompareAndTriggerNotes
-	cp a, 0x5C
+	cp a, 0x5c
 	jr ugt, Rhythm_CompareAndTriggerNotes
 	jrl Rhythm_SaveNoteState
 
@@ -82,9 +82,9 @@ Rhythm_NoteOnAfterSetup_A:
 	calr Rhythm_SendVolume_Dispatch
 	ldb a, 0x90
 	call Rhythm_SendByte
-	ldb a, 0x7F
+	ldb a, 0x7f
 	call Rhythm_SendByte
-	ldb a, 0x7D
+	ldb a, 0x7d
 	call Rhythm_SendByte
 	ret
 
@@ -109,9 +109,9 @@ Rhythm_NoteOnAfterSetup_B:
 	calr Rhythm_SendVolume_D6
 	ldb a, 0x90
 	call Rhythm_SendByte
-	ldb a, 0x7F
+	ldb a, 0x7f
 	call Rhythm_SendByte
-	ldb a, 0x7D
+	ldb a, 0x7d
 	call Rhythm_SendByte
 	ret
 
@@ -124,9 +124,9 @@ Rhythm_NoteOnAfterSetup_C:
 	call Rhythm_SendVolume_D7
 	ldb a, 0x90
 	call Rhythm_SendByte
-	ldb a, 0x7F
+	ldb a, 0x7f
 	call Rhythm_SendByte
-	ldb a, 0x7D
+	ldb a, 0x7d
 	call Rhythm_SendByte
 	ret
 
@@ -138,7 +138,7 @@ Rhythm_SetupAllChannels:
 	ret
 
 Rhythm_SetupChannel_D7:
-	ld xhl, 0x2C94
+	ld xhl, 0x2c94
 	ldda8 a, 12995
 	stda8 13003, a
 	ldda8 a, 12999
@@ -150,7 +150,7 @@ Rhythm_SetupChannel_D7:
 	ret
 
 Rhythm_SetupChannel_D4:
-	ld xhl, 0x2D94
+	ld xhl, 0x2d94
 	ldda8 a, 12996
 	stda8 13003, a
 	ldda8 a, 13000
@@ -162,7 +162,7 @@ Rhythm_SetupChannel_D4:
 	ret
 
 Rhythm_SetupChannel_D5:
-	ld xhl, 0x2E94
+	ld xhl, 0x2e94
 	ldda8 a, 12997
 	stda8 13003, a
 	ldda8 a, 13001
@@ -173,7 +173,7 @@ Rhythm_SetupChannel_D5:
 	ret
 
 Rhythm_SetupChannel_D6:
-	ld xhl, 0x2F94
+	ld xhl, 0x2f94
 	ldda8 a, 12998
 	stda8 13003, a
 	ldda8 a, 13002
@@ -222,7 +222,7 @@ RhythmEvt_IterateNoteOn:
 RhythmEvt_NoteOnLoop:
 	cp (xhl + 4), iy
 	jrl z, RhythmEvt_IterDone
-	ld_srib3 A, 0x07, 0xEC, 0xF4
+	ld_srib3 A, 0x07, 0xec, 0xf4
 	stda16 13405, xiy
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
@@ -243,7 +243,7 @@ RhythmEvt_NoteOn91:
 	calr Rhythm_AdvancePosition
 
 RhythmEvt_ApplyTranspose:
-	ld_srib3 A, 0x07, 0xEC, 0xF4
+	ld_srib3 A, 0x07, 0xec, 0xf4
 	calr Rhythm_CheckVelocityThreshold
 	bitda 4, 13044
 	jr nz, RhythmEvt_PostProcess
@@ -257,7 +257,7 @@ RhythmEvt_ApplyNoteRange:
 RhythmEvt_PostProcess:
 	calr Rhythm_VelocityCompute
 	popw iy
-	lda_dri3 XBC, 0x07, 0xEC, 0xF4
+	lda_dri3 XBC, 0x07, 0xec, 0xf4
 	calr Rhythm_AdvancePosition
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
@@ -279,7 +279,7 @@ RhythmEvt_FullProcess:
 RhythmEvt_FullLoop:
 	cp (xhl + 4), iy
 	jrl z, RhythmEvt_FullDone
-	ld_srib3 A, 0x07, 0xEC, 0xF4
+	ld_srib3 A, 0x07, 0xec, 0xf4
 	cp a, 0x90
 	jr nz, RhythmEvt_Full91
 	call RingBuf_AdvanceIndex
@@ -287,7 +287,7 @@ RhythmEvt_FullLoop:
 	pushw iy
 	calr Rhythm_AdvancePosition
 	call RingBuf_AdvanceIndex
-	ld_srib3 A, 0x07, 0xEC, 0xF4
+	ld_srib3 A, 0x07, 0xec, 0xf4
 	calr Rhythm_CheckVelocityThreshold
 	bitda 4, 13044
 	jr nz, RhythmEvt_Full90_PostTransp
@@ -301,7 +301,7 @@ RhythmEvt_Full90_PostRange:
 RhythmEvt_Full90_PostTransp:
 	calr Rhythm_VelocityLookup_A
 	popw iy
-	lda_dri3 XBC, 0x07, 0xEC, 0xF4
+	lda_dri3 XBC, 0x07, 0xec, 0xf4
 	calr Rhythm_AdvancePosition
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
@@ -314,16 +314,16 @@ RhythmEvt_Full91:
 	call RingBuf_AdvanceIndex
 	pushw iy
 	call RingBuf_AdvanceIndex
-	ld_srib3 A, 0x07, 0xEC, 0xF4
+	ld_srib3 A, 0x07, 0xec, 0xf4
 	stda8 13360, a
 	calr Rhythm_AdvancePosition
-	ld_srib3 A, 0x07, 0xEC, 0xF4
+	ld_srib3 A, 0x07, 0xec, 0xf4
 	stda8 13363, a
 	call RingBuf_AdvanceIndex
-	ld_srib3 A, 0x07, 0xEC, 0xF4
+	ld_srib3 A, 0x07, 0xec, 0xf4
 	stda8 13364, a
 	call RingBuf_AdvanceIndex
-	ld_srib3 A, 0x07, 0xEC, 0xF4
+	ld_srib3 A, 0x07, 0xec, 0xf4
 	calr Rhythm_CheckVelocityThreshold
 	bitda 4, 13044
 	jr nz, RhythmEvt_Full91_PostTransp
@@ -337,10 +337,10 @@ RhythmEvt_Full91_PostRange:
 RhythmEvt_Full91_PostTransp:
 	calr Rhythm_VoiceMapLookup
 	popw iy
-	lda_dri3 XBC, 0x07, 0xEC, 0xF4
+	lda_dri3 XBC, 0x07, 0xec, 0xf4
 	call RingBuf_AdvanceIndex
 	ldda8 a, 13360
-	lda_dri3 XBC, 0x07, 0xEC, 0xF4
+	lda_dri3 XBC, 0x07, 0xec, 0xf4
 	calr Rhythm_AdvancePosition
 	calr Rhythm_AdvancePosition
 	jrl RhythmEvt_FullLoop
@@ -394,7 +394,7 @@ Rhythm_CrossVoiceCorrect:
 	ldda8 w, 13078
 	orda8 w, 13079
 	orda8 w, 13080
-	and w, 0x3F
+	and w, 0x3f
 	jr nz, Rhythm_CrossVoice_ClearFlag
 	bitda 5, 13043
 	jr z, Rhythm_CrossVoice_ClearFlag
@@ -404,11 +404,11 @@ Rhythm_CrossVoice_Apply:
 	ld w, a
 	addda8 w, 13003
 	inc 1, w
-	sub w, 0xC
+	sub w, 0xc
 	stda8 13102, w
 	ordi8 13101, 1
-	ld xiy, 0xE46142
-	ld_srib3 W, 0x03, 0xF4, 0xE0
+	ld xiy, 0xe46142
+	ld_srib3 W, 0x03, 0xf4, 0xe0
 	sub a, w
 	pop xiy
 	stdi8 13363, 0
@@ -423,8 +423,8 @@ Rhythm_NoteRangeCheck:
 	jr z, Rhythm_NoteRangeReturn
 	push xiy
 	ld w, a
-	ld xiy, 0xE46142
-	ld_srib3 W, 0x03, 0xF4, 0xE0
+	ld xiy, 0xe46142
+	ld_srib3 W, 0x03, 0xf4, 0xe0
 	sub a, w
 	pop xiy
 	stdi8 13363, 0
@@ -460,23 +460,23 @@ Rhythm_VelLookA_CheckRange:
 	xor l, l
 
 Rhythm_VelLookA_SelectTable:
-	ld xiy, 0xF550CA
+	ld xiy, 0xf550ca
 	bitda 2, 13044
 	jr z, Rhythm_VelLookA_CheckBit3
-	ld xiy, 0xF550FB
+	ld xiy, 0xf550fb
 
 Rhythm_VelLookA_CheckBit3:
 	bitda 3, 13044
 	jr z, Rhythm_VelLookA_TableLookup
-	ld xiy, 0xF5512C
+	ld xiy, 0xf5512c
 
 Rhythm_VelLookA_TableLookup:
-	ld_srib3 L, 0x03, 0xF4, 0xEC
+	ld_srib3 L, 0x03, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, 0xE461C2
-	st_dri3b E, 0x07, 0xF4, 0xEC
-	ld_srib3 A, 0x03, 0xF4, 0xE0
+	ld xiy, 0xe461c2
+	st_dri3b E, 0x07, 0xf4, 0xec
+	ld_srib3 A, 0x03, 0xf4, 0xe0
 	add w, a
 	calr Rhythm_TransposeNote
 
@@ -487,8 +487,8 @@ Rhythm_VelLookA_Done:
 
 Rhythm_InstrBaseLookup:
 	push xiy
-	ld xiy, 0xE46142
-	st_dri3b E, 0x03, 0xF4, 0xE0
+	ld xiy, 0xe46142
+	st_dri3b E, 0x03, 0xf4, 0xe0
 	ld a, (xiy)
 	pop xiy
 	ret
@@ -533,17 +533,17 @@ Rhythm_Transp_Apply:
 	add w, a
 	bit 7, w
 	jr z, Rhythm_Transp_JumpToWrap
-	sub w, 0xC
+	sub w, 0xc
 
 Rhythm_Transp_JumpToWrap:
 	jr Rhythm_Transp_WrapCheck
 
 Rhythm_Transp_NegativeOctave:
-	sub a, 0xC
+	sub a, 0xc
 	add w, a
 	bit 7, w
 	jr z, Rhythm_Transp_WrapCheck
-	add w, 0xC
+	add w, 0xc
 
 Rhythm_Transp_WrapCheck:
 	cpdi8 13004, 12
@@ -552,7 +552,7 @@ Rhythm_Transp_WrapCheck:
 Rhythm_Transp_WrapLoop:
 	cpda8 w, 13004
 	jr c, Rhythm_Transp_FinalCheck
-	sub w, 0xC
+	sub w, 0xc
 	jr Rhythm_Transp_WrapLoop
 
 Rhythm_Transp_FinalCheck:
@@ -561,7 +561,7 @@ Rhythm_Transp_FinalCheck:
 	jr z, Rhythm_Transp_Done
 	cpda8 a, 13102
 	jr nc, Rhythm_Transp_Done
-	add a, 0xC
+	add a, 0xc
 
 Rhythm_Transp_Done:
 	anddi8 13101, 254
@@ -588,13 +588,13 @@ Rhythm_VoiceMap_CheckBit4:
 	xor l, l
 
 Rhythm_VoiceMap_ClampInstr:
-	ld xiy, 0xF5526F
+	ld xiy, 0xf5526f
 	bitda 3, 13044
 	jr z, Rhythm_VoiceMap_SelectTable
-	ld xiy, 0xF552A0
+	ld xiy, 0xf552a0
 
 Rhythm_VoiceMap_SelectTable:
-	ld_srib3 L, 0x03, 0xF4, 0xEC
+	ld_srib3 L, 0x03, 0xf4, 0xec
 	cps l, 0
 	jr z, Rhythm_VoiceMap_ApplyBase
 	ldda8 h, 13363
@@ -611,12 +611,12 @@ Rhythm_VoiceMap_CheckMute:
 Rhythm_VoiceMap_CheckDir:
 	bit 4, h
 	jr nz, Rhythm_VoiceMap_SubShift
-	and h, 0xF
+	and h, 0xf
 	add a, h
 	jr Rhythm_VoiceMap_ApplyBase
 
 Rhythm_VoiceMap_SubShift:
-	and h, 0xF
+	and h, 0xf
 	sub a, h
 
 Rhythm_VoiceMap_ApplyBase:
@@ -628,23 +628,23 @@ Rhythm_VoiceMap_ApplyBase:
 	xor l, l
 
 Rhythm_VoiceMap_Inst2Clamp:
-	ld xiy, 0xF550CA
+	ld xiy, 0xf550ca
 	bitda 2, 13044
 	jr z, Rhythm_VoiceMap_Inst2Bit2
-	ld xiy, 0xF550FB
+	ld xiy, 0xf550fb
 
 Rhythm_VoiceMap_Inst2Bit2:
 	bitda 3, 13044
 	jr z, Rhythm_VoiceMap_Inst2Bit3
-	ld xiy, 0xF5512C
+	ld xiy, 0xf5512c
 
 Rhythm_VoiceMap_Inst2Bit3:
-	ld_srib3 L, 0x03, 0xF4, 0xEC
+	ld_srib3 L, 0x03, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, 0xE461C2
-	st_dri3b E, 0x07, 0xF4, 0xEC
-	ld_srib3 A, 0x03, 0xF4, 0xE0
+	ld xiy, 0xe461c2
+	st_dri3b E, 0x07, 0xf4, 0xec
+	ld_srib3 A, 0x03, 0xf4, 0xe0
 	add w, a
 	calr Rhythm_TransposeNote
 
@@ -692,18 +692,18 @@ Rhythm_VelComp_ClampInstr:
 	xor l, l
 
 Rhythm_VelComp_SelectTable:
-	ld xiy, 0xF5532E
+	ld xiy, 0xf5532e
 	bitda 2, 13044
 	jr z, Rhythm_VelComp_Lookup
-	ld xiy, 0xF5535F
+	ld xiy, 0xf5535f
 
 Rhythm_VelComp_Lookup:
-	ld_srib3 L, 0x03, 0xF4, 0xEC
+	ld_srib3 L, 0x03, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, 0xE461C2
-	st_dri3b E, 0x07, 0xF4, 0xEC
-	ld_srib3 A, 0x03, 0xF4, 0xE0
+	ld xiy, 0xe461c2
+	st_dri3b E, 0x07, 0xf4, 0xec
+	ld_srib3 A, 0x03, 0xf4, 0xe0
 	add w, a
 	calr Rhythm_TransposeNote
 
@@ -742,13 +742,13 @@ Rhythm_DispatchCh_D7:
 	anddi8 13044, 251
 	ordi8 13044, 8
 	ldb w, 0x97
-	ld xix, 0x30F4
+	ld xix, 0x30f4
 
 Rhythm_DispatchCh_D7_Loop:
 	stdi8 13268, 4
 	calr Rhythm_SingleNoteHandler
 	add xix, 0x9
-	cp xix, 0x313C
+	cp xix, 0x313c
 	jr c, Rhythm_DispatchCh_D7_Loop
 	ret
 
@@ -760,7 +760,7 @@ Rhythm_DispatchCh_D4:
 	anddi8 13044, 247
 	ordi8 13044, 4
 	ldb w, 0x94
-	ld xix, 0x313C
+	ld xix, 0x313c
 
 Rhythm_DispatchCh_D4_Loop:
 	stdi8 13268, 8
@@ -783,7 +783,7 @@ Rhythm_DispatchCh_D5_Loop:
 	stdi8 13268, 16
 	calr Rhythm_SingleNoteHandler
 	add xix, 0x9
-	cp xix, 0x31CC
+	cp xix, 0x31cc
 	jr c, Rhythm_DispatchCh_D5_Loop
 	ret
 
@@ -794,7 +794,7 @@ Rhythm_DispatchCh_D6:
 	stda8 13004, a
 	anddi8 13044, 243
 	ldb w, 0x96
-	ld xix, 0x31CC
+	ld xix, 0x31cc
 
 Rhythm_DispatchCh_D6_Loop:
 	stdi8 13268, 32
@@ -958,35 +958,35 @@ Rhythm_MismatchOther_Return:
 
 Rhythm_Send_Ch90_7F_7E:
 	ldb a, 0x90
-	ldb w, 0x7F
-	ldb e, 0x7E
+	ldb w, 0x7f
+	ldb e, 0x7e
 	call Rhythm_Send3ByteMsg
 	ret
 
 Rhythm_Send_Ch90_7F_04:
 	ldb a, 0x90
-	ldb w, 0x7F
+	ldb w, 0x7f
 	ldb e, 0x4
 	call Rhythm_Send3ByteMsg
 	ret
 
 Rhythm_Send_Ch90_7F_05:
 	ldb a, 0x90
-	ldb w, 0x7F
+	ldb w, 0x7f
 	ldb e, 0x5
 	call Rhythm_Send3ByteMsg
 	ret
 
 Rhythm_Send_Ch90_7F_06:
 	ldb a, 0x90
-	ldb w, 0x7F
+	ldb w, 0x7f
 	ldb e, 0x6
 	call Rhythm_Send3ByteMsg
 	ret
 
 Rhythm_Send_Ch90_7F_07:
 	ldb a, 0x90
-	ldb w, 0x7F
+	ldb w, 0x7f
 	ldb e, 0x7
 	call Rhythm_Send3ByteMsg
 	ret
@@ -1001,7 +1001,7 @@ Rhythm_AllNotesOff_Dispatch:
 Rhythm_AllNotesOff_D7:
 	cpdi8 13103, 0
 	jr z, Rhythm_AllNotesOff_D7_Skip
-	ldb a, 0xD7
+	ldb a, 0xd7
 	ldb w, 0x3
 	ldb e, 0x0
 	call Rhythm_Send3ByteMsg
@@ -1012,7 +1012,7 @@ Rhythm_AllNotesOff_D7_Skip:
 Rhythm_AllNotesOff_D4:
 	cpdi8 13104, 0
 	jr z, Rhythm_AllNotesOff_D4_Skip
-	ldb a, 0xD4
+	ldb a, 0xd4
 	ldb w, 0x3
 	ldb e, 0x0
 	call Rhythm_Send3ByteMsg
@@ -1023,7 +1023,7 @@ Rhythm_AllNotesOff_D4_Skip:
 Rhythm_AllNotesOff_D5:
 	cpdi8 13105, 0
 	jr z, Rhythm_AllNotesOff_D5_Skip
-	ldb a, 0xD5
+	ldb a, 0xd5
 	ldb w, 0x3
 	ldb e, 0x0
 	call Rhythm_Send3ByteMsg
@@ -1034,7 +1034,7 @@ Rhythm_AllNotesOff_D5_Skip:
 Rhythm_AllNotesOff_D6:
 	cpdi8 13106, 0
 	jr z, Rhythm_AllNotesOff_D6_Done
-	ldb a, 0xD6
+	ldb a, 0xd6
 	ldb w, 0x3
 	ldb e, 0x0
 	call Rhythm_Send3ByteMsg
@@ -1052,7 +1052,7 @@ Rhythm_SendVolume_Dispatch:
 Rhythm_SendVolume_D7:
 	cpdi8 13103, 0
 	jr z, Rhythm_SendVolume_D7_Skip
-	ldb a, 0xD7
+	ldb a, 0xd7
 	ldb w, 0x3
 	ldda8 e, 13103
 	call Rhythm_Send3ByteMsg
@@ -1063,7 +1063,7 @@ Rhythm_SendVolume_D7_Skip:
 Rhythm_SendVolume_D4:
 	cpdi8 13104, 0
 	jr z, Rhythm_SendVolume_D4_Skip
-	ldb a, 0xD4
+	ldb a, 0xd4
 	ldb w, 0x3
 	ldda8 e, 13104
 	call Rhythm_Send3ByteMsg
@@ -1074,7 +1074,7 @@ Rhythm_SendVolume_D4_Skip:
 Rhythm_SendVolume_D5:
 	cpdi8 13105, 0
 	jr z, Rhythm_SendVolume_D5_Skip
-	ldb a, 0xD5
+	ldb a, 0xd5
 	ldb w, 0x3
 	ldda8 e, 13105
 	call Rhythm_Send3ByteMsg
@@ -1085,7 +1085,7 @@ Rhythm_SendVolume_D5_Skip:
 Rhythm_SendVolume_D6:
 	cpdi8 13106, 0
 	jr z, Rhythm_SendVolume_D6_Done
-	ldb a, 0xD6
+	ldb a, 0xd6
 	ldb w, 0x3
 	ldda8 e, 13106
 	call Rhythm_Send3ByteMsg
@@ -1104,7 +1104,7 @@ Rhythm_NoteOffMax_D7:
 	cpdi8 13103, 0
 	jr z, Rhythm_NoteOffMax_D7_Skip
 	ldb a, 0x90
-	ldb w, 0x7F
+	ldb w, 0x7f
 	ldb e, 0x77
 	call Rhythm_Send3ByteMsg
 
@@ -1115,7 +1115,7 @@ Rhythm_NoteOffMax_D4:
 	cpdi8 13104, 0
 	jr z, Rhythm_NoteOffMax_D4_Skip
 	ldb a, 0x90
-	ldb w, 0x7F
+	ldb w, 0x7f
 	ldb e, 0x74
 	call Rhythm_Send3ByteMsg
 
@@ -1126,7 +1126,7 @@ Rhythm_NoteOffMax_D5:
 	cpdi8 13105, 0
 	jr z, Rhythm_NoteOffMax_D5_Skip
 	ldb a, 0x90
-	ldb w, 0x7F
+	ldb w, 0x7f
 	ldb e, 0x75
 	call Rhythm_Send3ByteMsg
 
@@ -1137,7 +1137,7 @@ Rhythm_NoteOffMax_D6:
 	cpdi8 13106, 0
 	jr z, Rhythm_NoteOffMax_D6_Done
 	ldb a, 0x90
-	ldb w, 0x7F
+	ldb w, 0x7f
 	ldb e, 0x76
 	call Rhythm_Send3ByteMsg
 
@@ -1193,7 +1193,7 @@ Rhythm_SaveState:
 	ldda8 a, 13288
 	stda8 13289, a
 	ldda8 a, 12931
-	and a, 0xFD
+	and a, 0xfd
 	bit 0, a
 	jr z, Rhythm_SaveState_StoreBits
 	or a, 0x2
@@ -1216,7 +1216,7 @@ Rhythm_SaveState_CheckFx:
 
 Rhythm_SaveState_FxActive:
 	ldda8 a, 13094
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_SaveState_CheckFx2
 	anddi8 13067, 252
 	anddi8 13068, 254
@@ -1230,15 +1230,15 @@ Rhythm_SaveState_CheckFx2:
 	and a, 0x3
 	jr nz, Rhythm_SaveState_Fx2Active
 	ldda8 a, 13066
-	and a, 0xD
+	and a, 0xd
 	jr z, Rhythm_SaveState_ClearFx2
 
 Rhythm_SaveState_Fx2Active:
 	ldda8 a, 13095
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssignDetect
-	and a, 0xFC
-	and a, 0xF2
+	and a, 0xfc
+	and a, 0xf2
 	jr Rhythm_VoiceAssignDetect
 
 Rhythm_SaveState_ClearFx2:
@@ -1246,14 +1246,14 @@ Rhythm_SaveState_ClearFx2:
 
 Rhythm_VoiceAssignDetect:
 	ldda8 a, 13074
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_PartBDetect
 	ldda8 a, 13081
-	and a, 0x3F
+	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_PartBDetect
 	anddi8 64607, 191
 	ldda8 a, 13075
-	and a, 0x3F
+	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_PartAOn
 	ordi8 64607, 128
 	ordi8 13052, 2
@@ -1272,21 +1272,21 @@ Rhythm_VoiceAssign_PartAOn:
 	orda8 a, 13080
 	orda8 a, 13076
 	orda8 a, 13077
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_PartBDetect
 	ordi8 12932, 16
 	ordi8 12932, 4
 
 Rhythm_VoiceAssign_PartBDetect:
 	ldda8 a, 13075
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext1Detect
 	ldda8 a, 13082
-	and a, 0x3F
+	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_Ext1Detect
 	anddi8 64607, 127
 	ldda8 a, 13074
-	and a, 0x3F
+	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_PartBOn
 	ordi8 64607, 64
 	ordi8 13052, 1
@@ -1305,17 +1305,17 @@ Rhythm_VoiceAssign_PartBOn:
 	orda8 a, 13080
 	orda8 a, 13076
 	orda8 a, 13077
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext1Detect
 	ordi8 12932, 16
 	ordi8 12932, 4
 
 Rhythm_VoiceAssign_Ext1Detect:
 	ldda8 a, 13078
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext2Detect
 	ldda8 a, 13085
-	and a, 0x3F
+	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_Ext2Detect
 	anddi8 64607, 251
 	ldb e, 0x48
@@ -1330,16 +1330,16 @@ Rhythm_VoiceAssign_Ext1Detect:
 	orda8 a, 13075
 	orda8 a, 13076
 	orda8 a, 13077
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext2Detect
 	ordi8 12932, 8
 
 Rhythm_VoiceAssign_Ext2Detect:
 	ldda8 a, 13079
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext3Detect
 	ldda8 a, 13086
-	and a, 0x3F
+	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_Ext3Detect
 	anddi8 64607, 247
 	ldb e, 0x48
@@ -1354,16 +1354,16 @@ Rhythm_VoiceAssign_Ext2Detect:
 	orda8 a, 13075
 	orda8 a, 13076
 	orda8 a, 13077
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext3Detect
 	ordi8 12932, 8
 
 Rhythm_VoiceAssign_Ext3Detect:
 	ldda8 a, 13080
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Perc1Detect
 	ldda8 a, 13087
-	and a, 0x3F
+	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_Perc1Detect
 	anddi8 64608, 251
 	ldb e, 0x48
@@ -1378,16 +1378,16 @@ Rhythm_VoiceAssign_Ext3Detect:
 	orda8 a, 13075
 	orda8 a, 13076
 	orda8 a, 13077
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Perc1Detect
 	ordi8 12932, 8
 
 Rhythm_VoiceAssign_Perc1Detect:
 	ldda8 a, 13076
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Perc2Detect
 	ldda8 a, 13083
-	and a, 0x3F
+	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_Perc2Detect
 	anddi8 64607, 239
 	ldb e, 0x48
@@ -1400,10 +1400,10 @@ Rhythm_VoiceAssign_Perc1Detect:
 
 Rhythm_VoiceAssign_Perc2Detect:
 	ldda8 a, 13077
-	and a, 0x3F
+	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_SaveShadow
 	ldda8 a, 13084
-	and a, 0x3F
+	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_SaveShadow
 	anddi8 64607, 223
 	ldb e, 0x48
@@ -1445,8 +1445,8 @@ Rhythm_SeqResetCheck:
 	ldda8 l, 14235
 	xor h, h
 	sla l, 2
-	ld xiy, 0xF55A8C
-	ld_sril3 XIX, 0x07, 0xF4, 0xEC
+	ld xiy, 0xf55a8c
+	ld_sril3 XIX, 0x07, 0xf4, 0xec
 	cp xix, 0x0
 	jr z, Rhythm_SeqReset_UpdateFlags
 	ei 6
@@ -1456,7 +1456,7 @@ Rhythm_SeqResetCheck:
 
 Rhythm_SeqReset_UpdateFlags:
 	ldda8 a, 13519
-	and a, 0xEF
+	and a, 0xef
 	bit 2, a
 	jr z, Rhythm_SeqReset_Store
 	or a, 0x10
@@ -1502,8 +1502,8 @@ Rhythm_TranspMod_ModCheck:
 	xor l, l
 
 Rhythm_TranspMod_LookupTable:
-	ld xiy, 0xF5526F
-	ld_srib3 L, 0x03, 0xF4, 0xEC
+	ld xiy, 0xf5526f
+	ld_srib3 L, 0x03, 0xf4, 0xec
 	cps l, 0
 	jr z, Rhythm_TranspMod_Done
 	ldda8 h, 13286
@@ -1521,12 +1521,12 @@ Rhythm_TranspMod_Offset1:
 Rhythm_TranspMod_MuteCheck:
 	bit 4, h
 	jr nz, Rhythm_TranspMod_SubOffset
-	and h, 0xF
+	and h, 0xf
 	add a, h
 	jr Rhythm_TranspMod_Done
 
 Rhythm_TranspMod_SubOffset:
-	and h, 0xF
+	and h, 0xf
 	sub a, h
 
 Rhythm_TranspMod_Done:
@@ -1534,8 +1534,8 @@ Rhythm_TranspMod_Done:
 
 Rhythm_TranspMod_BaseApply:
 	ld w, a
-	ld xiy, 0xE46142
-	ld_srib3 A, 0x03, 0xF4, 0xE0
+	ld xiy, 0xe46142
+	ld_srib3 A, 0x03, 0xf4, 0xe0
 	ldda8 l, 13016
 	cp l, 0x30
 	jr c, Rhythm_TranspMod_BaseLookup
@@ -1543,13 +1543,13 @@ Rhythm_TranspMod_BaseApply:
 
 Rhythm_TranspMod_BaseLookup:
 	extz hl
-	ld xiy, 0xF550FB
-	ld_srib3 L, 0x07, 0xF4, 0xEC
+	ld xiy, 0xf550fb
+	ld_srib3 L, 0x07, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, 0xE461C2
-	st_dri3b E, 0x07, 0xF4, 0xEC
-	ld_srib3 A, 0x03, 0xF4, 0xE0
+	ld xiy, 0xe461c2
+	st_dri3b E, 0x07, 0xf4, 0xec
+	ld_srib3 A, 0x03, 0xf4, 0xe0
 	add w, a
 	ret
 
@@ -1561,22 +1561,22 @@ Rhythm_TranspMod_OctaveWrap:
 	add w, a
 	bit 7, w
 	jr z, Rhythm_TranspMod_WrapJump
-	sub w, 0xC
+	sub w, 0xc
 
 Rhythm_TranspMod_WrapJump:
 	jr Rhythm_TranspMod_WrapClamp
 
 Rhythm_TranspMod_WrapNeg:
-	sub a, 0xC
+	sub a, 0xc
 	add w, a
 	bit 7, w
 	jr z, Rhythm_TranspMod_WrapClamp
-	add w, 0xC
+	add w, 0xc
 
 Rhythm_TranspMod_WrapClamp:
-	cp w, 0x7F
+	cp w, 0x7f
 	jr ule, Rhythm_TranspMod_WrapDone
-	sub w, 0xC
+	sub w, 0xc
 	jr Rhythm_TranspMod_WrapClamp
 
 Rhythm_TranspMod_WrapDone:

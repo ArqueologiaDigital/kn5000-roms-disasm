@@ -10,7 +10,7 @@
 ;          +0  .long  pointer to SOUND_CATEGORY_NAMES string table
 ;          +4  .long  entry count (18 = number of categories)
 ;          +8  .long  stride or field offset (0x28 = 40)
-;          +12 .long  sentinel (0xFFFFFFFF = end-of-descriptor)
+;          +12 .long  sentinel (0xffffffff = end-of-descriptor)
 ;   3. Sound data section pointer table (16 entries, one per instrument category)
 ;   4. Sound category name table (18 x 16-char fixed-width, space-padded)
 ;   5. Per-category instrument data includes

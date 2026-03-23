@@ -10,7 +10,7 @@
 	aligned_string "SqedtVal"
 	jr	gt, 67
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	aligned_string "EqualizerBox"
 	jr	gt, 66
 	.byte 0x42, 0x43, 0x00, 0xff

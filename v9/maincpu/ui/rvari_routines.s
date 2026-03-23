@@ -12,7 +12,7 @@ RVari_Select_CalcVisibleCount:
 	ld xbc, (xiz + 52)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	dec 1, wa
 	ld bc, (xbc)
 	sub bc, wa
@@ -20,7 +20,7 @@ RVari_Select_CalcVisibleCount:
 	ld xbc, (xiz + 52)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	dec 1, wa
 	sub wa, (xbc)
 	ldw bc, 0x9
@@ -29,13 +29,13 @@ RVari_Select_CalcVisibleCount:
 
 RVari_Select_CheckTypeE:
 	ld xwa, (xiz + 56)
-	cpw (xwa), 0xE
+	cpw (xwa), 0xe
 	jrl nz, RVari_Select_TypeNotE
 	ld xbc, (xiz + 44)
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	exts xwa
 	divs wa, 0x4
 	inc 1, wa
@@ -51,38 +51,38 @@ RVari_Select_CheckTypeE:
 	exts xwa
 	divs wa, 0x4
 	exts xwa
-	divs wa, 0xA
-	ldto_werp HL, 0xE2
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	divs wa, 0xa
+	ldto_werp HL, 0xe2
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_SelectE_FirstItem_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0x8
-	ldw (xwa + 4), 0x9C
+	ldw (xwa + 4), 0x9c
 	jr RVari_SelectE_FirstItem_Draw
 
 RVari_SelectE_FirstItem_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xA3
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xa3
 	ldw (xwa + 4), 0x137
 
 RVari_SelectE_FirstItem_Draw:
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	lds bc, 0
-	ldw de, 0xF5
+	ldw de, 0xf5
 	call DrawDesignBox
 	ld xwa, (xiz + 56)
 	ld wa, (xwa)
@@ -92,20 +92,20 @@ RVari_SelectE_FirstItem_Draw:
 	extz bc
 	call AccVoice_DispatchWithChannel
 	extz xhl
-	pushw 0xD
+	pushw 0xd
 	push xhl
-	st_dri3b W, 0xFD, 0x1B, 0x01
+	st_dri3b W, 0xfd, 0x1b, 0x01
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_dri 0xFD, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xFF
-	ld (xsp + 12), 0xF5
+	stib_dri 0xfd, 0x22, 0x01, 0x00
+	ld (xsp + 10), 0xff
+	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	exts xwa
 	divs wa, 0x4
 	inc 1, wa
@@ -113,14 +113,14 @@ RVari_SelectE_FirstItem_Draw:
 	jr nz, RVari_SelectE_SecondItem_Setup
 	ld xwa, (xiz + 44)
 	ld bc, (xwa)
-	muls bc, 0xA
-	sub bc, 0xA
+	muls bc, 0xa
+	sub bc, 0xa
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
 	extz wa
-	div a, 0xA
+	div a, 0xa
 	ld e, w
 	extz de
 	add de, bc
@@ -134,52 +134,52 @@ RVari_SelectE_FirstItem_Draw:
 	ld (xsp + 12), 0x7
 
 RVari_SelectE_SecondItem_Setup:
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_SelectE_SecondItem_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0x8
-	ldw (xwa + 4), 0x1E
+	ldw (xwa + 4), 0x1e
 	jr RVari_SelectE_SecondItem_Draw
 
 RVari_SelectE_SecondItem_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xA3
-	ldw (xwa + 4), 0xBE
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xa3
+	ldw (xwa + 4), 0xbe
 
 RVari_SelectE_SecondItem_Draw:
-	dec_sriw 0, 0xFD, 0x16, 0x02
+	dec_sriw 0, 0xfd, 0x16, 0x02
 	ld xwa, (xiz + 44)
 	ld bc, (xwa)
-	muls bc, 0xA
-	sub bc, 0xA
+	muls bc, 0xa
+	sub bc, 0xa
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
 	extz wa
-	div a, 0xA
+	div a, 0xa
 	ld a, w
 	inc 1, a
 	extz wa
 	add wa, bc
 	pushw wa
-	pushw 0xED
+	pushw 0xed
 	pushw 0x1656
 	lda xwa, (xsp + 26)
 	push xwa
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	lda xde, (xsp + 20)
 	lds32 xwa, 3
 	push xwa
@@ -191,33 +191,33 @@ RVari_SelectE_SecondItem_Draw:
 	pushw wa
 	ld xwa, xhl
 	call DrawStringLeftJustify
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	add wa, 0xC
+	add wa, 0xc
 	ld (xbc), wa
-	st_dri3b B, 0xFD, 0x18, 0x02
-	sub wa, 0xF
+	st_dri3b B, 0xfd, 0x18, 0x02
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_SelectE_SecondItem_BtnNotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0x1C
-	ldw (xwa + 4), 0xB0
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0x1c
+	ldw (xwa + 4), 0xb0
 	jr RVari_SelectE_SecondItem_BtnDraw
 
 RVari_SelectE_SecondItem_BtnNotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xB7
-	ldw (xwa + 4), 0x14B
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xb7
+	ldw (xwa + 4), 0x14b
 
 RVari_SelectE_SecondItem_BtnDraw:
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
-	st_dri3b B, 0xFD, 0x15, 0x01
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x15, 0x01
 	lds32 xwa, 1
 	push xwa
 	ld a, (xsp + 14)
@@ -234,7 +234,7 @@ RVari_Select_OtherItem:
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	exts xwa
 	divs wa, 0x4
 	inc 1, wa
@@ -250,37 +250,37 @@ RVari_Select_OtherItem:
 	exts xwa
 	divs wa, 0x4
 	exts xwa
-	divs wa, 0xA
-	ldto_werp HL, 0xE2
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	divs wa, 0xa
+	ldto_werp HL, 0xe2
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_SelectO_Item_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0x8
-	ldw (xwa + 4), 0x9C
+	ldw (xwa + 4), 0x9c
 	jr RVari_SelectO_Item_Draw
 
 RVari_SelectO_Item_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xA3
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xa3
 	ldw (xwa + 4), 0x137
 
 RVari_SelectO_Item_Draw:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw bc, 0xC1
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw bc, 0xc1
 	lds de, 7
 	call DrawDesignBox
 	ld xwa, (xiz + 56)
@@ -291,20 +291,20 @@ RVari_SelectO_Item_Draw:
 	extz bc
 	call AccVoice_DispatchWithChannel
 	extz xhl
-	pushw 0xD
+	pushw 0xd
 	push xhl
-	st_dri3b W, 0xFD, 0x1B, 0x01
+	st_dri3b W, 0xfd, 0x1b, 0x01
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_dri 0xFD, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xFF
-	ld (xsp + 12), 0xF5
+	stib_dri 0xfd, 0x22, 0x01, 0x00
+	ld (xsp + 10), 0xff
+	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	exts xwa
 	divs wa, 0x4
 	inc 1, wa
@@ -312,14 +312,14 @@ RVari_SelectO_Item_Draw:
 	jr nz, RVari_SelectO_SecondItem_Setup
 	ld xwa, (xiz + 44)
 	ld de, (xwa)
-	muls de, 0xA
-	sub de, 0xA
+	muls de, 0xa
+	sub de, 0xa
 	ld xbc, (xiz + 60)
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
 	extz wa
-	div a, 0xA
+	div a, 0xa
 	ld l, w
 	extz hl
 	add hl, de
@@ -332,52 +332,52 @@ RVari_SelectO_Item_Draw:
 	ld (xsp + 12), 0x7
 
 RVari_SelectO_SecondItem_Setup:
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_SelectO_SecondItem_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0x8
-	ldw (xwa + 4), 0x1E
+	ldw (xwa + 4), 0x1e
 	jr RVari_SelectO_SecondItem_Draw
 
 RVari_SelectO_SecondItem_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xA3
-	ldw (xwa + 4), 0xBE
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xa3
+	ldw (xwa + 4), 0xbe
 
 RVari_SelectO_SecondItem_Draw:
-	dec_sriw 0, 0xFD, 0x16, 0x02
+	dec_sriw 0, 0xfd, 0x16, 0x02
 	ld xwa, (xiz + 44)
 	ld bc, (xwa)
-	muls bc, 0xA
-	sub bc, 0xA
+	muls bc, 0xa
+	sub bc, 0xa
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
 	extz wa
-	div a, 0xA
+	div a, 0xa
 	ld a, w
 	inc 1, a
 	extz wa
 	add wa, bc
 	pushw wa
-	pushw 0xED
-	pushw 0x165A
+	pushw 0xed
+	pushw 0x165a
 	lda xwa, (xsp + 26)
 	push xwa
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	lda xde, (xsp + 20)
 	lds32 xwa, 3
 	push xwa
@@ -389,33 +389,33 @@ RVari_SelectO_SecondItem_Draw:
 	pushw wa
 	ld xwa, xhl
 	call DrawStringLeftJustify
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	add wa, 0xC
+	add wa, 0xc
 	ld (xbc), wa
-	st_dri3b B, 0xFD, 0x18, 0x02
-	sub wa, 0xF
+	st_dri3b B, 0xfd, 0x18, 0x02
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_SelectO_SecondBtn_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0x1C
-	ldw (xwa + 4), 0xB0
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0x1c
+	ldw (xwa + 4), 0xb0
 	jr RVari_SelectO_SecondBtn_Draw
 
 RVari_SelectO_SecondBtn_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xB7
-	ldw (xwa + 4), 0x14B
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xb7
+	ldw (xwa + 4), 0x14b
 
 RVari_SelectO_SecondBtn_Draw:
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
-	st_dri3b B, 0xFD, 0x15, 0x01
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x15, 0x01
 	lds32 xwa, 1
 	push xwa
 	ld a, (xsp + 14)
@@ -433,7 +433,7 @@ RVari_Select_TypeNotE:
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	inc 1, wa
 	cp wa, (xbc)
 	jrl nz, RVari_SelNE_SecondItem
@@ -445,38 +445,38 @@ RVari_Select_TypeNotE:
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
-	ldto_werp HL, 0xE2
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	divs wa, 0xa
+	ldto_werp HL, 0xe2
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_SelNE_FirstItem_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0x8
-	ldw (xwa + 4), 0x9C
+	ldw (xwa + 4), 0x9c
 	jr RVari_SelNE_FirstItem_Draw
 
 RVari_SelNE_FirstItem_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xA3
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xa3
 	ldw (xwa + 4), 0x137
 
 RVari_SelNE_FirstItem_Draw:
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	lds bc, 0
-	ldw de, 0xF5
+	ldw de, 0xf5
 	call DrawDesignBox
 	ld xwa, (xiz + 56)
 	ld wa, (xwa)
@@ -484,42 +484,42 @@ RVari_SelNE_FirstItem_Draw:
 	ld xbc, (xiz + 44)
 	ld bc, (xbc)
 	dec 1, bc
-	mul c, 0xA
+	mul c, 0xa
 	ld e, c
 	ld xbc, (xiz + 64)
 	ld bc, (xbc)
 	extz bc
-	div c, 0xA
+	div c, 0xa
 	ld c, b
 	add c, e
 	extz bc
 	call AccVoice_DispatchWithChannel
 	extz xhl
-	pushw 0xD
+	pushw 0xd
 	push xhl
-	st_dri3b W, 0xFD, 0x1B, 0x01
+	st_dri3b W, 0xfd, 0x1b, 0x01
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_dri 0xFD, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xFF
-	ld (xsp + 12), 0xF5
+	stib_dri 0xfd, 0x22, 0x01, 0x00
+	ld (xsp + 10), 0xff
+	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	inc 1, wa
 	cp wa, (xbc)
 	jr nz, RVari_SelNE_FirstItem_Deselect
 	ld xwa, (xiz + 44)
 	ld bc, (xwa)
-	muls bc, 0xA
-	sub bc, 0xA
+	muls bc, 0xa
+	sub bc, 0xa
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	extz wa
-	div a, 0xA
+	div a, 0xa
 	ld e, w
 	extz de
 	add de, bc
@@ -538,11 +538,11 @@ RVari_SelNE_FirstItem_Deselect:
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	extz wa
-	div a, 0xA
+	div a, 0xa
 	ld l, w
 	extz hl
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 4)
@@ -553,39 +553,39 @@ RVari_SelNE_FirstItem_Deselect:
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	extz wa
-	div a, 0xA
+	div a, 0xa
 	ld l, w
 	extz hl
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_SelNE_FirstBtn_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0x1C
-	ldw (xwa + 4), 0xB0
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0x1c
+	ldw (xwa + 4), 0xb0
 	jr RVari_SelNE_FirstBtn_Draw
 
 RVari_SelNE_FirstBtn_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xB7
-	ldw (xwa + 4), 0x14B
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xb7
+	ldw (xwa + 4), 0x14b
 
 RVari_SelNE_FirstBtn_Draw:
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
-	st_dri3b B, 0xFD, 0x15, 0x01
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x15, 0x01
 	lds32 xwa, 1
 	push xwa
 	ld a, (xsp + 14)
@@ -602,7 +602,7 @@ RVari_SelNE_SecondItem:
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	inc 1, wa
 	cp wa, (xbc)
 	jrl nz, RVari_Select_ReturnZero
@@ -614,37 +614,37 @@ RVari_SelNE_SecondItem:
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
-	ldto_werp HL, 0xE2
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	divs wa, 0xa
+	ldto_werp HL, 0xe2
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_SelNE_SecondItem_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0x8
-	ldw (xwa + 4), 0x9C
+	ldw (xwa + 4), 0x9c
 	jr RVari_SelNE_SecondItem_Draw
 
 RVari_SelNE_SecondItem_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xA3
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xa3
 	ldw (xwa + 4), 0x137
 
 RVari_SelNE_SecondItem_Draw:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw bc, 0xC1
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw bc, 0xc1
 	lds de, 7
 	call DrawDesignBox
 	ld xwa, (xiz + 56)
@@ -653,42 +653,42 @@ RVari_SelNE_SecondItem_Draw:
 	ld xbc, (xiz + 44)
 	ld bc, (xbc)
 	dec 1, bc
-	mul c, 0xA
+	mul c, 0xa
 	ld e, c
 	ld xbc, (xiz + 60)
 	ld bc, (xbc)
 	extz bc
-	div c, 0xA
+	div c, 0xa
 	ld c, b
 	add c, e
 	extz bc
 	call AccVoice_DispatchWithChannel
 	extz xhl
-	pushw 0xD
+	pushw 0xd
 	push xhl
-	st_dri3b W, 0xFD, 0x1B, 0x01
+	st_dri3b W, 0xfd, 0x1b, 0x01
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_dri 0xFD, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xFF
-	ld (xsp + 12), 0xF5
+	stib_dri 0xfd, 0x22, 0x01, 0x00
+	ld (xsp + 10), 0xff
+	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	inc 1, wa
 	cp wa, (xbc)
 	jr nz, RVari_SelNE_SecondItem_Deselect
 	ld xwa, (xiz + 44)
 	ld de, (xwa)
-	muls de, 0xA
-	sub de, 0xA
+	muls de, 0xa
+	sub de, 0xa
 	ld xbc, (xiz + 60)
 	ld wa, (xbc)
 	extz wa
-	div a, 0xA
+	div a, 0xa
 	ld a, w
 	extz wa
 	add wa, de
@@ -706,11 +706,11 @@ RVari_SelNE_SecondItem_Deselect:
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	extz wa
-	div a, 0xA
+	div a, 0xa
 	ld l, w
 	extz hl
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 4)
@@ -721,39 +721,39 @@ RVari_SelNE_SecondItem_Deselect:
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	extz wa
-	div a, 0xA
+	div a, 0xa
 	ld l, w
 	extz hl
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_SelNE_SecondBtn_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0x1C
-	ldw (xwa + 4), 0xB0
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0x1c
+	ldw (xwa + 4), 0xb0
 	jr RVari_SelNE_SecondBtn_Draw
 
 RVari_SelNE_SecondBtn_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xB7
-	ldw (xwa + 4), 0x14B
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xb7
+	ldw (xwa + 4), 0x14b
 
 RVari_SelNE_SecondBtn_Draw:
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
-	st_dri3b B, 0xFD, 0x15, 0x01
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x15, 0x01
 	lds32 xwa, 1
 	push xwa
 	ld a, (xsp + 14)
@@ -778,7 +778,7 @@ RVari_Confirm:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xhl + 56)
-	cpw (xwa), 0xF
+	cpw (xwa), 0xf
 	jrl nz, RVari_Confirm_TypeNotF
 	ld (xsp + 8), 0x0
 
@@ -794,20 +794,20 @@ RVari_Confirm_TypeF_Loop:
 	ld wa, (xde)
 	call AccVoice_DispatchWithChannel
 	extz xhl
-	pushw 0xD
+	pushw 0xd
 	push xhl
-	st_dri3b W, 0xFD, 0x1A, 0x01
+	st_dri3b W, 0xfd, 0x1a, 0x01
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_dri 0xFD, 0x21, 0x01, 0x00
-	ld (xsp + 10), 0xFF
-	ld (xsp + 12), 0xF5
+	stib_dri 0xfd, 0x21, 0x01, 0x00
+	ld (xsp + 10), 0xff
+	ld (xsp + 12), 0xf5
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp BC, 0xE2
+	ldto_werp BC, 0xe2
 	ld a, (xsp + 8)
 	extz wa
 	cp wa, bc
@@ -819,53 +819,53 @@ RVari_ConfirmF_CheckSelected:
 	ld a, (xsp + 8)
 	extz wa
 	lda_24 xbc, 0xecfda8
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
 	lda_24 xbc, 0xecfda8
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_ConfirmF_Item_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0x8
-	ldw (xwa + 4), 0x1E
+	ldw (xwa + 4), 0x1e
 	jr RVari_ConfirmF_Item_Draw
 
 RVari_ConfirmF_Item_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xA3
-	ldw (xwa + 4), 0xBE
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xa3
+	ldw (xwa + 4), 0xbe
 
 RVari_ConfirmF_Item_Draw:
-	dec_sriw 0, 0xFD, 0x16, 0x02
+	dec_sriw 0, 0xfd, 0x16, 0x02
 	ld a, (xsp + 8)
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xed1626
-	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
-	pushw 0xED
-	pushw 0x165E
+	pushw 0xed
+	pushw 0x165e
 	lda xwa, (xsp + 28)
 	push xwa
 	call Audio_SendCommand
 	lda xsp, (xsp + 12)
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	lda xde, (xsp + 20)
 	lds32 xwa, 3
 	push xwa
@@ -877,33 +877,33 @@ RVari_ConfirmF_Item_Draw:
 	pushw wa
 	ld xwa, xhl
 	call DrawStringLeftJustify
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	add wa, 0xC
+	add wa, 0xc
 	ld (xbc), wa
-	st_dri3b B, 0xFD, 0x18, 0x02
-	sub wa, 0xF
+	st_dri3b B, 0xfd, 0x18, 0x02
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_ConfirmF_Btn_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0x1C
-	ldw (xwa + 4), 0xB0
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0x1c
+	ldw (xwa + 4), 0xb0
 	jr RVari_ConfirmF_Btn_Draw
 
 RVari_ConfirmF_Btn_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xB7
-	ldw (xwa + 4), 0x14B
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xb7
+	ldw (xwa + 4), 0x14b
 
 RVari_ConfirmF_Btn_Draw:
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
-	st_dri3b B, 0xFD, 0x14, 0x01
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x14, 0x01
 	lds32 xwa, 1
 	push xwa
 	ld a, (xsp + 14)
@@ -923,36 +923,36 @@ RVari_Confirm_TypeF_SubItems:
 	ld a, (xsp + 8)
 	extz wa
 	lda_24 xbc, 0xecfdac
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
 	lda_24 xbc, 0xecfdac
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
-	st_dri3b W, 0xFD, 0x18, 0x02
-	st_dri3b B, 0xFD, 0x14, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
+	st_dri3b B, 0xfd, 0x14, 0x02
 	lda xhl, (xde + 2)
 	ld bc, (xhl)
-	sub bc, 0xF
+	sub bc, 0xf
 	ld (xwa + 2), bc
 	ld bc, (xhl)
 	add bc, 0x10
 	ld (xwa + 6), bc
-	ldw (xwa), 0x2D
-	ldw (xwa + 4), 0xAC
+	ldw (xwa), 0x2d
+	ldw (xwa + 4), 0xac
 	ld c, (xsp + 8)
 	extz bc
 	sla bc, 2
 	lda_24 xhl, 0xecfdd4
-	ld_sril3 XHL, 0x07, 0xEC, 0xE4
+	ld_sril3 XHL, 0x07, 0xec, 0xe4
 	lds32 xbc, 1
 	push xbc
-	pushw 0xFF
-	pushw 0xF7
+	pushw 0xff
+	pushw 0xf7
 	ld xbc, xde
 	ld xde, xhl
 	call DrawStringLeftJustify
@@ -962,22 +962,22 @@ RVari_Confirm_TypeF_SubItems:
 	jrl RVari_Confirm_ReturnZero
 
 RVari_Confirm_TypeNotF:
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	ldw (xwa + 2), 0x6
 	ldw (xwa + 6), 0x17
-	ldw (xwa), 0xF5
-	ldw (xwa + 4), 0x13B
-	ldw bc, 0xC1
-	ldw de, 0xF3
+	ldw (xwa), 0xf5
+	ldw (xwa + 4), 0x13b
+	ldw bc, 0xc1
+	ldw de, 0xf3
 	call DrawDesignBox
-	st_dri3b B, 0xFD, 0x18, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
 	ld wa, (xde + 4)
 	sub wa, (xde)
 	exts xwa
 	divs wa, 0x2
 	ld bc, (xde)
 	add bc, wa
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	ld (xhl), bc
 	ld bc, (xde + 2)
 	ld wa, (xde + 6)
@@ -990,30 +990,30 @@ RVari_Confirm_TypeNotF:
 	ld xwa, (xiz + 52)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	inc 1, wa
 	pushw wa
 	ld xwa, (xiz + 44)
 	pushm (xwa)
-	pushw 0xED
+	pushw 0xed
 	pushw 0x1662
-	st_dri3b W, 0xFD, 0x1C, 0x01
+	st_dri3b W, 0xfd, 0x1c, 0x01
 	push xwa
 	call Audio_SendCommand
 	lda xsp, (xsp + 12)
-	st_dri3b W, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
-	st_dri3b B, 0xFD, 0x14, 0x01
+	st_dri3b W, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x14, 0x01
 	lds32 xhl, 0
 	push xhl
 	pushw 0x0
-	pushw 0xF7
+	pushw 0xf7
 	call DrawStringCentered
 	ld (xsp + 4), 0x9
 	ld xbc, (xiz + 52)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	dec 1, wa
 	ld bc, (xbc)
 	sub bc, wa
@@ -1021,7 +1021,7 @@ RVari_Confirm_TypeNotF:
 	ld xbc, (xiz + 52)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	dec 1, wa
 	sub wa, (xbc)
 	ldw bc, 0x9
@@ -1030,7 +1030,7 @@ RVari_Confirm_TypeNotF:
 
 RVari_Confirm_CalcVisible:
 	ld xwa, (xiz + 56)
-	cpw (xwa), 0xE
+	cpw (xwa), 0xe
 	jrl nz, RVari_ConfirmNE_Setup
 	ld (xsp + 8), 0x0
 	cp (xsp + 4), 0x0
@@ -1053,25 +1053,25 @@ RVari_ConfirmE_Loop:
 	ld bc, (xbc)
 	exts xbc
 	divs bc, 0x4
-	ldto_werp BC, 0xE6
+	ldto_werp BC, 0xe6
 	add c, e
 	extz bc
 	call AccVoice_DispatchWithChannel
 	extz xhl
-	pushw 0xD
+	pushw 0xd
 	push xhl
-	st_dri3b W, 0xFD, 0x1B, 0x01
+	st_dri3b W, 0xfd, 0x1b, 0x01
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_dri 0xFD, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xFF
-	ld (xsp + 12), 0xF5
+	stib_dri 0xfd, 0x22, 0x01, 0x00
+	ld (xsp + 10), 0xff
+	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	exts xwa
 	divs wa, 0x4
 	inc 1, wa
@@ -1079,8 +1079,8 @@ RVari_ConfirmE_Loop:
 	jr nz, RVari_ConfirmE_CheckSelected
 	ld xwa, (xiz + 44)
 	ld bc, (xwa)
-	muls bc, 0xA
-	sub bc, 0xA
+	muls bc, 0xa
+	sub bc, 0xa
 	ld e, (xsp + 8)
 	extz de
 	add de, bc
@@ -1101,8 +1101,8 @@ RVari_ConfirmE_CheckSelected:
 	lda_24 xde, 0x03f214
 	ld l, (xsp + 8)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 4)
@@ -1112,51 +1112,51 @@ RVari_ConfirmE_CheckSelected:
 	lda_24 xde, 0x03f214
 	ld l, (xsp + 8)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_ConfirmE_Item_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0x8
-	ldw (xwa + 4), 0x1E
+	ldw (xwa + 4), 0x1e
 	jr RVari_ConfirmE_Item_Draw
 
 RVari_ConfirmE_Item_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xA3
-	ldw (xwa + 4), 0xBE
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xa3
+	ldw (xwa + 4), 0xbe
 
 RVari_ConfirmE_Item_Draw:
-	dec_sriw 0, 0xFD, 0x16, 0x02
+	dec_sriw 0, 0xfd, 0x16, 0x02
 	ld xwa, (xiz + 44)
 	ld bc, (xwa)
-	muls bc, 0xA
-	sub bc, 0xA
+	muls bc, 0xa
+	sub bc, 0xa
 	ld a, (xsp + 8)
 	inc 1, a
 	extz wa
 	add wa, bc
 	pushw wa
-	pushw 0xED
-	pushw 0x166E
+	pushw 0xed
+	pushw 0x166e
 	lda xwa, (xsp + 26)
 	push xwa
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	lda xde, (xsp + 20)
 	lds32 xwa, 3
 	push xwa
@@ -1168,33 +1168,33 @@ RVari_ConfirmE_Item_Draw:
 	pushw wa
 	ld xwa, xhl
 	call DrawStringLeftJustify
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	add wa, 0xC
+	add wa, 0xc
 	ld (xbc), wa
-	st_dri3b B, 0xFD, 0x18, 0x02
-	sub wa, 0xF
+	st_dri3b B, 0xfd, 0x18, 0x02
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_ConfirmE_Btn_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0x1C
-	ldw (xwa + 4), 0xB0
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0x1c
+	ldw (xwa + 4), 0xb0
 	jr RVari_ConfirmE_Btn_Draw
 
 RVari_ConfirmE_Btn_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xB7
-	ldw (xwa + 4), 0x14B
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xb7
+	ldw (xwa + 4), 0x14b
 
 RVari_ConfirmE_Btn_Draw:
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
-	st_dri3b B, 0xFD, 0x15, 0x01
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x15, 0x01
 	lds32 xwa, 1
 	push xwa
 	ld a, (xsp + 14)
@@ -1223,32 +1223,32 @@ RVari_ConfirmNE_Loop:
 	ld xbc, (xiz + 44)
 	ld bc, (xbc)
 	dec 1, bc
-	mul c, 0xA
+	mul c, 0xa
 	add c, (xsp + 8)
 	extz bc
 	call AccVoice_DispatchWithChannel
 	extz xhl
-	pushw 0xD
+	pushw 0xd
 	push xhl
-	st_dri3b W, 0xFD, 0x1B, 0x01
+	st_dri3b W, 0xfd, 0x1b, 0x01
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_dri 0xFD, 0x22, 0x01, 0x00
-	ld (xsp + 10), 0xFF
-	ld (xsp + 12), 0xF5
+	stib_dri 0xfd, 0x22, 0x01, 0x00
+	ld (xsp + 10), 0xff
+	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	inc 1, wa
 	cp wa, (xbc)
 	jr nz, RVari_ConfirmNE_CheckSelected
 	ld xwa, (xiz + 44)
 	ld bc, (xwa)
-	muls bc, 0xA
-	sub bc, 0xA
+	muls bc, 0xa
+	sub bc, 0xa
 	ld e, (xsp + 8)
 	extz de
 	add de, bc
@@ -1266,8 +1266,8 @@ RVari_ConfirmNE_CheckSelected:
 	lda_24 xde, 0x03f214
 	ld l, (xsp + 8)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 4)
@@ -1277,36 +1277,36 @@ RVari_ConfirmNE_CheckSelected:
 	lda_24 xde, 0x03f214
 	ld l, (xsp + 8)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_ConfirmNE_Item_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0x1C
-	ldw (xwa + 4), 0xB0
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0x1c
+	ldw (xwa + 4), 0xb0
 	jr RVari_ConfirmNE_Item_Draw
 
 RVari_ConfirmNE_Item_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xB7
-	ldw (xwa + 4), 0x14B
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xb7
+	ldw (xwa + 4), 0x14b
 
 RVari_ConfirmNE_Item_Draw:
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
-	st_dri3b B, 0xFD, 0x15, 0x01
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x15, 0x01
 	lds32 xwa, 1
 	push xwa
 	ld a, (xsp + 14)
@@ -1333,15 +1333,15 @@ RVari_EnumNotify:
 	ld_sril XWA, (xsp + 0x0220)
 	ld (xsp + 6), xwa
 	ld xwa, (xhl + 56)
-	cpw (xwa), 0xF
+	cpw (xwa), 0xf
 	jrl nz, RVari_EnumNotify_CalcVisible
-	ld (xsp + 10), 0xFF
-	ld (xsp + 12), 0xF5
+	ld (xsp + 10), 0xff
+	ld (xsp + 12), 0xf5
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp BC, 0xE2
+	ldto_werp BC, 0xe2
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
@@ -1355,56 +1355,56 @@ RVari_EnumNotifyF_CheckSelected:
 	ld a, (xwa)
 	extz wa
 	lda_24 xbc, 0xecfda8
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
 	lda_24 xbc, 0xecfda8
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_EnumNotifyF_Item_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0x8
-	ldw (xwa + 4), 0x1E
+	ldw (xwa + 4), 0x1e
 	jr RVari_EnumNotifyF_Item_Draw
 
 RVari_EnumNotifyF_Item_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xA3
-	ldw (xwa + 4), 0xBE
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xa3
+	ldw (xwa + 4), 0xbe
 
 RVari_EnumNotifyF_Item_Draw:
-	dec_sriw 0, 0xFD, 0x16, 0x02
+	dec_sriw 0, 0xfd, 0x16, 0x02
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xed1626
-	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
-	pushw 0xED
+	pushw 0xed
 	pushw 0x1672
-	st_dri3b W, 0xFD, 0x1C, 0x01
+	st_dri3b W, 0xfd, 0x1c, 0x01
 	push xwa
 	call Audio_SendCommand
 	lda xsp, (xsp + 12)
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
-	st_dri3b B, 0xFD, 0x14, 0x01
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x14, 0x01
 	lds32 xwa, 3
 	push xwa
 	ld a, (xsp + 14)
@@ -1415,32 +1415,32 @@ RVari_EnumNotifyF_Item_Draw:
 	pushw wa
 	ld xwa, xhl
 	call DrawStringLeftJustify
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	add wa, 0xC
+	add wa, 0xc
 	ld (xbc), wa
-	st_dri3b B, 0xFD, 0x18, 0x02
-	sub wa, 0xF
+	st_dri3b B, 0xfd, 0x18, 0x02
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_EnumNotifyF_Btn_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0x1C
-	ldw (xwa + 4), 0xB0
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0x1c
+	ldw (xwa + 4), 0xb0
 	jr RVari_EnumNotifyF_Btn_Draw
 
 RVari_EnumNotifyF_Btn_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xB7
-	ldw (xwa + 4), 0x14B
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xb7
+	ldw (xwa + 4), 0x14b
 
 RVari_EnumNotifyF_Btn_Draw:
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	ld xwa, (xsp + 6)
 	lda xde, (xwa + 1)
 	lds32 xwa, 1
@@ -1460,7 +1460,7 @@ RVari_EnumNotify_CalcVisible:
 	ld xbc, (xiz + 52)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	dec 1, wa
 	ld bc, (xbc)
 	sub bc, wa
@@ -1468,7 +1468,7 @@ RVari_EnumNotify_CalcVisible:
 	ld xbc, (xiz + 52)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	dec 1, wa
 	sub wa, (xbc)
 	ldw bc, 0x9
@@ -1484,8 +1484,8 @@ RVari_EnumNotify_SetupDisplay:
 	ld xwa, (xsp + 6)
 	ld l, (xwa)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 4)
@@ -1496,21 +1496,21 @@ RVari_EnumNotify_SetupDisplay:
 	ld xwa, (xsp + 6)
 	ld l, (xwa)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xE8, 0xE4
-	ld_srib3 A, 0x07, 0xE0, 0xEC
+	ld_sril3 XWA, 0x07, 0xe8, 0xe4
+	ld_srib3 A, 0x07, 0xe0, 0xec
 	extz wa
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	call GetEditSwPoint
 	ld xwa, (xiz + 56)
-	cpw (xwa), 0xE
+	cpw (xwa), 0xe
 	jrl nz, RVari_EnumNotifyNE_CheckSelected
-	ld (xsp + 10), 0xFF
-	ld (xsp + 12), 0xF5
+	ld (xsp + 10), 0xff
+	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	exts xwa
 	divs wa, 0x4
 	inc 1, wa
@@ -1518,8 +1518,8 @@ RVari_EnumNotify_SetupDisplay:
 	jr nz, RVari_EnumNotifyE_CheckSelected
 	ld xwa, (xiz + 44)
 	ld bc, (xwa)
-	muls bc, 0xA
-	sub bc, 0xA
+	muls bc, 0xa
+	sub bc, 0xa
 	ld xwa, (xsp + 6)
 	ld e, (xwa)
 	extz de
@@ -1534,48 +1534,48 @@ RVari_EnumNotify_SetupDisplay:
 	ld (xsp + 12), 0x7
 
 RVari_EnumNotifyE_CheckSelected:
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_EnumNotifyE_Item_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
+	st_dri3b W, 0xfd, 0x18, 0x02
 	ldw (xwa), 0x8
-	ldw (xwa + 4), 0x1E
+	ldw (xwa + 4), 0x1e
 	jr RVari_EnumNotifyE_Item_Draw
 
 RVari_EnumNotifyE_Item_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xA3
-	ldw (xwa + 4), 0xBE
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xa3
+	ldw (xwa + 4), 0xbe
 
 RVari_EnumNotifyE_Item_Draw:
-	dec_sriw 0, 0xFD, 0x16, 0x02
+	dec_sriw 0, 0xfd, 0x16, 0x02
 	ld xwa, (xiz + 44)
 	ld bc, (xwa)
-	muls bc, 0xA
-	sub bc, 0xA
+	muls bc, 0xa
+	sub bc, 0xa
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	inc 1, a
 	extz wa
 	add wa, bc
 	pushw wa
-	pushw 0xED
+	pushw 0xed
 	pushw 0x1676
-	st_dri3b W, 0xFD, 0x1A, 0x01
+	st_dri3b W, 0xfd, 0x1a, 0x01
 	push xwa
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
-	st_dri3b B, 0xFD, 0x14, 0x01
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x14, 0x01
 	lds32 xwa, 3
 	push xwa
 	ld a, (xsp + 14)
@@ -1586,32 +1586,32 @@ RVari_EnumNotifyE_Item_Draw:
 	pushw wa
 	ld xwa, xhl
 	call DrawStringLeftJustify
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	add wa, 0xC
+	add wa, 0xc
 	ld (xbc), wa
-	st_dri3b B, 0xFD, 0x18, 0x02
-	sub wa, 0xF
+	st_dri3b B, 0xfd, 0x18, 0x02
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_EnumNotifyE_Btn_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0x1C
-	ldw (xwa + 4), 0xB0
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0x1c
+	ldw (xwa + 4), 0xb0
 	jr RVari_EnumNotifyE_Btn_Draw
 
 RVari_EnumNotifyE_Btn_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xB7
-	ldw (xwa + 4), 0x14B
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xb7
+	ldw (xwa + 4), 0x14b
 
 RVari_EnumNotifyE_Btn_Draw:
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	ld xwa, (xsp + 6)
 	lda xde, (xwa + 1)
 	lds32 xwa, 1
@@ -1627,20 +1627,20 @@ RVari_EnumNotifyE_Btn_Draw:
 	jrl RVari_EnumNotify_ReturnZero
 
 RVari_EnumNotifyNE_CheckSelected:
-	ld (xsp + 10), 0xFF
-	ld (xsp + 12), 0xF5
+	ld (xsp + 10), 0xff
+	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	inc 1, wa
 	cp wa, (xbc)
 	jr nz, RVari_EnumNotifyNE_Setup
 	ld xwa, (xiz + 44)
 	ld bc, (xwa)
-	muls bc, 0xA
-	sub bc, 0xA
+	muls bc, 0xa
+	sub bc, 0xa
 	ld xwa, (xsp + 6)
 	ld e, (xwa)
 	extz de
@@ -1652,30 +1652,30 @@ RVari_EnumNotifyNE_CheckSelected:
 	ld (xsp + 12), 0x7
 
 RVari_EnumNotifyNE_Setup:
-	st_dri3b B, 0xFD, 0x18, 0x02
-	st_dri3b C, 0xFD, 0x14, 0x02
+	st_dri3b B, 0xfd, 0x18, 0x02
+	st_dri3b C, 0xfd, 0x14, 0x02
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
-	sub wa, 0xF
+	sub wa, 0xf
 	ld (xde + 2), wa
 	ld wa, (xbc)
 	add wa, 0x10
 	ld (xde + 6), wa
 	cpw (xhl), 0x0
 	jr nz, RVari_EnumNotifyNE_Item_NotFirst
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0x1C
-	ldw (xwa + 4), 0xB0
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0x1c
+	ldw (xwa + 4), 0xb0
 	jr RVari_EnumNotifyNE_Item_Draw
 
 RVari_EnumNotifyNE_Item_NotFirst:
-	st_dri3b W, 0xFD, 0x18, 0x02
-	ldw (xwa), 0xB7
-	ldw (xwa + 4), 0x14B
+	st_dri3b W, 0xfd, 0x18, 0x02
+	ldw (xwa), 0xb7
+	ldw (xwa + 4), 0x14b
 
 RVari_EnumNotifyNE_Item_Draw:
-	st_dri3b C, 0xFD, 0x18, 0x02
-	st_dri3b A, 0xFD, 0x14, 0x02
+	st_dri3b C, 0xfd, 0x18, 0x02
+	st_dri3b A, 0xfd, 0x14, 0x02
 	ld xwa, (xsp + 6)
 	lda xde, (xwa + 1)
 	lds32 xwa, 1
@@ -1702,21 +1702,21 @@ RVari_OK:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xhl + 56)
-	cpw (xwa), 0xF
+	cpw (xwa), 0xf
 	jrl nz, RVari_OK_TypeE_CalcVisible
 	ld_sril XBC, (xsp + 0x0220)
 	ld xwa, xbc
-	cp xwa, 0xC
+	cp xwa, 0xc
 	jrl z, RVari_OK_TypeF_InputC
-	cp xbc, 0xB
+	cp xbc, 0xb
 	jrl z, RVari_OK_TypeF_InputB
-	cp xbc, 0xA
+	cp xbc, 0xa
 	jrl z, RVari_OK_TypeF_InputA
 	cp xbc, 0x9
 	jrl z, RVari_OK_TypeF_Input9
-	cp xbc, 0x8B
+	cp xbc, 0x8b
 	jrl z, RVari_OK_TypeF_Input8B
-	cp xbc, 0x8A
+	cp xbc, 0x8a
 	jr z, RVari_OK_TypeF_Input8A
 	cp xbc, 0x89
 	jrl nz, RVari_OK_PageScroll
@@ -1729,16 +1729,16 @@ RVari_OK:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp WA, 0xE2
+	ldto_werp WA, 0xe2
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	lds32 xhl, 0
@@ -1754,17 +1754,17 @@ RVari_OK_TypeF_Input8A:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp WA, 0xE2
+	ldto_werp WA, 0xe2
 	inc 4, wa
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	lds32 xhl, 0
@@ -1780,17 +1780,17 @@ RVari_OK_TypeF_Input8B:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp WA, 0xE2
+	ldto_werp WA, 0xe2
 	inc 8, wa
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	lds32 xhl, 0
@@ -1809,7 +1809,7 @@ RVari_OK_TypeF_Input9:
 	sla wa, 2
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -1831,7 +1831,7 @@ RVari_OK_TypeF_InputA:
 	inc 1, wa
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -1853,7 +1853,7 @@ RVari_OK_TypeF_InputB:
 	inc 2, wa
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -1875,7 +1875,7 @@ RVari_OK_TypeF_InputC:
 	inc 3, wa
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -1888,7 +1888,7 @@ RVari_OK_TypeE_CalcVisible:
 	ld xbc, (xiz + 52)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	dec 1, wa
 	ld bc, (xbc)
 	sub bc, wa
@@ -1896,7 +1896,7 @@ RVari_OK_TypeE_CalcVisible:
 	ld xbc, (xiz + 52)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	dec 1, wa
 	sub wa, (xbc)
 	ldw bc, 0x9
@@ -1905,25 +1905,25 @@ RVari_OK_TypeE_CalcVisible:
 
 RVari_OK_TypeE_DispatchInput:
 	ld xwa, (xiz + 56)
-	cpw (xwa), 0xE
+	cpw (xwa), 0xe
 	jrl nz, RVari_OK_TypeNE_DispatchInput
 	ld_sril XBC, (xsp + 0x0220)
 	ld xwa, xbc
-	cp xwa, 0xC
+	cp xwa, 0xc
 	jrl z, RVari_OK_TypeE_InputC
-	cp xbc, 0xB
+	cp xbc, 0xb
 	jrl z, RVari_OK_TypeE_InputB
-	cp xbc, 0xA
+	cp xbc, 0xa
 	jrl z, RVari_OK_TypeE_InputA
 	cp xbc, 0x9
 	jrl z, RVari_OK_TypeE_Input9
 	cp xbc, 0x8
 	jrl z, RVari_OK_TypeE_Input8
-	cp xbc, 0x8C
+	cp xbc, 0x8c
 	jrl z, RVari_OK_TypeE_Input8C
-	cp xbc, 0x8B
+	cp xbc, 0x8b
 	jrl z, RVari_OK_TypeE_Input8B
-	cp xbc, 0x8A
+	cp xbc, 0x8a
 	jrl z, RVari_OK_TypeE_Input8A
 	cp xbc, 0x89
 	jr z, RVari_OK_TypeE_Input89
@@ -1944,16 +1944,16 @@ RVari_OK_TypeE_DispatchInput:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp DE, 0xE2
+	ldto_werp DE, 0xe2
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	sla wa, 2
 	sub wa, 0x28
 	add wa, de
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -1979,16 +1979,16 @@ RVari_OK_TypeE_Input89:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp DE, 0xE2
+	ldto_werp DE, 0xe2
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	sla wa, 2
 	sub wa, 0x24
 	add wa, de
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2014,16 +2014,16 @@ RVari_OK_TypeE_Input8A:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp DE, 0xE2
+	ldto_werp DE, 0xe2
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	sla wa, 2
 	sub wa, 0x20
 	add wa, de
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2049,16 +2049,16 @@ RVari_OK_TypeE_Input8B:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp DE, 0xE2
+	ldto_werp DE, 0xe2
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	sla wa, 2
-	sub wa, 0x1C
+	sub wa, 0x1c
 	add wa, de
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2084,16 +2084,16 @@ RVari_OK_TypeE_Input8C:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp DE, 0xE2
+	ldto_werp DE, 0xe2
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	sla wa, 2
 	sub wa, 0x18
 	add wa, de
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2122,7 +2122,7 @@ RVari_OK_TypeE_Input8:
 	extz hl
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	sla wa, 2
 	sub wa, 0x28
 	ld de, wa
@@ -2131,11 +2131,11 @@ RVari_OK_TypeE_Input8:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp WA, 0xE2
+	ldto_werp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2164,7 +2164,7 @@ RVari_OK_TypeE_Input9:
 	extz hl
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	sla wa, 2
 	sub wa, 0x28
 	ld de, wa
@@ -2173,11 +2173,11 @@ RVari_OK_TypeE_Input9:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp WA, 0xE2
+	ldto_werp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2206,7 +2206,7 @@ RVari_OK_TypeE_InputA:
 	extz hl
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	sla wa, 2
 	sub wa, 0x28
 	ld de, wa
@@ -2215,11 +2215,11 @@ RVari_OK_TypeE_InputA:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp WA, 0xE2
+	ldto_werp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2248,7 +2248,7 @@ RVari_OK_TypeE_InputB:
 	extz hl
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	sla wa, 2
 	sub wa, 0x28
 	ld de, wa
@@ -2257,11 +2257,11 @@ RVari_OK_TypeE_InputB:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp WA, 0xE2
+	ldto_werp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2290,7 +2290,7 @@ RVari_OK_TypeE_InputC:
 	extz hl
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	sla wa, 2
 	sub wa, 0x28
 	ld de, wa
@@ -2299,11 +2299,11 @@ RVari_OK_TypeE_InputC:
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0x4
-	ldto_werp WA, 0xE2
+	ldto_werp WA, 0xe2
 	add wa, de
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2316,21 +2316,21 @@ RVari_OK_TypeE_InputC_Done:
 RVari_OK_TypeNE_DispatchInput:
 	ld_sril XBC, (xsp + 0x0220)
 	ld xwa, xbc
-	cp xwa, 0xC
+	cp xwa, 0xc
 	jrl z, RVari_OK_TypeNE_InputC
-	cp xbc, 0xB
+	cp xbc, 0xb
 	jrl z, RVari_OK_TypeNE_InputB
-	cp xbc, 0xA
+	cp xbc, 0xa
 	jrl z, RVari_OK_TypeNE_InputA
 	cp xbc, 0x9
 	jrl z, RVari_OK_TypeNE_Input9
 	cp xbc, 0x8
 	jrl z, RVari_OK_TypeNE_Input8
-	cp xbc, 0x8C
+	cp xbc, 0x8c
 	jrl z, RVari_OK_TypeNE_Input8C
-	cp xbc, 0x8B
+	cp xbc, 0x8b
 	jrl z, RVari_OK_TypeNE_Input8B
-	cp xbc, 0x8A
+	cp xbc, 0x8a
 	jrl z, RVari_OK_TypeNE_Input8A
 	cp xbc, 0x89
 	jr z, RVari_OK_TypeNE_Input89
@@ -2350,11 +2350,11 @@ RVari_OK_TypeNE_DispatchInput:
 	ld xbc, (xbc)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
-	sub wa, 0xA
+	muls wa, 0xa
+	sub wa, 0xa
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2379,11 +2379,11 @@ RVari_OK_TypeNE_Input89:
 	ld xbc, (xbc)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	sub wa, 0x9
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2408,11 +2408,11 @@ RVari_OK_TypeNE_Input8A:
 	ld xbc, (xbc)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	dec 8, wa
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2437,11 +2437,11 @@ RVari_OK_TypeNE_Input8B:
 	ld xbc, (xbc)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	dec 7, wa
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2466,11 +2466,11 @@ RVari_OK_TypeNE_Input8C:
 	ld xbc, (xbc)
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
+	muls wa, 0xa
 	dec 6, wa
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2498,13 +2498,13 @@ RVari_OK_TypeNE_Input8:
 	extz hl
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
-	sub wa, 0xA
+	muls wa, 0xa
+	sub wa, 0xa
 	add wa, hl
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2532,13 +2532,13 @@ RVari_OK_TypeNE_Input9:
 	extz hl
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
-	sub wa, 0xA
+	muls wa, 0xa
+	sub wa, 0xa
 	add wa, hl
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2566,13 +2566,13 @@ RVari_OK_TypeNE_InputA:
 	extz hl
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
-	sub wa, 0xA
+	muls wa, 0xa
+	sub wa, 0xa
 	add wa, hl
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2600,13 +2600,13 @@ RVari_OK_TypeNE_InputB:
 	extz hl
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
-	sub wa, 0xA
+	muls wa, 0xa
+	sub wa, 0xa
 	add wa, hl
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2634,13 +2634,13 @@ RVari_OK_TypeNE_InputC:
 	extz hl
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	muls wa, 0xA
-	sub wa, 0xA
+	muls wa, 0xa
+	sub wa, 0xa
 	add wa, hl
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0228)
@@ -2654,7 +2654,7 @@ RVari_OK_PageScroll:
 	ld xwa, (xiz + 52)
 	ld wa, (xwa)
 	exts xwa
-	divs wa, 0xA
+	divs wa, 0xa
 	inc 1, wa
 	st16_24 0x0340bc, xwa
 	ld_sril XWA, (xsp + 0x0220)
@@ -2667,7 +2667,7 @@ RVari_OK_PageScroll:
 	ld xwa, (xiz + 44)
 	incm 1, (xwa)
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	call SendEvent
 	jr RVari_OK_CheckPageDown
@@ -2678,7 +2678,7 @@ RVari_OK_PageUp_AtMax:
 	ld xwa, (xiz + 44)
 	ldw (xwa), 0x1
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	call SendEvent
 
@@ -2692,7 +2692,7 @@ RVari_OK_CheckPageDown:
 	ld xwa, (xiz + 44)
 	decm 1, (xwa)
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	call SendEvent
 	jr RVari_OK_ForwardDefault
@@ -2704,7 +2704,7 @@ RVari_OK_PageDown_AtMin:
 	ld16_24 xwa, 0x0340bc
 	ld (xbc), wa
 	ld_sril XWA, (xsp + 0x0228)
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	call SendEvent
 
@@ -2723,7 +2723,7 @@ RVari_Default:
 
 RVari_Epilogue:
 	pop xiz
-	st_dri3b L, 0xFD, 0x28, 0x02
+	st_dri3b L, 0xfd, 0x28, 0x02
 	ret
 
 RVari_UpdateDisplayNotify:
@@ -2747,11 +2747,11 @@ RVari_UpdateDisplayNotify:
 	ld wa, (xwa)
 	ld (xiz + 3), a
 	ld xwa, 0x1420000
-	ld xbc, 0x1E20000
+	ld xbc, 0x1e20000
 	ld xde, xiz
 	call MainFuncCall
 	ld xwa, 0x1400003
-	ld xbc, 0x1E00023
+	ld xbc, 0x1e00023
 	ld xde, xiz
 	call MainFuncCall
 	pop xiz

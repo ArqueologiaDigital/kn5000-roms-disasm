@@ -32,7 +32,7 @@
 ; =============================================================================
 
 DemoModeFunc:
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jr nz, DemoModeFunc_Exit
 	cp xde, 0x1
 	jr z, DemoModeFunc_Initialize
@@ -69,9 +69,9 @@ DemoMenuTtlFunc:
 	ret
 
 DemoStyleTtlFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr z, DemoStyle_InputHandler
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jrl nz, DemoStyleTtlFunc_Exit
 	dec 2, xde
 	cp xde, 0x0
@@ -79,10 +79,10 @@ DemoStyleTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DemoStyleTtlFunc_Exit
 	add xde, xde
-	add xde, 0xE201C4
+	add xde, 0xe201c4
 	ld de, (xde)
 	lda_24 xix, 0xf22339
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xf0, 0xe8
 DemoStyle_DispatchTable:
 	.ascii ":;<>"
 	.byte 0x1d, 0xd2, 0x69, 0xf8
@@ -90,7 +90,7 @@ DemoStyle_DispatchTable:
 	.byte 0x80, 0x00
 
 DemoStyle_InputHandler:
-	cp xde, 0xF
+	cp xde, 0xf
 	jr z, DemoStyle_EnterHandler
 	cp xde, 0x87
 	jr z, DemoStyle_DirectionHandler
@@ -114,7 +114,7 @@ DemoStyle_EncoderHandler:
 	jr nz, DemoStyleTtlFunc_Exit
 	cpdi8 3375, 0
 	jr nz, DemoStyleTtlFunc_Exit
-	ldw wa, 0xE2
+	ldw wa, 0xe2
 	jr DemoStyle_PostEventCommon
 
 DemoStyle_DirectionHandler:
@@ -122,7 +122,7 @@ DemoStyle_DirectionHandler:
 	jr nz, DemoStyleTtlFunc_Exit
 	cpdi8 3375, 0
 	jr nz, DemoStyleTtlFunc_Exit
-	ldw wa, 0xE3
+	ldw wa, 0xe3
 
 DemoStyle_PostEventCommon:
 	call UI_PostModeChangeEvent
@@ -144,9 +144,9 @@ DemoStyleTtlFunc_Exit:
 	ret
 
 DemoSoundTtlFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr z, DemoSound_InputHandler
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jrl nz, DemoSoundTtlFunc_Exit
 	dec 2, xde
 	cp xde, 0x0
@@ -154,17 +154,17 @@ DemoSoundTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DemoSoundTtlFunc_Exit
 	add xde, xde
-	add xde, 0xE201D0
+	add xde, 0xe201d0
 	ld de, (xde)
 	lda_24 xix, 0xf22404
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xf0, 0xe8
 DemoSound_DispatchTable:
 	.ascii ":;<>"
 	.byte 0x1d, 0xd2, 0x69, 0xf8
 	.ascii "^\\[Zh|"
 
 DemoSound_InputHandler:
-	cp xde, 0xF
+	cp xde, 0xf
 	jr z, DemoSound_EnterHandler
 	cp xde, 0x87
 	jr z, DemoSound_DirectionHandler
@@ -188,7 +188,7 @@ DemoSound_EncoderHandler:
 	jr nz, DemoSoundTtlFunc_Exit
 	cpdi8 3375, 0
 	jr nz, DemoSoundTtlFunc_Exit
-	ldw wa, 0xE1
+	ldw wa, 0xe1
 	jr DemoSound_PostEventCommon
 
 DemoSound_DirectionHandler:
@@ -196,7 +196,7 @@ DemoSound_DirectionHandler:
 	jr nz, DemoSoundTtlFunc_Exit
 	cpdi8 3375, 0
 	jr nz, DemoSoundTtlFunc_Exit
-	ldw wa, 0xE3
+	ldw wa, 0xe3
 
 DemoSound_PostEventCommon:
 	call UI_PostModeChangeEvent
@@ -218,9 +218,9 @@ DemoSoundTtlFunc_Exit:
 	ret
 
 DemoRhyTtlFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr z, DemoRhythm_InputHandler
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jrl nz, DemoRhyTtlFunc_Exit
 	dec 2, xde
 	cp xde, 0x0
@@ -228,17 +228,17 @@ DemoRhyTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DemoRhyTtlFunc_Exit
 	add xde, xde
-	add xde, 0xE201DC
+	add xde, 0xe201dc
 	ld de, (xde)
 	lda_24 xix, 0xf224ca
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xf0, 0xe8
 DemoRhythm_DispatchTable:
 	.ascii ":;<>"
 	.byte 0x1d, 0xd2, 0x69, 0xf8
 	.ascii "^\\[Zh|"
 
 DemoRhythm_InputHandler:
-	cp xde, 0xF
+	cp xde, 0xf
 	jr z, DemoRhythm_EnterHandler
 	cp xde, 0x84
 	jr z, DemoRhythm_DirectionHandler
@@ -262,7 +262,7 @@ DemoRhythm_EncoderHandler:
 	jr nz, DemoRhyTtlFunc_Exit
 	cpdi8 3375, 0
 	jr nz, DemoRhyTtlFunc_Exit
-	ldw wa, 0xE1
+	ldw wa, 0xe1
 	jr DemoRhythm_PostEventCommon
 
 DemoRhythm_DirectionHandler:
@@ -270,7 +270,7 @@ DemoRhythm_DirectionHandler:
 	jr nz, DemoRhyTtlFunc_Exit
 	cpdi8 3375, 0
 	jr nz, DemoRhyTtlFunc_Exit
-	ldw wa, 0xE2
+	ldw wa, 0xe2
 
 DemoRhythm_PostEventCommon:
 	call UI_PostModeChangeEvent

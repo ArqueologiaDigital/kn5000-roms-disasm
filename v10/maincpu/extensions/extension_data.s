@@ -3522,7 +3522,7 @@ Str_ErrorDialog_Caution:	.asciz "CAUTION!!"	; English text
 
 
 ; ---------------------------------------------------------------------------
-; Widget 10 (0x0A): ERROR Message
+; Widget 10 (0x0a): ERROR Message
 ; "** ERROR in CPU data transmission **"
 ; Screen group 7, index 10 - Main error message
 ; ---------------------------------------------------------------------------
@@ -3554,7 +3554,7 @@ ErrorDialog_CPUTransmissionError:
 
 
 ; ---------------------------------------------------------------------------
-; Widget 11 (0x0B): Recovery Instruction Line 1
+; Widget 11 (0x0b): Recovery Instruction Line 1
 ; "Please try turning off and on again."
 ; Screen group 7, index 11
 ; ---------------------------------------------------------------------------
@@ -3586,7 +3586,7 @@ Str_ErrorDialog_TryTurningOff:	aligned_string "Please try turning off and on aga
 
 
 ; ---------------------------------------------------------------------------
-; Widget 12 (0x0C): Recovery Instruction Line 2
+; Widget 12 (0x0c): Recovery Instruction Line 2
 ; "If this message appears again,"
 ; Screen group 7, index 12
 ; ---------------------------------------------------------------------------
@@ -3618,7 +3618,7 @@ ErrorDialog_RecoveryLine2:
 
 
 ; ---------------------------------------------------------------------------
-; Widget 13 (end marker 0xFFFF): Recovery Instruction Line 3
+; Widget 13 (end marker 0xffff): Recovery Instruction Line 3
 ; "this unit needs repairing."
 ; Screen group 7, final widget
 ; ---------------------------------------------------------------------------
@@ -4028,12 +4028,12 @@ Protocol_values_for_LED_rows:
 	; Used by Set_LEDs (FC71B2) to translate row index to serial protocol value
 	;
 	; Index 0-5: Left Panel (CPL)
-	;   0: 0xC0 = COMPOSER:MEMORY/MENU, SOUND ARR:SET/ON, MUSIC STYLIST, FADE IN/OUT, DISPLAY HOLD
-	;   1: 0xC1 = U.S. TRAD, COUNTRY, LATIN, MARCH&WALTZ, PARTY TIME, SHOWTIME, WORLD, CUSTOM
-	;   2: 0xC2 = STANDARD ROCK, R&ROLL&BLUES, POP&BALLAD, FUNK&FUSION, SOUL, BIG BAND, JAZZ, MSP:MENU
-	;   3: 0xC3 = VARIATION 1-4, MUSIC STYLE ARRANGER, AUTO PLAY CHORD
-	;   4: 0xC4 = FILL IN 1/2, INTRO&ENDING 1/2, SPLIT POINT (L/C/R), TEMPO/PROGRAM
-	;   5: 0xC8 = OTHER PARTS/TR
+	;   0: 0xc0 = COMPOSER:MEMORY/MENU, SOUND ARR:SET/ON, MUSIC STYLIST, FADE IN/OUT, DISPLAY HOLD
+	;   1: 0xc1 = U.S. TRAD, COUNTRY, LATIN, MARCH&WALTZ, PARTY TIME, SHOWTIME, WORLD, CUSTOM
+	;   2: 0xc2 = STANDARD ROCK, R&ROLL&BLUES, POP&BALLAD, FUNK&FUSION, SOUL, BIG BAND, JAZZ, MSP:MENU
+	;   3: 0xc3 = VARIATION 1-4, MUSIC STYLE ARRANGER, AUTO PLAY CHORD
+	;   4: 0xc4 = FILL IN 1/2, INTRO&ENDING 1/2, SPLIT POINT (L/C/R), TEMPO/PROGRAM
+	;   5: 0xc8 = OTHER PARTS/TR
 	;
 	; Index 6-14: Right Panel (CPR)
 	;   6: 0x00 = SUSTAIN, DIGITAL/DSP/REVERB EFFECT, ACOUSTIC ILLUSION, SEQ:PLAY/EASY REC/MENU
@@ -4042,9 +4042,9 @@ Protocol_values_for_LED_rows:
 	;   9: 0x03 = PANEL MEMORY 1-8
 	;  10: 0x04 = PART:LEFT/R2/R1, ENTERTAINER, CONDUCTOR:L/R2/R1, TECHNI CHORD
 	;  11: 0x08 = MENU:SOUND/CONTROL/MIDI/DISK
-	;  12: 0x0A = MEMORY A, MEMORY B
-	;  13: 0x0B = SYNCHRO&BREAK, R1/R2 OCTAVE -/+, BANK VIEW
-	;  14: 0x0C = START/STOP BEAT 1-4
+	;  12: 0x0a = MEMORY A, MEMORY B
+	;  13: 0x0b = SYNCHRO&BREAK, R1/R2 OCTAVE -/+, BANK VIEW
+	;  14: 0x0c = START/STOP BEAT 1-4
 	.byte 0xc0
 	andda8	d, 50114
 	.byte 0xc8

@@ -19,7 +19,7 @@ ParaLoadOpt_AudioFlagCheck:
 	res 0, a
 	stda8 48438, a
 	ld xwa, 0x570006
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
 
@@ -31,7 +31,7 @@ ParaLoadOpt_CaseA:
 	ld a, (xsp + 2)
 	st8_24 0x02475c, a
 	ld xwa, 0x570010
-	ld xbc, 0x1E000A7
+	ld xbc, 0x1e000a7
 	lds32 xde, 0
 	call ApPostEvent
 
@@ -43,7 +43,7 @@ ParaLoadOpt_CaseB:
 	ld a, (xsp)
 	st8_24 0x02475e, a
 	ld xwa, 0x570010
-	ld xbc, 0x1E000A7
+	ld xbc, 0x1e000a7
 	lds32 xde, 0
 	call ApPostEvent
 
@@ -58,13 +58,13 @@ ParaLoadOpt_CaseC:
 	extz wa
 	cps wa, 0
 	jrl mi, MidiFunc_SendEvtReturnAlt
-	cp wa, 0xC
+	cp wa, 0xc
 	jrl gt, MidiFunc_SendEvtReturnAlt
 	add wa, wa
 	lda_24 xix, 0xe7fe3a
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, 0xf76955
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ParaLoadOpt_DispatchTable_A:
 	sti8_24	149344, 0
@@ -142,7 +142,7 @@ ParaLoadOpt_AudioFlagCheck_B:
 	res 1, a
 	stda8 48438, a
 	ld xwa, 0x570011
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
 
@@ -155,8 +155,8 @@ ParaLoadOpt_CaseD:
 	stda8 48400, a
 	ld a, (xsp + 2)
 	st8_24 0x02475c, a
-	ld xwa, 0x57001B
-	ld xbc, 0x1E000A7
+	ld xwa, 0x57001b
+	ld xbc, 0x1e000a7
 	lds32 xde, 0
 	call ApPostEvent
 
@@ -169,8 +169,8 @@ ParaLoadOpt_CaseE:
 	stda8 48404, a
 	ld a, (xsp)
 	st8_24 0x02475e, a
-	ld xwa, 0x57001B
-	ld xbc, 0x1E000A7
+	ld xwa, 0x57001b
+	ld xbc, 0x1e000a7
 	lds32 xde, 0
 	call ApPostEvent
 
@@ -185,13 +185,13 @@ ParaLoadOpt_CaseF:
 	extz wa
 	cps wa, 0
 	jrl mi, MidiFunc_SendEventReturn
-	cp wa, 0xC
+	cp wa, 0xc
 	jrl gt, MidiFunc_SendEventReturn
 	add wa, wa
 	lda_24 xix, 0xe7fe54
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, 0xf76b03
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ParaLoadOpt_DispatchTable_B:
 	sti8_24	149344, 0
@@ -269,17 +269,17 @@ ParaLoadOpt_PostDualEvent:
 	jp	ApPostEvent
 
 TtMdParaLoad:
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, TtMdParaLoad_ReturnZero
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, TtMdParaLoad_ReturnZero
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, TtMdParaLoad_ReturnZero
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr nz, TtMdParaLoad_ReturnZero
 	or xde, xde
 	jr nz, TtMdParaLoad_ReturnZero
-	ld xwa, 0x5C0001
+	ld xwa, 0x5c0001
 	call GetViewInstance
 	ld xwa, (xhl + 42)
 	ldw (xwa), 0x2
@@ -297,27 +297,27 @@ AcParaLoadOptGridBoxProc:
 	ld (xsp + 16), xbc
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
-	cp xbc, 0x1E0008D
+	cp xbc, 0x1e0008d
 	jrl z, ParaLoadOpt_GridCheck2
 	ld xwa, (xsp + 16)
-	cp xwa, 0x1E0008B
+	cp xwa, 0x1e0008b
 	jrl z, ParaLoadOpt_GridCheck1
-	cp xwa, 0x1E0008A
+	cp xwa, 0x1e0008a
 	jrl z, ParaLoadOpt_GridCheck0
-	cp xwa, 0x1C00002
+	cp xwa, 0x1c00002
 	jrl z, ParaLoadOpt_GridReturn
-	cp xwa, 0x1C00001
+	cp xwa, 0x1c00001
 	jr z, ParaLoadOpt_GridHandler
-	sub xbc, 0x1C00017
+	sub xbc, 0x1c00017
 	cp xbc, 0x0
 	jrl lt, ParaLoadOpt_GridCheck3
 	cp xbc, 0x6
 	jrl gt, ParaLoadOpt_GridCheck3
 	add xbc, xbc
-	add xbc, 0xE7FE92
+	add xbc, 0xe7fe92
 	ld bc, (xbc)
 	lda_24 xix, 0xf76cc8
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; ParaLoadOpt grid handler
 ParaLoadOpt_GridHandler:
@@ -329,7 +329,7 @@ ParaLoadOpt_GridHandler:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -337,23 +337,23 @@ ParaLoadOpt_GridHandler:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xE2, 0
+	ldi_werp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xE2, 0
+	ldi_werp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	call SetDialDown
 	lds wa, 1
 	jrl ParaLoadOpt_SetDialAndReturn
@@ -371,21 +371,21 @@ ParaLoadOpt_GridReturn:
 	call PanelDisplay_DispatchByMode
 	cps hl, 0
 	jrl z, AccFunc_ReturnZeroJmp
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call SendEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
 	stdi8 32578, 72
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00016
-	ld xde, 0x1A000EE
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00016
+	ld xde, 0x1a000ee
 	call PostEvent
 	ld xwa, 0x1430003
-	ld xbc, 0x1E30006
+	ld xbc, 0x1e30006
 	ld xde, (xsp + 12)
 	call MainFuncCall
 	jrl AccFunc_ReturnZeroJmp
@@ -394,24 +394,24 @@ ParaLoadOpt_GridReturn:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1E00050
+	ld xbc, 0x1e00050
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, ParaLoadOpt_GridDelegateProc
 	ld xwa, xiz
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld wa, hl
 	add wa, wa
 	lda_24 xbc, 0xe7fe6e
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
-	add xhl, 0xFFFF0000
+	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	ld xde, xhl
 	call SendEvent
 	ld xwa, xiz
@@ -422,7 +422,7 @@ ParaLoadOpt_GridReturn:
 
 ParaLoadOpt_GridDelegateProc:
 	ld xwa, xiz
-	ld xbc, 0x1E00091
+	ld xbc, 0x1e00091
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -438,11 +438,11 @@ ParaLoadOpt_GridDelegateProc:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
@@ -452,25 +452,25 @@ ParaLoadOpt_GridDelegateProc:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1E00050
+	ld xbc, 0x1e00050
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, ParaLoadOpt_GridDelegateProc_B
 	ld xwa, xiz
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld wa, hl
 	add wa, wa
 	lda_24 xbc, 0xe7fe80
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
 	extz xde
-	add xde, 0xFFFF0000
+	add xde, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -480,7 +480,7 @@ ParaLoadOpt_GridDelegateProc:
 
 ParaLoadOpt_GridDelegateProc_B:
 	ld xwa, xiz
-	ld xbc, 0x1E00091
+	ld xbc, 0x1e00091
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -496,11 +496,11 @@ ParaLoadOpt_GridDelegateProc_B:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
@@ -512,7 +512,7 @@ ParaLoadOpt_SetDialAndReturn:
 ; ParaLoadOpt grid check case 0
 ParaLoadOpt_GridCheck0:
 	ld xwa, xiz
-	ld xiz, 0x3E
+	ld xiz, 0x3e
 	jr ParaLoadOpt_GetViewAndCopy
 
 ; ParaLoadOpt grid check case 1
@@ -570,11 +570,11 @@ ParaLoadOptGridCheck:
 	push xiz
 	ld xhl, xde
 	ld xde, xbc
-	ld xiy, 0xE7FF02
+	ld xiy, 0xe7ff02
 	lda xix, (xsp + 28)
 	ldw bc, 0x8
 	ldirw
-	ld xiy, 0xE7ED44
+	ld xiy, 0xe7ed44
 	lda xix, (xsp + 20)
 	lds bc, 4
 	ldirw
@@ -589,19 +589,19 @@ ParaLoadOptGridCheck:
 	lda xwa, (xiy + 2)
 	lda xix, (xiy + 4)
 	ld (xsp + 12), xix
-	cp xde, 0x1E0008D
+	cp xde, 0x1e0008d
 	jrl z, VoiceUI_MiscHandler
 	ld xde, (xsp + 16)
-	sub xde, 0x1C00017
+	sub xde, 0x1c00017
 	cp xde, 0x0
 	jrl lt, ParaLoadOpt_ReturnZero
 	cp xde, 0x6
 	jrl gt, ParaLoadOpt_ReturnZero
 	add xde, xde
-	add xde, 0xE7FF12
+	add xde, 0xe7ff12
 	ld de, (xde)
 	lda_24 xix, 0xf76fe2
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xf0, 0xe8
 ; ParaLoadOptGridCheck dispatch
 ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
@@ -829,7 +829,7 @@ ParaLoadOpt_GridDispatch:
 VoiceUI_MiscHandler:
 	ld xde, xhl
 	srl xde, 0
-	ldi_werp 0xEA, 0
+	ldi_werp 0xea, 0
 	ld (xiy), de
 	ld xde, xwa
 	ld (xwa), hl
@@ -851,7 +851,7 @@ VoiceUI_MiscHandler:
 	ld a, (xiz)
 	extz wa
 	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xsp + 20)
 	push xwa

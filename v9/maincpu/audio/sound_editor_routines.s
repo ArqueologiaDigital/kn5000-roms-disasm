@@ -42,7 +42,7 @@
 ; =============================================================================
 
 SeMenuModeFunc:
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	ret nz
 	cp xde, 0x1
 	jr z, SeMenuModeFunc_Handler
@@ -57,7 +57,7 @@ SeMenuModeFunc_Handler:
 SeMenuTitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DAB6
+	ld xiy, 0xe0dab6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -78,7 +78,7 @@ SeMenuTitleFunc_DisplayData:
 SeEasyTitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DAC6
+	ld xiy, 0xe0dac6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -99,7 +99,7 @@ SeEasyTitleFunc_DisplayData:
 SeTonTon1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DAD6
+	ld xiy, 0xe0dad6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -120,7 +120,7 @@ SeTonTon1TitleFunc_DisplayData:
 SeTonTon2TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DAE6
+	ld xiy, 0xe0dae6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -141,7 +141,7 @@ SeTonTon2TitleFunc_DisplayData:
 SeTonRan1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DAF6
+	ld xiy, 0xe0daf6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -162,7 +162,7 @@ SeTonRan1TitleFunc_DisplayData:
 SeTonRan2TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DB06
+	ld xiy, 0xe0db06
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -183,7 +183,7 @@ SeTonRan2TitleFunc_DisplayData:
 SeTonHyb1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DB16
+	ld xiy, 0xe0db16
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -204,7 +204,7 @@ SeTonHyb1TitleFunc_DisplayData:
 SePitPit1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DB26
+	ld xiy, 0xe0db26
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -225,7 +225,7 @@ SePitPit1TitleFunc_DisplayData:
 SePitEnv1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DB36
+	ld xiy, 0xe0db36
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -246,7 +246,7 @@ SePitEnv1TitleFunc_DisplayData:
 SePitEnv2TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DB46
+	ld xiy, 0xe0db46
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -267,7 +267,7 @@ SePitEnv2TitleFunc_DisplayData:
 SePitLfo1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DB56
+	ld xiy, 0xe0db56
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -288,7 +288,7 @@ SePitLfo1TitleFunc_DisplayData:
 SeAmpAmp1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DB66
+	ld xiy, 0xe0db66
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -309,7 +309,7 @@ SeAmpAmp1TitleFunc_DisplayData:
 SeAmpAmp2TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DB76
+	ld xiy, 0xe0db76
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -330,7 +330,7 @@ SeAmpAmp2TitleFunc_DisplayData:
 SeAmpEnv1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DB86
+	ld xiy, 0xe0db86
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -351,7 +351,7 @@ SeAmpEnv1TitleFunc_DisplayData:
 SeAmpEnv2TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DB96
+	ld xiy, 0xe0db96
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -372,7 +372,7 @@ SeAmpEnv2TitleFunc_DisplayData:
 SeAmpLfo1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DBA6
+	ld xiy, 0xe0dba6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -393,7 +393,7 @@ SeAmpLfo1TitleFunc_DisplayData:
 SeFilLpq1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DBB6
+	ld xiy, 0xe0dbb6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -414,7 +414,7 @@ SeFilLpq1TitleFunc_DisplayData:
 SeFilHpq1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DBC6
+	ld xiy, 0xe0dbc6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -435,7 +435,7 @@ SeFilHpq1TitleFunc_DisplayData:
 SeFilL241TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DBD6
+	ld xiy, 0xe0dbd6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -456,7 +456,7 @@ SeFilL241TitleFunc_DisplayData:
 SeFilH241TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DBE6
+	ld xiy, 0xe0dbe6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -477,7 +477,7 @@ SeFilH241TitleFunc_DisplayData:
 SeFilBpf1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DBF6
+	ld xiy, 0xe0dbf6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -498,7 +498,7 @@ SeFilBpf1TitleFunc_DisplayData:
 SeFilBcf1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DC06
+	ld xiy, 0xe0dc06
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -519,7 +519,7 @@ SeFilBcf1TitleFunc_DisplayData:
 SeFilFil2TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DC16
+	ld xiy, 0xe0dc16
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -540,7 +540,7 @@ SeFilFil2TitleFunc_DisplayData:
 SeFilEnv1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DC26
+	ld xiy, 0xe0dc26
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -561,7 +561,7 @@ SeFilEnv1TitleFunc_DisplayData:
 SeFilEnv2TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DC36
+	ld xiy, 0xe0dc36
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -582,7 +582,7 @@ SeFilEnv2TitleFunc_DisplayData:
 SeFilLfo1TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DC46
+	ld xiy, 0xe0dc46
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -603,7 +603,7 @@ SeFilLfo1TitleFunc_DisplayData:
 SeDigEffTitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DC56
+	ld xiy, 0xe0dc56
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -624,7 +624,7 @@ SeDigEffTitleFunc_DisplayData:
 SeCtr2TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DC66
+	ld xiy, 0xe0dc66
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -645,7 +645,7 @@ SeCtr2TitleFunc_DisplayData:
 SeCtr3TitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DC76
+	ld xiy, 0xe0dc76
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -666,7 +666,7 @@ SeCtr3TitleFunc_DisplayData:
 SeCopyTitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DC86
+	ld xiy, 0xe0dc86
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -687,7 +687,7 @@ SeCopyTitleFunc_DisplayData:
 SeWrtMemTitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DC96
+	ld xiy, 0xe0dc96
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -708,7 +708,7 @@ SeWrtMemTitleFunc_DisplayData:
 SeWrtSndTitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xE0DCA6
+	ld xiy, 0xe0dca6
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw

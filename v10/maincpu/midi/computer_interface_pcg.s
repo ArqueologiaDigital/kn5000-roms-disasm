@@ -12,13 +12,13 @@
 ; =============================================================================
 
 TtMdPcgOut:
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, TtMdPcgOut_Exit
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, TtMdPcgOut_Exit
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, TtMdPcgOut_Exit
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr nz, TtMdPcgOut_Exit
 	or xde, xde
 	jr nz, TtMdPcgOut_Exit
@@ -40,25 +40,25 @@ AcPcgOutGridBoxProc:
 	ld (xsp + 16), xbc
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
-	cp xbc, 0x1E0008D
+	cp xbc, 0x1e0008d
 	jrl z, PcgOutGrid_DispatchDelegate
 	ld xwa, (xsp + 16)
-	cp xwa, 0x1E0008B
+	cp xwa, 0x1e0008b
 	jrl z, PcgOutGrid_CopyStrBank1
-	cp xwa, 0x1E0008A
+	cp xwa, 0x1e0008a
 	jrl z, PcgOutGrid_CopyStrBank0
-	cp xwa, 0x1C00001
+	cp xwa, 0x1c00001
 	jr z, PcgOutGridBoxEventDispatch
-	sub xbc, 0x1C00017
+	sub xbc, 0x1c00017
 	cp xbc, 0x0
 	jrl lt, PcgOutGrid_DefaultHandler
 	cp xbc, 0x6
 	jrl gt, PcgOutGrid_DefaultHandler
 	add xbc, xbc
-	add xbc, 0xE7FF20
+	add xbc, 0xe7ff20
 	ld bc, (xbc)
 	lda_24 xix, 0xf7743b
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 
 PcgOutGridBoxEventDispatch:
 	ld xwa, xiz
@@ -69,7 +69,7 @@ PcgOutGridBoxEventDispatch:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -77,23 +77,23 @@ PcgOutGridBoxEventDispatch:
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xE2, 0
+	ldi_werp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xE2, 0
+	ldi_werp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	call SetDialDown
 	lds wa, 1
 	jrl PcgOutGridDialConfirm
@@ -102,20 +102,20 @@ PcgOutGridBoxEventDispatch:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1E00050
+	ld xbc, 0x1e00050
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, PcgOutGrid_CheckAltPrev
 	ld xwa, xiz
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	dec 1, hl
 	extz xhl
-	add xhl, 0xFFFF0000
+	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	ld xde, xhl
 	call SendEvent
 	ld xwa, xiz
@@ -126,7 +126,7 @@ PcgOutGridBoxEventDispatch:
 
 PcgOutGrid_CheckAltPrev:
 	ld xwa, xiz
-	ld xbc, 0x1E00091
+	ld xbc, 0x1e00091
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -142,11 +142,11 @@ PcgOutGrid_CheckAltPrev:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
@@ -156,22 +156,22 @@ PcgOutGrid_CheckAltPrev:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1E00050
+	ld xbc, 0x1e00050
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, PcgOutGrid_CheckAltNext
 	ld xwa, xiz
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	cps hl, 3
 	jrl ge, PcgOutGrid_ReturnZero
 	inc 1, hl
 	extz xhl
-	add xhl, 0xFFFF0000
+	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	ld xde, xhl
 	call SendEvent
 	ld xwa, xiz
@@ -182,7 +182,7 @@ PcgOutGrid_CheckAltPrev:
 
 PcgOutGrid_CheckAltNext:
 	ld xwa, xiz
-	ld xbc, 0x1E00091
+	ld xbc, 0x1e00091
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -198,11 +198,11 @@ PcgOutGrid_CheckAltNext:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
@@ -213,7 +213,7 @@ PcgOutGridDialConfirm:
 
 PcgOutGrid_CopyStrBank0:
 	ld xwa, xiz
-	ld xiz, 0x3E
+	ld xiz, 0x3e
 	jr PcgOutGrid_CopyStrCommon
 
 PcgOutGrid_CopyStrBank1:
@@ -267,11 +267,11 @@ PcgOutGridCheck:
 	push xiz
 	ld xiz, xde
 	ld (xsp + 44), xbc
-	ld xiy, 0xE7FF44
+	ld xiy, 0xe7ff44
 	lda xix, (xsp + 12)
 	lds bc, 5
 	ldirw
-	ld xiy, 0xE7ED44
+	ld xiy, 0xe7ed44
 	lda xix, (xsp + 4)
 	lds bc, 4
 	ldirw
@@ -281,19 +281,19 @@ PcgOutGridCheck:
 	lda xbc, (xhl + 2)
 	lda xde, (xhl + 4)
 	ld xwa, (xsp + 44)
-	cp xwa, 0x1E0008D
+	cp xwa, 0x1e0008d
 	jrl z, PcgOutCheckGridDataStructure
 	ld xwa, xix
-	sub xwa, 0x1C00017
+	sub xwa, 0x1c00017
 	cp xwa, 0x0
 	jrl lt, PcgOutGridCheckComplete
 	cp xwa, 0x6
 	jrl gt, PcgOutGridCheckComplete
 	add xwa, xwa
-	add xwa, 0xE7FFEE
+	add xwa, 0xe7ffee
 	ld wa, (xwa)
 	lda_24 xix, 0xf776bd
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 PcgOutGridCheckJumpTable:
 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f
@@ -449,7 +449,7 @@ PcgOutGridCheckJumpTable:
 PcgOutCheckGridDataStructure:
 	ld xwa, xiz
 	srl xwa, 0
-	ldi_werp 0xE2, 0
+	ldi_werp 0xe2, 0
 	ld (xhl), wa
 	ld xwa, xbc
 	ld ix, iz
@@ -471,15 +471,15 @@ PcgOutCheckGridDataStructure:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xE7
-	pushw 0xFF9E
+	pushw 0xe7
+	pushw 0xff9e
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl PcgOutCheck_SetFinalProp
 
 PcgOutCheck_SendPreset1:
@@ -487,33 +487,33 @@ PcgOutCheck_SendPreset1:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xE7
-	pushw 0xFFA4
+	pushw 0xe7
+	pushw 0xffa4
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl PcgOutCheck_SetFinalProp
 
 PcgOutCheck_SendPreset2:
 	cpi8_24 0x024770, 0xff
 	jr nz, PcgOutCheck_SendPreset2Named
-	pushw 0xE7
-	pushw 0xFFAA
+	pushw 0xe7
+	pushw 0xffaa
 	push xbc
 	call Strcpy
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	call SendEvent
 	ldw (xsp + 6), 0x4
-	pushw 0xE7
-	pushw 0xFFB0
+	pushw 0xe7
+	pushw 0xffb0
 	lda xwa, (xsp + 16)
 	push xwa
 	call Strcpy
@@ -521,22 +521,22 @@ PcgOutCheck_SendPreset2:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl PcgOutCheck_SetFinalProp
 
 PcgOutCheck_SendPreset2Named:
 	ld8_24 a, 0x02476e
 	exts wa
 	pushw wa
-	pushw 0xE7
-	pushw 0xFFB8
+	pushw 0xe7
+	pushw 0xffb8
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	call SendEvent
 	ldw (xsp + 6), 0x4
 	ld8_24 c, 0x024770
@@ -546,8 +546,8 @@ PcgOutCheck_SendPreset2Named:
 	sll wa, 7
 	add wa, bc
 	pushw wa
-	pushw 0xE7
-	pushw 0xFFBE
+	pushw 0xe7
+	pushw 0xffbe
 	lda xwa, (xsp + 18)
 	push xwa
 	call Audio_SendCommand
@@ -555,26 +555,26 @@ PcgOutCheck_SendPreset2Named:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl PcgOutCheck_SetFinalProp
 
 PcgOutCheck_SendPreset3:
 	ldw (xwa), 0x2
 	cpi8_24 0x024770, 0xff
 	jr nz, PcgOutCheck_SendPreset3Named
-	pushw 0xE7
-	pushw 0xFFC6
+	pushw 0xe7
+	pushw 0xffc6
 	push xbc
 	call Strcpy
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	call SendEvent
 	ldw (xsp + 6), 0x3
-	pushw 0xE7
-	pushw 0xFFCC
+	pushw 0xe7
+	pushw 0xffcc
 	lda xwa, (xsp + 16)
 	push xwa
 	call Strcpy
@@ -582,11 +582,11 @@ PcgOutCheck_SendPreset3:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	call SendEvent
 	ldw (xsp + 6), 0x4
-	pushw 0xE7
-	pushw 0xFFD2
+	pushw 0xe7
+	pushw 0xffd2
 	lda xwa, (xsp + 16)
 	push xwa
 	call Strcpy
@@ -594,29 +594,29 @@ PcgOutCheck_SendPreset3:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl PcgOutCheck_SetFinalProp
 
 PcgOutCheck_SendPreset3Named:
 	ld8_24 a, 0x02476e
 	exts wa
 	pushw wa
-	pushw 0xE7
-	pushw 0xFFDA
+	pushw 0xe7
+	pushw 0xffda
 	push xbc
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	call SendEvent
 	ldw (xsp + 6), 0x3
 	ld8_24 a, 0x024770
 	exts wa
 	pushw wa
-	pushw 0xE7
-	pushw 0xFFE0
+	pushw 0xe7
+	pushw 0xffe0
 	lda xwa, (xsp + 18)
 	push xwa
 	call Audio_SendCommand
@@ -624,7 +624,7 @@ PcgOutCheck_SendPreset3Named:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	call SendEvent
 	ldw (xsp + 6), 0x4
 	ld8_24 c, 0x024770
@@ -634,8 +634,8 @@ PcgOutCheck_SendPreset3Named:
 	sll wa, 7
 	add wa, bc
 	pushw wa
-	pushw 0xE7
-	pushw 0xFFE6
+	pushw 0xe7
+	pushw 0xffe6
 	lda xwa, (xsp + 18)
 	push xwa
 	call Audio_SendCommand
@@ -643,7 +643,7 @@ PcgOutCheck_SendPreset3Named:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 
 PcgOutCheck_SetFinalProp:
 	call SendEvent
@@ -655,7 +655,7 @@ PcgOutGridCheckComplete:
 	ret
 
 PcgOutSendFunc:
-	cp xbc, 0x1C00008
+	cp xbc, 0x1c00008
 	jr nz, PcgOutSendFunc_Exit
 	lda_24 xde, 0x024752
 	ld8_24 a, 0x02476a
@@ -664,9 +664,9 @@ PcgOutSendFunc:
 	ld (xde + 1), a
 	lda xbc, (xde + 2)
 	ld8_24 l, 0x024770
-	cp l, 0xFF
+	cp l, 0xff
 	jr nz, PcgOutSend_StoreBankIndex
-	ldw (xbc), 0xFFFF
+	ldw (xbc), 0xffff
 	jr PcgOutSend_TransmitMidi
 
 PcgOutSend_StoreBankIndex:
@@ -679,7 +679,7 @@ PcgOutSend_StoreBankIndex:
 
 PcgOutSend_TransmitMidi:
 	ld xwa, 0x1430000
-	ld xbc, 0x1E30000
+	ld xbc, 0x1e30000
 	call MainFuncCall
 
 PcgOutSendFunc_Exit:
@@ -687,7 +687,7 @@ PcgOutSendFunc_Exit:
 	ret
 
 MainPcgOutSend:
-	cp xbc, 0x1E30000
+	cp xbc, 0x1e30000
 	jr nz, MainPcgOutSend_Exit
 	ld a, (xde)
 	extz wa

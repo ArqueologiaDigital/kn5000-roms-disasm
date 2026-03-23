@@ -4,8 +4,8 @@
 ; This file contains VGA register read/write routines that are byte-identical
 ; between the Main CPU ROM (maincpu) and Table Data ROM (table_data).
 ;
-; In maincpu: Located at 0xEF5141-0xEF515F (30 bytes)
-; In table_data: Located at 0x9FCDFC-0x9FCE1D (34 bytes)
+; In maincpu: Located at 0xef5141-0xef515f (30 bytes)
+; In table_data: Located at 0x9fcdfc-0x9fce1d (34 bytes)
 ;
 ; Requirements:
 ;   - Must define VGA_IO_BASE before including this file
@@ -16,7 +16,7 @@
 ; -----------------------------------------------------------------------------
 ; Write_VGA_Register - Write byte to VGA I/O port
 ;
-; Entry: WA = port offset (e.g., 0x3C4 for sequencer address)
+; Entry: WA = port offset (e.g., 0x3c4 for sequencer address)
 ;        C = value to write
 ; Exit:  None
 ; Notes: Includes 256-iteration delay loop before write for bus timing

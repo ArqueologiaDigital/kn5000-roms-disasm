@@ -10,30 +10,30 @@
 	call SendEvent
 	ld xde, (xsp + 30)
 	set 7, de
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00009
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00009
 	call SendEvent
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
-	ld xbc, 0x1C00034
+	ld xbc, 0x1c00034
 	call SendEvent
 
-; Builds an SSF presentation workspace and sends event 0x1C0001C via direct
+; Builds an SSF presentation workspace and sends event 0x1c0001c via direct
 ; SendEvent (FA9660).  This is the CRITICAL path that allows
-; AcPresentationControlProc to pass its 0xB80A type-tag check and start
+; AcPresentationControlProc to pass its 0xb80a type-tag check and start
 ; SSF playback.
 ;
 ; The workspace (at XSP+14) is populated byte-by-byte from XSP+30/31:
-;   workspace[0] = byte at (XSP+31)   -- must be 0x0A for tag 0x0000B80A
-;   workspace[1] = byte at (XSP+30)   -- must be 0xB8
+;   workspace[0] = byte at (XSP+31)   -- must be 0x0a for tag 0x0000b80a
+;   workspace[1] = byte at (XSP+30)   -- must be 0xb8
 ;   workspace[2..3] = shifted/zero bytes
 ;
-; Reached via event 0x1C00038 (direct) or event 0x1C00030 (via
+; Reached via event 0x1c00038 (direct) or event 0x1c00030 (via
 ; GroupBoxProc_Ev1C00030 fall-through).
 GroupBoxProc_StartSSFPresentation:
 	ld xwa, (xsp + 38)
 	call SetRootObject
-	ld xwa, 0x1C0001C
+	ld xwa, 0x1c0001c
 	call SetRootEvent
 	lda xwa, (xsp + 18)
 	call SetRootParam
@@ -43,21 +43,21 @@ GroupBoxProc_StartSSFPresentation:
 	lda xwa, (xsp + 14)
 	ld c, (xbc)
 	ld (xwa + 3), c
-	ld_spib C, 0xE8
+	ld_spib C, 0xe8
 	ld (xwa + 2), c
-	ld_spib C, 0xE8
+	ld_spib C, 0xe8
 	ld (xwa + 1), c
 	ld c, (xde)
 	ld (xwa), c
 	lda xbc, (xsp + 10)
 	lda xde, (xsp + 8)
 	call SndParam_ResolveWidget
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jrl z, GroupBox_ReturnZero
 
 ; Loop body: iterates over SSF items via FCD437, builds workspace fields,
-; and sends event 0x1C0001C for each item via direct SendEvent.
-; Loops until FCD4FF reports no more items (HL == 0xFFFF).
+; and sends event 0x1c0001c for each item via direct SendEvent.
+; Loops until FCD4FF reports no more items (HL == 0xffff).
 GroupBoxProc_SSFItemLoop:
 	ld xwa, (xsp + 10)
 	ld (xsp + 18), xwa
@@ -68,24 +68,24 @@ GroupBoxProc_SSFItemLoop:
 	ldw (xde + 6), 0x0
 	lds32 xwa, 0
 	ld (xde + 8), xwa
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0001C
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0001c
 	call SendEvent
 	lda xwa, (xsp + 14)
 	lda xbc, (xsp + 10)
 	lda xde, (xsp + 8)
 	call SndParam_ResolveWidget
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr nz, GroupBoxProc_SSFItemLoop
 	jrl GroupBox_ReturnZero
 
-	; --- Event 0x1E0006E: Cancel/Back handler ---
-	; Iterates the 17-entry widget structure array at 0x0274E8
+	; --- Event 0x1e0006e: Cancel/Back handler ---
+	; Iterates the 17-entry widget structure array at 0x0274e8
 	; (28-byte entries: stride = (ix*8 - ix)*4 = ix*28).
-	; If event param (XWA) is nonzero: activates entries and sends 0x1C00026.
-	; If event param is zero: deactivates entries and sends 0x1C00026.
+	; If event param (XWA) is nonzero: activates entries and sends 0x1c00026.
+	; If event param is zero: deactivates entries and sends 0x1c00026.
 	; Each entry has: byte[0]=active, byte[1]=enabled, dword[2]=workspace,
-	; dword[6]=event(0x1C00007), dword[10]=focus_id, offset[14]=secondary.
+	; dword[6]=event(0x1c00007), dword[10]=focus_id, offset[14]=secondary.
 GroupBox_CancelBack:
 	lds iz, 0
 
@@ -106,14 +106,14 @@ GroupBox_CancelBack_Loop:
 	ld xhl, xbc
 	ld xwa, (xsp + 38)
 	ld (xbc + 2), xwa
-	ld xwa, 0x1C00007
+	ld xwa, 0x1c00007
 	ld (xbc + 6), xwa
 	ld (xbc + 10), xix
 	lda xwa, (xde + 14)
 	add xiy, xwa
 	ld xwa, (xsp + 38)
 	ld (xiy + 2), xwa
-	ld xwa, 0x1C00007
+	ld xwa, 0x1c00007
 	ld (xiy + 6), xwa
 	ld wa, iz
 	add wa, 0x80
@@ -125,7 +125,7 @@ GroupBox_CancelBack_Loop:
 	cp (xwa), 0x0
 	jr nz, GroupBox_CancelBack_ActivateSecondary
 	ld (xwa), 0x1
-	ld xwa, 0x1C00026
+	ld xwa, 0x1c00026
 	push xwa
 	ld xwa, (xsp + 8)
 	push xwa
@@ -142,7 +142,7 @@ GroupBox_CancelBack_ActivateSecondary:
 	sub xwa, xbc
 	sll xwa, 2
 	lda xbc, (xwa + 14)
-	ld xwa, 0x274E8
+	ld xwa, 0x274e8
 	add xwa, xbc
 	cp (xwa), 0x0
 	jrl z, GroupBox_CancelBack_LoopNext
@@ -150,7 +150,7 @@ GroupBox_CancelBack_ActivateSecondary:
 	cp (xwa), 0x0
 	jrl nz, GroupBox_CancelBack_LoopNext
 	ld (xwa), 0x1
-	ld xwa, 0x1C00026
+	ld xwa, 0x1c00026
 	push xwa
 	ld wa, iz
 	add wa, 0x80
@@ -170,7 +170,7 @@ GroupBox_CancelBack_Deactivate:
 	cp (xwa), 0x0
 	jr z, GroupBox_CancelBack_DeactivateSecondary
 	ld (xwa), 0x0
-	ld xwa, 0x1C00026
+	ld xwa, 0x1c00026
 	push xwa
 	push xix
 	ld xwa, 0x10
@@ -186,7 +186,7 @@ GroupBox_CancelBack_DeactivateSecondary:
 	sub xwa, xbc
 	sll xwa, 2
 	lda xbc, (xwa + 14)
-	ld xwa, 0x274E8
+	ld xwa, 0x274e8
 	add xwa, xbc
 	cp (xwa), 0x0
 	jr z, GroupBox_CancelBack_LoopNext
@@ -194,7 +194,7 @@ GroupBox_CancelBack_DeactivateSecondary:
 	cp (xwa), 0x0
 	jr z, GroupBox_CancelBack_LoopNext
 	ld (xwa), 0x0
-	ld xwa, 0x1C00026
+	ld xwa, 0x1c00026
 	push xwa
 	ld wa, iz
 	add wa, 0x80
@@ -211,49 +211,49 @@ GroupBox_CancelBack_LoopNext:
 	jrl ule, GroupBox_CancelBack_Loop
 	jrl GroupBox_ReturnZero
 
-	; --- Event 0x1E0006F: Dial Enable ---
-	; Stores WA (from XBC param) into dial enable register at 0x03EF50.
+	; --- Event 0x1e0006f: Dial Enable ---
+	; Stores WA (from XBC param) into dial enable register at 0x03ef50.
 GroupBox_DialEnable:
 	ld wa, bc
 	calr SetDialEnable
 	jrl GroupBox_ReturnZero
 
-	; --- Event 0x1E00070: Dial Down ---
-	; Registers down-direction parameters (workspace, event 0x1C00007, param)
-	; into dial state at 0x03EF56/5E/66 and updates dial focus.
+	; --- Event 0x1e00070: Dial Down ---
+	; Registers down-direction parameters (workspace, event 0x1c00007, param)
+	; into dial state at 0x03ef56/5E/66 and updates dial focus.
 GroupBox_DialDown:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
-	ld xbc, 0x1C00007
+	ld xbc, 0x1c00007
 	calr SetDialDown
 	jrl GroupBox_ReturnZero
 
-	; --- Event 0x1E00071: Dial Up ---
-	; Registers up-direction parameters (workspace, event 0x1C00007, param)
-	; into dial state at 0x03EF52/5A/62 and updates dial focus.
+	; --- Event 0x1e00071: Dial Up ---
+	; Registers up-direction parameters (workspace, event 0x1c00007, param)
+	; into dial state at 0x03ef52/5A/62 and updates dial focus.
 GroupBox_DialUp:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
-	ld xbc, 0x1C00007
+	ld xbc, 0x1c00007
 	calr SetDialUp
 	jrl GroupBox_ReturnZero
 
-	; --- Event 0x1E00088: Get Dial Focus ---
-	; Returns current dial focus value from 0x03EF6A in XHL.
+	; --- Event 0x1e00088: Get Dial Focus ---
+	; Returns current dial focus value from 0x03ef6a in XHL.
 GroupBox_GetDialFocus:
 	calr GetDialFocus
 	jrl GroupBox_Epilogue
 
-	; --- Event 0x1E00087: Set Dial Focus ---
-	; Stores dial focus (XWA) at 0x03EF6A and broadcasts 0x1C0002C.
+	; --- Event 0x1e00087: Set Dial Focus ---
+	; Stores dial focus (XWA) at 0x03ef6a and broadcasts 0x1c0002c.
 GroupBox_SetDialFocus:
 	calr SetDialFocus
 	jrl GroupBox_ReturnZero
 
-	; --- Events 0x1E00079/0x1E00078: UP/DOWN Navigation ---
-	; Calls 0xFA5867 (lookup), then dispatches 0x1E000B4 via FA9660.
-	; Falls through to loop that broadcasts 0x1C00009 (close/hide) to
-	; all active entries in the 0x0274E8 structure array.
+	; --- Events 0x1e00079/0x1e00078: UP/DOWN Navigation ---
+	; Calls 0xfa5867 (lookup), then dispatches 0x1e000b4 via FA9660.
+	; Falls through to loop that broadcasts 0x1c00009 (close/hide) to
+	; all active entries in the 0x0274e8 structure array.
 GroupBox_NavUpDown:
 	call GetTitleNow
 	ld xwa, xhl
@@ -266,11 +266,11 @@ GroupBox_NavUpDown:
 	jrl GroupBox_ReturnZero
 	lds wa, 0
 	calr SetDialEnable
-	ld xwa, 0xFFFFFFFF
+	ld xwa, 0xffffffff
 	st32_24 0x03ef6a, xwa
 	call InitializeTimer
 	ld xwa, (xsp + 38)
-	ld xbc, 0x1E000B4
+	ld xbc, 0x1e000b4
 	lds32 xde, 0
 
 GroupBox_NavDispatch:
@@ -285,12 +285,12 @@ GroupBox_CloseAll_Loop:
 	sll xwa, 3
 	sub xwa, xde
 	sll xwa, 2
-	ld xbc, 0x274E8
+	ld xbc, 0x274e8
 	add xbc, xwa
 	cp (xbc), 0x0
 	jr z, GroupBox_CloseAll_Secondary
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00009
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00009
 	call SendEvent
 
 GroupBox_CloseAll_Secondary:
@@ -301,15 +301,15 @@ GroupBox_CloseAll_Secondary:
 	sub xbc, xwa
 	sll xbc, 2
 	lda xwa, (xbc + 14)
-	ld xbc, 0x274E8
+	ld xbc, 0x274e8
 	add xbc, xwa
 	cp (xbc), 0x0
 	jr z, GroupBox_CloseAll_Next
 	ld de, iz
 	add de, 0x80
 	extz xde
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00009
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00009
 	call SendEvent
 
 GroupBox_CloseAll_Next:
@@ -318,7 +318,7 @@ GroupBox_CloseAll_Next:
 	jr ule, GroupBox_CloseAll_Loop
 	jr GroupBox_ReturnZero
 
-	; --- Event 0x1C00036: Display Update ---
+	; --- Event 0x1c00036: Display Update ---
 	; Enables display (FAA761 with WA=1), calls UpdateScreen, then disables.
 GroupBox_DisplayUpdate:
 	lds wa, 1
@@ -357,15 +357,15 @@ SetDialFocus:
 	cpdm32_24 257898, xde
 	ret z
 	st32_24 0x03ef6a, xde
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0002C
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0002c
 	call SendEvent
 	ret
 
 GetDialFocus:
 	cpdi16_24 257872, 0
 	jr nz, GetDialFocus_Active
-	ld xhl, 0xFFFFFFFF
+	ld xhl, 0xffffffff
 	ret
 
 GetDialFocus_Active:
@@ -407,23 +407,23 @@ SetAutoInc:
 	ld (xsp + 12), xbc
 	ld (xsp + 16), xwa
 	call GetRootEvent
-	cp xhl, 0x1C00026
+	cp xhl, 0x1c00026
 	jr z, EventParam_FetchPoint
-	cp xhl, 0x1C00009
+	cp xhl, 0x1c00009
 	jr z, EventParam_FetchPoint
-	cp xhl, 0x1C00007
+	cp xhl, 0x1c00007
 	jr z, EventParam_FetchPoint
-	cp xhl, 0x1C00008
+	cp xhl, 0x1c00008
 	jrl nz, ApTimer_SetupReturn
 
 EventParam_FetchPoint:
 	call GetRootParam
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 2)
-	cp xwa, 0xFF
+	cp xwa, 0xff
 	jrl ugt, ApTimer_SetupReturn
 	ld xwa, (xsp + 2)
-	and xwa, 0x1F
+	and xwa, 0x1f
 	ld (xsp + 6), wa
 	ld xwa, (xsp + 2)
 	srl xwa, 7
@@ -441,7 +441,7 @@ EventParam_FetchPoint:
 	sub xwa, xde
 	sll xwa, 2
 	add xwa, xbc
-	ld xbc, 0x274E8
+	ld xbc, 0x274e8
 	add xbc, xwa
 	ld xwa, (xsp + 16)
 	ld (xbc + 2), xwa
@@ -469,7 +469,7 @@ EventParam_FetchPoint:
 	lda_24 xwa, 0x0274e9
 	add xwa, xhl
 	ld (xwa), 0x1
-	ld xwa, 0x1C00026
+	ld xwa, 0x1c00026
 	push xwa
 	ld xwa, (xsp + 6)
 	push xwa
@@ -489,23 +489,23 @@ ScreenProc:
 	ld (xsp + 8), xbc
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1E0004A
+	cp xwa, 0x1e0004a
 	jrl z, Screen_GetDefault
-	cp xwa, 0x1E00048
+	cp xwa, 0x1e00048
 	jrl z, Screen_ReturnZero
-	cp xwa, 0x1E0004B
+	cp xwa, 0x1e0004b
 	jrl z, Screen_GetStoredValue
-	cp xwa, 0x1E00049
+	cp xwa, 0x1e00049
 	jrl z, Screen_SetStoredValue
-	cp xwa, 0x1C00007
+	cp xwa, 0x1c00007
 	jrl z, Screen_OK
-	cp xwa, 0x1C00009
+	cp xwa, 0x1c00009
 	jrl z, Screen_Deactivate
-	cp xwa, 0x1C0000D
+	cp xwa, 0x1c0000d
 	jrl z, Screen_Paint
-	cp xwa, 0x1C00002
+	cp xwa, 0x1c00002
 	jrl z, Screen_Close
-	cp xwa, 0x1C00001
+	cp xwa, 0x1c00001
 	jr z, Screen_Init
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -519,35 +519,35 @@ Screen_Init_RegisterChild:
 Screen_Init:
 	call GetCurrentTarget
 	ld xwa, xhl
-	ld xbc, 0x1E0004B
+	ld xbc, 0x1e0004b
 	lds32 xde, 0
 	call SendEvent
-	cp xhl, 0xFFFFFFFF
+	cp xhl, 0xffffffff
 	jr nz, Screen_Init_RegisterChild
 	call GetCurrentTarget
 	ld xwa, xhl
-	ld xbc, 0x1E00014
+	ld xbc, 0x1e00014
 	ld xde, 0x1600033
 	call SendEvent
 	or xhl, xhl
 	jr nz, Screen_Init_Setup
 
 Screen_Init_CloseDeadChildren:
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00002
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00002
 	ld xde, xiz
 	call SendEvent
 	call GetCurrentTarget
 	ld xwa, xhl
-	ld xbc, 0x1E00014
+	ld xbc, 0x1e00014
 	ld xde, 0x1600033
 	call SendEvent
 	or xhl, xhl
 	jr z, Screen_Init_CloseDeadChildren
 
 Screen_Init_Setup:
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00002
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00002
 	ld xde, xiz
 	call SendEvent
 	ld xwa, (xsp + 12)
@@ -565,32 +565,32 @@ Screen_Init_Setup:
 Screen_Init_ClearStoredValue:
 	ld xwa, (xsp + 4)
 	ld xbc, (xwa + 30)
-	ld xwa, 0xFFFFFFFF
+	ld xwa, 0xffffffff
 	ld (xbc), xwa
 
 Screen_Init_SetWall:
 	calr PostTitle_Function
 	cps hl, 0
-	call_24 nz, 0xF9883C
+	call_24 nz, 0xf9883c
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1E000B1
+	ld xbc, 0x1e000b1
 	lds32 xde, 0
 	call SendEvent
 	ld wa, hl
 	calr SetWallPaper
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1E000B2
+	ld xbc, 0x1e000b2
 	lds32 xde, 0
 	call SendEvent
 	ld wa, hl
 	calr SetWallColor
 	calr PostTitle_Function
 	cps hl, 0
-	call_24 nz, 0xF9884B
+	call_24 nz, 0xf9884b
 	call GetTitleNow
 	ld xwa, xhl
 	ld xde, (xsp + 12)
-	ld xbc, 0x1E00077
+	ld xbc, 0x1e00077
 	call SendEvent
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -601,7 +601,7 @@ Screen_Init_SetWall:
 	ld xwa, (xsp + 4)
 	ld xbc, (xwa + 30)
 	ld xwa, (xbc)
-	cp xwa, 0xFFFFFFFF
+	cp xwa, 0xffffffff
 	jr z, Screen_ReturnZero
 	ld xwa, (xbc)
 	ld xbc, (xsp + 8)
@@ -630,7 +630,7 @@ Screen_Close:
 
 Screen_Close_ClearValue:
 	ld xbc, (xhl + 30)
-	ld xwa, 0xFFFFFFFF
+	ld xwa, 0xffffffff
 	ld (xbc), xwa
 	jr Screen_ReturnZero
 
@@ -655,37 +655,37 @@ Screen_OK:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1E00024
+	ld xbc, 0x1e00024
 	ld xde, 0x1600047
 	call SendEvent
 	or xhl, xhl
 	jr nz, Screen_OK_Forward
-	cp xiz, 0xF
+	cp xiz, 0xf
 	jr nz, Screen_OK_Forward
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1E0007A
+	ld xbc, 0x1e0007a
 	lds32 xde, 0
 	call SendEvent
 	or xhl, xhl
 	jr nz, Screen_OK_NavUp
 	ld xwa, (xsp + 4)
 	ld xde, (xwa + 26)
-	cp xde, 0x1A00000
+	cp xde, 0x1a00000
 	jr z, Screen_OK_Forward
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
 	jr Screen_OK_PostAndDispatch
 
 Screen_OK_NavUp:
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1E00079
+	ld xbc, 0x1e00079
 	lds32 xde, 0
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1E0009A
+	ld xbc, 0x1e0009a
 	lds32 xde, 0
 
 Screen_OK_PostAndDispatch:
@@ -715,7 +715,7 @@ Screen_GetStoredValue:
 	jr Screen_Return
 
 Screen_GetDefault:
-	ld xhl, 0xFFFFFFFF
+	ld xhl, 0xffffffff
 
 Screen_Return:
 	pop xiz
@@ -725,79 +725,79 @@ Screen_Return:
 GetEditSwPoint:
 	ld hl, wa
 	lda xde, (xbc + 2)
-	cp wa, 0x8C
+	cp wa, 0x8c
 	jr z, EditSwParam_Mode4
-	cp wa, 0x8B
+	cp wa, 0x8b
 	jr z, EditSwParam_Mode3
-	cp wa, 0x8A
+	cp wa, 0x8a
 	jr z, EditSwParam_Mode2
 	cp wa, 0x89
 	jr z, EditSwParam_Mode1
 	cp wa, 0x88
 	jr z, EditSwParam_Mode0
-	cp hl, 0xC
+	cp hl, 0xc
 	jrl ugt, EditSwParam_Default
 	add hl, hl
 	lda_24 xix, 0xea9b1c
-	ld_sriw3 HL, 0x07, 0xF0, 0xEC
+	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	lda_24 xix, 0xf9a973
-	jp_dri 8, 0x07, 0xF0, 0xEC
+	jp_dri 8, 0x07, 0xf0, 0xec
 
-; GetEditSwPoint handler: mode 0 (value=0x2B)
+; GetEditSwPoint handler: mode 0 (value=0x2b)
 EditSwParam_Mode0:
 	lds wa, 0
 	jr EditSwParam_StoreMode0
-	ldw wa, 0x13F
+	ldw wa, 0x13f
 
 EditSwParam_StoreMode0:
 	ld (xbc), wa
-	ldw (xde), 0x2B
+	ldw (xde), 0x2b
 	ret
 
 ; GetEditSwPoint handler: mode 1 (value=0x55)
 EditSwParam_Mode1:
 	lds wa, 0
 	jr EditSwParam_StoreMode1
-	ldw wa, 0x13F
+	ldw wa, 0x13f
 
 EditSwParam_StoreMode1:
 	ld (xbc), wa
 	ldw (xde), 0x55
 	ret
 
-; GetEditSwPoint handler: mode 2 (value=0x7F)
+; GetEditSwPoint handler: mode 2 (value=0x7f)
 EditSwParam_Mode2:
 	lds wa, 0
 	jr EditSwParam_StoreMode2
-	ldw wa, 0x13F
+	ldw wa, 0x13f
 
 EditSwParam_StoreMode2:
 	ld (xbc), wa
-	ldw (xde), 0x7F
+	ldw (xde), 0x7f
 	ret
 
-; GetEditSwPoint handler: mode 3 (value=0xA9)
+; GetEditSwPoint handler: mode 3 (value=0xa9)
 EditSwParam_Mode3:
 	lds wa, 0
 	jr EditSwParam_Mode3_Store
-	ldw wa, 0x13F
+	ldw wa, 0x13f
 
 ; GetEditSwPoint: store mode 3 result
 EditSwParam_Mode3_Store:
 	ld (xbc), wa
-	ldw (xde), 0xA9
+	ldw (xde), 0xa9
 	ret
 
-; GetEditSwPoint handler: mode 4 (value=0xD3)
+; GetEditSwPoint handler: mode 4 (value=0xd3)
 EditSwParam_Mode4:
 	lds wa, 0
 	jr EditSwParam_Mode4_Store
-	ldw wa, 0x13F
+	ldw wa, 0x13f
 
 ; GetEditSwPoint: store mode 4 result
 EditSwParam_Mode4_Store:
 	ld (xbc), wa
-	ldw (xde), 0xD3
+	ldw (xde), 0xd3
 	ret
 
 ; GetEditSwPoint handler: tempo table lookup
@@ -820,9 +820,9 @@ EditSwParam_TempoTable:
 	.long NakaState_PresentationTail
 	ret
 
-; GetEditSwPoint handler: default (value=0xA0/0x78)
+; GetEditSwPoint handler: default (value=0xa0/0x78)
 EditSwParam_Default:
-	ldw (xbc), 0xA0
+	ldw (xbc), 0xa0
 	ldw (xde), 0x78
 	ret
 
@@ -833,9 +833,9 @@ SetWallPaper:
 	jr gt, SetWallPaper_Default
 	add wa, wa
 	lda_24 xix, 0xea9b36
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, 0xf9aa0d
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SetWallPaper_DispatchData:
 	cpdi16_24	213246, 0
@@ -857,11 +857,11 @@ SetWallPaper_CaseData:
 SetWallColor:
 	cps wa, 1
 	jr z, SetWallColor_01
-	cp wa, 0xF9
+	cp wa, 0xf9
 	jr z, SetWallColor_F9
 	cps wa, 2
 	jr z, SetWallColor_02
-	cp wa, 0xF8
+	cp wa, 0xf8
 	jr z, SetWallColor_F8
 	lds wa, 0
 	jr UI_ChangeWallPalette_Jump
@@ -885,7 +885,7 @@ UI_ChangeWallPalette_Jump:
 	jp ChangeWallPalette
 
 IvScreenProc:
-	cp xbc, 0x1C0000D
+	cp xbc, 0x1c0000d
 	jrl nz, ScreenProc
 	lds32 xhl, 0
 	ret
@@ -894,7 +894,7 @@ TtlScreenProc:
 	lda xsp, (xsp - 12)
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C0000D
+	cp xbc, 0x1c0000d
 	jr z, TtlScreen_PaintHandler
 	ld xwa, xiz
 	calr ScreenProc
@@ -912,7 +912,7 @@ TtlScreen_PaintHandler:
 	lds bc, 4
 	ldirw
 	ld xwa, xiz
-	ld xbc, 0x1E00024
+	ld xbc, 0x1e00024
 	ld xde, 0x1600024
 	call SendEvent
 	or xhl, xhl
@@ -940,7 +940,7 @@ DrawTitleBar:
 	lda xbc, (xsp + 32)
 	ld de, (xwa + 2)
 	ld (xbc + 2), de
-	add de, 0x1B
+	add de, 0x1b
 	ld (xbc + 6), de
 	ld de, (xwa)
 	inc 4, de
@@ -1044,8 +1044,8 @@ StringCenter_Entry:
 	lda xbc, (xsp + 12)
 	ld xde, (xsp + 4)
 	push xde
-	pushw 0xFF
-	pushw 0xF7
+	pushw 0xff
+	pushw 0xf7
 	ld xde, xiz
 	call DrawStringCentered
 	jr StringDraw_JoinPoint
@@ -1053,8 +1053,8 @@ StringCenter_Entry:
 DrawTitleBar_LeftJustify:
 	lds32 xde, 4
 	push xde
-	pushw 0xFF
-	pushw 0xF7
+	pushw 0xff
+	pushw 0xf7
 	ld xde, xiz
 	call DrawStringLeftJustify
 	jr StringDraw_JoinPoint
@@ -1062,8 +1062,8 @@ DrawTitleBar_LeftJustify:
 DrawTitleBar_RightJustify:
 	lds32 xde, 4
 	push xde
-	pushw 0xFF
-	pushw 0xF7
+	pushw 0xff
+	pushw 0xf7
 	ld xde, xiz
 	call DrawStringRightJustify
 
@@ -1075,10 +1075,10 @@ StringDraw_JoinPoint:
 	ld wa, (xsp + 8)
 	exts xwa
 	divs wa, 0x2
-	add wa, 0x1C
+	add wa, 0x1c
 	sub (xhl), wa
 	lda xde, (xhl + 2)
-	submi16 (xde), 0xB
+	submi16 (xde), 0xb
 	lda xwa, (xsp + 16)
 	ld bc, (xhl)
 	dec 2, bc
@@ -1092,8 +1092,8 @@ StringDraw_JoinPoint:
 	ld bc, (xde)
 	add bc, 0x19
 	ld (xwa + 6), bc
-	ldw bc, 0xC4
-	ldw de, 0xF0
+	ldw bc, 0xc4
+	ldw de, 0xf0
 	call DrawDesignBox
 	lda xwa, (xsp + 12)
 	ld xbc, (xsp + 42)
@@ -1112,23 +1112,23 @@ IvDirmdScreenProc:
 	ld (xsp + 8), xbc
 	ld (xsp + 12), xwa
 	ld xbc, (xsp + 8)
-	cp xbc, 0x1E000B1
+	cp xbc, 0x1e000b1
 	jrl z, DirmdEmu_CaseD
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1C0003A
+	cp xwa, 0x1c0003a
 	jr z, DirmdEmu_CaseC
-	cp xwa, 0x1C00039
+	cp xwa, 0x1c00039
 	jr z, DirmdEmu_CaseB
-	sub xbc, 0x1C00001
+	sub xbc, 0x1c00001
 	cp xbc, 0x0
 	jrl lt, DirmdEmu_CaseE
-	cp xbc, 0xE
+	cp xbc, 0xe
 	jrl gt, DirmdEmu_CaseE
 	add xbc, xbc
-	add xbc, 0xEA9B42
+	add xbc, 0xea9b42
 	ld bc, (xbc)
 	lda_24 xix, 0xf9acba
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; DirmdEmulator dispatch case B
 DirmdEmu_CaseB:
@@ -1145,13 +1145,13 @@ DirmdEmu_CaseC:
 	calr ScreenProc
 	call GetTitleOld
 	ld xwa, xhl
-	ld xbc, 0x1E00032
+	ld xbc, 0x1e00032
 	lds32 xde, 0
 	call SendEvent
 	ld xiz, xhl
 	call SleepMainTask
 	ld xwa, xiz
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	ld xde, (xsp + 4)
 	call FuncCall
 	call WakeUpMainTask
@@ -1172,7 +1172,7 @@ DirmdEmu_CaseC:
 	sti16_24 0x0276c4, 0x0001
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1E00032
+	ld xbc, 0x1e00032
 	lds32 xde, 0
 	call SendEvent
 	ld xiz, xhl
@@ -1191,7 +1191,7 @@ IvDirmd_ForwardToScreen:
 	jr TaskWake_ZeroReturn
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1E00032
+	ld xbc, 0x1e00032
 	lds32 xde, 0
 	call SendEvent
 	ld xiz, xhl
@@ -1206,11 +1206,11 @@ TaskWake_ZeroReturn:
 	lds32 xhl, 0
 	jr IvDirmd_Epilogue
 	ld xwa, (xsp + 4)
-	cp xwa, 0xFF
+	cp xwa, 0xff
 	jr ugt, IvDirmd_ForwardAndReturn
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1E00032
+	ld xbc, 0x1e00032
 	lds32 xde, 0
 	call SendEvent
 	ld xiz, xhl
@@ -1258,7 +1258,7 @@ GetDirmdFlag:
 DirmdTitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, 0xEA9B60
+	ld xiy, 0xea9b60
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -1313,16 +1313,16 @@ DirmdEmulator_Entry:
 DirmdEmulator:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1C00000
+	sub xbc, 0x1c00000
 	cp xbc, 0x0
 	jrl lt, DirmdEmu_DefaultCase
-	cp xbc, 0xF
+	cp xbc, 0xf
 	jrl gt, DirmdEmu_DefaultCase
 	add xbc, xbc
-	add xbc, 0xEA9BBE
+	add xbc, 0xea9bbe
 	ld bc, (xbc)
 	lda_24 xix, 0xf9aec6
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 DirmdEmulator_Dispatch:	.ascii ":;<>"
 	ld	xwa, (xiz+4)
 	call	(xwa)
@@ -1370,9 +1370,9 @@ DirmdEmu_CheckSoundCtrl:
 
 DirmdEmu_CheckBit4:
 	bitda 4, 58334
-	call_24 nz, 0xF994EA
+	call_24 nz, 0xf994ea
 	bitda 4, 58336
-	call_24 nz, 0xF994FA
+	call_24 nz, 0xf994fa
 	bitda 3, 58338
 	jr z, DirmdEmu_ClearAllFlags
 	lds wa, 1
@@ -1396,41 +1396,41 @@ WindowProc:
 	ld (xsp + 20), xbc
 	ld (xsp + 24), xwa
 	ld xbc, (xsp + 20)
-	cp xbc, 0x1C0001F
+	cp xbc, 0x1c0001f
 	jrl z, WindowProc_ForwardToGroupBoxes
 	ld xwa, (xsp + 20)
-	cp xwa, 0x1C00028
+	cp xwa, 0x1c00028
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1C00016
+	cp xwa, 0x1c00016
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1C00015
+	cp xwa, 0x1c00015
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1C00014
+	cp xwa, 0x1c00014
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1C0003B
+	cp xwa, 0x1c0003b
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1C00026
+	cp xwa, 0x1c00026
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1E00094
+	cp xwa, 0x1e00094
 	jrl z, WindowField_GetChildCount
-	cp xwa, 0x1E0004B
+	cp xwa, 0x1e0004b
 	jrl z, WindowField_ReadValue
-	cp xwa, 0x1E00049
+	cp xwa, 0x1e00049
 	jrl z, WindowField_Focus
-	cp xwa, 0x1E0004A
+	cp xwa, 0x1e0004a
 	jrl z, WindowField_GetValue
-	cp xwa, 0x1E00048
+	cp xwa, 0x1e00048
 	jrl z, WindowField_SetValue
-	sub xbc, 0x1C00001
+	sub xbc, 0x1c00001
 	cp xbc, 0x0
 	jrl lt, WindowProc_DefaultHandler
 	cp xbc, 0x9
 	jrl gt, WindowProc_DefaultHandler
 	add xbc, xbc
-	add xbc, 0xEA9BDE
+	add xbc, 0xea9bde
 	ld bc, (xbc)
 	lda_24 xix, 0xf9b061
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ; WindowProc event dispatch
 WindowProc_EventDispatch:
 	ld	xwa, (xsp+24)
@@ -1556,19 +1556,19 @@ WindowProc_EventDispatch:
 	ld	xwa, (xwa)
 	jrl	489
 
-; WindowProc field set value handler (event 0x1C00048)
+; WindowProc field set value handler (event 0x1c00048)
 WindowField_SetValue:
 	ld xwa, (xsp + 24)
-	ld xiz, 0x1C
+	ld xiz, 0x1c
 	jr WindowField_StoreToView
 
-; WindowProc field get value handler (event 0x1C0004A)
+; WindowProc field get value handler (event 0x1c0004a)
 WindowField_GetValue:
 	ld xwa, (xsp + 24)
-	ld xiz, 0x1C
+	ld xiz, 0x1c
 	jr WindowField_ReadFromView
 
-; WindowProc field focus handler (event 0x1C00049)
+; WindowProc field focus handler (event 0x1c00049)
 WindowField_Focus:
 	ld xwa, (xsp + 24)
 	ld xiz, 0x20
@@ -1581,7 +1581,7 @@ WindowField_StoreToView:
 	ld (xbc), xwa
 	jrl AcNaming_ReturnZero
 
-; WindowProc field read value handler (event 0x1C0004B)
+; WindowProc field read value handler (event 0x1c0004b)
 WindowField_ReadValue:
 	ld xwa, (xsp + 24)
 	ld xiz, 0x20
@@ -1593,13 +1593,13 @@ WindowField_ReadFromView:
 	ld xhl, (xwa)
 	jrl WindowProc_Epilogue
 
-; WindowProc get child count handler (event 0x1E00094)
+; WindowProc get child count handler (event 0x1e00094)
 WindowField_GetChildCount:
 	ld xwa, (xsp + 24)
 	call GetViewInstance
 	ld xwa, (xhl + 28)
 	ld xwa, (xwa)
-	cp xwa, 0xFFFFFFFF
+	cp xwa, 0xffffffff
 	scc16 nz, hl
 	extz xhl
 	jrl WindowProc_Epilogue
@@ -1613,7 +1613,7 @@ WindowField_GetChildCount:
 	ld xiz, (xwa)
 	ld xwa, xiz
 	call SetCurrentTarget
-	ld xwa, 0xFFFFFFFF
+	ld xwa, 0xffffffff
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
 	call SendEvent
@@ -1623,7 +1623,7 @@ WindowField_GetChildCount:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 28)
 	ld xwa, (xwa)
-	cp xwa, 0xFFFFFFFF
+	cp xwa, 0xffffffff
 	jr z, WindowField_ForwardAfterChild
 	ld xwa, (xsp + 4)
 	call SetCurrentTarget
@@ -1652,7 +1652,7 @@ WindowProc_GroupBoxForward:
 	ld xbc, (xsp + 12)
 	ld xwa, (xbc + 28)
 	ld xwa, (xwa)
-	cp xwa, 0xFFFFFFFF
+	cp xwa, 0xffffffff
 	jrl z, AcNaming_ReturnZero
 	cpw (xbc + 26), 0x0
 	jrl nz, AcNaming_ReturnZero
@@ -1673,7 +1673,7 @@ WindowProc_GroupBoxForward:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 28)
 	ld xwa, (xwa)
-	cp xwa, 0xFFFFFFFF
+	cp xwa, 0xffffffff
 	jrl z, AcNaming_ReturnZero
 	ld xwa, (xsp + 4)
 	jrl WindowProc_RestoreTarget
@@ -1682,10 +1682,10 @@ WindowProc_GroupBoxForward:
 WindowProc_DefaultHandler:
 	ld xwa, (xsp + 20)
 	srl xwa, 0
-	and xwa, 0xFFF
-	cp wa, 0x1E0
+	and xwa, 0xfff
+	cp wa, 0x1e0
 	jr c, WindowProc_GroupBoxAndChild
-	cp wa, 0x1FF
+	cp wa, 0x1ff
 	jr ugt, WindowProc_GroupBoxAndChild
 	ld xwa, (xsp + 24)
 	ld xbc, (xsp + 20)
@@ -1704,7 +1704,7 @@ WindowProc_GroupBoxAndChild:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 28)
 	ld xwa, (xwa)
-	cp xwa, 0xFFFFFFFF
+	cp xwa, 0xffffffff
 	jr z, AcNaming_ReturnZero
 	call GetRootObject
 	cp xhl, (xsp + 24)
@@ -1736,7 +1736,7 @@ WindowProc_GroupBoxAndChild:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 28)
 	ld xwa, (xwa)
-	cp xwa, 0xFFFFFFFF
+	cp xwa, 0xffffffff
 	jr z, AcNaming_ReturnZero
 	ld xwa, (xsp + 8)
 	call SetRootObject
@@ -1760,42 +1760,42 @@ AcNamingWindowProc:
 	ld (xsp + 46), xbc
 	ld (xsp + 50), xwa
 	ld xwa, (xsp + 46)
-	cp xwa, 0x1C00029
+	cp xwa, 0x1c00029
 	jrl z, WndScroll_HandleDialPage
-	cp xwa, 0x1E00081
+	cp xwa, 0x1e00081
 	jrl z, WndScroll_HandleCharSet
-	cp xwa, 0x1E00080
+	cp xwa, 0x1e00080
 	jrl z, WndScroll_HandleCharInput
 	ld xhl, (xsp + 42)
 	ld de, hl
-	cp xwa, 0x1E0007F
+	cp xwa, 0x1e0007f
 	jrl z, WndScroll_HandleIndexChange
-	cp xwa, 0x1E0007B
+	cp xwa, 0x1e0007b
 	jrl z, WndScroll_StoreCallerPtr
-	cp xwa, 0x1E0003A
+	cp xwa, 0x1e0003a
 	jrl z, WndScroll_CopyFromSource
-	cp xwa, 0x1E00086
+	cp xwa, 0x1e00086
 	jrl z, WndScroll_CopyStringAndSend
-	cp xwa, 0x1C00018
+	cp xwa, 0x1c00018
 	jrl z, WndEvt_DispatchByEventCode
-	cp xwa, 0x1C0001A
+	cp xwa, 0x1c0001a
 	jrl z, WndEvt_DispatchByEventCode
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	jrl z, WndEvt_DispatchByEventCode
-	cp xwa, 0x1C00019
+	cp xwa, 0x1c00019
 	jrl z, WndEvt_DispatchByEventCode
 	lda xbc, (xsp + 34)
-	cp xwa, 0x1C0000F
+	cp xwa, 0x1c0000f
 	jrl z, WndScroll_RepaintAll
-	cp xwa, 0x1C0000E
+	cp xwa, 0x1c0000e
 	jrl z, WndScroll_HandleSelectionChange
-	cp xwa, 0x1C00002
+	cp xwa, 0x1c00002
 	jrl z, WndScroll_BasicWindowProc
-	cp xwa, 0x1C0000C
+	cp xwa, 0x1c0000c
 	jrl z, WndScroll_InitSelectionTrack
-	cp xwa, 0x1C0000B
+	cp xwa, 0x1c0000b
 	jrl z, WndScroll_InitSelectionTrack
-	cp xwa, 0x1C00001
+	cp xwa, 0x1c00001
 	jrl nz, WndScroll_ForwardToWindowProc
 	or xhl, xhl
 	jr z, AcNaming_CheckDefaultWidget
@@ -1816,7 +1816,7 @@ AcNaming_InitScrollState:
 	sti16_24 0x0274d8, 0x0000
 	sti16_24 0x0274da, 0x0000
 	ld32_24 xwa, 0x0274d2
-	ld xbc, 0x1E0007C
+	ld xbc, 0x1e0007c
 	lds32 xde, 0
 	call ApFuncCall
 	st16_24 0x0274d6, xhl
@@ -1826,14 +1826,14 @@ AcNaming_InitScrollState:
 
 AcNaming_QueryCharSet:
 	ld32_24 xwa, 0x0274d2
-	ld xbc, 0x1E00084
+	ld xbc, 0x1e00084
 	lds32 xde, 0
 	call ApFuncCall
 	st16_24 0x0274e2, xhl
 	ld wa, hl
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0xEA9EEA
+	ld xbc, 0xea9eea
 	add xbc, xwa
 	ld xwa, (xbc)
 	st32_24 0x0274e4, xwa

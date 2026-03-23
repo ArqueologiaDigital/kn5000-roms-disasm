@@ -158,7 +158,7 @@ NakaBoxData_LyricsBox:
 	.byte 0x00			; padding
 	aligned_string "LyricsBox"
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 NakaBoxName_AcMuteToggleBox:	aligned_string "AcMuteToggleBox"
 NakaBoxData_MeasureBox:
 	.byte 0x5e, 0x5e, 0x6a, 0x00

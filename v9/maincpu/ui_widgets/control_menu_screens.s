@@ -19,7 +19,7 @@
 ;   Byte 0-1: Entry length (low byte) + 0x00
 ;   Byte 2-3: Widget type = 0x0160 (text widget)
 ;   Byte 4-5: Screen group ID (0x07 = error dialogs)
-;   Byte 6-7: Flags (0xFFFF = default)
+;   Byte 6-7: Flags (0xffff = default)
 ;   Byte 8-9: Widget index within screen group
 ;   Remaining: Widget-specific data (position, font, text)
 ; ===========================================================================

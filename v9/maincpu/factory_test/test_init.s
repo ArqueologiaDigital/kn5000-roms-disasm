@@ -31,7 +31,7 @@
 	ld (xsp + 8), wa
 	lda_24 xwa, \ParamD
 	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
+	mrid2 0xb7, 0x30
 	ld xbc, xwa
 	.if \ParamE <= 7
 	lds wa, \ParamE
@@ -54,7 +54,7 @@
 	ldw (xsp + 8), \ParamC
 	lda_24 xwa, \ParamD
 	ld (xsp + 10), xwa
-	mrid2 0xB7, 0x30
+	mrid2 0xb7, 0x30
 	ld xbc, xwa
 	.if \ParamE <= 7
 	lds wa, \ParamE
@@ -90,29 +90,29 @@
 
 ; InitializeHama - Register HAMA (file/disk) subsystem object tables and titles
 ; Registers widget tables, view handlers, and two diagnostic titles:
-;   "TT_HDDEXT" (0xE1FD18) - FDD/HD extension test, widget table 0x7f
-;   "TT_EXTAPR" (0xE1FD22) - Extension APR test, widget table 0xfc
-; Both titles use TestTitleFunc (0xF1E39A) as their lifecycle callback.
-; Title handler (TestTitleFunc) pointer is stored at 0xE1FD2C in fd_test_data.s.
+;   "TT_HDDEXT" (0xe1fd18) - FDD/HD extension test, widget table 0x7f
+;   "TT_EXTAPR" (0xe1fd22) - Extension APR test, widget table 0xfc
+; Both titles use TestTitleFunc (0xf1e39a) as their lifecycle callback.
+; Title handler (TestTitleFunc) pointer is stored at 0xe1fd2c in fd_test_data.s.
 InitializeHama:
 	lda xsp, (xsp - 14)
 
-	RegObjTableHama 0x1600004, 0xFA44E2, 0xE1F0BC, 0xE1F080, 0x169
-	RegObjTableHama 0x160000c, 0xFA58FB, 0xE1F0D4, 0xE1F0BE, 0x1c9
-	RegObjTableHama 0x160000d, 0xFA5948, 0xE1F0EA, 0xE1F0D6, 0x1e9
-	RegObjTablHama 0x1600002, 0xFA496C, 0x2, 0xE1F04A, 0x129
-	RegObjTablHama 0x1600002, 0xFA496C, 0x2, 0xE1F056, 0x429
-	RegObjTablHama 0x1600001, 0xFA48A9, 0x4b, 0xE1F0EC, 0x109
-	RegObjTablHama 0x1600001, 0xFA48A9, 0x4b, 0xE1F240, 0x409
-	RegObjTablHama 0x1600003, 0xFA4A18, 0x1, 0xE1FD2C, 0x149
-	RegObjTablHama 0x1600003, 0xFA4A18, 0x1, 0xE1FD34, 0x449
-	RegObjTablHama 0x1600010, 0xFA5995, 0x0, 0xE1FBD0, 0x7f
-	RegObjTablHama 0x160000f, 0xFA62CB, 0x0, 0xE1FC40, 0x37f
-	RegObjTablHama 0x1600010, 0xFA5995, 0x1a, 0xE1FBD4, 0xfc
-	RegObjTablHama 0x160000f, 0xFA62CB, 0x1a, 0xE1FC46, 0x3fc
+	RegObjTableHama 0x1600004, 0xfa44e2, 0xe1f0bc, 0xe1f080, 0x169
+	RegObjTableHama 0x160000c, 0xfa58fb, 0xe1f0d4, 0xe1f0be, 0x1c9
+	RegObjTableHama 0x160000d, 0xfa5948, 0xe1f0ea, 0xe1f0d6, 0x1e9
+	RegObjTablHama 0x1600002, 0xfa496c, 0x2, 0xe1f04a, 0x129
+	RegObjTablHama 0x1600002, 0xfa496c, 0x2, 0xe1f056, 0x429
+	RegObjTablHama 0x1600001, 0xfa48a9, 0x4b, 0xe1f0ec, 0x109
+	RegObjTablHama 0x1600001, 0xfa48a9, 0x4b, 0xe1f240, 0x409
+	RegObjTablHama 0x1600003, 0xfa4a18, 0x1, 0xe1fd2c, 0x149
+	RegObjTablHama 0x1600003, 0xfa4a18, 0x1, 0xe1fd34, 0x449
+	RegObjTablHama 0x1600010, 0xfa5995, 0x0, 0xe1fbd0, 0x7f
+	RegObjTablHama 0x160000f, 0xfa62cb, 0x0, 0xe1fc40, 0x37f
+	RegObjTablHama 0x1600010, 0xfa5995, 0x1a, 0xe1fbd4, 0xfc
+	RegObjTablHama 0x160000f, 0xfa62cb, 0x1a, 0xe1fc46, 0x3fc
 
-	RegTitleHama 0x9, 0xE1FD18, 0x7f, 0x1490000, 0xfc0000
-	RegTitleHama 0x9, 0xE1FD22, 0xfc, 0x1490000, 0xfc0000
+	RegTitleHama 0x9, 0xe1fd18, 0x7f, 0x1490000, 0xfc0000
+	RegTitleHama 0x9, 0xe1fd22, 0xfc, 0x1490000, 0xfc0000
 
 	lda xsp, (xsp + 14)
 	ret
@@ -122,17 +122,17 @@ FDTest_PrintDiag:
 
 ; TestTitleFunc - Title lifecycle and action handler for FD diagnostic tests
 ; Dispatches on two event codes:
-;   0x1C00007 (title lifecycle): xde selects handler from jump table at 0xE1FDFE
+;   0x1c00007 (title lifecycle): xde selects handler from jump table at 0xe1fdfe
 ;     0=new, 1=old, 2=activate, 3=inactivate, 4-5=interrupt, 6=TBIOS test
-;   0x1C00013 (user actions): xde selects handler from jump table at 0xE1FE0E
+;   0x1c00013 (user actions): xde selects handler from jump table at 0xe1fe0e
 ;     2=STOP, 3=START LOOP, 4=DIR listing, 5-6=debug test
 TestTitleFunc:
 	push xiz
 	ld xiz, xwa
 	lds wa, 0
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr z, TitleFunc_LifecycleDispatch
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jrl nz, TitleFunc_Return
 	ld xwa, xde
 	dec 2, xwa
@@ -141,12 +141,12 @@ TestTitleFunc:
 	cp xwa, 0x5
 	jrl ugt, TitleFunc_Return
 	add xwa, xwa
-	add xwa, 0xE1FE0E
+	add xwa, 0xe1fe0e
 	ld wa, (xwa)
 	lda_24 xix, 0xf1e3da
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
-; User action dispatch table (event 0x1C00013, xde=2..6)
+; User action dispatch table (event 0x1c00013, xde=2..6)
 ; Each entry loads a string address and calls FDTest_PrintDiag, then exits
 TitleFunc_ActionDispatch:
 	lda_24 xwa, 0xe1fd4c
@@ -173,14 +173,14 @@ TitleFunc_LifecycleDispatch:
 	cp xwa, 0x7
 	jrl ugt, TitleFunc_Return
 	add xwa, xwa
-	add xwa, 0xE1FDFE
+	add xwa, 0xe1fdfe
 	ld wa, (xwa)
 	lda_24 xix, 0xf1e43b
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
-; Title lifecycle dispatch table (event 0x1C00007, xde=0..6)
-; 0=new: print+call 0xF97EDB, 1=old: send event+call 0xFAA257
-; 2=activate: run test stats+call 0xFAA135, 3=inactivate: print+DIR listing
+; Title lifecycle dispatch table (event 0x1c00007, xde=0..6)
+; 0=new: print+call 0xf97edb, 1=old: send event+call 0xfaa257
+; 2=activate: run test stats+call 0xfaa135, 3=inactivate: print+DIR listing
 ; 4=interrupt: print+call RegHamaTitle1_Entry, 5=interrupt return: print+call RegHamaTitle2_Entry
 ; 6=TBIOS test: call ListDir2_Entry
 TitleFunc_LifecycleTable:
@@ -234,9 +234,9 @@ TitleFunc_Return:
 
 ; ListDirectoryEntries2 -- Opens directory, iterates all entries via
 ; ReadNextEntry, logging each via FDTest_PrintDiag. Similar to FDListDirectory
-; but uses format string at 0xE1FE1A and compares dir handle against xiz directly.
+; but uses format string at 0xe1fe1a and compares dir handle against xiz directly.
 ; Args: (xsp+4) = directory path string pointer
-; Returns: hl = 0 on success, 0xFFFF on open failure
+; Returns: hl = 0 on success, 0xffff on open failure
 ; Stack frame: 266 bytes
 ListDir2_Entry:
 	lda xsp, (xsp - 266)
@@ -274,10 +274,10 @@ ListDir2_Return:
 	lda xsp, (xsp + 266)
 	ret
 
-; RunTestAndUpdateCounters -- Checks FD status (0xF525EC), runs FDLoadSaveTest
-; if status is 2 or 3, increments TOTAL/OK/NG counters at 0x03DCFE-0x03DD02,
-; then displays updated counts via NAKA widget system (0xFA9D58).
-; Returns: l = 0xFF if status invalid, otherwise falls through to display
+; RunTestAndUpdateCounters -- Checks FD status (0xf525ec), runs FDLoadSaveTest
+; if status is 2 or 3, increments TOTAL/OK/NG counters at 0x03dcfe-0x03dd02,
+; then displays updated counts via NAKA widget system (0xfa9d58).
+; Returns: l = 0xff if status invalid, otherwise falls through to display
 RunTestCounters_Entry:
 	call GetMediaType
 	cps l, 3
@@ -316,7 +316,7 @@ RunTestCounters_Display:
 	jp ApPostEvent
 
 ; CreateAndRunFDOperation -- Builds a 16-byte parameter struct on the stack,
-; calls 0xF97CCA to execute the FD operation, then prints success/failure.
+; calls 0xf97cca to execute the FD operation, then prints success/failure.
 CreateRunFDOp_Entry:
 	lda xsp, (xsp - 16)
 	lda_24 xwa, 0xe1fe38
@@ -347,8 +347,8 @@ CreateRunFDOp_Return:
 
 .include "factory_test/fd_test_code.s"
 
-; RegisterHamaTitle1 -- Registers title with widget table 0x7F (FDD/HD test)
-; Calls 0xF51E4F with WA=2, then 0xF5289C with string at 0xE1FF42
+; RegisterHamaTitle1 -- Registers title with widget table 0x7f (FDD/HD test)
+; Calls 0xf51e4f with WA=2, then 0xf5289c with string at 0xe1ff42
 RegHamaTitle1_Entry:
 	lds wa, 2
 	call format_FD
@@ -357,8 +357,8 @@ RegHamaTitle1_Entry:
 	lds hl, 0
 	ret
 
-; RegisterHamaTitle2 -- Registers title with widget table 0xFC (extension APR test)
-; Calls 0xF51E4F with WA=3, then 0xF5289C with string at 0xE1FF4C
+; RegisterHamaTitle2 -- Registers title with widget table 0xfc (extension APR test)
+; Calls 0xf51e4f with WA=3, then 0xf5289c with string at 0xe1ff4c
 RegHamaTitle2_Entry:
 	lds wa, 3
 	call format_FD
@@ -367,7 +367,7 @@ RegHamaTitle2_Entry:
 	lds hl, 0
 	ret
 
-; SendEventWithParam -- Sends event 0x1C00025 with xwa as parameter via 0xFA9660
+; SendEventWithParam -- Sends event 0x1c00025 with xwa as parameter via 0xfa9660
 ; Args: xwa = event parameter (moved to xde)
 SendEvent_Entry:
 	ld xde, xwa
@@ -376,8 +376,8 @@ SendEvent_Entry:
 	jp SendEvent
 
 ; HamaEventDispatcher -- Dispatches events for HAMA subsystem
-; Handles 0x1C00007 (title lifecycle) and 0x1E00085 (extension event)
-; For 0x1C00007: dispatches on xde (0x8A=file ops, 0x8B=extension bootstrap)
+; Handles 0x1c00007 (title lifecycle) and 0x1e00085 (extension event)
+; For 0x1c00007: dispatches on xde (0x8a=file ops, 0x8b=extension bootstrap)
 HamaEvtDisp_Entry:
 	cp xbc, 0x01c00007
 	jr z, HamaEvtDisp_LifecycleCheck
@@ -446,7 +446,7 @@ CheckFDStatusLoad_Return:
 	pop xiz
 	ret
 
-; LoadExtensionROM -- Loads 4 bytes from extension ROM path at 0xE1FF9C
+; LoadExtensionROM -- Loads 4 bytes from extension ROM path at 0xe1ff9c
 ; into DRAM at 0x200000, checks result, jumps to extension entry point
 LoadExtROM_Entry:
 	pushw 0x4
@@ -471,12 +471,12 @@ GetAprStatus_Entry:
 
 LoadXaprInit_Entry:
 	pushw 0x4	; 4 bytes
-	pushw 0xE1
-	pushw 0xFFB0	; "XAPR"
+	pushw 0xe1
+	pushw 0xffb0	; "XAPR"
 	ld xwa, 0x280000
 	push xwa
 	call String_Compare
-	add xsp, 0xA
+	add xsp, 0xa
 	cps hl, 0
 	ret nz
 	sti8_24 0x03dd04, 0x01
@@ -500,12 +500,12 @@ CallExtIfActive_Entry:
 
 LoadAndRunXapr_Entry:
 	pushw 0x4	; 4 bytes
-	pushw 0xE1
-	pushw 0xFFC6	; "XAPR"
+	pushw 0xe1
+	pushw 0xffc6	; "XAPR"
 	ld xwa, 0x280000
 	push xwa
 	call String_Compare
-	add xsp, 0xA
+	add xsp, 0xa
 	cps hl, 0
 	jr nz, LoadAndRunXapr_ClearFlag
 	sti8_24 0x03dd04, 0x01

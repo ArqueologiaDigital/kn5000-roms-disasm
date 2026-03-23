@@ -1357,7 +1357,7 @@ SeqData_SubDispatch_Table:
 	.byte 0x07, 0x00, 0x0a, 0x00, 0x0d, 0x00, 0x10, 0x00
 	.byte 0x00, 0x00, 0x00, 0xff
 ; MIDI packet event type dispatch table
-; Index: event byte from queue (0x00-0xBF), entries: 192
+; Index: event byte from queue (0x00-0xbf), entries: 192
 ; Called from MidiPkt_ProcessEventQueue (midipkt_routines.s:275)
 ; Most entries are Nop; active entries dispatch to sub-table handlers
 MidiPkt_EventType_Table:
@@ -2823,124 +2823,124 @@ WidgetParam_SelfRef_Table:
 ; Each block is a sequence of 6-byte {min_value, max_value, param_id} records.
 ToneKit_NullParams:
 	.incbin "includes/generated/tonekit_param_blocks.bin"
-	.equ ToneKit_ParamBlock_000, ToneKit_NullParams + 0xC
-	.equ ToneKit_ParamBlock_001, ToneKit_NullParams + 0x2A
+	.equ ToneKit_ParamBlock_000, ToneKit_NullParams + 0xc
+	.equ ToneKit_ParamBlock_001, ToneKit_NullParams + 0x2a
 	.equ ToneKit_ParamBlock_002, ToneKit_NullParams + 0x48
 	.equ ToneKit_ParamBlock_003, ToneKit_NullParams + 0x66
 	.equ ToneKit_ParamBlock_004, ToneKit_NullParams + 0x90
-	.equ ToneKit_ParamBlock_005, ToneKit_NullParams + 0xF6
+	.equ ToneKit_ParamBlock_005, ToneKit_NullParams + 0xf6
 	.equ ToneKit_ParamBlock_006, ToneKit_NullParams + 0x114
-	.equ ToneKit_ParamBlock_007, ToneKit_NullParams + 0x13E
+	.equ ToneKit_ParamBlock_007, ToneKit_NullParams + 0x13e
 	.equ ToneKit_ParamBlock_008, ToneKit_NullParams + 0x168
 	.equ ToneKit_ParamBlock_009, ToneKit_NullParams + 0x198
-	.equ ToneKit_ParamBlock_010, ToneKit_NullParams + 0x1C8
+	.equ ToneKit_ParamBlock_010, ToneKit_NullParams + 0x1c8
 	.equ ToneKit_ParamBlock_011, ToneKit_NullParams + 0x228
-	.equ ToneKit_ParamBlock_012, ToneKit_NullParams + 0x24C
+	.equ ToneKit_ParamBlock_012, ToneKit_NullParams + 0x24c
 	.equ ToneKit_ParamBlock_013, ToneKit_NullParams + 0x270
-	.equ ToneKit_ParamBlock_014, ToneKit_NullParams + 0x28E
-	.equ ToneKit_ParamBlock_015, ToneKit_NullParams + 0x2EE
-	.equ ToneKit_ParamBlock_016, ToneKit_NullParams + 0x30C
-	.equ ToneKit_ParamBlock_017, ToneKit_NullParams + 0x32A
-	.equ ToneKit_ParamBlock_018, ToneKit_NullParams + 0x34E
-	.equ ToneKit_ParamBlock_019, ToneKit_NullParams + 0x36C
+	.equ ToneKit_ParamBlock_014, ToneKit_NullParams + 0x28e
+	.equ ToneKit_ParamBlock_015, ToneKit_NullParams + 0x2ee
+	.equ ToneKit_ParamBlock_016, ToneKit_NullParams + 0x30c
+	.equ ToneKit_ParamBlock_017, ToneKit_NullParams + 0x32a
+	.equ ToneKit_ParamBlock_018, ToneKit_NullParams + 0x34e
+	.equ ToneKit_ParamBlock_019, ToneKit_NullParams + 0x36c
 	.equ ToneKit_ParamBlock_020, ToneKit_NullParams + 0x390
-	.equ ToneKit_ParamBlock_021, ToneKit_NullParams + 0x3C0
-	.equ ToneKit_ParamBlock_022, ToneKit_NullParams + 0x3EA
+	.equ ToneKit_ParamBlock_021, ToneKit_NullParams + 0x3c0
+	.equ ToneKit_ParamBlock_022, ToneKit_NullParams + 0x3ea
 	.equ ToneKit_ParamBlock_023, ToneKit_NullParams + 0x432
 	.equ ToneKit_ParamBlock_024, ToneKit_NullParams + 0x474
-	.equ ToneKit_ParamBlock_025, ToneKit_NullParams + 0x4BC
+	.equ ToneKit_ParamBlock_025, ToneKit_NullParams + 0x4bc
 	.equ ToneKit_ParamBlock_026, ToneKit_NullParams + 0x510
 	.equ ToneKit_ParamBlock_027, ToneKit_NullParams + 0x552
-	.equ ToneKit_ParamBlock_028, ToneKit_NullParams + 0x5A6
-	.equ ToneKit_ParamBlock_029, ToneKit_NullParams + 0x5E2
+	.equ ToneKit_ParamBlock_028, ToneKit_NullParams + 0x5a6
+	.equ ToneKit_ParamBlock_029, ToneKit_NullParams + 0x5e2
 	.equ ToneKit_ParamBlock_030, ToneKit_NullParams + 0x600
-	.equ ToneKit_ParamBlock_031, ToneKit_NullParams + 0x61E
-	.equ ToneKit_ParamBlock_032, ToneKit_NullParams + 0x63C
-	.equ ToneKit_ParamBlock_033, ToneKit_NullParams + 0x65A
+	.equ ToneKit_ParamBlock_031, ToneKit_NullParams + 0x61e
+	.equ ToneKit_ParamBlock_032, ToneKit_NullParams + 0x63c
+	.equ ToneKit_ParamBlock_033, ToneKit_NullParams + 0x65a
 	.equ ToneKit_ParamBlock_034, ToneKit_NullParams + 0x678
 	.equ ToneKit_ParamBlock_035, ToneKit_NullParams + 0x696
-	.equ ToneKit_ParamBlock_036, ToneKit_NullParams + 0x6B4
-	.equ ToneKit_ParamBlock_037, ToneKit_NullParams + 0x6D2
-	.equ ToneKit_ParamBlock_038, ToneKit_NullParams + 0x6F0
-	.equ ToneKit_ParamBlock_039, ToneKit_NullParams + 0x70E
-	.equ ToneKit_ParamBlock_040, ToneKit_NullParams + 0x72C
-	.equ ToneKit_ParamBlock_041, ToneKit_NullParams + 0x74A
+	.equ ToneKit_ParamBlock_036, ToneKit_NullParams + 0x6b4
+	.equ ToneKit_ParamBlock_037, ToneKit_NullParams + 0x6d2
+	.equ ToneKit_ParamBlock_038, ToneKit_NullParams + 0x6f0
+	.equ ToneKit_ParamBlock_039, ToneKit_NullParams + 0x70e
+	.equ ToneKit_ParamBlock_040, ToneKit_NullParams + 0x72c
+	.equ ToneKit_ParamBlock_041, ToneKit_NullParams + 0x74a
 	.equ ToneKit_ParamBlock_042, ToneKit_NullParams + 0x780
-	.equ ToneKit_ParamBlock_043, ToneKit_NullParams + 0x7BC
+	.equ ToneKit_ParamBlock_043, ToneKit_NullParams + 0x7bc
 	.equ ToneKit_ParamBlock_044, ToneKit_NullParams + 0x804
-	.equ ToneKit_ParamBlock_045, ToneKit_NullParams + 0x83A
+	.equ ToneKit_ParamBlock_045, ToneKit_NullParams + 0x83a
 	.equ ToneKit_ParamBlock_046, ToneKit_NullParams + 0x870
-	.equ ToneKit_ParamBlock_047, ToneKit_NullParams + 0x8B8
+	.equ ToneKit_ParamBlock_047, ToneKit_NullParams + 0x8b8
 	.equ ToneKit_ParamBlock_048, ToneKit_NullParams + 0x900
-	.equ ToneKit_ParamBlock_049, ToneKit_NullParams + 0x94E
-	.equ ToneKit_ParamBlock_050, ToneKit_NullParams + 0x99C
-	.equ ToneKit_ParamBlock_051, ToneKit_NullParams + 0x9A8
-	.equ ToneKit_ParamBlock_052, ToneKit_NullParams + 0x9B4
-	.equ ToneKit_ParamBlock_053, ToneKit_NullParams + 0x9C0
-	.equ ToneKit_ParamBlock_054, ToneKit_NullParams + 0x9CC
-	.equ ToneKit_ParamBlock_055, ToneKit_NullParams + 0x9EA
-	.equ ToneKit_ParamBlock_056, ToneKit_NullParams + 0xA08
-	.equ ToneKit_ParamBlock_057, ToneKit_NullParams + 0xA26
-	.equ ToneKit_ParamBlock_058, ToneKit_NullParams + 0xA44
-	.equ ToneKit_DefaultParams, ToneKit_NullParams + 0xA7A
-	.equ NakaInst_PFTK, ToneKit_NullParams + 0xA92
-	.equ ToneKit_ParamBlock_059, ToneKit_NullParams + 0xAAA
-	.equ ToneKit_ParamBlock_060, ToneKit_NullParams + 0xAC2
-	.equ ToneKit_ParamBlock_061, ToneKit_NullParams + 0xADA
-	.equ ToneKit_ParamBlock_062, ToneKit_NullParams + 0xAF2
-	.equ ToneKit_ParamBlock_063, ToneKit_NullParams + 0xB0A
-	.equ ToneKit_ParamBlock_064, ToneKit_NullParams + 0xB22
-	.equ ToneKit_ParamBlock_065, ToneKit_NullParams + 0xB3A
-	.equ ToneKit_ParamBlock_066, ToneKit_NullParams + 0xB52
-	.equ ToneKit_ParamBlock_067, ToneKit_NullParams + 0xB6A
-	.equ ToneKit_ParamBlock_068, ToneKit_NullParams + 0xB82
-	.equ ToneKit_ParamBlock_069, ToneKit_NullParams + 0xB9A
-	.equ ToneKit_ParamBlock_070, ToneKit_NullParams + 0xBB2
-	.equ ToneKit_ParamBlock_071, ToneKit_NullParams + 0xBCA
-	.equ ToneKit_ParamBlock_072, ToneKit_NullParams + 0xBE2
-	.equ ToneKit_ParamBlock_073, ToneKit_NullParams + 0xBFA
-	.equ ToneKit_ParamBlock_074, ToneKit_NullParams + 0xC12
-	.equ ToneKit_ParamBlock_075, ToneKit_NullParams + 0xC2A
-	.equ ToneKit_ParamBlock_076, ToneKit_NullParams + 0xC42
-	.equ ToneKit_ParamBlock_077, ToneKit_NullParams + 0xC5A
-	.equ ToneKit_ParamBlock_078, ToneKit_NullParams + 0xC72
-	.equ ToneKit_ParamBlock_079, ToneKit_NullParams + 0xC8A
-	.equ ToneKit_ParamBlock_080, ToneKit_NullParams + 0xCA2
-	.equ ToneKit_ParamBlock_081, ToneKit_NullParams + 0xCBA
-	.equ ToneKit_ParamBlock_082, ToneKit_NullParams + 0xCD2
-	.equ ToneKit_ParamBlock_083, ToneKit_NullParams + 0xCEA
-	.equ ToneKit_ParamBlock_084, ToneKit_NullParams + 0xD02
-	.equ ToneKit_ParamBlock_085, ToneKit_NullParams + 0xD1A
-	.equ ToneKit_ParamBlock_086, ToneKit_NullParams + 0xD32
-	.equ ToneKit_ParamBlock_087, ToneKit_NullParams + 0xD4A
-	.equ ToneKit_ParamBlock_088, ToneKit_NullParams + 0xD62
-	.equ ToneKit_ParamBlock_089, ToneKit_NullParams + 0xD7A
-	.equ ToneKit_ParamBlock_090, ToneKit_NullParams + 0xD92
-	.equ ToneKit_ParamBlock_091, ToneKit_NullParams + 0xDAA
-	.equ ToneKit_ParamBlock_092, ToneKit_NullParams + 0xDC2
-	.equ ToneKit_ParamBlock_093, ToneKit_NullParams + 0xDDA
-	.equ ToneKit_ParamBlock_094, ToneKit_NullParams + 0xDF2
-	.equ ToneKit_ParamBlock_095, ToneKit_NullParams + 0xE0A
-	.equ ToneKit_ParamBlock_096, ToneKit_NullParams + 0xE22
-	.equ ToneKit_ParamBlock_097, ToneKit_NullParams + 0xE3A
-	.equ ToneKit_ParamBlock_098, ToneKit_NullParams + 0xE52
-	.equ ToneKit_ParamBlock_099, ToneKit_NullParams + 0xE6A
-	.equ ToneKit_ParamBlock_100, ToneKit_NullParams + 0xE82
-	.equ ToneKit_ParamBlock_101, ToneKit_NullParams + 0xE9A
-	.equ ToneKit_ParamBlock_102, ToneKit_NullParams + 0xEB2
-	.equ ToneKit_ParamBlock_103, ToneKit_NullParams + 0xECA
-	.equ ToneKit_ParamBlock_104, ToneKit_NullParams + 0xEE2
-	.equ ToneKit_ParamBlock_105, ToneKit_NullParams + 0xEFA
-	.equ ToneKit_ParamBlock_106, ToneKit_NullParams + 0xF12
-	.equ ToneKit_ParamBlock_107, ToneKit_NullParams + 0xF2A
-	.equ ToneKit_ParamBlock_108, ToneKit_NullParams + 0xF42
-	.equ ToneKit_ParamBlock_109, ToneKit_NullParams + 0xF5A
-	.equ ToneKit_ParamBlock_110, ToneKit_NullParams + 0xF72
-	.equ ToneKit_ParamBlock_111, ToneKit_NullParams + 0xF8A
-	.equ ToneKit_ParamBlock_112, ToneKit_NullParams + 0xFA2
-	.equ ToneKit_ParamBlock_113, ToneKit_NullParams + 0xFBA
-	.equ ToneKit_ParamBlock_114, ToneKit_NullParams + 0xFD2
-	.equ ToneKit_ParamBlock_115, ToneKit_NullParams + 0xFEA
+	.equ ToneKit_ParamBlock_049, ToneKit_NullParams + 0x94e
+	.equ ToneKit_ParamBlock_050, ToneKit_NullParams + 0x99c
+	.equ ToneKit_ParamBlock_051, ToneKit_NullParams + 0x9a8
+	.equ ToneKit_ParamBlock_052, ToneKit_NullParams + 0x9b4
+	.equ ToneKit_ParamBlock_053, ToneKit_NullParams + 0x9c0
+	.equ ToneKit_ParamBlock_054, ToneKit_NullParams + 0x9cc
+	.equ ToneKit_ParamBlock_055, ToneKit_NullParams + 0x9ea
+	.equ ToneKit_ParamBlock_056, ToneKit_NullParams + 0xa08
+	.equ ToneKit_ParamBlock_057, ToneKit_NullParams + 0xa26
+	.equ ToneKit_ParamBlock_058, ToneKit_NullParams + 0xa44
+	.equ ToneKit_DefaultParams, ToneKit_NullParams + 0xa7a
+	.equ NakaInst_PFTK, ToneKit_NullParams + 0xa92
+	.equ ToneKit_ParamBlock_059, ToneKit_NullParams + 0xaaa
+	.equ ToneKit_ParamBlock_060, ToneKit_NullParams + 0xac2
+	.equ ToneKit_ParamBlock_061, ToneKit_NullParams + 0xada
+	.equ ToneKit_ParamBlock_062, ToneKit_NullParams + 0xaf2
+	.equ ToneKit_ParamBlock_063, ToneKit_NullParams + 0xb0a
+	.equ ToneKit_ParamBlock_064, ToneKit_NullParams + 0xb22
+	.equ ToneKit_ParamBlock_065, ToneKit_NullParams + 0xb3a
+	.equ ToneKit_ParamBlock_066, ToneKit_NullParams + 0xb52
+	.equ ToneKit_ParamBlock_067, ToneKit_NullParams + 0xb6a
+	.equ ToneKit_ParamBlock_068, ToneKit_NullParams + 0xb82
+	.equ ToneKit_ParamBlock_069, ToneKit_NullParams + 0xb9a
+	.equ ToneKit_ParamBlock_070, ToneKit_NullParams + 0xbb2
+	.equ ToneKit_ParamBlock_071, ToneKit_NullParams + 0xbca
+	.equ ToneKit_ParamBlock_072, ToneKit_NullParams + 0xbe2
+	.equ ToneKit_ParamBlock_073, ToneKit_NullParams + 0xbfa
+	.equ ToneKit_ParamBlock_074, ToneKit_NullParams + 0xc12
+	.equ ToneKit_ParamBlock_075, ToneKit_NullParams + 0xc2a
+	.equ ToneKit_ParamBlock_076, ToneKit_NullParams + 0xc42
+	.equ ToneKit_ParamBlock_077, ToneKit_NullParams + 0xc5a
+	.equ ToneKit_ParamBlock_078, ToneKit_NullParams + 0xc72
+	.equ ToneKit_ParamBlock_079, ToneKit_NullParams + 0xc8a
+	.equ ToneKit_ParamBlock_080, ToneKit_NullParams + 0xca2
+	.equ ToneKit_ParamBlock_081, ToneKit_NullParams + 0xcba
+	.equ ToneKit_ParamBlock_082, ToneKit_NullParams + 0xcd2
+	.equ ToneKit_ParamBlock_083, ToneKit_NullParams + 0xcea
+	.equ ToneKit_ParamBlock_084, ToneKit_NullParams + 0xd02
+	.equ ToneKit_ParamBlock_085, ToneKit_NullParams + 0xd1a
+	.equ ToneKit_ParamBlock_086, ToneKit_NullParams + 0xd32
+	.equ ToneKit_ParamBlock_087, ToneKit_NullParams + 0xd4a
+	.equ ToneKit_ParamBlock_088, ToneKit_NullParams + 0xd62
+	.equ ToneKit_ParamBlock_089, ToneKit_NullParams + 0xd7a
+	.equ ToneKit_ParamBlock_090, ToneKit_NullParams + 0xd92
+	.equ ToneKit_ParamBlock_091, ToneKit_NullParams + 0xdaa
+	.equ ToneKit_ParamBlock_092, ToneKit_NullParams + 0xdc2
+	.equ ToneKit_ParamBlock_093, ToneKit_NullParams + 0xdda
+	.equ ToneKit_ParamBlock_094, ToneKit_NullParams + 0xdf2
+	.equ ToneKit_ParamBlock_095, ToneKit_NullParams + 0xe0a
+	.equ ToneKit_ParamBlock_096, ToneKit_NullParams + 0xe22
+	.equ ToneKit_ParamBlock_097, ToneKit_NullParams + 0xe3a
+	.equ ToneKit_ParamBlock_098, ToneKit_NullParams + 0xe52
+	.equ ToneKit_ParamBlock_099, ToneKit_NullParams + 0xe6a
+	.equ ToneKit_ParamBlock_100, ToneKit_NullParams + 0xe82
+	.equ ToneKit_ParamBlock_101, ToneKit_NullParams + 0xe9a
+	.equ ToneKit_ParamBlock_102, ToneKit_NullParams + 0xeb2
+	.equ ToneKit_ParamBlock_103, ToneKit_NullParams + 0xeca
+	.equ ToneKit_ParamBlock_104, ToneKit_NullParams + 0xee2
+	.equ ToneKit_ParamBlock_105, ToneKit_NullParams + 0xefa
+	.equ ToneKit_ParamBlock_106, ToneKit_NullParams + 0xf12
+	.equ ToneKit_ParamBlock_107, ToneKit_NullParams + 0xf2a
+	.equ ToneKit_ParamBlock_108, ToneKit_NullParams + 0xf42
+	.equ ToneKit_ParamBlock_109, ToneKit_NullParams + 0xf5a
+	.equ ToneKit_ParamBlock_110, ToneKit_NullParams + 0xf72
+	.equ ToneKit_ParamBlock_111, ToneKit_NullParams + 0xf8a
+	.equ ToneKit_ParamBlock_112, ToneKit_NullParams + 0xfa2
+	.equ ToneKit_ParamBlock_113, ToneKit_NullParams + 0xfba
+	.equ ToneKit_ParamBlock_114, ToneKit_NullParams + 0xfd2
+	.equ ToneKit_ParamBlock_115, ToneKit_NullParams + 0xfea
 	.equ ToneKit_ParamBlock_116, ToneKit_NullParams + 0x1002
 ToneKit_VoiceDispatch_Table:
 	.long ToneKit_ParamBlock_005
@@ -4727,7 +4727,7 @@ UIState_HandlerTable_WithProbe:
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeA
 	.long BitmapFinpic_ByteData
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_Standard:
@@ -4740,7 +4740,7 @@ UIState_HandlerTable_Standard:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeA
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_Compact:
@@ -4752,7 +4752,7 @@ UIState_HandlerTable_Compact:
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeA
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_Basic_00:
@@ -4763,7 +4763,7 @@ UIState_HandlerTable_Basic_00:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_Basic_01:
@@ -4774,7 +4774,7 @@ UIState_HandlerTable_Basic_01:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_Basic_02:
@@ -4785,7 +4785,7 @@ UIState_HandlerTable_Basic_02:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_Basic_03:
@@ -4796,7 +4796,7 @@ UIState_HandlerTable_Basic_03:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_Basic_04:
@@ -4807,7 +4807,7 @@ UIState_HandlerTable_Basic_04:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_Basic_05:
@@ -4818,7 +4818,7 @@ UIState_HandlerTable_Basic_05:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_Basic_06:
@@ -4829,7 +4829,7 @@ UIState_HandlerTable_Basic_06:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_Basic_07:
@@ -4840,7 +4840,7 @@ UIState_HandlerTable_Basic_07:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_00:
@@ -4851,7 +4851,7 @@ UIState_HandlerTable_00:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_01:
@@ -4862,7 +4862,7 @@ UIState_HandlerTable_01:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_02:
@@ -4873,7 +4873,7 @@ UIState_HandlerTable_02:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_03:
@@ -4884,7 +4884,7 @@ UIState_HandlerTable_03:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_04:
@@ -4895,7 +4895,7 @@ UIState_HandlerTable_04:
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_05:
@@ -4905,7 +4905,7 @@ UIState_HandlerTable_05:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_06:
@@ -4915,7 +4915,7 @@ UIState_HandlerTable_06:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_07:
@@ -4925,7 +4925,7 @@ UIState_HandlerTable_07:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_08:
@@ -4935,7 +4935,7 @@ UIState_HandlerTable_08:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_09:
@@ -4945,7 +4945,7 @@ UIState_HandlerTable_09:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_10:
@@ -4955,7 +4955,7 @@ UIState_HandlerTable_10:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_11:
@@ -4965,7 +4965,7 @@ UIState_HandlerTable_11:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_12:
@@ -4975,7 +4975,7 @@ UIState_HandlerTable_12:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_13:
@@ -4985,7 +4985,7 @@ UIState_HandlerTable_13:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_14:
@@ -4995,7 +4995,7 @@ UIState_HandlerTable_14:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_15:
@@ -5005,7 +5005,7 @@ UIState_HandlerTable_15:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_HandlerTable_16:
@@ -5015,7 +5015,7 @@ UIState_HandlerTable_16:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_ConfigB_000:
@@ -5025,7 +5025,7 @@ UIState_ConfigB_000:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_ConfigB_001:
@@ -5035,7 +5035,7 @@ UIState_ConfigB_001:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_ConfigB_002:
@@ -5045,7 +5045,7 @@ UIState_ConfigB_002:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 
 UIState_ConfigB_003:
@@ -5055,123 +5055,123 @@ UIState_ConfigB_003:
 	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_004:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_005:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_006:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_007:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_008:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_009:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_010:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_011:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_012:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_013:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_014:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_015:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_016:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_017:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_018:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_019:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_020:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_021:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_022:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_023:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_024:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_025:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_026:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_027:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_028:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_029:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_030:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_031:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_032:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_033:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_034:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_035:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_036:
 	.long UIState_UpdateControlBits
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_037:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_038:
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_039:
 	.long UIState_KeyScan_Dispatch
 	.long HdaeRom_AltTableEntry9
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_040:
 	.long UIState_KeyScan_Dispatch
 	.long FDemoText_ByteData_VoiceProbeC
-	.long 0xFFFFFFFF
+	.long 0xffffffff
 
 UIState_ConfigB_041:
 	.long UIState_KeyScan_Dispatch
@@ -7376,8 +7376,8 @@ SoundEffect_Dispatch_Table:
 ; =============================================================================
 ; 30 tables of 128 bytes each, mapping keyboard scan codes to character codes.
 ; Used by the text input system for different keyboard layouts/input modes.
-; Sparse tables use 0xFF for unmapped scan code positions.
-; Full permutation tables contain all values 0x00-0x7F in shuffled order.
+; Sparse tables use 0xff for unmapped scan code positions.
+; Full permutation tables contain all values 0x00-0x7f in shuffled order.
 ; The pointer table at EF0319 references these in pairs (forward/reverse).
 ; =============================================================================
 ; Character mapping table - preamble/header (sparse)

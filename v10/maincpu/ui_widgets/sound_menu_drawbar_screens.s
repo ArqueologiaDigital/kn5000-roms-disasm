@@ -6,10 +6,10 @@ NakaData_SoundMenuDrawbar:
 
 ; External label offsets within the binary blob above.
 	.equ Naka_EventDispatch_Table, NakaData_SoundMenuDrawbar + 0x0306
-	.equ Naka_Event_Table3, NakaData_SoundMenuDrawbar + 0x03C4
-	.equ Naka_Event_Table2, NakaData_SoundMenuDrawbar + 0x05AE
+	.equ Naka_Event_Table3, NakaData_SoundMenuDrawbar + 0x03c4
+	.equ Naka_Event_Table2, NakaData_SoundMenuDrawbar + 0x05ae
 	.equ NakaInst_EmptyString, NakaData_SoundMenuDrawbar + 0x0642
-	.equ NakaInst_IvSdpartProc, NakaData_SoundMenuDrawbar + 0x08C0
-	.equ NakaContainer_SoundMenu_Root, NakaData_SoundMenuDrawbar + 0x08CE
-	.equ NakaDesc_SOUND_MENU, NakaData_SoundMenuDrawbar + 0x08F8
+	.equ NakaInst_IvSdpartProc, NakaData_SoundMenuDrawbar + 0x08c0
+	.equ NakaContainer_SoundMenu_Root, NakaData_SoundMenuDrawbar + 0x08ce
+	.equ NakaDesc_SOUND_MENU, NakaData_SoundMenuDrawbar + 0x08f8
 	.equ NakaWidget_SoundMenu_PageButton, NakaData_SoundMenuDrawbar + 0x0904

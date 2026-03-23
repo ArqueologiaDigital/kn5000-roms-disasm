@@ -9,61 +9,61 @@
 InitializeYoko:
 	lda xsp, (xsp - 14)
 
-	RegObjTable 0x1600004, 0xFA44E2, 0xE20CAE, 0xE208EC, 0x167
-	RegObjTable 0x160000c, 0xFA58FB, 0xE20E22, 0xE20CB0, 0x1c7
-	RegObjTable 0x160000d, 0xFA5948, 0xE2106A, 0xE20E24, 0x1e7
-	RegObjTabl 0x1600002, 0xFA496C, 0x2e, 0xE20260, 0x127
-	RegObjTabl 0x1600002, 0xFA496C, 0x2e, 0xE2031C, 0x427
-	RegObjTabl 0x1600001, 0xFA48A9, 0x1, 0xE2106C, 0x107
-	RegObjTabl 0x1600001, 0xFA48A9, 0x1, 0xE21074, 0x407
-	RegObjTabl 0x1600003, 0xFA4A18, 0x1f, 0xE25042, 0x147
-	RegObjTabl 0x1600003, 0xFA4A18, 0x1f, 0xE250C2, 0x447
-	RegObjTabl 0x1600010, 0xFA5995, 0x2b, 0xE240AC, 0x6f
-	RegObjTabl 0x160000f, 0xFA62CB, 0x2b, 0xE24578, 0x36f
-	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2415C, 0x70
-	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE246C8, 0x370
-	RegObjTabl 0x1600010, 0xFA5995, 0xb, 0xE24190, 0x71
-	RegObjTabl 0x160000f, 0xFA62CB, 0xb, 0xE2472E, 0x371
-	RegObjTabl 0x1600010, 0xFA5995, 0x7, 0xE241C0, 0x72
-	RegObjTabl 0x160000f, 0xFA62CB, 0x7, 0xE24788, 0x372
-	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE241E0, 0x73
-	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE247CA, 0x373
-	RegObjTabl 0x1600010, 0xFA5995, 0xf, 0xE24224, 0x74
-	RegObjTabl 0x160000f, 0xFA62CB, 0xf, 0xE24844, 0x374
-	RegObjTabl 0x1600010, 0xFA5995, 0xd, 0xE24264, 0x75
-	RegObjTabl 0x160000f, 0xFA62CB, 0xd, 0xE248CC, 0x375
-	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE2429C, 0x76
-	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE2493A, 0x376
-	RegObjTabl 0x1600010, 0xFA5995, 0x1e, 0xE242C0, 0x78
-	RegObjTabl 0x160000f, 0xFA62CB, 0x1e, 0xE2497C, 0x378
-	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2433C, 0x7a
-	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE24A3E, 0x37a
-	RegObjTabl 0x1600010, 0xFA5995, 0x5, 0xE24370, 0x89
-	RegObjTabl 0x160000f, 0xFA62CB, 0x5, 0xE24A94, 0x389
-	RegObjTabl 0x1600010, 0xFA5995, 0x1, 0xE24388, 0x8a
-	RegObjTabl 0x160000f, 0xFA62CB, 0x1, 0xE24ABE, 0x38a
-	RegObjTabl 0x1600010, 0xFA5995, 0x16, 0xE24390, 0x8b
-	RegObjTabl 0x160000f, 0xFA62CB, 0x16, 0xE24ACA, 0x38b
-	RegObjTabl 0x1600010, 0xFA5995, 0x1c, 0xE243EC, 0x8c
-	RegObjTabl 0x160000f, 0xFA62CB, 0x1c, 0xE24B80, 0x38c
-	RegObjTabl 0x1600010, 0xFA5995, 0x5, 0xE24460, 0x8e
-	RegObjTabl 0x160000f, 0xFA62CB, 0x5, 0xE24C70, 0x38e
-	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE24478, 0x8f
-	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE24C9C, 0x38f
-	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE24494, 0x92
-	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE24CCE, 0x392
-	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xE244A8, 0xa7
-	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xE24CF8, 0x3a7
-	RegObjTabl 0x1600010, 0xFA5995, 0x6, 0xE244AC, 0xa9
-	RegObjTabl 0x160000f, 0xFA62CB, 0x6, 0xE24CFE, 0x3a9
-	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE244C8, 0xe0
-	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE24D32, 0x3e0
-	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE244DC, 0xe1
-	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE24D58, 0x3e1
-	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE24510, 0xe2
-	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE24DE6, 0x3e2
-	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE24544, 0xe3
-	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE24E78, 0x3e3
+	RegObjTable 0x1600004, 0xfa44e2, 0xe20cae, 0xe208ec, 0x167
+	RegObjTable 0x160000c, 0xfa58fb, 0xe20e22, 0xe20cb0, 0x1c7
+	RegObjTable 0x160000d, 0xfa5948, 0xe2106a, 0xe20e24, 0x1e7
+	RegObjTabl 0x1600002, 0xfa496c, 0x2e, 0xe20260, 0x127
+	RegObjTabl 0x1600002, 0xfa496c, 0x2e, 0xe2031c, 0x427
+	RegObjTabl 0x1600001, 0xfa48a9, 0x1, 0xe2106c, 0x107
+	RegObjTabl 0x1600001, 0xfa48a9, 0x1, 0xe21074, 0x407
+	RegObjTabl 0x1600003, 0xfa4a18, 0x1f, 0xe25042, 0x147
+	RegObjTabl 0x1600003, 0xfa4a18, 0x1f, 0xe250c2, 0x447
+	RegObjTabl 0x1600010, 0xfa5995, 0x2b, 0xe240ac, 0x6f
+	RegObjTabl 0x160000f, 0xfa62cb, 0x2b, 0xe24578, 0x36f
+	RegObjTabl 0x1600010, 0xfa5995, 0xc, 0xe2415c, 0x70
+	RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe246c8, 0x370
+	RegObjTabl 0x1600010, 0xfa5995, 0xb, 0xe24190, 0x71
+	RegObjTabl 0x160000f, 0xfa62cb, 0xb, 0xe2472e, 0x371
+	RegObjTabl 0x1600010, 0xfa5995, 0x7, 0xe241c0, 0x72
+	RegObjTabl 0x160000f, 0xfa62cb, 0x7, 0xe24788, 0x372
+	RegObjTabl 0x1600010, 0xfa5995, 0x10, 0xe241e0, 0x73
+	RegObjTabl 0x160000f, 0xfa62cb, 0x10, 0xe247ca, 0x373
+	RegObjTabl 0x1600010, 0xfa5995, 0xf, 0xe24224, 0x74
+	RegObjTabl 0x160000f, 0xfa62cb, 0xf, 0xe24844, 0x374
+	RegObjTabl 0x1600010, 0xfa5995, 0xd, 0xe24264, 0x75
+	RegObjTabl 0x160000f, 0xfa62cb, 0xd, 0xe248cc, 0x375
+	RegObjTabl 0x1600010, 0xfa5995, 0x8, 0xe2429c, 0x76
+	RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe2493a, 0x376
+	RegObjTabl 0x1600010, 0xfa5995, 0x1e, 0xe242c0, 0x78
+	RegObjTabl 0x160000f, 0xfa62cb, 0x1e, 0xe2497c, 0x378
+	RegObjTabl 0x1600010, 0xfa5995, 0xc, 0xe2433c, 0x7a
+	RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe24a3e, 0x37a
+	RegObjTabl 0x1600010, 0xfa5995, 0x5, 0xe24370, 0x89
+	RegObjTabl 0x160000f, 0xfa62cb, 0x5, 0xe24a94, 0x389
+	RegObjTabl 0x1600010, 0xfa5995, 0x1, 0xe24388, 0x8a
+	RegObjTabl 0x160000f, 0xfa62cb, 0x1, 0xe24abe, 0x38a
+	RegObjTabl 0x1600010, 0xfa5995, 0x16, 0xe24390, 0x8b
+	RegObjTabl 0x160000f, 0xfa62cb, 0x16, 0xe24aca, 0x38b
+	RegObjTabl 0x1600010, 0xfa5995, 0x1c, 0xe243ec, 0x8c
+	RegObjTabl 0x160000f, 0xfa62cb, 0x1c, 0xe24b80, 0x38c
+	RegObjTabl 0x1600010, 0xfa5995, 0x5, 0xe24460, 0x8e
+	RegObjTabl 0x160000f, 0xfa62cb, 0x5, 0xe24c70, 0x38e
+	RegObjTabl 0x1600010, 0xfa5995, 0x6, 0xe24478, 0x8f
+	RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe24c9c, 0x38f
+	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe24494, 0x92
+	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe24cce, 0x392
+	RegObjTabl 0x1600010, 0xfa5995, 0x0, 0xe244a8, 0xa7
+	RegObjTabl 0x160000f, 0xfa62cb, 0x0, 0xe24cf8, 0x3a7
+	RegObjTabl 0x1600010, 0xfa5995, 0x6, 0xe244ac, 0xa9
+	RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe24cfe, 0x3a9
+	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe244c8, 0xe0
+	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe24d32, 0x3e0
+	RegObjTabl 0x1600010, 0xfa5995, 0xc, 0xe244dc, 0xe1
+	RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe24d58, 0x3e1
+	RegObjTabl 0x1600010, 0xfa5995, 0xc, 0xe24510, 0xe2
+	RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe24de6, 0x3e2
+	RegObjTabl 0x1600010, 0xfa5995, 0xc, 0xe24544, 0xe3
+	RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe24e78, 0x3e3
 
 	RegMode 0x7, 0xe2, 0x4f10, 0xd, 0x1470014, 0x1a00089
 	RegMode 0x7, 0xe2, 0x4f1c, 0x13, 0x1470017, 0x1a000e0
@@ -96,7 +96,7 @@ InitializeYoko:
 	ret
 
 PartSelLangCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, PartSelLang_ReturnZero
 	lda_24 xhl, 0xe26078
 	ret
@@ -106,7 +106,7 @@ PartSelLang_ReturnZero:
 	ret
 
 AfterLangCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, AfterLang_ReturnZero
 	lda_24 xhl, 0xe26090
 	ret
@@ -116,7 +116,7 @@ AfterLang_ReturnZero:
 	ret
 
 TrAsPreLangCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, TrAsPreLang_ReturnZero
 	lda_24 xhl, 0xe260a8
 	ret
@@ -126,7 +126,7 @@ TrAsPreLang_ReturnZero:
 	ret
 
 AtentionLangCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, AtentionLang_ReturnZero
 	lda_24 xhl, 0xe260c0
 	ret
@@ -136,7 +136,7 @@ AtentionLang_ReturnZero:
 	ret
 
 AreYouSureLangCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, AreYouSureLang_ReturnZero
 	lda_24 xhl, 0xe260d8
 	ret
@@ -146,7 +146,7 @@ AreYouSureLang_ReturnZero:
 	ret
 
 GmOnSureLangCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, GmOnSureLang_ReturnZero
 	lda_24 xhl, 0xe260f0
 	ret
@@ -156,7 +156,7 @@ GmOnSureLang_ReturnZero:
 	ret
 
 GmOffSureLangCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, GmOffSureLang_ReturnZero
 	lda_24 xhl, 0xe26108
 	ret
@@ -166,18 +166,18 @@ GmOffSureLang_ReturnZero:
 	ret
 
 TrAsSureLangCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, TrAsSureLang_ReturnZero
 	ldda8 a, 10355
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xe26120
-	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ldda8 a, 4438
 	extz wa
 	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ldda8 a, 3295
 	inc 1, a
@@ -187,10 +187,10 @@ TrAsSureLangCheck:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xe25e50
-	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0x2
-	pushw 0xCB4
+	pushw 0xcb4
 	call Audio_SendCommand
 	lda xsp, (xsp + 18)
 	lda_24 xhl, 0x03def8
@@ -202,17 +202,17 @@ TrAsSureLang_ReturnZero:
 
 Audio_SendEventPostCmd:
 	ld xwa, 0x720006
-	ld xbc, 0x1C70011
+	ld xbc, 0x1c70011
 	lds32 xde, 0
 	jp ApPostEvent
 
 Audio_ExternalCallback:
 	ld xwa, 0x720006
-	ld xbc, 0x1C70011
+	ld xbc, 0x1c70011
 	lds32 xde, 0
 	call ApPostEvent
 	ld xwa, 0x720006
-	ld xbc, 0x1C70013
+	ld xbc, 0x1c70013
 	lds32 xde, 0
 	jp ApPostEvent
 Audio_ExternalCallback_End:
@@ -222,15 +222,15 @@ LyricsBoxProc:
 	push xiz
 	ld xiz, xde
 	ld (xsp + 48), xwa
-	cp xbc, 0x1C7000D
+	cp xbc, 0x1c7000d
 	jrl z, LyricsBox_HandleEventD
-	cp xbc, 0x1C7000C
+	cp xbc, 0x1c7000c
 	jrl z, LyricsBox_HandleEventC
-	cp xbc, 0x1C7000B
+	cp xbc, 0x1c7000b
 	jrl z, LyricsBox_HandleEventB
-	cp xbc, 0x1C7000A
+	cp xbc, 0x1c7000a
 	jr z, LyricsBox_HandleEventA
-	cp xbc, 0x1C70009
+	cp xbc, 0x1c70009
 	jr z, LyricsBox_HandleEvent9
 	ld xwa, (xsp + 48)
 	ld xde, xiz
@@ -239,29 +239,29 @@ LyricsBoxProc:
 
 LyricsBox_HandleEvent9:
 	call GetTitleNow
-	cp xhl, 0x1A00072
+	cp xhl, 0x1a00072
 	jr z, LyricsBox_MatchedTitle
 	call GetTitleNow
-	cp xhl, 0x1A00076
+	cp xhl, 0x1a00076
 	jr nz, LyricsBox_ClearBuffers
 
 LyricsBox_MatchedTitle:
 	ld xwa, (xsp + 48)
-	ld xbc, 0x1C0000D
+	ld xbc, 0x1c0000d
 	ld xde, xiz
 	call SendEvent
 
 LyricsBox_ClearBuffers:
 	lda_24 xbc, 0x020cbe
 	ld xwa, xbc
-	st_dri3b A, 0xE5, 0x40, 0x01
+	st_dri3b A, 0xe5, 0x40, 0x01
 
 LyricsBox_ClearOuterLoop:
 	ld xde, xwa
 	lda xhl, (xwa + 64)
 
 LyricsBox_ClearInnerLoop:
-	stib_dpi 0xE8, 0x00
+	stib_dpi 0xe8, 0x00
 	cp xde, xhl
 	jr c, LyricsBox_ClearInnerLoop
 	lda xwa, (xwa + 64)
@@ -279,10 +279,10 @@ LyricsBox_HandleEventA:
 	ld xwa, (xsp + 12)
 	ld (xsp + 4), xwa
 	call GetTitleNow
-	cp xhl, 0x1A00072
+	cp xhl, 0x1a00072
 	jr z, LyricsBox_DrawClientArea
 	call GetTitleNow
-	cp xhl, 0x1A00076
+	cp xhl, 0x1a00076
 	jrl nz, SongEdit_ReturnZero
 
 LyricsBox_DrawClientArea:
@@ -305,13 +305,13 @@ LyricsBox_DrawLineLoop:
 	ld bc, (xsp + 8)
 	extz xbc
 	sll xbc, 6
-	ld xhl, 0x20CBE
+	ld xhl, 0x20cbe
 	add xhl, xbc
 	cp (xsp + 8), de
 	jr nc, LyricsBox_CheckCurrentLine
 	push xhl
 	pushw 0x2
-	pushw 0xDFE
+	pushw 0xdfe
 	call Strcpy
 	inc 8, xsp
 	lda xbc, (xsp + 20)
@@ -328,7 +328,7 @@ LyricsBox_DrawLineLoop:
 	push xde
 	pushm (xhl + 34)
 	pushw 0x7
-	ld xde, 0x20DFE
+	ld xde, 0x20dfe
 	jrl LyricsBox_DrawAndAdvance
 
 LyricsBox_CheckCurrentLine:
@@ -371,11 +371,11 @@ LyricsBox_CheckCurrentLine:
 	extz xwa
 	sll xwa, 6
 	add xwa, xbc
-	ld xbc, 0x20CBE
+	ld xbc, 0x20cbe
 	add xbc, xwa
 	push xbc
 	pushw 0x2
-	pushw 0xDFE
+	pushw 0xdfe
 	call Strcpy
 	inc 8, xsp
 	ld bc, (xsp + 10)
@@ -396,7 +396,7 @@ LyricsBox_CheckCurrentLine:
 	ld xde, (xsp + 8)
 	pushm (xde + 32)
 	pushw 0x7
-	ld xde, 0x20DFE
+	ld xde, 0x20dfe
 	jr LyricsBox_DrawAndAdvance
 
 LyricsBox_CopyAndDraw:
@@ -418,7 +418,7 @@ LyricsBox_CopyAndDraw:
 	push xde
 	pushm (xhl + 32)
 	pushw 0x7
-	ld xde, 0x20DFE
+	ld xde, 0x20dfe
 
 LyricsBox_DrawAndAdvance:
 	call DrawString
@@ -437,10 +437,10 @@ LyricsBox_HandleEventB:
 	call GetViewInstance
 	ld (xsp + 12), xhl
 	call GetTitleNow
-	cp xhl, 0x1A00072
+	cp xhl, 0x1a00072
 	jr z, LyricsBox_DrawCurrentLine
 	call GetTitleNow
-	cp xhl, 0x1A00076
+	cp xhl, 0x1a00076
 	jrl nz, LyricsBox_UpdateCursors46
 
 LyricsBox_DrawCurrentLine:
@@ -462,10 +462,10 @@ LyricsBox_DrawCurrentLine:
 	sla bc, 6
 	add bc, (xwa)
 	lda_24 xwa, 0x020cbe
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	push xwa
 	pushw 0x2
-	pushw 0xDFE
+	pushw 0xdfe
 	call Strncpy
 	lda xsp, (xsp + 10)
 	ld wa, (xsp + 10)
@@ -494,8 +494,8 @@ LyricsBox_DrawCurrentLine:
 	call DrawString
 
 LyricsBox_UpdateCursors46:
-	ld xbc, 0x20E46
-	ld xwa, 0x20E4A
+	ld xbc, 0x20e46
+	ld xwa, 0x20e4a
 	jrl LyricsBox_StoreCursorPos
 
 LyricsBox_HandleEventC:
@@ -506,10 +506,10 @@ LyricsBox_HandleEventC:
 	call GetViewInstance
 	ld (xsp + 12), xhl
 	call GetTitleNow
-	cp xhl, 0x1A00072
+	cp xhl, 0x1a00072
 	jr z, LyricsBox_DrawSelLine
 	call GetTitleNow
-	cp xhl, 0x1A00076
+	cp xhl, 0x1a00076
 	jrl nz, LyricsBox_UpdateCursors3E
 
 LyricsBox_DrawSelLine:
@@ -530,10 +530,10 @@ LyricsBox_DrawSelLine:
 	sla bc, 6
 	add bc, (xwa)
 	lda_24 xwa, 0x020cbe
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	push xwa
 	pushw 0x2
-	pushw 0xDFE
+	pushw 0xdfe
 	call Strncpy
 	lda xsp, (xsp + 10)
 	ld wa, (xsp + 10)
@@ -562,8 +562,8 @@ LyricsBox_DrawSelLine:
 	call DrawString
 
 LyricsBox_UpdateCursors3E:
-	ld xbc, 0x20E3E
-	ld xwa, 0x20E42
+	ld xbc, 0x20e3e
+	ld xwa, 0x20e42
 
 LyricsBox_StoreCursorPos:
 	ld wa, (xwa)
@@ -575,10 +575,10 @@ LyricsBox_HandleEventD:
 	ld xde, xiz
 	call InheritedProc
 	call GetTitleNow
-	cp xhl, 0x1A00072
+	cp xhl, 0x1a00072
 	jr z, LyricsBox_ScrollAndDraw
 	call GetTitleNow
-	cp xhl, 0x1A00076
+	cp xhl, 0x1a00076
 	jr nz, SongEdit_ReturnZero
 
 LyricsBox_ScrollAndDraw:
@@ -640,7 +640,7 @@ SongEdit_CheckBounds:
 	extz wa
 	pushw wa
 	pushw 0x2
-	pushw 0xE4E
+	pushw 0xe4e
 	ld wa, (xde)
 	sla wa, 6
 	add wa, (xix)
@@ -655,8 +655,8 @@ SongEdit_CheckBounds:
 	add wa, (xbc)
 	ld (xbc), wa
 	sti8_24 0x020e4e, 0x00
-	ld xwa, 0x6F0027
-	ld xbc, 0x1C7000B
+	ld xwa, 0x6f0027
+	ld xbc, 0x1c7000b
 	lds32 xde, 0
 	jrl SongEdit_SendAndReturnOK
 
@@ -667,19 +667,19 @@ SongEdit_OverflowCheck:
 	jrl ge, SongEdit_ReturnOverflow
 	sla wa, 6
 	add wa, (xix)
-	stib_dri 0x07, 0xE4, 0xE0, 0x0D
+	stib_dri 0x07, 0xe4, 0xe0, 0x0d
 	ld wa, (xix)
 	inc 1, wa
 	ld (xix), wa
 	ld wa, (xhl)
 	sla wa, 6
 	add wa, (xix)
-	stib_dri 0x07, 0xE4, 0xE0, 0x00
+	stib_dri 0x07, 0xe4, 0xe0, 0x00
 	ld wa, (xix)
 	inc 1, wa
 	ld (xix), wa
-	ld xwa, 0x6F0027
-	ld xbc, 0x1C7000B
+	ld xwa, 0x6f0027
+	ld xbc, 0x1c7000b
 	lds32 xde, 0
 	call SendEvent
 	lda_24 xde, 0x020e46
@@ -699,12 +699,12 @@ SongEdit_OverflowCheck:
 	extz wa
 	pushw wa
 	pushw 0x2
-	pushw 0xE4E
+	pushw 0xe4e
 	ld bc, (xbc)
 	sla bc, 6
 	add bc, (xde)
 	lda_24 xwa, 0x020cbe
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	push xwa
 	call Strncpy
 	lda xsp, (xsp + 10)
@@ -714,8 +714,8 @@ SongEdit_OverflowCheck:
 	add wa, (xbc)
 	ld (xbc), wa
 	sti8_24 0x020e4e, 0x00
-	ld xwa, 0x6F0027
-	ld xbc, 0x1C7000B
+	ld xwa, 0x6f0027
+	ld xbc, 0x1c7000b
 	lds32 xde, 0
 
 SongEdit_SendAndReturnOK:
@@ -724,7 +724,7 @@ SongEdit_SendAndReturnOK:
 	jr SongEdit_CheckBounds_Epilogue
 
 SongEdit_ReturnOverflow:
-	ldb l, 0xFF
+	ldb l, 0xff
 
 SongEdit_CheckBounds_Epilogue:
 	inc 2, xsp
@@ -734,7 +734,7 @@ LyricsTrack_ReadAndParse:
 	lda_24 xwa, 0x020e4e
 	call SeqFile_ReadTrackData
 	pushw 0x2
-	pushw 0xE4E
+	pushw 0xe4e
 	call Strlen
 	inc 4, xsp
 	cp hl, 0x22
@@ -755,9 +755,9 @@ LyricsTrack_CheckEmpty:
 	add xde, xhl
 	ld c, (xde)
 	push xwa
-	cp c, 0xA
+	cp c, 0xa
 	jr z, LyricsTrack_HandleNewline
-	cp c, 0xD
+	cp c, 0xd
 	jrl nz, LyricsTrack_HandleNormalChar
 
 LyricsTrack_HandleNewline:
@@ -766,7 +766,7 @@ LyricsTrack_HandleNewline:
 	cps l, 1
 	jr z, LyricsTrack_HandleSingleChar
 	pushw 0x2
-	pushw 0xE4E
+	pushw 0xe4e
 	call Strlen
 	inc 4, xsp
 	extz hl
@@ -782,19 +782,19 @@ LyricsTrack_HandleSingleChar:
 	sla wa, 6
 	add wa, (xde)
 	lda_24 xhl, 0x020cbe
-	stib_dri 0x07, 0xEC, 0xE0, 0x0D
+	stib_dri 0x07, 0xec, 0xe0, 0x0d
 	ld wa, (xde)
 	inc 1, wa
 	ld (xde), wa
 	ld wa, (xbc)
 	sla wa, 6
 	add wa, (xde)
-	stib_dri 0x07, 0xEC, 0xE0, 0x00
+	stib_dri 0x07, 0xec, 0xe0, 0x00
 	ld wa, (xde)
 	inc 1, wa
 	ld (xde), wa
-	ld xwa, 0x6F0027
-	ld xbc, 0x1C7000B
+	ld xwa, 0x6f0027
+	ld xbc, 0x1c7000b
 	lds32 xde, 0
 	call SendEvent
 	lda_24 xde, 0x020e46
@@ -835,7 +835,7 @@ LyricsTrack_ResetBufferLoop:
 	exts xde
 	add xde, xwa
 	push xde
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -848,7 +848,7 @@ LyricsTrack_ResetBufferLoop:
 	lda xbc, (xbc + 64)
 
 LyricsTrack_ZeroFillLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, LyricsTrack_ZeroFillLoop
 	inc 1, iz
@@ -870,12 +870,12 @@ LyricsTrack_ZeroFillLoop:
 	ld wa, (xbc)
 	dec 1, wa
 	ld (xbc), wa
-	ld xwa, 0x6F0027
-	ld xbc, 0x1C7000D
+	ld xwa, 0x6f0027
+	ld xbc, 0x1c7000d
 	lds32 xde, 0
 	call SendEvent
-	ld xwa, 0x147001C
-	ld xbc, 0x1E70018
+	ld xwa, 0x147001c
+	ld xbc, 0x1e70018
 	lds32 xde, 0
 	call MainFuncCall
 	popw iz
@@ -883,10 +883,10 @@ LyricsTrack_ZeroFillLoop:
 
 LyricsFile_ValidateAndInsert:
 	pushw iz
-	ld xwa, 0x20F4E
+	ld xwa, 0x20f4e
 	call SeqFile_ValidateAndStore
 	pushw 0x2
-	pushw 0xF4E
+	pushw 0xf4e
 	call Strlen
 	inc 4, xsp
 	cp hl, 0x22
@@ -898,13 +898,13 @@ LyricsFile_CheckFirstByte:
 	cps e, 0
 	jrl z, LyricsBox_PopIzRet
 	lda_24 xhl, 0x020cbe
-	cp e, 0xD
+	cp e, 0xd
 	jr nz, LyricsFile_CheckLinefeed
 	lda_24 xbc, 0x020e42
 	ld de, (xbc + 2)
 	sla de, 6
 	add de, (xbc)
-	cp_srib_im 0x07, 0xEC, 0xE8, 0x0D
+	cp_srib_im 0x07, 0xec, 0xe8, 0x0d
 	jrl z, LyricsFile_ResetBuffers
 	jrl LyricsBox_PopIzRet
 
@@ -912,30 +912,30 @@ LyricsFile_CheckLinefeed:
 	lda_24 xbc, 0x020e42
 	ld wa, (xbc + 2)
 	sla wa, 6
-	cp e, 0xA
+	cp e, 0xa
 	jr nz, LyricsFile_InsertNormalChar
 	add wa, (xbc)
-	cp_srib_im 0x07, 0xEC, 0xE0, 0x0D
+	cp_srib_im 0x07, 0xec, 0xe0, 0x0d
 	jr z, LyricsFile_ResetBuffers
 	jr LyricsBox_PopIzRet
 
 LyricsFile_InsertNormalChar:
 	add wa, (xbc)
-	cp_srib_im 0x07, 0xEC, 0xE0, 0x0D
-	call_24 z, 0xF2B081
+	cp_srib_im 0x07, 0xec, 0xe0, 0x0d
+	call_24 z, 0xf2b081
 	pushw 0x2
-	pushw 0xF4E
+	pushw 0xf4e
 	call Strlen
 	ld iz, hl
 	pushw iz
 	pushw 0x2
-	pushw 0xF4E
+	pushw 0xf4e
 	lda_24 xwa, 0x020e42
 	ld bc, (xwa + 2)
 	sla bc, 6
 	add bc, (xwa)
 	lda_24 xwa, 0x020cbe
-	st_dri3b W, 0x07, 0xE0, 0xE4
+	st_dri3b W, 0x07, 0xe0, 0xe4
 	push xwa
 	call Strncpy
 	lda xsp, (xsp + 14)
@@ -943,8 +943,8 @@ LyricsFile_InsertNormalChar:
 	ld bc, iz
 	add bc, (xwa)
 	ld (xwa), bc
-	ld xwa, 0x6F0027
-	ld xbc, 0x1C7000C
+	ld xwa, 0x6f0027
+	ld xbc, 0x1c7000c
 	lds32 xde, 0
 	call SendEvent
 	call UpdateScreen
@@ -953,7 +953,7 @@ LyricsFile_InsertNormalChar:
 	sla bc, 6
 	add bc, (xwa)
 	lda_24 xwa, 0x020cbe
-	cp_srib_im 0x07, 0xE0, 0xE4, 0x0D
+	cp_srib_im 0x07, 0xe0, 0xe4, 0x0d
 	jr nz, LyricsBox_PopIzRet
 
 LyricsFile_ResetBuffers:
@@ -967,29 +967,29 @@ LyricsBoxFuncProc_Boundary:
 LyricsBoxFuncProc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C70013
+	cp xbc, 0x1c70013
 	jrl z, LyricsBoxFunc_ValidateFile
 	lda_24 xwa, 0x020e4e
-	cp xbc, 0x1C70012
+	cp xbc, 0x1c70012
 	jrl z, LyricsBoxFunc_HandleInput
-	cp xbc, 0x1C70011
+	cp xbc, 0x1c70011
 	jr z, LyricsBoxFunc_SendEvent12
-	cp xbc, 0x1C70010
+	cp xbc, 0x1c70010
 	jr z, LyricsBoxFunc_ResetCursors
-	cp xbc, 0x1E0003A
+	cp xbc, 0x1e0003a
 	jr z, LyricsBoxFunc_CopyString
-	cp xbc, 0x1C0000D
+	cp xbc, 0x1c0000d
 	jrl nz, LyricsBoxFunc_InheritedProc
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	jr LyricsBoxFunc_SendAndReturn
 
 LyricsBoxFunc_CopyString:
-	pushw 0xE2
-	pushw 0x61FA
+	pushw 0xe2
+	pushw 0x61fa
 	push xde
 	call Strcpy
 	inc 8, xsp
@@ -1014,7 +1014,7 @@ LyricsBoxFunc_ResetCursors:
 
 LyricsBoxFunc_SendEvent12:
 	ld xwa, 0x720006
-	ld xbc, 0x1C70012
+	ld xbc, 0x1c70012
 	lds32 xde, 0
 
 LyricsBoxFunc_SendAndReturn:
@@ -1035,9 +1035,9 @@ LyricsBoxFunc_HandleInput:
 	add xde, xhl
 	ld c, (xde)
 	push xwa
-	cp c, 0xA
+	cp c, 0xa
 	jr z, LyricsBoxFunc_HandleNewline
-	cp c, 0xD
+	cp c, 0xd
 	jrl nz, LyricsBoxFunc_HandleNormalChar
 
 LyricsBoxFunc_HandleNewline:
@@ -1046,16 +1046,16 @@ LyricsBoxFunc_HandleNewline:
 	cps l, 1
 	jr z, LyricsBoxFunc_HandleSingleChar
 	pushw 0x2
-	pushw 0xE4E
+	pushw 0xe4e
 	call Strlen
 	inc 4, xsp
 	extz hl
 	ld wa, hl
 	calr SongEdit_CheckBounds
-	cp l, 0xFF
+	cp l, 0xff
 	jrl z, SongName_ReturnZeroJmp
-	ld xwa, 0x6F0027
-	ld xbc, 0x1C7000B
+	ld xwa, 0x6f0027
+	ld xbc, 0x1c7000b
 	lds32 xde, 0
 	jrl LyricsBoxFunc_SendEventB
 
@@ -1068,19 +1068,19 @@ LyricsBoxFunc_HandleSingleChar:
 	sla wa, 6
 	add wa, (xde)
 	lda_24 xhl, 0x020cbe
-	stib_dri 0x07, 0xEC, 0xE0, 0x0D
+	stib_dri 0x07, 0xec, 0xe0, 0x0d
 	ld wa, (xde)
 	inc 1, wa
 	ld (xde), wa
 	ld wa, (xbc)
 	sla wa, 6
 	add wa, (xde)
-	stib_dri 0x07, 0xEC, 0xE0, 0x00
+	stib_dri 0x07, 0xec, 0xe0, 0x00
 	ld wa, (xde)
 	inc 1, wa
 	ld (xde), wa
-	ld xwa, 0x6F0027
-	ld xbc, 0x1C7000B
+	ld xwa, 0x6f0027
+	ld xbc, 0x1c7000b
 	lds32 xde, 0
 	call SendEvent
 	lda_24 xde, 0x020e46
@@ -1104,10 +1104,10 @@ LyricsBoxFunc_HandleNormalChar:
 	extz hl
 	ld wa, hl
 	calr SongEdit_CheckBounds
-	cp l, 0xFF
+	cp l, 0xff
 	jr z, SongName_ReturnZeroJmp
-	ld xwa, 0x6F0027
-	ld xbc, 0x1C7000B
+	ld xwa, 0x6f0027
+	ld xbc, 0x1c7000b
 	lds32 xde, 0
 
 LyricsBoxFunc_SendEventB:
@@ -1140,17 +1140,17 @@ SongNameBoxProc:
 	ld (xsp + 20), xde
 	ld xiz, xbc
 	ld (xsp + 24), xwa
-	cp xiz, 0x1C7000F
+	cp xiz, 0x1c7000f
 	jr z, SongNameBox_HandleEventF
-	cp xiz, 0x1C70009
+	cp xiz, 0x1c70009
 	jr z, SongNameBox_HandleEvent9
-	cp xiz, 0x1C0000C
+	cp xiz, 0x1c0000c
 	jr z, SongNameBox_HandleFocusGained
-	cp xiz, 0x1C0000B
+	cp xiz, 0x1c0000b
 	jr z, SongNameBox_HandleFocusGained
-	cp xiz, 0x1C00002
+	cp xiz, 0x1c00002
 	jr z, SongNameBox_HandleSize
-	cp xiz, 0x1C00001
+	cp xiz, 0x1c00001
 	jrl nz, SongNameBox_DefaultHandler
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
@@ -1171,22 +1171,22 @@ SongNameBox_HandleFocusGained:
 	ld xbc, xiz
 	ld xde, (xsp + 20)
 	call InheritedProc
-	ld xwa, 0x147001D
-	ld xbc, 0x1E70019
+	ld xwa, 0x147001d
+	ld xbc, 0x1e70019
 	lds32 xde, 0
 	call MainFuncCall
 	jr DrawStringCenter_RetZero2
 
 SongNameBox_HandleEvent9:
 	ld xwa, (xsp + 24)
-	ld xbc, 0x1C0000D
+	ld xbc, 0x1c0000d
 	ld xde, (xsp + 20)
 	call SendEvent
 	jr DrawStringCenter_RetZero2
 
 SongNameBox_HandleEventF:
 	ld xwa, (xsp + 24)
-	ld xbc, 0x1C0000D
+	ld xbc, 0x1c0000d
 	ld xde, (xsp + 20)
 	call SendEvent
 	ld xwa, (xsp + 24)
@@ -1208,8 +1208,8 @@ SongNameBox_HandleEventF:
 	ld xde, (xhl + 28)
 	push xde
 	pushm (xhl + 32)
-	pushw 0xF7
-	ld xde, 0x2104E
+	pushw 0xf7
+	ld xde, 0x2104e
 	call DrawStringCentered
 
 DrawStringCenter_RetZero2:
@@ -1234,17 +1234,17 @@ ComporserNameBoxProc:
 	ld (xsp + 20), xde
 	ld xiz, xbc
 	ld (xsp + 24), xwa
-	cp xiz, 0x1C7000E
+	cp xiz, 0x1c7000e
 	jr z, ComposerBox_HandleEventE
-	cp xiz, 0x1C70009
+	cp xiz, 0x1c70009
 	jr z, ComposerBox_HandleEvent9
-	cp xiz, 0x1C0000C
+	cp xiz, 0x1c0000c
 	jr z, SongNameBox2_HandleFocusGained
-	cp xiz, 0x1C0000B
+	cp xiz, 0x1c0000b
 	jr z, SongNameBox2_HandleFocusGained
-	cp xiz, 0x1C00002
+	cp xiz, 0x1c00002
 	jr z, ComposerBox_HandleSize
-	cp xiz, 0x1C00001
+	cp xiz, 0x1c00001
 	jrl nz, ComposerBox_DefaultHandler
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
@@ -1265,22 +1265,22 @@ SongNameBox2_HandleFocusGained:
 	ld xbc, xiz
 	ld xde, (xsp + 20)
 	call InheritedProc
-	ld xwa, 0x147001D
-	ld xbc, 0x1E7001A
+	ld xwa, 0x147001d
+	ld xbc, 0x1e7001a
 	lds32 xde, 0
 	call MainFuncCall
 	jr DrawStringCentered_RetZero
 
 ComposerBox_HandleEvent9:
 	ld xwa, (xsp + 24)
-	ld xbc, 0x1C0000D
+	ld xbc, 0x1c0000d
 	ld xde, (xsp + 20)
 	call SendEvent
 	jr DrawStringCentered_RetZero
 
 ComposerBox_HandleEventE:
 	ld xwa, (xsp + 24)
-	ld xbc, 0x1C0000D
+	ld xbc, 0x1c0000d
 	ld xde, (xsp + 20)
 	call SendEvent
 	ld xwa, (xsp + 24)
@@ -1302,7 +1302,7 @@ ComposerBox_HandleEventE:
 	ld xde, (xhl + 28)
 	push xde
 	pushm (xhl + 32)
-	pushw 0xF7
+	pushw 0xf7
 	ld xde, 0x21064
 	call DrawStringCentered
 
@@ -1328,9 +1328,9 @@ MeasureBoxProc:
 	ld (xsp + 58), xde
 	ld xiz, xbc
 	ld (xsp + 62), xwa
-	cp xiz, 0x1C0000F
+	cp xiz, 0x1c0000f
 	jr z, MeasureBox_HandleEventF
-	cp xiz, 0x1C0000B
+	cp xiz, 0x1c0000b
 	jr z, MeasureBox_HandleFocusGained
 	ld xwa, (xsp + 62)
 	ld xbc, xiz
@@ -1344,7 +1344,7 @@ MeasureBox_HandleFocusGained:
 	ld xde, (xsp + 58)
 	call InheritedProc
 	ld xde, (xsp + 62)
-	ld xwa, 0x147001E
+	ld xwa, 0x147001e
 	ld xbc, xiz
 	call MainPostEvent
 	jrl MeasureBox_ReturnZero
@@ -1358,11 +1358,11 @@ MeasureBox_HandleEventF:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	lda xhl, (xsp + 50)
-	ldw (xhl), 0x6C
+	ldw (xhl), 0x6c
 	lda xbc, (xhl + 2)
 	ldw (xbc), 0x56
 	lda xwa, (xhl + 4)
-	ldw (xwa), 0xD8
+	ldw (xwa), 0xd8
 	lda xde, (xhl + 6)
 	ldw (xde), 0x69
 	ld wa, (xwa)
@@ -1382,7 +1382,7 @@ MeasureBox_HandleEventF:
 	ld (xhl + 2), bc
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	ld xde, (xsp + 58)
 	call ApFuncCall
 	lda xde, (xsp + 8)
@@ -1392,13 +1392,13 @@ MeasureBox_HandleEventF:
 	lda xbc, (xhl + 16)
 
 MeasureBox_ZeroFillLoop:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, MeasureBox_ZeroFillLoop
 	ld (xde + 18), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E70016
+	ld xbc, 0x1e70016
 	call ApFuncCall
 	lda xwa, (xsp + 50)
 	lda xbc, (xsp + 46)
@@ -1421,16 +1421,16 @@ MeasureBox_Epilogue:
 MeasureBoxFunc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1E00045
+	cp xbc, 0x1e00045
 	jr z, MeasureBoxFunc_LoadAddr
-	cp xbc, 0x1E70016
+	cp xbc, 0x1e70016
 	jr z, MeasureBoxFunc_DrawMeasure
 	lds32 xhl, 0
 	jr MeasureBoxFunc_Epilogue
 
 MeasureBoxFunc_DrawMeasure:
 	push_sd16w 0x68, 0x26
-	pushw 0xE2
+	pushw 0xe2
 	pushw 0x6200
 	ld xwa, (xde + 18)
 	push xwa
@@ -1448,18 +1448,18 @@ MeasureBoxFunc_Epilogue:
 MeasureBoxFunc_End:
 
 AcDiskFileNameBoxProc:
-	st_dri3b L, 0xFD, 0x00, 0xFF
+	st_dri3b L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C70001
+	cp xbc, 0x1c70001
 	jr z, AcDiskFileName_HandleEventF
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, AcDiskFileName_HandleFocusGained
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, AcDiskFileName_HandleFocusGained
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, AcDiskFileName_HandleEvent1
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, AcDiskFileName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1479,8 +1479,8 @@ AcDiskFileName_CallInherited:
 AcDiskFileName_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
-	ld xwa, 0x147001D
-	ld xbc, 0x1E7000E
+	ld xwa, 0x147001d
+	ld xbc, 0x1e7000e
 	lds32 xde, 0
 	call MainFuncCall
 	jr AcDiskFileName_ReturnZero
@@ -1488,25 +1488,25 @@ AcDiskFileName_HandleFocusGained:
 AcDiskFileName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
-	pushw 0xE2
-	pushw 0x620E
+	pushw 0xe2
+	pushw 0x620e
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 	pushw 0x0
-	pushw 0x1C66
+	pushw 0x1c66
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 
 AcDiskFileName_ReturnZero:
@@ -1514,23 +1514,23 @@ AcDiskFileName_ReturnZero:
 
 AcDiskFileName_Epilogue:
 	pop xiz
-	st_dri3b L, 0xFD, 0x00, 0x01
+	st_dri3b L, 0xfd, 0x00, 0x01
 	ret
 AcDiskFileName_End:
 
 AcSmfFileNameBoxProc:
-	st_dri3b L, 0xFD, 0x00, 0xFF
+	st_dri3b L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C70002
+	cp xbc, 0x1c70002
 	jr z, AcSmfFileName_HandleEventF
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, AcSmfFileName_HandleFocusGained
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, AcSmfFileName_HandleFocusGained
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, AcSmfFileName_HandleEvent1
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, AcSmfFileName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1550,8 +1550,8 @@ AcSmfFileName_CallInherited:
 AcSmfFileName_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
-	ld xwa, 0x147001D
-	ld xbc, 0x1E7000F
+	ld xwa, 0x147001d
+	ld xbc, 0x1e7000f
 	lds32 xde, 0
 	call MainFuncCall
 	jr AcSmfFileName_ReturnZero
@@ -1559,7 +1559,7 @@ AcSmfFileName_HandleFocusGained:
 AcSmfFileName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
-	pushw 0xE2
+	pushw 0xe2
 	pushw 0x6228
 	lda xwa, (xsp + 8)
 	push xwa
@@ -1567,17 +1567,17 @@ AcSmfFileName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 	pushw 0x0
-	pushw 0x1C74
+	pushw 0x1c74
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 
 AcSmfFileName_ReturnZero:
@@ -1585,23 +1585,23 @@ AcSmfFileName_ReturnZero:
 
 AcSmfFileName_Epilogue:
 	pop xiz
-	st_dri3b L, 0xFD, 0x00, 0x01
+	st_dri3b L, 0xfd, 0x00, 0x01
 	ret
 AcSmfFileName_End:
 
 AcSmfSongNameBoxProc:
-	st_dri3b L, 0xFD, 0x00, 0xFF
+	st_dri3b L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C70003
+	cp xbc, 0x1c70003
 	jr z, AcSmfSongName_HandleEventF
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, AcSmfSongName_HandleFocusGained
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, AcSmfSongName_HandleFocusGained
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, AcSmfSongName_HandleEvent1
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, AcSmfSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1621,8 +1621,8 @@ AcSmfSongName_CallInherited:
 AcSmfSongName_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
-	ld xwa, 0x147001D
-	ld xbc, 0x1E70010
+	ld xwa, 0x147001d
+	ld xbc, 0x1e70010
 	lds32 xde, 0
 	call MainFuncCall
 	jr AcSmfSongName_ReturnZero
@@ -1630,7 +1630,7 @@ AcSmfSongName_HandleFocusGained:
 AcSmfSongName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
-	pushw 0xE2
+	pushw 0xe2
 	pushw 0x6242
 	lda xwa, (xsp + 8)
 	push xwa
@@ -1638,17 +1638,17 @@ AcSmfSongName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 	pushw 0x0
-	pushw 0x1C88
+	pushw 0x1c88
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 
 AcSmfSongName_ReturnZero:
@@ -1656,23 +1656,23 @@ AcSmfSongName_ReturnZero:
 
 AcSmfSongName_Epilogue:
 	pop xiz
-	st_dri3b L, 0xFD, 0x00, 0x01
+	st_dri3b L, 0xfd, 0x00, 0x01
 	ret
 AcSmfSongName_End:
 
 AcDocSongNameBoxProc:
-	st_dri3b L, 0xFD, 0x00, 0xFF
+	st_dri3b L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C70005
+	cp xbc, 0x1c70005
 	jr z, AcDocSongName_HandleEventF
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, AcDocSongName_HandleFocusGained
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, AcDocSongName_HandleFocusGained
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, AcDocSongName_HandleEvent1
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, AcDocSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1692,8 +1692,8 @@ AcDocSongName_CallInherited:
 AcDocSongName_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
-	ld xwa, 0x147001D
-	ld xbc, 0x1E70012
+	ld xwa, 0x147001d
+	ld xbc, 0x1e70012
 	lds32 xde, 0
 	call MainFuncCall
 	jr AcDocSongName_ReturnZero
@@ -1701,25 +1701,25 @@ AcDocSongName_HandleFocusGained:
 AcDocSongName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
-	pushw 0xE2
-	pushw 0x625C
+	pushw 0xe2
+	pushw 0x625c
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 	pushw 0x0
-	pushw 0x1C9E
+	pushw 0x1c9e
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 
 AcDocSongName_ReturnZero:
@@ -1727,23 +1727,23 @@ AcDocSongName_ReturnZero:
 
 AcDocSongName_Epilogue:
 	pop xiz
-	st_dri3b L, 0xFD, 0x00, 0x01
+	st_dri3b L, 0xfd, 0x00, 0x01
 	ret
 AcDocSongName_End:
 
 AcDocFileNoBoxProc:
-	st_dri3b L, 0xFD, 0x00, 0xFF
+	st_dri3b L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C70006
+	cp xbc, 0x1c70006
 	jr z, AcDocFileNo_HandleEventF
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, AcDocFileNo_HandleFocusGained
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, AcDocFileNo_HandleFocusGained
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, AcDocFileNo_HandleEvent1
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, AcDocFileNo_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1763,8 +1763,8 @@ AcDocFileNo_CallInherited:
 AcDocFileNo_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
-	ld xwa, 0x147001D
-	ld xbc, 0x1E70013
+	ld xwa, 0x147001d
+	ld xbc, 0x1e70013
 	lds32 xde, 0
 	call MainFuncCall
 	jr AcDocFileNo_ReturnZero
@@ -1772,7 +1772,7 @@ AcDocFileNo_HandleFocusGained:
 AcDocFileNo_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
-	pushw 0xE2
+	pushw 0xe2
 	pushw 0x6276
 	lda xwa, (xsp + 8)
 	push xwa
@@ -1780,17 +1780,17 @@ AcDocFileNo_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 	pushw 0x0
-	pushw 0x1CC2
+	pushw 0x1cc2
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 
 AcDocFileNo_ReturnZero:
@@ -1798,23 +1798,23 @@ AcDocFileNo_ReturnZero:
 
 AcDocFileNo_Epilogue:
 	pop xiz
-	st_dri3b L, 0xFD, 0x00, 0x01
+	st_dri3b L, 0xfd, 0x00, 0x01
 	ret
 AcDocFileNo_End:
 
 AcPDSongNameBoxProc:
-	st_dri3b L, 0xFD, 0x00, 0xFF
+	st_dri3b L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C70007
+	cp xbc, 0x1c70007
 	jr z, AcPDSongName_HandleEventF
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, AcPDSongName_HandleFocusGained
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, AcPDSongName_HandleFocusGained
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, AcPDSongName_HandleEvent1
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, AcPDSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1834,8 +1834,8 @@ AcPDSongName_CallInherited:
 AcPDSongName_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
-	ld xwa, 0x147001D
-	ld xbc, 0x1E70014
+	ld xwa, 0x147001d
+	ld xbc, 0x1e70014
 	lds32 xde, 0
 	call MainFuncCall
 	jr AcPDSongName_ReturnZero
@@ -1843,7 +1843,7 @@ AcPDSongName_HandleFocusGained:
 AcPDSongName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
-	pushw 0xE2
+	pushw 0xe2
 	pushw 0x6290
 	lda xwa, (xsp + 8)
 	push xwa
@@ -1851,17 +1851,17 @@ AcPDSongName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 	pushw 0x0
-	pushw 0x1CAC
+	pushw 0x1cac
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 
 AcPDSongName_ReturnZero:
@@ -1869,23 +1869,23 @@ AcPDSongName_ReturnZero:
 
 AcPDSongName_Epilogue:
 	pop xiz
-	st_dri3b L, 0xFD, 0x00, 0x01
+	st_dri3b L, 0xfd, 0x00, 0x01
 	ret
 AcPDSongName_End:
 
 AcPDFileNoBoxProc:
-	st_dri3b L, 0xFD, 0x00, 0xFF
+	st_dri3b L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C70008
+	cp xbc, 0x1c70008
 	jr z, AcPDFileNo_HandleEventF
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, AcPDFileNo_HandleFocusGained
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, AcPDFileNo_HandleFocusGained
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, AcPDFileNo_HandleEvent1
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, AcPDFileNo_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1905,8 +1905,8 @@ AcPDFileNo_CallInherited:
 AcPDFileNo_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
-	ld xwa, 0x147001D
-	ld xbc, 0x1E70015
+	ld xwa, 0x147001d
+	ld xbc, 0x1e70015
 	lds32 xde, 0
 	call MainFuncCall
 	jr AcPDFileNo_ReturnZero
@@ -1914,25 +1914,25 @@ AcPDFileNo_HandleFocusGained:
 AcPDFileNo_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
-	pushw 0xE2
-	pushw 0x62AA
+	pushw 0xe2
+	pushw 0x62aa
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 	pushw 0x0
-	pushw 0x1CC6
+	pushw 0x1cc6
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 
 AcPDFileNo_ReturnZero:
@@ -1940,7 +1940,7 @@ AcPDFileNo_ReturnZero:
 
 AcPDFileNo_Epilogue:
 	pop xiz
-	st_dri3b L, 0xFD, 0x00, 0x01
+	st_dri3b L, 0xfd, 0x00, 0x01
 	ret
 
 IvNamingExitProc:
@@ -1949,9 +1949,9 @@ IvNamingExitProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1C00007
+	cp xiz, 0x1c00007
 	jr z, IvNamingExit_ReturnZero
-	cp xiz, 0x1E0003A
+	cp xiz, 0x1e0003a
 	jr z, IvNamingExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -1959,8 +1959,8 @@ IvNamingExitProc:
 	jr IvNamingExit_CallInherited
 
 IvNamingExit_CopyString:
-	pushw 0xE2
-	pushw 0x62C4
+	pushw 0xe2
+	pushw 0x62c4
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -1970,26 +1970,26 @@ IvNamingExit_CopyString:
 
 IvNamingExit_ReturnZero:
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1E00053
+	ld xbc, 0x1e00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, IvNamingExit_ForwardEvent
 	call GetTitleNow
-	cp xhl, 0x1A0008F
+	cp xhl, 0x1a0008f
 	jr nz, IvNamingExit_CheckTitleA7
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A0008E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a0008e
 	jr IvNamingExit_PostTitleEvent
 
 IvNamingExit_CheckTitleA7:
 	call GetTitleNow
-	cp xhl, 0x1A000A7
+	cp xhl, 0x1a000a7
 	jr nz, IvNamingExit_ForwardEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A00083
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a00083
 
 IvNamingExit_PostTitleEvent:
 	call PostEvent
@@ -2269,39 +2269,39 @@ AcTrAsGridBoxProc:
 	ld (xsp + 12), xbc
 	ld (xsp + 16), xwa
 	ld xbc, (xsp + 12)
-	cp xbc, 0x1E0008D
+	cp xbc, 0x1e0008d
 	jrl z, TrAsGrid_HandleResizeEvent
 	ld xwa, (xsp + 12)
-	cp xwa, 0x1C00007
+	cp xwa, 0x1c00007
 	jrl z, TrAsGrid_HandleSelectEvent
-	cp xwa, 0x1E0008B
+	cp xwa, 0x1e0008b
 	jrl z, TrAsGrid_GetDirectionLabel
-	cp xwa, 0x1E0008A
+	cp xwa, 0x1e0008a
 	jrl z, TrAsGrid_GetWidgetLabel
-	cp xwa, 0x1C00001
+	cp xwa, 0x1c00001
 	jr z, TrAsGrid_HandleInit
-	sub xbc, 0x1C00017
+	sub xbc, 0x1c00017
 	cp xbc, 0x0
 	jrl lt, TrAsGrid_PassThrough
 	cp xbc, 0x6
 	jrl gt, TrAsGrid_PassThrough
 	add xbc, xbc
-	add xbc, 0xE2643A
+	add xbc, 0xe2643a
 	ld bc, (xbc)
 	lda_24 xix, 0xf2bf89
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 
 TrAsGrid_HandleInit:
-	ld xwa, 0xC0
+	ld xwa, 0xc0
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jr z, TrAsGrid_InitStateZero
-	ld xwa, 0x8B0009
+	ld xwa, 0x8b0009
 	lds bc, 0
 	jr TrAsGrid_InitDispatch
 
 TrAsGrid_InitStateZero:
-	ld xwa, 0x8B0009
+	ld xwa, 0x8b0009
 	lds bc, 1
 
 TrAsGrid_InitDispatch:
@@ -2314,7 +2314,7 @@ TrAsGrid_InitDispatch:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld xiz, xhl
@@ -2322,28 +2322,28 @@ TrAsGrid_InitDispatch:
 	ld bc, (xwa + 26)
 	ld xwa, xiz
 	srl xwa, 0
-	ldi_werp 0xE2, 0
+	ldi_werp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	call SetDialUp
 	ld xwa, (xsp + 4)
 	ld bc, (xwa + 26)
 	ld xwa, xiz
 	srl xwa, 0
-	ldi_werp 0xE2, 0
+	ldi_werp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	call SetDialDown
 	lds wa, 1
 	jrl TrAsGrid_CallUpdateSorted
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1E00050
+	ld xbc, 0x1e00050
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
@@ -2352,7 +2352,7 @@ TrAsGrid_InitDispatch:
 	jr nz, TrAsGrid_ScrollDown
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	dec 3, l
@@ -2363,7 +2363,7 @@ TrAsGrid_InitDispatch:
 TrAsGrid_ScrollDown:
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	inc 5, l
@@ -2374,7 +2374,7 @@ TrAsGrid_ApplyScrollOffset:
 	calr TrAsGrid_LookupByteTable
 	st8_24 0x021082, l
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld (xsp + 6), hl
@@ -2392,11 +2392,11 @@ TrAsGrid_ApplyScrollOffset:
 	res 0, c
 	stda8 3296, c
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1E0008E
-	ld xde, 0xFFFF0009
+	ld xbc, 0x1e0008e
+	ld xde, 0xffff0009
 	call SendEvent
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	jr TrAsGrid_DispatchNavigate
 
@@ -2415,9 +2415,9 @@ TrAsGrid_CheckScrollBoundary:
 	dec 1, wa
 	ld de, wa
 	extz xde
-	add xde, 0xFFFF0000
+	add xde, 0xffff0000
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 
 TrAsGrid_DispatchNavigate:
 	call SendEvent
@@ -2426,8 +2426,8 @@ TrAsGrid_DispatchNavigate:
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	call SleepMainTask
-	ld xwa, 0x147001C
-	ld xbc, 0x1E70005
+	ld xwa, 0x147001c
+	ld xbc, 0x1e70005
 	ld xde, (xsp + 8)
 	call FuncCall
 	call WakeUpMainTask
@@ -2435,7 +2435,7 @@ TrAsGrid_DispatchNavigate:
 
 TrAsGrid_HandleOtherEvent:
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1E00091
+	ld xbc, 0x1e00091
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
@@ -2457,17 +2457,17 @@ TrAsGrid_HandleOtherEvent:
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 8)
 	call SetDialUp
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 8)
 	call SetDialDown
 	lds wa, 1
 	jrl TrAsGrid_CallUpdateSorted
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1E00050
+	ld xbc, 0x1e00050
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
@@ -2476,7 +2476,7 @@ TrAsGrid_HandleOtherEvent:
 	jr nz, TrAsGrid_ScrollDown2
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	dec 1, l
@@ -2487,7 +2487,7 @@ TrAsGrid_HandleOtherEvent:
 TrAsGrid_ScrollDown2:
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	inc 7, l
@@ -2498,7 +2498,7 @@ TrAsGrid_ApplyScrollOffset2:
 	calr TrAsGrid_LookupByteTable
 	st8_24 0x021082, l
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld (xsp + 6), hl
@@ -2516,11 +2516,11 @@ TrAsGrid_ApplyScrollOffset2:
 	set 0, c
 	stda8 3296, c
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1E0008E
-	ld xde, 0xFFFF0002
+	ld xbc, 0x1e0008e
+	ld xde, 0xffff0002
 	call SendEvent
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	jr TrAsGrid_DispatchNavigate2
 
@@ -2539,9 +2539,9 @@ TrAsGrid_CheckScrollBoundary2:
 	inc 1, wa
 	ld de, wa
 	extz xde
-	add xde, 0xFFFF0000
+	add xde, 0xffff0000
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 
 TrAsGrid_DispatchNavigate2:
 	call SendEvent
@@ -2550,8 +2550,8 @@ TrAsGrid_DispatchNavigate2:
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	call SleepMainTask
-	ld xwa, 0x147001C
-	ld xbc, 0x1E70004
+	ld xwa, 0x147001c
+	ld xbc, 0x1e70004
 	ld xde, (xsp + 8)
 	call FuncCall
 	call WakeUpMainTask
@@ -2559,7 +2559,7 @@ TrAsGrid_DispatchNavigate2:
 
 TrAsGrid_HandleOtherEvent2:
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1E00091
+	ld xbc, 0x1e00091
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
@@ -2581,11 +2581,11 @@ TrAsGrid_HandleOtherEvent2:
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 8)
 	call SetDialUp
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 8)
 	call SetDialDown
 	lds wa, 1
@@ -2604,11 +2604,11 @@ TrAsGrid_GetWidgetLabel:
 TrAsGrid_GetDirectionLabel:
 	bitda 0, 3296
 	jr nz, TrAsGrid_DirectionLabel2
-	ld xwa, 0xE263E2
+	ld xwa, 0xe263e2
 	jr TrAsGrid_PushLabelAddr
 
 TrAsGrid_DirectionLabel2:
-	ld xwa, 0xE2640E
+	ld xwa, 0xe2640e
 
 TrAsGrid_PushLabelAddr:
 	push xwa
@@ -2626,7 +2626,7 @@ TrAsGrid_HandleSelectEvent:
 	ld xde, (xsp + 8)
 	call InheritedProc
 	ld xwa, (xsp + 8)
-	cp xwa, 0x8F
+	cp xwa, 0x8f
 	jrl nz, TrAsGrid_ReturnZero
 	bitda 0, 3296
 	jr nz, TrAsGrid_DeselectCell
@@ -2635,11 +2635,11 @@ TrAsGrid_HandleSelectEvent:
 	st8_24 0x021082, l
 	setda 0, 3296
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1E0008E
-	ld xde, 0xFFFF0002
+	ld xbc, 0x1e0008e
+	ld xde, 0xffff0002
 	call SendEvent
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	call SendEvent
 	ld xwa, (xsp + 16)
@@ -2647,8 +2647,8 @@ TrAsGrid_HandleSelectEvent:
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	call SleepMainTask
-	ld xwa, 0x147001C
-	ld xbc, 0x1E70008
+	ld xwa, 0x147001c
+	ld xbc, 0x1e70008
 	ld xde, (xsp + 8)
 	jr TrAsGrid_FinishCellUpdate
 
@@ -2658,11 +2658,11 @@ TrAsGrid_DeselectCell:
 	st8_24 0x021082, l
 	resda 0, 3296
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1E0008E
-	ld xde, 0xFFFF0002
+	ld xbc, 0x1e0008e
+	ld xde, 0xffff0002
 	call SendEvent
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	call SendEvent
 	ld xwa, (xsp + 16)
@@ -2670,8 +2670,8 @@ TrAsGrid_DeselectCell:
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	call SleepMainTask
-	ld xwa, 0x147001C
-	ld xbc, 0x1E70009
+	ld xwa, 0x147001c
+	ld xbc, 0x1e70009
 	ld xde, (xsp + 8)
 
 TrAsGrid_FinishCellUpdate:
@@ -2706,7 +2706,7 @@ TrAsGrid_LookupTable:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0xe26448
-	ld_sriw3 HL, 0x07, 0xE4, 0xE0
+	ld_sriw3 HL, 0x07, 0xe4, 0xe0
 	ret
 
 TrAsGrid_ByteData1:
@@ -2741,9 +2741,9 @@ TrAsGrid_CheckTrackType:
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
-	cp a, 0xE
+	cp a, 0xe
 	jr z, TrAsGrid_IsDrumType
-	cp a, 0xD
+	cp a, 0xd
 	jr z, TrAsGrid_IsDrumType
 
 TrAsGrid_NotDrumType:
@@ -2752,9 +2752,9 @@ TrAsGrid_NotDrumType:
 
 TrAsGrid_CheckCurrentCell:
 	ld8_24 a, 0x021082
-	cp a, 0xE
+	cp a, 0xe
 	jr z, TrAsGrid_IsDrumType
-	cp a, 0xD
+	cp a, 0xd
 	jr nz, TrAsGrid_NotDrumType
 
 TrAsGrid_IsDrumType:
@@ -2766,18 +2766,18 @@ TrAsGridCheck:
 	push xiz
 	ld xiz, xde
 	ld xwa, xbc
-	cp xbc, 0x1E0008D
+	cp xbc, 0x1e0008d
 	jrl z, TrAsGridChk_HandleResizeEvent
-	sub xwa, 0x1C00017
+	sub xwa, 0x1c00017
 	cp xwa, 0x0
 	jrl lt, TrAsGridChk_ReturnZero
 	cp xwa, 0x6
 	jrl gt, TrAsGridChk_ReturnZero
 	add xwa, xwa
-	add xwa, 0xE264D0
+	add xwa, 0xe264d0
 	ld wa, (xwa)
 	lda_24 xix, 0xf2c4b4
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 TrAsGridChk_ByteData:
 	call	GetFocusObject
@@ -2997,7 +2997,7 @@ TrAsGridChk_HandleResizeEvent:
 	lda xbc, (xsp + 14)
 	ld xwa, xiz
 	srl xwa, 0
-	ldi_werp 0xE2, 0
+	ldi_werp 0xe2, 0
 	ld (xbc), wa
 	lda xwa, (xbc + 2)
 	ld de, iz
@@ -3014,7 +3014,7 @@ TrAsGridChk_HandleResizeEvent:
 	jrl nz, TrAsGridChk_ReturnZero
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld wa, (xsp + 16)
@@ -3040,8 +3040,8 @@ TrAsGridChk_Part1_AdjustUp:
 TrAsGridChk_Part1_SendAudio:
 	extz hl
 	sla hl, 2
-	ld xbc, 0xE262CA
-	ld_sril3 XWA, 0x07, 0xE4, 0xEC
+	ld xbc, 0xe262ca
+	ld_sril3 XWA, 0x07, 0xe4, 0xec
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
@@ -3050,7 +3050,7 @@ TrAsGridChk_Part1_SendAudio:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 14)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl TrAsGridChk_DispatchAndReturn
 
 TrAsGridChk_Part2_Start:
@@ -3061,10 +3061,10 @@ TrAsGridChk_Part2_Start:
 	calr TrAsGrid_LookupTable
 	andda16 xhl, 61904
 	lda xbc, (xsp + 4)
-	ld xwa, 0xE26494
+	ld xwa, 0xe26494
 	cps hl, 0
 	jr z, TrAsGridChk_Part2_PushCmd
-	ld xwa, 0xE26490
+	ld xwa, 0xe26490
 
 TrAsGridChk_Part2_PushCmd:
 	push xwa
@@ -3073,7 +3073,7 @@ TrAsGridChk_Part2_PushCmd:
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld wa, (xsp + 16)
@@ -3087,7 +3087,7 @@ TrAsGridChk_Part2_PushCmd:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jrl nz, TrAsGridChk_Part2_Finish
-	ld xwa, 0xE26498
+	ld xwa, 0xe26498
 	jr TrAsGridChk_SendExtraAudioCmd
 
 TrAsGridChk_Part2_CheckType0:
@@ -3095,7 +3095,7 @@ TrAsGridChk_Part2_CheckType0:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part2_Finish
-	ld xwa, 0xE2649C
+	ld xwa, 0xe2649c
 	jr TrAsGridChk_SendExtraAudioCmd
 
 TrAsGridChk_Part2_UpDir:
@@ -3104,10 +3104,10 @@ TrAsGridChk_Part2_UpDir:
 	calr TrAsGrid_LookupTable
 	andda16 xhl, 61904
 	lda xbc, (xsp + 4)
-	ld xwa, 0xE264A4
+	ld xwa, 0xe264a4
 	cps hl, 0
 	jr z, TrAsGridChk_Part2_UpPushCmd
-	ld xwa, 0xE264A0
+	ld xwa, 0xe264a0
 
 TrAsGridChk_Part2_UpPushCmd:
 	push xwa
@@ -3116,7 +3116,7 @@ TrAsGridChk_Part2_UpPushCmd:
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld wa, (xsp + 16)
@@ -3130,7 +3130,7 @@ TrAsGridChk_Part2_UpPushCmd:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part2_Finish
-	ld xwa, 0xE264A8
+	ld xwa, 0xe264a8
 	jr TrAsGridChk_SendExtraAudioCmd
 
 TrAsGridChk_Part2_UpCheckType0:
@@ -3138,7 +3138,7 @@ TrAsGridChk_Part2_UpCheckType0:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part2_Finish
-	ld xwa, 0xE264AC
+	ld xwa, 0xe264ac
 
 TrAsGridChk_SendExtraAudioCmd:
 	push xwa
@@ -3151,7 +3151,7 @@ TrAsGridChk_Part2_Finish:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 14)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl TrAsGridChk_DispatchAndReturn
 
 TrAsGridChk_Part3_Start:
@@ -3161,10 +3161,10 @@ TrAsGridChk_Part3_Start:
 	extz wa
 	calr TrAsGrid_LookupTable
 	andda16 xhl, 62096
-	ld xwa, 0xE264B4
+	ld xwa, 0xe264b4
 	cps hl, 0
 	jr z, TrAsGridChk_Part3_PushCmd
-	ld xwa, 0xE264B0
+	ld xwa, 0xe264b0
 
 TrAsGridChk_Part3_PushCmd:
 	push xwa
@@ -3174,7 +3174,7 @@ TrAsGridChk_Part3_PushCmd:
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld wa, (xsp + 16)
@@ -3188,7 +3188,7 @@ TrAsGridChk_Part3_PushCmd:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jrl nz, TrAsGridChk_Part3_Finish
-	ld xwa, 0xE264B8
+	ld xwa, 0xe264b8
 	jr TrAsGridChk_SendExtraAudioCmd2
 
 TrAsGridChk_Part3_CheckType0:
@@ -3196,7 +3196,7 @@ TrAsGridChk_Part3_CheckType0:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part3_Finish
-	ld xwa, 0xE264BC
+	ld xwa, 0xe264bc
 	jr TrAsGridChk_SendExtraAudioCmd2
 
 TrAsGridChk_Part3_UpDir:
@@ -3204,10 +3204,10 @@ TrAsGridChk_Part3_UpDir:
 	extz wa
 	calr TrAsGrid_LookupTable
 	andda16 xhl, 62096
-	ld xwa, 0xE264C4
+	ld xwa, 0xe264c4
 	cps hl, 0
 	jr z, TrAsGridChk_Part3_UpPushCmd
-	ld xwa, 0xE264C0
+	ld xwa, 0xe264c0
 
 TrAsGridChk_Part3_UpPushCmd:
 	push xwa
@@ -3217,7 +3217,7 @@ TrAsGridChk_Part3_UpPushCmd:
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld wa, (xsp + 16)
@@ -3231,7 +3231,7 @@ TrAsGridChk_Part3_UpPushCmd:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part3_Finish
-	ld xwa, 0xE264C8
+	ld xwa, 0xe264c8
 	jr TrAsGridChk_SendExtraAudioCmd2
 
 TrAsGridChk_Part3_UpCheckType0:
@@ -3239,7 +3239,7 @@ TrAsGridChk_Part3_UpCheckType0:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part3_Finish
-	ld xwa, 0xE264CC
+	ld xwa, 0xe264cc
 
 TrAsGridChk_SendExtraAudioCmd2:
 	push xwa
@@ -3252,7 +3252,7 @@ TrAsGridChk_Part3_Finish:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 14)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 
 TrAsGridChk_DispatchAndReturn:
 	call SendEvent
@@ -3269,7 +3269,7 @@ AcModeSelBoxProc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1E0004D
+	cp xbc, 0x1e0004d
 	jr z, VoiceConfig_HandleInit
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -3285,7 +3285,7 @@ VoiceConfig_HandleInit:
 	jr nz, VoiceConfig_ReturnZero
 	ld xwa, xiz
 	call GetViewInstance
-	mrdb5 0x8B, 0x32, 0x19, 0x3E, 0x0D
+	mrdb5 0x8b, 0x32, 0x19, 0x3e, 0x0d
 
 VoiceConfig_ReturnZero:
 	lds32 xhl, 0
@@ -3298,15 +3298,15 @@ VoiceConfig_Epilogue:
 VoiceConfig_ScreenTypeDispatch:
 	push xiz
 	ld xiz, xwa
-	cp xiz, 0xB
+	cp xiz, 0xb
 	jr z, VoiceConfig_SetType5
-	cp xiz, 0xA
+	cp xiz, 0xa
 	jr z, VoiceConfig_SetType4
 	cp xiz, 0x9
 	jr z, VoiceConfig_SetType3
-	cp xiz, 0x8B
+	cp xiz, 0x8b
 	jr z, VoiceConfig_SetType2
-	cp xiz, 0x8A
+	cp xiz, 0x8a
 	jr z, VoiceConfig_SetType1
 	cp xiz, 0x89
 	jr nz, VoiceConfig_ReturnZeroShort
@@ -3314,14 +3314,14 @@ VoiceConfig_ScreenTypeDispatch:
 
 VoiceConfig_LookupByScreenType:
 	call GetTitleNow
-	ldi_werp 0xEE, 0
-	cp hl, 0xE3
+	ldi_werp 0xee, 0
+	cp hl, 0xe3
 	jr z, VoiceConfig_LoadTableB
-	cp hl, 0xE2
+	cp hl, 0xe2
 	jr z, VoiceConfig_LoadTableA
-	cp hl, 0xE1
+	cp hl, 0xe1
 	jr nz, VoiceConfig_ReturnZeroShort
-	ld xwa, 0xE264DE
+	ld xwa, 0xe264de
 
 VoiceConfig_ReadFromTable:
 	add xwa, xiz
@@ -3349,11 +3349,11 @@ VoiceConfig_SetType5:
 	jr VoiceConfig_LookupByScreenType
 
 VoiceConfig_LoadTableA:
-	ld xwa, 0xE264E4
+	ld xwa, 0xe264e4
 	jr VoiceConfig_ReadFromTable
 
 VoiceConfig_LoadTableB:
-	ld xwa, 0xE264EA
+	ld xwa, 0xe264ea
 	jr VoiceConfig_ReadFromTable
 
 VoiceConfig_ReturnZeroShort:
@@ -3371,9 +3371,9 @@ AcDemoSongBoxProc:
 	ld (xsp + 12), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 12)
-	cp xwa, 0x1C00007
+	cp xwa, 0x1c00007
 	jr z, AcDemoSong_HandleResize
-	cp xwa, 0x1C00002
+	cp xwa, 0x1c00002
 	jr z, AcDemoSong_HandleInit
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
@@ -3438,16 +3438,16 @@ AcDemoSong_Epilogue:
 AcDemoSong_End:
 
 AcCurrentSongBoxProc:
-	st_dri3b L, 0xFD, 0x00, 0xFF
+	st_dri3b L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, AcCurSongName_HandleFocusGained
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, AcCurSongName_HandleFocusGained
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, AcCurSong_HandleEvent1
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, AcCurSong_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -3471,15 +3471,15 @@ AcCurSongName_HandleFocusGained:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xE2
-	pushw 0x64F0
+	pushw 0xe2
+	pushw 0x64f0
 	lda xwa, (xsp + 10)
 	push xwa
 	call Audio_SendCommand
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 
 AcCurSong_ReturnZero:
@@ -3487,23 +3487,23 @@ AcCurSong_ReturnZero:
 
 AcCurSong_Epilogue:
 	pop xiz
-	st_dri3b L, 0xFD, 0x00, 0x01
+	st_dri3b L, 0xfd, 0x00, 0x01
 	ret
 AcCurSong_End:
 
 AcCurSongNameBoxProc:
-	st_dri3b L, 0xFD, 0x00, 0xFF
+	st_dri3b L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C70000
+	cp xbc, 0x1c70000
 	jr z, AcCurSongName_HandleEventF
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, AcCurSongName_HandleFocusAndInit
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, AcCurSongName_HandleFocusAndInit
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, AcCurSongName_HandleEvent1
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, AcCurSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -3523,8 +3523,8 @@ AcCurSongName_CallInherited:
 AcCurSongName_HandleFocusAndInit:
 	ld xwa, xiz
 	call InheritedProc
-	ld xwa, 0x147001D
-	ld xbc, 0x1E7000D
+	ld xwa, 0x147001d
+	ld xbc, 0x1e7000d
 	lds32 xde, 0
 	call MainFuncCall
 	jr MuteChSel_TtlSetup
@@ -3532,25 +3532,25 @@ AcCurSongName_HandleFocusAndInit:
 AcCurSongName_HandleEventF:
 	ld xwa, xiz
 	call InheritedProc
-	pushw 0xE2
-	pushw 0x64F8
+	pushw 0xe2
+	pushw 0x64f8
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 	pushw 0x0
-	pushw 0x1C50
+	pushw 0x1c50
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 
 ; SmfMuteChSelFunc title setup
@@ -3560,12 +3560,12 @@ MuteChSel_TtlSetup:
 ; SmfMuteChSelFunc title default
 MuteChSel_TtlDefault:
 	pop xiz
-	st_dri3b L, 0xFD, 0x00, 0x01
+	st_dri3b L, 0xfd, 0x00, 0x01
 	ret
 
 DemoSongSelFunc:
-	ld xwa, 0x147001C
-	ld xbc, 0x1E70000
+	ld xwa, 0x147001c
+	ld xbc, 0x1e70000
 	call MainFuncCall
 	lds32 xhl, 0
 	ret
@@ -3573,16 +3573,16 @@ DemoSongSelFunc:
 SmfMuteChSelFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1E0003E
+	sub xbc, 0x1e0003e
 	cp xbc, 0x0
 	jr lt, MuteChSel_ReturnZero
 	cp xbc, 0x9
 	jr gt, MuteChSel_ReturnZero
 	add xbc, xbc
-	add xbc, 0xE265B0
+	add xbc, 0xe265b0
 	ld bc, (xbc)
 	lda_24 xix, 0xf2cc54
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ; SmfMuteChSelFunc dispatch
 MuteChSel_Dispatch:
 	ld	xwa, (xde+14)
@@ -3616,16 +3616,16 @@ MuteChSel_Epilogue:
 SqTrAsPsSongFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1E0003E
+	sub xbc, 0x1e0003e
 	cp xbc, 0x0
 	jr lt, SqTrAsPsSong_ReturnZero
 	cp xbc, 0x9
 	jr gt, SqTrAsPsSong_ReturnZero
 	add xbc, xbc
-	add xbc, 0xE2665E
+	add xbc, 0xe2665e
 	ld bc, (xbc)
 	lda_24 xix, 0xf2ccb5
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ; SqTrAsPsSongFunc dispatch
 SqTrAsPsSong_Dispatch:
 	ld	xwa, (xde+14)
@@ -3658,18 +3658,18 @@ SqTrAsPsSong_Epilogue:
 SqAftSetFunc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1E00065
+	cp xbc, 0x1e00065
 	jr z, SqAftSet_Case2
-	cp xbc, 0x1E00064
+	cp xbc, 0x1e00064
 	jr z, SqAftSet_Case1
-	cp xbc, 0x1E00063
+	cp xbc, 0x1e00063
 	jr z, SqAftSet_Case0
-	cp xbc, 0x1E00062
+	cp xbc, 0x1e00062
 	jr nz, SqAftSet_Case2
 	ld wa, (xde + 8)
 	sla wa, 2
 	lda_24 xbc, 0xe26672
-	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 10)
 	push xwa
@@ -3700,7 +3700,7 @@ SqAftSet_LookupTableEntry:
 	extz wa
 	add wa, wa
 	lda_24 xbc, 0xe26686
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	st16_24 0x021086, xwa
 	ret
 
@@ -3708,18 +3708,18 @@ MuteChSetFunc:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
-	cp xbc, 0x1E00082
+	cp xbc, 0x1e00082
 	jr z, MuteChSet_ParamCheck
-	sub xwa, 0x1E0003E
+	sub xwa, 0x1e0003e
 	cp xwa, 0x0
 	jr lt, MuteChSetFunc_Exit
 	cp xwa, 0x9
 	jr gt, MuteChSetFunc_Exit
 	add xwa, xwa
-	add xwa, 0xE26766
+	add xwa, 0xe26766
 	ld wa, (xwa)
 	lda_24 xix, 0xf2cd84
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; MuteChSetFunc dispatch
 MuteChSet_Dispatch:
@@ -3749,8 +3749,8 @@ MuteChSet_ParamCheck:
 	ld8_24 a, 0x02108a
 	extz wa
 	calr SqAftSet_LookupTableEntry
-	ld xwa, 0x147001C
-	ld xbc, 0x1E7000B
+	ld xwa, 0x147001c
+	ld xbc, 0x1e7000b
 	lds32 xde, 0
 	call MainFuncCall
 
@@ -3767,7 +3767,7 @@ AcMuteToggleBoxProc:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1C00001
+	cp xwa, 0x1c00001
 	jr z, AcMuteToggle_HandleInit
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -3779,13 +3779,13 @@ AcMuteToggle_HandleInit:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 40)
-	ld xbc, 0x1E70017
+	ld xbc, 0x1e70017
 	lds32 xde, 0
 	call ApFuncCall
 	ld xde, xhl
 	st32_24 0x02108c, xde
 	ld xwa, xiz
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	call SendEvent
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -3799,7 +3799,7 @@ AcMuteToggle_Epilogue:
 	ret
 
 SMFMuteOnOffFunc:
-	cp xbc, 0x1E70017
+	cp xbc, 0x1e70017
 	jr nz, SMFMuteOnOff_Enable
 	lds32 xhl, 0
 	ld8_24 l, 0x021088
@@ -3812,16 +3812,16 @@ SMFMuteOnOff_Enable:
 	ld8_24 a, 0x02108a
 	extz wa
 	calr SqAftSet_LookupTableEntry
-	ld xwa, 0x147001C
-	ld xbc, 0x1E7000B
+	ld xwa, 0x147001c
+	ld xbc, 0x1e7000b
 	lds32 xde, 0
 	jr SMFMuteOnOff_PostCall
 
 SMFMuteOnOff_Disable:
 	sti8_24 0x021088, 0x00
 	sti16_24 0x021086, 0x0000
-	ld xwa, 0x147001C
-	ld xbc, 0x1E7000B
+	ld xwa, 0x147001c
+	ld xbc, 0x1e7000b
 	lds32 xde, 0
 
 SMFMuteOnOff_PostCall:
@@ -3843,7 +3843,7 @@ SMFMute_GetBit1Status:
 
 SMFMute_GetUpperBits:
 	ld16_24 xhl, 0x021086
-	and hl, 0xFFFC
+	and hl, 0xfffc
 	extz xhl
 	ret
 
@@ -3854,20 +3854,20 @@ SMFMute_ClearBit0:
 	ret
 
 Rt1MuteFunc:
-	cp xbc, 0x1E70017
+	cp xbc, 0x1e70017
 	jr z, SMFMute_GetBit0Status
 	cp xde, 0x1
 	jr nz, Rt1Mute_ClearAndPost
 	ordi16_24 135302, 1
-	ld xwa, 0x147001C
-	ld xbc, 0x1E7000B
+	ld xwa, 0x147001c
+	ld xbc, 0x1e7000b
 	lds32 xde, 0
 	jr Rt1Mute_PostCall
 
 Rt1Mute_ClearAndPost:
 	anddi16_24 135302, 65534
-	ld xwa, 0x147001C
-	ld xbc, 0x1E7000B
+	ld xwa, 0x147001c
+	ld xbc, 0x1e7000b
 	lds32 xde, 0
 
 Rt1Mute_PostCall:
@@ -3876,20 +3876,20 @@ Rt1Mute_PostCall:
 	ret
 
 Rt2MuteFunc:
-	cp xbc, 0x1E70017
+	cp xbc, 0x1e70017
 	jr z, SMFMute_GetBit1Status
 	cp xde, 0x1
 	jr nz, Rt2Mute_ClearAndPost
 	ordi16_24 135302, 2
-	ld xwa, 0x147001C
-	ld xbc, 0x1E7000B
+	ld xwa, 0x147001c
+	ld xbc, 0x1e7000b
 	lds32 xde, 0
 	jr Rt2Mute_PostCall
 
 Rt2Mute_ClearAndPost:
 	anddi16_24 135302, 65533
-	ld xwa, 0x147001C
-	ld xbc, 0x1E7000B
+	ld xwa, 0x147001c
+	ld xbc, 0x1e7000b
 	lds32 xde, 0
 
 Rt2Mute_PostCall:
@@ -3898,20 +3898,20 @@ Rt2Mute_PostCall:
 	ret
 
 DocOrchMuteFunc:
-	cp xbc, 0x1E70017
+	cp xbc, 0x1e70017
 	jrl z, SMFMute_GetUpperBits
 	cp xde, 0x1
 	jr nz, DocOrchMute_ClearAndPost
 	ordi16_24 135302, 65532
-	ld xwa, 0x147001C
-	ld xbc, 0x1E7000B
+	ld xwa, 0x147001c
+	ld xbc, 0x1e7000b
 	lds32 xde, 0
 	jr DocOrchMute_PostCall
 
 DocOrchMute_ClearAndPost:
 	anddi16_24 135302, 3
-	ld xwa, 0x147001C
-	ld xbc, 0x1E7000B
+	ld xwa, 0x147001c
+	ld xbc, 0x1e7000b
 	lds32 xde, 0
 
 DocOrchMute_PostCall:
@@ -3920,20 +3920,20 @@ DocOrchMute_PostCall:
 	ret
 
 PdOrchMuteFunc:
-	cp xbc, 0x1E70017
+	cp xbc, 0x1e70017
 	jrl z, SMFMute_ClearBit0
 	cp xde, 0x1
 	jr nz, PdOrchMute_ClearAndPost
 	ordi16_24 135302, 65534
-	ld xwa, 0x147001C
-	ld xbc, 0x1E7000B
+	ld xwa, 0x147001c
+	ld xbc, 0x1e7000b
 	lds32 xde, 0
 	jr PdOrchMute_PostCall
 
 PdOrchMute_ClearAndPost:
 	anddi16_24 135302, 1
-	ld xwa, 0x147001C
-	ld xbc, 0x1E7000B
+	ld xwa, 0x147001c
+	ld xbc, 0x1e7000b
 	lds32 xde, 0
 
 PdOrchMute_PostCall:
@@ -3944,12 +3944,12 @@ PdOrchMute_PostCall:
 SeqNameOKFunc:
 	call GetNamingWindowID
 	ld xwa, xhl
-	ld xbc, 0x1E0003A
-	ld xde, 0x20C92
+	ld xbc, 0x1e0003a
+	ld xde, 0x20c92
 	call SendEvent
-	ld xwa, 0x147001C
-	ld xbc, 0x1E70001
-	ld xde, 0x20C92
+	ld xwa, 0x147001c
+	ld xbc, 0x1e70001
+	ld xde, 0x20c92
 	call MainFuncCall
 	lds32 xhl, 0
 	ret
@@ -3959,17 +3959,17 @@ SeqNamingCheck:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1E0007C
+	cp xbc, 0x1e0007c
 	jr z, SeqNameOK_Return10
-	cp xbc, 0x1E00084
+	cp xbc, 0x1e00084
 	jr z, SeqNameOK_ReturnZero
-	cp xbc, 0x1E0003A
+	cp xbc, 0x1e0003a
 	jr nz, SeqNameOK_ReturnZero
 	pushw 0x10
 	pushw 0x0
-	pushw 0xF280
+	pushw 0xf280
 	pushw 0x2
-	pushw 0xCA2
+	pushw 0xca2
 	call Strncpy
 	lda_24 xwa, 0x020ca2
 	ld (xwa + 16), 0x0
@@ -3995,16 +3995,16 @@ SeqNameOK_Epilogue:
 SeqNameOK_End:
 
 AcDemoMedleyDispBoxProc:
-	st_dri3b L, 0xFD, 0x00, 0xFF
+	st_dri3b L, 0xfd, 0x00, 0xff
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, AcDemoMedley_HandleScrollEvent
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, AcDemoMedley_HandleScrollEvent
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, DemoMedDsp_LoadEntry
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, DemoMedDsp_HandleDefault
 	ld xwa, xiz
 	call InheritedProc
@@ -4027,10 +4027,10 @@ AcDemoMedley_HandleScrollEvent:
 	ld xwa, xiz
 	call InheritedProc
 	lda xbc, (xsp + 4)
-	ld xwa, 0xE26786
+	ld xwa, 0xe26786
 	cpi8_24 0x021090, 0x01
 	jr nz, DPPlayDsp_CheckEntry
-	ld xwa, 0xE2677A
+	ld xwa, 0xe2677a
 
 ; DPPlayDspCheck entry
 DPPlayDsp_CheckEntry:
@@ -4040,7 +4040,7 @@ DPPlayDsp_CheckEntry:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 
 ; DPPlayDspCheck return path
@@ -4050,25 +4050,25 @@ DPPlayDsp_ReturnPath:
 ; DPPauseDspCheck entry
 DPPauseDsp_CheckEntry:
 	pop xiz
-	st_dri3b L, 0xFD, 0x00, 0x01
+	st_dri3b L, 0xfd, 0x00, 0x01
 	ret
 
 DemoMedDspCheck:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
-	cp xbc, 0x1E00082
+	cp xbc, 0x1e00082
 	jr z, DPLoad_DspReturn
-	sub xwa, 0x1E0003E
+	sub xwa, 0x1e0003e
 	cp xwa, 0x0
 	jr lt, DPLoad_DspReturn
 	cp xwa, 0x9
 	jr gt, DPLoad_DspReturn
 	add xwa, xwa
-	add xwa, 0xE267AA
+	add xwa, 0xe267aa
 	ld wa, (xwa)
 	lda_24 xix, 0xf2d0e9
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DemoMedDspCheck dispatch
 DemoMedDsp_Dispatch:
@@ -4105,18 +4105,18 @@ DPPlayDspCheck:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
-	cp xbc, 0x1E00082
+	cp xbc, 0x1e00082
 	jr z, DPPlay_DspReturn
-	sub xwa, 0x1E0003E
+	sub xwa, 0x1e0003e
 	cp xwa, 0x0
 	jr lt, DPPlay_DspReturn
 	cp xwa, 0x9
 	jr gt, DPPlay_DspReturn
 	add xwa, xwa
-	add xwa, 0xE267CA
+	add xwa, 0xe267ca
 	ld wa, (xwa)
 	lda_24 xix, 0xf2d161
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DPPlayDspCheck dispatch
 DPPlayDsp_Dispatch:
@@ -4153,18 +4153,18 @@ DPPauseDspCheck:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
-	cp xbc, 0x1E00082
+	cp xbc, 0x1e00082
 	jr z, DPPause_DspReturn
-	sub xwa, 0x1E0003E
+	sub xwa, 0x1e0003e
 	cp xwa, 0x0
 	jr lt, DPPause_DspReturn
 	cp xwa, 0x9
 	jr gt, DPPause_DspReturn
 	add xwa, xwa
-	add xwa, 0xE267EA
+	add xwa, 0xe267ea
 	ld wa, (xwa)
 	lda_24 xix, 0xf2d1d9
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DPPauseDspCheck dispatch
 DPPauseDsp_Dispatch:
@@ -4205,9 +4205,9 @@ IvExitModeTrSelProc:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1C00007
+	cp xwa, 0x1c00007
 	jr z, IvExitTrSel_CheckSendEvent
-	cp xwa, 0x1E0003A
+	cp xwa, 0x1e0003a
 	jr z, IvExitTrSel_CopyString
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -4215,8 +4215,8 @@ IvExitModeTrSelProc:
 	jr IvExitTrSel_CallInherited
 
 IvExitTrSel_CopyString:
-	pushw 0xE2
-	pushw 0x67FE
+	pushw 0xe2
+	pushw 0x67fe
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -4228,26 +4228,26 @@ IvExitTrSel_CheckSendEvent:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, xiz
-	ld xbc, 0x1E00053
+	ld xbc, 0x1e00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, IvExitTrSel_PrepareInherited
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call SendEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00014
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00014
 	ld xde, 0x1800008
 	call PostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A00084
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a00084
 	call PostEvent
 
 IvExitTrSel_PrepareInherited:
@@ -4267,93 +4267,93 @@ IvExitTrSel_Epilogue:
 InitializeKubo:
 	lda xsp, (xsp - 14)
 
-	RegObjTable 0x1600004, 0xFA44E2, 0xE27596, 0xE27180, 0x168
-	RegObjTable 0x160000c, 0xFA58FB, 0xE275F8, 0xE27598, 0x1c8
-	RegObjTable 0x160000d, 0xFA5948, 0xE27FA2, 0xE275FA, 0x1e8
-	RegObjTabl 0x1600002, 0xFA496C, 0x49, 0xE26804, 0x128
-	RegObjTabl 0x1600002, 0xFA496C, 0x49, 0xE2692C, 0x428
-	RegObjTabl 0x1600001, 0xFA48A9, 0x0, 0x3DF10, 0x108
-	RegObjTabl 0x1600001, 0xFA48A9, 0x0, 0x3DF14, 0x408
-	RegObjTabl 0x1600003, 0xFA4A18, 0x2c, 0xE3051C, 0x148
-	RegObjTabl 0x1600003, 0xFA4A18, 0x2c, 0xE305D0, 0x448
-	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2E624, 0xa
-	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE2F0AC, 0x30a
-	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2E658, 0xb
-	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE2F0FA, 0x30b
-	RegObjTabl 0x1600010, 0xFA5995, 0x25, 0xE2E68C, 0xc
-	RegObjTabl 0x160000f, 0xFA62CB, 0x25, 0xE2F148, 0x30c
-	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2E724, 0xe
-	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE2F232, 0x30e
-	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2E758, 0x80
-	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE2F280, 0x380
-	RegObjTabl 0x1600010, 0xFA5995, 0x1c, 0xE2E78C, 0x81
-	RegObjTabl 0x160000f, 0xFA62CB, 0x1c, 0xE2F2CE, 0x381
-	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE2E800, 0x82
-	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE2F3AA, 0x382
-	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE2E824, 0x83
-	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE2F3E0, 0x383
-	RegObjTabl 0x1600010, 0xFA5995, 0xa, 0xE2E868, 0x84
-	RegObjTabl 0x160000f, 0xFA62CB, 0xa, 0xE2F446, 0x384
-	RegObjTabl 0x1600010, 0xFA5995, 0x19, 0xE2E894, 0x85
-	RegObjTabl 0x160000f, 0xFA62CB, 0x19, 0xE2F488, 0x385
-	RegObjTabl 0x1600010, 0xFA5995, 0xb, 0xE2E8FC, 0x86
-	RegObjTabl 0x160000f, 0xFA62CB, 0xb, 0xE2F560, 0x386
-	RegObjTabl 0x1600010, 0xFA5995, 0x18, 0xE2E92C, 0x87
-	RegObjTabl 0x160000f, 0xFA62CB, 0x18, 0xE2F5B2, 0x387
-	RegObjTabl 0x1600010, 0xFA5995, 0xc, 0xE2E990, 0x88
-	RegObjTabl 0x160000f, 0xFA62CB, 0xc, 0xE2F66A, 0x388
-	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE2E9C4, 0x8d
-	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE2F6C2, 0x38d
-	RegObjTabl 0x1600010, 0xFA5995, 0x11, 0xE2E9D8, 0x90
-	RegObjTabl 0x160000f, 0xFA62CB, 0x11, 0xE2F6E0, 0x390
-	RegObjTabl 0x1600010, 0xFA5995, 0x13, 0xE2EA20, 0x91
-	RegObjTabl 0x160000f, 0xFA62CB, 0x13, 0xE2F758, 0x391
-	RegObjTabl 0x1600010, 0xFA5995, 0x1a, 0xE2EA70, 0x93
-	RegObjTabl 0x160000f, 0xFA62CB, 0x1a, 0xE2F7DC, 0x393
-	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE2EADC, 0x94
-	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE2F898, 0x394
-	RegObjTabl 0x1600010, 0xFA5995, 0x1b, 0xE2EAF0, 0x95
-	RegObjTabl 0x160000f, 0xFA62CB, 0x1b, 0xE2F8B6, 0x395
-	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE2EB60, 0x96
-	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE2F966, 0x396
-	RegObjTabl 0x1600010, 0xFA5995, 0x4, 0xE2EB84, 0x97
-	RegObjTabl 0x160000f, 0xFA62CB, 0x4, 0xE2F99C, 0x397
-	RegObjTabl 0x1600010, 0xFA5995, 0x1a, 0xE2EB98, 0x98
-	RegObjTabl 0x160000f, 0xFA62CB, 0x1a, 0xE2F9BA, 0x398
-	RegObjTabl 0x1600010, 0xFA5995, 0x8, 0xE2EC04, 0x99
-	RegObjTabl 0x160000f, 0xFA62CB, 0x8, 0xE2FA64, 0x399
-	RegObjTabl 0x1600010, 0xFA5995, 0xe, 0xE2EC28, 0x9a
-	RegObjTabl 0x160000f, 0xFA62CB, 0xe, 0xE2FA9A, 0x39a
-	RegObjTabl 0x1600010, 0xFA5995, 0x16, 0xE2EC64, 0x9b
-	RegObjTabl 0x160000f, 0xFA62CB, 0x16, 0xE2FB02, 0x39b
-	RegObjTabl 0x1600010, 0xFA5995, 0x15, 0xE2ECC0, 0x9c
-	RegObjTabl 0x160000f, 0xFA62CB, 0x15, 0xE2FB9A, 0x39c
-	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE2ED18, 0x9d
-	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE2FC28, 0x39d
-	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE2ED5C, 0x9e
-	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE2FC9A, 0x39e
-	RegObjTabl 0x1600010, 0xFA5995, 0x19, 0xE2EDA0, 0x9f
-	RegObjTabl 0x160000f, 0xFA62CB, 0x19, 0xE2FD0C, 0x39f
-	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE2EE08, 0xa0
-	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE2FDB4, 0x3a0
-	RegObjTabl 0x1600010, 0xFA5995, 0x10, 0xE2EE4C, 0xa1
-	RegObjTabl 0x160000f, 0xFA62CB, 0x10, 0xE2FE24, 0x3a1
-	RegObjTabl 0x1600010, 0xFA5995, 0x11, 0xE2EE90, 0xa2
-	RegObjTabl 0x160000f, 0xFA62CB, 0x11, 0xE2FE96, 0x3a2
-	RegObjTabl 0x1600010, 0xFA5995, 0xf, 0xE2EED8, 0xa3
-	RegObjTabl 0x160000f, 0xFA62CB, 0xf, 0xE2FF0C, 0x3a3
-	RegObjTabl 0x1600010, 0xFA5995, 0x11, 0xE2EF18, 0xa4
-	RegObjTabl 0x160000f, 0xFA62CB, 0x11, 0xE2FF78, 0x3a4
-	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xE2EF60, 0xa8
-	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xE2FFF0, 0x3a8
-	RegObjTabl 0x1600010, 0xFA5995, 0x0, 0xE2EF64, 0xaa
-	RegObjTabl 0x160000f, 0xFA62CB, 0x0, 0xE2FFF6, 0x3aa
-	RegObjTabl 0x1600010, 0xFA5995, 0x2, 0xE2EF68, 0xab
-	RegObjTabl 0x160000f, 0xFA62CB, 0x2, 0xE2FFFC, 0x3ab
-	RegObjTabl 0x1600010, 0xFA5995, 0xf, 0xE2EF74, 0xd6
-	RegObjTabl 0x160000f, 0xFA62CB, 0xf, 0xE3000E, 0x3d6
-	RegObjTabl 0x1600010, 0xFA5995, 0x3d, 0xE2EFB4, 0xe7
-	RegObjTabl 0x160000f, 0xFA62CB, 0x3d, 0xE3009E, 0x3e7
+	RegObjTable 0x1600004, 0xfa44e2, 0xe27596, 0xe27180, 0x168
+	RegObjTable 0x160000c, 0xfa58fb, 0xe275f8, 0xe27598, 0x1c8
+	RegObjTable 0x160000d, 0xfa5948, 0xe27fa2, 0xe275fa, 0x1e8
+	RegObjTabl 0x1600002, 0xfa496c, 0x49, 0xe26804, 0x128
+	RegObjTabl 0x1600002, 0xfa496c, 0x49, 0xe2692c, 0x428
+	RegObjTabl 0x1600001, 0xfa48a9, 0x0, 0x3df10, 0x108
+	RegObjTabl 0x1600001, 0xfa48a9, 0x0, 0x3df14, 0x408
+	RegObjTabl 0x1600003, 0xfa4a18, 0x2c, 0xe3051c, 0x148
+	RegObjTabl 0x1600003, 0xfa4a18, 0x2c, 0xe305d0, 0x448
+	RegObjTabl 0x1600010, 0xfa5995, 0xc, 0xe2e624, 0xa
+	RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe2f0ac, 0x30a
+	RegObjTabl 0x1600010, 0xfa5995, 0xc, 0xe2e658, 0xb
+	RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe2f0fa, 0x30b
+	RegObjTabl 0x1600010, 0xfa5995, 0x25, 0xe2e68c, 0xc
+	RegObjTabl 0x160000f, 0xfa62cb, 0x25, 0xe2f148, 0x30c
+	RegObjTabl 0x1600010, 0xfa5995, 0xc, 0xe2e724, 0xe
+	RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe2f232, 0x30e
+	RegObjTabl 0x1600010, 0xfa5995, 0xc, 0xe2e758, 0x80
+	RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe2f280, 0x380
+	RegObjTabl 0x1600010, 0xfa5995, 0x1c, 0xe2e78c, 0x81
+	RegObjTabl 0x160000f, 0xfa62cb, 0x1c, 0xe2f2ce, 0x381
+	RegObjTabl 0x1600010, 0xfa5995, 0x8, 0xe2e800, 0x82
+	RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe2f3aa, 0x382
+	RegObjTabl 0x1600010, 0xfa5995, 0x10, 0xe2e824, 0x83
+	RegObjTabl 0x160000f, 0xfa62cb, 0x10, 0xe2f3e0, 0x383
+	RegObjTabl 0x1600010, 0xfa5995, 0xa, 0xe2e868, 0x84
+	RegObjTabl 0x160000f, 0xfa62cb, 0xa, 0xe2f446, 0x384
+	RegObjTabl 0x1600010, 0xfa5995, 0x19, 0xe2e894, 0x85
+	RegObjTabl 0x160000f, 0xfa62cb, 0x19, 0xe2f488, 0x385
+	RegObjTabl 0x1600010, 0xfa5995, 0xb, 0xe2e8fc, 0x86
+	RegObjTabl 0x160000f, 0xfa62cb, 0xb, 0xe2f560, 0x386
+	RegObjTabl 0x1600010, 0xfa5995, 0x18, 0xe2e92c, 0x87
+	RegObjTabl 0x160000f, 0xfa62cb, 0x18, 0xe2f5b2, 0x387
+	RegObjTabl 0x1600010, 0xfa5995, 0xc, 0xe2e990, 0x88
+	RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe2f66a, 0x388
+	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe2e9c4, 0x8d
+	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe2f6c2, 0x38d
+	RegObjTabl 0x1600010, 0xfa5995, 0x11, 0xe2e9d8, 0x90
+	RegObjTabl 0x160000f, 0xfa62cb, 0x11, 0xe2f6e0, 0x390
+	RegObjTabl 0x1600010, 0xfa5995, 0x13, 0xe2ea20, 0x91
+	RegObjTabl 0x160000f, 0xfa62cb, 0x13, 0xe2f758, 0x391
+	RegObjTabl 0x1600010, 0xfa5995, 0x1a, 0xe2ea70, 0x93
+	RegObjTabl 0x160000f, 0xfa62cb, 0x1a, 0xe2f7dc, 0x393
+	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe2eadc, 0x94
+	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe2f898, 0x394
+	RegObjTabl 0x1600010, 0xfa5995, 0x1b, 0xe2eaf0, 0x95
+	RegObjTabl 0x160000f, 0xfa62cb, 0x1b, 0xe2f8b6, 0x395
+	RegObjTabl 0x1600010, 0xfa5995, 0x8, 0xe2eb60, 0x96
+	RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe2f966, 0x396
+	RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe2eb84, 0x97
+	RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe2f99c, 0x397
+	RegObjTabl 0x1600010, 0xfa5995, 0x1a, 0xe2eb98, 0x98
+	RegObjTabl 0x160000f, 0xfa62cb, 0x1a, 0xe2f9ba, 0x398
+	RegObjTabl 0x1600010, 0xfa5995, 0x8, 0xe2ec04, 0x99
+	RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe2fa64, 0x399
+	RegObjTabl 0x1600010, 0xfa5995, 0xe, 0xe2ec28, 0x9a
+	RegObjTabl 0x160000f, 0xfa62cb, 0xe, 0xe2fa9a, 0x39a
+	RegObjTabl 0x1600010, 0xfa5995, 0x16, 0xe2ec64, 0x9b
+	RegObjTabl 0x160000f, 0xfa62cb, 0x16, 0xe2fb02, 0x39b
+	RegObjTabl 0x1600010, 0xfa5995, 0x15, 0xe2ecc0, 0x9c
+	RegObjTabl 0x160000f, 0xfa62cb, 0x15, 0xe2fb9a, 0x39c
+	RegObjTabl 0x1600010, 0xfa5995, 0x10, 0xe2ed18, 0x9d
+	RegObjTabl 0x160000f, 0xfa62cb, 0x10, 0xe2fc28, 0x39d
+	RegObjTabl 0x1600010, 0xfa5995, 0x10, 0xe2ed5c, 0x9e
+	RegObjTabl 0x160000f, 0xfa62cb, 0x10, 0xe2fc9a, 0x39e
+	RegObjTabl 0x1600010, 0xfa5995, 0x19, 0xe2eda0, 0x9f
+	RegObjTabl 0x160000f, 0xfa62cb, 0x19, 0xe2fd0c, 0x39f
+	RegObjTabl 0x1600010, 0xfa5995, 0x10, 0xe2ee08, 0xa0
+	RegObjTabl 0x160000f, 0xfa62cb, 0x10, 0xe2fdb4, 0x3a0
+	RegObjTabl 0x1600010, 0xfa5995, 0x10, 0xe2ee4c, 0xa1
+	RegObjTabl 0x160000f, 0xfa62cb, 0x10, 0xe2fe24, 0x3a1
+	RegObjTabl 0x1600010, 0xfa5995, 0x11, 0xe2ee90, 0xa2
+	RegObjTabl 0x160000f, 0xfa62cb, 0x11, 0xe2fe96, 0x3a2
+	RegObjTabl 0x1600010, 0xfa5995, 0xf, 0xe2eed8, 0xa3
+	RegObjTabl 0x160000f, 0xfa62cb, 0xf, 0xe2ff0c, 0x3a3
+	RegObjTabl 0x1600010, 0xfa5995, 0x11, 0xe2ef18, 0xa4
+	RegObjTabl 0x160000f, 0xfa62cb, 0x11, 0xe2ff78, 0x3a4
+	RegObjTabl 0x1600010, 0xfa5995, 0x0, 0xe2ef60, 0xa8
+	RegObjTabl 0x160000f, 0xfa62cb, 0x0, 0xe2fff0, 0x3a8
+	RegObjTabl 0x1600010, 0xfa5995, 0x0, 0xe2ef64, 0xaa
+	RegObjTabl 0x160000f, 0xfa62cb, 0x0, 0xe2fff6, 0x3aa
+	RegObjTabl 0x1600010, 0xfa5995, 0x2, 0xe2ef68, 0xab
+	RegObjTabl 0x160000f, 0xfa62cb, 0x2, 0xe2fffc, 0x3ab
+	RegObjTabl 0x1600010, 0xfa5995, 0xf, 0xe2ef74, 0xd6
+	RegObjTabl 0x160000f, 0xfa62cb, 0xf, 0xe3000e, 0x3d6
+	RegObjTabl 0x1600010, 0xfa5995, 0x3d, 0xe2efb4, 0xe7
+	RegObjTabl 0x160000f, 0xfa62cb, 0x3d, 0xe3009e, 0x3e7
 
 	RegMode 0x8, 0xe3, 0x2f8, 0x7, 0x1200000, 0x1a000d6
 	RegMode 0x8, 0xe3, 0x308, 0x8, 0x1480004, 0x1a00080
@@ -4407,13 +4407,13 @@ InitializeKubo:
 	ret
 
 AutoPunchTtlRqFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr nz, IvRealRecCheck_ReturnZero
 	bitda 2, 1057
 	jr nz, IvRealRecCheck_ReturnZero
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A00088
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a00088
 	call PostEvent
 
 IvRealRecCheck_ReturnZero:
@@ -4426,9 +4426,9 @@ IvRealRecExitProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1C00007
+	cp xiz, 0x1c00007
 	jr z, IvRealRecExit_CheckSendEvent
-	cp xiz, 0x1E0003A
+	cp xiz, 0x1e0003a
 	jr z, IvRealRecExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -4436,8 +4436,8 @@ IvRealRecExitProc:
 	jr IvRealRecExit_CallInherited
 
 IvRealRecExit_CopyString:
-	pushw 0xE3
-	pushw 0x416A
+	pushw 0xe3
+	pushw 0x416a
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -4447,26 +4447,26 @@ IvRealRecExit_CopyString:
 
 IvRealRecExit_CheckSendEvent:
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1E00053
+	ld xbc, 0x1e00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, IvRealRecExit_PrepareInherited
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call SendEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00014
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00014
 	ld xde, 0x1800008
 	call PostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A00084
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a00084
 	call PostEvent
 
 IvRealRecExit_PrepareInherited:
@@ -4489,11 +4489,11 @@ AcPanicEditSwProc:
 	ld (xsp + 4), xbc
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 4)
-	cp xwa, 0x1C00009
+	cp xwa, 0x1c00009
 	jrl z, AcPanicEditSw_HandleLostInherited
-	cp xwa, 0x1C00008
+	cp xwa, 0x1c00008
 	jr z, AcPanicEditSw_HandleFocus
-	cp xwa, 0x1C0000D
+	cp xwa, 0x1c0000d
 	jr z, AcPanicEditSw_HandleInit
 	ld xwa, (xsp + 8)
 	ld xbc, (xsp + 4)
@@ -4510,7 +4510,7 @@ AcPanicEditSw_HandleInit:
 	lds32 xde, 0
 	ld e, (xhl + 40)
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 	jr AcPanicEditSw_ReturnZero
 
@@ -4548,7 +4548,7 @@ UI_CheckDisplayModeAndDispatch:
 	ld a, c
 	and a, 0x3
 	jr z, AcPanicEditSw_HandleFocusLost
-	and c, 0xC
+	and c, 0xc
 	jr z, AcPanicEditSw_HandleFocusLost
 	ld xwa, (xhl + 42)
 	ld xbc, (xsp + 4)
@@ -4606,10 +4606,10 @@ AcPanicEditSw_Epilogue:
 	ret
 
 PanicFunc:
-	cp xbc, 0x1C00008
+	cp xbc, 0x1c00008
 	jr nz, PanicFunc_ReturnZero
-	ld xwa, 0x148002B
-	ld xbc, 0x1E80076
+	ld xwa, 0x148002b
+	ld xbc, 0x1e80076
 	call MainFuncCall
 
 PanicFunc_ReturnZero:
@@ -4617,7 +4617,7 @@ PanicFunc_ReturnZero:
 	ret
 
 HelpStsCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, HelpStsCheck_ReturnZero
 	lds32 xbc, 0
 	ld8_24 c, 0x0340e4
@@ -4635,7 +4635,7 @@ HelpStsCheck_ReturnZero:
 	ret
 
 HelpStsP2Check:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, HelpStsP2Check_ReturnZero
 	lds32 xbc, 0
 	ld8_24 c, 0x0340e4
@@ -4643,7 +4643,7 @@ HelpStsP2Check:
 	lds32 xwa, 0
 	ldda8 a, 10606
 	sll xwa, 2
-	st_dri3b W, 0xE1, 0xC8, 0x00
+	st_dri3b W, 0xe1, 0xc8, 0x00
 	ld xhl, 0x69800
 	add xhl, xwa
 	sub xhl, xbc
@@ -4654,7 +4654,7 @@ HelpStsP2Check_ReturnZero:
 	ret
 
 HelpStsP3Check:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, HelpStsP3Check_ReturnZero
 	lds32 xbc, 0
 	ld8_24 c, 0x0340e4
@@ -4662,7 +4662,7 @@ HelpStsP3Check:
 	lds32 xwa, 0
 	ldda8 a, 10606
 	sll xwa, 2
-	st_dri3b W, 0xE1, 0x90, 0x01
+	st_dri3b W, 0xe1, 0x90, 0x01
 	ld xhl, 0x69800
 	add xhl, xwa
 	sub xhl, xbc
@@ -4673,7 +4673,7 @@ HelpStsP3Check_ReturnZero:
 	ret
 
 HelpStsP4Check:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, HelpStsP4Check_ReturnZero
 	lds32 xbc, 0
 	ld8_24 c, 0x0340e4
@@ -4681,7 +4681,7 @@ HelpStsP4Check:
 	lds32 xwa, 0
 	ldda8 a, 10606
 	sll xwa, 2
-	st_dri3b W, 0xE1, 0x58, 0x02
+	st_dri3b W, 0xe1, 0x58, 0x02
 	ld xhl, 0x69800
 	add xhl, xwa
 	sub xhl, xbc
@@ -4692,7 +4692,7 @@ HelpStsP4Check_ReturnZero:
 	ret
 
 HelpMenuCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, HelpMenuCheck_ReturnZero
 	ld xhl, 0x988000
 	ret
@@ -4704,9 +4704,9 @@ HelpMenuCheck_ReturnZero:
 HelpLangChkFunc:
 	push xiz
 	ld xiz, xde
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, HelpLangChk_CheckIzZero
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr nz, HelpLang_ReturnZero
 	ld xwa, 0x1480028
 	ld xde, xiz
@@ -4717,27 +4717,27 @@ HelpLangChk_CheckIzZero:
 	or xiz, xiz
 	jr nz, HelpLang_ReturnZero
 	call GetTitleNow
-	cp xhl, 0x1A000E7
+	cp xhl, 0x1a000e7
 	jr z, HelpLang_ReturnZero
 	lds wa, 4
 	call PanelDisplay_DispatchByMode
 	cps hl, 0
 	jr z, HelpLang_ReturnZero
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call SendEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
 	stdi8 32578, 72
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00016
-	ld xde, 0x1A000EE
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00016
+	ld xde, 0x1a000ee
 	call PostEvent
 	ld xwa, 0x1480029
-	ld xbc, 0x1E80075
+	ld xbc, 0x1e80075
 	ld xde, xiz
 	call MainFuncCall
 
@@ -4747,15 +4747,15 @@ HelpLang_ReturnZero:
 	ret
 
 EdMenuPageFunc:
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr nz, HelpFuncCheck_Return
 	or xde, xde
 	jr nz, HelpFuncCheck_Return
 	call GetTitleOld
-	cp xhl, 0x1A00080
+	cp xhl, 0x1a00080
 	jr nz, HelpFuncCheck_Return
 	ld xwa, 0x930002
-	ld xbc, 0x1E0007F
+	ld xbc, 0x1e0007f
 	lds32 xde, 1
 	call SendEvent
 
@@ -4766,22 +4766,22 @@ HelpFuncCheck_Return:
 HelpFuncChkFunc:
 	push xiz
 	ld xiz, xde
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, HelpFunc_CheckIzZero
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jrl nz, HelpFunc_ReturnZero
 	or xiz, xiz
 	jrl nz, HelpFunc_ReturnZero
-	ld xwa, 0xE7001C
-	ld xbc, 0x1E0007F
+	ld xwa, 0xe7001c
+	ld xbc, 0x1e0007f
 	lds32 xde, 1
 	call SendEvent
-	ld xwa, 0xE70027
-	ld xbc, 0x1E0007F
+	ld xwa, 0xe70027
+	ld xbc, 0x1e0007f
 	lds32 xde, 1
 	call SendEvent
-	ld xwa, 0xE7002E
-	ld xbc, 0x1E0007F
+	ld xwa, 0xe7002e
+	ld xbc, 0x1e0007f
 	lds32 xde, 1
 	call SendEvent
 	jr HelpFunc_ReturnZero
@@ -4790,27 +4790,27 @@ HelpFunc_CheckIzZero:
 	or xiz, xiz
 	jr nz, HelpFunc_ReturnZero
 	call GetTitleNow
-	cp xhl, 0x1A000E7
+	cp xhl, 0x1a000e7
 	jr z, HelpFunc_ReturnZero
 	lds wa, 4
 	call PanelDisplay_DispatchByMode
 	cps hl, 0
 	jr z, HelpFunc_ReturnZero
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call SendEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
 	stdi8 32578, 72
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00016
-	ld xde, 0x1A000EE
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00016
+	ld xde, 0x1a000ee
 	call PostEvent
 	ld xwa, 0x1480029
-	ld xbc, 0x1E80075
+	ld xbc, 0x1e80075
 	ld xde, xiz
 	call MainFuncCall
 
@@ -4820,10 +4820,10 @@ HelpFunc_ReturnZero:
 	ret
 
 HelpOkSwFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr nz, HelpFunc_ReturnZero2
 	ld xwa, 0x1480029
-	ld xbc, 0x1E80074
+	ld xbc, 0x1e80074
 	call MainFuncCall
 
 HelpFunc_ReturnZero2:
@@ -4834,9 +4834,9 @@ HelpTtlProc:
 	lda xsp, (xsp - 74)
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C0000D
+	cp xbc, 0x1c0000d
 	jr z, HelpTtlProc_HandleActivation
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, HelpTtlProc_HandleActivation
 	ld xwa, xiz
 	call InheritedProc
@@ -4850,7 +4850,7 @@ HelpTtlProc_HandleActivation:
 	ld xiz, xhl
 	ld (xsp + 4), xiz
 	ld xwa, (xiz + 32)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	lds32 xde, 0
 	call ApFuncCall
 	lda xde, (xsp + 56)
@@ -4858,7 +4858,7 @@ HelpTtlProc_HandleActivation:
 	lda xwa, (xsp + 8)
 	ld (xde + 18), xwa
 	ld xwa, (xiz + 32)
-	ld xbc, 0x1E00047
+	ld xbc, 0x1e00047
 	call ApFuncCall
 	lda xwa, (xsp + 48)
 	ld bc, (xiz + 14)
@@ -4873,7 +4873,7 @@ HelpTtlProc_HandleActivation:
 	lda xbc, (xsp + 8)
 	push xbc
 	pushm (xde + 30)
-	ld xbc, 0x5B
+	ld xbc, 0x5b
 	lds de, 0
 	call DrawTitleBar
 	lds32 xhl, 0
@@ -4886,9 +4886,9 @@ HelpTtl_Epilogue:
 HelpTtlFunc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1E00047
+	cp xbc, 0x1e00047
 	jr z, HelpTtlFunc_DecrementPage
-	cp xbc, 0x1E00045
+	cp xbc, 0x1e00045
 	jr z, HelpTtlFunc_LoadPageCount
 	lds32 xhl, 0
 	jr HelpTtlFunc_Epilogue
@@ -4913,7 +4913,7 @@ HelpTtlFunc_ClampMin:
 HelpTtlFunc_LookupSlide:
 	sll wa, 2
 	lda_24 xix, 0xe343ee
-	ld_sril3 XWA, 0x07, 0xF0, 0xE0
+	ld_sril3 XWA, 0x07, 0xf0, 0xe0
 	push xwa
 	ld xwa, (xde + 18)
 	push xwa
@@ -4931,11 +4931,11 @@ IvSdrevProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1E0003A
+	cp xiz, 0x1e0003a
 	jr z, IvSdrev_CopyString
-	cp xiz, 0x1C0000D
+	cp xiz, 0x1c0000d
 	jr z, IvSdrev_HandleFocus
-	cp xiz, 0x1C00001
+	cp xiz, 0x1c00001
 	jr z, IvSdrev_CheckParam
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -4954,7 +4954,7 @@ IvSdrev_CheckParam:
 	cps hl, 0
 	jr nz, MasterParam_Return
 	ld xwa, 0x4002
-	ldw bc, 0x7F
+	ldw bc, 0x7f
 	lds de, 3
 	call MainLswPut
 
@@ -4971,14 +4971,14 @@ IvSdrev_HandleFocus:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
 	jr IvSdrev_ReturnZero
 
 IvSdrev_CopyString:
-	pushw 0xE3
-	pushw 0x44B6
+	pushw 0xe3
+	pushw 0x44b6
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -4999,11 +4999,11 @@ IvSddspProc:
 	ld (xsp + 6), xbc
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 6)
-	cp xwa, 0x1E0003A
+	cp xwa, 0x1e0003a
 	jrl z, IvSddsp_CopyString
-	cp xwa, 0x1C0000D
+	cp xwa, 0x1c0000d
 	jr z, IvSddsp_HandleFocus
-	cp xwa, 0x1C00001
+	cp xwa, 0x1c00001
 	jr z, IvSddsp_CheckParam
 	ld xwa, (xsp + 10)
 	ld xbc, (xsp + 6)
@@ -5020,7 +5020,7 @@ IvSddsp_CheckParam:
 	call GetPartSelect
 	ld iz, hl
 	ld wa, iz
-	ldw bc, 0x5D
+	ldw bc, 0x5d
 	call SndParam_LookupViaEncode
 	cps hl, 0
 	jr nz, FilterParam_Return
@@ -5032,7 +5032,7 @@ IvSddsp_CheckParam:
 	extz de
 	pushw 0x4
 	ld wa, iz
-	ldw bc, 0x5D
+	ldw bc, 0x5d
 	call MainLswPartPut
 
 FilterParam_Return:
@@ -5048,14 +5048,14 @@ IvSddsp_HandleFocus:
 	ld xde, (xsp + 2)
 	call InheritedProc
 	ld xwa, (xsp + 10)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
 	jr IvSddsp_ReturnZero
 
 IvSddsp_CopyString:
-	pushw 0xE3
-	pushw 0x44BA
+	pushw 0xe3
+	pushw 0x44ba
 	ld xwa, (xsp + 6)
 	push xwa
 	call Strcpy
@@ -5075,11 +5075,11 @@ IvSdaccProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1E0003A
+	cp xiz, 0x1e0003a
 	jr z, IvSdacc_CopyString
-	cp xiz, 0x1C0000D
+	cp xiz, 0x1c0000d
 	jr z, IvSdacc_HandleFocus
-	cp xiz, 0x1C00001
+	cp xiz, 0x1c00001
 	jr z, IvSdacc_CheckParam
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5115,14 +5115,14 @@ IvSdacc_HandleFocus:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
 	jr IvSdacc_ReturnZero
 
 IvSdacc_CopyString:
-	pushw 0xE3
-	pushw 0x44BE
+	pushw 0xe3
+	pushw 0x44be
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -5143,9 +5143,9 @@ IvPlayExitProc:
 	ld (xsp + 12), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 12)
-	cp xwa, 0x1C00007
+	cp xwa, 0x1c00007
 	jr z, IvPlayExit_CheckSendEvent
-	cp xwa, 0x1E0003A
+	cp xwa, 0x1e0003a
 	jr z, IvPlayExit_CopyString
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
@@ -5153,8 +5153,8 @@ IvPlayExitProc:
 	jr IvPlayExit_CallInherited
 
 IvPlayExit_CopyString:
-	pushw 0xE3
-	pushw 0x44C2
+	pushw 0xe3
+	pushw 0x44c2
 	ld xwa, (xsp + 12)
 	push xwa
 	call Strcpy
@@ -5167,7 +5167,7 @@ IvPlayExit_CheckSendEvent:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, xiz
-	ld xbc, 0x1E00053
+	ld xbc, 0x1e00053
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
@@ -5176,8 +5176,8 @@ IvPlayExit_CheckSendEvent:
 	jr nz, IvPlayExit_ClearFlag
 	ld xwa, (xsp + 4)
 	ld xde, (xwa + 22)
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00014
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00014
 	call PostEvent
 
 IvPlayExit_ClearFlag:
@@ -5202,9 +5202,9 @@ IvPunchExitProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1C00007
+	cp xiz, 0x1c00007
 	jr z, IvPunchExit_CheckSendEvent
-	cp xiz, 0x1E0003A
+	cp xiz, 0x1e0003a
 	jr z, IvPunchExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5212,8 +5212,8 @@ IvPunchExitProc:
 	jr IvPunchExit_CallInherited
 
 IvPunchExit_CopyString:
-	pushw 0xE3
-	pushw 0x44C8
+	pushw 0xe3
+	pushw 0x44c8
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -5223,16 +5223,16 @@ IvPunchExit_CopyString:
 
 IvPunchExit_CheckSendEvent:
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1E00053
+	ld xbc, 0x1e00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, IvPunchExit_PrepareInherited
 	bitda 2, 1057
 	jr nz, IvPunchExit_PrepareInherited
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A00084
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a00084
 	call PostEvent
 
 IvPunchExit_PrepareInherited:
@@ -5254,9 +5254,9 @@ IvAutoPunchExitProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1C00007
+	cp xiz, 0x1c00007
 	jr z, IvAutoPunchExit_CheckSendEvent
-	cp xiz, 0x1E0003A
+	cp xiz, 0x1e0003a
 	jr z, IvAutoPunchExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5264,8 +5264,8 @@ IvAutoPunchExitProc:
 	jr IvAutoPunchExit_CallInherited
 
 IvAutoPunchExit_CopyString:
-	pushw 0xE3
-	pushw 0x44CE
+	pushw 0xe3
+	pushw 0x44ce
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -5275,7 +5275,7 @@ IvAutoPunchExit_CopyString:
 
 IvAutoPunchExit_CheckSendEvent:
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1E00053
+	ld xbc, 0x1e00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
@@ -5286,9 +5286,9 @@ IvAutoPunchExit_CheckSendEvent:
 	jr nz, IvAutoPunchExit_PrepareInherited
 
 IvAutoPunchExit_PostSceneEvent:
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A00087
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a00087
 	call PostEvent
 
 IvAutoPunchExit_PrepareInherited:
@@ -5310,15 +5310,15 @@ AcIndexWideToggleProc:
 	ld (xsp + 8), xde
 	ld xiz, xbc
 	ld (xsp + 12), xwa
-	cp xiz, 0x1C0002A
+	cp xiz, 0x1c0002a
 	jrl z, AcIndexToggle_HandleDefault
-	cp xiz, 0x1E8006E
+	cp xiz, 0x1e8006e
 	jrl z, AcIndexToggle_CheckNoteRange
-	cp xiz, 0x1C0001B
+	cp xiz, 0x1c0001b
 	jrl z, AcIndexToggle_HandleFocusLost
-	cp xiz, 0x1C00007
+	cp xiz, 0x1c00007
 	jr z, AcIndexToggle_HandleSelectEvent
-	cp xiz, 0x1C00001
+	cp xiz, 0x1c00001
 	jr z, AcIndexToggle_HandleInit
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
@@ -5334,7 +5334,7 @@ AcIndexToggle_HandleInit:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 46)
-	ld xbc, 0x1E8006F
+	ld xbc, 0x1e8006f
 	lds32 xde, 0
 	call ApFuncCall
 	extz xhl
@@ -5343,8 +5343,8 @@ AcIndexToggle_HandleInit:
 	sll xwa, 0
 	ld xde, xwa
 	add xde, xhl
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0002A
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0002a
 	jrl SendNoteDeleteEvent
 
 AcIndexToggle_HandleSelectEvent:
@@ -5356,7 +5356,7 @@ AcIndexToggle_HandleSelectEvent:
 	cps hl, 0
 	jr z, AcIndexToggle_PrepareInherited
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1E8006E
+	ld xbc, 0x1e8006e
 	ld xde, (xsp + 8)
 	call SendEvent
 	cps hl, 0
@@ -5365,32 +5365,32 @@ AcIndexToggle_HandleSelectEvent:
 	ld de, (xwa + 44)
 	exts xde
 	ld xwa, (xwa + 46)
-	ld xbc, 0x1E80071
+	ld xbc, 0x1e80071
 	call ApFuncCall
 	or xhl, xhl
 	jrl nz, SqedtNote_ReturnZero
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 42)
-	cp de, 0xFFFF
+	cp de, 0xffff
 	jr z, AcIndexToggle_SendVisibility
 	exts xde
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0001B
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0001b
 	call SendEvent
 
 AcIndexToggle_SendVisibility:
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	lds32 xde, 1
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld de, (xwa + 44)
 	exts xde
 	ld xwa, (xwa + 46)
-	ld xbc, 0x1E80070
+	ld xbc, 0x1e80070
 	call ApFuncCall
-	ld xwa, 0xE70002
-	ld xbc, 0x1C0000D
+	ld xwa, 0xe70002
+	ld xbc, 0x1c0000d
 	lds32 xde, 0
 	jrl SendNoteDeleteEvent
 
@@ -5418,7 +5418,7 @@ AcIndexToggle_HandleFocusLost:
 	cpw (xwa), 0x0
 	jrl z, SqedtNote_ReturnZero
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	lds32 xde, 0
 	jrl SendNoteDeleteEvent
 
@@ -5433,21 +5433,21 @@ AcIndexToggle_CheckNoteRange:
 	cp wa, (xhl)
 	jr nc, AcIndexToggle_SetFromDE
 	ld iz, de
-	ldfr_werp BC, 0xFA
+	ldfr_werp BC, 0xfa
 	jr AcIndexToggle_SendNoteEvent
 
 AcIndexToggle_SetFromDE:
 	ld iz, bc
-	ldfr_werp DE, 0xFA
+	ldfr_werp DE, 0xfa
 
 AcIndexToggle_SendNoteEvent:
 	ld xwa, 0x2600024
-	ld xbc, 0x1E00029
+	ld xbc, 0x1e00029
 	ld xde, (xsp + 8)
 	call SendEvent
 	cp hl, iz
 	jr c, SqedtNote_ReturnZero
-	cp_werp HL, 0xFA
+	cp_werp HL, 0xfa
 	jr ugt, SqedtNote_ReturnZero
 	lds32 xhl, 1
 	jr AcIndexToggle_Epilogue
@@ -5460,11 +5460,11 @@ AcIndexToggle_HandleDefault:
 	ld xwa, (xsp + 12)
 	call GetViewInstance
 	lda xwa, (xhl + 42)
-	cpw (xwa), 0xFFFF
+	cpw (xwa), 0xffff
 	jr z, SqedtNote_ReturnZero
 	ld xbc, (xsp + 8)
 	srl xbc, 0
-	ldi_werp 0xE6, 0
+	ldi_werp 0xe6, 0
 	ld de, (xwa)
 	ld wa, de
 	cp wa, bc
@@ -5474,11 +5474,11 @@ AcIndexToggle_HandleDefault:
 	cp bc, wa
 	jr nz, SqedtNote_ReturnZero
 	exts xde
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0001B
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0001b
 	call SendEvent
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	lds32 xde, 1
 
 SendNoteDeleteEvent:
@@ -5494,11 +5494,11 @@ AcIndexToggle_Epilogue:
 
 AcIndexWideToggleFunc:
 	ld a, e
-	cp xbc, 0x1E80071
+	cp xbc, 0x1e80071
 	jr z, AcIndexToggleFunc_CheckMatch
-	cp xbc, 0x1E80070
+	cp xbc, 0x1e80070
 	jr z, AcIndexToggleFunc_StoreAndPost
-	cp xbc, 0x1E8006F
+	cp xbc, 0x1e8006f
 	jr nz, AcIndexToggleFunc_ReturnZero
 	lds32 xhl, 0
 	ld8_24 l, 0x0340e4
@@ -5520,7 +5520,7 @@ AcIndexToggleFunc_CheckMatch:
 	ret
 
 AttAreYouSureCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, AttModePreCheck_ReturnZero
 	lda_24 xhl, 0xe344d4
 	ret
@@ -5530,7 +5530,7 @@ AttModePreCheck_ReturnZero:
 	ret
 
 AttAttentionCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, AttAttentionCheck_ReturnZero
 	lda_24 xhl, 0xe344ec
 	ret
@@ -5540,7 +5540,7 @@ AttAttentionCheck_ReturnZero:
 	ret
 
 StsSeqMenu1Check:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, StsSeqMenu1Check_ReturnZero
 	lda_24 xhl, 0xe34504
 	ret
@@ -5550,7 +5550,7 @@ StsSeqMenu1Check_ReturnZero:
 	ret
 
 StsSeqMenu2Check:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, StsSeqMenu2Check_ReturnZero
 	lda_24 xhl, 0xe3451c
 	ret
@@ -5560,7 +5560,7 @@ StsSeqMenu2Check_ReturnZero:
 	ret
 
 StsEasyRec1Check:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, StsEasyRec1Check_ReturnZero
 	lda_24 xhl, 0xe34534
 	ret
@@ -5570,7 +5570,7 @@ StsEasyRec1Check_ReturnZero:
 	ret
 
 StsEasyRec2Check:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, StsEasyRec2Check_ReturnZero
 	lda_24 xhl, 0xe3454c
 	ret
@@ -5580,7 +5580,7 @@ StsEasyRec2Check_ReturnZero:
 	ret
 
 StsPnlWrtCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, StsPnlWrtCheck_ReturnZero
 	lda_24 xhl, 0xe34564
 	ret
@@ -5590,7 +5590,7 @@ StsPnlWrtCheck_ReturnZero:
 	ret
 
 StsTrkClr1Check:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, StsTrkClr1Check_ReturnZero
 	lda_24 xhl, 0xe3457c
 	ret
@@ -5600,7 +5600,7 @@ StsTrkClr1Check_ReturnZero:
 	ret
 
 StsTrkClr2Check:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, StsTrkClr2Check_ReturnZero
 	lda_24 xhl, 0xe34594
 	ret
@@ -5610,7 +5610,7 @@ StsTrkClr2Check_ReturnZero:
 	ret
 
 StsNtDrEditCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, StsNtDrEditCheck_ReturnZero
 	lda_24 xhl, 0xe345ac
 	ret
@@ -5620,7 +5620,7 @@ StsNtDrEditCheck_ReturnZero:
 	ret
 
 AttTrkClrCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, AttTrkClrCheck_ReturnZero
 	lda_24 xhl, 0xe345c4
 	ret
@@ -5630,7 +5630,7 @@ AttTrkClrCheck_ReturnZero:
 	ret
 
 AttSongClrCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, AttSongClrCheck_ReturnZero
 	lda_24 xhl, 0xe345dc
 	ret
@@ -5640,7 +5640,7 @@ AttSongClrCheck_ReturnZero:
 	ret
 
 StsAtPunchCheck:
-	cp xbc, 0x1E0009F
+	cp xbc, 0x1e0009f
 	jr nz, StsAtPunchCheck_ReturnZero
 	lda_24 xhl, 0xe345f4
 	ret
@@ -5650,36 +5650,36 @@ StsAtPunchCheck_ReturnZero:
 	ret
 
 MsgToTtlProc:
-	cp xbc, 0x1C00001
-	jp_24 nz, 0xFA4409
+	cp xbc, 0x1c00001
+	jp_24 nz, 0xfa4409
 	call InheritedProc
 	call GetTitleOld
-	cp xhl, 0x1A000EE
+	cp xhl, 0x1a000ee
 	jr nz, MsgToTtl_ReturnZero
 	call CheckNotDrawFlag
 	cps hl, 0
 	jr z, MsgToTtl_ReturnZero
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call SendEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
 	call GetTitleNow
 	cp l, 0x90
 	jr nz, MsgToTtl_CheckTitleAndPost
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A00084
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a00084
 	jr MsgToTtl_PostEvent
 
 MsgToTtl_CheckTitleAndPost:
 	call GetTitleNow
-	add xhl, 0x1A00000
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
+	add xhl, 0x1a00000
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
 	ld xde, xhl
 
 MsgToTtl_PostEvent:
@@ -5695,15 +5695,15 @@ NoteEditBoxProc:
 	ld (xsp + 90), xde
 	ld xiz, xbc
 	ld (xsp + 94), xwa
-	cp xiz, 0x1C00018
+	cp xiz, 0x1c00018
 	jrl z, NoteEdit_FormatDispatch
-	cp xiz, 0x1C00017
+	cp xiz, 0x1c00017
 	jrl z, NoteEdit_FormatDispatch
-	cp xiz, 0x1C80004
+	cp xiz, 0x1c80004
 	jrl z, NoteEditBox_GridDispatch2
-	cp xiz, 0x1C0000F
+	cp xiz, 0x1c0000f
 	jr z, NoteEditBox_HandleFocusLost
-	cp xiz, 0x1C0000B
+	cp xiz, 0x1c0000b
 	jr z, NoteEditBox_HandleFocusGained
 	ld xwa, (xsp + 94)
 	ld xbc, xiz
@@ -5717,15 +5717,15 @@ NoteEditBox_HandleFocusGained:
 	ld xde, (xsp + 90)
 	call InheritedProc
 	ld xde, (xsp + 94)
-	ld xwa, 0x148001F
+	ld xwa, 0x148001f
 	ld xbc, xiz
 	call MainPostEvent
 	ld xwa, (xsp + 94)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 0
 	call SetDialUp
 	ld xwa, (xsp + 94)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 0
 	call SetDialDown
 	lds wa, 1
@@ -5742,21 +5742,21 @@ NoteEditBox_HandleFocusLost:
 	ld (xsp + 12), xhl
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	ld xiy, (xsp + 12)
 	cp l, (xiy + 30)
 	jrl nz, NoteEdit_ReturnZero
 	lda xix, (xsp + 28)
-	ld xwa, 0xE33758
+	ld xwa, 0xe33758
 	add xwa, (xsp + 90)
 	ld a, (xwa)
 	extz wa
 	ld (xix), wa
 	lda xbc, (xix + 2)
-	ldw (xbc), 0xB9
-	ld xwa, 0xE33764
+	ldw (xbc), 0xb9
+	ld xwa, 0xe33764
 	add xwa, (xsp + 90)
 	ld a, (xwa)
 	extz wa
@@ -5783,7 +5783,7 @@ NoteEditBox_HandleFocusLost:
 	add bc, wa
 	ld (xde + 2), bc
 	ld xwa, (xiy + 26)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	ld xde, (xsp + 90)
 	call ApFuncCall
 	lda xde, (xsp + 68)
@@ -5795,7 +5795,7 @@ NoteEditBox_HandleFocusLost:
 
 ; NoteEditBox grid setup dispatch
 NoteEditBox_SetupGrid:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, NoteEditBox_SetupGrid
 	ld xhl, (xsp + 90)
@@ -5807,10 +5807,10 @@ NoteEditBox_SetupGrid:
 	cp xhl, 0x9
 	jr ugt, NoteEditBoxProc_SetupGridDisplay
 	add xhl, xhl
-	add xhl, 0xE34654
+	add xhl, 0xe34654
 	ld hl, (xhl)
 	lda_24 xix, 0xf2f1d9
-	jp_dri 8, 0x07, 0xF0, 0xEC
+	jp_dri 8, 0x07, 0xf0, 0xec
 ; NoteEditBoxProc event dispatch 1
 NoteEditBox_EventDispatch1:
 	ld	xwa, (xbc)
@@ -5843,15 +5843,15 @@ NoteEditBox_EventDispatch1:
 NoteEditBoxProc_SetupGridDisplay:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8003E
+	ld xbc, 0x1e8003e
 	call ApFuncCall
 	lda xwa, (xsp + 28)
 	lda xbc, (xsp + 24)
 	lda xde, (xsp + 36)
 	lds32 xhl, 0
 	push xhl
-	pushw 0xFF
-	pushw 0xF5
+	pushw 0xff
+	pushw 0xf5
 	call DrawStringLeftJustify
 	jrl NoteEdit_ReturnZero
 
@@ -5862,7 +5862,7 @@ NoteEditBox_GridDispatch2:
 	ld (xsp + 12), xhl
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xsp + 12)
@@ -5872,13 +5872,13 @@ NoteEditBox_GridDispatch2:
 	dec 3, xwa
 	cp xwa, 0x0
 	jrl c, NoteEditBoxProc_ClassifyGridPosition
-	cp xwa, 0xB
+	cp xwa, 0xb
 	jrl ugt, NoteEditBoxProc_ClassifyGridPosition
 	add xwa, xwa
-	add xwa, 0xE3463C
+	add xwa, 0xe3463c
 	ld wa, (xwa)
 	lda_24 xix, 0xf2f2a0
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; NoteEditBoxProc event dispatch 2
 NoteEditBox_EventDispatch2:
@@ -6552,7 +6552,7 @@ NoteEditBoxProc_ClassifyGridPosition:
 	cp xwa, 0x1
 	jr nz, NoteEditGrid_CheckTitle95Alt
 	call GetTitleNow
-	cp xhl, 0x1A00095
+	cp xhl, 0x1a00095
 	jr nz, NoteEditGrid_SetCoord3
 	ld (xsp + 10), 0x2
 	jr NoteEditGrid_LoadCoordinates
@@ -6563,7 +6563,7 @@ NoteEditGrid_SetCoord3:
 
 NoteEditGrid_CheckTitle95:
 	call GetTitleNow
-	cp xhl, 0x1A00095
+	cp xhl, 0x1a00095
 	jr nz, NoteEditGrid_SetCoord5
 	ld (xsp + 10), 0x4
 	jr NoteEditGrid_LoadCoordinates
@@ -6575,7 +6575,7 @@ NoteEditGrid_SetCoord5:
 NoteEditGrid_CheckTitle95Alt:
 	call GetTitleNow
 	ld (xsp + 10), 0x1
-	cp xhl, 0x1A00095
+	cp xhl, 0x1a00095
 	jr nz, NoteEditGrid_LoadCoordinates
 	ld (xsp + 10), 0x0
 
@@ -6585,7 +6585,7 @@ NoteEditGrid_LoadCoordinates:
 	extz bc
 	sla bc, 3
 	lda_24 xde, 0xe33770
-	st_dri3b B, 0x07, 0xE8, 0xE4
+	st_dri3b B, 0x07, 0xe8, 0xe4
 	ld bc, (xde)
 	ld (xwa), bc
 	lda xhl, (xwa + 2)
@@ -6598,7 +6598,7 @@ NoteEditGrid_LoadCoordinates:
 	add bc, (xde + 6)
 	ld (xwa + 6), bc
 	lds bc, 0
-	ldw de, 0xF5
+	ldw de, 0xf5
 	call DrawDesignBox
 	jrl NoteEdit_ReturnZero
 
@@ -6609,15 +6609,15 @@ NoteEdit_FormatDispatch:
 	ld xde, (xsp + 90)
 	call InheritedProc
 	ld xwa, (xsp + 90)
-	cp xwa, 0xE
+	cp xwa, 0xe
 	jr ugt, NoteEdit_FormatEntry
-	ld xwa, 0x148001F
-	ld xbc, 0x1C00017
+	ld xwa, 0x148001f
+	ld xbc, 0x1c00017
 	call MainDeleteEvent
-	ld xwa, 0x148001F
-	ld xbc, 0x1C00018
+	ld xwa, 0x148001f
+	ld xbc, 0x1c00018
 	call MainDeleteEvent
-	ld xwa, 0x148001F
+	ld xwa, 0x148001f
 	ld xbc, xiz
 	ld xde, (xsp + 90)
 	call MainPostEvent
@@ -6629,16 +6629,16 @@ NoteEdit_FormatDispatch:
 ; NoteEdit format entry
 NoteEdit_FormatEntry:
 	ld xwa, (xsp + 90)
-	cp xwa, 0xB
+	cp xwa, 0xb
 	jr ugt, NoteEdit_ReturnZero
-	add xwa, 0xE3462C
+	add xwa, 0xe3462c
 	ld wa, (xwa)
 	extz wa
 	sll wa, 1
-	ld xix, 0xE34638
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld xix, 0xe34638
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, 0xf2fa35
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; NoteEditBoxProc grid check dispatch
 NoteEditBox_GridDispatch:
@@ -6665,39 +6665,39 @@ NoteEditFunc:
 	push xiz
 	ld (xsp + 4), xwa
 	ld xwa, xbc
-	cp xbc, 0x1E80069
+	cp xbc, 0x1e80069
 	jrl z, NoteEdit_GetScreenId
 	lda_24 xhl, 0xe337e2
-	cp xbc, 0x1E8006B
+	cp xbc, 0x1e8006b
 	jrl z, NoteEdit_FormatNoteNameLow
-	cp xbc, 0x1E8006A
+	cp xbc, 0x1e8006a
 	jrl z, NoteEdit_FormatNoteNameHigh
-	cp xbc, 0x1E00045
+	cp xbc, 0x1e00045
 	jrl z, NoteEdit_GetParamValue
-	cp xbc, 0x1E8006D
+	cp xbc, 0x1e8006d
 	jrl z, NoteEdit_FormatChordNotes
-	cp xbc, 0x1E8006C
+	cp xbc, 0x1e8006c
 	jrl z, NoteEdit_FormatChordType
-	cp xbc, 0x1E8003E
+	cp xbc, 0x1e8003e
 	jr z, NoteEdit_FormatTempo
-	sub xwa, 0x1E80051
+	sub xwa, 0x1e80051
 	cp xwa, 0x0
 	jrl lt, NoteEdit_DefaultReturn
-	cp xwa, 0xF
+	cp xwa, 0xf
 	jrl gt, NoteEdit_DefaultReturn
 	add xwa, xwa
-	add xwa, 0xE346F4
+	add xwa, 0xe346f4
 	ld wa, (xwa)
 	lda_24 xix, 0xf2fad1
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 NoteEdit_FormatTempo:
 	ld xiz, xde
 	ldda16 xwa, 10052
-	cp wa, 0x3E7
+	cp wa, 0x3e7
 	jr ugt, NoteEdit_FormatTempoString
 	pushw wa
-	pushw 0xE3
+	pushw 0xe3
 	pushw 0x4668
 	ld xwa, (xiz + 18)
 	push xwa
@@ -6706,8 +6706,8 @@ NoteEdit_FormatTempo:
 	jrl NoteEdit_RestoreAndReturn
 
 NoteEdit_FormatTempoString:
-	pushw 0xE3
-	pushw 0x466E
+	pushw 0xe3
+	pushw 0x466e
 	ld xwa, (xiz + 18)
 	push xwa
 	call Strcpy
@@ -6717,11 +6717,11 @@ NoteEdit_FormatTempoString:
 	ldda16 xwa, 10114
 	inc 1, wa
 	pushw wa
-	ld xwa, 0xE34674
+	ld xwa, 0xe34674
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	push_sd16w 0x84, 0x27
-	ld xwa, 0xE3467A
+	ld xwa, 0xe3467a
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	call GetTitleNow
@@ -6743,27 +6743,27 @@ NoteEdit_FormatTempoString:
 
 NoteEdit_FormatNoteOther:
 	pushw wa
-	ld xwa, 0xE34680
+	ld xwa, 0xe34680
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	ldda8 a, 10120
 	extz wa
 	pushw wa
-	ld xwa, 0xE34684
+	ld xwa, 0xe34684
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	ldda8 a, 10122
 	extz wa
 	pushw wa
-	ld xwa, 0xE3468A
+	ld xwa, 0xe3468a
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
-	push_sd16w 0x8C, 0x27
-	ld xwa, 0xE34690
+	push_sd16w 0x8c, 0x27
+	ld xwa, 0xe34690
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
-	push_sd16w 0x8E, 0x27
-	ld xwa, 0xE34694
+	push_sd16w 0x8e, 0x27
+	ld xwa, 0xe34694
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	ldda16 xde, 10130
@@ -6778,22 +6778,22 @@ NoteEdit_FormatNoteOther:
 	lda xbc, (xiz + 18)
 	cp de, 0x10
 	jr z, NoteEdit_GateTime10
-	cp de, 0xC
+	cp de, 0xc
 	jr z, NoteEdit_GateTime0C
 	ld xwa, (xbc)
 	cp de, 0x8
 	jr nz, NoteEdit_GateTimeNumeric
-	pushw 0xE3
+	pushw 0xe3
 	pushw 0x4698
 	push xwa
 	jr NoteEdit_GateTimeStrcpy
 
 NoteEdit_GateTime0C:
-	ld xwa, 0xE346A0
+	ld xwa, 0xe346a0
 	jr NoteEdit_GateTimePushFormat
 
 NoteEdit_GateTime10:
-	ld xwa, 0xE346A8
+	ld xwa, 0xe346a8
 
 NoteEdit_GateTimePushFormat:
 	push xwa
@@ -6802,19 +6802,19 @@ NoteEdit_GateTimePushFormat:
 	jr NoteEdit_GateTimeStrcpy
 
 NoteEdit_GateTime18:
-	ld xwa, 0xE346B0
+	ld xwa, 0xe346b0
 	jr NoteEdit_GateTimePushAndCopy
 
 NoteEdit_GateTime20:
-	ld xwa, 0xE346B8
+	ld xwa, 0xe346b8
 	jr NoteEdit_GateTimePushAndCopy
 
 NoteEdit_GateTime30:
-	ld xwa, 0xE346C0
+	ld xwa, 0xe346c0
 	jr NoteEdit_GateTimePushAndCopy
 
 NoteEdit_GateTime60:
-	ld xwa, 0xE346C8
+	ld xwa, 0xe346c8
 
 NoteEdit_GateTimePushAndCopy:
 	push xwa
@@ -6828,8 +6828,8 @@ NoteEdit_GateTimeStrcpy:
 
 NoteEdit_GateTimeNumeric:
 	pushw de
-	pushw 0xE3
-	pushw 0x46D0
+	pushw 0xe3
+	pushw 0x46d0
 	push xwa
 	jr NoteEdit_CallAudioSendCmd
 
@@ -6839,7 +6839,7 @@ NoteEdit_FormatChordType:
 	addda8_24 a, 135318
 	extz wa
 	pushw wa
-	ld xwa, 0xE346D4
+	ld xwa, 0xe346d4
 
 NoteEdit_PushFormatAndCopy:
 	push xwa
@@ -6853,13 +6853,13 @@ NoteEdit_CallAudioSendCmd:
 
 NoteEdit_FormatChordNotes:
 	ld xiz, xde
-	pushw 0xA
+	pushw 0xa
 	lds32 xbc, 0
 	ld8_24 c, 0x021096
 	lds32 xwa, 0
 	ldda8 a, 10142
 	add xwa, xbc
-	ld xbc, 0xD
+	ld xbc, 0xd
 	call Math_MultiplyAccumulate
 	addda32 xhl, 7508
 	push xhl
@@ -6869,13 +6869,13 @@ NoteEdit_GetParamValue:
 	dec 1, xde
 	cp xde, 0x0
 	jr c, NoteEdit_GetTempoValue
-	cp xde, 0xD
+	cp xde, 0xd
 	jr ugt, NoteEdit_GetTempoValue
 	add xde, xde
-	add xde, 0xE346D8
+	add xde, 0xe346d8
 	ld de, (xde)
 	lda_24 xix, 0xf2fc8a
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xf0, 0xe8
 NoteEdit_ParamJumpTable:
 	ldda16	hl, 10114
 	extz	xhl
@@ -6975,9 +6975,9 @@ SngSel2Proc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1C00018
+	cp xiz, 0x1c00018
 	jr z, SngSel2_HandleTimerResetEvent
-	cp xiz, 0x1C00017
+	cp xiz, 0x1c00017
 	jr z, SngSel2_HandleTimerResetEvent
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -6990,11 +6990,11 @@ SngSel2_HandleTimerResetEvent:
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	ld xwa, 0x1C00002
+	ld xwa, 0x1c00002
 	push xwa
 	lds32 xwa, 0
 	push xwa
-	ld xwa, 0xC8
+	ld xwa, 0xc8
 	ld xbc, (xsp + 16)
 	ld xde, 0x810016
 	call ResetApTimer
@@ -7015,13 +7015,13 @@ SngSelProc:
 	ld (xsp + 74), xde
 	ld xiz, xbc
 	ld (xsp + 78), xwa
-	cp xiz, 0x1C00018
+	cp xiz, 0x1c00018
 	jrl z, SngSel_HandleScrollEvent
-	cp xiz, 0x1C00017
+	cp xiz, 0x1c00017
 	jrl z, SngSel_HandleScrollEvent
-	cp xiz, 0x1C0000F
+	cp xiz, 0x1c0000f
 	jr z, SngSel_HandleEventF
-	cp xiz, 0x1C0000B
+	cp xiz, 0x1c0000b
 	jr z, SngSel_HandleEventB
 	ld xwa, (xsp + 78)
 	ld xbc, xiz
@@ -7035,7 +7035,7 @@ SngSel_HandleEventB:
 	ld xde, (xsp + 74)
 	call InheritedProc
 	ld xde, (xsp + 78)
-	ld xwa, 0x148001E
+	ld xwa, 0x148001e
 	ld xbc, xiz
 	call MainPostEvent
 	jrl StringDraw_CleanupAndReturn
@@ -7050,14 +7050,14 @@ SngSel_HandleEventF:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 30)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xsp + 4)
 	cp l, (xwa + 34)
 	jrl nz, StringDraw_CleanupAndReturn
 	ld xwa, (xwa + 30)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	lds32 xde, 0
 	call ApFuncCall
 	lda xde, (xsp + 52)
@@ -7066,7 +7066,7 @@ SngSel_HandleEventF:
 	ld (xde + 18), xwa
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 30)
-	ld xbc, 0x1E00047
+	ld xbc, 0x1e00047
 	call ApFuncCall
 	lda xbc, (xsp + 12)
 	ld xde, (xsp + 4)
@@ -7121,7 +7121,7 @@ SngSel_HandleScrollEvent:
 	ld xwa, (xsp + 74)
 	cp xwa, 0x3
 	jr nz, StringDraw_CleanupAndReturn
-	ld xwa, 0x148001E
+	ld xwa, 0x148001e
 	ld xbc, xiz
 	lds32 xde, 0
 	call MainPostEvent
@@ -7142,18 +7142,18 @@ SngSelFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
-	cp xbc, 0x1E80069
+	cp xbc, 0x1e80069
 	jr z, SngSelFunc_GetTitleIndex
-	cp xbc, 0x1E00045
+	cp xbc, 0x1e00045
 	jr z, SngSelFunc_LoadTitleCount
-	cp xbc, 0x1E00047
+	cp xbc, 0x1e00047
 	jr z, SngSelFunc_HandleEvent47
 	lds32 xhl, 0
 	jr ReturnTitleOrZero
 
 SngSelFunc_HandleEvent47:
 	ld xiz, xde
-	pushw 0xE3
+	pushw 0xe3
 	pushw 0x4714
 	ld xwa, (xiz + 18)
 	push xwa
@@ -7162,18 +7162,18 @@ SngSelFunc_HandleEvent47:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xE3
-	pushw 0x471A
+	pushw 0xe3
+	pushw 0x471a
 	ld xwa, (xiz + 18)
 	inc 4, xwa
 	push xwa
 	call Audio_SendCommand
 	lda xbc, (xiz + 18)
 	ld xwa, (xbc)
-	ld (xwa + 6), 0x3A
+	ld (xwa + 6), 0x3a
 	pushw 0x10
 	pushw 0x0
-	pushw 0xF280
+	pushw 0xf280
 	ld xwa, (xbc)
 	inc 7, xwa
 	push xwa
@@ -7201,17 +7201,17 @@ ReturnTitleOrZero:
 
 PlySngSelFunc:
 	ld xhl, xwa
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr z, PlySngSel_HandleSelectEvent
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, PlySngSel_HandleTimerEvent
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr nz, PlaySong_ReturnZero
-	ld xwa, 0x1C00002
+	ld xwa, 0x1c00002
 	push xwa
 	lds32 xwa, 0
 	push xwa
-	ld xwa, 0xC8
+	ld xwa, 0xc8
 	ld xbc, xhl
 	ld xde, 0x810016
 	call SetApTimer
@@ -7220,10 +7220,10 @@ PlySngSelFunc:
 
 PlySngSel_HandleTimerEvent:
 	call GetTitleNow
-	cp xhl, 0x1A00081
+	cp xhl, 0x1a00081
 	jr nz, PlySngSel_ClearFlagAndReturn
 	ld xwa, 0x810012
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call SendEvent
 
@@ -7232,13 +7232,13 @@ PlySngSel_ClearFlagAndReturn:
 	jr PlaySong_ReturnZero
 
 PlySngSel_HandleSelectEvent:
-	ld xwa, 0xC8
-	cp xde, 0xF
+	ld xwa, 0xc8
+	cp xde, 0xf
 	jr nz, PlySngSel_ResetTimerCommon
 	lds32 xwa, 0
 
 PlySngSel_ResetTimerCommon:
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	push xbc
 	lds32 xbc, 0
 	push xbc
@@ -7251,16 +7251,16 @@ PlaySong_ReturnZero:
 	ret
 
 PlySngSel2Func:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr nz, EntGrid_InitDispatch
 	bitda 2, 1057
 	jr nz, EntGrid_InitDispatch
 	ld xwa, 0x810012
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 5
 	call SendEvent
 	ld xwa, 0x810016
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call SendEvent
 
@@ -7276,29 +7276,29 @@ AcEntertainerGridBoxProc:
 	ld (xsp + 16), xbc
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
-	cp xbc, 0x1E8000F
+	cp xbc, 0x1e8000f
 	jrl z, EntGrid_CellAction2
 	ld xwa, (xsp + 16)
-	cp xwa, 0x1E8000E
+	cp xwa, 0x1e8000e
 	jrl z, EntGrid_CellAction1
-	cp xwa, 0x1E0008D
+	cp xwa, 0x1e0008d
 	jrl z, EntGrid_CellSelect
-	cp xwa, 0x1E0008B
+	cp xwa, 0x1e0008b
 	jrl z, EntGrid_PostReturn
-	cp xwa, 0x1E0008A
+	cp xwa, 0x1e0008a
 	jrl z, EntGrid_PostEvent
-	cp xwa, 0x1C00001
+	cp xwa, 0x1c00001
 	jr z, AcEntertainer_EventDispatch
-	sub xbc, 0x1C00017
+	sub xbc, 0x1c00017
 	cp xbc, 0x0
 	jrl lt, EntGrid_CellAction3
 	cp xbc, 0x6
 	jrl gt, EntGrid_CellAction3
 	add xbc, xbc
-	add xbc, 0xE34742
+	add xbc, 0xe34742
 	ld bc, (xbc)
 	lda_24 xix, 0xf300bb
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; AcEntertainerGridBoxProc event dispatch
 AcEntertainer_EventDispatch:
@@ -7310,36 +7310,36 @@ AcEntertainer_EventDispatch:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld (xsp + 4), xhl
 	ld xde, xiz
 	ld xwa, 0x1480002
-	ld xbc, 0x1C0000B
+	ld xbc, 0x1c0000b
 EntGrid_PostMainEvent:
 	call MainPostEvent
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xE2, 0
+	ldi_werp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
 	srl xwa, 0
-	ldi_werp 0xE2, 0
+	ldi_werp 0xe2, 0
 	add wa, bc
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	call SetDialDown
 	lds wa, 1
 	call SetDialEnable
@@ -7350,24 +7350,24 @@ EntGrid_PostMainEvent:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1E00050
+	ld xbc, 0x1e00050
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, EntGrid_CheckOverflow1
 	ld xwa, xiz
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld wa, hl
 	add wa, wa
 	lda_24 xbc, 0xe3471e
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
-	add xhl, 0xFFFF0000
+	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	ld xde, xhl
 	call SendEvent
 	ld xwa, xiz
@@ -7378,7 +7378,7 @@ EntGrid_PostMainEvent:
 
 EntGrid_CheckOverflow1:
 	ld xwa, xiz
-	ld xbc, 0x1E00091
+	ld xbc, 0x1e00091
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -7394,11 +7394,11 @@ EntGrid_CheckOverflow1:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
@@ -7408,25 +7408,25 @@ EntGrid_CheckOverflow1:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1E00050
+	ld xbc, 0x1e00050
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, EntGrid_CheckOverflow2
 	ld xwa, xiz
-	ld xbc, 0x1E0008F
+	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
 	ld wa, hl
 	add wa, wa
 	lda_24 xbc, 0xe34730
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
 	extz xde
-	add xde, 0xFFFF0000
+	add xde, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -7436,7 +7436,7 @@ EntGrid_CheckOverflow1:
 
 EntGrid_CheckOverflow2:
 	ld xwa, xiz
-	ld xbc, 0x1E00091
+	ld xbc, 0x1e00091
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -7452,11 +7452,11 @@ EntGrid_CheckOverflow2:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 12)
 	call SetDialDown
 	lds wa, 1
@@ -7468,7 +7468,7 @@ EntGrid_SetDialEnable:
 ; Entertainer grid post event
 EntGrid_PostEvent:
 	ld xwa, xiz
-	ld xiz, 0x3E
+	ld xiz, 0x3e
 	jr EntGrid_GetViewAndCopy
 
 ; Entertainer grid post return
@@ -7543,11 +7543,11 @@ EntertainerGridCheck:
 	push xiz
 	ld (xsp + 58), xde
 	ld (xsp + 62), xbc
-	ld xiy, 0xE34774
+	ld xiy, 0xe34774
 	lda xix, (xsp + 48)
 	lds bc, 5
 	ldirw
-	ld xiy, 0xE3093E
+	ld xiy, 0xe3093e
 	lda xix, (xsp + 40)
 	lds bc, 4
 	ldirw
@@ -7568,26 +7568,26 @@ EntertainerGridCheck:
 	ld (xsp + 36), xwa
 	lda xwa, (xbc + 4)
 	ld (xsp + 32), xwa
-	cp xde, 0x1E8000F
+	cp xde, 0x1e8000f
 	jrl z, EntGridCheck_Default
 	lda_24 xwa, 0xe32a7a
 	ld (xsp + 16), xwa
-	cp xde, 0x1E8000E
+	cp xde, 0x1e8000e
 	jrl z, EntGridCheck_Return
 	ld xwa, xde
-	cp xwa, 0x1E0008D
+	cp xwa, 0x1e0008d
 	jrl z, EntGridCheck_Handler
 	ld xwa, (xsp + 20)
-	sub xwa, 0x1C00017
+	sub xwa, 0x1c00017
 	cp xwa, 0x0
 	jrl lt, SndParam_ReturnZero
 	cp xwa, 0x6
 	jrl gt, SndParam_ReturnZero
 	add xwa, xwa
-	add xwa, 0xE347F2
+	add xwa, 0xe347f2
 	ld wa, (xwa)
 	lda_24 xix, 0xf303d6
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; SndParam_ReadThenWrite dispatch
 SndParam_Dispatch:
@@ -7789,7 +7789,7 @@ SndParam_Dispatch:
 EntGridCheck_Handler:
 	ld xwa, (xsp + 58)
 	srl xwa, 0
-	ldi_werp 0xE2, 0
+	ldi_werp 0xe2, 0
 	ld (xbc), wa
 	ld xhl, (xsp + 36)
 	ld xde, (xsp + 58)
@@ -7804,9 +7804,9 @@ EntGridCheck_Handler:
 	ld wa, (xhl)
 	sla wa, 2
 	lda_24 xbc, 0xe34750
-	ld_sril3 XDE, 0x07, 0xE4, 0xE0
+	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xbc, (xsp + 24)
-	cp xde, 0x4E13
+	cp xde, 0x4e13
 	jrl z, EntGridCheck_Handle4E13
 	ld xhl, (xsp + 20)
 	lda xwa, (xhl + 1)
@@ -7814,13 +7814,13 @@ EntGridCheck_Handler:
 	lda xwa, (xhl + 2)
 	ld (xsp + 32), xwa
 	ld xwa, xde
-	cp xde, 0x4E12
+	cp xde, 0x4e12
 	jrl z, EntGridCheck_Handle4E12
-	cp xde, 0x4E11
+	cp xde, 0x4e11
 	jrl z, EntGridCheck_Handle4E11
-	cp xde, 0x4E10
+	cp xde, 0x4e10
 	jrl z, EntGridCheck_Handle4E10
-	cp xde, 0x4E00
+	cp xde, 0x4e00
 	jr z, EntGridCheck_Handle4E00
 	cp xde, 0x4140
 	jr z, EntGridCheck_Handle4140
@@ -7828,8 +7828,8 @@ EntGridCheck_Handler:
 	jrl nz, SndParam_ReturnZero
 	call SndParam_LookupReadOnly
 	pushw hl
-	pushw 0xE3
-	pushw 0x479C
+	pushw 0xe3
+	pushw 0x479c
 	lda xwa, (xsp + 54)
 	push xwa
 	call Audio_SendCommand
@@ -7837,15 +7837,15 @@ EntGridCheck_Handler:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 40)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl SndParam_SendEventReturnZero
 
 EntGridCheck_Handle4140:
 	call SndParam_LookupReadOnly
-	ld xwa, 0xE347B0
+	ld xwa, 0xe347b0
 	cps hl, 0
 	jr z, EntGridCheck_CopyStringResult
-	ld xwa, 0xE347A6
+	ld xwa, 0xe347a6
 
 EntGridCheck_CopyStringResult:
 	push xwa
@@ -7856,7 +7856,7 @@ EntGridCheck_CopyStringResult:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 40)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl SndParam_SendEventReturnZero
 
 EntGridCheck_Handle4E00:
@@ -7876,7 +7876,7 @@ EntGridCheck_Handle4E00:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 40)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl SndParam_SendEventReturnZero
 
 EntGridCheck_Handle4E10:
@@ -7904,7 +7904,7 @@ EntGridCheck_Handle4E10:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 40)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl SndParam_SendEventReturnZero
 
 EntGridCheck_Handle4E11:
@@ -7925,13 +7925,13 @@ EntGridCheck_Handle4E11:
 	lda xsp, (xsp + 10)
 	lda xwa, (xsp + 48)
 	ld (xwa + 6), 0x48
-	ld (xwa + 7), 0x7A
+	ld (xwa + 7), 0x7a
 	ld (xwa + 8), 0x20
 	ld (xwa + 9), 0x0
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 40)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl SndParam_SendEventReturnZero
 
 EntGridCheck_Handle4E12:
@@ -7960,13 +7960,13 @@ EntGridCheck_Handle4E12:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 40)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl SndParam_SendEventReturnZero
 
 EntGridCheck_Handle4E13:
 	pushm (xbc + 6)
-	pushw 0xE3
-	pushw 0x47BA
+	pushw 0xe3
+	pushw 0x47ba
 	ld xwa, (xsp + 26)
 	push xwa
 	call Audio_SendCommand
@@ -7974,7 +7974,7 @@ EntGridCheck_Handle4E13:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 40)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl SndParam_SendEventReturnZero
 
 ; EntertainerGridCheck return
@@ -8000,7 +8000,7 @@ EntGridCheck_Return:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 40)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 	jrl SndParam_SendEventReturnZero
 
 ; EntertainerGridCheck default
@@ -8066,7 +8066,7 @@ EntGridCheck_DefaultCase1:
 	lda xsp, (xsp + 10)
 	lda xwa, (xsp + 48)
 	ld (xwa + 6), 0x48
-	ld (xwa + 7), 0x7A
+	ld (xwa + 7), 0x7a
 	ld (xwa + 8), 0x20
 	jr EntGridCheck_NullTerminate
 
@@ -8099,8 +8099,8 @@ EntGridCheck_NullTerminate:
 EntGridCheck_SendAudioCommand:
 	ld xwa, (xsp + 24)
 	pushm (xwa + 6)
-	pushw 0xE3
-	pushw 0x47C4
+	pushw 0xe3
+	pushw 0x47c4
 	ld xwa, (xsp + 26)
 	push xwa
 	call Audio_SendCommand
@@ -8110,7 +8110,7 @@ SndParam_BuildDisplayEvent:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 40)
-	ld xbc, 0x1E0008C
+	ld xbc, 0x1e0008c
 
 SndParam_SendEventReturnZero:
 	call SendEvent
@@ -8127,9 +8127,9 @@ IvSongCopyExitProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1C00007
+	cp xiz, 0x1c00007
 	jr z, IvSongCopyExit_HandleSelectEvent
-	cp xiz, 0x1E0003A
+	cp xiz, 0x1e0003a
 	jr z, IvSongCopyExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -8137,7 +8137,7 @@ IvSongCopyExitProc:
 	jr IvSongCopyExit_CallInherited
 
 IvSongCopyExit_CopyString:
-	pushw 0xE3
+	pushw 0xe3
 	pushw 0x4800
 	ld xwa, (xsp + 8)
 	push xwa
@@ -8148,26 +8148,26 @@ IvSongCopyExit_CopyString:
 
 IvSongCopyExit_HandleSelectEvent:
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1E00053
+	ld xbc, 0x1e00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, IvSongCopyExit_PrepareInherited
 	call GetTitleNow
-	cp xhl, 0x1A00091
+	cp xhl, 0x1a00091
 	jr nz, IvSongCopyExit_CheckTitleA8
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A00093
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a00093
 	jr IvSongCopyExit_PostEvent
 
 IvSongCopyExit_CheckTitleA8:
 	call GetTitleNow
-	cp xhl, 0x1A000A8
+	cp xhl, 0x1a000a8
 	jr nz, IvSongCopyExit_PrepareInherited
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A00084
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a00084
 
 IvSongCopyExit_PostEvent:
 	call PostEvent
@@ -8191,9 +8191,9 @@ IvPnlWrExitProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1C00007
+	cp xiz, 0x1c00007
 	jr z, IvPnlWrExit_HandleSelectEvent
-	cp xiz, 0x1E0003A
+	cp xiz, 0x1e0003a
 	jr z, IvPnlWrExit_CopyString
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -8201,7 +8201,7 @@ IvPnlWrExitProc:
 	jr IvPnlWrExit_CallInherited
 
 IvPnlWrExit_CopyString:
-	pushw 0xE3
+	pushw 0xe3
 	pushw 0x4806
 	ld xwa, (xsp + 8)
 	push xwa
@@ -8212,26 +8212,26 @@ IvPnlWrExit_CopyString:
 
 IvPnlWrExit_HandleSelectEvent:
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1E00053
+	ld xbc, 0x1e00053
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, IvPnlWrExit_PrepareInherited
 	call GetTitleNow
-	cp xhl, 0x1A0008D
+	cp xhl, 0x1a0008d
 	jr nz, IvPnlWrExit_CheckTitleAA
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A00084
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a00084
 	jr IvPnlWrExit_PostEvent
 
 IvPnlWrExit_CheckTitleAA:
 	call GetTitleNow
-	cp xhl, 0x1A000AA
+	cp xhl, 0x1a000aa
 	jr nz, IvPnlWrExit_PrepareInherited
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00015
-	ld xde, 0x1A00080
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00015
+	ld xde, 0x1a00080
 
 IvPnlWrExit_PostEvent:
 	call PostEvent
@@ -8251,20 +8251,20 @@ IvPnlWrExit_Epilogue:
 
 SqplyValProc:
 	lda xsp, (xsp - 70)
-	push_werp 0xFA
+	push_werp 0xfa
 	ld (xsp + 60), xde
 	ld (xsp + 64), xbc
 	ld (xsp + 68), xwa
 	ld xwa, (xsp + 64)
-	cp xwa, 0x1C00007
+	cp xwa, 0x1c00007
 	jrl z, SqplyVal_HandleSelectEvent
-	cp xwa, 0x1C00018
+	cp xwa, 0x1c00018
 	jrl z, SqplyVal_HandleDownScrollEvent
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	jrl z, SqplyVal_HandleUpScrollEvent
-	cp xwa, 0x1C0000F
+	cp xwa, 0x1c0000f
 	jrl z, SqplyVal_HandleScrollEvent
-	cp xwa, 0x1C0000B
+	cp xwa, 0x1c0000b
 	jr z, SqplyVal_HandleInitEvent
 	ld xwa, (xsp + 68)
 	ld xbc, (xsp + 64)
@@ -8295,19 +8295,19 @@ SqplyVal_HandleInitEvent:
 SqplyVal_InitScrollAndRefresh:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80035
+	ld xbc, 0x1e80035
 	lds32 xde, 1
 	call ApFuncCall
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00007
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00007
 	ld xde, 0x89
 	call SendEvent
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 1
 	call SetDialUp
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
 	lds wa, 1
@@ -8318,11 +8318,11 @@ SqplyVal_CheckMode81:
 	cp l, 0x81
 	jr nz, SqplyVal_DispatchUpdate
 	ld xwa, 0x810016
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 5
 	call SendEvent
 	ld xwa, 0x810012
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call SendEvent
 	stdi8 58254, 0
@@ -8344,7 +8344,7 @@ SqplyVal_HandleScrollEvent:
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	ld xiy, (xsp + 6)
@@ -8353,7 +8353,7 @@ SqplyVal_HandleScrollEvent:
 	lda xhl, (xsp + 52)
 	ld xwa, (xsp + 60)
 	sll xwa, 3
-	ld xde, 0xE3358A
+	ld xde, 0xe3358a
 	add xde, xwa
 	ld wa, (xde)
 	ld (xhl), wa
@@ -8384,7 +8384,7 @@ SqplyVal_HandleScrollEvent:
 	add bc, wa
 	ld (xhl + 2), bc
 	ld xwa, (xiy + 26)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	ld xde, (xsp + 60)
 	call ApFuncCall
 	lda xde, (xsp + 10)
@@ -8394,7 +8394,7 @@ SqplyVal_HandleScrollEvent:
 	lda xbc, (xhl + 16)
 
 SqplyVal_ClearDrawBuffer:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SqplyVal_ClearDrawBuffer
 	ld (xde + 18), xhl
@@ -8413,7 +8413,7 @@ SqplyVal_ClearDrawBuffer:
 SqplyVal_RenderNoteGrid0:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8003E
+	ld xbc, 0x1e8003e
 	call ApFuncCall
 	lda xwa, (xsp + 52)
 	lda xbc, (xsp + 48)
@@ -8428,7 +8428,7 @@ SqplyVal_RenderNoteGrid0:
 SqplyVal_RenderNoteGrid1:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8003F
+	ld xbc, 0x1e8003f
 	call ApFuncCall
 	lda xwa, (xsp + 52)
 	lda xbc, (xsp + 48)
@@ -8443,7 +8443,7 @@ SqplyVal_RenderNoteGrid1:
 SqplyVal_RenderNoteGrid2:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80040
+	ld xbc, 0x1e80040
 	call ApFuncCall
 	lda xwa, (xsp + 52)
 	lda xbc, (xsp + 48)
@@ -8468,10 +8468,10 @@ SqplyVal_HandleExtraParams:
 	cp xhl, 0x7
 	jrl ugt, SqplyVal_ReturnZero
 	add xhl, xhl
-	add xhl, 0xE3480C
+	add xhl, 0xe3480c
 	ld hl, (xhl)
 	lda_24 xix, 0xf30cf0
-	jp_dri 8, 0x07, 0xF0, 0xEC
+	jp_dri 8, 0x07, 0xf0, 0xec
 SqplyVal_ExtraParamsData:
 	ld	xwa, (xbc)
 	ld	xbc, 31981633
@@ -8542,23 +8542,23 @@ SqplyVal_HandleUpScrollEvent:
 	jr nz, SqplyVal_UpScroll_Mode2
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80036
+	ld xbc, 0x1e80036
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	ldto_berp E, 0xFB
+	ldfr_berp L, 0xfb
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80037
+	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	ldto_berp E, 0xFB
+	ldfr_berp L, 0xfb
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, 0x1480003
-	ld xbc, 0x1E80014
+	ld xbc, 0x1e80014
 	call MainPostEvent
 	ld xwa, (xsp + 68)
 	ld xbc, (xsp + 64)
@@ -8573,7 +8573,7 @@ SqplyVal_UpScroll_Mode2:
 	bitda 2, 1057
 	jrl nz, SqplyVal_ReturnZero
 	ld xwa, 0x1480003
-	ld xbc, 0x1E80014
+	ld xbc, 0x1e80014
 	lds32 xde, 0
 	call MainPostEvent
 	ld xwa, (xsp + 68)
@@ -8581,11 +8581,11 @@ SqplyVal_UpScroll_Mode2:
 	ld xde, (xsp + 60)
 	call SetAutoInc
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 2
 	call SetDialUp
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
 	lds wa, 1
@@ -8604,23 +8604,23 @@ SqplyVal_HandleDownScrollEvent:
 	jr nz, SqplyVal_DownScroll_Mode2
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80036
+	ld xbc, 0x1e80036
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	ldto_berp E, 0xFB
+	ldfr_berp L, 0xfb
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80037
+	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	ldto_berp E, 0xFB
+	ldfr_berp L, 0xfb
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, 0x1480003
-	ld xbc, 0x1E80015
+	ld xbc, 0x1e80015
 	call MainPostEvent
 	ld xwa, (xsp + 68)
 	ld xbc, (xsp + 64)
@@ -8635,7 +8635,7 @@ SqplyVal_DownScroll_Mode2:
 	bitda 2, 1057
 	jrl nz, SqplyVal_ReturnZero
 	ld xwa, 0x1480003
-	ld xbc, 0x1E80015
+	ld xbc, 0x1e80015
 	lds32 xde, 0
 	call MainPostEvent
 	ld xwa, (xsp + 68)
@@ -8643,11 +8643,11 @@ SqplyVal_DownScroll_Mode2:
 	ld xde, (xsp + 60)
 	call SetAutoInc
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 2
 	call SetDialUp
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
 	lds wa, 1
@@ -8666,26 +8666,26 @@ SqplyVal_HandleSelectEvent:
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80036
+	ld xbc, 0x1e80036
 	lds32 xde, 0
 	call ApFuncCall
 	ld (xsp + 2), l
 	ld xwa, (xsp + 60)
-	cp xwa, 0xC
+	cp xwa, 0xc
 	jr z, SqplyVal_SelectTrack
-	cp xwa, 0xB
+	cp xwa, 0xb
 	jr z, SqplyVal_SelectTrack
-	cp xwa, 0xA
+	cp xwa, 0xa
 	jr z, SqplyVal_SelectTrack
 	cp xwa, 0x9
 	jr z, SqplyVal_SelectTrack
 	cp xwa, 0x8
 	jr z, SqplyVal_SelectTrack
-	cp xwa, 0x8C
+	cp xwa, 0x8c
 	jr z, SqplyVal_SelectTrack
-	cp xwa, 0x8B
+	cp xwa, 0x8b
 	jrl z, SqplyVal_SelectTrack_SetPart3
-	cp xwa, 0x8A
+	cp xwa, 0x8a
 	jrl z, SqplyVal_SelectTrack_SetPart2
 	cp xwa, 0x89
 	jrl z, SqplyVal_SelectTrack_SetPart1
@@ -8695,7 +8695,7 @@ SqplyVal_HandleSelectEvent:
 SqplyVal_SelectTrack:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80036
+	ld xbc, 0x1e80036
 	lds32 xde, 0
 	call ApFuncCall
 	ld (xsp + 4), l
@@ -8703,23 +8703,23 @@ SqplyVal_SelectTrack:
 	ld e, (xsp + 2)
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80037
+	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 	ld xwa, (xsp + 6)
 	lda xbc, (xwa + 26)
-	cpi_berp 0xFB, 0
+	cpi_berp 0xfb, 0
 	jr lt, SqplyVal_SelectTrack_NegRange
 	lds32 xde, 0
 	ld e, (xsp + 2)
 	ld xwa, (xbc)
-	ld xbc, 0x1E80035
+	ld xbc, 0x1e80035
 	call ApFuncCall
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
 	ld a, (xsp + 2)
 	cp a, (xsp + 4)
@@ -8728,16 +8728,16 @@ SqplyVal_SelectTrack:
 	ld e, (xsp + 4)
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80037
+	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	cpi_berp 0xFB, 0
+	ldfr_berp L, 0xfb
+	cpi_berp 0xfb, 0
 	jr lt, SqplyVal_ReturnZero
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	jr SqplyVal_DispatchScrollCmd
 
 SqplyVal_SelectTrack_SetPart1:
@@ -8756,16 +8756,16 @@ SqplyVal_SelectTrack_NegRange:
 	lds32 xde, 0
 	ld e, (xsp + 4)
 	ld xwa, (xbc)
-	ld xbc, 0x1E80037
+	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	cpi_berp 0xFB, 0
+	ldfr_berp L, 0xfb
+	cpi_berp 0xfb, 0
 	jr lt, SqplyVal_ReturnZero
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	exts de
 	exts xde
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 
 SqplyVal_DispatchScrollCmd:
 	call SendEvent
@@ -8774,26 +8774,26 @@ SqplyVal_ReturnZero:
 	lds32 xhl, 0
 
 SqplyVal_Epilogue:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	lda xsp, (xsp + 70)
 	ret
 
 SqedtValProc:
 	lda xsp, (xsp - 76)
-	push_werp 0xFA
+	push_werp 0xfa
 	ld (xsp + 66), xde
 	ld (xsp + 70), xbc
 	ld (xsp + 74), xwa
 	ld xwa, (xsp + 70)
-	cp xwa, 0x1C00007
+	cp xwa, 0x1c00007
 	jrl z, SqedtVal_HandleSelectEvent
-	cp xwa, 0x1C00018
+	cp xwa, 0x1c00018
 	jrl z, SqedtVal_HandleDownScrollEvent
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	jrl z, SqedtVal_HandleUpScrollEvent
-	cp xwa, 0x1C0000F
+	cp xwa, 0x1c0000f
 	jr z, SqedtVal_HandleScrollEvent
-	cp xwa, 0x1C0000B
+	cp xwa, 0x1c0000b
 	jr z, SqedtVal_HandleInitEvent
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
@@ -8809,11 +8809,11 @@ SqedtVal_HandleInitEvent:
 	ld xwa, (xsp + 74)
 	call GetViewInstance
 	ld xwa, (xhl + 26)
-	ld xbc, 0x1E80035
+	ld xbc, 0x1e80035
 	lds32 xde, 0
 	call ApFuncCall
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00007
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00007
 	ld xde, 0x88
 	call SendEvent
 	ld xde, (xsp + 74)
@@ -8821,11 +8821,11 @@ SqedtVal_HandleInitEvent:
 	ld xbc, (xsp + 70)
 	call MainPostEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 1
 	call SetDialUp
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
 	lds wa, 1
@@ -8841,7 +8841,7 @@ SqedtVal_HandleScrollEvent:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	ld xiy, (xsp + 4)
@@ -8850,7 +8850,7 @@ SqedtVal_HandleScrollEvent:
 	lda xhl, (xsp + 58)
 	ld xwa, (xsp + 66)
 	sll xwa, 3
-	ld xde, 0xE335EA
+	ld xde, 0xe335ea
 	add xde, xwa
 	ld wa, (xde)
 	ld (xhl), wa
@@ -8881,7 +8881,7 @@ SqedtVal_HandleScrollEvent:
 	add bc, wa
 	ld (xhl + 2), bc
 	ld xwa, (xiy + 26)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	ld xde, (xsp + 66)
 	call ApFuncCall
 	lda xde, (xsp + 8)
@@ -8891,18 +8891,18 @@ SqedtVal_HandleScrollEvent:
 	lda xbc, (xhl + 24)
 
 SqedtVal_ClearDrawBuffer:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SqedtVal_ClearDrawBuffer
 	ld (xde + 18), xhl
 	ld xwa, (xsp + 66)
-	cp xwa, 0xE
+	cp xwa, 0xe
 	jrl ugt, SqedtVal_ReturnZero
 	add xwa, xwa
-	add xwa, 0xE3481C
+	add xwa, 0xe3481c
 	ld wa, (xwa)
 	lda_24 xix, 0xf311f1
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SqedtVal_DrawParamsData:
 	ld	xwa, (xsp+4)
@@ -9013,23 +9013,23 @@ SqedtVal_HandleUpScrollEvent:
 	jrl nz, SqedtVal_ReturnZero
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80036
+	ld xbc, 0x1e80036
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFA
-	ldto_berp E, 0xFA
+	ldfr_berp L, 0xfa
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80037
+	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldfr_berp L, 0xFA
-	ldto_berp E, 0xFA
+	ldfr_berp L, 0xfa
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80014
+	ld xbc, 0x1e80014
 	call MainPostEvent
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
@@ -9049,23 +9049,23 @@ SqedtVal_HandleDownScrollEvent:
 	jrl nz, SqedtVal_ReturnZero
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80036
+	ld xbc, 0x1e80036
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFA
-	ldto_berp E, 0xFA
+	ldfr_berp L, 0xfa
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80037
+	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldfr_berp L, 0xFA
-	ldto_berp E, 0xFA
+	ldfr_berp L, 0xfa
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80015
+	ld xbc, 0x1e80015
 	call MainPostEvent
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
@@ -9084,41 +9084,41 @@ SqedtVal_HandleSelectEvent:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 66)
-	cp xwa, 0xB
+	cp xwa, 0xb
 	jr z, SqedtVal_CallSortedUpdate
 	cp xwa, 0x9
 	jr z, SqedtVal_SetBerp6
 	cp xwa, 0x8
 	jr z, SqedtVal_SetBerp5
-	cp xwa, 0x8B
+	cp xwa, 0x8b
 	jr z, SqedtVal_SetBerp3
-	cp xwa, 0x8A
+	cp xwa, 0x8a
 	jr z, SqedtVal_SetBerp2
 	cp xwa, 0x89
 	jr z, SqedtVal_SetBerp1
 	cp xwa, 0x88
 	jr nz, SqedtVal_SelectDefault
-	ldi_berp 0xFB, 0
+	ldi_berp 0xfb, 0
 	jr SqedtVal_SelectDispatch
 
 SqedtVal_SetBerp1:
-	ldi_berp 0xFB, 1
+	ldi_berp 0xfb, 1
 	jr SqedtVal_SelectDispatch
 
 SqedtVal_SetBerp2:
-	ldi_berp 0xFB, 2
+	ldi_berp 0xfb, 2
 	jr SqedtVal_SelectDispatch
 
 SqedtVal_SetBerp3:
-	ldi_berp 0xFB, 3
+	ldi_berp 0xfb, 3
 	jr SqedtVal_SelectDispatch
 
 SqedtVal_SetBerp5:
-	ldi_berp 0xFB, 5
+	ldi_berp 0xfb, 5
 	jr SqedtVal_SelectDispatch
 
 SqedtVal_SetBerp6:
-	ldi_berp 0xFB, 6
+	ldi_berp 0xfb, 6
 	jr SqedtVal_SelectDispatch
 
 SqedtVal_CallSortedUpdate:
@@ -9131,73 +9131,73 @@ SqedtVal_DoSortedUpdate:
 SqedtVal_SelectDefault:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80036
+	ld xbc, 0x1e80036
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 
 SqedtVal_SelectDispatch:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80036
+	ld xbc, 0x1e80036
 	lds32 xde, 0
 	call ApFuncCall
 	ld (xsp + 2), l
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80037
+	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldfr_berp L, 0xFA
+	ldfr_berp L, 0xfa
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 26)
-	cpi_berp 0xFA, 0
+	cpi_berp 0xfa, 0
 	jr lt, SqedtVal_Select_NegRange
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xbc)
-	ld xbc, 0x1E80035
+	ld xbc, 0x1e80035
 	call ApFuncCall
-	ldto_berp E, 0xFA
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call SendEvent
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	cp a, (xsp + 2)
 	jr z, SqedtVal_ReturnZero
 	lds32 xde, 0
 	ld e, (xsp + 2)
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80037
+	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldfr_berp L, 0xFA
-	cpi_berp 0xFA, 0
+	ldfr_berp L, 0xfa
+	cpi_berp 0xfa, 0
 	jr lt, SqedtVal_ReturnZero
-	ldto_berp E, 0xFA
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	jr SqedtVal_DispatchScrollCmd
 
 SqedtVal_Select_NegRange:
 	lds32 xde, 0
 	ld e, (xsp + 2)
 	ld xwa, (xbc)
-	ld xbc, 0x1E80037
+	ld xbc, 0x1e80037
 	call ApFuncCall
-	ldfr_berp L, 0xFA
-	cpi_berp 0xFA, 0
+	ldfr_berp L, 0xfa
+	cpi_berp 0xfa, 0
 	jr lt, SqedtVal_ReturnZero
-	ldto_berp E, 0xFA
+	ldto_berp E, 0xfa
 	exts de
 	exts xde
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 
 SqedtVal_DispatchScrollCmd:
 	call SendEvent
@@ -9206,64 +9206,64 @@ SqedtVal_ReturnZero:
 	lds32 xhl, 0
 
 SqedtVal_Epilogue:
-	pop_werp 0xFA
+	pop_werp 0xfa
 	lda xsp, (xsp + 76)
 	ret
 
 SqedtFixProc:
-	st_dri3b L, 0xFD, 0x7E, 0xFF
+	st_dri3b L, 0xfd, 0x7e, 0xff
 	push xiz
 	ld xhl, xbc
 	ld xiz, xwa
-	ld xiy, 0xE3488A
+	ld xiy, 0xe3488a
 	lda xix, (xsp + 100)
 	lds bc, 2
 	ldirw
 	ldi85
-	ld xiy, 0xE34890
+	ld xiy, 0xe34890
 	lda xix, (xsp + 96)
 	ldi85
 	ldiw
-	ld xiy, 0xE34894
+	ld xiy, 0xe34894
 	lda xix, (xsp + 90)
 	lds bc, 2
 	ldirw
 	ldi85
-	ld xiy, 0xE3489A
+	ld xiy, 0xe3489a
 	lda xix, (xsp + 84)
 	lds bc, 3
 	ldirw
-	ld xiy, 0xE348A0
+	ld xiy, 0xe348a0
 	lda xix, (xsp + 78)
 	lds bc, 3
 	ldirw
-	ld xiy, 0xE348A6
+	ld xiy, 0xe348a6
 	lda xix, (xsp + 76)
 	ldiw
-	ld xiy, 0xE348A8
+	ld xiy, 0xe348a8
 	lda xix, (xsp + 62)
 	lds bc, 7
 	ldirw
-	ld xiy, 0xE348B6
+	ld xiy, 0xe348b6
 	lda xix, (xsp + 48)
 	lds bc, 6
 	ldirw
 	ldi85
-	ld xiy, 0xE348C4
+	ld xiy, 0xe348c4
 	lda xix, (xsp + 34)
 	lds bc, 7
 	ldirw
-	ld xiy, 0xE348D2
+	ld xiy, 0xe348d2
 	lda xix, (xsp + 26)
 	lds bc, 3
 	ldirw
 	ldi85
-	ld xiy, 0xE348DA
+	ld xiy, 0xe348da
 	lda xix, (xsp + 20)
 	lds bc, 2
 	ldirw
 	ldi85
-	cp xhl, 0x1C0000B
+	cp xhl, 0x1c0000b
 	jr z, SqedtFix_HandleInitEvent
 	ld xwa, xiz
 	ld xbc, xhl
@@ -9278,7 +9278,7 @@ SqedtFix_HandleInitEvent:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	lda xwa, (xsp + 118)
-	ldw (xwa), 0x2C
+	ldw (xwa), 0x2c
 	lda xde, (xwa + 2)
 	ldw (xde), 0x21
 	lda xhl, (xwa + 4)
@@ -9312,8 +9312,8 @@ SqedtFix_HandleInitEvent:
 	pushm (xhl + 24)
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
-	ldw (xwa), 0xDA
-	ldw bc, 0xDA
+	ldw (xwa), 0xda
+	ldw bc, 0xda
 	add bc, 0x46
 	ld (xwa + 4), bc
 	sub bc, (xwa)
@@ -9331,16 +9331,16 @@ SqedtFix_HandleInitEvent:
 	pushm (xhl + 24)
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
-	ldw (xwa), 0x3D
+	ldw (xwa), 0x3d
 	lda xde, (xwa + 2)
-	ldw (xde), 0xB7
+	ldw (xde), 0xb7
 	lda xhl, (xwa + 4)
 	ld bc, (xwa)
 	add bc, 0x28
 	ld (xhl), bc
 	lda xix, (xwa + 6)
 	ld bc, (xde)
-	add bc, 0xF
+	add bc, 0xf
 	ld (xix), bc
 	ld bc, (xhl)
 	sub bc, (xwa)
@@ -9365,8 +9365,8 @@ SqedtFix_HandleInitEvent:
 	pushm (xhl + 24)
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
-	ldw (xwa), 0xE4
-	ldw bc, 0xE4
+	ldw (xwa), 0xe4
+	ldw bc, 0xe4
 	add bc, 0x28
 	ld (xwa + 4), bc
 	sub bc, (xwa)
@@ -9386,14 +9386,14 @@ SqedtFix_HandleInitEvent:
 	lda xwa, (xsp + 118)
 	ldw (xwa), 0x14
 	lda xde, (xwa + 2)
-	ldw (xde), 0xC8
+	ldw (xde), 0xc8
 	lda xhl, (xwa + 4)
 	ld bc, (xwa)
-	add bc, 0x2D
+	add bc, 0x2d
 	ld (xhl), bc
 	lda xix, (xwa + 6)
 	ld bc, (xde)
-	add bc, 0xF
+	add bc, 0xf
 	ld (xix), bc
 	ld bc, (xhl)
 	sub bc, (xwa)
@@ -9420,7 +9420,7 @@ SqedtFix_HandleInitEvent:
 	lda xwa, (xsp + 118)
 	ldw (xwa), 0x61
 	ldw bc, 0x61
-	add bc, 0x2D
+	add bc, 0x2d
 	ld (xwa + 4), bc
 	sub bc, (xwa)
 	exts xbc
@@ -9437,9 +9437,9 @@ SqedtFix_HandleInitEvent:
 	pushm (xhl + 24)
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
-	ldw (xwa), 0xB4
-	ldw bc, 0xB4
-	add bc, 0x2D
+	ldw (xwa), 0xb4
+	ldw bc, 0xb4
+	add bc, 0x2d
 	ld (xwa + 4), bc
 	sub bc, (xwa)
 	exts xbc
@@ -9458,7 +9458,7 @@ SqedtFix_HandleInitEvent:
 	lda xwa, (xsp + 118)
 	ldw (xwa), 0x101
 	ldw bc, 0x101
-	add bc, 0x2D
+	add bc, 0x2d
 	ld (xwa + 4), bc
 	sub bc, (xwa)
 	exts xbc
@@ -9482,19 +9482,19 @@ SqedtFix_HandleInitEvent:
 	add bc, 0x95
 	ld (xwa + 4), bc
 	ld bc, (xde)
-	add bc, 0x6A
+	add bc, 0x6a
 	ld (xwa + 6), bc
 	ld xde, (xsp + 4)
 	ld bc, (xde + 26)
 	ld de, (xde + 24)
 	call DrawDesignBox
 	lda xwa, (xsp + 126)
-	ldw (xwa), 0xA4
-	ldw bc, 0xA4
+	ldw (xwa), 0xa4
+	ldw bc, 0xa4
 	add bc, 0x95
 	ld (xwa + 4), bc
 	ld bc, (xwa + 2)
-	add bc, 0x6A
+	add bc, 0x6a
 	ld (xwa + 6), bc
 	ld xde, (xsp + 4)
 	ld bc, (xde + 26)
@@ -9502,24 +9502,16 @@ SqedtFix_HandleInitEvent:
 	call DrawDesignBox
 	lda xwa, (xsp + 114)
 	ldw (xwa), 0x4
-	ldw (xwa + 2), 0xC8
+	ldw (xwa + 2), 0xc8
 	lda xbc, (xsp + 110)
 	ld de, (xwa)
 	ld (xbc), de
-	ldw (xbc + 2), 0xD6
+	ldw (xbc + 2), 0xd6
 	ld xde, (xsp + 4)
 	ld de, (xde + 22)
 	call DrawLine
 	lda xwa, (xsp + 114)
-	ldw (xwa), 0x9B
-	lda xbc, (xsp + 110)
-	ld de, (xwa)
-	ld (xbc), de
-	ld xde, (xsp + 4)
-	ld de, (xde + 22)
-	call DrawLine
-	lda xwa, (xsp + 114)
-	ldw (xwa), 0xA4
+	ldw (xwa), 0x9b
 	lda xbc, (xsp + 110)
 	ld de, (xwa)
 	ld (xbc), de
@@ -9527,7 +9519,15 @@ SqedtFix_HandleInitEvent:
 	ld de, (xde + 22)
 	call DrawLine
 	lda xwa, (xsp + 114)
-	ldw (xwa), 0x13B
+	ldw (xwa), 0xa4
+	lda xbc, (xsp + 110)
+	ld de, (xwa)
+	ld (xbc), de
+	ld xde, (xsp + 4)
+	ld de, (xde + 22)
+	call DrawLine
+	lda xwa, (xsp + 114)
+	ldw (xwa), 0x13b
 	lda xbc, (xsp + 110)
 	ld de, (xwa)
 	ld (xbc), de
@@ -9537,18 +9537,18 @@ SqedtFix_HandleInitEvent:
 	lda xwa, (xsp + 114)
 	ldw (xwa), 0x4
 	lda xde, (xwa + 2)
-	ldw (xde), 0xC8
+	ldw (xde), 0xc8
 	lda xbc, (xsp + 110)
-	ldw (xbc), 0x9A
+	ldw (xbc), 0x9a
 	ld de, (xde)
 	ld (xbc + 2), de
 	ld xde, (xsp + 4)
 	ld de, (xde + 22)
 	call DrawLine
 	lda xwa, (xsp + 114)
-	ldw (xwa), 0xA4
+	ldw (xwa), 0xa4
 	lda xbc, (xsp + 110)
-	ldw (xbc), 0x13A
+	ldw (xbc), 0x13a
 	ld xde, (xsp + 4)
 	ld de, (xde + 22)
 	call DrawLine
@@ -9565,23 +9565,23 @@ SqedtFix_HandleInitEvent:
 	lda xix, (xwa + 2)
 	lda xiz, (xwa + 4)
 	lda xiy, (xwa + 6)
-	cp l, 0xA8
+	cp l, 0xa8
 	jrl z, SqedtFix_SetupLayoutB
 	cp l, 0x91
 	jrl z, SqedtFix_SetupLayoutB
-	cp l, 0xA4
+	cp l, 0xa4
 	jr z, SqedtFix_SetupLayoutA
-	cp l, 0xA2
+	cp l, 0xa2
 	jrl nz, SqedtFix_ReturnZero
 
 SqedtFix_SetupLayoutA:
-	ldw (xwa), 0xA
-	ldw (xix), 0x3A
+	ldw (xwa), 0xa
+	ldw (xix), 0x3a
 	ld de, (xwa)
 	add de, 0x82
 	ld (xiz), de
 	ld de, (xix)
-	add de, 0xF
+	add de, 0xf
 	ld (xiy), de
 	ld de, (xiz)
 	sub de, (xwa)
@@ -9627,10 +9627,10 @@ SqedtFix_SetupLayoutA:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x5C
-	ldw (xwa + 6), 0x6B
+	ldw (xbc), 0x5c
+	ldw (xwa + 6), 0x6b
 	ld de, (xbc)
-	ldw bc, 0x6B
+	ldw bc, 0x6b
 	sub bc, de
 	exts xbc
 	divs bc, 0x2
@@ -9646,7 +9646,7 @@ SqedtFix_SetupLayoutA:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x6A
+	ldw (xbc), 0x6a
 	ldw (xwa + 6), 0x79
 	ld de, (xbc)
 	ldw bc, 0x79
@@ -9665,10 +9665,10 @@ SqedtFix_SetupLayoutA:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x7E
-	ldw (xwa + 6), 0x8D
+	ldw (xbc), 0x7e
+	ldw (xwa + 6), 0x8d
 	ld de, (xbc)
-	ldw bc, 0x8D
+	ldw bc, 0x8d
 	sub bc, de
 	exts xbc
 	divs bc, 0x2
@@ -9684,10 +9684,10 @@ SqedtFix_SetupLayoutA:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x8C
-	ldw (xwa + 6), 0x9B
+	ldw (xbc), 0x8c
+	ldw (xwa + 6), 0x9b
 	ld de, (xbc)
-	ldw bc, 0x9B
+	ldw bc, 0x9b
 	sub bc, de
 	exts xbc
 	divs bc, 0x2
@@ -9702,16 +9702,16 @@ SqedtFix_SetupLayoutA:
 	pushm (xhl + 24)
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
-	ldw (xwa), 0xAA
+	ldw (xwa), 0xaa
 	lda xde, (xwa + 2)
-	ldw (xde), 0x3A
+	ldw (xde), 0x3a
 	lda xhl, (xwa + 4)
 	ld bc, (xwa)
 	add bc, 0x82
 	ld (xhl), bc
 	lda xix, (xwa + 6)
 	ld bc, (xde)
-	add bc, 0xF
+	add bc, 0xf
 	ld (xix), bc
 	ld bc, (xhl)
 	sub bc, (xwa)
@@ -9756,10 +9756,10 @@ SqedtFix_SetupLayoutA:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x5C
-	ldw (xwa + 6), 0x6B
+	ldw (xbc), 0x5c
+	ldw (xwa + 6), 0x6b
 	ld de, (xbc)
-	ldw bc, 0x6B
+	ldw bc, 0x6b
 	sub bc, de
 	exts xbc
 	divs bc, 0x2
@@ -9775,7 +9775,7 @@ SqedtFix_SetupLayoutA:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x6A
+	ldw (xbc), 0x6a
 	ldw (xwa + 6), 0x79
 	ld de, (xbc)
 	ldw bc, 0x79
@@ -9794,10 +9794,10 @@ SqedtFix_SetupLayoutA:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x7E
-	ldw (xwa + 6), 0x8D
+	ldw (xbc), 0x7e
+	ldw (xwa + 6), 0x8d
 	ld de, (xbc)
-	ldw bc, 0x8D
+	ldw bc, 0x8d
 	sub bc, de
 	exts xbc
 	divs bc, 0x2
@@ -9813,10 +9813,10 @@ SqedtFix_SetupLayoutA:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x8C
-	ldw (xwa + 6), 0x9B
+	ldw (xbc), 0x8c
+	ldw (xwa + 6), 0x9b
 	ld de, (xbc)
-	ldw bc, 0x9B
+	ldw bc, 0x9b
 	sub bc, de
 	exts xbc
 	divs bc, 0x2
@@ -9833,12 +9833,12 @@ SqedtFix_SetupLayoutA:
 
 SqedtFix_SetupLayoutB:
 	ldw (xwa), 0x6
-	ldw (xix), 0x3E
+	ldw (xix), 0x3e
 	ld de, (xwa)
 	add de, 0x82
 	ld (xiz), de
 	ld de, (xix)
-	add de, 0xF
+	add de, 0xf
 	ld (xiy), de
 	ld de, (xiz)
 	sub de, (xwa)
@@ -9865,10 +9865,10 @@ SqedtFix_SetupLayoutB:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x4E
-	ldw (xwa + 6), 0x5D
+	ldw (xbc), 0x4e
+	ldw (xwa + 6), 0x5d
 	ld de, (xbc)
-	ldw bc, 0x5D
+	ldw bc, 0x5d
 	sub bc, de
 	exts xbc
 	divs bc, 0x2
@@ -9884,10 +9884,10 @@ SqedtFix_SetupLayoutB:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x5F
-	ldw (xwa + 6), 0x6E
+	ldw (xbc), 0x5f
+	ldw (xwa + 6), 0x6e
 	ld de, (xbc)
-	ldw bc, 0x6E
+	ldw bc, 0x6e
 	sub bc, de
 	exts xbc
 	divs bc, 0x2
@@ -9940,16 +9940,16 @@ SqedtFix_SetupLayoutB:
 	pushm (xhl + 24)
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
-	ldw (xwa), 0xA6
+	ldw (xwa), 0xa6
 	lda xde, (xwa + 2)
-	ldw (xde), 0x3E
+	ldw (xde), 0x3e
 	lda xhl, (xwa + 4)
 	ld bc, (xwa)
 	add bc, 0x82
 	ld (xhl), bc
 	lda xix, (xwa + 6)
 	ld bc, (xde)
-	add bc, 0xF
+	add bc, 0xf
 	ld (xix), bc
 	ld bc, (xhl)
 	sub bc, (xwa)
@@ -9975,10 +9975,10 @@ SqedtFix_SetupLayoutB:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x4E
-	ldw (xwa + 6), 0x5D
+	ldw (xbc), 0x4e
+	ldw (xwa + 6), 0x5d
 	ld de, (xbc)
-	ldw bc, 0x5D
+	ldw bc, 0x5d
 	sub bc, de
 	exts xbc
 	divs bc, 0x2
@@ -9994,10 +9994,10 @@ SqedtFix_SetupLayoutB:
 	call DrawStringLeftJustify
 	lda xwa, (xsp + 118)
 	lda xbc, (xwa + 2)
-	ldw (xbc), 0x5F
-	ldw (xwa + 6), 0x6E
+	ldw (xbc), 0x5f
+	ldw (xwa + 6), 0x6e
 	ld de, (xbc)
-	ldw bc, 0x6E
+	ldw bc, 0x6e
 	sub bc, de
 	exts xbc
 	divs bc, 0x2
@@ -10057,7 +10057,7 @@ SqedtFix_ReturnZero:
 
 SqedtFix_Epilogue:
 	pop xiz
-	st_dri3b L, 0xFD, 0x82, 0x00
+	st_dri3b L, 0xfd, 0x82, 0x00
 	ret
 
 SqedtVal3Proc:
@@ -10066,13 +10066,13 @@ SqedtVal3Proc:
 	ld (xsp + 62), xde
 	ld xiz, xbc
 	ld (xsp + 66), xwa
-	cp xiz, 0x1C00018
+	cp xiz, 0x1c00018
 	jrl z, SqedtVal3_HandleSelectEvent2
-	cp xiz, 0x1C00017
+	cp xiz, 0x1c00017
 	jrl z, SqedtVal3_HandleSelectEvent1
-	cp xiz, 0x1C0000F
+	cp xiz, 0x1c0000f
 	jr z, SqedtVal3_HandleScrollEvent
-	cp xiz, 0x1C0000B
+	cp xiz, 0x1c0000b
 	jr z, SqedtVal3_HandleInitEvent
 	ld xwa, (xsp + 66)
 	ld xbc, xiz
@@ -10090,11 +10090,11 @@ SqedtVal3_HandleInitEvent:
 	ld xbc, xiz
 	call MainPostEvent
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 1
 	call SetDialUp
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
 	lds wa, 1
@@ -10107,7 +10107,7 @@ SqedtVal3_HandleScrollEvent:
 	ld xde, (xsp + 62)
 	call InheritedProc
 	ld xwa, (xsp + 62)
-	cp xwa, 0x1F
+	cp xwa, 0x1f
 	jrl c, SqedtVal_ReturnZero2
 	cp xwa, 0x22
 	jrl ugt, SqedtVal_ReturnZero2
@@ -10122,11 +10122,11 @@ SqedtVal3_HandleScrollEvent:
 	ld_sriw WA, (xde + 0x00fa)
 	ld (xbc), wa
 	ld ix, (xhl)
-	add_sriw_rm IX, 0xE9, 0xFC, 0x00
+	add_sriw_rm IX, 0xe9, 0xfc, 0x00
 	lda xwa, (xhl + 4)
 	ld (xwa), ix
 	ld ix, (xbc)
-	add_sriw_rm IX, 0xE9, 0xFE, 0x00
+	add_sriw_rm IX, 0xe9, 0xfe, 0x00
 	lda xde, (xhl + 6)
 	ld (xde), ix
 	ld wa, (xwa)
@@ -10146,8 +10146,8 @@ SqedtVal3_HandleScrollEvent:
 	ld (xhl + 2), bc
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E00045
-	ld xde, 0x1F
+	ld xbc, 0x1e00045
+	ld xde, 0x1f
 	call ApFuncCall
 	lda xde, (xsp + 8)
 	ld (xde), xhl
@@ -10156,13 +10156,13 @@ SqedtVal3_HandleScrollEvent:
 	lda xbc, (xhl + 20)
 
 SqedtVal3_FillBufferLoop1:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SqedtVal3_FillBufferLoop1
 	ld (xde + 18), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80048
+	ld xbc, 0x1e80048
 	call ApFuncCall
 	lda xwa, (xsp + 54)
 	lda xbc, (xsp + 50)
@@ -10181,11 +10181,11 @@ SqedtVal3_FillBufferLoop1:
 	ld_sriw WA, (xde + 0x0102)
 	ld (xbc), wa
 	ld ix, (xhl)
-	add_sriw_rm IX, 0xE9, 0x04, 0x01
+	add_sriw_rm IX, 0xe9, 0x04, 0x01
 	lda xwa, (xhl + 4)
 	ld (xwa), ix
 	ld ix, (xbc)
-	add_sriw_rm IX, 0xE9, 0x06, 0x01
+	add_sriw_rm IX, 0xe9, 0x06, 0x01
 	lda xde, (xhl + 6)
 	ld (xde), ix
 	ld wa, (xwa)
@@ -10205,7 +10205,7 @@ SqedtVal3_FillBufferLoop1:
 	ld (xhl + 2), bc
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	ld xde, 0x20
 	call ApFuncCall
 	lda xde, (xsp + 8)
@@ -10215,13 +10215,13 @@ SqedtVal3_FillBufferLoop1:
 	lda xbc, (xhl + 20)
 
 SqedtVal3_FillBufferLoop2:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SqedtVal3_FillBufferLoop2
 	ld (xde + 18), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80049
+	ld xbc, 0x1e80049
 	call ApFuncCall
 	lda xwa, (xsp + 54)
 	lda xbc, (xsp + 50)
@@ -10240,11 +10240,11 @@ SqedtVal3_FillBufferLoop2:
 	ld_sriw WA, (xde + 0x010a)
 	ld (xbc), wa
 	ld ix, (xhl)
-	add_sriw_rm IX, 0xE9, 0x0C, 0x01
+	add_sriw_rm IX, 0xe9, 0x0c, 0x01
 	lda xwa, (xhl + 4)
 	ld (xwa), ix
 	ld ix, (xbc)
-	add_sriw_rm IX, 0xE9, 0x0E, 0x01
+	add_sriw_rm IX, 0xe9, 0x0e, 0x01
 	lda xde, (xhl + 6)
 	ld (xde), ix
 	ld wa, (xwa)
@@ -10264,7 +10264,7 @@ SqedtVal3_FillBufferLoop2:
 	ld (xhl + 2), bc
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	ld xde, 0x21
 	call ApFuncCall
 	lda xde, (xsp + 8)
@@ -10274,13 +10274,13 @@ SqedtVal3_FillBufferLoop2:
 	lda xbc, (xhl + 20)
 
 SqedtVal3_FillBufferLoop3:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SqedtVal3_FillBufferLoop3
 	ld (xde + 18), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8004A
+	ld xbc, 0x1e8004a
 	call ApFuncCall
 	lda xwa, (xsp + 54)
 	lda xbc, (xsp + 50)
@@ -10299,11 +10299,11 @@ SqedtVal3_FillBufferLoop3:
 	ld_sriw WA, (xde + 0x0112)
 	ld (xbc), wa
 	ld ix, (xhl)
-	add_sriw_rm IX, 0xE9, 0x14, 0x01
+	add_sriw_rm IX, 0xe9, 0x14, 0x01
 	lda xwa, (xhl + 4)
 	ld (xwa), ix
 	ld ix, (xbc)
-	add_sriw_rm IX, 0xE9, 0x16, 0x01
+	add_sriw_rm IX, 0xe9, 0x16, 0x01
 	lda xde, (xhl + 6)
 	ld (xde), ix
 	ld wa, (xwa)
@@ -10323,7 +10323,7 @@ SqedtVal3_FillBufferLoop3:
 	ld (xhl + 2), bc
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	ld xde, 0x22
 	call ApFuncCall
 	lda xde, (xsp + 8)
@@ -10333,13 +10333,13 @@ SqedtVal3_FillBufferLoop3:
 	lda xbc, (xhl + 20)
 
 SqedtVal3_FillBufferLoop4:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SqedtVal3_FillBufferLoop4
 	ld (xde + 18), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8004B
+	ld xbc, 0x1e8004b
 	call ApFuncCall
 	lda xwa, (xsp + 54)
 	lda xbc, (xsp + 50)
@@ -10361,8 +10361,8 @@ SqedtVal3_HandleSelectEvent1:
 	cp xwa, 0x1
 	jr nz, SqedtVal_ReturnZero2
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80014
-	ld xde, 0x1F
+	ld xbc, 0x1e80014
+	ld xde, 0x1f
 	call MainPostEvent
 	ld xwa, (xsp + 66)
 	ld xbc, xiz
@@ -10378,8 +10378,8 @@ SqedtVal3_HandleSelectEvent2:
 	cp xwa, 0x1
 	jr nz, SqedtVal_ReturnZero2
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80015
-	ld xde, 0x1F
+	ld xbc, 0x1e80015
+	ld xde, 0x1f
 	call MainPostEvent
 	ld xwa, (xsp + 66)
 	ld xbc, xiz
@@ -10403,15 +10403,15 @@ SqedtVal2Proc:
 	ld (xsp + 70), xbc
 	ld (xsp + 74), xwa
 	ld xwa, (xsp + 70)
-	cp xwa, 0x1C00018
+	cp xwa, 0x1c00018
 	jrl z, SqedtVal2_HandleUpScrollInner
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	jrl z, SqedtVal2_HandleSelectEvent
-	cp xwa, 0x1C0000E
+	cp xwa, 0x1c0000e
 	jrl z, SqedtVal2_HandleUpScrollEvent
-	cp xwa, 0x1C0000F
+	cp xwa, 0x1c0000f
 	jrl z, SqedtVal2_HandleScrollEvent
-	cp xwa, 0x1C0000B
+	cp xwa, 0x1c0000b
 	jr z, SqedtVal2_HandleInitEvent
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
@@ -10434,51 +10434,51 @@ SqedtVal2_HandleInitEvent:
 	ld xbc, (xsp + 70)
 	call MainPostEvent
 	ld xwa, (xiz + 26)
-	ld xbc, 0x1E8003B
+	ld xbc, 0x1e8003b
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xiz + 26)
-	ld xbc, 0x1E8003D
+	ld xbc, 0x1e8003d
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 1
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	ld xde, 0x10001
 	call SendEvent
-	cp (xsp + 6), 0xA2
+	cp (xsp + 6), 0xa2
 	jr z, SqedtVal2_SendA2A4Events
-	cp (xsp + 6), 0xA4
+	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_SendCommonEvents
 
 SqedtVal2_SendA2A4Events:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 2
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	ld xde, 0x10002
 	call SendEvent
 
 SqedtVal2_SendCommonEvents:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	ld xde, 0x100
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	ld xde, 0x10100
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 2
 	call SetDialUp
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
 	lds wa, 1
@@ -10497,7 +10497,7 @@ SqedtVal2_HandleScrollEvent:
 	lda xhl, (xsp + 58)
 	ld xwa, (xsp + 66)
 	sll xwa, 3
-	ld xde, 0xE335EA
+	ld xde, 0xe335ea
 	add xde, xwa
 	ld wa, (xde)
 	ld (xhl), wa
@@ -10529,7 +10529,7 @@ SqedtVal2_HandleScrollEvent:
 	ld (xhl + 2), bc
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	ld xde, (xsp + 66)
 	call ApFuncCall
 	lda xde, (xsp + 12)
@@ -10540,23 +10540,23 @@ SqedtVal2_HandleScrollEvent:
 
 ; SqplyVal extra params dispatch
 SqplyVal_ExtraParams:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SqplyVal_ExtraParams
 	ld (xde + 18), xhl
 	ld xhl, (xsp + 66)
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 26)
-	sub xhl, 0xF
+	sub xhl, 0xf
 	cp xhl, 0x0
 	jrl c, AccIll_ReturnZero2
-	cp xhl, 0xF
+	cp xhl, 0xf
 	jrl ugt, AccIll_ReturnZero2
 	add xhl, xhl
-	add xhl, 0xE348E0
+	add xhl, 0xe348e0
 	ld hl, (xhl)
 	lda_24 xix, 0xf3244a
-	jp_dri 8, 0x07, 0xF0, 0xEC
+	jp_dri 8, 0x07, 0xf0, 0xec
 ; AccIll_HandleEditorLoad dispatch
 AccIll_Dispatch:
 	ld	xwa, (xbc)
@@ -10758,11 +10758,11 @@ SqedtVal2_HandleUpScrollEvent:
 	ld (xsp + 6), l
 	ld xwa, (xsp + 66)
 	srl xwa, 0
-	and xwa, 0xFF
+	and xwa, 0xff
 	ld c, a
 	ld xwa, (xsp + 66)
-	and xwa, 0xFF
-	ldfr_berp A, 0xFB
+	and xwa, 0xff
+	ldfr_berp A, 0xfb
 	cps c, 0
 	jr nz, SqedtVal2_HandleDownScrollEvent
 	lda xix, (xsp + 58)
@@ -10771,15 +10771,15 @@ SqedtVal2_HandleUpScrollEvent:
 	lda xhl, (xix + 6)
 	cp (xsp + 6), 0x91
 	jr z, SqedtVal2_UpScrollModeA2
-	cp (xsp + 6), 0xA8
+	cp (xsp + 6), 0xa8
 	jr nz, SqedtVal2_UpScrollDefault
 
 SqedtVal2_UpScrollModeA2:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	sla wa, 3
 	lda_24 xiy, 0xe34852
-	st_dri3b E, 0x07, 0xF4, 0xE0
+	st_dri3b E, 0x07, 0xf4, 0xe0
 	ld wa, (xiy + 2)
 	ld (xbc), wa
 	ld wa, (xiy)
@@ -10791,11 +10791,11 @@ SqedtVal2_UpScrollModeA2:
 	jr SqedtVal2_UpScrollCalcOffset
 
 SqedtVal2_UpScrollDefault:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	sla wa, 3
 	lda_24 xiy, 0xe3483a
-	st_dri3b E, 0x07, 0xF4, 0xE0
+	st_dri3b E, 0x07, 0xf4, 0xe0
 	ld wa, (xiy + 2)
 	ld (xbc), wa
 	ld wa, (xiy)
@@ -10812,19 +10812,19 @@ SqedtVal2_UpScrollCalcOffset:
 	jr SqedtVal2_DrawScrollFrame
 
 SqedtVal2_HandleDownScrollEvent:
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	extz wa
 	sla wa, 3
 	cp (xsp + 6), 0x91
 	jr z, SqedtVal2_DownScrollModeA2
-	cp (xsp + 6), 0xA8
+	cp (xsp + 6), 0xa8
 	jr nz, SqedtVal2_DownScrollDefault
 
 SqedtVal2_DownScrollModeA2:
 	lda xhl, (xsp + 58)
 	lda xde, (xhl + 2)
 	lda_24 xbc, 0xe3487a
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	st_dri3b A, 0x07, 0xe4, 0xe0
 	ld wa, (xbc + 2)
 	ld (xde), wa
 	ld wa, (xbc)
@@ -10840,7 +10840,7 @@ SqedtVal2_DownScrollDefault:
 	lda xhl, (xsp + 58)
 	lda xde, (xhl + 2)
 	lda_24 xbc, 0xe34862
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	st_dri3b A, 0x07, 0xe4, 0xe0
 	ld wa, (xbc + 2)
 	ld (xde), wa
 	ld wa, (xbc)
@@ -10859,11 +10859,11 @@ SqedtVal2_DownScrollCalcOffset:
 SqedtVal2_DrawScrollFrame:
 	ld xwa, (xsp + 66)
 	srl xwa, 8
-	and xwa, 0xFF
+	and xwa, 0xff
 	cps a, 1
 	jr nz, SqedtVal2_DrawWithViewColors
 	lda xwa, (xsp + 58)
-	pushw 0xF2
+	pushw 0xf2
 	lds bc, 1
 	lds de, 2
 	jr SqedtVal2_CallDrawDesignFrame
@@ -10896,112 +10896,112 @@ SqedtVal2_HandleSelectEvent:
 	jrl nz, SqedtVal2_HandleSelectCase3
 	sti8_24 0x03e2e0, 0x00
 	ld xwa, (xbc)
-	ld xbc, 0x1E8003A
+	ld xbc, 0x1e8003a
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	cpi_berp 0xFB, 0
+	ldfr_berp L, 0xfb
+	cpi_berp 0xfb, 0
 	jr z, SqedtVal2_CheckModeA2
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
-	dec1_berp 0xFB
+	dec1_berp 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8003B
+	ld xbc, 0x1e8003b
 	call ApFuncCall
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add xde, 0x100
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
 
 SqedtVal2_CheckModeA2:
-	cp (xsp + 6), 0xA2
+	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_CheckModeA4
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0xF
+	ld xbc, 0x1c0000f
+	ld xde, 0xf
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x10
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x11
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x12
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x13
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x14
 	jrl SqedtVal2_SendScrollAndDial
 
 SqedtVal2_CheckModeA4:
-	cp (xsp + 6), 0xA4
+	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_DefaultScrollSend
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x15
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x16
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x17
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x18
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x19
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1A
+	ld xbc, 0x1c0000f
+	ld xde, 0x1a
 	jr SqedtVal2_SendScrollAndDial
 
 SqedtVal2_DefaultScrollSend:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1B
+	ld xbc, 0x1c0000f
+	ld xde, 0x1b
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1C
+	ld xbc, 0x1c0000f
+	ld xde, 0x1c
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1D
+	ld xbc, 0x1c0000f
+	ld xde, 0x1d
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1E
+	ld xbc, 0x1c0000f
+	ld xde, 0x1e
 
 SqedtVal2_SendScrollAndDial:
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 2
 	call SetDialUp
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 2
 	jrl AccIll_CallSetDialDown
 
@@ -11011,113 +11011,113 @@ SqedtVal2_HandleSelectCase3:
 	jrl nz, SqedtVal2_HandleSelectCase2
 	sti8_24 0x03e2e0, 0x01
 	ld xwa, (xbc)
-	ld xbc, 0x1E8003C
+	ld xbc, 0x1e8003c
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	cpi_berp 0xFB, 0
+	ldfr_berp L, 0xfb
+	cpi_berp 0xfb, 0
 	jr z, SqedtVal2_SelectCase3_ModeA2
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add xde, 0x10000
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
-	dec1_berp 0xFB
+	dec1_berp 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8003D
+	ld xbc, 0x1e8003d
 	call ApFuncCall
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add xde, 0x10100
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
 
 SqedtVal2_SelectCase3_ModeA2:
-	cp (xsp + 6), 0xA2
+	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_SelectCase3_ModeA4
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0xF
+	ld xbc, 0x1c0000f
+	ld xde, 0xf
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x10
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x11
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x12
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x13
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x14
 	jrl SqedtVal2_SelectCase3_SendDial
 
 SqedtVal2_SelectCase3_ModeA4:
-	cp (xsp + 6), 0xA4
+	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_SelectCase3_Default
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x15
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x16
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x17
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x18
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x19
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1A
+	ld xbc, 0x1c0000f
+	ld xde, 0x1a
 	jr SqedtVal2_SelectCase3_SendDial
 
 SqedtVal2_SelectCase3_Default:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1B
+	ld xbc, 0x1c0000f
+	ld xde, 0x1b
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1C
+	ld xbc, 0x1c0000f
+	ld xde, 0x1c
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1D
+	ld xbc, 0x1c0000f
+	ld xde, 0x1d
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1E
+	ld xbc, 0x1c0000f
+	ld xde, 0x1e
 
 SqedtVal2_SelectCase3_SendDial:
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 4
 	call SetDialUp
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 4
 	jrl AccIll_CallSetDialDown
 
@@ -11127,38 +11127,38 @@ SqedtVal2_HandleSelectCase2:
 	jrl nz, SqedtVal2_HandleSelectCase4
 	sti8_24 0x03e2e0, 0x00
 	ld xwa, (xbc)
-	ld xbc, 0x1E8003A
+	ld xbc, 0x1e8003a
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	cp (xsp + 6), 0xA2
+	ldfr_berp L, 0xfb
+	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_SelectCase2_ModeA4
-	ldto_berp E, 0xFB
-	add e, 0xF
+	ldto_berp E, 0xfb
+	add e, 0xf
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80014
+	ld xbc, 0x1e80014
 	jr SqedtVal2_SelectCase2_PostEvent
 
 SqedtVal2_SelectCase2_ModeA4:
-	cp (xsp + 6), 0xA4
+	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_SelectCase2_Default
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add e, 0x15
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80014
+	ld xbc, 0x1e80014
 	jr SqedtVal2_SelectCase2_PostEvent
 
 SqedtVal2_SelectCase2_Default:
-	ldto_berp E, 0xFB
-	add e, 0x1B
+	ldto_berp E, 0xfb
+	add e, 0x1b
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80014
+	ld xbc, 0x1e80014
 
 SqedtVal2_SelectCase2_PostEvent:
 	call MainPostEvent
@@ -11167,11 +11167,11 @@ SqedtVal2_SelectCase2_PostEvent:
 	ld xde, (xsp + 66)
 	call SetAutoInc
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 66)
 	call SetDialUp
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 66)
 	jrl AccIll_CallSetDialDown
 
@@ -11181,38 +11181,38 @@ SqedtVal2_HandleSelectCase4:
 	jrl nz, AccIll_ReturnZero2
 	sti8_24 0x03e2e0, 0x01
 	ld xwa, (xbc)
-	ld xbc, 0x1E8003C
+	ld xbc, 0x1e8003c
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	cp (xsp + 6), 0xA2
+	ldfr_berp L, 0xfb
+	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_SelectCase4_ModeA4
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add e, 0x12
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80014
+	ld xbc, 0x1e80014
 	jr SqedtVal2_SelectCase4_PostEvent
 
 SqedtVal2_SelectCase4_ModeA4:
-	cp (xsp + 6), 0xA4
+	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_SelectCase4_Default
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add e, 0x18
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80014
+	ld xbc, 0x1e80014
 	jr SqedtVal2_SelectCase4_PostEvent
 
 SqedtVal2_SelectCase4_Default:
-	ldto_berp E, 0xFB
-	add e, 0x1D
+	ldto_berp E, 0xfb
+	add e, 0x1d
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80014
+	ld xbc, 0x1e80014
 
 SqedtVal2_SelectCase4_PostEvent:
 	call MainPostEvent
@@ -11221,11 +11221,11 @@ SqedtVal2_SelectCase4_PostEvent:
 	ld xde, (xsp + 66)
 	call SetAutoInc
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 66)
 	call SetDialUp
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 66)
 	jrl AccIll_CallSetDialDown
 
@@ -11245,136 +11245,136 @@ SqedtVal2_HandleUpScrollInner:
 	sti8_24 0x03e2e0, 0x00
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8003A
+	ld xbc, 0x1e8003a
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	cp (xsp + 6), 0x91
 	jr z, SqedtVal2_UpInner_CheckA8
-	cp (xsp + 6), 0xA8
+	cp (xsp + 6), 0xa8
 	jrl nz, SqedtVal2_UpInner_CheckA4
 
 SqedtVal2_UpInner_CheckA8:
-	cpi_berp 0xFB, 1
+	cpi_berp 0xfb, 1
 	jr nc, SqedtVal2_UpInner_SendExtra
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8003B
+	ld xbc, 0x1e8003b
 	call ApFuncCall
 
 SqedtVal2_UpInner_SendExtra:
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add xde, 0x100
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1B
+	ld xbc, 0x1c0000f
+	ld xde, 0x1b
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1C
+	ld xbc, 0x1c0000f
+	ld xde, 0x1c
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1D
+	ld xbc, 0x1c0000f
+	ld xde, 0x1d
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1E
+	ld xbc, 0x1c0000f
+	ld xde, 0x1e
 	jrl SqedtVal2_UpInner_SendDial
 
 SqedtVal2_UpInner_CheckA4:
-	cpi_berp 0xFB, 2
+	cpi_berp 0xfb, 2
 	jr nc, SqedtVal2_UpInner_SendFields
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8003B
+	ld xbc, 0x1e8003b
 	call ApFuncCall
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add xde, 0x100
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
 
 SqedtVal2_UpInner_SendFields:
-	cp (xsp + 6), 0xA2
+	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_UpInner_ModeA4Scroll
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0xF
+	ld xbc, 0x1c0000f
+	ld xde, 0xf
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x10
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x11
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x12
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x13
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x14
 	jr SqedtVal2_UpInner_SendDial
 
 SqedtVal2_UpInner_ModeA4Scroll:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x15
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x16
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x17
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x18
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x19
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1A
+	ld xbc, 0x1c0000f
+	ld xde, 0x1a
 
 SqedtVal2_UpInner_SendDial:
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 2
 	call SetDialUp
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 2
 	jrl AccIll_CallSetDialDown
 
@@ -11386,137 +11386,137 @@ SqedtVal2_HandleDownScrollInner:
 	jrl nz, SqedtVal2_HandleDownCase2
 	sti8_24 0x03e2e0, 0x01
 	ld xwa, (xbc)
-	ld xbc, 0x1E8003C
+	ld xbc, 0x1e8003c
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add xde, 0x10000
 	cp (xsp + 6), 0x91
 	jr z, SqedtVal2_DownInner_CheckA8
-	cp (xsp + 6), 0xA8
+	cp (xsp + 6), 0xa8
 	jrl nz, SqedtVal2_DownInner_CheckA4
 
 SqedtVal2_DownInner_CheckA8:
-	cpi_berp 0xFB, 1
+	cpi_berp 0xfb, 1
 	jr nc, SqedtVal2_DownInner_SendFields
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8003D
+	ld xbc, 0x1e8003d
 	call ApFuncCall
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add xde, 0x10100
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
 
 SqedtVal2_DownInner_SendFields:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1B
+	ld xbc, 0x1c0000f
+	ld xde, 0x1b
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1C
+	ld xbc, 0x1c0000f
+	ld xde, 0x1c
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1D
+	ld xbc, 0x1c0000f
+	ld xde, 0x1d
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1E
+	ld xbc, 0x1c0000f
+	ld xde, 0x1e
 	jrl SqedtVal2_DownInner_SendDial
 
 SqedtVal2_DownInner_CheckA4:
-	cpi_berp 0xFB, 2
+	cpi_berp 0xfb, 2
 	jr nc, SqedtVal2_DownInner_SendExtra
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
-	inc1_berp 0xFB
+	inc1_berp 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8003D
+	ld xbc, 0x1e8003d
 	call ApFuncCall
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add xde, 0x10100
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	call SendEvent
 
 SqedtVal2_DownInner_SendExtra:
-	cp (xsp + 6), 0xA2
+	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_DownInner_ModeA4Scroll
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0xF
+	ld xbc, 0x1c0000f
+	ld xde, 0xf
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x10
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x11
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x12
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x13
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x14
 	jr SqedtVal2_DownInner_SendDial
 
 SqedtVal2_DownInner_ModeA4Scroll:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x15
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x16
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x17
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x18
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x19
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C0000F
-	ld xde, 0x1A
+	ld xbc, 0x1c0000f
+	ld xde, 0x1a
 
 SqedtVal2_DownInner_SendDial:
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 4
 	call SetDialUp
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 4
 	jrl AccIll_CallSetDialDown
 
@@ -11526,38 +11526,38 @@ SqedtVal2_HandleDownCase2:
 	jrl nz, SqedtVal2_HandleDownCase4
 	sti8_24 0x03e2e0, 0x00
 	ld xwa, (xbc)
-	ld xbc, 0x1E8003A
+	ld xbc, 0x1e8003a
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	cp (xsp + 6), 0xA2
+	ldfr_berp L, 0xfb
+	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_DownCase2_ModeA4
-	ldto_berp E, 0xFB
-	add e, 0xF
+	ldto_berp E, 0xfb
+	add e, 0xf
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80015
+	ld xbc, 0x1e80015
 	jr SqedtVal2_DownCase2_PostEvent
 
 SqedtVal2_DownCase2_ModeA4:
-	cp (xsp + 6), 0xA4
+	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_DownCase2_Default
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add e, 0x15
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80015
+	ld xbc, 0x1e80015
 	jr SqedtVal2_DownCase2_PostEvent
 
 SqedtVal2_DownCase2_Default:
-	ldto_berp E, 0xFB
-	add e, 0x1B
+	ldto_berp E, 0xfb
+	add e, 0x1b
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80015
+	ld xbc, 0x1e80015
 
 SqedtVal2_DownCase2_PostEvent:
 	call MainPostEvent
@@ -11566,11 +11566,11 @@ SqedtVal2_DownCase2_PostEvent:
 	ld xde, (xsp + 66)
 	call SetAutoInc
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 66)
 	call SetDialUp
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 66)
 	jrl AccIll_CallSetDialDown
 
@@ -11580,38 +11580,38 @@ SqedtVal2_HandleDownCase4:
 	jrl nz, AccIll_ReturnZero2
 	sti8_24 0x03e2e0, 0x01
 	ld xwa, (xbc)
-	ld xbc, 0x1E8003C
+	ld xbc, 0x1e8003c
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	cp (xsp + 6), 0xA2
+	ldfr_berp L, 0xfb
+	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_DownCase4_ModeA4
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add e, 0x12
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80015
+	ld xbc, 0x1e80015
 	jr SqedtVal2_DownCase4_PostEvent
 
 SqedtVal2_DownCase4_ModeA4:
-	cp (xsp + 6), 0xA4
+	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_DownCase4_Default
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add e, 0x18
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80015
+	ld xbc, 0x1e80015
 	jr SqedtVal2_DownCase4_PostEvent
 
 SqedtVal2_DownCase4_Default:
-	ldto_berp E, 0xFB
-	add e, 0x1D
+	ldto_berp E, 0xfb
+	add e, 0x1d
 	ldb d, 0x0
 	extz xde
 	ld xwa, 0x1480000
-	ld xbc, 0x1E80015
+	ld xbc, 0x1e80015
 
 SqedtVal2_DownCase4_PostEvent:
 	call MainPostEvent
@@ -11620,11 +11620,11 @@ SqedtVal2_DownCase4_PostEvent:
 	ld xde, (xsp + 66)
 	call SetAutoInc
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 66)
 	call SetDialUp
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 66)
 
 AccIll_CallSetDialDown:
@@ -11644,19 +11644,19 @@ AccIllProc:
 	ld (xsp + 62), xde
 	ld xiz, xbc
 	ld (xsp + 66), xwa
-	cp xiz, 0x1C00018
+	cp xiz, 0x1c00018
 	jrl z, AccIll_HandleDownScroll
-	cp xiz, 0x1C00017
+	cp xiz, 0x1c00017
 	jrl z, AccIll_HandleUpScroll
-	cp xiz, 0x1C80001
+	cp xiz, 0x1c80001
 	jrl z, AccIll_HandleVertSlider
-	cp xiz, 0x1C80000
+	cp xiz, 0x1c80000
 	jr z, AccIll_HandleHorizSlider
-	cp xiz, 0x1E8000F
+	cp xiz, 0x1e8000f
 	jr z, AccIll_HandleUpperPanelEvent
-	cp xiz, 0x1E8000E
+	cp xiz, 0x1e8000e
 	jr z, AccIll_HandleLowerPanelEvent
-	cp xiz, 0x1C0000B
+	cp xiz, 0x1c0000b
 	jrl nz, AccIll_PassThrough
 	ld xwa, (xsp + 66)
 	ld xbc, xiz
@@ -11667,11 +11667,11 @@ AccIllProc:
 	ld xbc, xiz
 	call MainPostEvent
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 1
 	call SetDialUp
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
 	lds wa, 1
@@ -11679,7 +11679,7 @@ AccIllProc:
 
 AccIll_HandleLowerPanelEvent:
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1C80000
+	ld xbc, 0x1c80000
 	lds32 xde, 0
 	jr AccIll_PanelDispatch
 
@@ -11688,7 +11688,7 @@ AccIll_HandleUpperPanelEvent:
 	or xwa, xwa
 	jrl nz, AccIll_ReturnZero
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1C80001
+	ld xbc, 0x1c80001
 	lds32 xde, 0
 
 AccIll_PanelDispatch:
@@ -11701,7 +11701,7 @@ AccIll_HandleHorizSlider:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xsp + 4)
@@ -11710,10 +11710,10 @@ AccIll_HandleHorizSlider:
 	lda xix, (xsp + 54)
 	ldw (xix), 0x64
 	lda xbc, (xix + 2)
-	ldw (xbc), 0x5E
+	ldw (xbc), 0x5e
 	lda xde, (xix + 4)
 	ld wa, (xix)
-	add wa, 0xB4
+	add wa, 0xb4
 	ld (xde), wa
 	lda xhl, (xix + 6)
 	ld wa, (xbc)
@@ -11739,12 +11739,12 @@ AccIll_HandleHorizSlider:
 	lda xbc, (xbc + 20)
 
 AccIll_ClearDrawBuffer1:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, AccIll_ClearDrawBuffer1
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	lds32 xde, 0
 	call ApFuncCall
 	lda xde, (xsp + 8)
@@ -11753,7 +11753,7 @@ AccIll_ClearDrawBuffer1:
 	ld (xde + 18), xwa
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E00047
+	ld xbc, 0x1e00047
 	call ApFuncCall
 	lda xwa, (xsp + 54)
 	lda xbc, (xsp + 50)
@@ -11771,23 +11771,23 @@ AccIll_HandleVertSlider:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xsp + 4)
 	cp l, (xwa + 30)
 	jrl nz, AccIll_ReturnZero
 	lda xix, (xsp + 54)
-	ldw (xix), 0xB2
+	ldw (xix), 0xb2
 	lda xbc, (xix + 2)
 	ldw (xbc), 0x91
 	lda xde, (xix + 4)
 	ld wa, (xix)
-	add wa, 0x2D
+	add wa, 0x2d
 	ld (xde), wa
 	lda xhl, (xix + 6)
 	ld wa, (xbc)
-	add wa, 0xC
+	add wa, 0xc
 	ld (xhl), wa
 	ld wa, (xde)
 	sub wa, (xix)
@@ -11809,12 +11809,12 @@ AccIll_HandleVertSlider:
 	lda xbc, (xbc + 20)
 
 AccIll_ClearDrawBuffer2:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, AccIll_ClearDrawBuffer2
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	lds32 xde, 1
 	call ApFuncCall
 	lda xde, (xsp + 8)
@@ -11823,7 +11823,7 @@ AccIll_ClearDrawBuffer2:
 	ld (xde + 18), xwa
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 26)
-	ld xbc, 0x1E8004C
+	ld xbc, 0x1e8004c
 	call ApFuncCall
 	lda xwa, (xsp + 54)
 	lda xbc, (xsp + 50)
@@ -11831,7 +11831,7 @@ AccIll_ClearDrawBuffer2:
 	lds32 xhl, 1
 	push xhl
 	pushw 0x0
-	pushw 0xFF
+	pushw 0xff
 
 AccIll_CallDrawRoutine:
 	call DrawStringLeftJustify
@@ -11846,7 +11846,7 @@ AccIll_HandleUpScroll:
 	or xwa, xwa
 	jr nz, AccIll_UpScroll_Mode1
 	ld xwa, 0x1480002
-	ld xbc, 0x1E80011
+	ld xbc, 0x1e80011
 	lds32 xde, 1
 	jr AccIll_UpScroll_Dispatch
 
@@ -11855,7 +11855,7 @@ AccIll_UpScroll_Mode1:
 	cp xwa, 0x1
 	jr nz, AccIll_UpScroll_Refresh
 	ld xwa, 0x1480002
-	ld xbc, 0x1E80012
+	ld xbc, 0x1e80012
 	ld xde, 0x100
 
 AccIll_UpScroll_Dispatch:
@@ -11867,11 +11867,11 @@ AccIll_UpScroll_Refresh:
 	ld xde, (xsp + 62)
 	call SetAutoInc
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 1
 	call SetDialUp
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
 	lds wa, 1
@@ -11886,8 +11886,8 @@ AccIll_HandleDownScroll:
 	or xwa, xwa
 	jr nz, AccIll_DownScroll_Mode1
 	ld xwa, 0x1480002
-	ld xbc, 0x1E80011
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e80011
+	ld xde, 0xffffffff
 	jr AccIll_DownScroll_Dispatch
 
 AccIll_DownScroll_Mode1:
@@ -11895,8 +11895,8 @@ AccIll_DownScroll_Mode1:
 	cp xwa, 0x1
 	jr nz, AccIll_DownScroll_Refresh
 	ld xwa, 0x1480002
-	ld xbc, 0x1E80012
-	ld xde, 0xFFFFFF00
+	ld xbc, 0x1e80012
+	ld xde, 0xffffff00
 
 AccIll_DownScroll_Dispatch:
 	call MainPostEvent
@@ -11907,11 +11907,11 @@ AccIll_DownScroll_Refresh:
 	ld xde, (xsp + 62)
 	call SetAutoInc
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 1
 	call SetDialUp
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 1
 	call SetDialDown
 	lds wa, 1
@@ -11935,35 +11935,35 @@ AccIll_Epilogue:
 	ret
 
 EffectBoxProc:
-	st_dri3b L, 0xFD, 0xAA, 0xFE
+	st_dri3b L, 0xfd, 0xaa, 0xfe
 	push xiz
-	st_dri3l XDE, 0xFD, 0x4E, 0x01
-	st_dri3l XBC, 0xFD, 0x52, 0x01
-	st_dri3l XWA, 0xFD, 0x56, 0x01
-	ld xiy, 0xE34900
+	st_dri3l XDE, 0xfd, 0x4e, 0x01
+	st_dri3l XBC, 0xfd, 0x52, 0x01
+	st_dri3l XWA, 0xfd, 0x56, 0x01
+	ld xiy, 0xe34900
 	lda xix, (xsp + 12)
 	ldiw
 	ldiw
-	ld xiy, 0xE34904
+	ld xiy, 0xe34904
 	lda xix, (xsp + 8)
 	ldiw
 	ldiw
 	ld_sril XWA, (xsp + 0x0152)
-	cp xwa, 0x1C00018
+	cp xwa, 0x1c00018
 	jrl z, EffectBox_HandleCase0_Post
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	jrl z, EffectBox_HandleDefaultEvent
-	cp xwa, 0x1C80001
+	cp xwa, 0x1c80001
 	jrl z, EffectBox_HandleSelectEvent
-	cp xwa, 0x1C80000
+	cp xwa, 0x1c80000
 	jrl z, EffectBox_HandleScrollEvent
-	cp xwa, 0x1E8000F
+	cp xwa, 0x1e8000f
 	jrl z, EffectBox_HandleEvent1
-	cp xwa, 0x1E8000E
+	cp xwa, 0x1e8000e
 	jrl z, EffectBox_HandleEvent0
-	cp xwa, 0x1C0000E
+	cp xwa, 0x1c0000e
 	jrl z, EffectBox_HandleInitEvent
-	cp xwa, 0x1C0000B
+	cp xwa, 0x1c0000b
 	jrl nz, EffectBox_HandleInherited
 	ld_sril XWA, (xsp + 0x0156)
 	ld_sril XBC, (xsp + 0x0152)
@@ -11973,15 +11973,15 @@ EffectBoxProc:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 28)
-	ld xbc, 0x1E8000C
+	ld xbc, 0x1e8000c
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xiz + 28)
-	ld xbc, 0x1E8000A
+	ld xbc, 0x1e8000a
 	lds32 xde, 0
 	call ApFuncCall
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 1
 	call SendEvent
 	ld_sril XDE, (xsp + 0x0156)
@@ -11989,11 +11989,11 @@ EffectBoxProc:
 	ld_sril XBC, (xsp + 0x0152)
 	call MainPostEvent
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 2
 	call SetDialUp
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
 	lds wa, 1
@@ -12008,33 +12008,33 @@ EffectBox_HandleInitEvent:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 28)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	cp l, (xiz + 36)
 	jrl nz, EffectBoxProc_ReturnZero
 	ld xwa, (xiz + 28)
-	ld xbc, 0x1E8000B
+	ld xbc, 0x1e8000b
 	lds32 xde, 0
 	call ApFuncCall
-	ld xbc, 0xE3357A
+	ld xbc, 0xe3357a
 	add xbc, xhl
-	st_dri3b W, 0xFD, 0x46, 0x01
+	st_dri3b W, 0xfd, 0x46, 0x01
 	lda xde, (xwa + 2)
 	ld c, (xbc)
 	extz bc
 	ld (xde), bc
-	ldw (xwa), 0x3A
+	ldw (xwa), 0x3a
 	ld bc, (xde)
 	add bc, 0x10
 	ld (xwa + 6), bc
 	ld bc, (xwa)
-	add bc, 0xDF
+	add bc, 0xdf
 	ld (xwa + 4), bc
 	ld_sril XBC, (xsp + 0x014e)
 	cp xbc, 0x1
 	jr nz, EffectBox_DrawWithViewFrame
-	pushw 0xF2
+	pushw 0xf2
 	lds bc, 1
 	lds de, 2
 	jr EffectBox_CallDrawDesignFrame
@@ -12050,7 +12050,7 @@ EffectBox_CallDrawDesignFrame:
 
 EffectBox_HandleEvent0:
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C80000
+	ld xbc, 0x1c80000
 	lds32 xde, 0
 	jr EffectBox_SendEventCommon
 
@@ -12058,15 +12058,15 @@ EffectBox_HandleEvent1:
 	ld_sril XWA, (xsp + 0x0156)
 	call GetViewInstance
 	ld xwa, (xhl + 28)
-	ld xbc, 0x1E8000D
+	ld xbc, 0x1e8000d
 	lds32 xde, 0
 	call ApFuncCall
-	sub_sril_mr XHL, 0xFD, 0x4E, 0x01
+	sub_sril_mr XHL, 0xfd, 0x4e, 0x01
 	ld_sril XWA, (xsp + 0x014e)
 	cp xwa, 0x8
 	jrl nc, EffectBoxProc_ReturnZero
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C80001
+	ld xbc, 0x1c80001
 	ld_sril XDE, (xsp + 0x014e)
 
 EffectBox_SendEventCommon:
@@ -12079,19 +12079,19 @@ EffectBox_HandleScrollEvent:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xsp + 4)
 	cp l, (xwa + 36)
 	jrl nz, EffectBoxProc_ReturnZero
-	st_dri3b D, 0xFD, 0x3E, 0x01
+	st_dri3b D, 0xfd, 0x3e, 0x01
 	ldw (xix), 0x64
 	lda xbc, (xix + 2)
 	ldw (xbc), 0x26
 	lda xde, (xix + 4)
 	ld wa, (xix)
-	add wa, 0xB9
+	add wa, 0xb9
 	ld (xde), wa
 	lda xhl, (xix + 6)
 	ld wa, (xbc)
@@ -12103,7 +12103,7 @@ EffectBox_HandleScrollEvent:
 	divs wa, 0x2
 	ld ix, (xix)
 	add ix, wa
-	st_dri3b B, 0xFD, 0x3A, 0x01
+	st_dri3b B, 0xfd, 0x3a, 0x01
 	ld (xde), ix
 	ld bc, (xbc)
 	ld wa, (xhl)
@@ -12117,12 +12117,12 @@ EffectBox_HandleScrollEvent:
 	lda xbc, (xbc + 20)
 
 EffectBox_FillBufferLoop1:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, EffectBox_FillBufferLoop1
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	lds32 xde, 0
 	call ApFuncCall
 	lda xde, (xsp + 16)
@@ -12131,31 +12131,31 @@ EffectBox_FillBufferLoop1:
 	ld (xde + 18), xwa
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E00047
+	ld xbc, 0x1e00047
 	call ApFuncCall
-	st_dri3b W, 0xFD, 0x3E, 0x01
-	st_dri3b A, 0xFD, 0x3A, 0x01
+	st_dri3b W, 0xfd, 0x3e, 0x01
+	st_dri3b A, 0xfd, 0x3a, 0x01
 	lda xde, (xsp + 38)
 	lds32 xhl, 4
 	push xhl
-	pushw 0xFF
+	pushw 0xff
 	ld xhl, (xsp + 10)
 	pushm (xhl + 22)
 	call DrawStringLeftJustify
-	st_dri3b A, 0xFD, 0x3E, 0x01
-	ldw (xbc), 0x3A
-	ldw wa, 0x3A
-	add wa, 0x8C
+	st_dri3b A, 0xfd, 0x3e, 0x01
+	ldw (xbc), 0x3a
+	ldw wa, 0x3a
+	add wa, 0x8c
 	ld (xbc + 4), wa
 	sub wa, (xbc)
 	exts xwa
 	divs wa, 0x2
 	ld bc, (xbc)
 	add bc, wa
-	st_dri3w BC, 0xFD, 0x3A, 0x01
+	st_dri3w BC, 0xfd, 0x3a, 0x01
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	lds32 xde, 0
 	call ApFuncCall
 	lda xde, (xsp + 16)
@@ -12167,33 +12167,33 @@ EffectBox_FillBufferLoop1:
 	lda xbc, (xbc + 20)
 
 EffectBox_FillBufferLoop2:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, EffectBox_FillBufferLoop2
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80000
+	ld xbc, 0x1e80000
 	call ApFuncCall
 	lds iz, 0
 
 EffectBox_PostFillSetup:
-	st_dri3b B, 0xFD, 0x3E, 0x01
+	st_dri3b B, 0xfd, 0x3e, 0x01
 	lda xbc, (xde + 2)
 	ld wa, iz
 	extz xwa
-	ld xhl, 0xE33582
+	ld xhl, 0xe33582
 	add xhl, xwa
 	ld a, (xhl)
 	extz wa
 	ld (xbc), wa
-	add wa, 0xC
+	add wa, 0xc
 	ld (xde + 6), wa
 	ld bc, (xbc)
 	sub wa, bc
 	exts xwa
 	divs wa, 0x2
 	add bc, wa
-	st_dri3w BC, 0xFD, 0x3C, 0x01
+	st_dri3w BC, 0xfd, 0x3c, 0x01
 	pushw 0x11
 	ld wa, iz
 	mul wa, 0x11
@@ -12204,19 +12204,19 @@ EffectBox_PostFillSetup:
 	push xwa
 	call Strncpy
 	lda xsp, (xsp + 10)
-	st_dri3b W, 0xFD, 0x3E, 0x01
-	st_dri3b A, 0xFD, 0x3A, 0x01
+	st_dri3b W, 0xfd, 0x3e, 0x01
+	st_dri3b A, 0xfd, 0x3a, 0x01
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
-	pushw 0xFF
+	pushw 0xff
 	ld xhl, (xsp + 10)
 	pushm (xhl + 22)
 	call DrawStringLeftJustify
 	inc 1, iz
 	cp iz, 0x8
 	jr c, EffectBox_PostFillSetup
-	st_dri3b A, 0xFD, 0x3E, 0x01
+	st_dri3b A, 0xfd, 0x3e, 0x01
 	ldw (xbc), 0x100
 	ldw wa, 0x100
 	add wa, 0x14
@@ -12226,40 +12226,40 @@ EffectBox_PostFillSetup:
 	divs wa, 0x2
 	ld bc, (xbc)
 	add bc, wa
-	st_dri3w BC, 0xFD, 0x3A, 0x01
+	st_dri3w BC, 0xfd, 0x3a, 0x01
 	lda xbc, (xsp + 38)
 	ld xwa, xbc
 	lda xbc, (xbc + 20)
 
 EffectBox_FillBufferLoop3:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, EffectBox_FillBufferLoop3
 	lds iz, 0
 
 EffectBox_PostFill3Setup:
-	st_dri3b B, 0xFD, 0x3E, 0x01
+	st_dri3b B, 0xfd, 0x3e, 0x01
 	lda xbc, (xde + 2)
 	ld wa, iz
 	extz xwa
-	ld xhl, 0xE33582
+	ld xhl, 0xe33582
 	add xhl, xwa
 	ld a, (xhl)
 	extz wa
 	ld (xbc), wa
-	add wa, 0xC
+	add wa, 0xc
 	ld (xde + 6), wa
 	ld bc, (xbc)
 	sub wa, bc
 	exts xwa
 	divs wa, 0x2
 	add bc, wa
-	st_dri3w BC, 0xFD, 0x3C, 0x01
+	st_dri3w BC, 0xfd, 0x3c, 0x01
 	pushw 0x2
 	ld wa, iz
 	add wa, wa
 	extz xwa
-	st_dri3b W, 0xE1, 0x88, 0x00
+	st_dri3b W, 0xe1, 0x88, 0x00
 	lda xbc, (xsp + 60)
 	add xbc, xwa
 	push xbc
@@ -12267,23 +12267,23 @@ EffectBox_PostFill3Setup:
 	push xwa
 	call Strncpy
 	lda xsp, (xsp + 10)
-	st_dri3b W, 0xFD, 0x3E, 0x01
-	st_dri3b A, 0xFD, 0x3A, 0x01
+	st_dri3b W, 0xfd, 0x3e, 0x01
+	st_dri3b A, 0xfd, 0x3a, 0x01
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
-	pushw 0xFF
+	pushw 0xff
 	ld xhl, (xsp + 10)
 	pushm (xhl + 22)
 	call DrawStringLeftJustify
 	inc 1, iz
 	cp iz, 0x8
 	jr c, EffectBox_PostFill3Setup
-	st_dri3b D, 0xFD, 0x3E, 0x01
-	ldw (xix), 0x2B
+	st_dri3b D, 0xfd, 0x3e, 0x01
+	ldw (xix), 0x2b
 	lda xde, (xix + 4)
 	ld wa, (xix)
-	add wa, 0xE
+	add wa, 0xe
 	ld (xde), wa
 	lda xbc, (xix + 2)
 	ldw (xbc), 0x46
@@ -12295,7 +12295,7 @@ EffectBox_PostFill3Setup:
 	divs wa, 0x2
 	ld ix, (xix)
 	add ix, wa
-	st_dri3b B, 0xFD, 0x3A, 0x01
+	st_dri3b B, 0xfd, 0x3a, 0x01
 	ld (xde), ix
 	ld bc, (xbc)
 	ld wa, (xhl)
@@ -12306,7 +12306,7 @@ EffectBox_PostFill3Setup:
 	ld (xde + 2), bc
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000D
+	ld xbc, 0x1e8000d
 	lds32 xde, 0
 	call ApFuncCall
 	or xhl, xhl
@@ -12327,41 +12327,41 @@ EffectBox_SetEmptyString1:
 	ld (xwa + 1), 0x0
 
 EffectBox_DrawField1:
-	st_dri3b W, 0xFD, 0x3E, 0x01
-	st_dri3b A, 0xFD, 0x3A, 0x01
+	st_dri3b W, 0xfd, 0x3e, 0x01
+	st_dri3b A, 0xfd, 0x3a, 0x01
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
-	pushw 0xFF
+	pushw 0xff
 	ld xhl, (xsp + 10)
 	pushm (xhl + 22)
 	call DrawStringLeftJustify
-	st_dri3b A, 0xFD, 0x3E, 0x01
+	st_dri3b A, 0xfd, 0x3e, 0x01
 	lda xwa, (xbc + 2)
-	ldw (xwa), 0xB6
-	ldw (xbc + 6), 0xC4
+	ldw (xwa), 0xb6
+	ldw (xbc + 6), 0xc4
 	ld bc, (xwa)
-	ldw wa, 0xC4
+	ldw wa, 0xc4
 	sub wa, bc
 	exts xwa
 	divs wa, 0x2
 	add bc, wa
-	st_dri3w BC, 0xFD, 0x3C, 0x01
-	ldi_berp 0xFB, 7
+	st_dri3w BC, 0xfd, 0x3c, 0x01
+	ldi_berp 0xfb, 7
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000D
+	ld xbc, 0x1e8000d
 	lds32 xde, 0
 	call ApFuncCall
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	add a, l
-	ldfr_berp A, 0xFB
+	ldfr_berp A, 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	inc 1, xde
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80009
+	ld xbc, 0x1e80009
 	call ApFuncCall
 	lda xwa, (xsp + 38)
 	or xhl, xhl
@@ -12380,12 +12380,12 @@ EffectBox_SetEmptyString2:
 	ld (xwa + 1), 0x0
 
 EffectBox_DrawField2:
-	st_dri3b W, 0xFD, 0x3E, 0x01
-	st_dri3b A, 0xFD, 0x3A, 0x01
+	st_dri3b W, 0xfd, 0x3e, 0x01
+	st_dri3b A, 0xfd, 0x3a, 0x01
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
-	pushw 0xFF
+	pushw 0xff
 	ld xhl, (xsp + 10)
 	pushm (xhl + 22)
 	call DrawStringLeftJustify
@@ -12395,7 +12395,7 @@ EffectBox_DrawAndSendLoop:
 	ld de, iz
 	extz xde
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C80001
+	ld xbc, 0x1c80001
 	call SendEvent
 	inc 1, iz
 	cp iz, 0x8
@@ -12411,26 +12411,26 @@ EffectBox_HandleSelectEvent:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xsp + 4)
 	cp l, (xwa + 36)
 	jrl nz, EffectBoxProc_ReturnZero
-	st_dri3b D, 0xFD, 0x3E, 0x01
-	ldw (xix), 0xC3
+	st_dri3b D, 0xfd, 0x3e, 0x01
+	ldw (xix), 0xc3
 	lda xde, (xix + 4)
 	ld wa, (xix)
-	add wa, 0x3D
+	add wa, 0x3d
 	ld (xde), wa
 	lda xbc, (xix + 2)
-	ld xwa, 0xE33582
-	add_sril_rm XWA, 0xFD, 0x4E, 0x01
+	ld xwa, 0xe33582
+	add_sril_rm XWA, 0xfd, 0x4e, 0x01
 	ld a, (xwa)
 	extz wa
 	ld (xbc), wa
 	lda xhl, (xix + 6)
-	add wa, 0xC
+	add wa, 0xc
 	ld (xhl), wa
 	ld wa, (xde)
 	sub wa, (xix)
@@ -12438,7 +12438,7 @@ EffectBox_HandleSelectEvent:
 	divs wa, 0x2
 	ld ix, (xix)
 	add ix, wa
-	st_dri3b B, 0xFD, 0x3A, 0x01
+	st_dri3b B, 0xfd, 0x3a, 0x01
 	ld (xde), ix
 	ld bc, (xbc)
 	ld wa, (xhl)
@@ -12453,14 +12453,14 @@ EffectBox_HandleSelectEvent:
 
 ; EffectBox name setup dispatch
 EffectBox_NameSetup:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, EffectBox_NameSetup
 	ld_sril XDE, (xsp + 0x014e)
 	inc 1, xde
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	call ApFuncCall
 	lda xde, (xsp + 16)
 	ld (xde), xhl
@@ -12475,10 +12475,10 @@ EffectBox_NameSetup:
 	cp xhl, 0x6
 	jr ugt, EffectBoxProc_CopyNameAndSetup
 	add xhl, xhl
-	add xhl, 0xE34908
+	add xhl, 0xe34908
 	ld hl, (xhl)
 	lda_24 xix, 0xf33aab
-	jp_dri 8, 0x07, 0xF0, 0xEC
+	jp_dri 8, 0x07, 0xf0, 0xec
 ; EffectBoxProc dispatch
 EffectBox_Dispatch:
 	ld	xwa, (xbc)
@@ -12506,7 +12506,7 @@ EffectBox_Dispatch:
 EffectBoxProc_CopyNameAndSetup:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80001
+	ld xbc, 0x1e80001
 	call ApFuncCall
 	pushw 0x7
 	lda xwa, (xsp + 60)
@@ -12517,36 +12517,36 @@ EffectBoxProc_CopyNameAndSetup:
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000B
+	ld xbc, 0x1e8000b
 	lds32 xde, 0
 	call ApFuncCall
-	st_dri3b W, 0xFD, 0x3E, 0x01
-	st_dri3b A, 0xFD, 0x3A, 0x01
-	cp_sril_rm XHL, 0xFD, 0x4E, 0x01
+	st_dri3b W, 0xfd, 0x3e, 0x01
+	st_dri3b A, 0xfd, 0x3a, 0x01
+	cp_sril_rm XHL, 0xfd, 0x4e, 0x01
 	jr nz, EffectBox_DrawWithFBColor
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
 	pushw 0x0
-	pushw 0xFF
+	pushw 0xff
 	jr EffectBox_DrawStringAndSetDial
 
 EffectBox_DrawWithFBColor:
 	lda xde, (xsp + 38)
 	lds32 xhl, 0
 	push xhl
-	pushw 0xFF
+	pushw 0xff
 	ld xhl, (xsp + 10)
 	pushm (xhl + 22)
 
 EffectBox_DrawStringAndSetDial:
 	call DrawStringLeftJustify
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	lds32 xde, 2
 	call SetDialUp
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
 	lds wa, 1
@@ -12569,59 +12569,59 @@ EffectBox_HandleDefaultEvent:
 	cp xwa, 0x1
 	jrl nz, EffectBox_HandleCase2
 	ld xwa, (xbc)
-	ld xbc, 0x1E8000B
+	ld xbc, 0x1e8000b
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFA
-	cpi_berp 0xFA, 0
+	ldfr_berp L, 0xfa
+	cpi_berp 0xfa, 0
 	jr z, EffectBox_RedrawAfterChange
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ldto_berp A, 0xFA
+	ldto_berp A, 0xfa
 	dec 1, a
-	ldfr_berp A, 0xFB
+	ldfr_berp A, 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000A
+	ld xbc, 0x1e8000a
 	call ApFuncCall
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 1
 	call SendEvent
 	lds32 xde, 0
-	ldto_berp E, 0xFA
+	ldto_berp E, 0xfa
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C80001
+	ld xbc, 0x1c80001
 	call SendEvent
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C80001
+	ld xbc, 0x1c80001
 	call SendEvent
 	jr EffectBoxProc_RestoreAndJumpToDispatch
 
 EffectBox_RedrawAfterChange:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000D
+	ld xbc, 0x1e8000d
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
-	cpi_berp 0xFB, 0
+	ldfr_berp L, 0xfb
+	cpi_berp 0xfb, 0
 	jr z, EffectBoxProc_RestoreAndJumpToDispatch
-	dec1_berp 0xFB
+	dec1_berp 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000C
+	ld xbc, 0x1e8000c
 	call ApFuncCall
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C80000
+	ld xbc, 0x1c80000
 	lds32 xde, 0
 	call SendEvent
 	lds iz, 0
@@ -12630,7 +12630,7 @@ EffectBox_SendLoopValue:
 	ld de, iz
 	extz xde
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C80001
+	ld xbc, 0x1c80001
 	call SendEvent
 	inc 1, iz
 	cp iz, 0x8
@@ -12647,23 +12647,23 @@ EffectBox_HandleCase2:
 	cp xwa, 0x2
 	jr nz, EffectBox_HandleCaseOther
 	ld xwa, (xbc)
-	ld xbc, 0x1E8000D
+	ld xbc, 0x1e8000d
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000B
+	ld xbc, 0x1e8000b
 	lds32 xde, 0
 	call ApFuncCall
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	add a, l
-	ldfr_berp A, 0xFB
+	ldfr_berp A, 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	add xde, 0x100
 	ld xwa, 0x1480002
-	ld xbc, 0x1E80012
+	ld xbc, 0x1e80012
 	call MainPostEvent
 	ld_sril XWA, (xsp + 0x0156)
 	ld_sril XBC, (xsp + 0x0152)
@@ -12675,25 +12675,25 @@ EffectBox_HandleCaseOther:
 	or xwa, xwa
 	jrl nz, EffectBoxProc_ReturnZero
 	ld xwa, 0x1480002
-	ld xbc, 0x1E80011
+	ld xbc, 0x1e80011
 	lds32 xde, 1
 	call MainPostEvent
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000C
+	ld xbc, 0x1e8000c
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000A
+	ld xbc, 0x1e8000a
 	lds32 xde, 0
 	call ApFuncCall
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 1
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0156)
@@ -12714,85 +12714,85 @@ EffectBox_HandleCase0_Post:
 	ld_sril XBC, (xsp + 0x014e)
 	cp xbc, 0x1
 	jrl nz, EffectBox_HandleAppFunc
-	ld xbc, 0x1E8000B
+	ld xbc, 0x1e8000b
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFA
+	ldfr_berp L, 0xfa
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 28)
-	cpi_berp 0xFA, 7
+	cpi_berp 0xfa, 7
 	jr nc, EffectBox_RedrawFullLoop
-	ldto_berp E, 0xFA
+	ldto_berp E, 0xfa
 	inc 1, e
 	ldb d, 0x0
 	extz xde
 	ld xwa, (xbc)
-	ld xbc, 0x1E80009
+	ld xbc, 0x1e80009
 	call ApFuncCall
 	or xhl, xhl
 	jrl z, EffectBox_SetAutoIncAfterLoop
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ldto_berp A, 0xFA
+	ldto_berp A, 0xfa
 	inc 1, a
-	ldfr_berp A, 0xFB
+	ldfr_berp A, 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000A
+	ld xbc, 0x1e8000a
 	call ApFuncCall
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 1
 	call SendEvent
 	lds32 xde, 0
-	ldto_berp E, 0xFA
+	ldto_berp E, 0xfa
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C80001
+	ld xbc, 0x1c80001
 	call SendEvent
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C80001
+	ld xbc, 0x1c80001
 	call SendEvent
 	jrl EffectBox_SetAutoIncAfterLoop
 
 EffectBox_RedrawFullLoop:
 	ld xwa, (xbc)
-	ld xbc, 0x1E8000D
+	ld xbc, 0x1e8000d
 	lds32 xde, 0
 	call ApFuncCall
-	ldto_berp A, 0xFA
+	ldto_berp A, 0xfa
 	add a, l
-	ldfr_berp A, 0xFA
-	ldto_berp E, 0xFA
+	ldfr_berp A, 0xfa
+	ldto_berp E, 0xfa
 	inc 1, e
 	ldb d, 0x0
 	extz xde
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80009
+	ld xbc, 0x1e80009
 	call ApFuncCall
 	or xhl, xhl
 	jr z, EffectBox_SetAutoIncAfterLoop
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000D
+	ld xbc, 0x1e8000d
 	lds32 xde, 0
 	call ApFuncCall
 	inc 1, l
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
+	ldto_berp E, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000C
+	ld xbc, 0x1e8000c
 	call ApFuncCall
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C80000
+	ld xbc, 0x1c80000
 	lds32 xde, 0
 	call SendEvent
 	lds iz, 0
@@ -12801,7 +12801,7 @@ EffectBox_SendMultipleValues:
 	ld de, iz
 	extz xde
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C80001
+	ld xbc, 0x1c80001
 	call SendEvent
 	inc 1, iz
 	cp iz, 0x8
@@ -12817,23 +12817,23 @@ EffectBox_HandleAppFunc:
 	ld_sril XBC, (xsp + 0x014e)
 	cp xbc, 0x2
 	jr nz, EffectBox_HandleCase0_Direct
-	ld xbc, 0x1E8000D
+	ld xbc, 0x1e8000d
 	lds32 xde, 0
 	call ApFuncCall
-	ldfr_berp L, 0xFB
+	ldfr_berp L, 0xfb
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000B
+	ld xbc, 0x1e8000b
 	lds32 xde, 0
 	call ApFuncCall
-	ldto_berp A, 0xFB
+	ldto_berp A, 0xfb
 	add a, l
-	ldfr_berp A, 0xFB
+	ldfr_berp A, 0xfb
 	lds32 xde, 0
-	ldto_berp E, 0xFB
-	add xde, 0xFFFFFF00
+	ldto_berp E, 0xfb
+	add xde, 0xffffff00
 	ld xwa, 0x1480002
-	ld xbc, 0x1E80012
+	ld xbc, 0x1e80012
 	call MainPostEvent
 	ld_sril XWA, (xsp + 0x0156)
 	ld_sril XBC, (xsp + 0x0152)
@@ -12845,25 +12845,25 @@ EffectBox_HandleCase0_Direct:
 	or xwa, xwa
 	jr nz, EffectBoxProc_ReturnZero
 	ld xwa, 0x1480002
-	ld xbc, 0x1E80011
-	ld xde, 0xFFFFFFFF
+	ld xbc, 0x1e80011
+	ld xde, 0xffffffff
 	call MainPostEvent
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000C
+	ld xbc, 0x1e8000c
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E8000A
+	ld xbc, 0x1e8000a
 	lds32 xde, 0
 	call ApFuncCall
 	ld_sril XWA, (xsp + 0x0156)
-	ld xbc, 0x1C0000E
+	ld xbc, 0x1c0000e
 	lds32 xde, 1
 	call SendEvent
 	ld_sril XWA, (xsp + 0x0156)
@@ -12885,7 +12885,7 @@ EffectBox_HandleInherited:
 
 EffectBox_Epilogue:
 	pop xiz
-	st_dri3b L, 0xFD, 0x56, 0x01
+	st_dri3b L, 0xfd, 0x56, 0x01
 	ret
 
 EqualizerBoxProc:
@@ -12894,19 +12894,19 @@ EqualizerBoxProc:
 	ld (xsp + 88), xde
 	ld xiz, xbc
 	ld (xsp + 92), xwa
-	cp xiz, 0x1C80002
+	cp xiz, 0x1c80002
 	jrl z, Equalizer_HandleScrollUpEvent
-	cp xiz, 0x1C00018
+	cp xiz, 0x1c00018
 	jrl z, Equalizer_HandleEvent1
-	cp xiz, 0x1C00017
+	cp xiz, 0x1c00017
 	jrl z, Equalizer_DrawStringDone
-	cp xiz, 0x1C80003
+	cp xiz, 0x1c80003
 	jrl z, Equalizer_HandleSelectEvent
-	cp xiz, 0x1E8000F
+	cp xiz, 0x1e8000f
 	jr z, Equalizer_SendAndLoopDone
-	cp xiz, 0x1E8000E
+	cp xiz, 0x1e8000e
 	jr z, Equalizer_SendPanelEvent
-	cp xiz, 0x1C0000B
+	cp xiz, 0x1c0000b
 	jrl nz, Equalizer_HandleInherited
 	ld xwa, (xsp + 92)
 	ld xbc, xiz
@@ -12920,7 +12920,7 @@ EqualizerBoxProc:
 
 Equalizer_SendPanelEvent:
 	ld xwa, (xsp + 92)
-	ld xbc, 0x1C80002
+	ld xbc, 0x1c80002
 	lds32 xde, 1
 	call SendEvent
 	lds iz, 0
@@ -12929,7 +12929,7 @@ Equalizer_SendChannelLoop:
 	ld de, iz
 	extz xde
 	ld xwa, (xsp + 92)
-	ld xbc, 0x1C80003
+	ld xbc, 0x1c80003
 	call SendEvent
 	inc 1, iz
 	cp iz, 0x8
@@ -12938,11 +12938,11 @@ Equalizer_SendChannelLoop:
 
 Equalizer_SendAndLoopDone:
 	ld xwa, (xsp + 92)
-	ld xbc, 0x1C80002
+	ld xbc, 0x1c80002
 	lds32 xde, 1
 	call SendEvent
 	ld xwa, (xsp + 92)
-	ld xbc, 0x1C80003
+	ld xbc, 0x1c80003
 	ld xde, (xsp + 88)
 	call SendEvent
 	jrl SeqAccomp_ReturnZeroJmp
@@ -12956,7 +12956,7 @@ Equalizer_HandleSelectEvent:
 	ld (xsp + 22), xhl
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xsp + 22)
@@ -12965,16 +12965,16 @@ Equalizer_HandleSelectEvent:
 	lda xix, (xsp + 80)
 	ld xhl, (xsp + 88)
 	add xhl, xhl
-	ld xwa, 0xE34926
+	ld xwa, 0xe34926
 	add xwa, xhl
 	ld wa, (xwa)
 	ld (xix), wa
 	lda xde, (xix + 4)
 	ld wa, (xix)
-	add wa, 0x3C
+	add wa, 0x3c
 	ld (xde), wa
 	lda xbc, (xix + 2)
-	ld xwa, 0xE34916
+	ld xwa, 0xe34916
 	add xwa, xhl
 	ld wa, (xwa)
 	ld (xbc), wa
@@ -13002,12 +13002,12 @@ Equalizer_HandleSelectEvent:
 
 ; EffectBox state dispatch
 EffectBox_StateDispatch:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, EffectBox_StateDispatch
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E00045
+	ld xbc, 0x1e00045
 	ld xde, (xsp + 88)
 	call ApFuncCall
 	lda xde, (xsp + 46)
@@ -13024,10 +13024,10 @@ EffectBox_StateDispatch:
 	cp xbc, 0x6
 	jr ugt, EffectBox_State1
 	add xbc, xbc
-	add xbc, 0xE34936
+	add xbc, 0xe34936
 	ld bc, (xbc)
 	lda_24 xix, 0xf34148
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ; SeqAccomp editor load dispatch
 SeqAccomp_Dispatch:
 	ld	xbc, 31981666
@@ -13048,14 +13048,14 @@ SeqAccomp_Dispatch:
 ; EffectBox state 1
 EffectBox_State1:
 	ld xwa, (xhl)
-	ld xbc, 0x1E80061
+	ld xbc, 0x1e80061
 	call ApFuncCall
 	lda xwa, (xsp + 80)
 	lda xbc, (xsp + 76)
 	lda xde, (xsp + 26)
 	lds32 xhl, 0
 	push xhl
-	pushw 0xFF
+	pushw 0xff
 	ld xhl, (xsp + 28)
 	pushm (xhl + 22)
 	call DrawStringLeftJustify
@@ -13072,14 +13072,14 @@ Equalizer_DrawStringDone:
 	ld xde, 0x100
 	add xde, (xsp + 88)
 	ld xwa, 0x1480002
-	ld xbc, 0x1E80012
+	ld xbc, 0x1e80012
 	call MainPostEvent
 	ld xwa, (xsp + 92)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 88)
 	call SetDialUp
 	ld xwa, (xsp + 92)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 88)
 	call SetDialDown
 	lds wa, 1
@@ -13097,17 +13097,17 @@ Equalizer_HandleEvent1:
 	ld xwa, (xsp + 88)
 	cp xwa, 0x8
 	jrl nc, SeqAccomp_ReturnZeroJmp
-	ld xde, 0xFFFFFF00
+	ld xde, 0xffffff00
 	add xde, (xsp + 88)
 	ld xwa, 0x1480002
-	ld xbc, 0x1E80012
+	ld xbc, 0x1e80012
 	call MainPostEvent
 	ld xwa, (xsp + 92)
-	ld xbc, 0x1C00017
+	ld xbc, 0x1c00017
 	ld xde, (xsp + 88)
 	call SetDialUp
 	ld xwa, (xsp + 92)
-	ld xbc, 0x1C00018
+	ld xbc, 0x1c00018
 	ld xde, (xsp + 88)
 	call SetDialDown
 	lds wa, 1
@@ -13127,7 +13127,7 @@ Equalizer_HandleScrollUpEvent:
 	ld xwa, (xsp + 22)
 	ld (xsp + 4), xwa
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80069
+	ld xbc, 0x1e80069
 	lds32 xde, 0
 	call ApFuncCall
 	ld xwa, (xsp + 22)
@@ -13136,63 +13136,63 @@ Equalizer_HandleScrollUpEvent:
 	lda xwa, (xsp + 80)
 	ldw (xwa), 0x20
 	ldw (xwa + 2), 0x24
-	ldw (xwa + 4), 0xF8
+	ldw (xwa + 4), 0xf8
 	ldw (xwa + 6), 0x78
 	lds bc, 0
-	ldw de, 0xF5
+	ldw de, 0xf5
 	call DrawDesignBox
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80013
+	ld xbc, 0x1e80013
 	lds32 xde, 1
 	call ApFuncCall
 	extz hl
 	ld (xsp + 8), hl
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80013
+	ld xbc, 0x1e80013
 	lds32 xde, 2
 	call ApFuncCall
 	extz hl
 	ld (xsp + 10), hl
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80013
+	ld xbc, 0x1e80013
 	lds32 xde, 3
 	call ApFuncCall
 	extz hl
 	ld (xsp + 12), hl
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80013
+	ld xbc, 0x1e80013
 	lds32 xde, 4
 	call ApFuncCall
 	extz hl
 	ld (xsp + 14), hl
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80013
+	ld xbc, 0x1e80013
 	lds32 xde, 5
 	call ApFuncCall
 	extz hl
 	ld (xsp + 16), hl
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80013
+	ld xbc, 0x1e80013
 	lds32 xde, 6
 	call ApFuncCall
 	extz hl
 	ld (xsp + 18), hl
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80013
+	ld xbc, 0x1e80013
 	lds32 xde, 7
 	call ApFuncCall
 	extz hl
 	ld (xsp + 20), hl
 	ld xwa, (xsp + 22)
 	ld xwa, (xwa + 28)
-	ld xbc, 0x1E80013
+	ld xbc, 0x1e80013
 	ld xde, 0x8
 	call ApFuncCall
 	extz hl
@@ -13200,7 +13200,7 @@ Equalizer_HandleScrollUpEvent:
 	ld xwa, (xsp + 88)
 	cp xwa, 0x1
 	jr nz, Equalizer_SetFixedWidth1
-	ldw (xsp + 24), 0xFB
+	ldw (xsp + 24), 0xfb
 	jr Equalizer_StoreWidthAndDraw1
 
 Equalizer_SetFixedWidth1:
@@ -13223,7 +13223,7 @@ Equalizer_StoreWidthAndDraw1:
 	sub wa, (xsp + 8)
 	cp wa, 0x14
 	jr ule, Equalizer_SetFixedWidth2
-	ldw iz, 0xA
+	ldw iz, 0xa
 	jr Equalizer_StoreWidthAndDraw2
 
 Equalizer_SetFixedWidth2:
@@ -13240,26 +13240,26 @@ Equalizer_StoreWidthAndDraw2:
 	ld de, (xsp + 8)
 	add de, iz
 	ld (xbc), de
-	ldw (xbc + 2), 0x4D
+	ldw (xbc + 2), 0x4d
 	ld de, (xsp + 24)
 	call DrawLine
 	lda xwa, (xsp + 72)
 	ld bc, (xsp + 8)
 	add bc, iz
 	ld (xwa), bc
-	ldw (xwa + 2), 0x4D
+	ldw (xwa + 2), 0x4d
 	lda xbc, (xsp + 68)
 	ld de, (xsp + 12)
 	sub de, iz
 	ld (xbc), de
-	ldw (xbc + 2), 0x4D
+	ldw (xbc + 2), 0x4d
 	ld de, (xsp + 24)
 	call DrawLine
 	lda xwa, (xsp + 72)
 	ld bc, (xsp + 12)
 	sub bc, iz
 	ld (xwa), bc
-	ldw (xwa + 2), 0x4D
+	ldw (xwa + 2), 0x4d
 	lda xbc, (xsp + 68)
 	ld de, (xsp + 12)
 	ld (xbc), de
@@ -13271,7 +13271,7 @@ Equalizer_StoreWidthAndDraw2:
 	sub wa, (xsp + 12)
 	cp wa, 0x14
 	jr ule, Equalizer_SetFixedWidth3
-	ldw iz, 0xA
+	ldw iz, 0xa
 	jr Equalizer_StoreWidthAndDraw3
 
 Equalizer_SetFixedWidth3:
@@ -13288,26 +13288,26 @@ Equalizer_StoreWidthAndDraw3:
 	ld de, (xsp + 12)
 	add de, iz
 	ld (xbc), de
-	ldw (xbc + 2), 0x4D
+	ldw (xbc + 2), 0x4d
 	ld de, (xsp + 24)
 	call DrawLine
 	lda xwa, (xsp + 72)
 	ld bc, (xsp + 12)
 	add bc, iz
 	ld (xwa), bc
-	ldw (xwa + 2), 0x4D
+	ldw (xwa + 2), 0x4d
 	lda xbc, (xsp + 68)
 	ld de, (xsp + 16)
 	sub de, iz
 	ld (xbc), de
-	ldw (xbc + 2), 0x4D
+	ldw (xbc + 2), 0x4d
 	ld de, (xsp + 24)
 	call DrawLine
 	lda xwa, (xsp + 72)
 	ld bc, (xsp + 16)
 	sub bc, iz
 	ld (xwa), bc
-	ldw (xwa + 2), 0x4D
+	ldw (xwa + 2), 0x4d
 	lda xbc, (xsp + 68)
 	ld de, (xsp + 16)
 	ld (xbc), de
@@ -13319,7 +13319,7 @@ Equalizer_StoreWidthAndDraw3:
 	sub wa, (xsp + 16)
 	cp wa, 0x14
 	jr ule, Equalizer_SetFixedWidth4
-	ldw iz, 0xA
+	ldw iz, 0xa
 	jr Equalizer_StoreWidthAndDraw4
 
 Equalizer_SetFixedWidth4:
@@ -13336,26 +13336,26 @@ Equalizer_StoreWidthAndDraw4:
 	ld de, (xsp + 16)
 	add de, iz
 	ld (xbc), de
-	ldw (xbc + 2), 0x4D
+	ldw (xbc + 2), 0x4d
 	ld de, (xsp + 24)
 	call DrawLine
 	lda xwa, (xsp + 72)
 	ld bc, (xsp + 16)
 	add bc, iz
 	ld (xwa), bc
-	ldw (xwa + 2), 0x4D
+	ldw (xwa + 2), 0x4d
 	lda xbc, (xsp + 68)
 	ld de, (xsp + 20)
 	sub de, iz
 	ld (xbc), de
-	ldw (xbc + 2), 0x4D
+	ldw (xbc + 2), 0x4d
 	ld de, (xsp + 24)
 	call DrawLine
 	lda xwa, (xsp + 72)
 	ld bc, (xsp + 20)
 	sub bc, iz
 	ld (xwa), bc
-	ldw (xwa + 2), 0x4D
+	ldw (xwa + 2), 0x4d
 	lda xbc, (xsp + 68)
 	ld de, (xsp + 20)
 	ld (xbc), de
@@ -13369,14 +13369,14 @@ Equalizer_StoreWidthAndDraw4:
 	ld de, (xsp + 22)
 	ld (xwa + 2), de
 	lda xbc, (xsp + 68)
-	ldw (xbc), 0xF8
+	ldw (xbc), 0xf8
 	ld (xbc + 2), de
 	ld de, (xsp + 24)
 	call DrawLine
 	ld xwa, (xsp + 88)
 	cp xwa, 0x1
 	jr nz, Equalizer_SetFixedWidthFF
-	ldw (xsp + 24), 0xFF
+	ldw (xsp + 24), 0xff
 	jr Equalizer_StoreWidthAndDrawFF
 
 Equalizer_SetFixedWidthFF:
@@ -13444,9 +13444,9 @@ Equalizer_Epilogue:
 EqOnOffFuncToggleProc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1C0001C
+	cp xbc, 0x1c0001c
 	jr z, EqOnOff_CheckValue
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr z, EqOnOff_HandleToggleOn
 	ld xwa, xiz
 	call InheritedProc
@@ -13460,13 +13460,13 @@ EqOnOff_HandleToggleOn:
 	cps hl, 1
 	jr nz, EqOnOff_HandleToggleOff
 	ld xwa, xiz
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	lds32 xde, 1
 	jr SqEdit_SendEventEpilog
 
 EqOnOff_HandleToggleOff:
 	ld xwa, xiz
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	lds32 xde, 0
 	jr SqEdit_SendEventEpilog
 
@@ -13477,13 +13477,13 @@ EqOnOff_CheckValue:
 	cpw (xde + 4), 0x1
 	jr nz, EqOnOff_ToggleResult
 	ld xwa, xiz
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	lds32 xde, 1
 	jr SqEdit_SendEventEpilog
 
 EqOnOff_ToggleResult:
 	ld xwa, xiz
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	lds32 xde, 0
 
 SqEdit_SendEventEpilog:
@@ -13503,38 +13503,38 @@ SqplyFunc:
 	ld (xsp + 4), xde
 	ld (xsp + 8), xwa
 	ld xhl, xbc
-	cp xbc, 0x1E80069
+	cp xbc, 0x1e80069
 	jrl z, SqplyFunc_GetScreenId
 	ld xwa, (xsp + 4)
-	cp xbc, 0x1E80038
+	cp xbc, 0x1e80038
 	jrl z, SqplyFunc_HandlePartQuery
-	cp xbc, 0x1E80037
+	cp xbc, 0x1e80037
 	jrl z, SqplyFunc_HandleTrackLookup
-	cp xbc, 0x1E80035
+	cp xbc, 0x1e80035
 	jrl z, SqplyFunc_StoreTrackPart
-	cp xbc, 0x1E80036
+	cp xbc, 0x1e80036
 	jrl z, SqplyFunc_GetValueDispatch
-	cp xbc, 0x1E00045
+	cp xbc, 0x1e00045
 	jrl z, SqplyFunc_HandleGetValue
-	cp xbc, 0x1E80050
+	cp xbc, 0x1e80050
 	jrl z, SqplyFunc_FormatFillIn
-	cp xbc, 0x1E8004F
+	cp xbc, 0x1e8004f
 	jrl z, SqplyFunc_FormatEnding
-	cp xbc, 0x1E8004E
+	cp xbc, 0x1e8004e
 	jrl z, SqplyFunc_FormatIntro
 	ldda16 xde, 9832
-	cp xbc, 0x1E8004D
+	cp xbc, 0x1e8004d
 	jrl z, SqplyFunc_FormatRhythmPattern
-	sub xhl, 0x1E8003E
+	sub xhl, 0x1e8003e
 	cp xhl, 0x0
 	jrl lt, SqplyFunc_ReturnZero
 	cp xhl, 0x9
 	jrl gt, SqplyFunc_ReturnZero
 	add xhl, xhl
-	add xhl, 0xE34B38
+	add xhl, 0xe34b38
 	ld hl, (xhl)
 	lda_24 xix, 0xf346ed
-	jp_dri 8, 0x07, 0xF0, 0xEC
+	jp_dri 8, 0x07, 0xf0, 0xec
 SqplyFunc_ParamFormatData:
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
@@ -13650,13 +13650,13 @@ SqplyFunc_FormatRhythmPattern:
 	lda xbc, (xwa + 18)
 	cp de, 0x8002
 	jr nz, SqplyFunc_CheckPattern8001
-	ld xwa, 0xE34AEE
+	ld xwa, 0xe34aee
 	jr SqplyFunc_CopyPatternString
 
 SqplyFunc_CheckPattern8001:
 	cp hl, 0x8001
 	jr nz, SqplyFunc_FormatPatternNumeric
-	ld xwa, 0xE34AF4
+	ld xwa, 0xe34af4
 
 SqplyFunc_CopyPatternString:
 	push xwa
@@ -13668,22 +13668,22 @@ SqplyFunc_CopyPatternString:
 
 SqplyFunc_FormatPatternNumeric:
 	pushw hl
-	pushw 0xE3
-	pushw 0x4AFA
+	pushw 0xe3
+	pushw 0x4afa
 	jr SqplyFunc_PushAndFormat
 
 SqplyFunc_FormatIntro:
 	ld xwa, (xsp + 4)
 	ld (xsp), xwa
-	push_sd16w 0x38, 0xF2
-	ld xwa, 0xE34B00
+	push_sd16w 0x38, 0xf2
+	ld xwa, 0xe34b00
 	jr SqplyFunc_PushFormatAddr
 
 SqplyFunc_FormatEnding:
 	ld xwa, (xsp + 4)
 	ld (xsp), xwa
-	push_sd16w 0x3A, 0xF2
-	ld xwa, 0xE34B06
+	push_sd16w 0x3a, 0xf2
+	ld xwa, 0xe34b06
 	push xwa
 	ld xwa, (xsp + 6)
 	lda xbc, (xwa + 18)
@@ -13696,8 +13696,8 @@ SqplyFunc_PushAndFormat:
 SqplyFunc_FormatFillIn:
 	ld xwa, (xsp + 4)
 	ld (xsp), xwa
-	push_sd16w 0x3F, 0xF2
-	ld xwa, 0xE34B0C
+	push_sd16w 0x3f, 0xf2
+	ld xwa, 0xe34b0c
 
 SqplyFunc_PushFormatAddr:
 	push xwa
@@ -13718,13 +13718,13 @@ SqplyFunc_HandleGetValue:
 	dec 1, xwa
 	cp xwa, 0x0
 	jr c, SqplyFunc_GetValueDefault
-	cp xwa, 0xA
+	cp xwa, 0xa
 	jr ugt, SqplyFunc_GetValueDefault
 	add xwa, xwa
-	add xwa, 0xE34B22
+	add xwa, 0xe34b22
 	ld wa, (xwa)
 	lda_24 xix, 0xf348b0
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SqplyFunc_GetValueDispatch:
 	lds32 xhl, 0
@@ -13823,7 +13823,7 @@ SqplyFunc_TrackMode88_Part2:
 	jr SqplyFunc_TrackTypeReturn
 
 SqplyFunc_TrackMode88_Part3:
-	ldb l, 0xA
+	ldb l, 0xa
 	jr SqplyFunc_TrackTypeReturn
 
 SqplyFunc_TrackMode96_99:
@@ -13840,11 +13840,11 @@ SqplyFunc_TrackModePerc:
 	jr z, SqplyFunc_TrackPart2
 	cps c, 1
 	jr nz, SqplyFunc_TrackTypeUnknown
-	ldb l, 0xB
+	ldb l, 0xb
 	jr SqplyFunc_TrackTypeReturn
 
 SqplyFunc_TrackTypeUnknown:
-	ldb l, 0xFF
+	ldb l, 0xff
 
 SqplyFunc_TrackTypeReturn:
 	exts hl
@@ -13860,9 +13860,9 @@ SqplyFunc_HandlePartQuery:
 	jr gt, SqplyFunc_ReturnZero
 	add wa, wa
 	lda_24 xix, 0xe34b12
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, 0xf349b0
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SqplyFunc_PartQueryDispatch:
 	ldb	l, 1
@@ -13893,33 +13893,33 @@ SqedtFunc:
 	ld (xsp + 12), xwa
 	call GetTitleNow
 	ld xde, xiz
-	cp xiz, 0x1E80069
+	cp xiz, 0x1e80069
 	jrl z, SqedtFunc_StateChainA
-	cp xiz, 0x1E00045
+	cp xiz, 0x1e00045
 	jrl z, SqedtFunc_ModeD
-	cp xiz, 0x1E80073
+	cp xiz, 0x1e80073
 	jrl z, SqedtFunc_ModeB
-	cp xiz, 0x1E80072
+	cp xiz, 0x1e80072
 	jrl z, SqedtFunc_ModeA
-	cp xiz, 0x1E8004B
+	cp xiz, 0x1e8004b
 	jrl z, SqedtFunc_CheckMode
-	cp xiz, 0x1E8004A
+	cp xiz, 0x1e8004a
 	jrl z, SqedtFunc_Case2
-	cp xiz, 0x1E80049
+	cp xiz, 0x1e80049
 	jrl z, SqedtFunc_Case1
-	cp xiz, 0x1E80048
+	cp xiz, 0x1e80048
 	jrl z, SqedtFunc_Case0
 	ld xwa, (xsp + 8)
-	sub xde, 0x1E80016
+	sub xde, 0x1e80016
 	cp xde, 0x0
 	jrl lt, SeqFunc_ReturnZeroJmp
 	cp xde, 0x27
 	jrl gt, SeqFunc_ReturnZeroJmp
 	add xde, xde
-	add xde, 0xE34D20
+	add xde, 0xe34d20
 	ld de, (xde)
 	lda_24 xix, 0xf34a5c
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xf0, 0xe8
 ; SqedtFunc parameter dispatch
 Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
@@ -14400,7 +14400,7 @@ SqedtFunc_Case0:
 	ldda8 a, 10360
 	extz wa
 	muls wa, 0x6
-	ld xbc, 0xE349D4
+	ld xbc, 0xe349d4
 	exts xwa
 	add xwa, xbc
 	push xwa
@@ -14420,8 +14420,8 @@ SqedtFunc_Case2:
 	ld (xsp + 4), xwa
 	cpdi8 10360, 10
 	jr nz, SqedtFunc_Case2_CopyParam
-	pushw 0xE3
-	pushw 0x4C5C
+	pushw 0xe3
+	pushw 0x4c5c
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 18)
 	push xwa
@@ -14431,7 +14431,7 @@ SqedtFunc_Case2:
 
 SqedtFunc_Case2_CopyParam:
 	push_sd16w 0x28, 0x27
-	ld xwa, 0xE34C62
+	ld xwa, 0xe34c62
 	push xwa
 	ld xwa, (xsp + 10)
 	lda xbc, (xwa + 18)
@@ -14445,8 +14445,8 @@ SqedtFunc_CheckMode:
 	ld (xsp + 4), xwa
 	cpdi8 10360, 10
 	jr nz, SqedtFunc_CheckMode_CopyParam
-	pushw 0xE3
-	pushw 0x4C68
+	pushw 0xe3
+	pushw 0x4c68
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 18)
 	push xwa
@@ -14458,7 +14458,7 @@ SqedtFunc_CheckMode_CopyParam:
 	ldda8 a, 10348
 	extz wa
 	pushw wa
-	ld xwa, 0xE34C6C
+	ld xwa, 0xe34c6c
 	push xwa
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 18)
@@ -14520,9 +14520,9 @@ SeqFunc_ReturnZeroJmp:
 	jrl gt, SqedtFunc_ReturnNegOne
 	add wa, wa
 	lda_24 xix, 0xe34ce2
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, 0xf3502c
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; SqedtFunc value dispatch
 Sqedt_ValueDispatch:
@@ -14599,40 +14599,40 @@ Sqedt_ValueDispatch:
 	jr	2
 
 SqedtFunc_ReturnNegOne:
-	ldb l, 0xFF
+	ldb l, 0xff
 
 SqedtFunc_SignExtendAndReturn:
 	exts hl
 	exts xhl
 	jrl SqedtFunc_Epilogue12
-	cp l, 0x9B
+	cp l, 0x9b
 	jr z, SqedtFunc_SignExtend
-	cp l, 0x9F
+	cp l, 0x9f
 	jr z, SqedtFunc_ReturnNeg1
-	cp l, 0x9C
+	cp l, 0x9c
 	jr nz, SqedtFunc_ReturnNegOne
 	ldb l, 0x9
 	jr SqedtFunc_SignExtendAndReturn
 
 ; SqedtFunc return -1
 SqedtFunc_ReturnNeg1:
-	ldb l, 0xB
+	ldb l, 0xb
 	jr SqedtFunc_SignExtendAndReturn
 
 ; SqedtFunc sign extend and return
 SqedtFunc_SignExtend:
-	ldb l, 0xE
+	ldb l, 0xe
 	jr SqedtFunc_SignExtendAndReturn
 	extz wa
 	cps wa, 0
 	jrl mi, SeqFunc_ReturnZeroJmp
-	cp wa, 0xE
+	cp wa, 0xe
 	jrl gt, SeqFunc_ReturnZeroJmp
 	add wa, wa
 	lda_24 xix, 0xe34c90
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, 0xf3513d
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Sequencer format dispatch A
 SeqFormat_DispatchA:
@@ -14734,16 +14734,16 @@ SqedtFunc_StateChainB:
 	cp l, 0x90
 	jr z, SeqFormat_DispatchB
 	extz wa
-	sub wa, 0x9B
+	sub wa, 0x9b
 	cps wa, 0
 	jrl lt, SqedtFunc_GetFieldAddr_BySelector
-	cp wa, 0xD
+	cp wa, 0xd
 	jrl gt, SqedtFunc_GetFieldAddr_BySelector
 	add wa, wa
 	lda_24 xix, 0xe34d70
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, 0xf3527a
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Sequencer format dispatch B
 SeqFormat_DispatchB:
@@ -14767,9 +14767,9 @@ SeqFmt_Field_LoadB:
 SeqFmt_Field_LoadC:
 	ldada xhl, 10360
 	jrl SqedtFunc_Epilogue
-	cp xiz, 0xB
+	cp xiz, 0xb
 	jr z, SeqFmt_Field_LoadF
-	cp xiz, 0xA
+	cp xiz, 0xa
 	jr z, SeqFmt_Field_LoadE
 	cp xiz, 0x2
 	jr z, SeqFmt_Field_LoadD
@@ -14899,9 +14899,9 @@ SeqFmt_Field_LoadV:
 SeqFmt_Field_LoadW:
 	ldada xhl, 61992
 	jrl SqedtFunc_Epilogue
-	cp xiz, 0xE
+	cp xiz, 0xe
 	jr z, SeqFmt_Field_LoadX
-	cp xiz, 0xD
+	cp xiz, 0xd
 	jr nz, SeqFmt_Field_LoadY
 	ldada xhl, 61908
 	jrl SqedtFunc_Epilogue
@@ -14945,7 +14945,7 @@ SeqFmt_Field_LoadAC:
 SeqFmt_Field_LoadAD:
 	ldada xhl, 61929
 	jrl SqedtFunc_Epilogue
-	cp xiz, 0x1A
+	cp xiz, 0x1a
 	jr z, SeqFmt_Field_LoadAH
 	cp xiz, 0x19
 	jr z, SeqFmt_Field_LoadAG
@@ -14980,11 +14980,11 @@ SeqFmt_Field_LoadAI:
 
 ; DspItem0CngFunc dispatch
 DspItem0_CngFunc:
-	cp xiz, 0x1E
+	cp xiz, 0x1e
 	jr z, DspItem0Cng_LoadFieldB
-	cp xiz, 0x1D
+	cp xiz, 0x1d
 	jr z, DspItem0Cng_LoadFieldA
-	cp xiz, 0x1C
+	cp xiz, 0x1c
 	jr nz, DspItem0Cng_LoadFieldC
 	ldada xhl, 9996
 	jr SqedtFunc_Epilogue
@@ -15033,8 +15033,8 @@ SqedtFunc_Epilogue:
 ; =============================================================================
 ; DspItem0CngFunc -- DSP Effect Item Change Function (UI handler)
 ; =============================================================================
-; Handles DSP effect editor events. Displays effect names (0xE32A7A ptr table),
-; parameter names (0xE324C4 via per-algo config at 0xE446DC), and values.
+; Handles DSP effect editor events. Displays effect names (0xe32a7a ptr table),
+; parameter names (0xe324c4 via per-algo config at 0xe446dc), and values.
 ; Sends parameter changes to Sub CPU via Audio_SendCommand.
 ; Stack frame: 28 bytes.
 DspItem0CngFunc:
@@ -15043,9 +15043,9 @@ DspItem0CngFunc:
 	ld (xsp + 24), xwa
 	ld xix, (xsp + 20)
 	ld (xsp), xix
-	cp xix, 0x1E80069
+	cp xix, 0x1e80069
 	jrl z, DspItem0_DispatchTarget
-	cp xix, 0x1E00046
+	cp xix, 0x1e00046
 	jrl z, DspItem0_HandleType2
 	ld8_24 l, 0x021098
 	ldada xwa, 10616
@@ -15058,24 +15058,24 @@ DspItem0CngFunc:
 	inc 3, h
 	ld a, l
 	inc 4, a
-	ldfr_berp A, 0xE2
+	ldfr_berp A, 0xe2
 	ld a, l
 	inc 5, a
-	ldfr_berp A, 0xE6
+	ldfr_berp A, 0xe6
 	ld a, l
 	inc 6, a
-	ldfr_berp A, 0xEE
+	ldfr_berp A, 0xee
 	ld a, l
 	inc 7, a
 	extz wa
 	ld (xsp + 18), wa
-	ldto_berp A, 0xEE
+	ldto_berp A, 0xee
 	extz wa
 	ld (xsp + 16), wa
-	ldto_berp A, 0xE6
+	ldto_berp A, 0xe6
 	extz wa
 	ld (xsp + 14), wa
-	ldto_berp A, 0xE2
+	ldto_berp A, 0xe2
 	extz wa
 	ld (xsp + 12), wa
 	ld a, h
@@ -15088,30 +15088,30 @@ DspItem0CngFunc:
 	extz wa
 	ld c, l
 	extz bc
-	cp xix, 0x1E00045
+	cp xix, 0x1e00045
 	jrl z, DspItem0_TypeChangeHandler
-	cp xix, 0x1E8004C
+	cp xix, 0x1e8004c
 	jrl z, DspItem0_SendEffectParam
-	cp xix, 0x1E00047
+	cp xix, 0x1e00047
 	jr z, DspItem0_DisplayEffectName
 	ld xiy, (xsp)
-	sub xiy, 0x1E80000
+	sub xiy, 0x1e80000
 	cp xiy, 0x0
 	jrl lt, EffectEdit_ReturnZero
 	cp xiy, 0x10
 	jrl gt, EffectEdit_ReturnZero
 	add xiy, xiy
-	add xiy, 0xE34DA4
+	add xiy, 0xe34da4
 	ld iy, (xiy)
 	lda_24 xix, 0xf355f3
-	jp_dri 8, 0x07, 0xF0, 0xF4
+	jp_dri 8, 0x07, 0xf0, 0xf4
 
 DspItem0_DisplayEffectName:
 	ld (xsp), xde
 	ldda16 xwa, 10614
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0xE32A7A
+	ld xbc, 0xe32a7a
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -15170,7 +15170,7 @@ DspItem0_DisplayParamValues:
 	ld wa, (xsp + 24)
 	add wa, wa
 	extz xwa
-	st_dri3b A, 0xE1, 0x88, 0x00
+	st_dri3b A, 0xe1, 0x88, 0x00
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 18)
 	add xwa, xbc
@@ -15221,8 +15221,8 @@ DspItem0_SendEffectParam:
 	ld (xsp), xde
 	ld xwa, (xsp + 4)
 	pushm (xwa)
-	pushw 0xE3
-	pushw 0x4D8C
+	pushw 0xe3
+	pushw 0x4d8c
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 18)
 	push xwa
@@ -15237,10 +15237,10 @@ DspItem0_TypeChangeHandler:
 	cp xde, 0x8
 	jr ugt, DspItem0_TypeDispatch
 	add xde, xde
-	add xde, 0xE34D92
+	add xde, 0xe34d92
 	ld de, (xde)
 	lda_24 xix, 0xf35747
-	jp_dri 8, 0x07, 0xF0, 0xE8
+	jp_dri 8, 0x07, 0xf0, 0xe8
 
 ; DspItem0 type change dispatch
 DspItem0_TypeDispatch:
@@ -15248,42 +15248,42 @@ DspItem0_TypeDispatch:
 	jrl DspItem0_Epilogue
 	sla bc, 1
 	ld xwa, (xsp + 4)
-	st_dri3b C, 0x07, 0xE0, 0xE4
+	st_dri3b C, 0x07, 0xe0, 0xe4
 	jrl DspItem0_Epilogue
 	sla wa, 1
 	ld bc, wa
 	ld xwa, (xsp + 4)
-	st_dri3b C, 0x07, 0xE0, 0xE4
+	st_dri3b C, 0x07, 0xe0, 0xe4
 	jrl DspItem0_Epilogue
 	ld bc, (xsp + 8)
 	sla bc, 1
 	ld xwa, (xsp + 4)
-	st_dri3b C, 0x07, 0xE0, 0xE4
+	st_dri3b C, 0x07, 0xe0, 0xe4
 	jrl DspItem0_Epilogue
 	ld bc, (xsp + 10)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	st_dri3b C, 0x07, 0xE0, 0xE4
+	st_dri3b C, 0x07, 0xe0, 0xe4
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 12)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	st_dri3b C, 0x07, 0xE0, 0xE4
+	st_dri3b C, 0x07, 0xe0, 0xe4
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 14)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	st_dri3b C, 0x07, 0xE0, 0xE4
+	st_dri3b C, 0x07, 0xe0, 0xe4
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 16)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	st_dri3b C, 0x07, 0xE0, 0xE4
+	st_dri3b C, 0x07, 0xe0, 0xe4
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 18)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	st_dri3b C, 0x07, 0xE0, 0xE4
+	st_dri3b C, 0x07, 0xe0, 0xe4
 	jr DspItem0_Epilogue
 
 DspItem0_HandleType2:
@@ -15326,22 +15326,22 @@ EqualizerCngFunc:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
-	cp xbc, 0x1E00045
+	cp xbc, 0x1e00045
 	jrl z, Equalizer_ParamByIndex
-	cp xbc, 0x1E80013
+	cp xbc, 0x1e80013
 	jr z, Equalizer_DispatchA
 	lda_24 xbc, 0xe321fa
 	ldada xhl, 10616
-	sub xwa, 0x1E80061
+	sub xwa, 0x1e80061
 	cp xwa, 0x0
 	jrl lt, Equalizer_ParamString
 	cp xwa, 0x8
 	jrl gt, Equalizer_ParamString
 	add xwa, xwa
-	add xwa, 0xE34DDC
+	add xwa, 0xe34ddc
 	ld wa, (xwa)
 	lda_24 xix, 0xf35858
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; EqualizerCngFunc dispatch A
 Equalizer_DispatchA:
@@ -15354,14 +15354,14 @@ Equalizer_DispatchA:
 	cp xwa, 0x6
 	jrl ugt, Equalizer_LookupParamByIndex
 	add xwa, xwa
-	add xwa, 0xE34DCE
+	add xwa, 0xe34dce
 	ld wa, (xwa)
 	lda_24 xix, 0xf3588c
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; --- EQ_7Band_ParamLookup: Look up equalizer parameters for 7 frequency bands ---
 ; Seven entry points, one per EQ band. Each reads a 16-bit index from
-; consecutive RAM addresses (0x297A-0x2986), doubles it as a table offset,
+; consecutive RAM addresses (0x297a-0x2986), doubles it as a table offset,
 ; adds to the base pointer in XBC/XDE, loads a 16-bit value, and jumps
 ; to a common handler. Alternates between XBC and XDE base registers.
 ; EqualizerCngFunc dispatch B
@@ -15433,10 +15433,10 @@ Equalizer_ParamByIndex:
 	jr c, Equalizer_ReturnParamAddr
 	cp xde, 0x6
 	jr ugt, Equalizer_ReturnParamAddr
-	add xde, 0xE34DC6
+	add xde, 0xe34dc6
 	ld a, (xde)
 	exts wa
-	st_dri3b C, 0x07, 0xE4, 0xE0
+	st_dri3b C, 0x07, 0xe4, 0xe0
 	jrl Equalizer_PopIzRet
 
 Equalizer_ReturnParamAddr:
@@ -15463,7 +15463,7 @@ Equalizer_ReturnParamAddr:
 	jr Equalizer_LookupParamString
 	ld xix, xde
 	pushw 0x5
-	ldw wa, 0xA
+	ldw wa, 0xa
 	jr FormatEqParamValue
 	ld xix, xde
 	pushw 0x5
@@ -15475,16 +15475,16 @@ Equalizer_LookupParamString:
 	ld xbc, xwa
 	sll xbc, 2
 	add xbc, xwa
-	ld xwa, 0xE32390
+	ld xwa, 0xe32390
 	add xwa, xbc
 	push xwa
 	jr FormatEqParam_CopyAndReturn
 	ld xix, xde
 	pushw 0x5
-	ldw wa, 0xE
+	ldw wa, 0xe
 
 FormatEqParamValue:
-	ld_sriw3 WA, 0x07, 0xEC, 0xE0
+	ld_sriw3 WA, 0x07, 0xec, 0xe0
 	extz xwa
 	ld xde, xwa
 	sll xde, 2
@@ -15513,7 +15513,7 @@ Equalizer_PopIzRet:
 	ret
 
 MainExeFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr nz, Equalizer_FormatValue
 	ld xwa, 0x1480001
 	call MainPostEvent
@@ -15524,7 +15524,7 @@ Equalizer_FormatValue:
 	ret
 
 SureJudgeFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jrl nz, ParamCmd_ReturnZero
 	cpi8_24 0x0340ea, 0x00
 	jr nz, Equalizer_CmdDispatch
@@ -15538,76 +15538,76 @@ Equalizer_CmdDispatch:
 	call SetDialEnable
 	call GetTitleNow
 	ld xwa, xhl
-	cp xhl, 0x1A00091
+	cp xhl, 0x1a00091
 	jr z, Equalizer_CmdCase1
-	cp xhl, 0x1A00090
+	cp xhl, 0x1a00090
 	jr z, Equalizer_CmdCase0
-	sub xwa, 0x1A0009A
+	sub xwa, 0x1a0009a
 	cp xwa, 0x0
 	jrl lt, ParamCmd_ReturnZero
-	cp xwa, 0xE
+	cp xwa, 0xe
 	jrl gt, ParamCmd_ReturnZero
 	add xwa, xwa
-	add xwa, 0xE34DEE
+	add xwa, 0xe34dee
 	ld wa, (xwa)
 	lda_24 xix, 0xf35a44
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Equalizer command case 0
 Equalizer_CmdCase0:
 	ld xwa, 0x900009
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jrl ParamCmd_SendAndReturnZero
 
 ; Equalizer command case 1
 Equalizer_CmdCase1:
-	ld xwa, 0x91000B
-	ld xbc, 0x1C00001
+	ld xwa, 0x91000b
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jrl ParamCmd_SendAndReturnZero
-	ld xwa, 0x9A0006
-	ld xbc, 0x1C00001
+	ld xwa, 0x9a0006
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jrl ParamCmd_SendAndReturnZero
-	ld xwa, 0x9B000F
-	ld xbc, 0x1C00001
+	ld xwa, 0x9b000f
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jr ParamCmd_SendAndReturnZero
-	ld xwa, 0x9C000E
-	ld xbc, 0x1C00001
+	ld xwa, 0x9c000e
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jr ParamCmd_SendAndReturnZero
-	ld xwa, 0x9D000A
-	ld xbc, 0x1C00001
+	ld xwa, 0x9d000a
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jr ParamCmd_SendAndReturnZero
-	ld xwa, 0x9E000A
-	ld xbc, 0x1C00001
+	ld xwa, 0x9e000a
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jr ParamCmd_SendAndReturnZero
-	ld xwa, 0x9F0012
-	ld xbc, 0x1C00001
+	ld xwa, 0x9f0012
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jr ParamCmd_SendAndReturnZero
-	ld xwa, 0xA0000A
-	ld xbc, 0x1C00001
+	ld xwa, 0xa0000a
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jr ParamCmd_SendAndReturnZero
-	ld xwa, 0xA20009
-	ld xbc, 0x1C00001
+	ld xwa, 0xa20009
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jr ParamCmd_SendAndReturnZero
-	ld xwa, 0xA30009
-	ld xbc, 0x1C00001
+	ld xwa, 0xa30009
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jr ParamCmd_SendAndReturnZero
-	ld xwa, 0xA40009
-	ld xbc, 0x1C00001
+	ld xwa, 0xa40009
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jr ParamCmd_SendAndReturnZero
-	ld xwa, 0xA1000A
-	ld xbc, 0x1C00001
+	ld xwa, 0xa1000a
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 
 ParamCmd_SendAndReturnZero:
@@ -15653,19 +15653,19 @@ FormatParamValueStr:
 	dec 6, wa
 	cp wa, 0x12
 	jrl lt, PrepareAudioParam
-	cp wa, 0x2B
+	cp wa, 0x2b
 	jrl gt, PrepareAudioParam
 
 ; Equalizer format dispatch
 Equalizer_FormatDispatch:
 	lda_24 xix, 0xe34e28
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	extz wa
 	sll wa, 1
-	ld xix, 0xE34E54
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld xix, 0xe34e54
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, 0xf35b85
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 EqFormat_DispatchTable:
 	.byte 0x0b, 0x05, 0x00, 0x40, 0x90, 0x23, 0xe3, 0x00
@@ -15676,69 +15676,69 @@ EqFormat_DispatchTable:
 
 FormatParamString:
 	pushw 0x5
-	ld xwa, 0xE32006
+	ld xwa, 0xe32006
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, 0xE31FF6
+	ld xwa, 0xe31ff6
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, 0xE31E02
+	ld xwa, 0xe31e02
 	jrl FormatParamStr_CopyEnumName
 
 ; Equalizer format default
 Equalizer_FormatDefault:
 	pushw 0x5
-	ld xwa, 0xE31C0E
+	ld xwa, 0xe31c0e
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, 0xE31A1A
+	ld xwa, 0xe31a1a
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, 0xE31A10
+	ld xwa, 0xe31a10
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, 0xE318A2
+	ld xwa, 0xe318a2
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, 0xE316AE
+	ld xwa, 0xe316ae
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, 0xE314BA
+	ld xwa, 0xe314ba
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, 0xE312C6
+	ld xwa, 0xe312c6
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, 0xE310D2
+	ld xwa, 0xe310d2
 	jr FormatParamStr_CopyEnumName
 	add bc, bc
-	ld_sriw3 WA, 0x07, 0xE8, 0xE4
+	ld_sriw3 WA, 0x07, 0xe8, 0xe4
 	cps wa, 0
 	jr ge, EqFormat_NegativeValue
 	neg wa
 	pushw wa
-	ld xwa, 0xE34E0C
+	ld xwa, 0xe34e0c
 	jr SendAudioCommand
 
 EqFormat_NegativeValue:
 	pushw wa
 	cps wa, 0
 	jr le, EqFormat_PositiveValue
-	ld xwa, 0xE34E12
+	ld xwa, 0xe34e12
 	jr SendAudioCommand
 
 EqFormat_PositiveValue:
-	ld xwa, 0xE34E18
+	ld xwa, 0xe34e18
 	jr SendAudioCommand
 	pushw 0x5
-	ld xwa, 0xE31054
+	ld xwa, 0xe31054
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, 0xE30E60
+	ld xwa, 0xe30e60
 
 FormatParamStr_CopyEnumName:
 	add bc, bc
-	ld_sriw3 BC, 0x07, 0xE8, 0xE4
+	ld_sriw3 BC, 0x07, 0xe8, 0xe4
 	extz xbc
 	ld xde, xbc
 	sll xde, 2
@@ -15751,8 +15751,8 @@ FormatParamStr_CopyEnumName:
 	jr Equalizer_PadSpaceAndReturn
 
 Equalizer_CopyFixedString:
-	pushw 0xE3
-	pushw 0x4E1E
+	pushw 0xe3
+	pushw 0x4e1e
 	push xhl
 	call Strcpy
 	inc 8, xsp
@@ -15760,8 +15760,8 @@ Equalizer_CopyFixedString:
 
 PrepareAudioParam:
 	add bc, bc
-	push_sriw 0x07, 0xE8, 0xE4
-	ld xwa, 0xE34E24
+	push_sriw 0x07, 0xe8, 0xe4
+	ld xwa, 0xe34e24
 
 SendAudioCommand:
 	push xwa
@@ -15775,10 +15775,10 @@ Equalizer_PadSpaceAndReturn:
 	ret
 
 CycleOnOffFunc:
-	cp xbc, 0x1E0003B
+	cp xbc, 0x1e0003b
 	jr nz, CycleOnOff_PostAndReturn
 	ld xwa, 0x1480003
-	ld xbc, 0x1E80044
+	ld xbc, 0x1e80044
 	call MainPostEvent
 
 CycleOnOff_PostAndReturn:
@@ -15786,18 +15786,18 @@ CycleOnOff_PostAndReturn:
 	ret
 
 MetroOnOffFunc:
-	cp xbc, 0x1E0003B
+	cp xbc, 0x1e0003b
 	jr nz, MetroOnOff_ReturnZero
 	or xde, xde
 	jr nz, MetroOnOff_SendDisable
 	ld xwa, 0x1480003
-	ld xbc, 0x1E80045
+	ld xbc, 0x1e80045
 	lds32 xde, 0
 	jr MetroOnOff_PostEvent
 
 MetroOnOff_SendDisable:
 	ld xwa, 0x1480003
-	ld xbc, 0x1E80045
+	ld xbc, 0x1e80045
 	lds32 xde, 1
 
 MetroOnOff_PostEvent:
@@ -15808,18 +15808,18 @@ MetroOnOff_ReturnZero:
 	ret
 
 PunchInOutFunc:
-	cp xbc, 0x1E0003B
+	cp xbc, 0x1e0003b
 	jr nz, PunchInOut_ReturnZero
 	or xde, xde
 	jr nz, PunchInOut_SendDisable
 	ld xwa, 0x1480003
-	ld xbc, 0x1E80046
+	ld xbc, 0x1e80046
 	lds32 xde, 0
 	jr PunchInOut_PostEvent
 
 PunchInOut_SendDisable:
 	ld xwa, 0x1480003
-	ld xbc, 0x1E80046
+	ld xbc, 0x1e80046
 	lds32 xde, 1
 
 PunchInOut_PostEvent:
@@ -15830,7 +15830,7 @@ PunchInOut_ReturnZero:
 	ret
 
 EqInOutFunc:
-	cp xbc, 0x1E0003B
+	cp xbc, 0x1e0003b
 	jr nz, EqInOut_ReturnZero
 	or xde, xde
 	jr nz, EqInOut_SendEnable
@@ -15852,10 +15852,10 @@ EqInOut_ReturnZero:
 	ret
 
 MimeOnOffFunc:
-	cp xbc, 0x1E0003B
+	cp xbc, 0x1e0003b
 	jr nz, MimeOnOff_PostAndReturn
 	ld xwa, 0x1480023
-	ld xbc, 0x1E0003B
+	ld xbc, 0x1e0003b
 	call MainPostEvent
 
 MimeOnOff_PostAndReturn:
@@ -15863,20 +15863,20 @@ MimeOnOff_PostAndReturn:
 	ret
 
 TrkMixerIntTtlFunc:
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00016
-	ld xde, 0x1A000A5
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00016
+	ld xde, 0x1a000a5
 	call PostEvent
 	lds32 xhl, 0
 	ret
 
 
 BitmapNtedt0k:
-	cp xbc, 0x1E000A3
+	cp xbc, 0x1e000a3
 	jr z, BitmapNtedt0k_GetHeight
-	cp xbc, 0x1E000A2
+	cp xbc, 0x1e000a2
 	jr z, BitmapNtedt0k_GetWidth
-	cp xbc, 0x1E000A1
+	cp xbc, 0x1e000a1
 	jr z, BitmapNtedt0k_GetAddress
 	lds32 xhl, 0
 	ret
@@ -15890,16 +15890,16 @@ BitmapNtedt0k_GetWidth:
 	ret
 
 BitmapNtedt0k_GetHeight:
-	ld xhl, 0x7F
+	ld xhl, 0x7f
 	ret
 
 
 BitmapNtedt0d:
-	cp xbc, 0x1E000A3
+	cp xbc, 0x1e000a3
 	jr z, BitmapNtedt0d_GetHeight
-	cp xbc, 0x1E000A2
+	cp xbc, 0x1e000a2
 	jr z, BitmapNtedt0d_GetWidth
-	cp xbc, 0x1E000A1
+	cp xbc, 0x1e000a1
 	jr z, BitmapNtedt0d_GetAddress
 	lds32 xhl, 0
 	ret
@@ -15909,20 +15909,20 @@ BitmapNtedt0d_GetAddress:
 	ret
 
 BitmapNtedt0d_GetWidth:
-	ld xhl, 0xF0
+	ld xhl, 0xf0
 	ret
 
 BitmapNtedt0d_GetHeight:
-	ld xhl, 0x7F
+	ld xhl, 0x7f
 	ret
 
 
 BitmapDredt0k:
-	cp xbc, 0x1E000A3
+	cp xbc, 0x1e000a3
 	jr z, BitmapDredt0k_GetHeight
-	cp xbc, 0x1E000A2
+	cp xbc, 0x1e000a2
 	jr z, BitmapDredt0k_GetWidth
-	cp xbc, 0x1E000A1
+	cp xbc, 0x1e000a1
 	jr z, BitmapDredt0k_GetAddress
 	lds32 xhl, 0
 	ret
@@ -15940,11 +15940,11 @@ BitmapDredt0k_GetHeight:
 	ret
 
 BitmapDredt0d:
-	cp xbc, 0x1E000A3
+	cp xbc, 0x1e000a3
 	jr z, BitmapDredt0d_ReturnSize77
-	cp xbc, 0x1E000A2
+	cp xbc, 0x1e000a2
 	jr z, BitmapDredt0d_ReturnSizeA8
-	cp xbc, 0x1E000A1
+	cp xbc, 0x1e000a1
 	jr z, BitmapDredt0d_ReturnDataPtr
 	lds32 xhl, 0
 	ret
@@ -15954,7 +15954,7 @@ BitmapDredt0d_ReturnDataPtr:
 	ret
 
 BitmapDredt0d_ReturnSizeA8:
-	ld xhl, 0xA8
+	ld xhl, 0xa8
 	ret
 
 BitmapDredt0d_ReturnSize77:

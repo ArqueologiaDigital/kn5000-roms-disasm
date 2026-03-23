@@ -12,37 +12,37 @@ NakaInst_IvWaitWinCtlProc:
 	.equ NakaInst_VwScreenTitleProc, NakaInst_IvWaitWinCtlProc + 0x0052
 	.equ NakaInst_IvOneShotTimerProc, NakaInst_IvWaitWinCtlProc + 0x0064
 	.equ NakaInst_AcMonoIndexToggleProc, NakaInst_IvWaitWinCtlProc + 0x0078
-	.equ NakaInst_AcFileSfxBoxProc, NakaInst_IvWaitWinCtlProc + 0x008E
-	.equ NakaInst_AcParaStrBoxProc, NakaInst_IvWaitWinCtlProc + 0x00A0
-	.equ NakaInst_AcTtlJgBoxProc, NakaInst_IvWaitWinCtlProc + 0x00B2
-	.equ NakaInst_PsWindowToggleProc, NakaInst_IvWaitWinCtlProc + 0x00C2
-	.equ NakaInst_PsFileNameBoxProc, NakaInst_IvWaitWinCtlProc + 0x00D6
-	.equ Str_DISKNAME, NakaInst_IvWaitWinCtlProc + 0x09AE
+	.equ NakaInst_AcFileSfxBoxProc, NakaInst_IvWaitWinCtlProc + 0x008e
+	.equ NakaInst_AcParaStrBoxProc, NakaInst_IvWaitWinCtlProc + 0x00a0
+	.equ NakaInst_AcTtlJgBoxProc, NakaInst_IvWaitWinCtlProc + 0x00b2
+	.equ NakaInst_PsWindowToggleProc, NakaInst_IvWaitWinCtlProc + 0x00c2
+	.equ NakaInst_PsFileNameBoxProc, NakaInst_IvWaitWinCtlProc + 0x00d6
+	.equ Str_DISKNAME, NakaInst_IvWaitWinCtlProc + 0x09ae
 	.equ Str_LOAD, NakaInst_IvWaitWinCtlProc + 0x1076
-	.equ Str_COMP, NakaInst_IvWaitWinCtlProc + 0x126E
-	.equ Str_CUSTOM, NakaInst_IvWaitWinCtlProc + 0x12DE
+	.equ Str_COMP, NakaInst_IvWaitWinCtlProc + 0x126e
+	.equ Str_CUSTOM, NakaInst_IvWaitWinCtlProc + 0x12de
 	.equ Str_MIDI, NakaInst_IvWaitWinCtlProc + 0x1306
-	.equ Str_RHYTHM_CUSTOM, NakaInst_IvWaitWinCtlProc + 0x13D6
+	.equ Str_RHYTHM_CUSTOM, NakaInst_IvWaitWinCtlProc + 0x13d6
 	.equ Str_COMPOSER, NakaInst_IvWaitWinCtlProc + 0x1456
 	.equ Str_LOAD_2952, NakaInst_IvWaitWinCtlProc + 0x1586
-	.equ Str_SINGLE_LOAD, NakaInst_IvWaitWinCtlProc + 0x15D6
-	.equ Str_PREV, NakaInst_IvWaitWinCtlProc + 0x1A5A
-	.equ Str_DISK, NakaInst_IvWaitWinCtlProc + 0x1B42
-	.equ Str_LOAD_AS, NakaInst_IvWaitWinCtlProc + 0x1B6E
-	.equ Str_SOUND_MEMORY, NakaInst_IvWaitWinCtlProc + 0x278E
-	.equ Str_SEQUENCER, NakaInst_IvWaitWinCtlProc + 0x27E6
-	.equ Str_PERFORM, NakaInst_IvWaitWinCtlProc + 0x295E
-	.equ Str_BACKUP, NakaInst_IvWaitWinCtlProc + 0x29AE
-	.equ Str_PNL, NakaInst_IvWaitWinCtlProc + 0x29FE
-	.equ Str_COMP_3F6A, NakaInst_IvWaitWinCtlProc + 0x2B9E
-	.equ Str_CUSTOM_3FDA, NakaInst_IvWaitWinCtlProc + 0x2C0E
-	.equ Str_MIDI_4002, NakaInst_IvWaitWinCtlProc + 0x2C36
-	.equ Str_ALL_OFF, NakaInst_IvWaitWinCtlProc + 0x2CB6
-	.equ Str_SAVE, NakaInst_IvWaitWinCtlProc + 0x2E06
-	.equ Str_NEXT, NakaInst_IvWaitWinCtlProc + 0x2F8E
-	.equ Str_OFF, NakaInst_IvWaitWinCtlProc + 0x2FF0
-	.equ Str_SAVE_44A2, NakaInst_IvWaitWinCtlProc + 0x30D6
-	.equ Str_PREV_471A, NakaInst_IvWaitWinCtlProc + 0x334E
-	.equ Str_DISKINSERTOPTION, NakaInst_IvWaitWinCtlProc + 0x52EA
-	.equ Str_FILETYPEPRIORITY, NakaInst_IvWaitWinCtlProc + 0x533A
-	.equ NakaInst_WaitWinCtlSmf, NakaInst_IvWaitWinCtlProc + 0x6A34
+	.equ Str_SINGLE_LOAD, NakaInst_IvWaitWinCtlProc + 0x15d6
+	.equ Str_PREV, NakaInst_IvWaitWinCtlProc + 0x1a5a
+	.equ Str_DISK, NakaInst_IvWaitWinCtlProc + 0x1b42
+	.equ Str_LOAD_AS, NakaInst_IvWaitWinCtlProc + 0x1b6e
+	.equ Str_SOUND_MEMORY, NakaInst_IvWaitWinCtlProc + 0x278e
+	.equ Str_SEQUENCER, NakaInst_IvWaitWinCtlProc + 0x27e6
+	.equ Str_PERFORM, NakaInst_IvWaitWinCtlProc + 0x295e
+	.equ Str_BACKUP, NakaInst_IvWaitWinCtlProc + 0x29ae
+	.equ Str_PNL, NakaInst_IvWaitWinCtlProc + 0x29fe
+	.equ Str_COMP_3F6A, NakaInst_IvWaitWinCtlProc + 0x2b9e
+	.equ Str_CUSTOM_3FDA, NakaInst_IvWaitWinCtlProc + 0x2c0e
+	.equ Str_MIDI_4002, NakaInst_IvWaitWinCtlProc + 0x2c36
+	.equ Str_ALL_OFF, NakaInst_IvWaitWinCtlProc + 0x2cb6
+	.equ Str_SAVE, NakaInst_IvWaitWinCtlProc + 0x2e06
+	.equ Str_NEXT, NakaInst_IvWaitWinCtlProc + 0x2f8e
+	.equ Str_OFF, NakaInst_IvWaitWinCtlProc + 0x2ff0
+	.equ Str_SAVE_44A2, NakaInst_IvWaitWinCtlProc + 0x30d6
+	.equ Str_PREV_471A, NakaInst_IvWaitWinCtlProc + 0x334e
+	.equ Str_DISKINSERTOPTION, NakaInst_IvWaitWinCtlProc + 0x52ea
+	.equ Str_FILETYPEPRIORITY, NakaInst_IvWaitWinCtlProc + 0x533a
+	.equ NakaInst_WaitWinCtlSmf, NakaInst_IvWaitWinCtlProc + 0x6a34

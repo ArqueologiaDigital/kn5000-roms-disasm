@@ -30,17 +30,17 @@
 	aligned_string "nXXFB"
 	aligned_string "AcLswFuncEditBox"
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	aligned_string "AcGMOnOffBox"
 	aligned_string "fjXn"
 	aligned_string "AcSendEditSw"
 	.byte 0x41, 0x74, 0x74, 0x00
 	aligned_string "IvMpstPageControl"
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	aligned_string "AcVocalistListBox"
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	aligned_string "PsHarmOnOffBox"
 	rcf
 	.byte 0x00			; padding

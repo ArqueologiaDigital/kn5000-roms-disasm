@@ -6,27 +6,27 @@
 ;
 ; The KN5000 uses an MN89304 LCD controller with VGA-compatible registers.
 ; I/O ports are memory-mapped at VGA_IO_BASE (0x170000).
-; Video RAM is at VIDEO_RAM_BASE (0x1A0000), 320x240 @ 8bpp.
+; Video RAM is at VIDEO_RAM_BASE (0x1a0000), 320x240 @ 8bpp.
 ; =============================================================================
 
 ; === Base Addresses ===
 .equ VGA_IO_BASE, 0x170000	; LCD controller I/O base
-.equ VIDEO_RAM_BASE, 0x1A0000	; 4Mbit VRAM
+.equ VIDEO_RAM_BASE, 0x1a0000	; 4Mbit VRAM
 
 ; === VGA I/O Ports ===
-.equ VGA_ATTR_ADDR, 0x3C0	; Attribute Controller Address/Data
-.equ VGA_MISC_OUTPUT, 0x3C2	; Miscellaneous Output Register (write)
-.equ VGA_ENABLE, 0x3C3	; VGA Enable
-.equ VGA_SEQ_ADDR, 0x3C4	; Sequencer Address
-.equ VGA_SEQ_DATA, 0x3C5	; Sequencer Data
-.equ VGA_DAC_MASK, 0x3C6	; DAC Mask
-.equ VGA_DAC_ADDR_WRITE, 0x3C8	; DAC Write Address
-.equ VGA_DAC_DATA, 0x3C9	; DAC Data (R, G, B sequentially)
-.equ VGA_GC_ADDR, 0x3CE	; Graphics Controller Address
-.equ VGA_GC_DATA, 0x3CF	; Graphics Controller Data
-.equ VGA_CRTC_ADDR, 0x3D4	; CRTC Address
-.equ VGA_CRTC_DATA, 0x3D5	; CRTC Data
-.equ VGA_INPUT_STATUS, 0x3DA	; Input Status 1
+.equ VGA_ATTR_ADDR, 0x3c0	; Attribute Controller Address/Data
+.equ VGA_MISC_OUTPUT, 0x3c2	; Miscellaneous Output Register (write)
+.equ VGA_ENABLE, 0x3c3	; VGA Enable
+.equ VGA_SEQ_ADDR, 0x3c4	; Sequencer Address
+.equ VGA_SEQ_DATA, 0x3c5	; Sequencer Data
+.equ VGA_DAC_MASK, 0x3c6	; DAC Mask
+.equ VGA_DAC_ADDR_WRITE, 0x3c8	; DAC Write Address
+.equ VGA_DAC_DATA, 0x3c9	; DAC Data (R, G, B sequentially)
+.equ VGA_GC_ADDR, 0x3ce	; Graphics Controller Address
+.equ VGA_GC_DATA, 0x3cf	; Graphics Controller Data
+.equ VGA_CRTC_ADDR, 0x3d4	; CRTC Address
+.equ VGA_CRTC_DATA, 0x3d5	; CRTC Data
+.equ VGA_INPUT_STATUS, 0x3da	; Input Status 1
 
 ; === CRTC Register Indices ===
 .equ CRTC_HORIZ_TOTAL, 0x0	; Horizontal Total
@@ -39,12 +39,12 @@
 .equ CRTC_OVERFLOW, 0x7	; Overflow
 .equ CRTC_PRESET_ROW_SCAN, 0x8	; Preset Row Scan
 .equ CRTC_MAX_SCAN_LINE, 0x9	; Maximum Scan Line
-.equ CRTC_CURSOR_START, 0xA	; Cursor Start
-.equ CRTC_CURSOR_END, 0xB	; Cursor End
-.equ CRTC_START_ADDR_HIGH, 0xC	; Start Address High
-.equ CRTC_START_ADDR_LOW, 0xD	; Start Address Low
-.equ CRTC_CURSOR_LOC_HIGH, 0xE	; Cursor Location High
-.equ CRTC_CURSOR_LOC_LOW, 0xF	; Cursor Location Low
+.equ CRTC_CURSOR_START, 0xa	; Cursor Start
+.equ CRTC_CURSOR_END, 0xb	; Cursor End
+.equ CRTC_START_ADDR_HIGH, 0xc	; Start Address High
+.equ CRTC_START_ADDR_LOW, 0xd	; Start Address Low
+.equ CRTC_CURSOR_LOC_HIGH, 0xe	; Cursor Location High
+.equ CRTC_CURSOR_LOC_LOW, 0xf	; Cursor Location Low
 .equ CRTC_VERT_RETRACE_START, 0x10	; Vertical Retrace Start
 .equ CRTC_VERT_RETRACE_END, 0x11	; Vertical Retrace End (+ Protect bit 7)
 .equ CRTC_VERT_DISP_END, 0x12	; Vertical Display End

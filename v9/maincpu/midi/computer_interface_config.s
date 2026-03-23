@@ -19,13 +19,13 @@
 ; =============================================================================
 
 TtComputerConnection:
-	cp xbc, 0x1C0000C
+	cp xbc, 0x1c0000c
 	jr z, ComputerConnectionTitleExit
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, ComputerConnectionTitleExit
-	cp xbc, 0x1C00002
+	cp xbc, 0x1c00002
 	jr z, ComputerConnectionTitleExit
-	cp xbc, 0x1C00001
+	cp xbc, 0x1c00001
 	jr nz, ComputerConnectionTitleExit
 	or xde, xde
 	jr nz, ComputerConnectionTitleExit
@@ -33,9 +33,9 @@ TtComputerConnection:
 	cps l, 0	;  MIDI
 	jr nz, ComputerConnectionTitleExit
 	stdi8 32578, 70
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C00016
-	ld xde, 0x1A000EE
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c00016
+	ld xde, 0x1a000ee
 	call PostEvent
 
 ComputerConnectionTitleExit:
@@ -48,19 +48,19 @@ MdCmptCnctFunc:
 	ld xhl, xde
 	ld xde, xbc
 	ld xiz, xwa
-	ld xiy, 0xE7F844
+	ld xiy, 0xe7f844
 	lda xix, (xsp + 4)
 	ldiw
 	ldiw
-	cp xde, 0x1E0003F
+	cp xde, 0x1e0003f
 	jrl z, CmptCnctBlockingReturn
-	cp xde, 0x1E0003E
+	cp xde, 0x1e0003e
 	jrl z, CmptCnctBlockingReturn
-	cp xde, 0x1E00041
+	cp xde, 0x1e00041
 	jrl z, CmptCnctBlockingReturn
-	cp xde, 0x1E00040
+	cp xde, 0x1e00040
 	jrl z, CmptCnctInvalidInputReturn
-	cp xde, 0x1E00042
+	cp xde, 0x1e00042
 	jr z, CmptCnctDrawConnectionDiagram
 	lds32 xhl, 0
 	jrl MdCmptCnct_Epilogue
@@ -74,50 +74,50 @@ CmptCnctDrawConnectionDiagram:
 	jr z, CmptCnct_DrawDiagram1
 	cps bc, 0
 	jr nz, CmptCnct_DrawDiagramDefault
-	pushw 0xE7
-	pushw 0xF848
+	pushw 0xe7
+	pushw 0xf848
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 4)
-	pushw 0x6C
-	ld xbc, 0xE64772
+	pushw 0x6c
+	ld xbc, 0xe64772
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
 CmptCnct_DrawDiagram1:
-	pushw 0xE7
-	pushw 0xF862
+	pushw 0xe7
+	pushw 0xf862
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 4)
-	pushw 0x6C
-	ld xbc, 0xE6C452
+	pushw 0x6c
+	ld xbc, 0xe6c452
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
 CmptCnct_DrawDiagram2:
-	pushw 0xE7
-	pushw 0xF87C
+	pushw 0xe7
+	pushw 0xf87c
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 4)
-	pushw 0x6C
-	ld xbc, 0xE74132
+	pushw 0x6c
+	ld xbc, 0xe74132
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
 CmptCnct_DrawDiagramDefault:
-	pushw 0xE7
-	pushw 0xF896
+	pushw 0xe7
+	pushw 0xf896
 	push xwa
 	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 4)
-	pushw 0x6C
-	ld xbc, 0xE64772
+	pushw 0x6c
+	ld xbc, 0xe64772
 	ldw de, 0x128
 
 CmptCnctBitmapDrawComplete:
@@ -126,7 +126,7 @@ CmptCnctBitmapDrawComplete:
 	jr MdCmptCnct_Epilogue
 
 CmptCnctInvalidInputReturn:
-	ld xhl, 0x2C00
+	ld xhl, 0x2c00
 	jr MdCmptCnct_Epilogue
 
 CmptCnctBlockingReturn:
@@ -140,15 +140,15 @@ MdCmptCnct_Epilogue:
 MdPcgModeFunc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1E0003F
+	cp xbc, 0x1e0003f
 	jr z, PcgMode_BlockingReturn
-	cp xbc, 0x1E0003E
+	cp xbc, 0x1e0003e
 	jr z, PcgMode_BlockingReturn
-	cp xbc, 0x1E00041
+	cp xbc, 0x1e00041
 	jr z, PcgMode_BlockingReturn
-	cp xbc, 0x1E00040
+	cp xbc, 0x1e00040
 	jr z, PcgMode_InvalidReturn
-	cp xbc, 0x1E00042
+	cp xbc, 0x1e00042
 	jr z, PcgModeGridEventStart
 	lds32 xhl, 0
 	jr MdPcgMode_Epilogue
@@ -164,22 +164,22 @@ PcgModeGridEventStart:
 	jr z, PcgModeDisplayString_Bank1
 	cps de, 0
 	jr nz, PcgModeDefaultCase
-	ld xwa, 0xE7F8B0
+	ld xwa, 0xe7f8b0
 	jr PcgMode_CopyStrEntry
 
 PcgModeDisplayString_Bank1:
-	ld xwa, 0xE7F8BA
+	ld xwa, 0xe7f8ba
 	jr PcgMode_CopyStrEntry
 
 PcgMode_CopyStrCustom:
-	pushw 0xE7
-	pushw 0xF8C4
+	pushw 0xe7
+	pushw 0xf8c4
 	ld xwa, (xwa)
 	push xwa
 	jr PcgMode_CallStrcpy
 
 PcgModeDefaultCase:
-	ld xwa, 0xE7F8CE
+	ld xwa, 0xe7f8ce
 
 PcgMode_CopyStrEntry:
 	push xwa
@@ -205,15 +205,15 @@ MdPcgMode_Epilogue:
 MdDrumTypeFunc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1E0003F
+	cp xbc, 0x1e0003f
 	jr z, DrumType_BlockingReturn
-	cp xbc, 0x1E0003E
+	cp xbc, 0x1e0003e
 	jr z, DrumType_BlockingReturn
-	cp xbc, 0x1E00041
+	cp xbc, 0x1e00041
 	jr z, DrumType_BlockingReturn
-	cp xbc, 0x1E00040
+	cp xbc, 0x1e00040
 	jr z, DrumType_InvalidReturn
-	cp xbc, 0x1E00042
+	cp xbc, 0x1e00042
 	jr z, DrumType_GridEvent
 	lds32 xhl, 0
 	jr MdDrumType_Epilogue
@@ -229,22 +229,22 @@ DrumType_GridEvent:
 	jr z, DrumType_CopyStrBank1
 	cps de, 0
 	jr nz, DrumType_CopyStrDefault
-	ld xwa, 0xE7F8D8
+	ld xwa, 0xe7f8d8
 	jr DrumType_CopyStrEntry
 
 DrumType_CopyStrBank1:
-	ld xwa, 0xE7F8E2
+	ld xwa, 0xe7f8e2
 	jr DrumType_CopyStrEntry
 
 DrumType_CopyStrCustom:
-	pushw 0xE7
-	pushw 0xF8EC
+	pushw 0xe7
+	pushw 0xf8ec
 	ld xwa, (xwa)
 	push xwa
 	jr DrumType_CallStrcpy
 
 DrumType_CopyStrDefault:
-	ld xwa, 0xE7F8F6
+	ld xwa, 0xe7f8f6
 
 DrumType_CopyStrEntry:
 	push xwa
@@ -272,20 +272,20 @@ MdSetupLoadFunc:
 	push xiz
 	ld xhl, xbc
 	ld xiz, xwa
-	ld xiy, 0xE7F900
+	ld xiy, 0xe7f900
 	lda xix, (xsp + 4)
 	ldw bc, 0x8
 	ldirw
-	sub xhl, 0x1E0003E
+	sub xhl, 0x1e0003e
 	cp xhl, 0x0
 	jr lt, SetupLoadInvalidIndex
 	cp xhl, 0x9
 	jr gt, SetupLoadInvalidIndex
 	add xhl, xhl
-	add xhl, 0xE7F928
+	add xhl, 0xe7f928
 	ld hl, (xhl)
 	lda_24 xix, 0xf74d50
-	jp_dri 8, 0x07, 0xF0, 0xEC
+	jp_dri 8, 0x07, 0xf0, 0xec
 SetupLoadOptionJumpTable:
 	ld	xwa, (xde+14)
 	and	xwa, 2

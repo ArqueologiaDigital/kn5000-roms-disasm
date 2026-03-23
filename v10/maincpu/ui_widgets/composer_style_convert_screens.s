@@ -6,105 +6,105 @@ NakaStr_PaintArrowProc_Empty:
 
 ; External label offsets within the binary blob above.
 	.equ Str_TEMPO, NakaStr_PaintArrowProc_Empty + 0x1668
-	.equ NakaLabel_PatternCopy_MemoryLabel, NakaStr_PaintArrowProc_Empty + 0x1EBA
-	.equ NakaLabel_PatternCopy_PatMemLabel, NakaStr_PaintArrowProc_Empty + 0x1EE2
-	.equ NakaNode_PatternCopy_ProgressBar, NakaStr_PaintArrowProc_Empty + 0x1F0C
-	.equ NakaContainer_SeqToComposer_Root, NakaStr_PaintArrowProc_Empty + 0x1F2C
-	.equ Naka0x3E_SeqToComposer_DrmBtn, NakaStr_PaintArrowProc_Empty + 0x1F6C
-	.equ Naka0x3E_SeqToComposer_Ac3Btn, NakaStr_PaintArrowProc_Empty + 0x1F9A
-	.equ Naka0x3E_SeqToComposer_Ac2Btn, NakaStr_PaintArrowProc_Empty + 0x1FC8
-	.equ Naka0x29_SeqToComposer_Scrollbar, NakaStr_PaintArrowProc_Empty + 0x1FF6
+	.equ NakaLabel_PatternCopy_MemoryLabel, NakaStr_PaintArrowProc_Empty + 0x1eba
+	.equ NakaLabel_PatternCopy_PatMemLabel, NakaStr_PaintArrowProc_Empty + 0x1ee2
+	.equ NakaNode_PatternCopy_ProgressBar, NakaStr_PaintArrowProc_Empty + 0x1f0c
+	.equ NakaContainer_SeqToComposer_Root, NakaStr_PaintArrowProc_Empty + 0x1f2c
+	.equ Naka0x3E_SeqToComposer_DrmBtn, NakaStr_PaintArrowProc_Empty + 0x1f6c
+	.equ Naka0x3E_SeqToComposer_Ac3Btn, NakaStr_PaintArrowProc_Empty + 0x1f9a
+	.equ Naka0x3E_SeqToComposer_Ac2Btn, NakaStr_PaintArrowProc_Empty + 0x1fc8
+	.equ Naka0x29_SeqToComposer_Scrollbar, NakaStr_PaintArrowProc_Empty + 0x1ff6
 	.equ Naka0x3E_SeqToComposer_SourceBtn, NakaStr_PaintArrowProc_Empty + 0x2010
-	.equ Naka0x3E_SeqToComposer_DestBtn, NakaStr_PaintArrowProc_Empty + 0x203E
-	.equ Naka0x3E_SeqToComposer_InfoBtn, NakaStr_PaintArrowProc_Empty + 0x206C
-	.equ NakaLabel_SeqToComposer_FirstLast, NakaStr_PaintArrowProc_Empty + 0x209A
-	.equ NakaLabel_SeqToComposer_MeasureLabel, NakaStr_PaintArrowProc_Empty + 0x20C6
-	.equ NakaValue_SeqToComposer_MeasVal1, NakaStr_PaintArrowProc_Empty + 0x20EE
+	.equ Naka0x3E_SeqToComposer_DestBtn, NakaStr_PaintArrowProc_Empty + 0x203e
+	.equ Naka0x3E_SeqToComposer_InfoBtn, NakaStr_PaintArrowProc_Empty + 0x206c
+	.equ NakaLabel_SeqToComposer_FirstLast, NakaStr_PaintArrowProc_Empty + 0x209a
+	.equ NakaLabel_SeqToComposer_MeasureLabel, NakaStr_PaintArrowProc_Empty + 0x20c6
+	.equ NakaValue_SeqToComposer_MeasVal1, NakaStr_PaintArrowProc_Empty + 0x20ee
 	.equ NakaValue_SeqToComposer_MeasVal2, NakaStr_PaintArrowProc_Empty + 0x2108
 	.equ NakaValue_SeqToComposer_MeasVal3, NakaStr_PaintArrowProc_Empty + 0x2122
-	.equ NakaValue_SeqToComposer_MeasVal4, NakaStr_PaintArrowProc_Empty + 0x213C
+	.equ NakaValue_SeqToComposer_MeasVal4, NakaStr_PaintArrowProc_Empty + 0x213c
 	.equ NakaLabel_SeqToComposer_TransLabel, NakaStr_PaintArrowProc_Empty + 0x2156
-	.equ NakaLabel_SeqToComposer_TransPose, NakaStr_PaintArrowProc_Empty + 0x217C
-	.equ NakaLabel_SeqToComposer_SequencerLabel, NakaStr_PaintArrowProc_Empty + 0x21A2
-	.equ NakaGroup_SeqToComposer_SeqGroup, NakaStr_PaintArrowProc_Empty + 0x21CC
-	.equ NakaValue_SeqToComposer_SeqValue, NakaStr_PaintArrowProc_Empty + 0x21E6
+	.equ NakaLabel_SeqToComposer_TransPose, NakaStr_PaintArrowProc_Empty + 0x217c
+	.equ NakaLabel_SeqToComposer_SequencerLabel, NakaStr_PaintArrowProc_Empty + 0x21a2
+	.equ NakaGroup_SeqToComposer_SeqGroup, NakaStr_PaintArrowProc_Empty + 0x21cc
+	.equ NakaValue_SeqToComposer_SeqValue, NakaStr_PaintArrowProc_Empty + 0x21e6
 	.equ NakaLabel_SeqToComposer_FirstLabel, NakaStr_PaintArrowProc_Empty + 0x2200
 	.equ NakaLabel_SeqToComposer_MeasFirstLabel, NakaStr_PaintArrowProc_Empty + 0x2226
-	.equ NakaLabel_SeqToComposer_LastLabel, NakaStr_PaintArrowProc_Empty + 0x224C
+	.equ NakaLabel_SeqToComposer_LastLabel, NakaStr_PaintArrowProc_Empty + 0x224c
 	.equ NakaLabel_SeqToComposer_MeasLastLabel, NakaStr_PaintArrowProc_Empty + 0x2272
 	.equ NakaGroup_SeqToComposer_TransGroup, NakaStr_PaintArrowProc_Empty + 0x2298
-	.equ NakaLabel_SeqToComposer_TrnLabel, NakaStr_PaintArrowProc_Empty + 0x22B2
-	.equ NakaLabel_SeqToComposer_MemLabel, NakaStr_PaintArrowProc_Empty + 0x22D6
-	.equ NakaLabel_SeqToComposer_ComposerMemory, NakaStr_PaintArrowProc_Empty + 0x22FA
-	.equ NakaNode_SeqToComposer_ControlField, NakaStr_PaintArrowProc_Empty + 0x232A
-	.equ NakaNode_SeqToComposer_StyleField, NakaStr_PaintArrowProc_Empty + 0x234E
+	.equ NakaLabel_SeqToComposer_TrnLabel, NakaStr_PaintArrowProc_Empty + 0x22b2
+	.equ NakaLabel_SeqToComposer_MemLabel, NakaStr_PaintArrowProc_Empty + 0x22d6
+	.equ NakaLabel_SeqToComposer_ComposerMemory, NakaStr_PaintArrowProc_Empty + 0x22fa
+	.equ NakaNode_SeqToComposer_ControlField, NakaStr_PaintArrowProc_Empty + 0x232a
+	.equ NakaNode_SeqToComposer_StyleField, NakaStr_PaintArrowProc_Empty + 0x234e
 	.equ NakaNode_SeqToComposer_ProgressBar, NakaStr_PaintArrowProc_Empty + 0x2372
 	.equ NakaNode_SeqToComposer_PartDisplay, NakaStr_PaintArrowProc_Empty + 0x2392
 	.equ Naka0x1F_SeqToComposer_PartSel1, NakaStr_PaintArrowProc_Empty + 0x2410
 	.equ Naka0x1F_SeqToComposer_PartSel2, NakaStr_PaintArrowProc_Empty + 0x2438
 	.equ Naka0x64_SeqToComposer_TabContent, NakaStr_PaintArrowProc_Empty + 0x2460
-	.equ NakaContainer_EasyComposer_Root, NakaStr_PaintArrowProc_Empty + 0x247A
-	.equ Naka0x29_EasyComposer_Scrollbar, NakaStr_PaintArrowProc_Empty + 0x24B2
-	.equ Naka0x3D_EasyComposer_EditBtn, NakaStr_PaintArrowProc_Empty + 0x24CC
+	.equ NakaContainer_EasyComposer_Root, NakaStr_PaintArrowProc_Empty + 0x247a
+	.equ Naka0x29_EasyComposer_Scrollbar, NakaStr_PaintArrowProc_Empty + 0x24b2
+	.equ Naka0x3D_EasyComposer_EditBtn, NakaStr_PaintArrowProc_Empty + 0x24cc
 	.equ Naka0x3E_EasyComposer_DestBtn, NakaStr_PaintArrowProc_Empty + 0x2504
 	.equ Naka0x3E_EasyComposer_SourceBtn, NakaStr_PaintArrowProc_Empty + 0x2532
 	.equ Naka0x3E_EasyComposer_InfoBtn, NakaStr_PaintArrowProc_Empty + 0x2560
 	.equ NakaLabel_EasyComposer_CompMemLabel, NakaStr_PaintArrowProc_Empty + 0x2590
-	.equ NakaLabel_EasyComposer_MemField, NakaStr_PaintArrowProc_Empty + 0x25C2
-	.equ Naka0x11_EasyComposer_ListFrame, NakaStr_PaintArrowProc_Empty + 0x25E6
+	.equ NakaLabel_EasyComposer_MemField, NakaStr_PaintArrowProc_Empty + 0x25c2
+	.equ Naka0x11_EasyComposer_ListFrame, NakaStr_PaintArrowProc_Empty + 0x25e6
 	.equ NakaNode_EasyComposer_StatusField, NakaStr_PaintArrowProc_Empty + 0x2602
 	.equ NakaNode_EasyComposer_PartDisplay, NakaStr_PaintArrowProc_Empty + 0x2626
-	.equ Naka0x22_EasyComposer_PartSel1, NakaStr_PaintArrowProc_Empty + 0x26D6
+	.equ Naka0x22_EasyComposer_PartSel1, NakaStr_PaintArrowProc_Empty + 0x26d6
 	.equ Naka0x22_EasyComposer_PartSel2, NakaStr_PaintArrowProc_Empty + 0x2700
-	.equ Naka0x1F_EasyComposer_PartSel3, NakaStr_PaintArrowProc_Empty + 0x272A
+	.equ Naka0x1F_EasyComposer_PartSel3, NakaStr_PaintArrowProc_Empty + 0x272a
 	.equ NakaContainer_BendRange_Root, NakaStr_PaintArrowProc_Empty + 0x2752
-	.equ Naka0x22_BendRange_PartSelector, NakaStr_PaintArrowProc_Empty + 0x279E
-	.equ Naka0x1A_BendRange_RangeControl, NakaStr_PaintArrowProc_Empty + 0x27C8
+	.equ Naka0x22_BendRange_PartSelector, NakaStr_PaintArrowProc_Empty + 0x279e
+	.equ Naka0x1A_BendRange_RangeControl, NakaStr_PaintArrowProc_Empty + 0x27c8
 	.equ NakaLabel_BendRange_ValueLabel, NakaStr_PaintArrowProc_Empty + 0x2816
-	.equ NakaContainer_ModeSelect_Root, NakaStr_PaintArrowProc_Empty + 0x283C
+	.equ NakaContainer_ModeSelect_Root, NakaStr_PaintArrowProc_Empty + 0x283c
 	.equ NakaLabel_ModeSelect_IntroFillIns, NakaStr_PaintArrowProc_Empty + 0x2872
-	.equ NakaLabel_ModeSelect_ForEachPattern, NakaStr_PaintArrowProc_Empty + 0x28B0
-	.equ NakaLabel_ModeSelect_BeCopied, NakaStr_PaintArrowProc_Empty + 0x28EE
+	.equ NakaLabel_ModeSelect_ForEachPattern, NakaStr_PaintArrowProc_Empty + 0x28b0
+	.equ NakaLabel_ModeSelect_BeCopied, NakaStr_PaintArrowProc_Empty + 0x28ee
 	.equ NakaLabel_ModeSelect_MemAssigned, NakaStr_PaintArrowProc_Empty + 0x2932
 	.equ NakaLabel_ModeSelect_ToEachIntro, NakaStr_PaintArrowProc_Empty + 0x2970
-	.equ NakaLabel_ModeSelect_FillInEnding, NakaStr_PaintArrowProc_Empty + 0x29B0
-	.equ NakaLabel_ModeSelect_SoYouCanCreate, NakaStr_PaintArrowProc_Empty + 0x29F0
-	.equ NakaLabel_ModeSelect_IntroFillEnding, NakaStr_PaintArrowProc_Empty + 0x2A2C
-	.equ NakaNode_ModeSelect_NormalMode, NakaStr_PaintArrowProc_Empty + 0x2A66
-	.equ NakaNode_ModeSelect_ExpandMode, NakaStr_PaintArrowProc_Empty + 0x2AA8
-	.equ NakaNode_CustomCopy_RootOuter, NakaStr_PaintArrowProc_Empty + 0x2AEA
-	.equ NakaLabel_CustomCopy_FromLabel, NakaStr_PaintArrowProc_Empty + 0x2B20
-	.equ Str_FROM, NakaStr_PaintArrowProc_Empty + 0x2B40
-	.equ Naka0x11_CustomCopy_FromFrame, NakaStr_PaintArrowProc_Empty + 0x2B46
-	.equ NakaNode_CustomCopy_FromField, NakaStr_PaintArrowProc_Empty + 0x2B62
-	.equ NakaNode_CustomCopy_ToFieldTop, NakaStr_PaintArrowProc_Empty + 0x2B88
-	.equ NakaLabel_CustomCopy_ToLabel, NakaStr_PaintArrowProc_Empty + 0x2BAE
-	.equ Naka0x11_CustomCopy_ToFrame, NakaStr_PaintArrowProc_Empty + 0x2BD2
-	.equ Naka0x29_CustomCopy_Scrollbar, NakaStr_PaintArrowProc_Empty + 0x2BEE
-	.equ Naka0x3F_CustomCopy_Selector1, NakaStr_PaintArrowProc_Empty + 0x2C08
-	.equ Naka0x3F_CustomCopy_Selector2, NakaStr_PaintArrowProc_Empty + 0x2C38
-	.equ Naka0x3F_CustomCopy_Selector3, NakaStr_PaintArrowProc_Empty + 0x2C70
-	.equ NakaNode_CustomCopy_DestField, NakaStr_PaintArrowProc_Empty + 0x2CAA
-	.equ Naka0x3E_CustomCopy_InfoBtn, NakaStr_PaintArrowProc_Empty + 0x2CD0
-	.equ NakaNode_CustomCopy_SrcPatternField, NakaStr_PaintArrowProc_Empty + 0x2CFE
-	.equ NakaNode_CustomCopy_DstPatternField, NakaStr_PaintArrowProc_Empty + 0x2D24
-	.equ NakaNode_CustomCopy_MemoryField, NakaStr_PaintArrowProc_Empty + 0x2D4A
-	.equ NakaNode_CustomCopy_ProgressBar, NakaStr_PaintArrowProc_Empty + 0x2D70
-	.equ Naka0x35_CustomCopy_SongBar, NakaStr_PaintArrowProc_Empty + 0x2D90
-	.equ Naka0x11_CustomCopy_PresetFrame, NakaStr_PaintArrowProc_Empty + 0x2DB4
-	.equ NakaList_CustomCopy_PresetList, NakaStr_PaintArrowProc_Empty + 0x2DD0
-	.equ NakaList_CustomCopy_GroupList, NakaStr_PaintArrowProc_Empty + 0x2DFA
-	.equ NakaList_CustomCopy_RhythmList, NakaStr_PaintArrowProc_Empty + 0x2E24
-	.equ NakaNode_CustomCopy_RhythmStatus, NakaStr_PaintArrowProc_Empty + 0x2E4E
-	.equ Naka0x3E_CustomCopy_ExecuteBtn, NakaStr_PaintArrowProc_Empty + 0x2E72
-	.equ Naka0x3E_CustomCopy_AbortBtn1, NakaStr_PaintArrowProc_Empty + 0x2EA6
-	.equ Naka0x35_CustomCopy_DestSongBar, NakaStr_PaintArrowProc_Empty + 0x2ED8
-	.equ Naka0x11_CustomCopy_DestFrame, NakaStr_PaintArrowProc_Empty + 0x2EFC
-	.equ NakaList_CustomCopy_DestPresetList, NakaStr_PaintArrowProc_Empty + 0x2F18
-	.equ NakaList_CustomCopy_DestGroupList, NakaStr_PaintArrowProc_Empty + 0x2F42
-	.equ NakaList_CustomCopy_DestRhythmList, NakaStr_PaintArrowProc_Empty + 0x2F6C
-	.equ NakaNode_CustomCopy_DestRhythmStatus, NakaStr_PaintArrowProc_Empty + 0x2F96
-	.equ Naka0x3E_CustomCopy_ExecuteBtn2, NakaStr_PaintArrowProc_Empty + 0x2FBA
-	.equ Naka0x3E_CustomCopy_AbortBtn2, NakaStr_PaintArrowProc_Empty + 0x2FEE
+	.equ NakaLabel_ModeSelect_FillInEnding, NakaStr_PaintArrowProc_Empty + 0x29b0
+	.equ NakaLabel_ModeSelect_SoYouCanCreate, NakaStr_PaintArrowProc_Empty + 0x29f0
+	.equ NakaLabel_ModeSelect_IntroFillEnding, NakaStr_PaintArrowProc_Empty + 0x2a2c
+	.equ NakaNode_ModeSelect_NormalMode, NakaStr_PaintArrowProc_Empty + 0x2a66
+	.equ NakaNode_ModeSelect_ExpandMode, NakaStr_PaintArrowProc_Empty + 0x2aa8
+	.equ NakaNode_CustomCopy_RootOuter, NakaStr_PaintArrowProc_Empty + 0x2aea
+	.equ NakaLabel_CustomCopy_FromLabel, NakaStr_PaintArrowProc_Empty + 0x2b20
+	.equ Str_FROM, NakaStr_PaintArrowProc_Empty + 0x2b40
+	.equ Naka0x11_CustomCopy_FromFrame, NakaStr_PaintArrowProc_Empty + 0x2b46
+	.equ NakaNode_CustomCopy_FromField, NakaStr_PaintArrowProc_Empty + 0x2b62
+	.equ NakaNode_CustomCopy_ToFieldTop, NakaStr_PaintArrowProc_Empty + 0x2b88
+	.equ NakaLabel_CustomCopy_ToLabel, NakaStr_PaintArrowProc_Empty + 0x2bae
+	.equ Naka0x11_CustomCopy_ToFrame, NakaStr_PaintArrowProc_Empty + 0x2bd2
+	.equ Naka0x29_CustomCopy_Scrollbar, NakaStr_PaintArrowProc_Empty + 0x2bee
+	.equ Naka0x3F_CustomCopy_Selector1, NakaStr_PaintArrowProc_Empty + 0x2c08
+	.equ Naka0x3F_CustomCopy_Selector2, NakaStr_PaintArrowProc_Empty + 0x2c38
+	.equ Naka0x3F_CustomCopy_Selector3, NakaStr_PaintArrowProc_Empty + 0x2c70
+	.equ NakaNode_CustomCopy_DestField, NakaStr_PaintArrowProc_Empty + 0x2caa
+	.equ Naka0x3E_CustomCopy_InfoBtn, NakaStr_PaintArrowProc_Empty + 0x2cd0
+	.equ NakaNode_CustomCopy_SrcPatternField, NakaStr_PaintArrowProc_Empty + 0x2cfe
+	.equ NakaNode_CustomCopy_DstPatternField, NakaStr_PaintArrowProc_Empty + 0x2d24
+	.equ NakaNode_CustomCopy_MemoryField, NakaStr_PaintArrowProc_Empty + 0x2d4a
+	.equ NakaNode_CustomCopy_ProgressBar, NakaStr_PaintArrowProc_Empty + 0x2d70
+	.equ Naka0x35_CustomCopy_SongBar, NakaStr_PaintArrowProc_Empty + 0x2d90
+	.equ Naka0x11_CustomCopy_PresetFrame, NakaStr_PaintArrowProc_Empty + 0x2db4
+	.equ NakaList_CustomCopy_PresetList, NakaStr_PaintArrowProc_Empty + 0x2dd0
+	.equ NakaList_CustomCopy_GroupList, NakaStr_PaintArrowProc_Empty + 0x2dfa
+	.equ NakaList_CustomCopy_RhythmList, NakaStr_PaintArrowProc_Empty + 0x2e24
+	.equ NakaNode_CustomCopy_RhythmStatus, NakaStr_PaintArrowProc_Empty + 0x2e4e
+	.equ Naka0x3E_CustomCopy_ExecuteBtn, NakaStr_PaintArrowProc_Empty + 0x2e72
+	.equ Naka0x3E_CustomCopy_AbortBtn1, NakaStr_PaintArrowProc_Empty + 0x2ea6
+	.equ Naka0x35_CustomCopy_DestSongBar, NakaStr_PaintArrowProc_Empty + 0x2ed8
+	.equ Naka0x11_CustomCopy_DestFrame, NakaStr_PaintArrowProc_Empty + 0x2efc
+	.equ NakaList_CustomCopy_DestPresetList, NakaStr_PaintArrowProc_Empty + 0x2f18
+	.equ NakaList_CustomCopy_DestGroupList, NakaStr_PaintArrowProc_Empty + 0x2f42
+	.equ NakaList_CustomCopy_DestRhythmList, NakaStr_PaintArrowProc_Empty + 0x2f6c
+	.equ NakaNode_CustomCopy_DestRhythmStatus, NakaStr_PaintArrowProc_Empty + 0x2f96
+	.equ Naka0x3E_CustomCopy_ExecuteBtn2, NakaStr_PaintArrowProc_Empty + 0x2fba
+	.equ Naka0x3E_CustomCopy_AbortBtn2, NakaStr_PaintArrowProc_Empty + 0x2fee
 	.equ NakaContainer_CustomCopy_FinalRoot, NakaStr_PaintArrowProc_Empty + 0x3020
-	.equ String_MSP_BANK_SELECT, NakaStr_PaintArrowProc_Empty + 0x304A
+	.equ String_MSP_BANK_SELECT, NakaStr_PaintArrowProc_Empty + 0x304a

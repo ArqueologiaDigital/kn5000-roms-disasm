@@ -79,10 +79,10 @@ MidiPkt_BuildDirect:
 
 ; --- MIDI_BuildControlPacket: Construct a 4-byte MIDI control packet ---
 ; Two entry points building MIDI packets from a parameter structure (XIZ):
-; 1) Full packet: reads MIDI map value from table at 0xBCCC (via 0xFD6EB6),
+; 1) Full packet: reads MIDI map value from table at 0xbccc (via 0xfd6eb6),
 ;    adjusts by subtracting 0x20, ORs with (xiz+6) for status byte,
 ;    copies controller number from *(xiz+7), computes data byte via
-;    lookup (0xFD822D), copies channel from (xiz+8).
+;    lookup (0xfd822d), copies channel from (xiz+8).
 ; 2) Simple packet: same status byte construction but data byte 2 = 0.
 ; Output: 4-byte packet pointer + source struct pointer stored to (XWA).
 MidiPkt_BuildControl:
@@ -342,9 +342,9 @@ MidiPkt_ProcessEventQueue_Loop:
 	inc 4, xsp
 	stda32 48418, xhl
 	ldada xwa, 48418
-	cp (xwa), 0xFF
+	cp (xwa), 0xff
 	jr z, MidiPkt_ProcessEventQueue_Done
-	cp (xwa), 0xC0
+	cp (xwa), 0xc0
 	jr nc, MidiPkt_ProcessEventQueue_Next
 	ld c, (xwa)
 	extz bc
@@ -371,7 +371,7 @@ MidiPkt_DispatchViaTable_4D6A:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	ld xbc, 0xEE4D6A
+	ld xbc, 0xee4d6a
 	calr MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -395,7 +395,7 @@ MidiPkt_DispatchViaTable_4D82:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	ld xbc, 0xEE4D82
+	ld xbc, 0xee4d82
 	calr MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -419,7 +419,7 @@ MidiPkt_DispatchViaTable_4D8E:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	ld xbc, 0xEE4D8E
+	ld xbc, 0xee4d8e
 	calr MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -443,7 +443,7 @@ MidiPkt_DispatchViaTable_4D9A:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	ld xbc, 0xEE4D9A
+	ld xbc, 0xee4d9a
 	calr MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -467,7 +467,7 @@ MidiPkt_DispatchViaTable_4DA6:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	ld xbc, 0xEE4DA6
+	ld xbc, 0xee4da6
 	calr MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -491,7 +491,7 @@ MidiPkt_DispatchViaTable_4DAE:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	ld xbc, 0xEE4DAE
+	ld xbc, 0xee4dae
 	calr MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -506,7 +506,7 @@ MidiPkt_DispatchViaTable_4DAE:
 	add xbc, xde
 	ld xhl, (xbc)
 	call (xhl)
-	cp (xiz + 1), 0xB
+	cp (xiz + 1), 0xb
 	jr nz, MidiPkt_DispatchViaTable_4DAE_Done
 	lda xde, (xiz + 3)
 	ld xwa, (xsp + 8)
@@ -518,7 +518,7 @@ MidiPkt_DispatchViaTable_4DAE:
 	cps a, 0
 	jr z, MidiPkt_DispatchViaTable_4DAE_Done
 	ld xwa, xiz
-	ld xbc, 0xEE4DAE
+	ld xbc, 0xee4dae
 	calr MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -546,7 +546,7 @@ MidiPkt_DispatchSpecialType:
 	ld a, (xiz + 1)
 	cp a, 0x11
 	jr nz, MidiPkt_DispatchSpecialType_Type10
-	ld xwa, 0xEE35D0
+	ld xwa, 0xee35d0
 	lds bc, 6
 	call ArpQueue_Enqueue
 	ldda32 xwa, 48220
@@ -555,7 +555,7 @@ MidiPkt_DispatchSpecialType:
 MidiPkt_DispatchSpecialType_Type10:
 	cp a, 0x10
 	jr nz, MidiPkt_DispatchSpecialType_Default
-	ld xwa, 0xEE35D6
+	ld xwa, 0xee35d6
 	lds bc, 6
 	call ArpQueue_Enqueue
 	ldda32 xwa, 48220
@@ -567,7 +567,7 @@ MidiPkt_DispatchSpecialType_SendAndUpdate:
 
 MidiPkt_DispatchSpecialType_Default:
 	ld xwa, xiz
-	ld xbc, 0xEE4DC6
+	ld xbc, 0xee4dc6
 	calr MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -593,7 +593,7 @@ MidiPkt_MatchParamInTable:
 	lda_24 xix, 0xee49e8
 
 MidiPkt_MatchParamInTable_Loop:
-	ld_spil XHL, 0xEA
+	ld_spil XHL, 0xea
 	cp xix, xhl
 	ret z
 	ld c, (xhl + 7)
@@ -611,13 +611,13 @@ MidiPkt_EnqueueControl_3354:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld xiy, 0xEE334C
+	ld xiy, 0xee334c
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
 	ld xwa, (xiz + 4)
 	calr MidiPkt_CheckGateCondition
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr z, MidiPkt_EnqueueControl_3354_Return
 	lda_24 xbc, 0xee49e8
 	ld xwa, (xiz + 4)
@@ -627,7 +627,7 @@ MidiPkt_EnqueueControl_3354:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jr z, MidiPkt_EnqueueControl_3354_Return
-	ld xwa, 0xEE35DC
+	ld xwa, 0xee35dc
 	lds bc, 6
 	call ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -639,14 +639,14 @@ MidiPkt_EnqueueControl_3354:
 	and a, (xbc + 2)
 	ld c, a
 	ld a, (xde + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, MidiPkt_EnqueueControl_3354_ShiftBits
 	srla c
 
 MidiPkt_EnqueueControl_3354_ShiftBits:
 	lda xwa, (xsp + 4)
 	ld (xwa), c
-	and c, 0xF
+	and c, 0xf
 	ld (xwa + 1), c
 	ld c, (xwa)
 	srl c, 4
@@ -723,13 +723,13 @@ MidiPkt_EnqueueControl_335C:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld xiy, 0xEE3354
+	ld xiy, 0xee3354
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
 	ld xwa, (xiz + 4)
 	calr MidiPkt_CheckGateCondition
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr z, MidiPkt_EnqueueControl_335C_Return
 	lda_24 xbc, 0xee49e8
 	ld xwa, (xiz + 4)
@@ -739,7 +739,7 @@ MidiPkt_EnqueueControl_335C:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jr z, MidiPkt_EnqueueControl_335C_Return
-	ld xwa, 0xEE35DC
+	ld xwa, 0xee35dc
 	lds bc, 6
 	call ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -752,11 +752,11 @@ MidiPkt_EnqueueControl_335C:
 	ld c, (xbc + 8)
 	and c, (xde + 2)
 	jr z, MidiPkt_EnqueueControl_335C_ZeroData
-	ld (xwa), 0x7F
+	ld (xwa), 0x7f
 
 MidiPkt_EnqueueControl_335C_ZeroData:
 	ld c, (xwa)
-	and c, 0xF
+	and c, 0xf
 	ld (xwa + 1), c
 	ld c, (xwa)
 	srl c, 4
@@ -777,14 +777,14 @@ MidiPkt_EnqueueControl_3358:
 	dec 6, xsp
 	push xiz
 	ld xiz, xwa
-	ld xiy, 0xEE3358
+	ld xiy, 0xee3358
 	lda xix, (xsp + 4)
 	lds bc, 2
 	ldirw
 	ldi85
 	ld xwa, (xiz + 4)
 	calr MidiPkt_CheckGateCondition
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jrl z, MidiPkt_EnqueueControl_3358_Return
 	lda_24 xbc, 0xee49e8
 	ld xwa, (xiz + 4)
@@ -794,7 +794,7 @@ MidiPkt_EnqueueControl_3358:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jrl z, MidiPkt_EnqueueControl_3358_Return
-	ld xwa, 0xEE35DC
+	ld xwa, 0xee35dc
 	lds bc, 6
 	call ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -805,15 +805,15 @@ MidiPkt_EnqueueControl_3358:
 	ld a, (xwa)
 	extz wa
 	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xEC, 0xE0
-	cp xwa, 0xFFFFFFFF
+	ld_sril3 XWA, 0x07, 0xec, 0xe0
+	cp xwa, 0xffffffff
 	jr z, MidiPkt_EnqueueControl_3358_Return
 	lda xwa, (xsp + 4)
 	ld xbc, (xiz)
 	ld c, (xbc)
 	extz bc
 	sla bc, 2
-	ld_sril3 XBC, 0x07, 0xEC, 0xE4
+	ld_sril3 XBC, 0x07, 0xec, 0xe4
 	ld c, (xbc)
 	ld (xwa), c
 	lda xde, (xwa + 2)
@@ -821,7 +821,7 @@ MidiPkt_EnqueueControl_3358:
 	ld c, (xbc)
 	extz bc
 	sla bc, 2
-	ld_sril3 XBC, 0x07, 0xEC, 0xE4
+	ld_sril3 XBC, 0x07, 0xec, 0xe4
 	ld c, (xbc + 1)
 	and c, 0x7
 	ld (xde), c
@@ -836,13 +836,13 @@ MidiPkt_EnqueueControl_3358:
 
 MidiPkt_EnqueueControl_3358_SplitNibbles:
 	ld c, (xwa)
-	and c, 0xF
+	and c, 0xf
 	ld (xwa + 1), c
 	ld c, (xwa)
 	srl c, 4
 	ld (xwa), c
 	ld c, (xde)
-	and c, 0xF
+	and c, 0xf
 	ld (xwa + 3), c
 	ld c, (xde)
 	srl c, 4
@@ -863,7 +863,7 @@ MidiPkt_EnqueueControl_335E:
 	lda xsp, (xsp - 14)
 	push xiz
 	ld xiz, xwa
-	ld xiy, 0xEE335E
+	ld xiy, 0xee335e
 	lda xix, (xsp + 4)
 	lds bc, 2
 	ldirw
@@ -873,9 +873,9 @@ MidiPkt_EnqueueControl_335E:
 	lda_24 xwa, 0xee4aea
 	ld (xbc + 4), xwa
 	calr MidiPkt_CheckGateCondition
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr z, MidiPkt_EnqueueControl_335E_Return
-	ld xwa, 0xEE35DC
+	ld xwa, 0xee35dc
 	lds bc, 6
 	call ArpQueue_Enqueue
 	ld xwa, (xsp + 14)
@@ -898,13 +898,13 @@ MidiPkt_EnqueueControl_335E:
 
 MidiPkt_EnqueueControl_335E_SplitNibbles:
 	ld c, (xwa)
-	and c, 0xF
+	and c, 0xf
 	ld (xwa + 1), c
 	ld c, (xwa)
 	srl c, 4
 	ld (xwa), c
 	ld c, (xde)
-	and c, 0xF
+	and c, 0xf
 	ld (xwa + 3), c
 	ld c, (xde)
 	srl c, 4
@@ -925,20 +925,20 @@ MidiPkt_EnqueueControl_3364:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld xiy, 0xEE3364
+	ld xiy, 0xee3364
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
 	ld xwa, (xiz + 4)
 	calr MidiPkt_CheckGateCondition
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr z, MidiPkt_EnqueueControl_3364_Return
 	ld xbc, (xiz)
 	ld xwa, (xiz + 4)
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jr z, MidiPkt_EnqueueControl_3364_Return
-	ld xwa, 0xEE35DC
+	ld xwa, 0xee35dc
 	lds bc, 6
 	call ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -953,7 +953,7 @@ MidiPkt_EnqueueControl_3364:
 	ldda8 c, 64609
 	and c, 0x30
 	ld a, (xde + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, MidiPkt_EnqueueControl_3364_NoShift
 	srla c
 
@@ -964,7 +964,7 @@ MidiPkt_EnqueueControl_3364_NoShift:
 MidiPkt_EnqueueControl_3364_FormatData:
 	lda xwa, (xsp + 4)
 	ld c, (xwa)
-	and c, 0xF
+	and c, 0xf
 	ld (xwa + 1), c
 	ld c, (xwa)
 	srl c, 4
@@ -985,27 +985,27 @@ MidiPkt_EnqueueControl_3368:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld xiy, 0xEE3368
+	ld xiy, 0xee3368
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
 	ld xwa, (xiz + 4)
 	calr MidiPkt_CheckGateCondition
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jrl z, MidiPkt_EnqueueControl_3368_Return
 	ld xbc, (xiz)
 	ld xwa, (xiz + 4)
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jrl z, MidiPkt_EnqueueControl_3368_Return
-	ld xwa, 0xEE35DC
+	ld xwa, 0xee35dc
 	lds bc, 6
 	call ArpQueue_Enqueue
 	ldda8 a, 64921
 	and a, 0x1
 	cps a, 1
 	jr nz, MidiPkt_EnqueueControl_3368_NoPedal
-	ld xwa, 0xEE4AC2
+	ld xwa, 0xee4ac2
 	lds bc, 6
 	call ArpQueue_Enqueue
 	ld xbc, (xiz)
@@ -1014,7 +1014,7 @@ MidiPkt_EnqueueControl_3368:
 	and a, (xbc + 2)
 	ld c, a
 	ld a, (xde + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, MidiPkt_EnqueueControl_3368_PedalNoShift
 	srla c
 
@@ -1032,7 +1032,7 @@ MidiPkt_EnqueueControl_3368_NoPedal:
 	and a, (xbc + 2)
 	ld c, a
 	ld a, (xde + 11)
-	and a, 0xF
+	and a, 0xf
 	jr z, MidiPkt_EnqueueControl_3368_FormatData
 	srla c
 
@@ -1040,7 +1040,7 @@ MidiPkt_EnqueueControl_3368_FormatData:
 	ld (xsp + 4), c
 	lda xwa, (xsp + 4)
 	ld c, (xwa)
-	and c, 0xF
+	and c, 0xf
 	ld (xwa + 1), c
 	ld c, (xwa)
 	srl c, 4
@@ -1131,7 +1131,7 @@ MidiPkt_CheckGateCondition:
 	extz bc
 	muls bc, 0x6
 	lda_24 xde, 0xee4df2
-	st_dri3b B, 0x07, 0xE8, 0xE4
+	st_dri3b B, 0x07, 0xe8, 0xe4
 	ld xhl, (xde)
 	ld c, (xde + 4)
 	and c, (xhl)
@@ -1145,7 +1145,7 @@ MidiPkt_CheckGateCondition_Second:
 	extz wa
 	muls wa, 0x6
 	lda_24 xbc, 0xee4e04
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	st_dri3b A, 0x07, 0xe4, 0xe0
 	ld xde, (xbc)
 	ld a, (xbc + 4)
 	and a, (xde)
@@ -1153,7 +1153,7 @@ MidiPkt_CheckGateCondition_Second:
 	jr z, MidiPkt_CheckGateCondition_Pass
 
 MidiPkt_CheckGateCondition_Blocked:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ret
 
 MidiPkt_CheckGateCondition_Pass:
@@ -1165,7 +1165,7 @@ MidiPkt_DispatchViaTable_4DCE:
 	push xiz
 	ld xiz, (xsp + 16)
 	ld xwa, xiz
-	ld xbc, 0xEE4DCE
+	ld xbc, 0xee4dce
 	calr MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -1236,13 +1236,13 @@ MidiPkt_SendBankSelect:
 	ldda32 xwa, 48300
 	lds bc, 5
 	call SeqData_ReadFieldByIndex
-	cp l, 0x2B
+	cp l, 0x2b
 	jr z, MidiPkt_SendBankSelect_Send
-	cp l, 0x2C
+	cp l, 0x2c
 	ret nz
 
 MidiPkt_SendBankSelect_Send:
-	ld xwa, 0xEE35AC
+	ld xwa, 0xee35ac
 	lds bc, 5
 	call ArpQueue_Enqueue
 	ldda32 xwa, 48220

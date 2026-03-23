@@ -5,14 +5,14 @@
 // ReverbEqPresets, Reverb, Equalizer, DspEffect, AcousticIllusion,
 // LeftHold, TechniChord), SoundEdit widget, and associated string data.
 
-	.short 0xFFFF, 0x2
-	.short 0xFFFF, 0x8
-	.short 0xF5	; X-left coord of the button
+	.short 0xffff, 0x2
+	.short 0xffff, 0x8
+	.short 0xf5	; X-left coord of the button
 	.short 0x6	; y-top coord of the button
-	.short 0x13B, 0x17	; x-right coord of the button
-	.short 0xF3, 0xC1	; y-botton coord
-	.short 0xFFFF
-	.long 0x3E664	; <-- the LSByte here affects the page number
+	.short 0x13b, 0x17	; x-right coord of the button
+	.short 0xf3, 0xc1	; y-botton coord
+	.short 0xffff
+	.long 0x3e664	; <-- the LSByte here affects the page number
 	.short 0x1
 	.short 0x2	; total number of pages
 NakaWidget_SoundMenu_ScrollBar1:
@@ -59,17 +59,17 @@ NakaWidget_SoundMenu_PageControl:
 NakaMenuItem_PartSetting:
 	naka_header NAKA_TYPE_MENU_ITEM
 	.byte 0x06, 0x00
-	.short 0xFFFF, 0x8
-	.short 0xFFFF, 0x8
-	.short 0x8, 0x1E
-	.short 0x9C, 0x37
-	.short 0xF7, 0x0
-	.short 0xFFFF, 0x0
-	.short 0x0, 0xFF
+	.short 0xffff, 0x8
+	.short 0xffff, 0x8
+	.short 0x8, 0x1e
+	.short 0x9c, 0x37
+	.short 0xf7, 0x0
+	.short 0xffff, 0x0
+	.short 0x0, 0xff
 	.short 0x0, 0x88
-	.long 0x3E66E
+	.long 0x3e66e
 	.long MenuStr_PartSetting
-	.short 0x3, 0x1A0
+	.short 0x3, 0x1a0
 	.long 0x2
 
 MenuStr_PartSetting:	aligned_string "PART SETTING"
@@ -104,24 +104,24 @@ MenuStr_PartSetting:	aligned_string "PART SETTING"
 NakaMenuItem_Mixer:
 	.byte 0x1d, 0x00
 	.byte 0x60, 0x01, 0x06, 0x00
-	.short 0xFFFF, 0x9
+	.short 0xffff, 0x9
 	.short 0x7, 0x8
 	.short 0x8	; X coord of menu item
 	.short 0x48	; <== affects Y coord of the menu item's icon
 			;     and the text seems to disappear
-	.short 0x9C
+	.short 0x9c
 	.short 0x61	; Y coord of menu item
-	.short 0xF7	; bg color of menu item (00F7 means transparent)
+	.short 0xf7	; bg color of menu item (00F7 means transparent)
 	.short 0x0
-	.short 0xFFFF, 0x0
-	.short 0x0, 0xFF
+	.short 0xffff, 0x0
+	.short 0x0, 0xff
 	.short 0x0
 	.short 0x89	; <= affects positioning of label and icon
 			;    with mirror and offset on the x axis
 
-	.long 0x3E670
+	.long 0x3e670
 	.long MenuStr_Mixer
-	.short 0x8, 0x1A0
+	.short 0x8, 0x1a0
 	.long 0x7	; <== Select Icon (0 = no-icon, 1=worm, 2=... etc)
 
 MenuStr_Mixer:	aligned_string "MIXER"
@@ -148,7 +148,7 @@ NakaMenuItem_KeyScaling:
 	.byte 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00
 	.byte 0x00, 0x00, 0x8c, 0x00
-	.long 0x3E674
+	.long 0x3e674
 	.long MenuStr_KeyScaling
 	.byte 0x05, 0x00, 0xa0, 0x01
 	.byte 0x84, 0x00, 0x00, 0x00
@@ -164,7 +164,7 @@ NakaMenuItem_ReverbEqPresets:
 	.byte 0xf7, 0x00, 0x00, 0x00
 	.byte 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
 	.byte 0xff, 0x00, 0x00, 0x00, 0x08, 0x00
-	.long 0x3E676
+	.long 0x3e676
 	.long MenuStr_ReverbEqPresets
 	.byte 0x09, 0x00
 	.byte 0xa0, 0x01, 0x91, 0x00, 0x00, 0x00
@@ -207,8 +207,8 @@ NakaMenuItem_AcousticIllusion:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	ei	0
-	.byte 0xFF			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
+	.byte 0xff			; padding
 	rcf
 	.byte 0x00			; padding
 	ret
@@ -223,19 +223,19 @@ NakaMenuItem_AcousticIllusion:
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
+	.byte 0xff			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	incf
 	.byte 0x00			; padding
-	.long 0x3E67E
+	.long 0x3e67e
 	.long MenuStr_AcousticIllusion
 	.byte 0x0e, 0x00, 0xa0, 0x01, 0x92, 0x00, 0x00, 0x00
 
@@ -258,7 +258,7 @@ NakaWidget_SoundEdit:
 	.byte 0xff, 0x00
 	.byte 0x00, 0x00
 	.byte 0x8a, 0x00
-	.long 0x3E680
+	.long 0x3e680
 	.long MenuStr_SoundEdit
 	.byte 0x03, 0x00, 0x80, 0x01, 0x0f, 0x00, 0x00, 0x00
 
@@ -286,10 +286,10 @@ NakaMenuItem_TechniChord:
 	naka_header NAKA_TYPE_MENU_ITEM
 	scf
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
-	.byte 0xFF			; padding
-	.byte 0xFF			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
+	.byte 0xff			; padding
+	.byte 0xff			; padding
+	.byte 0xff			; padding
 	ccf
 	.byte 0x00			; padding
 	ldio	0, 163
@@ -300,18 +300,18 @@ NakaMenuItem_TechniChord:
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
+	.byte 0xff			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x0a, 0x00
-	.long 0x3E68C
+	.long 0x3e68c
 	.long NakaInst_TECHNI_CHORD
 	.byte 0x0d, 0x00
 	.byte 0xa0, 0x01, 0x18, 0x00, 0x00, 0x00

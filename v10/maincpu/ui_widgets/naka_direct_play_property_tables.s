@@ -115,7 +115,7 @@ NakaPropStr_TextLabel2_Font:
 	jr	z, 0x6f
 	jr	nz, 116
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	.byte 0xd4, 0x08, 0xe2
 	.byte 0x00			; padding
 

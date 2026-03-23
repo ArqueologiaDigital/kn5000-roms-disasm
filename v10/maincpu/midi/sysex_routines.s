@@ -30,15 +30,15 @@
 
 ExcSendFunc:
 	ld xhl, xde
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr nz, ExcSendFunc_InvalidParam_Exit
 	ld xwa, 0x570003
-	ld xbc, 0x1E00090
+	ld xbc, 0x1e00090
 	lds32 xde, 0
 	call SendEvent
 	exts xhl
 	ld xwa, 0x1430001
-	ld xbc, 0x1E30001
+	ld xbc, 0x1e30001
 	ld xde, xhl
 	call MainFuncCall
 
@@ -47,14 +47,14 @@ ExcSendFunc_InvalidParam_Exit:
 	ret
 
 MainExcSend:
-	cp xbc, 0x1E30001
+	cp xbc, 0x1e30001
 	jr nz, MainExcSend_UnexpectedMessageType_Exit
 	cp xde, 0x6
 	jr c, MainExcSend_ClampIndexToRange
 	lds32 xde, 0
 
 MainExcSend_ClampIndexToRange:
-	ld xwa, 0xE7FD84
+	ld xwa, 0xe7fd84
 	add xwa, xde
 	ld a, (xwa)
 	call SysEx_InitiateSend
@@ -64,16 +64,16 @@ MainExcSend_UnexpectedMessageType_Exit:
 	ret
 
 ExcDotFunc:
-	sub xbc, 0x1E0003E
+	sub xbc, 0x1e0003e
 	cp xbc, 0x0
 	jr lt, ExcDotFunc_InvalidIndex_Exit
 	cp xbc, 0x9
 	jr gt, ExcDotFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, 0xE7FD8A
+	add xbc, 0xe7fd8a
 	ld bc, (xbc)
 	lda_24 xix, 0xf76696
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ExcDotFunc_HandlerJumpTable:
 	.byte 0xaa, 0x12, 0x24, 0xaa, 0x0e, 0x21, 0xcb, 0x8f
 	.byte 0xda, 0xa8, 0xc2, 0x5c, 0x47, 0x02, 0x23, 0xd9
@@ -94,16 +94,16 @@ ExcDotFunc_HandlerJumpTable_Ext:
 ExcPmemFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1E0003E
+	sub xbc, 0x1e0003e
 	cp xbc, 0x0
 	jr lt, ExcPmemFunc_InvalidIndex_Exit
 	cp xbc, 0x9
 	jr gt, ExcPmemFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, 0xE7FDD6
+	add xbc, 0xe7fdd6
 	ld bc, (xbc)
 	lda_24 xix, 0xf76706
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ExcPmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -134,16 +134,16 @@ ExcPmemFunc_Return:
 ExcSmemFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1E0003E
+	sub xbc, 0x1e0003e
 	cp xbc, 0x0
 	jr lt, ExcSmemFunc_InvalidIndex_Exit
 	cp xbc, 0x9
 	jr gt, ExcSmemFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, 0xE7FDEA
+	add xbc, 0xe7fdea
 	ld bc, (xbc)
 	lda_24 xix, 0xf76764
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ExcSmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -174,16 +174,16 @@ ExcSmemFunc_Return:
 ExcCompFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1E0003E
+	sub xbc, 0x1e0003e
 	cp xbc, 0x0
 	jr lt, ExcCompFunc_InvalidIndex_Exit
 	cp xbc, 0x9
 	jr gt, ExcCompFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, 0xE7FDFE
+	add xbc, 0xe7fdfe
 	ld bc, (xbc)
 	lda_24 xix, 0xf767c2
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ExcCompFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -214,16 +214,16 @@ ExcCompFunc_Return:
 ExcSeqFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1E0003E
+	sub xbc, 0x1e0003e
 	cp xbc, 0x0
 	jr lt, ExcSeqFunc_InvalidIndex_Exit
 	cp xbc, 0x9
 	jr gt, ExcSeqFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, 0xE7FE12
+	add xbc, 0xe7fe12
 	ld bc, (xbc)
 	lda_24 xix, 0xf76820
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ExcSeqFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -254,16 +254,16 @@ ExcSeqFunc_Return:
 ExcMspFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1E0003E
+	sub xbc, 0x1e0003e
 	cp xbc, 0x0
 	jr lt, ExcMspFunc_InvalidIndex_Exit
 	cp xbc, 0x9
 	jr gt, ExcMspFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, 0xE7FE26
+	add xbc, 0xe7fe26
 	ld bc, (xbc)
 	lda_24 xix, 0xf7687e
-	jp_dri 8, 0x07, 0xF0, 0xE4
+	jp_dri 8, 0x07, 0xf0, 0xe4
 ExcMspFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2

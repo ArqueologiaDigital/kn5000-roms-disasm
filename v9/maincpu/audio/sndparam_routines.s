@@ -10,24 +10,24 @@ SndParam_ProbeCheckMatch:
 	lds bc, 0
 	cp xiz, xde
 	jr z, SndParam_ProbeMatchFound
-	ldw bc, 0xFFFF
+	ldw bc, 0xffff
 	jr SndParam_ProbeAdvance
 
 SndParam_ProbeMatchFound:
-	cp bc, 0xFFFF
+	cp bc, 0xffff
 	jr z, SndParam_ProbeAdvance
 	ld xwa, (xwa + 4)
 	ld (xsp + 6), xwa
 
 SndParam_ProbeAdvance:
 	inc 1, hl
-	cp hl, 0x7FF
+	cp hl, 0x7ff
 	jr ugt, SndParam_DispatchCallback
 	ld wa, ix
 	inc 3, wa
 	extz xwa
-	div wa, 0x7FF
-	ldto_werp IX, 0xE2
+	div wa, 0x7ff
+	ldto_werp IX, 0xe2
 
 SndParam_ProbeEntry:
 	ld bc, ix
@@ -36,7 +36,7 @@ SndParam_ProbeEntry:
 	ld xwa, 0x34100
 	add xwa, xbc
 	ld xde, (xwa)
-	cp xde, 0xFFFFFF
+	cp xde, 0xffffff
 	jr nz, SndParam_ProbeCheckMatch
 
 SndParam_DispatchCallback:
@@ -51,13 +51,13 @@ SndParam_DispatchCallback:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xee10ec
-	st_dri3b C, 0x07, 0xE8, 0xE4
+	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld bc, (xsp + 12)
 	ld de, (xsp + 10)
 	ld xhl, (xhl)
 	call (xhl)
 	ld xbc, xhl
-	cpw (xbc), 0xFFFF
+	cpw (xbc), 0xffff
 	jr z, SndParam_NotFound
 	ld wa, (xbc + 2)
 	cps wa, 1
@@ -74,7 +74,7 @@ SndParam_CallbackType1:
 	jr SndParam_Epilogue
 
 SndParam_NotFound:
-	ldw (xsp + 4), 0xFFFF
+	ldw (xsp + 4), 0xffff
 
 SndParam_Epilogue:
 	ld hl, (xsp + 4)
@@ -89,7 +89,7 @@ SndParam_DispatchTypeDE5:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xee1148
-	st_dri3b B, 0x07, 0xE8, 0xE4
+	st_dri3b B, 0x07, 0xe8, 0xe4
 	ld bc, (xsp + 12)
 	ld xhl, (xde)
 	call (xhl)
@@ -117,23 +117,23 @@ SndParam_LookupByKey:
 	lds32 xwa, 0
 	ld (xsp + 6), xwa
 	ld xhl, xiz
-	and xhl, 0xFF
+	and xhl, 0xff
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
 	srl xhl, 8
-	and xhl, 0xFF
+	and xhl, 0xff
 	add xhl, xwa
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
 	srl xhl, 0
-	and xhl, 0x1F
+	and xhl, 0x1f
 	add xhl, xwa
 	ld xwa, xhl
-	ld xbc, 0x7FF
+	ld xbc, 0x7ff
 	call DivMod32
 	ld ix, hl
 	jr SndParam_Lkp2_ProbeEntry
@@ -142,24 +142,24 @@ SndParam_Lkp2_ProbeCheck:
 	lds bc, 0
 	cp xiz, xde
 	jr z, SndParam_Lkp2_MatchFound
-	ldw bc, 0xFFFF
+	ldw bc, 0xffff
 	jr SndParam_Lkp2_ProbeAdvance
 
 SndParam_Lkp2_MatchFound:
-	cp bc, 0xFFFF
+	cp bc, 0xffff
 	jr z, SndParam_Lkp2_ProbeAdvance
 	ld xwa, (xwa + 4)
 	ld (xsp + 6), xwa
 
 SndParam_Lkp2_ProbeAdvance:
 	inc 1, hl
-	cp hl, 0x7FF
+	cp hl, 0x7ff
 	jr ugt, SndParam_Lkp2_Dispatch
 	ld wa, ix
 	inc 3, wa
 	extz xwa
-	div wa, 0x7FF
-	ldto_werp IX, 0xE2
+	div wa, 0x7ff
+	ldto_werp IX, 0xe2
 
 SndParam_Lkp2_ProbeEntry:
 	ld bc, ix
@@ -168,7 +168,7 @@ SndParam_Lkp2_ProbeEntry:
 	ld xwa, 0x34100
 	add xwa, xbc
 	ld xde, (xwa)
-	cp xde, 0xFFFFFF
+	cp xde, 0xffffff
 	jr nz, SndParam_Lkp2_ProbeCheck
 
 SndParam_Lkp2_Dispatch:
@@ -181,14 +181,14 @@ SndParam_Lkp2_Dispatch:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xee1110
-	st_dri3b C, 0x07, 0xE4, 0xE0
+	st_dri3b C, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 6)
 	ld bc, (xsp + 12)
 	ld de, (xsp + 10)
 	ld xhl, (xhl)
 	call (xhl)
 	ld xbc, xhl
-	cpw (xbc), 0xFFFF
+	cpw (xbc), 0xffff
 	jr z, SndParam_Lkp2_NotFound
 	ld wa, (xbc + 2)
 	cps wa, 1
@@ -205,7 +205,7 @@ SndParam_Lkp2_CallType1:
 	jr SndParam_Lkp2_Epilogue
 
 SndParam_Lkp2_NotFound:
-	ldw (xsp + 4), 0xFFFF
+	ldw (xsp + 4), 0xffff
 
 SndParam_Lkp2_Epilogue:
 	ld hl, (xsp + 4)
@@ -227,28 +227,28 @@ SndParam_WrapNotify2:
 SndParam_LookupReadOnly:
 	dec 6, xsp
 	push xiz
-	ldw (xsp + 4), 0xFFFF
+	ldw (xsp + 4), 0xffff
 	ld xiz, xwa
 	lds32 xwa, 0
 	ld (xsp + 6), xwa
 	ld xhl, xiz
-	and xhl, 0xFF
+	and xhl, 0xff
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
 	srl xhl, 8
-	and xhl, 0xFF
+	and xhl, 0xff
 	add xhl, xwa
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
 	srl xhl, 0
-	and xhl, 0x1F
+	and xhl, 0x1f
 	add xhl, xwa
 	ld xwa, xhl
-	ld xbc, 0x7FF
+	ld xbc, 0x7ff
 	call DivMod32
 	ld ix, hl
 	jr SndParam_RO_ProbeEntry
@@ -257,24 +257,24 @@ SndParam_RO_ProbeCheck:
 	lds bc, 0
 	cp xiz, xde
 	jr z, SndParam_RO_MatchFound
-	ldw bc, 0xFFFF
+	ldw bc, 0xffff
 	jr SndParam_RO_ProbeAdvance
 
 SndParam_RO_MatchFound:
-	cp bc, 0xFFFF
+	cp bc, 0xffff
 	jr z, SndParam_RO_ProbeAdvance
 	ld xwa, (xwa + 4)
 	ld (xsp + 6), xwa
 
 SndParam_RO_ProbeAdvance:
 	inc 1, hl
-	cp hl, 0x7FF
+	cp hl, 0x7ff
 	jr ugt, SndParam_RO_Dispatch
 	ld wa, ix
 	inc 3, wa
 	extz xwa
-	div wa, 0x7FF
-	ldto_werp IX, 0xE2
+	div wa, 0x7ff
+	ldto_werp IX, 0xe2
 
 SndParam_RO_ProbeEntry:
 	ld bc, ix
@@ -283,7 +283,7 @@ SndParam_RO_ProbeEntry:
 	ld xwa, 0x34100
 	add xwa, xbc
 	ld xde, (xwa)
-	cp xde, 0xFFFFFF
+	cp xde, 0xffffff
 	jr nz, SndParam_RO_ProbeCheck
 
 SndParam_RO_Dispatch:
@@ -296,7 +296,7 @@ SndParam_RO_Dispatch:
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xee10d0
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	st_dri3b A, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 6)
 	ld xhl, (xbc)
 	call (xhl)
@@ -350,30 +350,30 @@ SndParam_ResolveWidget:
 	ld xde, xiz
 	srl xde, 8
 	ld xhl, xde
-	and xhl, 0xF
+	and xhl, 0xf
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xde
 	srl xhl, 4
-	and xhl, 0xF
+	and xhl, 0xf
 	add xhl, xwa
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xde
 	srl xhl, 8
-	and xhl, 0xF
+	and xhl, 0xf
 	add xhl, xwa
 	ld xbc, xhl
 	sll xbc, 9
 	add xbc, xhl
 	srl xde, 12
 	ld xhl, xde
-	and xhl, 0xF
+	and xhl, 0xf
 	add xhl, xbc
 	ld xwa, xhl
-	ld xbc, 0x7FF
+	ld xbc, 0x7ff
 	call DivMod32
 	sll hl, 2
 	ldada xwa, 38872
@@ -383,7 +383,7 @@ SndParam_ResolveWidget:
 	or xde, xde
 	jrl z, SndParam_RW_NoEntry
 	ld xix, (xde)
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ld xwa, xix
 	srl xwa, 8
 	ld xbc, xiz
@@ -392,12 +392,12 @@ SndParam_ResolveWidget:
 	jr nz, SndParam_RW_CheckFirstMatch
 	ld xwa, xiz
 	srl xwa, 0
-	cp xwa, 0xB1
+	cp xwa, 0xb1
 	jr z, SndParam_RW_ExactMatch
 	ld xwa, xix
-	and xwa, 0xFF
+	and xwa, 0xff
 	and xwa, xiz
-	and xwa, 0xFF
+	and xwa, 0xff
 	jr z, SndParam_RW_CheckFirstMatch
 
 SndParam_RW_ExactMatch:
@@ -405,7 +405,7 @@ SndParam_RW_ExactMatch:
 	jr SndParam_RW_FoundCallback
 
 SndParam_RW_CheckFirstMatch:
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr nz, SndParam_RW_FoundCallback
 	ld xwa, (xde + 8)
 	or xwa, xwa
@@ -415,19 +415,19 @@ SndParam_RW_ChainNext:
 	ld xde, (xde + 8)
 	ld xix, xiz
 	ld xiy, (xde)
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ld xwa, xiy
 	srl xwa, 8
 	cp xbc, xwa
 	jr nz, SndParam_RW_ChainCheckFirst
 	ld xwa, xix
 	srl xwa, 0
-	cp xwa, 0xB1
+	cp xwa, 0xb1
 	jr z, SndParam_RW_ChainExactMatch
 	ld xwa, xiy
-	and xwa, 0xFF
+	and xwa, 0xff
 	and xwa, xix
-	and xwa, 0xFF
+	and xwa, 0xff
 	jr z, SndParam_RW_ChainCheckFirst
 
 SndParam_RW_ChainExactMatch:
@@ -435,7 +435,7 @@ SndParam_RW_ChainExactMatch:
 	jr SndParam_RW_FoundCallback
 
 SndParam_RW_ChainCheckFirst:
-	cp hl, 0xFFFF
+	cp hl, 0xffff
 	jr z, SndParam_RW_ChainContinue
 
 SndParam_RW_FoundCallback:
@@ -458,14 +458,14 @@ SndParam_RW_ProcessResult:
 	ld xbc, (xiz)
 	ld (xwa), xbc
 	ld xwa, (xsp + 22)
-	cp (xwa), 0xB1
+	cp (xwa), 0xb1
 	jr z, SndParam_RW_HandleB1Type
 	ld a, (xiz + 15)
 	inc 3, a
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xee1130
-	st_dri3b B, 0x07, 0xE4, 0xE0
+	st_dri3b B, 0x07, 0xe4, 0xe0
 	ld xwa, xiz
 	ld bc, (xsp + 4)
 	ld xix, (xde)
@@ -498,7 +498,7 @@ SndParam_RW_Success:
 	jr SndParam_RW_Epilogue
 
 SndParam_RW_Fail:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 
 SndParam_RW_Epilogue:
 	pop xiz
@@ -621,30 +621,30 @@ SndParam_DecodeMidiAddr:
 	ld (xsp + 14), xde
 	ld (xsp + 18), xbc
 	ld (xsp + 22), xwa
-	ldw (xsp + 4), 0xFFFF
+	ldw (xsp + 4), 0xffff
 	ld xwa, (xsp + 22)
 	ld xiz, (xwa)
 	ld (xsp + 6), xiz
 	lds32 xwa, 0
 	ld (xsp + 10), xwa
 	ld xhl, xiz
-	and xhl, 0xFF
+	and xhl, 0xff
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
 	srl xhl, 8
-	and xhl, 0xFF
+	and xhl, 0xff
 	add xhl, xwa
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
 	srl xhl, 0
-	and xhl, 0x1F
+	and xhl, 0x1f
 	add xhl, xwa
 	ld xwa, xhl
-	ld xbc, 0x7FF
+	ld xbc, 0x7ff
 	call DivMod32
 	ld ix, hl
 	jr SndParam_DMA_ProbeEntry
@@ -653,24 +653,24 @@ SndParam_DMA_ProbeCheck:
 	lds bc, 0
 	cp (xsp + 6), xde
 	jr z, SndParam_DMA_MatchFound
-	ldw bc, 0xFFFF
+	ldw bc, 0xffff
 	jr SndParam_DMA_ProbeAdvance
 
 SndParam_DMA_MatchFound:
-	cp bc, 0xFFFF
+	cp bc, 0xffff
 	jr z, SndParam_DMA_ProbeAdvance
 	ld xwa, (xwa + 4)
 	ld (xsp + 10), xwa
 
 SndParam_DMA_ProbeAdvance:
 	inc 1, hl
-	cp hl, 0x7FF
+	cp hl, 0x7ff
 	jr ugt, SndParam_DMA_ExtractFields
 	ld wa, ix
 	inc 3, wa
 	extz xwa
-	div wa, 0x7FF
-	ldto_werp IX, 0xE2
+	div wa, 0x7ff
+	ldto_werp IX, 0xe2
 
 SndParam_DMA_ProbeEntry:
 	ld bc, ix
@@ -679,7 +679,7 @@ SndParam_DMA_ProbeEntry:
 	ld xwa, 0x34100
 	add xwa, xbc
 	ld xde, (xwa)
-	cp xde, 0xFFFFFF
+	cp xde, 0xffffff
 	jr nz, SndParam_DMA_ProbeCheck
 
 SndParam_DMA_ExtractFields:
@@ -691,17 +691,17 @@ SndParam_DMA_ExtractFields:
 	cp xwa, 0x8000
 	jr c, SndParam_DMA_Zone2Check
 	ld xwa, (xbc)
-	cp xwa, 0x17FFF
+	cp xwa, 0x17fff
 	jr ugt, SndParam_DMA_Zone2Check
 	sub xiz, 0x8000
 	ld xwa, xiz
 	srl xwa, 10
-	and xwa, 0x3F
+	and xwa, 0x3f
 	ld bc, wa
 	ld xwa, (xsp + 18)
 	ld (xwa), bc
 	ld xbc, xiz
-	and xbc, 0x3FF
+	and xbc, 0x3ff
 	ld xwa, (xsp + 14)
 	ld (xwa), bc
 	ldw (xsp + 4), 0x0
@@ -712,17 +712,17 @@ SndParam_DMA_Zone2Check:
 	cp xwa, 0x18000
 	jr c, SndParam_DMA_Epilogue
 	ld xwa, (xbc)
-	cp xwa, 0x27FFF
+	cp xwa, 0x27fff
 	jr ugt, SndParam_DMA_Epilogue
 	sub xiz, 0x8000
 	ld xwa, xiz
 	srl xwa, 10
-	and xwa, 0x3F
+	and xwa, 0x3f
 	ld bc, wa
 	ld xwa, (xsp + 18)
 	ld (xwa), bc
 	ld xbc, xiz
-	and xbc, 0x3FF
+	and xbc, 0x3ff
 	add bc, 0x400
 	ld xwa, (xsp + 14)
 	ld (xwa), bc
@@ -811,21 +811,21 @@ SndParam_ResolveWidgetVariant2_Data:
 	ret
 
 SndParam_ReturnNotFound:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ret
 
 SndParam_ReadRegField:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ld c, (xwa + 4)
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xee1160
-	ld_sril3 XDE, 0x07, 0xE8, 0xE4
+	ld_sril3 XDE, 0x07, 0xe8, 0xe4
 	or xde, xde
 	ret z
 	ld c, (xwa + 5)
 	extz bc
-	ld_srib3 L, 0x07, 0xE8, 0xE4
+	ld_srib3 L, 0x07, 0xe8, 0xe4
 	extz hl
 	ld e, (xwa + 6)
 	extz de
@@ -834,7 +834,7 @@ SndParam_ReadRegField:
 	xor hl, bc
 	and hl, de
 	ld a, (xwa + 9)
-	and a, 0xF
+	and a, 0xf
 	ret z
 	sraa hl
 	ret
@@ -844,7 +844,7 @@ SndParam_ReadRegWithLUT:
 	ld c, e
 	sla c, 2
 	lda_24 xhl, 0xee0180
-	ld_sril3 XBC, 0x03, 0xEC, 0xE4
+	ld_sril3 XBC, 0x03, 0xec, 0xe4
 	ld c, (xbc)
 	cps e, 2
 	jr nz, SndParam_ReadRegMasked
@@ -858,9 +858,9 @@ SndParam_ReadRegWithLUT:
 	sll c, 7
 	extz bc
 	add hl, bc
-	cp hl, 0x3FC0
+	cp hl, 0x3fc0
 	ret lt
-	ldw hl, 0x3FFF
+	ldw hl, 0x3fff
 	jr SndParam_ReadRegReturn
 
 SndParam_ReadRegMasked:
@@ -877,18 +877,18 @@ SndParam_CompareRegField:
 	extz wa
 	sla wa, 2
 	lda_24 xde, 0xee1160
-	ld_sril3 XDE, 0x07, 0xE8, 0xE0
+	ld_sril3 XDE, 0x07, 0xe8, 0xe0
 	or xde, xde
 	jr z, SndParam_CompareNotFound
 	ld a, (xbc + 5)
 	extz wa
-	ld_srib3 L, 0x07, 0xE8, 0xE0
+	ld_srib3 L, 0x07, 0xe8, 0xe0
 	ld e, (xbc + 6)
 	ld a, (xbc + 10)
 	xor l, a
 	and l, e
 	ld a, (xbc + 9)
-	and a, 0xF
+	and a, 0xf
 	jr z, SndParam_CompareShifted
 	srla l
 
@@ -896,7 +896,7 @@ SndParam_CompareShifted:
 	ld a, (xbc + 11)
 	sla a, 2
 	lda_24 xbc, 0xee0198
-	ld_sril3 XBC, 0x03, 0xE4, 0xE0
+	ld_sril3 XBC, 0x03, 0xe4, 0xe0
 	cp l, (xbc + 1)
 	jr nz, SndParam_CompareStatus5
 	lds32 xwa, 3
@@ -915,30 +915,30 @@ SndParam_CompareAddOffset:
 	ret
 
 SndParam_CompareNotFound:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ret
 
 SndParam_ReadRegWord:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ld c, (xwa + 4)
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xee1160
-	ld_sril3 XDE, 0x07, 0xE8, 0xE4
+	ld_sril3 XDE, 0x07, 0xe8, 0xe4
 	or xde, xde
 	ret z
 	ld c, (xwa + 5)
 	extz bc
 	add bc, bc
-	ld_sriw3 DE, 0x07, 0xE8, 0xE4
+	ld_sriw3 DE, 0x07, 0xe8, 0xe4
 	ld a, (xwa + 11)
 	sla a, 2
 	lda_24 xbc, 0xee019c
-	ld_sril3 XWA, 0x03, 0xE4, 0xE0
+	ld_sril3 XWA, 0x03, 0xe4, 0xe0
 	lds hl, 0
 
 SndParam_ReadRegScanLoop:
-	cp_spiw DE, 0xE1
+	cp_spiw DE, 0xe1
 	ret z
 	inc 1, hl
 	cps hl, 5
@@ -952,16 +952,16 @@ SndParam_ReadRegBitfield:
 	extz bc
 	sla bc, 2
 	lda_24 xde, 0xee1160
-	ld_sril3 XIX, 0x07, 0xE8, 0xE4
+	ld_sril3 XIX, 0x07, 0xe8, 0xe4
 	or xix, xix
 	jr z, SndParam_BitfieldReturn
 	ld c, (xwa + 5)
 	extz bc
 	ld de, bc
 	inc 1, de
-	bit_dri 2, 0x07, 0xF0, 0xE8
+	bit_dri 2, 0x07, 0xf0, 0xe8
 	jr nz, SndParam_BitfieldPendingWrite
-	ld_srib3 L, 0x07, 0xF0, 0xE4
+	ld_srib3 L, 0x07, 0xf0, 0xe4
 	ld c, (xwa + 6)
 	ld b, c
 	ld e, (xwa + 10)
@@ -969,14 +969,14 @@ SndParam_ReadRegBitfield:
 	and l, b
 	ld e, (xwa + 9)
 	ld a, e
-	and a, 0xF
+	and a, 0xf
 	jr z, SndParam_BitfieldZeroCheck
 	srla l
 
 SndParam_BitfieldZeroCheck:
 	jr z, SndParam_BitfieldReturn
 	ld a, e
-	and a, 0xF
+	and a, 0xf
 	jr z, SndParam_BitfieldNoShift
 	srla c
 
@@ -992,26 +992,26 @@ SndParam_BitfieldReturn:
 	ret
 
 SndParam_ReadRegAddress:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 	ld a, (xwa + 4)
 	extz wa
 	sla wa, 2
 	lda_24 xbc, 0xee1160
-	ld_sril3 XWA, 0x07, 0xE4, 0xE0
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	or xwa, xwa
 	ret z
 	ld wa, (xwa + 8)
-	and wa, 0x1FF
+	and wa, 0x1ff
 	ld hl, wa
 	ret
 
 SndParam_ResetDefaultTable:
-	ld xiy, 0xEDBA2C
-	ld xix, 0x96D4
+	ld xiy, 0xedba2c
+	ld xix, 0x96d4
 	lds bc, 6
 	ldirw
 	ldada xhl, 38612
-	ldw (xhl), 0xFFFF
+	ldw (xhl), 0xffff
 	ret
 
 SndParam_RegisterEntry_Data:
@@ -2929,7 +2929,7 @@ SndParam_WidgetDispatch:
 	ld xiz, xbc
 	ld hl, wa
 	ld a, (xiz + 7)
-	ldfr_berp A, 0xF0
+	ldfr_berp A, 0xf0
 	extz ix
 	ld e, (xiz + 6)
 	extz de
@@ -2946,39 +2946,39 @@ SndParam_WidgetDispatch:
 	cps hl, 1
 	jr nz, SndParam_WidgetDispatchDone
 	cpdi16 37086, 508
-	call_24 nc, 0xEF14D8
+	call_24 nc, 0xef14d8
 	ldada xbc, 48444
 	ldda16 xde, 37086
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 5)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 6)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 7)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	jr SndParam_WidgetAppendTail
 
 SndParam_WidgetAppendType2:
 	cpdi16 37086, 508
-	call_24 nc, 0xEF14F3
+	call_24 nc, 0xef14f3
 	ldada xbc, 48444
 	ldda16 xde, 37086
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 5)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 6)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 7)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 
 SndParam_WidgetAppendTail:
-	ld (xde), 0xFF
+	ld (xde), 0xff
 	incdi16 4, 37086
 	jr SndParam_WidgetDispatchDone
 
@@ -3002,7 +3002,7 @@ SndParam_WidgetNotifyType1:
 	cps e, 0
 	jrl z, SndParam_Widget1_Done
 	lda xiy, (xiz + 6)
-	ldfr_berp E, 0xF0
+	ldfr_berp E, 0xf0
 	extz ix
 	ld c, (xiz + 5)
 	extz bc
@@ -3017,55 +3017,55 @@ SndParam_WidgetNotifyType1:
 	cps wa, 1
 	jrl nz, SndParam_Widget1_Done
 	cpdi16 37086, 504
-	call_24 nc, 0xEF14D8
+	call_24 nc, 0xef14d8
 	ldada xbc, 48444
 	ldda16 xde, 37086
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 5)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 6)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 7)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 8)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 9)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 10)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 11)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	jr SndParam_Widget1_AppendTail
 
 SndParam_Widget1_AppendType2:
 	cpdi16 37086, 504
-	call_24 nc, 0xEF14F3
+	call_24 nc, 0xef14f3
 	ldada xbc, 48444
 	ldda16 xde, 37086
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 5)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 6)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 7)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 8)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 9)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 10)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 	ld a, (xiz + 11)
-	lda_dpi XBC, 0xE8
+	lda_dpi XBC, 0xe8
 
 SndParam_Widget1_AppendTail:
-	ld (xde), 0xFF
+	ld (xde), 0xff
 	incdi16 8, 37086
 	jr SndParam_Widget1_Done
 
@@ -3139,12 +3139,12 @@ SndParam_BinarySearch:
 
 SndParam_EncodeAddress:
 	ld xhl, 0x8000
-	and wa, 0x3F
+	and wa, 0x3f
 	sll wa, 10
 	extz xwa
 	add xhl, xwa
 	ld wa, bc
-	and wa, 0x3FF
+	and wa, 0x3ff
 	extz xwa
 	or xhl, xwa
 	cp bc, 0x400
@@ -3155,10 +3155,10 @@ SndParam_EncodeAddress:
 SndParam_InitHashTable:
 	lda_24 xbc, 0x034100
 	ld xwa, xbc
-	st_dri3b B, 0xE5, 0xF8, 0x3F
+	st_dri3b B, 0xe5, 0xf8, 0x3f
 
 SndParam_InitHashFillLoop:
-	ld xiy, 0xEDBA3C
+	ld xiy, 0xedba3c
 	ld xix, xwa
 	lds bc, 4
 	ldirw
@@ -3174,13 +3174,13 @@ SndParam_RegisterAllWidgets:
 SndParam_RegisterLoop:
 	ld xbc, xiz
 	sll xbc, 2
-	ld xwa, 0xEE01A0
+	ld xwa, 0xee01a0
 	add xwa, xbc
 	ld xbc, (xwa)
 	ld xwa, (xbc)
 	calr SndParam_InsertEntry
 	inc 1, xiz
-	cp xiz, 0x3CC
+	cp xiz, 0x3cc
 	jr c, SndParam_RegisterLoop
 	pop xiz
 	ret
@@ -3192,23 +3192,23 @@ SndParam_InsertEntry:
 	ld xiz, xwa
 	ldw (xsp + 4), 0x0
 	ld xhl, xiz
-	and xhl, 0xFF
+	and xhl, 0xff
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
 	srl xhl, 8
-	and xhl, 0xFF
+	and xhl, 0xff
 	add xhl, xwa
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
 	srl xhl, 0
-	and xhl, 0x1F
+	and xhl, 0x1f
 	add xhl, xwa
 	ld xwa, xhl
-	ld xbc, 0x7FF
+	ld xbc, 0x7ff
 	call DivMod32
 
 SndParam_InsertProbe:
@@ -3218,7 +3218,7 @@ SndParam_InsertProbe:
 	ld xbc, 0x34100
 	add xbc, xwa
 	ld xde, (xbc)
-	cp xde, 0xFFFFFF
+	cp xde, 0xffffff
 	jr nz, SndParam_InsertCheckKey
 	ld (xbc), xiz
 	ld xwa, (xsp + 6)
@@ -3230,30 +3230,30 @@ SndParam_InsertCheckKey:
 	lds wa, 0
 	cp xiz, xde
 	jr z, SndParam_InsertKeyMatch
-	ldw wa, 0xFFFF
+	ldw wa, 0xffff
 
 SndParam_InsertIncSlot:
 	incm 1, (xsp + 4)
-	cpw (xsp + 4), 0x7FF
+	cpw (xsp + 4), 0x7ff
 	jr ule, SndParam_InsertNextSlot
 	jr SndParam_InsertFail
 
 SndParam_InsertKeyMatch:
-	cp wa, 0xFFFF
+	cp wa, 0xffff
 	jr z, SndParam_InsertIncSlot
 	jr SndParam_InsertFail
 
 SndParam_InsertNextSlot:
 	inc 3, hl
 	extz xhl
-	div hl, 0x7FF
-	ldto_werp WA, 0xEE
+	div hl, 0x7ff
+	ldto_werp WA, 0xee
 	ld hl, wa
-	cp wa, 0x7FF
+	cp wa, 0x7ff
 	jr c, SndParam_InsertProbe
 
 SndParam_InsertFail:
-	ldw hl, 0xFFFF
+	ldw hl, 0xffff
 
 SndParam_InsertReturn:
 	pop xiz
@@ -3263,20 +3263,20 @@ SndParam_InsertReturn:
 SndParam_ClearHashTable:
 	ldada xwa, 38872
 	ld xbc, xwa
-	st_dri3b B, 0xE1, 0xFC, 0x1F
+	st_dri3b B, 0xe1, 0xfc, 0x1f
 
 SndParam_ClearLoop:
 	lds32 xwa, 0
-	st_dpil XWA, 0xE6
+	st_dpil XWA, 0xe6
 	cp xbc, xde
 	jr c, SndParam_ClearLoop
 	lda_24 xde, 0x0380f8
 	lda xbc, (xde + 2)
 	ld xwa, xbc
-	st_dri3b A, 0xE5, 0x00, 0x40
+	st_dri3b A, 0xe5, 0x00, 0x40
 
 SndParam_ClearHeap:
-	stib_dpi 0xE0, 0x00
+	stib_dpi 0xe0, 0x00
 	cp xwa, xbc
 	jr c, SndParam_ClearHeap
 	ldw (xde), 0x0
@@ -3289,7 +3289,7 @@ SndParam_ReregisterAll:
 SndParam_ReregisterLoop:
 	ld xbc, xiz
 	sll xbc, 2
-	ld xwa, 0xEE01A0
+	ld xwa, 0xee01a0
 	add xwa, xbc
 	ld xhl, (xwa)
 	ld a, (xhl + 4)
@@ -3298,7 +3298,7 @@ SndParam_ReregisterLoop:
 	push xhl
 	calr SndParam_AllocAndInsert
 	inc 1, xiz
-	cp xiz, 0x3CC
+	cp xiz, 0x3cc
 	jr c, SndParam_ReregisterLoop
 	pop xiz
 	ret
@@ -3309,14 +3309,14 @@ SndParam_AllocAndInsert:
 	ld (xsp + 16), e
 	ld (xsp + 18), c
 	ld (xsp + 20), a
-	ldw wa, 0xC
+	ldw wa, 0xc
 	calr SndParam_HeapAlloc
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	or xwa, xwa
 	jr nz, SndParam_AllocBuildKey
-	ld xwa, 0xEE1560
+	ld xwa, 0xee1560
 	call Debug_PrintString
 	pushw 0x1
 	call Boot_HaltInstruction
@@ -3338,30 +3338,30 @@ SndParam_AllocBuildKey:
 	ld xde, (xsp + 12)
 	srl xde, 8
 	ld xhl, xde
-	and xhl, 0xF
+	and xhl, 0xf
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xde
 	srl xhl, 4
-	and xhl, 0xF
+	and xhl, 0xf
 	add xhl, xwa
 	ld xwa, xhl
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xde
 	srl xhl, 8
-	and xhl, 0xF
+	and xhl, 0xf
 	add xhl, xwa
 	ld xbc, xhl
 	sll xbc, 9
 	add xbc, xhl
 	srl xde, 12
 	ld xhl, xde
-	and xhl, 0xF
+	and xhl, 0xf
 	add xhl, xbc
 	ld xwa, xhl
-	ld xbc, 0x7FF
+	ld xbc, 0x7ff
 	call DivMod32
 	ld bc, hl
 	sll hl, 2

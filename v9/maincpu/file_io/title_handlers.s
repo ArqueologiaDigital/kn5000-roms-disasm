@@ -14,7 +14,7 @@
 ; =============================================================================
 
 LoadTtlJgFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr nz, LoadTtl_Return
 	ldw wa, 0x61
 	ldw bc, 0x64
@@ -25,7 +25,7 @@ LoadTtl_Return:
 	ret
 
 SaveTtlJgFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr nz, SaveTtl_Return
 	ldw wa, 0x67
 	calr FileIO_GetDiskCapacity
@@ -35,9 +35,9 @@ SaveTtl_Return:
 	ret
 
 SaveSmfTtlJgFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr nz, SaveSmfTtl_Return
-	ldw wa, 0x6B
+	ldw wa, 0x6b
 	calr FileIO_GetDiskCapacity
 
 SaveSmfTtl_Return:
@@ -45,13 +45,13 @@ SaveSmfTtl_Return:
 	ret
 
 DirectPlayTtlJgFunc:
-	cp xbc, 0x1C00007
-	call_24 z, 0xF8B3D8
+	cp xbc, 0x1c00007
+	call_24 z, 0xf8b3d8
 	lds32 xhl, 0
 	ret
 
 SongMedleyTtlJgFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr nz, SongMedleyTtl_Return
 	ldw wa, 0x77
 	calr FileIO_GetDiskCapacity
@@ -61,17 +61,17 @@ SongMedleyTtl_Return:
 	ret
 
 SetupFlashFunc:
-	cp xbc, 0x1E5000C
+	cp xbc, 0x1e5000c
 	jr z, SetupFlash_HandleLoadEvent
-	cp xbc, 0x1E5000B
+	cp xbc, 0x1e5000b
 	jr nz, SetupFlash_Return
 	stdi8 32578, 37
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	lds wa, 6
 	call CtrlPanel_IndicatorJumpTable
 	stdi8 32578, 35
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jr SetupFlash_Return
 
@@ -84,7 +84,7 @@ SetupFlash_Return:
 	ret
 
 FmmUtilityTitleFunc:
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jrl nz, FmmUtility_Return
 	cp xde, 0x3
 	jrl z, FmmUtility_HandleAbort
@@ -93,8 +93,8 @@ FmmUtilityTitleFunc:
 	stdi8 34046, 0
 	lds wa, 1
 	calr InitializeOperationState
-	ld xwa, 0x7B0013
-	ld xbc, 0x1E50005
+	ld xwa, 0x7b0013
+	ld xbc, 0x1e50005
 	lds32 xde, 0
 	call ApDeliveryEvent
 	ldmm8 32604, 36151
@@ -135,39 +135,39 @@ FmmUtility_CheckCapacity:
 	jrl le, FmmUtility_ContinueWait
 	cpdi8 32604, 124
 	jrl z, FmmUtility_ContinueWait
-	ld xwa, 0x7B0013
-	ld xbc, 0x1E50006
+	ld xwa, 0x7b0013
+	ld xbc, 0x1e50006
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ldw wa, 0x7C
+	ldw wa, 0x7c
 	jr FmmUtility_CallHandler
 
 FmmUtility_HandleCancel:
-	ld xwa, 0x7B0013
-	ld xbc, 0x1E50006
+	ld xwa, 0x7b0013
+	ld xbc, 0x1e50006
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	ldda8 a, 32604
 	extz wa
 	call UI_PostModeChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 32578, 0
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jr FmmUtility_ShowStatus
 
 FmmUtility_HandleError:
-	ld xwa, 0x7B0013
-	ld xbc, 0x1E50006
+	ld xwa, 0x7b0013
+	ld xbc, 0x1e50006
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ldw wa, 0x7D
+	ldw wa, 0x7d
 
 FmmUtility_CallHandler:
 	call UI_PostModeChangeEvent
@@ -175,35 +175,35 @@ FmmUtility_CallHandler:
 
 FmmUtility_HandleSuccess:
 	calr ResetProgressIndication
-	ld xwa, 0x7B0013
-	ld xbc, 0x1E50006
+	ld xwa, 0x7b0013
+	ld xbc, 0x1e50006
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	ldda8 a, 32604
 	extz wa
 	call UI_PostModeChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 32578, 2
-	ldw wa, 0xEE
+	ldw wa, 0xee
 
 FmmUtility_ShowStatus:
 	call SoundCtrl_SendCommand
 	jr FmmUtility_Return
 
 FmmUtility_ContinueWait:
-	ld xwa, 0x7B0013
-	ld xbc, 0x1E50006
+	ld xwa, 0x7b0013
+	ld xbc, 0x1e50006
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0000A
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call ApPostEvent
 	jr FmmUtility_Return
@@ -216,7 +216,7 @@ FmmUtility_Return:
 	ret
 
 FmmSmfUtilityTitleFunc:
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jrl nz, FmmSmfUtility_Return
 	cp xde, 0x3
 	jrl z, FmmSmfUtility_HandleAbort
@@ -225,8 +225,8 @@ FmmSmfUtilityTitleFunc:
 	stdi8 34046, 0
 	lds wa, 1
 	calr InitializeOperationState
-	ld xwa, 0x7B002A
-	ld xbc, 0x1E50005
+	ld xwa, 0x7b002a
+	ld xbc, 0x1e50005
 	lds32 xde, 0
 	call ApDeliveryEvent
 	ldmm8 32606, 36151
@@ -267,39 +267,39 @@ FmmSmfUtility_CheckCapacity:
 	jrl le, FmmSmfUtility_ContinueWait
 	cpdi8 32606, 123
 	jrl z, FmmSmfUtility_ContinueWait
-	ld xwa, 0x7B002A
-	ld xbc, 0x1E50006
+	ld xwa, 0x7b002a
+	ld xbc, 0x1e50006
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ldw wa, 0x7B
+	ldw wa, 0x7b
 	jr FmmSmfUtility_CallHandler
 
 FmmSmfUtility_HandleCancel:
-	ld xwa, 0x7B002A
-	ld xbc, 0x1E50006
+	ld xwa, 0x7b002a
+	ld xbc, 0x1e50006
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	ldda8 a, 32606
 	extz wa
 	call UI_PostModeChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 32578, 0
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jr FmmSmfUtility_ShowStatus
 
 FmmSmfUtility_HandleError:
-	ld xwa, 0x7B002A
-	ld xbc, 0x1E50006
+	ld xwa, 0x7b002a
+	ld xbc, 0x1e50006
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ldw wa, 0x7D
+	ldw wa, 0x7d
 
 FmmSmfUtility_CallHandler:
 	call UI_PostModeChangeEvent
@@ -307,35 +307,35 @@ FmmSmfUtility_CallHandler:
 
 FmmSmfUtility_HandleSuccess:
 	calr ResetProgressIndication
-	ld xwa, 0x7B002A
-	ld xbc, 0x1E50006
+	ld xwa, 0x7b002a
+	ld xbc, 0x1e50006
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	ldda8 a, 32606
 	extz wa
 	call UI_PostModeChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 32578, 2
-	ldw wa, 0xEE
+	ldw wa, 0xee
 
 FmmSmfUtility_ShowStatus:
 	call SoundCtrl_SendCommand
 	jr FmmSmfUtility_Return
 
 FmmSmfUtility_ContinueWait:
-	ld xwa, 0x7B002A
-	ld xbc, 0x1E50006
+	ld xwa, 0x7b002a
+	ld xbc, 0x1e50006
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0000A
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call ApPostEvent
 	jr FmmSmfUtility_Return

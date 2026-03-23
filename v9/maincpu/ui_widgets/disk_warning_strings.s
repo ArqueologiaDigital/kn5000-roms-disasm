@@ -6,6 +6,6 @@ DiskWarning_ConfirmStrings:
 
 ; External label offsets within the binary blob above.
 	.equ Data_SoundEditorCharsLayout, DiskWarning_ConfirmStrings + 0x1226
-	.equ NakaInst_OK, DiskWarning_ConfirmStrings + 0x164E
-	.equ Str_No, DiskWarning_ConfirmStrings + 0x166A
-	.equ Data_CharMapFormatBlock, DiskWarning_ConfirmStrings + 0x24F4
+	.equ NakaInst_OK, DiskWarning_ConfirmStrings + 0x164e
+	.equ Str_No, DiskWarning_ConfirmStrings + 0x166a
+	.equ Data_CharMapFormatBlock, DiskWarning_ConfirmStrings + 0x24f4

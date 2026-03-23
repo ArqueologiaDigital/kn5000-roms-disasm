@@ -12,15 +12,15 @@
 FmmComposerLoadFunc:
 	dec 2, xsp
 	pushw iz
-	cp xbc, 0x1C00018
+	cp xbc, 0x1c00018
 	jrl z, CompLoad_HandleScroll
-	cp xbc, 0x1C00017
+	cp xbc, 0x1c00017
 	jrl z, CompLoad_HandleScroll
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jrl z, CompLoad_HandleShow
-	cp xbc, 0x1E50004
+	cp xbc, 0x1e50004
 	jrl z, CompLoad_HandleSelection
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jrl nz, CompLoad_Return
 	cp xde, 0x3
 	jrl z, CompLoad_HandleAbort
@@ -30,7 +30,7 @@ FmmComposerLoadFunc:
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	cpdi16 34048, 0
@@ -58,60 +58,60 @@ CompLoad_DispatchState:
 
 CompLoad_ContinueWait:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0000A
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	jrl CompLoad_DispatchWidget
 
 CompLoad_HandleCancel:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 32578, 0
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jr CompLoad_CallStatusDisplay
 
 CompLoad_HandleError:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0x7D
+	ldw wa, 0x7d
 	call UI_PostModeChangeEvent
 	jrl CompLoad_Return
 
 CompLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 32578, 2
-	ldw wa, 0xEE
+	ldw wa, 0xee
 
 CompLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -129,14 +129,14 @@ CompLoad_HandleSelection:
 	jr lt, CompLoad_Selection_Negative
 	exts xhl
 	ldda32 xwa, 32636
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	ld xde, xhl
 	jrl CompLoad_DispatchWidget
 
 CompLoad_Selection_Negative:
 	stdi16 32640, 0
 	ldda32 xwa, 32636
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	lds32 xde, 0
 	jrl CompLoad_DispatchWidget
 
@@ -150,7 +150,7 @@ CompLoad_DrawItemLoop:
 	ldada xde, 34060
 	extz xhl
 	add xhl, xde
-	ldto_berp C, 0xF8
+	ldto_berp C, 0xf8
 	ld (xhl), c
 	lds bc, 3
 	call FileIO_CheckRecordByFile
@@ -184,7 +184,7 @@ CompLoad_DrawItem_Continue:
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 32636
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	inc 1, iz
 	cp iz, 0x14
@@ -196,7 +196,7 @@ CompLoad_HandleScroll:
 	ld (xsp + 2), wa
 	or xde, xde
 	jr nz, CompLoad_PageScroll
-	cp xbc, 0x1C00018
+	cp xbc, 0x1c00018
 	jr nz, CompLoad_ScrollUp
 	cp wa, 0x13
 	jrl ge, CompLoad_GetSelection
@@ -204,7 +204,7 @@ CompLoad_HandleScroll:
 	jr CompLoad_StorePosition
 
 CompLoad_ScrollUp:
-	cp xbc, 0x1C00017
+	cp xbc, 0x1c00017
 	jrl nz, CompLoad_GetSelection
 	cps wa, 0
 	jrl le, CompLoad_GetSelection
@@ -214,19 +214,19 @@ CompLoad_ScrollUp:
 CompLoad_PageScroll:
 	cp xde, 0x1
 	jr nz, CompLoad_PageDown
-	cp wa, 0xA
+	cp wa, 0xa
 	jrl lt, CompLoad_GetSelection
-	sub wa, 0xA
+	sub wa, 0xa
 	jr CompLoad_StorePosition
 
 CompLoad_PageDown:
 	cp xde, 0x2
 	jr nz, CompLoad_OpLoad
 	ld bc, wa
-	add bc, 0xA
+	add bc, 0xa
 	cp bc, 0x13
 	jrl gt, CompLoad_GetSelection
-	add wa, 0xA
+	add wa, 0xa
 
 CompLoad_StorePosition:
 	stda16 32640, xwa
@@ -239,13 +239,13 @@ CompLoad_OpLoad:
 	cps hl, 0
 	jr z, CompLoad_GetSelection
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds iz, 0
 
 CompLoad_HideButtons_Loop:
-	ldto_berp A, 0xF8
+	ldto_berp A, 0xf8
 	extz wa
 	call FileIO_FormatName_Copy
 	inc 1, iz
@@ -262,20 +262,20 @@ CompLoad_HideButtons_Loop:
 	stda8 32578, l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 
 CompLoad_GetSelection:
@@ -288,7 +288,7 @@ CompLoad_UpdateDisplay:
 	ldda16 xde, 32640
 	exts xde
 	ldda32 xwa, 32636
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	call ApPostEvent
 	ld de, (xsp + 2)
 	sll de, 5
@@ -296,7 +296,7 @@ CompLoad_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 32636
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	ldda16 xde, 32640
 	sll de, 5
@@ -304,7 +304,7 @@ CompLoad_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 32636
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 
 CompLoad_DispatchWidget:
 	call ApPostEvent
@@ -321,7 +321,7 @@ RenderFilterDisplay:
 	ld (xsp + 2), xwa
 	ld xwa, (xsp + 2)
 	ld c, (xsp)
-	lda_dpi XHL, 0xE0
+	lda_dpi XHL, 0xe0
 	ld (xsp + 2), xwa
 	cp (xsp), 0x0
 	jr nz, RenderFilter_CheckType1
@@ -329,7 +329,7 @@ RenderFilterDisplay:
 	cps l, 0
 	jr z, RenderFilter_CheckType1
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA06EE
+	ld xbc, 0xea06ee
 	jrl RenderFilter_CopyAndReturn
 
 RenderFilter_CheckType1:
@@ -347,17 +347,17 @@ RenderFilter_CheckType1:
 	cps l, 0
 	jr z, RenderFilter_Type1_Restricted
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA06F4
+	ld xbc, 0xea06f4
 	jrl RenderFilter_CopyAndReturn
 
 RenderFilter_Type1_Restricted:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA06FA
+	ld xbc, 0xea06fa
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_Type1_Unavail:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA0700
+	ld xbc, 0xea0700
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_CheckGeneric:
@@ -372,12 +372,12 @@ RenderFilter_CheckGeneric:
 	cps l, 0
 	jr z, RenderFilter_Generic_Restricted
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA0706
+	ld xbc, 0xea0706
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_Generic_Restricted:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA070C
+	ld xbc, 0xea070c
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_CheckType2:
@@ -397,17 +397,17 @@ RenderFilter_CheckType2:
 	cps l, 0
 	jr z, RenderFilter_Type2_Restricted
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA0712
+	ld xbc, 0xea0712
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_Type2_Restricted:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA0718
+	ld xbc, 0xea0718
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_Default:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA071E
+	ld xbc, 0xea071e
 
 RenderFilter_CopyAndReturn:
 	call FileIO_CopyString
@@ -417,13 +417,13 @@ RenderFilter_CopyAndReturn:
 FmmLoadFilterFunc:
 	dec 6, xsp
 	ld (xsp + 2), xde
-	cp xbc, 0x1C00018
+	cp xbc, 0x1c00018
 	jr z, LoadFilter_HandleScroll
-	cp xbc, 0x1C00017
+	cp xbc, 0x1c00017
 	jr z, LoadFilter_HandleScroll
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, LoadFilter_HandleShow
-	cp xbc, 0x1E50004
+	cp xbc, 0x1e50004
 	jrl nz, LoadFilter_Return
 	ld xwa, (xsp + 2)
 	stda32 32642, xwa
@@ -447,7 +447,7 @@ LoadFilter_DrawLoop:
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 32642
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	incm 1, (xsp)
 	cpw (xsp), 0x8
@@ -458,7 +458,7 @@ LoadFilter_HandleScroll:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x8
 	jrl nc, LoadFilter_OpLoad
-	cp xbc, 0x1C00017
+	cp xbc, 0x1c00017
 	jr nz, LoadFilter_ScrollDown
 	cp xwa, 0x1
 	jr nz, LoadFilter_ScrollUp_CheckZero
@@ -523,15 +523,15 @@ LoadFilter_UpdateDisplay:
 	extz wa
 	sla wa, 4
 	ldada xbc, 32646
-	st_dri3b B, 0x07, 0xE4, 0xE0
+	st_dri3b B, 0x07, 0xe4, 0xe0
 	ldda32 xwa, 32642
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	jrl LoadFilter_Return
 
 LoadFilter_OpLoad:
 	ld xwa, (xsp + 2)
-	cp xwa, 0xA
+	cp xwa, 0xa
 	jrl nz, LoadFilter_Return
 	call CheckFileSystemStatus
 	cps hl, 0
@@ -540,7 +540,7 @@ LoadFilter_OpLoad:
 	cps hl, 0
 	jrl z, LoadFilter_Return
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	call GetCurrentFileIndex
@@ -556,11 +556,11 @@ LoadFilter_OpLoad:
 	stda8 32578, l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	cpdi16 61854, 0
@@ -579,7 +579,7 @@ LoadFilter_OpLoad:
 	jr z, LoadFilter_Load_ShowCode1
 
 LoadFilter_Load_ShowCodeA:
-	ldw wa, 0xA
+	ldw wa, 0xa
 	jr LoadFilter_Load_CallHandler
 
 LoadFilter_Load_ShowCode1:
@@ -587,11 +587,11 @@ LoadFilter_Load_ShowCode1:
 
 LoadFilter_Load_CallHandler:
 	call UI_PostPartChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 
 LoadFilter_Return:
@@ -605,7 +605,7 @@ RenderSaveFilterDisplay:
 	ld (xsp + 2), xwa
 	ld xwa, (xsp + 2)
 	ld c, (xsp)
-	lda_dpi XHL, 0xE0
+	lda_dpi XHL, 0xe0
 	ld (xsp + 2), xwa
 	ld a, c
 	extz wa
@@ -618,17 +618,17 @@ RenderSaveFilterDisplay:
 	cps l, 0
 	jr z, RenderSaveFilter_Available
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA0724
+	ld xbc, 0xea0724
 	jr RenderSaveFilter_CopyAndReturn
 
 RenderSaveFilter_Available:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA072A
+	ld xbc, 0xea072a
 	jr RenderSaveFilter_CopyAndReturn
 
 RenderSaveFilter_Unavail:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xEA0730
+	ld xbc, 0xea0730
 
 RenderSaveFilter_CopyAndReturn:
 	call FileIO_CopyString
@@ -638,13 +638,13 @@ RenderSaveFilter_CopyAndReturn:
 FmmSaveFilterFunc:
 	dec 6, xsp
 	ld (xsp + 2), xde
-	cp xbc, 0x1C00018
+	cp xbc, 0x1c00018
 	jr z, SaveFilter_HandleScroll
-	cp xbc, 0x1C00017
+	cp xbc, 0x1c00017
 	jr z, SaveFilter_HandleScroll
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, SaveFilter_HandleShow
-	cp xbc, 0x1E50004
+	cp xbc, 0x1e50004
 	jrl nz, SaveFilter_Return
 	ld xwa, (xsp + 2)
 	stda32 32774, xwa
@@ -668,7 +668,7 @@ SaveFilter_DrawLoop:
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 32774
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	incm 1, (xsp)
 	cpw (xsp), 0x8
@@ -681,7 +681,7 @@ SaveFilter_HandleScroll:
 	jrl nc, SaveFilter_SelectAll
 	cp xwa, 0x1
 	jr nz, SaveFilter_ScrollOther
-	cp xbc, 0x1C00017
+	cp xbc, 0x1c00017
 	jr nz, SaveFilter_ScrollDown
 	call FileIO_GetRecordAttr_Check
 	cps l, 0
@@ -721,7 +721,7 @@ SaveFilter_ScrollDown_Unlock:
 SaveFilter_ScrollOther:
 	ld xwa, (xsp + 2)
 	extz wa
-	cp xbc, 0x1C00017
+	cp xbc, 0x1c00017
 	jr nz, SaveFilter_UnlockFilter
 
 SaveFilter_LockFilter:
@@ -745,9 +745,9 @@ SaveFilter_UpdateDisplay:
 	extz wa
 	sla wa, 4
 	ldada xbc, 32778
-	st_dri3b B, 0x07, 0xE4, 0xE0
+	st_dri3b B, 0x07, 0xe4, 0xe0
 	ldda32 xwa, 32774
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	jrl SaveFilter_DispatchWidget
 
 SaveFilter_SelectAll:
@@ -783,7 +783,7 @@ SaveFilter_SelectAll_Update:
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 32774
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	incm 1, (xsp)
 	cpw (xsp), 0x8
@@ -815,7 +815,7 @@ SaveFilter_DeselectAll_Loop:
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 32774
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	incm 1, (xsp)
 	cpw (xsp), 0x8
@@ -824,7 +824,7 @@ SaveFilter_DeselectAll_Loop:
 
 SaveFilter_OpSave:
 	ld xwa, (xsp + 2)
-	cp xwa, 0xA
+	cp xwa, 0xa
 	jrl nz, SaveFilter_OpFormat
 	call FileIO_FormatName_Done
 	cps hl, 0
@@ -834,8 +834,8 @@ SaveFilter_OpSave:
 	jr z, SaveFilter_Save_NoPwd
 	lds32 xde, 0
 	ldda8 e, 35340
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C50004
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c50004
 	jr SaveFilter_DispatchWidget
 
 SaveFilter_Save_NoPwd:
@@ -844,12 +844,12 @@ SaveFilter_Save_NoPwd:
 	jr z, SaveFilter_Save_Execute
 	cpi8_24 0x0340ea, 0x00
 	jr z, SaveFilter_Save_Execute
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C50000
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c50000
 	lds32 xde, 1
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 0
 
 SaveFilter_DispatchWidget:
@@ -858,7 +858,7 @@ SaveFilter_DispatchWidget:
 
 SaveFilter_Save_Execute:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -874,20 +874,20 @@ SaveFilter_Save_Execute:
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jr SaveFilter_CallStatusDisplay
 
 SaveFilter_OpFormat:
@@ -895,7 +895,7 @@ SaveFilter_OpFormat:
 	cp xwa, 0x32
 	jr nz, SaveFilter_ResetAll
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -911,20 +911,20 @@ SaveFilter_OpFormat:
 	stda16 34050, xhl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	lds wa, 1
 	call UI_PostPartChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 
 SaveFilter_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -932,7 +932,7 @@ SaveFilter_CallStatusDisplay:
 
 SaveFilter_ResetAll:
 	ld xwa, (xsp + 2)
-	cp xwa, 0xB
+	cp xwa, 0xb
 	jr nz, SaveFilter_Return
 	call FileIO_SetModeFlag_Reading
 	ldw (xsp), 0x0
@@ -955,7 +955,7 @@ SaveFilter_ResetAll_Loop:
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 32774
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	incm 1, (xsp)
 	cpw (xsp), 0x8

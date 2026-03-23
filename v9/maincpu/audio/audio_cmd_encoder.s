@@ -27,22 +27,22 @@ AudioCmd_ParseFormatSpec:
 
 AudioCmd_ReadFormatChar:
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xE0
+	ld_spib C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xF8
+	ldfr_berp C, 0xf8
 	exts iz
 	ld wa, iz
 	cp iz, 0x30
 	jr z, AudioCmd_Flag_Zero
-	cp wa, 0x2D
+	cp wa, 0x2d
 	jr z, AudioCmd_Flag_Minus
-	cp wa, 0x2B
+	cp wa, 0x2b
 	jr z, AudioCmd_Flag_Plus
 	cp wa, 0x23
 	jr z, AudioCmd_Flag_Hash
 	cp wa, 0x20
 	jr z, AudioCmd_Flag_Space
-	cp iz, 0x2A
+	cp iz, 0x2a
 	jr nz, AudioCmd_CheckIfDigit
 	ld xbc, (xsp + 86)
 	lds32 xwa, 2
@@ -59,9 +59,9 @@ AudioCmd_ReadFormatChar:
 
 AudioCmd_StarWidth_Positive:
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xE0
+	ld_spib C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xF8
+	ldfr_berp C, 0xf8
 	exts iz
 	jr AudioCmd_CheckPrecisionDot
 
@@ -89,32 +89,32 @@ AudioCmd_ParseWidthDigit:
 	ld bc, iz
 	sub bc, 0x30
 	ld wa, (xsp + 8)
-	muls wa, 0xA
+	muls wa, 0xa
 	ld (xsp + 8), wa
 	add (xsp + 8), bc
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xE0
+	ld_spib C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xF8
+	ldfr_berp C, 0xf8
 	exts iz
 
 AudioCmd_CheckIfDigit:
-	ldto_berp A, 0xF8
+	ldto_berp A, 0xf8
 	extz wa
 	lda_24 xbc, 0xeed778
-	bit_dri 2, 0x07, 0xE4, 0xE0
+	bit_dri 2, 0x07, 0xe4, 0xe0
 	jr nz, AudioCmd_ParseWidthDigit
 
 AudioCmd_CheckPrecisionDot:
-	cp iz, 0x2E
+	cp iz, 0x2e
 	jr nz, AudioCmd_CheckLengthH
 	setm 4, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xE0
+	ld_spib C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xF8
+	ldfr_berp C, 0xf8
 	exts iz
-	cp iz, 0x2A
+	cp iz, 0x2a
 	jr nz, AudioCmd_CheckPrecisionDigit
 	ld xbc, (xsp + 86)
 	lds32 xwa, 2
@@ -128,9 +128,9 @@ AudioCmd_CheckPrecisionDot:
 
 AudioCmd_StarPrecision_Applied:
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xE0
+	ld_spib C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xF8
+	ldfr_berp C, 0xf8
 	exts iz
 	jr AudioCmd_CheckLengthH
 
@@ -138,20 +138,20 @@ AudioCmd_ParsePrecisionDigit:
 	ld bc, iz
 	sub bc, 0x30
 	ld wa, (xsp + 10)
-	muls wa, 0xA
+	muls wa, 0xa
 	ld (xsp + 10), wa
 	add (xsp + 10), bc
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xE0
+	ld_spib C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xF8
+	ldfr_berp C, 0xf8
 	exts iz
 
 AudioCmd_CheckPrecisionDigit:
-	ldto_berp A, 0xF8
+	ldto_berp A, 0xf8
 	extz wa
 	lda_24 xbc, 0xeed778
-	bit_dri 2, 0x07, 0xE4, 0xE0
+	bit_dri 2, 0x07, 0xe4, 0xe0
 	jr nz, AudioCmd_ParsePrecisionDigit
 
 AudioCmd_CheckLengthH:
@@ -159,31 +159,31 @@ AudioCmd_CheckLengthH:
 	jr nz, AudioCmd_CheckLengthL
 	setm 5, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xE0
+	ld_spib C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xF8
+	ldfr_berp C, 0xf8
 	exts iz
 	jr AudioCmd_DispatchType
 
 AudioCmd_CheckLengthL:
-	cp iz, 0x6C
+	cp iz, 0x6c
 	jr nz, AudioCmd_CheckLengthLL
 	setm 6, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xE0
+	ld_spib C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xF8
+	ldfr_berp C, 0xf8
 	exts iz
 	jr AudioCmd_DispatchType
 
 AudioCmd_CheckLengthLL:
-	cp iz, 0x4C
+	cp iz, 0x4c
 	jr nz, AudioCmd_DispatchType
 	setm 7, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xE0
+	ld_spib C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xF8
+	ldfr_berp C, 0xf8
 	exts iz
 
 AudioCmd_DispatchType:
@@ -203,9 +203,9 @@ AudioCmd_DispatchType:
 	jrl gt, AudioCmd_MainLoop_ReadNext
 	add wa, wa
 	lda_24 xix, 0xeed878
-	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, 0xff1229
-	jp_dri 8, 0x07, 0xF0, 0xE0
+	jp_dri 8, 0x07, 0xf0, 0xe0
 
 AudioCmd_Format_Percent:
 	ld wa, (xsp + 6)
@@ -215,7 +215,7 @@ AudioCmd_Format_Percent:
 
 AudioCmd_Percent_PadLeft:
 	incm 1, (xsp + 4)
-	push_sd24w 0x20, 0xC2, 0x03
+	push_sd24w 0x20, 0xc2, 0x03
 	ld xwa, (xsp + 92)
 	call (xwa)
 	inc 2, xsp
@@ -301,7 +301,7 @@ AudioCmd_String_CheckLeftAlign:
 	jr AudioCmd_String_OutputLoop
 
 AudioCmd_String_PadLeftSpace:
-	push_sd24w 0x20, 0xC2, 0x03
+	push_sd24w 0x20, 0xc2, 0x03
 	ld xwa, (xsp + 92)
 	call (xwa)
 	inc 2, xsp
@@ -315,7 +315,7 @@ AudioCmd_String_PadLeftLoop:
 
 AudioCmd_String_OutputChars:
 	ld xwa, (xsp + 16)
-	ld_spib C, 0xE0
+	ld_spib C, 0xe0
 	ld (xsp + 16), xwa
 	exts bc
 	pushw bc
@@ -459,14 +459,14 @@ AudioCmd_Decimal_OutputSign:
 	ld xwa, (xsp + 16)
 	cp xwa, 0x0
 	jr ge, AudioCmd_Decimal_PlusSign
-	pushw 0x2D
+	pushw 0x2d
 	jr AudioCmd_Decimal_EmitSign
 
 AudioCmd_Decimal_PlusSign:
 	ld wa, (xsp + 6)
 	bit 0, wa
 	jr z, AudioCmd_Decimal_SpaceSign
-	pushw 0x2B
+	pushw 0x2b
 	jr AudioCmd_Decimal_EmitSign
 
 AudioCmd_Decimal_SpaceSign:
@@ -518,7 +518,7 @@ AudioCmd_Decimal_OutputDigits:
 	decm 1, (xsp + 12)
 	lda xbc, (xsp + 56)
 	ld wa, (xsp + 12)
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ld_srib3 A, 0x07, 0xe4, 0xe0
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 92)
@@ -618,7 +618,7 @@ AudioCmd_Unsigned_FinalWidth:
 	jr AudioCmd_Unsigned_PrecZeroLoop
 
 AudioCmd_Unsigned_PadLeftSpace:
-	push_sd24w 0x20, 0xC2, 0x03
+	push_sd24w 0x20, 0xc2, 0x03
 	ld xwa, (xsp + 92)
 	call (xwa)
 	inc 2, xsp
@@ -646,7 +646,7 @@ AudioCmd_Unsigned_PrecZeroLoop:
 AudioCmd_Unsigned_OutputDigits:
 	dec 1, iz
 	lda xwa, (xsp + 44)
-	ld_srib3 A, 0x07, 0xE0, 0xF8
+	ld_srib3 A, 0x07, 0xe0, 0xf8
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 92)
@@ -735,16 +735,16 @@ AudioCmd_Hex_SubtractLength:
 	sub (xsp + 10), wa
 
 AudioCmd_Hex_CheckAltForm:
-	ldi_werp 0xFA, 0
+	ldi_werp 0xfa, 0
 	ld wa, (xsp + 6)
 	bit 3, wa
 	jr z, AudioCmd_Hex_AltFormPrefix
-	ldi_werp 0xFA, 2
+	ldi_werp 0xfa, 2
 
 AudioCmd_Hex_AltFormPrefix:
 	ld wa, (xsp + 18)
 	add wa, (xsp + 10)
-	add_werp WA, 0xFA
+	add_werp WA, 0xfa
 	sub (xsp + 8), wa
 	jr ge, AudioCmd_Hex_ComputeWidth
 	ldw (xsp + 8), 0x0
@@ -753,7 +753,7 @@ AudioCmd_Hex_ComputeWidth:
 	ld wa, (xsp + 8)
 	add wa, (xsp + 18)
 	add wa, (xsp + 10)
-	add_werp WA, 0xFA
+	add_werp WA, 0xfa
 	add (xsp + 4), wa
 	ld wa, (xsp + 6)
 	bit 1, wa
@@ -775,7 +775,7 @@ AudioCmd_Hex_PadLeftLoop:
 	jr nz, AudioCmd_Hex_PadLeftSpace
 
 AudioCmd_Hex_EmitPrefix:
-	cpi_werp 0xFA, 0
+	cpi_werp 0xfa, 0
 	jr z, AudioCmd_Hex_ZeroFill
 	cpw (xsp + 18), 0x0
 	jr z, AudioCmd_Hex_ZeroFill
@@ -825,7 +825,7 @@ AudioCmd_Hex_OutputDigits:
 	decm 1, (xsp + 18)
 	lda xbc, (xsp + 32)
 	ld wa, (xsp + 18)
-	ld_srib3 A, 0x07, 0xE4, 0xE0
+	ld_srib3 A, 0x07, 0xe4, 0xe0
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 92)
@@ -992,7 +992,7 @@ AudioCmd_Octal_PrecZeroLoop:
 AudioCmd_Octal_OutputDigits:
 	dec 1, iz
 	lda xwa, (xsp + 20)
-	ld_srib3 A, 0x07, 0xE0, 0xF8
+	ld_srib3 A, 0x07, 0xe0, 0xf8
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 92)
@@ -1044,7 +1044,7 @@ AudioCmd_FormatFloat_Entry:
 	jr z, AudioCmd_FormatFloat_ShortArg
 	ld xwa, xbc
 	ld xde, (xsp + 86)
-	lda_dd8l XBC, 0x0A
+	lda_dd8l XBC, 0x0a
 	add (xde), xbc
 	ld xbc, (xde)
 	lda xbc, (xbc - 10)
@@ -1068,7 +1068,7 @@ AudioCmd_FormatFloat_Dispatch:
 	push xwa
 	ld xwa, (xsp + 100)
 	push xwa
-	ldto_berp A, 0xF8
+	ldto_berp A, 0xf8
 	exts wa
 	pushw wa
 	calr AudioCmd_FormatFloat
@@ -1078,9 +1078,9 @@ AudioCmd_FormatFloat_Dispatch:
 
 AudioCmd_MainLoop_ReadNext:
 	ld xwa, (xsp + 82)
-	ld_spib C, 0xE0
+	ld_spib C, 0xe0
 	ld (xsp + 82), xwa
-	ldfr_berp C, 0xF8
+	ldfr_berp C, 0xf8
 	exts iz
 	cps iz, 0
 	jrl nz, AudioCmd_OutputLiteral
@@ -1096,7 +1096,7 @@ AudioCmd_IntToStr:
 	cp xwa, 0x0
 	jr ge, AudioCmd_IntToStr_Positive
 	cpl wa
-	cpl_werp 0xE2
+	cpl_werp 0xe2
 	inc 1, xwa
 
 AudioCmd_IntToStr_Positive:
@@ -1104,17 +1104,17 @@ AudioCmd_IntToStr_Positive:
 
 AudioCmd_IntToStr_DivLoop:
 	ld xwa, (xsp + 12)
-	st_dpib A, 0xE0
+	st_dpib A, 0xe0
 	ld (xsp + 4), xbc
 	ld (xsp + 12), xwa
 	ld xwa, xiz
-	lda_dd8l XBC, 0x0A
+	lda_dd8l XBC, 0x0a
 	call DivMod32
 	add xhl, 0x30
 	ld xwa, (xsp + 4)
 	ld (xwa), l
 	ld xwa, xiz
-	lda_dd8l XBC, 0x0A
+	lda_dd8l XBC, 0x0a
 	call Math_DivideU32
 	ld xiz, xhl
 	or xiz, xiz
@@ -1132,17 +1132,17 @@ AudioCmd_UIntToStr:
 
 AudioCmd_UIntToStr_DivLoop:
 	ld xwa, (xsp + 12)
-	st_dpib A, 0xE0
+	st_dpib A, 0xe0
 	ld (xsp + 4), xbc
 	ld (xsp + 12), xwa
 	ld xwa, xiz
-	lda_dd8l XBC, 0x0A
+	lda_dd8l XBC, 0x0a
 	call DivMod32
 	add xhl, 0x30
 	ld xwa, (xsp + 4)
 	ld (xwa), l
 	ld xwa, xiz
-	lda_dd8l XBC, 0x0A
+	lda_dd8l XBC, 0x0a
 	call Math_DivideU32
 	ld xiz, xhl
 	or xiz, xiz
@@ -1154,10 +1154,10 @@ AudioCmd_UIntToStr_DivLoop:
 	ret
 
 AudioCmd_HexToStr:
-	ld xwa, 0xEED8B6
+	ld xwa, 0xeed8b6
 	cpw (xsp + 12), 0x78
 	jr nz, AudioCmd_HexToStr_TableSelected
-	ld xwa, 0xEED8A4
+	ld xwa, 0xeed8a4
 
 AudioCmd_HexToStr_TableSelected:
 	ld xix, xwa
@@ -1165,9 +1165,9 @@ AudioCmd_HexToStr_TableSelected:
 	ld xde, (xsp + 8)
 
 AudioCmd_HexToStr_Loop:
-	st_dpib A, 0xEC
+	st_dpib A, 0xec
 	ld xwa, xde
-	and xwa, 0xF
+	and xwa, 0xf
 	add xwa, xix
 	ld a, (xwa)
 	ld (xbc), a
@@ -1181,7 +1181,7 @@ AudioCmd_OctalToStr:
 	ld xhl, (xsp + 4)
 
 AudioCmd_OctalToStr_Loop:
-	st_dpib A, 0xEC
+	st_dpib A, 0xec
 	ld xwa, xde
 	and xwa, 0x7
 	add xwa, 0x30
@@ -1269,7 +1269,7 @@ AudioCmd_FormatFloat_gG_Setup:
 	pushm (xsp + 56)
 	push xiz
 	pushw bc
-	cpw (xsp + 24), 0xFFFC
+	cpw (xsp + 24), 0xfffc
 	jr le, AudioCmd_FormatFloat_gG_UseSci
 	cp (xsp + 24), hl
 	jr le, AudioCmd_FormatFloat_fF_Call
@@ -1286,7 +1286,7 @@ AudioCmd_FormatFloat_Return:
 AudioCmd_FormatFFixed:
 	dec 4, xsp
 	pushw iz
-	ldw (xsp + 4), 0xF
+	ldw (xsp + 4), 0xf
 	cpw (xsp + 26), 0x1
 	jr ge, AudioCmd_FFixed_SetPrecision
 	ldw (xsp + 2), 0x0
@@ -1313,7 +1313,7 @@ AudioCmd_FFixed_CheckLongDoubleLimit:
 	ld a, c
 	extz wa
 	lda_24 xde, 0xeed778
-	st_dri3b B, 0x07, 0xE8, 0xE0
+	st_dri3b B, 0x07, 0xe8, 0xe0
 	bitm 1, (xde)
 	jr z, AudioCmd_FFixed_SpecNoUpperCase
 	ld a, c
@@ -1339,7 +1339,7 @@ AudioCmd_FFixed_RoundCheck:
 	cp iz, wa
 	jr ge, AudioCmd_FFixed_AfterRound
 	ld xwa, (xsp + 22)
-	cp_srib_im 0x07, 0xE0, 0xF8, 0x34
+	cp_srib_im 0x07, 0xe0, 0xf8, 0x34
 	jr le, AudioCmd_FFixed_AfterRound
 	cps iz, 0
 	jr ge, AudioCmd_FFixed_RoundLoop
@@ -1347,15 +1347,15 @@ AudioCmd_FFixed_RoundCheck:
 
 AudioCmd_FFixed_RoundCarry:
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xE0, 0xF8, 0x30
+	stib_dri 0x07, 0xe0, 0xf8, 0x30
 
 AudioCmd_FFixed_RoundLoop:
 	dec 1, iz
 	ld xwa, (xsp + 22)
-	inc_srib 1, 0x07, 0xE0, 0xF8
+	inc_srib 1, 0x07, 0xe0, 0xf8
 	cps iz, 0
 	jr le, AudioCmd_FFixed_AfterRound
-	cp_srib_im 0x07, 0xE0, 0xF8, 0x39
+	cp_srib_im 0x07, 0xe0, 0xf8, 0x39
 	jr gt, AudioCmd_FFixed_RoundCarry
 
 AudioCmd_FFixed_AfterRound:
@@ -1397,7 +1397,7 @@ AudioCmd_FFixed_StripZeroLoop:
 
 AudioCmd_FFixed_StripZeroCheck:
 	ld xwa, (xsp + 22)
-	cp_srib_im 0x07, 0xE0, 0xF8, 0x30
+	cp_srib_im 0x07, 0xe0, 0xf8, 0x30
 	jr z, AudioCmd_FFixed_StripZeroLoop
 
 AudioCmd_FFixed_ComputeOutputLen:
@@ -1459,14 +1459,14 @@ AudioCmd_FFixed_PadLeftLoop:
 AudioCmd_FFixed_EmitSign:
 	cps iz, 0
 	jr z, AudioCmd_FFixed_SignPlus
-	pushw 0x2D
+	pushw 0x2d
 	jr AudioCmd_FFixed_SignEmit
 
 AudioCmd_FFixed_SignPlus:
 	ld wa, (xsp + 16)
 	bit 0, wa
 	jr z, AudioCmd_FFixed_SignSpace
-	pushw 0x2B
+	pushw 0x2b
 	jr AudioCmd_FFixed_SignEmit
 
 AudioCmd_FFixed_SignSpace:
@@ -1533,7 +1533,7 @@ AudioCmd_FFixed_IntegerDigits:
 
 AudioCmd_FFixed_IntDigitOutput:
 	ld xwa, (xsp + 22)
-	ld_srib3 A, 0x07, 0xE0, 0xF8
+	ld_srib3 A, 0x07, 0xe0, 0xf8
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 14)
@@ -1572,7 +1572,7 @@ AudioCmd_FFixed_IntZeroLoop:
 	jr z, AudioCmd_FFixed_FracLeadZeroLoop
 
 AudioCmd_FFixed_DecimalPoint:
-	pushw 0x2E
+	pushw 0x2e
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
@@ -1621,7 +1621,7 @@ AudioCmd_FFixed_FracDigits:
 
 AudioCmd_FFixed_FracDigitOutput:
 	ld xwa, (xsp + 22)
-	ld_srib3 A, 0x07, 0xE0, 0xF8
+	ld_srib3 A, 0x07, 0xe0, 0xf8
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 14)
@@ -1684,7 +1684,7 @@ AudioCmd_FFixed_DataTable:
 AudioCmd_FormatEScientific:
 	dec 2, xsp
 	push xiz
-	ldw (xsp + 4), 0xF
+	ldw (xsp + 4), 0xf
 	ld wa, (xsp + 16)
 	bit 4, wa
 	jr nz, AudioCmd_ESci_ApplyDefaults
@@ -1694,7 +1694,7 @@ AudioCmd_ESci_ApplyDefaults:
 	ld a, (xsp + 10)
 	extz wa
 	lda_24 xbc, 0xeed778
-	st_dri3b A, 0x07, 0xE4, 0xE0
+	st_dri3b A, 0x07, 0xe4, 0xe0
 	bitm 1, (xbc)
 	jr z, AudioCmd_ESci_SpecNoUpperCase
 	ld a, (xsp + 10)
@@ -1714,7 +1714,7 @@ AudioCmd_ESci_CheckSpecG:
 AudioCmd_ESci_SetDigitCount:
 	ld wa, (xsp + 20)
 	inc 1, wa
-	ldfr_werp WA, 0xFA
+	ldfr_werp WA, 0xfa
 	ld wa, (xsp + 16)
 	bit 7, wa
 	jr z, AudioCmd_ESci_RoundCheck
@@ -1723,27 +1723,27 @@ AudioCmd_ESci_SetDigitCount:
 AudioCmd_ESci_RoundCheck:
 	ld de, (xsp + 4)
 	inc 1, de
-	ldto_werp WA, 0xFA
+	ldto_werp WA, 0xfa
 	cp wa, de
 	jr ge, AudioCmd_ESci_AfterRound
-	ldto_werp DE, 0xFA
-	dec1_werp 0xFA
+	ldto_werp DE, 0xfa
+	dec1_werp 0xfa
 	ld xwa, (xsp + 22)
-	cp_srib_im 0x07, 0xE0, 0xE8, 0x34
+	cp_srib_im 0x07, 0xe0, 0xe8, 0x34
 	jr gt, AudioCmd_ESci_RoundLoop
 	jr AudioCmd_ESci_AfterRound
 
 AudioCmd_ESci_RoundCarry:
 	ld xwa, (xsp + 22)
-	stib_dri 0x07, 0xE0, 0xFA, 0x30
-	dec1_werp 0xFA
+	stib_dri 0x07, 0xe0, 0xfa, 0x30
+	dec1_werp 0xfa
 
 AudioCmd_ESci_RoundLoop:
 	ld xwa, (xsp + 22)
-	inc_srib 1, 0x07, 0xE0, 0xFA
-	cpi_werp 0xFA, 0
+	inc_srib 1, 0x07, 0xe0, 0xfa
+	cpi_werp 0xfa, 0
 	jr le, AudioCmd_ESci_AfterRound
-	cp_srib_im 0x07, 0xE0, 0xFA, 0x39
+	cp_srib_im 0x07, 0xe0, 0xfa, 0x39
 	jr gt, AudioCmd_ESci_RoundCarry
 
 AudioCmd_ESci_AfterRound:
@@ -1763,18 +1763,18 @@ AudioCmd_ESci_StripTrailZeros:
 	bit 3, wa
 	jr nz, AudioCmd_ESci_ComputeOutputLen
 	ld wa, (xsp + 20)
-	ldfr_werp WA, 0xFA
+	ldfr_werp WA, 0xfa
 	jr AudioCmd_ESci_StripCheck
 
 AudioCmd_ESci_StripLoop:
-	dec1_werp 0xFA
+	dec1_werp 0xfa
 	decm 1, (xsp + 20)
 
 AudioCmd_ESci_StripCheck:
-	cpi_werp 0xFA, 0
+	cpi_werp 0xfa, 0
 	jr le, AudioCmd_ESci_ComputeOutputLen
 	ld xwa, (xsp + 22)
-	cp_srib_im 0x07, 0xE0, 0xFA, 0x30
+	cp_srib_im 0x07, 0xe0, 0xfa, 0x30
 	jr z, AudioCmd_ESci_StripLoop
 
 AudioCmd_ESci_ComputeOutputLen:
@@ -1828,14 +1828,14 @@ AudioCmd_ESci_PadLeftLoop:
 AudioCmd_ESci_EmitSign:
 	cps iz, 0
 	jr z, AudioCmd_ESci_SignPlus
-	pushw 0x2D
+	pushw 0x2d
 	jr AudioCmd_ESci_SignEmit
 
 AudioCmd_ESci_SignPlus:
 	ld wa, (xsp + 16)
 	bit 0, wa
 	jr z, AudioCmd_ESci_SignSpace
-	pushw 0x2B
+	pushw 0x2b
 	jr AudioCmd_ESci_SignEmit
 
 AudioCmd_ESci_SignSpace:
@@ -1880,7 +1880,7 @@ AudioCmd_ESci_LeadDigit:
 	inc 2, xsp
 	ld xwa, (xsp + 22)
 	ld (xwa), 0x30
-	ldi_werp 0xFA, 0
+	ldi_werp 0xfa, 0
 	incdi16_24 1, 246306
 	cpw (xsp + 26), 0x0
 	jr ge, AudioCmd_ESci_Overflow_DecExp
@@ -1900,7 +1900,7 @@ AudioCmd_ESci_LeadDigitNormal:
 	call (xwa)
 	inc 2, xsp
 	incdi16_24 1, 246306
-	ldi_werp 0xFA, 1
+	ldi_werp 0xfa, 1
 
 AudioCmd_ESci_DecimalPoint:
 	cpw (xsp + 20), 0x0
@@ -1910,7 +1910,7 @@ AudioCmd_ESci_DecimalPoint:
 	jr z, AudioCmd_ESci_MantissaDigits
 
 AudioCmd_ESci_DecimalPointEmit:
-	pushw 0x2E
+	pushw 0x2e
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
@@ -1920,7 +1920,7 @@ AudioCmd_ESci_MantissaDigits:
 	ld c, (xsp + 10)
 	extz bc
 	lda_24 xwa, 0xeed778
-	bit_dri 1, 0x07, 0xE0, 0xE4
+	bit_dri 1, 0x07, 0xe0, 0xe4
 	jr z, AudioCmd_ESci_MantissaNoCase
 	ld a, (xsp + 10)
 	sub a, 0x20
@@ -1940,26 +1940,26 @@ AudioCmd_ESci_CheckGTrim:
 AudioCmd_ESci_OutputMantissa:
 	ld bc, (xsp + 4)
 	inc 1, bc
-	ldto_werp WA, 0xFA
+	ldto_werp WA, 0xfa
 	cp wa, bc
 	jr lt, AudioCmd_ESci_MantDigitLoop
 	jr AudioCmd_ESci_MantTrailLoop
 
 AudioCmd_ESci_MantDigitOutput:
 	ld xwa, (xsp + 22)
-	ld_srib3 A, 0x07, 0xE0, 0xFA
+	ld_srib3 A, 0x07, 0xe0, 0xfa
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
 	incdi16_24 1, 246306
-	inc1_werp 0xFA
+	inc1_werp 0xfa
 
 AudioCmd_ESci_MantDigitLoop:
 	ld bc, (xsp + 4)
 	inc 1, bc
-	ldto_werp WA, 0xFA
+	ldto_werp WA, 0xfa
 	cp wa, bc
 	jr ge, AudioCmd_ESci_MantTrailLoop
 	ld wa, (xsp + 20)
@@ -1995,7 +1995,7 @@ AudioCmd_ESci_MantTrailLoop:
 	ld c, (xsp + 10)
 	extz bc
 	lda_24 xwa, 0xeed778
-	bit_dri 1, 0x07, 0xE0, 0xE4
+	bit_dri 1, 0x07, 0xe0, 0xe4
 	jr z, AudioCmd_ESci_ExpNoCase
 	ld a, (xsp + 10)
 	sub a, 0x20
@@ -2023,18 +2023,18 @@ AudioCmd_ESci_EmitExpLetter:
 	incdi16_24 1, 246306
 	cpw (xsp + 26), 0x0
 	jr ge, AudioCmd_ESci_ExpSignPositive
-	pushw 0x2D
+	pushw 0x2d
 	jr AudioCmd_ESci_EmitExpSign
 
 AudioCmd_ESci_ExpSignPositive:
-	pushw 0x2B
+	pushw 0x2b
 
 AudioCmd_ESci_EmitExpSign:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
 	incdi16_24 1, 246306
-	ldfr_werp IZ, 0xFA
+	ldfr_werp IZ, 0xfa
 	jr AudioCmd_ESci_ExpLeadZeroLoop
 
 AudioCmd_ESci_ExpLeadZeros:
@@ -2045,8 +2045,8 @@ AudioCmd_ESci_ExpLeadZeros:
 	incdi16_24 1, 246306
 
 AudioCmd_ESci_ExpLeadZeroLoop:
-	ldto_werp WA, 0xFA
-	inc1_werp 0xFA
+	ldto_werp WA, 0xfa
+	inc1_werp 0xfa
 	cps wa, 3
 	jr lt, AudioCmd_ESci_ExpLeadZeros
 	jr AudioCmd_ESci_ExpDigitLoop
@@ -2054,7 +2054,7 @@ AudioCmd_ESci_ExpLeadZeroLoop:
 AudioCmd_ESci_ExpDigitOutput:
 	dec 1, iz
 	ld xwa, (xsp + 22)
-	ld_srib3 A, 0x07, 0xE0, 0xF8
+	ld_srib3 A, 0x07, 0xe0, 0xf8
 	exts wa
 	pushw wa
 	ld xwa, (xsp + 14)
@@ -2091,34 +2091,34 @@ AudioCmd_FormatGGeneral:
 	lda xsp, (xsp - 16)
 	push xiz
 	lds iz, 0
-	ldw (xsp + 6), 0xF
+	ldw (xsp + 6), 0xf
 	ldw (xsp + 8), 0x8
 	pushw 0x20
 	pushw 0x0
 	pushw 0x3
-	pushw 0xC224
+	pushw 0xc224
 	call Memset
 	inc 8, xsp
-	ldi_werp 0xFA, 0
+	ldi_werp 0xfa, 0
 
 AudioCmd_GGen_ClearArrays:
-	ldto_werp BC, 0xFA
+	ldto_werp BC, 0xfa
 	add bc, bc
 	lda_24 xde, 0x03c284
 	lda_24 xwa, 0x03c244
-	stiw_dri 0x07, 0xE0, 0xE4, 0x00, 0x00
-	stiw_dri 0x07, 0xE8, 0xE4, 0x00, 0x00
-	inc1_werp 0xFA
-	cp_erpw 0xFA, 0x20, 0x00
+	stiw_dri 0x07, 0xe0, 0xe4, 0x00, 0x00
+	stiw_dri 0x07, 0xe8, 0xe4, 0x00, 0x00
+	inc1_werp 0xfa
+	cp_erpw 0xfa, 0x20, 0x00
 	jr lt, AudioCmd_GGen_ClearArrays
 	ld wa, (xsp + 32)
 	bit 7, wa
 	jr z, AudioCmd_GGen_CheckLongDouble
 	ldw (xsp + 6), 0x12
-	ldw (xsp + 8), 0xA
+	ldw (xsp + 8), 0xa
 
 AudioCmd_GGen_CheckLongDouble:
-	ldi_werp 0xFA, 0
+	ldi_werp 0xfa, 0
 	cpw (xsp + 8), 0x0
 	jr le, AudioCmd_GGen_CheckSign
 
@@ -2126,13 +2126,13 @@ AudioCmd_GGen_LoadDigits:
 	lda xwa, (xsp + 10)
 	ld bc, (xsp + 8)
 	dec 1, bc
-	sub_werp BC, 0xFA
+	sub_werp BC, 0xfa
 	extz xbc
 	add xbc, (xsp + 24)
 	ld c, (xbc)
-	lda_dri3 XHL, 0x07, 0xE0, 0xFA
-	inc1_werp 0xFA
-	ldto_werp WA, 0xFA
+	lda_dri3 XHL, 0x07, 0xe0, 0xfa
+	inc1_werp 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, (xsp + 8)
 	jr lt, AudioCmd_GGen_LoadDigits
 
@@ -2173,7 +2173,7 @@ AudioCmd_GGen_NormalExp:
 
 AudioCmd_GGen_NonZero:
 	ld l, (xbc)
-	and l, 0xF0
+	and l, 0xf0
 	extz hl
 	sra hl, 4
 	lds wa, 4
@@ -2183,7 +2183,7 @@ AudioCmd_GGen_ComputeDecExp:
 	ld e, (xde)
 	res 7, e
 	extz de
-	and a, 0xF
+	and a, 0xf
 	jr z, AudioCmd_GGen_ShiftMantissa
 	slaa de
 
@@ -2205,53 +2205,53 @@ AudioCmd_GGen_AdjustNegExp:
 	ld wa, (xsp + 32)
 	bit 7, wa
 	jr z, AudioCmd_GGen_NormalDigits
-	ldi_werp 0xFA, 2
+	ldi_werp 0xfa, 2
 
 AudioCmd_GGen_LongDoubleDigits:
 	lda xwa, (xsp + 10)
-	ld_srib3 A, 0x07, 0xE0, 0xFA
-	and a, 0xFF
-	ldto_werp DE, 0xFA
+	ld_srib3 A, 0x07, 0xe0, 0xfa
+	and a, 0xff
+	ldto_werp DE, 0xfa
 	add de, de
 	lda_24 xbc, 0x03c240
 	extz wa
-	st_dri3w WA, 0x07, 0xE4, 0xE8
-	inc1_werp 0xFA
-	cp_erpw 0xFA, 0x0A, 0x00
+	st_dri3w WA, 0x07, 0xe4, 0xe8
+	inc1_werp 0xfa
+	cp_erpw 0xfa, 0x0a, 0x00
 	jr lt, AudioCmd_GGen_LongDoubleDigits
 	jr AudioCmd_GGen_NormalizeArray
 
 AudioCmd_GGen_NormalDigits:
 	lds ix, 0
-	ldi_werp 0xFA, 0
+	ldi_werp 0xfa, 0
 
 AudioCmd_GGen_FindLeadDigit:
 	lda xbc, (xsp + 10)
-	cp_srib_im 0x07, 0xE4, 0xFA, 0x00
+	cp_srib_im 0x07, 0xe4, 0xfa, 0x00
 	jr z, AudioCmd_GGen_FindLeadDone
 	lds ix, 1
 	jr AudioCmd_GGen_LoadDigitPairs
 
 AudioCmd_GGen_FindLeadDone:
-	inc1_werp 0xFA
-	cp_erpw 0xFA, 0x08, 0x00
+	inc1_werp 0xfa
+	cp_erpw 0xfa, 0x08, 0x00
 	jr lt, AudioCmd_GGen_FindLeadDigit
 
 AudioCmd_GGen_LoadDigitPairs:
-	andmi8 (xbc + 1), 0xF
-	ldi_werp 0xFA, 1
+	andmi8 (xbc + 1), 0xf
+	ldi_werp 0xfa, 1
 
 AudioCmd_GGen_DigitPairLoop:
-	ld_srib3 A, 0x07, 0xE4, 0xFA
-	and a, 0xFF
-	ldto_werp HL, 0xFA
+	ld_srib3 A, 0x07, 0xe4, 0xfa
+	and a, 0xff
+	ldto_werp HL, 0xfa
 	add hl, hl
 	dec 2, hl
 	lda_24 xde, 0x03c244
 	extz wa
-	st_dri3w WA, 0x07, 0xE8, 0xEC
-	inc1_werp 0xFA
-	cp_erpw 0xFA, 0x08, 0x00
+	st_dri3w WA, 0x07, 0xe8, 0xec
+	inc1_werp 0xfa
+	cp_erpw 0xfa, 0x08, 0x00
 	jr lt, AudioCmd_GGen_DigitPairLoop
 	cps ix, 0
 	jr z, AudioCmd_GGen_NormalizeArray
@@ -2260,10 +2260,10 @@ AudioCmd_GGen_DigitPairLoop:
 AudioCmd_GGen_NormalizeArray:
 	pushm (xsp + 8)
 	pushw 0x3
-	pushw 0xC244
+	pushw 0xc244
 	calr AudioCmd_CountLeadingZeros
 	inc 6, xsp
-	ldi_werp 0xFA, 0
+	ldi_werp 0xfa, 0
 	cps iz, 0
 	jr le, AudioCmd_GGen_NegativeExpCheck
 	cpw (xsp + 4), 0x0
@@ -2271,16 +2271,16 @@ AudioCmd_GGen_NormalizeArray:
 
 AudioCmd_GGen_MultiplyLoop:
 	pushw 0x3
-	pushw 0xC244
+	pushw 0xc244
 	calr AudioCmd_DivideDigitsByTen
 	pushm (xsp + 12)
 	pushw 0x3
-	pushw 0xC244
+	pushw 0xc244
 	calr AudioCmd_CountLeadingZeros
 	lda xsp, (xsp + 10)
 	sub iz, hl
-	inc1_werp 0xFA
-	ldto_werp WA, 0xFA
+	inc1_werp 0xfa
+	ldto_werp WA, 0xfa
 	cp wa, (xsp + 4)
 	jr lt, AudioCmd_GGen_MultiplyLoop
 
@@ -2290,7 +2290,7 @@ AudioCmd_GGen_PositiveExpDone:
 	sub wa, iz
 	pushw wa
 	pushw 0x3
-	pushw 0xC244
+	pushw 0xc244
 	jr AudioCmd_GGen_FinalShift
 
 AudioCmd_GGen_DivideLoop:
@@ -2298,17 +2298,17 @@ AudioCmd_GGen_DivideLoop:
 	calr AudioCmd_MultiplyDigitsByTen
 	pushm (xsp + 12)
 	pushw 0x3
-	pushw 0xC244
+	pushw 0xc244
 	calr AudioCmd_CountTrailingZeros
 	lda xsp, (xsp + 10)
 	add iz, hl
-	inc1_werp 0xFA
+	inc1_werp 0xfa
 
 AudioCmd_GGen_NegativeExpCheck:
 	ld de, (xsp + 4)
 	neg de
 	lda_24 xbc, 0x03c244
-	ldto_werp WA, 0xFA
+	ldto_werp WA, 0xfa
 	cp wa, de
 	jr lt, AudioCmd_GGen_DivideLoop
 	pushm (xsp + 6)
@@ -2320,18 +2320,18 @@ AudioCmd_GGen_NegativeExpCheck:
 AudioCmd_GGen_FinalShift:
 	calr AudioCmd_ShiftDigitArray
 	inc 8, xsp
-	ldi_werp 0xFA, 1
+	ldi_werp 0xfa, 1
 
 AudioCmd_GGen_RoundLoop:
-	push_werp 0xFA
-	ldto_werp BC, 0xFA
+	push_werp 0xfa
+	ldto_werp BC, 0xfa
 	add bc, bc
 	lda_24 xwa, 0x03c244
-	push_sriw 0x07, 0xE0, 0xE4
+	push_sriw 0x07, 0xe0, 0xe4
 	calr AudioCmd_NormalizeDigits
 	inc 4, xsp
-	inc1_werp 0xFA
-	cp_erpw 0xFA, 0x09, 0x00
+	inc1_werp 0xfa
+	cp_erpw 0xfa, 0x09, 0x00
 	jr lt, AudioCmd_GGen_RoundLoop
 	lds de, 0
 	lda_24 xbc, 0x03c244
@@ -2341,7 +2341,7 @@ AudioCmd_GGen_RoundLoop:
 	jr ule, AudioCmd_GGen_ExtractResult
 	lds de, 1
 	extz xwa
-	div wa, 0xA
+	div wa, 0xa
 	ld (xhl), a
 	incm 1, (xsp + 4)
 
@@ -2350,65 +2350,65 @@ AudioCmd_GGen_ExtractResult:
 	inc 1, de
 	ld wa, (xbc)
 	extz xwa
-	div wa, 0xA
-	ldto_werp WA, 0xE2
-	lda_dri3 XBC, 0x07, 0xEC, 0xF0
+	div wa, 0xa
+	ldto_werp WA, 0xe2
+	lda_dri3 XBC, 0x07, 0xec, 0xf0
 	incm 1, (xsp + 4)
-	ldi_werp 0xFA, 1
+	ldi_werp 0xfa, 1
 	jr AudioCmd_GGen_CopyLoop
 
 AudioCmd_GGen_CopyDigits:
 	ld bc, de
 	inc 1, de
 	lda_24 xwa, 0x03c224
-	ld_srib3 A, 0x07, 0xE0, 0xFA
-	lda_dri3 XBC, 0x07, 0xEC, 0xE4
-	inc1_werp 0xFA
+	ld_srib3 A, 0x07, 0xe0, 0xfa
+	lda_dri3 XBC, 0x07, 0xec, 0xe4
+	inc1_werp 0xfa
 
 AudioCmd_GGen_CopyLoop:
 	ld bc, (xsp + 6)
 	inc 2, bc
-	ldto_werp WA, 0xFA
+	ldto_werp WA, 0xfa
 	cp wa, bc
 	jr lt, AudioCmd_GGen_CopyDigits
 	ld de, (xsp + 6)
 	inc 1, de
-	st_dri3b A, 0x07, 0xEC, 0xE8
+	st_dri3b A, 0x07, 0xec, 0xe8
 	cp (xbc), 0x5
 	jr c, AudioCmd_GGen_HandleCarry
 	ld wa, (xsp + 6)
-	inc_srib 1, 0x07, 0xEC, 0xE0
+	inc_srib 1, 0x07, 0xec, 0xe0
 
 AudioCmd_GGen_HandleCarry:
 	ld (xbc), 0x0
 	ld wa, (xsp + 6)
-	ldfr_werp WA, 0xFA
+	ldfr_werp WA, 0xfa
 	jr AudioCmd_GGen_CarryCheck
 
 AudioCmd_GGen_CarryLoop:
-	ldto_werp BC, 0xFA
+	ldto_werp BC, 0xfa
 	dec 1, bc
-	inc_srib 1, 0x07, 0xEC, 0xE4
+	inc_srib 1, 0x07, 0xec, 0xe4
 	ld (xwa), 0x0
-	dec1_werp 0xFA
+	dec1_werp 0xfa
 
 AudioCmd_GGen_CarryCheck:
-	cpi_werp 0xFA, 0
+	cpi_werp 0xfa, 0
 	jr z, AudioCmd_GGen_ConvertToAscii
-	st_dri3b W, 0x07, 0xEC, 0xFA
+	st_dri3b W, 0x07, 0xec, 0xfa
 	cp (xwa), 0x9
 	jr ugt, AudioCmd_GGen_CarryLoop
 
 AudioCmd_GGen_ConvertToAscii:
-	ldi_werp 0xFA, 0
+	ldi_werp 0xfa, 0
 	jr AudioCmd_GGen_AsciiDone
 
 AudioCmd_GGen_AsciiLoop:
-	or_srib_im 0x07, 0xEC, 0xFA, 0x30
-	inc1_werp 0xFA
+	or_srib_im 0x07, 0xec, 0xfa, 0x30
+	inc1_werp 0xfa
 
 AudioCmd_GGen_AsciiDone:
-	ldto_werp WA, 0xFA
+	ldto_werp WA, 0xfa
 	cp wa, de
 	jr lt, AudioCmd_GGen_AsciiLoop
 	ld xbc, (xsp + 34)
@@ -2454,7 +2454,7 @@ AudioCmd_Shift_Loop:
 	ld xbc, (xsp + 6)
 	ld de, (xbc)
 	ld wa, hl
-	and a, 0xF
+	and a, 0xf
 	jr z, AudioCmd_Shift_ApplyShift
 	srla de
 
@@ -2468,7 +2468,7 @@ AudioCmd_Shift_ApplyShift:
 	and wa, (xbc)
 	ld bc, wa
 	ld wa, (xsp + 2)
-	and a, 0xF
+	and a, 0xf
 	jr z, AudioCmd_Shift_ApplyCarry
 	slla bc
 
@@ -2483,7 +2483,7 @@ AudioCmd_Shift_ApplyCarry:
 AudioCmd_Shift_LastEntry:
 	ld bc, (xiy)
 	ld wa, hl
-	and a, 0xF
+	and a, 0xf
 	jr z, AudioCmd_Shift_LastShift
 	srla bc
 
@@ -2495,7 +2495,7 @@ AudioCmd_Shift_LastShift:
 
 AudioCmd_PropagateCarry:
 	ld xiy, (xsp + 4)
-	andmi16 (xiy), 0xFF
+	andmi16 (xiy), 0xff
 	lds ix, 1
 	ld hl, (xsp + 8)
 	add hl, hl
@@ -2508,7 +2508,7 @@ AudioCmd_PropCarry_Loop:
 	add xde, xiy
 	ld wa, (xsp + 10)
 	ld bc, (xde)
-	and a, 0xF
+	and a, 0xf
 	jr z, AudioCmd_PropCarry_Store
 	slla bc
 
@@ -2523,7 +2523,7 @@ AudioCmd_PropCarry_Store:
 	ld wa, (xde)
 	srl wa, 8
 	add (xbc), wa
-	andmi16 (xde), 0xFF
+	andmi16 (xde), 0xff
 	inc 1, ix
 
 AudioCmd_PropCarry_Check:
@@ -2538,7 +2538,7 @@ AudioCmd_NormalizeDigits:
 	lda xbc, (xde + 18)
 
 AudioCmd_Normalize_ClearLoop:
-	stiw_dpi 0xE1, 0x00, 0x00
+	stiw_dpi 0xe1, 0x00, 0x00
 	cp xwa, xbc
 	jr c, AudioCmd_Normalize_ClearLoop
 	ld wa, (xsp + 6)
@@ -2576,7 +2576,7 @@ AudioCmd_Normalize_ExtractDigit:
 	sub wa, (xsp + 8)
 	add wa, wa
 	lda_24 xbc, 0x03c284
-	ld_sriw3 WA, 0x07, 0xE4, 0xE0
+	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	cps wa, 0
 	jr z, AudioCmd_Normalize_MultiplyTen
 	pushw iz
@@ -2587,7 +2587,7 @@ AudioCmd_Normalize_ExtractDigit:
 	sub bc, (xsp + 8)
 	add bc, bc
 	lda_24 xwa, 0x03c284
-	stiw_dri 0x07, 0xE0, 0xE4, 0x00, 0x00
+	stiw_dri 0x07, 0xe0, 0xe4, 0x00, 0x00
 	cp iz, 0x20
 	jrl le, AudioCmd_Normalize_MainLoop
 
@@ -2601,7 +2601,7 @@ AudioCmd_InsertCarry:
 	jr ge, AudioCmd_InsertCarry_Clamp
 	lda_24 xbc, 0x03c224
 	ld wa, (xsp + 4)
-	add_srib_mr A, 0x07, 0xE4, 0xE8
+	add_srib_mr A, 0x07, 0xe4, 0xe8
 
 AudioCmd_InsertCarry_Clamp:
 	jr AudioCmd_InsertCarry_Check
@@ -2618,13 +2618,13 @@ AudioCmd_InsertCarry_Check:
 AudioCmd_InsertCarry_Propagate:
 	ld bc, de
 	dec 1, bc
-	inc_srib 1, 0x07, 0xE0, 0xE4
+	inc_srib 1, 0x07, 0xe0, 0xe4
 	ld bc, de
 	dec 1, de
-	sub_srib_im 0x07, 0xE0, 0xE4, 0x0A
+	sub_srib_im 0x07, 0xe0, 0xe4, 0x0a
 
 AudioCmd_InsertCarry_PropCheck:
-	cp_srib_im 0x07, 0xE0, 0xE8, 0x0A
+	cp_srib_im 0x07, 0xe0, 0xe8, 0x0a
 	ret lt
 	cps de, 0
 	jr gt, AudioCmd_InsertCarry_Propagate
@@ -2638,14 +2638,14 @@ AudioCmd_DivideDigitsByTen:
 AudioCmd_DivByTen_Loop:
 	ld wa, (xbc)
 	extz xwa
-	div wa, 0xA
-	ldto_werp WA, 0xE2
+	div wa, 0xa
+	ldto_werp WA, 0xe2
 	sll wa, 8
 	add (xbc + 2), wa
 	ld wa, (xbc)
 	extz xwa
-	div wa, 0xA
-	st_dpiw WA, 0xE5
+	div wa, 0xa
+	st_dpiw WA, 0xe5
 	cp xbc, xde
 	jr c, AudioCmd_DivByTen_Loop
 	ret
@@ -2660,7 +2660,7 @@ AudioCmd_MulByTen_Loop:
 	ld xde, xbc
 	add xde, xhl
 	ld wa, (xde)
-	mul wa, 0xA
+	mul wa, 0xa
 	ld (xde), wa
 	cps ix, 0
 	jr z, AudioCmd_MulByTen_Next
@@ -2675,7 +2675,7 @@ AudioCmd_MulByTen_CarryLoop:
 	add xiy, xhl
 	srl wa, 8
 	add (xiy), wa
-	andmi16 (xde), 0xFF
+	andmi16 (xde), 0xff
 	dec 1, iz
 
 AudioCmd_MulByTen_CarryCheck:
@@ -2686,7 +2686,7 @@ AudioCmd_MulByTen_CarryCheck:
 	add xde, xde
 	add xde, xhl
 	ld wa, (xde)
-	cp wa, 0xFF
+	cp wa, 0xff
 	jr ugt, AudioCmd_MulByTen_CarryLoop
 
 AudioCmd_MulByTen_Next:
@@ -2714,7 +2714,7 @@ AudioCmd_BCDMul_Loop:
 	cpw (xbc), 0x0
 	jr z, AudioCmd_BCDMul_Skip
 	ld wa, (xbc)
-	mul wa, 0xA
+	mul wa, 0xa
 	ld (xbc), wa
 
 AudioCmd_BCDMul_Skip:
@@ -2731,8 +2731,8 @@ AudioCmd_BCDMul_CarryLoop:
 	ld ix, de
 	dec 2, ix
 	srl wa, 8
-	add_sriw_mr WA, 0x07, 0xEC, 0xF0
-	andmi16 (xbc), 0xFF
+	add_sriw_mr WA, 0x07, 0xec, 0xf0
+	andmi16 (xbc), 0xff
 
 AudioCmd_BCDMul_Next:
 	dec 2, de
@@ -2776,7 +2776,7 @@ AudioCmd_LeadZero_ShiftLoop:
 
 AudioCmd_LeadZero_ShiftBody:
 	ld xwa, (xsp + 8)
-	mriw2 0x90, 0x7E
+	mriw2 0x90, 0x7e
 	inc 1, iz
 
 AudioCmd_LeadZero_CheckBit7:
@@ -2847,7 +2847,7 @@ AudioCmd_TrailZero_ShiftLoop:
 
 AudioCmd_TrailZero_CheckHigh:
 	ld wa, hl
-	and wa, 0xFF00
+	and wa, 0xff00
 	jr z, AudioCmd_TrailZero_ApplyShift
 	cp iz, 0x8
 	jr lt, AudioCmd_TrailZero_ShiftLoop
@@ -2880,7 +2880,7 @@ AudioCmd_DecimalExponent:
 	jr ge, AudioCmd_DecExp_Positive
 	ld xwa, xiz
 	cpl wa
-	cpl_werp 0xE2
+	cpl_werp 0xe2
 	inc 1, xwa
 	ld (xsp + 4), xwa
 	jr AudioCmd_DecExp_ComputeQuotient
@@ -2899,7 +2899,7 @@ AudioCmd_DecExp_ComputeQuotient:
 	call Math_DivideSigned32
 	ld xiz, xhl
 	ld xwa, (xsp + 8)
-	cp xwa, 0x3D4
+	cp xwa, 0x3d4
 	jr le, AudioCmd_DecExp_CheckRemainder
 	inc 1, xiz
 	jr AudioCmd_DecExp_ApplySign
@@ -2918,7 +2918,7 @@ AudioCmd_DecExp_ApplySign:
 	jr ge, AudioCmd_DecExp_Positive_Return
 	ld xwa, xiz
 	cpl wa
-	cpl_werp 0xE2
+	cpl_werp 0xe2
 	inc 1, xwa
 	ld xhl, xwa
 	jr AudioCmd_DecExp_Return
@@ -3077,13 +3077,13 @@ AudioCmd_StringLength:
 	inc 4, xsp
 	inc 1, hl
 	ld bc, hl
-	st_dri3b C, 0x07, 0xF8, 0xE4
+	st_dri3b C, 0x07, 0xf8, 0xe4
 	cps bc, 0
 	jr z, AudioCmd_StrLen_NotFound
 	ld wa, (xsp + 12)
 
 AudioCmd_StrLen_ScanLoop:
-	cp_spdb A, 0xEC
+	cp_spdb A, 0xec
 	jr z, AudioCmd_StrLen_Return
 	djnz xbc, AudioCmd_StrLen_ScanLoop
 

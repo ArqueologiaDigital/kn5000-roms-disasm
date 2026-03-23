@@ -5,22 +5,22 @@
 ; the Main CPU ROM (maincpu) and Table Data ROM (table_data), differing only
 ; in RAM addresses and routine call targets.
 ;
-; In maincpu: Located at 0xEF083E-0xEF08A0
-; In table_data: Located at 0x9FB6D9-0x9FB738
+; In maincpu: Located at 0xef083e-0xef08a0
+; In table_data: Located at 0x9fb6d9-0x9fb738
 ;
 ; Required definitions before including this file:
 ;   REGION_CODE_VAR     - RAM address for region code storage
-;                         (maincpu: 0x0408, table_data: 0x0C06)
+;                         (maincpu: 0x0408, table_data: 0x0c06)
 ;   BOOT_ENTRY_POINT    - Entry point for watchdog reset jump
 ;                         (maincpu: RESET_HANDLER, table_data: Boot_Init)
 ;   INDIRECT_CALL_HELPER - Address of indirect call routine
-;                         (maincpu: 0xEF183D, table_data: 0xFFFA75)
+;                         (maincpu: 0xef183d, table_data: 0xfffa75)
 ;   INIT_HANDLER_TABLE  - Address of initialization handler table
-;                         (maincpu: 0xFFFEF0, table_data: 0xFFFEF0)
+;                         (maincpu: 0xfffef0, table_data: 0xfffef0)
 ;   INIT_FLAG_ADDR      - Address of init flag to check
-;                         (maincpu: 0xFFFEEE, table_data: 0xFFFEEE)
+;                         (maincpu: 0xfffeee, table_data: 0xfffeee)
 ;   CP_INIT_FLAG_ENCODING - Byte sequence for CP (INIT_FLAG_ADDR) comparison
-;                         (maincpu uses 1-byte 0xFF, table_data uses 2-byte 0xFFFF)
+;                         (maincpu uses 1-byte 0xff, table_data uses 2-byte 0xffff)
 ;
 ; =============================================================================
 

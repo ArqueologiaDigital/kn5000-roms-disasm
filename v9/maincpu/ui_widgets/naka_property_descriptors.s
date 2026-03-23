@@ -3,7 +3,7 @@
 ; String property descriptors (StrDesc_*), dispatch widgets, instance
 ; name strings, and method table (NakaMethodTable + MT_* strings).
 ;
-; ROM address range: 0xE169AE - 0xE176D6
+; ROM address range: 0xe169ae - 0xe176d6
 ;
 
 	.ascii "     Init       "
@@ -170,7 +170,7 @@ StrFld_ParaList_Font:
 	jr	z, 0x6f
 	jr	nz, 116
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	.byte 0xb0, 0x6b
 	cpdm32	0, xsp
 StrDesc_PsSCTxtBox2:
@@ -519,7 +519,7 @@ StrPrefix_S2cGridBox:
 	jr	gt, 0x00
 	aligned_string "S2cGridBox"
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 StrName_CmpNameMenuBox:		aligned_string "CmpNameMenuBox"
 StrExtra_Yajirushi_JpChars:	aligned_string "^GBBB"
 StrName_YajirushiBox:		aligned_string "Yajirushi"
@@ -539,7 +539,7 @@ StrName_AcSndArgGridBox:	aligned_string "AcSndArgGridBox"
 StrPrefix_AcApcToggle:
 	jr	gt, 0x46
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	aligned_string "AcApcToggle"
 	.byte 0x43, 0x00
 StrName_PsCstmCpNameBox:	aligned_string "PsCstmCpNameBox"

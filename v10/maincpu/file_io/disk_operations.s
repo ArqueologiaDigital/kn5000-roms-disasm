@@ -18,13 +18,13 @@
 FileCopyFunc:
 	push xiz
 	ld xiz, xde
-	cp xbc, 0x1C00018
+	cp xbc, 0x1c00018
 	jrl z, FCopy_HandleScroll
-	cp xbc, 0x1C00017
+	cp xbc, 0x1c00017
 	jrl z, FCopy_HandleScroll
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr z, FCopy_HandleExecute
-	cp xbc, 0x1E50004
+	cp xbc, 0x1e50004
 	jrl nz, FCopy_Return
 	stda32 32608, xiz
 	call GetCurrentFileIndex
@@ -59,8 +59,8 @@ FCopy_HandleExecute:
 	pushw 0x0
 	call FileIO_ReadHeader_ParseLoop
 	ldda32 xwa, 32608
-	ld xbc, 0x1C0000F
-	ld xde, 0x850C
+	ld xbc, 0x1c0000f
+	ld xde, 0x850c
 	call ApPostEvent
 	jrl FCopy_Return
 
@@ -69,7 +69,7 @@ FCopy_HandleScroll:
 	jrl nz, FCopy_HandleCopyContext
 	ldda16 xwa, 32614
 	ld de, wa
-	cp xbc, 0x1C00018
+	cp xbc, 0x1c00018
 	jr nz, FCopy_ScrollUp_Adjust
 	cps wa, 0
 	jr le, FCopy_ScrollDown_CheckMin
@@ -106,12 +106,12 @@ FCopy_Scroll_Apply:
 	pushw 0x0
 	call FileIO_ReadHeader_ParseLoop
 	ldda32 xwa, 32608
-	ld xbc, 0x1C0000F
-	ld xde, 0x850C
+	ld xbc, 0x1c0000f
+	ld xde, 0x850c
 	jr FCopy_DispatchFA9D58
 
 FCopy_ScrollUp_Adjust:
-	cp xbc, 0x1C00017
+	cp xbc, 0x1c00017
 	jr nz, FCopy_ScrollDown_Reload
 	cp wa, 0x13
 	jr ge, FCopy_ScrollUp_CheckMax
@@ -140,12 +140,12 @@ FCopy_HandleCopyContext:
 	jr z, FCopy_CopyConfirm_Execute
 	cpi8_24 0x0340ea, 0x00
 	jr z, FCopy_CopyConfirm_Execute
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C50000
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c50000
 	lds32 xde, 1
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 0
 
 FCopy_DispatchFA9D58:
@@ -154,7 +154,7 @@ FCopy_DispatchFA9D58:
 
 FCopy_CopyConfirm_Execute:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -171,27 +171,27 @@ FCopy_CopyConfirm_Execute:
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldw wa, 0x7B
+	ldw wa, 0x7b
 	call UI_PostModeChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jr FCopy_NotifyComplete
 
 FCopy_CopyExecute:
 	cp xiz, 0x32
 	jr nz, FCopy_Return
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -208,20 +208,20 @@ FCopy_CopyExecute:
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldw wa, 0x7B
+	ldw wa, 0x7b
 	call UI_PostModeChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 
 FCopy_NotifyComplete:
 	call SoundCtrl_SendCommand
@@ -235,9 +235,9 @@ FileRenameFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
-	cp xbc, 0x1E00086
+	cp xbc, 0x1e00086
 	jrl z, FRename_HandleApply
-	cp xbc, 0x1E0003A
+	cp xbc, 0x1e0003a
 	jrl nz, FRename_Return
 	call GetCurrentFileIndex
 	cps hl, 0
@@ -256,10 +256,10 @@ FileRenameFunc:
 
 FRename_PadLoop_CheckChar:
 	extz bc
-	ld_srib3 C, 0x07, 0xF0, 0xE4
+	ld_srib3 C, 0x07, 0xf0, 0xe4
 	and c, 0x7
 	jr nz, FRename_PadLoop_Advance
-	ld (xde), 0x5F
+	ld (xde), 0x5f
 
 FRename_PadLoop_Advance:
 	inc 1, iy
@@ -267,7 +267,7 @@ FRename_PadLoop_Advance:
 FRename_PadLoop_Cond:
 	cps iy, 6
 	jr ge, FRename_PadLoop_Fill
-	st_dri3b B, 0x07, 0xEC, 0xF4
+	st_dri3b B, 0x07, 0xec, 0xf4
 	ld c, (xde)
 	cps c, 0
 	jr nz, FRename_PadLoop_CheckChar
@@ -278,7 +278,7 @@ FRename_PadLoop_Fill:
 	ld xbc, xwa
 
 FRename_FillLoop:
-	stib_dri 0x07, 0xE4, 0xF4, 0x5F
+	stib_dri 0x07, 0xe4, 0xf4, 0x5f
 	inc 1, iy
 	cps iy, 6
 	jr lt, FRename_FillLoop
@@ -289,12 +289,12 @@ FRename_PadDone:
 
 FRename_TextChange_Error:
 	ld xwa, 0x8870
-	ld xbc, 0xEA06BE
+	ld xbc, 0xea06be
 	call FileIO_CopyString
 
 FRename_TextChange_SendApply:
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1E00086
+	ld xbc, 0x1e00086
 	ld xde, 0x8870
 	call ApPostEvent
 	jr FRename_Return
@@ -307,7 +307,7 @@ FRename_HandleApply:
 	ld xbc, (xsp + 4)
 	call FileIO_CopyString
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -322,10 +322,10 @@ FRename_HandleApply:
 	call GetEncodedFileSizeData
 	stda16 34050, xhl
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 
 FRename_Return:
@@ -338,9 +338,9 @@ FileRenameSmfFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
-	cp xbc, 0x1E00086
+	cp xbc, 0x1e00086
 	jrl z, FRenameSmf_HandleApply
-	cp xbc, 0x1E0003A
+	cp xbc, 0x1e0003a
 	jrl nz, FRenameSmf_Return
 	call GetFirstPageBase
 	cps hl, 0
@@ -359,10 +359,10 @@ FileRenameSmfFunc:
 
 FRenameSmf_PadLoop_CheckChar:
 	extz bc
-	ld_srib3 C, 0x07, 0xF0, 0xE4
+	ld_srib3 C, 0x07, 0xf0, 0xe4
 	and c, 0x7
 	jr nz, FRenameSmf_PadLoop_Advance
-	ld (xde), 0x5F
+	ld (xde), 0x5f
 
 FRenameSmf_PadLoop_Advance:
 	inc 1, iy
@@ -370,7 +370,7 @@ FRenameSmf_PadLoop_Advance:
 FRenameSmf_PadLoop_Cond:
 	cp iy, 0x8
 	jr ge, FRenameSmf_PadLoop_Fill
-	st_dri3b B, 0x07, 0xEC, 0xF4
+	st_dri3b B, 0x07, 0xec, 0xf4
 	ld c, (xde)
 	cps c, 0
 	jr nz, FRenameSmf_PadLoop_CheckChar
@@ -381,7 +381,7 @@ FRenameSmf_PadLoop_Fill:
 	ld xbc, xwa
 
 FRenameSmf_FillLoop:
-	stib_dri 0x07, 0xE4, 0xF4, 0x5F
+	stib_dri 0x07, 0xe4, 0xf4, 0x5f
 	inc 1, iy
 	cp iy, 0x8
 	jr lt, FRenameSmf_FillLoop
@@ -392,12 +392,12 @@ FRenameSmf_PadDone:
 
 FRenameSmf_TextChange_Error:
 	ld xwa, 0x8870
-	ld xbc, 0xEA06C6
+	ld xbc, 0xea06c6
 	call FileIO_CopyString
 
 FRenameSmf_TextChange_SendApply:
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1E00086
+	ld xbc, 0x1e00086
 	ld xde, 0x8870
 	call ApPostEvent
 	jr FRenameSmf_Return
@@ -407,10 +407,10 @@ FRenameSmf_HandleApply:
 	ld xbc, (xsp + 4)
 	call FileIO_CopyString
 	ld xwa, 0x8870
-	ld xbc, 0xEA06D0
+	ld xbc, 0xea06d0
 	call FileIO_BuildFilePath
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -425,10 +425,10 @@ FRenameSmf_HandleApply:
 	call GetFileCountEncoded
 	stda16 34052, xhl
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 
 FRenameSmf_Return:
@@ -439,9 +439,9 @@ FRenameSmf_Return:
 
 FmmFormatFunc:
 	pushw iz
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jrl z, FmmFmt_HandleProgress
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jrl nz, FmmFmt_Return
 	cp xde, 0x3
 	jr z, FmmFmt_HandleCancel
@@ -466,16 +466,16 @@ FmmFmt_InitPhase_CheckDrive:
 
 FmmFmt_InitPhase_DriveType23:
 	stda8 32616, a
-	ld xwa, 0x7B0036
-	ld xbc, 0x1C00001
+	ld xwa, 0x7b0036
+	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 34046, 0
 	jr FmmFmt_InitPhase_SetActive
 
 FmmFmt_InitPhase_OtherDrive:
-	ld xwa, 0x7B003F
-	ld xbc, 0x1C00001
+	ld xwa, 0x7b003f
+	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 34046, 2
@@ -495,18 +495,18 @@ FmmFmt_HandleProgress:
 	jrl z, FmmFmt_Return
 	ldda8 a, 32618
 	extz wa
-	cp xde, 0xF
+	cp xde, 0xf
 	jrl z, FmmFmt_HandleAbortFinal
 	ldda8 c, 34046
-	cp xde, 0xB
+	cp xde, 0xb
 	jrl z, FmmFmt_HandleAbort
-	cp xde, 0xA
+	cp xde, 0xa
 	jrl nz, FmmFmt_Return
 	ld a, c
 	cps c, 0
 	jrl nz, FmmFmt_ExecutePhase2
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -518,38 +518,38 @@ FmmFmt_HandleProgress:
 	calr SignalProgressUpdate
 	calr ResetProgressIndication
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
 	cps iz, 0
 	jr ge, FmmFmt_FormatSuccess
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	ldda8 a, 32618
 	extz wa
 	call UI_PostModeChangeEvent
 	stdi8 32620, 0
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
 	ld wa, iz
 	ldw bc, 0x8
 	calr FileIO_ValidateSignedValue
 	stda8 32578, l
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jrl FmmFmt_NotifyComplete
 
 FmmFmt_FormatSuccess:
-	ld xwa, 0x7B0036
-	ld xbc, 0x1C00002
+	ld xwa, 0x7b0036
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0x7B0031
-	ld xbc, 0x1C00001
+	ld xwa, 0x7b0031
+	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 34046, 1
@@ -559,12 +559,12 @@ FmmFmt_ExecutePhase2:
 	cps a, 2
 	jr nz, FmmFmt_Return
 	stdi8 32616, 3
-	ld xwa, 0x7B003F
-	ld xbc, 0x1C00002
+	ld xwa, 0x7b003f
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0x7B0036
-	ld xbc, 0x1C00001
+	ld xwa, 0x7b0036
+	ld xbc, 0x1c00001
 	lds32 xde, 0
 	jr FmmFmt_DispatchAndNotify
 
@@ -580,12 +580,12 @@ FmmFmt_AbortPhase2:
 	cps e, 2
 	jr nz, FmmFmt_Return
 	stdi8 32616, 2
-	ld xwa, 0x7B003F
-	ld xbc, 0x1C00002
+	ld xwa, 0x7b003f
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0x7B0036
-	ld xbc, 0x1C00001
+	ld xwa, 0x7b0036
+	ld xbc, 0x1c00001
 	lds32 xde, 0
 
 FmmFmt_DispatchAndNotify:
@@ -605,10 +605,10 @@ FmmFmt_Return:
 	ret
 
 UtilityTtlJgFunc:
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jr nz, UtilTtlJg_Return
-	ldw wa, 0x7B
-	ldw bc, 0x7C
+	ldw wa, 0x7b
+	ldw bc, 0x7c
 	calr FileIO_DiskEventDispatch
 
 UtilTtlJg_Return:
@@ -617,9 +617,9 @@ UtilTtlJg_Return:
 
 FmmLoadTitleFunc:
 	pushw iz
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jrl z, FmmLoadTtl_HandleOk
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jrl nz, FmmLoadTtl_Return
 	cp xde, 0x3
 	jrl z, FmmLoadTtl_HandleCancelOp
@@ -632,7 +632,7 @@ FmmLoadTitleFunc:
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	ldmm8 32622, 36151
@@ -674,7 +674,7 @@ FmmLoadTtl_CheckSmfHandle:
 	cpdi8 32622, 100
 	jrl z, FmmLoadTtl_LoadSlots
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
 	ldw wa, 0x64
@@ -682,51 +682,51 @@ FmmLoadTtl_CheckSmfHandle:
 
 FmmLoadTtl_StateCancelLoad:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	ldda8 a, 32622
 	extz wa
 	call UI_PostModeChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 32578, 0
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jr FmmLoadTtl_NotifyComplete
 
 FmmLoadTtl_StateIdle:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0x7D
+	ldw wa, 0x7d
 	jrl FmmLoadTtl_PlaySound
 
 FmmLoadTtl_StateSuccess:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
 	calr ResetProgressIndication
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	ldda8 a, 32622
 	extz wa
 	call UI_PostModeChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 32578, 2
-	ldw wa, 0xEE
+	ldw wa, 0xee
 
 FmmLoadTtl_NotifyComplete:
 	call SoundCtrl_SendCommand
@@ -734,11 +734,11 @@ FmmLoadTtl_NotifyComplete:
 
 FmmLoadTtl_LoadSlots:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0000A
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 35324, 0
@@ -751,7 +751,7 @@ FmmLoadTtl_LoadSlots:
 	lds iz, 0
 
 FmmLoadTtl_SlotLoop:
-	ldto_berp A, 0xF8
+	ldto_berp A, 0xf8
 	extz wa
 	call FileIO_FormatName_Loop
 	inc 1, iz
@@ -777,17 +777,17 @@ FmmLoadTtl_HandleScrollNav:
 FmmLoadTtl_HandleCancelOp:
 	calr CancelOperationCleanup
 	ld xwa, 0x610001
-	ld xbc, 0x1E0007F
+	ld xbc, 0x1e0007f
 	lds32 xde, 1
 	call ApPostEvent
 	jr FmmLoadTtl_Return
 
 FmmLoadTtl_HandleOk:
-	cp xde, 0xF
+	cp xde, 0xf
 	jr nz, FmmLoadTtl_Return
 	cpdi8 36148, 7
 	jr nz, FmmLoadTtl_Ok_DefaultSound
-	ldw wa, 0xD6
+	ldw wa, 0xd6
 	jr FmmLoadTtl_PlaySound
 
 FmmLoadTtl_Ok_DefaultSound:
@@ -803,9 +803,9 @@ FmmLoadTtl_Return:
 
 FmmSaveTitleFunc:
 	pushw iz
-	cp xbc, 0x1C00007
+	cp xbc, 0x1c00007
 	jrl z, FmmSaveTtl_HandleOk
-	cp xbc, 0x1C00013
+	cp xbc, 0x1c00013
 	jrl nz, FmmSaveTtl_Return
 	cp xde, 0x3
 	jrl z, FmmSaveTtl_HandleCancel
@@ -815,7 +815,7 @@ FmmSaveTitleFunc:
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	cpdi16 34050, 0
@@ -832,7 +832,7 @@ FmmSaveTtl_CheckFont:
 	lds iz, 0
 
 FmmSaveTtl_SlotLoop:
-	ldto_berp A, 0xF8
+	ldto_berp A, 0xf8
 	extz wa
 	call FileIO_BuildRecordPath_Done
 	inc 1, iz
@@ -843,24 +843,24 @@ FmmSaveTtl_SlotLoop:
 	lds wa, 7
 	call FileIO_BuildRecordPath_Return
 	call FileIO_SetModeFlag_Reading
-	ld xiy, 0xEA066A
-	ld xix, 0x8A0C
+	ld xiy, 0xea066a
+	ld xix, 0x8a0c
 	ldiw
 
 FmmSaveTtl_CommitSave:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0000A
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	jr FmmSaveTtl_DispatchAndReturn
 
 FmmSaveTtl_HandleCancel:
 	calr CancelOperationCleanup
 	ld xwa, 0x670001
-	ld xbc, 0x1E0007F
+	ld xbc, 0x1e0007f
 	lds32 xde, 1
 
 FmmSaveTtl_DispatchAndReturn:
@@ -868,7 +868,7 @@ FmmSaveTtl_DispatchAndReturn:
 	jr FmmSaveTtl_Return
 
 FmmSaveTtl_HandleOk:
-	cp xde, 0xF
+	cp xde, 0xf
 	jr nz, FmmSaveTtl_Return
 	ldw wa, 0x60
 	call UI_PostModeChangeEvent
@@ -882,11 +882,11 @@ DiskNameFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
-	cp xbc, 0x1E00086
+	cp xbc, 0x1e00086
 	jrl z, DiskName_HandleApply
-	cp xbc, 0x1E0003A
+	cp xbc, 0x1e0003a
 	jr z, DiskName_TextChange
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jrl nz, DiskName_Return
 	lds wa, 0
 	calr InitializeOperationState
@@ -896,8 +896,8 @@ DiskNameFunc:
 	ld xwa, xiz
 	call FileIO_CopyString
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1C0000F
-	ld xde, 0x878C
+	ld xbc, 0x1c0000f
+	ld xde, 0x878c
 	jr DiskName_Dispatch
 
 DiskName_TextChange:
@@ -916,50 +916,50 @@ DiskName_TextChange:
 	jr DiskName_PadLoop_Cond
 
 DiskName_PadLoop_CheckChar:
-	ld_srib3 A, 0x07, 0xF0, 0xF4
+	ld_srib3 A, 0x07, 0xf0, 0xf4
 	extz wa
-	ld_srib3 A, 0x07, 0xF8, 0xE0
+	ld_srib3 A, 0x07, 0xf8, 0xe0
 	and a, 0x7
 	jr nz, DiskName_PadLoop_Advance
-	ld (xbc), 0x5F
+	ld (xbc), 0x5f
 
 DiskName_PadLoop_Advance:
 	inc 1, iy
 
 DiskName_PadLoop_Cond:
-	cp iy, 0xB
+	cp iy, 0xb
 	jr ge, DiskName_PadLoop_Fill
-	st_dri3b A, 0x07, 0xEC, 0xF4
+	st_dri3b A, 0x07, 0xec, 0xf4
 	cp (xbc), 0x0
 	jr nz, DiskName_PadLoop_CheckChar
 
 DiskName_PadLoop_Fill:
-	cp iy, 0xB
+	cp iy, 0xb
 	jr ge, DiskName_PadDone
 	ld xwa, xde
 
 DiskName_FillLoop:
-	stib_dri 0x07, 0xE0, 0xF4, 0x5F
+	stib_dri 0x07, 0xe0, 0xf4, 0x5f
 	inc 1, iy
-	cp iy, 0xB
+	cp iy, 0xb
 	jr lt, DiskName_FillLoop
 
 DiskName_PadDone:
 	ld (xde + 11), 0x0
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1E00086
+	ld xbc, 0x1e00086
 
 DiskName_Dispatch:
 	call ApPostEvent
 	jr DiskName_Return
 
 DiskName_HandleApply:
-	ld xwa, 0x878C
+	ld xwa, 0x878c
 	ld xbc, (xsp + 4)
 	call FileIO_CopyString
 	lds wa, 0
 	calr InitializeOperationState
-	ld xwa, 0x878C
+	ld xwa, 0x878c
 	call FileIO_CheckPathAndVolumeLabel
 	calr SignalProgressUpdate
 	calr ResetProgressIndication
@@ -976,7 +976,7 @@ DiskInfoFunc:
 	lda xsp, (xsp - 16)
 	push xiz
 	ld (xsp + 16), xde
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jrl nz, DiskInfo_Return
 	lds wa, 0
 	calr InitializeOperationState
@@ -1036,7 +1036,7 @@ DiskInfo_RenderStrings:
 	ld xbc, xwa
 	sra xbc, 15
 	sra xbc, 0
-	and xbc, 0x3FF
+	and xbc, 0x3ff
 	add xbc, xwa
 	ld (xsp + 4), xbc
 	sra xbc, 10
@@ -1044,11 +1044,11 @@ DiskInfo_RenderStrings:
 	ldda16 xwa, 34048
 	sla wa, 2
 	lda_24 xbc, 0xea0558
-	ld_sril3 XBC, 0x07, 0xE4, 0xE0
-	ld xwa, 0x87CE
+	ld_sril3 XBC, 0x07, 0xe4, 0xe0
+	ld xwa, 0x87ce
 	call FileIO_CopyString
-	ld xwa, 0x87CE
-	ld xbc, 0xEA06D6
+	ld xwa, 0x87ce
+	ld xbc, 0xea06d6
 	call FileIO_BuildFilePath
 	ldada xwa, 34766
 	ld (xsp + 12), xwa
@@ -1058,8 +1058,8 @@ DiskInfo_RenderStrings:
 	ld xbc, xhl
 	ld xwa, (xsp + 12)
 	call FileIO_BuildFilePath
-	ld xwa, 0x87CE
-	ld xbc, 0xEA06DA
+	ld xwa, 0x87ce
+	ld xbc, 0xea06da
 	call FileIO_BuildFilePath
 	ldada xwa, 34766
 	ld (xsp + 12), xwa
@@ -1069,12 +1069,12 @@ DiskInfo_RenderStrings:
 	ld xbc, xhl
 	ld xwa, (xsp + 12)
 	call FileIO_BuildFilePath
-	ld xwa, 0x87CE
-	ld xbc, 0xEA06E4
+	ld xwa, 0x87ce
+	ld xbc, 0xea06e4
 	call FileIO_BuildFilePath
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1C0000F
-	ld xde, 0x87CE
+	ld xbc, 0x1c0000f
+	ld xde, 0x87ce
 	call ApPostEvent
 
 DiskInfo_Return:
@@ -1087,7 +1087,7 @@ SongNameFunc:
 	dec 8, xsp
 	pushw iz
 	ld (xsp + 6), xde
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr nz, SongName_Return
 	call GetFirstPageBase
 	ld iz, hl
@@ -1129,8 +1129,8 @@ SongName_NoSlot:
 
 SongName_SendDisplay:
 	ld xwa, (xsp + 6)
-	ld xbc, 0x1C0000F
-	ld xde, 0x880E
+	ld xbc, 0x1c0000f
+	ld xde, 0x880e
 	call ApPostEvent
 
 SongName_Return:
@@ -1143,7 +1143,7 @@ SaveFileNameNumFunc:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xde
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr nz, SaveFileNum_Return
 	call GetCurrentFileIndex
 	ld iz, hl
@@ -1164,7 +1164,7 @@ SaveFileNum_NoSlot:
 
 SaveFileNum_SendDisplay:
 	ld xwa, (xsp + 2)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x8850
 	call ApPostEvent
 
@@ -1178,11 +1178,11 @@ SaveFileNameFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
-	cp xbc, 0x1E00086
+	cp xbc, 0x1e00086
 	jrl z, SaveFileName_HandleApply
-	cp xbc, 0x1E0003A
+	cp xbc, 0x1e0003a
 	jr z, SaveFileName_TextChange
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jrl nz, SaveFileName_Return
 	ldada xiz, 34896
 	call FileIO_GetRecordByType
@@ -1192,7 +1192,7 @@ SaveFileNameFunc:
 	ld xwa, 0x8850
 	call FileIO_GetRecordType_Extended
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x8850
 	jr SaveFileName_Dispatch
 
@@ -1210,10 +1210,10 @@ SaveFileName_TextChange:
 
 SaveFileName_PadLoop_CheckChar:
 	extz wa
-	ld_srib3 A, 0x07, 0xF0, 0xE0
+	ld_srib3 A, 0x07, 0xf0, 0xe0
 	and a, 0x7
 	jr nz, SaveFileName_PadLoop_Advance
-	ld (xbc), 0x5F
+	ld (xbc), 0x5f
 
 SaveFileName_PadLoop_Advance:
 	inc 1, iy
@@ -1221,7 +1221,7 @@ SaveFileName_PadLoop_Advance:
 SaveFileName_PadLoop_Cond:
 	cps iy, 6
 	jr ge, SaveFileName_PadLoop_Fill
-	st_dri3b A, 0x07, 0xEC, 0xF4
+	st_dri3b A, 0x07, 0xec, 0xf4
 	ld a, (xbc)
 	cps a, 0
 	jr nz, SaveFileName_PadLoop_CheckChar
@@ -1232,7 +1232,7 @@ SaveFileName_PadLoop_Fill:
 	ld xwa, xde
 
 SaveFileName_FillLoop:
-	stib_dri 0x07, 0xE0, 0xF4, 0x5F
+	stib_dri 0x07, 0xe0, 0xf4, 0x5f
 	inc 1, iy
 	cps iy, 6
 	jr lt, SaveFileName_FillLoop
@@ -1240,7 +1240,7 @@ SaveFileName_FillLoop:
 SaveFileName_PadDone:
 	ld (xde + 6), 0x0
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1E00086
+	ld xbc, 0x1e00086
 
 SaveFileName_Dispatch:
 	call ApPostEvent
@@ -1263,7 +1263,7 @@ CurFileNameFunc:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xde
-	cp xbc, 0x1C0000B
+	cp xbc, 0x1c0000b
 	jr nz, CurFileName_Return
 	call GetCurrentFileIndex
 	ld iz, hl
@@ -1285,7 +1285,7 @@ CurFileName_NoSlot:
 
 CurFileName_SendDisplay:
 	ld xwa, (xsp + 2)
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	ld xde, 0x8870
 	call ApPostEvent
 

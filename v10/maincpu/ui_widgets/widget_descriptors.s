@@ -5,312 +5,312 @@ NakaData_WidgetDescriptors:
 	.incbin "includes/generated/naka_widget_descriptors.bin"
 
 ; External label offsets within the binary blob above.
-	.equ NakaInst_FxReservedSlot_00, NakaData_WidgetDescriptors + 0x01E1A
-	.equ NakaInst_FxReservedSlot_01, NakaData_WidgetDescriptors + 0x01E2C
-	.equ NakaInst_FxReservedSlot_02, NakaData_WidgetDescriptors + 0x01E3E
-	.equ NakaInst_FxReservedSlot_03, NakaData_WidgetDescriptors + 0x01E50
-	.equ NakaInst_FxReservedSlot_04, NakaData_WidgetDescriptors + 0x01E62
-	.equ NakaInst_FxReservedSlot_05, NakaData_WidgetDescriptors + 0x01E74
-	.equ NakaInst_FxReservedSlot_06, NakaData_WidgetDescriptors + 0x01E86
-	.equ NakaInst_FxReservedSlot_07, NakaData_WidgetDescriptors + 0x01E98
-	.equ NakaInst_FxReservedSlot_08, NakaData_WidgetDescriptors + 0x01EAA
-	.equ NakaInst_FxReservedSlot_09, NakaData_WidgetDescriptors + 0x01EBC
-	.equ NakaInst_FxReservedSlot_10, NakaData_WidgetDescriptors + 0x01ECE
-	.equ NakaInst_FxReservedSlot_11, NakaData_WidgetDescriptors + 0x01EE0
-	.equ NakaInst_FxReservedSlot_12, NakaData_WidgetDescriptors + 0x01EF2
-	.equ NakaInst_FxReservedSlot_13, NakaData_WidgetDescriptors + 0x01F04
-	.equ NakaInst_FxReservedSlot_14, NakaData_WidgetDescriptors + 0x01F16
-	.equ NakaInst_FxReservedSlot_15, NakaData_WidgetDescriptors + 0x01F28
-	.equ NakaInst_FxReservedSlot_16, NakaData_WidgetDescriptors + 0x01F3A
-	.equ NakaInst_FxReservedSlot_17, NakaData_WidgetDescriptors + 0x01F4C
-	.equ NakaInst_FxReservedSlot_18, NakaData_WidgetDescriptors + 0x01F5E
-	.equ NakaInst_FxReservedSlot_19, NakaData_WidgetDescriptors + 0x01F70
-	.equ NakaInst_FxReservedSlot_20, NakaData_WidgetDescriptors + 0x01F82
-	.equ NakaInst_FxReservedSlot_21, NakaData_WidgetDescriptors + 0x01F94
-	.equ NakaInst_FxReservedSlot_22, NakaData_WidgetDescriptors + 0x01FA6
-	.equ NakaInst_FxReservedSlot_23, NakaData_WidgetDescriptors + 0x01FB8
-	.equ NakaInst_FxReservedSlot_24, NakaData_WidgetDescriptors + 0x01FCA
-	.equ NakaInst_FxReservedSlot_25, NakaData_WidgetDescriptors + 0x01FDC
-	.equ NakaInst_FxReservedSlot_26, NakaData_WidgetDescriptors + 0x01FEE
+	.equ NakaInst_FxReservedSlot_00, NakaData_WidgetDescriptors + 0x01e1a
+	.equ NakaInst_FxReservedSlot_01, NakaData_WidgetDescriptors + 0x01e2c
+	.equ NakaInst_FxReservedSlot_02, NakaData_WidgetDescriptors + 0x01e3e
+	.equ NakaInst_FxReservedSlot_03, NakaData_WidgetDescriptors + 0x01e50
+	.equ NakaInst_FxReservedSlot_04, NakaData_WidgetDescriptors + 0x01e62
+	.equ NakaInst_FxReservedSlot_05, NakaData_WidgetDescriptors + 0x01e74
+	.equ NakaInst_FxReservedSlot_06, NakaData_WidgetDescriptors + 0x01e86
+	.equ NakaInst_FxReservedSlot_07, NakaData_WidgetDescriptors + 0x01e98
+	.equ NakaInst_FxReservedSlot_08, NakaData_WidgetDescriptors + 0x01eaa
+	.equ NakaInst_FxReservedSlot_09, NakaData_WidgetDescriptors + 0x01ebc
+	.equ NakaInst_FxReservedSlot_10, NakaData_WidgetDescriptors + 0x01ece
+	.equ NakaInst_FxReservedSlot_11, NakaData_WidgetDescriptors + 0x01ee0
+	.equ NakaInst_FxReservedSlot_12, NakaData_WidgetDescriptors + 0x01ef2
+	.equ NakaInst_FxReservedSlot_13, NakaData_WidgetDescriptors + 0x01f04
+	.equ NakaInst_FxReservedSlot_14, NakaData_WidgetDescriptors + 0x01f16
+	.equ NakaInst_FxReservedSlot_15, NakaData_WidgetDescriptors + 0x01f28
+	.equ NakaInst_FxReservedSlot_16, NakaData_WidgetDescriptors + 0x01f3a
+	.equ NakaInst_FxReservedSlot_17, NakaData_WidgetDescriptors + 0x01f4c
+	.equ NakaInst_FxReservedSlot_18, NakaData_WidgetDescriptors + 0x01f5e
+	.equ NakaInst_FxReservedSlot_19, NakaData_WidgetDescriptors + 0x01f70
+	.equ NakaInst_FxReservedSlot_20, NakaData_WidgetDescriptors + 0x01f82
+	.equ NakaInst_FxReservedSlot_21, NakaData_WidgetDescriptors + 0x01f94
+	.equ NakaInst_FxReservedSlot_22, NakaData_WidgetDescriptors + 0x01fa6
+	.equ NakaInst_FxReservedSlot_23, NakaData_WidgetDescriptors + 0x01fb8
+	.equ NakaInst_FxReservedSlot_24, NakaData_WidgetDescriptors + 0x01fca
+	.equ NakaInst_FxReservedSlot_25, NakaData_WidgetDescriptors + 0x01fdc
+	.equ NakaInst_FxReservedSlot_26, NakaData_WidgetDescriptors + 0x01fee
 	.equ NakaInst_FxReservedSlot_27, NakaData_WidgetDescriptors + 0x02000
 	.equ NakaInst_PEQ_OVERDR_DELAY, NakaData_WidgetDescriptors + 0x02012
 	.equ NakaInst_PEQ_DIST_DELAY, NakaData_WidgetDescriptors + 0x02024
 	.equ NakaInst_PEQ_COMPR_OVERDR, NakaData_WidgetDescriptors + 0x02036
 	.equ NakaInst_PEQ_COMPR_DIST, NakaData_WidgetDescriptors + 0x02048
-	.equ NakaInst_FxComboReserved_0, NakaData_WidgetDescriptors + 0x0205A
-	.equ NakaInst_FxComboReserved_1, NakaData_WidgetDescriptors + 0x0206C
-	.equ NakaInst_FxComboReserved_2, NakaData_WidgetDescriptors + 0x0207E
+	.equ NakaInst_FxComboReserved_0, NakaData_WidgetDescriptors + 0x0205a
+	.equ NakaInst_FxComboReserved_1, NakaData_WidgetDescriptors + 0x0206c
+	.equ NakaInst_FxComboReserved_2, NakaData_WidgetDescriptors + 0x0207e
 	.equ NakaInst_FxComboReserved_3, NakaData_WidgetDescriptors + 0x02090
-	.equ NakaInst_STAGE, NakaData_WidgetDescriptors + 0x020A2
-	.equ NakaInst_BATH_ROOM, NakaData_WidgetDescriptors + 0x020B4
-	.equ NakaInst_KARAOKE, NakaData_WidgetDescriptors + 0x020C6
-	.equ NakaInst_ROOM, NakaData_WidgetDescriptors + 0x020D8
-	.equ NakaInst_ReverbReserved_0, NakaData_WidgetDescriptors + 0x020EA
-	.equ NakaInst_ReverbReserved_1, NakaData_WidgetDescriptors + 0x020FC
-	.equ NakaInst_ReverbReserved_2, NakaData_WidgetDescriptors + 0x0210E
+	.equ NakaInst_STAGE, NakaData_WidgetDescriptors + 0x020a2
+	.equ NakaInst_BATH_ROOM, NakaData_WidgetDescriptors + 0x020b4
+	.equ NakaInst_KARAOKE, NakaData_WidgetDescriptors + 0x020c6
+	.equ NakaInst_ROOM, NakaData_WidgetDescriptors + 0x020d8
+	.equ NakaInst_ReverbReserved_0, NakaData_WidgetDescriptors + 0x020ea
+	.equ NakaInst_ReverbReserved_1, NakaData_WidgetDescriptors + 0x020fc
+	.equ NakaInst_ReverbReserved_2, NakaData_WidgetDescriptors + 0x0210e
 	.equ NakaInst_ReverbReserved_3, NakaData_WidgetDescriptors + 0x02120
 	.equ NakaInst_ReverbReserved_4, NakaData_WidgetDescriptors + 0x02132
 	.equ NakaInst_ReverbReserved_5, NakaData_WidgetDescriptors + 0x02144
 	.equ NakaInst_OVER_D, NakaData_WidgetDescriptors + 0x02156
 	.equ NakaInst_DS_D, NakaData_WidgetDescriptors + 0x02168
-	.equ NakaInst_GEQ, NakaData_WidgetDescriptors + 0x0217A
-	.equ NakaInst_EqReserved_0, NakaData_WidgetDescriptors + 0x0218C
-	.equ NakaInst_EqReserved_1, NakaData_WidgetDescriptors + 0x0219E
-	.equ NakaInst_EqReserved_2, NakaData_WidgetDescriptors + 0x021B0
-	.equ NakaInst_PEQ_COMPRESSOR, NakaData_WidgetDescriptors + 0x021C2
-	.equ NakaInst_PEQ_VIBRATO, NakaData_WidgetDescriptors + 0x021D4
-	.equ NakaInst_PEQ_FLANGER, NakaData_WidgetDescriptors + 0x021E6
-	.equ NakaInst_PEQ_S_DELAY, NakaData_WidgetDescriptors + 0x021F8
-	.equ NakaInst_PEQ_CHORUS, NakaData_WidgetDescriptors + 0x0220A
-	.equ NakaInst_AUTO_WAH_S_DELAY, NakaData_WidgetDescriptors + 0x0221C
-	.equ NakaInst_PEDAL_WAH_DELAY, NakaData_WidgetDescriptors + 0x0222E
+	.equ NakaInst_GEQ, NakaData_WidgetDescriptors + 0x0217a
+	.equ NakaInst_EqReserved_0, NakaData_WidgetDescriptors + 0x0218c
+	.equ NakaInst_EqReserved_1, NakaData_WidgetDescriptors + 0x0219e
+	.equ NakaInst_EqReserved_2, NakaData_WidgetDescriptors + 0x021b0
+	.equ NakaInst_PEQ_COMPRESSOR, NakaData_WidgetDescriptors + 0x021c2
+	.equ NakaInst_PEQ_VIBRATO, NakaData_WidgetDescriptors + 0x021d4
+	.equ NakaInst_PEQ_FLANGER, NakaData_WidgetDescriptors + 0x021e6
+	.equ NakaInst_PEQ_S_DELAY, NakaData_WidgetDescriptors + 0x021f8
+	.equ NakaInst_PEQ_CHORUS, NakaData_WidgetDescriptors + 0x0220a
+	.equ NakaInst_AUTO_WAH_S_DELAY, NakaData_WidgetDescriptors + 0x0221c
+	.equ NakaInst_PEDAL_WAH_DELAY, NakaData_WidgetDescriptors + 0x0222e
 	.equ NakaInst_S_DELAY_PHASER, NakaData_WidgetDescriptors + 0x02240
 	.equ NakaInst_S_DELAY_VIBRATO, NakaData_WidgetDescriptors + 0x02252
 	.equ NakaInst_S_DELAY_FLANGER, NakaData_WidgetDescriptors + 0x02264
 	.equ NakaInst_S_DELAY_S_DELAY, NakaData_WidgetDescriptors + 0x02276
 	.equ NakaInst_S_DELAY_CHORUS, NakaData_WidgetDescriptors + 0x02288
-	.equ NakaInst_STRING, NakaData_WidgetDescriptors + 0x0229A
-	.equ NakaInst_ChorusReserved_0, NakaData_WidgetDescriptors + 0x022AC
-	.equ NakaInst_ChorusReserved_1, NakaData_WidgetDescriptors + 0x022BE
-	.equ NakaInst_DEEP_SPACE, NakaData_WidgetDescriptors + 0x022D0
-	.equ NakaInst_SYMPHONIC, NakaData_WidgetDescriptors + 0x022E2
-	.equ NakaInst_PERCUSSIVE, NakaData_WidgetDescriptors + 0x022F4
+	.equ NakaInst_STRING, NakaData_WidgetDescriptors + 0x0229a
+	.equ NakaInst_ChorusReserved_0, NakaData_WidgetDescriptors + 0x022ac
+	.equ NakaInst_ChorusReserved_1, NakaData_WidgetDescriptors + 0x022be
+	.equ NakaInst_DEEP_SPACE, NakaData_WidgetDescriptors + 0x022d0
+	.equ NakaInst_SYMPHONIC, NakaData_WidgetDescriptors + 0x022e2
+	.equ NakaInst_PERCUSSIVE, NakaData_WidgetDescriptors + 0x022f4
 	.equ NakaInst_STANDARD, NakaData_WidgetDescriptors + 0x02306
 	.equ NakaInst_MIX_UP, NakaData_WidgetDescriptors + 0x02318
-	.equ NakaInst_HARS_EFFECT, NakaData_WidgetDescriptors + 0x0232A
-	.equ NakaInst_RING_MODULATOR, NakaData_WidgetDescriptors + 0x0233C
-	.equ NakaInst_ROTARY_SPEAKER, NakaData_WidgetDescriptors + 0x0234E
+	.equ NakaInst_HARS_EFFECT, NakaData_WidgetDescriptors + 0x0232a
+	.equ NakaInst_RING_MODULATOR, NakaData_WidgetDescriptors + 0x0233c
+	.equ NakaInst_ROTARY_SPEAKER, NakaData_WidgetDescriptors + 0x0234e
 	.equ NakaInst_AUTO_WAH, NakaData_WidgetDescriptors + 0x02360
 	.equ NakaInst_PEDAL_WAH, NakaData_WidgetDescriptors + 0x02372
 	.equ NakaInst_VIBRATO, NakaData_WidgetDescriptors + 0x02384
 	.equ NakaInst_PITCH_SHIFTER, NakaData_WidgetDescriptors + 0x02396
-	.equ NakaInst_AUTO_PAN, NakaData_WidgetDescriptors + 0x023A8
-	.equ NakaInst_ModulationReserved_0, NakaData_WidgetDescriptors + 0x023BA
-	.equ NakaInst_ModulationReserved_1, NakaData_WidgetDescriptors + 0x023CC
-	.equ NakaInst_CELM, NakaData_WidgetDescriptors + 0x023DE
-	.equ NakaInst_CEL, NakaData_WidgetDescriptors + 0x023F0
+	.equ NakaInst_AUTO_PAN, NakaData_WidgetDescriptors + 0x023a8
+	.equ NakaInst_ModulationReserved_0, NakaData_WidgetDescriptors + 0x023ba
+	.equ NakaInst_ModulationReserved_1, NakaData_WidgetDescriptors + 0x023cc
+	.equ NakaInst_CELM, NakaData_WidgetDescriptors + 0x023de
+	.equ NakaInst_CEL, NakaData_WidgetDescriptors + 0x023f0
 	.equ NakaInst_CelReserved_0, NakaData_WidgetDescriptors + 0x02402
 	.equ NakaInst_CelReserved_1, NakaData_WidgetDescriptors + 0x02414
 	.equ NakaInst_CelReserved_2, NakaData_WidgetDescriptors + 0x02426
 	.equ NakaInst_CelReserved_3, NakaData_WidgetDescriptors + 0x02438
-	.equ NakaInst_PARAMETRIC_EQ, NakaData_WidgetDescriptors + 0x0244A
-	.equ NakaInst_NOISE_FLANGER, NakaData_WidgetDescriptors + 0x0245C
-	.equ NakaInst_SLOW_ATTACKER, NakaData_WidgetDescriptors + 0x0246E
+	.equ NakaInst_PARAMETRIC_EQ, NakaData_WidgetDescriptors + 0x0244a
+	.equ NakaInst_NOISE_FLANGER, NakaData_WidgetDescriptors + 0x0245c
+	.equ NakaInst_SLOW_ATTACKER, NakaData_WidgetDescriptors + 0x0246e
 	.equ NakaInst_COMPRESSOR, NakaData_WidgetDescriptors + 0x02480
 	.equ NakaInst_EXCITER, NakaData_WidgetDescriptors + 0x02492
-	.equ NakaInst_FUZZ, NakaData_WidgetDescriptors + 0x024A4
-	.equ NakaInst_OVERDRIVE, NakaData_WidgetDescriptors + 0x024B6
-	.equ NakaInst_DISTORTION, NakaData_WidgetDescriptors + 0x024C8
-	.equ NakaInst_DistReserved_0, NakaData_WidgetDescriptors + 0x024DA
-	.equ NakaInst_DistReserved_1, NakaData_WidgetDescriptors + 0x024EC
-	.equ NakaInst_DistReserved_2, NakaData_WidgetDescriptors + 0x024FE
+	.equ NakaInst_FUZZ, NakaData_WidgetDescriptors + 0x024a4
+	.equ NakaInst_OVERDRIVE, NakaData_WidgetDescriptors + 0x024b6
+	.equ NakaInst_DISTORTION, NakaData_WidgetDescriptors + 0x024c8
+	.equ NakaInst_DistReserved_0, NakaData_WidgetDescriptors + 0x024da
+	.equ NakaInst_DistReserved_1, NakaData_WidgetDescriptors + 0x024ec
+	.equ NakaInst_DistReserved_2, NakaData_WidgetDescriptors + 0x024fe
 	.equ NakaInst_DistReserved_3, NakaData_WidgetDescriptors + 0x02510
 	.equ NakaInst_WAVE_REVERB_2, NakaData_WidgetDescriptors + 0x02522
 	.equ NakaInst_WAVE_REVERB_1, NakaData_WidgetDescriptors + 0x02534
 	.equ NakaInst_BRIGHT_REVERB_2, NakaData_WidgetDescriptors + 0x02546
 	.equ NakaInst_BRIGHT_REVERB_1, NakaData_WidgetDescriptors + 0x02558
-	.equ NakaInst_DARK_REVERB_2, NakaData_WidgetDescriptors + 0x0256A
-	.equ NakaInst_DARK_REVERB_1, NakaData_WidgetDescriptors + 0x0257C
-	.equ NakaInst_CONCERT_REVERB_2, NakaData_WidgetDescriptors + 0x0258E
-	.equ NakaInst_CONCERT_REVERB_1, NakaData_WidgetDescriptors + 0x025A0
-	.equ NakaInst_PLATE_REVERB_2, NakaData_WidgetDescriptors + 0x025B2
-	.equ NakaInst_PLATE_REVERB_1, NakaData_WidgetDescriptors + 0x025C4
-	.equ NakaInst_ROOM_REVERB_2, NakaData_WidgetDescriptors + 0x025D6
-	.equ NakaInst_ROOM_REVERB_1, NakaData_WidgetDescriptors + 0x025E8
-	.equ NakaInst_ROCK_ROTARY, NakaData_WidgetDescriptors + 0x025FA
-	.equ NakaInst_DelayReserved_0, NakaData_WidgetDescriptors + 0x0260C
-	.equ NakaInst_DelayReserved_1, NakaData_WidgetDescriptors + 0x0261E
+	.equ NakaInst_DARK_REVERB_2, NakaData_WidgetDescriptors + 0x0256a
+	.equ NakaInst_DARK_REVERB_1, NakaData_WidgetDescriptors + 0x0257c
+	.equ NakaInst_CONCERT_REVERB_2, NakaData_WidgetDescriptors + 0x0258e
+	.equ NakaInst_CONCERT_REVERB_1, NakaData_WidgetDescriptors + 0x025a0
+	.equ NakaInst_PLATE_REVERB_2, NakaData_WidgetDescriptors + 0x025b2
+	.equ NakaInst_PLATE_REVERB_1, NakaData_WidgetDescriptors + 0x025c4
+	.equ NakaInst_ROOM_REVERB_2, NakaData_WidgetDescriptors + 0x025d6
+	.equ NakaInst_ROOM_REVERB_1, NakaData_WidgetDescriptors + 0x025e8
+	.equ NakaInst_ROCK_ROTARY, NakaData_WidgetDescriptors + 0x025fa
+	.equ NakaInst_DelayReserved_0, NakaData_WidgetDescriptors + 0x0260c
+	.equ NakaInst_DelayReserved_1, NakaData_WidgetDescriptors + 0x0261e
 	.equ NakaInst_DelayReserved_2, NakaData_WidgetDescriptors + 0x02630
 	.equ NakaInst_MODULATION_DELAY, NakaData_WidgetDescriptors + 0x02642
 	.equ NakaInst_MULTI_TAP_DELAY, NakaData_WidgetDescriptors + 0x02654
 	.equ NakaInst_SINGLE_DELAY, NakaData_WidgetDescriptors + 0x02666
 	.equ NakaInst_GATED_REVERB, NakaData_WidgetDescriptors + 0x02678
-	.equ NakaInst_ReverbGateReserved, NakaData_WidgetDescriptors + 0x0268A
-	.equ NakaInst_ENSEMBLE, NakaData_WidgetDescriptors + 0x0269C
-	.equ NakaInst_PHASER, NakaData_WidgetDescriptors + 0x026AE
-	.equ NakaInst_FLANGER, NakaData_WidgetDescriptors + 0x026C0
-	.equ NakaInst_ENHANCER, NakaData_WidgetDescriptors + 0x026D2
-	.equ NakaInst_MODULATED_CHORUS, NakaData_WidgetDescriptors + 0x026E4
-	.equ NakaInst_CHORUS, NakaData_WidgetDescriptors + 0x026F6
+	.equ NakaInst_ReverbGateReserved, NakaData_WidgetDescriptors + 0x0268a
+	.equ NakaInst_ENSEMBLE, NakaData_WidgetDescriptors + 0x0269c
+	.equ NakaInst_PHASER, NakaData_WidgetDescriptors + 0x026ae
+	.equ NakaInst_FLANGER, NakaData_WidgetDescriptors + 0x026c0
+	.equ NakaInst_ENHANCER, NakaData_WidgetDescriptors + 0x026d2
+	.equ NakaInst_MODULATED_CHORUS, NakaData_WidgetDescriptors + 0x026e4
+	.equ NakaInst_CHORUS, NakaData_WidgetDescriptors + 0x026f6
 	.equ NakaInst_NO_OPERATION, NakaData_WidgetDescriptors + 0x02708
-	.equ NakaInst_ACHTUNG, NakaData_WidgetDescriptors + 0x029D8
-	.equ NakaInst_ATTENTION, NakaData_WidgetDescriptors + 0x029E2
-	.equ NakaInst_ATENCI_N, NakaData_WidgetDescriptors + 0x029EE
-	.equ NakaInst_Perhatian, NakaData_WidgetDescriptors + 0x029FA
-	.equ NakaInst_Sind_Sie_sicher, NakaData_WidgetDescriptors + 0x02A14
-	.equ NakaInst_Etes_vous_sur_FR, NakaData_WidgetDescriptors + 0x02A26
-	.equ NakaInst_Est_seguro, NakaData_WidgetDescriptors + 0x02A36
-	.equ NakaInst_Features_for_editing_a_song, NakaData_WidgetDescriptors + 0x02AA8
-	.equ NakaInst_Funktionen_zur_Bearbeitung_eines_Songs, NakaData_WidgetDescriptors + 0x02AC6
-	.equ NakaInst_EASY_RECORD_sets_the_Sequencer_to_record_your, NakaData_WidgetDescriptors + 0x02AEE
-	.equ NakaInst_EASY_RECORD_aktiviert_DE, NakaData_WidgetDescriptors + 0x02B70
-	.equ NakaInst_Press_OK_to_proceed, NakaData_WidgetDescriptors + 0x02C02
-	.equ NakaInst_Bestaetigen_Sie_mit_OK_DE, NakaData_WidgetDescriptors + 0x02C18
-	.equ NakaInst_PANEL_WRITE_replaces_the_sounds_and_settings_at, NakaData_WidgetDescriptors + 0x02C30
-	.equ NakaInst_PANEL_WRITE_ersetzt_alle_Kl_nge_und_Einstellungen, NakaData_WidgetDescriptors + 0x02CF2
-	.equ NakaInst_Press_the_up_down_buttons_under_the_screen, NakaData_WidgetDescriptors + 0x02DD0
-	.equ NakaInst_Druecken_Sie_Doppeltasten_DE, NakaData_WidgetDescriptors + 0x02E30
-	.equ NakaInst_Press_OK_to_complete_TRACK_CLEAR, NakaData_WidgetDescriptors + 0x02E98
-	.equ NakaInst_Druecken_OK_TRACK_CLEAR_DE, NakaData_WidgetDescriptors + 0x02EBA
-	.equ NakaInst_Press_the_up_down_button_under_the_screen, NakaData_WidgetDescriptors + 0x02EE6
-	.equ NakaInst_Dr_cken_Sie_eine_der_Doppeltasten_unter_dem, NakaData_WidgetDescriptors + 0x02F42
-	.equ NakaInst_Using_SONG_CLEAR_will_erase_any_existing, NakaData_WidgetDescriptors + 0x02FAA
-	.equ NakaInst_SONG_CLEAR_loescht_DE, NakaData_WidgetDescriptors + 0x02FF0
-	.equ NakaInst_Al_anular_la_canci_n_se_borra_la_grabaci_n_del, NakaData_WidgetDescriptors + 0x0302C
+	.equ NakaInst_ACHTUNG, NakaData_WidgetDescriptors + 0x029d8
+	.equ NakaInst_ATTENTION, NakaData_WidgetDescriptors + 0x029e2
+	.equ NakaInst_ATENCI_N, NakaData_WidgetDescriptors + 0x029ee
+	.equ NakaInst_Perhatian, NakaData_WidgetDescriptors + 0x029fa
+	.equ NakaInst_Sind_Sie_sicher, NakaData_WidgetDescriptors + 0x02a14
+	.equ NakaInst_Etes_vous_sur_FR, NakaData_WidgetDescriptors + 0x02a26
+	.equ NakaInst_Est_seguro, NakaData_WidgetDescriptors + 0x02a36
+	.equ NakaInst_Features_for_editing_a_song, NakaData_WidgetDescriptors + 0x02aa8
+	.equ NakaInst_Funktionen_zur_Bearbeitung_eines_Songs, NakaData_WidgetDescriptors + 0x02ac6
+	.equ NakaInst_EASY_RECORD_sets_the_Sequencer_to_record_your, NakaData_WidgetDescriptors + 0x02aee
+	.equ NakaInst_EASY_RECORD_aktiviert_DE, NakaData_WidgetDescriptors + 0x02b70
+	.equ NakaInst_Press_OK_to_proceed, NakaData_WidgetDescriptors + 0x02c02
+	.equ NakaInst_Bestaetigen_Sie_mit_OK_DE, NakaData_WidgetDescriptors + 0x02c18
+	.equ NakaInst_PANEL_WRITE_replaces_the_sounds_and_settings_at, NakaData_WidgetDescriptors + 0x02c30
+	.equ NakaInst_PANEL_WRITE_ersetzt_alle_Kl_nge_und_Einstellungen, NakaData_WidgetDescriptors + 0x02cf2
+	.equ NakaInst_Press_the_up_down_buttons_under_the_screen, NakaData_WidgetDescriptors + 0x02dd0
+	.equ NakaInst_Druecken_Sie_Doppeltasten_DE, NakaData_WidgetDescriptors + 0x02e30
+	.equ NakaInst_Press_OK_to_complete_TRACK_CLEAR, NakaData_WidgetDescriptors + 0x02e98
+	.equ NakaInst_Druecken_OK_TRACK_CLEAR_DE, NakaData_WidgetDescriptors + 0x02eba
+	.equ NakaInst_Press_the_up_down_button_under_the_screen, NakaData_WidgetDescriptors + 0x02ee6
+	.equ NakaInst_Dr_cken_Sie_eine_der_Doppeltasten_unter_dem, NakaData_WidgetDescriptors + 0x02f42
+	.equ NakaInst_Using_SONG_CLEAR_will_erase_any_existing, NakaData_WidgetDescriptors + 0x02faa
+	.equ NakaInst_SONG_CLEAR_loescht_DE, NakaData_WidgetDescriptors + 0x02ff0
+	.equ NakaInst_Al_anular_la_canci_n_se_borra_la_grabaci_n_del, NakaData_WidgetDescriptors + 0x0302c
 	.equ NakaInst_Using_TRACK_CLEAR_will_erase_any_existing, NakaData_WidgetDescriptors + 0x03110
-	.equ NakaInst_TRACK_CLEAR_l_scht_alle_Daten_in_den_ausgew_hlten, NakaData_WidgetDescriptors + 0x0315E
-	.equ NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las, NakaData_WidgetDescriptors + 0x0319A
+	.equ NakaInst_TRACK_CLEAR_l_scht_alle_Daten_in_den_ausgew_hlten, NakaData_WidgetDescriptors + 0x0315e
+	.equ NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las, NakaData_WidgetDescriptors + 0x0319a
 	.equ ExtDevice_ModeDispatch_Table, NakaData_WidgetDescriptors + 0x03678
-	.equ NakaInst_3d, NakaData_WidgetDescriptors + 0x03D28
-	.equ NakaInst_2d, NakaData_WidgetDescriptors + 0x03DF0
+	.equ NakaInst_3d, NakaData_WidgetDescriptors + 0x03d28
+	.equ NakaInst_2d, NakaData_WidgetDescriptors + 0x03df0
 	.equ Bitmap_Ntedt0k, NakaData_WidgetDescriptors + 0x04018
 	.equ Bitmap_Ntedt0d, NakaData_WidgetDescriptors + 0x04808
-	.equ Bitmap_Dredt0k, NakaData_WidgetDescriptors + 0x0BF18
-	.equ Bitmap_Dredt0d, NakaData_WidgetDescriptors + 0x0E800
+	.equ Bitmap_Dredt0k, NakaData_WidgetDescriptors + 0x0bf18
+	.equ Bitmap_Dredt0d, NakaData_WidgetDescriptors + 0x0e800
 	.equ WidgetData_DrawbarPositionTable, NakaData_WidgetDescriptors + 0x13618
-	.equ WidgetData_CharsetMappingTable, NakaData_WidgetDescriptors + 0x137D6
-	.equ FontPalette_Gradient7, NakaData_WidgetDescriptors + 0x13D12
-	.equ FontPalette_Gradient6, NakaData_WidgetDescriptors + 0x13D58
-	.equ FontPalette_Gradient5, NakaData_WidgetDescriptors + 0x13DB8
-	.equ FontPalette_Gradient4, NakaData_WidgetDescriptors + 0x13E18
-	.equ FontPalette_Gradient3, NakaData_WidgetDescriptors + 0x13E78
-	.equ FontPalette_Gradient2, NakaData_WidgetDescriptors + 0x13ED8
-	.equ FontPalette_Gradient1, NakaData_WidgetDescriptors + 0x13F38
-	.equ FontPalette_Gradient0, NakaData_WidgetDescriptors + 0x13F98
-	.equ Display_FontPalette_Table, NakaData_WidgetDescriptors + 0x13FF8
-	.equ NakaInst_MEMORY_C, NakaData_WidgetDescriptors + 0x1B1E4
-	.equ NakaInst_MEMORY_B, NakaData_WidgetDescriptors + 0x1B1F2
-	.equ NakaInst_MEMORY_A, NakaData_WidgetDescriptors + 0x1B200
-	.equ NakaInst_DashDash, NakaData_WidgetDescriptors + 0x1B262
-	.equ NakaInst_ON_Str, NakaData_WidgetDescriptors + 0x1B26E
-	.equ NakaInst_OFF_Str, NakaData_WidgetDescriptors + 0x1B272
-	.equ Naka_UIStringRef_Table, NakaData_WidgetDescriptors + 0x244A8
+	.equ WidgetData_CharsetMappingTable, NakaData_WidgetDescriptors + 0x137d6
+	.equ FontPalette_Gradient7, NakaData_WidgetDescriptors + 0x13d12
+	.equ FontPalette_Gradient6, NakaData_WidgetDescriptors + 0x13d58
+	.equ FontPalette_Gradient5, NakaData_WidgetDescriptors + 0x13db8
+	.equ FontPalette_Gradient4, NakaData_WidgetDescriptors + 0x13e18
+	.equ FontPalette_Gradient3, NakaData_WidgetDescriptors + 0x13e78
+	.equ FontPalette_Gradient2, NakaData_WidgetDescriptors + 0x13ed8
+	.equ FontPalette_Gradient1, NakaData_WidgetDescriptors + 0x13f38
+	.equ FontPalette_Gradient0, NakaData_WidgetDescriptors + 0x13f98
+	.equ Display_FontPalette_Table, NakaData_WidgetDescriptors + 0x13ff8
+	.equ NakaInst_MEMORY_C, NakaData_WidgetDescriptors + 0x1b1e4
+	.equ NakaInst_MEMORY_B, NakaData_WidgetDescriptors + 0x1b1f2
+	.equ NakaInst_MEMORY_A, NakaData_WidgetDescriptors + 0x1b200
+	.equ NakaInst_DashDash, NakaData_WidgetDescriptors + 0x1b262
+	.equ NakaInst_ON_Str, NakaData_WidgetDescriptors + 0x1b26e
+	.equ NakaInst_OFF_Str, NakaData_WidgetDescriptors + 0x1b272
+	.equ Naka_UIStringRef_Table, NakaData_WidgetDescriptors + 0x244a8
 	.equ NakaInst_EmptyFuncName, NakaData_WidgetDescriptors + 0x24598
-	.equ NakaInst_RevEqOnOffFunc, NakaData_WidgetDescriptors + 0x2459A
-	.equ NakaInst_RevEqSelFunc, NakaData_WidgetDescriptors + 0x245AA
-	.equ NakaInst_EqOnOffFunc, NakaData_WidgetDescriptors + 0x245B8
-	.equ NakaInst_EqSelFunc, NakaData_WidgetDescriptors + 0x245C4
-	.equ NakaInst_RevSelFunc, NakaData_WidgetDescriptors + 0x245CE
-	.equ NakaInst_SplitPointFunc, NakaData_WidgetDescriptors + 0x245DA
-	.equ NakaInst_StsSplitCheck, NakaData_WidgetDescriptors + 0x245EA
-	.equ NakaInst_InOutGridCheck, NakaData_WidgetDescriptors + 0x245F8
+	.equ NakaInst_RevEqOnOffFunc, NakaData_WidgetDescriptors + 0x2459a
+	.equ NakaInst_RevEqSelFunc, NakaData_WidgetDescriptors + 0x245aa
+	.equ NakaInst_EqOnOffFunc, NakaData_WidgetDescriptors + 0x245b8
+	.equ NakaInst_EqSelFunc, NakaData_WidgetDescriptors + 0x245c4
+	.equ NakaInst_RevSelFunc, NakaData_WidgetDescriptors + 0x245ce
+	.equ NakaInst_SplitPointFunc, NakaData_WidgetDescriptors + 0x245da
+	.equ NakaInst_StsSplitCheck, NakaData_WidgetDescriptors + 0x245ea
+	.equ NakaInst_InOutGridCheck, NakaData_WidgetDescriptors + 0x245f8
 	.equ NakaInst_TtMdInOut, NakaData_WidgetDescriptors + 0x24608
 	.equ NakaInst_FadeSetGridCheck, NakaData_WidgetDescriptors + 0x24612
 	.equ NakaInst_TtFadeInOut, NakaData_WidgetDescriptors + 0x24624
 	.equ NakaInst_VocalistPage2OKFunc, NakaData_WidgetDescriptors + 0x24630
 	.equ NakaInst_VocalistPage1OKFunc, NakaData_WidgetDescriptors + 0x24644
 	.equ NakaInst_VocalistGridCheck, NakaData_WidgetDescriptors + 0x24658
-	.equ NakaInst_TtVocalistWorkstation, NakaData_WidgetDescriptors + 0x2466A
+	.equ NakaInst_TtVocalistWorkstation, NakaData_WidgetDescriptors + 0x2466a
 	.equ NakaInst_HarmOnOffFunc, NakaData_WidgetDescriptors + 0x24680
-	.equ NakaInst_GMNoFunc, NakaData_WidgetDescriptors + 0x2468E
+	.equ NakaInst_GMNoFunc, NakaData_WidgetDescriptors + 0x2468e
 	.equ NakaInst_GMYesFunc, NakaData_WidgetDescriptors + 0x24698
-	.equ NakaInst_StsAreYouSureCheck, NakaData_WidgetDescriptors + 0x246A2
-	.equ NakaInst_StsGMOffCheck, NakaData_WidgetDescriptors + 0x246B6
-	.equ NakaInst_StsGMOnCheck, NakaData_WidgetDescriptors + 0x246C4
-	.equ NakaInst_StsAttentionCheck, NakaData_WidgetDescriptors + 0x246D2
-	.equ NakaInst_GMOKFunc, NakaData_WidgetDescriptors + 0x246E4
-	.equ NakaInst_TtMdGm, NakaData_WidgetDescriptors + 0x246EE
-	.equ NakaInst_BitmapBmphk, NakaData_WidgetDescriptors + 0x246F6
+	.equ NakaInst_StsAreYouSureCheck, NakaData_WidgetDescriptors + 0x246a2
+	.equ NakaInst_StsGMOffCheck, NakaData_WidgetDescriptors + 0x246b6
+	.equ NakaInst_StsGMOnCheck, NakaData_WidgetDescriptors + 0x246c4
+	.equ NakaInst_StsAttentionCheck, NakaData_WidgetDescriptors + 0x246d2
+	.equ NakaInst_GMOKFunc, NakaData_WidgetDescriptors + 0x246e4
+	.equ NakaInst_TtMdGm, NakaData_WidgetDescriptors + 0x246ee
+	.equ NakaInst_BitmapBmphk, NakaData_WidgetDescriptors + 0x246f6
 	.equ NakaInst_MdPresetWithFunc, NakaData_WidgetDescriptors + 0x24702
 	.equ NakaInst_MdPresetWithoutFunc, NakaData_WidgetDescriptors + 0x24714
 	.equ NakaInst_MdPresetOKFunc, NakaData_WidgetDescriptors + 0x24728
 	.equ NakaInst_TtMdPreset, NakaData_WidgetDescriptors + 0x24738
 	.equ NakaInst_ExcMspFunc, NakaData_WidgetDescriptors + 0x24744
 	.equ NakaInst_ExcSeqFunc, NakaData_WidgetDescriptors + 0x24750
-	.equ NakaInst_ExcCompFunc, NakaData_WidgetDescriptors + 0x2475C
+	.equ NakaInst_ExcCompFunc, NakaData_WidgetDescriptors + 0x2475c
 	.equ NakaInst_ExcSmemFunc, NakaData_WidgetDescriptors + 0x24768
 	.equ NakaInst_ExcPmemFunc, NakaData_WidgetDescriptors + 0x24774
 	.equ NakaInst_ExcDotFunc, NakaData_WidgetDescriptors + 0x24780
-	.equ NakaInst_ExcSendFunc, NakaData_WidgetDescriptors + 0x2478C
+	.equ NakaInst_ExcSendFunc, NakaData_WidgetDescriptors + 0x2478c
 	.equ NakaInst_TtMdExc, NakaData_WidgetDescriptors + 0x24798
-	.equ NakaInst_MidiPartGridCheck, NakaData_WidgetDescriptors + 0x247A0
-	.equ NakaInst_TtMdPart, NakaData_WidgetDescriptors + 0x247B2
-	.equ NakaInst_CtlMsgGridCheck, NakaData_WidgetDescriptors + 0x247BC
-	.equ NakaInst_TtMdCtlMsg, NakaData_WidgetDescriptors + 0x247CC
-	.equ NakaInst_PmemOutRGridCheck, NakaData_WidgetDescriptors + 0x247D8
-	.equ NakaInst_PmemOutLGridCheck, NakaData_WidgetDescriptors + 0x247EA
-	.equ NakaInst_TtMdPmemOut, NakaData_WidgetDescriptors + 0x247FC
+	.equ NakaInst_MidiPartGridCheck, NakaData_WidgetDescriptors + 0x247a0
+	.equ NakaInst_TtMdPart, NakaData_WidgetDescriptors + 0x247b2
+	.equ NakaInst_CtlMsgGridCheck, NakaData_WidgetDescriptors + 0x247bc
+	.equ NakaInst_TtMdCtlMsg, NakaData_WidgetDescriptors + 0x247cc
+	.equ NakaInst_PmemOutRGridCheck, NakaData_WidgetDescriptors + 0x247d8
+	.equ NakaInst_PmemOutLGridCheck, NakaData_WidgetDescriptors + 0x247ea
+	.equ NakaInst_TtMdPmemOut, NakaData_WidgetDescriptors + 0x247fc
 	.equ NakaInst_ComSetGridCheck, NakaData_WidgetDescriptors + 0x24808
 	.equ NakaInst_TtComSet, NakaData_WidgetDescriptors + 0x24818
 	.equ NakaInst_PcgOutSendFunc, NakaData_WidgetDescriptors + 0x24822
 	.equ NakaInst_PcgOutGridCheck, NakaData_WidgetDescriptors + 0x24832
 	.equ NakaInst_TtMdPcgOut, NakaData_WidgetDescriptors + 0x24842
-	.equ NakaInst_ParaLoadOptOKFunc, NakaData_WidgetDescriptors + 0x2484E
+	.equ NakaInst_ParaLoadOptOKFunc, NakaData_WidgetDescriptors + 0x2484e
 	.equ NakaInst_ParaLoadOptGridCheck, NakaData_WidgetDescriptors + 0x24860
 	.equ NakaInst_TtMdParaLoad, NakaData_WidgetDescriptors + 0x24876
 	.equ NakaInst_R12OctaveFunc, NakaData_WidgetDescriptors + 0x24884
 	.equ NakaInst_MdCmptCnctFunc, NakaData_WidgetDescriptors + 0x24892
-	.equ NakaInst_TtComputerConnection, NakaData_WidgetDescriptors + 0x248A2
-	.equ NakaInst_MdSetupLoadFunc, NakaData_WidgetDescriptors + 0x248B8
-	.equ NakaInst_MdDrumTypeFunc, NakaData_WidgetDescriptors + 0x248C8
-	.equ NakaInst_MdPcgModeFunc, NakaData_WidgetDescriptors + 0x248D8
-	.equ NakaInst_TtMdRealMsg, NakaData_WidgetDescriptors + 0x248E6
-	.equ NakaInst_TtMdmenu, NakaData_WidgetDescriptors + 0x248F2
+	.equ NakaInst_TtComputerConnection, NakaData_WidgetDescriptors + 0x248a2
+	.equ NakaInst_MdSetupLoadFunc, NakaData_WidgetDescriptors + 0x248b8
+	.equ NakaInst_MdDrumTypeFunc, NakaData_WidgetDescriptors + 0x248c8
+	.equ NakaInst_MdPcgModeFunc, NakaData_WidgetDescriptors + 0x248d8
+	.equ NakaInst_TtMdRealMsg, NakaData_WidgetDescriptors + 0x248e6
+	.equ NakaInst_TtMdmenu, NakaData_WidgetDescriptors + 0x248f2
 	.equ NakaDesc_PageWindow_Sentinel, NakaData_WidgetDescriptors + 0x24906
 	.equ NakaDesc_PageWindow_Table, NakaData_WidgetDescriptors + 0x24908
 	.equ NakaDesc_PageWindow_NullStr, NakaData_WidgetDescriptors + 0x24918
-	.equ NakaDesc_PageWindow_Window1, NakaData_WidgetDescriptors + 0x2491A
+	.equ NakaDesc_PageWindow_Window1, NakaData_WidgetDescriptors + 0x2491a
 	.equ NakaDesc_PageWindow_Window0, NakaData_WidgetDescriptors + 0x24922
-	.equ NakaDesc_PageWindow_Page, NakaData_WidgetDescriptors + 0x2492A
+	.equ NakaDesc_PageWindow_Page, NakaData_WidgetDescriptors + 0x2492a
 	.equ NakaDesc_OnOffStyle_Table, NakaData_WidgetDescriptors + 0x24930
 	.equ NakaDesc_OnOffStyle_NullStr, NakaData_WidgetDescriptors + 0x24944
 	.equ NakaDesc_OnOffStyle_Onoff, NakaData_WidgetDescriptors + 0x24946
-	.equ NakaDesc_OnOffStyle_Str, NakaData_WidgetDescriptors + 0x2494C
+	.equ NakaDesc_OnOffStyle_Str, NakaData_WidgetDescriptors + 0x2494c
 	.equ NakaDesc_OnOffStyle_Func, NakaData_WidgetDescriptors + 0x24950
 	.equ NakaDesc_OnOffStyle_Style, NakaData_WidgetDescriptors + 0x24956
 	.equ NakaDesc_PmanOnOff_NullTerm, NakaData_WidgetDescriptors + 0x24960
 	.equ NakaDesc_PmanOnOff1_Table, NakaData_WidgetDescriptors + 0x24962
-	.equ NakaDesc_PmanOnOff1_NullEntry, NakaData_WidgetDescriptors + 0x2497A
-	.equ NakaDesc_PmanOnOff1_PmanOut, NakaData_WidgetDescriptors + 0x2497C
+	.equ NakaDesc_PmanOnOff1_NullEntry, NakaData_WidgetDescriptors + 0x2497a
+	.equ NakaDesc_PmanOnOff1_PmanOut, NakaData_WidgetDescriptors + 0x2497c
 	.equ NakaDesc_PmanOnOff1_PmanAdr, NakaData_WidgetDescriptors + 0x24986
 	.equ NakaDesc_PmanOnOff1_OffStr, NakaData_WidgetDescriptors + 0x24990
 	.equ NakaDesc_PmanOnOff1_OnStr, NakaData_WidgetDescriptors + 0x24998
-	.equ NakaDesc_PmanOnOff1_Data, NakaData_WidgetDescriptors + 0x249A0
-	.equ NakaDesc_PmanOnOff2_Table, NakaData_WidgetDescriptors + 0x249A6
-	.equ NakaDesc_PmanOnOff2_NullEntry, NakaData_WidgetDescriptors + 0x249BE
-	.equ NakaDesc_PmanOnOff2_PmanOut, NakaData_WidgetDescriptors + 0x249C0
-	.equ NakaDesc_PmanOnOff2_PmanAdr, NakaData_WidgetDescriptors + 0x249CA
-	.equ NakaDesc_PmanOnOff2_OffStr, NakaData_WidgetDescriptors + 0x249D4
-	.equ NakaDesc_PmanOnOff2_OnStr, NakaData_WidgetDescriptors + 0x249DC
-	.equ NakaDesc_PmanOnOff2_Data, NakaData_WidgetDescriptors + 0x249E4
-	.equ NakaDesc_GridBox1_NullEntry, NakaData_WidgetDescriptors + 0x249FA
-	.equ NakaDesc_GridBox1_Func, NakaData_WidgetDescriptors + 0x249FC
-	.equ NakaDesc_GridBox1_FixedRow, NakaData_WidgetDescriptors + 0x24A02
-	.equ NakaDesc_GridBox1_FixedCol, NakaData_WidgetDescriptors + 0x24A0C
-	.equ NakaDesc_GridBox2_NullEntry, NakaData_WidgetDescriptors + 0x24A26
-	.equ NakaDesc_GridBox2_Func, NakaData_WidgetDescriptors + 0x24A28
-	.equ NakaDesc_GridBox2_FixedRow, NakaData_WidgetDescriptors + 0x24A2E
-	.equ NakaDesc_GridBox2_FixedCol, NakaData_WidgetDescriptors + 0x24A38
-	.equ NakaDesc_GridBox3_NullEntry, NakaData_WidgetDescriptors + 0x24A52
-	.equ NakaDesc_GridBox3_Func, NakaData_WidgetDescriptors + 0x24A54
-	.equ NakaDesc_GridBox3_FixedRow, NakaData_WidgetDescriptors + 0x24A5A
-	.equ NakaDesc_GridBox3_FixedCol, NakaData_WidgetDescriptors + 0x24A64
-	.equ NakaDesc_GridBox4_NullEntry, NakaData_WidgetDescriptors + 0x24A7E
-	.equ NakaDesc_GridBox4_Func, NakaData_WidgetDescriptors + 0x24A80
-	.equ NakaDesc_GridBox4_FixedRow, NakaData_WidgetDescriptors + 0x24A86
-	.equ NakaDesc_GridBox4_FixedCol, NakaData_WidgetDescriptors + 0x24A90
-	.equ NakaDesc_GridBox5_NullEntry, NakaData_WidgetDescriptors + 0x24AAA
-	.equ NakaDesc_GridBox5_Func, NakaData_WidgetDescriptors + 0x24AAC
-	.equ NakaDesc_GridBox5_FixedRow, NakaData_WidgetDescriptors + 0x24AB2
-	.equ NakaDesc_GridBox5_FixedCol, NakaData_WidgetDescriptors + 0x24ABC
-	.equ NakaDesc_GridBox6_NullEntry, NakaData_WidgetDescriptors + 0x24AD6
-	.equ NakaDesc_GridBox6_Func, NakaData_WidgetDescriptors + 0x24AD8
-	.equ NakaDesc_GridBox6_FixedRow, NakaData_WidgetDescriptors + 0x24ADE
-	.equ NakaDesc_GridBox6_FixedCol, NakaData_WidgetDescriptors + 0x24AE8
-	.equ NakaDesc_GridBox7_NullEntry, NakaData_WidgetDescriptors + 0x24B02
-	.equ NakaDesc_GridBox7_Func, NakaData_WidgetDescriptors + 0x24B04
-	.equ NakaDesc_GridBox7_FixedRow, NakaData_WidgetDescriptors + 0x24B0A
-	.equ NakaDesc_GridBox7_FixedCol, NakaData_WidgetDescriptors + 0x24B14
-	.equ NakaDesc_PageGridBox1_Table, NakaData_WidgetDescriptors + 0x24B1E
-	.equ NakaDesc_PageGridBox1_Null, NakaData_WidgetDescriptors + 0x24B32
-	.equ NakaDesc_PageGridBox1_Page, NakaData_WidgetDescriptors + 0x24B34
-	.equ NakaDesc_PageGridBox1_Func, NakaData_WidgetDescriptors + 0x24B3A
-	.equ NakaDesc_PageGridBox1_FixedRow, NakaData_WidgetDescriptors + 0x24B40
-	.equ NakaDesc_PageGridBox1_FixedCol, NakaData_WidgetDescriptors + 0x24B4A
-	.equ NakaDesc_PageGridBox2_Table, NakaData_WidgetDescriptors + 0x24B58
-	.equ NakaDesc_PageGridBox2_NullStr, NakaData_WidgetDescriptors + 0x24B68
-	.equ NakaDesc_PageGridBox2_Page, NakaData_WidgetDescriptors + 0x24B6A
-	.equ NakaDesc_PageGridBox2_Func, NakaData_WidgetDescriptors + 0x24B70
-	.equ NakaDesc_PageGridBox2_FixedRow, NakaData_WidgetDescriptors + 0x24B76
-	.equ NakaDesc_PageGridBox2_FixedCol, NakaData_WidgetDescriptors + 0x24B80
-	.equ NakaData_Block007, NakaData_WidgetDescriptors + 0x24BD6
+	.equ NakaDesc_PmanOnOff1_Data, NakaData_WidgetDescriptors + 0x249a0
+	.equ NakaDesc_PmanOnOff2_Table, NakaData_WidgetDescriptors + 0x249a6
+	.equ NakaDesc_PmanOnOff2_NullEntry, NakaData_WidgetDescriptors + 0x249be
+	.equ NakaDesc_PmanOnOff2_PmanOut, NakaData_WidgetDescriptors + 0x249c0
+	.equ NakaDesc_PmanOnOff2_PmanAdr, NakaData_WidgetDescriptors + 0x249ca
+	.equ NakaDesc_PmanOnOff2_OffStr, NakaData_WidgetDescriptors + 0x249d4
+	.equ NakaDesc_PmanOnOff2_OnStr, NakaData_WidgetDescriptors + 0x249dc
+	.equ NakaDesc_PmanOnOff2_Data, NakaData_WidgetDescriptors + 0x249e4
+	.equ NakaDesc_GridBox1_NullEntry, NakaData_WidgetDescriptors + 0x249fa
+	.equ NakaDesc_GridBox1_Func, NakaData_WidgetDescriptors + 0x249fc
+	.equ NakaDesc_GridBox1_FixedRow, NakaData_WidgetDescriptors + 0x24a02
+	.equ NakaDesc_GridBox1_FixedCol, NakaData_WidgetDescriptors + 0x24a0c
+	.equ NakaDesc_GridBox2_NullEntry, NakaData_WidgetDescriptors + 0x24a26
+	.equ NakaDesc_GridBox2_Func, NakaData_WidgetDescriptors + 0x24a28
+	.equ NakaDesc_GridBox2_FixedRow, NakaData_WidgetDescriptors + 0x24a2e
+	.equ NakaDesc_GridBox2_FixedCol, NakaData_WidgetDescriptors + 0x24a38
+	.equ NakaDesc_GridBox3_NullEntry, NakaData_WidgetDescriptors + 0x24a52
+	.equ NakaDesc_GridBox3_Func, NakaData_WidgetDescriptors + 0x24a54
+	.equ NakaDesc_GridBox3_FixedRow, NakaData_WidgetDescriptors + 0x24a5a
+	.equ NakaDesc_GridBox3_FixedCol, NakaData_WidgetDescriptors + 0x24a64
+	.equ NakaDesc_GridBox4_NullEntry, NakaData_WidgetDescriptors + 0x24a7e
+	.equ NakaDesc_GridBox4_Func, NakaData_WidgetDescriptors + 0x24a80
+	.equ NakaDesc_GridBox4_FixedRow, NakaData_WidgetDescriptors + 0x24a86
+	.equ NakaDesc_GridBox4_FixedCol, NakaData_WidgetDescriptors + 0x24a90
+	.equ NakaDesc_GridBox5_NullEntry, NakaData_WidgetDescriptors + 0x24aaa
+	.equ NakaDesc_GridBox5_Func, NakaData_WidgetDescriptors + 0x24aac
+	.equ NakaDesc_GridBox5_FixedRow, NakaData_WidgetDescriptors + 0x24ab2
+	.equ NakaDesc_GridBox5_FixedCol, NakaData_WidgetDescriptors + 0x24abc
+	.equ NakaDesc_GridBox6_NullEntry, NakaData_WidgetDescriptors + 0x24ad6
+	.equ NakaDesc_GridBox6_Func, NakaData_WidgetDescriptors + 0x24ad8
+	.equ NakaDesc_GridBox6_FixedRow, NakaData_WidgetDescriptors + 0x24ade
+	.equ NakaDesc_GridBox6_FixedCol, NakaData_WidgetDescriptors + 0x24ae8
+	.equ NakaDesc_GridBox7_NullEntry, NakaData_WidgetDescriptors + 0x24b02
+	.equ NakaDesc_GridBox7_Func, NakaData_WidgetDescriptors + 0x24b04
+	.equ NakaDesc_GridBox7_FixedRow, NakaData_WidgetDescriptors + 0x24b0a
+	.equ NakaDesc_GridBox7_FixedCol, NakaData_WidgetDescriptors + 0x24b14
+	.equ NakaDesc_PageGridBox1_Table, NakaData_WidgetDescriptors + 0x24b1e
+	.equ NakaDesc_PageGridBox1_Null, NakaData_WidgetDescriptors + 0x24b32
+	.equ NakaDesc_PageGridBox1_Page, NakaData_WidgetDescriptors + 0x24b34
+	.equ NakaDesc_PageGridBox1_Func, NakaData_WidgetDescriptors + 0x24b3a
+	.equ NakaDesc_PageGridBox1_FixedRow, NakaData_WidgetDescriptors + 0x24b40
+	.equ NakaDesc_PageGridBox1_FixedCol, NakaData_WidgetDescriptors + 0x24b4a
+	.equ NakaDesc_PageGridBox2_Table, NakaData_WidgetDescriptors + 0x24b58
+	.equ NakaDesc_PageGridBox2_NullStr, NakaData_WidgetDescriptors + 0x24b68
+	.equ NakaDesc_PageGridBox2_Page, NakaData_WidgetDescriptors + 0x24b6a
+	.equ NakaDesc_PageGridBox2_Func, NakaData_WidgetDescriptors + 0x24b70
+	.equ NakaDesc_PageGridBox2_FixedRow, NakaData_WidgetDescriptors + 0x24b76
+	.equ NakaDesc_PageGridBox2_FixedCol, NakaData_WidgetDescriptors + 0x24b80
+	.equ NakaData_Block007, NakaData_WidgetDescriptors + 0x24bd6

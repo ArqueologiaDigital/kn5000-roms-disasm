@@ -4,8 +4,8 @@
 ; This file contains VGA initialization code that is nearly byte-identical
 ; between the Main CPU ROM (maincpu) and Table Data ROM (table_data).
 ;
-; In maincpu: Located at 0xEF5163-0xEF5AFD (2458 bytes)
-; In table_data: Located at 0x9FCE1E-0x9FD7BB (2462 bytes)
+; In maincpu: Located at 0xef5163-0xef5afd (2458 bytes)
+; In table_data: Located at 0x9fce1e-0x9fd7bb (2462 bytes)
 ;
 ; This code initializes:
 ;   - VGA sequencer extended registers
@@ -52,32 +52,32 @@
 
 
 .macro VGA_SEQUENCER field, value
-	VGA_WRITE 0x3C4, \field
-	VGA_WRITE 0x3C5, \value
+	VGA_WRITE 0x3c4, \field
+	VGA_WRITE 0x3c5, \value
 .endm
 
 
 
 
 .macro VGA_GFX_CONTROLLER field, value
-	VGA_WRITE 0x3CE, \field
-	VGA_WRITE 0x3CF, \value
+	VGA_WRITE 0x3ce, \field
+	VGA_WRITE 0x3cf, \value
 .endm
 
 
 
 
 .macro VGA_COLOR_CRTC field, value
-	VGA_WRITE 0x3D4, \field
-	VGA_WRITE 0x3D5, \value
+	VGA_WRITE 0x3d4, \field
+	VGA_WRITE 0x3d5, \value
 .endm
 
 
 
 
 .macro VGA_ATTRIBUTE field, value
-	VGA_WRITE 0x3C0, \field
-	VGA_WRITE 0x3C0, \value
+	VGA_WRITE 0x3c0, \field
+	VGA_WRITE 0x3c0, \value
 .endm
 
 
@@ -103,8 +103,8 @@
 
 
 .macro RET_VGA_SEQUENCER field, value
-	VGA_WRITE 0x3C4, \field
-	RET_VGA_WRITE 0x3C5, \value
+	VGA_WRITE 0x3c4, \field
+	RET_VGA_WRITE 0x3c5, \value
 .endm
 
 
@@ -118,8 +118,8 @@
 ; This routine is called from the main VGA setup and returns via
 ; RET_VGA_SEQUENCER which performs a tail-call back to Write_VGA_Register.
 ;
-; In maincpu: VGA_Extended_Init (0xEF5163)
-; In table_data: VGA_Init entry point (0x9FCE1E)
+; In maincpu: VGA_Extended_Init (0xef5163)
+; In table_data: VGA_Init entry point (0x9fce1e)
 ;
 ; Label names use maincpu convention. Table_data can define aliases if needed.
 ; =============================================================================
@@ -259,7 +259,7 @@ VGA_Setup:
 	VGA_COLOR_CRTC CRTC_LINE_COMPARE, 0xff
 
 	; Read VGA_INPUT_STATUS - reuses BC=0FFh from previous write
-	ldw wa, 0x3DA
+	ldw wa, 0x3da
 	calr Read_VGA_Register
 
 	; EGA default palette (16 entries)
@@ -317,101 +317,101 @@ VGA_Setup:
 	VGA_WRITE 0x3c8, 0	; Start at palette index 0
 
 	; Color 0: Black (0, 0, 0)
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
 
 	; Color 1: White (F, F, F)
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
 
 	; Color 2: Red (F, 0, 0)
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
 
 	; Color 3: Green (0, F, 0)
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
 
 	; Color 4: Blue (0, 0, F)
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
 
 	; Color 5: Cyan (0, F, F)
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
 
 	; Color 6: Yellow (F, F, 0)
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
 
 	; Color 7: Magenta (F, 0, F)
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
-	ldw bc, 0xF
+	ldw wa, 0x3c9
+	ldw bc, 0xf
 	calr Write_VGA_Register
 
 	; Color 8: Dark Blue (0, 0, 4)
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 0
 	calr Write_VGA_Register
-	ldw wa, 0x3C9
+	ldw wa, 0x3c9
 	lds bc, 4
 	calr Write_VGA_Register
 
@@ -420,7 +420,7 @@ VGA_Setup:
 
 	; Set up parameters for video buffer initialization
 	; These are loaded here; caller provides the actual CALL to fill/copy routines
-	ld xwa, 0x43C00
+	ld xwa, 0x43c00
 	ldw bc, 0x808	; Fill pattern
 	ldw de, 0x9600	; Size in words (38400 = 0x9600)
 

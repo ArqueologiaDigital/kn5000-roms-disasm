@@ -10,8 +10,8 @@
 ;   0x8504: Slot limit 1
 ;   0x8506: Slot limit 2
 ;   0x8508: Slot limit 3
-;   0x09480E: External password slot storage
-;   0x0AB000 + slot*0x800 + 0x1C: Password data per slot
+;   0x09480e: External password slot storage
+;   0x0ab000 + slot*0x800 + 0x1c: Password data per slot
 ;
 ; Key routines:
 ;   SysData_F92C0E   - Get password value 1

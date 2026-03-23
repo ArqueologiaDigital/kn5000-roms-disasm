@@ -13,15 +13,15 @@ FmmWallpaperLoadFunc:
 	ld (xsp + 6), xde
 	ld xiz, xbc
 	ldda32 xwa, 33200
-	cp xiz, 0x1C00018
+	cp xiz, 0x1c00018
 	jrl z, WPLoad_HandleScroll
-	cp xiz, 0x1C00017
+	cp xiz, 0x1c00017
 	jrl z, WPLoad_HandleScroll
-	cp xiz, 0x1C0000B
+	cp xiz, 0x1c0000b
 	jrl z, WPLoad_HandleShow
-	cp xiz, 0x1E50004
+	cp xiz, 0x1e50004
 	jrl z, WPLoad_HandleSelection
-	cp xiz, 0x1C00013
+	cp xiz, 0x1c00013
 	jrl nz, WPLoad_Return
 	ld xwa, (xsp + 6)
 	cp xwa, 0x3
@@ -32,7 +32,7 @@ FmmWallpaperLoadFunc:
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	cpdi16 34048, 0
@@ -60,60 +60,60 @@ WPLoad_DispatchState:
 
 WPLoad_ContinueWait:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1C0000A
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	jrl WPLoad_DispatchWidget
 
 WPLoad_HandleCancel:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	ldw wa, 0x48
 	call UI_PostModeChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 32578, 0
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	jr WPLoad_CallStatusDisplay
 
 WPLoad_HandleError:
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0x7D
+	ldw wa, 0x7d
 	call UI_PostModeChangeEvent
 	jrl WPLoad_Return
 
 WPLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	ldw wa, 0x48
 	call UI_PostModeChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
 	stdi8 32578, 2
-	ldw wa, 0xEE
+	ldw wa, 0xee
 
 WPLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -135,23 +135,23 @@ WPLoad_HandleSelection:
 WPLoad_Selection_Positive:
 	ldda16 xwa, 33204
 	exts xwa
-	divs wa, 0xA
-	ldto_werp DE, 0xE2
+	divs wa, 0xa
+	ldto_werp DE, 0xe2
 	exts xde
 	ldda32 xwa, 33200
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	jrl WPLoad_DispatchWidget
 
 WPLoad_HandleShow:
 	ldda16 xbc, 33204
 	exts xbc
-	divs bc, 0xA
-	muls bc, 0xA
+	divs bc, 0xa
+	muls bc, 0xa
 	calr DisplaySmfSequenceList
 	jrl WPLoad_Return
 
 WPLoad_HandleScroll:
-	ld xbc, 0x1C50001
+	ld xbc, 0x1c50001
 	lds32 xde, 1
 	call ApPostEvent
 	ldda16 xhl, 33204
@@ -160,7 +160,7 @@ WPLoad_HandleScroll:
 	or xwa, xwa
 	jr nz, WPLoad_PageScroll
 	ld xwa, xiz
-	cp xwa, 0x1C00018
+	cp xwa, 0x1c00018
 	jr nz, WPLoad_ScrollUp
 	ld wa, hl
 	inc 1, wa
@@ -170,7 +170,7 @@ WPLoad_HandleScroll:
 	jr WPLoad_StorePosition
 
 WPLoad_ScrollUp:
-	cp xwa, 0x1C00017
+	cp xwa, 0x1c00017
 	jrl nz, WPLoad_GetSelection
 	cps hl, 0
 	jrl le, WPLoad_GetSelection
@@ -181,9 +181,9 @@ WPLoad_PageScroll:
 	ld xwa, (xsp + 6)
 	cp xwa, 0x1
 	jr nz, WPLoad_PageDown
-	cp hl, 0xA
+	cp hl, 0xa
 	jrl lt, WPLoad_GetSelection
-	sub hl, 0xA
+	sub hl, 0xa
 	jr WPLoad_StorePosition
 
 WPLoad_PageDown:
@@ -191,11 +191,11 @@ WPLoad_PageDown:
 	cp xwa, 0x2
 	jr nz, WPLoad_OpLoad
 	ld wa, hl
-	add wa, 0xA
+	add wa, 0xa
 	ldda16 xde, 34058
 	cp wa, de
 	jr ge, WPLoad_PageDown_Boundary
-	add hl, 0xA
+	add hl, 0xa
 
 WPLoad_StorePosition:
 	stda16 33204, xhl
@@ -207,14 +207,14 @@ WPLoad_PageDown_Boundary:
 	dec 1, bc
 	ld ix, bc
 	exts xix
-	divs ix, 0xA
+	divs ix, 0xa
 	exts xhl
-	divs hl, 0xA
+	divs hl, 0xa
 	cp hl, ix
 	jrl ge, WPLoad_GetSelection
 	exts xde
-	divs de, 0xA
-	ldto_werp WA, 0xEA
+	divs de, 0xa
+	ldto_werp WA, 0xea
 	cps wa, 0
 	jr z, WPLoad_GetSelection
 	stda16 33204, xbc
@@ -225,7 +225,7 @@ WPLoad_OpLoad:
 	cp xwa, 0x3
 	jr nz, WPLoad_GetSelection
 	ld xwa, 0x600026
-	ld xbc, 0x1C00001
+	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
 	lds wa, 0
@@ -237,20 +237,20 @@ WPLoad_OpLoad:
 	stda8 32578, l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1C00002
+	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
 	ldw wa, 0x48
 	call UI_PostModeChangeEvent
-	ld xwa, 0xFFFFFFFF
-	ld xbc, 0x1E0009E
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	ldw wa, 0xEE
+	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 
 WPLoad_GetSelection:
@@ -263,53 +263,53 @@ WPLoad_UpdateDisplay:
 	call FileIO_SelectWallpaperByIndex
 	ldda16 xwa, 33204
 	exts xwa
-	divs wa, 0xA
-	ldto_werp DE, 0xE2
+	divs wa, 0xa
+	ldto_werp DE, 0xe2
 	exts xde
 	ldda32 xwa, 33200
-	ld xbc, 0x1E50002
+	ld xbc, 0x1e50002
 	call ApPostEvent
 	ldda16 xbc, 33204
 	exts xbc
-	divs bc, 0xA
+	divs bc, 0xa
 	ld de, (xsp + 4)
 	exts xde
-	divs de, 0xA
+	divs de, 0xa
 	ldda32 xwa, 33200
 	cp de, bc
 	jr nz, WPLoad_RedrawPage
 	ld bc, (xsp + 4)
 	exts xbc
-	divs bc, 0xA
-	ldto_werp BC, 0xE6
+	divs bc, 0xa
+	ldto_werp BC, 0xe6
 	sll bc, 5
 	ldada xhl, 34060
 	ld de, bc
 	extz xde
 	add xde, xhl
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	ldda16 xwa, 33204
 	exts xwa
-	divs wa, 0xA
-	ldto_werp WA, 0xE2
+	divs wa, 0xa
+	ldto_werp WA, 0xe2
 	sll wa, 5
 	ldada xbc, 34060
 	ld de, wa
 	extz xde
 	add xde, xbc
 	ldda32 xwa, 33200
-	ld xbc, 0x1C0000F
+	ld xbc, 0x1c0000f
 	call ApPostEvent
 	jr WPLoad_SendState
 
 WPLoad_RedrawPage:
-	muls bc, 0xA
+	muls bc, 0xa
 	calr DisplaySmfSequenceList
 
 WPLoad_SendState:
 	ldda32 xwa, 33200
-	ld xbc, 0x1C50001
+	ld xbc, 0x1c50001
 	lds32 xde, 0
 
 WPLoad_DispatchWidget:
@@ -324,24 +324,24 @@ WPLoad_Return:
 WP_ScanAvailability:
 	push xiz
 	call CheckFileSystemStatus
-	ldfr_werp HL, 0xFA
+	ldfr_werp HL, 0xfa
 	stdi16 35318, 0
 	lds iz, 0
 
 WPScan_LoopBody:
 	ld bc, iz
 	extz xbc
-	ld xwa, 0xEA07AA
+	ld xwa, 0xea07aa
 	add xwa, xbc
 	ld c, (xwa)
 	lds de, 1
 	ld a, c
-	and a, 0xF
+	and a, 0xf
 	jr z, WPScan_CheckAvail
 	slla de
 
 WPScan_CheckAvail:
-	and_werp DE, 0xFA
+	and_werp DE, 0xfa
 	jrl z, WPScan_LoopContinue
 	cps c, 3
 	jr nz, WPScan_TypeNotThree
@@ -350,11 +350,11 @@ WPScan_CheckAvail:
 	jrl z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
-	ld xbc, 0xEA07AA
+	ld xbc, 0xea07aa
 	add xbc, xwa
 	lds de, 1
 	ld a, (xbc)
-	and a, 0xF
+	and a, 0xf
 	jr z, WPScan_MarkAvailable
 	slla de
 
@@ -376,11 +376,11 @@ WPScan_TypeNotThree:
 	jr nz, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
-	ld xbc, 0xEA07AA
+	ld xbc, 0xea07aa
 	add xbc, xwa
 	lds de, 1
 	ld a, (xbc)
-	and a, 0xF
+	and a, 0xf
 	jr z, WPScan_TypeTwo_Mark
 	slla de
 
@@ -396,11 +396,11 @@ WPScan_TypeGeneric:
 	jr z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
-	ld xbc, 0xEA07AA
+	ld xbc, 0xea07aa
 	add xbc, xwa
 	lds de, 1
 	ld a, (xbc)
-	and a, 0xF
+	and a, 0xf
 	jr z, WPScan_Generic_Mark
 	slla de
 
@@ -410,7 +410,7 @@ WPScan_Generic_Mark:
 	jr c, WPScan_LoopContinue
 
 WPScan_LimitReached:
-	ldto_berp A, 0xF8
+	ldto_berp A, 0xf8
 	stda8 35320, a
 
 WPScan_LoopContinue:
@@ -430,11 +430,11 @@ WP_FindNextSlot:
 	jr z, WPFind_NotFound
 	lds iz, 1
 	extz wa
-	ldfr_werp WA, 0xE6
+	ldfr_werp WA, 0xe6
 	lda_24 xde, 0xea07aa
 
 WPFind_SearchLoop:
-	ldto_werp HL, 0xE6
+	ldto_werp HL, 0xe6
 	add hl, iz
 	and hl, 0x3
 	ld wa, hl
@@ -443,7 +443,7 @@ WPFind_SearchLoop:
 	add xix, xwa
 	lds iy, 1
 	ld a, (xix)
-	and a, 0xF
+	and a, 0xf
 	jr z, WPFind_CheckSlot
 	slla iy
 
@@ -470,8 +470,8 @@ WPFind_Return:
 ; Wallpaper Name Getter Routines
 ; -----------------------------------------------------------------------------
 ; These routines retrieve wallpaper display names from various sources:
-; - User RAM structures (0x1ED350, 0x1E0000, 0x1E4980, 0x1E4AA7)
-; - ROM lookup tables (0xEA07AE, 0xEA07EA, 0xEA083E, 0xEA08DA)
+; - User RAM structures (0x1ed350, 0x1e0000, 0x1e4980, 0x1e4aa7)
+; - ROM lookup tables (0xea07ae, 0xea07ea, 0xea083e, 0xea08da)
 ;
 ; Common calling convention:
 ;   XWA = destination buffer pointer
@@ -489,7 +489,7 @@ WP_GetConfigName:
 	sll xbc, 4	; index * 16
 	add xhl, xbc
 	lda xhl, (xhl + 16)	; Offset to name field
-	lda_dpi XIY, 0xF8	; Store type marker
+	lda_dpi XIY, 0xf8	; Store type marker
 	ld xwa, xiz
 	ld xbc, xhl
 	ldw de, 0x10	; Copy 16 bytes
@@ -511,8 +511,8 @@ WP_GetNameByOffset:
 	ld xix, xwa
 	mul xhl, xbc	; Calculate offset
 	add xix, xhl
-	st_dri3b A, 0xF1, 0xB2, 0x00	; Offset to name field
-	lda_dpi XIY, 0xF8
+	st_dri3b A, 0xf1, 0xb2, 0x00	; Offset to name field
+	lda_dpi XIY, 0xf8
 	ld xwa, xiz
 	ldw de, 0x10
 	call FileIO_CopyString_WriteNull
@@ -523,16 +523,16 @@ WP_GetNameByOffset:
 	pop xiz
 	ret
 
-; Get wallpaper name from ROM table 1 (0xEA07AE)
+; Get wallpaper name from ROM table 1 (0xea07ae)
 ; Input: XWA = dest buffer, BC = index, E = type marker
 WP_GetPresetName1:
 	push xiz
 	ld xiz, xwa
-	lda_dpi XIY, 0xF8
+	lda_dpi XIY, 0xf8
 	ld wa, bc
 	extz xwa
 	sll xwa, 2	; index * 4 (pointer size)
-	ld xbc, 0xEA07AE	; ROM table address
+	ld xbc, 0xea07ae	; ROM table address
 	add xbc, xwa
 	ld xbc, (xbc)	; Get string pointer
 	ld xwa, xiz
@@ -543,13 +543,13 @@ WP_GetPresetName1:
 	pop xiz
 	ret
 
-; Simple wallpaper pointer lookup from ROM table 2 (0xEA07EA)
+; Simple wallpaper pointer lookup from ROM table 2 (0xea07ea)
 ; Input: WA = index
 ; Output: XHL = pointer to name string
 WP_GetPresetPtr:
 	extz xwa
 	sll xwa, 2	; index * 4
-	ld xbc, 0xEA07EA
+	ld xbc, 0xea07ea
 	add xbc, xwa
 	ld xhl, (xbc)
 	ret
@@ -560,26 +560,26 @@ WP_GetBankMemName:
 	push xiz
 	ld hl, bc
 	ld xiz, xwa
-	st_dpib A, 0xF8	; LDA XBC, XIZ+
+	st_dpib A, 0xf8	; LDA XBC, XIZ+
 	ld wa, (xsp + 8)
 	ld (xbc), a	; Store type marker
 	cps de, 4
 	jr nc, WP_GetBankMemName_FromROM
-	; From RAM at 0x0948A0
+	; From RAM at 0x0948a0
 	lda_24 xbc, 0x0948a0
 	sll hl, 2
 	add hl, de
 	mul hl, 0x60	; Entry size = 96 bytes
 	add xbc, xhl
 	ld xwa, xiz
-	ldw de, 0xD	; Copy 13 bytes
+	ldw de, 0xd	; Copy 13 bytes
 	call FileIO_CopyString_WriteNull
 	ld (xiz + 13), 0x0
 	jr WP_GetBankMemName_Format
 WP_GetBankMemName_FromROM:
 	extz xde
 	sll xde, 2
-	ld xbc, 0xEA083E	; ROM table address
+	ld xbc, 0xea083e	; ROM table address
 	add xbc, xde
 	ld xbc, (xbc)
 	ld xwa, xiz
@@ -591,16 +591,16 @@ WP_GetBankMemName_Format:
 	pop xiz
 	retd 0x2
 
-; Get wallpaper name from ROM table 3 (0xEA08DA)
+; Get wallpaper name from ROM table 3 (0xea08da)
 ; Input: XWA = dest buffer, BC = index, E = type marker
 WP_GetPresetName3:
 	push xiz
 	ld xiz, xwa
-	lda_dpi XIY, 0xF8
+	lda_dpi XIY, 0xf8
 	ld wa, bc
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0xEA08DA
+	ld xbc, 0xea08da
 	add xbc, xwa
 	ld xbc, (xbc)
 	ld xwa, xiz
@@ -611,16 +611,16 @@ WP_GetPresetName3:
 	pop xiz
 	ret
 
-; Get wallpaper name from structure at 0x1E0000 (stride 0x1D6)
+; Get wallpaper name from structure at 0x1e0000 (stride 0x1d6)
 ; Input: XWA = dest buffer, BC = index, E = type marker
 WP_GetUserName1:
 	push xiz
 	ld xiz, xwa
 	lda_24 xhl, 0x1e0000
 	lda xhl, (xhl + 16)
-	mul bc, 0x1D6	; Entry stride
+	mul bc, 0x1d6	; Entry stride
 	add xhl, xbc
-	lda_dpi XIY, 0xF8
+	lda_dpi XIY, 0xf8
 	ld xwa, xiz
 	ld xbc, xhl
 	ldw de, 0x10
@@ -632,14 +632,14 @@ WP_GetUserName1:
 	pop xiz
 	ret
 
-; Get wallpaper name from RAM at 0x1E4980
+; Get wallpaper name from RAM at 0x1e4980
 ; Input: XWA = dest buffer, BC = (unused), E = type marker
 WP_GetUserName2:
 	push xiz
 	ld de, bc
 	ld xiz, xwa
 	lda_24 xbc, 0x1e4980
-	lda_dpi XIY, 0xF8
+	lda_dpi XIY, 0xf8
 	ld xwa, xiz
 	ldw de, 0x10
 	call FileIO_CopyString_WriteNull
@@ -650,7 +650,7 @@ WP_GetUserName2:
 	pop xiz
 	ret
 
-; Get wallpaper name from structure at 0x1E4AA7 (stride 0x50)
+; Get wallpaper name from structure at 0x1e4aa7 (stride 0x50)
 ; Input: XWA = dest buffer, BC = index, E = type marker
 WP_GetUserName3:
 	push xiz
@@ -658,15 +658,15 @@ WP_GetUserName3:
 	lda_24 xhl, 0x1e4aa7
 	mul bc, 0x50	; Entry stride
 	add xhl, xbc
-	lda_dpi XIY, 0xF8
-	stib_dpi 0xF8, 0x20	; Space character
+	lda_dpi XIY, 0xf8
+	stib_dpi 0xf8, 0x20	; Space character
 	ld xwa, xiz
 	ld xbc, xhl
-	ldw de, 0xD	; Copy 13 bytes
+	ldw de, 0xd	; Copy 13 bytes
 	call FileIO_CopyString_WriteNull
 	ld (xiz + 13), 0x0
 	ld xwa, xiz
-	ldw bc, 0xF
+	ldw bc, 0xf
 	calr TrimAndPadSmfFilename
 	pop xiz
 	ret

@@ -28,7 +28,7 @@ SoundBank_InitDefaultParams:
 
 SoundBank_InitDefaults_Loop:
 	pushw bc
-	ld xde, 0xAB000
+	ld xde, 0xab000
 	xor xwa, xwa
 	ld wa, bc
 	sla xwa, 11
@@ -67,23 +67,23 @@ SoundBank_InitDefaults_Type4:
 	jr SoundBank_NextEntry1
 
 SoundBank_InitEntryDefaults:
-	ld xwa, 0xB8
+	ld xwa, 0xb8
 	add xwa, xde
 	ldw (xwa), 0x1
-	ld xwa, 0xBA
+	ld xwa, 0xba
 	add xwa, xde
 	ldw (xwa), 0x2
-	ld xwa, 0xBC
+	ld xwa, 0xbc
 	add xwa, xde
 	ld (xwa), 0x0
-	ld xwa, 0xBF
+	ld xwa, 0xbf
 	add xwa, xde
 	ldw (xwa), 0x0
 
 SoundBank_NextEntry1:
 	popw bc
 	inc 1, bc
-	cp bc, 0xA
+	cp bc, 0xa
 	jrl c, SoundBank_InitDefaults_Loop
 	pop xbc
 	pop xwa
@@ -106,7 +106,7 @@ SoundBank_InitTrackParams_Inner:
 
 SoundBank_InitTrack_Loop:
 	pushw bc
-	ld xde, 0xAB000
+	ld xde, 0xab000
 	xor xwa, xwa
 	ld wa, bc
 	sla xwa, 11
@@ -116,22 +116,22 @@ SoundBank_InitTrack_Loop:
 	xor iy, iy
 
 SoundBank_InitTrack_ByteFields:
-	ld xix, 0xF23124
-	ld_srib3 A, 0x07, 0xF0, 0xF4
-	lda_dri3 XBC, 0x07, 0xEC, 0xF4
+	ld xix, 0xf23124
+	ld_srib3 A, 0x07, 0xf0, 0xf4
+	lda_dri3 XBC, 0x07, 0xec, 0xf4
 	inc 1, iy
 	cps iy, 7
 	jr ule, SoundBank_InitTrack_ByteFields
 	ldda8 a, 36458
-	lda_dri3 XBC, 0x07, 0xEC, 0xF4
+	lda_dri3 XBC, 0x07, 0xec, 0xf4
 	ld xhl, 0x14
 	add xhl, xde
 	xor iy, iy
 
 SoundBank_InitTrack_WordFields:
-	ld xix, 0xF2312C
-	ld_sriw3 WA, 0x07, 0xF0, 0xF4
-	st_dri3w WA, 0x07, 0xEC, 0xF4
+	ld xix, 0xf2312c
+	ld_sriw3 WA, 0x07, 0xf0, 0xf4
+	st_dri3w WA, 0x07, 0xec, 0xf4
 	add iy, 0x2
 	cp iy, 0x8
 	jr c, SoundBank_InitTrack_WordFields
@@ -141,11 +141,11 @@ SoundBank_InitTrack_WordFields:
 	lds bc, 6
 
 SoundBank_InitTrack_ClearTail:
-	st_dpiw WA, 0xF1
+	st_dpiw WA, 0xf1
 	djnz xbc, SoundBank_InitTrack_ClearTail
 	popw bc
 	inc 1, bc
-	cp bc, 0xA
+	cp bc, 0xa
 	jrl c, SoundBank_InitTrack_Loop
 	pop xbc
 	pop xwa
@@ -172,7 +172,7 @@ SoundBank_CopyChannelData:
 
 SoundBank_CopyCh_Loop:
 	pushw bc
-	ld xde, 0xAB000
+	ld xde, 0xab000
 	xor xwa, xwa
 	ld wa, bc
 	sla xwa, 11
@@ -211,7 +211,7 @@ SoundBank_CopyChData:
 	lds bc, 6
 	ld xix, 0x100
 	add xix, xde
-	ld xiy, 0xC1
+	ld xiy, 0xc1
 	add xiy, xde
 	cp (xiy), 0x20
 	jr c, SoundBank_CopyCh_FromDefault
@@ -219,17 +219,17 @@ SoundBank_CopyChData:
 	jp SoundBank_CopyCh_InitRemaining
 
 SoundBank_CopyCh_FromDefault:
-	ld xiy, 0xF2324B
+	ld xiy, 0xf2324b
 	ldir85
 
 SoundBank_CopyCh_InitRemaining:
-	ldw bc, 0xA
-	ld xiy, 0xF23241
+	ldw bc, 0xa
+	ld xiy, 0xf23241
 	ldir85
 	lds bc, 6
-	ld xix, 0xC1
+	ld xix, 0xc1
 	add xix, xde
-	ld xiy, 0xF23241
+	ld xiy, 0xf23241
 	ldir85
 	pop xiy
 	pop xix
@@ -238,7 +238,7 @@ SoundBank_CopyCh_InitRemaining:
 SoundBank_NextEntry2:
 	popw bc
 	inc 1, bc
-	cp bc, 0xA
+	cp bc, 0xa
 	jrl c, SoundBank_CopyCh_Loop
 	pop xbc
 	pop xwa
@@ -255,7 +255,7 @@ SoundBank_InitPlaybackFlags:
 
 SoundBank_InitFlags_Loop:
 	pushw bc
-	ld xde, 0xAB000
+	ld xde, 0xab000
 	xor xwa, xwa
 	ld wa, bc
 	sla xwa, 11
@@ -293,7 +293,7 @@ SoundBank_StoreChParam:
 	push xiy
 	ld xix, 0x110
 	add xix, xde
-	ldw (xix), 0xFFFF
+	ldw (xix), 0xffff
 	pop xiy
 	pop xix
 	popw bc
@@ -301,7 +301,7 @@ SoundBank_StoreChParam:
 SoundBank_NextEntry3:
 	popw bc
 	inc 1, bc
-	cp bc, 0xA
+	cp bc, 0xa
 	jrl c, SoundBank_InitFlags_Loop
 	pop xbc
 	pop xwa
@@ -353,7 +353,7 @@ SMF_ResetMidiChannelMap:
 	xor xbc, xbc
 
 SMF_ResetMidiChanMap_Loop:
-	ld xix, 0x1A37
+	ld xix, 0x1a37
 	ld xhl, xbc
 	mul l, 0x2
 	add xix, xhl
@@ -362,7 +362,7 @@ SMF_ResetMidiChanMap_Loop:
 	inc 1, bc
 	cp bc, 0x10
 	jr lt, SMF_ResetMidiChanMap_Loop
-	ld xix, 0x1A37
+	ld xix, 0x1a37
 	ldw hl, 0x9
 	mul l, 0x2
 	add xix, xhl
@@ -381,9 +381,9 @@ SoundBank_LoadToWorkRAM:
 	xor xwa, xwa
 	ld8_24 a, 0x00ffe3
 	sla xwa, 11
-	ld xiy, 0xAB000
+	ld xiy, 0xab000
 	add xiy, xwa
-	ld xix, 0xF180
+	ld xix, 0xf180
 	ldw bc, 0x800
 	ldir85
 	ldda16 xwa, 10351
@@ -411,7 +411,7 @@ SMF_InitSequencerState:
 	cp xwa, xbc
 	jrl lt, SeqPlay_ResetAndStop
 	stdi16 6699, 1
-	ld xwa, 0x13FA
+	ld xwa, 0x13fa
 	stda32 4376, xwa
 	push xwa
 	lds32 xwa, 0
@@ -421,7 +421,7 @@ SMF_InitSequencerState:
 
 SMF_ReadMThd_Start:
 	lds bc, 4
-	ld xiy, 0xF236AF
+	ld xiy, 0xf236af
 
 SMF_ReadMThd_ByteLoop:
 	pushw bc
@@ -429,12 +429,12 @@ SMF_ReadMThd_ByteLoop:
 	call FloppyIO_ReadNextByte
 	pop xiy
 	popw bc
-	cp_spib A, 0xF4
+	cp_spib A, 0xf4
 	jrl z, SMF_ReadMThd_Matched
 	incdi8 1, 4343
 	cpdi8 4343, 1
 	jrl nz, SMF_ReadMThd_Mismatch
-	ld xwa, 0x13FA
+	ld xwa, 0x13fa
 	add xwa, 0x80
 	stda32 4376, xwa
 	jrl SMF_ReadMThd_Start
@@ -478,7 +478,7 @@ FloppyIO_WaitReadComplete:
 	ldda32 xbc, 6883
 	lds32 xwa, 0
 	cp xbc, xwa
-	jp_24 z, 0xF23436
+	jp_24 z, 0xf23436
 	call FloppyIO_ReadNextByte
 	nop
 	nop
@@ -508,7 +508,7 @@ FloppyIO_ReadAndValidateHeader:
 	call FloppyIO_SelectReadMode
 	call FloppyIO_ConfigureSwitchboard
 	lds bc, 4
-	ld xiy, 0xF236B3
+	ld xiy, 0xf236b3
 
 SMF_ReadMTrk_ByteLoop:
 	pushw bc
@@ -516,14 +516,14 @@ SMF_ReadMTrk_ByteLoop:
 	call FloppyIO_ReadNextByte
 	pop xiy
 	popw bc
-	cp_spib A, 0xF4
+	cp_spib A, 0xf4
 	jrl z, SMF_ReadMTrk_Matched
 	stdi16 6699, 49
 	jrl SeqPlay_FloppyReady
 
 SMF_ReadMTrk_Matched:
 	djnz xbc, SMF_ReadMTrk_ByteLoop
-	ld xix, 0xFA2
+	ld xix, 0xfa2
 	lds bc, 4
 
 SMF_ReadTrackData_Loop:
@@ -548,7 +548,7 @@ SMF_ReadTrackData_FloppyErr:
 	jp SeqPlay_ResetAndStop
 
 SMF_ReadTrackData_Continue:
-	lda_dpi XBC, 0xF0
+	lda_dpi XBC, 0xf0
 	djnz xbc, SMF_ReadTrackData_Loop
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_RestoreVoiceState_Return
@@ -589,7 +589,7 @@ SMF_TempoScaling_Loop:
 	call SeqTrack_ComputeTempoScaling
 	pop xiy
 	inc 1, xiy
-	cp xiy, 0xF
+	cp xiy, 0xf
 	jrl ule, SMF_TempoScaling_Loop
 	call SeqTrack_UpdateChannelVolumes
 	call FloppyIO_ReadNextByte
@@ -609,7 +609,7 @@ SMF_MainLoop_FloppyErr2:
 	jp SeqPlay_ResetAndStop
 
 SMF_CheckMetaEvent:
-	cp a, 0xFF
+	cp a, 0xff
 	jrl nz, SMF_CheckSysEx
 	call SMF_ParseTrackEvent
 	push xwa
@@ -641,9 +641,9 @@ SMF_ActivateVoicesAndFinish:
 	jrl SeqPlay_FinishFloppyLoadAndStart
 
 SMF_CheckSysEx:
-	cp a, 0xF7
+	cp a, 0xf7
 	jrl z, SMF_ProcessSysEx
-	cp a, 0xF0
+	cp a, 0xf0
 	jrl nz, SMF_CheckMidiStatus
 
 SMF_ProcessSysEx:

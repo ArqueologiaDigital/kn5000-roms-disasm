@@ -36,11 +36,11 @@ LED_pattern_test_data:
 ; Called from E1DMA_ISR handler (system_handlers.s)
 ;
 ; Each entry routes DMA event bytes to a specific ring buffer, consumed by:
-;   NoteEvent  (0x0203D5) -> note_voice_mapping, sound_editor_ui
+;   NoteEvent  (0x0203d5) -> note_voice_mapping, sound_editor_ui
 ;   SoundEdit  (via EF2E39) -> sound_editor_ui
-;   VoiceMap   (0x0201C1) -> note_voice_mapping
-;   DspSysEx   (0x01FCA3) -> dsp_config_sysex
-;   MidiOut    (0x01F785) -> midi_serial_routines  (not in this table)
+;   VoiceMap   (0x0201c1) -> note_voice_mapping
+;   DspSysEx   (0x01fca3) -> dsp_config_sysex
+;   MidiOut    (0x01f785) -> midi_serial_routines  (not in this table)
 SeqRingBuf_WriteDispatch_Table:
 	.long SeqDMA_MultiWrite_NoteEvent	; 0: -> NoteEvent buffer (block writes)
 	.long SeqDMA_MultiWrite_SoundEdit	; 1: -> SoundEdit buffer

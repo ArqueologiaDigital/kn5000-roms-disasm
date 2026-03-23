@@ -5,747 +5,747 @@ NakaData_StyleBitmaps:
 	.incbin "includes/generated/naka_style_bitmaps.bin"
 
 ; External label offsets within the binary blob above.
-	.equ NakaInst_iduMurai, NakaData_StyleBitmaps + 0x0000A
+	.equ NakaInst_iduMurai, NakaData_StyleBitmaps + 0x0000a
 	.equ NakaInst_iduRoot, NakaData_StyleBitmaps + 0x00014
-	.equ NakaInst_False_EB71DA, NakaData_StyleBitmaps + 0x0001C
-	.equ NakaInst_pSword_EmptyStr, NakaData_StyleBitmaps + 0x0004A
-	.equ NakaInst_pUword_FormatData, NakaData_StyleBitmaps + 0x0004C
+	.equ NakaInst_False_EB71DA, NakaData_StyleBitmaps + 0x0001c
+	.equ NakaInst_pSword_EmptyStr, NakaData_StyleBitmaps + 0x0004a
+	.equ NakaInst_pUword_FormatData, NakaData_StyleBitmaps + 0x0004c
 	.equ NakaInst_pUchar_FormatData, NakaData_StyleBitmaps + 0x00060
 	.equ NakaInst_pSlong_EmptyStr, NakaData_StyleBitmaps + 0x00072
 	.equ NakaInst_pUlong_FormatData, NakaData_StyleBitmaps + 0x00074
 	.equ NakaInst_PartID_EnumTable, NakaData_StyleBitmaps + 0x00088
-	.equ NakaInst_TrackID_EmptyStr, NakaData_StyleBitmaps + 0x0033A
-	.equ NakaInst_TR_All, NakaData_StyleBitmaps + 0x0033C
+	.equ NakaInst_TrackID_EmptyStr, NakaData_StyleBitmaps + 0x0033a
+	.equ NakaInst_TR_All, NakaData_StyleBitmaps + 0x0033c
 	.equ NakaInst_TR_Track16, NakaData_StyleBitmaps + 0x00344
 	.equ NakaInst_TR_Track15, NakaData_StyleBitmaps + 0x00350
-	.equ NakaInst_TR_Track14, NakaData_StyleBitmaps + 0x0035C
+	.equ NakaInst_TR_Track14, NakaData_StyleBitmaps + 0x0035c
 	.equ NakaInst_TR_Track13, NakaData_StyleBitmaps + 0x00368
 	.equ NakaInst_TR_Track12, NakaData_StyleBitmaps + 0x00374
 	.equ NakaInst_TR_Track11, NakaData_StyleBitmaps + 0x00380
-	.equ NakaInst_TR_Track10, NakaData_StyleBitmaps + 0x0038C
+	.equ NakaInst_TR_Track10, NakaData_StyleBitmaps + 0x0038c
 	.equ NakaInst_TR_Track9, NakaData_StyleBitmaps + 0x00398
-	.equ NakaInst_TR_Track8, NakaData_StyleBitmaps + 0x003A2
-	.equ NakaInst_TR_Track7, NakaData_StyleBitmaps + 0x003AC
-	.equ NakaInst_TR_Track6, NakaData_StyleBitmaps + 0x003B6
-	.equ NakaInst_TR_Track5, NakaData_StyleBitmaps + 0x003C0
-	.equ NakaInst_TR_Track4, NakaData_StyleBitmaps + 0x003CA
-	.equ NakaInst_TR_Track3, NakaData_StyleBitmaps + 0x003D4
-	.equ NakaInst_TR_Track2, NakaData_StyleBitmaps + 0x003DE
-	.equ NakaInst_TR_Track1, NakaData_StyleBitmaps + 0x003E8
-	.equ NakaInst_IntTimeID_EnumTable, NakaData_StyleBitmaps + 0x003F2
+	.equ NakaInst_TR_Track8, NakaData_StyleBitmaps + 0x003a2
+	.equ NakaInst_TR_Track7, NakaData_StyleBitmaps + 0x003ac
+	.equ NakaInst_TR_Track6, NakaData_StyleBitmaps + 0x003b6
+	.equ NakaInst_TR_Track5, NakaData_StyleBitmaps + 0x003c0
+	.equ NakaInst_TR_Track4, NakaData_StyleBitmaps + 0x003ca
+	.equ NakaInst_TR_Track3, NakaData_StyleBitmaps + 0x003d4
+	.equ NakaInst_TR_Track2, NakaData_StyleBitmaps + 0x003de
+	.equ NakaInst_TR_Track1, NakaData_StyleBitmaps + 0x003e8
+	.equ NakaInst_IntTimeID_EnumTable, NakaData_StyleBitmaps + 0x003f2
 	.equ NakaInst_IntTimeID_EmptyStr, NakaData_StyleBitmaps + 0x00462
 	.equ NakaInst_IT_10Sec, NakaData_StyleBitmaps + 0x00464
-	.equ NakaInst_IT_9Sec, NakaData_StyleBitmaps + 0x0046E
+	.equ NakaInst_IT_9Sec, NakaData_StyleBitmaps + 0x0046e
 	.equ NakaInst_IT_8Sec, NakaData_StyleBitmaps + 0x00476
-	.equ NakaInst_IT_7Sec, NakaData_StyleBitmaps + 0x0047E
+	.equ NakaInst_IT_7Sec, NakaData_StyleBitmaps + 0x0047e
 	.equ NakaInst_IT_6Sec, NakaData_StyleBitmaps + 0x00486
-	.equ NakaInst_IT_5Sec, NakaData_StyleBitmaps + 0x0048E
+	.equ NakaInst_IT_5Sec, NakaData_StyleBitmaps + 0x0048e
 	.equ NakaInst_IT_4Sec, NakaData_StyleBitmaps + 0x00496
-	.equ NakaInst_IT_3Sec, NakaData_StyleBitmaps + 0x0049E
-	.equ NakaInst_IT_2Sec, NakaData_StyleBitmaps + 0x004A6
-	.equ NakaInst_IT_1Sec, NakaData_StyleBitmaps + 0x004AE
-	.equ NakaInst_IT_Hold, NakaData_StyleBitmaps + 0x004B6
-	.equ NakaInst_IT_Default, NakaData_StyleBitmaps + 0x004BE
-	.equ NakaInst_IT_Off, NakaData_StyleBitmaps + 0x004CA
+	.equ NakaInst_IT_3Sec, NakaData_StyleBitmaps + 0x0049e
+	.equ NakaInst_IT_2Sec, NakaData_StyleBitmaps + 0x004a6
+	.equ NakaInst_IT_1Sec, NakaData_StyleBitmaps + 0x004ae
+	.equ NakaInst_IT_Hold, NakaData_StyleBitmaps + 0x004b6
+	.equ NakaInst_IT_Default, NakaData_StyleBitmaps + 0x004be
+	.equ NakaInst_IT_Off, NakaData_StyleBitmaps + 0x004ca
 	.equ NakaInst_WindowID_Cont, NakaData_StyleBitmaps + 0x00741
 	.equ WidgetStyleDataTable, NakaData_StyleBitmaps + 0x00774
-	.equ Bitmap_FadeInPicture, NakaData_StyleBitmaps + 0x00EB4
-	.equ Bitmap_FadeInText, NakaData_StyleBitmaps + 0x019A4
-	.equ Bitmap_FadeOutPicture, NakaData_StyleBitmaps + 0x01F44
-	.equ Bitmap_FadeOutText, NakaData_StyleBitmaps + 0x02A66
-	.equ StyleSong_MasterTable, NakaData_StyleBitmaps + 0x032D6
-	.equ NakaInst_o_s_Guitar_110, NakaData_StyleBitmaps + 0x08E4A
-	.equ NakaInst_Joplin_Rag_130, NakaData_StyleBitmaps + 0x08E68
-	.equ NakaInst_Jobim_Strings_66, NakaData_StyleBitmaps + 0x08E8A
-	.equ NakaInst_Rio_Disco_125, NakaData_StyleBitmaps + 0x08EB2
-	.equ NakaInst_176, NakaData_StyleBitmaps + 0x08EDA
-	.equ NakaInst_Jive_Ivories_176, NakaData_StyleBitmaps + 0x08EF0
-	.equ NakaInst_176_EC00C0, NakaData_StyleBitmaps + 0x08F02
-	.equ NakaInst_160, NakaData_StyleBitmaps + 0x08F2A
-	.equ NakaInst_Jazz_To_The_Bone_180, NakaData_StyleBitmaps + 0x08F78
+	.equ Bitmap_FadeInPicture, NakaData_StyleBitmaps + 0x00eb4
+	.equ Bitmap_FadeInText, NakaData_StyleBitmaps + 0x019a4
+	.equ Bitmap_FadeOutPicture, NakaData_StyleBitmaps + 0x01f44
+	.equ Bitmap_FadeOutText, NakaData_StyleBitmaps + 0x02a66
+	.equ StyleSong_MasterTable, NakaData_StyleBitmaps + 0x032d6
+	.equ NakaInst_o_s_Guitar_110, NakaData_StyleBitmaps + 0x08e4a
+	.equ NakaInst_Joplin_Rag_130, NakaData_StyleBitmaps + 0x08e68
+	.equ NakaInst_Jobim_Strings_66, NakaData_StyleBitmaps + 0x08e8a
+	.equ NakaInst_Rio_Disco_125, NakaData_StyleBitmaps + 0x08eb2
+	.equ NakaInst_176, NakaData_StyleBitmaps + 0x08eda
+	.equ NakaInst_Jive_Ivories_176, NakaData_StyleBitmaps + 0x08ef0
+	.equ NakaInst_176_EC00C0, NakaData_StyleBitmaps + 0x08f02
+	.equ NakaInst_160, NakaData_StyleBitmaps + 0x08f2a
+	.equ NakaInst_Jazz_To_The_Bone_180, NakaData_StyleBitmaps + 0x08f78
 	.equ NakaInst_Jazz_Blocks_146, NakaData_StyleBitmaps + 0x09000
 	.equ NakaInst_Jamaican_Voices_83, NakaData_StyleBitmaps + 0x09088
 	.equ NakaInst_Jailhouse_Brass_158, NakaData_StyleBitmaps + 0x09110
 	.equ NakaInst_Island_Strings_101, NakaData_StyleBitmaps + 0x09198
 	.equ NakaInst_Island_Delight_101, NakaData_StyleBitmaps + 0x09220
-	.equ NakaInst_In_Sax_Country_115, NakaData_StyleBitmaps + 0x092A8
+	.equ NakaInst_In_Sax_Country_115, NakaData_StyleBitmaps + 0x092a8
 	.equ NakaInst_I_Got_The_Blues_83, NakaData_StyleBitmaps + 0x09330
-	.equ NakaInst_Hugo_s_Revival_120, NakaData_StyleBitmaps + 0x093B8
+	.equ NakaInst_Hugo_s_Revival_120, NakaData_StyleBitmaps + 0x093b8
 	.equ NakaInst_House_Garden_125, NakaData_StyleBitmaps + 0x09440
-	.equ NakaInst_Honky_Tonk_Band_196, NakaData_StyleBitmaps + 0x094C8
+	.equ NakaInst_Honky_Tonk_Band_196, NakaData_StyleBitmaps + 0x094c8
 	.equ NakaInst_Hoedown_Strings_123, NakaData_StyleBitmaps + 0x09550
-	.equ NakaInst_Hip_Keys_108, NakaData_StyleBitmaps + 0x095D8
+	.equ NakaInst_Hip_Keys_108, NakaData_StyleBitmaps + 0x095d8
 	.equ NakaInst_Heavy_Harmonica_74, NakaData_StyleBitmaps + 0x09660
-	.equ NakaInst_Harry_J_Co_86, NakaData_StyleBitmaps + 0x096E8
+	.equ NakaInst_Harry_J_Co_86, NakaData_StyleBitmaps + 0x096e8
 	.equ NakaInst_Hard_Sax_Blues_124, NakaData_StyleBitmaps + 0x09770
-	.equ NakaInst_Hard_Analogue_148, NakaData_StyleBitmaps + 0x097F8
+	.equ NakaInst_Hard_Analogue_148, NakaData_StyleBitmaps + 0x097f8
 	.equ NakaInst_Ham_Rock_155, NakaData_StyleBitmaps + 0x09880
 	.equ NakaInst_Gypsy_Jazz_Frets_210, NakaData_StyleBitmaps + 0x09908
 	.equ NakaInst_Groovin_Horns_97, NakaData_StyleBitmaps + 0x09990
-	.equ NakaInst_Greasepaint_Time_132, NakaData_StyleBitmaps + 0x09A18
-	.equ NakaInst_Grand_Finale_132, NakaData_StyleBitmaps + 0x09AA0
-	.equ NakaInst_Gospel_Organ_66, NakaData_StyleBitmaps + 0x09B28
-	.equ NakaInst_Golden_Movie_Era_120, NakaData_StyleBitmaps + 0x09BB0
-	.equ NakaInst_Girls_On_Stage_118, NakaData_StyleBitmaps + 0x09C38
-	.equ NakaInst_German_Party_Hit_111, NakaData_StyleBitmaps + 0x09CC0
-	.equ NakaInst_Georgia_Brass_64, NakaData_StyleBitmaps + 0x09D48
-	.equ NakaInst_Gentle_Ballad_75, NakaData_StyleBitmaps + 0x09DD0
-	.equ NakaInst_Galombang_98, NakaData_StyleBitmaps + 0x09E58
-	.equ NakaInst_Fusion_Tines_98, NakaData_StyleBitmaps + 0x09E9C
-	.equ NakaInst_Funky_Talk_110, NakaData_StyleBitmaps + 0x09EE0
-	.equ NakaInst_Full_Tilt_Swing_127, NakaData_StyleBitmaps + 0x09F68
-	.equ NakaInst_Full_Brass_Band_115, NakaData_StyleBitmaps + 0x09FF0
-	.equ NakaInst_Foxy_Squeezebox_154, NakaData_StyleBitmaps + 0x0A078
-	.equ NakaInst_Foxtrot_Sparkle_120, NakaData_StyleBitmaps + 0x0A100
-	.equ NakaInst_Folklore_Brass_115, NakaData_StyleBitmaps + 0x0A188
-	.equ NakaInst_Fogerty_s_Stomp_206, NakaData_StyleBitmaps + 0x0A210
-	.equ NakaInst_Flugel_Ballad_63, NakaData_StyleBitmaps + 0x0A298
-	.equ NakaInst_Finale_Salute_115, NakaData_StyleBitmaps + 0x0A320
-	.equ NakaInst_Fiddle_For_Jazz_210, NakaData_StyleBitmaps + 0x0A3A8
-	.equ NakaInst_Festival_Amigos_116, NakaData_StyleBitmaps + 0x0A430
-	.equ NakaInst_Fantasy_Rhumba_115, NakaData_StyleBitmaps + 0x0A4B8
-	.equ NakaInst_Fair_Sea_Organ_125, NakaData_StyleBitmaps + 0x0A540
-	.equ NakaInst_Euro_Squeezebox_147, NakaData_StyleBitmaps + 0x0A5C8
-	.equ NakaInst_Ernst_Friends_120, NakaData_StyleBitmaps + 0x0A650
-	.equ NakaInst_Emerson_Keys_145, NakaData_StyleBitmaps + 0x0A6D8
-	.equ NakaInst_Electric_Gospel_88, NakaData_StyleBitmaps + 0x0A760
-	.equ NakaInst_Easy_Threesy_110, NakaData_StyleBitmaps + 0x0A7E8
-	.equ NakaInst_Easy_Bacharach_150, NakaData_StyleBitmaps + 0x0A870
-	.equ NakaInst_E_P_Does_It_82, NakaData_StyleBitmaps + 0x0A8F8
-	.equ NakaInst_Dreamy_Orchestra_67, NakaData_StyleBitmaps + 0x0A980
-	.equ NakaInst_Drawbar_Funk_85, NakaData_StyleBitmaps + 0x0AA08
-	.equ NakaInst_Doo_You_Dance_200, NakaData_StyleBitmaps + 0x0AA90
-	.equ NakaInst_Dolly_s_Strings_128, NakaData_StyleBitmaps + 0x0AB18
-	.equ NakaInst_Django_s_Solo_190, NakaData_StyleBitmaps + 0x0ABA0
-	.equ NakaInst_Disco_Techni_118, NakaData_StyleBitmaps + 0x0AC28
-	.equ NakaInst_Disco_Metal_124, NakaData_StyleBitmaps + 0x0ACB0
-	.equ NakaInst_Dire_Strats_138, NakaData_StyleBitmaps + 0x0AD38
-	.equ NakaInst_Deuringer_Swing_190, NakaData_StyleBitmaps + 0x0ADC0
-	.equ NakaInst_Dancing_Flutes_125, NakaData_StyleBitmaps + 0x0AE48
-	.equ NakaInst_Dance_Surround_124, NakaData_StyleBitmaps + 0x0AED0
-	.equ NakaInst_Dance_Island_104, NakaData_StyleBitmaps + 0x0AF58
-	.equ NakaInst_Dance_Band_Jive_176, NakaData_StyleBitmaps + 0x0AFE0
-	.equ NakaInst_Cuckoo_Clock_3_4_183, NakaData_StyleBitmaps + 0x0B068
-	.equ NakaInst_Crazy_Horse_Show_118, NakaData_StyleBitmaps + 0x0B0F0
-	.equ NakaInst_Country_Tenor_88, NakaData_StyleBitmaps + 0x0B178
-	.equ NakaInst_Country_Licks_235, NakaData_StyleBitmaps + 0x0B200
-	.equ NakaInst_Country_Harp_88, NakaData_StyleBitmaps + 0x0B288
-	.equ NakaInst_Count_On_It_90, NakaData_StyleBitmaps + 0x0B310
-	.equ NakaInst_Cool_Soul_Frets_66, NakaData_StyleBitmaps + 0x0B398
-	.equ NakaInst_Cool_Jazz_B3_145, NakaData_StyleBitmaps + 0x0B420
-	.equ NakaInst_Convoy_Bluegrass_206, NakaData_StyleBitmaps + 0x0B4A8
-	.equ NakaInst_Come_On_Baby_168, NakaData_StyleBitmaps + 0x0B530
-	.equ NakaInst_Coconut_Frets_152, NakaData_StyleBitmaps + 0x0B5B8
-	.equ NakaInst_Clean_Metal_148, NakaData_StyleBitmaps + 0x0B640
-	.equ NakaInst_Classical_Tango_120, NakaData_StyleBitmaps + 0x0B6C8
-	.equ NakaInst_Chuck_s_Late_Gig_72, NakaData_StyleBitmaps + 0x0B750
-	.equ NakaInst_Chiff_Funk_97, NakaData_StyleBitmaps + 0x0B7D8
-	.equ NakaInst_Chapel_Brass_124, NakaData_StyleBitmaps + 0x0B860
-	.equ NakaInst_Carol_Singers_75, NakaData_StyleBitmaps + 0x0B8E8
-	.equ NakaInst_Caribbean_Synth_90, NakaData_StyleBitmaps + 0x0B970
-	.equ NakaInst_Calypso_Steel_152, NakaData_StyleBitmaps + 0x0B9F8
-	.equ NakaInst_Caber_Dance_172, NakaData_StyleBitmaps + 0x0BA80
-	.equ NakaInst_Bright_Keys_16_74, NakaData_StyleBitmaps + 0x0BB08
-	.equ NakaInst_Breathy_Moments_83, NakaData_StyleBitmaps + 0x0BB90
-	.equ NakaInst_Brassy_Dance_108, NakaData_StyleBitmaps + 0x0BC18
-	.equ NakaInst_Boxing_Jazzy_147, NakaData_StyleBitmaps + 0x0BCA0
-	.equ NakaInst_Bourbon_Street_196, NakaData_StyleBitmaps + 0x0BD28
-	.equ NakaInst_Boogie_Dance_160, NakaData_StyleBitmaps + 0x0BDB0
-	.equ NakaInst_Bolero_Orchestra_120, NakaData_StyleBitmaps + 0x0BE38
-	.equ NakaInst_Blues_Rock_Keys_124, NakaData_StyleBitmaps + 0x0BEC0
-	.equ NakaInst_Blues_Alley_124, NakaData_StyleBitmaps + 0x0BF48
-	.equ NakaInst_Blue_Suede_Rock_158, NakaData_StyleBitmaps + 0x0BFD0
-	.equ NakaInst_Bigband_Shout_170, NakaData_StyleBitmaps + 0x0C058
-	.equ NakaInst_Besame_Strings_120, NakaData_StyleBitmaps + 0x0C0E0
-	.equ NakaInst_Bellow_Shake_Hit_135, NakaData_StyleBitmaps + 0x0C168
-	.equ NakaInst_Beach_Party_Song_152, NakaData_StyleBitmaps + 0x0C1F0
-	.equ NakaInst_Bavaria_To_Tyrol_195, NakaData_StyleBitmaps + 0x0C278
-	.equ NakaInst_Barber_Shop_Jazz_196, NakaData_StyleBitmaps + 0x0C300
-	.equ NakaInst_Banjo_Dance_138, NakaData_StyleBitmaps + 0x0C388
-	.equ NakaInst_Baltic_Reeds_141, NakaData_StyleBitmaps + 0x0C410
-	.equ NakaInst_Ballad_Romance_67, NakaData_StyleBitmaps + 0x0C498
-	.equ NakaInst_Ballad_Guitar_67, NakaData_StyleBitmaps + 0x0C520
-	.equ NakaInst_Ballad_Acoustics_84, NakaData_StyleBitmaps + 0x0C5A8
-	.equ NakaInst_Bad_B3_Blues_78, NakaData_StyleBitmaps + 0x0C630
-	.equ NakaInst_Austria_Symphony_169, NakaData_StyleBitmaps + 0x0C6B8
-	.equ NakaInst_At_The_Eger_120, NakaData_StyleBitmaps + 0x0C740
-	.equ NakaInst_Art_Meets_Lionel_190, NakaData_StyleBitmaps + 0x0C7C8
-	.equ NakaInst_Amor_Reed_117, NakaData_StyleBitmaps + 0x0C850
-	.equ NakaInst_Alto_Samba_116, NakaData_StyleBitmaps + 0x0C8D8
-	.equ NakaInst_Alpine_Combo_125, NakaData_StyleBitmaps + 0x0C960
-	.equ NakaInst_All_Out_Combo_180, NakaData_StyleBitmaps + 0x0C9E8
-	.equ NakaInst_Ady_s_PartyOrgan_125, NakaData_StyleBitmaps + 0x0CA70
-	.equ NakaInst_Acoustic_Beat_108, NakaData_StyleBitmaps + 0x0CAF8
-	.equ NakaInst_Accordion_Dream_64, NakaData_StyleBitmaps + 0x0CB80
-	.equ NakaInst_A_Case_Of_Soul_114, NakaData_StyleBitmaps + 0x0CC08
-	.equ NakaInst_88_Note_8_Beat_90, NakaData_StyleBitmaps + 0x0CC90
-	.equ NakaInst_80_s_Pop_Sax_118, NakaData_StyleBitmaps + 0x0CD18
-	.equ NakaInst_70_s_Glamour_129, NakaData_StyleBitmaps + 0x0CDA0
-	.equ NakaInst_3_4_Romance_130, NakaData_StyleBitmaps + 0x0CE28
-	.equ NakaInst_16_On_Stage_82, NakaData_StyleBitmaps + 0x0CEB0
-	.equ NakaInst_12_Boogie_Bars_160, NakaData_StyleBitmaps + 0x0CEF4
-	.equ StyleVar_GermanSchlager, NakaData_StyleBitmaps + 0x0CF16
-	.equ NakaInst_Orchestral_Eight_108, NakaData_StyleBitmaps + 0x0CF56
-	.equ StyleVar_EasyPlay8Beat, NakaData_StyleBitmaps + 0x0CFBC
-	.equ NakaInst_Easy_EP_90, NakaData_StyleBitmaps + 0x0D01E
-	.equ StyleVar_RockAfterEight, NakaData_StyleBitmaps + 0x0D062
-	.equ NakaInst_Vocal_Beats_108, NakaData_StyleBitmaps + 0x0D0E6
-	.equ StyleVar_OrchestralBeat, NakaData_StyleBitmaps + 0x0D108
-	.equ NakaInst_Cool_Rock_106, NakaData_StyleBitmaps + 0x0D126
-	.equ StyleVar_SmoothRock, NakaData_StyleBitmaps + 0x0D1AE
-	.equ NakaInst_Dream_Beat_114, NakaData_StyleBitmaps + 0x0D1EE
-	.equ StyleVar_GreatestHits, NakaData_StyleBitmaps + 0x0D254
-	.equ NakaInst_Paradise_Keys_90, NakaData_StyleBitmaps + 0x0D2B6
-	.equ StyleVar_Studio8Beat, NakaData_StyleBitmaps + 0x0D2FA
-	.equ NakaInst_Acoustic_Effects_86, NakaData_StyleBitmaps + 0x0D37E
-	.equ StyleVar_BalladProducer, NakaData_StyleBitmaps + 0x0D3A0
-	.equ NakaInst_Sax_For_Whitney_84, NakaData_StyleBitmaps + 0x0D3BE
-	.equ StyleVar_LoveSongs, NakaData_StyleBitmaps + 0x0D446
-	.equ NakaInst_Warm_Horn_Duet_72, NakaData_StyleBitmaps + 0x0D486
-	.equ StyleVar_16BeatGroove, NakaData_StyleBitmaps + 0x0D4EC
-	.equ NakaInst_New_Muzak_82, NakaData_StyleBitmaps + 0x0D54E
-	.equ StyleVar_EasyPlay16Beat, NakaData_StyleBitmaps + 0x0D592
-	.equ NakaInst_Solid_Sixteen_74, NakaData_StyleBitmaps + 0x0D616
-	.equ StyleVar_EPMoments, NakaData_StyleBitmaps + 0x0D638
-	.equ NakaInst_The_Way_It_Is_70, NakaData_StyleBitmaps + 0x0D656
-	.equ StyleVar_Gentle16Beat, NakaData_StyleBitmaps + 0x0D6DE
-	.equ NakaInst_Orchestral_16_82, NakaData_StyleBitmaps + 0x0D71E
-	.equ StyleVar_Atmospheric16, NakaData_StyleBitmaps + 0x0D784
-	.equ NakaInst_Ballad_Romance_67_EC49A4, NakaData_StyleBitmaps + 0x0D7E6
-	.equ StyleVar_SynthBallad, NakaData_StyleBitmaps + 0x0D82A
-	.equ NakaInst_Gentle_Ballad_75_EC4A6C, NakaData_StyleBitmaps + 0x0D8AE
-	.equ StyleVar_GrandsOnStage, NakaData_StyleBitmaps + 0x0D8D0
-	.equ NakaInst_Clavier_Francais_80, NakaData_StyleBitmaps + 0x0D8EE
-	.equ StyleVar_ModernBallads, NakaData_StyleBitmaps + 0x0D976
-	.equ NakaInst_Synth_Love_Song_84, NakaData_StyleBitmaps + 0x0D9B6
-	.equ StyleVar_NightClubDance, NakaData_StyleBitmaps + 0x0DA1C
-	.equ NakaInst_String_Romance_72, NakaData_StyleBitmaps + 0x0DA7E
-	.equ StyleVar_50sLoveSongs, NakaData_StyleBitmaps + 0x0DAC2
-	.equ NakaInst_Shuffle_Chanson_100, NakaData_StyleBitmaps + 0x0DB46
-	.equ StyleVar_OldieBallads, NakaData_StyleBitmaps + 0x0DB68
-	.equ NakaInst_Flute_Nocturne_63, NakaData_StyleBitmaps + 0x0DB86
-	.equ StyleVar_SoftSchlager, NakaData_StyleBitmaps + 0x0DC0E
-	.equ NakaInst_Spacy_Ballad_64, NakaData_StyleBitmaps + 0x0DC4E
-	.equ StyleVar_OldieDrawbars, NakaData_StyleBitmaps + 0x0DCB4
-	.equ NakaInst_Oldie_s_Parade_125, NakaData_StyleBitmaps + 0x0DD16
-	.equ StyleVar_EuroBallads, NakaData_StyleBitmaps + 0x0DD5A
-	.equ NakaInst_Dreamy_Harmonica_68, NakaData_StyleBitmaps + 0x0DDDE
-	.equ StyleVar_RomanticBand, NakaData_StyleBitmaps + 0x0DE00
-	.equ NakaInst_Late_Night_Tenor_117, NakaData_StyleBitmaps + 0x0DE1E
-	.equ StyleVar_JazzSerenade, NakaData_StyleBitmaps + 0x0DEA6
-	.equ NakaInst_Mellow_Mood_83, NakaData_StyleBitmaps + 0x0DEE6
-	.equ StyleVar_NatsBallads, NakaData_StyleBitmaps + 0x0DF4C
-	.equ NakaInst_Sweet_Swing_90, NakaData_StyleBitmaps + 0x0DFAE
-	.equ StyleVar_DrawbarCombo, NakaData_StyleBitmaps + 0x0DFF2
-	.equ NakaInst_Wunderlich_Combo_180, NakaData_StyleBitmaps + 0x0E076
-	.equ StyleVar_ParisRomance, NakaData_StyleBitmaps + 0x0E098
-	.equ NakaInst_French_Clavier_92, NakaData_StyleBitmaps + 0x0E0B6
-	.equ StyleVar_EasyPlayWaltz, NakaData_StyleBitmaps + 0x0E13E
-	.equ NakaInst_Three_Four_Vibes_110, NakaData_StyleBitmaps + 0x0E17E
-	.equ StyleVar_ParisianNights, NakaData_StyleBitmaps + 0x0E1E4
-	.equ NakaInst_Cafe_Atmosphere_175, NakaData_StyleBitmaps + 0x0E246
-	.equ StyleVar_EasyJazzWaltz, NakaData_StyleBitmaps + 0x0E28A
-	.equ NakaInst_Suited_To_Jazz_150, NakaData_StyleBitmaps + 0x0E30E
-	.equ NakaInst_Rock_Fall_155, NakaData_StyleBitmaps + 0x0E34E
-	.equ NakaInst_Hard_Blown_R_R_150, NakaData_StyleBitmaps + 0x0E416
-	.equ NakaInst_Boogie_Band_154, NakaData_StyleBitmaps + 0x0E4DE
-	.equ NakaInst_Don_t_Do_It_158, NakaData_StyleBitmaps + 0x0E5A6
-	.equ NakaInst_Barry_s_Boogie_150, NakaData_StyleBitmaps + 0x0E5E6
-	.equ NakaInst_Twin_E_P_Ballad_67, NakaData_StyleBitmaps + 0x0E6AE
-	.equ NakaInst_Solid_Surfin_144, NakaData_StyleBitmaps + 0x0E776
-	.equ NakaInst_Monkeying_About_154, NakaData_StyleBitmaps + 0x0E83E
-	.equ NakaInst_I_Want_To_B3_150, NakaData_StyleBitmaps + 0x0E87E
-	.equ NakaInst_Santa_Monica_Way_150, NakaData_StyleBitmaps + 0x0E946
-	.equ NakaInst_Handbag_Dance_129, NakaData_StyleBitmaps + 0x0EA0E
-	.equ NakaInst_Elton_s_Piano_136, NakaData_StyleBitmaps + 0x0EAD6
-	.equ NakaInst_Dire_Strats_138_EC5CD4, NakaData_StyleBitmaps + 0x0EB16
-	.equ NakaInst_C_P_On_Stage_145, NakaData_StyleBitmaps + 0x0EBDE
-	.equ NakaInst_Pop_Leader_144, NakaData_StyleBitmaps + 0x0ECA6
-	.equ NakaInst_Analogue_Ballad_106, NakaData_StyleBitmaps + 0x0ED6E
-	.equ NakaInst_Italy_Pop_Organ_118, NakaData_StyleBitmaps + 0x0EDAE
-	.equ NakaInst_Pop_Horns_111, NakaData_StyleBitmaps + 0x0EE76
-	.equ NakaInst_Sax_Rock_116, NakaData_StyleBitmaps + 0x0EF3E
-	.equ NakaInst_Ballad_Warmth_78, NakaData_StyleBitmaps + 0x0F006
-	.equ NakaInst_Everybody_Rock_131, NakaData_StyleBitmaps + 0x0F046
-	.equ NakaInst_Deep_Hammond_142, NakaData_StyleBitmaps + 0x0F10E
-	.equ NakaInst_Hard_Analogue_148_EC6394, NakaData_StyleBitmaps + 0x0F1D6
-	.equ NakaInst_Heavy_Harmonica_74_EC645C, NakaData_StyleBitmaps + 0x0F29E
-	.equ NakaInst_Digital_Swing_92, NakaData_StyleBitmaps + 0x0F2DE
-	.equ NakaInst_Blues_Harp_Swing_62, NakaData_StyleBitmaps + 0x0F3A6
-	.equ NakaInst_L_A_Strings_92, NakaData_StyleBitmaps + 0x0F42A
-	.equ NakaInst_Synth_Guitar_Pop_92, NakaData_StyleBitmaps + 0x0F46E
-	.equ NakaInst_Wide_Hornsection_100, NakaData_StyleBitmaps + 0x0F4F2
-	.equ NakaInst_Mad_Tabs_100, NakaData_StyleBitmaps + 0x0F536
-	.equ NakaInst_Key_Grooves_102, NakaData_StyleBitmaps + 0x0F576
-	.equ NakaInst_George_B_Unison_102, NakaData_StyleBitmaps + 0x0F5BA
-	.equ NakaInst_L_A_Synth_85, NakaData_StyleBitmaps + 0x0F63E
-	.equ NakaInst_Funk_Keys_96, NakaData_StyleBitmaps + 0x0F706
-	.equ NakaInst_Yuppie_Keys_97, NakaData_StyleBitmaps + 0x0F7CE
-	.equ NakaInst_Sweeping_Bridge_110, NakaData_StyleBitmaps + 0x0F80E
-	.equ StyleVar_FunkyTalk, NakaData_StyleBitmaps + 0x0F896
-	.equ NakaInst_Retro_Groove_127, NakaData_StyleBitmaps + 0x0F8D6
-	.equ StyleVar_OldDanceHit, NakaData_StyleBitmaps + 0x0F93C
-	.equ NakaInst_Metalic_Dance_121, NakaData_StyleBitmaps + 0x0F99E
-	.equ StyleVar_PolyDance, NakaData_StyleBitmaps + 0x0F9E2
-	.equ NakaInst_House_Piano_125, NakaData_StyleBitmaps + 0x0FA66
-	.equ StyleVar_DanceSquares, NakaData_StyleBitmaps + 0x0FA88
-	.equ NakaInst_Techno_Angle_146, NakaData_StyleBitmaps + 0x0FAA6
-	.equ StyleVar_DiscoTechni, NakaData_StyleBitmaps + 0x0FB2E
-	.equ NakaInst_Disco_Techni_118_EC6D2C, NakaData_StyleBitmaps + 0x0FB6E
-	.equ StyleVar_EuroDiscoHit, NakaData_StyleBitmaps + 0x0FBD4
-	.equ NakaInst_New_York_Disco_115, NakaData_StyleBitmaps + 0x0FC36
-	.equ StyleVar_DiscoTalk, NakaData_StyleBitmaps + 0x0FC7A
-	.equ NakaInst_Disco_Agogo_121, NakaData_StyleBitmaps + 0x0FCFE
-	.equ StyleVar_70sDanceHit, NakaData_StyleBitmaps + 0x0FD20
-	.equ NakaInst_Disco_Metal_124_EC6EFC, NakaData_StyleBitmaps + 0x0FD3E
-	.equ StyleVar_DiscoRanger, NakaData_StyleBitmaps + 0x0FDC6
-	.equ NakaInst_Hip_Hop_Echoes_108, NakaData_StyleBitmaps + 0x0FE06
-	.equ StyleVar_GloryDisco, NakaData_StyleBitmaps + 0x0FE6C
-	.equ NakaInst_Synth_of_The_90s_108, NakaData_StyleBitmaps + 0x0FECE
-	.equ StyleVar_NYRap, NakaData_StyleBitmaps + 0x0FF12
-	.equ NakaInst_Pump_The_Bass_96, NakaData_StyleBitmaps + 0x0FF96
-	.equ StyleVar_HipHop, NakaData_StyleBitmaps + 0x0FFB8
-	.equ NakaInst_Dance_Island_104_EC7194, NakaData_StyleBitmaps + 0x0FFD6
-	.equ StyleVar_ReggaeHit, NakaData_StyleBitmaps + 0x1005E
-	.equ NakaInst_Rasta_Jambo_101, NakaData_StyleBitmaps + 0x1009E
+	.equ NakaInst_Greasepaint_Time_132, NakaData_StyleBitmaps + 0x09a18
+	.equ NakaInst_Grand_Finale_132, NakaData_StyleBitmaps + 0x09aa0
+	.equ NakaInst_Gospel_Organ_66, NakaData_StyleBitmaps + 0x09b28
+	.equ NakaInst_Golden_Movie_Era_120, NakaData_StyleBitmaps + 0x09bb0
+	.equ NakaInst_Girls_On_Stage_118, NakaData_StyleBitmaps + 0x09c38
+	.equ NakaInst_German_Party_Hit_111, NakaData_StyleBitmaps + 0x09cc0
+	.equ NakaInst_Georgia_Brass_64, NakaData_StyleBitmaps + 0x09d48
+	.equ NakaInst_Gentle_Ballad_75, NakaData_StyleBitmaps + 0x09dd0
+	.equ NakaInst_Galombang_98, NakaData_StyleBitmaps + 0x09e58
+	.equ NakaInst_Fusion_Tines_98, NakaData_StyleBitmaps + 0x09e9c
+	.equ NakaInst_Funky_Talk_110, NakaData_StyleBitmaps + 0x09ee0
+	.equ NakaInst_Full_Tilt_Swing_127, NakaData_StyleBitmaps + 0x09f68
+	.equ NakaInst_Full_Brass_Band_115, NakaData_StyleBitmaps + 0x09ff0
+	.equ NakaInst_Foxy_Squeezebox_154, NakaData_StyleBitmaps + 0x0a078
+	.equ NakaInst_Foxtrot_Sparkle_120, NakaData_StyleBitmaps + 0x0a100
+	.equ NakaInst_Folklore_Brass_115, NakaData_StyleBitmaps + 0x0a188
+	.equ NakaInst_Fogerty_s_Stomp_206, NakaData_StyleBitmaps + 0x0a210
+	.equ NakaInst_Flugel_Ballad_63, NakaData_StyleBitmaps + 0x0a298
+	.equ NakaInst_Finale_Salute_115, NakaData_StyleBitmaps + 0x0a320
+	.equ NakaInst_Fiddle_For_Jazz_210, NakaData_StyleBitmaps + 0x0a3a8
+	.equ NakaInst_Festival_Amigos_116, NakaData_StyleBitmaps + 0x0a430
+	.equ NakaInst_Fantasy_Rhumba_115, NakaData_StyleBitmaps + 0x0a4b8
+	.equ NakaInst_Fair_Sea_Organ_125, NakaData_StyleBitmaps + 0x0a540
+	.equ NakaInst_Euro_Squeezebox_147, NakaData_StyleBitmaps + 0x0a5c8
+	.equ NakaInst_Ernst_Friends_120, NakaData_StyleBitmaps + 0x0a650
+	.equ NakaInst_Emerson_Keys_145, NakaData_StyleBitmaps + 0x0a6d8
+	.equ NakaInst_Electric_Gospel_88, NakaData_StyleBitmaps + 0x0a760
+	.equ NakaInst_Easy_Threesy_110, NakaData_StyleBitmaps + 0x0a7e8
+	.equ NakaInst_Easy_Bacharach_150, NakaData_StyleBitmaps + 0x0a870
+	.equ NakaInst_E_P_Does_It_82, NakaData_StyleBitmaps + 0x0a8f8
+	.equ NakaInst_Dreamy_Orchestra_67, NakaData_StyleBitmaps + 0x0a980
+	.equ NakaInst_Drawbar_Funk_85, NakaData_StyleBitmaps + 0x0aa08
+	.equ NakaInst_Doo_You_Dance_200, NakaData_StyleBitmaps + 0x0aa90
+	.equ NakaInst_Dolly_s_Strings_128, NakaData_StyleBitmaps + 0x0ab18
+	.equ NakaInst_Django_s_Solo_190, NakaData_StyleBitmaps + 0x0aba0
+	.equ NakaInst_Disco_Techni_118, NakaData_StyleBitmaps + 0x0ac28
+	.equ NakaInst_Disco_Metal_124, NakaData_StyleBitmaps + 0x0acb0
+	.equ NakaInst_Dire_Strats_138, NakaData_StyleBitmaps + 0x0ad38
+	.equ NakaInst_Deuringer_Swing_190, NakaData_StyleBitmaps + 0x0adc0
+	.equ NakaInst_Dancing_Flutes_125, NakaData_StyleBitmaps + 0x0ae48
+	.equ NakaInst_Dance_Surround_124, NakaData_StyleBitmaps + 0x0aed0
+	.equ NakaInst_Dance_Island_104, NakaData_StyleBitmaps + 0x0af58
+	.equ NakaInst_Dance_Band_Jive_176, NakaData_StyleBitmaps + 0x0afe0
+	.equ NakaInst_Cuckoo_Clock_3_4_183, NakaData_StyleBitmaps + 0x0b068
+	.equ NakaInst_Crazy_Horse_Show_118, NakaData_StyleBitmaps + 0x0b0f0
+	.equ NakaInst_Country_Tenor_88, NakaData_StyleBitmaps + 0x0b178
+	.equ NakaInst_Country_Licks_235, NakaData_StyleBitmaps + 0x0b200
+	.equ NakaInst_Country_Harp_88, NakaData_StyleBitmaps + 0x0b288
+	.equ NakaInst_Count_On_It_90, NakaData_StyleBitmaps + 0x0b310
+	.equ NakaInst_Cool_Soul_Frets_66, NakaData_StyleBitmaps + 0x0b398
+	.equ NakaInst_Cool_Jazz_B3_145, NakaData_StyleBitmaps + 0x0b420
+	.equ NakaInst_Convoy_Bluegrass_206, NakaData_StyleBitmaps + 0x0b4a8
+	.equ NakaInst_Come_On_Baby_168, NakaData_StyleBitmaps + 0x0b530
+	.equ NakaInst_Coconut_Frets_152, NakaData_StyleBitmaps + 0x0b5b8
+	.equ NakaInst_Clean_Metal_148, NakaData_StyleBitmaps + 0x0b640
+	.equ NakaInst_Classical_Tango_120, NakaData_StyleBitmaps + 0x0b6c8
+	.equ NakaInst_Chuck_s_Late_Gig_72, NakaData_StyleBitmaps + 0x0b750
+	.equ NakaInst_Chiff_Funk_97, NakaData_StyleBitmaps + 0x0b7d8
+	.equ NakaInst_Chapel_Brass_124, NakaData_StyleBitmaps + 0x0b860
+	.equ NakaInst_Carol_Singers_75, NakaData_StyleBitmaps + 0x0b8e8
+	.equ NakaInst_Caribbean_Synth_90, NakaData_StyleBitmaps + 0x0b970
+	.equ NakaInst_Calypso_Steel_152, NakaData_StyleBitmaps + 0x0b9f8
+	.equ NakaInst_Caber_Dance_172, NakaData_StyleBitmaps + 0x0ba80
+	.equ NakaInst_Bright_Keys_16_74, NakaData_StyleBitmaps + 0x0bb08
+	.equ NakaInst_Breathy_Moments_83, NakaData_StyleBitmaps + 0x0bb90
+	.equ NakaInst_Brassy_Dance_108, NakaData_StyleBitmaps + 0x0bc18
+	.equ NakaInst_Boxing_Jazzy_147, NakaData_StyleBitmaps + 0x0bca0
+	.equ NakaInst_Bourbon_Street_196, NakaData_StyleBitmaps + 0x0bd28
+	.equ NakaInst_Boogie_Dance_160, NakaData_StyleBitmaps + 0x0bdb0
+	.equ NakaInst_Bolero_Orchestra_120, NakaData_StyleBitmaps + 0x0be38
+	.equ NakaInst_Blues_Rock_Keys_124, NakaData_StyleBitmaps + 0x0bec0
+	.equ NakaInst_Blues_Alley_124, NakaData_StyleBitmaps + 0x0bf48
+	.equ NakaInst_Blue_Suede_Rock_158, NakaData_StyleBitmaps + 0x0bfd0
+	.equ NakaInst_Bigband_Shout_170, NakaData_StyleBitmaps + 0x0c058
+	.equ NakaInst_Besame_Strings_120, NakaData_StyleBitmaps + 0x0c0e0
+	.equ NakaInst_Bellow_Shake_Hit_135, NakaData_StyleBitmaps + 0x0c168
+	.equ NakaInst_Beach_Party_Song_152, NakaData_StyleBitmaps + 0x0c1f0
+	.equ NakaInst_Bavaria_To_Tyrol_195, NakaData_StyleBitmaps + 0x0c278
+	.equ NakaInst_Barber_Shop_Jazz_196, NakaData_StyleBitmaps + 0x0c300
+	.equ NakaInst_Banjo_Dance_138, NakaData_StyleBitmaps + 0x0c388
+	.equ NakaInst_Baltic_Reeds_141, NakaData_StyleBitmaps + 0x0c410
+	.equ NakaInst_Ballad_Romance_67, NakaData_StyleBitmaps + 0x0c498
+	.equ NakaInst_Ballad_Guitar_67, NakaData_StyleBitmaps + 0x0c520
+	.equ NakaInst_Ballad_Acoustics_84, NakaData_StyleBitmaps + 0x0c5a8
+	.equ NakaInst_Bad_B3_Blues_78, NakaData_StyleBitmaps + 0x0c630
+	.equ NakaInst_Austria_Symphony_169, NakaData_StyleBitmaps + 0x0c6b8
+	.equ NakaInst_At_The_Eger_120, NakaData_StyleBitmaps + 0x0c740
+	.equ NakaInst_Art_Meets_Lionel_190, NakaData_StyleBitmaps + 0x0c7c8
+	.equ NakaInst_Amor_Reed_117, NakaData_StyleBitmaps + 0x0c850
+	.equ NakaInst_Alto_Samba_116, NakaData_StyleBitmaps + 0x0c8d8
+	.equ NakaInst_Alpine_Combo_125, NakaData_StyleBitmaps + 0x0c960
+	.equ NakaInst_All_Out_Combo_180, NakaData_StyleBitmaps + 0x0c9e8
+	.equ NakaInst_Ady_s_PartyOrgan_125, NakaData_StyleBitmaps + 0x0ca70
+	.equ NakaInst_Acoustic_Beat_108, NakaData_StyleBitmaps + 0x0caf8
+	.equ NakaInst_Accordion_Dream_64, NakaData_StyleBitmaps + 0x0cb80
+	.equ NakaInst_A_Case_Of_Soul_114, NakaData_StyleBitmaps + 0x0cc08
+	.equ NakaInst_88_Note_8_Beat_90, NakaData_StyleBitmaps + 0x0cc90
+	.equ NakaInst_80_s_Pop_Sax_118, NakaData_StyleBitmaps + 0x0cd18
+	.equ NakaInst_70_s_Glamour_129, NakaData_StyleBitmaps + 0x0cda0
+	.equ NakaInst_3_4_Romance_130, NakaData_StyleBitmaps + 0x0ce28
+	.equ NakaInst_16_On_Stage_82, NakaData_StyleBitmaps + 0x0ceb0
+	.equ NakaInst_12_Boogie_Bars_160, NakaData_StyleBitmaps + 0x0cef4
+	.equ StyleVar_GermanSchlager, NakaData_StyleBitmaps + 0x0cf16
+	.equ NakaInst_Orchestral_Eight_108, NakaData_StyleBitmaps + 0x0cf56
+	.equ StyleVar_EasyPlay8Beat, NakaData_StyleBitmaps + 0x0cfbc
+	.equ NakaInst_Easy_EP_90, NakaData_StyleBitmaps + 0x0d01e
+	.equ StyleVar_RockAfterEight, NakaData_StyleBitmaps + 0x0d062
+	.equ NakaInst_Vocal_Beats_108, NakaData_StyleBitmaps + 0x0d0e6
+	.equ StyleVar_OrchestralBeat, NakaData_StyleBitmaps + 0x0d108
+	.equ NakaInst_Cool_Rock_106, NakaData_StyleBitmaps + 0x0d126
+	.equ StyleVar_SmoothRock, NakaData_StyleBitmaps + 0x0d1ae
+	.equ NakaInst_Dream_Beat_114, NakaData_StyleBitmaps + 0x0d1ee
+	.equ StyleVar_GreatestHits, NakaData_StyleBitmaps + 0x0d254
+	.equ NakaInst_Paradise_Keys_90, NakaData_StyleBitmaps + 0x0d2b6
+	.equ StyleVar_Studio8Beat, NakaData_StyleBitmaps + 0x0d2fa
+	.equ NakaInst_Acoustic_Effects_86, NakaData_StyleBitmaps + 0x0d37e
+	.equ StyleVar_BalladProducer, NakaData_StyleBitmaps + 0x0d3a0
+	.equ NakaInst_Sax_For_Whitney_84, NakaData_StyleBitmaps + 0x0d3be
+	.equ StyleVar_LoveSongs, NakaData_StyleBitmaps + 0x0d446
+	.equ NakaInst_Warm_Horn_Duet_72, NakaData_StyleBitmaps + 0x0d486
+	.equ StyleVar_16BeatGroove, NakaData_StyleBitmaps + 0x0d4ec
+	.equ NakaInst_New_Muzak_82, NakaData_StyleBitmaps + 0x0d54e
+	.equ StyleVar_EasyPlay16Beat, NakaData_StyleBitmaps + 0x0d592
+	.equ NakaInst_Solid_Sixteen_74, NakaData_StyleBitmaps + 0x0d616
+	.equ StyleVar_EPMoments, NakaData_StyleBitmaps + 0x0d638
+	.equ NakaInst_The_Way_It_Is_70, NakaData_StyleBitmaps + 0x0d656
+	.equ StyleVar_Gentle16Beat, NakaData_StyleBitmaps + 0x0d6de
+	.equ NakaInst_Orchestral_16_82, NakaData_StyleBitmaps + 0x0d71e
+	.equ StyleVar_Atmospheric16, NakaData_StyleBitmaps + 0x0d784
+	.equ NakaInst_Ballad_Romance_67_EC49A4, NakaData_StyleBitmaps + 0x0d7e6
+	.equ StyleVar_SynthBallad, NakaData_StyleBitmaps + 0x0d82a
+	.equ NakaInst_Gentle_Ballad_75_EC4A6C, NakaData_StyleBitmaps + 0x0d8ae
+	.equ StyleVar_GrandsOnStage, NakaData_StyleBitmaps + 0x0d8d0
+	.equ NakaInst_Clavier_Francais_80, NakaData_StyleBitmaps + 0x0d8ee
+	.equ StyleVar_ModernBallads, NakaData_StyleBitmaps + 0x0d976
+	.equ NakaInst_Synth_Love_Song_84, NakaData_StyleBitmaps + 0x0d9b6
+	.equ StyleVar_NightClubDance, NakaData_StyleBitmaps + 0x0da1c
+	.equ NakaInst_String_Romance_72, NakaData_StyleBitmaps + 0x0da7e
+	.equ StyleVar_50sLoveSongs, NakaData_StyleBitmaps + 0x0dac2
+	.equ NakaInst_Shuffle_Chanson_100, NakaData_StyleBitmaps + 0x0db46
+	.equ StyleVar_OldieBallads, NakaData_StyleBitmaps + 0x0db68
+	.equ NakaInst_Flute_Nocturne_63, NakaData_StyleBitmaps + 0x0db86
+	.equ StyleVar_SoftSchlager, NakaData_StyleBitmaps + 0x0dc0e
+	.equ NakaInst_Spacy_Ballad_64, NakaData_StyleBitmaps + 0x0dc4e
+	.equ StyleVar_OldieDrawbars, NakaData_StyleBitmaps + 0x0dcb4
+	.equ NakaInst_Oldie_s_Parade_125, NakaData_StyleBitmaps + 0x0dd16
+	.equ StyleVar_EuroBallads, NakaData_StyleBitmaps + 0x0dd5a
+	.equ NakaInst_Dreamy_Harmonica_68, NakaData_StyleBitmaps + 0x0ddde
+	.equ StyleVar_RomanticBand, NakaData_StyleBitmaps + 0x0de00
+	.equ NakaInst_Late_Night_Tenor_117, NakaData_StyleBitmaps + 0x0de1e
+	.equ StyleVar_JazzSerenade, NakaData_StyleBitmaps + 0x0dea6
+	.equ NakaInst_Mellow_Mood_83, NakaData_StyleBitmaps + 0x0dee6
+	.equ StyleVar_NatsBallads, NakaData_StyleBitmaps + 0x0df4c
+	.equ NakaInst_Sweet_Swing_90, NakaData_StyleBitmaps + 0x0dfae
+	.equ StyleVar_DrawbarCombo, NakaData_StyleBitmaps + 0x0dff2
+	.equ NakaInst_Wunderlich_Combo_180, NakaData_StyleBitmaps + 0x0e076
+	.equ StyleVar_ParisRomance, NakaData_StyleBitmaps + 0x0e098
+	.equ NakaInst_French_Clavier_92, NakaData_StyleBitmaps + 0x0e0b6
+	.equ StyleVar_EasyPlayWaltz, NakaData_StyleBitmaps + 0x0e13e
+	.equ NakaInst_Three_Four_Vibes_110, NakaData_StyleBitmaps + 0x0e17e
+	.equ StyleVar_ParisianNights, NakaData_StyleBitmaps + 0x0e1e4
+	.equ NakaInst_Cafe_Atmosphere_175, NakaData_StyleBitmaps + 0x0e246
+	.equ StyleVar_EasyJazzWaltz, NakaData_StyleBitmaps + 0x0e28a
+	.equ NakaInst_Suited_To_Jazz_150, NakaData_StyleBitmaps + 0x0e30e
+	.equ NakaInst_Rock_Fall_155, NakaData_StyleBitmaps + 0x0e34e
+	.equ NakaInst_Hard_Blown_R_R_150, NakaData_StyleBitmaps + 0x0e416
+	.equ NakaInst_Boogie_Band_154, NakaData_StyleBitmaps + 0x0e4de
+	.equ NakaInst_Don_t_Do_It_158, NakaData_StyleBitmaps + 0x0e5a6
+	.equ NakaInst_Barry_s_Boogie_150, NakaData_StyleBitmaps + 0x0e5e6
+	.equ NakaInst_Twin_E_P_Ballad_67, NakaData_StyleBitmaps + 0x0e6ae
+	.equ NakaInst_Solid_Surfin_144, NakaData_StyleBitmaps + 0x0e776
+	.equ NakaInst_Monkeying_About_154, NakaData_StyleBitmaps + 0x0e83e
+	.equ NakaInst_I_Want_To_B3_150, NakaData_StyleBitmaps + 0x0e87e
+	.equ NakaInst_Santa_Monica_Way_150, NakaData_StyleBitmaps + 0x0e946
+	.equ NakaInst_Handbag_Dance_129, NakaData_StyleBitmaps + 0x0ea0e
+	.equ NakaInst_Elton_s_Piano_136, NakaData_StyleBitmaps + 0x0ead6
+	.equ NakaInst_Dire_Strats_138_EC5CD4, NakaData_StyleBitmaps + 0x0eb16
+	.equ NakaInst_C_P_On_Stage_145, NakaData_StyleBitmaps + 0x0ebde
+	.equ NakaInst_Pop_Leader_144, NakaData_StyleBitmaps + 0x0eca6
+	.equ NakaInst_Analogue_Ballad_106, NakaData_StyleBitmaps + 0x0ed6e
+	.equ NakaInst_Italy_Pop_Organ_118, NakaData_StyleBitmaps + 0x0edae
+	.equ NakaInst_Pop_Horns_111, NakaData_StyleBitmaps + 0x0ee76
+	.equ NakaInst_Sax_Rock_116, NakaData_StyleBitmaps + 0x0ef3e
+	.equ NakaInst_Ballad_Warmth_78, NakaData_StyleBitmaps + 0x0f006
+	.equ NakaInst_Everybody_Rock_131, NakaData_StyleBitmaps + 0x0f046
+	.equ NakaInst_Deep_Hammond_142, NakaData_StyleBitmaps + 0x0f10e
+	.equ NakaInst_Hard_Analogue_148_EC6394, NakaData_StyleBitmaps + 0x0f1d6
+	.equ NakaInst_Heavy_Harmonica_74_EC645C, NakaData_StyleBitmaps + 0x0f29e
+	.equ NakaInst_Digital_Swing_92, NakaData_StyleBitmaps + 0x0f2de
+	.equ NakaInst_Blues_Harp_Swing_62, NakaData_StyleBitmaps + 0x0f3a6
+	.equ NakaInst_L_A_Strings_92, NakaData_StyleBitmaps + 0x0f42a
+	.equ NakaInst_Synth_Guitar_Pop_92, NakaData_StyleBitmaps + 0x0f46e
+	.equ NakaInst_Wide_Hornsection_100, NakaData_StyleBitmaps + 0x0f4f2
+	.equ NakaInst_Mad_Tabs_100, NakaData_StyleBitmaps + 0x0f536
+	.equ NakaInst_Key_Grooves_102, NakaData_StyleBitmaps + 0x0f576
+	.equ NakaInst_George_B_Unison_102, NakaData_StyleBitmaps + 0x0f5ba
+	.equ NakaInst_L_A_Synth_85, NakaData_StyleBitmaps + 0x0f63e
+	.equ NakaInst_Funk_Keys_96, NakaData_StyleBitmaps + 0x0f706
+	.equ NakaInst_Yuppie_Keys_97, NakaData_StyleBitmaps + 0x0f7ce
+	.equ NakaInst_Sweeping_Bridge_110, NakaData_StyleBitmaps + 0x0f80e
+	.equ StyleVar_FunkyTalk, NakaData_StyleBitmaps + 0x0f896
+	.equ NakaInst_Retro_Groove_127, NakaData_StyleBitmaps + 0x0f8d6
+	.equ StyleVar_OldDanceHit, NakaData_StyleBitmaps + 0x0f93c
+	.equ NakaInst_Metalic_Dance_121, NakaData_StyleBitmaps + 0x0f99e
+	.equ StyleVar_PolyDance, NakaData_StyleBitmaps + 0x0f9e2
+	.equ NakaInst_House_Piano_125, NakaData_StyleBitmaps + 0x0fa66
+	.equ StyleVar_DanceSquares, NakaData_StyleBitmaps + 0x0fa88
+	.equ NakaInst_Techno_Angle_146, NakaData_StyleBitmaps + 0x0faa6
+	.equ StyleVar_DiscoTechni, NakaData_StyleBitmaps + 0x0fb2e
+	.equ NakaInst_Disco_Techni_118_EC6D2C, NakaData_StyleBitmaps + 0x0fb6e
+	.equ StyleVar_EuroDiscoHit, NakaData_StyleBitmaps + 0x0fbd4
+	.equ NakaInst_New_York_Disco_115, NakaData_StyleBitmaps + 0x0fc36
+	.equ StyleVar_DiscoTalk, NakaData_StyleBitmaps + 0x0fc7a
+	.equ NakaInst_Disco_Agogo_121, NakaData_StyleBitmaps + 0x0fcfe
+	.equ StyleVar_70sDanceHit, NakaData_StyleBitmaps + 0x0fd20
+	.equ NakaInst_Disco_Metal_124_EC6EFC, NakaData_StyleBitmaps + 0x0fd3e
+	.equ StyleVar_DiscoRanger, NakaData_StyleBitmaps + 0x0fdc6
+	.equ NakaInst_Hip_Hop_Echoes_108, NakaData_StyleBitmaps + 0x0fe06
+	.equ StyleVar_GloryDisco, NakaData_StyleBitmaps + 0x0fe6c
+	.equ NakaInst_Synth_of_The_90s_108, NakaData_StyleBitmaps + 0x0fece
+	.equ StyleVar_NYRap, NakaData_StyleBitmaps + 0x0ff12
+	.equ NakaInst_Pump_The_Bass_96, NakaData_StyleBitmaps + 0x0ff96
+	.equ StyleVar_HipHop, NakaData_StyleBitmaps + 0x0ffb8
+	.equ NakaInst_Dance_Island_104_EC7194, NakaData_StyleBitmaps + 0x0ffd6
+	.equ StyleVar_ReggaeHit, NakaData_StyleBitmaps + 0x1005e
+	.equ NakaInst_Rasta_Jambo_101, NakaData_StyleBitmaps + 0x1009e
 	.equ StyleVar_RioGosDisco, NakaData_StyleBitmaps + 0x10104
 	.equ NakaInst_Dancing_Flutes_125_EC7324, NakaData_StyleBitmaps + 0x10166
-	.equ StyleVar_JamboDance, NakaData_StyleBitmaps + 0x101AA
-	.equ NakaInst_Reggae_Dance_Hit_101, NakaData_StyleBitmaps + 0x1022E
+	.equ StyleVar_JamboDance, NakaData_StyleBitmaps + 0x101aa
+	.equ NakaInst_Reggae_Dance_Hit_101, NakaData_StyleBitmaps + 0x1022e
 	.equ StyleVar_SambaParty, NakaData_StyleBitmaps + 0x10250
-	.equ NakaInst_Festival_Amigos_116_EC742C, NakaData_StyleBitmaps + 0x1026E
-	.equ StyleVar_LatinFestival, NakaData_StyleBitmaps + 0x102F6
+	.equ NakaInst_Festival_Amigos_116_EC742C, NakaData_StyleBitmaps + 0x1026e
+	.equ StyleVar_LatinFestival, NakaData_StyleBitmaps + 0x102f6
 	.equ NakaInst_Dance_Surround_124_EC74F4, NakaData_StyleBitmaps + 0x10336
-	.equ NakaInst_Last_Starparade_120, NakaData_StyleBitmaps + 0x103FE
-	.equ NakaInst_Party_Flautist_111, NakaData_StyleBitmaps + 0x104C6
+	.equ NakaInst_Last_Starparade_120, NakaData_StyleBitmaps + 0x103fe
+	.equ NakaInst_Party_Flautist_111, NakaData_StyleBitmaps + 0x104c6
 	.equ NakaInst_German_HitParade_120, NakaData_StyleBitmaps + 0x10506
-	.equ NakaInst_Ady_s_PartyOrgan_125_EC778C, NakaData_StyleBitmaps + 0x105CE
+	.equ NakaInst_Ady_s_PartyOrgan_125_EC778C, NakaData_StyleBitmaps + 0x105ce
 	.equ NakaInst_Pop_Of_The_Bells_125, NakaData_StyleBitmaps + 0x10696
-	.equ NakaInst_Puppet_March_116, NakaData_StyleBitmaps + 0x1075E
-	.equ NakaInst_Party_Space_120, NakaData_StyleBitmaps + 0x1079E
+	.equ NakaInst_Puppet_March_116, NakaData_StyleBitmaps + 0x1075e
+	.equ NakaInst_Party_Space_120, NakaData_StyleBitmaps + 0x1079e
 	.equ NakaInst_Orgel_Pops_111, NakaData_StyleBitmaps + 0x10866
-	.equ NakaInst_Anka_Rock_133, NakaData_StyleBitmaps + 0x1092E
-	.equ NakaInst_Party_Register_115, NakaData_StyleBitmaps + 0x109F6
-	.equ NakaInst_Shake_It_All_162, NakaData_StyleBitmaps + 0x10A36
-	.equ NakaInst_Chords_Birds_100, NakaData_StyleBitmaps + 0x10AFE
-	.equ NakaInst_Banjo_Sing_Song_134, NakaData_StyleBitmaps + 0x10BC6
-	.equ NakaInst_Fiddle_Dance_132, NakaData_StyleBitmaps + 0x10C8E
-	.equ NakaInst_Symphony_Hoedown_206, NakaData_StyleBitmaps + 0x10CCE
-	.equ NakaInst_Techno_Ranger_138, NakaData_StyleBitmaps + 0x10D96
-	.equ NakaInst_The_Zillertaler_150, NakaData_StyleBitmaps + 0x10E5E
-	.equ NakaInst_Sepp_s_Clarinet_195, NakaData_StyleBitmaps + 0x10F26
-	.equ NakaInst_Miseltoe_Melody_75, NakaData_StyleBitmaps + 0x10F66
-	.equ StyleVar_KingOfSoul, NakaData_StyleBitmaps + 0x10FEE
-	.equ NakaInst_Bad_Soul_Bars_140, NakaData_StyleBitmaps + 0x1102E
+	.equ NakaInst_Anka_Rock_133, NakaData_StyleBitmaps + 0x1092e
+	.equ NakaInst_Party_Register_115, NakaData_StyleBitmaps + 0x109f6
+	.equ NakaInst_Shake_It_All_162, NakaData_StyleBitmaps + 0x10a36
+	.equ NakaInst_Chords_Birds_100, NakaData_StyleBitmaps + 0x10afe
+	.equ NakaInst_Banjo_Sing_Song_134, NakaData_StyleBitmaps + 0x10bc6
+	.equ NakaInst_Fiddle_Dance_132, NakaData_StyleBitmaps + 0x10c8e
+	.equ NakaInst_Symphony_Hoedown_206, NakaData_StyleBitmaps + 0x10cce
+	.equ NakaInst_Techno_Ranger_138, NakaData_StyleBitmaps + 0x10d96
+	.equ NakaInst_The_Zillertaler_150, NakaData_StyleBitmaps + 0x10e5e
+	.equ NakaInst_Sepp_s_Clarinet_195, NakaData_StyleBitmaps + 0x10f26
+	.equ NakaInst_Miseltoe_Melody_75, NakaData_StyleBitmaps + 0x10f66
+	.equ StyleVar_KingOfSoul, NakaData_StyleBitmaps + 0x10fee
+	.equ NakaInst_Bad_Soul_Bars_140, NakaData_StyleBitmaps + 0x1102e
 	.equ StyleVar_DetroitPop, NakaData_StyleBitmaps + 0x11094
-	.equ NakaInst_Ross_Vocals_142, NakaData_StyleBitmaps + 0x110F6
-	.equ StyleVar_SoftSoul, NakaData_StyleBitmaps + 0x1113A
-	.equ NakaInst_A_Case_Of_Soul_114_EC837C, NakaData_StyleBitmaps + 0x111BE
-	.equ StyleVar_NewSoulBallad, NakaData_StyleBitmaps + 0x111E0
-	.equ NakaInst_Soul_Suitcase_70, NakaData_StyleBitmaps + 0x111FE
+	.equ NakaInst_Ross_Vocals_142, NakaData_StyleBitmaps + 0x110f6
+	.equ StyleVar_SoftSoul, NakaData_StyleBitmaps + 0x1113a
+	.equ NakaInst_A_Case_Of_Soul_114_EC837C, NakaData_StyleBitmaps + 0x111be
+	.equ StyleVar_NewSoulBallad, NakaData_StyleBitmaps + 0x111e0
+	.equ NakaInst_Soul_Suitcase_70, NakaData_StyleBitmaps + 0x111fe
 	.equ StyleVar_SoulToSun, NakaData_StyleBitmaps + 0x11286
-	.equ NakaInst_Keys_To_Soul_88, NakaData_StyleBitmaps + 0x112C6
-	.equ StyleVar_MellowSoul, NakaData_StyleBitmaps + 0x1132C
-	.equ NakaInst_Sweet_16_Sax_66, NakaData_StyleBitmaps + 0x1138E
-	.equ StyleVar_SlowSoulMood, NakaData_StyleBitmaps + 0x113D2
+	.equ NakaInst_Keys_To_Soul_88, NakaData_StyleBitmaps + 0x112c6
+	.equ StyleVar_MellowSoul, NakaData_StyleBitmaps + 0x1132c
+	.equ NakaInst_Sweet_16_Sax_66, NakaData_StyleBitmaps + 0x1138e
+	.equ StyleVar_SlowSoulMood, NakaData_StyleBitmaps + 0x113d2
 	.equ NakaInst_Soul_On_My_Mind_64, NakaData_StyleBitmaps + 0x11456
 	.equ StyleVar_RBGroove, NakaData_StyleBitmaps + 0x11478
 	.equ NakaInst_Blues_Horns_112, NakaData_StyleBitmaps + 0x11496
-	.equ StyleVar_DownDirtyBlues, NakaData_StyleBitmaps + 0x1151E
-	.equ NakaInst_Solid_Blues_78, NakaData_StyleBitmaps + 0x1155E
-	.equ StyleVar_RockBlues, NakaData_StyleBitmaps + 0x115C4
+	.equ StyleVar_DownDirtyBlues, NakaData_StyleBitmaps + 0x1151e
+	.equ NakaInst_Solid_Blues_78, NakaData_StyleBitmaps + 0x1155e
+	.equ StyleVar_RockBlues, NakaData_StyleBitmaps + 0x115c4
 	.equ NakaInst_Hard_Sax_Blues_124_EC87E4, NakaData_StyleBitmaps + 0x11626
-	.equ StyleVar_PlayTheBlues, NakaData_StyleBitmaps + 0x1166A
-	.equ NakaInst_I_Got_The_Blues_83_EC88AC, NakaData_StyleBitmaps + 0x116EE
+	.equ StyleVar_PlayTheBlues, NakaData_StyleBitmaps + 0x1166a
+	.equ NakaInst_I_Got_The_Blues_83_EC88AC, NakaData_StyleBitmaps + 0x116ee
 	.equ StyleVar_BluesAlley, NakaData_StyleBitmaps + 0x11710
 	.equ StyleVar_DayOfRest, NakaData_StyleBitmaps + 0x11902
 	.equ NakaInst_Gospel_Standard_124, NakaData_StyleBitmaps + 0x11986
-	.equ StyleVar_PowerGospel, NakaData_StyleBitmaps + 0x119A8
-	.equ NakaInst_Congregation_151, NakaData_StyleBitmaps + 0x119C6
-	.equ StyleVar_GospelBlues, NakaData_StyleBitmaps + 0x11A4E
-	.equ NakaInst_Drawbar_Service_66, NakaData_StyleBitmaps + 0x11A8E
-	.equ StyleVar_GospelInThrees, NakaData_StyleBitmaps + 0x11AF4
-	.equ NakaInst_Sing_It_Play_It_92, NakaData_StyleBitmaps + 0x11B56
-	.equ StyleVar_UpTempoBigband, NakaData_StyleBitmaps + 0x11B9A
-	.equ NakaInst_The_Duke_s_Piano_170, NakaData_StyleBitmaps + 0x11C1E
-	.equ StyleVar_SteadySwingband, NakaData_StyleBitmaps + 0x11C40
-	.equ NakaInst_Reeds_in_Unison_110, NakaData_StyleBitmaps + 0x11C5E
-	.equ StyleVar_AllAboard, NakaData_StyleBitmaps + 0x11CE6
-	.equ NakaInst_Main_Line_Brass_150, NakaData_StyleBitmaps + 0x11D26
-	.equ StyleVar_40sDanceBand, NakaData_StyleBitmaps + 0x11D8C
-	.equ NakaInst_Miller_Reeds_86, NakaData_StyleBitmaps + 0x11DEE
-	.equ StyleVar_SentimentalBand, NakaData_StyleBitmaps + 0x11E32
-	.equ NakaInst_Acker_s_Solo_90, NakaData_StyleBitmaps + 0x11EB6
-	.equ StyleVar_MoonlightDance, NakaData_StyleBitmaps + 0x11ED8
-	.equ NakaInst_Glenn_s_Big_Band_90, NakaData_StyleBitmaps + 0x11EF6
-	.equ StyleVar_40sLoveSongs, NakaData_StyleBitmaps + 0x11F7E
-	.equ NakaInst_Big_Band_Sound_92, NakaData_StyleBitmaps + 0x11FBE
+	.equ StyleVar_PowerGospel, NakaData_StyleBitmaps + 0x119a8
+	.equ NakaInst_Congregation_151, NakaData_StyleBitmaps + 0x119c6
+	.equ StyleVar_GospelBlues, NakaData_StyleBitmaps + 0x11a4e
+	.equ NakaInst_Drawbar_Service_66, NakaData_StyleBitmaps + 0x11a8e
+	.equ StyleVar_GospelInThrees, NakaData_StyleBitmaps + 0x11af4
+	.equ NakaInst_Sing_It_Play_It_92, NakaData_StyleBitmaps + 0x11b56
+	.equ StyleVar_UpTempoBigband, NakaData_StyleBitmaps + 0x11b9a
+	.equ NakaInst_The_Duke_s_Piano_170, NakaData_StyleBitmaps + 0x11c1e
+	.equ StyleVar_SteadySwingband, NakaData_StyleBitmaps + 0x11c40
+	.equ NakaInst_Reeds_in_Unison_110, NakaData_StyleBitmaps + 0x11c5e
+	.equ StyleVar_AllAboard, NakaData_StyleBitmaps + 0x11ce6
+	.equ NakaInst_Main_Line_Brass_150, NakaData_StyleBitmaps + 0x11d26
+	.equ StyleVar_40sDanceBand, NakaData_StyleBitmaps + 0x11d8c
+	.equ NakaInst_Miller_Reeds_86, NakaData_StyleBitmaps + 0x11dee
+	.equ StyleVar_SentimentalBand, NakaData_StyleBitmaps + 0x11e32
+	.equ NakaInst_Acker_s_Solo_90, NakaData_StyleBitmaps + 0x11eb6
+	.equ StyleVar_MoonlightDance, NakaData_StyleBitmaps + 0x11ed8
+	.equ NakaInst_Glenn_s_Big_Band_90, NakaData_StyleBitmaps + 0x11ef6
+	.equ StyleVar_40sLoveSongs, NakaData_StyleBitmaps + 0x11f7e
+	.equ NakaInst_Big_Band_Sound_92, NakaData_StyleBitmaps + 0x11fbe
 	.equ StyleVar_MidSwingband, NakaData_StyleBitmaps + 0x12024
 	.equ NakaInst_Reed_It_Mute_It_127, NakaData_StyleBitmaps + 0x12086
-	.equ StyleVar_SwingOrchestra, NakaData_StyleBitmaps + 0x120CA
-	.equ NakaInst_Swingin_Frets_142, NakaData_StyleBitmaps + 0x1214E
+	.equ StyleVar_SwingOrchestra, NakaData_StyleBitmaps + 0x120ca
+	.equ NakaInst_Swingin_Frets_142, NakaData_StyleBitmaps + 0x1214e
 	.equ StyleVar_NightClubCombo, NakaData_StyleBitmaps + 0x12170
-	.equ NakaInst_Swing_Unison_158, NakaData_StyleBitmaps + 0x1218E
+	.equ NakaInst_Swing_Unison_158, NakaData_StyleBitmaps + 0x1218e
 	.equ StyleVar_EasyPlaySwing, NakaData_StyleBitmaps + 0x12216
 	.equ NakaInst_Swing_Sparkle_140, NakaData_StyleBitmaps + 0x12256
-	.equ StyleVar_JazzClub, NakaData_StyleBitmaps + 0x122BC
-	.equ NakaInst_Club_Duet_146, NakaData_StyleBitmaps + 0x1231E
+	.equ StyleVar_JazzClub, NakaData_StyleBitmaps + 0x122bc
+	.equ NakaInst_Club_Duet_146, NakaData_StyleBitmaps + 0x1231e
 	.equ StyleVar_UpTempoCombo, NakaData_StyleBitmaps + 0x12362
-	.equ NakaInst_Acoustic_Jazz_174, NakaData_StyleBitmaps + 0x123E6
+	.equ NakaInst_Acoustic_Jazz_174, NakaData_StyleBitmaps + 0x123e6
 	.equ StyleVar_SimpleJazz, NakaData_StyleBitmaps + 0x12408
 	.equ NakaInst_Wild_Side_Organ_200, NakaData_StyleBitmaps + 0x12426
-	.equ StyleVar_40sBoogie, NakaData_StyleBitmaps + 0x124AE
-	.equ NakaInst_Boogie_Dance_160_EC96AC, NakaData_StyleBitmaps + 0x124EE
+	.equ StyleVar_40sBoogie, NakaData_StyleBitmaps + 0x124ae
+	.equ NakaInst_Boogie_Dance_160_EC96AC, NakaData_StyleBitmaps + 0x124ee
 	.equ StyleVar_JazzStandards, NakaData_StyleBitmaps + 0x12554
-	.equ NakaInst_Saxy_Jazz_145, NakaData_StyleBitmaps + 0x125B6
-	.equ StyleVar_ComboDrawbars, NakaData_StyleBitmaps + 0x125FA
-	.equ NakaInst_Even_Jazz_170, NakaData_StyleBitmaps + 0x1267E
-	.equ StyleVar_GentleJazz, NakaData_StyleBitmaps + 0x126A0
-	.equ NakaInst_Combo_Soloists_126, NakaData_StyleBitmaps + 0x126BE
+	.equ NakaInst_Saxy_Jazz_145, NakaData_StyleBitmaps + 0x125b6
+	.equ StyleVar_ComboDrawbars, NakaData_StyleBitmaps + 0x125fa
+	.equ NakaInst_Even_Jazz_170, NakaData_StyleBitmaps + 0x1267e
+	.equ StyleVar_GentleJazz, NakaData_StyleBitmaps + 0x126a0
+	.equ NakaInst_Combo_Soloists_126, NakaData_StyleBitmaps + 0x126be
 	.equ StyleVar_GypsyJazzers, NakaData_StyleBitmaps + 0x12746
 	.equ NakaInst_Stephane_Django_210, NakaData_StyleBitmaps + 0x12786
-	.equ StyleVar_JazzAccordion, NakaData_StyleBitmaps + 0x127EC
-	.equ NakaInst_Let_It_Register_158, NakaData_StyleBitmaps + 0x1284E
+	.equ StyleVar_JazzAccordion, NakaData_StyleBitmaps + 0x127ec
+	.equ NakaInst_Let_It_Register_158, NakaData_StyleBitmaps + 0x1284e
 	.equ StyleVar_SpeakeasyJazz, NakaData_StyleBitmaps + 0x12892
 	.equ NakaInst_Chicago_Piano_184, NakaData_StyleBitmaps + 0x12916
 	.equ StyleVar_JazzFrancais, NakaData_StyleBitmaps + 0x12938
 	.equ NakaInst_Squeeze_Box_Jazz_190, NakaData_StyleBitmaps + 0x12956
-	.equ StyleVar_VanDammeJazz, NakaData_StyleBitmaps + 0x129DE
-	.equ NakaInst_Deuringer_Swing_190_EC9BDC, NakaData_StyleBitmaps + 0x12A1E
-	.equ StyleVar_EuroJazz, NakaData_StyleBitmaps + 0x12A84
-	.equ NakaInst_Duelling_Reeds_147, NakaData_StyleBitmaps + 0x12AE6
-	.equ StyleVar_SmokeyJazzClub, NakaData_StyleBitmaps + 0x12B2A
-	.equ NakaInst_Slide_Scale_Jazz_70, NakaData_StyleBitmaps + 0x12BAE
-	.equ StyleVar_JazzAt3am, NakaData_StyleBitmaps + 0x12BD0
-	.equ NakaInst_Unwind_To_This_72, NakaData_StyleBitmaps + 0x12BEE
-	.equ StyleVar_SteadyJazz34, NakaData_StyleBitmaps + 0x12C76
-	.equ NakaInst_Do_You_Reed_It_158, NakaData_StyleBitmaps + 0x12CB6
-	.equ StyleVar_SlowJazz34, NakaData_StyleBitmaps + 0x12D1C
-	.equ NakaInst_Toots_Trick_150, NakaData_StyleBitmaps + 0x12D7E
-	.equ StyleVar_TheGroove, NakaData_StyleBitmaps + 0x12DC2
-	.equ NakaInst_Soprano_Groove_180, NakaData_StyleBitmaps + 0x12E46
-	.equ StyleVar_LAFusion, NakaData_StyleBitmaps + 0x12E68
-	.equ NakaInst_Fusion_Tines_98_ECA044, NakaData_StyleBitmaps + 0x12E86
-	.equ StyleVar_MusicalOverture, NakaData_StyleBitmaps + 0x12F0E
-	.equ NakaInst_In_The_Limelight_132, NakaData_StyleBitmaps + 0x12F4E
-	.equ StyleVar_Tinseltown, NakaData_StyleBitmaps + 0x12FB4
+	.equ StyleVar_VanDammeJazz, NakaData_StyleBitmaps + 0x129de
+	.equ NakaInst_Deuringer_Swing_190_EC9BDC, NakaData_StyleBitmaps + 0x12a1e
+	.equ StyleVar_EuroJazz, NakaData_StyleBitmaps + 0x12a84
+	.equ NakaInst_Duelling_Reeds_147, NakaData_StyleBitmaps + 0x12ae6
+	.equ StyleVar_SmokeyJazzClub, NakaData_StyleBitmaps + 0x12b2a
+	.equ NakaInst_Slide_Scale_Jazz_70, NakaData_StyleBitmaps + 0x12bae
+	.equ StyleVar_JazzAt3am, NakaData_StyleBitmaps + 0x12bd0
+	.equ NakaInst_Unwind_To_This_72, NakaData_StyleBitmaps + 0x12bee
+	.equ StyleVar_SteadyJazz34, NakaData_StyleBitmaps + 0x12c76
+	.equ NakaInst_Do_You_Reed_It_158, NakaData_StyleBitmaps + 0x12cb6
+	.equ StyleVar_SlowJazz34, NakaData_StyleBitmaps + 0x12d1c
+	.equ NakaInst_Toots_Trick_150, NakaData_StyleBitmaps + 0x12d7e
+	.equ StyleVar_TheGroove, NakaData_StyleBitmaps + 0x12dc2
+	.equ NakaInst_Soprano_Groove_180, NakaData_StyleBitmaps + 0x12e46
+	.equ StyleVar_LAFusion, NakaData_StyleBitmaps + 0x12e68
+	.equ NakaInst_Fusion_Tines_98_ECA044, NakaData_StyleBitmaps + 0x12e86
+	.equ StyleVar_MusicalOverture, NakaData_StyleBitmaps + 0x12f0e
+	.equ NakaInst_In_The_Limelight_132, NakaData_StyleBitmaps + 0x12f4e
+	.equ StyleVar_Tinseltown, NakaData_StyleBitmaps + 0x12fb4
 	.equ NakaInst_Fred_Ginger_120, NakaData_StyleBitmaps + 0x13016
-	.equ StyleVar_Showband, NakaData_StyleBitmaps + 0x1305A
-	.equ NakaInst_Mallets_On_Stage_135, NakaData_StyleBitmaps + 0x130DE
+	.equ StyleVar_Showband, NakaData_StyleBitmaps + 0x1305a
+	.equ NakaInst_Mallets_On_Stage_135, NakaData_StyleBitmaps + 0x130de
 	.equ StyleVar_TheatreStride, NakaData_StyleBitmaps + 0x13100
-	.equ NakaInst_Vaudeville_Bones_124, NakaData_StyleBitmaps + 0x1311E
-	.equ StyleVar_VaudevilleAct, NakaData_StyleBitmaps + 0x131A6
-	.equ NakaInst_Skeleton_Dance_165, NakaData_StyleBitmaps + 0x131E6
-	.equ StyleVar_TapDancer, NakaData_StyleBitmaps + 0x1324C
-	.equ NakaInst_Yankee_Doodle_It_182, NakaData_StyleBitmaps + 0x132AE
-	.equ StyleVar_ParisClub, NakaData_StyleBitmaps + 0x132F2
+	.equ NakaInst_Vaudeville_Bones_124, NakaData_StyleBitmaps + 0x1311e
+	.equ StyleVar_VaudevilleAct, NakaData_StyleBitmaps + 0x131a6
+	.equ NakaInst_Skeleton_Dance_165, NakaData_StyleBitmaps + 0x131e6
+	.equ StyleVar_TapDancer, NakaData_StyleBitmaps + 0x1324c
+	.equ NakaInst_Yankee_Doodle_It_182, NakaData_StyleBitmaps + 0x132ae
+	.equ StyleVar_ParisClub, NakaData_StyleBitmaps + 0x132f2
 	.equ NakaInst_Take_Your_Seat_118, NakaData_StyleBitmaps + 0x13376
 	.equ StyleVar_CabaretBand, NakaData_StyleBitmaps + 0x13398
-	.equ NakaInst_Midnight_Soloist_162, NakaData_StyleBitmaps + 0x133B6
-	.equ StyleVar_VivaLasVegas, NakaData_StyleBitmaps + 0x1343E
-	.equ NakaInst_Vegas_Showman_75, NakaData_StyleBitmaps + 0x1347E
-	.equ StyleVar_MagicBallroom, NakaData_StyleBitmaps + 0x134E4
+	.equ NakaInst_Midnight_Soloist_162, NakaData_StyleBitmaps + 0x133b6
+	.equ StyleVar_VivaLasVegas, NakaData_StyleBitmaps + 0x1343e
+	.equ NakaInst_Vegas_Showman_75, NakaData_StyleBitmaps + 0x1347e
+	.equ StyleVar_MagicBallroom, NakaData_StyleBitmaps + 0x134e4
 	.equ NakaInst_Strasser_More_120, NakaData_StyleBitmaps + 0x13546
-	.equ StyleVar_GentleFoxtrot, NakaData_StyleBitmaps + 0x1358A
-	.equ NakaInst_Foxy_Squeezebox_154_ECA7CC, NakaData_StyleBitmaps + 0x1360E
+	.equ StyleVar_GentleFoxtrot, NakaData_StyleBitmaps + 0x1358a
+	.equ NakaInst_Foxy_Squeezebox_154_ECA7CC, NakaData_StyleBitmaps + 0x1360e
 	.equ StyleVar_OrganistsDance, NakaData_StyleBitmaps + 0x13630
-	.equ NakaInst_Old_Wheels_Dance_190, NakaData_StyleBitmaps + 0x1364E
-	.equ StyleVar_UpTempoFoxtrot, NakaData_StyleBitmaps + 0x136D6
+	.equ NakaInst_Old_Wheels_Dance_190, NakaData_StyleBitmaps + 0x1364e
+	.equ StyleVar_UpTempoFoxtrot, NakaData_StyleBitmaps + 0x136d6
 	.equ NakaInst_Foxy_Brassy_170, NakaData_StyleBitmaps + 0x13716
-	.equ StyleVar_StrictlyFoxtrot, NakaData_StyleBitmaps + 0x1377C
-	.equ NakaInst_Come_Dancing_120, NakaData_StyleBitmaps + 0x137DE
+	.equ StyleVar_StrictlyFoxtrot, NakaData_StyleBitmaps + 0x1377c
+	.equ NakaInst_Come_Dancing_120, NakaData_StyleBitmaps + 0x137de
 	.equ StyleVar_RadioFoxtrot, NakaData_StyleBitmaps + 0x13822
-	.equ NakaInst_Wunder_Fox_168, NakaData_StyleBitmaps + 0x138A6
-	.equ StyleVar_StrictlyQuick, NakaData_StyleBitmaps + 0x138C8
-	.equ NakaInst_Organ_Quickstep_200, NakaData_StyleBitmaps + 0x138E6
-	.equ StyleVar_LetsTwist, NakaData_StyleBitmaps + 0x1396E
-	.equ NakaInst_Solid_Twist_168, NakaData_StyleBitmaps + 0x139AE
-	.equ StyleVar_JiveDance, NakaData_StyleBitmaps + 0x13A14
-	.equ NakaInst_Dance_Band_Jive_176_ECAC34, NakaData_StyleBitmaps + 0x13A76
-	.equ StyleVar_DoTheTwist, NakaData_StyleBitmaps + 0x13ABA
-	.equ NakaInst_Bari_Twist_155, NakaData_StyleBitmaps + 0x13B3E
-	.equ StyleVar_12ChaChaCha, NakaData_StyleBitmaps + 0x13B60
-	.equ NakaInst_Sequin_Dance_128, NakaData_StyleBitmaps + 0x13B7E
-	.equ StyleVar_LetsBeguine, NakaData_StyleBitmaps + 0x13C06
-	.equ NakaInst_Beguine_Romance_118, NakaData_StyleBitmaps + 0x13C46
-	.equ StyleVar_SambaFelicidade, NakaData_StyleBitmaps + 0x13CAC
-	.equ NakaInst_Samba_Testamento_115, NakaData_StyleBitmaps + 0x13D0E
-	.equ StyleVar_VivaPasodoble, NakaData_StyleBitmaps + 0x13D52
-	.equ NakaInst_Espana_Two_Step_118, NakaData_StyleBitmaps + 0x13DD6
-	.equ StyleVar_StrictTango, NakaData_StyleBitmaps + 0x13DF8
-	.equ NakaInst_Tango_Marcato_120, NakaData_StyleBitmaps + 0x13E16
-	.equ StyleVar_TangoDAmour, NakaData_StyleBitmaps + 0x13E9E
-	.equ StyleVar_LastDanceWaltz, NakaData_StyleBitmaps + 0x13FEA
-	.equ NakaInst_Concertina_Waltz_96, NakaData_StyleBitmaps + 0x1406E
+	.equ NakaInst_Wunder_Fox_168, NakaData_StyleBitmaps + 0x138a6
+	.equ StyleVar_StrictlyQuick, NakaData_StyleBitmaps + 0x138c8
+	.equ NakaInst_Organ_Quickstep_200, NakaData_StyleBitmaps + 0x138e6
+	.equ StyleVar_LetsTwist, NakaData_StyleBitmaps + 0x1396e
+	.equ NakaInst_Solid_Twist_168, NakaData_StyleBitmaps + 0x139ae
+	.equ StyleVar_JiveDance, NakaData_StyleBitmaps + 0x13a14
+	.equ NakaInst_Dance_Band_Jive_176_ECAC34, NakaData_StyleBitmaps + 0x13a76
+	.equ StyleVar_DoTheTwist, NakaData_StyleBitmaps + 0x13aba
+	.equ NakaInst_Bari_Twist_155, NakaData_StyleBitmaps + 0x13b3e
+	.equ StyleVar_12ChaChaCha, NakaData_StyleBitmaps + 0x13b60
+	.equ NakaInst_Sequin_Dance_128, NakaData_StyleBitmaps + 0x13b7e
+	.equ StyleVar_LetsBeguine, NakaData_StyleBitmaps + 0x13c06
+	.equ NakaInst_Beguine_Romance_118, NakaData_StyleBitmaps + 0x13c46
+	.equ StyleVar_SambaFelicidade, NakaData_StyleBitmaps + 0x13cac
+	.equ NakaInst_Samba_Testamento_115, NakaData_StyleBitmaps + 0x13d0e
+	.equ StyleVar_VivaPasodoble, NakaData_StyleBitmaps + 0x13d52
+	.equ NakaInst_Espana_Two_Step_118, NakaData_StyleBitmaps + 0x13dd6
+	.equ StyleVar_StrictTango, NakaData_StyleBitmaps + 0x13df8
+	.equ NakaInst_Tango_Marcato_120, NakaData_StyleBitmaps + 0x13e16
+	.equ StyleVar_TangoDAmour, NakaData_StyleBitmaps + 0x13e9e
+	.equ StyleVar_LastDanceWaltz, NakaData_StyleBitmaps + 0x13fea
+	.equ NakaInst_Concertina_Waltz_96, NakaData_StyleBitmaps + 0x1406e
 	.equ StyleVar_QuickWaltz, NakaData_StyleBitmaps + 0x14090
 	.equ StyleVar_PartyVienna, NakaData_StyleBitmaps + 0x14282
 	.equ NakaInst_Ball_Gown_Waltz_171, NakaData_StyleBitmaps + 0x14306
 	.equ NakaInst_Full_Brass_Band_115_ECB504, NakaData_StyleBitmaps + 0x14346
-	.equ NakaInst_Alto_Marchpast_115, NakaData_StyleBitmaps + 0x1440E
-	.equ NakaInst_OktoberFest_109, NakaData_StyleBitmaps + 0x144D6
-	.equ NakaInst_At_The_Eger_120_ECB75C, NakaData_StyleBitmaps + 0x1459E
-	.equ NakaInst_Marching_Polka_124, NakaData_StyleBitmaps + 0x145DE
-	.equ NakaInst_Wedding_Party_135, NakaData_StyleBitmaps + 0x146A6
-	.equ NakaInst_Alpine_Combo_125_ECB92C, NakaData_StyleBitmaps + 0x1476E
+	.equ NakaInst_Alto_Marchpast_115, NakaData_StyleBitmaps + 0x1440e
+	.equ NakaInst_OktoberFest_109, NakaData_StyleBitmaps + 0x144d6
+	.equ NakaInst_At_The_Eger_120_ECB75C, NakaData_StyleBitmaps + 0x1459e
+	.equ NakaInst_Marching_Polka_124, NakaData_StyleBitmaps + 0x145de
+	.equ NakaInst_Wedding_Party_135, NakaData_StyleBitmaps + 0x146a6
+	.equ NakaInst_Alpine_Combo_125_ECB92C, NakaData_StyleBitmaps + 0x1476e
 	.equ NakaInst_Emerald_Flute_120, NakaData_StyleBitmaps + 0x14836
 	.equ NakaInst_Scottish_Band_172, NakaData_StyleBitmaps + 0x14876
-	.equ NakaInst_Waltzing_Concert_169, NakaData_StyleBitmaps + 0x1493E
-	.equ NakaInst_Matterhorn_Waltz_197, NakaData_StyleBitmaps + 0x14A06
-	.equ NakaInst_Mazurka_Clarinet_150, NakaData_StyleBitmaps + 0x14ACE
-	.equ NakaInst_Tiroler_Harp_190, NakaData_StyleBitmaps + 0x14B0E
-	.equ NakaInst_Waikiki_Voices_101, NakaData_StyleBitmaps + 0x14BD6
-	.equ NakaInst_Hula_Dance_130, NakaData_StyleBitmaps + 0x14C9E
-	.equ NakaInst_Syncopated_Wood_130, NakaData_StyleBitmaps + 0x14D66
-	.equ NakaInst_Maple_Leaf_Piano_180, NakaData_StyleBitmaps + 0x14DA6
-	.equ NakaInst_Barber_Shop_Jazz_196_ECC02C, NakaData_StyleBitmaps + 0x14E6E
-	.equ NakaInst_Liquorice_Dixie_185, NakaData_StyleBitmaps + 0x14F36
-	.equ NakaInst_Never_On_A_120, NakaData_StyleBitmaps + 0x14FFE
-	.equ NakaInst_Cossack_Strings_141, NakaData_StyleBitmaps + 0x1503E
+	.equ NakaInst_Waltzing_Concert_169, NakaData_StyleBitmaps + 0x1493e
+	.equ NakaInst_Matterhorn_Waltz_197, NakaData_StyleBitmaps + 0x14a06
+	.equ NakaInst_Mazurka_Clarinet_150, NakaData_StyleBitmaps + 0x14ace
+	.equ NakaInst_Tiroler_Harp_190, NakaData_StyleBitmaps + 0x14b0e
+	.equ NakaInst_Waikiki_Voices_101, NakaData_StyleBitmaps + 0x14bd6
+	.equ NakaInst_Hula_Dance_130, NakaData_StyleBitmaps + 0x14c9e
+	.equ NakaInst_Syncopated_Wood_130, NakaData_StyleBitmaps + 0x14d66
+	.equ NakaInst_Maple_Leaf_Piano_180, NakaData_StyleBitmaps + 0x14da6
+	.equ NakaInst_Barber_Shop_Jazz_196_ECC02C, NakaData_StyleBitmaps + 0x14e6e
+	.equ NakaInst_Liquorice_Dixie_185, NakaData_StyleBitmaps + 0x14f36
+	.equ NakaInst_Never_On_A_120, NakaData_StyleBitmaps + 0x14ffe
+	.equ NakaInst_Cossack_Strings_141, NakaData_StyleBitmaps + 0x1503e
 	.equ NakaInst_Hungarian_Duet_115, NakaData_StyleBitmaps + 0x15106
-	.equ NakaInst_Spider_Dance_128, NakaData_StyleBitmaps + 0x151CE
+	.equ NakaInst_Spider_Dance_128, NakaData_StyleBitmaps + 0x151ce
 	.equ NakaInst_Jalapeno_Bellows_112, NakaData_StyleBitmaps + 0x15296
-	.equ NakaInst_Solid_Distortion_122, NakaData_StyleBitmaps + 0x152D6
-	.equ StyleVar_BluegrassTime, NakaData_StyleBitmaps + 0x1535E
-	.equ NakaInst_Cajun_Hoedown_124, NakaData_StyleBitmaps + 0x1539E
+	.equ NakaInst_Solid_Distortion_122, NakaData_StyleBitmaps + 0x152d6
+	.equ StyleVar_BluegrassTime, NakaData_StyleBitmaps + 0x1535e
+	.equ NakaInst_Cajun_Hoedown_124, NakaData_StyleBitmaps + 0x1539e
 	.equ StyleVar_ModernHoedown, NakaData_StyleBitmaps + 0x15404
 	.equ NakaInst_Country_Licks_235_ECC624, NakaData_StyleBitmaps + 0x15466
-	.equ StyleVar_KentuckyBlue, NakaData_StyleBitmaps + 0x154AA
-	.equ NakaInst_Country_Fiddle_123, NakaData_StyleBitmaps + 0x1552E
+	.equ StyleVar_KentuckyBlue, NakaData_StyleBitmaps + 0x154aa
+	.equ NakaInst_Country_Fiddle_123, NakaData_StyleBitmaps + 0x1552e
 	.equ StyleVar_TruckerCountry, NakaData_StyleBitmaps + 0x15550
-	.equ NakaInst_Fogerty_s_Stomp_206_ECC72C, NakaData_StyleBitmaps + 0x1556E
-	.equ StyleVar_CountryDance, NakaData_StyleBitmaps + 0x155F6
+	.equ NakaInst_Fogerty_s_Stomp_206_ECC72C, NakaData_StyleBitmaps + 0x1556e
+	.equ StyleVar_CountryDance, NakaData_StyleBitmaps + 0x155f6
 	.equ NakaInst_Nashville_Dance_147, NakaData_StyleBitmaps + 0x15636
-	.equ StyleVar_HillbillyBlues, NakaData_StyleBitmaps + 0x1569C
-	.equ NakaInst_Steel_City_Blues_128, NakaData_StyleBitmaps + 0x156FE
+	.equ StyleVar_HillbillyBlues, NakaData_StyleBitmaps + 0x1569c
+	.equ NakaInst_Steel_City_Blues_128, NakaData_StyleBitmaps + 0x156fe
 	.equ StyleVar_70sCountryPop, NakaData_StyleBitmaps + 0x15742
-	.equ NakaInst_Karen_s_Country_173, NakaData_StyleBitmaps + 0x157C6
-	.equ StyleVar_CountryRomance, NakaData_StyleBitmaps + 0x157E8
+	.equ NakaInst_Karen_s_Country_173, NakaData_StyleBitmaps + 0x157c6
+	.equ StyleVar_CountryRomance, NakaData_StyleBitmaps + 0x157e8
 	.equ NakaInst_Kentucky_Vocals_88, NakaData_StyleBitmaps + 0x15806
-	.equ StyleVar_WesternBallads, NakaData_StyleBitmaps + 0x1588E
-	.equ NakaInst_Cowboy_Saxes_85, NakaData_StyleBitmaps + 0x158CE
+	.equ StyleVar_WesternBallads, NakaData_StyleBitmaps + 0x1588e
+	.equ NakaInst_Cowboy_Saxes_85, NakaData_StyleBitmaps + 0x158ce
 	.equ StyleVar_CountryFolks, NakaData_StyleBitmaps + 0x15934
 	.equ NakaInst_South_Concertina_170, NakaData_StyleBitmaps + 0x15996
-	.equ StyleVar_Country88, NakaData_StyleBitmaps + 0x159DA
-	.equ NakaInst_Wandrin_Keys_75, NakaData_StyleBitmaps + 0x15A5E
-	.equ StyleVar_CountryLove, NakaData_StyleBitmaps + 0x15A80
-	.equ NakaInst_Tennessee_Guitar_88, NakaData_StyleBitmaps + 0x15A9E
-	.equ StyleVar_ModernCountry, NakaData_StyleBitmaps + 0x15B26
-	.equ NakaInst_Nashville_Steel_116, NakaData_StyleBitmaps + 0x15B66
-	.equ StyleVar_EZCountryRock, NakaData_StyleBitmaps + 0x15BCC
-	.equ NakaInst_Ricky_s_Guitar_128, NakaData_StyleBitmaps + 0x15C2E
-	.equ StyleVar_OldCountryHits, NakaData_StyleBitmaps + 0x15C72
-	.equ NakaInst_Geetar_Man_113, NakaData_StyleBitmaps + 0x15CF6
-	.equ StyleVar_NewCountryRock, NakaData_StyleBitmaps + 0x15D18
-	.equ NakaInst_Country_Horns_115, NakaData_StyleBitmaps + 0x15D36
-	.equ StyleVar_CountryHits, NakaData_StyleBitmaps + 0x15DBE
-	.equ NakaInst_Hard_Country_160, NakaData_StyleBitmaps + 0x15DFE
-	.equ NakaInst_Ham_Bossa_66, NakaData_StyleBitmaps + 0x15EC6
-	.equ NakaInst_Latin_Tines_68, NakaData_StyleBitmaps + 0x15F8E
-	.equ NakaInst_Modern_Bossa_74, NakaData_StyleBitmaps + 0x15FCE
+	.equ StyleVar_Country88, NakaData_StyleBitmaps + 0x159da
+	.equ NakaInst_Wandrin_Keys_75, NakaData_StyleBitmaps + 0x15a5e
+	.equ StyleVar_CountryLove, NakaData_StyleBitmaps + 0x15a80
+	.equ NakaInst_Tennessee_Guitar_88, NakaData_StyleBitmaps + 0x15a9e
+	.equ StyleVar_ModernCountry, NakaData_StyleBitmaps + 0x15b26
+	.equ NakaInst_Nashville_Steel_116, NakaData_StyleBitmaps + 0x15b66
+	.equ StyleVar_EZCountryRock, NakaData_StyleBitmaps + 0x15bcc
+	.equ NakaInst_Ricky_s_Guitar_128, NakaData_StyleBitmaps + 0x15c2e
+	.equ StyleVar_OldCountryHits, NakaData_StyleBitmaps + 0x15c72
+	.equ NakaInst_Geetar_Man_113, NakaData_StyleBitmaps + 0x15cf6
+	.equ StyleVar_NewCountryRock, NakaData_StyleBitmaps + 0x15d18
+	.equ NakaInst_Country_Horns_115, NakaData_StyleBitmaps + 0x15d36
+	.equ StyleVar_CountryHits, NakaData_StyleBitmaps + 0x15dbe
+	.equ NakaInst_Hard_Country_160, NakaData_StyleBitmaps + 0x15dfe
+	.equ NakaInst_Ham_Bossa_66, NakaData_StyleBitmaps + 0x15ec6
+	.equ NakaInst_Latin_Tines_68, NakaData_StyleBitmaps + 0x15f8e
+	.equ NakaInst_Modern_Bossa_74, NakaData_StyleBitmaps + 0x15fce
 	.equ NakaInst_Julio_s_Romance_119, NakaData_StyleBitmaps + 0x16096
-	.equ NakaInst_Besame_Strings_120_ECD31C, NakaData_StyleBitmaps + 0x1615E
+	.equ NakaInst_Besame_Strings_120_ECD31C, NakaData_StyleBitmaps + 0x1615e
 	.equ NakaInst_Amor_Reed_117_ECD3E4, NakaData_StyleBitmaps + 0x16226
 	.equ NakaInst_Bolero_Orchestra_120_ECD424, NakaData_StyleBitmaps + 0x16266
-	.equ NakaInst_Holiday_Rhumba_115, NakaData_StyleBitmaps + 0x1632E
-	.equ NakaInst_Pepito_For_Pepe_130, NakaData_StyleBitmaps + 0x163F6
-	.equ NakaInst_Mambo_Bravisimo_129, NakaData_StyleBitmaps + 0x164BE
-	.equ NakaInst_Modern_Ballroom_134, NakaData_StyleBitmaps + 0x164FE
-	.equ NakaInst_Saxy_Mambo_132, NakaData_StyleBitmaps + 0x165C6
-	.equ NakaInst_Cumbia_Sol_90, NakaData_StyleBitmaps + 0x1668E
+	.equ NakaInst_Holiday_Rhumba_115, NakaData_StyleBitmaps + 0x1632e
+	.equ NakaInst_Pepito_For_Pepe_130, NakaData_StyleBitmaps + 0x163f6
+	.equ NakaInst_Mambo_Bravisimo_129, NakaData_StyleBitmaps + 0x164be
+	.equ NakaInst_Modern_Ballroom_134, NakaData_StyleBitmaps + 0x164fe
+	.equ NakaInst_Saxy_Mambo_132, NakaData_StyleBitmaps + 0x165c6
+	.equ NakaInst_Cumbia_Sol_90, NakaData_StyleBitmaps + 0x1668e
 	.equ NakaInst_Caribbean_Flute_83, NakaData_StyleBitmaps + 0x16756
 	.equ NakaInst_Brazil_Fanfare_114, NakaData_StyleBitmaps + 0x16796
-	.equ NakaInst_Sunshine_Sax_120, NakaData_StyleBitmaps + 0x1685E
+	.equ NakaInst_Sunshine_Sax_120, NakaData_StyleBitmaps + 0x1685e
 	.equ NakaInst_12_String_Samba_108, NakaData_StyleBitmaps + 0x16926
-	.equ NakaInst_Torero_s_Trumpet_125, NakaData_StyleBitmaps + 0x169EE
+	.equ NakaInst_Torero_s_Trumpet_125, NakaData_StyleBitmaps + 0x169ee
 	.equ StyleGroup_ModernDance_Table, NakaData_StyleBitmaps + 0x17132
 	.equ NakaInst_Easy_Jazz_Waltz, NakaData_StyleBitmaps + 0x17232
 	.equ NakaInst_Parisian_Nights, NakaData_StyleBitmaps + 0x17244
 	.equ NakaInst_Easy_Play_Waltz, NakaData_StyleBitmaps + 0x17256
 	.equ NakaInst_Paris_Romance, NakaData_StyleBitmaps + 0x17268
-	.equ NakaInst_Drawbar_Combo, NakaData_StyleBitmaps + 0x1727A
-	.equ NakaInst_Nat_s_Ballads, NakaData_StyleBitmaps + 0x1728C
-	.equ NakaInst_Jazz_Serenade, NakaData_StyleBitmaps + 0x1729E
-	.equ NakaInst_Romantic_Band, NakaData_StyleBitmaps + 0x172B0
-	.equ NakaInst_Euro_Ballads, NakaData_StyleBitmaps + 0x172C2
-	.equ NakaInst_Oldie_Drawbars, NakaData_StyleBitmaps + 0x172D4
-	.equ NakaInst_Soft_Schlager, NakaData_StyleBitmaps + 0x172E6
-	.equ NakaInst_Oldie_Ballads, NakaData_StyleBitmaps + 0x172F8
-	.equ NakaInst_50_s_Love_Songs, NakaData_StyleBitmaps + 0x1730A
-	.equ NakaInst_Night_Club_Dance, NakaData_StyleBitmaps + 0x1731C
-	.equ NakaInst_Modern_Ballads, NakaData_StyleBitmaps + 0x1732E
+	.equ NakaInst_Drawbar_Combo, NakaData_StyleBitmaps + 0x1727a
+	.equ NakaInst_Nat_s_Ballads, NakaData_StyleBitmaps + 0x1728c
+	.equ NakaInst_Jazz_Serenade, NakaData_StyleBitmaps + 0x1729e
+	.equ NakaInst_Romantic_Band, NakaData_StyleBitmaps + 0x172b0
+	.equ NakaInst_Euro_Ballads, NakaData_StyleBitmaps + 0x172c2
+	.equ NakaInst_Oldie_Drawbars, NakaData_StyleBitmaps + 0x172d4
+	.equ NakaInst_Soft_Schlager, NakaData_StyleBitmaps + 0x172e6
+	.equ NakaInst_Oldie_Ballads, NakaData_StyleBitmaps + 0x172f8
+	.equ NakaInst_50_s_Love_Songs, NakaData_StyleBitmaps + 0x1730a
+	.equ NakaInst_Night_Club_Dance, NakaData_StyleBitmaps + 0x1731c
+	.equ NakaInst_Modern_Ballads, NakaData_StyleBitmaps + 0x1732e
 	.equ NakaInst_Grands_on_Stage, NakaData_StyleBitmaps + 0x17340
 	.equ NakaInst_Synth_Ballad, NakaData_StyleBitmaps + 0x17352
 	.equ NakaInst_Atmospheric_16, NakaData_StyleBitmaps + 0x17364
 	.equ NakaInst_Gentle_16_Beat, NakaData_StyleBitmaps + 0x17376
 	.equ NakaInst_E_P_Moments, NakaData_StyleBitmaps + 0x17388
-	.equ NakaInst_Easy_Play_16Beat, NakaData_StyleBitmaps + 0x1739A
-	.equ NakaInst_16_Beat_Groove, NakaData_StyleBitmaps + 0x173AC
-	.equ NakaInst_Love_Songs, NakaData_StyleBitmaps + 0x173BE
-	.equ NakaInst_Ballad_Producer, NakaData_StyleBitmaps + 0x173D0
-	.equ NakaInst_Studio_8_Beat, NakaData_StyleBitmaps + 0x173E2
-	.equ NakaInst_Greatest_Hits, NakaData_StyleBitmaps + 0x173F4
+	.equ NakaInst_Easy_Play_16Beat, NakaData_StyleBitmaps + 0x1739a
+	.equ NakaInst_16_Beat_Groove, NakaData_StyleBitmaps + 0x173ac
+	.equ NakaInst_Love_Songs, NakaData_StyleBitmaps + 0x173be
+	.equ NakaInst_Ballad_Producer, NakaData_StyleBitmaps + 0x173d0
+	.equ NakaInst_Studio_8_Beat, NakaData_StyleBitmaps + 0x173e2
+	.equ NakaInst_Greatest_Hits, NakaData_StyleBitmaps + 0x173f4
 	.equ NakaInst_Smooth_Rock, NakaData_StyleBitmaps + 0x17406
 	.equ NakaInst_Orchestral_Beat, NakaData_StyleBitmaps + 0x17418
-	.equ NakaInst_Rock_After_Eight, NakaData_StyleBitmaps + 0x1742A
-	.equ NakaInst_Easy_Play_8_Beat, NakaData_StyleBitmaps + 0x1743C
-	.equ NakaInst_German_Schlager, NakaData_StyleBitmaps + 0x1744E
+	.equ NakaInst_Rock_After_Eight, NakaData_StyleBitmaps + 0x1742a
+	.equ NakaInst_Easy_Play_8_Beat, NakaData_StyleBitmaps + 0x1743c
+	.equ NakaInst_German_Schlager, NakaData_StyleBitmaps + 0x1744e
 	.equ StyleGroup_RockPop_PairTable, NakaData_StyleBitmaps + 0x17460
 	.equ NakaInst_Ballads, NakaData_StyleBitmaps + 0x17662
-	.equ StyleGroup_PopBallad_Table, NakaData_StyleBitmaps + 0x177C2
+	.equ StyleGroup_PopBallad_Table, NakaData_StyleBitmaps + 0x177c2
 	.equ NakaInst_Western_Techno, NakaData_StyleBitmaps + 0x17852
 	.equ NakaInst_Samba_Party, NakaData_StyleBitmaps + 0x17864
 	.equ NakaInst_Jambo_Dance, NakaData_StyleBitmaps + 0x17876
 	.equ NakaInst_Rio_Goes_Disco, NakaData_StyleBitmaps + 0x17888
-	.equ NakaInst_Reggae_Hit, NakaData_StyleBitmaps + 0x1789A
-	.equ NakaInst_The_Big_Hit, NakaData_StyleBitmaps + 0x178AC
-	.equ NakaInst_N_Y_Rap, NakaData_StyleBitmaps + 0x178BE
-	.equ NakaInst_80_s_90_s, NakaData_StyleBitmaps + 0x178D0
-	.equ NakaInst_Hip_Hop, NakaData_StyleBitmaps + 0x178E2
-	.equ NakaInst_70_s_Dance_Craze, NakaData_StyleBitmaps + 0x178F4
+	.equ NakaInst_Reggae_Hit, NakaData_StyleBitmaps + 0x1789a
+	.equ NakaInst_The_Big_Hit, NakaData_StyleBitmaps + 0x178ac
+	.equ NakaInst_N_Y_Rap, NakaData_StyleBitmaps + 0x178be
+	.equ NakaInst_80_s_90_s, NakaData_StyleBitmaps + 0x178d0
+	.equ NakaInst_Hip_Hop, NakaData_StyleBitmaps + 0x178e2
+	.equ NakaInst_70_s_Dance_Craze, NakaData_StyleBitmaps + 0x178f4
 	.equ NakaInst_Dance_Floor, NakaData_StyleBitmaps + 0x17906
 	.equ NakaInst_80_s_Disco, NakaData_StyleBitmaps + 0x17918
-	.equ NakaInst_Glory_Disco, NakaData_StyleBitmaps + 0x1792A
-	.equ NakaInst_Techno_World, NakaData_StyleBitmaps + 0x1793C
-	.equ NakaInst_House_Party, NakaData_StyleBitmaps + 0x1794E
+	.equ NakaInst_Glory_Disco, NakaData_StyleBitmaps + 0x1792a
+	.equ NakaInst_Techno_World, NakaData_StyleBitmaps + 0x1793c
+	.equ NakaInst_House_Party, NakaData_StyleBitmaps + 0x1794e
 	.equ NakaInst_Straight_Dance, NakaData_StyleBitmaps + 0x17960
 	.equ NakaInst_British_DancePop, NakaData_StyleBitmaps + 0x17972
 	.equ StyleGroup_PartyMusic_PairTable, NakaData_StyleBitmaps + 0x17984
-	.equ StyleGroup_Swing_Table, NakaData_StyleBitmaps + 0x17B7A
-	.equ NakaInst_Gospel_In_Threes, NakaData_StyleBitmaps + 0x17C12
-	.equ NakaInst_Gospel_Blues, NakaData_StyleBitmaps + 0x17C24
-	.equ NakaInst_Power_Gospel, NakaData_StyleBitmaps + 0x17C36
-	.equ NakaInst_Day_Of_Rest, NakaData_StyleBitmaps + 0x17C48
-	.equ NakaInst_Lift_Your_Soul, NakaData_StyleBitmaps + 0x17C5A
-	.equ NakaInst_Sunday_Service, NakaData_StyleBitmaps + 0x17C6C
-	.equ NakaInst_Play_The_Blues, NakaData_StyleBitmaps + 0x17C7E
-	.equ NakaInst_Blues_Alley, NakaData_StyleBitmaps + 0x17C90
-	.equ NakaInst_Rock_Blues, NakaData_StyleBitmaps + 0x17CA2
-	.equ NakaInst_Down_Dirty_Blues, NakaData_StyleBitmaps + 0x17CB4
-	.equ NakaInst_R_B_Groove, NakaData_StyleBitmaps + 0x17CC6
-	.equ NakaInst_Slow_Soul_Mood, NakaData_StyleBitmaps + 0x17CD8
-	.equ NakaInst_Mellow_Soul, NakaData_StyleBitmaps + 0x17CEA
-	.equ NakaInst_Soul_To_Sun, NakaData_StyleBitmaps + 0x17CFC
-	.equ NakaInst_New_Soul_Ballad, NakaData_StyleBitmaps + 0x17D0E
-	.equ NakaInst_Soft_Soul, NakaData_StyleBitmaps + 0x17D20
-	.equ NakaInst_Detroit_Pop, NakaData_StyleBitmaps + 0x17D32
-	.equ NakaInst_King_Of_Soul, NakaData_StyleBitmaps + 0x17D44
-	.equ StyleGroup_FunkFusion_Separator, NakaData_StyleBitmaps + 0x17D56
-	.equ StyleGroup_FunkFusion_Table, NakaData_StyleBitmaps + 0x17D5A
-	.equ StyleGroup_FunkFusion_Pad, NakaData_StyleBitmaps + 0x17E49
-	.equ NakaInst_L_A_Fusion, NakaData_StyleBitmaps + 0x17E4E
-	.equ NakaInst_The_Groove, NakaData_StyleBitmaps + 0x17E60
-	.equ NakaInst_Slow_Jazz_3_4, NakaData_StyleBitmaps + 0x17E72
-	.equ NakaInst_Steady_Jazz_3_4, NakaData_StyleBitmaps + 0x17E84
-	.equ NakaInst_Jazz_At_3_00am, NakaData_StyleBitmaps + 0x17E96
-	.equ NakaInst_Smokey_Jazz_Club, NakaData_StyleBitmaps + 0x17EA8
-	.equ NakaInst_Euro_Jazz, NakaData_StyleBitmaps + 0x17EBA
-	.equ NakaInst_Van_Damme_Jazz, NakaData_StyleBitmaps + 0x17ECC
-	.equ NakaInst_Jazz_Francais, NakaData_StyleBitmaps + 0x17EDE
-	.equ NakaInst_Speakeasy_Jazz, NakaData_StyleBitmaps + 0x17EF0
-	.equ NakaInst_Jazz_Accordion, NakaData_StyleBitmaps + 0x17F02
-	.equ NakaInst_Gypsy_Jazzers, NakaData_StyleBitmaps + 0x17F14
-	.equ NakaInst_Gentle_Jazz, NakaData_StyleBitmaps + 0x17F26
-	.equ NakaInst_Combo_Drawbars, NakaData_StyleBitmaps + 0x17F38
-	.equ NakaInst_Jazz_Standards, NakaData_StyleBitmaps + 0x17F4A
-	.equ NakaInst_40_s_Boogie, NakaData_StyleBitmaps + 0x17F5C
-	.equ NakaInst_Simple_Jazz, NakaData_StyleBitmaps + 0x17F6E
-	.equ NakaInst_Up_Tempo_Combo, NakaData_StyleBitmaps + 0x17F80
-	.equ NakaInst_Jazz_Club, NakaData_StyleBitmaps + 0x17F92
-	.equ NakaInst_Easy_Play_Swing, NakaData_StyleBitmaps + 0x17FA4
-	.equ NakaInst_Night_Club_Combo, NakaData_StyleBitmaps + 0x17FB6
-	.equ NakaInst_Swing_Orchestra, NakaData_StyleBitmaps + 0x17FC8
-	.equ NakaInst_Mid_Swingband, NakaData_StyleBitmaps + 0x17FDA
-	.equ NakaInst_40_s_Love_Songs, NakaData_StyleBitmaps + 0x17FEC
-	.equ NakaInst_Moonlight_Dance, NakaData_StyleBitmaps + 0x17FFE
+	.equ StyleGroup_Swing_Table, NakaData_StyleBitmaps + 0x17b7a
+	.equ NakaInst_Gospel_In_Threes, NakaData_StyleBitmaps + 0x17c12
+	.equ NakaInst_Gospel_Blues, NakaData_StyleBitmaps + 0x17c24
+	.equ NakaInst_Power_Gospel, NakaData_StyleBitmaps + 0x17c36
+	.equ NakaInst_Day_Of_Rest, NakaData_StyleBitmaps + 0x17c48
+	.equ NakaInst_Lift_Your_Soul, NakaData_StyleBitmaps + 0x17c5a
+	.equ NakaInst_Sunday_Service, NakaData_StyleBitmaps + 0x17c6c
+	.equ NakaInst_Play_The_Blues, NakaData_StyleBitmaps + 0x17c7e
+	.equ NakaInst_Blues_Alley, NakaData_StyleBitmaps + 0x17c90
+	.equ NakaInst_Rock_Blues, NakaData_StyleBitmaps + 0x17ca2
+	.equ NakaInst_Down_Dirty_Blues, NakaData_StyleBitmaps + 0x17cb4
+	.equ NakaInst_R_B_Groove, NakaData_StyleBitmaps + 0x17cc6
+	.equ NakaInst_Slow_Soul_Mood, NakaData_StyleBitmaps + 0x17cd8
+	.equ NakaInst_Mellow_Soul, NakaData_StyleBitmaps + 0x17cea
+	.equ NakaInst_Soul_To_Sun, NakaData_StyleBitmaps + 0x17cfc
+	.equ NakaInst_New_Soul_Ballad, NakaData_StyleBitmaps + 0x17d0e
+	.equ NakaInst_Soft_Soul, NakaData_StyleBitmaps + 0x17d20
+	.equ NakaInst_Detroit_Pop, NakaData_StyleBitmaps + 0x17d32
+	.equ NakaInst_King_Of_Soul, NakaData_StyleBitmaps + 0x17d44
+	.equ StyleGroup_FunkFusion_Separator, NakaData_StyleBitmaps + 0x17d56
+	.equ StyleGroup_FunkFusion_Table, NakaData_StyleBitmaps + 0x17d5a
+	.equ StyleGroup_FunkFusion_Pad, NakaData_StyleBitmaps + 0x17e49
+	.equ NakaInst_L_A_Fusion, NakaData_StyleBitmaps + 0x17e4e
+	.equ NakaInst_The_Groove, NakaData_StyleBitmaps + 0x17e60
+	.equ NakaInst_Slow_Jazz_3_4, NakaData_StyleBitmaps + 0x17e72
+	.equ NakaInst_Steady_Jazz_3_4, NakaData_StyleBitmaps + 0x17e84
+	.equ NakaInst_Jazz_At_3_00am, NakaData_StyleBitmaps + 0x17e96
+	.equ NakaInst_Smokey_Jazz_Club, NakaData_StyleBitmaps + 0x17ea8
+	.equ NakaInst_Euro_Jazz, NakaData_StyleBitmaps + 0x17eba
+	.equ NakaInst_Van_Damme_Jazz, NakaData_StyleBitmaps + 0x17ecc
+	.equ NakaInst_Jazz_Francais, NakaData_StyleBitmaps + 0x17ede
+	.equ NakaInst_Speakeasy_Jazz, NakaData_StyleBitmaps + 0x17ef0
+	.equ NakaInst_Jazz_Accordion, NakaData_StyleBitmaps + 0x17f02
+	.equ NakaInst_Gypsy_Jazzers, NakaData_StyleBitmaps + 0x17f14
+	.equ NakaInst_Gentle_Jazz, NakaData_StyleBitmaps + 0x17f26
+	.equ NakaInst_Combo_Drawbars, NakaData_StyleBitmaps + 0x17f38
+	.equ NakaInst_Jazz_Standards, NakaData_StyleBitmaps + 0x17f4a
+	.equ NakaInst_40_s_Boogie, NakaData_StyleBitmaps + 0x17f5c
+	.equ NakaInst_Simple_Jazz, NakaData_StyleBitmaps + 0x17f6e
+	.equ NakaInst_Up_Tempo_Combo, NakaData_StyleBitmaps + 0x17f80
+	.equ NakaInst_Jazz_Club, NakaData_StyleBitmaps + 0x17f92
+	.equ NakaInst_Easy_Play_Swing, NakaData_StyleBitmaps + 0x17fa4
+	.equ NakaInst_Night_Club_Combo, NakaData_StyleBitmaps + 0x17fb6
+	.equ NakaInst_Swing_Orchestra, NakaData_StyleBitmaps + 0x17fc8
+	.equ NakaInst_Mid_Swingband, NakaData_StyleBitmaps + 0x17fda
+	.equ NakaInst_40_s_Love_Songs, NakaData_StyleBitmaps + 0x17fec
+	.equ NakaInst_Moonlight_Dance, NakaData_StyleBitmaps + 0x17ffe
 	.equ NakaInst_Sentimental_Band, NakaData_StyleBitmaps + 0x18010
 	.equ NakaInst_40_s_Dance_Band, NakaData_StyleBitmaps + 0x18022
 	.equ NakaInst_All_Aboard, NakaData_StyleBitmaps + 0x18034
 	.equ NakaInst_Steady_Swingband, NakaData_StyleBitmaps + 0x18046
-	.equ StyleGroup_JazzCombo_Table, NakaData_StyleBitmaps + 0x1806A
-	.equ NakaInst_Party_Vienna, NakaData_StyleBitmaps + 0x1816A
-	.equ NakaInst_Walzer_Time, NakaData_StyleBitmaps + 0x1817C
-	.equ NakaInst_Austrian_Waltz, NakaData_StyleBitmaps + 0x1818E
-	.equ NakaInst_Quick_Waltz, NakaData_StyleBitmaps + 0x181A0
-	.equ NakaInst_Last_Dance_Waltz, NakaData_StyleBitmaps + 0x181B2
-	.equ NakaInst_Tango_Pianist, NakaData_StyleBitmaps + 0x181C4
-	.equ NakaInst_Tango_D_Amour, NakaData_StyleBitmaps + 0x181D6
-	.equ NakaInst_Strict_Tango, NakaData_StyleBitmaps + 0x181E8
-	.equ NakaInst_Viva_Pasodoble, NakaData_StyleBitmaps + 0x181FA
-	.equ NakaInst_Samba_Felicidade, NakaData_StyleBitmaps + 0x1820C
-	.equ NakaInst_Let_s_Beguine, NakaData_StyleBitmaps + 0x1821E
+	.equ StyleGroup_JazzCombo_Table, NakaData_StyleBitmaps + 0x1806a
+	.equ NakaInst_Party_Vienna, NakaData_StyleBitmaps + 0x1816a
+	.equ NakaInst_Walzer_Time, NakaData_StyleBitmaps + 0x1817c
+	.equ NakaInst_Austrian_Waltz, NakaData_StyleBitmaps + 0x1818e
+	.equ NakaInst_Quick_Waltz, NakaData_StyleBitmaps + 0x181a0
+	.equ NakaInst_Last_Dance_Waltz, NakaData_StyleBitmaps + 0x181b2
+	.equ NakaInst_Tango_Pianist, NakaData_StyleBitmaps + 0x181c4
+	.equ NakaInst_Tango_D_Amour, NakaData_StyleBitmaps + 0x181d6
+	.equ NakaInst_Strict_Tango, NakaData_StyleBitmaps + 0x181e8
+	.equ NakaInst_Viva_Pasodoble, NakaData_StyleBitmaps + 0x181fa
+	.equ NakaInst_Samba_Felicidade, NakaData_StyleBitmaps + 0x1820c
+	.equ NakaInst_Let_s_Beguine, NakaData_StyleBitmaps + 0x1821e
 	.equ NakaInst_1_2_Cha_Cha_Cha, NakaData_StyleBitmaps + 0x18230
 	.equ NakaInst_Do_The_Twist, NakaData_StyleBitmaps + 0x18242
 	.equ NakaInst_Jive_Dance, NakaData_StyleBitmaps + 0x18254
 	.equ NakaInst_Let_s_Twist, NakaData_StyleBitmaps + 0x18266
 	.equ NakaInst_Strictly_Quick, NakaData_StyleBitmaps + 0x18278
-	.equ NakaInst_Radio_Foxtrot, NakaData_StyleBitmaps + 0x1828A
-	.equ NakaInst_Strictly_Foxtrot, NakaData_StyleBitmaps + 0x1829C
-	.equ NakaInst_Up_Tempo_Foxtrot, NakaData_StyleBitmaps + 0x182AE
-	.equ NakaInst_Organist_s_Dance, NakaData_StyleBitmaps + 0x182C0
-	.equ NakaInst_Gentle_Foxtrot, NakaData_StyleBitmaps + 0x182D2
-	.equ NakaInst_Magic_Ballroom, NakaData_StyleBitmaps + 0x182E4
-	.equ NakaInst_Viva_Las_Vegas, NakaData_StyleBitmaps + 0x182F6
+	.equ NakaInst_Radio_Foxtrot, NakaData_StyleBitmaps + 0x1828a
+	.equ NakaInst_Strictly_Foxtrot, NakaData_StyleBitmaps + 0x1829c
+	.equ NakaInst_Up_Tempo_Foxtrot, NakaData_StyleBitmaps + 0x182ae
+	.equ NakaInst_Organist_s_Dance, NakaData_StyleBitmaps + 0x182c0
+	.equ NakaInst_Gentle_Foxtrot, NakaData_StyleBitmaps + 0x182d2
+	.equ NakaInst_Magic_Ballroom, NakaData_StyleBitmaps + 0x182e4
+	.equ NakaInst_Viva_Las_Vegas, NakaData_StyleBitmaps + 0x182f6
 	.equ NakaInst_Cabaret_Band, NakaData_StyleBitmaps + 0x18308
-	.equ NakaInst_Paris_Club, NakaData_StyleBitmaps + 0x1831A
-	.equ NakaInst_Tap_Dancer, NakaData_StyleBitmaps + 0x1832C
-	.equ NakaInst_Vaudeville_Act, NakaData_StyleBitmaps + 0x1833E
+	.equ NakaInst_Paris_Club, NakaData_StyleBitmaps + 0x1831a
+	.equ NakaInst_Tap_Dancer, NakaData_StyleBitmaps + 0x1832c
+	.equ NakaInst_Vaudeville_Act, NakaData_StyleBitmaps + 0x1833e
 	.equ NakaInst_Theatre_Stride, NakaData_StyleBitmaps + 0x18350
 	.equ NakaInst_Showband, NakaData_StyleBitmaps + 0x18362
 	.equ NakaInst_Tinseltown, NakaData_StyleBitmaps + 0x18374
 	.equ NakaInst_Musical_Overture, NakaData_StyleBitmaps + 0x18386
 	.equ StyleGroup_TradFolk_PairTable, NakaData_StyleBitmaps + 0x18398
-	.equ StyleGroup_WorldMusic_Table, NakaData_StyleBitmaps + 0x1862A
-	.equ NakaInst_Country_Hits, NakaData_StyleBitmaps + 0x186BA
-	.equ NakaInst_New_Country_Rock, NakaData_StyleBitmaps + 0x186CC
-	.equ NakaInst_Old_Country_Hits, NakaData_StyleBitmaps + 0x186DE
-	.equ NakaInst_EZ_Country_Rock, NakaData_StyleBitmaps + 0x186F0
+	.equ StyleGroup_WorldMusic_Table, NakaData_StyleBitmaps + 0x1862a
+	.equ NakaInst_Country_Hits, NakaData_StyleBitmaps + 0x186ba
+	.equ NakaInst_New_Country_Rock, NakaData_StyleBitmaps + 0x186cc
+	.equ NakaInst_Old_Country_Hits, NakaData_StyleBitmaps + 0x186de
+	.equ NakaInst_EZ_Country_Rock, NakaData_StyleBitmaps + 0x186f0
 	.equ NakaInst_Modern_Country, NakaData_StyleBitmaps + 0x18702
 	.equ NakaInst_Country_Love, NakaData_StyleBitmaps + 0x18714
 	.equ NakaInst_Country_88, NakaData_StyleBitmaps + 0x18726
 	.equ NakaInst_Country_Folks, NakaData_StyleBitmaps + 0x18738
-	.equ NakaInst_Western_Ballads, NakaData_StyleBitmaps + 0x1874A
-	.equ NakaInst_Country_Romance, NakaData_StyleBitmaps + 0x1875C
-	.equ NakaInst_70_s_Country_Pop, NakaData_StyleBitmaps + 0x1876E
+	.equ NakaInst_Western_Ballads, NakaData_StyleBitmaps + 0x1874a
+	.equ NakaInst_Country_Romance, NakaData_StyleBitmaps + 0x1875c
+	.equ NakaInst_70_s_Country_Pop, NakaData_StyleBitmaps + 0x1876e
 	.equ NakaInst_Hillbilly_Blues, NakaData_StyleBitmaps + 0x18780
 	.equ NakaInst_Country_Dance, NakaData_StyleBitmaps + 0x18792
-	.equ NakaInst_Trucker_Country, NakaData_StyleBitmaps + 0x187A4
-	.equ NakaInst_Kentucky_Blue, NakaData_StyleBitmaps + 0x187B6
-	.equ NakaInst_Modern_Hoedown, NakaData_StyleBitmaps + 0x187C8
-	.equ NakaInst_Bluegrass_Time, NakaData_StyleBitmaps + 0x187DA
-	.equ StyleGroup_LatinWorld_PairTable, NakaData_StyleBitmaps + 0x187EC
-	.equ StyleGroup_LatinDance_Table, NakaData_StyleBitmaps + 0x18AEA
-	.equ NakaInst_Latin_World, NakaData_StyleBitmaps + 0x18B36
-	.equ NakaInst_Country, NakaData_StyleBitmaps + 0x18B48
-	.equ NakaInst_Trad_Folk, NakaData_StyleBitmaps + 0x18B5A
-	.equ NakaInst_Show_Trad_Dance, NakaData_StyleBitmaps + 0x18B6C
-	.equ NakaInst_Jazz_Swing, NakaData_StyleBitmaps + 0x18B7E
-	.equ NakaInst_Gospel_Blues_R_B, NakaData_StyleBitmaps + 0x18B90
-	.equ NakaInst_Party_Music, NakaData_StyleBitmaps + 0x18BA2
-	.equ NakaInst_Dance_Pop, NakaData_StyleBitmaps + 0x18BB4
-	.equ NakaInst_Rock_Pop, NakaData_StyleBitmaps + 0x18BC6
-	.equ SeqChan_Map_10ch, NakaData_StyleBitmaps + 0x18BF8
-	.equ SeqChan_Map_8ch, NakaData_StyleBitmaps + 0x18C02
-	.equ SeqChan_Map_6ch, NakaData_StyleBitmaps + 0x18C0A
-	.equ SeqChan_Map_4ch, NakaData_StyleBitmaps + 0x18C10
-	.equ SeqChan_Map_2ch, NakaData_StyleBitmaps + 0x18C14
-	.equ NakaInst_MEMORY_C_ECFDE0, NakaData_StyleBitmaps + 0x18C22
-	.equ NakaInst_MEMORY_B_ECFDEA, NakaData_StyleBitmaps + 0x18C2C
-	.equ NakaInst_MEMORY_A_ECFDF4, NakaData_StyleBitmaps + 0x18C36
-	.equ Naka_MemoryC_Screens, NakaData_StyleBitmaps + 0x18D22
-	.equ MemScreen_Space1, NakaData_StyleBitmaps + 0x18D62
-	.equ MemScreen_Space2, NakaData_StyleBitmaps + 0x18D66
-	.equ MemScreen_Space3, NakaData_StyleBitmaps + 0x18D6A
-	.equ MemScreen_NoteB, NakaData_StyleBitmaps + 0x18D6E
-	.equ NakaInst_B_a0, NakaData_StyleBitmaps + 0x18D72
-	.equ MemScreen_NoteA_Str, NakaData_StyleBitmaps + 0x18D78
-	.equ NakaInst_A_a0, NakaData_StyleBitmaps + 0x18D7C
-	.equ MemScreen_NoteG, NakaData_StyleBitmaps + 0x18D82
-	.equ NakaInst_F_9e_ECFF44, NakaData_StyleBitmaps + 0x18D86
-	.equ MemScreen_NoteF, NakaData_StyleBitmaps + 0x18D8C
-	.equ MemScreen_NoteE_Str, NakaData_StyleBitmaps + 0x18D90
-	.equ NakaInst_E_a0_ECFF52, NakaData_StyleBitmaps + 0x18D94
-	.equ MemScreen_NoteD, NakaData_StyleBitmaps + 0x18D9A
-	.equ NakaInst_D_a0_ECFF5C, NakaData_StyleBitmaps + 0x18D9E
-	.equ MemScreen_NoteC, NakaData_StyleBitmaps + 0x18DA4
-	.equ MemScreen_Blank, NakaData_StyleBitmaps + 0x18DA8
+	.equ NakaInst_Trucker_Country, NakaData_StyleBitmaps + 0x187a4
+	.equ NakaInst_Kentucky_Blue, NakaData_StyleBitmaps + 0x187b6
+	.equ NakaInst_Modern_Hoedown, NakaData_StyleBitmaps + 0x187c8
+	.equ NakaInst_Bluegrass_Time, NakaData_StyleBitmaps + 0x187da
+	.equ StyleGroup_LatinWorld_PairTable, NakaData_StyleBitmaps + 0x187ec
+	.equ StyleGroup_LatinDance_Table, NakaData_StyleBitmaps + 0x18aea
+	.equ NakaInst_Latin_World, NakaData_StyleBitmaps + 0x18b36
+	.equ NakaInst_Country, NakaData_StyleBitmaps + 0x18b48
+	.equ NakaInst_Trad_Folk, NakaData_StyleBitmaps + 0x18b5a
+	.equ NakaInst_Show_Trad_Dance, NakaData_StyleBitmaps + 0x18b6c
+	.equ NakaInst_Jazz_Swing, NakaData_StyleBitmaps + 0x18b7e
+	.equ NakaInst_Gospel_Blues_R_B, NakaData_StyleBitmaps + 0x18b90
+	.equ NakaInst_Party_Music, NakaData_StyleBitmaps + 0x18ba2
+	.equ NakaInst_Dance_Pop, NakaData_StyleBitmaps + 0x18bb4
+	.equ NakaInst_Rock_Pop, NakaData_StyleBitmaps + 0x18bc6
+	.equ SeqChan_Map_10ch, NakaData_StyleBitmaps + 0x18bf8
+	.equ SeqChan_Map_8ch, NakaData_StyleBitmaps + 0x18c02
+	.equ SeqChan_Map_6ch, NakaData_StyleBitmaps + 0x18c0a
+	.equ SeqChan_Map_4ch, NakaData_StyleBitmaps + 0x18c10
+	.equ SeqChan_Map_2ch, NakaData_StyleBitmaps + 0x18c14
+	.equ NakaInst_MEMORY_C_ECFDE0, NakaData_StyleBitmaps + 0x18c22
+	.equ NakaInst_MEMORY_B_ECFDEA, NakaData_StyleBitmaps + 0x18c2c
+	.equ NakaInst_MEMORY_A_ECFDF4, NakaData_StyleBitmaps + 0x18c36
+	.equ Naka_MemoryC_Screens, NakaData_StyleBitmaps + 0x18d22
+	.equ MemScreen_Space1, NakaData_StyleBitmaps + 0x18d62
+	.equ MemScreen_Space2, NakaData_StyleBitmaps + 0x18d66
+	.equ MemScreen_Space3, NakaData_StyleBitmaps + 0x18d6a
+	.equ MemScreen_NoteB, NakaData_StyleBitmaps + 0x18d6e
+	.equ NakaInst_B_a0, NakaData_StyleBitmaps + 0x18d72
+	.equ MemScreen_NoteA_Str, NakaData_StyleBitmaps + 0x18d78
+	.equ NakaInst_A_a0, NakaData_StyleBitmaps + 0x18d7c
+	.equ MemScreen_NoteG, NakaData_StyleBitmaps + 0x18d82
+	.equ NakaInst_F_9e_ECFF44, NakaData_StyleBitmaps + 0x18d86
+	.equ MemScreen_NoteF, NakaData_StyleBitmaps + 0x18d8c
+	.equ MemScreen_NoteE_Str, NakaData_StyleBitmaps + 0x18d90
+	.equ NakaInst_E_a0_ECFF52, NakaData_StyleBitmaps + 0x18d94
+	.equ MemScreen_NoteD, NakaData_StyleBitmaps + 0x18d9a
+	.equ NakaInst_D_a0_ECFF5C, NakaData_StyleBitmaps + 0x18d9e
+	.equ MemScreen_NoteC, NakaData_StyleBitmaps + 0x18da4
+	.equ MemScreen_Blank, NakaData_StyleBitmaps + 0x18da8
 .include "extensions/extension_data.s"

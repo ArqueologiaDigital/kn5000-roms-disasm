@@ -1293,7 +1293,7 @@ StrTimeSig_1_2:
 	.byte 0x00			; padding
 	ldb	e, 100
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	aligned_string "%s (%s)"
 	.byte 0x00			; padding
 	.byte 0x00			; padding
@@ -1815,11 +1815,11 @@ StrRhySlot_MemoryA:		aligned_string "MEMORY A "
 	popw iy
 	ld	xiy, 1498566477
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	ld	xhl, 1330926421
 	popw iy
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	.byte 0x00			; padding
 	or	bc, iy
 	.byte 0x00			; padding
@@ -2134,7 +2134,7 @@ StrCompileBank1:	aligned_string "COMPILE BANK:1"
 	aligned_string "MEMORY = %2d"
 	ldb	e, 100
 	.byte 0x00			; padding
-	.byte 0xFF			; padding
+	.byte 0xff			; padding
 	.long StrInstantStart
 	.long StrSyncToRhythm
 StrSyncToRhythm:	aligned_string "SYNC TO RHYTHM   "
@@ -2212,7 +2212,7 @@ MSG_ATTENTION_ES:
 	.byte 0xd3, 0x4e, 0x21, 0x00, 0xff	; Spanish (12 bytes)
 MSG_ATTENTION_EN2:	aligned_string "ATTENTION!"	; Duplicate (12 bytes)
 MSG_ATTENTION_ID:	.asciz "Perhatian !"	; Indonesian (12 bytes)
-	; Pointer table at 0xE1E516
+	; Pointer table at 0xe1e516
 	.long MSG_ATTENTION_EN
 	.long MSG_ATTENTION_DE
 	.long MSG_ATTENTION_FR
@@ -2232,7 +2232,7 @@ MSG_ARE_YOU_SURE_ES:
 	.asciz " seguro?"	; Spanish (14 bytes)
 MSG_ARE_YOU_SURE_EN2:	.asciz "Are You Sure?"	; Duplicate (14 bytes)
 MSG_ARE_YOU_SURE_ID:	.asciz "Apakah yakin akan dihapus ?"	; Indonesian (28 bytes)
-	; Pointer table at 0xE1E596
+	; Pointer table at 0xe1e596
 	.long MSG_ARE_YOU_SURE_EN
 	.long MSG_ARE_YOU_SURE_DE
 	.long MSG_ARE_YOU_SURE_FR
@@ -2252,7 +2252,7 @@ MSG_CUSTOM_SOUND_COPY_ES:
 	.asciz "Las memorias de sonido personalizado de este esquema musical serán copiadas a las memorias de los grupos de sonido.Algunas memorias de los grupos de sonido serán reemplazadas. ¿Está de acuerdo?"	; Spanish (194 bytes)
 MSG_CUSTOM_SOUND_COPY_EN2:	.asciz "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?"	; Duplicate (162 bytes)
 MSG_CUSTOM_SOUND_COPY_ID:	.asciz "Custom Sound Memory termasuk dengan Pattern yang akan digandakan kedalam SOUND GROUP MEMORIES. Beberapa Sound Group Memory dikembalikan. OK ?"	; Indonesian (142 bytes)
-	; Pointer table at 0xE1E994
+	; Pointer table at 0xe1e994
 	.long MSG_CUSTOM_SOUND_COPY_EN
 	.long MSG_CUSTOM_SOUND_COPY_DE
 	.long MSG_CUSTOM_SOUND_COPY_FR
@@ -2269,7 +2269,7 @@ MSG_SOUND_GROUP_AFFECTED_FR:
 MSG_SOUND_GROUP_AFFECTED_ES:	.asciz "Las memorias de los grupos de sonido afectadas son:"	; Spanish (52 bytes)
 MSG_SOUND_GROUP_AFFECTED_EN2:	aligned_string "Sound Group memories affected:"	; Duplicate (32 bytes)
 MSG_SOUND_GROUP_AFFECTED_ID:	aligned_string "Sound Group memory sudah bekerja :"	; Indonesian (36 bytes)
-	; Pointer table at 0xE1EA88
+	; Pointer table at 0xe1ea88
 	.long MSG_SOUND_GROUP_AFFECTED_EN
 	.long MSG_SOUND_GROUP_AFFECTED_DE
 	.long MSG_SOUND_GROUP_AFFECTED_FR
@@ -2289,7 +2289,7 @@ MSG_CUSTOM_SOUND_FULL_ES:
 	.asciz "La memoria de sonido personalizado está llena.Algunos sonidos utilizados por los ritmos personalizados actuales serán borrados. ¿Está de acuerdo?"	; Spanish (146 bytes)
 MSG_CUSTOM_SOUND_FULL_EN2:	.asciz "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?"	; Duplicate (106 bytes)
 MSG_CUSTOM_SOUND_FULL_ID:	.asciz "Custom Sound memory sudah penuh.Beberapa suara (Sounds) yang digunakan dengan Custom Rhythms sekarang akan dihapus. Benar ?"	; Indonesian (124 bytes)
-	; Pointer table at 0xE1ED64
+	; Pointer table at 0xe1ed64
 	.long MSG_CUSTOM_SOUND_FULL_EN
 	.long MSG_CUSTOM_SOUND_FULL_DE
 	.long MSG_CUSTOM_SOUND_FULL_FR
@@ -2307,7 +2307,7 @@ MSG_CUSTOM_RHYTHMS_AFFECTED_FR:
 MSG_CUSTOM_RHYTHMS_AFFECTED_ES:		aligned_string "Los ritmos personalizados afectados son:"	; Spanish (42 bytes)
 MSG_CUSTOM_RHYTHMS_AFFECTED_EN2:	aligned_string "Custom Rhythms affected:"	; Duplicate (26 bytes)
 MSG_CUSTOM_RHYTHMS_AFFECTED_ID:		.asciz "Custom Rhythm sudah bekerja :"	; Indonesian (30 bytes)
-	; Pointer table at 0xE1EE2C
+	; Pointer table at 0xe1ee2c
 	.long MSG_CUSTOM_RHYTHMS_AFFECTED_EN
 	.long MSG_CUSTOM_RHYTHMS_AFFECTED_DE
 	.long MSG_CUSTOM_RHYTHMS_AFFECTED_FR
@@ -2323,7 +2323,7 @@ MSG_INSERT_STYLE_CONVERT_FR:	.asciz "Please Insert the Style Convert Disk!"	; Fr
 MSG_INSERT_STYLE_CONVERT_ES:	.asciz "Please Insert the Style Convert Disk!"	; Spanish (38 bytes)
 MSG_INSERT_STYLE_CONVERT_EN2:	.asciz "Please Insert the Style Convert Disk!"	; Duplicate (38 bytes)
 MSG_INSERT_STYLE_CONVERT_ID:	.asciz "Please Insert the Style Convert Disk!"	; Indonesian (38 bytes)
-	; Pointer table at 0xE1EF42
+	; Pointer table at 0xe1ef42
 	.long MSG_INSERT_STYLE_CONVERT_EN
 	.long MSG_INSERT_STYLE_CONVERT_DE
 	.long MSG_INSERT_STYLE_CONVERT_FR

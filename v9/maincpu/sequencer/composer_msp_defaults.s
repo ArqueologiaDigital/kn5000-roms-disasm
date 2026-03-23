@@ -10,12 +10,12 @@
 ; This file contains:
 ;
 ; 1. MSP_DefaultSettings - Initial parameter values for a new MSP preset
-;    Three sub-blocks, each beginning with an "HK" signature (0x48, 0x4B):
+;    Three sub-blocks, each beginning with an "HK" signature (0x48, 0x4b):
 ;      Sub-block 1 (offset 0x00): Sound/voice defaults
-;        - Default volumes (0x5A = 90 for 3 channels)
+;        - Default volumes (0x5a = 90 for 3 channels)
 ;        - Channel-to-part assignments (parts 1-2 across 8 slots)
 ;        - Reverb/chorus levels, voice enable bitmask (0x80..0x87)
-;      Sub-block 2 (offset 0xE0): Sequencer defaults
+;      Sub-block 2 (offset 0xe0): Sequencer defaults
 ;        - Tempo (0x28 = 40?), time signature, quantize settings
 ;      Sub-block 3 (offset 0x130): Accompaniment/rhythm defaults
 ;        - Part counts, group sizes, rhythm channel mapping
@@ -79,7 +79,7 @@ MSP_Default_VoiceFlags4:	.byte 0x83, 0x87
 MSP_Default_SoundReserved:	.zero 112
 
 ; ---------------------------------------------------------------------------
-; Sub-block 2: Sequencer Defaults (offset 0xE0, 96 bytes)
+; Sub-block 2: Sequencer Defaults (offset 0xe0, 96 bytes)
 ; ---------------------------------------------------------------------------
 MSP_Default_Sequencer:
 MSP_Default_Signature2:		.byte 0x48, 0x00, 0x4b, 0x00	; "H\0K\0"
