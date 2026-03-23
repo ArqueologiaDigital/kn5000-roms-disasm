@@ -1,19 +1,5 @@
---- v9/maincpu/kn5000_v9_program.s	2026-03-23 09:55:06.400802398 +0000
-+++ v10/maincpu/kn5000_v10_program.s	2026-03-23 02:19:50.716706044 +0000
-@@ -1203,11 +1203,11 @@
- 	ld	xwa, (xsp+8)
- 	sla	xwa, 0
- 	ld	xbc, (xsp+4)
--	call	16714752
-+	call	16714766
- 	ld	xiz, xhl
- 	ld	xwa, (xsp+16)
- 	ld	xbc, xiz
--	call	16714318
-+	call	16714332
- 	ld	(xsp+16), xhl
- 	ld	xbc, (xsp+34)
- 	ld	xwa, xbc
+--- v9/maincpu/kn5000_v9_program.s	2026-03-23 11:40:25.706427802 +0000
++++ v10/maincpu/kn5000_v10_program.s	2026-03-23 11:34:24.803646069 +0000
 @@ -2428,7 +2428,9 @@
  	ret
  
@@ -25,6 +11,15 @@
  Debug_UartDelay:
  	ldw iz, 0xFE00
  	nop
+@@ -2452,7 +2454,7 @@
+ 	jp	Boot_InitWorkRAM_Trailer
+ 	jp	HDAE5000_Init_DetectAndVerify
+ 	jp	Boot_InitIOPorts
+-	jp	RESET_HANDLER
++	jp	BOOT_ENTRY_POINT
+ 	ret
+ 
+ Get_Firmware_Version:
 @@ -2460,7 +2462,8 @@
  	ret
  

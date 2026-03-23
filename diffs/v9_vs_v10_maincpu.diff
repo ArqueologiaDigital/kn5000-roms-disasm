@@ -17,41 +17,26 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
 -	.fill 12710, 1, 0xff
 +	.fill 12696, 1, 0xff
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/audio_control_engine.s v10/maincpu/audio/audio_control_engine.s
---- v9/maincpu/audio/audio_control_engine.s	2026-03-23 09:50:07.132769714 +0000
-+++ v10/maincpu/audio/audio_control_engine.s	2026-03-23 02:19:50.638151798 +0000
-@@ -3268,7 +3268,7 @@
- 	pushw	16
- 	push	xde
- 	push	xbc
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
+--- v9/maincpu/audio/audio_control_engine.s	2026-03-23 11:40:25.610245731 +0000
++++ v10/maincpu/audio/audio_control_engine.s	2026-03-23 11:34:24.434177933 +0000
+@@ -3273,7 +3273,7 @@
  	ret
  	calr	753
-@@ -3288,7 +3288,7 @@
- 	ld	wa, iz
- 	extz	xwa
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	add	xhl, 20
- 	ld	xbc, xhl
- 	.byte 0xaf
-@@ -3305,12 +3305,12 @@
- 	.byte 0x83
- 	lda	xwa, (xhl+2)
- 	push	xwa
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	ld	wa, iz
- 	extz	xwa
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	add	xhl, 20
- 	.byte 0xaf, 0x06
- 	or	(xhl), c
+ 	call	ToneGen_Config_InitAllEntries
+-	call	__jrt_nop_FC4CED
++	call	Voice_InitAllChannelEntries
+ 	call	ToneGen_DSPCfg_ResetAll
+ 	calr	651
+ 	call	MainTitle_SetBootFlag
+@@ -3319,7 +3319,7 @@
+ 	inc	1, iz
+ 	cp	iz, 24
+ 	jr	c, -83
+-	call	__jrt_nop_FC4CED
++	call	Voice_InitAllChannelEntries
+ 	popw	iz
+ 	inc	8, xsp
+ 	ret
 @@ -3379,7 +3379,7 @@
  	.byte 0xe0, 0xe4
  	ldw	wa, 4024
@@ -61,24 +46,15 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	decf
  	swi	7
  	lda	xsp, (xsp+10)
-@@ -3435,7 +3435,7 @@
- 	ld	xwa, (xsp+14)
- 	lda	xwa, (xwa+944)
- 	push	xwa
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	ld	(xsp+2), 0
- 	ld	c, (xsp+2)
-@@ -3521,7 +3521,7 @@
- 	push	xwa
- 	lda	xwa, (xix+15)
- 	push	xwa
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	.byte 0xc7
- 	swi	3
+@@ -3476,7 +3476,7 @@
+ 	push	xhl
+ 	push	xix
+ 	push	xiz
+-	call	SwbtWr_ReinitOutputBank
++	call	assswb_out
+ 	pop	xiz
+ 	pop	xix
+ 	pop	xhl
 @@ -3540,7 +3540,7 @@
  	.byte 0xe1, 0xb0
  	pop_sr
@@ -88,59 +64,84 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	decf
  	swi	7
  	lda	xsp, (xsp+10)
+@@ -5889,7 +5889,7 @@
+ 	push	xhl
+ 	push	xix
+ 	push	xiz
+-	call	SwbtWr_ReinitBothBanks
++	call	assswb_op
+ 	pop	xiz
+ 	pop	xix
+ 	pop	xhl
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/dsp_config_sysex.s v10/maincpu/audio/dsp_config_sysex.s
+--- v9/maincpu/audio/dsp_config_sysex.s	2026-03-23 11:40:25.615955995 +0000
++++ v10/maincpu/audio/dsp_config_sysex.s	2026-03-23 11:34:24.457367241 +0000
+@@ -61,7 +61,7 @@
+ 	.byte 0xf6
+ 	jr	lt, -50
+ 	push	xiz
+-	call	SwbtWr_ReinitOutputBank
++	call	assswb_out
+ 	pop	xiz
+ 	pop	xiz
+ 	inc	2, xsp
+@@ -126,7 +126,7 @@
+ 	.byte 0xf6
+ 	jr	lt, -42
+ 	push	xiz
+-	call	SwbtWr_ReinitOutputBank
++	call	assswb_out
+ 	pop	xiz
+ 	pop	xiz
+ 	inc	2, xsp
+@@ -186,7 +186,7 @@
+ 	.byte 0xf6
+ 	jr	lt, -50
+ 	push	xiz
+-	call	SwbtWr_ReinitOutputBank
++	call	assswb_out
+ 	pop	xiz
+ 	pop	xiz
+ 	inc	2, xsp
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
---- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 10:37:43.195220269 +0000
-+++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 02:19:50.646151865 +0000
-@@ -22850,11 +22850,11 @@
- 	add	xiz, xwa
- 	ld	xwa, xiz
- 	ldda32	xbc, 59883
--	call	16714318
-+	call	16714332
- 	ld	xiz, xhl
- 	ld	xwa, xiz
- 	ld	xbc, 1000
--	call	16714762
-+	call	16714776
- 	ld	xiz, xhl
- 	ld	xwa, 40
- 	cp	xiz, 40
-@@ -25322,7 +25322,7 @@
- 	sub	xbc, 426
- 	ld	xwa, xbc
- 	ld	xbc, 11
--	call	16714756
-+	call	16714770
- 	cp	xhl, 9
- 	jrl	ugt, 411
- 	add	xhl, xhl
-@@ -25345,7 +25345,7 @@
- 	sub	xbc, 102
- 	ld	xwa, xbc
- 	ld	xbc, 81
--	call	16714756
-+	call	16714770
- 	cp	xhl, 76
- 	jrl	ugt, 338
- 	add	xhl, 15651913
-@@ -25492,7 +25492,7 @@
- 	ld	xwa, xiz
- 	sub	xwa, 295
- 	ld	xbc, 80
--	call	16714762
-+	call	16714776
- 	ld	a, l
- 	extz	wa
- 	muls	wa, 80
-@@ -25506,7 +25506,7 @@
- 	sub	xbc, xwa
- 	ld	xwa, xbc
- 	ld	xbc, 11
--	call	16714756
-+	call	16714770
- 	cp	xhl, 9
- 	jrl	ugt, 371
- 	add	xhl, xhl
+--- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 11:40:25.632245489 +0000
++++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 11:34:24.525709935 +0000
+@@ -24296,7 +24296,7 @@
+ 	ld	xde, 57668
+ 	lds	wa, 5
+ 	lds	bc, 2
+-	call	Audio_InitDMAChannels_Done
++	call	sendCOMM
+ 	ret
+ 
+ CharMap_ActivePreamb_Prologue:
+@@ -25722,7 +25722,7 @@
+ 	inc	8, bc
+ 	lds	wa, 3
+ 	ld	xde, 57752
+-	call	Audio_InitDMAChannels_Done
++	call	sendCOMM
+ 	.byte 0xbf
+ 	ccf
+ 	push_sr
+@@ -25767,7 +25767,7 @@
+ 	stda32	57747, xde
+ 	lds	wa, 3
+ 	ldw	bc, 21
+-	call	Audio_InitDMAChannels_Done
++	call	sendCOMM
+ 	lds	hl, 0
+ 	jr	2
+ 	lds	hl, 1
+@@ -25869,7 +25869,7 @@
+ 	lds	wa, 3
+ 	ld	bc, (xsp+6)
+ 	ld	xde, xiz
+-	call	Audio_InitDMAChannels_Done
++	call	sendCOMM
+ 	.byte 0xbf, 0x04
+ 	push_sr
+ 	nop
 @@ -26663,266 +26663,1256 @@
  SendPartDataBlock_Return4:
  	ret
@@ -1327,7 +1328,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
 +	extz	xiz
 +	ld	xwa, xiz
 +	ld	xbc, 289
-+	call	16714332
++	call	Math_MultiplyAccumulate
 +	add	xhl, 16
 +	ld	xiy, xhl
 +	.byte 0xaf, 0x06
@@ -1339,7 +1340,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
 +	rcf
 +	ld	xwa, xiz
 +	ld	xbc, 470
-+	call	16714332
++	call	Math_MultiplyAccumulate
 +	add	xhl, 16
 +	.byte 0xaf, 0x06
 +	or	(xhl), c
@@ -1377,7 +1378,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
 +	nop
 +	ldirw
 +	ld	xbc, 470
-+	call	16714332
++	call	Math_MultiplyAccumulate
 +	add	xhl, 16
 +	.byte 0xaf, 0x06
 +	or	(xhl), c
@@ -1412,7 +1413,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
 +	extz	xiz
 +	ld	xwa, xiz
 +	ld	xbc, 470
-+	call	16714332
++	call	Math_MultiplyAccumulate
 +	add	xhl, 16
 +	.byte 0xaf, 0x06
 +	or	(xhl), h
@@ -1625,15 +1626,6 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	c, (xsp)
  	extz	bc
  	ld	a, (xsp+2)
-@@ -26974,7 +27964,7 @@
- 	add	wa, bc
- 	extz	xwa
- 	ld	xbc, 470
--	call	16714318
-+	call	16714332
- 	add	xhl, 16
- 	ld	xwa, 1966080
- 	add	xwa, xhl
 @@ -26982,7 +27972,7 @@
  	ldw	bc, 470
  	jr	43
@@ -1657,15 +1649,6 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	a, (xsp+4)
  	.byte 0xc7
  	swi	0
-@@ -27037,7 +28027,7 @@
- 	ld	wa, iz
- 	extz	xwa
- 	ld	xbc, 470
--	call	16714318
-+	call	16714332
- 	add	xhl, 16
- 	ld	xwa, 1966080
- 	add	xwa, xhl
 @@ -27058,7 +28048,7 @@
  	inc	1, iz
  	cp	iz, 128
@@ -1675,27 +1658,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lda_24	xwa, 1985191
  	ldw	bc, 10240
  	.byte 0x42
-@@ -27100,7 +28090,7 @@
- 	extz	xwa
- 	ld	(xsp+10), xwa
- 	ld	xbc, 470
--	call	16714318
-+	call	16714332
- 	add	xhl, 16
- 	bitm	0, (xsp+20)
- 	jr	z, 96
-@@ -27115,7 +28105,7 @@
- 	ld	(xsp+6), xwa
- 	ld	xwa, (xsp+10)
- 	ld	xbc, 10535
--	call	16714318
-+	call	16714332
- 	add	xhl, 18816
- 	add	xhl, xiz
- 	ld	xwa, (xsp+6)
 @@ -27175,7 +28165,7 @@
- 	call	15676503
- 	jp	16708813
+ 	call	InterCPU_E1_Bulk_Transfer
+ 	jp	TmFlash_Return
  	ld	xwa, 1966080
 -	calr	-1624
 +	calr	63909
@@ -1711,15 +1676,6 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	cps	l, 6
  	jr	ugt, 7
  	cps	l, 1
-@@ -27194,7 +28184,7 @@
- 	ret
- 	extz	xwa
- 	ld	xbc, 470
--	call	16714318
-+	call	16714332
- 	ld	xwa, xhl
- 	add	xwa, 16
- 	ld	xhl, 1966080
 @@ -27205,7 +28195,7 @@
  	ld	iz, bc
  	ld	(xsp+2), xwa
@@ -1738,24 +1694,6 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	reti
  	swi	7
  	ldw	ix, 2035
-@@ -27229,7 +28219,7 @@
- 	ld	xbc, 470
- 	jr	5
- 	ld	xbc, 289
--	call	16714318
-+	call	16714332
- 	add	xhl, 16
- 	.byte 0xaf
- 	push_sr
-@@ -27257,7 +28247,7 @@
- 	ld	xiz, xbc
- 	extz	xwa
- 	ld	xbc, 470
--	call	16714318
-+	call	16714332
- 	add	xhl, 16
- 	ld	xwa, 1966080
- 	add	xwa, xhl
 @@ -27278,7 +28268,7 @@
  	ld	iz, bc
  	ld	(xsp+6), xwa
@@ -1765,7 +1703,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	bc, iz
  	extz	xbc
  	extz	hl
-@@ -27293,13 +28283,13 @@
+@@ -27293,7 +28283,7 @@
  	reti
  	.byte 0xf0, 0xec
  	ldb	c, 242
@@ -1774,45 +1712,6 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ldw	ix, 2035
  	.byte 0xf0
  	cps	xix, 0
- 	ld	xwa, xbc
- 	ld	xbc, 470
--	call	16714318
-+	call	16714332
- 	add	xhl, 16
- 	.byte 0xaf, 0x06
- 	sub	(xhl), l
-@@ -27312,7 +28302,7 @@
- 	jr	65
- 	ld	xwa, xbc
- 	ld	xbc, 289
--	call	16714318
-+	call	16714332
- 	add	xhl, 16
- 	.byte 0xaf, 0x06
- 	sub	(xhl), l
-@@ -27353,11 +28343,11 @@
- 	ld	(xsp+8), a
- 	ld	xiz, (xsp+14)
- 	push	xiz
--	call	16715666
-+	call	16715680
- 	ld	(xsp+8), hl
- 	ld	xwa, (xsp+22)
- 	push	xwa
--	call	16715666
-+	call	16715680
- 	inc	8, xsp
- 	ld	(xsp+6), hl
- 	.byte 0x9f, 0x06
-@@ -27374,7 +28364,7 @@
- 	push	xiz
- 	ld	xwa, (xsp+24)
- 	push	xwa
--	call	16715024
-+	call	16715038
- 	add	xsp, 10
- 	cps	hl, 0
- 	jr	nz, 4
 @@ -27563,7 +28553,7 @@
  	inc 4, xwa
  	ld (xsp + 2), xwa
@@ -1822,7 +1721,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lda xwa, (xsp + 6)
  	push xwa
  	ld xwa, (xsp + 22)
-@@ -27584,12 +28574,12 @@
+@@ -27584,7 +28574,7 @@
  	ld	xwa, (xsp+4)
  	ld	(xwa), 0
  	pushw	255
@@ -1831,87 +1730,27 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lda	xwa, (xsp+16)
  	push	xwa
  	ld	xwa, (xsp+16)
- 	push	xwa
--	call	16715834
-+	call	16715848
- 	lda	xsp, (xsp+12)
- 	ret
- 	ld32_24	xbc, 246300
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/presentation_sound_nav.s v10/maincpu/audio/presentation_sound_nav.s
---- v9/maincpu/audio/presentation_sound_nav.s	2026-03-23 09:50:07.141477686 +0000
-+++ v10/maincpu/audio/presentation_sound_nav.s	2026-03-23 02:19:50.648697883 +0000
-@@ -1295,7 +1295,7 @@
- 	pushw 39828
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	lda	xwa, (xsp+2)
- 	call	16395937
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/sndparam_routines.s v10/maincpu/audio/sndparam_routines.s
---- v9/maincpu/audio/sndparam_routines.s	2026-03-23 09:50:07.143703444 +0000
-+++ v10/maincpu/audio/sndparam_routines.s	2026-03-23 02:19:50.650151899 +0000
-@@ -541,7 +541,7 @@
- 	add	xhl, xwa
- 	ld	xwa, xhl
- 	ld	xbc, 2047
--	call	16714756
-+	call	16714770
- 	ld	ix, hl
- 	jr	44
- 	lds	bc, 0
-@@ -760,7 +760,7 @@
- 	add	xhl, xwa
- 	ld	xwa, xhl
- 	ld	xbc, 2047
--	call	16714756
-+	call	16714770
- 	ld	ix, hl
- 	jr	44
- 	lds	bc, 0
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/sound_editor_ui.s v10/maincpu/audio/sound_editor_ui.s
---- v9/maincpu/audio/sound_editor_ui.s	2026-03-23 10:52:10.909730746 +0000
-+++ v10/maincpu/audio/sound_editor_ui.s	2026-03-23 02:19:50.672359564 +0000
-@@ -19063,7 +19063,7 @@
- 	push	xwa
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	79
-@@ -20464,7 +20464,7 @@
- 	push	xwa
- 	ld	xwa, (xiz+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, (xsp+12)
- 	jr	43
-@@ -21262,7 +21262,7 @@
- 	push	xwa
- 	ld	xwa, (xhl+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	19
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/tonegen_fileio_handlers.s v10/maincpu/audio/tonegen_fileio_handlers.s
---- v9/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 10:52:10.910531705 +0000
-+++ v10/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 02:19:50.674617106 +0000
-@@ -1146,7 +1146,7 @@
- 	push	xwa
- 	pushw	3
- 	pushw	16634
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
+--- v9/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 11:40:25.659852639 +0000
++++ v10/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 11:34:24.617700393 +0000
+@@ -589,7 +589,7 @@
+ 	push	xhl
+ 	push	xix
+ 	push	xiz
+-	call	SwbtWr_ReinitOutputBank
++	call	assswb_out
+ 	pop	xiz
+ 	pop	xix
+ 	pop	xhl
+@@ -1101,7 +1101,7 @@
+ 	lds	wa, 1
+ 	ld	xbc, 213242
+ 	lds	de, 6
+-	call	FlashWrite_Entry
++	call	FlashWrite
  	ret
  
+ Audio_DispatchCommand:
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/boot/rom_end_structure.s v10/maincpu/boot/rom_end_structure.s
 --- v9/maincpu/boot/rom_end_structure.s	2026-03-23 02:58:26.026327161 +0000
 +++ v10/maincpu/boot/rom_end_structure.s	2026-03-23 02:19:50.677005690 +0000
@@ -1933,303 +1772,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  
  ; RESERVED:
  	.fill 23, 1, 0xff
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/demo/demo_seq_bridge.s v10/maincpu/demo/demo_seq_bridge.s
---- v9/maincpu/demo/demo_seq_bridge.s	2026-03-23 09:50:07.150552142 +0000
-+++ v10/maincpu/demo/demo_seq_bridge.s	2026-03-23 02:19:50.679156783 +0000
-@@ -35,7 +35,7 @@
- 	push	xde
- 	pushw	0
- 	pushw	4441
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	push	xde
- 	push	xhl
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/demo/fdemotext_routines.s v10/maincpu/demo/fdemotext_routines.s
---- v9/maincpu/demo/fdemotext_routines.s	2026-03-23 09:50:07.151085227 +0000
-+++ v10/maincpu/demo/fdemotext_routines.s	2026-03-23 02:19:50.679548136 +0000
-@@ -1257,13 +1257,13 @@
- 	pushw	64982
- 	pushw	2
- 	pushw	18422
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+14)
- 	jr	13
- 	push	xhl
- 	pushw	2
- 	pushw	18422
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	lda_24	xhl, 149494
- 	pop	xiz
-@@ -1275,7 +1275,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xwa, 255
- 	ld	(xsp+4), xwa
-@@ -1305,7 +1305,7 @@
- 	push	xhl
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715559
-+	call	16715573
- 	inc	8, xsp
- 	cps	hl, 0
- 	jr	nz, 14
-@@ -1715,10 +1715,10 @@
- 	.byte 0xaf
- 	ldwio	128, 8352
- 	push	xwa
--	call	16715666
-+	call	16715680
- 	inc	1, hl
- 	pushw	hl
--	call	16715378
-+	call	16715392
- 	ld	(xsp+8), xhl
- 	ld	wa, iz
- 	exts	xwa
-@@ -1728,14 +1728,14 @@
- 	push	xwa
- 	ld	xwa, (xsp+12)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	lds	iz, 0
- 	pushw	64
- 	ld	xwa, (xsp+18)
- 	push	xwa
- 	ld	xwa, (xsp+26)
- 	push	xwa
--	call	16714981
-+	call	16714995
- 	lda	xsp, (xsp+24)
- 	ld	xwa, (xsp+6)
- 	ld	(xwa+64), 0
-@@ -1758,7 +1758,7 @@
- 	push	xde
- 	ld	xwa, (xsp+10)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	inc	1, iz
- 	ld	xde, (xsp+2)
-@@ -1778,10 +1778,10 @@
- 	ldw	wa, 44856
- 	ex_ff
- 	ldb	w, 56
--	call	16715583
-+	call	16715597
- 	ld	xwa, (xsp+26)
- 	push	xwa
--	call	16715666
-+	call	16715680
- 	lda	xsp, (xsp+12)
- 	dec	1, hl
- 	extz	xhl
-@@ -1791,7 +1791,7 @@
- 	push	xbc
- 	ld	xwa, (xsp+22)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jr	13
- 	inc	1, iz
-@@ -1805,7 +1805,7 @@
- 	jr	nz, -113
- 	ld	xwa, (xsp+2)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	inc	4, xsp
- 	popw	iz
- 	lda	xsp, (xsp+12)
-@@ -1867,7 +1867,7 @@
- 	.byte 0x98
- 	nop
- 	ldw	wa, 14648
--	call	16715559
-+	call	16715573
- 	inc	8, xsp
- 	cps	hl, 0
- 	jr	nz, 49
-@@ -1883,7 +1883,7 @@
- 	cps	wa, 0
- 	jr	nz, 30
- 	push	xbc
--	call	16714130
-+	call	16714144
- 	inc	4, xsp
- 	ld	(xsp+4), hl
- 	jr	18
-@@ -1894,7 +1894,7 @@
- 	push	xbc
- 	lda	xwa, (xsp+24)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	.byte 0xd7
- 	swi	2
-@@ -1928,17 +1928,17 @@
- 	pushw	65126
- 	pushw	2
- 	pushw	18552
--	call	16714340
-+	call	16714354
- 	lda	xwa, (xsp+18)
- 	push	xwa
- 	pushw	2
- 	pushw	18552
--	call	16715583
-+	call	16715597
- 	lda	xwa, (xsp+40)
- 	push	xwa
- 	pushw	2
- 	pushw	18562
--	call	16715583
-+	call	16715597
- 	lda	xsp, (xsp+28)
- 	.byte 0x40
- 	.long Pad_AfterNakaData_ExternalBase
-@@ -1966,15 +1966,15 @@
- 	call	16422496
- 	pushw	2
- 	pushw	18552
--	call	16715666
-+	call	16715680
- 	inc	1, hl
- 	pushw	hl
--	call	16715378
-+	call	16715392
- 	ld	xiz, xhl
- 	pushw	2
- 	pushw	18552
- 	push	xiz
--	call	16715583
-+	call	16715597
- 	lda	xsp, (xsp+14)
- 	ld	xwa, 21037056
- 	ld	xbc, 31522821
-@@ -2024,7 +2024,7 @@
- 	lda	xbc, (xsp+72)
- 	push	xbc
- 	push	xwa
--	call	16715559
-+	call	16715573
- 	inc	8, xsp
- 	cps	hl, 0
- 	jr	nz, 76
-@@ -2036,7 +2036,7 @@
- 	retd	55513
- 	jr	nz, 61
- 	push	xwa
--	call	16714130
-+	call	16714144
- 	inc	4, xsp
- 	ld	iz, hl
- 	jr	50
-@@ -2049,7 +2049,7 @@
- 	cp	c, 76
- 	jr	nz, 32
- 	push	xwa
--	call	16714130
-+	call	16714144
- 	inc	4, xsp
- 	ldw	iz, 64
- 	sub	iz, hl
-@@ -2057,7 +2057,7 @@
- 	ldw	iz, 64
- 	jr	13
- 	push	xwa
--	call	16714130
-+	call	16714144
- 	inc	4, xsp
- 	ld	iz, hl
- 	add	iz, 64
-@@ -2225,7 +2225,7 @@
- 	lda	xbc, (xsp+76)
- 	push	xbc
- 	push	xwa
--	call	16715559
-+	call	16715573
- 	inc	8, xsp
- 	cps	hl, 0
- 	jr	nz, 70
-@@ -2238,7 +2238,7 @@
- 	dec	6, wa
- 	.byte 0x37
- 	push	xwa
--	call	16714130
-+	call	16714144
- 	inc	4, xsp
- 	cps	hl, 0
- 	jr	lt, 44
-@@ -2254,7 +2254,7 @@
- 	jr	f, 104
- 	push_a
- 	push	xwa
--	call	16714130
-+	call	16714144
- 	inc	4, xsp
- 	cps	hl, 0
- 	jr	lt, 9
-@@ -2402,7 +2402,7 @@
- 	lda	xwa, (xsp+202)
- 	push	xwa
- 	push	xbc
--	call	16715559
-+	call	16715573
- 	inc	8, xsp
- 	cps	hl, 0
- 	jr	nz, 47
-@@ -2426,7 +2426,7 @@
- 	push	xbc
- 	lda	xwa, (xsp+8)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	.byte 0xd7
- 	swi	2
-@@ -2507,7 +2507,7 @@
- 	.byte 0x88
- 	nop
- 	ldw	wa, 14648
--	call	16715559
-+	call	16715573
- 	inc	8, xsp
- 	cps	hl, 0
- 	jr	nz, 19
-@@ -2519,7 +2519,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+8)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	.byte 0xd7
- 	swi	2
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/demo/file_demo_proc.s v10/maincpu/demo/file_demo_proc.s
---- v9/maincpu/demo/file_demo_proc.s	2026-03-23 09:50:07.151736535 +0000
-+++ v10/maincpu/demo/file_demo_proc.s	2026-03-23 02:19:50.680062206 +0000
-@@ -29,7 +29,7 @@
- 	.byte 0xf0
- 	jr	c, -8
- 	push	xiz
--	call	16715666
-+	call	16715680
- 	pushw	hl
- 	push	xiz
- 	.byte 0xf3
+--- v9/maincpu/demo/file_demo_proc.s	2026-03-23 11:40:25.672128967 +0000
++++ v10/maincpu/demo/file_demo_proc.s	2026-03-23 11:34:24.670118156 +0000
 @@ -37,7 +37,7 @@
  	ccf
  	.byte 0x01
@@ -2239,143 +1784,24 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	incf
  	swi	7
  	lda	xwa, (xsp+278)
-@@ -46,7 +46,7 @@
- 	.long Data_DiskFuncPtrTbl_EA0B00
- 	pushw	112
- 	push	xwa
--	call	16715187
-+	call	16715201
- 	lda	xsp, (xsp+22)
- 	.byte 0xf3
- 	swi	5
-@@ -74,7 +74,7 @@
- 	pushw	256
- 	push	xbc
- 	push	xhl
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	lds	iz, 1
- 	lda	xwa, (xsp+8)
-@@ -88,7 +88,7 @@
- 	lda	xwa, (xsp+10)
- 	push	xwa
- 	push	xhl
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	inc	1, iz
- 	cp	iz, 8
-@@ -116,7 +116,7 @@
- 	lda	xwa, (xsp+10)
- 	push	xwa
- 	push	xhl
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	lda	xwa, (xsp+8)
- 	ld	xbc, 256
-@@ -418,7 +418,7 @@
- 	push	xwa
- 	ld	xwa, (xsp+10)
- 	push	xwa
--	call	16715559
-+	call	16715573
- 	inc	8, xsp
- 	cps	hl, 0
- 	jr	z, 16
-@@ -452,7 +452,7 @@
- 	jr	z, 18
- 	push	xwa
- 	push	xiz
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xwa, (xsp+4)
- 	ld	(xiz+16), xwa
-@@ -3130,13 +3130,13 @@
- 	ld	wa, (xsp+38)
- 	extz	xwa
- 	ld	xbc, (xsp+8)
--	call	16714318
-+	call	16714332
- 	ld	xiz, xhl
- 	add	xiz, 176
- 	ld	wa, (xsp+36)
- 	extz	xwa
- 	ld	xbc, (xsp+8)
--	call	16714318
-+	call	16714332
- 	ld	(xsp+4), xhl
- 	ld	xwa, 176
- 	add	(xsp+4), xwa
-@@ -3233,13 +3233,13 @@
- 	ld	wa, (xsp+38)
- 	extz	xwa
- 	ld	xbc, (xsp+8)
--	call	16714318
-+	call	16714332
- 	ld	xiz, xhl
- 	add	xiz, 176
- 	ld	wa, (xsp+36)
- 	extz	xwa
- 	ld	xbc, (xsp+8)
--	call	16714318
-+	call	16714332
- 	ld	(xsp+4), xhl
- 	ld	xwa, 176
- 	add	(xsp+4), xwa
-@@ -3440,14 +3440,14 @@
- 	ldw	(xsp+10), 470
- 	extz	xwa
- 	ld	xbc, 470
--	call	16714318
-+	call	16714332
- 	ld	(xsp+2), xhl
- 	ld	xwa, 16
- 	add	(xsp+2), xwa
- 	ld	wa, iz
- 	extz	xwa
- 	ld	xbc, 470
--	call	16714318
-+	call	16714332
- 	ld	(xsp+6), xhl
- 	ld	xwa, 16
- 	add	(xsp+6), xwa
-@@ -3496,7 +3496,7 @@
- 	extz	wa
- 	ld	c, (xsp+14)
- 	extz	bc
--	call	16713020
-+	call	16713034
- 	lda_24	xwa, 1966080
- 	.byte 0xaf, 0x06, 0x80
- 	ld	bc, (xsp+10)
+@@ -3338,7 +3338,7 @@
+ 	jr	lt, 19
+ 	ld	wa, (xsp+32)
+ 	lds	bc, 0
+-	call	SetSongSlotValue
++	call	SetSongSlotValue_Entry
+ 	jr	8
+ 	ldw	iz, 65431
+ 	jr	3
 @@ -3509,7 +3509,7 @@
  	ld	c, (xsp+14)
  	extz	bc
  	ld	de, iz
 -	call	16713021
 +	call	16713035
- 	call	16288840
+ 	call	FileIO_CloseHandle
  	ld	hl, iz
  	popw	iz
-@@ -3561,13 +3561,13 @@
- 	ldb	h, 32
- 	extz	xwa
- 	ld	xbc, 9400
--	call	16714318
-+	call	16714332
- 	ld	xiz, xhl
- 	add	xiz, 16
- 	ld	wa, (xsp+36)
- 	extz	xwa
- 	ld	xbc, 9400
--	call	16714318
-+	call	16714332
- 	ld	(xsp+4), xhl
- 	ld	xwa, 16
- 	add	(xsp+4), xwa
 @@ -3587,7 +3587,7 @@
  	jr	lt, 43
  	ld	a, (xsp+10)
@@ -2391,276 +1817,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	bc, iz
 -	call	16713176
 +	call	16713190
- 	call	16288840
+ 	call	FileIO_CloseHandle
  	ld	hl, iz
  	pop	xiz
-@@ -6649,7 +6649,7 @@
- 	ld	wa, iz
- 	extz	xwa
- 	ld	xbc, 82
--	call	16714318
-+	call	16714332
- 	lda_24	xwa, 155394
- 	add	xwa, xhl
- 	.byte 0xb0, 0x9f
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/display/graphics_text_vga.s v10/maincpu/display/graphics_text_vga.s
---- v9/maincpu/display/graphics_text_vga.s	2026-03-23 09:50:07.153160761 +0000
-+++ v10/maincpu/display/graphics_text_vga.s	2026-03-23 02:19:50.681165934 +0000
-@@ -1542,7 +1542,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	ld	a, (xiz+6)
- 	and	a, 63
-@@ -1615,7 +1615,7 @@
- 	ld	xwa, 15380840
- 	push	xwa
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	ld	a, (xiz+6)
- 	and	a, 63
-@@ -1693,7 +1693,7 @@
- 	ld	xwa, 15380860
- 	push	xwa
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	ld	a, (xiz+6)
- 	and	a, 15
-@@ -1796,7 +1796,7 @@
- 	ld	xwa, 15380892
- 	push	xwa
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	ld	a, (xiz+6)
- 	and	a, 15
-@@ -1869,7 +1869,7 @@
- 	ld	xwa, 15380912
- 	push	xwa
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	ld	a, (xiz+6)
- 	and	a, 15
-@@ -4689,7 +4689,7 @@
- 	ld	xwa, 15538410
- 	push	xwa
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	17
-@@ -4737,7 +4737,7 @@
- 	ld	xwa, 15538454
- 	push	xwa
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	17
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/display/scoop_display.s v10/maincpu/display/scoop_display.s
---- v9/maincpu/display/scoop_display.s	2026-03-23 09:50:07.154161470 +0000
-+++ v10/maincpu/display/scoop_display.s	2026-03-23 02:19:50.682152169 +0000
-@@ -19374,7 +19374,7 @@
- 	pushw	52426
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	46
- 	ld	a, e
-@@ -19383,7 +19383,7 @@
- 	pushw	52430
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	22
- 	ld	a, e
-@@ -19392,7 +19392,7 @@
- 	pushw 52434
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	ld	a, (xiz+6)
- 	and	a, 63
-@@ -19474,7 +19474,7 @@
- 	pushw	52446
- 	lda	xwa, (xsp+11)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jrl	130
- 	ld	a, e
-@@ -19484,7 +19484,7 @@
- 	pushw	52450
- 	lda	xwa, (xsp+11)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	106
- 	ld	a, e
-@@ -19494,7 +19494,7 @@
- 	pushw	52454
- 	lda	xwa, (xsp+11)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	.byte 0xbf, 0x0a
- 	.asciz "7hR%"
- 	ld	wa, hl
-@@ -19509,7 +19509,7 @@
- 	pushw 52458
- 	lda	xwa, (xsp+10)
- 	push xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	t, 46
- 	ld	a, e
-@@ -19519,7 +19519,7 @@
- 	pushw 52462
- 	lda	xwa, (xsp+10)
- 	push xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	t, 22
- 	ld	a, e
-@@ -19529,7 +19529,7 @@
- 	pushw 52466
- 	lda	xwa, (xsp+10)
- 	push xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	ld	a, (xiz+6)
- 	and	a, 63
-@@ -19706,7 +19706,7 @@
- 	pushw	52498
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	46
- 	ld	a, e
-@@ -19716,7 +19716,7 @@
- 	pushw	52502
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	22
- 	ld	a, e
-@@ -19726,7 +19726,7 @@
- 	pushw	52506
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	ld	a, (xiz+6)
- 	and	a, 15
-@@ -19821,7 +19821,7 @@
- 	pushw	52518
- 	lda	xwa, (xsp+11)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jrl	130
- 	ld	a, e
-@@ -19831,7 +19831,7 @@
- 	pushw	52522
- 	lda	xwa, (xsp+11)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	106
- 	ld	a, e
-@@ -19841,7 +19841,7 @@
- 	pushw	52526
- 	lda	xwa, (xsp+11)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	.byte 0xbf, 0x0a
- 	.asciz "7hR%"
- 	ld	a, c
-@@ -19856,7 +19856,7 @@
- 	pushw	52530
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	46
- 	ld	a, e
-@@ -19866,7 +19866,7 @@
- 	pushw	52534
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	22
- 	ld	a, e
-@@ -19876,7 +19876,7 @@
- 	pushw	52538
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	ld	a, (xiz+6)
- 	and	a, 15
-@@ -19941,7 +19941,7 @@
- 	pushw	52550
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	40
- 	.byte 0x91, 0x04
-@@ -19949,7 +19949,7 @@
- 	pushw	52554
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	19
- 	.byte 0x91
-@@ -19957,7 +19957,7 @@
- 	pushw	52558
- 	lda	xwa, (xsp+10)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	ld	a, (xiz+6)
- 	and	a, 15
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/factory_test/test_data.s v10/maincpu/factory_test/test_data.s
 --- v9/maincpu/factory_test/test_data.s	2026-03-23 05:18:37.583172488 +0000
 +++ v10/maincpu/factory_test/test_data.s	2026-03-23 02:19:50.686152202 +0000
@@ -2675,283 +1834,138 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0x66, 0xbc, 0xf6, 0x00, 0x71, 0xbc, 0xf6, 0x00
  	.byte 0x82, 0xbc, 0xf6, 0x00, 0x99, 0xbc, 0xf6, 0x00
  	.byte 0xa0, 0xb4, 0xfd, 0x00, 0xa1, 0xb4, 0xfd, 0x00
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/file_io/misc_ui.s v10/maincpu/file_io/misc_ui.s
---- v9/maincpu/file_io/misc_ui.s	2026-03-23 09:50:07.161437170 +0000
-+++ v10/maincpu/file_io/misc_ui.s	2026-03-23 02:19:50.690152236 +0000
-@@ -35,7 +35,7 @@
- 	push	xwa
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	17
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/ac_listener_handlers.s v10/maincpu/midi/ac_listener_handlers.s
---- v9/maincpu/midi/ac_listener_handlers.s	2026-03-23 09:50:07.209253938 +0000
-+++ v10/maincpu/midi/ac_listener_handlers.s	2026-03-23 02:19:50.717528188 +0000
-@@ -870,7 +870,7 @@
- 	pushw 231
- 	pushw 63902
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -884,7 +884,7 @@
- 	.long Data_AcGridParamTable
- 	push	xwa
- 	push	xbc
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1490,7 +1490,7 @@
- 	.byte 0xe4, 0xe0
- 	ldb	w, 56
- 	push	xde
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1505,7 +1505,7 @@
- 	or	xwa, xix
- 	ldb	w, 56
- 	push	xde
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1529,7 +1529,7 @@
- 	or	xwa, xix
- 	ldb	w, 56
- 	push	xde
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1549,7 +1549,7 @@
- 	or	xwa, xix
- 	ldb	w, 56
- 	push	xde
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1569,7 +1569,7 @@
- 	or	xwa, xix
- 	ldb	w, 56
- 	push	xde
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1593,14 +1593,14 @@
- 	pushw	64766
- 	lda	xwa, (xsp+18)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	16
- 	pushw	231
- 	pushw	64772
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1620,14 +1620,14 @@
- 	pushw	64778
- 	lda	xwa, (xsp+18)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	jr	16
- 	pushw	231
- 	pushw	64784
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1645,7 +1645,7 @@
- 	or	xwa, xix
- 	ldb	w, 56
- 	push	xde
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1662,7 +1662,7 @@
- 	or	xwa, xix
- 	ldb	w, 56
- 	push	xde
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1680,7 +1680,7 @@
- 	or	xwa, xix
- 	ldb	w, 56
- 	push	xde
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1699,7 +1699,7 @@
- 	or	xix, xix
- 	ldb	w, 56
- 	push	xde
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1742,7 +1742,7 @@
- 	ldb	w, 56
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1759,7 +1759,7 @@
- 	ldb	w, 56
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1776,7 +1776,7 @@
- 	ldb	w, 56
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1797,7 +1797,7 @@
- 	pushw	64790
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1813,7 +1813,7 @@
- 	pushw	64796
- 	lda	xwa, (xsp+18)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1828,7 +1828,7 @@
- 	pushw	64802
- 	lda	xwa, (xsp+18)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1847,7 +1847,7 @@
- 	pushw	64808
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1862,7 +1862,7 @@
- 	pushw	64814
- 	lda	xwa, (xsp+18)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1876,7 +1876,7 @@
- 	pushw	64820
- 	lda	xwa, (xsp+18)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1893,7 +1893,7 @@
- 	ldb	w, 56
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1910,7 +1910,7 @@
- 	ldb	w, 56
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1927,7 +1927,7 @@
- 	ldb	w, 56
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1944,7 +1944,7 @@
- 	ldb	w, 56
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/computer_interface_config.s v10/maincpu/midi/computer_interface_config.s
---- v9/maincpu/midi/computer_interface_config.s	2026-03-23 09:50:07.209913537 +0000
-+++ v10/maincpu/midi/computer_interface_config.s	2026-03-23 02:19:50.718152472 +0000
-@@ -296,7 +296,7 @@
- 	push	xwa
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	21
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/file_io/single_load.s v10/maincpu/file_io/single_load.s
+--- v9/maincpu/file_io/single_load.s	2026-03-23 11:40:25.703652672 +0000
++++ v10/maincpu/file_io/single_load.s	2026-03-23 11:34:24.787802883 +0000
+@@ -219,7 +219,7 @@
+ 	call	16294158
+ 	ld	xbc, xhl
+ 	ld	xwa, xiz
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xwa, 35172
+ 	ldw	bc, 16
+ 	calr	60984
+@@ -286,7 +286,7 @@
+ 	ld	(xwa+63), 3
+ 	lda	xwa, (xwa+64)
+ 	ld	xbc, 15337792
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xde, 35213
+ 	ld	xwa, (xsp+6)
+ 	ld	xbc, 29360143
+@@ -311,7 +311,7 @@
+ 	call	16294280
+ 	ld	xbc, xhl
+ 	ld	xwa, xiz
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xwa, 35214
+ 	ldw	bc, 16
+ 	calr	60742
+@@ -549,7 +549,7 @@
+ 	call	16294427
+ 	ld	xbc, xhl
+ 	ld	xwa, xiz
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xwa, 35193
+ 	ldw	bc, 16
+ 	calr	60023
+@@ -679,7 +679,7 @@
+ 	ld	(xwa), 3
+ 	lda	xwa, (xbc+64)
+ 	ld	xbc, 15337826
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xde, 35213
+ 	ld	xwa, (xsp+8)
+ 	ld	xbc, 29360143
+@@ -730,7 +730,7 @@
+ 	call	16294549
+ 	ld	xbc, xhl
+ 	ld	xwa, xiz
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xwa, 35214
+ 	ldw	bc, 16
+ 	calr	59524
+@@ -993,7 +993,7 @@
+ 	call	16294804
+ 	ld	xbc, xhl
+ 	ld	xwa, xiz
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xwa, 35172
+ 	ldw	bc, 16
+ 	calr	58744
+@@ -1076,7 +1076,7 @@
+ 	lda	xwa, (xwa+64)
+ 	.byte 0x41
+ 	.long Str_AllOption_EA0980
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xde, 35213
+ 	ld	xwa, (xsp+6)
+ 	ld	xbc, 29360143
+@@ -1111,7 +1111,7 @@
+ 	call	16294681
+ 	ld	xbc, xhl
+ 	ld	xwa, xiz
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xwa, 35214
+ 	ldw	bc, 16
+ 	calr	58447
+@@ -1647,7 +1647,7 @@
+ 	push	xsp
+ 	nop
+ 	jr	z, 42
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xwa, 35277
+ 	ld	xbc, 15337902
+ 	call	FileIO_BuildFilePath
+@@ -1657,9 +1657,9 @@
+ 	ldada	xwa, 35298
+ 	.byte 0x41
+ 	.long Str_AllOption_EA09B2
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	jr	74
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xwa, 35277
+ 	ld	xbc, 15337924
+ 	call	FileIO_BuildFilePath
+@@ -1907,7 +1907,7 @@
+ 	calr	5520
+ 	ld	xbc, xhl
+ 	ld	xwa, xiz
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	ldada	xde, 35255
+ 	ld	xwa, (xsp+4)
+ 	ld	xbc, 29360143
+@@ -2094,7 +2094,7 @@
+ 	ld	(xwa), 3
+ 	lda	xwa, (xbc+64)
+ 	ld	xbc, 15337946
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	jr	28
+ 	ldda8	e, 35334
+ 	ld	c, e
+@@ -2374,7 +2374,7 @@
+ 	ld	(xwa+63), 3
+ 	lda	xwa, (xwa+64)
+ 	ld	xbc, 15337976
+-	call	__jrt_nop_F890DC
++	call	FileIO_CopyString
+ 	jrl	214
+ 	ld	l, (xsp+4)
+ 	.byte 0x8f, 0x04, 0x87
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/computer_interface_pcg.s v10/maincpu/midi/computer_interface_pcg.s
 --- v9/maincpu/midi/computer_interface_pcg.s	2026-03-23 09:50:07.210476510 +0000
 +++ v10/maincpu/midi/computer_interface_pcg.s	2026-03-23 02:19:50.718765607 +0000
@@ -3039,392 +2053,87 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x39
  	push_sr
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/midi_dispatch_handlers.s v10/maincpu/midi/midi_dispatch_handlers.s
---- v9/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 09:50:07.211014635 +0000
-+++ v10/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 02:19:50.719509365 +0000
-@@ -5805,7 +5805,7 @@
- 	dec	4, xsp
- 	pushw	iz
- 	pushw	32
--	call	16715378
-+	call	16715392
- 	inc	2, xsp
- 	ld	(xsp+2), xhl
- 	ld	xwa, (xsp+2)
-@@ -5845,7 +5845,7 @@
- 	ldw	iz, 65434
- 	ld	xwa, (xsp+2)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	inc	4, xsp
- 	ld	hl, iz
- 	popw	iz
-@@ -5894,7 +5894,7 @@
- 	ldada	xwa, 63872
- 	ld	(xsp+6), xwa
- 	pushw	1664
--	call	16715378
-+	call	16715392
- 	inc	2, xsp
- 	ld	(xsp+10), xhl
- 	ld	xwa, (xsp+10)
-@@ -5911,7 +5911,7 @@
- 	jr	ge, 15
- 	ld	xwa, (xsp+10)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	inc	4, xsp
- 	ld	hl, iz
- 	jrl	371
-@@ -5930,7 +5930,7 @@
- 	nop
- 	nop
- 	nop
--	call	16714318
-+	call	16714332
- 	add	xhl, 52
- 	.byte 0xaf, 0x06
- 	or	(xhl), h
-@@ -6006,7 +6006,7 @@
- 	nop
- 	nop
- 	nop
--	call	16714318
-+	call	16714332
- 	add	xhl, 754
- 	.byte 0xaf, 0x06
- 	or	(xhl), h
-@@ -6067,7 +6067,7 @@
- 	call	16626747
- 	ld	xwa, (xsp+10)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	inc	4, xsp
- 	lds	hl, 0
- 	pop	xiz
-@@ -6103,7 +6103,7 @@
- 	cp	(xsp+8), wa
- 	jr	c, -20
- 	pushw	768
--	call	16715378
-+	call	16715392
- 	inc	2, xsp
- 	ld	(xsp+14), xhl
- 	ld	xwa, (xsp+14)
-@@ -6125,7 +6125,7 @@
- 	jr	ge, 28
- 	ld	xwa, (xsp+14)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	inc	4, xsp
- 	ld	hl, iz
- 	jrl	412
-@@ -6160,7 +6160,7 @@
- 	ret
- 	.byte 0x86
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	add	xhl, 20
- 	.byte 0xaf, 0x04
- 	or	(xhl), h
-@@ -6227,7 +6227,7 @@
- 	ret
- 	.byte 0x86
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	add	xhl, 722
- 	.byte 0xaf, 0x04
- 	or	(xhl), h
-@@ -6292,7 +6292,7 @@
- 	call	16626833
- 	ld	xwa, (xsp+14)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	inc	4, xsp
- 	lds	hl, 0
- 	pop	xiz
-@@ -8002,7 +8002,7 @@
- 	ld	xiz, xbc
- 	add	xiz, (xsp+10)
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	add	xhl, 992
- 	add	xhl, (xsp+6)
- 	ld	xwa, xiz
-@@ -8462,7 +8462,7 @@
- 	ldada	xwa, 63872
- 	ld	(xsp+6), xwa
- 	pushw 1088
--	call	16715378
-+	call	16715392
- 	inc	2, xsp
- 	ld	(xsp+10), xhl
- 	ld	xwa, (xsp+10)
-@@ -8479,7 +8479,7 @@
- 	jr	ge, 15
- 	ld	xwa, (xsp+10)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	inc	4, xsp
- 	ld	hl, iz
- 	jrl	280
-@@ -8494,7 +8494,7 @@
- 	ld	xiz, xbc
- 	add	xiz, (xsp+10)
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	add	xhl, 52
- 	add	xhl, (xsp+6)
- 	ld	xwa, xiz
-@@ -8517,7 +8517,7 @@
- 	lda_rr	xiz, xwa, de
- 	ld	xwa, xbc
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	add	xhl, 52
- 	add	xhl, (xsp+6)
- 	ld	xwa, xiz
-@@ -8564,7 +8564,7 @@
- 	call	16626747
- 	ld	xwa, (xsp+10)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	inc	4, xsp
- 	lds	hl, 0
- 	pop	xiz
-@@ -8582,7 +8582,7 @@
- 	cps	iz, 3
- 	jr	c, -11
- 	pushw 336
--	call	16715378
-+	call	16715392
- 	inc	2, xsp
- 	ld	(xsp+8), xhl
- 	ld	xwa, (xsp+8)
-@@ -8599,7 +8599,7 @@
- 	jr	ge, 15
- 	ld	xwa, (xsp+8)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	inc	4, xsp
- 	ld	hl, iz
- 	jrl	241
-@@ -8624,7 +8624,7 @@
- 	add	(xsp+12), xwa
- 	ld	xwa, xbc
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	add	xhl, 20
- 	add	xhl, (xsp+2)
- 	ld	xwa, (xsp+12)
-@@ -8673,7 +8673,7 @@
- 	call	16626833
- 	ld	xwa, (xsp+8)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	inc	4, xsp
- 	lds	hl, 0
- 	popw	iz
-@@ -9953,32 +9953,32 @@
- 	pushw	64596
- 	lda	xwa, (xsp+30)
- 	push	xwa
--	call	16715147
-+	call	16715161
- 	pushw	24
- 	pushw	0
- 	pushw	64732
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715147
-+	call	16715161
- 	ldada	xwa, 63904
- 	pushw	1568
- 	pushw	237
- 	pushw	46076
- 	push	xwa
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+30)
- 	pushw	4
- 	lda	xwa, (xsp+26)
- 	push	xwa
- 	pushw	0
- 	pushw	64596
--	call	16715147
-+	call	16715161
- 	pushw	24
- 	lda	xwa, (xsp+12)
- 	push	xwa
- 	pushw	0
- 	pushw	64732
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+48)
- 	ret
- 	dec	6, xsp
-@@ -10004,7 +10004,7 @@
- 	ld	xwa, (xsp+4)
- 	push	xwa
- 	push	xde
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	inc	1, iz
- 	.byte 0x9f, 0x06, 0xf6
+--- v9/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 11:40:25.716165299 +0000
++++ v10/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 11:34:24.841244111 +0000
 @@ -14568,7 +14568,7 @@
  	lds	de, 5
- 	call	16604730
- 	call	16608397
+ 	call	MIDI_ReadChannelParam
+ 	call	SeqVoice_DispatchProcess_Data
 -	call	16713566
 +	call	16713580
  	ldda32	xwa, 48300
  	ldw	bc, 15
- 	call	16604854
+ 	call	SeqData_ReadFieldByIndex
+@@ -14846,7 +14846,7 @@
+ 	push	xhl
+ 	push	xix
+ 	push	xiz
+-	call	SwbtWr_ReinitOutputBank
++	call	assswb_out
+ 	call	SwbtWr_CallProcessAll
+ 	pop	xiz
+ 	pop	xix
+@@ -14857,7 +14857,7 @@
+ 	push	xhl
+ 	push	xix
+ 	push	xiz
+-	call	SwbtWr_ReinitOutputBank
++	call	assswb_out
+ 	resda	0, 4330
+ 	lds	wa, 3
+ 	call	BitMapOut_GetRenderMode_Return
+@@ -16486,7 +16486,7 @@
+ 	pop_f
+ 	.byte 0xe0, 0x90
+ 	call	MidiStream_JumpStubData
+-	call	SwbtWr_ReinitBothBanks
++	call	assswb_op
+ 	pop	xiz
+ 	pop	xix
+ 	pop	xhl
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/midipkt_routines.s v10/maincpu/midi/midipkt_routines.s
---- v9/maincpu/midi/midipkt_routines.s	2026-03-23 09:50:07.223502592 +0000
-+++ v10/maincpu/midi/midipkt_routines.s	2026-03-23 02:19:50.721925303 +0000
-@@ -187,7 +187,7 @@
- 	push	xwa
- 	ld	xwa, (xsp+22)
- 	push	xwa
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	lda	xwa, (xsp+10)
- 	ld	c, (xsp+4)
-@@ -1087,7 +1087,7 @@
- 	push	xwa
- 	ld	xwa, (xiz+4)
- 	push	xwa
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	lda	xwa, (xsp+8)
- 	ld	xbc, (xiz)
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/param_load_routines.s v10/maincpu/midi/param_load_routines.s
---- v9/maincpu/midi/param_load_routines.s	2026-03-23 09:50:07.224046667 +0000
-+++ v10/maincpu/midi/param_load_routines.s	2026-03-23 02:19:50.722152505 +0000
-@@ -757,7 +757,7 @@
- 	push	xwa
- 	ld	xwa, (xsp+20)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -776,7 +776,7 @@
- 	push	xwa
- 	ld	xwa, (xsp+20)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -795,7 +795,7 @@
- 	push	xwa
- 	ld	xwa, (xsp+20)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -817,7 +817,7 @@
- 	push	xwa
- 	ld	xwa, (xsp+20)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/sysex_routines.s v10/maincpu/midi/sysex_routines.s
---- v9/maincpu/midi/sysex_routines.s	2026-03-23 09:50:07.224486287 +0000
-+++ v10/maincpu/midi/sysex_routines.s	2026-03-23 02:19:50.722815855 +0000
-@@ -113,7 +113,7 @@
- 	push	xwa
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	17
-@@ -153,7 +153,7 @@
- 	push	xwa
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	17
-@@ -193,7 +193,7 @@
- 	push	xwa
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	17
-@@ -233,7 +233,7 @@
- 	push	xwa
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	17
-@@ -273,7 +273,7 @@
- 	push	xwa
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	17
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/accompaniment_engine.s v10/maincpu/sequencer/accompaniment_engine.s
---- v9/maincpu/sequencer/accompaniment_engine.s	2026-03-23 09:50:07.228770516 +0000
-+++ v10/maincpu/sequencer/accompaniment_engine.s	2026-03-23 02:19:50.726152539 +0000
-@@ -33425,7 +33425,7 @@
- 	push	xwa
- 	pushw	0
- 	pushw	13500
--	call	16714981
-+	call	16714995
- 	lda	xsp, (xsp+10)
- 	stdi8	13516, 0
- 
+--- v9/maincpu/midi/midipkt_routines.s	2026-03-23 11:40:25.718524009 +0000
++++ v10/maincpu/midi/midipkt_routines.s	2026-03-23 11:34:24.847169313 +0000
+@@ -1277,7 +1277,7 @@
+ 	lds	bc, 3
+ 	call	AssswbWr
+ 	push	xiz
+-	call	SwbtWr_ReinitBothBanks
++	call	assswb_op
+ 	pop	xiz
+ 	ret
+ MidiPkt_SysExProcessor_Data:
+@@ -1310,7 +1310,7 @@
+ 	lds	bc, 3
+ 	call	AssswbWr
+ 	push	xiz
+-	call	SwbtWr_ReinitBothBanks
++	call	assswb_op
+ 	pop	xiz
+ 	ret
+ MidiPkt_SysExBulkTransfer_Data:
+@@ -1371,7 +1371,7 @@
+ 	pop_sr
+ 	ld	xbc, 0x3e3c3b3a
+ 	call	16567069
+-	call	SwbtWr_ReinitOutputBank
++	call	assswb_out
+ 	pop	xiz
+ 	pop	xix
+ 	pop	xhl
+@@ -1572,7 +1572,7 @@
+ 	.byte 0xf6
+ 	jr	lt, -42
+ 	push	xiz
+-	call	SwbtWr_ReinitOutputBank
++	call	assswb_out
+ 	pop	xiz
+ 	pop	xiz
+ 	inc	2, xsp
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/seq_audio_mode.s v10/maincpu/sequencer/seq_audio_mode.s
---- v9/maincpu/sequencer/seq_audio_mode.s	2026-03-23 09:50:07.236659000 +0000
-+++ v10/maincpu/sequencer/seq_audio_mode.s	2026-03-23 02:19:50.730981318 +0000
-@@ -1369,17 +1369,17 @@
- RhythmROM_BytecodeBlock4:
- 	ld	xwa, 1024
- 	push	xwa
--	call	16715378
-+	call	16715392
- 	add	xsp, 4
+--- v9/maincpu/sequencer/seq_audio_mode.s	2026-03-23 11:40:25.741686652 +0000
++++ v10/maincpu/sequencer/seq_audio_mode.s	2026-03-23 11:34:24.942173328 +0000
+@@ -1374,12 +1374,12 @@
  	.byte 0xf1
  	.asciz "\\5c@"
  	.byte 0x10, 0x00
@@ -3440,375 +2149,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0x00, 0x00, 0x0e
  
  AccentData_ComparePart1:
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/seq_event_playback.s v10/maincpu/sequencer/seq_event_playback.s
---- v9/maincpu/sequencer/seq_event_playback.s	2026-03-23 09:50:07.237387302 +0000
-+++ v10/maincpu/sequencer/seq_event_playback.s	2026-03-23 02:19:50.731542732 +0000
-@@ -4015,7 +4015,7 @@
- 	push	xwa
- 	ld	xwa, (xsp+12)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jr	20
- 	inc	1, wa
-@@ -4024,7 +4024,7 @@
- 	pushw	61176
- 	ld	xwa, (xsp+14)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4037,7 +4037,7 @@
- 	pushw	61188
- 	ld	xwa, (xsp+14)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4051,7 +4051,7 @@
- 	pushw	61200
- 	ld	xwa, (xsp+14)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4069,7 +4069,7 @@
- 	pushw	61212
- 	ld	xwa, (xsp+16)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4096,7 +4096,7 @@
- 	push	xwa
- 	ld	xwa, (xsp+12)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4114,7 +4114,7 @@
- 	push	xwa
- 	ld	xwa, (xsp+12)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jr	18
- 	pushw	wa
-@@ -4122,7 +4122,7 @@
- 	pushw	61296
- 	ld	xwa, (xsp+14)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4163,7 +4163,7 @@
- 	pushw	61308
- 	ld	xwa, (xsp+24)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+20)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4180,7 +4180,7 @@
- 	push	xwa
- 	ld	xwa, (xsp+12)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4232,7 +4232,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+24)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jr	29
- 	ld	xwa, 11520
-@@ -4243,7 +4243,7 @@
- 	pushw	61352
- 	lda	xwa, (xsp+26)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4258,7 +4258,7 @@
- 	pushw	61364
- 	lda	xwa, (xsp+26)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4273,7 +4273,7 @@
- 	pushw	61376
- 	lda	xwa, (xsp+26)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4292,7 +4292,7 @@
- 	pushw	61388
- 	lda	xwa, (xsp+28)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4320,7 +4320,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+24)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4340,7 +4340,7 @@
- 	.long MidiPart_AfterStr
- 	push	xwa
- 	push	xbc
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jr	27
- 	ld	xwa, 11530
-@@ -4350,7 +4350,7 @@
- 	pushw	61472
- 	lda	xwa, (xsp+26)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4391,7 +4391,7 @@
- 	pushw	61484
- 	lda	xwa, (xsp+36)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+20)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4432,7 +4432,7 @@
- 	pushw	61492
- 	lda	xwa, (xsp+36)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+20)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -4457,7 +4457,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+24)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/sequencer_ui.s v10/maincpu/sequencer/sequencer_ui.s
---- v9/maincpu/sequencer/sequencer_ui.s	2026-03-23 09:50:07.243519046 +0000
-+++ v10/maincpu/sequencer/sequencer_ui.s	2026-03-23 02:19:50.736714758 +0000
-@@ -2187,7 +2187,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+30)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xbc, (xsp+10)
- 	ld	xix, (xbc+42)
-@@ -3593,7 +3593,7 @@
- 	push	xwa
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	20
-@@ -3636,7 +3636,7 @@
- 	push	xwa
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	19
-@@ -3731,7 +3731,7 @@
- 	push	xwa
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	54
-@@ -4081,7 +4081,7 @@
- 	.long MedleyDisp_Blank
- 	push	xwa
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	31
-@@ -4129,7 +4129,7 @@
- 	.long PlayModeStr_Play
- 	push	xwa
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	31
-@@ -4177,7 +4177,7 @@
- 	.long PlayModeStr_Pause
- 	push	xwa
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	inc	8, xsp
- 	ld	xhl, xiz
- 	jr	31
-@@ -5966,7 +5966,7 @@
- 	pushw	17932
- 	lda	xwa, (xsp+40)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	lda	xwa, (xsp+28)
- 	lda	xbc, (xsp+24)
-@@ -6022,7 +6022,7 @@
- 	pushw	17936
- 	lda	xwa, (xsp+40)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	lda	xwa, (xsp+28)
- 	lda	xbc, (xsp+24)
-@@ -6119,7 +6119,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+42)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	incm	1, (xsp+8)
- 	.byte 0xbf
-@@ -6142,7 +6142,7 @@
- 	pushw	17948
- 	lda	xwa, (xsp+42)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	incm	1, (xsp+10)
- 	lda	xwa, (xsp+28)
-@@ -6234,7 +6234,7 @@
- 	ld	xwa, 14894628
- 	push	xwa
- 	push	xde
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	incm	1, (xsp+8)
- 	.byte 0xbf
-@@ -6253,7 +6253,7 @@
- 	nop
- 	pushw	17960
- 	push	xde
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	incm	1, (xsp+10)
- 	lda	xwa, (xsp+28)
-@@ -7761,7 +7761,7 @@
- 	pushw	227
- 	pushw	18302
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -7777,7 +7777,7 @@
- 	ld	xwa, 14894984
- 	push	xwa
- 	push	xbc
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -13550,7 +13550,7 @@
- 	ld	xwa, (xsp+4)
- 	ld	xwa, (xwa+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jrl	356
- 	pushw	wa
-@@ -13610,7 +13610,7 @@
- 	ld	xwa, (xsp+4)
- 	ld	xwa, (xwa+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jrl	201
- 	ld	xwa, (xsp+4)
-@@ -14203,7 +14203,7 @@
- 	ld	xwa, (xbc)
- 	inc	1, xwa
- 	push	xwa
--	call	16714981
-+	call	16714995
- 	lda	xsp, (xsp+10)
- 	ldda8	a, 9750
- 	extz	wa
-@@ -14226,7 +14226,7 @@
- 	ld	xwa, (xbc)
- 	inc	1, xwa
- 	push	xwa
--	call	16714981
-+	call	16714995
- 	lda	xsp, (xsp+10)
- 	ldda8	a, 9816
- 	extz	wa
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/smf_event_processor.s v10/maincpu/sequencer/smf_event_processor.s
---- v9/maincpu/sequencer/smf_event_processor.s	2026-03-23 10:37:43.171994837 +0000
-+++ v10/maincpu/sequencer/smf_event_processor.s	2026-03-23 02:19:50.738816057 +0000
+--- v9/maincpu/sequencer/smf_event_processor.s	2026-03-23 11:40:25.789967478 +0000
++++ v10/maincpu/sequencer/smf_event_processor.s	2026-03-23 11:34:25.083753259 +0000
 @@ -4680,7 +4680,7 @@
  	add	(xde), xwa
  	.byte 0xeb
@@ -3818,223 +2161,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	nop
  	nop
  	ld	(xix), a
-@@ -4747,7 +4747,7 @@
- 	push	xwa
- 	ld	xwa, (xsp+22)
- 	push	xwa
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	ld	xwa, (xsp+4)
- 	ld	c, (xiz+12)
-@@ -5325,7 +5325,7 @@
- 	dec	2, wa
- 	extz	xwa
- 	ld	xbc, (xbc)
--	call	16714318
-+	call	16714332
- 	ld	xwa, (xsp+12)
- 	ld	xwa, (xwa+20)
- 	add	xwa, xhl
-@@ -5356,7 +5356,7 @@
- 	pushw	0
- 	lda	xwa, (xhl+26)
- 	push	xwa
--	call	16715756
-+	call	16715770
- 	inc	8, xsp
- 	inc	1, xiz
- 	ld	xbc, (xsp+8)
-@@ -5375,7 +5375,7 @@
- 	pushw	32
- 	ld	xwa, (xsp+12)
- 	push	xwa
--	call	16715756
-+	call	16715770
- 	inc	8, xsp
- 	ld	xwa, (xsp+8)
- 	ld	(xwa+11), 0
-@@ -5575,7 +5575,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+28)
- 	push	xwa
--	call	16714931
-+	call	16714945
- 	add	xsp, 10
- 	cps	hl, 0
- 	jr	nz, 116
-@@ -5761,7 +5761,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+28)
- 	push	xwa
--	call	16714931
-+	call	16714945
- 	add	xsp, 10
- 	cps	hl, 0
- 	jr	nz, 85
-@@ -5847,7 +5847,7 @@
- 	dec	2, wa
- 	extz	xwa
- 	ld	xbc, (xbc)
--	call	16714318
-+	call	16714332
- 	ld	xwa, (xsp+4)
- 	ld	xbc, (xwa+20)
- 	add	xbc, xhl
-@@ -6010,7 +6010,7 @@
- 	push	xwa
- 	lda	xwa, (xiz+52)
- 	push	xwa
--	call	16715147
-+	call	16715161
- 	ld	(xiz+64), 0
- 	.byte 0xbe
- 	ld	xiy, 3892314114
-@@ -6097,7 +6097,7 @@
- 	dec	2, wa
- 	extz	xwa
- 	ld	xbc, (xbc)
--	call	16714318
-+	call	16714332
- 	ld	xwa, (xsp+6)
- 	ld	xwa, (xwa+20)
- 	add	xwa, xhl
-@@ -6696,7 +6696,7 @@
- 	ld	wa, (xwa+38)
- 	extz	xwa
- 	ld	xbc, (xbc)
--	call	16714318
-+	call	16714332
- 	ld	xwa, (xsp+4)
- 	ld	(xwa+40), hl
- 	ld	xwa, (xsp+4)
-@@ -6740,7 +6740,7 @@
- 	ld	xwa, xde
- 	ld	xbc, (xsp+4)
- 	ld	xbc, (xbc+32)
--	call	16714762
-+	call	16714776
- 	inc	1, xhl
- 	ld	xwa, (xsp+4)
- 	ld	(xwa+54), hl
-@@ -6898,7 +6898,7 @@
- 	extz	xbc
- 	ld	xwa, (xsp+16)
- 	ld	xwa, (xwa+22)
--	call	16714762
-+	call	16714776
- 	ld	xwa, (xsp+8)
- 	ld	xbc, (xwa+28)
- 	add	xbc, xhl
-@@ -6930,13 +6930,13 @@
- 	extz	xbc
- 	ld	xwa, (xsp+16)
- 	ld	xwa, (xwa+22)
--	call	16714756
-+	call	16714770
- 	ld	xiz, xhl
- 	ld	xwa, (xsp+8)
- 	ld	bc, (xwa+38)
- 	extz	xbc
- 	ld	xwa, xiz
--	call	16714762
-+	call	16714776
- 	ld	a, l
- 	ld	(xsp+6), a
- 	ld	xwa, (xsp+16)
-@@ -7063,7 +7063,7 @@
- 	dec	2, wa
- 	extz	xwa
- 	ld	xbc, (xbc)
--	call	16714318
-+	call	16714332
- 	ld	xwa, (xsp+22)
- 	add	(xwa), xhl
- 	ld	xwa, (xsp+16)
-@@ -7071,7 +7071,7 @@
- 	extz	xwa
- 	ld	xbc, (xsp+8)
- 	ld	xbc, (xbc+32)
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld	a, (xsp+6)
- 	sub	xhl, xwa
-@@ -7152,7 +7152,7 @@
- 	ld	bc, (xwa+40)
- 	extz	xbc
- 	ld	xwa, xde
--	call	16714762
-+	call	16714776
- 	ld	wa, (xsp+4)
- 	extz	xwa
- 	sub	xhl, xwa
-@@ -7436,7 +7436,7 @@
- 	push	xbc
- 	ld	xwa, (xsp+20)
- 	push	xwa
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	sub	(xsp+18), iz
- 	ld	wa, iz
-@@ -7708,7 +7708,7 @@
- 	ld	xwa, (xsp+18)
- 	push	xwa
- 	push	xde
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	sub	(xsp+20), iz
- 	ld	xwa, (xsp+16)
-@@ -7990,7 +7990,7 @@
- 	ld	bc, (xwa+40)
- 	extz	xbc
- 	ld	xwa, (xsp+16)
--	call	16714762
-+	call	16714776
- 	ld	xwa, (xsp+12)
- 	ld	wa, (xwa+46)
- 	extz	xwa
-@@ -8097,7 +8097,7 @@
- 	pushw	20522
- 	lda	xwa, (xsp+14)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	ld	(xsp+30), 16
- 	lda	xwa, (xsp+31)
- 	push	xwa
-@@ -8432,7 +8432,7 @@
- 	pushw	228
- 	pushw	20536
- 	push	xiz
--	call	16715147
-+	call	16715161
- 	lda	xsp, (xsp+10)
- 	lds	hl, 0
- 	jr	31
-@@ -8621,7 +8621,7 @@
- 	ld	bc, (xwa+50)
- 	extz	xbc
- 	ld	xwa, xhl
--	call	16714762
-+	call	16714776
- 	ld	xbc, xhl
- 	ld	xwa, (xsp+2)
- 	.byte 0x98
-@@ -8752,7 +8752,7 @@
- 	ld	bc, (xwa+50)
- 	extz	xbc
- 	ld	xwa, xhl
--	call	16714762
-+	call	16714776
- 	ld	xbc, xhl
- 	ld	xwa, (xsp+2)
- 	.byte 0x98
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/storage/flash_floppy_handlers.s v10/maincpu/storage/flash_floppy_handlers.s
---- v9/maincpu/storage/flash_floppy_handlers.s	2026-03-23 10:37:43.171461054 +0000
-+++ v10/maincpu/storage/flash_floppy_handlers.s	2026-03-23 02:19:50.743792128 +0000
+--- v9/maincpu/storage/flash_floppy_handlers.s	2026-03-23 11:40:25.803004469 +0000
++++ v10/maincpu/storage/flash_floppy_handlers.s	2026-03-23 11:34:25.117074749 +0000
 @@ -120,7 +120,7 @@
  FlashRead_BlockData_Field6:
  	nop
@@ -4053,96 +2182,6 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ldb	w, 100
  	decf
  	push_sr
-@@ -1760,7 +1760,7 @@
- 	extz	wa
- 	calr	2721
- 	calr	2966
--	call	16713342
-+	call	16713356
- 	jrl	274
- 	calr	3531
- 	calr	3957
-@@ -3147,7 +3147,7 @@
- 	lda	xwa, (xsp+10)
- 	push	xwa
- 	lds	wa, 2
--	call	16713369
-+	call	16713383
- 	ld	xiz, (xsp+12)
- 	ld	wa, (xsp+10)
- 	ld	(xsp+8), wa
-@@ -3159,7 +3159,7 @@
- 	lda	xwa, (xsp+10)
- 	push	xwa
- 	lds	wa, 3
--	call	16713369
-+	call	16713383
- 	ld	xix, (xsp+12)
- 	sub	xix, 3434496
- 	cps	hl, 0
-@@ -3213,7 +3213,7 @@
- 	lda	xwa, (xsp+10)
- 	push	xwa
- 	lds	wa, 0
--	call	16713369
-+	call	16713383
- 	ld	xiz, (xsp+12)
- 	ld	wa, (xsp+10)
- 	ld	(xsp+8), wa
-@@ -3225,7 +3225,7 @@
- 	lda	xwa, (xsp+10)
- 	push	xwa
- 	lds	wa, 1
--	call	16713369
-+	call	16713383
- 	ld	xix, (xsp+12)
- 	sub	xix, 3434496
- 	cps	hl, 0
-@@ -3279,7 +3279,7 @@
- 	lda	xwa, (xsp+10)
- 	push	xwa
- 	lds	wa, 3
--	call	16713369
-+	call	16713383
- 	ld	xiz, (xsp+12)
- 	ld	wa, (xsp+10)
- 	ld	(xsp+8), wa
-@@ -3291,7 +3291,7 @@
- 	lda	xwa, (xsp+10)
- 	push	xwa
- 	lds	wa, 2
--	call	16713369
-+	call	16713383
- 	ld	xix, (xsp+12)
- 	cps	hl, 0
- 	jr	nz, 32
-@@ -3344,7 +3344,7 @@
- 	lda	xwa, (xsp+10)
- 	push	xwa
- 	lds	wa, 1
--	call	16713369
-+	call	16713383
- 	ld	xiz, (xsp+12)
- 	ld	wa, (xsp+10)
- 	ld	(xsp+8), wa
-@@ -3356,7 +3356,7 @@
- 	lda	xwa, (xsp+10)
- 	push	xwa
- 	lds	wa, 0
--	call	16713369
-+	call	16713383
- 	ld	xix, (xsp+12)
- 	cps	hl, 0
- 	jr	nz, 32
-@@ -4733,7 +4733,7 @@
- 	extz	wa
- 	calr	62001
- 	calr	62246
--	call	16713342
-+	call	16713356
- 	ldada	xwa, 2360
- 	.byte 0x98
- 	push_sr
 @@ -4916,7 +4916,7 @@
  	.byte 0x95
  	scf
@@ -4152,57 +2191,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	dec	2, xsp
  	ld	(xsp), e
  	calr	64365
-@@ -5086,7 +5086,7 @@
- 	ldda32	xde, 3218
- 	lds	wa, 1
- 	call	15678460
--	call	16713342
-+	call	16713356
- 	ld	hl, iz
- 	jr	3
- 	ldw	hl, 65434
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/bitmap_out_routines.s v10/maincpu/ui/bitmap_out_routines.s
---- v9/maincpu/ui/bitmap_out_routines.s	2026-03-23 09:50:07.251829965 +0000
-+++ v10/maincpu/ui/bitmap_out_routines.s	2026-03-23 02:19:50.755031290 +0000
-@@ -3687,7 +3687,7 @@
- 	cp	xhl, 27263185
- 	jr	nz, 59
- 	pushw	18
--	call	16715378
-+	call	16715392
- 	inc	2, xsp
- 	ld	xiz, xhl
- 	calr	65366
-@@ -3733,7 +3733,7 @@
- 	cp	xhl, 27263185
- 	jr	nz, 59
- 	pushw	18
--	call	16715378
-+	call	16715392
- 	inc	2, xsp
- 	ld	xiz, xhl
- 	calr	65238
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/drawbar_panel_ui.s v10/maincpu/ui/drawbar_panel_ui.s
---- v9/maincpu/ui/drawbar_panel_ui.s	2026-03-23 09:50:07.252984996 +0000
-+++ v10/maincpu/ui/drawbar_panel_ui.s	2026-03-23 02:19:50.762177256 +0000
-@@ -300,7 +300,7 @@
- 	ld	xbc, 15204420
- 	push	xbc
- 	push	xde
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -332,7 +332,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
+--- v9/maincpu/ui/drawbar_panel_ui.s	2026-03-23 11:40:25.816908067 +0000
++++ v10/maincpu/ui/drawbar_panel_ui.s	2026-03-23 11:34:25.166124332 +0000
 @@ -1196,7 +1196,7 @@
  	.byte 0xed, 0x00, 0xe9, 0xcc, 0x07, 0x00, 0x00, 0x00
  	.byte 0xea, 0x81, 0xe9, 0xed, 0x03, 0xe9, 0x61, 0x29
@@ -4384,267 +2375,6 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
  	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xd7
  	nop
-@@ -1539,7 +1539,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -1575,7 +1575,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -1603,7 +1603,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -1663,7 +1663,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -1706,7 +1706,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -1737,7 +1737,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -1797,7 +1797,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -1814,7 +1814,7 @@
- 	pushw	506
- 	ld	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jr	22
- 	ld	a, (xwa)
-@@ -1824,7 +1824,7 @@
- 	pushw	512
- 	ld	xwa, (xsp+18)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1841,7 +1841,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -1859,7 +1859,7 @@
- 	pushw	518
- 	lda	xwa, (xsp+46)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1876,7 +1876,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -1893,7 +1893,7 @@
- 	pushw	524
- 	lda	xwa, (xsp+44)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jr	22
- 	ld	a, (xwa)
-@@ -1903,7 +1903,7 @@
- 	pushw	530
- 	lda	xwa, (xsp+46)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1924,7 +1924,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -1941,7 +1941,7 @@
- 	pushw	536
- 	ld	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jr	22
- 	ld	a, (xwa)
-@@ -1951,7 +1951,7 @@
- 	pushw	542
- 	ld	xwa, (xsp+18)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -1968,7 +1968,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -1986,7 +1986,7 @@
- 	pushw	548
- 	lda	xwa, (xsp+46)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -2003,7 +2003,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xwa, 0
- 	ld8_24	a, 149362
- 	ld	xbc, xwa
-@@ -2021,7 +2021,7 @@
- 	nop
- 	pushw	554
- 	push	xbc
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jr	19
- 	ld	a, (xwa)
-@@ -2029,7 +2029,7 @@
- 	.long AudioStream_Property_Table
- 	pushw	560
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -2042,7 +2042,7 @@
- 	lds32	xwa, 0
- 	ld8_24	a, 149364
- 	ld	xbc, 26
--	call	16714318
-+	call	16714332
- 	lds32	xbc, 0
- 	ld8_24	c, 149362
- 	ld	xwa, xbc
-@@ -2068,7 +2068,7 @@
- 	pushw	566
- 	ld	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jr	18
- 	push	xwa
-@@ -2076,7 +2076,7 @@
- 	pushw	572
- 	ld	xwa, (xsp+20)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -2104,7 +2104,7 @@
- 	pushw	578
- 	ld	xwa, (xsp+20)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -2132,7 +2132,7 @@
- 	pushw	584
- 	ld	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jr	18
- 	push	xwa
-@@ -2140,7 +2140,7 @@
- 	pushw	590
- 	ld	xwa, (xsp+20)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -2853,7 +2853,7 @@
- 	ld	xbc, 15205336
- 	push	xbc
- 	push	xde
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
 @@ -3634,22 +3634,22 @@
  	.byte 0x04, 0x20, 0xb0, 0x02, 0x01, 0x00, 0xa2, 0x20
  	.byte 0xe8, 0x61, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0xd8
@@ -4690,33 +2420,6 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x10, 0x32, 0x41, 0x8c
  	.byte 0x00, 0xe0, 0x01, 0x78, 0x34, 0x01, 0xd9, 0x61
  	.byte 0xaf, 0x0c, 0x20, 0xb0, 0x51, 0xaf, 0x0c, 0x20
-@@ -14291,7 +14291,7 @@
- 	pushw	63602
- 	lda	xwa, (xsp+30)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	lda	xwa, (xsp+82)
- 	lda	xbc, (xsp+78)
-@@ -14415,7 +14415,7 @@
- 	ld	xwa, (xwa+2)
- 	push	xwa
- 	push	xbc
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	lda	xde, (xsp+54)
- 	ld	xwa, (xsp+14)
-@@ -14592,7 +14592,7 @@
- 	pushw	63606
- 	lda	xwa, (xsp+12)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	lda	xwa, (xsp+52)
- 	lda	xbc, (xsp+48)
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_control_panel.s v10/maincpu/ui/ui_control_panel.s
 --- v9/maincpu/ui/ui_control_panel.s	2026-03-23 09:50:07.256588652 +0000
 +++ v10/maincpu/ui/ui_control_panel.s	2026-03-23 02:19:50.769073973 +0000
@@ -4739,212 +2442,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0xee, 0x8d, 0xe8, 0x8c, 0xd9, 0xae, 0x95, 0x11
  	.byte 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x1c, 0x00
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_mode_handlers.s v10/maincpu/ui/ui_mode_handlers.s
---- v9/maincpu/ui/ui_mode_handlers.s	2026-03-23 09:50:07.257440461 +0000
-+++ v10/maincpu/ui/ui_mode_handlers.s	2026-03-23 02:19:50.770152910 +0000
-@@ -6808,7 +6808,7 @@
- 	pushw	237
- 	pushw	3808
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -6839,7 +6839,7 @@
- 	ld	xwa, 15535844
- 	push	xwa
- 	push	xbc
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -6866,7 +6866,7 @@
- 	pushw	237
- 	pushw	3820
- 	push	xiz
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -6888,7 +6888,7 @@
- 	pushw	237
- 	pushw	3824
- 	push	xiz
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -7720,7 +7720,7 @@
- 	pushw	4590
- 	lda	xwa, (xsp+12)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -7758,7 +7758,7 @@
- 	pushw	4594
- 	lda	xwa, (xsp+12)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -7792,7 +7792,7 @@
- 	pushw	4598
- 	lda	xwa, (xsp+12)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -7826,7 +7826,7 @@
- 	pushw	4602
- 	lda	xwa, (xsp+12)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -7859,7 +7859,7 @@
- 	pushw	4606
- 	lda	xwa, (xsp+12)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -7896,7 +7896,7 @@
- 	pushw	4610
- 	lda	xwa, (xsp+12)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -7928,7 +7928,7 @@
- 	pushw	4614
- 	lda	xwa, (xsp+12)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -8992,7 +8992,7 @@
- 	ld	xwa, 15537270
- 	push	xwa
- 	push	xhl
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -9032,7 +9032,7 @@
- 	ld	xwa, 15537278
- 	push	xwa
- 	push	xhl
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	call	16401616
- 	ld	xwa, xhl
-@@ -9714,7 +9714,7 @@
- 	pushw	237
- 	pushw	5458
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -9745,7 +9745,7 @@
- 	pushw	237
- 	pushw	5462
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -9778,7 +9778,7 @@
- 	pushw	237
- 	pushw	5466
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -9809,7 +9809,7 @@
- 	pushw	237
- 	pushw	5470
- 	push	xbc
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -9840,7 +9840,7 @@
- 	pushw	237
- 	pushw	5474
- 	push	xix
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -9868,7 +9868,7 @@
- 	pushw	237
- 	pushw	5478
- 	push	xix
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	call	16401616
- 	ld	xwa, xhl
-@@ -10607,7 +10607,7 @@
- 	pushw	5526
- 	ld	xwa, (xiz+18)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jrl	129
- 	dec	1, xwa
-@@ -10627,13 +10627,13 @@
- 	push	xhl
- 	ld	xwa, (xiz+18)
- 	push	xwa
--	call	16714981
-+	call	16714995
- 	pushw	2
- 	pushw	32
- 	ld	xwa, (xiz+18)
- 	lda	xwa, (xwa+16)
- 	push	xwa
--	call	16722139
-+	call	16722153
- 	lda	xsp, (xsp+18)
- 	ld	xwa, 15537572
- 	jr	37
-@@ -10647,13 +10647,13 @@
- 	push	xwa
- 	ld	xwa, (xiz+18)
- 	push	xwa
--	call	16714981
-+	call	16714995
- 	lda	xsp, (xsp+10)
- 	ld	xwa, 15537576
+--- v9/maincpu/ui/ui_mode_handlers.s	2026-03-23 11:40:25.829904099 +0000
++++ v10/maincpu/ui/ui_mode_handlers.s	2026-03-23 11:34:25.233519952 +0000
+@@ -10653,7 +10653,7 @@
  	push	xwa
  	ld	xwa, (xiz+18)
  	push	xwa
@@ -4953,370 +2453,6 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	inc	8, xsp
  	ld	(xhl), 0
  	ld	xhl, (xsp+4)
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_playback_modes.s v10/maincpu/ui/ui_playback_modes.s
---- v9/maincpu/ui/ui_playback_modes.s	2026-03-23 09:50:07.258866674 +0000
-+++ v10/maincpu/ui/ui_playback_modes.s	2026-03-23 02:19:50.772214000 +0000
-@@ -2139,7 +2139,7 @@
- 	pushw	62080
- 	pushw	0
- 	pushw	6888
--	call	16714981
-+	call	16714995
- 	ldada	xwa, 6888
- 	ld	(xwa+16), 0
- 	push	xwa
-@@ -2151,7 +2151,7 @@
- 	pushw	242
- 	pushw	0
- 	pushw	7248
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+24)
- 	ld	xwa, 4294967295
- 	ld	xbc, 29818880
-@@ -2168,7 +2168,7 @@
- 	pushw	252
- 	pushw	0
- 	pushw	7270
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+14)
- 	stdi8	7283, 0
- 	ld	xwa, 4294967295
-@@ -2186,7 +2186,7 @@
- 	pushw	264
- 	pushw	0
- 	pushw	7284
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+14)
- 	ldada	xwa, 7284
- 	ld	(xwa+16), 0
-@@ -2202,7 +2202,7 @@
- 	push	xhl
- 	pushw	0
- 	pushw	7304
--	call	16714981
-+	call	16714995
- 	lda	xsp, (xsp+10)
- 	ldada	xwa, 7304
- 	ld	(xwa+20), 0
-@@ -2229,7 +2229,7 @@
- 	pushw	272
- 	pushw	0
- 	pushw	7362
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	stdi8	7365, 0
- 	ld	xwa, 4294967295
-@@ -2243,7 +2243,7 @@
- 	push	xhl
- 	pushw	0
- 	pushw	7326
--	call	16714981
-+	call	16714995
- 	lda	xsp, (xsp+10)
- 	ldada	xwa, 7326
- 	ld	(xwa+12), 0
-@@ -2270,7 +2270,7 @@
- 	pushw	280
- 	pushw	0
- 	pushw	7366
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+10)
- 	stdi8	7369, 0
- 	ld	xwa, 4294967295
-@@ -2283,7 +2283,7 @@
- 	push	xhl
- 	pushw	0
- 	pushw	7340
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ldada	xwa, 7340
- 	ld	(xwa+20), 0
-@@ -2309,13 +2309,13 @@
- 	push	xhl
- 	pushw	0
- 	pushw	7370
--	call	16715583
-+	call	16715597
- 	pushw	20
- 	pushw	0
- 	pushw	7370
- 	pushw	2
- 	pushw	4174
--	call	16714981
-+	call	16714995
- 	lda	xsp, (xsp+18)
- 	lda_24	xwa, 135246
- 	ld	(xwa+20), 0
-@@ -2341,11 +2341,11 @@
- 	push	xhl
- 	pushw	0
- 	pushw	7370
--	call	16715583
-+	call	16715597
- 	pushw	59
- 	pushw	0
- 	pushw	7370
--	call	16715359
-+	call	16715373
- 	lda	xsp, (xsp+14)
- 	lda_24	xwa, 135268
- 	or	xhl, xhl
-@@ -2354,7 +2354,7 @@
- 	pushw	28
- 	push	xhl
- 	push	xwa
--	call	16714981
-+	call	16714995
- 	lda	xsp, (xsp+10)
- 	sti8_24	135296, 0
- 	jr	3
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_widget_defs.s v10/maincpu/ui/ui_widget_defs.s
---- v9/maincpu/ui/ui_widget_defs.s	2026-03-23 09:50:07.259468280 +0000
-+++ v10/maincpu/ui/ui_widget_defs.s	2026-03-23 02:19:50.774152943 +0000
-@@ -1923,7 +1923,7 @@
- 	pushw	41654
- 	ld	xwa, (xde+18)
- 	push	xwa
--	call	16714340
-+	call	16714354
- 	lda	xsp, (xsp+12)
- 	ld	xhl, xiz
- 	jr	31
-@@ -3462,7 +3462,7 @@
- 	push	xwa
- 	lda	xwa, (xsp+16)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 
- ButtonState_Paint_DrawAligned:
-@@ -8335,7 +8335,7 @@
- 	pushw 43152
- 	ld	xwa, (xsp+140)
- 	push	xwa
--	call	16715187
-+	call	16715201
- 	inc	8, xsp
- 	ld	xhl, (xsp+4)
- 	jrl	534
-@@ -8367,13 +8367,13 @@
- 	pushw 234
- 	pushw 43162
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	jrl	419
- 	pushw 234
- 	pushw 43170
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xwa, xiz
- 	ld	xbc, 31457287
-@@ -8486,7 +8486,7 @@
- 	jr	34
- 	ld	xwa, (xsp+136)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	inc	4, xsp
- 	lds32	xhl, 0
- 	jr	18
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_window_procs.s v10/maincpu/ui/ui_window_procs.s
---- v9/maincpu/ui/ui_window_procs.s	2026-03-23 09:50:07.261218433 +0000
-+++ v10/maincpu/ui/ui_window_procs.s	2026-03-23 02:19:50.774905858 +0000
-@@ -683,7 +683,7 @@
- 	.byte 0x9f, 0x06
- 	jrl	nc, 25050
- 	pushw	de
--	call	16715378
-+	call	16715392
- 	ld	(xsp+10), xhl
- 	.byte 0xd7
- 	swi	2
-@@ -694,7 +694,7 @@
- 	push	xbc
- 	ld	xwa, (xsp+14)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	ld16_24	wa, 160982
- 	.byte 0xd7
- 	swi	2
-@@ -713,10 +713,10 @@
- 	ld	xbc, 160944
- 	add	xbc, xwa
- 	push	xbc
--	call	16715583
-+	call	16715597
- 	ld	xwa, (xsp+26)
- 	push	xwa
--	call	16714468
-+	call	16714482
- 	lda	xsp, (xsp+22)
- 	lds	iz, 0
- 	.byte 0x9f, 0x06
-@@ -1957,24 +1957,24 @@
- 	ld	xwa, 15376750
- 	push	xwa
- 	push	xbc
--	call	16715583
-+	call	16715597
- 	lda	xwa, (xsp+20)
- 	push	xwa
--	call	16715666
-+	call	16715680
- 	ld	iz, hl
- 	ld	xwa, (xsp+20)
- 	ld	xwa, (xwa+22)
- 	push	xwa
--	call	16715666
-+	call	16715680
- 	lda	xsp, (xsp+16)
- 	cp	hl, iz
- 	jr	ule, 23
- 	lda	xwa, (xsp+12)
- 	push	xwa
--	call	16715666
-+	call	16715680
- 	inc	1, hl
- 	pushw	hl
--	call	16715378
-+	call	16715392
- 	inc	6, xsp
- 	ld	xwa, (xsp+8)
- 	ld	(xwa+22), xhl
-@@ -1983,7 +1983,7 @@
- 	ld	xwa, (xsp+12)
- 	ld	xwa, (xwa+22)
- 	push	xwa
--	call	16715583
-+	call	16715597
- 	inc	8, xsp
- 	ld	xbc, (xsp+8)
- 	ld	xwa, (xbc+22)
-@@ -4159,11 +4159,11 @@
- 	ld	xwa, (xsp+4)
- 	sla	xwa, 0
- 	ld	xbc, (xsp+8)
--	call	16714752
-+	call	16714766
- 	ld	xiz, xhl
- 	ld	xwa, (xsp+12)
- 	ld	xbc, xiz
--	call	16714318
-+	call	16714332
- 	ld	(xsp+12), xhl
- 	ld	xde, (xsp+30)
- 	ld	xwa, xde
-@@ -4212,11 +4212,11 @@
- 	ld	xwa, (xsp+8)
- 	sla	xwa, 0
- 	ld	xbc, (xsp+4)
--	call	16714752
-+	call	16714766
- 	ld	xiz, xhl
- 	ld	xwa, (xsp+16)
- 	ld	xbc, xiz
--	call	16714318
-+	call	16714332
- 	ld	(xsp+16), xhl
- 	ld	xde, (xsp+30)
- 	ld	xwa, xde
-@@ -8774,14 +8774,14 @@
- 	ld	xwa, (xsp+8)
- 	sla	xwa, 0
- 	ld	xbc, (xsp+4)
--	call	16714752
-+	call	16714766
- 	ld	(xsp+34), xhl
- 	lda	xwa, (xsp+62)
- 	ld	(xsp+42), xwa
- 	ld	xwa, (xsp+4)
- 	sla	xwa, 0
- 	ld	xbc, (xsp+8)
--	call	16714752
-+	call	16714766
- 	ld	xix, (xsp+42)
- 	lda	xwa, (xix+2)
- 	ld	(xsp+46), xwa
-@@ -8986,7 +8986,7 @@
- 	jrl	le, 211
- 	ld	xwa, (xsp+12)
- 	ld	xbc, xhl
--	call	16714318
-+	call	16714332
- 	ld	(xsp+12), xhl
- 	ld	xde, (xsp+42)
- 	ld	xwa, xde
-@@ -9075,7 +9075,7 @@
- 	jrl	958
- 	ld	xwa, (xsp+16)
- 	ld	xbc, (xsp+34)
--	call	16714318
-+	call	16714332
- 	ld	(xsp+16), xhl
- 	ld	xde, (xsp+42)
- 	ld	xwa, (xsp+46)
-@@ -9228,7 +9228,7 @@
- 	jr	le, 119
- 	ld	xwa, (xsp+12)
- 	ld	xbc, xhl
--	call	16714318
-+	call	16714332
- 	ld	(xsp+12), xhl
- 	ld	xde, (xsp+42)
- 	ld	xwa, xde
-@@ -9274,7 +9274,7 @@
- 	jrl	472
- 	ld	xwa, (xsp+16)
- 	ld	xbc, (xsp+34)
--	call	16714318
-+	call	16714332
- 	ld	(xsp+16), xhl
- 	ld	xhl, (xsp+42)
- 	ld	xde, (xsp+46)
-@@ -9377,7 +9377,7 @@
- 	jr	le, 118
- 	ld	xwa, (xsp+12)
- 	ld	xbc, xhl
--	call	16714318
-+	call	16714332
- 	ld	(xsp+12), xhl
- 	ld	xde, (xsp+42)
- 	ld	xwa, xde
-@@ -9423,7 +9423,7 @@
- 	jr	99
- 	ld	xwa, (xsp+16)
- 	ld	xbc, (xsp+34)
--	call	16714318
-+	call	16714332
- 	ld	(xsp+16), xhl
- 	ld	xhl, (xsp+42)
- 	ld	xde, (xsp+46)
-@@ -9879,11 +9879,11 @@
- 	.byte 0xaf, 0x04
- 	.long NakaInst_Ballads
- 	ld	xbc, (xsp+8)
--	call	16714752
-+	call	16714766
- 	ld	xiz, xhl
- 	ld	xwa, (xsp+12)
- 	ld	xbc, xiz
--	call	16714318
-+	call	16714332
- 	ld	(xsp+12), xhl
- 	ld	xbc, (xsp+34)
- 	ld	xwa, xbc
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui_widgets/naka_style_bitmaps.c v10/maincpu/ui_widgets/naka_style_bitmaps.c
 --- v9/maincpu/ui_widgets/naka_style_bitmaps.c	2026-03-23 10:48:50.456501971 +0000
 +++ v10/maincpu/ui_widgets/naka_style_bitmaps.c	2026-03-23 02:19:50.818153313 +0000
