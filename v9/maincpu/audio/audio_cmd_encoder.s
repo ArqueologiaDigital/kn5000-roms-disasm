@@ -3097,4 +3097,4 @@ AudioCmd_StrLen_Return:
 AudioCmd_FillToEnd:
 	.fill 41912, 1, 0xff
 AudioCmd_FillToVectors:
-	.fill 12696, 1, 0xff
+	.fill 12710, 1, 0xff

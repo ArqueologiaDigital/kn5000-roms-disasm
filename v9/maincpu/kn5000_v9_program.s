@@ -2457,7 +2457,6 @@ Debug_SWI_JumpTable:
 	jp	15664070
 	ret
 
-	.zero 14  ; v9: compensate for 14 fewer bytes of code vs v10
 Get_Firmware_Version:
 	ld8_24 l, 0xffffe8
 	ret
