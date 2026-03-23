@@ -1705,10 +1705,10 @@ VoiceEvent_AllocAllLayers:
 VoiceEvent_AllocTwoLayers:
 	ldada	xwa, 49662
 	lds	bc, 0
-	call	16662177
+	call	NoteMap_AssignVoiceParams
 	ldada	xwa, 49662
 	lds	bc, 1
-	jp	16662177
+	jp	NoteMap_AssignVoiceParams
 
 VoiceEvent_DispatchTable:
 	ldada xwa, 49662
@@ -4368,9 +4368,9 @@ AllocCheckNoteOn_Data:
 	jr	nz, 126
 	ld	xwa, (xsp+8)
 	lds	bc, 0
-	call	16668007
+	call	NoteMap_FindEntry
 	ld	xwa, (xsp+8)
-	call	16668708
+	call	NoteMap_FindBestVoiceSlot
 	cps	l, 0
 	jr	nz, 41
 	ld	xwa, (xsp+4)
@@ -4385,7 +4385,7 @@ AllocCheckNoteOn_Data:
 	nop
 	nop
 	jr	z, 17
-	call	16681724
+	call	NoteMap_FindBestMatch
 	cp	l, 255
 	jr	z, 8
 	ld	xwa, (xsp+4)
@@ -4415,7 +4415,7 @@ AllocCheckNoteOn_Data:
 	add	(xbc-55), c
 	extz	bc
 	ld	xwa, (xsp+8)
-	call	16667147
+	call	Voice_BuildAndEmitNoteOnEvents
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -4430,12 +4430,12 @@ AllocCheckNoteOn_Data:
 	jr	nz, 45
 	ld	xwa, (xsp+8)
 	lds	bc, 2
-	call	16668007
+	call	NoteMap_FindEntry
 	ld	xwa, (xsp+8)
-	call	16669248
+	call	NoteMap_FindBestFreeVoice
 	cps	l, 0
 	jr	nz, 25
-	call	16681601
+	call	VoiceMap_AllocateSlot
 	cp	l, 255
 	jr	z, 16
 	ld	xwa, (xsp+4)
@@ -4448,7 +4448,7 @@ AllocCheckNoteOn_Data:
 	ld	c, a
 	extz	bc
 	ld	xwa, (xsp+8)
-	call	16665613
+	call	NoteMap_AllocNewVoiceEntry
 	ld	a, (xsp+2)
 	extz	wa
 	inc	4, wa
@@ -4463,7 +4463,7 @@ AllocCheckNoteOn_Data:
 	ld	c, a
 	extz	bc
 	ld	xwa, (xsp+8)
-	call	16666361
+	call	NoteMap_SetChannelParam
 	ld	a, (xsp+2)
 	extz	wa
 	add	wa, 36
@@ -4486,7 +4486,7 @@ AllocCheckNoteOn_Data:
 	pushw	35789
 	extz	bc
 	ld	xwa, (xsp+8)
-	call	16666831
+	call	Voice_ScanAndEmitMidiEvents
 	ldda16	wa, 50584
 	bit	9, wa
 	jr	z, 53
@@ -4513,7 +4513,7 @@ AllocCheckNoteOn_Data:
 	add	(xbc-55), c
 	extz	bc
 	ld	xwa, (xsp+8)
-	call	16667147
+	call	Voice_BuildAndEmitNoteOnEvents
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -4537,7 +4537,7 @@ AllocCheckNoteOn_Data:
 	add	(xbc-55), c
 	extz	bc
 	ld	xwa, (xsp+8)
-	call	16667451
+	call	SeqPart_EmitNoteOnMessages
 	ld	a, (xsp+2)
 	extz	wa
 	add	wa, 100
@@ -4554,7 +4554,7 @@ AllocCheckNoteOn_Data:
 	add	(xbc-55), c
 	extz	bc
 	ld	xwa, (xsp+8)
-	call	16667729
+	call	Voice_EmitMidiNoteOnEvents
 	.byte 0xd7
 	swi	2
 	halt
@@ -13901,12 +13901,12 @@ SeqPerformance_EventDispatch:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	lds	bc, 1
-	call	16691429
+	call	SndPart_SetParam
 	ld	wa, (xsp+4)
 	pushw	3
 	ld	de, iz
 	lds	bc, 1
-	call	16569115
+	call	SndParam_NotifyAndReturn
 	jrl	-505
 	lds	wa, 0
 	cp	iz, 64
@@ -13921,53 +13921,53 @@ SeqPerformance_EventDispatch:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 432
-	call	16691429
+	call	SndPart_SetParam
 	ld	wa, (xsp+4)
 	ld	bc, iz
 	pushw	3
 	ld	de, bc
 	ldw	bc, 432
-	call	16569115
+	call	SndParam_NotifyAndReturn
 	jrl	-562
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 64
-	call	16691429
+	call	SndPart_SetParam
 	ld	wa, (xsp+4)
 	pushw	3
 	ld	de, iz
 	ldw	bc, 64
-	call	16569115
+	call	SndParam_NotifyAndReturn
 	jrl	-592
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 10
-	call	16691429
+	call	SndPart_SetParam
 	ld	wa, (xsp+4)
 	pushw	3
 	ld	de, iz
 	ldw	bc, 10
-	call	16569115
+	call	SndParam_NotifyAndReturn
 	jrl	-622
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 11
-	call	16691429
+	call	SndPart_SetParam
 	ld	wa, (xsp+4)
 	pushw	3
 	ld	de, iz
 	ldw	bc, 11
-	call	16569115
+	call	SndParam_NotifyAndReturn
 	jrl	-652
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 94
-	call	16691429
+	call	SndPart_SetParam
 	ld	wa, (xsp+4)
 	pushw	3
 	ld	de, iz
 	ldw	bc, 94
-	call	16569115
+	call	SndParam_NotifyAndReturn
 	jrl	-682
 
 SeqPerformance_Event_Block:
@@ -15093,7 +15093,7 @@ Audio_NullRet1:
 	ret
 
 Audio_NullRet1_Data:
-	jp	16684657
+	jp	NullRet2_Block
 	ret
 	nop
 	nop
@@ -18399,7 +18399,7 @@ HdaeRom_AltTableEntry9:
 	lda	xwa, (xsp+10)
 	ld	xde, xwa
 	ld	xwa, xiz
-	call	16569599
+	call	SndParam_ResolveWidget
 	cp	hl, 65535
 	jr	z, 50
 	lda	xwa, (xsp+12)
@@ -18409,7 +18409,7 @@ HdaeRom_AltTableEntry9:
 	lda	xwa, (xsp+6)
 	ld	xde, xwa
 	ld	xwa, xhl
-	call	16570309
+	call	SndParam_DecodeMidiAddr
 	cp	hl, 65535
 	jr	z, 14
 	ld	wa, (xsp+8)
@@ -18732,13 +18732,13 @@ SendEpilogue_Data:
 	jr	nz, 9
 	ldw	wa, 255
 	lds	bc, 2
-	call	16653225
+	call	MidiEvent_ConfigChannel
 	ldw	wa, 255
 	ldw	bc, 21
-	call	16653225
+	call	MidiEvent_ConfigChannel
 	ldw	wa, 255
 	ldw	bc, 22
-	call	16653225
+	call	MidiEvent_ConfigChannel
 	.byte 0xc7
 	swi	0
 	.byte 0x89
@@ -18795,13 +18795,13 @@ SendEpilogue_Data:
 	swi	0
 	.byte 0x89
 	extz	wa
-	call	16709486
+	call	SendPartDataBlock_Block
 	jrl	1297
 	.byte 0xc7
 	swi	0
 	.byte 0x89
 	extz	wa
-	call	16709510
+	call	SendPartDataBlock_Block2
 	jrl	1285
 	stda16	53194, iz
 	jrl	1278
@@ -18813,13 +18813,13 @@ SendEpilogue_Data:
 	swi	0
 	.byte 0x89
 	extz	wa
-	call	16709534
+	call	SendPartDataBlock_Block3
 	jrl	1252
 	.byte 0xc7
 	swi	0
 	.byte 0x89
 	extz	wa
-	call	16709714
+	call	SendPartDataBlock_Block9
 	jrl	1240
 	.byte 0xc7
 	swi	0
@@ -18840,7 +18840,7 @@ SendEpilogue_Data:
 	stda16	53198, iz
 	jrl	1193
 	ld	xwa, 16706
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 1
 	jr	nz, 2
 	lds	iz, 0
@@ -18848,20 +18848,20 @@ SendEpilogue_Data:
 	swi	0
 	.byte 0x89
 	extz	wa
-	call	16709558
+	call	SendPartDataBlock_Block4
 	jrl	1166
 	ld	xwa, 16706
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 1
 	jr	nz, 9
 	lds	wa, 0
-	call	16709558
+	call	SendPartDataBlock_Block4
 	jrl	1144
 	ld	xwa, 16705
-	call	16569399
+	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
-	call	16709558
+	call	SendPartDataBlock_Block4
 	jrl	1124
 	ld	wa, de
 	sub	wa, 128
@@ -18948,7 +18948,7 @@ SendEpilogue_Data:
 	jr	lt, -59
 	jrl	937
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
 	calr	1917
@@ -18960,7 +18960,7 @@ SendEpilogue_Data:
 	swi	7
 	jrl	nz, 908
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
 	calr	1704
@@ -18995,7 +18995,7 @@ SendEpilogue_Data:
 	jr	lt, -59
 	jrl	818
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 802
 	ldda8	a, 64797
@@ -19016,7 +19016,7 @@ SendEpilogue_Data:
 	calr	1537
 	jrl	754
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 738
 	ldda8	a, 64797
@@ -19038,7 +19038,7 @@ SendEpilogue_Data:
 	calr	1471
 	jrl	688
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 672
 	ldda8	a, 64797
@@ -19060,7 +19060,7 @@ SendEpilogue_Data:
 	calr	1405
 	jrl	622
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 606
 	ldda8	a, 64797
@@ -19082,7 +19082,7 @@ SendEpilogue_Data:
 	calr	1339
 	jrl	556
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 540
 	ldda8	a, 64797
@@ -19104,7 +19104,7 @@ SendEpilogue_Data:
 	calr	1273
 	jrl	490
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 474
 	ldda8	a, 64797
@@ -19126,7 +19126,7 @@ SendEpilogue_Data:
 	calr	1207
 	jrl	424
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 408
 	ldda8	a, 64797
@@ -19148,7 +19148,7 @@ SendEpilogue_Data:
 	calr	1141
 	jrl	358
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 342
 	ldda8	a, 64797
@@ -19170,7 +19170,7 @@ SendEpilogue_Data:
 	calr	1075
 	jrl	292
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 276
 	ldda8	a, 64797
@@ -19192,7 +19192,7 @@ SendEpilogue_Data:
 	calr	1009
 	jrl	226
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 210
 	ldda8	a, 64797
@@ -19214,7 +19214,7 @@ SendEpilogue_Data:
 	calr	942
 	jrl	159
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 143
 	ldda8	a, 64797
@@ -19236,7 +19236,7 @@ SendEpilogue_Data:
 	calr	875
 	jr	93
 	ld	xwa, 17025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jr	nz, 78
 	ldda8	a, 64797
@@ -19266,7 +19266,7 @@ SendEpilogue_Data:
 	stda32	53184, xwa
 	jr	4
 	stda32	53188, xwa
-	call	16695161
+	call	MIDI_PostSendStub
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -19731,7 +19731,7 @@ SendSysExCmd_Data:
 	ldw	bc, 133
 	lds	de, 0
 	calr	-408
-	jp	16695161
+	jp	MIDI_PostSendStub
 
 COMM_WriteAndCheck:
 	dec 4, xsp
@@ -19869,7 +19869,7 @@ MIDI_PitchBendData_Block:
 	ldw	bc, 146
 	lds	de, 0
 	calr	-706
-	jp	16695161
+	jp	MIDI_PostSendStub
 
 MIDI_SendAllSoundOff:
 	pushw iz
@@ -20702,7 +20702,7 @@ SendSinglePacket_Data:	.asciz "¿Þ7>éŽ¿$PØ©E¨Áî"
 	ei	0x06
 	push	xiz
 	pushm	(xsp+40)
-	call	15673567
+	call	SeqBuf2_WriteBytes
 	inc	6, xsp
 	ei	0x00
 	jr	37
@@ -20719,7 +20719,7 @@ SendSinglePacket_Data:	.asciz "¿Þ7>éŽ¿$PØ©E¨Áî"
 	ei	0x06
 	push	xiz
 	pushm	(xsp+40)
-	call	15673219
+	call	SeqMain_WriteBytes
 	inc	6, xsp
 	ei	0x00
 	pop	xiz
@@ -22850,11 +22850,11 @@ Dispatch_Data:
 	add	xiz, xwa
 	ld	xwa, xiz
 	ldda32	xbc, 59883
-	call	16714318
+	call	Math_MultiplyAccumulate
 	ld	xiz, xhl
 	ld	xwa, xiz
 	ld	xbc, 1000
-	call	16714762
+	call	Math_DivideU32
 	ld	xiz, xhl
 	ld	xwa, 40
 	cp	xiz, 40
@@ -22879,8 +22879,8 @@ Dispatch_Data:
 	ld	bc, wa
 	lds32	xwa, 4
 	lds	de, 3
-	call	16568833
-	call	16556824
+	call	SoundParam_NotifyChange
+	call	SeqTimer_UpdateTempoReg
 	ld	xwa, xiz
 	set	15, wa
 	stda16	4597, wa
@@ -24255,7 +24255,7 @@ StoreAndAdvance_RestoreReg2:
 StoreAndAdvance_Prologue3:
 	pushw	iz
 	lds	iz, 0
-	call	16068239
+	call	TaskBuf_ReadNextByte
 	ld	iz, hl
 	cps	iz, 0
 	jr	ge, 3
@@ -24296,7 +24296,7 @@ CharMap_ActivePreamb_LoadDRAM:
 	ld	xde, 57668
 	lds	wa, 5
 	lds	bc, 2
-	call	15676148
+	call	Audio_InitDMAChannels_Done
 	ret
 
 CharMap_ActivePreamb_Prologue:
@@ -24981,7 +24981,7 @@ SndParam_CheckAndApplyMode:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, 192
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 1
 	jr	nz, 7
 	ld	xwa, xiz
@@ -25322,7 +25322,7 @@ Param_SignExtendRetu_Data:
 	sub	xbc, 426
 	ld	xwa, xbc
 	ld	xbc, 11
-	call	16714756
+	call	DivMod32
 	cp	xhl, 9
 	jrl	ugt, 411
 	add	xhl, xhl
@@ -25345,7 +25345,7 @@ Param_SignExtendRetu_Data:
 	sub	xbc, 102
 	ld	xwa, xbc
 	ld	xbc, 81
-	call	16714756
+	call	DivMod32
 	cp	xhl, 76
 	jrl	ugt, 338
 	add	xhl, 15651913
@@ -25492,7 +25492,7 @@ Param_SignExtendRetu_Data:
 	ld	xwa, xiz
 	sub	xwa, 295
 	ld	xbc, 80
-	call	16714762
+	call	Math_DivideU32
 	ld	a, l
 	extz	wa
 	muls	wa, 80
@@ -25506,7 +25506,7 @@ Param_SignExtendRetu_Data:
 	sub	xbc, xwa
 	ld	xwa, xbc
 	ld	xbc, 11
-	call	16714756
+	call	DivMod32
 	cp	xhl, 9
 	jrl	ugt, 371
 	add	xhl, xhl
@@ -25722,7 +25722,7 @@ Param_SignExtendRetu_Data:
 	inc	8, bc
 	lds	wa, 3
 	ld	xde, 57752
-	call	15676148
+	call	Audio_InitDMAChannels_Done
 	.byte 0xbf
 	ccf
 	push_sr
@@ -25767,7 +25767,7 @@ Param_SignExtendRetu_Data:
 	stda32	57747, xde
 	lds	wa, 3
 	ldw	bc, 21
-	call	15676148
+	call	Audio_InitDMAChannels_Done
 	lds	hl, 0
 	jr	2
 	lds	hl, 1
@@ -25869,7 +25869,7 @@ Param_SignExtendRetu_Data:
 	lds	wa, 3
 	ld	bc, (xsp+6)
 	ld	xde, xiz
-	call	15676148
+	call	Audio_InitDMAChannels_Done
 	.byte 0xbf, 0x04
 	push_sr
 	nop
@@ -26505,7 +26505,7 @@ SendPartDataBlock_Block9:
 	ld	xwa, 58202
 	ldw	bc, 37
 	lds	de, 1
-	call	16708585
+	call	SendCOMM_VariableLengthPacket
 	ret
 	st16_24	246010, wa
 	lds	hl, 0
@@ -26974,7 +26974,7 @@ TmFlashWrite_Block1:
 	add	wa, bc
 	extz	xwa
 	ld	xbc, 470
-	call	16714318
+	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	ld	xwa, 1966080
 	add	xwa, xhl
@@ -26996,15 +26996,15 @@ TmFlashWrite_Block1:
 	.byte 0xf3, 0xe5
 	nop
 	.asciz "x21P"
-	call	15676503
+	call	InterCPU_E1_Bulk_Transfer
 	ld	a, (xsp+2)
 	extz	wa
 	ld	c, (xsp)
 	extz	bc
-	call	16708753
+	call	BuildAndSendPacket_Block
 	jr	4
-	call	16708693
-	call	16273886
+	call	COMM_BuildAndSendPacket
+	call	FDemoText_RefreshFullDisplay
 	inc	4, xsp
 	ret
 	ret
@@ -27037,7 +27037,7 @@ TmFlashWrite_Block1:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 470
-	call	16714318
+	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	ld	xwa, 1966080
 	add	xwa, xhl
@@ -27067,17 +27067,17 @@ TmFlashWrite_Block2:
 	nop
 	nop
 TmFlashWrite_Block3:
-	call	15676503
+	call	InterCPU_E1_Bulk_Transfer
 	ld	a, (xsp+4)
 	extz	wa
 	ldw	bc, 255
-	call	16708753
+	call	BuildAndSendPacket_Block
 	jr	12
 	ld	a, (xsp+4)
 	extz	wa
 	ldw	bc, 255
-	call	16708693
-	call	16273886
+	call	COMM_BuildAndSendPacket
+	call	FDemoText_RefreshFullDisplay
 	pop	xiz
 	.byte 0xef
 	jr	le, 0x0e
@@ -27100,7 +27100,7 @@ TmFlash_WriteRoutine:
 	extz	xwa
 	ld	(xsp+10), xwa
 	ld	xbc, 470
-	call	16714318
+	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	bitm	0, (xsp+20)
 	jr	z, 96
@@ -27115,7 +27115,7 @@ TmFlash_WriteRoutine:
 	ld	(xsp+6), xwa
 	ld	xwa, (xsp+10)
 	ld	xbc, 10535
-	call	16714318
+	call	Math_MultiplyAccumulate
 	add	xhl, 18816
 	add	xhl, xiz
 	ld	xwa, (xsp+6)
@@ -27172,8 +27172,8 @@ TmFlash_WriteRoutine:
 	ld	xwa, 1966080
 	ldw	bc, 29354
 	ld	xde, 30720
-	call	15676503
-	jp	16708813
+	call	InterCPU_E1_Bulk_Transfer
+	jp	TmFlash_Return
 	ld	xwa, 1966080
 	calr	-1624
 	ldw	wa, 65434
@@ -27194,7 +27194,7 @@ TmFlash_WriteRoutine:
 	ret
 	extz	xwa
 	ld	xbc, 470
-	call	16714318
+	call	Math_MultiplyAccumulate
 	ld	xwa, xhl
 	add	xwa, 16
 	ld	xhl, 1966080
@@ -27229,7 +27229,7 @@ TmFlash_WriteRoutine:
 	ld	xbc, 470
 	jr	5
 	ld	xbc, 289
-	call	16714318
+	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	.byte 0xaf
 	push_sr
@@ -27257,7 +27257,7 @@ TmFlash_WriteRoutine:
 	ld	xiz, xbc
 	extz	xwa
 	ld	xbc, 470
-	call	16714318
+	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	ld	xwa, 1966080
 	add	xwa, xhl
@@ -27299,7 +27299,7 @@ TmFlash_WriteRoutine:
 	cps	xix, 0
 	ld	xwa, xbc
 	ld	xbc, 470
-	call	16714318
+	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	.byte 0xaf, 0x06
 	sub	(xhl), l
@@ -27312,7 +27312,7 @@ TmFlash_WriteRoutine:
 	jr	65
 	ld	xwa, xbc
 	ld	xbc, 289
-	call	16714318
+	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	.byte 0xaf, 0x06
 	sub	(xhl), l
@@ -27353,11 +27353,11 @@ TmFlash_WriteRoutine:
 	ld	(xsp+8), a
 	ld	xiz, (xsp+14)
 	push	xiz
-	call	16715666
+	call	Strlen
 	ld	(xsp+8), hl
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16715666
+	call	Strlen
 	inc	8, xsp
 	ld	(xsp+6), hl
 	.byte 0x9f, 0x06
@@ -27374,7 +27374,7 @@ TmFlash_WriteRoutine:
 	push	xiz
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	16715024
+	call	Mem_Compare
 	add	xsp, 10
 	cps	hl, 0
 	jr	nz, 4
@@ -27589,7 +27589,7 @@ Audio_SendCommand_Block:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16715834
+	call	Audio_CommandEncoder
 	lda	xsp, (xsp+12)
 	ret
 	ld32_24	xbc, 246300

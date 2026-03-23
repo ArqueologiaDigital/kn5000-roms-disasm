@@ -65,10 +65,10 @@ BitMapOut_BlitComplete:
 	ret
 
 BitMapOut_ByteData_RenderA:
-	call	15665047
+	call	Boot_CheckConfigFlag7
 	cps	hl, 0
 	ret	z
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263222
 	ret	z
 	.byte 0xc1
@@ -85,38 +85,38 @@ BitMapOut_ByteData_RenderA:
 	jr	nz, 74
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
-	call	16423016
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263210
-	call	16424280
+	call	ApPostEvent
 	lds	wa, 1
 	jr	72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
-	call	16423016
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263211
-	call	16424280
+	call	ApPostEvent
 	lds	wa, 1
 	jr	35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
-	call	16423016
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263208
-	call	16424280
+	call	ApPostEvent
 	lds	wa, 1
 	calr	480
 	ret
 BitMapOut_ByteData_RenderB:
 	dec	6, xsp
-	call	15665047
+	call	Boot_CheckConfigFlag7
 	cps	hl, 0
 	jrl	z, 158
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263222
 	jrl	z, 145
 	ldda8	a, 49280
@@ -130,18 +130,18 @@ BitMapOut_ByteData_RenderB:
 	calr	429
 	cps	l, 0
 	jr	nz, 120
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263208
 	jr	nz, 108
 	ldda8	a, 36154
 	extz	wa
 	lds	bc, 0
-	call	16569591
+	call	SndParam_LookupViaEncode
 	ld	(xsp+3), l
 	ldda8	a, 36154
 	extz	wa
 	ldw	bc, 32
-	call	16569591
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
 	.byte 0xb8
@@ -149,7 +149,7 @@ BitMapOut_ByteData_RenderB:
 	push_a
 	push	xde
 	.byte 0x8d
-	call	16554837
+	call	SndParam_ResolveVoiceEntry
 	.byte 0x8f
 	nop
 	ldb	a, 201
@@ -161,15 +161,15 @@ BitMapOut_ByteData_RenderB:
 	ld	xwa, 4294967295
 	ld	xbc, 31457401
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	jr	35
 	ld	xwa, 4294967295
 	ld	xbc, 29491207
-	call	16423016
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29491207
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	lds	wa, 1
 	calr	310
 	inc	6, xsp
@@ -179,10 +179,10 @@ BitMapOut_ByteData_RenderC:
 	jrl	302
 BitMapOut_ByteData_RenderD:
 	dec	6, xsp
-	call	15665047
+	call	Boot_CheckConfigFlag7
 	cps	hl, 0
 	jr	z, 120
-	call	16406631
+	call	GetTitleNow
 	.long DrawbarSlider_ConfigData
 	.byte 0xa0, 0x01
 	jr	nz, 108
@@ -196,12 +196,12 @@ BitMapOut_ByteData_RenderD:
 	ldda8	a, 36154
 	extz	wa
 	lds	bc, 0
-	call	16569591
+	call	SndParam_LookupViaEncode
 	ld	(xsp+3), l
 	ldda8	a, 36154
 	extz	wa
 	ldw	bc, 32
-	call	16569591
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
 	.byte 0xb8
@@ -209,7 +209,7 @@ BitMapOut_ByteData_RenderD:
 	push_a
 	push	xde
 	.byte 0x8d
-	call	16554837
+	call	SndParam_ResolveVoiceEntry
 	.byte 0x8f
 	nop
 	ldb	a, 201
@@ -221,17 +221,17 @@ BitMapOut_ByteData_RenderD:
 	ld	xwa, 4294967295
 	ld	xbc, 31457401
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	jr	21
 	ld	xwa, 4294967295
 	ld	xbc, 29491207
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	lds	wa, 1
 	calr	172
 	inc	6, xsp
 	ret
-	call	15665047
+	call	Boot_CheckConfigFlag7
 	cps	hl, 0
 	ret	z
 	.byte 0xc1
@@ -243,16 +243,16 @@ BitMapOut_ByteData_RenderD:
 	ret	nz
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
-	call	16423016
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263209
-	call	16424280
+	call	ApPostEvent
 	lds	wa, 1
 	calr	109
 	ret
 BitMapOut_ByteData_RenderE:
-	call	15665047
+	call	Boot_CheckConfigFlag7
 	cps	hl, 0
 	ret	z
 	.byte 0xc1
@@ -266,16 +266,16 @@ BitMapOut_ByteData_RenderE:
 	calr	78
 	cps	l, 0
 	ret	nz
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263209
 	ret	nz
 	ld	xwa, 4294967295
 	ld	xbc, 29360129
-	call	16423016
+	call	DeleteEvent
 	ld	xwa, 4294967295
 	ld	xbc, 29360129
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	lds	wa, 1
 	calr	32
 	ret
@@ -320,7 +320,7 @@ BitMapOut_DecrementTimer:
 	ret
 
 BitMapOut_ByteData_TransitionSeq:
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27262977
 	ret	nz
 	.byte 0xc1, 0x80, 0xc0
@@ -341,7 +341,7 @@ BitMapOut_ByteData_TransitionSeq:
 	.byte 0x8f
 	lda	xwa, (xwa)
 	jr	f, 0
-	call	16546109
+	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
 	lds32	xde, 5
@@ -351,7 +351,7 @@ BitMapOut_ByteData_TransitionSeq:
 	.byte 0x8f
 	lda	xwa, (xwa)
 	jr	f, 0
-	call	16546109
+	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
 	lds32	xde, 6
@@ -361,9 +361,9 @@ BitMapOut_ByteData_TransitionSeq:
 	.byte 0x8f
 	ld	(xwa+48), xwa
 	nop
-	call	16546109
+	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 192
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 1
 	jr	nz, 14
 	ld	xwa, 4294967295
@@ -373,7 +373,7 @@ BitMapOut_ByteData_TransitionSeq:
 	ld	xwa, 4294967295
 	ld	xbc, 29491206
 	lds32	xde, 1
-	call	16424280
+	call	ApPostEvent
 	ret
 BitMapOut_ByteData_PresetCopy:
 	.byte 0xd7
@@ -406,7 +406,7 @@ BitMapOut_ByteData_PresetCopy:
 	cps	a, 0
 	jr	z, 31
 	ld	xwa, 769
-	call	16569399
+	call	SndParam_LookupReadOnly
 	.byte 0xc7
 	swi	3
 	.byte 0x89
@@ -3672,7 +3672,7 @@ BitMapOut_ByteData_RenderState:
 	.byte 0x89
 	extz	wa
 	calr	65428
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263184
 	jr	nz, 19
 	.byte 0xc7
@@ -3683,11 +3683,11 @@ BitMapOut_ByteData_RenderState:
 	ld	xwa, 4294967295
 	ld	xbc, 29360142
 	jr	67
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263185
 	jr	nz, 59
 	pushw	18
-	call	16715378
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	calr	65366
@@ -3699,15 +3699,15 @@ BitMapOut_ByteData_RenderState:
 	ld	xwa, 4294967295
 	ld	xbc, 29491202
 	ld	xde, xiz
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16424280
+	call	ApPostEvent
 	lds32	xwa, 0
 	lds32	xbc, 0
 	lds32	xde, 0
-	call	16355460
+	call	MainGetPmemName
 	pop	xiz
 	ret
 BitMapOut_ByteData_DisplayUpdate:
@@ -3721,7 +3721,7 @@ BitMapOut_ByteData_DisplayUpdate:
 	cps	a, 0
 	jr	z, 25
 	ld	xwa, 768
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	l, 0
 	jr	z, 12
 	dec	1, l
@@ -3729,11 +3729,11 @@ BitMapOut_ByteData_DisplayUpdate:
 	extz	hl
 	ld	wa, hl
 	calr	65269
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263185
 	jr	nz, 59
 	pushw	18
-	call	16715378
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	calr	65238
@@ -3745,11 +3745,11 @@ BitMapOut_ByteData_DisplayUpdate:
 	ld	xwa, 4294967295
 	ld	xbc, 29491202
 	ld	xde, xiz
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	ret
 
@@ -3834,16 +3834,16 @@ BitMapOut_UpdateWidget_Finalize:
 	ret
 
 BitMapOut_UpdateWidget_Done:
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263184
 	jr	z, 89
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263185
 	jr	z, 77
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263187
 	jr	z, 65
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263186
 	jr	z, 53
 	.byte 0xc1
@@ -3857,7 +3857,7 @@ BitMapOut_UpdateWidget_Done:
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263184
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	lds32	xde, 1
@@ -3873,7 +3873,7 @@ BitMapOut_UpdateWidget_Done:
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ret
 	ret
 	extz	wa
@@ -3882,7 +3882,7 @@ BitMapOut_UpdateWidget_Done:
 	scc16	pl, wa
 	swi	4
 	.byte 0xd1
-	jp	16534664
+	jp	ToneGen_LookupByVoiceIndex
 	ret
 	dec	2, xsp
 	.byte 0xd7
@@ -3893,7 +3893,7 @@ BitMapOut_UpdateWidget_Done:
 	jr	ge, 11
 	ld	a, (xsp+2)
 	extz	wa
-	call	16547458
+	call	VoiceData_ExtendedParamSetup
 	jr	31
 	.byte 0xc7
 	swi	3
@@ -3904,7 +3904,7 @@ BitMapOut_UpdateWidget_Done:
 	extz	wa
 	sll	wa, 3
 	add	wa, bc
-	call	16534664
+	call	ToneGen_LookupByVoiceIndex
 	.byte 0xc7
 	swi	3
 	jr	lt, -57

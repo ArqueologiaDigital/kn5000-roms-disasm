@@ -569,7 +569,7 @@ SmfFN_JumpTable:
 	stda32	33192, xwa
 	cpdi8	36150, 107
 	jr	z, 20
-	call	16292551
+	call	GetFirstPageBase
 	stda16	33196, hl
 	cps	hl, 0
 	jr	ge, 26
@@ -580,7 +580,7 @@ SmfFN_JumpTable:
 	cps	wa, 0
 	jr	le, 2
 	dec	1, wa
-	call	16292772
+	call	NavigateToFileIndex
 	ldda16	wa, 33196
 	exts	xwa
 	divs	wa, 10

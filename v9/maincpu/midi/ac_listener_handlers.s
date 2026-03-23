@@ -785,11 +785,11 @@ FadeSetGridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 Data_FadeSetGridDispatch:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	(xsp+28), xhl
 	lda	xbc, (xsp+4)
 	ld	xwa, (xsp+28)
@@ -808,11 +808,11 @@ Data_FadeSetGridDispatch:
 	lds	bc, 1
 	lds	de, 2
 	jr	74
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	(xsp+28), xhl
 	lda	xbc, (xsp+4)
 	ld	xwa, (xsp+28)
@@ -830,7 +830,7 @@ Data_FadeSetGridDispatch:
 	jrl	z, 366
 	ldw	bc, 65535
 	lds	de, 2
-	call	16382274
+	call	MainLswAdd
 	jrl	354
 	lda	xhl, (xsp+4)
 	ldw	(xhl), 1
@@ -870,9 +870,9 @@ Data_FadeSetGridDispatch:
 	pushw 231
 	pushw 63902
 	push	xbc
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
@@ -884,9 +884,9 @@ Data_FadeSetGridDispatch:
 	.long Data_AcGridParamTable
 	push	xwa
 	push	xbc
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
@@ -1304,11 +1304,11 @@ InOutGridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 Data_InOutGridDispatch:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
@@ -1350,7 +1350,7 @@ Data_InOutGridDispatch:
 	lds	de, 1
 	jrl	292
 	ld	xwa, 20480
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 2
 	jr	z, 17
 	cps	hl, 1
@@ -1379,11 +1379,11 @@ Data_InOutGridDispatch:
 	lds	bc, 1
 	lds	de, 1
 	jrl	202
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
@@ -1425,7 +1425,7 @@ Data_InOutGridDispatch:
 	lds	de, 1
 	jr	88
 	ld	xwa, 20480
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 2
 	jr	z, 17
 	cps	hl, 1
@@ -1453,7 +1453,7 @@ Data_InOutGridDispatch:
 	ld	xwa, 8579
 	ldw	bc, 65535
 	lds	de, 1
-	call	16382274
+	call	MainLswAdd
 	jrl	1405
 	lda	xwa, (xsp+4)
 	ldw	(xwa), 1
@@ -1490,9 +1490,9 @@ Data_InOutGridDispatch:
 	.byte 0xe4, 0xe0
 	ldb	w, 56
 	push	xde
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
@@ -1505,9 +1505,9 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
@@ -1529,14 +1529,14 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
-	call	16422496
-	call	16401616
+	call	SendEvent
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 29360140
 	lds32	xde, 0
@@ -1549,14 +1549,14 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
-	call	16422496
-	call	16401616
+	call	SendEvent
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 29360140
 	lds32	xde, 0
@@ -1569,21 +1569,21 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
-	call	16422496
-	call	16401616
+	call	SendEvent
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 29360140
 	lds32	xde, 0
 	jrl	1024
 	ldw	(xbc), 3
 	ld	xwa, 20480
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 1
 	jr	nz, 25
 	ld	wa, (xiz+4)
@@ -1593,16 +1593,16 @@ Data_InOutGridDispatch:
 	pushw	64766
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	jr	16
 	pushw	231
 	pushw	64772
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
@@ -1612,7 +1612,7 @@ Data_InOutGridDispatch:
 	pop_sr
 	nop
 	ld	xwa, 20480
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 2
 	jr	nz, 22
 	.byte 0x9e, 0x04, 0x04
@@ -1620,16 +1620,16 @@ Data_InOutGridDispatch:
 	pushw	64778
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	jr	16
 	pushw	231
 	pushw	64784
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
@@ -1645,9 +1645,9 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
@@ -1662,9 +1662,9 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
@@ -1680,9 +1680,9 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
@@ -1699,9 +1699,9 @@ Data_InOutGridDispatch:
 	or	xix, xix
 	ldb	w, 56
 	push	xde
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
@@ -1733,7 +1733,7 @@ ParaLoadOpt_Entry:
 
 Data_ParaLoadOptDispatch:
 	ld	xwa, 8448
-	call	16569399
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, 15203496
 	.byte 0xe3
@@ -1742,15 +1742,15 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	602
 	ld	xwa, 8449
-	call	16569399
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, 15203476
 	.byte 0xe3
@@ -1759,15 +1759,15 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	552
 	ld	xwa, 20480
-	call	16569399
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, 15203524
 	.byte 0xe3
@@ -1776,15 +1776,15 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
-	call	16422496
+	call	SendEvent
 	ld	xwa, 20480
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 2
 	jr	z, 99
 	lda	xwa, (xsp+6)
@@ -1797,46 +1797,46 @@ Data_ParaLoadOptDispatch:
 	pushw	64790
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	439
 	ldw	(xwa), 3
 	ld	xwa, 20481
-	call	16569399
+	call	SndParam_LookupReadOnly
 	exts	hl
 	pushw	hl
 	pushw	231
 	pushw	64796
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	389
 	ldw	(xsp+6), 3
 	ld	xwa, 20482
-	call	16569399
+	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	231
 	pushw	64802
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	340
 	ld	xwa, 20480
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 2
 	jr	z, 88
 	cps	hl, 1
@@ -1847,44 +1847,44 @@ Data_ParaLoadOptDispatch:
 	pushw	64808
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	285
 	ld	xwa, 20481
-	call	16569399
+	call	SndParam_LookupReadOnly
 	exts	hl
 	pushw	hl
 	pushw	231
 	pushw	64814
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	239
 	ld	xwa, 20482
-	call	16569399
+	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	231
 	pushw	64820
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	195
 	ld	xwa, 8577
-	call	16569399
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, 15203476
 	.byte 0xe3
@@ -1893,15 +1893,15 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	145
 	ld	xwa, 8580
-	call	16569399
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, 15203476
 	.byte 0xe3
@@ -1910,15 +1910,15 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jr	96
 	ld	xwa, 8578
-	call	16569399
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, 15203476
 	.byte 0xe3
@@ -1927,15 +1927,15 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jr	47
 	ld	xwa, 8579
-	call	16569399
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, 15203476
 	.byte 0xe3
@@ -1944,13 +1944,13 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
-	call	16422496
+	call	SendEvent
 
 MdPreset_ReturnZero2:
 	lds32 xhl, 0

@@ -26,7 +26,7 @@ MiddleFuncCall:
 MiddleFuncCall_DispatchData:
 	.byte 0xf1, 0xa4
 	.ascii "(E:;<>"
-	call	16280444
+	call	Demo_SelectEntry_ProcessSongList
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -35,7 +35,7 @@ MiddleFuncCall_DispatchData:
 	push	xde
 	pushw	0
 	pushw	4441
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	push	xde
 	push	xhl
@@ -60,11 +60,11 @@ MiddleFuncCall_DispatchData:
 	pop	xhl
 	pop	xde
 	jr	21
-	call	16637551
+	call	Audio_CheckSubsystemReady
 	jr	15
 	calr	60449
 	jr	10
-	call	16555561
+	call	VoiceChannels_InitPanFromPreset
 	jr	4
 
 ; SqTrSelTtl case B

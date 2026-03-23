@@ -589,7 +589,7 @@ DSPCfg_SyncBitmapData:
 	push	xhl
 	push	xix
 	push	xiz
-	call	15668467
+	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1101,7 +1101,7 @@ DSPCfg_Param_CaseC:
 	lds	wa, 1
 	ld	xbc, 213242
 	lds	de, 6
-	call	15678524
+	call	FlashWrite_Entry
 	ret
 
 Audio_DispatchCommand:
@@ -1146,7 +1146,7 @@ DSPCfg_Param_CaseD:
 	push	xwa
 	pushw	3
 	pushw	16634
-	call	16715147
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ret
 

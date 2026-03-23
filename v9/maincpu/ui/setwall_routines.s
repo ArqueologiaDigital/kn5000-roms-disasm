@@ -17,8 +17,8 @@ SetWall_JumpStubData:
 	push	xix
 	swi	6
 	stdi8	3295, 0
-	call	15870299
-	call	15855140
+	call	CDlikeSwTtl_SendStartEvt
+	call	SetWall_UpdateSlotIndex
 	ret
 
 SetWall_UpdateSlotIndex:
@@ -31,36 +31,36 @@ SetWall_UpdateSlotIndex:
 	ret
 
 SetWall_InlineCodeBlock:
-	call	15856564
+	call	SetWall_InlineCodeBlock2
 	ret
-	call	15856564
+	call	SetWall_InlineCodeBlock2
 	.byte 0xc1, 0xdf
 	incf
 	push	xsp
 	reti
 	jr	z, 4
 	call	15870215
-	call	15870299
+	call	CDlikeSwTtl_SendStartEvt
 	ldda8	a, 3295
 	cp	a, 15
 	jr	z, 2
 	inc	1, a
 	stda8	3295, a
-	call	15855140
+	call	SetWall_UpdateSlotIndex
 	ret
-	call	15856564
+	call	SetWall_InlineCodeBlock2
 	.byte 0xc1, 0xdf
 	incf
 	push	xsp
 	ldio	102, 4
 	call	15870215
-	call	15870299
+	call	CDlikeSwTtl_SendStartEvt
 	ldda8	a, 3295
 	cps	a, 0
 	jr	z, 2
 	dec	1, a
 	stda8	3295, a
-	call	15855140
+	call	SetWall_UpdateSlotIndex
 	ret
 	nop
 	push_sr
@@ -98,7 +98,7 @@ SetWall_InlineCodeBlock:
 	jr	z, 49
 	cp	a, 14
 	jr	z, 44
-	call	15870299
+	call	CDlikeSwTtl_SendStartEvt
 	ld	xhl, 61856
 	xor	w, w
 	ldda8	a, 3295
@@ -278,15 +278,15 @@ SetWall_Return:
 	ret
 
 SetWall_InitCallSequences:
-	call	15856564
-	call	15870299
+	call	SetWall_InlineCodeBlock2
+	call	CDlikeSwTtl_SendStartEvt
 	stdi8	3295, 8
-	call	15855140
+	call	SetWall_UpdateSlotIndex
 	ret
-	call	15856564
-	call	15870299
+	call	SetWall_InlineCodeBlock2
+	call	CDlikeSwTtl_SendStartEvt
 	stdi8	3295, 0
-	call	15855140
+	call	SetWall_UpdateSlotIndex
 	ret
 	ret
 	ret
@@ -649,7 +649,7 @@ SetWall_InlineCodeBlock2:
 	jr	z, 2
 	jr	4
 	jp	15856658
-	call	15856659
+	call	SetWall_CrossTypeChange
 	ret
 
 SetWall_CrossTypeChange:
@@ -1934,7 +1934,7 @@ SetWall_ForwardSkip_Return:
 
 SetWall_InlineCodeBlock3:
 	ret
-	call	16095929
+	call	AccWrap_PlayModeDispatch
 	.byte 0xc1, 0xa7
 	pushw	wa
 	push	xiz
@@ -1966,7 +1966,7 @@ SetWall_InlineCodeBlock3:
 	swi	3
 	xor	wa, wa
 	ldb	a, 76
-	call	16546109
+	call	CtrlPanel_SetIndicatorBit
 	ret
 	ret
 
@@ -2012,10 +2012,10 @@ SetWall_MiscDataAndCode:
 	.byte 0xa7
 	jr	z, 10
 	ldb	a, 142
-	call	16356496
+	call	UI_PostModeChangeEvent
 	jp	15860032
 	ldb	a, 131
-	call	16356496
+	call	UI_PostModeChangeEvent
 	ret
 	ldda32	xwa, 4349
 	push	xwa

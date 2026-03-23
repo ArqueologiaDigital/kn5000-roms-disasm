@@ -52,17 +52,17 @@ SeqStep_NoteByteBlock:
 	stda16	9830, wa
 	ldda32	xwa, 10018
 	stda16	10415, wa
-	call	15999398
+	call	SeqData_ReadNextByte
 	stda8	9686, l
 	ldw	wa, 129
-	call	15999413
+	call	PartCtrl_WriteByte_Indexed
 	cpdi8	9686, 129
 	jr	z, 73
-	call	15990866
+	call	SeqData_AdvancePosition
 	cpdi8	10362, 0
 	jr	nz, 62
 	.byte 0xc1, 0xd6, 0x25, 0x19, 0xd8, 0x25
-	call	15999398
+	call	SeqData_ReadNextByte
 	stda8	9686, l
 	ldda8	a, 9688
 	extz	wa

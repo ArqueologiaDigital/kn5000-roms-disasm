@@ -5029,9 +5029,9 @@ VoiceSynth_Algo_MultiPath:
 	ldda16	iy, 4011
 	and	iy, 15
 	push	xiy
-	call	15877703
+	call	SoundGen_CaptureVoiceParams
 	ldb	a, 209
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5047,10 +5047,10 @@ VoiceSynth_Algo_MultiPath:
 	ldb	w, 92
 	srl	xiy, 1
 	push	xiy
-	call	15879227
+	call	SoundGen_ScalePitchByTempo
 	pop	xiy
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5059,15 +5059,15 @@ VoiceSynth_Algo_MultiPath:
 	jr	nz, 30
 	ldda8	a, 4013
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
 	push	xsp
 	nop
 	jr	nz, 13
-	call	15883749
-	call	15879015
+	call	ToneGen_SetSustainBit
+	call	ToneGen_WriteChannelRegs
 	stdi8	4323, 0
 	ret
 VoiceSynth_Algo_Null:
@@ -5108,7 +5108,7 @@ VoiceSynth_Algo_ChannelConfig:
 	jr	nz, 8
 	push	xhl
 	push	xiy
-	call	15886726
+	call	VoiceChannel_GetCombinedStatus
 	pop	xiy
 	pop	xhl
 	.byte 0xf3
@@ -5144,10 +5144,10 @@ VoiceSynth_Algo_MultiStage:
 	ldda16	iy, 4011
 	and	iy, 15
 	extz	xiy
-	call	15877703
+	call	SoundGen_CaptureVoiceParams
 	push	xiy
 	ldb	a, 176
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5163,10 +5163,10 @@ VoiceSynth_Algo_MultiStage:
 	ldb	w, 92
 	srl	xiy, 1
 	push	xiy
-	call	15879227
+	call	SoundGen_ScalePitchByTempo
 	pop	xiy
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5194,7 +5194,7 @@ VoiceSynth_Algo_MultiStage:
 	.byte 0xf0, 0xec
 	ldb	a, 92
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5203,7 +5203,7 @@ VoiceSynth_Algo_MultiStage:
 	jr	nz, 60
 	ldb	a, 8
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5212,7 +5212,7 @@ VoiceSynth_Algo_MultiStage:
 	jr	nz, 45
 	ldda8	a, 4013
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5221,15 +5221,15 @@ VoiceSynth_Algo_MultiStage:
 	jr	nz, 28
 	ldb	a, 127
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
 	push	xsp
 	nop
 	jr	nz, 13
-	call	15883749
-	call	15879015
+	call	ToneGen_SetSustainBit
+	call	ToneGen_WriteChannelRegs
 	stdi8	4323, 0
 	ret
 VoiceSynth_Algo_PitchModulated:
@@ -5237,9 +5237,9 @@ VoiceSynth_Algo_PitchModulated:
 	and	iy, 15
 	extz	xiy
 	push	xiy
-	call	15877703
+	call	SoundGen_CaptureVoiceParams
 	ldb	a, 211
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5255,10 +5255,10 @@ VoiceSynth_Algo_PitchModulated:
 	ldb	w, 92
 	srl	xiy, 1
 	push	xiy
-	call	15879227
+	call	SoundGen_ScalePitchByTempo
 	pop	xiy
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5272,17 +5272,17 @@ VoiceSynth_Algo_PitchModulated:
 	push	xsp
 	push_sr
 	jr	nz, 4
-	call	15885567
+	call	VoiceSynth_ConditionalUpdate_Helper
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
 	push	xsp
 	nop
 	jr	nz, 13
-	call	15883749
-	call	15879015
+	call	ToneGen_SetSustainBit
+	call	ToneGen_WriteChannelRegs
 	stdi8	4323, 0
 	ret
 VoiceSynth_Algo_DirectStore:
@@ -5298,15 +5298,15 @@ VoiceSynth_Algo_DirectStore:
 	ret
 VoiceSynth_Algo_PitchShift:
 	ldda16	iy, 4237
-	call	15878054
+	call	SoundGen_ClampVoiceIndexMin1
 	and	iy, 15
 	push	xiy
-	call	15882932
+	call	SoundGen_ReadVoiceRegs
 	ldda8	w, 4011
 	and	w, 15
 	ldb	a, 208
 	or	a, w
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5322,10 +5322,10 @@ VoiceSynth_Algo_PitchShift:
 	ldb	w, 92
 	srl	iy, 1
 	push	xiy
-	call	15879227
+	call	SoundGen_ScalePitchByTempo
 	pop	xiy
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5334,15 +5334,15 @@ VoiceSynth_Algo_PitchShift:
 	jr	nz, 30
 	push	xiy
 	ldda8	a, 4013
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
 	push	xsp
 	nop
 	jr	nz, 13
-	call	15883749
-	call	15884920
+	call	ToneGen_SetSustainBit
+	call	SoundGen_WriteVoiceParams
 	stdi8	4323, 0
 	ret
 VoiceParam_ReadUpdate_6:
@@ -5381,7 +5381,7 @@ VoiceParam_ReadUpdate_6:
 	jr	nz, 8
 	push	xhl
 	pushw	iy
-	call	15886726
+	call	VoiceChannel_GetCombinedStatus
 	popw	iy
 	pop	xhl
 	.byte 0xf3
@@ -5403,19 +5403,19 @@ VoiceParam_ReadUpdate_7:
 	push	xsp
 	push_sr
 	jr	nz, 4
-	call	15885567
+	call	VoiceSynth_ConditionalUpdate_Helper
 	stda8	4234, a
 	stdi8	4235, 127
-	call	15887078
+	call	SoundGen_ClampUpdateVoice
 	ret
 VoiceParam_ReadUpdate_10:
 	ldda16	iy, 4237
-	call	15878054
+	call	SoundGen_ClampVoiceIndexMin1
 	and	iy, 15
-	call	15882932
+	call	SoundGen_ReadVoiceRegs
 	push	xiy
 	ldb	a, 176
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5431,10 +5431,10 @@ VoiceParam_ReadUpdate_10:
 	ldb	w, 92
 	srl	iy, 1
 	push	xiy
-	call	15879227
+	call	SoundGen_ScalePitchByTempo
 	pop	xiy
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5444,7 +5444,7 @@ VoiceParam_ReadUpdate_10:
 	ldda8	a, 4011
 	and	a, 15
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5453,7 +5453,7 @@ VoiceParam_ReadUpdate_10:
 	jrl	nz, 63
 	ldb	a, 8
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5462,7 +5462,7 @@ VoiceParam_ReadUpdate_10:
 	jrl	nz, 47
 	ldda8	a, 4013
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5471,28 +5471,28 @@ VoiceParam_ReadUpdate_10:
 	jrl	nz, 29
 	ldb	a, 127
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
 	push	xsp
 	nop
 	jrl	nz, 13
-	call	15883749
-	call	15884920
+	call	ToneGen_SetSustainBit
+	call	SoundGen_WriteVoiceParams
 	stdi8	4323, 0
 	ret
 VoiceParam_ReadUpdate_11:
 	ldda16	iy, 4237
-	call	15878054
+	call	SoundGen_ClampVoiceIndexMin1
 	and	iy, 15
 	push	xiy
-	call	15882932
+	call	SoundGen_ReadVoiceRegs
 	ldda8	w, 4011
 	and	w, 15
 	ldb	a, 240
 	or	a, w
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5508,10 +5508,10 @@ VoiceParam_ReadUpdate_11:
 	ldb	w, 92
 	srl	xiy, 1
 	push	xiy
-	call	15879227
+	call	SoundGen_ScalePitchByTempo
 	pop	xiy
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
@@ -5525,17 +5525,17 @@ VoiceParam_ReadUpdate_11:
 	push	xsp
 	push_sr
 	jr	nz, 4
-	call	15885567
+	call	VoiceSynth_ConditionalUpdate_Helper
 	push	xiy
-	call	15879151
+	call	SoundGen_UpdateAndRefresh
 	pop	xiy
 	.byte 0xc1, 0xe3
 	rcf
 	push	xsp
 	nop
 	jrl	nz, 13
-	call	15883749
-	call	15884920
+	call	ToneGen_SetSustainBit
+	call	SoundGen_WriteVoiceParams
 	stdi8	4323, 0
 	ret
 

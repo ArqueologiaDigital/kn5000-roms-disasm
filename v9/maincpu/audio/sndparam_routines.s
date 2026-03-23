@@ -541,7 +541,7 @@ SndParam_ResolveWidgetEx_Data:
 	add	xhl, xwa
 	ld	xwa, xhl
 	ld	xbc, 2047
-	call	16714756
+	call	DivMod32
 	ld	ix, hl
 	jr	44
 	lds	bc, 0
@@ -760,7 +760,7 @@ SndParam_ResolveWidgetVariant2_Data:
 	add	xhl, xwa
 	ld	xwa, xhl
 	ld	xbc, 2047
-	call	16714756
+	call	DivMod32
 	ld	ix, hl
 	jr	44
 	lds	bc, 0
@@ -2791,7 +2791,7 @@ SndParam_BatchUpdate_Data:
 	scc8	nc, d
 	nop
 	ld	(xwa+4), c
-	call	16705514
+	call	SndParam_FetchOscTableEntry
 	lda	xbc, (xsp+10)
 	ld	a, (xbc+1)
 	.byte 0xc7
@@ -2850,7 +2850,7 @@ SndParam_BatchUpdate_Data:
 	scc8	nc, d
 	nop
 	ld	(xwa+4), c
-	call	16705747
+	call	SndParam_ComputeVoiceIndex
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
 	.byte 0xc7
@@ -2901,7 +2901,7 @@ SndParam_BatchUpdate_Data:
 	push	xhl
 	push	xix
 	push	xiz
-	call	16581982
+	call	MIDI_DispatchCC
 	pop	xiz
 	pop	xix
 	pop	xhl

@@ -1902,8 +1902,8 @@ Voice_NoteParamTable:
 AccPlay_Entry:
 	jp AccPlay_MainDispatch
 AccPlay_JumpTable:
-	jp	16195765
-	jp	16198446
+	jp	AccPlay_ProcessVoiceBank
+	jp	AccPlay_ToggleCodeFragment
 
 AccPlay_ToggleEntry:
 	jp AccPlay_CheckAndToggle
@@ -2332,7 +2332,7 @@ AccPlay_SyncVoiceParams:
 	ldb	d, 30
 	sub	d, c
 	ldb	w, 255
-	call	16626673
+	call	SwbtWr_QueuePostEvent
 	pop	xbc
 	pop	xix
 	pop	xiy
@@ -3371,7 +3371,7 @@ AccPlay_ToggleCodeFragment:
 	nop
 	jr	z, 12
 	stdi8	32523, 0
-	call	16126848
+	call	TempoRingBuf_ReInitAndRet
 	calr	62399
 	ret
 
@@ -3848,11 +3848,11 @@ VocalistGridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 VocalistGrid_DispatchData:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xhl, (xsp+12)
 	ld	xwa, xde
@@ -3892,11 +3892,11 @@ VocalistGrid_DispatchData:
 	ldb	w, 217
 	sub	(xbc-38), xde
 	jr	102
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xhl, (xsp+12)
 	ld	xwa, xde
@@ -3943,7 +3943,7 @@ VocalistGrid_DispatchData:
 	swi	7
 	swi	7
 	lds	de, 2
-	call	16382274
+	call	MainLswAdd
 	jrl	1442
 	ld	(xsp+4), xbc
 	ld	xhl, xiy
@@ -4015,7 +4015,7 @@ VocalistGrid_DispatchData:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	jr	20
 	inc	1, wa
@@ -4024,9 +4024,9 @@ VocalistGrid_DispatchData:
 	pushw	61176
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
@@ -4037,9 +4037,9 @@ VocalistGrid_DispatchData:
 	pushw	61188
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
@@ -4051,9 +4051,9 @@ VocalistGrid_DispatchData:
 	pushw	61200
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
@@ -4069,9 +4069,9 @@ VocalistGrid_DispatchData:
 	pushw	61212
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
@@ -4096,9 +4096,9 @@ VocalistGrid_DispatchData:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
@@ -4114,7 +4114,7 @@ VocalistGrid_DispatchData:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	jr	18
 	pushw	wa
@@ -4122,9 +4122,9 @@ VocalistGrid_DispatchData:
 	pushw	61296
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
@@ -4163,9 +4163,9 @@ VocalistGrid_DispatchData:
 	pushw	61308
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+20)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
@@ -4180,9 +4180,9 @@ VocalistGrid_DispatchData:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
@@ -4221,7 +4221,7 @@ VocalistGrid_CheckHandler:
 
 VocalistGrid_CheckDispData:
 	ld	xwa, 11520
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cp	hl, 16
 	jr	z, 13
 	cp	hl, 17
@@ -4232,56 +4232,56 @@ VocalistGrid_CheckDispData:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	jr	29
 	ld	xwa, 11520
-	call	16569399
+	call	SndParam_LookupReadOnly
 	inc	1, hl
 	pushw	hl
 	pushw	231
 	pushw	61352
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
 	jrl	613
 	ld	xwa, 11522
-	call	16569399
+	call	SndParam_LookupReadOnly
 	inc	1, hl
 	pushw	hl
 	pushw	231
 	pushw	61364
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
 	jrl	567
 	ld	xwa, 11524
-	call	16569399
+	call	SndParam_LookupReadOnly
 	inc	1, hl
 	pushw	hl
 	pushw	231
 	pushw	61376
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
 	jrl	521
 	ld	xwa, 11526
-	call	16569399
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, 15199646
 	.byte 0xe3
@@ -4292,15 +4292,15 @@ VocalistGrid_CheckDispData:
 	pushw	61388
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
 	jrl	464
 	ld	xwa, 11528
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 3
 	jr	z, 33
 	cps	hl, 2
@@ -4320,15 +4320,15 @@ VocalistGrid_CheckDispData:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
 	jrl	385
 	ld	xwa, 11530
-	call	16569399
+	call	SndParam_LookupReadOnly
 	lda	xbc, (xsp+20)
 	cp	hl, 120
 	jr	z, 13
@@ -4340,25 +4340,25 @@ VocalistGrid_CheckDispData:
 	.long MidiPart_AfterStr
 	push	xwa
 	push	xbc
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	jr	27
 	ld	xwa, 11530
-	call	16569399
+	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	231
 	pushw	61472
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
 	jrl	295
 	ld	xwa, 11533
-	call	16569399
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
@@ -4368,7 +4368,7 @@ VocalistGrid_CheckDispData:
 	.byte 0xe4, 0xec
 	ldb	w, 56
 	ld	xwa, 11533
-	call	16569399
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	.byte 0xd7
@@ -4380,7 +4380,7 @@ VocalistGrid_CheckDispData:
 	.byte 0xe4, 0xe0
 	ldb	w, 56
 	ld	xwa, 11534
-	call	16569399
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, 15199626
 	.byte 0xe3
@@ -4391,15 +4391,15 @@ VocalistGrid_CheckDispData:
 	pushw	61484
 	lda	xwa, (xsp+36)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+20)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
 	jrl	177
 	ld	xwa, 11537
-	call	16569399
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
@@ -4409,7 +4409,7 @@ VocalistGrid_CheckDispData:
 	.byte 0xe4, 0xec
 	ldb	w, 56
 	ld	xwa, 11537
-	call	16569399
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	.byte 0xd7
@@ -4421,7 +4421,7 @@ VocalistGrid_CheckDispData:
 	.byte 0xe4, 0xe0
 	ldb	w, 56
 	ld	xwa, 11538
-	call	16569399
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, 15199626
 	.byte 0xe3
@@ -4432,9 +4432,9 @@ VocalistGrid_CheckDispData:
 	pushw	61492
 	lda	xwa, (xsp+36)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+20)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
@@ -4457,13 +4457,13 @@ VocalistGrid_CheckDispData:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
-	call	16422496
+	call	SendEvent
 
 AcVocalist_ReturnZero:
 	lds32 xhl, 0
@@ -4504,7 +4504,7 @@ AcVocalist_ListDispatch:
 	ld	xwa, 14090252
 	ld	xbc, 29360143
 	lds32	xde, 1
-	call	16422496
+	call	SendEvent
 
 ; AcVocalist list case 1
 AcVocalist_ListCase1:
@@ -4735,10 +4735,10 @@ MainVocalistPage1OKFunc:
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; MainVocalistPage1OKFunc dispatch
 VocalistPage1OK_Dispatch:
-	call	16604218
-	call	16604125
+	call	MidiSysEx_CopyParamToBuffer
+	call	MidiSysEx_SendAllPartChannels
 	stdi8	47084, 11
-	call	16602230
+	call	SndParam_ApplyAndSync
 	ld	xwa, (xsp)
 	srl	xwa, 0
 	ld	qwa, 0
@@ -4751,14 +4751,14 @@ VocalistPage1OK_Dispatch:
 	ld	xwa, 119808
 	lds	bc, 0
 	lds	de, 2
-	call	16568833
+	call	SoundParam_NotifyChange
 	stdi8	32578, 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16424280
+	call	ApPostEvent
 	stdi8	32576, 1
-	call	16603122
+	call	MidiSysEx_SendAllParams
 	.byte 0xf1, 0x40
 	jrl	nc, 0x0000
 
@@ -4769,10 +4769,10 @@ VocalistPage_Handler:
 	ret
 
 VocalistPage1_DispatchData:
-	call	16604218
-	call	16604125
+	call	MidiSysEx_CopyParamToBuffer
+	call	MidiSysEx_SendAllPartChannels
 	stdi8	47084, 2
-	call	16602230
+	call	SndParam_ApplyAndSync
 	ld	xwa, (xsp)
 	srl	xwa, 0
 	ld	qwa, 0
@@ -4785,21 +4785,21 @@ VocalistPage1_DispatchData:
 	ld	xwa, 98304
 	lds	bc, 0
 	lds	de, 2
-	call	16568833
+	call	SoundParam_NotifyChange
 	stdi8	32578, 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	jr	-98
 	ld	wa, bc
-	call	16604218
-	call	16604125
+	call	MidiSysEx_CopyParamToBuffer
+	call	MidiSysEx_SendAllPartChannels
 	stdi8	47084, 24
-	call	16602230
+	call	SndParam_ApplyAndSync
 	ld	xwa, 16897
 	lds	bc, 3
 	lds	de, 2
-	call	16568833
+	call	SoundParam_NotifyChange
 	ld	xwa, (xsp)
 	srl	xwa, 0
 	ld	qwa, 0
@@ -4812,19 +4812,19 @@ VocalistPage1_DispatchData:
 	ld	xwa, 101376
 	lds	bc, 0
 	lds	de, 2
-	call	16568833
+	call	SoundParam_NotifyChange
 	stdi8	32578, 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	jrl	-189
 	ld	wa, bc
-	call	16604218
-	call	16604125
+	call	MidiSysEx_CopyParamToBuffer
+	call	MidiSysEx_SendAllPartChannels
 	stdi8	47084, 1
-	call	16602230
+	call	SndParam_ApplyAndSync
 	lds	wa, 1
-	call	16329752
+	call	SmfMedley_RawData
 	stdi8	32578, 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150

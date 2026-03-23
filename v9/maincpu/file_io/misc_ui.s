@@ -35,7 +35,7 @@ JumpInsert_DispatchBody:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17

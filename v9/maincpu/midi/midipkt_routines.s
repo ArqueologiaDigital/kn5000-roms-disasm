@@ -91,7 +91,7 @@ MidiPkt_BuildControl:
 	ld	xiz, xwa
 	ldda32	xwa, 48300
 	ldw	bc, 10
-	call	16604854
+	call	SeqData_ReadFieldByIndex
 	sub	l, 32
 	ld	c, l
 	ld	l, (xiz+6)
@@ -104,7 +104,7 @@ MidiPkt_BuildControl:
 	extz	hl
 	ld	c, (xde)
 	ld	wa, hl
-	call	16609965
+	call	Part_LookupTableEntry
 	lda	xbc, (xsp+12)
 	ld	(xbc+2), l
 	ld	a, (xiz+8)
@@ -121,7 +121,7 @@ MidiPkt_BuildControl:
 	ld	xiz, xwa
 	ldda32	xwa, 48300
 	ldw	bc, 10
-	call	16604854
+	call	SeqData_ReadFieldByIndex
 	sub	l, 32
 	ld	a, (xiz+6)
 	or	a, l
@@ -155,7 +155,7 @@ MidiPkt_BuildControl:
 	jrl	z, 168
 	ldda32	xwa, 48300
 	ldw	bc, 10
-	call	16604854
+	call	SeqData_ReadFieldByIndex
 	sub	l, 32
 	ld	xbc, (xsp+16)
 	ld	a, (xbc+6)
@@ -163,7 +163,7 @@ MidiPkt_BuildControl:
 	ld	(xsp+4), a
 	extz	wa
 	ld	c, (xbc+7)
-	call	16609965
+	call	Part_LookupTableEntry
 	ld	(xsp+6), l
 	ld	xwa, (xsp+16)
 	ld	a, (xwa+14)
@@ -174,27 +174,27 @@ MidiPkt_BuildControl:
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xiz+1)
-	call	16609965
+	call	Part_LookupTableEntry
 	ld	a, (xiz+3)
 	and	a, l
 	jr	z, 4
 	ld	(xsp+6), 129
 	ld	xwa, 15611356
 	lds	bc, 6
-	call	16607843
+	call	ArpQueue_Enqueue
 	pushw 6
 	lda	xwa, (xsp+12)
 	push	xwa
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16715147
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+10)
 	ld	c, (xsp+4)
 	add	c, 32
 	ld	(xwa+1), c
 	lds	bc, 6
-	call	16607843
+	call	ArpQueue_Enqueue
 	lda	xwa, (xsp+6)
 	ld	c, (xwa)
 	and	c, 15
@@ -203,11 +203,11 @@ MidiPkt_BuildControl:
 	srl	c, 4
 	ld	(xwa), c
 	lds	bc, 3
-	call	16607843
-	call	16608122
+	call	ArpQueue_Enqueue
+	call	ArpQueue_ComputeAndEnqueue
 	ldda32	xwa, 48220
-	call	16608252
-	call	16614440
+	call	SeqOut_FlushTimedBuffer
+	call	ArpQueue_SwapBuffers
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
@@ -220,7 +220,7 @@ MidiPkt_BuildControl:
 	jr	z, 108
 	ldda32	xwa, 48300
 	ldw	bc, 10
-	call	16604854
+	call	SeqData_ReadFieldByIndex
 	sub	l, 32
 	ld	xde, (xsp+18)
 	ld	a, (xde+6)
@@ -236,7 +236,7 @@ MidiPkt_BuildControl:
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xde+7)
-	call	16609965
+	call	Part_LookupTableEntry
 	lda	xbc, (xsp+14)
 	lda	xwa, (xbc+2)
 	cp	l, (xiz)
@@ -687,10 +687,10 @@ MidiPkt_EnqueueExtended_Data:
 	jr	z, 83
 	ld	xwa, 15611356
 	lds	bc, 6
-	call	16607843
+	call	ArpQueue_Enqueue
 	ld	xwa, (xiz+4)
 	lds	bc, 6
-	call	16607843
+	call	ArpQueue_Enqueue
 	ld	xwa, (xiz)
 	ld	xbc, xwa
 	ld	bc, (xbc+4)
@@ -710,11 +710,11 @@ MidiPkt_EnqueueExtended_Data:
 	srl	c, 4
 	ld	(xwa), c
 	lds	bc, 3
-	call	16607843
-	call	16608122
+	call	ArpQueue_Enqueue
+	call	ArpQueue_ComputeAndEnqueue
 	ldda32	xwa, 48220
-	call	16608252
-	call	16614440
+	call	SeqOut_FlushTimedBuffer
+	call	ArpQueue_SwapBuffers
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -1081,13 +1081,13 @@ MidiPkt_EnqueueExtended2_Data:
 	jr	z, 111
 	ld	xwa, 15611356
 	lds	bc, 6
-	call	16607843
+	call	ArpQueue_Enqueue
 	pushw	6
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	xwa, (xiz+4)
 	push	xwa
-	call	16715147
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+8)
 	ld	xbc, (xiz)
@@ -1095,7 +1095,7 @@ MidiPkt_EnqueueExtended2_Data:
 	set	5, c
 	ld	(xwa+1), c
 	lds	bc, 6
-	call	16607843
+	call	ArpQueue_Enqueue
 	ld	xbc, (xiz)
 	ld	xde, (xiz+4)
 	ld	a, (xde+8)
@@ -1115,11 +1115,11 @@ MidiPkt_EnqueueExtended2_Data:
 	srl	c, 4
 	ld	(xwa), c
 	lds	bc, 3
-	call	16607843
-	call	16608122
+	call	ArpQueue_Enqueue
+	call	ArpQueue_ComputeAndEnqueue
 	ldda32	xwa, 48220
-	call	16608252
-	call	16614440
+	call	SeqOut_FlushTimedBuffer
+	call	ArpQueue_SwapBuffers
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
@@ -1206,14 +1206,14 @@ MidiPkt_DispatchData_Chan6:
 	push	xhl
 	push	xix
 	push	xiz
-	call	16095929
+	call	AccWrap_PlayModeDispatch
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
 	ldda8	a, 48380
 	extz	wa
-	jp	16616622
+	jp	SysEx_InitiateSend
 	ldda8	a, 36150
 	cp	a, 87
 	jr	z, 11
@@ -1225,7 +1225,7 @@ MidiPkt_DispatchData_Chan6:
 	ldda32	xwa, 48300
 	lds	bc, 4
 	ldw	de, 17
-	jp	16604730
+	jp	MIDI_ReadChannelParam
 
 MidiPkt_SendBankSelect:
 	ldda32 xwa, 48300
@@ -1275,9 +1275,9 @@ MidiPkt_SysExValidator_Data:
 	pushw	4
 	ldw	wa, 145
 	lds	bc, 3
-	call	16626163
+	call	AssswbWr
 	push	xiz
-	call	15668440
+	call	SwbtWr_ReinitBothBanks
 	pop	xiz
 	ret
 MidiPkt_SysExProcessor_Data:
@@ -1308,15 +1308,15 @@ MidiPkt_SysExProcessor_Data:
 	pushw	4
 	ldw	wa, 145
 	lds	bc, 3
-	call	16626163
+	call	AssswbWr
 	push	xiz
-	call	15668440
+	call	SwbtWr_ReinitBothBanks
 	pop	xiz
 	ret
 MidiPkt_SysExBulkTransfer_Data:
 	ldda32	xwa, 48300
 	lds	bc, 1
-	call	16604854
+	call	SeqData_ReadFieldByIndex
 	extz	hl
 	dec	1, hl
 	cps	hl, 0
@@ -1371,7 +1371,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	pop_sr
 	ld	xbc, 0x3e3c3b3a
 	call	16567069
-	call	15668467
+	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1383,7 +1383,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0x04
 	ldda32	xwa, 48300
 	ldw	bc, 9
-	call	16604854
+	call	SeqData_ReadFieldByIndex
 	.byte 0xc7
 	swi	3
 	cp	(xsp-57), hl
@@ -1426,7 +1426,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	pushw	0
 	lds	bc, 0
 	lds	de, 0
-	call	16569115
+	call	SndParam_NotifyAndReturn
 	.byte 0xc7
 	swi	3
 	.byte 0x89
@@ -1434,7 +1434,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	pushw	0
 	ldw	bc, 32
 	ldw	de, 120
-	call	16569115
+	call	SndParam_NotifyAndReturn
 	ld	xiy, 15610764
 	lda	xix, (xsp+10)
 	.byte 0x95
@@ -1474,7 +1474,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	pushw	0
 	lds	bc, 0
 	lds	de, 0
-	call	16569115
+	call	SndParam_NotifyAndReturn
 	.byte 0xc7
 	swi	3
 	.byte 0x89
@@ -1482,7 +1482,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	pushw	0
 	ldw	bc, 32
 	lds	de, 0
-	call	16569115
+	call	SndParam_NotifyAndReturn
 	ld	xiy, 15610776
 	lda	xix, (xsp+10)
 	.byte 0x95
@@ -1529,7 +1529,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	push	xiz
 	ldda32	xwa, 48300
 	ldw	bc, 11
-	call	16604854
+	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
@@ -1537,11 +1537,11 @@ MidiPkt_SysExBulkTransfer_Data:
 	extz	hl
 	ld	xwa, 19200
 	ld	bc, hl
-	call	16632065
+	call	DSPCfg_WriteParamFull
 	cps	hl, 0
 	jr	lt, 72
 	ld	xwa, 19204
-	call	16631801
+	call	DSPCfg_ReadParam_Map0
 	.byte 0xd7
 	swi	2
 	cp	(xhl-41), de
@@ -1565,14 +1565,14 @@ MidiPkt_SysExBulkTransfer_Data:
 	ld	wa, iz
 	exts	xwa
 	add	xwa, 19216
-	call	16632065
+	call	DSPCfg_WriteParamFull
 	inc	1, iz
 	.byte 0xd7
 	swi	2
 	.byte 0xf6
 	jr	lt, -42
 	push	xiz
-	call	15668467
+	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xiz
 	inc	2, xsp

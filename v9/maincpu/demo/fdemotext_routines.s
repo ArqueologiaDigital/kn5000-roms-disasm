@@ -1239,7 +1239,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	xwa, xiz
 	ld	xbc, 31457301
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	cp	(xhl), 0
 	jr	nz, 58
 	ld	xwa, xiz
@@ -1249,7 +1249,7 @@ FDemoText_ByteData_DisplayRefresh:
 	add	xwa, 27262976
 	ld	xbc, 31457301
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xwa, xiz
 	.byte 0xd7, 0xe2, 0xa8
 	pushw	wa
@@ -1257,13 +1257,13 @@ FDemoText_ByteData_DisplayRefresh:
 	pushw	64982
 	pushw	2
 	pushw	18422
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+14)
 	jr	13
 	push	xhl
 	pushw	2
 	pushw	18422
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	lda_24	xhl, 149494
 	pop	xiz
@@ -1275,13 +1275,13 @@ FDemoText_ByteData_DisplayRefresh:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, 255
 	ld	(xsp+4), xwa
 	ld	xbc, (xsp+4)
 	ld	wa, bc
-	call	16401023
+	call	CountObject
 	extz	xhl
 	ld	(xsp+8), xhl
 	or	xhl, xhl
@@ -1294,7 +1294,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	xwa, (xsp+4)
 	sll	xwa, 0
 	add	xwa, xbc
-	call	16401092
+	call	CheckViewObject
 	cps	hl, 0
 	jr	z, 42
 	ld	xbc, xiz
@@ -1305,7 +1305,7 @@ FDemoText_ByteData_DisplayRefresh:
 	push	xhl
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715559
+	call	Strcmp
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 14
@@ -1346,12 +1346,12 @@ FDemoText_ByteData_DisplayRefresh:
 	cp	hl, 60
 	jr	nz, 17
 	lds	iz, 1
-	call	16289020
+	call	FileIO_ReadByte
 	cps	hl, 0
 	jr	ge, 28
 	cpw	(xsp+2), 0
 	jr	z, 8
-	call	16289020
+	call	FileIO_ReadByte
 	cps	hl, 0
 	jr	ge, -31
 	cpw	(xsp+2), 0
@@ -1378,7 +1378,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ldw	(xsp+2), 0
 	lds32	xwa, 0
 	ld	(xsp+4), xwa
-	call	16289020
+	call	FileIO_ReadByte
 	cps	hl, 0
 	jr	ge, 14
 	cpw	(xsp+2), 1
@@ -1406,7 +1406,7 @@ FDemoText_ByteData_DisplayRefresh:
 	cp	hl, 60
 	jr	nz, -75
 	lds	iz, 1
-	call	16289020
+	call	FileIO_ReadByte
 	cps	hl, 0
 	jr	ge, 9
 	cpw	(xsp+2), 1
@@ -1715,10 +1715,10 @@ FDemoText_ByteData_TextRenderer:
 	.byte 0xaf
 	ldwio	128, 8352
 	push	xwa
-	call	16715666
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	16715378
+	call	Malloc
 	ld	(xsp+8), xhl
 	ld	wa, iz
 	exts	xwa
@@ -1728,14 +1728,14 @@ FDemoText_ByteData_TextRenderer:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	lds	iz, 0
 	pushw	64
 	ld	xwa, (xsp+18)
 	push	xwa
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	16714981
+	call	Strncpy
 	lda	xsp, (xsp+24)
 	ld	xwa, (xsp+6)
 	ld	(xwa+64), 0
@@ -1758,7 +1758,7 @@ FDemoText_ByteData_TextRenderer:
 	push	xde
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	inc	1, iz
 	ld	xde, (xsp+2)
@@ -1778,10 +1778,10 @@ FDemoText_ByteData_TextRenderer:
 	ldw	wa, 44856
 	ex_ff
 	ldb	w, 56
-	call	16715583
+	call	Strcpy
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	16715666
+	call	Strlen
 	lda	xsp, (xsp+12)
 	dec	1, hl
 	extz	xhl
@@ -1791,7 +1791,7 @@ FDemoText_ByteData_TextRenderer:
 	push	xbc
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	jr	13
 	inc	1, iz
@@ -1805,7 +1805,7 @@ FDemoText_ByteData_TextRenderer:
 	jr	nz, -113
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16714468
+	call	Free
 	inc	4, xsp
 	popw	iz
 	lda	xsp, (xsp+12)
@@ -1867,7 +1867,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0x98
 	nop
 	ldw	wa, 14648
-	call	16715559
+	call	Strcmp
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 49
@@ -1883,7 +1883,7 @@ FDemoText_ByteData_LayoutEngine:
 	cps	wa, 0
 	jr	nz, 30
 	push	xbc
-	call	16714130
+	call	ParseInt16
 	inc	4, xsp
 	ld	(xsp+4), hl
 	jr	18
@@ -1894,7 +1894,7 @@ FDemoText_ByteData_LayoutEngine:
 	push	xbc
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	.byte 0xd7
 	swi	2
@@ -1928,62 +1928,62 @@ FDemoText_ByteData_LayoutEngine:
 	pushw	65126
 	pushw	2
 	pushw	18552
-	call	16714340
+	call	Audio_SendCommand
 	lda	xwa, (xsp+18)
 	push	xwa
 	pushw	2
 	pushw	18552
-	call	16715583
+	call	Strcpy
 	lda	xwa, (xsp+40)
 	push	xwa
 	pushw	2
 	pushw	18562
-	call	16715583
+	call	Strcpy
 	lda	xsp, (xsp+28)
 	.byte 0x40
 	.long Pad_AfterNakaData_ExternalBase
 	ld	xbc, 29360130
 	lds32	xde, 5
-	call	16422496
+	call	SendEvent
 	.byte 0x40
 	.long Pad_NakaExternal_Block1
 	ld	xbc, 29360130
 	lds32	xde, 5
-	call	16422496
+	call	SendEvent
 	.byte 0x40
 	.long Pad_NakaExternal_Block1
 	ld	xbc, 29360129
 	lds32	xde, 5
-	call	16422496
+	call	SendEvent
 	.byte 0x40
 	.long Pad_NakaExternal_Block1
 	ld	xbc, 29425669
 	ld	xde, 19
-	call	16422496
+	call	SendEvent
 	ld	xwa, 15597590
 	ld	xbc, 29360129
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	pushw	2
 	pushw	18552
-	call	16715666
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	16715378
+	call	Malloc
 	ld	xiz, xhl
 	pushw	2
 	pushw	18552
 	push	xiz
-	call	16715583
+	call	Strcpy
 	lda	xsp, (xsp+14)
 	ld	xwa, 21037056
 	ld	xbc, 31522821
 	ld	xde, xiz
-	call	16403043
+	call	MainFuncCall
 	ld	xwa, 20971523
 	ld	xbc, 31457315
 	ld	xde, xiz
-	call	16403043
+	call	MainFuncCall
 	lds	hl, 0
 	pop	xiz
 	.byte 0xf3
@@ -2024,7 +2024,7 @@ FDemoText_ByteData_LayoutEngine:
 	lda	xbc, (xsp+72)
 	push	xbc
 	push	xwa
-	call	16715559
+	call	Strcmp
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 76
@@ -2036,7 +2036,7 @@ FDemoText_ByteData_LayoutEngine:
 	retd	55513
 	jr	nz, 61
 	push	xwa
-	call	16714130
+	call	ParseInt16
 	inc	4, xsp
 	ld	iz, hl
 	jr	50
@@ -2049,7 +2049,7 @@ FDemoText_ByteData_LayoutEngine:
 	cp	c, 76
 	jr	nz, 32
 	push	xwa
-	call	16714130
+	call	ParseInt16
 	inc	4, xsp
 	ldw	iz, 64
 	sub	iz, hl
@@ -2057,7 +2057,7 @@ FDemoText_ByteData_LayoutEngine:
 	ldw	iz, 64
 	jr	13
 	push	xwa
-	call	16714130
+	call	ParseInt16
 	inc	4, xsp
 	ld	iz, hl
 	add	iz, 64
@@ -2089,20 +2089,20 @@ FDemoText_ByteData_LayoutEngine:
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	lds32	xde, 1
-	call	16422496
+	call	SendEvent
 	ld	xwa, 14942217
 	ld	xbc, 29360129
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xwa, 14942218
 	ld	xbc, 29360129
 	lds32	xde, 5
-	call	16422496
+	call	SendEvent
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	lds32	xde, 0
-	call	16422496
-	call	16431987
+	call	SendEvent
+	call	DrawWall
 	jr	30
 	cps	iz, 0
 	jr	lt, 26
@@ -2225,7 +2225,7 @@ FDemoText_ByteData_LayoutEngine:
 	lda	xbc, (xsp+76)
 	push	xbc
 	push	xwa
-	call	16715559
+	call	Strcmp
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 70
@@ -2238,7 +2238,7 @@ FDemoText_ByteData_LayoutEngine:
 	dec	6, wa
 	.byte 0x37
 	push	xwa
-	call	16714130
+	call	ParseInt16
 	inc	4, xsp
 	cps	hl, 0
 	jr	lt, 44
@@ -2254,7 +2254,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	f, 104
 	push_a
 	push	xwa
-	call	16714130
+	call	ParseInt16
 	inc	4, xsp
 	cps	hl, 0
 	jr	lt, 9
@@ -2402,7 +2402,7 @@ FDemoText_ByteData_LayoutEngine:
 	lda	xwa, (xsp+202)
 	push	xwa
 	push	xbc
-	call	16715559
+	call	Strcmp
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 47
@@ -2426,7 +2426,7 @@ FDemoText_ByteData_LayoutEngine:
 	push	xbc
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	.byte 0xd7
 	swi	2
@@ -2507,7 +2507,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0x88
 	nop
 	ldw	wa, 14648
-	call	16715559
+	call	Strcmp
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 19
@@ -2519,7 +2519,7 @@ FDemoText_ByteData_LayoutEngine:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	.byte 0xd7
 	swi	2
@@ -2553,11 +2553,11 @@ FDemoText_ByteData_LayoutEngine:
 	jr	z, 27
 	ld	xbc, 29360129
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xwa, 14942218
 	ld	xbc, 29360129
 	lds32	xde, 5
-	call	16422496
+	call	SendEvent
 	lds	hl, 0
 	pop	xiz
 	.byte 0xf3
@@ -2993,11 +2993,11 @@ FDemoText_ByteData_LayoutB:
 	jr	z, 12
 	lda	xwa, (xsp+8)
 	ld	xbc, (xbc+16)
-	call	16434839
+	call	DrawBitmapFile
 	jr	9
 	lda	xwa, (xsp+8)
 	lds32	xbc, 0
-	call	16432188
+	call	DrawBitmap
 	ld	wa, (xsp+8)
 	add	wa, (xsp+2)
 	st16_24	154426, wa

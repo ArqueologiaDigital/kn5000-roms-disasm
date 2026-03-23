@@ -1369,7 +1369,7 @@ RhythmROM_CheckDone:
 RhythmROM_BytecodeBlock4:
 	ld	xwa, 1024
 	push	xwa
-	call	16715378
+	call	Malloc
 	add	xsp, 4
 	.byte 0xf1
 	.asciz "\\5c@"

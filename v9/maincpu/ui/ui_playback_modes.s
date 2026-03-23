@@ -53,12 +53,12 @@ UIStateEvt_VoiceParamHandler:
 	jr	z, 53
 	pushw	wa
 	xor	a, a
-	call	15997268
+	call	Part_WriteAllVoiceSubBlocks_B
 	popw	wa
-	call	15860763
+	call	SeqPlay_RestoreVoiceState_Return
 	call	15860661
-	call	16095929
-	call	15672407
+	call	AccWrap_PlayModeDispatch
+	call	SeqBuf_Init
 	stdi8	1073, 0
 	.byte 0xc1, 0xb3
 	pushw	wa
@@ -70,16 +70,16 @@ UIStateEvt_VoiceParamHandler:
 	push	xix
 	swi	6
 	ldb	a, 76
-	call	16546109
+	call	CtrlPanel_SetIndicatorBit
 	jr	49
 	pushw	wa
 	xor	a, a
-	call	15997170
+	call	Part_WriteAllVoiceSubBlocks_A
 	popw	wa
-	call	15860763
+	call	SeqPlay_RestoreVoiceState_Return
 	call	15860661
-	call	16095929
-	call	15672407
+	call	AccWrap_PlayModeDispatch
+	call	SeqBuf_Init
 	stdi8	1073, 0
 	.byte 0xc1, 0xb3
 	pushw	wa
@@ -87,7 +87,7 @@ UIStateEvt_VoiceParamHandler:
 	rcf
 	stdi16	61854, 0
 	stdi8	4596, 0
-	call	15976707
+	call	SeqPlay_CheckStartConditions
 	ret
 	ld	xix, 61856
 	xor	bc, bc
@@ -1361,7 +1361,7 @@ SqTrAsPsTtlFunc:
 	lda_24 xix, 0xf20ebd
 	jp_dri 8, 0x07, 0xF0, 0xE8
 SqTrAsPsTtl_Dispatch:	.ascii ":;<>"
-	call	15855868
+	call	SetWall_DataBlock1
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1369,15 +1369,15 @@ SqTrAsPsTtl_Dispatch:	.ascii ":;<>"
 	ld	xwa, 9175044
 	ld	xbc, 31457357
 	lds32	xde, 1
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 9175045
 	ld	xbc, 31457357
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 9175046
 	ld	xbc, 31457357
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	.ascii "h\":;<>"
 	call	15855883
 	pop	xiz
@@ -1468,7 +1468,7 @@ SqTrAsPsTtl_CaseF:
 	push	xhl
 	push	xix
 	push	xiz
-	call	15862640
+	call	CDlike_ExitModeAndRestore
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1491,9 +1491,9 @@ SqMdlyPlyTtlFunc:
 	lda_24 xix, 0xf20fd0
 	jp_dri 8, 0x07, 0xF0, 0xE8
 SqMdlyPlyTtl_Dispatch:	.ascii ":;<>"
-	call	15861305
+	call	PlayMode_InitFlagBlock
 	.ascii "^\\[ZhL:;<>"
-	call	15861383
+	call	PlayMode_ClearModeFlag
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1558,9 +1558,9 @@ DkMdlyPlyTtlFunc:
 	lda_24 xix, 0xf21064
 	jp_dri 8, 0x07, 0xF0, 0xE8
 DkMdlyPlyTtl_Dispatch:	.ascii ":;<>"
-	call	15861305
+	call	PlayMode_InitFlagBlock
 	.ascii "^\\[ZhL:;<>"
-	call	15861383
+	call	PlayMode_ClearModeFlag
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1711,11 +1711,11 @@ DisplayMode_BatchEventSend:
 	ld	xwa, 7340039
 	ld	xbc, 31457339
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 7340040
 	ld	xbc, 31457339
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 7340041
 	ld	xbc, 31457339
 	lds32	xde, 0
@@ -1723,11 +1723,11 @@ DisplayMode_BatchEventSend:
 	ld	xwa, 7602186
 	ld	xbc, 31457339
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 7602187
 	ld	xbc, 31457339
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 7602188
 	ld	xbc, 31457339
 	lds32	xde, 0
@@ -1735,7 +1735,7 @@ DisplayMode_BatchEventSend:
 	ld	xwa, 7405575
 	ld	xbc, 31457339
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 7405576
 	ld	xbc, 31457339
 	lds32	xde, 0
@@ -1743,11 +1743,11 @@ DisplayMode_BatchEventSend:
 	ld	xwa, 7667721
 	ld	xbc, 31457339
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 7667722
 	ld	xbc, 31457339
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ret
 
 DisplayMode_RefreshState:
@@ -2077,7 +2077,7 @@ DpMdlySmfLyrTtl_Dispatch:
 	jr	nc, 0
 	ld	xbc, 29818890
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	jr	59
 
 ; DpMdlySmfLyr case A
@@ -2139,7 +2139,7 @@ NameGetFuncCall_Dispatch:
 	pushw	62080
 	pushw	0
 	pushw	6888
-	call	16714981
+	call	Strncpy
 	ldada	xwa, 6888
 	ld	(xwa+16), 0
 	push	xwa
@@ -2151,58 +2151,58 @@ NameGetFuncCall_Dispatch:
 	pushw	242
 	pushw	0
 	pushw	7248
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+24)
 	ld	xwa, 4294967295
 	ld	xbc, 29818880
 	lds32	xde, 0
 	jrl	621
-	call	16291311
+	call	GetCurrentFileIndex
 	ld	wa, hl
-	call	16291363
+	call	GetFileEntryPtr
 	push	xhl
-	call	16291311
+	call	GetCurrentFileIndex
 	inc	1, hl
 	pushw	hl
 	pushw	226
 	pushw	252
 	pushw	0
 	pushw	7270
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+14)
 	stdi8	7283, 0
 	ld	xwa, 4294967295
 	ld	xbc, 29818881
 	lds32	xde, 0
 	jrl	564
-	call	16292551
+	call	GetFirstPageBase
 	ld	wa, hl
-	call	16292848
+	call	GetRecordPtrForFile
 	push	xhl
-	call	16292551
+	call	GetFirstPageBase
 	inc	1, hl
 	pushw	hl
 	pushw	226
 	pushw	264
 	pushw	0
 	pushw	7284
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+14)
 	ldada	xwa, 7284
 	ld	(xwa+16), 0
-	call	16290461
+	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818882
 	lds32	xde, 0
 	jrl	500
 	pushw	20
-	call	16292551
+	call	GetFirstPageBase
 	ld	wa, hl
-	call	16294015
+	call	GetFileEntryByIndex
 	push	xhl
 	pushw	0
 	pushw	7304
-	call	16714981
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ldada	xwa, 7304
 	ld	(xwa+20), 0
@@ -2217,19 +2217,19 @@ NameGetFuncCall_Dispatch:
 	nop
 	sub	de, 1
 	jr	gt, -19
-	call	16290461
+	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818883
 	lds32	xde, 0
 	jrl	424
-	call	16295886
+	call	FileIO_GetCurrentFileIndex_Alt
 	inc	1, hl
 	pushw	hl
 	pushw	226
 	pushw	272
 	pushw	0
 	pushw	7362
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	stdi8	7365, 0
 	ld	xwa, 4294967295
@@ -2237,13 +2237,13 @@ NameGetFuncCall_Dispatch:
 	lds32	xde, 0
 	jrl	378
 	pushw	12
-	call	16295886
+	call	FileIO_GetCurrentFileIndex_Alt
 	ld	wa, hl
-	call	16296891
+	call	FileIO_GetFileEntryWithRefresh
 	push	xhl
 	pushw	0
 	pushw	7326
-	call	16714981
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ldada	xwa, 7326
 	ld	(xwa+12), 0
@@ -2258,32 +2258,32 @@ NameGetFuncCall_Dispatch:
 	nop
 	sub	de, 1
 	jr	gt, -19
-	call	16290461
+	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818885
 	lds32	xde, 0
 	jrl	302
-	call	16295112
+	call	GetCurrentFileIndexAlt
 	inc	1, hl
 	pushw	hl
 	pushw	226
 	pushw	280
 	pushw	0
 	pushw	7366
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	stdi8	7369, 0
 	ld	xwa, 4294967295
 	ld	xbc, 29818888
 	lds32	xde, 0
 	jrl	256
-	call	16295112
+	call	GetCurrentFileIndexAlt
 	ld	wa, hl
-	call	16295409
+	call	GetFileRecordPtr
 	push	xhl
 	pushw	0
 	pushw	7340
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	ldada	xwa, 7340
 	ld	(xwa+20), 0
@@ -2298,24 +2298,24 @@ NameGetFuncCall_Dispatch:
 	nop
 	sub	de, 1
 	jr	gt, -19
-	call	16290461
+	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818887
 	lds32	xde, 0
 	jrl	184
-	call	16292551
+	call	GetFirstPageBase
 	ld	wa, hl
-	call	16294015
+	call	GetFileEntryByIndex
 	push	xhl
 	pushw	0
 	pushw	7370
-	call	16715583
+	call	Strcpy
 	pushw	20
 	pushw	0
 	pushw	7370
 	pushw	2
 	pushw	4174
-	call	16714981
+	call	Strncpy
 	lda	xsp, (xsp+18)
 	lda_24	xwa, 135246
 	ld	(xwa+20), 0
@@ -2330,22 +2330,22 @@ NameGetFuncCall_Dispatch:
 	nop
 	sub	de, 1
 	jr	gt, -19
-	call	16290461
+	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818895
 	lds32	xde, 0
 	jr	92
-	call	16292551
+	call	GetFirstPageBase
 	ld	wa, hl
-	call	16294015
+	call	GetFileEntryByIndex
 	push	xhl
 	pushw	0
 	pushw	7370
-	call	16715583
+	call	Strcpy
 	pushw	59
 	pushw	0
 	pushw	7370
-	call	16715359
+	call	NumFormat_DivideAndC_Data
 	lda	xsp, (xsp+14)
 	lda_24	xwa, 135268
 	or	xhl, xhl
@@ -2354,17 +2354,17 @@ NameGetFuncCall_Dispatch:
 	pushw	28
 	push	xhl
 	push	xwa
-	call	16714981
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	sti8_24	135296, 0
 	jr	3
 	ld	(xwa), 0
 	ld	xwa, 135268
-	call	16290461
+	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
 	ld	xbc, 29818894
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 
 ; NameGetFuncCall entry handler
 NameGetFunc_Entry:
@@ -2846,11 +2846,11 @@ DpDocTtl_Dispatch:
 	calr	-3086
 	calr	-1199
 	jrl	206
-	call	16695162
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, 7
 	calr	3398
-	call	16695580
+	call	Song_AbortPlayback
 	calr	-3627
 	jrl	184
 
@@ -2972,11 +2972,11 @@ DpPdTtl_Dispatch:
 	calr	-3389
 	calr	-1434
 	jrl	206
-	call	16695162
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, 7
 	calr	3095
-	call	16695580
+	call	Song_AbortPlayback
 	calr	-3930
 	jrl	184
 
@@ -3103,15 +3103,15 @@ DpSmfTtl_Dispatch:
 	jrl	230
 	cpdi8	36150, 114
 	jrl	z, 222
-	call	16695162
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, 23
 	calr	2769
-	call	16695580
+	call	Song_AbortPlayback
 	ld	xwa, 7274534
 	ld	xbc, 29818889
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	calr	-4272
 	jrl	184
 
@@ -3237,7 +3237,7 @@ DpSmfLyrTtl_Dispatch:
 	ld	xwa, 7274534
 	ld	xbc, 29818890
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	jrl	174
 
 ; DpSmfLyrTtl case A
@@ -3370,14 +3370,14 @@ SqTrSelTtlFunc:
 	lda_24 xix, 0xf22245
 	jp_dri 8, 0x07, 0xF0, 0xE8
 SqTrSelTtl_Dispatch:	.ascii ":;<>"
-	call	15860824
+	call	PlayMode_SetupAndDispatch
 	.ascii "^\\[Zh"
 	incf
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	call	15860847
+	call	PlayMode_TeardownAndRestore
 	pop	xiz
 	pop	xix
 	pop	xhl

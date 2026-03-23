@@ -748,7 +748,7 @@ SeMenu_SetDisplayValue_Data:
 	ld	(xwa+1), c
 	ld	c, (xsp)
 	ld	(xwa+2), c
-	call	16705633
+	call	SndParam_ApplyProgramChange
 	lda	xwa, (xsp+2)
 	ld	e, (xwa+3)
 	ld	c, (xwa+4)
@@ -776,7 +776,7 @@ SeMenu_SetDisplayValue_Data:
 	ld	a, (xsp+4)
 	extz	wa
 	pushw	wa
-	call	15789384
+	call	SeMenu_DisplayPartValue
 	lda	xsp, (xsp+16)
 	ret
 
@@ -1681,7 +1681,7 @@ SeMenu_TransferPartValues_EndData:
 	calr	64522
 	pushw	11
 	pushw	59
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	.byte 0xd7
 	swi	2
@@ -1734,7 +1734,7 @@ SeMenu_TransferPartValues_EndData:
 	ld	a, (xsp+12)
 	extz	wa
 	pushw	wa
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	ldb	l, 1
 	pop	xiz
@@ -1822,7 +1822,7 @@ SeMenu_TransferPartValues_EndData:
 	extz	wa
 	pushw	wa
 	pushw	42
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lda	xsp, (xsp+14)
 	ret
@@ -1943,7 +1943,7 @@ SeMenu_TransferPartValues_EndData:
 	calr	63957
 	pushw	12
 	pushw	59
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	.byte 0xd7
 	swi	2
@@ -2249,7 +2249,7 @@ SeMenu_SetupPartDisplay_End:
 	ld	(xwa+4), c
 	ld	c, (xsp+6)
 	ld	(xwa+2), c
-	call	16705514
+	call	SndParam_FetchOscTableEntry
 	lda	xbc, (xsp+8)
 	ld	a, (xbc)
 	.byte 0xc7
@@ -2351,9 +2351,9 @@ SeMenu_SetupPartDisplay_End:
 	cps	a, 0
 	jr	nz, 6
 	ld	wa, bc
-	jp	16356717
+	jp	UI_PostDialValueEvent
 	ld	wa, bc
-	jp	16356697
+	jp	UI_PostDialRangeEvent
 	dec	2, xsp
 	ld	(xsp), a
 	lds	wa, 1
@@ -2922,7 +2922,7 @@ SeMenu_ApplyPartEdit_Data2:
 	calr	61855
 	pushw	0
 	pushw	40
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	inc	4, xsp
 	ret
@@ -3350,7 +3350,7 @@ SeMenu_ApplyPartEdit_Data2:
 	calr	60837
 	pushw	9
 	pushw	41
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 2
 	calr	63231
@@ -3403,7 +3403,7 @@ SeMenu_ApplyPartEdit_Data2:
 	calr	60693
 	pushw	9
 	pushw	41
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 3
 	calr	63087
@@ -3459,7 +3459,7 @@ SeMenu_ApplyPartEdit_Data2:
 	calr	60549
 	pushw	9
 	pushw	41
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 4
 	calr	62943
@@ -3488,7 +3488,7 @@ SeMenu_ApplyPartEdit_Data2:
 	calr	58088
 	pushw	2
 	pushw	41
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 2
 	lds	bc, 1
@@ -3626,7 +3626,7 @@ SeMenu_ApplyPartEdit_Data2:
 	jr	nz, 10
 	pushw	wa
 	pushw	60
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lda	xbc, (xsp+16)
 	ldw	wa, 13
@@ -5259,7 +5259,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+8)
 	extz	wa
 	pushw	wa
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 1
 	calr	55985
@@ -6925,7 +6925,7 @@ SeMenu_RefreshPartDisplay_Data:
 	.byte 0x04
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+14)
 	mul	a, 3
 	.byte 0xc7
@@ -6936,7 +6936,7 @@ SeMenu_RefreshPartDisplay_Data:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -6969,7 +6969,7 @@ SeMenu_RefreshPartDisplay_Data:
 	.byte 0x04
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+14)
 	mul	a, 3
 	.byte 0xc7
@@ -6980,7 +6980,7 @@ SeMenu_RefreshPartDisplay_Data:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -7014,7 +7014,7 @@ SeMenu_RefreshPartDisplay_Data:
 	.byte 0x04
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+14)
 	mul	a, 3
 	.byte 0xc7
@@ -7022,7 +7022,7 @@ SeMenu_RefreshPartDisplay_Data:
 	.byte 0x99
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 7
 	ld	(xbc+7), 0
@@ -7057,7 +7057,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	(xsp+18), a
 	lda	xbc, (xsp+16)
 	ldw	wa, 13
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	rcf
 	push	xsp
@@ -7065,7 +7065,7 @@ SeMenu_RefreshPartDisplay_Data:
 	jrl	nz, 132
 	lda	xbc, (xsp+14)
 	ldw	wa, 14
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	ret
 	push	xix
@@ -7100,15 +7100,15 @@ SeMenu_RefreshPartDisplay_Data:
 	ret
 	ld	xhl, 238031577
 	nop
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xde, (xsp+14)
 	pushw	31
 	lds	wa, 0
 	ldw	bc, 19
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	14
 	pushw	39
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 6
 	jrl	128
@@ -7125,7 +7125,7 @@ SeMenu_RefreshPartDisplay_Data:
 	pop_sr
 	pushw	bc
 	ldw	wa, 15
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xwa, (xsp+2)
 	ld	(xwa+6), 15
 	ld	(xwa+7), 0
@@ -7141,7 +7141,7 @@ SeMenu_RefreshPartDisplay_Data:
 	pop_sr
 	pushw	de
 	ldw	wa, 16
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 15
 	lda	xwa, (xbc+7)
@@ -7186,7 +7186,7 @@ SeMenu_RefreshPartDisplay_Data:
 	.byte 0xde
 	ldw	wa, 40
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	cps	a, 0
 	ret	z
 	ldw	wa, 39
@@ -7198,7 +7198,7 @@ SeMenu_RefreshPartDisplay_Data:
 	jr	nz, 9
 	ldw	wa, 42
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	ldw	wa, 39
 	lds	bc, 2
 	lds	de, 1
@@ -7208,7 +7208,7 @@ SeMenu_RefreshPartDisplay_Data:
 	jr	nz, 41
 	lda	xbc, (xsp)
 	ldw	wa, 13
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -7217,10 +7217,10 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	c, (xsp)
 	extz	bc
 	ldw	wa, 13
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	13
 	pushw	39
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	jr	11
 	ldw	wa, 39
@@ -7234,7 +7234,7 @@ SeMenu_RefreshPartDisplay_Data:
 	jr	nz, 41
 	lda	xbc, (xsp)
 	ldw	wa, 13
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x87
 	push	xsp
 	.byte 0x04
@@ -7243,10 +7243,10 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	c, (xsp)
 	extz	bc
 	ldw	wa, 13
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	13
 	pushw	39
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	jr	11
 	ldw	wa, 39
@@ -7258,10 +7258,10 @@ SeMenu_RefreshPartDisplay_Data:
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	extz	wa
 	ldw	bc, 9
@@ -7306,7 +7306,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ret	z
 	ldw	wa, 40
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 7
@@ -7319,7 +7319,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ret	z
 	ldw	wa, 40
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 6
@@ -7331,7 +7331,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ret	z
 	ldw	wa, 40
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 6
@@ -7343,21 +7343,21 @@ SeMenu_RefreshPartDisplay_Data:
 	ret	z
 	ldw	wa, 40
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	ldw	wa, 41
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	extz	wa
 	ldw	bc, 20
@@ -7392,7 +7392,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ret	z
 	ldw	wa, 41
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 7
@@ -7405,7 +7405,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ret	z
 	ldw	wa, 41
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -7415,7 +7415,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ret	z
 	ldw	wa, 41
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -7425,25 +7425,25 @@ SeMenu_RefreshPartDisplay_Data:
 	ret	z
 	ldw	wa, 41
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 40
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	extz	wa
 	lds	bc, 1
-	jp	15758956
+	jp	SeMenu_ApplyPartEdit_Data2
 	extz	wa
 	lds	bc, 1
 	jp	15759013
@@ -7468,12 +7468,12 @@ SeMenu_RefreshPartDisplay_Data:
 	.byte 0xde
 	ldw	wa, 40
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	cps	a, 0
 	jr	nz, 9
 	ldw	wa, 39
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	lds	wa, 1
 	lds	bc, 1
 	jp	15757276
@@ -7498,9 +7498,9 @@ SeMenu_RefreshPartDisplay_Data:
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 

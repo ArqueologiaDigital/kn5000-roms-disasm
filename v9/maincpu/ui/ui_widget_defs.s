@@ -1923,7 +1923,7 @@ RamEditCheck_JumpStart:
 	pushw	41654
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr	31
@@ -3430,7 +3430,7 @@ ButtonState_DispatchDSP_InlineData:
 	lda	xde, (xsp+12)
 	ld	xwa, (xsp+298)
 	ld	xbc, 31457338
-	call	16422496
+	call	SendEvent
 	jr	100
 	ld	xwa, 15377130
 	jr	82
@@ -3462,7 +3462,7 @@ ButtonState_DispatchDSP_InlineData:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 
 ButtonState_Paint_DrawAligned:
@@ -8328,14 +8328,14 @@ AcTrkSw_Return:
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457300
 	ld	xde, 23068688
-	call	16422496
+	call	SendEvent
 	or	xhl, xhl
 	.byte 0x66
 	.long Data_DiskFuncPtrTbl_EA0B12
 	pushw 43152
 	ld	xwa, (xsp+140)
 	push	xwa
-	call	16715187
+	call	Strcat
 	inc	8, xsp
 	ld	xhl, (xsp+4)
 	jrl	534
@@ -8346,7 +8346,7 @@ AcTrkSw_Return:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16422496
+	call	SendEvent
 	lda	xbc, (xsp+8)
 	ld	xhl, xbc
 	ld	xwa, (xsp+136)
@@ -8367,13 +8367,13 @@ AcTrkSw_Return:
 	pushw 234
 	pushw 43162
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	jrl	419
 	pushw 234
 	pushw 43170
 	push	xwa
-	call	16715583
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, xiz
 	ld	xbc, 31457287
@@ -8382,7 +8382,7 @@ AcTrkSw_Return:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16422496
+	call	SendEvent
 	ld	xwa, (xsp+136)
 	ld	bc, (xwa+8)
 	extz	xbc
@@ -8399,7 +8399,7 @@ AcTrkSw_Return:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16422496
+	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
@@ -8416,7 +8416,7 @@ AcTrkSw_Return:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16422496
+	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
@@ -8433,7 +8433,7 @@ AcTrkSw_Return:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16422496
+	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
@@ -8446,12 +8446,12 @@ AcTrkSw_Return:
 	add	xwa, 39845888
 	ld	xbc, 31457291
 	ld	xde, (xsp+136)
-	call	16422496
+	call	SendEvent
 	jrl	140
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16422496
+	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
 	ld	(xwa+8), xbc
@@ -8464,7 +8464,7 @@ AcTrkSw_Return:
 	add	xwa, 39845888
 	ld	xbc, 31457292
 	ld	xde, (xsp+136)
-	call	16422496
+	call	SendEvent
 	jr	96
 	ld	xwa, xiz
 	ld	xbc, 31457293
@@ -8478,7 +8478,7 @@ AcTrkSw_Return:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, 31457305
-	call	16422496
+	call	SendEvent
 	lda	xwa, (xsp+8)
 	add	xwa, (xsp+136)
 	lds32	xhl, 0
@@ -8486,7 +8486,7 @@ AcTrkSw_Return:
 	jr	34
 	ld	xwa, (xsp+136)
 	push	xwa
-	call	16714468
+	call	Free
 	inc	4, xsp
 	lds32	xhl, 0
 	jr	18

@@ -113,12 +113,12 @@ GraphicsRender_ByteData:
 	dec	4, xsp
 	pushw	iz
 	st16_24	257958, wa
-	call	16459940
+	call	Table_LookupDword
 	ld	(xsp+2), xhl
 	ldw	iz, 64
 	ld	wa, iz
 	ld	xbc, (xsp+2)
-	call	16459925
+	call	SetPaletteRGB
 	inc	1, iz
 	cp	iz, 192
 	jr	c, -17
@@ -146,10 +146,10 @@ GraphicsRender_ByteData:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
-	call	16459940
+	call	Table_LookupDword
 	ld	xbc, xhl
 	ld	wa, iz
-	call	16459925
+	call	SetPaletteRGB
 	inc	1, iz
 	cp	iz, 64
 	jr	c, -39
@@ -162,10 +162,10 @@ GraphicsRender_ByteData:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
-	call	16459940
+	call	Table_LookupDword
 	ld	xbc, xhl
 	ld	wa, iz
-	call	16459925
+	call	SetPaletteRGB
 	inc	1, iz
 	.long GUI_DisplayStructData
 	jr	c, -39
@@ -1542,7 +1542,7 @@ DrawFunc_Init_Variant1:
 	push	xwa
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 63
@@ -1615,7 +1615,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380840
 	push	xwa
 	push	xbc
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 63
@@ -1693,7 +1693,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380860
 	push	xwa
 	push	xbc
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -1796,7 +1796,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380892
 	push	xwa
 	push	xbc
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -1869,7 +1869,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380912
 	push	xwa
 	push	xbc
-	call	16714340
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -4428,7 +4428,7 @@ ToneGen_ParamWriteDispatch:
 	ld	xwa, xbc
 	ld	xbc, xde
 	ld	xde, 15538064
-	call	16435914
+	call	DrawString
 	lda	xbc, (xsp+2)
 	lda	xwa, (xsp+6)
 	ld	de, (xwa)
@@ -4463,7 +4463,7 @@ ToneGen_ParamWriteDispatch:
 	ld	xwa, xbc
 	ld	xbc, xde
 	ld	xde, 15538138
-	call	16435914
+	call	DrawString
 	lda	xbc, (xsp+2)
 	lda	xwa, (xsp+6)
 	ld	de, (xwa)
@@ -4557,7 +4557,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xwa, xde
 	ld	xde, 15538302
-	call	16435914
+	call	DrawString
 
 ToneGen_WriteParam_Return:
 	popw iz
@@ -4689,7 +4689,7 @@ WallMenuEdit_EventDispatch:
 	ld	xwa, 15538410
 	push	xwa
 	push	xbc
-	call	16714340
+	call	Audio_SendCommand
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
@@ -4737,7 +4737,7 @@ WallOthEdit_EventDispatch:
 	ld	xwa, 15538454
 	push	xwa
 	push	xbc
-	call	16714340
+	call	Audio_SendCommand
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
@@ -5379,8 +5379,8 @@ CntIniFunc:
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; CntIniFunc event dispatch
 CntIniFunc_EventDispatch:
-	call	16095929
-	call	16180794
+	call	AccWrap_PlayModeDispatch
+	call	AccompSeq_StopSequence
 
 CntIniFunc_ReturnZero:
 	lds32 xhl, 0
