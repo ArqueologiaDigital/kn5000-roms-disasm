@@ -27935,7 +27935,7 @@ TmFlashWrite_Block1:
 	push	xsp
 	ld	xwa, 0xe91e376f
 	swi	4
-	calr	-396
+	calr	65140
 	ld	c, (xsp)
 	extz	bc
 	ld	a, (xsp+2)
@@ -27952,7 +27952,7 @@ TmFlashWrite_Block1:
 	ldw	bc, 470
 	jr	43
 	calr	65190
-	calr	-451
+	calr	65085
 	ld	a, (xsp)
 	extz	wa
 	extz	xwa
@@ -27993,11 +27993,11 @@ TmFlashWrite_Block1:
 	swi	0
 	.byte 0x8b
 	extz	bc
-	calr	-949
+	calr	64587
 	inc	1, iz
 	cp	iz, 20
 	jr	c, -21
-	calr	-562
+	calr	64974
 	ld	a, (xsp+4)
 	.byte 0xc7
 	swi	0
@@ -28028,7 +28028,7 @@ TmFlashWrite_Block1:
 	inc	1, iz
 	cp	iz, 128
 	jr	c, -21
-	calr	-634
+	calr	64902
 	lda_24	xwa, 1985191
 	ldw	bc, 10240
 	.byte 0x42
@@ -28145,7 +28145,7 @@ TmFlash_WriteRoutine:
 	call	InterCPU_E1_Bulk_Transfer
 	jp	TmFlash_Return
 	ld	xwa, 0x1e0000
-	calr	-1624
+	calr	63912
 	ldw	wa, 65434
 	cps	l, 6
 	jr	nz, 2
@@ -28153,7 +28153,7 @@ TmFlash_WriteRoutine:
 	ld	hl, wa
 	ret
 	ld	xwa, 0x1e0000
-	calr	-1644
+	calr	63892
 	cps	l, 6
 	jr	ugt, 7
 	cps	l, 1

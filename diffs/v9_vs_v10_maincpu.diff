@@ -20,7 +20,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	swi	7
  	lda	xsp, (xsp+10)
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
---- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 20:29:54.945448931 +0000
+--- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 20:42:20.984153989 +0000
 +++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 20:04:52.922773969 +0000
 @@ -26655,9 +26655,14 @@
  	ret
@@ -127,7 +127,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
 -	ld	xwa, 0xe91e376f
 +	ld	xwa, 0xe61e376f
  	swi	4
--	calr	-396
+-	calr	65140
 +	calr	65137
  	ld	c, (xsp)
  	extz	bc
@@ -136,7 +136,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ldw	bc, 470
  	jr	43
  	calr	65190
--	calr	-451
+-	calr	65085
 +	calr	65082
  	ld	a, (xsp)
  	extz	wa
@@ -145,12 +145,12 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	swi	0
  	.byte 0x8b
  	extz	bc
--	calr	-949
+-	calr	64587
 +	calr	64584
  	inc	1, iz
  	cp	iz, 20
  	jr	c, -21
--	calr	-562
+-	calr	64974
 +	calr	64971
  	ld	a, (xsp+4)
  	.byte 0xc7
@@ -159,7 +159,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	inc	1, iz
  	cp	iz, 128
  	jr	c, -21
--	calr	-634
+-	calr	64902
 +	calr	64899
  	lda_24	xwa, 1985191
  	ldw	bc, 10240
@@ -168,7 +168,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	call	InterCPU_E1_Bulk_Transfer
  	jp	TmFlash_Return
  	ld	xwa, 0x1e0000
--	calr	-1624
+-	calr	63912
 +	calr	63909
  	ldw	wa, 65434
  	cps	l, 6
@@ -177,7 +177,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	hl, wa
  	ret
  	ld	xwa, 0x1e0000
--	calr	-1644
+-	calr	63892
 +	calr	63889
  	cps	l, 6
  	jr	ugt, 7
