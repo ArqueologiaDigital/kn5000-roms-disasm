@@ -1,0 +1,5388 @@
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/audio_cmd_encoder.s v10/maincpu/audio/audio_cmd_encoder.s
+--- v9/maincpu/audio/audio_cmd_encoder.s	2026-03-23 10:37:43.196110528 +0000
++++ v10/maincpu/audio/audio_cmd_encoder.s	2026-03-23 02:19:50.637550023 +0000
+@@ -204,7 +204,7 @@
+ 	add wa, wa
+ 	lda_24 xix, 0xeed878
+ 	ld_sriw3 WA, 0x07, 0xF0, 0xE0
+-	lda_24 xix, 0xff1229
++	lda_24 xix, 0xff1237
+ 	jp_dri 8, 0x07, 0xF0, 0xE0
+ 
+ AudioCmd_Format_Percent:
+@@ -3097,4 +3097,4 @@
+ AudioCmd_FillToEnd:
+ 	.fill 41912, 1, 0xff
+ AudioCmd_FillToVectors:
+-	.fill 12710, 1, 0xff
++	.fill 12696, 1, 0xff
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/audio_control_engine.s v10/maincpu/audio/audio_control_engine.s
+--- v9/maincpu/audio/audio_control_engine.s	2026-03-23 09:50:07.132769714 +0000
++++ v10/maincpu/audio/audio_control_engine.s	2026-03-23 02:19:50.638151798 +0000
+@@ -3268,7 +3268,7 @@
+ 	pushw	16
+ 	push	xde
+ 	push	xbc
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	ret
+ 	calr	753
+@@ -3288,7 +3288,7 @@
+ 	ld	wa, iz
+ 	extz	xwa
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	add	xhl, 20
+ 	ld	xbc, xhl
+ 	.byte 0xaf
+@@ -3305,12 +3305,12 @@
+ 	.byte 0x83
+ 	lda	xwa, (xhl+2)
+ 	push	xwa
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	ld	wa, iz
+ 	extz	xwa
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	add	xhl, 20
+ 	.byte 0xaf, 0x06
+ 	or	(xhl), c
+@@ -3379,7 +3379,7 @@
+ 	.byte 0xe0, 0xe4
+ 	ldw	wa, 4024
+ 	ldw	wa, 7480
+-	.byte 0x8B
++	.byte 0x99
+ 	decf
+ 	swi	7
+ 	lda	xsp, (xsp+10)
+@@ -3435,7 +3435,7 @@
+ 	ld	xwa, (xsp+14)
+ 	lda	xwa, (xwa+944)
+ 	push	xwa
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	ld	(xsp+2), 0
+ 	ld	c, (xsp+2)
+@@ -3521,7 +3521,7 @@
+ 	push	xwa
+ 	lda	xwa, (xix+15)
+ 	push	xwa
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	.byte 0xc7
+ 	swi	3
+@@ -3540,7 +3540,7 @@
+ 	.byte 0xe1, 0xb0
+ 	pop_sr
+ 	ldw	wa, 7480
+-	.byte 0x8B
++	.byte 0x99
+ 	decf
+ 	swi	7
+ 	lda	xsp, (xsp+10)
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
+--- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 10:37:43.195220269 +0000
++++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 02:19:50.646151865 +0000
+@@ -22850,11 +22850,11 @@
+ 	add	xiz, xwa
+ 	ld	xwa, xiz
+ 	ldda32	xbc, 59883
+-	call	16714318
++	call	16714332
+ 	ld	xiz, xhl
+ 	ld	xwa, xiz
+ 	ld	xbc, 1000
+-	call	16714762
++	call	16714776
+ 	ld	xiz, xhl
+ 	ld	xwa, 40
+ 	cp	xiz, 40
+@@ -25322,7 +25322,7 @@
+ 	sub	xbc, 426
+ 	ld	xwa, xbc
+ 	ld	xbc, 11
+-	call	16714756
++	call	16714770
+ 	cp	xhl, 9
+ 	jrl	ugt, 411
+ 	add	xhl, xhl
+@@ -25345,7 +25345,7 @@
+ 	sub	xbc, 102
+ 	ld	xwa, xbc
+ 	ld	xbc, 81
+-	call	16714756
++	call	16714770
+ 	cp	xhl, 76
+ 	jrl	ugt, 338
+ 	add	xhl, 15651913
+@@ -25492,7 +25492,7 @@
+ 	ld	xwa, xiz
+ 	sub	xwa, 295
+ 	ld	xbc, 80
+-	call	16714762
++	call	16714776
+ 	ld	a, l
+ 	extz	wa
+ 	muls	wa, 80
+@@ -25506,7 +25506,7 @@
+ 	sub	xbc, xwa
+ 	ld	xwa, xbc
+ 	ld	xbc, 11
+-	call	16714756
++	call	16714770
+ 	cp	xhl, 9
+ 	jrl	ugt, 371
+ 	add	xhl, xhl
+@@ -26663,266 +26663,1256 @@
+ SendPartDataBlock_Return4:
+ 	ret
+ 
+-; === V9 patched region (auto-generated from v9 ROM) ===
+-; This region differs between v9 and v10. Labels are preserved
+-; for cross-references. Code is in .byte format pending disassembly.
+-
+-; === V9 patched region (auto-generated from v9 ROM) ===
+-; Region: 0xFEF99E to 0xFF04F8 (2906 bytes, v10 was 2920 bytes)
+-
+-; === V9 patched region (auto-generated from v9 ROM) ===
+-; Region: 2906 bytes (v10 was 2920 bytes, 14 fewer in v9)
+-
+ SendPartDataBlock_DoGetError:
+-	.byte 0x30, 0xFF, 0x00, 0x31, 0xFF, 0x00, 0x1B, 0x55, 0xF4, 0xFE
++	call SubCPU_Payload_GetErrorFlag
++	cp hl, 0xFFFF
++	ret nz
++	ldw wa, 0xFF
++	ldw bc, 0xFF
++	call COMM_BuildAndSendPacket
++	ret
++
+ SendPartDataBlock_Return5:
+-	.byte 0x0E
++	ret
++
+ SendPartDataBlock_Data:
+-	.byte 0xBF, 0xF6, 0x37, 0x3E, 0xBF, 0x0A, 0x61, 0xE8, 0x8E, 0xEE, 0x88, 0x1E, 0x66, 0x03, 0xAF, 0x0A
+-	.byte 0x22, 0xEA, 0x8D, 0xEE, 0x8C, 0x31, 0x08, 0x00, 0x95, 0x11, 0x8A, 0x10, 0x21, 0xBE, 0x10, 0x41
+-	.byte 0xEA, 0x89, 0x89, 0x11, 0x21, 0xBE, 0x11, 0x41, 0x89, 0x12, 0x21, 0xBE, 0x12, 0x41, 0x89, 0x13
+-	.byte 0x21, 0xBE, 0x13, 0x41, 0x89, 0x14, 0x21, 0xBE, 0x18, 0x41, 0x89, 0x15, 0x21, 0xBE, 0x19, 0x41
+-	.byte 0x89, 0x16, 0x21, 0xBE, 0x24, 0x41, 0x89, 0x17, 0x21, 0xBE, 0x25, 0x41, 0x89, 0x18, 0x21, 0xBE
+-	.byte 0x29, 0x41, 0x89, 0x19, 0x21, 0xBE, 0x2A, 0x41, 0x89, 0x1A, 0x21, 0xBE, 0x2B, 0x41, 0x89, 0x1B
+-	.byte 0x21, 0xBE, 0x2C, 0x41, 0x89, 0x1C, 0x21, 0xBE, 0x2D, 0x41, 0x89, 0x1D, 0x21, 0xBE, 0x2E, 0x41
+-	.byte 0x89, 0x1F, 0x21, 0xBE, 0x5C, 0x41, 0x89, 0x20, 0x21, 0xBE, 0x5D, 0x41, 0xC7, 0xE6, 0xA8, 0xD9
+-	.byte 0xA8, 0xD9, 0x8B, 0xDB, 0xC8, 0x5E, 0x00, 0xD9, 0x8A, 0xDA, 0xC8, 0x21, 0x00, 0xAF, 0x0A, 0x20
+-	.byte 0xC3, 0x07, 0xE0, 0xE8, 0x21, 0xF3, 0x07, 0xF8, 0xEC, 0x41, 0xC7, 0xE6, 0x61, 0xD9, 0x61, 0xC7
+-	.byte 0xE6, 0xCF, 0x08, 0x67, 0xDC, 0xBF, 0x04, 0x00, 0x00, 0xBF, 0x08, 0x02, 0x00, 0x00, 0xBF, 0x06
+-	.byte 0x02, 0x00, 0x00, 0x9F, 0x06, 0x20, 0xD8, 0xC8, 0x66, 0x00, 0xF3, 0x07, 0xF8, 0xE0, 0x31, 0x9F
+-	.byte 0x08, 0x22, 0xDA, 0xC8, 0x29, 0x00, 0xAF, 0x0A, 0x20, 0xEA, 0x13, 0xE8, 0x82, 0x82, 0x21, 0xB9
+-	.byte 0x01, 0x41, 0x8A, 0x01, 0x21, 0xB9, 0x02, 0x41, 0xB9, 0x03, 0x33, 0x8A, 0x02, 0x21, 0xB3, 0x41
+-	.byte 0xC9, 0xCC, 0xCF, 0xB3, 0x41, 0x8A, 0x03, 0x21, 0xB9, 0x04, 0x41, 0x8A, 0x04, 0x21, 0xB9, 0x05
+-	.byte 0x41, 0x8A, 0x05, 0x21, 0xB9, 0x06, 0x41, 0xB9, 0x07, 0x00, 0x32, 0x8A, 0x06, 0x21, 0xB9, 0x08
+-	.byte 0x41, 0x8A, 0x07, 0x21, 0xB9, 0x09, 0x41, 0x8A, 0x08, 0x21, 0xB9, 0x0A, 0x41, 0x8A, 0x09, 0x21
+-	.byte 0xB9, 0x0B, 0x41, 0x8A, 0x0A, 0x21, 0xB9, 0x17, 0x41, 0x8A, 0x0B, 0x21, 0xB9, 0x18, 0x41, 0xBA
+-	.byte 0x0C, 0x33, 0x83, 0x21, 0xB9, 0x19, 0x41, 0xB1, 0xB7, 0x83, 0x21, 0xC9, 0xCC, 0x10, 0xC9, 0xCF
+-	.byte 0x10, 0x6E, 0x02, 0xB1, 0xBF, 0x8A, 0x0D, 0x21, 0xB9, 0x1A, 0x41, 0x8A, 0x0E, 0x21, 0xB9, 0x1B
+-	.byte 0x41, 0x8A, 0x0F, 0x21, 0xB9, 0x1C, 0x41, 0x8A, 0x10, 0x21, 0xB9, 0x1D, 0x41, 0x8A, 0x11, 0x21
+-	.byte 0xB9, 0x1E, 0x41, 0x8A, 0x12, 0x21, 0xB9, 0x1F, 0x41, 0x8A, 0x13, 0x21, 0xB9, 0x20, 0x41, 0x8A
+-	.byte 0x14, 0x21, 0xB9, 0x21, 0x41, 0x8A, 0x15, 0x21, 0xB9, 0x22, 0x41, 0x8A, 0x16, 0x21, 0xB9, 0x23
+-	.byte 0x41, 0x8A, 0x17, 0x21, 0xB9, 0x24, 0x41, 0x8A, 0x18, 0x21, 0xB9, 0x25, 0x41, 0x8A, 0x19, 0x21
+-	.byte 0xB9, 0x27, 0x41, 0x8A, 0x1A, 0x21, 0xB9, 0x29, 0x41, 0x8A, 0x1B, 0x21, 0xB9, 0x2A, 0x41, 0x8A
+-	.byte 0x1C, 0x21, 0xB9, 0x2B, 0x41, 0x8A, 0x1D, 0x21, 0xB9, 0x2C, 0x41, 0x8A, 0x1E, 0x21, 0xB9, 0x2D
+-	.byte 0x41, 0x8A, 0x1F, 0x21, 0xB9, 0x2E, 0x41, 0x8A, 0x20, 0x21, 0xB9, 0x2F, 0x41, 0x8A, 0x21, 0x21
+-	.byte 0xB9, 0x30, 0x41, 0x8A, 0x22, 0x21, 0xB9, 0x31, 0x41, 0x8A, 0x23, 0x21, 0xB9, 0x32, 0x41, 0x8A
+-	.byte 0x24, 0x21, 0xB9, 0x33, 0x41, 0x8A, 0x25, 0x21, 0xB9, 0x34, 0x41, 0x8A, 0x26, 0x21, 0xB9, 0x35
+-	.byte 0x41, 0x8A, 0x27, 0x21, 0xB9, 0x36, 0x41, 0x8A, 0x28, 0x21, 0xB9, 0x37, 0x41, 0x8A, 0x2A, 0x21
+-	.byte 0xB9, 0x39, 0x41, 0x8A, 0x2B, 0x21, 0xB9, 0x3A, 0x41, 0x8A, 0x2C, 0x21, 0xB9, 0x3B, 0x41, 0x8A
+-	.byte 0x2D, 0x21, 0xB9, 0x3C, 0x41, 0x8A, 0x29, 0x21, 0xB9, 0x4D, 0x41, 0x8A, 0x2E, 0x21, 0xB9, 0x3D
+-	.byte 0x41, 0x8A, 0x2F, 0x21, 0xB9, 0x3E, 0x41, 0x8A, 0x30, 0x21, 0xB9, 0x3F, 0x41, 0x8A, 0x31, 0x21
+-	.byte 0xB9, 0x40, 0x41, 0x8A, 0x32, 0x21, 0xB9, 0x41, 0x41, 0x8A, 0x33, 0x21, 0xB9, 0x42, 0x41, 0x8A
+-	.byte 0x34, 0x21, 0xB9, 0x43, 0x41, 0x8A, 0x35, 0x21, 0xB9, 0x44, 0x41, 0x8A, 0x36, 0x21, 0xB9, 0x45
+-	.byte 0x41, 0x8A, 0x37, 0x21, 0xB9, 0x46, 0x41, 0x8A, 0x38, 0x21, 0xB9, 0x47, 0x41, 0x8A, 0x39, 0x21
+-	.byte 0xB9, 0x48, 0x41, 0x8A, 0x3A, 0x21, 0xB9, 0x49, 0x41, 0x8A, 0x3B, 0x21, 0xB9, 0x4A, 0x41, 0x8A
+-	.byte 0x3C, 0x21, 0xB9, 0x4B, 0x41, 0x8A, 0x3D, 0x21, 0xB9, 0x4C, 0x41, 0x8F, 0x04, 0x61, 0x9F, 0x06
+-	.byte 0x38, 0x51, 0x00, 0x9F, 0x08, 0x38, 0x3E, 0x00, 0x8F, 0x04, 0x3F, 0x04, 0x77, 0x44, 0xFE, 0x5E
+-	.byte 0xBF, 0x0A, 0x37, 0x0E, 0xB8, 0x10, 0x33, 0x83, 0x25, 0xCD, 0xCC, 0xB7, 0xB3, 0x45, 0xB8, 0x11
+-	.byte 0x31, 0xB1, 0xCF, 0x66, 0x05, 0xCD, 0x31, 0x06, 0xB3, 0x45, 0xB1, 0xC9, 0x66, 0x02, 0xB3, 0xBB
+-	.byte 0x88, 0x12, 0x23, 0xCB, 0xCC, 0xF0, 0xC7, 0xF0, 0x9B, 0xCB, 0xEF, 0x04, 0xD9, 0x12, 0xF2, 0x8D
+-	.byte 0xD5, 0xEE, 0x33, 0xC3, 0x07, 0xEC, 0xE4, 0x23, 0xC7, 0xF0, 0x9B, 0xC7, 0xF0, 0x8C, 0xCC, 0xEE
+-	.byte 0x06, 0x88, 0x13, 0x25, 0xCD, 0x8B, 0xCB, 0xCC, 0xF0, 0xC7, 0xF0, 0x9B, 0xCB, 0xEF, 0x04, 0xD9
+-	.byte 0x12, 0xC3, 0x07, 0xEC, 0xE4, 0x23, 0xC7, 0xF0, 0x9B, 0xCB, 0xEE, 0x04, 0xCB, 0xE4, 0xCD, 0xCC
+-	.byte 0x0F, 0xC7, 0xF0, 0x9D, 0xC7, 0xF0, 0x8B, 0xD9, 0x12, 0xC3, 0x07, 0xEC, 0xE4, 0x23, 0xC7, 0xF0
+-	.byte 0x9B, 0xCB, 0xEE, 0x02, 0xCB, 0xE4, 0xB8, 0x11, 0x44, 0xB8, 0x14, 0x31, 0xE9, 0x8A, 0xB9, 0x7C
+-	.byte 0x33, 0x82, 0x23, 0xBA, 0xFE, 0x43, 0xEA, 0x61, 0xEB, 0xF2, 0x67, 0xF5, 0xDB, 0xA8, 0xDB, 0x8A
+-	.byte 0xDA, 0xC8, 0x28, 0x00, 0xF3, 0x07, 0xE0, 0xE8, 0x31, 0x89, 0x11, 0x23, 0xC7, 0xF0, 0x9B, 0xF3
+-	.byte 0x07, 0xE0, 0xE8, 0x35, 0xF3, 0x07, 0xE0, 0xE8, 0x31, 0x89, 0x10, 0x23, 0xBD, 0x11, 0x43, 0xF3
+-	.byte 0x07, 0xE0, 0xE8, 0x35, 0xF3, 0x07, 0xE0, 0xE8, 0x31, 0x89, 0x0F, 0x23, 0xBD, 0x10, 0x43, 0xF3
+-	.byte 0x07, 0xE0, 0xE8, 0x35, 0xF3, 0x07, 0xE0, 0xE8, 0x31, 0x89, 0x0E, 0x23, 0xBD, 0x0F, 0x43, 0xF3
+-	.byte 0x07, 0xE0, 0xE8, 0x35, 0xF3, 0x07, 0xE0, 0xE8, 0x31, 0x89, 0x0D, 0x23, 0xBD, 0x0E, 0x43, 0xF3
+-	.byte 0x07, 0xE0, 0xE8, 0x35, 0xF3, 0x07, 0xE0, 0xE8, 0x31, 0x89, 0x0C, 0x23, 0xBD, 0x0D, 0x43, 0xEA
+-	.byte 0x13, 0xE8, 0x82, 0xC7, 0xF0, 0x8B, 0xBA, 0x0C, 0x43, 0xDB, 0xC8, 0x22, 0x00, 0xDB, 0xCF, 0x66
+-	.byte 0x00, 0x61, 0x8B, 0x0E, 0xF3, 0xFD, 0x56, 0xFE, 0x37, 0xE8, 0x8A, 0x45, 0x9D, 0xD5, 0xEE, 0x00
+-	.byte 0xEF, 0x8C, 0x31, 0xD5, 0x00, 0x95, 0x11, 0xEF, 0x8D, 0xEA, 0x8C, 0x31, 0xD5, 0x00, 0x95, 0x11
+-	.byte 0xBA, 0x66, 0x30, 0xE8, 0x8D, 0xF3, 0xE9, 0xB7, 0x00, 0x34, 0x31, 0x28, 0x00, 0x95, 0x11, 0x85
+-	.byte 0x10, 0xE8, 0x8D, 0xF3, 0xE9, 0x08, 0x01, 0x34, 0x31, 0x28, 0x00, 0x95, 0x11, 0x85, 0x10, 0xE8
+-	.byte 0x8D, 0xF3, 0xE9, 0x59, 0x01, 0x34, 0x31, 0x28, 0x00, 0x95, 0x11, 0x85, 0x10, 0xF3, 0xFD, 0xAA
+-	.byte 0x01, 0x37, 0x0E, 0xBF, 0xE6, 0x37, 0x3E, 0xBF, 0x16, 0x61, 0xBF, 0x1A, 0x60, 0xAF, 0x1A, 0x20
+-	.byte 0x1E, 0xA1, 0xFF, 0xAF, 0x1A, 0x22, 0xBA, 0x10, 0x33, 0xAF, 0x16, 0x20, 0xE8, 0x8D, 0xEA, 0x8C
+-	.byte 0x31, 0x08, 0x00, 0x95, 0x11, 0xB8, 0x10, 0x30, 0xB0, 0xCF, 0x66, 0x04, 0xB3, 0xBD, 0x68, 0x02
+-	.byte 0xB3, 0xB5, 0xB0, 0xCA, 0x66, 0x04, 0xB3, 0xBC, 0x68, 0x02, 0xB3, 0xB4, 0xAF, 0x1A, 0x23, 0xBB
+-	.byte 0x29, 0x30, 0xBF, 0x0E, 0x60, 0x80, 0x3C, 0xF0, 0xBB, 0x2A, 0x30, 0xBF, 0x0A, 0x60, 0xB0, 0x00
+-	.byte 0x00, 0xAF, 0x16, 0x24, 0xBC, 0x11, 0x30, 0xBF, 0x12, 0x60, 0x80, 0x21, 0xC9, 0xCC, 0xC0, 0xC9
+-	.byte 0xEF, 0x06, 0xC9, 0x67, 0xC9, 0x8B, 0xAF, 0x0E, 0x20, 0x80, 0xEB, 0xAF, 0x12, 0x25, 0x85, 0x21
+-	.byte 0xC9, 0xCC, 0x30, 0xC9, 0xEF, 0x04, 0xC9, 0x67, 0xC9, 0xEE, 0x04, 0xC9, 0x8D, 0xAF, 0x0A, 0x20
+-	.byte 0x80, 0x23, 0xCD, 0xE3, 0xAF, 0x0A, 0x22, 0xB2, 0x43, 0x85, 0x21, 0xC9, 0xCC, 0x0C, 0xC9, 0xEF
+-	.byte 0x02, 0xC9, 0x67, 0xC9, 0xE3, 0xB2, 0x43, 0x8C, 0x12, 0x21, 0xC9, 0x08, 0x7F, 0xD8, 0x12, 0xC9
+-	.byte 0x0A, 0x1E, 0xC9, 0x8B, 0xBB, 0x3B, 0x43, 0xEC, 0x8A, 0x8A, 0x13, 0x21, 0xBB, 0x2B, 0x41, 0xBA
+-	.byte 0x14, 0x30, 0xBF, 0x12, 0x60, 0xEB, 0x89, 0xB9, 0x2C, 0x30, 0xBF, 0x0E, 0x60, 0xB9, 0x3C, 0x30
+-	.byte 0xBF, 0x0A, 0x60, 0xAF, 0x12, 0x20, 0x80, 0x23, 0xCB, 0xCF, 0x09, 0x6F, 0x0B, 0xCB, 0x65, 0xAF
+-	.byte 0x0A, 0x20, 0xB0, 0x43, 0x23, 0x05, 0x68, 0x2F, 0xCB, 0xCF, 0x18, 0x6F, 0x20, 0xCB, 0x89, 0xCB
+-	.byte 0x81, 0xC9, 0x6C, 0xC9, 0x8B, 0xAF, 0x0A, 0x20, 0xB0, 0x43, 0xAF, 0x12, 0x20, 0x80, 0x21, 0xC9
+-	.byte 0xEE, 0x01, 0xC9, 0x6C, 0xC9, 0x8B, 0xAF, 0x0E, 0x20, 0xB0, 0x43, 0x68, 0x18, 0xCB, 0xC8, 0x13
+-	.byte 0xAF, 0x0A, 0x20, 0xB0, 0x43, 0x23, 0x13, 0xAF, 0x12, 0x20, 0x80, 0x21, 0xCB, 0x81, 0xC9, 0x8B
+-	.byte 0xAF, 0x0E, 0x20, 0xB0, 0x43, 0xAF, 0x16, 0x24, 0xBC, 0x15, 0x32, 0x82, 0x23, 0xAF, 0x1A, 0x23
+-	.byte 0xBB, 0x3E, 0x43, 0x82, 0x23, 0xBB, 0x2E, 0x43, 0x8C, 0x1E, 0x23, 0xCB, 0xEE, 0x03, 0xBB, 0x5C
+-	.byte 0x43, 0xEC, 0x88, 0xB8, 0x1F, 0x30, 0xBF, 0x06, 0x60, 0xEB, 0x8A, 0x80, 0x21, 0xBA, 0x5D, 0x41
+-	.byte 0xBF, 0x04, 0x00, 0x00, 0xDA, 0xA8, 0xDA, 0x8C, 0xDC, 0xC8, 0x5E, 0x00, 0xDA, 0x8B, 0xDB, 0xC8
+-	.byte 0x20, 0x00, 0xAF, 0x16, 0x20, 0xAF, 0x1A, 0x21, 0xC3, 0x07, 0xE0, 0xEC, 0x21, 0xF3, 0x07, 0xE4
+-	.byte 0xF0, 0x41, 0x8F, 0x04, 0x61, 0xDA, 0x61, 0x8F, 0x04, 0x3F, 0x08, 0x67, 0xD9, 0xAF, 0x06, 0x20
+-	.byte 0x80, 0x21, 0xC9, 0xCC, 0x0F, 0xC9, 0xCF, 0x0A, 0x66, 0x05, 0xC9, 0xCF, 0x0B, 0x6E, 0x43, 0xAF
+-	.byte 0x1A, 0x20, 0xB8, 0x60, 0x30, 0xBF, 0x12, 0x60, 0xAF, 0x16, 0x20, 0x88, 0x22, 0x3F, 0x32, 0x63
+-	.byte 0x06, 0xAF, 0x12, 0x20, 0xB0, 0x00, 0x32, 0xAF, 0x06, 0x20, 0xB0, 0xCF, 0x66, 0x24, 0xAF, 0x16
+-	.byte 0x23, 0xBB, 0x1C, 0x32, 0x82, 0x21, 0xC9, 0x33, 0x06, 0x66, 0x17, 0xAF, 0x1A, 0x21, 0xB9, 0x5E
+-	.byte 0x00, 0x01, 0x8B, 0x1D, 0x21, 0xB9, 0x5F, 0x41, 0x82, 0x23, 0xCB, 0xCC, 0x3F, 0xAF, 0x12, 0x20
+-	.byte 0xB0, 0x43, 0xAF, 0x1A, 0x21, 0xB9, 0x11, 0x30, 0xBF, 0x0A, 0x60, 0x80, 0x3C, 0xAA, 0xB9, 0x66
+-	.byte 0x31, 0xAF, 0x16, 0x20, 0xB8, 0x28, 0x32, 0xBF, 0x04, 0x00, 0x00, 0xB2, 0xCF, 0x66, 0x25, 0x8F
+-	.byte 0x04, 0x3F, 0x00, 0x6E, 0x07, 0xAF, 0x0A, 0x20, 0xB0, 0xB8, 0x68, 0x18, 0x8F, 0x04, 0x3F, 0x01
+-	.byte 0x6E, 0x07, 0xAF, 0x0A, 0x20, 0xB0, 0xBA, 0x68, 0x0B, 0x8F, 0x04, 0x3F, 0x02, 0x6E, 0x05, 0xAF
+-	.byte 0x0A, 0x20, 0xB0, 0xBC, 0xB9, 0x06, 0x30, 0xB0, 0x00, 0x00, 0xB9, 0x26, 0x33, 0xB3, 0x00, 0x00
+-	.byte 0xB2, 0xCE, 0x66, 0x09, 0xB0, 0xBD, 0x83, 0x21, 0xC9, 0x31, 0x05, 0xB3, 0x41, 0x8A, 0x01, 0x21
+-	.byte 0xB9, 0x02, 0x41, 0x8A, 0x02, 0x21, 0xB9, 0x03, 0x41, 0x8A, 0x03, 0x21, 0xB9, 0x04, 0x41, 0x8A
+-	.byte 0x04, 0x21, 0xB9, 0x05, 0x41, 0x8A, 0x05, 0x21, 0xB9, 0x17, 0x41, 0x8A, 0x06, 0x21, 0xB9, 0x18
+-	.byte 0x41, 0x8A, 0x07, 0x21, 0xC9, 0x63, 0xC9, 0xEC, 0x05, 0xB9, 0x19, 0x41, 0x8A, 0x08, 0x21, 0xB9
+-	.byte 0x1D, 0x41, 0xB9, 0x1B, 0x34, 0x8A, 0x09, 0x21, 0xB4, 0x41, 0xB9, 0x1C, 0x35, 0x8A, 0x0A, 0x21
+-	.byte 0xB5, 0x41, 0xB9, 0x1A, 0x33, 0xB3, 0x00, 0x42, 0x84, 0x21, 0xC9, 0xCF, 0x42, 0x63, 0x02, 0xB3
+-	.byte 0x41, 0x85, 0x21, 0x83, 0xF9, 0x63, 0x02, 0xB3, 0x41, 0x8A, 0x0B, 0x21, 0xC9, 0xEE, 0x01, 0xB9
+-	.byte 0x27, 0x41, 0x8A, 0x0C, 0x21, 0xB9, 0x2E, 0x41, 0xB9, 0x2F, 0x00, 0x00
++	lda	xsp, (xsp-10)
++	push	xiz
++	ld	(xsp+10), xbc
++	ld	xiz, xwa
++	ld	xwa, xiz
++	calr	870
++	ld	xde, (xsp+10)
++	ld	xiy, xde
++	ld	xix, xiz
++	ldw	bc, 8
++	ldirw
++	ld	a, (xde+16)
++	ld	(xiz+16), a
++	ld	xbc, xde
++	ld	a, (xbc+17)
++	ld	(xiz+17), a
++	ld	a, (xbc+18)
++	ld	(xiz+18), a
++	ld	a, (xbc+19)
++	ld	(xiz+19), a
++	ld	a, (xbc+20)
++	ld	(xiz+24), a
++	ld	a, (xbc+21)
++	ld	(xiz+25), a
++	ld	a, (xbc+22)
++	ld	(xiz+36), a
++	ld	a, (xbc+23)
++	ld	(xiz+37), a
++	ld	a, (xbc+24)
++	ld	(xiz+41), a
++	ld	a, (xbc+25)
++	ld	(xiz+42), a
++	ld	a, (xbc+26)
++	ld	(xiz+43), a
++	ld	a, (xbc+27)
++	ld	(xiz+44), a
++	ld	a, (xbc+28)
++	ld	(xiz+45), a
++	ld	a, (xbc+29)
++	ld	(xiz+46), a
++	ld	a, (xbc+31)
++	ld	(xiz+92), a
++	ld	a, (xbc+32)
++	ld	(xiz+93), a
++	.byte 0xc7, 0xe6
++	sub	(xwa-39), xwa
++	ld	hl, bc
++	add	hl, 94
++	ld	de, bc
++	add	de, 33
++	ld	xwa, (xsp+10)
++	.byte 0xc3
++	reti
++	.byte 0xe0, 0xe8
++	ldb	a, 243
++	reti
++	swi	0
++	.byte 0xec
++	ld	xbc, 3647071943
++	jr	lt, -57
++	.byte 0xe6
++	mul	l, 103
++	.byte 0xdc
++	ld	(xsp+4), 0
++	.byte 0xbf
++	ldio	2, 0
++	nop
++	.byte 0xbf
++	ei	2
++	nop
++	nop
++	ld	wa, (xsp+6)
++	add	wa, 102
++	.byte 0xf3
++	reti
++	swi	0
++	.byte 0xe0
++	ldw	bc, 2207
++	ldb	b, 218
++	.byte 0xc8
++	pushw	bc
++	nop
++	ld	xwa, (xsp+10)
++	exts	xde
++	add	xde, xwa
++	ld	a, (xde)
++	ld	(xbc+1), a
++	ld	a, (xde+1)
++	ld	(xbc+2), a
++	lda	xhl, (xbc+3)
++	ld	a, (xde+2)
++	ld	(xhl), a
++	and	a, 207
++	ld	(xhl), a
++	ld	a, (xde+3)
++	ld	(xbc+4), a
++	ld	a, (xde+4)
++	ld	(xbc+5), a
++	ld	a, (xde+5)
++	ld	(xbc+6), a
++	ld	(xbc+7), 50
++	ld	a, (xde+6)
++	ld	(xbc+8), a
++	ld	a, (xde+7)
++	ld	(xbc+9), a
++	ld	a, (xde+8)
++	ld	(xbc+10), a
++	ld	a, (xde+9)
++	ld	(xbc+11), a
++	ld	a, (xde+10)
++	ld	(xbc+23), a
++	ld	a, (xde+11)
++	ld	(xbc+24), a
++	lda	xhl, (xde+12)
++	ld	a, (xhl)
++	ld	(xbc+25), a
++	.byte 0xb1, 0xb7
++	ld	a, (xhl)
++	and	a, 16
++	cp	a, 16
++	jr	nz, 2
++	.byte 0xb1, 0xbf
++	ld	a, (xde+13)
++	ld	(xbc+26), a
++	ld	a, (xde+14)
++	ld	(xbc+27), a
++	ld	a, (xde+15)
++	ld	(xbc+28), a
++	ld	a, (xde+16)
++	ld	(xbc+29), a
++	ld	a, (xde+17)
++	ld	(xbc+30), a
++	ld	a, (xde+18)
++	ld	(xbc+31), a
++	ld	a, (xde+19)
++	ld	(xbc+32), a
++	ld	a, (xde+20)
++	ld	(xbc+33), a
++	ld	a, (xde+21)
++	ld	(xbc+34), a
++	ld	a, (xde+22)
++	ld	(xbc+35), a
++	ld	a, (xde+23)
++	ld	(xbc+36), a
++	ld	a, (xde+24)
++	ld	(xbc+37), a
++	ld	a, (xde+25)
++	ld	(xbc+39), a
++	ld	a, (xde+26)
++	ld	(xbc+41), a
++	ld	a, (xde+27)
++	ld	(xbc+42), a
++	ld	a, (xde+28)
++	ld	(xbc+43), a
++	ld	a, (xde+29)
++	ld	(xbc+44), a
++	ld	a, (xde+30)
++	ld	(xbc+45), a
++	ld	a, (xde+31)
++	ld	(xbc+46), a
++	ld	a, (xde+32)
++	ld	(xbc+47), a
++	ld	a, (xde+33)
++	ld	(xbc+48), a
++	ld	a, (xde+34)
++	ld	(xbc+49), a
++	ld	a, (xde+35)
++	ld	(xbc+50), a
++	ld	a, (xde+36)
++	ld	(xbc+51), a
++	ld	a, (xde+37)
++	ld	(xbc+52), a
++	ld	a, (xde+38)
++	ld	(xbc+53), a
++	ld	a, (xde+39)
++	ld	(xbc+54), a
++	ld	a, (xde+40)
++	ld	(xbc+55), a
++	ld	a, (xde+42)
++	ld	(xbc+57), a
++	ld	a, (xde+43)
++	ld	(xbc+58), a
++	ld	a, (xde+44)
++	ld	(xbc+59), a
++	ld	a, (xde+45)
++	ld	(xbc+60), a
++	ld	a, (xde+41)
++	ld	(xbc+77), a
++	ld	a, (xde+46)
++	ld	(xbc+61), a
++	ld	a, (xde+47)
++	ld	(xbc+62), a
++	ld	a, (xde+48)
++	ld	(xbc+63), a
++	ld	a, (xde+49)
++	ld	(xbc+64), a
++	ld	a, (xde+50)
++	ld	(xbc+65), a
++	ld	a, (xde+51)
++	ld	(xbc+66), a
++	ld	a, (xde+52)
++	ld	(xbc+67), a
++	ld	a, (xde+53)
++	ld	(xbc+68), a
++	ld	a, (xde+54)
++	ld	(xbc+69), a
++	ld	a, (xde+55)
++	ld	(xbc+70), a
++	ld	a, (xde+56)
++	ld	(xbc+71), a
++	ld	a, (xde+57)
++	ld	(xbc+72), a
++	ld	a, (xde+58)
++	ld	(xbc+73), a
++	ld	a, (xde+59)
++	ld	(xbc+74), a
++	ld	a, (xde+60)
++	ld	(xbc+75), a
++	ld	a, (xde+61)
++	ld	(xbc+76), a
++	incm8	1, (xsp+4)
++	.byte 0x9f, 0x06
++	push	xwa
++	.byte 0x51
++	nop
++	.byte 0x9f
++	ldio	56, 62
++	nop
++	.byte 0x8f, 0x04
++	push	xsp
++	.byte 0x04
++	jrl	c, -444
++	pop	xiz
++	lda	xsp, (xsp+10)
++	ret
++	lda	xhl, (xwa+16)
++	ld	e, (xhl)
++	and	e, 183
++	ld	(xhl), e
++	lda	xbc, (xwa+17)
++	.byte 0xb1
++	inc	6, l
++	halt
++	set	6, e
++	ld	(xhl), e
++	.byte 0xb1
++	inc	6, a
++	push_sr
++	.byte 0xb3, 0xbb
++	ld	c, (xwa+18)
++	and	c, 240
++	.byte 0xc7, 0xf0, 0x9b
++	srl	c, 4
++	extz	bc
++	lda_24	xhl, 15652237
++	.byte 0xc3
++	reti
++	or	xix, xix
++	ldb	c, 199
++	.byte 0xf0, 0x9b, 0xc7, 0xf0
++	or	(xix-52), h
++	.byte 0x06
++	ld	e, (xwa+19)
++	ld	c, e
++	and	c, 240
++	.byte 0xc7, 0xf0, 0x9b
++	srl	c, 4
++	extz	bc
++	.byte 0xc3
++	reti
++	or	xix, xix
++	ldb	c, 199
++	.byte 0xf0
++	or	(xhl-53), iz
++	.byte 0x04
++	or	d, c
++	and	e, 15
++	.byte 0xc7, 0xf0, 0x9d, 0xc7, 0xf0, 0x8b
++	extz	bc
++	.byte 0xc3
++	reti
++	or	xix, xix
++	ldb	c, 199
++	.byte 0xf0
++	or	(xhl-53), iz
++	push_sr
++	or	d, c
++	ld	(xwa+17), d
++	lda	xbc, (xwa+20)
++	ld	xde, xbc
++	lda	xhl, (xbc+124)
++	ld	c, (xde)
++	ld	(xde-2), c
++	inc	1, xde
++	cp	xde, xhl
++	jr	c, -11
++	lds	hl, 0
++	ld	de, hl
++	add	de, 40
++	.byte 0xf3
++	reti
++	.byte 0xe0, 0xe8
++	ldw	bc, 4489
++	ldb	c, 199
++	.byte 0xf0, 0x9b, 0xf3
++	reti
++	.byte 0xe0, 0xe8
++	ldw	iy, 2035
++	.byte 0xe0, 0xe8
++	ldw	bc, 4233
++	ldb	c, 189
++	scf
++	ld	xhl, 3906996211
++	ldw	iy, 2035
++	.byte 0xe0, 0xe8
++	ldw	bc, 3977
++	ldb	c, 189
++	rcf
++	ld	xhl, 3906996211
++	ldw	iy, 2035
++	.byte 0xe0, 0xe8
++	ldw	bc, 3721
++	ldb	c, 189
++	retd	62275
++	reti
++	.byte 0xe0, 0xe8
++	ldw	iy, 2035
++	.byte 0xe0, 0xe8
++	ldw	bc, 3465
++	ldb	c, 189
++	ret
++	ld	xhl, 3906996211
++	ldw	iy, 2035
++	.byte 0xe0, 0xe8
++	ldw	bc, 3209
++	ldb	c, 189
++	decf
++	ld	xhl, 2196247530
++	.byte 0xc7, 0xf0, 0x8b
++	ld	(xde+12), c
++	add	hl, 34
++	cp	hl, 102
++	jr	lt, -117
++	ret
++	.byte 0xf3
++	swi	5
++	.byte 0x56
++	swi	6
++	.byte 0x37
++	ld	xde, xwa
++	ld	xiy, 15652253
++	ld	xix, xsp
++	ldw	bc, 213
++	ldirw
++	ld	xiy, xsp
++	ld	xix, xde
++	ldw	bc, 213
++	ldirw
++	lda	xwa, (xde+102)
++	ld	xiy, xwa
++	.byte 0xf3
++	sbc	xsp, xbc
++	nop
++	ldw	ix, 10289
++	nop
++	ldirw
++	.byte 0x85
++	rcf
++	ld	xiy, xwa
++	lda	xix, (xde+264)
++	ldw	bc, 40
++	ldirw
++	.byte 0x85
++	rcf
++	ld	xiy, xwa
++	lda	xix, (xde+345)
++	ldw	bc, 40
++	ldirw
++	.byte 0x85
++	rcf
++	.byte 0xf3
++	swi	5
++	.byte 0xaa, 0x01, 0x37
++	ret
++	lda	xsp, (xsp-26)
++	push	xiz
++	ld	(xsp+22), xbc
++	ld	(xsp+26), xwa
++	ld	xwa, (xsp+26)
++	calr	65441
++	ld	xde, (xsp+26)
++	lda	xhl, (xde+16)
++	ld	xwa, (xsp+22)
++	ld	xiy, xwa
++	ld	xix, xde
++	ldw	bc, 8
++	ldirw
++	lda	xwa, (xwa+16)
++	.byte 0xb0
++	inc	6, l
++	.byte 0x04, 0xb3, 0xbd
++	jr	2
++	.byte 0xb3, 0xb5, 0xb0
++	inc	6, b
++	.byte 0x04, 0xb3, 0xbc
++	jr	2
++	.byte 0xb3, 0xb4
++	ld	xhl, (xsp+26)
++	lda	xwa, (xhl+41)
++	ld	(xsp+14), xwa
++	.byte 0x80
++	push	xix
++	.byte 0xf0
++	lda	xwa, (xhl+42)
++	ld	(xsp+10), xwa
++	ld	(xwa), 0
++	ld	xix, (xsp+22)
++	lda	xwa, (xix+17)
++	ld	(xsp+18), xwa
++	ld	a, (xwa)
++	and	a, 192
++	srl	a, 6
++	inc	7, a
++	ld	c, a
++	ld	xwa, (xsp+14)
++	or	(xwa), c
++	ld	xiy, (xsp+18)
++	ld	a, (xiy)
++	and	a, 48
++	srl	a, 4
++	inc	7, a
++	sll	a, 4
++	ld	e, a
++	ld	xwa, (xsp+10)
++	ld	c, (xwa)
++	or	c, e
++	ld	xde, (xsp+10)
++	ld	(xde), c
++	ld	a, (xiy)
++	and	a, 12
++	srl	a, 2
++	inc	7, a
++	or	c, a
++	ld	(xde), c
++	ld	a, (xix+18)
++	mul	a, 127
++	extz	wa
++	div	a, 30
++	ld	c, a
++	ld	(xhl+59), c
++	ld	xde, xix
++	ld	a, (xde+19)
++	ld	(xhl+43), a
++	lda	xwa, (xde+20)
++	ld	(xsp+18), xwa
++	ld	xbc, xhl
++	lda	xwa, (xbc+44)
++	ld	(xsp+14), xwa
++	lda	xwa, (xbc+60)
++	ld	(xsp+10), xwa
++	ld	xwa, (xsp+18)
++	ld	c, (xwa)
++	cp	c, 9
++	jr	nc, 11
++	inc	5, c
++	ld	xwa, (xsp+10)
++	ld	(xwa), c
++	ldb	c, 5
++	jr	47
++	cp	c, 24
++	jr	nc, 32
++	ld	a, c
++	add	a, c
++	dec	4, a
++	ld	c, a
++	ld	xwa, (xsp+10)
++	ld	(xwa), c
++	ld	xwa, (xsp+18)
++	ld	a, (xwa)
++	sll	a, 1
++	dec	4, a
++	ld	c, a
++	ld	xwa, (xsp+14)
++	ld	(xwa), c
++	jr	24
++	add	c, 19
++	ld	xwa, (xsp+10)
++	ld	(xwa), c
++	ldb	c, 19
++	ld	xwa, (xsp+18)
++	ld	a, (xwa)
++	add	a, c
++	ld	c, a
++	ld	xwa, (xsp+14)
++	ld	(xwa), c
++	ld	xix, (xsp+22)
++	lda	xde, (xix+21)
++	ld	c, (xde)
++	ld	xhl, (xsp+26)
++	ld	(xhl+62), c
++	ld	c, (xde)
++	ld	(xhl+46), c
++	ld	c, (xix+30)
++	sll	c, 3
++	ld	(xhl+92), c
++	ld	xwa, xix
++	lda	xwa, (xwa+31)
++	ld	(xsp+6), xwa
++	ld	xde, xhl
++	ld	a, (xwa)
++	ld	(xde+93), a
++	ld	(xsp+4), 0
++	lds	de, 0
++	ld	ix, de
++	add	ix, 94
++	ld	hl, de
++	add	hl, 32
++	ld	xwa, (xsp+22)
++	ld	xbc, (xsp+26)
++	.byte 0xc3
++	reti
++	.byte 0xe0, 0xec
++	ldb	a, 243
++	reti
++	.byte 0xe4, 0xf0
++	ld	xbc, 3663791247
++	jr	lt, -113
++	.byte 0x04
++	push	xsp
++	ldio	103, 217
++	ld	xwa, (xsp+6)
++	ld	a, (xwa)
++	and	a, 15
++	cp	a, 10
++	jr	z, 5
++	cp	a, 11
++	jr	nz, 67
++	ld	xwa, (xsp+26)
++	lda	xwa, (xwa+96)
++	ld	(xsp+18), xwa
++	ld	xwa, (xsp+22)
++	.byte 0x88
++	.ascii "\"?2c"
++	.byte 0x06
++	ld	xwa, (xsp+18)
++	ld	(xwa), 50
++	ld	xwa, (xsp+6)
++	.byte 0xb0
++	inc	6, l
++	ldb	d, 175
++	ex_ff
++	ldb	c, 187
++	.byte 0x1c
++	ldw	de, 8578
++	bit	6, a
++	jr	z, 23
++	ld	xbc, (xsp+26)
++	ld	(xbc+94), 1
++	ld	a, (xhl+29)
++	ld	(xbc+95), a
++	ld	c, (xde)
++	and	c, 63
++	ld	xwa, (xsp+18)
++	ld	(xwa), c
++	ld	xbc, (xsp+26)
++	lda	xwa, (xbc+17)
++	ld	(xsp+10), xwa
++	.byte 0x80
++	push	xix
++	.byte 0xaa
++	lda	xbc, (xbc+102)
++	ld	xwa, (xsp+22)
++	lda	xde, (xwa+40)
++	ld	(xsp+4), 0
++	.byte 0xb2
++	inc	6, l
++	ldb	e, 143
++	.byte 0x04
++	push	xsp
++	nop
++	jr	nz, 7
++	ld	xwa, (xsp+10)
++	.byte 0xb0, 0xb8
++	jr	24
++	.byte 0x8f, 0x04
++	push	xsp
++	.byte 0x01
++	jr	nz, 7
++	ld	xwa, (xsp+10)
++	.byte 0xb0, 0xba
++	jr	11
++	.byte 0x8f, 0x04
++	push	xsp
++	push_sr
++	jr	nz, 5
++	ld	xwa, (xsp+10)
++	.byte 0xb0, 0xbc
++	lda	xwa, (xbc+6)
++	ld	(xwa), 0
++	lda	xhl, (xbc+38)
++	ld	(xhl), 0
++	.byte 0xb2
++	inc	6, h
++	push	176
++	.byte 0xbd
++	ld	a, (xhl)
++	set	5, a
++	ld	(xhl), a
++	ld	a, (xde+1)
++	ld	(xbc+2), a
++	ld	a, (xde+2)
++	ld	(xbc+3), a
++	ld	a, (xde+3)
++	ld	(xbc+4), a
++	ld	a, (xde+4)
++	ld	(xbc+5), a
++	ld	a, (xde+5)
++	ld	(xbc+23), a
++	ld	a, (xde+6)
++	ld	(xbc+24), a
++	ld	a, (xde+7)
++	inc	3, a
++	sla	a, 5
++	ld	(xbc+25), a
++	ld	a, (xde+8)
++	ld	(xbc+29), a
++	lda	xix, (xbc+27)
++	ld	a, (xde+9)
++	ld	(xix), a
++	lda	xiy, (xbc+28)
++	ld	a, (xde+10)
++	ld	(xiy), a
++	lda	xhl, (xbc+26)
++	ld	(xhl), 66
++	ld	a, (xix)
++	cp	a, 66
++	jr	ule, 2
++	ld	(xhl), a
++	ld	a, (xiy)
++	cp	(xhl), a
++	jr	ule, 2
++	ld	(xhl), a
++	ld	a, (xde+11)
++	sll	a, 1
++	ld	(xbc+39), a
++	ld	a, (xde+12)
++	ld	(xbc+46), a
++	ld	(xbc+47), 0
+ SendPartDataBlock_Data2:
+-	.byte 0x8A, 0x0D, 0x21, 0xC9, 0xEE, 0x01, 0xB9, 0x29, 0x41, 0x8A, 0x0E, 0x21, 0xC9, 0xEC, 0x01, 0xB9
+-	.byte 0x2A, 0x41, 0x8A, 0x0F, 0x21, 0xC9, 0xEE
++	ld	a, (xde+13)
++	sll	a, 1
++	ld	(xbc+41), a
++	ld	a, (xde+14)
++	sla	a, 1
++	ld	(xbc+42), a
++	ld	a, (xde+15)
++	.byte 0xc9, 0xee
+ SendPartDataBlock_Data3:
+-	.byte 0x01, 0xB9, 0x2B, 0x41, 0x8A, 0x10, 0x21, 0xC9, 0xEC, 0x01, 0xB9, 0x2C, 0x41, 0x8A, 0x11, 0x21
+-	.byte 0xC9, 0xEE, 0x01, 0xB9, 0x2D, 0x41, 0xBA, 0x12, 0x30, 0xBF, 0x12, 0x60, 0x80, 0x21, 0xB9, 0x33
+-	.byte 0x41, 0xBA, 0x15, 0x30, 0xBF, 0x0E, 0x60, 0x80, 0x21, 0xB9, 0x34, 0x41, 0xBA, 0x18, 0x36, 0x86
+-	.byte 0x21, 0xB9, 0x35, 0x41, 0xB9, 0x30, 0x33, 0xB3, 0x00, 0x42, 0xB9, 0x31, 0x34, 0x8A, 0x13, 0x21
+-	.byte 0xB4, 0x41, 0xB9, 0x32, 0x35, 0x8A, 0x14, 0x21, 0xB5, 0x41, 0xAF, 0x12, 0x20, 0x80, 0x3F, 0x00
+-	.byte 0x6E, 0x2B, 0xAF, 0x0E, 0x20, 0x80, 0x3F, 0x00, 0x66, 0x0C, 0x8A, 0x16, 0x21, 0xB4, 0x41, 0x40
+-	.byte 0x17, 0x00, 0x00, 0x00, 0x68, 0x0F, 0x86, 0x3F, 0x00, 0x66, 0x12, 0x8A, 0x19, 0x21, 0xB4, 0x41
+-	.byte 0x40, 0x1A, 0x00, 0x00, 0x00, 0xEA, 0x8E, 0xE8, 0x86, 0x86, 0x21, 0xB5, 0x41, 0x84, 0x21, 0x83
+-	.byte 0xF9, 0x6F, 0x02, 0xB3, 0x41, 0x85, 0x21, 0x83, 0xF9, 0x63, 0x02, 0xB3, 0x41, 0xB9, 0x36, 0x30
+-	.byte 0xBF, 0x12, 0x60, 0x8A, 0x1D, 0x21, 0xC9, 0x63, 0xC9, 0xEC, 0x05, 0xC9, 0x8F, 0xAF, 0x12, 0x20
+-	.byte 0xB0, 0x47, 0x8A, 0x1E, 0x3F, 0xFF, 0x66, 0x05, 0xCF
++	.byte 0x01
++	ld	(xbc+43), a
++	ld	a, (xde+16)
++	sla	a, 1
++	ld	(xbc+44), a
++	ld	a, (xde+17)
++	sll	a, 1
++	ld	(xbc+45), a
++	lda	xwa, (xde+18)
++	ld	(xsp+18), xwa
++	ld	a, (xwa)
++	ld	(xbc+51), a
++	lda	xwa, (xde+21)
++	ld	(xsp+14), xwa
++	ld	a, (xwa)
++	ld	(xbc+52), a
++	lda	xiz, (xde+24)
++	ld	a, (xiz)
++	ld	(xbc+53), a
++	lda	xhl, (xbc+48)
++	ld	(xhl), 66
++	lda	xix, (xbc+49)
++	ld	a, (xde+19)
++	ld	(xix), a
++	lda	xiy, (xbc+50)
++	ld	a, (xde+20)
++	ld	(xiy), a
++	ld	xwa, (xsp+18)
++	.byte 0x80
++	push	xsp
++	nop
++	jr	nz, 43
++	ld	xwa, (xsp+14)
++	.byte 0x80
++	push	xsp
++	nop
++	jr	z, 12
++	ld	a, (xde+22)
++	ld	(xix), a
++	ld	xwa, 23
++	jr	15
++	.byte 0x86
++	push	xsp
++	nop
++	jr	z, 18
++	ld	a, (xde+25)
++	ld	(xix), a
++	ld	xwa, 26
++	ld	xiz, xde
++	add	xiz, xwa
++	ld	a, (xiz)
++	ld	(xiy), a
++	ld	a, (xix)
++	cp	(xhl), a
++	jr	nc, 2
++	ld	(xhl), a
++	ld	a, (xiy)
++	cp	(xhl), a
++	jr	ule, 2
++	ld	(xhl), a
++	lda	xwa, (xbc+54)
++	ld	(xsp+18), xwa
++	ld	a, (xde+29)
++	inc	3, a
++	sla	a, 5
++	ld	l, a
++	ld	xwa, (xsp+18)
++	ld	(xwa), l
++	.byte 0x8a
++	calr	65343
++	jr	z, 5
++	.byte 0xcf
+ SendPartDataBlock_Data4:
+-	.byte 0x31, 0x00, 0xB0, 0x47, 0xB9, 0x4D, 0x34, 0x8A, 0x1B, 0x21, 0xB4, 0x41, 0xAF, 0x06, 0x20, 0x80
+-	.byte 0x27, 0xCF, 0x89, 0xC9, 0xCC, 0x80, 0xC9, 0xCF, 0x80, 0x6E, 0x0B, 0xCF, 0xCC, 0x0F, 0xCF, 0xCF
+-	.byte 0x0A, 0x6E, 0x03, 0xB4, 0x00, 0x7F, 0x8A, 0x1C, 0x21, 0xB9, 0x37, 0x41, 0x8A, 0x1F, 0x21, 0xB9
+-	.byte 0x3C, 0x41, 0xB9, 0x3A, 0x34, 0x8A, 0x20, 0x21, 0xB4, 0x41, 0xB9, 0x3B, 0x35, 0x8A, 0x21
++	ldw	bc, 45056
++	ld	xsp, 2318683577
++	jp	4305953
++	ld	xwa, (xsp+6)
++	ld	l, (xwa)
++	ld	a, l
++	and	a, 128
++	cp	a, 128
++	jr	nz, 11
++	and	l, 15
++	cp	l, 10
++	jr	nz, 3
++	ld	(xix), 127
++	ld	a, (xde+28)
++	ld	(xbc+55), a
++	ld	a, (xde+31)
++	ld	(xbc+60), a
++	lda	xix, (xbc+58)
++	ld	a, (xde+32)
++	ld	(xix), a
++	lda	xiy, (xbc+59)
++	.byte 0x8a, 0x21
+ SendPartDataBlock_Data5:
+-	.byte 0x21, 0xB5, 0x41, 0xB9, 0x39, 0x33, 0xB3, 0x00, 0x42, 0x84, 0x21, 0xC9, 0xCF, 0x42, 0x63, 0x02
+-	.byte 0xB3, 0x41, 0x85, 0x21, 0x83, 0xF9, 0x63, 0x02, 0xB3, 0x41, 0x8F, 0x04, 0x61, 0xB9, 0x51, 0x31
+-	.byte 0xBA, 0x22, 0x32, 0x8F, 0x04, 0x3F, 0x03, 0x77, 0x26, 0xFE, 0x5E, 0xBF, 0x1A, 0x37, 0x0E
++	ldb	a, 181
++	ld	xbc, 3006478777
++	nop
++	ld	xde, 3486065028
++	ld	xde, 1102250595
++	ld	a, (xiy)
++	cp	(xhl), a
++	jr	ule, 2
++	ld	(xhl), a
++	incm8	1, (xsp+4)
++	lda	xbc, (xbc+81)
++	lda	xde, (xde+34)
++	.byte 0x8f, 0x04
++	push	xsp
++	pop_sr
++	jrl	c, -474
++	pop	xiz
++	lda	xsp, (xsp+26)
++	ret
++
+ SendPartDataBlock_InitVal4:
+-	.byte 0xDA, 0xA8, 0xF2, 0x6C, 0xD5, 0xEE, 0x33
++	lds de, 0
++	lda_24 xhl, 0xeed56c
++
+ SendPartDataBlock_LoadReg2:
+-	.byte 0xDA, 0x89, 0xE9, 0x12, 0xE9, 0x8D, 0xE8, 0x85, 0xEB, 0x8C, 0xE9, 0x84, 0x84, 0x23, 0x85, 0xF3
+-	.byte 0x6E, 0x08, 0xDA, 0x61, 0xDA, 0xCF, 0x10, 0x00, 0x67, 0xE6
++	ld bc, de
++	extz xbc
++	ld xiy, xbc
++	add xiy, xwa
++	ld xix, xhl
++	add xix, xbc
++	ld c, (xix)
++	cp c, (xiy)
++	jr nz, SendPartDataBlock_Compare2
++	inc 1, de
++	cp de, 0x10
++	jr c, SendPartDataBlock_LoadReg2
++
+ SendPartDataBlock_Compare2:
+-	.byte 0xDA, 0xCF, 0x10, 0x00, 0x6E, 0x03, 0x27, 0x06, 0x0E
++	cp de, 0x10
++	jr nz, SendPartDataBlock_InitVal5
++	ldb l, 0x6
++	ret
++
+ SendPartDataBlock_InitVal5:
+-	.byte 0xDA, 0xA8, 0xF2, 0x5B, 0xD5, 0xEE, 0x33
++	lds de, 0
++	lda_24 xhl, 0xeed55b
++
+ SendPartDataBlock_LoadReg3:
+-	.byte 0xDA, 0x89, 0xE9, 0x12, 0xE9, 0x8D, 0xE8, 0x85, 0xEB, 0x8C, 0xE9, 0x84, 0x84, 0x23, 0x85, 0xF3
+-	.byte 0x6E, 0x08, 0xDA, 0x61, 0xDA, 0xCF, 0x10, 0x00, 0x67, 0xE6
++	ld bc, de
++	extz xbc
++	ld xiy, xbc
++	add xiy, xwa
++	ld xix, xhl
++	add xix, xbc
++	ld c, (xix)
++	cp c, (xiy)
++	jr nz, SendPartDataBlock_Compare3
++	inc 1, de
++	cp de, 0x10
++	jr c, SendPartDataBlock_LoadReg3
++
+ SendPartDataBlock_Compare3:
+-	.byte 0xDA, 0xCF, 0x10, 0x00, 0x6E, 0x03, 0x27, 0x05, 0x0E
++	cp de, 0x10
++	jr nz, SendPartDataBlock_InitVal6
++	ldb l, 0x5
++	ret
++
+ SendPartDataBlock_InitVal6:
+-	.byte 0xDA, 0xA8, 0xF2, 0x4A, 0xD5, 0xEE, 0x33
++	lds de, 0
++	lda_24 xhl, 0xeed54a
++
+ SendPartDataBlock_LoadReg4:
+-	.byte 0xDA, 0x89, 0xE9, 0x12, 0xE9, 0x8D, 0xE8, 0x85, 0xEB, 0x8C, 0xE9, 0x84, 0x84, 0x23, 0x85, 0xF3
+-	.byte 0x6E, 0x08, 0xDA, 0x61, 0xDA, 0xCF, 0x10, 0x00, 0x67, 0xE6
++	ld bc, de
++	extz xbc
++	ld xiy, xbc
++	add xiy, xwa
++	ld xix, xhl
++	add xix, xbc
++	ld c, (xix)
++	cp c, (xiy)
++	jr nz, SendPartDataBlock_Compare4
++	inc 1, de
++	cp de, 0x10
++	jr c, SendPartDataBlock_LoadReg4
++
+ SendPartDataBlock_Compare4:
+-	.byte 0xDA, 0xCF, 0x10, 0x00, 0x6E, 0x03, 0x27, 0x04, 0x0E
++	cp de, 0x10
++	jr nz, SendPartDataBlock_InitVal7
++	ldb l, 0x4
++	ret
++
+ SendPartDataBlock_InitVal7:
+-	.byte 0xDA, 0xA8, 0xF2, 0x3B, 0xD5, 0xEE, 0x33
++	lds de, 0
++	lda_24 xhl, 0xeed53b
++
+ SendPartDataBlock_LoadReg5:
+-	.byte 0xDA, 0x89, 0xD9, 0x65, 0xE9, 0x12, 0xE9, 0x8D, 0xE8, 0x85, 0xDA, 0x89, 0xE9, 0x12, 0xEB, 0x8C
+-	.byte 0xE9, 0x84, 0x84, 0x23, 0x85, 0xF3, 0x6E, 0x06, 0xDA, 0x61, 0xDA, 0xDE, 0x67, 0xE2
++	ld bc, de
++	inc 5, bc
++	extz xbc
++	ld xiy, xbc
++	add xiy, xwa
++	ld bc, de
++	extz xbc
++	ld xix, xhl
++	add xix, xbc
++	ld c, (xix)
++	cp c, (xiy)
++	jr nz, SendPartDataBlock_Compare5
++	inc 1, de
++	cps de, 6
++	jr c, SendPartDataBlock_LoadReg5
++
+ SendPartDataBlock_Compare5:
+-	.byte 0xDA, 0xDE, 0x6E, 0x03, 0x27, 0x01, 0x0E
++	cps de, 6
++	jr nz, SendPartDataBlock_InitVal8
++	ldb l, 0x1
++	ret
++
+ SendPartDataBlock_InitVal8:
+-	.byte 0xDA, 0xA8, 0xF2, 0x42, 0xD5, 0xEE, 0x33
++	lds de, 0
++	lda_24 xhl, 0xeed542
++
+ SendPartDataBlock_LoadReg6:
+-	.byte 0xDA, 0x89, 0xD9, 0x65, 0xE9, 0x12, 0xE9, 0x8D, 0xE8, 0x85, 0xDA, 0x89, 0xE9, 0x12, 0xEB, 0x8C
+-	.byte 0xE9, 0x84, 0x84, 0x23, 0x85, 0xF3, 0x6E, 0x06, 0xDA, 0x61, 0xDA, 0xDB, 0x67, 0xE2
++	ld bc, de
++	inc 5, bc
++	extz xbc
++	ld xiy, xbc
++	add xiy, xwa
++	ld bc, de
++	extz xbc
++	ld xix, xhl
++	add xix, xbc
++	ld c, (xix)
++	cp c, (xiy)
++	jr nz, SendPartDataBlock_Compare6
++	inc 1, de
++	cps de, 3
++	jr c, SendPartDataBlock_LoadReg6
++
+ SendPartDataBlock_Compare6:
+-	.byte 0xDA, 0xDB, 0x6E, 0x03, 0x27, 0x02, 0x0E
++	cps de, 3
++	jr nz, SendPartDataBlock_InitVal9
++	ldb l, 0x2
++	ret
++
+ SendPartDataBlock_InitVal9:
+-	.byte 0xDA, 0xA8, 0xF2, 0x46, 0xD5, 0xEE, 0x33
++	lds de, 0
++	lda_24 xhl, 0xeed546
++
+ SendPartDataBlock_LoadReg7:
+-	.byte 0xDA, 0x89, 0xD9, 0x65, 0xE9, 0x12, 0xE9, 0x8D, 0xE8, 0x85, 0xDA, 0x89, 0xE9, 0x12, 0xEB, 0x8C
+-	.byte 0xE9, 0x84, 0x84, 0x23, 0x85, 0xF3, 0x6E, 0x06, 0xDA, 0x61, 0xDA, 0xDB, 0x67, 0xE2
++	ld bc, de
++	inc 5, bc
++	extz xbc
++	ld xiy, xbc
++	add xiy, xwa
++	ld bc, de
++	extz xbc
++	ld xix, xhl
++	add xix, xbc
++	ld c, (xix)
++	cp c, (xiy)
++	jr nz, SendPartDataBlock_Compare7
++	inc 1, de
++	cps de, 3
++	jr c, SendPartDataBlock_LoadReg7
++
+ SendPartDataBlock_Compare7:
+-	.byte 0xDA, 0xDB, 0x6E, 0x03, 0x27, 0x03, 0x0E
++	cps de, 3
++	jr nz, SendPartDataBlock_ClearByte5
++	ldb l, 0x3
++	ret
++
+ SendPartDataBlock_ClearByte5:
+-	.byte 0x27, 0x00, 0x0E
++	ldb l, 0x0
++	ret
++
+ SendPartDataBlock_SetWord7:
+-	.byte 0x32, 0xB8, 0x24, 0xF2, 0x00, 0x00, 0x1E, 0x31, 0xB9, 0x10, 0x30, 0xDB, 0xA8
++	ldw de, 0x24B8
++	lda_24 xbc, 0x1e0000
++	lda xwa, (xbc + 16)
++	lds hl, 0
++
+ SendPartDataBlock_Block11:
+-	.byte 0xD5, 0xE1, 0x83, 0xDA, 0x1C, 0xFA, 0xDB, 0x06, 0xF3, 0xE5, 0xA8, 0x72, 0x53, 0x0E
++	add_spiw HL, 0xE1
++	djnz xde, SendPartDataBlock_Block11
++	cpl hl
++	st_dri3w HL, 0xE5, 0xA8, 0x72
++	ret
++
++; HDAE ROM data dispatch handler
+ HdaeRom_DataHandler:
+-	.byte 0xF3, 0xFD, 0x48, 0xFE, 0x37, 0x3E, 0xF3, 0xFD, 0xB8, 0x01, 0x43, 0xF3, 0xFD, 0xBA, 0x01, 0x41
+-	.byte 0x40, 0x00, 0x00, 0x1E, 0x00, 0x1E, 0xC8, 0xFE, 0xF2, 0x00, 0x00, 0x1E, 0x31, 0xDB, 0x12
+-HdaeRom_DataHandler_0x22:
+-	.byte 0xDB, 0x69, 0xDB, 0xD8, 0x71, 0x5E, 0x01, 0xDB, 0xDD, 0x7A, 0x59, 0x01, 0xDB, 0x83, 0xF2, 0x47
+-	.byte 0xD7, 0xEE, 0x34, 0xD3, 0x07, 0xF0, 0xEC, 0x23, 0xF2, 0x84, 0x02, 0xFF, 0x34, 0xF3, 0x07
++	st_dri3b L, 0xFD, 0x48, 0xFE
++	push xiz
++	lda_dri3 XHL, 0xFD, 0xB8, 0x01
++	lda_dri3 XBC, 0xFD, 0xBA, 0x01
++	ld xwa, 0x1E0000
++	calr SendPartDataBlock_InitVal4
++	lda_24 xbc, 0x1e0000
++	extz hl
++	dec 1, hl
++	cps hl, 0
++	jrl lt, HdaeRom_DataDispatch_SetWord
++	cps hl, 5
++	jrl gt, HdaeRom_DataDispatch_SetWord
++	add hl, hl
++	lda_24 xix, 0xeed747
++	ld_sriw3 HL, 0x07, 0xF0, 0xEC
++	lda_24 xix, 0xff028f
++	jp_dri 8, 0x07, 0xF0, 0xEC
++; HDAE5000 extension ROM data dispatch (6-entry, table 0xEED747)
+ HdaeRom_DataDispatch:
+-	.byte 0xF0, 0xEC, 0xD8, 0xBF, 0x06, 0x61, 0xC3, 0xFD, 0xBA, 0x01, 0x3F, 0xFF, 0x7E, 0x33, 0x01, 0xC3
+-	.byte 0xFD, 0xB8, 0x01, 0x3F, 0xFF, 0x7E, 0x2A, 0x01, 0xBF, 0x04, 0x02, 0x28, 0x00, 0xBF, 0x0E, 0x30
+-	.byte 0xBF, 0x0A, 0x60, 0x9F, 0x04, 0x20, 0xD8, 0x69, 0xD8, 0x8E, 0xEE, 0x12, 0xEE, 0x88, 0x41, 0x21
+-	.byte 0x01, 0x00, 0x00, 0x1D, 0x4E, 0x0A, 0xFF, 0xEB, 0xC8, 0x10, 0x00, 0x00, 0x00, 0xEB, 0x8D, 0xAF
+-	.byte 0x06, 0x85, 0xAF, 0x0A, 0x24, 0x31, 0x90, 0x00, 0x95, 0x11, 0x85, 0x10, 0xEE, 0x88, 0x41, 0xD6
+-	.byte 0x01, 0x00, 0x00, 0x1D, 0x4E, 0x0A, 0xFF, 0xEB, 0xC8, 0x10, 0x00, 0x00, 0x00, 0xAF, 0x06, 0x83
+-	.byte 0xEB, 0x88, 0xAF, 0x0A, 0x21, 0x1E, 0xC0, 0xF6, 0x9F, 0x04, 0x3A, 0x01, 0x00, 0x6E, 0xAE, 0x78
+-	.byte 0xD0, 0x00, 0xBF, 0x06, 0x61, 0xC3, 0xFD, 0xBA, 0x01, 0x3F, 0xFF, 0x6E, 0x5A, 0xC3, 0xFD, 0xB8
+-	.byte 0x01, 0x3F, 0xFF, 0x6E, 0x52, 0xBF, 0x04, 0x02, 0x24, 0x00, 0xBF, 0x0E, 0x30, 0xBF, 0x0A, 0x60
+-	.byte 0x9F, 0x04, 0x20, 0xD8, 0x69, 0xE8, 0x12, 0xE8, 0x89, 0xE9, 0xEE, 0x03, 0xE8, 0x81, 0xE9, 0xEE
+-	.byte 0x04, 0xE9, 0xC8, 0x50, 0x00, 0x00, 0x00, 0xE9, 0x8D, 0xAF, 0x06, 0x85, 0xAF, 0x0A, 0x24, 0x31
+-	.byte 0x48, 0x00, 0x95, 0x11, 0x41, 0xD6, 0x01, 0x00, 0x00, 0x1D, 0x4E, 0x0A, 0xFF, 0xEB, 0xC8, 0x10
+-	.byte 0x00, 0x00, 0x00, 0xAF, 0x06, 0x83, 0xEB, 0x88, 0xAF, 0x0A, 0x21, 0x1E, 0x1D, 0xFA, 0x9F, 0x04
+-	.byte 0x3A, 0x01, 0x00, 0x6E, 0xB5, 0x68, 0x6B, 0xC3, 0xFD, 0xB8, 0x01, 0x21, 0xD8, 0x12, 0xBF, 0x04
+-	.byte 0x50, 0x68, 0x51, 0x9F, 0x04, 0x20, 0xE8, 0x12, 0xE8, 0x89, 0xE9, 0xEE, 0x03, 0xE8, 0x81, 0xE9
+-	.byte 0xEE, 0x04, 0xE9, 0xC8, 0x50, 0x00, 0x00, 0x00, 0xAF, 0x06, 0x81, 0xE9, 0x88, 0x1E, 0x9C, 0xF8
+-	.byte 0x9F, 0x04, 0x26, 0xEE, 0x12, 0xEE, 0x88, 0x41, 0xD6, 0x01, 0x00, 0x00, 0x1D, 0x4E, 0x0A, 0xFF
+-	.byte 0xEB, 0xC8, 0x10, 0x00, 0x00, 0x00, 0xAF, 0x06, 0x83, 0xEE, 0x89, 0xE9, 0xEE, 0x03, 0xEE, 0x81
+-	.byte 0xE9, 0xEE, 0x04, 0xE9, 0xC8, 0x50, 0x00, 0x00, 0x00, 0xAF, 0x06, 0x81, 0xEB, 0x88, 0x1E, 0xBA
+-	.byte 0xF9, 0x9F, 0x04, 0x61, 0xC3, 0xFD, 0xB8, 0x01, 0x21, 0xC9, 0x61, 0xD8, 0x12, 0x9F, 0x04, 0xF8
+-	.byte 0x67, 0xA1, 0xDB
++	ld	(xsp+6), xbc
++	cp	(xsp+442), 255
++	jrl	nz, 307
++	cp	(xsp+440), 255
++	jrl	nz, 298
++	.byte 0xbf, 0x04
++	push_sr
++	pushw	wa
++	nop
++	lda	xwa, (xsp+14)
++	ld	(xsp+10), xwa
++	ld	wa, (xsp+4)
++	dec	1, wa
++	ld	iz, wa
++	extz	xiz
++	ld	xwa, xiz
++	ld	xbc, 289
++	call	16714332
++	add	xhl, 16
++	ld	xiy, xhl
++	.byte 0xaf, 0x06
++	sub	(xiy), l
++	ldwio	36, 36913
++	nop
++	ldirw
++	.byte 0x85
++	rcf
++	ld	xwa, xiz
++	ld	xbc, 470
++	call	16714332
++	add	xhl, 16
++	.byte 0xaf, 0x06
++	or	(xhl), c
++	.byte 0x88
++	ld	xbc, (xsp+10)
++	calr	63168
++	.byte 0x9f, 0x04
++	push	xde
++	.byte 0x01
++	nop
++	jr	nz, -82
++	jrl	208
++	ld	(xsp+6), xbc
++	cp	(xsp+442), 255
++	jr	nz, 90
++	cp	(xsp+440), 255
++	jr	nz, 82
++	.byte 0xbf, 0x04
++	push_sr
++	ldb	d, 0
++	lda	xwa, (xsp+14)
++	ld	(xsp+10), xwa
++	ld	wa, (xsp+4)
++	dec	1, wa
++	extz	xwa
++	ld	xbc, xwa
++	sll	xbc, 3
++	add	xbc, xwa
++	sll	xbc, 4
++	add	xbc, 80
++	ld	xiy, xbc
++	.byte 0xaf, 0x06
++	sub	(xiy), l
++	ldwio	36, 18481
++	nop
++	ldirw
++	ld	xbc, 470
++	call	16714332
++	add	xhl, 16
++	.byte 0xaf, 0x06
++	or	(xhl), c
++	.byte 0x88
++	ld	xbc, (xsp+10)
++	calr	64029
++	.byte 0x9f, 0x04
++	push	xde
++	.byte 0x01
++	nop
++	jr	nz, -75
++	jr	107
++	.byte 0xc3
++	swi	5
++	.byte 0xb8, 0x01
++	ldb	a, 216
++	ccf
++	ld	(xsp+4), wa
++	jr	81
++	ld	wa, (xsp+4)
++	extz	xwa
++	ld	xbc, xwa
++	sll	xbc, 3
++	add	xbc, xwa
++	sll	xbc, 4
++	add	xbc, 80
++	.byte 0xaf, 0x06
++	or	(xbc), a
++	.byte 0x88
++	calr	63644
++	ld	iz, (xsp+4)
++	extz	xiz
++	ld	xwa, xiz
++	ld	xbc, 470
++	call	16714332
++	add	xhl, 16
++	.byte 0xaf, 0x06
++	or	(xhl), h
++	or	(xbc-23), h
++	pop_sr
++	add	xbc, xiz
++	sll	xbc, 4
++	add	xbc, 80
++	.byte 0xaf, 0x06
++	or	(xbc), c
++	.byte 0x88
++	calr	63930
++	incm	1, (xsp+4)
++	ld	a, (xsp+440)
++	inc	1, a
++	extz	wa
++	cp	(xsp+4), wa
++	jr	c, -95
++	lds	hl, 0
++	jr	3
++
+ HdaeRom_DataDispatch_SetWord:
+-	.byte 0xA8, 0x68, 0x03, 0x33, 0x9A, 0xFF, 0x5E, 0xF3, 0xFD, 0xB8
+-	.byte 0x01, 0x37, 0x0E
++	ldw hl, 0xFF9A
++	pop xiz
++	st_dri3b L, 0xFD, 0xB8, 0x01
++	ret
++
+ HdaeRom_DataDispatch_Block:
+-	.byte 0xF2, 0x00, 0x00, 0x1E, 0x32, 0xF2, 0x6C, 0xD5, 0xEE, 0x30, 0xE8, 0x89
++	lda_24 xde, 0x1e0000
++	lda_24 xwa, 0xeed56c
++	ld xbc, xwa
++	lda xhl, (xwa + 16)
++
+ HdaeRom_DataDispatch_Block2:
+-	.byte 0xB8, 0x10, 0x33, 0xC5, 0xE4, 0x21, 0xF5, 0xE8, 0x41, 0xEB, 0xF1, 0x67, 0xF6, 0x78, 0x3B, 0xFE
++	ld_spib A, 0xE4
++	lda_dpi XBC, 0xE8
++	cp xbc, xhl
++	jr c, HdaeRom_DataDispatch_Block2
++	calr SendPartDataBlock_SetWord7
++	lds hl, 0
++	ret
++
+ HdaeRom_DataDispatch_Block3:
+-	.byte 0xF3, 0xE1, 0x91, 0x49, 0x33, 0xF3, 0xE1, 0xA7, 0x72, 0x34, 0xEC, 0x69, 0xEB, 0xF4, 0x67, 0x10
+-	.byte 0xBC, 0xFF, 0x32, 0x82, 0x23, 0xBA, 0x01, 0x43, 0xEA, 0x69, 0xEC, 0x69, 0xEB, 0xF4, 0x6F, 0xF3
+-	.byte 0xB3, 0x00, 0x01, 0xC7, 0xEA, 0xA8, 0xDA, 0xA8, 0xDA, 0x89, 0xD9, 0xC8, 0xA7, 0x49, 0xF3, 0x07
+-	.byte 0xE0, 0xE4, 0x33, 0x8B, 0x01, 0x3C, 0xCF, 0xE9, 0x13, 0xE8, 0x81, 0xB9, 0x01, 0xBD, 0xC7, 0xEA
+-	.byte 0x61, 0xDA, 0x62, 0xC7, 0xEA, 0xCF, 0x80, 0x67, 0xDF, 0x0E
++	lda	xhl, (xwa+18833)
++	.byte 0xf3, 0xe1, 0xa7
++	jrl	le, -5068
++	jr	ge, -21
++	.byte 0xf4
++	jr	c, 16
++	lda	xde, (xix-1)
++	ld	c, (xde)
++	ld	(xde+1), c
++	dec	1, xde
++	dec	1, xix
++	cp	xix, xhl
++	jr	nc, -13
++	ld	(xhl), 1
++	.byte 0xc7
++	lds32	xde, 0
++	lds	de, 0
++	ld	bc, de
++	add	bc, 18855
++	.byte 0xf3
++	reti
++	.byte 0xe0, 0xe4
++	ldw	hl, 395
++	push	xix
++	.byte 0xcf
++	exts	xbc
++	add	xbc, xwa
++	.byte 0xb9, 0x01, 0xbd, 0xc7
++	inc	1, xde
++	inc	2, de
++	.byte 0xc7
++	cp	xde, 249522048
++
++; HDAE ROM alt dispatch handler
+ HdaeRom_AltHandler:
+-	.byte 0x2E, 0x40, 0x00, 0x00, 0x1E, 0x00, 0x1E, 0xE3, 0xFC, 0xDB, 0x12, 0xDB, 0x69, 0xDB, 0xD8, 0x61
+-	.byte 0x26, 0xDB, 0xDD, 0x6A, 0x22, 0xDB, 0x83, 0xF2, 0x53, 0xD7, 0xEE, 0x34, 0xD3, 0x07, 0xF0, 0xEC
+-	.byte 0x23, 0xF2, 0x62, 0x04, 0xFF, 0x34, 0xF3, 0x07, 0xF0, 0xEC, 0xD8
++	pushw iz
++	ld xwa, 0x1E0000
++	calr SendPartDataBlock_InitVal4
++	extz hl
++	dec 1, hl
++	cps hl, 0
++	jr lt, HdaeRom_AltDispatch_SetWord
++	cps hl, 5
++	jr gt, HdaeRom_AltDispatch_SetWord
++	add hl, hl
++	lda_24 xix, 0xeed753
++	ld_sriw3 HL, 0x07, 0xF0, 0xEC
++	lda_24 xix, 0xff0470
++	jp_dri 8, 0x07, 0xF0, 0xEC
++; HDAE5000 extension ROM alt dispatch (6-entry, table 0xEED753)
+ HdaeRom_AltDispatch:
+-	.byte 0x40, 0x00, 0x00, 0x1E, 0x00, 0x1E, 0x83, 0xFF, 0xDE, 0xA8, 0x68, 0x03
++	ld	xwa, 1966080
++	calr	-125
++	lds	iz, 0
++	jr	3
++
+ HdaeRom_AltDispatch_SetWord:
+-	.byte 0x36, 0x9A, 0xFF, 0xF2, 0x00, 0x00, 0x1E, 0x32, 0xF2, 0x6C, 0xD5, 0xEE, 0x30, 0xE8, 0x89, 0xB8
+-	.byte 0x10, 0x33
++	ldw iz, 0xFF9A
++	lda_24 xde, 0x1e0000
++	lda_24 xwa, 0xeed56c
++	ld xbc, xwa
++	lda xhl, (xwa + 16)
++
+ HdaeRom_AltDispatch_Block:
+-	.byte 0xC5, 0xE4, 0x21, 0xF5, 0xE8, 0x41, 0xEB, 0xF1, 0x67, 0xF6, 0x1E, 0x9B, 0xFD, 0xDE, 0x8B, 0x4E
+-	.byte 0x0E
++	ld_spib A, 0xE4
++	lda_dpi XBC, 0xE8
++	cp xbc, xhl
++	jr c, HdaeRom_AltDispatch_Block
++	calr SendPartDataBlock_SetWord7
++	ld hl, iz
++	popw iz
++	ret
++
+ PreTmLoad:
+-	.byte 0x0E
++	ret
++
+ PostTmLoad:
+-	.byte 0xD8, 0xD8, 0x61, 0x32, 0x30, 0xFF, 0x00, 0x31, 0xFF, 0x00, 0x1E, 0xA4, 0xFD, 0x30, 0xFF, 0x00
+-	.byte 0x31, 0xFF, 0x00, 0x1E, 0x8F, 0xFF, 0x1E, 0x26, 0xFF, 0x40, 0x00, 0x00, 0x1E, 0x00, 0x31, 0xAA
+-	.byte 0x72, 0x42, 0x00, 0x78, 0x00, 0x00, 0x1D, 0x57, 0x34, 0xEF, 0x30, 0xFF, 0x00, 0x31, 0xFF, 0x00
+-	.byte 0x1D, 0x91, 0xF4, 0xFE, 0x68, 0x0A
++	cps wa, 0
++	jr lt, PostTmLoad_Send
++	ldw wa, 0xFF
++	ldw bc, 0xFF
++	calr HdaeRom_DataHandler
++	ldw wa, 0xFF
++	ldw bc, 0xFF
++	calr HdaeRom_AltHandler
++	calr HdaeRom_DataDispatch_Block
++	ld xwa, 0x1E0000
++	ldw bc, 0x72AA
++	ld xde, 0x7800
++	call InterCPU_E1_Bulk_Transfer
++	ldw wa, 0xFF
++	ldw bc, 0xFF
++	call BuildAndSendPacket_Block
++	jr PostTmLoad_Block
++
+ PostTmLoad_Send:
+-	.byte 0x30, 0xFF, 0x00, 0x31, 0xFF, 0x00, 0x1D, 0x55, 0xF4, 0xFE
++	ldw wa, 0xFF
++	ldw bc, 0xFF
++	call COMM_BuildAndSendPacket
++
+ PostTmLoad_Block:
+-	.byte 0x1B, 0xDE, 0x51, 0xF8
++	jp FDemoText_RefreshFullDisplay
++
+ PreTmSave:
+-	.byte 0x0E
++	ret
++
+ PostTmSave:
+-	.byte 0xD8, 0xD8, 0xB0, 0xF9, 0x30, 0xFF, 0x00, 0x31, 0xFF, 0x00, 0x1D, 0x55, 0xF4, 0xFE, 0x0E
++	cps wa, 0
++	ret ge
++	ldw wa, 0xFF
++	ldw bc, 0xFF
++	call COMM_BuildAndSendPacket
++	ret
++
+ PostTmSave_ByteBlock:
+-	.byte 0x1E, 0x3A, 0xFC, 0xCF, 0xDE, 0x6B, 0x07, 0xCF, 0xD9, 0x67, 0x03, 0xDB, 0xA8, 0x0E, 0x33, 0x9A
+-	.byte 0xFF, 0x0E
+-; === End v9 patched region ===
++	calr	64567
++	cps	l, 6
++	jr	ugt, 7
++	cps	l, 1
++	jr	c, 3
++	lds	hl, 0
++	ret
++	ldw	hl, 65434
++	ret
++
+ PostTmSave_Success:
+ 	cps wa, 0
+ 	jr lt, PostTmSave_Failure
+@@ -26963,9 +27953,9 @@
+ 	.byte 0x8f
+ 	push_sr
+ 	push	xsp
+-	ld	xwa, 3911071599
++	ld	xwa, 3860739951
+ 	swi	4
+-	calr	-396
++	calr	65137
+ 	ld	c, (xsp)
+ 	extz	bc
+ 	ld	a, (xsp+2)
+@@ -26974,7 +27964,7 @@
+ 	add	wa, bc
+ 	extz	xwa
+ 	ld	xbc, 470
+-	call	16714318
++	call	16714332
+ 	add	xhl, 16
+ 	ld	xwa, 1966080
+ 	add	xwa, xhl
+@@ -26982,7 +27972,7 @@
+ 	ldw	bc, 470
+ 	jr	43
+ 	calr	65190
+-	calr	-451
++	calr	65082
+ 	ld	a, (xsp)
+ 	extz	wa
+ 	extz	xwa
+@@ -27023,11 +28013,11 @@
+ 	swi	0
+ 	.byte 0x8b
+ 	extz	bc
+-	calr	-949
++	calr	64584
+ 	inc	1, iz
+ 	cp	iz, 20
+ 	jr	c, -21
+-	calr	-562
++	calr	64971
+ 	ld	a, (xsp+4)
+ 	.byte 0xc7
+ 	swi	0
+@@ -27037,7 +28027,7 @@
+ 	ld	wa, iz
+ 	extz	xwa
+ 	ld	xbc, 470
+-	call	16714318
++	call	16714332
+ 	add	xhl, 16
+ 	ld	xwa, 1966080
+ 	add	xwa, xhl
+@@ -27058,7 +28048,7 @@
+ 	inc	1, iz
+ 	cp	iz, 128
+ 	jr	c, -21
+-	calr	-634
++	calr	64899
+ 	lda_24	xwa, 1985191
+ 	ldw	bc, 10240
+ 	.byte 0x42
+@@ -27100,7 +28090,7 @@
+ 	extz	xwa
+ 	ld	(xsp+10), xwa
+ 	ld	xbc, 470
+-	call	16714318
++	call	16714332
+ 	add	xhl, 16
+ 	bitm	0, (xsp+20)
+ 	jr	z, 96
+@@ -27115,7 +28105,7 @@
+ 	ld	(xsp+6), xwa
+ 	ld	xwa, (xsp+10)
+ 	ld	xbc, 10535
+-	call	16714318
++	call	16714332
+ 	add	xhl, 18816
+ 	add	xhl, xiz
+ 	ld	xwa, (xsp+6)
+@@ -27175,7 +28165,7 @@
+ 	call	15676503
+ 	jp	16708813
+ 	ld	xwa, 1966080
+-	calr	-1624
++	calr	63909
+ 	ldw	wa, 65434
+ 	cps	l, 6
+ 	jr	nz, 2
+@@ -27183,7 +28173,7 @@
+ 	ld	hl, wa
+ 	ret
+ 	ld	xwa, 1966080
+-	calr	-1644
++	calr	63889
+ 	cps	l, 6
+ 	jr	ugt, 7
+ 	cps	l, 1
+@@ -27194,7 +28184,7 @@
+ 	ret
+ 	extz	xwa
+ 	ld	xbc, 470
+-	call	16714318
++	call	16714332
+ 	ld	xwa, xhl
+ 	add	xwa, 16
+ 	ld	xhl, 1966080
+@@ -27205,7 +28195,7 @@
+ 	ld	iz, bc
+ 	ld	(xsp+2), xwa
+ 	ld	xwa, (xsp+2)
+-	calr	63836
++	calr	63833
+ 	ld	wa, iz
+ 	extz	xwa
+ 	extz	hl
+@@ -27220,7 +28210,7 @@
+ 	reti
+ 	.byte 0xf0, 0xec
+ 	ldb	c, 242
+-	.byte 0xED
++	swi	3
+ 	reti
+ 	swi	7
+ 	ldw	ix, 2035
+@@ -27229,7 +28219,7 @@
+ 	ld	xbc, 470
+ 	jr	5
+ 	ld	xbc, 289
+-	call	16714318
++	call	16714332
+ 	add	xhl, 16
+ 	.byte 0xaf
+ 	push_sr
+@@ -27257,7 +28247,7 @@
+ 	ld	xiz, xbc
+ 	extz	xwa
+ 	ld	xbc, 470
+-	call	16714318
++	call	16714332
+ 	add	xhl, 16
+ 	ld	xwa, 1966080
+ 	add	xwa, xhl
+@@ -27278,7 +28268,7 @@
+ 	ld	iz, bc
+ 	ld	(xsp+6), xwa
+ 	ld	xwa, (xsp+6)
+-	calr	63664
++	calr	63661
+ 	ld	bc, iz
+ 	extz	xbc
+ 	extz	hl
+@@ -27293,13 +28283,13 @@
+ 	reti
+ 	.byte 0xf0, 0xec
+ 	ldb	c, 242
+-	.byte 0x9B, 0x08, 0xFF
++	cp	(xbc+8), xsp
+ 	ldw	ix, 2035
+ 	.byte 0xf0
+ 	cps	xix, 0
+ 	ld	xwa, xbc
+ 	ld	xbc, 470
+-	call	16714318
++	call	16714332
+ 	add	xhl, 16
+ 	.byte 0xaf, 0x06
+ 	sub	(xhl), l
+@@ -27312,7 +28302,7 @@
+ 	jr	65
+ 	ld	xwa, xbc
+ 	ld	xbc, 289
+-	call	16714318
++	call	16714332
+ 	add	xhl, 16
+ 	.byte 0xaf, 0x06
+ 	sub	(xhl), l
+@@ -27353,11 +28343,11 @@
+ 	ld	(xsp+8), a
+ 	ld	xiz, (xsp+14)
+ 	push	xiz
+-	call	16715666
++	call	16715680
+ 	ld	(xsp+8), hl
+ 	ld	xwa, (xsp+22)
+ 	push	xwa
+-	call	16715666
++	call	16715680
+ 	inc	8, xsp
+ 	ld	(xsp+6), hl
+ 	.byte 0x9f, 0x06
+@@ -27374,7 +28364,7 @@
+ 	push	xiz
+ 	ld	xwa, (xsp+24)
+ 	push	xwa
+-	call	16715024
++	call	16715038
+ 	add	xsp, 10
+ 	cps	hl, 0
+ 	jr	nz, 4
+@@ -27563,7 +28553,7 @@
+ 	inc 4, xwa
+ 	ld (xsp + 2), xwa
+ 	pushw 0xFF
+-	pushw 0xACA
++	pushw 0xAD8
+ 	lda xwa, (xsp + 6)
+ 	push xwa
+ 	ld xwa, (xsp + 22)
+@@ -27584,12 +28574,12 @@
+ 	ld	xwa, (xsp+4)
+ 	ld	(xwa), 0
+ 	pushw	255
+-	pushw	2762
++	pushw	2776
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+ 	ld	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715834
++	call	16715848
+ 	lda	xsp, (xsp+12)
+ 	ret
+ 	ld32_24	xbc, 246300
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/presentation_sound_nav.s v10/maincpu/audio/presentation_sound_nav.s
+--- v9/maincpu/audio/presentation_sound_nav.s	2026-03-23 09:50:07.141477686 +0000
++++ v10/maincpu/audio/presentation_sound_nav.s	2026-03-23 02:19:50.648697883 +0000
+@@ -1295,7 +1295,7 @@
+ 	pushw 39828
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	lda	xwa, (xsp+2)
+ 	call	16395937
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/sndparam_routines.s v10/maincpu/audio/sndparam_routines.s
+--- v9/maincpu/audio/sndparam_routines.s	2026-03-23 09:50:07.143703444 +0000
++++ v10/maincpu/audio/sndparam_routines.s	2026-03-23 02:19:50.650151899 +0000
+@@ -541,7 +541,7 @@
+ 	add	xhl, xwa
+ 	ld	xwa, xhl
+ 	ld	xbc, 2047
+-	call	16714756
++	call	16714770
+ 	ld	ix, hl
+ 	jr	44
+ 	lds	bc, 0
+@@ -760,7 +760,7 @@
+ 	add	xhl, xwa
+ 	ld	xwa, xhl
+ 	ld	xbc, 2047
+-	call	16714756
++	call	16714770
+ 	ld	ix, hl
+ 	jr	44
+ 	lds	bc, 0
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/sound_editor_ui.s v10/maincpu/audio/sound_editor_ui.s
+--- v9/maincpu/audio/sound_editor_ui.s	2026-03-23 10:52:10.909730746 +0000
++++ v10/maincpu/audio/sound_editor_ui.s	2026-03-23 02:19:50.672359564 +0000
+@@ -19063,7 +19063,7 @@
+ 	push	xwa
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	79
+@@ -20464,7 +20464,7 @@
+ 	push	xwa
+ 	ld	xwa, (xiz+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, (xsp+12)
+ 	jr	43
+@@ -21262,7 +21262,7 @@
+ 	push	xwa
+ 	ld	xwa, (xhl+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	19
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/tonegen_fileio_handlers.s v10/maincpu/audio/tonegen_fileio_handlers.s
+--- v9/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 10:52:10.910531705 +0000
++++ v10/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 02:19:50.674617106 +0000
+@@ -1146,7 +1146,7 @@
+ 	push	xwa
+ 	pushw	3
+ 	pushw	16634
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	ret
+ 
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/boot/rom_end_structure.s v10/maincpu/boot/rom_end_structure.s
+--- v9/maincpu/boot/rom_end_structure.s	2026-03-23 02:58:26.026327161 +0000
++++ v10/maincpu/boot/rom_end_structure.s	2026-03-23 02:19:50.677005690 +0000
+@@ -5,7 +5,7 @@
+ ; Contains:
+ ;   - System timestamp pointers (4 x .long)
+ ;   - TMP94C241C interrupt vector table (42 vectors)
+-;   - Firmware version byte (0x09 = v9)
++;   - Firmware version byte (0x0A = v10)
+ ;   - Reserved padding
+ 
+ System_TimestampPointers:
+@@ -80,7 +80,7 @@
+ 	.fill 52, 1, 0xff
+ 
+ FIRMWARE_VERSION:
+-	.byte 0x09
++	.byte 0x0a
+ 
+ ; RESERVED:
+ 	.fill 23, 1, 0xff
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/demo/demo_seq_bridge.s v10/maincpu/demo/demo_seq_bridge.s
+--- v9/maincpu/demo/demo_seq_bridge.s	2026-03-23 09:50:07.150552142 +0000
++++ v10/maincpu/demo/demo_seq_bridge.s	2026-03-23 02:19:50.679156783 +0000
+@@ -35,7 +35,7 @@
+ 	push	xde
+ 	pushw	0
+ 	pushw	4441
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	push	xde
+ 	push	xhl
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/demo/fdemotext_routines.s v10/maincpu/demo/fdemotext_routines.s
+--- v9/maincpu/demo/fdemotext_routines.s	2026-03-23 09:50:07.151085227 +0000
++++ v10/maincpu/demo/fdemotext_routines.s	2026-03-23 02:19:50.679548136 +0000
+@@ -1257,13 +1257,13 @@
+ 	pushw	64982
+ 	pushw	2
+ 	pushw	18422
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+14)
+ 	jr	13
+ 	push	xhl
+ 	pushw	2
+ 	pushw	18422
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	lda_24	xhl, 149494
+ 	pop	xiz
+@@ -1275,7 +1275,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xwa, 255
+ 	ld	(xsp+4), xwa
+@@ -1305,7 +1305,7 @@
+ 	push	xhl
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715559
++	call	16715573
+ 	inc	8, xsp
+ 	cps	hl, 0
+ 	jr	nz, 14
+@@ -1715,10 +1715,10 @@
+ 	.byte 0xaf
+ 	ldwio	128, 8352
+ 	push	xwa
+-	call	16715666
++	call	16715680
+ 	inc	1, hl
+ 	pushw	hl
+-	call	16715378
++	call	16715392
+ 	ld	(xsp+8), xhl
+ 	ld	wa, iz
+ 	exts	xwa
+@@ -1728,14 +1728,14 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+12)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	lds	iz, 0
+ 	pushw	64
+ 	ld	xwa, (xsp+18)
+ 	push	xwa
+ 	ld	xwa, (xsp+26)
+ 	push	xwa
+-	call	16714981
++	call	16714995
+ 	lda	xsp, (xsp+24)
+ 	ld	xwa, (xsp+6)
+ 	ld	(xwa+64), 0
+@@ -1758,7 +1758,7 @@
+ 	push	xde
+ 	ld	xwa, (xsp+10)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	inc	1, iz
+ 	ld	xde, (xsp+2)
+@@ -1778,10 +1778,10 @@
+ 	ldw	wa, 44856
+ 	ex_ff
+ 	ldb	w, 56
+-	call	16715583
++	call	16715597
+ 	ld	xwa, (xsp+26)
+ 	push	xwa
+-	call	16715666
++	call	16715680
+ 	lda	xsp, (xsp+12)
+ 	dec	1, hl
+ 	extz	xhl
+@@ -1791,7 +1791,7 @@
+ 	push	xbc
+ 	ld	xwa, (xsp+22)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jr	13
+ 	inc	1, iz
+@@ -1805,7 +1805,7 @@
+ 	jr	nz, -113
+ 	ld	xwa, (xsp+2)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	inc	4, xsp
+ 	popw	iz
+ 	lda	xsp, (xsp+12)
+@@ -1867,7 +1867,7 @@
+ 	.byte 0x98
+ 	nop
+ 	ldw	wa, 14648
+-	call	16715559
++	call	16715573
+ 	inc	8, xsp
+ 	cps	hl, 0
+ 	jr	nz, 49
+@@ -1883,7 +1883,7 @@
+ 	cps	wa, 0
+ 	jr	nz, 30
+ 	push	xbc
+-	call	16714130
++	call	16714144
+ 	inc	4, xsp
+ 	ld	(xsp+4), hl
+ 	jr	18
+@@ -1894,7 +1894,7 @@
+ 	push	xbc
+ 	lda	xwa, (xsp+24)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	.byte 0xd7
+ 	swi	2
+@@ -1928,17 +1928,17 @@
+ 	pushw	65126
+ 	pushw	2
+ 	pushw	18552
+-	call	16714340
++	call	16714354
+ 	lda	xwa, (xsp+18)
+ 	push	xwa
+ 	pushw	2
+ 	pushw	18552
+-	call	16715583
++	call	16715597
+ 	lda	xwa, (xsp+40)
+ 	push	xwa
+ 	pushw	2
+ 	pushw	18562
+-	call	16715583
++	call	16715597
+ 	lda	xsp, (xsp+28)
+ 	.byte 0x40
+ 	.long Pad_AfterNakaData_ExternalBase
+@@ -1966,15 +1966,15 @@
+ 	call	16422496
+ 	pushw	2
+ 	pushw	18552
+-	call	16715666
++	call	16715680
+ 	inc	1, hl
+ 	pushw	hl
+-	call	16715378
++	call	16715392
+ 	ld	xiz, xhl
+ 	pushw	2
+ 	pushw	18552
+ 	push	xiz
+-	call	16715583
++	call	16715597
+ 	lda	xsp, (xsp+14)
+ 	ld	xwa, 21037056
+ 	ld	xbc, 31522821
+@@ -2024,7 +2024,7 @@
+ 	lda	xbc, (xsp+72)
+ 	push	xbc
+ 	push	xwa
+-	call	16715559
++	call	16715573
+ 	inc	8, xsp
+ 	cps	hl, 0
+ 	jr	nz, 76
+@@ -2036,7 +2036,7 @@
+ 	retd	55513
+ 	jr	nz, 61
+ 	push	xwa
+-	call	16714130
++	call	16714144
+ 	inc	4, xsp
+ 	ld	iz, hl
+ 	jr	50
+@@ -2049,7 +2049,7 @@
+ 	cp	c, 76
+ 	jr	nz, 32
+ 	push	xwa
+-	call	16714130
++	call	16714144
+ 	inc	4, xsp
+ 	ldw	iz, 64
+ 	sub	iz, hl
+@@ -2057,7 +2057,7 @@
+ 	ldw	iz, 64
+ 	jr	13
+ 	push	xwa
+-	call	16714130
++	call	16714144
+ 	inc	4, xsp
+ 	ld	iz, hl
+ 	add	iz, 64
+@@ -2225,7 +2225,7 @@
+ 	lda	xbc, (xsp+76)
+ 	push	xbc
+ 	push	xwa
+-	call	16715559
++	call	16715573
+ 	inc	8, xsp
+ 	cps	hl, 0
+ 	jr	nz, 70
+@@ -2238,7 +2238,7 @@
+ 	dec	6, wa
+ 	.byte 0x37
+ 	push	xwa
+-	call	16714130
++	call	16714144
+ 	inc	4, xsp
+ 	cps	hl, 0
+ 	jr	lt, 44
+@@ -2254,7 +2254,7 @@
+ 	jr	f, 104
+ 	push_a
+ 	push	xwa
+-	call	16714130
++	call	16714144
+ 	inc	4, xsp
+ 	cps	hl, 0
+ 	jr	lt, 9
+@@ -2402,7 +2402,7 @@
+ 	lda	xwa, (xsp+202)
+ 	push	xwa
+ 	push	xbc
+-	call	16715559
++	call	16715573
+ 	inc	8, xsp
+ 	cps	hl, 0
+ 	jr	nz, 47
+@@ -2426,7 +2426,7 @@
+ 	push	xbc
+ 	lda	xwa, (xsp+8)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	.byte 0xd7
+ 	swi	2
+@@ -2507,7 +2507,7 @@
+ 	.byte 0x88
+ 	nop
+ 	ldw	wa, 14648
+-	call	16715559
++	call	16715573
+ 	inc	8, xsp
+ 	cps	hl, 0
+ 	jr	nz, 19
+@@ -2519,7 +2519,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+8)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	.byte 0xd7
+ 	swi	2
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/demo/file_demo_proc.s v10/maincpu/demo/file_demo_proc.s
+--- v9/maincpu/demo/file_demo_proc.s	2026-03-23 09:50:07.151736535 +0000
++++ v10/maincpu/demo/file_demo_proc.s	2026-03-23 02:19:50.680062206 +0000
+@@ -29,7 +29,7 @@
+ 	.byte 0xf0
+ 	jr	c, -8
+ 	push	xiz
+-	call	16715666
++	call	16715680
+ 	pushw	hl
+ 	push	xiz
+ 	.byte 0xf3
+@@ -37,7 +37,7 @@
+ 	ccf
+ 	.byte 0x01
+ 	ldw	wa, 7480
+-	.byte 0xE5
++	.byte 0xf3
+ 	incf
+ 	swi	7
+ 	lda	xwa, (xsp+278)
+@@ -46,7 +46,7 @@
+ 	.long Data_DiskFuncPtrTbl_EA0B00
+ 	pushw	112
+ 	push	xwa
+-	call	16715187
++	call	16715201
+ 	lda	xsp, (xsp+22)
+ 	.byte 0xf3
+ 	swi	5
+@@ -74,7 +74,7 @@
+ 	pushw	256
+ 	push	xbc
+ 	push	xhl
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	lds	iz, 1
+ 	lda	xwa, (xsp+8)
+@@ -88,7 +88,7 @@
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+ 	push	xhl
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	inc	1, iz
+ 	cp	iz, 8
+@@ -116,7 +116,7 @@
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+ 	push	xhl
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	lda	xwa, (xsp+8)
+ 	ld	xbc, 256
+@@ -418,7 +418,7 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+10)
+ 	push	xwa
+-	call	16715559
++	call	16715573
+ 	inc	8, xsp
+ 	cps	hl, 0
+ 	jr	z, 16
+@@ -452,7 +452,7 @@
+ 	jr	z, 18
+ 	push	xwa
+ 	push	xiz
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xwa, (xsp+4)
+ 	ld	(xiz+16), xwa
+@@ -3130,13 +3130,13 @@
+ 	ld	wa, (xsp+38)
+ 	extz	xwa
+ 	ld	xbc, (xsp+8)
+-	call	16714318
++	call	16714332
+ 	ld	xiz, xhl
+ 	add	xiz, 176
+ 	ld	wa, (xsp+36)
+ 	extz	xwa
+ 	ld	xbc, (xsp+8)
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+4), xhl
+ 	ld	xwa, 176
+ 	add	(xsp+4), xwa
+@@ -3233,13 +3233,13 @@
+ 	ld	wa, (xsp+38)
+ 	extz	xwa
+ 	ld	xbc, (xsp+8)
+-	call	16714318
++	call	16714332
+ 	ld	xiz, xhl
+ 	add	xiz, 176
+ 	ld	wa, (xsp+36)
+ 	extz	xwa
+ 	ld	xbc, (xsp+8)
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+4), xhl
+ 	ld	xwa, 176
+ 	add	(xsp+4), xwa
+@@ -3440,14 +3440,14 @@
+ 	ldw	(xsp+10), 470
+ 	extz	xwa
+ 	ld	xbc, 470
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+2), xhl
+ 	ld	xwa, 16
+ 	add	(xsp+2), xwa
+ 	ld	wa, iz
+ 	extz	xwa
+ 	ld	xbc, 470
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+6), xhl
+ 	ld	xwa, 16
+ 	add	(xsp+6), xwa
+@@ -3496,7 +3496,7 @@
+ 	extz	wa
+ 	ld	c, (xsp+14)
+ 	extz	bc
+-	call	16713020
++	call	16713034
+ 	lda_24	xwa, 1966080
+ 	.byte 0xaf, 0x06, 0x80
+ 	ld	bc, (xsp+10)
+@@ -3509,7 +3509,7 @@
+ 	ld	c, (xsp+14)
+ 	extz	bc
+ 	ld	de, iz
+-	call	16713021
++	call	16713035
+ 	call	16288840
+ 	ld	hl, iz
+ 	popw	iz
+@@ -3561,13 +3561,13 @@
+ 	ldb	h, 32
+ 	extz	xwa
+ 	ld	xbc, 9400
+-	call	16714318
++	call	16714332
+ 	ld	xiz, xhl
+ 	add	xiz, 16
+ 	ld	wa, (xsp+36)
+ 	extz	xwa
+ 	ld	xbc, 9400
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+4), xhl
+ 	ld	xwa, 16
+ 	add	(xsp+4), xwa
+@@ -3587,7 +3587,7 @@
+ 	jr	lt, 43
+ 	ld	a, (xsp+10)
+ 	extz	wa
+-	call	16713175
++	call	16713189
+ 	lda_24	xwa, 1966080
+ 	.byte 0xaf, 0x04, 0x80
+ 	ld	bc, (xsp+8)
+@@ -3598,7 +3598,7 @@
+ 	ld	a, (xsp+10)
+ 	extz	wa
+ 	ld	bc, iz
+-	call	16713176
++	call	16713190
+ 	call	16288840
+ 	ld	hl, iz
+ 	pop	xiz
+@@ -6649,7 +6649,7 @@
+ 	ld	wa, iz
+ 	extz	xwa
+ 	ld	xbc, 82
+-	call	16714318
++	call	16714332
+ 	lda_24	xwa, 155394
+ 	add	xwa, xhl
+ 	.byte 0xb0, 0x9f
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/display/graphics_text_vga.s v10/maincpu/display/graphics_text_vga.s
+--- v9/maincpu/display/graphics_text_vga.s	2026-03-23 09:50:07.153160761 +0000
++++ v10/maincpu/display/graphics_text_vga.s	2026-03-23 02:19:50.681165934 +0000
+@@ -1542,7 +1542,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	ld	a, (xiz+6)
+ 	and	a, 63
+@@ -1615,7 +1615,7 @@
+ 	ld	xwa, 15380840
+ 	push	xwa
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	ld	a, (xiz+6)
+ 	and	a, 63
+@@ -1693,7 +1693,7 @@
+ 	ld	xwa, 15380860
+ 	push	xwa
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	ld	a, (xiz+6)
+ 	and	a, 15
+@@ -1796,7 +1796,7 @@
+ 	ld	xwa, 15380892
+ 	push	xwa
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	ld	a, (xiz+6)
+ 	and	a, 15
+@@ -1869,7 +1869,7 @@
+ 	ld	xwa, 15380912
+ 	push	xwa
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	ld	a, (xiz+6)
+ 	and	a, 15
+@@ -4689,7 +4689,7 @@
+ 	ld	xwa, 15538410
+ 	push	xwa
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	17
+@@ -4737,7 +4737,7 @@
+ 	ld	xwa, 15538454
+ 	push	xwa
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	17
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/display/scoop_display.s v10/maincpu/display/scoop_display.s
+--- v9/maincpu/display/scoop_display.s	2026-03-23 09:50:07.154161470 +0000
++++ v10/maincpu/display/scoop_display.s	2026-03-23 02:19:50.682152169 +0000
+@@ -19374,7 +19374,7 @@
+ 	pushw	52426
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	46
+ 	ld	a, e
+@@ -19383,7 +19383,7 @@
+ 	pushw	52430
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	22
+ 	ld	a, e
+@@ -19392,7 +19392,7 @@
+ 	pushw 52434
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	ld	a, (xiz+6)
+ 	and	a, 63
+@@ -19474,7 +19474,7 @@
+ 	pushw	52446
+ 	lda	xwa, (xsp+11)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jrl	130
+ 	ld	a, e
+@@ -19484,7 +19484,7 @@
+ 	pushw	52450
+ 	lda	xwa, (xsp+11)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	106
+ 	ld	a, e
+@@ -19494,7 +19494,7 @@
+ 	pushw	52454
+ 	lda	xwa, (xsp+11)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	.byte 0xbf, 0x0a
+ 	.asciz "7hR%"
+ 	ld	wa, hl
+@@ -19509,7 +19509,7 @@
+ 	pushw 52458
+ 	lda	xwa, (xsp+10)
+ 	push xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	t, 46
+ 	ld	a, e
+@@ -19519,7 +19519,7 @@
+ 	pushw 52462
+ 	lda	xwa, (xsp+10)
+ 	push xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	t, 22
+ 	ld	a, e
+@@ -19529,7 +19529,7 @@
+ 	pushw 52466
+ 	lda	xwa, (xsp+10)
+ 	push xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	ld	a, (xiz+6)
+ 	and	a, 63
+@@ -19706,7 +19706,7 @@
+ 	pushw	52498
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	46
+ 	ld	a, e
+@@ -19716,7 +19716,7 @@
+ 	pushw	52502
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	22
+ 	ld	a, e
+@@ -19726,7 +19726,7 @@
+ 	pushw	52506
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	ld	a, (xiz+6)
+ 	and	a, 15
+@@ -19821,7 +19821,7 @@
+ 	pushw	52518
+ 	lda	xwa, (xsp+11)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jrl	130
+ 	ld	a, e
+@@ -19831,7 +19831,7 @@
+ 	pushw	52522
+ 	lda	xwa, (xsp+11)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	106
+ 	ld	a, e
+@@ -19841,7 +19841,7 @@
+ 	pushw	52526
+ 	lda	xwa, (xsp+11)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	.byte 0xbf, 0x0a
+ 	.asciz "7hR%"
+ 	ld	a, c
+@@ -19856,7 +19856,7 @@
+ 	pushw	52530
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	46
+ 	ld	a, e
+@@ -19866,7 +19866,7 @@
+ 	pushw	52534
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	22
+ 	ld	a, e
+@@ -19876,7 +19876,7 @@
+ 	pushw	52538
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	ld	a, (xiz+6)
+ 	and	a, 15
+@@ -19941,7 +19941,7 @@
+ 	pushw	52550
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	40
+ 	.byte 0x91, 0x04
+@@ -19949,7 +19949,7 @@
+ 	pushw	52554
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	19
+ 	.byte 0x91
+@@ -19957,7 +19957,7 @@
+ 	pushw	52558
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	ld	a, (xiz+6)
+ 	and	a, 15
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/factory_test/test_data.s v10/maincpu/factory_test/test_data.s
+--- v9/maincpu/factory_test/test_data.s	2026-03-23 05:18:37.583172488 +0000
++++ v10/maincpu/factory_test/test_data.s	2026-03-23 02:19:50.686152202 +0000
+@@ -46,8 +46,8 @@
+ 	.byte 0x23, 0x79, 0xf4, 0x00, 0x43, 0x79, 0xf4, 0x00
+ 	.byte 0x24, 0xbc, 0xf6, 0x00, 0x2f, 0xbc, 0xf6, 0x00
+ 	.byte 0x48, 0xbc, 0xf6, 0x00, 0x5a, 0xbc, 0xf6, 0x00
+-	.byte 0x91, 0x04, 0xFF, 0x00, 0x92, 0x04, 0xFF, 0x00
+-	.byte 0xD6, 0x04, 0xFF, 0x00, 0xD7, 0x04, 0xFF, 0x00
++	.byte 0x9f, 0x04, 0xff, 0x00, 0xa0, 0x04, 0xff, 0x00
++	.byte 0xe4, 0x04, 0xff, 0x00, 0xe5, 0x04, 0xff, 0x00
+ 	.byte 0x66, 0xbc, 0xf6, 0x00, 0x71, 0xbc, 0xf6, 0x00
+ 	.byte 0x82, 0xbc, 0xf6, 0x00, 0x99, 0xbc, 0xf6, 0x00
+ 	.byte 0xa0, 0xb4, 0xfd, 0x00, 0xa1, 0xb4, 0xfd, 0x00
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/file_io/misc_ui.s v10/maincpu/file_io/misc_ui.s
+--- v9/maincpu/file_io/misc_ui.s	2026-03-23 09:50:07.161437170 +0000
++++ v10/maincpu/file_io/misc_ui.s	2026-03-23 02:19:50.690152236 +0000
+@@ -35,7 +35,7 @@
+ 	push	xwa
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	17
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/ac_listener_handlers.s v10/maincpu/midi/ac_listener_handlers.s
+--- v9/maincpu/midi/ac_listener_handlers.s	2026-03-23 09:50:07.209253938 +0000
++++ v10/maincpu/midi/ac_listener_handlers.s	2026-03-23 02:19:50.717528188 +0000
+@@ -870,7 +870,7 @@
+ 	pushw 231
+ 	pushw 63902
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -884,7 +884,7 @@
+ 	.long Data_AcGridParamTable
+ 	push	xwa
+ 	push	xbc
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1490,7 +1490,7 @@
+ 	.byte 0xe4, 0xe0
+ 	ldb	w, 56
+ 	push	xde
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1505,7 +1505,7 @@
+ 	or	xwa, xix
+ 	ldb	w, 56
+ 	push	xde
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1529,7 +1529,7 @@
+ 	or	xwa, xix
+ 	ldb	w, 56
+ 	push	xde
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1549,7 +1549,7 @@
+ 	or	xwa, xix
+ 	ldb	w, 56
+ 	push	xde
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1569,7 +1569,7 @@
+ 	or	xwa, xix
+ 	ldb	w, 56
+ 	push	xde
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1593,14 +1593,14 @@
+ 	pushw	64766
+ 	lda	xwa, (xsp+18)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	16
+ 	pushw	231
+ 	pushw	64772
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1620,14 +1620,14 @@
+ 	pushw	64778
+ 	lda	xwa, (xsp+18)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	jr	16
+ 	pushw	231
+ 	pushw	64784
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1645,7 +1645,7 @@
+ 	or	xwa, xix
+ 	ldb	w, 56
+ 	push	xde
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1662,7 +1662,7 @@
+ 	or	xwa, xix
+ 	ldb	w, 56
+ 	push	xde
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1680,7 +1680,7 @@
+ 	or	xwa, xix
+ 	ldb	w, 56
+ 	push	xde
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1699,7 +1699,7 @@
+ 	or	xix, xix
+ 	ldb	w, 56
+ 	push	xde
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1742,7 +1742,7 @@
+ 	ldb	w, 56
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1759,7 +1759,7 @@
+ 	ldb	w, 56
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1776,7 +1776,7 @@
+ 	ldb	w, 56
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1797,7 +1797,7 @@
+ 	pushw	64790
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1813,7 +1813,7 @@
+ 	pushw	64796
+ 	lda	xwa, (xsp+18)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1828,7 +1828,7 @@
+ 	pushw	64802
+ 	lda	xwa, (xsp+18)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1847,7 +1847,7 @@
+ 	pushw	64808
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1862,7 +1862,7 @@
+ 	pushw	64814
+ 	lda	xwa, (xsp+18)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1876,7 +1876,7 @@
+ 	pushw	64820
+ 	lda	xwa, (xsp+18)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1893,7 +1893,7 @@
+ 	ldb	w, 56
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1910,7 +1910,7 @@
+ 	ldb	w, 56
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1927,7 +1927,7 @@
+ 	ldb	w, 56
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1944,7 +1944,7 @@
+ 	ldb	w, 56
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/computer_interface_config.s v10/maincpu/midi/computer_interface_config.s
+--- v9/maincpu/midi/computer_interface_config.s	2026-03-23 09:50:07.209913537 +0000
++++ v10/maincpu/midi/computer_interface_config.s	2026-03-23 02:19:50.718152472 +0000
+@@ -296,7 +296,7 @@
+ 	push	xwa
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	21
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/computer_interface_pcg.s v10/maincpu/midi/computer_interface_pcg.s
+--- v9/maincpu/midi/computer_interface_pcg.s	2026-03-23 09:50:07.210476510 +0000
++++ v10/maincpu/midi/computer_interface_pcg.s	2026-03-23 02:19:50.718765607 +0000
+@@ -378,70 +378,70 @@
+ 	.byte 0xf2, 0x6a, 0x47, 0x02, 0x32, 0xbe, 0x0e, 0x30
+ 	.byte 0xa6, 0xf2, 0x6e, 0x28, 0xb1, 0x02, 0x00, 0x00
+ 	.byte 0xa0, 0x20, 0xe8, 0x61, 0x38, 0x0b, 0xe7, 0x00
+-	.byte 0x0b, 0x4e, 0xff, 0x3b, 0x1d, 0x64, 0x0a, 0xff
++	.byte 0x0b, 0x4e, 0xff, 0x3b, 0x1d, 0x72, 0x0a, 0xff
+ 	.byte 0xbf, 0x0c, 0x37, 0x1d, 0xd0, 0x44, 0xfa, 0xeb
+ 	.byte 0x88, 0xbf, 0x04, 0x32, 0x41, 0x8c, 0x00, 0xe0
+ 	.byte 0x01, 0x78, 0x2e, 0x04, 0xf2, 0x6c, 0x47, 0x02
+ 	.byte 0x32, 0xa6, 0xf2, 0x6e, 0x28, 0xb1, 0x02, 0x01
+ 	.byte 0x00, 0xa0, 0x20, 0xe8, 0x61, 0x38, 0x0b, 0xe7
+-	.byte 0x00, 0x0b, 0x54, 0xff, 0x3b, 0x1d, 0x64, 0x0a
++	.byte 0x00, 0x0b, 0x54, 0xff, 0x3b, 0x1d, 0x72, 0x0a
+ 	.byte 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0, 0x44, 0xfa
+ 	.byte 0xeb, 0x88, 0xbf, 0x04, 0x32, 0x41, 0x8c, 0x00
+ 	.byte 0xe0, 0x01, 0x78, 0xfd, 0x03, 0xf2, 0x6e, 0x47
+ 	.byte 0x02, 0x32, 0xa6, 0xf2, 0x7e, 0xab, 0x00, 0xb1
+ 	.byte 0x02, 0x02, 0x00, 0xc2, 0x70, 0x47, 0x02, 0x3f
+ 	.byte 0xff, 0x6e, 0x45, 0x0b, 0xe7, 0x00, 0x0b, 0x5a
+-	.byte 0xff, 0x3b, 0x1d, 0x3F, 0x0f, 0xff, 0xef, 0x60
++	.byte 0xff, 0x3b, 0x1d, 0x4d, 0x0f, 0xff, 0xef, 0x60
+ 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x04
+ 	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60
+ 	.byte 0x96, 0xfa, 0xbf, 0x06, 0x02, 0x04, 0x00, 0x0b
+ 	.byte 0xe7, 0x00, 0x0b, 0x60, 0xff, 0xbf, 0x10, 0x30
+-	.byte 0x38, 0x1d, 0x3F, 0x0f, 0xff, 0xef, 0x60, 0x1d
++	.byte 0x38, 0x1d, 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x1d
+ 	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x04, 0x32
+ 	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xa2, 0x03
+ 	.byte 0xa0, 0x20, 0x38, 0x0b, 0xe7, 0x00, 0x0b, 0x68
+-	.byte 0xff, 0x3b, 0x1d, 0x64, 0x0a, 0xff, 0xbf, 0x0c
++	.byte 0xff, 0x3b, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0c
+ 	.byte 0x37, 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf
+ 	.byte 0x04, 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x1d
+ 	.byte 0x60, 0x96, 0xfa, 0xbf, 0x06, 0x02, 0x04, 0x00
+ 	.byte 0xc2, 0x70, 0x47, 0x02, 0x23, 0xd9, 0x13, 0xae
+ 	.byte 0x0e, 0x20, 0xd8, 0xee, 0x07, 0xd9, 0x80, 0x28
+ 	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x6e, 0xff, 0xbf, 0x12
+-	.byte 0x30, 0x38, 0x1d, 0x64, 0x0a, 0xff, 0xbf, 0x0a
++	.byte 0x30, 0x38, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0a
+ 	.byte 0x37, 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf
+ 	.byte 0x04, 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78
+ 	.byte 0x48, 0x03, 0xf2, 0x70, 0x47, 0x02, 0x32, 0xa6
+ 	.byte 0xf2, 0x7e, 0x42, 0x03, 0xb1, 0x02, 0x02, 0x00
+ 	.byte 0xa0, 0x20, 0xe8, 0xcf, 0xff, 0xff, 0xff, 0xff
+ 	.byte 0x6e, 0x6c, 0x0b, 0xe7, 0x00, 0x0b, 0x76, 0xff
+-	.byte 0x3b, 0x1d, 0x3F, 0x0f, 0xff, 0xef, 0x60, 0x1d
++	.byte 0x3b, 0x1d, 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x1d
+ 	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x04, 0x32
+ 	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96
+ 	.byte 0xfa, 0xbf, 0x06, 0x02, 0x03, 0x00, 0x0b, 0xe7
+ 	.byte 0x00, 0x0b, 0x7c, 0xff, 0xbf, 0x10, 0x30, 0x38
+-	.byte 0x1d, 0x3F, 0x0f, 0xff, 0xef, 0x60, 0x1d, 0xd0
++	.byte 0x1d, 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x1d, 0xd0
+ 	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x04, 0x32, 0x41
+ 	.byte 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa
+ 	.byte 0xbf, 0x06, 0x02, 0x04, 0x00, 0x0b, 0xe7, 0x00
+ 	.byte 0x0b, 0x82, 0xff, 0xbf, 0x10, 0x30, 0x38, 0x1d
+-	.byte 0x3F, 0x0f, 0xff, 0xef, 0x60, 0x1d, 0xd0, 0x44
++	.byte 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x1d, 0xd0, 0x44
+ 	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x04, 0x32, 0x41, 0x8c
+ 	.byte 0x00, 0xe0, 0x01, 0x78, 0xc4, 0x02, 0xc2, 0x6e
+ 	.byte 0x47, 0x02, 0x21, 0xd8, 0x13, 0x28, 0x0b, 0xe7
+-	.byte 0x00, 0x0b, 0x8a, 0xff, 0x3b, 0x1d, 0x64, 0x0a
++	.byte 0x00, 0x0b, 0x8a, 0xff, 0x3b, 0x1d, 0x72, 0x0a
+ 	.byte 0xff, 0xbf, 0x0a, 0x37, 0x1d, 0xd0, 0x44, 0xfa
+ 	.byte 0xeb, 0x88, 0xbf, 0x04, 0x32, 0x41, 0x8c, 0x00
+ 	.byte 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa, 0xbf, 0x06
+ 	.byte 0x02, 0x03, 0x00, 0xae, 0x0e, 0x20, 0x38, 0x0b
+ 	.byte 0xe7, 0x00, 0x0b, 0x90, 0xff, 0xbf, 0x14, 0x30
+-	.byte 0x38, 0x1d, 0x64, 0x0a, 0xff, 0xbf, 0x0c, 0x37
++	.byte 0x38, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0c, 0x37
+ 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x04
+ 	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60
+ 	.byte 0x96, 0xfa, 0xbf, 0x06, 0x02, 0x04, 0x00, 0xae
+ 	.byte 0x0e, 0x21, 0xc2, 0x6e, 0x47, 0x02, 0x21, 0xd8
+ 	.byte 0x13, 0xd8, 0xee, 0x07, 0xd9, 0x80, 0x28, 0x0b
+ 	.byte 0xe7, 0x00, 0x0b, 0x96, 0xff, 0xbf, 0x12, 0x30
+-	.byte 0x38, 0x1d, 0x64, 0x0a, 0xff, 0xbf, 0x0a, 0x37
++	.byte 0x38, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0a, 0x37
+ 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x04
+ 	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x39
+ 	push_sr
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/midi_dispatch_handlers.s v10/maincpu/midi/midi_dispatch_handlers.s
+--- v9/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 09:50:07.211014635 +0000
++++ v10/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 02:19:50.719509365 +0000
+@@ -5805,7 +5805,7 @@
+ 	dec	4, xsp
+ 	pushw	iz
+ 	pushw	32
+-	call	16715378
++	call	16715392
+ 	inc	2, xsp
+ 	ld	(xsp+2), xhl
+ 	ld	xwa, (xsp+2)
+@@ -5845,7 +5845,7 @@
+ 	ldw	iz, 65434
+ 	ld	xwa, (xsp+2)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	inc	4, xsp
+ 	ld	hl, iz
+ 	popw	iz
+@@ -5894,7 +5894,7 @@
+ 	ldada	xwa, 63872
+ 	ld	(xsp+6), xwa
+ 	pushw	1664
+-	call	16715378
++	call	16715392
+ 	inc	2, xsp
+ 	ld	(xsp+10), xhl
+ 	ld	xwa, (xsp+10)
+@@ -5911,7 +5911,7 @@
+ 	jr	ge, 15
+ 	ld	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	inc	4, xsp
+ 	ld	hl, iz
+ 	jrl	371
+@@ -5930,7 +5930,7 @@
+ 	nop
+ 	nop
+ 	nop
+-	call	16714318
++	call	16714332
+ 	add	xhl, 52
+ 	.byte 0xaf, 0x06
+ 	or	(xhl), h
+@@ -6006,7 +6006,7 @@
+ 	nop
+ 	nop
+ 	nop
+-	call	16714318
++	call	16714332
+ 	add	xhl, 754
+ 	.byte 0xaf, 0x06
+ 	or	(xhl), h
+@@ -6067,7 +6067,7 @@
+ 	call	16626747
+ 	ld	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	inc	4, xsp
+ 	lds	hl, 0
+ 	pop	xiz
+@@ -6103,7 +6103,7 @@
+ 	cp	(xsp+8), wa
+ 	jr	c, -20
+ 	pushw	768
+-	call	16715378
++	call	16715392
+ 	inc	2, xsp
+ 	ld	(xsp+14), xhl
+ 	ld	xwa, (xsp+14)
+@@ -6125,7 +6125,7 @@
+ 	jr	ge, 28
+ 	ld	xwa, (xsp+14)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	inc	4, xsp
+ 	ld	hl, iz
+ 	jrl	412
+@@ -6160,7 +6160,7 @@
+ 	ret
+ 	.byte 0x86
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	add	xhl, 20
+ 	.byte 0xaf, 0x04
+ 	or	(xhl), h
+@@ -6227,7 +6227,7 @@
+ 	ret
+ 	.byte 0x86
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	add	xhl, 722
+ 	.byte 0xaf, 0x04
+ 	or	(xhl), h
+@@ -6292,7 +6292,7 @@
+ 	call	16626833
+ 	ld	xwa, (xsp+14)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	inc	4, xsp
+ 	lds	hl, 0
+ 	pop	xiz
+@@ -8002,7 +8002,7 @@
+ 	ld	xiz, xbc
+ 	add	xiz, (xsp+10)
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	add	xhl, 992
+ 	add	xhl, (xsp+6)
+ 	ld	xwa, xiz
+@@ -8462,7 +8462,7 @@
+ 	ldada	xwa, 63872
+ 	ld	(xsp+6), xwa
+ 	pushw 1088
+-	call	16715378
++	call	16715392
+ 	inc	2, xsp
+ 	ld	(xsp+10), xhl
+ 	ld	xwa, (xsp+10)
+@@ -8479,7 +8479,7 @@
+ 	jr	ge, 15
+ 	ld	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	inc	4, xsp
+ 	ld	hl, iz
+ 	jrl	280
+@@ -8494,7 +8494,7 @@
+ 	ld	xiz, xbc
+ 	add	xiz, (xsp+10)
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	add	xhl, 52
+ 	add	xhl, (xsp+6)
+ 	ld	xwa, xiz
+@@ -8517,7 +8517,7 @@
+ 	lda_rr	xiz, xwa, de
+ 	ld	xwa, xbc
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	add	xhl, 52
+ 	add	xhl, (xsp+6)
+ 	ld	xwa, xiz
+@@ -8564,7 +8564,7 @@
+ 	call	16626747
+ 	ld	xwa, (xsp+10)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	inc	4, xsp
+ 	lds	hl, 0
+ 	pop	xiz
+@@ -8582,7 +8582,7 @@
+ 	cps	iz, 3
+ 	jr	c, -11
+ 	pushw 336
+-	call	16715378
++	call	16715392
+ 	inc	2, xsp
+ 	ld	(xsp+8), xhl
+ 	ld	xwa, (xsp+8)
+@@ -8599,7 +8599,7 @@
+ 	jr	ge, 15
+ 	ld	xwa, (xsp+8)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	inc	4, xsp
+ 	ld	hl, iz
+ 	jrl	241
+@@ -8624,7 +8624,7 @@
+ 	add	(xsp+12), xwa
+ 	ld	xwa, xbc
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	add	xhl, 20
+ 	add	xhl, (xsp+2)
+ 	ld	xwa, (xsp+12)
+@@ -8673,7 +8673,7 @@
+ 	call	16626833
+ 	ld	xwa, (xsp+8)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	inc	4, xsp
+ 	lds	hl, 0
+ 	popw	iz
+@@ -9953,32 +9953,32 @@
+ 	pushw	64596
+ 	lda	xwa, (xsp+30)
+ 	push	xwa
+-	call	16715147
++	call	16715161
+ 	pushw	24
+ 	pushw	0
+ 	pushw	64732
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715147
++	call	16715161
+ 	ldada	xwa, 63904
+ 	pushw	1568
+ 	pushw	237
+ 	pushw	46076
+ 	push	xwa
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+30)
+ 	pushw	4
+ 	lda	xwa, (xsp+26)
+ 	push	xwa
+ 	pushw	0
+ 	pushw	64596
+-	call	16715147
++	call	16715161
+ 	pushw	24
+ 	lda	xwa, (xsp+12)
+ 	push	xwa
+ 	pushw	0
+ 	pushw	64732
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+48)
+ 	ret
+ 	dec	6, xsp
+@@ -10004,7 +10004,7 @@
+ 	ld	xwa, (xsp+4)
+ 	push	xwa
+ 	push	xde
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	inc	1, iz
+ 	.byte 0x9f, 0x06, 0xf6
+@@ -14568,7 +14568,7 @@
+ 	lds	de, 5
+ 	call	16604730
+ 	call	16608397
+-	call	16713566
++	call	16713580
+ 	ldda32	xwa, 48300
+ 	ldw	bc, 15
+ 	call	16604854
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/midipkt_routines.s v10/maincpu/midi/midipkt_routines.s
+--- v9/maincpu/midi/midipkt_routines.s	2026-03-23 09:50:07.223502592 +0000
++++ v10/maincpu/midi/midipkt_routines.s	2026-03-23 02:19:50.721925303 +0000
+@@ -187,7 +187,7 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+22)
+ 	push	xwa
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	lda	xwa, (xsp+10)
+ 	ld	c, (xsp+4)
+@@ -1087,7 +1087,7 @@
+ 	push	xwa
+ 	ld	xwa, (xiz+4)
+ 	push	xwa
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	lda	xwa, (xsp+8)
+ 	ld	xbc, (xiz)
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/param_load_routines.s v10/maincpu/midi/param_load_routines.s
+--- v9/maincpu/midi/param_load_routines.s	2026-03-23 09:50:07.224046667 +0000
++++ v10/maincpu/midi/param_load_routines.s	2026-03-23 02:19:50.722152505 +0000
+@@ -757,7 +757,7 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+20)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -776,7 +776,7 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+20)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -795,7 +795,7 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+20)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -817,7 +817,7 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+20)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/sysex_routines.s v10/maincpu/midi/sysex_routines.s
+--- v9/maincpu/midi/sysex_routines.s	2026-03-23 09:50:07.224486287 +0000
++++ v10/maincpu/midi/sysex_routines.s	2026-03-23 02:19:50.722815855 +0000
+@@ -113,7 +113,7 @@
+ 	push	xwa
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	17
+@@ -153,7 +153,7 @@
+ 	push	xwa
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	17
+@@ -193,7 +193,7 @@
+ 	push	xwa
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	17
+@@ -233,7 +233,7 @@
+ 	push	xwa
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	17
+@@ -273,7 +273,7 @@
+ 	push	xwa
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	17
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/accompaniment_engine.s v10/maincpu/sequencer/accompaniment_engine.s
+--- v9/maincpu/sequencer/accompaniment_engine.s	2026-03-23 09:50:07.228770516 +0000
++++ v10/maincpu/sequencer/accompaniment_engine.s	2026-03-23 02:19:50.726152539 +0000
+@@ -33425,7 +33425,7 @@
+ 	push	xwa
+ 	pushw	0
+ 	pushw	13500
+-	call	16714981
++	call	16714995
+ 	lda	xsp, (xsp+10)
+ 	stdi8	13516, 0
+ 
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/seq_audio_mode.s v10/maincpu/sequencer/seq_audio_mode.s
+--- v9/maincpu/sequencer/seq_audio_mode.s	2026-03-23 09:50:07.236659000 +0000
++++ v10/maincpu/sequencer/seq_audio_mode.s	2026-03-23 02:19:50.730981318 +0000
+@@ -1369,17 +1369,17 @@
+ RhythmROM_BytecodeBlock4:
+ 	ld	xwa, 1024
+ 	push	xwa
+-	call	16715378
++	call	16715392
+ 	add	xsp, 4
+ 	.byte 0xf1
+ 	.asciz "\\5c@"
+ 	.byte 0x10, 0x00
+-	.byte 0x00, 0x38, 0x1d, 0x72, 0x0E, 0xFF, 0xef, 0xc8
++	.byte 0x00, 0x38, 0x1d, 0x80, 0x0e, 0xff, 0xef, 0xc8
+ 	.byte 0x04, 0x00, 0x00, 0x00, 0xeb, 0x88, 0xe8, 0x88
+-	.byte 0x38, 0x1d, 0xE4, 0x0A, 0xFF, 0xef, 0xc8, 0x04
++	.byte 0x38, 0x1d, 0xf2, 0x0a, 0xff, 0xef, 0xc8, 0x04
+ 	.byte 0x00, 0x00, 0x00, 0xe1
+ 	.ascii "\\5 8"
+-	.byte 0x1d, 0xE4, 0x0A, 0xFF, 0xef, 0xc8, 0x04, 0x00
++	.byte 0x1d, 0xf2, 0x0a, 0xff, 0xef, 0xc8, 0x04, 0x00
+ 	.byte 0x00, 0x00, 0x0e
+ 
+ AccentData_ComparePart1:
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/seq_event_playback.s v10/maincpu/sequencer/seq_event_playback.s
+--- v9/maincpu/sequencer/seq_event_playback.s	2026-03-23 09:50:07.237387302 +0000
++++ v10/maincpu/sequencer/seq_event_playback.s	2026-03-23 02:19:50.731542732 +0000
+@@ -4015,7 +4015,7 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+12)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jr	20
+ 	inc	1, wa
+@@ -4024,7 +4024,7 @@
+ 	pushw	61176
+ 	ld	xwa, (xsp+14)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4037,7 +4037,7 @@
+ 	pushw	61188
+ 	ld	xwa, (xsp+14)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4051,7 +4051,7 @@
+ 	pushw	61200
+ 	ld	xwa, (xsp+14)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4069,7 +4069,7 @@
+ 	pushw	61212
+ 	ld	xwa, (xsp+16)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4096,7 +4096,7 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+12)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4114,7 +4114,7 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+12)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jr	18
+ 	pushw	wa
+@@ -4122,7 +4122,7 @@
+ 	pushw	61296
+ 	ld	xwa, (xsp+14)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4163,7 +4163,7 @@
+ 	pushw	61308
+ 	ld	xwa, (xsp+24)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+20)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4180,7 +4180,7 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+12)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4232,7 +4232,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+24)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jr	29
+ 	ld	xwa, 11520
+@@ -4243,7 +4243,7 @@
+ 	pushw	61352
+ 	lda	xwa, (xsp+26)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4258,7 +4258,7 @@
+ 	pushw	61364
+ 	lda	xwa, (xsp+26)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4273,7 +4273,7 @@
+ 	pushw	61376
+ 	lda	xwa, (xsp+26)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4292,7 +4292,7 @@
+ 	pushw	61388
+ 	lda	xwa, (xsp+28)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4320,7 +4320,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+24)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4340,7 +4340,7 @@
+ 	.long MidiPart_AfterStr
+ 	push	xwa
+ 	push	xbc
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jr	27
+ 	ld	xwa, 11530
+@@ -4350,7 +4350,7 @@
+ 	pushw	61472
+ 	lda	xwa, (xsp+26)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4391,7 +4391,7 @@
+ 	pushw	61484
+ 	lda	xwa, (xsp+36)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+20)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4432,7 +4432,7 @@
+ 	pushw	61492
+ 	lda	xwa, (xsp+36)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+20)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -4457,7 +4457,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+24)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/sequencer_ui.s v10/maincpu/sequencer/sequencer_ui.s
+--- v9/maincpu/sequencer/sequencer_ui.s	2026-03-23 09:50:07.243519046 +0000
++++ v10/maincpu/sequencer/sequencer_ui.s	2026-03-23 02:19:50.736714758 +0000
+@@ -2187,7 +2187,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+30)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xbc, (xsp+10)
+ 	ld	xix, (xbc+42)
+@@ -3593,7 +3593,7 @@
+ 	push	xwa
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	20
+@@ -3636,7 +3636,7 @@
+ 	push	xwa
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	19
+@@ -3731,7 +3731,7 @@
+ 	push	xwa
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	54
+@@ -4081,7 +4081,7 @@
+ 	.long MedleyDisp_Blank
+ 	push	xwa
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	31
+@@ -4129,7 +4129,7 @@
+ 	.long PlayModeStr_Play
+ 	push	xwa
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	31
+@@ -4177,7 +4177,7 @@
+ 	.long PlayModeStr_Pause
+ 	push	xwa
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	inc	8, xsp
+ 	ld	xhl, xiz
+ 	jr	31
+@@ -5966,7 +5966,7 @@
+ 	pushw	17932
+ 	lda	xwa, (xsp+40)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	lda	xwa, (xsp+28)
+ 	lda	xbc, (xsp+24)
+@@ -6022,7 +6022,7 @@
+ 	pushw	17936
+ 	lda	xwa, (xsp+40)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	lda	xwa, (xsp+28)
+ 	lda	xbc, (xsp+24)
+@@ -6119,7 +6119,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+42)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	incm	1, (xsp+8)
+ 	.byte 0xbf
+@@ -6142,7 +6142,7 @@
+ 	pushw	17948
+ 	lda	xwa, (xsp+42)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	incm	1, (xsp+10)
+ 	lda	xwa, (xsp+28)
+@@ -6234,7 +6234,7 @@
+ 	ld	xwa, 14894628
+ 	push	xwa
+ 	push	xde
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	incm	1, (xsp+8)
+ 	.byte 0xbf
+@@ -6253,7 +6253,7 @@
+ 	nop
+ 	pushw	17960
+ 	push	xde
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	incm	1, (xsp+10)
+ 	lda	xwa, (xsp+28)
+@@ -7761,7 +7761,7 @@
+ 	pushw	227
+ 	pushw	18302
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -7777,7 +7777,7 @@
+ 	ld	xwa, 14894984
+ 	push	xwa
+ 	push	xbc
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -13550,7 +13550,7 @@
+ 	ld	xwa, (xsp+4)
+ 	ld	xwa, (xwa+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jrl	356
+ 	pushw	wa
+@@ -13610,7 +13610,7 @@
+ 	ld	xwa, (xsp+4)
+ 	ld	xwa, (xwa+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jrl	201
+ 	ld	xwa, (xsp+4)
+@@ -14203,7 +14203,7 @@
+ 	ld	xwa, (xbc)
+ 	inc	1, xwa
+ 	push	xwa
+-	call	16714981
++	call	16714995
+ 	lda	xsp, (xsp+10)
+ 	ldda8	a, 9750
+ 	extz	wa
+@@ -14226,7 +14226,7 @@
+ 	ld	xwa, (xbc)
+ 	inc	1, xwa
+ 	push	xwa
+-	call	16714981
++	call	16714995
+ 	lda	xsp, (xsp+10)
+ 	ldda8	a, 9816
+ 	extz	wa
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/smf_event_processor.s v10/maincpu/sequencer/smf_event_processor.s
+--- v9/maincpu/sequencer/smf_event_processor.s	2026-03-23 10:37:43.171994837 +0000
++++ v10/maincpu/sequencer/smf_event_processor.s	2026-03-23 02:19:50.738816057 +0000
+@@ -4680,7 +4680,7 @@
+ 	add	(xde), xwa
+ 	.byte 0xeb
+ 	.long OscScope_RefreshLoop
+-	.long (AudioCmd_FillToVectors + 14)
++	.long AudioCmd_FillToVectors
+ 	nop
+ 	nop
+ 	ld	(xix), a
+@@ -4747,7 +4747,7 @@
+ 	push	xwa
+ 	ld	xwa, (xsp+22)
+ 	push	xwa
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	ld	xwa, (xsp+4)
+ 	ld	c, (xiz+12)
+@@ -5325,7 +5325,7 @@
+ 	dec	2, wa
+ 	extz	xwa
+ 	ld	xbc, (xbc)
+-	call	16714318
++	call	16714332
+ 	ld	xwa, (xsp+12)
+ 	ld	xwa, (xwa+20)
+ 	add	xwa, xhl
+@@ -5356,7 +5356,7 @@
+ 	pushw	0
+ 	lda	xwa, (xhl+26)
+ 	push	xwa
+-	call	16715756
++	call	16715770
+ 	inc	8, xsp
+ 	inc	1, xiz
+ 	ld	xbc, (xsp+8)
+@@ -5375,7 +5375,7 @@
+ 	pushw	32
+ 	ld	xwa, (xsp+12)
+ 	push	xwa
+-	call	16715756
++	call	16715770
+ 	inc	8, xsp
+ 	ld	xwa, (xsp+8)
+ 	ld	(xwa+11), 0
+@@ -5575,7 +5575,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+28)
+ 	push	xwa
+-	call	16714931
++	call	16714945
+ 	add	xsp, 10
+ 	cps	hl, 0
+ 	jr	nz, 116
+@@ -5761,7 +5761,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+28)
+ 	push	xwa
+-	call	16714931
++	call	16714945
+ 	add	xsp, 10
+ 	cps	hl, 0
+ 	jr	nz, 85
+@@ -5847,7 +5847,7 @@
+ 	dec	2, wa
+ 	extz	xwa
+ 	ld	xbc, (xbc)
+-	call	16714318
++	call	16714332
+ 	ld	xwa, (xsp+4)
+ 	ld	xbc, (xwa+20)
+ 	add	xbc, xhl
+@@ -6010,7 +6010,7 @@
+ 	push	xwa
+ 	lda	xwa, (xiz+52)
+ 	push	xwa
+-	call	16715147
++	call	16715161
+ 	ld	(xiz+64), 0
+ 	.byte 0xbe
+ 	ld	xiy, 3892314114
+@@ -6097,7 +6097,7 @@
+ 	dec	2, wa
+ 	extz	xwa
+ 	ld	xbc, (xbc)
+-	call	16714318
++	call	16714332
+ 	ld	xwa, (xsp+6)
+ 	ld	xwa, (xwa+20)
+ 	add	xwa, xhl
+@@ -6696,7 +6696,7 @@
+ 	ld	wa, (xwa+38)
+ 	extz	xwa
+ 	ld	xbc, (xbc)
+-	call	16714318
++	call	16714332
+ 	ld	xwa, (xsp+4)
+ 	ld	(xwa+40), hl
+ 	ld	xwa, (xsp+4)
+@@ -6740,7 +6740,7 @@
+ 	ld	xwa, xde
+ 	ld	xbc, (xsp+4)
+ 	ld	xbc, (xbc+32)
+-	call	16714762
++	call	16714776
+ 	inc	1, xhl
+ 	ld	xwa, (xsp+4)
+ 	ld	(xwa+54), hl
+@@ -6898,7 +6898,7 @@
+ 	extz	xbc
+ 	ld	xwa, (xsp+16)
+ 	ld	xwa, (xwa+22)
+-	call	16714762
++	call	16714776
+ 	ld	xwa, (xsp+8)
+ 	ld	xbc, (xwa+28)
+ 	add	xbc, xhl
+@@ -6930,13 +6930,13 @@
+ 	extz	xbc
+ 	ld	xwa, (xsp+16)
+ 	ld	xwa, (xwa+22)
+-	call	16714756
++	call	16714770
+ 	ld	xiz, xhl
+ 	ld	xwa, (xsp+8)
+ 	ld	bc, (xwa+38)
+ 	extz	xbc
+ 	ld	xwa, xiz
+-	call	16714762
++	call	16714776
+ 	ld	a, l
+ 	ld	(xsp+6), a
+ 	ld	xwa, (xsp+16)
+@@ -7063,7 +7063,7 @@
+ 	dec	2, wa
+ 	extz	xwa
+ 	ld	xbc, (xbc)
+-	call	16714318
++	call	16714332
+ 	ld	xwa, (xsp+22)
+ 	add	(xwa), xhl
+ 	ld	xwa, (xsp+16)
+@@ -7071,7 +7071,7 @@
+ 	extz	xwa
+ 	ld	xbc, (xsp+8)
+ 	ld	xbc, (xbc+32)
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld	a, (xsp+6)
+ 	sub	xhl, xwa
+@@ -7152,7 +7152,7 @@
+ 	ld	bc, (xwa+40)
+ 	extz	xbc
+ 	ld	xwa, xde
+-	call	16714762
++	call	16714776
+ 	ld	wa, (xsp+4)
+ 	extz	xwa
+ 	sub	xhl, xwa
+@@ -7436,7 +7436,7 @@
+ 	push	xbc
+ 	ld	xwa, (xsp+20)
+ 	push	xwa
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	sub	(xsp+18), iz
+ 	ld	wa, iz
+@@ -7708,7 +7708,7 @@
+ 	ld	xwa, (xsp+18)
+ 	push	xwa
+ 	push	xde
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	sub	(xsp+20), iz
+ 	ld	xwa, (xsp+16)
+@@ -7990,7 +7990,7 @@
+ 	ld	bc, (xwa+40)
+ 	extz	xbc
+ 	ld	xwa, (xsp+16)
+-	call	16714762
++	call	16714776
+ 	ld	xwa, (xsp+12)
+ 	ld	wa, (xwa+46)
+ 	extz	xwa
+@@ -8097,7 +8097,7 @@
+ 	pushw	20522
+ 	lda	xwa, (xsp+14)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	ld	(xsp+30), 16
+ 	lda	xwa, (xsp+31)
+ 	push	xwa
+@@ -8432,7 +8432,7 @@
+ 	pushw	228
+ 	pushw	20536
+ 	push	xiz
+-	call	16715147
++	call	16715161
+ 	lda	xsp, (xsp+10)
+ 	lds	hl, 0
+ 	jr	31
+@@ -8621,7 +8621,7 @@
+ 	ld	bc, (xwa+50)
+ 	extz	xbc
+ 	ld	xwa, xhl
+-	call	16714762
++	call	16714776
+ 	ld	xbc, xhl
+ 	ld	xwa, (xsp+2)
+ 	.byte 0x98
+@@ -8752,7 +8752,7 @@
+ 	ld	bc, (xwa+50)
+ 	extz	xbc
+ 	ld	xwa, xhl
+-	call	16714762
++	call	16714776
+ 	ld	xbc, xhl
+ 	ld	xwa, (xsp+2)
+ 	.byte 0x98
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/storage/flash_floppy_handlers.s v10/maincpu/storage/flash_floppy_handlers.s
+--- v9/maincpu/storage/flash_floppy_handlers.s	2026-03-23 10:37:43.171461054 +0000
++++ v10/maincpu/storage/flash_floppy_handlers.s	2026-03-23 02:19:50.743792128 +0000
+@@ -120,7 +120,7 @@
+ FlashRead_BlockData_Field6:
+ 	nop
+ 	.byte 0x0a
+-	.long (TmFlashWrite_Block3 + 14)
++	.long TmFlashWrite_Block3
+ 	ldb	w, 196
+ 	ex_ff
+ 	push_sr
+@@ -141,7 +141,7 @@
+ 	ldb	w, 12
+ 	pushw 2
+ 	.byte 0x0a
+-	.long (TmFlashWrite_Block2 + 14)
++	.long TmFlashWrite_Block2
+ 	ldb	w, 100
+ 	decf
+ 	push_sr
+@@ -1760,7 +1760,7 @@
+ 	extz	wa
+ 	calr	2721
+ 	calr	2966
+-	call	16713342
++	call	16713356
+ 	jrl	274
+ 	calr	3531
+ 	calr	3957
+@@ -3147,7 +3147,7 @@
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+ 	lds	wa, 2
+-	call	16713369
++	call	16713383
+ 	ld	xiz, (xsp+12)
+ 	ld	wa, (xsp+10)
+ 	ld	(xsp+8), wa
+@@ -3159,7 +3159,7 @@
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+ 	lds	wa, 3
+-	call	16713369
++	call	16713383
+ 	ld	xix, (xsp+12)
+ 	sub	xix, 3434496
+ 	cps	hl, 0
+@@ -3213,7 +3213,7 @@
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+ 	lds	wa, 0
+-	call	16713369
++	call	16713383
+ 	ld	xiz, (xsp+12)
+ 	ld	wa, (xsp+10)
+ 	ld	(xsp+8), wa
+@@ -3225,7 +3225,7 @@
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+ 	lds	wa, 1
+-	call	16713369
++	call	16713383
+ 	ld	xix, (xsp+12)
+ 	sub	xix, 3434496
+ 	cps	hl, 0
+@@ -3279,7 +3279,7 @@
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+ 	lds	wa, 3
+-	call	16713369
++	call	16713383
+ 	ld	xiz, (xsp+12)
+ 	ld	wa, (xsp+10)
+ 	ld	(xsp+8), wa
+@@ -3291,7 +3291,7 @@
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+ 	lds	wa, 2
+-	call	16713369
++	call	16713383
+ 	ld	xix, (xsp+12)
+ 	cps	hl, 0
+ 	jr	nz, 32
+@@ -3344,7 +3344,7 @@
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+ 	lds	wa, 1
+-	call	16713369
++	call	16713383
+ 	ld	xiz, (xsp+12)
+ 	ld	wa, (xsp+10)
+ 	ld	(xsp+8), wa
+@@ -3356,7 +3356,7 @@
+ 	lda	xwa, (xsp+10)
+ 	push	xwa
+ 	lds	wa, 0
+-	call	16713369
++	call	16713383
+ 	ld	xix, (xsp+12)
+ 	cps	hl, 0
+ 	jr	nz, 32
+@@ -4733,7 +4733,7 @@
+ 	extz	wa
+ 	calr	62001
+ 	calr	62246
+-	call	16713342
++	call	16713356
+ 	ldada	xwa, 2360
+ 	.byte 0x98
+ 	push_sr
+@@ -4916,7 +4916,7 @@
+ 	.byte 0x95
+ 	scf
+ 	calr	62157
+-	jp	16713566
++	jp	16713580
+ 	dec	2, xsp
+ 	ld	(xsp), e
+ 	calr	64365
+@@ -5086,7 +5086,7 @@
+ 	ldda32	xde, 3218
+ 	lds	wa, 1
+ 	call	15678460
+-	call	16713342
++	call	16713356
+ 	ld	hl, iz
+ 	jr	3
+ 	ldw	hl, 65434
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/bitmap_out_routines.s v10/maincpu/ui/bitmap_out_routines.s
+--- v9/maincpu/ui/bitmap_out_routines.s	2026-03-23 09:50:07.251829965 +0000
++++ v10/maincpu/ui/bitmap_out_routines.s	2026-03-23 02:19:50.755031290 +0000
+@@ -3687,7 +3687,7 @@
+ 	cp	xhl, 27263185
+ 	jr	nz, 59
+ 	pushw	18
+-	call	16715378
++	call	16715392
+ 	inc	2, xsp
+ 	ld	xiz, xhl
+ 	calr	65366
+@@ -3733,7 +3733,7 @@
+ 	cp	xhl, 27263185
+ 	jr	nz, 59
+ 	pushw	18
+-	call	16715378
++	call	16715392
+ 	inc	2, xsp
+ 	ld	xiz, xhl
+ 	calr	65238
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/drawbar_panel_ui.s v10/maincpu/ui/drawbar_panel_ui.s
+--- v9/maincpu/ui/drawbar_panel_ui.s	2026-03-23 09:50:07.252984996 +0000
++++ v10/maincpu/ui/drawbar_panel_ui.s	2026-03-23 02:19:50.762177256 +0000
+@@ -300,7 +300,7 @@
+ 	ld	xbc, 15204420
+ 	push	xbc
+ 	push	xde
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -332,7 +332,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1196,7 +1196,7 @@
+ 	.byte 0xed, 0x00, 0xe9, 0xcc, 0x07, 0x00, 0x00, 0x00
+ 	.byte 0xea, 0x81, 0xe9, 0xed, 0x03, 0xe9, 0x61, 0x29
+ 	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x34, 0x01, 0x3b, 0x1d
+-	.byte 0x64, 0x0A, 0xFF, 0xbf, 0x0c, 0x37, 0x1d, 0xd0
++	.byte 0x72, 0x0a, 0xff, 0xbf, 0x0c, 0x37, 0x1d, 0xd0
+ 	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x24, 0x32, 0x41
+ 	.byte 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa
+ 	.byte 0xf1, 0x2c, 0xfd, 0x32, 0xea, 0xca, 0xa0, 0xf9
+@@ -1207,52 +1207,52 @@
+ 	.byte 0x40, 0x3e, 0x01, 0xe8, 0x00, 0x68, 0x05, 0x40
+ 	.long NakaInst_OFF_E80144
+ 	.byte 0x38, 0xbf, 0x30, 0x30
+-	.byte 0x38, 0x1d, 0x3F, 0x0F, 0xFF, 0xef, 0x60, 0xbf
++	.byte 0x38, 0x1d, 0x4d, 0x0f, 0xff, 0xef, 0x60, 0xbf
+ 	.byte 0x26, 0x02, 0x01, 0x00, 0x1d, 0xd0, 0x44, 0xfa
+ 	.byte 0xeb, 0x88, 0xbf, 0x24, 0x32, 0x41, 0x8c, 0x00
+ 	.byte 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa, 0xbf, 0x26
+ 	.byte 0x02, 0x00, 0x00, 0xf1, 0xc4, 0xf9, 0x30, 0xe8
+ 	.byte 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf, 0x20, 0x60
+ 	.byte 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21, 0x41
+-	.byte 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x4E, 0x0A, 0xFF
++	.byte 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x5c, 0x0a, 0xff
+ 	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02, 0x21, 0xe8
+ 	.byte 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1, 0xe9, 0xee
+ 	.byte 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30, 0xe9, 0x80
+ 	.byte 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xb0, 0xcf, 0x66
+ 	.long Str_ol
+ 	.byte 0x0b, 0x4a, 0x01, 0xbf
+-	.byte 0x30, 0x30, 0x38, 0x1d, 0x3F, 0x0F, 0xFF, 0xef
++	.byte 0x30, 0x30, 0x38, 0x1d, 0x4d, 0x0f, 0xff, 0xef
+ 	.byte 0x60, 0x68, 0x16, 0x80, 0x21, 0xd8, 0x12, 0x28
+ 	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x50, 0x01, 0xbf, 0x32
+-	.byte 0x30, 0x38, 0x1d, 0x64, 0x0A, 0xFF, 0xbf, 0x0a
++	.byte 0x30, 0x38, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0a
+ 	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
+ 	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60
+ 	.byte 0x96, 0xfa, 0xbf, 0x26, 0x02, 0x01, 0x00, 0xf1
+ 	.byte 0xc5, 0xf9, 0x30, 0xe8, 0xca, 0xa0, 0xf9, 0x00
+ 	.byte 0x00, 0xbf, 0x20, 0x60, 0xe8, 0xa8, 0xc2, 0x74
+ 	.byte 0x47, 0x02, 0x21, 0x41, 0x1a, 0x00, 0x00, 0x00
+-	.byte 0x1d, 0x4E, 0x0A, 0xFF, 0xe8, 0xa8, 0xc2, 0x72
++	.byte 0x1d, 0x5c, 0x0a, 0xff, 0xe8, 0xa8, 0xc2, 0x72
+ 	.byte 0x47, 0x02, 0x21, 0xe8, 0x89, 0xe9, 0xee, 0x04
+ 	.byte 0xe8, 0xa1, 0xe9, 0xee, 0x06, 0xf2, 0x00, 0xd4
+ 	.byte 0x1e, 0x30, 0xe9, 0x80, 0xeb, 0x80, 0xaf, 0x20
+ 	.byte 0x80, 0x80, 0x21, 0xd8, 0x12, 0x28, 0x0b, 0xe8
+ 	.byte 0x00, 0x0b, 0x56, 0x01, 0xbf, 0x32, 0x30, 0x38
+-	.byte 0x1d, 0x64, 0x0A, 0xFF, 0xbf, 0x0a, 0x37, 0xbf
++	.byte 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0a, 0x37, 0xbf
+ 	.byte 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41
+ 	.byte 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa
+ 	.byte 0xbf, 0x26, 0x02, 0x02, 0x00, 0xf1, 0xc7, 0xf9
+ 	.byte 0x30, 0xe8, 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf
+ 	.byte 0x20, 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02
+-	.byte 0x21, 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x4E
++	.byte 0x21, 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x5c
+ 	.byte 0x0a, 0xff, 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02
+ 	.byte 0x21, 0xe8, 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1
+ 	.byte 0xe9, 0xee, 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30
+ 	.byte 0xe9, 0x80, 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xb0
+ 	.byte 0xcf, 0x66, 0x12, 0x0b, 0xe8, 0x00, 0x0b, 0x5c
+-	.byte 0x01, 0xbf, 0x30, 0x30, 0x38, 0x1d, 0x3F, 0x0f
++	.byte 0x01, 0xbf, 0x30, 0x30, 0x38, 0x1d, 0x4d, 0x0f
+ 	.byte 0xff, 0xef, 0x60, 0x68, 0x16, 0x80, 0x21, 0xd8
+ 	.byte 0x12, 0x28, 0x0b, 0xe8, 0x00, 0x0b, 0x62, 0x01
+-	.byte 0xbf, 0x32, 0x30, 0x38, 0x1d, 0x64, 0x0A, 0xFF
++	.byte 0xbf, 0x32, 0x30, 0x38, 0x1d, 0x72, 0x0a, 0xff
+ 	.byte 0xbf, 0x0a, 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09
+ 	.byte 0x00, 0x5b, 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01
+ 	.byte 0x78, 0xe5, 0x03, 0xaf, 0x14, 0x20, 0xbf, 0x14
+@@ -1266,7 +1266,7 @@
+ 	.long NakaInst_ON_E80168
+ 	.byte 0x68, 0x05, 0x40, 0x6e
+ 	.byte 0x01, 0xe8, 0x00, 0x38, 0xaf, 0x10, 0x20, 0x38
+-	.byte 0x1d, 0x3F, 0x0F, 0xFF, 0xef, 0x60, 0x1d, 0xd0
++	.byte 0x1d, 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x1d, 0xd0
+ 	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x24, 0x32, 0x41
+ 	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x81, 0x03, 0xf2
+ 	.byte 0x74, 0x47, 0x02, 0x31, 0xaf, 0x04, 0x20, 0xa0
+@@ -1274,67 +1274,67 @@
+ 	.byte 0x02, 0x03, 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20
+ 	.byte 0xe8, 0xee, 0x02, 0xaf, 0x08, 0x21, 0xe8, 0x81
+ 	.byte 0xa1, 0x20, 0x38, 0xaf, 0x10, 0x20, 0x38, 0x1d
+-	.byte 0x3F, 0x0F, 0xFF, 0xef, 0x60, 0x1d, 0xd0, 0x44
++	.byte 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x1d, 0xd0, 0x44
+ 	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x24, 0x32, 0x41, 0x8c
+ 	.byte 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa, 0xbf
+ 	.byte 0x26, 0x02, 0x00, 0x00, 0xf1, 0xc4, 0xf9, 0x30
+ 	.byte 0xe8, 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf, 0x20
+ 	.byte 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21
+-	.byte 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x4E, 0x0a
++	.byte 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x5c, 0x0a
+ 	.byte 0xff, 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02, 0x21
+ 	.byte 0xe8, 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1, 0xe9
+ 	.byte 0xee, 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30, 0xe9
+ 	.byte 0x80, 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xbf, 0x2c
+ 	.byte 0x31, 0xb0, 0xcf, 0x66, 0x0f, 0x0b, 0xe8, 0x00
+-	.byte 0x0b, 0x74, 0x01, 0x39, 0x1d, 0x3F, 0x0F, 0xFF
++	.byte 0x0b, 0x74, 0x01, 0x39, 0x1d, 0x4d, 0x0f, 0xff
+ 	.byte 0xef, 0x60, 0x68, 0x13, 0x80, 0x21, 0xd8, 0x12
+ 	.long AudioStream_Property_Table
+ 	.byte 0x0b, 0x7a, 0x01, 0x39
+-	.byte 0x1d, 0x64, 0x0A, 0xFF, 0xbf, 0x0a, 0x37, 0xbf
++	.byte 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0a, 0x37, 0xbf
+ 	.byte 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41
+ 	.byte 0x8c, 0x00, 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa
+ 	.byte 0xbf, 0x26, 0x02, 0x01, 0x00, 0xf1, 0xc5, 0xf9
+ 	.byte 0x30, 0xe8, 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf
+ 	.byte 0x20, 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02
+-	.byte 0x21, 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x4E
++	.byte 0x21, 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x5c
+ 	.byte 0x0a, 0xff, 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02
+ 	.byte 0x21, 0xe8, 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1
+ 	.byte 0xe9, 0xee, 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30
+ 	.byte 0xe9, 0x80, 0xeb, 0x80, 0xaf, 0x20, 0x80, 0x80
+ 	.byte 0x21, 0xd8, 0x12, 0x28, 0x0b, 0xe8, 0x00, 0x0b
+-	.byte 0x80, 0x01, 0xbf, 0x32, 0x30, 0x38, 0x1d, 0x64
++	.byte 0x80, 0x01, 0xbf, 0x32, 0x30, 0x38, 0x1d, 0x72
+ 	.byte 0x0a, 0xff, 0xbf, 0x0a, 0x37, 0xbf, 0x24, 0x32
+ 	.byte 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41, 0x8c, 0x00
+ 	.byte 0xe0, 0x01, 0x1d, 0x60, 0x96, 0xfa, 0xbf, 0x26
+ 	.byte 0x02, 0x02, 0x00, 0xf1, 0xc7, 0xf9, 0x30, 0xe8
+ 	.byte 0xca, 0xa0, 0xf9, 0x00, 0x00, 0xbf, 0x20, 0x60
+ 	.byte 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21, 0x41
+-	.byte 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x4E, 0x0A, 0xFF
++	.byte 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x5c, 0x0a, 0xff
+ 	.byte 0xe8, 0xa8, 0xc2, 0x72, 0x47, 0x02, 0x21, 0xe8
+ 	.byte 0x89, 0xe9, 0xee, 0x04, 0xe8, 0xa1, 0xe9, 0xee
+ 	.byte 0x06, 0xf2, 0x00, 0xd4, 0x1e, 0x30, 0xe9, 0x80
+ 	.byte 0xeb, 0x80, 0xaf, 0x20, 0x80, 0xb0, 0xcf, 0x66
+ 	.long Str_ol
+ 	.byte 0x0b, 0x86, 0x01, 0xbf
+-	.byte 0x30, 0x30, 0x38, 0x1d, 0x3F, 0x0F, 0xFF, 0xef
++	.byte 0x30, 0x30, 0x38, 0x1d, 0x4d, 0x0f, 0xff, 0xef
+ 	.byte 0x60, 0x68, 0x16, 0x80, 0x21, 0xd8, 0x12, 0x28
+ 	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x8c, 0x01, 0xbf, 0x32
+-	.byte 0x30, 0x38, 0x1d, 0x64, 0x0A, 0xFF, 0xbf, 0x0a
++	.byte 0x30, 0x38, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0a
+ 	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
+ 	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xe7
+ 	.byte 0x01, 0xf1, 0xb6, 0xf9, 0x30, 0xbf, 0x20, 0x60
+ 	.byte 0xb8, 0x0e, 0x30, 0xaf, 0x14, 0xa0, 0xbf, 0x08
+ 	.byte 0x60, 0xe8, 0xa8, 0xc2, 0x74, 0x47, 0x02, 0x21
+-	.byte 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x4E, 0x0a
++	.byte 0x41, 0x1a, 0x00, 0x00, 0x00, 0x1d, 0x5c, 0x0a
+ 	.byte 0xff, 0xaf, 0x18, 0x21, 0xeb, 0x81, 0xe9, 0x8a
+ 	.byte 0xaf, 0x08, 0x82, 0xaf, 0x04, 0x20, 0xa0, 0xfa
+ 	.byte 0x6e, 0x45, 0xaf, 0x10, 0x20, 0xb0, 0x02, 0x00
+ 	.byte 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20, 0xd8, 0x33
+ 	.byte 0x07, 0x66, 0x12, 0x0b, 0xe8, 0x00, 0x0b, 0x92
+-	.byte 0x01, 0xaf, 0x10, 0x20, 0x38, 0x1d, 0x3F, 0x0f
++	.byte 0x01, 0xaf, 0x10, 0x20, 0x38, 0x1d, 0x4d, 0x0f
+ 	.byte 0xff, 0xef, 0x60, 0x68, 0x12, 0x38, 0x0b, 0xe8
+ 	.byte 0x00, 0x0b, 0x98, 0x01, 0xaf, 0x14, 0x20, 0x38
+-	.byte 0x1d, 0x64, 0x0A, 0xFF, 0xbf, 0x0c, 0x37, 0xbf
++	.byte 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0c, 0x37, 0xbf
+ 	.byte 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b, 0x00, 0x41
+ 	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x71, 0x01, 0xaf
+ 	.byte 0x20, 0x20, 0xb8, 0x0f, 0x30, 0xaf, 0x14, 0xa0
+@@ -1342,7 +1342,7 @@
+ 	.byte 0xfa, 0x6e, 0x2e, 0xaf, 0x10, 0x20, 0xb0, 0x02
+ 	.byte 0x01, 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20, 0x38
+ 	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x9e, 0x01, 0xaf, 0x14
+-	.byte 0x20, 0x38, 0x1d, 0x64, 0x0A, 0xFF, 0xbf, 0x0c
++	.byte 0x20, 0x38, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0c
+ 	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
+ 	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x2f
+ 	.byte 0x01, 0xaf, 0x20, 0x20, 0xb8, 0x11, 0x30, 0xaf
+@@ -1351,9 +1351,9 @@
+ 	.byte 0x02, 0x02, 0x00, 0xaf, 0x1c, 0x20, 0xa0, 0x20
+ 	.byte 0xd8, 0x33, 0x07, 0x66, 0x12, 0x0b, 0xe8, 0x00
+ 	.byte 0x0b, 0xa4, 0x01, 0xaf, 0x10, 0x20, 0x38, 0x1d
+-	.byte 0x3F, 0x0F, 0xFF, 0xef, 0x60, 0x68, 0x12, 0x38
++	.byte 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x68, 0x12, 0x38
+ 	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xaa, 0x01, 0xaf, 0x14
+-	.byte 0x20, 0x38, 0x1d, 0x64, 0x0A, 0xFF, 0xbf, 0x0c
++	.byte 0x20, 0x38, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0c
+ 	.byte 0x37, 0xbf, 0x24, 0x32, 0x40, 0x09, 0x00, 0x5b
+ 	.byte 0x00, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xd7
+ 	nop
+@@ -1539,7 +1539,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -1575,7 +1575,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -1603,7 +1603,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -1663,7 +1663,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -1706,7 +1706,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -1737,7 +1737,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -1797,7 +1797,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -1814,7 +1814,7 @@
+ 	pushw	506
+ 	ld	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jr	22
+ 	ld	a, (xwa)
+@@ -1824,7 +1824,7 @@
+ 	pushw	512
+ 	ld	xwa, (xsp+18)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1841,7 +1841,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -1859,7 +1859,7 @@
+ 	pushw	518
+ 	lda	xwa, (xsp+46)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1876,7 +1876,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -1893,7 +1893,7 @@
+ 	pushw	524
+ 	lda	xwa, (xsp+44)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jr	22
+ 	ld	a, (xwa)
+@@ -1903,7 +1903,7 @@
+ 	pushw	530
+ 	lda	xwa, (xsp+46)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1924,7 +1924,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -1941,7 +1941,7 @@
+ 	pushw	536
+ 	ld	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jr	22
+ 	ld	a, (xwa)
+@@ -1951,7 +1951,7 @@
+ 	pushw	542
+ 	ld	xwa, (xsp+18)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -1968,7 +1968,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -1986,7 +1986,7 @@
+ 	pushw	548
+ 	lda	xwa, (xsp+46)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -2003,7 +2003,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149362
+ 	ld	xbc, xwa
+@@ -2021,7 +2021,7 @@
+ 	nop
+ 	pushw	554
+ 	push	xbc
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jr	19
+ 	ld	a, (xwa)
+@@ -2029,7 +2029,7 @@
+ 	.long AudioStream_Property_Table
+ 	pushw	560
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -2042,7 +2042,7 @@
+ 	lds32	xwa, 0
+ 	ld8_24	a, 149364
+ 	ld	xbc, 26
+-	call	16714318
++	call	16714332
+ 	lds32	xbc, 0
+ 	ld8_24	c, 149362
+ 	ld	xwa, xbc
+@@ -2068,7 +2068,7 @@
+ 	pushw	566
+ 	ld	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jr	18
+ 	push	xwa
+@@ -2076,7 +2076,7 @@
+ 	pushw	572
+ 	ld	xwa, (xsp+20)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -2104,7 +2104,7 @@
+ 	pushw	578
+ 	ld	xwa, (xsp+20)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -2132,7 +2132,7 @@
+ 	pushw	584
+ 	ld	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jr	18
+ 	push	xwa
+@@ -2140,7 +2140,7 @@
+ 	pushw	590
+ 	ld	xwa, (xsp+20)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -2853,7 +2853,7 @@
+ 	ld	xbc, 15205336
+ 	push	xbc
+ 	push	xde
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -3634,22 +3634,22 @@
+ 	.byte 0x04, 0x20, 0xb0, 0x02, 0x01, 0x00, 0xa2, 0x20
+ 	.byte 0xe8, 0x61, 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0xd8
+ 	.byte 0x6e, 0x12, 0x0b, 0xe8, 0x00, 0x0b, 0xba, 0x06
+-	.byte 0xbf, 0x1c, 0x30, 0x38, 0x1d, 0x3F, 0x0f, 0xff
++	.byte 0xbf, 0x1c, 0x30, 0x38, 0x1d, 0x4d, 0x0f, 0xff
+ 	.byte 0xef, 0x60, 0x68, 0x1a, 0xaf, 0x22, 0x20, 0x98
+ 	.byte 0x04, 0x20, 0xd8, 0x61, 0x28, 0x0b, 0xe8, 0x00
+ 	.byte 0x0b, 0xc0, 0x06, 0xbf, 0x1e, 0x30, 0x38, 0x1d
+-	.byte 0x64, 0x0a, 0xff, 0xbf, 0x0a, 0x37, 0x1d, 0xd0
++	.byte 0x72, 0x0a, 0xff, 0xbf, 0x0a, 0x37, 0x1d, 0xd0
+ 	.byte 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x10, 0x32, 0x41
+ 	.byte 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x0b, 0x02, 0xa4
+ 	.byte 0x20, 0xe8, 0x69, 0xbc, 0x04, 0x32, 0xee, 0xf0
+ 	.byte 0x6e, 0x4f, 0xaf, 0x04, 0x20, 0xb0, 0x02, 0x01
+ 	.byte 0x00, 0x92, 0x3f, 0x00, 0x00, 0x6e, 0x12, 0x0b
+ 	.byte 0xe8, 0x00, 0x0b, 0xc8, 0x06, 0xaf, 0x0c, 0x20
+-	.byte 0x38, 0x1d, 0x3F, 0x0f, 0xff, 0xef, 0x60, 0x68
++	.byte 0x38, 0x1d, 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x68
+ 	.byte 0x1f, 0xaf, 0x22, 0x20, 0xa0, 0x20, 0xe8, 0x69
+ 	.byte 0x1d, 0x37, 0xd4, 0xfc, 0xdb, 0x61, 0x2b, 0x0b
+ 	.byte 0xe8, 0x00, 0x0b, 0xce, 0x06, 0xbf, 0x1e, 0x30
+-	.byte 0x38, 0x1d, 0x64, 0x0a, 0xff, 0xbf, 0x0a, 0x37
++	.byte 0x38, 0x1d, 0x72, 0x0a, 0xff, 0xbf, 0x0a, 0x37
+ 	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x10
+ 	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0xb1
+ 	.byte 0x01, 0xdd, 0x8e, 0xde, 0x64, 0xa4, 0x20, 0xe3
+@@ -3657,7 +3657,7 @@
+ 	.byte 0x20, 0xb0, 0x02, 0x02, 0x00, 0x92, 0x20, 0xd8
+ 	.byte 0xec, 0x02, 0xf2, 0x60, 0x06, 0xe8, 0x31, 0xe3
+ 	.byte 0x07, 0xe4, 0xe0, 0x20, 0x38, 0xaf, 0x0c, 0x20
+-	.byte 0x38, 0x1d, 0x3F, 0x0f, 0xff, 0xef, 0x60, 0x1d
++	.byte 0x38, 0x1d, 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x1d
+ 	.byte 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x10, 0x32
+ 	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x72, 0x01
+ 	.byte 0xdd, 0x60, 0xa4, 0x20, 0xe3, 0x07, 0xec, 0xf4
+@@ -3665,7 +3665,7 @@
+ 	.byte 0x03, 0x00, 0x40, 0xdc, 0x06, 0xe8, 0x00, 0x92
+ 	.byte 0x3f, 0x00, 0x00, 0x66, 0x05, 0x40, 0xd6, 0x06
+ 	.byte 0xe8, 0x00, 0x38, 0xaf, 0x0c, 0x20, 0x38, 0x1d
+-	.byte 0x3F, 0x0f, 0xff, 0xef, 0x60, 0x1d, 0xd0, 0x44
++	.byte 0x4d, 0x0f, 0xff, 0xef, 0x60, 0x1d, 0xd0, 0x44
+ 	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x10, 0x32, 0x41, 0x8c
+ 	.byte 0x00, 0xe0, 0x01, 0x78, 0x34, 0x01, 0xd9, 0x61
+ 	.byte 0xaf, 0x0c, 0x20, 0xb0, 0x51, 0xaf, 0x0c, 0x20
+@@ -14291,7 +14291,7 @@
+ 	pushw	63602
+ 	lda	xwa, (xsp+30)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	lda	xwa, (xsp+82)
+ 	lda	xbc, (xsp+78)
+@@ -14415,7 +14415,7 @@
+ 	ld	xwa, (xwa+2)
+ 	push	xwa
+ 	push	xbc
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	lda	xde, (xsp+54)
+ 	ld	xwa, (xsp+14)
+@@ -14592,7 +14592,7 @@
+ 	pushw	63606
+ 	lda	xwa, (xsp+12)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	lda	xwa, (xsp+52)
+ 	lda	xbc, (xsp+48)
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_control_panel.s v10/maincpu/ui/ui_control_panel.s
+--- v9/maincpu/ui/ui_control_panel.s	2026-03-23 09:50:07.256588652 +0000
++++ v10/maincpu/ui/ui_control_panel.s	2026-03-23 02:19:50.769073973 +0000
+@@ -2590,7 +2590,7 @@
+ 	.byte 0x9e, 0x06, 0x22, 0x1d, 0x2f, 0xd3, 0xfc, 0x78
+ 	.byte 0x1c, 0x01, 0xea, 0x8e, 0xa6, 0x20, 0x1d, 0x37
+ 	.byte 0xd4, 0xfc, 0xbe, 0x04, 0x53, 0x0b, 0x0c, 0x00
+-	.byte 0x1d, 0x72, 0x0e, 0xff, 0xef, 0x62, 0xbf, 0x04
++	.byte 0x1d, 0x80, 0x0e, 0xff, 0xef, 0x62, 0xbf, 0x04
+ 	.byte 0x63, 0xaf, 0x04, 0x20, 0xee, 0x8d, 0xe8, 0x8c
+ 	.byte 0xd9, 0xae, 0x95, 0x11, 0x40, 0xff, 0xff, 0xff
+ 	.byte 0xff, 0x41, 0x1c, 0x00, 0xc0, 0x01, 0xaf, 0x04
+@@ -2606,7 +2606,7 @@
+ 	.byte 0x23, 0xd4, 0xfc, 0x78, 0xa8, 0x00, 0xea, 0x8e
+ 	.byte 0xa6, 0x20, 0xe8, 0xef, 0x00, 0xd7, 0xe2, 0xa8
+ 	.byte 0xa6, 0x21, 0x1d, 0xf7, 0xd4, 0xfc, 0xbe, 0x04
+-	.byte 0x53, 0x0b, 0x0c, 0x00, 0x1d, 0x72, 0x0e, 0xff
++	.byte 0x53, 0x0b, 0x0c, 0x00, 0x1d, 0x80, 0x0e, 0xff
+ 	.byte 0xef, 0x62, 0xbf, 0x04, 0x63, 0xaf, 0x04, 0x20
+ 	.byte 0xee, 0x8d, 0xe8, 0x8c, 0xd9, 0xae, 0x95, 0x11
+ 	.byte 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x1c, 0x00
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_mode_handlers.s v10/maincpu/ui/ui_mode_handlers.s
+--- v9/maincpu/ui/ui_mode_handlers.s	2026-03-23 09:50:07.257440461 +0000
++++ v10/maincpu/ui/ui_mode_handlers.s	2026-03-23 02:19:50.770152910 +0000
+@@ -6808,7 +6808,7 @@
+ 	pushw	237
+ 	pushw	3808
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -6839,7 +6839,7 @@
+ 	ld	xwa, 15535844
+ 	push	xwa
+ 	push	xbc
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -6866,7 +6866,7 @@
+ 	pushw	237
+ 	pushw	3820
+ 	push	xiz
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -6888,7 +6888,7 @@
+ 	pushw	237
+ 	pushw	3824
+ 	push	xiz
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -7720,7 +7720,7 @@
+ 	pushw	4590
+ 	lda	xwa, (xsp+12)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -7758,7 +7758,7 @@
+ 	pushw	4594
+ 	lda	xwa, (xsp+12)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -7792,7 +7792,7 @@
+ 	pushw	4598
+ 	lda	xwa, (xsp+12)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -7826,7 +7826,7 @@
+ 	pushw	4602
+ 	lda	xwa, (xsp+12)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -7859,7 +7859,7 @@
+ 	pushw	4606
+ 	lda	xwa, (xsp+12)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -7896,7 +7896,7 @@
+ 	pushw	4610
+ 	lda	xwa, (xsp+12)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -7928,7 +7928,7 @@
+ 	pushw	4614
+ 	lda	xwa, (xsp+12)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -8992,7 +8992,7 @@
+ 	ld	xwa, 15537270
+ 	push	xwa
+ 	push	xhl
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -9032,7 +9032,7 @@
+ 	ld	xwa, 15537278
+ 	push	xwa
+ 	push	xhl
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -9714,7 +9714,7 @@
+ 	pushw	237
+ 	pushw	5458
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -9745,7 +9745,7 @@
+ 	pushw	237
+ 	pushw	5462
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -9778,7 +9778,7 @@
+ 	pushw	237
+ 	pushw	5466
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -9809,7 +9809,7 @@
+ 	pushw	237
+ 	pushw	5470
+ 	push	xbc
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -9840,7 +9840,7 @@
+ 	pushw	237
+ 	pushw	5474
+ 	push	xix
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -9868,7 +9868,7 @@
+ 	pushw	237
+ 	pushw	5478
+ 	push	xix
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	call	16401616
+ 	ld	xwa, xhl
+@@ -10607,7 +10607,7 @@
+ 	pushw	5526
+ 	ld	xwa, (xiz+18)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jrl	129
+ 	dec	1, xwa
+@@ -10627,13 +10627,13 @@
+ 	push	xhl
+ 	ld	xwa, (xiz+18)
+ 	push	xwa
+-	call	16714981
++	call	16714995
+ 	pushw	2
+ 	pushw	32
+ 	ld	xwa, (xiz+18)
+ 	lda	xwa, (xwa+16)
+ 	push	xwa
+-	call	16722139
++	call	16722153
+ 	lda	xsp, (xsp+18)
+ 	ld	xwa, 15537572
+ 	jr	37
+@@ -10647,13 +10647,13 @@
+ 	push	xwa
+ 	ld	xwa, (xiz+18)
+ 	push	xwa
+-	call	16714981
++	call	16714995
+ 	lda	xsp, (xsp+10)
+ 	ld	xwa, 15537576
+ 	push	xwa
+ 	ld	xwa, (xiz+18)
+ 	push	xwa
+-	call	16713999
++	call	16714013
+ 	inc	8, xsp
+ 	ld	(xhl), 0
+ 	ld	xhl, (xsp+4)
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_playback_modes.s v10/maincpu/ui/ui_playback_modes.s
+--- v9/maincpu/ui/ui_playback_modes.s	2026-03-23 09:50:07.258866674 +0000
++++ v10/maincpu/ui/ui_playback_modes.s	2026-03-23 02:19:50.772214000 +0000
+@@ -2139,7 +2139,7 @@
+ 	pushw	62080
+ 	pushw	0
+ 	pushw	6888
+-	call	16714981
++	call	16714995
+ 	ldada	xwa, 6888
+ 	ld	(xwa+16), 0
+ 	push	xwa
+@@ -2151,7 +2151,7 @@
+ 	pushw	242
+ 	pushw	0
+ 	pushw	7248
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+24)
+ 	ld	xwa, 4294967295
+ 	ld	xbc, 29818880
+@@ -2168,7 +2168,7 @@
+ 	pushw	252
+ 	pushw	0
+ 	pushw	7270
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+14)
+ 	stdi8	7283, 0
+ 	ld	xwa, 4294967295
+@@ -2186,7 +2186,7 @@
+ 	pushw	264
+ 	pushw	0
+ 	pushw	7284
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+14)
+ 	ldada	xwa, 7284
+ 	ld	(xwa+16), 0
+@@ -2202,7 +2202,7 @@
+ 	push	xhl
+ 	pushw	0
+ 	pushw	7304
+-	call	16714981
++	call	16714995
+ 	lda	xsp, (xsp+10)
+ 	ldada	xwa, 7304
+ 	ld	(xwa+20), 0
+@@ -2229,7 +2229,7 @@
+ 	pushw	272
+ 	pushw	0
+ 	pushw	7362
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	stdi8	7365, 0
+ 	ld	xwa, 4294967295
+@@ -2243,7 +2243,7 @@
+ 	push	xhl
+ 	pushw	0
+ 	pushw	7326
+-	call	16714981
++	call	16714995
+ 	lda	xsp, (xsp+10)
+ 	ldada	xwa, 7326
+ 	ld	(xwa+12), 0
+@@ -2270,7 +2270,7 @@
+ 	pushw	280
+ 	pushw	0
+ 	pushw	7366
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+10)
+ 	stdi8	7369, 0
+ 	ld	xwa, 4294967295
+@@ -2283,7 +2283,7 @@
+ 	push	xhl
+ 	pushw	0
+ 	pushw	7340
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ldada	xwa, 7340
+ 	ld	(xwa+20), 0
+@@ -2309,13 +2309,13 @@
+ 	push	xhl
+ 	pushw	0
+ 	pushw	7370
+-	call	16715583
++	call	16715597
+ 	pushw	20
+ 	pushw	0
+ 	pushw	7370
+ 	pushw	2
+ 	pushw	4174
+-	call	16714981
++	call	16714995
+ 	lda	xsp, (xsp+18)
+ 	lda_24	xwa, 135246
+ 	ld	(xwa+20), 0
+@@ -2341,11 +2341,11 @@
+ 	push	xhl
+ 	pushw	0
+ 	pushw	7370
+-	call	16715583
++	call	16715597
+ 	pushw	59
+ 	pushw	0
+ 	pushw	7370
+-	call	16715359
++	call	16715373
+ 	lda	xsp, (xsp+14)
+ 	lda_24	xwa, 135268
+ 	or	xhl, xhl
+@@ -2354,7 +2354,7 @@
+ 	pushw	28
+ 	push	xhl
+ 	push	xwa
+-	call	16714981
++	call	16714995
+ 	lda	xsp, (xsp+10)
+ 	sti8_24	135296, 0
+ 	jr	3
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_widget_defs.s v10/maincpu/ui/ui_widget_defs.s
+--- v9/maincpu/ui/ui_widget_defs.s	2026-03-23 09:50:07.259468280 +0000
++++ v10/maincpu/ui/ui_widget_defs.s	2026-03-23 02:19:50.774152943 +0000
+@@ -1923,7 +1923,7 @@
+ 	pushw	41654
+ 	ld	xwa, (xde+18)
+ 	push	xwa
+-	call	16714340
++	call	16714354
+ 	lda	xsp, (xsp+12)
+ 	ld	xhl, xiz
+ 	jr	31
+@@ -3462,7 +3462,7 @@
+ 	push	xwa
+ 	lda	xwa, (xsp+16)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 
+ ButtonState_Paint_DrawAligned:
+@@ -8335,7 +8335,7 @@
+ 	pushw 43152
+ 	ld	xwa, (xsp+140)
+ 	push	xwa
+-	call	16715187
++	call	16715201
+ 	inc	8, xsp
+ 	ld	xhl, (xsp+4)
+ 	jrl	534
+@@ -8367,13 +8367,13 @@
+ 	pushw 234
+ 	pushw 43162
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	jrl	419
+ 	pushw 234
+ 	pushw 43170
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xwa, xiz
+ 	ld	xbc, 31457287
+@@ -8486,7 +8486,7 @@
+ 	jr	34
+ 	ld	xwa, (xsp+136)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	inc	4, xsp
+ 	lds32	xhl, 0
+ 	jr	18
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_window_procs.s v10/maincpu/ui/ui_window_procs.s
+--- v9/maincpu/ui/ui_window_procs.s	2026-03-23 09:50:07.261218433 +0000
++++ v10/maincpu/ui/ui_window_procs.s	2026-03-23 02:19:50.774905858 +0000
+@@ -683,7 +683,7 @@
+ 	.byte 0x9f, 0x06
+ 	jrl	nc, 25050
+ 	pushw	de
+-	call	16715378
++	call	16715392
+ 	ld	(xsp+10), xhl
+ 	.byte 0xd7
+ 	swi	2
+@@ -694,7 +694,7 @@
+ 	push	xbc
+ 	ld	xwa, (xsp+14)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	ld16_24	wa, 160982
+ 	.byte 0xd7
+ 	swi	2
+@@ -713,10 +713,10 @@
+ 	ld	xbc, 160944
+ 	add	xbc, xwa
+ 	push	xbc
+-	call	16715583
++	call	16715597
+ 	ld	xwa, (xsp+26)
+ 	push	xwa
+-	call	16714468
++	call	16714482
+ 	lda	xsp, (xsp+22)
+ 	lds	iz, 0
+ 	.byte 0x9f, 0x06
+@@ -1957,24 +1957,24 @@
+ 	ld	xwa, 15376750
+ 	push	xwa
+ 	push	xbc
+-	call	16715583
++	call	16715597
+ 	lda	xwa, (xsp+20)
+ 	push	xwa
+-	call	16715666
++	call	16715680
+ 	ld	iz, hl
+ 	ld	xwa, (xsp+20)
+ 	ld	xwa, (xwa+22)
+ 	push	xwa
+-	call	16715666
++	call	16715680
+ 	lda	xsp, (xsp+16)
+ 	cp	hl, iz
+ 	jr	ule, 23
+ 	lda	xwa, (xsp+12)
+ 	push	xwa
+-	call	16715666
++	call	16715680
+ 	inc	1, hl
+ 	pushw	hl
+-	call	16715378
++	call	16715392
+ 	inc	6, xsp
+ 	ld	xwa, (xsp+8)
+ 	ld	(xwa+22), xhl
+@@ -1983,7 +1983,7 @@
+ 	ld	xwa, (xsp+12)
+ 	ld	xwa, (xwa+22)
+ 	push	xwa
+-	call	16715583
++	call	16715597
+ 	inc	8, xsp
+ 	ld	xbc, (xsp+8)
+ 	ld	xwa, (xbc+22)
+@@ -4159,11 +4159,11 @@
+ 	ld	xwa, (xsp+4)
+ 	sla	xwa, 0
+ 	ld	xbc, (xsp+8)
+-	call	16714752
++	call	16714766
+ 	ld	xiz, xhl
+ 	ld	xwa, (xsp+12)
+ 	ld	xbc, xiz
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+12), xhl
+ 	ld	xde, (xsp+30)
+ 	ld	xwa, xde
+@@ -4212,11 +4212,11 @@
+ 	ld	xwa, (xsp+8)
+ 	sla	xwa, 0
+ 	ld	xbc, (xsp+4)
+-	call	16714752
++	call	16714766
+ 	ld	xiz, xhl
+ 	ld	xwa, (xsp+16)
+ 	ld	xbc, xiz
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+16), xhl
+ 	ld	xde, (xsp+30)
+ 	ld	xwa, xde
+@@ -8774,14 +8774,14 @@
+ 	ld	xwa, (xsp+8)
+ 	sla	xwa, 0
+ 	ld	xbc, (xsp+4)
+-	call	16714752
++	call	16714766
+ 	ld	(xsp+34), xhl
+ 	lda	xwa, (xsp+62)
+ 	ld	(xsp+42), xwa
+ 	ld	xwa, (xsp+4)
+ 	sla	xwa, 0
+ 	ld	xbc, (xsp+8)
+-	call	16714752
++	call	16714766
+ 	ld	xix, (xsp+42)
+ 	lda	xwa, (xix+2)
+ 	ld	(xsp+46), xwa
+@@ -8986,7 +8986,7 @@
+ 	jrl	le, 211
+ 	ld	xwa, (xsp+12)
+ 	ld	xbc, xhl
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+12), xhl
+ 	ld	xde, (xsp+42)
+ 	ld	xwa, xde
+@@ -9075,7 +9075,7 @@
+ 	jrl	958
+ 	ld	xwa, (xsp+16)
+ 	ld	xbc, (xsp+34)
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+16), xhl
+ 	ld	xde, (xsp+42)
+ 	ld	xwa, (xsp+46)
+@@ -9228,7 +9228,7 @@
+ 	jr	le, 119
+ 	ld	xwa, (xsp+12)
+ 	ld	xbc, xhl
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+12), xhl
+ 	ld	xde, (xsp+42)
+ 	ld	xwa, xde
+@@ -9274,7 +9274,7 @@
+ 	jrl	472
+ 	ld	xwa, (xsp+16)
+ 	ld	xbc, (xsp+34)
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+16), xhl
+ 	ld	xhl, (xsp+42)
+ 	ld	xde, (xsp+46)
+@@ -9377,7 +9377,7 @@
+ 	jr	le, 118
+ 	ld	xwa, (xsp+12)
+ 	ld	xbc, xhl
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+12), xhl
+ 	ld	xde, (xsp+42)
+ 	ld	xwa, xde
+@@ -9423,7 +9423,7 @@
+ 	jr	99
+ 	ld	xwa, (xsp+16)
+ 	ld	xbc, (xsp+34)
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+16), xhl
+ 	ld	xhl, (xsp+42)
+ 	ld	xde, (xsp+46)
+@@ -9879,11 +9879,11 @@
+ 	.byte 0xaf, 0x04
+ 	.long NakaInst_Ballads
+ 	ld	xbc, (xsp+8)
+-	call	16714752
++	call	16714766
+ 	ld	xiz, xhl
+ 	ld	xwa, (xsp+12)
+ 	ld	xbc, xiz
+-	call	16714318
++	call	16714332
+ 	ld	(xsp+12), xhl
+ 	ld	xbc, (xsp+34)
+ 	ld	xwa, xbc
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui_widgets/naka_style_bitmaps.c v10/maincpu/ui_widgets/naka_style_bitmaps.c
+--- v9/maincpu/ui_widgets/naka_style_bitmaps.c	2026-03-23 10:48:50.456501971 +0000
++++ v10/maincpu/ui_widgets/naka_style_bitmaps.c	2026-03-23 02:19:50.818153313 +0000
+@@ -13462,7 +13462,7 @@
+         0x00000000,
+     },
+ 
+-    .field_0772 = 0x0549,
++    .field_0772 = 0x054A,
+ 
+     .ptrs_4 = {
+         NAKA_ADDR(VGA_Initialize),
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui_widgets/widget_dispatch.s v10/maincpu/ui_widgets/widget_dispatch.s
+--- v9/maincpu/ui_widgets/widget_dispatch.s	2026-03-23 10:48:57.096716311 +0000
++++ v10/maincpu/ui_widgets/widget_dispatch.s	2026-03-23 02:19:50.870914254 +0000
+@@ -2643,7 +2643,7 @@
+ 	.byte 0x01, 0x00, 0x00, 0x01, 0x91, 0x02, 0xff, 0x00
+ 	.byte 0x01, 0x00, 0x01, 0x00, 0xff, 0x00, 0x00, 0x01
+ 	.byte 0x01, 0xff, 0x00, 0x00, 0x02, 0x00, 0x00, 0x01
+-	.long (HdaeRom_DataHandler_0x22 + 14)
++	.long HdaeRom_DataHandler_0x22
+ 	.byte 0x0b, 0x00, 0x01, 0x00
+ 	.byte 0xff, 0x00, 0x01, 0x01, 0x01, 0xff, 0x00, 0x00
+ 	.byte 0x03, 0x00, 0x00, 0x01, 0x93, 0x00, 0x0f, 0x00
+@@ -2659,7 +2659,7 @@
+ 	.byte 0x13, 0x00, 0x00, 0x01, 0x98, 0x03, 0x70, 0x01
+ 	.byte 0x03, 0x04, 0x01, 0x00, 0xff, 0x00, 0x00, 0x01
+ 	.byte 0x01, 0xff, 0x00, 0x00, 0x20, 0x00, 0x00, 0x02
+-	.long (SendPartDataBlock_Data3 + 11)
++	.long SendPartDataBlock_Data3
+ 	.byte 0x7f, 0x00, 0x01, 0x00
+ 	.byte 0xff, 0x00, 0x00, 0x0a, 0x00, 0xff, 0x00, 0x00
+ 	.byte 0x08, 0x00, 0x00, 0x01, 0x90, 0x04, 0xff, 0x28
+@@ -7997,7 +7997,7 @@
+ 	.asciz "KN5000 SOUND RAM"
+ 	.byte 0x50, 0xf9, 0xfe
+ 	.byte 0x00, 0x9d, 0xf9, 0xfe, 0x00, 0x9e, 0xf9, 0xfe
+-	.byte 0x00, 0xa8, 0xf9, 0xfe, 0x00, 0x01, 0x01, 0x01
++	.byte 0x00, 0xb3, 0xf9, 0xfe, 0x00, 0x01, 0x01, 0x01
+ 	.byte 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 0x02, 0x03
+ 	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x20, 0x20, 0x20
+ 	.ascii " Initial     "
+@@ -8165,7 +8165,7 @@
+ 	.byte 0xff, 0xff, 0x1c, 0x00, 0x1a, 0x00, 0x00, 0x00
+ 	.byte 0x7c, 0x00, 0xc8, 0x00, 0xa3, 0x00, 0xd7, 0x00
+ 	.byte 0xf5, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
+-	.long (SendPartDataBlock_Data2 + 11)
++	.long SendPartDataBlock_Data2
+ 	.byte 0x00, 0x00, 0x01, 0x08
+ 	.byte 0x01, 0x00, 0x64, 0x01, 0x00, 0x00, 0xff, 0xff
+ 	.byte 0x1d, 0x00, 0x1b, 0x00, 0x00, 0x00, 0xa4, 0x00
+@@ -8189,7 +8189,7 @@
+ 	.byte 0xff, 0xff, 0x1f, 0x00, 0x1d, 0x00, 0x00, 0x00
+ 	.byte 0x0c, 0x00, 0x4b, 0x00, 0x90, 0x00, 0x5e, 0x00
+ 	.byte 0xf5, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
+-	.long (SendPartDataBlock_Data2 + 11)
++	.long SendPartDataBlock_Data2
+ 	.byte 0x00, 0x00, 0x13, 0x00
+ 	.byte 0x64, 0x01, 0x00, 0x00, 0xff, 0xff, 0x20, 0x00
+ 	.byte 0x1e, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x73, 0x00
+@@ -8199,7 +8199,7 @@
+ 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00
+ 	.byte 0x66, 0x00, 0x93, 0x00, 0x81, 0x00, 0xa0, 0x00
+ 	.byte 0xf5, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00
+-	.long (SendPartDataBlock_Data2 + 11)
++	.long SendPartDataBlock_Data2
+ 	.byte 0x00, 0x00, 0x06, 0x00
+ 	.byte 0x64, 0x01, 0x00, 0x00, 0xff, 0xff, 0x1d, 0x00
+ 	.byte 0x1b, 0x00, 0x00, 0x00, 0x37, 0x00, 0x76, 0x00
