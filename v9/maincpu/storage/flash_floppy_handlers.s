@@ -120,7 +120,7 @@ FlashRead_BlockData_Field5:
 FlashRead_BlockData_Field6:
 	nop
 	.byte 0x0a
-	.long TmFlashWrite_Block3
+	.long (TmFlashWrite_Block3 + 14)
 	ldb	w, 196
 	ex_ff
 	push_sr
@@ -141,7 +141,7 @@ FlashWrite_BlockData_Type3:
 	ldb	w, 12
 	pushw 2
 	.byte 0x0a
-	.long TmFlashWrite_Block2
+	.long (TmFlashWrite_Block2 + 14)
 	ldb	w, 100
 	decf
 	push_sr

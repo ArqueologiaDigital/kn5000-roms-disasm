@@ -13462,7 +13462,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         0x00000000,
     },
 
-    .field_0772 = 0x054A,
+    .field_0772 = 0x0549,
 
     .ptrs_4 = {
         NAKA_ADDR(VGA_Initialize),
