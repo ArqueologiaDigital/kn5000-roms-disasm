@@ -4375,10 +4375,10 @@ AllocCheckNoteOn_Data:
 	jr	nz, 41
 	ld	xwa, (xsp+4)
 	lds	bc, 0
-	calr	NoteMap_AllocateVoice
+	calr	5082
 	ld	xwa, (xsp+4)
 	lds	bc, 1
-	calr	NoteMap_AllocateVoice
+	calr	5074
 	.byte 0xd1
 	ldb	b, 206
 	push	xsp
@@ -4390,7 +4390,7 @@ AllocCheckNoteOn_Data:
 	jr	z, 8
 	ld	xwa, (xsp+4)
 	lds	bc, 2
-	calr	NoteMap_AllocateVoice
+	calr	5049
 	ldda16	wa, 50584
 	bit	9, wa
 	jrl	z, 355
@@ -4440,10 +4440,10 @@ AllocCheckNoteOn_Data:
 	jr	z, 16
 	ld	xwa, (xsp+4)
 	lds	bc, 2
-	calr	NoteMap_AssignVoiceParams
+	calr	4654
 	ld	xwa, (xsp+4)
 	lds	bc, 2
-	calr	NoteMap_InitVoiceSlots
+	calr	4271
 	ld	a, (xsp+2)
 	ld	c, a
 	extz	bc
@@ -15828,9 +15828,9 @@ __jrt_nop_FE9A0A_LoadReg:
 __jrt_nop_FE9A0A_Data:
 	ld8_24	c, 52965
 	ld	b, c
-	calr	Voice_ComputeNoteBitPosition
+	calr	65025
 	ld	xiy, 15646276
-	calr	ComputeNoteBitPositi_StoreDRAM
+	calr	65173
 	cps	a, 0
 	jr	z, 20
 	.byte 0xc2
@@ -16993,7 +16993,7 @@ __jrt_nop_FEA344_Data:
 	ldio	0, 16
 	nop
 	ldb	w, 0
-	ld	xwa, 0x8000
+	ld	xwa, 32768
 	.byte 0x01
 	nop
 	push_sr
@@ -17026,7 +17026,7 @@ __jrt_nop_FEA344_Data2:
 	ldio	0, 16
 	nop
 	ldb	w, 0
-	ld	xwa, 0x8000
+	ld	xwa, 32768
 	.byte 0x01
 	nop
 	push_sr
@@ -17069,11 +17069,11 @@ __jrt_nop_FEA344_Data2:
 	push	xsp
 	push_sr
 	jrl	ule, 135
-	calr	Voice_UpdateNoteBitmap
+	calr	62522
 	cps	w, 0
 	jr	nz, 29
 	decdi8_24	1, 52965
-	calr	Voice_UpdateNoteBitmap
+	calr	62510
 	incdi8_24	1, 52965
 	jr	14
 	cps	w, 0
@@ -17106,9 +17106,9 @@ __jrt_nop_FEA344_Data2:
 	.byte 0xcf
 	incf
 	jr	nc, 5
-	calr	NoteDisplay_InitState
+	calr	63771
 	jr	3
-	calr	NoteDisplay_LookupBitmap
+	calr	63823
 	ld8_24	a, 52959
 	stda8	52918, a
 	ld8_24	a, 52960
@@ -17348,7 +17348,7 @@ UIState_ProcessKeyEvent:
 	nop
 	.byte 0x21
 	extz	wa
-	calr	MIDI_WriteChannelData_Block
+	calr	5821
 	cps	l, 0
 	jrl	nz, 432
 	lda	xwa, (xsp)
@@ -17369,7 +17369,7 @@ SndParam_ProcessEntry:
 	nop
 	ldb	a, 216
 	ccf
-	calr	MIDI_WriteChannelData_Block
+	calr	5775
 	cps	l, 0
 	jrl	nz, 386
 	lda	xwa, (xsp)
@@ -17418,7 +17418,7 @@ SndParam_ProcessEntry:
 	nop
 	ldb	a, 216
 	ccf
-	calr	MIDI_WriteChannelData_Block
+	calr	5663
 	cps	l, 0
 	jrl	nz, 274
 	lda	xwa, (xsp)
@@ -17464,7 +17464,7 @@ SndParam_ProcessEntry:
 	nop
 	ldb	a, 216
 	ccf
-	calr	MIDI_WriteChannelData_Block
+	calr	5551
 	cps	l, 0
 	jrl	nz, 162
 	lda	xwa, (xsp)
@@ -17512,7 +17512,7 @@ SndParam_ProcessEntry:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	NoteMap_AllocateVoice
+	calr	1696
 	jr	48
 	.byte 0xbf
 	pop_sr
@@ -17593,7 +17593,7 @@ HdaeRom_Entry:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	Note_CheckTransposeRange
+	calr	1542
 	inc	4, xsp
 	ret
 HdaeRom_ProcessBlock:
@@ -17664,7 +17664,7 @@ HdaeRom_ReadParam:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1405
 	inc	4, xsp
 	ret
 HdaeRom_WriteParam:
@@ -17827,13 +17827,13 @@ HdaeRom_TableEntry2:
 	ld	de, wa
 	ldw	wa, 23
 	lds	bc, 7
-	calr	MIDI_SendControlChange
+	calr	3802
 	ld	a, (xsp+2)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 24
 	lds	bc, 7
-	calr	MIDI_SendControlChange
+	calr	3787
 	jr	48
 	ld	a, (xsp+3)
 	res	7, a
@@ -17845,14 +17845,14 @@ HdaeRom_TableEntry2:
 	ld	de, wa
 	ldw	wa, 23
 	ldw	bc, 91
-	calr	MIDI_SendControlChange
+	calr	3756
 	ld	a, (xsp+2)
 	res	7, a
 	extz	wa
 	ld	de, wa
 	ldw	wa, 24
 	ldw	bc, 91
-	calr	MIDI_SendControlChange
+	calr	3737
 	inc	4, xsp
 	ret
 	ret
@@ -17953,7 +17953,7 @@ HdaeRom_AltProcessBlock:
 	jr	z, 8
 	lda	xwa, (xsp)
 	ldw	bc, 15
-	calr	AccWrap_PlayModeStateMachine
+	calr	828
 	.byte 0xbf
 	pop_sr
 	inc	6, l
@@ -18070,7 +18070,7 @@ HdaeRom_AltCheckResult:
 	ld	de, wa
 	ldw	wa, 25
 	lds	bc, 7
-	calr	MIDI_SendControlChange
+	calr	3298
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -18120,7 +18120,7 @@ HdaeRom_AltCheckResult:
 	ld	wa, de
 	ld	de, bc
 	ldw	bc, 145
-	calr	MIDI_SendControlChange
+	calr	3196
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry0:
@@ -18143,7 +18143,7 @@ HdaeRom_AltTableEntry0:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	SeekRecord_Done_Prologue
+	calr	444
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry1:
@@ -18190,7 +18190,7 @@ HdaeRom_AltTableEntry1:
 	ld	c, a
 	extz	bc
 	ld	xwa, xde
-	calr	UIParam_ScanAndCollect
+	calr	352
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry2:
@@ -18406,11 +18406,11 @@ HdaeRom_AltTableEntry9:
 	ld	wa, (xsp+8)
 	ld	bc, (xsp+6)
 	ld	de, (xsp+10)
-	calr	SndPart_SetParam
+	calr	22
 	jr	9
 	ld	xwa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	SendEpilogue_Data
+	calr	489
 	ld	a, (xsp+4)
 	ld	(xiz+3), a
 	pop	xiz
@@ -18698,7 +18698,7 @@ SendEpilogue_Data:
 	ld	de, wa
 	ldw	wa, 80
 	ldw	bc, 130
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	2290
 	jrl	1507
 	dec	5, iz
 	.byte 0xc7
@@ -18708,7 +18708,7 @@ SendEpilogue_Data:
 	ld	de, wa
 	ldw	wa, 80
 	ldw	bc, 131
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	2269
 	.byte 0xc7
 	swi	0
 	.byte 0x89, 0xc1
@@ -18747,7 +18747,7 @@ SendEpilogue_Data:
 	ld	de, wa
 	ldw	wa, 127
 	ldw	bc, 9
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	2171
 	jrl	1388
 	ldw	wa, 127
 	cps	iz, 0
@@ -18761,7 +18761,7 @@ SendEpilogue_Data:
 	ld	de, wa
 	ldw	wa, 80
 	ldw	bc, 153
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	2141
 	jrl	1358
 	ld	wa, de
 	cp	wa, 130
@@ -18819,7 +18819,7 @@ SendEpilogue_Data:
 	ld	de, wa
 	ldw	wa, 80
 	ldw	bc, 133
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	2004
 	jrl	1221
 	ld	wa, de
 	cp	wa, 66
@@ -18830,7 +18830,7 @@ SendEpilogue_Data:
 	jrl	nz, 1200
 	stda16	53198, iz
 	jrl	1193
-	ld	xwa, 0x4142
+	ld	xwa, 16706
 	call	SndParam_LookupReadOnly
 	cps	hl, 1
 	jr	nz, 2
@@ -18841,14 +18841,14 @@ SendEpilogue_Data:
 	extz	wa
 	call	SendPartDataBlock_Block4
 	jrl	1166
-	ld	xwa, 0x4142
+	ld	xwa, 16706
 	call	SndParam_LookupReadOnly
 	cps	hl, 1
 	jr	nz, 9
 	lds	wa, 0
 	call	SendPartDataBlock_Block4
 	jrl	1144
-	ld	xwa, 0x4141
+	ld	xwa, 16705
 	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
@@ -18882,7 +18882,7 @@ SendEpilogue_Data:
 	ld	de, wa
 	ldw	wa, 80
 	ldw	bc, 177
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1837
 	jrl	1054
 	.byte 0xc7
 	swi	0
@@ -18896,7 +18896,7 @@ SendEpilogue_Data:
 	ldb	d, 0
 	ldw	wa, 80
 	ldw	bc, 134
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1809
 	.byte 0xd7
 	swi	2
 	and	(xwa-40), d
@@ -18907,7 +18907,7 @@ SendEpilogue_Data:
 	swi	0
 	.byte 0x89
 	extz	wa
-	calr	SeqVoice_CheckAndRet_Data
+	calr	1823
 	ld	(xsp+4), xhl
 	lds	iz, 0
 	cp	iz, 12
@@ -18933,12 +18933,12 @@ SendEpilogue_Data:
 	ccf
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1728
 	inc	1, iz
 	cp	iz, 12
 	jr	lt, -59
 	jrl	937
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
@@ -18950,11 +18950,11 @@ SendEpilogue_Data:
 	nop
 	swi	7
 	jrl	nz, 908
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
-	calr	SeqVoice_CheckAndRet_Data
+	calr	1704
 	ld	(xsp+4), xhl
 	lds	iz, 0
 	cp	iz, 12
@@ -18980,12 +18980,12 @@ SendEpilogue_Data:
 	ccf
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1609
 	inc	1, iz
 	cp	iz, 12
 	jr	lt, -59
 	jrl	818
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 802
@@ -19004,9 +19004,9 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1537
 	jrl	754
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 738
@@ -19026,9 +19026,9 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1471
 	jrl	688
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 672
@@ -19048,9 +19048,9 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1405
 	jrl	622
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 606
@@ -19070,9 +19070,9 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1339
 	jrl	556
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 540
@@ -19092,9 +19092,9 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1273
 	jrl	490
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 474
@@ -19114,9 +19114,9 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1207
 	jrl	424
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 408
@@ -19136,9 +19136,9 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1141
 	jrl	358
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 342
@@ -19158,9 +19158,9 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1075
 	jrl	292
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 276
@@ -19180,9 +19180,9 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	1009
 	jrl	226
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 210
@@ -19202,9 +19202,9 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	942
 	jrl	159
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 143
@@ -19224,9 +19224,9 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	875
 	jr	93
-	ld	xwa, 0x4281
+	ld	xwa, 17025
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jr	nz, 78
@@ -19246,7 +19246,7 @@ SendEpilogue_Data:
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	810
 	jr	28
 	stda32	53172, xwa
 	jr	22
@@ -19721,7 +19721,7 @@ SendSysExCmd_Data:
 	ldw	wa, 80
 	ldw	bc, 133
 	lds	de, 0
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	-408
 	jp	MIDI_PostSendStub
 
 COMM_WriteAndCheck:
@@ -19859,7 +19859,7 @@ MIDI_PitchBendData_Block:
 	ldw	wa, 80
 	ldw	bc, 146
 	lds	de, 0
-	calr	SeqVoice_CheckAndRet_Prologue
+	calr	-706
 	jp	MIDI_PostSendStub
 
 MIDI_SendAllSoundOff:
@@ -22630,7 +22630,7 @@ MidiSysMsg_Handler:
 
 ; MIDI system message dispatch (15-entry, table 0xeec1e8)
 MidiSysMsg_Dispatch:
-	calr	FileIO_ReadNextRecord
+	calr	2375
 	ld	wa, hl
 	cps	wa, 0
 	jr	ge, 6
@@ -22642,7 +22642,7 @@ MidiSysMsg_Dispatch:
 	lds	iz, 0
 	cps	iz, 1
 	jrl	ge, 319
-	calr	FileIO_ReadNextRecord
+	calr	2345
 	cps	hl, 0
 	jr	ge, 6
 	ldw	hl, 65535
@@ -22656,7 +22656,7 @@ MidiSysMsg_Dispatch:
 	lds	iz, 0
 	cps	iz, 1
 	jr	ge, 29
-	calr	FileIO_ReadNextRecord
+	calr	2311
 	ld	wa, hl
 	cps	wa, 0
 	jr	ge, 6
@@ -22670,13 +22670,13 @@ MidiSysMsg_Dispatch:
 	lda	xwa, (xsp+4)
 	ld	xbc, xwa
 	ldw	wa, 243
-	calr	Dispatch_Data
+	calr	252
 	adddm32	59879, xhl
 	jrl	238
 	lds	iz, 0
 	cps	iz, 2
 	jr	ge, 29
-	calr	FileIO_ReadNextRecord
+	calr	2258
 	ld	wa, hl
 	cps	wa, 0
 	jr	ge, 6
@@ -22690,13 +22690,13 @@ MidiSysMsg_Dispatch:
 	lda	xwa, (xsp+4)
 	ld	xbc, xwa
 	ldw	wa, 244
-	calr	Dispatch_Data
+	calr	199
 	adddm32	59879, xhl
 	jrl	185
 	lds	iz, 0
 	cps	iz, 2
 	jrl	ge, 178
-	calr	FileIO_ReadNextRecord
+	calr	2204
 	cps	hl, 0
 	jr	ge, 6
 	ldw	hl, 65535
@@ -22708,7 +22708,7 @@ MidiSysMsg_Dispatch:
 	lds	iz, 0
 	cps	iz, 2
 	jr	ge, 29
-	calr	FileIO_ReadNextRecord
+	calr	2176
 	ld	wa, hl
 	cps	wa, 0
 	jr	ge, 6
@@ -22725,7 +22725,7 @@ MidiSysMsg_Dispatch:
 	lds	iz, 0
 	cps	iz, 2
 	jr	ge, 107
-	calr	FileIO_ReadNextRecord
+	calr	2133
 	cps	hl, 0
 	jr	ge, 5
 	ldw	hl, 65535
@@ -22734,7 +22734,7 @@ MidiSysMsg_Dispatch:
 	cps	iz, 2
 	jr	lt, -18
 	jr	87
-	calr	FileIO_ReadNextRecord
+	calr	2113
 	ld	wa, hl
 	cps	wa, 0
 	jr	ge, 5
@@ -23884,7 +23884,7 @@ CalcAddrOffset_Data:
 	ld	wa, iz
 	.byte 0x9f, 0x06, 0xf0
 	jr	nc, 31
-	calr	RingBuffer_ReadByte
+	calr	65451
 	ld	wa, hl
 	cps	wa, 0
 	jr	ge, 5
@@ -24976,10 +24976,10 @@ SndParam_CheckAndApplyMode:
 	cps	hl, 1
 	jr	nz, 7
 	ld	xwa, xiz
-	calr	SndParam_ApplyVoiceValue
+	calr	65456
 	jr	5
 	ld	xwa, xiz
-	calr	SndParam_LookupOscEnvelope
+	calr	65334
 	pop	xiz
 	ret
 
@@ -25622,7 +25622,7 @@ Param_SignExtendRetu_Data:
 	ld	wa, (xsp+10)
 	ldw	bc, 65535
 	lds	de, 0
-	calr	MIDI_SendPitchBend
+	calr	64612
 	ld	(xsp+8), l
 	ld	l, (xsp+8)
 	pop	xiz
@@ -25636,7 +25636,7 @@ Param_SignExtendRetu_Data:
 	calr	64511
 	ld	(xsp+6), hl
 	ld	xwa, (xsp+20)
-	calr	Param_SignExtendRetu_Data
+	calr	64543
 	.byte 0x9f, 0x06
 	push	xsp
 	nop
@@ -25815,7 +25815,7 @@ Param_SignExtendRetu_Data:
 	calr	64049
 	ld	(xsp+6), hl
 	ld	xwa, xiz
-	calr	Param_SignExtendRetu_Data
+	calr	64082
 	ld	bc, (xsp+6)
 	exts	xbc
 	.byte 0x9f, 0x06
@@ -26493,7 +26493,7 @@ SendPartDataBlock_Block9:
 	cpdm8	58202, c
 	ret	z
 	stda8	58202, c
-	ld	xwa, 0xe35a
+	ld	xwa, 58202
 	ldw	bc, 37
 	lds	de, 1
 	call	SendCOMM_VariableLengthPacket
@@ -27666,7 +27666,7 @@ HdaeRom_DataDispatch:
 	or	(xhl), c
 	.byte 0x88
 	ld	xbc, (xsp+10)
-	calr	SendPartDataBlock_Data
+	calr	63168
 	.byte 0x9f, 0x04
 	push	xde
 	.byte 0x01
@@ -27816,7 +27816,7 @@ HdaeRom_AltHandler:
 ; HDAE5000 extension ROM alt dispatch (6-entry, table HdaeRom_AltDispatchOffsetTable)
 HdaeRom_AltDispatch:
 	ld	xwa, 0x1e0000
-	calr	HdaeRom_DataDispatch_Block3
+	calr	-125
 	lds	iz, 0
 	jr	3
 
@@ -27879,7 +27879,7 @@ PostTmSave:
 	ret
 
 PostTmSave_ByteBlock:
-	calr	SendPartDataBlock_InitVal4
+	calr	64570
 	cps	l, 6
 	jr	ugt, 7
 	cps	l, 1
@@ -27931,7 +27931,7 @@ TmFlashWrite_Block1:
 	push	xsp
 	ld	xwa, 0xe91e376f
 	swi	4
-	calr	HdaeRom_DataDispatch_Block
+	calr	-396
 	ld	c, (xsp)
 	extz	bc
 	ld	a, (xsp+2)
@@ -27947,8 +27947,8 @@ TmFlashWrite_Block1:
 	lda	xde, (xhl+30720)
 	ldw	bc, 470
 	jr	43
-	calr	HdaeRom_AltHandler
-	calr	HdaeRom_DataDispatch_Block
+	calr	65190
+	calr	-451
 	ld	a, (xsp)
 	extz	wa
 	extz	xwa
@@ -27989,11 +27989,11 @@ TmFlashWrite_Block1:
 	swi	0
 	.byte 0x8b
 	extz	bc
-	calr	HdaeRom_DataHandler
+	calr	-949
 	inc	1, iz
 	cp	iz, 20
 	jr	c, -21
-	calr	HdaeRom_DataDispatch_Block
+	calr	-562
 	ld	a, (xsp+4)
 	.byte 0xc7
 	swi	0
@@ -28020,11 +28020,11 @@ TmFlashWrite_Block1:
 	swi	0
 	.byte 0x8b
 	extz	bc
-	calr	HdaeRom_AltHandler
+	calr	65015
 	inc	1, iz
 	cp	iz, 128
 	jr	c, -21
-	calr	HdaeRom_DataDispatch_Block
+	calr	-634
 	lda_24	xwa, 1985191
 	ldw	bc, 10240
 	.byte 0x42
@@ -28141,7 +28141,7 @@ TmFlash_WriteRoutine:
 	call	InterCPU_E1_Bulk_Transfer
 	jp	TmFlash_Return
 	ld	xwa, 0x1e0000
-	calr	SendPartDataBlock_InitVal4
+	calr	-1624
 	ldw	wa, 65434
 	cps	l, 6
 	jr	nz, 2
@@ -28149,7 +28149,7 @@ TmFlash_WriteRoutine:
 	ld	hl, wa
 	ret
 	ld	xwa, 0x1e0000
-	calr	SendPartDataBlock_InitVal4
+	calr	-1644
 	cps	l, 6
 	jr	ugt, 7
 	cps	l, 1
@@ -28171,7 +28171,7 @@ TmFlash_WriteRoutine:
 	ld	iz, bc
 	ld	(xsp+2), xwa
 	ld	xwa, (xsp+2)
-	calr	SendPartDataBlock_InitVal4
+	calr	63836
 	ld	wa, iz
 	extz	xwa
 	extz	hl
@@ -28244,7 +28244,7 @@ TmFlash_WriteRoutine:
 	ld	iz, bc
 	ld	(xsp+6), xwa
 	ld	xwa, (xsp+6)
-	calr	SendPartDataBlock_InitVal4
+	calr	63664
 	ld	bc, iz
 	extz	xbc
 	extz	hl
