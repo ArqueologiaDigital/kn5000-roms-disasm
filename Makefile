@@ -460,8 +460,9 @@ rebuilt_ROMs/kn5000_v9_program.llvm.o: v9/maincpu/kn5000_v9_program.s original_R
 rebuilt_ROMs/kn5000_v9_program.llvm.elf: rebuilt_ROMs/kn5000_v9_program.llvm.o v9/maincpu/maincpu.ld
 	$(LLVM_LLD) -T v9/maincpu/maincpu.ld -o $@ $<
 
-rebuilt_ROMs/kn5000_v9_program.llvm.rom: rebuilt_ROMs/kn5000_v9_program.llvm.elf
+rebuilt_ROMs/kn5000_v9_program.llvm.rom: rebuilt_ROMs/kn5000_v9_program.llvm.elf v9/maincpu/v9_binary_patch.json
 	$(LLVM_OBJCOPY) -O binary $< $@
+	python3 scripts/build/apply_v9_patch.py $@
 
 # --- Subcpu payload ---
 rebuilt_ROMs/kn5000_subprogram_v142.llvm.o: v142/subcpu/kn5000_subprogram_v142.s
