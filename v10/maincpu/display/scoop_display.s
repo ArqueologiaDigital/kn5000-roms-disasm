@@ -428,8 +428,8 @@ GraphicsRender_EventCheck_Body:
 	ret
 
 UIRender_LoadTwoDescriptors:
-	ld xiy, 0xef5db6
-	ld xix, 0xef5e37
+	ld xiy, UIRender_DescriptorTable1
+	ld xix, UIRender_DescriptorTable2
 	ld xwa, xiy
 	ld xbc, xix
 	call Scoop_EventLoop_12Entry
@@ -2357,7 +2357,7 @@ Display_TitleString_BuildFromMode:
 	jp TitleString_NullRet
 
 Display_TitleString_Mode0:
-	ld xiy, 0xef72ab
+	ld xiy, StringData_Tempo
 	lds bc, 5
 	jp String_CopyFromIY
 
@@ -2367,17 +2367,17 @@ Display_TitleString_Mode1:
 	jp TitleString_NullRet
 
 Display_TitleString_Mode2:
-	ld xiy, 0xef72b0
+	ld xiy, StringData_Repeat
 	lds bc, 6
 	jp String_CopyFromIY
 
 Display_TitleString_Mode3:
-	ld xiy, 0xef72b6
+	ld xiy, StringData_Start
 	lds bc, 5
 	jp String_CopyFromIY
 
 Display_TitleString_Mode4:
-	ld xiy, 0xef72bb
+	ld xiy, StringData_Stop
 	lds bc, 4
 	jp String_CopyFromIY
 
@@ -2397,7 +2397,7 @@ Display_TitleString_Mode5:
 	and a, 0x30
 	sra a, 4
 	ldw bc, 0xa
-	ld xiy, 0xef72c5
+	ld xiy, StringData_VariNames
 	ld w, a
 	sla a, 3
 	sla w, 1
@@ -2441,13 +2441,13 @@ TitleString_CheckRhythmBank:
 TitleString_BuildFromBank:
 	xor b, b
 	sla bc, 3
-	ld xiy, 0xef72ed
+	ld xiy, StringData_StyleSections
 	st_dri3b E, 0x07, 0xf4, 0xe4
 	ldw bc, 0x8
 	jp String_CopyFromIY
 
 TitleString_LoadRhythmLabel:
-	ld xiy, 0xef72bf
+	ld xiy, StringData_Rhythm
 	lds bc, 6
 
 String_CopyFromIY:
@@ -2930,7 +2930,7 @@ Timer_ModeDispatch:
 	xor h, h
 	sla hl, 2
 	push xix
-	ld xix, 0xef7809
+	ld xix, Timer_ModeSelect_Table
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 	call (xhl)
@@ -6949,7 +6949,7 @@ Interrupt_CodeDispatch:
 	xor w, w
 	sla a, 2
 	ld hl, wa
-	ld xwa, 0xefa361
+	ld xwa, Interrupt_VectorSelect_Table
 	ld_sril3 XHL, 0x07, 0xe0, 0xec
 	call (xhl)
 	jp Interrupt_NullRet
@@ -14677,7 +14677,7 @@ DisplayStr_ClearLoop:
 
 DisplayStr_StyleSectionInit:
 	call DisplayStr_ClearRegion
-	ld xiy, 0xeff0a2
+	ld xiy, DisplayStr_StyleSectionNames
 	ld xix, 0xece
 	xor wa, wa
 	ldda8 a, 14120
@@ -15089,7 +15089,7 @@ SNS_LoadKeyAndChord:
 	ldda8 l, 3437
 	and l, 0xf
 	sla hl, 1
-	ld xiy, 0xeff599
+	ld xiy, StringData_KeyNames
 	st_dri3b E, 0x07, 0xf4, 0xec
 	ld wa, (xiy)
 	ld (xix), wa
@@ -16794,15 +16794,15 @@ Display_RedrawStatusBar:
 	jr nz, Scoop_SetupDisplayTables
 	call Display_DeferOrDrawWall
 	sti8_24 0x03efa8, 0x00
-	ld xiy, 0xe0b99d
-	ld xix, 0xe0b9ed
+	ld xiy, StyleUI_ParamBlock_AltD
+	ld xix, StyleUI_ParamBlock_AltE
 	call UIRender_TwoTableGeneral
 	call Display_DeferOrUpdateScreen
 	jrl Scoop_Return
 
 Scoop_SetupDisplayTables:
-	ld xiy, 0xe0b905
-	ld xix, 0xe0b92e
+	ld xiy, StyleUI_ParamBlock_AltB
+	ld xix, StyleUI_ParamBlock_AltC
 	push xhl
 	call UIRender_TwoTableGeneral
 	pop xhl
@@ -16820,7 +16820,7 @@ Scoop_InitPartDisplay:
 	pop xhl
 	push xhl
 	sla hl, 2
-	ld xiy, 0xe0ba60
+	ld xiy, StyleUI_ParamBlockPtrTable
 	cpdi8 3429, 2
 	jr nz, Scoop_SelectModeTable_2Part
 	ld xiy, 0xe0baf8
@@ -16840,7 +16840,7 @@ Scoop_SelectModeTable_2Part_XIX:
 	cps l, 0
 	jr nz, Scoop_SetPartIndexAndDisplay
 	ld xiy, 0xe0c8cf
-	ld xix, 0xe0c95b
+	ld xix, StyleUI_ScreenData_MeasCursor
 	call UIRender_TwoTableGeneral
 
 Scoop_SetPartIndexAndDisplay:
@@ -16872,7 +16872,7 @@ Scoop_CheckPartStatus_End:
 	ret
 
 Scoop_CallDisplayHelper:
-	ld xiy, 0xf00aa3
+	ld xiy, Scoop_DisplayData_ButtonLayout
 	ld xix, 0xf00aab
 	call UIRender_TwoTableGeneral
 	ret
@@ -16898,8 +16898,8 @@ Scoop_DisplayData_ButtonLayout:
 	ret
 
 Scoop_DrawGridLines:
-	ld xiy, 0xf00ae6
-	ld xix, 0xf00b40
+	ld xiy, Scoop_GridLineData
+	ld xix, Scoop_DrawGridDividers
 	call UIRender_TwoTableGeneral
 	call Scoop_DrawGridDividers
 	ret
@@ -16963,8 +16963,8 @@ Scoop_GridLineData:
 	nop
 
 Scoop_DrawGridDividers:
-	ld xiy, 0xf00b4f
-	ld xix, 0xf00b6d
+	ld xiy, Scoop_GridDividerData
+	ld xix, Scoop_DrawFrameLines
 	call UIRender_TwoTableGeneral
 	ret
 
@@ -16987,8 +16987,8 @@ Scoop_GridDividerData:
 	nop
 
 Scoop_DrawFrameLines:
-	ld xiy, 0xf00b7c
-	ld xix, 0xf00bed
+	ld xiy, Scoop_FrameData
+	ld xix, Scoop_InitDisplayFull
 	call UIRender_TwoTableGeneral
 	ret
 
@@ -17052,8 +17052,8 @@ Scoop_FrameData:
 Scoop_InitDisplayFull:
 	sti8_24 0x03efa8, 0x00
 	calr Scoop_DrawFrameLines
-	ld xiy, 0xe0b9ed
-	ld xix, 0xe0ba60
+	ld xiy, StyleUI_ParamBlock_AltE
+	ld xix, StyleUI_ParamBlockPtrTable
 	call UIRender_TwoTableGeneral
 	ldda8 a, 3424
 	stda8 4494, a
@@ -17177,7 +17177,7 @@ Scoop_TitleBar_ClampParts:
 	lds bc, 4
 
 Scoop_TitleBar_DisplayPartTable:
-	ld xiy, 0xe0bb90
+	ld xiy, StyleUI_ScreenData_Main
 	ld xix, xiy
 	muls bc, 0x2d
 	add xix, xbc

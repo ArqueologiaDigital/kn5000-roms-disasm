@@ -1932,7 +1932,7 @@ UIState_KeyScan_Dispatch:
 	ldda8 a, 0x8d38				; Load current UI state ID
 	extz wa					; Zero-extend to 16-bit
 	sla wa, 2				; state * 4 (pointer table stride)
-	lda_24 xbc, 0xe01f80			; Base of state->key-map pointer table
+	lda_24 xbc, SSF_PresentationGateTable			; Base of state->key-map pointer table
 	ld_rrl	xix, xbc, wa
 	or xix, xix				; Test if pointer is null
 	ret z					; Return if no key map for this state
@@ -2580,7 +2580,7 @@ MainPmanControl:
 	add xwa, xwa
 	add xwa, 0xea99f8
 	ld wa, (xwa)
-	lda_24 xix, 0xf991b1
+	lda_24 xix, MainPmanCtrl_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 MainPmanCtrl_DispatchTable:
@@ -3019,7 +3019,7 @@ CtrlPanel_DispatchByIndex:
 	add wa, wa
 	lda_24 xix, 0xea9a04
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf9965e
+	lda_24 xix, CtrlPanel_FrameDispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 CtrlPanel_FrameDispatchTable:
@@ -3337,7 +3337,7 @@ CtrlPanel_FuncDispatch:
 	sll wa, 1
 	ld xix, 0xea9b02
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf99961
+	lda_24 xix, GroupBox_HandlePartChange
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 GroupBox_HandlePartChange:

@@ -284,7 +284,7 @@ MdSetupLoadFunc:
 	add xhl, xhl
 	add xhl, 0xe7f928
 	ld hl, (xhl)
-	lda_24 xix, 0xf74d50
+	lda_24 xix, SetupLoadOptionJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xec
 SetupLoadOptionJumpTable:
 	ld	xwa, (xde+14)

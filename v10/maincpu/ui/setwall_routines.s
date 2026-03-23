@@ -417,7 +417,7 @@ SetWall_WriteSingleSlot:
 	ldda8 l, 3390
 	dec 1, l
 	sla l, 4
-	ld xde, 0xf1f50a
+	ld xde, SetWall_SlotOrderTable
 	st_dri3b E, 0x07, 0xe8, 0xec
 	ld xix, 0xab000
 	xor xwa, xwa
@@ -475,7 +475,7 @@ SetWall_WriteAllSlots:
 	ldda8 l, 3390
 	dec 1, l
 	sla l, 4
-	ld xde, 0xf1f50a
+	ld xde, SetWall_SlotOrderTable
 	st_dri3b E, 0x07, 0xe8, 0xec
 	ldi_berp 0x34, 0
 
@@ -553,7 +553,7 @@ SetWall_LocalWriteAll:
 	ldda8 l, 3390
 	dec 1, l
 	sla l, 4
-	ld xde, 0xf1f50a
+	ld xde, SetWall_SlotOrderTable
 	st_dri3b E, 0x07, 0xe8, 0xec
 	ldi_berp 0x34, 0
 
@@ -728,7 +728,7 @@ SetWall_CrossType_ClearBit1:
 SetWall_CrossType_MapLookup:
 	xor h, h
 	push xde
-	ld xde, 0xf1f447
+	ld xde, SetWall_SlotTypeMap
 	ld_srib3 L, 0x07, 0xe8, 0xec
 	pop xde
 	cp l, 0xff
@@ -1150,7 +1150,7 @@ SetWall_ParseB0ControlChange:
 	ldda8 l, 10355
 	xor h, h
 	push xde
-	ld xde, 0xf1f447
+	ld xde, SetWall_SlotTypeMap
 	ld_srib3 L, 0x07, 0xe8, 0xec
 	pop xde
 	cp a, l

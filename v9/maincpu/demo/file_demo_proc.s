@@ -160,7 +160,7 @@ MainPreControl:
 	add xbc, xbc
 	add xbc, 0xea007a
 	ld bc, (xbc)
-	lda_24 xix, 0xf86625
+	lda_24 xix, MainPreControl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; MainPreControl dispatch (11-entry, table 0xea007a)
 MainPreControl_Dispatch:
@@ -235,7 +235,7 @@ ApPreControl:
 	add xwa, xwa
 	add xwa, 0xea0090
 	ld wa, (xwa)
-	lda_24 xix, 0xf866f9
+	lda_24 xix, Seq_PostMelodyEvent
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 Seq_PostMelodyEvent:

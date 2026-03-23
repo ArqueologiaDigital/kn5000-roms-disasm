@@ -606,7 +606,7 @@ AccVoice_ComputeParamOffset:
 	ldda8 a, 13030
 	extz wa
 	sla wa, 2
-	ld xix, 0xf53d57
+	ld xix, AccVoice_PartOffsetTable2
 	ld_sril3 XIX, 0x07, 0xf0, 0xe0
 	add xiy, xix
 	add xiy, 0x60

@@ -1761,7 +1761,7 @@ VoiceEvent_TypeDispatch:
 	add wa, wa
 	lda_24 xix, 0xee8f06
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfe137d
+	lda_24 xix, VoiceEvent_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Voice event handler dispatch (14-entry, table 0xee8f06)
@@ -7708,7 +7708,7 @@ NoteMap_AllocNewVoiceEntry:
 	jrl ugt, SlotLoop_Continue_RestoreReg
 	ld a, (xsp + 10)
 	extz wa
-	lda_24 xbc, 0xee8eb8
+	lda_24 xbc, CharMap_ValueData_A
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	ld (xsp + 4), a
 	ldw (xsp + 2), 0x0
@@ -7997,7 +7997,7 @@ NoteMap_SetChannelParam:
 	ld (xsp + 26), xwa
 	ld a, (xsp + 24)
 	extz wa
-	lda_24 xbc, 0xee8eb8
+	lda_24 xbc, CharMap_ValueData_A
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	ld a, (xsp + 24)
 	extz wa
@@ -8708,7 +8708,7 @@ NoteMap_FindEntry:
 	ld (xsp + 12), xwa
 	ld a, (xsp + 10)
 	extz wa
-	lda_24 xbc, 0xee8ed8
+	lda_24 xbc, CharMap_ValueData_B
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	ld (xsp + 4), a
 	ldada xwa, 59760
@@ -10586,7 +10586,7 @@ SndParam_UpdateChannelTuning:
 	cp a, 0xff
 	jr z, UpdateChannelTuning_LoadDRAM
 	extz wa
-	lda_24 xhl, 0xee8eb8
+	lda_24 xhl, CharMap_ValueData_A
 	ldmm_srib 0x07, 0xec, 0xe0, 0x44, 0xcd
 	ldda8 a, 52548
 	extz wa
@@ -13395,7 +13395,7 @@ RhythmBuf_EventDispatchLoop:
 	add wa, wa
 	lda_24 xix, 0xee8fae
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfe8433
+	lda_24 xix, Rhythm_ProcessEventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 Rhythm_ProcessEventDispatch:
@@ -13893,7 +13893,7 @@ SeqEvtBuf_NoteDispatch:
 	add wa, wa
 	lda_24 xix, 0xee8fc0
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfe89a8
+	lda_24 xix, SeqPerformance_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Sequence performance event dispatch (6-entry, table 0xee8fc0)
@@ -15488,7 +15488,7 @@ __jrt_nop_FE9709_LoadReg:
 	ld xiz, 0xfea356
 	ld_srib3 C, 0x03, 0xf8, 0xec
 	ldto_werp WA, 0x30
-	ld xiz, 0xfea514
+	ld xiz, __jrt_nop_FEA344_Data2
 	and_sriw_rm WA, 0x03, 0xf8, 0xe4
 	jr nz, __jrt_nop_FE9709_Decrement
 	or_sriw_rm WA, 0x03, 0xf8, 0xe4
@@ -15540,7 +15540,7 @@ __jrt_nop_FE9709_LoadReg4:
 	ld xiz, 0xfea356
 	ld_srib3 L, 0x07, 0xf8, 0xec
 	dec 1, hl
-	ld xiz, 0xfe980c
+	ld xiz, __jrt_nop_FE9709_Data
 	or_srib_rm A, 0x07, 0xf8, 0xec
 
 __jrt_nop_FE9709_Increment:
@@ -16585,7 +16585,7 @@ InitPartAllocState_Block5:
 __jrt_nop_FEA171:
 
 __jrt_nop_FEA171_LoadReg:
-	ld xiz, 0xfea349
+	ld xiz, __jrt_nop_FEA344_Data
 	ld_srib3 W, 0x07, 0xf8, 0xec
 	ldb a, 0x40
 	sti16_24 0x00cf77, 0x0001
@@ -16679,7 +16679,7 @@ __jrt_nop_FEA1FA_Block2:
 	ld_sriw3 BC, 0x07, 0xf8, 0xec
 	inc 2, hl
 	ld_sriw3 DE, 0x07, 0xf8, 0xec
-	ld xiz, 0xfea349
+	ld xiz, __jrt_nop_FEA344_Data
 	ld8_24 l, 0x00cee0
 	ld_srib3 L, 0x03, 0xf8, 0xec
 	add l, 0xc
@@ -22625,7 +22625,7 @@ MidiSysMsg_Handler:
 	add wa, wa
 	lda_24 xix, 0xeec1e8
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfed672
+	lda_24 xix, MidiSysMsg_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; MIDI system message dispatch (15-entry, table 0xeec1e8)
@@ -25127,7 +25127,7 @@ SndParam_LookupByChannel:
 	add wa, wa
 	lda_24 xix, 0xeed3c6
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfeeb06
+	lda_24 xix, SndParam_TypeDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Sound parameter type dispatch (6-entry, table 0xeed3c6)
@@ -25203,7 +25203,7 @@ SndParam_OffsetHandler:
 	add de, de
 	lda_24 xix, 0xeed3d2
 	ld_sriw3 DE, 0x07, 0xf0, 0xe8
-	lda_24 xix, 0xfeeb97
+	lda_24 xix, SndParam_OffsetDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 
 ; Sound parameter offset dispatch (6-entry, table 0xeed3d2)
@@ -27629,7 +27629,7 @@ HdaeRom_DataHandler:
 	add hl, hl
 	lda_24 xix, 0xeed747
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
-	lda_24 xix, 0xff028f
+	lda_24 xix, HdaeRom_DataDispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
 ; HDAE5000 extension ROM data dispatch (6-entry, table 0xeed747)
 HdaeRom_DataDispatch:
@@ -27826,7 +27826,7 @@ HdaeRom_AltHandler:
 	add hl, hl
 	lda_24 xix, 0xeed753
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
-	lda_24 xix, 0xff0470
+	lda_24 xix, HdaeRom_AltDispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
 ; HDAE5000 extension ROM alt dispatch (6-entry, table 0xeed753)
 HdaeRom_AltDispatch:

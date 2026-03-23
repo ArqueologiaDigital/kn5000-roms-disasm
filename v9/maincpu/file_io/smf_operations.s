@@ -560,7 +560,7 @@ FmmSmfFileNameFunc:
 	add xde, xde
 	add xde, 0xea079e
 	ld de, (xde)
-	lda_24 xix, 0xf8e0c8
+	lda_24 xix, SmfFN_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe8
 SmfFN_JumpTable:
 	stda32	33184, xbc

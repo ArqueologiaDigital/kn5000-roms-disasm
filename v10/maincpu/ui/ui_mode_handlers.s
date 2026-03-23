@@ -1230,7 +1230,7 @@ Test_PROGRAM_and_TABLE_DATA_ROMs:
 	ldi_berp 0xe2, 0
 
 RomTest_ProgramTableData_OuterLoop:
-	ld xhl, 0xe00000
+	ld xhl, LED_patterns_indicating_firmware_version
 	lds32 xix, 0
 
 RomTest_ProgramTableData_SumLoop:
@@ -2206,7 +2206,7 @@ TEST2FUNC:
 	add xde, xde
 	add xde, 0xeb8042
 	ld de, (xde)
-	lda_24 xix, 0xfb7d72
+	lda_24 xix, TEST2FUNC_DispatchReturn
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; TEST2FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST2FUNC_DispatchReturn:
@@ -2227,7 +2227,7 @@ TEST3FUNC:
 	add xde, xde
 	add xde, 0xeb804e
 	ld de, (xde)
-	lda_24 xix, 0xfb7da6
+	lda_24 xix, TEST3FUNC_DispatchReturn
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; TEST3FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST3FUNC_DispatchReturn:
@@ -2248,7 +2248,7 @@ TEST4FUNC:
 	add xde, xde
 	add xde, 0xeb805a
 	ld de, (xde)
-	lda_24 xix, 0xfb7dda
+	lda_24 xix, TEST4FUNC_DispatchReturn
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; TEST4FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST4FUNC_DispatchReturn:
@@ -2269,7 +2269,7 @@ TEST6FUNC:
 	add xde, xde
 	add xde, 0xeb8066
 	ld de, (xde)
-	lda_24 xix, 0xfb7e0e
+	lda_24 xix, TEST6FUNC_DispatchReturn
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; TEST6FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST6FUNC_DispatchReturn:
@@ -2554,7 +2554,7 @@ AcMstStyleAlpGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xed0d24
 	ld bc, (xbc)
-	lda_24 xix, 0xfb809c
+	lda_24 xix, MasterSetup_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; MasterSetup event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d24)
@@ -3374,7 +3374,7 @@ MstStyleAlpGridCheck:
 	add xwa, xwa
 	add xwa, 0xed0d58
 	ld wa, (xwa)
-	lda_24 xix, 0xfb8913
+	lda_24 xix, MstStyleAlp_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; MstStyleAlpGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d58)
@@ -3598,7 +3598,7 @@ AcMstStyle1GridBoxProc:
 	add xbc, xbc
 	add xbc, 0xed0d66
 	ld bc, (xbc)
-	lda_24 xix, 0xfb8b6d
+	lda_24 xix, MstStyle_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; MasterStyle event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d66)
@@ -3899,7 +3899,7 @@ MstStyle1GridCheck:
 	add xwa, xwa
 	add xwa, 0xed0d8a
 	ld wa, (xwa)
-	lda_24 xix, 0xfb8ece
+	lda_24 xix, MstStyle1Grid_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; MstStyle1GridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d8a)
@@ -4085,7 +4085,7 @@ AcMstStyle1SubGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xed0d9e
 	ld bc, (xbc)
-	lda_24 xix, 0xfb90b1
+	lda_24 xix, MstStyle1_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; MstStyle1 event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d9e)
@@ -4586,7 +4586,7 @@ MstStyle1SubGridCheck:
 	add xwa, xwa
 	add xwa, 0xed0dc2
 	ld wa, (xwa)
-	lda_24 xix, 0xfb962a
+	lda_24 xix, MstStyle1Sub_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; MstStyle1SubGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0dc2)
@@ -4774,7 +4774,7 @@ AcMstStyle2GridBoxProc:
 	add xbc, xbc
 	add xbc, 0xed0e04
 	ld bc, (xbc)
-	lda_24 xix, 0xfb9801
+	lda_24 xix, MstStyle1Page_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; MstStyle1 subpage event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0e04)
@@ -5980,7 +5980,7 @@ MstStyle2GridCheck:
 	add xwa, xwa
 	add xwa, 0xed0ec4
 	ld wa, (xwa)
-	lda_24 xix, 0xfba3ff
+	lda_24 xix, MstGrid2_ScrollJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 MstGrid2_ScrollJumpTable:
@@ -6431,7 +6431,7 @@ AcTchSensGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xed0ed2
 	ld bc, (xbc)
-	lda_24 xix, 0xfba81c
+	lda_24 xix, MstStyle2_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; MstStyle2 event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0ed2)
@@ -6675,7 +6675,7 @@ TchSensGridCheck:
 	add xwa, xwa
 	add xwa, 0xed0f08
 	ld wa, (xwa)
-	lda_24 xix, 0xfbaa9c
+	lda_24 xix, TchSensGrid_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; TchSensGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0f08)
@@ -7021,7 +7021,7 @@ AcFSWAssGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xed0f16
 	ld bc, (xbc)
-	lda_24 xix, 0xfbadfc
+	lda_24 xix, TchSens_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; TouchSensitivity event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0f16)
@@ -7239,7 +7239,7 @@ FSWAssGridCheck:
 	add xwa, xwa
 	add xwa, 0xed1226
 	ld wa, (xwa)
-	lda_24 xix, 0xfbb04c
+	lda_24 xix, FSWAssGrid_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; FSWAssGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed1226)
@@ -8166,7 +8166,7 @@ FswAsIniFunc:
 	add xde, xde
 	add xde, 0xed1234
 	ld de, (xde)
-	lda_24 xix, 0xfbb987
+	lda_24 xix, FswAsIni_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; FswAsIniFunc event dispatch (6-entry, event 0x1c00013, table 0xed1234)
 FswAsIni_EventDispatch:
@@ -8377,7 +8377,7 @@ AcPmExpFilterGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xed1420
 	ld bc, (xbc)
-	lda_24 xix, 0xfbbbd2
+	lda_24 xix, PmemPageCtl_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; IvPmemWindowPageCtl event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed1420)
@@ -8493,7 +8493,7 @@ PmExpFilter_DrawCellBank1:
 	ld a, (xsp + 10)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xed1240
+	lda_24 xbc, ParamStr_Table_01
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xed
@@ -8561,7 +8561,7 @@ PmExpFilter_DrawCellBank2:
 	ld a, (xsp + 10)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xed1318
+	lda_24 xbc, ParamStr_Table_02
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xed
@@ -8868,7 +8868,7 @@ PmExpFilterGridCheck:
 	add xwa, xwa
 	add xwa, 0xed149a
 	ld wa, (xwa)
-	lda_24 xix, 0xfbc173
+	lda_24 xix, PmExpFilter_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; PmExpFilterGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed149a)
@@ -9159,7 +9159,7 @@ AcDispTimeSetGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xed14a8
 	ld bc, (xbc)
-	lda_24 xix, 0xfbc47c
+	lda_24 xix, PmExpFilter2_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; PmExpFilter event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed14a8)
@@ -9408,7 +9408,7 @@ DispTimeSetGridCheck:
 	add xwa, xwa
 	add xwa, 0xed1582
 	ld wa, (xwa)
-	lda_24 xix, 0xfbc735
+	lda_24 xix, DispTimeSet_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DispTimeSetGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed1582)
@@ -9892,7 +9892,7 @@ DispTimeSetCheck_CellDecode:
 	ld8_24 a, 0x0340e6
 	extz wa
 	sla wa, 2
-	lda_24 xde, 0xed14b6
+	lda_24 xde, ParamStr_Table_03
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
 	push xwa
 	pushw 0xed
@@ -9907,7 +9907,7 @@ DispTimeSetCheck_CellDecode:
 	jrl DispTimeSet_SendEventReturn
 
 DispTimeSetCheck_TryRow3:
-	lda_24 xde, 0xed14b6
+	lda_24 xde, ParamStr_Table_03
 	cpw (xhl), 0x1
 	jr nz, DispTimeSetCheck_TryRow4
 	cpw (xwa), 0x3
@@ -10593,7 +10593,7 @@ MssNameFunc:
 	add xbc, xbc
 	add xbc, 0xed15ac
 	ld bc, (xbc)
-	lda_24 xix, 0xfbd32d
+	lda_24 xix, MssName_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; MssNameFunc event dispatch (10-entry, event 0x1c00013, table 0xed15ac)
 MssName_EventDispatch:
@@ -11802,7 +11802,7 @@ PmBkNameFunc:
 	add xbc, xbc
 	add xbc, 0xed15ee
 	ld bc, (xbc)
-	lda_24 xix, 0xfbe0ef
+	lda_24 xix, PmBkName_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; PmBkNameFunc event dispatch (10-entry, event 0x1c00013, table 0xed15ee)
 PmBkName_EventDispatch:
@@ -13999,7 +13999,7 @@ RVari_Select_CheckSameBank:
 	divs wa, 0x4
 	ldto_werp WA, 0xe2
 	sla wa, 2
-	lda_24 xbc, 0xed1626
+	lda_24 xbc, ParamStr_Table_04
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xed
@@ -14120,7 +14120,7 @@ RVari_Select_CheckSameBank:
 	divs wa, 0x4
 	ldto_werp WA, 0xe2
 	sla wa, 2
-	lda_24 xbc, 0xed1626
+	lda_24 xbc, ParamStr_Table_04
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xed

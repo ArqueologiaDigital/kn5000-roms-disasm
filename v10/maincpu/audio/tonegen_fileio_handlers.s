@@ -314,7 +314,7 @@ DSPCfg_Init_BoundsCheck:
 	add de, de
 	lda_24 xix, 0xed930a
 	ld_sriw3 DE, 0x07, 0xf0, 0xe8
-	lda_24 xix, 0xfc4eea
+	lda_24 xix, DSPCfg_InitDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; DSPCfg_InitAllEntries dispatch
 DSPCfg_InitDispatch:
@@ -1066,7 +1066,7 @@ CtrlPanel_IndicatorJumpTable:
 	add wa, wa
 	lda_24 xix, 0xed9608
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfc55cb
+	lda_24 xix, DSPCfg_Param_CaseC
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DSP config parameter handler C
@@ -1111,7 +1111,7 @@ Audio_DispatchCommand:
 	add wa, wa
 	lda_24 xix, 0xed961a
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfc5647
+	lda_24 xix, DSPCfg_Param_CaseD
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DSP config parameter handler D
@@ -1157,7 +1157,7 @@ PanelDisplay_DispatchByMode:
 	add wa, wa
 	lda_24 xix, 0xed962c
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfc56c5
+	lda_24 xix, PanelDisplay_DispatchData
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 PanelDisplay_DispatchData:

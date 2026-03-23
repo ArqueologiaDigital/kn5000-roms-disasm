@@ -526,7 +526,7 @@ AcFadeSetGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe7f964
 	ld bc, (xbc)
-	lda_24 xix, 0xf7528a
+	lda_24 xix, VoiceParam_ListHandler
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; Voice parameter list handler
@@ -781,7 +781,7 @@ FadeSetGridCheck:
 	add xwa, xwa
 	add xwa, 0xe7f9d2
 	ld wa, (xwa)
-	lda_24 xix, 0xf75517
+	lda_24 xix, Data_FadeSetGridDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 Data_FadeSetGridDispatch:
@@ -1010,7 +1010,7 @@ AcInOutGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe7fc86
 	ld bc, (xbc)
-	lda_24 xix, 0xf757bc
+	lda_24 xix, AcInOutGrid_Init
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 AcInOutGrid_Init:
@@ -1300,7 +1300,7 @@ InOutGridCheck:
 	add xwa, xwa
 	add xwa, 0xe7fd70
 	ld wa, (xwa)
-	lda_24 xix, 0xf75ade
+	lda_24 xix, Data_InOutGridDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 Data_InOutGridDispatch:
@@ -1728,7 +1728,7 @@ ParaLoadOpt_Entry:
 	add wa, wa
 	lda_24 xix, 0xe7fd3a
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf75f68
+	lda_24 xix, Data_ParaLoadOptDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 Data_ParaLoadOptDispatch:

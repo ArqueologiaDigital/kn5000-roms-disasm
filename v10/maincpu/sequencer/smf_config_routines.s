@@ -1094,7 +1094,7 @@ SMF_Event_ProgramChange:
 	ld l, a
 	xor h, h
 	push xde
-	ld xde, 0xf28adb
+	ld xde, SMF_PartAssignTable
 	ld_srib3 A, 0x07, 0xe8, 0xec
 	pop xde
 	xor xhl, xhl
@@ -1165,7 +1165,7 @@ SMF_Event_ControlChange:
 	ld l, a
 	xor h, h
 	push xde
-	ld xde, 0xf28adb
+	ld xde, SMF_PartAssignTable
 	ld_srib3 A, 0x07, 0xe8, 0xec
 	pop xde
 	xor xhl, xhl
@@ -1805,7 +1805,7 @@ SMF_Parse_Complete:
 
 SMF_TranslateChannel:
 	push xix
-	ld xix, 0xf2908d
+	ld xix, SMF_ChannelTranslationTable
 	xor hl, hl
 	ld l, a
 	ld_srib3 W, 0x07, 0xf0, 0xec
@@ -3105,7 +3105,7 @@ SMF_SlotParam_BankLSBReturn:
 	bitm 5, (xiy + 3)
 	jr nz, SMF_SlotParam_RPN
 	push xix
-	ld xix, 0xf29d0b
+	ld xix, SMF_SlotParam_RPNReturn
 	ld l, (xiy + 3)
 	ld_srib3 A, 0x07, 0xf0, 0xec
 	pop xix

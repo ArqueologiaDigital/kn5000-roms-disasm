@@ -204,7 +204,7 @@ AudioCmd_DispatchType:
 	add wa, wa
 	lda_24 xix, 0xeed878
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xff1237
+	lda_24 xix, AudioCmd_Format_Percent
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 AudioCmd_Format_Percent:

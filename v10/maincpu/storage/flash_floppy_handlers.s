@@ -1461,11 +1461,11 @@ NoteEvent_LoadSoundGenParams:
 	ldw bc, 0x80
 	ldirw
 	ldda32 xix, 3186
-	ld xiy, 0xe15b80
+	ld xiy, MSP_Default_Signature1
 	ldw bc, 0x30
 	ldirw
 	ldda32 xwa, 3186
-	ld xiy, 0xe15be0
+	ld xiy, MSP_Default_VoiceEnable
 	st_dri3b D, 0xe1, 0xc0, 0x13
 	ldw bc, 0x20
 	ldirw
@@ -1991,9 +1991,9 @@ PartGrid_ColumnDispatch:
 	cps wa, 6
 	jr gt, PartGrid_CopyHLtoBC
 	add wa, wa
-	lda_24 xix, 0xe1611a
+	lda_24 xix, MSP_Default_GroupOffsetA
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf16e2d
+	lda_24 xix, PartGrid_ColumnJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 PartGrid_ColumnJumpTable:
@@ -2046,7 +2046,7 @@ FrameSetup_ComputeGridIndex:
 	extz wa
 	muls wa, 0x3
 	add wa, bc
-	lda_24 xbc, 0xe160c0
+	lda_24 xbc, MSP_Default_ChannelMap
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	ld e, (xsp + 4)
 	cp (xsp + 4), 0x4
@@ -2330,9 +2330,9 @@ NoteEventBuffer_CopyToSlot:
 	cps bc, 6
 	jr gt, NoteEvent_CopyCommon
 	add bc, bc
-	lda_24 xix, 0xe16128
+	lda_24 xix, MSP_Default_GroupOffsetB
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, 0xf17155
+	lda_24 xix, NOTE_EVENT_DISPATCH_1
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; Note event buffer copy dispatch - 7 cases (BC 0-6)
 ; Selects destination buffer pointer based on case, then copies 46080 bytes
@@ -2377,9 +2377,9 @@ NoteEventBuffer_Store:
 	cps wa, 6
 	jrl gt, NoteEvent_StoreCommon
 	add wa, wa
-	lda_24 xix, 0xe16136
+	lda_24 xix, MSP_Default_VarSize
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf171c4
+	lda_24 xix, NOTE_EVENT_DISPATCH_2
 	jp_dri 8, 0x07, 0xf0, 0xe0
 ; Note event dispatch table 2
 ; 7 cases (WA 0-6), offset table at 0xe16136
@@ -5480,7 +5480,7 @@ FloppyDisk_ComputeToneParams:
 	st_dri3l XBC, 0xfd, 0x14, 0x04
 	st_dri3l XWA, 0xfd, 0x18, 0x04
 	calr Flash_InitExtMemAddrs
-	ld xiy, 0xe15cc0
+	ld xiy, MSP_Default_Signature3
 	lda xix, (xsp + 16)
 	ldw bc, 0x200
 	ldirw
@@ -6213,7 +6213,7 @@ DualVoice_LoadAndScan:
 	call AccPatch_CountSlotsAlt
 	ld a, (xsp + 12)
 	extz wa
-	lda_24 xbc, 0xe160fc
+	lda_24 xbc, MSP_Default_GroupIndexPad
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	ld (xsp + 8), a
 	ldda32 xwa, 3186
@@ -6228,7 +6228,7 @@ DualVoice_AccPatchLoop:
 	muls wa, 0x3
 	ld de, wa
 	add de, bc
-	lda_24 xwa, 0xe160c0
+	lda_24 xwa, MSP_Default_ChannelMap
 	ldmm_srib 0x07, 0xe0, 0xe8, 0xac, 0x39
 	call AccPatch_InitFromSlotIndex
 	inc1_berp 0xfb
@@ -6249,7 +6249,7 @@ DualVoice_ParamCompareLoop:
 	muls wa, 0x3
 	ld bc, wa
 	add wa, de
-	lda_24 xde, 0xe160c0
+	lda_24 xde, MSP_Default_ChannelMap
 	ldmm_srib 0x07, 0xe8, 0xe0, 0xac, 0x39
 	ld a, (xsp + 8)
 	extz wa
@@ -6365,7 +6365,7 @@ ToneData_ZeroFillLoop:
 	cp xwa, xbc
 	jr c, ToneData_ZeroFillLoop
 
-	lda_24 xwa, 0xe16184
+	lda_24 xwa, Composer_SettingsBlock
 	ld xbc, xwa
 	ldda32 xde, 3226
 	lda xhl, (xwa + 6)
@@ -6386,7 +6386,7 @@ ToneData_CopyBlock2_Loop:
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock2_Loop
-	lda_24 xhl, 0xe16144
+	lda_24 xhl, MSP_Default_PartBankMap
 	ld xbc, xhl
 	ldda32 xwa, 3226
 	st_dri3b B, 0xe1, 0x00, 0x02
@@ -6718,7 +6718,7 @@ AcCmpSetGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe1ce3a
 	ld bc, (xbc)
-	lda_24 xix, 0xf1a4bf
+	lda_24 xix, CmpSetP1_DialGrid
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; CmpSetP1 dial grid dispatch (7-entry, table 0xe1ce3a)
@@ -6941,7 +6941,7 @@ CmpSetP1GridCheck:
 	add xwa, xwa
 	add xwa, 0xe1cf00
 	ld wa, (xwa)
-	lda_24 xix, 0xf1a716
+	lda_24 xix, CmpSetP1_GridCheck_EventEnc
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; CmpSetP1 grid check event encoding dispatch
@@ -7007,7 +7007,7 @@ CmpSetP1_GridCheck_Return:
 	add wa, wa
 	lda_24 xix, 0xe1cef0
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf1a7cb
+	lda_24 xix, UI_COMPONENT_DISPATCH
 	jp_dri 8, 0x07, 0xf0, 0xe0
 ; UI component dispatch table - handles cases 0-7 for grid/focus handling
 ; Offset table at 0xe1cef0 selects which handler to run based on WA value
@@ -7107,7 +7107,7 @@ CmpSetGridCheck:
 	add xwa, xwa
 	add xwa, 0xe1d40e
 	ld wa, (xwa)
-	lda_24 xix, 0xf1a8c9
+	lda_24 xix, GridCheck_Handler0
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; =============================================================================
@@ -7799,7 +7799,7 @@ PsS2cTrans_HandleScroll:
 	ldda8 a, 14734
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1d598
+	lda_24 xbc, PtrTbl_TransposeStrs
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 8)
@@ -7863,7 +7863,7 @@ S2cGridBoxProc:
 	add xwa, xwa
 	add xwa, 0xe1d728
 	ld wa, (xwa)
-	lda_24 xix, 0xf1b01b
+	lda_24 xix, FdcFormat_DialGrid
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; FdcFormat dial grid dispatch (7-entry, table 0xe1d728)

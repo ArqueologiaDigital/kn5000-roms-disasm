@@ -260,7 +260,7 @@ WndEvt_DispatchByEventCode:
 	add xwa, xwa
 	add xwa, 0xea9ef6
 	ld wa, (xwa)
-	lda_24 xix, 0xf9b83f
+	lda_24 xix, WndEvt_EventCodeDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Window event dispatch by event code
@@ -3924,7 +3924,7 @@ PsGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xeaa248
 	ld bc, (xbc)
-	lda_24 xix, 0xf9de32
+	lda_24 xix, PsGridBox_Init
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 	.include "ui/psgridbox_routines.s"
@@ -4301,7 +4301,7 @@ DrawDesignBox_QueuedPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfad5ac
+	lda_24 xbc, DrawDesignBox_QueueCallback
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -4383,7 +4383,7 @@ Draw_DispatchByPartType:
 	add wa, wa
 	lda_24 xix, 0xeaae16
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfad649
+	lda_24 xix, Draw_StyledBoxWithFrame
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 Draw_StyledBoxWithFrame:
@@ -4877,7 +4877,7 @@ DrawPartGroup_DispatchByType:
 	add wa, wa
 	lda_24 xix, 0xeaadf6
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfadb3a
+	lda_24 xix, DrawPartGroup_TableJump_DefaultCase
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 DrawPartGroup_TableJump_DefaultCase:
@@ -7056,7 +7056,7 @@ ChangeWall_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaf232
+	lda_24 xbc, ChangeWall_QueueCallback
 	ld (xwa), xbc
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
@@ -7097,7 +7097,7 @@ ChangeWallPalette_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaf282
+	lda_24 xbc, ChangeWallPalette_QueueCallback
 	ld (xwa), xbc
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
@@ -7174,7 +7174,7 @@ ChangePalette_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaf2ee
+	lda_24 xbc, ChangePalette_QueueCallback
 	ld (xwa), xbc
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
@@ -7613,7 +7613,7 @@ ColorBlit_Deferred:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaf6cd
+	lda_24 xbc, ColorBlit_CallbackBlock
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -7915,7 +7915,7 @@ ColorBlit2_Deferred:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaf919
+	lda_24 xbc, ColorBlit2_CallbackBlock
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)

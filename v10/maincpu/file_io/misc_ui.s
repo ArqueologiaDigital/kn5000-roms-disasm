@@ -24,7 +24,7 @@ JumpInsertFunc:
 	add xbc, xbc
 	add xbc, 0xea96e4
 	ld bc, (xbc)
-	lda_24 xix, 0xf950b0
+	lda_24 xix, JumpInsert_DispatchBody
 	jp_dri 8, 0x07, 0xf0, 0xe4
 JumpInsert_DispatchBody:
 	ld	xwa, (xde+14)

@@ -20,7 +20,7 @@ MiddleFuncCall:
 	add xwa, xwa
 	add xwa, 0xe201e8
 	ld wa, (xwa)
-	lda_24 xix, 0xf2258e
+	lda_24 xix, MiddleFuncCall_DispatchData
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 MiddleFuncCall_DispatchData:
@@ -558,7 +558,7 @@ SqTrSel_CaseG:
 	add wa, wa
 	lda_24 xix, 0xe20250
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf22b5f
+	lda_24 xix, SqTrSel_CaseG_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SqTrSel_CaseG_JumpTable:

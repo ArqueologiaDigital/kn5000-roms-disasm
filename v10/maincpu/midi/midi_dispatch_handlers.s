@@ -1324,7 +1324,7 @@ PanelEvt_CheckFlag7_Dispatch_A:
 	jr nz, PanelEvt_CheckFlag7_Ret_A
 
 PanelEvt_CheckFlag7_DoDispatch_A:
-	ld xiy, 0xfd0609
+	ld xiy, PanelEvt_DispatchTable
 	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 
@@ -1338,7 +1338,7 @@ PanelEvt_CheckFlag7_Dispatch_B:
 	jr nz, PanelEvt_CheckFlag7_Ret_B
 
 PanelEvt_CheckFlag7_DoDispatch_B:
-	ld xiy, 0xfd0609
+	ld xiy, PanelEvt_DispatchTable
 	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 
@@ -1352,7 +1352,7 @@ PanelEvt_CheckFlag7_Dispatch_C:
 	jr nz, PanelEvt_CheckFlag7_Ret_C
 
 PanelEvt_CheckFlag7_DoDispatch_C:
-	ld xiy, 0xfd0609
+	ld xiy, PanelEvt_DispatchTable
 	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 
@@ -1360,7 +1360,7 @@ PanelEvt_CheckFlag7_Ret_C:
 	ret
 
 PanelEvt_UnconditionalDispatch:
-	ld xiy, 0xfd0609
+	ld xiy, PanelEvt_DispatchTable
 	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 	ret
@@ -1368,7 +1368,7 @@ PanelEvt_UnconditionalDispatch:
 PanelEvt_CheckFlag6_Dispatch:
 	bitda 6, 64851
 	jr z, PanelEvt_CheckFlag6_Ret
-	ld xiy, 0xfd0609
+	ld xiy, PanelEvt_DispatchTable
 	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 
@@ -1382,7 +1382,7 @@ PanelEvt_CheckChanZero_Dispatch:
 	jr z, PanelEvt_CheckChanZero_Ret
 
 PanelEvt_CheckChanZero_DoDispatch:
-	ld xiy, 0xfd0609
+	ld xiy, PanelEvt_DispatchTable
 	ldb a, 0xf
 	calr PanelEvent_DispatchByIndex
 
@@ -1793,7 +1793,7 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	nop
 
 PanelEvt_Dispatch3Entry_A:
-	ld xiy, 0xfd093f
+	ld xiy, PanelEvt_Dispatch3_TableAndHandlers_A
 	ldb a, 0x3
 	calr PanelEvent_DispatchByIndex
 	ret
@@ -1843,7 +1843,7 @@ PanelEvt_Dispatch3_TableAndHandlers_A:
 	ret
 
 PanelEvt_Dispatch3Entry_B:
-	ld xiy, 0xfd098f
+	ld xiy, PanelEvt_Dispatch3_Table_B
 	ldb a, 0x3
 	calr PanelEvent_DispatchByIndex
 	ret
@@ -2377,7 +2377,7 @@ FileData_ValidateAndDispatch:
 	ld xix, 0x963c
 	ld c, (xix + 4)
 	ld w, (xix + 256)
-	ld xiy, 0xfdb773
+	ld xiy, SeqOut_WriteTimedBytes
 	ld xiz, 0x424
 	pushw wa
 	ld a, w
@@ -11284,7 +11284,7 @@ MIDI_ReadChannelParam:
 	add bc, bc
 	lda_24 xix, 0xee2d2a
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, 0xfd5e5c
+	lda_24 xix, MidiChan_ParamDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; MIDI channel parameter read dispatch
 MidiChan_ParamDispatch:
@@ -11340,7 +11340,7 @@ SeqData_ReadFieldByIndex:
 	add bc, bc
 	lda_24 xix, 0xee2d4a
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, 0xfd5ed8
+	lda_24 xix, SeqData_FieldDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; Sequence data field read dispatch
 SeqData_FieldDispatch:
@@ -14235,7 +14235,7 @@ MidiTable_DispatchHelper:
 	ld a, (xwa)
 	extz wa
 	sla	wa, 2
-	lda_24 xbc, 0xee2d6c
+	lda_24 xbc, SeqChan_CommandDispatch_Table
 	ld_rrl	xhl, xbc, wa
 	call	(xhl)
 	calr MidiTable_FlushArpNotes
@@ -16222,7 +16222,7 @@ SysEx_InitiateSend:
 	add wa, wa
 	lda_24 xix, 0xee2f7e
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfd8cf1
+	lda_24 xix, SysEx_SendDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; SysEx send dispatch
@@ -16331,7 +16331,7 @@ SeqData_DispatchHandler:
 	call SeqData_ReadFieldByIndex
 	extz hl
 	sla hl, 2
-	lda_24 xbc, 0xee2f8c
+	lda_24 xbc, SeqData_SubDispatch_Table
 	ld_sril3 XHL, 0x07, 0xe4, 0xec
 	call (xhl)
 

@@ -895,7 +895,7 @@ SndParam_CompareRegField:
 SndParam_CompareShifted:
 	ld a, (xbc + 11)
 	sla a, 2
-	lda_24 xbc, 0xee0198
+	lda_24 xbc, Naka_SubDispatch_B_Table
 	ld_sril3 XBC, 0x03, 0xe4, 0xe0
 	cp l, (xbc + 1)
 	jr nz, SndParam_CompareStatus5

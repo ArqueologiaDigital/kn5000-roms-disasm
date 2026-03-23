@@ -143,7 +143,7 @@ TestTitleFunc:
 	add xwa, xwa
 	add xwa, 0xe1fe0e
 	ld wa, (xwa)
-	lda_24 xix, 0xf1e3da
+	lda_24 xix, TitleFunc_ActionDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; User action dispatch table (event 0x1c00013, xde=2..6)
@@ -175,7 +175,7 @@ TitleFunc_LifecycleDispatch:
 	add xwa, xwa
 	add xwa, 0xe1fdfe
 	ld wa, (xwa)
-	lda_24 xix, 0xf1e43b
+	lda_24 xix, TitleFunc_LifecycleTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Title lifecycle dispatch table (event 0x1c00007, xde=0..6)

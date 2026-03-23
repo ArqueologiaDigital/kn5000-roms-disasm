@@ -4158,7 +4158,7 @@ PmBank_DrawRegionInfo:
 	ld a, b
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xed16ae
+	lda_24 xbc, ParamStr_Table_05
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xed
@@ -4404,7 +4404,7 @@ ToneGen_WriteParamByIndex:
 	add bc, bc
 	lda_24 xix, 0xed18a2
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, 0xfc22d7
+	lda_24 xix, ToneGen_ParamWriteDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; ToneGen_WriteParamByIndex dispatch table
 ToneGen_ParamWriteDispatch:
@@ -4580,7 +4580,7 @@ WallHomeEditCheck:
 	add xwa, xwa
 	add xwa, 0xed18c6
 	ld wa, (xwa)
-	lda_24 xix, 0xfc248a
+	lda_24 xix, WallHomeEdit_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; WallHomeEditCheck event dispatch
@@ -4669,7 +4669,7 @@ WallMenuEditCheck:
 	add xwa, xwa
 	add xwa, 0xed18f2
 	ld wa, (xwa)
-	lda_24 xix, 0xfc256e
+	lda_24 xix, WallMenuEdit_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; WallMenuEditCheck event dispatch
@@ -4717,7 +4717,7 @@ WallOthEditCheck:
 	add xwa, xwa
 	add xwa, 0xed191e
 	ld wa, (xwa)
-	lda_24 xix, 0xfc25e9
+	lda_24 xix, WallOthEdit_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; WallOthEditCheck event dispatch
@@ -5293,7 +5293,7 @@ MainSysControl:
 	add wa, wa
 	lda_24 xix, 0xed1b22
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfc2c12
+	lda_24 xix, MainSysCtrl_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; MainSysControl dispatch table
@@ -5373,7 +5373,7 @@ CntIniFunc:
 	add xde, xde
 	add xde, 0xed1b34
 	ld de, (xde)
-	lda_24 xix, 0xfc2cd9
+	lda_24 xix, CntIniFunc_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CntIniFunc event dispatch
 CntIniFunc_EventDispatch:
@@ -5481,7 +5481,7 @@ AcFreeSplit_LookupNoteLabel:
 	divs hl, 0xc
 	ldto_werp WA, 0xee
 	sla wa, 2
-	lda_24 xbc, 0xed1b40
+	lda_24 xbc, ParamStr_Table_06
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xed
@@ -5527,7 +5527,7 @@ AcFreeSplit_LookupSecondNote:
 	divs hl, 0xc
 	ldto_werp WA, 0xee
 	sla wa, 2
-	lda_24 xbc, 0xed1b40
+	lda_24 xbc, ParamStr_Table_06
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xed

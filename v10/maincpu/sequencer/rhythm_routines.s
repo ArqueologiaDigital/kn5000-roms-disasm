@@ -460,7 +460,7 @@ Rhythm_VelLookA_CheckRange:
 	xor l, l
 
 Rhythm_VelLookA_SelectTable:
-	ld xiy, 0xf550ca
+	ld xiy, Rhythm_InstrMapTable_Default
 	bitda 2, 13044
 	jr z, Rhythm_VelLookA_CheckBit3
 	ld xiy, 0xf550fb
@@ -588,7 +588,7 @@ Rhythm_VoiceMap_CheckBit4:
 	xor l, l
 
 Rhythm_VoiceMap_ClampInstr:
-	ld xiy, 0xf5526f
+	ld xiy, Rhythm_PitchShiftTable_Default
 	bitda 3, 13044
 	jr z, Rhythm_VoiceMap_SelectTable
 	ld xiy, 0xf552a0
@@ -628,7 +628,7 @@ Rhythm_VoiceMap_ApplyBase:
 	xor l, l
 
 Rhythm_VoiceMap_Inst2Clamp:
-	ld xiy, 0xf550ca
+	ld xiy, Rhythm_InstrMapTable_Default
 	bitda 2, 13044
 	jr z, Rhythm_VoiceMap_Inst2Bit2
 	ld xiy, 0xf550fb
@@ -692,7 +692,7 @@ Rhythm_VelComp_ClampInstr:
 	xor l, l
 
 Rhythm_VelComp_SelectTable:
-	ld xiy, 0xf5532e
+	ld xiy, Rhythm_VelocityTable_A
 	bitda 2, 13044
 	jr z, Rhythm_VelComp_Lookup
 	ld xiy, 0xf5535f
@@ -1445,7 +1445,7 @@ Rhythm_SeqResetCheck:
 	ldda8 l, 14235
 	xor h, h
 	sla l, 2
-	ld xiy, 0xf55a8c
+	ld xiy, Rhythm_SeqResetTable
 	ld_sril3 XIX, 0x07, 0xf4, 0xec
 	cp xix, 0x0
 	jr z, Rhythm_SeqReset_UpdateFlags
@@ -1502,7 +1502,7 @@ Rhythm_TranspMod_ModCheck:
 	xor l, l
 
 Rhythm_TranspMod_LookupTable:
-	ld xiy, 0xf5526f
+	ld xiy, Rhythm_PitchShiftTable_Default
 	ld_srib3 L, 0x03, 0xf4, 0xec
 	cps l, 0
 	jr z, Rhythm_TranspMod_Done

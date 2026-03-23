@@ -81,7 +81,7 @@ DemoStyleTtlFunc:
 	add xde, xde
 	add xde, 0xe201c4
 	ld de, (xde)
-	lda_24 xix, 0xf22339
+	lda_24 xix, DemoStyle_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe8
 DemoStyle_DispatchTable:
 	.ascii ":;<>"
@@ -156,7 +156,7 @@ DemoSoundTtlFunc:
 	add xde, xde
 	add xde, 0xe201d0
 	ld de, (xde)
-	lda_24 xix, 0xf22404
+	lda_24 xix, DemoSound_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe8
 DemoSound_DispatchTable:
 	.ascii ":;<>"
@@ -230,7 +230,7 @@ DemoRhyTtlFunc:
 	add xde, xde
 	add xde, 0xe201dc
 	ld de, (xde)
-	lda_24 xix, 0xf224ca
+	lda_24 xix, DemoRhythm_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe8
 DemoRhythm_DispatchTable:
 	.ascii ":;<>"

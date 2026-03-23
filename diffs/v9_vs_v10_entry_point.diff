@@ -1,5 +1,5 @@
---- v9/maincpu/kn5000_v9_program.s	2026-03-23 11:59:32.686050197 +0000
-+++ v10/maincpu/kn5000_v10_program.s	2026-03-23 11:57:27.564456213 +0000
+--- v9/maincpu/kn5000_v9_program.s	2026-03-23 12:35:24.982753331 +0000
++++ v10/maincpu/kn5000_v10_program.s	2026-03-23 12:34:32.166164062 +0000
 @@ -3126,4 +3126,5 @@
  	.set SeqChan_UnhandledCmd_0x03, 0xfd8264
  	.set SeqChan_UnhandledCmd_0x12, 0xfd8273

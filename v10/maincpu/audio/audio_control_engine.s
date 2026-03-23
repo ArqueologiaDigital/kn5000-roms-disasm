@@ -1669,7 +1669,7 @@ Set_LEDs:
 	ret ugt
 	ldada xwa, 36664
 	extz de
-	lda_24 xhl, 0xeda616
+	lda_24 xhl, Protocol_values_for_LED_rows
 	ld_srib3 E, 0x07, 0xec, 0xe8
 	ld (xwa), e
 	ld (xwa + 1), c
@@ -3977,7 +3977,7 @@ FileIO_OperationDispatch:
 	ldda8 a, 37159
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xedaa64
+	lda_24 xbc, SoundProgram_DispatchTable
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	call (xhl)
 	cpdi16 37086, 508
@@ -7460,7 +7460,7 @@ RegBitManip_Dispatch:
 	ldda8 l, 64605
 	and l, 0x7
 	sla hl, 2
-	ld xix, 0xfca3bb
+	ld xix, RegisterBit_Manipulate_Table
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	jp (xix)
 RegisterBit_Manipulate_Table:
@@ -7623,7 +7623,7 @@ MidiStream_FoundMatch:
 MidiStream_ProcessorDispatch:
 	and w, 0x7
 	sll w, 2
-	ld xix, 0xfca4f9
+	ld xix, MidiStream_Processor_Table
 	ld_sril3 XIX, 0x03, 0xf0, 0xe1
 	call (xix)
 	jr MidiStream_NextEvent
@@ -7809,7 +7809,7 @@ MidiSeqBuf_ProcessorTable:
 
 MidiSeqBuf_InitFromTable:
 	stdi8 37330, 255
-	ld xiy, 0xfcb9df
+	ld xiy, VoiceMode_ParamConfigTables
 	ld xix, 0x91d2
 
 MidiSeqBufInit_CopyLoop:
@@ -8500,7 +8500,7 @@ VoiceMode_ParamDispatch:
 	ldda8 l, 37301
 	and l, 0x70
 	srl hl, 2
-	ld xiy, 0xfcada3
+	ld xiy, VoiceMode_ParamDispatch_Table
 	ld_sril3 XIY, 0x07, 0xf4, 0xec
 	call (xiy)
 	jr AudioSeq_CheckEventPending
@@ -8613,7 +8613,7 @@ MidiCtrl_DispatchHandler:
 	ldda8 l, 64848
 	and l, 0x3
 	sll hl, 2
-	ld xix, 0xfcaee9
+	ld xix, MidiCtrl_ModeDispatch_Table
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	jp (xix)
 MidiCtrl_ModeDispatch_Table:
@@ -9013,7 +9013,7 @@ VoiceParam_DispatchByMode:
 	ldda8 a, 37301
 	and a, 0x3
 	sll a, 2
-	ld xix, 0xfcb46f
+	ld xix, VoiceParam_ModeDispatch_Table
 	ld_sril3 XIX, 0x03, 0xf0, 0xe0
 	call (xix)
 
@@ -9240,7 +9240,7 @@ MidiVoiceNote_Dispatch:
 	ldda8 l, 37301
 	and l, 0x3
 	sll l, 2
-	ld xix, 0xfcb6f9
+	ld xix, MidiVoiceNote_Dispatch_Table
 	ld_sril3 XIX, 0x03, 0xf0, 0xec
 	jp (xix)
 MidiVoiceNote_Dispatch_Table:
@@ -9336,7 +9336,7 @@ MidiPart_ChannelDispatch:
 	ldda8 l, 64848
 	and l, 0x3
 	sll hl, 2
-	ld xix, 0xfcb80d
+	ld xix, MidiNote_VelocityHandler_Table
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	jp (xix)
 

@@ -112,7 +112,7 @@ VoiceChannel_LookupParams:
 	ld c, l
 	sla hl, 2
 	push xix
-	ld xix, 0xf25eac
+	ld xix, VoiceSynth_DataEntry_PtrTable
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 	ld_srib3 A, 0x07, 0xec, 0xf4
@@ -171,7 +171,7 @@ VoiceChannel_ApplyPitchFlags:
 	cpdi8 4323, 0
 	jrl nz, VoiceChannel_NullRet
 	push xix
-	ld xix, 0xf2435b
+	ld xix, SeqTrack_ChannelMapIdentity
 	cpdi8 4600, 1
 	jr z, VoiceChannel_SelectChannelBank
 	ld xix, 0xf2436b
@@ -325,7 +325,7 @@ VoiceChannel_GetParamBlock:
 	cpdi8 4600, 1
 	jr nz, VoiceChannel_GetParamBlockAlt
 	push xix
-	ld xix, 0xf26c1e
+	ld xix, VoiceChannel_ParamTable1
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 	jr VoiceChannel_StoreParamPtr
@@ -510,7 +510,7 @@ SoundGen_SelectChannelTable:
 	ld xix, 0xf2436b
 	cpdi8 4600, 1
 	jr nz, SoundGen_SelectAltChannelTable
-	ld xix, 0xf2435b
+	ld xix, SeqTrack_ChannelMapIdentity
 
 SoundGen_SelectAltChannelTable:
 	ld_srib3 A, 0x07, 0xf0, 0xec
@@ -526,7 +526,7 @@ SoundGen_ApplyChannelParam:
 	pop xiy
 	push xiy
 	push xde
-	ld xde, 0xf26dd0
+	ld xde, SoundGen_VoiceParamData
 	ld_srib3 A, 0x03, 0xe8, 0xe4
 	pop xde
 	push xiy
@@ -632,7 +632,7 @@ SoundGen_InitVoiceLoop:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	ld xde, 0xf26e7e
+	ld xde, SoundGen_InitVoiceData
 	ld_srib3 A, 0x07, 0xe8, 0xf4
 	push xiy
 	call SoundGen_UpdateAndRefresh
@@ -1026,7 +1026,7 @@ SMF_SetupActiveChannel:
 	st_dpiw WA, 0xf1
 	stda32 4376, xix
 	ldda32 xix, 4376
-	ld xiy, 0xf2823a
+	ld xiy, SMF_HeaderConstants
 	lds bc, 4
 	ldir85
 	ld xiy, 0xf280
@@ -2965,7 +2965,7 @@ FileOpen:
 	ld xwa, (xsp + 24)
 	or xwa, xwa
 	jrl z, FileOpen_ErrorNoFile
-	lda_24 xwa, 0xf4f05a
+	lda_24 xwa, FileClose
 	st32_24 0x0210f6, xwa
 	ld (xsp + 4), 0x4
 	cp (xbc), 0x0
@@ -9820,7 +9820,7 @@ GetDiskFreeSpace:
 	add wa, wa
 	lda_24 xix, 0xe45104
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf5277e
+	lda_24 xix, GetDiskFreeSpace_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 GetDiskFreeSpace_JumpTable:
@@ -9876,7 +9876,7 @@ GetVolumeLabel:
 	add wa, wa
 	lda_24 xix, 0xe45118
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf527f7
+	lda_24 xix, GetVolumeLabel_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 GetVolumeLabel_JumpTable:

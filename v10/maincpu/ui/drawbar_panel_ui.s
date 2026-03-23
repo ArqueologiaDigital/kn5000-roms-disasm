@@ -181,7 +181,7 @@ ComSetGridCheck:
 	add xwa, xwa
 	add xwa, 0xe800c0
 	ld wa, (xwa)
-	lda_24 xix, 0xf77fc4
+	lda_24 xix, ComSetGridCheck_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ComSetGridCheck_JumpTable:
@@ -508,7 +508,7 @@ AcPmemOutLGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe800ce
 	ld bc, (xbc)
-	lda_24 xix, 0xf7838b
+	lda_24 xix, AcPmemOutL_Init
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 AcPmemOutL_Init:
@@ -818,7 +818,7 @@ AcPmemOutRGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe800dc
 	ld bc, (xbc)
-	lda_24 xix, 0xf786de
+	lda_24 xix, AcPmemOutR_Init
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 AcPmemOutR_Init:
@@ -1122,7 +1122,7 @@ PmemOutLGridCheck:
 	add xwa, xwa
 	add xwa, 0xe801c6
 	ld wa, (xwa)
-	lda_24 xix, 0xf78a11
+	lda_24 xix, PmemOutLGridCheck_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 PmemOutLGridCheck_JumpTable:
@@ -1492,7 +1492,7 @@ PmemOutRGridCheck:
 	add xhl, xhl
 	add xhl, 0xe80272
 	ld hl, (xhl)
-	lda_24 xix, 0xf79260
+	lda_24 xix, TtMdCtlMsg_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
 ; TtMdCtlMsg event dispatch (7-entry, table 0xe80272)
 
@@ -2339,7 +2339,7 @@ AcCtlMsgGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe80378
 	ld bc, (xbc)
-	lda_24 xix, 0xf79b5d
+	lda_24 xix, AcCtlMsgGrid_Init
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 AcCtlMsgGrid_Init:
@@ -2766,7 +2766,7 @@ CtlMsgGridCheck:
 	add xwa, xwa
 	add xwa, 0xe803f0
 	ld wa, (xwa)
-	lda_24 xix, 0xf79ff0
+	lda_24 xix, CtlMsgGridCheck_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 CtlMsgGridCheck_JumpTable:
@@ -2986,7 +2986,7 @@ AcMidiPartGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe80512
 	ld bc, (xbc)
-	lda_24 xix, 0xf7a275
+	lda_24 xix, MidiSetup_TtlCase3
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; MidiSetup title case 3
@@ -3560,7 +3560,7 @@ MidiPartGridCheck:
 	add xwa, xwa
 	add xwa, 0xe806fc
 	ld wa, (xwa)
-	lda_24 xix, 0xf7a8d4
+	lda_24 xix, MidiPartGridCheck_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 MidiPartGridCheck_JumpTable:
@@ -4230,7 +4230,7 @@ IvSdpartProc:
 	add xwa, xwa
 	add xwa, 0xe95550
 	ld wa, (xwa)
-	lda_24 xix, 0xf7b7ae
+	lda_24 xix, IvSdpart_Init
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 IvSdpart_Init:
@@ -10424,7 +10424,7 @@ AcWelcomScreen_Select:
 	add hl, hl
 	lda_24 xix, 0xe9f102
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
-	lda_24 xix, 0xf7f649
+	lda_24 xix, AcWelcomScreen_RenderBytecode
 	jp_dri 8, 0x07, 0xf0, 0xec
 AcWelcomScreen_RenderBytecode:
 	ld	xwa, 4294967295
@@ -10888,7 +10888,7 @@ PsMixerControlProc:
 	add xbc, xbc
 	add xbc, 0xe9f5a8
 	ld bc, (xbc)
-	lda_24 xix, 0xf7fb04
+	lda_24 xix, PsMixer_ControlHandler
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; PsMixerControlProc control handler dispatch (10-entry)
@@ -17178,7 +17178,7 @@ DemoMenu_WorkspaceFunc:
 	add wa, wa
 	lda_24 xix, 0xe9f984
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf83d5c
+	lda_24 xix, DemoMenu_WorkspaceDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DemoMenu workspace dispatch (6-entry, table 0xe9f984)
@@ -17235,7 +17235,7 @@ DemoMenu_DescriptorFunc:
 	add wa, wa
 	lda_24 xix, 0xe9f990
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf83de9
+	lda_24 xix, DemoDesc_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 DemoDesc_DispatchTable:
@@ -17955,7 +17955,7 @@ AcPresentationControlProc:
 	add xbc, xbc
 	add xbc, 0xe9f9b2
 	ld bc, (xbc)
-	lda_24 xix, 0xf84563
+	lda_24 xix, AcPresCtrl_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; AcPresentationControlProc event dispatch (11-entry, table 0xe9f9b2)
 AcPresCtrl_EventDispatch:

@@ -148,7 +148,7 @@ We_seem_to_be_running_boot_ROM_code:
 	call VGA_Setup
 	pushw 0x8
 	pushw 0x3
-	ld xwa, 0xe00b2e	; "Please Wait !!"
+	ld xwa, Bitmap_1bit_Please_Wait	; "Please Wait !!"
 	ldw bc, 0x30
 	ldw de, 0x50
 	call Draw_FlashMemUpdate_message_bitmap
@@ -416,7 +416,7 @@ Boot_HandleComboDisplay:
 	call Get_Firmware_Version	; Returns version byte in L (0x0a = v10)
 	and l, 0xf
 	extz hl
-	lda_24 xbc, 0xe00000		; LED_patterns_indicating_firmware_version table
+	lda_24 xbc, LED_patterns_indicating_firmware_version		; LED_patterns_indicating_firmware_version table
 	ld_srib3 C, 0x07, 0xe4, 0xec	; Read LED pattern from table
 	extz bc
 	lds wa, 7
@@ -535,9 +535,9 @@ GetResouceInfo:
 	cp wa, 0x9
 	ret ugt
 	add wa, wa
-	lda_24 xix, 0xe1ffd2
+	lda_24 xix, RESOURCE_INFO_HANDLER_OFFSETS
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf1ea4c
+	lda_24 xix, RESOURCE_INFO_HANDLERS
 	jp_dri 8, 0x07, 0xf0, 0xe0
 ; Resource info handlers - 10 handlers for different resource types
 RESOURCE_INFO_HANDLERS:
@@ -643,7 +643,7 @@ rcm_sv_XAPR_j:
 
 SetSepaOutMode:
 	lda xsp, (xsp - 20)
-	ld xiy, 0xe1ffe6
+	ld xiy, SepaOut_Config_0
 	lda xix, (xsp + 16)
 	ldiw
 	ldiw
@@ -1001,27 +1001,27 @@ Voice_InitBankDataSafe_Alt1:
 	ret
 
 Voice_InitBankTables:
-	ld xiy, 0xf6f119
+	ld xiy, Voice_BankHeaderDefaults
 	ld xix, 0x1e8800
 	ldw bc, 0x10
 	ldirw
 	ldb a, 0xc
 
 Voice_InitBankTables_Loop:
-	ld xiy, 0xf6f139
+	ld xiy, Voice_BankSlotZeroInit
 	ldw bc, 0x8
 	ldirw
 	dec 1, a
 	jr nz, Voice_InitBankTables_Loop
-	ld xiy, 0xf6f249
+	ld xiy, BLOCK_OF_64_ZEROES
 	ld xix, 0x1e8a00
 	ldw bc, 0x20
 	ldirw
-	ld xiy, 0xf6f289
+	ld xiy, HEADER__COMPILE_BANKS
 	ld xix, 0x1e8a40
 	ldw bc, 0x20
 	ldirw
-	ld xiy, 0xf6f2c9
+	ld xiy, HEADER__USER_BANKS
 	ld xix, 0x1e8a80
 	ldw bc, 0x20
 	ldirw
@@ -1029,7 +1029,7 @@ Voice_InitBankTables_Loop:
 	ldb a, 0x39
 
 Voice_InitBankTables_SlotLoop:
-	ld xiy, 0xf6f149
+	ld xiy, Voice_SlotTemplate
 	ldw bc, 0x80
 	ldirw
 	dec 1, a
@@ -1040,16 +1040,16 @@ Voice_InitBankTables_SlotLoop:
 	.include "audio/voice_bank_defaults.s"
 Voice_InitBankData:
 	calr Voice_InitBankTables
-	ld xiy, 0xf6f42f
+	ld xiy, Voice_FactoryPresetData
 	ld xix, 0x1e8820
 	ldw bc, 0xf0
 	ldirw
 	ld xix, 0x1e8a00
-	ld xiy, 0xf6f249
+	ld xiy, BLOCK_OF_64_ZEROES
 	ldw bc, 0x60
 	ldirw
 	ld xix, 0x1e8b00
-	ld xiy, 0xf6f62f
+	ld xiy, MSP_FACTORY_DEFAULTS
 	ldw bc, 0xa80
 	ldirw
 	calr CountAvailableVoiceSlots

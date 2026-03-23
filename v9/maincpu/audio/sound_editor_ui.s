@@ -8480,7 +8480,7 @@ SeMenu_ShowPopupDialog:
 	push xiy
 	ld hl, (xiz + 8)
 	sub hl, 0x20
-	ld xiy, 0xf0ee9b
+	ld xiy, SeMenu_ShowPopupDialog_Draw
 	sla hl, 2
 	ld_sril3 XIY, 0x07, 0xf4, 0xec
 	push xiy
@@ -8559,7 +8559,7 @@ SeMenu_ShowConfirmDialog:
 	ld hl, (xiz + 8)
 	ld a, (xiz + 10)
 	sub hl, 0x20
-	ld xiy, 0xf0ef8a
+	ld xiy, SeMenu_ShowConfirmDialog_Data
 	sla hl, 2
 	ld_sril3 XIY, 0x07, 0xf4, 0xec
 	call (xiy)
@@ -17323,7 +17323,7 @@ S2cGridCheck:
 	add xwa, xwa
 	add xwa, 0xe1d78e
 	ld wa, (xwa)
-	lda_24 xix, 0xf1b2ce
+	lda_24 xix, S2c_GridCheck_DataBlock
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 S2c_GridCheck_DataBlock:
@@ -17793,7 +17793,7 @@ PsCstmCpBnkBox_ReadParam2:
 PsCstmCpBnkBox_LookupAndSend:
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1d9b8
+	lda_24 xbc, PtrTbl_RhySlotLongNames
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 8)
@@ -18276,7 +18276,7 @@ PsCmpQtzBox_HandleEvtBC:
 	ldda8 a, 13531
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1dd26
+	lda_24 xbc, PtrTbl_NotePositionStrs
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 8)
@@ -18596,7 +18596,7 @@ PsNameMemBox_HandleEvtBC:
 	ldda8 a, 13526
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1dd86
+	lda_24 xbc, PtrTbl_StyleVarGroupCodes
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 8)
@@ -18691,7 +18691,7 @@ AcEasyCmpGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe1de4c
 	ld bc, (xbc)
-	lda_24 xix, 0xf1c0a2
+	lda_24 xix, EasyCmp_DialGrid
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; EasyCmp dial grid dispatch (7-entry, table 0xe1de4c)
@@ -18906,7 +18906,7 @@ EasyCmpGridCheck:
 	add xwa, xwa
 	add xwa, 0xe1df16
 	ld wa, (xwa)
-	lda_24 xix, 0xf1c2dd
+	lda_24 xix, EasyCmp_GridCheck_DataBlock
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 EasyCmp_GridCheck_DataBlock:
@@ -19051,7 +19051,7 @@ MspNameBnkFunc:
 	add xwa, xwa
 	add xwa, 0xe1df5c
 	ld wa, (xwa)
-	lda_24 xix, 0xf1c445
+	lda_24 xix, EasyCmp_GridEvtCase_Default
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 EasyCmp_GridEvtCase_Default:
@@ -19189,7 +19189,7 @@ PsMspNameBnk_HandleEvtBC:
 	ldda8 a, 32574
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1df70
+	lda_24 xbc, PtrTbl_MspCompileBankLabels
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 8)
@@ -19441,7 +19441,7 @@ VwVariBox_GetText_LookupAudio:
 	ld a, (xwa)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1dfd0
+	lda_24 xbc, PtrTbl_MusicStyleBankNames
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld_sril XWA, (xsp + 0x0118)
@@ -19913,7 +19913,7 @@ MspRGrpSetGridCheck:
 	add xwa, xwa
 	add xwa, 0xe1e2c2
 	ld wa, (xwa)
-	lda_24 xix, 0xf1cd3b
+	lda_24 xix, MspRGrpSetGridCheck_DataBlock
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 MspRGrpSetGridCheck_DataBlock:
@@ -20001,7 +20001,7 @@ RgpSetBnk_GridCheck_EventEnc:
 	ld a, (xbc)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1e172
+	lda_24 xbc, PtrTbl_MusicStyleBankNames2
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	push xde
@@ -20450,7 +20450,7 @@ MspPlayModeFunc:
 	add xwa, xwa
 	add xwa, 0xe1e344
 	ld wa, (xwa)
-	lda_24 xix, 0xf1d215
+	lda_24 xix, MspPlayModeFunc_DataBlock
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 MspPlayModeFunc_DataBlock:
@@ -20528,7 +20528,7 @@ AcSndArgGridBoxProc:
 	add xwa, xwa
 	add xwa, 0xe1e35e
 	ld wa, (xwa)
-	lda_24 xix, 0xf1d2ee
+	lda_24 xix, AcSndArgGrid_Init
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 AcSndArgGrid_Init:
@@ -20876,7 +20876,7 @@ SndArgGridCheck:
 	add xwa, xwa
 	add xwa, 0xe1e36c
 	ld wa, (xwa)
-	lda_24 xix, 0xf1d6fa
+	lda_24 xix, SndArgGridCheck_JumpTableFallthrough
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SndArgGridCheck_JumpTableFallthrough:
@@ -21238,7 +21238,7 @@ StylCnvStorBnkSel:
 	ld xhl, xde
 	ld xde, xbc
 	ld xiz, xwa
-	ld xiy, 0xe1e37a
+	ld xiy, SLOT_NAME_PTRS
 	lda xix, (xsp + 4)
 	ldw bc, 0x2e
 	ldirw
@@ -21250,7 +21250,7 @@ StylCnvStorBnkSel:
 	add xde, xde
 	add xde, 0xe1e4bc
 	ld de, (xde)
-	lda_24 xix, 0xf1da62
+	lda_24 xix, StylCnvStorBnkSel_DataBlock
 	jp_dri 8, 0x07, 0xf0, 0xe8
 
 StylCnvStorBnkSel_DataBlock:
@@ -22002,7 +22002,7 @@ StylCnvLangCheck_ReturnZero:
 SndArrLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, SndArrLangCheck_ReturnZero
-	lda_24 xhl, 0xe1f032
+	lda_24 xhl, Hama_ModeInit_Table
 	ret
 
 SndArrLangCheck_ReturnZero:

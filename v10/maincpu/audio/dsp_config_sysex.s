@@ -216,7 +216,7 @@ SysEx_DispatchByChannel:
 	add wa, wa
 	lda_24 xix, 0xee3520
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfdad13
+	lda_24 xix, SysEx_ChannelHandler_4B_Data
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SysEx_ChannelHandler_4B_Data:
@@ -269,7 +269,7 @@ SysEx_DispatchByChannel_49:
 	add wa, wa
 	lda_24 xix, 0xee3584
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfdad9a
+	lda_24 xix, SysEx_ChannelHandler_49_Data
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SysEx_ChannelHandler_49_Data:
@@ -869,7 +869,7 @@ SwbtWr_InitBank1:
 	ret
 
 SwbtWr_InitBank2:
-	ld xiy, 0xee7ca7
+	ld xiy, Naka_RenderMode_A_Table
 	stda32 49281, xiy
 	ld xiy, 0xee86b4
 	stda32 49285, xiy
@@ -879,7 +879,7 @@ SwbtWr_InitBank2:
 	ret
 
 SwbtWr_InitBank3:
-	ld xiy, 0xee86d0
+	ld xiy, Naka_EventHandler_Table
 	stda32 49281, xiy
 	ld xiy, 0xee8c79
 	stda32 49285, xiy
@@ -4434,7 +4434,7 @@ DspConfig_EventDispatch:
 	add bc, bc
 	lda_24 xix, 0xee6390
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, 0xfdd2b3
+	lda_24 xix, AssSwb_SwapEntriesAndDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 AssSwb_SwapEntriesAndDispatch:

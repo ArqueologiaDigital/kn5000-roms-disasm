@@ -63,7 +63,7 @@ ParaLoadOpt_CaseC:
 	add wa, wa
 	lda_24 xix, 0xe7fe3a
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf76955
+	lda_24 xix, ParaLoadOpt_DispatchTable_A
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ParaLoadOpt_DispatchTable_A:
@@ -190,7 +190,7 @@ ParaLoadOpt_CaseF:
 	add wa, wa
 	lda_24 xix, 0xe7fe54
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf76b03
+	lda_24 xix, ParaLoadOpt_DispatchTable_B
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ParaLoadOpt_DispatchTable_B:
@@ -316,7 +316,7 @@ AcParaLoadOptGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe7fe92
 	ld bc, (xbc)
-	lda_24 xix, 0xf76cc8
+	lda_24 xix, ParaLoadOpt_GridHandler
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; ParaLoadOpt grid handler
@@ -600,7 +600,7 @@ ParaLoadOptGridCheck:
 	add xde, xde
 	add xde, 0xe7ff12
 	ld de, (xde)
-	lda_24 xix, 0xf76fe2
+	lda_24 xix, ParaLoadOpt_GridDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; ParaLoadOptGridCheck dispatch
 ParaLoadOpt_GridDispatch:

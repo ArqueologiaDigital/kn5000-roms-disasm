@@ -1130,7 +1130,7 @@ SqSngSelTtlFunc:
 	add xde, xde
 	add xde, 0xe1fffa
 	ld de, (xde)
-	lda_24 xix, 0xf20cec
+	lda_24 xix, SqTrAs_CondCheck
 	jp_dri 8, 0x07, 0xf0, 0xe8
 
 ; SqTrAs conditional voice check
@@ -1164,7 +1164,7 @@ SqSngNameTtlFunc:
 	add xde, xde
 	add xde, 0xe20006
 	ld de, (xde)
-	lda_24 xix, 0xf20d37
+	lda_24 xix, SQTR_DISPATCH_TABLE_1
 	jp_dri 8, 0x07, 0xf0, 0xe8
 
 ; Sequencer track dispatch table 1 - Handler for SqTrAsTtlFunc, 6 cases (XDE 0-5)
@@ -1206,7 +1206,7 @@ SqTrAsTtlFunc:
 	add xde, xde
 	add xde, 0xe20012
 	ld de, (xde)
-	lda_24 xix, 0xf20d8e
+	lda_24 xix, SQTR_DISPATCH_TABLE_2
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; Sequencer track dispatch table 2 - SqTrAsTtlFunc handler
 ; 6 dispatch cases (XDE 0-5)
@@ -1353,7 +1353,7 @@ SqTrAsPsTtlFunc:
 	add xde, xde
 	add xde, 0xe2001e
 	ld de, (xde)
-	lda_24 xix, 0xf20ebd
+	lda_24 xix, SqTrAsPsTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 SqTrAsPsTtl_Dispatch:	.ascii ":;<>"
 	call	SetWall_DataBlock1
@@ -1483,7 +1483,7 @@ SqMdlyPlyTtlFunc:
 	add xde, xde
 	add xde, 0xe2003c
 	ld de, (xde)
-	lda_24 xix, 0xf20fd0
+	lda_24 xix, SqMdlyPlyTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 SqMdlyPlyTtl_Dispatch:	.ascii ":;<>"
 	call	PlayMode_InitFlagBlock
@@ -1550,7 +1550,7 @@ DkMdlyPlyTtlFunc:
 	add xde, xde
 	add xde, 0xe20048
 	ld de, (xde)
-	lda_24 xix, 0xf21064
+	lda_24 xix, DkMdlyPlyTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 DkMdlyPlyTtl_Dispatch:	.ascii ":;<>"
 	call	PlayMode_InitFlagBlock
@@ -1686,7 +1686,7 @@ DisplayMode_DispatchEvents:
 	add wa, wa
 	lda_24 xix, 0xe200b4
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf21181
+	lda_24 xix, DisplayMode_BatchEventSend
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; --- DisplayMode_BatchEventSend: Dispatch events for display mode transitions ---
@@ -1764,7 +1764,7 @@ DpMdlyDocTtlFunc:
 	add xde, xde
 	add xde, 0xe200c2
 	ld de, (xde)
-	lda_24 xix, 0xf21284
+	lda_24 xix, DpMdlyDocTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; DpMdlyDocTtlFunc title dispatch
 DpMdlyDocTtl_Dispatch:
@@ -1852,7 +1852,7 @@ DpMdlyPdTtlFunc:
 	add xde, xde
 	add xde, 0xe200ce
 	ld de, (xde)
-	lda_24 xix, 0xf21334
+	lda_24 xix, DpMdlyPdTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; DpMdlyPdTtlFunc title dispatch
 DpMdlyPdTtl_Dispatch:
@@ -1940,7 +1940,7 @@ DpMdlySmfTtlFunc:
 	add xde, xde
 	add xde, 0xe200da
 	ld de, (xde)
-	lda_24 xix, 0xf213e4
+	lda_24 xix, DpMdlySmfTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; DpMdlySmfTtlFunc title dispatch
 DpMdlySmfTtl_Dispatch:
@@ -2028,7 +2028,7 @@ DpMdlySmfLyrTtlFunc:
 	add xde, xde
 	add xde, 0xe200e6
 	ld de, (xde)
-	lda_24 xix, 0xf214a2
+	lda_24 xix, DpMdlySmfLyrTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; DpMdlySmfLyrTtlFunc title dispatch
 DpMdlySmfLyrTtl_Dispatch:
@@ -2125,7 +2125,7 @@ NameGetFuncCall:
 	add xbc, xbc
 	add xbc, 0xe20120
 	ld bc, (xbc)
-	lda_24 xix, 0xf21578
+	lda_24 xix, NameGetFuncCall_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; NameGetFuncCall dispatch
 NameGetFuncCall_Dispatch:
@@ -2832,7 +2832,7 @@ DpDocTtlFunc:
 	add xde, xde
 	add xde, 0xe20150
 	ld de, (xde)
-	lda_24 xix, 0xf21d5a
+	lda_24 xix, DpDocTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; DpDocTtlFunc title dispatch
 DpDocTtl_Dispatch:
@@ -2868,7 +2868,7 @@ DpDoc_CaseA:
 	add xwa, xwa
 	add xwa, 0xe2013c
 	ld wa, (xwa)
-	lda_24 xix, 0xf21dd0
+	lda_24 xix, DpDoc_CaseB
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DpDocTtl case B
@@ -2958,7 +2958,7 @@ DpPdTtlFunc:
 	add xde, xde
 	add xde, 0xe20170
 	ld de, (xde)
-	lda_24 xix, 0xf21e89
+	lda_24 xix, DpPdTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; DpPdTtlFunc title dispatch
 DpPdTtl_Dispatch:
@@ -2994,7 +2994,7 @@ DpPd_CaseA:
 	add xwa, xwa
 	add xwa, 0xe2015c
 	ld wa, (xwa)
-	lda_24 xix, 0xf21eff
+	lda_24 xix, DpPd_CaseB
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DpPdTtl case B
@@ -3084,7 +3084,7 @@ DpSmfTtlFunc:
 	add xde, xde
 	add xde, 0xe20190
 	ld de, (xde)
-	lda_24 xix, 0xf21fb9
+	lda_24 xix, DpSmfTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; DpSmfTtlFunc title dispatch
 DpSmfTtl_Dispatch:
@@ -3129,7 +3129,7 @@ DpSmf_CaseA:
 	add xwa, xwa
 	add xwa, 0xe2017c
 	ld wa, (xwa)
-	lda_24 xix, 0xf22055
+	lda_24 xix, DpSmf_CaseB
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DpSmfTtl case B
@@ -3219,7 +3219,7 @@ DpSmfLyrTtlFunc:
 	add xde, xde
 	add xde, 0xe2019c
 	ld de, (xde)
-	lda_24 xix, 0xf2210e
+	lda_24 xix, DpSmfLyrTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; DpSmfLyrTtlFunc title dispatch
 DpSmfLyrTtl_Dispatch:
@@ -3362,7 +3362,7 @@ SqTrSelTtlFunc:
 	add xde, xde
 	add xde, 0xe201a8
 	ld de, (xde)
-	lda_24 xix, 0xf22245
+	lda_24 xix, SqTrSelTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 SqTrSelTtl_Dispatch:	.ascii ":;<>"
 	call	PlayMode_SetupAndDispatch

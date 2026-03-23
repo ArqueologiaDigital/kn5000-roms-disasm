@@ -740,7 +740,7 @@ GetEditSwPoint:
 	add hl, hl
 	lda_24 xix, 0xea9b1c
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
-	lda_24 xix, 0xf9a973
+	lda_24 xix, EditSwParam_Mode0
 	jp_dri 8, 0x07, 0xf0, 0xec
 
 ; GetEditSwPoint handler: mode 0 (value=0x2b)
@@ -834,7 +834,7 @@ SetWallPaper:
 	add wa, wa
 	lda_24 xix, 0xea9b36
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf9aa0d
+	lda_24 xix, SetWallPaper_DispatchData
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SetWallPaper_DispatchData:
@@ -1127,7 +1127,7 @@ IvDirmdScreenProc:
 	add xbc, xbc
 	add xbc, 0xea9b42
 	ld bc, (xbc)
-	lda_24 xix, 0xf9acba
+	lda_24 xix, DirmdEmu_CaseB
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; DirmdEmulator dispatch case B
@@ -1321,7 +1321,7 @@ DirmdEmulator:
 	add xbc, xbc
 	add xbc, 0xea9bbe
 	ld bc, (xbc)
-	lda_24 xix, 0xf9aec6
+	lda_24 xix, DirmdEmulator_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 DirmdEmulator_Dispatch:	.ascii ":;<>"
 	ld	xwa, (xiz+4)
@@ -1429,7 +1429,7 @@ WindowProc:
 	add xbc, xbc
 	add xbc, 0xea9bde
 	ld bc, (xbc)
-	lda_24 xix, 0xf9b061
+	lda_24 xix, WindowProc_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; WindowProc event dispatch
 WindowProc_EventDispatch:

@@ -541,7 +541,7 @@ UIStateMachine_ClearBit3:
 UIStateMachine_PrimaryDispatch:
 	stda8 1041, a
 	sll a, 2
-	lda_24 xhl, 0xef0d64
+	lda_24 xhl, UI_STATE_MACHINE_TABLE
 	ld_sril3 XHL, 0x03, 0xec, 0xe0
 	jp (xhl)
 
@@ -574,7 +574,7 @@ UI_STATE_2_SUBSTATE:
 	ldda8 a, 1042
 	and a, 0xf
 	sll a, 2
-	lda_24 xhl, 0xef0da5
+	lda_24 xhl, UI_SUBSTATE_TABLE
 	ld_sril3 XHL, 0x03, 0xec, 0xe0
 	jp (xhl)
 
@@ -2208,7 +2208,7 @@ TaskSched_TimerSlot_Skip:
 TaskSched_TimerSlot_Fire:
 	ld wa, (xix + 2)
 	ld (xix + 256), wa
-	lda_24 xwa, 0xef1b47
+	lda_24 xwa, TaskSched_TimerSlot_Skip
 	push xwa
 	ld xwa, (xix + 4)
 	jp (xwa)
@@ -5862,7 +5862,7 @@ INTTC0_HANDLER:
 	srl c, 5
 	extz bc
 	sla bc, 2
-	lda_24 xde, 0xe00012
+	lda_24 xde, SeqRingBuf_WriteDispatch_Table
 	st_dri3b B, 0x07, 0xe8, 0xe4
 	ld xbc, 0x5e8
 	ld xhl, (xde)
@@ -6173,7 +6173,7 @@ Flash_EraseSector_UseBank1:
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
-	ld xwa, 0xff0000
+	ld xwa, SendPartDataBlock_Data2
 	and (xsp + 4), xwa
 	call Get_Region_Code
 	cps l, 4
@@ -6397,7 +6397,7 @@ Flash_WriteFromMemory:
 	ld (xsp + 2), xde
 	ld (xsp + 6), xbc
 	ld (xsp + 10), a
-	ld xwa, 0xff0000
+	ld xwa, SendPartDataBlock_Data2
 	and (xsp + 2), xwa
 	lds iz, 0
 
@@ -7082,7 +7082,7 @@ SLIDE_Parse_Header:
 	push xiz
 	ld (xsp + 10), xbc
 	ld xiz, xwa
-	ld xiy, 0xe00032	; "SLIDE"
+	ld xiy, SLIDE_STRING	; "SLIDE"
 	lda xix, (xsp + 4)
 	lds bc, 3
 	ldirw
@@ -7575,7 +7575,7 @@ FDC_WriteCompressed_Return:
 SHOW_FD_TO_FLASH_MEMORY_MESSAGE:
 	pushw 0x8
 	pushw 0x2
-	ld xwa, 0xe0065e	; "FD -> Flash Memory"
+	ld xwa, Bitmap_1bit_FD_to_Flash_Memory	; "FD -> Flash Memory"
 	ldw bc, 0x30
 	ldw de, 0xa0
 	call Draw_FlashMemUpdate_message_bitmap
@@ -7588,7 +7588,7 @@ FirmwareUpdate_SaveDiskType:
 SHOW_CHANGE_FLOPPY_2_OF_2_MESSAGE:
 	pushw 0x8
 	pushw 0x2
-	ld xwa, 0xe00d96	; "Change FD (2/2)"
+	ld xwa, Bitmap_1bit_Change_FD_2_of_2	; "Change FD (2/2)"
 	ldw bc, 0x30
 	ldw de, 0xa0
 	call Draw_FlashMemUpdate_message_bitmap
@@ -7667,7 +7667,7 @@ Erase_and_Burn____when_disk_is_valid:
 	ld (xsp), a
 	pushw 0x8
 	pushw 0x2
-	ld xwa, 0xe003f6	; "Now Erasing!!"
+	ld xwa, Bitmap_1bit_Now_Erasing	; "Now Erasing!!"
 	ldw bc, 0x30
 	ldw de, 0xa0
 	call Draw_FlashMemUpdate_message_bitmap
@@ -7679,9 +7679,9 @@ Erase_and_Burn____when_disk_is_valid:
 	cps wa, 7
 	jrl gt, SHOW_ILLEGAL_DISK_MESSAGE
 	add wa, wa
-	lda_24 xix, 0xe00178
+	lda_24 xix, HANDLE_UPDATE_OFFSETS
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xef4784
+	lda_24 xix, HANDLE_UPDATE_FILE_TYPE_ID_001h
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 
@@ -7773,7 +7773,7 @@ UpdateFile_StackCleanup:
 SHOW_ILLEGAL_DISK_MESSAGE:
 	pushw 0x8
 	pushw 0x2
-	ld xwa, 0xe00ffe	; "Illegal Disk!"
+	ld xwa, Bitmap_1bit_Illegal_Disk	; "Illegal Disk!"
 	ldw bc, 0x30
 	ldw de, 0xa0
 	call Draw_FlashMemUpdate_message_bitmap
@@ -8570,7 +8570,7 @@ FLASH_MEM_UPDATE:
 	jr z, Flash_CheckAndValidate	; yes, it is.
 	pushw 0x8
 	pushw 0x2
-	ld xwa, 0xe0018e	; "Flash Memory Update"
+	ld xwa, Bitmap_1bit_Flash_Memory_Update	; "Flash Memory Update"
 	ldw bc, 0x30
 	ldw de, 0x50
 	call Draw_FlashMemUpdate_message_bitmap
@@ -8579,13 +8579,13 @@ FLASH_MEM_UPDATE:
 	calr Erase_and_Burn____when_disk_is_valid
 	pushw 0x8
 	pushw 0x1
-	ld xwa, 0xe008c6	; "Completed!"
+	ld xwa, Bitmap_1bit_Completed	; "Completed!"
 	ldw bc, 0x30
 	ldw de, 0xa0
 	call Draw_FlashMemUpdate_message_bitmap
 	pushw 0x8
 	pushw 0x1
-	ld xwa, 0xe01266	; "Turn On AGAIN !!"
+	ld xwa, Bitmap_1bit_Turn_On_AGAIN	; "Turn On AGAIN !!"
 	ldw bc, 0x30
 	ldw de, 0xc8
 	call Draw_FlashMemUpdate_message_bitmap
@@ -8599,7 +8599,7 @@ Flash_CheckAndValidate:
 	jr nz, flash_update__not_today
 	pushw 0x8
 	pushw 0x2
-	ld xwa, 0xe0018e	; "Flash Memory Update"
+	ld xwa, Bitmap_1bit_Flash_Memory_Update	; "Flash Memory Update"
 	ldw bc, 0x30
 	ldw de, 0x50
 	call Draw_FlashMemUpdate_message_bitmap
@@ -8608,13 +8608,13 @@ Flash_CheckAndValidate:
 	calr Erase_and_Burn____when_disk_is_valid
 	pushw 0x8
 	pushw 0x1
-	ld xwa, 0xe008c6	; "Completed!"
+	ld xwa, Bitmap_1bit_Completed	; "Completed!"
 	ldw bc, 0x30
 	ldw de, 0xa0
 	call Draw_FlashMemUpdate_message_bitmap
 	pushw 0x8
 	pushw 0x1
-	ld xwa, 0xe01266	; "Turn On AGAIN !!"
+	ld xwa, Bitmap_1bit_Turn_On_AGAIN	; "Turn On AGAIN !!"
 	ldw bc, 0x30
 	ldw de, 0xc8
 	call Draw_FlashMemUpdate_message_bitmap

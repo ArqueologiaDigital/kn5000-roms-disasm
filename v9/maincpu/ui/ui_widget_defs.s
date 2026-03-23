@@ -30,7 +30,7 @@ AcGridBoxProc:
 	add xwa, xwa
 	add xwa, 0xeaa258
 	ld wa, (xwa)
-	lda_24 xix, 0xf9e9b3
+	lda_24 xix, AcGridBox_Init
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 AcGridBox_Init:
@@ -239,7 +239,7 @@ GridCheck:
 	add xwa, xwa
 	add xwa, 0xeaa26c
 	ld wa, (xwa)
-	lda_24 xix, 0xf9ebfc
+	lda_24 xix, GridCheck_JumpEnd
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 GridCheck_JumpEnd:
@@ -1913,7 +1913,7 @@ RamEditCheck:
 	add xwa, xwa
 	add xwa, 0xeaa2ba
 	ld wa, (xwa)
-	lda_24 xix, 0xf9fe0d
+	lda_24 xix, RamEditCheck_JumpStart
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 RamEditCheck_JumpStart:
@@ -3423,7 +3423,7 @@ ButtonState_DispatchDSP:
 	add wa, wa
 	lda_24 xix, 0xeaa31a
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfa0e3e
+	lda_24 xix, ButtonState_DispatchDSP_InlineData
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ButtonState_DispatchDSP_InlineData:
@@ -3669,7 +3669,7 @@ AcIndexEdit_DispatchDSP:
 	sll wa, 1
 	ld xix, 0xeaa34e
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xfa10c8
+	lda_24 xix, AcIndexEdit_DispatchDSP_InlineData
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 AcIndexEdit_DispatchDSP_InlineData:
@@ -8292,7 +8292,7 @@ ObjectProc:
 	add xwa, xwa
 	add xwa, 0xeaa8a4
 	ld wa, (xwa)
-	lda_24 xix, 0xfa3dfd
+	lda_24 xix, AcTrkSw_Return
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 AcTrkSw_Return:
@@ -8551,7 +8551,7 @@ ExitWindow_OK:
 	lda xbc, (xsp + 2)
 	ld xwa, 0x1600005
 	ld (xbc), xwa
-	lda_24 xwa, 0xfa4836
+	lda_24 xwa, SupportClassProc
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0x37
 	lda_24 xwa, 0xeb7690
@@ -8561,7 +8561,7 @@ ExitWindow_OK:
 	lda xbc, (xsp + 2)
 	ld xwa, 0x1600006
 	ld (xbc), xwa
-	lda_24 xwa, 0xfa4a6d
+	lda_24 xwa, ModeProc
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0x20
 	lda_24 xwa, 0x0328fc
@@ -8571,7 +8571,7 @@ ExitWindow_OK:
 	lda xbc, (xsp + 2)
 	ld xwa, 0x1600007
 	ld (xbc), xwa
-	lda_24 xwa, 0xfa4e03
+	lda_24 xwa, TitleProc
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0x100
 	lda_24 xwa, 0x032abc
@@ -8584,7 +8584,7 @@ ExitWindow_Return:
 	lda xbc, (xsp + 2)
 	ld xwa, 0x1600010
 	ld (xbc), xwa
-	lda_24 xwa, 0xfa5995
+	lda_24 xwa, ViewableProc
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0x0
 	ld wa, iz
@@ -8990,7 +8990,7 @@ ClassProc:
 	add xbc, xbc
 	add xbc, 0xeaa8f8
 	ld bc, (xbc)
-	lda_24 xix, 0xfa4598
+	lda_24 xix, ClassProc_Event_LoadFromWA
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ;-----------------------------------------------------------------------------
 ; ClassProc_EventHandlers - Dispatch table for UI event types
@@ -9568,7 +9568,7 @@ ModeProc:
 	add xbc, xbc
 	add xbc, 0xeaa908
 	ld bc, (xbc)
-	lda_24 xix, 0xfa4afd
+	lda_24 xix, NakaWidget_ReturnZero
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 NakaWidget_ReturnZero:
@@ -9953,7 +9953,7 @@ TitleProc:
 	add xde, xde
 	add xde, 0xeaa9c0
 	ld de, (xde)
-	lda_24 xix, 0xfa4f76
+	lda_24 xix, TitleProc_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 
 ; TitleProc event dispatch
@@ -10980,7 +10980,7 @@ ViewableProc:
 	add xwa, xwa
 	add xwa, 0xeaa9e6
 	ld wa, (xwa)
-	lda_24 xix, 0xfa5aa3
+	lda_24 xix, Viewable_GetClassProc
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 Viewable_GetClassProc:
@@ -17267,7 +17267,7 @@ CommonIDProc:
 	add xde, xde
 	add xde, 0xeaabe4
 	ld de, (xde)
-	lda_24 xix, 0xfa936f
+	lda_24 xix, CommonIDProc_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe8
 CommonIDProc_JumpTable:
 	ld	xwa, (xsp+16)
@@ -19195,7 +19195,7 @@ DrawFunc_DispatchDone:
 	ldw wa, 0x8
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaa4d8
+	lda_24 xbc, DrawFunc_StackHandler
 	ld (xwa), xbc
 	ld (xwa + 4), xiz
 	calr DisplayCmd_DequeueAndExecute
@@ -19237,7 +19237,7 @@ DrawFunc_StackEntry_Prologue:
 	ldw wa, 0x8
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaa4d8
+	lda_24 xbc, DrawFunc_StackHandler
 	ld (xwa), xbc
 	ld (xwa + 4), xiz
 	calr DisplayCmd_DequeueAndExecute
@@ -19320,7 +19320,7 @@ LcdOn:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaa5ce
+	lda_24 xbc, InitGraphics_SetupVRAM
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
 
@@ -19339,7 +19339,7 @@ LcdOff:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaa5f3
+	lda_24 xbc, LcdOn_Done
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
 
@@ -19406,7 +19406,7 @@ UpdateScreen_Prologue:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaa648
+	lda_24 xbc, UpdateScreen_CheckDirty
 	ld (xwa), xbc
 	calr DisplayCmd_DequeueAndExecute
 	ret

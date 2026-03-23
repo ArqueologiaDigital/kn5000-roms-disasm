@@ -57,7 +57,7 @@ AcPcgOutGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe7ff20
 	ld bc, (xbc)
-	lda_24 xix, 0xf7743b
+	lda_24 xix, PcgOutGridBoxEventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 PcgOutGridBoxEventDispatch:
@@ -292,7 +292,7 @@ PcgOutGridCheck:
 	add xwa, xwa
 	add xwa, 0xe7ffee
 	ld wa, (xwa)
-	lda_24 xix, 0xf776bd
+	lda_24 xix, PcgOutGridCheckJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 PcgOutGridCheckJumpTable:

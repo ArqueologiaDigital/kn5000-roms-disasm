@@ -116,7 +116,7 @@ SoundBank_InitTrack_Loop:
 	xor iy, iy
 
 SoundBank_InitTrack_ByteFields:
-	ld xix, 0xf23124
+	ld xix, SoundBank_DefaultTrackData
 	ld_srib3 A, 0x07, 0xf0, 0xf4
 	lda_dri3 XBC, 0x07, 0xec, 0xf4
 	inc 1, iy
@@ -224,12 +224,12 @@ SoundBank_CopyCh_FromDefault:
 
 SoundBank_CopyCh_InitRemaining:
 	ldw bc, 0xa
-	ld xiy, 0xf23241
+	ld xiy, SoundBank_DefaultNamePadding
 	ldir85
 	lds bc, 6
 	ld xix, 0xc1
 	add xix, xde
-	ld xiy, 0xf23241
+	ld xiy, SoundBank_DefaultNamePadding
 	ldir85
 	pop xiy
 	pop xix
@@ -421,7 +421,7 @@ SMF_InitSequencerState:
 
 SMF_ReadMThd_Start:
 	lds bc, 4
-	ld xiy, 0xf236af
+	ld xiy, SMF_HeaderMagic_MThdMTrk
 
 SMF_ReadMThd_ByteLoop:
 	pushw bc

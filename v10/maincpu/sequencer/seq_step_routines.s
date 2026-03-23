@@ -42,7 +42,7 @@ SeqStep_NoteReadEvent:
 	add wa, wa
 	lda_24 xix, 0xe44ed6
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf4cead
+	lda_24 xix, SeqStep_NoteByteBlock
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SeqStep_NoteByteBlock:
@@ -303,7 +303,7 @@ SeqStep_EventPosConsumeAdvance:
 	add wa, wa
 	lda_24 xix, 0xe44ee4
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf4d171
+	lda_24 xix, SeqStep_EventPosFinish
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SeqStep_EventPosFinish:
@@ -546,7 +546,7 @@ SeqStep_DeleteDone:
 	add wa, wa
 	lda_24 xix, 0xe44ef2
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf4d3cd
+	lda_24 xix, SeqStep_DeleteExitRestore
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SeqStep_DeleteExitRestore:

@@ -994,7 +994,7 @@ FloppyIO_ReadMidiEvtBytes_Exit:
 	ret
 
 VoiceChannels_LoadPartMapAndInitPan:
-	ld xiy, 0xf23e18
+	ld xiy, VoiceChannels_PartMapTable
 	cpdi8 4600, 1
 	jrl z, VoiceChannels_LoadPartMap_Mode1
 	ld xiy, 0xf23e28
@@ -1036,7 +1036,7 @@ SeqPlay_InitChannelParams:
 
 SeqPlay_InitChannelParams_Loop:
 	ld hl, de
-	ld xix, 0xf237c1
+	ld xix, FloppyIO_SwitchboardChannelPtrs
 	sla hl, 2
 	ld_sril3 XIY, 0x07, 0xf0, 0xec
 	ld (xiy + 11), a
@@ -1122,7 +1122,7 @@ SeqTrack_ClearTempoAccum_Loop:
 
 SMF_ReadAndValidateMTrkHeader:
 	lds bc, 4
-	ld xiy, 0xf2410e
+	ld xiy, SMF_HeaderMagic_MTrk_Ref
 
 SMF_MTrk_ReadByteLoop:
 	pushw bc
@@ -1509,7 +1509,7 @@ MidiSysEx_Cmd_ControlChange:
 
 MidiSysEx_CC_LookupPartMap:
 	push xix
-	ld xix, 0xf2435b
+	ld xix, SeqTrack_ChannelMapIdentity
 	cpdi8 4600, 1
 	jrl z, MidiSysEx_CC_PartMapSelected
 	ld xix, 0xf2436b
@@ -1532,7 +1532,7 @@ MidiSysEx_Cmd_ProgramChange:
 	xor hl, hl
 	ldda8 l, 4213
 	push xix
-	ld xix, 0xf2435b
+	ld xix, SeqTrack_ChannelMapIdentity
 	cpdi8 4600, 1
 	jrl z, MidiSysEx_PgmChg_PartMapSelected
 	ld xix, 0xf2436b
@@ -2923,7 +2923,7 @@ VoiceSynth_AlgoTableDispatch:
 	sla l, 2
 	extz xhl
 	push xix
-	ld xix, 0xf24fa0
+	ld xix, VoiceSynth_Algorithm_Table
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 	call (xhl)
@@ -3283,7 +3283,7 @@ MidiPgmChg_Mode1_SetupA:
 	cpdi8 4323, 0
 	jrl nz, SoundGen_NullReturn
 	push xix
-	ld xix, 0xf2435b
+	ld xix, SeqTrack_ChannelMapIdentity
 	ld_srib3 A, 0x07, 0xf0, 0xf4
 	pop xix
 	push xiy
@@ -3634,7 +3634,7 @@ VoiceParam_ReadUpdateDispatch:
 	sla l, 2
 	extz xhl
 	push xix
-	ld xix, 0xf256b9
+	ld xix, VoiceParam_ReadUpdate_Table
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 	call (xhl)
@@ -3787,7 +3787,7 @@ MidiPgmChg_Mode0_SetupB:
 	stda8 6744, l
 	ldda8 l, 4012
 	stda8 6745, l
-	ld xix, 0xf25aa4
+	ld xix, VoiceParam_ChannelMapRemapped
 	ld_srib3 L, 0x07, 0xf0, 0xf4
 	pop xiy
 	pop xix
@@ -3880,7 +3880,7 @@ MidiPgmChg_Mode2_SetupB:
 	stda8 6744, l
 	ldda8 l, 4012
 	stda8 6745, l
-	ld xix, 0xf25aa4
+	ld xix, VoiceParam_ChannelMapRemapped
 	ld_srib3 L, 0x07, 0xf0, 0xf4
 	pop xiy
 	pop xix
@@ -4455,7 +4455,7 @@ VoiceSynth_HandleDataEntry:
 	extz xhl
 	sla hl, 2
 	push xix
-	ld xix, 0xf25eac
+	ld xix, VoiceSynth_DataEntry_PtrTable
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 	ldda8 a, 4013
@@ -4463,7 +4463,7 @@ VoiceSynth_HandleDataEntry:
 	ld ix, bc
 	extz xix
 	push xiy
-	ld xiy, 0xf25f89
+	ld xiy, VoiceChannel_ParamLimitTable
 	ld_srib3 E, 0x07, 0xf4, 0xf0
 	pop xiy
 	cp a, e
@@ -4556,7 +4556,7 @@ VoiceChannel_SelectNextParam:
 	extz xhl
 	sla hl, 2
 	push xix
-	ld xix, 0xf25eac
+	ld xix, VoiceSynth_DataEntry_PtrTable
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 	ld_srib3 A, 0x07, 0xec, 0xf4
@@ -4564,7 +4564,7 @@ VoiceChannel_SelectNextParam:
 	xor b, b
 	ld ix, bc
 	push xiy
-	ld xiy, 0xf25f89
+	ld xiy, VoiceChannel_ParamLimitTable
 	ld_srib3 E, 0x07, 0xf4, 0xf0
 	pop xiy
 	cp a, e
@@ -4594,7 +4594,7 @@ VoiceChannel_SelectPrevParam:
 	ld hl, wa
 	sla hl, 2
 	push xix
-	ld xix, 0xf25eac
+	ld xix, VoiceSynth_DataEntry_PtrTable
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 	ld_srib3 A, 0x07, 0xec, 0xf4
@@ -4902,14 +4902,14 @@ VoiceParam_HandleDataEntry:
 	xor h, h
 	sla hl, 2
 	push xix
-	ld xix, 0xf25eac
+	ld xix, VoiceSynth_DataEntry_PtrTable
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 	ldda8 a, 4013
 	xor b, b
 	ld ix, bc
 	push xiy
-	ld xiy, 0xf25f89
+	ld xiy, VoiceChannel_ParamLimitTable
 	ld_srib3 E, 0x07, 0xf4, 0xf0
 	pop xiy
 	cp a, e

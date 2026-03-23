@@ -349,7 +349,7 @@ MidiPkt_ProcessEventQueue_Loop:
 	ld c, (xwa)
 	extz bc
 	sla bc, 2
-	lda_24 xde, 0xee304c
+	lda_24 xde, MidiPkt_EventType_Table
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)

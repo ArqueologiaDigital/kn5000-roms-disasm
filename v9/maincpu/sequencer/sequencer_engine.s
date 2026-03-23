@@ -20200,7 +20200,7 @@ SeqEvent_MainHandler:
 	add wa, wa
 	lda_24 xix, 0xe4487e
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf43d83
+	lda_24 xix, SeqEvent_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Sequencer event handler dispatch
@@ -20463,7 +20463,7 @@ AppEvent_ChainDispatch1:
 	add xbc, xbc
 	add xbc, 0xe448f6
 	ld bc, (xbc)
-	lda_24 xix, 0xf44169
+	lda_24 xix, APP_EVENT_HANDLER_TABLE
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; Application event handler dispatch table
 ; Handles up to 32 event types (XBC 0-0x1f), used by ApDeliveryEvent system
@@ -21036,7 +21036,7 @@ AppEvent_InlineHandler:
 	add xbc, xbc
 	add xbc, 0xe44992
 	ld bc, (xbc)
-	lda_24 xix, 0xf448a4
+	lda_24 xix, AppEvent_SubDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; Application event sub-dispatch
 AppEvent_SubDispatch:
@@ -21914,7 +21914,7 @@ SeqState_LabelDispatch:
 	add bc, bc
 	lda_24 xix, 0xe449e2
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, 0xf451c1
+	lda_24 xix, SoundData_HandlerDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; Sound data handler dispatch
 SoundData_HandlerDispatch:
@@ -22849,7 +22849,7 @@ ApPlaySyori:
 	add bc, bc
 	lda_24 xix, 0xe44a32
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, 0xf45b63
+	lda_24 xix, SeqAccomp_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; Sequencer accompaniment event dispatch
 SeqAccomp_EventDispatch:
@@ -23051,7 +23051,7 @@ SeqAccomp_ParamDelivery:
 	add xwa, xwa
 	add xwa, 0xe44a1a
 	ld wa, (xwa)
-	lda_24 xix, 0xf45de1
+	lda_24 xix, SeqAccomp_SubHandlerA
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Sequencer accompaniment sub-handler A
@@ -23253,7 +23253,7 @@ SeqAccomp_SubChain:
 	add xwa, xwa
 	add xwa, 0xe44a02
 	ld wa, (xwa)
-	lda_24 xix, 0xf45ff9
+	lda_24 xix, SeqAccomp_SubHandlerB
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Sequencer accompaniment sub-handler B
@@ -23813,7 +23813,7 @@ NoteEditSy_SendModeScrollReset:
 	add bc, bc
 	lda_24 xix, 0xe44a42
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, 0xf46524
+	lda_24 xix, NoteEditSy_ModeDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; Note editor mode dispatch
@@ -24016,7 +24016,7 @@ NoteEditSy_HandleUpScroll:
 	add xde, xde
 	add xde, 0xe44a6a
 	ld de, (xde)
-	lda_24 xix, 0xf4670f
+	lda_24 xix, NoteEditSy_UpScroll_Param0
 	jp_dri 8, 0x07, 0xf0, 0xe8
 
 NoteEditSy_UpScroll_Param0:
@@ -24077,7 +24077,7 @@ NoteEditSy_HandleDownScroll:
 	add xde, xde
 	add xde, 0xe44a52
 	ld de, (xde)
-	lda_24 xix, 0xf4677e
+	lda_24 xix, NoteEditSy_DownScroll_Param0
 	jp_dri 8, 0x07, 0xf0, 0xe8
 
 NoteEditSy_DownScroll_Param0:
@@ -25058,7 +25058,7 @@ MainExeCall:
 	add wa, wa
 	lda_24 xix, 0xe44a88
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf470f7
+	lda_24 xix, MainExe_HandleD6
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 MainExe_HandleD6:
@@ -33644,7 +33644,7 @@ SeqPart_VelocityCurveCalc:
 	add wa, wa
 	lda_24 xix, 0xe44ec0
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf4c38c
+	lda_24 xix, SeqPart_VelCurveData
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SeqPart_VelCurveData:

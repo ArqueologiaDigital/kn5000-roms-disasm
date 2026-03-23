@@ -1255,7 +1255,7 @@ AccompSeq_LoadParams_OverrideCheck:
 	dec 1, a
 	and a, 0x7
 	sll wa, 2
-	ld xiy, 0xf6efec
+	ld xiy, AccompSeq_TempoScaleTable
 	ld_sril3 XWA, 0x07, 0xf4, 0xe0
 	add xwa, 0x6
 	stda16 32302, xwa

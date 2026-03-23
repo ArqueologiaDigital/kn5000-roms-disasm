@@ -50,7 +50,7 @@ DrawLine_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaa9e3
+	lda_24 xbc, DrawLine_ParamBlock
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -1018,7 +1018,7 @@ DrawBox_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfab2ba
+	lda_24 xbc, DrawBox_ParamBlock
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -1186,7 +1186,7 @@ DrawFrame_DeferredPath:
 	ldw wa, 0xe
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfab425
+	lda_24 xbc, DrawFrame_ParamBlock
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -1935,7 +1935,7 @@ MovePixels_DeferredPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfabaa0
+	lda_24 xbc, MovePixels_ParamBlock
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2163,7 +2163,7 @@ DrawBitmap_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfabc83
+	lda_24 xbc, DrawBitmap_ParamBlock
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2389,7 +2389,7 @@ DrawBitmapFast_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfabe5a
+	lda_24 xbc, DrawBitmapFast_ParamBlock
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2528,7 +2528,7 @@ DrawIcons_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfabf86
+	lda_24 xbc, DrawIcons_ParamBlock
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2665,7 +2665,7 @@ DrawFrameSP_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfac0cf
+	lda_24 xbc, DrawFrameSP_ParamBlock
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -3361,7 +3361,7 @@ DrawBitmapFile_DeferredPath:
 	ldw wa, 0xc
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfac6de
+	lda_24 xbc, DrawBitmapFile_ParamBlock
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)

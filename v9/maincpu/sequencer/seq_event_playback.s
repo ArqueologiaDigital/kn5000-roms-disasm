@@ -178,7 +178,7 @@ SeqEvt_WriteNoteOnRotating:
 	push xwa
 	xor xwa, xwa
 	ldda8 a, 32266
-	ld xix, 0xf70f42
+	ld xix, SeqEvt_RotationOffsetTable
 	add xix, xwa
 	ld ix, (xix)
 	ld_srib3 A, 0x07, 0xec, 0xf0
@@ -2257,7 +2257,7 @@ Voice_InitSlotTemplate:
 	ld a, (xiy)
 	push xiy
 	ld xix, xiy
-	ld xiy, 0xf72123
+	ld xiy, Voice_SlotTemplateData
 	ldw bc, 0x8
 	ldirw
 	pop xiy
@@ -2464,7 +2464,7 @@ AccPlay_NoteAllocAndWrite:
 	xor w, w
 	sla wa, 2
 	ld hl, wa
-	ld xix, 0xf72368
+	ld xix, AccPlay_NoteParamTable
 	ld_srib3 A, 0x07, 0xf0, 0xec
 	stda8 32340, a
 	inc 1, hl
@@ -3596,7 +3596,7 @@ AcVocalGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe7ed7c
 	ld bc, (xbc)
-	lda_24 xix, 0xf736a3
+	lda_24 xix, AcVocalGrid_DialSetup
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; AcVocalGridBoxProc dial setup handler
@@ -3842,7 +3842,7 @@ VocalistGridCheck:
 	add xwa, xwa
 	add xwa, 0xe7f098
 	ld wa, (xwa)
-	lda_24 xix, 0xf73938
+	lda_24 xix, VocalistGrid_DispatchData
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 VocalistGrid_DispatchData:
@@ -4214,7 +4214,7 @@ VocalistGrid_CheckHandler:
 	add xwa, xwa
 	add xwa, 0xe7f048
 	ld wa, (xwa)
-	lda_24 xix, 0xf73ce9
+	lda_24 xix, VocalistGrid_CheckDispData
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 VocalistGrid_CheckDispData:
@@ -4491,7 +4491,7 @@ AcVocalist_ListSetup:
 	add xhl, xhl
 	add xhl, 0xe7f0a6
 	ld hl, (xhl)
-	lda_24 xix, 0xf73ff7
+	lda_24 xix, AcVocalist_ListDispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
 ; AcVocalistListBoxProc dispatch
 AcVocalist_ListDispatch:
@@ -4729,7 +4729,7 @@ MainVocalistPage1OKFunc:
 	add de, de
 	lda_24 xix, 0xe7f0da
 	ld_sriw3 DE, 0x07, 0xf0, 0xe8
-	lda_24 xix, 0xf7422f
+	lda_24 xix, VocalistPage1OK_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; MainVocalistPage1OKFunc dispatch
 VocalistPage1OK_Dispatch:

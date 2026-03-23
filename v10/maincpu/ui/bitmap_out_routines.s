@@ -3927,7 +3927,7 @@ OneTchFUNC:
 	add xde, xde
 	add xde, 0xeb7c94
 	ld de, (xde)
-	lda_24 xix, 0xfb632e
+	lda_24 xix, BitMapOut_ByteData_WidgetTable
 	jp_dri 8, 0x07, 0xf0, 0xe8
 BitMapOut_ByteData_WidgetTable:
 	resda	7, 47074

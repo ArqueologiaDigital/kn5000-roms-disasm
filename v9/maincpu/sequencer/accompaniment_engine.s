@@ -52,7 +52,7 @@ AccStyle_LookupTempoAndVelocity:
 
 AccStyle_LookupTempo_ClampL:
 	sla l, 1
-	ld xwa, 0xf55c2f
+	ld xwa, AccStyle_TempoMultiplierTable
 	ld_sriw3 HL, 0x03, 0xe0, 0xec
 	xor xwa, xwa
 	ldda8 a, 37099
@@ -783,7 +783,7 @@ Rhythm_LookupStyleIndex_Compute:
 
 AccVoice_LookupParamIndex:
 	push xhl
-	ld xhl, 0xf56413
+	ld xhl, AccVoice_ParamIndexData
 	and wa, 0x3
 	ld_srib3 A, 0x07, 0xec, 0xe0
 	pop xhl
@@ -851,7 +851,7 @@ AccVoice_ParamIndexData:
 	neg	wa
 
 AccPart_GetVoiceParamOffsetTable:
-	ld xhl, 0xf564a6
+	ld xhl, AccPart_VoiceParamDispatchTable
 	ldfr_berp W, 0x31
 	extz wa
 	sla wa, 2
@@ -1166,7 +1166,7 @@ AccTuning_SetAllFromLookup:
 	ret
 
 AccTuning_FetchValue:
-	ld xhl, 0xf56729
+	ld xhl, AccTuning_ValueTable
 	ld_srib3 A, 0x03, 0xec, 0xe0
 	ret
 
@@ -5391,7 +5391,7 @@ AccWave_BankResolve_Normal:
 	ld xhl, xiz
 	sla xhl, 8
 	srl wa, 10
-	ld xix, 0xf59089
+	ld xix, AccWave_BankTable
 	ld_sril3 XIX, 0x07, 0xf0, 0xe0
 	add xhl, xix
 
@@ -5746,7 +5746,7 @@ AccFlags_CheckSync71:
 AccFlags_Dispatch:
 	and w, 0xf
 	sla w, 2
-	ld xhl, 0xf59517
+	ld xhl, AccFlags_JumpTable
 	ld_sril3 XWA, 0x03, 0xec, 0xe1
 	jp (xwa)
 
@@ -11981,7 +11981,7 @@ AccVoiceState_DispatchChange:
 	sla hl, 2
 	ld xwa, 0xf5cbe3
 	ld_sril3 XWA, 0x07, 0xe0, 0xec
-	ld xiy, 0xf5cb63
+	ld xiy, AccVoiceState_PartLookupTable
 	ld_sril3 XIY, 0x07, 0xf4, 0xec
 	stda8 37111, e
 	ld l, (xiy + 256)
@@ -12246,7 +12246,7 @@ AccDemo_Init_DataBlock:
 	ret
 
 AccDemo_LoadRhythm:
-	ld xiy, 0xf5cfcc
+	ld xiy, Demo_StyleRhythmData
 	ld xix, 0x94800
 	add xix, 0x0
 	ldw bc, 0x60
@@ -14359,7 +14359,7 @@ AccPatch_CopyDefaultsToSlot:
 	pushw wa
 	push xiy
 	add xiy, 0xc
-	ld xix, 0xf5efa7
+	ld xix, AccPatch_DefaultSlotData
 	ld xbc, 0x54
 	push xiy
 	push xix
@@ -14514,7 +14514,7 @@ AccPatch_CopyDefaultsForInit:
 	pushw wa
 	push xiy
 	add xiy, 0xc
-	ld xix, 0xf5efa7
+	ld xix, AccPatch_DefaultSlotData
 	ld xbc, 0x54
 	push xiy
 	push xix
@@ -14915,7 +14915,7 @@ AccPatch_WriteRhythmParam_Loop:
 	inc 2, xsp
 	pop c
 	sll c, 1
-	ld xwa, 0xf5f38e
+	ld xwa, AccPatch_RhythmParamDefaults
 	ld_srib3 A, 0x03, 0xe0, 0xe4
 	push c
 	pushw wa
@@ -14923,7 +14923,7 @@ AccPatch_WriteRhythmParam_Loop:
 	inc 2, xsp
 	pop c
 	inc 1, c
-	ld xwa, 0xf5f38e
+	ld xwa, AccPatch_RhythmParamDefaults
 	ld_srib3 A, 0x03, 0xe0, 0xe4
 	cps c, 7
 	jr nz, AccPatch_WriteRhythmParam_Push
@@ -22645,7 +22645,7 @@ RhythmROM_PatternDisp_ReadByte:
 	and l, 0xf
 	xor h, h
 	sla hl, 1
-	ld xix, 0xf63643
+	ld xix, RhythmROM_PatternDisp_CheckCmd
 	xor xwa, xwa
 	ld_sriw3 WA, 0x07, 0xf0, 0xec
 	jr RhythmROM_PatternDisp_Handle90
@@ -23827,7 +23827,7 @@ AccWidget_ProcessSpecialCmd:
 	jr nz, __pad_F64174
 	ldda8 a, 13549
 	and a, 0x7f
-	ld xix, 0xf644ff
+	ld xix, DrumKit_GroupAssignTable
 	ld_srib3 A, 0x03, 0xf0, 0xe0
 	ldda8 w, 13526
 	sub w, 0x1e
@@ -24069,7 +24069,7 @@ __pad_F64174:
 
 DrumKit_ErrorFallbackLoop:
 	xor c, c
-	ld xix, 0xf6472a
+	ld xix, DrumKit_FallbackSlotTable
 
 DrumKit_ErrorFallbackSlotIter:
 	ldda8 a, 14757
@@ -24225,7 +24225,7 @@ RhythmROM_LoadDrumKit:
 
 DrumKit_PatternLoadFailed:
 	xor c, c
-	ld xix, 0xf6472a
+	ld xix, DrumKit_FallbackSlotTable
 
 DrumKit_FallbackSlotLoop:
 	ldda8 a, 14757
@@ -24815,7 +24815,7 @@ DrumSlot_Dispatch:
 	lds hl, 0
 
 DrumSlot_ClampAndLookup:
-	ld xiy, 0xf64d75
+	ld xiy, DrumSlot_HandlerTable
 	pushw hl
 	sll hl, 2
 	ld_sril3 XWA, 0x07, 0xf4, 0xec
@@ -24904,7 +24904,7 @@ RhythmPatInit_LoadParams:
 	ld a, (xiy + 12)
 	stda8 13528, a
 	ld l, a
-	ld xwa, 0xf64e95
+	ld xwa, RhythmPatInit_KitIndexTable
 	ld_srib3 A, 0x03, 0xe0, 0xec
 	stda8 13529, a
 	ld a, (xiy + 13)
@@ -24973,7 +24973,7 @@ RhythmFillIn_Wrapper:
 
 RhythmFillIn_Select:
 	anddi8 58338, 247
-	ld xwa, 0xf64f4d
+	ld xwa, RhythmFillIn_PatternTable
 	cps hl, 4
 	jr c, RhythmFillIn_LookupAndApply
 	sub hl, 0x4
@@ -25097,7 +25097,7 @@ RhythmVariation_Select:
 	cps a, 0
 	jr nz, RhythmVariation_Return
 	and hl, 0xf
-	ld xwa, 0xf64f4d
+	ld xwa, RhythmFillIn_PatternTable
 	ld_srib3 A, 0x07, 0xe0, 0xec
 	stda8 14235, a
 	calr DrumKit_UpdateStatusFlags
@@ -28373,7 +28373,7 @@ RhythmParam_Dispatch:
 	add bc, bc
 	lda_24 xix, 0xe4a126
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, 0xf66d5a
+	lda_24 xix, RhythmParam_CheckExit
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 RhythmParam_CheckExit:
@@ -28561,7 +28561,7 @@ VoiceSlot_Dispatch:
 	add de, de
 	lda_24 xix, 0xe4a118
 	ld_sriw3 DE, 0x07, 0xf0, 0xe8
-	lda_24 xix, 0xf66ebd
+	lda_24 xix, Voice_ClearSlotAndRet
 	jp_dri 8, 0x07, 0xf0, 0xe8
 
 Voice_ClearSlotAndRet:
@@ -28710,7 +28710,7 @@ DrumParam_LookupChannelBit:
 	push xwa
 	push xix
 	ldda8 a, 14776
-	ld xix, 0xf6700c
+	ld xix, PatIdx_Lookup_Return
 	ld_srib3 A, 0x03, 0xf0, 0xe0
 	stda8 14281, a
 	pop xix
@@ -28957,7 +28957,7 @@ __pad_F671E7:
 	calr Rhythm_MapChannelToDrumIndex
 	pop xix
 	popw hl
-	ld xwa, 0xf67244
+	ld xwa, RegPreset_LoadVoiceData
 	ld_srib3 A, 0x07, 0xe0, 0xec
 	and xwa, 0x7
 	push xwa
@@ -30353,7 +30353,7 @@ CmpMenuTtlFunc:
 	add xde, xde
 	add xde, 0xe4be72
 	ld de, (xde)
-	lda_24 xix, 0xf67e06
+	lda_24 xix, CmpMenuTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CmpMenuTtlFunc title dispatch
 CmpMenuTtl_Dispatch:
@@ -30411,7 +30411,7 @@ CmpSetTtlFunc:
 	add xde, xde
 	add xde, 0xe4be98
 	ld de, (xde)
-	lda_24 xix, 0xf67e92
+	lda_24 xix, CmpSetTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CmpSetTtlFunc title dispatch
 CmpSetTtl_Dispatch:
@@ -30521,7 +30521,7 @@ CmpSetTtl_DynamicLookup:
 	add xde, xde
 	add xde, 0xe4be80
 	ld de, (xde)
-	lda_24 xix, 0xf67f8d
+	lda_24 xix, CmpSetTtl_Dispatch2
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CmpSetTtlFunc title dispatch 2
 CmpSetTtl_Dispatch2:
@@ -30567,7 +30567,7 @@ CmpRealTtlFunc:
 	add xde, xde
 	add xde, 0xe4bec0
 	ld de, (xde)
-	lda_24 xix, 0xf68027
+	lda_24 xix, CmpRealTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CmpRealTtlFunc title dispatch
 CmpRealTtl_Dispatch:
@@ -30605,7 +30605,7 @@ CmpRealTtl_MajorDispatch:
 	add xwa, xwa
 	add xwa, 0xe4bea6
 	ld wa, (xwa)
-	lda_24 xix, 0xf68093
+	lda_24 xix, CmpRealTtl_RhythmVar0
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; CmpRealTtl rhythm variation 0
@@ -30837,7 +30837,7 @@ CmpBkslTtlFunc:
 	add xde, xde
 	add xde, 0xe4bece
 	ld de, (xde)
-	lda_24 xix, 0xf6831b
+	lda_24 xix, CmpBkslTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CmpBkslTtlFunc title dispatch
 CmpBkslTtl_Dispatch:
@@ -31038,7 +31038,7 @@ CmpBksl_STtlFunc:
 	add xde, xde
 	add xde, 0xe4bef2
 	ld de, (xde)
-	lda_24 xix, 0xf68494
+	lda_24 xix, CmpBkslSTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CmpBksl_STtlFunc title dispatch
 CmpBkslSTtl_Dispatch:
@@ -31084,7 +31084,7 @@ CmpBkslSTtl_DirectMode:
 	add xwa, xwa
 	add xwa, 0xe4bedc
 	ld wa, (xwa)
-	lda_24 xix, 0xf68513
+	lda_24 xix, CmpBkslSTtl_FillIn4
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; CmpBkslSTtl fill-in level 4
@@ -31220,7 +31220,7 @@ CmpNcpTtlFunc:
 	add xde, xde
 	add xde, 0xe4bf28
 	ld de, (xde)
-	lda_24 xix, 0xf68633
+	lda_24 xix, CmpNcpTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CmpNcpTtlFunc title dispatch
 CmpNcpTtl_Dispatch:
@@ -31300,7 +31300,7 @@ CmpNcpTtl_TableDispatch:
 	add xde, xde
 	add xde, 0xe4bf00
 	ld de, (xde)
-	lda_24 xix, 0xf686f7
+	lda_24 xix, CmpNcpTtl_Dispatch2
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CmpNcpTtlFunc title dispatch 2
 CmpNcpTtl_Dispatch2:
@@ -31737,7 +31737,7 @@ CmEsyTtlFunc:
 	add xde, xde
 	add xde, 0xe4bf56
 	ld de, (xde)
-	lda_24 xix, 0xf68c53
+	lda_24 xix, CmEsyTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CmEsyTtlFunc title dispatch
 CmEsyTtl_Dispatch:
@@ -31804,7 +31804,7 @@ CmpEsyTtl_Mode2:
 	sll de, 1
 	ld xix, 0xe4bf4a
 	ld_sriw3 DE, 0x07, 0xf0, 0xe8
-	lda_24 xix, 0xf68d1c
+	lda_24 xix, CmEsyTtl_Dispatch2
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CmEsyTtlFunc title dispatch 2
 CmEsyTtl_Dispatch2:
@@ -31926,7 +31926,7 @@ S2cTtlFunc:
 	add xde, xde
 	add xde, 0xe4bf7c
 	ld de, (xde)
-	lda_24 xix, 0xf68e1c
+	lda_24 xix, S2cTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; S2cTtlFunc title dispatch
 S2cTtl_Dispatch:
@@ -31983,7 +31983,7 @@ CmpEsyTtl_E_Var1:
 	add xwa, xwa
 	add xwa, 0xe4bf64
 	ld wa, (xwa)
-	lda_24 xix, 0xf68ed2
+	lda_24 xix, CmpEsy_E_DispatchDataBlock
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 CmpEsy_E_DispatchDataBlock:
@@ -32260,7 +32260,7 @@ CstmCpTtlFunc:
 	add xde, xde
 	add xde, 0xe4bfb2
 	ld de, (xde)
-	lda_24 xix, 0xf69261
+	lda_24 xix, CstmCpTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CstmCpTtlFunc title dispatch
 CstmCpTtl_Dispatch:
@@ -32316,7 +32316,7 @@ CstmCpTtl_RecMode2:
 	add xde, xde
 	add xde, 0xe4bf8a
 	ld de, (xde)
-	lda_24 xix, 0xf69310
+	lda_24 xix, CstmCpTtl_Dispatch2
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; CstmCpTtlFunc title dispatch 2
 CstmCpTtl_Dispatch2:
@@ -32943,7 +32943,7 @@ MainCmpSetFunc:
 	add xhl, xhl
 	add xhl, 0xe4c06e
 	ld hl, (xhl)
-	lda_24 xix, 0xf69a0c
+	lda_24 xix, MainCmpSet_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
 ; MainCmpSetFunc dispatch
 MainCmpSet_Dispatch:
@@ -33376,7 +33376,7 @@ MspMenuTtlFunc:
 	add xde, xde
 	add xde, 0xe4c086
 	ld de, (xde)
-	lda_24 xix, 0xf69e50
+	lda_24 xix, MspMenuTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; MspMenuTtlFunc title dispatch
 MspMenuTtl_Dispatch:
@@ -33426,7 +33426,7 @@ MspNameTtlFunc:
 	add xde, xde
 	add xde, 0xe4c094
 	ld de, (xde)
-	lda_24 xix, 0xf69ed7
+	lda_24 xix, MspNameTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; MspNameTtlFunc title dispatch
 MspNameTtl_Dispatch:
@@ -33481,7 +33481,7 @@ MspRecTtlFunc:
 	add xde, xde
 	add xde, 0xe4c0a2
 	ld de, (xde)
-	lda_24 xix, 0xf69f65
+	lda_24 xix, MspRecTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; MspRecTtlFunc title dispatch
 MspRecTtl_Dispatch:
@@ -33610,7 +33610,7 @@ SndArgTtlFunc:
 	add xde, xde
 	add xde, 0xe4c0b0
 	ld de, (xde)
-	lda_24 xix, 0xf6a092
+	lda_24 xix, SndArgTtl_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; SndArgTtlFunc title dispatch
 SndArgTtl_Dispatch:
@@ -34655,7 +34655,7 @@ AccScreen_BeatDataBlock:
 	ret
 
 AccScreen_DrawInit_StackWrap:
-	ld xwa, 0xf6a95e
+	ld xwa, AccScreen_DrawInit_Body
 	push xwa
 	call DrawFunc_StackEntry
 	inc 4, xsp
@@ -34667,7 +34667,7 @@ AccScreen_DrawInit_Body:
 	ret
 
 AccScreen_UpdateBeat_StackWrap:
-	ld xwa, 0xf6a975
+	ld xwa, AccScreen_UpdateBeat_Body
 	push xwa
 	call DrawFunc_StackEntry
 	inc 4, xsp
@@ -34679,7 +34679,7 @@ AccScreen_UpdateBeat_Body:
 	ret
 
 AccScreen_DrawMeasure_StackWrap:
-	ld xwa, 0xf6a98c
+	ld xwa, AccScreen_DrawMeasure_Body
 	push xwa
 	call DrawFunc_StackEntry
 	inc 4, xsp

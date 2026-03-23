@@ -2288,7 +2288,7 @@ AcTrAsGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe2643a
 	ld bc, (xbc)
-	lda_24 xix, 0xf2bf89
+	lda_24 xix, TrAsGrid_HandleInit
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 TrAsGrid_HandleInit:
@@ -2776,7 +2776,7 @@ TrAsGridCheck:
 	add xwa, xwa
 	add xwa, 0xe264d0
 	ld wa, (xwa)
-	lda_24 xix, 0xf2c4b4
+	lda_24 xix, TrAsGridChk_ByteData
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 TrAsGridChk_ByteData:
@@ -3581,7 +3581,7 @@ SmfMuteChSelFunc:
 	add xbc, xbc
 	add xbc, 0xe265b0
 	ld bc, (xbc)
-	lda_24 xix, 0xf2cc54
+	lda_24 xix, MuteChSel_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; SmfMuteChSelFunc dispatch
 MuteChSel_Dispatch:
@@ -3624,7 +3624,7 @@ SqTrAsPsSongFunc:
 	add xbc, xbc
 	add xbc, 0xe2665e
 	ld bc, (xbc)
-	lda_24 xix, 0xf2ccb5
+	lda_24 xix, SqTrAsPsSong_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; SqTrAsPsSongFunc dispatch
 SqTrAsPsSong_Dispatch:
@@ -3718,7 +3718,7 @@ MuteChSetFunc:
 	add xwa, xwa
 	add xwa, 0xe26766
 	ld wa, (xwa)
-	lda_24 xix, 0xf2cd84
+	lda_24 xix, MuteChSet_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; MuteChSetFunc dispatch
@@ -4067,7 +4067,7 @@ DemoMedDspCheck:
 	add xwa, xwa
 	add xwa, 0xe267aa
 	ld wa, (xwa)
-	lda_24 xix, 0xf2d0e9
+	lda_24 xix, DemoMedDsp_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DemoMedDspCheck dispatch
@@ -4115,7 +4115,7 @@ DPPlayDspCheck:
 	add xwa, xwa
 	add xwa, 0xe267ca
 	ld wa, (xwa)
-	lda_24 xix, 0xf2d161
+	lda_24 xix, DPPlayDsp_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DPPlayDspCheck dispatch
@@ -4163,7 +4163,7 @@ DPPauseDspCheck:
 	add xwa, xwa
 	add xwa, 0xe267ea
 	ld wa, (xwa)
-	lda_24 xix, 0xf2d1d9
+	lda_24 xix, DPPauseDsp_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; DPPauseDspCheck dispatch
@@ -5809,7 +5809,7 @@ NoteEditBox_SetupGrid:
 	add xhl, xhl
 	add xhl, 0xe34654
 	ld hl, (xhl)
-	lda_24 xix, 0xf2f1d9
+	lda_24 xix, NoteEditBox_EventDispatch1
 	jp_dri 8, 0x07, 0xf0, 0xec
 ; NoteEditBoxProc event dispatch 1
 NoteEditBox_EventDispatch1:
@@ -5877,7 +5877,7 @@ NoteEditBox_GridDispatch2:
 	add xwa, xwa
 	add xwa, 0xe3463c
 	ld wa, (xwa)
-	lda_24 xix, 0xf2f2a0
+	lda_24 xix, NoteEditBox_EventDispatch2
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; NoteEditBoxProc event dispatch 2
@@ -6637,7 +6637,7 @@ NoteEdit_FormatEntry:
 	sll wa, 1
 	ld xix, 0xe34638
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf2fa35
+	lda_24 xix, NoteEditBox_GridDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; NoteEditBoxProc grid check dispatch
@@ -6688,7 +6688,7 @@ NoteEditFunc:
 	add xwa, xwa
 	add xwa, 0xe346f4
 	ld wa, (xwa)
-	lda_24 xix, 0xf2fad1
+	lda_24 xix, NoteEdit_FormatTempo
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 NoteEdit_FormatTempo:
@@ -6874,7 +6874,7 @@ NoteEdit_GetParamValue:
 	add xde, xde
 	add xde, 0xe346d8
 	ld de, (xde)
-	lda_24 xix, 0xf2fc8a
+	lda_24 xix, NoteEdit_ParamJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe8
 NoteEdit_ParamJumpTable:
 	ldda16	hl, 10114
@@ -7297,7 +7297,7 @@ AcEntertainerGridBoxProc:
 	add xbc, xbc
 	add xbc, 0xe34742
 	ld bc, (xbc)
-	lda_24 xix, 0xf300bb
+	lda_24 xix, AcEntertainer_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 
 ; AcEntertainerGridBoxProc event dispatch
@@ -7557,7 +7557,7 @@ EntertainerGridCheck:
 	ld (xsp + 12), xwa
 	lda_24 xwa, 0xe321fa
 	ld (xsp + 8), xwa
-	lda_24 xwa, 0xe30e60
+	lda_24 xwa, NakaData_WidgetDescriptors
 	ld (xsp + 4), xwa
 	lda xwa, (xsp + 48)
 	ld (xsp + 28), xwa
@@ -7586,7 +7586,7 @@ EntertainerGridCheck:
 	add xwa, xwa
 	add xwa, 0xe347f2
 	ld wa, (xwa)
-	lda_24 xix, 0xf303d6
+	lda_24 xix, SndParam_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; SndParam_ReadThenWrite dispatch
@@ -8470,7 +8470,7 @@ SqplyVal_HandleExtraParams:
 	add xhl, xhl
 	add xhl, 0xe3480c
 	ld hl, (xhl)
-	lda_24 xix, 0xf30cf0
+	lda_24 xix, SqplyVal_ExtraParamsData
 	jp_dri 8, 0x07, 0xf0, 0xec
 SqplyVal_ExtraParamsData:
 	ld	xwa, (xbc)
@@ -8901,7 +8901,7 @@ SqedtVal_ClearDrawBuffer:
 	add xwa, xwa
 	add xwa, 0xe3481c
 	ld wa, (xwa)
-	lda_24 xix, 0xf311f1
+	lda_24 xix, SqedtVal_DrawParamsData
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SqedtVal_DrawParamsData:
@@ -10555,7 +10555,7 @@ SqplyVal_ExtraParams:
 	add xhl, xhl
 	add xhl, 0xe348e0
 	ld hl, (xhl)
-	lda_24 xix, 0xf3244a
+	lda_24 xix, AccIll_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
 ; AccIll_HandleEditorLoad dispatch
 AccIll_Dispatch:
@@ -12477,7 +12477,7 @@ EffectBox_NameSetup:
 	add xhl, xhl
 	add xhl, 0xe34908
 	ld hl, (xhl)
-	lda_24 xix, 0xf33aab
+	lda_24 xix, EffectBox_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
 ; EffectBoxProc dispatch
 EffectBox_Dispatch:
@@ -13026,7 +13026,7 @@ EffectBox_StateDispatch:
 	add xbc, xbc
 	add xbc, 0xe34936
 	ld bc, (xbc)
-	lda_24 xix, 0xf34148
+	lda_24 xix, SeqAccomp_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; SeqAccomp editor load dispatch
 SeqAccomp_Dispatch:
@@ -13533,7 +13533,7 @@ SqplyFunc:
 	add xhl, xhl
 	add xhl, 0xe34b38
 	ld hl, (xhl)
-	lda_24 xix, 0xf346ed
+	lda_24 xix, SqplyFunc_ParamFormatData
 	jp_dri 8, 0x07, 0xf0, 0xec
 SqplyFunc_ParamFormatData:
 	ld	xwa, (xsp+4)
@@ -13723,7 +13723,7 @@ SqplyFunc_HandleGetValue:
 	add xwa, xwa
 	add xwa, 0xe34b22
 	ld wa, (xwa)
-	lda_24 xix, 0xf348b0
+	lda_24 xix, SqplyFunc_GetValueDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SqplyFunc_GetValueDispatch:
@@ -13861,7 +13861,7 @@ SqplyFunc_HandlePartQuery:
 	add wa, wa
 	lda_24 xix, 0xe34b12
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf349b0
+	lda_24 xix, SqplyFunc_PartQueryDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SqplyFunc_PartQueryDispatch:
@@ -13918,7 +13918,7 @@ SqedtFunc:
 	add xde, xde
 	add xde, 0xe34d20
 	ld de, (xde)
-	lda_24 xix, 0xf34a5c
+	lda_24 xix, Sqedt_ParamDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 ; SqedtFunc parameter dispatch
 Sqedt_ParamDispatch:
@@ -14521,7 +14521,7 @@ SeqFunc_ReturnZeroJmp:
 	add wa, wa
 	lda_24 xix, 0xe34ce2
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf3502c
+	lda_24 xix, Sqedt_ValueDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; SqedtFunc value dispatch
@@ -14631,7 +14631,7 @@ SqedtFunc_SignExtend:
 	add wa, wa
 	lda_24 xix, 0xe34c90
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf3513d
+	lda_24 xix, SeqFormat_DispatchA
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Sequencer format dispatch A
@@ -14742,7 +14742,7 @@ SqedtFunc_StateChainB:
 	add wa, wa
 	lda_24 xix, 0xe34d70
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf3527a
+	lda_24 xix, SeqFormat_DispatchB
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Sequencer format dispatch B
@@ -15103,7 +15103,7 @@ DspItem0CngFunc:
 	add xiy, xiy
 	add xiy, 0xe34da4
 	ld iy, (xiy)
-	lda_24 xix, 0xf355f3
+	lda_24 xix, DspItem0_DisplayEffectName
 	jp_dri 8, 0x07, 0xf0, 0xf4
 
 DspItem0_DisplayEffectName:
@@ -15239,7 +15239,7 @@ DspItem0_TypeChangeHandler:
 	add xde, xde
 	add xde, 0xe34d92
 	ld de, (xde)
-	lda_24 xix, 0xf35747
+	lda_24 xix, DspItem0_TypeDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
 
 ; DspItem0 type change dispatch
@@ -15340,7 +15340,7 @@ EqualizerCngFunc:
 	add xwa, xwa
 	add xwa, 0xe34ddc
 	ld wa, (xwa)
-	lda_24 xix, 0xf35858
+	lda_24 xix, Equalizer_DispatchA
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; EqualizerCngFunc dispatch A
@@ -15356,7 +15356,7 @@ Equalizer_DispatchA:
 	add xwa, xwa
 	add xwa, 0xe34dce
 	ld wa, (xwa)
-	lda_24 xix, 0xf3588c
+	lda_24 xix, Equalizer_DispatchB
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; --- EQ_7Band_ParamLookup: Look up equalizer parameters for 7 frequency bands ---
@@ -15550,7 +15550,7 @@ Equalizer_CmdDispatch:
 	add xwa, xwa
 	add xwa, 0xe34dee
 	ld wa, (xwa)
-	lda_24 xix, 0xf35a44
+	lda_24 xix, Equalizer_CmdCase0
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 ; Equalizer command case 0
@@ -15664,7 +15664,7 @@ Equalizer_FormatDispatch:
 	sll wa, 1
 	ld xix, 0xe34e54
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf35b85
+	lda_24 xix, EqFormat_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 EqFormat_DispatchTable:
@@ -15734,7 +15734,7 @@ EqFormat_PositiveValue:
 	ld xwa, 0xe31054
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, 0xe30e60
+	ld xwa, NakaData_WidgetDescriptors
 
 FormatParamStr_CopyEnumName:
 	add bc, bc

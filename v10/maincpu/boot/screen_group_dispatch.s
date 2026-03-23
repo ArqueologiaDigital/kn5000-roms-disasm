@@ -56,7 +56,7 @@ VoiceInit_Dispatch:
 	ldto_werp WA, 0xfa
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0xee8c7e
+	ld xbc, SystemConfig_PointerTable
 	add xbc, xwa
 	ld xwa, (xbc)
 	add xwa, xde
@@ -69,7 +69,7 @@ ScreenGroup_WidgetLoop:
 	ldto_werp WA, 0xfa
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0xee8c7e
+	ld xbc, SystemConfig_PointerTable
 	add xbc, xwa
 	ld xwa, (xbc)
 	or xwa, xwa

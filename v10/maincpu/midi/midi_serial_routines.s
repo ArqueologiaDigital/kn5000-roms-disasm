@@ -883,7 +883,7 @@ SC0Init_BaudTableReturn:
 READ_COM_SELECT_SWITCH:
 	ldda8 a, 104
 	srl a, 4
-	ld xix, 0xfcf90c
+	ld xix, MidiSerial_OffsetTable
 	ld_srib3 A, 0x03, 0xf0, 0xe0
 	stda8 47072, a
 	ret

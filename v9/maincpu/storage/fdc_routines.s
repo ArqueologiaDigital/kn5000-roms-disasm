@@ -334,7 +334,7 @@ FDC_COMMAND_DISPATCHER:
 	add wa, wa
 	lda_24 xix, 0xea98b2
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf96dd6
+	lda_24 xix, FDC_CMD_HANDLER_BASE
 	jp_dri 8, 0x07, 0xf0, 0xe0
 ; FDC command handler base - entry point for command 0
 FDC_CMD_HANDLER_BASE:
@@ -2225,7 +2225,7 @@ FDC_CommandEntry_CopyParams:
 	add wa, wa
 	lda_24 xix, 0xea98ca
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf97d8d
+	lda_24 xix, FDC_HANDLER_DISPATCH_BASE
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 
