@@ -13797,7 +13797,7 @@ Not_sure_maybe_SOFT_VERSION_related:
 	cps	hl, 0
 	jr	z, 19
 	stdi8	13781, 1
-	call	16776919
+	call	16776933
 	cp	l, 255
 	jr	z, 5
 	stdi8	13781, 0

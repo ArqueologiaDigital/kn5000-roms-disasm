@@ -2457,6 +2457,7 @@ Debug_SWI_JumpTable:
 	jp	15664070
 	ret
 
+	.zero 14  ; v9: compensate for 14 fewer bytes of code vs v10
 Get_Firmware_Version:
 	ld8_24 l, 0xffffe8
 	ret
@@ -2464,7 +2465,6 @@ Get_Firmware_Version:
 ROM_PaddingFF:
 	.byte 0x0F, 0x05, 0xEF, 0x1B, 0xC6
 
-	.zero 14  ; v9: compensate for 14 fewer bytes of code vs v10
 	.include "boot/rom_end_structure.s"
 
 ; Labels emitted as .set (exact addresses from ORG/name)
