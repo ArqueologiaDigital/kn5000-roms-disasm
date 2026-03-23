@@ -270,7 +270,7 @@ SongBankLookup_BuildAudioCmd:
 	pushw 0xe2
 	pushw 0x202
 	push xiz
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	ld (xiz + 4), 0x0
 	ld wa, (xsp + 4)

@@ -2,7 +2,7 @@
 """Rename LABEL_* to semantic names in kn5000_v10_program.s (audio config functions).
 
 Covers two major function groups:
-  1. Audio_CommandEncoder (FF1054-FF292E) — Printf-like audio command byte formatter
+  1. Sprintf_Core (FF1054-FF292E) — Printf-like audio command byte formatter
      and its helper functions (string formatting, BCD conversion, float formatting,
      base conversion, digit array manipulation, string copy/search).
   2. Audio_CheckInitStatus (FDF00A-FE01F8) — Audio init status checking, voice/part
@@ -33,21 +33,21 @@ import re
 #   FDFB71-FDFE28  AudioInit_ComparePartStates: part-level diff detection
 #   FDFE28-FE01F8  AudioInit_CompareChannelStates: channel-level diff loops
 #
-#   FF1054-FF1918  Audio_CommandEncoder: printf-like format string parser
-#   FF1933-FF19F5  AudioCmd_IntToStr / AudioCmd_UIntToStr: signed/unsigned
-#   FF19C2-FF1A17  AudioCmd_HexToStr / AudioCmd_OctalToStr: hex/octal formatters
-#   FF1A17-FF1DD1  AudioCmd_FormatFloat: floating-point formatting entry
-#   FF1AC4-FF1DD5  AudioCmd_FormatFFixed: fixed-point %f formatting
-#   FF1DE9-FF2135  AudioCmd_FormatEScientific: %e/%E scientific formatting
-#   FF2139-FF2410  AudioCmd_FormatGGeneral: %g/%G general float formatting
-#   FF2424-FF24ED  AudioCmd_ShiftDigitArray: digit array shift/carry helper
-#   FF24ED-FF258D  AudioCmd_NormalizeDigits: digit normalization/rounding
-#   FF258D-FF25D4  AudioCmd_InsertCarry: carry propagation for digit add
-#   FF25D4-FF265F  AudioCmd_DivideDigitsByTen: digit array divide-by-10
-#   FF265F-FF26A4  AudioCmd_MultiplyDigitsByTen: digit array multiply-by-10
-#   FF26A4-FF2716  AudioCmd_CountLeadingZeros: count leading zero digits
-#   FF2716-FF2768  AudioCmd_CountTrailingZeros: count trailing zero digits
-#   FF2768-FF27EC  AudioCmd_DecimalExponent: decimal exponent calculation
+#   FF1054-FF1918  Sprintf_Core: printf-like format string parser
+#   FF1933-FF19F5  Sprintf_IntToStr / Sprintf_UIntToStr: signed/unsigned
+#   FF19C2-FF1A17  Sprintf_HexToStr / Sprintf_OctalToStr: hex/octal formatters
+#   FF1A17-FF1DD1  Sprintf_FormatFloat: floating-point formatting entry
+#   FF1AC4-FF1DD5  Sprintf_FormatFFixed: fixed-point %f formatting
+#   FF1DE9-FF2135  Sprintf_FormatEScientific: %e/%E scientific formatting
+#   FF2139-FF2410  Sprintf_FormatGGeneral: %g/%G general float formatting
+#   FF2424-FF24ED  Sprintf_ShiftDigitArray: digit array shift/carry helper
+#   FF24ED-FF258D  Sprintf_NormalizeDigits: digit normalization/rounding
+#   FF258D-FF25D4  Sprintf_InsertCarry: carry propagation for digit add
+#   FF25D4-FF265F  Sprintf_DivideDigitsByTen: digit array divide-by-10
+#   FF265F-FF26A4  Sprintf_MultiplyDigitsByTen: digit array multiply-by-10
+#   FF26A4-FF2716  Sprintf_CountLeadingZeros: count leading zero digits
+#   FF2716-FF2768  Sprintf_CountTrailingZeros: count trailing zero digits
+#   FF2768-FF27EC  Sprintf_DecimalExponent: decimal exponent calculation
 #   FF27EC-FF2930  AudioCmd helper: memory copy, itoa-base-N, string search
 # ---------------------------------------------------------------------------
 
@@ -606,1225 +606,1225 @@ RENAMES = [
      'Initialize 161-entry part send level table (50730-50731)'),
 
     # ==================================================================
-    # Audio_CommandEncoder body (FF1054-FF1918)
+    # Sprintf_Core body (FF1054-FF1918)
     # Printf-like format string parser for audio command packets.
     # Stack frame: 74 bytes. Parses % specifiers to build packets.
     # ==================================================================
 
-    ('LABEL_FF1054', 'AudioCmd_OutputLiteral',
+    ('LABEL_FF1054', 'Sprintf_OutputLiteral',
      'Not a % specifier: output literal char via callback, advance'),
 
-    ('LABEL_FF1068', 'AudioCmd_ParseFormatSpec',
+    ('LABEL_FF1068', 'Sprintf_ParseFormatSpec',
      'Found %: init flags/width/precision, start parsing specifier'),
 
-    ('LABEL_FF107E', 'AudioCmd_ReadFormatChar',
+    ('LABEL_FF107E', 'Sprintf_ReadFormatChar',
      'Read next format char: dispatch flag characters (0#+ -)'),
 
-    ('LABEL_FF10D3', 'AudioCmd_StarWidth_Positive',
+    ('LABEL_FF10D3', 'Sprintf_StarWidth_Positive',
      'Star-width >= 0: read next format char and continue'),
 
-    ('LABEL_FF10E3', 'AudioCmd_Flag_Space',
+    ('LABEL_FF10E3', 'Sprintf_Flag_Space',
      'Flag 0x20 (space): set bit 2 in flags'),
 
-    ('LABEL_FF10E8', 'AudioCmd_Flag_Hash',
+    ('LABEL_FF10E8', 'Sprintf_Flag_Hash',
      'Flag 0x23 (#): set bit 3 in flags (alternate form)'),
 
-    ('LABEL_FF10ED', 'AudioCmd_Flag_Plus',
+    ('LABEL_FF10ED', 'Sprintf_Flag_Plus',
      'Flag 0x2B (+): set bit 0 in flags (force sign)'),
 
-    ('LABEL_FF10F2', 'AudioCmd_Flag_Minus',
+    ('LABEL_FF10F2', 'Sprintf_Flag_Minus',
      'Flag 0x2D (-): set bit 1 in flags (left-align)'),
 
-    ('LABEL_FF10F7', 'AudioCmd_Flag_Zero',
+    ('LABEL_FF10F7', 'Sprintf_Flag_Zero',
      'Flag 0x30 (0): set pad char to 0x30 in fill field'),
 
-    ('LABEL_FF1101', 'AudioCmd_ParseWidthDigit',
+    ('LABEL_FF1101', 'Sprintf_ParseWidthDigit',
      'Parse width digit: width = width * 10 + (char - 0x30)'),
 
-    ('LABEL_FF1122', 'AudioCmd_CheckIfDigit',
+    ('LABEL_FF1122', 'Sprintf_CheckIfDigit',
      'Check if current char is a digit (lookup table at 0xEED778)'),
 
-    ('LABEL_FF1133', 'AudioCmd_CheckPrecisionDot',
+    ('LABEL_FF1133', 'Sprintf_CheckPrecisionDot',
      'Check for . (0x2E): start precision field parsing'),
 
-    ('LABEL_FF1169', 'AudioCmd_StarPrecision_Applied',
+    ('LABEL_FF1169', 'Sprintf_StarPrecision_Applied',
      'Star-precision applied: read next format char'),
 
-    ('LABEL_FF1179', 'AudioCmd_ParsePrecisionDigit',
+    ('LABEL_FF1179', 'Sprintf_ParsePrecisionDigit',
      'Parse precision digit: precision = precision * 10 + (char - 0x30)'),
 
-    ('LABEL_FF119A', 'AudioCmd_CheckPrecisionDigit',
+    ('LABEL_FF119A', 'Sprintf_CheckPrecisionDigit',
      'Check if current char is a digit for precision field'),
 
-    ('LABEL_FF11AB', 'AudioCmd_CheckLengthH',
+    ('LABEL_FF11AB', 'Sprintf_CheckLengthH',
      'Check for h (0x68): short int length modifier'),
 
-    ('LABEL_FF11C4', 'AudioCmd_CheckLengthL',
+    ('LABEL_FF11C4', 'Sprintf_CheckLengthL',
      'Check for l (0x6C): long int length modifier'),
 
-    ('LABEL_FF11DD', 'AudioCmd_CheckLengthLL',
+    ('LABEL_FF11DD', 'Sprintf_CheckLengthLL',
      'Check for L (0x4C): long double length modifier'),
 
-    ('LABEL_FF11F4', 'AudioCmd_DispatchType',
+    ('LABEL_FF11F4', 'Sprintf_DispatchType',
      'Dispatch format type: G/E -> float, X -> hex, c/s/d/o/u/x/p/n'),
 
-    ('LABEL_FF1237', 'AudioCmd_Format_Percent',
+    ('LABEL_FF1237', 'Sprintf_Format_Percent',
      'Format %%: output % literal with left/right padding'),
 
-    ('LABEL_FF1241', 'AudioCmd_Percent_PadLeft',
+    ('LABEL_FF1241', 'Sprintf_Percent_PadLeft',
      'Pad left with spaces before % char'),
 
-    ('LABEL_FF1250', 'AudioCmd_Percent_PadLeftLoop',
+    ('LABEL_FF1250', 'Sprintf_Percent_PadLeftLoop',
      'Left-pad loop: decrement width, output space if > 0'),
 
-    ('LABEL_FF125A', 'AudioCmd_Format_CharOrPercent',
+    ('LABEL_FF125A', 'Sprintf_Format_CharOrPercent',
      'Format %c or %%: output char from varargs or literal %'),
 
-    ('LABEL_FF1271', 'AudioCmd_Percent_LiteralPush',
+    ('LABEL_FF1271', 'Sprintf_Percent_LiteralPush',
      'Push literal 0x25 (%) for output'),
 
-    ('LABEL_FF1274', 'AudioCmd_Percent_OutputChar',
+    ('LABEL_FF1274', 'Sprintf_Percent_OutputChar',
      'Output character via callback, then check right-pad'),
 
-    ('LABEL_FF1286', 'AudioCmd_Percent_PadRight',
+    ('LABEL_FF1286', 'Sprintf_Percent_PadRight',
      'Right-pad with spaces after character'),
 
-    ('LABEL_FF1293', 'AudioCmd_Percent_PadRightLoop',
+    ('LABEL_FF1293', 'Sprintf_Percent_PadRightLoop',
      'Right-pad loop: decrement width, output space if > 0'),
 
     # -- %s string formatting --
 
-    ('LABEL_FF12C3', 'AudioCmd_String_UseStrLen',
+    ('LABEL_FF12C3', 'Sprintf_String_UseStrLen',
      'Use measured string length as precision'),
 
-    ('LABEL_FF12C8', 'AudioCmd_String_UsePrecision',
+    ('LABEL_FF12C8', 'Sprintf_String_UsePrecision',
      'Use specified precision (shorter than string)'),
 
-    ('LABEL_FF12CB', 'AudioCmd_String_ComputePadding',
+    ('LABEL_FF12CB', 'Sprintf_String_ComputePadding',
      'Compute padding: compare precision vs width'),
 
-    ('LABEL_FF12DA', 'AudioCmd_String_WidthAvailable',
+    ('LABEL_FF12DA', 'Sprintf_String_WidthAvailable',
      'Width >= precision: subtract used chars from width'),
 
-    ('LABEL_FF12E3', 'AudioCmd_String_CheckLeftAlign',
+    ('LABEL_FF12E3', 'Sprintf_String_CheckLeftAlign',
      'Check left-align flag for string output'),
 
-    ('LABEL_FF12ED', 'AudioCmd_String_PadLeftSpace',
+    ('LABEL_FF12ED', 'Sprintf_String_PadLeftSpace',
      'Pad left with spaces before string'),
 
-    ('LABEL_FF12F9', 'AudioCmd_String_PadLeftLoop',
+    ('LABEL_FF12F9', 'Sprintf_String_PadLeftLoop',
      'Left-pad space loop: decrement width count'),
 
-    ('LABEL_FF1305', 'AudioCmd_String_OutputChars',
+    ('LABEL_FF1305', 'Sprintf_String_OutputChars',
      'Output string characters via callback, one byte at a time'),
 
-    ('LABEL_FF1318', 'AudioCmd_String_OutputLoop',
+    ('LABEL_FF1318', 'Sprintf_String_OutputLoop',
      'String output loop: decrement precision, output next char'),
 
-    ('LABEL_FF132D', 'AudioCmd_String_PadRightSpace',
+    ('LABEL_FF132D', 'Sprintf_String_PadRightSpace',
      'Pad right with spaces after string'),
 
-    ('LABEL_FF1337', 'AudioCmd_String_PadRightLoop',
+    ('LABEL_FF1337', 'Sprintf_String_PadRightLoop',
      'Right-pad loop: decrement width count'),
 
     # -- %d signed decimal formatting --
 
-    ('LABEL_FF135D', 'AudioCmd_Decimal_GetShortArg',
+    ('LABEL_FF135D', 'Sprintf_Decimal_GetShortArg',
      'Get short (16-bit) argument for %d, sign-extend to 32-bit'),
 
-    ('LABEL_FF136E', 'AudioCmd_Decimal_Setup',
+    ('LABEL_FF136E', 'Sprintf_Decimal_Setup',
      'Set up decimal formatting: init sign, check for zero suppression'),
 
-    ('LABEL_FF1396', 'AudioCmd_Decimal_ConvertToString',
+    ('LABEL_FF1396', 'Sprintf_Decimal_ConvertToString',
      'Convert integer to decimal string buffer via signed itoa'),
 
-    ('LABEL_FF13BC', 'AudioCmd_Decimal_CheckPrecision',
+    ('LABEL_FF13BC', 'Sprintf_Decimal_CheckPrecision',
      'Check if explicit precision vs measured length'),
 
-    ('LABEL_FF13CC', 'AudioCmd_Decimal_NoPrecision',
+    ('LABEL_FF13CC', 'Sprintf_Decimal_NoPrecision',
      'No precision specified: zero out precision field'),
 
-    ('LABEL_FF13D3', 'AudioCmd_Decimal_SubtractLength',
+    ('LABEL_FF13D3', 'Sprintf_Decimal_SubtractLength',
      'Subtract converted length from precision'),
 
-    ('LABEL_FF13D9', 'AudioCmd_Decimal_CheckSign',
+    ('LABEL_FF13D9', 'Sprintf_Decimal_CheckSign',
      'Check if sign char needed (bits 0+2: force-sign or space)'),
 
-    ('LABEL_FF13E7', 'AudioCmd_Decimal_ComputeWidth',
+    ('LABEL_FF13E7', 'Sprintf_Decimal_ComputeWidth',
      'Compute total width: length + precision + sign indicator'),
 
-    ('LABEL_FF13FA', 'AudioCmd_Decimal_FinalWidth',
+    ('LABEL_FF13FA', 'Sprintf_Decimal_FinalWidth',
      'Final width calculation for padding'),
 
-    ('LABEL_FF1428', 'AudioCmd_Decimal_PadLeftSpace',
+    ('LABEL_FF1428', 'Sprintf_Decimal_PadLeftSpace',
      'Left-pad with spaces (not left-aligned, not zero-fill)'),
 
-    ('LABEL_FF1432', 'AudioCmd_Decimal_PadLeftLoop',
+    ('LABEL_FF1432', 'Sprintf_Decimal_PadLeftLoop',
      'Left-pad space loop: decrement width'),
 
-    ('LABEL_FF1441', 'AudioCmd_Decimal_OutputSign',
+    ('LABEL_FF1441', 'Sprintf_Decimal_OutputSign',
      'Output sign character if needed (- + or space)'),
 
-    ('LABEL_FF1451', 'AudioCmd_Decimal_PlusSign',
+    ('LABEL_FF1451', 'Sprintf_Decimal_PlusSign',
      'Positive with force-sign: output + (0x2B)'),
 
-    ('LABEL_FF145E', 'AudioCmd_Decimal_SpaceSign',
+    ('LABEL_FF145E', 'Sprintf_Decimal_SpaceSign',
      'Positive with space-sign: output space (0x20)'),
 
-    ('LABEL_FF1469', 'AudioCmd_Decimal_EmitSign',
+    ('LABEL_FF1469', 'Sprintf_Decimal_EmitSign',
      'Emit sign character via callback'),
 
-    ('LABEL_FF1470', 'AudioCmd_Decimal_ZeroFill',
+    ('LABEL_FF1470', 'Sprintf_Decimal_ZeroFill',
      'Check and emit zero-fill padding before digits'),
 
-    ('LABEL_FF1483', 'AudioCmd_Decimal_ZeroFillBody',
+    ('LABEL_FF1483', 'Sprintf_Decimal_ZeroFillBody',
      'Zero-fill loop body: push 0x30, call output'),
 
-    ('LABEL_FF148D', 'AudioCmd_Decimal_ZeroFillLoop',
+    ('LABEL_FF148D', 'Sprintf_Decimal_ZeroFillLoop',
      'Zero-fill loop: decrement width, output 0 if > 0'),
 
-    ('LABEL_FF1499', 'AudioCmd_Decimal_PrecZeroBody',
+    ('LABEL_FF1499', 'Sprintf_Decimal_PrecZeroBody',
      'Precision zero-fill body: push 0x30'),
 
-    ('LABEL_FF14A3', 'AudioCmd_Decimal_PrecZeroLoop',
+    ('LABEL_FF14A3', 'Sprintf_Decimal_PrecZeroLoop',
      'Precision zero-fill loop: fill to precision width'),
 
-    ('LABEL_FF14AF', 'AudioCmd_Decimal_OutputDigits',
+    ('LABEL_FF14AF', 'Sprintf_Decimal_OutputDigits',
      'Output converted digit string from buffer'),
 
-    ('LABEL_FF14C7', 'AudioCmd_Decimal_DigitLoop',
+    ('LABEL_FF14C7', 'Sprintf_Decimal_DigitLoop',
      'Digit output loop: decrement digit count, output next'),
 
-    ('LABEL_FF14D9', 'AudioCmd_Decimal_PadRightSpace',
+    ('LABEL_FF14D9', 'Sprintf_Decimal_PadRightSpace',
      'Right-pad with spaces after decimal number'),
 
-    ('LABEL_FF14E3', 'AudioCmd_Decimal_PadRightLoop',
+    ('LABEL_FF14E3', 'Sprintf_Decimal_PadRightLoop',
      'Right-pad loop: decrement width'),
 
     # -- %u unsigned decimal formatting --
 
-    ('LABEL_FF1506', 'AudioCmd_Unsigned_GetShortArg',
+    ('LABEL_FF1506', 'Sprintf_Unsigned_GetShortArg',
      'Get short (16-bit) argument for %u, zero-extend to 32-bit'),
 
-    ('LABEL_FF1514', 'AudioCmd_Unsigned_Setup',
+    ('LABEL_FF1514', 'Sprintf_Unsigned_Setup',
      'Set up unsigned formatting: init buffer, check zero suppression'),
 
-    ('LABEL_FF1531', 'AudioCmd_Unsigned_ConvertToString',
+    ('LABEL_FF1531', 'Sprintf_Unsigned_ConvertToString',
      'Convert unsigned int to string via unsigned itoa'),
 
-    ('LABEL_FF1543', 'AudioCmd_Unsigned_CheckPrecision',
+    ('LABEL_FF1543', 'Sprintf_Unsigned_CheckPrecision',
      'Check precision for unsigned output'),
 
-    ('LABEL_FF1550', 'AudioCmd_Unsigned_NoPrecision',
+    ('LABEL_FF1550', 'Sprintf_Unsigned_NoPrecision',
      'No precision: zero out field'),
 
-    ('LABEL_FF1557', 'AudioCmd_Unsigned_SubtractLength',
+    ('LABEL_FF1557', 'Sprintf_Unsigned_SubtractLength',
      'Subtract converted length from precision'),
 
-    ('LABEL_FF155A', 'AudioCmd_Unsigned_ComputeWidth',
+    ('LABEL_FF155A', 'Sprintf_Unsigned_ComputeWidth',
      'Compute total output width for unsigned number'),
 
-    ('LABEL_FF1569', 'AudioCmd_Unsigned_FinalWidth',
+    ('LABEL_FF1569', 'Sprintf_Unsigned_FinalWidth',
      'Final width with zero-floor'),
 
-    ('LABEL_FF157E', 'AudioCmd_Unsigned_PadLeftSpace',
+    ('LABEL_FF157E', 'Sprintf_Unsigned_PadLeftSpace',
      'Left-pad unsigned with spaces'),
 
-    ('LABEL_FF158A', 'AudioCmd_Unsigned_PadLeftLoop',
+    ('LABEL_FF158A', 'Sprintf_Unsigned_PadLeftLoop',
      'Left-pad space loop for unsigned'),
 
-    ('LABEL_FF1596', 'AudioCmd_Unsigned_PrecZeroBody',
+    ('LABEL_FF1596', 'Sprintf_Unsigned_PrecZeroBody',
      'Precision zero-fill body for unsigned'),
 
-    ('LABEL_FF15A0', 'AudioCmd_Unsigned_PrecZeroLoop',
+    ('LABEL_FF15A0', 'Sprintf_Unsigned_PrecZeroLoop',
      'Precision zero-fill loop for unsigned'),
 
-    ('LABEL_FF15AC', 'AudioCmd_Unsigned_OutputDigits',
+    ('LABEL_FF15AC', 'Sprintf_Unsigned_OutputDigits',
      'Output unsigned digit string from buffer'),
 
-    ('LABEL_FF15C0', 'AudioCmd_Unsigned_DigitLoop',
+    ('LABEL_FF15C0', 'Sprintf_Unsigned_DigitLoop',
      'Unsigned digit output loop'),
 
-    ('LABEL_FF15CF', 'AudioCmd_Unsigned_PadRightSpace',
+    ('LABEL_FF15CF', 'Sprintf_Unsigned_PadRightSpace',
      'Right-pad unsigned with spaces'),
 
-    ('LABEL_FF15D9', 'AudioCmd_Unsigned_PadRightLoop',
+    ('LABEL_FF15D9', 'Sprintf_Unsigned_PadRightLoop',
      'Right-pad loop for unsigned'),
 
     # -- %X/%x hex formatting --
 
-    ('LABEL_FF15E9', 'AudioCmd_Hex_GetArg',
+    ('LABEL_FF15E9', 'Sprintf_Hex_GetArg',
      'Get argument for hex formatting, check long modifier'),
 
-    ('LABEL_FF15FF', 'AudioCmd_Hex_GetShortArg',
+    ('LABEL_FF15FF', 'Sprintf_Hex_GetShortArg',
      'Get short (16-bit) argument for hex, zero-extend'),
 
-    ('LABEL_FF160D', 'AudioCmd_Hex_Setup',
+    ('LABEL_FF160D', 'Sprintf_Hex_Setup',
      'Set up hex formatting: init buffer, check zero suppression'),
 
-    ('LABEL_FF162D', 'AudioCmd_Hex_ConvertToString',
+    ('LABEL_FF162D', 'Sprintf_Hex_ConvertToString',
      'Convert to hex string via hex-digit itoa'),
 
-    ('LABEL_FF1641', 'AudioCmd_Hex_CheckPrecision',
+    ('LABEL_FF1641', 'Sprintf_Hex_CheckPrecision',
      'Check precision for hex output'),
 
-    ('LABEL_FF1651', 'AudioCmd_Hex_NoPrecision',
+    ('LABEL_FF1651', 'Sprintf_Hex_NoPrecision',
      'No precision: zero out field'),
 
-    ('LABEL_FF1658', 'AudioCmd_Hex_SubtractLength',
+    ('LABEL_FF1658', 'Sprintf_Hex_SubtractLength',
      'Subtract converted hex length from precision'),
 
-    ('LABEL_FF165E', 'AudioCmd_Hex_CheckAltForm',
+    ('LABEL_FF165E', 'Sprintf_Hex_CheckAltForm',
      'Check # flag (bit 3): if set, prefix "0x" (add 2 chars)'),
 
-    ('LABEL_FF166C', 'AudioCmd_Hex_AltFormPrefix',
+    ('LABEL_FF166C', 'Sprintf_Hex_AltFormPrefix',
      'Alt form: set prefix width to 2 (for "0x")'),
 
-    ('LABEL_FF167F', 'AudioCmd_Hex_ComputeWidth',
+    ('LABEL_FF167F', 'Sprintf_Hex_ComputeWidth',
      'Compute total hex output width with prefix'),
 
-    ('LABEL_FF16A1', 'AudioCmd_Hex_PadLeftSpace',
+    ('LABEL_FF16A1', 'Sprintf_Hex_PadLeftSpace',
      'Left-pad hex with spaces'),
 
-    ('LABEL_FF16AB', 'AudioCmd_Hex_PadLeftLoop',
+    ('LABEL_FF16AB', 'Sprintf_Hex_PadLeftLoop',
      'Left-pad space loop for hex'),
 
-    ('LABEL_FF16B5', 'AudioCmd_Hex_EmitPrefix',
+    ('LABEL_FF16B5', 'Sprintf_Hex_EmitPrefix',
      'Emit "0x" prefix if alt form and non-zero value'),
 
-    ('LABEL_FF16D1', 'AudioCmd_Hex_ZeroFill',
+    ('LABEL_FF16D1', 'Sprintf_Hex_ZeroFill',
      'Check and emit zero-fill for hex formatting'),
 
-    ('LABEL_FF16E4', 'AudioCmd_Hex_ZeroFillBody',
+    ('LABEL_FF16E4', 'Sprintf_Hex_ZeroFillBody',
      'Zero-fill body: output 0x30'),
 
-    ('LABEL_FF16EE', 'AudioCmd_Hex_ZeroFillLoop',
+    ('LABEL_FF16EE', 'Sprintf_Hex_ZeroFillLoop',
      'Zero-fill loop for hex'),
 
-    ('LABEL_FF16FA', 'AudioCmd_Hex_PrecZeroBody',
+    ('LABEL_FF16FA', 'Sprintf_Hex_PrecZeroBody',
      'Precision zero-fill body for hex'),
 
-    ('LABEL_FF1704', 'AudioCmd_Hex_PrecZeroLoop',
+    ('LABEL_FF1704', 'Sprintf_Hex_PrecZeroLoop',
      'Precision zero-fill loop for hex'),
 
-    ('LABEL_FF1710', 'AudioCmd_Hex_OutputDigits',
+    ('LABEL_FF1710', 'Sprintf_Hex_OutputDigits',
      'Output hex digit string from buffer'),
 
-    ('LABEL_FF1728', 'AudioCmd_Hex_DigitLoop',
+    ('LABEL_FF1728', 'Sprintf_Hex_DigitLoop',
      'Hex digit output loop'),
 
-    ('LABEL_FF173A', 'AudioCmd_Hex_PadRightSpace',
+    ('LABEL_FF173A', 'Sprintf_Hex_PadRightSpace',
      'Right-pad hex with spaces'),
 
-    ('LABEL_FF1744', 'AudioCmd_Hex_PadRightLoop',
+    ('LABEL_FF1744', 'Sprintf_Hex_PadRightLoop',
      'Right-pad loop for hex'),
 
     # -- %o octal formatting --
 
-    ('LABEL_FF1767', 'AudioCmd_Octal_GetShortArg',
+    ('LABEL_FF1767', 'Sprintf_Octal_GetShortArg',
      'Get short (16-bit) arg for octal, zero-extend'),
 
-    ('LABEL_FF1775', 'AudioCmd_Octal_Setup',
+    ('LABEL_FF1775', 'Sprintf_Octal_Setup',
      'Set up octal formatting: init buffer, check zero suppression'),
 
-    ('LABEL_FF1792', 'AudioCmd_Octal_ConvertToString',
+    ('LABEL_FF1792', 'Sprintf_Octal_ConvertToString',
      'Convert to octal string via octal-digit itoa'),
 
-    ('LABEL_FF17A4', 'AudioCmd_Octal_CheckPrecision',
+    ('LABEL_FF17A4', 'Sprintf_Octal_CheckPrecision',
      'Check precision for octal output'),
 
-    ('LABEL_FF17B1', 'AudioCmd_Octal_NoPrecision',
+    ('LABEL_FF17B1', 'Sprintf_Octal_NoPrecision',
      'No precision: zero out field'),
 
-    ('LABEL_FF17B8', 'AudioCmd_Octal_SubtractLength',
+    ('LABEL_FF17B8', 'Sprintf_Octal_SubtractLength',
      'Subtract converted octal length from precision'),
 
-    ('LABEL_FF17BB', 'AudioCmd_Octal_CheckAltForm',
+    ('LABEL_FF17BB', 'Sprintf_Octal_CheckAltForm',
      'Check # flag: if set, prefix with single 0'),
 
-    ('LABEL_FF17DB', 'AudioCmd_Octal_ComputeWidth',
+    ('LABEL_FF17DB', 'Sprintf_Octal_ComputeWidth',
      'Compute total octal output width'),
 
-    ('LABEL_FF17FC', 'AudioCmd_Octal_PadLeftSpace',
+    ('LABEL_FF17FC', 'Sprintf_Octal_PadLeftSpace',
      'Left-pad octal with spaces'),
 
-    ('LABEL_FF1806', 'AudioCmd_Octal_PadLeftLoop',
+    ('LABEL_FF1806', 'Sprintf_Octal_PadLeftLoop',
      'Left-pad space loop for octal'),
 
-    ('LABEL_FF1810', 'AudioCmd_Octal_EmitPrefix',
+    ('LABEL_FF1810', 'Sprintf_Octal_EmitPrefix',
      'Emit "0" prefix if alt form and non-zero value'),
 
-    ('LABEL_FF1825', 'AudioCmd_Octal_ZeroFill',
+    ('LABEL_FF1825', 'Sprintf_Octal_ZeroFill',
      'Check and emit zero-fill for octal'),
 
-    ('LABEL_FF1838', 'AudioCmd_Octal_ZeroFillBody',
+    ('LABEL_FF1838', 'Sprintf_Octal_ZeroFillBody',
      'Zero-fill body for octal'),
 
-    ('LABEL_FF1842', 'AudioCmd_Octal_ZeroFillLoop',
+    ('LABEL_FF1842', 'Sprintf_Octal_ZeroFillLoop',
      'Zero-fill loop for octal'),
 
-    ('LABEL_FF184E', 'AudioCmd_Octal_PrecZeroBody',
+    ('LABEL_FF184E', 'Sprintf_Octal_PrecZeroBody',
      'Precision zero-fill body for octal'),
 
-    ('LABEL_FF1858', 'AudioCmd_Octal_PrecZeroLoop',
+    ('LABEL_FF1858', 'Sprintf_Octal_PrecZeroLoop',
      'Precision zero-fill loop for octal'),
 
-    ('LABEL_FF1864', 'AudioCmd_Octal_OutputDigits',
+    ('LABEL_FF1864', 'Sprintf_Octal_OutputDigits',
      'Output octal digit string from buffer'),
 
-    ('LABEL_FF1878', 'AudioCmd_Octal_DigitLoop',
+    ('LABEL_FF1878', 'Sprintf_Octal_DigitLoop',
      'Octal digit output loop'),
 
-    ('LABEL_FF1887', 'AudioCmd_Octal_PadRightSpace',
+    ('LABEL_FF1887', 'Sprintf_Octal_PadRightSpace',
      'Right-pad octal with spaces'),
 
-    ('LABEL_FF1891', 'AudioCmd_Octal_PadRightLoop',
+    ('LABEL_FF1891', 'Sprintf_Octal_PadRightLoop',
      'Right-pad loop for octal'),
 
     # -- %n (store count) and %G/%E/%f float entry --
 
-    ('LABEL_FF18BA', 'AudioCmd_StoreCount_Short',
+    ('LABEL_FF18BA', 'Sprintf_StoreCount_Short',
      '%n short modifier: store 16-bit output count to pointer'),
 
-    ('LABEL_FF18C1', 'AudioCmd_FormatFloat_Entry',
+    ('LABEL_FF18C1', 'Sprintf_FormatFloat_Entry',
      '%G or %E: load float argument, set up float formatting'),
 
-    ('LABEL_FF18E1', 'AudioCmd_FormatFloat_ShortArg',
+    ('LABEL_FF18E1', 'Sprintf_FormatFloat_ShortArg',
      'Float short arg: 8-byte copy from varargs'),
 
-    ('LABEL_FF18F3', 'AudioCmd_FormatFloat_Dispatch',
+    ('LABEL_FF18F3', 'Sprintf_FormatFloat_Dispatch',
      'Float dispatch: push args, call format sub (eE->sci, fF->fixed, gG->general)'),
 
-    ('LABEL_FF1918', 'AudioCmd_MainLoop_ReadNext',
+    ('LABEL_FF1918', 'Sprintf_MainLoop_ReadNext',
      'Main loop: read next format char, branch if non-null'),
 
     # ==================================================================
-    # AudioCmd_IntToStr (FF1933) — signed integer to decimal string
+    # Sprintf_IntToStr (FF1933) — signed integer to decimal string
     # ==================================================================
 
-    ('LABEL_FF1933', 'AudioCmd_IntToStr',
+    ('LABEL_FF1933', 'Sprintf_IntToStr',
      'Signed int-to-string: handle negative, then itoa via /10 loop'),
 
-    ('LABEL_FF1948', 'AudioCmd_IntToStr_Positive',
+    ('LABEL_FF1948', 'Sprintf_IntToStr_Positive',
      'Value is positive (or now negated): start divmod loop'),
 
-    ('LABEL_FF194A', 'AudioCmd_IntToStr_DivLoop',
+    ('LABEL_FF194A', 'Sprintf_IntToStr_DivLoop',
      'Divmod loop: extract digits via DivMod32, store in buffer'),
 
     # ==================================================================
-    # AudioCmd_UIntToStr (FF1983) — unsigned integer to decimal string
+    # Sprintf_UIntToStr (FF1983) — unsigned integer to decimal string
     # ==================================================================
 
-    ('LABEL_FF1983', 'AudioCmd_UIntToStr',
+    ('LABEL_FF1983', 'Sprintf_UIntToStr',
      'Unsigned int-to-string: divmod loop without sign handling'),
 
-    ('LABEL_FF1989', 'AudioCmd_UIntToStr_DivLoop',
+    ('LABEL_FF1989', 'Sprintf_UIntToStr_DivLoop',
      'Unsigned divmod loop: extract digits via DivMod32'),
 
     # ==================================================================
-    # AudioCmd_HexToStr (FF19C2) — value to hex string
+    # Sprintf_HexToStr (FF19C2) — value to hex string
     # ==================================================================
 
-    ('LABEL_FF19C2', 'AudioCmd_HexToStr',
+    ('LABEL_FF19C2', 'Sprintf_HexToStr',
      'Hex-to-string: select uppercase/lowercase digit table'),
 
-    ('LABEL_FF19D3', 'AudioCmd_HexToStr_TableSelected',
+    ('LABEL_FF19D3', 'Sprintf_HexToStr_TableSelected',
      'Hex digit table selected: start conversion loop'),
 
-    ('LABEL_FF19DB', 'AudioCmd_HexToStr_Loop',
+    ('LABEL_FF19DB', 'Sprintf_HexToStr_Loop',
      'Hex loop: extract nibble (AND 0xF), lookup digit, shift right 4'),
 
     # ==================================================================
-    # AudioCmd_OctalToStr (FF19F5) — value to octal string
+    # Sprintf_OctalToStr (FF19F5) — value to octal string
     # ==================================================================
 
-    ('LABEL_FF19F5', 'AudioCmd_OctalToStr',
+    ('LABEL_FF19F5', 'Sprintf_OctalToStr',
      'Octal-to-string: extract 3-bit groups, add 0x30'),
 
-    ('LABEL_FF19FB', 'AudioCmd_OctalToStr_Loop',
+    ('LABEL_FF19FB', 'Sprintf_OctalToStr_Loop',
      'Octal loop: extract 3 bits (AND 0x7), add 0x30, shift right 3'),
 
     # ==================================================================
-    # AudioCmd_FormatFloat (FF1A17) — float formatting dispatcher
+    # Sprintf_FormatFloat (FF1A17) — float formatting dispatcher
     # Calls format-specific sub-functions for e/E, f/F, or g/G.
     # ==================================================================
 
-    ('LABEL_FF1A17', 'AudioCmd_FormatFloat',
+    ('LABEL_FF1A17', 'Sprintf_FormatFloat',
      'Float formatter entry: decompose float, dispatch by specifier'),
 
-    ('LABEL_FF1A60', 'AudioCmd_FormatFloat_eE',
+    ('LABEL_FF1A60', 'Sprintf_FormatFloat_eE',
      'Specifier e or E: push args for scientific notation'),
 
-    ('LABEL_FF1A70', 'AudioCmd_FormatFloat_fF_Check',
+    ('LABEL_FF1A70', 'Sprintf_FormatFloat_fF_Check',
      'Check for f or F specifier'),
 
-    ('LABEL_FF1A7A', 'AudioCmd_FormatFloat_fF',
+    ('LABEL_FF1A7A', 'Sprintf_FormatFloat_fF',
      'Specifier f or F: push args for fixed-point'),
 
-    ('LABEL_FF1A88', 'AudioCmd_FormatFloat_fF_Call',
+    ('LABEL_FF1A88', 'Sprintf_FormatFloat_fF_Call',
      'Call fixed-point format sub-function'),
 
-    ('LABEL_FF1A90', 'AudioCmd_FormatFloat_gG',
+    ('LABEL_FF1A90', 'Sprintf_FormatFloat_gG',
      'Specifier g or G: default precision 6 if not set'),
 
-    ('LABEL_FF1A9D', 'AudioCmd_FormatFloat_gG_Setup',
+    ('LABEL_FF1A9D', 'Sprintf_FormatFloat_gG_Setup',
      'g/G setup: push args, check exponent range for e vs f'),
 
-    ('LABEL_FF1AB9', 'AudioCmd_FormatFloat_gG_UseSci',
+    ('LABEL_FF1AB9', 'Sprintf_FormatFloat_gG_UseSci',
      'g/G exponent out of range: use scientific notation'),
 
-    ('LABEL_FF1ABF', 'AudioCmd_FormatFloat_Return',
+    ('LABEL_FF1ABF', 'Sprintf_FormatFloat_Return',
      'Float formatter return: restore iz, clean stack'),
 
     # ==================================================================
-    # AudioCmd_FormatFFixed (FF1AC4) — fixed-point %f formatter
+    # Sprintf_FormatFFixed (FF1AC4) — fixed-point %f formatter
     # ==================================================================
 
-    ('LABEL_FF1AC4', 'AudioCmd_FormatFFixed',
+    ('LABEL_FF1AC4', 'Sprintf_FormatFFixed',
      'Fixed-point %f formatter entry: set up digit limits'),
 
-    ('LABEL_FF1ADA', 'AudioCmd_FFixed_SetPrecision',
+    ('LABEL_FF1ADA', 'Sprintf_FFixed_SetPrecision',
      'Set precision from argument'),
 
-    ('LABEL_FF1AE0', 'AudioCmd_FFixed_CheckDefaults',
+    ('LABEL_FF1AE0', 'Sprintf_FFixed_CheckDefaults',
      'Check and apply default precision (6) and long-double limit'),
 
-    ('LABEL_FF1AED', 'AudioCmd_FFixed_CheckLongDouble',
+    ('LABEL_FF1AED', 'Sprintf_FFixed_CheckLongDouble',
      'Check long-double flag (bit 7): set limit to 18 if set'),
 
-    ('LABEL_FF1AFA', 'AudioCmd_FFixed_CheckLongDoubleLimit',
+    ('LABEL_FF1AFA', 'Sprintf_FFixed_CheckLongDoubleLimit',
      'Set digit limit to 0x12 (18) for long double'),
 
-    ('LABEL_FF1B16', 'AudioCmd_FFixed_SpecNoUpperCase',
+    ('LABEL_FF1B16', 'Sprintf_FFixed_SpecNoUpperCase',
      'Specifier is lowercase: no case conversion'),
 
-    ('LABEL_FF1B18', 'AudioCmd_FFixed_CheckSpecG',
+    ('LABEL_FF1B18', 'Sprintf_FFixed_CheckSpecG',
      'Check if specifier is G: adjust precision/digit count'),
 
-    ('LABEL_FF1B22', 'AudioCmd_FFixed_NotG',
+    ('LABEL_FF1B22', 'Sprintf_FFixed_NotG',
      'Not G: add exponent to precision for total digits'),
 
-    ('LABEL_FF1B28', 'AudioCmd_FFixed_RoundCheck',
+    ('LABEL_FF1B28', 'Sprintf_FFixed_RoundCheck',
      'Check if rounding needed: compare iz vs limit'),
 
-    ('LABEL_FF1B42', 'AudioCmd_FFixed_RoundCarry',
+    ('LABEL_FF1B42', 'Sprintf_FFixed_RoundCarry',
      'Rounding: carry propagation, set digit to 0x30'),
 
-    ('LABEL_FF1B4B', 'AudioCmd_FFixed_RoundLoop',
+    ('LABEL_FF1B4B', 'Sprintf_FFixed_RoundLoop',
      'Rounding loop: decrement iz, increment digit, check overflow'),
 
-    ('LABEL_FF1B61', 'AudioCmd_FFixed_AfterRound',
+    ('LABEL_FF1B61', 'Sprintf_FFixed_AfterRound',
      'After rounding: re-check case for leading digit handling'),
 
-    ('LABEL_FF1B6F', 'AudioCmd_FFixed_AfterRound_NoCase',
+    ('LABEL_FF1B6F', 'Sprintf_FFixed_AfterRound_NoCase',
      'After round, no case conversion'),
 
-    ('LABEL_FF1B71', 'AudioCmd_FFixed_CheckG_StripZeros',
+    ('LABEL_FF1B71', 'Sprintf_FFixed_CheckG_StripZeros',
      'G specifier: check if trailing zeros should be stripped'),
 
-    ('LABEL_FF1B83', 'AudioCmd_FFixed_CheckG_AltForm',
+    ('LABEL_FF1B83', 'Sprintf_FFixed_CheckG_AltForm',
      'G with # flag: keep trailing zeros'),
 
-    ('LABEL_FF1B8B', 'AudioCmd_FFixed_CaseApplied',
+    ('LABEL_FF1B8B', 'Sprintf_FFixed_CaseApplied',
      'Case conversion applied: check G specifier for zero stripping'),
 
-    ('LABEL_FF1B9A', 'AudioCmd_FFixed_StripZeroLoop',
+    ('LABEL_FF1B9A', 'Sprintf_FFixed_StripZeroLoop',
      'Strip trailing zeros: decrement iz and precision'),
 
-    ('LABEL_FF1B9F', 'AudioCmd_FFixed_StripZeroCheck',
+    ('LABEL_FF1B9F', 'Sprintf_FFixed_StripZeroCheck',
      'Check if current digit is 0x30 (zero): continue stripping'),
 
-    ('LABEL_FF1BAA', 'AudioCmd_FFixed_ComputeOutputLen',
+    ('LABEL_FF1BAA', 'Sprintf_FFixed_ComputeOutputLen',
      'Compute output length: precision + sign + decimal point'),
 
-    ('LABEL_FF1BB9', 'AudioCmd_FFixed_CheckPrecZero',
+    ('LABEL_FF1BB9', 'Sprintf_FFixed_CheckPrecZero',
      'Check if precision is zero (no decimal point needed)'),
 
-    ('LABEL_FF1BBC', 'AudioCmd_FFixed_AdjustForSign',
+    ('LABEL_FF1BBC', 'Sprintf_FFixed_AdjustForSign',
      'Adjust output length for sign character'),
 
-    ('LABEL_FF1BCC', 'AudioCmd_FFixed_AdjustForSign2',
+    ('LABEL_FF1BCC', 'Sprintf_FFixed_AdjustForSign2',
      'Second sign adjustment (force-sign or space flags)'),
 
-    ('LABEL_FF1BCF', 'AudioCmd_FFixed_ComputePadding',
+    ('LABEL_FF1BCF', 'Sprintf_FFixed_ComputePadding',
      'Compute padding: subtract digit count from min-width'),
 
-    ('LABEL_FF1BE3', 'AudioCmd_FFixed_CheckOverflow',
+    ('LABEL_FF1BE3', 'Sprintf_FFixed_CheckOverflow',
      'Check if lead digit > 9: adjust padding'),
 
-    ('LABEL_FF1BEF', 'AudioCmd_FFixed_PadLeftCheck',
+    ('LABEL_FF1BEF', 'Sprintf_FFixed_PadLeftCheck',
      'Check left-align flag for padding direction'),
 
-    ('LABEL_FF1C02', 'AudioCmd_FFixed_PadLeftSpace',
+    ('LABEL_FF1C02', 'Sprintf_FFixed_PadLeftSpace',
      'Left-pad with spaces, increment output counter'),
 
-    ('LABEL_FF1C11', 'AudioCmd_FFixed_PadLeftLoop',
+    ('LABEL_FF1C11', 'Sprintf_FFixed_PadLeftLoop',
      'Left-pad loop: decrement count, output space'),
 
-    ('LABEL_FF1C1B', 'AudioCmd_FFixed_EmitSign',
+    ('LABEL_FF1C1B', 'Sprintf_FFixed_EmitSign',
      'Emit sign character (-, +, or space) if needed'),
 
-    ('LABEL_FF1C24', 'AudioCmd_FFixed_SignPlus',
+    ('LABEL_FF1C24', 'Sprintf_FFixed_SignPlus',
      'Force-sign: output + (0x2B)'),
 
-    ('LABEL_FF1C31', 'AudioCmd_FFixed_SignSpace',
+    ('LABEL_FF1C31', 'Sprintf_FFixed_SignSpace',
      'Space-sign: output space (0x20)'),
 
-    ('LABEL_FF1C3C', 'AudioCmd_FFixed_SignEmit',
+    ('LABEL_FF1C3C', 'Sprintf_FFixed_SignEmit',
      'Call output callback for sign char'),
 
-    ('LABEL_FF1C48', 'AudioCmd_FFixed_ZeroFill',
+    ('LABEL_FF1C48', 'Sprintf_FFixed_ZeroFill',
      'Check zero-fill padding before digits'),
 
-    ('LABEL_FF1C5B', 'AudioCmd_FFixed_ZeroFillBody',
+    ('LABEL_FF1C5B', 'Sprintf_FFixed_ZeroFillBody',
      'Zero-fill body: output 0x30'),
 
-    ('LABEL_FF1C6A', 'AudioCmd_FFixed_ZeroFillLoop',
+    ('LABEL_FF1C6A', 'Sprintf_FFixed_ZeroFillLoop',
      'Zero-fill loop: decrement, output 0'),
 
-    ('LABEL_FF1C74', 'AudioCmd_FFixed_LeadDigit',
+    ('LABEL_FF1C74', 'Sprintf_FFixed_LeadDigit',
      'Output leading digit: handle overflow (>9 -> output 1)'),
 
-    ('LABEL_FF1C95', 'AudioCmd_FFixed_LeadDigitZero',
+    ('LABEL_FF1C95', 'Sprintf_FFixed_LeadDigitZero',
      'Leading digit zero case: output 0x30'),
 
-    ('LABEL_FF1CA6', 'AudioCmd_FFixed_LeadDigitDone',
+    ('LABEL_FF1CA6', 'Sprintf_FFixed_LeadDigitDone',
      'Leading digit emitted: increment output counter'),
 
-    ('LABEL_FF1CAB', 'AudioCmd_FFixed_IntegerDigits',
+    ('LABEL_FF1CAB', 'Sprintf_FFixed_IntegerDigits',
      'Output integer part digits from buffer'),
 
-    ('LABEL_FF1CAF', 'AudioCmd_FFixed_IntDigitOutput',
+    ('LABEL_FF1CAF', 'Sprintf_FFixed_IntDigitOutput',
      'Output one integer digit from buffer'),
 
-    ('LABEL_FF1CC8', 'AudioCmd_FFixed_IntDigitLoop',
+    ('LABEL_FF1CC8', 'Sprintf_FFixed_IntDigitLoop',
      'Integer digit loop: check against limit'),
 
-    ('LABEL_FF1CDD', 'AudioCmd_FFixed_IntZeroFill',
+    ('LABEL_FF1CDD', 'Sprintf_FFixed_IntZeroFill',
      'Fill remaining integer positions with 0x30'),
 
-    ('LABEL_FF1CEC', 'AudioCmd_FFixed_IntZeroLoop',
+    ('LABEL_FF1CEC', 'Sprintf_FFixed_IntZeroLoop',
      'Integer zero-fill loop'),
 
-    ('LABEL_FF1D05', 'AudioCmd_FFixed_DecimalPoint',
+    ('LABEL_FF1D05', 'Sprintf_FFixed_DecimalPoint',
      'Output decimal point (0x2E) if precision > 0 or # flag'),
 
-    ('LABEL_FF1D16', 'AudioCmd_FFixed_FracLeadZeros',
+    ('LABEL_FF1D16', 'Sprintf_FFixed_FracLeadZeros',
      'Fractional leading zeros: fill with 0 before significant digits'),
 
-    ('LABEL_FF1D39', 'AudioCmd_FFixed_FracLeadZeroBody',
+    ('LABEL_FF1D39', 'Sprintf_FFixed_FracLeadZeroBody',
      'Fractional zero body: output 0x30'),
 
-    ('LABEL_FF1D43', 'AudioCmd_FFixed_FracLeadZeroDone',
+    ('LABEL_FF1D43', 'Sprintf_FFixed_FracLeadZeroDone',
      'Fractional leading zeros done: increment output counter'),
 
-    ('LABEL_FF1D4B', 'AudioCmd_FFixed_FracLeadZeroLoop',
+    ('LABEL_FF1D4B', 'Sprintf_FFixed_FracLeadZeroLoop',
      'Fractional leading zero loop: check exponent'),
 
-    ('LABEL_FF1D5C', 'AudioCmd_FFixed_FracDigits',
+    ('LABEL_FF1D5C', 'Sprintf_FFixed_FracDigits',
      'Output fractional digits from buffer'),
 
-    ('LABEL_FF1D67', 'AudioCmd_FFixed_FracDigitOutput',
+    ('LABEL_FF1D67', 'Sprintf_FFixed_FracDigitOutput',
      'Output one fractional digit'),
 
-    ('LABEL_FF1D80', 'AudioCmd_FFixed_FracDigitLoop',
+    ('LABEL_FF1D80', 'Sprintf_FFixed_FracDigitLoop',
      'Fractional digit loop: check against limit'),
 
-    ('LABEL_FF1D95', 'AudioCmd_FFixed_FracTrailZeros',
+    ('LABEL_FF1D95', 'Sprintf_FFixed_FracTrailZeros',
      'Fractional trailing zeros: fill to precision'),
 
-    ('LABEL_FF1DA4', 'AudioCmd_FFixed_FracTrailLoop',
+    ('LABEL_FF1DA4', 'Sprintf_FFixed_FracTrailLoop',
      'Fractional trailing zero loop'),
 
-    ('LABEL_FF1DB8', 'AudioCmd_FFixed_PadRightSpace',
+    ('LABEL_FF1DB8', 'Sprintf_FFixed_PadRightSpace',
      'Right-pad with spaces (left-aligned mode)'),
 
-    ('LABEL_FF1DC7', 'AudioCmd_FFixed_PadRightLoop',
+    ('LABEL_FF1DC7', 'Sprintf_FFixed_PadRightLoop',
      'Right-pad space loop'),
 
-    ('LABEL_FF1DD1', 'AudioCmd_FFixed_Return',
+    ('LABEL_FF1DD1', 'Sprintf_FFixed_Return',
      'Fixed-point formatter return: restore iz, clean stack'),
 
-    ('LABEL_FF1DD5', 'AudioCmd_FFixed_DataTable',
+    ('LABEL_FF1DD5', 'Sprintf_FFixed_DataTable',
      'Data table for fixed-point formatting (20 bytes)'),
 
     # ==================================================================
-    # AudioCmd_FormatEScientific (FF1DE9) — %e/%E scientific formatter
+    # Sprintf_FormatEScientific (FF1DE9) — %e/%E scientific formatter
     # ==================================================================
 
-    ('LABEL_FF1DE9', 'AudioCmd_FormatEScientific',
+    ('LABEL_FF1DE9', 'Sprintf_FormatEScientific',
      'Scientific %e/%E formatter: set up precision and digit limits'),
 
-    ('LABEL_FF1DFE', 'AudioCmd_ESci_ApplyDefaults',
+    ('LABEL_FF1DFE', 'Sprintf_ESci_ApplyDefaults',
      'Apply default precision (6) if not specified'),
 
-    ('LABEL_FF1E19', 'AudioCmd_ESci_SpecNoUpperCase',
+    ('LABEL_FF1E19', 'Sprintf_ESci_SpecNoUpperCase',
      'Specifier is lowercase: no case conversion'),
 
-    ('LABEL_FF1E1C', 'AudioCmd_ESci_CheckSpecG',
+    ('LABEL_FF1E1C', 'Sprintf_ESci_CheckSpecG',
      'Check if specifier is G for general float mode'),
 
-    ('LABEL_FF1E2B', 'AudioCmd_ESci_SetDigitCount',
+    ('LABEL_FF1E2B', 'Sprintf_ESci_SetDigitCount',
      'Set total digit count from precision'),
 
-    ('LABEL_FF1E40', 'AudioCmd_ESci_RoundCheck',
+    ('LABEL_FF1E40', 'Sprintf_ESci_RoundCheck',
      'Check if rounding needed: compare digits vs limit'),
 
-    ('LABEL_FF1E5F', 'AudioCmd_ESci_RoundCarry',
+    ('LABEL_FF1E5F', 'Sprintf_ESci_RoundCarry',
      'Rounding carry: set digit to 0x30, decrement'),
 
-    ('LABEL_FF1E6B', 'AudioCmd_ESci_RoundLoop',
+    ('LABEL_FF1E6B', 'Sprintf_ESci_RoundLoop',
      'Rounding loop: increment digit, check > 9'),
 
-    ('LABEL_FF1E80', 'AudioCmd_ESci_AfterRound',
+    ('LABEL_FF1E80', 'Sprintf_ESci_AfterRound',
      'After rounding: re-check case conversion'),
 
-    ('LABEL_FF1E8C', 'AudioCmd_ESci_AfterRound_NoCase',
+    ('LABEL_FF1E8C', 'Sprintf_ESci_AfterRound_NoCase',
      'After round, no case needed'),
 
-    ('LABEL_FF1E8F', 'AudioCmd_ESci_StripTrailZeros',
+    ('LABEL_FF1E8F', 'Sprintf_ESci_StripTrailZeros',
      'G specifier: strip trailing zeros if no # flag'),
 
-    ('LABEL_FF1EA4', 'AudioCmd_ESci_StripLoop',
+    ('LABEL_FF1EA4', 'Sprintf_ESci_StripLoop',
      'Strip trailing zeros loop: decrement counter and precision'),
 
-    ('LABEL_FF1EAA', 'AudioCmd_ESci_StripCheck',
+    ('LABEL_FF1EAA', 'Sprintf_ESci_StripCheck',
      'Check if current digit is zero for stripping'),
 
-    ('LABEL_FF1EBA', 'AudioCmd_ESci_ComputeOutputLen',
+    ('LABEL_FF1EBA', 'Sprintf_ESci_ComputeOutputLen',
      'Compute output length: digits + sign + exponent (5 chars)'),
 
-    ('LABEL_FF1ECC', 'AudioCmd_ESci_CheckPrecZero',
+    ('LABEL_FF1ECC', 'Sprintf_ESci_CheckPrecZero',
      'Check precision zero: no decimal point if zero'),
 
-    ('LABEL_FF1ECF', 'AudioCmd_ESci_AdjustForSign',
+    ('LABEL_FF1ECF', 'Sprintf_ESci_AdjustForSign',
      'Adjust for sign character if needed'),
 
-    ('LABEL_FF1EDF', 'AudioCmd_ESci_AdjustForSign2',
+    ('LABEL_FF1EDF', 'Sprintf_ESci_AdjustForSign2',
      'Second sign adjustment (force-sign or space)'),
 
-    ('LABEL_FF1EE2', 'AudioCmd_ESci_ComputePadding',
+    ('LABEL_FF1EE2', 'Sprintf_ESci_ComputePadding',
      'Compute padding width: min-width minus output length'),
 
-    ('LABEL_FF1EEF', 'AudioCmd_ESci_PadLeftCheck',
+    ('LABEL_FF1EEF', 'Sprintf_ESci_PadLeftCheck',
      'Check left-align for padding direction'),
 
-    ('LABEL_FF1F02', 'AudioCmd_ESci_PadLeftSpace',
+    ('LABEL_FF1F02', 'Sprintf_ESci_PadLeftSpace',
      'Left-pad with spaces'),
 
-    ('LABEL_FF1F11', 'AudioCmd_ESci_PadLeftLoop',
+    ('LABEL_FF1F11', 'Sprintf_ESci_PadLeftLoop',
      'Left-pad space loop'),
 
-    ('LABEL_FF1F1B', 'AudioCmd_ESci_EmitSign',
+    ('LABEL_FF1F1B', 'Sprintf_ESci_EmitSign',
      'Emit sign character (-, +, or space)'),
 
-    ('LABEL_FF1F24', 'AudioCmd_ESci_SignPlus',
+    ('LABEL_FF1F24', 'Sprintf_ESci_SignPlus',
      'Force-sign: output +'),
 
-    ('LABEL_FF1F31', 'AudioCmd_ESci_SignSpace',
+    ('LABEL_FF1F31', 'Sprintf_ESci_SignSpace',
      'Space-sign: output space'),
 
-    ('LABEL_FF1F3C', 'AudioCmd_ESci_SignEmit',
+    ('LABEL_FF1F3C', 'Sprintf_ESci_SignEmit',
      'Call output callback for sign'),
 
-    ('LABEL_FF1F48', 'AudioCmd_ESci_ZeroFill',
+    ('LABEL_FF1F48', 'Sprintf_ESci_ZeroFill',
      'Zero-fill padding before mantissa'),
 
-    ('LABEL_FF1F5B', 'AudioCmd_ESci_ZeroFillBody',
+    ('LABEL_FF1F5B', 'Sprintf_ESci_ZeroFillBody',
      'Zero-fill body: output 0x30'),
 
-    ('LABEL_FF1F6A', 'AudioCmd_ESci_ZeroFillLoop',
+    ('LABEL_FF1F6A', 'Sprintf_ESci_ZeroFillLoop',
      'Zero-fill loop'),
 
-    ('LABEL_FF1F74', 'AudioCmd_ESci_LeadDigit',
+    ('LABEL_FF1F74', 'Sprintf_ESci_LeadDigit',
      'Output leading mantissa digit (handle overflow)'),
 
-    ('LABEL_FF1FA0', 'AudioCmd_ESci_Overflow_DecExp',
+    ('LABEL_FF1FA0', 'Sprintf_ESci_Overflow_DecExp',
      'Overflow: decrement exponent'),
 
-    ('LABEL_FF1FA5', 'AudioCmd_ESci_LeadDigitNormal',
+    ('LABEL_FF1FA5', 'Sprintf_ESci_LeadDigitNormal',
      'Normal leading digit: output directly'),
 
-    ('LABEL_FF1FBC', 'AudioCmd_ESci_DecimalPoint',
+    ('LABEL_FF1FBC', 'Sprintf_ESci_DecimalPoint',
      'Output decimal point if precision > 0 or # flag'),
 
-    ('LABEL_FF1FCB', 'AudioCmd_ESci_DecimalPointEmit',
+    ('LABEL_FF1FCB', 'Sprintf_ESci_DecimalPointEmit',
      'Emit decimal point (0x2E)'),
 
-    ('LABEL_FF1FDA', 'AudioCmd_ESci_MantissaDigits',
+    ('LABEL_FF1FDA', 'Sprintf_ESci_MantissaDigits',
      'Output mantissa digits from buffer'),
 
-    ('LABEL_FF1FF3', 'AudioCmd_ESci_MantissaNoCase',
+    ('LABEL_FF1FF3', 'Sprintf_ESci_MantissaNoCase',
      'Mantissa no case conversion needed'),
 
-    ('LABEL_FF1FF6', 'AudioCmd_ESci_CheckGTrim',
+    ('LABEL_FF1FF6', 'Sprintf_ESci_CheckGTrim',
      'G specifier: check if all zeros trimmed'),
 
-    ('LABEL_FF200A', 'AudioCmd_ESci_OutputMantissa',
+    ('LABEL_FF200A', 'Sprintf_ESci_OutputMantissa',
      'Start mantissa digit output loop'),
 
-    ('LABEL_FF2018', 'AudioCmd_ESci_MantDigitOutput',
+    ('LABEL_FF2018', 'Sprintf_ESci_MantDigitOutput',
      'Output one mantissa digit from buffer'),
 
-    ('LABEL_FF2032', 'AudioCmd_ESci_MantDigitLoop',
+    ('LABEL_FF2032', 'Sprintf_ESci_MantDigitLoop',
      'Mantissa digit loop: check against count'),
 
-    ('LABEL_FF204A', 'AudioCmd_ESci_MantTrailZeros',
+    ('LABEL_FF204A', 'Sprintf_ESci_MantTrailZeros',
      'Mantissa trailing zeros: fill to precision'),
 
-    ('LABEL_FF2059', 'AudioCmd_ESci_MantTrailLoop',
+    ('LABEL_FF2059', 'Sprintf_ESci_MantTrailLoop',
      'Mantissa trailing zero loop'),
 
-    ('LABEL_FF2099', 'AudioCmd_ESci_ExpNoCase',
+    ('LABEL_FF2099', 'Sprintf_ESci_ExpNoCase',
      'Exponent: no case conversion needed'),
 
-    ('LABEL_FF209C', 'AudioCmd_ESci_CheckExpG',
+    ('LABEL_FF209C', 'Sprintf_ESci_CheckExpG',
      'Check if G specifier adjusts exponent format'),
 
-    ('LABEL_FF20A8', 'AudioCmd_ESci_ExpLetterNormal',
+    ('LABEL_FF20A8', 'Sprintf_ESci_ExpLetterNormal',
      'Normal exponent letter (e or E)'),
 
-    ('LABEL_FF20AB', 'AudioCmd_ESci_EmitExpLetter',
+    ('LABEL_FF20AB', 'Sprintf_ESci_EmitExpLetter',
      'Emit exponent letter (e/E/g-2)'),
 
-    ('LABEL_FF20C6', 'AudioCmd_ESci_ExpSignPositive',
+    ('LABEL_FF20C6', 'Sprintf_ESci_ExpSignPositive',
      'Exponent sign positive: output +'),
 
-    ('LABEL_FF20C9', 'AudioCmd_ESci_EmitExpSign',
+    ('LABEL_FF20C9', 'Sprintf_ESci_EmitExpSign',
      'Emit exponent sign via callback'),
 
-    ('LABEL_FF20DA', 'AudioCmd_ESci_ExpLeadZeros',
+    ('LABEL_FF20DA', 'Sprintf_ESci_ExpLeadZeros',
      'Exponent leading zeros: pad to 3 digits'),
 
-    ('LABEL_FF20E9', 'AudioCmd_ESci_ExpLeadZeroLoop',
+    ('LABEL_FF20E9', 'Sprintf_ESci_ExpLeadZeroLoop',
      'Exponent leading zero loop'),
 
-    ('LABEL_FF20F5', 'AudioCmd_ESci_ExpDigitOutput',
+    ('LABEL_FF20F5', 'Sprintf_ESci_ExpDigitOutput',
      'Output exponent digits from buffer'),
 
-    ('LABEL_FF210E', 'AudioCmd_ESci_ExpDigitLoop',
+    ('LABEL_FF210E', 'Sprintf_ESci_ExpDigitLoop',
      'Exponent digit output loop'),
 
-    ('LABEL_FF211C', 'AudioCmd_ESci_PadRightSpace',
+    ('LABEL_FF211C', 'Sprintf_ESci_PadRightSpace',
      'Right-pad with spaces (left-aligned mode)'),
 
-    ('LABEL_FF212B', 'AudioCmd_ESci_PadRightLoop',
+    ('LABEL_FF212B', 'Sprintf_ESci_PadRightLoop',
      'Right-pad space loop'),
 
-    ('LABEL_FF2135', 'AudioCmd_ESci_Return',
+    ('LABEL_FF2135', 'Sprintf_ESci_Return',
      'Scientific formatter return: restore iz, clean stack'),
 
     # ==================================================================
-    # AudioCmd_FormatGGeneral (FF2139) — %g/%G general float formatter
+    # Sprintf_FormatGGeneral (FF2139) — %g/%G general float formatter
     # Decomposes float, selects between f and e format.
     # ==================================================================
 
-    ('LABEL_FF2139', 'AudioCmd_FormatGGeneral',
+    ('LABEL_FF2139', 'Sprintf_FormatGGeneral',
      'General %g/%G formatter: decompose float, set up digit arrays'),
 
-    ('LABEL_FF215E', 'AudioCmd_GGen_ClearArrays',
+    ('LABEL_FF215E', 'Sprintf_GGen_ClearArrays',
      'Clear digit arrays (0x03C244 and 0x03C284)'),
 
-    ('LABEL_FF2197', 'AudioCmd_GGen_CheckLongDouble',
+    ('LABEL_FF2197', 'Sprintf_GGen_CheckLongDouble',
      'Check long-double flag: adjust limits (8 -> 10 digits)'),
 
-    ('LABEL_FF21A1', 'AudioCmd_GGen_LoadDigits',
+    ('LABEL_FF21A1', 'Sprintf_GGen_LoadDigits',
      'Load float digits into array from mantissa buffer'),
 
-    ('LABEL_FF21C3', 'AudioCmd_GGen_CheckSign',
+    ('LABEL_FF21C3', 'Sprintf_GGen_CheckSign',
      'Check sign bit of mantissa for negative flag'),
 
-    ('LABEL_FF21CE', 'AudioCmd_GGen_Negative',
+    ('LABEL_FF21CE', 'Sprintf_GGen_Negative',
      'Float is negative: set sign = 1'),
 
-    ('LABEL_FF21D0', 'AudioCmd_GGen_ExtractExponent',
+    ('LABEL_FF21D0', 'Sprintf_GGen_ExtractExponent',
      'Extract exponent from decomposed float'),
 
-    ('LABEL_FF21EA', 'AudioCmd_GGen_LongDoubleExp',
+    ('LABEL_FF21EA', 'Sprintf_GGen_LongDoubleExp',
      'Long-double exponent extraction (8-bit + bias 0x4000)'),
 
-    ('LABEL_FF21F6', 'AudioCmd_GGen_NormalExp',
+    ('LABEL_FF21F6', 'Sprintf_GGen_NormalExp',
      'Normal float: check for zero mantissa'),
 
-    ('LABEL_FF2200', 'AudioCmd_GGen_NonZero',
+    ('LABEL_FF2200', 'Sprintf_GGen_NonZero',
      'Non-zero mantissa: extract 4-bit exponent + bias 0x400'),
 
-    ('LABEL_FF220F', 'AudioCmd_GGen_ComputeDecExp',
+    ('LABEL_FF220F', 'Sprintf_GGen_ComputeDecExp',
      'Compute decimal exponent from binary exponent'),
 
-    ('LABEL_FF221D', 'AudioCmd_GGen_ShiftMantissa',
+    ('LABEL_FF221D', 'Sprintf_GGen_ShiftMantissa',
      'Shift mantissa if exponent bits non-zero'),
 
-    ('LABEL_FF2223', 'AudioCmd_GGen_DecimalExponent',
+    ('LABEL_FF2223', 'Sprintf_GGen_DecimalExponent',
      'Call decimal exponent calculator'),
 
-    ('LABEL_FF2233', 'AudioCmd_GGen_AdjustNegExp',
+    ('LABEL_FF2233', 'Sprintf_GGen_AdjustNegExp',
      'Adjust for negative exponent'),
 
-    ('LABEL_FF223E', 'AudioCmd_GGen_LongDoubleDigits',
+    ('LABEL_FF223E', 'Sprintf_GGen_LongDoubleDigits',
      'Long-double: load all 10 digit pairs into array'),
 
-    ('LABEL_FF2266', 'AudioCmd_GGen_NormalDigits',
+    ('LABEL_FF2266', 'Sprintf_GGen_NormalDigits',
      'Normal float: load 8 digit pairs, find leading non-zero'),
 
-    ('LABEL_FF226B', 'AudioCmd_GGen_FindLeadDigit',
+    ('LABEL_FF226B', 'Sprintf_GGen_FindLeadDigit',
      'Find first non-zero digit in array'),
 
-    ('LABEL_FF227A', 'AudioCmd_GGen_FindLeadDone',
+    ('LABEL_FF227A', 'Sprintf_GGen_FindLeadDone',
      'Leading digit found or array exhausted'),
 
-    ('LABEL_FF2284', 'AudioCmd_GGen_LoadDigitPairs',
+    ('LABEL_FF2284', 'Sprintf_GGen_LoadDigitPairs',
      'Load digit pairs into working array (0x03C244)'),
 
-    ('LABEL_FF228B', 'AudioCmd_GGen_DigitPairLoop',
+    ('LABEL_FF228B', 'Sprintf_GGen_DigitPairLoop',
      'Digit pair loading loop'),
 
-    ('LABEL_FF22B8', 'AudioCmd_GGen_NormalizeArray',
+    ('LABEL_FF22B8', 'Sprintf_GGen_NormalizeArray',
      'Normalize digit array: count leading zeros'),
 
-    ('LABEL_FF22D4', 'AudioCmd_GGen_MultiplyLoop',
+    ('LABEL_FF22D4', 'Sprintf_GGen_MultiplyLoop',
      'Multiply digit array by 10 to shift left (positive exponent)'),
 
-    ('LABEL_FF22F9', 'AudioCmd_GGen_PositiveExpDone',
+    ('LABEL_FF22F9', 'Sprintf_GGen_PositiveExpDone',
      'Positive exponent shifting done: compute remaining'),
 
-    ('LABEL_FF2309', 'AudioCmd_GGen_DivideLoop',
+    ('LABEL_FF2309', 'Sprintf_GGen_DivideLoop',
      'Divide digit array by 10 to shift right (negative exponent)'),
 
-    ('LABEL_FF2321', 'AudioCmd_GGen_NegativeExpCheck',
+    ('LABEL_FF2321', 'Sprintf_GGen_NegativeExpCheck',
      'Negative exponent: check loop continuation'),
 
-    ('LABEL_FF233B', 'AudioCmd_GGen_FinalShift',
+    ('LABEL_FF233B', 'Sprintf_GGen_FinalShift',
      'Final digit array shift for alignment'),
 
-    ('LABEL_FF2343', 'AudioCmd_GGen_RoundLoop',
+    ('LABEL_FF2343', 'Sprintf_GGen_RoundLoop',
      'Rounding loop: process each digit position'),
 
-    ('LABEL_FF2383', 'AudioCmd_GGen_ExtractResult',
+    ('LABEL_FF2383', 'Sprintf_GGen_ExtractResult',
      'Extract formatted result from digit array'),
 
-    ('LABEL_FF239F', 'AudioCmd_GGen_CopyDigits',
+    ('LABEL_FF239F', 'Sprintf_GGen_CopyDigits',
      'Copy digit values to output buffer (0x03C224)'),
 
-    ('LABEL_FF23B5', 'AudioCmd_GGen_CopyLoop',
+    ('LABEL_FF23B5', 'Sprintf_GGen_CopyLoop',
      'Digit copy loop'),
 
-    ('LABEL_FF23D8', 'AudioCmd_GGen_HandleCarry',
+    ('LABEL_FF23D8', 'Sprintf_GGen_HandleCarry',
      'Handle carry from rounding (digit > 9)'),
 
-    ('LABEL_FF23E3', 'AudioCmd_GGen_CarryLoop',
+    ('LABEL_FF23E3', 'Sprintf_GGen_CarryLoop',
      'Carry propagation loop: increment higher digit'),
 
-    ('LABEL_FF23F3', 'AudioCmd_GGen_CarryCheck',
+    ('LABEL_FF23F3', 'Sprintf_GGen_CarryCheck',
      'Check if carry needed at current position'),
 
-    ('LABEL_FF2402', 'AudioCmd_GGen_ConvertToAscii',
+    ('LABEL_FF2402', 'Sprintf_GGen_ConvertToAscii',
      'Convert digit values to ASCII (OR with 0x30)'),
 
-    ('LABEL_FF2407', 'AudioCmd_GGen_AsciiLoop',
+    ('LABEL_FF2407', 'Sprintf_GGen_AsciiLoop',
      'ASCII conversion loop'),
 
-    ('LABEL_FF2410', 'AudioCmd_GGen_AsciiDone',
+    ('LABEL_FF2410', 'Sprintf_GGen_AsciiDone',
      'ASCII conversion done: store exponent and return'),
 
     # ==================================================================
-    # AudioCmd_ShiftDigitArray (FF2424) — shift digit array with carry
+    # Sprintf_ShiftDigitArray (FF2424) — shift digit array with carry
     # ==================================================================
 
-    ('LABEL_FF2424', 'AudioCmd_ShiftDigitArray',
+    ('LABEL_FF2424', 'Sprintf_ShiftDigitArray',
      'Shift digit array: build mask, shift entries with carry'),
 
-    ('LABEL_FF2432', 'AudioCmd_Shift_BuildMask',
+    ('LABEL_FF2432', 'Sprintf_Shift_BuildMask',
      'Build bit mask for shift amount'),
 
-    ('LABEL_FF243D', 'AudioCmd_Shift_SetupLoop',
+    ('LABEL_FF243D', 'Sprintf_Shift_SetupLoop',
      'Set up shift loop from high digit to low'),
 
-    ('LABEL_FF245C', 'AudioCmd_Shift_Loop',
+    ('LABEL_FF245C', 'Sprintf_Shift_Loop',
      'Shift loop: shift current entry, carry from previous'),
 
-    ('LABEL_FF2470', 'AudioCmd_Shift_ApplyShift',
+    ('LABEL_FF2470', 'Sprintf_Shift_ApplyShift',
      'Apply right-shift to current digit pair'),
 
-    ('LABEL_FF248B', 'AudioCmd_Shift_ApplyCarry',
+    ('LABEL_FF248B', 'Sprintf_Shift_ApplyCarry',
      'Apply carry bits from lower digit to upper'),
 
-    ('LABEL_FF2498', 'AudioCmd_Shift_LastEntry',
+    ('LABEL_FF2498', 'Sprintf_Shift_LastEntry',
      'Process last (lowest) digit entry'),
 
-    ('LABEL_FF24A3', 'AudioCmd_Shift_LastShift',
+    ('LABEL_FF24A3', 'Sprintf_Shift_LastShift',
      'Shift last entry and return'),
 
     # ==================================================================
-    # AudioCmd_PropagateCarry (FF24A9) — carry propagation helper
+    # Sprintf_PropagateCarry (FF24A9) — carry propagation helper
     # ==================================================================
 
-    ('LABEL_FF24A9', 'AudioCmd_PropagateCarry',
+    ('LABEL_FF24A9', 'Sprintf_PropagateCarry',
      'Propagate carry through digit array after multiplication'),
 
-    ('LABEL_FF24B9', 'AudioCmd_PropCarry_Loop',
+    ('LABEL_FF24B9', 'Sprintf_PropCarry_Loop',
      'Carry propagation loop: shift, add overflow to next'),
 
-    ('LABEL_FF24CD', 'AudioCmd_PropCarry_Store',
+    ('LABEL_FF24CD', 'Sprintf_PropCarry_Store',
      'Store shifted digit, extract overflow'),
 
-    ('LABEL_FF24E8', 'AudioCmd_PropCarry_Check',
+    ('LABEL_FF24E8', 'Sprintf_PropCarry_Check',
      'Check loop termination'),
 
     # ==================================================================
-    # AudioCmd_NormalizeDigits (FF24ED) — digit normalization/rounding
+    # Sprintf_NormalizeDigits (FF24ED) — digit normalization/rounding
     # ==================================================================
 
-    ('LABEL_FF24ED', 'AudioCmd_NormalizeDigits',
+    ('LABEL_FF24ED', 'Sprintf_NormalizeDigits',
      'Normalize digit array: clear BCD buffer, add rounding offset'),
 
-    ('LABEL_FF24F8', 'AudioCmd_Normalize_ClearLoop',
+    ('LABEL_FF24F8', 'Sprintf_Normalize_ClearLoop',
      'Clear BCD accumulator array'),
 
-    ('LABEL_FF2509', 'AudioCmd_Normalize_MainLoop',
+    ('LABEL_FF2509', 'Sprintf_Normalize_MainLoop',
      'Main normalization loop: check for all-zero and process digits'),
 
-    ('LABEL_FF254E', 'AudioCmd_Normalize_MultiplyTen',
+    ('LABEL_FF254E', 'Sprintf_Normalize_MultiplyTen',
      'Multiply digit array by 10 (shift left one decimal place)'),
 
-    ('LABEL_FF2553', 'AudioCmd_Normalize_ExtractDigit',
+    ('LABEL_FF2553', 'Sprintf_Normalize_ExtractDigit',
      'Extract current leading digit from array'),
 
-    ('LABEL_FF258B', 'AudioCmd_Normalize_Done',
+    ('LABEL_FF258B', 'Sprintf_Normalize_Done',
      'Normalization complete: restore iz and return'),
 
     # ==================================================================
-    # AudioCmd_InsertCarry (FF258D) — carry insertion after digit add
+    # Sprintf_InsertCarry (FF258D) — carry insertion after digit add
     # ==================================================================
 
-    ('LABEL_FF258D', 'AudioCmd_InsertCarry',
+    ('LABEL_FF258D', 'Sprintf_InsertCarry',
      'Insert carry into digit array at specified position'),
 
-    ('LABEL_FF25A3', 'AudioCmd_InsertCarry_Clamp',
+    ('LABEL_FF25A3', 'Sprintf_InsertCarry_Clamp',
      'Clamp insertion position to array bounds'),
 
-    ('LABEL_FF25A5', 'AudioCmd_InsertCarry_ClampLoop',
+    ('LABEL_FF25A5', 'Sprintf_InsertCarry_ClampLoop',
      'Clamp loop: decrement position until in range'),
 
-    ('LABEL_FF25A7', 'AudioCmd_InsertCarry_Check',
+    ('LABEL_FF25A7', 'Sprintf_InsertCarry_Check',
      'Check if position is within digit array'),
 
-    ('LABEL_FF25B4', 'AudioCmd_InsertCarry_Propagate',
+    ('LABEL_FF25B4', 'Sprintf_InsertCarry_Propagate',
      'Propagate carry: increment digit, subtract 10 if >= 10'),
 
-    ('LABEL_FF25C7', 'AudioCmd_InsertCarry_PropCheck',
+    ('LABEL_FF25C7', 'Sprintf_InsertCarry_PropCheck',
      'Check if carry propagation needed (digit >= 10)'),
 
     # ==================================================================
-    # AudioCmd_DivideDigitsByTen (FF25D4) — divide array by 10
+    # Sprintf_DivideDigitsByTen (FF25D4) — divide array by 10
     # ==================================================================
 
-    ('LABEL_FF25D4', 'AudioCmd_DivideDigitsByTen',
+    ('LABEL_FF25D4', 'Sprintf_DivideDigitsByTen',
      'Divide digit array by 10: shift all entries right'),
 
-    ('LABEL_FF25DC', 'AudioCmd_DivByTen_Loop',
+    ('LABEL_FF25DC', 'Sprintf_DivByTen_Loop',
      'Divide loop: divmod each entry, carry remainder to next'),
 
     # ==================================================================
-    # AudioCmd_MultiplyDigitsByTen (FF25FD) — multiply array by 10
+    # Sprintf_MultiplyDigitsByTen (FF25FD) — multiply array by 10
     # ==================================================================
 
-    ('LABEL_FF25FD', 'AudioCmd_MultiplyDigitsByTen',
+    ('LABEL_FF25FD', 'Sprintf_MultiplyDigitsByTen',
      'Multiply digit array by 10 with carry propagation'),
 
-    ('LABEL_FF2602', 'AudioCmd_MulByTen_Loop',
+    ('LABEL_FF2602', 'Sprintf_MulByTen_Loop',
      'Multiply loop: mul each entry by 10, propagate overflow'),
 
-    ('LABEL_FF2619', 'AudioCmd_MulByTen_CarryLoop',
+    ('LABEL_FF2619', 'Sprintf_MulByTen_CarryLoop',
      'Carry loop: propagate overflow to higher entries'),
 
-    ('LABEL_FF262E', 'AudioCmd_MulByTen_CarryCheck',
+    ('LABEL_FF262E', 'Sprintf_MulByTen_CarryCheck',
      'Check if carry overflow exists (> 0xFF)'),
 
-    ('LABEL_FF2642', 'AudioCmd_MulByTen_Next',
+    ('LABEL_FF2642', 'Sprintf_MulByTen_Next',
      'Next entry in multiply loop'),
 
-    ('LABEL_FF2659', 'AudioCmd_MulByTen_HandleOverflow',
+    ('LABEL_FF2659', 'Sprintf_MulByTen_HandleOverflow',
      'Handle top-entry overflow: increment count if bit 7 set'),
 
     # ==================================================================
-    # AudioCmd_MultiplyBCDByTen (FF265F) — BCD buffer multiply
+    # Sprintf_MultiplyBCDByTen (FF265F) — BCD buffer multiply
     # ==================================================================
 
-    ('LABEL_FF265F', 'AudioCmd_MultiplyBCDByTen',
+    ('LABEL_FF265F', 'Sprintf_MultiplyBCDByTen',
      'Multiply BCD accumulator buffer by 10'),
 
-    ('LABEL_FF2669', 'AudioCmd_BCDMul_Loop',
+    ('LABEL_FF2669', 'Sprintf_BCDMul_Loop',
      'BCD multiply loop: mul each pair by 10'),
 
-    ('LABEL_FF2677', 'AudioCmd_BCDMul_Skip',
+    ('LABEL_FF2677', 'Sprintf_BCDMul_Skip',
      'Skip zero entries in BCD multiply'),
 
-    ('LABEL_FF2683', 'AudioCmd_BCDMul_CarryLoop',
+    ('LABEL_FF2683', 'Sprintf_BCDMul_CarryLoop',
      'BCD carry propagation: handle overflow > 0xFF'),
 
-    ('LABEL_FF269B', 'AudioCmd_BCDMul_Next',
+    ('LABEL_FF269B', 'Sprintf_BCDMul_Next',
      'Next entry in BCD carry loop'),
 
     # ==================================================================
-    # AudioCmd_CountLeadingZeros (FF26A4) — count leading zero digits
+    # Sprintf_CountLeadingZeros (FF26A4) — count leading zero digits
     # ==================================================================
 
-    ('LABEL_FF26A4', 'AudioCmd_CountLeadingZeros',
+    ('LABEL_FF26A4', 'Sprintf_CountLeadingZeros',
      'Count leading zero entries in digit array'),
 
-    ('LABEL_FF26B0', 'AudioCmd_LeadZero_Loop',
+    ('LABEL_FF26B0', 'Sprintf_LeadZero_Loop',
      'Leading zero loop: scan until non-zero found'),
 
-    ('LABEL_FF26C6', 'AudioCmd_LeadZero_CheckAllZero',
+    ('LABEL_FF26C6', 'Sprintf_LeadZero_CheckAllZero',
      'Check if all entries were zero'),
 
-    ('LABEL_FF26CF', 'AudioCmd_LeadZero_CountBits',
+    ('LABEL_FF26CF', 'Sprintf_LeadZero_CountBits',
      'Non-zero found: count shift bits needed'),
 
-    ('LABEL_FF26D6', 'AudioCmd_LeadZero_ShiftLoop',
+    ('LABEL_FF26D6', 'Sprintf_LeadZero_ShiftLoop',
      'Shift loop: count high bits needing alignment'),
 
-    ('LABEL_FF26DD', 'AudioCmd_LeadZero_ShiftBody',
+    ('LABEL_FF26DD', 'Sprintf_LeadZero_ShiftBody',
      'Shift body: process array entries'),
 
-    ('LABEL_FF26E4', 'AudioCmd_LeadZero_CheckBit7',
+    ('LABEL_FF26E4', 'Sprintf_LeadZero_CheckBit7',
      'Check if bit 7 set (entry needs shifting)'),
 
-    ('LABEL_FF26F1', 'AudioCmd_LeadZero_ApplyShift',
+    ('LABEL_FF26F1', 'Sprintf_LeadZero_ApplyShift',
      'Apply shift if needed via PropagateCarry helper'),
 
-    ('LABEL_FF2702', 'AudioCmd_LeadZero_AccumShift',
+    ('LABEL_FF2702', 'Sprintf_LeadZero_AccumShift',
      'Accumulate total shift count'),
 
-    ('LABEL_FF2705', 'AudioCmd_LeadZero_OuterLoop',
+    ('LABEL_FF2705', 'Sprintf_LeadZero_OuterLoop',
      'Outer loop: continue until no more high bits'),
 
-    ('LABEL_FF2712', 'AudioCmd_LeadZero_Return',
+    ('LABEL_FF2712', 'Sprintf_LeadZero_Return',
      'Return total leading zero count in hl'),
 
     # ==================================================================
-    # AudioCmd_CountTrailingZeros (FF2716) — count trailing zero digits
+    # Sprintf_CountTrailingZeros (FF2716) — count trailing zero digits
     # ==================================================================
 
-    ('LABEL_FF2716', 'AudioCmd_CountTrailingZeros',
+    ('LABEL_FF2716', 'Sprintf_CountTrailingZeros',
      'Count trailing zero entries in digit array'),
 
-    ('LABEL_FF2723', 'AudioCmd_TrailZero_Loop',
+    ('LABEL_FF2723', 'Sprintf_TrailZero_Loop',
      'Trailing zero scan loop from start'),
 
-    ('LABEL_FF2737', 'AudioCmd_TrailZero_CheckAllZero',
+    ('LABEL_FF2737', 'Sprintf_TrailZero_CheckAllZero',
      'Check if all entries were zero'),
 
-    ('LABEL_FF273F', 'AudioCmd_TrailZero_CountBits',
+    ('LABEL_FF273F', 'Sprintf_TrailZero_CountBits',
      'Count trailing bit positions needing shift'),
 
-    ('LABEL_FF2745', 'AudioCmd_TrailZero_ShiftLoop',
+    ('LABEL_FF2745', 'Sprintf_TrailZero_ShiftLoop',
      'Shift loop: count low bits'),
 
-    ('LABEL_FF274A', 'AudioCmd_TrailZero_CheckHigh',
+    ('LABEL_FF274A', 'Sprintf_TrailZero_CheckHigh',
      'Check if high byte is non-zero'),
 
-    ('LABEL_FF2758', 'AudioCmd_TrailZero_ApplyShift',
+    ('LABEL_FF2758', 'Sprintf_TrailZero_ApplyShift',
      'Apply alignment shift if needed'),
 
-    ('LABEL_FF2764', 'AudioCmd_TrailZero_Done',
+    ('LABEL_FF2764', 'Sprintf_TrailZero_Done',
      'Return trailing zero count in hl'),
 
-    ('LABEL_FF2766', 'AudioCmd_TrailZero_Return',
+    ('LABEL_FF2766', 'Sprintf_TrailZero_Return',
      'Restore iz and return'),
 
     # ==================================================================
-    # AudioCmd_DecimalExponent (FF2768) — decimal exponent calculation
+    # Sprintf_DecimalExponent (FF2768) — decimal exponent calculation
     # Computes floor(log10(abs(x))) for float formatting.
     # ==================================================================
 
-    ('LABEL_FF2768', 'AudioCmd_DecimalExponent',
+    ('LABEL_FF2768', 'Sprintf_DecimalExponent',
      'Compute decimal exponent via multiply-accumulate with log10(2)'),
 
-    ('LABEL_FF2790', 'AudioCmd_DecExp_Positive',
+    ('LABEL_FF2790', 'Sprintf_DecExp_Positive',
      'Exponent is positive: store directly'),
 
-    ('LABEL_FF2793', 'AudioCmd_DecExp_ComputeQuotient',
+    ('LABEL_FF2793', 'Sprintf_DecExp_ComputeQuotient',
      'Divide by 1000 to get approximate decimal exponent'),
 
-    ('LABEL_FF27BE', 'AudioCmd_DecExp_CheckRemainder',
+    ('LABEL_FF27BE', 'Sprintf_DecExp_CheckRemainder',
      'Check remainder: round up if > 0x3D4 (980)'),
 
-    ('LABEL_FF27D2', 'AudioCmd_DecExp_ApplySign',
+    ('LABEL_FF27D2', 'Sprintf_DecExp_ApplySign',
      'Apply sign to computed exponent'),
 
-    ('LABEL_FF27E6', 'AudioCmd_DecExp_Positive_Return',
+    ('LABEL_FF27E6', 'Sprintf_DecExp_Positive_Return',
      'Positive exponent: return in xhl'),
 
-    ('LABEL_FF27E8', 'AudioCmd_DecExp_Return',
+    ('LABEL_FF27E8', 'Sprintf_DecExp_Return',
      'Decimal exponent return'),
 
     # ==================================================================
     # Helper functions (FF27EC-FF292E) — memory copy, itoa, string ops
     # ==================================================================
 
-    ('LABEL_FF27EC', 'AudioCmd_CopyBytes8',
+    ('LABEL_FF27EC', 'Sprintf_CopyBytes8',
      'Copy 8 bytes from (xbc) to (xwa) (two 32-bit loads)'),
 
-    ('LABEL_FF27F7', 'AudioCmd_ItoaBaseN',
+    ('LABEL_FF27F7', 'Sprintf_ItoaBaseN',
      'Integer-to-string with arbitrary base (2-36)'),
 
-    ('LABEL_FF2809', 'AudioCmd_ItoaBaseN_Invalid',
+    ('LABEL_FF2809', 'Sprintf_ItoaBaseN_Invalid',
      'Invalid base (< 2 or > 36): store null and return'),
 
-    ('LABEL_FF2811', 'AudioCmd_ItoaBaseN_Setup',
+    ('LABEL_FF2811', 'Sprintf_ItoaBaseN_Setup',
      'Set up itoa buffer and division loop'),
 
-    ('LABEL_FF2827', 'AudioCmd_ItoaBaseN_DivLoop',
+    ('LABEL_FF2827', 'Sprintf_ItoaBaseN_DivLoop',
      'Itoa divmod loop: extract digit, check > 9 for alpha'),
 
-    ('LABEL_FF2848', 'AudioCmd_ItoaBaseN_StoreDigit',
+    ('LABEL_FF2848', 'Sprintf_ItoaBaseN_StoreDigit',
      'Store digit: add 0x27 offset if > 9 (a-z)'),
 
-    ('LABEL_FF285E', 'AudioCmd_ItoaBaseN_Reverse',
+    ('LABEL_FF285E', 'Sprintf_ItoaBaseN_Reverse',
      'Reverse digit buffer to correct order'),
 
-    ('LABEL_FF2877', 'AudioCmd_ItoaBaseN_Return',
+    ('LABEL_FF2877', 'Sprintf_ItoaBaseN_Return',
      'Itoa return: pointer to result in xhl'),
 
-    ('LABEL_FF287F', 'AudioCmd_ItoaBaseN_Pad',
+    ('LABEL_FF287F', 'Sprintf_ItoaBaseN_Pad',
      'Padding byte (0xFF) between functions'),
 
-    ('LABEL_FF2880', 'AudioCmd_CopyBytes10',
+    ('LABEL_FF2880', 'Sprintf_CopyBytes10',
      'Copy 10 bytes from (xbc) to (xwa) (two 32-bit + one 16-bit)'),
 
-    ('LABEL_FF2891', 'AudioCmd_StringNSearch',
+    ('LABEL_FF2891', 'Sprintf_StringNSearch',
      'Search for char in string with length limit'),
 
-    ('LABEL_FF28B2', 'AudioCmd_StringNSearch_Found',
+    ('LABEL_FF28B2', 'Sprintf_StringNSearch_Found',
      'Char found: compute position from pointer difference'),
 
-    ('LABEL_FF28BB', 'AudioCmd_StringNSearch_Copy',
+    ('LABEL_FF28BB', 'Sprintf_StringNSearch_Copy',
      'Copy result string segment to output'),
 
-    ('LABEL_FF28D1', 'AudioCmd_MemChr',
+    ('LABEL_FF28D1', 'Sprintf_MemChr',
      'Memory search for byte (like memchr): scan bc bytes for wa'),
 
-    ('LABEL_FF28E9', 'AudioCmd_DataBlock_28E9',
+    ('LABEL_FF28E9', 'Sprintf_DataBlock_28E9',
      'Data block between functions (32 bytes)'),
 
-    ('LABEL_FF2909', 'AudioCmd_StringLength',
+    ('LABEL_FF2909', 'Sprintf_StringLength',
      'Compute string length (like strlen) and find char'),
 
-    ('LABEL_FF2924', 'AudioCmd_StrLen_ScanLoop',
+    ('LABEL_FF2924', 'Sprintf_StrLen_ScanLoop',
      'String scan loop: compare each byte'),
 
-    ('LABEL_FF292C', 'AudioCmd_StrLen_NotFound',
+    ('LABEL_FF292C', 'Sprintf_StrLen_NotFound',
      'Character not found: return 0'),
 
-    ('LABEL_FF292E', 'AudioCmd_StrLen_Return',
+    ('LABEL_FF292E', 'Sprintf_StrLen_Return',
      'String length return'),
 
-    ('LABEL_FF2930', 'AudioCmd_FillToEnd',
+    ('LABEL_FF2930', 'Sprintf_FillToEnd',
      'Fill region to end of ROM space (0xFF padding)'),
 
-    ('LABEL_FFCCE8', 'AudioCmd_FillToVectors',
+    ('LABEL_FFCCE8', 'Sprintf_FillToVectors',
      'Fill region before interrupt vectors (0xFF padding)'),
 ]
 

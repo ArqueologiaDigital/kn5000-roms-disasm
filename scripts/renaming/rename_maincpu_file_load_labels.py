@@ -59,7 +59,7 @@ Three function regions (~477 labels total):
      0x1C00007 (OK)
    - Sub-handlers for numeric-type vs pattern-type display modes
    - Key/dial input handlers with boundary checks (0x88-0x8C, 0x8-0xC)
-   - Audio preview via Audio_SendCommand
+   - Audio preview via Sprintf_Locked
    - Page scroll (up=0x10, down=0x90) with wrap-around
 
 Uses binary I/O with latin-1 encoding.
@@ -846,7 +846,7 @@ RENAMES = [
     ('LABEL_FBFD9B', 'RVari_SelectE_SecondItem_NotFirst',
      'Second item not at index 0: use full rect (0xA3 x 0xBE)'),
     ('LABEL_FBFDA9', 'RVari_SelectE_SecondItem_Draw',
-     'Draw second item: compute audio index, send Audio_SendCommand'),
+     'Draw second item: compute audio index, send Sprintf_Locked'),
     ('LABEL_FBFE42', 'RVari_SelectE_SecondItem_BtnNotFirst',
      'Second item button not first: use full rect (0xB7 x 0x14B)'),
     ('LABEL_FBFE50', 'RVari_SelectE_SecondItem_BtnDraw',
@@ -858,7 +858,7 @@ RENAMES = [
     ('LABEL_FBFEFD', 'RVari_SelectO_Item_NotFirst',
      'Other select: item not at first position, use full rect'),
     ('LABEL_FBFF0B', 'RVari_SelectO_Item_Draw',
-     'Draw other select item: color, text, Audio_SendCommand'),
+     'Draw other select item: color, text, Sprintf_Locked'),
     ('LABEL_FBFF9D', 'RVari_SelectO_SecondItem_Setup',
      'Setup second item for other type'),
     ('LABEL_FBFFD2', 'RVari_SelectO_SecondItem_NotFirst',

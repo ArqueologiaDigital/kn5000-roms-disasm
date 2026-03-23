@@ -176,7 +176,7 @@ RENAMES = [
      'PlayRowAudio row 4: ldada 14836'),
 
     ('LABEL_F1D7C8', 'SndArgGridCheck_PlayRow_Send',
-     'Send row audio command via Audio_SendCommand'),
+     'Send row audio command via Sprintf_Locked'),
 
     ('LABEL_F1D7D0', 'SndArgGridCheck_PlayRow_Finalize',
      'Finalize row audio: call 0xFA44D0, send PlayAudio event'),

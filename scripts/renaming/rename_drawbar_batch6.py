@@ -69,7 +69,7 @@ RENAMES = {
     "LABEL_F83F5C": "PsVari_Confirm",                 # Confirm (0x1C0000F)
     "LABEL_F83FCC": "PsVari_DrawInactive",            # Draw inactive string
     "LABEL_F83FDA": "PsVari_DrawStringCall",          # DrawStringAlignment call point
-    "LABEL_F83FE3": "PsVari_GetText",                 # Get text (0x1E0003A) - Audio_SendCommand
+    "LABEL_F83FE3": "PsVari_GetText",                 # Get text (0x1E0003A) - Sprintf_Locked
     "LABEL_F84004": "PsVari_OK",                      # OK handler (0x1C00007)
     "LABEL_F84040": "PsVari_OKForward",               # OK: forward to InheritedProc
     "LABEL_F8404E": "PsVari_Notify",                  # Notify (0x1C0001B)

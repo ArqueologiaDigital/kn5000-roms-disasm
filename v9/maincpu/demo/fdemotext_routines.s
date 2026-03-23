@@ -1257,7 +1257,7 @@ FDemoText_ByteData_DisplayRefresh:
 	pushw	64982
 	pushw	2
 	pushw	18422
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	jr	13
 	push	xhl
@@ -1928,7 +1928,7 @@ FDemoText_ByteData_LayoutEngine:
 	pushw	65126
 	pushw	2
 	pushw	18552
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xwa, (xsp+18)
 	push	xwa
 	pushw	2

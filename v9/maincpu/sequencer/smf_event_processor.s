@@ -4680,7 +4680,7 @@ SeqStep_FileSectorDone:
 	add	(xde), xwa
 	.byte 0xeb
 	.long OscScope_RefreshLoop
-	.long (AudioCmd_FillToVectors + 14)
+	.long (Sprintf_FillToVectors + 14)
 	nop
 	nop
 	ld	(xix), a

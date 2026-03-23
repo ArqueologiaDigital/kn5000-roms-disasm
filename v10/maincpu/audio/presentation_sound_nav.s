@@ -1295,7 +1295,7 @@ DirmdEmu_CaseF:
 	pushw 39828
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+2)
 	call	16395937

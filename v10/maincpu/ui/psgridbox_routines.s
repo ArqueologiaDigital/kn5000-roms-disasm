@@ -1002,7 +1002,7 @@ PsGridBox_Scroll_Render:
 	pushw 0xea
 	pushw 0xa1ec
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	lda xde, (xsp + 24)
 	ld_sril XWA, (xsp + 0x014e)

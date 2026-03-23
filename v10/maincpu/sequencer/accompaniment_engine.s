@@ -37502,7 +37502,7 @@ StylCnvModl_ClearDisplayBuf:
 	jr nz, StylCnvModl_CopyDefaultName
 	pushw 0x2e
 	push xwa
-	call AudioCmd_StringLength
+	call Sprintf_StringLength
 	inc 6, xsp
 	or xhl, xhl
 	jr z, StylCnvModl_FormatFilename
@@ -38835,7 +38835,7 @@ StylCnv_Type3_LoadFileLoop:
 	pushw 0x2e
 	lda xwa, (xsp + 20)
 	push xwa
-	call AudioCmd_StringLength
+	call Sprintf_StringLength
 	inc 6, xsp
 	ld wa, (xsp + 8)
 	ldada xbc, 16264

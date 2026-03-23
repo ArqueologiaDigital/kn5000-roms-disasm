@@ -369,10 +369,10 @@ RENAMES = [
      'Handle 0x1E00009 GetCurrent: advance cursor, look up name'),
 
     ('LABEL_FA8E57', 'ModeID_GetCurrent_HasName',
-     'Name exists: push name addr (EAAB80) for Audio_SendCommand'),
+     'Name exists: push name addr (EAAB80) for Sprintf_Locked'),
 
     ('LABEL_FA8E5D', 'ModeID_GetCurrent_SendAudio',
-     'Push audio command params and call Audio_SendCommand'),
+     'Push audio command params and call Sprintf_Locked'),
 
     ('LABEL_FA8E6B', 'ModeID_GetNext',
      'Handle 0x1E0000B GetNext: advance cursor, copy name or send audio'),
@@ -443,10 +443,10 @@ RENAMES = [
      'Handle 0x1E00009 GetCurrent: advance cursor, look up name'),
 
     ('LABEL_FA909D', 'TitleID_GetCurrent_HasName',
-     'Name exists: push name addr (EAABAC) for Audio_SendCommand'),
+     'Name exists: push name addr (EAABAC) for Sprintf_Locked'),
 
     ('LABEL_FA90A3', 'TitleID_GetCurrent_SendAudio',
-     'Push audio command params and call Audio_SendCommand'),
+     'Push audio command params and call Sprintf_Locked'),
 
     ('LABEL_FA90B1', 'TitleID_GetNext',
      'Handle 0x1E0000B GetNext: advance cursor, copy name or send audio'),

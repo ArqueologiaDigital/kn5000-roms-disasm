@@ -2146,7 +2146,7 @@ NameGetFuncCall_Dispatch:
 	pushw	242
 	pushw	0
 	pushw	7248
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+24)
 	ld	xwa, 4294967295
 	ld	xbc, 29818880
@@ -2163,7 +2163,7 @@ NameGetFuncCall_Dispatch:
 	pushw	252
 	pushw	0
 	pushw	7270
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	stdi8	7283, 0
 	ld	xwa, 4294967295
@@ -2181,7 +2181,7 @@ NameGetFuncCall_Dispatch:
 	pushw	264
 	pushw	0
 	pushw	7284
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	ldada	xwa, 7284
 	ld	(xwa+16), 0
@@ -2224,7 +2224,7 @@ NameGetFuncCall_Dispatch:
 	pushw	272
 	pushw	0
 	pushw	7362
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	stdi8	7365, 0
 	ld	xwa, 4294967295
@@ -2265,7 +2265,7 @@ NameGetFuncCall_Dispatch:
 	pushw	280
 	pushw	0
 	pushw	7366
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	stdi8	7369, 0
 	ld	xwa, 4294967295

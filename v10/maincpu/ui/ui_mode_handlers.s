@@ -3316,7 +3316,7 @@ MasterSetup_GetNameB_DrawString:
 	pushw 0xd18
 	lda xwa, (xsp + 30)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 22)
 	lda xwa, (xsp + 50)
 	lda xbc, (xsp + 46)
@@ -4535,7 +4535,7 @@ MstStyle1Sub_GetNameB_DrawString:
 	pushw 0xd98
 	lda xwa, (xsp + 28)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 20)
 	lda xwa, (xsp + 50)
 	lda xbc, (xsp + 46)
@@ -5794,7 +5794,7 @@ MstStyle2_GetNameB_DrawString:
 	pushw 0xdd0
 	lda xwa, (xsp + 34)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 20)
 	lda xwa, (xsp + 40)
 	lda xbc, (xsp + 36)
@@ -5833,7 +5833,7 @@ MstStyle2_NameB_DrawCurrent:
 	pushw 0xed
 	pushw 0xdec
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	ld xwa, 0xed0df0
 	jr MstStyle2_NameB_Render
@@ -5850,7 +5850,7 @@ MstStyle2_NameB_DrawLower:
 	pushw 0xed
 	pushw 0xdf6
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	ld xwa, 0xed0dfa
 
@@ -5928,7 +5928,7 @@ MstStyle2_NameB_Render:
 	pushw 0xe00
 	lda xwa, (xsp + 26)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	lda xwa, (xsp + 40)
 	lda xbc, (xsp + 36)
@@ -6807,7 +6807,7 @@ TchSensGrid_EventDispatch:
 	pushw	237
 	pushw	3808
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -6865,7 +6865,7 @@ TchSensGrid_EventDispatch:
 	pushw	237
 	pushw	3820
 	push	xiz
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -6887,7 +6887,7 @@ TchSensGrid_EventDispatch:
 	pushw	237
 	pushw	3824
 	push	xiz
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -6916,7 +6916,7 @@ TchSensGrid_CellSelect:
 	pushw 0xef4
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -6960,7 +6960,7 @@ TchSensGrid_CheckCell_1_5:
 	pushw 0xf00
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -6980,7 +6980,7 @@ TchSensGrid_CheckCell_1_6:
 	pushw 0xf04
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -7719,7 +7719,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4590
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7757,7 +7757,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4594
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7791,7 +7791,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4598
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7825,7 +7825,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4602
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7858,7 +7858,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4606
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7895,7 +7895,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4610
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7927,7 +7927,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4614
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7963,7 +7963,7 @@ FSWAssGrid_CellSelect:
 	pushw 0x120a
 	lda xwa, (xsp + 12)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -7990,7 +7990,7 @@ FSWAssGrid_CheckCell_1_3:
 	pushw 0x120e
 	lda xwa, (xsp + 12)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -8017,7 +8017,7 @@ FSWAssGrid_CheckCell_1_4:
 	pushw 0x1212
 	lda xwa, (xsp + 12)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -8044,7 +8044,7 @@ FSWAssGrid_CheckCell_1_5:
 	pushw 0x1216
 	lda xwa, (xsp + 12)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -8071,7 +8071,7 @@ FSWAssGrid_CheckCell_1_6:
 	pushw 0x121a
 	lda xwa, (xsp + 12)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -8098,7 +8098,7 @@ FSWAssGrid_CheckCell_1_7:
 	pushw 0x121e
 	lda xwa, (xsp + 12)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -8125,7 +8125,7 @@ FSWAssGrid_CheckCell_1_8:
 	pushw 0x1222
 	lda xwa, (xsp + 12)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -8499,7 +8499,7 @@ PmExpFilter_DrawCellBank1:
 	pushw 0xed
 	pushw 0x1404
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -8567,7 +8567,7 @@ PmExpFilter_DrawCellBank2:
 	pushw 0xed
 	pushw 0x1412
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -9713,7 +9713,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5458
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9744,7 +9744,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5462
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9777,7 +9777,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5466
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9808,7 +9808,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5470
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9839,7 +9839,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5474
 	push	xix
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9867,7 +9867,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5478
 	push	xix
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9898,7 +9898,7 @@ DispTimeSetCheck_CellDecode:
 	pushw 0xed
 	pushw 0x156a
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -9920,7 +9920,7 @@ DispTimeSetCheck_TryRow3:
 	pushw 0xed
 	pushw 0x156e
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -9941,7 +9941,7 @@ DispTimeSetCheck_TryRow4:
 	pushw 0xed
 	pushw 0x1572
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -9962,7 +9962,7 @@ DispTimeSetCheck_TryRow5:
 	pushw 0xed
 	pushw 0x1576
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -9983,7 +9983,7 @@ DispTimeSetCheck_TryRow6:
 	pushw 0xed
 	pushw 0x157a
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -10004,7 +10004,7 @@ DispTimeSetCheck_TryRow7:
 	pushw 0xed
 	pushw 0x157e
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -10632,7 +10632,7 @@ MssName_EventDispatch:
 	ld	xwa, (xiz+18)
 	lda	xwa, (xwa+16)
 	push	xwa
-	call	AudioCmd_DataBlock_28E9
+	call	Sprintf_DataBlock_28E9
 	lda	xsp, (xsp+18)
 	ld	xwa, 15537572
 	jr	37
@@ -10752,7 +10752,7 @@ AcPmBkNoBox_FormatBankNo:
 	pushw 0xed
 	pushw 0x15ca
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 
 AcPmBkNoBox_SendConfirm:
@@ -10831,7 +10831,7 @@ AcBkNoBox_Match:
 	pushw 0x15d2
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
@@ -11409,7 +11409,7 @@ AcPmBkEdit_BankChanged:
 	pushw 0x15e0
 	ld xwa, (xsp + 14)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	ld_sril XWA, (xsp + 0x0138)
 	inc 1, xwa
 	push xwa
@@ -11466,7 +11466,7 @@ AcPmBkEdit_BankEdit:
 	pushw 0x15ea
 	ld xwa, (xsp + 14)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	ld_sril XWA, (xsp + 0x0138)
 	inc 2, xwa
 	push xwa
@@ -11841,7 +11841,7 @@ GmOnOffFunc:
 	pushw 0x1602
 	ld xwa, (xde + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	ld xhl, xiz
 	jrl VariScreen_CleanupRet
@@ -12364,7 +12364,7 @@ VariScreen_DrawNameString:
 	pushw 0x160a
 	lda xwa, (xsp + 40)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xfd, 0x26, 0x02
 	st_dri3b A, 0xfd, 0x22, 0x02
@@ -12646,7 +12646,7 @@ VariScreen_DrawRightNameString:
 	pushw 0x160e
 	lda xwa, (xsp + 40)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xfd, 0x26, 0x02
 	st_dri3b A, 0xfd, 0x22, 0x02
@@ -12779,7 +12779,7 @@ VariScreen_HandleConfirm:
 	pushw 0x1612
 	st_dri3b W, 0xfd, 0x2a, 0x01
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	st_dri3b W, 0xfd, 0x26, 0x02
 	st_dri3b A, 0xfd, 0x22, 0x02
@@ -12943,7 +12943,7 @@ VariScreen_ConfirmDrawNameAudio:
 	pushw 0x161e
 	lda xwa, (xsp + 40)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	st_dri3b W, 0xfd, 0x26, 0x02
 	st_dri3b B, 0xfd, 0x22, 0x02
@@ -13158,7 +13158,7 @@ VariScreen_EnumDrawNameAudio:
 	pushw 0x1622
 	lda xwa, (xsp + 40)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	st_dri3b W, 0xfd, 0x26, 0x02
 	st_dri3b B, 0xfd, 0x22, 0x02
@@ -14006,7 +14006,7 @@ RVari_Select_CheckSameBank:
 	pushw 0x164e
 	lda xwa, (xsp + 28)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	st_dri3b C, 0xfd, 0x18, 0x02
 	st_dri3b A, 0xfd, 0x14, 0x02
@@ -14127,7 +14127,7 @@ RVari_Select_CheckSameBank:
 	pushw 0x1652
 	lda xwa, (xsp + 28)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	st_dri3b W, 0xfd, 0x18, 0x02
 	st_dri3b A, 0xfd, 0x14, 0x02

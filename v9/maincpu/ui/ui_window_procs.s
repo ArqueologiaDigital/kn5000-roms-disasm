@@ -1113,7 +1113,7 @@ ModeEdit_HandlePaint:
 	pushw 0x9f08
 	lda xwa, (xsp + 14)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 	st_dri3b A, 0xfd, 0x04, 0x01
 	ld_sril XWA, (xsp + 0x0114)
@@ -1246,7 +1246,7 @@ TitleEdit_HandlePaint:
 	pushw 0x9f14
 	lda xwa, (xsp + 14)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 	st_dri3b A, 0xfd, 0x04, 0x01
 	ld_sril XWA, (xsp + 0x0114)
@@ -2907,7 +2907,7 @@ AcTempoBox_MatchTempoID:
 	pushw 0xa180
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr AcTempoBox_SendConfirmEvent
 
@@ -6927,7 +6927,7 @@ CaptureLcd:
 	pushw 0xae50
 	lda xwa, (xsp + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 20)
 	lds32 xwa, 1
 	addm32_24 0x03044a, xwa

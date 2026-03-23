@@ -1435,7 +1435,7 @@ DrawFunc_Init_FontTable0:
 DrawFunc_Init_PushFontAndDraw:
 	push xwa
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	ld a, (xiz + 6)
 	and a, 0x3f
@@ -1540,7 +1540,7 @@ DrawFunc_Init_Variant1:
 	push	xwa
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 63
@@ -1613,7 +1613,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380840
 	push	xwa
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 63
@@ -1691,7 +1691,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380860
 	push	xwa
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -1794,7 +1794,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380892
 	push	xwa
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -1867,7 +1867,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380912
 	push	xwa
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -3895,7 +3895,7 @@ PmBank_BankChanged_DrawSlot:
 	pushw 0x167a
 	lda xwa, (xsp + 14)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	st_dri3b W, 0xfd, 0x0c, 0x01
 	st_dri3b C, 0xfd, 0x08, 0x01
@@ -4165,7 +4165,7 @@ PmBank_DrawRegionInfo:
 	pushw 0x1718
 	lda xwa, (xsp + 20)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 	st_dri3b A, 0xfd, 0x08, 0x01
 	ldw (xbc), 0xe6
@@ -4640,7 +4640,7 @@ WallHomeEdit_PushAddr:
 	push xbc
 
 WallHomeEdit_CallAudio:
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	ld xhl, (xsp + 4)
 	jr WallHome_PopIzSkip4Ret
@@ -4687,7 +4687,7 @@ WallMenuEdit_EventDispatch:
 	ld	xwa, 15538410
 	push	xwa
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
@@ -4735,7 +4735,7 @@ WallOthEdit_EventDispatch:
 	ld	xwa, 15538454
 	push	xwa
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
@@ -5488,7 +5488,7 @@ AcFreeSplit_LookupNoteLabel:
 	pushw 0x1bf8
 	lda xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 
 AcFreeSplit_SendConfirmEvent:
@@ -5534,7 +5534,7 @@ AcFreeSplit_LookupSecondNote:
 	pushw 0x1c10
 	lda xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 
 AcFreeSplit_SendSecondConfirm:

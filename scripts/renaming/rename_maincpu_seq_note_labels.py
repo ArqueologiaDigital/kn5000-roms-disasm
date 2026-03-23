@@ -283,13 +283,13 @@ RENAMES = [
      'Part 1: adjust offset up by 6'),
 
     ('LABEL_F2C798', 'TrAsGridChk_Part1_SendAudio',
-     'Part 1: lookup audio command from 0xE262CA, call Audio_SendCommand'),
+     'Part 1: lookup audio command from 0xE262CA, call Sprintf_Locked'),
 
     ('LABEL_F2C7C3', 'TrAsGridChk_Part2_Start',
      'Part 2 handler: check bit0 flag, lookup table, send audio command'),
 
     ('LABEL_F2C7E5', 'TrAsGridChk_Part2_PushCmd',
-     'Part 2: push audio command address and call Audio_SendCommand'),
+     'Part 2: push audio command address and call Sprintf_Locked'),
 
     ('LABEL_F2C81E', 'TrAsGridChk_Part2_CheckType0',
      'Part 2: check track type with mode=0 (non-matching position)'),
@@ -298,13 +298,13 @@ RENAMES = [
      'Part 2 up-direction: adjust offset up by 6, lookup table'),
 
     ('LABEL_F2C84A', 'TrAsGridChk_Part2_UpPushCmd',
-     'Part 2 up-direction: push audio command and call Audio_SendCommand'),
+     'Part 2 up-direction: push audio command and call Sprintf_Locked'),
 
     ('LABEL_F2C882', 'TrAsGridChk_Part2_UpCheckType0',
      'Part 2 up-direction: check track type with mode=0'),
 
     ('LABEL_F2C890', 'TrAsGridChk_SendExtraAudioCmd',
-     'Send extra audio command: push XWA, call Audio_SendCommand'),
+     'Send extra audio command: push XWA, call Sprintf_Locked'),
 
     ('LABEL_F2C89B', 'TrAsGridChk_Part2_Finish',
      'Part 2 finish: call FA44D0, dispatch 0x1E0008C event'),
@@ -313,7 +313,7 @@ RENAMES = [
      'Part 3 handler: check bit0 flag, lookup table at 62096, send audio'),
 
     ('LABEL_F2C8CB', 'TrAsGridChk_Part3_PushCmd',
-     'Part 3: push audio command and call Audio_SendCommand'),
+     'Part 3: push audio command and call Sprintf_Locked'),
 
     ('LABEL_F2C907', 'TrAsGridChk_Part3_CheckType0',
      'Part 3: check track type with mode=0 (non-matching position)'),
@@ -322,13 +322,13 @@ RENAMES = [
      'Part 3 up-direction: adjust offset up by 6, lookup table'),
 
     ('LABEL_F2C930', 'TrAsGridChk_Part3_UpPushCmd',
-     'Part 3 up-direction: push audio command and call Audio_SendCommand'),
+     'Part 3 up-direction: push audio command and call Sprintf_Locked'),
 
     ('LABEL_F2C96B', 'TrAsGridChk_Part3_UpCheckType0',
      'Part 3 up-direction: check track type with mode=0'),
 
     ('LABEL_F2C979', 'TrAsGridChk_SendExtraAudioCmd2',
-     'Send extra audio command for part 3: push XWA, call Audio_SendCommand'),
+     'Send extra audio command for part 3: push XWA, call Sprintf_Locked'),
 
     ('LABEL_F2C984', 'TrAsGridChk_Part3_Finish',
      'Part 3 finish: call FA44D0, dispatch 0x1E0008C event'),
@@ -349,7 +349,7 @@ RENAMES = [
     # ==================================================================
 
     ('LABEL_F2FAD1', 'NoteEdit_FormatTempo',
-     'Format tempo value: if <= 0x3E7 call Audio_SendCommand, else copy string'),
+     'Format tempo value: if <= 0x3E7 call Sprintf_Locked, else copy string'),
 
     ('LABEL_F2FAF2', 'NoteEdit_FormatTempoString',
      'Format tempo as string via Strcpy from 0xE3466E'),
@@ -385,16 +385,16 @@ RENAMES = [
      'Call Strcpy for gate time string, adjust stack'),
 
     ('LABEL_F2FC13', 'NoteEdit_GateTimeNumeric',
-     'Format gate time as numeric value via Audio_SendCommand with 0xE346D0'),
+     'Format gate time as numeric value via Sprintf_Locked with 0xE346D0'),
 
     ('LABEL_F2FC1D', 'NoteEdit_FormatChordType',
      'Format chord type: lookup offset from mem[10142]+mem[135318]'),
 
     ('LABEL_F2FC30', 'NoteEdit_PushFormatAndCopy',
-     'Common: push format addr, push dest buffer, call Audio_SendCommand or Strcpy'),
+     'Common: push format addr, push dest buffer, call Sprintf_Locked or Strcpy'),
 
     ('LABEL_F2FC35', 'NoteEdit_CallAudioSendCmd',
-     'Call Audio_SendCommand with 10-byte stack frame, adjust stack'),
+     'Call Sprintf_Locked with 10-byte stack frame, adjust stack'),
 
     ('LABEL_F2FC3F', 'NoteEdit_FormatChordNotes',
      'Format chord notes: compute table offset via Math_MultiplyAccumulate'),
@@ -674,7 +674,7 @@ RENAMES = [
      'Push format string and copy via Strcpy'),
 
     ('LABEL_F34831', 'SqplyFunc_FormatPatternNumeric',
-     'Format pattern as numeric value via Audio_SendCommand'),
+     'Format pattern as numeric value via Sprintf_Locked'),
 
     ('LABEL_F3483A', 'SqplyFunc_FormatIntro',
      'Format intro parameter: push mem[0xF238] value'),
@@ -683,7 +683,7 @@ RENAMES = [
      'Format ending parameter: push mem[0xF23A] value'),
 
     ('LABEL_F3485F', 'SqplyFunc_PushAndFormat',
-     'Push string buffer pointer and jump to Audio_SendCommand call'),
+     'Push string buffer pointer and jump to Sprintf_Locked call'),
 
     ('LABEL_F34864', 'SqplyFunc_FormatFillIn',
      'Format fill-in parameter: push mem[0xF23F] value'),
@@ -692,7 +692,7 @@ RENAMES = [
      'Push format address and dest buffer pointer'),
 
     ('LABEL_F3487A', 'SqplyFunc_CallAudioSendCmd',
-     'Call Audio_SendCommand with 10-byte frame'),
+     'Call Sprintf_Locked with 10-byte frame'),
 
     ('LABEL_F34881', 'SqplyFunc_RestoreAndReturn',
      'Restore XHL from stack and jump to epilogue'),

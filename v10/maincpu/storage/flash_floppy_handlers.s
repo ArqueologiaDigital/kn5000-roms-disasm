@@ -7019,7 +7019,7 @@ UI_COMPONENT_DISPATCH:
 	pushw 0xe1	; Push parameter
 	pushw 0xcee4	; Push parameter
 	push xde	; Push XDE
-	call Audio_SendCommand	; Call handler function
+	call Sprintf_Locked	; Call handler function
 	lda xsp, (xsp + 10)	; Clean up stack (10 bytes)
 	jrl WidgetHandler_PostEventAndReturnZero	; Jump to end
 UI_COMPONENT_DISPATCH_CASE1:
@@ -7039,7 +7039,7 @@ UI_COMPONENT_DISPATCH_CASE1:
 	pushw 0xe1	; Push parameter
 	pushw 0xcee8	; Push parameter
 	push xde	; Push XDE
-	call Audio_SendCommand	; Call handler function
+	call Sprintf_Locked	; Call handler function
 	lda xsp, (xsp + 16)	; Clean up stack (16 bytes)
 	jr WidgetHandler_PostEventAndReturnZero	; Jump to end
 UI_COMPONENT_DISPATCH_CASE2:
@@ -7076,7 +7076,7 @@ UI_COMPONENT_DISPATCH_CASE5_SKIP:
 	push xwa	; Push parameter
 UI_COMPONENT_DISPATCH_PUSH_CALL:
 	push xde	; Push XDE
-	call Audio_SendCommand	; Call handler function
+	call Sprintf_Locked	; Call handler function
 	inc 8, xsp	; Increment stack pointer
 
 WidgetHandler_PostEventAndReturnZero:
@@ -7216,7 +7216,7 @@ GridCheck_LookupAndSend:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 
 GridCheck_GetFocusAndSend:
@@ -7617,7 +7617,7 @@ S2cMemNoBox_HandleScroll:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -7656,7 +7656,7 @@ PsS2cFmeas_HandleScroll:
 	pushw 0xd584
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xbc, (xiz + 22)
 	lda xwa, (xiz + 32)
@@ -7710,7 +7710,7 @@ PsS2cLmeas_HandleScroll:
 	pushw 0xd588
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xbc, (xiz + 22)
 	lda xwa, (xiz + 32)
@@ -7764,7 +7764,7 @@ PsSeqSongNo_HandleScroll:
 	pushw 0xd58c
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -7804,7 +7804,7 @@ PsS2cTrans_HandleScroll:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)

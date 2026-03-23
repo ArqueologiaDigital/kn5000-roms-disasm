@@ -1393,7 +1393,7 @@ PmemOutL_GridCheck:
 	pushw 0xe8
 	pushw 0x1b0
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -1824,7 +1824,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	512
 	ld	xwa, (xsp+18)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1859,7 +1859,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	518
 	lda	xwa, (xsp+46)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1903,7 +1903,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	530
 	lda	xwa, (xsp+46)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1951,7 +1951,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	542
 	ld	xwa, (xsp+18)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1986,7 +1986,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	548
 	lda	xwa, (xsp+46)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -2029,7 +2029,7 @@ TtMdCtlMsg_EventDispatch:
 	.long AudioStream_Property_Table
 	pushw	560
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -2076,7 +2076,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	572
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -2104,7 +2104,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	578
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -2140,7 +2140,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	590
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -2204,7 +2204,7 @@ CtlMsg_SendAudioCommand:
 	pushw 0x25a
 	ld xwa, (xsp + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
 CtlMsg_GetFocusAndDispatch:
@@ -2226,7 +2226,7 @@ CtlMsg_ReadOffsetAndSend:
 	pushw 0x260
 	ld xwa, (xsp + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -2266,7 +2266,7 @@ CtlMsg_SendParamValue:
 	pushw 0x26c
 	ld xwa, (xsp + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
 CtlMsg_DispatchFocusEvent:
@@ -3722,7 +3722,7 @@ MidiPart_AudioCmdDisplay:
 	pushw 0x6e8
 	lda xwa, (xsp + 30)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
 MidiPart_GridDispatchEvent:
@@ -6122,7 +6122,7 @@ LswVolume:
 	pushw 0xe9
 	pushw 0x5588
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr LswVolume_ReturnThis
 
@@ -6247,7 +6247,7 @@ LswMute:
 	pushw 0xe9
 	pushw 0x5598
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr LswMute_ReturnThis
 
@@ -6391,7 +6391,7 @@ LswPan_FormatRight:
 LswPan_SendCommand:
 	push xwa
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr LswPan_ReturnThis
 
@@ -6493,7 +6493,7 @@ LswReverb:
 	pushw 0xe9
 	pushw 0x55bc
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr LswReverb_ReturnThis
 
@@ -6609,7 +6609,7 @@ LswDSPEffect:
 	pushw 0xe9
 	pushw 0x55c4
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr LswDSPEff_ReturnThis
 
@@ -6904,7 +6904,7 @@ LswSustainLength:
 	pushw 0xe9
 	pushw 0x55e4
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr LswSustLen_ReturnThis
 
@@ -7008,7 +7008,7 @@ LswKeyShift:
 	pushw 0xe9
 	pushw 0x55ec
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr LswKeyShift_ReturnThis
 
@@ -7126,7 +7126,7 @@ LswTuning:
 	pushw 0xe9
 	pushw 0x55fa
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr LswTuning_ReturnThis
 
@@ -7237,7 +7237,7 @@ LswBendRange:
 	pushw 0xe9
 	pushw 0x560c
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr LswBendRng_ReturnThis
 
@@ -7949,7 +7949,7 @@ LswMidiChannel:
 	pushw 0xe9
 	pushw 0x565c
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr LswMidi_LoadReturnValue
 
@@ -8395,7 +8395,7 @@ CheckMsg_AudioCommand:
 	pushw 0xd892
 	ld xwa, (xiz + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
 CheckMsg_ReturnZero:
@@ -8507,7 +8507,7 @@ MsgHeader_BuildLoop:
 	pushw 0xe9
 	pushw 0xd8a2
 	push xiz
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 20)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e00023
@@ -9589,7 +9589,7 @@ LswTuning_SearchLoop:
 	pushw 0xdb76
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	ld wa, iz
 	extz xwa
@@ -10060,7 +10060,7 @@ LswScalingKeyX:
 	pushw 0xe9
 	pushw 0xde32
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jr LswScaleKeyX_LoadReturn
 
@@ -10154,7 +10154,7 @@ Softver_ShowHide:
 	pushw 0xde3e
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, 0xf00001
@@ -10166,7 +10166,7 @@ Softver_ShowHide:
 	pushw 0xde42
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, 0xf00002
@@ -10178,7 +10178,7 @@ Softver_ShowHide:
 	pushw 0xde46
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, 0xf00003
@@ -10190,7 +10190,7 @@ Softver_ShowHide:
 	pushw 0xde4a
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, 0xf00004
@@ -10249,7 +10249,7 @@ MPver_ShowHide:
 	pushw 0xde54
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, 0xef000a
@@ -11911,7 +11911,7 @@ PsMixer_SendEventAndForward:
 	pushw 0xf580
 	lda xwa, (xsp + 30)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 	lda xde, (xsp + 18)
 	ld xwa, (xsp + 90)
@@ -14291,7 +14291,7 @@ AudioCtrl_DataBlock:
 	pushw	63602
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+82)
 	lda	xbc, (xsp+78)
@@ -14592,7 +14592,7 @@ AudioCtrl_DataBlock:
 	pushw	63606
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+52)
 	lda	xbc, (xsp+48)
@@ -17421,7 +17421,7 @@ PsVari_GetText:
 	pushw 0xf99c
 	ld_sril XWA, (xsp + 0x011a)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr AudioView_ReturnZeroJmp
 

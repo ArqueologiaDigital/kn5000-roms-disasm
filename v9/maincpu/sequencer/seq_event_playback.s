@@ -4022,7 +4022,7 @@ VocalistGrid_DispatchData:
 	pushw	61176
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4035,7 +4035,7 @@ VocalistGrid_DispatchData:
 	pushw	61188
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4049,7 +4049,7 @@ VocalistGrid_DispatchData:
 	pushw	61200
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4067,7 +4067,7 @@ VocalistGrid_DispatchData:
 	pushw	61212
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4120,7 +4120,7 @@ VocalistGrid_DispatchData:
 	pushw	61296
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4161,7 +4161,7 @@ VocalistGrid_DispatchData:
 	pushw	61308
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+20)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4241,7 +4241,7 @@ VocalistGrid_CheckDispData:
 	pushw	61352
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4256,7 +4256,7 @@ VocalistGrid_CheckDispData:
 	pushw	61364
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4271,7 +4271,7 @@ VocalistGrid_CheckDispData:
 	pushw	61376
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4290,7 +4290,7 @@ VocalistGrid_CheckDispData:
 	pushw	61388
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4348,7 +4348,7 @@ VocalistGrid_CheckDispData:
 	pushw	61472
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4389,7 +4389,7 @@ VocalistGrid_CheckDispData:
 	pushw	61484
 	lda	xwa, (xsp+36)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+20)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4430,7 +4430,7 @@ VocalistGrid_CheckDispData:
 	pushw	61492
 	lda	xwa, (xsp+36)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+20)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -5501,7 +5501,7 @@ SplitPoint_HandleNoteEvt:
 	pushw 0xf81a
 	ld xwa, (xde + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 	ld xwa, (xsp + 8)
 	ld de, (xwa + 4)

@@ -80,7 +80,7 @@ RENAMES = {
 
     # === CheckMessage sub-labels (lines 7802-7846) ===
     "LABEL_F7E0B3": "CheckMsg_IncrementCheck",        # Check if next message exists
-    "LABEL_F7E0FF": "CheckMsg_AudioCommand",          # Send Audio_SendCommand for text
+    "LABEL_F7E0FF": "CheckMsg_AudioCommand",          # Send Sprintf_Locked for text
     "LABEL_F7E115": "CheckMsg_ReturnZero",            # Return zero (default)
     "LABEL_F7E119": "CheckMsg_ReturnAddress",         # Return address of 0x02478C
     "LABEL_F7E120": "CheckMsg_ReturnTwo",             # Return 2 (count)

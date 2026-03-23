@@ -96,7 +96,7 @@ RENAMES = {
     # === LswPan (lines 5764-5890) ===
     "LABEL_F7CF2E": "LswPan_FormatOffset",            # Format pan offset (!=0x40)
     "LABEL_F7CF41": "LswPan_FormatRight",             # Format right pan (>0x40)
-    "LABEL_F7CF4B": "LswPan_SendCommand",             # Send Audio_SendCommand
+    "LABEL_F7CF4B": "LswPan_SendCommand",             # Send Sprintf_Locked
     "LABEL_F7CF56": "LswPan_InactiveStr",             # Load inactive string
     "LABEL_F7CF5B": "LswPan_CopyStr",                 # Copy string
     "LABEL_F7CF63": "LswPan_ReturnThis",              # Return xiz

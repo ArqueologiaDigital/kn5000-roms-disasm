@@ -28524,14 +28524,14 @@ Math_MultiplyAccumulate:
 	ret
 
 ; =============================================================================
-; Audio_SendCommand -- Send sound parameter command to Sub CPU
+; Sprintf_Locked -- Send sound parameter command to Sub CPU
 ; =============================================================================
 ; Primary interface for all Main CPU -> Sub CPU audio parameter updates.
-; Acquires audio lock #7, formats command via Audio_CommandEncoder (printf-like
+; Acquires audio lock #7, formats command via Sprintf_Core (printf-like
 ; format string parser), writes to ring buffer at 0xbd3c via AssswbWr.
 ; Referenced by 197+ locations (every Lsw* function, preset loaders, etc.).
 ; Args: xwa = format string pointer, stack = format arguments
-Audio_SendCommand:
+Sprintf_Locked:
 	dec 4, xsp
 	pushw iz
 	lds wa, 7
@@ -28549,7 +28549,7 @@ Audio_SendCommand:
 	push xwa
 	ld xwa, (xsp + 22)
 	push xwa
-	call Audio_CommandEncoder
+	call Sprintf_Core
 	lda xsp, (xsp + 12)
 	ld iz, hl
 	lds wa, 7
@@ -28559,7 +28559,7 @@ Audio_SendCommand:
 	inc 4, xsp
 	ret
 
-Audio_SendCommand_Block:
+Sprintf_Unlocked:
 	ld	xwa, (xsp+4)
 	st32_24	246300, xwa
 	ld	xwa, (xsp+4)
@@ -28570,7 +28570,7 @@ Audio_SendCommand_Block:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Audio_CommandEncoder
+	call	Sprintf_Core
 	lda	xsp, (xsp+12)
 	ret
 	ld32_24	xbc, 246300
@@ -29264,7 +29264,7 @@ Strcpy:
 	push xwa
 	ld xiz, (xsp + 16)
 	push xiz
-	call AudioCmd_StringNSearch
+	call Sprintf_StringNSearch
 	add xsp, 0xc
 	or xhl, xhl
 	jr nz, Strcpy_LoadReg
@@ -29318,7 +29318,7 @@ Heap_Grow:
 ; Input:  XWA = pointer to null-terminated string (pushed on stack)
 ; Output: HL = length of string (excluding null terminator)
 ;         Returns 0xffff if null terminator not found
-; Uses AudioCmd_MemChr to search for 0x00 byte, then computes result - start.
+; Uses Sprintf_MemChr to search for 0x00 byte, then computes result - start.
 ; Located between Strcpy and Memset (standard C library functions).
 ; ============================================================================
 Strlen:
@@ -29327,7 +29327,7 @@ Strlen:
 	pushw 0x0
 	ld xiz, (xsp + 12)
 	push xiz
-	call AudioCmd_MemChr
+	call Sprintf_MemChr
 	inc 8, xsp
 	or xhl, xhl
 	jr nz, Strlen_Compute
@@ -29357,7 +29357,7 @@ Strlen_LoadParam:
 	cpl_werp 0xea
 	inc 1, xde
 	push xde
-	call AudioCmd_ItoaBaseN
+	call Sprintf_ItoaBaseN
 	lda xsp, (xsp + 10)
 	dec 1, xhl
 	ret
@@ -29367,14 +29367,14 @@ Strlen_LoadParam:
 ; ============================================================================
 ; Input:  WA = integer value, XBC = base pointer, XDE = format options
 ; Output: String written to output buffer
-; Wrapper around AudioCmd_ItoaBaseN. Pushes parameters and delegates to
+; Wrapper around Sprintf_ItoaBaseN. Pushes parameters and delegates to
 ; the audio command subsystem's integer-to-string conversion.
 ; ============================================================================
 Itoa_WithBase:
 	pushw wa
 	push xbc
 	push xde
-	call AudioCmd_ItoaBaseN
+	call Sprintf_ItoaBaseN
 	lda xsp, (xsp + 10)
 	ret
 
@@ -29423,4 +29423,4 @@ Math_AbsInt16:
 	neg hl
 	ret
 
-	.include "audio/audio_cmd_encoder.s"
+	.include "audio/sprintf_core.s"

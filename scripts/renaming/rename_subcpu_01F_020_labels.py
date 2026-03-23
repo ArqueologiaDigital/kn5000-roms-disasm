@@ -361,10 +361,10 @@ RENAMES = [
     # Reads byte count from (xsp+4), decrements in loop, discards bytes.
     # Returns HL=0.  Effectively a null/skip command handler.
     # ------------------------------------------------------------------
-    ('LABEL_01FC8A', 'AudioCmd_40_5F_SkipLoop',
+    ('LABEL_01FC8A', 'Sprintf_40_5F_SkipLoop',
      'Skip loop: decrement byte counter until zero'),
 
-    ('LABEL_01FC92', 'AudioCmd_40_5F_Done',
+    ('LABEL_01FC92', 'Sprintf_40_5F_Done',
      'Return HL=0 after consuming all command bytes'),
 
     # ------------------------------------------------------------------

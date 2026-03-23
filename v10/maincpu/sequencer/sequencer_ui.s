@@ -191,7 +191,7 @@ TrAsSureLangCheck:
 	push xwa
 	pushw 0x2
 	pushw 0xcb4
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 18)
 	lda_24 xhl, 0x03def8
 	ret
@@ -1434,7 +1434,7 @@ MeasureBoxFunc_DrawMeasure:
 	pushw 0x6200
 	ld xwa, (xde + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	ld xhl, xiz
 	jr MeasureBoxFunc_Epilogue
@@ -3045,7 +3045,7 @@ TrAsGridChk_Part1_SendAudio:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
@@ -3069,7 +3069,7 @@ TrAsGridChk_Part2_Start:
 TrAsGridChk_Part2_PushCmd:
 	push xwa
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
@@ -3112,7 +3112,7 @@ TrAsGridChk_Part2_UpDir:
 TrAsGridChk_Part2_UpPushCmd:
 	push xwa
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
@@ -3144,7 +3144,7 @@ TrAsGridChk_SendExtraAudioCmd:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 
 TrAsGridChk_Part2_Finish:
@@ -3170,7 +3170,7 @@ TrAsGridChk_Part3_PushCmd:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
@@ -3213,7 +3213,7 @@ TrAsGridChk_Part3_UpPushCmd:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
@@ -3245,7 +3245,7 @@ TrAsGridChk_SendExtraAudioCmd2:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 
 TrAsGridChk_Part3_Finish:
@@ -3475,7 +3475,7 @@ AcCurSongName_HandleFocusGained:
 	pushw 0x64f0
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -4036,7 +4036,7 @@ AcDemoMedley_HandleScrollEvent:
 DPPlayDsp_CheckEntry:
 	push xwa
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -4081,7 +4081,7 @@ DemoMedDsp_Dispatch:
 	.long MedleyDisp_Blank
 	push	xwa
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	31
@@ -4129,7 +4129,7 @@ DPPlayDsp_Dispatch:
 	.long PlayModeStr_Play
 	push	xwa
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	31
@@ -4177,7 +4177,7 @@ DPPauseDsp_Dispatch:
 	.long PlayModeStr_Pause
 	push	xwa
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	31
@@ -6119,7 +6119,7 @@ NoteEditBox_EventDispatch2:
 	push	xwa
 	lda	xwa, (xsp+42)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+8)
 	.byte 0xbf
@@ -6142,7 +6142,7 @@ NoteEditBox_EventDispatch2:
 	pushw	17948
 	lda	xwa, (xsp+42)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+10)
 	lda	xwa, (xsp+28)
@@ -6234,7 +6234,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, 14894628
 	push	xwa
 	push	xde
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+8)
 	.byte 0xbf
@@ -6253,7 +6253,7 @@ NoteEditBox_EventDispatch2:
 	nop
 	pushw	17960
 	push	xde
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+10)
 	lda	xwa, (xsp+28)
@@ -6701,7 +6701,7 @@ NoteEdit_FormatTempo:
 	pushw 0x4668
 	ld xwa, (xiz + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jrl NoteEdit_RestoreAndReturn
 
@@ -6847,7 +6847,7 @@ NoteEdit_PushFormatAndCopy:
 	push xwa
 
 NoteEdit_CallAudioSendCmd:
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jrl NoteEdit_RestoreAndReturn
 
@@ -7167,7 +7167,7 @@ SngSelFunc_HandleEvent47:
 	ld xwa, (xiz + 18)
 	inc 4, xwa
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xbc, (xiz + 18)
 	ld xwa, (xbc)
 	ld (xwa + 6), 0x3a
@@ -7761,7 +7761,7 @@ SndParam_Dispatch:
 	pushw	227
 	pushw	18302
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7832,7 +7832,7 @@ EntGridCheck_Handler:
 	pushw 0x479c
 	lda xwa, (xsp + 54)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -7969,7 +7969,7 @@ EntGridCheck_Handle4E13:
 	pushw 0x47ba
 	ld xwa, (xsp + 26)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -8103,7 +8103,7 @@ EntGridCheck_SendAudioCommand:
 	pushw 0x47c4
 	ld xwa, (xsp + 26)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
 SndParam_BuildDisplayEvent:
@@ -13706,7 +13706,7 @@ SqplyFunc_PushFormatAddr:
 	push xwa
 
 SqplyFunc_CallAudioSendCmd:
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
 SqplyFunc_RestoreAndReturn:
@@ -14465,7 +14465,7 @@ SqedtFunc_CheckMode_CopyParam:
 	push xwa
 
 SqedtFunc_CheckMode_SendAudio:
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr StringCopyEpilog
 
@@ -15035,7 +15035,7 @@ SqedtFunc_Epilogue:
 ; =============================================================================
 ; Handles DSP effect editor events. Displays effect names (0xe32a7a ptr table),
 ; parameter names (0xe324c4 via per-algo config at 0xe446dc), and values.
-; Sends parameter changes to Sub CPU via Audio_SendCommand.
+; Sends parameter changes to Sub CPU via Sprintf_Locked.
 ; Stack frame: 28 bytes.
 DspItem0CngFunc:
 	lda xsp, (xsp - 28)
@@ -15226,7 +15226,7 @@ DspItem0_SendEffectParam:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
 DspItem0_ExitWithHL:
@@ -15766,7 +15766,7 @@ PrepareAudioParam:
 SendAudioCommand:
 	push xwa
 	push xhl
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
 Equalizer_PadSpaceAndReturn:

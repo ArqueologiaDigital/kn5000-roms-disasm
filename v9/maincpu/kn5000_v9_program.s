@@ -2039,7 +2039,7 @@ TextRender_XorMode_DrawPixel:
 	ld wa, (xde)
 	exts xwa
 	.include "display/graphics_text_vga.s"
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 
 ChordProc_SendRefreshEvent:
@@ -2095,7 +2095,7 @@ AcChordBox_HandleChordUpdate:
 	pushw 0x1c92
 	lda xwa, (xsp + 12)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	ld xwa, 0xc0
 	call SndParam_LookupReadOnly

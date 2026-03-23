@@ -17391,7 +17391,7 @@ S2c_GridCheck_Dispatch:
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 
 S2c_GridCheck_GetFocusSendEvt:
@@ -17475,7 +17475,7 @@ PsCmpCpFGrpBox_HandleEvt4:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
@@ -17588,7 +17588,7 @@ PsCmpCpFVariBox_HandleEvt5:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
@@ -17691,7 +17691,7 @@ PsCmpCpFPtnBox_HandleEvtBC:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
@@ -17798,7 +17798,7 @@ PsCstmCpBnkBox_LookupAndSend:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -17870,7 +17870,7 @@ PsCstmCpSwBox_PushTableAddr1:
 	push xbc
 
 PsCstmCpSwBox_SendCommand:
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -18023,7 +18023,7 @@ PsCtmAttStrBox_HandleEvtBC:
 	pushw 0x3a4f
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -18080,7 +18080,7 @@ AcMemNoBox_HandleEvtBC:
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
@@ -18198,7 +18198,7 @@ AcCmpRecBox_HandleEvtBC:
 	ld xwa, (xhl + 4)
 	push xwa
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	ld xwa, (xsp + 12)
 	ldw (xwa + 22), 0xf2
@@ -18217,7 +18217,7 @@ AcCmpRecBox_AdjustTable:
 	ld xwa, (xhl)
 	push xwa
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	ld xwa, (xsp + 8)
 	ldw (xwa + 22), 0xf5
@@ -18281,7 +18281,7 @@ PsCmpQtzBox_HandleEvtBC:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -18350,7 +18350,7 @@ PsCmpMeasBox_HandleEvtBC:
 	pushw 0xdd7a
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0108)
@@ -18418,7 +18418,7 @@ PsCmpMemBox_HandleEvtBC:
 	pushw 0xdd7e
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0108)
@@ -18492,7 +18492,7 @@ AcCmpTempoBox_HandleEvt1C:
 	pushw 0xdd82
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld_sril XWA, (xsp + 0x0104)
@@ -18601,7 +18601,7 @@ PsNameMemBox_HandleEvtBC:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
@@ -19003,7 +19003,7 @@ EasyCmp_GridEvtEnc_Case2:
 ; EasyCmpGridCheck event case 1
 EasyCmp_GridCheck_EventCase1:
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	jr EasyCmp_GridCheck_EventCase3
 
@@ -19014,7 +19014,7 @@ EasyCmp_GridCheck_EventCase2:
 	pushw 0xe1
 	pushw 0xdf12
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
 ; EasyCmpGridCheck event case 3
@@ -19194,7 +19194,7 @@ PsMspNameBnk_HandleEvtBC:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -19446,7 +19446,7 @@ VwVariBox_GetText_LookupAudio:
 	push xwa
 	ld_sril XWA, (xsp + 0x0118)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	jr VwVariBox_ReturnHandled
 
@@ -19831,7 +19831,7 @@ MspBnkNameBox_HandleEvt1B:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -19845,7 +19845,7 @@ MspBnkNameBox_HandleEvt1C:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -19859,7 +19859,7 @@ MspBnkNameBox_HandleEvt1D:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -19874,7 +19874,7 @@ RgpSetBnk_GridCheck:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -20005,7 +20005,7 @@ RgpSetBnk_GridCheck_EventEnc:
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	jr AudioEvt_GetFocusRetZero
 
@@ -20032,7 +20032,7 @@ RgpSetBnk_EvtEnc_SendAudioCmd:
 	pushw 0xe1
 	pushw 0xe2bc
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
 AudioEvt_GetFocusRetZero:
@@ -20087,7 +20087,7 @@ RgpSetBnkBox_HandleEvtBC:
 	push xwa
 	lda xwa, (xsp + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -20228,7 +20228,7 @@ MspMeasBox_HandleEvtBC:
 	pushw 0xe2f8
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -20291,7 +20291,7 @@ MspMemBox_ClampValue:
 	pushw 0xe306
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -20412,7 +20412,7 @@ AcSndArgGrid_BnkDispatch:
 	pushw 0xe314
 	lda xwa, (xsp + 10)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -20994,7 +20994,7 @@ SndArgGridCheck_PlayRow_4:
 SndArgGridCheck_PlayRow_Send:
 	push xwa
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 
 SndArgGridCheck_PlayRow_Finalize:

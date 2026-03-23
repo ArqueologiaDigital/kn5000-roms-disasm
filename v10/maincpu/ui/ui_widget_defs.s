@@ -260,7 +260,7 @@ GridCheck_CellSelect:
 	pushw 0xea
 	pushw 0xa266
 	push xde
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
@@ -664,7 +664,7 @@ PsNumEditBox_Confirm:
 	pushw 0xa27c
 	lda xwa, (xsp + 28)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xwa, (xsp + 32)
 	push xwa
 	lda xwa, (xsp + 46)
@@ -682,7 +682,7 @@ PsNumEditBox_Confirm:
 	push xwa
 	lda xwa, (xsp + 20)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 20)
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 42)
@@ -906,7 +906,7 @@ AcNumEdit_GetText:
 	pushw 0xa2ac
 	lda xwa, (xsp + 22)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xwa, (xsp + 26)
 	push xwa
 	lda xwa, (xsp + 40)
@@ -925,7 +925,7 @@ AcNumEdit_GetText:
 	push xwa
 	ld xwa, (xsp + 42)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 18)
 	jrl AcNumEdit_ReturnZero
 
@@ -1394,7 +1394,7 @@ LswEditCheck:
 	pushw 0xa2b2
 	ld xwa, (xde + 8)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	ld xhl, xiz
 	jr LswEditCheck_Return
@@ -1923,7 +1923,7 @@ RamEditCheck_JumpStart:
 	pushw	41654
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr	31
@@ -4002,7 +4002,7 @@ PsPageBox_Confirm_DrawValue:
 	pushw 0xa354
 	lda xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	st_dri3b A, 0xfd, 0x0c, 0x01
 	ld_sril XWA, (xsp + 0x0114)
@@ -6115,7 +6115,7 @@ AcPmemName_Confirm:
 	pushw 0xea
 	pushw 0xa3cc
 	push xix
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 	jr AcPmemName_Confirm_SendEvent
 
@@ -6126,7 +6126,7 @@ AcPmemName_Confirm_ZeroIndex:
 	pushw 0xea
 	pushw 0xa3de
 	push xix
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 	jr AcPmemName_Confirm_SendEvent
 
@@ -6135,7 +6135,7 @@ AcPmemName_Confirm_EmptySlot:
 	pushw 0xea
 	pushw 0xa3ee
 	push xix
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 
 AcPmemName_Confirm_SendEvent:
@@ -6319,7 +6319,7 @@ AcMixerVol_Confirm:
 	pushw 0xa6b0
 	lda xwa, (xsp + 24)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xwa, (xsp + 24)
 	lda xbc, (xsp + 32)
@@ -6997,7 +6997,7 @@ DbMemDump_Confirm_RowLoop:
 	pushw 0xa6c6
 	lda xwa, (xsp + 38)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 22)
 	lda xwa, (xsp + 104)
 	lda xbc, (xsp + 100)
@@ -7036,7 +7036,7 @@ DbMemDump_Confirm_RowLoop:
 	pushw 0xa6d2
 	lda xwa, (xsp + 40)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 24)
 	lda xbc, (xsp + 100)
 	addmi16 (xbc), 0x30
@@ -7705,7 +7705,7 @@ PsTrkSw_Confirm_DrawGeometry:
 	pushw 0xa824
 	lda xwa, (xsp + 124)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 4)
 	ld xbc, (xwa + 24)
@@ -12410,7 +12410,7 @@ BoxStyle7_CheckInner:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 
 BoxStyle7_InnerFill:
@@ -12533,7 +12533,7 @@ BoxStyle8_CheckInner:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 
 BoxStyle8_InnerFill:
@@ -12656,7 +12656,7 @@ BoxStyle9_CheckInner:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 
 BoxStyle9_InnerFill:
@@ -12779,7 +12779,7 @@ BoxStyle10_CheckInner:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 
 BoxStyle10_InnerFill:
@@ -12903,7 +12903,7 @@ BoxStyle11_CheckInner:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 
 BoxStyle11_InnerFill:
@@ -13026,7 +13026,7 @@ BoxStyle12_CheckInner:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 
 BoxStyle12_InnerFill:
@@ -13149,7 +13149,7 @@ BoxStyle13_CheckInner:
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 16)
 
 BoxStyle13_InnerFill:
@@ -15647,7 +15647,7 @@ ViewID_EventSwitch:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	jrl ViewID_ReturnZero
 
@@ -15667,7 +15667,7 @@ ViewID_Select_Lookup:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jrl ViewID_ReturnZero
 
@@ -15694,7 +15694,7 @@ ViewID_Select_NoName:
 	pushw 0xaaca
 	ld xwa, (xde + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 	jrl ViewID_ReturnZero
 
@@ -15752,7 +15752,7 @@ ViewID_GetCurrent:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jr ViewID_ReturnZero
 
@@ -15775,7 +15775,7 @@ ViewID_GetCurrent_NoName:
 	pushw 0xaae0
 	ld xwa, (xbc + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 	jr ViewID_ReturnZero
 
@@ -15961,7 +15961,7 @@ ScreenID_EventSwitch:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	jrl ScreenID_ReturnZero
 
@@ -15981,7 +15981,7 @@ ScreenID_Select_Lookup:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jrl ScreenID_ReturnZero
 
@@ -16012,7 +16012,7 @@ ScreenID_Select_NoName:
 	pushw 0xaafe
 	ld xwa, (xde + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 	jrl ScreenID_ReturnZero
 
@@ -16045,7 +16045,7 @@ ScreenID_GetCurrent:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jr ScreenID_ReturnZero
 
@@ -16068,7 +16068,7 @@ ScreenID_GetCurrent_NoName:
 	pushw 0xab0c
 	ld xwa, (xbc + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 	jr ScreenID_ReturnZero
 
@@ -16112,7 +16112,7 @@ ScreenID_EnumOpen_ScanLoop:
 	pushw 0xab1c
 	lda xwa, (xsp + 28)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jr ScreenID_EnumOpen_Compare
 
@@ -16141,7 +16141,7 @@ ScreenID_EnumOpen_ScanNoName:
 	pushw 0xab22
 	lda xwa, (xsp + 30)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 
 ScreenID_EnumOpen_Compare:
@@ -16313,7 +16313,7 @@ WindowID_EventSwitch:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	inc 8, xsp
 	jrl WindowID_ReturnZero
 
@@ -16333,7 +16333,7 @@ WindowID_Select_Lookup:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jrl WindowID_ReturnZero
 
@@ -16364,7 +16364,7 @@ WindowID_Select_NoName:
 	pushw 0xab40
 	ld xwa, (xde + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 	jrl WindowID_ReturnZero
 
@@ -16397,7 +16397,7 @@ WindowID_GetCurrent:
 	ld xwa, (xsp + 12)
 	ld xwa, (xwa + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jr WindowID_ReturnZero
 
@@ -16420,7 +16420,7 @@ WindowID_GetCurrent_NoName:
 	pushw 0xab4e
 	ld xwa, (xbc + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 	jr WindowID_ReturnZero
 
@@ -16464,7 +16464,7 @@ WindowID_EnumOpen_ScanLoop:
 	pushw 0xab5e
 	lda xwa, (xsp + 28)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jr WindowID_EnumOpen_Compare
 
@@ -16493,7 +16493,7 @@ WindowID_EnumOpen_ScanNoName:
 	pushw 0xab64
 	lda xwa, (xsp + 30)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 14)
 
 WindowID_EnumOpen_Compare:
@@ -16659,7 +16659,7 @@ ModeID_EnumFill:
 	pushw 0xea
 	pushw 0xab74
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jrl ModeID_ReturnZero
 
@@ -16697,7 +16697,7 @@ ModeID_GetCurrent_SendAudio:
 	push xwa
 	ld xwa, (xiz + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jr ModeID_ReturnZero
 
@@ -16721,7 +16721,7 @@ ModeID_GetNext:
 	pushw 0xab90
 	ld xwa, (xwa)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr ModeID_ReturnZero
 
@@ -16770,7 +16770,7 @@ ModeID_EnumOpen_SearchLoop:
 	pushw 0xea
 	pushw 0xab98
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 
 ModeID_EnumOpen_Compare:
@@ -16904,7 +16904,7 @@ TitleID_EnumFill:
 	pushw 0xea
 	pushw 0xaba0
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jrl TitleID_ReturnZero
 
@@ -16942,7 +16942,7 @@ TitleID_GetCurrent_SendAudio:
 	push xwa
 	ld xwa, (xiz + 4)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	jr TitleID_ReturnZero
 
@@ -16966,7 +16966,7 @@ TitleID_GetNext:
 	pushw 0xabbc
 	ld xwa, (xwa)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	jr TitleID_ReturnZero
 
@@ -17015,7 +17015,7 @@ TitleID_EnumOpen_SearchLoop:
 	pushw 0xea
 	pushw 0xabc4
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 
 TitleID_EnumOpen_Compare:

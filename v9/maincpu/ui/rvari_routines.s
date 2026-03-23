@@ -176,7 +176,7 @@ RVari_SelectE_SecondItem_Draw:
 	pushw 0x1656
 	lda xwa, (xsp + 26)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xfd, 0x18, 0x02
 	st_dri3b A, 0xfd, 0x14, 0x02
@@ -374,7 +374,7 @@ RVari_SelectO_SecondItem_Draw:
 	pushw 0x165a
 	lda xwa, (xsp + 26)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xfd, 0x18, 0x02
 	st_dri3b A, 0xfd, 0x14, 0x02
@@ -862,7 +862,7 @@ RVari_ConfirmF_Item_Draw:
 	pushw 0x165e
 	lda xwa, (xsp + 28)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	st_dri3b C, 0xfd, 0x18, 0x02
 	st_dri3b A, 0xfd, 0x14, 0x02
@@ -999,7 +999,7 @@ RVari_Confirm_TypeNotF:
 	pushw 0x1662
 	st_dri3b W, 0xfd, 0x1c, 0x01
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	st_dri3b W, 0xfd, 0x18, 0x02
 	st_dri3b A, 0xfd, 0x14, 0x02
@@ -1153,7 +1153,7 @@ RVari_ConfirmE_Item_Draw:
 	pushw 0x166e
 	lda xwa, (xsp + 26)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xfd, 0x18, 0x02
 	st_dri3b A, 0xfd, 0x14, 0x02
@@ -1400,7 +1400,7 @@ RVari_EnumNotifyF_Item_Draw:
 	pushw 0x1672
 	st_dri3b W, 0xfd, 0x1c, 0x01
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 	st_dri3b C, 0xfd, 0x18, 0x02
 	st_dri3b A, 0xfd, 0x14, 0x02
@@ -1571,7 +1571,7 @@ RVari_EnumNotifyE_Item_Draw:
 	pushw 0x1676
 	st_dri3b W, 0xfd, 0x1a, 0x01
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	st_dri3b C, 0xfd, 0x18, 0x02
 	st_dri3b A, 0xfd, 0x14, 0x02

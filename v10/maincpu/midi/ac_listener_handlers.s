@@ -870,7 +870,7 @@ Data_FadeSetGridDispatch:
 	pushw 231
 	pushw 63902
 	push	xbc
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -929,7 +929,7 @@ SndParam_LookupAndSendCmd:
 	pushw 0xf9b8
 	lda xwa, (xsp + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -1593,7 +1593,7 @@ Data_InOutGridDispatch:
 	pushw	64766
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	16
 	pushw	231
@@ -1620,7 +1620,7 @@ Data_InOutGridDispatch:
 	pushw	64778
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	16
 	pushw	231
@@ -1813,7 +1813,7 @@ Data_ParaLoadOptDispatch:
 	pushw	64796
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1828,7 +1828,7 @@ Data_ParaLoadOptDispatch:
 	pushw	64802
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1862,7 +1862,7 @@ Data_ParaLoadOptDispatch:
 	pushw	64814
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1876,7 +1876,7 @@ Data_ParaLoadOptDispatch:
 	pushw	64820
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Audio_SendCommand
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl

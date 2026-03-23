@@ -474,7 +474,7 @@ PcgOutCheckGridDataStructure:
 	pushw 0xe7
 	pushw 0xff9e
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -490,7 +490,7 @@ PcgOutCheck_SendPreset1:
 	pushw 0xe7
 	pushw 0xffa4
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -531,7 +531,7 @@ PcgOutCheck_SendPreset2Named:
 	pushw 0xe7
 	pushw 0xffb8
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -550,7 +550,7 @@ PcgOutCheck_SendPreset2Named:
 	pushw 0xffbe
 	lda xwa, (xsp + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -604,7 +604,7 @@ PcgOutCheck_SendPreset3Named:
 	pushw 0xe7
 	pushw 0xffda
 	push xbc
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -619,7 +619,7 @@ PcgOutCheck_SendPreset3Named:
 	pushw 0xffe0
 	lda xwa, (xsp + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl
@@ -638,7 +638,7 @@ PcgOutCheck_SendPreset3Named:
 	pushw 0xffe6
 	lda xwa, (xsp + 18)
 	push xwa
-	call Audio_SendCommand
+	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	call GetFocusObject
 	ld xwa, xhl

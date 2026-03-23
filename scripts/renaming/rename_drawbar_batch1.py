@@ -43,11 +43,11 @@ RENAMES = {
     "LABEL_F791AE": "PmemOutL_ColumnParamDisplay",  # Lookup by column, display param string
 
     # === CtlMsg grid handlers (lines 1706-1785) ===
-    "LABEL_F799D2": "CtlMsg_SendAudioCommand",      # Read byte, Audio_SendCommand 0x25A
+    "LABEL_F799D2": "CtlMsg_SendAudioCommand",      # Read byte, Sprintf_Locked 0x25A
     "LABEL_F799E8": "CtlMsg_GetFocusAndDispatch",   # GetFocusObject, SendEvent
-    "LABEL_F799F9": "CtlMsg_ReadOffsetAndSend",     # Read offset+15, Audio_SendCommand 0x260
+    "LABEL_F799F9": "CtlMsg_ReadOffsetAndSend",     # Read offset+15, Sprintf_Locked 0x260
     "LABEL_F79A2D": "CtlMsg_ComputeAndCheck",       # Compute address, check bit 7
-    "LABEL_F79A69": "CtlMsg_SendParamValue",        # Read byte, Audio_SendCommand 0x26C
+    "LABEL_F79A69": "CtlMsg_SendParamValue",        # Read byte, Sprintf_Locked 0x26C
     "LABEL_F79A7F": "CtlMsg_DispatchFocusEvent",    # GetFocusObject, dispatch event
     "LABEL_F79A8D": "CtlMsg_SendEventReturn",       # Call SendEvent then TtMdCtlMsg_ReturnZero2
 
@@ -85,7 +85,7 @@ RENAMES = {
     "LABEL_F7A8D4": "MidiPartGridCheck_JumpTable",  # Jump table .byte data block
 
     # === MidiPartGridCheck handlers (lines 3165-3239) ===
-    "LABEL_F7AC8E": "MidiPart_AudioCmdDisplay",     # SndParam_LookupReadOnly, Audio_SendCommand
+    "LABEL_F7AC8E": "MidiPart_AudioCmdDisplay",     # SndParam_LookupReadOnly, Sprintf_Locked
     "LABEL_F7ACA9": "MidiPart_GridDispatchEvent",   # GetFocusObject, SendEvent dispatch
     "LABEL_F7ACBA": "MidiPart_LookupColumnParam",   # Lookup column param, display string
     "LABEL_F7ACFB": "MidiPart_LookupFromTable",     # Lookup from table at 0xE80528
