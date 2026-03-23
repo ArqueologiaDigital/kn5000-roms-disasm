@@ -9,8 +9,9 @@ msg = ""
 
 # Primary build: LLVM assembly
 for entry in [
-	("maincpu",		"kn5000_v10_program.rom",	"kn5000_v10_program.llvm.rom",		0xE00000),
-	("subcpu payload",	"kn5000_subprogram_v142.rom",	"kn5000_subprogram_v142.llvm.rom",	0x0400),
+	("maincpu v10",		"kn5000_v10_program.rom",	"kn5000_v10_program.llvm.rom",		0xE00000),
+	("maincpu v9",		"kn5000_v9_program.rom",	"kn5000_v9_program.llvm.rom",		0xE00000),
+	("subcpu payload v142",	"kn5000_subprogram_v142.rom",	"kn5000_subprogram_v142.llvm.rom",	0x0400),
 	("subcpu boot",		"kn5000_subcpu_boot.ic30",	"kn5000_subcpu_boot.llvm.rom",		0xFE0000),
 	("hdae5000",		"hd-ae5000_v2_06i.ic4",		"hd-ae5000_v2_06i.llvm.rom",		0x280000),
 	("table data",		"kn5000_table_data.rom",	"kn5000_table_data.llvm.rom",		0x800000),

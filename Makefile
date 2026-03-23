@@ -13,7 +13,7 @@ all: llvm-all
 	python scripts/build/compare_roms.py
 
 # LLVM build targets (primary)
-llvm-all: rebuilt_ROMs/kn5000_v10_program.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom rebuilt_ROMs/kn5000_table_data.llvm.rom rebuilt_ROMs/kn5000_custom_data.llvm.rom
+llvm-all: rebuilt_ROMs/kn5000_v10_program.llvm.rom rebuilt_ROMs/kn5000_v9_program.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom rebuilt_ROMs/kn5000_table_data.llvm.rom rebuilt_ROMs/kn5000_custom_data.llvm.rom
 
 # ============================================================================
 # C-compiled ScreenData paramblocks
@@ -49,6 +49,25 @@ GUI_BINS = v10/maincpu/includes/generated/gui_display_struct_data.bin
 TONEKIT_BINS = v10/maincpu/includes/generated/tonekit_param_blocks.bin
 SOUNDCFG_BINS = v10/maincpu/includes/generated/sound_config_lookup.bin
 C_DATA_BINS = $(PARAMBLOCK_BINS) $(VOICE_BINS) $(AUDIO_BINS) $(SOUND_DATA_BINS) $(SCREENDATA_BINS) $(ACCOMP_BINS) $(SE_BINS) $(NAKA_BINS) $(SEPAOUT_BINS) $(GUI_BINS) $(TONEKIT_BINS) $(SOUNDCFG_BINS)
+
+# V9 C data bins (compiled from v9/maincpu sources)
+V9_PARAMBLOCK_BINS = $(patsubst %,v9/maincpu/includes/generated/style_ui_paramblock_%.bin,$(PARAMBLOCK_NAMES))
+V9_SCREENDATA_BINS = $(patsubst %,v9/maincpu/includes/generated/style_ui_screendata_%.bin,$(SCREENDATA_NAMES))
+V9_ACCOMP_BINS = $(patsubst %,v9/maincpu/includes/generated/%.bin,$(ACCOMP_NAMES))
+V9_SE_BINS = $(patsubst %,v9/maincpu/includes/generated/%.bin,$(SE_NAMES))
+V9_SE_LINK_LD = v9/maincpu/audio/sound_editor_screens/se_screens_link.ld
+V9_ACCOMP_LINK_LD = v9/maincpu/sequencer/accomp_screens/accomp_screens_link.ld
+V9_NAKA_LINK_LD = v9/maincpu/ui_widgets/naka_ctrl_menu_link.ld
+V9_NAKA_TYPES_H = v9/maincpu/ui_widgets/naka_types.h
+V9_NAKA_BINS = $(patsubst v10/%,v9/%,$(NAKA_BINS))
+V9_VOICE_BINS = v9/maincpu/includes/generated/voice_factory_presets.bin
+V9_AUDIO_BINS = v9/maincpu/includes/generated/tonegen_param_table.bin
+V9_SOUND_DATA_BINS = $(patsubst v10/%,v9/%,$(SOUND_DATA_BINS))
+V9_SEPAOUT_BINS = v9/maincpu/includes/generated/sepaout_config.bin
+V9_GUI_BINS = v9/maincpu/includes/generated/gui_display_struct_data.bin
+V9_TONEKIT_BINS = v9/maincpu/includes/generated/tonekit_param_blocks.bin
+V9_SOUNDCFG_BINS = v9/maincpu/includes/generated/sound_config_lookup.bin
+V9_C_DATA_BINS = $(V9_PARAMBLOCK_BINS) $(V9_VOICE_BINS) $(V9_AUDIO_BINS) $(V9_SOUND_DATA_BINS) $(V9_SCREENDATA_BINS) $(V9_ACCOMP_BINS) $(V9_SE_BINS) $(V9_NAKA_BINS) $(V9_SEPAOUT_BINS) $(V9_GUI_BINS) $(V9_TONEKIT_BINS) $(V9_SOUNDCFG_BINS)
 
 v10/maincpu/includes/generated/style_ui_paramblock_%.bin: v10/maincpu/style_ui/paramblock/%.c v10/maincpu/style_ui/screendata_types.h
 	@mkdir -p v10/maincpu/includes/generated
@@ -325,6 +344,99 @@ v10/maincpu/includes/generated/gui_display_struct_data.bin: v10/maincpu/includes
 	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
 	@rm -f $@.o
 
+
+# V9 C data compilation rules (mirror v10 rules with v9 paths)
+v9/maincpu/includes/generated/style_ui_paramblock_%.bin: v9/maincpu/style_ui/paramblock/%.c v9/maincpu/style_ui/screendata_types.h
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I v9/maincpu/style_ui -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+v9/maincpu/includes/generated/style_ui_screendata_ctlonly.bin: v9/maincpu/style_ui/ctlonly.c v9/maincpu/style_ui/screendata_types.h v9/maincpu/style_ui/ctlonly_link.ld
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I v9/maincpu/style_ui -o $@.o $<
+	$(LLVM_LLD) -T v9/maincpu/style_ui/ctlonly_link.ld -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
+
+v9/maincpu/includes/generated/style_ui_screendata_%.bin: v9/maincpu/style_ui/%.c v9/maincpu/style_ui/screendata_types.h
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I v9/maincpu/style_ui -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+v9/maincpu/includes/generated/se_%.bin: v9/maincpu/audio/sound_editor_screens/se_%.c v9/maincpu/style_ui/screendata_types.h $(V9_SE_LINK_LD)
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I v9/maincpu/style_ui -o $@.o $<
+	$(LLVM_LLD) -T $(V9_SE_LINK_LD) -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
+
+v9/maincpu/includes/generated/accomp_%.bin: v9/maincpu/sequencer/accomp_screens/accomp_%.c v9/maincpu/style_ui/screendata_types.h $(V9_ACCOMP_LINK_LD)
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I v9/maincpu/style_ui -o $@.o $<
+	$(LLVM_LLD) -T $(V9_ACCOMP_LINK_LD) -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
+
+# V9 NAKA widget descriptors - generic rule for all naka bins
+v9/maincpu/includes/generated/naka_%.bin: v9/maincpu/ui_widgets/naka_%.c $(V9_NAKA_TYPES_H) v9/maincpu/ui_widgets/naka_%_link.ld
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I v9/maincpu/ui_widgets -o $@.o $<
+	$(LLVM_LLD) -T v9/maincpu/ui_widgets/naka_$*_link.ld -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
+
+v9/maincpu/includes/generated/naka_control_menu_header.bin: v9/maincpu/ui_widgets/control_menu_header.c $(V9_NAKA_TYPES_H) $(V9_NAKA_LINK_LD)
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -I v9/maincpu/ui_widgets -o $@.o $<
+	$(LLVM_LLD) -T $(V9_NAKA_LINK_LD) -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
+
+v9/maincpu/includes/generated/voice_factory_presets.bin: v9/maincpu/audio/voice_factory_presets.c
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+v9/maincpu/includes/generated/tonegen_param_table.bin: v9/maincpu/audio/tonegen_param_table.c
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+v9/maincpu/includes/generated/sound_data_%.bin: v9/maincpu/audio/sound_data_%.c
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+v9/maincpu/includes/generated/sepaout_config.bin: v9/maincpu/ui/sepaout_config.c v9/maincpu/ui/sepaout_config_link.ld
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_LLD) -T v9/maincpu/ui/sepaout_config_link.ld -o $@.elf $@.o
+	$(LLVM_OBJCOPY) -O binary -j .text $@.elf $@
+	@rm -f $@.o $@.elf
+
+v9/maincpu/includes/generated/gui_display_struct_data.bin: v9/maincpu/includes/gui_display_struct_data.c
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+v9/maincpu/includes/generated/tonekit_param_blocks.bin: v9/maincpu/ui_widgets/tonekit_param_blocks.c
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
+v9/maincpu/includes/generated/sound_config_lookup.bin: v9/maincpu/ui_widgets/sound_config_lookup.c
+	@mkdir -p v9/maincpu/includes/generated
+	$(CLANG) -target tlcs900 -ffreestanding -c -O2 -o $@.o $<
+	$(LLVM_OBJCOPY) -O binary -j .text $@.o $@
+	@rm -f $@.o
+
 paramblocks: $(PARAMBLOCK_BINS)
 screendata: $(SCREENDATA_BINS)
 naka: $(NAKA_BINS)
@@ -338,6 +450,17 @@ rebuilt_ROMs/kn5000_v10_program.llvm.elf: rebuilt_ROMs/kn5000_v10_program.llvm.o
 	$(LLVM_LLD) -T v10/maincpu/maincpu.ld -o $@ $<
 
 rebuilt_ROMs/kn5000_v10_program.llvm.rom: rebuilt_ROMs/kn5000_v10_program.llvm.elf
+	$(LLVM_OBJCOPY) -O binary $< $@
+
+# --- V9 Maincpu ---
+rebuilt_ROMs/kn5000_v9_program.llvm.o: v9/maincpu/kn5000_v9_program.s original_ROMs/kn5000_v9_program.rom $(V9_C_DATA_BINS)
+	mkdir -p rebuilt_ROMs
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v9/maincpu -o $@ $<
+
+rebuilt_ROMs/kn5000_v9_program.llvm.elf: rebuilt_ROMs/kn5000_v9_program.llvm.o v9/maincpu/maincpu.ld
+	$(LLVM_LLD) -T v9/maincpu/maincpu.ld -o $@ $<
+
+rebuilt_ROMs/kn5000_v9_program.llvm.rom: rebuilt_ROMs/kn5000_v9_program.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Subcpu payload ---
@@ -536,6 +659,8 @@ website: gallery issues rom-status
 # ============================================================================
 clean:
 	rm -f rebuilt_ROMs/kn5000_v10_program.llvm.*
+	rm -f rebuilt_ROMs/kn5000_v9_program.llvm.*
+	rm -rf v9/maincpu/includes/generated/
 	rm -f rebuilt_ROMs/kn5000_subprogram_v142.llvm.*
 	rm -f rebuilt_ROMs/kn5000_subcpu_boot.llvm.*
 	rm -f rebuilt_ROMs/hd-ae5000_v2_06i.llvm.*
