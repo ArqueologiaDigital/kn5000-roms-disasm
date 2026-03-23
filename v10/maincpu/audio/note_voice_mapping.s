@@ -27770,10 +27770,10 @@ HdaeRom_DataDispatch_Block:
 	lda	xhl, (xwa + 16)
 
 HdaeRom_DataDispatch_Block2:
-	ld_spib A, 0xe4
-	lda_dpi XBC, 0xe8
-	cp xbc, xhl
-	jr c, HdaeRom_DataDispatch_Block2
+	ld_spib	A, 0xe4
+	lda_dpi	XBC, 0xe8
+	cp	xbc, xhl
+	jr	c, HdaeRom_DataDispatch_Block2
 	calr SendPartDataBlock_SetWord7
 	lds hl, 0
 	ret
