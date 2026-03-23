@@ -27625,12 +27625,10 @@ HdaeRom_DataHandler_0x22:
 	add hl, hl
 	lda_24 xix, HdaeRom_DispatchOffsetTable
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
-	lda_24 xix, 0xFF0284
-	.byte 0xf3, 0x07
+	lda_24 xix, HdaeRom_DataDispatch
+	jp_dri 8, 0x07, 0xf0, 0xec
+; HDAE5000 extension ROM data dispatch (6-entry, table HdaeRom_DispatchOffsetTable)
 HdaeRom_DataDispatch:
-	.byte 0xf0
-	.byte 0xec
-	.byte 0xd8
 	ld	(xsp+6), xbc
 	cp	(xsp+442), 255
 	jrl	nz, 307
