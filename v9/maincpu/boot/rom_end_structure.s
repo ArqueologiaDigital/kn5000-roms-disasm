@@ -77,7 +77,7 @@ InterruptVectorTable:
 	.long Empty_Handler
 
 ; RESERVED:
-	.fill 66, 1, 0xff
+	.fill 52, 1, 0xff
 
 FIRMWARE_VERSION:
 	.byte 0x09

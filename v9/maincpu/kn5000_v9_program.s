@@ -2464,6 +2464,7 @@ Get_Firmware_Version:
 ROM_PaddingFF:
 	.byte 0xff, 0xff, 0xff, 0x00, 0xff
 
+	.zero 14  ; v9: compensate for 14 fewer bytes of code vs v10
 	.include "boot/rom_end_structure.s"
 
 ; Labels emitted as .set (exact addresses from ORG/name)
