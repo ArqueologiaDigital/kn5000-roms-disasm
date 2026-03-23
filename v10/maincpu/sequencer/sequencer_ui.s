@@ -2029,45 +2029,45 @@ IvNamingExit_ScreenData:
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
-	call	16401417
+	call	InheritedProc
 	ld	xwa, (xsp+178)
-	call	16409190
+	call	GetViewInstance
 	ld	xiz, xhl
 	ld	xde, (xsp+178)
 	ld	xwa, (xiz+34)
 	ld	xbc, 31916034
-	call	16403043
+	call	MainFuncCall
 	cpw	(xiz+46), 0
 	jrl	z, 628
 	ld	xwa, (xsp+178)
 	ld	xbc, 29360152
 	lds32	xde, 0
-	call	16360825
+	call	SetDialUp
 	ld	xwa, (xsp+178)
 	ld	xbc, 29360151
 	lds32	xde, 0
-	call	16360842
+	call	SetDialDown
 	lds	wa, 1
-	call	16360763
+	call	SetDialEnable
 	jrl	587
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
-	call	16401417
+	call	InheritedProc
 	ld	xwa, (xsp+178)
-	call	16409190
+	call	GetViewInstance
 	ld	(xsp+22), xhl
 	ld	xwa, (xsp+22)
 	ld	xwa, (xwa+34)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
-	call	16403043
+	call	MainFuncCall
 	ld	xwa, (xsp+22)
 	cpw	(xwa+38), 2
 	jrl	lt, 525
 	lda	xbc, (xsp+154)
 	ld	xwa, (xsp+178)
-	call	16356829
+	call	GetClientBox
 	lda	xde, (xsp+154)
 	ld	bc, (xde+4)
 	sub	bc, (xde)
@@ -2097,7 +2097,7 @@ IvNamingExit_ScreenData:
 	ld	de, (xwa)
 	ld	(xbc), de
 	lds	de, 7
-	call	16427402
+	call	DrawLine
 	incm	1, (xsp+20)
 	ld	xwa, (xsp+22)
 	ld	wa, (xwa+38)
@@ -2107,9 +2107,9 @@ IvNamingExit_ScreenData:
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
-	call	16401417
+	call	InheritedProc
 	ld	xwa, (xsp+178)
-	call	16409190
+	call	GetViewInstance
 	ld	(xsp+10), xhl
 	ld	xwa, (xsp+10)
 	ld	(xsp+4), xwa
@@ -2126,7 +2126,7 @@ IvNamingExit_ScreenData:
 	jrl	ge, 238
 	lda	xbc, (xsp+154)
 	ld	xwa, (xsp+178)
-	call	16356829
+	call	GetClientBox
 	lda	xbc, (xsp+154)
 	lda	xwa, (xbc+4)
 	ld	(xsp+18), xwa
@@ -2187,7 +2187,7 @@ IvNamingExit_ScreenData:
 	push	xwa
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	ld	xbc, (xsp+10)
 	ld	xix, (xbc+42)
@@ -2212,9 +2212,9 @@ IvNamingExit_ScreenData:
 	pushm	(xhl+32)
 	ld	xhl, (xsp+10)
 	pushm	(xhl+22)
-	call	16435914
+	call	DrawString
 	ld	xwa, (xsp+178)
-	call	16409190
+	call	GetViewInstance
 	ld	wa, (xhl+38)
 	.byte 0x9b
 	pushw	wa
@@ -2229,26 +2229,26 @@ IvNamingExit_ScreenData:
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
-	call	16401417
+	call	InheritedProc
 	ld	xwa, (xsp+178)
-	call	16409190
+	call	GetViewInstance
 	ld	xiz, xhl
 	ld	xwa, (xiz+34)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
-	call	16403043
+	call	MainFuncCall
 	cpw	(xiz+48), 0
 	jr	z, 19
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
-	call	16360893
+	call	SetAutoInc
 	lds32	xhl, 0
 	jr	19
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)
-	call	16401417
+	call	InheritedProc
 	pop	xiz
 	lda	xsp, (xsp+178)
 	ret
@@ -2780,11 +2780,11 @@ TrAsGridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 TrAsGridChk_ByteData:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xiz, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xiz
@@ -2814,26 +2814,26 @@ TrAsGridChk_ByteData:
 	ld	xwa, 21430300
 	ld	xbc, 31916038
 	ld	xde, xiz
-	call	16403043
-	call	16401616
+	call	MainFuncCall
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457421
 	ld	xde, xiz
-	call	16422496
-	call	16401616
+	call	SendEvent
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	de, (xsp+16)
 	extz	xde
 	add	xde, 131072
 	ld	xbc, 31457421
-	call	16422496
-	call	16401616
+	call	SendEvent
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	de, (xsp+16)
 	extz	xde
 	add	xde, 196608
 	ld	xbc, 31457421
-	call	16422496
+	call	SendEvent
 	jrl	1087
 	bitda	0, 3296
 	jr	nz, 8
@@ -2846,11 +2846,11 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	-355
 	.byte 0xd1, 0xd0, 0xf1, 0xeb
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457421
 	ld	xde, xiz
-	call	16422496
+	call	SendEvent
 	ld	xwa, 21430300
 	ld	xbc, 31916042
 	ld	xde, xiz
@@ -2874,21 +2874,21 @@ TrAsGridChk_ByteData:
 	ld	xwa, 21430300
 	ld	xbc, 31916044
 	ld	xde, xiz
-	call	16403043
-	call	16401616
+	call	MainFuncCall
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457421
 	ld	xde, xiz
-	call	16422496
+	call	SendEvent
 	ld	xwa, 21430300
 	ld	xbc, 31916042
 	ld	xde, xiz
 	jrl	318
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xiz, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xiz
@@ -2918,26 +2918,26 @@ TrAsGridChk_ByteData:
 	ld	xwa, 21430300
 	ld	xbc, 31916039
 	ld	xde, xiz
-	call	16403043
-	call	16401616
+	call	MainFuncCall
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457421
 	ld	xde, xiz
-	call	16422496
-	call	16401616
+	call	SendEvent
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	de, (xsp+16)
 	extz	xde
 	add	xde, 131072
 	ld	xbc, 31457421
-	call	16422496
-	call	16401616
+	call	SendEvent
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	de, (xsp+16)
 	extz	xde
 	add	xde, 196608
 	ld	xbc, 31457421
-	call	16422496
+	call	SendEvent
 	jrl	771
 	bitda	0, 3296
 	jr	nz, 8
@@ -2951,11 +2951,11 @@ TrAsGridChk_ByteData:
 	calr	-671
 	cpl	hl
 	.byte 0xd1, 0xd0, 0xf1, 0xcb
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457421
 	ld	xde, xiz
-	call	16422496
+	call	SendEvent
 	ld	xwa, 21430300
 	ld	xbc, 31916042
 	ld	xde, xiz
@@ -2981,16 +2981,16 @@ TrAsGridChk_ByteData:
 	ld	xwa, 21430300
 	ld	xbc, 31916044
 	ld	xde, xiz
-	call	16403043
-	call	16401616
+	call	MainFuncCall
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457421
 	ld	xde, xiz
-	call	16422496
+	call	SendEvent
 	ld	xwa, 21430300
 	ld	xbc, 31916042
 	ld	xde, xiz
-	call	16403043
+	call	MainFuncCall
 	jrl	609
 
 TrAsGridChk_HandleResizeEvent:
@@ -3593,7 +3593,7 @@ MuteChSel_Dispatch:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	20
@@ -3636,7 +3636,7 @@ SqTrAsPsSong_Dispatch:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	19
@@ -3731,7 +3731,7 @@ MuteChSet_Dispatch:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	54
@@ -4081,7 +4081,7 @@ DemoMedDsp_Dispatch:
 	.long MedleyDisp_Blank
 	push	xwa
 	push	xbc
-	call	16714354
+	call	Audio_SendCommand
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	31
@@ -4129,7 +4129,7 @@ DPPlayDsp_Dispatch:
 	.long PlayModeStr_Play
 	push	xwa
 	push	xbc
-	call	16714354
+	call	Audio_SendCommand
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	31
@@ -4177,7 +4177,7 @@ DPPauseDsp_Dispatch:
 	.long PlayModeStr_Pause
 	push	xwa
 	push	xbc
-	call	16714354
+	call	Audio_SendCommand
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	31
@@ -5882,7 +5882,7 @@ NoteEditBox_GridDispatch2:
 
 ; NoteEditBoxProc event dispatch 2
 NoteEditBox_EventDispatch2:
-	call	16406631
+	call	GetTitleNow
 	ld	(xsp+10), 3
 	cp	xhl, 27263125
 	jr	nz, 4
@@ -5908,8 +5908,8 @@ NoteEditBox_EventDispatch2:
 	ld	(xwa+6), bc
 	lds	bc, 0
 	ldw	de, 245
-	call	16438617
-	call	16406631
+	call	DrawDesignBox
+	call	GetTitleNow
 	ld	(xsp+10), 7
 	cp	xhl, 27263125
 	jr	nz, 4
@@ -5918,7 +5918,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981649
 	ld	xde, (xsp+90)
-	call	16402871
+	call	ApFuncCall
 	lda	xix, (xsp+28)
 	ld	(xix), hl
 	.byte 0x94
@@ -5966,7 +5966,7 @@ NoteEditBox_EventDispatch2:
 	pushw	17932
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
@@ -5975,12 +5975,12 @@ NoteEditBox_EventDispatch2:
 	push	xhl
 	pushw	251
 	pushw	245
-	call	16437066
+	call	DrawStringLeftJustify
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981650
 	ld	xde, (xsp+90)
-	call	16402871
+	call	ApFuncCall
 	lda	xix, (xsp+28)
 	ld	(xix), hl
 	lda	xde, (xix+2)
@@ -6022,7 +6022,7 @@ NoteEditBox_EventDispatch2:
 	pushw	17936
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
@@ -6036,7 +6036,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981651
 	ld	xde, (xsp+90)
-	call	16402871
+	call	ApFuncCall
 	lda	xwa, (xsp+20)
 	ld	(xwa), hl
 	lda	xhl, (xwa+2)
@@ -6050,7 +6050,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0x9c
 	ld	xiz, 1375910274
 	ldw	de, 242
-	call	16427402
+	call	DrawLine
 	jrl	1521
 	ld	xwa, 9764884
 	ld	xbc, 29360141
@@ -6059,13 +6059,13 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, 9961489
 	ld	xbc, 29360141
 	ld	xde, (xsp+90)
-	call	16422496
+	call	SendEvent
 	jrl	1486
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981660
 	lds32	xde, 0
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+8), hl
 	.byte 0xbf
 	ldwio	2, 1
@@ -6088,7 +6088,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981661
-	call	16402871
+	call	ApFuncCall
 	or	xhl, xhl
 	jr	z, 76
 	lds32	xwa, 0
@@ -6119,7 +6119,7 @@ NoteEditBox_EventDispatch2:
 	push	xwa
 	lda	xwa, (xsp+42)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+8)
 	.byte 0xbf
@@ -6142,7 +6142,7 @@ NoteEditBox_EventDispatch2:
 	pushw	17948
 	lda	xwa, (xsp+42)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+10)
 	lda	xwa, (xsp+28)
@@ -6169,7 +6169,7 @@ NoteEditBox_EventDispatch2:
 	push	xhl
 	pushw	255
 	pushw	245
-	call	16437066
+	call	DrawStringLeftJustify
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -6182,7 +6182,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981660
 	lds32	xde, 0
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+8), hl
 	.byte 0xbf
 	ldwio	2, 1
@@ -6205,7 +6205,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981661
-	call	16402871
+	call	ApFuncCall
 	lda	xde, (xsp+36)
 	lda	xwa, (xsp+28)
 	lda	xbc, (xwa+2)
@@ -6234,7 +6234,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, 14894628
 	push	xwa
 	push	xde
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+8)
 	.byte 0xbf
@@ -6253,7 +6253,7 @@ NoteEditBox_EventDispatch2:
 	nop
 	pushw	17960
 	push	xde
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+10)
 	lda	xwa, (xsp+28)
@@ -6280,7 +6280,7 @@ NoteEditBox_EventDispatch2:
 	push	xhl
 	pushw	255
 	pushw	245
-	call	16437066
+	call	DrawStringLeftJustify
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -6303,7 +6303,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981664
 	lds32	xde, 0
-	call	16402871
+	call	ApFuncCall
 	jrl	906
 	lda	xix, (xsp+28)
 	.byte 0xb4
@@ -6342,7 +6342,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xwa+26)
 	ld	xbc, 31457349
 	ld	xde, (xsp+90)
-	call	16402871
+	call	ApFuncCall
 	lda	xde, (xsp+68)
 	ld	(xde), xhl
 	lda	xbc, (xsp+36)
@@ -6357,7 +6357,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981674
-	call	16402871
+	call	ApFuncCall
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
 	lda	xde, (xsp+36)
@@ -6365,7 +6365,7 @@ NoteEditBox_EventDispatch2:
 	push	xhl
 	pushw	0
 	pushw	255
-	call	16437066
+	call	DrawStringLeftJustify
 	lda	xhl, (xsp+28)
 	lda	xbc, (xhl+2)
 	.byte 0xb1
@@ -6397,7 +6397,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xwa+26)
 	ld	xbc, 31457349
 	ld	xde, (xsp+90)
-	call	16402871
+	call	ApFuncCall
 	lda	xde, (xsp+68)
 	ld	(xde), xhl
 	lda	xwa, (xsp+36)
@@ -6405,7 +6405,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981675
-	call	16402871
+	call	ApFuncCall
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
 	lda	xde, (xsp+36)
@@ -6413,13 +6413,13 @@ NoteEditBox_EventDispatch2:
 	push	xhl
 	pushw	0
 	pushw	255
-	call	16437066
+	call	DrawStringLeftJustify
 	jrl	634
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31457349
 	ld	xde, (xsp+90)
-	call	16402871
+	call	ApFuncCall
 	lda	xwa, (xsp+68)
 	ld	(xwa), xhl
 	lda	xbc, (xsp+36)
@@ -6470,7 +6470,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981676
-	call	16402871
+	call	ApFuncCall
 	lda	xbc, (xsp+24)
 	ld8_24	a, 135318
 	.byte 0xc1
@@ -6490,7 +6490,7 @@ NoteEditBox_EventDispatch2:
 	push	xhl
 	pushw	242
 	pushw	255
-	call	16437066
+	call	DrawStringLeftJustify
 	lda	xix, (xsp+28)
 	.byte 0xb4
 	push_sr
@@ -6529,7 +6529,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981677
-	call	16402871
+	call	ApFuncCall
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
 	lda	xde, (xsp+36)
@@ -6537,7 +6537,7 @@ NoteEditBox_EventDispatch2:
 	push	xhl
 	pushw	242
 	pushw	255
-	call	16437066
+	call	DrawStringLeftJustify
 	ld8_24	a, 135318
 	inc	1, a
 	st8_24	135318, a
@@ -6645,11 +6645,11 @@ NoteEditBox_GridDispatch:
 	ld	xwa, (xsp+94)
 	ld	xbc, 29360151
 	ld	xde, (xsp+90)
-	call	16360825
+	call	SetDialUp
 	ld	xwa, (xsp+94)
 	ld	xbc, 29360152
 	ld	xde, (xsp+90)
-	call	16360842
+	call	SetDialDown
 
 NoteEdit_ReturnZero:
 	lds32 xhl, 0
@@ -7591,11 +7591,11 @@ EntertainerGridCheck:
 
 ; SndParam_ReadThenWrite dispatch
 SndParam_Dispatch:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	(xsp+58), xhl
 	lda	xbc, (xsp+40)
 	ld	xwa, (xsp+58)
@@ -7645,7 +7645,7 @@ SndParam_Dispatch:
 	.byte 0xe4, 0xe8
 	ldb	w, 217
 	sub	(xbc-38), xix
-	call	16382274
+	call	MainLswAdd
 	jrl	1244
 	ld	xwa, 21495810
 	ld	xbc, 31981585
@@ -7657,11 +7657,11 @@ SndParam_Dispatch:
 	ld	xwa, 21495810
 	ld	xbc, 31981586
 	jrl	165
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	(xsp+58), xhl
 	lda	xbc, (xsp+40)
 	ld	xwa, (xsp+58)
@@ -7709,7 +7709,7 @@ SndParam_Dispatch:
 	jr	5
 	ldw	bc, 65535
 	lds	de, 4
-	call	16382274
+	call	MainLswAdd
 	jrl	1080
 	ld	xwa, 21495810
 	ld	xbc, 31981585
@@ -7721,7 +7721,7 @@ SndParam_Dispatch:
 	ld	xwa, 21495810
 	ld	xbc, 31981586
 	ld	xde, xhl
-	call	16423773
+	call	MainPostEvent
 	jrl	1034
 	lda	xhl, (xsp+40)
 	.byte 0xb3
@@ -7761,9 +7761,9 @@ SndParam_Dispatch:
 	pushw	227
 	pushw	18302
 	push	xbc
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
@@ -7777,9 +7777,9 @@ SndParam_Dispatch:
 	ld	xwa, 14894984
 	push	xwa
 	push	xbc
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
@@ -8475,12 +8475,12 @@ SqplyVal_HandleExtraParams:
 SqplyVal_ExtraParamsData:
 	ld	xwa, (xbc)
 	ld	xbc, 31981633
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981624
 	ld	xde, (xsp+60)
-	call	16402871
+	call	ApFuncCall
 	lda	xwa, (xsp+52)
 	lda	xbc, (xsp+48)
 	lda	xde, (xsp+32)
@@ -8517,15 +8517,15 @@ SqplyVal_ExtraParamsData:
 	.byte 0x04, 0x9b
 	push_f
 	.byte 0x04
-	call	16437066
+	call	DrawStringLeftJustify
 	ld	xwa, (xsp+68)
 	ld	xbc, 29360151
 	lds32	xde, 1
-	call	16360825
+	call	SetDialUp
 	ld	xwa, (xsp+68)
 	ld	xbc, 29360152
 	lds32	xde, 1
-	call	16360842
+	call	SetDialDown
 	lds	wa, 1
 	jrl	391
 
@@ -8908,12 +8908,12 @@ SqedtVal_DrawParamsData:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981590
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981624
 	ld	xde, (xsp+66)
-	call	16402871
+	call	ApFuncCall
 	lda	xwa, (xsp+58)
 	lda	xbc, (xsp+54)
 	lda	xde, (xsp+30)
@@ -8988,15 +8988,15 @@ SqedtVal_DrawParamsData:
 	.byte 0x04, 0x9b
 	push_f
 	.byte 0x04
-	call	16437066
+	call	DrawStringLeftJustify
 	ld	xwa, (xsp+74)
 	ld	xbc, 29360151
 	lds32	xde, 1
-	call	16360825
+	call	SetDialUp
 	ld	xwa, (xsp+74)
 	ld	xbc, 29360152
 	lds32	xde, 1
-	call	16360842
+	call	SetDialDown
 	lds	wa, 1
 	jrl	343
 
@@ -10561,12 +10561,12 @@ SqplyVal_ExtraParams:
 AccIll_Dispatch:
 	ld	xwa, (xbc)
 	ld	xbc, 31981605
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981625
 	ld	xde, (xsp+66)
-	call	16402871
+	call	ApFuncCall
 	or	xhl, xhl
 	jrl	z, 163
 	lda	xwa, (xsp+58)
@@ -10633,7 +10633,7 @@ AccIll_Dispatch:
 	.byte 0x04, 0x9b
 	push_f
 	.byte 0x04
-	call	16437066
+	call	DrawStringLeftJustify
 	ld	xwa, (xsp+4)
 	lda	xbc, (xwa+26)
 	lda	xwa, (xsp+12)
@@ -10680,12 +10680,12 @@ AccIll_Dispatch:
 	ld	xwa, (xbc)
 	ld	xbc, 31981682
 	ld	xde, (xsp+8)
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, 31981625
 	ld	xde, (xsp+66)
-	call	16402871
+	call	ApFuncCall
 	lda	xbc, (xsp+54)
 	lda	xde, (xsp+34)
 	or	xhl, xhl
@@ -10743,7 +10743,7 @@ AccIll_Dispatch:
 	.byte 0x04, 0x9b
 	push_f
 	.byte 0x04
-	call	16437066
+	call	DrawStringLeftJustify
 	jrl	2812
 
 SqedtVal2_HandleUpScrollEvent:
@@ -13550,7 +13550,7 @@ SqplyFunc_ParamFormatData:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	jrl	356
 	pushw	wa
@@ -13572,7 +13572,7 @@ SqplyFunc_ParamFormatData:
 	jrl	292
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
-	call	16406631
+	call	GetTitleNow
 	ld	xwa, (xsp)
 	lda	xbc, (xwa+18)
 	cp	l, 130
@@ -13610,12 +13610,12 @@ SqplyFunc_ParamFormatData:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	jrl	201
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
-	call	16406631
+	call	GetTitleNow
 	cp	l, 134
 	jr	nz, 11
 	.byte 0xd1
@@ -13629,7 +13629,7 @@ SqplyFunc_ParamFormatData:
 	jrl	149
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
-	call	16406631
+	call	GetTitleNow
 	cp	l, 134
 	jr	nz, 11
 	.byte 0xd1
@@ -14203,7 +14203,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xbc)
 	inc	1, xwa
 	push	xwa
-	call	16714995
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ldda8	a, 9750
 	extz	wa
@@ -14226,7 +14226,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xbc)
 	inc	1, xwa
 	push	xwa
-	call	16714995
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ldda8	a, 9816
 	extz	wa

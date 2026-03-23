@@ -129,8 +129,8 @@ AccompSeq_IncrementTickCounter:
 	stda16	1128, hl
 	stda8	1130, a
 	incdi8	1, 1132
-	call	16190255
-	call	16190259
+	call	SeqEvt_EntryPoint1
+	call	SeqEvt_EntryPoint2
 	ret
 
 AccompSeq_InitEventDispatch:
@@ -1021,9 +1021,9 @@ AccompSeq_LargeCodeBlock1:
 	pop_sr
 	decdi8	6, 55497
 	.byte 0x06
-	call	16181007
+	call	AccompSeq_InitPartFull
 	jr	4
-	call	16181622
+	call	AccompSeq_ReinitPart
 	ei	6
 	ldda8	c, 1045
 	stda8	1130, c
@@ -1054,7 +1054,7 @@ AccompSeq_UpdatePos_Store:
 AccompSeq_JumpTable:
 	jp	16180817
 	jp	16181857
-	jp	16181996
+	jp	AccompSeq_GuardedNoteOff
 
 AccompSeq_StopSequence:
 	push xiz
@@ -1071,7 +1071,7 @@ AccompSeq_AllNotesOff:
 AccompSeq_ProcessAfterNote:
 	jp AccompSeq_PostNoteProcess
 AccompSeq_LargeCodeBlock2:
-	jp	16181981
+	jp	AccompSeq_ClearPendingFlag
 	ldda8	a, 49277
 	cp	a, 9
 	jrl	nz, 160
@@ -1142,7 +1142,7 @@ AccompSeq_LargeCodeBlock2:
 	calr	684
 	jr	7
 	calr	771
-	call	16182394
+	call	AccompSeq_ProcessChordChange
 	ret
 
 AccompSeq_PostNoteProcess:
@@ -1451,9 +1451,9 @@ AccompSeq_HandleSpecialMode:
 	ldb	a, 4
 	jr	15
 	stdi8	32578, 57
-	call	16144626
+	call	DrumVoice_NotifyEE
 	ldb	a, 8
-	call	16694689
+	call	MIDI_SendSysExCmd
 	ret
 
 AccompSeq_OutputEvent:
@@ -2258,7 +2258,7 @@ AccompSeq_InitBankDone:
 	ret
 
 AccompSeq_BankTablePtr:
-	jp	16184146
+	jp	Voice_ResetToFactoryBanks
 
 AccompSeq_InitBankTables:
 	jp Voice_InitBankTables

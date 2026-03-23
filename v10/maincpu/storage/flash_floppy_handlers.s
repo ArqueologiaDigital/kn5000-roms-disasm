@@ -1621,7 +1621,7 @@ Flash_InitBytecodeBlock:
 	ld	a, (xsp+4)
 	extz	wa
 	calr	1569
-	call	16115997
+	call	AccPatch_CountSlotsAlt
 	ld	a, (xsp+10)
 	extz	wa
 	lda_24	xbc, 14770428
@@ -1651,7 +1651,7 @@ Flash_InitBytecodeBlock:
 	pop_f
 	.byte 0xac
 	push	xbc
-	call	16117240
+	call	AccPatch_InitFromSlotIndex
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1692,7 +1692,7 @@ Flash_InitBytecodeBlock:
 	pop_f
 	.byte 0xad
 	push	xbc
-	call	16134719
+	call	DualVoice_ParamLoadDone
 	ldda8	a, 13744
 	extz	wa
 	bit	0, wa
@@ -1705,7 +1705,7 @@ Flash_InitBytecodeBlock:
 	swi	3
 	div	l, 103
 	.byte 0xb6
-	call	16115993
+	call	AccPatch_CountSlots_Wrapper
 	.byte 0x8f
 	ldio	63, 0
 	jrl	nz, 128
@@ -1760,7 +1760,7 @@ Flash_InitBytecodeBlock:
 	extz	wa
 	calr	2721
 	calr	2966
-	call	16713356
+	call	TmFlash_CopyToExtMem
 	jrl	274
 	calr	3531
 	calr	3957
@@ -1807,7 +1807,7 @@ Flash_InitBytecodeBlock:
 	pop_f
 	.byte 0xac
 	push	xbc
-	call	16117240
+	call	AccPatch_InitFromSlotIndex
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1848,7 +1848,7 @@ Flash_InitBytecodeBlock:
 	pop_f
 	.byte 0xad
 	push	xbc
-	call	16134719
+	call	DualVoice_ParamLoadDone
 	ldda8	a, 13744
 	extz	wa
 	bit	0, wa
@@ -1861,7 +1861,7 @@ Flash_InitBytecodeBlock:
 	pop_f
 	.byte 0xac
 	push	xbc
-	call	16117240
+	call	AccPatch_InitFromSlotIndex
 	jr	9
 	.byte 0xc7
 	swi	3
@@ -1902,7 +1902,7 @@ Flash_InitBytecodeBlock:
 	.byte 0x8f, 0x06
 	pop_f
 	jr	nov, 12
-	call	16115993
+	call	AccPatch_CountSlots_Wrapper
 	ld	l, (xsp+2)
 	.byte 0xd7
 	swi	2
@@ -1968,7 +1968,7 @@ Flash_InitBytecodeBlock:
 	extz	bc
 	extz	de
 	calr	6188
-	call	16115993
+	call	AccPatch_CountSlots_Wrapper
 	ldb	l, 0
 	inc	2, xsp
 	ret
@@ -3122,7 +3122,7 @@ Flash_ExtendedOpsBlock:
 	ldda32	xbc, 3222
 	ldda32	xde, 3218
 	lds	wa, 1
-	jp	15678460
+	jp	Flash_EraseSectorAndWrite
 	lda	xsp, (xsp-12)
 	push	xiz
 	ldda32	xix, 3222
@@ -3147,7 +3147,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 2
-	call	16713383
+	call	TmFlash_WriteRoutine
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -3159,7 +3159,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 3
-	call	16713383
+	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
 	sub	xix, 3434496
 	cps	hl, 0
@@ -3213,7 +3213,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 0
-	call	16713383
+	call	TmFlash_WriteRoutine
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -3225,7 +3225,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 1
-	call	16713383
+	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
 	sub	xix, 3434496
 	cps	hl, 0
@@ -3256,7 +3256,7 @@ Flash_ExtendedOpsBlock:
 	ldda32	xbc, 3222
 	ldda32	xde, 3218
 	lds	wa, 1
-	call	15678460
+	call	Flash_EraseSectorAndWrite
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
@@ -3279,7 +3279,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 3
-	call	16713383
+	call	TmFlash_WriteRoutine
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -3291,7 +3291,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 2
-	call	16713383
+	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
 	cps	hl, 0
 	jr	nz, 32
@@ -3344,7 +3344,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 1
-	call	16713383
+	call	TmFlash_WriteRoutine
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -3356,7 +3356,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 0
-	call	16713383
+	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
 	cps	hl, 0
 	jr	nz, 32
@@ -4067,7 +4067,7 @@ Flash_ExtendedOpsBlock:
 	ldda32	xbc, 3222
 	ldda32	xde, 3218
 	lds	wa, 1
-	jp	15678460
+	jp	Flash_EraseSectorAndWrite
 	ldb	l, 0
 	ldda32	xde, 3218
 	ldb	b, 0
@@ -4733,7 +4733,7 @@ Flash_SlotUpdateOpsBlock:
 	extz	wa
 	calr	62001
 	calr	62246
-	call	16713356
+	call	TmFlash_CopyToExtMem
 	ldada	xwa, 2360
 	.byte 0x98
 	push_sr
@@ -4981,8 +4981,8 @@ Flash_SlotUpdateOpsBlock:
 	calr	58277
 	lda	xwa, (xsp+2)
 	ld	xbc, 1024
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	cps	iz, 0
 	jrl	lt, 284
@@ -5003,8 +5003,8 @@ Flash_SlotUpdateOpsBlock:
 	calr	57916
 	ldda32	xwa, 3186
 	ld	xbc, (xsp+70)
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	cps	iz, 0
 	jrl	lt, 236
@@ -5013,8 +5013,8 @@ Flash_SlotUpdateOpsBlock:
 	calr	57886
 	ldda32	xwa, 3186
 	ld	xbc, (xsp+74)
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	cps	iz, 0
 	jrl	lt, 206
@@ -5023,8 +5023,8 @@ Flash_SlotUpdateOpsBlock:
 	calr	57856
 	ldda32	xwa, 3186
 	ld	xbc, (xsp+78)
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	cps	iz, 0
 	jrl	lt, 176
@@ -5033,8 +5033,8 @@ Flash_SlotUpdateOpsBlock:
 	calr	57826
 	ldda32	xwa, 3186
 	ld	xbc, (xsp+82)
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	cps	iz, 0
 	jrl	lt, 146
@@ -5043,8 +5043,8 @@ Flash_SlotUpdateOpsBlock:
 	calr	57796
 	ldda32	xwa, 3186
 	ld	xbc, (xsp+86)
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	cps	iz, 0
 	jr	lt, 117
@@ -5053,8 +5053,8 @@ Flash_SlotUpdateOpsBlock:
 	calr	57767
 	ldda32	xwa, 3186
 	ld	xbc, (xsp+90)
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	cps	iz, 0
 	jr	lt, 88
@@ -5063,8 +5063,8 @@ Flash_SlotUpdateOpsBlock:
 	calr	57738
 	ldda32	xwa, 3186
 	ld	xbc, (xsp+94)
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	cps	iz, 0
 	jr	lt, 59
@@ -5077,16 +5077,16 @@ Flash_SlotUpdateOpsBlock:
 	scf
 	ldda32	xwa, 3222
 	ld	xbc, 62464
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	cps	iz, 0
 	jr	lt, 18
 	ldda32	xbc, 3222
 	ldda32	xde, 3218
 	lds	wa, 1
-	call	15678460
-	call	16713356
+	call	Flash_EraseSectorAndWrite
+	call	TmFlash_CopyToExtMem
 	ld	hl, iz
 	jr	3
 	ldw	hl, 65434
@@ -5212,15 +5212,15 @@ Flash_SlotUpdateOpsBlock:
 	add	xwa, xhl
 	ld	(xbc+28), xwa
 	ld	xiz, xwa
-	call	16291158
+	call	FileIO_GetDiskFreeSpace
 	cp	xhl, xiz
 	jr	ge, 6
 	ldw	hl, 65435
 	jrl	321
 	lda	xwa, (xsp+16)
 	ld	xbc, 1024
-	call	16289320
-	call	16288706
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cps	hl, 0
 	jrl	lt, 296
 	lds	wa, 1
@@ -5233,8 +5233,8 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 8
 	add	xbc, xde
 	sla	xbc, 4
-	call	16289320
-	call	16288706
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cps	hl, 0
 	jrl	lt, 256
 	lds	wa, 2
@@ -5247,8 +5247,8 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 8
 	add	xbc, xde
 	sla	xbc, 4
-	call	16289320
-	call	16288706
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cps	hl, 0
 	jrl	lt, 216
 	lds	wa, 3
@@ -5261,8 +5261,8 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 8
 	add	xbc, xde
 	sla	xbc, 4
-	call	16289320
-	call	16288706
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cps	hl, 0
 	jrl	lt, 176
 	lds	wa, 4
@@ -5275,8 +5275,8 @@ Flash_SlotUpdateOpsBlock:
 	sla	xbc, 8
 	add	xbc, xde
 	sla	xbc, 4
-	call	16289320
-	call	16288706
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cps	hl, 0
 	jrl	lt, 136
 	lds	wa, 5
@@ -5290,8 +5290,8 @@ Flash_SlotUpdateOpsBlock:
 	add	xbc, xde
 	sla	xbc, 4
 	ld	xwa, xhl
-	call	16289320
-	call	16288706
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cps	hl, 0
 	jr	lt, 95
 	lds	wa, 6
@@ -5305,8 +5305,8 @@ Flash_SlotUpdateOpsBlock:
 	add	xbc, xde
 	sla	xbc, 4
 	ld	xwa, xhl
-	call	16289320
-	call	16288706
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cps	hl, 0
 	jr	lt, 54
 	lds	wa, 7
@@ -5320,14 +5320,14 @@ Flash_SlotUpdateOpsBlock:
 	add	xbc, xde
 	sla	xbc, 4
 	ld	xwa, xhl
-	call	16289320
-	call	16288706
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	cps	hl, 0
 	jr	lt, 13
 	ldda32	xwa, 3218
 	ld	xbc, 62464
-	call	16289320
-	call	16288706
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	pop	xiz
 	.byte 0xf3
 	swi	5
@@ -5735,13 +5735,13 @@ FloppyCtrl_PopIzStoreRet:
 
 ToneParam_ExtendedOpsBlock:
 	pushw	iz
-	call	16170020
+	call	cmp_ld_mae
 	lda_24	xwa, 608256
 	ld	xde, xwa
 	lda_24	xbc, 700416
 	sub	xbc, xde
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	cps	iz, 0
 	jr	nz, 5
@@ -5751,7 +5751,7 @@ ToneParam_ExtendedOpsBlock:
 	cp	iz, 65429
 	jr	nz, 2
 	lds	wa, 0
-	call	16170031
+	call	cmp_ld_ato
 	ld	hl, iz
 	popw	iz
 	ret
@@ -5824,7 +5824,7 @@ ToneParam_ExtendedOpsBlock:
 	calr	624
 	ld	iz, hl
 	jr	7
-	call	16116017
+	call	AccDemo_InitDone
 	ldw	iz, 65434
 	calr	534
 	ld	hl, iz
@@ -5854,7 +5854,7 @@ ToneParam_ExtendedOpsBlock:
 	jrl	c, 4501
 	.byte 0x85
 	rcf
-	call	16170020
+	call	cmp_ld_mae
 	ldda32	xwa, 3186
 	stda32	14766, xwa
 	ldda32	xwa, 3182
@@ -5989,7 +5989,7 @@ ToneParam_ExtendedOpsBlock:
 	.byte 0xf1
 	lda	xiy, (xwa)
 	.byte 0xb0
-	call	16134719
+	call	DualVoice_ParamLoadDone
 	ldda8	a, 13744
 	extz	wa
 	bit	0, wa
@@ -6001,7 +6001,7 @@ ToneParam_ExtendedOpsBlock:
 	pop_f
 	.byte 0xac
 	push	xbc
-	call	16117240
+	call	AccPatch_InitFromSlotIndex
 	ldda32	xwa, 3186
 	stda32	14766, xwa
 	ldw	iz, 65429
@@ -6947,11 +6947,11 @@ CmpSetP1GridCheck:
 
 ; CmpSetP1 grid check event encoding dispatch
 CmpSetP1_GridCheck_EventEnc:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
@@ -6966,11 +6966,11 @@ CmpSetP1_GridCheck_EventEnc:
 	ld	xwa, 21233677
 	ld	xbc, 31719438
 	jr	54
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
@@ -6984,7 +6984,7 @@ CmpSetP1_GridCheck_EventEnc:
 	exts	xde
 	ld	xwa, 21233677
 	ld	xbc, 31719439
-	call	16403043
+	call	MainFuncCall
 	jrl	253
 
 ; CmpSetP1 grid check return

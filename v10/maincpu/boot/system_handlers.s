@@ -3409,7 +3409,7 @@ SeqBuf_ReadAlternate2:
 	pushw	ix
 	push	xde
 	lda_24	xde, 124233
-	call	15675467
+	call	RingBuf512_ReadAlt_ByteBlock
 	pop	xde
 	popw	ix
 	ret
@@ -3501,7 +3501,7 @@ TempoRingBuf_InlineBytecode2:
 	pushw	ix
 	push	xde
 	lda_24	xde, 124755
-	call	15675726
+	call	Seq_RingBuf_WriteByte_Data
 	pop	xde
 	popw	ix
 	ret
@@ -3607,7 +3607,7 @@ RhythmBuf_InlineBytecode2:
 	pushw	ix
 	push	xde
 	lda_24	xde, 126813
-	call	15675467
+	call	RingBuf512_ReadAlt_ByteBlock
 	pop	xde
 	popw	ix
 	ret
@@ -3689,14 +3689,14 @@ AltEvtBuf_Helpers:
 	pushw	ix
 	push	xde
 	lda_24	xde, 127335
-	call	15675297
+	call	Seq_RingBuf_ReadByte_Large
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
 	lda_24	xde, 127335
-	call	15675324
+	call	Seq_RingBuf_ReadByte_Small
 	pop	xde
 	popw	ix
 	ret
@@ -3892,7 +3892,7 @@ SeqMain_ReadAlternate:
 	pushw	ix
 	push	xde
 	lda_24	xde, 127867
-	call	15675610
+	call	RingBuf1024_ReadAlt_ByteBlock
 	pop	xde
 	popw	ix
 	ret
@@ -4188,14 +4188,14 @@ SeqBuf3_Helpers:
 	pushw	ix
 	push	xde
 	lda_24	xde, 129689
-	call	15675440
+	call	RingBuf_CheckFull_256
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
 	lda_24	xde, 129689
-	call	15675467
+	call	RingBuf512_ReadAlt_ByteBlock
 	pop	xde
 	popw	ix
 	ret
@@ -4285,14 +4285,14 @@ SeqBuf_DspSysEx_CopyPointers:
 	pushw	ix
 	push	xde
 	lda_24	xde, 130211
-	call	15675583
+	call	Seq_RingBuf_ReadData
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
 	lda_24	xde, 130211
-	call	15675610
+	call	RingBuf1024_ReadAlt_ByteBlock
 	pop	xde
 	popw	ix
 	ret
@@ -4359,7 +4359,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	pushw	ix
 	push	xde
 	lda_24	xde, 131245
-	call	15675098
+	call	RingBuf_InitStructFields
 	pop	xde
 	popw	ix
 	ret
@@ -4371,14 +4371,14 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	pushw	ix
 	push	xde
 	lda_24	xde, 131245
-	call	15675154
+	call	RingBuf128_ReadAlt_CheckEmpty
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
 	lda_24	xde, 131245
-	call	15675181
+	call	RingBuf128_ReadAlt2_CheckEmpty
 	pop	xde
 	popw	ix
 	ret
@@ -4446,7 +4446,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	pushw	ix
 	push	xde
 	lda_24	xde, 131383
-	call	15675098
+	call	RingBuf_InitStructFields
 	pop	xde
 	popw	ix
 	ret
@@ -4458,14 +4458,14 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	pushw	ix
 	push	xde
 	lda_24	xde, 131383
-	call	15675154
+	call	RingBuf128_ReadAlt_CheckEmpty
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
 	lda_24	xde, 131383
-	call	15675181
+	call	RingBuf128_ReadAlt2_CheckEmpty
 	pop	xde
 	popw	ix
 	ret
@@ -4657,14 +4657,14 @@ SeqBuf_NoteEvent_SaveWritePtr:
 	pushw	ix
 	push	xde
 	lda_24	xde, 131787
-	call	15675297
+	call	Seq_RingBuf_ReadByte_Large
 	pop	xde
 	popw	ix
 	ret
 	pushw	ix
 	push	xde
 	lda_24	xde, 131787
-	call	15675324
+	call	Seq_RingBuf_ReadByte_Small
 	pop	xde
 	popw	ix
 	ret
@@ -4845,7 +4845,7 @@ SeqBuf_NoteEvent_AlternateRead:
 	pushw	ix
 	push	xde
 	lda_24	xde, 132319
-	call	15675297
+	call	Seq_RingBuf_ReadByte_Large
 	pop	xde
 	popw	ix
 	ret
@@ -6810,7 +6810,7 @@ HDAE5000_Status_DataBlock:
 	calr	65106
 	ld	xwa, 524288
 	ld	xbc, 65536
-	call	15678255
+	call	Flash_FillBuffer
 	calr	65455
 	cp	hl, 65535
 	jr	nz, 9
@@ -8026,7 +8026,7 @@ HDAE5000_Init_BytecodeBlock:
 	extz	wa
 	bit	0, wa
 	jr	nz, -12
-	call	15678734
+	call	HDAE5000_Detect
 	cp	xhl, 4294967295
 	jr	nz, 8
 	.byte 0xf2, 0x04
@@ -8035,7 +8035,7 @@ HDAE5000_Init_BytecodeBlock:
 	.byte 0xba, 0xc7
 	swi	3
 	sub	(xbc-40), xbc
-	call	15677338
+	call	Flash_IdentifyAndValidateChip
 	cp	hl, 65535
 	jr	nz, 10
 	.byte 0xf2, 0x04
@@ -8073,12 +8073,12 @@ HDAE5000_Init_BytecodeBlock:
 	or	xhl, xhl
 	jr	z, 6
 	lds	wa, 1
-	call	15677562
-	call	15679273
+	call	Flash_ChipErase
+	call	HDAE5000_Status_Check
 	cp	hl, 65535
 	jr	nz, 13
 	calr	64920
-	call	15679273
+	call	HDAE5000_Status_Check
 	cp	hl, 65535
 	jr	z, -13
 	sti8_24	1441796, 0

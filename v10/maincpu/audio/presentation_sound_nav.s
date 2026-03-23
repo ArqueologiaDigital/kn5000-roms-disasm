@@ -1274,7 +1274,7 @@ DirmdEmu_CaseF:
 	cpda8	a, 36153
 	jr	z, 25
 	ldw	wa, 255
-	call	16454736
+	call	GraphicsRender_ByteData
 	ldw	wa, 245
 	call	16454730
 	call	16454839
@@ -1295,7 +1295,7 @@ DirmdEmu_CaseF:
 	pushw 39828
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+2)
 	call	16395937
@@ -1434,7 +1434,7 @@ WindowProc:
 ; WindowProc event dispatch
 WindowProc_EventDispatch:
 	ld	xwa, (xsp+24)
-	call	16409190
+	call	GetViewInstance
 	ld	(xsp+12), xhl
 	ld	xwa, (xsp+16)
 	cp	xwa, 4
@@ -1453,26 +1453,26 @@ WindowProc_EventDispatch:
 	ld	xwa, (xsp+24)
 	ld	xbc, 29360130
 	lds32	xde, 0
-	call	16422496
-	call	16423543
+	call	SendEvent
+	call	GetCurrentTarget
 	ld	xiz, xhl
 	ld	xwa, xiz
 	ld	xbc, 31457355
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	cp	xhl, 4294967295
 	jr	z, 23
 	ld	xiz, xhl
 	ld	xwa, xiz
 	ld	xbc, 31457355
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	cp	xhl, 4294967295
 	jr	nz, -23
 	ld	xde, (xsp+24)
 	ld	xwa, xiz
 	ld	xbc, 31457353
-	call	16422496
+	call	SendEvent
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
 	ld	(xwa), xiz
@@ -1491,14 +1491,14 @@ WindowProc_EventDispatch:
 	ld	xwa, (xbc)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
-	call	16422496
+	call	SendEvent
 	jrl	692
 	ld	xwa, (xsp+24)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
 	calr	-6389
 	ld	xwa, (xsp+24)
-	call	16409190
+	call	GetViewInstance
 	ld	(xsp+12), xhl
 	ld	xwa, (xsp+16)
 	cp	xwa, 3
@@ -1523,7 +1523,7 @@ WindowProc_EventDispatch:
 	ld	xde, (xwa)
 	ld	xwa, (xbc)
 	ld	xbc, 31457353
-	call	16422496
+	call	SendEvent
 	ld	xde, (xsp+12)
 	ld	xbc, (xde+32)
 	ld	xwa, (xbc)
@@ -1533,14 +1533,14 @@ WindowProc_EventDispatch:
 	ld	xde, (xwa)
 	ld	xwa, (xbc)
 	ld	xbc, 31457352
-	call	16422496
-	call	16423543
+	call	SendEvent
+	call	GetCurrentTarget
 	cp	xhl, (xsp+24)
 	jr	nz, 12
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
 	ld	xwa, (xwa)
-	call	16423549
+	call	SetCurrentTarget
 	ld	xde, (xsp+12)
 	ld	xbc, (xde+28)
 	ld	xwa, 4294967295
@@ -1548,7 +1548,7 @@ WindowProc_EventDispatch:
 	ld	xbc, (xde+32)
 	ld	(xbc), xwa
 	jrl	514
-	call	16423543
+	call	GetCurrentTarget
 	cp	xhl, (xsp+24)
 	jrl	nz, 504
 	ld	xwa, (xsp+12)

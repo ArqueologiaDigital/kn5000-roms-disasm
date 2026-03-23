@@ -185,11 +185,11 @@ ComSetGridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 ComSetGridCheck_JumpTable:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	(xsp+22), xhl
 	lda	xbc, (xsp+4)
 	ld	xwa, (xsp+22)
@@ -201,7 +201,7 @@ ComSetGridCheck_JumpTable:
 	cpw	(xbc), 1
 	jrl	nz, 737
 	ld	xwa, 192
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 1
 	jr	nz, 34
 	ld	wa, (xsp+6)
@@ -219,11 +219,11 @@ ComSetGridCheck_JumpTable:
 	lds	bc, 1
 	lds	de, 2
 	jr	115
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	(xsp+22), xhl
 	lda	xbc, (xsp+4)
 	ld	xwa, (xsp+22)
@@ -235,7 +235,7 @@ ComSetGridCheck_JumpTable:
 	cpw	(xbc), 1
 	jrl	nz, 621
 	ld	xwa, 192
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 1
 	jr	nz, 34
 	ld	wa, (xsp+6)
@@ -252,7 +252,7 @@ ComSetGridCheck_JumpTable:
 	ld_rrl	xwa, xwa, bc
 	ldw	bc, 65535
 	lds	de, 2
-	call	16382274
+	call	MainLswAdd
 	jrl	546
 	lda	xhl, (xsp+4)
 	ldw	(xhl), 1
@@ -300,15 +300,15 @@ ComSetGridCheck_JumpTable:
 	ld	xbc, 15204420
 	push	xbc
 	push	xde
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
 	jrl	363
 	ld	xwa, 192
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 1
 	jr	nz, 7
 	ld	xwa, 15204432
@@ -332,9 +332,9 @@ ComSetGridCheck_JumpTable:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
 	ld	xbc, 31457420
@@ -1504,11 +1504,11 @@ PmemOutRGridCheck:
 ; -----------------------------------------------------------------------------
 
 TtMdCtlMsg_EventDispatch:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xiz, xhl
 	lda	xwa, (xsp+32)
 	ld	xbc, xiz
@@ -1539,7 +1539,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -1561,7 +1561,7 @@ TtMdCtlMsg_EventDispatch:
 	incf
 	lds32	xbc, 0
 	ld	(xwa+14), xbc
-	call	16383559
+	call	MainRamPut
 	jrl	1935
 	jrl	598
 	ld	xiy, 15204820
@@ -1575,7 +1575,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -1603,7 +1603,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -1625,14 +1625,14 @@ TtMdCtlMsg_EventDispatch:
 	incf
 	lds32	xbc, 0
 	ld	(xwa+14), xbc
-	call	16383559
+	call	MainRamPut
 	jrl	1739
 	jrl	402
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xiz, xhl
 	lda	xwa, (xsp+32)
 	.byte 0xee
@@ -1663,7 +1663,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -1706,7 +1706,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -1737,7 +1737,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -1766,11 +1766,11 @@ TtMdCtlMsg_EventDispatch:
 	jr	nz, 14
 	ld	xbc, 128
 	ld	(xde), xbc
-	call	16383559
+	call	MainRamPut
 	jrl	1341
 	ld	xbc, 4294967295
 	ld	(xde), xbc
-	call	16383626
+	call	MainRamAdd
 	jrl	1327
 	ld	(xsp+4), xiz
 	.byte 0xb1
@@ -1797,7 +1797,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -1814,7 +1814,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	506
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	jr	22
 	ld	a, (xwa)
@@ -1824,13 +1824,13 @@ TtMdCtlMsg_EventDispatch:
 	pushw	512
 	ld	xwa, (xsp+18)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
-	call	16422496
+	call	SendEvent
 	.byte 0xbf
 	ldb	b, 2
 	.byte 0x01
@@ -1841,7 +1841,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -1859,13 +1859,13 @@ TtMdCtlMsg_EventDispatch:
 	pushw	518
 	lda	xwa, (xsp+46)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
-	call	16422496
+	call	SendEvent
 	.byte 0xbf
 	ldb	b, 2
 	push_sr
@@ -1876,7 +1876,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -1893,7 +1893,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	524
 	lda	xwa, (xsp+44)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	jr	22
 	ld	a, (xwa)
@@ -1903,9 +1903,9 @@ TtMdCtlMsg_EventDispatch:
 	pushw	530
 	lda	xwa, (xsp+46)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
@@ -1924,7 +1924,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -1941,7 +1941,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	536
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	jr	22
 	ld	a, (xwa)
@@ -1951,13 +1951,13 @@ TtMdCtlMsg_EventDispatch:
 	pushw	542
 	ld	xwa, (xsp+18)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
-	call	16422496
+	call	SendEvent
 	.byte 0xbf
 	ldb	b, 2
 	.byte 0x01
@@ -1968,7 +1968,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -1986,13 +1986,13 @@ TtMdCtlMsg_EventDispatch:
 	pushw	548
 	lda	xwa, (xsp+46)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
-	call	16422496
+	call	SendEvent
 	.byte 0xbf
 	ldb	b, 2
 	push_sr
@@ -2003,7 +2003,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld8_24	a, 149362
 	ld	xbc, xwa
@@ -2021,7 +2021,7 @@ TtMdCtlMsg_EventDispatch:
 	nop
 	pushw	554
 	push	xbc
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	jr	19
 	ld	a, (xwa)
@@ -2029,9 +2029,9 @@ TtMdCtlMsg_EventDispatch:
 	.long AudioStream_Property_Table
 	pushw	560
 	push	xbc
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
@@ -2042,7 +2042,7 @@ TtMdCtlMsg_EventDispatch:
 	lds32	xwa, 0
 	ld8_24	a, 149364
 	ld	xbc, 26
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xbc, 0
 	ld8_24	c, 149362
 	ld	xwa, xbc
@@ -2068,7 +2068,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	566
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	jr	18
 	push	xwa
@@ -2076,9 +2076,9 @@ TtMdCtlMsg_EventDispatch:
 	pushw	572
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
@@ -2104,9 +2104,9 @@ TtMdCtlMsg_EventDispatch:
 	pushw	578
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
@@ -2132,7 +2132,7 @@ TtMdCtlMsg_EventDispatch:
 	pushw	584
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	jr	18
 	push	xwa
@@ -2140,9 +2140,9 @@ TtMdCtlMsg_EventDispatch:
 	pushw	590
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+32)
 	ld	xbc, 31457420
@@ -2770,11 +2770,11 @@ CtlMsgGridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 CtlMsgGridCheck_JumpTable:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	(xsp+30), xhl
 	lda	xbc, (xsp+12)
 	ld	xwa, (xsp+30)
@@ -2797,11 +2797,11 @@ CtlMsgGridCheck_JumpTable:
 	lds	bc, 1
 	lds	de, 2
 	jr	82
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	(xsp+30), xhl
 	lda	xbc, (xsp+12)
 	ld	xwa, (xsp+30)
@@ -2853,9 +2853,9 @@ CtlMsgGridCheck_JumpTable:
 	ld	xbc, 15205336
 	push	xbc
 	push	xde
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
 	ld	xbc, 31457420
@@ -3807,7 +3807,7 @@ MidiPart_DataBlock:
 	push	xsp
 	retd	63152
 	ldw	wa, 15
-	call	16356541
+	call	SoundCtrl_SendCommand
 	ret
 
 InitializeMurai:
@@ -10455,7 +10455,7 @@ AcWelcomScreen_RenderBytecode:
 	rcf
 	lda	xwa, (xsp+12)
 	ldw	bc, 30
-	call	16446786
+	call	ClipBlit_Direct
 	ld16_24	wa, 149380
 	exts	xwa
 	ld	xbc, xwa
@@ -10471,7 +10471,7 @@ AcWelcomScreen_RenderBytecode:
 	rcf
 	lda	xwa, (xsp+12)
 	ldw	bc, 30
-	call	16446432
+	call	ClipBlit_Replace
 	cp	iz, 65535
 	jrl	z, 776
 	muls	iz, 12
@@ -10494,7 +10494,7 @@ AcWelcomScreen_RenderBytecode:
 	ld	xwa, (xsp+20)
 	ld	xbc, 29360140
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	jrl	717
 	lda	xix, (xsp+12)
 	.byte 0x95
@@ -10571,7 +10571,7 @@ AcWelcomScreen_RenderBytecode:
 	.byte 0x41
 	.long Bitmap_Digit1
 	ldw	de, 16
-	call	16434441
+	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
 	.byte 0x90
 	push	xwa
@@ -10582,7 +10582,7 @@ AcWelcomScreen_RenderBytecode:
 	pushw	247
 	ld	xbc, 15326918
 	ldw	de, 16
-	call	16434441
+	call	DrawBitmapSP2
 	jrl	510
 	lda_24	xhl, 256548
 	.byte 0x9b
@@ -10618,7 +10618,7 @@ AcWelcomScreen_RenderBytecode:
 	rcf
 	nop
 	ldw	bc, 245
-	call	16429683
+	call	DrawBox
 	ld16_24	wa, 149380
 	exts	xwa
 	ld	xbc, xwa
@@ -10646,7 +10646,7 @@ AcWelcomScreen_RenderBytecode:
 	nop
 	ld	xbc, 15326816
 	ldw	de, 16
-	call	16434441
+	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
 	.byte 0x90
 	push	xwa
@@ -10665,7 +10665,7 @@ AcWelcomScreen_RenderBytecode:
 	nop
 	ld	xbc, 15326952
 	ldw	de, 16
-	call	16434441
+	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
 	.byte 0x90
 	push	xwa
@@ -10684,7 +10684,7 @@ AcWelcomScreen_RenderBytecode:
 	nop
 	ld	xbc, 15326884
 	ldw	de, 16
-	call	16434441
+	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
 	.byte 0x90
 	push	xwa
@@ -10703,7 +10703,7 @@ AcWelcomScreen_RenderBytecode:
 	nop
 	ld	xbc, 15326952
 	ldw	de, 16
-	call	16434441
+	call	DrawBitmapSP2
 	ld16_24	wa, 149380
 	exts	xwa
 	ld	xbc, xwa
@@ -10736,7 +10736,7 @@ AcWelcomScreen_RenderBytecode:
 	.byte 0x41
 	.long Bitmap_DigitD
 	ldw	de, 16
-	call	16434441
+	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
 	.byte 0x90
 	push	xwa
@@ -10755,7 +10755,7 @@ AcWelcomScreen_RenderBytecode:
 	nop
 	ld	xbc, 15326986
 	ldw	de, 16
-	call	16434441
+	call	DrawBitmapSP2
 	ld16_24	wa, 149380
 	exts	xwa
 	ld	xiy, xwa
@@ -10771,12 +10771,12 @@ AcWelcomScreen_RenderBytecode:
 	ld	xwa, 18874379
 	ld	xbc, 31457452
 	lds32	xde, 0
-	call	16402871
-	call	16445488
+	call	ApFuncCall
+	call	CaptureLcd
 	ld	xwa, 18874379
 	ld	xbc, 31457453
 	lds32	xde, 0
-	call	16402871
+	call	ApFuncCall
 
 AcWelcomScreen_Select_NextStep:
 	ld16_24 xwa, 0x024784
@@ -12177,7 +12177,7 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+6)
 	lda	xde, (xsp+4)
 	ldw	wa, 52
-	call	16459251
+	call	GetFrameSPSize
 	ld	xiy, xiz
 	lda	xix, (xsp+16)
 	lds	bc, 4
@@ -12189,7 +12189,7 @@ AudioCtrl_DataBlock:
 	add	(xwa+2), bc
 	ldw	bc, 193
 	ld	de, (xsp+24)
-	call	16438617
+	call	DrawDesignBox
 	lda	xde, (xsp+12)
 	.byte 0xb2
 	push_sr
@@ -12211,13 +12211,13 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+12)
 	lda	xbc, (xsp+8)
 	ldw	de, 248
-	call	16427402
+	call	DrawLine
 	lda	xwa, (xsp+12)
 	incm	1, (xwa)
 	lda	xbc, (xsp+8)
 	incm	1, (xbc)
 	ldw	de, 255
-	call	16427402
+	call	DrawLine
 	.byte 0x9f
 	incf
 	push	xwa
@@ -12238,7 +12238,7 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+6)
 	lda	xde, (xsp+4)
 	ldw	wa, 52
-	call	16459251
+	call	GetFrameSPSize
 	ld	xiy, xiz
 	lda	xix, (xsp+8)
 	lds	bc, 4
@@ -12250,7 +12250,7 @@ AudioCtrl_DataBlock:
 	add	(xwa+2), bc
 	ldw	bc, 193
 	ld	de, (xsp+16)
-	call	16438617
+	call	DrawDesignBox
 	pop	xiz
 	lda	xsp, (xsp+14)
 	ret
@@ -12262,7 +12262,7 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+6)
 	lda	xde, (xsp+4)
 	ldw	wa, 52
-	call	16459251
+	call	GetFrameSPSize
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz)
 	ld	(xwa), bc
@@ -12279,7 +12279,7 @@ AudioCtrl_DataBlock:
 	jr	6
 	ldw	bc, 52
 	ldw	de, 8
-	call	16433276
+	call	DrawFrameSP
 	ld	xiy, xiz
 	lda	xix, (xsp+12)
 	lds	bc, 4
@@ -12293,7 +12293,7 @@ AudioCtrl_DataBlock:
 	.byte 0x9f, 0x04, 0x81
 	ld	(xwa+6), bc
 	lda	xbc, (xsp+8)
-	call	16357274
+	call	GetBoxCenter
 	lda	xwa, (xsp+12)
 	lda	xbc, (xsp+8)
 	lds32	xde, 3
@@ -12301,7 +12301,7 @@ AudioCtrl_DataBlock:
 	pushw	255
 	pushw	247
 	ld	xde, (xsp+28)
-	call	16436908
+	call	DrawStringCentered
 	pop	xiz
 	lda	xsp, (xsp+22)
 	ret
@@ -12325,7 +12325,7 @@ AudioCtrl_DataBlock:
 	ldw	wa, 136
 	.byte 0x9f, 0x06, 0x80
 	lda	xbc, (xsp+8)
-	call	16361779
+	call	GetEditSwPoint
 	lda	xde, (xiz+2)
 	lda	xbc, (xsp+10)
 	ld	wa, (xbc)
@@ -12357,7 +12357,7 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+6)
 	lda	xde, (xsp+4)
 	ldw	wa, 52
-	call	16459251
+	call	GetFrameSPSize
 	ld	xiy, xiz
 	lda	xix, (xsp+12)
 	lds	bc, 4
@@ -12372,10 +12372,10 @@ AudioCtrl_DataBlock:
 	.byte 0xd7, 0xe2
 	add	(xiz-34), w
 	lda	xbc, (xsp+8)
-	call	16361779
+	call	GetEditSwPoint
 	lda	xwa, (xsp+12)
 	ld	xbc, (xsp+22)
-	call	16357274
+	call	GetBoxCenter
 	ld	wa, iz
 	add	wa, wa
 	dec	8, wa
@@ -12395,7 +12395,7 @@ AudioCtrl_DataBlock:
 	lda	xbc, (xsp+6)
 	lda	xde, (xsp+4)
 	ldw	wa, 52
-	call	16459251
+	call	GetFrameSPSize
 	ld	xiy, xiz
 	lda	xix, (xsp+8)
 	lds	bc, 4
@@ -12522,7 +12522,7 @@ AudioCtrl_DataBlock:
 	pushw	8
 	pushw	0
 	pushw	0
-	call	16437380
+	call	DrawStringReverse
 	jrl	193
 	ld	wa, (xsp+12)
 	calr	64606
@@ -12544,13 +12544,13 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457342
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+10), hl
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457343
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+28)
 	ld	bc, (xsp+10)
 	ld	de, hl
@@ -12560,13 +12560,13 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+6), hl
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+8), hl
 	ld	wa, (xsp+6)
 	ld	de, (xsp+4)
@@ -12575,21 +12575,21 @@ AudioCtrl_DataBlock:
 	jr	z, 29
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	.byte 0x9f
 	ldio	4, 159
 	ldio	32, 219
 	.byte 0x89
 	ld	de, (xsp+12)
-	call	16382357
+	call	MainLswPartAdd
 	jr	24
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
 	ld	bc, (xsp+10)
 	ld	de, (xsp+8)
-	call	16382274
+	call	MainLswAdd
 	lds32	xhl, 0
 	pop	xiz
 	lda	xsp, (xsp+28)
@@ -12651,7 +12651,7 @@ AudioCtrl_DataBlock:
 	push	xhl
 	pushw	0
 	pushw	247
-	call	16436908
+	call	DrawStringCentered
 	lda	xbc, (xsp+16)
 	.byte 0x99
 	push_sr
@@ -12685,7 +12685,7 @@ AudioCtrl_DataBlock:
 	pushw	8
 	pushw	0
 	pushw	0
-	call	16437380
+	call	DrawStringReverse
 	jrl	193
 	ld	wa, (xsp+12)
 	calr	64150
@@ -12707,13 +12707,13 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457342
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+10), hl
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457343
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+28)
 	ld	bc, (xsp+10)
 	ld	de, hl
@@ -12723,13 +12723,13 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+6), hl
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+8), hl
 	ld	wa, (xsp+6)
 	ld	de, (xsp+4)
@@ -12738,21 +12738,21 @@ AudioCtrl_DataBlock:
 	jr	z, 29
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	.byte 0x9f
 	ldio	4, 159
 	ldio	32, 219
 	.byte 0x89
 	ld	de, (xsp+12)
-	call	16382357
+	call	MainLswPartAdd
 	jr	24
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
 	ld	bc, (xsp+10)
 	ld	de, (xsp+8)
-	call	16382274
+	call	MainLswAdd
 	lds32	xhl, 0
 	pop	xiz
 	lda	xsp, (xsp+28)
@@ -12799,7 +12799,7 @@ AudioCtrl_DataBlock:
 	.byte 0xd7
 	addm32_24	13162632, xwa
 	nop
-	call	16370311
+	call	DrawEditSw
 	jrl	816
 	ld	wa, (xsp+10)
 	calr	63807
@@ -12848,7 +12848,7 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+2), hl
 	ld	wa, (xsp+2)
 	ld	de, (xsp+4)
@@ -12857,18 +12857,18 @@ AudioCtrl_DataBlock:
 	jr	z, 28
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	ld	wa, (xsp+2)
 	ld	bc, iz
-	call	16569591
+	call	SndParam_LookupViaEncode
 	ld	(xsp+50), hl
 	jr	21
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
-	call	16569399
+	call	SndParam_LookupReadOnly
 	ld	(xsp+50), hl
 	ld	bc, iz
 	extz	xbc
@@ -12882,7 +12882,7 @@ AudioCtrl_DataBlock:
 	ld	(xde+8), xwa
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457346
-	call	16402871
+	call	ApFuncCall
 	lda	xwa, (xsp+62)
 	lda	xde, (xsp+14)
 	lda	xbc, (xsp+58)
@@ -12905,7 +12905,7 @@ AudioCtrl_DataBlock:
 	pushw	7
 	pushw	0
 	pushw	0
-	call	16437380
+	call	DrawStringReverse
 	lda	xwa, (xsp+62)
 	lda	xbc, (xsp+58)
 	ld	de, (xsp+12)
@@ -12914,12 +12914,12 @@ AudioCtrl_DataBlock:
 	decm	8, (xwa)
 	decm	3, (xwa+2)
 	lds32	xbc, 4
-	call	16432188
+	call	DrawBitmap
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522818
-	call	16402871
+	call	ApFuncCall
 	lda_24	xbc, 15333420
 	or	xhl, xhl
 	jr	z, 41
@@ -12947,7 +12947,7 @@ AudioCtrl_DataBlock:
 	add	(xde+2), wa
 	lda	xwa, (xsp+58)
 	lds32	xbc, 5
-	call	16432188
+	call	DrawBitmap
 	jrl	405
 	ld	wa, (xsp+10)
 	calr	63396
@@ -12970,13 +12970,13 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457342
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+12), hl
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457343
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+74)
 	ld	bc, (xsp+12)
 	ld	de, hl
@@ -12986,7 +12986,7 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+2), hl
 	ld	wa, (xsp+12)
 	ld	(xsp+10), wa
@@ -12994,7 +12994,7 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+12), hl
 	ld	wa, (xsp+2)
 	ld	de, (xsp+4)
@@ -13003,7 +13003,7 @@ AudioCtrl_DataBlock:
 	jr	z, 32
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	.byte 0x9f
 	incf
@@ -13011,15 +13011,15 @@ AudioCtrl_DataBlock:
 	ld	wa, (xsp+4)
 	ld	bc, iz
 	ld	de, (xsp+12)
-	call	16382357
+	call	MainLswPartAdd
 	jrl	223
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
 	ld	bc, (xsp+10)
 	ld	de, (xsp+12)
-	call	16382274
+	call	MainLswAdd
 	jrl	196
 	ld	iz, bc
 	ld	wa, (xsp+10)
@@ -13043,26 +13043,26 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457464
-	call	16402871
+	call	ApFuncCall
 	or	xhl, xhl
 	jrl	z, 134
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+2), hl
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+12), hl
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457465
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+10), hl
 	ld	wa, (xsp+2)
 	cp	wa, 65535
@@ -13071,7 +13071,7 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	.byte 0x9f
 	incf
@@ -13079,17 +13079,17 @@ AudioCtrl_DataBlock:
 	ld	wa, (xsp+4)
 	ld	bc, iz
 	ld	de, (xsp+12)
-	call	16382173
+	call	MainLswPartPut
 	jr	29
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
 	ld	bc, (xsp+10)
 	ld	de, (xsp+12)
-	call	16382090
+	call	MainLswPut
 	lds32	xhl, 0
 	popw	iz
 	lda	xsp, (xsp+76)
@@ -13134,7 +13134,7 @@ AudioCtrl_DataBlock:
 	.byte 0xd7
 	addm32_24	13162632, xwa
 	nop
-	call	16370311
+	call	DrawEditSw
 	jrl	674
 	ld	wa, (xsp+12)
 	calr	62843
@@ -13173,7 +13173,7 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+4), hl
 	ld	wa, (xsp+4)
 	cp	wa, 65535
@@ -13182,20 +13182,20 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	ld	wa, (xsp+4)
 	ld	bc, iz
-	call	16569591
+	call	SndParam_LookupViaEncode
 	ld	(xsp+52), hl
 	jr	26
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
-	call	16569399
+	call	SndParam_LookupReadOnly
 	ld	(xsp+52), hl
 	ld	bc, iz
 	extz	xbc
@@ -13209,7 +13209,7 @@ AudioCtrl_DataBlock:
 	ld	(xde+8), xwa
 	ld	xwa, (xsp+8)
 	ld	xbc, 31457346
-	call	16402871
+	call	ApFuncCall
 	lda	xwa, (xsp+64)
 	lda	xbc, (xsp+60)
 	lda	xde, (xsp+16)
@@ -13232,7 +13232,7 @@ AudioCtrl_DataBlock:
 	pushw	7
 	pushw	0
 	pushw	0
-	call	16437380
+	call	DrawStringReverse
 	jrl	387
 	ld	wa, (xsp+12)
 	calr	62556
@@ -13253,13 +13253,13 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, (xsp+8)
 	ld	xbc, 31457342
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+14), hl
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31457343
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+76)
 	ld	bc, (xsp+14)
 	ld	de, hl
@@ -13269,14 +13269,14 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+4), hl
 	ld	(xsp+12), iz
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+14), hl
 	ld	wa, (xsp+4)
 	ld	de, (xsp+6)
@@ -13285,7 +13285,7 @@ AudioCtrl_DataBlock:
 	jr	z, 32
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	.byte 0x9f
 	ret
@@ -13293,15 +13293,15 @@ AudioCtrl_DataBlock:
 	ld	wa, (xsp+6)
 	ld	bc, iz
 	ld	de, (xsp+14)
-	call	16382357
+	call	MainLswPartAdd
 	jrl	213
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
 	ld	bc, (xsp+12)
 	ld	de, (xsp+14)
-	call	16382274
+	call	MainLswAdd
 	jrl	186
 	ld	wa, (xsp+12)
 	calr	62355
@@ -13322,26 +13322,26 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, (xsp+8)
 	ld	xbc, 31457464
-	call	16402871
+	call	ApFuncCall
 	or	xhl, xhl
 	jrl	z, 129
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+4), hl
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+14), hl
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31457465
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+12), hl
 	ld	wa, (xsp+4)
 	ld	de, (xsp+6)
@@ -13350,7 +13350,7 @@ AudioCtrl_DataBlock:
 	jr	z, 31
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	.byte 0x9f
 	ret
@@ -13358,15 +13358,15 @@ AudioCtrl_DataBlock:
 	ld	wa, (xsp+6)
 	ld	bc, iz
 	ld	de, (xsp+14)
-	call	16382173
+	call	MainLswPartPut
 	jr	24
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
 	ld	bc, (xsp+12)
 	ld	de, (xsp+14)
-	call	16382090
+	call	MainLswPut
 	lds32	xhl, 0
 	pop	xiz
 	lda	xsp, (xsp+76)
@@ -13408,7 +13408,7 @@ AudioCtrl_DataBlock:
 	.byte 0xd7
 	addm32_24	13162632, xwa
 	nop
-	call	16370311
+	call	DrawEditSw
 	jrl	544
 	ld	wa, (xsp+10)
 	calr	62030
@@ -13459,7 +13459,7 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	ld	wa, iz
 	ld	de, (xsp+4)
@@ -13468,21 +13468,21 @@ AudioCtrl_DataBlock:
 	jr	z, 29
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	.byte 0xd7
 	swi	2
 	add	(xhl-34), wa
 	.byte 0xd7
 	swi	2
 	.byte 0x89
-	call	16569591
+	call	SndParam_LookupViaEncode
 	ld	(xsp+50), hl
 	jr	21
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
-	call	16569399
+	call	SndParam_LookupReadOnly
 	ld	(xsp+50), hl
 	.byte 0xd7
 	swi	2
@@ -13498,7 +13498,7 @@ AudioCtrl_DataBlock:
 	ld	(xde+8), xwa
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457346
-	call	16402871
+	call	ApFuncCall
 	lda	xwa, (xsp+66)
 	lda	xbc, (xsp+62)
 	lda	xde, (xsp+14)
@@ -13521,12 +13521,12 @@ AudioCtrl_DataBlock:
 	pushw	7
 	pushw	0
 	pushw	0
-	call	16437380
+	call	DrawStringReverse
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522818
-	call	16402871
+	call	ApFuncCall
 	lda	xwa, (xsp+58)
 	or	xhl, xhl
 	jr	z, 7
@@ -13537,7 +13537,7 @@ AudioCtrl_DataBlock:
 	ld	xbc, 30
 	jr	5
 	ld	xbc, 29
-	call	16432188
+	call	DrawBitmap
 	jrl	192
 	ld	wa, (xsp+10)
 	calr	61678
@@ -13559,13 +13559,13 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457342
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457343
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+78)
 	ld	bc, iz
 	ld	de, hl
@@ -13575,13 +13575,13 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+10), hl
 	ld	wa, iz
 	ld	de, (xsp+4)
@@ -13590,7 +13590,7 @@ AudioCtrl_DataBlock:
 	jr	z, 32
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	.byte 0xd7
 	swi	2
 	.byte 0x9b, 0x9f
@@ -13599,15 +13599,15 @@ AudioCtrl_DataBlock:
 	swi	2
 	.byte 0x89
 	ld	de, (xsp+14)
-	call	16382357
+	call	MainLswPartAdd
 	jr	24
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
 	ld	bc, (xsp+12)
 	ld	de, (xsp+10)
-	call	16382274
+	call	MainLswAdd
 	lds32	xhl, 0
 	pop	xiz
 	lda	xsp, (xsp+78)
@@ -13652,7 +13652,7 @@ AudioCtrl_DataBlock:
 	.byte 0xd7
 	addm32_24	13162632, xwa
 	nop
-	call	16370311
+	call	DrawEditSw
 	jrl	566
 	ld	wa, (xsp+12)
 	calr	61342
@@ -13695,14 +13695,14 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522818
-	call	16402871
+	call	ApFuncCall
 	or	xhl, xhl
 	jr	z, 78
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	ld	wa, iz
 	ld	de, (xsp+6)
@@ -13711,17 +13711,17 @@ AudioCtrl_DataBlock:
 	jr	z, 26
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+4), hl
 	ld	wa, iz
 	ld	bc, (xsp+4)
-	call	16569591
+	call	SndParam_LookupViaEncode
 	jr	22
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
-	call	16569399
+	call	SndParam_LookupReadOnly
 	jr	2
 	lds	hl, 0
 	ld	(xsp+52), hl
@@ -13737,7 +13737,7 @@ AudioCtrl_DataBlock:
 	ld	(xde+8), xwa
 	ld	xwa, (xsp+8)
 	ld	xbc, 31457346
-	call	16402871
+	call	ApFuncCall
 	lda	xde, (xsp+16)
 	lda	xwa, (xsp+64)
 	lda	xbc, (xsp+60)
@@ -13760,7 +13760,7 @@ AudioCtrl_DataBlock:
 	pushw	7
 	pushw	0
 	pushw	0
-	call	16437380
+	call	DrawStringReverse
 	lda	xwa, (xsp+64)
 	.byte 0x98, 0x06
 	push	xwa
@@ -13779,7 +13779,7 @@ AudioCtrl_DataBlock:
 	zcf
 	nop
 	lds32	xbc, 2
-	call	16432188
+	call	DrawBitmap
 	ldw	wa, 128
 	.byte 0x9f
 	ldw	ix, 55456
@@ -13791,7 +13791,7 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+60)
 	add	(xwa+2), bc
 	lds32	xbc, 3
-	call	16432188
+	call	DrawBitmap
 	jrl	192
 	ld	wa, (xsp+12)
 	calr	60968
@@ -13812,13 +13812,13 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, (xsp+8)
 	ld	xbc, 31457342
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31457343
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+76)
 	ld	bc, iz
 	ld	de, hl
@@ -13828,13 +13828,13 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	iz, hl
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+12), hl
 	ld	wa, iz
 	ld	de, (xsp+6)
@@ -13843,7 +13843,7 @@ AudioCtrl_DataBlock:
 	jr	z, 32
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+4), hl
 	.byte 0x9f
 	incf
@@ -13851,15 +13851,15 @@ AudioCtrl_DataBlock:
 	ld	wa, iz
 	ld	bc, (xsp+6)
 	ld	de, (xsp+16)
-	call	16382357
+	call	MainLswPartAdd
 	jr	24
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, xhl
 	ld	bc, (xsp+14)
 	ld	de, (xsp+12)
-	call	16382274
+	call	MainLswAdd
 	lds32	xhl, 0
 	pop	xiz
 	lda	xsp, (xsp+76)
@@ -13906,14 +13906,14 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522818
-	call	16402871
+	call	ApFuncCall
 	or	xhl, xhl
 	jrl	z, 179
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+4), hl
 	ld	wa, (xsp+4)
 	cp	wa, 65535
@@ -13922,21 +13922,21 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+14), hl
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+14)
-	call	16569591
+	call	SndParam_LookupViaEncode
 	ld	(xsp+16), hl
 	jr	28
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xiz, xhl
 	ld	xwa, xiz
-	call	16569399
+	call	SndParam_LookupReadOnly
 	ld	(xsp+16), hl
 	.byte 0x9f
 	rcf
@@ -13976,7 +13976,7 @@ AudioCtrl_DataBlock:
 	pushw	0
 	pushw	1
 	ld	xde, 15333484
-	call	16437380
+	call	DrawStringReverse
 	lds32	xhl, 0
 	jrl	552
 	ld	xwa, (xsp+30)
@@ -13990,13 +13990,13 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+4), hl
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+10), hl
 	ld	wa, (xsp+4)
 	cp	wa, 65535
@@ -14005,11 +14005,11 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+14), hl
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+14)
-	call	16569591
+	call	SndParam_LookupViaEncode
 	ld	(xsp+16), hl
 	.byte 0x9f
 	rcf
@@ -14030,10 +14030,10 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xiz, xhl
 	ld	xwa, xiz
-	call	16569399
+	call	SndParam_LookupReadOnly
 	ld	(xsp+16), hl
 	.byte 0x9f
 	rcf
@@ -14044,7 +14044,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, xiz
 	lds	bc, 0
 	ld	de, (xsp+10)
-	call	16382090
+	call	MainLswPut
 	.byte 0x9f
 	rcf
 	push	xsp
@@ -14067,13 +14067,13 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457342
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+16), hl
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457343
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+34)
 	ld	bc, (xsp+16)
 	ld	de, hl
@@ -14083,7 +14083,7 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+4), hl
 	ld	wa, (xsp+16)
 	ld	(xsp+8), wa
@@ -14091,7 +14091,7 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+10), hl
 	ld	wa, (xsp+4)
 	ld	de, (xsp+6)
@@ -14100,7 +14100,7 @@ AudioCtrl_DataBlock:
 	jr	z, 34
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+14), hl
 	.byte 0x9f
 	ldwio	4, 1695
@@ -14113,12 +14113,12 @@ AudioCtrl_DataBlock:
 	jrl	-356
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xiz, xhl
 	ld	xwa, xiz
 	ld	bc, (xsp+16)
 	ld	de, (xsp+10)
-	call	16382274
+	call	MainLswAdd
 	jrl	-385
 	ld	wa, bc
 	calr	60078
@@ -14129,13 +14129,13 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+4), hl
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+10), hl
 	ld	wa, (xsp+4)
 	ld	de, (xsp+6)
@@ -14144,7 +14144,7 @@ AudioCtrl_DataBlock:
 	jr	z, 33
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+14), hl
 	.byte 0x9f
 	ldwio	4, 1695
@@ -14157,12 +14157,12 @@ AudioCtrl_DataBlock:
 	jrl	-488
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	xiz, xhl
 	ld	xwa, xiz
 	lds	bc, 1
 	ld	de, (xsp+10)
-	call	16382090
+	call	MainLswPut
 	jrl	-516
 	ld	xwa, (xsp+30)
 	cp	xwa, 8
@@ -14223,11 +14223,11 @@ AudioCtrl_DataBlock:
 	.byte 0xd7
 	addm32_24	13162632, xwa
 	nop
-	call	16370311
+	call	DrawEditSw
 	lda	xbc, (xsp+68)
 	.byte 0xbf
 	.asciz "B204"
-	call	16459251
+	call	GetFrameSPSize
 	lda	xhl, (xsp+82)
 	ld	wa, (xhl+4)
 	.byte 0x93
@@ -14253,13 +14253,13 @@ AudioCtrl_DataBlock:
 	dec	2, de
 	ld	(xbc+2), de
 	ldw	de, 248
-	call	16427402
+	call	DrawLine
 	lda	xwa, (xsp+74)
 	incm	1, (xwa)
 	lda	xbc, (xsp+70)
 	incm	1, (xbc)
 	ldw	de, 255
-	call	16427402
+	call	DrawLine
 	ld16_24	wa, 149396
 	ld	(xsp+12), wa
 	sla	wa, 3
@@ -14291,7 +14291,7 @@ AudioCtrl_DataBlock:
 	pushw	63602
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+82)
 	lda	xbc, (xsp+78)
@@ -14300,7 +14300,7 @@ AudioCtrl_DataBlock:
 	push	xhl
 	pushw	0
 	pushw	247
-	call	16436908
+	call	DrawStringCentered
 	incm	1, (xsp+12)
 	incm	1, (xsp+18)
 	.byte 0x9f
@@ -14339,7 +14339,7 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, 20971524
 	ld	xbc, 31457374
-	call	16402738
+	call	FuncCall
 	jrl	411
 	ld	xwa, (xsp+90)
 	ld	(xsp+4), xwa
@@ -14415,12 +14415,12 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xwa+2)
 	push	xwa
 	push	xbc
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+54)
 	ld	xwa, (xsp+14)
 	ld	xbc, 31457346
-	call	16402871
+	call	ApFuncCall
 	lda	xbc, (xsp+78)
 	lda	xwa, (xsp+82)
 	lda	xde, (xsp+22)
@@ -14443,7 +14443,7 @@ AudioCtrl_DataBlock:
 	pushw	7
 	pushw	0
 	pushw	0
-	call	16437380
+	call	DrawStringReverse
 	incm	1, (xsp+12)
 	incm	1, (xsp+20)
 	.byte 0x9f
@@ -14478,13 +14478,13 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, (xsp+14)
 	ld	xbc, 31457342
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+20), hl
 	ld	de, (xsp+8)
 	exts	xde
 	ld	xwa, (xsp+14)
 	ld	xbc, 31457343
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+94)
 	ld	bc, (xsp+20)
 	ld	de, hl
@@ -14494,7 +14494,7 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+14)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	extz	xhl
 	ld	wa, (xsp+20)
 	extz	xwa
@@ -14503,7 +14503,7 @@ AudioCtrl_DataBlock:
 	add	xde, xhl
 	ld	xwa, 20971524
 	ld	xbc, 31457449
-	call	16403043
+	call	MainFuncCall
 	lds32	xhl, 0
 	pop	xiz
 	lda	xsp, (xsp+94)
@@ -14532,11 +14532,11 @@ AudioCtrl_DataBlock:
 	.byte 0xd7
 	addm32_24	13162632, xwa
 	nop
-	call	16370311
+	call	DrawEditSw
 	lda	xbc, (xsp+38)
 	lda	xde, (xsp+36)
 	ldw	wa, 52
-	call	16459251
+	call	GetFrameSPSize
 	lda	xhl, (xsp+52)
 	ld	wa, (xhl+4)
 	.byte 0x93
@@ -14562,13 +14562,13 @@ AudioCtrl_DataBlock:
 	dec	2, de
 	ld	(xbc+2), de
 	ldw	de, 248
-	call	16427402
+	call	DrawLine
 	lda	xwa, (xsp+44)
 	incm	1, (xwa)
 	lda	xbc, (xsp+40)
 	incm	1, (xbc)
 	ldw	de, 255
-	call	16427402
+	call	DrawLine
 	ld16_24	iz, 149396
 	sla	iz, 3
 	.byte 0xd7
@@ -14592,7 +14592,7 @@ AudioCtrl_DataBlock:
 	pushw	63606
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+52)
 	lda	xbc, (xsp+48)
@@ -14601,7 +14601,7 @@ AudioCtrl_DataBlock:
 	push	xhl
 	pushw	0
 	pushw	247
-	call	16436908
+	call	DrawStringCentered
 	inc	1, iz
 	.byte 0xd7
 	swi	2
@@ -14653,13 +14653,13 @@ AudioCtrl_DataBlock:
 	zcf
 	ld	xwa, (xsp+10)
 	ld	xbc, 31457342
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+14), hl
 	ld	de, (xsp+8)
 	exts	xde
 	ld	xwa, (xsp+10)
 	ld	xbc, 31457343
-	call	16402871
+	call	ApFuncCall
 	ld	xwa, (xsp+16)
 	ld	bc, (xsp+14)
 	ld	de, hl
@@ -14669,7 +14669,7 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+10)
 	ld	xbc, 31522816
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+2), hl
 	ld	wa, (xsp+14)
 	ld	(xsp+4), wa
@@ -14677,13 +14677,13 @@ AudioCtrl_DataBlock:
 	exts	xde
 	ld	xwa, (xsp+10)
 	ld	xbc, 31457345
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+6), hl
 	ld	de, (xsp+8)
 	exts	xde
 	ld	xwa, (xsp+10)
 	ld	xbc, 31522817
-	call	16402871
+	call	ApFuncCall
 	ld	(xsp+12), hl
 	ld	wa, (xsp+2)
 	cp	wa, 65535
@@ -14705,7 +14705,7 @@ AudioCtrl_DataBlock:
 	jr	nz, 105
 	ld	wa, (xsp+2)
 	ldw	bc, 1026
-	call	16569591
+	call	SndParam_LookupViaEncode
 	cps	hl, 0
 	jr	nz, 91
 	.byte 0x9f
@@ -14713,13 +14713,13 @@ AudioCtrl_DataBlock:
 	ld	wa, (xsp+4)
 	ldw	bc, 1026
 	lds	de, 1
-	call	16382173
+	call	MainLswPartPut
 	.byte 0x9f
 	ei	4
 	ld	wa, (xsp+4)
 	ldw	bc, 1027
 	lds	de, 1
-	call	16382173
+	call	MainLswPartPut
 	.byte 0x9f
 	ei	4
 	ld	wa, (xsp+4)
@@ -14728,7 +14728,7 @@ AudioCtrl_DataBlock:
 	jr	40
 	ld	wa, (xsp+2)
 	ldw	bc, 1025
-	call	16569591
+	call	SndParam_LookupViaEncode
 	cps	hl, 0
 	jr	nz, 34
 	.byte 0x9f
@@ -14736,13 +14736,13 @@ AudioCtrl_DataBlock:
 	ld	wa, (xsp+4)
 	ldw	bc, 1026
 	lds	de, 0
-	call	16382173
+	call	MainLswPartPut
 	.byte 0x9f
 	ei	4
 	ld	wa, (xsp+4)
 	ldw	bc, 1027
 	lds	de, 0
-	call	16382173
+	call	MainLswPartPut
 	lds32	xhl, 0
 	jr	36
 	.byte 0x9f
@@ -14750,7 +14750,7 @@ AudioCtrl_DataBlock:
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+14)
 	ld	de, (xsp+6)
-	call	16382357
+	call	MainLswPartAdd
 	jr	-22
 	cp	xde, 1026
 	jr	z, 8

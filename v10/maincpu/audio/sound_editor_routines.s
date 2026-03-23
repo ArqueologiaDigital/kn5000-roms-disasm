@@ -68,7 +68,7 @@ SeMenuTitleFunc:
 	ret
 
 SeMenuTitleFunc_DisplayData:
-	jp	15769954
+	jp	UpdSeSel_ProcessStep
 	jp	15776726
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
@@ -89,7 +89,7 @@ SeEasyTitleFunc:
 	ret
 
 SeEasyTitleFunc_DisplayData:
-	jp	15771301
+	jp	UpdSeSel_ExtendedOps_Data
 	jp	15777038
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
@@ -110,7 +110,7 @@ SeTonTon1TitleFunc:
 	ret
 
 SeTonTon1TitleFunc_DisplayData:
-	jp	15774685
+	jp	SeMenu_AltUpdate
 	jp	15776869
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
@@ -131,7 +131,7 @@ SeTonTon2TitleFunc:
 	ret
 
 SeTonTon2TitleFunc_DisplayData:
-	jp	15775060
+	jp	SeMenu_AltUpdate_Data
 	jp	15776880
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
@@ -194,7 +194,7 @@ SeTonHyb1TitleFunc:
 	ret
 
 SeTonHyb1TitleFunc_DisplayData:
-	jp	15775726
+	jp	SeMenu_ControllerUpdate
 	jp	15776913
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
@@ -698,7 +698,7 @@ SeWrtMemTitleFunc:
 	ret
 
 SeWrtMemTitleFunc_DisplayData:
-	jp	15776196
+	jp	SeMenu_CopyWriteUpdate_Data
 	jp	15777034
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)

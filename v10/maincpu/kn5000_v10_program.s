@@ -988,15 +988,15 @@ Voice_InitBankDataSafe:
 
 Voice_InitBankDataSafe_Alt1:
 	push	xiz
-	call	16184125
+	call	Voice_BankLookupCode
 	pop	xiz
 	ret
 	push	xiz
-	call	16184142
+	call	Voice_RefreshBankData
 	pop	xiz
 	ret
 	push	xiz
-	call	16183473
+	call	Voice_InitBankTables
 	pop	xiz
 	ret
 
@@ -1203,11 +1203,11 @@ Voice_FactoryPresetData:
 	ld	xwa, (xsp+8)
 	sla	xwa, 0
 	ld	xbc, (xsp+4)
-	call	16714766
+	call	Math_DivideSigned32
 	ld	xiz, xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xbc, (xsp+34)
 	ld	xwa, xbc
@@ -2451,10 +2451,10 @@ Debug_UartDelay:
 Debug_SWI_JumpTable:
 	swi	7
 	swi	7
-	jp	15666168
-	jp	15682388
-	jp	15664399
-	jp	15664070
+	jp	Boot_InitWorkRAM_Trailer
+	jp	HDAE5000_Init_DetectAndVerify
+	jp	Boot_InitIOPorts
+	jp	BOOT_ENTRY_POINT
 	ret
 
 Get_Firmware_Version:

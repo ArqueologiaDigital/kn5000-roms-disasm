@@ -29,7 +29,7 @@ FDemo_DisplayResourceData:
 	.byte 0xf0
 	jr	c, -8
 	push	xiz
-	call	16715680
+	call	Strlen
 	pushw	hl
 	push	xiz
 	.byte 0xf3
@@ -46,13 +46,13 @@ FDemo_DisplayResourceData:
 	.long Data_DiskFuncPtrTbl_EA0B00
 	pushw	112
 	push	xwa
-	call	16715201
+	call	Strcat
 	lda	xsp, (xsp+22)
 	.byte 0xf3
 	swi	5
 	ldio	1, 48
 	ld	xbc, 15335542
-	call	16288711
+	call	FileIO_OpenWithMode
 	ld	(xsp+4), hl
 	.byte 0x9f, 0x04
 	push	xsp
@@ -62,7 +62,7 @@ FDemo_DisplayResourceData:
 	calr	194
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
-	call	16289140
+	call	FileIO_ReadBlock
 	or	xhl, xhl
 	jr	z, 31
 	ld	xwa, 256
@@ -74,12 +74,12 @@ FDemo_DisplayResourceData:
 	pushw	256
 	push	xbc
 	push	xhl
-	call	16715161
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	lds	iz, 1
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
-	call	16289140
+	call	FileIO_ReadBlock
 	or	xhl, xhl
 	jr	z, 23
 	ld	xwa, 256
@@ -88,7 +88,7 @@ FDemo_DisplayResourceData:
 	lda	xwa, (xsp+10)
 	push	xwa
 	push	xhl
-	call	16715161
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	inc	1, iz
 	cp	iz, 8
@@ -101,13 +101,13 @@ FDemo_DisplayResourceData:
 	lds	iz, 0
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
-	call	16289140
+	call	FileIO_ReadBlock
 	inc	1, iz
 	cp	iz, 72
 	jr	lt, -20
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
-	call	16289140
+	call	FileIO_ReadBlock
 	or	xhl, xhl
 	jr	z, 39
 	ld	xwa, 256
@@ -116,14 +116,14 @@ FDemo_DisplayResourceData:
 	lda	xwa, (xsp+10)
 	push	xwa
 	push	xhl
-	call	16715161
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
-	call	16289140
+	call	FileIO_ReadBlock
 	or	xhl, xhl
 	jr	nz, -39
-	call	16288840
+	call	FileIO_CloseHandle
 	ld	hl, (xsp+4)
 	pop	xiz
 	.byte 0xf3
@@ -418,7 +418,7 @@ FDemo_LinkedListSearchInsert:
 	push	xwa
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	16715573
+	call	Strcmp
 	inc	8, xsp
 	cps	hl, 0
 	jr	z, 16
@@ -452,7 +452,7 @@ FDemo_LinkedListSearchInsert:
 	jr	z, 18
 	push	xwa
 	push	xiz
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, (xsp+4)
 	ld	(xiz+16), xwa
@@ -688,11 +688,11 @@ Demo_SelectEntry_ByteTable:
 	.byte 0xf2, 0x4d, 0x2a, 0xf2, 0xee
 	ldda8	a, 10404
 	extz	wa
-	jp	16271021
+	jp	Seq_DispatchEventType6
 	setda	3, 10413
 	cpdi8	36152, 228
 	jr	z, 11
-	call	15870395
+	call	CDlikeSwTtl_SetRecordAndNotify
 	stdi8	4440, 0
 	jr	5
 	stdi8	4440, 18
@@ -3092,7 +3092,7 @@ FileIO_ByteBlock_DemoProc1:
 	push	xiz
 	ld	(xsp+36), bc
 	ld	(xsp+38), wa
-	call	16291311
+	call	GetCurrentFileIndex
 	cps	hl, 0
 	jr	ge, 6
 	ldw	hl, 65432
@@ -3103,22 +3103,22 @@ FileIO_ByteBlock_DemoProc1:
 	.byte 0x99
 	extz	iz
 	ld	wa, hl
-	call	16291363
+	call	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+26)
 	ld	bc, iz
-	call	16290174
+	call	FileIO_FormatFileIndex
 	lda	xbc, (xsp+26)
 	lda	xwa, (xsp+12)
 	lds	de, 1
-	call	16290219
+	call	FileIO_ReadHeader
 	lda	xwa, (xsp+12)
 	.byte 0x41
 	.long Resource_RegionPad
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
-	call	16288706
+	call	FileIO_ReturnError
 	jrl	128
 	lds	wa, 1
 	calr	61392
@@ -3130,19 +3130,19 @@ FileIO_ByteBlock_DemoProc1:
 	ld	wa, (xsp+38)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	xiz, xhl
 	add	xiz, 176
 	ld	wa, (xsp+36)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+4), xhl
 	ld	xwa, 176
 	add	(xsp+4), xwa
 	ld	xwa, xiz
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	ld	iz, hl
 	cps	iz, 0
 	jr	lt, 46
@@ -3154,7 +3154,7 @@ FileIO_ByteBlock_DemoProc1:
 	sub	(xwa), l
 	ldio	33, 29
 	jrl	ov, -1907
-	call	16288706
+	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, (xsp+36)
 	extz	wa
@@ -3162,7 +3162,7 @@ FileIO_ByteBlock_DemoProc1:
 	call	16474806
 	jr	3
 	ldw	iz, 65434
-	call	16288840
+	call	FileIO_CloseHandle
 	ld	hl, iz
 	pop	xiz
 	lda	xsp, (xsp+36)
@@ -3171,7 +3171,7 @@ FileIO_ByteBlock_DemoProc1:
 	push	xiz
 	ld	(xsp+36), bc
 	ld	(xsp+38), wa
-	call	16291311
+	call	GetCurrentFileIndex
 	cps	hl, 0
 	jr	ge, 6
 	ldw	hl, 65432
@@ -3180,21 +3180,21 @@ FileIO_ByteBlock_DemoProc1:
 	extz	wa
 	ld	(xsp+10), wa
 	ld	wa, hl
-	call	16291363
+	call	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+26)
 	ld	bc, (xsp+10)
-	call	16290174
+	call	FileIO_FormatFileIndex
 	lda	xbc, (xsp+26)
 	lda	xwa, (xsp+12)
 	lds	de, 1
-	call	16290219
+	call	FileIO_ReadHeader
 	lda	xwa, (xsp+12)
 	ld	xbc, 15336016
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
-	call	16288706
+	call	FileIO_ReturnError
 	jrl	199
 	lds	wa, 1
 	calr	61175
@@ -3214,7 +3214,7 @@ FileIO_ByteBlock_DemoProc1:
 	add	(xsp+4), xwa
 	ld	xwa, xiz
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	ld	iz, hl
 	cps	iz, 0
 	jrl	lt, 130
@@ -3224,7 +3224,7 @@ FileIO_ByteBlock_DemoProc1:
 	lda_24	xwa, 2020176
 	.byte 0xaf, 0x04, 0x80
 	ld	xbc, 16
-	call	16289140
+	call	FileIO_ReadBlock
 	ld16_24	wa, 2020189
 	extz	xwa
 	ld	(xsp+8), xwa
@@ -3233,25 +3233,25 @@ FileIO_ByteBlock_DemoProc1:
 	ld	wa, (xsp+38)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	xiz, xhl
 	add	xiz, 176
 	ld	wa, (xsp+36)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+4), xhl
 	ld	xwa, 176
 	add	(xsp+4), xwa
 	ld	xwa, xiz
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	lda_24	xwa, 2020176
 	.byte 0xaf, 0x04
 	sub	(xwa), l
 	ldio	33, 29
 	jrl	ov, -1907
-	call	16288706
+	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, (xsp+36)
 	extz	wa
@@ -3259,7 +3259,7 @@ FileIO_ByteBlock_DemoProc1:
 	call	16474820
 	jr	3
 	ldw	iz, 65434
-	call	16288840
+	call	FileIO_CloseHandle
 	ld	hl, iz
 	pop	xiz
 	lda	xsp, (xsp+36)
@@ -3267,7 +3267,7 @@ FileIO_ByteBlock_DemoProc1:
 	lda	xsp, (xsp-30)
 	push	xiz
 	ld	(xsp+32), wa
-	call	16291311
+	call	GetCurrentFileIndex
 	cps	hl, 0
 	jr	ge, 6
 	ldw	hl, 65432
@@ -3278,21 +3278,21 @@ FileIO_ByteBlock_DemoProc1:
 	.byte 0x99
 	extz	iz
 	ld	wa, hl
-	call	16291363
+	call	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+22)
 	ld	bc, iz
-	call	16290174
+	call	FileIO_FormatFileIndex
 	lda	xbc, (xsp+22)
 	lda	xwa, (xsp+8)
 	lds	de, 2
-	call	16290219
+	call	FileIO_ReadHeader
 	lda	xwa, (xsp+8)
 	ld	xbc, 15336020
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
-	call	16288706
+	call	FileIO_ReturnError
 	jrl	145
 	lds	wa, 2
 	calr	60891
@@ -3305,12 +3305,12 @@ FileIO_ByteBlock_DemoProc1:
 	jr	118
 	ld	wa, (xsp+32)
 	extz	wa
-	call	16021850
+	call	SeqLoad_ProcessDataBlock
 	ld	(xsp+4), xhl
-	call	16291311
+	call	GetCurrentFileIndex
 	ld	wa, hl
 	lds	bc, 2
-	call	16291439
+	call	UpdateFileEntry
 	cp	(xsp+4), xhl
 	jr	c, 81
 	ld	wa, (xsp+32)
@@ -3323,12 +3323,12 @@ FileIO_ByteBlock_DemoProc1:
 	lda_24	xwa, 700416
 	add	xwa, xbc
 	ld	xbc, 2048
-	call	16289140
+	call	FileIO_ReadBlock
 	lda_24	xwa, 720896
 	add	xwa, xiz
 	ld	xbc, (xsp+4)
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, (xsp+32)
 	extz	wa
@@ -3338,12 +3338,12 @@ FileIO_ByteBlock_DemoProc1:
 	jr	lt, 19
 	ld	wa, (xsp+32)
 	lds	bc, 0
-	call	16335251
+	call	SetSongSlotValue_Entry
 	jr	8
 	ldw	iz, 65431
 	jr	3
 	ldw	iz, 65434
-	call	16288840
+	call	FileIO_CloseHandle
 	ld	hl, iz
 	pop	xiz
 	lda	xsp, (xsp+30)
@@ -3352,7 +3352,7 @@ FileIO_ByteBlock_DemoProc1:
 	pushw	iz
 	ld	(xsp+26), bc
 	ld	(xsp+28), wa
-	call	16291311
+	call	GetCurrentFileIndex
 	cps	hl, 0
 	jr	ge, 5
 	ldw	hl, 65432
@@ -3363,21 +3363,21 @@ FileIO_ByteBlock_DemoProc1:
 	.byte 0x99
 	extz	iz
 	ld	wa, hl
-	call	16291363
+	call	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+16)
 	ld	bc, iz
-	call	16290174
+	call	FileIO_FormatFileIndex
 	lda	xbc, (xsp+16)
 	lda	xwa, (xsp+2)
 	lds	de, 3
-	call	16290219
+	call	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
 	ld	xbc, 15336024
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 6
-	call	16288706
+	call	FileIO_ReturnError
 	jr	34
 	calr	60876
 	cps	hl, 0
@@ -3390,7 +3390,7 @@ FileIO_ByteBlock_DemoProc1:
 	ld	iz, hl
 	jr	3
 	ldw	iz, 65434
-	call	16288840
+	call	FileIO_CloseHandle
 	ld	hl, iz
 	popw	iz
 	lda	xsp, (xsp+28)
@@ -3399,7 +3399,7 @@ FileIO_ByteBlock_DemoProc1:
 	pushw	iz
 	ld	(xsp+40), bc
 	ld	(xsp+42), wa
-	call	16291311
+	call	GetCurrentFileIndex
 	cps	hl, 0
 	jr	ge, 6
 	ldw	hl, 65432
@@ -3410,27 +3410,27 @@ FileIO_ByteBlock_DemoProc1:
 	.byte 0x99
 	extz	iz
 	ld	wa, hl
-	call	16291363
+	call	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+30)
 	ld	bc, iz
-	call	16290174
+	call	FileIO_FormatFileIndex
 	lda	xbc, (xsp+30)
 	lda	xwa, (xsp+16)
 	lds	de, 4
-	call	16290219
+	call	FileIO_ReadHeader
 	lda	xwa, (xsp+16)
 	ld	xbc, 15336028
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
-	call	16288706
+	call	FileIO_ReturnError
 	jrl	254
 	lds	wa, 4
 	calr	60538
 	cps	hl, 0
 	jr	nz, 10
-	call	16288840
+	call	FileIO_CloseHandle
 	.byte 0x33, 0x9a
 	.long NakaInst_WindowID_Cont
 	ld	wa, (xsp+42)
@@ -3440,14 +3440,14 @@ FileIO_ByteBlock_DemoProc1:
 	ldw	(xsp+10), 470
 	extz	xwa
 	ld	xbc, 470
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+2), xhl
 	ld	xwa, 16
 	add	(xsp+2), xwa
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 470
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+6), xhl
 	ld	xwa, 16
 	add	(xsp+6), xwa
@@ -3488,7 +3488,7 @@ FileIO_ByteBlock_DemoProc1:
 	ld	(xsp+14), a
 	ld	xwa, (xsp+2)
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	ld	iz, hl
 	cps	iz, 0
 	jr	lt, 53
@@ -3496,13 +3496,13 @@ FileIO_ByteBlock_DemoProc1:
 	extz	wa
 	ld	c, (xsp+14)
 	extz	bc
-	call	16713034
+	call	TmFlashWrite_Block1
 	lda_24	xwa, 1966080
 	.byte 0xaf, 0x06, 0x80
 	ld	bc, (xsp+10)
 	extz	xbc
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	a, (xsp+12)
 	extz	wa
@@ -3510,7 +3510,7 @@ FileIO_ByteBlock_DemoProc1:
 	extz	bc
 	ld	de, iz
 	call	16713035
-	call	16288840
+	call	FileIO_CloseHandle
 	ld	hl, iz
 	popw	iz
 	lda	xsp, (xsp+42)
@@ -3519,7 +3519,7 @@ FileIO_ByteBlock_DemoProc1:
 	push	xiz
 	ld	(xsp+36), bc
 	ld	(xsp+38), wa
-	call	16291311
+	call	GetCurrentFileIndex
 	cps	hl, 0
 	jr	ge, 6
 	.byte 0x33, 0x98
@@ -3530,27 +3530,27 @@ FileIO_ByteBlock_DemoProc1:
 	.byte 0x99
 	extz	iz
 	ld	wa, hl
-	call	16291363
+	call	GetFileEntryPtr
 	ld	xde, xhl
 	lda	xwa, (xsp+26)
 	ld	bc, iz
-	call	16290174
+	call	FileIO_FormatFileIndex
 	lda	xbc, (xsp+26)
 	lda	xwa, (xsp+12)
 	lds	de, 4
-	call	16290219
+	call	FileIO_ReadHeader
 	lda	xwa, (xsp+12)
 	ld	xbc, 15336032
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
-	call	16288706
+	call	FileIO_ReturnError
 	jrl	171
 	lds	wa, 4
 	calr	60196
 	cps	hl, 0
 	jr	nz, 10
-	call	16288840
+	call	FileIO_CloseHandle
 	ldw	hl, 65434
 	jrl	152
 	cpw	(xsp+38), 2
@@ -3561,13 +3561,13 @@ FileIO_ByteBlock_DemoProc1:
 	ldb	h, 32
 	extz	xwa
 	ld	xbc, 9400
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	xiz, xhl
 	add	xiz, 16
 	ld	wa, (xsp+36)
 	extz	xwa
 	ld	xbc, 9400
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+4), xhl
 	ld	xwa, 16
 	add	(xsp+4), xwa
@@ -3581,7 +3581,7 @@ FileIO_ByteBlock_DemoProc1:
 	ld	(xsp+10), 64
 	ld	xwa, xiz
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	ld	iz, hl
 	cps	iz, 0
 	jr	lt, 43
@@ -3592,14 +3592,14 @@ FileIO_ByteBlock_DemoProc1:
 	.byte 0xaf, 0x04, 0x80
 	ld	bc, (xsp+8)
 	extz	xbc
-	call	16289140
-	call	16288706
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	a, (xsp+10)
 	extz	wa
 	ld	bc, iz
 	call	16713190
-	call	16288840
+	call	FileIO_CloseHandle
 	ld	hl, iz
 	pop	xiz
 	lda	xsp, (xsp+36)
@@ -6649,7 +6649,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 82
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lda_24	xwa, 155394
 	add	xwa, xhl
 	.byte 0xb0, 0x9f
@@ -6681,7 +6681,7 @@ FileIO_ByteBlock_DemoProc2:
 	lda	xwa, (xsp+2)
 	.byte 0x41
 	.long FileOp_StubAndDirNames
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
 	ld	xhl, 15336520
@@ -6691,12 +6691,12 @@ FileIO_ByteBlock_DemoProc2:
 	add	wa, 16
 	extz	xwa
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	ld	xwa, 154578
 	ld	xbc, 16
-	call	16289140
+	call	FileIO_ReadBlock
 	sti8_24	154594, 0
-	call	16288840
+	call	FileIO_CloseHandle
 	lda_24	xhl, 154578
 	popw	iz
 	lda	xsp, (xsp+26)
@@ -6724,17 +6724,17 @@ FileIO_ByteBlock_DemoProc2:
 	calr	61428
 	lda	xwa, (xsp+4)
 	ld	xbc, 15336646
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
 	ld	xhl, 15336520
 	jr	72
 	ld	xwa, 13
 	lds	bc, 0
-	call	16289504
-	call	16289020
+	call	FileIO_SeekAndReadBlock
+	call	FileIO_ReadByte
 	ld	iz, hl
-	call	16289020
+	call	FileIO_ReadByte
 	sll	hl, 8
 	or	iz, hl
 	.byte 0x9f, 0x1c
@@ -6742,12 +6742,12 @@ FileIO_ByteBlock_DemoProc2:
 	ld	(xde), 0
 	nop
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	ld	xwa, 154600
 	ld	xbc, 16
-	call	16289140
+	call	FileIO_ReadBlock
 	sti8_24	154616, 0
-	call	16288840
+	call	FileIO_CloseHandle
 	lda_24	xhl, 154600
 	pop	xiz
 	lda	xsp, (xsp+26)
@@ -6775,7 +6775,7 @@ FileIO_ByteBlock_DemoProc2:
 	calr	61281
 	lda	xwa, (xsp+2)
 	ld	xbc, 15336650
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
 	ld	xhl, 15336520
@@ -6785,12 +6785,12 @@ FileIO_ByteBlock_DemoProc2:
 	add	wa, 256
 	extz	xwa
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	ld	xwa, 154622
 	ld	xbc, 16
-	call	16289140
+	call	FileIO_ReadBlock
 	sti8_24	154638, 0
-	call	16288840
+	call	FileIO_CloseHandle
 	lda_24	xhl, 154622
 	popw	iz
 	lda	xsp, (xsp+26)
@@ -6819,7 +6819,7 @@ FileIO_ByteBlock_DemoProc2:
 	calr	61156
 	lda	xwa, (xsp+2)
 	ld	xbc, 15336654
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
 	ld	xhl, 15336520
@@ -6832,12 +6832,12 @@ FileIO_ByteBlock_DemoProc2:
 	add	wa, 160
 	extz	xwa
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	ld	xwa, 154644
 	ld	xbc, 13
-	call	16289140
+	call	FileIO_ReadBlock
 	sti8_24	154657, 0
-	call	16288840
+	call	FileIO_CloseHandle
 	lda_24	xhl, 154644
 	popw	iz
 	lda	xsp, (xsp+28)
@@ -6865,7 +6865,7 @@ FileIO_ByteBlock_DemoProc2:
 	calr	61027
 	lda	xwa, (xsp+2)
 	ld	xbc, 15336658
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
 	.byte 0x43
@@ -6876,12 +6876,12 @@ FileIO_ByteBlock_DemoProc2:
 	add	wa, 16
 	extz	xwa
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	ld	xwa, 154666
 	ld	xbc, 16
-	call	16289140
+	call	FileIO_ReadBlock
 	sti8_24	154682, 0
-	call	16288840
+	call	FileIO_CloseHandle
 	lda_24	xhl, 154666
 	popw	iz
 	lda	xsp, (xsp+26)
@@ -6908,7 +6908,7 @@ FileIO_ByteBlock_DemoProc2:
 	calr	60907
 	lda	xwa, (xsp+2)
 	ld	xbc, 15336662
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
 	.byte 0x43
@@ -6916,12 +6916,12 @@ FileIO_ByteBlock_DemoProc2:
 	jr	40
 	ld	xwa, 18816
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	ld	xwa, 154688
 	ld	xbc, 16
-	call	16289140
+	call	FileIO_ReadBlock
 	sti8_24	154704, 0
-	call	16288840
+	call	FileIO_CloseHandle
 	lda_24	xhl, 154688
 	popw	iz
 	lda	xsp, (xsp+24)
@@ -6949,7 +6949,7 @@ FileIO_ByteBlock_DemoProc2:
 	calr	60792
 	lda	xwa, (xsp+2)
 	ld	xbc, 15336666
-	call	16288711
+	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
 	ld	xhl, 15336520
@@ -6960,12 +6960,12 @@ FileIO_ByteBlock_DemoProc2:
 	add	wa, 19111
 	extz	xwa
 	lds	bc, 0
-	call	16289504
+	call	FileIO_SeekAndReadBlock
 	lda_24	xwa, 154711
 	ld	xbc, 13
-	call	16289140
+	call	FileIO_ReadBlock
 	sti8_24	154724, 0
-	call	16288840
+	call	FileIO_CloseHandle
 	lda_24	xhl, 154710
 	popw	iz
 	lda	xsp, (xsp+26)
@@ -8749,7 +8749,7 @@ ValidateSigned_Positive:
 	ret
 
 FileIO_ErrorCodeByteBlock:
-	call	15665047
+	call	Boot_CheckConfigFlag7
 	cps	hl, 0
 	ret	z
 	.byte 0xc1
@@ -8790,7 +8790,7 @@ FileIO_ErrorCodeByteBlock:
 	cp	c, 99
 	jr	nz, 7
 	ldw	wa, 72
-	call	16356496
+	call	UI_PostModeChangeEvent
 	calr	64612
 	ret
 	ld8_24	a, 213234
@@ -8811,7 +8811,7 @@ FileIO_ErrorCodeByteBlock:
 	cps	c, 5
 	ret	nc
 	lds	wa, 6
-	call	16356451
+	call	UI_PostPartChangeEvent
 	ld8_24	a, 213234
 	extz	wa
 	lda_24	xbc, 15336786
@@ -8856,8 +8856,8 @@ FileIO_ErrorCodeByteBlock:
 	ldw	bc, 100
 	jrl	-604
 	extz	wa
-	jp	16356496
-	call	16279546
+	jp	UI_PostModeChangeEvent
+	call	FDemo_MultiGuardCheck
 	cps	hl, 0
 	ret	z
 	.byte 0xd1
@@ -8865,7 +8865,7 @@ FileIO_ErrorCodeByteBlock:
 	cp	(xiy), 0
 	nop
 	jr	ge, 10
-	call	16291104
+	call	GetDiskSizeInfo
 	extz	hl
 	stda16	34048, hl
 	ldda16	wa, 34048
@@ -8880,10 +8880,10 @@ FileIO_ErrorCodeByteBlock:
 	cps	wa, 2
 	ret	nz
 	ld	xwa, 15337136
-	call	16290941
+	call	FileIO_CheckFileExists
 	cps	l, 0
 	ret	z
-	jp	16279580
+	jp	FDemo_LoadRegsAndPostEvent
 
 FileIO_MedleyDispatchByMode:
 	ldda8 a, 36150

@@ -23,14 +23,14 @@ SysEx_ApplyToSlot4B_Data:
 	push	xiz
 	ldda32	xwa, 48300
 	ldw	bc, 11
-	call	16604854
+	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
 	calr	87
 	ld	(xsp+4), l
 	ld	xwa, 19204
-	call	16631801
+	call	DSPCfg_ReadParam_Map0
 	.byte 0xd7
 	swi	2
 	cp	(xhl-41), de
@@ -43,7 +43,7 @@ SysEx_ApplyToSlot4B_Data:
 	ldw	de, 35038
 	exts	xwa
 	add	xwa, 19216
-	call	16631527
+	call	DSPCfg_ResolveAndExtract
 	cps	hl, 1
 	jr	z, 4
 	cps	hl, 2
@@ -53,7 +53,7 @@ SysEx_ApplyToSlot4B_Data:
 	add	xwa, 19216
 	ld	c, (xsp+4)
 	extz	bc
-	call	16632065
+	call	DSPCfg_WriteParamFull
 	jr	7
 	inc	1, iz
 	.byte 0xd7
@@ -61,7 +61,7 @@ SysEx_ApplyToSlot4B_Data:
 	.byte 0xf6
 	jr	lt, -50
 	push	xiz
-	call	15668467
+	call	assswb_out
 	pop	xiz
 	pop	xiz
 	inc	2, xsp
@@ -83,7 +83,7 @@ SysEx_ApplyToSlot49_Data:
 	push	xiz
 	ldda32	xwa, 48300
 	ldw	bc, 11
-	call	16604854
+	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
@@ -91,11 +91,11 @@ SysEx_ApplyToSlot49_Data:
 	extz	hl
 	ld	xwa, 18688
 	ld	bc, hl
-	call	16632065
+	call	DSPCfg_WriteParamFull
 	cps	hl, 0
 	jr	lt, 72
 	ld	xwa, 18692
-	call	16631801
+	call	DSPCfg_ReadParam_Map0
 	.byte 0xd7
 	swi	2
 	cp	(xhl-41), de
@@ -119,14 +119,14 @@ SysEx_ApplyToSlot49_Data:
 	ld	wa, iz
 	exts	xwa
 	add	xwa, 18704
-	call	16632065
+	call	DSPCfg_WriteParamFull
 	inc	1, iz
 	.byte 0xd7
 	swi	2
 	.byte 0xf6
 	jr	lt, -42
 	push	xiz
-	call	15668467
+	call	assswb_out
 	pop	xiz
 	pop	xiz
 	inc	2, xsp
@@ -148,14 +148,14 @@ SysEx_ApplyToSlot49_Format_Data:
 	push	xiz
 	ldda32	xwa, 48300
 	ldw	bc, 11
-	call	16604854
+	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
 	calr	87
 	ld	(xsp+4), l
 	ld	xwa, 18692
-	call	16631801
+	call	DSPCfg_ReadParam_Map0
 	.byte 0xd7
 	swi	2
 	cp	(xhl-41), de
@@ -168,7 +168,7 @@ SysEx_ApplyToSlot49_Format_Data:
 	ldw	de, 35038
 	exts	xwa
 	add	xwa, 18704
-	call	16631527
+	call	DSPCfg_ResolveAndExtract
 	cps	hl, 1
 	jr	z, 4
 	cps	hl, 2
@@ -178,7 +178,7 @@ SysEx_ApplyToSlot49_Format_Data:
 	add	xwa, 18704
 	ld	c, (xsp+4)
 	extz	bc
-	call	16632065
+	call	DSPCfg_WriteParamFull
 	jr	7
 	inc	1, iz
 	.byte 0xd7
@@ -186,7 +186,7 @@ SysEx_ApplyToSlot49_Format_Data:
 	.byte 0xf6
 	jr	lt, -50
 	push	xiz
-	call	15668467
+	call	assswb_out
 	pop	xiz
 	pop	xiz
 	inc	2, xsp
@@ -5832,7 +5832,7 @@ UIStateEvt_ParamEdit_Data:
 	ldda16	wa, 50582
 	and	wa, 7
 	jr	nz, 4
-	call	16643573
+	call	AudioInit_RefreshToneBank
 	.byte 0xd1, 0x96, 0xc5
 	push	xix
 	.byte 0xe8
@@ -6514,7 +6514,7 @@ UIStateEvt_ChannelConfig_Data:
 	nop
 	ret
 	ld	xwa, 20480
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 2
 	jr	z, 38
 	cps	hl, 1
@@ -6525,13 +6525,13 @@ UIStateEvt_ChannelConfig_Data:
 	stdi8	50019, 255
 	ret
 	ld	xwa, 20481
-	call	16569399
+	call	SndParam_LookupReadOnly
 	stda8	50018, l
 	stdi8	50019, 255
 	ret
 	stdi8	50018, 0
 	ld	xwa, 20482
-	call	16569399
+	call	SndParam_LookupReadOnly
 	stda8	50019, l
 	ret
 UIStateEvt_StubReturn:

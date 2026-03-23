@@ -600,16 +600,16 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+38)
-	call	15757703
+	call	SeMenu_ReadObjData
 	lds	wa, 0
 	lds	bc, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	.byte 0x8f
 	ldb	h, 63
 	nop
 	jr	nz, 11
 	ldw	wa, 33
-	call	15755140
+	call	SeMenu_SetDisplayValue
 	lds	wa, 1
 	jr	110
 	.byte 0x8f
@@ -617,7 +617,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x01
 	jr	nz, 63
 	lda	xwa, (xsp+2)
-	call	15757820
+	call	SeMenu_FillObjTable
 	.byte 0xc7
 	swi	3
 	cp	(xbc-57), xhl
@@ -633,7 +633,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0xe4, 0xe8
 	ldb	c, 217
 	ccf
-	call	15756078
+	call	SeMenu_StorePartParam
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -643,7 +643,7 @@ UpdSeSel_ExtendedOps_Data:
 	lds	wa, 0
 	ldw	bc, 41
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	lds	wa, 2
 	jr	41
 	lda	xwa, (xsp+2)
@@ -651,27 +651,27 @@ UpdSeSel_ExtendedOps_Data:
 	ldb	h, 63
 	push_sr
 	jr	nz, 38
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	c, (xsp+2)
 	extz	bc
 	ldw	wa, 9
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	33
 	lds	wa, 0
 	ldw	bc, 93
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	lds	wa, 3
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	jr	64
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	c, (xsp+2)
 	extz	bc
 	ldw	wa, 10
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xbc, (xsp+2)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	a, (xbc)
 	add	a, 11
@@ -679,13 +679,13 @@ UpdSeSel_ExtendedOps_Data:
 	ld	c, a
 	extz	bc
 	lds	wa, 2
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	33
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -696,7 +696,7 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	jrl	le, -1337
@@ -710,7 +710,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	39
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -725,71 +725,71 @@ UpdSeSel_ExtendedOps_Data:
 	lds	wa, 0
 	ldw	bc, 19
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	pushw	39
 	lds	wa, 0
 	ldw	bc, 41
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	pushw	39
 	lds	wa, 0
 	ldw	bc, 42
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	lds	wa, 1
-	call	15757708
-	call	15757719
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_AdvanceSubIndex
 	lda	xwa, (xsp+4)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	jrl	137
 	lda	xwa, (xsp+2)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+2)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cp	l, 15
 	jr	ule, 100
 	lda	xbc, (xsp+6)
 	ldw	wa, 15
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+6)
 	extz	bc
 	ldw	wa, 16
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xbc, (xsp+6)
 	ldw	wa, 14
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+6)
 	extz	bc
 	ldw	wa, 15
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xbc, (xsp+6)
 	ldw	wa, 13
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+6)
 	extz	bc
 	ldw	wa, 14
-	call	15756078
+	call	SeMenu_StorePartParam
 	ldw	wa, 13
 	lds	bc, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	39
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -800,12 +800,12 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	push	xde
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -817,7 +817,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	40
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -825,33 +825,33 @@ UpdSeSel_ExtendedOps_Data:
 	div	l, 103
 	.byte 0xe4
 	lds	wa, 1
-	call	15757708
-	call	15757719
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_AdvanceSubIndex
 	lds	wa, 0
 	lds	bc, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	jr	66
 	lda	xwa, (xsp+4)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cp	l, 10
 	jr	ule, 29
 	pushw	40
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	call	15762463
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -862,12 +862,12 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	pushw	iy
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -879,7 +879,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	41
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -887,41 +887,41 @@ UpdSeSel_ExtendedOps_Data:
 	inc	7, iz
 	.byte 0xe5
 	lds	wa, 1
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	jr	99
 	lda	xwa, (xsp+4)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cps	l, 5
 	jr	ule, 63
 	lda	xbc, (xsp+6)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+6)
 	extz	bc
 	ldw	wa, 10
-	call	15756078
+	call	SeMenu_StorePartParam
 	ldw	wa, 9
 	lds	bc, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	41
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 2
 	lds	bc, 1
 	call	15764042
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -943,7 +943,7 @@ UpdSeSel_ExtendedOps_Data:
 	swi	3
 	.byte 0xa9
 	lda	xwa, (xsp+12)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	incf
 	push	xsp
@@ -954,7 +954,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	15756750
+	call	SeMenu_TransferPartValues_EndData
 	.byte 0xc7
 	swi	3
 	.byte 0x89
@@ -962,7 +962,7 @@ UpdSeSel_ExtendedOps_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	lda	xde, (xsp+2)
-	call	15756657
+	call	SeMenu_TransferPartValues
 	.byte 0xc7
 	swi	2
 	.byte 0xa8
@@ -976,7 +976,7 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	wa
 	lds	wa, 0
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	2
 	jr	lt, -57
@@ -999,7 +999,7 @@ UpdSeSel_ExtendedOps_Data:
 	extz	de
 	pushw	de
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	2
 	jr	lt, -57
@@ -1013,7 +1013,7 @@ UpdSeSel_ExtendedOps_Data:
 	ldb	c, 217
 	ccf
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	jr	89
 	.byte 0x8f
 	ret
@@ -1032,27 +1032,27 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0xaa
 	jrl	-168
 	lda	xwa, (xsp+6)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+8)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+6)
 	extz	wa
 	ld	c, (xsp+8)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cp	l, 8
 	jr	ule, 28
 	ld	a, (xsp+14)
 	extz	wa
 	pushw	wa
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -1060,9 +1060,9 @@ UpdSeSel_ExtendedOps_Data:
 	ret
 	lda	xsp, (xsp-12)
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	ldwio	63, 28160
 	pushw	ix
@@ -1074,69 +1074,69 @@ UpdSeSel_ExtendedOps_Data:
 	jr	3
 	calr	240
 	lds	wa, 1
-	call	15757708
-	call	15757719
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_AdvanceSubIndex
 	lda	xwa, (xsp+4)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	jrl	157
 	lda	xwa, (xsp+2)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+2)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
+	call	SeMenu_StorePartParam
 	.byte 0x87
 	push	xsp
 	nop
 	jr	nz, 116
-	call	15757719
+	call	SeMenu_AdvanceSubIndex
 	cp	l, 12
 	jr	ule, 115
 	lda	xbc, (xsp+6)
 	lds	wa, 1
-	call	15767791
+	call	SeMenu_LoadParamByte
 	ld	c, (xsp+6)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xbc, (xsp+6)
 	lds	wa, 2
-	call	15767791
+	call	SeMenu_LoadParamByte
 	ld	c, (xsp+6)
 	extz	bc
 	lds	wa, 2
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xbc, (xsp+6)
 	lds	wa, 3
-	call	15767791
+	call	SeMenu_LoadParamByte
 	ld	c, (xsp+6)
 	extz	bc
 	lds	wa, 3
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xbc, (xsp+6)
 	lds	wa, 4
-	call	15767791
+	call	SeMenu_LoadParamByte
 	ld	c, (xsp+6)
 	extz	bc
 	lds	wa, 4
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	43
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	jr	8
-	call	15757719
+	call	SeMenu_AdvanceSubIndex
 	cps	l, 4
 	jr	ugt, -35
 	lda	xsp, (xsp+12)
@@ -1155,7 +1155,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	43
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1189,7 +1189,7 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	43
 	lds	wa, 0
 	lds	de, 1
-	call	15754207
+	call	SeMenu_RegisterElement_Type2
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1209,12 +1209,12 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	pushw	iy
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -1226,7 +1226,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	44
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1234,38 +1234,38 @@ UpdSeSel_ExtendedOps_Data:
 	inc	7, ix
 	.byte 0xe5
 	lds	wa, 1
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	jr	90
 	lda	xwa, (xsp+4)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cps	l, 3
 	jr	ule, 54
 	pushw	44
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lda	xbc, (xsp+6)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+6)
 	extz	bc
 	ldw	wa, 10
-	call	15756078
+	call	SeMenu_StorePartParam
 	lds	wa, 0
 	lds	bc, 0
 	call	15764042
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -1273,9 +1273,9 @@ UpdSeSel_ExtendedOps_Data:
 	ret
 	lda	xsp, (xsp-10)
 	lda	xwa, (xsp+8)
-	call	15757703
+	call	SeMenu_ReadObjData
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	ldio	63, 0
 	jr	nz, 21
@@ -1287,37 +1287,37 @@ UpdSeSel_ExtendedOps_Data:
 	jr	3
 	calr	140
 	lds	wa, 1
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	jr	80
 	lda	xwa, (xsp+2)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+4)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+2)
 	extz	wa
 	ld	c, (xsp+4)
 	extz	bc
-	call	15756078
+	call	SeMenu_StorePartParam
 	.byte 0x87
 	push	xsp
 	nop
 	jr	nz, 10
-	call	15757719
+	call	SeMenu_AdvanceSubIndex
 	cps	l, 6
 	jr	ugt, 10
 	jr	37
-	call	15757719
+	call	SeMenu_AdvanceSubIndex
 	cps	l, 7
 	jr	ule, 29
 	pushw	45
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	call	15761621
 	lds	wa, 0
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	lds	wa, 1
-	call	15755567
-	call	15757713
+	call	SeMenu_SetupMenuDisplay
+	call	SeMenu_ResetSubIndex
 	lda	xsp, (xsp+10)
 	ret
 	dec	2, xsp
@@ -1325,7 +1325,7 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -1337,7 +1337,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	45
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1354,12 +1354,12 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	pushw	45
 	lds	wa, 0
 	ldw	bc, 13
 	lds	de, 1
-	call	15754207
+	call	SeMenu_RegisterElement_Type2
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -1377,7 +1377,7 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	45
 	lds	wa, 0
 	lds	de, 1
-	call	15754207
+	call	SeMenu_RegisterElement_Type2
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1394,12 +1394,12 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	pushw	iz
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -1411,7 +1411,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	46
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1419,41 +1419,41 @@ UpdSeSel_ExtendedOps_Data:
 	mul	l, 103
 	.byte 0xe4
 	lds	wa, 1
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	jr	99
 	lda	xwa, (xsp+4)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cps	l, 7
 	jr	ule, 63
 	lda	xbc, (xsp+6)
 	lds	wa, 5
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+6)
 	extz	bc
 	ldw	wa, 10
-	call	15756078
+	call	SeMenu_StorePartParam
 	ldw	wa, 9
 	lds	bc, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	46
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 2
 	lds	bc, 0
 	call	15764042
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -1463,9 +1463,9 @@ UpdSeSel_ExtendedOps_Data:
 	jrl	-1185
 	lda	xsp, (xsp-10)
 	lda	xwa, (xsp+8)
-	call	15757703
+	call	SeMenu_ReadObjData
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	ldio	63, 0
 	jr	nz, 21
@@ -1477,40 +1477,40 @@ UpdSeSel_ExtendedOps_Data:
 	jr	3
 	calr	235
 	lds	wa, 1
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	jr	99
 	lda	xwa, (xsp+2)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+4)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+2)
 	extz	wa
 	ld	c, (xsp+4)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cp	l, 8
 	jr	ule, 62
 	lda	xbc, (xsp+4)
 	lds	wa, 7
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+4)
 	extz	bc
 	ldw	wa, 11
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xbc, (xsp+4)
 	ldw	wa, 8
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+4)
 	extz	bc
 	ldw	wa, 12
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	59
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	lda	xsp, (xsp+10)
 	ret
 	dec	4, xsp
@@ -1526,7 +1526,7 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	59
 	lds	wa, 0
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1545,22 +1545,22 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	59
 	lds	wa, 0
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	ld	c, (xsp+2)
 	extz	bc
 	pushw	59
 	lds	wa, 0
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	ld	c, (xsp+2)
 	extz	bc
 	ldw	wa, 13
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	.byte 0xd7
 	swi	2
 	halt
@@ -1579,7 +1579,7 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	59
 	lds	wa, 3
 	lds	de, 1
-	call	15754207
+	call	SeMenu_RegisterElement_Type2
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1598,22 +1598,22 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	59
 	lds	wa, 3
 	lds	de, 1
-	call	15754207
+	call	SeMenu_RegisterElement_Type2
 	ld	c, (xsp+2)
 	extz	bc
 	pushw	59
 	lds	wa, 3
 	lds	de, 1
-	call	15754207
+	call	SeMenu_RegisterElement_Type2
 	ld	c, (xsp+2)
 	extz	bc
 	ldw	wa, 13
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	.byte 0xd7
 	swi	2
 	halt
@@ -1621,7 +1621,7 @@ UpdSeSel_ExtendedOps_Data:
 	ret
 	dec	6, xsp
 	lda	xwa, (xsp+4)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
@@ -1630,29 +1630,29 @@ UpdSeSel_ExtendedOps_Data:
 	lds	wa, 0
 	ldw	bc, 16
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	lds	wa, 1
 	jr	28
 	lda	xwa, (xsp)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	.byte 0x8f
 	nop
 	ldb	c, 217
 	ccf
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	60
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 0
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	inc	6, xsp
 	ret
 	lda	xsp, (xsp-10)
 	lda	xwa, (xsp+8)
-	call	15757703
+	call	SeMenu_ReadObjData
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	ldio	63, 0
 	jr	nz, 21
@@ -1664,29 +1664,29 @@ UpdSeSel_ExtendedOps_Data:
 	jr	3
 	calr	217
 	lds	wa, 1
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	jr	127
 	lda	xwa, (xsp+2)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+4)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+2)
 	extz	wa
 	ld	c, (xsp+4)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cps	l, 5
 	jr	ule, 91
 	lda	xbc, (xsp+4)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f, 0x04
 	push	xix
 	reti
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
 	cps	a, 1
@@ -1703,17 +1703,17 @@ UpdSeSel_ExtendedOps_Data:
 	jr	nz, 11
 	ldw	wa, 53
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	27
 	pushw	48
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 0
 	lds	bc, 0
 	call	15765121
 	call	15765545
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lda	xsp, (xsp+10)
 	ret
 	dec	2, xsp
@@ -1721,7 +1721,7 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -1733,7 +1733,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	48
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1750,7 +1750,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	48
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1766,7 +1766,7 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -1784,7 +1784,7 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	48
 	lds	wa, 0
 	lds	de, 1
-	call	15754207
+	call	SeMenu_RegisterElement_Type2
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1796,52 +1796,52 @@ UpdSeSel_ExtendedOps_Data:
 	inc	2, xsp
 	ret
 	pushw	49
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 1
 	lds	bc, 0
 	call	15765121
 	call	15765545
 	lds	wa, 1
-	jp	15755567
+	jp	SeMenu_SetupMenuDisplay
 	pushw	50
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 0
 	lds	bc, 1
 	call	15765121
 	lds	wa, 1
-	jp	15755567
+	jp	SeMenu_SetupMenuDisplay
 	pushw	51
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 1
 	lds	bc, 1
 	call	15765121
 	lds	wa, 1
-	jp	15755567
+	jp	SeMenu_SetupMenuDisplay
 	pushw	52
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	call	15765785
 	lds	wa, 1
-	jp	15755567
+	jp	SeMenu_SetupMenuDisplay
 	pushw	53
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 1
-	jp	15755567
+	jp	SeMenu_SetupMenuDisplay
 	lda	xsp, (xsp-10)
 	.byte 0xd7
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	pushw	iy
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -1853,7 +1853,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	54
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1861,38 +1861,38 @@ UpdSeSel_ExtendedOps_Data:
 	inc	7, ix
 	.byte 0xe5
 	lds	wa, 1
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	jr	90
 	lda	xwa, (xsp+4)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cps	l, 3
 	jr	ule, 54
 	lda	xbc, (xsp+6)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+6)
 	extz	bc
 	ldw	wa, 10
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	54
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 0
 	lds	bc, 0
 	call	15764042
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -1903,12 +1903,12 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	push	xde
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -1920,7 +1920,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	55
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1928,33 +1928,33 @@ UpdSeSel_ExtendedOps_Data:
 	div	l, 103
 	.byte 0xe4
 	lds	wa, 1
-	call	15757708
-	call	15757719
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_AdvanceSubIndex
 	lds	wa, 0
 	lds	bc, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	jr	66
 	lda	xwa, (xsp+4)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cp	l, 10
 	jr	ule, 29
 	pushw	55
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	call	15762463
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -1965,12 +1965,12 @@ UpdSeSel_ExtendedOps_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	pushw	iy
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -1982,7 +1982,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x83
 	pushw	56
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -1990,41 +1990,41 @@ UpdSeSel_ExtendedOps_Data:
 	inc	7, iz
 	.byte 0xe5
 	lds	wa, 1
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	jr	99
 	lda	xwa, (xsp+4)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cps	l, 5
 	jr	ule, 63
 	lda	xbc, (xsp+6)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+6)
 	extz	bc
 	ldw	wa, 10
-	call	15756078
+	call	SeMenu_StorePartParam
 	ldw	wa, 9
 	lds	bc, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	56
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 2
 	lds	bc, 1
 	call	15764042
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -2181,7 +2181,7 @@ SeMenu_AltUpdate_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	jrl	f, 8971
@@ -2189,7 +2189,7 @@ SeMenu_AltUpdate_Data:
 	lds	wa, 0
 	ldw	bc, 18
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	cp	(xbc-57), xhl
@@ -2198,7 +2198,7 @@ SeMenu_AltUpdate_Data:
 	pushw	35
 	lds	bc, 0
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -2212,7 +2212,7 @@ SeMenu_AltUpdate_Data:
 	pushw	35
 	lds	bc, 1
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -2223,27 +2223,27 @@ SeMenu_AltUpdate_Data:
 	lds	wa, 0
 	ldw	bc, 92
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	lds	wa, 1
-	call	15757708
-	call	15757719
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_AdvanceSubIndex
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	c, (xsp+2)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	jr	82
 	lda	xwa, (xsp+4)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cp	l, 10
 	jr	ule, 45
 	.byte 0xc7
@@ -2251,7 +2251,7 @@ SeMenu_AltUpdate_Data:
 	cp	(xbc-57), xhl
 	.byte 0x89
 	extz	wa
-	call	15758731
+	call	SeMenu_ApplyPartEdit
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -2259,13 +2259,13 @@ SeMenu_AltUpdate_Data:
 	inc	3, ix
 	.byte 0xef
 	pushw	35
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -2276,7 +2276,7 @@ SeMenu_AltUpdate_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	jr	mi, -65
@@ -2294,7 +2294,7 @@ SeMenu_AltUpdate_Data:
 	.byte 0x83
 	pushw	36
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	2
 	jr	lt, -57
@@ -2312,7 +2312,7 @@ SeMenu_AltUpdate_Data:
 	.byte 0x83
 	pushw	36
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	2
 	jr	lt, -57
@@ -2332,22 +2332,22 @@ SeMenu_AltUpdate_Data:
 	ldb	c, 217
 	ccf
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	jr	96
 	lda	xwa, (xsp+4)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cp	l, 20
 	jr	ule, 59
 	pushw	36
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	.byte 0xc7
 	swi	2
@@ -2370,10 +2370,10 @@ SeMenu_AltUpdate_Data:
 	inc	3, ix
 	.byte 0xe1
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -2384,7 +2384,7 @@ SeMenu_AltUpdate_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	jr	mi, -65
@@ -2402,7 +2402,7 @@ SeMenu_AltUpdate_Data:
 	.byte 0x83
 	pushw	37
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	2
 	jr	lt, -57
@@ -2420,7 +2420,7 @@ SeMenu_AltUpdate_Data:
 	.byte 0x83
 	pushw	37
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	2
 	jr	lt, -57
@@ -2440,22 +2440,22 @@ SeMenu_AltUpdate_Data:
 	ldb	c, 217
 	ccf
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	jr	96
 	lda	xwa, (xsp+4)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cp	l, 20
 	jr	ule, 59
 	pushw	37
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	.byte 0xc7
 	swi	2
@@ -2478,10 +2478,10 @@ SeMenu_AltUpdate_Data:
 	inc	3, ix
 	.byte 0xe1
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -2702,19 +2702,19 @@ SeMenu_CopyWriteUpdate_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+2)
-	call	15767391
+	call	SeMenu_HandleMenuChange_Data
 	.byte 0x8f
 	push_sr
 	push	xsp
 	.byte 0x01
 	jr	nz, 15
 	lds	wa, 2
-	call	15753634
+	call	SeMenu_ClearNotification
 	lds	wa, 0
 	call	15767396
 	jrl	209
 	lda	xwa, (xsp+24)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	push_f
 	push	xsp
@@ -2724,12 +2724,12 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	wa, 0
 	lds	bc, 0
 	ldw	de, 16
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	lds	wa, 1
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	jrl	173
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	.byte 0xc7
 	swi	3
 	cp	(xwa-57), xhl
@@ -2751,7 +2751,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xbc, (xsp+6)
 	lds	wa, 1
 	ldw	de, 16
-	call	15757843
+	call	SeMenu_SetupPartDisplay
 	lda	xwa, (xsp+4)
 	call	15758219
 	lda	xde, (xsp+6)
@@ -2772,13 +2772,13 @@ SeMenu_CopyWriteUpdate_Data:
 	ldb	c, 217
 	ccf
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	c, (xsp+7)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	62
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 1
 	call	15758461
@@ -2791,11 +2791,11 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	de, 0
 	call	15758467
 	lds	wa, 0
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	ldw	wa, 30
 	lds	bc, 0
-	call	15756078
-	call	15757713
+	call	SeMenu_StorePartParam
+	call	SeMenu_ResetSubIndex
 	.byte 0xd7
 	swi	2
 	halt
@@ -2803,7 +2803,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ret
 	dec	2, xsp
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	ldb	a, 13
 	.byte 0x87
 	push	xsp
@@ -2819,12 +2819,12 @@ SeMenu_CopyWriteUpdate_Data:
 	swi	2
 	.byte 0x04
 	lda	xwa, (xsp+10)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ldwio	63, 28160
 	pushw	de
 	lds	wa, 1
-	call	15767821
+	call	SeMenu_SetDisplayState
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -2835,7 +2835,7 @@ SeMenu_CopyWriteUpdate_Data:
 	pushw	58
 	lds	wa, 0
 	lds	de, 1
-	call	15753785
+	call	SeMenu_RegisterElement_Type1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -2843,23 +2843,23 @@ SeMenu_CopyWriteUpdate_Data:
 	muls	l, 103
 	.byte 0xe7
 	lds	wa, 1
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	jr	97
 	lda	xwa, (xsp+4)
-	call	15757735
+	call	SeMenu_ReadObjParam
 	lda	xwa, (xsp+6)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
-	call	15757719
+	call	SeMenu_StorePartParam
+	call	SeMenu_AdvanceSubIndex
 	cp	l, 8
 	jr	ule, 60
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+2)
 	and	a, 15
 	cp	a, 11
@@ -2871,15 +2871,15 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	58
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 0
-	call	15757708
-	call	15757713
+	call	SeMenu_SetCurrentStep
+	call	SeMenu_ResetSubIndex
 	lds	wa, 0
-	call	15767821
+	call	SeMenu_SetDisplayState
 	.byte 0xd7
 	swi	2
 	halt
@@ -2887,7 +2887,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ret
 	lda	xsp, (xsp-20)
 	lda	xwa, (xsp+18)
-	call	15757703
+	call	SeMenu_ReadObjData
 	.byte 0x8f
 	ccf
 	push	xsp
@@ -2897,11 +2897,11 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	wa, 0
 	lds	bc, 0
 	ldw	de, 13
-	call	15754207
+	call	SeMenu_RegisterElement_Type2
 	lds	wa, 1
 	jr	47
 	lda	xwa, (xsp)
-	call	15757766
+	call	SeMenu_FillEntryTable
 	lda	xbc, (xsp)
 	ld	xwa, xbc
 	lda	xde, (xbc+13)
@@ -2914,141 +2914,141 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	c, -14
 	lds	wa, 1
 	ldw	de, 13
-	call	15757843
+	call	SeMenu_SetupPartDisplay
 	pushw	61
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 0
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	lda	xsp, (xsp+20)
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	ret
 	ret
 	ret
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	lds	wa, 0
-	call	15757708
-	jp	15757713
+	call	SeMenu_SetCurrentStep
+	jp	SeMenu_ResetSubIndex
 	ret
 	dec	4, xsp
 	lda	xde, (xsp+2)
@@ -3104,7 +3104,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -3118,7 +3118,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -3133,7 +3133,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3153,14 +3153,14 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15756908
 	ldw	wa, 59
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3180,13 +3180,13 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15756908
 	ldw	wa, 59
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -3198,13 +3198,13 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nz, 9
 	ldw	wa, 60
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3219,14 +3219,14 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	5
 	ldw	wa, 61
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	lda	xsp, (xsp-14)
 	ld	(xsp+12), a
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 1
 	ld	(xbc+7), 4
@@ -3251,7 +3251,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+12), a
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 1
 	ld	(xbc+7), 5
@@ -3276,26 +3276,26 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 59
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	lda	xsp, (xsp-12)
 	pushw	iz
 	ld	(xsp+12), bc
 	ld	iz, wa
 	lda	xwa, (xsp+6)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f, 0x06
 	push	xsp
 	nop
 	jr	nz, 13
 	lda	xwa, (xsp+2)
-	call	15767826
+	call	SeMenu_DisplayState_Data
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3339,14 +3339,14 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	ld	(xsp+6), a
 	lda	xwa, (xsp+2)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
 	nop
 	jr	z, 81
 	lda	xwa, (xsp+2)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3359,10 +3359,10 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x99
 	lda	xbc, (xsp+4)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
-	call	15756043
+	call	SeMenu_IsPartEnabled
 	ld	a, (xsp+4)
 	extz	wa
 	cps	hl, 0
@@ -3380,7 +3380,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15755941
 	pushw	2
 	pushw	32
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	.byte 0xd7
 	swi	2
@@ -3390,20 +3390,20 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xsp, (xsp-12)
 	ld	(xsp+10), a
 	lda	xwa, (xsp+6)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f, 0x06
 	push	xsp
 	nop
 	jr	z, 117
 	lda	xwa, (xsp+6)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 104
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp)
 	extz	bc
 	lda	xde, (xsp+4)
@@ -3430,15 +3430,15 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lda	xde, (xsp+8)
 	lds	wa, 3
-	call	15766804
+	call	SeMenu_ApplySynthParam_Data
 	ld	a, (xsp)
 	extz	wa
 	ld	bc, (xsp+8)
-	call	15754383
+	call	SeMenu_RegisterParamDisplay_Data
 	ld	a, (xsp)
 	extz	wa
 	ldw	bc, 16
-	call	15753942
+	call	SeMenu_InitDisplayField
 	lds	wa, 2
 	call	15758489
 	lda	xsp, (xsp+12)
@@ -3446,20 +3446,20 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xwa, (xsp+6)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f, 0x06
 	push	xsp
 	nop
 	jr	z, 104
 	lda	xwa, (xsp+6)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 91
 	lda	xbc, (xsp+4)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
@@ -3482,11 +3482,11 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+4)
 	extz	wa
 	ld	bc, (xsp+2)
-	call	15754383
+	call	SeMenu_RegisterParamDisplay_Data
 	ld	a, (xsp+4)
 	extz	wa
 	ldw	bc, 16
-	call	15753942
+	call	SeMenu_InitDisplayField
 	lds	wa, 3
 	call	15758489
 	lda	xsp, (xsp+10)
@@ -3497,14 +3497,14 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	ret
 	push	xsp
 	nop
 	jrl	z, 133
 	lda	xwa, (xsp+14)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f
 	ret
 	push	xsp
@@ -3512,7 +3512,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 120
 	lda	xbc, (xsp+16)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+16)
 	inc	2, a
 	.byte 0xc7
@@ -3520,7 +3520,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x99
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -3553,7 +3553,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+5)
 	extz	bc
-	call	15767776
+	call	SeMenu_StoreParamByte
 	lds	wa, 4
 	call	15758489
 	.byte 0xd7
@@ -3567,14 +3567,14 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	ret
 	push	xsp
 	nop
 	jr	z, 115
 	lda	xwa, (xsp+14)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f
 	ret
 	push	xsp
@@ -3582,7 +3582,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 102
 	lda	xbc, (xsp+16)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+16)
 	inc	4, a
 	.byte 0xc7
@@ -3590,7 +3590,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x99
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -3630,14 +3630,14 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	ret
 	push	xsp
 	nop
 	jr	z, 115
 	lda	xwa, (xsp+14)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f
 	ret
 	push	xsp
@@ -3645,7 +3645,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 102
 	lda	xbc, (xsp+16)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+16)
 	inc	6, a
 	.byte 0xc7
@@ -3653,7 +3653,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x99
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -3693,20 +3693,20 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	ld	(xsp+10), a
 	lda	xwa, (xsp+4)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
 	jrl	z, 199
 	lda	xwa, (xsp+4)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f, 0x04
 	push	xsp
 	.byte 0x01
 	jrl	z, 185
 	lda	xbc, (xsp+8)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+8)
 	inc	8, a
 	.byte 0xc7
@@ -3724,7 +3724,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+6)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf, 0x06, 0xb7, 0xc7
 	swi	3
 	dec	6, wa
@@ -3757,7 +3757,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	a, (xsp+8)
 	dec	1, a
 	extz	wa
@@ -3768,10 +3768,10 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+6)
 	pushw	127
 	lds	wa, 0
-	call	15754780
+	call	SeMenu_SetupDisplayObject_Alt1
 	ld	a, (xsp+8)
 	extz	wa
-	call	15758731
+	call	SeMenu_ApplyPartEdit
 	ld	a, (xsp+8)
 	add	a, 12
 	.byte 0xc7
@@ -3780,7 +3780,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	pushw	wa
 	pushw	32
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 7
 	call	15758489
@@ -3792,19 +3792,19 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	incf
 	push	xsp
 	nop
 	jr	z, 78
 	lda	xwa, (xsp+12)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	cp	(xsp+12), 1
 	jr	z, 65
 	lda	xbc, (xsp)
 	ldw	wa, 11
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -3828,7 +3828,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xwa, (xsp+2)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3839,7 +3839,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nz, 28
 	lda	xbc, (xsp)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x87
 	push	xsp
 	nop
@@ -3847,16 +3847,16 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	call	15754899
 	ldw	wa, 16
-	call	15754324
+	call	SeMenu_RegisterParamDisplay
 	jr	83
 	lds	wa, 0
 	call	15767396
 	ldw	wa, 62
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	66
 	lda	xwa, (xsp+2)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3875,17 +3875,17 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nc, 23
 	incm	1, (xsp+6)
 	ld	wa, (xsp+6)
-	call	15754693
+	call	SeMenu_SetupDisplayObject_Data
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
-	call	15767761
+	call	SeMenu_SendEvent
+	call	SeMenu_OrPartConfig_Data
 	lda	xsp, (xsp+10)
 	ret
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	nop
@@ -3901,7 +3901,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	bc, 0
 	jr	28
 	lda	xwa, (xsp)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -3911,10 +3911,10 @@ SeMenu_CopyWriteUpdate_Data:
 	nop
 	jr	nz, 15
 	lds	wa, 0
-	call	15767406
+	call	SeMenu_SetPatchBank
 	ldw	wa, 32
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	43
 	.byte 0x8f, 0x04
 	push	xsp
@@ -3926,17 +3926,17 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 23
 	decm	1, (xsp+2)
 	ld	wa, (xsp+2)
-	call	15754693
+	call	SeMenu_SetupDisplayObject_Data
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
-	call	15767761
+	call	SeMenu_SendEvent
+	call	SeMenu_OrPartConfig_Data
 	inc	6, xsp
 	ret
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp+2)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3951,10 +3951,10 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	5
 	ldw	wa, 43
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	84
 	lda	xwa, (xsp+2)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3965,11 +3965,11 @@ SeMenu_CopyWriteUpdate_Data:
 	nop
 	jr	nz, 18
 	lds	wa, 0
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	lds	wa, 0
-	call	15767406
+	call	SeMenu_SetPatchBank
 	lds	wa, 2
-	call	15753634
+	call	SeMenu_ClearNotification
 	jr	45
 	.byte 0x8f, 0x04
 	push	xsp
@@ -3977,26 +3977,26 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 39
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x87
 	push	xsp
 	.byte 0x01
 	jr	z, 26
 	lds	wa, 0
 	lds	bc, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	lds	wa, 1
-	call	15755815
+	call	SeMenu_SetupMenuDisplay_Finalize_Data
 	pushw	0
 	pushw	32
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	inc	6, xsp
 	ret
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp+2)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -4011,10 +4011,10 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	5
 	ldw	wa, 39
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	58
 	lda	xwa, (xsp+2)
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -4026,26 +4026,26 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 39
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x87
 	push	xsp
 	push_sr
 	jr	z, 26
 	lds	wa, 0
 	lds	bc, 2
-	call	15756078
+	call	SeMenu_StorePartParam
 	lds	wa, 2
-	call	15755815
+	call	SeMenu_SetupMenuDisplay_Finalize_Data
 	pushw	0
 	pushw	32
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	inc	6, xsp
 	ret
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp+2)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xwa, (xsp+2)
 	.byte 0x8f, 0x04
 	push	xsp
@@ -4059,7 +4059,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	wa, 59
 	lds	bc, 0
 	jr	30
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -4074,9 +4074,9 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nz, 11
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	79
-	call	15767401
+	call	SeMenu_LoadPatchStatus
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -4086,38 +4086,38 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	l, 0
 	jr	nz, 61
 	lda	xwa, (xsp)
-	call	15753653
+	call	SeMenu_LoadMasterPtr
 	ld	a, (xsp)
 	extz	wa
 	lds	bc, 0
 	lds	de, 1
-	call	16672252
+	call	SndParam_UpdateChannelTuning
 	cp	l, 255
 	jr	nz, 17
 	ld	a, (xsp)
 	extz	wa
 	lds	bc, 1
 	lds	de, 1
-	call	16672252
+	call	SndParam_UpdateChannelTuning
 	cp	l, 255
 	jr	z, 21
 	lds	wa, 1
-	call	15767010
+	call	SeMenu_SetFilterMode
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	lds	wa, 0
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	inc	6, xsp
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15757708
+	call	SeMenu_SetCurrentStep
 	lds	wa, 0
-	call	15767406
+	call	SeMenu_SetPatchBank
 	lds	wa, 2
-	call	15753634
+	call	SeMenu_ClearNotification
 	ret
 	dec	4, xsp
 	lda	xde, (xsp+2)
@@ -4221,7 +4221,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+4), a
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	res	7, a
 	.byte 0xc7
@@ -4229,7 +4229,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x99
 	ld	a, (xsp+2)
 	extz	wa
-	call	15756043
+	call	SeMenu_IsPartEnabled
 	ld	a, (xsp+2)
 	extz	wa
 	cps	hl, 0
@@ -4248,10 +4248,10 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15755941
 	pushw	1
 	pushw	34
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 1
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	.byte 0xd7
 	swi	2
 	halt
@@ -4261,7 +4261,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+8), a
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+2)
 	extz	bc
 	lda	xde, (xsp+6)
@@ -4288,15 +4288,15 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lda	xde, (xsp)
 	lds	wa, 0
-	call	15766804
+	call	SeMenu_ApplySynthParam_Data
 	ld	a, (xsp+2)
 	extz	wa
 	ld	bc, (xsp)
-	call	15754383
+	call	SeMenu_RegisterParamDisplay_Data
 	ld	a, (xsp+2)
 	extz	wa
 	ldw	bc, 16
-	call	15753942
+	call	SeMenu_InitDisplayField
 	lds	wa, 2
 	call	15758489
 	lda	xsp, (xsp+10)
@@ -4305,7 +4305,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+6), a
 	lda	xbc, (xsp+4)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
@@ -4328,11 +4328,11 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+4)
 	extz	wa
 	ld	bc, (xsp+2)
-	call	15754383
+	call	SeMenu_RegisterParamDisplay_Data
 	ld	a, (xsp+4)
 	extz	wa
 	ldw	bc, 16
-	call	15753942
+	call	SeMenu_InitDisplayField
 	lds	wa, 3
 	call	15758489
 	inc	8, xsp
@@ -4344,7 +4344,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+16), a
 	lda	xbc, (xsp+14)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+14)
 	mul	a, 3
 	.byte 0xc7
@@ -4355,7 +4355,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -4381,7 +4381,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+5)
 	extz	bc
-	call	15767776
+	call	SeMenu_StoreParamByte
 	lds	wa, 6
 	call	15758489
 	.byte 0xd7
@@ -4396,7 +4396,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+16), a
 	lda	xbc, (xsp+14)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+14)
 	mul	a, 3
 	.byte 0xc7
@@ -4404,7 +4404,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x99
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -4439,7 +4439,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+16), a
 	lda	xbc, (xsp+14)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+14)
 	mul	a, 3
 	.byte 0xc7
@@ -4450,7 +4450,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -4519,7 +4519,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	wa, 32
 	call	15758609
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ret
 	dec	8, xsp
 	.byte 0xd7
@@ -4527,15 +4527,15 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	ld	(xsp+8), a
 	lda	xwa, (xsp+6)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp+4)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	inc	1, a
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+6)
@@ -4543,7 +4543,7 @@ SeMenu_CopyWriteUpdate_Data:
 	and	(xhl), c
 	jr	gt, -39
 	ccf
-	call	15756126
+	call	SeMenu_BitShiftMask_End
 	.byte 0xc7
 	swi	2
 	cp	(xsp-57), de
@@ -4593,7 +4593,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8b
 	extz	bc
 	lds	wa, 3
-	call	15756107
+	call	SeMenu_BitShiftMask
 	.byte 0xc7
 	swi	3
 	cp	(xsp-57), hl
@@ -4609,14 +4609,14 @@ SeMenu_CopyWriteUpdate_Data:
 	and	(xhl), c
 	jr	gt, -39
 	ccf
-	call	15756107
+	call	SeMenu_BitShiftMask
 	or	(xsp+4), l
 	ld	a, (xsp+6)
 	extz	wa
 	lda	xde, (xsp+2)
 	pushw	128
 	lds	bc, 0
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	lda	xde, (xsp+4)
 	.byte 0xc7
 	swi	3
@@ -4625,20 +4625,20 @@ SeMenu_CopyWriteUpdate_Data:
 	pushw	wa
 	lds	wa, 0
 	ldw	bc, 18
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	ld	a, (xsp+6)
 	inc	1, a
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	1
 	pushw	35
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 2
 	call	15758489
@@ -4653,7 +4653,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+14)
 	inc	1, a
 	.byte 0xc7
@@ -4661,7 +4661,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x99
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 63
 	ld	(xbc+7), 0
@@ -4694,7 +4694,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	ld	(xsp+10), a
 	lda	xwa, (xsp+8)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+8)
 	inc	5, a
 	ld	(xsp+2), a
@@ -4710,7 +4710,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp+6)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf, 0x06, 0xb7, 0xc7
 	swi	3
 	dec	6, wa
@@ -4739,23 +4739,23 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	a, (xsp+8)
 	extz	wa
 	lda	xde, (xsp+6)
 	pushw	127
 	lds	bc, 1
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	ld	a, (xsp+8)
 	extz	wa
-	call	15758731
+	call	SeMenu_ApplyPartEdit
 	ld	a, (xsp+8)
 	add	a, 11
 	ld	(xsp+2), a
 	extz	wa
 	pushw	wa
 	pushw	35
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 6
 	call	15758489
@@ -4768,7 +4768,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+12), a
 	lda	xbc, (xsp)
 	ldw	wa, 10
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -4825,21 +4825,21 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 38
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	dec	8, xsp
 	ld	(xsp+6), a
 	lda	xbc, (xsp+4)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf, 0x04, 0xb7
 	ld	a, (xsp+6)
 	extz	wa
@@ -4852,19 +4852,19 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	l, 1
 	jr	nz, 57
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 31
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	2
 	pushw	36
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	ld	c, (xsp+2)
 	extz	bc
@@ -4879,10 +4879,10 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+8), a
 	lda	xbc, (xsp+6)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+4)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf, 0x06, 0xb7, 0xbf, 0x04, 0xb7
 	ld	a, (xsp+8)
 	extz	wa
@@ -4896,19 +4896,19 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	l, 1
 	jr	nz, 57
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 30
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	1
 	pushw	36
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	ld	c, (xsp+2)
 	extz	bc
@@ -4923,10 +4923,10 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+8), a
 	lda	xbc, (xsp+6)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+4)
 	lds	wa, 4
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf, 0x06, 0xb7, 0xbf, 0x04, 0xb7
 	ld	a, (xsp+8)
 	extz	wa
@@ -4940,19 +4940,19 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	l, 1
 	jr	nz, 57
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 32
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	3
 	pushw	36
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	ld	c, (xsp+2)
 	extz	bc
@@ -4967,7 +4967,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+6), a
 	lda	xbc, (xsp+4)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf, 0x04, 0xb7
 	ld	a, (xsp+6)
 	extz	wa
@@ -4979,19 +4979,19 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	l, 1
 	jr	nz, 57
 	lda	xwa, (xsp+2)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 4
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 33
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	4
 	pushw	36
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	ld	c, (xsp+2)
 	extz	bc
@@ -5014,7 +5014,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 36
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 7
@@ -5027,7 +5027,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 36
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -5037,7 +5037,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 36
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -5047,29 +5047,29 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 36
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xbc, (xsp+12)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf
 	incf
 	.byte 0xb7
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -5103,20 +5103,20 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+18), a
 	lda	xbc, (xsp+14)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+12)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf
 	ret
 	.byte 0xb7, 0xbf
 	incf
 	.byte 0xb7
 	lda	xwa, (xsp+16)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -5151,20 +5151,20 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+18), a
 	lda	xbc, (xsp+14)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+12)
 	lds	wa, 4
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf
 	ret
 	.byte 0xb7, 0xbf
 	incf
 	.byte 0xb7
 	lda	xwa, (xsp+16)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -5199,15 +5199,15 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+16), a
 	lda	xbc, (xsp+12)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf
 	incf
 	.byte 0xb7
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 4
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -5252,7 +5252,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 37
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -5262,7 +5262,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 37
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -5272,7 +5272,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 37
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -5282,15 +5282,15 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 37
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	dec	4, xsp
 	.byte 0xd7
@@ -5301,7 +5301,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	wa, 48903
 	.byte 0x04
 	ldw	bc, 43224
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xc7
 	swi	3
 	dec	6, wa
@@ -5322,7 +5322,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -5331,10 +5331,10 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	0
 	pushw	38
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	.byte 0xd7
 	swi	2
@@ -5345,9 +5345,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+10), a
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xwa, (xsp+4)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	c, (xsp+2)
 	extz	bc
 	lda	xde, (xsp+8)
@@ -5373,7 +5373,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lda	xde, (xsp)
 	lds	wa, 1
-	call	15766804
+	call	SeMenu_ApplySynthParam_Data
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+2)
@@ -5385,7 +5385,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	ldw	de, 16
-	call	15754031
+	call	SeMenu_InitDisplayField_Alt
 	lds	wa, 2
 	call	15758489
 	lda	xsp, (xsp+12)
@@ -5394,9 +5394,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+8), a
 	lda	xbc, (xsp+4)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xwa, (xsp+6)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
@@ -5427,7 +5427,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	ldw	de, 16
-	call	15754031
+	call	SeMenu_InitDisplayField_Alt
 	lds	wa, 3
 	call	15758489
 	lda	xsp, (xsp+10)
@@ -5439,7 +5439,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+22), a
 	lda	xbc, (xsp+8)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	ldio	63, 4
 	jrl	z, 634
@@ -5447,25 +5447,25 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xwa), 0
 	lda	xbc, (xwa+1)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+14)
 	lds	wa, 4
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+15)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+16)
 	lds	wa, 5
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+17)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+18)
 	lds	wa, 6
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+19)
 	lds	wa, 7
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	l, (xsp+22)
 	res	7, l
 	ld	a, (xsp+8)
@@ -5638,33 +5638,33 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xhl+1)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	c, (xsp+14)
 	extz	bc
 	lds	wa, 4
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	c, (xsp+15)
 	extz	bc
 	lds	wa, 2
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	c, (xsp+16)
 	extz	bc
 	lds	wa, 5
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	c, (xsp+17)
 	extz	bc
 	lds	wa, 3
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	c, (xsp+18)
 	extz	bc
 	lds	wa, 6
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	c, (xsp+19)
 	extz	bc
 	lds	wa, 7
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xwa, (xsp+10)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xwa, (xsp+6)
 	.byte 0x8f
 	ldwio	63, 28160
@@ -5675,7 +5675,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	ldb	c, 0
@@ -5686,7 +5686,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	ldw	de, 32523
 	nop
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -5694,14 +5694,14 @@ SeMenu_CopyWriteUpdate_Data:
 	inc	3, hl
 	.byte 0xd6
 	jr	49
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0xc7
 	swi	3
 	cp	(xbc-57), xhl
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	ldb	c, 0
@@ -5712,7 +5712,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	ldw	de, 32523
 	nop
-	call	15754780
+	call	SeMenu_SetupDisplayObject_Alt1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -5721,7 +5721,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xd6
 	pushw	1
 	pushw	38
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 6
 	call	15758489
@@ -5742,7 +5742,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 38
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -5752,12 +5752,12 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	z
 	ldw	wa, 38
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -5773,13 +5773,13 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 9
 	ldw	wa, 38
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -5795,13 +5795,13 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 9
 	ldw	wa, 38
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -5816,16 +5816,16 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	5
 	ldw	wa, 34
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	2, xsp
 	cps	a, 0
 	jr	nz, 33
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	nop
@@ -5835,7 +5835,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	5
 	ldw	wa, 61
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	2, xsp
 	ret
 	dec	4, xsp
@@ -5919,7 +5919,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+8), bc
 	ld	iz, wa
 	lda	xwa, (xsp+2)
-	call	15767826
+	call	SeMenu_DisplayState_Data
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -5953,7 +5953,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+20), a
 	lda	xbc, (xsp+18)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	ccf
 	push	xsp
@@ -5967,7 +5967,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xde, (xsp+2)
 	ld	(xde+6), 255
 	ld	(xde+7), 0
@@ -5995,12 +5995,12 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+5)
 	extz	bc
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	a, (xsp+18)
 	extz	wa
 	pushw	wa
 	pushw	33
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	.byte 0x8f
 	ccf
@@ -6014,7 +6014,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+5)
-	call	15755068
+	call	SeMenu_InitDisplayColumn_Data
 	.byte 0x8f
 	ccf
 	push	xsp
@@ -6030,7 +6030,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+5)
 	extz	bc
-	call	15767869
+	call	SeMenu_StoreEffectCoeff
 	lds	wa, 4
 	jrl	239
 	lda	xbc, (xsp+2)
@@ -6041,7 +6041,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nz, 68
 	ld	(xsp+18), 9
 	ldw	wa, 9
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 15
 	ld	(xbc+7), 0
@@ -6073,14 +6073,14 @@ SeMenu_CopyWriteUpdate_Data:
 	swi	3
 	.byte 0x99
 	ldw	wa, 10
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xwa, (xsp+2)
 	ld	(xwa+6), 15
 	ld	(xwa+7), 0
 	ld	(xwa+8), 11
 	ld	(xwa+9), 0
 	lda	xwa, (xsp+14)
-	call	15753653
+	call	SeMenu_LoadMasterPtr
 	.byte 0xc7
 	swi	3
 	dec	6, wa
@@ -6094,7 +6094,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	wa, 4
 	ldw	bc, 64
 	lds	de, 1
-	call	15767411
+	call	SeMenu_PatchBank_Data
 	ld	a, (xsp+14)
 	extz	wa
 	pushw	64
@@ -6111,17 +6111,17 @@ SeMenu_CopyWriteUpdate_Data:
 	pushw	15
 	lds	wa, 0
 	ldw	bc, 93
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	ld	a, (xsp+18)
 	extz	wa
 	ld	c, (xsp+16)
 	extz	bc
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	a, (xsp+18)
 	extz	wa
 	pushw	wa
 	pushw	33
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 4
 	call	15758489
@@ -6139,13 +6139,13 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	wa, 4
 	ldw	bc, 64
 	lds	de, 0
-	call	15767411
+	call	SeMenu_PatchBank_Data
 	ld	a, (xsp+14)
 	extz	wa
 	pushw	64
 	lds	bc, 4
 	lds	de, 0
-	call	16626212
+	call	AddswbWr
 	jr	-102
 	ld	(xwa+10), 255
 	call	15756146
@@ -6162,13 +6162,13 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15767396
 	ldw	wa, 62
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -6187,10 +6187,10 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 20
 	lds	wa, 0
 	lds	bc, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	0
 	pushw	33
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	inc	4, xsp
 	ret
@@ -6198,7 +6198,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -6217,10 +6217,10 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 20
 	lds	wa, 0
 	lds	bc, 2
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	0
 	pushw	33
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	inc	4, xsp
 	ret
@@ -6228,7 +6228,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -6247,10 +6247,10 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 20
 	lds	wa, 0
 	lds	bc, 3
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	0
 	pushw	33
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	inc	4, xsp
 	ret
@@ -6258,7 +6258,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -6276,10 +6276,10 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 20
 	lds	wa, 0
 	lds	bc, 4
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	0
 	pushw	33
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	inc	4, xsp
 	ret
@@ -6287,19 +6287,19 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	nz
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	incf
 	push	xix
 	retd	12727
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -6345,13 +6345,13 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	incf
 	push	xix
 	retd	12727
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -6403,13 +6403,13 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	incf
 	push	xix
 	retd	12727
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -6469,13 +6469,13 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	incf
 	push	xix
 	retd	12727
 	lds	wa, 4
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -6526,13 +6526,13 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	incf
 	push	xix
 	retd	12727
 	lds	wa, 5
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -6582,13 +6582,13 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	incf
 	push	xix
 	retd	12727
 	lds	wa, 6
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -6619,13 +6619,13 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	incf
 	push	xix
 	retd	12727
 	lds	wa, 7
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -6660,13 +6660,13 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xsp+14), a
 	lda	xbc, (xsp+12)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	incf
 	push	xix
 	retd	12727
 	ldw	wa, 8
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -6700,7 +6700,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	jr	nz, 74
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+2)
 	and	a, 15
 	cp	a, 11
@@ -6716,21 +6716,21 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xde, (xsp+2)
 	pushw	15
 	lds	wa, 0
 	ldw	bc, 93
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	ldw	wa, 58
 	lds	bc, 1
-	call	15753584
-	call	15767761
+	call	SeMenu_SendEvent
+	call	SeMenu_OrPartConfig_Data
 	jr	112
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xwa, (xsp)
-	call	15753653
+	call	SeMenu_LoadMasterPtr
 	.byte 0xbf
 	push_sr
 	inc	6, l
@@ -6738,7 +6738,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	wa, 4
 	ldw	bc, 64
 	lds	de, 0
-	call	15767411
+	call	SeMenu_PatchBank_Data
 	ld	a, (xsp)
 	extz	wa
 	pushw	64
@@ -6751,25 +6751,25 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	wa, 4
 	ldw	bc, 64
 	lds	de, 1
-	call	15767411
+	call	SeMenu_PatchBank_Data
 	ld	a, (xsp)
 	extz	wa
 	pushw	64
 	lds	bc, 4
 	ldw	de, 64
-	call	16626212
+	call	AddswbWr
 	ld	c, (xsp+2)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xde, (xsp+2)
 	pushw	128
 	lds	wa, 0
 	ldw	bc, 93
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	0
 	pushw	58
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	inc	4, xsp
 	ret
@@ -6778,7 +6778,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	jr	nz, 64
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp)
 	and	a, 15
 	jr	z, 103
@@ -6792,19 +6792,19 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xde, (xsp)
 	pushw	15
 	lds	wa, 0
 	ldw	bc, 93
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	ldw	wa, 58
 	lds	bc, 1
-	call	15753584
-	call	15767761
+	call	SeMenu_SendEvent
+	call	SeMenu_OrPartConfig_Data
 	jr	52
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xb7
 	inc	6, h
 	.byte 0x04, 0xb7, 0xb6
@@ -6813,15 +6813,15 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xde, (xsp)
 	pushw	64
 	lds	wa, 0
 	ldw	bc, 93
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	0
 	pushw	58
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	inc	2, xsp
 	ret
@@ -6829,7 +6829,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	nz
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	dec	2, xsp
 	cps	a, 0
@@ -6842,13 +6842,13 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15753872
 	ld	a, (xsp)
 	extz	wa
-	call	15755203
+	call	SeMenu_SetDisplayValue_Data
 	ldw	wa, 35
-	call	15753620
+	call	SeMenu_TriggerNotification
 	lds	wa, 1
 	call	15767396
 	lds	wa, 0
-	call	15766945
+	call	SeMenu_SetSelectedRow
 	inc	2, xsp
 	ret
 	dec	6, xsp
@@ -6882,17 +6882,17 @@ SeMenu_CopyWriteUpdate_Data:
 	ldb	c, 217
 	ccf
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	c, (xsp+1)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	0
 	pushw	62
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	pushw	1
 	pushw	62
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	8, xsp
 	inc	6, xsp
 	ret
@@ -6927,17 +6927,17 @@ SeMenu_CopyWriteUpdate_Data:
 	ldb	c, 217
 	ccf
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	c, (xsp+1)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	0
 	pushw	62
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	pushw	1
 	pushw	62
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	8, xsp
 	inc	6, xsp
 	ret
@@ -6945,15 +6945,15 @@ SeMenu_CopyWriteUpdate_Data:
 	ret	nz
 	ldw	wa, 63
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15766945
+	call	SeMenu_SetSelectedRow
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	jrl	391
 	jrl	477
@@ -6978,7 +6978,7 @@ SeMenu_CopyWriteUpdate_Data:
 	calr	1331
 	jr	82
 	lda	xwa, (xsp+2)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -6993,7 +6993,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15758441
 	lda	xbc, (xsp+4)
 	ld	xwa, xbc
-	call	16459824
+	call	FontGlyph_ByteData
 	.byte 0xc7
 	swi	3
 	.byte 0x89
@@ -7003,7 +7003,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+4)
 	pushw	127
 	lds	wa, 0
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -7015,7 +7015,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15767396
 	ldw	wa, 62
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	.byte 0xd7
 	swi	2
 	halt
@@ -7031,7 +7031,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	jrl	nz, 130
 	lda	xwa, (xsp+2)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -7040,7 +7040,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xbc, (xsp+4)
 	lds	wa, 1
 	ldw	de, 13
-	call	15757987
+	call	SeMenu_SetupPartDisplay_End
 	.byte 0xc7
 	swi	3
 	cp	(xwa-57), xhl
@@ -7055,7 +7055,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	de, 32523
 	nop
 	lds	wa, 0
-	call	15754780
+	call	SeMenu_SetupDisplayObject_Alt1
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -7082,7 +7082,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+20)
 	pushw	127
 	lds	wa, 0
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -7094,7 +7094,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15767396
 	ldw	wa, 62
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	.byte 0xd7
 	swi	2
 	halt
@@ -7108,7 +7108,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldb	c, 16
 	extz	bc
 	lds	wa, 2
-	call	15756078
+	call	SeMenu_StorePartParam
 	lda	xbc, (xsp+2)
 	lds	wa, 0
 	call	15758441
@@ -7119,12 +7119,12 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	lds	wa, 0
 	lds	bc, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	63
-	call	15789674
+	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 1
 	call	15758461
@@ -7141,7 +7141,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	6, xsp
 	lda	xbc, (xsp+4)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
@@ -7150,7 +7150,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
@@ -7162,23 +7162,23 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	0
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	pushw	1
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	8, xsp
 	inc	6, xsp
 	ret
 	dec	8, xsp
 	lda	xbc, (xsp+6)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp)
 	dec	1, a
 	cp	(xsp+6), a
@@ -7187,7 +7187,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+6)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	a, (xsp+6)
 	extz	wa
 	lda	xbc, (xsp+4)
@@ -7199,13 +7199,13 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	0
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	pushw	1
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	8, xsp
 	inc	8, xsp
 	ret
@@ -7215,7 +7215,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	lda	xbc, (xsp+2)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xc7
 	swi	3
 	cp	(xwa-57), xhl
@@ -7245,7 +7245,7 @@ SeMenu_CopyWriteUpdate_Data:
 	nop
 	lda	xbc, (xsp+24)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xc7
 	swi	3
 	.byte 0xa8
@@ -7290,7 +7290,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldb	w, 216
 	.byte 0xa9
 	ldw	de, 16
-	call	15757843
+	call	SeMenu_SetupPartDisplay
 	ld	c, (xsp+24)
 	extz	bc
 	lda	xwa, (xsp+6)
@@ -7304,10 +7304,10 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	1
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	.byte 0xd7
 	swi	2
@@ -7320,7 +7320,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x04
 	lda	xbc, (xsp+2)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xc7
 	swi	3
 	cp	(xwa-57), xhl
@@ -7339,7 +7339,7 @@ SeMenu_CopyWriteUpdate_Data:
 	retd	58979
 	lda	xbc, (xsp+24)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+24)
 	.byte 0xc7
 	swi	3
@@ -7386,7 +7386,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldb	w, 216
 	.byte 0xa9
 	ldw	de, 16
-	call	15757843
+	call	SeMenu_SetupPartDisplay
 	ld	c, (xsp+24)
 	extz	bc
 	lda	xwa, (xsp+6)
@@ -7400,10 +7400,10 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	1
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	.byte 0xd7
 	swi	2
@@ -7413,7 +7413,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	6, xsp
 	lda	xbc, (xsp+4)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
@@ -7440,10 +7440,10 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	1
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	jr	17
 	cp	a, 97
@@ -7457,7 +7457,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	6, xsp
 	lda	xbc, (xsp)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x87
 	push	xsp
 	nop
@@ -7466,14 +7466,14 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	a, (xsp)
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	15758552
 	lda	xbc, (xsp+4)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+2)
@@ -7481,7 +7481,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15758423
 	pushw	1
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	inc	6, xsp
 	ret
@@ -7497,7 +7497,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x99
 	lda	xbc, (xsp+4)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xc7
 	swi	3
 	dec	6, wa
@@ -7520,14 +7520,14 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	15758552
 	lda	xbc, (xsp+6)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	ld	c, (xsp+2)
@@ -7535,7 +7535,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15758423
 	pushw	1
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	.byte 0xd7
 	swi	2
@@ -7545,21 +7545,21 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	6, xsp
 	lda	xbc, (xsp)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x87
 	.ascii "?_o:‡"
 	jr	lt, -121
 	ldb	c, 217
 	ccf
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	ld	a, (xsp)
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	15758552
 	lda	xbc, (xsp+4)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+2)
@@ -7567,7 +7567,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15758423
 	pushw	1
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	inc	6, xsp
 	ret
@@ -7588,16 +7588,16 @@ SeMenu_CopyWriteUpdate_Data:
 	retd	60259
 	lds	wa, 0
 	lds	bc, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	lds	wa, 1
 	lds	bc, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	0
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	pushw	1
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	8, xsp
 	.byte 0xd7
 	swi	2
@@ -7610,10 +7610,10 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xa8
 	lda	xbc, (xsp+4)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+6)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xc7
 	swi	2
 	cp	(xwa-57), xde
@@ -7781,7 +7781,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xbc, (xsp+10)
 	lds	wa, 1
 	ldw	de, 16
-	call	15757843
+	call	SeMenu_SetupPartDisplay
 	ld	a, (xsp+6)
 	extz	wa
 	lda	xbc, (xsp+10)
@@ -7795,10 +7795,10 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+8)
 	extz	bc
 	lds	wa, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	1
 	pushw	63
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	pop	xiz
 	lda	xsp, (xsp+42)
@@ -7810,7 +7810,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	5
 	ldw	wa, 43
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	cps	a, 0
 	jr	nz, 7
 	ldw	wa, 59
@@ -7818,20 +7818,20 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	5
 	ldw	wa, 48
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	cps	a, 0
 	ret	nz
 	ldw	wa, 63
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	lds	wa, 2
-	call	15766945
+	call	SeMenu_SetSelectedRow
 	ret
 	cps	a, 0
 	ret	nz
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	ret
 
@@ -8335,7 +8335,7 @@ SeMenu_NameEditor_End:
 	and	w, 127
 	or	w, a
 	stda8	1642, w
-	call	15794470
+	call	SeMenu_NameEdit_CheckBit7
 	jr	35
 	.byte 0xc1
 	push	xwa
@@ -8349,7 +8349,7 @@ SeMenu_NameEditor_End:
 	stda8	1632, w
 	sti8_24	257960, 0
 	ld	xiy, 15816819
-	call	15789082
+	call	SeMenu_NameEditor_HandleInput
 	ret
 
 SeMenu_DisplayPartValue:
@@ -8421,7 +8421,7 @@ SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
 	inc	2, wa
 	stda16	1746, wa
 	sti8_24	257960, 0
-	call	15789197
+	call	SeMenu_NameEditor_ChangeCase_Data
 	pop	xiy
 	.ascii "\\[ZYX^"
 	ret
@@ -8437,7 +8437,7 @@ SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
 	ld	wa, (xiz+14)
 	stda16	1746, wa
 	sti8_24	257960, 0
-	call	15789091
+	call	SeMenu_NameEditor_HandleInput_Data
 	pop	xiy
 	pop	xix
 	pop	xhl
@@ -8459,7 +8459,7 @@ SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
 	ld	wa, (xiz+14)
 	stda16	1746, wa
 	sti8_24	257960, 0
-	call	15789224
+	call	SeMenu_NameEditor_SelectCharSet_Data
 	pop	xiy
 	pop	xix
 	pop	xhl
@@ -8630,7 +8630,7 @@ SeMenu_ShowConfirmDialog_Data:
 	nop
 	ld	xiy, 15799353
 	ld	xix, 15799392
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	.byte 0xc1
 	pop	xix
 	ei	63
@@ -8642,7 +8642,7 @@ SeMenu_ShowConfirmDialog_Data:
 	sti8_24	257960, 1
 	ld	xiy, 15799402
 	ld	xix, 15799412
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	.ascii "^]\\[ZYX"
 	ret
 	.ascii "89:;<=>"
@@ -8653,13 +8653,13 @@ SeMenu_ShowConfirmDialog_Data:
 	sti8_24	257960, 0
 	ld	xiy, 15799009
 	ld	xix, 15799019
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	c, 2
 	jr	22
 	sti8_24	257960, 0
 	ld	xiy, 15799009
 	ld	xix, 15799029
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	c, 4
 	ldda8	w, 1630
 	ld	a, c
@@ -8711,9 +8711,9 @@ SeMenu_ShowConfirmDialog_Data:
 	sti8_24	257960, 1
 	ld	xiy, 15799412
 	ld	xix, 15799422
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15799422
-	call	15789278
+	call	SeMenu_NameEditor_Redraw
 	pop	xiz
 	.ascii "]\\[ZYX"
 	ret
@@ -8729,7 +8729,7 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	wa, (xiz+14)
 	stda16	1746, wa
 	sti8_24	257960, 0
-	call	15789242
+	call	SeMenu_NameEditor_Complete
 	pop	xiy
 	pop	xix
 	pop	xhl
@@ -8771,7 +8771,7 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xwa
 	incf
 	nop
-	call	15789197
+	call	SeMenu_NameEditor_ChangeCase_Data
 	ldda16	ix, 1734
 	ldda16	iy, 1736
 	add	ix, 196
@@ -8788,7 +8788,7 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xde
 	.byte 0x01
 	nop
-	call	15789197
+	call	SeMenu_NameEditor_ChangeCase_Data
 	ldda16	ix, 1734
 	ldda16	iy, 1736
 	stda16	1740, ix
@@ -8803,7 +8803,7 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xwa
 	incf
 	nop
-	call	15789197
+	call	SeMenu_NameEditor_ChangeCase_Data
 	ldda16	ix, 1734
 	ldda16	iy, 1736
 	stda16	1740, ix
@@ -8828,7 +8828,7 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xwa
 	reti
 	nop
-	call	15789197
+	call	SeMenu_NameEditor_ChangeCase_Data
 	ldda16	ix, 1734
 	ldda16	iy, 1736
 	sub	ix, 4
@@ -8869,7 +8869,7 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xwa
 	ret
 	nop
-	call	15789197
+	call	SeMenu_NameEditor_ChangeCase_Data
 	ret
 	stda16	1740, ix
 	stda16	1744, ix
@@ -8886,7 +8886,7 @@ SeMenu_ShowConfirmDialog_Data:
 	nop
 	pushw	ix
 	pushw	iy
-	call	15789109
+	call	SeMenu_NameEditor_InsertChar
 	popw	iy
 	popw	ix
 	stda16	1740, ix
@@ -8903,7 +8903,7 @@ SeMenu_ShowConfirmDialog_Data:
 	nop
 	pushw	ix
 	pushw	iy
-	call	15789197
+	call	SeMenu_NameEditor_ChangeCase_Data
 	popw	iy
 	popw	ix
 	ldb	c, 5
@@ -8932,7 +8932,7 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xiz
 	pushw	ix
 	pushw	iy
-	call	15789197
+	call	SeMenu_NameEditor_ChangeCase_Data
 	popw	iy
 	popw	ix
 	pop	xiz
@@ -8956,7 +8956,7 @@ SeMenu_ShowConfirmDialog_Data:
 	.byte 0x04
 	pushw	ix
 	pushw	iy
-	call	15789109
+	call	SeMenu_NameEditor_InsertChar
 	popw	iy
 	popw	ix
 	pop	c
@@ -8986,12 +8986,12 @@ SeMenu_ShowConfirmDialog_Data:
 	sti8_24	257960, 0
 	ld	xiy, 15801680
 	ld	xix, 15801690
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	jr	20
 	sti8_24	257960, 0
 	ld	xiy, 15801670
 	ld	xix, 15801680
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	xor	xwa, xwa
 	ldda8	a, 1629
 	sla	wa, 2
@@ -9031,7 +9031,7 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	xiy, (xiz)
 	ld	xix, xiy
 	add	xix, 42
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ret
 	ld	a, (xiz)
 	and	a, 224
@@ -9060,7 +9060,7 @@ SeMenu_ShowConfirmDialog_Data:
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
 	ldb	e, 0
-	call	15789242
+	call	SeMenu_NameEditor_Complete
 	ldda16	ix, 1734
 	ldda16	iy, 1736
 	stda16	1740, ix
@@ -9083,7 +9083,7 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xwa
 	.byte 0x01
 	nop
-	call	15789091
+	call	SeMenu_NameEditor_HandleInput_Data
 	jr	44
 	ld	xiz, 15791318
 	xor	w, w
@@ -9102,7 +9102,7 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	ix, hl
 	lds	bc, 5
 	ldw	hl, 40
-	call	15789127
+	call	SeMenu_NameEditor_DeleteChar
 	ret
 	.byte 0x96
 	rcf
@@ -9142,37 +9142,37 @@ SeMenu_WaveformSelect_Apply:
 	add	xiz, xwa
 	ld	xiy, (xiz)
 	ld	xix, (xiz+4)
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15814733
 	ld	xix, 15814796
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ret
 SeMenu_WaveformSelect_Data:
 	cpdi8	1720, 1
 	jr	nz, 6
-	call	15791367
+	call	SeMenu_WaveformSelect_Apply
 	jr	95
 	sti8_24	257960, 0
 	cpdi8	1710, 1
 	jr	z, 20
 	ld	xiy, 15798632
 	ld	xix, 15798923
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	call	15791523
 	.ascii "h>E&]"
 	.byte 0xf1
 	nop
 	ld	xix, 15818738
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	call	15792279
 	ld	xiy, 15818758
 	ld	xix, 15818993
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15791567
 	sti8_24	257960, 1
 	ld	xiy, 15818738
 	ld	xix, 15818758
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 0
 	ret
 	sti8_24	257960, 0
@@ -9183,11 +9183,11 @@ SeMenu_WaveformSelect_Data:
 	jr	z, 16
 	ld	xiy, 15798923
 	ld	xix, 15798967
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	jr	14
 	ld	xiy, 15798967
 	ld	xix, 15799009
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ret
 	sti8_24	257960, 0
 	ldb	a, 13
@@ -9232,24 +9232,24 @@ SeMenu_PresetManager_Init:
 	sti8_24	257960, 0
 	ld	xiy, 15818948
 	ld	xix, 15818982
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15791567
 	jrl	138
 	sti8_24	257960, 1
 	ld	xiy, 15819041
 	ld	xix, 15819051
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	ld	xiy, 15819051
 	call	15797223
 	sti8_24	257960, 1
 	ld	xiy, 15818738
 	ld	xix, 15818758
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	jr	85
 	ld	xiy, 15818758
 	ld	xix, 15818993
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15791567
 	jr	65
 	call	15792279
@@ -9257,12 +9257,12 @@ SeMenu_PresetManager_Init:
 	sti8_24	257960, 0
 	ld	xiy, 15818792
 	ld	xix, 15818826
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	jr	37
 	sti8_24	257960, 0
 	ld	xiy, 15818864
 	ld	xix, 15818898
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	jr	15
 	ld	xiy, 15819051
 	sti8_24	257960, 0
@@ -9290,16 +9290,16 @@ SeMenu_PresetManager_Save:
 
 SeMenu_PresetManager_SaveApply:
 	call	15792372
-	call	15791861
+	call	SeMenu_PresetManager_Save
 	ld	xiy, 15799776
 	ld	xix, 15800196
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	call	15790154
 	call	15792175
 	sti8_24	257960, 0
 	ld	xiy, 15804881
 	ld	xix, 15805140
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15792393
 	ret
 SeMenu_PresetManager_Data:
@@ -9310,22 +9310,22 @@ SeMenu_PresetManager_Data:
 	jr	z, 20
 	ld	xiy, 15814236
 	ld	xix, 15814688
-	call	15789056
-	call	15791861
+	call	SeMenu_NameEditor_Setup
+	call	SeMenu_PresetManager_Save
 	jr	28
 	ld	xiy, 15814688
 	ld	xix, 15814733
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15814247
 	ld	xix, 15814688
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	call	15790154
 	call	15790228
 	sti8_24	257960, 0
 	ld	xiy, 15805307
 	ld	xix, 15805318
-	call	15789069
-	call	15794695
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_BankEdit_LoopHelper
 	call	15792393
 	ret
 	.byte 0xc1, 0xae, 0x06
@@ -9335,13 +9335,13 @@ SeMenu_PresetManager_Data:
 	sti8_24	257960, 0
 	ld	xiy, 15800196
 	ld	xix, 15800206
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	c, 2
 	jr	22
 	sti8_24	257960, 0
 	ld	xiy, 15800196
 	ld	xix, 15800216
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	c, 4
 	ldda8	w, 1630
 	ld	a, c
@@ -9500,17 +9500,17 @@ SeMenu_PresetManager_Data:
 	sti8_24	257960, 0
 	ld	xiy, 15799728
 	ld	xix, 15799771
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ret
 	sti8_24	257960, 0
 	ld	xiy, 15799771
 	ld	xix, 15799776
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ret
 	sti8_24	257960, 0
 	ld	xiy, 15799517
 	ld	xix, 15799728
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 0
 	ret
 SeMenu_PresetBrowser_Init:
@@ -9544,11 +9544,11 @@ SeMenu_PresetBrowser_Select:
 
 
 SeMenu_PresetBrowser_Data:
-	call	15792492
-	call	15792513
+	call	SeMenu_PresetBrowser_Navigate
+	call	SeMenu_PresetBrowser_Select
 	ld	xiy, 15811174
 	ld	xix, 15811595
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	call	15792593
 	call	15790154
 	call	15792686
@@ -9556,7 +9556,7 @@ SeMenu_PresetBrowser_Data:
 	sti8_24	257960, 0
 	ld	xiy, 15807619
 	ld	xix, 15807700
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	ret
 	sti8_24	257960, 0
 	ldb	c, 4
@@ -9611,18 +9611,18 @@ SeMenu_PresetBrowser_Data:
 	sti8_24	257960, 1
 	ld	xiy, 15807860
 	ld	xix, 15807870
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 0
 	ld	xiy, 15807940
 	ld	xix, 15807950
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15807950
 	ld	xix, 15807960
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 2
 	ld	xiy, 15807950
 	ld	xix, 15807960
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	c, 4
 	ld	xiy, 1637
 	ld	w, (xiy)
@@ -9669,7 +9669,7 @@ SeMenu_PresetBrowser_Data:
 	nop
 	nop
 	pushw	de
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	popw	de
 	pop	xiy
 	pop	c
@@ -9691,7 +9691,7 @@ SeMenu_PresetBrowser_Data:
 	ld	xix, xiy
 	add	xix, 10
 	pushw	de
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	popw	de
 	pop	xiy
 	pop	c
@@ -9703,7 +9703,7 @@ SeMenu_PresetBrowser_Data:
 	swi	0
 	.byte 0xe8
 	ldb	e, 42
-	call	15789082
+	call	SeMenu_NameEditor_HandleInput
 	popw	de
 	pop	xiy
 	pop	c
@@ -9721,7 +9721,7 @@ SeMenu_PresetBrowser_Data:
 	nop
 	nop
 	nop
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	pop	xiy
 	pop	c
 	jr	0
@@ -9791,44 +9791,44 @@ SeMenu_CompareAndApply_Data5:
 SeMenu_CompareAndApply_Data6:
 	swi	3
 	.byte 0xf0
-	call	15791861
+	call	SeMenu_PresetManager_Save
 	sti8_24	257960, 2
 	ld	xiy, 15802456
 	ld	xix, 15802476
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 0
 	ld	xiy, 15802243
 	ld	xix, 15802456
-	call	15789056
-	call	15793120
+	call	SeMenu_NameEditor_Setup
+	call	SeMenu_CompareAndApply_Data4
 	stdi16	1734, 56
 	stdi16	1736, 139
 	call	15790464
 	sti8_24	257960, 0
 	ld	xiy, 15806598
 	ld	xix, 15806654
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	ret
 SeMenu_Utility_CopyBlock:
-	call	15793085
+	call	SeMenu_CompareAndApply_Data
 	cpdi8	1710, 1
 	.ascii "f(El "
 	.byte 0xf1
 	nop
 	ld	xix, 15802665
-	call	15789056
-	call	15793634
+	call	SeMenu_NameEditor_Setup
+	call	SeMenu_Utility_CompareBlock_End
 	sti8_24	257960, 2
 	ld	xiy, 15804145
 	ld	xix, 15804155
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	jr	28
 	ld	xiy, 15802476
 	ld	xix, 15802500
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15819475
 	ld	xix, 15819690
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	call	15790154
 	call	15790228
 	sti8_24	257960, 0
@@ -9838,13 +9838,13 @@ SeMenu_Utility_CopyBlock:
 	jr	z, 16
 	ld	xiy, 15806670
 	ld	xix, 15806740
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	jr	18
 	ld	xiy, 15819799
 	ld	xix, 15819865
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15793377
-	call	15793120
+	call	SeMenu_CompareAndApply_Data4
 	ret
 	sti8_24	257960, 0
 	ldda8	a, 1632
@@ -9854,30 +9854,30 @@ SeMenu_Utility_CopyBlock:
 	.byte 0xf1
 	nop
 	ld	xix, 15819917
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	sti8_24	257960, 2
 	ld	xiy, 15804145
 	ld	xix, 15804167
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	jr	34
 	ld	xiy, 15819917
 	ld	xix, 15819931
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 2
 	ld	xiy, 15804167
 	ld	xix, 15804177
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ret
 SeMenu_Utility_FillBlock:
-	call	15793085
+	call	SeMenu_CompareAndApply_Data
 	ld	xiy, 15802665
 	ld	xix, 15802996
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 2
 	ld	xiy, 15802996
 	ld	xix, 15803016
-	call	15789056
-	call	15791861
+	call	SeMenu_NameEditor_Setup
+	call	SeMenu_PresetManager_Save
 	stdi16	1734, 56
 	stdi16	1736, 139
 	call	15790464
@@ -9886,8 +9886,8 @@ SeMenu_Utility_FillBlock:
 	sti8_24	257960, 0
 	ld	xiy, 15806768
 	ld	xix, 15806885
-	call	15789069
-	call	15793120
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_CompareAndApply_Data4
 	ret
 SeMenu_Utility_CompareBlock:
 	; --- Main: init, 2x XIY/XIX setup, language branch, 3 calls (80 bytes) ---
@@ -9959,125 +9959,125 @@ SeMenu_Utility_FormatSigned:
 
 
 SeMenu_Utility_FormatSigned_Data:
-	call	15793653
+	call	SeMenu_Utility_SearchByte
 	ld	xiy, 15803281
 	ld	xix, 15803614
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15803614
 	ld	xix, 15803635
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 4
-	call	15793634
+	call	SeMenu_Utility_CompareBlock_End
 	call	15790154
 	call	15790228
-	call	15793709
+	call	SeMenu_Utility_FormatNumber_End
 	sti8_24	257960, 0
 	ld	xiy, 15805798
 	ld	xix, 15805894
-	call	15789069
-	call	15793688
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatPercent:
-	call	15793653
+	call	SeMenu_Utility_SearchByte
 	ld	xiy, 15803655
 	ld	xix, 15803805
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15803805
 	ld	xix, 15803825
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 4
-	call	15793634
+	call	SeMenu_Utility_CompareBlock_End
 	call	15790154
 	call	15790228
-	call	15793709
+	call	SeMenu_Utility_FormatNumber_End
 	sti8_24	257960, 0
 	ld	xiy, 15805986
 	ld	xix, 15806037
-	call	15789069
-	call	15793688
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatPercent_Data:
-	call	15793653
+	call	SeMenu_Utility_SearchByte
 	ld	xiy, 15803655
 	ld	xix, 15803805
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15803825
 	ld	xix, 15803846
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 4
-	call	15793634
+	call	SeMenu_Utility_CompareBlock_End
 	call	15790154
 	call	15790228
-	call	15793709
+	call	SeMenu_Utility_FormatNumber_End
 	sti8_24	257960, 0
 	ld	xiy, 15805986
 	ld	xix, 15806037
-	call	15789069
-	call	15793688
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatHex:
-	call	15793653
+	call	SeMenu_Utility_SearchByte
 	ld	xiy, 15803846
 	ld	xix, 15804112
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 4
-	call	15793634
+	call	SeMenu_Utility_CompareBlock_End
 	call	15790154
 	call	15790228
-	call	15793709
+	call	SeMenu_Utility_FormatNumber_End
 	sti8_24	257960, 0
 	ld	xiy, 15806053
 	ld	xix, 15806134
-	call	15789069
-	call	15793688
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatHex_Data:
-	call	15793653
+	call	SeMenu_Utility_SearchByte
 	ld	xiy, 15804112
 	ld	xix, 15804135
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 4
-	call	15793634
+	call	SeMenu_Utility_CompareBlock_End
 	call	15790154
 	call	15790228
-	call	15793709
-	call	15793688
+	call	SeMenu_Utility_FormatNumber_End
+	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_End:
-	call	15793653
+	call	SeMenu_Utility_SearchByte
 	ld	xiy, 15804467
 	ld	xix, 15804544
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15804177
 	ld	xix, 15804467
-	call	15789056
-	call	15791861
+	call	SeMenu_NameEditor_Setup
+	call	SeMenu_PresetManager_Save
 	sti8_24	257960, 2
 	ld	xiy, 15804135
 	ld	xix, 15804155
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	call	15790154
 	call	15790228
 	sti8_24	257960, 0
 	ld	xiy, 15806158
 	ld	xix, 15806275
-	call	15789069
-	call	15793688
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_NameEdit_DataBlock1:
 	ldda8	a, 1632
@@ -10089,7 +10089,7 @@ SeMenu_NameEdit_DataBlock1:
 	jr	5
 	ld	xiy, 15815618
 	ld	xix, 15815905
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	xor	xwa, xwa
 	ldda8	a, 1648
 	sla	wa, 3
@@ -10097,7 +10097,7 @@ SeMenu_NameEdit_DataBlock1:
 	add	xiz, xwa
 	ld	xiy, (xiz)
 	ld	xix, (xiz+4)
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15815378
 	xor	xbc, xbc
 	ld	xiz, 15817425
@@ -10117,7 +10117,7 @@ SeMenu_NameEdit_DataBlock1:
 	jr	5
 	ld	xiy, 15815558
 	ld	xix, 15815618
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15816804
 	ldda8	a, 1648
 	cp	a, 10
@@ -10125,7 +10125,7 @@ SeMenu_NameEdit_DataBlock1:
 	ld	xix, 15816860
 	jr	5
 	ld	xix, 15816871
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	xor	xwa, xwa
 	ldda8	a, 1648
 	sla	wa, 3
@@ -10133,16 +10133,16 @@ SeMenu_NameEdit_DataBlock1:
 	add	xiz, xwa
 	ld	xiy, (xiz)
 	ld	xix, (xiz+4)
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	ret
 SeMenu_NameEdit_DataBlock2:
 	ld	xiy, 15817641
 	ld	xix, 15818022
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15819931
 	ld	xix, 15820023
-	call	15789069
-	call	15794470
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_NameEdit_CheckBit7
 	ret
 SeMenu_NameEdit_Dispatch:
 	; --- Dispatch on A: XIY/XIX setup, 3 paths (53 bytes) ---
@@ -10196,7 +10196,7 @@ SeMenu_PatchEdit_DataBlock:
 	pop_a
 	ld	xiy, 15816819
 	ld	xix, 15816849
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	jr	15
 	ld	xiy, 15817103
 	sti8_24	257960, 0
@@ -10318,18 +10318,18 @@ SeMenu_DrumKit_Dispatch:
 	sti8_24	257960, 0
 	ld	xiy, 15807123
 	ld	xix, 15807145
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	jr	61
 	sti8_24	257960, 1
 	ld	xiy, 15807535
 	ld	xix, 15807545
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	jr	22
 	sti8_24	257960, 1
 	ld	xiy, 15807545
 	ld	xix, 15807555
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	a, 13
 	sti8_24	257960, 0
 	ld	xiy, 15807555
@@ -10350,18 +10350,18 @@ Data_UnknownBlock:
 	.byte 0x01
 	ld	xiy, 15807850
 	ld	xix, 15807860
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	call	15795050
 	jr	65
 	sti8_24	257960, 0
 	ld	xiy, 15807664
 	ld	xix, 15807689
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	jr	43
 	sti8_24	257960, 0
 	ld	xiy, 15807619
 	ld	xix, 15807644
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	jr	21
 	call	15792686
 	jr	15
@@ -10372,7 +10372,7 @@ Data_UnknownBlock:
 	sti8_24	257960, 0
 	ld	xiy, 15807930
 	ld	xix, 15807940
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldda8	c, 1632
 	xor	b, b
 	sla	bc, 2
@@ -10387,7 +10387,7 @@ Data_UnknownBlock:
 	nop
 	nop
 	nop
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ret
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
@@ -10416,7 +10416,7 @@ Data_UnknownBlock:
 	sti8_24	257960, 1
 	ld	xiy, 15819765
 	ld	xix, 15819775
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	sti8_24	257960, 0
 	.byte 0xc1, 0xae, 0x06
@@ -10458,7 +10458,7 @@ Data_UnknownBlock:
 	sti8_24	257960, 0
 	ld	xiy, 15805864
 	ld	xix, 15805894
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	jr	15
 	sti8_24	257960, 0
 	ld	xiy, 15805894
@@ -10469,7 +10469,7 @@ Data_UnknownBlock:
 	sti8_24	257960, 0
 	ld	xiy, 15805864
 	ld	xix, 15805894
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	jr	15
 	sti8_24	257960, 0
 	ld	xiy, 15805894
@@ -10492,7 +10492,7 @@ Data_UnknownBlock:
 	sti8_24	257960, 1
 	ld	xiy, 15806293
 	ld	xix, 15806313
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	sti8_24	257960, 0
 	ld	xiy, 15806313
@@ -10501,10 +10501,10 @@ Data_UnknownBlock:
 	sti8_24	257960, 0
 	ld	xiy, 15808280
 	ld	xix, 15808528
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15808528
 	ld	xix, 15808568
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15795513
 	ret
 	ldda8	l, 1632
@@ -10520,11 +10520,11 @@ Data_UnknownBlock:
 	ldda8	a, 36154
 	stda8	37100, a
 	ld	xwa, 37098
-	call	16705633
+	call	SndParam_ApplyProgramChange
 	ldda8	a, 37101
 	ldda8	c, 37102
 	ld	xde, 134163
-	call	16705098
+	call	SndParam_ApplyProgramChangeAsync
 	ldb	c, 20
 	xor	hl, hl
 	ldw	ix, 5889
@@ -10554,7 +10554,7 @@ Data_UnknownBlock:
 	ld	(xiy-3), c
 	ld	(xiy-2), ix
 	sub	xiy, 4
-	call	15789188
+	call	SeMenu_NameEditor_ChangeCase
 	ret
 	sti8_24	257960, 0
 	.byte 0xc1, 0xae, 0x06
@@ -10563,15 +10563,15 @@ Data_UnknownBlock:
 	jr	z, 14
 	ld	xiy, 15808571
 	ld	xix, 15808605
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 0
 	ld	xiy, 15808605
 	ld	xix, 15809088
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	jr	14
 	ld	xiy, 15808649
 	ld	xix, 15809088
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	.byte 0xc1
 	jr	le, 6
 	push	xsp
@@ -10588,29 +10588,29 @@ Data_UnknownBlock:
 	.byte 0xf0
 	ld	xiy, 15809146
 	ld	xix, 15809174
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15796071
 	.ascii "hBE@:ñ"
 	nop
 	ld	xix, 15809098
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15809118
 	ld	xix, 15809146
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15796071
 	.ascii "h ET:"
 	.byte 0xf1
 	nop
 	ld	xix, 15809118
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15809174
 	ld	xix, 15809202
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15796071
 	ret
 	ld	xiy, 15808528
 	ld	xix, 15808568
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15795513
 	ret
 	cps	a, 0
@@ -10622,7 +10622,7 @@ Data_UnknownBlock:
 	sti8_24	257960, 1
 	ld	xiy, 15809212
 	ld	xix, 15809222
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 0
 	.byte 0xc1
 	jr	le, 6
@@ -10642,21 +10642,21 @@ Data_UnknownBlock:
 	jr	10
 	ld	xiy, 15809174
 	ld	xix, 15809202
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15796071
 	jr	125
 	sti8_24	257960, 1
 	ld	xiy, 15809202
 	ld	xix, 15809222
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15809135
-	call	15789082
+	call	SeMenu_NameEditor_HandleInput
 	call	15796071
 	jr	90
 	sti8_24	257960, 1
 	ld	xiy, 15809202
 	ld	xix, 15809222
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 0
 	.byte 0xc1
 	jr	le, 6
@@ -10671,15 +10671,15 @@ Data_UnknownBlock:
 	.byte 0xf1
 	nop
 	ld	xix, 15809146
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	jr	30
 	ld	xiy, 15809146
 	ld	xix, 15809174
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	jr	14
 	ld	xiy, 15809174
 	ld	xix, 15809202
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	call	15796071
 	ret
 	xor	wa, wa
@@ -10711,7 +10711,7 @@ Data_UnknownBlock:
 	.byte 0x54
 	add	ix, 14
 	stda16	1746, ix
-	call	15789161
+	call	SeMenu_NameEditor_MoveCursor
 	ret
 SeMenu_PresetInit_Main:
 	; --- Main: init, XIY/XIX setup, 2 loops, 9 calls (63 bytes) ---
@@ -10789,11 +10789,11 @@ SeMenu_FxEdit_Init:
 	sti8_24	257960, 0
 	ld	xiy, 15810809
 	ld	xix, 15810921
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 2
 	ld	xiy, 15810799
 	ld	xix, 15810809
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	stdi16	1734, 47
 	stdi16	1736, 51
 	call	15790464
@@ -10802,66 +10802,66 @@ SeMenu_FxEdit_Init:
 	sti8_24	257960, 0
 	ld	xiy, 15812278
 	ld	xix, 15812349
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	ret
 SeMenu_FxEdit_DataBlock1:
 	call	15792414
 	sti8_24	257960, 0
 	ld	xiy, 15810921
 	ld	xix, 15811129
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 2
 	ld	xiy, 15810799
 	ld	xix, 15810809
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	call	15790154
 	call	15790228
 	sti8_24	257960, 0
 	ld	xiy, 15812419
 	ld	xix, 15812470
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	ret
 SeMenu_FxEdit_DataBlock2:
-	call	15792492
+	call	SeMenu_PresetBrowser_Navigate
 	ld	xiy, 15801417
 	ld	xix, 15801487
-	call	15789056
-	call	15791861
+	call	SeMenu_NameEditor_Setup
+	call	SeMenu_PresetManager_Save
 	call	15794137
-	call	15792513
+	call	SeMenu_PresetBrowser_Select
 	ret
 SeMenu_FxEdit_DataBlock3:
-	call	15792492
+	call	SeMenu_PresetBrowser_Navigate
 	call	15796589
-	call	15792513
+	call	SeMenu_PresetBrowser_Select
 	ret
 SeMenu_FxEdit_DataBlock4:
-	call	15793653
+	call	SeMenu_Utility_SearchByte
 	ld	xiy, 15802243
 	ld	xix, 15802423
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 2
 	ld	xiy, 15802456
 	ld	xix, 15802476
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 0
 	ld	xiy, 15811129
 	ld	xix, 15811174
-	call	15789056
-	call	15791861
+	call	SeMenu_NameEditor_Setup
+	call	SeMenu_PresetManager_Save
 	call	15793201
-	call	15793688
+	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_FilterEdit_Init:
-	call	15793653
+	call	SeMenu_Utility_SearchByte
 	ld	xiy, 15804544
 	ld	xix, 15804861
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	sti8_24	257960, 2
 	ld	xiy, 15804861
 	ld	xix, 15804881
-	call	15789056
-	call	15791861
+	call	SeMenu_NameEditor_Setup
+	call	SeMenu_PresetManager_Save
 	stdi16	1734, 56
 	stdi16	1736, 139
 	call	15790464
@@ -10870,18 +10870,18 @@ SeMenu_FilterEdit_Init:
 	sti8_24	257960, 0
 	ld	xiy, 15812490
 	ld	xix, 15812577
-	call	15789069
-	call	15793688
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_FilterEdit_DataBlock1:
-	call	15793653
+	call	SeMenu_Utility_SearchByte
 	call	15792542
-	call	15793688
+	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_FilterEdit_DataBlock2:
-	call	15793085
+	call	SeMenu_CompareAndApply_Data
 	call	15792542
-	call	15793120
+	call	SeMenu_CompareAndApply_Data4
 	ret
 SeMenu_FilterEdit_Dispatch:
 	.byte 0xc9
@@ -10894,19 +10894,19 @@ SeMenu_FilterEdit_Dispatch:
 	sti8_24	257960, 0
 	ld	xiy, 15811925
 	ld	xix, 15811985
-	call	15789069
-	call	15796257
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_PresetInit_Loop2
 	jr	63
 	sti8_24	257960, 0
 	ld	xiy, 15811815
 	ld	xix, 15811875
-	call	15789069
-	call	15796206
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_PresetInit_Loop1
 	jr	37
 	sti8_24	257960, 1
 	ld	xiy, 15812228
 	ld	xix, 15812238
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	ld	xiy, 15812036
 	sti8_24	257960, 0
@@ -10918,7 +10918,7 @@ SeMenu_FilterEdit_AltDispatch:
 	sti8_24	257960, 1
 	ld	xiy, 15812369
 	ld	xix, 15812379
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	sti8_24	257960, 0
 	ld	xiy, 15812349
@@ -10930,7 +10930,7 @@ SeMenu_FilterEdit_DataBlock3:
 	sti8_24	257960, 1
 	ld	xiy, 15812369
 	ld	xix, 15812379
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	sti8_24	257960, 0
 	ld	xiy, 15812470
@@ -10942,7 +10942,7 @@ SeMenu_FilterEdit_DataBlock4:
 	call	15797223
 	ret
 SeMenu_FilterEdit_DataBlock5:
-	call	15797061
+	call	SeMenu_EqEdit_SetupHelper1
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
@@ -10950,23 +10950,23 @@ SeMenu_FilterEdit_DataBlock5:
 	sti8_24	257960, 0
 	ld	xiy, 15812669
 	ld	xix, 15812893
-	call	15789056
-	call	15793634
+	call	SeMenu_NameEditor_Setup
+	call	SeMenu_Utility_CompareBlock_End
 	jr	41
 	sti8_24	257960, 0
 	ld	xiy, 15812669
 	ld	xix, 15812844
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15812893
 	ld	xix, 15812924
-	call	15789056
+	call	SeMenu_NameEditor_Setup
 	ld	xiy, 15813111
 	jr	5
 	ld	xiy, 15813081
 	sti8_24	257960, 0
 	ld	xix, 15813222
-	call	15789069
-	call	15797082
+	call	SeMenu_NameEditor_Draw
+	call	SeMenu_EqEdit_SetupHelper2
 	ret
 SeMenu_EqEdit_Init:
 	; --- Main: call helpers, setup XIY/XIX pairs, call F0EC00/F0EC0D (53 bytes) ---
@@ -11038,14 +11038,14 @@ SeMenu_EqEdit_DrawInit:
 	sti8_24	257960, 0
 	ld	xiy, 15814184
 	ld	xix, 15814214
-	call	15789069
+	call	SeMenu_NameEditor_Draw
 	ret
 	extz	xwa
 	xor	w, w
 	sla	wa, 2
 	add	xiy, xwa
 	ld	xiy, (xiy)
-	call	15789082
+	call	SeMenu_NameEditor_HandleInput
 	ret
 	.ascii "89:;<=>^]\\[ZYX"
 	ret
@@ -17327,11 +17327,11 @@ S2cGridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 S2c_GridCheck_DataBlock:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+10)
 	ld	xbc, xde
@@ -17345,11 +17345,11 @@ S2c_GridCheck_DataBlock:
 	ld	xwa, 21233678
 	ld	xbc, 31719440
 	jr	53
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+10)
 	ld	xbc, xde
@@ -17362,7 +17362,7 @@ S2c_GridCheck_DataBlock:
 	exts	xde
 	ld	xwa, 21233678
 	ld	xbc, 31719441
-	call	16403043
+	call	MainFuncCall
 	jr	91
 
 ; S2cGridCheck dispatch
@@ -18910,11 +18910,11 @@ EasyCmpGridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 EasyCmp_GridCheck_DataBlock:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
@@ -18934,11 +18934,11 @@ EasyCmp_GridCheck_DataBlock:
 	ld	xwa, 21233688
 	ld	xbc, 31719465
 	jr	70
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
@@ -18957,7 +18957,7 @@ EasyCmp_GridCheck_DataBlock:
 	jr	10
 	ld	xwa, 21233688
 	ld	xbc, 31719466
-	call	16403043
+	call	MainFuncCall
 	jrl	131
 
 ; EasyCmpGridCheck event encoding dispatch
@@ -19063,7 +19063,7 @@ EasyCmp_GridEvtCase_Default:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	79
@@ -19917,11 +19917,11 @@ MspRGrpSetGridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 MspRGrpSetGridCheck_DataBlock:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
@@ -19941,11 +19941,11 @@ MspRGrpSetGridCheck_DataBlock:
 	ld	xwa, 21233679
 	ld	xbc, 31719444
 	jr	70
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
@@ -19964,7 +19964,7 @@ MspRGrpSetGridCheck_DataBlock:
 	jr	10
 	ld	xwa, 21233679
 	ld	xbc, 31719445
-	call	16403043
+	call	MainFuncCall
 	jrl	172
 
 ; RgpSetBnkCheck event encoding dispatch
@@ -20455,7 +20455,7 @@ MspPlayModeFunc:
 
 MspPlayModeFunc_DataBlock:
 	lds	wa, 0
-	call	16360763
+	call	SetDialEnable
 	ld	xwa, (xiz+14)
 	sll	xwa, 2
 	lda	xbc, (xsp+4)
@@ -20464,7 +20464,7 @@ MspPlayModeFunc_DataBlock:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, (xsp+12)
 	jr	43
@@ -21262,7 +21262,7 @@ StylCnvStorBnkSel_DataBlock:
 	push	xwa
 	ld	xwa, (xhl+18)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	19
@@ -21418,7 +21418,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	xwa, xix
 	jr	2
 	ld	xbc, xhl
-	call	16427402
+	call	DrawLine
 	inc	8, xsp
 	retd	2
 	lda	xsp, (xsp-30)
@@ -21869,17 +21869,17 @@ StylCnvStorBnk_ProcDataBlock:
 	cp	xbc, 29360139
 	jr	z, 9
 	ld	xwa, (xsp+16)
-	call	16401417
+	call	InheritedProc
 	jr	72
 	ld	xwa, (xsp+16)
-	call	16401417
+	call	InheritedProc
 	ld	xwa, (xsp+16)
-	call	16409190
+	call	GetViewInstance
 	ld	xiz, xhl
 	ld	(xsp+4), xiz
 	lda	xbc, (xsp+8)
 	ld	xwa, (xsp+16)
-	call	16356829
+	call	GetClientBox
 	lda	xwa, (xsp+8)
 	lda	xhl, (xiz+26)
 	ld	xbc, (xsp+4)

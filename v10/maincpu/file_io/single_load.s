@@ -184,7 +184,7 @@ SLSrcBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35151
 	ld	xbc, 15337784
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xiz, 35151
 	ldda8	a, 35324
 	extz	wa
@@ -195,14 +195,14 @@ SLSrcBankList_FuncBody:
 	calr	50553
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35151
 	ldw	bc, 16
 	calr	61054
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	ld	xde, 35150
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -219,14 +219,14 @@ SLSrcBankList_FuncBody:
 	call	16294158
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xwa, 35172
 	ldw	bc, 16
 	calr	60984
 	ldada	xde, 35171
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -250,7 +250,7 @@ SLSrcBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35193
 	ld	xbc, 15337788
-	call	16290067
+	call	FileIO_BuildFilePath
 	.byte 0xc1
 	swi	2
 	.byte 0x89
@@ -268,14 +268,14 @@ SLSrcBankList_FuncBody:
 	calr	50356
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35193
 	ldw	bc, 16
 	calr	60857
 	ldada	xde, 35192
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	.byte 0xc1
 	swi	2
 	.byte 0x89
@@ -286,11 +286,11 @@ SLSrcBankList_FuncBody:
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	xbc, 15337792
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xde, 35213
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -311,14 +311,14 @@ SLSrcBankList_FuncBody:
 	call	16294280
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xwa, 35214
 	ldw	bc, 16
 	calr	60742
 	ldada	xde, 35213
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -406,7 +406,7 @@ SLSrcBankList_FuncBody:
 	ldada	xde, 35171
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35213
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -462,7 +462,7 @@ SLSrcBankList_FuncBody:
 	ldada	xde, 35171
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35213
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -478,11 +478,11 @@ SLSrcBankList_FuncBody:
 	ldada	xde, 35171
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35213
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	stda32	33226, xwa
 	jr	55
@@ -538,7 +538,7 @@ SLSrcBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35172
 	ld	xbc, 15337816
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35172
 	ldw	bc, 16
 	calr	60058
@@ -549,7 +549,7 @@ SLSrcBankList_FuncBody:
 	call	16294427
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xwa, 35193
 	ldw	bc, 16
 	calr	60023
@@ -562,19 +562,19 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
 	ld	xde, 35150
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35171
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35192
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35213
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	lds32	xhl, 0
 	pop	xiz
 	inc	4, xsp
@@ -600,7 +600,7 @@ SLSrcBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35151
 	ld	xbc, 15337818
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35151
 	ldw	bc, 16
 	calr	59868
@@ -614,11 +614,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	ld	xde, 35150
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35171
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -648,7 +648,7 @@ SLSrcBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35193
 	ld	xbc, 15337822
-	call	16290067
+	call	FileIO_BuildFilePath
 	.byte 0xc1
 	swi	2
 	.byte 0x89
@@ -660,14 +660,14 @@ SLSrcBankList_FuncBody:
 	calr	63498
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35193
 	ldw	bc, 16
 	calr	59704
 	ldada	xde, 35192
 	ld	xwa, (xsp+8)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xbc, 35150
 	lda	xwa, (xbc+63)
 	.byte 0xc1
@@ -679,7 +679,7 @@ SLSrcBankList_FuncBody:
 	ld	(xwa), 3
 	lda	xwa, (xbc+64)
 	ld	xbc, 15337826
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xde, 35213
 	ld	xwa, (xsp+8)
 	ld	xbc, 29360143
@@ -699,7 +699,7 @@ SLSrcBankList_FuncBody:
 	ldada	xde, 35213
 	ld	xwa, (xsp+8)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -730,14 +730,14 @@ SLSrcBankList_FuncBody:
 	call	16294549
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xwa, 35214
 	ldw	bc, 16
 	calr	59524
 	ldada	xde, 35213
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -808,7 +808,7 @@ SLSrcBankList_FuncBody:
 	ldada	xde, 35171
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35213
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -864,7 +864,7 @@ SLSrcBankList_FuncBody:
 	ldada	xde, 35171
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35213
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -880,11 +880,11 @@ SLSrcBankList_FuncBody:
 	ldada	xde, 35171
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35213
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	stda32	33234, xwa
 	jr	28
@@ -955,14 +955,14 @@ SLSrcBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35151
 	ld	xbc, 15337848
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35151
 	ldw	bc, 16
 	calr	58856
 	ld	xwa, (xsp+2)
 	ld	xbc, 29360143
 	ld	xde, 35150
-	call	16424280
+	call	ApPostEvent
 	ld	a, (xsp)
 	.byte 0x87, 0x81
 	ldda8	c, 35328
@@ -977,7 +977,7 @@ SLSrcBankList_FuncBody:
 	ldada	xde, 35171
 	ld	xwa, (xsp+2)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	inc	6, xsp
 	ret
 	dec	4, xsp
@@ -993,14 +993,14 @@ SLSrcBankList_FuncBody:
 	call	16294804
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xwa, 35172
 	ldw	bc, 16
 	calr	58744
 	ldada	xde, 35171
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -1024,7 +1024,7 @@ SLSrcBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35193
 	ld	xbc, 15337852
-	call	16290067
+	call	FileIO_BuildFilePath
 	.byte 0xc1
 	swi	2
 	.byte 0x89
@@ -1057,14 +1057,14 @@ SLSrcBankList_FuncBody:
 	calr	48083
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35193
 	ldw	bc, 16
 	calr	58584
 	ldada	xde, 35192
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	.byte 0xc1
 	swi	2
 	.byte 0x89
@@ -1076,11 +1076,11 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (xwa+64)
 	.byte 0x41
 	.long Str_AllOption_EA0980
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xde, 35213
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -1111,14 +1111,14 @@ SLSrcBankList_FuncBody:
 	call	16294681
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xwa, 35214
 	ldw	bc, 16
 	calr	58447
 	ldada	xde, 35213
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -1215,7 +1215,7 @@ SLSrcBankList_FuncBody:
 	ldada	xde, 35171
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35213
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -1315,7 +1315,7 @@ SLSrcBankList_FuncBody:
 	ldada	xde, 35171
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35213
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -1331,11 +1331,11 @@ SLSrcBankList_FuncBody:
 	ldada	xde, 35171
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35213
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	stda32	33240, xwa
 	jr	52
@@ -1394,7 +1394,7 @@ SLSrcBankList_FuncBody:
 	add	xde, xwa
 	ld	xwa, (xsp+2)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	inc	1, iz
 	cps	iz, 4
 	jr	c, -70
@@ -1588,7 +1588,7 @@ SLDstBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35235
 	ld	xbc, 15337898
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xiz, 35235
 	ldda8	a, 35330
 	extz	wa
@@ -1599,7 +1599,7 @@ SLDstBankList_FuncBody:
 	calr	46525
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35235
 	ldw	bc, 16
 	calr	57026
@@ -1616,11 +1616,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	ld	xde, 35234
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35255
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -1647,22 +1647,22 @@ SLDstBankList_FuncBody:
 	push	xsp
 	nop
 	jr	z, 42
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xwa, 35277
 	ld	xbc, 15337902
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35277
 	ldw	bc, 16
 	calr	56878
 	ldada	xwa, 35298
 	.byte 0x41
 	.long Str_AllOption_EA09B2
-	call	16290012
+	call	FileIO_CopyString
 	jr	74
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xwa, 35277
 	ld	xbc, 15337924
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xiz, 35277
 	ldda8	a, 35330
 	extz	wa
@@ -1674,7 +1674,7 @@ SLDstBankList_FuncBody:
 	calr	46303
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35277
 	ldw	bc, 16
 	calr	56804
@@ -1686,11 +1686,11 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35276
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -1757,11 +1757,11 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35255
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	stda32	33252, xwa
 	lds32	xhl, 0
@@ -1816,7 +1816,7 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35255
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -1832,7 +1832,7 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35255
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -1862,7 +1862,7 @@ SLDstBankList_FuncBody:
 	extz	wa
 	ldda8	c, 35330
 	extz	bc
-	call	16286078
+	call	FileIO_ByteBlock_DemoProc1
 	exts	xhl
 	pop	xiz
 	inc	4, xsp
@@ -1886,7 +1886,7 @@ SLDstBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35256
 	ld	xbc, 15337932
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xiz, 35256
 	ldda8	a, 35332
 	inc	1, a
@@ -1895,7 +1895,7 @@ SLDstBankList_FuncBody:
 	calr	45647
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35256
 	ldw	bc, 16
 	calr	56148
@@ -1907,15 +1907,15 @@ SLDstBankList_FuncBody:
 	calr	5520
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290012
+	call	FileIO_CopyString
 	ldada	xde, 35255
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35276
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -1943,11 +1943,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	ld	xde, 35234
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, xiz
 	jr	47
 	ldda8	w, 35332
@@ -1990,7 +1990,7 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	ld	xde, xhl
-	call	16424280
+	call	ApPostEvent
 	jr	-70
 	cp	xde, 10
 	jr	nz, -78
@@ -2021,7 +2021,7 @@ SLDstBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35235
 	ld	xbc, 15337938
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35235
 	ldw	bc, 16
 	calr	55782
@@ -2035,11 +2035,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	ld	xde, 35234
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35255
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -2063,7 +2063,7 @@ SLDstBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35277
 	ld	xbc, 15337942
-	call	16290067
+	call	FileIO_BuildFilePath
 	.byte 0xc1
 	swi	2
 	.byte 0x89
@@ -2079,7 +2079,7 @@ SLDstBankList_FuncBody:
 	calr	59418
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35277
 	ldw	bc, 16
 	calr	55624
@@ -2094,7 +2094,7 @@ SLDstBankList_FuncBody:
 	ld	(xwa), 3
 	lda	xwa, (xbc+64)
 	ld	xbc, 15337946
-	call	16290012
+	call	FileIO_CopyString
 	jr	28
 	ldda8	e, 35334
 	ld	c, e
@@ -2110,11 +2110,11 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35276
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -2181,11 +2181,11 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35255
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	stda32	33256, xwa
 	lds32	xhl, 0
@@ -2240,7 +2240,7 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35255
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -2256,7 +2256,7 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35255
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -2312,7 +2312,7 @@ SLDstBankList_FuncBody:
 	ldada	xwa, 35235
 	.byte 0x41
 	.long Data_SaveLoadMenuTable
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35235
 	ldw	bc, 16
 	calr	54951
@@ -2333,11 +2333,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (xsp+2)
 	ld	xbc, 29360143
 	ld	xde, 35234
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35255
 	ld	xwa, (xsp+2)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	inc	6, xsp
 	ret
 	dec	6, xsp
@@ -2366,7 +2366,7 @@ SLDstBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35277
 	ld	xbc, 15337972
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35277
 	ldw	bc, 16
 	calr	54806
@@ -2374,7 +2374,7 @@ SLDstBankList_FuncBody:
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	xbc, 15337976
-	call	16290012
+	call	FileIO_CopyString
 	jrl	214
 	ld	l, (xsp+4)
 	.byte 0x8f, 0x04, 0x87
@@ -2395,7 +2395,7 @@ SLDstBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35277
 	ld	xbc, 15337994
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xiz, 35277
 	ld	c, (xsp+4)
 	.byte 0x8f, 0x04, 0x83
@@ -2407,7 +2407,7 @@ SLDstBankList_FuncBody:
 	calr	44183
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35277
 	ldw	bc, 16
 	calr	54684
@@ -2432,7 +2432,7 @@ SLDstBankList_FuncBody:
 	swi	0
 	ldada	xwa, 35277
 	ld	xbc, 15337998
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xiz, 35277
 	ldda8	a, 35336
 	extz	wa
@@ -2444,7 +2444,7 @@ SLDstBankList_FuncBody:
 	calr	44083
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	16290067
+	call	FileIO_BuildFilePath
 	ldada	xwa, 35277
 	ldw	bc, 16
 	calr	54584
@@ -2456,11 +2456,11 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35276
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	pop	xiz
 	inc	6, xsp
 	ret
@@ -2550,11 +2550,11 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35255
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	stda32	33260, xwa
 	lds32	xhl, 0
@@ -2654,7 +2654,7 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35255
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -2670,7 +2670,7 @@ SLDstBankList_FuncBody:
 	ldada	xde, 35255
 	ld	xwa, xiz
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	ldada	xde, 35297
 	ld	xwa, xiz
 	ld	xbc, 29360143
@@ -2734,7 +2734,7 @@ SLDstBankList_FuncBody:
 	add	xde, xwa
 	ld	xwa, (xsp+2)
 	ld	xbc, 29360143
-	call	16424280
+	call	ApPostEvent
 	inc	1, iz
 	cps	iz, 4
 	jr	c, -70

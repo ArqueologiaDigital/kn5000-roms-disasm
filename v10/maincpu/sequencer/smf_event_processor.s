@@ -443,7 +443,7 @@ VoiceChannel_ParamTable1:
 	.byte 0x80, 0xf5
 	nop
 	nop
-	call	15887342
+	call	VoiceChannel_GetParamBlock
 	ldda8	a, 4013
 	ld	(xiy+3), a
 	ret
@@ -3784,13 +3784,13 @@ SeqStep_ByteBlockF245:
 	pushw	20506
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16051095
+	call	FileOpen
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
 	jr	z, 19
 	push	xiz
-	call	16052314
+	call	FileClose
 	inc	4, xsp
 	sti16_24	124220, 21
 	ldw	hl, 65535
@@ -3811,7 +3811,7 @@ SeqStep_ByteBlockF245:
 	pushw	20508
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16051095
+	call	FileOpen
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
@@ -3825,7 +3825,7 @@ SeqStep_ByteBlockF245:
 	call	(xwa)
 	ld	(xsp+8), hl
 	push	xiz
-	call	16052314
+	call	FileClose
 	inc	8, xsp
 	ld	hl, (xsp+4)
 	pop	xiz
@@ -4117,7 +4117,7 @@ SeqStep_FileTellFinal:
 	pushw	20520
 	ld	xwa, (xsp+48)
 	push	xwa
-	call	16051095
+	call	FileOpen
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
@@ -4142,7 +4142,7 @@ SeqStep_FileTellFinal:
 	pushw	32
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16051824
+	call	FileRead
 	lda	xsp, (xsp+12)
 	cps	hl, 1
 	jr	nz, 53
@@ -4153,7 +4153,7 @@ SeqStep_FileTellFinal:
 	jr	z, 19
 	sti16_24	124220, 27
 	push	xiz
-	call	16052314
+	call	FileClose
 	inc	4, xsp
 	ldw	hl, 65535
 	jr	57
@@ -4162,7 +4162,7 @@ SeqStep_FileTellFinal:
 	pushw	32
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16051824
+	call	FileRead
 	lda	xsp, (xsp+12)
 	cps	hl, 1
 	jr	z, -53
@@ -4178,7 +4178,7 @@ SeqStep_FileTellFinal:
 	cps	hl, 0
 	jr	nz, -62
 	push	xiz
-	call	16052314
+	call	FileClose
 	inc	4, xsp
 	pop	xiz
 	lda	xsp, (xsp+36)
@@ -4747,7 +4747,7 @@ SeqStep_FileSectorReturn:
 	push	xwa
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16715161
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+4)
 	ld	c, (xiz+12)
@@ -5325,7 +5325,7 @@ SeqStep_FileSectorPopReturn:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+20)
 	add	xwa, xhl
@@ -5356,7 +5356,7 @@ SeqStep_FileSectorPopReturn:
 	pushw	0
 	lda	xwa, (xhl+26)
 	push	xwa
-	call	16715770
+	call	Memset
 	inc	8, xsp
 	inc	1, xiz
 	ld	xbc, (xsp+8)
@@ -5375,7 +5375,7 @@ SeqStep_FileSectorPopReturn:
 	pushw	32
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715770
+	call	Memset
 	inc	8, xsp
 	ld	xwa, (xsp+8)
 	ld	(xwa+11), 0
@@ -5575,7 +5575,7 @@ SeqByteBlock_StyleBitmapRef:
 	push	xwa
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16714945
+	call	String_Compare
 	add	xsp, 10
 	cps	hl, 0
 	jr	nz, 116
@@ -5761,7 +5761,7 @@ SeqByteBlock_StyleBitmapRef:
 	push	xwa
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16714945
+	call	String_Compare
 	add	xsp, 10
 	cps	hl, 0
 	jr	nz, 85
@@ -5847,7 +5847,7 @@ SeqByteBlock_StyleBitmapRef:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	xwa, (xsp+4)
 	ld	xbc, (xwa+20)
 	add	xbc, xhl
@@ -6010,7 +6010,7 @@ SeqByteBlock_StyleBitmapRef:
 	push	xwa
 	lda	xwa, (xiz+52)
 	push	xwa
-	call	16715161
+	call	Mem_Copy
 	ld	(xiz+64), 0
 	.byte 0xbe
 	ld	xiy, 3892314114
@@ -6097,7 +6097,7 @@ SeqByteBlock_StyleBitmapRef:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+20)
 	add	xwa, xhl
@@ -6322,7 +6322,7 @@ SeqByteBlock_StyleBitmapRef:
 	push_sr
 	.byte 0xb0
 	pushw	538
-	call	16051046
+	call	SeqStep_MemAllocWrapper
 	inc	2, xsp
 	ld	(xsp+8), xhl
 	ld	xwa, xhl
@@ -6378,7 +6378,7 @@ SeqByteBlock_StyleBitmapRef:
 	ldw	iz, 22
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16052743
+	call	SeqStep_FreeMemory
 	inc	4, xsp
 	ld	hl, iz
 	jrl	931
@@ -6497,11 +6497,11 @@ SeqByteBlock_StyleBitmapRef:
 	cp	iz, 9
 	jr	nz, 85
 	pushw	538
-	call	16051046
+	call	SeqStep_MemAllocWrapper
 	ld	xiz, xhl
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	16052743
+	call	SeqStep_FreeMemory
 	inc	6, xsp
 	or	xiz, xiz
 	jr	nz, 5
@@ -6696,7 +6696,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	wa, (xwa+38)
 	extz	xwa
 	ld	xbc, (xbc)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	xwa, (xsp+4)
 	ld	(xwa+40), hl
 	ld	xwa, (xsp+4)
@@ -6740,7 +6740,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	xwa, xde
 	ld	xbc, (xsp+4)
 	ld	xbc, (xbc+32)
-	call	16714776
+	call	Math_DivideU32
 	inc	1, xhl
 	ld	xwa, (xsp+4)
 	ld	(xwa+54), hl
@@ -6761,7 +6761,7 @@ SeqByteBlock_StyleBitmapRef:
 	.byte 0xb8
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16052743
+	call	SeqStep_FreeMemory
 	inc	4, xsp
 	lds	hl, 0
 	pop	xiz
@@ -6898,7 +6898,7 @@ SeqByteBlock_ChannelContainer:
 	extz	xbc
 	ld	xwa, (xsp+16)
 	ld	xwa, (xwa+22)
-	call	16714776
+	call	Math_DivideU32
 	ld	xwa, (xsp+8)
 	ld	xbc, (xwa+28)
 	add	xbc, xhl
@@ -6930,13 +6930,13 @@ SeqByteBlock_ChannelContainer:
 	extz	xbc
 	ld	xwa, (xsp+16)
 	ld	xwa, (xwa+22)
-	call	16714770
+	call	DivMod32
 	ld	xiz, xhl
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa+38)
 	extz	xbc
 	ld	xwa, xiz
-	call	16714776
+	call	Math_DivideU32
 	ld	a, l
 	ld	(xsp+6), a
 	ld	xwa, (xsp+16)
@@ -7063,7 +7063,7 @@ SeqByteBlock_ChannelContainer:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	xwa, (xsp+22)
 	add	(xwa), xhl
 	ld	xwa, (xsp+16)
@@ -7071,7 +7071,7 @@ SeqByteBlock_ChannelContainer:
 	extz	xwa
 	ld	xbc, (xsp+8)
 	ld	xbc, (xbc+32)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	lds32	xwa, 0
 	ld	a, (xsp+6)
 	sub	xhl, xwa
@@ -7152,7 +7152,7 @@ SeqByteBlock_ChannelContainer:
 	ld	bc, (xwa+40)
 	extz	xbc
 	ld	xwa, xde
-	call	16714776
+	call	Math_DivideU32
 	ld	wa, (xsp+4)
 	extz	xwa
 	sub	xhl, xwa
@@ -7436,7 +7436,7 @@ SeqByteBlock_ChannelContainer:
 	push	xbc
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16715161
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	sub	(xsp+18), iz
 	ld	wa, iz
@@ -7708,7 +7708,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xsp+18)
 	push	xwa
 	push	xde
-	call	16715161
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	sub	(xsp+20), iz
 	ld	xwa, (xsp+16)
@@ -7990,7 +7990,7 @@ SeqChan_TraverseAndProcess:
 	ld	bc, (xwa+40)
 	extz	xbc
 	ld	xwa, (xsp+16)
-	call	16714776
+	call	Math_DivideU32
 	ld	xwa, (xsp+12)
 	ld	wa, (xwa+46)
 	extz	xwa
@@ -8097,7 +8097,7 @@ SeqChan_ReadNextFromLoop:
 	pushw	20522
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	ld	(xsp+30), 16
 	lda	xwa, (xsp+31)
 	push	xwa
@@ -8165,7 +8165,7 @@ SeqChan_WritePatchData:
 	jr	f, -18
 	.byte 0x88
 	push	xwa
-	call	16052743
+	call	SeqStep_FreeMemory
 	lda	xsp, (xsp+12)
 	ld	hl, (xsp+4)
 	pop	xiz
@@ -8309,7 +8309,7 @@ SeqStep_SectorCompareBlock:
 	pushw	20534
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16051095
+	call	FileOpen
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
@@ -8324,7 +8324,7 @@ SeqStep_SectorCompareBlock:
 	calr	65440
 	ld	(xsp+12), hl
 	push	xiz
-	call	16052314
+	call	FileClose
 	lda	xsp, (xsp+12)
 	ld	hl, (xsp+4)
 	pop	xiz
@@ -8397,10 +8397,10 @@ SeqChan_ByteBlockC:
 	call	16064067
 	cps	hl, 0
 	jr	z, 9
-	call	16064049
+	call	FDC_ClearDiskChangeStatus
 	lds	hl, 6
 	jrl	136
-	call	16064073
+	call	FDC_ReadDiskType
 	cps	l, 2
 	jr	nz, 97
 	cpw	(xsp+12), 0
@@ -8432,7 +8432,7 @@ SeqChan_ByteBlockC:
 	pushw	228
 	pushw	20536
 	push	xiz
-	call	16715161
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	lds	hl, 0
 	jr	31
@@ -8621,7 +8621,7 @@ SeqChan_ByteBlockE:
 	ld	bc, (xwa+50)
 	extz	xbc
 	ld	xwa, xhl
-	call	16714776
+	call	Math_DivideU32
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	.byte 0x98
@@ -8752,7 +8752,7 @@ SeqChan_ByteBlockF:
 	ld	bc, (xwa+50)
 	extz	xbc
 	ld	xwa, xhl
-	call	16714776
+	call	Math_DivideU32
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	.byte 0x98
@@ -10546,7 +10546,7 @@ SndTable_ByteBlock_ReadOps:
 	pushw	1024
 	pushw	1
 	push	xwa
-	call	16051824
+	call	FileRead
 	lda	xsp, (xsp+12)
 	cps	hl, 0
 	jr	lt, 3
@@ -10586,12 +10586,12 @@ SndTable_ByteBlock_ReadOps:
 	nop
 	ld32_24	xbc, 254958
 	lds	wa, 2
-	call	15671408
+	call	TaskMsg_Send
 	ld32_24	xwa, 254958
 	lda	xwa, (xwa+1028)
 	ld	xbc, xwa
 	lds	wa, 2
-	call	15671408
+	call	TaskMsg_Send
 	.byte 0xbf, 0x04
 	push_sr
 	nop
@@ -10604,7 +10604,7 @@ SndTable_ByteBlock_ReadOps:
 	.byte 0xf0
 	jrl	ugt, 134
 	lds	wa, 2
-	call	15671777
+	call	TaskMsg_Receive
 	ld	xiz, xhl
 	.byte 0x9e
 	push_sr
@@ -10620,7 +10620,7 @@ SndTable_ByteBlock_ReadOps:
 	ld	xwa, xiz
 	ld	xbc, xwa
 	lds	wa, 3
-	call	15671408
+	call	TaskMsg_Send
 	jr	102
 	lda	xwa, (xiz+4)
 	calr	65336
@@ -10638,7 +10638,7 @@ SndTable_ByteBlock_ReadOps:
 	ld	xwa, xiz
 	ld	xbc, xwa
 	lds	wa, 3
-	call	15671408
+	call	TaskMsg_Send
 	jr	71
 	.byte 0xb6
 	push_sr
@@ -10663,7 +10663,7 @@ SndTable_ByteBlock_ReadOps:
 	ld	xwa, xiz
 	ld	xbc, xwa
 	lds	wa, 3
-	call	15671408
+	call	TaskMsg_Send
 	.byte 0x9f, 0x04
 	push	xwa
 	nop
@@ -11170,7 +11170,7 @@ Seq_DispatcherEntry:
 VoiceParam_ClampAndValidate_Tramp:
 	jp VoiceParam_ClampAndValidate
 SeqDispatch_TrampolineB:
-	jp	16079790
+	jp	Rhythm_TailPadding
 
 Rhythm_DispatchNote_Tramp:
 	jp Rhythm_DispatchNote

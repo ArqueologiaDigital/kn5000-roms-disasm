@@ -1524,10 +1524,10 @@ SplitNoteStr_D:
 SplitNoteStr_DFlat:	aligned_string "D~a0"
 SplitNoteStr_C:
 	ld	xhl, 3942580256
-	jp	15204589
+	jp	NakaData_PartConfig
 	jp	15073517
 	jp	14942445
-	jp	14811373
+	jp	SepaOut_FormatData_Tail
 	jp	14680301
 	jp	14549229
 	jp	14418157

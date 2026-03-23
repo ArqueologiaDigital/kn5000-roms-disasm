@@ -16,15 +16,15 @@ Scoop_SoundEditorData:
 	ld	bc, (xsp+6)
 	call	15783834
 	lds	wa, 1
-	call	15671395
+	call	AudioLock_GetCount
 	cps	hl, 0
 	jr	z, 8
 	lds	wa, 3
-	call	15670367
+	call	TaskSched_YieldToQueue
 	jr	-18
 	lds32	xwa, 0
 	ld	xbc, 29360135
-	jp	16423016
+	jp	DeleteEvent
 	jp	15777037
 	dec	4, xsp
 	lda	xde, (xsp+2)
@@ -124,14 +124,14 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-20)
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xwa, (xsp+16)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+16)
 	ld	(xsp), a
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
@@ -185,7 +185,7 @@ Scoop_SoundEditorData:
 	extz	wa
 	ld	c, (xsp+5)
 	extz	bc
-	call	15767776
+	call	SeMenu_StoreParamByte
 	lds	wa, 3
 	call	15758489
 	lda	xsp, (xsp+20)
@@ -196,9 +196,9 @@ Scoop_SoundEditorData:
 	.byte 0x04
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xwa, (xsp+16)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	.byte 0x8f
 	ret
 	push	xsp
@@ -218,7 +218,7 @@ Scoop_SoundEditorData:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
@@ -276,14 +276,14 @@ Scoop_SoundEditorData:
 	.byte 0x04
 	ld	(xsp+18), a
 	lda	xwa, (xsp+14)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	ret
 	push	xsp
 	.byte 0x01
 	jr	z, 85
 	lda	xwa, (xsp+16)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+16)
 	inc	8, a
 	.byte 0xc7
@@ -291,7 +291,7 @@ Scoop_SoundEditorData:
 	.byte 0x99
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 7
 	ld	(xbc+7), 5
@@ -325,7 +325,7 @@ Scoop_SoundEditorData:
 	.byte 0xde
 	ldw	wa, 45
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	cps	a, 0
 	ret	z
 	ldw	wa, 43
@@ -336,7 +336,7 @@ Scoop_SoundEditorData:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -348,7 +348,7 @@ Scoop_SoundEditorData:
 	jr	z, 22
 	ldw	wa, 47
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	11
 	ldw	wa, 43
 	lds	bc, 2
@@ -359,7 +359,7 @@ Scoop_SoundEditorData:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -378,7 +378,7 @@ Scoop_SoundEditorData:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -397,7 +397,7 @@ Scoop_SoundEditorData:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -409,15 +409,15 @@ Scoop_SoundEditorData:
 	jr	nz, 9
 	ldw	wa, 44
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -432,16 +432,16 @@ Scoop_SoundEditorData:
 	jr	5
 	ldw	wa, 61
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -463,11 +463,11 @@ Scoop_SoundEditorData:
 	jr	nz, 29
 	lda	xbc, (xsp+12)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+12)
 	extz	bc
 	ldw	wa, 10
-	call	15756078
+	call	SeMenu_StorePartParam
 	lds	wa, 0
 	lds	bc, 0
 	call	15764042
@@ -479,7 +479,7 @@ Scoop_SoundEditorData:
 	ld	(xsp+6), a
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	ld	c, (xsp+2)
@@ -492,19 +492,19 @@ Scoop_SoundEditorData:
 	cps	l, 1
 	jr	nz, 52
 	lda	xwa, (xsp+4)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 27
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	1
 	pushw	44
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 0
 	lds	bc, 0
@@ -517,10 +517,10 @@ Scoop_SoundEditorData:
 	ld	(xsp+8), a
 	lda	xbc, (xsp+4)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+8)
 	extz	wa
 	ld	e, (xsp+4)
@@ -535,19 +535,19 @@ Scoop_SoundEditorData:
 	cps	l, 1
 	jr	nz, 52
 	lda	xwa, (xsp+6)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 26
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	0
 	pushw	44
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 0
 	lds	bc, 0
@@ -560,7 +560,7 @@ Scoop_SoundEditorData:
 	ld	(xsp+6), a
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	ld	e, (xsp+2)
@@ -572,19 +572,19 @@ Scoop_SoundEditorData:
 	cps	l, 1
 	jr	nz, 52
 	lda	xwa, (xsp+4)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 28
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	2
 	pushw	44
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 0
 	lds	bc, 0
@@ -599,7 +599,7 @@ Scoop_SoundEditorData:
 	.byte 0xde
 	ldw	wa, 45
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	cps	a, 0
 	ret	z
 	lds	wa, 1
@@ -608,7 +608,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 7
@@ -621,7 +621,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -631,7 +631,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -641,21 +641,21 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 44
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 43
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	lda	xsp, (xsp-18)
 	.byte 0xd7
@@ -663,9 +663,9 @@ Scoop_SoundEditorData:
 	.byte 0x04
 	ld	(xsp+18), a
 	lda	xwa, (xsp+16)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+14)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	ret
 	push	xsp
@@ -676,7 +676,7 @@ Scoop_SoundEditorData:
 	.byte 0x99
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -726,9 +726,9 @@ Scoop_SoundEditorData:
 	.byte 0x04
 	ld	(xsp+18), a
 	lda	xwa, (xsp+16)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+14)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xhl, (xsp+2)
 	lda	xwa, (xhl+6)
 	lda	xbc, (xhl+7)
@@ -753,7 +753,7 @@ Scoop_SoundEditorData:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
@@ -798,9 +798,9 @@ Scoop_SoundEditorData:
 	.byte 0x04
 	ld	(xsp+18), a
 	lda	xwa, (xsp+16)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+14)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xhl, (xsp+2)
 	lda	xwa, (xhl+6)
 	lda	xbc, (xhl+7)
@@ -825,7 +825,7 @@ Scoop_SoundEditorData:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
@@ -870,9 +870,9 @@ Scoop_SoundEditorData:
 	.byte 0x04
 	ld	(xsp+18), a
 	lda	xwa, (xsp+16)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+14)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xhl, (xsp+2)
 	lda	xwa, (xhl+6)
 	lda	xbc, (xhl+7)
@@ -897,7 +897,7 @@ Scoop_SoundEditorData:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
@@ -942,9 +942,9 @@ Scoop_SoundEditorData:
 	.byte 0x04
 	ld	(xsp+20), a
 	lda	xwa, (xsp+18)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+16)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	rcf
 	push	xsp
@@ -960,7 +960,7 @@ Scoop_SoundEditorData:
 	jr	32
 	lda	xbc, (xsp+14)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf
 	ret
 	inc	6, e
@@ -976,7 +976,7 @@ Scoop_SoundEditorData:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xsp+12)
@@ -1021,9 +1021,9 @@ Scoop_SoundEditorData:
 	.byte 0x04
 	ld	(xsp+20), a
 	lda	xwa, (xsp+18)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+16)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	rcf
 	push	xsp
@@ -1039,7 +1039,7 @@ Scoop_SoundEditorData:
 	jr	32
 	lda	xbc, (xsp+14)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xbf
 	ret
 	inc	6, e
@@ -1055,7 +1055,7 @@ Scoop_SoundEditorData:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xsp+12)
@@ -1097,17 +1097,17 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	incf
 	push	xsp
 	.byte 0x01
 	jr	z, 76
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 6
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -1133,17 +1133,17 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	incf
 	push	xsp
 	nop
 	jr	z, 89
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 7
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -1187,12 +1187,12 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 45
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -1211,13 +1211,13 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 45
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -1233,13 +1233,13 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 45
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp+2)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
@@ -1255,11 +1255,11 @@ Scoop_SoundEditorData:
 	jr	z, 69
 	ldw	wa, 45
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	58
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0xb7
 	inc	6, e
 	.byte 0x04, 0xb7, 0xb5
@@ -1268,23 +1268,23 @@ Scoop_SoundEditorData:
 	ld	c, (xsp)
 	extz	bc
 	lds	wa, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	0
 	pushw	45
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lda	xde, (xsp)
 	pushw	32
 	lds	wa, 0
 	ldw	bc, 13
-	call	15754780
+	call	SeMenu_SetupDisplayObject_Alt1
 	call	15761621
 	inc	6, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -1296,15 +1296,15 @@ Scoop_SoundEditorData:
 	jr	nz, 9
 	ldw	wa, 46
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -1319,16 +1319,16 @@ Scoop_SoundEditorData:
 	jr	5
 	ldw	wa, 61
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 5
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -1348,17 +1348,17 @@ Scoop_SoundEditorData:
 	call	15757111
 	lda	xbc, (xsp+12)
 	lds	wa, 5
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+12)
 	extz	bc
 	ldw	wa, 10
-	call	15756078
+	call	SeMenu_StorePartParam
 	lds	wa, 2
 	lds	bc, 0
 	call	15764042
 	lda	xbc, (xsp+12)
 	ldw	wa, 9
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	incf
 	push	xsp
@@ -1366,10 +1366,10 @@ Scoop_SoundEditorData:
 	jr	z, 21
 	ldw	wa, 9
 	lds	bc, 0
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	9
 	pushw	46
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 1
 	call	15758489
@@ -1378,10 +1378,10 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 6
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -1401,17 +1401,17 @@ Scoop_SoundEditorData:
 	call	15757111
 	lda	xbc, (xsp+12)
 	lds	wa, 6
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+12)
 	extz	bc
 	ldw	wa, 10
-	call	15756078
+	call	SeMenu_StorePartParam
 	lds	wa, 2
 	lds	bc, 0
 	call	15764042
 	lda	xbc, (xsp+12)
 	ldw	wa, 9
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	incf
 	push	xsp
@@ -1419,10 +1419,10 @@ Scoop_SoundEditorData:
 	jr	z, 21
 	ldw	wa, 9
 	lds	bc, 1
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	9
 	pushw	46
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 2
 	call	15758489
@@ -1431,10 +1431,10 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 7
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -1454,17 +1454,17 @@ Scoop_SoundEditorData:
 	call	15757111
 	lda	xbc, (xsp+12)
 	lds	wa, 7
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+12)
 	extz	bc
 	ldw	wa, 10
-	call	15756078
+	call	SeMenu_StorePartParam
 	lds	wa, 2
 	lds	bc, 0
 	call	15764042
 	lda	xbc, (xsp+12)
 	ldw	wa, 9
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	incf
 	push	xsp
@@ -1472,10 +1472,10 @@ Scoop_SoundEditorData:
 	jr	z, 21
 	ldw	wa, 9
 	lds	bc, 2
-	call	15756078
+	call	SeMenu_StorePartParam
 	pushw	9
 	pushw	46
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 3
 	call	15758489
@@ -1485,7 +1485,7 @@ Scoop_SoundEditorData:
 	ld	(xsp+6), a
 	lda	xbc, (xsp+2)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	ld	c, (xsp+2)
@@ -1498,19 +1498,19 @@ Scoop_SoundEditorData:
 	cps	l, 1
 	jr	nz, 52
 	lda	xwa, (xsp+4)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 49
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	3
 	pushw	46
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 2
 	lds	bc, 0
@@ -1523,10 +1523,10 @@ Scoop_SoundEditorData:
 	ld	(xsp+8), a
 	lda	xbc, (xsp+2)
 	lds	wa, 4
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+4)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+8)
 	extz	wa
 	ld	e, (xsp+4)
@@ -1541,19 +1541,19 @@ Scoop_SoundEditorData:
 	cps	l, 1
 	jr	nz, 52
 	lda	xwa, (xsp+6)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 48
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	2
 	pushw	46
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 2
 	lds	bc, 0
@@ -1566,7 +1566,7 @@ Scoop_SoundEditorData:
 	ld	(xsp+6), a
 	lda	xbc, (xsp+2)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	ld	e, (xsp+2)
@@ -1578,19 +1578,19 @@ Scoop_SoundEditorData:
 	cps	l, 1
 	jr	nz, 52
 	lda	xwa, (xsp+4)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 4
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 50
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	4
 	pushw	46
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 2
 	lds	bc, 0
@@ -1602,10 +1602,10 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xwa, (xsp+12)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -1630,10 +1630,10 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-16)
 	ld	(xsp+14), a
 	lda	xwa, (xsp+12)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -1670,7 +1670,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 7
@@ -1683,7 +1683,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -1693,7 +1693,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -1703,25 +1703,25 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 46
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 45
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	extz	wa
 	lds	bc, 0
-	jp	15758956
+	jp	SeMenu_ApplyPartEdit_Data2
 	extz	wa
 	lds	bc, 0
 	jp	15759013
@@ -1746,12 +1746,12 @@ Scoop_SoundEditorData:
 	.byte 0xde
 	ldw	wa, 45
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	cps	a, 0
 	jr	nz, 9
 	ldw	wa, 43
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	lds	wa, 0
 	lds	bc, 1
 	jp	15757276
@@ -1776,10 +1776,10 @@ Scoop_SoundEditorData:
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	dec	4, xsp
 	lda	xde, (xsp+2)
@@ -1983,12 +1983,12 @@ Scoop_SoundEditorData:
 	ld	(xsp+18), c
 	ld	(xsp+20), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xbc, (xsp)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -2041,12 +2041,12 @@ Scoop_SoundEditorData:
 	ld	(xsp+18), c
 	ld	(xsp+20), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xbc, (xsp)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -2096,12 +2096,12 @@ Scoop_SoundEditorData:
 	ld	(xsp+18), c
 	ld	(xsp+20), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xbc, (xsp)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 63
 	ld	(xbc+7), 0
@@ -2151,12 +2151,12 @@ Scoop_SoundEditorData:
 	ld	(xsp+18), c
 	ld	(xsp+20), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 7
 	ld	(xbc+7), 5
@@ -2200,12 +2200,12 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xbc, (xsp)
 	lds	wa, 5
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 1
 	ld	(xbc+7), 7
@@ -2253,12 +2253,12 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xbc, (xsp)
 	lds	wa, 4
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -2303,12 +2303,12 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xbc, (xsp)
 	lds	wa, 5
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 127
 	ld	(xbc+7), 0
@@ -2353,7 +2353,7 @@ Scoop_SoundEditorData:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -2365,7 +2365,7 @@ Scoop_SoundEditorData:
 	jr	nz, 15
 	ldw	wa, 55
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	4
 	call	15756545
 	inc	4, xsp
@@ -2378,12 +2378,12 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -2402,20 +2402,20 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
 	jr	nz, 32
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xix
@@ -2439,13 +2439,13 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	6, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -2461,13 +2461,13 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -2479,15 +2479,15 @@ Scoop_SoundEditorData:
 	jr	nz, 9
 	ldw	wa, 54
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -2502,7 +2502,7 @@ Scoop_SoundEditorData:
 	jr	5
 	ldw	wa, 61
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	extz	wa
@@ -2542,14 +2542,14 @@ Scoop_SoundEditorData:
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
 	jr	nz, 33
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xix
@@ -2574,7 +2574,7 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	6, xsp
 	ret
 	extz	wa
@@ -2582,7 +2582,7 @@ Scoop_SoundEditorData:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -2594,15 +2594,15 @@ Scoop_SoundEditorData:
 	jr	nz, 9
 	ldw	wa, 54
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -2617,7 +2617,7 @@ Scoop_SoundEditorData:
 	jr	5
 	ldw	wa, 61
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	extz	wa
@@ -2645,7 +2645,7 @@ Scoop_SoundEditorData:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -2657,7 +2657,7 @@ Scoop_SoundEditorData:
 	jr	nz, 15
 	ldw	wa, 55
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	4
 	call	15756545
 	inc	4, xsp
@@ -2670,12 +2670,12 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -2694,20 +2694,20 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
 	jr	nz, 32
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xix
@@ -2731,13 +2731,13 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	6, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -2753,13 +2753,13 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -2771,15 +2771,15 @@ Scoop_SoundEditorData:
 	jr	nz, 9
 	ldw	wa, 54
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -2794,7 +2794,7 @@ Scoop_SoundEditorData:
 	jr	5
 	ldw	wa, 61
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	extz	wa
@@ -2828,14 +2828,14 @@ Scoop_SoundEditorData:
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
 	jr	nz, 33
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xix
@@ -2860,7 +2860,7 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	6, xsp
 	ret
 	extz	wa
@@ -2868,7 +2868,7 @@ Scoop_SoundEditorData:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -2880,15 +2880,15 @@ Scoop_SoundEditorData:
 	jr	nz, 9
 	ldw	wa, 54
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -2903,21 +2903,21 @@ Scoop_SoundEditorData:
 	jr	5
 	ldw	wa, 61
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	lda	xsp, (xsp-20)
 	ld	(xsp+18), a
 	lda	xwa, (xsp+16)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xbc, (xsp+14)
 	lds	wa, 4
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -2966,15 +2966,15 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-20)
 	ld	(xsp+18), a
 	lda	xwa, (xsp+16)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xbc, (xsp+14)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	lds	wa, 4
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -3021,12 +3021,12 @@ Scoop_SoundEditorData:
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xwa, (xsp+12)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	lda	xbc, (xsp)
 	lds	wa, 5
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 15
 	ld	(xbc+7), 0
@@ -3077,7 +3077,7 @@ Scoop_SoundEditorData:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3089,7 +3089,7 @@ Scoop_SoundEditorData:
 	jr	nz, 15
 	ldw	wa, 55
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	4
 	call	15756545
 	inc	4, xsp
@@ -3102,12 +3102,12 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3126,20 +3126,20 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
 	jr	nz, 29
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xix
@@ -3160,13 +3160,13 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	6, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -3182,13 +3182,13 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -3200,15 +3200,15 @@ Scoop_SoundEditorData:
 	jr	nz, 9
 	ldw	wa, 54
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3223,13 +3223,13 @@ Scoop_SoundEditorData:
 	jr	5
 	ldw	wa, 61
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3241,7 +3241,7 @@ Scoop_SoundEditorData:
 	jr	nz, 15
 	ldw	wa, 55
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	jr	4
 	call	15756545
 	inc	4, xsp
@@ -3254,12 +3254,12 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3278,20 +3278,20 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
 	jr	nz, 32
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	.byte 0x8f
 	push_sr
 	push	xix
@@ -3315,13 +3315,13 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	6, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -3337,13 +3337,13 @@ Scoop_SoundEditorData:
 	jr	z, 9
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
 	.byte 0x01
@@ -3355,15 +3355,15 @@ Scoop_SoundEditorData:
 	jr	nz, 9
 	ldw	wa, 54
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	lda	xwa, (xsp)
-	call	15766955
+	call	SeMenu_LoadObjEntries
 	.byte 0x8f
 	push_sr
 	push	xsp
@@ -3378,16 +3378,16 @@ Scoop_SoundEditorData:
 	jr	5
 	ldw	wa, 61
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	inc	4, xsp
 	ret
 	lda	xsp, (xsp-18)
 	ld	(xsp+16), a
 	lda	xwa, (xsp+14)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp)
 	ld	(xbc+6), 255
 	ld	(xbc+7), 0
@@ -3409,11 +3409,11 @@ Scoop_SoundEditorData:
 	jr	nz, 29
 	lda	xbc, (xsp+12)
 	lds	wa, 3
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	c, (xsp+12)
 	extz	bc
 	ldw	wa, 10
-	call	15756078
+	call	SeMenu_StorePartParam
 	lds	wa, 0
 	lds	bc, 0
 	call	15764042
@@ -3425,7 +3425,7 @@ Scoop_SoundEditorData:
 	ld	(xsp+6), a
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	ld	c, (xsp+2)
@@ -3438,19 +3438,19 @@ Scoop_SoundEditorData:
 	cps	l, 1
 	jr	nz, 52
 	lda	xwa, (xsp+4)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 58
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	1
 	pushw	54
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 0
 	lds	bc, 0
@@ -3463,10 +3463,10 @@ Scoop_SoundEditorData:
 	ld	(xsp+8), a
 	lda	xbc, (xsp+4)
 	lds	wa, 1
-	call	15756091
+	call	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+8)
 	extz	wa
 	ld	e, (xsp+4)
@@ -3481,19 +3481,19 @@ Scoop_SoundEditorData:
 	cps	l, 1
 	jr	nz, 52
 	lda	xwa, (xsp+6)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 57
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	0
 	pushw	54
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 0
 	lds	bc, 0
@@ -3506,7 +3506,7 @@ Scoop_SoundEditorData:
 	ld	(xsp+6), a
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+6)
 	extz	wa
 	ld	e, (xsp+2)
@@ -3518,19 +3518,19 @@ Scoop_SoundEditorData:
 	cps	l, 1
 	jr	nz, 52
 	lda	xwa, (xsp+4)
-	call	15755834
+	call	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
 	lds	wa, 2
-	call	15756091
+	call	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xde, (xsp)
 	pushw	127
 	ldw	bc, 59
-	call	15753690
+	call	SeMenu_RegisterElement_Extended
 	pushw	2
 	pushw	54
-	call	15789915
+	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 0
 	lds	bc, 0
@@ -3545,7 +3545,7 @@ Scoop_SoundEditorData:
 	.byte 0xde
 	ldw	wa, 55
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	cps	a, 0
 	ret	z
 	lds	wa, 1
@@ -3554,7 +3554,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 7
@@ -3567,7 +3567,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -3577,7 +3577,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -3587,21 +3587,21 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 54
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 48
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	extz	wa
 	ldw	bc, 63
@@ -3646,7 +3646,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 7
@@ -3659,7 +3659,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 6
@@ -3671,7 +3671,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 6
@@ -3683,21 +3683,21 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 55
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	ldw	wa, 56
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	extz	wa
 	ldw	bc, 74
@@ -3732,7 +3732,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	jr	nz, 7
@@ -3745,7 +3745,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -3755,7 +3755,7 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
@@ -3765,25 +3765,25 @@ Scoop_SoundEditorData:
 	ret	z
 	ldw	wa, 56
 	lds	bc, 1
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 55
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 	extz	wa
 	lds	bc, 2
-	jp	15758956
+	jp	SeMenu_ApplyPartEdit_Data2
 	extz	wa
 	lds	bc, 2
 	jp	15759013
@@ -3808,12 +3808,12 @@ Scoop_SoundEditorData:
 	.byte 0xde
 	ldw	wa, 55
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	cps	a, 0
 	jr	nz, 9
 	ldw	wa, 48
 	lds	bc, 0
-	jp	15753584
+	jp	SeMenu_SendEvent
 	lds	wa, 2
 	lds	bc, 1
 	jp	15757276
@@ -3838,10 +3838,10 @@ Scoop_SoundEditorData:
 	cps	a, 0
 	ret	nz
 	lds	wa, 0
-	call	15755567
+	call	SeMenu_SetupMenuDisplay
 	ldw	wa, 32
 	lds	bc, 0
-	call	15753584
+	call	SeMenu_SendEvent
 	ret
 
 

@@ -125,7 +125,7 @@ ParaLoadOpt_DispatchTable_A:
 	ld	xwa, 5701642
 	ld	xbc, 29360139
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 
 MidiFunc_SendEvtReturnAlt:
 	inc 6, xsp
@@ -252,7 +252,7 @@ ParaLoadOpt_DispatchTable_B:
 	ld	xwa, 5701653
 	ld	xbc, 29360139
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 
 MidiFunc_SendEventReturn:
 	inc 6, xsp
@@ -262,11 +262,11 @@ ParaLoadOpt_PostDualEvent:
 	ld	xwa, 5701638
 	ld	xbc, 29360130
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ld	xwa, 5701649
 	ld	xbc, 29360130
 	lds32	xde, 0
-	jp	16424280
+	jp	ApPostEvent
 
 TtMdParaLoad:
 	cp xbc, 0x1C0000C
@@ -604,11 +604,11 @@ ParaLoadOptGridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE8
 ; ParaLoadOptGridCheck dispatch
 ParaLoadOpt_GridDispatch:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
 	srl	xbc, 0
@@ -665,11 +665,11 @@ ParaLoadOpt_GridDispatch:
 	lds32	xbc, 3
 	ld	(xwa+6), xbc
 	jrl	210
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
 	srl	xbc, 0
@@ -737,7 +737,7 @@ ParaLoadOpt_GridDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, 4294967295
 	ld	(xwa+14), xbc
-	call	16383626
+	call	MainRamAdd
 	jrl	441
 	ld	xix, xhl
 	ldw	(xiy), 1
@@ -757,9 +757,9 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
@@ -776,9 +776,9 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
@@ -795,9 +795,9 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420
@@ -817,9 +817,9 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
 	ld	xbc, 31457420

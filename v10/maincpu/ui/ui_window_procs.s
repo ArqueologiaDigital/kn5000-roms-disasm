@@ -274,7 +274,7 @@ WndEvt_EventCodeDispatch:
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 31457408
-	call	16422496
+	call	SendEvent
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
 	.byte 0xaf
@@ -292,7 +292,7 @@ WndEvt_EventCodeDispatch:
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 31457408
-	call	16422496
+	call	SendEvent
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
@@ -315,7 +315,7 @@ WndEvt_EventCodeDispatch:
 	.byte 0xaf, 0x04, 0x80
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
-	call	16459328
+	call	ConvertStrings
 	ld16_24	wa, 160984
 	extz	xwa
 	lda_24	xde, 160944
@@ -325,12 +325,12 @@ WndEvt_EventCodeDispatch:
 	ld	(xbc), a
 	ld	xwa, 22
 	ld	xbc, 29360143
-	call	16422496
+	call	SendEvent
 	ld16_24	de, 160990
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 29360142
-	call	16422496
+	call	SendEvent
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
@@ -363,7 +363,7 @@ WndEvt_EventCodeDispatch:
 	.byte 0xaf, 0x04, 0x81
 	ld	xwa, (xbc)
 	ld	xbc, (xsp+8)
-	call	16459328
+	call	ConvertStrings
 	ld16_24	wa, 160984
 	extz	xwa
 	lda_24	xde, 160944
@@ -373,12 +373,12 @@ WndEvt_EventCodeDispatch:
 	ld	(xbc), a
 	ld	xwa, 22
 	ld	xbc, 29360143
-	call	16422496
+	call	SendEvent
 	ld16_24	de, 160990
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 29360142
-	call	16422496
+	call	SendEvent
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
@@ -395,7 +395,7 @@ WndEvt_EventCodeDispatch:
 	.byte 0xaf, 0x04, 0x80
 	ld	xwa, (xwa)
 	ld	xbc, (xsp+8)
-	call	16459328
+	call	ConvertStrings
 	ld16_24	wa, 160994
 	mul	wa, 3
 	addda16_24	wa, 160986
@@ -445,7 +445,7 @@ WndEvt_EventCodeDispatch:
 	.byte 0xaf, 0x04, 0x80
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
-	call	16459328
+	call	ConvertStrings
 	lda	xde, (xsp+12)
 	ld	c, (xde)
 	lda_24	xwa, 160944
@@ -470,12 +470,12 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, 22
 	ld	xbc, 29360143
 	ld	xde, 160944
-	call	16422496
+	call	SendEvent
 	ld16_24	de, 160990
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 29360142
-	call	16422496
+	call	SendEvent
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
@@ -507,7 +507,7 @@ WndEvt_EventCodeDispatch:
 	.byte 0xaf, 0x04, 0x80
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
-	call	16459328
+	call	ConvertStrings
 	lda	xde, (xsp+12)
 	ld	c, (xde)
 	ld16_24	wa, 160984
@@ -530,12 +530,12 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, 22
 	ld	xbc, 29360143
 	ld	xde, 160944
-	call	16422496
+	call	SendEvent
 	ld16_24	de, 160990
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 29360142
-	call	16422496
+	call	SendEvent
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
@@ -580,7 +580,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xbc), a
 	ld	xwa, 22
 	ld	xbc, 29360143
-	call	16422496
+	call	SendEvent
 	ld16_24	de, 160984
 	extz	xde
 	ld	xwa, (xsp+50)
@@ -621,7 +621,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xbc), a
 	ld	xwa, 22
 	ld	xbc, 29360143
-	call	16422496
+	call	SendEvent
 	ld16_24	de, 160984
 	extz	xde
 	ld	xwa, (xsp+50)
@@ -683,7 +683,7 @@ WndEvt_EventCodeDispatch:
 	.byte 0x9f, 0x06
 	jrl	nc, 25050
 	pushw	de
-	call	16715392
+	call	Malloc
 	ld	(xsp+10), xhl
 	.byte 0xd7
 	swi	2
@@ -694,7 +694,7 @@ WndEvt_EventCodeDispatch:
 	push	xbc
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	ld16_24	wa, 160982
 	.byte 0xd7
 	swi	2
@@ -713,10 +713,10 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 160944
 	add	xbc, xwa
 	push	xbc
-	call	16715597
+	call	Strcpy
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	16714482
+	call	Free
 	lda	xsp, (xsp+22)
 	lds	iz, 0
 	.byte 0x9f, 0x06
@@ -761,7 +761,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, 22
 	ld	xbc, 29360143
 	ld	xde, 160944
-	call	16422496
+	call	SendEvent
 	ld16_24	de, 160984
 	extz	xde
 	ld	xwa, (xsp+50)
@@ -789,11 +789,11 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, 22
 	ld	xbc, 31457408
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xwa, 22
 	ld	xbc, 29360143
 	ld	xde, 160944
-	call	16422496
+	call	SendEvent
 	ld	xwa, (xsp+50)
 	ld	xbc, 31457408
 	lds32	xde, 0
@@ -1937,7 +1937,7 @@ EditSw_Epilogue:
 EditSw_ByteData:
 	lda	xsp, (xsp-28)
 	pushw	iz
-	call	16409190
+	call	GetViewInstance
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+8)
 	ld	(xsp+2), xwa
@@ -1957,24 +1957,24 @@ EditSw_ByteData:
 	ld	xwa, 15376750
 	push	xwa
 	push	xbc
-	call	16715597
+	call	Strcpy
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	16715680
+	call	Strlen
 	ld	iz, hl
 	ld	xwa, (xsp+20)
 	ld	xwa, (xwa+22)
 	push	xwa
-	call	16715680
+	call	Strlen
 	lda	xsp, (xsp+16)
 	cp	hl, iz
 	jr	ule, 23
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16715680
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	16715392
+	call	Malloc
 	inc	6, xsp
 	ld	xwa, (xsp+8)
 	ld	(xwa+22), xhl
@@ -1983,16 +1983,16 @@ EditSw_ByteData:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+22)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	ld	xbc, (xsp+8)
 	ld	xwa, (xbc+22)
 	ld	xbc, (xbc+26)
-	call	16459473
+	call	CalcTotalWidth
 	ld	(xsp+6), hl
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+26)
-	call	16459274
+	call	GetCharHeight
 	lda	xbc, (xsp+18)
 	ld	wa, hl
 	exts	xwa
@@ -4159,11 +4159,11 @@ DrawDesignBox_ByteData:
 	ld	xwa, (xsp+4)
 	sla	xwa, 0
 	ld	xbc, (xsp+8)
-	call	16714766
+	call	Math_DivideSigned32
 	ld	xiz, xhl
 	ld	xwa, (xsp+12)
 	ld	xbc, xiz
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+30)
 	ld	xwa, xde
@@ -4212,11 +4212,11 @@ DrawDesignBox_ByteData:
 	ld	xwa, (xsp+8)
 	sla	xwa, 0
 	ld	xbc, (xsp+4)
-	call	16714766
+	call	Math_DivideSigned32
 	ld	xiz, xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xde, (xsp+30)
 	ld	xwa, xde
@@ -8774,14 +8774,14 @@ ColorBlit2_LargeCodeBlock:
 	ld	xwa, (xsp+8)
 	sla	xwa, 0
 	ld	xbc, (xsp+4)
-	call	16714766
+	call	Math_DivideSigned32
 	ld	(xsp+34), xhl
 	lda	xwa, (xsp+62)
 	ld	(xsp+42), xwa
 	ld	xwa, (xsp+4)
 	sla	xwa, 0
 	ld	xbc, (xsp+8)
-	call	16714766
+	call	Math_DivideSigned32
 	ld	xix, (xsp+42)
 	lda	xwa, (xix+2)
 	ld	(xsp+46), xwa
@@ -8986,7 +8986,7 @@ ColorBlit2_LargeCodeBlock:
 	jrl	le, 211
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, xde
@@ -9075,7 +9075,7 @@ ColorBlit2_LargeCodeBlock:
 	jrl	958
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, (xsp+46)
@@ -9228,7 +9228,7 @@ ColorBlit2_LargeCodeBlock:
 	jr	le, 119
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, xde
@@ -9274,7 +9274,7 @@ ColorBlit2_LargeCodeBlock:
 	jrl	472
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xhl, (xsp+42)
 	ld	xde, (xsp+46)
@@ -9377,7 +9377,7 @@ ColorBlit2_LargeCodeBlock:
 	jr	le, 118
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, xde
@@ -9423,7 +9423,7 @@ ColorBlit2_LargeCodeBlock:
 	jr	99
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xhl, (xsp+42)
 	ld	xde, (xsp+46)
@@ -9879,11 +9879,11 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xaf, 0x04
 	.long NakaInst_Ballads
 	ld	xbc, (xsp+8)
-	call	16714766
+	call	Math_DivideSigned32
 	ld	xiz, xhl
 	ld	xwa, (xsp+12)
 	ld	xbc, xiz
-	call	16714332
+	call	Math_MultiplyAccumulate
 	ld	(xsp+12), xhl
 	ld	xbc, (xsp+34)
 	ld	xwa, xbc

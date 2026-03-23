@@ -88,7 +88,7 @@ EffectMode_ByteData_Block2:
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	lds	wa, 1
 	jr	54
 	.byte 0xc1
@@ -100,9 +100,9 @@ EffectMode_ByteData_Block2:
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	lds	wa, 1
-	jp	16356451
+	jp	UI_PostPartChangeEvent
 	.byte 0xc1
 	popw	iz
 	.byte 0x8d
@@ -112,16 +112,16 @@ EffectMode_ByteData_Block2:
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	lds	wa, 1
-	call	16356451
+	call	UI_PostPartChangeEvent
 	jr	59
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ldw	wa, 18
-	call	16356451
+	call	UI_PostPartChangeEvent
 	stdi8	36174, 15
 	ret
 	.byte 0xc1
@@ -133,9 +133,9 @@ EffectMode_ByteData_Block2:
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ldw	wa, 193
-	call	16356496
+	call	UI_PostModeChangeEvent
 	stdi8	36174, 0
 	ret
 EffectMode_ByteData_Block3:
@@ -154,20 +154,20 @@ EffectMode_ByteData_Block3:
 	ld	xsp, 1066219201
 	.byte 0xc0
 	jr	nz, 6
-	call	16356602
+	call	UI_PostTimerResetEvent
 	jr	58
 	ld	xwa, 1025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 3
 	jr	z, 4
 	cps	hl, 2
 	jr	nz, 41
 	ld	xwa, 1024
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 0
 	jr	z, 28
 	ld	xwa, 163842
-	call	16569399
+	call	SndParam_LookupReadOnly
 	stda8	36180, l
 	.byte 0xf1, 0xe2, 0xb7
 	ld	(xsp-15), de
@@ -183,17 +183,17 @@ EffectMode_ByteData_Block3:
 	.byte 0x01, 0x04
 	nop
 	nop
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 3
 	jr	z, 4
 	cps	hl, 2
 	jr	nz, 33
 	ld	xwa, 1024
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 0
 	jr	z, 20
 	ld	xwa, 163842
-	call	16569399
+	call	SndParam_LookupReadOnly
 	stda8	36180, l
 	.byte 0xf1, 0xe2, 0xb7, 0xbf
 	calr	1551
@@ -213,17 +213,17 @@ EffectMode_ByteData_Block4:
 	and	a, 40
 	jr	z, 50
 	ld	xwa, 1025
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 3
 	jr	z, 4
 	cps	hl, 2
 	jr	nz, 33
 	ld	xwa, 1024
-	call	16569399
+	call	SndParam_LookupReadOnly
 	cps	hl, 0
 	jr	z, 20
 	ld	xwa, 163842
-	call	16569399
+	call	SndParam_LookupReadOnly
 	stda8	36180, l
 	.byte 0xf1, 0xe2, 0xb7, 0xbf
 	calr	1470
@@ -1972,7 +1972,7 @@ EffectMode_ByteData_DiagEvents:
 	push	xhl
 	push	xix
 	push	xiz
-	call	16531164
+	call	CPanel_PanelDetection_Wrapper
 	stda8	36220, a
 	pop	xiz
 	pop	xix
@@ -2012,7 +2012,7 @@ EffectMode_ByteData_DiagEvents:
 	ld	xwa, 16056340
 	ld	xbc, 29360129
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	.byte 0xd7
 	swi	2
 	halt
@@ -2024,8 +2024,8 @@ EffectMode_ByteData_DiagEvents:
 	ld	xwa, 16386
 	ldw	bc, 128
 	lds	de, 3
-	call	16569135
-	call	16649845
+	call	SndParam_LookupByKey
+	call	Voice_InitializeAll
 	ret
 
 Voice_EmitNoteWithVelocity:
@@ -2281,7 +2281,7 @@ TableDispatch_Return:
 	ret
 
 BitmapFinpic_ByteData:
-	call	15665047
+	call	Boot_CheckConfigFlag7
 	cps	hl, 0
 	ret	z
 	ldda8	a, 49280
@@ -2293,13 +2293,13 @@ BitmapFinpic_ByteData:
 	jrl	pl, 16320
 	nop
 	ret	nz
-	call	16406631
+	call	GetTitleNow
 	cp	xhl, 27263222
 	ret	nz
 	ld	xwa, 4294967295
 	ld	xbc, 29360139
 	lds32	xde, 0
-	call	16424280
+	call	ApPostEvent
 	ret
 
 BitmapFinpic:
@@ -3380,15 +3380,15 @@ MstStyleAlpGridCheck:
 
 ; MstStyleAlpGridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0D58)
 MstStyleAlp_EventDispatch:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	(xsp+58), xhl
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
-	call	16409190
+	call	GetViewInstance
 	ld	xde, (xsp+58)
 	ld	(xsp+52), de
 	ld	xbc, (xhl+78)
@@ -3404,7 +3404,7 @@ MstStyleAlp_EventDispatch:
 	extz	xde
 	ld	xwa, 21102605
 	ld	xbc, 31588376
-	call	16403043
+	call	MainFuncCall
 	jrl	408
 
 MstStyleAlp_CellSelect:
@@ -5985,15 +5985,15 @@ MstStyle2GridCheck:
 	jp_dri 8, 0x07, 0xF0, 0xE0
 
 MstGrid2_ScrollJumpTable:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	(xsp+62), xhl
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
-	call	16409190
+	call	GetViewInstance
 	ld	xbc, (xsp+62)
 	ld	(xsp+56), bc
 	cps	bc, 4
@@ -6030,7 +6030,7 @@ MstGrid2_ScrollJumpTable:
 	extz	xde
 	ld	xwa, 21102605
 	ld	xbc, 31588376
-	call	16403043
+	call	MainFuncCall
 	jrl	596
 
 MstGrid2_CellSelect:
@@ -6681,11 +6681,11 @@ TchSensGridCheck:
 
 ; TchSensGridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED0F08)
 TchSensGrid_EventDispatch:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xde
@@ -6731,11 +6731,11 @@ TchSensGrid_EventDispatch:
 	lds	bc, 1
 	lds	de, 2
 	jr	123
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xde
@@ -6786,7 +6786,7 @@ TchSensGrid_EventDispatch:
 	ld	xwa, 259
 	ldw	bc, 65535
 	lds	de, 2
-	call	16382274
+	call	MainLswAdd
 	jrl	506
 	lda	xix, (xde+4)
 	ld	xwa, (xde)
@@ -6808,9 +6808,9 @@ TchSensGrid_EventDispatch:
 	pushw	237
 	pushw	3808
 	push	xbc
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 31457420
@@ -6839,9 +6839,9 @@ TchSensGrid_EventDispatch:
 	ld	xwa, 15535844
 	push	xwa
 	push	xbc
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 31457420
@@ -6866,9 +6866,9 @@ TchSensGrid_EventDispatch:
 	pushw	237
 	pushw	3820
 	push	xiz
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 31457420
@@ -6888,9 +6888,9 @@ TchSensGrid_EventDispatch:
 	pushw	237
 	pushw	3824
 	push	xiz
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+10)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
 	ld	xbc, 31457420
@@ -7245,11 +7245,11 @@ FSWAssGridCheck:
 
 ; FSWAssGridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED1226)
 FSWAssGrid_EventDispatch:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+260)
 	ld	xbc, xde
@@ -7265,14 +7265,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 2
 	jr	nz, 64
 	ld	xwa, 10374
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	2228
 	cp	l, 28
 	jrl	nc, 2213
 	ld	xwa, 10374
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	2206
@@ -7295,14 +7295,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 3
 	jr	nz, 64
 	ld	xwa, 10376
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	2154
 	cp	l, 28
 	jrl	nc, 2139
 	ld	xwa, 10376
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	2132
@@ -7325,14 +7325,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 4
 	jr	nz, 64
 	ld	xwa, 10378
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	2080
 	cp	l, 28
 	jrl	nc, 2065
 	ld	xwa, 10378
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	2058
@@ -7355,14 +7355,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 5
 	jr	nz, 64
 	ld	xwa, 10380
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	2006
 	cp	l, 28
 	jrl	nc, 1991
 	ld	xwa, 10380
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1984
@@ -7385,14 +7385,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 6
 	jr	nz, 64
 	ld	xwa, 10382
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1932
 	cp	l, 28
 	jrl	nc, 1917
 	ld	xwa, 10382
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1910
@@ -7415,14 +7415,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 7
 	jr	nz, 64
 	ld	xwa, 10384
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1858
 	cp	l, 28
 	jrl	nc, 1843
 	ld	xwa, 10384
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1836
@@ -7445,14 +7445,14 @@ FSWAssGrid_EventDispatch:
 	cp	de, 8
 	jrl	nz, 1787
 	ld	xwa, 10368
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1780
 	cp	l, 30
 	jrl	nc, 1765
 	ld	xwa, 10368
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1758
@@ -7467,11 +7467,11 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10368
 	lds	de, 2
 	jrl	549
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+260)
 	.byte 0xea
@@ -7487,14 +7487,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 2
 	jr	nz, 63
 	ld	xwa, 10374
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1669
 	cps	l, 0
 	jrl	z, 1655
 	ld	xwa, 10374
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1648
@@ -7517,14 +7517,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 3
 	jr	nz, 63
 	ld	xwa, 10376
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1596
 	cps	l, 0
 	jrl	z, 1582
 	ld	xwa, 10376
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1575
@@ -7547,14 +7547,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 4
 	jr	nz, 63
 	ld	xwa, 10378
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1523
 	cps	l, 0
 	jrl	z, 1509
 	ld	xwa, 10378
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1502
@@ -7577,14 +7577,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 5
 	jr	nz, 63
 	ld	xwa, 10380
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1450
 	cps	l, 0
 	jrl	z, 1436
 	ld	xwa, 10380
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1429
@@ -7607,14 +7607,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 6
 	jr	nz, 63
 	ld	xwa, 10382
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1377
 	cps	l, 0
 	jrl	z, 1363
 	ld	xwa, 10382
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1356
@@ -7637,14 +7637,14 @@ FSWAssGrid_EventDispatch:
 	cps	de, 7
 	jr	nz, 62
 	ld	xwa, 10384
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1304
 	cps	l, 0
 	jrl	z, 1290
 	ld	xwa, 10384
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1283
@@ -7667,14 +7667,14 @@ FSWAssGrid_EventDispatch:
 	cp	de, 8
 	jrl	nz, 1235
 	ld	xwa, 10368
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1228
 	cp	l, 29
 	jrl	ule, 1213
 	ld	xwa, 10368
-	call	16569399
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	1206
@@ -7688,7 +7688,7 @@ FSWAssGrid_EventDispatch:
 	ccf
 	ld	xwa, 10368
 	lds	de, 2
-	call	16382090
+	call	MainLswPut
 	jrl	1167
 	lda	xix, (xde+4)
 	lda	xiy, (xsp+4)
@@ -7720,9 +7720,9 @@ FSWAssGrid_EventDispatch:
 	pushw	4590
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
@@ -7758,9 +7758,9 @@ FSWAssGrid_EventDispatch:
 	pushw	4594
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
@@ -7792,9 +7792,9 @@ FSWAssGrid_EventDispatch:
 	pushw	4598
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
@@ -7826,9 +7826,9 @@ FSWAssGrid_EventDispatch:
 	pushw	4602
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
@@ -7859,9 +7859,9 @@ FSWAssGrid_EventDispatch:
 	pushw	4606
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	.byte 0xf3
 	swi	5
@@ -7896,9 +7896,9 @@ FSWAssGrid_EventDispatch:
 	pushw	4610
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
@@ -7928,9 +7928,9 @@ FSWAssGrid_EventDispatch:
 	pushw	4614
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
 	ld	xbc, 31457420
@@ -8874,11 +8874,11 @@ PmExpFilterGridCheck:
 
 ; PmExpFilterGridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED149A)
 PmExpFilter_EventDispatch:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	.byte 0xf3
 	swi	5
@@ -8917,11 +8917,11 @@ PmExpFilter_EventDispatch:
 	ldw	bc, 65535
 	lds	de, 2
 	jr	119
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	.byte 0xf3
 	swi	5
@@ -8959,7 +8959,7 @@ PmExpFilter_EventDispatch:
 	ld_rrl	xwa, xbc, wa
 	lds	bc, 1
 	lds	de, 2
-	call	16382274
+	call	MainLswAdd
 	jrl	413
 	ld8_24	a, 213218
 	cps	a, 2
@@ -8992,9 +8992,9 @@ PmExpFilter_EventDispatch:
 	ld	xwa, 15537270
 	push	xwa
 	push	xhl
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	.byte 0xf3
 	swi	5
@@ -9032,9 +9032,9 @@ PmExpFilter_EventDispatch:
 	ld	xwa, 15537278
 	push	xwa
 	push	xhl
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	.byte 0xf3
 	swi	5
@@ -9414,11 +9414,11 @@ DispTimeSetGridCheck:
 
 ; DispTimeSetGridCheck event dispatch (7-entry, events 0x1C00017-0x1C0001D, table 0xED1582)
 DispTimeSet_EventDispatch:
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xwa, (xsp+40)
 	ld	xbc, xde
@@ -9546,11 +9546,11 @@ DispTimeSet_EventDispatch:
 	lds32	xbc, 1
 	ld	(xwa+10), xbc
 	jrl	326
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 31457423
 	lds32	xde, 0
-	call	16422496
+	call	SendEvent
 	ld	xde, xhl
 	lda	xiy, (xsp+40)
 	ld	xwa, xde
@@ -9687,7 +9687,7 @@ DispTimeSet_EventDispatch:
 	ld	(xhl), xbc
 	lds32	xbc, 1
 	ld	(xde), xbc
-	call	16383626
+	call	MainRamAdd
 	jrl	825
 	lda_24	xwa, 213222
 	lda	xiy, (xde+14)
@@ -9714,9 +9714,9 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5458
 	push	xbc
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
@@ -9745,9 +9745,9 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5462
 	push	xbc
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
@@ -9778,9 +9778,9 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5466
 	push	xbc
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
@@ -9809,9 +9809,9 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5470
 	push	xbc
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
@@ -9840,9 +9840,9 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5474
 	push	xix
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
@@ -9868,9 +9868,9 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5478
 	push	xix
-	call	16714354
+	call	Audio_SendCommand
 	lda	xsp, (xsp+12)
-	call	16401616
+	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
@@ -10607,7 +10607,7 @@ MssName_EventDispatch:
 	pushw	5526
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16715597
+	call	Strcpy
 	inc	8, xsp
 	jrl	129
 	dec	1, xwa
@@ -10617,23 +10617,23 @@ MssName_EventDispatch:
 	ld	(xbc), xwa
 	ld	xwa, (xbc)
 	dec	1, xwa
-	call	16477847
+	call	EffectMode_SearchPresetTableC0
 	ld	xwa, (xiz+14)
 	dec	1, xwa
 	cp	xhl, 4294967295
 	jr	z, 43
 	pushw	16
-	call	16477847
+	call	EffectMode_SearchPresetTableC0
 	push	xhl
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16714995
+	call	Strncpy
 	pushw	2
 	pushw	32
 	ld	xwa, (xiz+18)
 	lda	xwa, (xwa+16)
 	push	xwa
-	call	16722153
+	call	AudioCmd_DataBlock_28E9
 	lda	xsp, (xsp+18)
 	ld	xwa, 15537572
 	jr	37
@@ -10647,7 +10647,7 @@ MssName_EventDispatch:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16714995
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	xwa, 15537576
 	push	xwa
