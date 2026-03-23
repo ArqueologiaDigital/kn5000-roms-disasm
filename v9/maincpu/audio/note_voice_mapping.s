@@ -27204,7 +27204,7 @@ TmFlash_WriteRoutine:
 	ld	iz, bc
 	ld	(xsp+2), xwa
 	ld	xwa, (xsp+2)
-	calr	63833
+	calr	63836
 	ld	wa, iz
 	extz	xwa
 	extz	hl
@@ -27277,7 +27277,7 @@ TmFlash_WriteRoutine:
 	ld	iz, bc
 	ld	(xsp+6), xwa
 	ld	xwa, (xsp+6)
-	calr	63661
+	calr	63664
 	ld	bc, iz
 	extz	xbc
 	extz	hl
