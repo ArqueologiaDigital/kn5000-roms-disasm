@@ -37,7 +37,7 @@ FDemo_DisplayResourceData:
 	ccf
 	.byte 0x01
 	ldw	wa, 7480
-	.byte 0xf3
+	.byte 0xE5
 	incf
 	swi	7
 	lda	xwa, (xsp+278)

@@ -3379,7 +3379,7 @@ VoiceData_ExtendedParamSetup:
 	.byte 0xe0, 0xe4
 	ldw	wa, 4024
 	ldw	wa, 7480
-	.byte 0x99
+	.byte 0x8B
 	decf
 	swi	7
 	lda	xsp, (xsp+10)
@@ -3540,7 +3540,7 @@ VoiceData_ExtendedParamSetup:
 	.byte 0xe1, 0xb0
 	pop_sr
 	ldw	wa, 7480
-	.byte 0x99
+	.byte 0x8B
 	decf
 	swi	7
 	lda	xsp, (xsp+10)
