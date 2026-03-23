@@ -21,20 +21,18 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lda	xsp, (xsp+10)
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
 --- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 21:13:36.455241846 +0000
-+++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 21:13:36.471241950 +0000
++++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 22:45:14.755412231 +0000
 @@ -26655,9 +26655,14 @@
  	ret
  
  SendPartDataBlock_DoGetError:
--	ldw	wa, 0xff
--	ldw	bc, 0xff
++	call	SubCPU_Payload_GetErrorFlag
++	cp	hl, 0xffff
++	ret	nz
+ 	ldw	wa, 0xff
+ 	ldw	bc, 0xff
 -	jp	COMM_BuildAndSendPacket
-+	call SubCPU_Payload_GetErrorFlag
-+	cp hl, 0xffff
-+	ret nz
-+	ldw wa, 0xff
-+	ldw bc, 0xff
-+	call COMM_BuildAndSendPacket
++	call	COMM_BuildAndSendPacket
 +	ret
 +
  SendPartDataBlock_Return5:

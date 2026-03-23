@@ -26655,12 +26655,12 @@ SendPartDataBlock_Return4:
 	ret
 
 SendPartDataBlock_DoGetError:
-	call SubCPU_Payload_GetErrorFlag
-	cp hl, 0xffff
-	ret nz
-	ldw wa, 0xff
-	ldw bc, 0xff
-	call COMM_BuildAndSendPacket
+	call	SubCPU_Payload_GetErrorFlag
+	cp	hl, 0xffff
+	ret	nz
+	ldw	wa, 0xff
+	ldw	bc, 0xff
+	call	COMM_BuildAndSendPacket
 	ret
 
 SendPartDataBlock_Return5:
