@@ -3127,5 +3127,4 @@ ROM_PaddingFF:
 	.set SeqChan_UnhandledCmd_0x03, 0xFD8264
 	.set SeqChan_UnhandledCmd_0x12, 0xFD8273
 	.set AudioInit_PartConfig_Loop_0x26, 0xFE0053
-	.set HdaeRom_DataHandler_0x22, 0xFF0270
 	.set NakaData_RomEnd, 0xFFFFFF

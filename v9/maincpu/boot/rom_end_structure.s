@@ -5,7 +5,7 @@
 ; Contains:
 ;   - System timestamp pointers (4 x .long)
 ;   - TMP94C241C interrupt vector table (42 vectors)
-;   - Firmware version byte (0x0A = v10)
+;   - Firmware version byte (0x09 = v9)
 ;   - Reserved padding
 
 System_TimestampPointers:
@@ -77,10 +77,10 @@ InterruptVectorTable:
 	.long Empty_Handler
 
 ; RESERVED:
-	.fill 52, 1, 0xff
+	.fill 66, 1, 0xff
 
 FIRMWARE_VERSION:
-	.byte 0x0a
+	.byte 0x09
 
 ; RESERVED:
 	.fill 23, 1, 0xff
