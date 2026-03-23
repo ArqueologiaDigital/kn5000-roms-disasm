@@ -73,8 +73,7 @@ NoteEditSy_ScanReturn:
 
 SeqAcc_UpdateAndDispatch:
 	call Accomp_UpdateModeFlag
-	jr __jrt_nop_F38912
-__jrt_nop_F38912:
+	jr SeqAcc_InitAndDispatch
 
 SeqAcc_InitAndDispatch:
 	stdi16 9832, 1
@@ -13082,8 +13081,7 @@ Part_ApplyVoiceTableC:
 
 SeqVoice_ApplyTableEntry:
 	ld xwa, 0xe4459a
-	jr __jrt_nop_F3FF49
-__jrt_nop_F3FF49:
+	jr Part_LoadAndApplyVoiceTable
 
 Part_LoadAndApplyVoiceTable:
 	ldda8 c, 10362
@@ -19484,7 +19482,7 @@ SeqPlay_CheckAndStartPlayback:
 SeqAcc_SetIndicator_PB:
 	ldda16 xwa, 61854
 	stda16 10357, xwa
-	call __jrt_nop_F86E7B
+	call Demo_PreSetup
 	resda 0, 10405
 	ldw wa, 0x4c
 	jp CtrlPanel_SetIndicatorBit
@@ -26822,8 +26820,7 @@ SeqLoad_CheckAutoAccompFlag:
 	resda 0, 62014
 
 SeqLoad_SkipBitCheck:
-	jr __jrt_nop_F48211
-__jrt_nop_F48211:
+	jr SeqLoad_ClearAutoAccompBit1
 
 SeqLoad_ClearAutoAccompBit1:
 	resda 1, 62014
@@ -27840,8 +27837,7 @@ SeqScan_RefreshReadAndCompare:
 	call SeqData_ReadNextByte
 	stda8 9607, l
 	call PartCtrl_RefreshWordPeriodic
-	jr __jrt_nop_F48AA9
-__jrt_nop_F48AA9:
+	jr SeqScan_ComparePosition14vs1052
 
 SeqScan_ComparePosition14vs1052:
 	ldda16 xwa, 9614
@@ -28064,8 +28060,7 @@ SeqTick_StoreFirstCandidate:
 	ldda16 xwa, 9626
 	cps wa, 0
 	jrl nz, SeqEvt_InitDualTrackScan
-	jr __jrt_nop_F48CD4
-__jrt_nop_F48CD4:
+	jr Seq_InitAdvancePosition
 
 Seq_InitAdvancePosition:
 	stdi16 9614, 0
@@ -28673,8 +28668,7 @@ SeqSearch_InitNotFound:
 	stdi16 9640, 65535
 	stdi8 9642, 255
 	ldmm16 9662, 9652
-	jr __jrt_nop_F492B6
-__jrt_nop_F492B6:
+	jr SeqEvt_SelectNearestTiming
 
 SeqEvt_SelectNearestTiming:
 	ldda16 xbc, 9636
@@ -29602,8 +29596,7 @@ SeqVoice_InitDefaultsAndReturn:
 	ret
 
 SeqVoice_InitJmpNop:
-	jr __jrt_nop_F49B31
-__jrt_nop_F49B31:
+	jr SeqPart_InitClear
 
 SeqPart_InitClear:
 	pushw iz
@@ -34817,7 +34810,6 @@ SeqPart_VoiceCheckEndExit:
 	ldda8 e, 9740
 	bit 7, e
 	jrl nz, SeqStep_EventProcess
-	jr __jrt_nop_F4CE4D
-__jrt_nop_F4CE4D:
+	jr SeqStep_NoteDispatch
 
 	.include "sequencer/seq_step_routines.s"

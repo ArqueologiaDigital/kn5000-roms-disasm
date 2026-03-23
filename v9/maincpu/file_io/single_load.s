@@ -219,7 +219,7 @@ SLSrcBankList_FuncBody:
 	call	16294158
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xwa, 35172
 	ldw	bc, 16
 	calr	60984
@@ -286,7 +286,7 @@ SLSrcBankList_FuncBody:
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	xbc, 15337792
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xde, 35213
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
@@ -311,7 +311,7 @@ SLSrcBankList_FuncBody:
 	call	16294280
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xwa, 35214
 	ldw	bc, 16
 	calr	60742
@@ -549,7 +549,7 @@ SLSrcBankList_FuncBody:
 	call	16294427
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xwa, 35193
 	ldw	bc, 16
 	calr	60023
@@ -679,7 +679,7 @@ SLSrcBankList_FuncBody:
 	ld	(xwa), 3
 	lda	xwa, (xbc+64)
 	ld	xbc, 15337826
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xde, 35213
 	ld	xwa, (xsp+8)
 	ld	xbc, 29360143
@@ -730,7 +730,7 @@ SLSrcBankList_FuncBody:
 	call	16294549
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xwa, 35214
 	ldw	bc, 16
 	calr	59524
@@ -993,7 +993,7 @@ SLSrcBankList_FuncBody:
 	call	16294804
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xwa, 35172
 	ldw	bc, 16
 	calr	58744
@@ -1076,7 +1076,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (xwa+64)
 	.byte 0x41
 	.long Str_AllOption_EA0980
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xde, 35213
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
@@ -1111,7 +1111,7 @@ SLSrcBankList_FuncBody:
 	call	16294681
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xwa, 35214
 	ldw	bc, 16
 	calr	58447
@@ -1647,7 +1647,7 @@ SLDstBankList_FuncBody:
 	push	xsp
 	nop
 	jr	z, 42
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xwa, 35277
 	ld	xbc, 15337902
 	call	FileIO_BuildFilePath
@@ -1657,9 +1657,9 @@ SLDstBankList_FuncBody:
 	ldada	xwa, 35298
 	.byte 0x41
 	.long Str_AllOption_EA09B2
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	jr	74
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xwa, 35277
 	ld	xbc, 15337924
 	call	FileIO_BuildFilePath
@@ -1907,7 +1907,7 @@ SLDstBankList_FuncBody:
 	calr	5520
 	ld	xbc, xhl
 	ld	xwa, xiz
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	ldada	xde, 35255
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
@@ -2094,7 +2094,7 @@ SLDstBankList_FuncBody:
 	ld	(xwa), 3
 	lda	xwa, (xbc+64)
 	ld	xbc, 15337946
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	jr	28
 	ldda8	e, 35334
 	ld	c, e
@@ -2374,7 +2374,7 @@ SLDstBankList_FuncBody:
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	xbc, 15337976
-	call	__jrt_nop_F890DC
+	call	FileIO_CopyString
 	jrl	214
 	ld	l, (xsp+4)
 	.byte 0x8f, 0x04, 0x87

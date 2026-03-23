@@ -184,8 +184,7 @@ Display_DeferOrDrawWall:
 	lda_24 xbc, 0xfb154e
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
-	jr __jrt_nop_FB1550
-__jrt_nop_FB1550:
+	jr Display_DeferOrDrawWall_Direct
 
 Display_DeferOrDrawWall_Direct:
 	sti16_24 0x03ef92, 0x0000
@@ -203,8 +202,7 @@ Display_DeferOrUpdateScreen:
 	lda_24 xbc, 0xfb1577
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
-	jr __jrt_nop_FB1579
-__jrt_nop_FB1579:
+	jr Display_DeferOrUpdateScreen_Direct
 
 Display_DeferOrUpdateScreen_Direct:
 	sti16_24 0x03ef92, 0x0001

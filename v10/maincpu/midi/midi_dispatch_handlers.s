@@ -15114,8 +15114,7 @@ MidiChan_InitAllBufferPtrs:
 	calr ArpQueue_InitBuffer
 	ldda32 xwa, 48224
 	ldda32 xbc, 48312
-	jr __jrt_nop_FD83D2
-__jrt_nop_FD83D2:
+	jr ArpQueue_InitBuffer
 
 ArpQueue_InitBuffer:
 	ld xde, xbc

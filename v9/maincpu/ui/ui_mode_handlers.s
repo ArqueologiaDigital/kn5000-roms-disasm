@@ -246,8 +246,7 @@ EffectMode_ApplyTranspose:
 
 EffectMode_ApplyTranspose_StoreTimer:
 	stdi8 36174, 0
-	jr __jrt_nop_FB6C51
-__jrt_nop_FB6C51:
+	jr EffectMode_CheckTransposeAndLookup
 
 EffectMode_CheckTransposeAndLookup:
 	ld xwa, 0x28000

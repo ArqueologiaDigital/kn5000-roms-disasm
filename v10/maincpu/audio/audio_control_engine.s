@@ -1061,8 +1061,7 @@ MIDI_WriteSecondByte:
 	ldada xwa, 36542
 	ldcf_dd8 6, 0x34
 	scc8 c, c
-	jr __jrt_nop_FC6A9F
-__jrt_nop_FC6A9F:
+	jr MIDI_WriteParamByte
 
 MIDI_WriteParamByte:
 	lda xsp, (xsp - 10)
@@ -8280,8 +8279,7 @@ TempoRingBuf_ProcessEntry:
 	call AudioCtrl_SaveAllRegs
 	call SeqPlay_CheckAndStartPlayback
 	call AudioCtrl_RestoreAllRegs
-	jr __jrt_nop_FCAB95
-__jrt_nop_FCAB95:
+	jr TempoRingBuf_ClearEntryType
 
 TempoRingBuf_ClearEntryType:
 	stdi8 37322, 0

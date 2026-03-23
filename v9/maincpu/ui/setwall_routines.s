@@ -1691,8 +1691,7 @@ SetWall_SkipEvents_IncCount:
 	call SetWall_StreamAdvanceBounded
 	cpdi8 10362, 0
 	jr z, SetWall_SkipEvents_CheckCount
-	jr __jrt_nop_F1FE58
-__jrt_nop_F1FE58:
+	jr SetWall_SkipEvents_Return
 
 SetWall_SkipEvents_Return:
 	xor b, b

@@ -1354,8 +1354,7 @@ MBytePkt_LoopBody:
 	popw hl
 	popw bc
 	jr nz, MBytePkt_EncWriteResult
-	jr __jrt_nop_FC4AB7
-__jrt_nop_FC4AB7:
+	jr MBytePkt_EncNoEvent
 
 MBytePkt_EncNoEvent:
 	calr CPanel_DecEventPtr

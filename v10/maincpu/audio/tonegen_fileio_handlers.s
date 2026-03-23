@@ -95,8 +95,7 @@ ToneGen_DSPCfg_Initialize:
 	jrl DSPCfg_InitAllEntries
 
 ToneGen_InitAllChannelEntries_Skip:
-	jr __jrt_nop_FC4CED
-__jrt_nop_FC4CED:
+	jr Voice_InitAllChannelEntries
 
 Voice_InitAllChannelEntries:
 	lda xsp, (xsp - 14)
@@ -704,8 +703,7 @@ SoundParam_NotifyMultipleChanges:
 	lds de, 0
 	call SoundParam_NotifyChange
 	call BitMapOut_DetectChanges
-	jr __jrt_nop_FC5245
-__jrt_nop_FC5245:
+	jr ToneGen_DiffScanAndUpdate
 
 ToneGen_DiffScanAndUpdate:
 	lda xsp, (xsp - 14)

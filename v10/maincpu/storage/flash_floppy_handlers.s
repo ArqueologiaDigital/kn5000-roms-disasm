@@ -2194,8 +2194,7 @@ PartGrid_OperationsBlock:
 ; PartGrid column dispatch end
 PartGrid_ColumnDispatch_End:
 	lds wa, 0
-	jr __jrt_nop_F17001
-__jrt_nop_F17001:
+	jr PartGrid_ColumnDispatch_Default
 
 ; PartGrid column dispatch default case
 PartGrid_ColumnDispatch_Default:

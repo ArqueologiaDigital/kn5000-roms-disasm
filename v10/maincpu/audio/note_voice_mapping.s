@@ -15168,8 +15168,7 @@ ProcessControllers_R_LoadDRAM:
 
 PlayMode_ClearBit6:
 	anddi8_24 52958, 191
-	jr __jrt_nop_FE94A6
-__jrt_nop_FE94A6:
+	jr PlayMode_UpdateAndReturn
 
 PlayMode_UpdateAndReturn:
 	calr Voice_DispatchByTimingState
@@ -15184,8 +15183,7 @@ PlayMode_UpdateAndReturn:
 
 PlayMode_SetZeroResult:
 	ldb h, 0x0
-	jr __jrt_nop_FE94CC
-__jrt_nop_FE94CC:
+	jr PlayMode_StoreResult
 
 PlayMode_StoreResult:
 	pop xde
@@ -15212,8 +15210,7 @@ PlayMode_CheckModes23:
 
 PlayMode_ClearBit6_Alt:
 	anddi8_24 52958, 191
-	jr __jrt_nop_FE9501
-__jrt_nop_FE9501:
+	jr PlayMode_CheckSlotAndReturn
 
 PlayMode_CheckSlotAndReturn:
 	calr Voice_CheckAndResetSlotState
@@ -15227,8 +15224,7 @@ PlayMode_CheckSlotAndReturn:
 
 PlayMode_SetZero_Alt:
 	ldb h, 0x0
-	jr __jrt_nop_FE9524
-__jrt_nop_FE9524:
+	jr PlayMode_Epilogue
 
 PlayMode_Epilogue:
 	pop xde
@@ -15395,8 +15391,7 @@ CheckAndResetSlotSta_LoadDRAM2:
 
 CheckAndResetSlotSta_Block2:
 	calr NullRet2_Block
-	jr __jrt_nop_FE9670
-__jrt_nop_FE9670:
+	jr Voice_NullRet2
 
 Voice_NullRet2:
 	ret
@@ -15979,8 +15974,7 @@ __jrt_nop_FE9A0A_Block10:
 
 __jrt_nop_FE9A0A_Block11:
 	calr NoteDisplay_ClearAndSetUpdate
-	jr __jrt_nop_FE9B48
-__jrt_nop_FE9B48:
+	jr Audio_NullRet2
 
 Audio_NullRet2:
 	ret
@@ -16129,8 +16123,7 @@ VoiceSlot_CheckPitch_OrBits:
 VoiceSlot_CheckPitch_OrBits2:
 	xor hl, hl
 	anddi8_24 52958, 223
-	jr __jrt_nop_FE9CC4
-__jrt_nop_FE9CC4:
+	jr NoteBuffer_CompactEntries
 
 NoteBuffer_CompactEntries:
 	ld xix, 0xcf8f
@@ -16319,8 +16312,7 @@ NoteDisplay_FoundEntry:
 NoteDisplay_NotFound:
 	ldb a, 0x0
 	ldb w, 0x0
-	jr __jrt_nop_FE9E8A
-__jrt_nop_FE9E8A:
+	jr NoteDisplay_StoreBoundsReturn
 
 NoteDisplay_StoreBoundsReturn:
 	popw bc
@@ -16362,8 +16354,7 @@ NoteDisplay_AlternateLookup:
 Voice_ZeroInitConverge:
 	ldb a, 0x0
 	ldb w, 0x0
-	jr __jrt_nop_FE9EF8
-__jrt_nop_FE9EF8:
+	jr NoteDisplay_AltReturn
 
 NoteDisplay_AltReturn:
 	ret

@@ -163,8 +163,7 @@ SMF_FlushAndFinalize:
 	st8_24 0x00ffe3, a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
-	jr __jrt_nop_F28238
-__jrt_nop_F28238:
+	jr SMF_PopReturn
 
 SMF_PopReturn:
 	popw wa
@@ -1507,8 +1506,7 @@ SMF_Resolve_Ch15Search:
 
 SMF_Resolve_Ch15Found:
 	ld wa, iy
-	jr __jrt_nop_F28D6B
-__jrt_nop_F28D6B:
+	jr SMF_Resolve_Return
 
 SMF_Resolve_Return:
 	ret
@@ -2024,8 +2022,7 @@ SMF_Config_Format3:
 SMF_Config_Format3_Done:
 	pop xiy
 	pop xix
-	jr __jrt_nop_F29282
-__jrt_nop_F29282:
+	jr SMF_Config_ProcessSlotData
 
 SMF_Config_ProcessSlotData:
 	push xix

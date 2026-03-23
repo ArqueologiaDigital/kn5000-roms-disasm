@@ -11571,8 +11571,7 @@ AccChord_CompareNoteC:
 	bitda 1, 12932
 	jr z, AccChord_ReadKeysRet
 	call BitMapOut_CheckDiskAndApply
-	jr __jrt_nop_F53720
-__jrt_nop_F53720:
+	jr AccChord_ReadKeysRet
 
 AccChord_ReadKeysRet:
 	ret

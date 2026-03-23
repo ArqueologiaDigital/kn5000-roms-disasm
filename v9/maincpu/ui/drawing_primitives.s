@@ -2094,8 +2094,7 @@ DrawWall_Deferred:
 	lda_24 xbc, 0xfabbe5
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
-	jr __jrt_nop_FABBE7
-__jrt_nop_FABBE7:
+	jr DrawWall_DoCopy
 
 DrawWall_DoCopy:
 	lda xsp, (xsp - 12)

@@ -7254,8 +7254,7 @@ PaletteBankRotate:
 	lda_24 xbc, 0xfaf35e
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
-	jr __jrt_nop_FAF360
-__jrt_nop_FAF360:
+	jr PaletteBankRotate_Impl
 
 PaletteBankRotate_Impl:
 	push xiz

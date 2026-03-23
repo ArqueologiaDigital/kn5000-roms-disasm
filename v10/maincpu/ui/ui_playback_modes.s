@@ -436,8 +436,7 @@ PlayMode_CheckAndDispatch:
 	call PlayMode_DispatchAndClearBit2
 	bitda 2, 3394
 	jr z, PlayMode_SendModeCommand
-	jr __jrt_nop_F206AA
-__jrt_nop_F206AA:
+	jr PlayMode_SendModeCommand
 
 PlayMode_SendModeCommand:
 	stdi8 4437, 0
@@ -574,8 +573,7 @@ SongMode_CheckAndDispatch:
 	call SongMode_AbortAndClearBit2
 	bitda 2, 3394
 	jr z, SongMode_SendStopCommand
-	jr __jrt_nop_F207BA
-__jrt_nop_F207BA:
+	jr SongMode_SendStopCommand
 
 SongMode_SendStopCommand:
 	stdi8 4437, 0
@@ -728,8 +726,7 @@ PartFormat_CheckAndDispatch:
 	call PartFormat_AbortAndClearBit2
 	bitda 2, 3394
 	jr z, PartFormat_SendStopCommand
-	jr __jrt_nop_F20920
-__jrt_nop_F20920:
+	jr PartFormat_SendStopCommand
 
 PartFormat_SendStopCommand:
 	stdi8 4437, 0
@@ -795,8 +792,7 @@ PlayMode_StopAbortRetZero:
 	call PlayMode_StopAndAbort
 	bitda 2, 3394
 	jr z, PlayModeStop_SendStopCmd
-	jr __jrt_nop_F209B0
-__jrt_nop_F209B0:
+	jr PlayModeStop_SendStopCmd
 
 PlayModeStop_SendStopCmd:
 	stdi8 4437, 0
@@ -995,8 +991,7 @@ CDlike_ExitModeAndRestore:
 	stdi8 4420, 0
 	bitda 2, 3394
 	jr z, CDlikeExit_CheckPlaybackType
-	jr __jrt_nop_F20B8B
-__jrt_nop_F20B8B:
+	jr CDlikeExit_CheckPlaybackType
 
 CDlikeExit_CheckPlaybackType:
 	cpdi8 36151, 119

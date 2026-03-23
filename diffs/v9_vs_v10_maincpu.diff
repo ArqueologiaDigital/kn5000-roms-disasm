@@ -17,27 +17,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
 -	.fill 12710, 1, 0xff
 +	.fill 12696, 1, 0xff
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/audio_control_engine.s v10/maincpu/audio/audio_control_engine.s
---- v9/maincpu/audio/audio_control_engine.s	2026-03-23 11:56:56.565530870 +0000
-+++ v10/maincpu/audio/audio_control_engine.s	2026-03-23 11:56:56.847747085 +0000
-@@ -3273,7 +3273,7 @@
- 	ret
- 	calr	753
- 	call	ToneGen_Config_InitAllEntries
--	call	__jrt_nop_FC4CED
-+	call	Voice_InitAllChannelEntries
- 	call	ToneGen_DSPCfg_ResetAll
- 	calr	651
- 	call	MainTitle_SetBootFlag
-@@ -3319,7 +3319,7 @@
- 	inc	1, iz
- 	cp	iz, 24
- 	jr	c, -83
--	call	__jrt_nop_FC4CED
-+	call	Voice_InitAllChannelEntries
- 	popw	iz
- 	inc	8, xsp
- 	ret
-@@ -3379,7 +3379,7 @@
+--- v9/maincpu/audio/audio_control_engine.s	2026-03-23 12:14:03.008458078 +0000
++++ v10/maincpu/audio/audio_control_engine.s	2026-03-23 12:13:53.207751809 +0000
+@@ -3378,7 +3378,7 @@
  	.byte 0xe0, 0xe4
  	ldw	wa, 4024
  	ldw	wa, 7480
@@ -46,7 +28,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	decf
  	swi	7
  	lda	xsp, (xsp+10)
-@@ -3476,7 +3476,7 @@
+@@ -3475,7 +3475,7 @@
  	push	xhl
  	push	xix
  	push	xiz
@@ -55,7 +37,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	pop	xiz
  	pop	xix
  	pop	xhl
-@@ -3540,7 +3540,7 @@
+@@ -3539,7 +3539,7 @@
  	.byte 0xe1, 0xb0
  	pop_sr
  	ldw	wa, 7480
@@ -64,7 +46,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	decf
  	swi	7
  	lda	xsp, (xsp+10)
-@@ -5889,7 +5889,7 @@
+@@ -5888,7 +5888,7 @@
  	push	xhl
  	push	xix
  	push	xiz
@@ -104,9 +86,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	pop	xiz
  	inc	2, xsp
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
---- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 11:56:56.624853796 +0000
-+++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 11:56:56.888901665 +0000
-@@ -24296,7 +24296,7 @@
+--- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 12:14:04.807851754 +0000
++++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 12:13:54.847765938 +0000
+@@ -24287,7 +24287,7 @@
  	ld	xde, 57668
  	lds	wa, 5
  	lds	bc, 2
@@ -115,7 +97,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ret
  
  CharMap_ActivePreamb_Prologue:
-@@ -25722,7 +25722,7 @@
+@@ -25713,7 +25713,7 @@
  	inc	8, bc
  	lds	wa, 3
  	ld	xde, 57752
@@ -124,7 +106,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0xbf
  	ccf
  	push_sr
-@@ -25767,7 +25767,7 @@
+@@ -25758,7 +25758,7 @@
  	stda32	57747, xde
  	lds	wa, 3
  	ldw	bc, 21
@@ -133,7 +115,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lds	hl, 0
  	jr	2
  	lds	hl, 1
-@@ -25869,7 +25869,7 @@
+@@ -25860,7 +25860,7 @@
  	lds	wa, 3
  	ld	bc, (xsp+6)
  	ld	xde, xiz
@@ -142,7 +124,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0xbf, 0x04
  	push_sr
  	nop
-@@ -26663,266 +26663,1256 @@
+@@ -26654,266 +26654,1256 @@
  SendPartDataBlock_Return4:
  	ret
  
@@ -1614,7 +1596,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  PostTmSave_Success:
  	cps wa, 0
  	jr lt, PostTmSave_Failure
-@@ -26963,9 +27953,9 @@
+@@ -26954,9 +27944,9 @@
  	.byte 0x8f
  	push_sr
  	push	xsp
@@ -1626,7 +1608,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	c, (xsp)
  	extz	bc
  	ld	a, (xsp+2)
-@@ -26982,7 +27972,7 @@
+@@ -26973,7 +27963,7 @@
  	ldw	bc, 470
  	jr	43
  	calr	65190
@@ -1635,7 +1617,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	a, (xsp)
  	extz	wa
  	extz	xwa
-@@ -27023,11 +28013,11 @@
+@@ -27014,11 +28004,11 @@
  	swi	0
  	.byte 0x8b
  	extz	bc
@@ -1649,7 +1631,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	a, (xsp+4)
  	.byte 0xc7
  	swi	0
-@@ -27058,7 +28048,7 @@
+@@ -27049,7 +28039,7 @@
  	inc	1, iz
  	cp	iz, 128
  	jr	c, -21
@@ -1658,7 +1640,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lda_24	xwa, 1985191
  	ldw	bc, 10240
  	.byte 0x42
-@@ -27175,7 +28165,7 @@
+@@ -27166,7 +28156,7 @@
  	call	InterCPU_E1_Bulk_Transfer
  	jp	TmFlash_Return
  	ld	xwa, 1966080
@@ -1667,7 +1649,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ldw	wa, 65434
  	cps	l, 6
  	jr	nz, 2
-@@ -27183,7 +28173,7 @@
+@@ -27174,7 +28164,7 @@
  	ld	hl, wa
  	ret
  	ld	xwa, 1966080
@@ -1676,7 +1658,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	cps	l, 6
  	jr	ugt, 7
  	cps	l, 1
-@@ -27205,7 +28195,7 @@
+@@ -27196,7 +28186,7 @@
  	ld	iz, bc
  	ld	(xsp+2), xwa
  	ld	xwa, (xsp+2)
@@ -1685,7 +1667,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	wa, iz
  	extz	xwa
  	extz	hl
-@@ -27220,7 +28210,7 @@
+@@ -27211,7 +28201,7 @@
  	reti
  	.byte 0xf0, 0xec
  	ldb	c, 242
@@ -1694,7 +1676,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	reti
  	swi	7
  	ldw	ix, 2035
-@@ -27278,7 +28268,7 @@
+@@ -27269,7 +28259,7 @@
  	ld	iz, bc
  	ld	(xsp+6), xwa
  	ld	xwa, (xsp+6)
@@ -1703,7 +1685,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	bc, iz
  	extz	xbc
  	extz	hl
-@@ -27293,7 +28283,7 @@
+@@ -27284,7 +28274,7 @@
  	reti
  	.byte 0xf0, 0xec
  	ldb	c, 242
@@ -1712,7 +1694,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ldw	ix, 2035
  	.byte 0xf0
  	cps	xix, 0
-@@ -27563,7 +28553,7 @@
+@@ -27554,7 +28544,7 @@
  	inc 4, xwa
  	ld (xsp + 2), xwa
  	pushw 0xff
@@ -1721,7 +1703,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lda xwa, (xsp + 6)
  	push xwa
  	ld xwa, (xsp + 22)
-@@ -27584,7 +28574,7 @@
+@@ -27575,7 +28565,7 @@
  	ld	xwa, (xsp+4)
  	ld	(xwa), 0
  	pushw	255
@@ -1731,9 +1713,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	push	xwa
  	ld	xwa, (xsp+16)
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/tonegen_fileio_handlers.s v10/maincpu/audio/tonegen_fileio_handlers.s
---- v9/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 11:56:56.590331868 +0000
-+++ v10/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 11:56:56.859753701 +0000
-@@ -589,7 +589,7 @@
+--- v9/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 12:14:03.359373173 +0000
++++ v10/maincpu/audio/tonegen_fileio_handlers.s	2026-03-23 12:13:53.557254136 +0000
+@@ -588,7 +588,7 @@
  	push	xhl
  	push	xix
  	push	xiz
@@ -1742,7 +1724,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	pop	xiz
  	pop	xix
  	pop	xhl
-@@ -1101,7 +1101,7 @@
+@@ -1099,7 +1099,7 @@
  	lds	wa, 1
  	ld	xbc, 213242
  	lds	de, 6
@@ -1773,8 +1755,8 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  ; RESERVED:
  	.fill 23, 1, 0xff
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/demo/file_demo_proc.s v10/maincpu/demo/file_demo_proc.s
---- v9/maincpu/demo/file_demo_proc.s	2026-03-23 11:56:56.520903098 +0000
-+++ v10/maincpu/demo/file_demo_proc.s	2026-03-23 11:56:56.813094448 +0000
+--- v9/maincpu/demo/file_demo_proc.s	2026-03-23 12:14:02.426733610 +0000
++++ v10/maincpu/demo/file_demo_proc.s	2026-03-23 12:13:52.621847347 +0000
 @@ -37,7 +37,7 @@
  	ccf
  	.byte 0x01
@@ -1784,7 +1766,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	incf
  	swi	7
  	lda	xwa, (xsp+278)
-@@ -3338,7 +3338,7 @@
+@@ -3337,7 +3337,7 @@
  	jr	lt, 19
  	ld	wa, (xsp+32)
  	lds	bc, 0
@@ -1793,7 +1775,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	jr	8
  	ldw	iz, 65431
  	jr	3
-@@ -3509,7 +3509,7 @@
+@@ -3508,7 +3508,7 @@
  	ld	c, (xsp+14)
  	extz	bc
  	ld	de, iz
@@ -1802,7 +1784,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	call	FileIO_CloseHandle
  	ld	hl, iz
  	popw	iz
-@@ -3587,7 +3587,7 @@
+@@ -3586,7 +3586,7 @@
  	jr	lt, 43
  	ld	a, (xsp+10)
  	extz	wa
@@ -1811,7 +1793,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lda_24	xwa, 1966080
  	.byte 0xaf, 0x04, 0x80
  	ld	bc, (xsp+8)
-@@ -3598,7 +3598,7 @@
+@@ -3597,7 +3597,7 @@
  	ld	a, (xsp+10)
  	extz	wa
  	ld	bc, iz
@@ -1834,138 +1816,6 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0x66, 0xbc, 0xf6, 0x00, 0x71, 0xbc, 0xf6, 0x00
  	.byte 0x82, 0xbc, 0xf6, 0x00, 0x99, 0xbc, 0xf6, 0x00
  	.byte 0xa0, 0xb4, 0xfd, 0x00, 0xa1, 0xb4, 0xfd, 0x00
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/file_io/single_load.s v10/maincpu/file_io/single_load.s
---- v9/maincpu/file_io/single_load.s	2026-03-23 11:56:56.443858821 +0000
-+++ v10/maincpu/file_io/single_load.s	2026-03-23 11:56:56.732722856 +0000
-@@ -219,7 +219,7 @@
- 	call	16294158
- 	ld	xbc, xhl
- 	ld	xwa, xiz
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xwa, 35172
- 	ldw	bc, 16
- 	calr	60984
-@@ -286,7 +286,7 @@
- 	ld	(xwa+63), 3
- 	lda	xwa, (xwa+64)
- 	ld	xbc, 15337792
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xde, 35213
- 	ld	xwa, (xsp+6)
- 	ld	xbc, 29360143
-@@ -311,7 +311,7 @@
- 	call	16294280
- 	ld	xbc, xhl
- 	ld	xwa, xiz
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xwa, 35214
- 	ldw	bc, 16
- 	calr	60742
-@@ -549,7 +549,7 @@
- 	call	16294427
- 	ld	xbc, xhl
- 	ld	xwa, xiz
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xwa, 35193
- 	ldw	bc, 16
- 	calr	60023
-@@ -679,7 +679,7 @@
- 	ld	(xwa), 3
- 	lda	xwa, (xbc+64)
- 	ld	xbc, 15337826
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xde, 35213
- 	ld	xwa, (xsp+8)
- 	ld	xbc, 29360143
-@@ -730,7 +730,7 @@
- 	call	16294549
- 	ld	xbc, xhl
- 	ld	xwa, xiz
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xwa, 35214
- 	ldw	bc, 16
- 	calr	59524
-@@ -993,7 +993,7 @@
- 	call	16294804
- 	ld	xbc, xhl
- 	ld	xwa, xiz
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xwa, 35172
- 	ldw	bc, 16
- 	calr	58744
-@@ -1076,7 +1076,7 @@
- 	lda	xwa, (xwa+64)
- 	.byte 0x41
- 	.long Str_AllOption_EA0980
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xde, 35213
- 	ld	xwa, (xsp+6)
- 	ld	xbc, 29360143
-@@ -1111,7 +1111,7 @@
- 	call	16294681
- 	ld	xbc, xhl
- 	ld	xwa, xiz
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xwa, 35214
- 	ldw	bc, 16
- 	calr	58447
-@@ -1647,7 +1647,7 @@
- 	push	xsp
- 	nop
- 	jr	z, 42
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xwa, 35277
- 	ld	xbc, 15337902
- 	call	FileIO_BuildFilePath
-@@ -1657,9 +1657,9 @@
- 	ldada	xwa, 35298
- 	.byte 0x41
- 	.long Str_AllOption_EA09B2
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	jr	74
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xwa, 35277
- 	ld	xbc, 15337924
- 	call	FileIO_BuildFilePath
-@@ -1907,7 +1907,7 @@
- 	calr	5520
- 	ld	xbc, xhl
- 	ld	xwa, xiz
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	ldada	xde, 35255
- 	ld	xwa, (xsp+4)
- 	ld	xbc, 29360143
-@@ -2094,7 +2094,7 @@
- 	ld	(xwa), 3
- 	lda	xwa, (xbc+64)
- 	ld	xbc, 15337946
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	jr	28
- 	ldda8	e, 35334
- 	ld	c, e
-@@ -2374,7 +2374,7 @@
- 	ld	(xwa+63), 3
- 	lda	xwa, (xwa+64)
- 	ld	xbc, 15337976
--	call	__jrt_nop_F890DC
-+	call	FileIO_CopyString
- 	jrl	214
- 	ld	l, (xsp+4)
- 	.byte 0x8f, 0x04, 0x87
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/computer_interface_pcg.s v10/maincpu/midi/computer_interface_pcg.s
 --- v9/maincpu/midi/computer_interface_pcg.s	2026-03-23 11:56:56.508598608 +0000
 +++ v10/maincpu/midi/computer_interface_pcg.s	2026-03-23 11:56:56.798354033 +0000
@@ -2053,8 +1903,8 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x39
  	push_sr
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/midi_dispatch_handlers.s v10/maincpu/midi/midi_dispatch_handlers.s
---- v9/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 11:56:56.507183513 +0000
-+++ v10/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 11:56:56.796459797 +0000
+--- v9/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 12:14:02.031827834 +0000
++++ v10/maincpu/midi/midi_dispatch_handlers.s	2026-03-23 12:13:52.219176017 +0000
 @@ -14568,7 +14568,7 @@
  	lds	de, 5
  	call	MIDI_ReadChannelParam
@@ -2082,7 +1932,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	resda	0, 4330
  	lds	wa, 3
  	call	BitMapOut_GetRenderMode_Return
-@@ -16486,7 +16486,7 @@
+@@ -16485,7 +16485,7 @@
  	pop_f
  	.byte 0xe0, 0x90
  	call	MidiStream_JumpStubData
@@ -2150,8 +2000,8 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  
  AccentData_ComparePart1:
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/smf_event_processor.s v10/maincpu/sequencer/smf_event_processor.s
---- v9/maincpu/sequencer/smf_event_processor.s	2026-03-23 11:56:56.695336806 +0000
-+++ v10/maincpu/sequencer/smf_event_processor.s	2026-03-23 11:56:56.951384945 +0000
+--- v9/maincpu/sequencer/smf_event_processor.s	2026-03-23 12:14:08.228055861 +0000
++++ v10/maincpu/sequencer/smf_event_processor.s	2026-03-23 12:13:57.970929613 +0000
 @@ -4680,7 +4680,7 @@
  	add	(xde), xwa
  	.byte 0xeb
@@ -2162,8 +2012,8 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	nop
  	ld	(xix), a
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/storage/flash_floppy_handlers.s v10/maincpu/storage/flash_floppy_handlers.s
---- v9/maincpu/storage/flash_floppy_handlers.s	2026-03-23 11:56:56.640368341 +0000
-+++ v10/maincpu/storage/flash_floppy_handlers.s	2026-03-23 11:56:56.896548215 +0000
+--- v9/maincpu/storage/flash_floppy_handlers.s	2026-03-23 12:14:05.138194290 +0000
++++ v10/maincpu/storage/flash_floppy_handlers.s	2026-03-23 12:13:55.139647511 +0000
 @@ -120,7 +120,7 @@
  FlashRead_BlockData_Field6:
  	nop
@@ -2182,7 +2032,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ldb	w, 100
  	decf
  	push_sr
-@@ -4916,7 +4916,7 @@
+@@ -4915,7 +4915,7 @@
  	.byte 0x95
  	scf
  	calr	62157
@@ -2442,9 +2292,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	.byte 0xee, 0x8d, 0xe8, 0x8c, 0xd9, 0xae, 0x95, 0x11
  	.byte 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x1c, 0x00
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_mode_handlers.s v10/maincpu/ui/ui_mode_handlers.s
---- v9/maincpu/ui/ui_mode_handlers.s	2026-03-23 11:56:56.484985858 +0000
-+++ v10/maincpu/ui/ui_mode_handlers.s	2026-03-23 11:56:56.775988549 +0000
-@@ -10653,7 +10653,7 @@
+--- v9/maincpu/ui/ui_mode_handlers.s	2026-03-23 12:14:00.969984884 +0000
++++ v10/maincpu/ui/ui_mode_handlers.s	2026-03-23 12:13:51.029186242 +0000
+@@ -10652,7 +10652,7 @@
  	push	xwa
  	ld	xwa, (xiz+18)
  	push	xwa

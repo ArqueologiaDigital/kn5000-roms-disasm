@@ -1010,8 +1010,7 @@ Banner_Loop_Exit:
 
 Demo_PreSetupAndScan:
 	calr Demo_ScanActivePartChannels
-	jr __jrt_nop_F86E7B
-__jrt_nop_F86E7B:
+	jr Demo_PreSetup
 
 Demo_PreSetup:
 	call AccWrap_PlayModeDispatch
@@ -4680,8 +4679,7 @@ FileIO_ValidateRecord_Return:
 	calr FileIO_CopyString
 	ld xwa, 0x271f2
 	ld xbc, 0xea0452	; pointer to "________.MID"
-	jr __jrt_nop_F890DC
-__jrt_nop_F890DC:
+	jr FileIO_CopyString
 
 FileIO_CopyString:
 	ld xde, xbc

@@ -453,8 +453,7 @@ SeqEvt_InitVoiceScan:
 	calr Voice_ScanSlotMetric
 	ldda16 xwa, 32256
 	stda16 32254, xwa
-	jr __jrt_nop_F70F88
-__jrt_nop_F70F88:
+	jr SeqEvt_VoiceScanDone
 
 SeqEvt_VoiceScanDone:
 	ret
@@ -2757,8 +2756,7 @@ MidiSeq_SoftPedalValue:
 	ld (xhl + 2), a
 	lds de, 3
 	calr MidiSeqBuf_ProcessEntries
-	jr __jrt_nop_F7256E
-__jrt_nop_F7256E:
+	jr MidiSeq_SustainRet
 
 MidiSeq_SustainRet:
 	ret

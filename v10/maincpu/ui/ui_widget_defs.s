@@ -18986,8 +18986,7 @@ DrawTask_DequeueLoop:
 	jr DrawTask_EventLoop
 
 InitDrawTask:
-	jr __jrt_nop_FAA347
-__jrt_nop_FAA347:
+	jr DrawTask_DequeueLoop_Check
 
 DrawTask_DequeueLoop_Check:
 	lds wa, 3
@@ -19326,8 +19325,7 @@ LcdOn:
 	jrl DisplayCmd_DequeueAndExecute
 
 InitGraphics_SetupVRAM:
-	jr __jrt_nop_FAA5D0
-__jrt_nop_FAA5D0:
+	jr InitGraphics_SetupVRAM_Loop
 
 InitGraphics_SetupVRAM_Loop:
 	sti16_24 0x030464, 0x0001
@@ -19346,8 +19344,7 @@ LcdOff:
 	jrl DisplayCmd_DequeueAndExecute
 
 LcdOn_Done:
-	jr __jrt_nop_FAA5F5
-__jrt_nop_FAA5F5:
+	jr LcdOn_Return
 
 LcdOn_Return:
 	call VGA_ScreenBlank

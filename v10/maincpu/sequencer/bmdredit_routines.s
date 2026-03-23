@@ -1771,8 +1771,7 @@ BmDrEdit_InitMelodicMode:
 	resda 0, 10050
 	stdi8 10100, 10
 	stdi8 10146, 11
-	jr __jrt_nop_F36FA7
-__jrt_nop_F36FA7:
+	jr BmDrEdit_InitCommon
 
 BmDrEdit_InitCommon:
 	pushw iz
@@ -1945,8 +1944,7 @@ BmDrEdit_CleanupMelodicMode:
 BmDrEdit_SkipMelodicPartSelect:
 	ldmm16 10132, 10130
 	ldmm16 10128, 10126
-	jr __jrt_nop_F37173
-__jrt_nop_F37173:
+	jr BmDrEdit_CleanupCommon
 
 BmDrEdit_CleanupCommon:
 	resda 2, 10407
@@ -2734,8 +2732,7 @@ BmDrEdit_LoadAlternateAndValidate:
 	call SeqData_SetErrorCode
 
 BmDrEdit_LoadAlternateAndValidate_Done:
-	jr __jrt_nop_F37897
-__jrt_nop_F37897:
+	jr BmDrEdit_CountMeasuresAndValidate
 
 BmDrEdit_CountMeasuresAndValidate:
 	cpdi8 10362, 0
@@ -2936,8 +2933,7 @@ BmDrEdit_DrumVoiceUp_Check:
 
 BmDrEdit_DrumVoiceUp_ClearFlag:
 	resda 0, 10591
-	jr __jrt_nop_F37A5F
-__jrt_nop_F37A5F:
+	jr BmDrEdit_DrumVoiceUp
 
 BmDrEdit_DrumVoiceUp:
 	bitda 7, 10054
@@ -2973,8 +2969,7 @@ BmDrEdit_DrumVoiceDown_Check:
 
 BmDrEdit_DrumVoiceDown_ClearFlag:
 	resda 0, 10591
-	jr __jrt_nop_F37AB6
-__jrt_nop_F37AB6:
+	jr BmDrEdit_DrumVoiceDown
 
 BmDrEdit_DrumVoiceDown:
 	bitda 7, 10054
@@ -3853,8 +3848,7 @@ BmDrEdit_MultiSong_Return:
 NoteEdit_SendScrollCmds:
 	bitda 0, 10050
 	jr nz, BmDrEdit_SendScrollCmds_DrumMode
-	jr __jrt_nop_F38288
-__jrt_nop_F38288:
+	jr BmDrEdit_SendScrollCmds_MelodicNoteOff
 
 BmDrEdit_SendScrollCmds_MelodicNoteOff:
 	bitda 0, 10591
@@ -4017,8 +4011,7 @@ BmDrEdit_ComputeMeasureAndBeat:
 	div wa, 0x60
 	ldto_werp WA, 0xe2
 	stda8 10116, a
-	jr __jrt_nop_F384AA
-__jrt_nop_F384AA:
+	jr BmDrEdit_CalcSongPosition
 
 BmDrEdit_CalcSongPosition:
 	ldda16 xbc, 10138

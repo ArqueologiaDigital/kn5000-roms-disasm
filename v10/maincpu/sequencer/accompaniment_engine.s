@@ -319,8 +319,7 @@ AccStyle_ApplyChanges:
 
 AccStyle_ApplyChanges_Extended:
 	calr AccStyle_ApplyExtendedStyle
-	jr __jrt_nop_F55EDB
-__jrt_nop_F55EDB:
+	jr AccStyle_ApplyChanges_Finalize
 
 AccStyle_ApplyChanges_Finalize:
 	calr AccBuf_InitKbd1WithMarkers
@@ -1349,8 +1348,7 @@ AccVoice_DispatchCh_Acc4:
 	bitda 5, 13100
 	jr z, SoundPatch_NullRet
 	call AccCh4_ProcessNotes
-	jr __jrt_nop_F568A7
-__jrt_nop_F568A7:
+	jr SoundPatch_NullRet
 
 SoundPatch_NullRet:
 	ret
@@ -1855,8 +1853,7 @@ AccPart_ParamAddr_Acc4:
 	jr nz, AccPart_SubtractBaseAddr
 	add hl, 0x1d6
 	ld_sriw3 WA, 0x07, 0xf4, 0xec
-	jr __jrt_nop_F56D47
-__jrt_nop_F56D47:
+	jr AccPart_SubtractBaseAddr
 
 AccPart_SubtractBaseAddr:
 	sub wa, 0x8000
@@ -2840,8 +2837,7 @@ AccVoice_SendD6:
 	ldda8 e, 13107
 	stda8 13106, e
 	call Rhythm_Send3ByteMsg
-	jr __jrt_nop_F57654
-__jrt_nop_F57654:
+	jr AccCh_ReturnStub
 
 AccCh_ReturnStub:
 	ret
@@ -4583,8 +4579,7 @@ AccStyle_LoadAndApply:
 
 AccStyle_Finalize:
 	call AccVoice_SelectAndApplyPatch
-	jr __jrt_nop_F587C4
-__jrt_nop_F587C4:
+	jr AccInit_ClearAllFlags
 
 AccInit_ClearAllFlags:
 	anddi8 13068, 254
@@ -6910,8 +6905,7 @@ AccPedal_Bit6_Hold:
 	bitda 2, 1054
 	jr z, AccPedal_Bit6_HoldOff
 	calr AccPedal_HoldOn
-	jr __jrt_nop_F59F4D
-__jrt_nop_F59F4D:
+	jr AccPedal_Bit6_HoldOff
 
 AccPedal_Bit6_HoldOff:
 	bitda 6, 13439
@@ -6921,8 +6915,7 @@ AccPedal_Bit6_HoldOff:
 	bitda 2, 1054
 	jr z, AccPedal_Bit6_Return
 	calr AccPedal_HoldOff
-	jr __jrt_nop_F59F64
-__jrt_nop_F59F64:
+	jr AccPedal_Bit6_Return
 
 AccPedal_Bit6_Return:
 	ret
@@ -7259,8 +7252,7 @@ AccPedal_MapToAcc_Return:
 	jr z, AccPedal_MapPadding
 	ordi8 13441, 32
 	ordi8 13440, 32
-	jr __jrt_nop_F5A2B1
-__jrt_nop_F5A2B1:
+	jr AccPedal_MapPadding
 
 AccPedal_MapPadding:
 	ret
@@ -8099,8 +8091,7 @@ AccAutoPlay_Trigger_Finalize:
 AccAutoPlay_Trigger_Return:
 	anddi8 13464, 254
 	anddi8 13465, 254
-	jr __jrt_nop_F5AA8E
-__jrt_nop_F5AA8E:
+	jr AccAutoPlay_ModeAvail_Padding
 
 AccAutoPlay_ModeAvail_Padding:
 	anddi8 13464, 127
@@ -8267,8 +8258,7 @@ AccAutoPlay_Periodic_Evaluate:
 	bitda 7, 13421
 	jr nz, AccAutoPlay_Periodic_Padding
 	calr AccAutoPlay_Disable
-	jr __jrt_nop_F5ABD8
-__jrt_nop_F5ABD8:
+	jr AccAutoPlay_Periodic_Padding
 
 AccAutoPlay_Periodic_Padding:
 	anddi8 13422, 251
@@ -8583,8 +8573,7 @@ AccPlayMode_Router_Alt:
 	bitda 2, 1056
 	jr nz, AccPlayMode_Router_AltPadding
 	calr AccPlayMode_StartPlay
-	jr __jrt_nop_F5AE54
-__jrt_nop_F5AE54:
+	jr AccPlayMode_Router_AltPadding
 
 AccPlayMode_Router_AltPadding:
 	ret
@@ -9405,8 +9394,7 @@ AccTiming_InitAllParts:
 	calr AccAccTiming_TableScan
 	ldda16 xwa, 13172
 	stda16 13170, xwa
-	jr __jrt_nop_F5B4EA
-__jrt_nop_F5B4EA:
+	jr AccTiming_MasterTick_Return
 
 AccTiming_MasterTick_Return:
 	ret
@@ -9482,8 +9470,7 @@ AccTiming_MasterTick:
 	stda8 13106, a
 	ldda8 a, 13175
 	stda8 13174, a
-	jr __jrt_nop_F5B619
-__jrt_nop_F5B619:
+	jr AccKbdTiming_Ret
 
 AccKbdTiming_Ret:
 	ret
@@ -12736,8 +12723,7 @@ AccTone_NoteLookup_Ret:
 AccTone_ExtendAndDispatch:
 	extz bc
 	extz wa
-	jr __jrt_nop_F5D740
-__jrt_nop_F5D740:
+	jr AccTone_ExtendAndDispatch_Body
 
 AccTone_ExtendAndDispatch_Body:
 	push xiz
@@ -17120,8 +17106,7 @@ AccPatch_ProcessMarkerCommand:
 	calr AccPatch_ReadRingBufBytes
 	calr AccPatch_ParseAndResolve
 	calr AccPatch_ProcessMarkerEvent
-	jr __jrt_nop_F60695
-__jrt_nop_F60695:
+	jr AccPatch_ContinueProcessing
 
 AccPatch_ContinueProcessing:
 	jrl AccPatch_EventDispatchLoop
@@ -17578,8 +17563,7 @@ AccPatch_ProcessMarker_CheckD5:
 	cp a, 0xd5
 	jr nz, AccPatch_FetchSequence
 	ldb a, 0xd4
-	jr __jrt_nop_F60A7A
-__jrt_nop_F60A7A:
+	jr AccPatch_FetchSequence
 
 AccPatch_FetchSequence:
 	calr AccPatch_FetchStepEntry
@@ -18397,8 +18381,7 @@ BlockCopyDisp_Equal:
 
 BlockCopyDisp_IXLarger:
 	calr BlockCopy_FwdIXSmaller
-	jr __jrt_nop_F61158
-__jrt_nop_F61158:
+	jr BlockCopyDisp_CheckAndForward
 
 BlockCopyDisp_CheckAndForward:
 	cpdi8 32578, 0
@@ -28283,8 +28266,7 @@ VoiceTable_AdvanceReadPos:
 	stdi16 14722, 5
 
 VoiceTable_AdvRead_Done:
-	jr __jrt_nop_F66C60
-__jrt_nop_F66C60:
+	jr VoiceTable_ResolveReadAddr
 
 VoiceTable_ResolveReadAddr:
 	ldda16 xbc, 14722
@@ -28964,8 +28946,7 @@ VoiceAssign_Process_Return:
 	addda32 xix, 12919
 	add xix, xwa
 	add xix, xde
-	jr __jrt_nop_F671E6
-__jrt_nop_F671E6:
+	jr VoiceAssign_StoreFinal
 
 VoiceAssign_StoreFinal:
 	ret

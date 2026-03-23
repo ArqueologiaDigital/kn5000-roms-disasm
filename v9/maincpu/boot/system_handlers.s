@@ -1380,8 +1380,7 @@ MidiSerial_ProcessAndReinit:
 	call MidiSerial_ProcessInput
 	call Audio_ProcessAllMidiStreams
 	calr SwbtWr_ReinitBothBanks
-	jr __jrt_nop_EF148F
-__jrt_nop_EF148F:
+	jr MidiEvt_UpdateReadPosition
 
 MidiEvt_UpdateReadPosition:
 	lda_24 xhl, 0x01f37b

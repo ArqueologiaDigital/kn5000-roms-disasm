@@ -29,8 +29,7 @@ AccompSeq_PeriodicReturn:
 	ret
 
 AccompSeq_CaptureTimerState:
-	jr __jrt_nop_F6DCD3
-__jrt_nop_F6DCD3:
+	jr AccompSeq_ReadTimerRegisters
 
 AccompSeq_ReadTimerRegisters:
 	xor a, a
@@ -528,8 +527,7 @@ AccompSeq_Parse_TypeC0_Finalize:
 	calr AccompSeq_ProcessNoteOn5
 
 AccompSeq_Parse_Return:
-	jr __jrt_nop_F6E15C
-__jrt_nop_F6E15C:
+	jr AccompSeq_Ret
 
 AccompSeq_Ret:
 	ret
