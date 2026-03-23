@@ -27764,10 +27764,10 @@ HdaeRom_DataDispatch_SetWord:
 	ret
 
 HdaeRom_DataDispatch_Block:
-	lda_24 xde, 0x1e0000
-	lda_24 xwa, 0xeed56c
-	ld xbc, xwa
-	lda xhl, (xwa + 16)
+	lda_24	xde, 0x1e0000
+	lda_24	xwa, 0xeed56c
+	ld	xbc, xwa
+	lda	xhl, (xwa + 16)
 
 HdaeRom_DataDispatch_Block2:
 	ld_spib A, 0xe4
