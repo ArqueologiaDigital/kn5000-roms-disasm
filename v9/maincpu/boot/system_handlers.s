@@ -1418,9 +1418,12 @@ Seq_ProcessEventLoop:
 
 SeqEvtTick_Return:
 	ret
+; SwbtWr_ReinitBothBanks - Reinitialize both tone generator output banks
+; Original Matsushita debug symbol: "assswb_op" (assign sound write bank - operation)
+; Calls SwbtWr_InitBank1 and SwbtWr_InitBank2 to reinitialize voice
+; parameter transfers to the tone generator.
 SwbtWr_ReinitBothBanks:
 
-assswb_op:
 	cpdi8 48444, 255
 	jr z, SwbtWr_ReinitBothBanks_Return
 	call SwbtWr_InitBank1
@@ -1430,9 +1433,11 @@ assswb_op:
 
 SwbtWr_ReinitBothBanks_Return:
 	ret
+; SwbtWr_ReinitOutputBank - Reinitialize the output tone generator bank
+; Original Matsushita debug symbol: "assswb_out" (assign sound write bank - output)
+; Calls only SwbtWr_InitBank2 (the output bank).
 SwbtWr_ReinitOutputBank:
 
-assswb_out:
 	cpdi8 48444, 255
 	jr z, SwbtWr_ReinitOutputBank_Return
 	call SwbtWr_InitBank2
@@ -5418,8 +5423,12 @@ SubCPU_Init_DMA_Channels:
 	stdi8 1504, 0
 	stdi8 1506, 0
 	ret
-Audio_InitDMAChannels_Done:
 
+; sendCOMM - Send chunked data to SubCPU via inter-CPU communication channel
+; Original Matsushita debug symbol: "sendCOMM"
+; Acquires Audio_Lock, splits data into 32-byte chunks, and transfers each
+; via InterCPU_Send_Data_Block to the tone generator SubCPU.
+; Entry: A = command/channel ID, BC = total byte count, XDE = source pointer
 sendCOMM:
 	dec 6, xsp
 	pushw iz
@@ -6457,8 +6466,10 @@ Flash_EraseSectorAndWrite_Write:
 	calr Flash_WriteFromMemory
 	lda xsp, (xsp + 10)
 	ret
-FlashWrite_Entry:
 
+; FlashWrite - Write data to flash memory chip
+; Identifies the target flash chip, copies ROM content to a buffer,
+; applies modifications, then programs the flash sector.
 FlashWrite:
 	dec 8, xsp
 	push xiz
@@ -6514,7 +6525,7 @@ FlashWrite_DoWrite:
 	lds wa, 1
 	ld xbc, 0x800000
 	ldw de, 0x400
-	calr FlashWrite_Entry
+	calr FlashWrite
 	lds wa, 1
 	jrl Flash_IdentifyChip
 

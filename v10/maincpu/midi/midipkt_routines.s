@@ -1277,7 +1277,7 @@ MidiPkt_SysExValidator_Data:
 	lds	bc, 3
 	call	AssswbWr
 	push	xiz
-	call	assswb_op
+	call	SwbtWr_ReinitBothBanks
 	pop	xiz
 	ret
 MidiPkt_SysExProcessor_Data:
@@ -1310,7 +1310,7 @@ MidiPkt_SysExProcessor_Data:
 	lds	bc, 3
 	call	AssswbWr
 	push	xiz
-	call	assswb_op
+	call	SwbtWr_ReinitBothBanks
 	pop	xiz
 	ret
 MidiPkt_SysExBulkTransfer_Data:
@@ -1371,7 +1371,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	pop_sr
 	ld	xbc, 0x3e3c3b3a
 	call	16567069
-	call	assswb_out
+	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1572,7 +1572,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0xf6
 	jr	lt, -42
 	push	xiz
-	call	assswb_out
+	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xiz
 	inc	2, xsp

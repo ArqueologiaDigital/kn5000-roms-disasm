@@ -6884,7 +6884,7 @@ Flash_SaveSplashScreen:
 	lds wa, 1
 	ld xbc, 0x66800
 	ldw de, 0x3000
-	call FlashWrite_Entry
+	call FlashWrite
 	ret
 
 CaptureLcd:

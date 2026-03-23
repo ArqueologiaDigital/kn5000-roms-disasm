@@ -61,7 +61,7 @@ SysEx_ApplyToSlot4B_Data:
 	.byte 0xf6
 	jr	lt, -50
 	push	xiz
-	call	assswb_out
+	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xiz
 	inc	2, xsp
@@ -126,7 +126,7 @@ SysEx_ApplyToSlot49_Data:
 	.byte 0xf6
 	jr	lt, -42
 	push	xiz
-	call	assswb_out
+	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xiz
 	inc	2, xsp
@@ -186,7 +186,7 @@ SysEx_ApplyToSlot49_Format_Data:
 	.byte 0xf6
 	jr	lt, -50
 	push	xiz
-	call	assswb_out
+	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xiz
 	inc	2, xsp

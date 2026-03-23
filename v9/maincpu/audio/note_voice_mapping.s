@@ -24287,7 +24287,7 @@ CharMap_ActivePreamb_LoadDRAM:
 	ld	xde, 57668
 	lds	wa, 5
 	lds	bc, 2
-	call	Audio_InitDMAChannels_Done
+	call	sendCOMM
 	ret
 
 CharMap_ActivePreamb_Prologue:
@@ -25713,7 +25713,7 @@ Param_SignExtendRetu_Data:
 	inc	8, bc
 	lds	wa, 3
 	ld	xde, 57752
-	call	Audio_InitDMAChannels_Done
+	call	sendCOMM
 	.byte 0xbf
 	ccf
 	push_sr
@@ -25758,7 +25758,7 @@ Param_SignExtendRetu_Data:
 	stda32	57747, xde
 	lds	wa, 3
 	ldw	bc, 21
-	call	Audio_InitDMAChannels_Done
+	call	sendCOMM
 	lds	hl, 0
 	jr	2
 	lds	hl, 1
@@ -25860,7 +25860,7 @@ Param_SignExtendRetu_Data:
 	lds	wa, 3
 	ld	bc, (xsp+6)
 	ld	xde, xiz
-	call	Audio_InitDMAChannels_Done
+	call	sendCOMM
 	.byte 0xbf, 0x04
 	push_sr
 	nop

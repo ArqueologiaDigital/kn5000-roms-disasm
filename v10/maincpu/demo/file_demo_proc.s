@@ -1878,7 +1878,7 @@ LoadRegion7_OpenSuccess:
 	lds	wa, 1
 	ld xbc, xiz				; buffer ptr
 	ldw de, 0x0400				; size
-	call FlashWrite_Entry				; flash read/copy
+	call FlashWrite				; flash read/copy
 	push xiz
 	call Free				; Free buffer
 	inc 4, xsp				; clean stack
@@ -3337,7 +3337,7 @@ FileIO_ByteBlock_DemoProc1:
 	jr	lt, 19
 	ld	wa, (xsp+32)
 	lds	bc, 0
-	call	SetSongSlotValue_Entry
+	call	SetSongSlotValue
 	jr	8
 	ldw	iz, 65431
 	jr	3

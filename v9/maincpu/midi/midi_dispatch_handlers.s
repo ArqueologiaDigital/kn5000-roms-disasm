@@ -10347,7 +10347,7 @@ SndParam_CopyPreset_Bank2:
 	ldw de, 0xea
 
 SndParam_CopyPreset_CallFlash:
-	call FlashWrite_Entry
+	call FlashWrite
 
 SoundData_FreeSoundPtr:
 	push xiz

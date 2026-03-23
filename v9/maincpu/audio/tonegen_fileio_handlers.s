@@ -894,19 +894,19 @@ ToneGen_FlashWriteAll:
 	lds wa, 1
 	ld xbc, 0xed933a
 	ldw de, 0xfa
-	call FlashWrite_Entry
+	call FlashWrite
 	lda_24 xbc, 0xed9434
 	ld xwa, 0x3d3110
 	push xwa
 	lds wa, 1
 	ldw de, 0xea
-	call FlashWrite_Entry
+	call FlashWrite
 	lda_24 xbc, 0xed951e
 	ld xwa, 0x3d3210
 	push xwa
 	lds wa, 1
 	ldw de, 0xea
-	call FlashWrite_Entry
+	call FlashWrite
 	pushw 0x50
 	call Malloc
 	inc 2, xsp
@@ -953,7 +953,7 @@ ToneGen_FlashWriteAll:
 	lds wa, 1
 	ld xbc, xiz
 	ldw de, 0x50
-	call FlashWrite_Entry
+	call FlashWrite
 	push xiz
 	call Free
 	inc 4, xsp
@@ -1010,7 +1010,7 @@ ToneGen_FlashReadAndRestore:
 	lds wa, 1
 	ld xbc, xiz
 	ldw de, 0x50
-	call FlashWrite_Entry
+	call FlashWrite
 	push xiz
 	call Free
 	inc 4, xsp
@@ -1099,7 +1099,7 @@ DSPCfg_Param_CaseC:
 	lds	wa, 1
 	ld	xbc, 213242
 	lds	de, 6
-	call	FlashWrite_Entry
+	call	FlashWrite
 	ret
 
 Audio_DispatchCommand:

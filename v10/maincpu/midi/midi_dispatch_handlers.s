@@ -10347,7 +10347,7 @@ SndParam_CopyPreset_Bank2:
 	ldw de, 0xea
 
 SndParam_CopyPreset_CallFlash:
-	call FlashWrite_Entry
+	call FlashWrite
 
 SoundData_FreeSoundPtr:
 	push xiz
@@ -14846,7 +14846,7 @@ MidiSysEx_ProcessBlock:
 	push	xhl
 	push	xix
 	push	xiz
-	call	assswb_out
+	call	SwbtWr_ReinitOutputBank
 	call	SwbtWr_CallProcessAll
 	pop	xiz
 	pop	xix
@@ -14857,7 +14857,7 @@ MidiSysEx_ProcessBlock:
 	push	xhl
 	push	xix
 	push	xiz
-	call	assswb_out
+	call	SwbtWr_ReinitOutputBank
 	resda	0, 4330
 	lds	wa, 3
 	call	BitMapOut_GetRenderMode_Return
@@ -16485,7 +16485,7 @@ SeqData_FormatOutput_Data:
 	pop_f
 	.byte 0xe0, 0x90
 	call	MidiStream_JumpStubData
-	call	assswb_op
+	call	SwbtWr_ReinitBothBanks
 	pop	xiz
 	pop	xix
 	pop	xhl

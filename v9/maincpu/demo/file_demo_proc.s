@@ -1878,7 +1878,7 @@ LoadRegion7_OpenSuccess:
 	lds	wa, 1
 	ld xbc, xiz				; buffer ptr
 	ldw de, 0x0400				; size
-	call FlashWrite_Entry				; flash read/copy
+	call FlashWrite				; flash read/copy
 	push xiz
 	call Free				; Free buffer
 	inc 4, xsp				; clean stack

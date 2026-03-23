@@ -3475,7 +3475,7 @@ VoiceData_ExtendedParamSetup:
 	push	xhl
 	push	xix
 	push	xiz
-	call	assswb_out
+	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -5888,7 +5888,7 @@ SwbtWr_CheckBufferOverflow:
 	push	xhl
 	push	xix
 	push	xiz
-	call	assswb_op
+	call	SwbtWr_ReinitBothBanks
 	pop	xiz
 	pop	xix
 	pop	xhl

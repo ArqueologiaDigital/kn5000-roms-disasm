@@ -4041,7 +4041,9 @@ DocMed_Exit:
 	pop xiz
 	ret
 
-SetSongSlotValue_Entry:
+; SetSongSlotValue - Store a value into a song/medley slot
+; Entry: WA = slot index (0-9), BC = value to store
+; Computes slot address at 0x0AB000 + (index * 2048) + 0x1C
 SetSongSlotValue:
 	cp wa, 0xa
 	ret nc
