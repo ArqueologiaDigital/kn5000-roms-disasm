@@ -20,8 +20,8 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	swi	7
  	lda	xsp, (xsp+10)
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
---- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 16:29:54.643905058 +0000
-+++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 14:39:00.716905877 +0000
+--- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 17:10:56.944401145 +0000
++++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 17:10:56.957520570 +0000
 @@ -26655,9 +26655,14 @@
  	ret
  
@@ -53,13 +53,13 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
 -	jrl gt, 345
 +	jrl gt, HdaeRom_DataDispatch_SetWord
  	add hl, hl
- 	lda_24 xix, 0xeed747
+ 	lda_24 xix, HdaeRom_DispatchOffsetTable
  	ld_sriw3 HL, 0x07, 0xf0, 0xec
 -	lda_24 xix, 0xFF0284
 -	.byte 0xf3, 0x07
 +	lda_24 xix, HdaeRom_DataDispatch
 +	jp_dri 8, 0x07, 0xf0, 0xec
-+; HDAE5000 extension ROM data dispatch (6-entry, table 0xeed747)
++; HDAE5000 extension ROM data dispatch (6-entry, table HdaeRom_DispatchOffsetTable)
  HdaeRom_DataDispatch:
 -	.byte 0xf0
 -	.byte 0xec

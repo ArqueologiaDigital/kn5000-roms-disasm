@@ -27627,11 +27627,11 @@ HdaeRom_DataHandler:
 	cps hl, 5
 	jrl gt, HdaeRom_DataDispatch_SetWord
 	add hl, hl
-	lda_24 xix, 0xeed747
+	lda_24 xix, HdaeRom_DispatchOffsetTable
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	lda_24 xix, HdaeRom_DataDispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
-; HDAE5000 extension ROM data dispatch (6-entry, table 0xeed747)
+; HDAE5000 extension ROM data dispatch (6-entry, table HdaeRom_DispatchOffsetTable)
 HdaeRom_DataDispatch:
 	ld	(xsp+6), xbc
 	cp	(xsp+442), 255
@@ -27824,11 +27824,11 @@ HdaeRom_AltHandler:
 	cps hl, 5
 	jr gt, HdaeRom_AltDispatch_SetWord
 	add hl, hl
-	lda_24 xix, 0xeed753
+	lda_24 xix, HdaeRom_AltDispatchOffsetTable
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	lda_24 xix, HdaeRom_AltDispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
-; HDAE5000 extension ROM alt dispatch (6-entry, table 0xeed753)
+; HDAE5000 extension ROM alt dispatch (6-entry, table HdaeRom_AltDispatchOffsetTable)
 HdaeRom_AltDispatch:
 	ld	xwa, 1966080
 	calr	-125
