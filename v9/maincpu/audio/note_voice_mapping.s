@@ -26654,20 +26654,10 @@ SendPartDataBlock_SetWord6:
 SendPartDataBlock_Return4:
 	ret
 
-; === V9 patched region (auto-generated from v9 ROM) ===
-; This region differs between v9 and v10. Labels are preserved
-; for cross-references. Code is in .byte format pending disassembly.
-
-; === V9 patched region (auto-generated from v9 ROM) ===
-; Region: 0xfef99e to 0xff04f8 (2906 bytes, v10 was 2920 bytes)
-
-; === V9 patched region (auto-generated from v9 ROM) ===
-; Region: 2906 bytes (v10 was 2920 bytes, 14 fewer in v9)
-
 SendPartDataBlock_DoGetError:
-	ldw	wa, 255
-	ldw	bc, 255
-	jp	16708693
+	ldw	wa, 0xff
+	ldw	bc, 0xff
+	jp	COMM_BuildAndSendPacket
 SendPartDataBlock_Return5:
 	ret
 
@@ -27619,23 +27609,23 @@ SendPartDataBlock_Block11:
 ; HDAE ROM data dispatch handler
 HdaeRom_DataHandler:
 	st_dri3b L, 0xfd, 0x48, 0xfe
-	push	xiz
+	push xiz
 	lda_dri3 XHL, 0xfd, 0xb8, 0x01
 	lda_dri3 XBC, 0xfd, 0xba, 0x01
-	ld	xwa, 0x001E0000
-	calr	(SendPartDataBlock_InitVal4 - . - 3)
-	lda_24	xbc, 0x1e0000
-	extz	hl
+	ld xwa, 0x1e0000
+	calr SendPartDataBlock_InitVal4
+	lda_24 xbc, 0x1e0000
+	extz hl
 HdaeRom_DataHandler_0x22:
-	dec	1, hl
-	cps	hl, 0
-	jrl	lt, 350
-	cps	hl, 5
-	jrl	gt, 345
-	add	hl, hl
-	lda_24	xix, 0xEED747
+	dec 1, hl
+	cps hl, 0
+	jrl lt, 350
+	cps hl, 5
+	jrl gt, 345
+	add hl, hl
+	lda_24 xix, 0xeed747
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
-	lda_24	xix, 0xFF0284
+	lda_24 xix, 0xFF0284
 	.byte 0xf3, 0x07
 HdaeRom_DataDispatch:
 	.byte 0xf0
@@ -27696,7 +27686,7 @@ HdaeRom_DataDispatch:
 	ld	wa, (xsp+4)
 	dec	1, wa
 	extz	xwa
-	ld xbc, xwa
+	ld	xbc, xwa
 	sll	xbc, 3
 	add	xbc, xwa
 	sll	xbc, 4
@@ -27727,7 +27717,7 @@ HdaeRom_DataDispatch:
 	jr	81
 	ld	wa, (xsp+4)
 	extz	xwa
-	ld xbc, xwa
+	ld	xbc, xwa
 	sll	xbc, 3
 	add	xbc, xwa
 	sll	xbc, 4
@@ -27768,8 +27758,8 @@ HdaeRom_DataDispatch_SetWord:
 	lda	xsp, (xsp+440)
 	ret
 HdaeRom_DataDispatch_Block:
-	lda_24	xde, 1966080
-	lda_24	xwa, 15652204
+	lda_24	xde, 0x1e0000
+	lda_24	xwa, 0xeed56c
 	ld	xbc, xwa
 HdaeRom_DataDispatch_Block2:
 	.byte 0xb8, 0x10, 0x33, 0xc5, 0xe4, 0x21, 0xf5, 0xe8, 0x41, 0xeb, 0xf1, 0x67, 0xf6, 0x78, 0x3b, 0xfe
@@ -27811,17 +27801,17 @@ HdaeRom_DataDispatch_Block3:
 HdaeRom_AltHandler:
 	pushw iz
 	ld xwa, 0x1e0000
-	calr	64739
+	calr SendPartDataBlock_InitVal4
 	extz hl
 	dec 1, hl
 	cps hl, 0
-	jr	lt, 38
+	jr lt, HdaeRom_AltDispatch_SetWord
 	cps hl, 5
-	jr	gt, 34
+	jr gt, HdaeRom_AltDispatch_SetWord
 	add hl, hl
 	lda_24 xix, 0xeed753
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
-	lda_24	xix, 16712802
+	lda_24 xix, HdaeRom_AltDispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
 ; HDAE5000 extension ROM alt dispatch (6-entry, table 0xeed753)
 HdaeRom_AltDispatch:
@@ -27841,8 +27831,8 @@ HdaeRom_AltDispatch_Block:
 	ld_spib A, 0xe4
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
-	jr	c, -10
-	calr	64923
+	jr c, HdaeRom_AltDispatch_Block
+	calr SendPartDataBlock_SetWord7
 	ld hl, iz
 	popw iz
 	ret
@@ -27852,21 +27842,21 @@ PreTmLoad:
 
 PostTmLoad:
 	cps wa, 0
-	jr	lt, 50
+	jr lt, PostTmLoad_Send
 	ldw wa, 0xff
 	ldw bc, 0xff
-	calr	64932
+	calr HdaeRom_DataHandler
 	ldw wa, 0xff
 	ldw bc, 0xff
-	calr	65423
-	calr	65318
+	calr HdaeRom_AltHandler
+	calr HdaeRom_DataDispatch_Block
 	ld xwa, 0x1e0000
 	ldw bc, 0x72aa
 	ld xde, 0x7800
-	call	15676503
+	call InterCPU_E1_Bulk_Transfer
 	ldw wa, 0xff
 	ldw bc, 0xff
-	call	16708753
+	call BuildAndSendPacket_Block
 	jr PostTmLoad_Block
 
 PostTmLoad_Send:
@@ -27899,8 +27889,6 @@ PostTmSave_ByteBlock:
 	ldw	hl, 65434
 	ret
 
-
-; === End v9 patched region ===
 PostTmSave_Success:
 	cps wa, 0
 	jr lt, PostTmSave_Failure

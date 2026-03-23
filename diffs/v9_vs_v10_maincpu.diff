@@ -20,26 +20,15 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	swi	7
  	lda	xsp, (xsp+10)
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
---- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 15:39:55.251374870 +0000
+--- v9/maincpu/audio/note_voice_mapping.s	2026-03-23 16:29:54.643905058 +0000
 +++ v10/maincpu/audio/note_voice_mapping.s	2026-03-23 14:39:00.716905877 +0000
-@@ -26654,20 +26654,15 @@
- SendPartDataBlock_Return4:
+@@ -26655,9 +26655,14 @@
  	ret
  
--; === V9 patched region (auto-generated from v9 ROM) ===
--; This region differs between v9 and v10. Labels are preserved
--; for cross-references. Code is in .byte format pending disassembly.
--
--; === V9 patched region (auto-generated from v9 ROM) ===
--; Region: 0xfef99e to 0xff04f8 (2906 bytes, v10 was 2920 bytes)
--
--; === V9 patched region (auto-generated from v9 ROM) ===
--; Region: 2906 bytes (v10 was 2920 bytes, 14 fewer in v9)
--
  SendPartDataBlock_DoGetError:
--	ldw	wa, 255
--	ldw	bc, 255
--	jp	16708693
+-	ldw	wa, 0xff
+-	ldw	bc, 0xff
+-	jp	COMM_BuildAndSendPacket
 +	call SubCPU_Payload_GetErrorFlag
 +	cp hl, 0xffff
 +	ret nz
@@ -51,39 +40,22 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  SendPartDataBlock_Return5:
  	ret
  
-@@ -27619,28 +27614,25 @@
- ; HDAE ROM data dispatch handler
- HdaeRom_DataHandler:
- 	st_dri3b L, 0xfd, 0x48, 0xfe
--	push	xiz
-+	push xiz
- 	lda_dri3 XHL, 0xfd, 0xb8, 0x01
- 	lda_dri3 XBC, 0xfd, 0xba, 0x01
--	ld	xwa, 0x001E0000
--	calr	(SendPartDataBlock_InitVal4 - . - 3)
--	lda_24	xbc, 0x1e0000
--	extz	hl
+@@ -27616,21 +27621,18 @@
+ 	calr SendPartDataBlock_InitVal4
+ 	lda_24 xbc, 0x1e0000
+ 	extz hl
 -HdaeRom_DataHandler_0x22:
--	dec	1, hl
--	cps	hl, 0
--	jrl	lt, 350
--	cps	hl, 5
--	jrl	gt, 345
--	add	hl, hl
--	lda_24	xix, 0xEED747
-+	ld xwa, 0x1e0000
-+	calr SendPartDataBlock_InitVal4
-+	lda_24 xbc, 0x1e0000
-+	extz hl
-+	dec 1, hl
-+	cps hl, 0
+ 	dec 1, hl
+ 	cps hl, 0
+-	jrl lt, 350
 +	jrl lt, HdaeRom_DataDispatch_SetWord
-+	cps hl, 5
+ 	cps hl, 5
+-	jrl gt, 345
 +	jrl gt, HdaeRom_DataDispatch_SetWord
-+	add hl, hl
-+	lda_24 xix, 0xeed747
+ 	add hl, hl
+ 	lda_24 xix, 0xeed747
  	ld_sriw3 HL, 0x07, 0xf0, 0xec
--	lda_24	xix, 0xFF0284
+-	lda_24 xix, 0xFF0284
 -	.byte 0xf3, 0x07
 +	lda_24 xix, HdaeRom_DataDispatch
 +	jp_dri 8, 0x07, 0xf0, 0xec
@@ -95,16 +67,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	(xsp+6), xbc
  	cp	(xsp+442), 255
  	jrl	nz, 307
-@@ -27696,7 +27688,7 @@
- 	ld	wa, (xsp+4)
- 	dec	1, wa
- 	extz	xwa
--	ld xbc, xwa
-+	ld	xbc, xwa
- 	sll	xbc, 3
- 	add	xbc, xwa
- 	sll	xbc, 4
-@@ -27721,13 +27713,16 @@
+@@ -27711,8 +27713,11 @@
  	nop
  	jr	nz, -75
  	jr	107
@@ -118,13 +81,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	(xsp+4), wa
  	jr	81
  	ld	wa, (xsp+4)
- 	extz	xwa
--	ld xbc, xwa
-+	ld	xbc, xwa
- 	sll	xbc, 3
- 	add	xbc, xwa
- 	sll	xbc, 4
-@@ -27759,20 +27754,30 @@
+@@ -27749,20 +27754,30 @@
  	extz	wa
  	cp	(xsp+4), wa
  	jr	c, -95
@@ -144,8 +101,8 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ret
 +
  HdaeRom_DataDispatch_Block:
--	lda_24	xde, 1966080
--	lda_24	xwa, 15652204
+-	lda_24	xde, 0x1e0000
+-	lda_24	xwa, 0xeed56c
 -	ld	xbc, xwa
 +	lda_24 xde, 0x1e0000
 +	lda_24 xwa, 0xeed56c
@@ -165,68 +122,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  HdaeRom_DataDispatch_Block3:
  	lda	xhl, (xwa+18833)
  	.byte 0xf3, 0xe1, 0xa7
-@@ -27811,17 +27816,17 @@
- HdaeRom_AltHandler:
- 	pushw iz
- 	ld xwa, 0x1e0000
--	calr	64739
-+	calr SendPartDataBlock_InitVal4
- 	extz hl
- 	dec 1, hl
- 	cps hl, 0
--	jr	lt, 38
-+	jr lt, HdaeRom_AltDispatch_SetWord
- 	cps hl, 5
--	jr	gt, 34
-+	jr gt, HdaeRom_AltDispatch_SetWord
- 	add hl, hl
- 	lda_24 xix, 0xeed753
- 	ld_sriw3 HL, 0x07, 0xf0, 0xec
--	lda_24	xix, 16712802
-+	lda_24 xix, HdaeRom_AltDispatch
- 	jp_dri 8, 0x07, 0xf0, 0xec
- ; HDAE5000 extension ROM alt dispatch (6-entry, table 0xeed753)
- HdaeRom_AltDispatch:
-@@ -27841,8 +27846,8 @@
- 	ld_spib A, 0xe4
- 	lda_dpi XBC, 0xe8
- 	cp xbc, xhl
--	jr	c, -10
--	calr	64923
-+	jr c, HdaeRom_AltDispatch_Block
-+	calr SendPartDataBlock_SetWord7
- 	ld hl, iz
- 	popw iz
- 	ret
-@@ -27852,21 +27857,21 @@
- 
- PostTmLoad:
- 	cps wa, 0
--	jr	lt, 50
-+	jr lt, PostTmLoad_Send
- 	ldw wa, 0xff
- 	ldw bc, 0xff
--	calr	64932
-+	calr HdaeRom_DataHandler
- 	ldw wa, 0xff
- 	ldw bc, 0xff
--	calr	65423
--	calr	65318
-+	calr HdaeRom_AltHandler
-+	calr HdaeRom_DataDispatch_Block
- 	ld xwa, 0x1e0000
- 	ldw bc, 0x72aa
- 	ld xde, 0x7800
--	call	15676503
-+	call InterCPU_E1_Bulk_Transfer
- 	ldw wa, 0xff
- 	ldw bc, 0xff
--	call	16708753
-+	call BuildAndSendPacket_Block
- 	jr PostTmLoad_Block
- 
- PostTmLoad_Send:
-@@ -27889,7 +27894,7 @@
+@@ -27879,7 +27894,7 @@
  	ret
  
  PostTmSave_ByteBlock:
@@ -235,16 +131,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	cps	l, 6
  	jr	ugt, 7
  	cps	l, 1
-@@ -27899,8 +27904,6 @@
- 	ldw	hl, 65434
- 	ret
- 
--
--; === End v9 patched region ===
- PostTmSave_Success:
- 	cps wa, 0
- 	jr lt, PostTmSave_Failure
-@@ -27941,9 +27944,9 @@
+@@ -27929,9 +27944,9 @@
  	.byte 0x8f
  	push_sr
  	push	xsp
@@ -256,7 +143,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	c, (xsp)
  	extz	bc
  	ld	a, (xsp+2)
-@@ -27960,7 +27963,7 @@
+@@ -27948,7 +27963,7 @@
  	ldw	bc, 470
  	jr	43
  	calr	65190
@@ -265,7 +152,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	a, (xsp)
  	extz	wa
  	extz	xwa
-@@ -28001,11 +28004,11 @@
+@@ -27989,11 +28004,11 @@
  	swi	0
  	.byte 0x8b
  	extz	bc
@@ -279,7 +166,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	a, (xsp+4)
  	.byte 0xc7
  	swi	0
-@@ -28036,7 +28039,7 @@
+@@ -28024,7 +28039,7 @@
  	inc	1, iz
  	cp	iz, 128
  	jr	c, -21
@@ -288,7 +175,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lda_24	xwa, 1985191
  	ldw	bc, 10240
  	.byte 0x42
-@@ -28153,7 +28156,7 @@
+@@ -28141,7 +28156,7 @@
  	call	InterCPU_E1_Bulk_Transfer
  	jp	TmFlash_Return
  	ld	xwa, 1966080
@@ -297,7 +184,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ldw	wa, 65434
  	cps	l, 6
  	jr	nz, 2
-@@ -28161,7 +28164,7 @@
+@@ -28149,7 +28164,7 @@
  	ld	hl, wa
  	ret
  	ld	xwa, 1966080
@@ -306,7 +193,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	cps	l, 6
  	jr	ugt, 7
  	cps	l, 1
-@@ -28183,7 +28186,7 @@
+@@ -28171,7 +28186,7 @@
  	ld	iz, bc
  	ld	(xsp+2), xwa
  	ld	xwa, (xsp+2)
@@ -315,7 +202,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	wa, iz
  	extz	xwa
  	extz	hl
-@@ -28198,7 +28201,7 @@
+@@ -28186,7 +28201,7 @@
  	reti
  	.byte 0xf0, 0xec
  	ldb	c, 242
@@ -324,7 +211,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	reti
  	swi	7
  	ldw	ix, 2035
-@@ -28256,7 +28259,7 @@
+@@ -28244,7 +28259,7 @@
  	ld	iz, bc
  	ld	(xsp+6), xwa
  	ld	xwa, (xsp+6)
@@ -333,7 +220,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ld	bc, iz
  	extz	xbc
  	extz	hl
-@@ -28271,7 +28274,7 @@
+@@ -28259,7 +28274,7 @@
  	reti
  	.byte 0xf0, 0xec
  	ldb	c, 242
@@ -342,7 +229,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	ldw	ix, 2035
  	.byte 0xf0
  	cps	xix, 0
-@@ -28541,7 +28544,7 @@
+@@ -28529,7 +28544,7 @@
  	inc 4, xwa
  	ld (xsp + 2), xwa
  	pushw 0xff
@@ -351,7 +238,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lda xwa, (xsp + 6)
  	push xwa
  	ld xwa, (xsp + 22)
-@@ -28562,7 +28565,7 @@
+@@ -28550,7 +28565,7 @@
  	ld	xwa, (xsp+4)
  	ld	(xwa), 0
  	pushw	255
