@@ -367,28 +367,28 @@ BootscreenSlideMarker:
 	.asciz "SLIDE"
 
 Bitmap_1bit_Flash_Memory_Update:	; 9FA156
-	.incbin "../maincpu/images/Bitmap_1bit_Flash_Memory_Update.bin"
+	.incbin "../v10/maincpu/images/Bitmap_1bit_Flash_Memory_Update.bin"
 
 Bitmap_1bit_Now_Erasing:	; 9FA3BE
-	.incbin "../maincpu/images/Bitmap_1bit_Now_Erasing.bin"
+	.incbin "../v10/maincpu/images/Bitmap_1bit_Now_Erasing.bin"
 
 Bitmap_1bit_FD_to_Flash_Memory:	; 9FA626
-	.incbin "../maincpu/images/Bitmap_1bit_FD_to_Flash_Memory.bin"
+	.incbin "../v10/maincpu/images/Bitmap_1bit_FD_to_Flash_Memory.bin"
 
 Bitmap_1bit_Completed:	; 9FA88E
-	.incbin "../maincpu/images/Bitmap_1bit_Completed.bin"
+	.incbin "../v10/maincpu/images/Bitmap_1bit_Completed.bin"
 
 Bitmap_1bit_Please_Wait:	; 9FAAF6
-	.incbin "../maincpu/images/Bitmap_1bit_Please_Wait.bin"
+	.incbin "../v10/maincpu/images/Bitmap_1bit_Please_Wait.bin"
 
 Bitmap_1bit_Change_FD_2_of_2:	; 9FAD5E
-	.incbin "../maincpu/images/Bitmap_1bit_Change_FD_2_of_2.bin"
+	.incbin "../v10/maincpu/images/Bitmap_1bit_Change_FD_2_of_2.bin"
 
 Bitmap_1bit_Illegal_Disk:	; 9FAFC6
-	.incbin "../maincpu/images/Bitmap_1bit_Illegal_Disk.bin"
+	.incbin "../v10/maincpu/images/Bitmap_1bit_Illegal_Disk.bin"
 
 Bitmap_1bit_Turn_On_AGAIN:	; 9FB22E
-	.incbin "../maincpu/images/Bitmap_1bit_Turn_On_AGAIN.bin"
+	.incbin "../v10/maincpu/images/Bitmap_1bit_Turn_On_AGAIN.bin"
 
 ; Boot initialization data tables (0x9FB496 - 0x9FB4D1)
 ; TODO: determine purpose of these tables
