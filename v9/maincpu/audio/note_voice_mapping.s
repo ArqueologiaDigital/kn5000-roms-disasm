@@ -26964,7 +26964,7 @@ TmFlashWrite_Block1:
 	push	xsp
 	ld	xwa, 3860739951
 	swi	4
-	calr	65137
+	calr	-396
 	ld	c, (xsp)
 	extz	bc
 	ld	a, (xsp+2)
@@ -26981,7 +26981,7 @@ TmFlashWrite_Block1:
 	ldw	bc, 470
 	jr	43
 	calr	65190
-	calr	65082
+	calr	-451
 	ld	a, (xsp)
 	extz	wa
 	extz	xwa
@@ -27022,11 +27022,11 @@ TmFlashWrite_Block1:
 	swi	0
 	.byte 0x8b
 	extz	bc
-	calr	64584
+	calr	-949
 	inc	1, iz
 	cp	iz, 20
 	jr	c, -21
-	calr	64971
+	calr	-562
 	ld	a, (xsp+4)
 	.byte 0xc7
 	swi	0
@@ -27057,7 +27057,7 @@ TmFlashWrite_Block1:
 	inc	1, iz
 	cp	iz, 128
 	jr	c, -21
-	calr	64899
+	calr	-634
 	lda_24	xwa, 1985191
 	ldw	bc, 10240
 	.byte 0x42
@@ -27174,7 +27174,7 @@ TmFlash_WriteRoutine:
 	call	15676503
 	jp	16708813
 	ld	xwa, 1966080
-	calr	63909
+	calr	-1624
 	ldw	wa, 65434
 	cps	l, 6
 	jr	nz, 2
@@ -27182,7 +27182,7 @@ TmFlash_WriteRoutine:
 	ld	hl, wa
 	ret
 	ld	xwa, 1966080
-	calr	63889
+	calr	-1644
 	cps	l, 6
 	jr	ugt, 7
 	cps	l, 1
