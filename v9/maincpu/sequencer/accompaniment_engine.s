@@ -13797,7 +13797,7 @@ Not_sure_maybe_SOFT_VERSION_related:
 	cps	hl, 0
 	jr	z, 19
 	stdi8	13781, 1
-	call	16776933
+	call	16776919
 	cp	l, 255
 	jr	z, 5
 	stdi8	13781, 0
@@ -33425,7 +33425,7 @@ MspMenuTtl_Dispatch:
 	push	xwa
 	pushw	0
 	pushw	13500
-	call	16714995
+	call	16714981
 	lda	xsp, (xsp+10)
 	stdi8	13516, 0
 

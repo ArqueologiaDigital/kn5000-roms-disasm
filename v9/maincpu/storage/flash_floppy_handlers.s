@@ -1760,7 +1760,7 @@ Flash_InitBytecodeBlock:
 	extz	wa
 	calr	2721
 	calr	2966
-	call	16713356
+	call	16713342
 	jrl	274
 	calr	3531
 	calr	3957
@@ -3147,7 +3147,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 2
-	call	16713383
+	call	16713369
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -3159,7 +3159,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 3
-	call	16713383
+	call	16713369
 	ld	xix, (xsp+12)
 	sub	xix, 3434496
 	cps	hl, 0
@@ -3213,7 +3213,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 0
-	call	16713383
+	call	16713369
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -3225,7 +3225,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 1
-	call	16713383
+	call	16713369
 	ld	xix, (xsp+12)
 	sub	xix, 3434496
 	cps	hl, 0
@@ -3279,7 +3279,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 3
-	call	16713383
+	call	16713369
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -3291,7 +3291,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 2
-	call	16713383
+	call	16713369
 	ld	xix, (xsp+12)
 	cps	hl, 0
 	jr	nz, 32
@@ -3344,7 +3344,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 1
-	call	16713383
+	call	16713369
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -3356,7 +3356,7 @@ Flash_ExtendedOpsBlock:
 	lda	xwa, (xsp+10)
 	push	xwa
 	lds	wa, 0
-	call	16713383
+	call	16713369
 	ld	xix, (xsp+12)
 	cps	hl, 0
 	jr	nz, 32
@@ -4733,7 +4733,7 @@ Flash_SlotUpdateOpsBlock:
 	extz	wa
 	calr	62001
 	calr	62246
-	call	16713356
+	call	16713342
 	ldada	xwa, 2360
 	.byte 0x98
 	push_sr
@@ -4916,7 +4916,7 @@ Flash_SlotUpdateOpsBlock:
 	.byte 0x95
 	scf
 	calr	62157
-	jp	16713580
+	jp	16713566
 	dec	2, xsp
 	ld	(xsp), e
 	calr	64365
@@ -5086,7 +5086,7 @@ Flash_SlotUpdateOpsBlock:
 	ldda32	xde, 3218
 	lds	wa, 1
 	call	15678460
-	call	16713356
+	call	16713342
 	ld	hl, iz
 	jr	3
 	ldw	hl, 65434

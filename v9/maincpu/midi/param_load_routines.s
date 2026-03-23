@@ -757,7 +757,7 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -776,7 +776,7 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -795,7 +795,7 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -817,7 +817,7 @@ ParaLoadOpt_GridDispatch:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl

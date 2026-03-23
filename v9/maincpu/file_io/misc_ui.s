@@ -35,7 +35,7 @@ JumpInsert_DispatchBody:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17

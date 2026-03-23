@@ -35,7 +35,7 @@ MiddleFuncCall_DispatchData:
 	push	xde
 	pushw	0
 	pushw	4441
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	push	xde
 	push	xhl

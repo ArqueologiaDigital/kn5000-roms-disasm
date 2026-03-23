@@ -29,7 +29,7 @@ FDemo_DisplayResourceData:
 	.byte 0xf0
 	jr	c, -8
 	push	xiz
-	call	16715680
+	call	16715666
 	pushw	hl
 	push	xiz
 	.byte 0xf3
@@ -46,7 +46,7 @@ FDemo_DisplayResourceData:
 	.long Data_DiskFuncPtrTbl_EA0B00
 	pushw	112
 	push	xwa
-	call	16715201
+	call	16715187
 	lda	xsp, (xsp+22)
 	.byte 0xf3
 	swi	5
@@ -74,7 +74,7 @@ FDemo_DisplayResourceData:
 	pushw	256
 	push	xbc
 	push	xhl
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	lds	iz, 1
 	lda	xwa, (xsp+8)
@@ -88,7 +88,7 @@ FDemo_DisplayResourceData:
 	lda	xwa, (xsp+10)
 	push	xwa
 	push	xhl
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	inc	1, iz
 	cp	iz, 8
@@ -116,7 +116,7 @@ FDemo_DisplayResourceData:
 	lda	xwa, (xsp+10)
 	push	xwa
 	push	xhl
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
@@ -418,7 +418,7 @@ FDemo_LinkedListSearchInsert:
 	push	xwa
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	16715573
+	call	16715559
 	inc	8, xsp
 	cps	hl, 0
 	jr	z, 16
@@ -452,7 +452,7 @@ FDemo_LinkedListSearchInsert:
 	jr	z, 18
 	push	xwa
 	push	xiz
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xwa, (xsp+4)
 	ld	(xiz+16), xwa
@@ -3130,13 +3130,13 @@ FileIO_ByteBlock_DemoProc1:
 	ld	wa, (xsp+38)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	16714332
+	call	16714318
 	ld	xiz, xhl
 	add	xiz, 176
 	ld	wa, (xsp+36)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	16714332
+	call	16714318
 	ld	(xsp+4), xhl
 	ld	xwa, 176
 	add	(xsp+4), xwa
@@ -3233,13 +3233,13 @@ FileIO_ByteBlock_DemoProc1:
 	ld	wa, (xsp+38)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	16714332
+	call	16714318
 	ld	xiz, xhl
 	add	xiz, 176
 	ld	wa, (xsp+36)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	16714332
+	call	16714318
 	ld	(xsp+4), xhl
 	ld	xwa, 176
 	add	(xsp+4), xwa
@@ -3440,14 +3440,14 @@ FileIO_ByteBlock_DemoProc1:
 	ldw	(xsp+10), 470
 	extz	xwa
 	ld	xbc, 470
-	call	16714332
+	call	16714318
 	ld	(xsp+2), xhl
 	ld	xwa, 16
 	add	(xsp+2), xwa
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 470
-	call	16714332
+	call	16714318
 	ld	(xsp+6), xhl
 	ld	xwa, 16
 	add	(xsp+6), xwa
@@ -3496,7 +3496,7 @@ FileIO_ByteBlock_DemoProc1:
 	extz	wa
 	ld	c, (xsp+14)
 	extz	bc
-	call	16713034
+	call	16713020
 	lda_24	xwa, 1966080
 	.byte 0xaf, 0x06, 0x80
 	ld	bc, (xsp+10)
@@ -3509,7 +3509,7 @@ FileIO_ByteBlock_DemoProc1:
 	ld	c, (xsp+14)
 	extz	bc
 	ld	de, iz
-	call	16713035
+	call	16713021
 	call	16288840
 	ld	hl, iz
 	popw	iz
@@ -3561,13 +3561,13 @@ FileIO_ByteBlock_DemoProc1:
 	ldb	h, 32
 	extz	xwa
 	ld	xbc, 9400
-	call	16714332
+	call	16714318
 	ld	xiz, xhl
 	add	xiz, 16
 	ld	wa, (xsp+36)
 	extz	xwa
 	ld	xbc, 9400
-	call	16714332
+	call	16714318
 	ld	(xsp+4), xhl
 	ld	xwa, 16
 	add	(xsp+4), xwa
@@ -3587,7 +3587,7 @@ FileIO_ByteBlock_DemoProc1:
 	jr	lt, 43
 	ld	a, (xsp+10)
 	extz	wa
-	call	16713189
+	call	16713175
 	lda_24	xwa, 1966080
 	.byte 0xaf, 0x04, 0x80
 	ld	bc, (xsp+8)
@@ -3598,7 +3598,7 @@ FileIO_ByteBlock_DemoProc1:
 	ld	a, (xsp+10)
 	extz	wa
 	ld	bc, iz
-	call	16713190
+	call	16713176
 	call	16288840
 	ld	hl, iz
 	pop	xiz
@@ -6649,7 +6649,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 82
-	call	16714332
+	call	16714318
 	lda_24	xwa, 155394
 	add	xwa, xhl
 	.byte 0xb0, 0x9f

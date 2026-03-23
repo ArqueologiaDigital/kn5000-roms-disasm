@@ -22850,11 +22850,11 @@ Dispatch_Data:
 	add	xiz, xwa
 	ld	xwa, xiz
 	ldda32	xbc, 59883
-	call	16714332
+	call	16714318
 	ld	xiz, xhl
 	ld	xwa, xiz
 	ld	xbc, 1000
-	call	16714776
+	call	16714762
 	ld	xiz, xhl
 	ld	xwa, 40
 	cp	xiz, 40
@@ -25322,7 +25322,7 @@ Param_SignExtendRetu_Data:
 	sub	xbc, 426
 	ld	xwa, xbc
 	ld	xbc, 11
-	call	16714770
+	call	16714756
 	cp	xhl, 9
 	jrl	ugt, 411
 	add	xhl, xhl
@@ -25345,7 +25345,7 @@ Param_SignExtendRetu_Data:
 	sub	xbc, 102
 	ld	xwa, xbc
 	ld	xbc, 81
-	call	16714770
+	call	16714756
 	cp	xhl, 76
 	jrl	ugt, 338
 	add	xhl, 15651913
@@ -25492,7 +25492,7 @@ Param_SignExtendRetu_Data:
 	ld	xwa, xiz
 	sub	xwa, 295
 	ld	xbc, 80
-	call	16714776
+	call	16714762
 	ld	a, l
 	extz	wa
 	muls	wa, 80
@@ -25506,7 +25506,7 @@ Param_SignExtendRetu_Data:
 	sub	xbc, xwa
 	ld	xwa, xbc
 	ld	xbc, 11
-	call	16714770
+	call	16714756
 	cp	xhl, 9
 	jrl	ugt, 371
 	add	xhl, xhl
@@ -26973,7 +26973,7 @@ TmFlashWrite_Block1:
 	add	wa, bc
 	extz	xwa
 	ld	xbc, 470
-	call	16714332
+	call	16714318
 	add	xhl, 16
 	ld	xwa, 1966080
 	add	xwa, xhl
@@ -27036,7 +27036,7 @@ TmFlashWrite_Block1:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 470
-	call	16714332
+	call	16714318
 	add	xhl, 16
 	ld	xwa, 1966080
 	add	xwa, xhl
@@ -27099,7 +27099,7 @@ TmFlash_WriteRoutine:
 	extz	xwa
 	ld	(xsp+10), xwa
 	ld	xbc, 470
-	call	16714332
+	call	16714318
 	add	xhl, 16
 	bitm	0, (xsp+20)
 	jr	z, 96
@@ -27114,7 +27114,7 @@ TmFlash_WriteRoutine:
 	ld	(xsp+6), xwa
 	ld	xwa, (xsp+10)
 	ld	xbc, 10535
-	call	16714332
+	call	16714318
 	add	xhl, 18816
 	add	xhl, xiz
 	ld	xwa, (xsp+6)
@@ -27193,7 +27193,7 @@ TmFlash_WriteRoutine:
 	ret
 	extz	xwa
 	ld	xbc, 470
-	call	16714332
+	call	16714318
 	ld	xwa, xhl
 	add	xwa, 16
 	ld	xhl, 1966080
@@ -27228,7 +27228,7 @@ TmFlash_WriteRoutine:
 	ld	xbc, 470
 	jr	5
 	ld	xbc, 289
-	call	16714332
+	call	16714318
 	add	xhl, 16
 	.byte 0xaf
 	push_sr
@@ -27256,7 +27256,7 @@ TmFlash_WriteRoutine:
 	ld	xiz, xbc
 	extz	xwa
 	ld	xbc, 470
-	call	16714332
+	call	16714318
 	add	xhl, 16
 	ld	xwa, 1966080
 	add	xwa, xhl
@@ -27298,7 +27298,7 @@ TmFlash_WriteRoutine:
 	cps	xix, 0
 	ld	xwa, xbc
 	ld	xbc, 470
-	call	16714332
+	call	16714318
 	add	xhl, 16
 	.byte 0xaf, 0x06
 	sub	(xhl), l
@@ -27311,7 +27311,7 @@ TmFlash_WriteRoutine:
 	jr	65
 	ld	xwa, xbc
 	ld	xbc, 289
-	call	16714332
+	call	16714318
 	add	xhl, 16
 	.byte 0xaf, 0x06
 	sub	(xhl), l
@@ -27352,11 +27352,11 @@ TmFlash_WriteRoutine:
 	ld	(xsp+8), a
 	ld	xiz, (xsp+14)
 	push	xiz
-	call	16715680
+	call	16715666
 	ld	(xsp+8), hl
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16715680
+	call	16715666
 	inc	8, xsp
 	ld	(xsp+6), hl
 	.byte 0x9f, 0x06
@@ -27373,7 +27373,7 @@ TmFlash_WriteRoutine:
 	push	xiz
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	16715038
+	call	16715024
 	add	xsp, 10
 	cps	hl, 0
 	jr	nz, 4
@@ -27588,7 +27588,7 @@ Audio_SendCommand_Block:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16715848
+	call	16715834
 	lda	xsp, (xsp+12)
 	ret
 	ld32_24	xbc, 246300

@@ -1923,7 +1923,7 @@ RamEditCheck_JumpStart:
 	pushw	41654
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr	31
@@ -3462,7 +3462,7 @@ ButtonState_DispatchDSP_InlineData:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 
 ButtonState_Paint_DrawAligned:
@@ -8335,7 +8335,7 @@ AcTrkSw_Return:
 	pushw 43152
 	ld	xwa, (xsp+140)
 	push	xwa
-	call	16715201
+	call	16715187
 	inc	8, xsp
 	ld	xhl, (xsp+4)
 	jrl	534
@@ -8367,13 +8367,13 @@ AcTrkSw_Return:
 	pushw 234
 	pushw 43162
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	jrl	419
 	pushw 234
 	pushw 43170
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xwa, xiz
 	ld	xbc, 31457287
@@ -8486,7 +8486,7 @@ AcTrkSw_Return:
 	jr	34
 	ld	xwa, (xsp+136)
 	push	xwa
-	call	16714482
+	call	16714468
 	inc	4, xsp
 	lds32	xhl, 0
 	jr	18

@@ -3268,7 +3268,7 @@ VoiceData_ExtendedParamSetup:
 	pushw	16
 	push	xde
 	push	xbc
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	ret
 	calr	753
@@ -3288,7 +3288,7 @@ VoiceData_ExtendedParamSetup:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 26
-	call	16714332
+	call	16714318
 	add	xhl, 20
 	ld	xbc, xhl
 	.byte 0xaf
@@ -3305,12 +3305,12 @@ VoiceData_ExtendedParamSetup:
 	.byte 0x83
 	lda	xwa, (xhl+2)
 	push	xwa
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 26
-	call	16714332
+	call	16714318
 	add	xhl, 20
 	.byte 0xaf, 0x06
 	or	(xhl), c
@@ -3435,7 +3435,7 @@ VoiceData_ExtendedParamSetup:
 	ld	xwa, (xsp+14)
 	lda	xwa, (xwa+944)
 	push	xwa
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	ld	(xsp+2), 0
 	ld	c, (xsp+2)
@@ -3521,7 +3521,7 @@ VoiceData_ExtendedParamSetup:
 	push	xwa
 	lda	xwa, (xix+15)
 	push	xwa
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	.byte 0xc7
 	swi	3

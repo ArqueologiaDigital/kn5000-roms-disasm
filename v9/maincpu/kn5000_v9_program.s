@@ -1203,11 +1203,11 @@ Voice_FactoryPresetData:
 	ld	xwa, (xsp+8)
 	sla	xwa, 0
 	ld	xbc, (xsp+4)
-	call	16714766
+	call	16714752
 	ld	xiz, xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
-	call	16714332
+	call	16714318
 	ld	(xsp+16), xhl
 	ld	xbc, (xsp+34)
 	ld	xwa, xbc
@@ -2428,8 +2428,8 @@ Debug_PrintString_Done:
 	ret
 
 Debug_UartHelpers:
-	.byte 0xc9, 0xcf, 0x0a, 0x6f, 0x04, 0xc9, 0xc8, 0x30
-	.byte 0x0e, 0xc9, 0xc8, 0x57, 0x0e
+	.byte 0x21, 0xC9, 0xD8, 0x66, 0x07, 0x3C, 0x1E, 0x12
+	.byte 0x00, 0x5C, 0x68, 0xF2, 0x5E
 
 Debug_UartDelay:
 	ldw iz, 0xFE00
@@ -2462,7 +2462,7 @@ Get_Firmware_Version:
 	ret
 
 ROM_PaddingFF:
-	.byte 0xff, 0xff, 0xff, 0x00, 0xff
+	.byte 0x0F, 0x05, 0xEF, 0x1B, 0xC6
 
 	.zero 14  ; v9: compensate for 14 fewer bytes of code vs v10
 	.include "boot/rom_end_structure.s"

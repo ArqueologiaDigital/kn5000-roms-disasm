@@ -1542,7 +1542,7 @@ DrawFunc_Init_Variant1:
 	push	xwa
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 63
@@ -1615,7 +1615,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380840
 	push	xwa
 	push	xbc
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 63
@@ -1693,7 +1693,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380860
 	push	xwa
 	push	xbc
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -1796,7 +1796,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380892
 	push	xwa
 	push	xbc
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -1869,7 +1869,7 @@ DrawFunc_Init_Variant1:
 	ld	xwa, 15380912
 	push	xwa
 	push	xbc
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -4689,7 +4689,7 @@ WallMenuEdit_EventDispatch:
 	ld	xwa, 15538410
 	push	xwa
 	push	xbc
-	call	16714354
+	call	16714340
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
@@ -4737,7 +4737,7 @@ WallOthEdit_EventDispatch:
 	ld	xwa, 15538454
 	push	xwa
 	push	xbc
-	call	16714354
+	call	16714340
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17

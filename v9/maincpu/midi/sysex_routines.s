@@ -113,7 +113,7 @@ ExcPmemFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
@@ -153,7 +153,7 @@ ExcSmemFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
@@ -193,7 +193,7 @@ ExcCompFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
@@ -233,7 +233,7 @@ ExcSeqFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17
@@ -273,7 +273,7 @@ ExcMspFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	17

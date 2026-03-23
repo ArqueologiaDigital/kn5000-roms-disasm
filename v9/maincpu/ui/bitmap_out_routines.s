@@ -3687,7 +3687,7 @@ BitMapOut_ByteData_RenderState:
 	cp	xhl, 27263185
 	jr	nz, 59
 	pushw	18
-	call	16715392
+	call	16715378
 	inc	2, xsp
 	ld	xiz, xhl
 	calr	65366
@@ -3733,7 +3733,7 @@ BitMapOut_ByteData_DisplayUpdate:
 	cp	xhl, 27263185
 	jr	nz, 59
 	pushw	18
-	call	16715392
+	call	16715378
 	inc	2, xsp
 	ld	xiz, xhl
 	calr	65238

@@ -683,7 +683,7 @@ WndEvt_EventCodeDispatch:
 	.byte 0x9f, 0x06
 	jrl	nc, 25050
 	pushw	de
-	call	16715392
+	call	16715378
 	ld	(xsp+10), xhl
 	.byte 0xd7
 	swi	2
@@ -694,7 +694,7 @@ WndEvt_EventCodeDispatch:
 	push	xbc
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16715597
+	call	16715583
 	ld16_24	wa, 160982
 	.byte 0xd7
 	swi	2
@@ -713,10 +713,10 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 160944
 	add	xbc, xwa
 	push	xbc
-	call	16715597
+	call	16715583
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	16714482
+	call	16714468
 	lda	xsp, (xsp+22)
 	lds	iz, 0
 	.byte 0x9f, 0x06
@@ -1957,24 +1957,24 @@ EditSw_ByteData:
 	ld	xwa, 15376750
 	push	xwa
 	push	xbc
-	call	16715597
+	call	16715583
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	16715680
+	call	16715666
 	ld	iz, hl
 	ld	xwa, (xsp+20)
 	ld	xwa, (xwa+22)
 	push	xwa
-	call	16715680
+	call	16715666
 	lda	xsp, (xsp+16)
 	cp	hl, iz
 	jr	ule, 23
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16715680
+	call	16715666
 	inc	1, hl
 	pushw	hl
-	call	16715392
+	call	16715378
 	inc	6, xsp
 	ld	xwa, (xsp+8)
 	ld	(xwa+22), xhl
@@ -1983,7 +1983,7 @@ EditSw_ByteData:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+22)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xbc, (xsp+8)
 	ld	xwa, (xbc+22)
@@ -4159,11 +4159,11 @@ DrawDesignBox_ByteData:
 	ld	xwa, (xsp+4)
 	sla	xwa, 0
 	ld	xbc, (xsp+8)
-	call	16714766
+	call	16714752
 	ld	xiz, xhl
 	ld	xwa, (xsp+12)
 	ld	xbc, xiz
-	call	16714332
+	call	16714318
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+30)
 	ld	xwa, xde
@@ -4212,11 +4212,11 @@ DrawDesignBox_ByteData:
 	ld	xwa, (xsp+8)
 	sla	xwa, 0
 	ld	xbc, (xsp+4)
-	call	16714766
+	call	16714752
 	ld	xiz, xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
-	call	16714332
+	call	16714318
 	ld	(xsp+16), xhl
 	ld	xde, (xsp+30)
 	ld	xwa, xde
@@ -8774,14 +8774,14 @@ ColorBlit2_LargeCodeBlock:
 	ld	xwa, (xsp+8)
 	sla	xwa, 0
 	ld	xbc, (xsp+4)
-	call	16714766
+	call	16714752
 	ld	(xsp+34), xhl
 	lda	xwa, (xsp+62)
 	ld	(xsp+42), xwa
 	ld	xwa, (xsp+4)
 	sla	xwa, 0
 	ld	xbc, (xsp+8)
-	call	16714766
+	call	16714752
 	ld	xix, (xsp+42)
 	lda	xwa, (xix+2)
 	ld	(xsp+46), xwa
@@ -8986,7 +8986,7 @@ ColorBlit2_LargeCodeBlock:
 	jrl	le, 211
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
-	call	16714332
+	call	16714318
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, xde
@@ -9075,7 +9075,7 @@ ColorBlit2_LargeCodeBlock:
 	jrl	958
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
-	call	16714332
+	call	16714318
 	ld	(xsp+16), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, (xsp+46)
@@ -9228,7 +9228,7 @@ ColorBlit2_LargeCodeBlock:
 	jr	le, 119
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
-	call	16714332
+	call	16714318
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, xde
@@ -9274,7 +9274,7 @@ ColorBlit2_LargeCodeBlock:
 	jrl	472
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
-	call	16714332
+	call	16714318
 	ld	(xsp+16), xhl
 	ld	xhl, (xsp+42)
 	ld	xde, (xsp+46)
@@ -9377,7 +9377,7 @@ ColorBlit2_LargeCodeBlock:
 	jr	le, 118
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
-	call	16714332
+	call	16714318
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, xde
@@ -9423,7 +9423,7 @@ ColorBlit2_LargeCodeBlock:
 	jr	99
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
-	call	16714332
+	call	16714318
 	ld	(xsp+16), xhl
 	ld	xhl, (xsp+42)
 	ld	xde, (xsp+46)
@@ -9879,11 +9879,11 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xaf, 0x04
 	.long NakaInst_Ballads
 	ld	xbc, (xsp+8)
-	call	16714766
+	call	16714752
 	ld	xiz, xhl
 	ld	xwa, (xsp+12)
 	ld	xbc, xiz
-	call	16714332
+	call	16714318
 	ld	(xsp+12), xhl
 	ld	xbc, (xsp+34)
 	ld	xwa, xbc

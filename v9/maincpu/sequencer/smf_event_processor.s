@@ -4747,7 +4747,7 @@ SeqStep_FileSectorReturn:
 	push	xwa
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+4)
 	ld	c, (xiz+12)
@@ -5325,7 +5325,7 @@ SeqStep_FileSectorPopReturn:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	16714332
+	call	16714318
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+20)
 	add	xwa, xhl
@@ -5356,7 +5356,7 @@ SeqStep_FileSectorPopReturn:
 	pushw	0
 	lda	xwa, (xhl+26)
 	push	xwa
-	call	16715770
+	call	16715756
 	inc	8, xsp
 	inc	1, xiz
 	ld	xbc, (xsp+8)
@@ -5375,7 +5375,7 @@ SeqStep_FileSectorPopReturn:
 	pushw	32
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715770
+	call	16715756
 	inc	8, xsp
 	ld	xwa, (xsp+8)
 	ld	(xwa+11), 0
@@ -5575,7 +5575,7 @@ SeqByteBlock_StyleBitmapRef:
 	push	xwa
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16714945
+	call	16714931
 	add	xsp, 10
 	cps	hl, 0
 	jr	nz, 116
@@ -5761,7 +5761,7 @@ SeqByteBlock_StyleBitmapRef:
 	push	xwa
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16714945
+	call	16714931
 	add	xsp, 10
 	cps	hl, 0
 	jr	nz, 85
@@ -5847,7 +5847,7 @@ SeqByteBlock_StyleBitmapRef:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	16714332
+	call	16714318
 	ld	xwa, (xsp+4)
 	ld	xbc, (xwa+20)
 	add	xbc, xhl
@@ -6010,7 +6010,7 @@ SeqByteBlock_StyleBitmapRef:
 	push	xwa
 	lda	xwa, (xiz+52)
 	push	xwa
-	call	16715161
+	call	16715147
 	ld	(xiz+64), 0
 	.byte 0xbe
 	ld	xiy, 3892314114
@@ -6097,7 +6097,7 @@ SeqByteBlock_StyleBitmapRef:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	16714332
+	call	16714318
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+20)
 	add	xwa, xhl
@@ -6696,7 +6696,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	wa, (xwa+38)
 	extz	xwa
 	ld	xbc, (xbc)
-	call	16714332
+	call	16714318
 	ld	xwa, (xsp+4)
 	ld	(xwa+40), hl
 	ld	xwa, (xsp+4)
@@ -6740,7 +6740,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	xwa, xde
 	ld	xbc, (xsp+4)
 	ld	xbc, (xbc+32)
-	call	16714776
+	call	16714762
 	inc	1, xhl
 	ld	xwa, (xsp+4)
 	ld	(xwa+54), hl
@@ -6898,7 +6898,7 @@ SeqByteBlock_ChannelContainer:
 	extz	xbc
 	ld	xwa, (xsp+16)
 	ld	xwa, (xwa+22)
-	call	16714776
+	call	16714762
 	ld	xwa, (xsp+8)
 	ld	xbc, (xwa+28)
 	add	xbc, xhl
@@ -6930,13 +6930,13 @@ SeqByteBlock_ChannelContainer:
 	extz	xbc
 	ld	xwa, (xsp+16)
 	ld	xwa, (xwa+22)
-	call	16714770
+	call	16714756
 	ld	xiz, xhl
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa+38)
 	extz	xbc
 	ld	xwa, xiz
-	call	16714776
+	call	16714762
 	ld	a, l
 	ld	(xsp+6), a
 	ld	xwa, (xsp+16)
@@ -7063,7 +7063,7 @@ SeqByteBlock_ChannelContainer:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	16714332
+	call	16714318
 	ld	xwa, (xsp+22)
 	add	(xwa), xhl
 	ld	xwa, (xsp+16)
@@ -7071,7 +7071,7 @@ SeqByteBlock_ChannelContainer:
 	extz	xwa
 	ld	xbc, (xsp+8)
 	ld	xbc, (xbc+32)
-	call	16714332
+	call	16714318
 	lds32	xwa, 0
 	ld	a, (xsp+6)
 	sub	xhl, xwa
@@ -7152,7 +7152,7 @@ SeqByteBlock_ChannelContainer:
 	ld	bc, (xwa+40)
 	extz	xbc
 	ld	xwa, xde
-	call	16714776
+	call	16714762
 	ld	wa, (xsp+4)
 	extz	xwa
 	sub	xhl, xwa
@@ -7436,7 +7436,7 @@ SeqByteBlock_ChannelContainer:
 	push	xbc
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	sub	(xsp+18), iz
 	ld	wa, iz
@@ -7708,7 +7708,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xsp+18)
 	push	xwa
 	push	xde
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	sub	(xsp+20), iz
 	ld	xwa, (xsp+16)
@@ -7990,7 +7990,7 @@ SeqChan_TraverseAndProcess:
 	ld	bc, (xwa+40)
 	extz	xbc
 	ld	xwa, (xsp+16)
-	call	16714776
+	call	16714762
 	ld	xwa, (xsp+12)
 	ld	wa, (xwa+46)
 	extz	xwa
@@ -8097,7 +8097,7 @@ SeqChan_ReadNextFromLoop:
 	pushw	20522
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	16715597
+	call	16715583
 	ld	(xsp+30), 16
 	lda	xwa, (xsp+31)
 	push	xwa
@@ -8432,7 +8432,7 @@ SeqChan_ByteBlockC:
 	pushw	228
 	pushw	20536
 	push	xiz
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	lds	hl, 0
 	jr	31
@@ -8621,7 +8621,7 @@ SeqChan_ByteBlockE:
 	ld	bc, (xwa+50)
 	extz	xbc
 	ld	xwa, xhl
-	call	16714776
+	call	16714762
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	.byte 0x98
@@ -8752,7 +8752,7 @@ SeqChan_ByteBlockF:
 	ld	bc, (xwa+50)
 	extz	xbc
 	ld	xwa, xhl
-	call	16714776
+	call	16714762
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	.byte 0x98

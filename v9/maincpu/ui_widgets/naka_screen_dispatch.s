@@ -1302,7 +1302,7 @@ StrTimeSig_1_2:
 	.byte 0xa4, 0x00, 0x55
 	.byte 0x00			; padding
 	jr	f, 0
-	jrl	nz, 16744960
+	jrl	nz, 16744946
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	.byte 0x00			; padding

@@ -4015,7 +4015,7 @@ VocalistGrid_DispatchData:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	jr	20
 	inc	1, wa
@@ -4024,7 +4024,7 @@ VocalistGrid_DispatchData:
 	pushw	61176
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -4037,7 +4037,7 @@ VocalistGrid_DispatchData:
 	pushw	61188
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -4051,7 +4051,7 @@ VocalistGrid_DispatchData:
 	pushw	61200
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -4069,7 +4069,7 @@ VocalistGrid_DispatchData:
 	pushw	61212
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -4096,7 +4096,7 @@ VocalistGrid_DispatchData:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -4114,7 +4114,7 @@ VocalistGrid_DispatchData:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	jr	18
 	pushw	wa
@@ -4122,7 +4122,7 @@ VocalistGrid_DispatchData:
 	pushw	61296
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -4163,7 +4163,7 @@ VocalistGrid_DispatchData:
 	pushw	61308
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+20)
 	call	16401616
 	ld	xwa, xhl
@@ -4180,7 +4180,7 @@ VocalistGrid_DispatchData:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -4232,7 +4232,7 @@ VocalistGrid_CheckDispData:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	jr	29
 	ld	xwa, 11520
@@ -4243,7 +4243,7 @@ VocalistGrid_CheckDispData:
 	pushw	61352
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -4258,7 +4258,7 @@ VocalistGrid_CheckDispData:
 	pushw	61364
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -4273,7 +4273,7 @@ VocalistGrid_CheckDispData:
 	pushw	61376
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -4292,7 +4292,7 @@ VocalistGrid_CheckDispData:
 	pushw	61388
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -4320,7 +4320,7 @@ VocalistGrid_CheckDispData:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -4340,7 +4340,7 @@ VocalistGrid_CheckDispData:
 	.long MidiPart_AfterStr
 	push	xwa
 	push	xbc
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	jr	27
 	ld	xwa, 11530
@@ -4350,7 +4350,7 @@ VocalistGrid_CheckDispData:
 	pushw	61472
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -4391,7 +4391,7 @@ VocalistGrid_CheckDispData:
 	pushw	61484
 	lda	xwa, (xsp+36)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+20)
 	call	16401616
 	ld	xwa, xhl
@@ -4432,7 +4432,7 @@ VocalistGrid_CheckDispData:
 	pushw	61492
 	lda	xwa, (xsp+36)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+20)
 	call	16401616
 	ld	xwa, xhl
@@ -4457,7 +4457,7 @@ VocalistGrid_CheckDispData:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl

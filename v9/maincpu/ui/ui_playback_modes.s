@@ -2139,7 +2139,7 @@ NameGetFuncCall_Dispatch:
 	pushw	62080
 	pushw	0
 	pushw	6888
-	call	16714995
+	call	16714981
 	ldada	xwa, 6888
 	ld	(xwa+16), 0
 	push	xwa
@@ -2151,7 +2151,7 @@ NameGetFuncCall_Dispatch:
 	pushw	242
 	pushw	0
 	pushw	7248
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+24)
 	ld	xwa, 4294967295
 	ld	xbc, 29818880
@@ -2168,7 +2168,7 @@ NameGetFuncCall_Dispatch:
 	pushw	252
 	pushw	0
 	pushw	7270
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+14)
 	stdi8	7283, 0
 	ld	xwa, 4294967295
@@ -2186,7 +2186,7 @@ NameGetFuncCall_Dispatch:
 	pushw	264
 	pushw	0
 	pushw	7284
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+14)
 	ldada	xwa, 7284
 	ld	(xwa+16), 0
@@ -2202,7 +2202,7 @@ NameGetFuncCall_Dispatch:
 	push	xhl
 	pushw	0
 	pushw	7304
-	call	16714995
+	call	16714981
 	lda	xsp, (xsp+10)
 	ldada	xwa, 7304
 	ld	(xwa+20), 0
@@ -2229,7 +2229,7 @@ NameGetFuncCall_Dispatch:
 	pushw	272
 	pushw	0
 	pushw	7362
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	stdi8	7365, 0
 	ld	xwa, 4294967295
@@ -2243,7 +2243,7 @@ NameGetFuncCall_Dispatch:
 	push	xhl
 	pushw	0
 	pushw	7326
-	call	16714995
+	call	16714981
 	lda	xsp, (xsp+10)
 	ldada	xwa, 7326
 	ld	(xwa+12), 0
@@ -2270,7 +2270,7 @@ NameGetFuncCall_Dispatch:
 	pushw	280
 	pushw	0
 	pushw	7366
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	stdi8	7369, 0
 	ld	xwa, 4294967295
@@ -2283,7 +2283,7 @@ NameGetFuncCall_Dispatch:
 	push	xhl
 	pushw	0
 	pushw	7340
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ldada	xwa, 7340
 	ld	(xwa+20), 0
@@ -2309,13 +2309,13 @@ NameGetFuncCall_Dispatch:
 	push	xhl
 	pushw	0
 	pushw	7370
-	call	16715597
+	call	16715583
 	pushw	20
 	pushw	0
 	pushw	7370
 	pushw	2
 	pushw	4174
-	call	16714995
+	call	16714981
 	lda	xsp, (xsp+18)
 	lda_24	xwa, 135246
 	ld	(xwa+20), 0
@@ -2341,11 +2341,11 @@ NameGetFuncCall_Dispatch:
 	push	xhl
 	pushw	0
 	pushw	7370
-	call	16715597
+	call	16715583
 	pushw	59
 	pushw	0
 	pushw	7370
-	call	16715373
+	call	16715359
 	lda	xsp, (xsp+14)
 	lda_24	xwa, 135268
 	or	xhl, xhl
@@ -2354,7 +2354,7 @@ NameGetFuncCall_Dispatch:
 	pushw	28
 	push	xhl
 	push	xwa
-	call	16714995
+	call	16714981
 	lda	xsp, (xsp+10)
 	sti8_24	135296, 0
 	jr	3

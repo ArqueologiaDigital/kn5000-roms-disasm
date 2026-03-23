@@ -2187,7 +2187,7 @@ IvNamingExit_ScreenData:
 	push	xwa
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xbc, (xsp+10)
 	ld	xix, (xbc+42)
@@ -3593,7 +3593,7 @@ MuteChSel_Dispatch:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	20
@@ -3636,7 +3636,7 @@ SqTrAsPsSong_Dispatch:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	19
@@ -3731,7 +3731,7 @@ MuteChSet_Dispatch:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	54
@@ -4081,7 +4081,7 @@ DemoMedDsp_Dispatch:
 	.long MedleyDisp_Blank
 	push	xwa
 	push	xbc
-	call	16714354
+	call	16714340
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	31
@@ -4129,7 +4129,7 @@ DPPlayDsp_Dispatch:
 	.long PlayModeStr_Play
 	push	xwa
 	push	xbc
-	call	16714354
+	call	16714340
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	31
@@ -4177,7 +4177,7 @@ DPPauseDsp_Dispatch:
 	.long PlayModeStr_Pause
 	push	xwa
 	push	xbc
-	call	16714354
+	call	16714340
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	31
@@ -5966,7 +5966,7 @@ NoteEditBox_EventDispatch2:
 	pushw	17932
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
@@ -6022,7 +6022,7 @@ NoteEditBox_EventDispatch2:
 	pushw	17936
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
@@ -6119,7 +6119,7 @@ NoteEditBox_EventDispatch2:
 	push	xwa
 	lda	xwa, (xsp+42)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+8)
 	.byte 0xbf
@@ -6142,7 +6142,7 @@ NoteEditBox_EventDispatch2:
 	pushw	17948
 	lda	xwa, (xsp+42)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+10)
 	lda	xwa, (xsp+28)
@@ -6234,7 +6234,7 @@ NoteEditBox_EventDispatch2:
 	ld	xwa, 14894628
 	push	xwa
 	push	xde
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+8)
 	.byte 0xbf
@@ -6253,7 +6253,7 @@ NoteEditBox_EventDispatch2:
 	nop
 	pushw	17960
 	push	xde
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+10)
 	lda	xwa, (xsp+28)
@@ -7761,7 +7761,7 @@ SndParam_Dispatch:
 	pushw	227
 	pushw	18302
 	push	xbc
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -7777,7 +7777,7 @@ SndParam_Dispatch:
 	ld	xwa, 14894984
 	push	xwa
 	push	xbc
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -13550,7 +13550,7 @@ SqplyFunc_ParamFormatData:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	jrl	356
 	pushw	wa
@@ -13610,7 +13610,7 @@ SqplyFunc_ParamFormatData:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	jrl	201
 	ld	xwa, (xsp+4)
@@ -14203,7 +14203,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xbc)
 	inc	1, xwa
 	push	xwa
-	call	16714995
+	call	16714981
 	lda	xsp, (xsp+10)
 	ldda8	a, 9750
 	extz	wa
@@ -14226,7 +14226,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xbc)
 	inc	1, xwa
 	push	xwa
-	call	16714995
+	call	16714981
 	lda	xsp, (xsp+10)
 	ldda8	a, 9816
 	extz	wa

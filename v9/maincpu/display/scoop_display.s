@@ -19374,7 +19374,7 @@ Scoop_EnvProcessor_Data:
 	pushw	52426
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	46
 	ld	a, e
@@ -19383,7 +19383,7 @@ Scoop_EnvProcessor_Data:
 	pushw	52430
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	22
 	ld	a, e
@@ -19392,7 +19392,7 @@ Scoop_EnvProcessor_Data:
 	pushw 52434
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 63
@@ -19474,7 +19474,7 @@ Scoop_EnvProcessor_Data:
 	pushw	52446
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jrl	130
 	ld	a, e
@@ -19484,7 +19484,7 @@ Scoop_EnvProcessor_Data:
 	pushw	52450
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	106
 	ld	a, e
@@ -19494,7 +19494,7 @@ Scoop_EnvProcessor_Data:
 	pushw	52454
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	16714354
+	call	16714340
 	.byte 0xbf, 0x0a
 	.asciz "7hR%"
 	ld	wa, hl
@@ -19509,7 +19509,7 @@ Scoop_EnvProcessor_Data:
 	pushw 52458
 	lda	xwa, (xsp+10)
 	push xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	t, 46
 	ld	a, e
@@ -19519,7 +19519,7 @@ Scoop_EnvProcessor_Data:
 	pushw 52462
 	lda	xwa, (xsp+10)
 	push xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	t, 22
 	ld	a, e
@@ -19529,7 +19529,7 @@ Scoop_EnvProcessor_Data:
 	pushw 52466
 	lda	xwa, (xsp+10)
 	push xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 63
@@ -19706,7 +19706,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52498
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	46
 	ld	a, e
@@ -19716,7 +19716,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52502
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	22
 	ld	a, e
@@ -19726,7 +19726,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52506
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -19821,7 +19821,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52518
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jrl	130
 	ld	a, e
@@ -19831,7 +19831,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52522
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	106
 	ld	a, e
@@ -19841,7 +19841,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52526
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	16714354
+	call	16714340
 	.byte 0xbf, 0x0a
 	.asciz "7hR%"
 	ld	a, c
@@ -19856,7 +19856,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52530
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	46
 	ld	a, e
@@ -19866,7 +19866,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52534
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	22
 	ld	a, e
@@ -19876,7 +19876,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52538
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -19941,7 +19941,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52550
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	40
 	.byte 0x91, 0x04
@@ -19949,7 +19949,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52554
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	19
 	.byte 0x91
@@ -19957,7 +19957,7 @@ Scoop_EventLoop_36Entry_Data:
 	pushw	52558
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15

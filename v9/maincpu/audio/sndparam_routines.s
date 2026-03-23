@@ -541,7 +541,7 @@ SndParam_ResolveWidgetEx_Data:
 	add	xhl, xwa
 	ld	xwa, xhl
 	ld	xbc, 2047
-	call	16714770
+	call	16714756
 	ld	ix, hl
 	jr	44
 	lds	bc, 0
@@ -760,7 +760,7 @@ SndParam_ResolveWidgetVariant2_Data:
 	add	xhl, xwa
 	ld	xwa, xhl
 	ld	xbc, 2047
-	call	16714770
+	call	16714756
 	ld	ix, hl
 	jr	44
 	lds	bc, 0

@@ -5805,7 +5805,7 @@ FileData_AllocLoadAndParse:
 	dec	4, xsp
 	pushw	iz
 	pushw	32
-	call	16715392
+	call	16715378
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	ld	xwa, (xsp+2)
@@ -5845,7 +5845,7 @@ FileData_AllocLoadAndParse:
 	ldw	iz, 65434
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16714482
+	call	16714468
 	inc	4, xsp
 	ld	hl, iz
 	popw	iz
@@ -5894,7 +5894,7 @@ FileData_RawDataBlock:
 	ldada	xwa, 63872
 	ld	(xsp+6), xwa
 	pushw	1664
-	call	16715392
+	call	16715378
 	inc	2, xsp
 	ld	(xsp+10), xhl
 	ld	xwa, (xsp+10)
@@ -5911,7 +5911,7 @@ FileData_RawDataBlock:
 	jr	ge, 15
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	16714482
+	call	16714468
 	inc	4, xsp
 	ld	hl, iz
 	jrl	371
@@ -5930,7 +5930,7 @@ FileData_RawDataBlock:
 	nop
 	nop
 	nop
-	call	16714332
+	call	16714318
 	add	xhl, 52
 	.byte 0xaf, 0x06
 	or	(xhl), h
@@ -6006,7 +6006,7 @@ FileData_RawDataBlock:
 	nop
 	nop
 	nop
-	call	16714332
+	call	16714318
 	add	xhl, 754
 	.byte 0xaf, 0x06
 	or	(xhl), h
@@ -6067,7 +6067,7 @@ FileData_RawDataBlock:
 	call	16626747
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	16714482
+	call	16714468
 	inc	4, xsp
 	lds	hl, 0
 	pop	xiz
@@ -6103,7 +6103,7 @@ FileData_RawDataBlock:
 	cp	(xsp+8), wa
 	jr	c, -20
 	pushw	768
-	call	16715392
+	call	16715378
 	inc	2, xsp
 	ld	(xsp+14), xhl
 	ld	xwa, (xsp+14)
@@ -6125,7 +6125,7 @@ FileData_RawDataBlock:
 	jr	ge, 28
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16714482
+	call	16714468
 	inc	4, xsp
 	ld	hl, iz
 	jrl	412
@@ -6160,7 +6160,7 @@ FileData_RawDataBlock:
 	ret
 	.byte 0x86
 	ld	xbc, 26
-	call	16714332
+	call	16714318
 	add	xhl, 20
 	.byte 0xaf, 0x04
 	or	(xhl), h
@@ -6227,7 +6227,7 @@ FileData_RawDataBlock:
 	ret
 	.byte 0x86
 	ld	xbc, 26
-	call	16714332
+	call	16714318
 	add	xhl, 722
 	.byte 0xaf, 0x04
 	or	(xhl), h
@@ -6292,7 +6292,7 @@ FileData_RawDataBlock:
 	call	16626833
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16714482
+	call	16714468
 	inc	4, xsp
 	lds	hl, 0
 	pop	xiz
@@ -8002,7 +8002,7 @@ DataBuf_CopyBulkBitfields_Large:
 	ld	xiz, xbc
 	add	xiz, (xsp+10)
 	ld	xbc, 26
-	call	16714332
+	call	16714318
 	add	xhl, 992
 	add	xhl, (xsp+6)
 	ld	xwa, xiz
@@ -8462,7 +8462,7 @@ DataBuf_CopyBulkBitfields_Large:
 	ldada	xwa, 63872
 	ld	(xsp+6), xwa
 	pushw 1088
-	call	16715392
+	call	16715378
 	inc	2, xsp
 	ld	(xsp+10), xhl
 	ld	xwa, (xsp+10)
@@ -8479,7 +8479,7 @@ DataBuf_CopyBulkBitfields_Large:
 	jr	ge, 15
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	16714482
+	call	16714468
 	inc	4, xsp
 	ld	hl, iz
 	jrl	280
@@ -8494,7 +8494,7 @@ DataBuf_CopyBulkBitfields_Large:
 	ld	xiz, xbc
 	add	xiz, (xsp+10)
 	ld	xbc, 26
-	call	16714332
+	call	16714318
 	add	xhl, 52
 	add	xhl, (xsp+6)
 	ld	xwa, xiz
@@ -8517,7 +8517,7 @@ DataBuf_CopyBulkBitfields_Large:
 	lda_rr	xiz, xwa, de
 	ld	xwa, xbc
 	ld	xbc, 26
-	call	16714332
+	call	16714318
 	add	xhl, 52
 	add	xhl, (xsp+6)
 	ld	xwa, xiz
@@ -8564,7 +8564,7 @@ DataBuf_CopyBulkBitfields_Large:
 	call	16626747
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	16714482
+	call	16714468
 	inc	4, xsp
 	lds	hl, 0
 	pop	xiz
@@ -8582,7 +8582,7 @@ DataBuf_CopyBulkBitfields_Large:
 	cps	iz, 3
 	jr	c, -11
 	pushw 336
-	call	16715392
+	call	16715378
 	inc	2, xsp
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+8)
@@ -8599,7 +8599,7 @@ DataBuf_CopyBulkBitfields_Large:
 	jr	ge, 15
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16714482
+	call	16714468
 	inc	4, xsp
 	ld	hl, iz
 	jrl	241
@@ -8624,7 +8624,7 @@ DataBuf_CopyBulkBitfields_Large:
 	add	(xsp+12), xwa
 	ld	xwa, xbc
 	ld	xbc, 26
-	call	16714332
+	call	16714318
 	add	xhl, 20
 	add	xhl, (xsp+2)
 	ld	xwa, (xsp+12)
@@ -8673,7 +8673,7 @@ DataBuf_CopyBulkBitfields_Large:
 	call	16626833
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16714482
+	call	16714468
 	inc	4, xsp
 	lds	hl, 0
 	popw	iz
@@ -9953,32 +9953,32 @@ DataBuf_Data_FormatDispatch:
 	pushw	64596
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	16715161
+	call	16715147
 	pushw	24
 	pushw	0
 	pushw	64732
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715161
+	call	16715147
 	ldada	xwa, 63904
 	pushw	1568
 	pushw	237
 	pushw	46076
 	push	xwa
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+30)
 	pushw	4
 	lda	xwa, (xsp+26)
 	push	xwa
 	pushw	0
 	pushw	64596
-	call	16715161
+	call	16715147
 	pushw	24
 	lda	xwa, (xsp+12)
 	push	xwa
 	pushw	0
 	pushw	64732
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+48)
 	ret
 	dec	6, xsp
@@ -10004,7 +10004,7 @@ DataBuf_Data_FormatDispatch:
 	ld	xwa, (xsp+4)
 	push	xwa
 	push	xde
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	inc	1, iz
 	.byte 0x9f, 0x06, 0xf6
@@ -14568,7 +14568,7 @@ SeqChan_StepCmd_Field5to6:
 	lds	de, 5
 	call	16604730
 	call	16608397
-	call	16713580
+	call	16713566
 	ldda32	xwa, 48300
 	ldw	bc, 15
 	call	16604854

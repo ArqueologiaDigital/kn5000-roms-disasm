@@ -1257,13 +1257,13 @@ FDemoText_ByteData_DisplayRefresh:
 	pushw	64982
 	pushw	2
 	pushw	18422
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+14)
 	jr	13
 	push	xhl
 	pushw	2
 	pushw	18422
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	lda_24	xhl, 149494
 	pop	xiz
@@ -1275,7 +1275,7 @@ FDemoText_ByteData_DisplayRefresh:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	ld	xwa, 255
 	ld	(xsp+4), xwa
@@ -1305,7 +1305,7 @@ FDemoText_ByteData_DisplayRefresh:
 	push	xhl
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715573
+	call	16715559
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 14
@@ -1715,10 +1715,10 @@ FDemoText_ByteData_TextRenderer:
 	.byte 0xaf
 	ldwio	128, 8352
 	push	xwa
-	call	16715680
+	call	16715666
 	inc	1, hl
 	pushw	hl
-	call	16715392
+	call	16715378
 	ld	(xsp+8), xhl
 	ld	wa, iz
 	exts	xwa
@@ -1728,14 +1728,14 @@ FDemoText_ByteData_TextRenderer:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16715597
+	call	16715583
 	lds	iz, 0
 	pushw	64
 	ld	xwa, (xsp+18)
 	push	xwa
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	16714995
+	call	16714981
 	lda	xsp, (xsp+24)
 	ld	xwa, (xsp+6)
 	ld	(xwa+64), 0
@@ -1758,7 +1758,7 @@ FDemoText_ByteData_TextRenderer:
 	push	xde
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	inc	1, iz
 	ld	xde, (xsp+2)
@@ -1778,10 +1778,10 @@ FDemoText_ByteData_TextRenderer:
 	ldw	wa, 44856
 	ex_ff
 	ldb	w, 56
-	call	16715597
+	call	16715583
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	16715680
+	call	16715666
 	lda	xsp, (xsp+12)
 	dec	1, hl
 	extz	xhl
@@ -1791,7 +1791,7 @@ FDemoText_ByteData_TextRenderer:
 	push	xbc
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	jr	13
 	inc	1, iz
@@ -1805,7 +1805,7 @@ FDemoText_ByteData_TextRenderer:
 	jr	nz, -113
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	16714482
+	call	16714468
 	inc	4, xsp
 	popw	iz
 	lda	xsp, (xsp+12)
@@ -1867,7 +1867,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0x98
 	nop
 	ldw	wa, 14648
-	call	16715573
+	call	16715559
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 49
@@ -1883,7 +1883,7 @@ FDemoText_ByteData_LayoutEngine:
 	cps	wa, 0
 	jr	nz, 30
 	push	xbc
-	call	16714144
+	call	16714130
 	inc	4, xsp
 	ld	(xsp+4), hl
 	jr	18
@@ -1894,7 +1894,7 @@ FDemoText_ByteData_LayoutEngine:
 	push	xbc
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	.byte 0xd7
 	swi	2
@@ -1928,17 +1928,17 @@ FDemoText_ByteData_LayoutEngine:
 	pushw	65126
 	pushw	2
 	pushw	18552
-	call	16714354
+	call	16714340
 	lda	xwa, (xsp+18)
 	push	xwa
 	pushw	2
 	pushw	18552
-	call	16715597
+	call	16715583
 	lda	xwa, (xsp+40)
 	push	xwa
 	pushw	2
 	pushw	18562
-	call	16715597
+	call	16715583
 	lda	xsp, (xsp+28)
 	.byte 0x40
 	.long Pad_AfterNakaData_ExternalBase
@@ -1966,15 +1966,15 @@ FDemoText_ByteData_LayoutEngine:
 	call	16422496
 	pushw	2
 	pushw	18552
-	call	16715680
+	call	16715666
 	inc	1, hl
 	pushw	hl
-	call	16715392
+	call	16715378
 	ld	xiz, xhl
 	pushw	2
 	pushw	18552
 	push	xiz
-	call	16715597
+	call	16715583
 	lda	xsp, (xsp+14)
 	ld	xwa, 21037056
 	ld	xbc, 31522821
@@ -2024,7 +2024,7 @@ FDemoText_ByteData_LayoutEngine:
 	lda	xbc, (xsp+72)
 	push	xbc
 	push	xwa
-	call	16715573
+	call	16715559
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 76
@@ -2036,7 +2036,7 @@ FDemoText_ByteData_LayoutEngine:
 	retd	55513
 	jr	nz, 61
 	push	xwa
-	call	16714144
+	call	16714130
 	inc	4, xsp
 	ld	iz, hl
 	jr	50
@@ -2049,7 +2049,7 @@ FDemoText_ByteData_LayoutEngine:
 	cp	c, 76
 	jr	nz, 32
 	push	xwa
-	call	16714144
+	call	16714130
 	inc	4, xsp
 	ldw	iz, 64
 	sub	iz, hl
@@ -2057,7 +2057,7 @@ FDemoText_ByteData_LayoutEngine:
 	ldw	iz, 64
 	jr	13
 	push	xwa
-	call	16714144
+	call	16714130
 	inc	4, xsp
 	ld	iz, hl
 	add	iz, 64
@@ -2225,7 +2225,7 @@ FDemoText_ByteData_LayoutEngine:
 	lda	xbc, (xsp+76)
 	push	xbc
 	push	xwa
-	call	16715573
+	call	16715559
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 70
@@ -2238,7 +2238,7 @@ FDemoText_ByteData_LayoutEngine:
 	dec	6, wa
 	.byte 0x37
 	push	xwa
-	call	16714144
+	call	16714130
 	inc	4, xsp
 	cps	hl, 0
 	jr	lt, 44
@@ -2254,7 +2254,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	f, 104
 	push_a
 	push	xwa
-	call	16714144
+	call	16714130
 	inc	4, xsp
 	cps	hl, 0
 	jr	lt, 9
@@ -2402,7 +2402,7 @@ FDemoText_ByteData_LayoutEngine:
 	lda	xwa, (xsp+202)
 	push	xwa
 	push	xbc
-	call	16715573
+	call	16715559
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 47
@@ -2426,7 +2426,7 @@ FDemoText_ByteData_LayoutEngine:
 	push	xbc
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	.byte 0xd7
 	swi	2
@@ -2507,7 +2507,7 @@ FDemoText_ByteData_LayoutEngine:
 	.byte 0x88
 	nop
 	ldw	wa, 14648
-	call	16715573
+	call	16715559
 	inc	8, xsp
 	cps	hl, 0
 	jr	nz, 19
@@ -2519,7 +2519,7 @@ FDemoText_ByteData_LayoutEngine:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	.byte 0xd7
 	swi	2

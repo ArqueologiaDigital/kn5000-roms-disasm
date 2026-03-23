@@ -187,7 +187,7 @@ MidiPkt_BuildControl:
 	push	xwa
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+10)
 	ld	c, (xsp+4)
@@ -1087,7 +1087,7 @@ MidiPkt_EnqueueExtended2_Data:
 	push	xwa
 	ld	xwa, (xiz+4)
 	push	xwa
-	call	16715161
+	call	16715147
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+8)
 	ld	xbc, (xiz)

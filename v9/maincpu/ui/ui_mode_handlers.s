@@ -6808,7 +6808,7 @@ TchSensGrid_EventDispatch:
 	pushw	237
 	pushw	3808
 	push	xbc
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -6839,7 +6839,7 @@ TchSensGrid_EventDispatch:
 	ld	xwa, 15535844
 	push	xwa
 	push	xbc
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -6866,7 +6866,7 @@ TchSensGrid_EventDispatch:
 	pushw	237
 	pushw	3820
 	push	xiz
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -6888,7 +6888,7 @@ TchSensGrid_EventDispatch:
 	pushw	237
 	pushw	3824
 	push	xiz
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -7720,7 +7720,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4590
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -7758,7 +7758,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4594
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -7792,7 +7792,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4598
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -7826,7 +7826,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4602
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -7859,7 +7859,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4606
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -7896,7 +7896,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4610
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -7928,7 +7928,7 @@ FSWAssGrid_EventDispatch:
 	pushw	4614
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -8992,7 +8992,7 @@ PmExpFilter_EventDispatch:
 	ld	xwa, 15537270
 	push	xwa
 	push	xhl
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -9032,7 +9032,7 @@ PmExpFilter_EventDispatch:
 	ld	xwa, 15537278
 	push	xwa
 	push	xhl
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -9714,7 +9714,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5458
 	push	xbc
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -9745,7 +9745,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5462
 	push	xbc
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -9778,7 +9778,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5466
 	push	xbc
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -9809,7 +9809,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5470
 	push	xbc
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -9840,7 +9840,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5474
 	push	xix
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -9868,7 +9868,7 @@ DispTimeSet_EventDispatch:
 	pushw	237
 	pushw	5478
 	push	xix
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+12)
 	call	16401616
 	ld	xwa, xhl
@@ -10607,7 +10607,7 @@ MssName_EventDispatch:
 	pushw	5526
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	jrl	129
 	dec	1, xwa
@@ -10627,13 +10627,13 @@ MssName_EventDispatch:
 	push	xhl
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16714995
+	call	16714981
 	pushw	2
 	pushw	32
 	ld	xwa, (xiz+18)
 	lda	xwa, (xwa+16)
 	push	xwa
-	call	16722153
+	call	16722139
 	lda	xsp, (xsp+18)
 	ld	xwa, 15537572
 	jr	37
@@ -10647,13 +10647,13 @@ MssName_EventDispatch:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16714995
+	call	16714981
 	lda	xsp, (xsp+10)
 	ld	xwa, 15537576
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16714013
+	call	16713999
 	inc	8, xsp
 	ld	(xhl), 0
 	ld	xhl, (xsp+4)

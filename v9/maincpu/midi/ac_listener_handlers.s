@@ -870,7 +870,7 @@ Data_FadeSetGridDispatch:
 	pushw 231
 	pushw 63902
 	push	xbc
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -884,7 +884,7 @@ Data_FadeSetGridDispatch:
 	.long Data_AcGridParamTable
 	push	xwa
 	push	xbc
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1490,7 +1490,7 @@ Data_InOutGridDispatch:
 	.byte 0xe4, 0xe0
 	ldb	w, 56
 	push	xde
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1505,7 +1505,7 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1529,7 +1529,7 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1549,7 +1549,7 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1569,7 +1569,7 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1593,14 +1593,14 @@ Data_InOutGridDispatch:
 	pushw	64766
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	16
 	pushw	231
 	pushw	64772
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1620,14 +1620,14 @@ Data_InOutGridDispatch:
 	pushw	64778
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	jr	16
 	pushw	231
 	pushw	64784
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1645,7 +1645,7 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1662,7 +1662,7 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1680,7 +1680,7 @@ Data_InOutGridDispatch:
 	or	xwa, xix
 	ldb	w, 56
 	push	xde
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1699,7 +1699,7 @@ Data_InOutGridDispatch:
 	or	xix, xix
 	ldb	w, 56
 	push	xde
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1742,7 +1742,7 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1759,7 +1759,7 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1776,7 +1776,7 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1797,7 +1797,7 @@ Data_ParaLoadOptDispatch:
 	pushw	64790
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1813,7 +1813,7 @@ Data_ParaLoadOptDispatch:
 	pushw	64796
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -1828,7 +1828,7 @@ Data_ParaLoadOptDispatch:
 	pushw	64802
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -1847,7 +1847,7 @@ Data_ParaLoadOptDispatch:
 	pushw	64808
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1862,7 +1862,7 @@ Data_ParaLoadOptDispatch:
 	pushw	64814
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -1876,7 +1876,7 @@ Data_ParaLoadOptDispatch:
 	pushw	64820
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16714354
+	call	16714340
 	lda	xsp, (xsp+10)
 	call	16401616
 	ld	xwa, xhl
@@ -1893,7 +1893,7 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1910,7 +1910,7 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1927,7 +1927,7 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
@@ -1944,7 +1944,7 @@ Data_ParaLoadOptDispatch:
 	ldb	w, 56
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16715597
+	call	16715583
 	inc	8, xsp
 	call	16401616
 	ld	xwa, xhl
