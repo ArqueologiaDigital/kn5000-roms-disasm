@@ -1,6 +1,6 @@
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
---- v9/maincpu/audio/note_voice_mapping.s	2026-03-24 02:28:24.883348846 +0000
-+++ v10/maincpu/audio/note_voice_mapping.s	2026-03-24 08:06:40.791190959 +0000
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
+--- v9/maincpu/audio/note_voice_mapping.s	2026-03-24 16:58:16.381675765 +0000
++++ v10/maincpu/audio/note_voice_mapping.s	2026-03-24 16:58:16.221674494 +0000
 @@ -26655,9 +26655,14 @@
  	ret
  
@@ -205,16 +205,16 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  	lda	xwa, (xsp+16)
  	push	xwa
  	ld	xwa, (xsp+16)
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/audio/sprintf_core.s v10/maincpu/audio/sprintf_core.s
---- v9/maincpu/audio/sprintf_core.s	2026-03-24 02:28:24.129778029 +0000
-+++ v10/maincpu/audio/sprintf_core.s	2026-03-24 02:28:24.144187892 +0000
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/sprintf_core.s v10/maincpu/audio/sprintf_core.s
+--- v9/maincpu/audio/sprintf_core.s	2026-03-24 16:58:16.397931757 +0000
++++ v10/maincpu/audio/sprintf_core.s	2026-03-24 16:58:16.237674621 +0000
 @@ -3100,4 +3100,4 @@
  Sprintf_FillToEnd:
  	.fill 41912, 1, 0xff
  Sprintf_FillToVectors:
 -	.fill 12710, 1, 0xff
 +	.fill 12696, 1, 0xff
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/boot/rom_end_structure.s v10/maincpu/boot/rom_end_structure.s
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/boot/rom_end_structure.s v10/maincpu/boot/rom_end_structure.s
 --- v9/maincpu/boot/rom_end_structure.s	2026-03-23 11:56:45.202000468 +0000
 +++ v10/maincpu/boot/rom_end_structure.s	2026-03-23 11:56:56.727439921 +0000
 @@ -5,7 +5,7 @@
@@ -235,9 +235,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  
  ; RESERVED:
  	.fill 23, 1, 0xff
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/boot/system_handlers.s v10/maincpu/boot/system_handlers.s
---- v9/maincpu/boot/system_handlers.s	2026-03-24 02:28:24.179512058 +0000
-+++ v10/maincpu/boot/system_handlers.s	2026-03-24 08:06:40.796144380 +0000
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/boot/system_handlers.s v10/maincpu/boot/system_handlers.s
+--- v9/maincpu/boot/system_handlers.s	2026-03-24 16:58:16.405675956 +0000
++++ v10/maincpu/boot/system_handlers.s	2026-03-24 16:58:16.242047793 +0000
 @@ -6182,7 +6182,7 @@
  	ld xiz, xwa
  	ld xwa, (xsp + 8)
@@ -256,9 +256,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  	and (xsp + 2), xwa
  	lds iz, 0
  
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/demo/file_demo_proc.s v10/maincpu/demo/file_demo_proc.s
---- v9/maincpu/demo/file_demo_proc.s	2026-03-24 08:30:04.504854090 +0000
-+++ v10/maincpu/demo/file_demo_proc.s	2026-03-24 08:30:04.997467607 +0000
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/demo/file_demo_proc.s v10/maincpu/demo/file_demo_proc.s
+--- v9/maincpu/demo/file_demo_proc.s	2026-03-24 16:58:16.413676020 +0000
++++ v10/maincpu/demo/file_demo_proc.s	2026-03-24 16:58:16.249943203 +0000
 @@ -37,7 +37,7 @@
  	ccf
  	.byte 0x01
@@ -268,7 +268,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  	incf
  	swi	7
  	lda	xwa, (xsp+278)
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/factory_test/test_data.s v10/maincpu/factory_test/test_data.s
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/factory_test/test_data.s v10/maincpu/factory_test/test_data.s
 --- v9/maincpu/factory_test/test_data.s	2026-03-23 13:25:36.015158199 +0000
 +++ v10/maincpu/factory_test/test_data.s	2026-03-23 13:25:34.350523116 +0000
 @@ -46,8 +46,8 @@
@@ -282,11 +282,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  	.byte 0x66, 0xbc, 0xf6, 0x00, 0x71, 0xbc, 0xf6, 0x00
  	.byte 0x82, 0xbc, 0xf6, 0x00, 0x99, 0xbc, 0xf6, 0x00
  	.byte 0xa0, 0xb4, 0xfd, 0x00, 0xa1, 0xb4, 0xfd, 0x00
-Only in v10/maincpu: kn5000_v10_program.s
-Only in v9/maincpu: kn5000_v9_program.s
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/midi/computer_interface_pcg.s v10/maincpu/midi/computer_interface_pcg.s
---- v9/maincpu/midi/computer_interface_pcg.s	2026-03-23 14:38:46.888794294 +0000
-+++ v10/maincpu/midi/computer_interface_pcg.s	2026-03-23 14:38:48.183646689 +0000
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/midi/computer_interface_pcg.s v10/maincpu/midi/computer_interface_pcg.s
+--- v9/maincpu/midi/computer_interface_pcg.s	2026-03-24 16:58:16.452841411 +0000
++++ v10/maincpu/midi/computer_interface_pcg.s	2026-03-24 16:58:16.289675034 +0000
 @@ -378,70 +378,70 @@
  	.byte 0xf2, 0x6a, 0x47, 0x02, 0x32, 0xbe, 0x0e, 0x30
  	.byte 0xa6, 0xf2, 0x6e, 0x28, 0xb1, 0x02, 0x00, 0x00
@@ -370,9 +368,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  	.byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0xbf, 0x04
  	.byte 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x39
  	push_sr
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/sequencer/seq_audio_mode.s v10/maincpu/sequencer/seq_audio_mode.s
---- v9/maincpu/sequencer/seq_audio_mode.s	2026-03-24 02:28:24.464862154 +0000
-+++ v10/maincpu/sequencer/seq_audio_mode.s	2026-03-24 02:28:24.470082263 +0000
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/seq_audio_mode.s v10/maincpu/sequencer/seq_audio_mode.s
+--- v9/maincpu/sequencer/seq_audio_mode.s	2026-03-24 16:58:16.488513723 +0000
++++ v10/maincpu/sequencer/seq_audio_mode.s	2026-03-24 16:58:16.316057809 +0000
 @@ -1374,12 +1374,12 @@
  	.byte 0xf1
  	.asciz "\\5c@"
@@ -389,9 +387,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  	.byte 0x00, 0x00, 0x0e
  
  AccentData_ComparePart1:
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/sequencer/smf_event_processor.s v10/maincpu/sequencer/smf_event_processor.s
---- v9/maincpu/sequencer/smf_event_processor.s	2026-03-24 02:28:24.959844434 +0000
-+++ v10/maincpu/sequencer/smf_event_processor.s	2026-03-24 02:28:24.968368829 +0000
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/sequencer/smf_event_processor.s v10/maincpu/sequencer/smf_event_processor.s
+--- v9/maincpu/sequencer/smf_event_processor.s	2026-03-24 16:58:16.509676783 +0000
++++ v10/maincpu/sequencer/smf_event_processor.s	2026-03-24 16:58:16.333675384 +0000
 @@ -4680,7 +4680,7 @@
  	add	(xde), xwa
  	.byte 0xeb
@@ -401,9 +399,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  	nop
  	nop
  	ld	(xix), a
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/storage/flash_floppy_handlers.s v10/maincpu/storage/flash_floppy_handlers.s
---- v9/maincpu/storage/flash_floppy_handlers.s	2026-03-24 08:30:04.588944903 +0000
-+++ v10/maincpu/storage/flash_floppy_handlers.s	2026-03-24 08:30:05.183556975 +0000
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/storage/flash_floppy_handlers.s v10/maincpu/storage/flash_floppy_handlers.s
+--- v9/maincpu/storage/flash_floppy_handlers.s	2026-03-24 16:58:16.517676847 +0000
++++ v10/maincpu/storage/flash_floppy_handlers.s	2026-03-24 16:58:16.340050488 +0000
 @@ -120,7 +120,7 @@
  FlashRead_BlockData_Field6:
  	nop
@@ -422,9 +420,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  	ldb	w, 100
  	decf
  	push_sr
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/ui/drawbar_panel_ui.s v10/maincpu/ui/drawbar_panel_ui.s
---- v9/maincpu/ui/drawbar_panel_ui.s	2026-03-24 08:30:04.660819021 +0000
-+++ v10/maincpu/ui/drawbar_panel_ui.s	2026-03-24 08:30:05.336381158 +0000
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/drawbar_panel_ui.s v10/maincpu/ui/drawbar_panel_ui.s
+--- v9/maincpu/ui/drawbar_panel_ui.s	2026-03-24 16:58:16.521676878 +0000
++++ v10/maincpu/ui/drawbar_panel_ui.s	2026-03-24 16:58:16.345675479 +0000
 @@ -1196,7 +1196,7 @@
  	.byte 0xed, 0x00, 0xe9, 0xcc, 0x07, 0x00, 0x00, 0x00
  	.byte 0xea, 0x81, 0xe9, 0xed, 0x03, 0xe9, 0x61, 0x29
@@ -651,9 +649,9 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  	.byte 0xfa, 0xeb, 0x88, 0xbf, 0x10, 0x32, 0x41, 0x8c
  	.byte 0x00, 0xe0, 0x01, 0x78, 0x34, 0x01, 0xd9, 0x61
  	.byte 0xaf, 0x0c, 0x20, 0xb0, 0x51, 0xaf, 0x0c, 0x20
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/ui/ui_control_panel.s v10/maincpu/ui/ui_control_panel.s
---- v9/maincpu/ui/ui_control_panel.s	2026-03-24 02:28:24.755347797 +0000
-+++ v10/maincpu/ui/ui_control_panel.s	2026-03-24 02:28:24.773619205 +0000
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui/ui_control_panel.s v10/maincpu/ui/ui_control_panel.s
+--- v9/maincpu/ui/ui_control_panel.s	2026-03-24 16:58:16.530929207 +0000
++++ v10/maincpu/ui/ui_control_panel.s	2026-03-24 16:58:16.352219927 +0000
 @@ -2590,7 +2590,7 @@
  	.byte 0x9e, 0x06, 0x22, 0x1d, 0x2f, 0xd3, 0xfc, 0x78
  	.byte 0x1c, 0x01, 0xea, 0x8e, 0xa6, 0x20, 0x1d, 0x37
@@ -672,7 +670,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  	.byte 0xef, 0x62, 0xbf, 0x04, 0x63, 0xaf, 0x04, 0x20
  	.byte 0xee, 0x8d, 0xe8, 0x8c, 0xd9, 0xae, 0x95, 0x11
  	.byte 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x1c, 0x00
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/ui_widgets/naka_style_bitmaps.c v10/maincpu/ui_widgets/naka_style_bitmaps.c
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui_widgets/naka_style_bitmaps.c v10/maincpu/ui_widgets/naka_style_bitmaps.c
 --- v9/maincpu/ui_widgets/naka_style_bitmaps.c	2026-03-24 08:30:04.756988615 +0000
 +++ v10/maincpu/ui_widgets/naka_style_bitmaps.c	2026-03-24 08:30:05.528952273 +0000
 @@ -13462,7 +13462,7 @@
@@ -684,7 +682,7 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.el
  
      .ptrs_4 = {
          NAKA_ADDR(VGA_Initialize),
-diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=*.o' '--exclude=*.elf' v9/maincpu/ui_widgets/widget_dispatch.s v10/maincpu/ui_widgets/widget_dispatch.s
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/ui_widgets/widget_dispatch.s v10/maincpu/ui_widgets/widget_dispatch.s
 --- v9/maincpu/ui_widgets/widget_dispatch.s	2026-03-24 02:28:24.851348584 +0000
 +++ v10/maincpu/ui_widgets/widget_dispatch.s	2026-03-24 02:28:24.863348682 +0000
 @@ -2643,7 +2643,7 @@
