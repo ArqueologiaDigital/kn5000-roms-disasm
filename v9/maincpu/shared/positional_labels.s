@@ -3248,11 +3248,11 @@
 	.set WidgetStyleDataTable_0x71C, WidgetStyleDataTable + 1820
 	.set WidgetStyleDataTable_0x728, WidgetStyleDataTable + 1832
 	.set WidgetStyleDataTable_0x734, WidgetStyleDataTable + 1844
-	.set __jrt_nop_FE9709_Data_0xC, __jrt_nop_FE9709_Data + 12
-	.set __jrt_nop_FEA344_Data_0x189, __jrt_nop_FEA344_Data + 393
-	.set __jrt_nop_FEA344_Data_0x91, __jrt_nop_FEA344_Data + 145
-	.set __jrt_nop_FEA344_Data_0xBA, __jrt_nop_FEA344_Data + 186
-	.set __jrt_nop_FEA344_Data_0xD, __jrt_nop_FEA344_Data + 13
+	.set VoiceSlot_StoreParams_Data_0xC, VoiceSlot_StoreParams_Data + 12
+	.set VoiceSlot_CheckAndApply_Data_0x189, VoiceSlot_CheckAndApply_Data + 393
+	.set VoiceSlot_CheckAndApply_Data_0x91, VoiceSlot_CheckAndApply_Data + 145
+	.set VoiceSlot_CheckAndApply_Data_0xBA, VoiceSlot_CheckAndApply_Data + 186
+	.set VoiceSlot_CheckAndApply_Data_0xD, VoiceSlot_CheckAndApply_Data + 13
 	.set __pad_F62002_0x2, __pad_F62002 + 2
 	.set __pad_F62002_0xE, __pad_F62002 + 14
 	.set __pad_F62230_0x2, __pad_F62230 + 2

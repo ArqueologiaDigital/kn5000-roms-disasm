@@ -9085,7 +9085,7 @@ FindEntry_AdvanceSlo_StoreDRAM:
 	stda16 0xcf01, xwa
 	ldada xwa, 0xceff
 	push xwa
-	call __jrt_nop_FEA344_Prologue
+	call VoiceSlot_CheckAndApply_Prologue
 	inc 4, xsp
 	call AccWrap_AutoPlayZoneTrack
 	jp ProcessControllers_R_Prologue
@@ -15172,7 +15172,7 @@ PlayMode_ClearBit6:
 
 PlayMode_UpdateAndReturn:
 	calr Voice_DispatchByTimingState
-	calr __jrt_nop_FEA344_LoadReg
+	calr VoiceSlot_CheckAndApply_LoadReg
 	anddi8_24 0xcede, 191
 	ld16_24 xhl, 0x00cf01
 	anddi16_24 0xcf01, 255
@@ -15406,7 +15406,7 @@ NullRet2_Block:
 	anddi8_24 0xcede, 249
 	sti8_24 0x00cee1, 0x00
 	sti8_24 0x00cee4, 0x00
-	calr __jrt_nop_FEA013_Block2
+	calr VoiceSlot_Epilogue_Block2
 	ret
 
 NullRet2_Data:
@@ -15439,32 +15439,32 @@ NullRet2_Block2:
 	jr EffectState_Dispatch_Block2
 
 EffectState_Dispatch:
-	calr __jrt_nop_FE9955_Block
+	calr PitchCalc_Return_Block
 	jr EffectState_Dispatch_Block2
 
 EffectState_Dispatch_Block:
-	calr __jrt_nop_FE9A0A_Block3
+	calr VoiceSlot_LoadResult_Block3
 
 EffectState_Dispatch_Block2:
-	calr __jrt_nop_FEA013_Block2
+	calr VoiceSlot_Epilogue_Block2
 	ret
 
 EffectState_Dispatch_Block3:
 	sti8_24 0x00cee5, 0x04
 	ld16_24 xde, 0x00ceff
-	calr __jrt_nop_FE9709_Block2
-	calr __jrt_nop_FE9709_LoadReg3
-	jr __jrt_nop_FE9709
-__jrt_nop_FE9709:
+	calr VoiceSlot_StoreParams_Block2
+	calr VoiceSlot_StoreParams_LoadReg3
+	jr VoiceSlot_StoreParams
+VoiceSlot_StoreParams:
 
-__jrt_nop_FE9709_Block:
+VoiceSlot_StoreParams_Block:
 	st8_24 0x00cedf, a
 	st8_24 0x00cee0, w
 	sti8_24 0x00cee1, 0x00
 	anddi8_24 0xcede, 249
 	ret
 
-__jrt_nop_FE9709_Block2:
+VoiceSlot_StoreParams_Block2:
 	sti16_24 0x00cf2f, 0x0000
 	ld xiy, 0xceff
 	ld xix, 0xcf8f
@@ -15473,40 +15473,40 @@ __jrt_nop_FE9709_Block2:
 	sla hl, 1
 	add iy, hl
 	cps de, 0
-	jr nz, __jrt_nop_FE9709_OrBits
+	jr nz, VoiceSlot_StoreParams_OrBits
 	sti8_24 0x00cee5, 0x00
-	jr __jrt_nop_FE9709_Return
+	jr VoiceSlot_StoreParams_Return
 
-__jrt_nop_FE9709_OrBits:
+VoiceSlot_StoreParams_OrBits:
 	xor wa, wa
 	ldfr_werp WA, 0x30
 	xor b, b
 	xor h, h
 
-__jrt_nop_FE9709_LoadReg:
+VoiceSlot_StoreParams_LoadReg:
 	ld l, (xiy + 5)
-	ld xiz, __jrt_nop_FEA344_Data_0xD
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ld_srib3 C, 0x03, 0xf8, 0xec
 	ldto_werp WA, 0x30
-	ld xiz, __jrt_nop_FEA344_Data2
+	ld xiz, VoiceSlot_CheckAndApply_Data2
 	and_sriw_rm WA, 0x03, 0xf8, 0xe4
-	jr nz, __jrt_nop_FE9709_Decrement
+	jr nz, VoiceSlot_StoreParams_Decrement
 	or_sriw_rm WA, 0x03, 0xf8, 0xe4
 	ldfr_werp WA, 0x30
 	ld (xix), l
 	inc 1, ix
 	inc 1, b
 	cpda8_24 b, 0xcee5
-	jr nc, __jrt_nop_FE9709_Block3
+	jr nc, VoiceSlot_StoreParams_Block3
 
-__jrt_nop_FE9709_Decrement:
+VoiceSlot_StoreParams_Decrement:
 	dec 1, iy
 	dec 1, iy
 	dec 1, de
 	cps de, 0
-	jr nz, __jrt_nop_FE9709_LoadReg
+	jr nz, VoiceSlot_StoreParams_LoadReg
 
-__jrt_nop_FE9709_Block3:
+VoiceSlot_StoreParams_Block3:
 	st8_24 0x00cee5, b
 	ld c, b
 	xor b, b
@@ -15515,50 +15515,50 @@ __jrt_nop_FE9709_Block3:
 	add iy, bc
 	dec 1, iy
 
-__jrt_nop_FE9709_LoadReg2:
+VoiceSlot_StoreParams_LoadReg2:
 	ld a, (xiy)
 	ld (xix), a
 	dec 1, iy
 	inc 1, ix
-	djnz xbc, __jrt_nop_FE9709_LoadReg2
+	djnz xbc, VoiceSlot_StoreParams_LoadReg2
 
-__jrt_nop_FE9709_Return:
+VoiceSlot_StoreParams_Return:
 	ret
 
-__jrt_nop_FE9709_LoadReg3:
+VoiceSlot_StoreParams_LoadReg3:
 	ld xiy, 0xceff
 	ld16_24 xbc, 0x00ceff
 	xor a, a
 	xor h, h
 	cps bc, 0
-	jr z, __jrt_nop_FE9709_LoadReg5
+	jr z, VoiceSlot_StoreParams_LoadReg5
 
-__jrt_nop_FE9709_LoadReg4:
+VoiceSlot_StoreParams_LoadReg4:
 	ld l, (xiy + 5)
 	cpda8_24 l, 0xcee6
-	jr z, __jrt_nop_FE9709_Increment
-	ld xiz, __jrt_nop_FEA344_Data_0xD
+	jr z, VoiceSlot_StoreParams_Increment
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ld_srib3 L, 0x07, 0xf8, 0xec
 	dec 1, hl
-	ld xiz, __jrt_nop_FE9709_Data
+	ld xiz, VoiceSlot_StoreParams_Data
 	or_srib_rm A, 0x07, 0xf8, 0xec
 
-__jrt_nop_FE9709_Increment:
+VoiceSlot_StoreParams_Increment:
 	inc 2, iy
-	djnz xbc, __jrt_nop_FE9709_LoadReg4
+	djnz xbc, VoiceSlot_StoreParams_LoadReg4
 
-__jrt_nop_FE9709_LoadReg5:
+VoiceSlot_StoreParams_LoadReg5:
 	ld l, a
-	ld xiz, __jrt_nop_FE9709_Data_0xC
+	ld xiz, VoiceSlot_StoreParams_Data_0xC
 	ld_srib3 A, 0x07, 0xf8, 0xec
 	ld8_24 l, 0x00cee6
-	ld xiz, __jrt_nop_FEA344_Data_0xD
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
 	anddi8_24 0xcede, 127
 	anddi8_24 0xcede, 239
 	ret
 
-__jrt_nop_FE9709_Data:
+VoiceSlot_StoreParams_Data:
 	.byte 0x01
 	push_sr
 	.byte 0x01
@@ -15592,7 +15592,7 @@ ComputeNoteBitPositi_Prologue:
 	ld xiz, 0xcee6
 	ld_srib3 L, 0x07, 0xf8, 0xf4
 	sub l, w
-	ld xiz, __jrt_nop_FEA344_Data_0xD
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ld_srib3 A, 0x07, 0xf8, 0xec
 	dec 1, a
 	ldb c, 0xb
@@ -15624,7 +15624,7 @@ ComputeNoteBitPositi_Data:
 	ldb	w, 206
 	and	(xsp), xiz
 	.byte 0xd6
-	ld	xiz, __jrt_nop_FEA344_Data_0xD
+	ld	xiz, VoiceSlot_CheckAndApply_Data_0xD
 	.byte 0xc3
 	reti
 	swi	0
@@ -15695,23 +15695,23 @@ Voice_DecrementCounter:
 	dec 1, c
 	cps c, 0
 	jr z, PitchCalcStep_ClearByte
-	jr __jrt_nop_FE9917
-__jrt_nop_FE9917:
+	jr PitchCalc_FindBitPosition
+PitchCalc_FindBitPosition:
 
-__jrt_nop_FE9917_Increment:
+PitchCalc_FindBitPosition_Increment:
 	inc 1, b
 	sla de, 1
 	bit 12, de
-	jr nz, __jrt_nop_FE9917_OrBits
+	jr nz, PitchCalc_FindBitPosition_OrBits
 
-__jrt_nop_FE9917_TestBit11:
+PitchCalc_FindBitPosition_TestBit11:
 	bit 11, de
-	jr z, __jrt_nop_FE9917_Increment
+	jr z, PitchCalc_FindBitPosition_Increment
 	jr ComputeNoteBitPositi_Block
 
-__jrt_nop_FE9917_OrBits:
+PitchCalc_FindBitPosition_OrBits:
 	or de, 0x1
-	jr __jrt_nop_FE9917_TestBit11
+	jr PitchCalc_FindBitPosition_TestBit11
 
 Voice_PitchCalcStep:
 	ld8_24 l, 0x00cee5
@@ -15720,59 +15720,59 @@ Voice_PitchCalcStep:
 	ld xiz, 0xcee6
 	ld_srib3 L, 0x07, 0xf8, 0xec
 	add l, b
-	ld xiz, __jrt_nop_FEA344_Data_0xD
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
-	jr __jrt_nop_FE9955_Return
+	jr PitchCalc_Return_Return
 
 PitchCalcStep_ClearByte:
 	ldb a, 0x0
 	ldb w, 0x0
-	jr __jrt_nop_FE9955
-__jrt_nop_FE9955:
+	jr PitchCalc_Return
+PitchCalc_Return:
 
-__jrt_nop_FE9955_Return:
+PitchCalc_Return_Return:
 	ret
 
-__jrt_nop_FE9955_Block:
+PitchCalc_Return_Block:
 	sti8_24 0x00cee5, 0x04
 	ld16_24 xde, 0x00ceff
-	calr __jrt_nop_FE9709_Block2
+	calr VoiceSlot_StoreParams_Block2
 	cpi8_24 0x00cee5, 0x02
-	jr ugt, __jrt_nop_FE9955_Block2
-	jr __jrt_nop_FE9955_Block3
+	jr ugt, PitchCalc_Return_Block2
+	jr PitchCalc_Return_Block3
 
-__jrt_nop_FE9955_Block2:
+PitchCalc_Return_Block2:
 	calr Voice_UpdateNoteBitmap
 	cps w, 0
-	jr nz, __jrt_nop_FE9989_Compare
+	jr nz, VoiceSlot_CompareAndUpdate_Compare
 	decdi8_24 1, 0xcee5
 	calr Voice_UpdateNoteBitmap
 	incdi8_24 1, 0xcee5
-	jr __jrt_nop_FE9989_Compare
+	jr VoiceSlot_CompareAndUpdate_Compare
 
-__jrt_nop_FE9955_Block3:
-	calr __jrt_nop_FE9A0A_Block
-	jr __jrt_nop_FE9989
-__jrt_nop_FE9989:
+PitchCalc_Return_Block3:
+	calr VoiceSlot_LoadResult_Block
+	jr VoiceSlot_CompareAndUpdate
+VoiceSlot_CompareAndUpdate:
 
-__jrt_nop_FE9989_Compare:
+VoiceSlot_CompareAndUpdate_Compare:
 	cps w, 0
-	jr nz, __jrt_nop_FE9989_TestBit24
+	jr nz, VoiceSlot_CompareAndUpdate_TestBit24
 	ld8_24 a, 0x00cee2
 	ld8_24 w, 0x00cee3
-	jr __jrt_nop_FE9989_Block2
+	jr VoiceSlot_CompareAndUpdate_Block2
 
-__jrt_nop_FE9989_TestBit24:
+VoiceSlot_CompareAndUpdate_TestBit24:
 	bitda_24 6, 0xcede
-	jr nz, __jrt_nop_FE9989_Block
+	jr nz, VoiceSlot_CompareAndUpdate_Block
 	ldfr_werp DE, 0x3e
 	ldda16 xde, 0xc596
 	and de, 0x8
 	ldto_werp DE, 0x3e
-	jr nz, __jrt_nop_FE9989_Block4
-	jr __jrt_nop_FE9989_Block3
+	jr nz, VoiceSlot_CompareAndUpdate_Block4
+	jr VoiceSlot_CompareAndUpdate_Block3
 
-__jrt_nop_FE9989_Block:
+VoiceSlot_CompareAndUpdate_Block:
 	ld8_24 l, 0x00cee5
 	xor h, h
 	dec 1, hl
@@ -15781,21 +15781,21 @@ __jrt_nop_FE9989_Block:
 	ld_srib3 E, 0x07, 0xf8, 0xec
 	sub d, e
 	cp d, 0xc
-	jr nc, __jrt_nop_FE9989_Block4
-	jr __jrt_nop_FE9989_Block3
+	jr nc, VoiceSlot_CompareAndUpdate_Block4
+	jr VoiceSlot_CompareAndUpdate_Block3
 
-__jrt_nop_FE9989_Block2:
+VoiceSlot_CompareAndUpdate_Block2:
 	calr NoteDisplay_ClearAndSetUpdate
-	jr __jrt_nop_FE9989_Return
+	jr VoiceSlot_CompareAndUpdate_Return
 
-__jrt_nop_FE9989_Block3:
+VoiceSlot_CompareAndUpdate_Block3:
 	calr NoteDisplay_InitState
-	jr __jrt_nop_FE9989_Return
+	jr VoiceSlot_CompareAndUpdate_Return
 
-__jrt_nop_FE9989_Block4:
+VoiceSlot_CompareAndUpdate_Block4:
 	calr NoteDisplay_LookupBitmap
 
-__jrt_nop_FE9989_Return:
+VoiceSlot_CompareAndUpdate_Return:
 	ret
 
 Voice_UpdateNoteBitmap:
@@ -15810,22 +15810,22 @@ Voice_UpdateNoteBitmap:
 	jr z, UpdateNoteBitmap_ClearByte
 	ordi8_24 0xcede, 16
 	anddi8_24 0xcede, 127
-	jr __jrt_nop_FE9A0A_LoadReg
+	jr VoiceSlot_LoadResult_LoadReg
 
 UpdateNoteBitmap_ClearByte:
 	ldb a, 0x0
 	ldb w, 0x0
-	jr __jrt_nop_FE9A0A
-__jrt_nop_FE9A0A:
+	jr VoiceSlot_LoadResult
+VoiceSlot_LoadResult:
 
-__jrt_nop_FE9A0A_LoadReg:
+VoiceSlot_LoadResult_LoadReg:
 	ld l, a
 	extz hl
 	pop xiz
 	pop xix
 	ret
 
-__jrt_nop_FE9A0A_Data:
+VoiceSlot_LoadResult_Data:
 	ld8_24	c, 0xcee5
 	ld	b, c
 	calr	65025
@@ -15849,26 +15849,26 @@ __jrt_nop_FE9A0A_Data:
 	jr	0
 	ret
 
-__jrt_nop_FE9A0A_Block:
+VoiceSlot_LoadResult_Block:
 	cpi8_24 0x00cee0, 0x00
-	jr z, __jrt_nop_FE9A0A_SetByte
+	jr z, VoiceSlot_LoadResult_SetByte
 	ldb a, 0x0
 	ldb w, 0x0
-	jr __jrt_nop_FE9A0A_Block2
+	jr VoiceSlot_LoadResult_Block2
 
-__jrt_nop_FE9A0A_SetByte:
+VoiceSlot_LoadResult_SetByte:
 	ldb a, 0x1
 	ld8_24 l, 0x00cee6
 	xor h, h
-	ld xiz, __jrt_nop_FEA344_Data_0xD
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
 
-__jrt_nop_FE9A0A_Block2:
+VoiceSlot_LoadResult_Block2:
 	anddi8_24 0xcede, 127
 	ordi8_24 0xcede, 16
 	ret
 
-__jrt_nop_FE9A0A_Data2:
+VoiceSlot_LoadResult_Data2:
 	ldb	a, 1
 	ld8_24	l, 0xcee5
 	xor	h, h
@@ -15894,20 +15894,20 @@ __jrt_nop_FE9A0A_Data2:
 	.byte 0x7f
 	ret
 
-__jrt_nop_FE9A0A_Block3:
+VoiceSlot_LoadResult_Block3:
 	calr Audio_NullRet2_Prologue
 	ld16_24 xwa, 0x00cf2f
 	addda8_24 a, 0xcee5
 	cps a, 2
-	jr ugt, __jrt_nop_FE9A0A_TestBit24
+	jr ugt, VoiceSlot_LoadResult_TestBit24
 	jrl Audio_NullRet2
 
-__jrt_nop_FE9A0A_TestBit24:
+VoiceSlot_LoadResult_TestBit24:
 	bitda_24 1, 0xcede
-	jr nz, __jrt_nop_FE9A0A_Block9
+	jr nz, VoiceSlot_LoadResult_Block9
 	calr Voice_LookupNoteAndComputePitch
 	cps w, 0
-	jr nz, __jrt_nop_FE9A0A_Compare
+	jr nz, VoiceSlot_LoadResult_Compare
 	ld8_24 l, 0x00cee5
 	xor h, h
 	dec 1, hl
@@ -15920,10 +15920,10 @@ __jrt_nop_FE9A0A_TestBit24:
 	ld8_24 a, 0x00cee5
 	dec 1, a
 	cps a, 2
-	jr ugt, __jrt_nop_FE9A0A_Block4
+	jr ugt, VoiceSlot_LoadResult_Block4
 	jr Audio_NullRet2
 
-__jrt_nop_FE9A0A_Block4:
+VoiceSlot_LoadResult_Block4:
 	decdi8_24 1, 0xcee5
 	calr Voice_LookupNoteAndComputePitch
 	incdi8_24 1, 0xcee5
@@ -15931,48 +15931,48 @@ __jrt_nop_FE9A0A_Block4:
 	ldto_lerp XIZ, 0x30
 	ld (xiz), c
 
-__jrt_nop_FE9A0A_Compare:
+VoiceSlot_LoadResult_Compare:
 	cps w, 0
-	jr nz, __jrt_nop_FE9A0A_Block5
+	jr nz, VoiceSlot_LoadResult_Block5
 	ld8_24 a, 0x00cee2
 	ld8_24 w, 0x00cee3
-	jr __jrt_nop_FE9A0A_Block6
+	jr VoiceSlot_LoadResult_Block6
 
-__jrt_nop_FE9A0A_Block5:
+VoiceSlot_LoadResult_Block5:
 	ldfr_werp DE, 0x3e
 	ldda16 xde, 0xc596
 	and de, 0x8
 	ldto_werp DE, 0x3e
-	jr nz, __jrt_nop_FE9A0A_Block8
-	jr __jrt_nop_FE9A0A_Block7
+	jr nz, VoiceSlot_LoadResult_Block8
+	jr VoiceSlot_LoadResult_Block7
 
-__jrt_nop_FE9A0A_Block6:
+VoiceSlot_LoadResult_Block6:
 	calr NoteDisplay_ClearAndSetUpdate
 	jr Audio_NullRet2
 
-__jrt_nop_FE9A0A_Block7:
+VoiceSlot_LoadResult_Block7:
 	calr NoteDisplay_InitState
 	jr Audio_NullRet2
 
-__jrt_nop_FE9A0A_Block8:
+VoiceSlot_LoadResult_Block8:
 	calr NoteDisplay_LookupBitmap
 	jr Audio_NullRet2
 
-__jrt_nop_FE9A0A_Block9:
+VoiceSlot_LoadResult_Block9:
 	calr NoteDisplay_AlternateLookup
 	cps a, 0
-	jr z, __jrt_nop_FE9A0A_Block10
-	calr __jrt_nop_FEA013_Block
+	jr z, VoiceSlot_LoadResult_Block10
+	calr VoiceSlot_Epilogue_Block
 	jr Audio_NullRet2
 
-__jrt_nop_FE9A0A_Block10:
+VoiceSlot_LoadResult_Block10:
 	calr Voice_LookupNoteAndComputePitch
 	cps a, 0
-	jr z, __jrt_nop_FE9A0A_Block11
+	jr z, VoiceSlot_LoadResult_Block11
 	calr NoteDisplay_LookupBitmap
 	jr Audio_NullRet2
 
-__jrt_nop_FE9A0A_Block11:
+VoiceSlot_LoadResult_Block11:
 	calr NoteDisplay_ClearAndSetUpdate
 	jr Audio_NullRet2
 
@@ -16265,7 +16265,7 @@ NoteDisplay_LookupEntry:
 	ld xiz, 0xcee6
 	ld_srib3 L, 0x07, 0xf8, 0xec
 	add l, w
-	ld xiz, __jrt_nop_FEA344_Data_0xD
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
 	dec 1, w
 	ld8_24 l, 0x00cee5
@@ -16305,7 +16305,7 @@ NoteDisplay_FoundEntry:
 	ld xiz, 0xcee6
 	ld_srib3 L, 0x07, 0xf8, 0xec
 	add l, w
-	ld xiz, __jrt_nop_FEA344_Data_0xD
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
 	jr NoteDisplay_StoreBoundsReturn
 
@@ -16347,7 +16347,7 @@ NoteDisplay_AlternateLookup:
 	ld8_24 l, 0x00cf34
 	add l, w
 	xor h, h
-	ld xiz, __jrt_nop_FEA344_Data_0xD
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
 	jr NoteDisplay_AltReturn
 
@@ -16407,7 +16407,7 @@ NoteDisplay_LookupFromCurrent:
 	ld_srib3 L, 0x07, 0xf8, 0xec
 
 NoteDisplay_LookupFromTable:
-	ld xiz, __jrt_nop_FEA344_Data_0xD
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ld_srib3 A, 0x07, 0xf8, 0xec
 	cpdm8_24 0xcee0, a
 	jr z, NoteDisplay_SameNote
@@ -16427,7 +16427,7 @@ NoteDisplay_SetUpdateFlags:
 	anddi8_24 0xcede, 254
 	anddi8_24 0xcede, 127
 	ordi8_24 0xcede, 16
-	jr __jrt_nop_FEA013_Epilogue
+	jr VoiceSlot_Epilogue_Epilogue
 
 NoteDisplay_SameNote:
 	cpdi16_24 0xcf2f, 0
@@ -16446,15 +16446,15 @@ NoteDisplay_SetOverlayFlags:
 	anddi8_24 0xcede, 254
 	anddi8_24 0xcede, 127
 	ordi8_24 0xcede, 16
-	jr __jrt_nop_FEA013
-__jrt_nop_FEA013:
+	jr VoiceSlot_Epilogue
+VoiceSlot_Epilogue:
 
-__jrt_nop_FEA013_Epilogue:
+VoiceSlot_Epilogue_Epilogue:
 	pop xiz
 	pop xix
 	ret
 
-__jrt_nop_FEA013_Block:
+VoiceSlot_Epilogue_Block:
 	st8_24 0x00cedf, a
 	st8_24 0x00cee0, w
 	sti8_24 0x00cee1, 0x00
@@ -16465,9 +16465,9 @@ __jrt_nop_FEA013_Block:
 	ordi8_24 0xcede, 16
 	ret
 
-__jrt_nop_FEA013_Block2:
+VoiceSlot_Epilogue_Block2:
 	calr Voice_InitPartAllocState
-	calr __jrt_nop_FEA1FA_TestBit24
+	calr VoiceSlot_IterateAlloc_TestBit24
 	ordi16_24 0xcf01, 0xff00
 	ld8_24 a, 0x00cedf
 	st8_24 0x00cee2, a
@@ -16493,20 +16493,20 @@ InitPartAllocState_Block:
 	jr z, InitPartAllocState_TestBit24
 	bitda_24 4, 0xcede
 	jr z, InitPartAllocState_Block2
-	calr __jrt_nop_FEA171_TestBit24
+	calr VoiceSlot_SetPitchParams_TestBit24
 	jr InitPartAllocState_TestBit24
 
 InitPartAllocState_Block2:
-	calr __jrt_nop_FEA1FA_Block2
+	calr VoiceSlot_IterateAlloc_Block2
 
 InitPartAllocState_TestBit24:
 	bitda_24 4, 0xcede
 	jr z, InitPartAllocState_Block3
-	calr __jrt_nop_FEA1FA_Block3
+	calr VoiceSlot_IterateAlloc_Block3
 	jr InitPartAllocState_Epilogue
 
 InitPartAllocState_Block3:
-	calr __jrt_nop_FEA1FA_LoadReg
+	calr VoiceSlot_IterateAlloc_LoadReg
 
 InitPartAllocState_Epilogue:
 	pop xiz
@@ -16526,10 +16526,10 @@ InitPartAllocState_TestBit242:
 	ld8_24 l, 0x00cedf
 	xor h, h
 	dec 1, hl
-	ld xiz, __jrt_nop_FEA344_Data_0x91
+	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
 	ld_srib3 A, 0x07, 0xf8, 0xec
 	st8_24 0x00cee5, a
-	ld xiz, __jrt_nop_FEA344_Data_0xBA
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xBA
 	sla hl, 2
 	ld_sriw3 BC, 0x07, 0xf8, 0xec
 	inc 2, hl
@@ -16543,7 +16543,7 @@ InitPartAllocState_TestBit242:
 	xor h, h
 	ld l, c
 	sla hl, 1
-	ld xiz, __jrt_nop_FEA344_Data_0x189
+	ld xiz, VoiceSlot_CheckAndApply_Data_0x189
 	ld_sriw3 WA, 0x07, 0xf8, 0xec
 	ld l, b
 	sla hl, 1
@@ -16577,33 +16577,33 @@ InitPartAllocState_OrBits:
 	bitda_24 1, 0xcede
 	jr z, InitPartAllocState_Block5
 	ld8_24 l, 0x00cee1
-	jr __jrt_nop_FEA171_LoadReg
+	jr VoiceSlot_SetPitchParams_LoadReg
 
 InitPartAllocState_Block5:
 	ld8_24 l, 0x00cee0
-	jr __jrt_nop_FEA171
-__jrt_nop_FEA171:
+	jr VoiceSlot_SetPitchParams
+VoiceSlot_SetPitchParams:
 
-__jrt_nop_FEA171_LoadReg:
-	ld xiz, __jrt_nop_FEA344_Data
+VoiceSlot_SetPitchParams_LoadReg:
+	ld xiz, VoiceSlot_CheckAndApply_Data
 	ld_srib3 W, 0x07, 0xf8, 0xec
 	ldb a, 0x40
 	sti16_24 0x00cf77, 0x0001
 	st16_24 0x00cf7b, xwa
 	ret
 
-__jrt_nop_FEA171_TestBit24:
+VoiceSlot_SetPitchParams_TestBit24:
 	bitda_24 1, 0xcede
-	jr z, __jrt_nop_FEA1FA_Block
+	jr z, VoiceSlot_IterateAlloc_Block
 	ld8_24 l, 0x00cedf
 	xor h, h
 	dec 1, hl
-	ld xiz, __jrt_nop_FEA344_Data_0x91
+	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
 	ld_srib3 C, 0x07, 0xf8, 0xec
 	st8_24 0x00cef1, c
 	incdi8_24 1, 0xcef1
 	xor b, b
-	ld xiy, __jrt_nop_FEA344_Data_0xBA
+	ld xiy, VoiceSlot_CheckAndApply_Data_0xBA
 	ld xix, 0xcef2
 	sla hl, 2
 	ld8_24 d, 0x00cee1
@@ -16617,69 +16617,69 @@ __jrt_nop_FEA171_TestBit24:
 	ld (xix), a
 	inc 1, ix
 
-__jrt_nop_FEA171_LoadFromStack:
+VoiceSlot_SetPitchParams_LoadFromStack:
 	ld_srib3 A, 0x07, 0xf4, 0xec
 	add a, e
 	cp a, 0x3c
-	jr c, __jrt_nop_FEA171_Compare
+	jr c, VoiceSlot_SetPitchParams_Compare
 	sub a, 0xc
 
-__jrt_nop_FEA171_Compare:
+VoiceSlot_SetPitchParams_Compare:
 	cp a, d
-	jr z, __jrt_nop_FEA171_Block
+	jr z, VoiceSlot_SetPitchParams_Block
 	ld (xix), a
 	inc 1, ix
-	jr __jrt_nop_FEA1FA_NextIter
+	jr VoiceSlot_IterateAlloc_NextIter
 
-__jrt_nop_FEA171_Block:
+VoiceSlot_SetPitchParams_Block:
 	decdi8_24 1, 0xcef1
-	jr __jrt_nop_FEA1FA
-__jrt_nop_FEA1FA:
+	jr VoiceSlot_IterateAlloc
+VoiceSlot_IterateAlloc:
 
-__jrt_nop_FEA1FA_NextIter:
+VoiceSlot_IterateAlloc_NextIter:
 	inc 1, hl
-	djnz xbc, __jrt_nop_FEA171_LoadFromStack
-	jr __jrt_nop_FEA1FA_Return
+	djnz xbc, VoiceSlot_SetPitchParams_LoadFromStack
+	jr VoiceSlot_IterateAlloc_Return
 
-__jrt_nop_FEA1FA_Block:
+VoiceSlot_IterateAlloc_Block:
 	ld8_24 l, 0x00cedf
 	xor h, h
 	dec 1, hl
-	ld xiz, __jrt_nop_FEA344_Data_0x91
+	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
 	ld_srib3 C, 0x07, 0xf8, 0xec
 	st8_24 0x00cef1, c
 	xor b, b
-	ld xiy, __jrt_nop_FEA344_Data_0xBA
+	ld xiy, VoiceSlot_CheckAndApply_Data_0xBA
 	ld xix, 0xcef2
 	sla hl, 2
 	ld8_24 e, 0x00cee0
 	dec 1, e
 	add e, 0x30
 
-__jrt_nop_FEA1FA_LoadFromStack:
+VoiceSlot_IterateAlloc_LoadFromStack:
 	ld_srib3 A, 0x07, 0xf4, 0xec
 	add a, e
 	ld (xix), a
 	inc 1, hl
 	inc 1, ix
-	djnz xbc, __jrt_nop_FEA1FA_LoadFromStack
+	djnz xbc, VoiceSlot_IterateAlloc_LoadFromStack
 
-__jrt_nop_FEA1FA_Return:
+VoiceSlot_IterateAlloc_Return:
 	ret
 
-__jrt_nop_FEA1FA_Block2:
+VoiceSlot_IterateAlloc_Block2:
 	ld8_24 l, 0x00cedf
 	xor h, h
 	dec 1, hl
-	ld xiz, __jrt_nop_FEA344_Data_0x91
+	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
 	ld_srib3 A, 0x07, 0xf8, 0xec
 	st8_24 0x00cef1, a
-	ld xiz, __jrt_nop_FEA344_Data_0xBA
+	ld xiz, VoiceSlot_CheckAndApply_Data_0xBA
 	sla hl, 2
 	ld_sriw3 BC, 0x07, 0xf8, 0xec
 	inc 2, hl
 	ld_sriw3 DE, 0x07, 0xf8, 0xec
-	ld xiz, __jrt_nop_FEA344_Data
+	ld xiz, VoiceSlot_CheckAndApply_Data
 	ld8_24 l, 0x00cee0
 	ld_srib3 L, 0x03, 0xf8, 0xec
 	add l, 0xc
@@ -16693,86 +16693,86 @@ __jrt_nop_FEA1FA_Block2:
 	st8_24 0x00cef5, d
 	ret
 
-__jrt_nop_FEA1FA_Block3:
+VoiceSlot_IterateAlloc_Block3:
 	ld16_24 xbc, 0x00ceff
 	st16_24 0x00cf5f, xbc
 	cps bc, 0
-	jr z, __jrt_nop_FEA1FA_Return2
+	jr z, VoiceSlot_IterateAlloc_Return2
 	ld xiy, 0xcf03
 	ld xix, 0xcf63
 
-__jrt_nop_FEA1FA_Block4:
+VoiceSlot_IterateAlloc_Block4:
 	ld_spiw WA, 0xf5
 	cp w, 0x6b
-	jr ugt, __jrt_nop_FEA1FA_SetByte
+	jr ugt, VoiceSlot_IterateAlloc_SetByte
 	add w, 0xc
 
-__jrt_nop_FEA1FA_SetByte:
+VoiceSlot_IterateAlloc_SetByte:
 	ldb a, 0x40
 	st_dpiw WA, 0xf1
-	djnz xbc, __jrt_nop_FEA1FA_Block4
+	djnz xbc, VoiceSlot_IterateAlloc_Block4
 
-__jrt_nop_FEA1FA_Return2:
+VoiceSlot_IterateAlloc_Return2:
 	ret
 
-__jrt_nop_FEA1FA_LoadReg:
+VoiceSlot_IterateAlloc_LoadReg:
 	ld xiy, 0xcee6
 	ld xix, 0xcf5f
 	ld8_24 c, 0x00cee5
 	xor b, b
 	ld (xix + 256), bc
 
-__jrt_nop_FEA1FA_LoadReg2:
+VoiceSlot_IterateAlloc_LoadReg2:
 	ld w, (xiy)
 	ldb a, 0x40
 	ld (xix + 4), wa
 	inc 1, iy
 	inc 1, ix
 	inc 1, ix
-	djnz xbc, __jrt_nop_FEA1FA_LoadReg2
+	djnz xbc, VoiceSlot_IterateAlloc_LoadReg2
 	ret
 
-__jrt_nop_FEA1FA_TestBit24:
+VoiceSlot_IterateAlloc_TestBit24:
 	bitda_24 0, 0xcede
-	jr nz, __jrt_nop_FEA1FA_Block6
+	jr nz, VoiceSlot_IterateAlloc_Block6
 	ld8_24 a, 0x00cedf
 	ld8_24 w, 0x00cee0
 	ld8_24 l, 0x00cee1
 	cpda8 a, 0x8d42
-	jr nz, __jrt_nop_FEA1FA_StoreDRAM
+	jr nz, VoiceSlot_IterateAlloc_StoreDRAM
 	cpda8 w, 0x8d40
-	jr nz, __jrt_nop_FEA1FA_StoreDRAM
+	jr nz, VoiceSlot_IterateAlloc_StoreDRAM
 	cpda8 l, 0x8d44
-	jr z, __jrt_nop_FEA344_Return
+	jr z, VoiceSlot_CheckAndApply_Return
 
-__jrt_nop_FEA1FA_StoreDRAM:
+VoiceSlot_IterateAlloc_StoreDRAM:
 	stda8 0x8d42, a
 	stda8 0x8d40, w
 	bitda_24 1, 0xcede
-	jr nz, __jrt_nop_FEA1FA_StoreDRAM2
+	jr nz, VoiceSlot_IterateAlloc_StoreDRAM2
 	stdi8 0x8d44, 0
-	jr __jrt_nop_FEA1FA_Block5
+	jr VoiceSlot_IterateAlloc_Block5
 
-__jrt_nop_FEA1FA_StoreDRAM2:
+VoiceSlot_IterateAlloc_StoreDRAM2:
 	stda8 0x8d44, l
 
-__jrt_nop_FEA1FA_Block5:
-	jr __jrt_nop_FEA344_DoCheckDis
+VoiceSlot_IterateAlloc_Block5:
+	jr VoiceSlot_CheckAndApply_DoCheckDis
 
-__jrt_nop_FEA1FA_Block6:
+VoiceSlot_IterateAlloc_Block6:
 	stdi8 0x8d42, 0
 	stdi8 0x8d40, 0
 	stdi8 0x8d44, 0
-	jr __jrt_nop_FEA344
-__jrt_nop_FEA344:
+	jr VoiceSlot_CheckAndApply
+VoiceSlot_CheckAndApply:
 
-__jrt_nop_FEA344_DoCheckDis:
+VoiceSlot_CheckAndApply_DoCheckDis:
 	call BitMapOut_CheckDiskAndApply
 
-__jrt_nop_FEA344_Return:
+VoiceSlot_CheckAndApply_Return:
 	ret
 
-__jrt_nop_FEA344_Data:
+VoiceSlot_CheckAndApply_Data:
 	nop
 	.ascii "$%&'()*+,!\"#"
 	.byte 0x01
@@ -17008,7 +17008,7 @@ __jrt_nop_FEA344_Data:
 	ldio	0, 16
 	nop
 
-__jrt_nop_FEA344_LoadReg:
+VoiceSlot_CheckAndApply_LoadReg:
 	ld xiy, 0xceff
 	ld xix, 0xcf17
 	ld bc, (xiy + 256)
@@ -17016,7 +17016,7 @@ __jrt_nop_FEA344_LoadReg:
 	ldirw
 	ret
 
-__jrt_nop_FEA344_Data2:
+VoiceSlot_CheckAndApply_Data2:
 	.byte 0x01
 	nop
 	push_sr
@@ -17148,7 +17148,7 @@ __jrt_nop_FEA344_Data2:
 	pop	xwa
 	ret
 
-__jrt_nop_FEA344_Prologue:
+VoiceSlot_CheckAndApply_Prologue:
 	push xiz
 	ld xiz, xsp
 	push xix
@@ -17161,31 +17161,31 @@ __jrt_nop_FEA344_Prologue:
 	add xiz, 0x4
 	lds32 xiy, 0
 
-__jrt_nop_FEA344_Compare:
+VoiceSlot_CheckAndApply_Compare:
 	cp iy, bc
-	jr ge, __jrt_nop_FEA344_Epilogue
+	jr ge, VoiceSlot_CheckAndApply_Epilogue
 	ld_sriw3 WA, 0x07, 0xf8, 0xf4
 	ld ix, iy
 
-__jrt_nop_FEA344_Increment:
+VoiceSlot_CheckAndApply_Increment:
 	inc 2, ix
 	cp ix, bc
-	jr ge, __jrt_nop_FEA344_Block
+	jr ge, VoiceSlot_CheckAndApply_Block
 	ldfr_lerp XIZ, 0x38
 	extz ix
 	add xiz, xix
 	ex_werp IZ, 0x38
 	cp_srib_mr W, 0x39, 0x01, 0x00
-	jr le, __jrt_nop_FEA344_Increment
+	jr le, VoiceSlot_CheckAndApply_Increment
 	ex_sriw WA, 0x07, 0xf8, 0xf0
-	jr __jrt_nop_FEA344_Increment
+	jr VoiceSlot_CheckAndApply_Increment
 
-__jrt_nop_FEA344_Block:
+VoiceSlot_CheckAndApply_Block:
 	st_dri3w WA, 0x07, 0xf8, 0xf4
 	inc 2, iy
-	jr __jrt_nop_FEA344_Compare
+	jr VoiceSlot_CheckAndApply_Compare
 
-__jrt_nop_FEA344_Epilogue:
+VoiceSlot_CheckAndApply_Epilogue:
 	pop xde
 	pop xix
 	pop xiz

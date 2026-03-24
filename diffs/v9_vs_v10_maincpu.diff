@@ -1,6 +1,6 @@
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
---- v9/maincpu/audio/note_voice_mapping.s	2026-03-24 18:25:54.709825703 +0000
-+++ v10/maincpu/audio/note_voice_mapping.s	2026-03-24 18:25:53.721492292 +0000
+--- v9/maincpu/audio/note_voice_mapping.s	2026-03-24 21:32:19.206273586 +0000
++++ v10/maincpu/audio/note_voice_mapping.s	2026-03-24 21:32:19.200463976 +0000
 @@ -26655,9 +26655,14 @@
  	ret
  
@@ -205,6 +205,18 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	lda	xwa, (xsp+16)
  	push	xwa
  	ld	xwa, (xsp+16)
+diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/sound_editor_ui.s v10/maincpu/audio/sound_editor_ui.s
+--- v9/maincpu/audio/sound_editor_ui.s	2026-03-24 21:50:13.563426242 +0000
++++ v10/maincpu/audio/sound_editor_ui.s	2026-03-24 18:25:53.801818257 +0000
+@@ -11845,7 +11845,7 @@
+ 	pushw	ix
+ 	pushw	ix
+ 	add	xhl, xsp
+-	ld	xiz, 0xff182c
++	ld	xiz, Sprintf_Octal_ZeroFill_0x7
+ 	swi	7
+ 	swi	7
+ 	nop
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/sprintf_core.s v10/maincpu/audio/sprintf_core.s
 --- v9/maincpu/audio/sprintf_core.s	2026-03-24 18:05:57.630187572 +0000
 +++ v10/maincpu/audio/sprintf_core.s	2026-03-24 18:05:56.935701666 +0000
