@@ -3128,4 +3128,5 @@ ROM_PaddingFF:
 	.set AudioInit_PartConfig_Loop_0x26, 0xfe0053
 	.set HdaeRom_DispatchOffsetTable, CharMap_PermutationPtrTable_B + 540
 	.set HdaeRom_AltDispatchOffsetTable, CharMap_PermutationPtrTable_B + 552
+	.set _addr24_Mem_Copy, 0xff0d8b
 	.set NakaData_RomEnd, 0xffffff

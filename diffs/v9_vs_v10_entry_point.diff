@@ -1,10 +1,12 @@
---- v9/maincpu/kn5000_v9_program.s	2026-03-23 17:10:56.933324164 +0000
-+++ v10/maincpu/kn5000_v10_program.s	2026-03-23 17:10:56.948401179 +0000
-@@ -3126,6 +3126,7 @@
+--- v9/maincpu/kn5000_v9_program.s	2026-03-24 00:57:06.146110595 +0000
++++ v10/maincpu/kn5000_v10_program.s	2026-03-24 00:57:06.131927367 +0000
+@@ -3126,7 +3126,8 @@
  	.set SeqChan_UnhandledCmd_0x03, 0xfd8264
  	.set SeqChan_UnhandledCmd_0x12, 0xfd8273
  	.set AudioInit_PartConfig_Loop_0x26, 0xfe0053
 +	.set HdaeRom_DataHandler_0x22, 0xff0270
  	.set HdaeRom_DispatchOffsetTable, CharMap_PermutationPtrTable_B + 540
  	.set HdaeRom_AltDispatchOffsetTable, CharMap_PermutationPtrTable_B + 552
+-	.set _addr24_Mem_Copy, 0xff0d8b
++	.set _addr24_Mem_Copy, 0xff0d99
  	.set NakaData_RomEnd, 0xffffff

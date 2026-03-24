@@ -3129,4 +3129,5 @@ ROM_PaddingFF:
 	.set HdaeRom_DataHandler_0x22, 0xff0270
 	.set HdaeRom_DispatchOffsetTable, CharMap_PermutationPtrTable_B + 540
 	.set HdaeRom_AltDispatchOffsetTable, CharMap_PermutationPtrTable_B + 552
+	.set _addr24_Mem_Copy, 0xff0d99
 	.set NakaData_RomEnd, 0xffffff
