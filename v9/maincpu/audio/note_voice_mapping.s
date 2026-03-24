@@ -27619,9 +27619,9 @@ HdaeRom_DataHandler:
 HdaeRom_DataHandler_0x22:
 	dec 1, hl
 	cps hl, 0
-	jrl lt, 350
+	jrl lt, HdaeRom_DataDispatch_SetWord
 	cps hl, 5
-	jrl gt, 345
+	jrl gt, HdaeRom_DataDispatch_SetWord
 	add hl, hl
 	lda_24 xix, HdaeRom_DispatchOffsetTable
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
@@ -27747,10 +27747,10 @@ HdaeRom_DataDispatch:
 	extz	wa
 	cp	(xsp+4), wa
 	jr	c, -95
-	.byte 0xdb
-HdaeRom_DataDispatch_SetWord:
-	.byte 0xa8
+	lds	hl, 0
 	jr	3
+
+HdaeRom_DataDispatch_SetWord:
 	ldw	hl, 0xff9a
 	pop	xiz
 	lda	xsp, (xsp+440)
