@@ -55,7 +55,7 @@ ToneGen_LookupByVoiceIndex:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, 2020352
+	lda_24	xwa, 0x1ED400
 	add	xwa, xbc
 	calr	317
 	ret
@@ -91,7 +91,7 @@ ToneGen_ApplyMaskLoop:
 ToneGen_DSPCfg_Initialize:
 	calr ToneGen_DSPCfg_ResetAll
 	jrl ToneGen_DSPCfg_ResetAllChannels
-	ldada xwa, 62592
+	ldada xwa, 0xF480
 	jrl DSPCfg_InitAllEntries
 
 ToneGen_InitAllChannelEntries_Skip:
@@ -221,27 +221,27 @@ DSPCfg_InitEntryLoop:
 	inc 1, iz
 	cp iz, 0x2e
 	jr c, DSPCfg_InitEntryLoop
-	ldada xbc, 64628
+	ldada xbc, 0xFC74
 	sub xbc, 0xf9a0
 	add xbc, (xsp + 2)
 	lds wa, 0
 	call DSPCfg_WriteAllSlots_Combined
-	ldada xbc, 64654
+	ldada xbc, 0xFC8E
 	sub xbc, 0xf9a0
 	add xbc, (xsp + 2)
 	lds wa, 1
 	call DSPCfg_WriteAllSlots_Combined
-	ldada xbc, 64706
+	ldada xbc, 0xFCC2
 	sub xbc, 0xf9a0
 	add xbc, (xsp + 2)
 	lds wa, 2
 	call DSPCfg_WriteAllSlots_Combined
-	ldada xbc, 64732
+	ldada xbc, 0xFCDC
 	sub xbc, 0xf9a0
 	add xbc, (xsp + 2)
 	lds wa, 3
 	call DSPCfg_WriteAllSlots_Combined
-	ldada xbc, 64680
+	ldada xbc, 0xFCA8
 	sub xbc, 0xf9a0
 	add xbc, (xsp + 2)
 	lds wa, 4
@@ -350,7 +350,7 @@ DSPCfg_InitDispatchData:
 	.byte 0xc3
 	reti
 	.byte 0xe0
-	sbc	xix, 3893275611
+	sbc	xix, 0xE80EABDB
 	.byte 0x8a
 	ld	l, (xbc+1)
 	extz	hl
@@ -420,7 +420,7 @@ DSPCfg_InitDispatchData:
 	.byte 0xf3
 	reti
 	.byte 0xe0, 0xe4
-	ldw	wa, 43228
+	ldw	wa, 0xA8DC
 	lda	xbc, (xde+3)
 	ld	(xsp+2), xbc
 	ld	c, (xbc)
@@ -465,7 +465,7 @@ DSPCfg_InitDispatchData:
 	.byte 0xf3
 	reti
 	.byte 0xe0, 0xe4
-	ldw	wa, 43229
+	ldw	wa, 0xA8DD
 	lda	xbc, (xde+3)
 	ld	(xsp+2), xbc
 	ld	c, (xbc)
@@ -506,7 +506,7 @@ DSPCfg_InitDispatchData:
 	.byte 0xf3
 	reti
 	.byte 0xe0, 0xec
-	ld	xhl, 2299440091
+	ld	xhl, 0x890EABDB
 	.byte 0x01
 	ldb	c, 217
 	ccf
@@ -517,7 +517,7 @@ DSPCfg_InitDispatchData:
 	nop
 	lds	hl, 2
 	ret
-	ldada	xwa, 62592
+	ldada	xwa, 0xF480
 	jrl	-718
 
 DSPCfg_ResetAuxEntries:
@@ -559,10 +559,10 @@ DSPCfg_SyncBitmapData:
 	push	xiz
 	ld	(xsp+18), xbc
 	ld	xiz, xwa
-	ldada	xwa, 48444
+	ldada	xwa, 0xBD3C
 	ld	(xsp+14), xwa
 	ld	(xsp+10), xwa
-	ldda16	bc, 37086
+	ldda16	bc, 0x90DE
 	jrl	136
 	ld	(xsp+6), 0
 	.byte 0xc5
@@ -600,12 +600,12 @@ DSPCfg_SyncBitmapData:
 	.byte 0xaf
 	ldwio	130, 1167
 	ldb	a, 178
-	ld	xbc, 1641646809
+	ld	xbc, 0x61D98AD9
 	extz	xde
 	.byte 0xaf
 	ldwio	130, 1679
 	ldb	a, 178
-	ld	xbc, 1641646809
+	ld	xbc, 0x61D98AD9
 	extz	xde
 	.byte 0xaf
 	ldwio	130, 8582
@@ -617,7 +617,7 @@ DSPCfg_SyncBitmapData:
 	inc	1, bc
 	extz	xwa
 	.byte 0xaf
-	ldwio	128, 17840
+	ldwio	128, 0x45B0
 	incm8	1, (xsp+6)
 	decm8	1, (xsp+8)
 	inc	1, xiz
@@ -630,13 +630,13 @@ DSPCfg_SyncBitmapData:
 	swi	0
 	ldb	a, 191
 	.byte 0x04
-	ld	xbc, 4282320015
+	ld	xbc, 0xFF3F048F
 	jrl	nz, -149
 	ld	wa, bc
 	extz	xwa
 	add	xwa, (xsp+14)
 	ld	(xwa), 255
-	stda16	37086, bc
+	stda16	0x90DE, bc
 	pop	xiz
 	lda	xsp, (xsp+18)
 	ret
@@ -646,19 +646,19 @@ DSPCfg_SyncBitmapData:
 SndParam_SyncDisplayBitmap:
 	lds32 xwa, 0
 	call SndParam_LookupReadOnly
-	stda8 36460, l
+	stda8 0x8E6C, l
 	ld xwa, 0x102
 	call SndParam_LookupReadOnly
-	stda8 36462, l
+	stda8 0x8E6E, l
 	ld xwa, 0x103
 	call SndParam_LookupReadOnly
-	stda8 36464, l
+	stda8 0x8E70, l
 	ld xwa, 0x300
 	call SndParam_LookupReadOnly
-	stda8 36466, l
+	stda8 0x8E72, l
 	ld xwa, 0x4006
 	call SndParam_LookupReadOnly
-	stda8 36468, l
+	stda8 0x8E74, l
 	pushw 0x620
 	pushw 0x0
 	pushw 0xf9a0
@@ -666,38 +666,38 @@ SndParam_SyncDisplayBitmap:
 	pushw 0xc8e4
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	ldada xbc, 63904
-	ldada xwa, 63926
+	ldada xbc, 0xF9A0
+	ldada xwa, 0xF9B6
 	sub xwa, xbc
 	lda_24 xde, 0x03c8e4
 	add xwa, xde
 	xormi8 (xwa), 0x1
-	ldada xwa, 63952
+	ldada xwa, 0xF9D0
 	sub xwa, xbc
 	add xwa, xde
 	xormi8 (xwa), 0x1
-	ldada xwa, 63978
+	ldada xwa, 0xF9EA
 	sub xwa, xbc
 	add xwa, xde
 	xormi8 (xwa), 0x1
-	ldada xwa, 64919
+	ldada xwa, 0xFD97
 	sub xwa, xbc
 	add xwa, xde
 	ormi8 (xwa), 0x7f
 	ret
 
 SoundParam_NotifyMultipleChanges:
-	ldda8 c, 36460
+	ldda8 c, 0x8E6C
 	extz bc
 	lds32 xwa, 0
 	lds de, 0
 	call SoundParam_NotifyChange
-	ldda8 c, 36462
+	ldda8 c, 0x8E6E
 	extz bc
 	ld xwa, 0x102
 	lds de, 0
 	call SoundParam_NotifyChange
-	ldda8 c, 36464
+	ldda8 c, 0x8E70
 	extz bc
 	ld xwa, 0x103
 	lds de, 0
@@ -708,8 +708,8 @@ SoundParam_NotifyMultipleChanges:
 ToneGen_DiffScanAndUpdate:
 	lda xsp, (xsp - 14)
 	pushw iz
-	ldda16 xbc, 37086
-	ldada xwa, 48444
+	ldda16 xbc, 0x90DE
+	ldada xwa, 0xBD3C
 	ld (xsp + 12), xwa
 	ld (xsp + 8), xwa
 	lds iz, 0
@@ -733,7 +733,7 @@ ToneGen_DiffScanOuter:
 
 ToneGen_DiffScanInner:
 	inc 1, iz
-	ldada xde, 64864
+	ldada xde, 0xFD60
 	ld xwa, xde
 	sub xwa, 0xf9a0
 	ld hl, iz
@@ -781,7 +781,7 @@ ToneGen_DiffRecordChange:
 	extz xwa
 	ld xix, xwa
 	add xix, (xsp + 8)
-	ldada xhl, 64864
+	ldada xhl, 0xFD60
 	ld de, iz
 	extz xde
 	add xde, xhl
@@ -811,8 +811,8 @@ ToneGen_DiffOuterNext:
 	inc 1, iz
 
 ToneGen_DiffScanCheckEnd:
-	ldada xde, 64864
-	ldada xwa, 65470
+	ldada xde, 0xFD60
+	ldada xwa, 0xFFBE
 	sub xwa, xde
 	ld hl, iz
 	extz xhl
@@ -822,7 +822,7 @@ ToneGen_DiffScanCheckEnd:
 	extz xwa
 	add xwa, (xsp + 12)
 	ld (xwa), 0xff
-	stda16 37086, xbc
+	stda16 0x90DE, xbc
 	popw iz
 	lda xsp, (xsp + 14)
 	ret
@@ -836,8 +836,8 @@ ToneGen_FileIO_SaveAndSync:
 	ldmi16 (xwa), 0xfd50
 	ldmi16 (xwa + 1), 0xfd52
 	ldmi16 (xwa + 2), 0xfd54
-	ldada xwa, 64930
-	ldada xbc, 63904
+	ldada xwa, 0xFDA2
+	ldada xbc, 0xF9A0
 	sub xwa, xbc
 	pushw wa
 	push xiz
@@ -864,13 +864,13 @@ ToneGen_FileIO_RestoreFromBackup:
 	pushw 0xf9a0
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	setda 5, 36470
+	setda 5, 0x8E76
 	calr SoundParam_NotifyMultipleChanges
 	call SwbtWr_ReinitOutputBank
 	call ToneGen_DispatchByMode
 	call CtrlPanel_RefreshIndicatorState
 	call SwbtWr_NullRet
-	resda 5, 36470
+	resda 5, 0x8E76
 	ret
 
 ToneGen_FlashVerify:
@@ -1072,32 +1072,32 @@ CtrlPanel_IndicatorJumpTable:
 ; DSP config parameter handler C
 DSPCfg_Param_CaseC:
 	ret
-	ld	xwa, 4011008
+	ld	xwa, 0x3D3400
 	push	xwa
 	lds	wa, 1
-	ld	xbc, 213220
+	ld	xbc, 0x0340E4
 	lds	de, 2
 	jr	67
-	ld	xwa, 4011024
+	ld	xwa, 0x3D3410
 	push	xwa
 	lds	wa, 1
-	ld	xbc, 213222
+	ld	xbc, 0x0340E6
 	ldw	de, 12
 	.asciz "h1@ 4="
 	push	xwa
 	lds	wa, 1
-	ld	xbc, 213234
+	ld	xbc, 0x0340F2
 	lds	de, 4
 	.asciz "h @04="
 	push	xwa
 	lds	wa, 1
-	ld	xbc, 213238
+	ld	xbc, 0x0340F6
 	lds	de, 4
 	jr	15
-	ld	xwa, 4011072
+	ld	xwa, 0x3D3440
 	push	xwa
 	lds	wa, 1
-	ld	xbc, 213242
+	ld	xbc, 0x0340FA
 	lds	de, 6
 	call	FlashWrite
 	ret
@@ -1118,32 +1118,32 @@ Audio_DispatchCommand:
 DSPCfg_Param_CaseD:
 	ret
 	pushw	2
-	ld	xwa, 4011008
+	ld	xwa, 0x3D3400
 	push	xwa
-	ld	xwa, 213220
+	ld	xwa, 0x0340E4
 	jr	30
 	pushw	12
-	ld	xwa, 4011024
+	ld	xwa, 0x3D3410
 	push	xwa
-	ld	xwa, 213222
+	ld	xwa, 0x0340E6
 	jr	14
 	pushw	4
 	.asciz "@ 4="
 	push	xwa
-	ld	xwa, 213234
+	ld	xwa, 0x0340F2
 	push	xwa
 	jr	32
 	pushw	4
-	ld	xwa, 4011056
+	ld	xwa, 0x3D3430
 	push	xwa
 	pushw	3
-	pushw	16630
+	pushw	0x40F6
 	jr	15
 	pushw	6
-	ld	xwa, 4011072
+	ld	xwa, 0x3D3440
 	push	xwa
 	pushw	3
-	pushw	16634
+	pushw	0x40FA
 	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ret
@@ -1161,8 +1161,8 @@ PanelDisplay_DispatchByMode:
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 PanelDisplay_DispatchData:
-	ld	xde, 4011008
-	lda_24	xhl, 213220
+	ld	xde, 0x3D3400
+	lda_24	xhl, 0x0340E4
 	lds	bc, 0
 	ld_spib	a, 236
 	.byte 0xc5
@@ -1172,8 +1172,8 @@ PanelDisplay_DispatchData:
 	cps	bc, 2
 	jr	c, -14
 	jr	115
-	ld	xde, 4011024
-	lda_24	xhl, 213222
+	ld	xde, 0x3D3410
+	lda_24	xhl, 0x0340E6
 	lds	bc, 0
 	ld_spib	a, 236
 	.byte 0xc5
@@ -1183,7 +1183,7 @@ PanelDisplay_DispatchData:
 	cp	bc, 12
 	jr	c, -16
 	.asciz "hUB 4="
-	lda_24	xhl, 213234
+	lda_24	xhl, 0x0340F2
 	lds	bc, 0
 	.byte 0xc5, 0xec
 	ldb	a, 197
@@ -1193,7 +1193,7 @@ PanelDisplay_DispatchData:
 	cps	bc, 4
 	jr	c, -14
 	.asciz "h9B04="
-	lda_24	xhl, 213238
+	lda_24	xhl, 0x0340F6
 	lds	bc, 0
 	ld_spib	a, 236
 	.byte 0xc5
@@ -1204,7 +1204,7 @@ PanelDisplay_DispatchData:
 	jr	c, 16777202
 	jr	t, 0x1d
 	.asciz "B@4="
-	lda_24	xhl, 213242
+	lda_24	xhl, 0x0340FA
 	lds	bc, 0
 	.byte 0xc5, 0xec
 	ldb	a, 197
@@ -1222,7 +1222,7 @@ DSPCfg_Param_Default:
 	ret
 
 Encoder_MarkInvalid:
-	stdi8 49209, 255
+	stdi8 0xC039, 255
 	ret
 
 Encoder_Stub1:
@@ -1238,8 +1238,8 @@ Encoder_AlignByte:
 	ret
 
 Encoder_ValueScanAndSync:
-	stdi8 36492, 0
-	stdi8 36494, 0
+	stdi8 0x8E8C, 0
+	stdi8 0x8E8E, 0
 	jr Encoder_SyncLoop
 
 Encoder_ScanAndSync:
@@ -1248,17 +1248,17 @@ Encoder_ScanAndSync:
 
 Encoder_SyncLoop:
 	call MidiCC_SyncForceResync
-	ldda8 a, 36492
+	ldda8 a, 0x8E8C
 	extz wa
 	muls wa, 0x3
 	ld_srib3 A, 0x07, 0xec, 0xe0
-	stda8 36496, a
+	stda8 0x8E90, a
 	cp a, 0xff
 	jr nz, Encoder_ScanAndSync
-	ldda8 a, 36494
+	ldda8 a, 0x8E8E
 	extz wa
 	sll wa, 2
-	ldada xbc, 49209
+	ldada xbc, 0xC039
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0xff
@@ -1267,32 +1267,32 @@ Encoder_SyncLoop:
 
 Encoder_ReadNextEntry:
 	call MidiCC_SyncForceResync
-	ldda8 a, 36492
+	ldda8 a, 0x8E8C
 	extz wa
 	muls wa, 0x3
 	st_dri3b E, 0x07, 0xec, 0xe0
 	ld xix, 0x8e78
 	ldi85
 	ldiw
-	incdi8 1, 36492
+	incdi8 1, 0x8E8C
 	ret
 
 Encoder_PrepareCallback:
 	push xiz
-	ldda8 c, 36496
+	ldda8 c, 0x8E90
 	extz bc
 	sla bc, 2
 	ld xwa, 0xed9c1e
-	cpdi8 36148, 20
+	cpdi8 0x8D34, 20
 	jr nz, Encoder_ResolveCallbackAddr
 	ld xwa, 0xed9c9e
 
 Encoder_ResolveCallbackAddr:
 	ld_sril3 XIZ, 0x07, 0xe0, 0xe4
-	ldada xbc, 36476
+	ldada xbc, 0x8E7C
 	ld (xbc + 4), 0xaa
 	ldmi16 (xbc + 5), 0x8e90
-	ldada xde, 36472
+	ldada xde, 0x8E78
 	ld a, (xde + 1)
 	ld (xbc + 6), a
 	ld a, (xde + 2)
@@ -1300,7 +1300,7 @@ Encoder_ResolveCallbackAddr:
 	jr FileIO_MainLoop
 
 FileIO_ProcessMaskAndShift:
-	ldada xhl, 36472
+	ldada xhl, 0x8E78
 	ld e, (xiz + 3)
 	ld d, e
 	and d, (xhl + 1)

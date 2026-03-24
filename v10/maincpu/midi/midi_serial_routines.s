@@ -30,7 +30,7 @@ MIDI_INIT_SEQUENCES:
 	calr SndParam_RegisterAllWidgets
 	calr SndParam_ClearHashTable
 	calr SndParam_ReregisterAll
-	ldada xbc, 38808
+	ldada xbc, 0x9798
 	ld xwa, xbc
 	lda xbc, (xbc + 64)
 
@@ -56,7 +56,7 @@ INTRX0_CLEAR_ERROR_STATE:
 	anddi8 1063, 189
 	setda 3, 1063
 	stdi8 1074, 0
-	incdi8 1, 47070
+	incdi8 1, 0xB7DE
 	popw wa
 	reti
 
@@ -75,14 +75,14 @@ INTTX0_HANDLER:
 	bit 3, a
 	jr z, IntTx0_DequeueAndSend
 	resda 3, 1065
-	bitda 4, 64848
+	bitda 4, 0xFD50
 	jr nz, IntTx0_SendHoldByte
 	stdi8 208, 252
 	jr IntTx0_CheckQueueEmpty
 
 IntTx0_FlagBit0Branch:
 	resda 0, 1065
-	bitda 4, 64848
+	bitda 4, 0xFD50
 	jr nz, IntTx0_SendHoldByte
 	stdi8 208, 248
 	jr IntTx0_CheckQueueEmpty
@@ -96,14 +96,14 @@ IntTx0_SendHoldByte:
 
 IntTx0_FlagBit1Branch:
 	resda 1, 1065
-	bitda 4, 64848
+	bitda 4, 0xFD50
 	jr nz, IntTx0_SendHoldByte
 	stdi8 208, 250
 	jr IntTx0_CheckQueueEmpty
 
 IntTx0_FlagBit2Branch:
 	resda 2, 1065
-	bitda 4, 64848
+	bitda 4, 0xFD50
 	jr nz, IntTx0_SendHoldByte
 	stdi8 208, 251
 	jr IntTx0_CheckQueueEmpty
@@ -161,7 +161,7 @@ INTRX0_HANDLER:
 	reti
 
 MIDI_RX_BYTE_DISPATCHER:
-	stda8 47071, a
+	stda8 0xB7DF, a
 	push xwa
 	push xbc
 	push xde
@@ -170,7 +170,7 @@ MIDI_RX_BYTE_DISPATCHER:
 	push xiy
 	push xiz
 	calr MIDI_RX_CONTEXT_RESTORE
-	ldda8 a, 47071
+	ldda8 a, 0xB7DF
 	bit 7, a
 	jr z, RxDisp_DataByteDispatch
 	cp a, 0xf7
@@ -227,13 +227,13 @@ SysMsg_Return:
 	ret
 
 SysMsg_NotActiveSense:
-	bitda 4, 64848
+	bitda 4, 0xFD50
 	jr nz, SysMsg_Return
 	cp a, 0xfd
 	jr nc, SysMsg_Return
-	bitda 6, 47074
+	bitda 6, 0xB7E2
 	jr nz, SysMsg_Return
-	cpdi8 32523, 0
+	cpdi8 0x7F0B, 0
 	jr z, SysMsg_ClockTransportDispatch
 	cp a, 0xfa
 	jr nz, SysMsg_CheckStop
@@ -243,15 +243,15 @@ SysMsg_NotActiveSense:
 SysMsg_CheckStop:
 	cp a, 0xfc
 	jr nz, SysMsg_ClockTransportDispatch
-	setda 0, 32565
+	setda 0, 0x7F35
 
 SysMsg_ClockTransportDispatch:
 	ld d, a
-	bitda 2, 64848
+	bitda 2, 0xFD50
 	jrl z, AltClk_DisabledClockPath
 	cp d, 0xf8
 	jr nz, ClkTick_PerClockCounters
-	bitda 5, 10412
+	bitda 5, 0x28AC
 	jr z, ClkTick_TempoThresholdCheck
 	incdi8 1, 1108
 
@@ -261,7 +261,7 @@ ClkTick_TempoThresholdCheck:
 	jr ugt, ClkTick_HighTempoLoad
 	cps a, 4
 	jr ugt, ClkTick_MidRangeTempoMul
-	ldda16 xwa, 47064
+	ldda16 xwa, 0xB7D8
 	jr ClkTick_WriteTimingReg
 
 ClkTick_MidRangeTempoMul:
@@ -271,7 +271,7 @@ ClkTick_MidRangeTempoMul:
 	jr ClkTick_WriteTimingReg
 
 ClkTick_HighTempoLoad:
-	ldda16 xwa, 47062
+	ldda16 xwa, 0xB7D6
 
 ClkTick_WriteTimingReg:
 	stda16 146, xwa	; LD (TREG5L), WA
@@ -289,7 +289,7 @@ ClkTick_BeatSubdivCheck:
 	jr nz, ClkTick_PerClockCounters
 	stdi8 1130, 0
 	incdi16 1, 1128
-	cpdi8 32523, 0
+	cpdi8 0x7F0B, 0
 	jr z, ClkTick_PerClockCounters
 	calr MIDI_QUEUE_TRACK_EVENT
 
@@ -335,7 +335,7 @@ ClkTick_Src2FineBeatCheck:
 	jr nz, ClkTick_Src2ErrorDelta
 	stdi8 1045, 0
 	incdi8 1, 1046
-	ldda8 a, 14235
+	ldda8 a, 0x379B
 	and a, 0x1f
 	jr z, ClkTick_Src2CoarseOverflow
 	calr MIDI_QUEUE_TRACK_EVENT
@@ -350,7 +350,7 @@ ClkTick_Src2CoarseOverflow:
 	incdi8 1, 1076
 	incdi8 1, 1077
 	ldda8 a, 1077
-	cpda8 a, 13527
+	cpda8 a, 0x34D7
 	jr ule, ClkTick_Src2ErrorDelta
 	stdi8 1077, 0
 
@@ -388,7 +388,7 @@ ClkTick_Src3ClickCheck:
 	jr nz, ClkTick_Src3LowerSyncCheck
 	resda 0, 1073
 	stdi8 1054, 1
-	cpdi16 10410, 0
+	cpdi16 0x28AA, 0
 	jr z, ClkTick_Src3LowerSyncCheck
 	ldb a, 0x85
 	calr MIDI_QUEUE_EVENT_PAIR
@@ -400,7 +400,7 @@ ClkTick_Src3LowerSyncCheck:
 	jr nz, ClkTick_Src3OverflowQueue
 	resda 3, 1073
 	stdi8 1054, 8
-	cpdi16 10410, 0
+	cpdi16 0x28AA, 0
 	jr z, ClkTick_Src3OverflowQueue
 	ldb a, 0x86
 	calr MIDI_QUEUE_EVENT_PAIR
@@ -410,12 +410,12 @@ ClkTick_Src3OverflowQueue:
 	jr nz, Transport_Return
 	stdi8 1051, 0
 	incdi16 1, 1052
-	cpdi16 10410, 0
+	cpdi16 0x28AA, 0
 	jr z, Transport_StopHandler
 	calr MIDI_QUEUE_TRACK_EVENT
 
 Transport_StopHandler:
-	bitda 2, 64850
+	bitda 2, 0xFD52
 	jr z, Transport_Return
 	cp d, 0xfc
 	jr nz, Transport_Return
@@ -424,11 +424,11 @@ Transport_StopHandler:
 	jr z, Transport_StopSrc3Snapshot
 	bitda 2, 1057
 	jr z, Transport_StopSrc1QueueEvent
-	setda 2, 13434
+	setda 2, 0x347A
 
 Transport_StopSrc1QueueEvent:
 	stdi8 1054, 16
-	cpdi16 10410, 0
+	cpdi16 0x28AA, 0
 	jr z, Transport_StopSrc3Snapshot
 	ldb a, 0x86
 	calr MIDI_QUEUE_EVENT_PAIR
@@ -448,9 +448,9 @@ Transport_Return:
 	ret
 
 Transport_NoClockSourcePath:
-	bitda 2, 64850
+	bitda 2, 0xFD52
 	jr z, Transport_StopSrc3Snapshot
-	bitda 2, 10407
+	bitda 2, 0x28A7
 	jr nz, Transport_NoClockReturn
 	cp d, 0xfa
 	jr z, StartPlay_Body
@@ -461,7 +461,7 @@ Transport_NoClockReturn:
 	ret
 
 MIDI_START_PLAYBACK_REQUEST:
-	cpdi16 61854, 0
+	cpdi16 0xF19E, 0
 	jr z, StartPlay_Return
 	push_sr
 	ei 6
@@ -473,9 +473,9 @@ StartPlay_Return:
 	ret
 
 StartPlay_Body:
-	setda 5, 10412
+	setda 5, 0x28AC
 	stdi8 1108, 0
-	cpdi16 61854, 0
+	cpdi16 0xF19E, 0
 	jr nz, ResetPlay_Return
 
 MIDI_RESET_PLAYBACK_STATE:
@@ -483,21 +483,21 @@ MIDI_RESET_PLAYBACK_STATE:
 	stda8 1047, a
 	stda16 1048, xwa
 	stdi8 1056, 1
-	bitda 1, 10407
+	bitda 1, 0x28A7
 	jr z, ResetPlay_Src3Check
 	stda8 1045, a
 	stda8 1046, a
 	stda8 1076, a
 	stda8 1077, a
 	stdi8 1054, 1
-	resda 0, 10406
-	cpdi16 10410, 0
+	resda 0, 0x28A6
+	cpdi16 0x28AA, 0
 	jr z, ResetPlay_Src3Check
 	ldb a, 0x85
 	calr MIDI_QUEUE_EVENT_PAIR
 
 ResetPlay_Src3Check:
-	bitda 0, 10407
+	bitda 0, 0x28A7
 	jr z, ResetPlay_Return
 	xor wa, wa
 	stda8 1051, a
@@ -540,12 +540,12 @@ StartTiming_ClearAndReturn:
 
 Continue_SetRunning:
 	stdi8 1056, 6
-	bitda 0, 10407
+	bitda 0, 0x28A7
 	jr z, Continue_Return
 	stdi8 1057, 6
-	bitda 1, 10407
+	bitda 1, 0x28A7
 	jr z, Continue_Return
-	bitda 0, 10406
+	bitda 0, 0x28A6
 	jr nz, Continue_ClearPositionAndSetSrc1
 	stdi8 1045, 0
 	stdi8 1046, 0
@@ -553,7 +553,7 @@ Continue_SetRunning:
 Continue_ClearPositionAndSetSrc1:
 	stdi8 1076, 0
 	stdi8 1077, 0
-	anddi8 10406, 254
+	anddi8 0x28A6, 254
 	stdi8 1054, 6
 
 Continue_Return:
@@ -566,7 +566,7 @@ AltClk_DisabledClockPath:
 	and a, 0x5
 	popw wa
 	jr z, AltClk_NoSrcFlagPath
-	bitda 2, 64850
+	bitda 2, 0xFD52
 	jr z, AltClk_Return
 	cp d, 0xfc
 	jr nz, AltClk_Return
@@ -575,11 +575,11 @@ AltClk_DisabledClockPath:
 	jr z, AltClk_StopSrc3Snapshot
 	bitda 2, 1057
 	jr z, AltClk_StopSrc1Queue
-	setda 2, 13434
+	setda 2, 0x347A
 
 AltClk_StopSrc1Queue:
 	stdi8 1054, 12
-	cpdi16 10410, 0
+	cpdi16 0x28AA, 0
 	jr z, AltClk_StopSrc3Snapshot
 	ldb a, 0x86
 	calr MIDI_QUEUE_EVENT_PAIR
@@ -599,9 +599,9 @@ AltClk_Return:
 	ret
 
 AltClk_NoSrcFlagPath:
-	bitda 2, 64850
+	bitda 2, 0xFD52
 	jr z, AltClk_NoMatchReturn
-	bitda 2, 10407
+	bitda 2, 0x28A7
 	jr nz, AltClk_NoMatchReturn
 	cp d, 0xfa
 	jr z, AltClk_StartArmTx
@@ -617,7 +617,7 @@ AltClk_StartArmTx:
 	jrl StartPlay_Body
 
 AltClk_ContinueArmTx:
-	bitda 0, 10407
+	bitda 0, 0x28A7
 	jr z, AltClk_Src3DisabledReturn
 	setda 2, 1065
 	stdi8 234, 221
@@ -657,7 +657,7 @@ QueueTrack_LinearBufWrite:
 MIDI_QUEUE_EVENT_PAIR:
 	bitda 0, 1113
 	jr nz, QueuePair_LinearBufWrite
-	cpdi16_24 124753, 2
+	cpdi16_24 0x01E751, 2
 	jr c, QueuePair_FifoFullReturn
 	push_sr
 	ei 6
@@ -728,7 +728,7 @@ MIDI_QUEUE_EVENT_TO_SEQUENCER:
 
 QueueToSeq_OverflowFlag:
 	setda 2, 1063
-	incdi8 1, 47069
+	incdi8 1, 0xB7DD
 	ret
 
 ChanDisp_QueueOverflow:
@@ -774,7 +774,7 @@ ChanDisp_NoteOnZeroReturn:
 
 ChanDisp_QueueOverflowSet:
 	setda 2, 1063
-	incdi8 1, 47069
+	incdi8 1, 0xB7DD
 	ret
 
 MIDI_SYSTEM_EXCLUSIVE_HANDLER:
@@ -850,8 +850,8 @@ MIDI_RX_CONTEXT_SAVE:
 	ret
 
 SC0Init_Entry:
-	resda 0, 47079
-	stdi8 47073, 0
+	resda 0, 0xB7E7
+	stdi8 0xB7E1, 0
 	calr SC0Init_ClearContextSlots
 	calr SC0Init_StandardBaudTable
 	calr READ_COM_SELECT_SWITCH
@@ -863,19 +863,19 @@ SC0Init_StandardBaudTable:
 	call Get_Region_Code
 	cps l, 4
 	jr z, SC0Init_AlternateBaudTable
-	stdi16 47060, 31250
-	stdi16 47062, 10416
-	stdi16 47064, 4166
-	stdi16 47066, 1000
-	stdi8 47068, 8	; BR0CR: clk=fc/4/8 = 500kHz (baudrate for MIDI ?!)
+	stdi16 0xB7D4, 0x7A12
+	stdi16 0xB7D6, 0x28B0
+	stdi16 0xB7D8, 4166
+	stdi16 0xB7DA, 1000
+	stdi8 0xB7DC, 8	; BR0CR: clk=fc/4/8 = 500kHz (baudrate for MIDI ?!)
 	jr SC0Init_BaudTableReturn
 
 SC0Init_AlternateBaudTable:
-	stdi16 47060, 23437
-	stdi16 47062, 7812
-	stdi16 47064, 3125
-	stdi16 47066, 750
-	stdi8 47068, 6	; BR0CR: clk=fc/4/6 = 666.6kHz (baudrate for MIDI ?!)
+	stdi16 0xB7D4, 0x5B8D
+	stdi16 0xB7D6, 7812
+	stdi16 0xB7D8, 3125
+	stdi16 0xB7DA, 750
+	stdi8 0xB7DC, 6	; BR0CR: clk=fc/4/6 = 666.6kHz (baudrate for MIDI ?!)
 
 SC0Init_BaudTableReturn:
 	ret
@@ -885,7 +885,7 @@ READ_COM_SELECT_SWITCH:
 	srl a, 4
 	ld xix, MidiSerial_OffsetTable
 	ld_srib3 A, 0x03, 0xf0, 0xe0
-	stda8 47072, a
+	stda8 0xB7E0, a
 	ret
 
 ; Input: Active-low "COM_SELECT"
@@ -935,7 +935,7 @@ SC0Init_EnableRegisters:
 	ei 6
 	stdi8 210, 41
 	stdi8 209, 0
-	ldda8 a, 47068
+	ldda8 a, 0xB7DC
 	stda8 211, a
 	stdi8 234, 93
 	stdi8 208, 254
@@ -957,7 +957,7 @@ MIDI_SC0_TX_DISPATCH:
 	push xix
 	push xiy
 	push xiz
-	cpdi8 47072, 0	; 000h means MIDI
+	cpdi8 0xB7E0, 0	; 000h means MIDI
 	jr nz, SC0TxDisp_NonMidiPath
 	calr MIDI_SC0_ENABLE_TX
 	jr SC0TxDisp_RestoreAndReturn

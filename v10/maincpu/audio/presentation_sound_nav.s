@@ -354,7 +354,7 @@ GetDialEnableState:
 
 SetDialFocus:
 	ld xde, xwa
-	cpdm32_24 257898, xde
+	cpdm32_24 0x03EF6A, xde
 	ret z
 	st32_24 0x03ef6a, xde
 	ld xwa, 0xffffffff
@@ -363,7 +363,7 @@ SetDialFocus:
 	ret
 
 GetDialFocus:
-	cpdi16_24 257872, 0
+	cpdi16_24 0x03EF50, 0
 	jr nz, GetDialFocus_Active
 	ld xhl, 0xffffffff
 	ret
@@ -571,7 +571,7 @@ Screen_Init_ClearStoredValue:
 Screen_Init_SetWall:
 	calr PostTitle_Function
 	cps hl, 0
-	call_24 nz, 0xf9883c
+	call_24 nz, SleepMainTask
 	ld xwa, (xsp + 12)
 	ld xbc, 0x1e000b1
 	lds32 xde, 0
@@ -586,7 +586,7 @@ Screen_Init_SetWall:
 	calr SetWallColor
 	calr PostTitle_Function
 	cps hl, 0
-	call_24 nz, 0xf9884b
+	call_24 nz, WakeUpMainTask
 	call GetTitleNow
 	ld xwa, xhl
 	ld xde, (xsp + 12)
@@ -838,18 +838,18 @@ SetWallPaper:
 	jp_dri 8, 0x07, 0xf0, 0xe0
 
 SetWallPaper_DispatchData:
-	cpdi16_24	213246, 0
+	cpdi16_24	0x0340FE, 0
 	jr	nz, 28
 
 SetWallPaper_Default:
 	lds wa, 0
 	jp ChangeWall
 SetWallPaper_CaseData:
-	cpdi16_24	213242, 0
+	cpdi16_24	0x0340FA, 0
 	jr	nz, 13
 	lds	wa, 1
 	jr	-17
-	cpdi16_24	213244, 0
+	cpdi16_24	0x0340FC, 0
 	jr	z, -13
 	lds	wa, 2
 	jr	t, 0xe2
@@ -1270,44 +1270,44 @@ DirmdTitleFunc:
 
 ; DirmdEmulator dispatch case F
 DirmdEmu_CaseF:
-	ldda8	a, 36152
-	cpda8	a, 36153
+	ldda8	a, 0x8D38
+	cpda8	a, 0x8D39
 	jr	z, 25
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
 	ldw	wa, 245
-	call	16454730
-	call	16454839
+	call	0xFB144A
+	call	0xFB14B7
 	ldw	wa, 255
-	call	16454742
-	ld	xwa, 15375216
-	call	16395937
-	jp	16262336
-	ld	xwa, 15375234
-	call	16395937
-	jp	16262337
+	call	0xFB1456
+	ld	xwa, 0xEA9B70
+	call	0xFA2EA1
+	jp	0xF824C0
+	ld	xwa, 0xEA9B82
+	call	0xFA2EA1
+	jp	0xF824C1
 	lda	xsp, (xsp-256)
 	pushw	iz
 	pushm	(xsp+264)
 	ld	iz, (xsp+264)
 	pushw	iz
 	pushw 234
-	pushw 39828
+	pushw 0x9B94
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+2)
-	call	16395937
+	call	0xFA2EA1
 	ld	wa, iz
 	ld	bc, (xsp+264)
-	call	16262338
+	call	0xF824C2
 	popw	iz
 	.byte 0xf3, 0xfd, 0x00, 0x01, 0x37
 	ret
-	ld	xwa, 15375276
-	call	16395937
-	jp	16262339
+	ld	xwa, 0xEA9BAC
+	call	0xFA2EA1
+	jp	0xF824C3
 DirmdEmulator_Entry:
 
 DirmdEmulator:
@@ -1348,43 +1348,43 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 
 ; DirmdEmulator default/fallthrough case
 DirmdEmu_DefaultCase:
-	bitda 1, 58334
+	bitda 1, 0xE3DE
 	jr z, DirmdEmu_CheckModeChange
-	ldda8 a, 58332
+	ldda8 a, 0xE3DC
 	extz wa
 	call UI_PostPartChangeEvent
 
 DirmdEmu_CheckModeChange:
-	bitda 7, 58334
+	bitda 7, 0xE3DE
 	jr z, DirmdEmu_CheckSoundCtrl
-	ldda8 a, 58332
+	ldda8 a, 0xE3DC
 	extz wa
 	call UI_PostModeChangeEvent
 
 DirmdEmu_CheckSoundCtrl:
-	bitda 6, 58334
+	bitda 6, 0xE3DE
 	jr z, DirmdEmu_CheckBit4
-	ldda8 a, 58332
+	ldda8 a, 0xE3DC
 	extz wa
 	call SoundCtrl_SendCommand
 
 DirmdEmu_CheckBit4:
-	bitda 4, 58334
-	call_24 nz, 0xf994ea
-	bitda 4, 58336
-	call_24 nz, 0xf994fa
-	bitda 3, 58338
+	bitda 4, 0xE3DE
+	call_24 nz, UI_PostRefreshEvent
+	bitda 4, 0xE3E0
+	call_24 nz, UI_PostTimerResetEvent
+	bitda 3, 0xE3E2
 	jr z, DirmdEmu_ClearAllFlags
 	lds wa, 1
 	call UI_PostEvent_0x6E
 
 DirmdEmu_ClearAllFlags:
-	stdi8 58334, 0
-	stdi8 58332, 0
-	stdi8 58336, 0
-	stdi8 58338, 0
-	stdi8 58340, 255
-	stdi8 58342, 255
+	stdi8 0xE3DE, 0
+	stdi8 0xE3DC, 0
+	stdi8 0xE3E0, 0
+	stdi8 0xE3E2, 0
+	stdi8 0xE3E4, 255
+	stdi8 0xE3E6, 255
 	lds32 xhl, 0
 	pop xiz
 	ret
@@ -1448,30 +1448,30 @@ WindowProc_EventDispatch:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
 	ld	xwa, (xwa)
-	cp	xwa, 4294967295
+	cp	xwa, 0xFFFFFFFF
 	jr	z, 14
 	ld	xwa, (xsp+24)
-	ld	xbc, 29360130
+	ld	xbc, 0x01C00002
 	lds32	xde, 0
 	call	SendEvent
 	call	GetCurrentTarget
 	ld	xiz, xhl
 	ld	xwa, xiz
-	ld	xbc, 31457355
+	ld	xbc, 0x01E0004B
 	lds32	xde, 0
 	call	SendEvent
-	cp	xhl, 4294967295
+	cp	xhl, 0xFFFFFFFF
 	jr	z, 23
 	ld	xiz, xhl
 	ld	xwa, xiz
-	ld	xbc, 31457355
+	ld	xbc, 0x01E0004B
 	lds32	xde, 0
 	call	SendEvent
-	cp	xhl, 4294967295
+	cp	xhl, 0xFFFFFFFF
 	jr	nz, -23
 	ld	xde, (xsp+24)
 	ld	xwa, xiz
-	ld	xbc, 31457353
+	ld	xbc, 0x01E00049
 	call	SendEvent
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
@@ -1479,14 +1479,14 @@ WindowProc_EventDispatch:
 	ld	xwa, (xsp+24)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
-	calr	-6333
+	calr	59203
 	ld	xwa, (xsp+16)
 	cp	xwa, 4
 	jrl	nz, 724
 	ld	xwa, (xsp+12)
 	ld	xbc, (xwa+32)
 	ld	xwa, (xbc)
-	cp	xwa, 4294967295
+	cp	xwa, 0xFFFFFFFF
 	jrl	z, 707
 	ld	xwa, (xbc)
 	ld	xbc, (xsp+20)
@@ -1496,7 +1496,7 @@ WindowProc_EventDispatch:
 	ld	xwa, (xsp+24)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
-	calr	-6389
+	calr	59147
 	ld	xwa, (xsp+24)
 	call	GetViewInstance
 	ld	(xsp+12), xhl
@@ -1512,27 +1512,27 @@ WindowProc_EventDispatch:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
 	ld	xwa, (xwa)
-	cp	xwa, 4294967295
+	cp	xwa, 0xFFFFFFFF
 	jrl	z, 620
 	ld	xde, (xsp+12)
 	ld	xbc, (xde+28)
 	ld	xwa, (xbc)
-	cp	xwa, 4294967295
+	cp	xwa, 0xFFFFFFFF
 	jr	z, 16
 	ld	xwa, (xde+32)
 	ld	xde, (xwa)
 	ld	xwa, (xbc)
-	ld	xbc, 31457353
+	ld	xbc, 0x01E00049
 	call	SendEvent
 	ld	xde, (xsp+12)
 	ld	xbc, (xde+32)
 	ld	xwa, (xbc)
-	cp	xwa, 4294967295
+	cp	xwa, 0xFFFFFFFF
 	jr	z, 16
 	ld	xwa, (xde+28)
 	ld	xde, (xwa)
 	ld	xwa, (xbc)
-	ld	xbc, 31457352
+	ld	xbc, 0x01E00048
 	call	SendEvent
 	call	GetCurrentTarget
 	cp	xhl, (xsp+24)
@@ -1543,7 +1543,7 @@ WindowProc_EventDispatch:
 	call	SetCurrentTarget
 	ld	xde, (xsp+12)
 	ld	xbc, (xde+28)
-	ld	xwa, 4294967295
+	ld	xwa, 0xFFFFFFFF
 	ld	(xbc), xwa
 	ld	xbc, (xde+32)
 	ld	(xbc), xwa
@@ -1862,7 +1862,7 @@ AcNaming_ShowNavButtons:
 AcNaming_SetVisibleAndInit:
 	call SetVisible
 	lds iz, 0
-	cpdi16_24 160982, 0
+	cpdi16_24 0x0274D6, 0
 	jr ule, WndScroll_InitBuffer
 
 ; --- UI Window Procs, Graphics & Mode Screens ---

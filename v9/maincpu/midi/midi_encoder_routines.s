@@ -39,7 +39,7 @@ CPanel_EncoderDispatch:
 	or c, e	; Combine to form 5-bit index
 	extz bc
 	sla bc, 2	; Multiply by 4 (jump table entry size)
-	lda_24 xde, 0xeda0bc
+	lda_24 xde, ENCODER_HANDLER_TABLE
 	exts xbc
 	add xbc, xde	; XBC = table entry address
 	ld xix, (xbc)	; Load handler address
@@ -58,16 +58,16 @@ Encoder_ProcessModwheel:
 	ldw hl, 0xffff	; Default return = no change
 	cpl a	; Invert input value
 	ld c, a
-	stda8 36554, c	; Store raw value
+	stda8 0x8ECA, c	; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
-	lda_24 xbc, 0xeda13c                  ; Lookup table address
+	lda_24 xbc, ENCODER_LUT_MODWHEEL                  ; Lookup table address
 	ld_srib3 A, 0x07, 0xe4, 0xe0	; Get processed value from table
-	ldda8 c, 36580	; Get current value
+	ldda8 c, 0x8EE4	; Get current value
 	res 7, c	; Clear change flag
 	cp c, a	; Compare with new value
 	ret z	; Return if unchanged
-	stda8 36580, a	; Store new value
+	stda8 0x8EE4, a	; Store new value
 	ld l, a
 	extz hl	; Return value in HL
 	ret
@@ -79,15 +79,15 @@ Encoder_ProcessModwheel_End:
 Encoder_ProcessVolume:
 	pushw iz
 	ldw iz, 0xffff	; Default return = no change
-	stda8 36556, a	; Store raw value
+	stda8 0x8ECC, a	; Store raw value
 	extz wa
-	lda_24 xbc, 0xeda1bc                  ; Lookup table address
+	lda_24 xbc, ENCODER_LUT_VOLUME                  ; Lookup table address
 	ld_srib3 A, 0x07, 0xe4, 0xe0	; Get processed value
 	calr Encoder_ClampScaleAndNormalize	; Clamp to valid range
 	ld a, l
-	cpda8 a, 36596	; Compare with current
+	cpda8 a, 0x8EF4	; Compare with current
 	jr z, Encoder_ProcessVolume_NoChange
-	stda8 36596, a	; Store new value
+	stda8 0x8EF4, a	; Store new value
 	ldfr_berp A, 0xf8
 	extz iz	; IZ = new value
 
@@ -101,7 +101,7 @@ Encoder_ProcessVolume_NoChange:
 ; Output: HL = clamped and scaled value
 Encoder_ClampScaleAndNormalize:
 	ld l, a
-	ldda8 c, 36574	; Get minimum limit
+	ldda8 c, 0x8EDE	; Get minimum limit
 	cp l, c	; Compare with limit
 	jr nc, Encoder_PerformScaling	; Skip if >= limit
 	ld l, c	; Clamp to minimum
@@ -114,10 +114,10 @@ Encoder_PerformScaling:
 	ld xwa, xhl
 	ld xbc, 0xec	; Divisor
 	call Math_DivideU32	; Division routine
-	ldda8 a, 36572	; Get mode value
+	ldda8 a, 0x8EDC	; Get mode value
 	extz wa
 	add wa, wa	; Double for word table index
-	lda_24 xbc, 0xeda2bc                  ; Index table
+	lda_24 xbc, ENCODER_LUT_BREATH_INDEX                  ; Index table
 	ld_sriw3 BC, 0x07, 0xe4, 0xe0	; Get index offset
 	extz xbc
 	ld xwa, xhl
@@ -137,18 +137,18 @@ Encoder_ClampScaleAndNormalize_End:
 Encoder_ProcessBreath:
 	ldw hl, 0xffff	; Default return = no change
 	cpl a	; Invert input
-	stda8 36564, a	; Store raw value
+	stda8 0x8ED4, a	; Store raw value
 	extz wa
-	lda_24 xbc, 0xeda2d2                  ; Lookup table
+	lda_24 xbc, ENCODER_LUT_BREATH_VALUE                  ; Lookup table
 	ld_srib3 A, 0x07, 0xe4, 0xe0	; Get processed value
-	ldda8 c, 14235	; Get system mode flags
+	ldda8 c, 0x379B	; Get system mode flags
 	and c, 0xf	; Mask relevant bits
 	jr nz, Encoder_ProcessBreath_WithModeAdjustment	; If mode active, process
-	cpdi8 32523, 0	; Check alternate condition
+	cpdi8 0x7F0B, 0	; Check alternate condition
 	jr z, Encoder_ProcessBreath_SimplePassthrough	; Simple processing if clear
 
 Encoder_ProcessBreath_WithModeAdjustment:
-	ldda8 c, 36570	; Get breath mode
+	ldda8 c, 0x8EDA	; Get breath mode
 	cps c, 0
 	ret z	; Return if disabled
 	srl a, 1	; Divide by 2
@@ -157,23 +157,23 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	dec 1, c	; Decrement mode for index
 	extz bc
 	add bc, bc	; Word index
-	lda_24 xwa, 0xeda3d2                  ; Multiplier table
+	lda_24 xwa, ENCODER_LUT_BREATH_MULT                  ; Multiplier table
 	ld_sriw3 DE, 0x07, 0xe0, 0xe4	; Get multiplier
 	mul xhl, xde	; Multiply
-	lda_24 xwa, 0xeda3ea                  ; Offset table
+	lda_24 xwa, ENCODER_LUT_BREATH_OFFSET                  ; Offset table
 	ld_sriw3 WA, 0x07, 0xe0, 0xe4	; Get offset
 	sub hl, wa	; Subtract offset
 	add hl, 0x4080	; Add center offset
 	srl hl, 8	; Divide by 256
 	add hl, hl	; Double
 	ld a, l
-	stda8 36584, a	; Store result
+	stda8 0x8EE8, a	; Store result
 	jr Encoder_ProcessBreath_Return
 
 Encoder_ProcessBreath_SimplePassthrough:
-	cpdm8 36584, a	; Compare with current
+	cpdm8 0x8EE8, a	; Compare with current
 	ret z	; Return if unchanged
-	stda8 36584, a	; Store new value
+	stda8 0x8EE8, a	; Store new value
 	ld l, a
 	extz hl
 
@@ -186,16 +186,16 @@ Encoder_ProcessBreath_End:
 ; Output: HL = processed MIDI CC value, or 0xffff if unchanged
 Encoder_ProcessFoot:
 	ldw hl, 0xffff	; Default return = no change
-	stda8 36566, a	; Store raw value
+	stda8 0x8ED6, a	; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
-	lda_24 xbc, 0xeda402                  ; Lookup table
+	lda_24 xbc, ENCODER_LUT_FOOT                  ; Lookup table
 	ld_srib3 A, 0x07, 0xe4, 0xe0	; Get processed value
-	ldda8 c, 36586	; Get current value
+	ldda8 c, 0x8EEA	; Get current value
 	res 7, c	; Clear change flag
 	cp c, a	; Compare
 	ret z	; Return if unchanged
-	stda8 36586, a	; Store new value
+	stda8 0x8EEA, a	; Store new value
 	ld l, a
 	extz hl	; Return value in HL
 	ret
@@ -207,12 +207,12 @@ Encoder_ProcessFoot_End:
 Encoder_ProcessExpression:
 	cpl a	; Invert input
 	ld c, a
-	stda8 36568, c	; Store raw value
+	stda8 0x8ED8, c	; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
-	lda_24 xbc, 0xeda482                  ; Lookup table
+	lda_24 xbc, ENCODER_LUT_EXPRESSION                  ; Lookup table
 	ld_srib3 A, 0x07, 0xe4, 0xe0	; Get processed value
-	stda8 36582, a	; Store value
+	stda8 0x8EE6, a	; Store value
 	extz wa
 	ld hl, wa	; Return value in HL
 	ret
@@ -237,7 +237,7 @@ Encoder_ReturnDefaultConstant_End:
 ; Encoder_ApplySystemModeSettings - Select processing mode based on system state
 ; Reads mode value from 0xc07d and configures encoder processing accordingly
 Encoder_ApplySystemModeSettings:
-	ldda8 a, 49277	; Get mode selector
+	ldda8 a, 0xC07D	; Get mode selector
 	cps a, 6
 	jr z, Encoder_ConfigureRangeLimit	; Jump if mode 6
 	cps a, 5
@@ -245,31 +245,31 @@ Encoder_ApplySystemModeSettings:
 	cps a, 4
 	ret nz	; Return if not mode 4
 	; Mode 4: Configure breath mode
-	ldda8 a, 49279
+	ldda8 a, 0xC07F
 	and a, 0xf	; Mask low nibble
 	ret z	; Return if zero
-	ldda8 a, 49278
+	ldda8 a, 0xC07E
 	and a, 0xf	; Mask low nibble
-	stda8 36570, a	; Set breath mode
+	stda8 0x8EDA, a	; Set breath mode
 	ret
 
 Encoder_ConfigureVolumeMode:
-	ldda8 a, 49279
+	ldda8 a, 0xC07F
 	and a, 0xff	; Full byte check
 	ret z	; Return if zero
-	ldda8 a, 49278
+	ldda8 a, 0xC07E
 	and a, 0xff	; Full byte
-	stda8 36572, a	; Set volume mode
+	stda8 0x8EDC, a	; Set volume mode
 	ret
 
 Encoder_ConfigureRangeLimit:
-	ldda8 a, 49279
+	ldda8 a, 0xC07F
 	res 7, a	; Clear bit 7
 	cps a, 0
 	ret z	; Return if zero
-	ldda8 a, 49278
+	ldda8 a, 0xC07E
 	res 7, a	; Clear bit 7
-	stda8 36574, a	; Set range limit
+	stda8 0x8EDE, a	; Set range limit
 	ret
 
 ; End of MIDI encoder routines

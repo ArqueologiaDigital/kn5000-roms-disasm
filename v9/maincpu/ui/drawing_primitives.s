@@ -38,7 +38,7 @@ DrawLine:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawLine_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawLine_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 6)
@@ -403,7 +403,7 @@ DrawLine_Impl_PatternVertLoop:
 	muls wa, 0x140
 	add wa, (xix)
 	extz xwa
-	addda32_24 xwa, 197714
+	addda32_24 xwa, 0x030452
 	ld a, (xwa)
 	ld (xiz), a
 	add (xde), hl
@@ -428,7 +428,7 @@ DrawLine_Impl_PatternNonVert:
 	ld xde, (xsp + 42)
 	add bc, (xde)
 	extz xbc
-	addda32_24 xbc, 197714
+	addda32_24 xbc, 0x030452
 	push xbc
 	ld wa, (xsp + 52)
 	exts xwa
@@ -451,7 +451,7 @@ DrawLine_Impl_PatternHorzNegDir:
 	ld xwa, (xsp + 42)
 	add bc, (xwa)
 	extz xbc
-	addda32_24 xbc, 197714
+	addda32_24 xbc, 0x030452
 	push xbc
 	ld xwa, (xsp + 68)
 	ld bc, (xwa)
@@ -510,7 +510,7 @@ DrawLine_Impl_PatternSteepLoop:
 	add de, (xhl)
 	ld wa, de
 	extz xwa
-	addda32_24 xwa, 197714
+	addda32_24 xwa, 0x030452
 	ld xde, (xsp + 28)
 	ld a, (xwa)
 	ld (xde), a
@@ -569,7 +569,7 @@ DrawLine_Impl_PatternShallowLoop:
 	add de, (xhl)
 	ld wa, de
 	extz xwa
-	addda32_24 xwa, 197714
+	addda32_24 xwa, 0x030452
 	ld xde, (xsp + 28)
 	ld a, (xwa)
 	ld (xde), a
@@ -1007,7 +1007,7 @@ DrawBox:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBox_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawBox_Return
 	ld xwa, xiz
 	ld bc, (xsp + 4)
@@ -1175,7 +1175,7 @@ DrawFrame:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawFrame_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawFrame_Return
 	ld xwa, xiz
 	ld bc, (xsp + 4)
@@ -1426,7 +1426,7 @@ DrawFrame_Impl_PatternSetup:
 	exts xwa
 	ld xbc, (xsp + 40)
 	add xbc, xwa
-	addda32_24 xbc, 197714
+	addda32_24 xbc, 0x030452
 	push xbc
 	ld bc, (xde)
 	ld xwa, (xsp + 44)
@@ -1449,7 +1449,7 @@ DrawFrame_Impl_PatternTwoEdges:
 	exts xwa
 	ld xbc, (xsp + 40)
 	add xbc, xwa
-	addda32_24 xbc, 197714
+	addda32_24 xbc, 0x030452
 	push xbc
 	ld bc, (xde)
 	ld xwa, (xsp + 44)
@@ -1473,7 +1473,7 @@ DrawFrame_Impl_PatternTwoEdges:
 	sll xbc, 6
 	ld xwa, xbc
 	add xwa, xde
-	addda32_24 xwa, 197714
+	addda32_24 xwa, 0x030452
 	push xwa
 	ld wa, (xhl)
 	exts xwa
@@ -1538,7 +1538,7 @@ DrawFrame_Impl_PatternOneSideLoop:
 	exts xwa
 	ld xiy, xde
 	add xiy, xwa
-	addda32_24 xiy, 197714
+	addda32_24 xiy, 0x030452
 	ld a, (xiy)
 	ld (xiz), a
 	inc 1, xbc
@@ -1578,7 +1578,7 @@ DrawFrame_Impl_PatternTwoSideLoop:
 	exts xwa
 	ld xhl, xde
 	add xhl, xwa
-	addda32_24 xhl, 197714
+	addda32_24 xhl, 0x030452
 	ld a, (xhl)
 	ld (xix), a
 	ld xwa, (xsp + 30)
@@ -1592,7 +1592,7 @@ DrawFrame_Impl_PatternTwoSideLoop:
 	exts xwa
 	ld xhl, xde
 	add xhl, xwa
-	addda32_24 xhl, 197714
+	addda32_24 xhl, 0x030452
 	ld a, (xhl)
 	ld (xix), a
 	inc 1, xbc
@@ -1924,7 +1924,7 @@ MovePixels:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, MovePixels_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, MovePixels_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -2063,7 +2063,7 @@ DrawWall:
 
 DrawWall_DirectPath:
 	sti16_24 0x030450, 0x0000
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawWall_SetCopyFlag
 
 DrawWall_WaitVblankBefore:
@@ -2071,12 +2071,12 @@ DrawWall_WaitVblankBefore:
 	call Audio_Lock_Release
 	lds wa, 3
 	call TaskSched_YieldToQueue
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr nz, DrawWall_WaitVblankBefore
 
 DrawWall_SetCopyFlag:
 	sti16_24 0x030450, 0x0001
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr nz, DrawWall_Deferred
 
 DrawWall_WaitVblankAfter:
@@ -2084,7 +2084,7 @@ DrawWall_WaitVblankAfter:
 	call Audio_Lock_Release
 	lds wa, 3
 	call TaskSched_YieldToQueue
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawWall_WaitVblankAfter
 
 DrawWall_Deferred:
@@ -2152,7 +2152,7 @@ DrawBitmap:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmap_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawBitmap_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -2378,7 +2378,7 @@ DrawBitmapFast:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmapFast_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawBitmapFast_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -2517,7 +2517,7 @@ DrawIcons:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawIcons_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawIcons_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -2653,7 +2653,7 @@ DrawFrameSP:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawFrameSP_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawFrameSP_Return
 	ld xwa, xiz
 	ld bc, (xsp + 6)
@@ -2825,7 +2825,7 @@ DrawBitmapSP:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmapSP_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawBitmapSP_Return
 	pushm (xsp + 14)
 	ld xwa, xiz
@@ -2860,7 +2860,7 @@ DrawBitmapSP_Return:
 	ld xhl, (xwa + 8)
 	ld de, (xwa + 12)
 	ld wa, (xwa + 14)
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	ret z
 	pushw wa
 	ld xwa, xbc
@@ -3047,7 +3047,7 @@ DrawBitmapSPFast:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmapSPFast_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawBitmapSPFast_Return
 	pushm (xsp + 14)
 	ld xwa, xiz
@@ -3082,7 +3082,7 @@ DrawBitmapSPFast_Return:
 	ld xhl, (xwa + 8)
 	ld de, (xwa + 12)
 	ld wa, (xwa + 14)
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	ret z
 	pushw wa
 	ld xwa, xbc
@@ -3174,7 +3174,7 @@ DrawBitmapSP2:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmapSP2_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawBitmapSP2_Return
 	pushm (xsp + 18)
 	pushm (xsp + 18)
@@ -3217,7 +3217,7 @@ DrawBitmapSP2_Return:
 	ld iy, (xwa + 14)
 	ld ix, (xwa + 16)
 	ld wa, (xwa + 18)
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	ret z
 	pushw iy
 	pushw ix
@@ -3350,7 +3350,7 @@ DrawBitmapFile:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmapFile_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawBitmapFile_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -3773,7 +3773,7 @@ DrawString:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawString_DeferredPath
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawString_Return
 	ld xwa, (xsp + 28)
 	push xwa
@@ -3836,7 +3836,7 @@ DrawString_Return:
 	ld xix, (xiz + 20)
 	ld hl, (xiz + 24)
 	ld de, (xiz + 26)
-	cpdi16_24 197710, 0
+	cpdi16_24 0x03044E, 0
 	jr z, DrawString_DeferredDispatch
 	push xix
 	pushw hl
@@ -4029,7 +4029,7 @@ DrawString_Impl_ClampDirtyRight2:
 DrawString_Impl_FillBackground:
 	ld_sriw BC, (xsp + 0x0144)
 	cp bc, 0xf7
-	call_24 nz, 0xfab2cf
+	call_24 nz, DrawBox_Impl
 	lda xwa, (xsp + 40)
 	ld (xsp + 24), xwa
 	cp (xwa), 0x0

@@ -122,7 +122,7 @@ SoundBank_InitTrack_ByteFields:
 	inc 1, iy
 	cps iy, 7
 	jr ule, SoundBank_InitTrack_ByteFields
-	ldda8 a, 36458
+	ldda8 a, 0x8E6A
 	lda_dri3 XBC, 0x07, 0xec, 0xf4
 	ld xhl, 0x14
 	add xhl, xde
@@ -324,7 +324,7 @@ SMF_SelectBank_AfterReset:
 	push xde
 	call SetWall_LoadBankToToneGen
 	ldda8 a, 4599
-	cpda8_24 a, 65507
+	cpda8_24 a, 0xFFE3
 	jrl z, SMF_SelectBank_AfterToneLoad
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a
@@ -332,7 +332,7 @@ SMF_SelectBank_AfterReset:
 
 SMF_SelectBank_AfterToneLoad:
 	call SMF_InitSequencerState
-	anddi8 10417, 254
+	anddi8 0x28B1, 254
 	pop xde
 	pop xix
 	pop xiz
@@ -374,10 +374,10 @@ SMF_ResetMidiChanMap_Loop:
 	ret
 
 SoundBank_LoadToWorkRAM:
-	ldda16 xwa, 61999
-	stda16 10351, xwa
-	ldda16 xwa, 62001
-	stda16 10353, xwa
+	ldda16 xwa, 0xF22F
+	stda16 0x286F, xwa
+	ldda16 xwa, 0xF231
+	stda16 0x2871, xwa
 	xor xwa, xwa
 	ld8_24 a, 0x00ffe3
 	sla xwa, 11
@@ -386,14 +386,14 @@ SoundBank_LoadToWorkRAM:
 	ld xix, 0xf180
 	ldw bc, 0x800
 	ldir85
-	ldda16 xwa, 10351
-	stda16 61999, xwa
-	ldda16 xwa, 10353
-	stda16 62001, xwa
-	ldda16 xwa, 61854
+	ldda16 xwa, 0x286F
+	stda16 0xF22F, xwa
+	ldda16 xwa, 0x2871
+	stda16 0xF231, xwa
+	ldda16 xwa, 0xF19E
 	st16_24 0x00ffec, xwa
 	xor wa, wa
-	stda16 61854, xwa
+	stda16 0xF19E, xwa
 	ret
 
 SMF_InitSequencerState:
@@ -478,7 +478,7 @@ FloppyIO_WaitReadComplete:
 	ldda32 xbc, 6883
 	lds32 xwa, 0
 	cp xbc, xwa
-	jp_24 z, 0xf23436
+	jp_24 z, SMF_AfterFloppyWait
 	call FloppyIO_ReadNextByte
 	nop
 	nop
@@ -553,7 +553,7 @@ SMF_ReadTrackData_Continue:
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
-	stda16 61854, xwa
+	stda16 0xF19E, xwa
 	st16_24 0x00ffec, xwa
 	call SeqTrack_AssignFloppyChannels
 	cpdi8 4323, 0

@@ -87,13 +87,13 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	ldx
 	.byte 0x00			; padding
 	pop_f
-	ld	xwa, 1647706359
+	ld	xwa, 0x623600F7
 	.byte 0xf7
 	.byte 0x00			; padding
 	.byte 0xf5, 0x7d, 0xf7
 	.byte 0x00			; padding
 	rcf
-	ld	xsp, 1301020919
+	ld	xsp, 0x4D8C00F7
 	.byte 0xf7
 	.byte 0x00			; padding
 	muls	xsp, xsp
@@ -103,7 +103,7 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	.byte 0x52
 	ldx
 	.byte 0x00			; padding
-	ld	xde, 1510012726
+	ld	xde, 0x5A00F736
 	.byte 0x57
 	ldx
 	.byte 0x00			; padding

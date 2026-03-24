@@ -73,7 +73,7 @@ MidiSerial_ParseStatus_Data:
 	and	l, 15
 	sla	l, 2
 	extz	hl
-	ld	xiz, 0xfcfa67
+	ld	xiz, MidiSerial_CmdJumpTable
 	.byte 0xe3
 	reti
 	swi	0
@@ -161,7 +161,7 @@ MidiSerial_HandleDefault_Data:
 	ldb	l, 207
 	scc8	f, d
 	srl	hl, 2
-	ld	xix, 0xfcfb3d
+	ld	xix, MidiCC_LowRange_Table
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xec
@@ -191,7 +191,7 @@ MidiCC_Handler_SimpleParamStore:
 	.byte 0x01
 	ret
 MidiCC_Handler_CC3_TableLookup:
-	ld	xix, 0xfd0e67
+	ld	xix, MidiCC_ChannelMappingData
 	ldda8	l, 0x9635
 	.byte 0xc3
 	pop_sr
@@ -221,7 +221,7 @@ MidiCC_Handler_CC3_TableLookup:
 	extz	wa
 	ldda8	a, 0x9657
 	sla	wa, 2
-	ld	xix, 0xfcfbb3
+	ld	xix, MidiCC_ExtendedRange_Table
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xe0
@@ -12947,7 +12947,7 @@ SeqVoice_DispatchProcess_Data:
 	ld	xbc, 0x72aa
 	ld	(xwa+8), xbc
 	ld	xbc, (xwa)
-	lda	xbc, (xbc+29354)
+	lda	xbc, (xbc+0x72AA)
 	ld	(xwa+4), xbc
 	ret
 	lda_24	xbc, 0x1e0000
@@ -12964,7 +12964,7 @@ SeqVoice_DispatchProcess_Data:
 	ld	xbc, 0x729a
 	ld	(xwa+8), xbc
 	ld	xbc, (xwa)
-	lda	xbc, (xbc+29338)
+	lda	xbc, (xbc+0x729A)
 	ld	(xwa+4), xbc
 	ret
 	push	xiz
@@ -13145,7 +13145,7 @@ SeqVoice_DispatchProcess_Data:
 	ld	xiz, xwa
 	lda_24	xwa, 0x1e8b00
 	ld	(xiz), xwa
-	lda	xwa, (xwa+14592)
+	lda	xwa, (xwa+0x3900)
 	ld	(xiz+4), xwa
 	ld	xwa, 0x3900
 	ld	(xiz+8), xwa

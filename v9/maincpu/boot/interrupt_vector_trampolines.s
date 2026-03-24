@@ -80,7 +80,7 @@
 	swi	7
 	swi	7
 	swi	7
-	ld	xiy, 4278254794
+	ld	xiy, 0xFF00FCCA
 	swi	7
 	swi	7
 	swi	7

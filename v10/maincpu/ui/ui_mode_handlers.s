@@ -9706,7 +9706,7 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
 	sll	xwa, 2
-	ld	xde, 0xed14b6
+	ld	xde, ParamStr_Table_03
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
@@ -9737,7 +9737,7 @@ DispTimeSet_EventDispatch:
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
 	sll	xwa, 2
-	ld	xde, 0xed14b6
+	ld	xde, ParamStr_Table_03
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
@@ -9752,7 +9752,7 @@ DispTimeSet_EventDispatch:
 	ld	xbc, 0x1e0008c
 	jrl	672
 	lda_24	xbc, 0x340ea
-	lda_24	xwa, 0xed14b6
+	lda_24	xwa, ParamStr_Table_03
 	ld	(xsp+4), xwa
 	.byte 0xa2, 0xf1
 	jr	nz, 62

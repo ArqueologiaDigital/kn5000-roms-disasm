@@ -32,7 +32,7 @@ TtComputerConnection:
 	call GET_COMPUTER_INTERFACE_SELECTION
 	cps l, 0	;  MIDI
 	jr nz, ComputerConnectionTitleExit
-	stdi8 32578, 70
+	stdi8 0x7F42, 70
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -81,7 +81,7 @@ CmptCnctDrawConnectionDiagram:
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6c
-	ld xbc, 0xe64772
+	ld xbc, Bitmap_MIDIConnections_1
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
@@ -93,7 +93,7 @@ CmptCnct_DrawDiagram1:
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6c
-	ld xbc, 0xe6c452
+	ld xbc, Bitmap_MIDIConnections_2
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
@@ -105,7 +105,7 @@ CmptCnct_DrawDiagram2:
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6c
-	ld xbc, 0xe74132
+	ld xbc, Bitmap_MIDIConnections_3
 	ldw de, 0x128
 	jr CmptCnctBitmapDrawComplete
 
@@ -117,7 +117,7 @@ CmptCnct_DrawDiagramDefault:
 	inc 8, xsp
 	lda xwa, (xsp + 4)
 	pushw 0x6c
-	ld xbc, 0xe64772
+	ld xbc, Bitmap_MIDIConnections_1
 	ldw de, 0x128
 
 CmptCnctBitmapDrawComplete:
@@ -272,7 +272,7 @@ MdSetupLoadFunc:
 	push xiz
 	ld xhl, xbc
 	ld xiz, xwa
-	ld xiy, 0xe7f900
+	ld xiy, DisplayMode_OnOff_Table
 	lda xix, (xsp + 4)
 	ldw bc, 0x8
 	ldirw

@@ -1920,7 +1920,7 @@ RamEditCheck_JumpStart:
 	ld	xwa, (xde+14)
 	push	xwa
 	pushw	234
-	pushw	41654
+	pushw	0xA2B6
 	ld	xwa, (xde+18)
 	push	xwa
 	call	Sprintf_Locked
@@ -1933,9 +1933,9 @@ RamEditCheck_JumpStart:
 	jr	23
 	ld	xhl, 16
 	jr	16
-	ld	xhl, 4294967267
+	ld	xhl, 0xFFFFFFE3
 	jr	9
-	lda_24	xhl, 161482
+	lda_24	xhl, 0x0276CA
 	jr	2
 
 RamEditCheck_NotHandled:
@@ -3161,7 +3161,7 @@ PsEditSwBox_InlineData:
 	ld	(xsp+8), de
 	ld	xiz, xbc
 	lda	xbc, (xsp+4)
-	calr	-25036
+	calr	40500
 	lda	xwa, (xsp+4)
 	cpw	(xwa), 0
 	jr	nz, 41
@@ -3173,7 +3173,7 @@ PsEditSwBox_InlineData:
 	inc	8, wa
 	ld	(xiz+6), wa
 	ld	wa, (xsp+8)
-	calr	-29446
+	calr	36090
 	ldw	wa, 8
 	cps	hl, 0
 	jr	z, 2
@@ -3192,7 +3192,7 @@ PsEditSwBox_InlineData:
 	ld	(xiz+6), wa
 	ldw	(xiz), 281
 	ld	wa, (xsp+8)
-	calr	-29482
+	calr	36054
 	lda	xwa, (xiz+4)
 	cps	hl, 0
 	jr	z, 6
@@ -3221,10 +3221,10 @@ PsEditSwBox_InlineData:
 	jr	c, 2
 	.byte 0xd8, 0xbe
 	lda	xbc, (xsp+6)
-	calr	-25203
+	calr	40333
 	lda	xbc, (xsp+2)
 	ld	wa, iz
-	calr	-25211
+	calr	40325
 	lda	xbc, (xsp+6)
 	cpw	(xbc+2), 239
 	jr	nz, 31
@@ -3429,33 +3429,33 @@ ButtonState_DispatchDSP:
 ButtonState_DispatchDSP_InlineData:
 	lda	xde, (xsp+12)
 	ld	xwa, (xsp+298)
-	ld	xbc, 31457338
+	ld	xbc, 0x01E0003A
 	call	SendEvent
 	jr	100
-	ld	xwa, 15377130
+	ld	xwa, 0xEAA2EA
 	jr	82
-	ld	xwa, 15377134
+	ld	xwa, 0xEAA2EE
 	jr	75
-	ld	xwa, 15377138
+	ld	xwa, 0xEAA2F2
 	jr	68
-	ld	xwa, 15377142
+	ld	xwa, 0xEAA2F6
 	jr	61
 	.byte 0x40
 	.long NakaInst_OK
 	jr	54
-	ld	xwa, 15377150
+	ld	xwa, 0xEAA2FE
 	jr	47
-	ld	xwa, 15377154
+	ld	xwa, 0xEAA302
 	jr	40
-	ld	xwa, 15377158
+	ld	xwa, 0xEAA306
 	jr	33
-	ld	xwa, 15377160
+	ld	xwa, 0xEAA308
 	jr	26
-	ld	xwa, 15377162
+	ld	xwa, 0xEAA30A
 	jr	19
-	ld	xwa, 15377166
+	ld	xwa, 0xEAA30E
 	jr	12
-	ld	xwa, 15377170
+	ld	xwa, 0xEAA312
 	jr	5
 	.byte 0x40
 	.long Str_No
@@ -3678,21 +3678,21 @@ AcIndexEdit_DispatchDSP_InlineData:
 	ld	xwa, (xsp+6)
 	bit	7, wa
 	jr	z, 13
-	ld	xwa, 4294967295
-	ld	xbc, 29360152
+	ld	xwa, 0xFFFFFFFF
+	ld	xbc, 0x01C00018
 	jrl	161
-	ld	xwa, 4294967295
-	ld	xbc, 29360151
+	ld	xwa, 0xFFFFFFFF
+	ld	xbc, 0x01C00017
 	jrl	148
 	ld	de, (xsp+4)
 	exts	xde
-	ld	xwa, 4294967295
-	ld	xbc, 29360151
+	ld	xwa, 0xFFFFFFFF
+	ld	xbc, 0x01C00017
 	jrl	130
 	ld	de, (xsp+4)
 	exts	xde
-	ld	xwa, 4294967295
-	ld	xbc, 29360152
+	ld	xwa, 0xFFFFFFFF
+	ld	xbc, 0x01C00018
 	jr	t, 0x71
 
 AcIndexEdit_Fallthrough:
@@ -5360,7 +5360,7 @@ IvCatchEventProc:
 	ld (xsp + 12), xbc
 	ld (xsp + 16), xwa
 	ld xwa, (xsp + 16)
-	cp xwa, 0xffffff
+	cp xwa, NakaData_RomEnd
 	jr ule, IvCatchEvent_Lookup
 	cp xwa, 0x3000000
 	jr c, IvCatchEvent_Forward
@@ -6694,9 +6694,9 @@ AcMixerVol_Return:
 
 ScrollDelta_ComputeDirection:
 	ld	hl, de
-	cp	xwa, 29360167
+	cp	xwa, 0x01C00027
 	jr	z, 18
-	cp	xwa, 29360135
+	cp	xwa, 0x01C00007
 	jr	nz, 21
 	ld	hl, (xsp+4)
 	bit	7, bc
@@ -6704,7 +6704,7 @@ ScrollDelta_ComputeDirection:
 	jr	13
 	bit	7, bc
 	jr	z, 8
-	mul	hl, 65535
+	mul	hl, 0xFFFF
 	jr	2
 	lds	hl, 0
 	retd	2
@@ -7121,7 +7121,7 @@ DbMemDump_OK_AddOffset:
 
 DbMemDump_OK_ClampAndConfirm:
 	ld xbc, (xde)
-	ld xwa, 0xffffff
+	ld xwa, NakaData_RomEnd
 	and (xbc), xwa
 	ld xwa, (xsp + 120)
 	ld xbc, 0x1c0000f
@@ -7142,7 +7142,7 @@ DbMemDump_Return:
 
 CaptureLcdCheck:
 	cp xbc, 0x1c00007
-	call_24 z, 0xfaf030
+	call_24 z, CaptureLcd
 	lds32 xhl, 0
 	ret
 
@@ -8299,40 +8299,40 @@ AcTrkSw_Return:
 	ld	xhl, xiz
 	jrl	682
 	ld	xwa, xiz
-	ld	xbc, 31457281
+	ld	xbc, 0x01E00001
 	ld	xde, (xsp+136)
 	jrl	597
 	ld	xwa, xiz
-	ld	xbc, 31457282
+	ld	xbc, 0x01E00002
 	ld	xde, (xsp+136)
 	jrl	582
 	ld	xwa, xiz
-	ld	xbc, 31457283
+	ld	xbc, 0x01E00003
 	ld	xde, (xsp+136)
 	jrl	567
 	ld	xwa, xiz
-	ld	xbc, 31457301
+	ld	xbc, 0x01E00015
 	ld	xde, (xsp+136)
 	jrl	552
 	ld	xwa, xiz
-	ld	xbc, 31457284
+	ld	xbc, 0x01E00004
 	ld	xde, (xsp+136)
 	jrl	537
 	ld	xwa, (xsp+136)
 	ld	(xwa), 0
 	ld	xwa, xiz
-	ld	xbc, 31457285
+	ld	xbc, 0x01E00005
 	ld	xde, (xsp+136)
 	calr	1662
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457300
-	ld	xde, 23068688
+	ld	xbc, 0x01E00014
+	ld	xde, 0x01600010
 	call	SendEvent
 	or	xhl, xhl
 	.byte 0x66
 	.long Data_DiskFuncPtrTbl_EA0B12
-	pushw 43152
+	pushw 0xA890
 	ld	xwa, (xsp+140)
 	push	xwa
 	call	Strcat
@@ -8340,12 +8340,12 @@ AcTrkSw_Return:
 	ld	xhl, (xsp+4)
 	jrl	534
 	ld	xwa, xiz
-	ld	xbc, 31457286
+	ld	xbc, 0x01E00006
 	ld	xde, (xsp+136)
 	jrl	449
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, 0x01E00019
 	call	SendEvent
 	lda	xbc, (xsp+8)
 	ld	xhl, xbc
@@ -8355,7 +8355,7 @@ AcTrkSw_Return:
 	cp	(xhl), 89
 	jr	nz, 11
 	pushw 234
-	pushw 43156
+	pushw 0xA894
 	ld	xwa, (xde)
 	push	xwa
 	jr	21
@@ -8365,23 +8365,23 @@ AcTrkSw_Return:
 	cp	(xbc), 90
 	jr	nz, 16
 	pushw 234
-	pushw 43162
+	pushw 0xA89A
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
 	jrl	419
 	pushw 234
-	pushw 43170
+	pushw 0xA8A2
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
 	ld	xwa, xiz
-	ld	xbc, 31457287
+	ld	xbc, 0x01E00007
 	ld	xde, (xsp+136)
 	jrl	343
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, 0x01E00019
 	call	SendEvent
 	ld	xwa, (xsp+136)
 	ld	bc, (xwa+8)
@@ -8392,13 +8392,13 @@ AcTrkSw_Return:
 	sub	a, 65
 	ldb	w, 0
 	extz	xwa
-	add	xwa, 39845888
-	ld	xbc, 31457288
+	add	xwa, 0x02600000
+	ld	xbc, 0x01E00008
 	ld	xde, (xsp+136)
 	jrl	184
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, 0x01E00019
 	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
@@ -8409,13 +8409,13 @@ AcTrkSw_Return:
 	sub	a, 65
 	ldb	w, 0
 	extz	xwa
-	add	xwa, 39845888
-	ld	xbc, 31457289
+	add	xwa, 0x02600000
+	ld	xbc, 0x01E00009
 	ld	xde, (xsp+136)
 	jr	122
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, 0x01E00019
 	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
@@ -8426,13 +8426,13 @@ AcTrkSw_Return:
 	sub	a, 65
 	ldb	w, 0
 	extz	xwa
-	add	xwa, 39845888
-	ld	xbc, 31457290
+	add	xwa, 0x02600000
+	ld	xbc, 0x01E0000A
 	ld	xde, (xsp+136)
 	jr	60
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, 0x01E00019
 	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
@@ -8443,14 +8443,14 @@ AcTrkSw_Return:
 	sub	a, 65
 	ldb	w, 0
 	extz	xwa
-	add	xwa, 39845888
-	ld	xbc, 31457291
+	add	xwa, 0x02600000
+	ld	xbc, 0x01E0000B
 	ld	xde, (xsp+136)
 	call	SendEvent
 	jrl	140
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, 0x01E00019
 	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
@@ -8461,23 +8461,23 @@ AcTrkSw_Return:
 	sub	a, 65
 	ldb	w, 0
 	extz	xwa
-	add	xwa, 39845888
-	ld	xbc, 31457292
+	add	xwa, 0x02600000
+	ld	xbc, 0x01E0000C
 	ld	xde, (xsp+136)
 	call	SendEvent
 	jr	96
 	ld	xwa, xiz
-	ld	xbc, 31457293
+	ld	xbc, 0x01E0000D
 	ld	xde, (xsp+136)
 	jr	12
 	ld	xwa, xiz
-	ld	xbc, 31457294
+	ld	xbc, 0x01E0000E
 	ld	xde, (xsp+136)
 	calr	1145
 	jr	65
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, 0x01E00019
 	call	SendEvent
 	lda	xwa, (xsp+8)
 	add	xwa, (xsp+136)
@@ -10827,7 +10827,7 @@ EnumList_Reset_Send:
 	jr TitleProc_ClearResourceDirtyFlag
 
 TitleProc_SetResourceDirtyFlag:
-	ordm16_24 179248, xwa
+	ordm16_24 0x02BC30, xwa
 	ld16_24 xde, 0x02bc30
 	extz xde
 	ld xwa, 0x1400001
@@ -10836,7 +10836,7 @@ TitleProc_SetResourceDirtyFlag:
 
 TitleProc_ClearResourceDirtyFlag:
 	cpl wa
-	anddm16_24 179248, xwa
+	anddm16_24 0x02BC30, xwa
 	ld16_24 xde, 0x02bc30
 	extz xde
 	ld xwa, 0x1400001
@@ -17573,7 +17573,7 @@ EventHandler_ObjectDispatch:
 	ld xbc, (xsp + 4)
 	ld xde, (xsp)
 	call (xhl)
-	cpdi16_24 257870, 0
+	cpdi16_24 0x03EF4E, 0
 	jr z, EventHandler_ContinueProc
 	lds wa, 3
 	call TaskSched_YieldToQueue
@@ -17665,7 +17665,7 @@ EventRoute_ObjectDispatch:
 	st32_24 0x02bc28, xwa
 	ld xwa, (xsp + 8)
 	st32_24 0x02bc2c, xwa
-	cpdi16_24 257870, 0
+	cpdi16_24 0x03EF4E, 0
 	jr z, EventRoute_DispatchJump
 	lds wa, 3
 	call TaskSched_YieldToQueue
@@ -17704,7 +17704,7 @@ EventRoute_OwnerMatch:
 	jr EventRoute_OwnerMatch
 
 EventRoute_OwnerMatchDone:
-	incdi16_24 1, 194624
+	incdi16_24 1, 0x02F840
 	ld bc, de
 	muls bc, 0xc
 	lda_24 xwa, 0x02bc34
@@ -17721,7 +17721,7 @@ EventRoute_OwnerMatchDone:
 	jr PostEvent_AllocSlot
 
 PostEvent_Prologue:
-	incdi16_24 1, 191542
+	incdi16_24 1, 0x02EC36
 
 PostEvent_AllocSlot:
 	lds wa, 4
@@ -17741,7 +17741,7 @@ GetEvent:
 	lds wa, 4
 	call TaskSched_WaitForEvent
 	ld16_24 xwa, 0x02ec34
-	cpda16_24 xwa, 191542
+	cpda16_24 xwa, 0x02EC36
 	jr nz, PostEvent_FillSlot
 	lds wa, 4
 	call TaskSched_SignalEvent
@@ -17749,7 +17749,7 @@ GetEvent:
 	jr GetEvent_Prologue
 
 PostEvent_FillSlot:
-	decdi16_24 1, 194624
+	decdi16_24 1, 0x02F840
 	ld16_24 xwa, 0x02ec34
 	ld (xsp + 4), wa
 	ld bc, (xsp + 4)
@@ -17779,7 +17779,7 @@ PostEvent_LinkSlot:
 	jr PostEvent_Return
 
 PostEvent_ReturnZero:
-	incdi16_24 1, 191540
+	incdi16_24 1, 0x02EC34
 
 PostEvent_Return:
 	lds wa, 4
@@ -17943,8 +17943,8 @@ EventDispatch_Direct:
 	; --- Check if ring buffer is empty ---
 	lds	wa, 4
 	call TaskSched_WaitForEvent				; acquire lock/semaphore (id=4)
-	ld16_24	bc, 191542
-	ld16_24	de, 191540
+	ld16_24	bc, 0x02EC36
+	ld16_24	de, 0x02EC34
 	cp de, bc				; compare read/write positions
 	jr nz, DeleteSpecEvent_Prologue			; buffer not empty, process events
 	; --- Buffer empty: release lock, dispatch directly ---
@@ -18196,7 +18196,7 @@ MainPostEvent_Allocate:
 	sub wa, 0xff
 	cp wa, bc
 	jr z, MainPostEvent_VirtDispatch_Prologue
-	incdi16_24 1, 194626
+	incdi16_24 1, 0x02F842
 	ld16_24 xwa, 0x02f83a
 	muls wa, 0xc
 	lda_24 xbc, 0x02ec38
@@ -18239,7 +18239,7 @@ MainGetEvent:
 	lds wa, 7
 	call TaskSched_WaitForEvent
 	ld16_24 xwa, 0x02f838
-	cpda16_24 xwa, 194618
+	cpda16_24 xwa, 0x02F83A
 	jr nz, MainGetEvent_ScanDone
 	lds wa, 7
 	call TaskSched_SignalEvent
@@ -18247,7 +18247,7 @@ MainGetEvent:
 	jr MainGetEvent_Return
 
 MainGetEvent_ScanDone:
-	decdi16_24 1, 194626
+	decdi16_24 1, 0x02F842
 	ld16_24 xde, 0x02f838
 	ld bc, de
 	muls bc, 0xc
@@ -18267,7 +18267,7 @@ MainGetEvent_ScanDone:
 	jr MainGetEvent_ReturnZeroAlt
 
 MainGetEvent_ReturnZero:
-	incdi16_24 1, 194616
+	incdi16_24 1, 0x02F838
 
 MainGetEvent_ReturnZeroAlt:
 	lds wa, 7
@@ -18427,7 +18427,7 @@ ObjectSearch_Continue:
 	sub wa, 0x3ff
 	cp wa, bc
 	jr z, ObjectSearch_CheckLoop
-	incdi16_24 1, 194624
+	incdi16_24 1, 0x02F840
 	ld16_24 xwa, 0x02ec36
 	muls wa, 0xc
 	lda_24 xbc, 0x02bc34
@@ -18515,7 +18515,7 @@ ApDeliveryEvent_ReturnZero:
 	ld (xsp + 4), xwa
 
 ApDeliveryEvent_Return:
-	incdi16_24 1, 194624
+	incdi16_24 1, 0x02F840
 	ld16_24 xwa, 0x02ec36
 	muls wa, 0xc
 	lda_24 xbc, 0x02bc34
@@ -18584,7 +18584,7 @@ RootContext_InitEventQueue:
 ApTimer:
 	dec 8, xsp
 	push xiz
-	cpdi16_24 197704, 65535
+	cpdi16_24 0x030448, 0xFFFF
 	jrl nz, SetApTimer_Return
 	jrl ApTimer_IncrementCounter
 
@@ -18726,7 +18726,7 @@ ApTimer_VirtualDispatch:
 	ld xbc, (xsp + 4)
 	ld xde, (xsp + 8)
 	call (xhl)
-	cpdi16_24 197704, 65535
+	cpdi16_24 0x030448, 0xFFFF
 	jr z, ApTimer_IncrementCounter
 
 SetApTimer_Return:
@@ -18736,7 +18736,7 @@ SetApTimer_Return:
 	exts xbc
 	add xbc, xwa
 	ld xwa, (xbc + 4)
-	cpda32_24 xwa, 197700
+	cpda32_24 xwa, 0x030444
 	jrl ule, ApTimer_VirtDispatch_Prologue
 
 ApTimer_IncrementCounter:
@@ -18821,7 +18821,7 @@ ResetApTimer_NotFound:
 	st_dri3w BC, 0x07, 0xe0, 0xe8
 
 ResetApTimer_ReturnZero:
-	cpda16_24 xix, 197704
+	cpda16_24 xix, 0x030448
 	jr nz, ResetApTimer_ReturnOneDone
 
 ResetApTimer_ReturnAlt:
@@ -18926,7 +18926,7 @@ KillApTimer_CheckNextEntry_Match:
 	ld (xiy + 2), wa
 
 KillApTimer_CheckNextEntry_Unlink:
-	cpda16_24 xix, 197704
+	cpda16_24 xix, 0x030448
 	jr nz, KillApTimer_CheckNextEntry_Done
 	ld wa, (xbc)
 	st16_24 0x030448, xwa
@@ -18956,7 +18956,7 @@ KillApTimer_CheckNextEntry_Epilogue:
 DrawTask_EventLoop:
 	calr DrawTask_Dispatch
 	ld xiz, xhl
-	cpdi16_24 257870, 0
+	cpdi16_24 0x03EF4E, 0
 	jr z, DrawTask_FuncDispatch
 	lds wa, 5
 	lds bc, 3
@@ -18971,7 +18971,7 @@ DrawTask_FuncDispatch:
 	call (xhl)
 	ld xwa, xiz
 	calr DrawFunc_Return
-	cpdi16_24 257870, 0
+	cpdi16_24 0x03EF4E, 0
 	jr z, DrawTask_EventLoop
 	lds wa, 5
 	lds bc, 3
@@ -19353,7 +19353,7 @@ LcdOn_Return:
 
 
 LcdOff_Done:
-	cpdi16_24 197732, 0
+	cpdi16_24 0x030464, 0
 	ret z
 
 	call VGA_ScreenUnblank
@@ -19361,7 +19361,7 @@ LcdOff_Done:
 
 
 LcdOff_Return:
-	cpdi16_24 197732, 0
+	cpdi16_24 0x030464, 0
 	ret z
 
 	call VGA_ScreenBlank
@@ -19419,16 +19419,16 @@ UpdateScreen_CheckDirty:
 Gfx_BlitDirtyRegions:
 	dec 8, xsp
 	pushw iz
-	cpdi16_24 257938, 0
+	cpdi16_24 0x03EF92, 0
 	jrl z, SetChangeRect_Prologue
-	cpdi16_24 197726, 0
+	cpdi16_24 0x03045E, 0
 	jrl z, SetChangeRect_Prologue
-	cpdi16_24 197728, 0
+	cpdi16_24 0x030460, 0
 	jr z, Gfx_BlitDirty_ScanMatch
 	ld16_24 xwa, 0x03ef9e
 	cps wa, 4
 	jr nz, Gfx_BlitDirty_Prologue
-	cpdi16_24 257952, 4
+	cpdi16_24 0x03EFA0, 4
 	jr z, Display_CheckScreenDimensions
 	cps wa, 4
 	jr nz, Display_CheckScreenDimensions
@@ -19453,7 +19453,7 @@ Gfx_BlitDirty_ScanLoop:
 	jr Display_CheckScreenDimensions
 
 Gfx_BlitDirty_ScanMatch:
-	cpdi16_24 197730, 0
+	cpdi16_24 0x030462, 0
 	jr z, Display_CheckScreenDimensions
 	lda xwa, (xsp + 6)
 	ld (xsp + 2), xwa
@@ -19488,7 +19488,7 @@ Display_CheckDim_Prologue:
 	call DisplayBuffer_Process
 
 Display_CheckDim_CheckWidth:
-	cpdi16_24 197728, 0
+	cpdi16_24 0x030460, 0
 	jr z, Display_CheckDim_CheckHeight
 	calr InitGraphics_SetupVRAM_Loop
 	ld16_24 xwa, 0x03ef9e
@@ -19497,7 +19497,7 @@ Display_CheckDim_CheckWidth:
 	jr Display_CheckDim_Done
 
 Display_CheckDim_CheckHeight:
-	cpdi16_24 197730, 0
+	cpdi16_24 0x030462, 0
 	jr z, Display_CheckDim_Return
 
 Display_CheckDim_Done:
@@ -19532,7 +19532,7 @@ SetNeedUpdate:
 SetChangeRect:
 	push xiz
 	ld xiz, xwa
-	cpdi16_24 257870, 0
+	cpdi16_24 0x03EF4E, 0
 	jr z, SetChangeRect_ClampLeft
 	lds wa, 5
 	lds bc, 3
@@ -19644,7 +19644,7 @@ ModifyPixel:
 	muls bc, 0x140
 	add bc, (xwa)
 	extz xbc
-	addda32_24 xbc, 197714
+	addda32_24 xbc, 0x030452
 	ld a, (xbc)
 	ldfr_berp A, 0xf8
 	extz iz
@@ -19718,7 +19718,7 @@ ModifyPixelEx:
 	muls bc, 0x140
 	add bc, (xwa)
 	extz xbc
-	addda32_24 xbc, 197714
+	addda32_24 xbc, 0x030452
 	ld a, (xbc)
 	ldfr_berp A, 0xf8
 	extz iz

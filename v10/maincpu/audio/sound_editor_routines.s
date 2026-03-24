@@ -69,11 +69,11 @@ SeMenuTitleFunc:
 
 SeMenuTitleFunc_DisplayData:
 	jp	UpdSeSel_ProcessStep
-	jp	15776726
+	jp	0xF0BBD6
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15777606
-	jp	15776736
+	jp	0xF0BF46
+	jp	0xF0BBE0
 
 SeEasyTitleFunc:
 	lda xsp, (xsp - 16)
@@ -90,11 +90,11 @@ SeEasyTitleFunc:
 
 SeEasyTitleFunc_DisplayData:
 	jp	UpdSeSel_ExtendedOps_Data
-	jp	15777038
+	jp	0xF0BD0E
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15783696
-	jp	15777048
+	jp	0xF0D710
+	jp	0xF0BD18
 
 SeTonTon1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -111,11 +111,11 @@ SeTonTon1TitleFunc:
 
 SeTonTon1TitleFunc_DisplayData:
 	jp	SeMenu_AltUpdate
-	jp	15776869
+	jp	0xF0BC65
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15779545
-	jp	15776879
+	jp	0xF0C6D9
+	jp	0xF0BC6F
 
 SeTonTon2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -132,11 +132,11 @@ SeTonTon2TitleFunc:
 
 SeTonTon2TitleFunc_DisplayData:
 	jp	SeMenu_AltUpdate_Data
-	jp	15776880
+	jp	0xF0BC70
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15779591
-	jp	15776890
+	jp	0xF0C707
+	jp	0xF0BC7A
 
 SeTonRan1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -152,12 +152,12 @@ SeTonRan1TitleFunc:
 	ret
 
 SeTonRan1TitleFunc_DisplayData:
-	jp	15775280
-	jp	15776891
+	jp	0xF0B630
+	jp	0xF0BC7B
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15779637
-	jp	15776901
+	jp	0xF0C735
+	jp	0xF0BC85
 
 SeTonRan2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -173,12 +173,12 @@ SeTonRan2TitleFunc:
 	ret
 
 SeTonRan2TitleFunc_DisplayData:
-	jp	15775503
-	jp	15776902
+	jp	0xF0B70F
+	jp	0xF0BC86
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15779683
-	jp	15776912
+	jp	0xF0C763
+	jp	0xF0BC90
 
 SeTonHyb1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -195,11 +195,11 @@ SeTonHyb1TitleFunc:
 
 SeTonHyb1TitleFunc_DisplayData:
 	jp	SeMenu_ControllerUpdate
-	jp	15776913
+	jp	0xF0BC91
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15779729
-	jp	15776923
+	jp	0xF0C791
+	jp	0xF0BC9B
 
 SePitPit1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -215,12 +215,12 @@ SePitPit1TitleFunc:
 	ret
 
 SePitPit1TitleFunc_DisplayData:
-	jp	15771526
-	jp	15776737
+	jp	0xF0A786
+	jp	0xF0BBE1
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15768272
-	jp	15776747
+	jp	0xF09AD0
+	jp	0xF0BBEB
 
 SePitEnv1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -236,12 +236,12 @@ SePitEnv1TitleFunc:
 	ret
 
 SePitEnv1TitleFunc_DisplayData:
-	jp	15771803
-	jp	15776748
+	jp	0xF0A89B
+	jp	0xF0BBEC
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15768318
-	jp	15776758
+	jp	0xF09AFE
+	jp	0xF0BBF6
 
 SePitEnv2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -257,12 +257,12 @@ SePitEnv2TitleFunc:
 	ret
 
 SePitEnv2TitleFunc_DisplayData:
-	jp	15771953
-	jp	15776759
+	jp	0xF0A931
+	jp	0xF0BBF7
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15768364
-	jp	15776769
+	jp	0xF09B2C
+	jp	0xF0BC01
 
 SePitLfo1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -278,12 +278,12 @@ SePitLfo1TitleFunc:
 	ret
 
 SePitLfo1TitleFunc_DisplayData:
-	jp	15772123
-	jp	15776770
+	jp	0xF0A9DB
+	jp	0xF0BC02
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15768410
-	jp	15776780
+	jp	0xF09B5A
+	jp	0xF0BC0C
 
 SeAmpAmp1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -299,12 +299,12 @@ SeAmpAmp1TitleFunc:
 	ret
 
 SeAmpAmp1TitleFunc_DisplayData:
-	jp	15772387
-	jp	15776781
+	jp	0xF0AAE3
+	jp	0xF0BC0D
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15744435
-	jp	15776791
+	jp	0xF03DB3
+	jp	0xF0BC17
 
 SeAmpAmp2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -320,12 +320,12 @@ SeAmpAmp2TitleFunc:
 	ret
 
 SeAmpAmp2TitleFunc_DisplayData:
-	jp	15772723
-	jp	15776792
+	jp	0xF0AC33
+	jp	0xF0BC18
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15744481
-	jp	15776802
+	jp	0xF03DE1
+	jp	0xF0BC22
 
 SeAmpEnv1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -341,12 +341,12 @@ SeAmpEnv1TitleFunc:
 	ret
 
 SeAmpEnv1TitleFunc_DisplayData:
-	jp	15772884
-	jp	15776803
+	jp	0xF0ACD4
+	jp	0xF0BC23
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15744527
-	jp	15776813
+	jp	0xF03E0F
+	jp	0xF0BC2D
 
 SeAmpEnv2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -362,12 +362,12 @@ SeAmpEnv2TitleFunc:
 	ret
 
 SeAmpEnv2TitleFunc_DisplayData:
-	jp	15773136
-	jp	15776814
+	jp	0xF0ADD0
+	jp	0xF0BC2E
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15744573
-	jp	15776824
+	jp	0xF03E3D
+	jp	0xF0BC38
 
 SeAmpLfo1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -383,12 +383,12 @@ SeAmpLfo1TitleFunc:
 	ret
 
 SeAmpLfo1TitleFunc_DisplayData:
-	jp	15773307
-	jp	15776825
+	jp	0xF0AE7B
+	jp	0xF0BC39
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15744619
-	jp	15776835
+	jp	0xF03E6B
+	jp	0xF0BC43
 
 SeFilLpq1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -404,12 +404,12 @@ SeFilLpq1TitleFunc:
 	ret
 
 SeFilLpq1TitleFunc_DisplayData:
-	jp	15773775
-	jp	15776924
+	jp	0xF0B04F
+	jp	0xF0BC9C
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15748702
-	jp	15776934
+	jp	0xF04E5E
+	jp	0xF0BCA6
 
 SeFilHpq1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -425,12 +425,12 @@ SeFilHpq1TitleFunc:
 	ret
 
 SeFilHpq1TitleFunc_DisplayData:
-	jp	15774091
-	jp	15776935
+	jp	0xF0B18B
+	jp	0xF0BCA7
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15748748
-	jp	15776945
+	jp	0xF04E8C
+	jp	0xF0BCB1
 
 SeFilL241TitleFunc:
 	lda xsp, (xsp - 16)
@@ -446,12 +446,12 @@ SeFilL241TitleFunc:
 	ret
 
 SeFilL241TitleFunc_DisplayData:
-	jp	15774118
-	jp	15776946
+	jp	0xF0B1A6
+	jp	0xF0BCB2
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15748794
-	jp	15776956
+	jp	0xF04EBA
+	jp	0xF0BCBC
 
 SeFilH241TitleFunc:
 	lda xsp, (xsp - 16)
@@ -467,12 +467,12 @@ SeFilH241TitleFunc:
 	ret
 
 SeFilH241TitleFunc_DisplayData:
-	jp	15774141
-	jp	15776957
+	jp	0xF0B1BD
+	jp	0xF0BCBD
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15748840
-	jp	15776967
+	jp	0xF04EE8
+	jp	0xF0BCC7
 
 SeFilBpf1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -488,12 +488,12 @@ SeFilBpf1TitleFunc:
 	ret
 
 SeFilBpf1TitleFunc_DisplayData:
-	jp	15774164
-	jp	15776968
+	jp	0xF0B1D4
+	jp	0xF0BCC8
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15748886
-	jp	15776978
+	jp	0xF04F16
+	jp	0xF0BCD2
 
 SeFilBcf1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -509,12 +509,12 @@ SeFilBcf1TitleFunc:
 	ret
 
 SeFilBcf1TitleFunc_DisplayData:
-	jp	15774183
-	jp	15776979
+	jp	0xF0B1E7
+	jp	0xF0BCD3
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15748932
-	jp	15776989
+	jp	0xF04F44
+	jp	0xF0BCDD
 
 SeFilFil2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -530,12 +530,12 @@ SeFilFil2TitleFunc:
 	ret
 
 SeFilFil2TitleFunc_DisplayData:
-	jp	15774198
-	jp	15776990
+	jp	0xF0B1F6
+	jp	0xF0BCDE
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15748978
-	jp	15777000
+	jp	0xF04F72
+	jp	0xF0BCE8
 
 SeFilEnv1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -551,12 +551,12 @@ SeFilEnv1TitleFunc:
 	ret
 
 SeFilEnv1TitleFunc_DisplayData:
-	jp	15774359
-	jp	15777001
+	jp	0xF0B297
+	jp	0xF0BCE9
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15749024
-	jp	15777011
+	jp	0xF04FA0
+	jp	0xF0BCF3
 
 SeFilEnv2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -572,12 +572,12 @@ SeFilEnv2TitleFunc:
 	ret
 
 SeFilEnv2TitleFunc_DisplayData:
-	jp	15774509
-	jp	15777012
+	jp	0xF0B32D
+	jp	0xF0BCF4
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15749070
-	jp	15777022
+	jp	0xF04FCE
+	jp	0xF0BCFE
 
 SeFilLfo1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -593,12 +593,12 @@ SeFilLfo1TitleFunc:
 	ret
 
 SeFilLfo1TitleFunc_DisplayData:
-	jp	15774679
-	jp	15777023
+	jp	0xF0B3D7
+	jp	0xF0BCFF
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15749116
-	jp	15777033
+	jp	0xF04FFC
+	jp	0xF0BD09
 
 SeDigEffTitleFunc:
 	lda xsp, (xsp - 16)
@@ -614,12 +614,12 @@ SeDigEffTitleFunc:
 	ret
 
 SeDigEffTitleFunc_DisplayData:
-	jp	15776472
-	jp	15777049
+	jp	0xF0BAD8
+	jp	0xF0BD19
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15783880
-	jp	15777059
+	jp	0xF0D7C8
+	jp	0xF0BD23
 
 SeCtr2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -635,12 +635,12 @@ SeCtr2TitleFunc:
 	ret
 
 SeCtr2TitleFunc_DisplayData:
-	jp	15773313
-	jp	15776847
+	jp	0xF0AE81
+	jp	0xF0BC4F
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15777071
-	jp	15776857
+	jp	0xF0BD2F
+	jp	0xF0BC59
 
 SeCtr3TitleFunc:
 	lda xsp, (xsp - 16)
@@ -656,12 +656,12 @@ SeCtr3TitleFunc:
 	ret
 
 SeCtr3TitleFunc_DisplayData:
-	jp	15773707
-	jp	15776858
+	jp	0xF0B00B
+	jp	0xF0BC5A
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15777117
-	jp	15776868
+	jp	0xF0BD5D
+	jp	0xF0BC64
 
 SeCopyTitleFunc:
 	lda xsp, (xsp - 16)
@@ -677,12 +677,12 @@ SeCopyTitleFunc:
 	ret
 
 SeCopyTitleFunc_DisplayData:
-	jp	15776637
-	jp	15777060
+	jp	0xF0BB7D
+	jp	0xF0BD24
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15783742
-	jp	15777070
+	jp	0xF0D73E
+	jp	0xF0BD2E
 
 SeWrtMemTitleFunc:
 	lda xsp, (xsp - 16)
@@ -699,11 +699,11 @@ SeWrtMemTitleFunc:
 
 SeWrtMemTitleFunc_DisplayData:
 	jp	SeMenu_CopyWriteUpdate_Data
-	jp	15777034
+	jp	0xF0BD0A
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	15783788
-	jp	15777035
+	jp	0xF0D76C
+	jp	0xF0BD0B
 
 SeWrtSndTitleFunc:
 	lda xsp, (xsp - 16)
