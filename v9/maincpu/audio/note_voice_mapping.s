@@ -27936,7 +27936,7 @@ TmFlashWrite_Block1_Entry:
 	push	xsp
 	ld	xwa, 0xe91e376f
 	swi	4
-	calr	65140
+	calr	HdaeRom_DataDispatch_Block
 	ld	c, (xsp)
 	extz	bc
 	ld	a, (xsp+2)
@@ -27952,8 +27952,8 @@ TmFlashWrite_Block1_Entry:
 	lda	xde, (xhl+30720)
 	ldw	bc, 470
 	jr	43
-	calr	65190
-	calr	65085
+	calr	HdaeRom_AltHandler
+	calr	HdaeRom_DataDispatch_Block
 	ld	a, (xsp)
 	extz	wa
 	extz	xwa
@@ -27996,11 +27996,11 @@ TmFlashWrite_ValidateParams:
 	swi	0
 	.byte 0x8b
 	extz	bc
-	calr	64587
+	calr	HdaeRom_DataHandler
 	inc	1, iz
 	cp	iz, 20
 	jr	c, -21
-	calr	64974
+	calr	HdaeRom_DataDispatch_Block
 	ld	a, (xsp+4)
 	.byte 0xc7
 	swi	0
@@ -28027,11 +28027,11 @@ TmFlashWrite_ValidateParams:
 	swi	0
 	.byte 0x8b
 	extz	bc
-	calr	65015
+	calr	HdaeRom_AltHandler
 	inc	1, iz
 	cp	iz, 128
 	jr	c, -21
-	calr	64902
+	calr	HdaeRom_DataDispatch_Block
 	lda_24	xwa, 0x1e4aa7
 	ldw	bc, 0x2800
 	.byte 0x42
@@ -28149,7 +28149,7 @@ TmFlash_BulkTransferToSubCPU:
 	call	InterCPU_E1_Bulk_Transfer
 	jp	TmFlash_Return
 	ld	xwa, 0x1e0000
-	calr	63912
+	calr	SendPartDataBlock_InitVal4
 	ldw	wa, 0xff9a
 	cps	l, 6
 	jr	nz, 2
@@ -28157,7 +28157,7 @@ TmFlash_BulkTransferToSubCPU:
 	ld	hl, wa
 	ret
 	ld	xwa, 0x1e0000
-	calr	63892
+	calr	SendPartDataBlock_InitVal4
 	cps	l, 6
 	jr	ugt, 7
 	cps	l, 1
@@ -28179,7 +28179,7 @@ TmFlash_BulkTransferToSubCPU:
 	ld	iz, bc
 	ld	(xsp+2), xwa
 	ld	xwa, (xsp+2)
-	calr	63836
+	calr	SendPartDataBlock_InitVal4
 	ld	wa, iz
 	extz	xwa
 	extz	hl
@@ -28252,7 +28252,7 @@ TmFlash_BulkTransferToSubCPU:
 	ld	iz, bc
 	ld	(xsp+6), xwa
 	ld	xwa, (xsp+6)
-	calr	63664
+	calr	SendPartDataBlock_InitVal4
 	ld	bc, iz
 	extz	xbc
 	extz	hl
