@@ -186,7 +186,7 @@ Boot_FlashAndExtensions:
 	jr nz, BootInit_SeqAndPanel
 	calr Get_Region_Code
 	cps l, 4
-	call_24 nz, 0xef4bcc	; if it is present (and this unit was sold in
+	call_24 nz, HDAE5000_Parport_Setup	; if it is present (and this unit was sold in
 					; a specific market region), then call the
 					; HDAE5000 PPI init code
 
@@ -194,7 +194,7 @@ Boot_FlashAndExtensions:
 BootInit_SeqAndPanel:
 	call Seq_FullInit
 	ei 0
-	ld32_24 xhl, 0xfc3e65
+	ld32_24 xhl, CPanel_InitDispatchTable
 	call (xhl)
 	call CPanel_ScanButtons
 	stda8 1026, l
@@ -1337,7 +1337,7 @@ Voice_FactoryPresetData:
 	ld	xbc, (xsp+26)
 	ld	bc, (xbc)
 	ld	(xwa+6), bc
-	calr	-26029
+	calr	39507
 	pop	xiz
 	lda	xsp, (xsp+56)
 	ret
@@ -1345,7 +1345,7 @@ Voice_FactoryPresetData:
 	push	xiz
 	ld	(xsp+4), bc
 	ld	xiz, xwa
-	calr	-26605
+	calr	38931
 	cps	hl, 0
 	jr	z, 29
 	ld8_24	a, 257960
@@ -1357,7 +1357,7 @@ Voice_FactoryPresetData:
 	calr	78
 	jr	41
 	ldw	wa, 16
-	calr	-26882
+	calr	38654
 	ld	xwa, xhl
 	lda_24	xbc, 16452973
 	ld	(xwa), xbc
@@ -1369,7 +1369,7 @@ Voice_FactoryPresetData:
 	ld	(xwa+12), bc
 	ld8_24	c, 257960
 	ld	(xwa+14), c
-	calr	-27133
+	calr	38403
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -1435,7 +1435,7 @@ Voice_FactoryPresetData:
 	ld	de, (xde)
 	ld	(xiy), de
 	ld	de, (xsp+14)
-	calr	-3777
+	calr	61759
 	lda	xwa, (xsp+10)
 	ld	xbc, (xsp+16)
 	lda	xde, (xbc+6)
@@ -1445,7 +1445,7 @@ Voice_FactoryPresetData:
 	ld	de, (xde)
 	ld	(xbc+2), de
 	ld	de, (xsp+14)
-	calr	-3805
+	calr	61731
 	lda	xwa, (xsp+10)
 	ld	xhl, (xsp+16)
 	ld	bc, (xhl+2)
@@ -1458,7 +1458,7 @@ Voice_FactoryPresetData:
 	ld	de, (xhl+6)
 	ld	(xbc+2), de
 	ld	de, (xsp+14)
-	calr	-3840
+	calr	61696
 	lda	xwa, (xsp+10)
 	ld	xbc, (xsp+16)
 	lda	xde, (xbc+4)
@@ -1468,9 +1468,9 @@ Voice_FactoryPresetData:
 	ld	de, (xde)
 	ld	(xbc), de
 	ld	de, (xsp+14)
-	calr	-3866
+	calr	61670
 	ld	xwa, (xsp+16)
-	calr	-26392
+	calr	39144
 	popw	iz
 	lda	xsp, (xsp+18)
 	ret
@@ -1765,7 +1765,7 @@ TextRender_ClampGlyphRight:
 TextRender_ClampGlyphBottom:
 	ld_sriw BC, (xsp + 0x0142)
 	cp bc, 0xf7
-	call_24 nz, 0xfaf938
+	call_24 nz, ColorBlit2_Impl
 	lda xwa, (xsp + 38)
 	ld (xsp + 30), xwa
 	cp (xwa), 0x0
@@ -2125,7 +2125,7 @@ MainChordPre:
 	ldda8 a, 36160
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xecfee0
+	lda_24 xbc, Naka_MemoryC_Screens
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	push xiz
@@ -2457,7 +2457,7 @@ Debug_SWI_JumpTable:
 	ret
 
 Get_Firmware_Version:
-	ld8_24 l, 0xffffe8
+	ld8_24 l, FIRMWARE_VERSION
 	ret
 
 ROM_PaddingFF:

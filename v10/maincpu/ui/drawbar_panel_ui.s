@@ -1528,7 +1528,7 @@ TtMdCtlMsg_EventDispatch:
 	jr	z, 112
 	cps	bc, 0
 	jrl	nz, 2039
-	ld	xiy, 0xe801d4
+	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	.byte 0x95
@@ -1564,7 +1564,7 @@ TtMdCtlMsg_EventDispatch:
 	call	MainRamPut
 	jrl	1935
 	jrl	598
-	ld	xiy, 0xe801d4
+	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	.byte 0x95
@@ -1592,7 +1592,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 255
 	ld	(xwa+6), xbc
 	jrl	509
-	ld	xiy, 0xe801d4
+	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	.byte 0x95
@@ -1652,7 +1652,7 @@ TtMdCtlMsg_EventDispatch:
 	jrl	z, 128
 	cps	bc, 0
 	jrl	nz, 1677
-	ld	xiy, 0xe801d4
+	ld	xiy, NakaInst_ON_E80168_0x6C
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	.byte 0x95

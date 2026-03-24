@@ -22290,7 +22290,7 @@ AccPat_DualVoice_DataBlock:
 	xor	l, l
 	sla	l, 2
 	xor	h, h
-	ld	xix, 0xe46312
+	ld	xix, RhythmTiming_OffsetTable
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xec

@@ -567,7 +567,7 @@ SndParam_ResolveWidgetEx_Data:
 	ld	xwa, 0x034100
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, 0xffffff
+	cp	xde, NakaData_RomEnd
 	jr	nz, -68
 	ld	xwa, (xsp+6)
 	or	xwa, xwa
@@ -786,7 +786,7 @@ SndParam_ResolveWidgetVariant2_Data:
 	ld	xwa, 0x034100
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, 0xffffff
+	cp	xde, NakaData_RomEnd
 	jr	nz, -68
 	ld	xwa, (xsp+8)
 	or	xwa, xwa

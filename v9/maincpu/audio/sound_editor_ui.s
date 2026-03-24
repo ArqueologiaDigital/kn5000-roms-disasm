@@ -9165,13 +9165,13 @@ SeMenu_WaveformSelect_Data:
 	ld	xix, 0xf15ff2
 	call	SeMenu_NameEditor_Setup
 	call	0xf0f897
-	ld	xiy, 0xf16006
-	ld	xix, 0xf160f1
+	ld	xiy, DrumDetailEdit_Entry_01
+	ld	xix, Data_Dispatch_Entry_0x39
 	call	SeMenu_NameEditor_Draw
 	call	0xf0f5cf
 	sti8_24	0x03efa8, 1
 	ld	xiy, 0xf15ff2
-	ld	xix, 0xf16006
+	ld	xix, DrumDetailEdit_Entry_01
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 0
 	ret
@@ -9244,24 +9244,24 @@ SeMenu_PresetManager_Init:
 	call	0xf10be7
 	sti8_24	0x03efa8, 1
 	ld	xiy, 0xf15ff2
-	ld	xix, 0xf16006
+	ld	xix, DrumDetailEdit_Entry_01
 	call	SeMenu_NameEditor_Setup
 	jr	85
-	ld	xiy, 0xf16006
-	ld	xix, 0xf160f1
+	ld	xiy, DrumDetailEdit_Entry_01
+	ld	xix, Data_Dispatch_Entry_0x39
 	call	SeMenu_NameEditor_Draw
 	call	0xf0f5cf
 	jr	65
 	call	0xf0f897
 	jr	59
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf16028
-	ld	xix, 0xf1604a
+	ld	xiy, DrumDetailEdit_Entry_02
+	ld	xix, DrumDetailEdit_Entry_03
 	call	SeMenu_NameEditor_Draw
 	jr	37
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf16070
-	ld	xix, 0xf16092
+	ld	xiy, DrumDetailEdit_Entry_06
+	ld	xix, DrumDetailEdit_Entry_07
 	call	SeMenu_NameEditor_Draw
 	jr	15
 	ld	xiy, 0xf1612b
@@ -9861,7 +9861,7 @@ SeMenu_Utility_CopyBlock:
 	call	SeMenu_NameEditor_Setup
 	jr	34
 	ld	xiy, 0xf1648d
-	ld	xix, 0xf1649b
+	ld	xix, EffectParamEdit_Entry_01
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 2
 	ld	xiy, 0xf12707
@@ -10122,7 +10122,7 @@ SeMenu_NameEdit_DataBlock1:
 	ldda8	a, 1648
 	cp	a, 10
 	jr	nz, 7
-	ld	xix, 0xf1589c
+	ld	xix, FlashRead_BlockData_Field7
 	jr	5
 	ld	xix, FlashWrite_BlockHandler_Table
 	call	SeMenu_NameEditor_Draw
@@ -10139,7 +10139,7 @@ SeMenu_NameEdit_DataBlock2:
 	ld	xiy, 0xf15ba9
 	ld	xix, 0xf15d26
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf1649b
+	ld	xiy, EffectParamEdit_Entry_01
 	ld	xix, 0xf164f7
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_NameEdit_CheckBit7
@@ -10195,7 +10195,7 @@ SeMenu_PatchEdit_DataBlock:
 	ldb	e, 104
 	pop_a
 	ld	xiy, 0xf15873
-	ld	xix, 0xf15891
+	ld	xix, FlashRead_BlockData_Field8
 	call	SeMenu_NameEditor_Draw
 	jr	15
 	ld	xiy, FlashRead_BlockHandler_Table
