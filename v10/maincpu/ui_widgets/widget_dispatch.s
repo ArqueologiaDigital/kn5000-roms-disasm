@@ -7781,13 +7781,13 @@ CharMap_Mode16:
 	ldw	bc, 9497
 	ldw	hl, 0x1a34
 	pushw	iy
-	ldw	iz, 14391
+	ldw	iz, 0x3837
 	push	xbc
 	push	xde
 	push	xhl
-	jp	1851197
-	ld	xwa, 1178813764
-	ld	xsp, 538910237
+	jp	0x1c3f3d
+	ld	xwa, 0x46434544
+	ld	xsp, 0x201f1e1d
 	.ascii "!\"#TUVWXYZ[\\]^_O`abcdef)Hghi>BAjkMlNmnopqrstuvwx2yz{|}~"
 	.byte 0x7f
 ; Character mapping table - full permutation variant F (sequential layout)
@@ -8024,7 +8024,7 @@ CharMap_FullPermutation:
 	nop
 	jr	lt, 20
 	nop
-	ld	xde, 32512
+	ld	xde, 0x7f00
 	nop
 	calr	7680
 	nop
@@ -8032,7 +8032,7 @@ CharMap_FullPermutation:
 	nop
 	nop
 	nop
-	ld	xde, 1610612736
+	ld	xde, 0x60000000
 	push_sr
 	ld	xwa, 135
 	nop

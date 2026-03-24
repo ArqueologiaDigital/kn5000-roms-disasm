@@ -439,7 +439,7 @@ Sprintf_Decimal_FinalWidth:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Decimal_OutputSign
-	cpdi16_24 246304, 32
+	cpdi16_24 0x3c220, 32
 	jr z, Sprintf_Decimal_PadLeftLoop
 	bit 4, wa
 	jr nz, Sprintf_Decimal_PadLeftLoop
@@ -487,7 +487,7 @@ Sprintf_Decimal_ZeroFill:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Decimal_PrecZeroLoop
-	cpdi16_24 246304, 48
+	cpdi16_24 0x3c220, 48
 	jr z, Sprintf_Decimal_ZeroFillLoop
 	jr Sprintf_Decimal_PrecZeroLoop
 
@@ -761,7 +761,7 @@ Sprintf_Hex_ComputeWidth:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Hex_EmitPrefix
-	cpdi16_24 246304, 32
+	cpdi16_24 0x3c220, 32
 	jr z, Sprintf_Hex_PadLeftLoop
 	jr Sprintf_Hex_EmitPrefix
 
@@ -794,7 +794,7 @@ Sprintf_Hex_ZeroFill:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Hex_PrecZeroLoop
-	cpdi16_24 246304, 48
+	cpdi16_24 0x3c220, 48
 	jr z, Sprintf_Hex_ZeroFillLoop
 	jr Sprintf_Hex_PrecZeroLoop
 
@@ -932,7 +932,7 @@ Sprintf_Octal_ComputeWidth:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Octal_EmitPrefix
-	cpdi16_24 246304, 32
+	cpdi16_24 0x3c220, 32
 	jr z, Sprintf_Octal_PadLeftLoop
 	jr Sprintf_Octal_EmitPrefix
 
@@ -962,7 +962,7 @@ Sprintf_Octal_ZeroFill:
 	ld wa, (xsp + 6)
 	bit 1, wa
 	jr nz, Sprintf_Octal_PrecZeroLoop
-	cpdi16_24 246304, 48
+	cpdi16_24 0x3c220, 48
 	jr z, Sprintf_Octal_ZeroFillLoop
 	jr Sprintf_Octal_PrecZeroLoop
 
@@ -1442,7 +1442,7 @@ Sprintf_FFixed_PadLeftCheck:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_FFixed_EmitSign
-	cpdi16_24 246304, 32
+	cpdi16_24 0x3c220, 32
 	jr z, Sprintf_FFixed_PadLeftLoop
 	jr Sprintf_FFixed_EmitSign
 
@@ -1451,7 +1451,7 @@ Sprintf_FFixed_PadLeftSpace:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_FFixed_PadLeftLoop:
 	ld wa, (xsp + 18)
@@ -1482,13 +1482,13 @@ Sprintf_FFixed_SignEmit:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_FFixed_ZeroFill:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_FFixed_LeadDigit
-	cpdi16_24 246304, 48
+	cpdi16_24 0x3c220, 48
 	jr z, Sprintf_FFixed_ZeroFillLoop
 	jr Sprintf_FFixed_LeadDigit
 
@@ -1497,7 +1497,7 @@ Sprintf_FFixed_ZeroFillBody:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_FFixed_ZeroFillLoop:
 	ld wa, (xsp + 18)
@@ -1528,7 +1528,7 @@ Sprintf_FFixed_LeadDigitZero:
 	inc 2, xsp
 
 Sprintf_FFixed_LeadDigitDone:
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_FFixed_IntegerDigits:
 	lds iz, 0
@@ -1542,7 +1542,7 @@ Sprintf_FFixed_IntDigitOutput:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 	inc 1, iz
 
 Sprintf_FFixed_IntDigitLoop:
@@ -1561,7 +1561,7 @@ Sprintf_FFixed_IntZeroFill:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_FFixed_IntZeroLoop:
 	ld wa, (xsp + 2)
@@ -1579,7 +1579,7 @@ Sprintf_FFixed_DecimalPoint:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 	jr Sprintf_FFixed_FracLeadZeroLoop
 
 Sprintf_FFixed_FracLeadZeros:
@@ -1604,7 +1604,7 @@ Sprintf_FFixed_FracLeadZeroBody:
 	inc 2, xsp
 
 Sprintf_FFixed_FracLeadZeroDone:
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 	incm 1, (xsp + 26)
 
 Sprintf_FFixed_FracLeadZeroLoop:
@@ -1630,7 +1630,7 @@ Sprintf_FFixed_FracDigitOutput:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 	inc 1, iz
 
 Sprintf_FFixed_FracDigitLoop:
@@ -1649,7 +1649,7 @@ Sprintf_FFixed_FracTrailZeros:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_FFixed_FracTrailLoop:
 	ld wa, (xsp + 20)
@@ -1666,7 +1666,7 @@ Sprintf_FFixed_PadRightSpace:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_FFixed_PadRightLoop:
 	ld wa, (xsp + 18)
@@ -1812,7 +1812,7 @@ Sprintf_ESci_PadLeftCheck:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_ESci_EmitSign
-	cpdi16_24 246304, 32
+	cpdi16_24 0x3c220, 32
 	jr z, Sprintf_ESci_PadLeftLoop
 	jr Sprintf_ESci_EmitSign
 
@@ -1821,7 +1821,7 @@ Sprintf_ESci_PadLeftSpace:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_ESci_PadLeftLoop:
 	decm 1, (xsp + 18)
@@ -1851,13 +1851,13 @@ Sprintf_ESci_SignEmit:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_ESci_ZeroFill:
 	ld wa, (xsp + 16)
 	bit 1, wa
 	jr nz, Sprintf_ESci_LeadDigit
-	cpdi16_24 246304, 48
+	cpdi16_24 0x3c220, 48
 	jr z, Sprintf_ESci_ZeroFillLoop
 	jr Sprintf_ESci_LeadDigit
 
@@ -1866,7 +1866,7 @@ Sprintf_ESci_ZeroFillBody:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_ESci_ZeroFillLoop:
 	decm 1, (xsp + 18)
@@ -1884,7 +1884,7 @@ Sprintf_ESci_LeadDigit:
 	ld xwa, (xsp + 22)
 	ld (xwa), 0x30
 	ldi_werp 0xfa, 0
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 	cpw (xsp + 26), 0x0
 	jr ge, Sprintf_ESci_Overflow_DecExp
 	incm 1, (xsp + 26)
@@ -1902,7 +1902,7 @@ Sprintf_ESci_LeadDigitNormal:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 	ldi_werp 0xfa, 1
 
 Sprintf_ESci_DecimalPoint:
@@ -1917,7 +1917,7 @@ Sprintf_ESci_DecimalPointEmit:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_ESci_MantissaDigits:
 	ld c, (xsp + 10)
@@ -1956,7 +1956,7 @@ Sprintf_ESci_MantDigitOutput:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 	inc1_werp 0xfa
 
 Sprintf_ESci_MantDigitLoop:
@@ -1976,7 +1976,7 @@ Sprintf_ESci_MantTrailZeros:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_ESci_MantTrailLoop:
 	ld wa, (xsp + 20)
@@ -2023,7 +2023,7 @@ Sprintf_ESci_EmitExpLetter:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 	cpw (xsp + 26), 0x0
 	jr ge, Sprintf_ESci_ExpSignPositive
 	pushw 0x2d
@@ -2036,7 +2036,7 @@ Sprintf_ESci_EmitExpSign:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 	ldfr_werp IZ, 0xfa
 	jr Sprintf_ESci_ExpLeadZeroLoop
 
@@ -2045,7 +2045,7 @@ Sprintf_ESci_ExpLeadZeros:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_ESci_ExpLeadZeroLoop:
 	ldto_werp WA, 0xfa
@@ -2063,7 +2063,7 @@ Sprintf_ESci_ExpDigitOutput:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_ESci_ExpDigitLoop:
 	cps iz, 0
@@ -2078,7 +2078,7 @@ Sprintf_ESci_PadRightSpace:
 	ld xwa, (xsp + 14)
 	call (xwa)
 	inc 2, xsp
-	incdi16_24 1, 246306
+	incdi16_24 1, 0x3c222
 
 Sprintf_ESci_PadRightLoop:
 	decm 1, (xsp + 18)

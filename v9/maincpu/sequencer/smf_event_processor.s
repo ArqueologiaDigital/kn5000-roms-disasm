@@ -29,9 +29,9 @@ ToneGen_DispatchSubHandler:
 	ldto_lerp XIZ, 0x38
 	stda32 4349, xiz
 	pop xiz
-	cpda16 xix, 10349
+	cpda16 xix, 0x286d
 	jr ule, ToneGen_StoreBlockAndLink
-	stdi8 10362, 5
+	stdi8 0x287a, 5
 	jr ToneGen_DispatchReturn
 
 ToneGen_StoreBlockAndLink:
@@ -54,17 +54,17 @@ ToneGen_DispatchAndLinkBlock:
 	push xiy
 	call DispatchHandler_JumpToSubHandler
 	ld wa, ix
-	ldda16 xhl, 10415
+	ldda16 xhl, 0x28af
 	call ToneGen_ComputeBlockPtr
 	ldda32 xhl, 4349
 	ld (xhl + 3), wa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
 	ldda32 xhl, 4349
-	ldda16 xbc, 10415
+	ldda16 xbc, 0x28af
 	ld (xhl + 1), bc
 	ldw (xhl + 3), 0xffff
-	stda16 10415, xwa
+	stda16 0x28af, xwa
 	stdi16 9830, 5
 	pop xiy
 	pop xix
@@ -837,7 +837,7 @@ SMF_LoadSoundBankAndPlay:
 	push xde
 	call SetWall_LoadBankToToneGen
 	ldda8 a, 4599
-	cpda8_24 a, 65507
+	cpda8_24 a, 0xffe3
 	jr z, SMF_LoadBank_ClearAndPrepare
 	ldda8 a, 4599
 	st8_24 0x00ffe3, a
@@ -860,7 +860,7 @@ SMF_LoadBank_ClearAndPrepare:
 SMF_SeekAndPreparePlayback:
 	bit 15, hl
 	jr nz, SMF_RestoreTimerState
-	anddi8 36232, 254
+	anddi8 0x8d88, 254
 	call SMF_CalcFilePosition
 	push xwa
 	push xbc
@@ -886,10 +886,10 @@ SMF_Seek_WritePosition:
 	pop xwa
 
 SMF_RestoreTimerState:
-	bitda 0, 10405
+	bitda 0, 0x28a5
 	jr z, SMF_SeekReturn
 	ld16_24 xwa, 0x00ffec
-	stda16 61854, xwa
+	stda16 0xf19e, xwa
 	push xhl
 	call Audio_CheckSubsystemReady
 	pop xhl
@@ -899,14 +899,14 @@ SMF_SeekReturn:
 
 SeqPlay_StartWithDisplay:
 	call SeqPlay_CheckStartConditions
-	cpdi8 62013, 255
+	cpdi8 0xf23d, 255
 	jr z, SeqPlay_SetFlagAndMode
-	anddi8 64941, 251
+	anddi8 0xfdad, 251
 	xor a, a
 	jr SeqPlay_QueueDisplayEvent
 
 SeqPlay_SetFlagAndMode:
-	ordi8 64941, 4
+	ordi8 0xfdad, 4
 	ldb a, 0x4
 
 SeqPlay_QueueDisplayEvent:
@@ -921,7 +921,7 @@ SeqPlay_QueueDisplayEvent:
 
 SMF_InitPlaybackState:
 	pushw wa
-	cpdi16 61852, 0
+	cpdi16 0xf19c, 0
 	jr z, SMF_InitChannelState
 	stdi16 6699, 9
 	jrl SMF_PopReturn
@@ -931,7 +931,7 @@ SMF_InitChannelState:
 	stda8 4236, a
 	stda16 4347, xwa
 	stda8 4344, a
-	cpdi16_24 65516, 0
+	cpdi16_24 0xffec, 0
 	jr z, SMF_SetStatusAndJump
 	xor c, c
 
@@ -971,7 +971,7 @@ SMF_FoundActiveChannel:
 	ld16_24 xwa, 0x00ffec
 	stda16 4325, xwa
 	stdi8 4324, 255
-	bitda 2, 64941
+	bitda 2, 0xfdad
 	jr nz, SMF_InitChannelScan
 	stdi8 4324, 0
 
@@ -1001,13 +1001,13 @@ SMF_FindFirstActiveChannel:
 	jrl SMF_Finalize_RestoreAndPlay
 
 SMF_SetupActiveChannel:
-	stda8 10359, c
+	stda8 0x2877, c
 	inc 1, hl
 	push xde
 	ld xde, 0xf250
 	ld_sriw3 HL, 0x07, 0xe8, 0xec
 	pop xde
-	stda16 10415, xhl
+	stda16 0x28af, xhl
 	stdi16 9830, 5
 	ld xiy, 0xf2823e
 	ld xix, 0x13fa
@@ -1053,10 +1053,10 @@ SMF_WaitForReady:
 	ldb a, 0x8
 	lda_dpi XBC, 0xf0
 	stda32 4376, xix
-	ldda8 l, 64610
+	ldda8 l, 0xfc62
 	xor h, h
 	pushw bc
-	ldda8 b, 64611
+	ldda8 b, 0xfc63
 	and b, 0x1
 	xor c, c
 	or hl, bc
@@ -1120,12 +1120,12 @@ SMF_WriteChannel_Continue:
 	cpdi8 6709, 0
 	jrl z, SMF_FinishChannelAndGetNextEvent
 	call BitMapOut_ComputeRegionDelta
-	stdi8 10359, 0
+	stdi8 0x2877, 0
 
 SMF_ScanAndProcessChannel:
 	ld xiy, 0xf460
 	xor hl, hl
-	ldda8 l, 10359
+	ldda8 l, 0x2877
 	ld c, l
 	ldda16 xde, 4325
 	ld a, c
@@ -1167,8 +1167,8 @@ SMF_WriteChannelNoteData:
 	stda8 4359, a
 	ld a, (xiy + 7)
 	stda8 4332, a
-	anddi8 10359, 15
-	ldda8 l, 10359
+	anddi8 0x2877, 15
+	ldda8 l, 0x2877
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
@@ -1441,7 +1441,7 @@ SMF_WriteVol_FileUnderflow4:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteVol_PanAndPitch:
-	ldda8 l, 10359
+	ldda8 l, 0x2877
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
@@ -1530,7 +1530,7 @@ SMF_WriteRPN_FileUnderflow3:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_FineTune:
-	ldda8 l, 10359
+	ldda8 l, 0x2877
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
@@ -1632,7 +1632,7 @@ SMF_WriteRPN_FileUnderflow7:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_CoarseTune:
-	ldda8 l, 10359
+	ldda8 l, 0x2877
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
@@ -1729,7 +1729,7 @@ SMF_WriteRPN_FileUnderflow11:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_Transpose:
-	ldda8 l, 10359
+	ldda8 l, 0x2877
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
@@ -1782,8 +1782,8 @@ SMF_WriteRPN_FileUnderflow13:
 	jp SMF_FlushAndFinalize
 
 SMF_AdvanceChannelScan:
-	incdi8 1, 10359
-	cpdi8 10359, 15
+	incdi8 1, 0x2877
+	cpdi8 0x2877, 15
 	jrl ule, SMF_ScanAndProcessChannel
 
 SMF_FinishChannelAndGetNextEvent:
@@ -3102,7 +3102,7 @@ FileOpen_MatchDevice:
 	ld (xsp + 8), xwa
 	ld a, (xsp + 6)
 	extz wa
-	cpda16_24 xwa, 254942
+	cpda16_24 xwa, 0x3e3de
 	jr ge, FileOpen_DeviceFound
 
 FileOpen_DeviceSearchLoop:
@@ -3120,7 +3120,7 @@ FileOpen_DeviceSearchLoop:
 	add (xsp + 8), xwa
 	ld a, (xsp + 6)
 	extz wa
-	cpda16_24 xwa, 254942
+	cpda16_24 xwa, 0x3e3de
 	jr lt, FileOpen_DeviceSearchLoop
 
 FileOpen_DeviceFound:
@@ -3130,7 +3130,7 @@ FileOpen_DeviceFound:
 	inc 4, xsp
 	ld a, (xsp + 6)
 	extz wa
-	cpda16_24 xwa, 254942
+	cpda16_24 xwa, 0x3e3de
 	jr nz, FileOpen_CheckPermission
 
 FileOpen_ErrorNoFile:
@@ -3153,7 +3153,7 @@ FileOpen_CheckPermission:
 	jrl FileOpen_Return
 
 FileOpen_FindFreeSlot:
-	incdi8_24 1, 135412
+	incdi8_24 1, 0x210f4
 	ld (xsp + 14), 0x0
 	cp (xsp + 14), 0x10
 	jr nc, FileOpen_SlotExhausted
@@ -3395,12 +3395,12 @@ SeqStep_ByteBlockEF56:
 	push	xsp
 	nop
 	jr	nz, 11
-	sti16_24	124220, 17
+	sti16_24	0x1e53c, 17
 	lds32	xhl, 0
 	jr	53
 	.byte 0xb9, 0x04
 	dec	6, w
-	pushw	15602
+	pushw	0x3cf2
 	.byte 0xe5, 0x01
 	push_sr
 	decf
@@ -3484,17 +3484,17 @@ SeqStep_ByteBlockF002:
 	push	xsp
 	nop
 	jr	nz, 11
-	sti16_24	124220, 17
-	ldw	hl, 65535
+	sti16_24	0x1e53c, 17
+	ldw	hl, 0xffff
 	ret
 	.byte 0xb9, 0x04
 	dec	6, a
-	pushw	15602
+	pushw	0x3cf2
 	.byte 0xe5, 0x01
 	push_sr
 	decf
 	nop
-	ldw	hl, 65535
+	ldw	hl, 0xffff
 	ret
 	lds	hl, 0
 	ld	xwa, (xsp+4)
@@ -3519,7 +3519,7 @@ SeqStep_ByteBlockF002:
 	ld	wa, hl
 	cps	wa, 0
 	ret	nz
-	ldw	hl, 65535
+	ldw	hl, 0xffff
 	ret
 
 FileClose:
@@ -3564,7 +3564,7 @@ SeqStep_FileCloseProcess:
 	st16_24 0x01e53c, xwa
 
 SeqStep_FileCloseReturn:
-	incdi8_24 1, 135412
+	incdi8_24 1, 0x210f4
 	ld a, (xiz + 5)
 	extz wa
 	ld bc, wa
@@ -3631,8 +3631,8 @@ SeqStep_FileCloseExit:
 	call	(xwa)
 	lda	xsp, (xsp+10)
 	jrl	131
-	sti16_24	124220, 25
-	ldw	hl, 65535
+	sti16_24	0x1e53c, 25
+	ldw	hl, 0xffff
 	jr	119
 	.byte 0xd7
 	swi	2
@@ -3645,7 +3645,7 @@ SeqStep_FileCloseExit:
 	swi	2
 	or	(xwa-40), d
 	push_sr
-	lda_24	xbc, 135348
+	lda_24	xbc, 0x210b4
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -3656,7 +3656,7 @@ SeqStep_FileCloseExit:
 	swi	2
 	or	(xwa-40), d
 	push_sr
-	lda_24	xbc, 135348
+	lda_24	xbc, 0x210b4
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -3674,7 +3674,7 @@ SeqStep_FileCloseExit:
 	swi	2
 	or	(xwa-40), d
 	push_sr
-	lda_24	xbc, 135348
+	lda_24	xbc, 0x210b4
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -3683,7 +3683,7 @@ SeqStep_FileCloseExit:
 	swi	2
 	or	(xwa-40), d
 	push_sr
-	lda_24	xbc, 135348
+	lda_24	xbc, 0x210b4
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -3709,8 +3709,8 @@ SeqStep_FileCloseExit:
 	ld	xbc, (xsp+4)
 	or	xbc, xbc
 	jr	nz, 11
-	sti16_24	124220, 17
-	ldw	hl, 65535
+	sti16_24	0x1e53c, 17
+	ldw	hl, 0xffff
 	ret
 	lda	xwa, (xsp+8)
 	inc	2, xwa
@@ -3777,11 +3777,11 @@ SeqStep_FileOpenSetupVtable:
 SeqStep_ByteBlockF245:
 	dec	2, xsp
 	push	xiz
-	ld16_24	wa, 124220
+	ld16_24	wa, 0x1e53c
 	ld	(xsp+4), wa
-	sti16_24	124220, 0
+	sti16_24	0x1e53c, 0
 	pushw	228
-	pushw	20506
+	pushw	0x501a
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	FileOpen
@@ -3792,8 +3792,8 @@ SeqStep_ByteBlockF245:
 	push	xiz
 	call	FileClose
 	inc	4, xsp
-	sti16_24	124220, 21
-	ldw	hl, 65535
+	sti16_24	0x1e53c, 21
+	ldw	hl, 0xffff
 	jr	75
 	.byte 0xd2
 	push	xix
@@ -3802,13 +3802,13 @@ SeqStep_ByteBlockF245:
 	halt
 	nop
 	jr	z, 5
-	ldw	hl, 65535
+	ldw	hl, 0xffff
 	jr	61
 	ld	wa, (xsp+4)
 	exts	wa
-	st16_24	124220, wa
+	st16_24	0x1e53c, wa
 	pushw	228
-	pushw	20508
+	pushw	0x501c
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	FileOpen
@@ -3816,7 +3816,7 @@ SeqStep_ByteBlockF245:
 	ld	xiz, xhl
 	or	xiz, xiz
 	jr	nz, 5
-	ldw	hl, 65535
+	ldw	hl, 0xffff
 	jr	24
 	ld	xwa, xiz
 	push	xwa
@@ -3838,7 +3838,7 @@ SeqStep_ByteBlockF245:
 	push	xsp
 	nop
 	jr	nz, 11
-	sti16_24	124220, 17
+	sti16_24	0x1e53c, 17
 	ldw	hl, 17
 	ret
 	ld	xwa, (xde+18)
@@ -3851,7 +3851,7 @@ SeqStep_ByteBlockF245:
 	ld	(xbc), xwa
 	lds	hl, 0
 	ret
-	sti16_24	124220, 18
+	sti16_24	0x1e53c, 18
 	ldw	hl, 18
 	ret
 	ld	xbc, (xsp+4)
@@ -3861,7 +3861,7 @@ SeqStep_ByteBlockF245:
 	push	xsp
 	nop
 	jr	nz, 11
-	sti16_24	124220, 17
+	sti16_24	0x1e53c, 17
 	ldw	hl, 17
 	ret
 	ld	xwa, (xsp+8)
@@ -3877,7 +3877,7 @@ SeqStep_ByteBlockF245:
 	ret	z
 	ld	a, l
 	exts	wa
-	st16_24	124220, wa
+	st16_24	0x1e53c, wa
 	ret
 
 SeqStep_FileSeekSetup:
@@ -4013,7 +4013,7 @@ SeqStep_FileSeekCleanup:
 	ld xwa, (xsp + 4)
 	or xwa, xwa
 	jr nz, SeqStep_FileTellReturn
-	cpdi16_24 124220, 13
+	cpdi16_24 0x1e53c, 13
 	jr nz, SeqStep_FileTellSetup
 	sti16_24 0x01e53c, 0x0000
 	pushw 0xe4
@@ -4026,7 +4026,7 @@ SeqStep_FileSeekCleanup:
 	ld xwa, (xsp + 4)
 	or xwa, xwa
 	jr nz, SeqStep_FileTellReturn
-	cpdi16_24 124220, 13
+	cpdi16_24 0x1e53c, 13
 	jr nz, SeqStep_FileTellReturn
 	ldw hl, 0xffff
 	jrl SeqStep_FileTellExit
@@ -4114,7 +4114,7 @@ SeqStep_FileTellFinal:
 	lda	xsp, (xsp-36)
 	push	xiz
 	pushw	228
-	pushw	20520
+	pushw	0x5028
 	ld	xwa, (xsp+48)
 	push	xwa
 	call	FileOpen
@@ -4122,12 +4122,12 @@ SeqStep_FileTellFinal:
 	ld	xiz, xhl
 	or	xiz, xiz
 	jr	nz, 6
-	ldw	hl, 65535
+	ldw	hl, 0xffff
 	jrl	149
 	ld	xwa, (xiz+26)
 	or	xwa, xwa
 	jr	nz, 9
-	sti16_24	124220, 13
+	sti16_24	0x1e53c, 13
 	jr	64
 	pushw	0
 	ld	xwa, 64
@@ -4151,11 +4151,11 @@ SeqStep_FileTellFinal:
 	jr	z, 47
 	cp	(xsp+8), 229
 	jr	z, 19
-	sti16_24	124220, 27
+	sti16_24	0x1e53c, 27
 	push	xiz
 	call	FileClose
 	inc	4, xsp
-	ldw	hl, 65535
+	ldw	hl, 0xffff
 	jr	57
 	push	xiz
 	pushw	1
@@ -4548,7 +4548,7 @@ SeqStep_FileBufferFinal:
 	push_sr
 	nop
 	nop
-	lda_24	xwa, 135706
+	lda_24	xwa, 0x2121a
 	ld	xiz, xwa
 	.byte 0xbf
 	ei	2
@@ -4556,7 +4556,7 @@ SeqStep_FileBufferFinal:
 	nop
 	.byte 0x9f, 0x06
 	push	xsp
-	ldwio	0, 14953
+	ldwio	0, 0x3a69
 	ld	a, (xiz+22)
 	and	a, 3
 	cps	a, 3
@@ -4582,7 +4582,7 @@ SeqStep_FileBufferFinal:
 	lda	xiz, (xiz+538)
 	.byte 0x9f, 0x06
 	push	xsp
-	ldwio	0, 50785
+	ldwio	0, 0xc661
 	ld	hl, (xsp+4)
 	pop	xiz
 	inc	4, xsp
@@ -4781,7 +4781,7 @@ SeqStep_FileSectorReturn:
 	.byte 0xf5, 0xe0
 	ldw	bc, 1215
 	jr	f, -98
-	retd	55328
+	retd	0xd820
 	.byte 0xef
 	ldio	177, 65
 	ld	xwa, (xsp+4)
@@ -4971,7 +4971,7 @@ SeqStep_FileSectorPopReturn:
 	.byte 0x9a
 	ldb	d, 63
 	swi	7
-	retd	22910
+	retd	0x597e
 	.byte 0x01
 	ld	wa, (xsp+14)
 	mul	wa, 3
@@ -5269,10 +5269,10 @@ SeqStep_FileSectorPopReturn:
 	inc	8, xsp
 	ld	xwa, (xsp+20)
 	.byte 0x98
-	ld	xiy, 1845493823
+	ld	xiy, 0x6e00003f
 	ldio	175, 20
 	ldb	w, 184
-	ld	xiy, 773482582
+	ld	xiy, 0x2e1a6856
 	.byte 0x9f
 	ldio	4, 175
 	push_f
@@ -5433,7 +5433,7 @@ SeqByteBlock_PathNormalize:
 	ldb	c, 243
 	reti
 	.byte 0xe0, 0xe8
-	ld	xhl, 2292623848
+	ld	xhl, 0x88a6a9e8
 	inc	1, de
 	.byte 0xda
 SeqByteBlock_TechnichordCfgB:
@@ -5453,7 +5453,7 @@ SeqByteBlock_StyleBitmapRef:
 	push	xsp
 	nop
 	jr	z, 3
-	ldw	hl, 65535
+	ldw	hl, 0xffff
 	ld	xwa, (xsp+8)
 	cp	(xwa), 46
 	jr	nz, 10
@@ -5473,7 +5473,7 @@ SeqByteBlock_StyleBitmapRef:
 	inc	4, xsp
 	cps	hl, 0
 	jr	z, 79
-	lda_24	xwa, 135706
+	lda_24	xwa, 0x2121a
 	ld	(xsp+16), xwa
 	lds	iz, 0
 	cp	iz, 10
@@ -5528,7 +5528,7 @@ SeqByteBlock_StyleBitmapRef:
 	ex_ff
 	push	xsp
 	ldb	w, 126
-	ldw	de, 44801
+	ldw	de, 0xaf01
 	ldb	h, 32
 	.byte 0xb8
 	pop_sr
@@ -5583,7 +5583,7 @@ SeqByteBlock_StyleBitmapRef:
 	swi	0
 	ld	h, (xhl-81)
 	ldb	w, 184
-	ldw	hl, 44867
+	ldw	hl, 0xaf43
 	ldio	32, 56
 	ld	xwa, (xsp+42)
 	lda	xwa, (xwa+52)
@@ -5615,7 +5615,7 @@ SeqByteBlock_StyleBitmapRef:
 	jrl	z, 546
 	ld	xwa, (xsp+38)
 	.byte 0xb8
-	ld	xwa, 34043596
+	ld	xwa, 0x20776cc
 	lda	xwa, (xsp+42)
 	push	xwa
 	lda	xwa, (xsp+26)
@@ -5873,8 +5873,8 @@ SeqByteBlock_StyleBitmapRef:
 	.byte 0xb8
 	pop_sr
 	inc	6, h
-	ld	xiy, 3089114799
-	ld	xwa, 855994060
+	ld	xiy, 0xb82026af
+	ld	xwa, 0x33056ecc
 	decf
 	nop
 	jr	95
@@ -5913,7 +5913,7 @@ SeqByteBlock_StyleBitmapRef:
 	jr	23
 	ld	xwa, (xsp+38)
 	.byte 0xb8
-	ld	xwa, 2936891080
+	ld	xwa, 0xaf0d66c8
 	ldb	h, 32
 	.byte 0xb8
 	pop_sr
@@ -6013,7 +6013,7 @@ SeqByteBlock_StyleBitmapRef:
 	call	Mem_Copy
 	ld	(xiz+64), 0
 	.byte 0xbe
-	ld	xiy, 3892314114
+	ld	xiy, 0xe8000002
 	.byte 0xa8
 	ld	(xiz+71), xwa
 	lds32	xwa, 0
@@ -6227,8 +6227,8 @@ SeqByteBlock_StyleBitmapRef:
 	.byte 0xf3
 	reti
 	.byte 0xe0, 0xe4
-	ldw	wa, 48696
-	ldw	ix, 14384
+	ldw	wa, 0xbe38
+	ldw	ix, 0x3830
 	calr	62220
 	inc	8, xsp
 	ld	xwa, (xsp+4)
@@ -6279,7 +6279,7 @@ SeqByteBlock_StyleBitmapRef:
 	push_f
 	ld	xwa, (xsp+8)
 	.byte 0xb8
-	ld	xiy, 3640655874
+	ld	xiy, 0xd9000002
 	.byte 0xa8
 	ld	xwa, (xsp+8)
 	ld	(xwa+42), bc
@@ -6311,7 +6311,7 @@ SeqByteBlock_StyleBitmapRef:
 	.byte 0xbf
 	ldb	w, 2
 	swi	7
-	retd	10927
+	retd	0x2aaf
 	ldb	w, 168
 	.byte 0x1a
 	ldb	w, 191
@@ -6669,7 +6669,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	bc, wa
 	ld	xwa, (xsp+4)
 	.byte 0x98
-	ldw	wa, 44865
+	ldw	wa, 0xaf41
 	.byte 0x04
 	ldb	w, 168
 	push_f
@@ -6724,7 +6724,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	bc, wa
 	ld	xwa, (xsp+4)
 	.byte 0x98
-	ldw	wa, 59713
+	ldw	wa, 0xe941
 	.byte 0x8b
 	ld	xwa, (xsp+4)
 	ld	bc, (xwa+46)
@@ -6746,7 +6746,7 @@ SeqByteBlock_StyleBitmapRef:
 	ld	(xwa+54), hl
 	ld	xwa, (xsp+4)
 	.byte 0x98
-	ldw	iz, 63295
+	ldw	iz, 0xf73f
 	retd	1379
 	.byte 0xbf
 	ldb	w, 2
@@ -6838,7 +6838,7 @@ SeqByteBlock_ChannelContainer:
 	.byte 0xb8
 	pop_sr
 	inc	6, l
-	ld	xhl, 359061726
+	ld	xhl, 0x1566d8de
 	cps	iz, 5
 	jr	nz, 59
 	ld	xwa, (xsp+18)
@@ -7168,7 +7168,7 @@ SeqByteBlock_ChannelContainer:
 	jr	z, 17
 	ld	a, l
 	exts	wa
-	st16_24	124220, wa
+	st16_24	0x1e53c, wa
 	ld	(xiz+6), wa
 	lds	hl, 0
 	jrl	269
@@ -7197,10 +7197,10 @@ SeqByteBlock_ChannelContainer:
 	jr	nz, 17
 	.byte 0xbe
 	ei	2
-	ldwio	0, 15602
+	ldwio	0, 0x3cf2
 	.byte 0xe5, 0x01
 	push_sr
-	ldwio	0, 43227
+	ldwio	0, 0xa8db
 	jrl	202
 	ld	xbc, (xiz+34)
 	ld	xwa, (xsp+24)
@@ -7353,7 +7353,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xsp+10)
 	.byte 0xa8
 	ex_ff
-	subdm8	10350, l
+	subdm8	0x286e, l
 	ldwio	32, 1688
 	push	xsp
 	ldb	c, 0
@@ -7389,7 +7389,7 @@ SeqByteBlock_ChannelContainer:
 	jr	z, 26
 	ld	a, l
 	exts	wa
-	st16_24	124220, wa
+	st16_24	0x1e53c, wa
 	ld	hl, (xsp+2)
 	jrl	354
 	ld	xwa, (xsp+10)
@@ -7459,7 +7459,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xwa+4)
 	cpl	wa
 	.byte 0xd7
-	ld32_24	xbc, 1351430
+	ld32_24	xbc, 0x149f06
 	extz	xbc
 	and	xbc, xwa
 	pushw	bc
@@ -7513,7 +7513,7 @@ SeqByteBlock_ChannelContainer:
 	ret
 	ldb	w, 245
 	.byte 0xe0
-	ld	xiy, 2942308031
+	ld	xiy, 0xaf600ebf
 	ldwio	32, 648
 	swi	5
 	jr	nz, 14
@@ -7604,7 +7604,7 @@ SeqChan_InitChannelState:
 	.byte 0xbf
 	ld	xwa, (xsp+12)
 	.byte 0xb8
-	ld	xwa, 1058316221
+	ld	xwa, 0x3f149fbd
 	nop
 	nop
 	jrl	z, 584
@@ -7620,7 +7620,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xsp+12)
 	.byte 0xa8
 	ex_ff
-	subdm8	10350, l
+	subdm8	0x286e, l
 	incf
 	ldb	w, 152
 	ei	63
@@ -7665,7 +7665,7 @@ SeqChan_InitChannelState:
 	jr	z, 15
 	ld	a, l
 	exts	wa
-	st16_24	124220, wa
+	st16_24	0x1e53c, wa
 	ld	hl, (xsp+2)
 	jrl	442
 	ld	xwa, (xsp+12)
@@ -7735,7 +7735,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xwa+4)
 	cpl	wa
 	.byte 0xd7
-	ld32_24	xbc, 1482502
+	ld32_24	xbc, 0x169f06
 	exts	xbc
 	and	xbc, xwa
 	pushw	bc
@@ -7808,7 +7808,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xsp+16)
 	.byte 0x80
 	push	xsp
-	ldwio	110, 62736
+	ldwio	110, 0xf510
 	.byte 0xe8
 	nop
 	decf
@@ -7823,7 +7823,7 @@ SeqChan_InitChannelState:
 	.byte 0xc5, 0xe0
 	ldb	c, 245
 	.byte 0xe8
-	ld	xhl, 2673873087
+	ld	xhl, 0x9f6010bf
 	push_a
 	jr	ge, -97
 	push_sr
@@ -7832,7 +7832,7 @@ SeqChan_InitChannelState:
 	ld	xwa, (xsp+16)
 	.byte 0xc5, 0xe0
 	ldb	c, 178
-	ld	xhl, 2673873087
+	ld	xhl, 0x9f6010bf
 	push_a
 	jr	ge, -97
 	push_sr
@@ -7864,7 +7864,7 @@ SeqChan_InitChannelState:
 	ld	xbc, (xwa+22)
 	ld	xwa, (xsp+12)
 	.byte 0xa8
-	ld	xsp, 2936759281
+	ld	xsp, 0xaf0b63f1
 	incf
 	ldb	w, 232
 	.byte 0x89
@@ -7939,7 +7939,7 @@ SeqChan_ValidateAndDispatch:
 	.byte 0xbe
 	pop_sr
 	inc	6, l
-	ldwio	62, 13086
+	ldwio	62, 0x331e
 	.byte 0xf1
 	inc	4, xsp
 	cps	hl, 0
@@ -8028,7 +8028,7 @@ SeqChan_TraverseAndProcess:
 	ld	xwa, (xsp+12)
 	ld	xbc, (xsp+16)
 	ld	(xwa+22), xbc
-	lda_24	xwa, 135706
+	lda_24	xwa, 0x2121a
 	ld	xiz, xwa
 	.byte 0xbf, 0x04
 	push_sr
@@ -8036,7 +8036,7 @@ SeqChan_TraverseAndProcess:
 	nop
 	.byte 0x9f, 0x04
 	push	xsp
-	ldwio	0, 12649
+	ldwio	0, 0x3169
 	ld	xwa, (xsp+12)
 	ld	a, (xwa+5)
 	.byte 0x8e, 0x17, 0xf1
@@ -8060,7 +8060,7 @@ SeqChan_TraverseAndProcess:
 	push_sr
 	ldw	iz, 1183
 	push	xsp
-	ldwio	0, 53089
+	ldwio	0, 0xcf61
 	ld	hl, (xsp+6)
 	pop	xiz
 	inc	4, xsp
@@ -8094,7 +8094,7 @@ SeqChan_ReadNextFromLoop:
 	lda	xwa, (xwa+26)
 	ld	(xsp+6), xwa
 	pushw	228
-	pushw	20522
+	pushw	0x502a
 	lda	xwa, (xsp+14)
 	push	xwa
 	call	Strcpy
@@ -8157,7 +8157,7 @@ SeqChan_WritePatchData:
 	extz	wa
 	ld	bc, wa
 	sla	bc, 2
-	lda_24	xde, 135348
+	lda_24	xde, 0x210b4
 	lds32	xwa, 0
 	.byte 0xf3
 	reti
@@ -8186,7 +8186,7 @@ SeqChan_WriteExtendedPatch:
 	inc	4, xsp
 	cps	hl, 0
 	jr	z, 56
-	ldw	hl, 65535
+	ldw	hl, 0xffff
 	jr	80
 	lds32	xwa, 4
 	add	(xsp+14), xwa
@@ -8218,8 +8218,8 @@ SeqChan_WriteExtendedPatch:
 	pop_sr
 	.byte 0xbf
 	jr	-19
-	sti16_24	124220, 18
-	ldw	hl, 65535
+	sti16_24	0x1e53c, 18
+	ldw	hl, 0xffff
 	pop	xiz
 	ret
 
@@ -8241,7 +8241,7 @@ SeqStep_CountLoop_Body:
 	inc1_werp 0xfa
 
 SeqStep_CountLoop_CheckEnd:
-	cpdi16_24 124220, 0
+	cpdi16_24 0x1e53c, 0
 	jr nz, SeqStep_CountLoop_ResetWerp
 	ld xwa, (xsp + 8)
 	cpw (xwa + 6), 0x0
@@ -8292,8 +8292,8 @@ SeqStep_SectorCompareBlock:
 	and	wa, 24
 	cp	wa, bc
 	jr	z, 11
-	sti16_24	124220, 13
-	ldw	hl, 65535
+	sti16_24	0x1e53c, 13
+	ldw	hl, 0xffff
 	ret
 	ld	wa, (xsp+10)
 	ld	(xde+64), a
@@ -8306,7 +8306,7 @@ SeqStep_SectorCompareBlock:
 	dec	2, xsp
 	push	xiz
 	pushw	228
-	pushw	20534
+	pushw	0x5036
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	FileOpen
@@ -8314,7 +8314,7 @@ SeqStep_SectorCompareBlock:
 	ld	xiz, xhl
 	or	xiz, xiz
 	jr	nz, 5
-	ldw	hl, 65535
+	ldw	hl, 0xffff
 	jr	24
 	.byte 0x9f
 	ret
@@ -8394,7 +8394,7 @@ SeqChan_ByteBlockB:
 SeqChan_ByteBlockC:
 	push	xiz
 	ld	xiz, (xsp+20)
-	call	16064067
+	call	0xf51e43
 	cps	hl, 0
 	jr	z, 9
 	call	FDC_ClearDiskChangeStatus
@@ -8409,7 +8409,7 @@ SeqChan_ByteBlockC:
 	jr	nz, 83
 	cpw	(xsp+16), 1
 	jr	nz, 76
-	stdi16	35344, 65535
+	stdi16	0x8a10, 0xffff
 	push	xiz
 	pushw	1
 	pushw	1
@@ -8422,7 +8422,7 @@ SeqChan_ByteBlockC:
 	pushw	3
 	calr	65360
 	lda	xsp, (xsp+16)
-	stdi16	35344, 0
+	stdi16	0x8a10, 0
 	cps	hl, 0
 	jr	nz, 8
 	ld	(xiz+16), 2
@@ -8430,7 +8430,7 @@ SeqChan_ByteBlockC:
 	jr	52
 	pushw	512
 	pushw	228
-	pushw	20536
+	pushw	0x5038
 	push	xiz
 	call	Mem_Copy
 	lda	xsp, (xsp+10)
@@ -8487,7 +8487,7 @@ SeqChan_ByteBlockD:
 	jr	nz, 5
 	lds	hl, 0
 	jrl	220
-	incdi16_24	1, 141086
+	incdi16_24	1, 0x2271e
 	ld	wa, (xbc)
 	cp	wa, 49
 	jr	z, 116
@@ -8518,7 +8518,7 @@ SeqChan_ByteBlockD:
 	calr	65246
 	ld	xwa, (xiz)
 	push	xwa
-	call	16058402
+	call	0xf50822
 	inc	8, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -8539,7 +8539,7 @@ SeqChan_ByteBlockD:
 	ld	xwa, (xwa+26)
 	ld	xwa, (xiz)
 	push	xwa
-	call	16058402
+	call	0xf50822
 	inc	4, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -8561,7 +8561,7 @@ SeqChan_ByteBlockD:
 	calr	65167
 	ld	xwa, (xiz)
 	push	xwa
-	call	16058402
+	call	0xf50822
 	inc	8, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -8580,7 +8580,7 @@ SeqChan_ByteBlockD:
 	calr	65130
 	ld	xwa, (xiz)
 	push	xwa
-	call	16058402
+	call	0xf50822
 	inc	8, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -8605,7 +8605,7 @@ SeqChan_ByteBlockD:
 SeqChan_ByteBlockE:
 	lda	xsp, (xsp-12)
 	pushw	iz
-	sti16_24	141086, 0
+	sti16_24	0x2271e, 0
 	ld	xwa, (xsp+22)
 	ld	xwa, (xwa)
 	ld	xwa, (xwa+26)
@@ -8614,7 +8614,7 @@ SeqChan_ByteBlockE:
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	.byte 0x98
-	ldw	de, 55121
+	ldw	de, 0xd751
 	.byte 0xe6, 0x88
 	ld	(xsp+10), wa
 	ld	xwa, (xsp+2)
@@ -8625,12 +8625,12 @@ SeqChan_ByteBlockE:
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	.byte 0x98
-	ldw	ix, 55121
+	ldw	ix, 0xd751
 	.byte 0xe6, 0x88
 	ld	(xsp+6), wa
 	ld	xwa, (xsp+2)
 	.byte 0x98
-	ldw	ix, 48979
+	ldw	ix, 0xbf53
 	ldio	83, 175
 	ex_ff
 	ldb	w, 168
@@ -8690,14 +8690,14 @@ SeqChan_ByteBlockE:
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+10)
 	.byte 0x98
-	ldw	de, 26609
+	ldw	de, 0x67f1
 	.byte 0x8b, 0xbf
 	ldwio	2, 0
 	incm	1, (xsp+6)
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+6)
 	.byte 0x98
-	ldw	ix, 32497
+	ldw	ix, 0x7ef1
 	jrl	c, -16385
 	ei	2
 	nop
@@ -8736,7 +8736,7 @@ SeqChan_ByteBlockE:
 SeqChan_ByteBlockF:
 	lda	xsp, (xsp-12)
 	pushw	iz
-	sti16_24	141086, 0
+	sti16_24	0x2271e, 0
 	ld	xwa, (xsp+22)
 	ld	xwa, (xwa)
 	ld	xwa, (xwa+26)
@@ -8745,7 +8745,7 @@ SeqChan_ByteBlockF:
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	.byte 0x98
-	ldw	de, 55121
+	ldw	de, 0xd751
 	.byte 0xe6, 0x88
 	ld	(xsp+10), wa
 	ld	xwa, (xsp+2)
@@ -8756,12 +8756,12 @@ SeqChan_ByteBlockF:
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	.byte 0x98
-	ldw	ix, 55121
+	ldw	ix, 0xd751
 	.byte 0xe6, 0x88
 	ld	(xsp+6), wa
 	ld	xwa, (xsp+2)
 	.byte 0x98
-	ldw	ix, 48979
+	ldw	ix, 0xbf53
 	ldio	83, 175
 	ex_ff
 	ldb	w, 168
@@ -8821,14 +8821,14 @@ SeqChan_ByteBlockF:
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+10)
 	.byte 0x98
-	ldw	de, 26609
+	ldw	de, 0x67f1
 	.byte 0x8b, 0xbf
 	ldwio	2, 0
 	incm	1, (xsp+6)
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+6)
 	.byte 0x98
-	ldw	ix, 32497
+	ldw	ix, 0x7ef1
 	jrl	c, -16385
 	ei	2
 	nop
@@ -8880,11 +8880,11 @@ FDC_StoreDiskType:
 	ret
 
 FDC_ClearDiskChangeStatus:
-	sti16_24	254950, 0
-	ld8_24	a, 254948
-	st8_24	254946, a
+	sti16_24	0x3e3e6, 0
+	ld8_24	a, 0x3e3e4
+	st8_24	0x3e3e2, a
 	ret
-	ld16_24	hl, 254950
+	ld16_24	hl, 0x3e3e6
 	ret
 
 FDC_ReadDiskType:
@@ -9682,7 +9682,7 @@ GetMediaType_SetupReadCmd:
 	ldw (xsp + 16), 0x1
 	ld xwa, (xsp + 2)
 	ld (xsp + 18), xwa
-	stdi16 35344, 65535
+	stdi16 0x8a10, 0xffff
 	ldi_berp 0xfb, 0
 	call Check_for_Floppy_Disk_Change
 	cps l, 0
@@ -9789,7 +9789,7 @@ GetMediaType_CheckExtraFormat:
 	ldi_berp 0xfb, 5
 
 GetMediaType_Epilogue:
-	stdi16 35344, 0
+	stdi16 0x8a10, 0
 	ld xwa, (xsp + 2)
 	push xwa
 	call Free
@@ -9826,10 +9826,10 @@ GetDiskFreeSpace:
 GetDiskFreeSpace_JumpTable:
 	lds	hl, 0
 	jr	72
-	ld	xwa, 730112
+	ld	xwa, 0xb2400
 	ld	(xiz), xwa
 	jr	16
-	ld	xwa, 1457664
+	ld	xwa, 0x163e00
 	ld	(xiz), xwa
 	jr	7
 	.byte 0x40, 0x00
@@ -10541,7 +10541,7 @@ SndTable_ByteBlock_ReadOps:
 	push	xsp
 	nop
 	jr	nz, 48
-	ld32_24	xbc, 144762
+	ld32_24	xbc, 0x2357a
 	push	xbc
 	pushw	1024
 	pushw	1
@@ -10552,13 +10552,13 @@ SndTable_ByteBlock_ReadOps:
 	jr	lt, 3
 	lds	hl, 0
 	ret
-	ld32_24	xwa, 144762
+	ld32_24	xwa, 0x2357a
 	ld	wa, (xwa+6)
-	and	wa, 32767
+	and	wa, 0x7fff
 	jr	nz, 3
 	lds	hl, 0
 	ret
-	ldw	hl, 65535
+	ldw	hl, 0xffff
 	ret
 	.byte 0xc2
 	or	xhl, xix
@@ -10569,25 +10569,25 @@ SndTable_ByteBlock_ReadOps:
 	calr	759
 	extz	hl
 	ret
-	ldw	hl, 65535
+	ldw	hl, 0xffff
 	ret
 	dec	2, xsp
 	push	xiz
-	sti8_24	144766, 1
-	ld32_24	xwa, 254952
-	st32_24	141102, xwa
-	ld32_24	xwa, 254958
+	sti8_24	0x2357e, 1
+	ld32_24	xwa, 0x3e3e8
+	st32_24	0x2272e, xwa
+	ld32_24	xwa, 0x3e3ee
 	ldw	(xwa+2), 0
-	ld32_24	xwa, 254958
+	ld32_24	xwa, 0x3e3ee
 	.byte 0xf3, 0xe1
 	ei	4
 	push_sr
 	nop
 	nop
-	ld32_24	xbc, 254958
+	ld32_24	xbc, 0x3e3ee
 	lds	wa, 2
 	call	TaskMsg_Send
-	ld32_24	xwa, 254958
+	ld32_24	xwa, 0x3e3ee
 	lda	xwa, (xwa+1028)
 	ld	xbc, xwa
 	lds	wa, 2
@@ -10646,13 +10646,13 @@ SndTable_ByteBlock_ReadOps:
 	.byte 0x04
 	ld	wa, (xsp+4)
 	extz	xwa
-	ld32_24	xbc, 141102
+	ld32_24	xbc, 0x2272e
 	sub	xbc, xwa
 	cp	xbc, 1024
 	jr	ugt, 14
 	ld	wa, (xsp+4)
 	extz	xwa
-	ld32_24	xbc, 141102
+	ld32_24	xbc, 0x2272e
 	sub	xbc, xwa
 	ld	(xiz), bc
 	.byte 0xbe
@@ -10675,8 +10675,8 @@ SndTable_ByteBlock_ReadOps:
 	ldb	l, 2
 	.byte 0xf0
 	jrl	ule, -134
-	sti8_24	144766, 0
-	call	15670294
+	sti8_24	0x2357e, 0
+	call	0xef1c16
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -10694,7 +10694,7 @@ TaskBuf_ReadNextByte:
 	pushw iz
 	cpi8_24 0x02358a, 0x01
 	jrl nz, TaskBuf_Error
-	cpdi16_24 144768, 0
+	cpdi16_24 0x23580, 0
 	jr nz, TaskBuf_CheckPendingData
 	lds wa, 3
 	call TaskMsg_Receive
@@ -10715,7 +10715,7 @@ TaskBuf_CheckPendingData:
 	jr TaskBuf_PopIzRet
 
 TaskBuf_EmptyAndReturn:
-	cpdi16_24 144768, 0
+	cpdi16_24 0x23580, 0
 	jr nz, TaskBuf_ReadAndDecrement
 	sti8_24 0x02358a, 0x02
 	ldw hl, 0xffff
@@ -10728,7 +10728,7 @@ TaskBuf_ReadAndDecrement:
 	ld a, (xbc)
 	ldfr_berp A, 0xf8
 	extz iz
-	subdi16_24 144768, 1
+	subdi16_24 0x23580, 1
 	jr nz, TaskBuf_ReturnByte
 	ld32_24 xwa, 0x023582
 	cpw (xwa), 0x400
@@ -10892,18 +10892,18 @@ FDC_ExecuteSectorCommand:
 FDC_SectorCmd_ByteBlock:
 	push	xiz
 	ld	xiz, xwa
-	ld16_24	wa, 144780
+	ld16_24	wa, 0x2358c
 	ld	xbc, xiz
-	calr	-91
-	incdi16_24	1, 144780
+	calr	65445
+	incdi16_24	1, 0x2358c
 	cps	hl, 0
 	jr	nz, 22
-	ld16_24	de, 144780
+	ld16_24	de, 0x2358c
 	lda	xwa, (xiz+512)
 	ld	xbc, xwa
 	ld	wa, de
-	calr	-117
-	incdi16_24	1, 144780
+	calr	65419
+	incdi16_24	1, 0x2358c
 	pop	xiz
 	ret
 
@@ -11151,13 +11151,13 @@ SeqDispatch_InitWithPayload:
 	call AccDemo_Init_Wrap
 
 SeqDispatch_PostInit:
-	anddi8 13043, 254
+	anddi8 0x32f3, 254
 	ret
 
 SeqDispatch_TrampolineBlock:
-	jp	16069340
+	jp	0xf532dc
 	ret
-	jp	16069341
+	jp	0xf532dd
 	ret
 	ret
 	ret
@@ -11202,12 +11202,12 @@ Rhythm_DispatchNote_Finalize:
 Rhythm_TransposeWithMod_Tramp:
 	jp Rhythm_TransposeWithMod
 Rhythm_TransposeTrampBlock:
-	jp	16079849
+	jp	0xf55be9
 
 Seq_DispatcherTick:
-	cpdi8 36150, 16
+	cpdi8 0x8d36, 16
 	jr c, Seq_DispatcherTick_Process
-	cpdi8 36150, 22
+	cpdi8 0x8d36, 22
 	jr ugt, Seq_DispatcherTick_Process
 	jr Seq_DispatcherTickReturn
 
@@ -11219,9 +11219,9 @@ Seq_DispatcherTick_Process:
 	call Seq_ReadTempoLookup
 	calr Seq_ProcessAllInputState
 	call Rhythm_CompareAndTrigger
-	anddi8 13044, 159
+	anddi8 0x32f4, 159
 	call AccTick_Main
-	ldda8 a, 13044
+	ldda8 a, 0x32f4
 	and a, 0x60
 	call Rhythm_SaveState
 	call Seq_RhythmProcessor
@@ -11234,22 +11234,22 @@ Seq_DispatcherTickReturn:
 	ret
 
 SeqTick_ReadControlState:
-	ldda8 a, 64602
-	stda8 13045, a
-	ldda8 a, 64603
+	ldda8 a, 0xfc5a
+	stda8 0x32f5, a
+	ldda8 a, 0xfc5b
 	and a, 0x7f
 	and a, 0x7
-	stda8 13047, a
+	stda8 0x32f7, a
 	calr VoiceParam_ClampAndStore
 	nop
 	nop
 	nop
 	nop
-	ldda8 a, 64605
+	ldda8 a, 0xfc5d
 	or a, 0xe0
 	srl a, 5
-	stda8 13049, a
-	ldda8 w, 64607
+	stda8 0x32f9, a
+	ldda8 w, 0xfc5f
 	xor a, a
 	bit 6, w
 	jr z, SeqCtl_CheckBit6
@@ -11261,7 +11261,7 @@ SeqCtl_CheckBit6:
 	or a, 0x2
 
 SeqCtl_CheckBit7:
-	stda8 13051, a
+	stda8 0x32fb, a
 	xor a, a
 	bit 4, w
 	jr z, SeqCtl_CheckBit4
@@ -11273,7 +11273,7 @@ SeqCtl_CheckBit4:
 	or a, 0x2
 
 SeqCtl_CheckBit5:
-	stda8 13053, a
+	stda8 0x32fd, a
 	xor a, a
 	bit 2, w
 	jr z, SeqCtl_CheckBit2
@@ -11285,42 +11285,42 @@ SeqCtl_CheckBit2:
 	or a, 0x2
 
 SeqCtl_CheckBit3:
-	ldda8 w, 64608
+	ldda8 w, 0xfc60
 	bit 2, w
 	jr z, SeqCtl_StorePedalFlags
 	or a, 0x4
 
 SeqCtl_StorePedalFlags:
-	stda8 13055, a
-	ldda8 a, 64921
+	stda8 0x32ff, a
+	ldda8 a, 0xfd99
 	and a, 0x1
-	stda8 13057, a
-	ldda8 a, 64606
+	stda8 0x3301, a
+	ldda8 a, 0xfc5e
 	and a, 0x10
 	srl a, 4
 	ldb a, 0x0
-	stda8 13059, a
-	ldda8 a, 64609
+	stda8 0x3303, a
+	ldda8 a, 0xfc61
 	and a, 0x30
 	srl a, 4
-	stda8 13061, a
+	stda8 0x3305, a
 	xor a, a
-	bitda 2, 64941
+	bitda 2, 0xfdad
 	jr nz, SeqCtl_StoreKeyMask
 	or a, 0x3f
 
 SeqCtl_StoreKeyMask:
-	stda8 13063, a
+	stda8 0x3307, a
 	ret
 
 VoiceParam_ClampAndStore:
-	ldda8 l, 13045
-	ldda8 h, 13047
+	ldda8 l, 0x32f5
+	ldda8 h, 0x32f7
 	calr VoiceParam_ClampAndValidate
-	stda8 13045, l
+	stda8 0x32f5, l
 	and h, 0x7f
 	and h, 0x7
-	stda8 13047, h
+	stda8 0x32f7, h
 	ret
 
 VoiceParam_ClampAndValidate:
@@ -11375,18 +11375,18 @@ Seq_ReadTempoLookup:
 	ld l, a
 	add xhl, 0xe46c17
 	ld a, (xhl)
-	stda16 13131, xwa
+	stda16 0x334b, xwa
 	ret
 
 Seq_ProcessAllInputState:
-	ldda8 a, 12931
+	ldda8 a, 0x3283
 	and a, 0xfe
 	bitda 2, 1054
 	jr z, Seq_InputState_StoreFlag
 	or a, 0x1
 
 Seq_InputState_StoreFlag:
-	stda8 12931, a
+	stda8 0x3283, a
 	calr AccKey_ScanAndSetDirty
 	calr AccState_ReadAccompParams
 	calr AudioMode_CheckAndUpdateStereo
@@ -11396,19 +11396,19 @@ Seq_InputState_StoreFlag:
 	calr AudioMode_CopyAccentFlags
 	calr AccPedal_SetFlag13155
 	xor xhl, xhl
-	ldda8 l, 12928
+	ldda8 l, 0x3280
 	sla l, 1
 	add xhl, 0xe46b9e
 	ld bc, (xhl)
 	xor hl, hl
-	ldda8 l, 12927
+	ldda8 l, 0x327f
 	add bc, hl
-	stda16 12925, xbc
-	stdi8 13033, 24
-	bitda 0, 12931
+	stda16 0x327d, xbc
+	stdi8 0x32e9, 24
+	bitda 0, 0x3283
 	jr z, AccInput_CheckRecordMode
 	call AccTuning_DisableIfNoStyle
-	bitda 0, 13155
+	bitda 0, 0x3363
 	jr nz, AccInput_ProcessWithPedal
 	calr AccPedal_ProcessAllChanges
 
@@ -11418,7 +11418,7 @@ AccInput_ProcessWithPedal:
 	calr AccVoice_ProcessLeftPedalChanges
 	calr AccPitch_CheckTransposeFlags
 	calr AccChord_ProcessKeyChanges
-	bitda 0, 13155
+	bitda 0, 0x3363
 	jr z, AccInput_CompareAndCheck
 	calr AccChord_ResolveVoiceAndDispatch
 
@@ -11437,7 +11437,7 @@ AccInput_Return:
 
 AccKey_ScanAndSetDirty:
 	push xbc
-	anddi8 12932, 253
+	anddi8 0x3284, 253
 	ldb a, 0x1
 	ld xhl, 0xf1a0
 	xor c, c
@@ -11453,46 +11453,46 @@ AccKey_ScanLoop:
 	jr AccKey_ScanLoop
 
 AccKey_FoundActiveKey:
-	andda16 xwa, 61854
+	andda16 xwa, 0xf19e
 	jr z, AccKey_ScanDone
-	ordi8 12932, 2
+	ordi8 0x3284, 2
 
 AccKey_ScanDone:
 	pop xbc
 	ret
 
 AccChord_ReadAndStoreKeys:
-	ldda8 a, 52960
-	stda8 13017, a
-	ldda8 a, 52959
-	stda8 13016, a
-	ldda8 a, 52961
-	stda8 13018, a
-	ldda8 a, 52958
-	stda8 13015, a
+	ldda8 a, 0xcee0
+	stda8 0x32d9, a
+	ldda8 a, 0xcedf
+	stda8 0x32d8, a
+	ldda8 a, 0xcee1
+	stda8 0x32da, a
+	ldda8 a, 0xcede
+	stda8 0x32d7, a
 	cpdi8 8968, 0
 	jr z, AccChord_CheckKeyOverride
 	ldda8 a, 8962
-	stda8 13017, a
+	stda8 0x32d9, a
 	ldda8 a, 8960
-	stda8 13016, a
+	stda8 0x32d8, a
 	ldda8 a, 8964
-	stda8 13018, a
+	stda8 0x32da, a
 	ldda8 a, 8966
-	stda8 13015, a
+	stda8 0x32d7, a
 
 AccChord_CheckKeyOverride:
-	bitda 1, 13015
+	bitda 1, 0x32d7
 	jr nz, AccChord_CheckUIState
-	ldda8 a, 13017
-	stda8 13018, a
+	ldda8 a, 0x32d9
+	stda8 0x32da, a
 
 AccChord_CheckUIState:
-	cpdi8 36148, 14
+	cpdi8 0x8d34, 14
 	jr nz, AccChord_CheckUIStateExit
-	cpdi8 36150, 177
+	cpdi8 0x8d36, 177
 	jr z, AccChord_CheckKeyFlags
-	cpdi8 36150, 176
+	cpdi8 0x8d36, 176
 	jr nz, AccChord_SetDefaultKeys
 
 AccChord_CheckKeyFlags:
@@ -11501,74 +11501,74 @@ AccChord_CheckKeyFlags:
 	jr nz, AccChord_CheckUIStateExit
 
 AccChord_SetDefaultKeys:
-	stdi8 13015, 0
-	stdi8 13016, 1
-	stdi8 36162, 1
-	bitda 4, 13546
+	stdi8 0x32d7, 0
+	stdi8 0x32d8, 1
+	stdi8 0x8d42, 1
+	bitda 4, 0x34ea
 	jr z, AccChord_ReadChannelKeys
-	stdi8 13016, 5
-	stdi8 36162, 5
+	stdi8 0x32d8, 5
+	stdi8 0x8d42, 5
 
 AccChord_ReadChannelKeys:
-	ldda8 a, 13545
+	ldda8 a, 0x34e9
 	and a, 0xf
 	inc 1, a
-	stda8 13017, a
-	stda8 36160, a
-	stda8 13018, a
+	stda8 0x32d9, a
+	stda8 0x8d40, a
+	stda8 0x32da, a
 
 AccChord_CheckUIStateExit:
-	cpdi8 36148, 14
+	cpdi8 0x8d34, 14
 	jr z, AccChord_CheckModeAndUpdate
-	cpdi8 13041, 14
+	cpdi8 0x32f1, 14
 	jr nz, AccChord_CheckModeAndUpdate
-	ldda8 a, 52959
-	stda8 36162, a
-	ldda8 a, 52960
-	stda8 36160, a
+	ldda8 a, 0xcedf
+	stda8 0x8d42, a
+	ldda8 a, 0xcee0
+	stda8 0x8d40, a
 	calr AccDisplay_RefreshIfDiskActive
 
 AccChord_CheckModeAndUpdate:
-	ldda8 a, 13076
-	orda8 a, 13077
+	ldda8 a, 0x3314
+	orda8 a, 0x3315
 	and a, 0x3f
 	jrl z, AccChord_ReadKeysRet
-	ldda8 a, 13016
+	ldda8 a, 0x32d8
 	cps a, 0
 	jr nz, AccChord_ReadKeysRet
-	ldda8 a, 13020
-	cpda8 a, 13016
+	ldda8 a, 0x32dc
+	cpda8 a, 0x32d8
 	jr z, AccChord_ReadKeysRet
-	stda8 13016, a
-	stda8 52959, a
-	stda8 36162, a
+	stda8 0x32d8, a
+	stda8 0xcedf, a
+	stda8 0x8d42, a
 	stda8 8960, a
-	ldda8 a, 13021
-	stda8 13017, a
-	stda8 52960, a
-	stda8 36160, a
+	ldda8 a, 0x32dd
+	stda8 0x32d9, a
+	stda8 0xcee0, a
+	stda8 0x8d40, a
 	stda8 8962, a
-	ldda8 a, 13022
-	stda8 13018, a
-	stda8 52961, a
-	stda8 36164, a
+	ldda8 a, 0x32de
+	stda8 0x32da, a
+	stda8 0xcee1, a
+	stda8 0x8d44, a
 	stda8 8964, a
-	cpda8 a, 13021
+	cpda8 a, 0x32dd
 	jr nz, AccChord_CompareNoteC
-	stdi8 36164, 0
+	stdi8 0x8d44, 0
 
 AccChord_CompareNoteC:
-	ldda8 a, 13019
-	stda8 13015, a
-	stda8 52958, a
+	ldda8 a, 0x32db
+	stda8 0x32d7, a
+	stda8 0xcede, a
 	stda8 8966, a
 	call Voice_InitSlotData
 	call Voice_FindAndAllocBestMatch
-	ldda8 a, 64605
+	ldda8 a, 0xfc5d
 	and a, 0x7
 	cps a, 0
 	jr z, AccChord_ReadKeysRet
-	bitda 1, 12932
+	bitda 1, 0x3284
 	jr z, AccChord_ReadKeysRet
 	call BitMapOut_CheckDiskAndApply
 	jr AccChord_ReadKeysRet
@@ -11578,7 +11578,7 @@ AccChord_ReadKeysRet:
 
 AccDisplay_RefreshIfDiskActive:
 	push xwa
-	ldda8 a, 64605
+	ldda8 a, 0xfc5d
 	and a, 0x7
 	cps a, 0
 	jr z, AccDisplay_RefreshDone
@@ -11593,9 +11593,9 @@ AccState_ReadAccompParams:
 	ei 6
 	stda8 1124, a
 	ldda8 a, 1046
-	stda8 12928, a
+	stda8 0x3280, a
 	ldda8 a, 1076
-	stda8 12980, a
+	stda8 0x32b4, a
 	ldda8 a, 1077
-	stda8 12979, a
+	stda8 0x32b3, a
 	ldda8 a, 1045

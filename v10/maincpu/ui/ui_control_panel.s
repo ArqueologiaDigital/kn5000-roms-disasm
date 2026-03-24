@@ -89,14 +89,14 @@ MainFlashFunc:
 	jr z, MainFlash_AudioDispatch
 	cp xbc, 0x1e30005
 	jr nz, MainFlash_ReturnZero
-	stdi8 32578, 37
+	stdi8 0x7f42, 37
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
 	call ApPostEvent
 	lds wa, 7
 	call CtrlPanel_IndicatorJumpTable
-	stdi8 32578, 35
+	stdi8 0x7f42, 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -2026,11 +2026,11 @@ CtrlPanel_HandleKey10:
 	ret
 
 PartSelect_UpdateDisplayState:
-	ldda8 a, 64614
+	ldda8 a, 0xfc66
 	and a, 0x1
 	cps a, 0
 	scc8 z, e
-	stda8 36154, e
+	stda8 0x8d3a, e
 	extz de
 	pushw 0xff
 	ldw wa, 0x90
@@ -2129,12 +2129,12 @@ WakeUpApTask:
 	jrl MainTaskControl
 
 RefreshApTask:
-	stdi8 58332, 0
-	stdi8 58334, 0
-	stdi8 58336, 0
-	stdi8 58338, 0
-	stdi8 58340, 255
-	stdi8 58342, 255
+	stdi8 0xe3dc, 0
+	stdi8 0xe3de, 0
+	stdi8 0xe3e0, 0
+	stdi8 0xe3e2, 0
+	stdi8 0xe3e4, 255
+	stdi8 0xe3e6, 255
 	lds32 xwa, 0
 	st32_24 0x02749a, xwa
 	st32_24 0x02749e, xwa
@@ -2625,7 +2625,7 @@ MainPmanCtrl_HandleA0:
 	jr nz, MainPmanCtrl_CheckSoundParam
 
 MainPmanCtrl_StorePartSelect:
-	stda8 36154, e
+	stda8 0x8d3a, e
 	jr MainPmanCtrl_LoadPartSelect
 
 MainPmanCtrl_CheckSoundParam:
@@ -2637,15 +2637,15 @@ MainPmanCtrl_CheckSoundParam:
 	jr nz, MainPmanCtrl_SetPartSelectZero
 
 MainPmanCtrl_SetPartSelectOne:
-	stdi8 36154, 1
+	stdi8 0x8d3a, 1
 	ldb e, 0x1
 	jr MainPmanCtrl_CompareAndUpdate
 
 MainPmanCtrl_SetPartSelectZero:
-	stdi8 36154, 0
+	stdi8 0x8d3a, 0
 
 MainPmanCtrl_LoadPartSelect:
-	ldda8 e, 36154
+	ldda8 e, 0x8d3a
 
 MainPmanCtrl_CompareAndUpdate:
 	cp e, (xsp + 6)
@@ -2672,7 +2672,7 @@ MainTitleControl:
 	jrl z, MainTitleCtrl_HandleBA
 	cp xbc, 0x1e000ab
 	jrl z, MainTitleCtrl_HandleAB
-	ldda8 a, 36150
+	ldda8 a, 0x8d36
 	cp xbc, 0x1c00013
 	jrl z, SeqState_DemoModeHandler
 	cp xbc, 0x1c00028
@@ -2683,8 +2683,8 @@ MainTitleControl:
 	jr z, SeqState_TransitionMode
 	cp xbc, 0x1c00014
 	jrl nz, UIWidget_ReturnZero
-	ldmm8 36149, 36148
-	stda8 36148, l
+	ldmm8 0x8d35, 0x8d34
+	stda8 0x8d34, l
 	ldw wa, 0x48
 	call CtrlPanel_SetIndicatorBit
 	lds32 xwa, 0
@@ -2708,16 +2708,16 @@ MainTitleControl:
 ;   0x0274a8-0x0274ae - Additional transition parameters
 ; =============================================================================
 SeqState_TransitionMode:
-	stda8 36151, a
-	ldmm8 36153, 36152
-	stda8 36150, l
-	stda8 36152, l
+	stda8 0x8d37, a
+	ldmm8 0x8d39, 0x8d38
+	stda8 0x8d36, l
+	stda8 0x8d38, l
 	ldw wa, 0x61
 	jr MainTitleCtrl_SetIndicatorAndClear
 
 MainTitleCtrl_SaveAndTransition:
-	ldmm8 36153, 36152
-	stda8 36152, l
+	ldmm8 0x8d39, 0x8d38
+	stda8 0x8d38, l
 	ldw wa, 0x61
 
 MainTitleCtrl_SetIndicatorAndClear:
@@ -2732,13 +2732,13 @@ MainTitleCtrl_SetIndicatorAndClear:
 SeqState_DemoModeHandler:
 	cp xde, 0x8
 	jrl nz, UIWidget_ReturnZero
-	cpdm8 36152, a
+	cpdm8 0x8d38, a
 	jr nz, SeqDemo_SaveCurrentState
-	stda8 36151, a
+	stda8 0x8d37, a
 
 SeqDemo_SaveCurrentState:
-	ldmm8 36153, 36152
-	ldmm8 36149, 36148
+	ldmm8 0x8d39, 0x8d38
+	ldmm8 0x8d35, 0x8d34
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleAB:
@@ -2770,13 +2770,13 @@ MainTitleCtrl_CheckSecondTimer:
 	st16_24 0x0274ae, xwa
 	cps wa, 0
 	jr nz, UIWidget_ReturnZero
-	cpdi16_24 160940, 0
+	cpdi16_24 0x274ac, 0
 	jr z, MainTitleCtrl_ClearIndicatorBit
-	setda 0, 36700
+	setda 0, 0x8f5c
 	jr MainTitleCtrl_SetIndicator60
 
 MainTitleCtrl_ClearIndicatorBit:
-	resda 0, 36700
+	resda 0, 0x8f5c
 
 MainTitleCtrl_SetIndicator60:
 	ldw wa, 0x60
@@ -2806,12 +2806,12 @@ CtrlPanel_SelectionReturnZero:
 	ret
 
 GetPartSelect:
-	ldda8 l, 36154
+	ldda8 l, 0x8d3a
 	extz hl
 	ret
 
 GetCurrentPartSelect:
-	ldda8 l, 36154
+	ldda8 l, 0x8d3a
 	ret
 
 UI_PostPartChangeEvent:
@@ -2885,8 +2885,8 @@ UI_PostTimerResetEvent:
 	jp ApPostEvent
 
 SeqState_HasModeChanged:
-	ldda8 a, 36150
-	cpda8 a, 36152
+	ldda8 a, 0x8d36
+	cpda8 a, 0x8d38
 	scc16 nz, hl
 	ret
 
@@ -3842,7 +3842,7 @@ GroupBox_Nav_ClearWidgetFlags:
 	jrl GroupBox_NavDispatch
 
 GroupBox_HandleCursorNav:
-	cpdi16_24 257872, 0
+	cpdi16_24 0x3ef50, 0
 	jr z, GroupBox_CursorNav_AddLsw
 	cp xwa, 0x0
 	jr ge, GroupBox_CursorNav_LoadPositive
