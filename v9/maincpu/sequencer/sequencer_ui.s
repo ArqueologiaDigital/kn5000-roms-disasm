@@ -2014,17 +2014,17 @@ IvNamingExit_ScreenData:
 	ld	(xsp+174), xbc
 	ld	(xsp+178), xwa
 	ld	xwa, (xsp+174)
-	cp	xwa, 0x01C00018
+	cp	xwa, 0x01c00018
 	jrl	z, 654
-	cp	xwa, 0x01C00017
+	cp	xwa, 0x01c00017
 	jrl	z, 645
-	cp	xwa, 0x01E70003
+	cp	xwa, 0x01e70003
 	jrl	z, 600
-	cp	xwa, 0x01C0000F
+	cp	xwa, 0x01c0000f
 	jrl	z, 291
-	cp	xwa, 0x01C0000B
+	cp	xwa, 0x01c0000b
 	jr	z, 105
-	cp	xwa, 0x01C00001
+	cp	xwa, 0x01c00001
 	jrl	nz, 687
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
@@ -2035,16 +2035,16 @@ IvNamingExit_ScreenData:
 	ld	xiz, xhl
 	ld	xde, (xsp+178)
 	ld	xwa, (xiz+34)
-	ld	xbc, 0x01E70002
+	ld	xbc, 0x01e70002
 	call	MainFuncCall
 	cpw	(xiz+46), 0
 	jrl	z, 628
 	ld	xwa, (xsp+178)
-	ld	xbc, 0x01C00018
+	ld	xbc, 0x01c00018
 	lds32	xde, 0
 	call	SetDialUp
 	ld	xwa, (xsp+178)
-	ld	xbc, 0x01C00017
+	ld	xbc, 0x01c00017
 	lds32	xde, 0
 	call	SetDialDown
 	lds	wa, 1
@@ -2255,7 +2255,7 @@ IvNamingExit_ScreenData:
 
 TrAsGrid_LookupByteTable:
 	extz wa
-	ldada xbc, 0xF1A0
+	ldada xbc, 0xf1a0
 	extz xwa
 	add xwa, xbc
 	ld l, (xwa)
@@ -2711,7 +2711,7 @@ TrAsGrid_LookupTable:
 
 TrAsGrid_ByteData1:
 	extz	wa
-	lda_24	xde, 0xE26468
+	lda_24	xde, 0xe26468
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -2726,7 +2726,7 @@ TrAsGrid_ByteData1:
 	jr	z, 2
 	dec	1, a
 	extz	wa
-	ld	xbc, 0xE2647C
+	ld	xbc, 0xe2647c
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
@@ -2737,7 +2737,7 @@ TrAsGrid_CheckTrackType:
 	jr nz, TrAsGrid_CheckCurrentCell
 	ld a, c
 	extz wa
-	ldada xbc, 0xF1A0
+	ldada xbc, 0xf1a0
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -2782,7 +2782,7 @@ TrAsGridCheck:
 TrAsGridChk_ByteData:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008F
+	ld	xbc, 0x01e0008f
 	lds32	xde, 0
 	call	SendEvent
 	ld	xiz, xhl
@@ -2811,13 +2811,13 @@ TrAsGridChk_ByteData:
 	push_a
 	.byte 0x73
 	pushw	wa
-	ld	xwa, 0x0147001C
-	ld	xbc, 0x01E70006
+	ld	xwa, 0x0147001c
+	ld	xbc, 0x01e70006
 	ld	xde, xiz
 	call	MainFuncCall
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008D
+	ld	xbc, 0x01e0008d
 	ld	xde, xiz
 	call	SendEvent
 	call	GetFocusObject
@@ -2825,14 +2825,14 @@ TrAsGridChk_ByteData:
 	ld	de, (xsp+16)
 	extz	xde
 	add	xde, 0x020000
-	ld	xbc, 0x01E0008D
+	ld	xbc, 0x01e0008d
 	call	SendEvent
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	de, (xsp+16)
 	extz	xde
 	add	xde, 0x030000
-	ld	xbc, 0x01E0008D
+	ld	xbc, 0x01e0008d
 	call	SendEvent
 	jrl	1087
 	bitda	0, 3296
@@ -2848,11 +2848,11 @@ TrAsGridChk_ByteData:
 	.byte 0xd1, 0xd0, 0xf1, 0xeb
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008D
+	ld	xbc, 0x01e0008d
 	ld	xde, xiz
 	call	SendEvent
-	ld	xwa, 0x0147001C
-	ld	xbc, 0x01E7000A
+	ld	xwa, 0x0147001c
+	ld	xbc, 0x01e7000a
 	ld	xde, xiz
 	jrl	412
 	bitda	0, 3296
@@ -2862,8 +2862,8 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	65130
 	.byte 0xd1, 0x90, 0xf2, 0xeb
-	ld	xwa, 0x0147001C
-	ld	xbc, 0x01E7000C
+	ld	xwa, 0x0147001c
+	ld	xbc, 0x01e7000c
 	ld	xde, xiz
 	jr	25
 	inc	6, e
@@ -2871,22 +2871,22 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	65103
 	.byte 0xd1, 0x90, 0xf2, 0xeb
-	ld	xwa, 0x0147001C
-	ld	xbc, 0x01E7000C
+	ld	xwa, 0x0147001c
+	ld	xbc, 0x01e7000c
 	ld	xde, xiz
 	call	MainFuncCall
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008D
+	ld	xbc, 0x01e0008d
 	ld	xde, xiz
 	call	SendEvent
-	ld	xwa, 0x0147001C
-	ld	xbc, 0x01E7000A
+	ld	xwa, 0x0147001c
+	ld	xbc, 0x01e7000a
 	ld	xde, xiz
 	jrl	318
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008F
+	ld	xbc, 0x01e0008f
 	lds32	xde, 0
 	call	SendEvent
 	ld	xiz, xhl
@@ -2915,13 +2915,13 @@ TrAsGridChk_ByteData:
 	push_a
 	.byte 0x73
 	pushw	wa
-	ld	xwa, 0x0147001C
-	ld	xbc, 0x01E70007
+	ld	xwa, 0x0147001c
+	ld	xbc, 0x01e70007
 	ld	xde, xiz
 	call	MainFuncCall
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008D
+	ld	xbc, 0x01e0008d
 	ld	xde, xiz
 	call	SendEvent
 	call	GetFocusObject
@@ -2929,14 +2929,14 @@ TrAsGridChk_ByteData:
 	ld	de, (xsp+16)
 	extz	xde
 	add	xde, 0x020000
-	ld	xbc, 0x01E0008D
+	ld	xbc, 0x01e0008d
 	call	SendEvent
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	de, (xsp+16)
 	extz	xde
 	add	xde, 0x030000
-	ld	xbc, 0x01E0008D
+	ld	xbc, 0x01e0008d
 	call	SendEvent
 	jrl	771
 	bitda	0, 3296
@@ -2953,11 +2953,11 @@ TrAsGridChk_ByteData:
 	.byte 0xd1, 0xd0, 0xf1, 0xcb
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008D
+	ld	xbc, 0x01e0008d
 	ld	xde, xiz
 	call	SendEvent
-	ld	xwa, 0x0147001C
-	ld	xbc, 0x01E7000A
+	ld	xwa, 0x0147001c
+	ld	xbc, 0x01e7000a
 	ld	xde, xiz
 	jr	95
 	bitda	0, 3296
@@ -2968,8 +2968,8 @@ TrAsGridChk_ByteData:
 	calr	64813
 	cpl	hl
 	.byte 0xd1, 0x90, 0xf2, 0xcb
-	ld	xwa, 0x0147001C
-	ld	xbc, 0x01E7000C
+	ld	xwa, 0x0147001c
+	ld	xbc, 0x01e7000c
 	ld	xde, xiz
 	jr	27
 	inc	6, e
@@ -2978,17 +2978,17 @@ TrAsGridChk_ByteData:
 	calr	64784
 	cpl	hl
 	.byte 0xd1, 0x90, 0xf2, 0xcb
-	ld	xwa, 0x0147001C
-	ld	xbc, 0x01E7000C
+	ld	xwa, 0x0147001c
+	ld	xbc, 0x01e7000c
 	ld	xde, xiz
 	call	MainFuncCall
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008D
+	ld	xbc, 0x01e0008d
 	ld	xde, xiz
 	call	SendEvent
-	ld	xwa, 0x0147001C
-	ld	xbc, 0x01E7000A
+	ld	xwa, 0x0147001c
+	ld	xbc, 0x01e7000a
 	ld	xde, xiz
 	call	MainFuncCall
 	jrl	609
@@ -3059,7 +3059,7 @@ TrAsGridChk_Part2_Start:
 	dec 2, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xF1D0
+	andda16 xhl, 0xf1d0
 	lda xbc, (xsp + 4)
 	ld xwa, 0xe26494
 	cps hl, 0
@@ -3102,7 +3102,7 @@ TrAsGridChk_Part2_UpDir:
 	inc 6, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xF1D0
+	andda16 xhl, 0xf1d0
 	lda xbc, (xsp + 4)
 	ld xwa, 0xe264a4
 	cps hl, 0
@@ -3160,7 +3160,7 @@ TrAsGridChk_Part3_Start:
 	dec 2, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xF290
+	andda16 xhl, 0xf290
 	ld xwa, 0xe264b4
 	cps hl, 0
 	jr z, TrAsGridChk_Part3_PushCmd
@@ -3203,7 +3203,7 @@ TrAsGridChk_Part3_UpDir:
 	inc 6, a
 	extz wa
 	calr TrAsGrid_LookupTable
-	andda16 xhl, 0xF290
+	andda16 xhl, 0xf290
 	ld xwa, 0xe264c4
 	cps hl, 0
 	jr z, TrAsGridChk_Part3_UpPushCmd
@@ -3404,7 +3404,7 @@ AcDemoSong_HandleResize:
 	calr VoiceConfig_ScreenTypeDispatch
 	cpdi8 3375, 0
 	jr nz, AcCurrentSongBox_RetZero
-	bitda 3, 0x28AD
+	bitda 3, 0x28ad
 	jr z, AcDemoSong_SetupDisplay
 	cpdm8 4439, l
 	jr nz, AcCurrentSongBox_RetZero
@@ -3587,7 +3587,7 @@ SmfMuteChSelFunc:
 MuteChSel_Dispatch:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 0xE26510
+	ld	xbc, 0xe26510
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -3630,7 +3630,7 @@ SqTrAsPsSongFunc:
 SqTrAsPsSong_Dispatch:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 0xE265C4
+	ld	xbc, 0xe265c4
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -3725,7 +3725,7 @@ MuteChSetFunc:
 MuteChSet_Dispatch:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 0xE266A6
+	ld	xbc, 0xe266a6
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -3739,7 +3739,7 @@ MuteChSet_Dispatch:
 	jr	50
 	ld	xhl, 15
 	jr	43
-	lda_24	xhl, 0x02108A
+	lda_24	xhl, 0x02108a
 	jr	36
 
 ; MuteChSetFunc parameter check
@@ -3865,7 +3865,7 @@ Rt1MuteFunc:
 	jr Rt1Mute_PostCall
 
 Rt1Mute_ClearAndPost:
-	anddi16_24 0x021086, 0xFFFE
+	anddi16_24 0x021086, 0xfffe
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -3887,7 +3887,7 @@ Rt2MuteFunc:
 	jr Rt2Mute_PostCall
 
 Rt2Mute_ClearAndPost:
-	anddi16_24 0x021086, 0xFFFD
+	anddi16_24 0x021086, 0xfffd
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -3902,7 +3902,7 @@ DocOrchMuteFunc:
 	jrl z, SMFMute_GetUpperBits
 	cp xde, 0x1
 	jr nz, DocOrchMute_ClearAndPost
-	ordi16_24 0x021086, 0xFFFC
+	ordi16_24 0x021086, 0xfffc
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -3924,7 +3924,7 @@ PdOrchMuteFunc:
 	jrl z, SMFMute_ClearBit0
 	cp xde, 0x1
 	jr nz, PdOrchMute_ClearAndPost
-	ordi16_24 0x021086, 0xFFFE
+	ordi16_24 0x021086, 0xfffe
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0
@@ -4074,7 +4074,7 @@ DemoMedDspCheck:
 DemoMedDsp_Dispatch:
 	ld	xhl, (xde+14)
 	ld	xbc, (xde+18)
-	ld	xwa, 0xE2679E
+	ld	xwa, 0xe2679e
 	or	xhl, xhl
 	jr	nz, 5
 	.byte 0x40
@@ -4091,7 +4091,7 @@ DemoMedDsp_Dispatch:
 	jr	23
 	ld	xhl, 16
 	jr	16
-	ld	xhl, 0xFFFFFFE3
+	ld	xhl, 0xffffffe3
 	jr	9
 	lda_24	xhl, 0x021090
 	jr	2
@@ -4122,7 +4122,7 @@ DPPlayDspCheck:
 DPPlayDsp_Dispatch:
 	ld	xhl, (xde+14)
 	ld	xbc, (xde+18)
-	ld	xwa, 0xE267C4
+	ld	xwa, 0xe267c4
 	or	xhl, xhl
 	jr	nz, 5
 	.byte 0x40
@@ -4139,7 +4139,7 @@ DPPlayDsp_Dispatch:
 	jr	23
 	ld	xhl, 16
 	jr	16
-	ld	xhl, 0xFFFFFFE3
+	ld	xhl, 0xffffffe3
 	jr	9
 	lda_24	xhl, 0x021092
 	jr	2
@@ -4170,7 +4170,7 @@ DPPauseDspCheck:
 DPPauseDsp_Dispatch:
 	ld	xhl, (xde+14)
 	ld	xbc, (xde+18)
-	ld	xwa, 0xE267E4
+	ld	xwa, 0xe267e4
 	or	xhl, xhl
 	jr	nz, 5
 	.byte 0x40
@@ -4187,7 +4187,7 @@ DPPauseDsp_Dispatch:
 	jr	23
 	ld	xhl, 16
 	jr	16
-	ld	xhl, 0xFFFFFFE3
+	ld	xhl, 0xffffffe3
 	jr	9
 	lda_24	xhl, 0x021094
 	jr	2
@@ -4529,19 +4529,19 @@ AcPanicEditSw_HandleFocus:
 	jr z, AcPanicEditSw_SetMode1
 	cp xiz, 0x80
 	jr nz, UI_CheckDisplayModeAndDispatch
-	setda_24 0, 0x02109E
+	setda_24 0, 0x02109e
 	jr UI_CheckDisplayModeAndDispatch
 
 AcPanicEditSw_SetMode1:
-	setda_24 1, 0x02109E
+	setda_24 1, 0x02109e
 	jr UI_CheckDisplayModeAndDispatch
 
 AcPanicEditSw_SetMode2:
-	setda_24 2, 0x02109E
+	setda_24 2, 0x02109e
 	jr UI_CheckDisplayModeAndDispatch
 
 AcPanicEditSw_SetMode3:
-	setda_24 3, 0x02109E
+	setda_24 3, 0x02109e
 
 UI_CheckDisplayModeAndDispatch:
 	ld8_24 c, 0x02109e
@@ -4578,19 +4578,19 @@ AcPanicEditSw_HandleLostInherited:
 	jr z, AcPanicEditSw_ClearMode1
 	cp xiz, 0x80
 	jr nz, EventHandler_FinalizeAndReturn
-	resda_24 0, 0x02109E
+	resda_24 0, 0x02109e
 	jr EventHandler_FinalizeAndReturn
 
 AcPanicEditSw_ClearMode1:
-	resda_24 1, 0x02109E
+	resda_24 1, 0x02109e
 	jr EventHandler_FinalizeAndReturn
 
 AcPanicEditSw_ClearMode2:
-	resda_24 2, 0x02109E
+	resda_24 2, 0x02109e
 	jr EventHandler_FinalizeAndReturn
 
 AcPanicEditSw_ClearMode3:
-	resda_24 3, 0x02109E
+	resda_24 3, 0x02109e
 
 EventHandler_FinalizeAndReturn:
 	ld xwa, (xsp + 8)
@@ -4623,7 +4623,7 @@ HelpStsCheck:
 	ld8_24 c, 0x0340e4
 	sll xbc, 2
 	lds32 xwa, 0
-	ldda8 a, 0x296E
+	ldda8 a, 0x296e
 	sll xwa, 2
 	ld xhl, 0x69800
 	add xhl, xwa
@@ -4641,7 +4641,7 @@ HelpStsP2Check:
 	ld8_24 c, 0x0340e4
 	sll xbc, 2
 	lds32 xwa, 0
-	ldda8 a, 0x296E
+	ldda8 a, 0x296e
 	sll xwa, 2
 	st_dri3b W, 0xe1, 0xc8, 0x00
 	ld xhl, 0x69800
@@ -4660,7 +4660,7 @@ HelpStsP3Check:
 	ld8_24 c, 0x0340e4
 	sll xbc, 2
 	lds32 xwa, 0
-	ldda8 a, 0x296E
+	ldda8 a, 0x296e
 	sll xwa, 2
 	st_dri3b W, 0xe1, 0x90, 0x01
 	ld xhl, 0x69800
@@ -4679,7 +4679,7 @@ HelpStsP4Check:
 	ld8_24 c, 0x0340e4
 	sll xbc, 2
 	lds32 xwa, 0
-	ldda8 a, 0x296E
+	ldda8 a, 0x296e
 	sll xwa, 2
 	st_dri3b W, 0xe1, 0x58, 0x02
 	ld xhl, 0x69800
@@ -4731,7 +4731,7 @@ HelpLangChk_CheckIzZero:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 0x7F42, 72
+	stdi8 0x7f42, 72
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -4804,7 +4804,7 @@ HelpFunc_CheckIzZero:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 0x7F42, 72
+	stdi8 0x7f42, 72
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -4895,11 +4895,11 @@ HelpTtlFunc:
 
 HelpTtlFunc_LoadPageCount:
 	lds32 xhl, 0
-	ldda8 l, 0x296E
+	ldda8 l, 0x296e
 	jr HelpTtlFunc_Epilogue
 
 HelpTtlFunc_DecrementPage:
-	ldda8 a, 0x296E
+	ldda8 a, 0x296e
 	extz wa
 	dec 1, wa
 	cps wa, 0
@@ -5024,7 +5024,7 @@ IvSddsp_CheckParam:
 	call SndParam_LookupViaEncode
 	cps hl, 0
 	jr nz, FilterParam_Return
-	ldada xwa, 0x918D
+	ldada xwa, 0x918d
 	ld bc, iz
 	extz xbc
 	add xbc, xwa
@@ -5172,7 +5172,7 @@ IvPlayExit_CheckSendEvent:
 	call SendEvent
 	or xhl, xhl
 	jr z, IvPlayExit_PrepareInherited
-	cpdi8 0xE38E, 0
+	cpdi8 0xe38e, 0
 	jr nz, IvPlayExit_ClearFlag
 	ld xwa, (xsp + 4)
 	ld xde, (xwa + 22)
@@ -5181,7 +5181,7 @@ IvPlayExit_CheckSendEvent:
 	call PostEvent
 
 IvPlayExit_ClearFlag:
-	stdi8 0xE38E, 0
+	stdi8 0xe38e, 0
 
 IvPlayExit_PrepareInherited:
 	ld xwa, xiz
@@ -5280,7 +5280,7 @@ IvAutoPunchExit_CheckSendEvent:
 	call SendEvent
 	or xhl, xhl
 	jr z, IvAutoPunchExit_PrepareInherited
-	cpdi16 0x28A8, 0
+	cpdi16 0x28a8, 0
 	jr z, IvAutoPunchExit_PostSceneEvent
 	bitda 2, 1057
 	jr nz, IvAutoPunchExit_PrepareInherited
@@ -5514,7 +5514,7 @@ AcIndexToggleFunc_ReturnZero:
 	ret
 
 AcIndexToggleFunc_CheckMatch:
-	cpda8_24 a, 0x0340E4
+	cpda8_24 a, 0x0340e4
 	scc16 z, hl
 	extz xhl
 	ret
@@ -5814,30 +5814,30 @@ NoteEditBox_SetupGrid:
 ; NoteEditBoxProc event dispatch 1
 NoteEditBox_EventDispatch1:
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80054
+	ld	xbc, 0x01e80054
 	jr	82
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80055
+	ld	xbc, 0x01e80055
 	jr	73
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80057
+	ld	xbc, 0x01e80057
 	jr	64
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80058
+	ld	xbc, 0x01e80058
 	jr	55
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E8005A
+	ld	xbc, 0x01e8005a
 	jr	46
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80056
+	ld	xbc, 0x01e80056
 	jr	33
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8005B
+	ld	xbc, 0x01e8005b
 	jr	20
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80059
+	ld	xbc, 0x01e80059
 	jr	11
 
 NoteEditBoxProc_SetupGridDisplay:
@@ -5884,14 +5884,14 @@ NoteEditBox_GridDispatch2:
 NoteEditBox_EventDispatch2:
 	call	GetTitleNow
 	ld	(xsp+10), 3
-	cp	xhl, 0x01A00095
+	cp	xhl, 0x01a00095
 	jr	nz, 4
 	ld	(xsp+10), 2
 	lda	xwa, (xsp+28)
 	ld	c, (xsp+10)
 	extz	bc
 	sla	bc, 3
-	lda_24	xde, 0xE33770
+	lda_24	xde, 0xe33770
 	.byte 0xf3
 	reti
 	or	xix, xwa
@@ -5911,12 +5911,12 @@ NoteEditBox_EventDispatch2:
 	call	DrawDesignBox
 	call	GetTitleNow
 	ld	(xsp+10), 7
-	cp	xhl, 0x01A00095
+	cp	xhl, 0x01a00095
 	jr	nz, 4
 	ld	(xsp+10), 6
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80051
+	ld	xbc, 0x01e80051
 	ld	xde, (xsp+90)
 	call	ApFuncCall
 	lda	xix, (xsp+28)
@@ -5930,7 +5930,7 @@ NoteEditBox_EventDispatch2:
 	ld	a, (xsp+10)
 	extz	wa
 	sla	wa, 3
-	lda_24	xbc, 0xE33770
+	lda_24	xbc, 0xe33770
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe0
@@ -5963,7 +5963,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0xbc
 	push_sr
 	.long Str_42a03242322043
-	pushw	0x460C
+	pushw	0x460c
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	Strcpy
@@ -5978,7 +5978,7 @@ NoteEditBox_EventDispatch2:
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80052
+	ld	xbc, 0x01e80052
 	ld	xde, (xsp+90)
 	call	ApFuncCall
 	lda	xix, (xsp+28)
@@ -5987,7 +5987,7 @@ NoteEditBox_EventDispatch2:
 	ld	a, (xsp+10)
 	extz	wa
 	sla	wa, 3
-	lda_24	xbc, 0xE33770
+	lda_24	xbc, 0xe33770
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe0
@@ -6034,13 +6034,13 @@ NoteEditBox_EventDispatch2:
 	jrl	941
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80053
+	ld	xbc, 0x01e80053
 	ld	xde, (xsp+90)
 	call	ApFuncCall
 	lda	xwa, (xsp+20)
 	ld	(xwa), hl
 	lda	xhl, (xwa+2)
-	lda_24	xix, 0xE33770
+	lda_24	xix, 0xe33770
 	ld	bc, (xix+66)
 	ld	(xhl), bc
 	lda	xbc, (xsp+16)
@@ -6048,22 +6048,22 @@ NoteEditBox_EventDispatch2:
 	ld	(xbc), de
 	ld	de, (xhl)
 	.byte 0x9c
-	ld	xiz, 0x5202B982
+	ld	xiz, 0x5202b982
 	ldw	de, 242
 	call	DrawLine
 	jrl	1521
 	ld	xwa, 0x950014
-	ld	xbc, 0x01C0000D
+	ld	xbc, 0x01c0000d
 	ld	xde, (xsp+90)
 	jr	13
 	ld	xwa, 0x980011
-	ld	xbc, 0x01C0000D
+	ld	xbc, 0x01c0000d
 	ld	xde, (xsp+90)
 	call	SendEvent
 	jrl	1486
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8005C
+	ld	xbc, 0x01e8005c
 	lds32	xde, 0
 	call	ApFuncCall
 	ld	(xsp+8), hl
@@ -6075,7 +6075,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0x89
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 0xE337B8
+	lda_24	xbc, 0xe337b8
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -6087,7 +6087,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0x8d
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8005D
+	ld	xbc, 0x01e8005d
 	call	ApFuncCall
 	or	xhl, xhl
 	jr	z, 76
@@ -6115,7 +6115,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0xd7, 0xe2, 0x88
 	pushw	wa
 	ld	(xsp+10), wa
-	ld	xwa, 0xE34618
+	ld	xwa, 0xe34618
 	push	xwa
 	lda	xwa, (xsp+42)
 	push	xwa
@@ -6137,9 +6137,9 @@ NoteEditBox_EventDispatch2:
 	pushw	de
 	nop
 	.byte 0x9f
-	ldwio	4, 0xE30B
+	ldwio	4, 0xe30b
 	nop
-	pushw	0x461C
+	pushw	0x461c
 	lda	xwa, (xsp+42)
 	push	xwa
 	call	Sprintf_Locked
@@ -6180,7 +6180,7 @@ NoteEditBox_EventDispatch2:
 	jrl	1219
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8005C
+	ld	xbc, 0x01e8005c
 	lds32	xde, 0
 	call	ApFuncCall
 	ld	(xsp+8), hl
@@ -6192,7 +6192,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0x89
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 0xE337D0
+	lda_24	xbc, 0xe337d0
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -6204,7 +6204,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0x8d
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8005D
+	ld	xbc, 0x01e8005d
 	call	ApFuncCall
 	lda	xde, (xsp+36)
 	lda	xwa, (xsp+28)
@@ -6219,11 +6219,11 @@ NoteEditBox_EventDispatch2:
 	ldb	h, 0
 	.byte 0xb4
 	push_sr
-	ldw	bc, 0xC700
+	ldw	bc, 0xc700
 	swi	3
 	dec	6, wa
 	ldwio	159, 1032
-	ld	xwa, 0xE34620
+	ld	xwa, 0xe34620
 	jr	21
 	ld	wa, (xsp+8)
 	extz	xwa
@@ -6231,7 +6231,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0xd7, 0xe2, 0x88
 	pushw	wa
 	ld	(xsp+10), wa
-	ld	xwa, 0xE34624
+	ld	xwa, 0xe34624
 	push	xwa
 	push	xde
 	call	Sprintf_Locked
@@ -6248,8 +6248,8 @@ NoteEditBox_EventDispatch2:
 	nop
 	.byte 0xb4
 	push_sr
-	ldw	bc, 0x9F00
-	ldwio	4, 0xE30B
+	ldw	bc, 0x9f00
+	ldwio	4, 0xe30b
 	nop
 	pushw	0x4628
 	push	xde
@@ -6291,17 +6291,17 @@ NoteEditBox_EventDispatch2:
 	jrl	956
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8005E
+	ld	xbc, 0x01e8005e
 	lds32	xde, 0
 	jr	28
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8005F
+	ld	xbc, 0x01e8005f
 	lds32	xde, 0
 	jr	13
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80060
+	ld	xbc, 0x01e80060
 	lds32	xde, 0
 	call	ApFuncCall
 	jrl	906
@@ -6340,7 +6340,7 @@ NoteEditBox_EventDispatch2:
 	ld	(xde+2), bc
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E00045
+	ld	xbc, 0x01e00045
 	ld	xde, (xsp+90)
 	call	ApFuncCall
 	lda	xde, (xsp+68)
@@ -6356,7 +6356,7 @@ NoteEditBox_EventDispatch2:
 	jr	c, -8
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8006A
+	ld	xbc, 0x01e8006a
 	call	ApFuncCall
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
@@ -6395,7 +6395,7 @@ NoteEditBox_EventDispatch2:
 	ld	(xhl+2), bc
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E00045
+	ld	xbc, 0x01e00045
 	ld	xde, (xsp+90)
 	call	ApFuncCall
 	lda	xde, (xsp+68)
@@ -6404,7 +6404,7 @@ NoteEditBox_EventDispatch2:
 	ld	(xde+18), xwa
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8006B
+	ld	xbc, 0x01e8006b
 	call	ApFuncCall
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
@@ -6417,7 +6417,7 @@ NoteEditBox_EventDispatch2:
 	jrl	634
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E00045
+	ld	xbc, 0x01e00045
 	ld	xde, (xsp+90)
 	call	ApFuncCall
 	lda	xwa, (xsp+68)
@@ -6469,7 +6469,7 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+68)
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8006C
+	ld	xbc, 0x01e8006c
 	call	ApFuncCall
 	lda	xbc, (xsp+24)
 	ld8_24	a, 0x021096
@@ -6528,7 +6528,7 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+68)
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8006D
+	ld	xbc, 0x01e8006d
 	call	ApFuncCall
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
@@ -6643,11 +6643,11 @@ NoteEdit_FormatEntry:
 ; NoteEditBoxProc grid check dispatch
 NoteEditBox_GridDispatch:
 	ld	xwa, (xsp+94)
-	ld	xbc, 0x01C00017
+	ld	xbc, 0x01c00017
 	ld	xde, (xsp+90)
 	call	SetDialUp
 	ld	xwa, (xsp+94)
-	ld	xbc, 0x01C00018
+	ld	xbc, 0x01c00018
 	ld	xde, (xsp+90)
 	call	SetDialDown
 
@@ -6752,7 +6752,7 @@ NoteEdit_FormatNoteOther:
 	ld xwa, 0xe34684
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
-	ldda8 a, 0x278A
+	ldda8 a, 0x278a
 	extz wa
 	pushw wa
 	ld xwa, 0xe3468a
@@ -6835,7 +6835,7 @@ NoteEdit_GateTimeNumeric:
 
 NoteEdit_FormatChordType:
 	ld xiz, xde
-	ldda8 a, 0x279E
+	ldda8 a, 0x279e
 	addda8_24 a, 0x021096
 	extz wa
 	pushw wa
@@ -6857,7 +6857,7 @@ NoteEdit_FormatChordNotes:
 	lds32 xbc, 0
 	ld8_24 c, 0x021096
 	lds32 xwa, 0
-	ldda8 a, 0x279E
+	ldda8 a, 0x279e
 	add xwa, xbc
 	ld xbc, 0xd
 	call Math_MultiplyAccumulate
@@ -6893,27 +6893,27 @@ NoteEdit_ParamJumpTable:
 	ldda8	l, 0x2798
 	jrl	141
 	lds32	xhl, 0
-	ldda8	l, 0x279E
+	ldda8	l, 0x279e
 	jrl	132
 
 NoteEdit_GetTempoValue:
 	ldda16 xhl, 0x2744
 	extz xhl
 	jr NoteEdit_Epilogue
-	ldda16 xhl, 0x27B4
+	ldda16 xhl, 0x27b4
 	extz xhl
 	jr NoteEdit_Epilogue
-	ldda16 xhl, 0x27B6
+	ldda16 xhl, 0x27b6
 	extz xhl
 	jr NoteEdit_Epilogue
-	ldda16 xhl, 0x27B8
+	ldda16 xhl, 0x27b8
 	extz xhl
 	jr NoteEdit_Epilogue
-	ldda16 xhl, 0x27B2
+	ldda16 xhl, 0x27b2
 	extz xhl
 	jr NoteEdit_Epilogue
 	extz de
-	ldada xbc, 0x27A4
+	ldada xbc, 0x27a4
 	extz xde
 	add xde, xbc
 	lds32 xhl, 0
@@ -7215,7 +7215,7 @@ PlySngSelFunc:
 	ld xbc, xhl
 	ld xde, 0x810016
 	call SetApTimer
-	stdi8 0xE38E, 1
+	stdi8 0xe38e, 1
 	jr PlaySong_ReturnZero
 
 PlySngSel_HandleTimerEvent:
@@ -7228,7 +7228,7 @@ PlySngSel_HandleTimerEvent:
 	call SendEvent
 
 PlySngSel_ClearFlagAndReturn:
-	stdi8 0xE38E, 0
+	stdi8 0xe38e, 0
 	jr PlaySong_ReturnZero
 
 PlySngSel_HandleSelectEvent:
@@ -7593,7 +7593,7 @@ EntertainerGridCheck:
 SndParam_Dispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008F
+	ld	xbc, 0x01e0008f
 	lds32	xde, 0
 	call	SendEvent
 	ld	(xsp+58), xhl
@@ -7601,7 +7601,7 @@ SndParam_Dispatch:
 	ld	xwa, (xsp+58)
 	srl	xwa, 0
 	.byte 0xd7
-	subdm32_24	0x50B1A8, xsp
+	subdm32_24	0x50b1a8, xsp
 	push	xde
 	ldb	b, 185
 	push_sr
@@ -7616,7 +7616,7 @@ SndParam_Dispatch:
 	cp	wa, 8
 	jrl	gt, 1317
 	add	wa, wa
-	lda_24	xix, 0xE347E0
+	lda_24	xix, 0xe347e0
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -7630,16 +7630,16 @@ SndParam_Dispatch:
 	ldb	a, 218
 	.byte 0xec
 	push_sr
-	cp	xbc, 0x01C00019
+	cp	xbc, 0x01c00019
 	jr	nz, 16
-	lda_24	xbc, 0xE34750
+	lda_24	xbc, 0xe34750
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe8
 	ldb	w, 217
 	sub	(xix-38), xix
 	jr	14
-	lda_24	xbc, 0xE34750
+	lda_24	xbc, 0xe34750
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe8
@@ -7648,18 +7648,18 @@ SndParam_Dispatch:
 	call	MainLswAdd
 	jrl	1244
 	ld	xwa, 0x01480002
-	ld	xbc, 0x01E80011
+	ld	xbc, 0x01e80011
 	lds32	xde, 1
 	jrl	188
 	dec	5, de
 	exts	xde
 	add	xde, 256
 	ld	xwa, 0x01480002
-	ld	xbc, 0x01E80012
+	ld	xbc, 0x01e80012
 	jrl	165
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008F
+	ld	xbc, 0x01e0008f
 	lds32	xde, 0
 	call	SendEvent
 	ld	(xsp+58), xhl
@@ -7667,7 +7667,7 @@ SndParam_Dispatch:
 	ld	xwa, (xsp+58)
 	srl	xwa, 0
 	.byte 0xd7
-	subdm32_24	0x50B1A8, xsp
+	subdm32_24	0x50b1a8, xsp
 	push	xde
 	ldb	c, 185
 	push_sr
@@ -7682,7 +7682,7 @@ SndParam_Dispatch:
 	cp	wa, 8
 	jrl	gt, 1145
 	add	wa, wa
-	lda_24	xix, 0xE347CE
+	lda_24	xix, 0xe347ce
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -7695,7 +7695,7 @@ SndParam_Dispatch:
 	ldb	b, 219
 	.byte 0xec
 	push_sr
-	lda_24	xwa, 0xE34750
+	lda_24	xwa, 0xe34750
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -7704,22 +7704,22 @@ SndParam_Dispatch:
 	nop
 	.byte 0xc0, 0x01
 	jr	nz, 7
-	ldw	bc, 0xFFFC
+	ldw	bc, 0xfffc
 	lds	de, 4
 	jr	5
-	ldw	bc, 0xFFFF
+	ldw	bc, 0xffff
 	lds	de, 4
 	call	MainLswAdd
 	jrl	1080
 	ld	xwa, 0x01480002
-	ld	xbc, 0x01E80011
-	ld	xde, 0xFFFFFFFF
+	ld	xbc, 0x01e80011
+	ld	xde, 0xffffffff
 	jr	22
 	dec	5, hl
 	exts	xhl
-	add	xhl, 0xFFFFFF00
+	add	xhl, 0xffffff00
 	ld	xwa, 0x01480002
-	ld	xbc, 0x01E80012
+	ld	xbc, 0x01e80012
 	ld	xde, xhl
 	call	MainPostEvent
 	jrl	1034
@@ -7733,7 +7733,7 @@ SndParam_Dispatch:
 	push_sr
 	nop
 	nop
-	lda_24	xix, 0xE34750
+	lda_24	xix, 0xe34750
 	ld	xiz, (xsp+58)
 	jr	18
 	ld	iy, bc
@@ -7759,22 +7759,22 @@ SndParam_Dispatch:
 	jrl	nz, 953
 	.byte 0x92, 0x04
 	pushw	227
-	pushw	0x477E
+	pushw	0x477e
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	916
-	ld	xwa, 0xE34792
+	ld	xwa, 0xe34792
 	.byte 0x92
 	push	xsp
 	nop
 	nop
 	jr	z, 5
-	ld	xwa, 0xE34788
+	ld	xwa, 0xe34788
 	push	xwa
 	push	xbc
 	call	Strcpy
@@ -7782,7 +7782,7 @@ SndParam_Dispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	t, 0x036b
 
 ; EntertainerGridCheck handler
@@ -8325,7 +8325,7 @@ SqplyVal_CheckMode81:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call SendEvent
-	stdi8 0xE38E, 0
+	stdi8 0xe38e, 0
 
 SqplyVal_DispatchUpdate:
 	ld xde, (xsp + 68)
@@ -8474,11 +8474,11 @@ SqplyVal_HandleExtraParams:
 	jp_dri 8, 0x07, 0xf0, 0xec
 SqplyVal_ExtraParamsData:
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80041
+	ld	xbc, 0x01e80041
 	call	ApFuncCall
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80038
+	ld	xbc, 0x01e80038
 	ld	xde, (xsp+60)
 	call	ApFuncCall
 	lda	xwa, (xsp+52)
@@ -8492,22 +8492,22 @@ SqplyVal_ExtraParamsData:
 	pushw	255
 	jr	66
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80042
+	ld	xbc, 0x01e80042
 	jr	-55
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80043
+	ld	xbc, 0x01e80043
 	jr	-64
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E8004E
+	ld	xbc, 0x01e8004e
 	jr	-73
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E8004F
+	ld	xbc, 0x01e8004f
 	jr	-82
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80050
+	ld	xbc, 0x01e80050
 	jr	-91
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80047
+	ld	xbc, 0x01e80047
 	jr	-100
 	lds32	xhl, 0
 	push	xhl
@@ -8519,11 +8519,11 @@ SqplyVal_ExtraParamsData:
 	.byte 0x04
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+68)
-	ld	xbc, 0x01C00017
+	ld	xbc, 0x01c00017
 	lds32	xde, 1
 	call	SetDialUp
 	ld	xwa, (xsp+68)
-	ld	xbc, 0x01C00018
+	ld	xbc, 0x01c00018
 	lds32	xde, 1
 	call	SetDialDown
 	lds	wa, 1
@@ -8907,11 +8907,11 @@ SqedtVal_ClearDrawBuffer:
 SqedtVal_DrawParamsData:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80016
+	ld	xbc, 0x01e80016
 	call	ApFuncCall
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80038
+	ld	xbc, 0x01e80038
 	ld	xde, (xsp+66)
 	call	ApFuncCall
 	lda	xwa, (xsp+58)
@@ -8926,59 +8926,59 @@ SqedtVal_DrawParamsData:
 	jrl	202
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80017
+	ld	xbc, 0x01e80017
 	jr	-61
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80018
+	ld	xbc, 0x01e80018
 	jr	-74
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80019
+	ld	xbc, 0x01e80019
 	jr	-87
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8001A
+	ld	xbc, 0x01e8001a
 	jr	-100
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8001B
+	ld	xbc, 0x01e8001b
 	jr	-113
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8001C
+	ld	xbc, 0x01e8001c
 	jr	-126
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8001D
+	ld	xbc, 0x01e8001d
 	jrl	-140
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8001E
+	ld	xbc, 0x01e8001e
 	jrl	-154
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E8001F
+	ld	xbc, 0x01e8001f
 	jrl	-168
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80020
+	ld	xbc, 0x01e80020
 	jrl	-182
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80021
+	ld	xbc, 0x01e80021
 	jrl	-196
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80022
+	ld	xbc, 0x01e80022
 	jrl	-210
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80023
+	ld	xbc, 0x01e80023
 	jrl	-224
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80024
+	ld	xbc, 0x01e80024
 	jrl	-238
 	lds32	xhl, 0
 	push	xhl
@@ -8990,11 +8990,11 @@ SqedtVal_DrawParamsData:
 	.byte 0x04
 	call	DrawStringLeftJustify
 	ld	xwa, (xsp+74)
-	ld	xbc, 0x01C00017
+	ld	xbc, 0x01c00017
 	lds32	xde, 1
 	call	SetDialUp
 	ld	xwa, (xsp+74)
-	ld	xbc, 0x01C00018
+	ld	xbc, 0x01c00018
 	lds32	xde, 1
 	call	SetDialDown
 	lds	wa, 1
@@ -10560,11 +10560,11 @@ SqplyVal_ExtraParams:
 ; AccIll_HandleEditorLoad dispatch
 AccIll_Dispatch:
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80025
+	ld	xbc, 0x01e80025
 	call	ApFuncCall
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80039
+	ld	xbc, 0x01e80039
 	ld	xde, (xsp+66)
 	call	ApFuncCall
 	or	xhl, xhl
@@ -10578,49 +10578,49 @@ AccIll_Dispatch:
 	pushw	255
 	jrl	163
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80026
+	ld	xbc, 0x01e80026
 	jr	-57
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80027
+	ld	xbc, 0x01e80027
 	jr	-66
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80028
+	ld	xbc, 0x01e80028
 	jr	-75
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80029
+	ld	xbc, 0x01e80029
 	jr	-84
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E8002A
+	ld	xbc, 0x01e8002a
 	jr	-93
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E8002B
+	ld	xbc, 0x01e8002b
 	jr	-102
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E8002C
+	ld	xbc, 0x01e8002c
 	jr	-111
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E8002D
+	ld	xbc, 0x01e8002d
 	jr	-120
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E8002E
+	ld	xbc, 0x01e8002e
 	jrl	-130
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E8002F
+	ld	xbc, 0x01e8002f
 	jrl	-140
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80030
+	ld	xbc, 0x01e80030
 	jrl	-150
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80031
+	ld	xbc, 0x01e80031
 	jrl	-160
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80032
+	ld	xbc, 0x01e80032
 	jrl	-170
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80033
+	ld	xbc, 0x01e80033
 	jrl	-180
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80034
+	ld	xbc, 0x01e80034
 	jrl	-190
 	lda	xwa, (xsp+58)
 	lda	xbc, (xsp+54)
@@ -10678,12 +10678,12 @@ AccIll_Dispatch:
 	add	de, wa
 	ld	(xhl+2), de
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80072
+	ld	xbc, 0x01e80072
 	ld	xde, (xsp+8)
 	call	ApFuncCall
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
-	ld	xbc, 0x01E80039
+	ld	xbc, 0x01e80039
 	ld	xde, (xsp+66)
 	call	ApFuncCall
 	lda	xbc, (xsp+54)
@@ -10731,7 +10731,7 @@ AccIll_Dispatch:
 	add	de, wa
 	ld	(xhl+2), de
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80073
+	ld	xbc, 0x01e80073
 	ld	xde, (xsp+8)
 	jrl	-131
 	lda	xwa, (xsp+58)
@@ -12482,25 +12482,25 @@ EffectBox_NameSetup:
 ; EffectBoxProc dispatch
 EffectBox_Dispatch:
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80002
+	ld	xbc, 0x01e80002
 	jr	65
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80003
+	ld	xbc, 0x01e80003
 	jr	56
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80004
+	ld	xbc, 0x01e80004
 	jr	47
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80005
+	ld	xbc, 0x01e80005
 	jr	38
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80006
+	ld	xbc, 0x01e80006
 	jr	29
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80007
+	ld	xbc, 0x01e80007
 	jr	20
 	ld	xwa, (xbc)
-	ld	xbc, 0x01E80008
+	ld	xbc, 0x01e80008
 	jr	11
 
 EffectBoxProc_CopyNameAndSetup:
@@ -13030,19 +13030,19 @@ EffectBox_StateDispatch:
 	jp_dri 8, 0x07, 0xf0, 0xe4
 ; SeqAccomp editor load dispatch
 SeqAccomp_Dispatch:
-	ld	xbc, 0x01E80062
+	ld	xbc, 0x01e80062
 	jr	49
-	ld	xbc, 0x01E80063
+	ld	xbc, 0x01e80063
 	.asciz "h*Ad"
 	.byte 0xe8, 0x01
 	.asciz "h#Ae"
 	.byte 0xe8, 0x01
 	jr	28
-	ld	xbc, 0x01E80066
+	ld	xbc, 0x01e80066
 	jr	21
-	ld	xbc, 0x01E80067
+	ld	xbc, 0x01e80067
 	jr	14
-	ld	xbc, 0x01E80068
+	ld	xbc, 0x01e80068
 	jr	7
 
 ; EffectBox state 1
@@ -13541,11 +13541,11 @@ SqplyFunc_ParamFormatData:
 	ld	wa, de
 	cp	de, 0x8002
 	jr	nz, 7
-	ld	xwa, 0xE34A9C
+	ld	xwa, 0xe34a9c
 	jr	11
 	cp	wa, 0x8001
 	jr	nz, 22
-	ld	xwa, 0xE34AA0
+	ld	xwa, 0xe34aa0
 	push	xwa
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
@@ -13554,21 +13554,21 @@ SqplyFunc_ParamFormatData:
 	inc	8, xsp
 	jrl	356
 	pushw	wa
-	ld	xwa, 0xE34AA4
+	ld	xwa, 0xe34aa4
 	jrl	332
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ldda8	a, 9010
 	extz	wa
 	pushw	wa
-	ld	xwa, 0xE34AA8
+	ld	xwa, 0xe34aa8
 	jrl	312
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ldda8	a, 7528
 	extz	wa
 	pushw	wa
-	ld	xwa, 0xE34AAE
+	ld	xwa, 0xe34aae
 	jrl	292
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
@@ -13581,31 +13581,31 @@ SqplyFunc_ParamFormatData:
 	pushw	wa
 	inc	6, w
 	reti
-	ld	xwa, 0xE34AB2
+	ld	xwa, 0xe34ab2
 	jr	5
-	ld	xwa, 0xE34AB8
+	ld	xwa, 0xe34ab8
 	push	xwa
 	.byte 0xa1
 	.ascii " 8h6¡!ñ±"
 	pushw	wa
 	inc	6, a
 	reti
-	ld	xwa, 0xE34ABE
+	ld	xwa, 0xe34abe
 	jr	5
-	ld	xwa, 0xE34AC4
+	ld	xwa, 0xe34ac4
 	push	xwa
 	push	xbc
 	jr	30
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
-	ld	xwa, 0xE34AD0
+	ld	xwa, 0xe34ad0
 	.byte 0xc1
 	push	xde
 	pushw	wa
 	push	xsp
 	nop
 	jr	z, 5
-	ld	xwa, 0xE34ACA
+	ld	xwa, 0xe34aca
 	push	xwa
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
@@ -13621,11 +13621,11 @@ SqplyFunc_ParamFormatData:
 	.byte 0xd1
 	ldb	w, 37
 	.byte 0x04
-	ld	xwa, 0xE34AD6
+	ld	xwa, 0xe34ad6
 	jr	9
 	.byte 0xd1, 0x1c
 	ldb	e, 4
-	ld	xwa, 0xE34ADC
+	ld	xwa, 0xe34adc
 	jrl	149
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
@@ -13635,11 +13635,11 @@ SqplyFunc_ParamFormatData:
 	.byte 0xd1
 	ldb	b, 37
 	.byte 0x04
-	ld	xwa, 0xE34AE2
+	ld	xwa, 0xe34ae2
 	jr	9
 	.byte 0xd1
 	calr	1061
-	ld	xwa, 0xE34AE8
+	ld	xwa, 0xe34ae8
 	jr	113
 
 SqplyFunc_FormatRhythmPattern:
@@ -13732,7 +13732,7 @@ SqplyFunc_GetValueDispatch:
 	jrl SqplyFunc_Epilogue
 	ldada xhl, 9832
 	jr SqplyFunc_GetValueReturn
-	ldada xhl, 0x28B1
+	ldada xhl, 0x28b1
 	jr SqplyFunc_GetValueDone
 	call GetTitleNow
 	cp l, 0x82
@@ -13754,13 +13754,13 @@ SqplyFunc_GetValNonPlay2:
 	jr SqplyFunc_GetValueReturn
 	ldada xhl, 9964
 	jr SqplyFunc_GetValueReturn
-	ldada xhl, 0xF238
+	ldada xhl, 0xf238
 	jr SqplyFunc_GetValueReturn
-	ldada xhl, 0xF23A
+	ldada xhl, 0xf23a
 	jr SqplyFunc_GetValueReturn
-	ldada xhl, 0xF23F
+	ldada xhl, 0xf23f
 	jr SqplyFunc_GetValueReturn
-	ldada xhl, 0x283A
+	ldada xhl, 0x283a
 
 SqplyFunc_GetValueDone:
 	jrl SqplyFunc_Epilogue
@@ -13866,7 +13866,7 @@ SqplyFunc_HandlePartQuery:
 
 SqplyFunc_PartQueryDispatch:
 	ldb	l, 1
-	ld8_24	a, 0x02109C
+	ld8_24	a, 0x02109c
 	cp	a, l
 	scc16	z, hl
 	extz	xhl
@@ -13932,7 +13932,7 @@ Sqedt_ParamDispatch:
 	cps	hl, 7
 	jr	gt, 58
 	add	hl, hl
-	lda_24	xix, 0xE34D10
+	lda_24	xix, 0xe34d10
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xec
@@ -13947,13 +13947,13 @@ Sqedt_ParamDispatch:
 	jr	34
 	ldda8	a, 9756
 	jr	28
-	ldda8	a, 0xF1D6
+	ldda8	a, 0xf1d6
 	jr	22
-	ldda8	a, 0xF1DB
+	ldda8	a, 0xf1db
 	jr	16
-	ldda8	a, 0xF1F1
+	ldda8	a, 0xf1f1
 	jr	10
-	ldda8	a, 0xF228
+	ldda8	a, 0xf228
 	jr	4
 	ldda8	a, 9732
 	jrl	961
@@ -13966,7 +13966,7 @@ Sqedt_ParamDispatch:
 	cps	hl, 7
 	jr	gt, 88
 	add	hl, hl
-	lda_24	xix, 0xE34D00
+	lda_24	xix, 0xe34d00
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xec
@@ -13979,14 +13979,14 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	rcf
 	ldb	h, 4
-	ld	xwa, 0xE34B4C
+	ld	xwa, 0xe34b4c
 	jr	64
 	.byte 0xd1
 	calr	1062
-	ld	xwa, 0xE34B52
+	ld	xwa, 0xe34b52
 	jr	53
 	.byte 0xd1, 0xd7, 0xf1, 0x04
-	ld	xwa, 0xE34B58
+	ld	xwa, 0xe34b58
 	jr	42
 	.byte 0xd1
 	cp	bc, ix
@@ -13994,7 +13994,7 @@ Sqedt_ParamDispatch:
 	.long FmtStr_pct3d_4B5E
 	jr	31
 	.byte 0xd1
-	st32_24	0x4004F1, xix
+	st32_24	0x4004f1, xix
 	popw	hl
 	.byte 0xe3
 	nop
@@ -14002,11 +14002,11 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	pushw	bc
 	.byte 0xf2, 0x04
-	ld	xwa, 0xE34B6A
+	ld	xwa, 0xe34b6a
 	jr	9
 	.byte 0xd1, 0x06
 	ldb	h, 4
-	ld	xwa, 0xE34B70
+	ld	xwa, 0xe34b70
 	jrl	1151
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14017,7 +14017,7 @@ Sqedt_ParamDispatch:
 	cps	hl, 7
 	jr	gt, 88
 	add	hl, hl
-	lda_24	xix, 0xE34CF0
+	lda_24	xix, 0xe34cf0
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xec
@@ -14031,17 +14031,17 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	ccf
 	ldb	h, 4
-	ld	xwa, 0xE34B76
+	ld	xwa, 0xe34b76
 	jr	64
 	.byte 0xd1
 	ldb	w, 38
 	.byte 0x04
-	ld	xwa, 0xE34B7C
+	ld	xwa, 0xe34b7c
 	jr	53
 	.byte 0xd1
 	pushw	ix
 	ldb	h, 4
-	ld	xwa, 0xE34B82
+	ld	xwa, 0xe34b82
 	jr	42
 	.byte 0xd1
 	ldb	h, 38
@@ -14051,16 +14051,16 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	swi	4
 	ldb	e, 4
-	ld	xwa, 0xE34B8E
+	ld	xwa, 0xe34b8e
 	jr	20
 	.byte 0xd1
 	swi	2
 	ldb	e, 4
-	ld	xwa, 0xE34B94
+	ld	xwa, 0xe34b94
 	jr	9
 	.byte 0xd1
 	ldio	38, 4
-	ld	xwa, 0xE34B9A
+	ld	xwa, 0xe34b9a
 	jrl	1031
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14069,7 +14069,7 @@ Sqedt_ParamDispatch:
 	jr	le, 17
 	exts	de
 	.long Str_20469e32473220
-	pushw	0x4BA0
+	pushw	0x4ba0
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jr	21
@@ -14081,14 +14081,14 @@ Sqedt_ParamDispatch:
 	exts	de
 	pushw	de
 	pushw	227
-	pushw	0x4BA8
+	pushw	0x4ba8
 	ld	xwa, (xbc)
 	push	xwa
 	jrl	981
 	exts	de
 	pushw	de
 	pushw	227
-	pushw	0x4BB0
+	pushw	0x4bb0
 	jrl	910
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14110,27 +14110,27 @@ Sqedt_ParamDispatch:
 	jr	8
 	exts	de
 	pushw	de
-	ld	xwa, 0xE34BC6
+	ld	xwa, 0xe34bc6
 	jrl	910
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldda8	e, 0xF22E
+	ldda8	e, 0xf22e
 	cps	e, 0
 	jr	le, 10
 	exts	de
 	pushw	de
-	ld	xwa, 0xE34BCC
+	ld	xwa, 0xe34bcc
 	jr	24
 	cps	e, 0
 	jr	ge, 12
 	neg	e
 	exts	de
 	pushw	de
-	ld	xwa, 0xE34BD4
+	ld	xwa, 0xe34bd4
 	jr	8
 	exts	de
 	pushw	de
-	ld	xwa, 0xE34BDC
+	ld	xwa, 0xe34bdc
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14138,10 +14138,10 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	9
-	ldda8	a, 0xF1E0
+	ldda8	a, 0xf1e0
 	extz	wa
 	muls	wa, 9
-	ld	xbc, 0xE34A16
+	ld	xbc, 0xe34a16
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -14149,10 +14149,10 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	15
-	ldda8	a, 0xF1F6
+	ldda8	a, 0xf1f6
 	extz	wa
 	muls	wa, 15
-	ld	xbc, 0xE34A32
+	ld	xbc, 0xe34a32
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -14162,7 +14162,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9728
 	extz	wa
 	pushw	wa
-	ld	xwa, 0xE34BE2
+	ld	xwa, 0xe34be2
 	jrl	767
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14172,17 +14172,17 @@ Sqedt_ParamDispatch:
 	cps	e, 0
 	jr	le, 8
 	pushw	wa
-	ld	xwa, 0xE34BE8
+	ld	xwa, 0xe34be8
 	jr	22
 	cps	e, 0
 	jr	ge, 12
 	neg	e
 	exts	de
 	pushw	de
-	ld	xwa, 0xE34BF0
+	ld	xwa, 0xe34bf0
 	jr	6
 	pushw	wa
-	ld	xwa, 0xE34BF8
+	ld	xwa, 0xe34bf8
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14196,7 +14196,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9750
 	extz	wa
 	muls	wa, 9
-	lda_24	xde, 0xE30946
+	lda_24	xde, 0xe30946
 	exts	xwa
 	add	xwa, xde
 	push	xwa
@@ -14208,7 +14208,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9750
 	extz	wa
 	pushw	wa
-	ld	xwa, 0xE34BFE
+	ld	xwa, 0xe34bfe
 	jr	61
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14219,7 +14219,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9816
 	extz	wa
 	muls	wa, 9
-	lda_24	xde, 0xE30946
+	lda_24	xde, 0xe30946
 	exts	xwa
 	add	xwa, xde
 	push	xwa
@@ -14231,7 +14231,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9816
 	extz	wa
 	pushw	wa
-	ld	xwa, 0xE34C06
+	ld	xwa, 0xe34c06
 	push	xwa
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+18)
@@ -14240,39 +14240,39 @@ Sqedt_ParamDispatch:
 	jrl	579
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldda8	a, 0xF1D3
+	ldda8	a, 0xf1d3
 	extz	wa
 	pushw	wa
-	ld	xwa, 0xE34C0E
+	ld	xwa, 0xe34c0e
 	jrl	550
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldda8	a, 0xF1D4
+	ldda8	a, 0xf1d4
 	extz	wa
 	pushw	wa
-	ld	xwa, 0xE34C14
+	ld	xwa, 0xe34c14
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jrl	471
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldda8	a, 0xF1D5
+	ldda8	a, 0xf1d5
 	extz	wa
 	pushw	wa
-	ld	xwa, 0xE34C1A
+	ld	xwa, 0xe34c1a
 	jrl	501
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
-	ldda8	a, 0xF1E9
+	ldda8	a, 0xf1e9
 	jrl	175
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	.byte 0xd1
 	cp	xbc, xde
 	.byte 0x04
-	ld	xwa, 0xE34C20
+	ld	xwa, 0xe34c20
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14282,19 +14282,19 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	pushw	wa
 	ldb	h, 4
-	ld	xwa, 0xE34C26
+	ld	xwa, 0xe34c26
 	jrl	442
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
-	ldda8	a, 0xF1EE
+	ldda8	a, 0xf1ee
 	jr	117
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	.byte 0xd1
 	cp	xbc, xsp
 	.byte 0x04
-	ld	xwa, 0xE34C2C
+	ld	xwa, 0xe34c2c
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14304,17 +14304,17 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9770
 	extz	wa
 	pushw	wa
-	ld	xwa, 0xE34C32
+	ld	xwa, 0xe34c32
 	jrl	381
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
-	ldda8	a, 0xF1E1
+	ldda8	a, 0xf1e1
 	jr	56
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	.byte 0xd1, 0xe2, 0xf1, 0x04
-	ld	xwa, 0xE34C38
+	ld	xwa, 0xe34c38
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14324,12 +14324,12 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	pushw	iz
 	ldb	h, 4
-	ld	xwa, 0xE34C3E
+	ld	xwa, 0xe34c3e
 	jrl	323
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
-	ldda8	a, 0xF1E6
+	ldda8	a, 0xf1e6
 	extz	wa
 	muls	wa, 5
 	.byte 0x41
@@ -14354,7 +14354,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9776
 	extz	wa
 	pushw	wa
-	ld	xwa, 0xE34C4A
+	ld	xwa, 0xe34c4a
 	jrl	245
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14378,7 +14378,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9994
 	extz	wa
 	pushw	wa
-	ld	xwa, 0xE34C56
+	ld	xwa, 0xe34c56
 	jrl	181
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14386,7 +14386,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9998
 	extz	wa
 	muls	wa, 3
-	ld	xbc, 0xE3499E
+	ld	xbc, 0xe3499e
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -14455,7 +14455,7 @@ SqedtFunc_CheckMode:
 	jr StringCopyEpilog
 
 SqedtFunc_CheckMode_CopyParam:
-	ldda8 a, 0x286C
+	ldda8 a, 0x286c
 	extz wa
 	pushw wa
 	ld xwa, 0xe34c6c
@@ -14533,9 +14533,9 @@ Sqedt_ValueDispatch:
 	cp	hl, 8
 	jrl	gt, 183
 	add	hl, hl
-	lda_24	xix, 0xE34CD0
+	lda_24	xix, 0xe34cd0
 	ld_rrw	hl, xix, hl
-	lda_24	xix, 0xF35054
+	lda_24	xix, 0xf35054
 	jp_rr	8, xix, hl
 	ldb	l, 0
 	jrl	158
@@ -14548,9 +14548,9 @@ Sqedt_ValueDispatch:
 	cps	hl, 7
 	jrl	gt, 135
 	add	hl, hl
-	lda_24	xix, 0xE34CC0
+	lda_24	xix, 0xe34cc0
 	ld_rrw	hl, xix, hl
-	lda_24	xix, 0xF35084
+	lda_24	xix, 0xf35084
 	jp_rr	8, xix, hl
 	ldb	l, 1
 	jr	111
@@ -14561,9 +14561,9 @@ Sqedt_ValueDispatch:
 	cp	hl, 8
 	jr	gt, 93
 	add	hl, hl
-	lda_24	xix, 0xE34CAE
+	lda_24	xix, 0xe34cae
 	ld_rrw	hl, xix, hl
-	lda_24	xix, 0xF350AE
+	lda_24	xix, 0xf350ae
 	jp_rr	8, xix, hl
 	ldb	l, 2
 	jr	69
@@ -14637,7 +14637,7 @@ SqedtFunc_SignExtend:
 ; Sequencer format dispatch A
 SeqFormat_DispatchA:
 	ldb	l, 0
-	ld8_24	a, 0x02109C
+	ld8_24	a, 0x02109c
 	cp	a, l
 	scc16	z, hl
 	extz	xhl
@@ -14653,14 +14653,14 @@ SeqFormat_DispatchA:
 	ldb	l, 6
 	jr	-34
 	lds32	xhl, 0
-	ld8_24	l, 0x03E2DC
+	ld8_24	l, 0x03e2dc
 	jrl	206
-	st8_24	0x03E2DC, a
+	st8_24	0x03e2dc, a
 	jrl	-366
 	lds32	xhl, 0
-	ld8_24	l, 0x03E2DE
+	ld8_24	l, 0x03e2de
 	jrl	188
-	st8_24	0x03E2DE, a
+	st8_24	0x03e2de, a
 	jrl	-384
 	extz	wa
 	sub	wa, 15
@@ -14669,44 +14669,44 @@ SeqFormat_DispatchA:
 	cp	wa, 15
 	jrl	gt, -402
 	add	wa, wa
-	lda_24	xix, 0xE34C70
+	lda_24	xix, 0xe34c70
 	ld_rrw	wa, xix, wa
-	lda_24	xix, 0xF351AD
+	lda_24	xix, 0xf351ad
 	jp_rr	8, xix, wa
-	cpi8_24	0x03E2E0, 0
+	cpi8_24	0x03e2e0, 0
 	jrl	nz, -433
 	ld	xwa, 15
 	jr	62
-	cpi8_24	0x03E2E0, 1
+	cpi8_24	0x03e2e0, 1
 	jrl	nz, -449
 	ld	xwa, 18
 	jr	80
-	cpi8_24	0x03E2E0, 0
+	cpi8_24	0x03e2e0, 0
 	jrl	nz, -465
 	ld	xwa, 21
 	jr	30
-	cpi8_24	0x03E2E0, 1
+	cpi8_24	0x03e2e0, 1
 	jrl	nz, -481
 	ld	xwa, 24
 	jr	48
-	cpi8_24	0x03E2E0, 0
+	cpi8_24	0x03e2e0, 0
 	jrl	nz, -497
 	ld	xwa, 27
 	ld	xbc, (xsp+8)
 	sub	xbc, xwa
 	lds32	xwa, 0
-	ld8_24	a, 0x03E2DC
+	ld8_24	a, 0x03e2dc
 	cp	xwa, xbc
 	scc16	z, hl
 	extz	xhl
 	jr	42
-	cpi8_24	0x03E2E0, 1
+	cpi8_24	0x03e2e0, 1
 	jrl	nz, -531
 	ld	xwa, 29
 	ld	xbc, (xsp+8)
 	sub	xbc, xwa
 	lds32	xwa, 0
-	ld8_24	a, 0x03E2DE
+	ld8_24	a, 0x03e2de
 	cp	xwa, xbc
 	scc16	z, hl
 	extz	xhl
@@ -14761,7 +14761,7 @@ SeqFmt_Field_LoadA:
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadB:
-	ldada xhl, 0x286C
+	ldada xhl, 0x286c
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadC:
@@ -14817,7 +14817,7 @@ SeqFmt_Field_LoadJ:
 	jr z, SeqFmt_Field_LoadK
 	cp xiz, 0x1
 	jr nz, SeqFmt_Field_LoadL
-	ldada xhl, 0xF1D7
+	ldada xhl, 0xf1d7
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadK:
@@ -14825,7 +14825,7 @@ SeqFmt_Field_LoadK:
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadL:
-	ldada xhl, 0xF1D6
+	ldada xhl, 0xf1d6
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x6
 	jr z, SeqFmt_Field_LoadN
@@ -14833,7 +14833,7 @@ SeqFmt_Field_LoadL:
 	jr z, SeqFmt_Field_LoadM
 	cp xiz, 0x1
 	jr nz, SeqFmt_Field_LoadO
-	ldada xhl, 0xF1DC
+	ldada xhl, 0xf1dc
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadM:
@@ -14841,11 +14841,11 @@ SeqFmt_Field_LoadM:
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadN:
-	ldada xhl, 0xF1E0
+	ldada xhl, 0xf1e0
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadO:
-	ldada xhl, 0xF1DB
+	ldada xhl, 0xf1db
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x9
 	jr z, SeqFmt_Field_LoadS
@@ -14857,7 +14857,7 @@ SeqFmt_Field_LoadO:
 	jr z, SeqFmt_Field_LoadP
 	cp xiz, 0x1
 	jr nz, SeqFmt_Field_LoadT
-	ldada xhl, 0xF1F2
+	ldada xhl, 0xf1f2
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadP:
@@ -14865,7 +14865,7 @@ SeqFmt_Field_LoadP:
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadQ:
-	ldada xhl, 0xF1F6
+	ldada xhl, 0xf1f6
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadR:
@@ -14877,7 +14877,7 @@ SeqFmt_Field_LoadS:
 	jrl SqedtFunc_ReturnPath
 
 SeqFmt_Field_LoadT:
-	ldada xhl, 0xF1F1
+	ldada xhl, 0xf1f1
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x5
 	jr z, SeqFmt_Field_LoadV
@@ -14885,7 +14885,7 @@ SeqFmt_Field_LoadT:
 	jr z, SeqFmt_Field_LoadU
 	cp xiz, 0x1
 	jr nz, SeqFmt_Field_LoadW
-	ldada xhl, 0xF229
+	ldada xhl, 0xf229
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadU:
@@ -14893,25 +14893,25 @@ SeqFmt_Field_LoadU:
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadV:
-	ldada xhl, 0xF22E
+	ldada xhl, 0xf22e
 	jrl SqedtFunc_ReturnPath
 
 SeqFmt_Field_LoadW:
-	ldada xhl, 0xF228
+	ldada xhl, 0xf228
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0xe
 	jr z, SeqFmt_Field_LoadX
 	cp xiz, 0xd
 	jr nz, SeqFmt_Field_LoadY
-	ldada xhl, 0xF1D4
+	ldada xhl, 0xf1d4
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadX:
-	ldada xhl, 0xF1D5
+	ldada xhl, 0xf1d5
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadY:
-	ldada xhl, 0xF1D3
+	ldada xhl, 0xf1d3
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x14
 	jr z, SeqFmt_Field_LoadAC
@@ -14923,7 +14923,7 @@ SeqFmt_Field_LoadY:
 	jr z, SeqFmt_Field_LoadZ
 	cp xiz, 0x10
 	jr nz, SeqFmt_Field_LoadAD
-	ldada xhl, 0xF1EA
+	ldada xhl, 0xf1ea
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadZ:
@@ -14931,11 +14931,11 @@ SeqFmt_Field_LoadZ:
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadAA:
-	ldada xhl, 0xF1EE
+	ldada xhl, 0xf1ee
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadAB:
-	ldada xhl, 0xF1EF
+	ldada xhl, 0xf1ef
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadAC:
@@ -14943,7 +14943,7 @@ SeqFmt_Field_LoadAC:
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadAD:
-	ldada xhl, 0xF1E9
+	ldada xhl, 0xf1e9
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x1a
 	jr z, SeqFmt_Field_LoadAH
@@ -14955,7 +14955,7 @@ SeqFmt_Field_LoadAD:
 	jr z, SeqFmt_Field_LoadAE
 	cp xiz, 0x16
 	jr nz, SeqFmt_Field_LoadAI
-	ldada xhl, 0xF1E2
+	ldada xhl, 0xf1e2
 	jr SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadAE:
@@ -14963,11 +14963,11 @@ SeqFmt_Field_LoadAE:
 	jr SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadAF:
-	ldada xhl, 0xF1E6
+	ldada xhl, 0xf1e6
 	jr SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadAG:
-	ldada xhl, 0xF1E7
+	ldada xhl, 0xf1e7
 	jr SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadAH:
@@ -14975,7 +14975,7 @@ SeqFmt_Field_LoadAH:
 	jr SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadAI:
-	ldada xhl, 0xF1E1
+	ldada xhl, 0xf1e1
 	jr SqedtFunc_Epilogue
 
 ; DspItem0CngFunc dispatch
@@ -15129,7 +15129,7 @@ DspItem0_DisplayParamNames:
 	ld8_24 a, 0x021098
 	extz wa
 	add wa, (xsp + 20)
-	ldada xbc, 0x29AC
+	ldada xbc, 0x29ac
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -15157,7 +15157,7 @@ DspItem0_DisplayParamValues:
 	ld8_24 a, 0x021098
 	extz wa
 	add wa, (xsp + 20)
-	ldada xbc, 0x29AC
+	ldada xbc, 0x29ac
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -15290,7 +15290,7 @@ DspItem0_HandleType2:
 	lds32 xhl, 2
 	jr DspItem0_Epilogue
 	lds32 xwa, 0
-	ldda8 a, 0x29AA
+	ldda8 a, 0x29aa
 	cp xde, xwa
 	scc16 c, hl
 	extz xhl
@@ -15309,7 +15309,7 @@ EffectEdit_ReturnZero:
 	extz xhl
 	jr DspItem0_Epilogue
 	lds32 xhl, 0
-	ldda8 l, 0x29AA
+	ldda8 l, 0x29aa
 	jr DspItem0_Epilogue
 
 ; DspItem0 dispatch target (calls GetTitleNow then falls through to epilogue)
@@ -15366,21 +15366,21 @@ Equalizer_DispatchA:
 ; to a common handler. Alternates between XBC and XDE base registers.
 ; EqualizerCngFunc dispatch B
 Equalizer_DispatchB:
-	ldda16	wa, 0x297A
+	ldda16	wa, 0x297a
 	extz	xwa
 	add	xwa, xwa
 	add	xbc, xwa
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	300
-	ldda16	wa, 0x297C
+	ldda16	wa, 0x297c
 	extz	xwa
 	add	xwa, xwa
 	add	xde, xwa
 	ld	hl, (xde)
 	extz	xhl
 	jrl	283
-	ldda16	wa, 0x297E
+	ldda16	wa, 0x297e
 	extz	xwa
 	add	xwa, xwa
 	add	xbc, xwa
@@ -15623,7 +15623,7 @@ FormatParamValueStr:
 	ld (xiz), 0x20
 	ld c, a
 	extz bc
-	ldada xde, 0x29AC
+	ldada xde, 0x29ac
 	extz xbc
 	add xbc, xde
 	ld w, (xbc)

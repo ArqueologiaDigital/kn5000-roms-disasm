@@ -303,7 +303,7 @@ MtName_SetSelectedFileNum:	aligned_string "MT_SetSelectedFileNum"
 MtName_PsSongSelBoxID:		aligned_string "MT_PsSongSelBoxID"
 MtName_SongNameSet:		aligned_string "MT_SongNameSet"
 	aligned_string "MT_DemoSongSel"
-	jp	0xBBF900
+	jp	0xbbf900
 	.byte 0xf2, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7e, 0x10
 	.byte 0xe2
 	.byte 0x00			; padding

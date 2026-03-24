@@ -41,7 +41,7 @@ MiddleFuncCall_DispatchData:
 	push	xhl
 	push	xix
 	push	xiz
-	call	0xF200F1
+	call	0xf200f1
 	.ascii "^\\[Zhi:;<>"
 	.byte 0x1d, 0x40, 0xee, 0xf1, 0x5e, 0x5c
 	.ascii "[Zh[:;<>"
@@ -54,7 +54,7 @@ MiddleFuncCall_DispatchData:
 	.ascii "^\\[Zh1:;<>"
 	.byte 0x1d, 0xb5, 0xee, 0xf1, 0x5e, 0x5c
 	.ascii "[Zh#:;<>"
-	call	0xF1EF03
+	call	0xf1ef03
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -462,7 +462,7 @@ SeqInit_LookupDispatchEntry:
 	ret
 
 SeqInit_PostDispatchEvent:
-	ldda8 a, 0x28A4
+	ldda8 a, 0x28a4
 	extz wa
 	calr SeqInit_LookupDispatchEntry
 	ld xwa, xhl
@@ -548,7 +548,7 @@ PlayMode_SendStopEvent:
 
 ; SqTrSelTtl case G
 SqTrSel_CaseG:
-	ldda8 a, 0x8D36
+	ldda8 a, 0x8d36
 	extz wa
 	sub wa, 0x6f
 	cps wa, 0
@@ -613,7 +613,7 @@ SqTrSel_CaseG_Thunk4:
 
 
 PlayMode_CheckAndAbort:
-	cpdi8 0x8D36, 114
+	cpdi8 0x8d36, 114
 	ret z
 	call SeqState_GetFlags
 	bit 0, hl
@@ -637,7 +637,7 @@ PlayMode_SwitchToModeAndNotify:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x7F42, 35
+	stdi8 0x7f42, 35
 	ldw wa, 0xee
 	jp SoundCtrl_SendCommand
 DispatchHandler_ConditionalJump:
@@ -683,12 +683,12 @@ DispatchHandler_InitAllSlots:
 	pop xde
 	lds iy, 1
 	call SeqNode_ResolveSlotPtr
-	stdi16 0xF22F, 1
+	stdi16 0xf22f, 1
 	ldda32 xiy, 4349
 	xor xhl, xhl
 	lds de, 2
-	ldda16 xbc, 0x286D
-	stda16 0xF231, xbc
+	ldda16 xbc, 0x286d
+	stda16 0xf231, xbc
 	dec 1, bc
 
 SeqSlot_InitEntryLoop:
@@ -749,7 +749,7 @@ DispatchHandler_ResolveSlot:
 	ldda32 xde, 7514
 	ld (xhl), xde
 	pop xde
-	ldda16 xiy, 0xF22F
+	ldda16 xiy, 0xf22f
 	cp iy, 0xffff
 	jr z, DispatchResolve_ReturnFail
 	ldda32 xde, 4349
@@ -757,7 +757,7 @@ DispatchHandler_ResolveSlot:
 	call SeqNode_ResolveSlotPtr
 	ldda32 xhl, 4349
 	ld wa, (xhl + 3)
-	stda16 0xF22F, xwa
+	stda16 0xf22f, xwa
 	ld ix, iy
 	cp wa, 0xffff
 	jr z, DispatchResolve_MarkCurrent
@@ -771,7 +771,7 @@ DispatchResolve_MarkCurrent:
 	call SeqNode_ResolveSlotPtr
 	ldda32 xhl, 4349
 	ormi8 (xhl), 0x80
-	decdi16 1, 0xF231
+	decdi16 1, 0xf231
 	pop xde
 	stda32 4349, xde
 	ldb w, 0x0
@@ -790,8 +790,8 @@ SeqNode_InsertAtPosition:
 	ld (xhl), xde
 	pop xde
 	stda16 3302, xwa
-	ldda16 xbc, 0xF22F
-	stda16 0xF22F, xiy
+	ldda16 xbc, 0xf22f
+	stda16 0xf22f, xiy
 	xor wa, wa
 	call SeqNode_ResolveSlotPtr
 	ldda32 xhl, 4349
@@ -849,7 +849,7 @@ SeqNodeInsert_Finalize:
 	ldda32 xhl, 4349
 	ld (xhl + 1), ix
 	inc 1, wa
-	adddm16 0xF231, xwa
+	adddm16 0xf231, xwa
 	ret
 
 SeqNodeInsert_EmptyList:
@@ -892,7 +892,7 @@ VoiceSlot_ScanLoop:
 	ld_sriw3 IY, 0x07, 0xf0, 0xf8
 	cp iy, 0xffff
 	jrl z, VoiceSlot_AllocNewSlot
-	stda16 0x28BA, xiy
+	stda16 0x28ba, xiy
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
@@ -900,7 +900,7 @@ VoiceSlot_ScanLoop:
 	ldto_lerp XIX, 0x38
 	xor w, w
 	sla iz, 1
-	stda16 0x28BC, xwa
+	stda16 0x28bc, xwa
 	ld xix, 0xc9e
 
 VoiceSlot_FindFreeEntry:
@@ -924,7 +924,7 @@ VoiceSlot_CheckOccupied:
 	ldto_lerp XIX, 0x38
 	sla iz, 1
 	and iy, 0xff
-	stda16 0x28B8, xiy
+	stda16 0x28b8, xiy
 	ld xix, 0xf1f8
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
@@ -937,8 +937,8 @@ VoiceSlot_CheckOccupied:
 	cp wa, 0xff
 	jr ugt, VoiceSlot_Overflow
 	ld_sriw3 IY, 0x07, 0xf0, 0xf8
-	stda16 0x289F, xiy
-	stda16 0x28B6, xwa
+	stda16 0x289f, xiy
+	stda16 0x28b6, xwa
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
@@ -967,7 +967,7 @@ VoiceSlot_CheckOccupied:
 
 VoiceSlot_Overflow:
 	sub wa, 0xfb
-	stda16 0x28B6, xwa
+	stda16 0x28b6, xwa
 	pushw de
 	call DispatchHandler_ResolveSlot
 	popw de
@@ -976,7 +976,7 @@ VoiceSlot_Overflow:
 	ld iy, ix
 	ld xix, 0xf1f8
 	srl iz, 1
-	ldda16 xwa, 0x28B6
+	ldda16 xwa, 0x28b6
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
 	ld (xix + 32), a
@@ -985,7 +985,7 @@ VoiceSlot_Overflow:
 	call SeqNode_ResolveSlotPtr
 	ldda32 xhl, 4349
 	ldw (xhl + 3), 0xffff
-	stda16 0x289F, xiy
+	stda16 0x289f, xiy
 	ld wa, iy
 	pushw de
 	ld xix, 0xf1f8
@@ -1020,9 +1020,9 @@ VoiceSlot_Overflow:
 VoiceSlot_SendErrorAndReset:
 	ldb w, 0x68
 	call MIDI_SendSysExCmd
-	anddi8 0xE3E2, 111
-	stdi8 0x7F42, 15
-	stdi16 0xE3DC, 0x40EE
+	anddi8 0xe3e2, 111
+	stdi8 0x7f42, 15
+	stdi16 0xe3dc, 0x40ee
 	popw bc
 	ret
 

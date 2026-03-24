@@ -12947,7 +12947,7 @@ SeqVoice_DispatchProcess_Data:
 	ld	xbc, 0x72aa
 	ld	(xwa+8), xbc
 	ld	xbc, (xwa)
-	lda	xbc, (xbc+0x72AA)
+	lda	xbc, (xbc+0x72aa)
 	ld	(xwa+4), xbc
 	ret
 	lda_24	xbc, 0x1e0000
@@ -12964,7 +12964,7 @@ SeqVoice_DispatchProcess_Data:
 	ld	xbc, 0x729a
 	ld	(xwa+8), xbc
 	ld	xbc, (xwa)
-	lda	xbc, (xbc+0x729A)
+	lda	xbc, (xbc+0x729a)
 	ld	(xwa+4), xbc
 	ret
 	push	xiz

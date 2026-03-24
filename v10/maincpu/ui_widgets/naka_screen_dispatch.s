@@ -1289,7 +1289,7 @@ StrTimeSig_3_2:
 StrTimeSig_2_2:
 	.byte 0x32, 0x2f, 0x32, 0x00
 StrTimeSig_1_2:
-	ldw	bc, 0x322F
+	ldw	bc, 0x322f
 	.byte 0x00			; padding
 	ldb	e, 100
 	.byte 0x00			; padding
@@ -1297,7 +1297,7 @@ StrTimeSig_1_2:
 	aligned_string "%s (%s)"
 	.byte 0x00			; padding
 	.byte 0x00			; padding
-	jp16	0xA400
+	jp16	0xa400
 	.byte 0x00			; padding
 	.byte 0xa4, 0x00, 0x55
 	.byte 0x00			; padding
@@ -1813,10 +1813,10 @@ StrRhySlot_MemoryA:		aligned_string "MEMORY A "
 	aligned_string "MEMORY"
 	aligned_string "CUSTOM"
 	popw iy
-	ld	xiy, 0x59524F4D
+	ld	xiy, 0x59524f4d
 	.byte 0x00			; padding
 	.byte 0xff			; padding
-	ld	xhl, 0x4F545355
+	ld	xhl, 0x4f545355
 	popw iy
 	.byte 0x00			; padding
 	.byte 0xff			; padding

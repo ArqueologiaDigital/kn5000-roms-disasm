@@ -13,11 +13,11 @@ ParaLoadOpt_AudioFlagCheck:
 	ld (xsp), e
 	ld (xsp + 2), c
 	ld (xsp + 4), a
-	ldda8 a, 0xBD36
+	ldda8 a, 0xbd36
 	bit 0, a
 	jr z, ParaLoadOpt_CaseA
 	res 0, a
-	stda8 0xBD36, a
+	stda8 0xbd36, a
 	ld xwa, 0x570006
 	ld xbc, 0x1c00001
 	lds32 xde, 0
@@ -72,58 +72,58 @@ ParaLoadOpt_DispatchTable_A:
 	sti8_24	0x024764, 0
 	sti8_24	0x024766, 0
 	sti8_24	0x024768, 0
-	ld	xwa, 0x57000A
-	ld	xbc, 0x01C0000B
+	ld	xwa, 0x57000a
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	201
 	sti8_24	0x024760, 1
-	ld	xwa, 0x57000A
-	ld	xbc, 0x01C0000B
+	ld	xwa, 0x57000a
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	180
 	sti8_24	0x024760, 3
-	ld	xwa, 0x57000A
-	ld	xbc, 0x01C0000B
+	ld	xwa, 0x57000a
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	159
 	sti8_24	0x024762, 1
-	ld	xwa, 0x57000A
-	ld	xbc, 0x01C0000B
+	ld	xwa, 0x57000a
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	138
 	sti8_24	0x024762, 3
-	ld	xwa, 0x57000A
-	ld	xbc, 0x01C0000B
+	ld	xwa, 0x57000a
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	118
 	sti8_24	0x024764, 1
-	ld	xwa, 0x57000A
-	ld	xbc, 0x01C0000B
+	ld	xwa, 0x57000a
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	98
 	sti8_24	0x024764, 3
-	ld	xwa, 0x57000A
-	ld	xbc, 0x01C0000B
+	ld	xwa, 0x57000a
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	78
 	sti8_24	0x024766, 1
-	ld	xwa, 0x57000A
-	ld	xbc, 0x01C0000B
+	ld	xwa, 0x57000a
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	58
 	sti8_24	0x024766, 3
-	ld	xwa, 0x57000A
-	ld	xbc, 0x01C0000B
+	ld	xwa, 0x57000a
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	38
 	sti8_24	0x024768, 1
-	ld	xwa, 0x57000A
-	ld	xbc, 0x01C0000B
+	ld	xwa, 0x57000a
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	18
 	sti8_24	0x024768, 3
-	ld	xwa, 0x57000A
-	ld	xbc, 0x01C0000B
+	ld	xwa, 0x57000a
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	call	ApPostEvent
 
@@ -136,11 +136,11 @@ ParaLoadOpt_AudioFlagCheck_B:
 	ld (xsp), e
 	ld (xsp + 2), c
 	ld (xsp + 4), a
-	ldda8 a, 0xBD36
+	ldda8 a, 0xbd36
 	bit 1, a
 	jr z, ParaLoadOpt_CaseD
 	res 1, a
-	stda8 0xBD36, a
+	stda8 0xbd36, a
 	ld xwa, 0x570011
 	ld xbc, 0x1c00001
 	lds32 xde, 0
@@ -148,11 +148,11 @@ ParaLoadOpt_AudioFlagCheck_B:
 
 ; ParaLoadOpt case D
 ParaLoadOpt_CaseD:
-	ldda8 a, 0xBD10
+	ldda8 a, 0xbd10
 	bit 7, a
 	jr z, ParaLoadOpt_CaseE
 	res 7, a
-	stda8 0xBD10, a
+	stda8 0xbd10, a
 	ld a, (xsp + 2)
 	st8_24 0x02475c, a
 	ld xwa, 0x57001b
@@ -162,11 +162,11 @@ ParaLoadOpt_CaseD:
 
 ; ParaLoadOpt case E
 ParaLoadOpt_CaseE:
-	ldda8 a, 0xBD14
+	ldda8 a, 0xbd14
 	bit 7, a
 	jr z, ParaLoadOpt_CaseF
 	res 7, a
-	stda8 0xBD14, a
+	stda8 0xbd14, a
 	ld a, (xsp)
 	st8_24 0x02475e, a
 	ld xwa, 0x57001b
@@ -176,11 +176,11 @@ ParaLoadOpt_CaseE:
 
 ; ParaLoadOpt case F
 ParaLoadOpt_CaseF:
-	ldda8 a, 0xBD0C
+	ldda8 a, 0xbd0c
 	bit 7, a
 	jrl z, MidiFunc_SendEventReturn
 	res 7, a
-	stda8 0xBD0C, a
+	stda8 0xbd0c, a
 	ld a, (xsp + 4)
 	extz wa
 	cps wa, 0
@@ -200,57 +200,57 @@ ParaLoadOpt_DispatchTable_B:
 	sti8_24	0x024766, 0
 	sti8_24	0x024768, 0
 	ld	xwa, 0x570015
-	ld	xbc, 0x01C0000B
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	201
 	sti8_24	0x024760, 2
 	ld	xwa, 0x570015
-	ld	xbc, 0x01C0000B
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	180
 	sti8_24	0x024760, 3
 	ld	xwa, 0x570015
-	ld	xbc, 0x01C0000B
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	159
 	sti8_24	0x024762, 2
 	ld	xwa, 0x570015
-	ld	xbc, 0x01C0000B
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	138
 	sti8_24	0x024762, 3
 	ld	xwa, 0x570015
-	ld	xbc, 0x01C0000B
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	118
 	sti8_24	0x024764, 2
 	ld	xwa, 0x570015
-	ld	xbc, 0x01C0000B
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	98
 	sti8_24	0x024764, 3
 	ld	xwa, 0x570015
-	ld	xbc, 0x01C0000B
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	78
 	sti8_24	0x024766, 2
 	ld	xwa, 0x570015
-	ld	xbc, 0x01C0000B
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	58
 	sti8_24	0x024766, 3
 	ld	xwa, 0x570015
-	ld	xbc, 0x01C0000B
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	38
 	sti8_24	0x024768, 2
 	ld	xwa, 0x570015
-	ld	xbc, 0x01C0000B
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	18
 	sti8_24	0x024768, 3
 	ld	xwa, 0x570015
-	ld	xbc, 0x01C0000B
+	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	call	ApPostEvent
 
@@ -260,11 +260,11 @@ MidiFunc_SendEventReturn:
 
 ParaLoadOpt_PostDualEvent:
 	ld	xwa, 0x570006
-	ld	xbc, 0x01C00002
+	ld	xbc, 0x01c00002
 	lds32	xde, 0
 	call	ApPostEvent
 	ld	xwa, 0x570011
-	ld	xbc, 0x01C00002
+	ld	xbc, 0x01c00002
 	lds32	xde, 0
 	jp	ApPostEvent
 
@@ -379,7 +379,7 @@ ParaLoadOpt_GridReturn:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 0x7F42, 72
+	stdi8 0x7f42, 72
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -606,7 +606,7 @@ ParaLoadOptGridCheck:
 ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008F
+	ld	xbc, 0x01e0008f
 	lds32	xde, 0
 	call	SendEvent
 	lda	xwa, (xsp+20)
@@ -625,49 +625,49 @@ ParaLoadOpt_GridDispatch:
 	jr	z, 36
 	cps	hl, 2
 	jrl	nz, 782
-	ld	xiy, 0xE7FEA0
+	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 0x0340F6
+	lda_24	xbc, 0x0340f6
 	ld	(xwa), xbc
 	lds32	xbc, 1
 	ld	(xwa+6), xbc
 	jrl	303
-	ld	xiy, 0xE7FEA0
+	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 0x0340F7
+	lda_24	xbc, 0x0340f7
 	ld	(xwa), xbc
 	lds32	xbc, 1
 	ld	(xwa+6), xbc
 	jrl	272
-	ld	xiy, 0xE7FEA0
+	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 0x0340F8
+	lda_24	xbc, 0x0340f8
 	ld	(xwa), xbc
 	lds32	xbc, 3
 	ld	(xwa+6), xbc
 	jrl	241
-	ld	xiy, 0xE7FEA0
+	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 0x0340F9
+	lda_24	xbc, 0x0340f9
 	ld	(xwa), xbc
 	lds32	xbc, 3
 	ld	(xwa+6), xbc
 	jrl	210
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008F
+	ld	xbc, 0x01e0008f
 	lds32	xde, 0
 	call	SendEvent
 	lda	xwa, (xsp+20)
@@ -686,28 +686,28 @@ ParaLoadOpt_GridDispatch:
 	jr	z, 43
 	cps	hl, 2
 	jrl	nz, 598
-	ld	xiy, 0xE7FEA0
+	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 0x0340F6
+	lda_24	xbc, 0x0340f6
 	ld	(xwa), xbc
 	lds32	xbc, 1
 	ld	(xwa+6), xbc
-	ld	xbc, 0xFFFFFFFF
+	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
 	jr	112
-	ld	xiy, 0xE7FEA0
+	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 0x0340F7
+	lda_24	xbc, 0x0340f7
 	ld	(xwa), xbc
 	lds32	xbc, 1
 	ld	(xwa+6), xbc
-	ld	xbc, 0xFFFFFFFF
+	ld	xbc, 0xffffffff
 	.byte 0xb8
 	ret
 	.ascii "ahJE"
@@ -716,11 +716,11 @@ ParaLoadOpt_GridDispatch:
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 0x0340F8
+	lda_24	xbc, 0x0340f8
 	ld	(xwa), xbc
 	lds32	xbc, 3
 	ld	(xwa+6), xbc
-	ld	xbc, 0xFFFFFFFF
+	ld	xbc, 0xffffffff
 	.byte 0xb8
 	ret
 	.ascii "ah$E"
@@ -731,11 +731,11 @@ ParaLoadOpt_GridDispatch:
 	ldw	bc, 11
 	ldirw
 	lda	xwa, (xsp+44)
-	lda_24	xbc, 0x0340F9
+	lda_24	xbc, 0x0340f9
 	ld	(xwa), xbc
 	lds32	xbc, 3
 	ld	(xwa+6), xbc
-	ld	xbc, 0xFFFFFFFF
+	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
 	call	MainRamAdd
 	jrl	441
@@ -762,7 +762,7 @@ ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	370
 	lda	xhl, (xbc+1)
 	.byte 0xa4, 0xf3
@@ -781,7 +781,7 @@ ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	319
 	lda	xhl, (xbc+2)
 	.byte 0xa4, 0xf3
@@ -800,7 +800,7 @@ ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	268
 	inc	3, xbc
 	.byte 0xa4, 0xf1
@@ -822,7 +822,7 @@ ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	217
 
 ; Voice UI misc handler

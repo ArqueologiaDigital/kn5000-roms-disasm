@@ -32,7 +32,7 @@ TtComputerConnection:
 	call GET_COMPUTER_INTERFACE_SELECTION
 	cps l, 0	;  MIDI
 	jr nz, ComputerConnectionTitleExit
-	stdi8 0x7F42, 70
+	stdi8 0x7f42, 70
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee

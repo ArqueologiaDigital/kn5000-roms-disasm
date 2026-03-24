@@ -2662,7 +2662,7 @@ RVari_OK_PageScroll:
 	jr nz, RVari_OK_CheckPageDown
 	ld xwa, (xiz + 44)
 	ld wa, (xwa)
-	cpda16_24 xwa, 0x0340BC
+	cpda16_24 xwa, 0x0340bc
 	jr ge, RVari_OK_PageUp_AtMax
 	ld xwa, (xiz + 44)
 	incm 1, (xwa)
@@ -2673,7 +2673,7 @@ RVari_OK_PageScroll:
 	jr RVari_OK_CheckPageDown
 
 RVari_OK_PageUp_AtMax:
-	cpdi16_24 0x0340BC, 1
+	cpdi16_24 0x0340bc, 1
 	jr le, RVari_OK_CheckPageDown
 	ld xwa, (xiz + 44)
 	ldw (xwa), 0x1
@@ -2698,7 +2698,7 @@ RVari_OK_CheckPageDown:
 	jr RVari_OK_ForwardDefault
 
 RVari_OK_PageDown_AtMin:
-	cpdi16_24 0x0340BC, 1
+	cpdi16_24 0x0340bc, 1
 	jr le, RVari_OK_ForwardDefault
 	ld xbc, (xiz + 44)
 	ld16_24 xwa, 0x0340bc

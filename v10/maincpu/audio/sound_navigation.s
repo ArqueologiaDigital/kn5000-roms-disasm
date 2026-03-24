@@ -363,7 +363,7 @@ MainGetRhythmName:
 	call Malloc
 	inc 2, xsp
 	ld (xsp + 2), xhl
-	ldada xbc, 0x90EA
+	ldada xbc, 0x90ea
 	ldto_berp A, 0xfa
 	ld (xbc), a
 	ldto_berp A, 0xfb
@@ -378,7 +378,7 @@ MainGetRhythmName:
 	pop xix
 	pop xhl
 	pop xde
-	ldada xbc, 0x90EE
+	ldada xbc, 0x90ee
 	ld a, (xbc)
 	extz wa
 	ld c, (xbc + 1)

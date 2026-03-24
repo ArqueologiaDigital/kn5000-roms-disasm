@@ -38,7 +38,7 @@ DrawLine:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawLine_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawLine_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 6)
@@ -1007,7 +1007,7 @@ DrawBox:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBox_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawBox_Return
 	ld xwa, xiz
 	ld bc, (xsp + 4)
@@ -1175,7 +1175,7 @@ DrawFrame:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawFrame_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawFrame_Return
 	ld xwa, xiz
 	ld bc, (xsp + 4)
@@ -1924,7 +1924,7 @@ MovePixels:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, MovePixels_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, MovePixels_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -2063,7 +2063,7 @@ DrawWall:
 
 DrawWall_DirectPath:
 	sti16_24 0x030450, 0x0000
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawWall_SetCopyFlag
 
 DrawWall_WaitVblankBefore:
@@ -2071,12 +2071,12 @@ DrawWall_WaitVblankBefore:
 	call Audio_Lock_Release
 	lds wa, 3
 	call TaskSched_YieldToQueue
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr nz, DrawWall_WaitVblankBefore
 
 DrawWall_SetCopyFlag:
 	sti16_24 0x030450, 0x0001
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr nz, DrawWall_Deferred
 
 DrawWall_WaitVblankAfter:
@@ -2084,7 +2084,7 @@ DrawWall_WaitVblankAfter:
 	call Audio_Lock_Release
 	lds wa, 3
 	call TaskSched_YieldToQueue
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawWall_WaitVblankAfter
 
 DrawWall_Deferred:
@@ -2152,7 +2152,7 @@ DrawBitmap:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmap_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawBitmap_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -2378,7 +2378,7 @@ DrawBitmapFast:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmapFast_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawBitmapFast_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -2517,7 +2517,7 @@ DrawIcons:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawIcons_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawIcons_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -2653,7 +2653,7 @@ DrawFrameSP:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawFrameSP_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawFrameSP_Return
 	ld xwa, xiz
 	ld bc, (xsp + 6)
@@ -2825,7 +2825,7 @@ DrawBitmapSP:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmapSP_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawBitmapSP_Return
 	pushm (xsp + 14)
 	ld xwa, xiz
@@ -2860,7 +2860,7 @@ DrawBitmapSP_Return:
 	ld xhl, (xwa + 8)
 	ld de, (xwa + 12)
 	ld wa, (xwa + 14)
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	ret z
 	pushw wa
 	ld xwa, xbc
@@ -3047,7 +3047,7 @@ DrawBitmapSPFast:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmapSPFast_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawBitmapSPFast_Return
 	pushm (xsp + 14)
 	ld xwa, xiz
@@ -3082,7 +3082,7 @@ DrawBitmapSPFast_Return:
 	ld xhl, (xwa + 8)
 	ld de, (xwa + 12)
 	ld wa, (xwa + 14)
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	ret z
 	pushw wa
 	ld xwa, xbc
@@ -3174,7 +3174,7 @@ DrawBitmapSP2:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmapSP2_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawBitmapSP2_Return
 	pushm (xsp + 18)
 	pushm (xsp + 18)
@@ -3217,7 +3217,7 @@ DrawBitmapSP2_Return:
 	ld iy, (xwa + 14)
 	ld ix, (xwa + 16)
 	ld wa, (xwa + 18)
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	ret z
 	pushw iy
 	pushw ix
@@ -3350,7 +3350,7 @@ DrawBitmapFile:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawBitmapFile_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawBitmapFile_Return
 	ld xwa, xiz
 	ld xbc, (xsp + 4)
@@ -3773,7 +3773,7 @@ DrawString:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawString_DeferredPath
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawString_Return
 	ld xwa, (xsp + 28)
 	push xwa
@@ -3836,7 +3836,7 @@ DrawString_Return:
 	ld xix, (xiz + 20)
 	ld hl, (xiz + 24)
 	ld de, (xiz + 26)
-	cpdi16_24 0x03044E, 0
+	cpdi16_24 0x03044e, 0
 	jr z, DrawString_DeferredDispatch
 	push xix
 	pushw hl

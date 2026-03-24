@@ -162,7 +162,7 @@ Brass_PatchEntry_011:
 Brass_PatchEntry_012:
 	.byte 0x0a, 0x00, 0xff
 Brass_PatchEntry_013:
-	pushw	0xFF00
+	pushw	0xff00
 Brass_PatchEntry_014:
 	.byte 0x0e, 0x00, 0xff
 Brass_PatchEntry_015:

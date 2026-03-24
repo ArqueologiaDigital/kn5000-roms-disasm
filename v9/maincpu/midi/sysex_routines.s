@@ -107,7 +107,7 @@ ExcPmemFunc:
 ExcPmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 0xE7FD9E
+	ld	xbc, FileTransfer_Status_Table
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -147,7 +147,7 @@ ExcSmemFunc:
 ExcSmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 0xE7FD9E
+	ld	xbc, FileTransfer_Status_Table
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -187,7 +187,7 @@ ExcCompFunc:
 ExcCompFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 0xE7FD9E
+	ld	xbc, FileTransfer_Status_Table
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -227,7 +227,7 @@ ExcSeqFunc:
 ExcSeqFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 0xE7FD9E
+	ld	xbc, FileTransfer_Status_Table
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -267,7 +267,7 @@ ExcMspFunc:
 ExcMspFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 0xE7FD9E
+	ld	xbc, FileTransfer_Status_Table
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa

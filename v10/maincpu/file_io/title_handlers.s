@@ -65,12 +65,12 @@ SetupFlashFunc:
 	jr z, SetupFlash_HandleLoadEvent
 	cp xbc, 0x1e5000b
 	jr nz, SetupFlash_Return
-	stdi8 0x7F42, 37
+	stdi8 0x7f42, 37
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	lds wa, 6
 	call CtrlPanel_IndicatorJumpTable
-	stdi8 0x7F42, 35
+	stdi8 0x7f42, 35
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jr SetupFlash_Return
@@ -90,14 +90,14 @@ FmmUtilityTitleFunc:
 	jrl z, FmmUtility_HandleAbort
 	cp xde, 0x2
 	jrl nz, FmmUtility_Return
-	stdi8 0x84FE, 0
+	stdi8 0x84fe, 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50005
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ldmm8 0x7F5C, 0x8D37
+	ldmm8 0x7f5c, 0x8d37
 	cpdi16 0x8500, 0
 	jr ge, FmmUtility_DispatchState
 	call GetDiskSizeInfo
@@ -133,7 +133,7 @@ FmmUtility_ScanFormat:
 FmmUtility_CheckCapacity:
 	cpdi16 0x8504, 0
 	jrl le, FmmUtility_ContinueWait
-	cpdi8 0x7F5C, 124
+	cpdi8 0x7f5c, 124
 	jrl z, FmmUtility_ContinueWait
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50006
@@ -151,14 +151,14 @@ FmmUtility_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldda8 a, 0x7F5C
+	ldda8 a, 0x7f5c
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x7F42, 0
+	stdi8 0x7f42, 0
 	ldw wa, 0xee
 	jr FmmUtility_ShowStatus
 
@@ -183,14 +183,14 @@ FmmUtility_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldda8 a, 0x7F5C
+	ldda8 a, 0x7f5c
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x7F42, 2
+	stdi8 0x7f42, 2
 	ldw wa, 0xee
 
 FmmUtility_ShowStatus:
@@ -222,14 +222,14 @@ FmmSmfUtilityTitleFunc:
 	jrl z, FmmSmfUtility_HandleAbort
 	cp xde, 0x2
 	jrl nz, FmmSmfUtility_Return
-	stdi8 0x84FE, 0
+	stdi8 0x84fe, 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50005
 	lds32 xde, 0
 	call ApDeliveryEvent
-	ldmm8 0x7F5E, 0x8D37
+	ldmm8 0x7f5e, 0x8d37
 	cpdi16 0x8500, 0
 	jr ge, FmmSmfUtility_DispatchState
 	call GetDiskSizeInfo
@@ -265,7 +265,7 @@ FmmSmfUtility_ScanFormat:
 FmmSmfUtility_CheckCapacity:
 	cpdi16 0x8502, 0
 	jrl le, FmmSmfUtility_ContinueWait
-	cpdi8 0x7F5E, 123
+	cpdi8 0x7f5e, 123
 	jrl z, FmmSmfUtility_ContinueWait
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50006
@@ -283,14 +283,14 @@ FmmSmfUtility_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldda8 a, 0x7F5E
+	ldda8 a, 0x7f5e
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x7F42, 0
+	stdi8 0x7f42, 0
 	ldw wa, 0xee
 	jr FmmSmfUtility_ShowStatus
 
@@ -315,14 +315,14 @@ FmmSmfUtility_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldda8 a, 0x7F5E
+	ldda8 a, 0x7f5e
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 0x7F42, 2
+	stdi8 0x7f42, 2
 	ldw wa, 0xee
 
 FmmSmfUtility_ShowStatus:

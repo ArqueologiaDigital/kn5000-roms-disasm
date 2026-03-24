@@ -787,7 +787,7 @@ FadeSetGridCheck:
 Data_FadeSetGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008F
+	ld	xbc, 0x01e0008f
 	lds32	xde, 0
 	call	SendEvent
 	ld	(xsp+28), xhl
@@ -801,16 +801,16 @@ Data_FadeSetGridDispatch:
 	cpw	(xbc), 1
 	jrl	nz, 463
 	sla	wa, 2
-	lda_24	xbc, 0xE7F972
+	lda_24	xbc, 0xe7f972
 	ld_rrl	xwa, xbc, wa
-	cp	xwa, 0xFFFFFFFF
+	cp	xwa, 0xffffffff
 	jrl	z, 441
 	lds	bc, 1
 	lds	de, 2
 	jr	74
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008F
+	ld	xbc, 0x01e0008f
 	lds32	xde, 0
 	call	SendEvent
 	ld	(xsp+28), xhl
@@ -824,11 +824,11 @@ Data_FadeSetGridDispatch:
 	cpw	(xbc), 1
 	jrl	nz, 388
 	sla	wa, 2
-	lda_24	xbc, 0xE7F972
+	lda_24	xbc, 0xe7f972
 	ld_rrl	xwa, xbc, wa
-	cp	xwa, 0xFFFFFFFF
+	cp	xwa, 0xffffffff
 	jrl	z, 366
-	ldw	bc, 0xFFFF
+	ldw	bc, 0xffff
 	lds	de, 2
 	call	MainLswAdd
 	jrl	354
@@ -836,7 +836,7 @@ Data_FadeSetGridDispatch:
 	ldw	(xhl), 1
 	lda	xde, (xhl+2)
 	ldw	(xde), 0
-	lda_24	xix, 0xE7F972
+	lda_24	xix, 0xe7f972
 	ld	xiz, (xsp+28)
 	jr	18
 	ld	iy, bc
@@ -856,28 +856,28 @@ Data_FadeSetGridDispatch:
 	ld	xwa, (xsp+28)
 	ld	xhl, (xwa)
 	lda	xde, (xwa+4)
-	cp	xhl, 0x2A12
+	cp	xhl, 0x2a12
 	jr	z, 66
-	cp	xhl, 0x2A11
+	cp	xhl, 0x2a11
 	jr	z, 58
-	cp	xhl, 0x2A10
+	cp	xhl, 0x2a10
 	jr	z, 50
-	cp	xhl, 0x2A01
+	cp	xhl, 0x2a01
 	jr	z, 9
-	cp	xhl, 0x2A00
+	cp	xhl, 0x2a00
 	jrl	nz, 251
 	pushm	(xde)
 	pushw 231
-	pushw 0xF99E
+	pushw 0xf99e
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	214
-	ld	xwa, 0xE7F9B2
+	ld	xwa, 0xe7f9b2
 	cpw	(xde), 0
 	jr	z, 5
 	.byte 0x40
@@ -889,7 +889,7 @@ Data_FadeSetGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	173
 
 ; AcInOutGrid handler
@@ -1306,7 +1306,7 @@ InOutGridCheck:
 Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008F
+	ld	xbc, 0x01e0008f
 	lds32	xde, 0
 	call	SendEvent
 	ld	xiz, xhl
@@ -1324,7 +1324,7 @@ Data_InOutGridDispatch:
 	cp	bc, 8
 	jrl	gt, 1762
 	add	bc, bc
-	lda_24	xix, 0xE7FD5E
+	lda_24	xix, 0xe7fd5e
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe4
@@ -1381,7 +1381,7 @@ Data_InOutGridDispatch:
 	jrl	202
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01E0008F
+	ld	xbc, 0x01e0008f
 	lds32	xde, 0
 	call	SendEvent
 	ld	xiz, xhl
@@ -1399,7 +1399,7 @@ Data_InOutGridDispatch:
 	cp	bc, 8
 	jrl	gt, 1558
 	add	bc, bc
-	lda_24	xix, 0xE7FD4C
+	lda_24	xix, 0xe7fd4c
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe4
@@ -1413,15 +1413,15 @@ Data_InOutGridDispatch:
 	nop
 	ldb	a, 0
 	nop
-	ldw	bc, 0xFFFF
+	ldw	bc, 0xffff
 	lds	de, 1
 	jr	112
 	ld	xwa, 8449
-	ldw	bc, 0xFFFF
+	ldw	bc, 0xffff
 	lds	de, 1
 	jr	100
 	ld	xwa, 0x5000
-	ldw	bc, 0xFFFF
+	ldw	bc, 0xffff
 	lds	de, 1
 	jr	88
 	ld	xwa, 0x5000
@@ -1431,27 +1431,27 @@ Data_InOutGridDispatch:
 	cps	hl, 1
 	jrl	nz, 1482
 	ld	xwa, 0x5001
-	ldw	bc, 0xFFFF
+	ldw	bc, 0xffff
 	lds	de, 1
 	jr	58
 	ld	xwa, 0x5002
-	ldw	bc, 0xFFFF
+	ldw	bc, 0xffff
 	lds	de, 1
 	jr	46
 	ld	xwa, 8577
-	ldw	bc, 0xFFFF
+	ldw	bc, 0xffff
 	lds	de, 1
 	jr	34
 	ld	xwa, 8580
-	ldw	bc, 0xFFFF
+	ldw	bc, 0xffff
 	lds	de, 1
 	jr	22
 	ld	xwa, 8578
-	ldw	bc, 0xFFFF
+	ldw	bc, 0xffff
 	lds	de, 1
 	jr	10
 	ld	xwa, 8579
-	ldw	bc, 0xFFFF
+	ldw	bc, 0xffff
 	lds	de, 1
 	call	MainLswAdd
 	jrl	1405
@@ -1461,7 +1461,7 @@ Data_InOutGridDispatch:
 	ld	(xwa+4), xbc
 	ld	xix, (xiz)
 	lda	xbc, (xwa+2)
-	lda_24	xhl, 0xE7FC94
+	lda_24	xhl, 0xe7fc94
 	cp	xix, 8579
 	jrl	z, 612
 	cp	xix, 8578
@@ -1484,7 +1484,7 @@ Data_InOutGridDispatch:
 	ldw	(xbc), 0
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda_24	xbc, 0xE7FCA8
+	lda_24	xbc, 0xe7fca8
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -1495,7 +1495,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	1253
 	ldw	(xbc), 1
 	ld	wa, (xwa)
@@ -1510,11 +1510,11 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	1214
 	ld	xix, xwa
 	ld	wa, (xwa)
-	lda_24	xhl, 0xE7FCC4
+	lda_24	xhl, 0xe7fcc4
 	cps	wa, 2
 	jr	z, 121
 	cps	wa, 1
@@ -1534,11 +1534,11 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	call	SendEvent
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01C0000C
+	ld	xbc, 0x01c0000c
 	lds32	xde, 0
 	jrl	1136
 	ldw	(xbc), 2
@@ -1554,11 +1554,11 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	call	SendEvent
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01C0000C
+	ld	xbc, 0x01c0000c
 	lds32	xde, 0
 	jrl	1080
 	ldw	(xbc), 2
@@ -1574,11 +1574,11 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	call	SendEvent
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01C0000C
+	ld	xbc, 0x01c0000c
 	lds32	xde, 0
 	jrl	1024
 	ldw	(xbc), 3
@@ -1590,14 +1590,14 @@ Data_InOutGridDispatch:
 	exts	wa
 	pushw	wa
 	pushw	231
-	pushw	0xFCFE
+	pushw	0xfcfe
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	16
 	pushw	231
-	pushw	0xFD04
+	pushw	0xfd04
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -1605,7 +1605,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	949
 	.byte 0xb1
 	push_sr
@@ -1617,14 +1617,14 @@ Data_InOutGridDispatch:
 	jr	nz, 22
 	.byte 0x9e, 0x04, 0x04
 	pushw	231
-	pushw	0xFD0A
+	pushw	0xfd0a
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	16
 	pushw	231
-	pushw	0xFD10
+	pushw	0xfd10
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -1632,7 +1632,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	877
 	.byte 0xb1
 	push_sr
@@ -1650,7 +1650,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	838
 	.byte 0xb1
 	push_sr
@@ -1667,7 +1667,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	798
 	.byte 0xb1
 	push_sr
@@ -1685,7 +1685,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	758
 	.byte 0xb1
 	push_sr
@@ -1704,7 +1704,7 @@ Data_InOutGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	718
 
 ; ParaLoadOpt entry handler
@@ -1735,7 +1735,7 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 8448
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, 0xE7FCA8
+	lda_24	xwa, 0xe7fca8
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1747,12 +1747,12 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	602
 	ld	xwa, 8449
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, 0xE7FC94
+	lda_24	xwa, 0xe7fc94
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1764,12 +1764,12 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	552
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, 0xE7FCC4
+	lda_24	xwa, 0xe7fcc4
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1781,7 +1781,7 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	call	SendEvent
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
@@ -1794,7 +1794,7 @@ Data_ParaLoadOptDispatch:
 	jrl	nz, 480
 	ldw	(xwa), 3
 	pushw	231
-	pushw	0xFD16
+	pushw	0xfd16
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -1802,7 +1802,7 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	439
 	ldw	(xwa), 3
 	ld	xwa, 0x5001
@@ -1810,7 +1810,7 @@ Data_ParaLoadOptDispatch:
 	exts	hl
 	pushw	hl
 	pushw	231
-	pushw	0xFD1C
+	pushw	0xfd1c
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Sprintf_Locked
@@ -1818,14 +1818,14 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	389
 	ldw	(xsp+6), 3
 	ld	xwa, 0x5002
 	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	231
-	pushw	0xFD22
+	pushw	0xfd22
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Sprintf_Locked
@@ -1833,7 +1833,7 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	340
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
@@ -1844,7 +1844,7 @@ Data_ParaLoadOptDispatch:
 	cps	hl, 0
 	jrl	nz, 322
 	pushw	231
-	pushw	0xFD28
+	pushw	0xfd28
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -1852,14 +1852,14 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	285
 	ld	xwa, 0x5001
 	call	SndParam_LookupReadOnly
 	exts	hl
 	pushw	hl
 	pushw	231
-	pushw	0xFD2E
+	pushw	0xfd2e
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Sprintf_Locked
@@ -1867,13 +1867,13 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	239
 	ld	xwa, 0x5002
 	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	231
-	pushw	0xFD34
+	pushw	0xfd34
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Sprintf_Locked
@@ -1881,12 +1881,12 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	195
 	ld	xwa, 8577
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, 0xE7FC94
+	lda_24	xwa, 0xe7fc94
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1898,12 +1898,12 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jrl	145
 	ld	xwa, 8580
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, 0xE7FC94
+	lda_24	xwa, 0xe7fc94
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1915,12 +1915,12 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jr	96
 	ld	xwa, 8578
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, 0xE7FC94
+	lda_24	xwa, 0xe7fc94
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1932,12 +1932,12 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	jr	47
 	ld	xwa, 8579
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, 0xE7FC94
+	lda_24	xwa, 0xe7fc94
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -1949,7 +1949,7 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x01E0008C
+	ld	xbc, 0x01e0008c
 	call	SendEvent
 
 MdPreset_ReturnZero2:
@@ -2289,16 +2289,16 @@ MainMpstFunc:
 	cp xbc, 0x1e30003
 	jr nz, MainMpst_ReturnZero
 	ld xwa, (xsp)
-	stda8 0xB7EC, a
+	stda8 0xb7ec, a
 	call SndParam_ApplyAndSync
-	stdi8 0x7F42, 35
+	stdi8 0x7f42, 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
 	jr MainMpst_PostEvent
 
 MainMpst_HandlePresetCopy:
-	stdi8 0x7F42, 37
+	stdi8 0x7f42, 37
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -2306,7 +2306,7 @@ MainMpst_HandlePresetCopy:
 	ld xwa, (xsp)
 	extz wa
 	call SndParam_AllocAndCopyPreset
-	stdi8 0x7F42, 35
+	stdi8 0x7f42, 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -2334,7 +2334,7 @@ TtMdExc:
 	jr nz, TtMdExc_ReturnZero
 	or xde, xde
 	jr nz, TtMdExc_ReturnZero
-	setda 6, 0xB7E2
+	setda 6, 0xb7e2
 	ld xwa, 0x570003
 	call GetViewInstance
 	ld xwa, (xhl + 38)
@@ -2344,7 +2344,7 @@ TtMdExc:
 TtMdExc_HandleClose:
 	or xde, xde
 	jr nz, TtMdExc_ReturnZero
-	resda 6, 0xB7E2
+	resda 6, 0xb7e2
 
 TtMdExc_ReturnZero:
 	lds32 xhl, 0

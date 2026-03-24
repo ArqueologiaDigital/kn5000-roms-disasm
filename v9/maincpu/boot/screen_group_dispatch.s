@@ -80,31 +80,31 @@ ScreenGroup_WidgetLoop:
 	ret
 
 ScreenGroup_InitState:
-	ldada xbc, 0xC1FE
+	ldada xbc, 0xc1fe
 	ld (xbc), 0x1
 	ld (xbc + 1), 0xff
 	ld (xbc + 2), 0xff
 	ld (xbc + 3), 0xff
-	ordi8 0xC2C2, 127
-	anddi8 0xC2C3, 1
-	ordi8 0xC2C4, 254
-	anddi8 0xC2C5, 1
-	ordi8 0xC2C6, 127
-	anddi8 0xC2C7, 1
-	ordi8 0xC2C8, 254
-	anddi8 0xC2C9, 1
-	ordi8 0xC2CA, 127
-	anddi8 0xC2CB, 1
-	ordi8 0xC2CC, 254
-	anddi8 0xC2CD, 1
-	ordi8 0xC2CE, 127
-	anddi8 0xC2CF, 1
-	ordi8 0xC2D0, 254
-	anddi8 0xC2D1, 1
-	ordi8 0xC2D2, 127
-	anddi8 0xC2D3, 1
-	ordi8 0xC2D4, 254
-	anddi8 0xC2D5, 1
+	ordi8 0xc2c2, 127
+	anddi8 0xc2c3, 1
+	ordi8 0xc2c4, 254
+	anddi8 0xc2c5, 1
+	ordi8 0xc2c6, 127
+	anddi8 0xc2c7, 1
+	ordi8 0xc2c8, 254
+	anddi8 0xc2c9, 1
+	ordi8 0xc2ca, 127
+	anddi8 0xc2cb, 1
+	ordi8 0xc2cc, 254
+	anddi8 0xc2cd, 1
+	ordi8 0xc2ce, 127
+	anddi8 0xc2cf, 1
+	ordi8 0xc2d0, 254
+	anddi8 0xc2d1, 1
+	ordi8 0xc2d2, 127
+	anddi8 0xc2d3, 1
+	ordi8 0xc2d4, 254
+	anddi8 0xc2d5, 1
 	lds de, 0
 	cp de, 0x20
 	jrl ge, ScreenGroup_InitParams16
@@ -248,13 +248,13 @@ ScreenGroup_FinalInit:
 ScreenGroup_InitWordPairsLoop:
 	ld wa, de
 	add wa, wa
-	ldada xbc, 0xC62A
+	ldada xbc, 0xc62a
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0x10
 	ld wa, de
 	add wa, wa
-	ldada xbc, 0xC62B
+	ldada xbc, 0xc62b
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0x0
@@ -263,11 +263,11 @@ ScreenGroup_InitWordPairsLoop:
 	jr lt, ScreenGroup_InitWordPairsLoop
 
 ScreenGroup_InitFinalize:
-	stdi8 0xCA6A, 8
-	stdi8 0xCA6B, 0
-	stdi8 0xCA6C, 8
-	stdi8 0xCA6D, 0
-	stdi8 0xCA6E, 16
-	stdi8 0xCA6F, 0
+	stdi8 0xca6a, 8
+	stdi8 0xca6b, 0
+	stdi8 0xca6c, 8
+	stdi8 0xca6d, 0
+	stdi8 0xca6e, 16
+	stdi8 0xca6f, 0
 	jp COMM_SendDataReturn
 
