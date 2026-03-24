@@ -1,6 +1,6 @@
---- v9/maincpu/kn5000_v9_program.s	2026-03-24 00:57:06.146110595 +0000
-+++ v10/maincpu/kn5000_v10_program.s	2026-03-24 00:57:06.131927367 +0000
-@@ -3126,7 +3126,8 @@
+--- v9/maincpu/kn5000_v9_program.s	2026-03-24 18:05:56.779194064 +0000
++++ v10/maincpu/kn5000_v10_program.s	2026-03-24 18:05:56.776511485 +0000
+@@ -3127,7 +3127,8 @@
  	.set SeqChan_UnhandledCmd_0x03, 0xfd8264
  	.set SeqChan_UnhandledCmd_0x12, 0xfd8273
  	.set AudioInit_PartConfig_Loop_0x26, 0xfe0053
