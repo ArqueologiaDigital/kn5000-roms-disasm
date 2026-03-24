@@ -1,6 +1,6 @@
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
---- v9/maincpu/audio/note_voice_mapping.s	2026-03-24 23:05:04.663531114 +0000
-+++ v10/maincpu/audio/note_voice_mapping.s	2026-03-24 23:05:04.671062738 +0000
+--- v9/maincpu/audio/note_voice_mapping.s	2026-03-24 23:17:06.381484761 +0000
++++ v10/maincpu/audio/note_voice_mapping.s	2026-03-24 23:17:06.393484860 +0000
 @@ -26655,9 +26655,14 @@
  	ret
  
@@ -25,15 +25,11 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  	dec 1, hl
  	cps hl, 0
  	jrl lt, HdaeRom_DataDispatch_SetWord
-@@ -27751,10 +27755,11 @@
- 	jr	3
- 
+@@ -27753,8 +27757,9 @@
  HdaeRom_DataDispatch_SetWord:
--	ldw	hl, 0xff9a
--	pop	xiz
+ 	ldw	hl, 0xff9a
+ 	pop	xiz
 -	lda	xsp, (xsp+440)
-+	ldw hl, 0xff9a
-+	pop xiz
 +	st_dri3b L, 0xfd, 0xb8, 0x01
  	ret
 +

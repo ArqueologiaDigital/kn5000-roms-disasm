@@ -27755,8 +27755,8 @@ HdaeRom_DataDispatch:
 	jr	3
 
 HdaeRom_DataDispatch_SetWord:
-	ldw hl, 0xff9a
-	pop xiz
+	ldw	hl, 0xff9a
+	pop	xiz
 	st_dri3b L, 0xfd, 0xb8, 0x01
 	ret
 
