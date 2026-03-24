@@ -14535,7 +14535,7 @@ Sqedt_ValueDispatch:
 	add	hl, hl
 	lda_24	xix, NakaInst_2d_0x80
 	ld_rrw	hl, xix, hl
-	lda_24	xix, 0xf35054
+	lda_24	xix, Sqedt_ValueDispatch_0x28
 	jp_rr	8, xix, hl
 	ldb	l, 0
 	jrl	158
@@ -14550,7 +14550,7 @@ Sqedt_ValueDispatch:
 	add	hl, hl
 	lda_24	xix, NakaInst_2d_0x70
 	ld_rrw	hl, xix, hl
-	lda_24	xix, 0xf35084
+	lda_24	xix, Sqedt_ValueDispatch_0x58
 	jp_rr	8, xix, hl
 	ldb	l, 1
 	jr	111
@@ -14563,7 +14563,7 @@ Sqedt_ValueDispatch:
 	add	hl, hl
 	lda_24	xix, NakaInst_2d_0x5E
 	ld_rrw	hl, xix, hl
-	lda_24	xix, 0xf350ae
+	lda_24	xix, Sqedt_ValueDispatch_0x82
 	jp_rr	8, xix, hl
 	ldb	l, 2
 	jr	69
@@ -14671,7 +14671,7 @@ SeqFormat_DispatchA:
 	add	wa, wa
 	lda_24	xix, NakaInst_2d_0x20
 	ld_rrw	wa, xix, wa
-	lda_24	xix, 0xf351ad
+	lda_24	xix, SeqFormat_DispatchA_0x70
 	jp_rr	8, xix, wa
 	cpi8_24	0x03e2e0, 0
 	jrl	nz, -433

@@ -186,7 +186,7 @@ TitleFunc_LifecycleDispatch:
 TitleFunc_LifecycleTable:
 	lda_24 xwa, FDTest_String_TestTitleFunc_0x70
 	calr FDTest_PrintDiag
-	call 0xf97edb
+	call Reset_Floppy_Disk_Controller_0x12
 	jr TitleFunc_Return
 	ld xwa, 0x01c00007
 	push xwa

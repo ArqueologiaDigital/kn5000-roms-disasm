@@ -1327,7 +1327,7 @@ FDemoText_ByteData_DisplayRefresh:
 	jr	ge, -116
 	.byte 0x40
 	.long ErrStr_GetInstanceID
-	call	0xfa2ea1
+	call	DbMemo_DrawContent_Loop_0x61
 	ld	xhl, 0xffffffff
 	pop	xiz
 	.byte 0xf3

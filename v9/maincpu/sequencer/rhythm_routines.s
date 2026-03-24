@@ -463,12 +463,12 @@ Rhythm_VelLookA_SelectTable:
 	ld xiy, Rhythm_InstrMapTable_Default
 	bitda 2, 0x32f4
 	jr z, Rhythm_VelLookA_CheckBit3
-	ld xiy, 0xf550fb
+	ld xiy, Rhythm_InstrMapTable_Default_0x31
 
 Rhythm_VelLookA_CheckBit3:
 	bitda 3, 0x32f4
 	jr z, Rhythm_VelLookA_TableLookup
-	ld xiy, 0xf5512c
+	ld xiy, Rhythm_InstrMapTable_Default_0x62
 
 Rhythm_VelLookA_TableLookup:
 	ld_srib3 L, 0x03, 0xf4, 0xec
@@ -591,7 +591,7 @@ Rhythm_VoiceMap_ClampInstr:
 	ld xiy, Rhythm_PitchShiftTable_Default
 	bitda 3, 0x32f4
 	jr z, Rhythm_VoiceMap_SelectTable
-	ld xiy, 0xf552a0
+	ld xiy, Rhythm_PitchShiftTable_Default_0x31
 
 Rhythm_VoiceMap_SelectTable:
 	ld_srib3 L, 0x03, 0xf4, 0xec
@@ -631,12 +631,12 @@ Rhythm_VoiceMap_Inst2Clamp:
 	ld xiy, Rhythm_InstrMapTable_Default
 	bitda 2, 0x32f4
 	jr z, Rhythm_VoiceMap_Inst2Bit2
-	ld xiy, 0xf550fb
+	ld xiy, Rhythm_InstrMapTable_Default_0x31
 
 Rhythm_VoiceMap_Inst2Bit2:
 	bitda 3, 0x32f4
 	jr z, Rhythm_VoiceMap_Inst2Bit3
-	ld xiy, 0xf5512c
+	ld xiy, Rhythm_InstrMapTable_Default_0x62
 
 Rhythm_VoiceMap_Inst2Bit3:
 	ld_srib3 L, 0x03, 0xf4, 0xec
@@ -695,7 +695,7 @@ Rhythm_VelComp_SelectTable:
 	ld xiy, Rhythm_VelocityTable_A
 	bitda 2, 0x32f4
 	jr z, Rhythm_VelComp_Lookup
-	ld xiy, 0xf5535f
+	ld xiy, Rhythm_VelocityTable_A_0x31
 
 Rhythm_VelComp_Lookup:
 	ld_srib3 L, 0x03, 0xf4, 0xec
@@ -1543,7 +1543,7 @@ Rhythm_TranspMod_BaseApply:
 
 Rhythm_TranspMod_BaseLookup:
 	extz hl
-	ld xiy, 0xf550fb
+	ld xiy, Rhythm_InstrMapTable_Default_0x31
 	ld_srib3 L, 0x07, 0xf4, 0xec
 	extz hl
 	sla hl, 4

@@ -846,7 +846,7 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	40
 	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
-	call	0xf0841f
+	call	SeMenu_ApplyPartEdit_Data2_0xDB3
 	lds	wa, 1
 	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
@@ -916,7 +916,7 @@ UpdSeSel_ExtendedOps_Data:
 	inc	2, xsp
 	lds	wa, 2
 	lds	bc, 1
-	call	0xf08a4a
+	call	SeMenu_ApplyPartEdit_Data2_0x13DE
 	lds	wa, 1
 	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
@@ -987,7 +987,7 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf06daf
+	call	SeMenu_TransferPartValues_AltLoop_0x9
 	.byte 0xc7
 	swi	2
 	cp	(xbc-57), xde
@@ -1260,7 +1260,7 @@ UpdSeSel_ExtendedOps_Data:
 	call	SeMenu_StorePartParam
 	lds	wa, 0
 	lds	bc, 0
-	call	0xf08a4a
+	call	SeMenu_ApplyPartEdit_Data2_0x13DE
 	lds	wa, 1
 	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
@@ -1312,7 +1312,7 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	45
 	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
-	call	0xf080d5
+	call	SeMenu_ApplyPartEdit_Data2_0xA69
 	lds	wa, 0
 	call	SeMenu_SetCurrentStep
 	lds	wa, 1
@@ -1448,7 +1448,7 @@ UpdSeSel_ExtendedOps_Data:
 	inc	2, xsp
 	lds	wa, 2
 	lds	bc, 0
-	call	0xf08a4a
+	call	SeMenu_ApplyPartEdit_Data2_0x13DE
 	lds	wa, 1
 	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
@@ -1534,11 +1534,11 @@ UpdSeSel_ExtendedOps_Data:
 	inc	7, iz
 	.byte 0xe2
 	lda	xwa, (xsp+4)
-	call	0xf06e5b
+	call	SeMenu_TransferPartValues_EndData_0x8D
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf06e71
+	call	SeMenu_TransferPartValues_EndData_0xA3
 	ld	c, (xsp+2)
 	inc	2, c
 	extz	bc
@@ -1587,11 +1587,11 @@ UpdSeSel_ExtendedOps_Data:
 	inc	7, iz
 	.byte 0xe2
 	lda	xwa, (xsp+4)
-	call	0xf06e5b
+	call	SeMenu_TransferPartValues_EndData_0x8D
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf06e8e
+	call	SeMenu_TransferPartValues_EndData_0xC0
 	ld	c, (xsp+2)
 	inc	2, c
 	extz	bc
@@ -1710,8 +1710,8 @@ UpdSeSel_ExtendedOps_Data:
 	inc	2, xsp
 	lds	wa, 0
 	lds	bc, 0
-	call	0xf08e81
-	call	0xf09029
+	call	SeMenu_ApplyPartEdit_Data2_0x1815
+	call	SeMenu_ApplyPartEdit_Data2_0x19BD
 	lds	wa, 1
 	call	SeMenu_SetupMenuDisplay
 	lda	xsp, (xsp+10)
@@ -1800,8 +1800,8 @@ UpdSeSel_ExtendedOps_Data:
 	inc	2, xsp
 	lds	wa, 1
 	lds	bc, 0
-	call	0xf08e81
-	call	0xf09029
+	call	SeMenu_ApplyPartEdit_Data2_0x1815
+	call	SeMenu_ApplyPartEdit_Data2_0x19BD
 	lds	wa, 1
 	jp	SeMenu_SetupMenuDisplay
 	pushw	50
@@ -1809,7 +1809,7 @@ UpdSeSel_ExtendedOps_Data:
 	inc	2, xsp
 	lds	wa, 0
 	lds	bc, 1
-	call	0xf08e81
+	call	SeMenu_ApplyPartEdit_Data2_0x1815
 	lds	wa, 1
 	jp	SeMenu_SetupMenuDisplay
 	pushw	51
@@ -1817,13 +1817,13 @@ UpdSeSel_ExtendedOps_Data:
 	inc	2, xsp
 	lds	wa, 1
 	lds	bc, 1
-	call	0xf08e81
+	call	SeMenu_ApplyPartEdit_Data2_0x1815
 	lds	wa, 1
 	jp	SeMenu_SetupMenuDisplay
 	pushw	52
 	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
-	call	0xf09119
+	call	SeMenu_ApplyPartEdit_Data2_0x1AAD
 	lds	wa, 1
 	jp	SeMenu_SetupMenuDisplay
 	pushw	53
@@ -1887,7 +1887,7 @@ UpdSeSel_ExtendedOps_Data:
 	inc	2, xsp
 	lds	wa, 0
 	lds	bc, 0
-	call	0xf08a4a
+	call	SeMenu_ApplyPartEdit_Data2_0x13DE
 	lds	wa, 1
 	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
@@ -1949,7 +1949,7 @@ UpdSeSel_ExtendedOps_Data:
 	pushw	55
 	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
-	call	0xf0841f
+	call	SeMenu_ApplyPartEdit_Data2_0xDB3
 	lds	wa, 1
 	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
@@ -2019,7 +2019,7 @@ UpdSeSel_ExtendedOps_Data:
 	inc	2, xsp
 	lds	wa, 2
 	lds	bc, 1
-	call	0xf08a4a
+	call	SeMenu_ApplyPartEdit_Data2_0x13DE
 	lds	wa, 1
 	call	SeMenu_SetupMenuDisplay
 	lds	wa, 0
@@ -2362,7 +2362,7 @@ SeMenu_AltUpdate_Data:
 	ld	e, a
 	extz	de
 	lds	wa, 0
-	call	0xf08c98
+	call	SeMenu_ApplyPartEdit_Data2_0x162C
 	.byte 0xc7
 	swi	2
 	jr	lt, -57
@@ -2470,7 +2470,7 @@ SeMenu_AltUpdate_Data:
 	ld	e, a
 	extz	de
 	lds	wa, 1
-	call	0xf08c98
+	call	SeMenu_ApplyPartEdit_Data2_0x162C
 	.byte 0xc7
 	swi	2
 	jr	lt, -57
@@ -2711,7 +2711,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	wa, 2
 	call	SeMenu_ClearNotification
 	lds	wa, 0
-	call	0xf09764
+	call	SeMenu_HandleMenuChange_Data_0x5
 	jrl	209
 	lda	xwa, (xsp+24)
 	call	SeMenu_ReadObjData
@@ -2740,7 +2740,7 @@ SeMenu_CopyWriteUpdate_Data:
 	reti
 	.byte 0xe4, 0xe0
 	ldw	bc, 0x88e9
-	call	0xfb2841
+	call	FontGlyph_ByteData_0x11
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -2753,7 +2753,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	de, 16
 	call	SeMenu_SetupPartDisplay
 	lda	xwa, (xsp+4)
-	call	0xf0738b
+	call	SeMenu_SetupPartDisplay_End_0xE8
 	lda	xde, (xsp+6)
 	ld	a, (xsp+4)
 	extz	wa
@@ -2781,15 +2781,15 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 1
-	call	0xf0747d
+	call	SeMenu_SetupPartDisplay_End_0x1DA
 	lds	wa, 0
 	ldw	bc, 11
 	lds	de, 0
-	call	0xf07483
+	call	SeMenu_SetupPartDisplay_End_0x1E0
 	lds	wa, 1
 	ldw	bc, 12
 	lds	de, 0
-	call	0xf07483
+	call	SeMenu_SetupPartDisplay_End_0x1E0
 	lds	wa, 0
 	call	SeMenu_SetCurrentStep
 	ldw	wa, 30
@@ -2811,7 +2811,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 2
 	ldb	a, 16
 	extz	wa
-	call	0xf0e2f2
+	call	SeMenu_CopyWriteUpdate_Data_0x292E
 	inc	2, xsp
 	ret
 	lda	xsp, (xsp-10)
@@ -3054,7 +3054,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -3073,7 +3073,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -3090,17 +3090,17 @@ SeMenu_CopyWriteUpdate_Data:
 	ret
 	extz	wa
 	lds	bc, 2
-	jp	0xf07fb4
+	jp	SeMenu_ApplyPartEdit_Data2_0x948
 	extz	wa
-	jp	0xf08089
+	jp	SeMenu_ApplyPartEdit_Data2_0xA1D
 	ld	c, a
 	extz	bc
 	lds	wa, 1
-	jp	0xf080b5
+	jp	SeMenu_ApplyPartEdit_Data2_0xA49
 	ld	c, a
 	extz	bc
 	lds	wa, 2
-	jp	0xf080b5
+	jp	SeMenu_ApplyPartEdit_Data2_0xA49
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
@@ -3112,7 +3112,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	lds	wa, 3
-	call	0xf080b5
+	call	SeMenu_ApplyPartEdit_Data2_0xA49
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -3126,7 +3126,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	lds	wa, 4
-	call	0xf080b5
+	call	SeMenu_ApplyPartEdit_Data2_0xA49
 	inc	4, xsp
 	ret
 	dec	4, xsp
@@ -3150,7 +3150,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x01
 	jr	z, 15
 	lds	wa, 1
-	call	0xf06e6c
+	call	SeMenu_TransferPartValues_EndData_0x9E
 	ldw	wa, 59
 	lds	bc, 1
 	call	SeMenu_SendEvent
@@ -3177,7 +3177,7 @@ SeMenu_CopyWriteUpdate_Data:
 	halt
 	jr	z, 15
 	lds	wa, 5
-	call	0xf06e6c
+	call	SeMenu_TransferPartValues_EndData_0x9E
 	ldw	wa, 59
 	lds	bc, 1
 	call	SeMenu_SendEvent
@@ -3235,16 +3235,16 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+12)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	pushw	16
 	lda	xwa, (xsp+2)
 	push	xwa
 	ldw	wa, 60
 	lds	bc, 0
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 3
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+14)
 	ret
 	lda	xsp, (xsp-14)
@@ -3260,16 +3260,16 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+12)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	pushw	16
 	lda	xwa, (xsp+2)
 	push	xwa
 	ldw	wa, 60
 	lds	bc, 0
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 6
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+14)
 	ret
 	cps	a, 0
@@ -3306,20 +3306,20 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xwa
 	ld	wa, iz
 	ld	bc, (xsp+16)
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 58
-	call	0xf098d7
+	call	SeMenu_OrPartConfig_Data_0x6
 	cps	l, 0
 	jr	z, 15
 	lda	xwa, (xsp+4)
-	call	0xf0991c
+	call	SeMenu_DisplayState_Data_0xA
 	ld	a, (xsp+10)
 	.byte 0x8f, 0x04, 0xf1
 	jr	nz, 35
 	ld	a, (xsp+10)
 	extz	wa
-	call	0xf09917
+	call	SeMenu_DisplayState_Data_0x5
 	ld	a, (xsp+8)
 	extz	wa
 	ld	c, (xsp+10)
@@ -3377,7 +3377,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	6, wa
 	ccf
 	lds	bc, 1
-	call	0xf06aa5
+	call	SeMenu_PartMask_Data_0x5
 	pushw	2
 	pushw	32
 	call	SeMenu_ShowConfirmDialog
@@ -3408,9 +3408,9 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lda	xde, (xsp+4)
 	lds	wa, 3
-	call	0xf09567
+	call	SeMenu_ApplySynthParam_Data_0x53
 	lda	xwa, (xsp+2)
-	call	0xf092f0
+	call	SeMenu_ApplyPartEdit_Data2_0x1C84
 	ld	a, (xsp+10)
 	res	7, a
 	cps	a, 0
@@ -3440,7 +3440,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	bc, 16
 	call	SeMenu_InitDisplayField
 	lds	wa, 2
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+12)
 	ret
 	lda	xsp, (xsp-10)
@@ -3463,9 +3463,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf092cf
+	call	SeMenu_ApplyPartEdit_Data2_0x1C63
 	lda	xwa, (xsp)
-	call	0xf092e6
+	call	SeMenu_ApplyPartEdit_Data2_0x1C7A
 	ld	a, (xsp+8)
 	res	7, a
 	cps	a, 0
@@ -3488,7 +3488,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	bc, 16
 	call	SeMenu_InitDisplayField
 	lds	wa, 3
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+10)
 	ret
 	lda	xsp, (xsp-18)
@@ -3529,7 +3529,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	.byte 0xc7
 	swi	3
 	.byte 0x8b
@@ -3546,7 +3546,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xbf, 0x04
 	.asciz "080 "
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	cps	l, 1
 	jr	nz, 14
 	ld	a, (xsp+16)
@@ -3555,7 +3555,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	call	SeMenu_StoreParamByte
 	lds	wa, 4
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	.byte 0xd7
 	swi	2
 	halt
@@ -3599,7 +3599,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	.byte 0xc7
 	swi	3
 	.byte 0x8b
@@ -3616,9 +3616,9 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xbf, 0x04
 	.asciz "080 "
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 5
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	.byte 0xd7
 	swi	2
 	halt
@@ -3662,7 +3662,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	.byte 0xc7
 	swi	3
 	.byte 0x8b
@@ -3679,9 +3679,9 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xbf, 0x04
 	.asciz "080 "
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 6
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	.byte 0xd7
 	swi	2
 	halt
@@ -3715,7 +3715,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+10)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	a, (xsp+10)
 	res	7, a
 	.byte 0xc7
@@ -3783,7 +3783,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 7
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	.byte 0xd7
 	swi	2
 	halt
@@ -3813,16 +3813,16 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	pushw	15
 	lda	xwa, (xsp+2)
 	push	xwa
 	ldw	wa, 32
 	ldw	bc, 11
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	ldw	wa, 8
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+16)
 	ret
 	lda	xsp, (xsp-10)
@@ -3845,12 +3845,12 @@ SeMenu_CopyWriteUpdate_Data:
 	nop
 	scc8	z, a
 	extz	wa
-	call	0xf06693
+	call	SeMenu_SetupDisplayObject_Alt2_Continue_0x21
 	ldw	wa, 16
 	call	SeMenu_RegisterParamDisplay
 	jr	83
 	lds	wa, 0
-	call	0xf09764
+	call	SeMenu_HandleMenuChange_Data_0x5
 	ldw	wa, 62
 	lds	bc, 0
 	call	SeMenu_SendEvent
@@ -3866,9 +3866,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ldio	63, 0
 	jr	nz, 47
 	lda	xwa, (xsp+6)
-	call	0xf095ba
+	call	SeMenu_SetMode_Data_0x5
 	lda	xwa, (xsp+4)
-	call	0xf095c4
+	call	SeMenu_SetMode_Data_0xF
 	ld	wa, (xsp+4)
 	dec	1, wa
 	cp	(xsp+6), wa
@@ -3921,7 +3921,7 @@ SeMenu_CopyWriteUpdate_Data:
 	nop
 	jr	nz, 37
 	lda	xwa, (xsp+2)
-	call	0xf095ba
+	call	SeMenu_SetMode_Data_0x5
 	cpw	(xsp+2), 0
 	jr	z, 23
 	decm	1, (xsp+2)
@@ -4065,7 +4065,7 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xsp
 	.byte 0x01
 	.asciz "fi0="
-	call	0xf07511
+	call	SeMenu_SetupPartDisplay_End_0x26E
 	jr	96
 	.byte 0x8f
 	push_sr
@@ -4082,7 +4082,7 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xsp
 	.byte 0x01
 	jr	z, 69
-	call	0xf098d7
+	call	SeMenu_OrPartConfig_Data_0x6
 	cps	l, 0
 	jr	nz, 61
 	lda	xwa, (xsp)
@@ -4123,7 +4123,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -4142,7 +4142,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -4161,7 +4161,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -4180,7 +4180,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -4199,7 +4199,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -4245,7 +4245,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	6, wa
 	push_f
 	lds	bc, 1
-	call	0xf06aa5
+	call	SeMenu_PartMask_Data_0x5
 	pushw	1
 	pushw	34
 	call	SeMenu_ShowConfirmDialog
@@ -4266,9 +4266,9 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lda	xde, (xsp+6)
 	lds	wa, 0
-	call	0xf09567
+	call	SeMenu_ApplySynthParam_Data_0x53
 	lda	xwa, (xsp+4)
-	call	0xf092f0
+	call	SeMenu_ApplyPartEdit_Data2_0x1C84
 	ld	a, (xsp+8)
 	res	7, a
 	cps	a, 0
@@ -4298,7 +4298,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	bc, 16
 	call	SeMenu_InitDisplayField
 	lds	wa, 2
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+10)
 	ret
 	dec	8, xsp
@@ -4309,9 +4309,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf092cf
+	call	SeMenu_ApplyPartEdit_Data2_0x1C63
 	lda	xwa, (xsp)
-	call	0xf092e6
+	call	SeMenu_ApplyPartEdit_Data2_0x1C7A
 	ld	a, (xsp+6)
 	res	7, a
 	cps	a, 0
@@ -4334,7 +4334,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	bc, 16
 	call	SeMenu_InitDisplayField
 	lds	wa, 3
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-16)
@@ -4364,7 +4364,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	.byte 0xc7
 	swi	3
 	.byte 0x8b
@@ -4374,7 +4374,7 @@ SeMenu_CopyWriteUpdate_Data:
 	pushw	23
 	.byte 0xbf, 0x04
 	.asciz "080\""
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	cps	l, 1
 	jr	nz, 14
 	ld	a, (xsp+14)
@@ -4383,7 +4383,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	call	SeMenu_StoreParamByte
 	lds	wa, 6
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	.byte 0xd7
 	swi	2
 	halt
@@ -4413,7 +4413,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	.byte 0xc7
 	swi	3
 	.byte 0x8b
@@ -4424,9 +4424,9 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 34
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 7
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	.byte 0xd7
 	swi	2
 	halt
@@ -4459,7 +4459,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	.byte 0xc7
 	swi	3
 	.byte 0x8b
@@ -4469,9 +4469,9 @@ SeMenu_CopyWriteUpdate_Data:
 	pushw	5
 	.byte 0xbf, 0x04
 	.asciz "080\""
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	ldw	wa, 8
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	.byte 0xd7
 	swi	2
 	halt
@@ -4479,45 +4479,45 @@ SeMenu_CopyWriteUpdate_Data:
 	ret
 	cps	a, 0
 	ret	z
-	call	0xf06d01
+	call	SeMenu_BitShiftMask_End_0x1A3
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 34
 	lds	bc, 1
 	lds	de, 0
-	call	0xf08e2d
+	call	SeMenu_ApplyPartEdit_Data2_0x17C1
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 34
 	lds	bc, 2
 	lds	de, 0
-	call	0xf08e2d
+	call	SeMenu_ApplyPartEdit_Data2_0x17C1
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 34
 	lds	bc, 3
 	lds	de, 0
-	call	0xf08e2d
+	call	SeMenu_ApplyPartEdit_Data2_0x17C1
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 34
 	lds	bc, 4
 	lds	de, 0
-	call	0xf08e2d
+	call	SeMenu_ApplyPartEdit_Data2_0x17C1
 	ret
 	cps	a, 0
 	ret	nz
 	ldw	wa, 38
-	call	0xf07511
+	call	SeMenu_SetupPartDisplay_End_0x26E
 	ret
 	cps	a, 0
 	ret	nz
 	ldw	wa, 32
-	call	0xf07511
+	call	SeMenu_SetupPartDisplay_End_0x26E
 	lds	wa, 0
 	call	SeMenu_SetupMenuDisplay
 	ret
@@ -4641,7 +4641,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 2
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	.byte 0xd7
 	swi	2
 	halt
@@ -4670,7 +4670,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	.byte 0xc7
 	swi	3
 	.byte 0x8b
@@ -4680,9 +4680,9 @@ SeMenu_CopyWriteUpdate_Data:
 	pushw	0
 	.byte 0xbf, 0x04
 	.asciz "080#"
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 4
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	.byte 0xd7
 	swi	2
 	halt
@@ -4701,7 +4701,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+10)
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	a, (xsp+10)
 	res	7, a
 	.byte 0xc7
@@ -4758,7 +4758,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 6
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	.byte 0xd7
 	swi	2
 	halt
@@ -4777,49 +4777,49 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+12)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	pushw	92
 	.byte 0xbf
 	push_sr
 	.asciz "080#"
 	ldw	bc, 10
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 7
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+14)
 	ret
 	cps	a, 0
 	ret	z
-	call	0xf06d01
+	call	SeMenu_BitShiftMask_End_0x1A3
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 35
 	lds	bc, 1
 	lds	de, 1
-	call	0xf08e2d
+	call	SeMenu_ApplyPartEdit_Data2_0x17C1
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 35
 	lds	bc, 2
 	lds	de, 1
-	call	0xf08e2d
+	call	SeMenu_ApplyPartEdit_Data2_0x17C1
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 35
 	lds	bc, 3
 	lds	de, 1
-	call	0xf08e2d
+	call	SeMenu_ApplyPartEdit_Data2_0x17C1
 	ret
 	cps	a, 0
 	ret	z
 	ldw	wa, 35
 	lds	bc, 4
 	lds	de, 1
-	call	0xf08e2d
+	call	SeMenu_ApplyPartEdit_Data2_0x17C1
 	ret
 	cps	a, 0
 	ret	z
@@ -4848,7 +4848,7 @@ SeMenu_CopyWriteUpdate_Data:
 	pushw	bc
 	lds	bc, 2
 	lds	de, 0
-	call	0xf097e7
+	call	SeMenu_PatchBank_Data_0x74
 	cps	l, 1
 	jr	nz, 57
 	lda	xwa, (xsp+2)
@@ -4870,9 +4870,9 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lds	wa, 0
 	lds	de, 1
-	call	0xf08c98
+	call	SeMenu_ApplyPartEdit_Data2_0x162C
 	lds	wa, 3
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-10)
@@ -4892,7 +4892,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	pushw	bc
 	lds	bc, 1
-	call	0xf097e7
+	call	SeMenu_PatchBank_Data_0x74
 	cps	l, 1
 	jr	nz, 57
 	lda	xwa, (xsp+2)
@@ -4914,9 +4914,9 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lds	wa, 0
 	lds	de, 1
-	call	0xf08c98
+	call	SeMenu_ApplyPartEdit_Data2_0x162C
 	lds	wa, 4
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+10)
 	ret
 	lda	xsp, (xsp-10)
@@ -4936,7 +4936,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	pushw	bc
 	lds	bc, 3
-	call	0xf097e7
+	call	SeMenu_PatchBank_Data_0x74
 	cps	l, 1
 	jr	nz, 57
 	lda	xwa, (xsp+2)
@@ -4958,9 +4958,9 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lds	wa, 0
 	lds	de, 1
-	call	0xf08c98
+	call	SeMenu_ApplyPartEdit_Data2_0x162C
 	lds	wa, 5
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+10)
 	ret
 	dec	8, xsp
@@ -4975,7 +4975,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	de
 	pushw	127
 	lds	bc, 4
-	call	0xf097e7
+	call	SeMenu_PatchBank_Data_0x74
 	cps	l, 1
 	jr	nz, 57
 	lda	xwa, (xsp+2)
@@ -4997,19 +4997,19 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lds	wa, 0
 	lds	de, 1
-	call	0xf08c98
+	call	SeMenu_ApplyPartEdit_Data2_0x162C
 	lds	wa, 6
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	inc	8, xsp
 	ret
 	cps	a, 0
 	ret	z
-	call	0xf06d01
+	call	SeMenu_BitShiftMask_End_0x1A3
 	ret
 	cps	a, 0
 	ret	z
 	lds	wa, 1
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	ret	z
 	ldw	wa, 36
@@ -5022,7 +5022,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	bc, 0
 	jr	15
 	lds	wa, 2
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	ret	z
 	ldw	wa, 36
@@ -5032,7 +5032,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	ret	z
 	lds	wa, 3
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	ret	z
 	ldw	wa, 36
@@ -5042,7 +5042,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	ret	z
 	lds	wa, 4
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	ret	z
 	ldw	wa, 36
@@ -5079,7 +5079,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	e, (xsp+14)
 	extz	de
 	pushw	35
@@ -5087,16 +5087,16 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xwa
 	ldw	wa, 37
 	lds	bc, 2
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	cps	l, 1
 	jr	nz, 13
 	ld	c, (xsp+14)
 	extz	bc
 	lds	wa, 1
 	lds	de, 1
-	call	0xf08c98
+	call	SeMenu_ApplyPartEdit_Data2_0x162C
 	lds	wa, 3
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+18)
 	ret
 	lda	xsp, (xsp-20)
@@ -5127,7 +5127,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	e, (xsp+16)
 	extz	de
 	pushw	34
@@ -5135,16 +5135,16 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xwa
 	ldw	wa, 37
 	lds	bc, 1
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	cps	l, 1
 	jr	nz, 13
 	ld	c, (xsp+16)
 	extz	bc
 	lds	wa, 1
 	lds	de, 1
-	call	0xf08c98
+	call	SeMenu_ApplyPartEdit_Data2_0x162C
 	lds	wa, 4
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-20)
@@ -5175,7 +5175,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	e, (xsp+16)
 	extz	de
 	pushw	36
@@ -5183,16 +5183,16 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xwa
 	ldw	wa, 37
 	lds	bc, 3
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	cps	l, 1
 	jr	nz, 13
 	ld	c, (xsp+16)
 	extz	bc
 	lds	wa, 1
 	lds	de, 1
-	call	0xf08c98
+	call	SeMenu_ApplyPartEdit_Data2_0x162C
 	lds	wa, 5
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-18)
@@ -5217,7 +5217,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	e, (xsp+14)
 	extz	de
 	pushw	37
@@ -5225,21 +5225,21 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xwa
 	ldw	wa, 37
 	lds	bc, 4
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	cps	l, 1
 	jr	nz, 13
 	ld	c, (xsp+14)
 	extz	bc
 	lds	wa, 1
 	lds	de, 1
-	call	0xf08c98
+	call	SeMenu_ApplyPartEdit_Data2_0x162C
 	lds	wa, 6
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+18)
 	ret
 	cps	a, 0
 	ret	z
-	call	0xf06d01
+	call	SeMenu_BitShiftMask_End_0x1A3
 	ret
 	cps	a, 0
 	jr	nz, 7
@@ -5247,7 +5247,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	bc, 0
 	jr	15
 	lds	wa, 1
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	ret	z
 	ldw	wa, 37
@@ -5257,7 +5257,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	ret	z
 	lds	wa, 2
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	ret	z
 	ldw	wa, 37
@@ -5267,7 +5267,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	ret	z
 	lds	wa, 3
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	ret	z
 	ldw	wa, 37
@@ -5277,7 +5277,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	ret	z
 	lds	wa, 4
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	ret	z
 	ldw	wa, 37
@@ -5352,9 +5352,9 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lda	xde, (xsp+8)
 	lds	wa, 1
-	call	0xf09567
+	call	SeMenu_ApplySynthParam_Data_0x53
 	lda	xwa, (xsp+6)
-	call	0xf092f0
+	call	SeMenu_ApplyPartEdit_Data2_0x1C84
 	ld	a, (xsp+10)
 	res	7, a
 	cps	a, 0
@@ -5379,7 +5379,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	ld	de, (xsp)
-	call	0xf06500
+	call	SeMenu_RegisterParamDisplay_Data_0x71
 	ld	a, (xsp+4)
 	extz	wa
 	ld	c, (xsp+2)
@@ -5387,7 +5387,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	de, 16
 	call	SeMenu_InitDisplayField_Alt
 	lds	wa, 2
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+12)
 	ret
 	lda	xsp, (xsp-10)
@@ -5400,9 +5400,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf092cf
+	call	SeMenu_ApplyPartEdit_Data2_0x1C63
 	lda	xwa, (xsp)
-	call	0xf092e6
+	call	SeMenu_ApplyPartEdit_Data2_0x1C7A
 	ld	a, (xsp+8)
 	res	7, a
 	cps	a, 0
@@ -5421,7 +5421,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+4)
 	extz	bc
 	ld	de, (xsp+2)
-	call	0xf06500
+	call	SeMenu_RegisterParamDisplay_Data_0x71
 	ld	a, (xsp+6)
 	extz	wa
 	ld	c, (xsp+4)
@@ -5429,7 +5429,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	de, 16
 	call	SeMenu_InitDisplayField_Alt
 	lds	wa, 3
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+10)
 	ret
 	lda	xsp, (xsp-22)
@@ -5724,7 +5724,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 6
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	.byte 0xd7
 	swi	2
 	halt
@@ -5732,12 +5732,12 @@ SeMenu_CopyWriteUpdate_Data:
 	ret
 	cps	a, 0
 	ret	z
-	call	0xf06d01
+	call	SeMenu_BitShiftMask_End_0x1A3
 	ret
 	cps	a, 0
 	ret	z
 	lds	wa, 1
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	ret	z
 	ldw	wa, 38
@@ -5747,7 +5747,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	ret	z
 	lds	wa, 2
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	ret	z
 	ldw	wa, 38
@@ -5768,7 +5768,7 @@ SeMenu_CopyWriteUpdate_Data:
 	nop
 	jr	z, 19
 	lds	wa, 3
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	jr	z, 9
 	ldw	wa, 38
@@ -5790,7 +5790,7 @@ SeMenu_CopyWriteUpdate_Data:
 	nop
 	jr	z, 19
 	lds	wa, 4
-	call	0xf06fae
+	call	SeMenu_TransferPartValues_EndData_0x1E0
 	cps	l, 0
 	jr	z, 9
 	ldw	wa, 38
@@ -5842,7 +5842,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -5861,7 +5861,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -5880,7 +5880,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -5899,7 +5899,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -5930,7 +5930,7 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xwa
 	ld	wa, iz
 	ld	bc, (xsp+12)
-	call	0xf07333
+	call	SeMenu_SetupPartDisplay_End_0x90
 	cp	hl, 0xffff
 	jr	z, 26
 	ld	a, (xsp+4)
@@ -5986,9 +5986,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xde+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	lda	xwa, (xsp+2)
-	call	0xf06b72
+	call	SeMenu_BitShiftMask_End_0x14
 	cps	l, 1
 	jrl	nz, 397
 	ld	a, (xsp+18)
@@ -6050,7 +6050,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	c, (xsp+18)
 	extz	bc
 	pushw	41
@@ -6058,7 +6058,7 @@ SeMenu_CopyWriteUpdate_Data:
 	push	xwa
 	ldw	wa, 33
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 4
 	jrl	162
 	.byte 0x8f
@@ -6102,7 +6102,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	de, 64
 	jr	114
 	ld	(xwa+10), 1
-	call	0xf06b72
+	call	SeMenu_BitShiftMask_End_0x14
 	cps	l, 1
 	jr	nz, 120
 	ld	a, (xsp+5)
@@ -6124,7 +6124,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
 	lds	wa, 4
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	jr	62
 	lda	xwa, (xsp+2)
 	.byte 0xb0
@@ -6148,7 +6148,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	AddswbWr
 	jr	-102
 	ld	(xwa+10), 255
-	call	0xf06b72
+	call	SeMenu_BitShiftMask_End_0x14
 	cps	l, 1
 	jr	z, -120
 	.byte 0xd7
@@ -6159,7 +6159,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	ret	z
 	lds	wa, 0
-	call	0xf09764
+	call	SeMenu_HandleMenuChange_Data_0x5
 	ldw	wa, 62
 	lds	bc, 0
 	call	SeMenu_SendEvent
@@ -6306,7 +6306,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	e, (xsp+12)
 	lda	xbc, (xsp)
 	lda	xwa, (xbc+8)
@@ -6331,9 +6331,9 @@ SeMenu_CopyWriteUpdate_Data:
 	.asciz "080:"
 	lds	bc, 1
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 1
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	jr	10
 	ld	(xwa), 30
 	jr	-39
@@ -6358,7 +6358,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	e, (xsp+12)
 	lda	xbc, (xsp)
 	lda	xwa, (xbc+8)
@@ -6387,9 +6387,9 @@ SeMenu_CopyWriteUpdate_Data:
 	.asciz "080:"
 	lds	bc, 2
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 2
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	jr	16
 	ld	(xwa), 50
 	ld	(xbc), 206
@@ -6416,7 +6416,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	a, (xsp+12)
 	extz	wa
 	cps	wa, 0
@@ -6445,9 +6445,9 @@ SeMenu_CopyWriteUpdate_Data:
 	.asciz "080:"
 	lds	bc, 3
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 3
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	jr	40
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
@@ -6482,7 +6482,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	a, (xsp+12)
 	extz	wa
 	cps	wa, 0
@@ -6510,9 +6510,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	wa, 58
 	lds	bc, 4
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 4
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	jr	16
 	lda	xwa, (xsp)
 	ld	(xwa+8), 100
@@ -6539,7 +6539,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	a, (xsp+12)
 	extz	wa
 	cps	wa, 0
@@ -6568,9 +6568,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	wa, 58
 	lds	bc, 5
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 5
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	jr	12
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
@@ -6595,7 +6595,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	a, (xsp+12)
 	cps	a, 5
 	jr	z, 4
@@ -6610,9 +6610,9 @@ SeMenu_CopyWriteUpdate_Data:
 	.asciz "(90:"
 	lds	bc, 6
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 6
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+16)
 	ret
 	lda	xsp, (xsp-16)
@@ -6632,7 +6632,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	a, (xsp+12)
 	cp	a, 10
 	jr	z, 50
@@ -6651,9 +6651,9 @@ SeMenu_CopyWriteUpdate_Data:
 	.asciz "(90:"
 	lds	bc, 7
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 7
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+16)
 	ret
 	lda	xsp, (xsp-16)
@@ -6673,7 +6673,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	0xf074bc
+	call	SeMenu_SetupPartDisplay_End_0x219
 	ld	a, (xsp+12)
 	cp	a, 11
 	jr	ugt, 42
@@ -6690,9 +6690,9 @@ SeMenu_CopyWriteUpdate_Data:
 	ldw	wa, 58
 	ldw	bc, 8
 	lds	de, 0
-	call	0xf06f37
+	call	SeMenu_TransferPartValues_EndData_0x169
 	ldw	wa, 8
-	call	0xf07499
+	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+16)
 	ret
 	dec	4, xsp
@@ -6835,18 +6835,18 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	jr	z, 44
 	lda	xwa, (xsp)
-	call	0xf0744d
+	call	SeMenu_SetupPartDisplay_End_0x1AA
 	ld	a, (xsp)
 	extz	wa
 	ldw	bc, 62
-	call	0xf06290
+	call	SeMenu_RegisterElement_Type1_ClearLoop_0x44
 	ld	a, (xsp)
 	extz	wa
 	call	SeMenu_SetDisplayValue_Data
 	ldw	wa, 35
 	call	SeMenu_TriggerNotification
 	lds	wa, 1
-	call	0xf09764
+	call	SeMenu_HandleMenuChange_Data_0x5
 	lds	wa, 0
 	call	SeMenu_SetSelectedRow
 	inc	2, xsp
@@ -6855,7 +6855,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	jr	nz, 106
 	lda	xwa, (xsp+4)
-	call	0xf0744d
+	call	SeMenu_SetupPartDisplay_End_0x1AA
 	.byte 0x8f, 0x04
 	push	xsp
 	ldb	l, 111
@@ -6863,7 +6863,7 @@ SeMenu_CopyWriteUpdate_Data:
 	incm8	1, (xsp+4)
 	ld	a, (xsp+4)
 	extz	wa
-	call	0xf07452
+	call	SeMenu_SetupPartDisplay_End_0x1AF
 	lda	xde, (xsp)
 	ld	a, (xsp+4)
 	extz	wa
@@ -6900,7 +6900,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	a, 0
 	jr	nz, 106
 	lda	xwa, (xsp+4)
-	call	0xf0744d
+	call	SeMenu_SetupPartDisplay_End_0x1AA
 	.byte 0x8f, 0x04
 	push	xsp
 	nop
@@ -6908,7 +6908,7 @@ SeMenu_CopyWriteUpdate_Data:
 	decm8	1, (xsp+4)
 	ld	a, (xsp+4)
 	extz	wa
-	call	0xf07452
+	call	SeMenu_SetupPartDisplay_End_0x1AF
 	lda	xde, (xsp)
 	ld	a, (xsp+4)
 	extz	wa
@@ -6990,7 +6990,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	0xf07469
+	call	SeMenu_SetupPartDisplay_End_0x1C6
 	lda	xbc, (xsp+4)
 	ld	xwa, xbc
 	call	FontGlyph_ByteData
@@ -7012,7 +7012,7 @@ SeMenu_CopyWriteUpdate_Data:
 	rcf
 	jr	c, -51
 	lds	wa, 0
-	call	0xf09764
+	call	SeMenu_HandleMenuChange_Data_0x5
 	ldw	wa, 62
 	lds	bc, 0
 	call	SeMenu_SendEvent
@@ -7072,7 +7072,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x89
 	extz	wa
 	lda	xbc, (xsp+20)
-	call	0xf07469
+	call	SeMenu_SetupPartDisplay_End_0x1C6
 	.byte 0xc7
 	swi	3
 	.byte 0x89
@@ -7091,7 +7091,7 @@ SeMenu_CopyWriteUpdate_Data:
 	rcf
 	jr	c, -42
 	lds	wa, 0
-	call	0xf09764
+	call	SeMenu_HandleMenuChange_Data_0x5
 	ldw	wa, 62
 	lds	bc, 0
 	call	SeMenu_SendEvent
@@ -7111,11 +7111,11 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_StorePartParam
 	lda	xbc, (xsp+2)
 	lds	wa, 0
-	call	0xf07469
+	call	SeMenu_SetupPartDisplay_End_0x1C6
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
-	call	0xf074f0
+	call	SeMenu_SetupPartDisplay_End_0x24D
 	ld	c, (xsp)
 	extz	bc
 	lds	wa, 1
@@ -7127,15 +7127,15 @@ SeMenu_CopyWriteUpdate_Data:
 	call	SeMenu_ShowPopupDialog
 	inc	2, xsp
 	lds	wa, 1
-	call	0xf0747d
+	call	SeMenu_SetupPartDisplay_End_0x1DA
 	lds	wa, 0
 	ldw	bc, 8
 	lds	de, 0
-	call	0xf07483
+	call	SeMenu_SetupPartDisplay_End_0x1E0
 	lds	wa, 1
 	lds	bc, 6
 	lds	de, 0
-	call	0xf07483
+	call	SeMenu_SetupPartDisplay_End_0x1E0
 	inc	4, xsp
 	ret
 	dec	6, xsp
@@ -7154,11 +7154,11 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf07469
+	call	SeMenu_SetupPartDisplay_End_0x1C6
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
-	call	0xf074f0
+	call	SeMenu_SetupPartDisplay_End_0x24D
 	ld	c, (xsp)
 	extz	bc
 	lds	wa, 1
@@ -7191,11 +7191,11 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+6)
 	extz	wa
 	lda	xbc, (xsp+4)
-	call	0xf07469
+	call	SeMenu_SetupPartDisplay_End_0x1C6
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf074f0
+	call	SeMenu_SetupPartDisplay_End_0x24D
 	ld	c, (xsp+2)
 	extz	bc
 	lds	wa, 1
@@ -7300,7 +7300,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldb	a, 216
 	ccf
 	lda	xbc, (xsp+4)
-	call	0xf074f0
+	call	SeMenu_SetupPartDisplay_End_0x24D
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 1
@@ -7396,7 +7396,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldb	a, 216
 	ccf
 	lda	xbc, (xsp+4)
-	call	0xf074f0
+	call	SeMenu_SetupPartDisplay_End_0x24D
 	ld	c, (xsp+4)
 	extz	bc
 	lds	wa, 1
@@ -7417,7 +7417,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf07469
+	call	SeMenu_SetupPartDisplay_End_0x1C6
 	lda	xde, (xsp+2)
 	ld	a, (xde)
 	cp	a, 65
@@ -7432,11 +7432,11 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xde)
 	extz	bc
-	call	0xf07457
+	call	SeMenu_SetupPartDisplay_End_0x1B4
 	ld	a, (xsp+2)
 	extz	wa
 	lda	xbc, (xsp)
-	call	0xf074f0
+	call	SeMenu_SetupPartDisplay_End_0x24D
 	ld	c, (xsp)
 	extz	bc
 	lds	wa, 1
@@ -7470,7 +7470,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf074d8
+	call	SeMenu_SetupPartDisplay_End_0x235
 	lda	xbc, (xsp+4)
 	lds	wa, 0
 	call	SeMenu_LoadPartParam
@@ -7478,7 +7478,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	call	0xf07457
+	call	SeMenu_SetupPartDisplay_End_0x1B4
 	pushw	1
 	pushw	63
 	call	SeMenu_ShowConfirmDialog
@@ -7524,7 +7524,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf074d8
+	call	SeMenu_SetupPartDisplay_End_0x235
 	lda	xbc, (xsp+6)
 	lds	wa, 0
 	call	SeMenu_LoadPartParam
@@ -7532,7 +7532,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	call	0xf07457
+	call	SeMenu_SetupPartDisplay_End_0x1B4
 	pushw	1
 	pushw	63
 	call	SeMenu_ShowConfirmDialog
@@ -7556,7 +7556,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	a, (xsp)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	0xf074d8
+	call	SeMenu_SetupPartDisplay_End_0x235
 	lda	xbc, (xsp+4)
 	lds	wa, 0
 	call	SeMenu_LoadPartParam
@@ -7564,7 +7564,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	ld	c, (xsp+2)
 	extz	bc
-	call	0xf07457
+	call	SeMenu_SetupPartDisplay_End_0x1B4
 	pushw	1
 	pushw	63
 	call	SeMenu_ShowConfirmDialog
@@ -7579,7 +7579,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x89
 	extz	wa
 	ldw	bc, 32
-	call	0xf07457
+	call	SeMenu_SetupPartDisplay_End_0x1B4
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -7706,7 +7706,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lda	xwa, (xsp+10)
 	lda	xbc, (xsp+28)
 	ldw	de, 16
-	call	0xf07376
+	call	SeMenu_SetupPartDisplay_End_0xD3
 	.byte 0xc7
 	swi	2
 	cp	(xwa-57), xbc
@@ -7745,7 +7745,7 @@ SeMenu_CopyWriteUpdate_Data:
 	swi	0
 	.byte 0x8d
 	extz	de
-	call	0xf07376
+	call	SeMenu_SetupPartDisplay_End_0xD3
 	.byte 0xc7
 	swi	1
 	cp	(xbc-57), w
@@ -7791,7 +7791,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldb	a, 216
 	ccf
 	lda	xbc, (xsp+8)
-	call	0xf074f0
+	call	SeMenu_SetupPartDisplay_End_0x24D
 	ld	c, (xsp+8)
 	extz	bc
 	lds	wa, 1
@@ -8202,7 +8202,7 @@ SeMenu_NameEditor_HandleInput:
 	; --- Wrapper function 3: push xwa, ld xwa=xiy, call, pop, ret ---
 	push xwa
 	ld xwa, xiy
-	call 0xfb158f
+	call GraphicsRender_ShortByteBlock_0x5
 	pop xwa
 	ret
 SeMenu_NameEditor_HandleInput_Data:
@@ -8210,7 +8210,7 @@ SeMenu_NameEditor_HandleInput_Data:
 	sti8_24	0x03efa8, 0
 	push xwa
 	ld xwa, 0x000006ca
-	call 0xfb19d4
+	call DrawText_LayoutAndRender_Variant1_0x2EB
 	pop xwa
 	ret
 SeMenu_NameEditor_InsertChar:
@@ -8218,7 +8218,7 @@ SeMenu_NameEditor_InsertChar:
 	sti8_24	0x03efa8, 0
 	push xwa
 	ld xwa, 0x000006ca
-	call 0xfb1a28
+	call DrawText_LayoutAndRender_Variant1_0x33F
 	pop xwa
 	ret
 SeMenu_NameEditor_DeleteChar:
@@ -8230,7 +8230,7 @@ SeMenu_NameEditor_DeleteChar:
 	stda16	1746, bc
 	stda16	1748, hl
 	ld xwa, 0x000006ca
-	call 0xfb1cff
+	call DrawText_LayoutAndRender_Variant1_0x616
 	pop xwa
 	ret
 SeMenu_NameEditor_MoveCursor:
@@ -8238,7 +8238,7 @@ SeMenu_NameEditor_MoveCursor:
 	sti8_24	0x03efa8, 0
 	push xwa
 	ld xwa, 0x000006ca
-	call 0xfb1db3
+	call DrawText_LayoutAndRender_Variant1_0x6CA
 	pop xwa
 	ret
 SeMenu_NameEditor_MoveCursor_Data:
@@ -8260,7 +8260,7 @@ SeMenu_NameEditor_ChangeCase_Data:
 	sti8_24	0x03efa8, 0
 	push xwa
 	ld xwa, 0x000006ca
-	call 0xfb1ad0
+	call DrawText_LayoutAndRender_Variant1_0x3E7
 	pop xwa
 	ret
 SeMenu_NameEditor_SelectCharSet:
@@ -8275,7 +8275,7 @@ SeMenu_NameEditor_SelectCharSet_Data:
 	sti8_24	0x03efa8, 0
 	push xwa
 	ld xwa, 0x000006ca
-	call 0xfb1aa6
+	call DrawText_LayoutAndRender_Variant1_0x3BD
 	pop xwa
 	ret
 SeMenu_NameEditor_Complete:
@@ -8311,7 +8311,7 @@ SeMenu_NameEditor_Redraw_Data:
 	; --- Wrapper function 17 ---
 	push xwa
 	ld xwa, xiy
-	call 0xfb2201
+	call DrawFunc_Init_Variant1_0x108
 	pop xwa
 	ret
 
@@ -8348,7 +8348,7 @@ SeMenu_NameEditor_End:
 	or	w, a
 	stda8	1632, w
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf15873
+	ld	xiy, TuningSystem_Handler_Table_0x242C
 	call	SeMenu_NameEditor_HandleInput
 	ret
 
@@ -8628,20 +8628,20 @@ SeMenu_ShowConfirmDialog_Data:
 	pop_sr
 	nop
 	nop
-	ld	xiy, 0xf11439
-	ld	xix, 0xf11460
+	ld	xiy, SeBitmap_EnvCurve5_0x46B
+	ld	xix, SeBitmap_EnvCurve5_0x492
 	call	SeMenu_NameEditor_Setup
 	.byte 0xc1
 	pop	xix
 	ei	63
 	nop
 	jr	z, 12
-	ld	xiy, 0xf11460
-	ld	xix, 0xf1146a
+	ld	xiy, SeBitmap_EnvCurve5_0x492
+	ld	xix, SeBitmap_EnvCurve5_0x49C
 	jr	16
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf1146a
-	ld	xix, 0xf11474
+	ld	xiy, SeBitmap_EnvCurve5_0x49C
+	ld	xix, SeBitmap_EnvCurve5_0x4A6
 	call	SeMenu_NameEditor_Setup
 	.ascii "^]\\[ZYX"
 	ret
@@ -8651,14 +8651,14 @@ SeMenu_ShowConfirmDialog_Data:
 	.byte 0x01
 	jr	nz, 24
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf112e1
-	ld	xix, 0xf112eb
+	ld	xiy, SeBitmap_EnvCurve5_0x313
+	ld	xix, SeBitmap_EnvCurve5_0x31D
 	call	SeMenu_NameEditor_Setup
 	ldb	c, 2
 	jr	22
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf112e1
-	ld	xix, 0xf112f5
+	ld	xiy, SeBitmap_EnvCurve5_0x313
+	ld	xix, SeBitmap_EnvCurve5_0x327
 	call	SeMenu_NameEditor_Setup
 	ldb	c, 4
 	ldda8	w, 1630
@@ -8671,7 +8671,7 @@ SeMenu_ShowConfirmDialog_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 0xf11421
+	ld	xiz, SeBitmap_EnvCurve5_0x453
 	.byte 0xe3
 	reti
 	swi	0
@@ -8691,7 +8691,7 @@ SeMenu_ShowConfirmDialog_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 0xf113d9
+	ld	xiz, SeBitmap_EnvCurve5_0x40B
 	.byte 0xe3
 	reti
 	swi	0
@@ -8709,10 +8709,10 @@ SeMenu_ShowConfirmDialog_Data:
 	pop	c
 	djnz8	c, -84
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf11474
-	ld	xix, 0xf1147e
+	ld	xiy, SeBitmap_EnvCurve5_0x4A6
+	ld	xix, SeBitmap_EnvCurve5_0x4B0
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf1147e
+	ld	xiy, SeBitmap_EnvCurve5_0x4B0
 	call	SeMenu_NameEditor_Redraw
 	pop	xiz
 	.ascii "]\\[ZYX"
@@ -8745,7 +8745,7 @@ SeMenu_ShowConfirmDialog_Data:
 	pushw	ix
 	pushw	iy
 	push	c
-	call	0xf0f2bb
+	call	SeMenu_ShowConfirmDialog_Data_0x331
 	pop	c
 	popw	iy
 	popw	ix
@@ -8907,7 +8907,7 @@ SeMenu_ShowConfirmDialog_Data:
 	popw	iy
 	popw	ix
 	ldb	c, 5
-	ld	xiz, 0xf0f37e
+	ld	xiz, SeMenu_ShowConfirmDialog_Data_0x3F4
 	ld	hl, (xiz)
 	ld	de, (xiz+2)
 	add	xiz, 4
@@ -8984,13 +8984,13 @@ SeMenu_ShowConfirmDialog_Data:
 	.byte 0x01
 	jr	nz, 22
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf11d50
-	ld	xix, 0xf11d5a
+	ld	xiy, SeBitmap_EnvCurve5_0xD82
+	ld	xix, SeBitmap_EnvCurve5_0xD8C
 	call	SeMenu_NameEditor_Setup
 	jr	20
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf11d46
-	ld	xix, 0xf11d50
+	ld	xiy, SeBitmap_EnvCurve5_0xD78
+	ld	xix, SeBitmap_EnvCurve5_0xD82
 	call	SeMenu_NameEditor_Setup
 	xor	xwa, xwa
 	ldda8	a, 1629
@@ -8999,9 +8999,9 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xsp
 	.byte 0x01
 	jr	nz, 7
-	ld	xiz, 0xf11e8a
+	ld	xiz, SeBitmap_EnvCurve5_0xEBC
 	jr	5
-	ld	xiz, 0xf11e76
+	ld	xiz, SeBitmap_EnvCurve5_0xEA8
 	push	xwa
 	add	xiz, xwa
 	ld	wa, (xiz)
@@ -9018,15 +9018,15 @@ SeMenu_ShowConfirmDialog_Data:
 	xor	xwa, xwa
 	ldda8	a, 1629
 	add	xiz, xwa
-	call	0xf0f433
+	call	SeMenu_ShowConfirmDialog_Data_0x4A9
 	pop	xwa
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	nz, 7
-	ld	xiz, 0xf11e6a
+	ld	xiz, SeBitmap_EnvCurve5_0xE9C
 	jr	5
-	ld	xiz, 0xf11e56
+	ld	xiz, SeBitmap_EnvCurve5_0xE88
 	add	xiz, xwa
 	ld	xiy, (xiz)
 	ld	xix, xiy
@@ -9085,7 +9085,7 @@ SeMenu_ShowConfirmDialog_Data:
 	nop
 	call	SeMenu_NameEditor_HandleInput_Data
 	jr	44
-	ld	xiz, 0xf0f4d6
+	ld	xiz, SeMenu_ShowConfirmDialog_Data_0x54C
 	xor	w, w
 	sll	wa, 2
 	.byte 0xe3
@@ -9135,7 +9135,7 @@ SeMenu_WaveformSelect_Process:
 
 SeMenu_WaveformSelect_Apply:
 	sti8_24	0x03efa8, 0
-	ld	xiz, 0xf152ba
+	ld	xiz, TuningSystem_Handler_Table_0x1E73
 	xor	xwa, xwa
 	ld8_24	a, 0x0340e4
 	sla	wa, 2
@@ -9143,8 +9143,8 @@ SeMenu_WaveformSelect_Apply:
 	ld	xiy, (xiz)
 	ld	xix, (xiz+4)
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf1504d
-	ld	xix, 0xf1508c
+	ld	xiy, TuningSystem_Handler_Table_0x1C06
+	ld	xix, TuningSystem_Handler_Table_0x1C45
 	call	SeMenu_NameEditor_Setup
 	ret
 SeMenu_WaveformSelect_Data:
@@ -9155,22 +9155,22 @@ SeMenu_WaveformSelect_Data:
 	sti8_24	0x03efa8, 0
 	cpdi8	1710, 1
 	jr	z, 20
-	ld	xiy, 0xf11168
-	ld	xix, 0xf1128b
+	ld	xiy, SeBitmap_EnvCurve5_0x19A
+	ld	xix, SeBitmap_EnvCurve5_0x2BD
 	call	SeMenu_NameEditor_Setup
-	call	0xf0f5a3
+	call	SeMenu_WaveformSelect_Data_0x6D
 	.ascii "h>E&]"
 	.byte 0xf1
 	nop
-	ld	xix, 0xf15ff2
+	ld	xix, FlashWrite_BlockRef_Type6_0x561
 	call	SeMenu_NameEditor_Setup
-	call	0xf0f897
+	call	SeMenu_PresetManager_Data_0x152
 	ld	xiy, DrumDetailEdit_Entry_01
 	ld	xix, Data_Dispatch_Entry_0x39
 	call	SeMenu_NameEditor_Draw
-	call	0xf0f5cf
+	call	SeMenu_WaveformSelect_Data_0x99
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf15ff2
+	ld	xiy, FlashWrite_BlockRef_Type6_0x561
 	ld	xix, DrumDetailEdit_Entry_01
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 0
@@ -9181,18 +9181,18 @@ SeMenu_WaveformSelect_Data:
 	push	xsp
 	.byte 0x01
 	jr	z, 16
-	ld	xiy, 0xf1128b
-	ld	xix, 0xf112b7
+	ld	xiy, SeBitmap_EnvCurve5_0x2BD
+	ld	xix, SeBitmap_EnvCurve5_0x2E9
 	call	SeMenu_NameEditor_Setup
 	jr	14
-	ld	xiy, 0xf112b7
-	ld	xix, 0xf112e1
+	ld	xiy, SeBitmap_EnvCurve5_0x2E9
+	ld	xix, SeBitmap_EnvCurve5_0x313
 	call	SeMenu_NameEditor_Setup
 	ret
 	sti8_24	0x03efa8, 0
 	ldb	a, 13
 	push_a
-	call	0xf0f5e5
+	call	SeMenu_WaveformSelect_Data_0xAF
 	pop_a
 	inc	1, a
 	cp	a, 15
@@ -9206,16 +9206,16 @@ SeMenu_WaveformSelect_Data:
 	ld	d, (xbc)
 	cps	d, 0
 	jr	z, 15
-	ld	xiy, 0xf1612b
+	ld	xiy, FlashWrite_BlockRef_Type6_0x69A
 	sti8_24	0x03efa8, 0
-	call	0xf10be7
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 SeMenu_PresetManager_Init:
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 7
-	call	0xf0f5a3
+	call	SeMenu_WaveformSelect_Data_0x6D
 	jrl	194
 	cps	a, 0
 	jr	z, 52
@@ -9230,29 +9230,29 @@ SeMenu_PresetManager_Init:
 	cp	a, 13
 	jrl	c, 150
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf160c4
-	ld	xix, 0xf160e6
+	ld	xiy, FlashWrite_BlockRef_Type6_0x633
+	ld	xix, FlashWrite_BlockRef_Type6_0x655
 	call	SeMenu_NameEditor_Draw
-	call	0xf0f5cf
+	call	SeMenu_WaveformSelect_Data_0x99
 	jrl	138
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf16121
-	ld	xix, 0xf1612b
+	ld	xiy, FlashWrite_BlockRef_Type6_0x690
+	ld	xix, FlashWrite_BlockRef_Type6_0x69A
 	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
-	ld	xiy, 0xf1612b
-	call	0xf10be7
+	ld	xiy, FlashWrite_BlockRef_Type6_0x69A
+	call	SeMenu_EqEdit_DrawInit_0x15
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf15ff2
+	ld	xiy, FlashWrite_BlockRef_Type6_0x561
 	ld	xix, DrumDetailEdit_Entry_01
 	call	SeMenu_NameEditor_Setup
 	jr	85
 	ld	xiy, DrumDetailEdit_Entry_01
 	ld	xix, Data_Dispatch_Entry_0x39
 	call	SeMenu_NameEditor_Draw
-	call	0xf0f5cf
+	call	SeMenu_WaveformSelect_Data_0x99
 	jr	65
-	call	0xf0f897
+	call	SeMenu_PresetManager_Data_0x152
 	jr	59
 	sti8_24	0x03efa8, 0
 	ld	xiy, DrumDetailEdit_Entry_02
@@ -9264,9 +9264,9 @@ SeMenu_PresetManager_Init:
 	ld	xix, DrumDetailEdit_Entry_07
 	call	SeMenu_NameEditor_Draw
 	jr	15
-	ld	xiy, 0xf1612b
+	ld	xiy, FlashWrite_BlockRef_Type6_0x69A
 	sti8_24	0x03efa8, 0
-	call	0xf10be7
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 SeMenu_PresetManager_Load:
 	; --- Wrapper 1: conditional XIY/XIX setup + call (28 bytes) ---
@@ -9284,63 +9284,63 @@ SeMenu_PresetManager_Save:
 	ld xiy, 0x00f1115e
 	ld xix, 0x00f11168
 	call SeMenu_NameEditor_Setup
-	call 0xfb1588
+	call Display_DeferOrUpdateScreen_Direct_0xF
 	ret
 
 
 SeMenu_PresetManager_SaveApply:
-	call	0xf0f8f4
+	call	SeMenu_PresetManager_Data_0x1AF
 	call	SeMenu_PresetManager_Save
-	ld	xiy, 0xf115e0
-	ld	xix, 0xf11784
+	ld	xiy, SeBitmap_EnvCurve5_0x612
+	ld	xix, SeBitmap_EnvCurve5_0x7B6
 	call	SeMenu_NameEditor_Setup
-	call	0xf0f04a
-	call	0xf0f82f
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_PresetManager_Data_0xEA
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf129d1
-	ld	xix, 0xf12ad4
+	ld	xiy, SeBitmap_EnvCurve5_0x1A03
+	ld	xix, SeBitmap_EnvCurve5_0x1B06
 	call	SeMenu_NameEditor_Draw
-	call	0xf0f909
+	call	SeMenu_PresetManager_Data_0x1C4
 	ret
 SeMenu_PresetManager_Data:
-	call	0xf0f8f4
+	call	SeMenu_PresetManager_Data_0x1AF
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 20
-	ld	xiy, 0xf14e5c
-	ld	xix, 0xf15020
+	ld	xiy, TuningSystem_Handler_Table_0x1A15
+	ld	xix, TuningSystem_Handler_Table_0x1BD9
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_PresetManager_Save
 	jr	28
-	ld	xiy, 0xf15020
-	ld	xix, 0xf1504d
+	ld	xiy, TuningSystem_Handler_Table_0x1BD9
+	ld	xix, TuningSystem_Handler_Table_0x1C06
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf14e67
-	ld	xix, 0xf15020
+	ld	xiy, TuningSystem_Handler_Table_0x1A20
+	ld	xix, TuningSystem_Handler_Table_0x1BD9
 	call	SeMenu_NameEditor_Setup
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12b7b
-	ld	xix, 0xf12b86
+	ld	xiy, SeBitmap_EnvCurve5_0x1BAD
+	ld	xix, SeBitmap_EnvCurve5_0x1BB8
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_BankEdit_LoopHelper
-	call	0xf0f909
+	call	SeMenu_PresetManager_Data_0x1C4
 	ret
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	nz, 24
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf11784
-	ld	xix, 0xf1178e
+	ld	xiy, SeBitmap_EnvCurve5_0x7B6
+	ld	xix, SeBitmap_EnvCurve5_0x7C0
 	call	SeMenu_NameEditor_Setup
 	ldb	c, 2
 	jr	22
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf11784
-	ld	xix, 0xf11798
+	ld	xiy, SeBitmap_EnvCurve5_0x7B6
+	ld	xix, SeBitmap_EnvCurve5_0x7CA
 	call	SeMenu_NameEditor_Setup
 	ldb	c, 4
 	ldda8	w, 1630
@@ -9353,7 +9353,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 0xf117fc
+	ld	xiz, SeBitmap_EnvCurve5_0x82E
 	.byte 0xe3
 	reti
 	swi	0
@@ -9373,7 +9373,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 0xf117b4
+	ld	xiz, SeBitmap_EnvCurve5_0x7E6
 	.byte 0xe3
 	reti
 	swi	0
@@ -9409,7 +9409,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 0xf118d8
+	ld	xiz, SeBitmap_EnvCurve5_0x90A
 	.byte 0xe3
 	reti
 	swi	0
@@ -9429,7 +9429,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 0xf11860
+	ld	xiz, SeBitmap_EnvCurve5_0x892
 	.byte 0xe3
 	reti
 	swi	0
@@ -9459,7 +9459,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 0xf11954
+	ld	xiz, SeBitmap_EnvCurve5_0x986
 	.byte 0xe3
 	reti
 	swi	0
@@ -9479,7 +9479,7 @@ SeMenu_PresetManager_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 0xf1191a
+	ld	xiz, SeBitmap_EnvCurve5_0x94C
 	.byte 0xe3
 	reti
 	swi	0
@@ -9498,18 +9498,18 @@ SeMenu_PresetManager_Data:
 	djnz8	c, -84
 	ret
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf115b0
-	ld	xix, 0xf115db
+	ld	xiy, SeBitmap_EnvCurve5_0x5E2
+	ld	xix, SeBitmap_EnvCurve5_0x60D
 	call	SeMenu_NameEditor_Setup
 	ret
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf115db
-	ld	xix, 0xf115e0
+	ld	xiy, SeBitmap_EnvCurve5_0x60D
+	ld	xix, SeBitmap_EnvCurve5_0x612
 	call	SeMenu_NameEditor_Setup
 	ret
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf114dd
-	ld	xix, 0xf115b0
+	ld	xiy, SeBitmap_EnvCurve5_0x50F
+	ld	xix, SeBitmap_EnvCurve5_0x5E2
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 0
 	ret
@@ -9519,8 +9519,8 @@ SeMenu_PresetBrowser_Init:
 	ld xiy, 0x00f11a37
 	ld xix, 0x00f11c49
 	call SeMenu_NameEditor_Setup
-	call 0xf0f04a
-	call 0xf0f7a5
+	call SeMenu_ShowConfirmDialog_Data_0xC0
+	call SeMenu_PresetManager_Data_0x60
 	sti8_24	0x03efa8, 0
 	ld xiy, TuningSys_Param_01
 	ld xix, 0x00f132bf
@@ -9546,16 +9546,16 @@ SeMenu_PresetBrowser_Select:
 SeMenu_PresetBrowser_Data:
 	call	SeMenu_PresetBrowser_Navigate
 	call	SeMenu_PresetBrowser_Select
-	ld	xiy, 0xf14266
-	ld	xix, 0xf1440b
+	ld	xiy, TuningSystem_Handler_Table_0xE1F
+	ld	xix, TuningSystem_Handler_Table_0xFC4
 	call	SeMenu_NameEditor_Setup
-	call	0xf0f9d1
-	call	0xf0f04a
-	call	0xf0fa2e
-	call	0xf1036a
+	call	SeMenu_PresetBrowser_Data_0x3B
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_PresetBrowser_Data_0x98
+	call	Data_UnknownBlock_0x6E
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf13483
-	ld	xix, 0xf134d4
+	ld	xiy, TuningSystem_Handler_Table_0x3C
+	ld	xix, TuningSystem_Handler_Table_0x8D
 	call	SeMenu_NameEditor_Draw
 	ret
 	sti8_24	0x03efa8, 0
@@ -9570,7 +9570,7 @@ SeMenu_PresetBrowser_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 0xf1446f
+	ld	xiz, TuningSystem_Handler_Table_0x1028
 	.byte 0xe3
 	reti
 	swi	0
@@ -9590,7 +9590,7 @@ SeMenu_PresetBrowser_Data:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 0xf14427
+	ld	xiz, TuningSystem_Handler_Table_0xFE0
 	.byte 0xe3
 	reti
 	swi	0
@@ -9609,19 +9609,19 @@ SeMenu_PresetBrowser_Data:
 	djnz8	c, -84
 	ret
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf13574
-	ld	xix, 0xf1357e
+	ld	xiy, TuningSystem_Handler_Table_0x12D
+	ld	xix, TuningSystem_Handler_Table_0x137
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf135c4
-	ld	xix, 0xf135ce
+	ld	xiy, TuningSystem_Handler_Table_0x17D
+	ld	xix, TuningSystem_Handler_Table_0x187
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf135ce
-	ld	xix, 0xf135d8
+	ld	xiy, TuningSystem_Handler_Table_0x187
+	ld	xix, TuningSystem_Handler_Table_0x191
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 2
-	ld	xiy, 0xf135ce
-	ld	xix, 0xf135d8
+	ld	xiy, TuningSystem_Handler_Table_0x187
+	ld	xix, TuningSystem_Handler_Table_0x191
 	call	SeMenu_NameEditor_Setup
 	ldb	c, 4
 	ld	xiy, 1637
@@ -9636,7 +9636,7 @@ SeMenu_PresetBrowser_Data:
 	ld	e, d
 	xor	d, d
 	sla	de, 2
-	ld	xiz, 0xf135a6
+	ld	xiz, TuningSystem_Handler_Table_0x15F
 	.byte 0xe3
 	reti
 	swi	0
@@ -9657,7 +9657,7 @@ SeMenu_PresetBrowser_Data:
 	sti8_24	0x03efa8, 0
 	push	c
 	push	xiy
-	ld	xiz, 0xf13708
+	ld	xiz, TuningSystem_Handler_Table_0x2C1
 	.byte 0xe3
 	reti
 	swi	0
@@ -9680,7 +9680,7 @@ SeMenu_PresetBrowser_Data:
 	srl	a, 6
 	xor	w, w
 	mul	a, 10
-	ld	xiz, 0xf136dc
+	ld	xiz, TuningSystem_Handler_Table_0x295
 	.byte 0xe3
 	reti
 	swi	0
@@ -9697,7 +9697,7 @@ SeMenu_PresetBrowser_Data:
 	pop	c
 	push	c
 	push	xiy
-	ld	xiz, 0xf13526
+	ld	xiz, TuningSystem_Handler_Table_0xDF
 	.byte 0xe3
 	reti
 	swi	0
@@ -9710,7 +9710,7 @@ SeMenu_PresetBrowser_Data:
 	sti8_24	0x03efa8, 2
 	push	c
 	push	xiy
-	ld	xiz, 0xf14487
+	ld	xiz, TuningSystem_Handler_Table_0x1040
 	.byte 0xe3
 	reti
 	swi	0
@@ -9744,9 +9744,9 @@ SeMenu_CompareAndApply_Check:
 	ld xix, 0x00f162d3
 	call SeMenu_NameEditor_Setup
 SeMenu_CompareAndApply_Match:
-	call 0xf0f04a
-	call 0xf0f7a5
-	call 0xf0f392
+	call SeMenu_ShowConfirmDialog_Data_0xC0
+	call SeMenu_PresetManager_Data_0x60
+	call SeMenu_ShowConfirmDialog_Data_0x408
 	cpdi8	1710, 1
 	jr z, SeMenu_CompareAndApply_Apply
 	sti8_24	0x03efa8, 0
@@ -9785,28 +9785,28 @@ SeMenu_CompareAndApply_Data4:
 
 
 SeMenu_CompareAndApply_Data5:
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	.byte 0x1d, 0xbd
 SeMenu_CompareAndApply_Data6:
 	swi	3
 	.byte 0xf0
 	call	SeMenu_PresetManager_Save
 	sti8_24	0x03efa8, 2
-	ld	xiy, 0xf12058
-	ld	xix, 0xf1206c
+	ld	xiy, SeBitmap_EnvCurve5_0x108A
+	ld	xix, SeBitmap_EnvCurve5_0x109E
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf11f83
-	ld	xix, 0xf12058
+	ld	xiy, SeBitmap_EnvCurve5_0xFB5
+	ld	xix, SeBitmap_EnvCurve5_0x108A
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_CompareAndApply_Data4
 	stdi16	1734, 56
 	stdi16	1736, 139
-	call	0xf0f180
+	call	SeMenu_ShowConfirmDialog_Data_0x1F6
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf13086
-	ld	xix, 0xf130be
+	ld	xiy, SeMenu_CompareScreen_DataTable_0x141
+	ld	xix, SeMenu_CompareScreen_DataTable_0x179
 	call	SeMenu_NameEditor_Draw
 	ret
 SeMenu_Utility_CopyBlock:
@@ -9815,35 +9815,35 @@ SeMenu_Utility_CopyBlock:
 	.ascii "f(El "
 	.byte 0xf1
 	nop
-	ld	xix, 0xf12129
+	ld	xix, SeBitmap_EnvCurve5_0x115B
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_Utility_CompareBlock_End
 	sti8_24	0x03efa8, 2
-	ld	xiy, 0xf126f1
-	ld	xix, 0xf126fb
+	ld	xiy, SeBitmap_EnvCurve5_0x1723
+	ld	xix, SeBitmap_EnvCurve5_0x172D
 	call	SeMenu_NameEditor_Setup
 	jr	28
-	ld	xiy, 0xf1206c
-	ld	xix, 0xf12084
+	ld	xiy, SeBitmap_EnvCurve5_0x109E
+	ld	xix, SeBitmap_EnvCurve5_0x10B6
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf162d3
-	ld	xix, 0xf163aa
+	ld	xiy, DrumDetailEdit_Menu_Table_0x1A4
+	ld	xix, DrumDetailEdit_Menu_Table_0x27B
 	call	SeMenu_NameEditor_Setup
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	sti8_24	0x03efa8, 0
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 16
-	ld	xiy, 0xf130ce
-	ld	xix, 0xf13114
+	ld	xiy, SeMenu_CompareScreen_DataTable_0x189
+	ld	xix, SeMenu_CompareScreen_DataTable_0x1CF
 	call	SeMenu_NameEditor_Draw
 	jr	18
-	ld	xiy, 0xf16417
-	ld	xix, 0xf16459
+	ld	xiy, DrumDetailEdit_Menu_Table_0x2E8
+	ld	xix, DrumDetailEdit_Menu_Table_0x32A
 	call	SeMenu_NameEditor_Draw
-	call	0xf0fce1
+	call	SeMenu_Utility_CopyBlock_0x8B
 	call	SeMenu_CompareAndApply_Data4
 	ret
 	sti8_24	0x03efa8, 0
@@ -9853,39 +9853,39 @@ SeMenu_Utility_CopyBlock:
 	.ascii "$Eyd"
 	.byte 0xf1
 	nop
-	ld	xix, 0xf1648d
+	ld	xix, DrumDetailEdit_Menu_Table_0x35E
 	call	SeMenu_NameEditor_Draw
 	sti8_24	0x03efa8, 2
-	ld	xiy, 0xf126f1
-	ld	xix, 0xf12707
+	ld	xiy, SeBitmap_EnvCurve5_0x1723
+	ld	xix, SeBitmap_EnvCurve5_0x1739
 	call	SeMenu_NameEditor_Setup
 	jr	34
-	ld	xiy, 0xf1648d
+	ld	xiy, DrumDetailEdit_Menu_Table_0x35E
 	ld	xix, EffectParamEdit_Entry_01
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 2
-	ld	xiy, 0xf12707
-	ld	xix, 0xf12711
+	ld	xiy, SeBitmap_EnvCurve5_0x1739
+	ld	xix, SeBitmap_EnvCurve5_0x1743
 	call	SeMenu_NameEditor_Setup
 	ret
 SeMenu_Utility_FillBlock:
 	call	SeMenu_CompareAndApply_Data
-	ld	xiy, 0xf12129
-	ld	xix, 0xf12274
+	ld	xiy, SeBitmap_EnvCurve5_0x115B
+	ld	xix, SeBitmap_EnvCurve5_0x12A6
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 2
-	ld	xiy, 0xf12274
-	ld	xix, 0xf12288
+	ld	xiy, SeBitmap_EnvCurve5_0x12A6
+	ld	xix, SeBitmap_EnvCurve5_0x12BA
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_PresetManager_Save
 	stdi16	1734, 56
 	stdi16	1736, 139
-	call	0xf0f180
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0x1F6
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf13130
-	ld	xix, 0xf131a5
+	ld	xiy, SeMenu_CompareScreen_DataTable_0x1EB
+	ld	xix, SeMenu_CompareScreen_DataTable_0x260
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_CompareAndApply_Data4
 	ret
@@ -9902,8 +9902,8 @@ SeMenu_Utility_CompareBlock:
 	jr z, SeMenu_Utility_CompareBlock_Loop
 	call SeMenu_Utility_CompareBlock_End
 SeMenu_Utility_CompareBlock_Loop:
-	call 0xf0f04a
-	call 0xf0f094
+	call SeMenu_ShowConfirmDialog_Data_0xC0
+	call SeMenu_ShowConfirmDialog_Data_0x10A
 	call SeMenu_Utility_FormatNumber_End
 	sti8_24	0x03efa8, 0
 	ld xiy, 0x00f12d66
@@ -9960,122 +9960,122 @@ SeMenu_Utility_FormatSigned:
 
 SeMenu_Utility_FormatSigned_Data:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, 0xf12391
-	ld	xix, 0xf124de
+	ld	xiy, SeBitmap_EnvCurve5_0x13C3
+	ld	xix, SeBitmap_EnvCurve5_0x1510
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf124de
-	ld	xix, 0xf124f3
+	ld	xiy, SeBitmap_EnvCurve5_0x1510
+	ld	xix, SeBitmap_EnvCurve5_0x1525
 	call	SeMenu_NameEditor_Setup
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 4
 	call	SeMenu_Utility_CompareBlock_End
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12d66
-	ld	xix, 0xf12dc6
+	ld	xiy, SeBitmap_EnvCurve5_0x1D98
+	ld	xix, SeBitmap_EnvCurve5_0x1DF8
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatPercent:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, 0xf12507
-	ld	xix, 0xf1259d
+	ld	xiy, SeBitmap_EnvCurve5_0x1539
+	ld	xix, SeBitmap_EnvCurve5_0x15CF
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf1259d
-	ld	xix, 0xf125b1
+	ld	xiy, SeBitmap_EnvCurve5_0x15CF
+	ld	xix, SeBitmap_EnvCurve5_0x15E3
 	call	SeMenu_NameEditor_Setup
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 4
 	call	SeMenu_Utility_CompareBlock_End
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12e22
-	ld	xix, 0xf12e55
+	ld	xiy, SeBitmap_EnvCurve5_0x1E54
+	ld	xix, SeBitmap_EnvCurve5_0x1E87
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatPercent_Data:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, 0xf12507
-	ld	xix, 0xf1259d
+	ld	xiy, SeBitmap_EnvCurve5_0x1539
+	ld	xix, SeBitmap_EnvCurve5_0x15CF
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf125b1
-	ld	xix, 0xf125c6
+	ld	xiy, SeBitmap_EnvCurve5_0x15E3
+	ld	xix, SeBitmap_EnvCurve5_0x15F8
 	call	SeMenu_NameEditor_Setup
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 4
 	call	SeMenu_Utility_CompareBlock_End
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12e22
-	ld	xix, 0xf12e55
+	ld	xiy, SeBitmap_EnvCurve5_0x1E54
+	ld	xix, SeBitmap_EnvCurve5_0x1E87
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatHex:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, 0xf125c6
-	ld	xix, 0xf126d0
+	ld	xiy, SeBitmap_EnvCurve5_0x15F8
+	ld	xix, SeBitmap_EnvCurve5_0x1702
 	call	SeMenu_NameEditor_Setup
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 4
 	call	SeMenu_Utility_CompareBlock_End
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12e65
-	ld	xix, 0xf12eb6
+	ld	xiy, SeBitmap_EnvCurve5_0x1E97
+	ld	xix, SeBitmap_EnvCurve5_0x1EE8
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatHex_Data:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, 0xf126d0
-	ld	xix, 0xf126e7
+	ld	xiy, SeBitmap_EnvCurve5_0x1702
+	ld	xix, SeBitmap_EnvCurve5_0x1719
 	call	SeMenu_NameEditor_Setup
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 4
 	call	SeMenu_Utility_CompareBlock_End
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_End:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, 0xf12833
-	ld	xix, 0xf12880
+	ld	xiy, SeBitmap_EnvCurve5_0x1865
+	ld	xix, SeBitmap_EnvCurve5_0x18B2
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf12711
-	ld	xix, 0xf12833
+	ld	xiy, SeBitmap_EnvCurve5_0x1743
+	ld	xix, SeBitmap_EnvCurve5_0x1865
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_PresetManager_Save
 	sti8_24	0x03efa8, 2
-	ld	xiy, 0xf126e7
-	ld	xix, 0xf126fb
+	ld	xiy, SeBitmap_EnvCurve5_0x1719
+	ld	xix, SeBitmap_EnvCurve5_0x172D
 	call	SeMenu_NameEditor_Setup
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12ece
-	ld	xix, 0xf12f43
+	ld	xiy, SeBitmap_EnvCurve5_0x1F00
+	ld	xix, SeBitmap_EnvCurve5_0x1F75
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
@@ -10085,22 +10085,22 @@ SeMenu_NameEdit_DataBlock1:
 	stda8	1648, a
 	cp	a, 10
 	jr	nz, 7
-	ld	xiy, 0xf153e1
+	ld	xiy, TuningSystem_Handler_Table_0x1F9A
 	jr	5
-	ld	xiy, 0xf153c2
-	ld	xix, 0xf154e1
+	ld	xiy, TuningSystem_Handler_Table_0x1F7B
+	ld	xix, TuningSystem_Handler_Table_0x209A
 	call	SeMenu_NameEditor_Setup
 	xor	xwa, xwa
 	ldda8	a, 1648
 	sla	wa, 3
-	ld	xiz, 0xf15804
+	ld	xiz, TuningSystem_Handler_Table_0x23BD
 	add	xiz, xwa
 	ld	xiy, (xiz)
 	ld	xix, (xiz+4)
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf152d2
+	ld	xiy, TuningSystem_Handler_Table_0x1E8B
 	xor	xbc, xbc
-	ld	xiz, 0xf15ad1
+	ld	xiz, FlashWrite_BlockRef_Type6_0x40
 	ldda8	c, 1648
 	sla	bc, 2
 	.byte 0xe3
@@ -10113,12 +10113,12 @@ SeMenu_NameEdit_DataBlock1:
 	ldda8	a, 1648
 	cp	a, 10
 	jr	nz, 7
-	ld	xiy, 0xf153a4
+	ld	xiy, TuningSystem_Handler_Table_0x1F5D
 	jr	5
-	ld	xiy, 0xf15386
-	ld	xix, 0xf153c2
+	ld	xiy, TuningSystem_Handler_Table_0x1F3F
+	ld	xix, TuningSystem_Handler_Table_0x1F7B
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf15864
+	ld	xiy, TuningSystem_Handler_Table_0x241D
 	ldda8	a, 1648
 	cp	a, 10
 	jr	nz, 7
@@ -10136,11 +10136,11 @@ SeMenu_NameEdit_DataBlock1:
 	call	SeMenu_NameEditor_Draw
 	ret
 SeMenu_NameEdit_DataBlock2:
-	ld	xiy, 0xf15ba9
-	ld	xix, 0xf15d26
+	ld	xiy, FlashWrite_BlockRef_Type6_0x118
+	ld	xix, FlashWrite_BlockRef_Type6_0x295
 	call	SeMenu_NameEditor_Setup
 	ld	xiy, EffectParamEdit_Entry_01
-	ld	xix, 0xf164f7
+	ld	xix, DrumDetailEdit_Menu_Table_0x3C8
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_NameEdit_CheckBit7
 	ret
@@ -10161,7 +10161,7 @@ SeMenu_NameEdit_SetupPath:
 SeMenu_NameEdit_DefaultPath:
 	sti8_24	0x03efa8, 0
 	ld xiy, EffectParam_Edit_Table
-	call 0xf10be7
+	call SeMenu_EqEdit_DrawInit_0x15
 SeMenu_NameEdit_Return:
 	ret
 SeMenu_NameEdit_CheckBit7:
@@ -10185,7 +10185,7 @@ SeMenu_PatchEdit_DataBlock:
 	cps	a, 7
 	jr	nc, 37
 	xor	xbc, xbc
-	ld	xiz, 0xf15aa1
+	ld	xiz, FlashWrite_BlockRef_Type6_0x10
 	ldda8	c, 1648
 	sla	bc, 2
 	.byte 0xe3
@@ -10194,13 +10194,13 @@ SeMenu_PatchEdit_DataBlock:
 	.byte 0xe4
 	ldb	e, 104
 	pop_a
-	ld	xiy, 0xf15873
+	ld	xiy, TuningSystem_Handler_Table_0x242C
 	ld	xix, FlashRead_BlockData_Field8
 	call	SeMenu_NameEditor_Draw
 	jr	15
 	ld	xiy, FlashRead_BlockHandler_Table
 	sti8_24	0x03efa8, 0
-	call	0xf10be7
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 SeMenu_PatchEdit_Dispatch:
 	; --- Dispatch on A: table lookup, 4 paths (92 bytes) ---
@@ -10229,12 +10229,12 @@ SeMenu_PatchEdit_SetupPath:
 	ldb a, 0x00
 	jr t, SeMenu_PatchEdit_DefaultPath
 SeMenu_PatchEdit_CallHelper:
-	call 0xf0f82f
+	call SeMenu_PresetManager_Data_0xEA
 	jr t, SeMenu_PatchEdit_Return
 SeMenu_PatchEdit_DefaultPath:
 	ld xiy, 0x00f12afd
 	sti8_24	0x03efa8, 0
-	call 0xf10be7
+	call SeMenu_EqEdit_DrawInit_0x15
 SeMenu_PatchEdit_Return:
 	ret
 
@@ -10316,24 +10316,24 @@ SeMenu_DrumKit_Dispatch:
 	cp	a, 16
 	jr	nz, 68
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf13293
-	ld	xix, 0xf132a9
+	ld	xiy, TuningSys_Param_01_0xAE
+	ld	xix, TuningSys_Param_01_0xC4
 	call	SeMenu_NameEditor_Draw
 	jr	61
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf1342f
-	ld	xix, 0xf13439
+	ld	xiy, TuningSys_Param_01_0x24A
+	ld	xix, TuningSys_Param_01_0x254
 	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	jr	22
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf13439
-	ld	xix, 0xf13443
+	ld	xiy, TuningSys_Param_01_0x254
+	ld	xix, TuningSys_Param_01_0x25E
 	call	SeMenu_NameEditor_Setup
 	ldb	a, 13
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf13443
-	call	0xf10be7
+	ld	xiy, TuningSys_Param_01_0x25E
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 Data_UnknownBlock:
 	cps	a, 0
@@ -10348,35 +10348,35 @@ Data_UnknownBlock:
 	pop_sr
 	nop
 	.byte 0x01
-	ld	xiy, 0xf1356a
-	ld	xix, 0xf13574
+	ld	xiy, TuningSystem_Handler_Table_0x123
+	ld	xix, TuningSystem_Handler_Table_0x12D
 	call	SeMenu_NameEditor_Setup
-	call	0xf1036a
+	call	Data_UnknownBlock_0x6E
 	jr	65
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf134b0
-	ld	xix, 0xf134c9
+	ld	xiy, TuningSystem_Handler_Table_0x69
+	ld	xix, TuningSystem_Handler_Table_0x82
 	call	SeMenu_NameEditor_Draw
 	jr	43
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf13483
-	ld	xix, 0xf1349c
+	ld	xiy, TuningSystem_Handler_Table_0x3C
+	ld	xix, TuningSystem_Handler_Table_0x55
 	call	SeMenu_NameEditor_Draw
 	jr	21
-	call	0xf0fa2e
+	call	SeMenu_PresetBrowser_Data_0x98
 	jr	15
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf13512
-	call	0xf10be7
+	ld	xiy, TuningSystem_Handler_Table_0xCB
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf135ba
-	ld	xix, 0xf135c4
+	ld	xiy, TuningSystem_Handler_Table_0x173
+	ld	xix, TuningSystem_Handler_Table_0x17D
 	call	SeMenu_NameEditor_Setup
 	ldda8	c, 1632
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 0xf13628
+	ld	xiz, TuningSystem_Handler_Table_0x1E1
 	.byte 0xe3
 	reti
 	swi	0
@@ -10399,23 +10399,23 @@ Data_UnknownBlock:
 	cp	a, 9
 	jr	c, 8
 	push_a
-	call	0xf0f392
+	call	SeMenu_ShowConfirmDialog_Data_0x408
 	pop_a
 	jr	55
 	cps	a, 0
 	jr	nz, 51
-	call	0xf0f392
+	call	SeMenu_ShowConfirmDialog_Data_0x408
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 18
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf13054
-	ld	xix, 0xf1305e
+	ld	xiy, SeMenu_CompareScreen_DataTable_0x10F
+	ld	xix, SeMenu_CompareScreen_DataTable_0x119
 	jr	16
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf163f5
-	ld	xix, 0xf163ff
+	ld	xiy, DrumDetailEdit_Menu_Table_0x2C6
+	ld	xix, DrumDetailEdit_Menu_Table_0x2D0
 	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	sti8_24	0x03efa8, 0
@@ -10423,89 +10423,89 @@ Data_UnknownBlock:
 	push	xsp
 	.byte 0x01
 	jr	z, 7
-	ld	xiy, 0xf13020
+	ld	xiy, SeMenu_CompareScreen_DataTable_0xDB
 	jr	5
-	ld	xiy, 0xf163e1
-	call	0xf10be7
+	ld	xiy, DrumDetailEdit_Menu_Table_0x2B2
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf130be
-	call	0xf10be7
+	ld	xiy, SeMenu_CompareScreen_DataTable_0x179
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
 	jr	z, 7
-	ld	xiy, 0xf13114
+	ld	xiy, SeMenu_CompareScreen_DataTable_0x1CF
 	jr	30
 	cps	a, 0
 	jr	nz, 21
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf16459
-	call	0xf10be7
-	call	0xf0fce1
+	ld	xiy, DrumDetailEdit_Menu_Table_0x32A
+	call	SeMenu_EqEdit_DrawInit_0x15
+	call	SeMenu_Utility_CopyBlock_0x8B
 	jr	15
-	ld	xiy, 0xf16459
+	ld	xiy, DrumDetailEdit_Menu_Table_0x32A
 	sti8_24	0x03efa8, 0
-	call	0xf10be7
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf131bd
-	call	0xf10be7
+	ld	xiy, SeMenu_CompareScreen_DataTable_0x278
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	cps	a, 5
 	jr	nz, 22
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12da8
-	ld	xix, 0xf12dc6
+	ld	xiy, SeBitmap_EnvCurve5_0x1DDA
+	ld	xix, SeBitmap_EnvCurve5_0x1DF8
 	call	SeMenu_NameEditor_Draw
 	jr	15
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12dc6
-	call	0xf10be7
+	ld	xiy, SeBitmap_EnvCurve5_0x1DF8
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	cps	a, 5
 	jr	nz, 22
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12da8
-	ld	xix, 0xf12dc6
+	ld	xiy, SeBitmap_EnvCurve5_0x1DDA
+	ld	xix, SeBitmap_EnvCurve5_0x1DF8
 	call	SeMenu_NameEditor_Draw
 	jr	15
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12dc6
-	call	0xf10be7
+	ld	xiy, SeBitmap_EnvCurve5_0x1DF8
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12e55
-	call	0xf10be7
+	ld	xiy, SeBitmap_EnvCurve5_0x1E87
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12e55
-	call	0xf10be7
+	ld	xiy, SeBitmap_EnvCurve5_0x1E87
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12eb6
-	call	0xf10be7
+	ld	xiy, SeBitmap_EnvCurve5_0x1EE8
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	cps	a, 0
 	jr	nz, 22
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf12f55
-	ld	xix, 0xf12f69
+	ld	xiy, SeMenu_CompareScreen_DataTable_0x10
+	ld	xix, SeMenu_CompareScreen_DataTable_0x24
 	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf12f69
-	call	0xf10be7
+	ld	xiy, SeMenu_CompareScreen_DataTable_0x24
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf13718
-	ld	xix, 0xf13810
+	ld	xiy, TuningSystem_Handler_Table_0x2D1
+	ld	xix, TuningSystem_Handler_Table_0x3C9
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf13810
-	ld	xix, 0xf13838
+	ld	xiy, TuningSystem_Handler_Table_0x3C9
+	ld	xix, TuningSystem_Handler_Table_0x3F1
 	call	SeMenu_NameEditor_Draw
-	call	0xf10539
+	call	Data_UnknownBlock_0x23D
 	ret
 	ldda8	l, 1632
 	cps	l, 1
@@ -10540,7 +10540,7 @@ Data_UnknownBlock:
 	push	xwa
 	push	xbc
 	push	d
-	call	0xfb2841
+	call	FontGlyph_ByteData_0x11
 	pop	d
 	pop	xbc
 	pop	xwa
@@ -10561,16 +10561,16 @@ Data_UnknownBlock:
 	push	xsp
 	.byte 0x01
 	jr	z, 14
-	ld	xiy, 0xf1383b
-	ld	xix, 0xf1385d
+	ld	xiy, TuningSystem_Handler_Table_0x3F4
+	ld	xix, TuningSystem_Handler_Table_0x416
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf1385d
-	ld	xix, 0xf13a40
+	ld	xiy, TuningSystem_Handler_Table_0x416
+	ld	xix, TuningSystem_Handler_Table_0x5F9
 	call	SeMenu_NameEditor_Setup
 	jr	14
-	ld	xiy, 0xf13889
-	ld	xix, 0xf13a40
+	ld	xiy, TuningSystem_Handler_Table_0x442
+	ld	xix, TuningSystem_Handler_Table_0x5F9
 	call	SeMenu_NameEditor_Setup
 	.byte 0xc1
 	jr	le, 6
@@ -10586,32 +10586,32 @@ Data_UnknownBlock:
 	push	xde
 	stdi8	7424, 236
 	.byte 0xf0
-	ld	xiy, 0xf13a7a
-	ld	xix, 0xf13a96
+	ld	xiy, TuningSystem_Handler_Table_0x633
+	ld	xix, TuningSystem_Handler_Table_0x64F
 	call	SeMenu_NameEditor_Draw
-	call	0xf10767
+	call	Data_UnknownBlock_0x46B
 	.ascii "hBE@:ñ"
 	nop
-	ld	xix, 0xf13a4a
+	ld	xix, TuningSystem_Handler_Table_0x603
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf13a5e
-	ld	xix, 0xf13a7a
+	ld	xiy, TuningSystem_Handler_Table_0x617
+	ld	xix, TuningSystem_Handler_Table_0x633
 	call	SeMenu_NameEditor_Draw
-	call	0xf10767
+	call	Data_UnknownBlock_0x46B
 	.ascii "h ET:"
 	.byte 0xf1
 	nop
-	ld	xix, 0xf13a5e
+	ld	xix, TuningSystem_Handler_Table_0x617
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf13a96
-	ld	xix, 0xf13ab2
+	ld	xiy, TuningSystem_Handler_Table_0x64F
+	ld	xix, TuningSystem_Handler_Table_0x66B
 	call	SeMenu_NameEditor_Draw
-	call	0xf10767
+	call	Data_UnknownBlock_0x46B
 	ret
-	ld	xiy, 0xf13810
-	ld	xix, 0xf13838
+	ld	xiy, TuningSystem_Handler_Table_0x3C9
+	ld	xix, TuningSystem_Handler_Table_0x3F1
 	call	SeMenu_NameEditor_Draw
-	call	0xf10539
+	call	Data_UnknownBlock_0x23D
 	ret
 	cps	a, 0
 	jr	z, 92
@@ -10620,8 +10620,8 @@ Data_UnknownBlock:
 	cps	a, 2
 	jr	z, 119
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf13abc
-	ld	xix, 0xf13ac6
+	ld	xiy, TuningSystem_Handler_Table_0x675
+	ld	xix, TuningSystem_Handler_Table_0x67F
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 0
 	.byte 0xc1
@@ -10634,28 +10634,28 @@ Data_UnknownBlock:
 	push	xsp
 	push_sr
 	jr	z, 24
-	ld	xiy, 0xf13a5e
-	ld	xix, 0xf13a7a
+	ld	xiy, TuningSystem_Handler_Table_0x617
+	ld	xix, TuningSystem_Handler_Table_0x633
 	jr	22
-	ld	xiy, 0xf13a7a
-	ld	xix, 0xf13a96
+	ld	xiy, TuningSystem_Handler_Table_0x633
+	ld	xix, TuningSystem_Handler_Table_0x64F
 	jr	10
-	ld	xiy, 0xf13a96
-	ld	xix, 0xf13ab2
+	ld	xiy, TuningSystem_Handler_Table_0x64F
+	ld	xix, TuningSystem_Handler_Table_0x66B
 	call	SeMenu_NameEditor_Draw
-	call	0xf10767
+	call	Data_UnknownBlock_0x46B
 	jr	125
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf13ab2
-	ld	xix, 0xf13ac6
+	ld	xiy, TuningSystem_Handler_Table_0x66B
+	ld	xix, TuningSystem_Handler_Table_0x67F
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf13a6f
+	ld	xiy, TuningSystem_Handler_Table_0x628
 	call	SeMenu_NameEditor_HandleInput
-	call	0xf10767
+	call	Data_UnknownBlock_0x46B
 	jr	90
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf13ab2
-	ld	xix, 0xf13ac6
+	ld	xiy, TuningSystem_Handler_Table_0x66B
+	ld	xix, TuningSystem_Handler_Table_0x67F
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 0
 	.byte 0xc1
@@ -10670,22 +10670,22 @@ Data_UnknownBlock:
 	.ascii "f E^:"
 	.byte 0xf1
 	nop
-	ld	xix, 0xf13a7a
+	ld	xix, TuningSystem_Handler_Table_0x633
 	call	SeMenu_NameEditor_Draw
 	jr	30
-	ld	xiy, 0xf13a7a
-	ld	xix, 0xf13a96
+	ld	xiy, TuningSystem_Handler_Table_0x633
+	ld	xix, TuningSystem_Handler_Table_0x64F
 	call	SeMenu_NameEditor_Draw
 	jr	14
-	ld	xiy, 0xf13a96
-	ld	xix, 0xf13ab2
+	ld	xiy, TuningSystem_Handler_Table_0x64F
+	ld	xix, TuningSystem_Handler_Table_0x66B
 	call	SeMenu_NameEditor_Draw
-	call	0xf10767
+	call	Data_UnknownBlock_0x46B
 	ret
 	xor	wa, wa
 	ldda8	a, 1633
 	div	a, 16
-	ld	xiz, 0xf13b46
+	ld	xiz, TuningSystem_Handler_Table_0x6FF
 	xor	hl, hl
 	ld	l, w
 	sla	hl, 1
@@ -10698,7 +10698,7 @@ Data_UnknownBlock:
 	.byte 0x54
 	add	ix, 8
 	stda16	1744, ix
-	ld	xiz, 0xf13b66
+	ld	xiz, TuningSystem_Handler_Table_0x71F
 	xor	hl, hl
 	ld	l, a
 	sla	hl, 1
@@ -10715,20 +10715,20 @@ Data_UnknownBlock:
 	ret
 SeMenu_PresetInit_Main:
 	; --- Main: init, XIY/XIX setup, 2 loops, 9 calls (63 bytes) ---
-	call 0xf0f8f4
+	call SeMenu_PresetManager_Data_0x1AF
 	call SeMenu_PresetManager_Save
 	ld xiy, 0x00f13f72
 	ld xix, 0x00f140ef
 	call SeMenu_NameEditor_Setup
-	call 0xf0f04a
-	call 0xf0f7a5
+	call SeMenu_ShowConfirmDialog_Data_0xC0
+	call SeMenu_PresetManager_Data_0x60
 	sti8_24	0x03efa8, 0
 	ld xiy, 0x00f144e7
 	ld xix, 0x00f1459c
 	call SeMenu_NameEditor_Draw
 	call SeMenu_PresetInit_Loop1
 	call SeMenu_PresetInit_Loop2
-	call 0xf0f909
+	call SeMenu_PresetManager_Data_0x1C4
 	ret
 SeMenu_PresetInit_Loop1:
 	; --- Loop 1: iterate A from 2 to 5, call table lookup (15 bytes) ---
@@ -10753,7 +10753,7 @@ SeMenu_PresetInit_TableLookup1:
 	jr z, SeMenu_PresetInit_Lookup1Return
 	ld xiy, 0x00f14640
 	sti8_24	0x03efa8, 0
-	call 0xf10be7
+	call SeMenu_EqEdit_DrawInit_0x15
 SeMenu_PresetInit_Lookup1Return:
 	ret
 SeMenu_PresetInit_Loop2:
@@ -10779,108 +10779,108 @@ SeMenu_PresetInit_TableLookup2:
 	jr z, SeMenu_PresetInit_Lookup2Return
 	ld xiy, 0x00f145c4
 	sti8_24	0x03efa8, 0
-	call 0xf10be7
+	call SeMenu_EqEdit_DrawInit_0x15
 SeMenu_PresetInit_Lookup2Return:
 	ret
 
 
 SeMenu_FxEdit_Init:
-	call	0xf0f91e
+	call	SeMenu_PresetManager_Data_0x1D9
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf140f9
-	ld	xix, 0xf14169
+	ld	xiy, TuningSystem_Handler_Table_0xCB2
+	ld	xix, TuningSystem_Handler_Table_0xD22
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 2
-	ld	xiy, 0xf140ef
-	ld	xix, 0xf140f9
+	ld	xiy, TuningSystem_Handler_Table_0xCA8
+	ld	xix, TuningSystem_Handler_Table_0xCB2
 	call	SeMenu_NameEditor_Setup
 	stdi16	1734, 47
 	stdi16	1736, 51
-	call	0xf0f180
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0x1F6
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf146b6
-	ld	xix, 0xf146fd
+	ld	xiy, TuningSystem_Handler_Table_0x126F
+	ld	xix, TuningSystem_Handler_Table_0x12B6
 	call	SeMenu_NameEditor_Draw
 	ret
 SeMenu_FxEdit_DataBlock1:
-	call	0xf0f91e
+	call	SeMenu_PresetManager_Data_0x1D9
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf14169
-	ld	xix, 0xf14239
+	ld	xiy, TuningSystem_Handler_Table_0xD22
+	ld	xix, TuningSystem_Handler_Table_0xDF2
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 2
-	ld	xiy, 0xf140ef
-	ld	xix, 0xf140f9
+	ld	xiy, TuningSystem_Handler_Table_0xCA8
+	ld	xix, TuningSystem_Handler_Table_0xCB2
 	call	SeMenu_NameEditor_Setup
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf14743
-	ld	xix, 0xf14776
+	ld	xiy, TuningSystem_Handler_Table_0x12FC
+	ld	xix, TuningSystem_Handler_Table_0x132F
 	call	SeMenu_NameEditor_Draw
 	ret
 SeMenu_FxEdit_DataBlock2:
 	call	SeMenu_PresetBrowser_Navigate
-	ld	xiy, 0xf11c49
-	ld	xix, 0xf11c8f
+	ld	xiy, SeBitmap_EnvCurve5_0xC7B
+	ld	xix, SeBitmap_EnvCurve5_0xCC1
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_PresetManager_Save
-	call	0xf0ffd9
+	call	SeMenu_Utility_End_0x12
 	call	SeMenu_PresetBrowser_Select
 	ret
 SeMenu_FxEdit_DataBlock3:
 	call	SeMenu_PresetBrowser_Navigate
-	call	0xf1096d
+	call	SeMenu_FilterEdit_Init_0x4
 	call	SeMenu_PresetBrowser_Select
 	ret
 SeMenu_FxEdit_DataBlock4:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, 0xf11f83
-	ld	xix, 0xf12037
+	ld	xiy, SeBitmap_EnvCurve5_0xFB5
+	ld	xix, SeBitmap_EnvCurve5_0x1069
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 2
-	ld	xiy, 0xf12058
-	ld	xix, 0xf1206c
+	ld	xiy, SeBitmap_EnvCurve5_0x108A
+	ld	xix, SeBitmap_EnvCurve5_0x109E
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf14239
-	ld	xix, 0xf14266
+	ld	xiy, TuningSystem_Handler_Table_0xDF2
+	ld	xix, TuningSystem_Handler_Table_0xE1F
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_PresetManager_Save
-	call	0xf0fc31
+	call	SeMenu_CompareAndApply_Data6_0x32
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_FilterEdit_Init:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, 0xf12880
-	ld	xix, 0xf129bd
+	ld	xiy, SeBitmap_EnvCurve5_0x18B2
+	ld	xix, SeBitmap_EnvCurve5_0x19EF
 	call	SeMenu_NameEditor_Setup
 	sti8_24	0x03efa8, 2
-	ld	xiy, 0xf129bd
-	ld	xix, 0xf129d1
+	ld	xiy, SeBitmap_EnvCurve5_0x19EF
+	ld	xix, SeBitmap_EnvCurve5_0x1A03
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_PresetManager_Save
 	stdi16	1734, 56
 	stdi16	1736, 139
-	call	0xf0f180
-	call	0xf0f04a
-	call	0xf0f094
+	call	SeMenu_ShowConfirmDialog_Data_0x1F6
+	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf1478a
-	ld	xix, 0xf147e1
+	ld	xiy, TuningSystem_Handler_Table_0x1343
+	ld	xix, TuningSystem_Handler_Table_0x139A
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_FilterEdit_DataBlock1:
 	call	SeMenu_Utility_SearchByte
-	call	0xf0f99e
+	call	SeMenu_PresetBrowser_Data_0x8
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_FilterEdit_DataBlock2:
 	call	SeMenu_CompareAndApply_Data
-	call	0xf0f99e
+	call	SeMenu_PresetBrowser_Data_0x8
 	call	SeMenu_CompareAndApply_Data4
 	ret
 SeMenu_FilterEdit_Dispatch:
@@ -10892,54 +10892,54 @@ SeMenu_FilterEdit_Dispatch:
 	cp	a, 11
 	jr	c, 74
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf14555
-	ld	xix, 0xf14591
+	ld	xiy, TuningSystem_Handler_Table_0x110E
+	ld	xix, TuningSystem_Handler_Table_0x114A
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_PresetInit_Loop2
 	jr	63
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf144e7
-	ld	xix, 0xf14523
+	ld	xiy, TuningSystem_Handler_Table_0x10A0
+	ld	xix, TuningSystem_Handler_Table_0x10DC
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_PresetInit_Loop1
 	jr	37
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf14684
-	ld	xix, 0xf1468e
+	ld	xiy, TuningSystem_Handler_Table_0x123D
+	ld	xix, TuningSystem_Handler_Table_0x1247
 	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
-	ld	xiy, 0xf145c4
+	ld	xiy, TuningSystem_Handler_Table_0x117D
 	sti8_24	0x03efa8, 0
-	call	0xf10be7
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 SeMenu_FilterEdit_AltDispatch:
 	cps	a, 0
 	jr	nz, 22
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf14711
-	ld	xix, 0xf1471b
+	ld	xiy, TuningSystem_Handler_Table_0x12CA
+	ld	xix, TuningSystem_Handler_Table_0x12D4
 	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf146fd
-	call	0xf10be7
+	ld	xiy, TuningSystem_Handler_Table_0x12B6
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 SeMenu_FilterEdit_DataBlock3:
 	cps	a, 0
 	jr	nz, 22
 	sti8_24	0x03efa8, 1
-	ld	xiy, 0xf14711
-	ld	xix, 0xf1471b
+	ld	xiy, TuningSystem_Handler_Table_0x12CA
+	ld	xix, TuningSystem_Handler_Table_0x12D4
 	call	SeMenu_NameEditor_Setup
 	ldb	a, 0
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf14776
-	call	0xf10be7
+	ld	xiy, TuningSystem_Handler_Table_0x132F
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 SeMenu_FilterEdit_DataBlock4:
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf147e1
-	call	0xf10be7
+	ld	xiy, TuningSystem_Handler_Table_0x139A
+	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
 SeMenu_FilterEdit_DataBlock5:
 	call	SeMenu_EqEdit_SetupHelper1
@@ -10948,23 +10948,23 @@ SeMenu_FilterEdit_DataBlock5:
 	.byte 0x01
 	jr	z, 26
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf1483d
-	ld	xix, 0xf1491d
+	ld	xiy, TuningSystem_Handler_Table_0x13F6
+	ld	xix, TuningSystem_Handler_Table_0x14D6
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_Utility_CompareBlock_End
 	jr	41
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf1483d
-	ld	xix, 0xf148ec
+	ld	xiy, TuningSystem_Handler_Table_0x13F6
+	ld	xix, TuningSystem_Handler_Table_0x14A5
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf1491d
-	ld	xix, 0xf1493c
+	ld	xiy, TuningSystem_Handler_Table_0x14D6
+	ld	xix, TuningSystem_Handler_Table_0x14F5
 	call	SeMenu_NameEditor_Setup
-	ld	xiy, 0xf149f7
+	ld	xiy, TuningSystem_Handler_Table_0x15B0
 	jr	5
-	ld	xiy, 0xf149d9
+	ld	xiy, TuningSystem_Handler_Table_0x1592
 	sti8_24	0x03efa8, 0
-	ld	xix, 0xf14a66
+	ld	xix, TuningSystem_Handler_Table_0x161F
 	call	SeMenu_NameEditor_Draw
 	call	SeMenu_EqEdit_SetupHelper2
 	ret
@@ -11029,15 +11029,15 @@ SeMenu_EqEdit_SetConstA:
 SeMenu_EqEdit_DefaultPath:
 	sti8_24	0x03efa8, 0
 	ld xiy, 0x00f14a66
-	call 0xf10be7
+	call SeMenu_EqEdit_DrawInit_0x15
 SeMenu_EqEdit_Return:
 	ret
 
 
 SeMenu_EqEdit_DrawInit:
 	sti8_24	0x03efa8, 0
-	ld	xiy, 0xf14e28
-	ld	xix, 0xf14e46
+	ld	xiy, TuningSystem_Handler_Table_0x19E1
+	ld	xix, TuningSystem_Handler_Table_0x19FF
 	call	SeMenu_NameEditor_Draw
 	ret
 	extz	xwa
@@ -11845,7 +11845,7 @@ SeBitmap_EnvCurve5:
 	pushw	ix
 	pushw	ix
 	add	xhl, xsp
-	ld	xiz, 0xff182c
+	ld	xiz, Sprintf_Octal_ZeroFill_0x7
 	swi	7
 	swi	7
 	nop

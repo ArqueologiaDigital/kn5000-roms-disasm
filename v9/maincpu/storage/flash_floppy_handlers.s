@@ -666,7 +666,7 @@ FlashWrite_BlockRef_Type6:
 	nop
 	.byte 0x54, 0x55
 	popw	iz
-	ld	xiy, 0xfa0917
+	ld	xiy, VwMenuBox_Confirm_RenderBottom_0x2E
 	.byte 0xd1
 	nop
 	.byte 0x50

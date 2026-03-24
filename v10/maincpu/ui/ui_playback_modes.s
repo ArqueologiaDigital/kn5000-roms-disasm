@@ -17,7 +17,7 @@ UIStateEvt_VoiceParamHandler:
 	jr	lt, 17
 	cp	a, 122
 	jr	le, 4
-	jp	0xf20310
+	jp	UIStateEvt_VoiceParamHandler_0x24
 	stdi8	4330, 0
 	jrl	164
 	ldda8	a, 0xc07d
@@ -56,7 +56,7 @@ UIStateEvt_VoiceParamHandler:
 	call	Part_WriteAllVoiceSubBlocks_B
 	popw	wa
 	call	SeqPlay_RestoreVoiceState_Return
-	call	0xf203b5
+	call	UIStateEvt_VoiceParamHandler_0xC9
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	stdi8	1073, 0
@@ -77,7 +77,7 @@ UIStateEvt_VoiceParamHandler:
 	call	Part_WriteAllVoiceSubBlocks_A
 	popw	wa
 	call	SeqPlay_RestoreVoiceState_Return
-	call	0xf203b5
+	call	UIStateEvt_VoiceParamHandler_0xC9
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	stdi8	1073, 0
@@ -381,14 +381,14 @@ DispatchHandler_ClearActiveFlag:
 	ret
 
 PlayMode_InitFlagBlock:
-	call	0xf2063e
+	call	PlayMode_InitFlagBlock_0x5
 	ret
 	.byte 0xc1
 	ldw	ix, 0x3f0d
 	nop
 	jr	nz, 9
 	stdi8	3380, 1
-	call	0xf2064f
+	call	PlayMode_InitFlagBlock_0x16
 	ret
 	.byte 0xc1, 0xac
 	pushw	wa
@@ -547,14 +547,14 @@ Medley_GetPlaybackStatus:
 SongMode_InitFlagBlock:
 	ret
 	ret
-	call	0xf2077b
+	call	SongMode_InitFlagBlock_0x7
 	ret
 	.byte 0xc1
 	ldw	ix, 0x3f0d
 	nop
 	jr	nz, 9
 	stdi8	3380, 1
-	call	0xf2078c
+	call	SongMode_InitFlagBlock_0x18
 	ret
 	.byte 0xc1, 0xac
 	pushw	wa
@@ -700,14 +700,14 @@ PartFormat_InitFlagBlock:
 	ret
 	ret
 	ret
-	call	0xf208e1
+	call	PartFormat_InitFlagBlock_0xA
 	ret
 	.byte 0xc1
 	ldw	ix, 0x3f0d
 	nop
 	jr	nz, 9
 	stdi8	3380, 1
-	call	0xf208f2
+	call	PartFormat_InitFlagBlock_0x1B
 	ret
 	.byte 0xc1, 0xac
 	pushw	wa
@@ -762,14 +762,14 @@ PlayModeStop_InitFlagBlock:
 	.byte 0xc1, 0x37, 0x8d
 	push	xsp
 	jrl	z, 1126
-	call	0xf2096a
+	call	PlayModeStop_InitFlagBlock_0x10
 	ret
 	.byte 0xc1
 	ldw	ix, 0x3f0d
 	nop
 	jr	nz, 9
 	stdi8	3380, 1
-	call	0xf2097b
+	call	PlayModeStop_InitFlagBlock_0x21
 	ret
 	.byte 0xc1, 0xac
 	pushw	wa
@@ -1136,14 +1136,14 @@ SqSngSelTtlFunc:
 ; SqTrAs conditional voice check
 SqTrAs_CondCheck:
 	.ascii ":;<>"
-	call	0xf20087
+	call	SetWall_InlineCodeBlock3_0x1
 	.ascii "^\\[Zh"
 	incf
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	call	0xf200c6
+	call	SetWall_InlineCodeBlock3_0x40
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1374,7 +1374,7 @@ SqTrAsPsTtl_Dispatch:	.ascii ":;<>"
 	lds32	xde, 0
 	call	ApPostEvent
 	.ascii "h\":;<>"
-	call	0xf1f10b
+	call	SetWall_DataBlock1_0xF
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1775,12 +1775,12 @@ DpMdlyDocTtl_Dispatch:
 	push	xhl
 	push	xix
 	push	xiz
-	call	0xf20776
+	call	SongMode_InitFlagBlock_0x2
 	pop	xiz
 	pop	xix
 	pop	xhl
 	.ascii "ZhY:;<>"
-	call	0xf20797
+	call	SongMode_InitFlagBlock_0x23
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1863,12 +1863,12 @@ DpMdlyPdTtl_Dispatch:
 	push	xhl
 	push	xix
 	push	xiz
-	call	0xf208dc
+	call	PartFormat_InitFlagBlock_0x5
 	pop	xiz
 	pop	xix
 	pop	xhl
 	.ascii "ZhY:;<>"
-	call	0xf208fd
+	call	PartFormat_InitFlagBlock_0x26
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1954,9 +1954,9 @@ DpMdlySmfTtl_Dispatch:
 	push	xhl
 	push	xix
 	push	xiz
-	call	0xf2095e
+	call	PlayModeStop_InitFlagBlock_0x4
 	.ascii "^\\[ZhY:;<>"
-	call	0xf20986
+	call	PlayModeStop_InitFlagBlock_0x2C
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2045,14 +2045,14 @@ DpMdlySmfLyrTtl_Dispatch:
 	push	xhl
 	push	xix
 	push	xiz
-	call	0xf2095e
+	call	PlayModeStop_InitFlagBlock_0x4
 	.ascii "^\\[Zh"
 	incf
 	push xde
 	push xhl
 	push xix
 	push xiz
-	call	0xf209f2
+	call	PlayModeStop_ClearFlagBlock_0x4
 	aligned_string "^\\[Z@&"
 	jr	nc, 0x00
 	ld	xbc, 0x01c7000a
@@ -2062,7 +2062,7 @@ DpMdlySmfLyrTtl_Dispatch:
 	push xhl
 	push xix
 	push xiz
-	call	0xf209f3
+	call	PlayModeStop_ClearFlagBlock_0x5
 	pop xiz
 	pop xix
 	pop xhl
@@ -3387,10 +3387,10 @@ Display_InitGraphicsAndScreen:
 	ldw wa, 0x00ff
 	call GraphicsRender_ByteData
 	ldw wa, 0x00f5
-	call 0xfb144a
-	call 0xfb14b7
+	call TextRender_PopAndReturn_0x9
+	call GraphicsRender_ByteData_0x67
 	ldw wa, 0x00ff
-	call 0xfb1456
+	call GraphicsRender_ByteData_0x6
 Display_CallInitScreenLayout:
 	push xde
 	push xhl

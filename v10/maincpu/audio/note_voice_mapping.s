@@ -15485,7 +15485,7 @@ __jrt_nop_FE9709_OrBits:
 
 __jrt_nop_FE9709_LoadReg:
 	ld l, (xiy + 5)
-	ld xiz, 0xfea356
+	ld xiz, __jrt_nop_FEA344_Data_0xD
 	ld_srib3 C, 0x03, 0xf8, 0xec
 	ldto_werp WA, 0x30
 	ld xiz, __jrt_nop_FEA344_Data2
@@ -15537,7 +15537,7 @@ __jrt_nop_FE9709_LoadReg4:
 	ld l, (xiy + 5)
 	cpda8_24 l, 0xcee6
 	jr z, __jrt_nop_FE9709_Increment
-	ld xiz, 0xfea356
+	ld xiz, __jrt_nop_FEA344_Data_0xD
 	ld_srib3 L, 0x07, 0xf8, 0xec
 	dec 1, hl
 	ld xiz, __jrt_nop_FE9709_Data
@@ -15549,10 +15549,10 @@ __jrt_nop_FE9709_Increment:
 
 __jrt_nop_FE9709_LoadReg5:
 	ld l, a
-	ld xiz, 0xfe9818
+	ld xiz, __jrt_nop_FE9709_Data_0xC
 	ld_srib3 A, 0x07, 0xf8, 0xec
 	ld8_24 l, 0x00cee6
-	ld xiz, 0xfea356
+	ld xiz, __jrt_nop_FEA344_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
 	anddi8_24 0xcede, 127
 	anddi8_24 0xcede, 239
@@ -15592,7 +15592,7 @@ ComputeNoteBitPositi_Prologue:
 	ld xiz, 0xcee6
 	ld_srib3 L, 0x07, 0xf8, 0xf4
 	sub l, w
-	ld xiz, 0xfea356
+	ld xiz, __jrt_nop_FEA344_Data_0xD
 	ld_srib3 A, 0x07, 0xf8, 0xec
 	dec 1, a
 	ldb c, 0xb
@@ -15624,7 +15624,7 @@ ComputeNoteBitPositi_Data:
 	ldb	w, 206
 	and	(xsp), xiz
 	.byte 0xd6
-	ld	xiz, 0xfea356
+	ld	xiz, __jrt_nop_FEA344_Data_0xD
 	.byte 0xc3
 	reti
 	swi	0
@@ -15720,7 +15720,7 @@ Voice_PitchCalcStep:
 	ld xiz, 0xcee6
 	ld_srib3 L, 0x07, 0xf8, 0xec
 	add l, b
-	ld xiz, 0xfea356
+	ld xiz, __jrt_nop_FEA344_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
 	jr __jrt_nop_FE9955_Return
 
@@ -15860,7 +15860,7 @@ __jrt_nop_FE9A0A_SetByte:
 	ldb a, 0x1
 	ld8_24 l, 0x00cee6
 	xor h, h
-	ld xiz, 0xfea356
+	ld xiz, __jrt_nop_FEA344_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
 
 __jrt_nop_FE9A0A_Block2:
@@ -16265,7 +16265,7 @@ NoteDisplay_LookupEntry:
 	ld xiz, 0xcee6
 	ld_srib3 L, 0x07, 0xf8, 0xec
 	add l, w
-	ld xiz, 0xfea356
+	ld xiz, __jrt_nop_FEA344_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
 	dec 1, w
 	ld8_24 l, 0x00cee5
@@ -16305,7 +16305,7 @@ NoteDisplay_FoundEntry:
 	ld xiz, 0xcee6
 	ld_srib3 L, 0x07, 0xf8, 0xec
 	add l, w
-	ld xiz, 0xfea356
+	ld xiz, __jrt_nop_FEA344_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
 	jr NoteDisplay_StoreBoundsReturn
 
@@ -16347,7 +16347,7 @@ NoteDisplay_AlternateLookup:
 	ld8_24 l, 0x00cf34
 	add l, w
 	xor h, h
-	ld xiz, 0xfea356
+	ld xiz, __jrt_nop_FEA344_Data_0xD
 	ld_srib3 W, 0x07, 0xf8, 0xec
 	jr NoteDisplay_AltReturn
 
@@ -16407,7 +16407,7 @@ NoteDisplay_LookupFromCurrent:
 	ld_srib3 L, 0x07, 0xf8, 0xec
 
 NoteDisplay_LookupFromTable:
-	ld xiz, 0xfea356
+	ld xiz, __jrt_nop_FEA344_Data_0xD
 	ld_srib3 A, 0x07, 0xf8, 0xec
 	cpdm8_24 0xcee0, a
 	jr z, NoteDisplay_SameNote
@@ -16526,10 +16526,10 @@ InitPartAllocState_TestBit242:
 	ld8_24 l, 0x00cedf
 	xor h, h
 	dec 1, hl
-	ld xiz, 0xfea3da
+	ld xiz, __jrt_nop_FEA344_Data_0x91
 	ld_srib3 A, 0x07, 0xf8, 0xec
 	st8_24 0x00cee5, a
-	ld xiz, 0xfea403
+	ld xiz, __jrt_nop_FEA344_Data_0xBA
 	sla hl, 2
 	ld_sriw3 BC, 0x07, 0xf8, 0xec
 	inc 2, hl
@@ -16543,7 +16543,7 @@ InitPartAllocState_TestBit242:
 	xor h, h
 	ld l, c
 	sla hl, 1
-	ld xiz, 0xfea4d2
+	ld xiz, __jrt_nop_FEA344_Data_0x189
 	ld_sriw3 WA, 0x07, 0xf8, 0xec
 	ld l, b
 	sla hl, 1
@@ -16598,12 +16598,12 @@ __jrt_nop_FEA171_TestBit24:
 	ld8_24 l, 0x00cedf
 	xor h, h
 	dec 1, hl
-	ld xiz, 0xfea3da
+	ld xiz, __jrt_nop_FEA344_Data_0x91
 	ld_srib3 C, 0x07, 0xf8, 0xec
 	st8_24 0x00cef1, c
 	incdi8_24 1, 0xcef1
 	xor b, b
-	ld xiy, 0xfea403
+	ld xiy, __jrt_nop_FEA344_Data_0xBA
 	ld xix, 0xcef2
 	sla hl, 2
 	ld8_24 d, 0x00cee1
@@ -16645,11 +16645,11 @@ __jrt_nop_FEA1FA_Block:
 	ld8_24 l, 0x00cedf
 	xor h, h
 	dec 1, hl
-	ld xiz, 0xfea3da
+	ld xiz, __jrt_nop_FEA344_Data_0x91
 	ld_srib3 C, 0x07, 0xf8, 0xec
 	st8_24 0x00cef1, c
 	xor b, b
-	ld xiy, 0xfea403
+	ld xiy, __jrt_nop_FEA344_Data_0xBA
 	ld xix, 0xcef2
 	sla hl, 2
 	ld8_24 e, 0x00cee0
@@ -16671,10 +16671,10 @@ __jrt_nop_FEA1FA_Block2:
 	ld8_24 l, 0x00cedf
 	xor h, h
 	dec 1, hl
-	ld xiz, 0xfea3da
+	ld xiz, __jrt_nop_FEA344_Data_0x91
 	ld_srib3 A, 0x07, 0xf8, 0xec
 	st8_24 0x00cef1, a
-	ld xiz, 0xfea403
+	ld xiz, __jrt_nop_FEA344_Data_0xBA
 	sla hl, 2
 	ld_sriw3 BC, 0x07, 0xf8, 0xec
 	inc 2, hl
@@ -17339,7 +17339,7 @@ UIState_ProcessKeyEvent:
 	add	wa, wa
 	lda_24	xix, SoundEffect_Dispatch_Table_0x123C
 	ld_rrw	wa, xix, wa
-	lda_24	xix, 0xfea84f
+	lda_24	xix, UIState_ProcessKeyEvent_0x3D
 	jp_rr	8, xix, wa
 	ld	a, (xsp+3)
 	and	a, 255
@@ -19622,7 +19622,7 @@ SeqVoice_CheckAndRet_Data:
 	add	wa, wa
 	lda_24	xix, SoundEffect_Dispatch_Table_0x1352
 	ld_rrw	wa, xix, wa
-	lda_24	xix, 0xfebca0
+	lda_24	xix, SeqVoice_CheckAndRet_Data_0x4A
 	jp_rr	8, xix, wa
 	lda_24	xhl, SoundEffect_Dispatch_Table_0x1292
 	jr	102
@@ -19681,7 +19681,7 @@ SeqVoice_CheckAndRet_Data:
 	add	wa, wa
 	lda_24	xix, SoundEffect_Dispatch_Table_0x1360
 	ld_rrw	wa, xix, wa
-	lda_24	xix, 0xfebd57
+	lda_24	xix, SeqVoice_CheckAndRet_Data_0x101
 	jp_rr	8, xix, wa
 	lds	hl, 0
 	.ascii "hE3@ÿh@3Aÿh;3Bÿh6Û«h2Û¬h.Û­h*"
@@ -25319,7 +25319,7 @@ Param_SignExtendRetu_Data:
 	add	xhl, xhl
 	add	xhl, CharMap_FullPermutation_0x38C
 	ld	hl, (xhl)
-	lda_24	xix, 0xfeec84
+	lda_24	xix, Param_SignExtendRetu_Data_0x69
 	.byte 0xf3
 	reti
 	.byte 0xf0
@@ -25503,7 +25503,7 @@ Param_SignExtendRetu_Data:
 	add	xhl, xhl
 	add	xhl, CharMap_FullPermutation_0x3F4
 	ld	hl, (xhl)
-	lda_24	xix, 0xfeee7f
+	lda_24	xix, Param_SignExtendRetu_Data_0x264
 	.byte 0xf3
 	reti
 	.byte 0xf0
@@ -25793,7 +25793,7 @@ Param_SignExtendRetu_Data:
 	ld	bc, (xsp+4)
 	add	bc, bc
 	add	bc, 13
-	call	0xfd72e7
+	call	Part_ProcessEntry_Data_0x19
 	.byte 0xf5
 	swi	0
 	ld	xsp, 0xe1f700b6

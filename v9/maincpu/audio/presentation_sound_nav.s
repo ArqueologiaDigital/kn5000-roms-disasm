@@ -1276,16 +1276,16 @@ DirmdEmu_CaseF:
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
 	ldw	wa, 245
-	call	0xfb144a
-	call	0xfb14b7
+	call	TextRender_PopAndReturn_0x9
+	call	GraphicsRender_ByteData_0x67
 	ldw	wa, 255
-	call	0xfb1456
+	call	GraphicsRender_ByteData_0x6
 	ld	xwa, DiskWarning_ConfirmStrings_0xEC4
-	call	0xfa2ea1
-	jp	0xf824c0
+	call	DbMemo_DrawContent_Loop_0x61
+	jp	AudioCtrl_DataBlock_0x1BDA
 	ld	xwa, DiskWarning_ConfirmStrings_0xED6
-	call	0xfa2ea1
-	jp	0xf824c1
+	call	DbMemo_DrawContent_Loop_0x61
+	jp	AudioCtrl_DataBlock_0x1BDB
 	lda	xsp, (xsp-256)
 	pushw	iz
 	pushm	(xsp+264)
@@ -1298,16 +1298,16 @@ DirmdEmu_CaseF:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+2)
-	call	0xfa2ea1
+	call	DbMemo_DrawContent_Loop_0x61
 	ld	wa, iz
 	ld	bc, (xsp+264)
-	call	0xf824c2
+	call	AudioCtrl_DataBlock_0x1BDC
 	popw	iz
 	.byte 0xf3, 0xfd, 0x00, 0x01, 0x37
 	ret
 	ld	xwa, DiskWarning_ConfirmStrings_0xF00
-	call	0xfa2ea1
-	jp	0xf824c3
+	call	DbMemo_DrawContent_Loop_0x61
+	jp	AudioCtrl_DataBlock_0x1BDD
 DirmdEmulator_Entry:
 
 DirmdEmulator:

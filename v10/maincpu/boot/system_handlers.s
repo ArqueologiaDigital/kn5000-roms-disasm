@@ -6545,7 +6545,7 @@ TableDataROM_IdentifyChip_WaitReady:
 	ld (xbc), xwa
 	ld xbc, xde
 	add xbc, 0x15554
-	ld xwa, 0xf000f0
+	ld xwa, StringData_APCModeNames_0x24F
 	ld (xbc), xwa
 	ld_sril XWA, (xde + 0x6464)
 	ret
@@ -8151,7 +8151,7 @@ HDAE5000_Init_BytecodeBlock:
 	halt
 	jr	-2
 	ei	7
-	ld	xwa, 0xfffed8
+	ld	xwa, Debug_SWI_JumpTable_0x6
 	ldw	ix, 331
 	extz	xix
 	.byte 0xe9, 0xee

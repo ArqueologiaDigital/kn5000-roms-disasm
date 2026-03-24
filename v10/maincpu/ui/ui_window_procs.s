@@ -3995,7 +3995,7 @@ DrawDesignBox_ByteData:
 	ldw	wa, 14
 	calr	53750
 	ld	xwa, xhl
-	lda_24	xbc, 0xfad279
+	lda_24	xbc, DrawDesignBox_ByteData_0x59
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -7251,7 +7251,7 @@ PaletteBankRotate:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfaf35e
+	lda_24 xbc, PaletteBankRotate_0x18
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
 	jr PaletteBankRotate_Impl
@@ -8253,7 +8253,7 @@ ColorBlit2_LargeCodeBlock:
 	ldw	wa, 20
 	calr	43204
 	ld	xwa, xhl
-	lda_24	xbc, 0xfafbad
+	lda_24	xbc, ColorBlit2_LargeCodeBlock_0x65
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -8652,7 +8652,7 @@ ColorBlit2_LargeCodeBlock:
 	ldw	wa, 16
 	calr	42303
 	ld	xwa, xhl
-	lda_24	xbc, 0xfaff38
+	lda_24	xbc, ColorBlit2_LargeCodeBlock_0x3F0
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -9501,7 +9501,7 @@ ColorBlit2_LargeCodeBlock:
 	ldw	wa, 16
 	calr	40278
 	ld	xwa, xhl
-	lda_24	xbc, 0xfb0721
+	lda_24	xbc, ColorBlit2_LargeCodeBlock_0xBD9
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)

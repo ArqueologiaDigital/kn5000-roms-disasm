@@ -1793,7 +1793,7 @@ LoadRegion1_OpenSuccess:
 	cps hl, 0
 	jr z, LoadRegion1_AltPmLoad
 	lds	wa, 0
-	call 0xfb62c3
+	call BitMapOut_UpdateWidget_Done_0x98
 	ld xwa, 0x00000010
 	lds	bc, 0
 	call FileIO_SeekAndReadBlock				; set region param
@@ -1814,7 +1814,7 @@ LoadRegion1_OpenSuccess:
 	ld iz, hl
 	lds	wa, 0
 	ld bc, iz
-	call 0xfb62c4
+	call BitMapOut_UpdateWidget_Done_0x99
 	jr LoadRegion1_Finalize
 LoadRegion1_AltPmLoad:
 	call PrePmLoad				; alternate region setup
@@ -2185,7 +2185,7 @@ LoadRegion5_OpenSuccess:
 	call msp_ld_ato
 	jr LoadRegion5_Finalize
 LoadRegion5_AltPath:
-	call 0xf194c9				; alternate path
+	call DualVoice_WriteBackSlots_0x5				; alternate path
 	ld iz, hl
 LoadRegion5_Finalize:
 	call FileIO_CloseHandle
@@ -2215,7 +2215,7 @@ LoadRegion6_OpenSuccess:
 	calr FileIO_CheckRegionSignature
 	cps hl, 0
 	jr z, LoadRegion6_ModeError
-	call 0xf186a9
+	call Flash_SlotUpdateOpsBlock_0x336
 	ld iz, hl
 	jr LoadRegion6_Finalize
 LoadRegion6_ModeError:
@@ -2738,7 +2738,7 @@ FileIO_SaveRegion6_Simple:
 	call FileIO_ReturnError
 	jr SaveRegion6_Return
 SaveRegion6_OpenSuccess:
-	call 0xf187f3				; region-specific handler
+	call Flash_SlotUpdateOpsBlock_0x480				; region-specific handler
 	ld iz, hl
 	call FileIO_CloseHandle
 	cps iz, 0
@@ -3147,7 +3147,7 @@ FileIO_ByteBlock_DemoProc1:
 	jr	lt, 46
 	ld	wa, (xsp+36)
 	extz	wa
-	call	0xfb62b5
+	call	BitMapOut_UpdateWidget_Done_0x8A
 	lda_24	xwa, 0x1ed350
 	.byte 0xaf, 0x04
 	sub	(xwa), l
@@ -3158,7 +3158,7 @@ FileIO_ByteBlock_DemoProc1:
 	ld	wa, (xsp+36)
 	extz	wa
 	ld	bc, iz
-	call	0xfb62b6
+	call	BitMapOut_UpdateWidget_Done_0x8B
 	jr	3
 	ldw	iz, 0xff9a
 	call	FileIO_CloseHandle
@@ -3219,7 +3219,7 @@ FileIO_ByteBlock_DemoProc1:
 	jrl	lt, 130
 	ld	wa, (xsp+36)
 	extz	wa
-	call	0xfb62c3
+	call	BitMapOut_UpdateWidget_Done_0x98
 	lda_24	xwa, 0x1ed350
 	.byte 0xaf, 0x04, 0x80
 	ld	xbc, 16
@@ -3255,7 +3255,7 @@ FileIO_ByteBlock_DemoProc1:
 	ld	wa, (xsp+36)
 	extz	wa
 	ld	bc, iz
-	call	0xfb62c4
+	call	BitMapOut_UpdateWidget_Done_0x99
 	jr	3
 	ldw	iz, 0xff9a
 	call	FileIO_CloseHandle
@@ -3314,7 +3314,7 @@ FileIO_ByteBlock_DemoProc1:
 	jr	c, 81
 	ld	wa, (xsp+32)
 	extz	wa
-	call	0xf479da
+	call	SeqLoad_ProcessDataBlock_0x80
 	ld	xiz, xhl
 	ld	bc, (xsp+32)
 	extz	xbc
@@ -3332,7 +3332,7 @@ FileIO_ByteBlock_DemoProc1:
 	ld	wa, (xsp+32)
 	extz	wa
 	ld	bc, iz
-	call	0xf47a26
+	call	SeqLoad_ProcessDataBlock_0xCC
 	cps	iz, 0
 	jr	lt, 19
 	ld	wa, (xsp+32)
@@ -3385,7 +3385,7 @@ FileIO_ByteBlock_DemoProc1:
 	extz	wa
 	ld	bc, (xsp+26)
 	extz	bc
-	call	0xf6d8dd
+	call	AccStyle_TableDataEntry_0x90
 	ld	iz, hl
 	jr	3
 	ldw	iz, 0xff9a

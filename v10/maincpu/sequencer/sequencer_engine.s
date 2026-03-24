@@ -20499,7 +20499,7 @@ AppEvtHandler_Branch_002:
 	add wa, wa
 	lda_24 xix, WidgetData_CharsetMappingTable_0x28C
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf441c9
+	lda_24 xix, AppEvtHandler_Branch_002_0x4B
 	jp_dri 8, 0x07, 0xf0, 0xe0
 	ldada xiz, 9744
 	ldada xwa, 9746
@@ -20559,7 +20559,7 @@ AppEvtHandler_Branch_006:
 	add wa, wa
 	lda_24 xix, WidgetData_CharsetMappingTable_0x27C
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, 0xf4427e
+	lda_24 xix, AppEvtHandler_Branch_006_0x3B
 	jp_dri 8, 0x07, 0xf0, 0xe0
 	ldada xiz, 9744
 	ldada xwa, 9746
@@ -20768,7 +20768,7 @@ AppEvtHandler_Branch_021:
 	add xwa, xwa
 	add xwa, WidgetData_CharsetMappingTable_0x270
 	ld wa, (xwa)
-	lda_24 xix, 0xf44517
+	lda_24 xix, AppEvtHandler_Branch_021_0x5E
 	jp_dri 8, 0x07, 0xf0, 0xe0
 	ldda8 a, 0xf1e9
 	cp a, 0x11
@@ -20854,7 +20854,7 @@ AppEvtHandler_Branch_024:
 	add xwa, xwa
 	add xwa, WidgetData_CharsetMappingTable_0x264
 	ld wa, (xwa)
-	lda_24 xix, 0xf44647
+	lda_24 xix, AppEvtHandler_Branch_024_0x97
 	jp_dri 8, 0x07, 0xf0, 0xe0
 	ldda8 a, 0xf1e1
 	cp a, 0x11
@@ -21372,7 +21372,7 @@ AppEvent_SubDispatch:
 	add	xwa, xwa
 	add	xwa, WidgetData_CharsetMappingTable_0x30C
 	ld	wa, (xwa)
-	lda_24	xix, 0xf44c4a
+	lda_24	xix, AppEvent_SubDispatch_0x3A6
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe0
@@ -21473,7 +21473,7 @@ AppEvent_SubDispatch:
 	add	xwa, xwa
 	add	xwa, WidgetData_CharsetMappingTable_0x300
 	ld	wa, (xwa)
-	lda_24	xix, 0xf44d70
+	lda_24	xix, AppEvent_SubDispatch_0x4CC
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe0
@@ -22268,7 +22268,7 @@ EffEdit_DSPConfigBlock:
 	extz	de
 	lda	xhl, (xsp+2)
 	push	xhl
-	call	0xfdcea0
+	call	DSPCfg_Data_ParamDispatch_0x1C9
 	cps	hl, 0
 	jrl	lt, 696
 	ldda8	a, 0x8d38
@@ -23200,9 +23200,9 @@ SeqAccomp_SubHandlerA:
 	jr	nz, 16
 	call	SeqPlay_DataBlock_BBE
 	jr	10
-	call	0xf38cb2
+	call	SeqPlay_DataBlock_BBE_0xF4
 	jr	4
-	call	0xf38d13
+	call	SeqPlay_DataBlock_BBE_0x155
 	ldda32	xwa, 0x2972
 	ld	xbc, 0x01c0000f
 	lds32	xde, 7
@@ -23418,11 +23418,11 @@ SeqAccomp_SubHandlerB:
 	jr	z, 14
 	cp	xwa, 8
 	jr	nz, 16
-	call	0xf38bea
+	call	SeqPlay_DataBlock_BBE_0x2C
 	jr	10
-	call	0xf38ce4
+	call	SeqPlay_DataBlock_BBE_0x126
 	jr	4
-	call	0xf38d59
+	call	SeqPlay_DataBlock_BBE_0x19B
 	.byte 0xe1
 	.ascii "r) A"
 	retd	0xc000
@@ -31401,7 +31401,7 @@ SeqPart_ByteBlockA95A:
 	swi	2
 	halt
 	ret
-	call	0xf3ff26
+	call	AppEvent_ExtendedHandler_0x7
 	call	SeqVoice_InitReturnZero
 	.byte 0xf1
 	jrl	ge, -20440

@@ -525,7 +525,7 @@ Voice_DecodeNoteChannel:
 	and l, 0xf
 	sla hl, 1
 	push xix
-	ld xix, 0xf71455
+	ld xix, Voice_NoteChannelTable1_0x402
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	jr Voice_DecodeRet
@@ -539,7 +539,7 @@ Voice_DecodeNonPercussion:
 	or a, h
 	ld hl, wa
 	push xix
-	ld xix, 0xf71055
+	ld xix, Voice_NoteChannelTable1_0x2
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 
@@ -1065,7 +1065,7 @@ Voice_NoteChannelTable1:
 	or	l, h
 	xor	h, h
 	push	xix
-	ld	xix, 0xf71492
+	ld	xix, Voice_NoteChannelTable1_0x43F
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xec
@@ -1240,7 +1240,7 @@ Voice_DecodeNoteChannel2:
 	or a, h
 	ld hl, wa
 	push xix
-	ld xix, 0xf715b4
+	ld xix, Voice_NoteChannelTable2_0x2
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	ret
@@ -1728,7 +1728,7 @@ Voice_ClampBankIndex:
 	xor h, h
 	sla hl, 1
 	push xix
-	ld xix, 0xf719d2
+	ld xix, Voice_BankIndexTable_0x2
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	ret
@@ -1760,7 +1760,7 @@ Voice_DecodeStandard:
 	or a, h
 	ld hl, wa
 	push xix
-	ld xix, 0xf71a26
+	ld xix, Voice_NoteParamTable_0x2
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 
@@ -3995,7 +3995,7 @@ VocalistGrid_DispatchData:
 	.byte 0xe8, 0xc8
 	.long MidiPart_ColWidthData
 	ld	wa, (xwa)
-	lda_24	xix, 0xf73a98
+	lda_24	xix, VocalistGrid_DispatchData_0x160
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe0

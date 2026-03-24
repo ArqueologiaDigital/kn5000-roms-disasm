@@ -5330,7 +5330,7 @@ AudioModeChange_Handler:
 	lda_24 xbc, SystemConfig_PointerTable_0x76
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ld xbc, xhl
-	lda_24 xwa, 0xfdecef
+	lda_24 xwa, AudioInit_MixFallbackDefault_0x5
 	cp xwa, xbc
 	ret z
 	lds wa, 0
@@ -5372,7 +5372,7 @@ AudioSubsystem_Callback:
 	lda_24 xbc, SystemConfig_PointerTable_0x76
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ld xbc, xhl
-	lda_24 xwa, 0xfdecef
+	lda_24 xwa, AudioInit_MixFallbackDefault_0x5
 	cp xwa, xbc
 	ret z
 	lds wa, 0
@@ -5443,7 +5443,7 @@ AudioVoice_Callback:
 	lda_24 xbc, SystemConfig_PointerTable_0x76
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ld xbc, xhl
-	lda_24 xwa, 0xfdecef
+	lda_24 xwa, AudioInit_MixFallbackDefault_0x5
 	cp xwa, xbc
 	jr z, AudioVoice_SkipToDispatch
 	lds wa, 0
@@ -5488,7 +5488,7 @@ AudioVoiceReset_Handler:
 	lda_24 xbc, SystemConfig_PointerTable_0x76
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ld xbc, xhl
-	lda_24 xwa, 0xfdecef
+	lda_24 xwa, AudioInit_MixFallbackDefault_0x5
 	cp xwa, xbc
 	ret z
 	lds wa, 1

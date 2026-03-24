@@ -41,7 +41,7 @@ MiddleFuncCall_DispatchData:
 	push	xhl
 	push	xix
 	push	xiz
-	call	0xf200f1
+	call	SetWall_MiscDataAndCode_0x2
 	.ascii "^\\[Zhi:;<>"
 	.byte 0x1d, 0x40, 0xee, 0xf1, 0x5e, 0x5c
 	.ascii "[Zh[:;<>"
@@ -54,7 +54,7 @@ MiddleFuncCall_DispatchData:
 	.ascii "^\\[Zh1:;<>"
 	.byte 0x1d, 0xb5, 0xee, 0xf1, 0x5e, 0x5c
 	.ascii "[Zh#:;<>"
-	call	0xf1ef03
+	call	SetWall_InlineCodeBlock_0xC8
 	pop	xiz
 	pop	xix
 	pop	xhl

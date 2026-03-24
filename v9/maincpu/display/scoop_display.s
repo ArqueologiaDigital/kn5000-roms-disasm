@@ -615,7 +615,7 @@ ScoopDisp_BytecodeBlock1:
 	nop
 	ldb	w, 0x0e
 	.ascii "9:;<=>…ã “»â»–"
-	call	0xf0190c
+	call	Scoop_CurveUpdate_DrawSegment_0x20
 	ld	a, l
 	pop	xiz
 	pop	xiy
@@ -1829,7 +1829,7 @@ PerfMode_Evt04_VolumeHandler:
 	ldb	b, 3
 	ldda8	e, 3831
 	ldb	d, 127
-	call	0xfcc5c9
+	call	MidiStream_DispatchData_0x16
 	call	MidiStream_LoadAllPresets
 	call	Audio_ProcessAllMidiStreams
 	ret
@@ -10938,11 +10938,11 @@ VoiceSlot_StatusRet:
 	stda8	4341, a
 	bit	4, a
 	jrl	z, 8
-	call	0xf00019
+	call	StringData_APCModeNames_0x178
 	jp	VoiceSlot_StatusRet_0x8A0
 	bit	6, a
 	jrl	z, 8
-	call	0xf0006b
+	call	StringData_APCModeNames_0x1CA
 	jp	VoiceSlot_StatusRet_0x8A0
 	jp	VoiceSlot_StatusRet_0x1C5
 	.byte 0xc7
@@ -11102,23 +11102,23 @@ VoiceSlot_StatusRet:
 	cps	l, 2
 	jrl	z, 12
 	jp	VoiceSlot_StatusRet_0x1C5
-	call	0xf00299
+	call	StringData_APCModeNames_0x3F8
 	jp	VoiceSlot_StatusRet_0x8A0
-	call	0xf000bc
+	call	StringData_APCModeNames_0x21B
 	jp	VoiceSlot_StatusRet_0x8A0
 	.byte 0xf1, 0xf5
 	rcf
 	scc8	z, b
 	ccf
 	swi	5
-	call	0xf00304
+	call	StringData_APCModeNames_0x463
 	jp	VoiceSlot_StatusRet_0x8A0
 	.byte 0xf1, 0xf5
 	rcf
 	scc8	z, l
 	pop_sr
 	swi	5
-	call	0xf002b5
+	call	StringData_APCModeNames_0x414
 	jp	VoiceSlot_StatusRet_0x8A0
 	.byte 0xc1, 0xf1
 	rcf
@@ -11141,7 +11141,7 @@ VoiceSlot_StatusRet:
 	push	xix
 	.byte 0x89
 	jrl	z, 187
-	call	0xf00379
+	call	StringData_APCModeNames_0x4D8
 	jp	VoiceSlot_StatusRet_0x8A0
 	and	a, 127
 	call	StringData_EffectLabel_0xC2
@@ -11227,7 +11227,7 @@ VoiceSlot_StatusRet:
 	jp	VoiceSlot_StatusRet_0x5B7
 	jp	VoiceSlot_StatusRet_0x1C5
 	xor	hl, hl
-	call	0xf0014d
+	call	StringData_APCModeNames_0x2AC
 	jp	VoiceSlot_StatusRet_0x8A0
 	ldda8	a, 4337
 	cp	a, 144
@@ -11292,7 +11292,7 @@ VoiceSlot_StatusRet:
 	push	xix
 	.byte 0x89
 	jrl	z, -1209
-	call	0xf00305
+	call	StringData_APCModeNames_0x464
 	jp	VoiceSlot_StatusRet_0x8A0
 	call	StringData_PartNames_0x54
 	jp	VoiceSlot_StatusRet_0x8A0
@@ -11317,15 +11317,15 @@ VoiceSlot_StatusRet:
 	jp	VoiceSlot_StatusRet_0x1C5
 	call	StringData_PartNames_0x22C
 	jp	VoiceSlot_StatusRet_0x8A0
-	call	0xf00235
+	call	StringData_APCModeNames_0x394
 	jp	VoiceSlot_StatusRet_0x8A0
-	call	0xf00236
+	call	StringData_APCModeNames_0x395
 	jp	VoiceSlot_StatusRet_0x8A0
-	call	0xf0029a
+	call	StringData_APCModeNames_0x3F9
 	jp	VoiceSlot_StatusRet_0x8A0
-	call	0xf0029b
+	call	StringData_APCModeNames_0x3FA
 	jp	VoiceSlot_StatusRet_0x8A0
-	call	0xf002b4
+	call	StringData_APCModeNames_0x413
 	jp	VoiceSlot_StatusRet_0x8A0
 	jp	VoiceSlot_StatusRet_0x1C5
 	ldda8	a, 4338
@@ -13248,7 +13248,7 @@ SubCPU_ToneParamRet:
 	jrl	nz, 8
 	call	SubCPU_ToneParamRet_0x98D
 	jp	SubCPU_ToneParamRet_0x7B8
-	call	0xf005b4
+	call	StringData_APCModeNames_0x713
 	jp	SubCPU_ToneParamRet_0x5E9
 	.byte 0xc1, 0xb5
 	ret
@@ -13265,7 +13265,7 @@ SubCPU_ToneParamRet:
 	push	xsp
 	ldw	wa, 2174
 	nop
-	call	0xf005b4
+	call	StringData_APCModeNames_0x713
 	jp	SubCPU_ToneParamRet_0x5E9
 	stdi16	3778, 0
 	ldda8	a, 3765
@@ -14486,7 +14486,7 @@ DisplayStr_RhythmLabel:
 	call	Display_BytecodeBlock_F_0x32D
 	ld	xiy, DisplayStr_RhythmLabel
 	push	xiy
-	call	0xf003ef
+	call	StringData_APCModeNames_0x54E
 	pop	xiy
 	.byte 0xf1, 0xf6
 	rcf
@@ -15882,7 +15882,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	scf
 	and	a, w
 	jrl	nz, 14
-	ld	xiy, 0xf00016
+	ld	xiy, StringData_APCModeNames_0x175
 	ld	xix, 3802
 	lds	bc, 3
 	.byte 0x85
@@ -15923,7 +15923,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	inc	1, xix
 	and	a, w
 	jrl	nz, 14
-	ld	xiy, 0xf00016
+	ld	xiy, StringData_APCModeNames_0x175
 	ld	xix, 3804
 	lds	bc, 3
 	.byte 0x85
@@ -15947,14 +15947,14 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
-	ld	xiy, 0xf00059
+	ld	xiy, StringData_APCModeNames_0x1B8
 	ld	xix, 3791
 	ldw	bc, 17
 	.byte 0x85
 	scf
 	and	w, a
 	jrl	nz, 14
-	ld	xiy, 0xf00016
+	ld	xiy, StringData_APCModeNames_0x175
 	ld	xix, 3806
 	lds	bc, 3
 	.byte 0x85
@@ -15974,14 +15974,14 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	pushw	wa
 	call	DisplayStr_ClearRegion
 	popw	wa
-	ld	xiy, 0xf000ab
+	ld	xiy, StringData_APCModeNames_0x20A
 	ld	xix, 3791
 	ldw	bc, 16
 	.byte 0x85
 	scf
 	and	w, a
 	jrl	nz, 14
-	ld	xiy, 0xf00016
+	ld	xiy, StringData_APCModeNames_0x175
 	ld	xix, 3804
 	lds	bc, 3
 	.byte 0x85
@@ -16008,7 +16008,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	and	l, 15
 	xor	h, h
 	sla	hl, 2
-	ld	xiy, 0xf0010d
+	ld	xiy, StringData_APCModeNames_0x26C
 	.byte 0xd3
 	reti
 	.byte 0xf4, 0xec
@@ -16043,7 +16043,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	pushw	wa
 	ld	bc, hl
 	sla	hl, 4
-	ld	xiy, 0xf001c5
+	ld	xiy, StringData_APCModeNames_0x324
 	.byte 0xf3
 	reti
 	.byte 0xf4, 0xec
@@ -16059,7 +16059,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	rcf
 	scc8	z, l
 	ldb	w, 0
-	ld	xiy, 0xf00225
+	ld	xiy, StringData_APCModeNames_0x384
 	.byte 0xf1, 0xf3
 	rcf
 	scc8	nz, l
@@ -16069,7 +16069,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ldw	bc, 8
 	.byte 0x85
 	scf
-	jp	0xf001c0
+	jp	StringData_APCModeNames_0x31F
 	xor	w, w
 	call	ParamDigit_ExtractAndFormat
 	ld	xiy, 4481
@@ -16103,7 +16103,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	lds	bc, 4
 	.byte 0x85
 	scf
-	ld	xiy, 0xf00291
+	ld	xiy, StringData_APCModeNames_0x3F0
 	inc	1, xix
 	ldw	bc, 8
 	.byte 0x85
@@ -16140,7 +16140,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
 	ld	xix, 3793
-	ld	xiy, 0xf002f7
+	ld	xiy, StringData_APCModeNames_0x456
 	ldw	bc, 13
 	.byte 0x85
 	scf
@@ -16195,7 +16195,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	sla	l, 2
 	add	l, h
 	xor	h, h
-	ld	xiy, 0xf00361
+	ld	xiy, StringData_APCModeNames_0x4C0
 	.byte 0xf3
 	reti
 	.byte 0xf4, 0xec
@@ -16217,7 +16217,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	nop
 	stdi8	3567, 15
 	call	Display_UpdateRegion0
-	jp	0xf003a7
+	jp	StringData_APCModeNames_0x506
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
@@ -16226,7 +16226,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	stdi8	3567, 1
 	call	Display_UpdateRegion0
 	call	DisplayStr_ClearRegion
-	ld	xiy, 0xf003d8
+	ld	xiy, StringData_APCModeNames_0x537
 	ld	xix, 3793
 	lds	bc, 7
 	.byte 0x85
@@ -16235,7 +16235,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	xor	h, h
 	and	l, 7
 	sla	hl, 2
-	ld	xiy, 0xf003df
+	ld	xiy, StringData_APCModeNames_0x53E
 	.byte 0xf3
 	reti
 	.byte 0xf4, 0xec
@@ -16299,8 +16299,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	and	a, 240
 	cp	a, 176
 	jrl	nz, -85
-	call	0xf00496
-	jp	0xf0041f
+	call	StringData_APCModeNames_0x5F5
+	jp	StringData_APCModeNames_0x57E
 	ldb	a, 5
 	call	VoiceSlot_RestoreState
 	.ascii "^]\\ZY[X"
@@ -16337,7 +16337,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	and	a, 240
 	cp	a, 176
 	jrl	z, 4
-	jp	0xf00505
+	jp	StringData_APCModeNames_0x664
 	ldda8	a, 3765
 	and	a, 4
 	.byte 0xc9, 0xe9
@@ -16387,7 +16387,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ldda8	l, 4337
 	sub	l, 181
 	mul	l, 10
-	ld	xiy, 0xf00596
+	ld	xiy, StringData_APCModeNames_0x6F5
 	.byte 0xf3
 	reti
 	.byte 0xf4, 0xec
@@ -16410,7 +16410,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	lds	bc, 3
 	.byte 0x85
 	scf
-	jp	0xf00591
+	jp	StringData_APCModeNames_0x6F0
 	ldda8	c, 4339
 	xor	hl, hl
 	cp	c, 64
@@ -16428,7 +16428,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ldb	w, 83
 	.byte 0x55
 	.ascii "STAIN  SOFT PEDALSOSTENUTE "
-	call	0xf00877
+	call	StringData_APCModeNames_0x9D6
 	cps	l, 0
 	jrl	z, 47
 	ldda8	a, 3765
@@ -16437,12 +16437,12 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	stdi8	3952, 48
 	stdi16	3778, 0
-	jp	0xf00852
+	jp	StringData_APCModeNames_0x9B1
 	call	DisplayStr_BytecodeBlock_A
 	xor	wa, wa
 	stda8	3952, a
 	stda16	3778, wa
-	jp	0xf0084e
+	jp	StringData_APCModeNames_0x9AD
 	ldda8	a, 4463
 	stda8	3952, a
 	ldda8	a, 4462
@@ -16457,13 +16457,13 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	stdi16	3778, 0
 	stdi8	3952, 48
-	jp	0xf00852
+	jp	StringData_APCModeNames_0x9B1
 	call	DisplayStr_BytecodeBlock_A
 	xor	wa, wa
 	stda16	3778, wa
 	stda8	3952, a
-	jp	0xf0084e
-	call	0xf00862
+	jp	StringData_APCModeNames_0x9AD
+	call	StringData_APCModeNames_0x9C1
 	ldda8	a, 4463
 	exts	wa
 	.byte 0xd1
@@ -16493,11 +16493,11 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	DisplayStr_BytecodeBlock_A_0x53
 	stdi8	3952, 0
 	stdi16	3778, 0
-	jp	0xf0084e
+	jp	StringData_APCModeNames_0x9AD
 	call	DisplayStr_BytecodeBlock_A_0x120
 	stdi8	3952, 48
 	stdi16	3778, 0
-	jp	0xf00852
+	jp	StringData_APCModeNames_0x9B1
 	sub	wa, hl
 	stda16	3778, wa
 	cp	wa, 96
@@ -16538,7 +16538,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	pop	xiy
 	.byte 0x01
 	call	DisplayStr_BytecodeBlock_A_0x120
-	jp	0xf0084e
+	jp	StringData_APCModeNames_0x9AD
 	call	DisplayStr_BytecodeBlock_A_0x120
 	call	DisplayStr_BytecodeBlock_A_0x1A4
 	.byte 0xc1, 0xbb
@@ -16549,14 +16549,14 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	DisplayStr_BytecodeBlock_A_0x53
 	stdi8	3952, 48
 	stdi16	3778, 0
-	jp	0xf0084e
+	jp	StringData_APCModeNames_0x9AD
 	.byte 0xc1, 0xbb
 	ret
 	push	xsp
 	.byte 0x84
 	jrl	nz, 8
-	call	0xf00853
-	jp	0xf0084e
+	call	StringData_APCModeNames_0x9B2
+	jp	StringData_APCModeNames_0x9AD
 	.byte 0xc1, 0xbc
 	ret
 	push	xsp
@@ -16566,11 +16566,11 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	xor	wa, wa
 	stdi8	3952, 0
 	stda16	3778, wa
-	jp	0xf0084e
+	jp	StringData_APCModeNames_0x9AD
 	call	DisplayStr_BytecodeBlock_A_0x53
 	stdi8	3952, 48
 	stdi16	3778, 0
-	jp	0xf0084e
+	jp	StringData_APCModeNames_0x9AD
 	sub	hl, wa
 	cp	hl, 96
 	jrl	c, 116
@@ -16582,7 +16582,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	stdi8	3952, 48
 	stdi16	3778, 0
-	jp	0xf00852
+	jp	StringData_APCModeNames_0x9B1
 	ld	wa, hl
 	ldb	l, 96
 	div8rr	a, l
@@ -16612,14 +16612,14 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	nop
 	cp	w, 48
 	jrl	z, 9
-	jp	0xf007c9
+	jp	StringData_APCModeNames_0x928
 	cps	a, 1
 	jrl	z, 8
 	call	DisplayStr_BytecodeBlock_A_0xCD
-	jp	0xf007cd
+	jp	StringData_APCModeNames_0x92C
 	call	DisplayStr_BytecodeBlock_A
 	stdi16	3778, 0
-	jp	0xf0084e
+	jp	StringData_APCModeNames_0x9AD
 	.byte 0xc1, 0xb5
 	ret
 	push	xsp
@@ -16628,7 +16628,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	stdi8	3952, 48
 	stdi16	3778, 0
-	jp	0xf00852
+	jp	StringData_APCModeNames_0x9B1
 	call	DisplayStr_BytecodeBlock_A_0x120
 	call	DisplayStr_BytecodeBlock_A_0x1A4
 	.byte 0xc1, 0xbb
@@ -16639,14 +16639,14 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	DisplayStr_BytecodeBlock_A
 	stdi8	3952, 48
 	stdi16	3778, 0
-	jp	0xf0084e
+	jp	StringData_APCModeNames_0x9AD
 	.byte 0xc1, 0xbb
 	ret
 	push	xsp
 	.byte 0x84
 	jrl	nz, 8
-	call	0xf00853
-	jp	0xf0084e
+	call	StringData_APCModeNames_0x9B2
+	jp	StringData_APCModeNames_0x9AD
 	.byte 0xc1, 0xbc
 	ret
 	push	xsp
@@ -16656,7 +16656,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	xor	wa, wa
 	stda8	3952, a
 	stda16	3778, wa
-	jp	0xf0084e
+	jp	StringData_APCModeNames_0x9AD
 	call	DisplayStr_BytecodeBlock_A
 	stdi8	3952, 48
 	stdi16	3778, 0
@@ -16676,29 +16676,29 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	stda16	3778, wa
 	ret
 	push	xiy
-	call	0xf008d9
+	call	StringData_APCModeNames_0xA38
 	xor	wa, wa
 	stda16	4468, wa
 	ldda16	wa, 0x28c1
 	stda16	4472, wa
 	ldda16	wa, 0x28bf
 	stda16	4474, wa
-	call	0xf008e9
-	call	0xf0094d
+	call	StringData_APCModeNames_0xA48
+	call	StringData_APCModeNames_0xAAC
 	bit	7, a
 	jrl	z, -14
-	call	0xf008e9
+	call	StringData_APCModeNames_0xA48
 	cps	l, 0
 	jrl	nz, 46
-	call	0xf0094d
+	call	StringData_APCModeNames_0xAAC
 	bit	7, a
 	jrl	z, -19
 	cp	a, 129
 	jrl	nz, 8
 	incdi16	1, 4468
-	jp	0xf008a0
+	jp	StringData_APCModeNames_0x9FF
 	ldb	l, 0
-	call	0xf00963
+	call	StringData_APCModeNames_0xAC2
 	ldda8	a, 4463
 	cp	a, 47
 	jrl	z, -49
@@ -16722,10 +16722,10 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	cps	wa, 0
 	jrl	nz, 6
 	ldb	l, 1
-	jp	0xf0091f
+	jp	StringData_APCModeNames_0xA7E
 	stda16	4474, wa
 	ldw	wa, 255
-	jp	0xf00919
+	jp	StringData_APCModeNames_0xA78
 	dec	1, wa
 	stda16	4472, wa
 	xor	hl, hl
@@ -16740,7 +16740,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ld	hl, (xhl+3)
 	stda16	4474, hl
 	lds	wa, 5
-	jp	0xf00947
+	jp	StringData_APCModeNames_0xAA6
 	inc	1, wa
 	stda16	4472, wa
 	pop	xix
@@ -16759,12 +16759,12 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jrl	1041
 	ld	xix, 4462
 	push	xix
-	call	0xf0094d
+	call	StringData_APCModeNames_0xAAC
 	pop	xix
 	.byte 0xf5, 0xf0
 	ld	xbc, 0x09201d3c
 	.byte 0xf0
-	call	0xf0094d
+	call	StringData_APCModeNames_0xAAC
 	pop	xix
 	bit	7, a
 	jrl	nz, 7
@@ -16873,7 +16873,7 @@ Scoop_CheckPartStatus_End:
 
 Scoop_CallDisplayHelper:
 	ld xiy, Scoop_DisplayData_ButtonLayout
-	ld xix, 0xf00aab
+	ld xix, Scoop_DisplayData_ButtonLayout_0x8
 	call UIRender_TwoTableGeneral
 	ret
 
@@ -16883,8 +16883,8 @@ Scoop_DisplayData_ButtonLayout:
 	di
 	zcf
 	nop
-	ld	xiy, 0xf00aba
-	ld	xix, 0xf00ac4
+	ld	xiy, Scoop_DisplayData_ButtonLayout_0x17
+	ld	xix, Scoop_DisplayData_ButtonLayout_0x21
 	call	UIRender_TwoTableGeneral
 	ret
 	jp	2058
@@ -17950,7 +17950,7 @@ Scoop_EventHandler_SpecialMode:
 	.byte 0xd1, 0xbc
 	pushw	wa
 	.byte 0xa1
-	call	0xf01795
+	call	Scoop_SpecialMode_UpdateParams_0x70
 	call	Scoop_SpecialMode_UpdateParams
 	.byte 0xc1
 	jrl	gt, 16168
@@ -17963,15 +17963,15 @@ Scoop_EventHandler_SpecialMode:
 	jr	nz, 2
 	jr	44
 	ldda16	bc, 9870
-	call	0xf01795
-	call	0xf0175d
+	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_SpecialMode_UpdateParams_0x38
 	.byte 0xc1
 	jrl	gt, 16168
 	nop
 	jr	z, 3
 	jrl	377
 	ldda16	bc, 9872
-	call	0xf01795
+	call	Scoop_SpecialMode_UpdateParams_0x70
 	call	Scoop_SpecialMode_UpdateParams
 	.byte 0xc1
 	jrl	gt, 16168
@@ -17990,14 +17990,14 @@ Scoop_EventHandler_SpecialMode:
 	.byte 0xa1
 	ldda16	iy, 0x28bc
 	ldda16	ix, 0x28b6
-	call	0xf01795
+	call	Scoop_SpecialMode_UpdateParams_0x70
 	call	Scoop_SpecialMode_UpdateParams
 	.byte 0xc1
 	jrl	gt, 16168
 	nop
 	jr	z, 3
 	jrl	300
-	call	0xf0175d
+	call	Scoop_SpecialMode_UpdateParams_0x38
 	.byte 0xc1
 	jrl	gt, 16168
 	nop
@@ -18010,14 +18010,14 @@ Scoop_EventHandler_SpecialMode:
 	jr	39
 	ldw	bc, 256
 	sub	bc, 5
-	call	0xf01795
+	call	Scoop_SpecialMode_UpdateParams_0x70
 	call	Scoop_SpecialMode_UpdateParams
 	.byte 0xc1
 	jrl	gt, 16168
 	nop
 	jr	z, 3
 	jrl	253
-	call	0xf0175d
+	call	Scoop_SpecialMode_UpdateParams_0x38
 	.byte 0xc1
 	jrl	gt, 16168
 	nop
@@ -18048,15 +18048,15 @@ Scoop_EventHandler_SpecialMode:
 	.byte 0xd1, 0xb6
 	pushw	wa
 	.byte 0xa1
-	call	0xf01795
-	call	0xf0175d
+	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_SpecialMode_UpdateParams_0x38
 	.byte 0xc1
 	jrl	gt, 16168
 	nop
 	jr	z, 3
 	jrl	155
 	ldda16	bc, 9870
-	call	0xf01795
+	call	Scoop_SpecialMode_UpdateParams_0x70
 	call	Scoop_SpecialMode_UpdateParams
 	.byte 0xc1
 	jrl	gt, 16168
@@ -18069,15 +18069,15 @@ Scoop_EventHandler_SpecialMode:
 	jr	nz, 2
 	jr	42
 	ldda16	bc, 9872
-	call	0xf01795
-	call	0xf0175d
+	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_SpecialMode_UpdateParams_0x38
 	.byte 0xc1
 	jrl	gt, 16168
 	nop
 	jr	z, 2
 	jr	104
 	ldda16	bc, 9870
-	call	0xf01795
+	call	Scoop_SpecialMode_UpdateParams_0x70
 	call	Scoop_SpecialMode_UpdateParams
 	.byte 0xc1
 	jrl	gt, 16168
@@ -18101,11 +18101,11 @@ Scoop_EventHandler_SpecialMode:
 	swi	1
 	jr	nc, 2
 	jr	6
-	call	0xf01795
+	call	Scoop_SpecialMode_UpdateParams_0x70
 	jr	33
 	ldda16	bc, 9876
-	call	0xf01795
-	call	0xf0175d
+	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_SpecialMode_UpdateParams_0x38
 	.byte 0xc1
 	jrl	gt, 16168
 	nop
@@ -18115,7 +18115,7 @@ Scoop_EventHandler_SpecialMode:
 	.byte 0xd1
 	ld	iz, (xix)
 	.byte 0xa1
-	call	0xf01795
+	call	Scoop_SpecialMode_UpdateParams_0x70
 	ret
 
 Scoop_SpecialMode_Setup:

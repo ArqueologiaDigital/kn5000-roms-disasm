@@ -315,7 +315,7 @@ Boot_ClearAllInterruptEnables:
 ; ===========================================================================
 SubCPU_Send_Payload:
 	push xiz
-	cpi8_24 0xfffeef, 0xff
+	cpi8_24 ROM_PaddingFF_0x4, 0xff
 	jrl nz, SubCPU_Payload_Done
 	lds32 xiz, 0
 
@@ -344,7 +344,7 @@ SubCPU_Payload_DelayLoop_Short:
 	ld xde, 0x90000
 	call InterCPU_E1_Bulk_Transfer
 	ld xiz, 0x800000
-	cpi8_24 0xfffeed, 0xff
+	cpi8_24 ROM_PaddingFF_0x2, 0xff
 	jr nz, SubCPU_Payload_TransferPart2
 	ld xiz, 0x50000
 	ld xwa, 0x3e0000
@@ -1511,7 +1511,7 @@ DrawText_QueueDeferred:
 	ldw wa, 0x1e
 	calr DrawQueue_Alloc
 	ld xiz, xhl
-	lda_24 xwa, 0xfb0f31
+	lda_24 xwa, DrawText_PopAndReturn_0x7
 	ld (xhl), xwa
 	ld xwa, (xsp + 16)
 	ld xiy, xwa

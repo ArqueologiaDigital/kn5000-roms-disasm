@@ -1353,7 +1353,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0xba
 	pop_sr
 	ld	xbc, 0x3e3c3b3a
-	call	0xfccdb4
+	call	MidiStream_ExtendedDispatch_0x298
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1370,7 +1370,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0xba
 	pop_sr
 	ld	xbc, 0x3e3c3b3a
-	call	0xfccb1d
+	call	MidiStream_ExtendedDispatch_0x1
 	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xix

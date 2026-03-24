@@ -1651,7 +1651,7 @@ SelfTest_SramAndRom:
 	ld xbc, 0x1e0009a
 	lds32 xde, 1
 	call ApPostEvent
-	ld xwa, 0xf40001
+	ld xwa, SeqData_ScanTracks_OuterLoop_0xC
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
@@ -1689,7 +1689,7 @@ SelfTest_PostRomError:
 	ld xbc, 0x1e0009a
 	lds32 xde, 1
 	call ApPostEvent
-	ld xwa, 0xf40007
+	ld xwa, SeqData_ScanTracks_InnerLoop_0x5
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
@@ -1829,7 +1829,7 @@ EffectMode_HandleTimerEvents:
 	jr z, EffectMode_TimerEvent_Step1E
 	cps a, 0
 	jrl nz, EffectMode_TimerEvent_Default
-	ld xwa, 0xf8000c
+	ld xwa, AudioCtrl_PageHandler_0x11
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
@@ -1840,7 +1840,7 @@ EffectMode_HandleTimerEvents:
 	ret
 
 EffectMode_TimerEvent_Step1E:
-	ld xwa, 0xf8000e
+	ld xwa, AudioCtrl_PageHandler_0x13
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
@@ -1851,7 +1851,7 @@ EffectMode_TimerEvent_Step1E:
 	ret
 
 EffectMode_TimerEvent_Step3C:
-	ld xwa, 0xf80010
+	ld xwa, AudioCtrl_PageHandler_0x15
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
@@ -1862,7 +1862,7 @@ EffectMode_TimerEvent_Step3C:
 	ret
 
 EffectMode_TimerEvent_Step5A:
-	ld xwa, 0xf80006
+	ld xwa, AudioCtrl_PageHandler_0xB
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
@@ -1873,7 +1873,7 @@ EffectMode_TimerEvent_Step5A:
 	ret
 
 EffectMode_TimerEvent_Step78:
-	ld xwa, 0xf80008
+	ld xwa, AudioCtrl_PageHandler_0xD
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
@@ -1884,7 +1884,7 @@ EffectMode_TimerEvent_Step78:
 	ret
 
 EffectMode_TimerEvent_Step96:
-	ld xwa, 0xf8000a
+	ld xwa, AudioCtrl_PageHandler_0xF
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
@@ -1901,31 +1901,31 @@ EffectMode_RunDiagSequence:
 	ldda8 a, 0x8d7a
 	cps a, 0
 	jr nz, EffectMode_DiagSeq_AnimFrame
-	ld xwa, 0xf80006
+	ld xwa, AudioCtrl_PageHandler_0xB
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
-	ld xwa, 0xf80008
+	ld xwa, AudioCtrl_PageHandler_0xD
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
-	ld xwa, 0xf8000a
+	ld xwa, AudioCtrl_PageHandler_0xF
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
-	ld xwa, 0xf8000c
+	ld xwa, AudioCtrl_PageHandler_0x11
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
-	ld xwa, 0xf8000e
+	ld xwa, AudioCtrl_PageHandler_0x13
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
@@ -1990,13 +1990,13 @@ EffectMode_ByteData_DiagEvents:
 	and	(xbc-55), d
 	push	110
 	ret
-	ld	xwa, 0xf5000b
+	ld	xwa, SeqStep_FileSectorPopReturn_0x35E
 	ld	xbc, 0x1c00001
 	lds32	xde, 0
 	jr	51
 	cp	a, 9
 	jr	nz, 14
-	ld	xwa, 0xf5000e
+	ld	xwa, SeqStep_FileSectorPopReturn_0x361
 	ld	xbc, 0x1c00001
 	lds32	xde, 0
 	jr	32
@@ -2004,11 +2004,11 @@ EffectMode_ByteData_DiagEvents:
 	swi	3
 	ldw	hl, 0x6600
 	ret
-	ld	xwa, 0xf50011
+	ld	xwa, SeqStep_FileSectorPopReturn_0x364
 	ld	xbc, 0x1c00001
 	lds32	xde, 0
 	jr	12
-	ld	xwa, 0xf50014
+	ld	xwa, SeqStep_FileSectorPopReturn_0x367
 	ld	xbc, 0x1c00001
 	lds32	xde, 0
 	call	ApPostEvent

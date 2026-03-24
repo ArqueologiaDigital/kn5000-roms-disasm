@@ -102,7 +102,7 @@ GraphicsRender_ByteData:
 	lds	wa, 6
 	calr	36824
 	ld	xwa, xhl
-	lda_24	xbc, 0xfb147d
+	lda_24	xbc, GraphicsRender_ByteData_0x2D
 	ld	(xwa), xbc
 	ld	(xwa+4), iz
 	calr	36593
@@ -133,7 +133,7 @@ GraphicsRender_ByteData:
 	lds	wa, 4
 	calr	36737
 	ld	xwa, xhl
-	lda_24	xbc, 0xfb14cf
+	lda_24	xbc, GraphicsRender_ByteData_0x7F
 	ld	(xwa), xbc
 	jrl	-29027
 	jr	0
@@ -181,7 +181,7 @@ Display_DeferOrDrawWall:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfb154e
+	lda_24 xbc, Display_DeferOrDrawWall_0x18
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
 	jr Display_DeferOrDrawWall_Direct
@@ -199,7 +199,7 @@ Display_DeferOrUpdateScreen:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, 0xfb1577
+	lda_24 xbc, Display_DeferOrUpdateScreen_0x18
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
 	jr Display_DeferOrUpdateScreen_Direct
@@ -5318,13 +5318,13 @@ MainSysCtrl_Entry5_VoiceInit:
 	call Voice_InitBankDataSafe
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry6:
-	call 0xfc7ea9
+	call VoiceData_ExtendedParamSetup_0x27
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry7:
-	call 0xfc7ec2
+	call VoiceData_ExtendedParamSetup_0x40
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry8:
-	call 0xfc7f31
+	call VoiceData_ExtendedParamSetup_0xAF
 
 
 MainSysControl_PostDispatchFinalize:

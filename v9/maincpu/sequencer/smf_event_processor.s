@@ -174,7 +174,7 @@ VoiceChannel_ApplyPitchFlags:
 	ld xix, SeqTrack_ChannelMapIdentity
 	cpdi8 4600, 1
 	jr z, VoiceChannel_SelectChannelBank
-	ld xix, 0xf2436b
+	ld xix, SeqTrack_ChannelMapIdentity_0x10
 
 VoiceChannel_SelectChannelBank:
 	ld_srib3 A, 0x07, 0xf0, 0xf4
@@ -332,7 +332,7 @@ VoiceChannel_GetParamBlock:
 
 VoiceChannel_GetParamBlockAlt:
 	push xix
-	ld xix, 0xf26c5e
+	ld xix, VoiceChannel_ParamTable1_0x40
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 
@@ -507,7 +507,7 @@ SoundGen_UpdateAndWriteChannel:
 	jr SoundGen_ApplyChannelParam
 
 SoundGen_SelectChannelTable:
-	ld xix, 0xf2436b
+	ld xix, SeqTrack_ChannelMapIdentity_0x10
 	cpdi8 4600, 1
 	jr nz, SoundGen_SelectAltChannelTable
 	ld xix, SeqTrack_ChannelMapIdentity
@@ -1009,11 +1009,11 @@ SMF_SetupActiveChannel:
 	pop xde
 	stda16 0x28af, xhl
 	stdi16 9830, 5
-	ld xiy, 0xf2823e
+	ld xiy, SMF_HeaderConstants_0x4
 	ld xix, 0x13fa
 	lds bc, 7
 	ldirw
-	ld xiy, 0xf2824c
+	ld xiy, SMF_HeaderConstants_0x12
 	lds bc, 4
 	ldir85
 	xor wa, wa
@@ -1079,10 +1079,10 @@ SMF_Setup_FileUnderflow:
 	jp SMF_FlushAndFinalize
 
 SMF_Setup_WriteLoop:
-	ld xiy, 0xf2827c
+	ld xiy, SMF_HeaderConstants_0x42
 	cpdi8 4324, 0
 	jr nz, SMF_Setup_SelectTablePtr
-	ld xiy, 0xf28284
+	ld xiy, SMF_HeaderConstants_0x4A
 
 SMF_Setup_SelectTablePtr:
 	ldda32 xix, 4376
@@ -1139,7 +1139,7 @@ SMF_ScanAndProcessChannel:
 	ld b, l
 	sla l, 1
 	push xix
-	ld xix, 0xf28254
+	ld xix, SMF_HeaderConstants_0x1A
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	cp hl, 0xffff
@@ -1453,7 +1453,7 @@ SMF_WriteVol_PanAndPitch:
 	xor h, h
 	sla l, 1
 	push xix
-	ld xix, 0xf28254
+	ld xix, SMF_HeaderConstants_0x1A
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	cp hl, 0xffff
@@ -1536,7 +1536,7 @@ SMF_WriteRPN_FineTune:
 	ld xix, 0xf1a0
 	ld_srib3 L, 0x07, 0xf0, 0xec
 	sla hl, 1
-	ld xix, 0xf28254
+	ld xix, SMF_HeaderConstants_0x1A
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	ld xiy, 0xf460
@@ -1638,7 +1638,7 @@ SMF_WriteRPN_CoarseTune:
 	ld xix, 0xf1a0
 	ld_srib3 L, 0x07, 0xf0, 0xec
 	sla l, 1
-	ld xix, 0xf28254
+	ld xix, SMF_HeaderConstants_0x1A
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	ld xiy, 0xf460
@@ -1735,7 +1735,7 @@ SMF_WriteRPN_Transpose:
 	ld xix, 0xf1a0
 	ld_srib3 L, 0x07, 0xf0, 0xec
 	sla l, 1
-	ld xix, 0xf28254
+	ld xix, SMF_HeaderConstants_0x1A
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	ld xiy, 0xf460
@@ -2276,7 +2276,7 @@ SMF_ProgramChange_ProcessPatch:
 	ldda8 l, 4213
 	ld xix, 0xf1a0
 	ld_srib3 L, 0x07, 0xf0, 0xec
-	ld xix, 0xf2828c
+	ld xix, SMF_HeaderConstants_0x52
 	ld_srib3 L, 0x07, 0xf0, 0xec
 	stda8 6748, l
 	pop xix
@@ -8394,7 +8394,7 @@ SeqChan_ByteBlockB:
 SeqChan_ByteBlockC:
 	push	xiz
 	ld	xiz, (xsp+20)
-	call	0xf51e43
+	call	FDC_ClearDiskChangeStatus_0x12
 	cps	hl, 0
 	jr	z, 9
 	call	FDC_ClearDiskChangeStatus
@@ -8518,7 +8518,7 @@ SeqChan_ByteBlockD:
 	calr	65246
 	ld	xwa, (xiz)
 	push	xwa
-	call	0xf50822
+	call	SeqByteBlock_StyleBitmapRef_0x736
 	inc	8, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -8539,7 +8539,7 @@ SeqChan_ByteBlockD:
 	ld	xwa, (xwa+26)
 	ld	xwa, (xiz)
 	push	xwa
-	call	0xf50822
+	call	SeqByteBlock_StyleBitmapRef_0x736
 	inc	4, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -8561,7 +8561,7 @@ SeqChan_ByteBlockD:
 	calr	65167
 	ld	xwa, (xiz)
 	push	xwa
-	call	0xf50822
+	call	SeqByteBlock_StyleBitmapRef_0x736
 	inc	8, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -8580,7 +8580,7 @@ SeqChan_ByteBlockD:
 	calr	65130
 	ld	xwa, (xiz)
 	push	xwa
-	call	0xf50822
+	call	SeqByteBlock_StyleBitmapRef_0x736
 	inc	8, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -11155,9 +11155,9 @@ SeqDispatch_PostInit:
 	ret
 
 SeqDispatch_TrampolineBlock:
-	jp	0xf532dc
+	jp	SeqDispatch_TrampolineBlock_0xB
 	ret
-	jp	0xf532dd
+	jp	SeqDispatch_TrampolineBlock_0xC
 	ret
 	ret
 	ret
@@ -11202,7 +11202,7 @@ Rhythm_DispatchNote_Finalize:
 Rhythm_TransposeWithMod_Tramp:
 	jp Rhythm_TransposeWithMod
 Rhythm_TransposeTrampBlock:
-	jp	0xf55be9
+	jp	AccStyle_TempoLookupData_0x6
 
 Seq_DispatcherTick:
 	cpdi8 0x8d36, 16

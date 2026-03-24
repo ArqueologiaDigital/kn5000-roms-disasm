@@ -216,7 +216,7 @@ SLSrcBankList_FuncBody:
 	extz	wa
 	div8rr	a, c
 	extz	wa
-	call	0xf8a10e
+	call	FileIO_ByteBlock_DemoProc2_0x2D
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -308,7 +308,7 @@ SLSrcBankList_FuncBody:
 	lda	xiz, (xwa+64)
 	ldda8	a, 0x89fc
 	extz	wa
-	call	0xf8a188
+	call	FileIO_ByteBlock_DemoProc2_0xA7
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -546,7 +546,7 @@ SLSrcBankList_FuncBody:
 	ld	(xwa+42), 2
 	lda	xiz, (xwa+43)
 	lds	wa, 0
-	call	0xf8a21b
+	call	FileIO_ByteBlock_DemoProc2_0x13A
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -727,7 +727,7 @@ SLSrcBankList_FuncBody:
 	extz	wa
 	div8rr	a, e
 	extz	wa
-	call	0xf8a295
+	call	FileIO_ByteBlock_DemoProc2_0x1B4
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -990,7 +990,7 @@ SLSrcBankList_FuncBody:
 	ldada	xwa, 0x894e
 	ld	(xwa+21), 1
 	lda	xiz, (xwa+22)
-	call	0xf8a394
+	call	FileIO_ByteBlock_DemoProc2_0x2B3
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -1103,12 +1103,12 @@ SLSrcBankList_FuncBody:
 	jr	c, 14
 	sub	a, e
 	extz	wa
-	call	0xf8a404
+	call	FileIO_ByteBlock_DemoProc2_0x323
 	ld	xbc, xhl
 	ld	xwa, xiz
 	jr	10
 	extz	wa
-	call	0xf8a319
+	call	FileIO_ByteBlock_DemoProc2_0x238
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -1855,7 +1855,7 @@ SLDstBankList_FuncBody:
 	div8rr	e, c
 	extz	de
 	ld	bc, de
-	call	0xf88256
+	call	FileIO_ByteBlock_DemoProc1_0xD8
 	exts	xhl
 	jr	18
 	ldda8	a, 0x89fc
@@ -1996,7 +1996,7 @@ SLDstBankList_FuncBody:
 	jr	nz, -78
 	ldda8	a, 0x8a04
 	extz	wa
-	call	0xf88376
+	call	FileIO_ByteBlock_DemoProc1_0x1F8
 	exts	xhl
 	pop	xiz
 	ret
@@ -2286,7 +2286,7 @@ SLDstBankList_FuncBody:
 	extz	wa
 	ldda8	c, 0x8a06
 	extz	bc
-	call	0xf8845c
+	call	FileIO_ByteBlock_DemoProc1_0x2DE
 	exts	xhl
 	pop	xiz
 	inc	4, xsp
@@ -2692,14 +2692,14 @@ SLDstBankList_FuncBody:
 	extz	bc
 	div8rr	c, e
 	extz	bc
-	call	0xf8862a
+	call	FileIO_ByteBlock_DemoProc1_0x4AC
 	exts	xhl
 	jr	18
 	ldda8	a, 0x8a00
 	extz	wa
 	ldda8	c, 0x8a08
 	extz	bc
-	call	0xf884d4
+	call	FileIO_ByteBlock_DemoProc1_0x356
 	exts	xhl
 	pop	xiz
 	inc	4, xsp

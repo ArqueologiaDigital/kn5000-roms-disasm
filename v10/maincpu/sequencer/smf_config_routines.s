@@ -3116,7 +3116,7 @@ SMF_SlotParam_BankLSBReturn:
 
 SMF_SlotParam_RPN:
 	push xix
-	ld xix, 0xf29d2a
+	ld xix, SMF_SlotParam_RPNReturn_0x1F
 	ld l, (xiy + 3)
 	ld_srib3 A, 0x07, 0xf0, 0xec
 	pop xix

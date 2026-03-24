@@ -10157,7 +10157,7 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	ld xwa, 0xf00001
+	ld xwa, StringData_APCModeNames_0x160
 	ld xbc, 0x1c0000f
 	call SendEvent
 	call Boot_ParseTableDataTimestamp
@@ -10169,7 +10169,7 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	ld xwa, 0xf00002
+	ld xwa, StringData_APCModeNames_0x161
 	ld xbc, 0x1c0000f
 	call SendEvent
 	call Boot_GetSystemPointer
@@ -10181,7 +10181,7 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	ld xwa, 0xf00003
+	ld xwa, StringData_APCModeNames_0x162
 	ld xbc, 0x1c0000f
 	call SendEvent
 	call Boot_ParseSubCPUTimestamp
@@ -10193,7 +10193,7 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	ld xwa, 0xf00004
+	ld xwa, StringData_APCModeNames_0x163
 	ld xbc, 0x1c0000f
 	jr Softver_SendEvent
 
