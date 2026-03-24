@@ -12473,49 +12473,49 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .str_3 = ALIGNED_STRING("True"),
 
-    .ptr_0042 = 0x00EB7208,
+    .ptr_0042 = 0x00eb7208,
 
     .pad_1 = { 0 },
 
-    .field_004b = 0x12FF,
+    .field_004b = 0x12ff,
 
-    .field_004d = 0xEB72,
+    .field_004d = 0xeb72,
 
     .pad_2 = { 0 },
 
-    .field_0055 = 0x1CFF,
+    .field_0055 = 0x1cff,
 
-    .field_0057 = 0xEB72,
+    .field_0057 = 0xeb72,
 
     .pad_3 = { 0 },
 
-    .field_005f = 0x26FF,
+    .field_005f = 0x26ff,
 
-    .field_0061 = 0xEB72,
+    .field_0061 = 0xeb72,
 
     .pad_4 = { 0 },
 
-    .field_0069 = 0x30FF,
+    .field_0069 = 0x30ff,
 
-    .field_006b = 0xEB72,
+    .field_006b = 0xeb72,
 
     .pad_5 = { 0 },
 
-    .field_0073 = 0x3AFF,
+    .field_0073 = 0x3aff,
 
-    .field_0075 = 0xEB72,
+    .field_0075 = 0xeb72,
 
     .pad_6 = { 0 },
 
-    .field_007d = 0x44FF,
+    .field_007d = 0x44ff,
 
-    .field_007f = 0xEB72,
+    .field_007f = 0xeb72,
 
     .pad_7 = { 0 },
 
-    .field_0087 = 0x5EFF,
+    .field_0087 = 0x5eff,
 
-    .field_0089 = 0xEB74,
+    .field_0089 = 0xeb74,
 
     .pad_8 = { 0 },
 
@@ -12575,37 +12575,37 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_00d8 = SELF(str_22),
 
-    .field_00dc = 0x000A,
+    .field_00dc = 0x000a,
 
     .pad_18 = { 0 },
 
     .ptr_00e0 = SELF(str_21),
 
-    .field_00e4 = 0x000B,
+    .field_00e4 = 0x000b,
 
     .pad_19 = { 0 },
 
     .ptr_00e8 = SELF(str_20),
 
-    .field_00ec = 0x000C,
+    .field_00ec = 0x000c,
 
     .pad_20 = { 0 },
 
     .ptr_00f0 = SELF(str_19),
 
-    .field_00f4 = 0x000D,
+    .field_00f4 = 0x000d,
 
     .pad_21 = { 0 },
 
     .ptr_00f8 = SELF(str_18),
 
-    .field_00fc = 0x000E,
+    .field_00fc = 0x000e,
 
     .pad_22 = { 0 },
 
     .ptr_0100 = SELF(str_17),
 
-    .field_0104 = 0x000F,
+    .field_0104 = 0x000f,
 
     .pad_23 = { 0 },
 
@@ -12671,27 +12671,27 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0158 = SELF(str_6),
 
-    .field_015c = 0x001A,
+    .field_015c = 0x001a,
 
     .pad_34 = { 0 },
 
     .ptr_0160 = SELF(str_5),
 
-    .field_0164 = 0x001B,
+    .field_0164 = 0x001b,
 
     .pad_35 = { 0 },
 
-    .ptr_0168 = 0x00EB7338,
+    .ptr_0168 = 0x00eb7338,
 
-    .field_016c = 0x00FF,
+    .field_016c = 0x00ff,
 
     .pad_36 = { 0 },
 
-    .ptr_0170 = 0x00EB7336,
+    .ptr_0170 = 0x00eb7336,
 
     .pad_37 = { 0 },
 
-    .field_0179 = 0x50FF,
+    .field_0179 = 0x50ff,
 
     .str_4 = ALIGNED_STRING("T_PartSelect"),
 
@@ -12797,97 +12797,97 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_44 = { 0 },
 
-    .ptr_02ea = 0x00EB7556,
+    .ptr_02ea = 0x00eb7556,
 
     .field_02ee = 0x0008,
 
     .pad_45 = { 0 },
 
-    .ptr_02f2 = 0x00EB754A,
+    .ptr_02f2 = 0x00eb754a,
 
     .field_02f6 = 0x0009,
 
     .pad_46 = { 0 },
 
-    .ptr_02fa = 0x00EB753E,
+    .ptr_02fa = 0x00eb753e,
 
-    .field_02fe = 0x000A,
+    .field_02fe = 0x000a,
 
     .pad_47 = { 0 },
 
-    .ptr_0302 = 0x00EB7532,
+    .ptr_0302 = 0x00eb7532,
 
-    .field_0306 = 0x000B,
+    .field_0306 = 0x000b,
 
     .pad_48 = { 0 },
 
-    .ptr_030a = 0x00EB7526,
+    .ptr_030a = 0x00eb7526,
 
-    .field_030e = 0x000C,
+    .field_030e = 0x000c,
 
     .pad_49 = { 0 },
 
-    .ptr_0312 = 0x00EB751A,
+    .ptr_0312 = 0x00eb751a,
 
-    .field_0316 = 0x000D,
+    .field_0316 = 0x000d,
 
     .pad_50 = { 0 },
 
-    .ptr_031a = 0x00EB750E,
+    .ptr_031a = 0x00eb750e,
 
-    .field_031e = 0x000E,
+    .field_031e = 0x000e,
 
     .pad_51 = { 0 },
 
-    .ptr_0322 = 0x00EB7502,
+    .ptr_0322 = 0x00eb7502,
 
-    .field_0326 = 0x000F,
+    .field_0326 = 0x000f,
 
     .pad_52 = { 0 },
 
-    .ptr_032a = 0x00EB74FA,
+    .ptr_032a = 0x00eb74fa,
 
-    .field_032e = 0x00FF,
+    .field_032e = 0x00ff,
 
     .pad_53 = { 0 },
 
-    .ptr_0332 = 0x00EB74F8,
+    .ptr_0332 = 0x00eb74f8,
 
     .pad_54 = { 0 },
 
-    .field_033b = 0x54FF,
+    .field_033b = 0x54ff,
 
     .str_33 = "R_All",
 
-    .field_0343 = 0x54FF,
+    .field_0343 = 0x54ff,
 
     .str_34 = "R_Track16",
 
-    .field_034f = 0x54FF,
+    .field_034f = 0x54ff,
 
     .str_35 = "R_Track15",
 
-    .field_035b = 0x54FF,
+    .field_035b = 0x54ff,
 
     .str_36 = "R_Track14",
 
-    .field_0367 = 0x54FF,
+    .field_0367 = 0x54ff,
 
     .str_37 = "R_Track13",
 
-    .field_0373 = 0x54FF,
+    .field_0373 = 0x54ff,
 
     .str_38 = "R_Track12",
 
-    .field_037f = 0x54FF,
+    .field_037f = 0x54ff,
 
     .str_39 = "R_Track11",
 
-    .field_038b = 0x54FF,
+    .field_038b = 0x54ff,
 
     .str_40 = "R_Track10",
 
-    .field_0397 = 0x54FF,
+    .field_0397 = 0x54ff,
 
     .str_41 = ALIGNED_STRING("R_Track9"),
 
@@ -12967,31 +12967,31 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0442 = SELF(str_52),
 
-    .field_0446 = 0x000A,
+    .field_0446 = 0x000a,
 
     .pad_64 = { 0 },
 
-    .ptr_044a = 0x00EB762C,
+    .ptr_044a = 0x00eb762c,
 
-    .field_044e = 0x000B,
+    .field_044e = 0x000b,
 
     .pad_65 = { 0 },
 
-    .ptr_0452 = 0x00EB7622,
+    .ptr_0452 = 0x00eb7622,
 
-    .field_0456 = 0x000C,
+    .field_0456 = 0x000c,
 
     .pad_66 = { 0 },
 
-    .ptr_045a = 0x00EB7620,
+    .ptr_045a = 0x00eb7620,
 
     .pad_67 = { 0 },
 
-    .field_0463 = 0x49FF,
+    .field_0463 = 0x49ff,
 
     .str_50 = "T_10Sec",
 
-    .field_046d = 0x49FF,
+    .field_046d = 0x49ff,
 
     .str_51 = ALIGNED_STRING("T_9Sec"),
 
@@ -13031,7 +13031,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_04e4 = 0x0002,
 
-    .ptr_04e6 = 0x00EB67E8,
+    .ptr_04e6 = 0x00eb67e8,
 
     .ptr_04ea = NAKA_ADDR(ucharProc),
 
@@ -13047,7 +13047,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_04fc = 0x0001,
 
-    .ptr_04fe = 0x00EB67FC,
+    .ptr_04fe = 0x00eb67fc,
 
     .ptr_0502 = NAKA_ADDR(slongProc),
 
@@ -13063,7 +13063,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0514 = 0x0004,
 
-    .ptr_0516 = 0x00EB6810,
+    .ptr_0516 = 0x00eb6810,
 
     .ptr_051a = NAKA_ADDR(boolProc),
 
@@ -13079,7 +13079,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_052c = 0x0004,
 
-    .ptr_052e = 0x00EB6840,
+    .ptr_052e = 0x00eb6840,
 
     .ptr_0532 = NAKA_ADDR(pFuncProc),
 
@@ -13095,7 +13095,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0544 = 0x0004,
 
-    .ptr_0546 = 0x00EB6854,
+    .ptr_0546 = 0x00eb6854,
 
     .ptr_054a = NAKA_ADDR(pPropProc),
 
@@ -13111,7 +13111,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_055c = 0x0004,
 
-    .ptr_055e = 0x00EB6868,
+    .ptr_055e = 0x00eb6868,
 
     .ptr_0562 = NAKA_ADDR(ClassIDProc),
 
@@ -13127,7 +13127,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0574 = 0x0004,
 
-    .ptr_0576 = 0x00EB687C,
+    .ptr_0576 = 0x00eb687c,
 
     .ptr_057a = NAKA_ADDR(EventIDProc),
 
@@ -13143,7 +13143,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_058c = 0x0008,
 
-    .ptr_058e = 0x00EB6890,
+    .ptr_058e = 0x00eb6890,
 
     .ptr_0592 = NAKA_ADDR(RectX1Proc),
 
@@ -13159,7 +13159,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05a4 = 0x0002,
 
-    .ptr_05a6 = 0x00EB68A4,
+    .ptr_05a6 = 0x00eb68a4,
 
     .ptr_05aa = NAKA_ADDR(RectX2Proc),
 
@@ -13175,7 +13175,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05bc = 0x0002,
 
-    .ptr_05be = 0x00EB68B8,
+    .ptr_05be = 0x00eb68b8,
 
     .ptr_05c2 = NAKA_ADDR(POINTWProc),
 
@@ -13191,7 +13191,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05d4 = 0x0002,
 
-    .ptr_05d6 = 0x00EB68CC,
+    .ptr_05d6 = 0x00eb68cc,
 
     .ptr_05da = NAKA_ADDR(PointYProc),
 
@@ -13207,7 +13207,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_05ec = 0x0004,
 
-    .ptr_05ee = 0x00EB68E0,
+    .ptr_05ee = 0x00eb68e0,
 
     .ptr_05f2 = NAKA_ADDR(NameProc),
 
@@ -13223,7 +13223,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0604 = 0x0004,
 
-    .ptr_0606 = 0x00EB68F4,
+    .ptr_0606 = 0x00eb68f4,
 
     .ptr_060a = NAKA_ADDR(ViewIDProc),
 
@@ -13239,7 +13239,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_061c = 0x0002,
 
-    .ptr_061e = 0x00EB67E8,
+    .ptr_061e = 0x00eb67e8,
 
     .ptr_0622 = NAKA_ADDR(ViewFlagProc),
 
@@ -13251,11 +13251,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_062e = NAKA_ADDR(ColorIDProc),
 
-    .field_0632 = 0x001D,
+    .field_0632 = 0x001d,
 
     .field_0634 = 0x0002,
 
-    .ptr_0636 = 0x00EB69AA,
+    .ptr_0636 = 0x00eb69aa,
 
     .ptr_063a = NAKA_ADDR(BorderIDProc),
 
@@ -13271,7 +13271,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_064c = 0x0004,
 
-    .ptr_064e = 0x00EB6D62,
+    .ptr_064e = 0x00eb6d62,
 
     .ptr_0652 = NAKA_ADDR(TitleIDProc),
 
@@ -13287,7 +13287,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0664 = 0x0004,
 
-    .ptr_0666 = 0x00EB6D76,
+    .ptr_0666 = 0x00eb6d76,
 
     .ptr_066a = NAKA_ADDR(FontIDProc),
 
@@ -13303,7 +13303,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_067c = 0x0001,
 
-    .ptr_067e = 0x00EB6D8A,
+    .ptr_067e = 0x00eb6d8a,
 
     .ptr_0682 = NAKA_ADDR(EditSwIDProc),
 
@@ -13319,7 +13319,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0694 = 0x0001,
 
-    .ptr_0696 = 0x00EB6F54,
+    .ptr_0696 = 0x00eb6f54,
 
     .ptr_069a = NAKA_ADDR(LineModeIDProc),
 
@@ -13335,7 +13335,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_06ac = 0x0002,
 
-    .ptr_06ae = 0x00EB70AE,
+    .ptr_06ae = 0x00eb70ae,
 
     .ptr_06b2 = NAKA_ADDR(BitmapIDProc),
 
@@ -13351,7 +13351,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_06c4 = 0x0004,
 
-    .ptr_06c6 = 0x00EB70E4,
+    .ptr_06c6 = 0x00eb70e4,
 
     .ptr_06ca = NAKA_ADDR(MainFuncIDProc),
 
@@ -13363,11 +13363,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_06d6 = NAKA_ADDR(UserIDProc),
 
-    .field_06da = 0x000D,
+    .field_06da = 0x000d,
 
     .field_06dc = 0x0002,
 
-    .ptr_06de = 0x00EB70F8,
+    .ptr_06de = 0x00eb70f8,
 
     .ptr_06e2 = NAKA_ADDR(pBoolProc),
 
@@ -13391,7 +13391,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0700 = 0x0004,
 
-    .ptr_0702 = 0x00EB720A,
+    .ptr_0702 = 0x00eb720a,
 
     .ptr_0706 = NAKA_ADDR(pScharProc),
 
@@ -13399,7 +13399,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_070c = 0x0004,
 
-    .ptr_070e = 0x00EB7214,
+    .ptr_070e = 0x00eb7214,
 
     .ptr_0712 = NAKA_ADDR(pUcharProc),
 
@@ -13407,7 +13407,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0718 = 0x0004,
 
-    .ptr_071a = 0x00EB721E,
+    .ptr_071a = 0x00eb721e,
 
     .ptr_071e = NAKA_ADDR(pSlongProc),
 
@@ -13415,7 +13415,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0724 = 0x0004,
 
-    .ptr_0726 = 0x00EB7228,
+    .ptr_0726 = 0x00eb7228,
 
     .ptr_072a = NAKA_ADDR(pUlongProc),
 
@@ -13423,7 +13423,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0730 = 0x0004,
 
-    .ptr_0732 = 0x00EB7232,
+    .ptr_0732 = 0x00eb7232,
 
     .ptr_0736 = NAKA_ADDR(WindowIDProc),
 
@@ -13431,15 +13431,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_073c = 0x0004,
 
-    .ptr_073e = 0x00EB723C,
+    .ptr_073e = 0x00eb723c,
 
     .ptr_0742 = NAKA_ADDR(PartIDProc),
 
-    .field_0746 = 0x001D,
+    .field_0746 = 0x001d,
 
     .field_0748 = 0x0002,
 
-    .ptr_074a = 0x00EB7246,
+    .ptr_074a = 0x00eb7246,
 
     .ptr_074e = NAKA_ADDR(TrackIDProc),
 
@@ -13451,7 +13451,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_075a = NAKA_ADDR(IntTimeIDProc),
 
-    .field_075e = 0x000D,
+    .field_075e = 0x000d,
 
     .field_0760 = 0x0002,
 
@@ -13462,7 +13462,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         0x00000000,
     },
 
-    .field_0772 = 0x054A,
+    .field_0772 = 0x054a,
 
     .ptrs_4 = {
         NAKA_ADDR(VGA_Initialize),
@@ -13471,647 +13471,647 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         NAKA_ADDR(VGA_Stub_3),
     },
 
-    .field_0784 = 0xD400,
+    .field_0784 = 0xd400,
 
-    .field_0786 = 0x001E,
+    .field_0786 = 0x001e,
 
-    .field_0788 = 0xD7C0,
+    .field_0788 = 0xd7c0,
 
-    .field_078a = 0x001E,
+    .field_078a = 0x001e,
 
-    .field_078c = 0xDB80,
+    .field_078c = 0xdb80,
 
-    .field_078e = 0x001E,
+    .field_078e = 0x001e,
 
-    .field_0790 = 0xDF40,
+    .field_0790 = 0xdf40,
 
-    .field_0792 = 0x001E,
+    .field_0792 = 0x001e,
 
-    .field_0794 = 0xE300,
+    .field_0794 = 0xe300,
 
-    .field_0796 = 0x001E,
+    .field_0796 = 0x001e,
 
-    .field_0798 = 0xE6C0,
+    .field_0798 = 0xe6c0,
 
-    .field_079a = 0x001E,
+    .field_079a = 0x001e,
 
-    .field_079c = 0xEA80,
+    .field_079c = 0xea80,
 
-    .field_079e = 0x001E,
+    .field_079e = 0x001e,
 
-    .field_07a0 = 0xEE40,
+    .field_07a0 = 0xee40,
 
-    .field_07a2 = 0x001E,
+    .field_07a2 = 0x001e,
 
-    .field_07a4 = 0xF200,
+    .field_07a4 = 0xf200,
 
-    .field_07a6 = 0x001E,
+    .field_07a6 = 0x001e,
 
-    .field_07a8 = 0xF5C0,
+    .field_07a8 = 0xf5c0,
 
-    .field_07aa = 0x001E,
+    .field_07aa = 0x001e,
 
-    .field_07ac = 0xF980,
+    .field_07ac = 0xf980,
 
-    .field_07ae = 0x001E,
+    .field_07ae = 0x001e,
 
-    .field_07b0 = 0xFD40,
+    .field_07b0 = 0xfd40,
 
-    .field_07b2 = 0x001E,
+    .field_07b2 = 0x001e,
 
     .field_07b4 = 0x0100,
 
-    .field_07b6 = 0x001F,
+    .field_07b6 = 0x001f,
 
-    .field_07b8 = 0x04C0,
+    .field_07b8 = 0x04c0,
 
-    .field_07ba = 0x001F,
+    .field_07ba = 0x001f,
 
     .field_07bc = 0x0880,
 
-    .field_07be = 0x001F,
+    .field_07be = 0x001f,
 
-    .field_07c0 = 0x0C40,
+    .field_07c0 = 0x0c40,
 
-    .field_07c2 = 0x001F,
+    .field_07c2 = 0x001f,
 
     .field_07c4 = 0x1000,
 
-    .field_07c6 = 0x001F,
+    .field_07c6 = 0x001f,
 
-    .field_07c8 = 0x13C0,
+    .field_07c8 = 0x13c0,
 
-    .field_07ca = 0x001F,
+    .field_07ca = 0x001f,
 
     .field_07cc = 0x1780,
 
-    .field_07ce = 0x001F,
+    .field_07ce = 0x001f,
 
-    .field_07d0 = 0x1B40,
+    .field_07d0 = 0x1b40,
 
-    .field_07d2 = 0x001F,
+    .field_07d2 = 0x001f,
 
-    .field_07d4 = 0x1F00,
+    .field_07d4 = 0x1f00,
 
-    .field_07d6 = 0x001F,
+    .field_07d6 = 0x001f,
 
-    .field_07d8 = 0x22C0,
+    .field_07d8 = 0x22c0,
 
-    .field_07da = 0x001F,
+    .field_07da = 0x001f,
 
     .field_07dc = 0x2680,
 
-    .field_07de = 0x001F,
+    .field_07de = 0x001f,
 
-    .field_07e0 = 0x2A40,
+    .field_07e0 = 0x2a40,
 
-    .field_07e2 = 0x001F,
+    .field_07e2 = 0x001f,
 
-    .field_07e4 = 0x2E00,
+    .field_07e4 = 0x2e00,
 
-    .field_07e6 = 0x001F,
+    .field_07e6 = 0x001f,
 
-    .field_07e8 = 0x31C0,
+    .field_07e8 = 0x31c0,
 
-    .field_07ea = 0x001F,
+    .field_07ea = 0x001f,
 
     .field_07ec = 0x3580,
 
-    .field_07ee = 0x001F,
+    .field_07ee = 0x001f,
 
     .field_07f0 = 0x3940,
 
-    .field_07f2 = 0x001F,
+    .field_07f2 = 0x001f,
 
-    .field_07f4 = 0x3D00,
+    .field_07f4 = 0x3d00,
 
-    .field_07f6 = 0x001F,
+    .field_07f6 = 0x001f,
 
-    .field_07f8 = 0x40C0,
+    .field_07f8 = 0x40c0,
 
-    .field_07fa = 0x001F,
+    .field_07fa = 0x001f,
 
     .field_07fc = 0x4480,
 
-    .field_07fe = 0x001F,
+    .field_07fe = 0x001f,
 
     .field_0800 = 0x4840,
 
-    .field_0802 = 0x001F,
+    .field_0802 = 0x001f,
 
-    .field_0804 = 0x4C00,
+    .field_0804 = 0x4c00,
 
-    .field_0806 = 0x001F,
+    .field_0806 = 0x001f,
 
-    .field_0808 = 0x4FC0,
+    .field_0808 = 0x4fc0,
 
-    .field_080a = 0x001F,
+    .field_080a = 0x001f,
 
     .field_080c = 0x5380,
 
-    .field_080e = 0x001F,
+    .field_080e = 0x001f,
 
     .field_0810 = 0x5740,
 
-    .field_0812 = 0x001F,
+    .field_0812 = 0x001f,
 
-    .field_0814 = 0x5B00,
+    .field_0814 = 0x5b00,
 
-    .field_0816 = 0x001F,
+    .field_0816 = 0x001f,
 
-    .field_0818 = 0x5EC0,
+    .field_0818 = 0x5ec0,
 
-    .field_081a = 0x001F,
+    .field_081a = 0x001f,
 
     .field_081c = 0x6280,
 
-    .field_081e = 0x001F,
+    .field_081e = 0x001f,
 
     .field_0820 = 0x6640,
 
-    .field_0822 = 0x001F,
+    .field_0822 = 0x001f,
 
-    .field_0824 = 0x6A00,
+    .field_0824 = 0x6a00,
 
-    .field_0826 = 0x001F,
+    .field_0826 = 0x001f,
 
-    .field_0828 = 0x6DC0,
+    .field_0828 = 0x6dc0,
 
-    .field_082a = 0x001F,
+    .field_082a = 0x001f,
 
     .field_082c = 0x7180,
 
-    .field_082e = 0x001F,
+    .field_082e = 0x001f,
 
     .field_0830 = 0x7540,
 
-    .field_0832 = 0x001F,
+    .field_0832 = 0x001f,
 
     .field_0834 = 0x7900,
 
-    .field_0836 = 0x001F,
+    .field_0836 = 0x001f,
 
-    .field_0838 = 0x7CC0,
+    .field_0838 = 0x7cc0,
 
-    .field_083a = 0x001F,
+    .field_083a = 0x001f,
 
     .field_083c = 0x8080,
 
-    .field_083e = 0x001F,
+    .field_083e = 0x001f,
 
     .field_0840 = 0x8440,
 
-    .field_0842 = 0x001F,
+    .field_0842 = 0x001f,
 
     .field_0844 = 0x8800,
 
-    .field_0846 = 0x001F,
+    .field_0846 = 0x001f,
 
-    .field_0848 = 0x8BC0,
+    .field_0848 = 0x8bc0,
 
-    .field_084a = 0x001F,
+    .field_084a = 0x001f,
 
-    .field_084c = 0x8F80,
+    .field_084c = 0x8f80,
 
-    .field_084e = 0x001F,
+    .field_084e = 0x001f,
 
     .field_0850 = 0x9340,
 
-    .field_0852 = 0x001F,
+    .field_0852 = 0x001f,
 
     .field_0854 = 0x9700,
 
-    .field_0856 = 0x001F,
+    .field_0856 = 0x001f,
 
-    .field_0858 = 0x9AC0,
+    .field_0858 = 0x9ac0,
 
-    .field_085a = 0x001F,
+    .field_085a = 0x001f,
 
-    .field_085c = 0x9E80,
+    .field_085c = 0x9e80,
 
-    .field_085e = 0x001F,
+    .field_085e = 0x001f,
 
-    .field_0860 = 0xA240,
+    .field_0860 = 0xa240,
 
-    .field_0862 = 0x001F,
+    .field_0862 = 0x001f,
 
-    .field_0864 = 0xA600,
+    .field_0864 = 0xa600,
 
-    .field_0866 = 0x001F,
+    .field_0866 = 0x001f,
 
-    .field_0868 = 0xA9C0,
+    .field_0868 = 0xa9c0,
 
-    .field_086a = 0x001F,
+    .field_086a = 0x001f,
 
-    .field_086c = 0xAD80,
+    .field_086c = 0xad80,
 
-    .field_086e = 0x001F,
+    .field_086e = 0x001f,
 
-    .field_0870 = 0xB140,
+    .field_0870 = 0xb140,
 
-    .field_0872 = 0x001F,
+    .field_0872 = 0x001f,
 
-    .field_0874 = 0xB500,
+    .field_0874 = 0xb500,
 
-    .field_0876 = 0x001F,
+    .field_0876 = 0x001f,
 
-    .field_0878 = 0xB8C0,
+    .field_0878 = 0xb8c0,
 
-    .field_087a = 0x001F,
+    .field_087a = 0x001f,
 
-    .field_087c = 0xBC80,
+    .field_087c = 0xbc80,
 
-    .field_087e = 0x001F,
+    .field_087e = 0x001f,
 
-    .field_0880 = 0xC040,
+    .field_0880 = 0xc040,
 
-    .field_0882 = 0x001F,
+    .field_0882 = 0x001f,
 
-    .field_0884 = 0xC400,
+    .field_0884 = 0xc400,
 
-    .field_0886 = 0x001F,
+    .field_0886 = 0x001f,
 
-    .field_0888 = 0xC7C0,
+    .field_0888 = 0xc7c0,
 
-    .field_088a = 0x001F,
+    .field_088a = 0x001f,
 
-    .field_088c = 0xCB80,
+    .field_088c = 0xcb80,
 
-    .field_088e = 0x001F,
+    .field_088e = 0x001f,
 
-    .field_0890 = 0xCF40,
+    .field_0890 = 0xcf40,
 
-    .field_0892 = 0x001F,
+    .field_0892 = 0x001f,
 
-    .field_0894 = 0xD300,
+    .field_0894 = 0xd300,
 
-    .field_0896 = 0x001F,
+    .field_0896 = 0x001f,
 
-    .field_0898 = 0xD6C0,
+    .field_0898 = 0xd6c0,
 
-    .field_089a = 0x001F,
+    .field_089a = 0x001f,
 
-    .field_089c = 0xDA80,
+    .field_089c = 0xda80,
 
-    .field_089e = 0x001F,
+    .field_089e = 0x001f,
 
-    .field_08a0 = 0xDE40,
+    .field_08a0 = 0xde40,
 
-    .field_08a2 = 0x001F,
+    .field_08a2 = 0x001f,
 
-    .field_08a4 = 0xE200,
+    .field_08a4 = 0xe200,
 
-    .field_08a6 = 0x001F,
+    .field_08a6 = 0x001f,
 
-    .field_08a8 = 0xE5C0,
+    .field_08a8 = 0xe5c0,
 
-    .field_08aa = 0x001F,
+    .field_08aa = 0x001f,
 
-    .field_08ac = 0xE980,
+    .field_08ac = 0xe980,
 
-    .field_08ae = 0x001F,
+    .field_08ae = 0x001f,
 
-    .field_08b0 = 0xED40,
+    .field_08b0 = 0xed40,
 
-    .field_08b2 = 0x001F,
+    .field_08b2 = 0x001f,
 
-    .field_08b4 = 0xF100,
+    .field_08b4 = 0xf100,
 
-    .field_08b6 = 0x001F,
+    .field_08b6 = 0x001f,
 
-    .field_08b8 = 0xF4C0,
+    .field_08b8 = 0xf4c0,
 
-    .field_08ba = 0x001F,
+    .field_08ba = 0x001f,
 
-    .field_08bc = 0xF880,
+    .field_08bc = 0xf880,
 
-    .field_08be = 0x001F,
+    .field_08be = 0x001f,
 
-    .field_08c0 = 0xFC40,
+    .field_08c0 = 0xfc40,
 
-    .field_08c2 = 0x001F,
+    .field_08c2 = 0x001f,
 
-    .field_08c4 = 0xC2C4,
+    .field_08c4 = 0xc2c4,
 
     .field_08c6 = 0x0003,
 
-    .field_08c8 = 0xF9B6,
+    .field_08c8 = 0xf9b6,
 
     .pad_108 = { 0 },
 
-    .field_08cc = 0xF9B7,
+    .field_08cc = 0xf9b7,
 
     .pad_109 = { 0 },
 
-    .field_08d2 = 0xFDDA,
+    .field_08d2 = 0xfdda,
 
     .pad_110 = { 0 },
 
-    .field_08d6 = 0xF9D0,
+    .field_08d6 = 0xf9d0,
 
     .pad_111 = { 0 },
 
-    .field_08da = 0xF9D1,
+    .field_08da = 0xf9d1,
 
     .pad_112 = { 0 },
 
     .field_08de = 0x0001,
 
-    .field_08e0 = 0xFDEE,
+    .field_08e0 = 0xfdee,
 
     .pad_113 = { 0 },
 
-    .field_08e4 = 0xF9EA,
+    .field_08e4 = 0xf9ea,
 
     .pad_114 = { 0 },
 
-    .field_08e8 = 0xF9EB,
+    .field_08e8 = 0xf9eb,
 
     .pad_115 = { 0 },
 
     .field_08ec = 0x0002,
 
-    .field_08ee = 0xFE02,
+    .field_08ee = 0xfe02,
 
     .pad_116 = { 0 },
 
-    .field_08f2 = 0xFA04,
+    .field_08f2 = 0xfa04,
 
     .pad_117 = { 0 },
 
-    .field_08f6 = 0xFA05,
+    .field_08f6 = 0xfa05,
 
     .pad_118 = { 0 },
 
     .field_08fa = 0x0003,
 
-    .field_08fc = 0xFE16,
+    .field_08fc = 0xfe16,
 
     .pad_119 = { 0 },
 
-    .field_0900 = 0xFA1E,
+    .field_0900 = 0xfa1e,
 
     .pad_120 = { 0 },
 
-    .field_0904 = 0xFA1F,
+    .field_0904 = 0xfa1f,
 
     .pad_121 = { 0 },
 
     .field_0908 = 0x0004,
 
-    .field_090a = 0xFE2A,
+    .field_090a = 0xfe2a,
 
     .pad_122 = { 0 },
 
-    .field_090e = 0xFA38,
+    .field_090e = 0xfa38,
 
     .pad_123 = { 0 },
 
-    .field_0912 = 0xFA39,
+    .field_0912 = 0xfa39,
 
     .pad_124 = { 0 },
 
     .field_0916 = 0x0005,
 
-    .field_0918 = 0xFE3E,
+    .field_0918 = 0xfe3e,
 
     .pad_125 = { 0 },
 
-    .field_091c = 0xFA52,
+    .field_091c = 0xfa52,
 
     .pad_126 = { 0 },
 
-    .field_0920 = 0xFA53,
+    .field_0920 = 0xfa53,
 
     .pad_127 = { 0 },
 
     .field_0924 = 0x0006,
 
-    .field_0926 = 0xFE52,
+    .field_0926 = 0xfe52,
 
     .pad_128 = { 0 },
 
-    .field_092a = 0xFA6C,
+    .field_092a = 0xfa6c,
 
     .pad_129 = { 0 },
 
-    .field_092e = 0xFA6D,
+    .field_092e = 0xfa6d,
 
     .pad_130 = { 0 },
 
     .field_0932 = 0x0007,
 
-    .field_0934 = 0xFE66,
+    .field_0934 = 0xfe66,
 
     .pad_131 = { 0 },
 
-    .field_0938 = 0xFA86,
+    .field_0938 = 0xfa86,
 
     .pad_132 = { 0 },
 
-    .field_093c = 0xFA87,
+    .field_093c = 0xfa87,
 
     .pad_133 = { 0 },
 
     .field_0940 = 0x0008,
 
-    .field_0942 = 0xFE7A,
+    .field_0942 = 0xfe7a,
 
     .pad_134 = { 0 },
 
-    .field_0946 = 0xFAA0,
+    .field_0946 = 0xfaa0,
 
     .pad_135 = { 0 },
 
-    .field_094a = 0xFAA1,
+    .field_094a = 0xfaa1,
 
     .pad_136 = { 0 },
 
     .field_094e = 0x0009,
 
-    .field_0950 = 0xFE8E,
+    .field_0950 = 0xfe8e,
 
     .pad_137 = { 0 },
 
-    .field_0954 = 0xFABA,
+    .field_0954 = 0xfaba,
 
     .pad_138 = { 0 },
 
-    .field_0958 = 0xFABB,
+    .field_0958 = 0xfabb,
 
     .pad_139 = { 0 },
 
-    .field_095c = 0x000A,
+    .field_095c = 0x000a,
 
-    .field_095e = 0xFEA2,
+    .field_095e = 0xfea2,
 
     .pad_140 = { 0 },
 
-    .field_0962 = 0xFAD4,
+    .field_0962 = 0xfad4,
 
     .pad_141 = { 0 },
 
-    .field_0966 = 0xFAD5,
+    .field_0966 = 0xfad5,
 
     .pad_142 = { 0 },
 
-    .field_096a = 0x000B,
+    .field_096a = 0x000b,
 
-    .field_096c = 0xFEB6,
+    .field_096c = 0xfeb6,
 
     .pad_143 = { 0 },
 
-    .field_0970 = 0xFAEE,
+    .field_0970 = 0xfaee,
 
     .pad_144 = { 0 },
 
-    .field_0974 = 0xFAEF,
+    .field_0974 = 0xfaef,
 
     .pad_145 = { 0 },
 
-    .field_0978 = 0x000C,
+    .field_0978 = 0x000c,
 
-    .field_097a = 0xFECA,
+    .field_097a = 0xfeca,
 
     .pad_146 = { 0 },
 
-    .field_097e = 0xFB08,
+    .field_097e = 0xfb08,
 
     .pad_147 = { 0 },
 
-    .field_0982 = 0xFB09,
+    .field_0982 = 0xfb09,
 
     .pad_148 = { 0 },
 
-    .field_0986 = 0x000D,
+    .field_0986 = 0x000d,
 
-    .field_0988 = 0xFEDE,
+    .field_0988 = 0xfede,
 
     .pad_149 = { 0 },
 
-    .field_098c = 0xFB22,
+    .field_098c = 0xfb22,
 
     .pad_150 = { 0 },
 
-    .field_0990 = 0xFB23,
+    .field_0990 = 0xfb23,
 
     .pad_151 = { 0 },
 
-    .field_0994 = 0x000E,
+    .field_0994 = 0x000e,
 
-    .field_0996 = 0xFEF2,
+    .field_0996 = 0xfef2,
 
     .pad_152 = { 0 },
 
-    .field_099a = 0xFB3C,
+    .field_099a = 0xfb3c,
 
     .pad_153 = { 0 },
 
-    .field_099e = 0xFB3D,
+    .field_099e = 0xfb3d,
 
     .pad_154 = { 0 },
 
-    .field_09a2 = 0x000F,
+    .field_09a2 = 0x000f,
 
-    .field_09a4 = 0xFF06,
+    .field_09a4 = 0xff06,
 
     .pad_155 = { 0 },
 
-    .field_09a8 = 0xFB56,
+    .field_09a8 = 0xfb56,
 
     .pad_156 = { 0 },
 
-    .field_09ac = 0xFB57,
+    .field_09ac = 0xfb57,
 
     .pad_157 = { 0 },
 
     .field_09b0 = 0x0010,
 
-    .field_09b2 = 0xFF1A,
+    .field_09b2 = 0xff1a,
 
     .pad_158 = { 0 },
 
-    .field_09b6 = 0xFB70,
+    .field_09b6 = 0xfb70,
 
     .pad_159 = { 0 },
 
-    .field_09ba = 0xFB71,
+    .field_09ba = 0xfb71,
 
     .pad_160 = { 0 },
 
     .field_09be = 0x0011,
 
-    .field_09c0 = 0xFF2E,
+    .field_09c0 = 0xff2e,
 
     .pad_161 = { 0 },
 
-    .field_09c4 = 0xFB8A,
+    .field_09c4 = 0xfb8a,
 
     .pad_162 = { 0 },
 
-    .field_09c8 = 0xFB8B,
+    .field_09c8 = 0xfb8b,
 
     .pad_163 = { 0 },
 
     .field_09cc = 0x0012,
 
-    .field_09ce = 0xFF42,
+    .field_09ce = 0xff42,
 
     .pad_164 = { 0 },
 
-    .field_09d2 = 0xFBA4,
+    .field_09d2 = 0xfba4,
 
     .pad_165 = { 0 },
 
-    .field_09d6 = 0xFBA5,
+    .field_09d6 = 0xfba5,
 
     .pad_166 = { 0 },
 
     .field_09da = 0x0013,
 
-    .field_09dc = 0xFF56,
+    .field_09dc = 0xff56,
 
     .pad_167 = { 0 },
 
-    .field_09e0 = 0xFBBE,
+    .field_09e0 = 0xfbbe,
 
     .pad_168 = { 0 },
 
-    .field_09e4 = 0xFBBF,
+    .field_09e4 = 0xfbbf,
 
     .pad_169 = { 0 },
 
     .field_09e8 = 0x0014,
 
-    .field_09ea = 0xFF6A,
+    .field_09ea = 0xff6a,
 
     .pad_170 = { 0 },
 
-    .field_09ee = 0xFD62,
+    .field_09ee = 0xfd62,
 
     .pad_171 = { 0 },
 
-    .field_09f2 = 0xFD63,
+    .field_09f2 = 0xfd63,
 
     .pad_172 = { 0 },
 
     .field_09f6 = 0x0017,
 
-    .field_09f8 = 0xFF7E,
+    .field_09f8 = 0xff7e,
 
     .pad_173 = { 0 },
 
-    .field_09fc = 0xFC5A,
+    .field_09fc = 0xfc5a,
 
     .pad_174 = { 0 },
 
-    .field_0a00 = 0xFC5B,
+    .field_0a00 = 0xfc5b,
 
     .pad_175 = { 0 },
 
     .str_63 = "H",
 
-    .field_0a06 = 0xFF92,
+    .field_0a06 = 0xff92,
 
     .pad_176 = { 0 },
 
@@ -14121,11 +14121,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_177 = { 0 },
 
-    .field_0a21 = 0x300A,
+    .field_0a21 = 0x300a,
 
     .pad_178 = { 0 },
 
-    .field_0a27 = 0x4A0A,
+    .field_0a27 = 0x4a0a,
 
     .pad_179 = { 0 },
 
@@ -14147,37 +14147,37 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0a3e = 0x0108,
 
-    .field_0a40 = 0x01B6,
+    .field_0a40 = 0x01b6,
 
     .pad_183 = { 0 },
 
     .field_0a44 = 0x0103,
 
-    .field_0a46 = 0x01B6,
+    .field_0a46 = 0x01b6,
 
     .pad_184 = { 0 },
 
     .field_0a4a = 0x0107,
 
-    .field_0a4c = 0x01D0,
+    .field_0a4c = 0x01d0,
 
     .pad_185 = { 0 },
 
     .field_0a50 = 0x0103,
 
-    .field_0a52 = 0x01D0,
+    .field_0a52 = 0x01d0,
 
     .pad_186 = { 0 },
 
     .field_0a56 = 0x0107,
 
-    .field_0a58 = 0x01EA,
+    .field_0a58 = 0x01ea,
 
     .pad_187 = { 0 },
 
     .field_0a5c = 0x0103,
 
-    .field_0a5e = 0x01EA,
+    .field_0a5e = 0x01ea,
 
     .pad_188 = { 0 },
 
@@ -14195,13 +14195,13 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0a6e = 0x0107,
 
-    .field_0a70 = 0x021E,
+    .field_0a70 = 0x021e,
 
     .pad_191 = { 0 },
 
     .field_0a74 = 0x0103,
 
-    .field_0a76 = 0x021E,
+    .field_0a76 = 0x021e,
 
     .pad_192 = { 0 },
 
@@ -14217,49 +14217,49 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_194 = { 0 },
 
-    .field_0a87 = 0x9E08,
+    .field_0a87 = 0x9e08,
 
     .field_0a89 = 0x0002,
 
     .pad_195 = { 0 },
 
-    .field_0a8d = 0xBA08,
+    .field_0a8d = 0xba08,
 
     .field_0a8f = 0x0002,
 
     .pad_196 = { 0 },
 
-    .field_0a93 = 0xBA05,
+    .field_0a93 = 0xba05,
 
     .field_0a95 = 0x0002,
 
     .field_0a97 = 0x0700,
 
-    .field_0a99 = 0xC603,
+    .field_0a99 = 0xc603,
 
     .field_0a9b = 0x0002,
 
     .pad_197 = { 0 },
 
-    .field_0a9f = 0xCE04,
+    .field_0a9f = 0xce04,
 
     .field_0aa1 = 0x0002,
 
     .field_0aa3 = 0x0100,
 
-    .field_0aa5 = 0xD401,
+    .field_0aa5 = 0xd401,
 
     .field_0aa7 = 0x0002,
 
     .pad_198 = { 0 },
 
-    .field_0aab = 0xD411,
+    .field_0aab = 0xd411,
 
     .field_0aad = 0x0002,
 
     .field_0aaf = 0x1100,
 
-    .field_0ab1 = 0xEE01,
+    .field_0ab1 = 0xee01,
 
     .field_0ab3 = 0x0002,
 
@@ -14289,7 +14289,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0acd = 0x0400,
 
-    .field_0acf = 0xFF01,
+    .field_0acf = 0xff01,
 
     .pad_202 = { 0 },
 
@@ -14309,11 +14309,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0ae2 = 0x0249,
 
-    .field_0ae4 = 0x6F4D,
+    .field_0ae4 = 0x6f4d,
 
     .field_0ae6 = 0x6564,
 
-    .field_0ae8 = 0x6E72,
+    .field_0ae8 = 0x6e72,
 
     .field_0aea = 0x5620,
 
@@ -14325,55 +14325,55 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0af2 = 0x2020,
 
-    .field_0af4 = 0x031D,
+    .field_0af4 = 0x031d,
 
-    .field_0af6 = 0x6F4D,
+    .field_0af6 = 0x6f4d,
 
     .field_0af8 = 0x6373,
 
-    .field_0afa = 0x776F,
+    .field_0afa = 0x776f,
 
-    .field_0afc = 0x4D20,
+    .field_0afc = 0x4d20,
 
-    .field_0afe = 0x6E61,
+    .field_0afe = 0x6e61,
 
-    .field_0b00 = 0x6F64,
+    .field_0b00 = 0x6f64,
 
-    .field_0b02 = 0x696C,
+    .field_0b02 = 0x696c,
 
-    .field_0b04 = 0x736E,
+    .field_0b04 = 0x736e,
 
-    .field_0b06 = 0x01D5,
+    .field_0b06 = 0x01d5,
 
     .field_0b08 = 0x6953,
 
-    .field_0b0a = 0x676E,
+    .field_0b0a = 0x676e,
 
     .field_0b0c = 0x4920,
 
-    .field_0b0e = 0x2C74,
+    .field_0b0e = 0x2c74,
 
     .field_0b10 = 0x5020,
 
-    .field_0b12 = 0x616C,
+    .field_0b12 = 0x616c,
 
     .field_0b14 = 0x2079,
 
     .field_0b16 = 0x7449,
 
-    .field_0b18 = 0x02E5,
+    .field_0b18 = 0x02e5,
 
-    .field_0b1a = 0x6C41,
+    .field_0b1a = 0x6c41,
 
     .field_0b1c = 0x6970,
 
-    .field_0b1e = 0x656E,
+    .field_0b1e = 0x656e,
 
     .field_0b20 = 0x4320,
 
-    .field_0b22 = 0x6D6F,
+    .field_0b22 = 0x6d6f,
 
-    .field_0b24 = 0x6F62,
+    .field_0b24 = 0x6f62,
 
     .field_0b26 = 0x2020,
 
@@ -14393,39 +14393,39 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0b36 = 0x6172,
 
-    .field_0b38 = 0x626D,
+    .field_0b38 = 0x626d,
 
     .field_0b3a = 0x2061,
 
-    .field_0b3c = 0x02C8,
+    .field_0b3c = 0x02c8,
 
     .field_0b3e = 0x6142,
 
-    .field_0b40 = 0x6C6C,
+    .field_0b40 = 0x6c6c,
 
     .field_0b42 = 0x4720,
 
-    .field_0b44 = 0x776F,
+    .field_0b44 = 0x776f,
 
-    .field_0b46 = 0x206E,
+    .field_0b46 = 0x206e,
 
     .field_0b48 = 0x6157,
 
-    .field_0b4a = 0x746C,
+    .field_0b4a = 0x746c,
 
-    .field_0b4c = 0x207A,
+    .field_0b4c = 0x207a,
 
-    .field_0b4e = 0x000A,
+    .field_0b4e = 0x000a,
 
-    .field_0b50 = 0x6F53,
+    .field_0b50 = 0x6f53,
 
     .field_0b52 = 0x7466,
 
     .field_0b54 = 0x5220,
 
-    .field_0b56 = 0x636F,
+    .field_0b56 = 0x636f,
 
-    .field_0b58 = 0x206B,
+    .field_0b58 = 0x206b,
 
     .field_0b5a = 0x2020,
 
@@ -14433,25 +14433,25 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0b5e = 0x2020,
 
-    .field_0b60 = 0x03BB,
+    .field_0b60 = 0x03bb,
 
-    .field_0b62 = 0x6F54,
+    .field_0b62 = 0x6f54,
 
     .field_0b64 = 0x6572,
 
     .field_0b66 = 0x6461,
 
-    .field_0b68 = 0x726F,
+    .field_0b68 = 0x726f,
 
     .field_0b6a = 0x4220,
 
-    .field_0b6c = 0x6E61,
+    .field_0b6c = 0x6e61,
 
     .field_0b6e = 0x2064,
 
     .field_0b70 = 0x2020,
 
-    .field_0b72 = 0x025F,
+    .field_0b72 = 0x025f,
 
     .field_0b74 = 0x6156,
 
@@ -14459,29 +14459,29 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0b78 = 0x7665,
 
-    .field_0b7a = 0x6C69,
+    .field_0b7a = 0x6c69,
 
-    .field_0b7c = 0x656C,
+    .field_0b7c = 0x656c,
 
     .field_0b7e = 0x4220,
 
-    .field_0b80 = 0x6E6F,
+    .field_0b80 = 0x6e6f,
 
     .field_0b82 = 0x7365,
 
-    .field_0b84 = 0x017D,
+    .field_0b84 = 0x017d,
 
-    .field_0b86 = 0x6B4F,
+    .field_0b86 = 0x6b4f,
 
-    .field_0b88 = 0x616C,
+    .field_0b88 = 0x616c,
 
-    .field_0b8a = 0x6F68,
+    .field_0b8a = 0x6f68,
 
-    .field_0b8c = 0x616D,
+    .field_0b8c = 0x616d,
 
     .field_0b8e = 0x4420,
 
-    .field_0b90 = 0x6E61,
+    .field_0b90 = 0x6e61,
 
     .field_0b92 = 0x6563,
 
@@ -14499,7 +14499,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0ba0 = 0x6469,
 
-    .field_0ba2 = 0x6C64,
+    .field_0ba2 = 0x6c64,
 
     .field_0ba4 = 0x7365,
 
@@ -14507,11 +14507,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0ba8 = 0x0352,
 
-    .field_0baa = 0x6F43,
+    .field_0baa = 0x6f43,
 
     .field_0bac = 0x6277,
 
-    .field_0bae = 0x796F,
+    .field_0bae = 0x796f,
 
     .field_0bb0 = 0x5320,
 
@@ -14523,43 +14523,43 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0bb8 = 0x2020,
 
-    .field_0bba = 0x02C7,
+    .field_0bba = 0x02c7,
 
     .field_0bbc = 0x7543,
 
-    .field_0bbe = 0x6B63,
+    .field_0bbe = 0x6b63,
 
-    .field_0bc0 = 0x6F6F,
+    .field_0bc0 = 0x6f6f,
 
     .field_0bc2 = 0x4320,
 
-    .field_0bc4 = 0x6F6C,
+    .field_0bc4 = 0x6f6c,
 
-    .field_0bc6 = 0x6B63,
+    .field_0bc6 = 0x6b63,
 
     .field_0bc8 = 0x3320,
 
-    .field_0bca = 0x342F,
+    .field_0bca = 0x342f,
 
     .field_0bcc = 0x0266,
 
-    .field_0bce = 0x6F53,
+    .field_0bce = 0x6f53,
 
     .field_0bd0 = 0x7466,
 
     .field_0bd2 = 0x4420,
 
-    .field_0bd4 = 0x2D61,
+    .field_0bd4 = 0x2d61,
 
     .field_0bd6 = 0x6144,
 
-    .field_0bd8 = 0x636E,
+    .field_0bd8 = 0x636e,
 
     .field_0bda = 0x2065,
 
     .field_0bdc = 0x2020,
 
-    .field_0bde = 0x032A,
+    .field_0bde = 0x032a,
 
     .field_0be0 = 0x7543,
 
@@ -14573,7 +14573,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0bea = 0x7544,
 
-    .field_0bec = 0x206F,
+    .field_0bec = 0x206f,
 
     .field_0bee = 0x2020,
 
@@ -14583,7 +14583,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0bf4 = 0x6165,
 
-    .field_0bf6 = 0x206D,
+    .field_0bf6 = 0x206d,
 
     .field_0bf8 = 0x6542,
 
@@ -14595,7 +14595,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0c00 = 0x2020,
 
-    .field_0c02 = 0x02CC,
+    .field_0c02 = 0x02cc,
 
     .field_0c04 = 0x6946,
 
@@ -14607,7 +14607,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0c0c = 0x7572,
 
-    .field_0c0e = 0x736D,
+    .field_0c0e = 0x736d,
 
     .field_0c10 = 0x2020,
 
@@ -14623,7 +14623,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0c1c = 0x4720,
 
-    .field_0c1e = 0x6E69,
+    .field_0c1e = 0x6e69,
 
     .field_0c20 = 0x6567,
 
@@ -14631,33 +14631,33 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0c24 = 0x2020,
 
-    .field_0c26 = 0x02B0,
+    .field_0c26 = 0x02b0,
 
     .field_0c28 = 0x7449,
 
-    .field_0c2a = 0x6C61,
+    .field_0c2a = 0x6c61,
 
     .field_0c2c = 0x6169,
 
-    .field_0c2e = 0x206E,
+    .field_0c2e = 0x206e,
 
     .field_0c30 = 0x6154,
 
-    .field_0c32 = 0x676E,
+    .field_0c32 = 0x676e,
 
-    .field_0c34 = 0x206F,
+    .field_0c34 = 0x206f,
 
     .field_0c36 = 0x2020,
 
-    .field_0c38 = 0x017E,
+    .field_0c38 = 0x017e,
 
-    .field_0c3a = 0x6F48,
+    .field_0c3a = 0x6f48,
 
     .field_0c3c = 0x6465,
 
-    .field_0c3e = 0x776F,
+    .field_0c3e = 0x776f,
 
-    .field_0c40 = 0x206E,
+    .field_0c40 = 0x206e,
 
     .field_0c42 = 0x7246,
 
@@ -14667,37 +14667,37 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0c48 = 0x2020,
 
-    .field_0c4a = 0x00BF,
+    .field_0c4a = 0x00bf,
 
     .field_0c4c = 0x7449,
 
-    .field_0c4e = 0x6C61,
+    .field_0c4e = 0x6c61,
 
     .field_0c50 = 0x2079,
 
-    .field_0c52 = 0x6F50,
+    .field_0c52 = 0x6f50,
 
     .field_0c54 = 0x2070,
 
-    .field_0c56 = 0x724F,
+    .field_0c56 = 0x724f,
 
     .field_0c58 = 0x6167,
 
-    .field_0c5a = 0x206E,
+    .field_0c5a = 0x206e,
 
-    .field_0c5c = 0x011F,
+    .field_0c5c = 0x011f,
 
     .field_0c5e = 0x6944,
 
     .field_0c60 = 0x6373,
 
-    .field_0c62 = 0x206F,
+    .field_0c62 = 0x206f,
 
-    .field_0c64 = 0x654D,
+    .field_0c64 = 0x654d,
 
     .field_0c66 = 0x6174,
 
-    .field_0c68 = 0x206C,
+    .field_0c68 = 0x206c,
 
     .field_0c6a = 0x2020,
 
@@ -14705,11 +14705,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0c6e = 0x0185,
 
-    .field_0c70 = 0x6F4D,
+    .field_0c70 = 0x6f4d,
 
     .field_0c72 = 0x6564,
 
-    .field_0c74 = 0x6E72,
+    .field_0c74 = 0x6e72,
 
     .field_0c76 = 0x5620,
 
@@ -14721,61 +14721,61 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0c7e = 0x2020,
 
-    .field_0c80 = 0x02ED,
+    .field_0c80 = 0x02ed,
 
-    .field_0c82 = 0x6F4D,
+    .field_0c82 = 0x6f4d,
 
     .field_0c84 = 0x6373,
 
-    .field_0c86 = 0x776F,
+    .field_0c86 = 0x776f,
 
-    .field_0c88 = 0x4D20,
+    .field_0c88 = 0x4d20,
 
-    .field_0c8a = 0x6E61,
+    .field_0c8a = 0x6e61,
 
-    .field_0c8c = 0x6F64,
+    .field_0c8c = 0x6f64,
 
-    .field_0c8e = 0x696C,
+    .field_0c8e = 0x696c,
 
-    .field_0c90 = 0x736E,
+    .field_0c90 = 0x736e,
 
-    .field_0c92 = 0x01B9,
+    .field_0c92 = 0x01b9,
 
     .field_0c94 = 0x6953,
 
-    .field_0c96 = 0x676E,
+    .field_0c96 = 0x676e,
 
     .field_0c98 = 0x4920,
 
-    .field_0c9a = 0x2C74,
+    .field_0c9a = 0x2c74,
 
     .field_0c9c = 0x5020,
 
-    .field_0c9e = 0x616C,
+    .field_0c9e = 0x616c,
 
     .field_0ca0 = 0x2079,
 
     .field_0ca2 = 0x7449,
 
-    .field_0ca4 = 0x02A1,
+    .field_0ca4 = 0x02a1,
 
-    .field_0ca6 = 0x6B4F,
+    .field_0ca6 = 0x6b4f,
 
-    .field_0ca8 = 0x616C,
+    .field_0ca8 = 0x616c,
 
-    .field_0caa = 0x6F68,
+    .field_0caa = 0x6f68,
 
-    .field_0cac = 0x616D,
+    .field_0cac = 0x616d,
 
     .field_0cae = 0x4420,
 
-    .field_0cb0 = 0x6E61,
+    .field_0cb0 = 0x6e61,
 
     .field_0cb2 = 0x6563,
 
     .field_0cb4 = 0x2020,
 
-    .field_0cb6 = 0x02C5,
+    .field_0cb6 = 0x02c5,
 
     .field_0cb8 = 0x7246,
 
@@ -14785,7 +14785,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0cbe = 0x4720,
 
-    .field_0cc0 = 0x6E69,
+    .field_0cc0 = 0x6e69,
 
     .field_0cc2 = 0x6567,
 
@@ -14795,9 +14795,9 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0cc8 = 0x0101,
 
-    .field_0cca = 0xB002,
+    .field_0cca = 0xb002,
 
-    .field_0ccc = 0x83D2,
+    .field_0ccc = 0x83d2,
 
     .field_0cce = 0x0102,
 
@@ -14841,17 +14841,17 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_205 = { 0 },
 
-    .field_0cfa = 0x0F0E,
+    .field_0cfa = 0x0f0e,
 
-    .field_0cfc = 0x0F0E,
+    .field_0cfc = 0x0f0e,
 
-    .field_0cfe = 0x0F0E,
+    .field_0cfe = 0x0f0e,
 
-    .field_0d00 = 0x0F0E,
+    .field_0d00 = 0x0f0e,
 
     .field_0d02 = 0x8002,
 
-    .field_0d04 = 0x0F0E,
+    .field_0d04 = 0x0f0e,
 
     .pad_206 = { 0 },
 
@@ -14871,17 +14871,17 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_207 = { 0 },
 
-    .field_0d1e = 0x0F0E,
+    .field_0d1e = 0x0f0e,
 
-    .field_0d20 = 0x0F0E,
+    .field_0d20 = 0x0f0e,
 
-    .field_0d22 = 0x0F0E,
+    .field_0d22 = 0x0f0e,
 
-    .field_0d24 = 0x0F0E,
+    .field_0d24 = 0x0f0e,
 
-    .field_0d26 = 0x0F0E,
+    .field_0d26 = 0x0f0e,
 
-    .field_0d28 = 0x0F0E,
+    .field_0d28 = 0x0f0e,
 
     .pad_208 = { 0 },
 
@@ -14901,75 +14901,75 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0d3c = 0x8001,
 
-    .field_0d3e = 0x0F0E,
+    .field_0d3e = 0x0f0e,
 
-    .field_0d40 = 0x0F0E,
+    .field_0d40 = 0x0f0e,
 
     .field_0d42 = 0x8000,
 
-    .field_0d44 = 0x0F0E,
+    .field_0d44 = 0x0f0e,
 
-    .field_0d46 = 0x0F0E,
+    .field_0d46 = 0x0f0e,
 
-    .field_0d48 = 0x0F0E,
+    .field_0d48 = 0x0f0e,
 
-    .field_0d4a = 0x0F0E,
+    .field_0d4a = 0x0f0e,
 
-    .field_0d4c = 0x0F0E,
+    .field_0d4c = 0x0f0e,
 
-    .field_0d4e = 0x0F0E,
+    .field_0d4e = 0x0f0e,
 
-    .field_0d50 = 0x0F0E,
+    .field_0d50 = 0x0f0e,
 
-    .field_0d52 = 0x0F0E,
+    .field_0d52 = 0x0f0e,
 
     .pad_209 = { 0 },
 
-    .field_0d56 = 0x0F0E,
+    .field_0d56 = 0x0f0e,
 
-    .field_0d58 = 0x0F0E,
+    .field_0d58 = 0x0f0e,
 
-    .field_0d5a = 0x0F0E,
+    .field_0d5a = 0x0f0e,
 
-    .field_0d5c = 0x0F0E,
+    .field_0d5c = 0x0f0e,
 
-    .field_0d5e = 0x0F0E,
+    .field_0d5e = 0x0f0e,
 
-    .field_0d60 = 0x0F0E,
+    .field_0d60 = 0x0f0e,
 
-    .field_0d62 = 0x0F0E,
+    .field_0d62 = 0x0f0e,
 
     .pad_210 = { 0 },
 
-    .field_0d66 = 0x0F0E,
+    .field_0d66 = 0x0f0e,
 
-    .field_0d68 = 0x0F0E,
+    .field_0d68 = 0x0f0e,
 
-    .field_0d6a = 0x0F0E,
+    .field_0d6a = 0x0f0e,
 
-    .field_0d6c = 0x0F0E,
+    .field_0d6c = 0x0f0e,
 
-    .field_0d6e = 0x0F0E,
+    .field_0d6e = 0x0f0e,
 
-    .field_0d70 = 0x0F0E,
+    .field_0d70 = 0x0f0e,
 
-    .field_0d72 = 0x0F0E,
+    .field_0d72 = 0x0f0e,
 
     .field_0d74 = 0x0105,
 
-    .field_0d76 = 0x0F0E,
+    .field_0d76 = 0x0f0e,
 
-    .field_0d78 = 0x0F0E,
+    .field_0d78 = 0x0f0e,
 
-    .field_0d7a = 0x0F0E,
+    .field_0d7a = 0x0f0e,
 
-    .field_0d7c = 0x0F0E,
+    .field_0d7c = 0x0f0e,
 
     .pad_211 = { 0 },
 
-    .field_0d88 = 0x0F0E,
+    .field_0d88 = 0x0f0e,
 
-    .field_0d8a = 0x0F0E,
+    .field_0d8a = 0x0f0e,
 
     .pad_212 = { 0 },
 
@@ -15017,21 +15017,21 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_213 = { 0 },
 
-    .field_0dbe = 0x010A,
+    .field_0dbe = 0x010a,
 
-    .field_0dc0 = 0x020A,
+    .field_0dc0 = 0x020a,
 
-    .field_0dc2 = 0x040A,
+    .field_0dc2 = 0x040a,
 
-    .field_0dc4 = 0x080A,
+    .field_0dc4 = 0x080a,
 
-    .field_0dc6 = 0x100A,
+    .field_0dc6 = 0x100a,
 
-    .field_0dc8 = 0x200A,
+    .field_0dc8 = 0x200a,
 
-    .field_0dca = 0x400A,
+    .field_0dca = 0x400a,
 
-    .field_0dcc = 0x800A,
+    .field_0dcc = 0x800a,
 
     .pad_214 = { 0 },
 
@@ -15059,71 +15059,71 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0dec = 0x8009,
 
-    .field_0dee = 0x0F0E,
+    .field_0dee = 0x0f0e,
 
-    .field_0df0 = 0x0F0E,
+    .field_0df0 = 0x0f0e,
 
-    .field_0df2 = 0x080D,
+    .field_0df2 = 0x080d,
 
     .pad_216 = { 0 },
 
-    .field_0e04 = 0x020D,
+    .field_0e04 = 0x020d,
 
-    .field_0e06 = 0x040D,
+    .field_0e06 = 0x040d,
 
-    .field_0e08 = 0x0F0E,
+    .field_0e08 = 0x0f0e,
 
-    .field_0e0a = 0x010D,
+    .field_0e0a = 0x010d,
 
-    .field_0e0c = 0x0F0E,
+    .field_0e0c = 0x0f0e,
 
     .pad_217 = { 0 },
 
-    .field_0e1a = 0x010C,
+    .field_0e1a = 0x010c,
 
-    .field_0e1c = 0x020C,
+    .field_0e1c = 0x020c,
 
     .pad_218 = { 0 },
 
-    .field_0e22 = 0x010B,
+    .field_0e22 = 0x010b,
 
-    .field_0e24 = 0x020B,
+    .field_0e24 = 0x020b,
 
-    .field_0e26 = 0x040B,
+    .field_0e26 = 0x040b,
 
-    .field_0e28 = 0x080B,
+    .field_0e28 = 0x080b,
 
     .pad_219 = { 0 },
 
-    .field_0e2e = 0x00FF,
+    .field_0e2e = 0x00ff,
 
-    .field_0e30 = 0x01FF,
+    .field_0e30 = 0x01ff,
 
-    .field_0e32 = 0x02FF,
+    .field_0e32 = 0x02ff,
 
-    .field_0e34 = 0x033F,
+    .field_0e34 = 0x033f,
 
-    .field_0e36 = 0x04FF,
+    .field_0e36 = 0x04ff,
 
     .field_0e38 = 0x0501,
 
-    .field_0e3a = 0x06FF,
+    .field_0e3a = 0x06ff,
 
-    .field_0e3c = 0x07FF,
+    .field_0e3c = 0x07ff,
 
-    .field_0e3e = 0x08FF,
+    .field_0e3e = 0x08ff,
 
-    .field_0e40 = 0x09FF,
+    .field_0e40 = 0x09ff,
 
-    .field_0e42 = 0x0AFF,
+    .field_0e42 = 0x0aff,
 
-    .field_0e44 = 0x0B0F,
+    .field_0e44 = 0x0b0f,
 
-    .field_0e46 = 0x0C03,
+    .field_0e46 = 0x0c03,
 
-    .field_0e48 = 0x0D0F,
+    .field_0e48 = 0x0d0f,
 
-    .field_0e4a = 0x0E0F,
+    .field_0e4a = 0x0e0f,
 
     .field_0e4c = NAKA_NONE,
 
@@ -15137,25 +15137,25 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0e56 = 0x0001,
 
-    .field_0e58 = 0x6B68,
+    .field_0e58 = 0x6b68,
 
     .field_0e5a = 0x7270,
 
     .ptr_0e5c = SELF(field_0e58),
 
-    .field_0e60 = 0x6B68,
+    .field_0e60 = 0x6b68,
 
     .field_0e62 = 0x7270,
 
     .field_0e64 = 0x0001,
 
-    .field_0e66 = 0xFFC0,
+    .field_0e66 = 0xffc0,
 
-    .field_0e68 = 0x009F,
+    .field_0e68 = 0x009f,
 
-    .field_0e6a = 0x6B68,
+    .field_0e6a = 0x6b68,
 
-    .field_0e6c = 0x5F74,
+    .field_0e6c = 0x5f74,
 
     .field_0e6e = 0x0002,
 
@@ -15169,7 +15169,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_222 = { 0 },
 
-    .field_0e7c = 0x001E,
+    .field_0e7c = 0x001e,
 
     .field_0e7e = 0x8000,
 
@@ -15647,13 +15647,13 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_229 = { 0 },
 
-    .field_106c = 0x07F8,
+    .field_106c = 0x07f8,
 
-    .field_106e = 0x07F8,
+    .field_106e = 0x07f8,
 
-    .field_1070 = 0x07F8,
+    .field_1070 = 0x07f8,
 
-    .field_1072 = 0x07F8,
+    .field_1072 = 0x07f8,
 
     .field_1074 = 0x0707,
 
@@ -15737,23 +15737,23 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_230 = { 0 },
 
-    .field_10d2 = 0xF8F8,
+    .field_10d2 = 0xf8f8,
 
-    .field_10d4 = 0x07F8,
+    .field_10d4 = 0x07f8,
 
-    .field_10d6 = 0xF8F8,
+    .field_10d6 = 0xf8f8,
 
-    .field_10d8 = 0xF807,
+    .field_10d8 = 0xf807,
 
-    .field_10da = 0x07F8,
+    .field_10da = 0x07f8,
 
-    .field_10dc = 0x07F8,
+    .field_10dc = 0x07f8,
 
-    .field_10de = 0x07F8,
+    .field_10de = 0x07f8,
 
-    .field_10e0 = 0x07F8,
+    .field_10e0 = 0x07f8,
 
-    .field_10e2 = 0x07F8,
+    .field_10e2 = 0x07f8,
 
     .field_10e4 = 0x0707,
 
@@ -15829,33 +15829,33 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_231 = { 0 },
 
-    .field_1137 = 0xF8F8,
+    .field_1137 = 0xf8f8,
 
-    .field_1139 = 0xF8F8,
+    .field_1139 = 0xf8f8,
 
-    .field_113b = 0xF8F8,
+    .field_113b = 0xf8f8,
 
-    .field_113d = 0xF8F8,
+    .field_113d = 0xf8f8,
 
-    .field_113f = 0xF8F8,
+    .field_113f = 0xf8f8,
 
-    .field_1141 = 0xF8F8,
+    .field_1141 = 0xf8f8,
 
-    .field_1143 = 0xF8F8,
+    .field_1143 = 0xf8f8,
 
-    .field_1145 = 0xF807,
+    .field_1145 = 0xf807,
 
-    .field_1147 = 0x07F8,
+    .field_1147 = 0x07f8,
 
-    .field_1149 = 0xF8F8,
+    .field_1149 = 0xf8f8,
 
-    .field_114b = 0xF807,
+    .field_114b = 0xf807,
 
-    .field_114d = 0xF807,
+    .field_114d = 0xf807,
 
-    .field_114f = 0xF807,
+    .field_114f = 0xf807,
 
-    .field_1151 = 0xF807,
+    .field_1151 = 0xf807,
 
     .field_1153 = 0x0707,
 
@@ -15921,43 +15921,43 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_232 = { 0 },
 
-    .field_119e = 0xF8F8,
+    .field_119e = 0xf8f8,
 
-    .field_11a0 = 0xF8F8,
+    .field_11a0 = 0xf8f8,
 
-    .field_11a2 = 0xF8F8,
+    .field_11a2 = 0xf8f8,
 
-    .field_11a4 = 0xF8F8,
+    .field_11a4 = 0xf8f8,
 
-    .field_11a6 = 0xF8F8,
+    .field_11a6 = 0xf8f8,
 
-    .field_11a8 = 0xF8F8,
+    .field_11a8 = 0xf8f8,
 
-    .field_11aa = 0xF8F8,
+    .field_11aa = 0xf8f8,
 
-    .field_11ac = 0xF8F8,
+    .field_11ac = 0xf8f8,
 
-    .field_11ae = 0xF8F8,
+    .field_11ae = 0xf8f8,
 
-    .field_11b0 = 0xF8F8,
+    .field_11b0 = 0xf8f8,
 
-    .field_11b2 = 0xF8F8,
+    .field_11b2 = 0xf8f8,
 
-    .field_11b4 = 0x07F8,
+    .field_11b4 = 0x07f8,
 
-    .field_11b6 = 0xF8F8,
+    .field_11b6 = 0xf8f8,
 
-    .field_11b8 = 0xF807,
+    .field_11b8 = 0xf807,
 
-    .field_11ba = 0x07F8,
+    .field_11ba = 0x07f8,
 
-    .field_11bc = 0x07F8,
+    .field_11bc = 0x07f8,
 
-    .field_11be = 0x07F8,
+    .field_11be = 0x07f8,
 
-    .field_11c0 = 0x07F8,
+    .field_11c0 = 0x07f8,
 
-    .field_11c2 = 0x07F8,
+    .field_11c2 = 0x07f8,
 
     .field_11c4 = 0x0707,
 
@@ -16013,53 +16013,53 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_233 = { 0 },
 
-    .field_1204 = 0xF8F8,
+    .field_1204 = 0xf8f8,
 
-    .field_1206 = 0xF8F8,
+    .field_1206 = 0xf8f8,
 
-    .field_1208 = 0xF8F8,
+    .field_1208 = 0xf8f8,
 
-    .field_120a = 0xF8F8,
+    .field_120a = 0xf8f8,
 
-    .field_120c = 0xF8F8,
+    .field_120c = 0xf8f8,
 
-    .field_120e = 0xF8F8,
+    .field_120e = 0xf8f8,
 
-    .field_1210 = 0xF8F8,
+    .field_1210 = 0xf8f8,
 
-    .field_1212 = 0xF8F8,
+    .field_1212 = 0xf8f8,
 
-    .field_1214 = 0xF8F8,
+    .field_1214 = 0xf8f8,
 
-    .field_1216 = 0xF8F8,
+    .field_1216 = 0xf8f8,
 
-    .field_1218 = 0xF8F8,
+    .field_1218 = 0xf8f8,
 
-    .field_121a = 0xF8F8,
+    .field_121a = 0xf8f8,
 
-    .field_121c = 0xF8F8,
+    .field_121c = 0xf8f8,
 
-    .field_121e = 0xF8F8,
+    .field_121e = 0xf8f8,
 
-    .field_1220 = 0xF8F8,
+    .field_1220 = 0xf8f8,
 
-    .field_1222 = 0xF8F8,
+    .field_1222 = 0xf8f8,
 
-    .field_1224 = 0x07F8,
+    .field_1224 = 0x07f8,
 
-    .field_1226 = 0xF8F8,
+    .field_1226 = 0xf8f8,
 
-    .field_1228 = 0xF807,
+    .field_1228 = 0xf807,
 
-    .field_122a = 0x07F8,
+    .field_122a = 0x07f8,
 
-    .field_122c = 0x07F8,
+    .field_122c = 0x07f8,
 
-    .field_122e = 0x07F8,
+    .field_122e = 0x07f8,
 
-    .field_1230 = 0x07F8,
+    .field_1230 = 0x07f8,
 
-    .field_1232 = 0x07F8,
+    .field_1232 = 0x07f8,
 
     .field_1234 = 0x0707,
 
@@ -16105,63 +16105,63 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_234 = { 0 },
 
-    .field_126a = 0xF8F8,
+    .field_126a = 0xf8f8,
 
-    .field_126c = 0xF8F8,
+    .field_126c = 0xf8f8,
 
-    .field_126e = 0xF8F8,
+    .field_126e = 0xf8f8,
 
-    .field_1270 = 0xF8F8,
+    .field_1270 = 0xf8f8,
 
-    .field_1272 = 0xF8F8,
+    .field_1272 = 0xf8f8,
 
-    .field_1274 = 0xF8F8,
+    .field_1274 = 0xf8f8,
 
-    .field_1276 = 0xF8F8,
+    .field_1276 = 0xf8f8,
 
-    .field_1278 = 0xF8F8,
+    .field_1278 = 0xf8f8,
 
-    .field_127a = 0xF8F8,
+    .field_127a = 0xf8f8,
 
-    .field_127c = 0xF8F8,
+    .field_127c = 0xf8f8,
 
-    .field_127e = 0xF8F8,
+    .field_127e = 0xf8f8,
 
-    .field_1280 = 0xF8F8,
+    .field_1280 = 0xf8f8,
 
-    .field_1282 = 0xF8F8,
+    .field_1282 = 0xf8f8,
 
-    .field_1284 = 0xF8F8,
+    .field_1284 = 0xf8f8,
 
-    .field_1286 = 0xF8F8,
+    .field_1286 = 0xf8f8,
 
-    .field_1288 = 0xF8F8,
+    .field_1288 = 0xf8f8,
 
-    .field_128a = 0xF8F8,
+    .field_128a = 0xf8f8,
 
-    .field_128c = 0xF8F8,
+    .field_128c = 0xf8f8,
 
-    .field_128e = 0xF8F8,
+    .field_128e = 0xf8f8,
 
-    .field_1290 = 0xF8F8,
+    .field_1290 = 0xf8f8,
 
-    .field_1292 = 0xF8F8,
+    .field_1292 = 0xf8f8,
 
-    .field_1294 = 0x07F8,
+    .field_1294 = 0x07f8,
 
-    .field_1296 = 0xF8F8,
+    .field_1296 = 0xf8f8,
 
-    .field_1298 = 0xF807,
+    .field_1298 = 0xf807,
 
-    .field_129a = 0x07F8,
+    .field_129a = 0x07f8,
 
-    .field_129c = 0x07F8,
+    .field_129c = 0x07f8,
 
-    .field_129e = 0x07F8,
+    .field_129e = 0x07f8,
 
-    .field_12a0 = 0x07F8,
+    .field_12a0 = 0x07f8,
 
-    .field_12a2 = 0x07F8,
+    .field_12a2 = 0x07f8,
 
     .field_12a4 = 0x0707,
 
@@ -16197,73 +16197,73 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_235 = { 0 },
 
-    .field_12d0 = 0xF8F8,
+    .field_12d0 = 0xf8f8,
 
-    .field_12d2 = 0xF8F8,
+    .field_12d2 = 0xf8f8,
 
-    .field_12d4 = 0xF8F8,
+    .field_12d4 = 0xf8f8,
 
-    .field_12d6 = 0xF8F8,
+    .field_12d6 = 0xf8f8,
 
-    .field_12d8 = 0xF8F8,
+    .field_12d8 = 0xf8f8,
 
-    .field_12da = 0xF8F8,
+    .field_12da = 0xf8f8,
 
-    .field_12dc = 0xF8F8,
+    .field_12dc = 0xf8f8,
 
-    .field_12de = 0xF8F8,
+    .field_12de = 0xf8f8,
 
-    .field_12e0 = 0xF8F8,
+    .field_12e0 = 0xf8f8,
 
-    .field_12e2 = 0xF8F8,
+    .field_12e2 = 0xf8f8,
 
-    .field_12e4 = 0xF8F8,
+    .field_12e4 = 0xf8f8,
 
-    .field_12e6 = 0xF8F8,
+    .field_12e6 = 0xf8f8,
 
-    .field_12e8 = 0xF8F8,
+    .field_12e8 = 0xf8f8,
 
-    .field_12ea = 0xF8F8,
+    .field_12ea = 0xf8f8,
 
-    .field_12ec = 0xF8F8,
+    .field_12ec = 0xf8f8,
 
-    .field_12ee = 0xF8F8,
+    .field_12ee = 0xf8f8,
 
-    .field_12f0 = 0xF8F8,
+    .field_12f0 = 0xf8f8,
 
-    .field_12f2 = 0xF8F8,
+    .field_12f2 = 0xf8f8,
 
-    .field_12f4 = 0xF8F8,
+    .field_12f4 = 0xf8f8,
 
-    .field_12f6 = 0xF8F8,
+    .field_12f6 = 0xf8f8,
 
-    .field_12f8 = 0xF8F8,
+    .field_12f8 = 0xf8f8,
 
-    .field_12fa = 0xF8F8,
+    .field_12fa = 0xf8f8,
 
-    .field_12fc = 0xF8F8,
+    .field_12fc = 0xf8f8,
 
-    .field_12fe = 0xF8F8,
+    .field_12fe = 0xf8f8,
 
-    .field_1300 = 0xF8F8,
+    .field_1300 = 0xf8f8,
 
-    .field_1302 = 0xF8F8,
+    .field_1302 = 0xf8f8,
 
-    .field_1304 = 0x07F8,
+    .field_1304 = 0x07f8,
 
-    .field_1306 = 0xF8F8,
+    .field_1306 = 0xf8f8,
 
-    .field_1308 = 0xF807,
+    .field_1308 = 0xf807,
 
-    .field_130a = 0x07F8,
+    .field_130a = 0x07f8,
 
-    .field_130c = 0x07F8,
+    .field_130c = 0x07f8,
 
-    .field_130e = 0x07F8,
+    .field_130e = 0x07f8,
 
-    .field_1310 = 0x07F8,
+    .field_1310 = 0x07f8,
 
-    .field_1312 = 0x07F8,
+    .field_1312 = 0x07f8,
 
     .field_1314 = 0x0707,
 
@@ -16289,83 +16289,83 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_236 = { 0 },
 
-    .field_1336 = 0xF8F8,
+    .field_1336 = 0xf8f8,
 
-    .field_1338 = 0xF8F8,
+    .field_1338 = 0xf8f8,
 
-    .field_133a = 0xF8F8,
+    .field_133a = 0xf8f8,
 
-    .field_133c = 0xF8F8,
+    .field_133c = 0xf8f8,
 
-    .field_133e = 0xF8F8,
+    .field_133e = 0xf8f8,
 
-    .field_1340 = 0xF8F8,
+    .field_1340 = 0xf8f8,
 
-    .field_1342 = 0xF8F8,
+    .field_1342 = 0xf8f8,
 
-    .field_1344 = 0xF8F8,
+    .field_1344 = 0xf8f8,
 
-    .field_1346 = 0xF8F8,
+    .field_1346 = 0xf8f8,
 
-    .field_1348 = 0xF8F8,
+    .field_1348 = 0xf8f8,
 
-    .field_134a = 0xF8F8,
+    .field_134a = 0xf8f8,
 
-    .field_134c = 0xF8F8,
+    .field_134c = 0xf8f8,
 
-    .field_134e = 0xF8F8,
+    .field_134e = 0xf8f8,
 
-    .field_1350 = 0xF8F8,
+    .field_1350 = 0xf8f8,
 
-    .field_1352 = 0xF8F8,
+    .field_1352 = 0xf8f8,
 
-    .field_1354 = 0xF8F8,
+    .field_1354 = 0xf8f8,
 
-    .field_1356 = 0xF8F8,
+    .field_1356 = 0xf8f8,
 
-    .field_1358 = 0xF8F8,
+    .field_1358 = 0xf8f8,
 
-    .field_135a = 0xF8F8,
+    .field_135a = 0xf8f8,
 
-    .field_135c = 0xF8F8,
+    .field_135c = 0xf8f8,
 
-    .field_135e = 0xF8F8,
+    .field_135e = 0xf8f8,
 
-    .field_1360 = 0xF8F8,
+    .field_1360 = 0xf8f8,
 
-    .field_1362 = 0xF8F8,
+    .field_1362 = 0xf8f8,
 
-    .field_1364 = 0xF8F8,
+    .field_1364 = 0xf8f8,
 
-    .field_1366 = 0xF8F8,
+    .field_1366 = 0xf8f8,
 
-    .field_1368 = 0xF8F8,
+    .field_1368 = 0xf8f8,
 
-    .field_136a = 0xF8F8,
+    .field_136a = 0xf8f8,
 
-    .field_136c = 0xF8F8,
+    .field_136c = 0xf8f8,
 
-    .field_136e = 0xF8F8,
+    .field_136e = 0xf8f8,
 
-    .field_1370 = 0xF8F8,
+    .field_1370 = 0xf8f8,
 
-    .field_1372 = 0xF8F8,
+    .field_1372 = 0xf8f8,
 
-    .field_1374 = 0x07F8,
+    .field_1374 = 0x07f8,
 
-    .field_1376 = 0xF8F8,
+    .field_1376 = 0xf8f8,
 
-    .field_1378 = 0xF807,
+    .field_1378 = 0xf807,
 
-    .field_137a = 0x07F8,
+    .field_137a = 0x07f8,
 
-    .field_137c = 0x07F8,
+    .field_137c = 0x07f8,
 
-    .field_137e = 0x07F8,
+    .field_137e = 0x07f8,
 
-    .field_1380 = 0x07F8,
+    .field_1380 = 0x07f8,
 
-    .field_1382 = 0x07F8,
+    .field_1382 = 0x07f8,
 
     .field_1384 = 0x0707,
 
@@ -16381,195 +16381,195 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_237 = { 0 },
 
-    .field_139c = 0xF8F8,
+    .field_139c = 0xf8f8,
 
-    .field_139e = 0xF8F8,
+    .field_139e = 0xf8f8,
 
-    .field_13a0 = 0xF8F8,
+    .field_13a0 = 0xf8f8,
 
-    .field_13a2 = 0xF8F8,
+    .field_13a2 = 0xf8f8,
 
-    .field_13a4 = 0xF8F8,
+    .field_13a4 = 0xf8f8,
 
-    .field_13a6 = 0xF8F8,
+    .field_13a6 = 0xf8f8,
 
-    .field_13a8 = 0xF8F8,
+    .field_13a8 = 0xf8f8,
 
-    .field_13aa = 0xF8F8,
+    .field_13aa = 0xf8f8,
 
-    .field_13ac = 0xF8F8,
+    .field_13ac = 0xf8f8,
 
-    .field_13ae = 0xF8F8,
+    .field_13ae = 0xf8f8,
 
-    .field_13b0 = 0xF8F8,
+    .field_13b0 = 0xf8f8,
 
-    .field_13b2 = 0xF8F8,
+    .field_13b2 = 0xf8f8,
 
-    .field_13b4 = 0xF8F8,
+    .field_13b4 = 0xf8f8,
 
-    .field_13b6 = 0xF8F8,
+    .field_13b6 = 0xf8f8,
 
-    .field_13b8 = 0xF8F8,
+    .field_13b8 = 0xf8f8,
 
-    .field_13ba = 0xF8F8,
+    .field_13ba = 0xf8f8,
 
-    .field_13bc = 0xF8F8,
+    .field_13bc = 0xf8f8,
 
-    .field_13be = 0xF8F8,
+    .field_13be = 0xf8f8,
 
-    .field_13c0 = 0xF8F8,
+    .field_13c0 = 0xf8f8,
 
-    .field_13c2 = 0xF8F8,
+    .field_13c2 = 0xf8f8,
 
-    .field_13c4 = 0xF8F8,
+    .field_13c4 = 0xf8f8,
 
-    .field_13c6 = 0xF8F8,
+    .field_13c6 = 0xf8f8,
 
-    .field_13c8 = 0xF8F8,
+    .field_13c8 = 0xf8f8,
 
-    .field_13ca = 0xF8F8,
+    .field_13ca = 0xf8f8,
 
-    .field_13cc = 0xF8F8,
+    .field_13cc = 0xf8f8,
 
-    .field_13ce = 0xF8F8,
+    .field_13ce = 0xf8f8,
 
-    .field_13d0 = 0xF8F8,
+    .field_13d0 = 0xf8f8,
 
-    .field_13d2 = 0xF8F8,
+    .field_13d2 = 0xf8f8,
 
-    .field_13d4 = 0xF8F8,
+    .field_13d4 = 0xf8f8,
 
-    .field_13d6 = 0xF8F8,
+    .field_13d6 = 0xf8f8,
 
-    .field_13d8 = 0xF8F8,
+    .field_13d8 = 0xf8f8,
 
-    .field_13da = 0xF8F8,
+    .field_13da = 0xf8f8,
 
-    .field_13dc = 0xF8F8,
+    .field_13dc = 0xf8f8,
 
-    .field_13de = 0xF8F8,
+    .field_13de = 0xf8f8,
 
-    .field_13e0 = 0xF8F8,
+    .field_13e0 = 0xf8f8,
 
-    .field_13e2 = 0xF8F8,
+    .field_13e2 = 0xf8f8,
 
-    .field_13e4 = 0x07F8,
+    .field_13e4 = 0x07f8,
 
-    .field_13e6 = 0xF8F8,
+    .field_13e6 = 0xf8f8,
 
-    .field_13e8 = 0xF807,
+    .field_13e8 = 0xf807,
 
-    .field_13ea = 0x07F8,
+    .field_13ea = 0x07f8,
 
-    .field_13ec = 0x07F8,
+    .field_13ec = 0x07f8,
 
-    .field_13ee = 0x07F8,
+    .field_13ee = 0x07f8,
 
-    .field_13f0 = 0x07F8,
+    .field_13f0 = 0x07f8,
 
-    .field_13f2 = 0x07F8,
+    .field_13f2 = 0x07f8,
 
     .field_13f4 = 0x0007,
 
     .pad_238 = { 0 },
 
-    .field_1402 = 0xF8F8,
+    .field_1402 = 0xf8f8,
 
-    .field_1404 = 0xF8F8,
+    .field_1404 = 0xf8f8,
 
-    .field_1406 = 0xF8F8,
+    .field_1406 = 0xf8f8,
 
-    .field_1408 = 0xF8F8,
+    .field_1408 = 0xf8f8,
 
-    .field_140a = 0xF8F8,
+    .field_140a = 0xf8f8,
 
-    .field_140c = 0xF8F8,
+    .field_140c = 0xf8f8,
 
-    .field_140e = 0xF8F8,
+    .field_140e = 0xf8f8,
 
-    .field_1410 = 0xF8F8,
+    .field_1410 = 0xf8f8,
 
-    .field_1412 = 0xF8F8,
+    .field_1412 = 0xf8f8,
 
-    .field_1414 = 0xF8F8,
+    .field_1414 = 0xf8f8,
 
-    .field_1416 = 0xF8F8,
+    .field_1416 = 0xf8f8,
 
-    .field_1418 = 0xF8F8,
+    .field_1418 = 0xf8f8,
 
-    .field_141a = 0xF8F8,
+    .field_141a = 0xf8f8,
 
-    .field_141c = 0xF8F8,
+    .field_141c = 0xf8f8,
 
-    .field_141e = 0xF8F8,
+    .field_141e = 0xf8f8,
 
-    .field_1420 = 0xF8F8,
+    .field_1420 = 0xf8f8,
 
-    .field_1422 = 0xF8F8,
+    .field_1422 = 0xf8f8,
 
-    .field_1424 = 0xF8F8,
+    .field_1424 = 0xf8f8,
 
-    .field_1426 = 0xF8F8,
+    .field_1426 = 0xf8f8,
 
-    .field_1428 = 0xF8F8,
+    .field_1428 = 0xf8f8,
 
-    .field_142a = 0xF8F8,
+    .field_142a = 0xf8f8,
 
-    .field_142c = 0xF8F8,
+    .field_142c = 0xf8f8,
 
-    .field_142e = 0xF8F8,
+    .field_142e = 0xf8f8,
 
-    .field_1430 = 0xF8F8,
+    .field_1430 = 0xf8f8,
 
-    .field_1432 = 0xF8F8,
+    .field_1432 = 0xf8f8,
 
-    .field_1434 = 0xF8F8,
+    .field_1434 = 0xf8f8,
 
-    .field_1436 = 0xF8F8,
+    .field_1436 = 0xf8f8,
 
-    .field_1438 = 0xF8F8,
+    .field_1438 = 0xf8f8,
 
-    .field_143a = 0xF8F8,
+    .field_143a = 0xf8f8,
 
-    .field_143c = 0xF8F8,
+    .field_143c = 0xf8f8,
 
-    .field_143e = 0xF8F8,
+    .field_143e = 0xf8f8,
 
-    .field_1440 = 0xF8F8,
+    .field_1440 = 0xf8f8,
 
-    .field_1442 = 0xF8F8,
+    .field_1442 = 0xf8f8,
 
-    .field_1444 = 0xF8F8,
+    .field_1444 = 0xf8f8,
 
-    .field_1446 = 0xF8F8,
+    .field_1446 = 0xf8f8,
 
-    .field_1448 = 0xF8F8,
+    .field_1448 = 0xf8f8,
 
-    .field_144a = 0xF8F8,
+    .field_144a = 0xf8f8,
 
-    .field_144c = 0xF8F8,
+    .field_144c = 0xf8f8,
 
-    .field_144e = 0xF8F8,
+    .field_144e = 0xf8f8,
 
-    .field_1450 = 0xF8F8,
+    .field_1450 = 0xf8f8,
 
-    .field_1452 = 0xF8F8,
+    .field_1452 = 0xf8f8,
 
-    .field_1454 = 0x07F8,
+    .field_1454 = 0x07f8,
 
-    .field_1456 = 0xF8F8,
+    .field_1456 = 0xf8f8,
 
-    .field_1458 = 0xF807,
+    .field_1458 = 0xf807,
 
-    .field_145a = 0x07F8,
+    .field_145a = 0x07f8,
 
-    .field_145c = 0x07F8,
+    .field_145c = 0x07f8,
 
-    .field_145e = 0x07F8,
+    .field_145e = 0x07f8,
 
-    .field_1460 = 0x07F8,
+    .field_1460 = 0x07f8,
 
-    .field_1462 = 0x07F8,
+    .field_1462 = 0x07f8,
 
     .field_1464 = 0x0707,
 
@@ -16585,93 +16585,93 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_239 = { 0 },
 
-    .field_147c = 0xF8F8,
+    .field_147c = 0xf8f8,
 
-    .field_147e = 0xF8F8,
+    .field_147e = 0xf8f8,
 
-    .field_1480 = 0xF8F8,
+    .field_1480 = 0xf8f8,
 
-    .field_1482 = 0xF8F8,
+    .field_1482 = 0xf8f8,
 
-    .field_1484 = 0xF8F8,
+    .field_1484 = 0xf8f8,
 
-    .field_1486 = 0xF8F8,
+    .field_1486 = 0xf8f8,
 
-    .field_1488 = 0xF8F8,
+    .field_1488 = 0xf8f8,
 
-    .field_148a = 0xF8F8,
+    .field_148a = 0xf8f8,
 
-    .field_148c = 0xF8F8,
+    .field_148c = 0xf8f8,
 
-    .field_148e = 0xF8F8,
+    .field_148e = 0xf8f8,
 
-    .field_1490 = 0xF8F8,
+    .field_1490 = 0xf8f8,
 
-    .field_1492 = 0xF8F8,
+    .field_1492 = 0xf8f8,
 
-    .field_1494 = 0xF8F8,
+    .field_1494 = 0xf8f8,
 
-    .field_1496 = 0xF8F8,
+    .field_1496 = 0xf8f8,
 
-    .field_1498 = 0xF8F8,
+    .field_1498 = 0xf8f8,
 
-    .field_149a = 0xF8F8,
+    .field_149a = 0xf8f8,
 
-    .field_149c = 0xF8F8,
+    .field_149c = 0xf8f8,
 
-    .field_149e = 0xF8F8,
+    .field_149e = 0xf8f8,
 
-    .field_14a0 = 0xF8F8,
+    .field_14a0 = 0xf8f8,
 
-    .field_14a2 = 0xF8F8,
+    .field_14a2 = 0xf8f8,
 
-    .field_14a4 = 0xF8F8,
+    .field_14a4 = 0xf8f8,
 
-    .field_14a6 = 0xF8F8,
+    .field_14a6 = 0xf8f8,
 
-    .field_14a8 = 0xF8F8,
+    .field_14a8 = 0xf8f8,
 
-    .field_14aa = 0xF8F8,
+    .field_14aa = 0xf8f8,
 
-    .field_14ac = 0xF8F8,
+    .field_14ac = 0xf8f8,
 
-    .field_14ae = 0xF8F8,
+    .field_14ae = 0xf8f8,
 
-    .field_14b0 = 0xF8F8,
+    .field_14b0 = 0xf8f8,
 
-    .field_14b2 = 0xF8F8,
+    .field_14b2 = 0xf8f8,
 
-    .field_14b4 = 0xF8F8,
+    .field_14b4 = 0xf8f8,
 
-    .field_14b6 = 0xF8F8,
+    .field_14b6 = 0xf8f8,
 
-    .field_14b8 = 0xF8F8,
+    .field_14b8 = 0xf8f8,
 
-    .field_14ba = 0xF8F8,
+    .field_14ba = 0xf8f8,
 
-    .field_14bc = 0xF8F8,
+    .field_14bc = 0xf8f8,
 
-    .field_14be = 0xF8F8,
+    .field_14be = 0xf8f8,
 
-    .field_14c0 = 0xF8F8,
+    .field_14c0 = 0xf8f8,
 
-    .field_14c2 = 0xF8F8,
+    .field_14c2 = 0xf8f8,
 
-    .field_14c4 = 0x07F8,
+    .field_14c4 = 0x07f8,
 
-    .field_14c6 = 0xF8F8,
+    .field_14c6 = 0xf8f8,
 
-    .field_14c8 = 0xF807,
+    .field_14c8 = 0xf807,
 
-    .field_14ca = 0x07F8,
+    .field_14ca = 0x07f8,
 
-    .field_14cc = 0x07F8,
+    .field_14cc = 0x07f8,
 
-    .field_14ce = 0x07F8,
+    .field_14ce = 0x07f8,
 
-    .field_14d0 = 0x07F8,
+    .field_14d0 = 0x07f8,
 
-    .field_14d2 = 0x07F8,
+    .field_14d2 = 0x07f8,
 
     .field_14d4 = 0x0707,
 
@@ -16697,83 +16697,83 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_240 = { 0 },
 
-    .field_14f6 = 0xF8F8,
+    .field_14f6 = 0xf8f8,
 
-    .field_14f8 = 0xF8F8,
+    .field_14f8 = 0xf8f8,
 
-    .field_14fa = 0xF8F8,
+    .field_14fa = 0xf8f8,
 
-    .field_14fc = 0xF8F8,
+    .field_14fc = 0xf8f8,
 
-    .field_14fe = 0xF8F8,
+    .field_14fe = 0xf8f8,
 
-    .field_1500 = 0xF8F8,
+    .field_1500 = 0xf8f8,
 
-    .field_1502 = 0xF8F8,
+    .field_1502 = 0xf8f8,
 
-    .field_1504 = 0xF8F8,
+    .field_1504 = 0xf8f8,
 
-    .field_1506 = 0xF8F8,
+    .field_1506 = 0xf8f8,
 
-    .field_1508 = 0xF8F8,
+    .field_1508 = 0xf8f8,
 
-    .field_150a = 0xF8F8,
+    .field_150a = 0xf8f8,
 
-    .field_150c = 0xF8F8,
+    .field_150c = 0xf8f8,
 
-    .field_150e = 0xF8F8,
+    .field_150e = 0xf8f8,
 
-    .field_1510 = 0xF8F8,
+    .field_1510 = 0xf8f8,
 
-    .field_1512 = 0xF8F8,
+    .field_1512 = 0xf8f8,
 
-    .field_1514 = 0xF8F8,
+    .field_1514 = 0xf8f8,
 
-    .field_1516 = 0xF8F8,
+    .field_1516 = 0xf8f8,
 
-    .field_1518 = 0xF8F8,
+    .field_1518 = 0xf8f8,
 
-    .field_151a = 0xF8F8,
+    .field_151a = 0xf8f8,
 
-    .field_151c = 0xF8F8,
+    .field_151c = 0xf8f8,
 
-    .field_151e = 0xF8F8,
+    .field_151e = 0xf8f8,
 
-    .field_1520 = 0xF8F8,
+    .field_1520 = 0xf8f8,
 
-    .field_1522 = 0xF8F8,
+    .field_1522 = 0xf8f8,
 
-    .field_1524 = 0xF8F8,
+    .field_1524 = 0xf8f8,
 
-    .field_1526 = 0xF8F8,
+    .field_1526 = 0xf8f8,
 
-    .field_1528 = 0xF8F8,
+    .field_1528 = 0xf8f8,
 
-    .field_152a = 0xF8F8,
+    .field_152a = 0xf8f8,
 
-    .field_152c = 0xF8F8,
+    .field_152c = 0xf8f8,
 
-    .field_152e = 0xF8F8,
+    .field_152e = 0xf8f8,
 
-    .field_1530 = 0xF8F8,
+    .field_1530 = 0xf8f8,
 
-    .field_1532 = 0xF8F8,
+    .field_1532 = 0xf8f8,
 
-    .field_1534 = 0x07F8,
+    .field_1534 = 0x07f8,
 
-    .field_1536 = 0xF8F8,
+    .field_1536 = 0xf8f8,
 
-    .field_1538 = 0xF807,
+    .field_1538 = 0xf807,
 
-    .field_153a = 0x07F8,
+    .field_153a = 0x07f8,
 
-    .field_153c = 0x07F8,
+    .field_153c = 0x07f8,
 
-    .field_153e = 0x07F8,
+    .field_153e = 0x07f8,
 
-    .field_1540 = 0x07F8,
+    .field_1540 = 0x07f8,
 
-    .field_1542 = 0x07F8,
+    .field_1542 = 0x07f8,
 
     .field_1544 = 0x0707,
 
@@ -16809,73 +16809,73 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_241 = { 0 },
 
-    .field_1570 = 0xF8F8,
+    .field_1570 = 0xf8f8,
 
-    .field_1572 = 0xF8F8,
+    .field_1572 = 0xf8f8,
 
-    .field_1574 = 0xF8F8,
+    .field_1574 = 0xf8f8,
 
-    .field_1576 = 0xF8F8,
+    .field_1576 = 0xf8f8,
 
-    .field_1578 = 0xF8F8,
+    .field_1578 = 0xf8f8,
 
-    .field_157a = 0xF8F8,
+    .field_157a = 0xf8f8,
 
-    .field_157c = 0xF8F8,
+    .field_157c = 0xf8f8,
 
-    .field_157e = 0xF8F8,
+    .field_157e = 0xf8f8,
 
-    .field_1580 = 0xF8F8,
+    .field_1580 = 0xf8f8,
 
-    .field_1582 = 0xF8F8,
+    .field_1582 = 0xf8f8,
 
-    .field_1584 = 0xF8F8,
+    .field_1584 = 0xf8f8,
 
-    .field_1586 = 0xF8F8,
+    .field_1586 = 0xf8f8,
 
-    .field_1588 = 0xF8F8,
+    .field_1588 = 0xf8f8,
 
-    .field_158a = 0xF8F8,
+    .field_158a = 0xf8f8,
 
-    .field_158c = 0xF8F8,
+    .field_158c = 0xf8f8,
 
-    .field_158e = 0xF8F8,
+    .field_158e = 0xf8f8,
 
-    .field_1590 = 0xF8F8,
+    .field_1590 = 0xf8f8,
 
-    .field_1592 = 0xF8F8,
+    .field_1592 = 0xf8f8,
 
-    .field_1594 = 0xF8F8,
+    .field_1594 = 0xf8f8,
 
-    .field_1596 = 0xF8F8,
+    .field_1596 = 0xf8f8,
 
-    .field_1598 = 0xF8F8,
+    .field_1598 = 0xf8f8,
 
-    .field_159a = 0xF8F8,
+    .field_159a = 0xf8f8,
 
-    .field_159c = 0xF8F8,
+    .field_159c = 0xf8f8,
 
-    .field_159e = 0xF8F8,
+    .field_159e = 0xf8f8,
 
-    .field_15a0 = 0xF8F8,
+    .field_15a0 = 0xf8f8,
 
-    .field_15a2 = 0xF8F8,
+    .field_15a2 = 0xf8f8,
 
-    .field_15a4 = 0x07F8,
+    .field_15a4 = 0x07f8,
 
-    .field_15a6 = 0xF8F8,
+    .field_15a6 = 0xf8f8,
 
-    .field_15a8 = 0xF807,
+    .field_15a8 = 0xf807,
 
-    .field_15aa = 0x07F8,
+    .field_15aa = 0x07f8,
 
-    .field_15ac = 0x07F8,
+    .field_15ac = 0x07f8,
 
-    .field_15ae = 0x07F8,
+    .field_15ae = 0x07f8,
 
-    .field_15b0 = 0x07F8,
+    .field_15b0 = 0x07f8,
 
-    .field_15b2 = 0x07F8,
+    .field_15b2 = 0x07f8,
 
     .field_15b4 = 0x0707,
 
@@ -16921,63 +16921,63 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_242 = { 0 },
 
-    .field_15ea = 0xF8F8,
+    .field_15ea = 0xf8f8,
 
-    .field_15ec = 0xF8F8,
+    .field_15ec = 0xf8f8,
 
-    .field_15ee = 0xF8F8,
+    .field_15ee = 0xf8f8,
 
-    .field_15f0 = 0xF8F8,
+    .field_15f0 = 0xf8f8,
 
-    .field_15f2 = 0xF8F8,
+    .field_15f2 = 0xf8f8,
 
-    .field_15f4 = 0xF8F8,
+    .field_15f4 = 0xf8f8,
 
-    .field_15f6 = 0xF8F8,
+    .field_15f6 = 0xf8f8,
 
-    .field_15f8 = 0xF8F8,
+    .field_15f8 = 0xf8f8,
 
-    .field_15fa = 0xF8F8,
+    .field_15fa = 0xf8f8,
 
-    .field_15fc = 0xF8F8,
+    .field_15fc = 0xf8f8,
 
-    .field_15fe = 0xF8F8,
+    .field_15fe = 0xf8f8,
 
-    .field_1600 = 0xF8F8,
+    .field_1600 = 0xf8f8,
 
-    .field_1602 = 0xF8F8,
+    .field_1602 = 0xf8f8,
 
-    .field_1604 = 0xF8F8,
+    .field_1604 = 0xf8f8,
 
-    .field_1606 = 0xF8F8,
+    .field_1606 = 0xf8f8,
 
-    .field_1608 = 0xF8F8,
+    .field_1608 = 0xf8f8,
 
-    .field_160a = 0xF8F8,
+    .field_160a = 0xf8f8,
 
-    .field_160c = 0xF8F8,
+    .field_160c = 0xf8f8,
 
-    .field_160e = 0xF8F8,
+    .field_160e = 0xf8f8,
 
-    .field_1610 = 0xF8F8,
+    .field_1610 = 0xf8f8,
 
-    .field_1612 = 0xF8F8,
+    .field_1612 = 0xf8f8,
 
-    .field_1614 = 0x07F8,
+    .field_1614 = 0x07f8,
 
-    .field_1616 = 0xF8F8,
+    .field_1616 = 0xf8f8,
 
-    .field_1618 = 0xF807,
+    .field_1618 = 0xf807,
 
-    .field_161a = 0x07F8,
+    .field_161a = 0x07f8,
 
-    .field_161c = 0x07F8,
+    .field_161c = 0x07f8,
 
-    .field_161e = 0x07F8,
+    .field_161e = 0x07f8,
 
-    .field_1620 = 0x07F8,
+    .field_1620 = 0x07f8,
 
-    .field_1622 = 0x07F8,
+    .field_1622 = 0x07f8,
 
     .field_1624 = 0x0707,
 
@@ -17033,53 +17033,53 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_243 = { 0 },
 
-    .field_1664 = 0xF8F8,
+    .field_1664 = 0xf8f8,
 
-    .field_1666 = 0xF8F8,
+    .field_1666 = 0xf8f8,
 
-    .field_1668 = 0xF8F8,
+    .field_1668 = 0xf8f8,
 
-    .field_166a = 0xF8F8,
+    .field_166a = 0xf8f8,
 
-    .field_166c = 0xF8F8,
+    .field_166c = 0xf8f8,
 
-    .field_166e = 0xF8F8,
+    .field_166e = 0xf8f8,
 
-    .field_1670 = 0xF8F8,
+    .field_1670 = 0xf8f8,
 
-    .field_1672 = 0xF8F8,
+    .field_1672 = 0xf8f8,
 
-    .field_1674 = 0xF8F8,
+    .field_1674 = 0xf8f8,
 
-    .field_1676 = 0xF8F8,
+    .field_1676 = 0xf8f8,
 
-    .field_1678 = 0xF8F8,
+    .field_1678 = 0xf8f8,
 
-    .field_167a = 0xF8F8,
+    .field_167a = 0xf8f8,
 
-    .field_167c = 0xF8F8,
+    .field_167c = 0xf8f8,
 
-    .field_167e = 0xF8F8,
+    .field_167e = 0xf8f8,
 
-    .field_1680 = 0xF8F8,
+    .field_1680 = 0xf8f8,
 
-    .field_1682 = 0xF8F8,
+    .field_1682 = 0xf8f8,
 
-    .field_1684 = 0x07F8,
+    .field_1684 = 0x07f8,
 
-    .field_1686 = 0xF8F8,
+    .field_1686 = 0xf8f8,
 
-    .field_1688 = 0xF807,
+    .field_1688 = 0xf807,
 
-    .field_168a = 0x07F8,
+    .field_168a = 0x07f8,
 
-    .field_168c = 0x07F8,
+    .field_168c = 0x07f8,
 
-    .field_168e = 0x07F8,
+    .field_168e = 0x07f8,
 
-    .field_1690 = 0x07F8,
+    .field_1690 = 0x07f8,
 
-    .field_1692 = 0x07F8,
+    .field_1692 = 0x07f8,
 
     .field_1694 = 0x0707,
 
@@ -17145,43 +17145,43 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_244 = { 0 },
 
-    .field_16de = 0xF8F8,
+    .field_16de = 0xf8f8,
 
-    .field_16e0 = 0xF8F8,
+    .field_16e0 = 0xf8f8,
 
-    .field_16e2 = 0xF8F8,
+    .field_16e2 = 0xf8f8,
 
-    .field_16e4 = 0xF8F8,
+    .field_16e4 = 0xf8f8,
 
-    .field_16e6 = 0xF8F8,
+    .field_16e6 = 0xf8f8,
 
-    .field_16e8 = 0xF8F8,
+    .field_16e8 = 0xf8f8,
 
-    .field_16ea = 0xF8F8,
+    .field_16ea = 0xf8f8,
 
-    .field_16ec = 0xF8F8,
+    .field_16ec = 0xf8f8,
 
-    .field_16ee = 0xF8F8,
+    .field_16ee = 0xf8f8,
 
-    .field_16f0 = 0xF8F8,
+    .field_16f0 = 0xf8f8,
 
-    .field_16f2 = 0xF8F8,
+    .field_16f2 = 0xf8f8,
 
-    .field_16f4 = 0x07F8,
+    .field_16f4 = 0x07f8,
 
-    .field_16f6 = 0xF8F8,
+    .field_16f6 = 0xf8f8,
 
-    .field_16f8 = 0xF807,
+    .field_16f8 = 0xf807,
 
-    .field_16fa = 0x07F8,
+    .field_16fa = 0x07f8,
 
-    .field_16fc = 0x07F8,
+    .field_16fc = 0x07f8,
 
-    .field_16fe = 0x07F8,
+    .field_16fe = 0x07f8,
 
-    .field_1700 = 0x07F8,
+    .field_1700 = 0x07f8,
 
-    .field_1702 = 0x07F8,
+    .field_1702 = 0x07f8,
 
     .field_1704 = 0x0707,
 
@@ -17257,33 +17257,33 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_245 = { 0 },
 
-    .field_1757 = 0xF8F8,
+    .field_1757 = 0xf8f8,
 
-    .field_1759 = 0xF8F8,
+    .field_1759 = 0xf8f8,
 
-    .field_175b = 0xF8F8,
+    .field_175b = 0xf8f8,
 
-    .field_175d = 0xF8F8,
+    .field_175d = 0xf8f8,
 
-    .field_175f = 0xF8F8,
+    .field_175f = 0xf8f8,
 
-    .field_1761 = 0xF8F8,
+    .field_1761 = 0xf8f8,
 
-    .field_1763 = 0xF8F8,
+    .field_1763 = 0xf8f8,
 
-    .field_1765 = 0xF807,
+    .field_1765 = 0xf807,
 
-    .field_1767 = 0x07F8,
+    .field_1767 = 0x07f8,
 
-    .field_1769 = 0xF8F8,
+    .field_1769 = 0xf8f8,
 
-    .field_176b = 0xF807,
+    .field_176b = 0xf807,
 
-    .field_176d = 0xF807,
+    .field_176d = 0xf807,
 
-    .field_176f = 0xF807,
+    .field_176f = 0xf807,
 
-    .field_1771 = 0xF807,
+    .field_1771 = 0xf807,
 
     .field_1773 = 0x0707,
 
@@ -17369,23 +17369,23 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_246 = { 0 },
 
-    .field_17d2 = 0xF8F8,
+    .field_17d2 = 0xf8f8,
 
-    .field_17d4 = 0x07F8,
+    .field_17d4 = 0x07f8,
 
-    .field_17d6 = 0xF8F8,
+    .field_17d6 = 0xf8f8,
 
-    .field_17d8 = 0xF807,
+    .field_17d8 = 0xf807,
 
-    .field_17da = 0x07F8,
+    .field_17da = 0x07f8,
 
-    .field_17dc = 0x07F8,
+    .field_17dc = 0x07f8,
 
-    .field_17de = 0x07F8,
+    .field_17de = 0x07f8,
 
-    .field_17e0 = 0x07F8,
+    .field_17e0 = 0x07f8,
 
-    .field_17e2 = 0x07F8,
+    .field_17e2 = 0x07f8,
 
     .field_17e4 = 0x0707,
 
@@ -17481,13 +17481,13 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_247 = { 0 },
 
-    .field_184c = 0x07F8,
+    .field_184c = 0x07f8,
 
-    .field_184e = 0x07F8,
+    .field_184e = 0x07f8,
 
-    .field_1850 = 0x07F8,
+    .field_1850 = 0x07f8,
 
-    .field_1852 = 0x07F8,
+    .field_1852 = 0x07f8,
 
     .field_1854 = 0x0707,
 
@@ -19595,10 +19595,10 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_209c = 0x0707,
 
-    .field_209e = 0x07F8,
+    .field_209e = 0x07f8,
 
     .ptrs_5 = {
-        0x00F807F8,
+        0x00f807f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -19700,20 +19700,20 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_210e = 0x0707,
 
-    .field_2110 = 0x07F8,
+    .field_2110 = 0x07f8,
 
-    .field_2112 = 0x07F8,
+    .field_2112 = 0x07f8,
 
-    .field_2114 = 0x07F8,
+    .field_2114 = 0x07f8,
 
-    .field_2116 = 0xF8F8,
+    .field_2116 = 0xf8f8,
 
-    .field_2118 = 0xF807,
+    .field_2118 = 0xf807,
 
-    .field_211a = 0x07F8,
+    .field_211a = 0x07f8,
 
     .ptrs_6 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -19805,31 +19805,31 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_2180 = 0x0707,
 
-    .field_2182 = 0x07F8,
+    .field_2182 = 0x07f8,
 
-    .field_2184 = 0x07F8,
+    .field_2184 = 0x07f8,
 
-    .field_2186 = 0x07F8,
+    .field_2186 = 0x07f8,
 
-    .field_2188 = 0xF8F8,
+    .field_2188 = 0xf8f8,
 
-    .field_218a = 0xF807,
+    .field_218a = 0xf807,
 
-    .field_218c = 0x07F8,
+    .field_218c = 0x07f8,
 
-    .field_218e = 0xF8F8,
+    .field_218e = 0xf8f8,
 
-    .field_2190 = 0xF8F8,
+    .field_2190 = 0xf8f8,
 
-    .field_2192 = 0xF8F8,
+    .field_2192 = 0xf8f8,
 
-    .field_2194 = 0xF8F8,
+    .field_2194 = 0xf8f8,
 
-    .field_2196 = 0xF8F8,
+    .field_2196 = 0xf8f8,
 
-    .field_2198 = 0xF8F8,
+    .field_2198 = 0xf8f8,
 
-    .field_219a = 0xF8F8,
+    .field_219a = 0xf8f8,
 
     .pad_250 = { 0 },
 
@@ -19909,40 +19909,40 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_21f2 = 0x0707,
 
-    .field_21f4 = 0x07F8,
+    .field_21f4 = 0x07f8,
 
-    .field_21f6 = 0x07F8,
+    .field_21f6 = 0x07f8,
 
-    .field_21f8 = 0x07F8,
+    .field_21f8 = 0x07f8,
 
-    .field_21fa = 0xF8F8,
+    .field_21fa = 0xf8f8,
 
-    .field_21fc = 0xF807,
+    .field_21fc = 0xf807,
 
-    .field_21fe = 0x07F8,
+    .field_21fe = 0x07f8,
 
-    .field_2200 = 0xF8F8,
+    .field_2200 = 0xf8f8,
 
-    .field_2202 = 0xF8F8,
+    .field_2202 = 0xf8f8,
 
-    .field_2204 = 0xF8F8,
+    .field_2204 = 0xf8f8,
 
-    .field_2206 = 0xF8F8,
+    .field_2206 = 0xf8f8,
 
-    .field_2208 = 0xF8F8,
+    .field_2208 = 0xf8f8,
 
-    .field_220a = 0xF8F8,
+    .field_220a = 0xf8f8,
 
-    .field_220c = 0xF8F8,
+    .field_220c = 0xf8f8,
 
-    .field_220e = 0xF8F8,
+    .field_220e = 0xf8f8,
 
-    .field_2210 = 0xF8F8,
+    .field_2210 = 0xf8f8,
 
-    .field_2212 = 0xF8F8,
+    .field_2212 = 0xf8f8,
 
     .ptrs_7 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -20014,50 +20014,50 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_2264 = 0x0707,
 
-    .field_2266 = 0x07F8,
+    .field_2266 = 0x07f8,
 
-    .field_2268 = 0x07F8,
+    .field_2268 = 0x07f8,
 
-    .field_226a = 0x07F8,
+    .field_226a = 0x07f8,
 
-    .field_226c = 0xF8F8,
+    .field_226c = 0xf8f8,
 
-    .field_226e = 0xF807,
+    .field_226e = 0xf807,
 
-    .field_2270 = 0x07F8,
+    .field_2270 = 0x07f8,
 
-    .field_2272 = 0xF8F8,
+    .field_2272 = 0xf8f8,
 
-    .field_2274 = 0xF8F8,
+    .field_2274 = 0xf8f8,
 
-    .field_2276 = 0xF8F8,
+    .field_2276 = 0xf8f8,
 
-    .field_2278 = 0xF8F8,
+    .field_2278 = 0xf8f8,
 
-    .field_227a = 0xF8F8,
+    .field_227a = 0xf8f8,
 
-    .field_227c = 0xF8F8,
+    .field_227c = 0xf8f8,
 
-    .field_227e = 0xF8F8,
+    .field_227e = 0xf8f8,
 
-    .field_2280 = 0xF8F8,
+    .field_2280 = 0xf8f8,
 
-    .field_2282 = 0xF8F8,
+    .field_2282 = 0xf8f8,
 
-    .field_2284 = 0xF8F8,
+    .field_2284 = 0xf8f8,
 
-    .field_2286 = 0xF8F8,
+    .field_2286 = 0xf8f8,
 
-    .field_2288 = 0xF8F8,
+    .field_2288 = 0xf8f8,
 
-    .field_228a = 0xF8F8,
+    .field_228a = 0xf8f8,
 
-    .field_228c = 0xF8F8,
+    .field_228c = 0xf8f8,
 
-    .field_228e = 0xF8F8,
+    .field_228e = 0xf8f8,
 
     .ptrs_8 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -20119,60 +20119,60 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_22d6 = 0x0707,
 
-    .field_22d8 = 0x07F8,
+    .field_22d8 = 0x07f8,
 
-    .field_22da = 0x07F8,
+    .field_22da = 0x07f8,
 
-    .field_22dc = 0x07F8,
+    .field_22dc = 0x07f8,
 
-    .field_22de = 0xF8F8,
+    .field_22de = 0xf8f8,
 
-    .field_22e0 = 0xF807,
+    .field_22e0 = 0xf807,
 
-    .field_22e2 = 0x07F8,
+    .field_22e2 = 0x07f8,
 
-    .field_22e4 = 0xF8F8,
+    .field_22e4 = 0xf8f8,
 
-    .field_22e6 = 0xF8F8,
+    .field_22e6 = 0xf8f8,
 
-    .field_22e8 = 0xF8F8,
+    .field_22e8 = 0xf8f8,
 
-    .field_22ea = 0xF8F8,
+    .field_22ea = 0xf8f8,
 
-    .field_22ec = 0xF8F8,
+    .field_22ec = 0xf8f8,
 
-    .field_22ee = 0xF8F8,
+    .field_22ee = 0xf8f8,
 
-    .field_22f0 = 0xF8F8,
+    .field_22f0 = 0xf8f8,
 
-    .field_22f2 = 0xF8F8,
+    .field_22f2 = 0xf8f8,
 
-    .field_22f4 = 0xF8F8,
+    .field_22f4 = 0xf8f8,
 
-    .field_22f6 = 0xF8F8,
+    .field_22f6 = 0xf8f8,
 
-    .field_22f8 = 0xF8F8,
+    .field_22f8 = 0xf8f8,
 
-    .field_22fa = 0xF8F8,
+    .field_22fa = 0xf8f8,
 
-    .field_22fc = 0xF8F8,
+    .field_22fc = 0xf8f8,
 
-    .field_22fe = 0xF8F8,
+    .field_22fe = 0xf8f8,
 
-    .field_2300 = 0xF8F8,
+    .field_2300 = 0xf8f8,
 
-    .field_2302 = 0xF8F8,
+    .field_2302 = 0xf8f8,
 
-    .field_2304 = 0xF8F8,
+    .field_2304 = 0xf8f8,
 
-    .field_2306 = 0xF8F8,
+    .field_2306 = 0xf8f8,
 
-    .field_2308 = 0xF8F8,
+    .field_2308 = 0xf8f8,
 
-    .field_230a = 0xF8F8,
+    .field_230a = 0xf8f8,
 
     .ptrs_9 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -20224,70 +20224,70 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_2348 = 0x0707,
 
-    .field_234a = 0x07F8,
+    .field_234a = 0x07f8,
 
-    .field_234c = 0x07F8,
+    .field_234c = 0x07f8,
 
-    .field_234e = 0x07F8,
+    .field_234e = 0x07f8,
 
-    .field_2350 = 0xF8F8,
+    .field_2350 = 0xf8f8,
 
-    .field_2352 = 0xF807,
+    .field_2352 = 0xf807,
 
-    .field_2354 = 0x07F8,
+    .field_2354 = 0x07f8,
 
-    .field_2356 = 0xF8F8,
+    .field_2356 = 0xf8f8,
 
-    .field_2358 = 0xF8F8,
+    .field_2358 = 0xf8f8,
 
-    .field_235a = 0xF8F8,
+    .field_235a = 0xf8f8,
 
-    .field_235c = 0xF8F8,
+    .field_235c = 0xf8f8,
 
-    .field_235e = 0xF8F8,
+    .field_235e = 0xf8f8,
 
-    .field_2360 = 0xF8F8,
+    .field_2360 = 0xf8f8,
 
-    .field_2362 = 0xF8F8,
+    .field_2362 = 0xf8f8,
 
-    .field_2364 = 0xF8F8,
+    .field_2364 = 0xf8f8,
 
-    .field_2366 = 0xF8F8,
+    .field_2366 = 0xf8f8,
 
-    .field_2368 = 0xF8F8,
+    .field_2368 = 0xf8f8,
 
-    .field_236a = 0xF8F8,
+    .field_236a = 0xf8f8,
 
-    .field_236c = 0xF8F8,
+    .field_236c = 0xf8f8,
 
-    .field_236e = 0xF8F8,
+    .field_236e = 0xf8f8,
 
-    .field_2370 = 0xF8F8,
+    .field_2370 = 0xf8f8,
 
-    .field_2372 = 0xF8F8,
+    .field_2372 = 0xf8f8,
 
-    .field_2374 = 0xF8F8,
+    .field_2374 = 0xf8f8,
 
-    .field_2376 = 0xF8F8,
+    .field_2376 = 0xf8f8,
 
-    .field_2378 = 0xF8F8,
+    .field_2378 = 0xf8f8,
 
-    .field_237a = 0xF8F8,
+    .field_237a = 0xf8f8,
 
-    .field_237c = 0xF8F8,
+    .field_237c = 0xf8f8,
 
-    .field_237e = 0xF8F8,
+    .field_237e = 0xf8f8,
 
-    .field_2380 = 0xF8F8,
+    .field_2380 = 0xf8f8,
 
-    .field_2382 = 0xF8F8,
+    .field_2382 = 0xf8f8,
 
-    .field_2384 = 0xF8F8,
+    .field_2384 = 0xf8f8,
 
-    .field_2386 = 0xF8F8,
+    .field_2386 = 0xf8f8,
 
     .ptrs_10 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -20329,80 +20329,80 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_23ba = 0x0707,
 
-    .field_23bc = 0x07F8,
+    .field_23bc = 0x07f8,
 
-    .field_23be = 0x07F8,
+    .field_23be = 0x07f8,
 
-    .field_23c0 = 0x07F8,
+    .field_23c0 = 0x07f8,
 
-    .field_23c2 = 0xF8F8,
+    .field_23c2 = 0xf8f8,
 
-    .field_23c4 = 0xF807,
+    .field_23c4 = 0xf807,
 
-    .field_23c6 = 0x07F8,
+    .field_23c6 = 0x07f8,
 
-    .field_23c8 = 0xF8F8,
+    .field_23c8 = 0xf8f8,
 
-    .field_23ca = 0xF8F8,
+    .field_23ca = 0xf8f8,
 
-    .field_23cc = 0xF8F8,
+    .field_23cc = 0xf8f8,
 
-    .field_23ce = 0xF8F8,
+    .field_23ce = 0xf8f8,
 
-    .field_23d0 = 0xF8F8,
+    .field_23d0 = 0xf8f8,
 
-    .field_23d2 = 0xF8F8,
+    .field_23d2 = 0xf8f8,
 
-    .field_23d4 = 0xF8F8,
+    .field_23d4 = 0xf8f8,
 
-    .field_23d6 = 0xF8F8,
+    .field_23d6 = 0xf8f8,
 
-    .field_23d8 = 0xF8F8,
+    .field_23d8 = 0xf8f8,
 
-    .field_23da = 0xF8F8,
+    .field_23da = 0xf8f8,
 
-    .field_23dc = 0xF8F8,
+    .field_23dc = 0xf8f8,
 
-    .field_23de = 0xF8F8,
+    .field_23de = 0xf8f8,
 
-    .field_23e0 = 0xF8F8,
+    .field_23e0 = 0xf8f8,
 
-    .field_23e2 = 0xF8F8,
+    .field_23e2 = 0xf8f8,
 
-    .field_23e4 = 0xF8F8,
+    .field_23e4 = 0xf8f8,
 
-    .field_23e6 = 0xF8F8,
+    .field_23e6 = 0xf8f8,
 
-    .field_23e8 = 0xF8F8,
+    .field_23e8 = 0xf8f8,
 
-    .field_23ea = 0xF8F8,
+    .field_23ea = 0xf8f8,
 
-    .field_23ec = 0xF8F8,
+    .field_23ec = 0xf8f8,
 
-    .field_23ee = 0xF8F8,
+    .field_23ee = 0xf8f8,
 
-    .field_23f0 = 0xF8F8,
+    .field_23f0 = 0xf8f8,
 
-    .field_23f2 = 0xF8F8,
+    .field_23f2 = 0xf8f8,
 
-    .field_23f4 = 0xF8F8,
+    .field_23f4 = 0xf8f8,
 
-    .field_23f6 = 0xF8F8,
+    .field_23f6 = 0xf8f8,
 
-    .field_23f8 = 0xF8F8,
+    .field_23f8 = 0xf8f8,
 
-    .field_23fa = 0xF8F8,
+    .field_23fa = 0xf8f8,
 
-    .field_23fc = 0xF8F8,
+    .field_23fc = 0xf8f8,
 
-    .field_23fe = 0xF8F8,
+    .field_23fe = 0xf8f8,
 
-    .field_2400 = 0xF8F8,
+    .field_2400 = 0xf8f8,
 
-    .field_2402 = 0xF8F8,
+    .field_2402 = 0xf8f8,
 
     .ptrs_11 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -20434,90 +20434,90 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_242c = 0x0707,
 
-    .field_242e = 0x07F8,
+    .field_242e = 0x07f8,
 
-    .field_2430 = 0x07F8,
+    .field_2430 = 0x07f8,
 
-    .field_2432 = 0x07F8,
+    .field_2432 = 0x07f8,
 
-    .field_2434 = 0xF8F8,
+    .field_2434 = 0xf8f8,
 
-    .field_2436 = 0xF807,
+    .field_2436 = 0xf807,
 
-    .field_2438 = 0x07F8,
+    .field_2438 = 0x07f8,
 
-    .field_243a = 0xF8F8,
+    .field_243a = 0xf8f8,
 
-    .field_243c = 0xF8F8,
+    .field_243c = 0xf8f8,
 
-    .field_243e = 0xF8F8,
+    .field_243e = 0xf8f8,
 
-    .field_2440 = 0xF8F8,
+    .field_2440 = 0xf8f8,
 
-    .field_2442 = 0xF8F8,
+    .field_2442 = 0xf8f8,
 
-    .field_2444 = 0xF8F8,
+    .field_2444 = 0xf8f8,
 
-    .field_2446 = 0xF8F8,
+    .field_2446 = 0xf8f8,
 
-    .field_2448 = 0xF8F8,
+    .field_2448 = 0xf8f8,
 
-    .field_244a = 0xF8F8,
+    .field_244a = 0xf8f8,
 
-    .field_244c = 0xF8F8,
+    .field_244c = 0xf8f8,
 
-    .field_244e = 0xF8F8,
+    .field_244e = 0xf8f8,
 
-    .field_2450 = 0xF8F8,
+    .field_2450 = 0xf8f8,
 
-    .field_2452 = 0xF8F8,
+    .field_2452 = 0xf8f8,
 
-    .field_2454 = 0xF8F8,
+    .field_2454 = 0xf8f8,
 
-    .field_2456 = 0xF8F8,
+    .field_2456 = 0xf8f8,
 
-    .field_2458 = 0xF8F8,
+    .field_2458 = 0xf8f8,
 
-    .field_245a = 0xF8F8,
+    .field_245a = 0xf8f8,
 
-    .field_245c = 0xF8F8,
+    .field_245c = 0xf8f8,
 
-    .field_245e = 0xF8F8,
+    .field_245e = 0xf8f8,
 
-    .field_2460 = 0xF8F8,
+    .field_2460 = 0xf8f8,
 
-    .field_2462 = 0xF8F8,
+    .field_2462 = 0xf8f8,
 
-    .field_2464 = 0xF8F8,
+    .field_2464 = 0xf8f8,
 
-    .field_2466 = 0xF8F8,
+    .field_2466 = 0xf8f8,
 
-    .field_2468 = 0xF8F8,
+    .field_2468 = 0xf8f8,
 
-    .field_246a = 0xF8F8,
+    .field_246a = 0xf8f8,
 
-    .field_246c = 0xF8F8,
+    .field_246c = 0xf8f8,
 
-    .field_246e = 0xF8F8,
+    .field_246e = 0xf8f8,
 
-    .field_2470 = 0xF8F8,
+    .field_2470 = 0xf8f8,
 
-    .field_2472 = 0xF8F8,
+    .field_2472 = 0xf8f8,
 
-    .field_2474 = 0xF8F8,
+    .field_2474 = 0xf8f8,
 
-    .field_2476 = 0xF8F8,
+    .field_2476 = 0xf8f8,
 
-    .field_2478 = 0xF8F8,
+    .field_2478 = 0xf8f8,
 
-    .field_247a = 0xF8F8,
+    .field_247a = 0xf8f8,
 
-    .field_247c = 0xF8F8,
+    .field_247c = 0xf8f8,
 
-    .field_247e = 0xF8F8,
+    .field_247e = 0xf8f8,
 
     .ptrs_12 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -20539,100 +20539,100 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_249e = 0x0707,
 
-    .field_24a0 = 0x07F8,
+    .field_24a0 = 0x07f8,
 
-    .field_24a2 = 0x07F8,
+    .field_24a2 = 0x07f8,
 
-    .field_24a4 = 0x07F8,
+    .field_24a4 = 0x07f8,
 
-    .field_24a6 = 0xF8F8,
+    .field_24a6 = 0xf8f8,
 
-    .field_24a8 = 0xF807,
+    .field_24a8 = 0xf807,
 
-    .field_24aa = 0x07F8,
+    .field_24aa = 0x07f8,
 
-    .field_24ac = 0xF8F8,
+    .field_24ac = 0xf8f8,
 
-    .field_24ae = 0xF8F8,
+    .field_24ae = 0xf8f8,
 
-    .field_24b0 = 0xF8F8,
+    .field_24b0 = 0xf8f8,
 
-    .field_24b2 = 0xF8F8,
+    .field_24b2 = 0xf8f8,
 
-    .field_24b4 = 0xF8F8,
+    .field_24b4 = 0xf8f8,
 
-    .field_24b6 = 0xF8F8,
+    .field_24b6 = 0xf8f8,
 
-    .field_24b8 = 0xF8F8,
+    .field_24b8 = 0xf8f8,
 
-    .field_24ba = 0xF8F8,
+    .field_24ba = 0xf8f8,
 
-    .field_24bc = 0xF8F8,
+    .field_24bc = 0xf8f8,
 
-    .field_24be = 0xF8F8,
+    .field_24be = 0xf8f8,
 
-    .field_24c0 = 0xF8F8,
+    .field_24c0 = 0xf8f8,
 
-    .field_24c2 = 0xF8F8,
+    .field_24c2 = 0xf8f8,
 
-    .field_24c4 = 0xF8F8,
+    .field_24c4 = 0xf8f8,
 
-    .field_24c6 = 0xF8F8,
+    .field_24c6 = 0xf8f8,
 
-    .field_24c8 = 0xF8F8,
+    .field_24c8 = 0xf8f8,
 
-    .field_24ca = 0xF8F8,
+    .field_24ca = 0xf8f8,
 
-    .field_24cc = 0xF8F8,
+    .field_24cc = 0xf8f8,
 
-    .field_24ce = 0xF8F8,
+    .field_24ce = 0xf8f8,
 
-    .field_24d0 = 0xF8F8,
+    .field_24d0 = 0xf8f8,
 
-    .field_24d2 = 0xF8F8,
+    .field_24d2 = 0xf8f8,
 
-    .field_24d4 = 0xF8F8,
+    .field_24d4 = 0xf8f8,
 
-    .field_24d6 = 0xF8F8,
+    .field_24d6 = 0xf8f8,
 
-    .field_24d8 = 0xF8F8,
+    .field_24d8 = 0xf8f8,
 
-    .field_24da = 0xF8F8,
+    .field_24da = 0xf8f8,
 
-    .field_24dc = 0xF8F8,
+    .field_24dc = 0xf8f8,
 
-    .field_24de = 0xF8F8,
+    .field_24de = 0xf8f8,
 
-    .field_24e0 = 0xF8F8,
+    .field_24e0 = 0xf8f8,
 
-    .field_24e2 = 0xF8F8,
+    .field_24e2 = 0xf8f8,
 
-    .field_24e4 = 0xF8F8,
+    .field_24e4 = 0xf8f8,
 
-    .field_24e6 = 0xF8F8,
+    .field_24e6 = 0xf8f8,
 
-    .field_24e8 = 0xF8F8,
+    .field_24e8 = 0xf8f8,
 
-    .field_24ea = 0xF8F8,
+    .field_24ea = 0xf8f8,
 
-    .field_24ec = 0xF8F8,
+    .field_24ec = 0xf8f8,
 
-    .field_24ee = 0xF8F8,
+    .field_24ee = 0xf8f8,
 
-    .field_24f0 = 0xF8F8,
+    .field_24f0 = 0xf8f8,
 
-    .field_24f2 = 0xF8F8,
+    .field_24f2 = 0xf8f8,
 
-    .field_24f4 = 0xF8F8,
+    .field_24f4 = 0xf8f8,
 
-    .field_24f6 = 0xF8F8,
+    .field_24f6 = 0xf8f8,
 
-    .field_24f8 = 0xF8F8,
+    .field_24f8 = 0xf8f8,
 
-    .field_24fa = 0xF8F8,
+    .field_24fa = 0xf8f8,
 
     .ptrs_13 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -20644,90 +20644,90 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_2510 = 0x0707,
 
-    .field_2512 = 0x07F8,
+    .field_2512 = 0x07f8,
 
-    .field_2514 = 0x07F8,
+    .field_2514 = 0x07f8,
 
-    .field_2516 = 0x07F8,
+    .field_2516 = 0x07f8,
 
-    .field_2518 = 0xF8F8,
+    .field_2518 = 0xf8f8,
 
-    .field_251a = 0xF807,
+    .field_251a = 0xf807,
 
-    .field_251c = 0x07F8,
+    .field_251c = 0x07f8,
 
-    .field_251e = 0xF8F8,
+    .field_251e = 0xf8f8,
 
-    .field_2520 = 0xF8F8,
+    .field_2520 = 0xf8f8,
 
-    .field_2522 = 0xF8F8,
+    .field_2522 = 0xf8f8,
 
-    .field_2524 = 0xF8F8,
+    .field_2524 = 0xf8f8,
 
-    .field_2526 = 0xF8F8,
+    .field_2526 = 0xf8f8,
 
-    .field_2528 = 0xF8F8,
+    .field_2528 = 0xf8f8,
 
-    .field_252a = 0xF8F8,
+    .field_252a = 0xf8f8,
 
-    .field_252c = 0xF8F8,
+    .field_252c = 0xf8f8,
 
-    .field_252e = 0xF8F8,
+    .field_252e = 0xf8f8,
 
-    .field_2530 = 0xF8F8,
+    .field_2530 = 0xf8f8,
 
-    .field_2532 = 0xF8F8,
+    .field_2532 = 0xf8f8,
 
-    .field_2534 = 0xF8F8,
+    .field_2534 = 0xf8f8,
 
-    .field_2536 = 0xF8F8,
+    .field_2536 = 0xf8f8,
 
-    .field_2538 = 0xF8F8,
+    .field_2538 = 0xf8f8,
 
-    .field_253a = 0xF8F8,
+    .field_253a = 0xf8f8,
 
-    .field_253c = 0xF8F8,
+    .field_253c = 0xf8f8,
 
-    .field_253e = 0xF8F8,
+    .field_253e = 0xf8f8,
 
-    .field_2540 = 0xF8F8,
+    .field_2540 = 0xf8f8,
 
-    .field_2542 = 0xF8F8,
+    .field_2542 = 0xf8f8,
 
-    .field_2544 = 0xF8F8,
+    .field_2544 = 0xf8f8,
 
-    .field_2546 = 0xF8F8,
+    .field_2546 = 0xf8f8,
 
-    .field_2548 = 0xF8F8,
+    .field_2548 = 0xf8f8,
 
-    .field_254a = 0xF8F8,
+    .field_254a = 0xf8f8,
 
-    .field_254c = 0xF8F8,
+    .field_254c = 0xf8f8,
 
-    .field_254e = 0xF8F8,
+    .field_254e = 0xf8f8,
 
-    .field_2550 = 0xF8F8,
+    .field_2550 = 0xf8f8,
 
-    .field_2552 = 0xF8F8,
+    .field_2552 = 0xf8f8,
 
-    .field_2554 = 0xF8F8,
+    .field_2554 = 0xf8f8,
 
-    .field_2556 = 0xF8F8,
+    .field_2556 = 0xf8f8,
 
-    .field_2558 = 0xF8F8,
+    .field_2558 = 0xf8f8,
 
-    .field_255a = 0xF8F8,
+    .field_255a = 0xf8f8,
 
-    .field_255c = 0xF8F8,
+    .field_255c = 0xf8f8,
 
-    .field_255e = 0xF8F8,
+    .field_255e = 0xf8f8,
 
-    .field_2560 = 0xF8F8,
+    .field_2560 = 0xf8f8,
 
-    .field_2562 = 0xF8F8,
+    .field_2562 = 0xf8f8,
 
     .ptrs_14 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -20749,80 +20749,80 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_2582 = 0x0707,
 
-    .field_2584 = 0x07F8,
+    .field_2584 = 0x07f8,
 
-    .field_2586 = 0x07F8,
+    .field_2586 = 0x07f8,
 
-    .field_2588 = 0x07F8,
+    .field_2588 = 0x07f8,
 
-    .field_258a = 0xF8F8,
+    .field_258a = 0xf8f8,
 
-    .field_258c = 0xF807,
+    .field_258c = 0xf807,
 
-    .field_258e = 0x07F8,
+    .field_258e = 0x07f8,
 
-    .field_2590 = 0xF8F8,
+    .field_2590 = 0xf8f8,
 
-    .field_2592 = 0xF8F8,
+    .field_2592 = 0xf8f8,
 
-    .field_2594 = 0xF8F8,
+    .field_2594 = 0xf8f8,
 
-    .field_2596 = 0xF8F8,
+    .field_2596 = 0xf8f8,
 
-    .field_2598 = 0xF8F8,
+    .field_2598 = 0xf8f8,
 
-    .field_259a = 0xF8F8,
+    .field_259a = 0xf8f8,
 
-    .field_259c = 0xF8F8,
+    .field_259c = 0xf8f8,
 
-    .field_259e = 0xF8F8,
+    .field_259e = 0xf8f8,
 
-    .field_25a0 = 0xF8F8,
+    .field_25a0 = 0xf8f8,
 
-    .field_25a2 = 0xF8F8,
+    .field_25a2 = 0xf8f8,
 
-    .field_25a4 = 0xF8F8,
+    .field_25a4 = 0xf8f8,
 
-    .field_25a6 = 0xF8F8,
+    .field_25a6 = 0xf8f8,
 
-    .field_25a8 = 0xF8F8,
+    .field_25a8 = 0xf8f8,
 
-    .field_25aa = 0xF8F8,
+    .field_25aa = 0xf8f8,
 
-    .field_25ac = 0xF8F8,
+    .field_25ac = 0xf8f8,
 
-    .field_25ae = 0xF8F8,
+    .field_25ae = 0xf8f8,
 
-    .field_25b0 = 0xF8F8,
+    .field_25b0 = 0xf8f8,
 
-    .field_25b2 = 0xF8F8,
+    .field_25b2 = 0xf8f8,
 
-    .field_25b4 = 0xF8F8,
+    .field_25b4 = 0xf8f8,
 
-    .field_25b6 = 0xF8F8,
+    .field_25b6 = 0xf8f8,
 
-    .field_25b8 = 0xF8F8,
+    .field_25b8 = 0xf8f8,
 
-    .field_25ba = 0xF8F8,
+    .field_25ba = 0xf8f8,
 
-    .field_25bc = 0xF8F8,
+    .field_25bc = 0xf8f8,
 
-    .field_25be = 0xF8F8,
+    .field_25be = 0xf8f8,
 
-    .field_25c0 = 0xF8F8,
+    .field_25c0 = 0xf8f8,
 
-    .field_25c2 = 0xF8F8,
+    .field_25c2 = 0xf8f8,
 
-    .field_25c4 = 0xF8F8,
+    .field_25c4 = 0xf8f8,
 
-    .field_25c6 = 0xF8F8,
+    .field_25c6 = 0xf8f8,
 
-    .field_25c8 = 0xF8F8,
+    .field_25c8 = 0xf8f8,
 
-    .field_25ca = 0xF8F8,
+    .field_25ca = 0xf8f8,
 
     .ptrs_15 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -20854,70 +20854,70 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_25f4 = 0x0707,
 
-    .field_25f6 = 0x07F8,
+    .field_25f6 = 0x07f8,
 
-    .field_25f8 = 0x07F8,
+    .field_25f8 = 0x07f8,
 
-    .field_25fa = 0x07F8,
+    .field_25fa = 0x07f8,
 
-    .field_25fc = 0xF8F8,
+    .field_25fc = 0xf8f8,
 
-    .field_25fe = 0xF807,
+    .field_25fe = 0xf807,
 
-    .field_2600 = 0x07F8,
+    .field_2600 = 0x07f8,
 
-    .field_2602 = 0xF8F8,
+    .field_2602 = 0xf8f8,
 
-    .field_2604 = 0xF8F8,
+    .field_2604 = 0xf8f8,
 
-    .field_2606 = 0xF8F8,
+    .field_2606 = 0xf8f8,
 
-    .field_2608 = 0xF8F8,
+    .field_2608 = 0xf8f8,
 
-    .field_260a = 0xF8F8,
+    .field_260a = 0xf8f8,
 
-    .field_260c = 0xF8F8,
+    .field_260c = 0xf8f8,
 
-    .field_260e = 0xF8F8,
+    .field_260e = 0xf8f8,
 
-    .field_2610 = 0xF8F8,
+    .field_2610 = 0xf8f8,
 
-    .field_2612 = 0xF8F8,
+    .field_2612 = 0xf8f8,
 
-    .field_2614 = 0xF8F8,
+    .field_2614 = 0xf8f8,
 
-    .field_2616 = 0xF8F8,
+    .field_2616 = 0xf8f8,
 
-    .field_2618 = 0xF8F8,
+    .field_2618 = 0xf8f8,
 
-    .field_261a = 0xF8F8,
+    .field_261a = 0xf8f8,
 
-    .field_261c = 0xF8F8,
+    .field_261c = 0xf8f8,
 
-    .field_261e = 0xF8F8,
+    .field_261e = 0xf8f8,
 
-    .field_2620 = 0xF8F8,
+    .field_2620 = 0xf8f8,
 
-    .field_2622 = 0xF8F8,
+    .field_2622 = 0xf8f8,
 
-    .field_2624 = 0xF8F8,
+    .field_2624 = 0xf8f8,
 
-    .field_2626 = 0xF8F8,
+    .field_2626 = 0xf8f8,
 
-    .field_2628 = 0xF8F8,
+    .field_2628 = 0xf8f8,
 
-    .field_262a = 0xF8F8,
+    .field_262a = 0xf8f8,
 
-    .field_262c = 0xF8F8,
+    .field_262c = 0xf8f8,
 
-    .field_262e = 0xF8F8,
+    .field_262e = 0xf8f8,
 
-    .field_2630 = 0xF8F8,
+    .field_2630 = 0xf8f8,
 
-    .field_2632 = 0xF8F8,
+    .field_2632 = 0xf8f8,
 
     .ptrs_16 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -20959,60 +20959,60 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_2666 = 0x0707,
 
-    .field_2668 = 0x07F8,
+    .field_2668 = 0x07f8,
 
-    .field_266a = 0x07F8,
+    .field_266a = 0x07f8,
 
-    .field_266c = 0x07F8,
+    .field_266c = 0x07f8,
 
-    .field_266e = 0xF8F8,
+    .field_266e = 0xf8f8,
 
-    .field_2670 = 0xF807,
+    .field_2670 = 0xf807,
 
-    .field_2672 = 0x07F8,
+    .field_2672 = 0x07f8,
 
-    .field_2674 = 0xF8F8,
+    .field_2674 = 0xf8f8,
 
-    .field_2676 = 0xF8F8,
+    .field_2676 = 0xf8f8,
 
-    .field_2678 = 0xF8F8,
+    .field_2678 = 0xf8f8,
 
-    .field_267a = 0xF8F8,
+    .field_267a = 0xf8f8,
 
-    .field_267c = 0xF8F8,
+    .field_267c = 0xf8f8,
 
-    .field_267e = 0xF8F8,
+    .field_267e = 0xf8f8,
 
-    .field_2680 = 0xF8F8,
+    .field_2680 = 0xf8f8,
 
-    .field_2682 = 0xF8F8,
+    .field_2682 = 0xf8f8,
 
-    .field_2684 = 0xF8F8,
+    .field_2684 = 0xf8f8,
 
-    .field_2686 = 0xF8F8,
+    .field_2686 = 0xf8f8,
 
-    .field_2688 = 0xF8F8,
+    .field_2688 = 0xf8f8,
 
-    .field_268a = 0xF8F8,
+    .field_268a = 0xf8f8,
 
-    .field_268c = 0xF8F8,
+    .field_268c = 0xf8f8,
 
-    .field_268e = 0xF8F8,
+    .field_268e = 0xf8f8,
 
-    .field_2690 = 0xF8F8,
+    .field_2690 = 0xf8f8,
 
-    .field_2692 = 0xF8F8,
+    .field_2692 = 0xf8f8,
 
-    .field_2694 = 0xF8F8,
+    .field_2694 = 0xf8f8,
 
-    .field_2696 = 0xF8F8,
+    .field_2696 = 0xf8f8,
 
-    .field_2698 = 0xF8F8,
+    .field_2698 = 0xf8f8,
 
-    .field_269a = 0xF8F8,
+    .field_269a = 0xf8f8,
 
     .ptrs_17 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -21064,50 +21064,50 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_26d8 = 0x0707,
 
-    .field_26da = 0x07F8,
+    .field_26da = 0x07f8,
 
-    .field_26dc = 0x07F8,
+    .field_26dc = 0x07f8,
 
-    .field_26de = 0x07F8,
+    .field_26de = 0x07f8,
 
-    .field_26e0 = 0xF8F8,
+    .field_26e0 = 0xf8f8,
 
-    .field_26e2 = 0xF807,
+    .field_26e2 = 0xf807,
 
-    .field_26e4 = 0x07F8,
+    .field_26e4 = 0x07f8,
 
-    .field_26e6 = 0xF8F8,
+    .field_26e6 = 0xf8f8,
 
-    .field_26e8 = 0xF8F8,
+    .field_26e8 = 0xf8f8,
 
-    .field_26ea = 0xF8F8,
+    .field_26ea = 0xf8f8,
 
-    .field_26ec = 0xF8F8,
+    .field_26ec = 0xf8f8,
 
-    .field_26ee = 0xF8F8,
+    .field_26ee = 0xf8f8,
 
-    .field_26f0 = 0xF8F8,
+    .field_26f0 = 0xf8f8,
 
-    .field_26f2 = 0xF8F8,
+    .field_26f2 = 0xf8f8,
 
-    .field_26f4 = 0xF8F8,
+    .field_26f4 = 0xf8f8,
 
-    .field_26f6 = 0xF8F8,
+    .field_26f6 = 0xf8f8,
 
-    .field_26f8 = 0xF8F8,
+    .field_26f8 = 0xf8f8,
 
-    .field_26fa = 0xF8F8,
+    .field_26fa = 0xf8f8,
 
-    .field_26fc = 0xF8F8,
+    .field_26fc = 0xf8f8,
 
-    .field_26fe = 0xF8F8,
+    .field_26fe = 0xf8f8,
 
-    .field_2700 = 0xF8F8,
+    .field_2700 = 0xf8f8,
 
-    .field_2702 = 0xF8F8,
+    .field_2702 = 0xf8f8,
 
     .ptrs_18 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -21169,40 +21169,40 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_274a = 0x0707,
 
-    .field_274c = 0x07F8,
+    .field_274c = 0x07f8,
 
-    .field_274e = 0x07F8,
+    .field_274e = 0x07f8,
 
-    .field_2750 = 0x07F8,
+    .field_2750 = 0x07f8,
 
-    .field_2752 = 0xF8F8,
+    .field_2752 = 0xf8f8,
 
-    .field_2754 = 0xF807,
+    .field_2754 = 0xf807,
 
-    .field_2756 = 0x07F8,
+    .field_2756 = 0x07f8,
 
-    .field_2758 = 0xF8F8,
+    .field_2758 = 0xf8f8,
 
-    .field_275a = 0xF8F8,
+    .field_275a = 0xf8f8,
 
-    .field_275c = 0xF8F8,
+    .field_275c = 0xf8f8,
 
-    .field_275e = 0xF8F8,
+    .field_275e = 0xf8f8,
 
-    .field_2760 = 0xF8F8,
+    .field_2760 = 0xf8f8,
 
-    .field_2762 = 0xF8F8,
+    .field_2762 = 0xf8f8,
 
-    .field_2764 = 0xF8F8,
+    .field_2764 = 0xf8f8,
 
-    .field_2766 = 0xF8F8,
+    .field_2766 = 0xf8f8,
 
-    .field_2768 = 0xF8F8,
+    .field_2768 = 0xf8f8,
 
-    .field_276a = 0xF8F8,
+    .field_276a = 0xf8f8,
 
     .ptrs_19 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -21274,31 +21274,31 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_27bc = 0x0707,
 
-    .field_27be = 0x07F8,
+    .field_27be = 0x07f8,
 
-    .field_27c0 = 0x07F8,
+    .field_27c0 = 0x07f8,
 
-    .field_27c2 = 0x07F8,
+    .field_27c2 = 0x07f8,
 
-    .field_27c4 = 0xF8F8,
+    .field_27c4 = 0xf8f8,
 
-    .field_27c6 = 0xF807,
+    .field_27c6 = 0xf807,
 
-    .field_27c8 = 0x07F8,
+    .field_27c8 = 0x07f8,
 
-    .field_27ca = 0xF8F8,
+    .field_27ca = 0xf8f8,
 
-    .field_27cc = 0xF8F8,
+    .field_27cc = 0xf8f8,
 
-    .field_27ce = 0xF8F8,
+    .field_27ce = 0xf8f8,
 
-    .field_27d0 = 0xF8F8,
+    .field_27d0 = 0xf8f8,
 
-    .field_27d2 = 0xF8F8,
+    .field_27d2 = 0xf8f8,
 
-    .field_27d4 = 0xF8F8,
+    .field_27d4 = 0xf8f8,
 
-    .field_27d6 = 0xF8F8,
+    .field_27d6 = 0xf8f8,
 
     .pad_251 = { 0 },
 
@@ -21378,20 +21378,20 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_282e = 0x0707,
 
-    .field_2830 = 0x07F8,
+    .field_2830 = 0x07f8,
 
-    .field_2832 = 0x07F8,
+    .field_2832 = 0x07f8,
 
-    .field_2834 = 0x07F8,
+    .field_2834 = 0x07f8,
 
-    .field_2836 = 0xF8F8,
+    .field_2836 = 0xf8f8,
 
-    .field_2838 = 0xF807,
+    .field_2838 = 0xf807,
 
-    .field_283a = 0x07F8,
+    .field_283a = 0x07f8,
 
     .ptrs_20 = {
-        0x00F8F8F8,
+        0x00f8f8f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -21483,10 +21483,10 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_28a0 = 0x0707,
 
-    .field_28a2 = 0x07F8,
+    .field_28a2 = 0x07f8,
 
     .ptrs_21 = {
-        0x00F807F8,
+        0x00f807f8,
         0x00000000,
         0x00000000,
         0x00000000,
@@ -24084,7 +24084,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_32dc = SELF(str_1166),
 
-    .field_32e0 = 0x03B5,
+    .field_32e0 = 0x03b5,
 
     .ptr_32e2 = SELF(str_1165),
 
@@ -24104,7 +24104,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_32fa = SELF(str_1161),
 
-    .field_32fe = 0x02BC,
+    .field_32fe = 0x02bc,
 
     .ptr_3300 = SELF(str_1160),
 
@@ -24116,15 +24116,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_330c = SELF(str_1158),
 
-    .field_3310 = 0x00AC,
+    .field_3310 = 0x00ac,
 
     .ptr_3312 = SELF(str_1157),
 
-    .field_3316 = 0x00A7,
+    .field_3316 = 0x00a7,
 
     .ptr_3318 = SELF(str_1156),
 
-    .field_331c = 0x00AB,
+    .field_331c = 0x00ab,
 
     .ptr_331e = SELF(str_1155),
 
@@ -24136,7 +24136,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_332a = SELF(str_1153),
 
-    .field_332e = 0x00BD,
+    .field_332e = 0x00bd,
 
     .ptr_3330 = SELF(str_1152),
 
@@ -24144,11 +24144,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3336 = SELF(str_1151),
 
-    .field_333a = 0x00FA,
+    .field_333a = 0x00fa,
 
     .ptr_333c = SELF(str_1150),
 
-    .field_3340 = 0x017A,
+    .field_3340 = 0x017a,
 
     .ptr_3342 = SELF(str_1149),
 
@@ -24156,7 +24156,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3348 = SELF(str_1148),
 
-    .field_334c = 0x00CD,
+    .field_334c = 0x00cd,
 
     .ptr_334e = SELF(str_1147),
 
@@ -24164,7 +24164,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3354 = SELF(str_1146),
 
-    .field_3358 = 0x011D,
+    .field_3358 = 0x011d,
 
     .ptr_335a = SELF(str_1145),
 
@@ -24192,11 +24192,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_337e = SELF(str_1139),
 
-    .field_3382 = 0x008D,
+    .field_3382 = 0x008d,
 
     .ptr_3384 = SELF(str_1138),
 
-    .field_3388 = 0x01E8,
+    .field_3388 = 0x01e8,
 
     .ptr_338a = SELF(str_1137),
 
@@ -24208,7 +24208,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3396 = SELF(str_1135),
 
-    .field_339a = 0x00DC,
+    .field_339a = 0x00dc,
 
     .ptr_339c = SELF(str_1134),
 
@@ -24220,11 +24220,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_33a8 = SELF(str_1132),
 
-    .field_33ac = 0x00F4,
+    .field_33ac = 0x00f4,
 
     .ptr_33ae = SELF(str_1131),
 
-    .field_33b2 = 0x00E4,
+    .field_33b2 = 0x00e4,
 
     .ptr_33b4 = SELF(str_1130),
 
@@ -24236,47 +24236,47 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_33c0 = SELF(str_1128),
 
-    .field_33c4 = 0x021B,
+    .field_33c4 = 0x021b,
 
     .ptr_33c6 = SELF(str_1127),
 
-    .field_33ca = 0x02F6,
+    .field_33ca = 0x02f6,
 
     .ptr_33cc = SELF(str_1126),
 
-    .field_33d0 = 0x02E0,
+    .field_33d0 = 0x02e0,
 
     .ptr_33d2 = SELF(str_1125),
 
-    .field_33d6 = 0x02E5,
+    .field_33d6 = 0x02e5,
 
     .ptr_33d8 = SELF(str_1124),
 
-    .field_33dc = 0x02F4,
+    .field_33dc = 0x02f4,
 
     .ptr_33de = SELF(str_1123),
 
-    .field_33e2 = 0x016A,
+    .field_33e2 = 0x016a,
 
     .ptr_33e4 = SELF(str_1122),
 
-    .field_33e8 = 0x02D2,
+    .field_33e8 = 0x02d2,
 
     .ptr_33ea = SELF(str_1121),
 
-    .field_33ee = 0x013C,
+    .field_33ee = 0x013c,
 
     .ptr_33f0 = SELF(str_1120),
 
-    .field_33f4 = 0x008C,
+    .field_33f4 = 0x008c,
 
     .ptr_33f6 = SELF(str_1119),
 
-    .field_33fa = 0x01D4,
+    .field_33fa = 0x01d4,
 
     .ptr_33fc = SELF(str_1118),
 
-    .field_3400 = 0x039A,
+    .field_3400 = 0x039a,
 
     .ptr_3402 = SELF(str_1117),
 
@@ -24284,11 +24284,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3408 = SELF(str_1116),
 
-    .field_340c = 0x00B8,
+    .field_340c = 0x00b8,
 
     .ptr_340e = SELF(str_1115),
 
-    .field_3412 = 0x01AE,
+    .field_3412 = 0x01ae,
 
     .ptr_3414 = SELF(str_1114),
 
@@ -24304,23 +24304,23 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3426 = SELF(str_1111),
 
-    .field_342a = 0x03D7,
+    .field_342a = 0x03d7,
 
     .ptr_342c = SELF(str_1110),
 
-    .field_3430 = 0x02B5,
+    .field_3430 = 0x02b5,
 
     .ptr_3432 = SELF(str_1109),
 
-    .field_3436 = 0x02D8,
+    .field_3436 = 0x02d8,
 
     .ptr_3438 = SELF(str_1108),
 
-    .field_343c = 0x010D,
+    .field_343c = 0x010d,
 
     .ptr_343e = SELF(str_1107),
 
-    .field_3442 = 0x001A,
+    .field_3442 = 0x001a,
 
     .ptr_3444 = SELF(str_1106),
 
@@ -24328,11 +24328,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_344a = SELF(str_1105),
 
-    .field_344e = 0x02F3,
+    .field_344e = 0x02f3,
 
     .ptr_3450 = SELF(str_1104),
 
-    .field_3454 = 0x02E3,
+    .field_3454 = 0x02e3,
 
     .ptr_3456 = SELF(str_1103),
 
@@ -24340,15 +24340,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_345c = SELF(str_1102),
 
-    .field_3460 = 0x023A,
+    .field_3460 = 0x023a,
 
     .ptr_3462 = SELF(str_1101),
 
-    .field_3466 = 0x01B1,
+    .field_3466 = 0x01b1,
 
     .ptr_3468 = SELF(str_1100),
 
-    .field_346c = 0x01BE,
+    .field_346c = 0x01be,
 
     .ptr_346e = SELF(str_1099),
 
@@ -24356,7 +24356,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3474 = SELF(str_1098),
 
-    .field_3478 = 0x02C8,
+    .field_3478 = 0x02c8,
 
     .ptr_347a = SELF(str_1097),
 
@@ -24384,7 +24384,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_349e = SELF(str_1091),
 
-    .field_34a2 = 0x00DB,
+    .field_34a2 = 0x00db,
 
     .ptr_34a4 = SELF(str_1090),
 
@@ -24396,7 +24396,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_34b0 = SELF(str_1088),
 
-    .field_34b4 = 0x00C8,
+    .field_34b4 = 0x00c8,
 
     .ptr_34b6 = SELF(str_1087),
 
@@ -24404,19 +24404,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_34bc = SELF(str_1086),
 
-    .field_34c0 = 0x02C9,
+    .field_34c0 = 0x02c9,
 
     .ptr_34c2 = SELF(str_1085),
 
-    .field_34c6 = 0x031E,
+    .field_34c6 = 0x031e,
 
     .ptr_34c8 = SELF(str_1084),
 
-    .field_34cc = 0x01EE,
+    .field_34cc = 0x01ee,
 
     .ptr_34ce = SELF(str_1083),
 
-    .field_34d2 = 0x02FE,
+    .field_34d2 = 0x02fe,
 
     .ptr_34d4 = SELF(str_1082),
 
@@ -24428,7 +24428,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_34e0 = SELF(str_1080),
 
-    .field_34e4 = 0x030C,
+    .field_34e4 = 0x030c,
 
     .ptr_34e6 = SELF(str_1079),
 
@@ -24436,7 +24436,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_34ec = SELF(str_1078),
 
-    .field_34f0 = 0x03A9,
+    .field_34f0 = 0x03a9,
 
     .ptr_34f2 = SELF(str_1077),
 
@@ -24452,19 +24452,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3504 = SELF(str_1074),
 
-    .field_3508 = 0x008F,
+    .field_3508 = 0x008f,
 
     .ptr_350a = SELF(str_1073),
 
-    .field_350e = 0x018B,
+    .field_350e = 0x018b,
 
     .ptr_3510 = SELF(str_1072),
 
-    .field_3514 = 0x02C5,
+    .field_3514 = 0x02c5,
 
     .ptr_3516 = SELF(str_1071),
 
-    .field_351a = 0x02D6,
+    .field_351a = 0x02d6,
 
     .ptr_351c = SELF(str_1070),
 
@@ -24472,23 +24472,23 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3522 = SELF(str_1069),
 
-    .field_3526 = 0x03BF,
+    .field_3526 = 0x03bf,
 
     .ptr_3528 = SELF(str_1068),
 
-    .field_352c = 0x00C7,
+    .field_352c = 0x00c7,
 
     .ptr_352e = SELF(str_1067),
 
-    .field_3532 = 0x038B,
+    .field_3532 = 0x038b,
 
     .ptr_3534 = SELF(str_1066),
 
-    .field_3538 = 0x02A2,
+    .field_3538 = 0x02a2,
 
     .ptr_353a = SELF(str_1065),
 
-    .field_353e = 0x02E1,
+    .field_353e = 0x02e1,
 
     .ptr_3540 = SELF(str_1064),
 
@@ -24500,7 +24500,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_354c = SELF(str_1062),
 
-    .field_3550 = 0x00F0,
+    .field_3550 = 0x00f0,
 
     .ptr_3552 = SELF(str_1061),
 
@@ -24508,19 +24508,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3558 = SELF(str_1060),
 
-    .field_355c = 0x038A,
+    .field_355c = 0x038a,
 
     .ptr_355e = SELF(str_1059),
 
-    .field_3562 = 0x01B3,
+    .field_3562 = 0x01b3,
 
     .ptr_3564 = SELF(str_1058),
 
-    .field_3568 = 0x01F2,
+    .field_3568 = 0x01f2,
 
     .ptr_356a = SELF(str_1057),
 
-    .field_356e = 0x01DB,
+    .field_356e = 0x01db,
 
     .ptr_3570 = SELF(str_1056),
 
@@ -24536,7 +24536,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3582 = SELF(str_1053),
 
-    .field_3586 = 0x008A,
+    .field_3586 = 0x008a,
 
     .ptr_3588 = SELF(str_1052),
 
@@ -24552,43 +24552,43 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_359a = SELF(str_1049),
 
-    .field_359e = 0x01B6,
+    .field_359e = 0x01b6,
 
     .ptr_35a0 = SELF(str_1048),
 
-    .field_35a4 = 0x01BA,
+    .field_35a4 = 0x01ba,
 
     .ptr_35a6 = SELF(str_1047),
 
-    .field_35aa = 0x00E2,
+    .field_35aa = 0x00e2,
 
     .ptr_35ac = SELF(str_1046),
 
-    .field_35b0 = 0x01AF,
+    .field_35b0 = 0x01af,
 
     .ptr_35b2 = SELF(str_1045),
 
-    .field_35b6 = 0x01B4,
+    .field_35b6 = 0x01b4,
 
     .ptr_35b8 = SELF(str_1044),
 
-    .field_35bc = 0x01B9,
+    .field_35bc = 0x01b9,
 
     .ptr_35be = SELF(str_1043),
 
-    .field_35c2 = 0x01BC,
+    .field_35c2 = 0x01bc,
 
     .ptr_35c4 = SELF(str_1042),
 
-    .field_35c8 = 0x038D,
+    .field_35c8 = 0x038d,
 
     .ptr_35ca = SELF(str_1041),
 
-    .field_35ce = 0x038F,
+    .field_35ce = 0x038f,
 
     .ptr_35d0 = SELF(str_1040),
 
-    .field_35d4 = 0x02EE,
+    .field_35d4 = 0x02ee,
 
     .ptr_35d6 = SELF(str_1039),
 
@@ -24608,11 +24608,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_35ee = SELF(str_1035),
 
-    .field_35f2 = 0x037E,
+    .field_35f2 = 0x037e,
 
     .ptr_35f4 = SELF(str_1034),
 
-    .field_35f8 = 0x037B,
+    .field_35f8 = 0x037b,
 
     .ptr_35fa = SELF(str_1033),
 
@@ -24620,7 +24620,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3600 = SELF(str_1032),
 
-    .field_3604 = 0x031B,
+    .field_3604 = 0x031b,
 
     .ptr_3606 = SELF(str_1031),
 
@@ -24628,7 +24628,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_360c = SELF(str_1030),
 
-    .field_3610 = 0x028A,
+    .field_3610 = 0x028a,
 
     .ptr_3612 = SELF(str_1029),
 
@@ -24640,11 +24640,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_361e = SELF(str_1027),
 
-    .field_3622 = 0x029E,
+    .field_3622 = 0x029e,
 
     .ptr_3624 = SELF(str_1026),
 
-    .field_3628 = 0x02AB,
+    .field_3628 = 0x02ab,
 
     .ptr_362a = SELF(str_1025),
 
@@ -24652,7 +24652,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3630 = SELF(str_1024),
 
-    .field_3634 = 0x03AF,
+    .field_3634 = 0x03af,
 
     .ptr_3636 = SELF(str_1023),
 
@@ -24672,11 +24672,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_364e = SELF(str_1019),
 
-    .field_3652 = 0x015B,
+    .field_3652 = 0x015b,
 
     .ptr_3654 = SELF(str_1018),
 
-    .field_3658 = 0x03DB,
+    .field_3658 = 0x03db,
 
     .ptr_365a = SELF(str_1017),
 
@@ -24684,19 +24684,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3660 = SELF(str_1016),
 
-    .field_3664 = 0x02D1,
+    .field_3664 = 0x02d1,
 
     .ptr_3666 = SELF(str_1015),
 
-    .field_366a = 0x00B2,
+    .field_366a = 0x00b2,
 
     .ptr_366c = SELF(str_1014),
 
-    .field_3670 = 0x026E,
+    .field_3670 = 0x026e,
 
     .ptr_3672 = SELF(str_1013),
 
-    .field_3676 = 0x02ED,
+    .field_3676 = 0x02ed,
 
     .ptr_3678 = SELF(str_1012),
 
@@ -24712,7 +24712,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_368a = SELF(str_1009),
 
-    .field_368e = 0x03BD,
+    .field_368e = 0x03bd,
 
     .ptr_3690 = SELF(str_1008),
 
@@ -24720,15 +24720,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3696 = SELF(str_1007),
 
-    .field_369a = 0x012E,
+    .field_369a = 0x012e,
 
     .ptr_369c = SELF(str_1006),
 
-    .field_36a0 = 0x03A8,
+    .field_36a0 = 0x03a8,
 
     .ptr_36a2 = SELF(str_1005),
 
-    .field_36a6 = 0x03E7,
+    .field_36a6 = 0x03e7,
 
     .ptr_36a8 = SELF(str_1004),
 
@@ -24736,15 +24736,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_36ae = SELF(str_1003),
 
-    .field_36b2 = 0x03C7,
+    .field_36b2 = 0x03c7,
 
     .ptr_36b4 = SELF(str_1002),
 
-    .field_36b8 = 0x03D1,
+    .field_36b8 = 0x03d1,
 
     .ptr_36ba = SELF(str_1001),
 
-    .field_36be = 0x018E,
+    .field_36be = 0x018e,
 
     .ptr_36c0 = SELF(str_1000),
 
@@ -24756,11 +24756,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_36cc = SELF(str_998),
 
-    .field_36d0 = 0x029D,
+    .field_36d0 = 0x029d,
 
     .ptr_36d2 = SELF(str_997),
 
-    .field_36d6 = 0x01CA,
+    .field_36d6 = 0x01ca,
 
     .ptr_36d8 = SELF(str_996),
 
@@ -24772,11 +24772,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_36e4 = SELF(str_994),
 
-    .field_36e8 = 0x02EA,
+    .field_36e8 = 0x02ea,
 
     .ptr_36ea = SELF(str_993),
 
-    .field_36ee = 0x00F9,
+    .field_36ee = 0x00f9,
 
     .ptr_36f0 = SELF(str_992),
 
@@ -24792,11 +24792,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3702 = SELF(str_989),
 
-    .field_3706 = 0x023E,
+    .field_3706 = 0x023e,
 
     .ptr_3708 = SELF(str_988),
 
-    .field_370c = 0x01D1,
+    .field_370c = 0x01d1,
 
     .ptr_370e = SELF(str_987),
 
@@ -24808,7 +24808,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_371a = SELF(str_985),
 
-    .field_371e = 0x02B4,
+    .field_371e = 0x02b4,
 
     .ptr_3720 = SELF(str_984),
 
@@ -24824,7 +24824,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3732 = SELF(str_981),
 
-    .field_3736 = 0x00D4,
+    .field_3736 = 0x00d4,
 
     .ptr_3738 = SELF(str_980),
 
@@ -24840,7 +24840,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_374a = SELF(str_977),
 
-    .field_374e = 0x03BE,
+    .field_374e = 0x03be,
 
     .ptr_3750 = SELF(str_976),
 
@@ -24848,7 +24848,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3756 = SELF(str_975),
 
-    .field_375a = 0x021F,
+    .field_375a = 0x021f,
 
     .ptr_375c = SELF(str_974),
 
@@ -24860,31 +24860,31 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3768 = SELF(str_972),
 
-    .field_376c = 0x02BB,
+    .field_376c = 0x02bb,
 
     .ptr_376e = SELF(str_971),
 
-    .field_3772 = 0x02B8,
+    .field_3772 = 0x02b8,
 
     .ptr_3774 = SELF(str_970),
 
-    .field_3778 = 0x01CF,
+    .field_3778 = 0x01cf,
 
     .ptr_377a = SELF(str_969),
 
-    .field_377e = 0x033D,
+    .field_377e = 0x033d,
 
     .ptr_3780 = SELF(str_968),
 
-    .field_3784 = 0x011A,
+    .field_3784 = 0x011a,
 
     .ptr_3786 = SELF(str_967),
 
-    .field_378a = 0x024E,
+    .field_378a = 0x024e,
 
     .ptr_378c = SELF(str_966),
 
-    .field_3790 = 0x00E9,
+    .field_3790 = 0x00e9,
 
     .ptr_3792 = SELF(str_965),
 
@@ -24892,35 +24892,35 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3798 = SELF(str_964),
 
-    .field_379c = 0x00DE,
+    .field_379c = 0x00de,
 
     .ptr_379e = SELF(str_963),
 
-    .field_37a2 = 0x00EE,
+    .field_37a2 = 0x00ee,
 
     .ptr_37a4 = SELF(str_962),
 
-    .field_37a8 = 0x000F,
+    .field_37a8 = 0x000f,
 
     .ptr_37aa = SELF(str_961),
 
-    .field_37ae = 0x01A6,
+    .field_37ae = 0x01a6,
 
     .ptr_37b0 = SELF(str_960),
 
-    .field_37b4 = 0x001C,
+    .field_37b4 = 0x001c,
 
     .ptr_37b6 = SELF(str_959),
 
-    .field_37ba = 0x031F,
+    .field_37ba = 0x031f,
 
     .ptr_37bc = SELF(str_958),
 
-    .field_37c0 = 0x02C4,
+    .field_37c0 = 0x02c4,
 
     .ptr_37c2 = SELF(str_957),
 
-    .field_37c6 = 0x01EA,
+    .field_37c6 = 0x01ea,
 
     .ptr_37c8 = SELF(str_956),
 
@@ -24928,7 +24928,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_37ce = SELF(str_955),
 
-    .field_37d2 = 0x017C,
+    .field_37d2 = 0x017c,
 
     .ptr_37d4 = SELF(str_954),
 
@@ -24936,11 +24936,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_37da = SELF(str_953),
 
-    .field_37de = 0x034D,
+    .field_37de = 0x034d,
 
     .ptr_37e0 = SELF(str_952),
 
-    .field_37e4 = 0x036F,
+    .field_37e4 = 0x036f,
 
     .ptr_37e6 = SELF(str_951),
 
@@ -24948,7 +24948,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_37ec = SELF(str_950),
 
-    .field_37f0 = 0x035D,
+    .field_37f0 = 0x035d,
 
     .ptr_37f2 = SELF(str_949),
 
@@ -24968,11 +24968,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_380a = SELF(str_945),
 
-    .field_380e = 0x034C,
+    .field_380e = 0x034c,
 
     .ptr_3810 = SELF(str_944),
 
-    .field_3814 = 0x036A,
+    .field_3814 = 0x036a,
 
     .ptr_3816 = SELF(str_943),
 
@@ -24984,27 +24984,27 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3822 = SELF(str_941),
 
-    .field_3826 = 0x026B,
+    .field_3826 = 0x026b,
 
     .ptr_3828 = SELF(str_940),
 
-    .field_382c = 0x00A9,
+    .field_382c = 0x00a9,
 
     .ptr_382e = SELF(str_939),
 
-    .field_3832 = 0x03C2,
+    .field_3832 = 0x03c2,
 
     .ptr_3834 = SELF(str_938),
 
-    .field_3838 = 0x032A,
+    .field_3838 = 0x032a,
 
     .ptr_383a = SELF(str_937),
 
-    .field_383e = 0x02C7,
+    .field_383e = 0x02c7,
 
     .ptr_3840 = SELF(str_936),
 
-    .field_3844 = 0x03A5,
+    .field_3844 = 0x03a5,
 
     .ptr_3846 = SELF(str_935),
 
@@ -25024,7 +25024,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_385e = SELF(str_931),
 
-    .field_3862 = 0x017B,
+    .field_3862 = 0x017b,
 
     .ptr_3864 = SELF(str_930),
 
@@ -25032,7 +25032,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_386a = SELF(str_929),
 
-    .field_386e = 0x012F,
+    .field_386e = 0x012f,
 
     .ptr_3870 = SELF(str_928),
 
@@ -25040,11 +25040,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3876 = SELF(str_927),
 
-    .field_387a = 0x010C,
+    .field_387a = 0x010c,
 
     .ptr_387c = SELF(str_926),
 
-    .field_3880 = 0x013B,
+    .field_3880 = 0x013b,
 
     .ptr_3882 = SELF(str_925),
 
@@ -25052,15 +25052,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3888 = SELF(str_924),
 
-    .field_388c = 0x02FB,
+    .field_388c = 0x02fb,
 
     .ptr_388e = SELF(str_923),
 
-    .field_3892 = 0x013A,
+    .field_3892 = 0x013a,
 
     .ptr_3894 = SELF(str_922),
 
-    .field_3898 = 0x016E,
+    .field_3898 = 0x016e,
 
     .ptr_389a = SELF(str_921),
 
@@ -25068,11 +25068,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_38a0 = SELF(str_920),
 
-    .field_38a4 = 0x00D2,
+    .field_38a4 = 0x00d2,
 
     .ptr_38a6 = SELF(str_919),
 
-    .field_38aa = 0x03B4,
+    .field_38aa = 0x03b4,
 
     .ptr_38ac = SELF(str_918),
 
@@ -25092,11 +25092,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_38c4 = SELF(str_914),
 
-    .field_38c8 = 0x00DF,
+    .field_38c8 = 0x00df,
 
     .ptr_38ca = SELF(str_913),
 
-    .field_38ce = 0x00AF,
+    .field_38ce = 0x00af,
 
     .ptr_38d0 = SELF(str_912),
 
@@ -25104,7 +25104,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_38d6 = SELF(str_911),
 
-    .field_38da = 0x011B,
+    .field_38da = 0x011b,
 
     .ptr_38dc = SELF(str_910),
 
@@ -25112,7 +25112,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_38e2 = SELF(str_909),
 
-    .field_38e6 = 0x011F,
+    .field_38e6 = 0x011f,
 
     .ptr_38e8 = SELF(str_908),
 
@@ -25124,7 +25124,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_38f4 = SELF(str_906),
 
-    .field_38f8 = 0x011E,
+    .field_38f8 = 0x011e,
 
     .ptr_38fa = SELF(str_905),
 
@@ -25132,7 +25132,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3900 = SELF(str_904),
 
-    .field_3904 = 0x00D1,
+    .field_3904 = 0x00d1,
 
     .ptr_3906 = SELF(str_903),
 
@@ -25144,11 +25144,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3912 = SELF(str_901),
 
-    .field_3916 = 0x022C,
+    .field_3916 = 0x022c,
 
     .ptr_3918 = SELF(str_900),
 
-    .field_391c = 0x039D,
+    .field_391c = 0x039d,
 
     .ptr_391e = SELF(str_899),
 
@@ -25172,31 +25172,31 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_393c = SELF(str_894),
 
-    .field_3940 = 0x00B9,
+    .field_3940 = 0x00b9,
 
     .ptr_3942 = SELF(str_893),
 
-    .field_3946 = 0x028C,
+    .field_3946 = 0x028c,
 
     .ptr_3948 = SELF(str_892),
 
-    .field_394c = 0x01DD,
+    .field_394c = 0x01dd,
 
     .ptr_394e = SELF(str_891),
 
-    .field_3952 = 0x01B7,
+    .field_3952 = 0x01b7,
 
     .ptr_3954 = SELF(str_890),
 
-    .field_3958 = 0x03A6,
+    .field_3958 = 0x03a6,
 
     .ptr_395a = SELF(str_889),
 
-    .field_395e = 0x00F3,
+    .field_395e = 0x00f3,
 
     .ptr_3960 = SELF(str_888),
 
-    .field_3964 = 0x01D2,
+    .field_3964 = 0x01d2,
 
     .ptr_3966 = SELF(str_887),
 
@@ -25212,7 +25212,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3978 = SELF(str_884),
 
-    .field_397c = 0x00C1,
+    .field_397c = 0x00c1,
 
     .ptr_397e = SELF(str_883),
 
@@ -25232,19 +25232,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3996 = SELF(str_879),
 
-    .field_399a = 0x00BA,
+    .field_399a = 0x00ba,
 
     .ptr_399c = SELF(str_878),
 
-    .field_39a0 = 0x034A,
+    .field_39a0 = 0x034a,
 
     .ptr_39a2 = SELF(str_877),
 
-    .field_39a6 = 0x00A1,
+    .field_39a6 = 0x00a1,
 
     .ptr_39a8 = SELF(str_876),
 
-    .field_39ac = 0x03D8,
+    .field_39ac = 0x03d8,
 
     .ptr_39ae = SELF(str_875),
 
@@ -25264,7 +25264,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_39c6 = SELF(str_871),
 
-    .field_39ca = 0x02EB,
+    .field_39ca = 0x02eb,
 
     .ptr_39cc = SELF(str_870),
 
@@ -25272,7 +25272,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_39d2 = SELF(str_869),
 
-    .field_39d6 = 0x01C0,
+    .field_39d6 = 0x01c0,
 
     .ptr_39d8 = SELF(str_868),
 
@@ -25280,15 +25280,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_39de = SELF(str_867),
 
-    .field_39e2 = 0x00A8,
+    .field_39e2 = 0x00a8,
 
     .ptr_39e4 = SELF(str_866),
 
-    .field_39e8 = 0x02E8,
+    .field_39e8 = 0x02e8,
 
     .ptr_39ea = SELF(str_865),
 
-    .field_39ee = 0x00B1,
+    .field_39ee = 0x00b1,
 
     .ptr_39f0 = SELF(str_864),
 
@@ -25300,15 +25300,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_39fc = SELF(str_862),
 
-    .field_3a00 = 0x030B,
+    .field_3a00 = 0x030b,
 
     .ptr_3a02 = SELF(str_861),
 
-    .field_3a06 = 0x02DA,
+    .field_3a06 = 0x02da,
 
     .ptr_3a08 = SELF(str_860),
 
-    .field_3a0c = 0x02A8,
+    .field_3a0c = 0x02a8,
 
     .ptr_3a0e = SELF(str_859),
 
@@ -25328,11 +25328,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3a26 = SELF(str_855),
 
-    .field_3a2a = 0x00CF,
+    .field_3a2a = 0x00cf,
 
     .ptr_3a2c = SELF(str_854),
 
-    .field_3a30 = 0x00BC,
+    .field_3a30 = 0x00bc,
 
     .ptr_3a32 = SELF(str_853),
 
@@ -25340,7 +25340,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3a38 = SELF(str_852),
 
-    .field_3a3c = 0x03A7,
+    .field_3a3c = 0x03a7,
 
     .ptr_3a3e = SELF(str_851),
 
@@ -25356,11 +25356,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3a50 = SELF(str_848),
 
-    .field_3a54 = 0x01DA,
+    .field_3a54 = 0x01da,
 
     .ptr_3a56 = SELF(str_847),
 
-    .field_3a5a = 0x01DC,
+    .field_3a5a = 0x01dc,
 
     .ptr_3a5c = SELF(str_846),
 
@@ -25368,15 +25368,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3a62 = SELF(str_845),
 
-    .field_3a66 = 0x013F,
+    .field_3a66 = 0x013f,
 
     .ptr_3a68 = SELF(str_844),
 
-    .field_3a6c = 0x03AD,
+    .field_3a6c = 0x03ad,
 
     .ptr_3a6e = SELF(str_843),
 
-    .field_3a72 = 0x02D7,
+    .field_3a72 = 0x02d7,
 
     .ptr_3a74 = SELF(str_842),
 
@@ -25392,19 +25392,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3a86 = SELF(str_839),
 
-    .field_3a8a = 0x03A3,
+    .field_3a8a = 0x03a3,
 
     .ptr_3a8c = SELF(str_838),
 
-    .field_3a90 = 0x02CC,
+    .field_3a90 = 0x02cc,
 
     .ptr_3a92 = SELF(str_837),
 
-    .field_3a96 = 0x02D3,
+    .field_3a96 = 0x02d3,
 
     .ptr_3a98 = SELF(str_836),
 
-    .field_3a9c = 0x02A9,
+    .field_3a9c = 0x02a9,
 
     .ptr_3a9e = SELF(str_835),
 
@@ -25412,7 +25412,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3aa4 = SELF(str_834),
 
-    .field_3aa8 = 0x014E,
+    .field_3aa8 = 0x014e,
 
     .ptr_3aaa = SELF(str_833),
 
@@ -25424,7 +25424,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3ab6 = SELF(str_831),
 
-    .field_3aba = 0x03C4,
+    .field_3aba = 0x03c4,
 
     .ptr_3abc = SELF(str_830),
 
@@ -25432,19 +25432,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3ac2 = SELF(str_829),
 
-    .field_3ac6 = 0x033F,
+    .field_3ac6 = 0x033f,
 
     .ptr_3ac8 = SELF(str_828),
 
-    .field_3acc = 0x032C,
+    .field_3acc = 0x032c,
 
     .ptr_3ace = SELF(str_827),
 
-    .field_3ad2 = 0x02DD,
+    .field_3ad2 = 0x02dd,
 
     .ptr_3ad4 = SELF(str_826),
 
-    .field_3ad8 = 0x02FA,
+    .field_3ad8 = 0x02fa,
 
     .ptr_3ada = SELF(str_825),
 
@@ -25460,7 +25460,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3aec = SELF(str_822),
 
-    .field_3af0 = 0x027B,
+    .field_3af0 = 0x027b,
 
     .ptr_3af2 = SELF(str_821),
 
@@ -25476,7 +25476,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3b04 = SELF(str_818),
 
-    .field_3b08 = 0x027A,
+    .field_3b08 = 0x027a,
 
     .ptr_3b0a = SELF(str_817),
 
@@ -25496,55 +25496,55 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3b22 = SELF(str_813),
 
-    .field_3b26 = 0x02CF,
+    .field_3b26 = 0x02cf,
 
     .ptr_3b28 = SELF(str_812),
 
-    .field_3b2c = 0x01ED,
+    .field_3b2c = 0x01ed,
 
     .ptr_3b2e = SELF(str_811),
 
-    .field_3b32 = 0x01DE,
+    .field_3b32 = 0x01de,
 
     .ptr_3b34 = SELF(str_810),
 
-    .field_3b38 = 0x00B3,
+    .field_3b38 = 0x00b3,
 
     .ptr_3b3a = SELF(str_809),
 
-    .field_3b3e = 0x01F7,
+    .field_3b3e = 0x01f7,
 
     .ptr_3b40 = SELF(str_808),
 
-    .field_3b44 = 0x00F5,
+    .field_3b44 = 0x00f5,
 
     .ptr_3b46 = SELF(str_807),
 
-    .field_3b4a = 0x03E0,
+    .field_3b4a = 0x03e0,
 
     .ptr_3b4c = SELF(str_806),
 
-    .field_3b50 = 0x011C,
+    .field_3b50 = 0x011c,
 
     .ptr_3b52 = SELF(str_805),
 
-    .field_3b56 = 0x00FC,
+    .field_3b56 = 0x00fc,
 
     .ptr_3b58 = SELF(str_804),
 
-    .field_3b5c = 0x00E6,
+    .field_3b5c = 0x00e6,
 
     .ptr_3b5e = SELF(str_803),
 
-    .field_3b62 = 0x024F,
+    .field_3b62 = 0x024f,
 
     .ptr_3b64 = SELF(str_802),
 
-    .field_3b68 = 0x02E9,
+    .field_3b68 = 0x02e9,
 
     .ptr_3b6a = SELF(str_801),
 
-    .field_3b6e = 0x03DD,
+    .field_3b6e = 0x03dd,
 
     .ptr_3b70 = SELF(str_800),
 
@@ -25564,7 +25564,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3b88 = SELF(str_796),
 
-    .field_3b8c = 0x01F1,
+    .field_3b8c = 0x01f1,
 
     .ptr_3b8e = SELF(str_795),
 
@@ -25572,15 +25572,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3b94 = SELF(str_794),
 
-    .field_3b98 = 0x00ED,
+    .field_3b98 = 0x00ed,
 
     .ptr_3b9a = SELF(str_793),
 
-    .field_3b9e = 0x01AB,
+    .field_3b9e = 0x01ab,
 
     .ptr_3ba0 = SELF(str_792),
 
-    .field_3ba4 = 0x02E4,
+    .field_3ba4 = 0x02e4,
 
     .ptr_3ba6 = SELF(str_791),
 
@@ -25596,31 +25596,31 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3bb8 = SELF(str_788),
 
-    .field_3bbc = 0x014F,
+    .field_3bbc = 0x014f,
 
     .ptr_3bbe = SELF(str_787),
 
-    .field_3bc2 = 0x01E0,
+    .field_3bc2 = 0x01e0,
 
     .ptr_3bc4 = SELF(str_786),
 
-    .field_3bc8 = 0x037A,
+    .field_3bc8 = 0x037a,
 
     .ptr_3bca = SELF(str_785),
 
-    .field_3bce = 0x026A,
+    .field_3bce = 0x026a,
 
     .ptr_3bd0 = SELF(str_784),
 
-    .field_3bd4 = 0x03BA,
+    .field_3bd4 = 0x03ba,
 
     .ptr_3bd6 = SELF(str_783),
 
-    .field_3bda = 0x01EF,
+    .field_3bda = 0x01ef,
 
     .ptr_3bdc = SELF(str_782),
 
-    .field_3be0 = 0x00A6,
+    .field_3be0 = 0x00a6,
 
     .ptr_3be2 = SELF(str_781),
 
@@ -25628,27 +25628,27 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3be8 = SELF(str_780),
 
-    .field_3bec = 0x01C1,
+    .field_3bec = 0x01c1,
 
     .ptr_3bee = SELF(str_779),
 
-    .field_3bf2 = 0x01CD,
+    .field_3bf2 = 0x01cd,
 
     .ptr_3bf4 = SELF(str_778),
 
-    .field_3bf8 = 0x01D3,
+    .field_3bf8 = 0x01d3,
 
     .ptr_3bfa = SELF(str_777),
 
-    .field_3bfe = 0x01D0,
+    .field_3bfe = 0x01d0,
 
     .ptr_3c00 = SELF(str_776),
 
-    .field_3c04 = 0x01C4,
+    .field_3c04 = 0x01c4,
 
     .ptr_3c06 = SELF(str_775),
 
-    .field_3c0a = 0x01C8,
+    .field_3c0a = 0x01c8,
 
     .ptr_3c0c = SELF(str_774),
 
@@ -25660,15 +25660,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3c18 = SELF(str_772),
 
-    .field_3c1c = 0x01FD,
+    .field_3c1c = 0x01fd,
 
     .ptr_3c1e = SELF(str_771),
 
-    .field_3c22 = 0x02AC,
+    .field_3c22 = 0x02ac,
 
     .ptr_3c24 = SELF(str_770),
 
-    .field_3c28 = 0x022D,
+    .field_3c28 = 0x022d,
 
     .ptr_3c2a = SELF(str_769),
 
@@ -25684,15 +25684,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3c3c = SELF(str_766),
 
-    .field_3c40 = 0x00EC,
+    .field_3c40 = 0x00ec,
 
     .ptr_3c42 = SELF(str_765),
 
-    .field_3c46 = 0x00FB,
+    .field_3c46 = 0x00fb,
 
     .ptr_3c48 = SELF(str_764),
 
-    .field_3c4c = 0x00C4,
+    .field_3c4c = 0x00c4,
 
     .ptr_3c4e = SELF(str_763),
 
@@ -25700,7 +25700,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3c54 = SELF(str_762),
 
-    .field_3c58 = 0x026C,
+    .field_3c58 = 0x026c,
 
     .ptr_3c5a = SELF(str_761),
 
@@ -25712,7 +25712,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3c66 = SELF(str_759),
 
-    .field_3c6a = 0x01BD,
+    .field_3c6a = 0x01bd,
 
     .ptr_3c6c = SELF(str_758),
 
@@ -25724,11 +25724,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3c78 = SELF(str_756),
 
-    .field_3c7c = 0x027D,
+    .field_3c7c = 0x027d,
 
     .ptr_3c7e = SELF(str_755),
 
-    .field_3c82 = 0x00A5,
+    .field_3c82 = 0x00a5,
 
     .ptr_3c84 = SELF(str_754),
 
@@ -25736,7 +25736,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3c8a = SELF(str_753),
 
-    .field_3c8e = 0x00D5,
+    .field_3c8e = 0x00d5,
 
     .ptr_3c90 = SELF(str_752),
 
@@ -25752,27 +25752,27 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3ca2 = SELF(str_749),
 
-    .field_3ca6 = 0x01B5,
+    .field_3ca6 = 0x01b5,
 
     .ptr_3ca8 = SELF(str_748),
 
-    .field_3cac = 0x027C,
+    .field_3cac = 0x027c,
 
     .ptr_3cae = SELF(str_747),
 
-    .field_3cb2 = 0x02E7,
+    .field_3cb2 = 0x02e7,
 
     .ptr_3cb4 = SELF(str_746),
 
-    .field_3cb8 = 0x035C,
+    .field_3cb8 = 0x035c,
 
     .ptr_3cba = SELF(str_745),
 
-    .field_3cbe = 0x01E7,
+    .field_3cbe = 0x01e7,
 
     .ptr_3cc0 = SELF(str_744),
 
-    .field_3cc4 = 0x01F3,
+    .field_3cc4 = 0x01f3,
 
     .ptr_3cc6 = SELF(str_743),
 
@@ -25780,19 +25780,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3ccc = SELF(str_742),
 
-    .field_3cd0 = 0x03C3,
+    .field_3cd0 = 0x03c3,
 
     .ptr_3cd2 = SELF(str_741),
 
-    .field_3cd6 = 0x00D8,
+    .field_3cd6 = 0x00d8,
 
     .ptr_3cd8 = SELF(str_740),
 
-    .field_3cdc = 0x020D,
+    .field_3cdc = 0x020d,
 
     .ptr_3cde = SELF(str_739),
 
-    .field_3ce2 = 0x02CD,
+    .field_3ce2 = 0x02cd,
 
     .ptr_3ce4 = SELF(str_738),
 
@@ -25808,19 +25808,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3cf6 = SELF(str_735),
 
-    .field_3cfa = 0x012A,
+    .field_3cfa = 0x012a,
 
     .ptr_3cfc = SELF(str_734),
 
-    .field_3d00 = 0x017E,
+    .field_3d00 = 0x017e,
 
     .ptr_3d02 = SELF(str_733),
 
-    .field_3d06 = 0x033B,
+    .field_3d06 = 0x033b,
 
     .ptr_3d08 = SELF(str_732),
 
-    .field_3d0c = 0x028E,
+    .field_3d0c = 0x028e,
 
     .ptr_3d0e = SELF(str_731),
 
@@ -25828,7 +25828,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3d14 = SELF(str_730),
 
-    .field_3d18 = 0x02B1,
+    .field_3d18 = 0x02b1,
 
     .ptr_3d1a = SELF(str_729),
 
@@ -25840,19 +25840,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3d26 = SELF(str_727),
 
-    .field_3d2a = 0x035A,
+    .field_3d2a = 0x035a,
 
     .ptr_3d2c = SELF(str_726),
 
-    .field_3d30 = 0x03D9,
+    .field_3d30 = 0x03d9,
 
     .ptr_3d32 = SELF(str_725),
 
-    .field_3d36 = 0x010A,
+    .field_3d36 = 0x010a,
 
     .ptr_3d38 = SELF(str_724),
 
-    .field_3d3c = 0x010B,
+    .field_3d3c = 0x010b,
 
     .ptr_3d3e = SELF(str_723),
 
@@ -25876,19 +25876,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3d5c = SELF(str_718),
 
-    .field_3d60 = 0x01C2,
+    .field_3d60 = 0x01c2,
 
     .ptr_3d62 = SELF(str_717),
 
-    .field_3d66 = 0x01B8,
+    .field_3d66 = 0x01b8,
 
     .ptr_3d68 = SELF(str_716),
 
-    .field_3d6c = 0x009F,
+    .field_3d6c = 0x009f,
 
     .ptr_3d6e = SELF(str_715),
 
-    .field_3d72 = 0x014C,
+    .field_3d72 = 0x014c,
 
     .ptr_3d74 = SELF(str_714),
 
@@ -25896,7 +25896,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3d7a = SELF(str_713),
 
-    .field_3d7e = 0x036E,
+    .field_3d7e = 0x036e,
 
     .ptr_3d80 = SELF(str_712),
 
@@ -25904,11 +25904,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3d86 = SELF(str_711),
 
-    .field_3d8a = 0x01C6,
+    .field_3d8a = 0x01c6,
 
     .ptr_3d8c = SELF(str_710),
 
-    .field_3d90 = 0x037C,
+    .field_3d90 = 0x037c,
 
     .ptr_3d92 = SELF(str_709),
 
@@ -25916,7 +25916,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3d98 = SELF(str_708),
 
-    .field_3d9c = 0x03AA,
+    .field_3d9c = 0x03aa,
 
     .ptr_3d9e = SELF(str_707),
 
@@ -25936,15 +25936,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3db6 = SELF(str_703),
 
-    .field_3dba = 0x02B0,
+    .field_3dba = 0x02b0,
 
     .ptr_3dbc = SELF(str_702),
 
-    .field_3dc0 = 0x00BF,
+    .field_3dc0 = 0x00bf,
 
     .ptr_3dc2 = SELF(str_701),
 
-    .field_3dc6 = 0x008B,
+    .field_3dc6 = 0x008b,
 
     .ptr_3dc8 = SELF(str_700),
 
@@ -25952,15 +25952,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3dce = SELF(str_699),
 
-    .field_3dd2 = 0x03E3,
+    .field_3dd2 = 0x03e3,
 
     .ptr_3dd4 = SELF(str_698),
 
-    .field_3dd8 = 0x03C8,
+    .field_3dd8 = 0x03c8,
 
     .ptr_3dda = SELF(str_697),
 
-    .field_3dde = 0x03AB,
+    .field_3dde = 0x03ab,
 
     .ptr_3de0 = SELF(str_696),
 
@@ -25968,7 +25968,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3de6 = SELF(str_695),
 
-    .field_3dea = 0x014A,
+    .field_3dea = 0x014a,
 
     .ptr_3dec = SELF(str_694),
 
@@ -25980,11 +25980,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3df8 = SELF(str_692),
 
-    .field_3dfc = 0x02BE,
+    .field_3dfc = 0x02be,
 
     .ptr_3dfe = SELF(str_691),
 
-    .field_3e02 = 0x020A,
+    .field_3e02 = 0x020a,
 
     .ptr_3e04 = SELF(str_690),
 
@@ -25992,15 +25992,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3e0a = SELF(str_689),
 
-    .field_3e0e = 0x024A,
+    .field_3e0e = 0x024a,
 
     .ptr_3e10 = SELF(str_688),
 
-    .ptr_3e14 = 0x00F20081,
+    .ptr_3e14 = 0x00f20081,
 
-    .field_3e18 = 0x00EC,
+    .field_3e18 = 0x00ec,
 
-    .field_3e1a = 0x02EC,
+    .field_3e1a = 0x02ec,
 
     .ptr_3e1c = SELF(str_686),
 
@@ -26016,25 +26016,25 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .str_108 = "j",
 
-    .field_3e30 = 0x00EC,
+    .field_3e30 = 0x00ec,
 
     .field_3e32 = 0x0136,
 
     .str_109 = "H",
 
-    .field_3e36 = 0x00EC,
+    .field_3e36 = 0x00ec,
 
     .field_3e38 = 0x0377,
 
     .str_110 = "&",
 
-    .field_3e3c = 0x00EC,
+    .field_3e3c = 0x00ec,
 
     .field_3e3e = 0x0309,
 
     .ptr_3e40 = SELF(str_680),
 
-    .field_3e44 = 0x03CE,
+    .field_3e44 = 0x03ce,
 
     .ptr_3e46 = SELF(str_679),
 
@@ -26042,7 +26042,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3e4c = SELF(str_678),
 
-    .field_3e50 = 0x00B6,
+    .field_3e50 = 0x00b6,
 
     .ptr_3e52 = SELF(str_677),
 
@@ -26054,19 +26054,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3e5e = SELF(str_675),
 
-    .field_3e62 = 0x034F,
+    .field_3e62 = 0x034f,
 
     .ptr_3e64 = SELF(str_674),
 
-    .field_3e68 = 0x03D4,
+    .field_3e68 = 0x03d4,
 
     .ptr_3e6a = SELF(str_673),
 
-    .field_3e6e = 0x00EF,
+    .field_3e6e = 0x00ef,
 
     .ptr_3e70 = SELF(str_672),
 
-    .field_3e74 = 0x01A2,
+    .field_3e74 = 0x01a2,
 
     .ptr_3e76 = SELF(str_671),
 
@@ -26074,11 +26074,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3e7c = SELF(str_670),
 
-    .field_3e80 = 0x02FC,
+    .field_3e80 = 0x02fc,
 
     .ptr_3e82 = SELF(str_669),
 
-    .field_3e86 = 0x00AE,
+    .field_3e86 = 0x00ae,
 
     .ptr_3e88 = SELF(str_668),
 
@@ -26086,19 +26086,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3e8e = SELF(str_667),
 
-    .field_3e92 = 0x00E7,
+    .field_3e92 = 0x00e7,
 
     .ptr_3e94 = SELF(str_666),
 
-    .field_3e98 = 0x00F2,
+    .field_3e98 = 0x00f2,
 
     .ptr_3e9a = SELF(str_665),
 
-    .field_3e9e = 0x00DD,
+    .field_3e9e = 0x00dd,
 
     .ptr_3ea0 = SELF(str_664),
 
-    .field_3ea4 = 0x01FC,
+    .field_3ea4 = 0x01fc,
 
     .ptr_3ea6 = SELF(str_663),
 
@@ -26106,7 +26106,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3eac = SELF(str_662),
 
-    .field_3eb0 = 0x039B,
+    .field_3eb0 = 0x039b,
 
     .ptr_3eb2 = SELF(str_661),
 
@@ -26114,11 +26114,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3eb8 = SELF(str_660),
 
-    .field_3ebc = 0x023C,
+    .field_3ebc = 0x023c,
 
     .ptr_3ebe = SELF(str_659),
 
-    .field_3ec2 = 0x021E,
+    .field_3ec2 = 0x021e,
 
     .ptr_3ec4 = SELF(str_658),
 
@@ -26126,23 +26126,23 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3eca = SELF(str_657),
 
-    .field_3ece = 0x029C,
+    .field_3ece = 0x029c,
 
     .ptr_3ed0 = SELF(str_656),
 
-    .field_3ed4 = 0x02A3,
+    .field_3ed4 = 0x02a3,
 
     .ptr_3ed6 = SELF(str_655),
 
-    .field_3eda = 0x03CA,
+    .field_3eda = 0x03ca,
 
     .ptr_3edc = SELF(str_654),
 
-    .field_3ee0 = 0x038E,
+    .field_3ee0 = 0x038e,
 
     .ptr_3ee2 = SELF(str_653),
 
-    .field_3ee6 = 0x02B6,
+    .field_3ee6 = 0x02b6,
 
     .ptr_3ee8 = SELF(str_652),
 
@@ -26158,11 +26158,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3efa = SELF(str_649),
 
-    .field_3efe = 0x03C5,
+    .field_3efe = 0x03c5,
 
     .ptr_3f00 = SELF(str_648),
 
-    .field_3f04 = 0x02DE,
+    .field_3f04 = 0x02de,
 
     .ptr_3f06 = SELF(str_647),
 
@@ -26178,11 +26178,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3f18 = SELF(str_644),
 
-    .field_3f1c = 0x02D0,
+    .field_3f1c = 0x02d0,
 
     .ptr_3f1e = SELF(str_643),
 
-    .field_3f22 = 0x00A3,
+    .field_3f22 = 0x00a3,
 
     .ptr_3f24 = SELF(str_642),
 
@@ -26190,19 +26190,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3f2a = SELF(str_641),
 
-    .field_3f2e = 0x00E1,
+    .field_3f2e = 0x00e1,
 
     .ptr_3f30 = SELF(str_640),
 
-    .field_3f34 = 0x03BC,
+    .field_3f34 = 0x03bc,
 
     .ptr_3f36 = SELF(str_639),
 
-    .field_3f3a = 0x012C,
+    .field_3f3a = 0x012c,
 
     .ptr_3f3c = SELF(str_638),
 
-    .field_3f40 = 0x020B,
+    .field_3f40 = 0x020b,
 
     .ptr_3f42 = SELF(str_637),
 
@@ -26214,7 +26214,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3f4e = SELF(str_635),
 
-    .field_3f52 = 0x009B,
+    .field_3f52 = 0x009b,
 
     .ptr_3f54 = SELF(str_634),
 
@@ -26226,23 +26226,23 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3f60 = SELF(str_632),
 
-    .field_3f64 = 0x01FB,
+    .field_3f64 = 0x01fb,
 
     .ptr_3f66 = SELF(str_631),
 
-    .field_3f6a = 0x02B2,
+    .field_3f6a = 0x02b2,
 
     .ptr_3f6c = SELF(str_630),
 
-    .field_3f70 = 0x012D,
+    .field_3f70 = 0x012d,
 
     .ptr_3f72 = SELF(str_629),
 
-    .field_3f76 = 0x00E8,
+    .field_3f76 = 0x00e8,
 
     .ptr_3f78 = SELF(str_628),
 
-    .field_3f7c = 0x01E2,
+    .field_3f7c = 0x01e2,
 
     .ptr_3f7e = SELF(str_627),
 
@@ -26254,11 +26254,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3f8a = SELF(str_625),
 
-    .field_3f8e = 0x03A1,
+    .field_3f8e = 0x03a1,
 
     .ptr_3f90 = SELF(str_624),
 
-    .field_3f94 = 0x039E,
+    .field_3f94 = 0x039e,
 
     .ptr_3f96 = SELF(str_623),
 
@@ -26266,23 +26266,23 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3f9c = SELF(str_622),
 
-    .field_3fa0 = 0x030F,
+    .field_3fa0 = 0x030f,
 
     .ptr_3fa2 = SELF(str_621),
 
-    .field_3fa6 = 0x02DF,
+    .field_3fa6 = 0x02df,
 
     .ptr_3fa8 = SELF(str_620),
 
-    .field_3fac = 0x02CE,
+    .field_3fac = 0x02ce,
 
     .ptr_3fae = SELF(str_619),
 
-    .field_3fb2 = 0x03E5,
+    .field_3fb2 = 0x03e5,
 
     .ptr_3fb4 = SELF(str_618),
 
-    .field_3fb8 = 0x02F5,
+    .field_3fb8 = 0x02f5,
 
     .ptr_3fba = SELF(str_617),
 
@@ -26290,11 +26290,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3fc0 = SELF(str_616),
 
-    .field_3fc4 = 0x02F8,
+    .field_3fc4 = 0x02f8,
 
     .ptr_3fc6 = SELF(str_615),
 
-    .field_3fca = 0x037D,
+    .field_3fca = 0x037d,
 
     .ptr_3fcc = SELF(str_614),
 
@@ -26302,15 +26302,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_3fd2 = SELF(str_613),
 
-    .field_3fd6 = 0x00B0,
+    .field_3fd6 = 0x00b0,
 
     .ptr_3fd8 = SELF(str_612),
 
-    .field_3fdc = 0x035E,
+    .field_3fdc = 0x035e,
 
     .ptr_3fde = SELF(str_611),
 
-    .field_3fe2 = 0x00E0,
+    .field_3fe2 = 0x00e0,
 
     .ptr_3fe4 = SELF(str_610),
 
@@ -26334,7 +26334,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4002 = SELF(str_605),
 
-    .field_4006 = 0x01E6,
+    .field_4006 = 0x01e6,
 
     .ptr_4008 = SELF(str_604),
 
@@ -26342,19 +26342,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_400e = SELF(str_603),
 
-    .field_4012 = 0x009C,
+    .field_4012 = 0x009c,
 
     .ptr_4014 = SELF(str_602),
 
-    .field_4018 = 0x03B3,
+    .field_4018 = 0x03b3,
 
     .ptr_401a = SELF(str_601),
 
-    .field_401e = 0x03B1,
+    .field_401e = 0x03b1,
 
     .ptr_4020 = SELF(str_600),
 
-    .field_4024 = 0x009A,
+    .field_4024 = 0x009a,
 
     .ptr_4026 = SELF(str_599),
 
@@ -26362,7 +26362,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_402c = SELF(str_598),
 
-    .field_4030 = 0x026F,
+    .field_4030 = 0x026f,
 
     .ptr_4032 = SELF(str_597),
 
@@ -26370,19 +26370,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4038 = SELF(str_596),
 
-    .field_403c = 0x01E5,
+    .field_403c = 0x01e5,
 
     .ptr_403e = SELF(str_595),
 
-    .field_4042 = 0x01E3,
+    .field_4042 = 0x01e3,
 
     .ptr_4044 = SELF(str_594),
 
-    .field_4048 = 0x03DE,
+    .field_4048 = 0x03de,
 
     .ptr_404a = SELF(str_593),
 
-    .field_404e = 0x03CC,
+    .field_404e = 0x03cc,
 
     .ptr_4050 = SELF(str_592),
 
@@ -26390,11 +26390,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4056 = SELF(str_591),
 
-    .field_405a = 0x018F,
+    .field_405a = 0x018f,
 
     .ptr_405c = SELF(str_590),
 
-    .field_4060 = 0x039F,
+    .field_4060 = 0x039f,
 
     .ptr_4062 = SELF(str_589),
 
@@ -26402,11 +26402,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4068 = SELF(str_588),
 
-    .field_406c = 0x037F,
+    .field_406c = 0x037f,
 
     .ptr_406e = SELF(str_587),
 
-    .field_4072 = 0x01D6,
+    .field_4072 = 0x01d6,
 
     .ptr_4074 = SELF(str_586),
 
@@ -26414,7 +26414,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_407a = SELF(str_585),
 
-    .field_407e = 0x02DB,
+    .field_407e = 0x02db,
 
     .ptr_4080 = SELF(str_584),
 
@@ -26422,19 +26422,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4086 = SELF(str_583),
 
-    .field_408a = 0x01AA,
+    .field_408a = 0x01aa,
 
     .ptr_408c = SELF(str_582),
 
-    .field_4090 = 0x022B,
+    .field_4090 = 0x022b,
 
     .ptr_4092 = SELF(str_581),
 
-    .field_4096 = 0x02D9,
+    .field_4096 = 0x02d9,
 
     .ptr_4098 = SELF(str_580),
 
-    .field_409c = 0x031D,
+    .field_409c = 0x031d,
 
     .ptr_409e = SELF(str_579),
 
@@ -26442,23 +26442,23 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_40a4 = SELF(str_578),
 
-    .field_40a8 = 0x01BF,
+    .field_40a8 = 0x01bf,
 
     .ptr_40aa = SELF(str_577),
 
-    .field_40ae = 0x001E,
+    .field_40ae = 0x001e,
 
     .ptr_40b0 = SELF(str_576),
 
-    .field_40b4 = 0x027E,
+    .field_40b4 = 0x027e,
 
     .ptr_40b6 = SELF(str_575),
 
-    .field_40ba = 0x018A,
+    .field_40ba = 0x018a,
 
     .ptr_40bc = SELF(str_574),
 
-    .field_40c0 = 0x02D4,
+    .field_40c0 = 0x02d4,
 
     .ptr_40c2 = SELF(str_573),
 
@@ -26478,11 +26478,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_40da = SELF(str_569),
 
-    .field_40de = 0x01E9,
+    .field_40de = 0x01e9,
 
     .ptr_40e0 = SELF(str_568),
 
-    .field_40e4 = 0x01F0,
+    .field_40e4 = 0x01f0,
 
     .ptr_40e6 = SELF(str_567),
 
@@ -26490,7 +26490,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_40ec = SELF(str_566),
 
-    .field_40f0 = 0x034E,
+    .field_40f0 = 0x034e,
 
     .ptr_40f2 = SELF(str_565),
 
@@ -26502,7 +26502,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_40fe = SELF(str_563),
 
-    .field_4102 = 0x021C,
+    .field_4102 = 0x021c,
 
     .ptr_4104 = SELF(str_562),
 
@@ -26510,7 +26510,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_410a = SELF(str_561),
 
-    .field_410e = 0x023B,
+    .field_410e = 0x023b,
 
     .ptr_4110 = SELF(str_560),
 
@@ -26518,11 +26518,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4116 = SELF(str_559),
 
-    .field_411a = 0x03D2,
+    .field_411a = 0x03d2,
 
     .ptr_411c = SELF(str_558),
 
-    .field_4120 = 0x00F6,
+    .field_4120 = 0x00f6,
 
     .ptr_4122 = SELF(str_557),
 
@@ -26534,7 +26534,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_412e = SELF(str_555),
 
-    .field_4132 = 0x02C0,
+    .field_4132 = 0x02c0,
 
     .ptr_4134 = SELF(str_554),
 
@@ -26542,15 +26542,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_413a = SELF(str_553),
 
-    .field_413e = 0x03D5,
+    .field_413e = 0x03d5,
 
     .ptr_4140 = SELF(str_552),
 
-    .field_4144 = 0x015A,
+    .field_4144 = 0x015a,
 
     .ptr_4146 = SELF(str_551),
 
-    .field_414a = 0x028D,
+    .field_414a = 0x028d,
 
     .ptr_414c = SELF(str_550),
 
@@ -26558,11 +26558,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4152 = SELF(str_549),
 
-    .field_4156 = 0x038C,
+    .field_4156 = 0x038c,
 
     .ptr_4158 = SELF(str_548),
 
-    .field_415c = 0x02C2,
+    .field_415c = 0x02c2,
 
     .ptr_415e = SELF(str_547),
 
@@ -26578,11 +26578,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4170 = SELF(str_544),
 
-    .field_4174 = 0x02AD,
+    .field_4174 = 0x02ad,
 
     .ptr_4176 = SELF(str_543),
 
-    .field_417a = 0x02A7,
+    .field_417a = 0x02a7,
 
     .ptr_417c = SELF(str_542),
 
@@ -26590,7 +26590,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4182 = SELF(str_541),
 
-    .field_4186 = 0x017D,
+    .field_4186 = 0x017d,
 
     .ptr_4188 = SELF(str_540),
 
@@ -26598,7 +26598,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_418e = SELF(str_539),
 
-    .field_4192 = 0x02D5,
+    .field_4192 = 0x02d5,
 
     .ptr_4194 = SELF(str_538),
 
@@ -26606,7 +26606,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_419a = SELF(str_537),
 
-    .field_419e = 0x00F7,
+    .field_419e = 0x00f7,
 
     .ptr_41a0 = SELF(str_536),
 
@@ -26614,19 +26614,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_41a6 = SELF(str_535),
 
-    .field_41aa = 0x016D,
+    .field_41aa = 0x016d,
 
     .ptr_41ac = SELF(str_534),
 
-    .field_41b0 = 0x02F9,
+    .field_41b0 = 0x02f9,
 
     .ptr_41b2 = SELF(str_533),
 
-    .field_41b6 = 0x025D,
+    .field_41b6 = 0x025d,
 
     .ptr_41b8 = SELF(str_532),
 
-    .field_41bc = 0x027F,
+    .field_41bc = 0x027f,
 
     .ptr_41be = SELF(str_531),
 
@@ -26646,11 +26646,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_41d6 = SELF(str_527),
 
-    .field_41da = 0x00FE,
+    .field_41da = 0x00fe,
 
     .ptr_41dc = SELF(str_526),
 
-    .field_41e0 = 0x033E,
+    .field_41e0 = 0x033e,
 
     .ptr_41e2 = SELF(str_525),
 
@@ -26658,11 +26658,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_41e8 = SELF(str_524),
 
-    .field_41ec = 0x03DA,
+    .field_41ec = 0x03da,
 
     .ptr_41ee = SELF(str_523),
 
-    .field_41f2 = 0x02B9,
+    .field_41f2 = 0x02b9,
 
     .ptr_41f4 = SELF(str_522),
 
@@ -26678,11 +26678,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4206 = SELF(str_519),
 
-    .field_420a = 0x02A4,
+    .field_420a = 0x02a4,
 
     .ptr_420c = SELF(str_518),
 
-    .field_4210 = 0x028F,
+    .field_4210 = 0x028f,
 
     .ptr_4212 = SELF(str_517),
 
@@ -26690,7 +26690,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4218 = SELF(str_516),
 
-    .field_421c = 0x02BA,
+    .field_421c = 0x02ba,
 
     .ptr_421e = SELF(str_515),
 
@@ -26702,15 +26702,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_422a = SELF(str_513),
 
-    .field_422e = 0x00D3,
+    .field_422e = 0x00d3,
 
     .ptr_4230 = SELF(str_512),
 
-    .field_4234 = 0x03D6,
+    .field_4234 = 0x03d6,
 
     .ptr_4236 = SELF(str_511),
 
-    .field_423a = 0x03DF,
+    .field_423a = 0x03df,
 
     .ptr_423c = SELF(str_510),
 
@@ -26722,7 +26722,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4248 = SELF(str_508),
 
-    .field_424c = 0x022E,
+    .field_424c = 0x022e,
 
     .ptr_424e = SELF(str_507),
 
@@ -26734,7 +26734,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_425a = SELF(str_505),
 
-    .field_425e = 0x015D,
+    .field_425e = 0x015d,
 
     .ptr_4260 = SELF(str_504),
 
@@ -26742,11 +26742,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4266 = SELF(str_503),
 
-    .field_426a = 0x013D,
+    .field_426a = 0x013d,
 
     .ptr_426c = SELF(str_502),
 
-    .field_4270 = 0x016B,
+    .field_4270 = 0x016b,
 
     .ptr_4272 = SELF(str_501),
 
@@ -26758,7 +26758,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_427e = SELF(str_499),
 
-    .field_4282 = 0x015F,
+    .field_4282 = 0x015f,
 
     .ptr_4284 = SELF(str_498),
 
@@ -26766,7 +26766,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_428a = SELF(str_497),
 
-    .field_428e = 0x032E,
+    .field_428e = 0x032e,
 
     .ptr_4290 = SELF(str_496),
 
@@ -26774,7 +26774,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4296 = SELF(str_495),
 
-    .field_429a = 0x013E,
+    .field_429a = 0x013e,
 
     .ptr_429c = SELF(str_494),
 
@@ -26786,15 +26786,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_42a8 = SELF(str_492),
 
-    .field_42ac = 0x00AA,
+    .field_42ac = 0x00aa,
 
     .ptr_42ae = SELF(str_491),
 
-    .field_42b2 = 0x030A,
+    .field_42b2 = 0x030a,
 
     .ptr_42b4 = SELF(str_490),
 
-    .field_42b8 = 0x02DC,
+    .field_42b8 = 0x02dc,
 
     .ptr_42ba = SELF(str_489),
 
@@ -26802,19 +26802,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_42c0 = SELF(str_488),
 
-    .field_42c4 = 0x015C,
+    .field_42c4 = 0x015c,
 
     .ptr_42c6 = SELF(str_487),
 
-    .field_42ca = 0x00BE,
+    .field_42ca = 0x00be,
 
     .ptr_42cc = SELF(str_486),
 
-    .field_42d0 = 0x00C9,
+    .field_42d0 = 0x00c9,
 
     .ptr_42d2 = SELF(str_485),
 
-    .field_42d6 = 0x00C3,
+    .field_42d6 = 0x00c3,
 
     .ptr_42d8 = SELF(str_484),
 
@@ -26822,15 +26822,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_42de = SELF(str_483),
 
-    .field_42e2 = 0x00C0,
+    .field_42e2 = 0x00c0,
 
     .ptr_42e4 = SELF(str_482),
 
-    .field_42e8 = 0x00C2,
+    .field_42e8 = 0x00c2,
 
     .ptr_42ea = SELF(str_481),
 
-    .field_42ee = 0x00B5,
+    .field_42ee = 0x00b5,
 
     .ptr_42f0 = SELF(str_480),
 
@@ -26838,23 +26838,23 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_42f6 = SELF(str_479),
 
-    .field_42fa = 0x00CB,
+    .field_42fa = 0x00cb,
 
     .ptr_42fc = SELF(str_478),
 
-    .field_4300 = 0x00CA,
+    .field_4300 = 0x00ca,
 
     .ptr_4302 = SELF(str_477),
 
-    .field_4306 = 0x01F6,
+    .field_4306 = 0x01f6,
 
     .ptr_4308 = SELF(str_476),
 
-    .field_430c = 0x01C7,
+    .field_430c = 0x01c7,
 
     .ptr_430e = SELF(str_475),
 
-    .field_4312 = 0x01C5,
+    .field_4312 = 0x01c5,
 
     .ptr_4314 = SELF(str_474),
 
@@ -26878,15 +26878,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4332 = SELF(str_469),
 
-    .field_4336 = 0x028B,
+    .field_4336 = 0x028b,
 
     .ptr_4338 = SELF(str_468),
 
-    .field_433c = 0x030D,
+    .field_433c = 0x030d,
 
     .ptr_433e = SELF(str_467),
 
-    .field_4342 = 0x030E,
+    .field_4342 = 0x030e,
 
     .ptr_4344 = SELF(str_466),
 
@@ -26898,15 +26898,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4350 = SELF(str_464),
 
-    .field_4354 = 0x03E2,
+    .field_4354 = 0x03e2,
 
     .ptr_4356 = SELF(str_463),
 
-    .field_435a = 0x010E,
+    .field_435a = 0x010e,
 
     .ptr_435c = SELF(str_462),
 
-    .field_4360 = 0x01A9,
+    .field_4360 = 0x01a9,
 
     .ptr_4362 = SELF(str_461),
 
@@ -26914,15 +26914,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4368 = SELF(str_460),
 
-    .field_436c = 0x01F5,
+    .field_436c = 0x01f5,
 
     .ptr_436e = SELF(str_459),
 
-    .field_4372 = 0x01CB,
+    .field_4372 = 0x01cb,
 
     .ptr_4374 = SELF(str_458),
 
-    .field_4378 = 0x01DF,
+    .field_4378 = 0x01df,
 
     .ptr_437a = SELF(str_457),
 
@@ -26930,11 +26930,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4380 = SELF(str_456),
 
-    .field_4384 = 0x03E6,
+    .field_4384 = 0x03e6,
 
     .ptr_4386 = SELF(str_455),
 
-    .field_438a = 0x03E1,
+    .field_438a = 0x03e1,
 
     .ptr_438c = SELF(str_454),
 
@@ -26962,7 +26962,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_43b0 = SELF(str_448),
 
-    .field_43b4 = 0x014D,
+    .field_43b4 = 0x014d,
 
     .ptr_43b6 = SELF(str_447),
 
@@ -26974,7 +26974,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_43c2 = SELF(str_445),
 
-    .field_43c6 = 0x00AD,
+    .field_43c6 = 0x00ad,
 
     .ptr_43c8 = SELF(str_444),
 
@@ -26982,19 +26982,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_43ce = SELF(str_443),
 
-    .field_43d2 = 0x01FA,
+    .field_43d2 = 0x01fa,
 
     .ptr_43d4 = SELF(str_442),
 
-    .field_43d8 = 0x03AC,
+    .field_43d8 = 0x03ac,
 
     .ptr_43da = SELF(str_441),
 
-    .field_43de = 0x03B6,
+    .field_43de = 0x03b6,
 
     .ptr_43e0 = SELF(str_440),
 
-    .field_43e4 = 0x034B,
+    .field_43e4 = 0x034b,
 
     .ptr_43e6 = SELF(str_439),
 
@@ -27002,11 +27002,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_43ec = SELF(str_438),
 
-    .field_43f0 = 0x00D6,
+    .field_43f0 = 0x00d6,
 
     .ptr_43f2 = SELF(str_437),
 
-    .field_43f6 = 0x007F,
+    .field_43f6 = 0x007f,
 
     .ptr_43f8 = SELF(str_436),
 
@@ -27014,31 +27014,31 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_43fe = SELF(str_435),
 
-    .field_4402 = 0x00D9,
+    .field_4402 = 0x00d9,
 
     .ptr_4404 = SELF(str_434),
 
-    .field_4408 = 0x00D7,
+    .field_4408 = 0x00d7,
 
     .ptr_440a = SELF(str_433),
 
-    .field_440e = 0x000E,
+    .field_440e = 0x000e,
 
     .ptr_4410 = SELF(str_432),
 
-    .field_4414 = 0x036D,
+    .field_4414 = 0x036d,
 
     .ptr_4416 = SELF(str_431),
 
-    .field_441a = 0x00C6,
+    .field_441a = 0x00c6,
 
     .ptr_441c = SELF(str_430),
 
-    .field_4420 = 0x035B,
+    .field_4420 = 0x035b,
 
     .ptr_4422 = SELF(str_429),
 
-    .field_4426 = 0x00CE,
+    .field_4426 = 0x00ce,
 
     .ptr_4428 = SELF(str_428),
 
@@ -27046,7 +27046,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_442e = SELF(str_427),
 
-    .field_4432 = 0x000C,
+    .field_4432 = 0x000c,
 
     .ptr_4434 = SELF(str_426),
 
@@ -27062,51 +27062,51 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4446 = SELF(str_423),
 
-    .field_444a = 0x03C0,
+    .field_444a = 0x03c0,
 
     .ptr_444c = SELF(str_422),
 
-    .field_4450 = 0x03C6,
+    .field_4450 = 0x03c6,
 
     .ptr_4452 = SELF(str_421),
 
-    .field_4456 = 0x03D3,
+    .field_4456 = 0x03d3,
 
     .ptr_4458 = SELF(str_420),
 
-    .field_445c = 0x03AE,
+    .field_445c = 0x03ae,
 
     .ptr_445e = SELF(str_419),
 
-    .field_4462 = 0x03D0,
+    .field_4462 = 0x03d0,
 
     .ptr_4464 = SELF(str_418),
 
-    .field_4468 = 0x02A5,
+    .field_4468 = 0x02a5,
 
     .ptr_446a = SELF(str_417),
 
-    .field_446e = 0x03CF,
+    .field_446e = 0x03cf,
 
     .ptr_4470 = SELF(str_416),
 
-    .field_4474 = 0x024D,
+    .field_4474 = 0x024d,
 
     .ptr_4476 = SELF(str_415),
 
-    .field_447a = 0x00A0,
+    .field_447a = 0x00a0,
 
     .ptr_447c = SELF(str_414),
 
-    .field_4480 = 0x00A2,
+    .field_4480 = 0x00a2,
 
     .ptr_4482 = SELF(str_413),
 
-    .field_4486 = 0x018C,
+    .field_4486 = 0x018c,
 
     .ptr_4488 = SELF(str_412),
 
-    .field_448c = 0x01B0,
+    .field_448c = 0x01b0,
 
     .ptr_448e = SELF(str_411),
 
@@ -27114,31 +27114,31 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4494 = SELF(str_410),
 
-    .field_4498 = 0x001F,
+    .field_4498 = 0x001f,
 
     .ptr_449a = SELF(str_409),
 
-    .field_449e = 0x039C,
+    .field_449e = 0x039c,
 
     .ptr_44a0 = SELF(str_408),
 
-    .field_44a4 = 0x00BB,
+    .field_44a4 = 0x00bb,
 
     .ptr_44a6 = SELF(str_407),
 
-    .field_44aa = 0x00C5,
+    .field_44aa = 0x00c5,
 
     .ptr_44ac = SELF(str_406),
 
-    .field_44b0 = 0x01E1,
+    .field_44b0 = 0x01e1,
 
     .ptr_44b2 = SELF(str_405),
 
-    .field_44b6 = 0x009E,
+    .field_44b6 = 0x009e,
 
     .ptr_44b8 = SELF(str_404),
 
-    .field_44bc = 0x03B9,
+    .field_44bc = 0x03b9,
 
     .ptr_44be = SELF(str_403),
 
@@ -27150,7 +27150,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_44ca = SELF(str_401),
 
-    .field_44ce = 0x03A2,
+    .field_44ce = 0x03a2,
 
     .ptr_44d0 = SELF(str_400),
 
@@ -27162,11 +27162,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_44dc = SELF(str_398),
 
-    .field_44e0 = 0x02EF,
+    .field_44e0 = 0x02ef,
 
     .ptr_44e2 = SELF(str_397),
 
-    .field_44e6 = 0x01E4,
+    .field_44e6 = 0x01e4,
 
     .ptr_44e8 = SELF(str_396),
 
@@ -27174,15 +27174,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_44ee = SELF(str_395),
 
-    .field_44f2 = 0x02C6,
+    .field_44f2 = 0x02c6,
 
     .ptr_44f4 = SELF(str_394),
 
-    .field_44f8 = 0x029F,
+    .field_44f8 = 0x029f,
 
     .ptr_44fa = SELF(str_393),
 
-    .field_44fe = 0x03A0,
+    .field_44fe = 0x03a0,
 
     .ptr_4500 = SELF(str_392),
 
@@ -27190,15 +27190,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4506 = SELF(str_391),
 
-    .field_450a = 0x016F,
+    .field_450a = 0x016f,
 
     .ptr_450c = SELF(str_390),
 
-    .field_4510 = 0x029A,
+    .field_4510 = 0x029a,
 
     .ptr_4512 = SELF(str_389),
 
-    .field_4516 = 0x021D,
+    .field_4516 = 0x021d,
 
     .ptr_4518 = SELF(str_388),
 
@@ -27210,19 +27210,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4524 = SELF(str_386),
 
-    .field_4528 = 0x008E,
+    .field_4528 = 0x008e,
 
     .ptr_452a = SELF(str_385),
 
-    .field_452e = 0x00B7,
+    .field_452e = 0x00b7,
 
     .ptr_4530 = SELF(str_384),
 
-    .field_4534 = 0x00B4,
+    .field_4534 = 0x00b4,
 
     .ptr_4536 = SELF(str_383),
 
-    .field_453a = 0x02A0,
+    .field_453a = 0x02a0,
 
     .ptr_453c = SELF(str_382),
 
@@ -27234,11 +27234,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4548 = SELF(str_380),
 
-    .field_454c = 0x020E,
+    .field_454c = 0x020e,
 
     .ptr_454e = SELF(str_379),
 
-    .field_4552 = 0x025C,
+    .field_4552 = 0x025c,
 
     .ptr_4554 = SELF(str_378),
 
@@ -27246,7 +27246,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_455a = SELF(str_377),
 
-    .field_455e = 0x01F9,
+    .field_455e = 0x01f9,
 
     .ptr_4560 = SELF(str_376),
 
@@ -27258,19 +27258,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_456c = SELF(str_374),
 
-    .field_4570 = 0x01C9,
+    .field_4570 = 0x01c9,
 
     .ptr_4572 = SELF(str_373),
 
-    .field_4576 = 0x01D5,
+    .field_4576 = 0x01d5,
 
     .ptr_4578 = SELF(str_372),
 
-    .field_457c = 0x01D7,
+    .field_457c = 0x01d7,
 
     .ptr_457e = SELF(str_371),
 
-    .field_4582 = 0x009D,
+    .field_4582 = 0x009d,
 
     .ptr_4584 = SELF(str_370),
 
@@ -27282,7 +27282,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4590 = SELF(str_368),
 
-    .field_4594 = 0x02F7,
+    .field_4594 = 0x02f7,
 
     .ptr_4596 = SELF(str_367),
 
@@ -27310,11 +27310,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_45ba = SELF(str_361),
 
-    .field_45be = 0x021A,
+    .field_45be = 0x021a,
 
     .ptr_45c0 = SELF(str_360),
 
-    .field_45c4 = 0x024B,
+    .field_45c4 = 0x024b,
 
     .ptr_45c6 = SELF(str_359),
 
@@ -27334,7 +27334,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_45de = SELF(str_355),
 
-    .field_45e2 = 0x000D,
+    .field_45e2 = 0x000d,
 
     .ptr_45e4 = SELF(str_354),
 
@@ -27342,7 +27342,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_45ea = SELF(str_353),
 
-    .field_45ee = 0x000A,
+    .field_45ee = 0x000a,
 
     .ptr_45f0 = SELF(str_352),
 
@@ -27350,19 +27350,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_45f6 = SELF(str_351),
 
-    .field_45fa = 0x033A,
+    .field_45fa = 0x033a,
 
     .ptr_45fc = SELF(str_350),
 
-    .field_4600 = 0x01B2,
+    .field_4600 = 0x01b2,
 
     .ptr_4602 = SELF(str_349),
 
-    .field_4606 = 0x032F,
+    .field_4606 = 0x032f,
 
     .ptr_4608 = SELF(str_348),
 
-    .field_460c = 0x00D0,
+    .field_460c = 0x00d0,
 
     .ptr_460e = SELF(str_347),
 
@@ -27370,7 +27370,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4614 = SELF(str_346),
 
-    .field_4618 = 0x01AC,
+    .field_4618 = 0x01ac,
 
     .ptr_461a = SELF(str_345),
 
@@ -27394,7 +27394,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4638 = SELF(str_340),
 
-    .field_463c = 0x01CC,
+    .field_463c = 0x01cc,
 
     .ptr_463e = SELF(str_339),
 
@@ -27402,39 +27402,39 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4644 = SELF(str_338),
 
-    .field_4648 = 0x019E,
+    .field_4648 = 0x019e,
 
     .ptr_464a = SELF(str_337),
 
-    .field_464e = 0x01A1,
+    .field_464e = 0x01a1,
 
     .ptr_4650 = SELF(str_336),
 
-    .field_4654 = 0x01A8,
+    .field_4654 = 0x01a8,
 
     .ptr_4656 = SELF(str_335),
 
-    .field_465a = 0x019A,
+    .field_465a = 0x019a,
 
     .ptr_465c = SELF(str_334),
 
-    .field_4660 = 0x019F,
+    .field_4660 = 0x019f,
 
     .ptr_4662 = SELF(str_333),
 
-    .field_4666 = 0x01A7,
+    .field_4666 = 0x01a7,
 
     .ptr_4668 = SELF(str_332),
 
-    .field_466c = 0x01A4,
+    .field_466c = 0x01a4,
 
     .ptr_466e = SELF(str_331),
 
-    .field_4672 = 0x01A3,
+    .field_4672 = 0x01a3,
 
     .ptr_4674 = SELF(str_330),
 
-    .field_4678 = 0x019D,
+    .field_4678 = 0x019d,
 
     .ptr_467a = SELF(str_329),
 
@@ -27450,7 +27450,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_468c = SELF(str_326),
 
-    .field_4690 = 0x001D,
+    .field_4690 = 0x001d,
 
     .ptr_4692 = SELF(str_325),
 
@@ -27470,7 +27470,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_46aa = SELF(str_321),
 
-    .field_46ae = 0x02AE,
+    .field_46ae = 0x02ae,
 
     .ptr_46b0 = SELF(str_320),
 
@@ -27486,15 +27486,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_46c2 = SELF(str_317),
 
-    .field_46c6 = 0x03C9,
+    .field_46c6 = 0x03c9,
 
     .ptr_46c8 = SELF(str_316),
 
-    .field_46cc = 0x022F,
+    .field_46cc = 0x022f,
 
     .ptr_46ce = SELF(str_315),
 
-    .field_46d2 = 0x00CC,
+    .field_46d2 = 0x00cc,
 
     .ptr_46d4 = SELF(str_314),
 
@@ -27502,7 +27502,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_46da = SELF(str_313),
 
-    .field_46de = 0x036B,
+    .field_46de = 0x036b,
 
     .ptr_46e0 = SELF(str_312),
 
@@ -27510,11 +27510,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_46e6 = SELF(str_311),
 
-    .field_46ea = 0x032D,
+    .field_46ea = 0x032d,
 
     .ptr_46ec = SELF(str_310),
 
-    .field_46f0 = 0x02E6,
+    .field_46f0 = 0x02e6,
 
     .ptr_46f2 = SELF(str_309),
 
@@ -27522,7 +27522,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_46f8 = SELF(str_308),
 
-    .field_46fc = 0x001B,
+    .field_46fc = 0x001b,
 
     .ptr_46fe = SELF(str_307),
 
@@ -27530,7 +27530,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4704 = SELF(str_306),
 
-    .field_4708 = 0x02F1,
+    .field_4708 = 0x02f1,
 
     .ptr_470a = SELF(str_305),
 
@@ -27538,7 +27538,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4710 = SELF(str_304),
 
-    .field_4714 = 0x015E,
+    .field_4714 = 0x015e,
 
     .ptr_4716 = SELF(str_303),
 
@@ -27550,15 +27550,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4722 = SELF(str_301),
 
-    .field_4726 = 0x02AA,
+    .field_4726 = 0x02aa,
 
     .ptr_4728 = SELF(str_300),
 
-    .field_472c = 0x03A4,
+    .field_472c = 0x03a4,
 
     .ptr_472e = SELF(str_299),
 
-    .field_4732 = 0x03B2,
+    .field_4732 = 0x03b2,
 
     .ptr_4734 = SELF(str_298),
 
@@ -27566,11 +27566,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_473a = SELF(str_297),
 
-    .field_473e = 0x00FF,
+    .field_473e = 0x00ff,
 
     .ptr_4740 = SELF(str_296),
 
-    .field_4744 = 0x01A5,
+    .field_4744 = 0x01a5,
 
     .ptr_4746 = SELF(str_295),
 
@@ -27586,7 +27586,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4758 = SELF(str_292),
 
-    .field_475c = 0x01A0,
+    .field_475c = 0x01a0,
 
     .ptr_475e = SELF(str_291),
 
@@ -27594,7 +27594,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4764 = SELF(str_290),
 
-    .field_4768 = 0x01D9,
+    .field_4768 = 0x01d9,
 
     .ptr_476a = SELF(str_289),
 
@@ -27606,11 +27606,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4776 = SELF(str_287),
 
-    .field_477a = 0x01EC,
+    .field_477a = 0x01ec,
 
     .ptr_477c = SELF(str_286),
 
-    .field_4780 = 0x01F4,
+    .field_4780 = 0x01f4,
 
     .ptr_4782 = SELF(str_285),
 
@@ -27622,11 +27622,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_478e = SELF(str_283),
 
-    .field_4792 = 0x01FF,
+    .field_4792 = 0x01ff,
 
     .ptr_4794 = SELF(str_282),
 
-    .field_4798 = 0x01F8,
+    .field_4798 = 0x01f8,
 
     .ptr_479a = SELF(str_281),
 
@@ -27638,11 +27638,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_47a6 = SELF(str_279),
 
-    .field_47aa = 0x000B,
+    .field_47aa = 0x000b,
 
     .ptr_47ac = SELF(str_278),
 
-    .field_47b0 = 0x02BF,
+    .field_47b0 = 0x02bf,
 
     .ptr_47b2 = SELF(str_277),
 
@@ -27650,7 +27650,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_47b8 = SELF(str_276),
 
-    .field_47bc = 0x017F,
+    .field_47bc = 0x017f,
 
     .ptr_47be = SELF(str_275),
 
@@ -27658,19 +27658,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_47c4 = SELF(str_274),
 
-    .field_47c8 = 0x00DA,
+    .field_47c8 = 0x00da,
 
     .ptr_47ca = SELF(str_273),
 
-    .field_47ce = 0x019C,
+    .field_47ce = 0x019c,
 
     .ptr_47d0 = SELF(str_272),
 
-    .field_47d4 = 0x00FD,
+    .field_47d4 = 0x00fd,
 
     .ptr_47d6 = SELF(str_271),
 
-    .field_47da = 0x00E5,
+    .field_47da = 0x00e5,
 
     .ptr_47dc = SELF(str_270),
 
@@ -27682,11 +27682,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_47e8 = SELF(str_268),
 
-    .field_47ec = 0x012B,
+    .field_47ec = 0x012b,
 
     .ptr_47ee = SELF(str_267),
 
-    .field_47f2 = 0x019B,
+    .field_47f2 = 0x019b,
 
     .ptr_47f4 = SELF(str_266),
 
@@ -27694,7 +27694,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_47fa = SELF(str_265),
 
-    .field_47fe = 0x00E3,
+    .field_47fe = 0x00e3,
 
     .ptr_4800 = SELF(str_264),
 
@@ -27702,27 +27702,27 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4806 = SELF(str_263),
 
-    .field_480a = 0x03DC,
+    .field_480a = 0x03dc,
 
     .ptr_480c = SELF(str_262),
 
-    .field_4810 = 0x02B7,
+    .field_4810 = 0x02b7,
 
     .ptr_4812 = SELF(str_261),
 
-    .field_4816 = 0x02AF,
+    .field_4816 = 0x02af,
 
     .ptr_4818 = SELF(str_260),
 
-    .field_481c = 0x02B3,
+    .field_481c = 0x02b3,
 
     .ptr_481e = SELF(str_259),
 
-    .field_4822 = 0x025E,
+    .field_4822 = 0x025e,
 
     .ptr_4824 = SELF(str_258),
 
-    .field_4828 = 0x010F,
+    .field_4828 = 0x010f,
 
     .ptr_482a = SELF(str_257),
 
@@ -27742,23 +27742,23 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4842 = SELF(str_253),
 
-    .field_4846 = 0x035F,
+    .field_4846 = 0x035f,
 
     .ptr_4848 = SELF(str_252),
 
-    .field_484c = 0x036C,
+    .field_484c = 0x036c,
 
     .ptr_484e = SELF(str_251),
 
-    .field_4852 = 0x032B,
+    .field_4852 = 0x032b,
 
     .ptr_4854 = SELF(str_250),
 
-    .field_4858 = 0x01FE,
+    .field_4858 = 0x01fe,
 
     .ptr_485a = SELF(str_249),
 
-    .field_485e = 0x01D8,
+    .field_485e = 0x01d8,
 
     .ptr_4860 = SELF(str_248),
 
@@ -27766,7 +27766,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4866 = SELF(str_247),
 
-    .field_486a = 0x02C3,
+    .field_486a = 0x02c3,
 
     .ptr_486c = SELF(str_246),
 
@@ -27774,7 +27774,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4872 = SELF(str_245),
 
-    .field_4876 = 0x014B,
+    .field_4876 = 0x014b,
 
     .ptr_4878 = SELF(str_244),
 
@@ -27782,7 +27782,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_487e = SELF(str_243),
 
-    .field_4882 = 0x01EB,
+    .field_4882 = 0x01eb,
 
     .ptr_4884 = SELF(str_242),
 
@@ -27790,7 +27790,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_488a = SELF(str_241),
 
-    .field_488e = 0x025B,
+    .field_488e = 0x025b,
 
     .ptr_4890 = SELF(str_240),
 
@@ -27798,19 +27798,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4896 = SELF(str_239),
 
-    .field_489a = 0x03CD,
+    .field_489a = 0x03cd,
 
     .ptr_489c = SELF(str_238),
 
-    .field_48a0 = 0x03B0,
+    .field_48a0 = 0x03b0,
 
     .ptr_48a2 = SELF(str_237),
 
-    .field_48a6 = 0x02FF,
+    .field_48a6 = 0x02ff,
 
     .ptr_48a8 = SELF(str_236),
 
-    .field_48ac = 0x023D,
+    .field_48ac = 0x023d,
 
     .ptr_48ae = SELF(str_235),
 
@@ -27826,11 +27826,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_48c0 = SELF(str_232),
 
-    .field_48c4 = 0x03BB,
+    .field_48c4 = 0x03bb,
 
     .ptr_48c6 = SELF(str_231),
 
-    .field_48ca = 0x03B8,
+    .field_48ca = 0x03b8,
 
     .ptr_48cc = SELF(str_230),
 
@@ -27842,15 +27842,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_48d8 = SELF(str_228),
 
-    .field_48dc = 0x03B7,
+    .field_48dc = 0x03b7,
 
     .ptr_48de = SELF(str_227),
 
-    .field_48e2 = 0x033C,
+    .field_48e2 = 0x033c,
 
     .ptr_48e4 = SELF(str_226),
 
-    .field_48e8 = 0x016C,
+    .field_48e8 = 0x016c,
 
     .ptr_48ea = SELF(str_225),
 
@@ -27862,7 +27862,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_48f6 = SELF(str_223),
 
-    .field_48fa = 0x029B,
+    .field_48fa = 0x029b,
 
     .ptr_48fc = SELF(str_222),
 
@@ -27878,7 +27878,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_490e = SELF(str_219),
 
-    .field_4912 = 0x023F,
+    .field_4912 = 0x023f,
 
     .ptr_4914 = SELF(str_218),
 
@@ -27886,11 +27886,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_491a = SELF(str_217),
 
-    .field_491e = 0x00EB,
+    .field_491e = 0x00eb,
 
     .ptr_4920 = SELF(str_216),
 
-    .field_4924 = 0x025A,
+    .field_4924 = 0x025a,
 
     .ptr_4926 = SELF(str_215),
 
@@ -27898,7 +27898,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_492c = SELF(str_214),
 
-    .field_4930 = 0x025F,
+    .field_4930 = 0x025f,
 
     .ptr_4932 = SELF(str_213),
 
@@ -27906,23 +27906,23 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4938 = SELF(str_212),
 
-    .field_493c = 0x02CB,
+    .field_493c = 0x02cb,
 
     .ptr_493e = SELF(str_211),
 
-    .field_4942 = 0x02CA,
+    .field_4942 = 0x02ca,
 
     .ptr_4944 = SELF(str_210),
 
-    .field_4948 = 0x02C1,
+    .field_4948 = 0x02c1,
 
     .ptr_494a = SELF(str_209),
 
-    .field_494e = 0x02F0,
+    .field_494e = 0x02f0,
 
     .ptr_4950 = SELF(str_208),
 
-    .field_4954 = 0x01AD,
+    .field_4954 = 0x01ad,
 
     .ptr_4956 = SELF(str_207),
 
@@ -27930,7 +27930,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_495c = SELF(str_206),
 
-    .field_4960 = 0x031C,
+    .field_4960 = 0x031c,
 
     .ptr_4962 = SELF(str_205),
 
@@ -27942,7 +27942,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_496e = SELF(str_203),
 
-    .field_4972 = 0x01BB,
+    .field_4972 = 0x01bb,
 
     .ptr_4974 = SELF(str_202),
 
@@ -27950,11 +27950,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_497a = SELF(str_201),
 
-    .field_497e = 0x03E4,
+    .field_497e = 0x03e4,
 
     .ptr_4980 = SELF(str_200),
 
-    .field_4984 = 0x022A,
+    .field_4984 = 0x022a,
 
     .ptr_4986 = SELF(str_199),
 
@@ -27962,15 +27962,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_498c = SELF(str_198),
 
-    .field_4990 = 0x02FD,
+    .field_4990 = 0x02fd,
 
     .ptr_4992 = SELF(str_197),
 
-    .field_4996 = 0x02F2,
+    .field_4996 = 0x02f2,
 
     .ptr_4998 = SELF(str_196),
 
-    .field_499c = 0x02BD,
+    .field_499c = 0x02bd,
 
     .ptr_499e = SELF(str_195),
 
@@ -27978,7 +27978,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_49a4 = SELF(str_194),
 
-    .field_49a8 = 0x02A6,
+    .field_49a8 = 0x02a6,
 
     .ptr_49aa = SELF(str_193),
 
@@ -27994,19 +27994,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_49bc = SELF(str_190),
 
-    .field_49c0 = 0x026D,
+    .field_49c0 = 0x026d,
 
     .ptr_49c2 = SELF(str_189),
 
-    .field_49c6 = 0x02E2,
+    .field_49c6 = 0x02e2,
 
     .ptr_49c8 = SELF(str_188),
 
-    .field_49cc = 0x024C,
+    .field_49cc = 0x024c,
 
     .ptr_49ce = SELF(str_187),
 
-    .field_49d2 = 0x00F1,
+    .field_49d2 = 0x00f1,
 
     .ptr_49d4 = SELF(str_186),
 
@@ -28014,27 +28014,27 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_49da = SELF(str_185),
 
-    .field_49de = 0x01C3,
+    .field_49de = 0x01c3,
 
     .ptr_49e0 = SELF(str_184),
 
-    .field_49e4 = 0x02A1,
+    .field_49e4 = 0x02a1,
 
     .ptr_49e6 = SELF(str_183),
 
-    .field_49ea = 0x00EA,
+    .field_49ea = 0x00ea,
 
     .ptr_49ec = SELF(str_182),
 
-    .field_49f0 = 0x03C1,
+    .field_49f0 = 0x03c1,
 
     .ptr_49f2 = SELF(str_181),
 
-    .field_49f6 = 0x020F,
+    .field_49f6 = 0x020f,
 
     .ptr_49f8 = SELF(str_180),
 
-    .field_49fc = 0x03CB,
+    .field_49fc = 0x03cb,
 
     .ptr_49fe = SELF(str_179),
 
@@ -28042,11 +28042,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4a04 = SELF(str_178),
 
-    .field_4a08 = 0x01CE,
+    .field_4a08 = 0x01ce,
 
     .ptr_4a0a = SELF(str_177),
 
-    .field_4a0e = 0x00A4,
+    .field_4a0e = 0x00a4,
 
     .ptr_4a10 = SELF(str_176),
 
@@ -28070,19 +28070,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_4a2e = SELF(str_171),
 
-    .field_4a32 = 0x018D,
+    .field_4a32 = 0x018d,
 
     .ptr_4a34 = SELF(str_170),
 
-    .field_4a38 = 0x00F8,
+    .field_4a38 = 0x00f8,
 
     .ptr_4a3a = SELF(str_169),
 
-    .field_4a3e = 0x020C,
+    .field_4a3e = 0x020c,
 
     .ptr_4a40 = SELF(str_168),
 
-    .field_4a44 = 0x031A,
+    .field_4a44 = 0x031a,
 
     .str_168 = ALIGNED_STRING("Zorba's Band                 120"),
 
@@ -30146,11 +30146,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_d06e = SELF(str_1177),
 
-    .field_d072 = 0x000A,
+    .field_d072 = 0x000a,
 
     .ptr_d074 = SELF(str_1176),
 
-    .field_d078 = 0x000B,
+    .field_d078 = 0x000b,
 
     .pad_257 = { 0 },
 
@@ -30164,19 +30164,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_d108 = SELF(str_1183),
 
-    .field_d10c = 0x000C,
+    .field_d10c = 0x000c,
 
     .ptr_d10e = SELF(str_1182),
 
-    .field_d112 = 0x000D,
+    .field_d112 = 0x000d,
 
     .ptr_d114 = SELF(str_1181),
 
-    .field_d118 = 0x000E,
+    .field_d118 = 0x000e,
 
     .ptr_d11a = SELF(str_1180),
 
-    .field_d11e = 0x000F,
+    .field_d11e = 0x000f,
 
     .pad_258 = { 0 },
 
@@ -30250,11 +30250,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_d306 = SELF(str_1193),
 
-    .field_d30a = 0x001A,
+    .field_d30a = 0x001a,
 
     .ptr_d30c = SELF(str_1192),
 
-    .field_d310 = 0x001B,
+    .field_d310 = 0x001b,
 
     .pad_261 = { 0 },
 
@@ -30268,19 +30268,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_d3a0 = SELF(str_1199),
 
-    .field_d3a4 = 0x001C,
+    .field_d3a4 = 0x001c,
 
     .ptr_d3a6 = SELF(str_1198),
 
-    .field_d3aa = 0x001D,
+    .field_d3aa = 0x001d,
 
     .ptr_d3ac = SELF(str_1197),
 
-    .field_d3b0 = 0x001E,
+    .field_d3b0 = 0x001e,
 
     .ptr_d3b2 = SELF(str_1196),
 
-    .field_d3b6 = 0x001F,
+    .field_d3b6 = 0x001f,
 
     .pad_262 = { 0 },
 
@@ -30904,7 +30904,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_e342 = SELF(str_1387),
 
-    .field_e346 = 0x007F,
+    .field_e346 = 0x007f,
 
     .pad_286 = { 0 },
 
@@ -30978,11 +30978,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_e52e = SELF(str_1400),
 
-    .field_e532 = 0x008A,
+    .field_e532 = 0x008a,
 
     .ptr_e534 = SELF(str_1399),
 
-    .field_e538 = 0x008B,
+    .field_e538 = 0x008b,
 
     .pad_289 = { 0 },
 
@@ -30996,19 +30996,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_e5c8 = SELF(str_1406),
 
-    .field_e5cc = 0x008C,
+    .field_e5cc = 0x008c,
 
     .ptr_e5ce = SELF(str_1405),
 
-    .field_e5d2 = 0x008D,
+    .field_e5d2 = 0x008d,
 
     .ptr_e5d4 = SELF(str_1404),
 
-    .field_e5d8 = 0x008E,
+    .field_e5d8 = 0x008e,
 
     .ptr_e5da = SELF(str_1403),
 
-    .field_e5de = 0x008F,
+    .field_e5de = 0x008f,
 
     .pad_290 = { 0 },
 
@@ -31082,11 +31082,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_e7c6 = SELF(str_1416),
 
-    .field_e7ca = 0x009A,
+    .field_e7ca = 0x009a,
 
     .ptr_e7cc = SELF(str_1415),
 
-    .field_e7d0 = 0x009B,
+    .field_e7d0 = 0x009b,
 
     .pad_293 = { 0 },
 
@@ -31100,19 +31100,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_e860 = SELF(str_1422),
 
-    .field_e864 = 0x009C,
+    .field_e864 = 0x009c,
 
     .ptr_e866 = SELF(str_1421),
 
-    .field_e86a = 0x009D,
+    .field_e86a = 0x009d,
 
     .ptr_e86c = SELF(str_1420),
 
-    .field_e870 = 0x009E,
+    .field_e870 = 0x009e,
 
     .ptr_e872 = SELF(str_1419),
 
-    .field_e876 = 0x009F,
+    .field_e876 = 0x009f,
 
     .pad_294 = { 0 },
 
@@ -31126,19 +31126,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_e906 = SELF(str_1426),
 
-    .field_e90a = 0x00A0,
+    .field_e90a = 0x00a0,
 
     .ptr_e90c = SELF(str_1425),
 
-    .field_e910 = 0x00A1,
+    .field_e910 = 0x00a1,
 
     .ptr_e912 = SELF(str_1424),
 
-    .field_e916 = 0x00A2,
+    .field_e916 = 0x00a2,
 
     .ptr_e918 = SELF(str_1423),
 
-    .field_e91c = 0x00A3,
+    .field_e91c = 0x00a3,
 
     .pad_295 = { 0 },
 
@@ -31152,19 +31152,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_e9ac = SELF(str_1430),
 
-    .field_e9b0 = 0x00A4,
+    .field_e9b0 = 0x00a4,
 
     .ptr_e9b2 = SELF(str_1429),
 
-    .field_e9b6 = 0x00A5,
+    .field_e9b6 = 0x00a5,
 
     .ptr_e9b8 = SELF(str_1428),
 
-    .field_e9bc = 0x00A6,
+    .field_e9bc = 0x00a6,
 
     .ptr_e9be = SELF(str_1427),
 
-    .field_e9c2 = 0x00A7,
+    .field_e9c2 = 0x00a7,
 
     .pad_296 = { 0 },
 
@@ -31178,19 +31178,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_ea52 = SELF(str_1434),
 
-    .field_ea56 = 0x00A8,
+    .field_ea56 = 0x00a8,
 
     .ptr_ea58 = SELF(str_1433),
 
-    .field_ea5c = 0x00A9,
+    .field_ea5c = 0x00a9,
 
     .ptr_ea5e = SELF(str_1432),
 
-    .field_ea62 = 0x00AA,
+    .field_ea62 = 0x00aa,
 
     .ptr_ea64 = SELF(str_1431),
 
-    .field_ea68 = 0x00AB,
+    .field_ea68 = 0x00ab,
 
     .pad_297 = { 0 },
 
@@ -31204,19 +31204,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_eaf8 = SELF(str_1438),
 
-    .field_eafc = 0x00AC,
+    .field_eafc = 0x00ac,
 
     .ptr_eafe = SELF(str_1437),
 
-    .field_eb02 = 0x00AD,
+    .field_eb02 = 0x00ad,
 
     .ptr_eb04 = SELF(str_1436),
 
-    .field_eb08 = 0x00AE,
+    .field_eb08 = 0x00ae,
 
     .ptr_eb0a = SELF(str_1435),
 
-    .field_eb0e = 0x00AF,
+    .field_eb0e = 0x00af,
 
     .pad_298 = { 0 },
 
@@ -31230,19 +31230,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_eb9e = SELF(str_1442),
 
-    .field_eba2 = 0x00B0,
+    .field_eba2 = 0x00b0,
 
     .ptr_eba4 = SELF(str_1441),
 
-    .field_eba8 = 0x00B1,
+    .field_eba8 = 0x00b1,
 
     .ptr_ebaa = SELF(str_1440),
 
-    .field_ebae = 0x00B2,
+    .field_ebae = 0x00b2,
 
     .ptr_ebb0 = SELF(str_1439),
 
-    .field_ebb4 = 0x00B3,
+    .field_ebb4 = 0x00b3,
 
     .pad_299 = { 0 },
 
@@ -31256,19 +31256,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_ec44 = SELF(str_1446),
 
-    .field_ec48 = 0x00B4,
+    .field_ec48 = 0x00b4,
 
     .ptr_ec4a = SELF(str_1445),
 
-    .field_ec4e = 0x00B5,
+    .field_ec4e = 0x00b5,
 
     .ptr_ec50 = SELF(str_1444),
 
-    .field_ec54 = 0x00B6,
+    .field_ec54 = 0x00b6,
 
     .ptr_ec56 = SELF(str_1443),
 
-    .field_ec5a = 0x00B7,
+    .field_ec5a = 0x00b7,
 
     .pad_300 = { 0 },
 
@@ -31282,19 +31282,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_ecea = SELF(str_1450),
 
-    .field_ecee = 0x00B8,
+    .field_ecee = 0x00b8,
 
     .ptr_ecf0 = SELF(str_1449),
 
-    .field_ecf4 = 0x00B9,
+    .field_ecf4 = 0x00b9,
 
     .ptr_ecf6 = SELF(str_1448),
 
-    .field_ecfa = 0x00BA,
+    .field_ecfa = 0x00ba,
 
     .ptr_ecfc = SELF(str_1447),
 
-    .field_ed00 = 0x00BB,
+    .field_ed00 = 0x00bb,
 
     .pad_301 = { 0 },
 
@@ -31308,19 +31308,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_ed90 = SELF(str_1454),
 
-    .field_ed94 = 0x00BC,
+    .field_ed94 = 0x00bc,
 
     .ptr_ed96 = SELF(str_1453),
 
-    .field_ed9a = 0x00BD,
+    .field_ed9a = 0x00bd,
 
     .ptr_ed9c = SELF(str_1452),
 
-    .field_eda0 = 0x00BE,
+    .field_eda0 = 0x00be,
 
     .ptr_eda2 = SELF(str_1451),
 
-    .field_eda6 = 0x00BF,
+    .field_eda6 = 0x00bf,
 
     .pad_302 = { 0 },
 
@@ -31334,19 +31334,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_ee36 = SELF(str_1458),
 
-    .field_ee3a = 0x00C0,
+    .field_ee3a = 0x00c0,
 
     .ptr_ee3c = SELF(str_1457),
 
-    .field_ee40 = 0x00C1,
+    .field_ee40 = 0x00c1,
 
     .ptr_ee42 = SELF(str_1456),
 
-    .field_ee46 = 0x00C2,
+    .field_ee46 = 0x00c2,
 
     .ptr_ee48 = SELF(str_1455),
 
-    .field_ee4c = 0x00C3,
+    .field_ee4c = 0x00c3,
 
     .pad_303 = { 0 },
 
@@ -31360,19 +31360,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_eedc = SELF(str_1462),
 
-    .field_eee0 = 0x00C4,
+    .field_eee0 = 0x00c4,
 
     .ptr_eee2 = SELF(str_1461),
 
-    .field_eee6 = 0x00C5,
+    .field_eee6 = 0x00c5,
 
     .ptr_eee8 = SELF(str_1460),
 
-    .field_eeec = 0x00C6,
+    .field_eeec = 0x00c6,
 
     .ptr_eeee = SELF(str_1459),
 
-    .field_eef2 = 0x00C7,
+    .field_eef2 = 0x00c7,
 
     .pad_304 = { 0 },
 
@@ -31386,19 +31386,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_ef82 = SELF(str_1466),
 
-    .field_ef86 = 0x00C8,
+    .field_ef86 = 0x00c8,
 
     .ptr_ef88 = SELF(str_1465),
 
-    .field_ef8c = 0x00C9,
+    .field_ef8c = 0x00c9,
 
     .ptr_ef8e = SELF(str_1464),
 
-    .field_ef92 = 0x00CA,
+    .field_ef92 = 0x00ca,
 
     .ptr_ef94 = SELF(str_1463),
 
-    .field_ef98 = 0x00CB,
+    .field_ef98 = 0x00cb,
 
     .pad_305 = { 0 },
 
@@ -31412,19 +31412,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f028 = SELF(str_1470),
 
-    .field_f02c = 0x00CC,
+    .field_f02c = 0x00cc,
 
     .ptr_f02e = SELF(str_1469),
 
-    .field_f032 = 0x00CD,
+    .field_f032 = 0x00cd,
 
     .ptr_f034 = SELF(str_1468),
 
-    .field_f038 = 0x00CE,
+    .field_f038 = 0x00ce,
 
     .ptr_f03a = SELF(str_1467),
 
-    .field_f03e = 0x00CF,
+    .field_f03e = 0x00cf,
 
     .pad_306 = { 0 },
 
@@ -31438,19 +31438,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f0ce = SELF(str_1474),
 
-    .field_f0d2 = 0x00D0,
+    .field_f0d2 = 0x00d0,
 
     .ptr_f0d4 = SELF(str_1473),
 
-    .field_f0d8 = 0x00D1,
+    .field_f0d8 = 0x00d1,
 
     .ptr_f0da = SELF(str_1472),
 
-    .field_f0de = 0x00D2,
+    .field_f0de = 0x00d2,
 
     .ptr_f0e0 = SELF(str_1471),
 
-    .field_f0e4 = 0x00D3,
+    .field_f0e4 = 0x00d3,
 
     .pad_307 = { 0 },
 
@@ -31464,19 +31464,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f174 = SELF(str_1478),
 
-    .field_f178 = 0x00D4,
+    .field_f178 = 0x00d4,
 
     .ptr_f17a = SELF(str_1477),
 
-    .field_f17e = 0x00D5,
+    .field_f17e = 0x00d5,
 
     .ptr_f180 = SELF(str_1476),
 
-    .field_f184 = 0x00D6,
+    .field_f184 = 0x00d6,
 
     .ptr_f186 = SELF(str_1475),
 
-    .field_f18a = 0x00D7,
+    .field_f18a = 0x00d7,
 
     .pad_308 = { 0 },
 
@@ -31490,19 +31490,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f21a = SELF(str_1482),
 
-    .field_f21e = 0x00D8,
+    .field_f21e = 0x00d8,
 
     .ptr_f220 = SELF(str_1481),
 
-    .field_f224 = 0x00D9,
+    .field_f224 = 0x00d9,
 
     .ptr_f226 = SELF(str_1480),
 
-    .field_f22a = 0x00DA,
+    .field_f22a = 0x00da,
 
     .ptr_f22c = SELF(str_1479),
 
-    .field_f230 = 0x00DB,
+    .field_f230 = 0x00db,
 
     .pad_309 = { 0 },
 
@@ -31516,19 +31516,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f2c0 = SELF(str_1486),
 
-    .field_f2c4 = 0x00DC,
+    .field_f2c4 = 0x00dc,
 
     .ptr_f2c6 = SELF(str_1485),
 
-    .field_f2ca = 0x00DD,
+    .field_f2ca = 0x00dd,
 
     .ptr_f2cc = SELF(str_1484),
 
-    .field_f2d0 = 0x00DE,
+    .field_f2d0 = 0x00de,
 
     .ptr_f2d2 = SELF(str_1483),
 
-    .field_f2d6 = 0x00DF,
+    .field_f2d6 = 0x00df,
 
     .pad_310 = { 0 },
 
@@ -31542,19 +31542,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f366 = SELF(str_1490),
 
-    .field_f36a = 0x00E0,
+    .field_f36a = 0x00e0,
 
     .ptr_f36c = SELF(str_1489),
 
-    .field_f370 = 0x00E1,
+    .field_f370 = 0x00e1,
 
     .ptr_f372 = SELF(str_1488),
 
-    .field_f376 = 0x00E2,
+    .field_f376 = 0x00e2,
 
     .ptr_f378 = SELF(str_1487),
 
-    .field_f37c = 0x00E3,
+    .field_f37c = 0x00e3,
 
     .pad_311 = { 0 },
 
@@ -31568,19 +31568,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f40c = SELF(str_1494),
 
-    .field_f410 = 0x00E4,
+    .field_f410 = 0x00e4,
 
     .ptr_f412 = SELF(str_1493),
 
-    .field_f416 = 0x00E5,
+    .field_f416 = 0x00e5,
 
     .ptr_f418 = SELF(str_1492),
 
-    .field_f41c = 0x00E6,
+    .field_f41c = 0x00e6,
 
     .ptr_f41e = SELF(str_1491),
 
-    .field_f422 = 0x00E7,
+    .field_f422 = 0x00e7,
 
     .pad_312 = { 0 },
 
@@ -31594,19 +31594,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f4b2 = SELF(str_1498),
 
-    .field_f4b6 = 0x00E8,
+    .field_f4b6 = 0x00e8,
 
     .ptr_f4b8 = SELF(str_1497),
 
-    .field_f4bc = 0x00E9,
+    .field_f4bc = 0x00e9,
 
     .ptr_f4be = SELF(str_1496),
 
-    .field_f4c2 = 0x00EA,
+    .field_f4c2 = 0x00ea,
 
     .ptr_f4c4 = SELF(str_1495),
 
-    .field_f4c8 = 0x00EB,
+    .field_f4c8 = 0x00eb,
 
     .pad_313 = { 0 },
 
@@ -31620,19 +31620,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f558 = SELF(str_1502),
 
-    .field_f55c = 0x00EC,
+    .field_f55c = 0x00ec,
 
     .ptr_f55e = SELF(str_1501),
 
-    .field_f562 = 0x00ED,
+    .field_f562 = 0x00ed,
 
     .ptr_f564 = SELF(str_1500),
 
-    .field_f568 = 0x00EE,
+    .field_f568 = 0x00ee,
 
     .ptr_f56a = SELF(str_1499),
 
-    .field_f56e = 0x00EF,
+    .field_f56e = 0x00ef,
 
     .pad_314 = { 0 },
 
@@ -31646,19 +31646,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f5fe = SELF(str_1506),
 
-    .field_f602 = 0x00F0,
+    .field_f602 = 0x00f0,
 
     .ptr_f604 = SELF(str_1505),
 
-    .field_f608 = 0x00F1,
+    .field_f608 = 0x00f1,
 
     .ptr_f60a = SELF(str_1504),
 
-    .field_f60e = 0x00F2,
+    .field_f60e = 0x00f2,
 
     .ptr_f610 = SELF(str_1503),
 
-    .field_f614 = 0x00F3,
+    .field_f614 = 0x00f3,
 
     .pad_315 = { 0 },
 
@@ -31672,19 +31672,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f6a4 = SELF(str_1510),
 
-    .field_f6a8 = 0x00F4,
+    .field_f6a8 = 0x00f4,
 
     .ptr_f6aa = SELF(str_1509),
 
-    .field_f6ae = 0x00F5,
+    .field_f6ae = 0x00f5,
 
     .ptr_f6b0 = SELF(str_1508),
 
-    .field_f6b4 = 0x00F6,
+    .field_f6b4 = 0x00f6,
 
     .ptr_f6b6 = SELF(str_1507),
 
-    .field_f6ba = 0x00F7,
+    .field_f6ba = 0x00f7,
 
     .pad_316 = { 0 },
 
@@ -31698,19 +31698,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f74a = SELF(str_1514),
 
-    .field_f74e = 0x00F8,
+    .field_f74e = 0x00f8,
 
     .ptr_f750 = SELF(str_1513),
 
-    .field_f754 = 0x00F9,
+    .field_f754 = 0x00f9,
 
     .ptr_f756 = SELF(str_1512),
 
-    .field_f75a = 0x00FA,
+    .field_f75a = 0x00fa,
 
     .ptr_f75c = SELF(str_1511),
 
-    .field_f760 = 0x00FB,
+    .field_f760 = 0x00fb,
 
     .pad_317 = { 0 },
 
@@ -31724,19 +31724,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f7f0 = SELF(str_1518),
 
-    .field_f7f4 = 0x00FC,
+    .field_f7f4 = 0x00fc,
 
     .ptr_f7f6 = SELF(str_1517),
 
-    .field_f7fa = 0x00FD,
+    .field_f7fa = 0x00fd,
 
     .ptr_f7fc = SELF(str_1516),
 
-    .field_f800 = 0x00FE,
+    .field_f800 = 0x00fe,
 
     .ptr_f802 = SELF(str_1515),
 
-    .field_f806 = 0x00FF,
+    .field_f806 = 0x00ff,
 
     .pad_318 = { 0 },
 
@@ -31810,11 +31810,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_f9ee = SELF(str_1528),
 
-    .field_f9f2 = 0x010A,
+    .field_f9f2 = 0x010a,
 
     .ptr_f9f4 = SELF(str_1527),
 
-    .field_f9f8 = 0x010B,
+    .field_f9f8 = 0x010b,
 
     .pad_321 = { 0 },
 
@@ -31828,19 +31828,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_fa88 = SELF(str_1534),
 
-    .field_fa8c = 0x010C,
+    .field_fa8c = 0x010c,
 
     .ptr_fa8e = SELF(str_1533),
 
-    .field_fa92 = 0x010D,
+    .field_fa92 = 0x010d,
 
     .ptr_fa94 = SELF(str_1532),
 
-    .field_fa98 = 0x010E,
+    .field_fa98 = 0x010e,
 
     .ptr_fa9a = SELF(str_1531),
 
-    .field_fa9e = 0x010F,
+    .field_fa9e = 0x010f,
 
     .pad_322 = { 0 },
 
@@ -31914,11 +31914,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_fc86 = SELF(str_1544),
 
-    .field_fc8a = 0x011A,
+    .field_fc8a = 0x011a,
 
     .ptr_fc8c = SELF(str_1543),
 
-    .field_fc90 = 0x011B,
+    .field_fc90 = 0x011b,
 
     .pad_325 = { 0 },
 
@@ -31932,19 +31932,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_fd20 = SELF(str_1550),
 
-    .field_fd24 = 0x011C,
+    .field_fd24 = 0x011c,
 
     .ptr_fd26 = SELF(str_1549),
 
-    .field_fd2a = 0x011D,
+    .field_fd2a = 0x011d,
 
     .ptr_fd2c = SELF(str_1548),
 
-    .field_fd30 = 0x011E,
+    .field_fd30 = 0x011e,
 
     .ptr_fd32 = SELF(str_1547),
 
-    .field_fd36 = 0x011F,
+    .field_fd36 = 0x011f,
 
     .pad_326 = { 0 },
 
@@ -32018,11 +32018,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_ff1e = SELF(str_1560),
 
-    .field_ff22 = 0x012A,
+    .field_ff22 = 0x012a,
 
     .ptr_ff24 = SELF(str_1559),
 
-    .field_ff28 = 0x012B,
+    .field_ff28 = 0x012b,
 
     .pad_329 = { 0 },
 
@@ -32036,19 +32036,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_ffb8 = SELF(str_1566),
 
-    .field_ffbc = 0x012C,
+    .field_ffbc = 0x012c,
 
     .ptr_ffbe = SELF(str_1565),
 
-    .field_ffc2 = 0x012D,
+    .field_ffc2 = 0x012d,
 
     .ptr_ffc4 = SELF(str_1564),
 
-    .field_ffc8 = 0x012E,
+    .field_ffc8 = 0x012e,
 
     .ptr_ffca = SELF(str_1563),
 
-    .field_ffce = 0x012F,
+    .field_ffce = 0x012f,
 
     .pad_330 = { 0 },
 
@@ -32122,11 +32122,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_101b6 = SELF(str_1576),
 
-    .field_101ba = 0x013A,
+    .field_101ba = 0x013a,
 
     .ptr_101bc = SELF(str_1575),
 
-    .field_101c0 = 0x013B,
+    .field_101c0 = 0x013b,
 
     .pad_333 = { 0 },
 
@@ -32140,19 +32140,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_10250 = SELF(str_1582),
 
-    .field_10254 = 0x013C,
+    .field_10254 = 0x013c,
 
     .ptr_10256 = SELF(str_1581),
 
-    .field_1025a = 0x013D,
+    .field_1025a = 0x013d,
 
     .ptr_1025c = SELF(str_1580),
 
-    .field_10260 = 0x013E,
+    .field_10260 = 0x013e,
 
     .ptr_10262 = SELF(str_1579),
 
-    .field_10266 = 0x013F,
+    .field_10266 = 0x013f,
 
     .pad_334 = { 0 },
 
@@ -32226,11 +32226,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1044e = SELF(str_1592),
 
-    .field_10452 = 0x014A,
+    .field_10452 = 0x014a,
 
     .ptr_10454 = SELF(str_1591),
 
-    .field_10458 = 0x014B,
+    .field_10458 = 0x014b,
 
     .pad_337 = { 0 },
 
@@ -32244,19 +32244,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_104e8 = SELF(str_1598),
 
-    .field_104ec = 0x014C,
+    .field_104ec = 0x014c,
 
     .ptr_104ee = SELF(str_1597),
 
-    .field_104f2 = 0x014D,
+    .field_104f2 = 0x014d,
 
     .ptr_104f4 = SELF(str_1596),
 
-    .field_104f8 = 0x014E,
+    .field_104f8 = 0x014e,
 
     .ptr_104fa = SELF(str_1595),
 
-    .field_104fe = 0x014F,
+    .field_104fe = 0x014f,
 
     .pad_338 = { 0 },
 
@@ -32330,11 +32330,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_106e6 = SELF(str_1608),
 
-    .field_106ea = 0x015A,
+    .field_106ea = 0x015a,
 
     .ptr_106ec = SELF(str_1607),
 
-    .field_106f0 = 0x015B,
+    .field_106f0 = 0x015b,
 
     .pad_341 = { 0 },
 
@@ -32348,19 +32348,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_10780 = SELF(str_1614),
 
-    .field_10784 = 0x015C,
+    .field_10784 = 0x015c,
 
     .ptr_10786 = SELF(str_1613),
 
-    .field_1078a = 0x015D,
+    .field_1078a = 0x015d,
 
     .ptr_1078c = SELF(str_1612),
 
-    .field_10790 = 0x015E,
+    .field_10790 = 0x015e,
 
     .ptr_10792 = SELF(str_1611),
 
-    .field_10796 = 0x015F,
+    .field_10796 = 0x015f,
 
     .pad_342 = { 0 },
 
@@ -32434,11 +32434,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1097e = SELF(str_1624),
 
-    .field_10982 = 0x016A,
+    .field_10982 = 0x016a,
 
     .ptr_10984 = SELF(str_1623),
 
-    .field_10988 = 0x016B,
+    .field_10988 = 0x016b,
 
     .pad_345 = { 0 },
 
@@ -32452,19 +32452,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_10a18 = SELF(str_1630),
 
-    .field_10a1c = 0x016C,
+    .field_10a1c = 0x016c,
 
     .ptr_10a1e = SELF(str_1629),
 
-    .field_10a22 = 0x016D,
+    .field_10a22 = 0x016d,
 
     .ptr_10a24 = SELF(str_1628),
 
-    .field_10a28 = 0x016E,
+    .field_10a28 = 0x016e,
 
     .ptr_10a2a = SELF(str_1627),
 
-    .field_10a2e = 0x016F,
+    .field_10a2e = 0x016f,
 
     .pad_346 = { 0 },
 
@@ -32538,11 +32538,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_10c16 = SELF(str_1640),
 
-    .field_10c1a = 0x017A,
+    .field_10c1a = 0x017a,
 
     .ptr_10c1c = SELF(str_1639),
 
-    .field_10c20 = 0x017B,
+    .field_10c20 = 0x017b,
 
     .pad_349 = { 0 },
 
@@ -32556,19 +32556,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_10cb0 = SELF(str_1646),
 
-    .field_10cb4 = 0x017C,
+    .field_10cb4 = 0x017c,
 
     .ptr_10cb6 = SELF(str_1645),
 
-    .field_10cba = 0x017D,
+    .field_10cba = 0x017d,
 
     .ptr_10cbc = SELF(str_1644),
 
-    .field_10cc0 = 0x017E,
+    .field_10cc0 = 0x017e,
 
     .ptr_10cc2 = SELF(str_1643),
 
-    .field_10cc6 = 0x017F,
+    .field_10cc6 = 0x017f,
 
     .pad_350 = { 0 },
 
@@ -32642,11 +32642,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_10eae = SELF(str_1656),
 
-    .field_10eb2 = 0x018A,
+    .field_10eb2 = 0x018a,
 
     .ptr_10eb4 = SELF(str_1655),
 
-    .field_10eb8 = 0x018B,
+    .field_10eb8 = 0x018b,
 
     .pad_353 = { 0 },
 
@@ -32660,19 +32660,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_10f48 = SELF(str_1662),
 
-    .field_10f4c = 0x018C,
+    .field_10f4c = 0x018c,
 
     .ptr_10f4e = SELF(str_1661),
 
-    .field_10f52 = 0x018D,
+    .field_10f52 = 0x018d,
 
     .ptr_10f54 = SELF(str_1660),
 
-    .field_10f58 = 0x018E,
+    .field_10f58 = 0x018e,
 
     .ptr_10f5a = SELF(str_1659),
 
-    .field_10f5e = 0x018F,
+    .field_10f5e = 0x018f,
 
     .pad_354 = { 0 },
 
@@ -32746,11 +32746,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11146 = SELF(str_1672),
 
-    .field_1114a = 0x019A,
+    .field_1114a = 0x019a,
 
     .ptr_1114c = SELF(str_1671),
 
-    .field_11150 = 0x019B,
+    .field_11150 = 0x019b,
 
     .pad_357 = { 0 },
 
@@ -32764,19 +32764,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_111e0 = SELF(str_1678),
 
-    .field_111e4 = 0x019C,
+    .field_111e4 = 0x019c,
 
     .ptr_111e6 = SELF(str_1677),
 
-    .field_111ea = 0x019D,
+    .field_111ea = 0x019d,
 
     .ptr_111ec = SELF(str_1676),
 
-    .field_111f0 = 0x019E,
+    .field_111f0 = 0x019e,
 
     .ptr_111f2 = SELF(str_1675),
 
-    .field_111f6 = 0x019F,
+    .field_111f6 = 0x019f,
 
     .pad_358 = { 0 },
 
@@ -32790,19 +32790,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11286 = SELF(str_1682),
 
-    .field_1128a = 0x01A0,
+    .field_1128a = 0x01a0,
 
     .ptr_1128c = SELF(str_1681),
 
-    .field_11290 = 0x01A1,
+    .field_11290 = 0x01a1,
 
     .ptr_11292 = SELF(str_1680),
 
-    .field_11296 = 0x01A2,
+    .field_11296 = 0x01a2,
 
     .ptr_11298 = SELF(str_1679),
 
-    .field_1129c = 0x01A3,
+    .field_1129c = 0x01a3,
 
     .pad_359 = { 0 },
 
@@ -32816,19 +32816,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1132c = SELF(str_1686),
 
-    .field_11330 = 0x01A4,
+    .field_11330 = 0x01a4,
 
     .ptr_11332 = SELF(str_1685),
 
-    .field_11336 = 0x01A5,
+    .field_11336 = 0x01a5,
 
     .ptr_11338 = SELF(str_1684),
 
-    .field_1133c = 0x01A6,
+    .field_1133c = 0x01a6,
 
     .ptr_1133e = SELF(str_1683),
 
-    .field_11342 = 0x01A7,
+    .field_11342 = 0x01a7,
 
     .pad_360 = { 0 },
 
@@ -32842,19 +32842,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_113d2 = SELF(str_1690),
 
-    .field_113d6 = 0x01A8,
+    .field_113d6 = 0x01a8,
 
     .ptr_113d8 = SELF(str_1689),
 
-    .field_113dc = 0x01A9,
+    .field_113dc = 0x01a9,
 
     .ptr_113de = SELF(str_1688),
 
-    .field_113e2 = 0x01AA,
+    .field_113e2 = 0x01aa,
 
     .ptr_113e4 = SELF(str_1687),
 
-    .field_113e8 = 0x01AB,
+    .field_113e8 = 0x01ab,
 
     .pad_361 = { 0 },
 
@@ -32868,19 +32868,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11478 = SELF(str_1694),
 
-    .field_1147c = 0x01AC,
+    .field_1147c = 0x01ac,
 
     .ptr_1147e = SELF(str_1693),
 
-    .field_11482 = 0x01AD,
+    .field_11482 = 0x01ad,
 
     .ptr_11484 = SELF(str_1692),
 
-    .field_11488 = 0x01AE,
+    .field_11488 = 0x01ae,
 
     .ptr_1148a = SELF(str_1691),
 
-    .field_1148e = 0x01AF,
+    .field_1148e = 0x01af,
 
     .pad_362 = { 0 },
 
@@ -32894,19 +32894,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1151e = SELF(str_1698),
 
-    .field_11522 = 0x01B0,
+    .field_11522 = 0x01b0,
 
     .ptr_11524 = SELF(str_1697),
 
-    .field_11528 = 0x01B1,
+    .field_11528 = 0x01b1,
 
     .ptr_1152a = SELF(str_1696),
 
-    .field_1152e = 0x01B2,
+    .field_1152e = 0x01b2,
 
     .ptr_11530 = SELF(str_1695),
 
-    .field_11534 = 0x01B3,
+    .field_11534 = 0x01b3,
 
     .pad_363 = { 0 },
 
@@ -32920,19 +32920,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_115c4 = SELF(str_1702),
 
-    .field_115c8 = 0x01B4,
+    .field_115c8 = 0x01b4,
 
     .ptr_115ca = SELF(str_1701),
 
-    .field_115ce = 0x01B5,
+    .field_115ce = 0x01b5,
 
     .ptr_115d0 = SELF(str_1700),
 
-    .field_115d4 = 0x01B6,
+    .field_115d4 = 0x01b6,
 
     .ptr_115d6 = SELF(str_1699),
 
-    .field_115da = 0x01B7,
+    .field_115da = 0x01b7,
 
     .pad_364 = { 0 },
 
@@ -32946,19 +32946,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1166a = SELF(str_1706),
 
-    .field_1166e = 0x01B8,
+    .field_1166e = 0x01b8,
 
     .ptr_11670 = SELF(str_1705),
 
-    .field_11674 = 0x01B9,
+    .field_11674 = 0x01b9,
 
     .ptr_11676 = SELF(str_1704),
 
-    .field_1167a = 0x01BA,
+    .field_1167a = 0x01ba,
 
     .ptr_1167c = SELF(str_1703),
 
-    .field_11680 = 0x01BB,
+    .field_11680 = 0x01bb,
 
     .pad_365 = { 0 },
 
@@ -32972,19 +32972,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11710 = SELF(str_1710),
 
-    .field_11714 = 0x01BC,
+    .field_11714 = 0x01bc,
 
     .ptr_11716 = SELF(str_1709),
 
-    .field_1171a = 0x01BD,
+    .field_1171a = 0x01bd,
 
     .ptr_1171c = SELF(str_1708),
 
-    .field_11720 = 0x01BE,
+    .field_11720 = 0x01be,
 
     .ptr_11722 = SELF(str_1707),
 
-    .field_11726 = 0x01BF,
+    .field_11726 = 0x01bf,
 
     .pad_366 = { 0 },
 
@@ -32998,19 +32998,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_117b6 = SELF(str_1714),
 
-    .field_117ba = 0x01C0,
+    .field_117ba = 0x01c0,
 
     .ptr_117bc = SELF(str_1713),
 
-    .field_117c0 = 0x01C1,
+    .field_117c0 = 0x01c1,
 
     .ptr_117c2 = SELF(str_1712),
 
-    .field_117c6 = 0x01C2,
+    .field_117c6 = 0x01c2,
 
     .ptr_117c8 = SELF(str_1711),
 
-    .field_117cc = 0x01C3,
+    .field_117cc = 0x01c3,
 
     .pad_367 = { 0 },
 
@@ -33024,19 +33024,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1185c = SELF(str_1718),
 
-    .field_11860 = 0x01C4,
+    .field_11860 = 0x01c4,
 
     .ptr_11862 = SELF(str_1717),
 
-    .field_11866 = 0x01C5,
+    .field_11866 = 0x01c5,
 
     .ptr_11868 = SELF(str_1716),
 
-    .field_1186c = 0x01C6,
+    .field_1186c = 0x01c6,
 
     .ptr_1186e = SELF(str_1715),
 
-    .field_11872 = 0x01C7,
+    .field_11872 = 0x01c7,
 
     .pad_368 = { 0 },
 
@@ -33050,19 +33050,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11902 = SELF(str_1722),
 
-    .field_11906 = 0x01C8,
+    .field_11906 = 0x01c8,
 
     .ptr_11908 = SELF(str_1721),
 
-    .field_1190c = 0x01C9,
+    .field_1190c = 0x01c9,
 
     .ptr_1190e = SELF(str_1720),
 
-    .field_11912 = 0x01CA,
+    .field_11912 = 0x01ca,
 
     .ptr_11914 = SELF(str_1719),
 
-    .field_11918 = 0x01CB,
+    .field_11918 = 0x01cb,
 
     .pad_369 = { 0 },
 
@@ -33076,19 +33076,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_119a8 = SELF(str_1726),
 
-    .field_119ac = 0x01CC,
+    .field_119ac = 0x01cc,
 
     .ptr_119ae = SELF(str_1725),
 
-    .field_119b2 = 0x01CD,
+    .field_119b2 = 0x01cd,
 
     .ptr_119b4 = SELF(str_1724),
 
-    .field_119b8 = 0x01CE,
+    .field_119b8 = 0x01ce,
 
     .ptr_119ba = SELF(str_1723),
 
-    .field_119be = 0x01CF,
+    .field_119be = 0x01cf,
 
     .pad_370 = { 0 },
 
@@ -33102,19 +33102,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11a4e = SELF(str_1730),
 
-    .field_11a52 = 0x01D0,
+    .field_11a52 = 0x01d0,
 
     .ptr_11a54 = SELF(str_1729),
 
-    .field_11a58 = 0x01D1,
+    .field_11a58 = 0x01d1,
 
     .ptr_11a5a = SELF(str_1728),
 
-    .field_11a5e = 0x01D2,
+    .field_11a5e = 0x01d2,
 
     .ptr_11a60 = SELF(str_1727),
 
-    .field_11a64 = 0x01D3,
+    .field_11a64 = 0x01d3,
 
     .pad_371 = { 0 },
 
@@ -33128,19 +33128,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11af4 = SELF(str_1734),
 
-    .field_11af8 = 0x01D4,
+    .field_11af8 = 0x01d4,
 
     .ptr_11afa = SELF(str_1733),
 
-    .field_11afe = 0x01D5,
+    .field_11afe = 0x01d5,
 
     .ptr_11b00 = SELF(str_1732),
 
-    .field_11b04 = 0x01D6,
+    .field_11b04 = 0x01d6,
 
     .ptr_11b06 = SELF(str_1731),
 
-    .field_11b0a = 0x01D7,
+    .field_11b0a = 0x01d7,
 
     .pad_372 = { 0 },
 
@@ -33154,19 +33154,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11b9a = SELF(str_1738),
 
-    .field_11b9e = 0x01D8,
+    .field_11b9e = 0x01d8,
 
     .ptr_11ba0 = SELF(str_1737),
 
-    .field_11ba4 = 0x01D9,
+    .field_11ba4 = 0x01d9,
 
     .ptr_11ba6 = SELF(str_1736),
 
-    .field_11baa = 0x01DA,
+    .field_11baa = 0x01da,
 
     .ptr_11bac = SELF(str_1735),
 
-    .field_11bb0 = 0x01DB,
+    .field_11bb0 = 0x01db,
 
     .pad_373 = { 0 },
 
@@ -33180,19 +33180,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11c40 = SELF(str_1742),
 
-    .field_11c44 = 0x01DC,
+    .field_11c44 = 0x01dc,
 
     .ptr_11c46 = SELF(str_1741),
 
-    .field_11c4a = 0x01DD,
+    .field_11c4a = 0x01dd,
 
     .ptr_11c4c = SELF(str_1740),
 
-    .field_11c50 = 0x01DE,
+    .field_11c50 = 0x01de,
 
     .ptr_11c52 = SELF(str_1739),
 
-    .field_11c56 = 0x01DF,
+    .field_11c56 = 0x01df,
 
     .pad_374 = { 0 },
 
@@ -33206,19 +33206,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11ce6 = SELF(str_1746),
 
-    .field_11cea = 0x01E0,
+    .field_11cea = 0x01e0,
 
     .ptr_11cec = SELF(str_1745),
 
-    .field_11cf0 = 0x01E1,
+    .field_11cf0 = 0x01e1,
 
     .ptr_11cf2 = SELF(str_1744),
 
-    .field_11cf6 = 0x01E2,
+    .field_11cf6 = 0x01e2,
 
     .ptr_11cf8 = SELF(str_1743),
 
-    .field_11cfc = 0x01E3,
+    .field_11cfc = 0x01e3,
 
     .pad_375 = { 0 },
 
@@ -33232,19 +33232,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11d8c = SELF(str_1750),
 
-    .field_11d90 = 0x01E4,
+    .field_11d90 = 0x01e4,
 
     .ptr_11d92 = SELF(str_1749),
 
-    .field_11d96 = 0x01E5,
+    .field_11d96 = 0x01e5,
 
     .ptr_11d98 = SELF(str_1748),
 
-    .field_11d9c = 0x01E6,
+    .field_11d9c = 0x01e6,
 
     .ptr_11d9e = SELF(str_1747),
 
-    .field_11da2 = 0x01E7,
+    .field_11da2 = 0x01e7,
 
     .pad_376 = { 0 },
 
@@ -33258,19 +33258,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11e32 = SELF(str_1754),
 
-    .field_11e36 = 0x01E8,
+    .field_11e36 = 0x01e8,
 
     .ptr_11e38 = SELF(str_1753),
 
-    .field_11e3c = 0x01E9,
+    .field_11e3c = 0x01e9,
 
     .ptr_11e3e = SELF(str_1752),
 
-    .field_11e42 = 0x01EA,
+    .field_11e42 = 0x01ea,
 
     .ptr_11e44 = SELF(str_1751),
 
-    .field_11e48 = 0x01EB,
+    .field_11e48 = 0x01eb,
 
     .pad_377 = { 0 },
 
@@ -33284,19 +33284,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11ed8 = SELF(str_1758),
 
-    .field_11edc = 0x01EC,
+    .field_11edc = 0x01ec,
 
     .ptr_11ede = SELF(str_1757),
 
-    .field_11ee2 = 0x01ED,
+    .field_11ee2 = 0x01ed,
 
     .ptr_11ee4 = SELF(str_1756),
 
-    .field_11ee8 = 0x01EE,
+    .field_11ee8 = 0x01ee,
 
     .ptr_11eea = SELF(str_1755),
 
-    .field_11eee = 0x01EF,
+    .field_11eee = 0x01ef,
 
     .pad_378 = { 0 },
 
@@ -33310,19 +33310,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_11f7e = SELF(str_1762),
 
-    .field_11f82 = 0x01F0,
+    .field_11f82 = 0x01f0,
 
     .ptr_11f84 = SELF(str_1761),
 
-    .field_11f88 = 0x01F1,
+    .field_11f88 = 0x01f1,
 
     .ptr_11f8a = SELF(str_1760),
 
-    .field_11f8e = 0x01F2,
+    .field_11f8e = 0x01f2,
 
     .ptr_11f90 = SELF(str_1759),
 
-    .field_11f94 = 0x01F3,
+    .field_11f94 = 0x01f3,
 
     .pad_379 = { 0 },
 
@@ -33336,19 +33336,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_12024 = SELF(str_1766),
 
-    .field_12028 = 0x01F4,
+    .field_12028 = 0x01f4,
 
     .ptr_1202a = SELF(str_1765),
 
-    .field_1202e = 0x01F5,
+    .field_1202e = 0x01f5,
 
     .ptr_12030 = SELF(str_1764),
 
-    .field_12034 = 0x01F6,
+    .field_12034 = 0x01f6,
 
     .ptr_12036 = SELF(str_1763),
 
-    .field_1203a = 0x01F7,
+    .field_1203a = 0x01f7,
 
     .pad_380 = { 0 },
 
@@ -33362,19 +33362,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_120ca = SELF(str_1770),
 
-    .field_120ce = 0x01F8,
+    .field_120ce = 0x01f8,
 
     .ptr_120d0 = SELF(str_1769),
 
-    .field_120d4 = 0x01F9,
+    .field_120d4 = 0x01f9,
 
     .ptr_120d6 = SELF(str_1768),
 
-    .field_120da = 0x01FA,
+    .field_120da = 0x01fa,
 
     .ptr_120dc = SELF(str_1767),
 
-    .field_120e0 = 0x01FB,
+    .field_120e0 = 0x01fb,
 
     .pad_381 = { 0 },
 
@@ -33388,19 +33388,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_12170 = SELF(str_1774),
 
-    .field_12174 = 0x01FC,
+    .field_12174 = 0x01fc,
 
     .ptr_12176 = SELF(str_1773),
 
-    .field_1217a = 0x01FD,
+    .field_1217a = 0x01fd,
 
     .ptr_1217c = SELF(str_1772),
 
-    .field_12180 = 0x01FE,
+    .field_12180 = 0x01fe,
 
     .ptr_12182 = SELF(str_1771),
 
-    .field_12186 = 0x01FF,
+    .field_12186 = 0x01ff,
 
     .pad_382 = { 0 },
 
@@ -33474,11 +33474,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1236e = SELF(str_1784),
 
-    .field_12372 = 0x020A,
+    .field_12372 = 0x020a,
 
     .ptr_12374 = SELF(str_1783),
 
-    .field_12378 = 0x020B,
+    .field_12378 = 0x020b,
 
     .pad_385 = { 0 },
 
@@ -33492,19 +33492,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_12408 = SELF(str_1790),
 
-    .field_1240c = 0x020C,
+    .field_1240c = 0x020c,
 
     .ptr_1240e = SELF(str_1789),
 
-    .field_12412 = 0x020D,
+    .field_12412 = 0x020d,
 
     .ptr_12414 = SELF(str_1788),
 
-    .field_12418 = 0x020E,
+    .field_12418 = 0x020e,
 
     .ptr_1241a = SELF(str_1787),
 
-    .field_1241e = 0x020F,
+    .field_1241e = 0x020f,
 
     .pad_386 = { 0 },
 
@@ -33578,11 +33578,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_12606 = SELF(str_1800),
 
-    .field_1260a = 0x021A,
+    .field_1260a = 0x021a,
 
     .ptr_1260c = SELF(str_1799),
 
-    .field_12610 = 0x021B,
+    .field_12610 = 0x021b,
 
     .pad_389 = { 0 },
 
@@ -33596,19 +33596,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_126a0 = SELF(str_1806),
 
-    .field_126a4 = 0x021C,
+    .field_126a4 = 0x021c,
 
     .ptr_126a6 = SELF(str_1805),
 
-    .field_126aa = 0x021D,
+    .field_126aa = 0x021d,
 
     .ptr_126ac = SELF(str_1804),
 
-    .field_126b0 = 0x021E,
+    .field_126b0 = 0x021e,
 
     .ptr_126b2 = SELF(str_1803),
 
-    .field_126b6 = 0x021F,
+    .field_126b6 = 0x021f,
 
     .pad_390 = { 0 },
 
@@ -33682,11 +33682,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1289e = SELF(str_1816),
 
-    .field_128a2 = 0x022A,
+    .field_128a2 = 0x022a,
 
     .ptr_128a4 = SELF(str_1815),
 
-    .field_128a8 = 0x022B,
+    .field_128a8 = 0x022b,
 
     .pad_393 = { 0 },
 
@@ -33700,19 +33700,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_12938 = SELF(str_1822),
 
-    .field_1293c = 0x022C,
+    .field_1293c = 0x022c,
 
     .ptr_1293e = SELF(str_1821),
 
-    .field_12942 = 0x022D,
+    .field_12942 = 0x022d,
 
     .ptr_12944 = SELF(str_1820),
 
-    .field_12948 = 0x022E,
+    .field_12948 = 0x022e,
 
     .ptr_1294a = SELF(str_1819),
 
-    .field_1294e = 0x022F,
+    .field_1294e = 0x022f,
 
     .pad_394 = { 0 },
 
@@ -33786,11 +33786,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_12b36 = SELF(str_1832),
 
-    .field_12b3a = 0x023A,
+    .field_12b3a = 0x023a,
 
     .ptr_12b3c = SELF(str_1831),
 
-    .field_12b40 = 0x023B,
+    .field_12b40 = 0x023b,
 
     .pad_397 = { 0 },
 
@@ -33804,19 +33804,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_12bd0 = SELF(str_1838),
 
-    .field_12bd4 = 0x023C,
+    .field_12bd4 = 0x023c,
 
     .ptr_12bd6 = SELF(str_1837),
 
-    .field_12bda = 0x023D,
+    .field_12bda = 0x023d,
 
     .ptr_12bdc = SELF(str_1836),
 
-    .field_12be0 = 0x023E,
+    .field_12be0 = 0x023e,
 
     .ptr_12be2 = SELF(str_1835),
 
-    .field_12be6 = 0x023F,
+    .field_12be6 = 0x023f,
 
     .pad_398 = { 0 },
 
@@ -33890,11 +33890,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_12dce = SELF(str_1848),
 
-    .field_12dd2 = 0x024A,
+    .field_12dd2 = 0x024a,
 
     .ptr_12dd4 = SELF(str_1847),
 
-    .field_12dd8 = 0x024B,
+    .field_12dd8 = 0x024b,
 
     .pad_401 = { 0 },
 
@@ -33908,19 +33908,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_12e68 = SELF(str_1854),
 
-    .field_12e6c = 0x024C,
+    .field_12e6c = 0x024c,
 
     .ptr_12e6e = SELF(str_1853),
 
-    .field_12e72 = 0x024D,
+    .field_12e72 = 0x024d,
 
     .ptr_12e74 = SELF(str_1852),
 
-    .field_12e78 = 0x024E,
+    .field_12e78 = 0x024e,
 
     .ptr_12e7a = SELF(str_1851),
 
-    .field_12e7e = 0x024F,
+    .field_12e7e = 0x024f,
 
     .pad_402 = { 0 },
 
@@ -33994,11 +33994,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13066 = SELF(str_1864),
 
-    .field_1306a = 0x025A,
+    .field_1306a = 0x025a,
 
     .ptr_1306c = SELF(str_1863),
 
-    .field_13070 = 0x025B,
+    .field_13070 = 0x025b,
 
     .pad_405 = { 0 },
 
@@ -34012,19 +34012,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13100 = SELF(str_1870),
 
-    .field_13104 = 0x025C,
+    .field_13104 = 0x025c,
 
     .ptr_13106 = SELF(str_1869),
 
-    .field_1310a = 0x025D,
+    .field_1310a = 0x025d,
 
     .ptr_1310c = SELF(str_1868),
 
-    .field_13110 = 0x025E,
+    .field_13110 = 0x025e,
 
     .ptr_13112 = SELF(str_1867),
 
-    .field_13116 = 0x025F,
+    .field_13116 = 0x025f,
 
     .pad_406 = { 0 },
 
@@ -34098,11 +34098,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_132fe = SELF(str_1880),
 
-    .field_13302 = 0x026A,
+    .field_13302 = 0x026a,
 
     .ptr_13304 = SELF(str_1879),
 
-    .field_13308 = 0x026B,
+    .field_13308 = 0x026b,
 
     .pad_409 = { 0 },
 
@@ -34116,19 +34116,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13398 = SELF(str_1886),
 
-    .field_1339c = 0x026C,
+    .field_1339c = 0x026c,
 
     .ptr_1339e = SELF(str_1885),
 
-    .field_133a2 = 0x026D,
+    .field_133a2 = 0x026d,
 
     .ptr_133a4 = SELF(str_1884),
 
-    .field_133a8 = 0x026E,
+    .field_133a8 = 0x026e,
 
     .ptr_133aa = SELF(str_1883),
 
-    .field_133ae = 0x026F,
+    .field_133ae = 0x026f,
 
     .pad_410 = { 0 },
 
@@ -34202,11 +34202,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13596 = SELF(str_1896),
 
-    .field_1359a = 0x027A,
+    .field_1359a = 0x027a,
 
     .ptr_1359c = SELF(str_1895),
 
-    .field_135a0 = 0x027B,
+    .field_135a0 = 0x027b,
 
     .pad_413 = { 0 },
 
@@ -34220,19 +34220,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13630 = SELF(str_1902),
 
-    .field_13634 = 0x027C,
+    .field_13634 = 0x027c,
 
     .ptr_13636 = SELF(str_1901),
 
-    .field_1363a = 0x027D,
+    .field_1363a = 0x027d,
 
     .ptr_1363c = SELF(str_1900),
 
-    .field_13640 = 0x027E,
+    .field_13640 = 0x027e,
 
     .ptr_13642 = SELF(str_1899),
 
-    .field_13646 = 0x027F,
+    .field_13646 = 0x027f,
 
     .pad_414 = { 0 },
 
@@ -34306,11 +34306,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1382e = SELF(str_1912),
 
-    .field_13832 = 0x028A,
+    .field_13832 = 0x028a,
 
     .ptr_13834 = SELF(str_1911),
 
-    .field_13838 = 0x028B,
+    .field_13838 = 0x028b,
 
     .pad_417 = { 0 },
 
@@ -34324,19 +34324,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_138c8 = SELF(str_1918),
 
-    .field_138cc = 0x028C,
+    .field_138cc = 0x028c,
 
     .ptr_138ce = SELF(str_1917),
 
-    .field_138d2 = 0x028D,
+    .field_138d2 = 0x028d,
 
     .ptr_138d4 = SELF(str_1916),
 
-    .field_138d8 = 0x028E,
+    .field_138d8 = 0x028e,
 
     .ptr_138da = SELF(str_1915),
 
-    .field_138de = 0x028F,
+    .field_138de = 0x028f,
 
     .pad_418 = { 0 },
 
@@ -34410,11 +34410,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13ac6 = SELF(str_1928),
 
-    .field_13aca = 0x029A,
+    .field_13aca = 0x029a,
 
     .ptr_13acc = SELF(str_1927),
 
-    .field_13ad0 = 0x029B,
+    .field_13ad0 = 0x029b,
 
     .pad_421 = { 0 },
 
@@ -34428,19 +34428,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13b60 = SELF(str_1934),
 
-    .field_13b64 = 0x029C,
+    .field_13b64 = 0x029c,
 
     .ptr_13b66 = SELF(str_1933),
 
-    .field_13b6a = 0x029D,
+    .field_13b6a = 0x029d,
 
     .ptr_13b6c = SELF(str_1932),
 
-    .field_13b70 = 0x029E,
+    .field_13b70 = 0x029e,
 
     .ptr_13b72 = SELF(str_1931),
 
-    .field_13b76 = 0x029F,
+    .field_13b76 = 0x029f,
 
     .pad_422 = { 0 },
 
@@ -34454,19 +34454,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13c06 = SELF(str_1938),
 
-    .field_13c0a = 0x02A0,
+    .field_13c0a = 0x02a0,
 
     .ptr_13c0c = SELF(str_1937),
 
-    .field_13c10 = 0x02A1,
+    .field_13c10 = 0x02a1,
 
     .ptr_13c12 = SELF(str_1936),
 
-    .field_13c16 = 0x02A2,
+    .field_13c16 = 0x02a2,
 
     .ptr_13c18 = SELF(str_1935),
 
-    .field_13c1c = 0x02A3,
+    .field_13c1c = 0x02a3,
 
     .pad_423 = { 0 },
 
@@ -34480,19 +34480,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13cac = SELF(str_1942),
 
-    .field_13cb0 = 0x02A4,
+    .field_13cb0 = 0x02a4,
 
     .ptr_13cb2 = SELF(str_1941),
 
-    .field_13cb6 = 0x02A5,
+    .field_13cb6 = 0x02a5,
 
     .ptr_13cb8 = SELF(str_1940),
 
-    .field_13cbc = 0x02A6,
+    .field_13cbc = 0x02a6,
 
     .ptr_13cbe = SELF(str_1939),
 
-    .field_13cc2 = 0x02A7,
+    .field_13cc2 = 0x02a7,
 
     .pad_424 = { 0 },
 
@@ -34506,19 +34506,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13d52 = SELF(str_1946),
 
-    .field_13d56 = 0x02A8,
+    .field_13d56 = 0x02a8,
 
     .ptr_13d58 = SELF(str_1945),
 
-    .field_13d5c = 0x02A9,
+    .field_13d5c = 0x02a9,
 
     .ptr_13d5e = SELF(str_1944),
 
-    .field_13d62 = 0x02AA,
+    .field_13d62 = 0x02aa,
 
     .ptr_13d64 = SELF(str_1943),
 
-    .field_13d68 = 0x02AB,
+    .field_13d68 = 0x02ab,
 
     .pad_425 = { 0 },
 
@@ -34532,19 +34532,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13df8 = SELF(str_1950),
 
-    .field_13dfc = 0x02AC,
+    .field_13dfc = 0x02ac,
 
     .ptr_13dfe = SELF(str_1949),
 
-    .field_13e02 = 0x02AD,
+    .field_13e02 = 0x02ad,
 
     .ptr_13e04 = SELF(str_1948),
 
-    .field_13e08 = 0x02AE,
+    .field_13e08 = 0x02ae,
 
     .ptr_13e0a = SELF(str_1947),
 
-    .field_13e0e = 0x02AF,
+    .field_13e0e = 0x02af,
 
     .pad_426 = { 0 },
 
@@ -34558,19 +34558,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13e9e = SELF(str_1954),
 
-    .field_13ea2 = 0x02B0,
+    .field_13ea2 = 0x02b0,
 
     .ptr_13ea4 = SELF(str_1953),
 
-    .field_13ea8 = 0x02B1,
+    .field_13ea8 = 0x02b1,
 
     .ptr_13eaa = SELF(str_1952),
 
-    .field_13eae = 0x02B2,
+    .field_13eae = 0x02b2,
 
     .ptr_13eb0 = SELF(str_1951),
 
-    .field_13eb4 = 0x02B3,
+    .field_13eb4 = 0x02b3,
 
     .pad_427 = { 0 },
 
@@ -34584,19 +34584,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13f44 = SELF(str_1958),
 
-    .field_13f48 = 0x02B4,
+    .field_13f48 = 0x02b4,
 
     .ptr_13f4a = SELF(str_1957),
 
-    .field_13f4e = 0x02B5,
+    .field_13f4e = 0x02b5,
 
     .ptr_13f50 = SELF(str_1956),
 
-    .field_13f54 = 0x02B6,
+    .field_13f54 = 0x02b6,
 
     .ptr_13f56 = SELF(str_1955),
 
-    .field_13f5a = 0x02B7,
+    .field_13f5a = 0x02b7,
 
     .pad_428 = { 0 },
 
@@ -34610,19 +34610,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_13fea = SELF(str_1962),
 
-    .field_13fee = 0x02B8,
+    .field_13fee = 0x02b8,
 
     .ptr_13ff0 = SELF(str_1961),
 
-    .field_13ff4 = 0x02B9,
+    .field_13ff4 = 0x02b9,
 
     .ptr_13ff6 = SELF(str_1960),
 
-    .field_13ffa = 0x02BA,
+    .field_13ffa = 0x02ba,
 
     .ptr_13ffc = SELF(str_1959),
 
-    .field_14000 = 0x02BB,
+    .field_14000 = 0x02bb,
 
     .pad_429 = { 0 },
 
@@ -34636,19 +34636,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14090 = SELF(str_1966),
 
-    .field_14094 = 0x02BC,
+    .field_14094 = 0x02bc,
 
     .ptr_14096 = SELF(str_1965),
 
-    .field_1409a = 0x02BD,
+    .field_1409a = 0x02bd,
 
     .ptr_1409c = SELF(str_1964),
 
-    .field_140a0 = 0x02BE,
+    .field_140a0 = 0x02be,
 
     .ptr_140a2 = SELF(str_1963),
 
-    .field_140a6 = 0x02BF,
+    .field_140a6 = 0x02bf,
 
     .pad_430 = { 0 },
 
@@ -34662,19 +34662,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14136 = SELF(str_1970),
 
-    .field_1413a = 0x02C0,
+    .field_1413a = 0x02c0,
 
     .ptr_1413c = SELF(str_1969),
 
-    .field_14140 = 0x02C1,
+    .field_14140 = 0x02c1,
 
     .ptr_14142 = SELF(str_1968),
 
-    .field_14146 = 0x02C2,
+    .field_14146 = 0x02c2,
 
     .ptr_14148 = SELF(str_1967),
 
-    .field_1414c = 0x02C3,
+    .field_1414c = 0x02c3,
 
     .pad_431 = { 0 },
 
@@ -34688,19 +34688,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_141dc = SELF(str_1974),
 
-    .field_141e0 = 0x02C4,
+    .field_141e0 = 0x02c4,
 
     .ptr_141e2 = SELF(str_1973),
 
-    .field_141e6 = 0x02C5,
+    .field_141e6 = 0x02c5,
 
     .ptr_141e8 = SELF(str_1972),
 
-    .field_141ec = 0x02C6,
+    .field_141ec = 0x02c6,
 
     .ptr_141ee = SELF(str_1971),
 
-    .field_141f2 = 0x02C7,
+    .field_141f2 = 0x02c7,
 
     .pad_432 = { 0 },
 
@@ -34714,19 +34714,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14282 = SELF(str_1978),
 
-    .field_14286 = 0x02C8,
+    .field_14286 = 0x02c8,
 
     .ptr_14288 = SELF(str_1977),
 
-    .field_1428c = 0x02C9,
+    .field_1428c = 0x02c9,
 
     .ptr_1428e = SELF(str_1976),
 
-    .field_14292 = 0x02CA,
+    .field_14292 = 0x02ca,
 
     .ptr_14294 = SELF(str_1975),
 
-    .field_14298 = 0x02CB,
+    .field_14298 = 0x02cb,
 
     .pad_433 = { 0 },
 
@@ -34740,19 +34740,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14328 = SELF(str_1982),
 
-    .field_1432c = 0x02CC,
+    .field_1432c = 0x02cc,
 
     .ptr_1432e = SELF(str_1981),
 
-    .field_14332 = 0x02CD,
+    .field_14332 = 0x02cd,
 
     .ptr_14334 = SELF(str_1980),
 
-    .field_14338 = 0x02CE,
+    .field_14338 = 0x02ce,
 
     .ptr_1433a = SELF(str_1979),
 
-    .field_1433e = 0x02CF,
+    .field_1433e = 0x02cf,
 
     .pad_434 = { 0 },
 
@@ -34766,19 +34766,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_143ce = SELF(str_1986),
 
-    .field_143d2 = 0x02D0,
+    .field_143d2 = 0x02d0,
 
     .ptr_143d4 = SELF(str_1985),
 
-    .field_143d8 = 0x02D1,
+    .field_143d8 = 0x02d1,
 
     .ptr_143da = SELF(str_1984),
 
-    .field_143de = 0x02D2,
+    .field_143de = 0x02d2,
 
     .ptr_143e0 = SELF(str_1983),
 
-    .field_143e4 = 0x02D3,
+    .field_143e4 = 0x02d3,
 
     .pad_435 = { 0 },
 
@@ -34792,19 +34792,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14474 = SELF(str_1990),
 
-    .field_14478 = 0x02D4,
+    .field_14478 = 0x02d4,
 
     .ptr_1447a = SELF(str_1989),
 
-    .field_1447e = 0x02D5,
+    .field_1447e = 0x02d5,
 
     .ptr_14480 = SELF(str_1988),
 
-    .field_14484 = 0x02D6,
+    .field_14484 = 0x02d6,
 
     .ptr_14486 = SELF(str_1987),
 
-    .field_1448a = 0x02D7,
+    .field_1448a = 0x02d7,
 
     .pad_436 = { 0 },
 
@@ -34818,19 +34818,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1451a = SELF(str_1994),
 
-    .field_1451e = 0x02D8,
+    .field_1451e = 0x02d8,
 
     .ptr_14520 = SELF(str_1993),
 
-    .field_14524 = 0x02D9,
+    .field_14524 = 0x02d9,
 
     .ptr_14526 = SELF(str_1992),
 
-    .field_1452a = 0x02DA,
+    .field_1452a = 0x02da,
 
     .ptr_1452c = SELF(str_1991),
 
-    .field_14530 = 0x02DB,
+    .field_14530 = 0x02db,
 
     .pad_437 = { 0 },
 
@@ -34844,19 +34844,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_145c0 = SELF(str_1998),
 
-    .field_145c4 = 0x02DC,
+    .field_145c4 = 0x02dc,
 
     .ptr_145c6 = SELF(str_1997),
 
-    .field_145ca = 0x02DD,
+    .field_145ca = 0x02dd,
 
     .ptr_145cc = SELF(str_1996),
 
-    .field_145d0 = 0x02DE,
+    .field_145d0 = 0x02de,
 
     .ptr_145d2 = SELF(str_1995),
 
-    .field_145d6 = 0x02DF,
+    .field_145d6 = 0x02df,
 
     .pad_438 = { 0 },
 
@@ -34870,19 +34870,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14666 = SELF(str_2002),
 
-    .field_1466a = 0x02E0,
+    .field_1466a = 0x02e0,
 
     .ptr_1466c = SELF(str_2001),
 
-    .field_14670 = 0x02E1,
+    .field_14670 = 0x02e1,
 
     .ptr_14672 = SELF(str_2000),
 
-    .field_14676 = 0x02E2,
+    .field_14676 = 0x02e2,
 
     .ptr_14678 = SELF(str_1999),
 
-    .field_1467c = 0x02E3,
+    .field_1467c = 0x02e3,
 
     .pad_439 = { 0 },
 
@@ -34896,19 +34896,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1470c = SELF(str_2006),
 
-    .field_14710 = 0x02E4,
+    .field_14710 = 0x02e4,
 
     .ptr_14712 = SELF(str_2005),
 
-    .field_14716 = 0x02E5,
+    .field_14716 = 0x02e5,
 
     .ptr_14718 = SELF(str_2004),
 
-    .field_1471c = 0x02E6,
+    .field_1471c = 0x02e6,
 
     .ptr_1471e = SELF(str_2003),
 
-    .field_14722 = 0x02E7,
+    .field_14722 = 0x02e7,
 
     .pad_440 = { 0 },
 
@@ -34922,19 +34922,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_147b2 = SELF(str_2010),
 
-    .field_147b6 = 0x02E8,
+    .field_147b6 = 0x02e8,
 
     .ptr_147b8 = SELF(str_2009),
 
-    .field_147bc = 0x02E9,
+    .field_147bc = 0x02e9,
 
     .ptr_147be = SELF(str_2008),
 
-    .field_147c2 = 0x02EA,
+    .field_147c2 = 0x02ea,
 
     .ptr_147c4 = SELF(str_2007),
 
-    .field_147c8 = 0x02EB,
+    .field_147c8 = 0x02eb,
 
     .pad_441 = { 0 },
 
@@ -34948,19 +34948,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14858 = SELF(str_2014),
 
-    .field_1485c = 0x02EC,
+    .field_1485c = 0x02ec,
 
     .ptr_1485e = SELF(str_2013),
 
-    .field_14862 = 0x02ED,
+    .field_14862 = 0x02ed,
 
     .ptr_14864 = SELF(str_2012),
 
-    .field_14868 = 0x02EE,
+    .field_14868 = 0x02ee,
 
     .ptr_1486a = SELF(str_2011),
 
-    .field_1486e = 0x02EF,
+    .field_1486e = 0x02ef,
 
     .pad_442 = { 0 },
 
@@ -34974,19 +34974,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_148fe = SELF(str_2018),
 
-    .field_14902 = 0x02F0,
+    .field_14902 = 0x02f0,
 
     .ptr_14904 = SELF(str_2017),
 
-    .field_14908 = 0x02F1,
+    .field_14908 = 0x02f1,
 
     .ptr_1490a = SELF(str_2016),
 
-    .field_1490e = 0x02F2,
+    .field_1490e = 0x02f2,
 
     .ptr_14910 = SELF(str_2015),
 
-    .field_14914 = 0x02F3,
+    .field_14914 = 0x02f3,
 
     .pad_443 = { 0 },
 
@@ -35000,19 +35000,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_149a4 = SELF(str_2022),
 
-    .field_149a8 = 0x02F4,
+    .field_149a8 = 0x02f4,
 
     .ptr_149aa = SELF(str_2021),
 
-    .field_149ae = 0x02F5,
+    .field_149ae = 0x02f5,
 
     .ptr_149b0 = SELF(str_2020),
 
-    .field_149b4 = 0x02F6,
+    .field_149b4 = 0x02f6,
 
     .ptr_149b6 = SELF(str_2019),
 
-    .field_149ba = 0x02F7,
+    .field_149ba = 0x02f7,
 
     .pad_444 = { 0 },
 
@@ -35026,19 +35026,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14a4a = SELF(str_2026),
 
-    .field_14a4e = 0x02F8,
+    .field_14a4e = 0x02f8,
 
     .ptr_14a50 = SELF(str_2025),
 
-    .field_14a54 = 0x02F9,
+    .field_14a54 = 0x02f9,
 
     .ptr_14a56 = SELF(str_2024),
 
-    .field_14a5a = 0x02FA,
+    .field_14a5a = 0x02fa,
 
     .ptr_14a5c = SELF(str_2023),
 
-    .field_14a60 = 0x02FB,
+    .field_14a60 = 0x02fb,
 
     .pad_445 = { 0 },
 
@@ -35052,19 +35052,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14af0 = SELF(str_2030),
 
-    .field_14af4 = 0x02FC,
+    .field_14af4 = 0x02fc,
 
     .ptr_14af6 = SELF(str_2029),
 
-    .field_14afa = 0x02FD,
+    .field_14afa = 0x02fd,
 
     .ptr_14afc = SELF(str_2028),
 
-    .field_14b00 = 0x02FE,
+    .field_14b00 = 0x02fe,
 
     .ptr_14b02 = SELF(str_2027),
 
-    .field_14b06 = 0x02FF,
+    .field_14b06 = 0x02ff,
 
     .pad_446 = { 0 },
 
@@ -35138,11 +35138,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14cee = SELF(str_2040),
 
-    .field_14cf2 = 0x030A,
+    .field_14cf2 = 0x030a,
 
     .ptr_14cf4 = SELF(str_2039),
 
-    .field_14cf8 = 0x030B,
+    .field_14cf8 = 0x030b,
 
     .pad_449 = { 0 },
 
@@ -35156,19 +35156,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14d88 = SELF(str_2046),
 
-    .field_14d8c = 0x030C,
+    .field_14d8c = 0x030c,
 
     .ptr_14d8e = SELF(str_2045),
 
-    .field_14d92 = 0x030D,
+    .field_14d92 = 0x030d,
 
     .ptr_14d94 = SELF(str_2044),
 
-    .field_14d98 = 0x030E,
+    .field_14d98 = 0x030e,
 
     .ptr_14d9a = SELF(str_2043),
 
-    .field_14d9e = 0x030F,
+    .field_14d9e = 0x030f,
 
     .pad_450 = { 0 },
 
@@ -35242,11 +35242,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_14f86 = SELF(str_2056),
 
-    .field_14f8a = 0x031A,
+    .field_14f8a = 0x031a,
 
     .ptr_14f8c = SELF(str_2055),
 
-    .field_14f90 = 0x031B,
+    .field_14f90 = 0x031b,
 
     .pad_453 = { 0 },
 
@@ -35260,19 +35260,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_15020 = SELF(str_2062),
 
-    .field_15024 = 0x031C,
+    .field_15024 = 0x031c,
 
     .ptr_15026 = SELF(str_2061),
 
-    .field_1502a = 0x031D,
+    .field_1502a = 0x031d,
 
     .ptr_1502c = SELF(str_2060),
 
-    .field_15030 = 0x031E,
+    .field_15030 = 0x031e,
 
     .ptr_15032 = SELF(str_2059),
 
-    .field_15036 = 0x031F,
+    .field_15036 = 0x031f,
 
     .pad_454 = { 0 },
 
@@ -35346,11 +35346,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1521e = SELF(str_2072),
 
-    .field_15222 = 0x032A,
+    .field_15222 = 0x032a,
 
     .ptr_15224 = SELF(str_2071),
 
-    .field_15228 = 0x032B,
+    .field_15228 = 0x032b,
 
     .pad_457 = { 0 },
 
@@ -35364,19 +35364,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_152b8 = SELF(str_2078),
 
-    .field_152bc = 0x032C,
+    .field_152bc = 0x032c,
 
     .ptr_152be = SELF(str_2077),
 
-    .field_152c2 = 0x032D,
+    .field_152c2 = 0x032d,
 
     .ptr_152c4 = SELF(str_2076),
 
-    .field_152c8 = 0x032E,
+    .field_152c8 = 0x032e,
 
     .ptr_152ca = SELF(str_2075),
 
-    .field_152ce = 0x032F,
+    .field_152ce = 0x032f,
 
     .pad_458 = { 0 },
 
@@ -35450,11 +35450,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_154b6 = SELF(str_2088),
 
-    .field_154ba = 0x033A,
+    .field_154ba = 0x033a,
 
     .ptr_154bc = SELF(str_2087),
 
-    .field_154c0 = 0x033B,
+    .field_154c0 = 0x033b,
 
     .pad_461 = { 0 },
 
@@ -35468,19 +35468,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_15550 = SELF(str_2094),
 
-    .field_15554 = 0x033C,
+    .field_15554 = 0x033c,
 
     .ptr_15556 = SELF(str_2093),
 
-    .field_1555a = 0x033D,
+    .field_1555a = 0x033d,
 
     .ptr_1555c = SELF(str_2092),
 
-    .field_15560 = 0x033E,
+    .field_15560 = 0x033e,
 
     .ptr_15562 = SELF(str_2091),
 
-    .field_15566 = 0x033F,
+    .field_15566 = 0x033f,
 
     .pad_462 = { 0 },
 
@@ -35554,11 +35554,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1574e = SELF(str_2104),
 
-    .field_15752 = 0x034A,
+    .field_15752 = 0x034a,
 
     .ptr_15754 = SELF(str_2103),
 
-    .field_15758 = 0x034B,
+    .field_15758 = 0x034b,
 
     .pad_465 = { 0 },
 
@@ -35572,19 +35572,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_157e8 = SELF(str_2110),
 
-    .field_157ec = 0x034C,
+    .field_157ec = 0x034c,
 
     .ptr_157ee = SELF(str_2109),
 
-    .field_157f2 = 0x034D,
+    .field_157f2 = 0x034d,
 
     .ptr_157f4 = SELF(str_2108),
 
-    .field_157f8 = 0x034E,
+    .field_157f8 = 0x034e,
 
     .ptr_157fa = SELF(str_2107),
 
-    .field_157fe = 0x034F,
+    .field_157fe = 0x034f,
 
     .pad_466 = { 0 },
 
@@ -35658,11 +35658,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_159e6 = SELF(str_2120),
 
-    .field_159ea = 0x035A,
+    .field_159ea = 0x035a,
 
     .ptr_159ec = SELF(str_2119),
 
-    .field_159f0 = 0x035B,
+    .field_159f0 = 0x035b,
 
     .pad_469 = { 0 },
 
@@ -35676,19 +35676,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_15a80 = SELF(str_2126),
 
-    .field_15a84 = 0x035C,
+    .field_15a84 = 0x035c,
 
     .ptr_15a86 = SELF(str_2125),
 
-    .field_15a8a = 0x035D,
+    .field_15a8a = 0x035d,
 
     .ptr_15a8c = SELF(str_2124),
 
-    .field_15a90 = 0x035E,
+    .field_15a90 = 0x035e,
 
     .ptr_15a92 = SELF(str_2123),
 
-    .field_15a96 = 0x035F,
+    .field_15a96 = 0x035f,
 
     .pad_470 = { 0 },
 
@@ -35762,11 +35762,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_15c7e = SELF(str_2136),
 
-    .field_15c82 = 0x036A,
+    .field_15c82 = 0x036a,
 
     .ptr_15c84 = SELF(str_2135),
 
-    .field_15c88 = 0x036B,
+    .field_15c88 = 0x036b,
 
     .pad_473 = { 0 },
 
@@ -35780,19 +35780,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_15d18 = SELF(str_2142),
 
-    .field_15d1c = 0x036C,
+    .field_15d1c = 0x036c,
 
     .ptr_15d1e = SELF(str_2141),
 
-    .field_15d22 = 0x036D,
+    .field_15d22 = 0x036d,
 
     .ptr_15d24 = SELF(str_2140),
 
-    .field_15d28 = 0x036E,
+    .field_15d28 = 0x036e,
 
     .ptr_15d2a = SELF(str_2139),
 
-    .field_15d2e = 0x036F,
+    .field_15d2e = 0x036f,
 
     .pad_474 = { 0 },
 
@@ -35866,11 +35866,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_15f16 = SELF(str_2152),
 
-    .field_15f1a = 0x037A,
+    .field_15f1a = 0x037a,
 
     .ptr_15f1c = SELF(str_2151),
 
-    .field_15f20 = 0x037B,
+    .field_15f20 = 0x037b,
 
     .pad_477 = { 0 },
 
@@ -35884,19 +35884,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_15fb0 = SELF(str_2158),
 
-    .field_15fb4 = 0x037C,
+    .field_15fb4 = 0x037c,
 
     .ptr_15fb6 = SELF(str_2157),
 
-    .field_15fba = 0x037D,
+    .field_15fba = 0x037d,
 
     .ptr_15fbc = SELF(str_2156),
 
-    .field_15fc0 = 0x037E,
+    .field_15fc0 = 0x037e,
 
     .ptr_15fc2 = SELF(str_2155),
 
-    .field_15fc6 = 0x037F,
+    .field_15fc6 = 0x037f,
 
     .pad_478 = { 0 },
 
@@ -35970,11 +35970,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_161ae = SELF(str_2168),
 
-    .field_161b2 = 0x038A,
+    .field_161b2 = 0x038a,
 
     .ptr_161b4 = SELF(str_2167),
 
-    .field_161b8 = 0x038B,
+    .field_161b8 = 0x038b,
 
     .pad_481 = { 0 },
 
@@ -35988,19 +35988,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16248 = SELF(str_2174),
 
-    .field_1624c = 0x038C,
+    .field_1624c = 0x038c,
 
     .ptr_1624e = SELF(str_2173),
 
-    .field_16252 = 0x038D,
+    .field_16252 = 0x038d,
 
     .ptr_16254 = SELF(str_2172),
 
-    .field_16258 = 0x038E,
+    .field_16258 = 0x038e,
 
     .ptr_1625a = SELF(str_2171),
 
-    .field_1625e = 0x038F,
+    .field_1625e = 0x038f,
 
     .pad_482 = { 0 },
 
@@ -36074,11 +36074,11 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16446 = SELF(str_2184),
 
-    .field_1644a = 0x039A,
+    .field_1644a = 0x039a,
 
     .ptr_1644c = SELF(str_2183),
 
-    .field_16450 = 0x039B,
+    .field_16450 = 0x039b,
 
     .pad_485 = { 0 },
 
@@ -36092,19 +36092,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_164e0 = SELF(str_2190),
 
-    .field_164e4 = 0x039C,
+    .field_164e4 = 0x039c,
 
     .ptr_164e6 = SELF(str_2189),
 
-    .field_164ea = 0x039D,
+    .field_164ea = 0x039d,
 
     .ptr_164ec = SELF(str_2188),
 
-    .field_164f0 = 0x039E,
+    .field_164f0 = 0x039e,
 
     .ptr_164f2 = SELF(str_2187),
 
-    .field_164f6 = 0x039F,
+    .field_164f6 = 0x039f,
 
     .pad_486 = { 0 },
 
@@ -36118,19 +36118,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16586 = SELF(str_2194),
 
-    .field_1658a = 0x03A0,
+    .field_1658a = 0x03a0,
 
     .ptr_1658c = SELF(str_2193),
 
-    .field_16590 = 0x03A1,
+    .field_16590 = 0x03a1,
 
     .ptr_16592 = SELF(str_2192),
 
-    .field_16596 = 0x03A2,
+    .field_16596 = 0x03a2,
 
     .ptr_16598 = SELF(str_2191),
 
-    .field_1659c = 0x03A3,
+    .field_1659c = 0x03a3,
 
     .pad_487 = { 0 },
 
@@ -36144,19 +36144,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1662c = SELF(str_2198),
 
-    .field_16630 = 0x03A4,
+    .field_16630 = 0x03a4,
 
     .ptr_16632 = SELF(str_2197),
 
-    .field_16636 = 0x03A5,
+    .field_16636 = 0x03a5,
 
     .ptr_16638 = SELF(str_2196),
 
-    .field_1663c = 0x03A6,
+    .field_1663c = 0x03a6,
 
     .ptr_1663e = SELF(str_2195),
 
-    .field_16642 = 0x03A7,
+    .field_16642 = 0x03a7,
 
     .pad_488 = { 0 },
 
@@ -36170,19 +36170,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_166d2 = SELF(str_2202),
 
-    .field_166d6 = 0x03A8,
+    .field_166d6 = 0x03a8,
 
     .ptr_166d8 = SELF(str_2201),
 
-    .field_166dc = 0x03A9,
+    .field_166dc = 0x03a9,
 
     .ptr_166de = SELF(str_2200),
 
-    .field_166e2 = 0x03AA,
+    .field_166e2 = 0x03aa,
 
     .ptr_166e4 = SELF(str_2199),
 
-    .field_166e8 = 0x03AB,
+    .field_166e8 = 0x03ab,
 
     .pad_489 = { 0 },
 
@@ -36196,19 +36196,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16778 = SELF(str_2206),
 
-    .field_1677c = 0x03AC,
+    .field_1677c = 0x03ac,
 
     .ptr_1677e = SELF(str_2205),
 
-    .field_16782 = 0x03AD,
+    .field_16782 = 0x03ad,
 
     .ptr_16784 = SELF(str_2204),
 
-    .field_16788 = 0x03AE,
+    .field_16788 = 0x03ae,
 
     .ptr_1678a = SELF(str_2203),
 
-    .field_1678e = 0x03AF,
+    .field_1678e = 0x03af,
 
     .pad_490 = { 0 },
 
@@ -36222,19 +36222,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1681e = SELF(str_2210),
 
-    .field_16822 = 0x03B0,
+    .field_16822 = 0x03b0,
 
     .ptr_16824 = SELF(str_2209),
 
-    .field_16828 = 0x03B1,
+    .field_16828 = 0x03b1,
 
     .ptr_1682a = SELF(str_2208),
 
-    .field_1682e = 0x03B2,
+    .field_1682e = 0x03b2,
 
     .ptr_16830 = SELF(str_2207),
 
-    .field_16834 = 0x03B3,
+    .field_16834 = 0x03b3,
 
     .pad_491 = { 0 },
 
@@ -36248,19 +36248,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_168c4 = SELF(str_2214),
 
-    .field_168c8 = 0x03B4,
+    .field_168c8 = 0x03b4,
 
     .ptr_168ca = SELF(str_2213),
 
-    .field_168ce = 0x03B5,
+    .field_168ce = 0x03b5,
 
     .ptr_168d0 = SELF(str_2212),
 
-    .field_168d4 = 0x03B6,
+    .field_168d4 = 0x03b6,
 
     .ptr_168d6 = SELF(str_2211),
 
-    .field_168da = 0x03B7,
+    .field_168da = 0x03b7,
 
     .pad_492 = { 0 },
 
@@ -36274,19 +36274,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1696a = SELF(str_2218),
 
-    .field_1696e = 0x03B8,
+    .field_1696e = 0x03b8,
 
     .ptr_16970 = SELF(str_2217),
 
-    .field_16974 = 0x03B9,
+    .field_16974 = 0x03b9,
 
     .ptr_16976 = SELF(str_2216),
 
-    .field_1697a = 0x03BA,
+    .field_1697a = 0x03ba,
 
     .ptr_1697c = SELF(str_2215),
 
-    .field_16980 = 0x03BB,
+    .field_16980 = 0x03bb,
 
     .pad_493 = { 0 },
 
@@ -36300,19 +36300,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16a10 = SELF(str_2222),
 
-    .field_16a14 = 0x03BC,
+    .field_16a14 = 0x03bc,
 
     .ptr_16a16 = SELF(str_2221),
 
-    .field_16a1a = 0x03BD,
+    .field_16a1a = 0x03bd,
 
     .ptr_16a1c = SELF(str_2220),
 
-    .field_16a20 = 0x03BE,
+    .field_16a20 = 0x03be,
 
     .ptr_16a22 = SELF(str_2219),
 
-    .field_16a26 = 0x03BF,
+    .field_16a26 = 0x03bf,
 
     .pad_494 = { 0 },
 
@@ -36326,19 +36326,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16ab6 = SELF(str_2226),
 
-    .field_16aba = 0x03C0,
+    .field_16aba = 0x03c0,
 
     .ptr_16abc = SELF(str_2225),
 
-    .field_16ac0 = 0x03C1,
+    .field_16ac0 = 0x03c1,
 
     .ptr_16ac2 = SELF(str_2224),
 
-    .field_16ac6 = 0x03C2,
+    .field_16ac6 = 0x03c2,
 
     .ptr_16ac8 = SELF(str_2223),
 
-    .field_16acc = 0x03C3,
+    .field_16acc = 0x03c3,
 
     .pad_495 = { 0 },
 
@@ -36352,19 +36352,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16b5c = SELF(str_2230),
 
-    .field_16b60 = 0x03C4,
+    .field_16b60 = 0x03c4,
 
     .ptr_16b62 = SELF(str_2229),
 
-    .field_16b66 = 0x03C5,
+    .field_16b66 = 0x03c5,
 
     .ptr_16b68 = SELF(str_2228),
 
-    .field_16b6c = 0x03C6,
+    .field_16b6c = 0x03c6,
 
     .ptr_16b6e = SELF(str_2227),
 
-    .field_16b72 = 0x03C7,
+    .field_16b72 = 0x03c7,
 
     .pad_496 = { 0 },
 
@@ -36378,19 +36378,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16c02 = SELF(str_2234),
 
-    .field_16c06 = 0x03C8,
+    .field_16c06 = 0x03c8,
 
     .ptr_16c08 = SELF(str_2233),
 
-    .field_16c0c = 0x03C9,
+    .field_16c0c = 0x03c9,
 
     .ptr_16c0e = SELF(str_2232),
 
-    .field_16c12 = 0x03CA,
+    .field_16c12 = 0x03ca,
 
     .ptr_16c14 = SELF(str_2231),
 
-    .field_16c18 = 0x03CB,
+    .field_16c18 = 0x03cb,
 
     .pad_497 = { 0 },
 
@@ -36404,19 +36404,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16ca8 = SELF(str_2238),
 
-    .field_16cac = 0x03CC,
+    .field_16cac = 0x03cc,
 
     .ptr_16cae = SELF(str_2237),
 
-    .field_16cb2 = 0x03CD,
+    .field_16cb2 = 0x03cd,
 
     .ptr_16cb4 = SELF(str_2236),
 
-    .field_16cb8 = 0x03CE,
+    .field_16cb8 = 0x03ce,
 
     .ptr_16cba = SELF(str_2235),
 
-    .field_16cbe = 0x03CF,
+    .field_16cbe = 0x03cf,
 
     .pad_498 = { 0 },
 
@@ -36430,19 +36430,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16d4e = SELF(str_2242),
 
-    .field_16d52 = 0x03D0,
+    .field_16d52 = 0x03d0,
 
     .ptr_16d54 = SELF(str_2241),
 
-    .field_16d58 = 0x03D1,
+    .field_16d58 = 0x03d1,
 
     .ptr_16d5a = SELF(str_2240),
 
-    .field_16d5e = 0x03D2,
+    .field_16d5e = 0x03d2,
 
     .ptr_16d60 = SELF(str_2239),
 
-    .field_16d64 = 0x03D3,
+    .field_16d64 = 0x03d3,
 
     .pad_499 = { 0 },
 
@@ -36456,19 +36456,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16df4 = SELF(str_2246),
 
-    .field_16df8 = 0x03D4,
+    .field_16df8 = 0x03d4,
 
     .ptr_16dfa = SELF(str_2245),
 
-    .field_16dfe = 0x03D5,
+    .field_16dfe = 0x03d5,
 
     .ptr_16e00 = SELF(str_2244),
 
-    .field_16e04 = 0x03D6,
+    .field_16e04 = 0x03d6,
 
     .ptr_16e06 = SELF(str_2243),
 
-    .field_16e0a = 0x03D7,
+    .field_16e0a = 0x03d7,
 
     .pad_500 = { 0 },
 
@@ -36482,19 +36482,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16e9a = SELF(str_2250),
 
-    .field_16e9e = 0x03D8,
+    .field_16e9e = 0x03d8,
 
     .ptr_16ea0 = SELF(str_2249),
 
-    .field_16ea4 = 0x03D9,
+    .field_16ea4 = 0x03d9,
 
     .ptr_16ea6 = SELF(str_2248),
 
-    .field_16eaa = 0x03DA,
+    .field_16eaa = 0x03da,
 
     .ptr_16eac = SELF(str_2247),
 
-    .field_16eb0 = 0x03DB,
+    .field_16eb0 = 0x03db,
 
     .pad_501 = { 0 },
 
@@ -36508,19 +36508,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16f40 = SELF(str_2254),
 
-    .field_16f44 = 0x03DC,
+    .field_16f44 = 0x03dc,
 
     .ptr_16f46 = SELF(str_2253),
 
-    .field_16f4a = 0x03DD,
+    .field_16f4a = 0x03dd,
 
     .ptr_16f4c = SELF(str_2252),
 
-    .field_16f50 = 0x03DE,
+    .field_16f50 = 0x03de,
 
     .ptr_16f52 = SELF(str_2251),
 
-    .field_16f56 = 0x03DF,
+    .field_16f56 = 0x03df,
 
     .pad_502 = { 0 },
 
@@ -36534,19 +36534,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_16fe6 = SELF(str_2258),
 
-    .field_16fea = 0x03E0,
+    .field_16fea = 0x03e0,
 
     .ptr_16fec = SELF(str_2257),
 
-    .field_16ff0 = 0x03E1,
+    .field_16ff0 = 0x03e1,
 
     .ptr_16ff2 = SELF(str_2256),
 
-    .field_16ff6 = 0x03E2,
+    .field_16ff6 = 0x03e2,
 
     .ptr_16ff8 = SELF(str_2255),
 
-    .field_16ffc = 0x03E3,
+    .field_16ffc = 0x03e3,
 
     .pad_503 = { 0 },
 
@@ -36560,19 +36560,19 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_1708c = SELF(str_2262),
 
-    .field_17090 = 0x03E4,
+    .field_17090 = 0x03e4,
 
     .ptr_17092 = SELF(str_2261),
 
-    .field_17096 = 0x03E5,
+    .field_17096 = 0x03e5,
 
     .ptr_17098 = SELF(str_2260),
 
-    .field_1709c = 0x03E6,
+    .field_1709c = 0x03e6,
 
     .ptr_1709e = SELF(str_2259),
 
-    .field_170a2 = 0x03E7,
+    .field_170a2 = 0x03e7,
 
     .pad_504 = { 0 },
 
@@ -37677,43 +37677,43 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .str_2522 = ALIGNED_STRING("Easy Listening  "),
 
-    .field_18bea = 0x0A09,
+    .field_18bea = 0x0a09,
 
-    .field_18bec = 0x0C0B,
+    .field_18bec = 0x0c0b,
 
-    .field_18bee = 0x8A89,
+    .field_18bee = 0x8a89,
 
-    .field_18bf0 = 0xFF8B,
+    .field_18bf0 = 0xff8b,
 
     .field_18bf2 = 0x8989,
 
-    .field_18bf4 = 0x8B8A,
+    .field_18bf4 = 0x8b8a,
 
-    .field_18bf6 = 0x8B89,
+    .field_18bf6 = 0x8b89,
 
     .field_18bf8 = 0x8988,
 
-    .field_18bfa = 0x8B8A,
+    .field_18bfa = 0x8b8a,
 
-    .field_18bfc = 0x088C,
+    .field_18bfc = 0x088c,
 
-    .field_18bfe = 0x0A09,
+    .field_18bfe = 0x0a09,
 
-    .field_18c00 = 0x0C0B,
+    .field_18c00 = 0x0c0b,
 
     .field_18c02 = 0x8988,
 
-    .field_18c04 = 0x8B8A,
+    .field_18c04 = 0x8b8a,
 
     .field_18c06 = 0x0908,
 
-    .field_18c08 = 0x0B0A,
+    .field_18c08 = 0x0b0a,
 
     .field_18c0a = 0x8988,
 
-    .field_18c0c = 0x088A,
+    .field_18c0c = 0x088a,
 
-    .field_18c0e = 0x0A09,
+    .field_18c0e = 0x0a09,
 
     .field_18c10 = 0x8988,
 
@@ -37787,28 +37787,28 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
     .str_2542 = ALIGNED_STRING("  "),
 
     .ptrs_35 = {
-        0x00ED020C,
-        0x00ED0206,
-        0x00ED0200,
-        0x00ED01FA,
-        0x00ED01F4,
-        0x00ED01EE,
-        0x00ED01E8,
-        0x00ED01E2,
-        0x00ED01DA,
-        0x00ED01D4,
-        0x00ED01CE,
-        0x00ED01C8,
-        0x00ED01C2,
-        0x00ED01BA,
-        0x00ED01B2,
-        0x00ED01AC,
-        0x00ED01A4,
-        0x00ED019E,
-        0x00ED0198,
-        0x00ED0192,
-        0x00ED018A,
-        0x00ED0184,
+        0x00ed020c,
+        0x00ed0206,
+        0x00ed0200,
+        0x00ed01fa,
+        0x00ed01f4,
+        0x00ed01ee,
+        0x00ed01e8,
+        0x00ed01e2,
+        0x00ed01da,
+        0x00ed01d4,
+        0x00ed01ce,
+        0x00ed01c8,
+        0x00ed01c2,
+        0x00ed01ba,
+        0x00ed01b2,
+        0x00ed01ac,
+        0x00ed01a4,
+        0x00ed019e,
+        0x00ed0198,
+        0x00ed0192,
+        0x00ed018a,
+        0x00ed0184,
         NAKA_ADDR(ChordTypeStr_69),
         NAKA_ADDR(ChordTypeStr_sus4),
         NAKA_ADDR(ChordTypeStr_7_Flat9),
@@ -37821,14 +37821,14 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         NAKA_ADDR(ChordTypeStr_Flat13_Only),
         NAKA_ADDR(ChordTypeStr_Sharp9_Flat13),
         NAKA_ADDR(ChordTypeStr_Flat9_Flat13),
-        0x00ED011E,
-        0x00ED0118,
-        0x00ED0110,
-        0x00ED0108,
-        0x00ED0102,
+        0x00ed011e,
+        0x00ed0118,
+        0x00ed0110,
+        0x00ed0108,
+        0x00ed0102,
     },
 
-    .field_18e48 = 0x00FA,
+    .field_18e48 = 0x00fa,
 
 };
 

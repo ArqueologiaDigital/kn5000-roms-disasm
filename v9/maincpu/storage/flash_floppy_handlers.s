@@ -1624,7 +1624,7 @@ Flash_InitBytecodeBlock:
 	call	AccPatch_CountSlotsAlt
 	ld	a, (xsp+10)
 	extz	wa
-	lda_24	xbc, 0xe160fc
+	lda_24	xbc, MSP_Default_GroupIndexPad
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
@@ -1644,7 +1644,7 @@ Flash_InitBytecodeBlock:
 	muls	wa, 3
 	ld	de, wa
 	add	de, bc
-	lda_24	xwa, 0xe160c0
+	lda_24	xwa, MSP_Default_ChannelMap
 	.byte 0xc3
 	reti
 	.byte 0xe0, 0xe8
@@ -1676,7 +1676,7 @@ Flash_InitBytecodeBlock:
 	muls	wa, 3
 	ld	bc, wa
 	add	wa, de
-	lda_24	xde, 0xe160c0
+	lda_24	xde, MSP_Default_ChannelMap
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -1780,7 +1780,7 @@ Flash_InitBytecodeBlock:
 	scf
 	ld	a, (xsp+12)
 	extz	wa
-	lda_24	xbc, 0xe160fc
+	lda_24	xbc, MSP_Default_GroupIndexPad
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
@@ -1800,7 +1800,7 @@ Flash_InitBytecodeBlock:
 	muls	wa, 3
 	ld	de, wa
 	add	de, bc
-	lda_24	xwa, 0xe160c0
+	lda_24	xwa, MSP_Default_ChannelMap
 	.byte 0xc3
 	reti
 	.byte 0xe0, 0xe8
@@ -1834,7 +1834,7 @@ Flash_InitBytecodeBlock:
 	muls	wa, 3
 	ld	bc, wa
 	add	wa, de
-	lda_24	xde, 0xe160c0
+	lda_24	xde, MSP_Default_ChannelMap
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -2141,7 +2141,7 @@ PartGrid_OperationsBlock:
 	extz	wa
 	muls	wa, 3
 	add	wa, bc
-	lda_24	xbc, 0xe160c0
+	lda_24	xbc, MSP_Default_ChannelMap
 	ld_rrb	a, xbc, wa
 	ld	(xsp+2), a
 	ld	bc, (xsp+18)
@@ -2481,7 +2481,7 @@ Flash_StoreBaseAndInitAccPatch:
 Flash_ExtendedOpsBlock:
 	push	xiz
 	extz	de
-	lda_24	xix, 0xe160c0
+	lda_24	xix, MSP_Default_ChannelMap
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe8
@@ -4047,12 +4047,12 @@ Flash_ExtendedOpsBlock:
 	.byte 0x95
 	scf
 	ldda32	xix, 3222
-	ld	xiy, 0xe15c60
+	ld	xiy, MSP_Default_Sequencer
 	ldw	bc, 8
 	.byte 0x95
 	scf
 	ldda32	xwa, 3222
-	ld	xiy, 0xe15c70
+	ld	xiy, MSP_Default_SeqReserved
 	lda	xix, (xwa+16)
 	ldw	bc, 32
 	.byte 0x95
@@ -4759,7 +4759,7 @@ Flash_SlotUpdateOpsBlock:
 	nop
 	ld	a, (xsp)
 	extz	wa
-	lda_24	xbc, 0xe160fc
+	lda_24	xbc, MSP_Default_GroupIndexPad
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
@@ -4817,7 +4817,7 @@ Flash_SlotUpdateOpsBlock:
 	nop
 	ld	a, (xsp)
 	extz	wa
-	lda_24	xbc, 0xe160fc
+	lda_24	xbc, MSP_Default_GroupIndexPad
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
@@ -5102,7 +5102,7 @@ Flash_SlotUpdateOpsBlock:
 	.byte 0x37
 	push	xiz
 	calr	57947
-	ld	xiy, 0xe15cc0
+	ld	xiy, MSP_Default_Accompaniment
 	lda	xix, (xsp+16)
 	ldw	bc, 512
 	.byte 0x95

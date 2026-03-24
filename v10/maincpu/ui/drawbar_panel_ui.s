@@ -3954,7 +3954,7 @@ Bitmap_QueryProperties3x:
 	jr	z, 3
 	lds32	xhl, 0
 	ret
-	lda_24	xhl, 0xe8c66a
+	lda_24	xhl, BitmapBound_DrawbarSlider1_Start
 	ret
 	ld	xhl, 22
 	ret
@@ -3968,7 +3968,7 @@ Bitmap_QueryProperties3x:
 	jr	z, 3
 	lds32	xhl, 0
 	ret
-	lda_24	xhl, 0xe8d97e
+	lda_24	xhl, BitmapBound_DrawbarSlider2_Start
 	ret
 	ld	xhl, 22
 	ret
@@ -3982,7 +3982,7 @@ Bitmap_QueryProperties3x:
 	jr	z, 3
 	lds32	xhl, 0
 	ret
-	lda_24	xhl, 0xe8ec92
+	lda_24	xhl, BitmapBound_DrawbarSlider3_Start
 	ret
 	ld	xhl, 22
 	ret
@@ -10542,7 +10542,7 @@ AcWelcomScreen_RenderBytecode:
 	pushw	17
 	.byte 0x92, 0x04
 	pushw	247
-	ld	xbc, 0xe9df2c
+	ld	xbc, Bitmap_DigitD
 	ldw	de, 16
 	jr	86
 	lda	xix, (xsp+12)
@@ -10682,7 +10682,7 @@ AcWelcomScreen_RenderBytecode:
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
-	ld	xbc, 0xe9dea4
+	ld	xbc, Bitmap_DigitL
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
@@ -10753,7 +10753,7 @@ AcWelcomScreen_RenderBytecode:
 	.byte 0x9a
 	ldwio	4, 0xf70b
 	nop
-	ld	xbc, 0xe9df0a
+	ld	xbc, Bitmap_DigitR
 	ldw	de, 16
 	call	DrawBitmapSP2
 	ld16_24	wa, 0x24784

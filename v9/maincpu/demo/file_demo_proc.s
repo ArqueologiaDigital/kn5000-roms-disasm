@@ -6682,7 +6682,7 @@ FileIO_ByteBlock_DemoProc2:
 	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
-	ld	xhl, 0xea0448
+	ld	xhl, Filename_TemplateArea
 	jr	47
 	ld	wa, (xsp+26)
 	sll	wa, 4
@@ -6725,7 +6725,7 @@ FileIO_ByteBlock_DemoProc2:
 	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
-	ld	xhl, 0xea0448
+	ld	xhl, Filename_TemplateArea
 	jr	72
 	ld	xwa, 13
 	lds	bc, 0
@@ -6776,7 +6776,7 @@ FileIO_ByteBlock_DemoProc2:
 	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
-	ld	xhl, 0xea0448
+	ld	xhl, Filename_TemplateArea
 	jr	47
 	ld	wa, (xsp+26)
 	sll	wa, 11
@@ -6820,7 +6820,7 @@ FileIO_ByteBlock_DemoProc2:
 	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
-	ld	xhl, 0xea0448
+	ld	xhl, Filename_TemplateArea
 	jr	54
 	ld	wa, (xsp+28)
 	sll	wa, 2
@@ -6950,7 +6950,7 @@ FileIO_ByteBlock_DemoProc2:
 	call	FileIO_OpenWithMode
 	cps	hl, 0
 	jr	ge, 7
-	ld	xhl, 0xea0448
+	ld	xhl, Filename_TemplateArea
 	jr	54
 	sti8_24	0x25c56, 32
 	ld	wa, (xsp+26)
