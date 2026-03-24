@@ -1525,10 +1525,10 @@ SplitNoteStr_DFlat:	aligned_string "D~a0"
 SplitNoteStr_C:
 	ld	xhl, 0xeaff0020
 	jp	NakaData_PartConfig
-	jp	0xe600ed
-	jp	0xe400ed
+	jp	Bitmap_SplitPoint_Gb_0x2B
+	jp	Bitmap_Dredt0d_0xA8D
 	jp	SepaOut_FormatData_Tail
-	jp	0xe000ed
+	jp	FILETYPE_SIG_TABLE_2_0x15
 	jp	0xde00ed
 	jp	0xdc00ed
 	jp	0xda00ed

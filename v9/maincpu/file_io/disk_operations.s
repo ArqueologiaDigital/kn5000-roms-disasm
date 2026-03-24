@@ -249,7 +249,7 @@ FileRenameFunc:
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
-	lda_24 xix, 0xeed778
+	lda_24 xix, CharMap_FullPermutation_0x660
 	ldada xwa, 0x8870
 	ld xhl, xwa
 	jr FRename_PadLoop_Cond
@@ -289,7 +289,7 @@ FRename_PadDone:
 
 FRename_TextChange_Error:
 	ld xwa, 0x8870
-	ld xbc, 0xea06be
+	ld xbc, DiskOp_ChannelCfgTable_0x52
 	call FileIO_CopyString
 
 FRename_TextChange_SendApply:
@@ -352,7 +352,7 @@ FileRenameSmfFunc:
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
-	lda_24 xix, 0xeed778
+	lda_24 xix, CharMap_FullPermutation_0x660
 	ldada xwa, 0x8870
 	ld xhl, xwa
 	jr FRenameSmf_PadLoop_Cond
@@ -392,7 +392,7 @@ FRenameSmf_PadDone:
 
 FRenameSmf_TextChange_Error:
 	ld xwa, 0x8870
-	ld xbc, 0xea06c6
+	ld xbc, DiskOp_ChannelCfgTable_0x5A
 	call FileIO_CopyString
 
 FRenameSmf_TextChange_SendApply:
@@ -407,7 +407,7 @@ FRenameSmf_HandleApply:
 	ld xbc, (xsp + 4)
 	call FileIO_CopyString
 	ld xwa, 0x8870
-	ld xbc, 0xea06d0
+	ld xbc, DiskOp_ChannelCfgTable_0x64
 	call FileIO_BuildFilePath
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -843,7 +843,7 @@ FmmSaveTtl_SlotLoop:
 	lds wa, 7
 	call FileIO_BuildRecordPath_Return
 	call FileIO_SetModeFlag_Reading
-	ld xiy, 0xea066a
+	ld xiy, BankStr_Memory_0xA
 	ld xix, 0x8a0c
 	ldiw
 
@@ -910,7 +910,7 @@ DiskName_TextChange:
 	call FileIO_CopyString
 	lds iy, 0
 	ldada xix, 0x8870
-	lda_24 xiz, 0xeed778
+	lda_24 xiz, CharMap_FullPermutation_0x660
 	ldada xde, 0x878c
 	ld xhl, xde
 	jr DiskName_PadLoop_Cond
@@ -1048,7 +1048,7 @@ DiskInfo_RenderStrings:
 	ld xwa, 0x87ce
 	call FileIO_CopyString
 	ld xwa, 0x87ce
-	ld xbc, 0xea06d6
+	ld xbc, DiskOp_ChannelCfgTable_0x6A
 	call FileIO_BuildFilePath
 	ldada xwa, 0x87ce
 	ld (xsp + 12), xwa
@@ -1059,7 +1059,7 @@ DiskInfo_RenderStrings:
 	ld xwa, (xsp + 12)
 	call FileIO_BuildFilePath
 	ld xwa, 0x87ce
-	ld xbc, 0xea06da
+	ld xbc, DiskOp_ChannelCfgTable_0x6E
 	call FileIO_BuildFilePath
 	ldada xwa, 0x87ce
 	ld (xsp + 12), xwa
@@ -1070,7 +1070,7 @@ DiskInfo_RenderStrings:
 	ld xwa, (xsp + 12)
 	call FileIO_BuildFilePath
 	ld xwa, 0x87ce
-	ld xbc, 0xea06e4
+	ld xbc, DiskOp_ChannelCfgTable_0x78
 	call FileIO_BuildFilePath
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1c0000f
@@ -1203,7 +1203,7 @@ SaveFileName_TextChange:
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
-	lda_24 xix, 0xeed778
+	lda_24 xix, CharMap_FullPermutation_0x660
 	ldada xde, 0x8850
 	ld xhl, xde
 	jr SaveFileName_PadLoop_Cond

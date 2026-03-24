@@ -18,7 +18,7 @@ MiddleFuncCall:
 	cp xwa, 0xc
 	jrl gt, SqTrSel_CaseC
 	add xwa, xwa
-	add xwa, 0xe201e8
+	add xwa, SepaOut_Config_0_0x202
 	ld wa, (xwa)
 	lda_24 xix, MiddleFuncCall_DispatchData
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -426,30 +426,30 @@ CDlikeSwTtl_SendEvent8C_13:
 
 CDlikeSwTtl_SetRecordAndNotify:
 	sti8_24 0x021090, 0x01
-	ld xwa, 0xe1000b
+	ld xwa, NAKA_PerfReg_Container_Root_0x1697
 	ld xbc, 0x1c0000c
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xe2000b
+	ld xwa, SepaOut_Config_0_0x25
 	ld xbc, 0x1c0000c
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xe3000b
+	ld xwa, NakaInst_FADE_IN_OUT_SETTING_0x2475
 	ld xbc, 0x1c0000c
 	lds32 xde, 0
 	jp ApPostEvent
 
 SeqInit_PostEventSequence:
 	sti8_24 0x021090, 0x00
-	ld xwa, 0xe1000b
+	ld xwa, NAKA_PerfReg_Container_Root_0x1697
 	ld xbc, 0x1c0000c
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xe2000b
+	ld xwa, SepaOut_Config_0_0x25
 	ld xbc, 0x1c0000c
 	lds32 xde, 0
 	call ApPostEvent
-	ld xwa, 0xe3000b
+	ld xwa, NakaInst_FADE_IN_OUT_SETTING_0x2475
 	ld xbc, 0x1c0000c
 	lds32 xde, 0
 	jp ApPostEvent
@@ -457,7 +457,7 @@ SeqInit_PostEventSequence:
 SeqInit_LookupDispatchEntry:
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe20208
+	lda_24 xbc, SepaOut_Config_0_0x222
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ret
 
@@ -556,7 +556,7 @@ SqTrSel_CaseG:
 	cps wa, 7
 	ret gt
 	add wa, wa
-	lda_24 xix, 0xe20250
+	lda_24 xix, SepaOut_Config_0_0x26A
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SqTrSel_CaseG_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0

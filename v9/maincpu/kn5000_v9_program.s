@@ -6,6 +6,7 @@
 	.text
 
 	.include "shared/macros.s"
+	.include "shared/positional_labels.s"
 	.include "shared/sfr_tmp94c241.s"
 	.include "shared/vga_constants.s"
 	.include "shared/event_codes.s"

@@ -2609,7 +2609,7 @@ DrawIcons_Impl_ColLoop:
 	ld a, c
 	extz wa
 	add wa, wa
-	lda_24 xbc, 0xeaabf2
+	lda_24 xbc, Str_No_0x8DC
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	ld (xix), wa
 	inc 1, iy

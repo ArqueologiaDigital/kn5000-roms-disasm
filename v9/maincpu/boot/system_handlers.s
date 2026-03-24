@@ -358,7 +358,7 @@ MemCopy_SetupAndDMA:
 
 Boot_InitWorkRAM_ROMCopy1_Start:
 	ld xde, 0x3d524
-	ld xhl, 0xeed8c8
+	ld xhl, CharMap_FullPermutation_0x7B0
 	ld xbc, 0x219e
 	or xbc, xbc
 	jr z, Boot_InitWorkRAM_ROMCopy2_Start
@@ -373,7 +373,7 @@ Boot_InitWorkRAM_ROMCopy1_Loop:
 
 Boot_InitWorkRAM_ROMCopy2_Start:
 	ld xde, 0xe35e
-	ld xhl, 0xeefa66
+	ld xhl, Naka_DrawbarReg_Table_0x4DE
 	ld xbc, 0x95b
 	or xbc, xbc
 	jr z, Boot_InitWorkRAM_Done
@@ -2022,7 +2022,7 @@ TaskSched_InitTimerSlots:
 	ld (xix + 4), xwa
 	add ix, 0x8
 	djnz8 b, TaskSched_InitTimerSlots
-	ld xhl, 0xef1933
+	ld xhl, TaskSched_ScreenGroupTable_0x3C
 	ldw de, 0x4f9
 	extz xde
 	ldw bc, 0xa
@@ -2036,7 +2036,7 @@ TaskSched_InitExtQueues:
 	st_dpiw IX, 0xed
 	st_dpiw IX, 0xed
 	djnz8 b, TaskSched_InitExtQueues
-	ld xhl, 0xef193d
+	ld xhl, TaskSched_ScreenGroupTable_0x46
 	ldw de, 0x533
 	extz xde
 	ldw bc, 0xc
@@ -2095,7 +2095,7 @@ TaskSched_InitMsgQueues:
 	st_dpiw IX, 0xed
 	st_dpiw IX, 0xed
 	djnz8 b, TaskSched_InitMsgQueues
-	ld xwa, 0xef1a7e
+	ld xwa, TaskSched_InitMsgQueues_0x12
 	jr TaskSched_PostInit
 
 	normal
@@ -2276,7 +2276,7 @@ Show_ScreenGroup_Entry:
 	ldb l, 0xc
 	mul8rr l, a
 	extz xhl
-	add xhl, 0xef18eb
+	add xhl, Checksum_ComputeComplement_0x4
 	ldb c, 0xc
 	mul8rr c, a
 	add bc, 0x47d

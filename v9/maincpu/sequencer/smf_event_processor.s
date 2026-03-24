@@ -3048,7 +3048,7 @@ FileOpen_NormalizeName:
 	ld xwa, xde
 	ld a, (xwa)
 	extz wa
-	lda_24 xbc, 0xeed778
+	lda_24 xbc, CharMap_FullPermutation_0x660
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	bit 1, a
 	jr z, FileOpen_NormalizeNoUpper
@@ -8949,7 +8949,7 @@ FDC_Format2DD_Start:
 	push_werp 0xfa
 	lds wa, 0
 	calr FDC_SetSectorLength
-	lda_24 xwa, 0xe45076
+	lda_24 xwa, Display_FontPalette_Table_0x21E
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -8963,7 +8963,7 @@ FDC_Format2DD_Start:
 	jrl FDC_CmdFrame_Epilogue
 
 FDC_Format2DD_Step2:
-	lda_24 xwa, 0xe45056
+	lda_24 xwa, Display_FontPalette_Table_0x1FE
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -8994,7 +8994,7 @@ FDC_Format2DD_WriteBoot:
 	push xwa
 	call Memset
 	pushw 0x20
-	lda_24 xwa, 0xe450b6
+	lda_24 xwa, Display_FontPalette_Table_0x25E
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9031,7 +9031,7 @@ FDC_Format2DD_WriteFAT1:
 	push xwa
 	call Memset
 	pushw 0x3
-	lda_24 xwa, 0xe450d6
+	lda_24 xwa, Display_FontPalette_Table_0x27E
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9116,7 +9116,7 @@ FDC_Format2DD_WriteDataSec1:
 	push xwa
 	call Memset
 	pushw 0x3
-	lda_24 xwa, 0xe450d6
+	lda_24 xwa, Display_FontPalette_Table_0x27E
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9326,7 +9326,7 @@ FDC_Format2HD_Start:
 	push_werp 0xfa
 	lds wa, 0
 	calr FDC_SetSectorLength
-	lda_24 xwa, 0xe45096
+	lda_24 xwa, Display_FontPalette_Table_0x23E
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9340,7 +9340,7 @@ FDC_Format2HD_Start:
 	jrl FdcOp_Epilogue20
 
 FDC_Format2HD_Step2:
-	lda_24 xwa, 0xe45056
+	lda_24 xwa, Display_FontPalette_Table_0x1FE
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9371,7 +9371,7 @@ FDC_Format2HD_WriteBoot:
 	push xwa
 	call Memset
 	pushw 0x20
-	lda_24 xwa, 0xe450da
+	lda_24 xwa, Display_FontPalette_Table_0x282
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9408,7 +9408,7 @@ FDC_Format2HD_WriteFAT1:
 	push xwa
 	call Memset
 	pushw 0x3
-	lda_24 xwa, 0xe450fa
+	lda_24 xwa, Display_FontPalette_Table_0x2A2
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9478,7 +9478,7 @@ FDC_Format2HD_TrackTest:
 	push xwa
 	call Memset
 	pushw 0x3
-	lda_24 xwa, 0xe450fa
+	lda_24 xwa, Display_FontPalette_Table_0x2A2
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9691,7 +9691,7 @@ GetMediaType_SetupReadCmd:
 	jrl GetMediaType_Epilogue
 
 GetMediaType_TryRecalib:
-	lda_24 xwa, 0xe450a6
+	lda_24 xwa, Display_FontPalette_Table_0x24E
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9701,7 +9701,7 @@ GetMediaType_TryRecalib:
 	jrl GetMediaType_Epilogue
 
 GetMediaType_TryFormat2HD:
-	lda_24 xwa, 0xe45096
+	lda_24 xwa, Display_FontPalette_Table_0x23E
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9747,7 +9747,7 @@ GetMediaType_Invalid:
 	jr GetMediaType_Epilogue
 
 GetMediaType_Try2DDHeader:
-	lda_24 xwa, 0xe45076
+	lda_24 xwa, Display_FontPalette_Table_0x21E
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9818,7 +9818,7 @@ GetDiskFreeSpace:
 	cps wa, 6
 	jr gt, FileIO_ReadFreeSpaceViaFAT
 	add wa, wa
-	lda_24 xix, 0xe45104
+	lda_24 xix, Display_FontPalette_Table_0x2AC
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, GetDiskFreeSpace_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -9874,7 +9874,7 @@ GetVolumeLabel:
 	cps wa, 6
 	jr gt, FileIO_ReadVolumeLabelEntry
 	add wa, wa
-	lda_24 xix, 0xe45118
+	lda_24 xix, Display_FontPalette_Table_0x2C0
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, GetVolumeLabel_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -10676,7 +10676,7 @@ SndTable_ByteBlock_ReadOps:
 	.byte 0xf0
 	jrl	ule, -134
 	sti8_24	0x2357e, 0
-	call	0xef1c16
+	call	Show_ScreenGroup_Entry_0x7A
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -11345,7 +11345,7 @@ VoiceParam_Clamp_CheckRange:
 	jr TableLoad_Return
 
 VoiceParam_Clamp_LookupTable:
-	ld xwa, 0xe4638a
+	ld xwa, Display_FontPalette_Table_0x1532
 	sla l, 1
 	and h, 0x7f
 	and h, 0x7
@@ -11373,7 +11373,7 @@ Seq_ReadTempoLookup:
 	xor xhl, xhl
 	ldda16 xwa, 1033
 	ld l, a
-	add xhl, 0xe46c17
+	add xhl, Display_FontPalette_Table_0x1DBF
 	ld a, (xhl)
 	stda16 0x334b, xwa
 	ret
@@ -11398,7 +11398,7 @@ Seq_InputState_StoreFlag:
 	xor xhl, xhl
 	ldda8 l, 0x3280
 	sla l, 1
-	add xhl, 0xe46b9e
+	add xhl, Display_FontPalette_Table_0x1D46
 	ld bc, (xhl)
 	xor hl, hl
 	ldda8 l, 0x327f

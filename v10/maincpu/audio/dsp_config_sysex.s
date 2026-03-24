@@ -14,7 +14,7 @@ SysEx_ClampVoiceIndex8:
 
 SysEx_ClampVoiceIndex8_DoLookup:
 	extz wa
-	lda_24 xbc, 0xee33a4
+	lda_24 xbc, MidiPkt_EventType_Table_0x358
 	ld_srib3 L, 0x07, 0xe4, 0xe0
 	ret
 
@@ -74,7 +74,7 @@ SysEx_ClampVoiceIndex128:
 
 SysEx_ClampVoiceIndex128_DoLookup:
 	extz wa
-	lda_24 xbc, 0xee33ac
+	lda_24 xbc, MidiPkt_EventType_Table_0x360
 	ld_srib3 L, 0x07, 0xe4, 0xe0
 	ret
 
@@ -139,7 +139,7 @@ SysEx_ClampVoiceIndex8_49:
 
 SysEx_ClampVoiceIndex8_49_DoLookup:
 	extz wa
-	lda_24 xbc, 0xee342c
+	lda_24 xbc, MidiPkt_EventType_Table_0x3E0
 	ld_srib3 L, 0x07, 0xe4, 0xe0
 	ret
 
@@ -199,7 +199,7 @@ SysEx_ClampVoiceIndex128_49:
 
 SysEx_ClampVoiceIndex128_49_DoLookup:
 	extz wa
-	lda_24 xbc, 0xee3434
+	lda_24 xbc, MidiPkt_EventType_Table_0x3E8
 	ld_srib3 L, 0x07, 0xe4, 0xe0
 	ret
 
@@ -214,7 +214,7 @@ SysEx_DispatchByChannel:
 	cps wa, 7
 	ret gt
 	add wa, wa
-	lda_24 xix, 0xee3520
+	lda_24 xix, MidiPkt_EventType_Table_0x4D4
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SysEx_ChannelHandler_4B_Data
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -222,35 +222,35 @@ SysEx_DispatchByChannel:
 SysEx_ChannelHandler_4B_Data:
 	cps	c, 5
 	ret	nc
-	ld	xwa, 0xee34b4
+	ld	xwa, MidiPkt_EventType_Table_0x468
 	jr	77
 	cps	c, 7
 	ret	nc
-	ld	xwa, 0xee34be
+	ld	xwa, MidiPkt_EventType_Table_0x472
 	jr	66
 	cps	c, 5
 	ret	nc
-	ld	xwa, 0xee34cc
+	ld	xwa, MidiPkt_EventType_Table_0x480
 	jr	55
 	cps	c, 7
 	ret	nc
-	ld	xwa, 0xee34d6
+	ld	xwa, MidiPkt_EventType_Table_0x48A
 	jr	44
 	cp	c, 8
 	ret	nc
-	ld	xwa, 0xee34e4
+	ld	xwa, MidiPkt_EventType_Table_0x498
 	jr	32
 	cp	c, 8
 	ret	nc
-	ld	xwa, 0xee34f4
+	ld	xwa, MidiPkt_EventType_Table_0x4A8
 	jr	20
 	cps	c, 7
 	ret	nc
-	ld	xwa, 0xee3504
+	ld	xwa, MidiPkt_EventType_Table_0x4B8
 	jr	9
 	cps	c, 7
 	ret	nc
-	ld	xwa, 0xee3512
+	ld	xwa, MidiPkt_EventType_Table_0x4C6
 	.byte 0xd3
 	reti
 	.byte 0xe0, 0xe8
@@ -267,7 +267,7 @@ SysEx_DispatchByChannel_49:
 	cps wa, 7
 	ret gt
 	add wa, wa
-	lda_24 xix, 0xee3584
+	lda_24 xix, MidiPkt_EventType_Table_0x538
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SysEx_ChannelHandler_49_Data
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -275,35 +275,35 @@ SysEx_DispatchByChannel_49:
 SysEx_ChannelHandler_49_Data:
 	cps	c, 5
 	ret	nc
-	ld	xwa, 0xee3530
+	ld	xwa, MidiPkt_EventType_Table_0x4E4
 	jr	75
 	cps	c, 5
 	ret	nc
-	ld	xwa, 0xee353a
+	ld	xwa, MidiPkt_EventType_Table_0x4EE
 	jr	64
 	cps	c, 5
 	ret	nc
-	ld	xwa, 0xee3544
+	ld	xwa, MidiPkt_EventType_Table_0x4F8
 	jr	53
 	cps	c, 5
 	ret	nc
-	ld	xwa, 0xee354e
+	ld	xwa, MidiPkt_EventType_Table_0x502
 	jr	42
 	cps	c, 5
 	ret	nc
-	ld	xwa, 0xee3558
+	ld	xwa, MidiPkt_EventType_Table_0x50C
 	jr	31
 	cps	c, 5
 	ret	nc
-	ld	xwa, 0xee3562
+	ld	xwa, MidiPkt_EventType_Table_0x516
 	jr	20
 	cps	c, 6
 	ret	nc
-	ld	xwa, 0xee356c
+	ld	xwa, MidiPkt_EventType_Table_0x520
 	jr	9
 	cps	c, 6
 	ret	nc
-	ld	xwa, 0xee3578
+	ld	xwa, MidiPkt_EventType_Table_0x52C
 	.byte 0xd3
 	reti
 	.byte 0xe0, 0xe8
@@ -859,9 +859,9 @@ SwbtWr_ProcessAll_CompactDone:
 	ret
 
 SwbtWr_InitBank1:
-	ld xiy, 0xee7786
+	ld xiy, Naka_DisplayMode_Table_0x10
 	stda32 0xc081, xiy
-	ld xiy, 0xee7ca3
+	ld xiy, UIState_DefaultConfig_A_0x4
 	stda32 0xc085, xiy
 	ld xiy, 0xbd3c
 	stda32 0xc089, xiy
@@ -871,7 +871,7 @@ SwbtWr_InitBank1:
 SwbtWr_InitBank2:
 	ld xiy, Naka_RenderMode_A_Table
 	stda32 0xc081, xiy
-	ld xiy, 0xee86b4
+	ld xiy, UIState_DefaultConfig_B_0x4
 	stda32 0xc085, xiy
 	ld xiy, 0xbd3c
 	stda32 0xc089, xiy
@@ -881,7 +881,7 @@ SwbtWr_InitBank2:
 SwbtWr_InitBank3:
 	ld xiy, Naka_EventHandler_Table
 	stda32 0xc081, xiy
-	ld xiy, 0xee8c79
+	ld xiy, UIState_DefaultConfig_C_0x4
 	stda32 0xc085, xiy
 	ld xiy, 0xc039
 	stda32 0xc089, xiy
@@ -1645,7 +1645,7 @@ MidiSysEx_BuildAndSend_Exit:
 MIDI_BroadcastControlChange:
 	dec 8, xsp
 	push_werp 0xfa
-	ld xiy, 0xee4fba
+	ld xiy, WidgetParam_SelfRef_Table_0x19E
 	lda xix, (xsp + 2)
 	lds bc, 3
 	ldirw
@@ -1701,7 +1701,7 @@ CompIface_SendActiveSensing_PC1MAC:
 	ei 0
 	lds wa, 4
 	lds bc, 1
-	ld xde, 0xee4fc4	;	PC1 or MAC (0F5h)
+	ld xde, WidgetParam_SelfRef_Table_0x1A8	;	PC1 or MAC (0F5h)
 	call sendCOMM
 	pop_sr
 	ret
@@ -1711,7 +1711,7 @@ CompIface_SendActiveSensing_PC2:
 	ei 0
 	lds wa, 4
 	lds bc, 1
-	ld xde, 0xee4fc2	;	PC2 (0F4h)
+	ld xde, WidgetParam_SelfRef_Table_0x1A6	;	PC2 (0F4h)
 	call sendCOMM
 	pop_sr
 	ret
@@ -2301,7 +2301,7 @@ DSPCfg_ScaleFactor_StoreResult:
 
 DSPCfg_LookupMidiMap:
 	extz xwa
-	ld xbc, 0xee636c
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
 	add xbc, xwa
 	ld a, (xbc)
 	jp VoiceData_LookupPtrByIndex
@@ -2748,7 +2748,7 @@ DSPCfg_ReadViaTableLookup:
 	calr DSPCfg_GetParamCount
 	exts xhl
 	sll xhl, 2
-	ld xbc, 0xee75f6
+	ld xbc, WidgetParam_Config_058_0x36
 	add xbc, xhl
 	ld xbc, (xbc)
 	lda xwa, (xiz + 1)
@@ -2773,7 +2773,7 @@ DSPCfg_WriteViaTableLookup:
 	calr DSPCfg_GetParamCount
 	exts xhl
 	sll xhl, 2
-	ld xbc, 0xee75f6
+	ld xbc, WidgetParam_Config_058_0x36
 	add xbc, xhl
 	ld xbc, (xbc)
 	lda xwa, (xiz + 1)
@@ -2830,7 +2830,7 @@ DSPCfg_LookupAndExtract:
 	dec 8, xsp
 	extz xbc
 	sll xbc, 2
-	ld xde, 0xee6044
+	ld xde, ToneKit_ParamBlock_116_0x7C
 	add xde, xbc
 	mul wa, 0x6
 	add xwa, (xde)
@@ -2847,7 +2847,7 @@ DSPCfg_LookupAndExtract:
 
 DSPCfg_Data_001:
 	extz	xwa
-	ld	xbc, 0xee6364
+	ld	xbc, ToneKit_VoiceDispatch_Table_0x31C
 	add	xbc, xwa
 	ld	l, (xbc)
 	extz	hl
@@ -2855,7 +2855,7 @@ DSPCfg_Data_001:
 
 DSPCfg_GetSlotCount:
 	extz xwa
-	ld xbc, 0xee5fe0
+	ld xbc, ToneKit_ParamBlock_116_0x18
 	add xbc, xwa
 	ld l, (xbc)
 	extz hl
@@ -2863,7 +2863,7 @@ DSPCfg_GetSlotCount:
 
 DSPCfg_Data_002:
 	extz	xwa
-	ld	xbc, 0xee6368
+	ld	xbc, ToneKit_VoiceDispatch_Table_0x320
 	add	xbc, xwa
 	ld	l, (xbc)
 	extz	hl
@@ -2880,7 +2880,7 @@ DSPCfg_FindSlot63:
 	ld wa, iz
 	exts xwa
 	sll xwa, 2
-	ld xbc, 0xee75f6
+	ld xbc, WidgetParam_Config_058_0x36
 	add xbc, xwa
 	ld xwa, (xbc)
 	lds iz, 0
@@ -2912,7 +2912,7 @@ DSPCfg_Data_003:
 	ld	xwa, xbc
 	calr	65182
 	sla	hl, 2
-	lda_24	xbc, 0xee6044
+	lda_24	xbc, ToneKit_ParamBlock_116_0x7C
 	mul	iz, 6
 	ld	xwa, xiz
 	.byte 0xe3
@@ -2967,7 +2967,7 @@ DSPCfg_DecodeParamIdRange:
 	jr c, DSPCfg_DecodeParamIdRange_Invalid
 	cp xwa, 0x7
 	jr ugt, DSPCfg_DecodeParamIdRange_Invalid
-	add xwa, 0xee6372
+	add xwa, ToneKit_VoiceDispatch_Table_0x32A
 	ld c, (xwa)
 	exts bc
 	ld xwa, (xsp + 6)
@@ -3176,14 +3176,14 @@ DSPCfg_ResolveWithFallback:
 	ld wa, (xsp + 10)
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0xee61d4
+	ld xbc, ToneKit_VoiceDispatch_Table_0x18C
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (xsp + 12), xwa
 	ld wa, (xsp + 8)
 	extz xwa
 	add xwa, xwa
-	ld xbc, 0xee637a
+	ld xbc, ToneKit_VoiceDispatch_Table_0x332
 	add xbc, xwa
 	ld bc, (xbc)
 	sll bc, 8
@@ -3280,7 +3280,7 @@ DSPCfg_ClampAndExtract:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0xee6044
+	ld xbc, ToneKit_ParamBlock_116_0x7C
 	add xbc, xwa
 	ld wa, (xsp + 16)
 	mul wa, 0x6
@@ -3330,7 +3330,7 @@ DSPCfg_ValidateSlotForWrite:
 	ld de, wa
 	extz xde
 	sll xde, 2
-	ld xhl, 0xee75f6
+	ld xhl, WidgetParam_Config_058_0x36
 	add xhl, xde
 	ld xde, (xhl)
 	or xde, xde
@@ -3424,7 +3424,7 @@ DSPCfg_WriteParamFull:
 	ld iz, hl
 	ld wa, (xsp + 6)
 	extz xwa
-	ld xbc, 0xee636c
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
@@ -3469,7 +3469,7 @@ DSPCfg_WriteParamFull_Type1_Clamped:
 DSPCfg_WriteParamFull_Type1_Notify:
 	ld wa, (xsp + 6)
 	extz xwa
-	ld xbc, 0xee636c
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
@@ -3670,7 +3670,7 @@ DSPCfg_WriteAllSlots_Direct:
 	calr DSPCfg_StoreByte_ReturnZero
 	ld wa, (xsp + 20)
 	extz xwa
-	ld xbc, 0xee636c
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
 	add xbc, xwa
 	ld a, (xbc)
 	pushw 0xff
@@ -3682,7 +3682,7 @@ DSPCfg_WriteAllSlots_Direct:
 	ld (xsp + 6), hl
 	ld wa, (xsp + 6)
 	sla wa, 2
-	lda_24 xbc, 0xee61d4
+	lda_24 xbc, ToneKit_VoiceDispatch_Table_0x18C
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 8), xwa
 	lds iz, 0
@@ -3703,7 +3703,7 @@ DSPCfg_WriteAllSlots_Direct_Loop:
 	calr DSPCfg_WriteViaTableLookup
 	ld wa, (xsp + 20)
 	extz xwa
-	ld xbc, 0xee636c
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
@@ -3742,7 +3742,7 @@ DSPCfg_WriteAllSlots_Clamped:
 	ld (xsp + 4), hl
 	ld wa, (xsp + 4)
 	sla wa, 2
-	lda_24 xbc, 0xee61d4
+	lda_24 xbc, ToneKit_VoiceDispatch_Table_0x18C
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 6), xwa
 	lds iz, 0
@@ -3773,7 +3773,7 @@ DSPCfg_WriteAllSlots_Clamped_Loop:
 	calr DSPCfg_WriteViaTableLookup
 	ld wa, (xsp + 20)
 	extz xwa
-	ld xbc, 0xee636c
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
@@ -4023,7 +4023,7 @@ DSPCfg_Data_ParamDispatch:
 	cps	wa, 5
 	jr	gt, 74
 	add	wa, wa
-	lda_24	xix, 0xee6384
+	lda_24	xix, ToneKit_VoiceDispatch_Table_0x33C
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -4067,7 +4067,7 @@ DSPCfg_Data_ParamDispatch:
 	calr	62523
 	extz	xhl
 	sll	xhl, 2
-	ld	xbc, 0xee75f6
+	ld	xbc, WidgetParam_Config_058_0x36
 	add	xbc, xhl
 	ld	xbc, (xbc)
 	lds32	xwa, 1
@@ -4102,7 +4102,7 @@ DSPCfg_CheckParamTableEntry:
 	jr ugt, DSPCfg_CheckParamTableEntry_NotFound
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0xee75f6
+	ld xbc, WidgetParam_Config_058_0x36
 	add xbc, xwa
 	ld xwa, (xbc)
 	or xwa, xwa
@@ -4180,7 +4180,7 @@ DSPCfg_ApplyParamStruct:
 	ld a, (xiz)
 	extz wa
 	ld (xsp + 4), wa
-	lda_24 xbc, 0xee5fe0
+	lda_24 xbc, ToneKit_ParamBlock_116_0x18
 	ld wa, (xsp + 4)
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -4220,7 +4220,7 @@ DSPCfg_ApplyParamStruct_Normal:
 	ld wa, (xsp + 4)
 	exts xwa
 	sll xwa, 2
-	ld xbc, 0xee75f6
+	ld xbc, WidgetParam_Config_058_0x36
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (xsp + 14), xwa
@@ -4299,7 +4299,7 @@ DSPCfg_ApplyParamStruct_WriteLoop:
 	ld wa, (xsp + 4)
 	exts xwa
 	sll xwa, 2
-	ld xbc, 0xee75f6
+	ld xbc, WidgetParam_Config_058_0x36
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (xsp + 14), xwa
@@ -4432,7 +4432,7 @@ DSPCfg_ApplyParamStructFull_RangeCheck:
 ; DSP config event dispatch
 DspConfig_EventDispatch:
 	add bc, bc
-	lda_24 xix, 0xee6390
+	lda_24 xix, ToneKit_VoiceDispatch_Table_0x348
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
 	lda_24 xix, AssSwb_SwapEntriesAndDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -5327,7 +5327,7 @@ AudioModeChange_Handler:
 	ldda8 a, 0x8d34
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xee8cf4
+	lda_24 xbc, SystemConfig_PointerTable_0x76
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ld xbc, xhl
 	lda_24 xwa, 0xfdecef
@@ -5369,7 +5369,7 @@ AudioSubsystem_Callback:
 	ldda8 a, 0x8d34
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xee8cf4
+	lda_24 xbc, SystemConfig_PointerTable_0x76
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ld xbc, xhl
 	lda_24 xwa, 0xfdecef
@@ -5440,7 +5440,7 @@ AudioVoice_Callback:
 	ldda8 a, 0x8d34
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xee8cf4
+	lda_24 xbc, SystemConfig_PointerTable_0x76
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ld xbc, xhl
 	lda_24 xwa, 0xfdecef
@@ -5485,7 +5485,7 @@ AudioVoiceReset_Handler:
 	ldda8 a, 0x8d34
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xee8cf4
+	lda_24 xbc, SystemConfig_PointerTable_0x76
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ld xbc, xhl
 	lda_24 xwa, 0xfdecef
@@ -5559,7 +5559,7 @@ UIState_ProcessMidiEvent:
 	ld a, l
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xee8d74
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0x7C
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld a, h
 	cp a, 0x16
@@ -5582,7 +5582,7 @@ UIStateEvt_PartRouting:
 	ret z
 	ld a, l
 	extz wa
-	lda_24 xbc, 0xee8df4
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	add wa, wa
@@ -5592,7 +5592,7 @@ UIStateEvt_PartRouting:
 	ld a, d
 	and a, 0x7
 	extz wa
-	lda_24 xbc, 0xee8e14
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0x11C
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	and a, 0x7
 	sla a, 1
@@ -5609,7 +5609,7 @@ UIStateEvt_VoiceAssign:
 	jr nz, UIStateEvt_VoiceAssign_Reset
 	ld a, l
 	extz wa
-	lda_24 xbc, 0xee8df4
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	ldada xbc, 0xc222
@@ -5624,7 +5624,7 @@ UIStateEvt_VoiceAssign:
 UIStateEvt_VoiceAssign_Reset:
 	ld a, l
 	extz wa
-	lda_24 xbc, 0xee8df4
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	ldada xbc, 0xc222
@@ -5643,7 +5643,7 @@ UIStateEvt_ToneChange:
 	jr z, UIStateEvt_ToneChange_Set
 	ld a, l
 	extz wa
-	lda_24 xbc, 0xee8df4
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	ldada xbc, 0xc202
@@ -5658,7 +5658,7 @@ UIStateEvt_ToneChange:
 UIStateEvt_ToneChange_Set:
 	ld a, l
 	extz wa
-	lda_24 xbc, 0xee8df4
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	ldada xbc, 0xc202
@@ -5667,7 +5667,7 @@ UIStateEvt_ToneChange_Set:
 	add xix, xbc
 	ld a, l
 	extz wa
-	lda_24 xbc, 0xee8df4
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	ld (xix), a
 	cp l, 0x13
@@ -5685,7 +5685,7 @@ UIStateEvt_DrumAssign:
 	jr z, UIStateEvt_DrumAssign_Set
 	ld a, l
 	extz wa
-	lda_24 xbc, 0xee8df4
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	ldada xbc, 0xc222
@@ -5697,7 +5697,7 @@ UIStateEvt_DrumAssign:
 UIStateEvt_DrumAssign_Set:
 	ld a, l
 	extz wa
-	lda_24 xbc, 0xee8df4
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	ldada xbc, 0xc222
@@ -5707,7 +5707,7 @@ UIStateEvt_DrumAssign_Set:
 	ld a, l
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xee8d74
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0x7C
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld a, (xwa + 13)
 	and a, 0xf
@@ -5725,7 +5725,7 @@ UIStateEvt_TransposeUpdate:
 	jr z, UIStateEvt_TransposeUpdate_Clear
 	ld a, l
 	extz wa
-	lda_24 xbc, 0xee8df4
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	add wa, wa
@@ -5741,7 +5741,7 @@ UIStateEvt_TransposeUpdate:
 UIStateEvt_TransposeUpdate_Clear:
 	ld a, l
 	extz wa
-	lda_24 xbc, 0xee8df4
+	lda_24 xbc, AudioInit_VoiceDispatch_Table_0xFC
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	add wa, wa
@@ -5762,7 +5762,7 @@ UIStateEvt_ParamEdit_Data:
 	cps	wa, 6
 	jrl	gt, 601
 	add	wa, wa
-	lda_24	xix, 0xee8e48
+	lda_24	xix, AudioInit_VoiceDispatch_Table_0x150
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -5782,7 +5782,7 @@ UIStateEvt_ParamEdit_Data:
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 0xee8e28
+	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x130
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -5793,7 +5793,7 @@ UIStateEvt_ParamEdit_Data:
 	mul	d, 216
 	ccf
 	add	wa, wa
-	lda_24	xbc, 0xee8e28
+	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x130
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0, 0xe6
@@ -5807,7 +5807,7 @@ UIStateEvt_ParamEdit_Data:
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 0xee8e28
+	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x130
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0, 0xe6
@@ -5816,7 +5816,7 @@ UIStateEvt_ParamEdit_Data:
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 0xee8e28
+	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x130
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -5926,7 +5926,7 @@ UIStateEvt_ParamEdit_Data:
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 0xee8e28
+	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x130
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -5937,7 +5937,7 @@ UIStateEvt_ParamEdit_Data:
 	mul	d, 216
 	ccf
 	add	wa, wa
-	lda_24	xbc, 0xee8e28
+	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x130
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0, 0xe6
@@ -5950,7 +5950,7 @@ UIStateEvt_ParamEdit_Data:
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 0xee8e28
+	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x130
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0, 0xe6
@@ -5959,7 +5959,7 @@ UIStateEvt_ParamEdit_Data:
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 0xee8e28
+	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x130
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -6040,7 +6040,7 @@ UIStateEvt_VolumeMixer_Data:
 	cps	wa, 5
 	ret	gt
 	add	wa, wa
-	lda_24	xix, 0xee8e56
+	lda_24	xix, AudioInit_VoiceDispatch_Table_0x15E
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -6156,7 +6156,7 @@ UIStateEvt_VolumeMixer_Data:
 	jr	ge, 79
 	ld	wa, de
 	sla	wa, 2
-	lda_24	xbc, 0xee8d74
+	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x7C
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -6281,7 +6281,7 @@ UIStateEvt_EffectSelect_Data:
 	ldda8	a, 0xc07e
 	and	a, 255
 	extz	wa
-	lda_24	xbc, 0xee8e1c
+	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x124
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
@@ -6402,7 +6402,7 @@ UIStateEvt_ChannelConfig_Data:
 	ldda8	a, 0xfd04
 	and	a, 255
 	extz	wa
-	lda_24	xbc, 0xee8e1c
+	lda_24	xbc, AudioInit_VoiceDispatch_Table_0x124
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0

@@ -38,7 +38,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0dcb6
+	lda_24	xde, GUI_DisplayStructData_0xCD8
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -57,7 +57,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0dcfe
+	lda_24	xde, GUI_DisplayStructData_0xD20
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -76,7 +76,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0dd46
+	lda_24	xde, GUI_DisplayStructData_0xD68
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -95,7 +95,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0dd8e
+	lda_24	xde, GUI_DisplayStructData_0xDB0
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -114,7 +114,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0ddd6
+	lda_24	xde, GUI_DisplayStructData_0xDF8
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1793,7 +1793,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0de1e
+	lda_24	xde, GUI_DisplayStructData_0xE40
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1812,7 +1812,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0de66
+	lda_24	xde, GUI_DisplayStructData_0xE88
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1831,7 +1831,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0deae
+	lda_24	xde, GUI_DisplayStructData_0xED0
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1850,7 +1850,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0def6
+	lda_24	xde, GUI_DisplayStructData_0xF18
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1869,7 +1869,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0df3e
+	lda_24	xde, GUI_DisplayStructData_0xF60
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1888,7 +1888,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0df86
+	lda_24	xde, GUI_DisplayStructData_0xFA8
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1907,7 +1907,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0dfce
+	lda_24	xde, GUI_DisplayStructData_0xFF0
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1926,7 +1926,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e016
+	lda_24	xde, GUI_DisplayStructData_0x1038
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1945,7 +1945,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e05e
+	lda_24	xde, GUI_DisplayStructData_0x1080
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -1964,7 +1964,7 @@ Scoop_SoundEditorData:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e0a6
+	lda_24	xde, GUI_DisplayStructData_0x10C8
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)

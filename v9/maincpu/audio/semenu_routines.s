@@ -2388,7 +2388,7 @@ SeMenu_SetupPartDisplay_End:
 	ld	(xbc), 32
 	ret
 	extz	wa
-	lda_24	xde, 0xe0e107
+	lda_24	xde, GUI_DisplayStructData_0x1129
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -2398,7 +2398,7 @@ SeMenu_SetupPartDisplay_End:
 	ld	(xbc), 0
 	jr	14
 	extz	wa
-	lda_24	xde, 0xe0e168
+	lda_24	xde, GUI_DisplayStructData_0x118A
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -4755,7 +4755,7 @@ SeMenu_ApplyPartEdit_Data2:
 	div	a, 12
 	ld	a, w
 	extz	wa
-	lda_24	xde, 0xe0e0ee
+	lda_24	xde, GUI_DisplayStructData_0x1110
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -5065,7 +5065,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+24)
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 0xe0e0fb
+	lda_24	xbc, GUI_DisplayStructData_0x111D
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -6670,12 +6670,12 @@ SeMenu_StoreEffectCoeff_Data:
 	ld	(xbc), a
 	ret
 	lda	xsp, (xsp-40)
-	ld	xiy, 0xe0e1ea
+	ld	xiy, GUI_DisplayStructData_0x120C
 	lda	xix, (xsp+22)
 	.byte 0x85
 	rcf
 	ldiw
-	ld	xiy, 0xe0e1ed
+	ld	xiy, GUI_DisplayStructData_0x120F
 	lda	xix, (xsp+18)
 	.byte 0x85
 	rcf
@@ -6855,7 +6855,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e200
+	lda_24	xde, GUI_DisplayStructData_0x1222
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -6874,7 +6874,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e248
+	lda_24	xde, GUI_DisplayStructData_0x126A
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -6893,7 +6893,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e290
+	lda_24	xde, GUI_DisplayStructData_0x12B2
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -6912,7 +6912,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e2d8
+	lda_24	xde, GUI_DisplayStructData_0x12FA
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -7073,7 +7073,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lda	xbc, (xsp+2)
 	ld	a, (xsp+14)
 	extz	wa
-	lda_24	xde, 0xe0e320
+	lda_24	xde, GUI_DisplayStructData_0x1342
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -7092,7 +7092,7 @@ SeMenu_RefreshPartDisplay_Data:
 	jr	nz, 54
 	ld	a, (xsp+5)
 	extz	wa
-	lda_24	xbc, 0xe0e340
+	lda_24	xbc, GUI_DisplayStructData_0x1362
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0

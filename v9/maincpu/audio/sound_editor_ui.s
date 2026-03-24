@@ -3062,7 +3062,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e34d
+	lda_24	xde, GUI_DisplayStructData_0x136F
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -3081,7 +3081,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e395
+	lda_24	xde, GUI_DisplayStructData_0x13B7
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -3325,7 +3325,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+10)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e3dd
+	lda_24	xde, GUI_DisplayStructData_0x13FF
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -4131,7 +4131,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e425
+	lda_24	xde, ToneGen_ParamTable_0x1E
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -4150,7 +4150,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e46d
+	lda_24	xde, ToneGen_ParamTable_0x66
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -4169,7 +4169,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e4b5
+	lda_24	xde, ToneGen_ParamTable_0xAE
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -4188,7 +4188,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e4fd
+	lda_24	xde, ToneGen_ParamTable_0xF6
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -4207,7 +4207,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e545
+	lda_24	xde, ToneGen_ParamTable_0x13E
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -5850,7 +5850,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e58d
+	lda_24	xde, ToneGen_ParamTable_0x186
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -5869,7 +5869,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e6ad
+	lda_24	xde, ToneGen_ParamTable_0x2A6
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -5888,7 +5888,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e5d5
+	lda_24	xde, ToneGen_ParamTable_0x1CE
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -5907,7 +5907,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e61d
+	lda_24	xde, ToneGen_ParamTable_0x216
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -5938,7 +5938,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	c, (xsp+6)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 0xe0e665
+	lda_24	xde, ToneGen_ParamTable_0x25E
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -6424,7 +6424,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cp	wa, 11
 	jr	gt, 103
 	add	wa, wa
-	lda_24	xix, 0xe0e6f5
+	lda_24	xix, ToneGen_ParamTable_0x2EE
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -6490,7 +6490,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cp	wa, 9
 	jr	gt, 79
 	add	wa, wa
-	lda_24	xix, 0xe0e70d
+	lda_24	xix, ToneGen_ParamTable_0x306
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -6547,7 +6547,7 @@ SeMenu_CopyWriteUpdate_Data:
 	cps	wa, 5
 	jr	gt, 75
 	add	wa, wa
-	lda_24	xix, 0xe0e721
+	lda_24	xix, ToneGen_ParamTable_0x31A
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -7938,7 +7938,7 @@ SeMenu_PopupDialog_Close_Data:
 	sub a, 0x20
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe0e72d
+	lda_24 xbc, ToneGen_ParamTable_0x326
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	call (xhl)
 
@@ -8088,7 +8088,7 @@ SeMenu_ListSelector_HandleInput:
 	sub a, 0x20
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe0e72d
+	lda_24 xbc, ToneGen_ParamTable_0x326
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	call (xhl)
 	jr SeMenu_ListSelector_ScrollDown
@@ -13284,7 +13284,7 @@ SeBitmap_EnvCurve5:
 	nop
 	jrl	ugt, 17152
 	.byte 0x55, 0x52, 0x56
-	ld	xiy, 0xe00a22
+	ld	xiy, Bitmap_1bit_Completed_0x15C
 	ld	xiz, 0x6c010600
 	nop
 	.byte 0x01
@@ -16216,7 +16216,7 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0x50
 	ld	xbc, 0x4e494e4e
-	ld	xsp, 0xe80c17
+	ld	xsp, TextInput_Prop_NullTerm_0x1
 	.byte 0xd1, 0x00
 	.ascii "REVERB"
 	.byte 0x17
@@ -17321,7 +17321,7 @@ S2cGridCheck:
 	cp xwa, 0x6
 	jrl gt, S2c_GridCheck_EventEnc
 	add xwa, xwa
-	add xwa, 0xe1d78e
+	add xwa, StrBeatOff_0x4
 	ld wa, (xwa)
 	lda_24 xix, S2c_GridCheck_DataBlock
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -17382,7 +17382,7 @@ S2c_GridCheck_Dispatch:
 	dec 2, a
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1d736
+	lda_24 xbc, StrTranspose_Minus25_0x12
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld a, (xwa)
 	extz wa
@@ -17686,7 +17686,7 @@ PsCmpCpFPtnBox_HandleEvtBC:
 	ldda8 a, 0x34ef
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1d79c
+	lda_24 xbc, StrBeatOff_0x12
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 16)
@@ -17849,10 +17849,10 @@ PsCstmCpSwBox_HandleEvtBC:
 	lda xbc, (xsp + 4)
 	cp (xhl + 36), 0x0
 	jr nz, PsCstmCpSwBox_ReadParam2
-	ld xwa, 0xe1db64
+	ld xwa, StrRhySlot_MemoryA_0x12
 	cpdi8 0x39b6, 10
 	jr nc, PsCstmCpSwBox_PushTableAddr0
-	ld xwa, 0xe1db5c
+	ld xwa, StrRhySlot_MemoryA_0xA
 
 PsCstmCpSwBox_PushTableAddr0:
 	push xwa
@@ -17860,10 +17860,10 @@ PsCstmCpSwBox_PushTableAddr0:
 	jr PsCstmCpSwBox_SendCommand
 
 PsCstmCpSwBox_ReadParam2:
-	ld xwa, 0xe1db74
+	ld xwa, StrRhySlot_MemoryA_0x22
 	cpdi8 0x39b7, 10
 	jr nc, PsCstmCpSwBox_PushTableAddr1
-	ld xwa, 0xe1db6c
+	ld xwa, StrRhySlot_MemoryA_0x1A
 
 PsCstmCpSwBox_PushTableAddr1:
 	push xwa
@@ -18075,7 +18075,7 @@ AcMemNoBox_HandleEvtBC:
 	ldda8 a, 0x34d6
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1db7c
+	lda_24 xbc, StrRhySlot_MemoryA_0x2A
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 16)
@@ -18191,7 +18191,7 @@ AcCmpRecBox_HandleEvtBC:
 	ld e, (xiz + 36)
 	ldda8 a, 0x379b
 	and a, e
-	lda_24 xhl, 0xe1dd08
+	lda_24 xhl, StrStyleSect2_A_Vari1_0x8
 	lda xbc, (xsp + 16)
 	cp a, e
 	jr nz, AcCmpRecBox_CheckParam2
@@ -18689,7 +18689,7 @@ AcEasyCmpGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, EasyCmp_GridCheck_Case4
 	add xbc, xbc
-	add xbc, 0xe1de4c
+	add xbc, StyleVarGrp_AEnd2b_0x2
 	ld bc, (xbc)
 	lda_24 xix, EasyCmp_DialGrid
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -18904,7 +18904,7 @@ EasyCmpGridCheck:
 	cp xwa, 0x6
 	jrl gt, EasyCmp_GridCheck_EventCase4
 	add xwa, xwa
-	add xwa, 0xe1df16
+	add xwa, StrGenre_8Beat_0x1A
 	ld wa, (xwa)
 	lda_24 xix, EasyCmp_GridCheck_DataBlock
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -18997,7 +18997,7 @@ EasyCmp_GridEvtEnc_Case2:
 	ld a, (xwa)
 	cps a, 0
 	jr nz, EasyCmp_GridCheck_EventCase2
-	ld xwa, 0xe1df0e
+	ld xwa, StrGenre_8Beat_0x12
 	push xwa
 
 ; EasyCmpGridCheck event case 1
@@ -19036,7 +19036,7 @@ MspNameBnkFunc:
 	push xiz
 	ld xhl, xbc
 	ld xiz, xwa
-	ld xiy, 0xe1df24
+	ld xiy, StrGenre_8Beat_0x28
 	lda xix, (xsp + 4)
 	ldw bc, 0x8
 	ldirw
@@ -19049,7 +19049,7 @@ MspNameBnkFunc:
 	cp xwa, 0x9
 	jr gt, MspNaming_CleanupExit
 	add xwa, xwa
-	add xwa, 0xe1df5c
+	add xwa, StrBankShort_User1_0xA
 	ld wa, (xwa)
 	lda_24 xix, EasyCmp_GridEvtCase_Default
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -19911,7 +19911,7 @@ MspRGrpSetGridCheck:
 	cp xwa, 0x6
 	jrl gt, RgpSetBnk_GridCheck_Return
 	add xwa, xwa
-	add xwa, 0xe1e2c2
+	add xwa, StrMsBankLong2_Effect1_0x18
 	ld wa, (xwa)
 	lda_24 xix, MspRGrpSetGridCheck_DataBlock
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -20082,7 +20082,7 @@ RgpSetBnkBox_HandleEvtBC:
 	ldda8 a, 0x7f3d
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1e2d0
+	lda_24 xbc, StrMsBankLong2_Effect1_0x26
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 8)
@@ -20435,7 +20435,7 @@ MspPlayModeFunc:
 	ld xiz, xde
 	ld xde, xbc
 	ld (xsp + 12), xwa
-	ld xiy, 0xe1e318
+	ld xiy, StrCompileBank1_0x30
 	lda xix, (xsp + 4)
 	lds bc, 4
 	ldirw
@@ -20448,7 +20448,7 @@ MspPlayModeFunc:
 	cp xwa, 0x9
 	jr gt, AcSndArgGrid_BoxCase1
 	add xwa, xwa
-	add xwa, 0xe1e344
+	add xwa, StrInstantStart_0x12
 	ld wa, (xwa)
 	lda_24 xix, MspPlayModeFunc_DataBlock
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -20500,7 +20500,7 @@ AcSndArgGridBoxProc:
 	ld (xsp + 18), xde
 	ld xiz, xbc
 	ld (xsp + 22), xwa
-	ld xiy, 0xe1e358
+	ld xiy, StrInstantStart_0x26
 	lda xix, (xsp + 12)
 	lds bc, 2
 	ldirw
@@ -20526,7 +20526,7 @@ AcSndArgGridBoxProc:
 	cp xwa, 0x6
 	jrl gt, AcSndArgGrid_ForwardToBase
 	add xwa, xwa
-	add xwa, 0xe1e35e
+	add xwa, StrInstantStart_0x2C
 	ld wa, (xwa)
 	lda_24 xix, AcSndArgGrid_Init
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -20874,7 +20874,7 @@ SndArgGridCheck:
 	cp xwa, 0x6
 	jrl gt, SndArgGridCheck_Return
 	add xwa, xwa
-	add xwa, 0xe1e36c
+	add xwa, StrInstantStart_0x3A
 	ld wa, (xwa)
 	lda_24 xix, SndArgGridCheck_JumpTableFallthrough
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -21932,7 +21932,7 @@ CmpNameMenu_Epilogue:
 AttLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, AttLangCheck_ReturnZero
-	lda_24 xhl, 0xe1e516
+	lda_24 xhl, MSG_ATTENTION_ID_0xC
 	ret
 
 AttLangCheck_ReturnZero:
@@ -21942,7 +21942,7 @@ AttLangCheck_ReturnZero:
 SureLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, SureLangCheck_ReturnZero
-	lda_24 xhl, 0xe1e596
+	lda_24 xhl, MSG_ARE_YOU_SURE_ID_0x1C
 	ret
 
 SureLangCheck_ReturnZero:
@@ -21952,7 +21952,7 @@ SureLangCheck_ReturnZero:
 SndMemLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, SndMemLangCheck_ReturnZero
-	lda_24 xhl, 0xe1e994
+	lda_24 xhl, MSG_CUSTOM_SOUND_COPY_ID_0x8E
 	ret
 
 SndMemLangCheck_ReturnZero:
@@ -21962,7 +21962,7 @@ SndMemLangCheck_ReturnZero:
 SndMem1LangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, SndMem1LangCheck_ReturnZero
-	lda_24 xhl, 0xe1ea88
+	lda_24 xhl, MSG_SOUND_GROUP_AFFECTED_ID_0x24
 	ret
 
 SndMem1LangCheck_ReturnZero:
@@ -21972,7 +21972,7 @@ SndMem1LangCheck_ReturnZero:
 MemfulLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, MemfulLangCheck_ReturnZero
-	lda_24 xhl, 0xe1ed64
+	lda_24 xhl, MSG_CUSTOM_SOUND_FULL_ID_0x7C
 	ret
 
 MemfulLangCheck_ReturnZero:
@@ -21982,7 +21982,7 @@ MemfulLangCheck_ReturnZero:
 Memful2LangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, Memful2LangCheck_ReturnZero
-	lda_24 xhl, 0xe1ee2c
+	lda_24 xhl, MSG_CUSTOM_RHYTHMS_AFFECTED_ID_0x1E
 	ret
 
 Memful2LangCheck_ReturnZero:
@@ -21992,7 +21992,7 @@ Memful2LangCheck_ReturnZero:
 StylCnvLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StylCnvLangCheck_ReturnZero
-	lda_24 xhl, 0xe1ef42
+	lda_24 xhl, MSG_INSERT_STYLE_CONVERT_ID_0x26
 	ret
 
 StylCnvLangCheck_ReturnZero:

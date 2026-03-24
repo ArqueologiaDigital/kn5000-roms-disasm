@@ -1186,7 +1186,7 @@ AccompSeq_LookupStyle_Internal:
 	xor xwa, xwa
 	ldw wa, 0x20
 	mul xwa, xhl
-	add xwa, 0xe4c1a6
+	add xwa, NakaInst_OFF_Str_0xD4
 	stda16 0x7e2a, xwa
 	ldto_werp WA, 0xe2
 	stda16 0x7e28, xwa

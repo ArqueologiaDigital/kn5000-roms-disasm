@@ -238,7 +238,7 @@ WndScroll_ItemCountCheck:
 	add bc, wa
 	extz xbc
 	add xbc, xbc
-	ld xde, 0xea9ede
+	ld xde, Data_SoundEditorCharsLayout_0xC
 	add xde, xbc
 	cp iz, (xde)
 	jr ule, WndScroll_DrawSingleItem
@@ -258,7 +258,7 @@ WndEvt_DispatchByEventCode:
 	cp xwa, 0x8
 	jrl ugt, UIDialog_ReturnZeroJmp
 	add xwa, xwa
-	add xwa, 0xea9ef6
+	add xwa, Data_SoundEditorCharsLayout_0x24
 	ld wa, (xwa)
 	lda_24 xix, WndEvt_EventCodeDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -401,7 +401,7 @@ WndEvt_EventCodeDispatch:
 	addda16_24	wa, 0x0274da
 	extz	xwa
 	add	xwa, xwa
-	lda_24	xde, 0xea9ede
+	lda_24	xde, Data_SoundEditorCharsLayout_0xC
 	ld	xbc, xde
 	add	xbc, xwa
 	ld16_24	wa, 0x0274de
@@ -493,7 +493,7 @@ WndEvt_EventCodeDispatch:
 	add	wa, bc
 	extz	xwa
 	add	xwa, xwa
-	ld	xbc, 0xea9ede
+	ld	xbc, Data_SoundEditorCharsLayout_0xC
 	add	xbc, xwa
 	ld16_24	wa, 0x0274de
 	ld	de, wa
@@ -845,7 +845,7 @@ WndScroll_SendSelectionEvents:
 	ld16_24 xwa, 0x0274da
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0xea9bf2
+	ld xbc, DiskWarning_ConfirmStrings_0xF46
 	add xbc, xwa
 	ld xde, (xbc)
 	ld xwa, 0x1d
@@ -872,7 +872,7 @@ WndScroll_HandleCharInput:
 	ld a, (xwa)
 	ld c, a
 	extz bc
-	lda_24 xhl, 0xeed778
+	lda_24 xhl, CharMap_FullPermutation_0x660
 	ld_srib3 C, 0x07, 0xec, 0xe4
 	bit 0, c
 	jr z, WndScroll_CharIsUppercase
@@ -932,7 +932,7 @@ WndScroll_SetUnderscoreOffset:
 	jr WndScroll_SendPageEvents
 
 WndScroll_SearchCharTable:
-	lda_24 xwa, 0xea9e00
+	lda_24 xwa, DiskWarning_ConfirmStrings_0x1154
 	ld (xsp + 8), xwa
 	lds iz, 0
 	jr WndScroll_CheckTableEnd
@@ -964,7 +964,7 @@ WndScroll_CheckTableEnd:
 	inc 2, wa
 	extz xwa
 	add xwa, xwa
-	ld xbc, 0xea9ede
+	ld xbc, Data_SoundEditorCharsLayout_0xC
 	add xbc, xwa
 	cp iz, (xbc)
 	jr ule, WndScroll_CompareCharLoop
@@ -1016,7 +1016,7 @@ WndScroll_HandleDialPage:
 	ld bc, wa
 	extz xbc
 	add xbc, xbc
-	ld xwa, 0xea9ede
+	ld xwa, Data_SoundEditorCharsLayout_0xC
 	add xwa, xbc
 	ld wa, (xwa)
 	cpdm16_24 0x0274de, xwa
@@ -1533,7 +1533,7 @@ UserBitmapCheck:
 	ret
 
 UserBitmapCheck_ReturnTablePtr:
-	lda_24 xhl, 0xea9f20
+	lda_24 xhl, Data_SoundEditorCharsLayout_0x4E
 	ret
 
 UserBitmapCheck_ReturnSize:
@@ -1950,11 +1950,11 @@ EditSw_ByteData:
 	jr	z, 20
 	cpw	(xwa), 0
 	jr	nz, 7
-	ld	xwa, 0xeaa166
+	ld	xwa, Data_SoundEditorCharsLayout_0x294
 	jr	12
-	ld	xwa, 0xeaa16a
+	ld	xwa, Data_SoundEditorCharsLayout_0x298
 	jr	5
-	ld	xwa, 0xeaa16e
+	ld	xwa, Data_SoundEditorCharsLayout_0x29C
 	push	xwa
 	push	xbc
 	call	Strcpy
@@ -2077,15 +2077,15 @@ DrawEditSw:
 	jr z, DrawEditSw_SelectVariantC
 	cpw (xwa), 0x0
 	jr nz, DrawEditSw_SelectVariantA
-	ld xwa, 0xeaa172
+	ld xwa, Data_SoundEditorCharsLayout_0x2A0
 	jr DrawEditSw_CopyVariant
 
 DrawEditSw_SelectVariantA:
-	ld xwa, 0xeaa176
+	ld xwa, Data_SoundEditorCharsLayout_0x2A4
 	jr DrawEditSw_CopyVariant
 
 DrawEditSw_SelectVariantC:
-	ld xwa, 0xeaa17a
+	ld xwa, Data_SoundEditorCharsLayout_0x2A8
 
 DrawEditSw_CopyVariant:
 	push xwa
@@ -3922,7 +3922,7 @@ PsGridBoxProc:
 	cp xbc, 0x7
 	jrl gt, PsGridBox_Default
 	add xbc, xbc
-	add xbc, 0xeaa248
+	add xbc, Data_SoundEditorCharsLayout_0x376
 	ld bc, (xbc)
 	lda_24 xix, PsGridBox_Init
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -4381,7 +4381,7 @@ DrawDesignBox_CheckStyle80:
 ; Draw dispatch by part type
 Draw_DispatchByPartType:
 	add wa, wa
-	lda_24 xix, 0xeaae16
+	lda_24 xix, Str_No_0xB00
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, Draw_StyledBoxWithFrame
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -4875,7 +4875,7 @@ DrawDesignBox_PartGroupStyle:
 ; DrawPartGroup dispatch by type
 DrawPartGroup_DispatchByType:
 	add wa, wa
-	lda_24 xix, 0xeaadf6
+	lda_24 xix, Str_No_0xAE0
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, DrawPartGroup_TableJump_DefaultCase
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -6934,7 +6934,7 @@ CaptureLcd:
 	call GetDiskSizeInfo
 	call GetEncodedFileSizeData
 	lda xwa, (xsp + 2)
-	ld xbc, 0xeaae5e
+	ld xbc, Str_No_0xB48
 	call FileIO_OpenWithMode
 	cps hl, 0
 	jrl nz, CaptureLcd_WriteFailed
@@ -7076,7 +7076,7 @@ ChangeWall_Impl:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	ld xwa, 0xeaae62
+	ld xwa, Str_No_0xB4C
 	add xwa, xbc
 	ld xwa, (xwa)
 	st32_24 0x03ef98, xwa
@@ -7196,7 +7196,7 @@ ChangePalette_Impl:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	lda_24 xwa, 0xeaae66
+	lda_24 xwa, Str_No_0xB50
 	add xwa, xbc
 	ld xwa, (xwa)
 	st32_24 0x03ef94, xwa
@@ -7423,7 +7423,7 @@ ClipBlit_Replace_ScanlineLoop:
 	pushw bc
 	call Math_AbsInt16
 	add hl, hl
-	lda_24	xwa, 0xeaae94
+	lda_24	xwa, Str_No_0xB7E
 	ld_rrw	de, xwa, hl
 	ldw bc, 0x001e
 	sub bc, de
