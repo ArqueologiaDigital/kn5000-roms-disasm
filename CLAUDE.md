@@ -1096,3 +1096,58 @@ See `../kn5000-docs/memory-map.md` for the complete memory layout including all 
 The main blocking issue is that ASL only supports TMP96C141, not TMP94C241F. Unsupported instructions are emitted as raw bytes via macros in `tmp94c241.inc`.
 
 See `../kn5000-docs/reverse-engineering.md` for detailed toolchain notes and workarounds.
+
+## Cross-Version Diff Minimization Policies (STRICT)
+
+These policies govern how multi-version source trees are maintained to ensure that cross-version diffs show ONLY genuine firmware differences, with zero formatting noise.
+
+### 1. Symbolic References (STRICT)
+All code and data references must use symbolic labels, never raw numeric addresses:
+- **Instructions:** `call`, `jp`, `calr`, `jr`, `jrl`, `lda_24`, `ld` with ROM addresses must use label names.
+- **Data pointers:** `.long` pointer tables must use `.long LABEL`, not `.long 0x00NNNNNN`.
+- **Embedded 24-bit addresses in bytecode/data tables:** Use the `addr24` macro with a `.set` constant:
+  ```asm
+  .set _addr24_Mem_Copy, 0xff0d99  ; version-specific address
+  addr24 _addr24_Mem_Copy          ; emits 3-byte LE address
+  ```
+- **Missing symbols:** When a target address has no symbol, create one with a semantic name derived from code analysis.
+- **Mid-instruction addresses:** When a pointer targets a byte inside a multi-byte instruction (not an entry point), define it as `.set LABEL, ParentLabel + N` with a comment explaining the mid-structure offset.
+
+### 2. Lowercase Hex (STRICT)
+All hex values must use lowercase `a-f`. Applies to `.byte`, `.long`, instruction immediates, and hex in comments. Does NOT apply to hex digits in symbol names (e.g., `NAKA_TYPE_0x5D` keeps its case).
+
+### 3. Tab-After-Mnemonic Formatting (STRICT)
+All instruction lines must use tab between mnemonic and operand: `	call	LABEL`, not `	call LABEL`. This ensures cross-version diffs show only semantic differences, not whitespace noise.
+
+### 4. No Faux-Instructions in Data (STRICT)
+Data bytes must NOT be represented as TLCS-900 instructions. If a region contains bytecode, data tables, or non-CPU-code binary data, it must be represented as:
+- **C structs with semantically named fields** compiled via the clang pipeline (preferred). Field names must derive from actual code analysis showing how the firmware uses each field.
+- **`.byte` directives with explanatory comments** (acceptable as an intermediate step before struct definition is understood).
+- Raw `.byte` without annotation is never acceptable for structured data.
+
+### 5. Canonical Label Names (STRICT)
+Each address must have exactly one label name. No aliases (`__jrt_nop_XXXXXX`, redundant `_Entry` suffixes, etc.) unless they serve a documented purpose. When multiple names exist for the same address, pick the most semantically descriptive one and remove the aliases. Original Matsushita debug symbol names (e.g., `assswb_op`, `sendCOMM`) must be preserved in comments, not as live labels.
+
+### 6. Label Placement (STRICT)
+Labels must be placed at instruction/data boundaries, never in the middle of a multi-byte instruction encoding. When disassembling, verify that labels don't split instructions by checking that the bytes after the label form a valid instruction.
+
+### 7. Decimal-to-Hex Immediates (STRICT)
+Large numeric immediates (addresses, bitmasks, buffer sizes) must use hex notation. Small values used as counts, indices, or arithmetic (0-255) may remain decimal. Rule of thumb: if the value represents an address or hardware/memory constant, use hex.
+
+### 8. Consistent Signed/Unsigned Displacements (STRICT)
+`calr` and `jrl` displacements must use the same sign convention across all versions. Prefer unsigned 16-bit representation (matching assembler output) unless the displacement is small and clearly negative (within -128..+127).
+
+### 9. Multi-Version Sync (STRICT)
+Every edit must be applied to ALL versions where the same code exists. After any change to one version, check all other versions for the same code and apply the equivalent fix. Always rebuild and verify byte-match on ALL versions after edits.
+
+### 10. Diff and Documentation Regeneration (STRICT)
+After any codebase change affecting cross-version comparisons:
+- Regenerate diff files in `diffs/`.
+- Update the website report if numbers changed.
+- Update the website report if the cleaner diff reveals new insights about what actually changed between versions (e.g., discovering that a "code change" was actually a data table pointer adjustment).
+
+### 11. Native Instructions Over .byte (STRICT)
+Executable code must be represented as native TLCS-900 instructions, not raw `.byte` directives. When creating a new version's source from ROM bytes, disassemble all code regions to native instructions. `.byte` fallbacks are acceptable ONLY for: (a) genuinely unknown instruction encodings not supported by the LLVM backend, (b) data bytes that are not executable code.
+
+### 12. All Content Reachable via Website Sidebar (STRICT)
+Every documentation page added to the website (`/mnt/shared/kn5000-docs/`) must have a corresponding entry in `_data/navigation.yml`. No orphan pages.

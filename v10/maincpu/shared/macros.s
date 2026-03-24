@@ -122,3 +122,11 @@
 .macro naka_header type
 	.byte \type, 0x00, 0x60, 0x01
 .endm
+
+; addr24 - Emit a 24-bit little-endian address from a .set constant
+; Usage: addr24 _addr24_SymbolName
+; Used for embedded addresses in bytecode/data tables where the
+; assembler cannot emit 3-byte relocations for positional labels.
+.macro addr24 sym
+	.byte (\sym & 0xff), ((\sym >> 8) & 0xff), ((\sym >> 16) & 0xff)
+.endm
