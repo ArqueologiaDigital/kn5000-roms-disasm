@@ -27713,11 +27713,8 @@ HdaeRom_DataDispatch:
 	nop
 	jr	nz, -75
 	jr	107
-	.byte 0xc3
-	swi	5
-	.byte 0xb8, 0x01
-	ldb	a, 216
-	ccf
+	ld	a, (xsp+440)
+	extz	wa
 	ld	(xsp+4), wa
 	jr	81
 	ld	wa, (xsp+4)
