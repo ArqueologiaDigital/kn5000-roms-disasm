@@ -407,7 +407,7 @@ Rhythm_CrossVoice_Apply:
 	sub w, 0xc
 	stda8 0x332e, w
 	ordi8 0x332d, 1
-	ld xiy, 0xe46142
+	ld xiy, Display_FontPalette_Table_0x12EA_
 	ld_srib3 W, 0x03, 0xf4, 0xe0
 	sub a, w
 	pop xiy
@@ -423,7 +423,7 @@ Rhythm_NoteRangeCheck:
 	jr z, Rhythm_NoteRangeReturn
 	push xiy
 	ld w, a
-	ld xiy, 0xe46142
+	ld xiy, Display_FontPalette_Table_0x12EA_
 	ld_srib3 W, 0x03, 0xf4, 0xe0
 	sub a, w
 	pop xiy
@@ -463,18 +463,18 @@ Rhythm_VelLookA_SelectTable:
 	ld xiy, Rhythm_InstrMapTable_Default
 	bitda 2, 0x32f4
 	jr z, Rhythm_VelLookA_CheckBit3
-	ld xiy, 0xf550fb
+	ld xiy, Rhythm_InstrMapTable_Default_0x31_
 
 Rhythm_VelLookA_CheckBit3:
 	bitda 3, 0x32f4
 	jr z, Rhythm_VelLookA_TableLookup
-	ld xiy, 0xf5512c
+	ld xiy, Rhythm_InstrMapTable_Default_0x62_
 
 Rhythm_VelLookA_TableLookup:
 	ld_srib3 L, 0x03, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, 0xe461c2
+	ld xiy, Display_FontPalette_Table_0x136A_
 	st_dri3b E, 0x07, 0xf4, 0xec
 	ld_srib3 A, 0x03, 0xf4, 0xe0
 	add w, a
@@ -487,7 +487,7 @@ Rhythm_VelLookA_Done:
 
 Rhythm_InstrBaseLookup:
 	push xiy
-	ld xiy, 0xe46142
+	ld xiy, Display_FontPalette_Table_0x12EA_
 	st_dri3b E, 0x03, 0xf4, 0xe0
 	ld a, (xiy)
 	pop xiy
@@ -591,7 +591,7 @@ Rhythm_VoiceMap_ClampInstr:
 	ld xiy, Rhythm_PitchShiftTable_Default
 	bitda 3, 0x32f4
 	jr z, Rhythm_VoiceMap_SelectTable
-	ld xiy, 0xf552a0
+	ld xiy, Rhythm_PitchShiftTable_Default_0x31_
 
 Rhythm_VoiceMap_SelectTable:
 	ld_srib3 L, 0x03, 0xf4, 0xec
@@ -631,18 +631,18 @@ Rhythm_VoiceMap_Inst2Clamp:
 	ld xiy, Rhythm_InstrMapTable_Default
 	bitda 2, 0x32f4
 	jr z, Rhythm_VoiceMap_Inst2Bit2
-	ld xiy, 0xf550fb
+	ld xiy, Rhythm_InstrMapTable_Default_0x31_
 
 Rhythm_VoiceMap_Inst2Bit2:
 	bitda 3, 0x32f4
 	jr z, Rhythm_VoiceMap_Inst2Bit3
-	ld xiy, 0xf5512c
+	ld xiy, Rhythm_InstrMapTable_Default_0x62_
 
 Rhythm_VoiceMap_Inst2Bit3:
 	ld_srib3 L, 0x03, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, 0xe461c2
+	ld xiy, Display_FontPalette_Table_0x136A_
 	st_dri3b E, 0x07, 0xf4, 0xec
 	ld_srib3 A, 0x03, 0xf4, 0xe0
 	add w, a
@@ -695,13 +695,13 @@ Rhythm_VelComp_SelectTable:
 	ld xiy, Rhythm_VelocityTable_A
 	bitda 2, 0x32f4
 	jr z, Rhythm_VelComp_Lookup
-	ld xiy, 0xf5535f
+	ld xiy, Rhythm_VelocityTable_A_0x31_
 
 Rhythm_VelComp_Lookup:
 	ld_srib3 L, 0x03, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, 0xe461c2
+	ld xiy, Display_FontPalette_Table_0x136A_
 	st_dri3b E, 0x07, 0xf4, 0xec
 	ld_srib3 A, 0x03, 0xf4, 0xe0
 	add w, a
@@ -1534,7 +1534,7 @@ Rhythm_TranspMod_Done:
 
 Rhythm_TranspMod_BaseApply:
 	ld w, a
-	ld xiy, 0xe46142
+	ld xiy, Display_FontPalette_Table_0x12EA_
 	ld_srib3 A, 0x03, 0xf4, 0xe0
 	ldda8 l, 0x32d8
 	cp l, 0x30
@@ -1543,11 +1543,11 @@ Rhythm_TranspMod_BaseApply:
 
 Rhythm_TranspMod_BaseLookup:
 	extz hl
-	ld xiy, 0xf550fb
+	ld xiy, Rhythm_InstrMapTable_Default_0x31_
 	ld_srib3 L, 0x07, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, 0xe461c2
+	ld xiy, Display_FontPalette_Table_0x136A_
 	st_dri3b E, 0x07, 0xf4, 0xec
 	ld_srib3 A, 0x03, 0xf4, 0xe0
 	add w, a

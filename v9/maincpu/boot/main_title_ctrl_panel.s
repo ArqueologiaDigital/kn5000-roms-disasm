@@ -167,7 +167,7 @@ SndParam_SendDiskMenuEvents:
 	ld xde, xiz
 	ld xwa, xde
 	sll xwa, 2
-	ld xbc, 0xea9966
+	ld xbc, DiskWarning_ConfirmStrings_0xCBA_
 	add xbc, xwa
 	ld xwa, (xbc)
 	ordm32_24 0x02749a, xwa
@@ -187,7 +187,7 @@ CtrlPanel_CheckDiskMenuRelease:
 	call ApPostEvent
 	ld xwa, xiz
 	sll xwa, 2
-	ld xbc, 0xea9966
+	ld xbc, DiskWarning_ConfirmStrings_0xCBA_
 	add xbc, xwa
 	ld xwa, (xbc)
 	cpl wa
@@ -218,7 +218,7 @@ CtrlPanel_ProcessButtonPress:
 	ld xde, xiz
 	ld xwa, xde
 	sll xwa, 2
-	ld xbc, 0xea9966
+	ld xbc, DiskWarning_ConfirmStrings_0xCBA_
 	add xbc, xwa
 	ld xwa, (xbc)
 	ordm32_24 0x02749e, xwa
@@ -238,7 +238,7 @@ CtrlPanel_CheckButtonRelease:
 	call ApPostEvent
 	ld xwa, xiz
 	sll xwa, 2
-	ld xbc, 0xea9966
+	ld xbc, DiskWarning_ConfirmStrings_0xCBA_
 	add xbc, xwa
 	ld xwa, (xbc)
 	cpl wa
@@ -309,7 +309,7 @@ CtrlPanel_HandleSerialPort:
 	add a, 0x10
 	exts wa
 	sla wa, 2
-	lda_24 xbc, 0xea98e2
+	lda_24 xbc, DiskWarning_ConfirmStrings_0xC36_
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001f

@@ -48,20 +48,20 @@
 FDLoadSaveTest:
 	dec 4, xsp
 	push xiz
-	lda_24 xwa, 0xe1fe56
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x118
 	calr FDTest_PrintDiag
-	lda_24 xwa, 0xe1fe46
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x108
 	push xwa
 	call FileOpenDefault
 	inc 4, xsp
 	cps hl, 0
 	jr z, FDTest_OpenFailed
-	lda_24 xwa, 0xe1fe66
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x128
 	calr FDTest_PrintDiag
 	jr FDTest_AllocBuffer
 
 FDTest_OpenFailed:
-	lda_24 xwa, 0xe1fe6e
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x130
 	calr FDTest_PrintDiag
 
 FDTest_AllocBuffer:
@@ -72,7 +72,7 @@ FDTest_AllocBuffer:
 	ld xwa, xhl
 	or xwa, xwa
 	jr nz, FDTest_FillBuffer
-	lda_24 xwa, 0xe1fe72
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x134
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -94,16 +94,16 @@ FDTest_FillLoop:
 	jr c, FDTest_FillLoop
 
 FDTest_OpenForWrite:
-	lda_24 xwa, 0xe1fe86
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x148
 	push xwa
-	lda_24 xwa, 0xe1fe46
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x108
 	push xwa
 	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, FDTest_WriteBuffer
-	lda_24 xwa, 0xe1fe8a
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x14C
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -113,7 +113,7 @@ FDTest_OpenForWrite:
 	jrl FDTest_Return
 
 FDTest_WriteBuffer:
-	lda_24 xwa, 0xe1fea2
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x164
 	calr FDTest_PrintDiag
 	push xiz
 	pushw 0x800
@@ -124,7 +124,7 @@ FDTest_WriteBuffer:
 	lda xsp, (xsp + 12)
 	cp hl, 0x800
 	jr z, FDTest_CloseAndReopen
-	lda_24 xwa, 0xe1feb2
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x174
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -134,7 +134,7 @@ FDTest_WriteBuffer:
 	jrl FDTest_Return
 
 FDTest_CloseAndReopen:
-	lda_24 xwa, 0xe1feba
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x17C
 	calr FDTest_PrintDiag
 	push xiz
 	call FileClose
@@ -144,18 +144,18 @@ FDTest_CloseAndReopen:
 	push xwa
 	call Memset
 	lda xsp, (xsp + 12)
-	lda_24 xwa, 0xe1febe
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x180
 	calr FDTest_PrintDiag
-	lda_24 xwa, 0xe1fecc
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x18E
 	push xwa
-	lda_24 xwa, 0xe1fe46
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x108
 	push xwa
 	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, FDTest_ReadBack
-	lda_24 xwa, 0xe1fed0
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x192
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -174,7 +174,7 @@ FDTest_ReadBack:
 	lda xsp, (xsp + 12)
 	cp hl, 0x800
 	jr z, FDTest_VerifyData
-	lda_24 xwa, 0xe1fee8
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x1AA
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -184,7 +184,7 @@ FDTest_ReadBack:
 	jr FDTest_Return
 
 FDTest_VerifyData:
-	lda_24 xwa, 0xe1fef0
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x1B2
 	calr FDTest_PrintDiag
 	push xiz
 	call FileClose
@@ -206,11 +206,11 @@ FDTest_CompareNext:
 	jr c, FDTest_CompareLoop
 
 FDTest_CompareResult:
-	lda_24 xwa, 0xe1fef4
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x1B6
 	calr FDTest_PrintDiag
 	cps iz, 0
 	jr z, FDTest_Pass
-	lda_24 xwa, 0xe1ff06
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x1C8
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -224,7 +224,7 @@ FDTest_Pass:
 	push xwa
 	call Free
 	inc 4, xsp
-	lda_24 xwa, 0xe1ff16
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x1D8
 	calr FDTest_PrintDiag
 	lds hl, 0
 
@@ -245,7 +245,7 @@ FDListDirectory:
 	lda xsp, (xsp - 266)
 	push xiz
 	lds wa, 0
-	lda_24 xwa, 0xe1ff1a
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x1DC
 	lda xbc, (xsp + 4)
 	call _findfirst
 	ld xiz, xhl
@@ -306,7 +306,7 @@ FDTestDialogProc:
 	cp xwa, 0x6
 	jr gt, FDTestDlg_Unhandled
 	add xwa, xwa
-	add xwa, 0xe1ff34
+	add xwa, FDTest_String_TestTitleFunc_0x1F6
 	ld wa, (xwa)
 	lda_24 xix, FDTestDlg_DefaultCase
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -321,7 +321,7 @@ FDTestDlg_FormatDisplay:
 	ldi_werp 0xe2, 0
 	.byte 0xbf, 0x00, 0x50	; ld (xsp + 0), wa
 	ld (xsp + 2), de
-	lda_24 xwa, 0xe1ff1e
+	lda_24 xwa, FDTest_String_TestTitleFunc_0x1E0
 	ld (xsp + 4), xwa
 	call GetFocusObject
 	lda xwa, (xsp)

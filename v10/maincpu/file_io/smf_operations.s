@@ -204,7 +204,7 @@ RenderSmfFilename:
 	extz bc
 	stib_dri 0x07, 0xe0, 0xe4, 0x00
 	lds ix, 0
-	lda_24 xhl, 0xeed778
+	lda_24 xhl, CharMap_FullPermutation_0x660
 	jr RenderSmf_LoopCheck
 
 RenderSmf_CheckSeparator:
@@ -292,7 +292,7 @@ SaveFN_HandleApply:
 	ldw bc, 0x8
 	calr RenderSmfFilename
 	ld xwa, 0x8850
-	ld xbc, 0xea0736
+	ld xbc, DiskOp_ChannelCfgTable_0xCA
 	call FileIO_BuildFilePath
 	ld xwa, 0x8850
 	call FileIO_WriteRecordName
@@ -315,7 +315,7 @@ SmfSeqToSongNumFunc:
 SeqToSong_BuildEntry:
 	ldada xwa, 0x8094
 	stib_dpi 0xe0, 0x00
-	ld xbc, 0xea073c
+	ld xbc, DiskOp_ChannelCfgTable_0xD0
 	call FileIO_CopyString
 	ldada xiz, 0x8095
 	ldda8 a, 0x8948
@@ -348,7 +348,7 @@ SmfSeqFromSongNumFunc:
 SeqFromSong_BuildEntry:
 	ldada xwa, 0x8118
 	stib_dpi 0xe0, 0x00
-	ld xbc, 0xea0748
+	ld xbc, DiskOp_ChannelCfgTable_0xDC
 	call FileIO_CopyString
 	ldada xiz, 0x8119
 	ldda8 a, 0x8948
@@ -404,7 +404,7 @@ SmfLoadAs_Apply:
 	ldda8 a, 0x8946
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xea0754
+	lda_24 xbc, DiskOp_ChannelCfgTable_0xE8
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ldda32 xwa, 0x819c
 	ld xbc, 0x1c0000f
@@ -558,7 +558,7 @@ FmmSmfFileNameFunc:
 	cp xde, 0x5
 	jr gt, SmfFN_ReturnZero
 	add xde, xde
-	add xde, 0xea079e
+	add xde, Str_SmfConvert_GmToGm_0x1E
 	ld de, (xde)
 	lda_24 xix, SmfFN_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe8
@@ -1220,7 +1220,7 @@ SmfFN_UpdateFilenameField:
 	cps wa, 0
 	jr le, SmfFN_FetchFilename
 	ld xwa, xiz
-	ld xbc, 0xea0790
+	ld xbc, Str_SmfConvert_GmToGm_0x10
 	call FileIO_CopyString
 	jr SmfFN_WriteFilenameField
 

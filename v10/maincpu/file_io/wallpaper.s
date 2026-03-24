@@ -331,7 +331,7 @@ WP_ScanAvailability:
 WPScan_LoopBody:
 	ld bc, iz
 	extz xbc
-	ld xwa, 0xea07aa
+	ld xwa, Str_SmfConvert_GmToGm_0x2A
 	add xwa, xbc
 	ld c, (xwa)
 	lds de, 1
@@ -350,7 +350,7 @@ WPScan_CheckAvail:
 	jrl z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
-	ld xbc, 0xea07aa
+	ld xbc, Str_SmfConvert_GmToGm_0x2A
 	add xbc, xwa
 	lds de, 1
 	ld a, (xbc)
@@ -376,7 +376,7 @@ WPScan_TypeNotThree:
 	jr nz, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
-	ld xbc, 0xea07aa
+	ld xbc, Str_SmfConvert_GmToGm_0x2A
 	add xbc, xwa
 	lds de, 1
 	ld a, (xbc)
@@ -396,7 +396,7 @@ WPScan_TypeGeneric:
 	jr z, WPScan_LoopContinue
 	ld wa, iz
 	extz xwa
-	ld xbc, 0xea07aa
+	ld xbc, Str_SmfConvert_GmToGm_0x2A
 	add xbc, xwa
 	lds de, 1
 	ld a, (xbc)
@@ -431,7 +431,7 @@ WP_FindNextSlot:
 	lds iz, 1
 	extz wa
 	ldfr_werp WA, 0xe6
-	lda_24 xde, 0xea07aa
+	lda_24 xde, Str_SmfConvert_GmToGm_0x2A
 
 WPFind_SearchLoop:
 	ldto_werp HL, 0xe6
@@ -532,7 +532,7 @@ WP_GetPresetName1:
 	ld wa, bc
 	extz xwa
 	sll xwa, 2	; index * 4 (pointer size)
-	ld xbc, 0xea07ae	; ROM table address
+	ld xbc, Str_SmfConvert_GmToGm_0x2E	; ROM table address
 	add xbc, xwa
 	ld xbc, (xbc)	; Get string pointer
 	ld xwa, xiz
@@ -579,7 +579,7 @@ WP_GetBankMemName:
 WP_GetBankMemName_FromROM:
 	extz xde
 	sll xde, 2
-	ld xbc, 0xea083e	; ROM table address
+	ld xbc, Str_Variation1_0x08	; ROM table address
 	add xbc, xde
 	ld xbc, (xbc)
 	ld xwa, xiz
@@ -600,7 +600,7 @@ WP_GetPresetName3:
 	ld wa, bc
 	extz xwa
 	sll xwa, 2
-	ld xbc, 0xea08da
+	ld xbc, PtrTbl_DrumKitNames_0x02
 	add xbc, xwa
 	ld xbc, (xbc)
 	ld xwa, xiz

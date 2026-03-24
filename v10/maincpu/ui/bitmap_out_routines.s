@@ -446,7 +446,7 @@ BitMapOut_CopyPreset9_Execute:
 	ld (xsp + 56), xbc
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xeb7942
+	lda_24 xbc, WidgetStyleDataTable_0x10
 	st_dri3b A, 0x07, 0xe4, 0xe0
 	ld xwa, (xbc)
 	ld xix, (xsp + 56)
@@ -646,7 +646,7 @@ BitMapOut_Snapshot_Execute:
 	extz wa
 	ld bc, wa
 	sla bc, 2
-	lda_24 xde, 0xeb7942
+	lda_24 xde, WidgetStyleDataTable_0x10
 	ld_sril3 XDE, 0x07, 0xe8, 0xe4
 	cp (xde), 0x78
 	jr nz, BitMapOut_Snapshot_PostProcess
@@ -968,7 +968,7 @@ BitMapOut_RestoreFullVoice:
 	push xiz
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xeb7942
+	lda_24 xbc, WidgetStyleDataTable_0x10
 	exts xwa
 	add xwa, xbc
 	ld (xsp + 24), xwa
@@ -1488,7 +1488,7 @@ BitMapOut_CopyROMToWorkspace:
 	pushw 0x3c0
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xeb7942
+	lda_24 xbc, WidgetStyleDataTable_0x10
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0x0
@@ -3362,7 +3362,7 @@ BitMapOut_DeltaEncode_Type90Final:
 	sll xbc, 3
 	sub xbc, xde
 	add xbc, xbc
-	ld xde, 0xeb7a86
+	ld xde, WidgetStyleDataTable_0x154
 	add xde, xbc
 	ld xbc, (xde)
 	ld c, (xbc)
@@ -3381,7 +3381,7 @@ BitMapOut_DeltaEncode_Type90Final:
 	sll xbc, 3
 	sub xbc, xwa
 	add xbc, xbc
-	lda_24 xhl, 0xeb7a90
+	lda_24 xhl, WidgetStyleDataTable_0x15E
 	add xhl, xbc
 	lda xde, (xsp + 2)
 	ld a, (xde)
@@ -3767,7 +3767,7 @@ BitMapOut_UpdateWidget_CheckType:
 	dec 1, a
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xeb7942
+	lda_24 xbc, WidgetStyleDataTable_0x10
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
 	pushw 0x10
 	ldada xwa, 0xf9a2
@@ -3790,7 +3790,7 @@ BitMapOut_UpdateWidget_TypeB:
 	dec 1, a
 	extz wa
 	sla wa, 2
-	lda_24 xde, 0xeb7942
+	lda_24 xde, WidgetStyleDataTable_0x10
 	ld_sril3 XDE, 0x07, 0xe8, 0xe0
 	pushw 0x10
 	push xbc
@@ -3925,7 +3925,7 @@ OneTchFUNC:
 	cp xde, 0x5
 	jr ugt, BitMapOut_ApplyWidgetPatch
 	add xde, xde
-	add xde, 0xeb7c94
+	add xde, WidgetStyleDataTable_0x362
 	ld de, (xde)
 	lda_24 xix, BitMapOut_ByteData_WidgetTable
 	jp_dri 8, 0x07, 0xf0, 0xe8

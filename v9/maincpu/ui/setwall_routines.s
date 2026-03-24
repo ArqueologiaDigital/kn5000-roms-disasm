@@ -39,7 +39,7 @@ SetWall_InlineCodeBlock:
 	push	xsp
 	reti
 	jr	z, 4
-	call	0xf22907
+	call	CDlikeSwTtl_DispatchData_0x06_
 	call	CDlikeSwTtl_SendStartEvt
 	ldda8	a, 3295
 	cp	a, 15
@@ -53,7 +53,7 @@ SetWall_InlineCodeBlock:
 	incf
 	push	xsp
 	ldio	102, 4
-	call	0xf22907
+	call	CDlikeSwTtl_DispatchData_0x06_
 	call	CDlikeSwTtl_SendStartEvt
 	ldda8	a, 3295
 	cps	a, 0
@@ -87,7 +87,7 @@ SetWall_InlineCodeBlock:
 	ccf
 	zcf
 	incf
-	call	0xf1eeba
+	call	SetWall_InlineCodeBlock_0x7F_
 	ret
 	ldda8	a, 0x2873
 	cp	a, 13
@@ -117,9 +117,9 @@ SetWall_InlineCodeBlock:
 	cp	a, 14
 	jr	z, 2
 	jr	4
-	call	0xf2294b
+	call	CDlikeSwTtl_DispatchData_0x4A_
 	ret
-	call	0xf1eeba
+	call	SetWall_InlineCodeBlock_0x7F_
 	ret
 	swi	7
 	swi	7
@@ -237,7 +237,7 @@ SetWall_CompareAndSwap:
 	xor w, w
 	ld iy, wa
 	push xde
-	ld xde, 0xf1ef08
+	ld xde, SetWall_InlineCodeBlock_0xCD_
 	ld_srib3 C, 0x07, 0xe8, 0xf4
 	ldda8 a, 3295
 	ld iy, wa
@@ -245,7 +245,7 @@ SetWall_CompareAndSwap:
 	ld_srib3 A, 0x07, 0xe8, 0xf4
 	stda8 3297, a
 	ld iy, wa
-	ld xde, 0xf1ef08
+	ld xde, SetWall_InlineCodeBlock_0xCD_
 	ld_srib3 A, 0x07, 0xe8, 0xf4
 	pop xde
 	and a, c
@@ -619,12 +619,12 @@ SetWall_InlineCodeBlock2:
 	.byte 0xc1
 	jrl	ule, -3800
 	jr	nz, 4
-	jp	0xf1f412
+	jp	SetWall_InlineCodeBlock2_0x5E_
 	ldda8	a, 0x2873
 	xor	w, w
 	ld	iy, wa
 	push	xde
-	ld	xde, 0xf1ef08
+	ld	xde, SetWall_InlineCodeBlock_0xCD_
 	.byte 0xc3
 	reti
 	cp	xix, xwa
@@ -639,7 +639,7 @@ SetWall_InlineCodeBlock2:
 	cp	xix, xwa
 	ldb	a, 216
 	.byte 0x8d
-	ld	xde, 0xf1ef08
+	ld	xde, SetWall_InlineCodeBlock_0xCD_
 	.byte 0xc3
 	reti
 	cp	xix, xwa
@@ -648,7 +648,7 @@ SetWall_InlineCodeBlock2:
 	cps	a, 0
 	jr	z, 2
 	jr	4
-	jp	0xf1f412
+	jp	SetWall_InlineCodeBlock2_0x5E_
 	call	SetWall_CrossTypeChange
 	ret
 
@@ -1946,7 +1946,7 @@ SetWall_InlineCodeBlock3:
 	lds	bc, 0
 	stda8	0x286b, c
 	push	xix
-	call	0xf20141
+	call	SetWall_MiscDataAndCode_0x52_
 	pop	xix
 	xor	bc, bc
 	ldda8	c, 0x286b
@@ -2012,7 +2012,7 @@ SetWall_MiscDataAndCode:
 	jr	z, 10
 	ldb	a, 142
 	call	UI_PostModeChangeEvent
-	jp	0xf20140
+	jp	SetWall_MiscDataAndCode_0x51_
 	ldb	a, 131
 	call	UI_PostModeChangeEvent
 	ret
@@ -2043,7 +2043,7 @@ SetWall_MiscDataAndCode:
 	push	xbc
 	push	xde
 	push	xix
-	call	0xf201ba
+	call	SetWall_MiscDataAndCode_0xCB_
 	pop	xix
 	pop	xde
 	pop	xbc

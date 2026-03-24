@@ -162,7 +162,7 @@ CompLoad_DrawItemLoop:
 	jr CompLoad_DrawItem_Continue
 
 CompLoad_DrawItem_Empty:
-	lda_24 xbc, 0xea06ec
+	lda_24 xbc, DiskOp_ChannelCfgTable_0x80_
 
 CompLoad_DrawItem_Continue:
 	ld de, iz
@@ -329,7 +329,7 @@ RenderFilterDisplay:
 	cps l, 0
 	jr z, RenderFilter_CheckType1
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea06ee
+	ld xbc, DiskOp_ChannelCfgTable_0x82_
 	jrl RenderFilter_CopyAndReturn
 
 RenderFilter_CheckType1:
@@ -347,17 +347,17 @@ RenderFilter_CheckType1:
 	cps l, 0
 	jr z, RenderFilter_Type1_Restricted
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea06f4
+	ld xbc, DiskOp_ChannelCfgTable_0x88_
 	jrl RenderFilter_CopyAndReturn
 
 RenderFilter_Type1_Restricted:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea06fa
+	ld xbc, DiskOp_ChannelCfgTable_0x8E_
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_Type1_Unavail:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea0700
+	ld xbc, DiskOp_ChannelCfgTable_0x94_
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_CheckGeneric:
@@ -372,12 +372,12 @@ RenderFilter_CheckGeneric:
 	cps l, 0
 	jr z, RenderFilter_Generic_Restricted
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea0706
+	ld xbc, DiskOp_ChannelCfgTable_0x9A_
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_Generic_Restricted:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea070c
+	ld xbc, DiskOp_ChannelCfgTable_0xA0_
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_CheckType2:
@@ -397,17 +397,17 @@ RenderFilter_CheckType2:
 	cps l, 0
 	jr z, RenderFilter_Type2_Restricted
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea0712
+	ld xbc, DiskOp_ChannelCfgTable_0xA6_
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_Type2_Restricted:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea0718
+	ld xbc, DiskOp_ChannelCfgTable_0xAC_
 	jr RenderFilter_CopyAndReturn
 
 RenderFilter_Default:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea071e
+	ld xbc, DiskOp_ChannelCfgTable_0xB2_
 
 RenderFilter_CopyAndReturn:
 	call FileIO_CopyString
@@ -618,17 +618,17 @@ RenderSaveFilterDisplay:
 	cps l, 0
 	jr z, RenderSaveFilter_Available
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea0724
+	ld xbc, DiskOp_ChannelCfgTable_0xB8_
 	jr RenderSaveFilter_CopyAndReturn
 
 RenderSaveFilter_Available:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea072a
+	ld xbc, DiskOp_ChannelCfgTable_0xBE_
 	jr RenderSaveFilter_CopyAndReturn
 
 RenderSaveFilter_Unavail:
 	ld xwa, (xsp + 2)
-	ld xbc, 0xea0730
+	ld xbc, DiskOp_ChannelCfgTable_0xC4_
 
 RenderSaveFilter_CopyAndReturn:
 	call FileIO_CopyString

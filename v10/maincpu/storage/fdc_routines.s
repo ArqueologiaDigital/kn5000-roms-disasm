@@ -223,7 +223,7 @@ FDC_WaitReady:
 	cps	wa, 5
 	jrl	gt, 151
 	add	wa, wa
-	lda_24	xix, 0xea98a6
+	lda_24	xix, DiskWarning_ConfirmStrings_0xBFA
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -332,7 +332,7 @@ FDC_COMMAND_DISPATCHER:
 	cp wa, 0xb
 	jr ugt, FDC_CheckDriveCount
 	add wa, wa
-	lda_24 xix, 0xea98b2
+	lda_24 xix, DiskWarning_ConfirmStrings_0xC06
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, FDC_CMD_HANDLER_BASE
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -2223,7 +2223,7 @@ FDC_CommandEntry_CopyParams:
 	cp wa, 0xb
 	jr	ugt, 100
 	add wa, wa
-	lda_24 xix, 0xea98ca
+	lda_24 xix, DiskWarning_ConfirmStrings_0xC1E
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, FDC_HANDLER_DISPATCH_BASE
 	jp_dri 8, 0x07, 0xf0, 0xe0

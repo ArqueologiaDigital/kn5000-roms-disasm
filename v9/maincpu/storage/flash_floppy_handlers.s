@@ -666,7 +666,7 @@ FlashWrite_BlockRef_Type6:
 	nop
 	.byte 0x54, 0x55
 	popw	iz
-	ld	xiy, 0xfa0917
+	ld	xiy, VwMenuBox_Confirm_RenderBottom_0x2E_
 	.byte 0xd1
 	nop
 	.byte 0x50
@@ -1319,109 +1319,109 @@ NAKA_InitDataBlock:
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe1482e
+	lda_24	xhl, NAKA_UIObjectTable_0x13E0_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe148a0
+	lda_24	xhl, NAKA_UIObjectTable_0x1452_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe148e0
+	lda_24	xhl, NAKA_UIObjectTable_0x1492_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe14ad2
+	lda_24	xhl, NAKA_UIObjectTable_0x1684_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe14b4a
+	lda_24	xhl, NAKA_UIObjectTable_0x16FC_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe14cba
+	lda_24	xhl, NAKA_UIObjectTable_0x186C_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe14e4c
+	lda_24	xhl, NAKA_UIObjectTable_0x19FE_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe14fd8
+	lda_24	xhl, NAKA_UIObjectTable_0x1B8A_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe151bc
+	lda_24	xhl, NAKA_UIObjectTable_0x1D6E_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe15240
+	lda_24	xhl, NAKA_UIObjectTable_0x1DF2_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe153e2
+	lda_24	xhl, NAKA_UIObjectTable_0x1F94_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe15452
+	lda_24	xhl, NAKA_UIObjectTable_0x2004_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe155b4
+	lda_24	xhl, NAKA_UIObjectTable_0x2166_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe1562e
+	lda_24	xhl, NAKA_UIObjectTable_0x21E0_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe15790
+	lda_24	xhl, NAKA_UIObjectTable_0x2342_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe15900
+	lda_24	xhl, NAKA_UIObjectTable_0x24B2_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe15960
+	lda_24	xhl, NAKA_UIObjectTable_0x2512_
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, 0xe159c0
+	lda_24	xhl, NAKA_UIObjectTable_0x2572_
 	ret
 	lds32	xhl, 0
 	ret
@@ -1452,11 +1452,11 @@ NAKA_InitDataBlock:
 NoteEvent_LoadSoundGenParams:
 	st_dri3b L, 0xfd, 0x94, 0xfe
 	push xiz
-	ld xiy, 0xe15b20
+	ld xiy, NAKA_UIObjectTable_0x26D2_
 	st_dri3b D, 0xfd, 0x10, 0x01
 	ldw bc, 0x30
 	ldirw
-	ld xiy, 0xe15a20
+	ld xiy, NAKA_UIObjectTable_0x25D2_
 	lda xix, (xsp + 16)
 	ldw bc, 0x80
 	ldirw
@@ -1476,7 +1476,7 @@ NoteEvent_LoadSoundGenParams:
 	st_dri3b B, 0xe5, 0x80, 0x00
 
 NoteEvent_CopyVoiceParamsLoop:
-	ld xiy, 0xe15c20
+	ld xiy, MSP_Default_SoundReserved_0x30_
 	ld xix, xwa
 	ldw bc, 0x10
 	ldirw
@@ -1494,7 +1494,7 @@ NoteEvent_CopyExtParamsOuter:
 	st_dri3b C, 0xe9, 0x80, 0x00
 
 NoteEvent_CopyExtParamsInner:
-	ld xiy, 0xe15c40
+	ld xiy, MSP_Default_SoundReserved_0x50_
 	ld xix, xwa
 	ldw bc, 0x10
 	ldirw
@@ -2316,7 +2316,7 @@ Pack12BitValueWithBank:
 ; NoteEventBuffer Store dispatch (7-entry, table 0xe16136)
 NoteEvent_Store:
 	extz wa
-	lda_24 xbc, 0xe160de
+	lda_24 xbc, MSP_Default_ChannelMap_0x1E_
 	ld_srib3 L, 0x07, 0xe4, 0xe0
 	ret
 
@@ -3074,7 +3074,7 @@ Flash_ExtendedOpsBlock:
 	jr	c, -30
 	ldb	w, 0
 	.byte 0xc7
-	addm32_24	0xe2c7a8, xhl
+	addm32_24	Naka_ReverbScreen_EmptyStr_0x4804_, xhl
 	extz	bc
 	sla	bc, 2
 	inc	6, bc
@@ -3942,7 +3942,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0xc7
 	lds32	xde, 0
 	.byte 0xc7
-	addm32_24	0xe2c7a8, xiy
+	addm32_24	Naka_ReverbScreen_EmptyStr_0x4804_, xiy
 	extz	de
 	sla	de, 2
 	ld	wa, de
@@ -4058,7 +4058,7 @@ Flash_ExtendedOpsBlock:
 	.byte 0x95
 	scf
 	ldda32	xwa, 3222
-	ld	xiy, 0xe15cb0
+	ld	xiy, MSP_Default_SeqReserved_0x40_
 	lda	xix, (xwa+80)
 	ldw	bc, 8
 	.byte 0x95
@@ -4848,7 +4848,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	wa, (xhl+4)
 	ld	(xbc+2), wa
 	.byte 0xc7
-	addm32_24	0xe2c7a8, xhl
+	addm32_24	Naka_ReverbScreen_EmptyStr_0x4804_, xhl
 	extz	bc
 	sla	bc, 2
 	ld	wa, bc
@@ -4928,7 +4928,7 @@ Flash_SlotUpdateOpsBlock:
 	ld	wa, (xhl+4)
 	ld	(xbc+2), wa
 	.byte 0xc7
-	addm32_24	0xe2c7a8, xhl
+	addm32_24	Naka_ReverbScreen_EmptyStr_0x4804_, xhl
 	extz	bc
 	sla	bc, 2
 	ld	wa, bc
@@ -6375,7 +6375,7 @@ ToneData_CopyBlock1_Loop:
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock1_Loop
-	lda_24 xhl, 0xe161e4
+	lda_24 xhl, Composer_SettingsBlock_0x60_
 	ld xbc, xhl
 	ldda32 xwa, 3226
 	lda xde, (xwa + 16)
@@ -6397,7 +6397,7 @@ ToneData_CopyBlock3_Loop:
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock3_Loop
-	lda_24 xhl, 0xe16204
+	lda_24 xhl, Composer_SettingsBlock_0x80_
 	ld xbc, xhl
 	ldda32 xwa, 3226
 	st_dri3b B, 0xe1, 0x40, 0x02
@@ -6408,7 +6408,7 @@ ToneData_CopyBlock4_Loop:
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock4_Loop
-	lda_24 xhl, 0xe16244
+	lda_24 xhl, Composer_SettingsBlock_0xC0_
 	ld xbc, xhl
 	ldda32 xwa, 3226
 	st_dri3b B, 0xe1, 0x80, 0x02
@@ -6426,7 +6426,7 @@ ToneData_CopyBlock5_Loop:
 ToneData_ScanRegionLoop:
 	cp (xbc), 0x0
 	jr nz, ToneData_AdvanceRegion
-	lda_24 xiy, 0xe161f4
+	lda_24 xiy, Composer_SettingsBlock_0x70_
 	ld xhl, xiy
 	ldda32 xwa, 3226
 	lda xwa, (xwa + 32)
@@ -6716,7 +6716,7 @@ AcCmpSetGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, CmpSetP1_GridCheck_Case4
 	add xbc, xbc
-	add xbc, 0xe1ce3a
+	add xbc, NoteStepDisplayData_0x5C_
 	ld bc, (xbc)
 	lda_24 xix, CmpSetP1_DialGrid
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -6775,7 +6775,7 @@ CmpSetP1_DialGrid:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, 0xe1ce16
+	lda_24 xbc, NoteStepDisplayData_0x38_
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
@@ -6833,7 +6833,7 @@ CmpSetP1_SendAndApplyFunc:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, 0xe1ce28
+	lda_24 xbc, NoteStepDisplayData_0x4A_
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
@@ -6939,7 +6939,7 @@ CmpSetP1GridCheck:
 	cp xwa, 0x6
 	jrl gt, Widget_PostEvtReturnZero
 	add xwa, xwa
-	add xwa, 0xe1cf00
+	add xwa, StrTimeSig_1_2_0x20_
 	ld wa, (xwa)
 	lda_24 xix, CmpSetP1_GridCheck_EventEnc
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -7005,7 +7005,7 @@ CmpSetP1_GridCheck_Return:
 	cps wa, 7
 	jrl gt, WidgetHandler_PostEventAndReturnZero
 	add wa, wa
-	lda_24 xix, 0xe1cef0
+	lda_24 xix, StrTimeSig_1_2_0x10_
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, UI_COMPONENT_DISPATCH
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -7105,7 +7105,7 @@ CmpSetGridCheck:
 	cp xwa, 0x6
 	jrl gt, GridCheck_ReturnZero
 	add xwa, xwa
-	add xwa, 0xe1d40e
+	add xwa, StrPanLeft64_0x0A_
 	ld wa, (xwa)
 	lda_24 xix, GridCheck_Handler0
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -7612,7 +7612,7 @@ S2cMemNoBox_HandleScroll:
 	ldda8 a, 0x398f
 	extz wa
 	sla wa, 2
-	lda_24 xbc, 0xe1d41c
+	lda_24 xbc, StrPanLeft64_0x18_
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 8)
@@ -7861,7 +7861,7 @@ S2cGridBoxProc:
 	cp xwa, 0x6
 	jrl gt, FdcFormat_GridCheck_Case4
 	add xwa, xwa
-	add xwa, 0xe1d728
+	add xwa, StrTranspose_Minus25_0x04_
 	ld wa, (xwa)
 	lda_24 xix, FdcFormat_DialGrid
 	jp_dri 8, 0x07, 0xf0, 0xe0

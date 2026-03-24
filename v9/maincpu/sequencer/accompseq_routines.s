@@ -1050,8 +1050,8 @@ AccompSeq_UpdatePos_Store:
 	ret
 
 AccompSeq_JumpTable:
-	jp	0xf6e651
-	jp	0xf6ea61
+	jp	AccompSeq_LargeCodeBlock2_0x04_
+	jp	AccompSeq_WriteMidi_CodeBlock_0x0A_
 	jp	AccompSeq_GuardedNoteOff
 
 AccompSeq_StopSequence:
@@ -1094,7 +1094,7 @@ AccompSeq_LargeCodeBlock2:
 	jr	z, 107
 	xor	w, w
 	ld	hl, wa
-	ld	xix, 0xf6ec3a
+	ld	xix, AccompSeq_MidiFilterCodeBlock_0x7A_
 	.byte 0xc3
 	reti
 	.byte 0xf0, 0xec
@@ -1127,7 +1127,7 @@ AccompSeq_LargeCodeBlock2:
 	.byte 0xcf
 	ret
 	jr	ugt, 33
-	call	0xf71475
+	call	Voice_NoteChannelTable1_0x422_
 	cps	h, 0
 	jr	z, 25
 	.byte 0xc1
@@ -1186,7 +1186,7 @@ AccompSeq_LookupStyle_Internal:
 	xor xwa, xwa
 	ldw wa, 0x20
 	mul xwa, xhl
-	add xwa, 0xe4c1a6
+	add xwa, NakaInst_OFF_Str_0xD4_
 	stda16 0x7e2a, xwa
 	ldto_werp WA, 0xe2
 	stda16 0x7e28, xwa
@@ -1685,7 +1685,7 @@ AccompSeq_MidiFilterCodeBlock:
 	pushw	0x3f7f
 	nop
 	jr	z, 4
-	jp	0xf6ec39
+	jp	AccompSeq_MidiFilterCodeBlock_0x79_
 	ldb	e, 12
 	ldda8	a, 0xfd12
 	bit	7, w

@@ -2424,7 +2424,7 @@ SMF_SlotChain_ExtendedVoice:
 	mul l, 0x20
 	add hl, 0x5
 	add hl, 0x2
-	ld xix, 0xedb3fc
+	ld xix, Naka_ToshiParam_Table_0x8C_
 	ld_srib3 A, 0x07, 0xf0, 0xec
 	jr SMF_SlotChain_ExtVoiceStore
 
@@ -2521,7 +2521,7 @@ SMF_SlotParam_VolumeScale:
 	mul l, 0x20
 	add hl, 0x7
 	add hl, 0x2
-	ld xix, 0xedb3fc
+	ld xix, Naka_ToshiParam_Table_0x8C_
 	ld_srib3 A, 0x07, 0xf0, 0xec
 	ld (xiy + 4), a
 
@@ -3116,7 +3116,7 @@ SMF_SlotParam_BankLSBReturn:
 
 SMF_SlotParam_RPN:
 	push xix
-	ld xix, 0xf29d2a
+	ld xix, SMF_SlotParam_RPNReturn_0x1F_
 	ld l, (xiy + 3)
 	ld_srib3 A, 0x07, 0xf0, 0xec
 	pop xix

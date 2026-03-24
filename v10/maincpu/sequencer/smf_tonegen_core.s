@@ -997,7 +997,7 @@ VoiceChannels_LoadPartMapAndInitPan:
 	ld xiy, VoiceChannels_PartMapTable
 	cpdi8 4600, 1
 	jrl z, VoiceChannels_LoadPartMap_Mode1
-	ld xiy, 0xf23e28
+	ld xiy, VoiceChannels_PartMapTable_0x10
 
 VoiceChannels_LoadPartMap_Mode1:
 	ld xix, 0xf1a0
@@ -1512,7 +1512,7 @@ MidiSysEx_CC_LookupPartMap:
 	ld xix, SeqTrack_ChannelMapIdentity
 	cpdi8 4600, 1
 	jrl z, MidiSysEx_CC_PartMapSelected
-	ld xix, 0xf2436b
+	ld xix, SeqTrack_ChannelMapIdentity_0x10
 
 MidiSysEx_CC_PartMapSelected:
 	ld_srib3 A, 0x07, 0xf0, 0xec
@@ -1535,7 +1535,7 @@ MidiSysEx_Cmd_ProgramChange:
 	ld xix, SeqTrack_ChannelMapIdentity
 	cpdi8 4600, 1
 	jrl z, MidiSysEx_PgmChg_PartMapSelected
-	ld xix, 0xf2436b
+	ld xix, SeqTrack_ChannelMapIdentity_0x10
 
 MidiSysEx_PgmChg_PartMapSelected:
 	ld_srib3 A, 0x07, 0xf0, 0xec
@@ -3067,7 +3067,7 @@ MidiPgmChg_Mode0_SetupA:
 	stda8 6744, l
 	ldda8 l, 4012
 	stda8 6745, l
-	ld xix, 0xf2436b
+	ld xix, SeqTrack_ChannelMapIdentity_0x10
 	ld_srib3 L, 0x07, 0xf0, 0xf4
 	stda8 6748, l
 	pop xix
@@ -3111,7 +3111,7 @@ MidiPgmChg_Mode0_SetupA:
 	cpdi8 4323, 0
 	jrl nz, SoundGen_NullReturn
 	push xix
-	ld xix, 0xf2436b
+	ld xix, SeqTrack_ChannelMapIdentity_0x10
 	ld_srib3 A, 0x07, 0xf0, 0xf4
 	pop xix
 	push xhl
@@ -3158,7 +3158,7 @@ MidiPgmChg_Mode2_SetupA:
 	stda8 6744, l
 	ldda8 l, 4012
 	stda8 6745, l
-	ld xix, 0xf2436b
+	ld xix, SeqTrack_ChannelMapIdentity_0x10
 	ld_srib3 L, 0x07, 0xf0, 0xf4
 	stda8 6748, l
 	pop xix
@@ -3215,7 +3215,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeA:
 	cpdi8 4323, 0
 	jrl nz, SoundGen_NullReturn
 	push xix
-	ld xix, 0xf2436b
+	ld xix, SeqTrack_ChannelMapIdentity_0x10
 	ld_srib3 A, 0x07, 0xf0, 0xf4
 	pop xix
 	push xhl
@@ -4775,7 +4775,7 @@ VoiceParam_ByMode_Mode0:
 	stda8 6744, l
 	ldda8 l, 4012
 	stda8 6745, l
-	ld xix, 0xf2436b
+	ld xix, SeqTrack_ChannelMapIdentity_0x10
 	ld_srib3 L, 0x07, 0xf0, 0xe8
 	stda8 6748, l
 	pop xde
@@ -4804,7 +4804,7 @@ VoiceParam_ByMode_Mode2:
 	stda8 6744, l
 	ldda8 l, 4012
 	stda8 6745, l
-	ld xix, 0xf2436b
+	ld xix, SeqTrack_ChannelMapIdentity_0x10
 	ld_srib3 L, 0x07, 0xf0, 0xe8
 	stda8 6748, l
 	pop xde
@@ -5120,7 +5120,7 @@ VoiceSynth_Algo_ConditionalUpdate:
 	; --- Main routine: bit test, store, conditional call (49 bytes) ---
 	bitda	0, 4236
 	jr nz, VoiceSynth_ConditionalUpdate_SetParams
-	call 0xf26c9e
+	call VoiceChannel_ParamTable1_0x80
 	stdi8	4323, 0
 VoiceSynth_ConditionalUpdate_SetParams:
 	stdi8	4233, 3
@@ -5188,7 +5188,7 @@ VoiceSynth_Algo_MultiStage:
 	push	xsp
 	.byte 0x01
 	jr	z, 10
-	ld	xix, 0xf2436b
+	ld	xix, SeqTrack_ChannelMapIdentity_0x10
 	.byte 0xc3
 	reti
 	.byte 0xf0, 0xec
@@ -5393,7 +5393,7 @@ VoiceParam_ReadUpdate_7:
 	.byte 0xf1
 	and	(xix+16), w
 	jr	nz, 9
-	call	0xf26c9e
+	call	VoiceChannel_ParamTable1_0x80
 	stdi8	4323, 0
 	stdi8	4233, 3
 	ldda8	a, 4013

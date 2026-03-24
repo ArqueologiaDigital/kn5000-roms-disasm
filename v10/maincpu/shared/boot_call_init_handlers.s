@@ -44,7 +44,7 @@ Boot_CallInitHandlers:
 	; IF INIT_FLAG_COMPARE_WORD (evaluated to false)
 	; ELSE
 	; maincpu: CP (0xfffeee), 0xff (6 bytes)
-	cpi8_24	0xfffeee, 255
+	cpi8_24	ROM_PaddingFF_0x03, 255
 	; ENDIF
 
 	jr nz, Boot_CallInitHandlers__done	; 6e xx (offset computed by assembler)
