@@ -54,7 +54,7 @@ MainExcSend:
 	lds32 xde, 0
 
 MainExcSend_ClampIndexToRange:
-	ld xwa, NakaInst_DIRECT_E7FCE4_0xA0_
+	ld xwa, 0xe7fd84
 	add xwa, xde
 	ld a, (xwa)
 	call SysEx_InitiateSend
@@ -70,7 +70,7 @@ ExcDotFunc:
 	cp xbc, 0x9
 	jr gt, ExcDotFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, NakaInst_DIRECT_E7FCE4_0xA6_
+	add xbc, 0xe7fd8a
 	ld bc, (xbc)
 	lda_24 xix, ExcDotFunc_HandlerJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -100,7 +100,7 @@ ExcPmemFunc:
 	cp xbc, 0x9
 	jr gt, ExcPmemFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, FileTransfer_BlankStatus_0x0A_
+	add xbc, 0xe7fdd6
 	ld bc, (xbc)
 	lda_24 xix, ExcPmemFunc_HandlerJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -140,7 +140,7 @@ ExcSmemFunc:
 	cp xbc, 0x9
 	jr gt, ExcSmemFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, FileTransfer_BlankStatus_0x1E_
+	add xbc, 0xe7fdea
 	ld bc, (xbc)
 	lda_24 xix, ExcSmemFunc_HandlerJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -180,7 +180,7 @@ ExcCompFunc:
 	cp xbc, 0x9
 	jr gt, ExcCompFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, FileTransfer_BlankStatus_0x32_
+	add xbc, 0xe7fdfe
 	ld bc, (xbc)
 	lda_24 xix, ExcCompFunc_HandlerJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -220,7 +220,7 @@ ExcSeqFunc:
 	cp xbc, 0x9
 	jr gt, ExcSeqFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, FileTransfer_BlankStatus_0x46_
+	add xbc, 0xe7fe12
 	ld bc, (xbc)
 	lda_24 xix, ExcSeqFunc_HandlerJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -260,7 +260,7 @@ ExcMspFunc:
 	cp xbc, 0x9
 	jr gt, ExcMspFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, FileTransfer_BlankStatus_0x5A_
+	add xbc, 0xe7fe26
 	ld bc, (xbc)
 	lda_24 xix, ExcMspFunc_HandlerJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe4

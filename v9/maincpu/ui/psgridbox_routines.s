@@ -1008,9 +1008,9 @@ PsGridBox_Scroll_Render:
 	ld_sril XWA, (xsp + 0x014e)
 	ld xbc, 0x1e0008c
 	jrl PsGridBox_DispatchEvent
-	ld xwa, Data_SoundEditorCharsLayout_0x320_
+	ld xwa, 0xeaa1f2
 	jr PsGridBox_Scroll_CopyStr
-	ld xwa, Data_SoundEditorCharsLayout_0x340_
+	ld xwa, 0xeaa212
 
 PsGridBox_Scroll_CopyStr:
 	push xwa

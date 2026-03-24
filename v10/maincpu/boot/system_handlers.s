@@ -358,7 +358,7 @@ MemCopy_SetupAndDMA:
 
 Boot_InitWorkRAM_ROMCopy1_Start:
 	ld xde, 0x3d524
-	ld xhl, CharMap_FullPermutation_0x7B0
+	ld xhl, 0xeed8c8
 	ld xbc, 0x219e
 	or xbc, xbc
 	jr z, Boot_InitWorkRAM_ROMCopy2_Start
@@ -373,7 +373,7 @@ Boot_InitWorkRAM_ROMCopy1_Loop:
 
 Boot_InitWorkRAM_ROMCopy2_Start:
 	ld xde, 0xe35e
-	ld xhl, Naka_DrawbarReg_Table_0x4DE
+	ld xhl, 0xeefa66
 	ld xbc, 0x95b
 	or xbc, xbc
 	jr z, Boot_InitWorkRAM_Done
@@ -2022,7 +2022,7 @@ TaskSched_InitTimerSlots:
 	ld (xix + 4), xwa
 	add ix, 0x8
 	djnz8 b, TaskSched_InitTimerSlots
-	ld xhl, TaskSched_ScreenGroupTable_0x3C
+	ld xhl, 0xef1933
 	ldw de, 0x4f9
 	extz xde
 	ldw bc, 0xa
@@ -2036,7 +2036,7 @@ TaskSched_InitExtQueues:
 	st_dpiw IX, 0xed
 	st_dpiw IX, 0xed
 	djnz8 b, TaskSched_InitExtQueues
-	ld xhl, TaskSched_ScreenGroupTable_0x46
+	ld xhl, 0xef193d
 	ldw de, 0x533
 	extz xde
 	ldw bc, 0xc
@@ -2095,7 +2095,7 @@ TaskSched_InitMsgQueues:
 	st_dpiw IX, 0xed
 	st_dpiw IX, 0xed
 	djnz8 b, TaskSched_InitMsgQueues
-	ld xwa, TaskSched_InitMsgQueues_0x12
+	ld xwa, 0xef1a7e
 	jr TaskSched_PostInit
 
 	normal
@@ -2276,7 +2276,7 @@ Show_ScreenGroup_Entry:
 	ldb l, 0xc
 	mul8rr l, a
 	extz xhl
-	add xhl, Checksum_ComputeComplement_0x04
+	add xhl, 0xef18eb
 	ldb c, 0xc
 	mul8rr c, a
 	add bc, 0x47d
@@ -6545,7 +6545,7 @@ TableDataROM_IdentifyChip_WaitReady:
 	ld (xbc), xwa
 	ld xbc, xde
 	add xbc, 0x15554
-	ld xwa, StringData_APCModeNames_0x24F
+	ld xwa, 0xf000f0
 	ld (xbc), xwa
 	ld_sril XWA, (xde + 0x6464)
 	ret
@@ -8151,7 +8151,7 @@ HDAE5000_Init_BytecodeBlock:
 	halt
 	jr	-2
 	ei	7
-	ld	xwa, Debug_SWI_JumpTable_0x06
+	ld	xwa, 0xfffed8
 	ldw	ix, 331
 	extz	xix
 	.byte 0xe9, 0xee

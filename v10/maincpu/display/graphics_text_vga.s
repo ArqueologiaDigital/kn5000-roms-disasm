@@ -102,7 +102,7 @@ GraphicsRender_ByteData:
 	lds	wa, 6
 	calr	36824
 	ld	xwa, xhl
-	lda_24	xbc, GraphicsRender_ByteData_0x2D
+	lda_24	xbc, 0xfb147d
 	ld	(xwa), xbc
 	ld	(xwa+4), iz
 	calr	36593
@@ -133,7 +133,7 @@ GraphicsRender_ByteData:
 	lds	wa, 4
 	calr	36737
 	ld	xwa, xhl
-	lda_24	xbc, GraphicsRender_ByteData_0x7F
+	lda_24	xbc, 0xfb14cf
 	ld	(xwa), xbc
 	jrl	-29027
 	jr	0
@@ -142,7 +142,7 @@ GraphicsRender_ByteData:
 	ld	wa, iz
 	sub	wa, 32
 	extz	xwa
-	ld	xbc, Str_No_0xBBE
+	ld	xbc, 0xeaaed4
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
@@ -181,7 +181,7 @@ Display_DeferOrDrawWall:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, Display_DeferOrDrawWall_0x18
+	lda_24 xbc, 0xfb154e
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
 	jr Display_DeferOrDrawWall_Direct
@@ -199,7 +199,7 @@ Display_DeferOrUpdateScreen:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, Display_DeferOrUpdateScreen_0x18
+	lda_24 xbc, 0xfb1577
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
 	jr Display_DeferOrUpdateScreen_Direct
@@ -225,7 +225,7 @@ GraphicsRender_ProcessEntries:
 	push xiz
 	st_dri3l XBC, 0xfd, 0x96, 0x00
 	ld xiz, xwa
-	ld xiy, Str_No_0xBFE
+	ld xiy, 0xeaaf14
 	lda xix, (xsp + 6)
 	ldw bc, 0x48
 	ldirw
@@ -268,7 +268,7 @@ GraphicsRender_Start:
 	push xiz
 	ld (xsp + 54), xbc
 	ld xiz, xwa
-	ld xiy, Str_No_0xC8E
+	ld xiy, 0xeaafa4
 	lda xix, (xsp + 6)
 	ldw bc, 0x18
 	ldirw
@@ -309,7 +309,7 @@ GraphicsRender_Start_Done:
 DrawText_LayoutAndRender:
 	st_dri3b L, 0xfd, 0xee, 0xfe
 	push xiz
-	ld xiy, Str_No_0xCBE
+	ld xiy, 0xeaafd4
 	st_dri3b D, 0xfd, 0x0e, 0x01
 	lds bc, 4
 	ldirw
@@ -375,7 +375,7 @@ DrawText_LayoutAndRender_Variant1:
 	swi	6
 	.byte 0x37
 	push	xiz
-	ld	xiy, Str_No_0xCC6
+	ld	xiy, 0xeaafdc
 	lda	xix, (xsp+270)
 	lds	bc, 4
 	.byte 0x95
@@ -450,7 +450,7 @@ DrawText_LayoutAndRender_Variant1:
 	swi	6
 	.byte 0x37
 	push	xiz
-	ld	xiy, Str_No_0xCCE
+	ld	xiy, 0xeaafe4
 	.byte 0xf3
 	swi	5
 	ret
@@ -531,7 +531,7 @@ DrawText_LayoutAndRender_Variant1:
 	swi	6
 	.byte 0x37
 	push	xiz
-	ld	xiy, Str_No_0xCD6
+	ld	xiy, 0xeaafec
 	lda	xix, (xsp+270)
 	lds	bc, 4
 	.byte 0x95
@@ -607,7 +607,7 @@ DrawText_LayoutAndRender_Variant1:
 	swi	6
 	.byte 0x37
 	push	xiz
-	ld	xiy, Str_No_0xCDE
+	ld	xiy, 0xeaaff4
 	.byte 0xf3
 	swi	5
 	ret
@@ -677,7 +677,7 @@ DrawText_LayoutAndRender_Variant1:
 	swi	6
 	.byte 0x37
 	push	xiz
-	ld	xiy, Str_No_0xCE6
+	ld	xiy, 0xeaaffc
 	lda	xix, (xsp+270)
 	lds	bc, 4
 	.byte 0x95
@@ -1211,7 +1211,7 @@ DrawText_ExtendedLayout:
 	st_dri3b L, 0xfd, 0xe4, 0xfe
 	push xiz
 	st_dri3l XWA, 0xfd, 0x1c, 0x01
-	ld xiy, Str_No_0xDFE
+	ld xiy, 0xeab114
 	st_dri3b D, 0xfd, 0x14, 0x01
 	lds bc, 4
 	ldirw
@@ -1287,7 +1287,7 @@ DrawText_ExtLayout_NullAndDraw:
 	and a, 0x3f
 	extz wa
 	sla wa, 2
-	lda_24 xbc, Str_No_0xCEE
+	lda_24 xbc, 0xeab004
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
 	st_dri3b W, 0xfd, 0x14, 0x01
 	push xbc
@@ -1304,7 +1304,7 @@ DrawText_ExtLayout_Variant1:
 	lda	xsp, (xsp-284)
 	push	xiz
 	ld	(xsp+284), xwa
-	ld	xiy, Str_No_0xE06
+	ld	xiy, 0xeab11c
 	lda	xix, (xsp+276)
 	lds	bc, 4
 	ldirw
@@ -1367,7 +1367,7 @@ DrawText_ExtLayout_Variant1:
 	ld	a, (xwa+6)
 	and	a, 15
 	extz	wa
-	lda_24	xbc, Str_No_0xDEE
+	lda_24	xbc, 0xeab104
 	ld_rrb	c, xbc, wa
 	extz	bc
 	extz	xbc
@@ -1386,7 +1386,7 @@ DrawFunc_Init:
 	st_dri3b L, 0xfd, 0xf4, 0xfe
 	push xiz
 	ld xiz, xwa
-	ld xiy, Str_No_0xE0E
+	ld xiy, 0xeab124
 	st_dri3b D, 0xfd, 0x08, 0x01
 	lds bc, 4
 	ldirw
@@ -1422,15 +1422,15 @@ DrawFunc_Init_SkipShift:
 	jr z, DrawFunc_Init_FontTable2
 	cps ix, 1
 	jr nz, DrawFunc_Init_FontTable0
-	ld xwa, Str_No_0xE16
+	ld xwa, 0xeab12c
 	jr DrawFunc_Init_PushFontAndDraw
 
 DrawFunc_Init_FontTable2:
-	ld xwa, Str_No_0xE1A
+	ld xwa, 0xeab130
 	jr DrawFunc_Init_PushFontAndDraw
 
 DrawFunc_Init_FontTable0:
-	ld xwa, Str_No_0xE1E
+	ld xwa, 0xeab134
 
 DrawFunc_Init_PushFontAndDraw:
 	push xwa
@@ -1441,7 +1441,7 @@ DrawFunc_Init_PushFontAndDraw:
 	and a, 0x3f
 	extz wa
 	sla wa, 2
-	lda_24 xbc, Str_No_0xCEE
+	lda_24 xbc, 0xeab004
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	st_dri3b W, 0xfd, 0x08, 0x01
 	st_dri3b A, 0xfd, 0x04, 0x01
@@ -1462,7 +1462,7 @@ DrawFunc_Init_Variant1:
 	.byte 0x37
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, Str_No_0xE22
+	ld	xiy, 0xeab138
 	.byte 0xf3
 	swi	5
 	ldio	1, 52
@@ -1518,7 +1518,7 @@ DrawFunc_Init_Variant1:
 	pushw	bc
 	cps	hl, 1
 	jr	nz, 17
-	ld	xwa, Str_No_0xE2A
+	ld	xwa, 0xeab140
 	jr	15
 	pushw	bc
 	pushw	234
@@ -1532,11 +1532,11 @@ DrawFunc_Init_Variant1:
 	jr	z, 11
 	cps	hl, 1
 	jr	nz, 14
-	ld	xwa, Str_No_0xE36
+	ld	xwa, 0xeab14c
 	jr	12
-	ld	xwa, Str_No_0xE3A
+	ld	xwa, 0xeab150
 	jr	5
-	ld	xwa, Str_No_0xE3E
+	ld	xwa, 0xeab154
 	push	xwa
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -1546,7 +1546,7 @@ DrawFunc_Init_Variant1:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Str_No_0xCEE
+	lda_24	xbc, 0xeab004
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -1577,7 +1577,7 @@ DrawFunc_Init_Variant1:
 	.byte 0x37
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, Str_No_0xE42
+	ld	xiy, 0xeab158
 	.byte 0xf3
 	swi	5
 	ldio	1, 52
@@ -1604,13 +1604,13 @@ DrawFunc_Init_Variant1:
 	cps	hl, 1
 	jr	nz, 18
 	.byte 0x94, 0x04
-	ld	xwa, Str_No_0xE4A
+	ld	xwa, 0xeab160
 	jr	16
 	.byte 0x94, 0x04
-	ld	xwa, Str_No_0xE4E
+	ld	xwa, 0xeab164
 	jr	7
 	.byte 0x94, 0x04
-	ld	xwa, Str_No_0xE52
+	ld	xwa, 0xeab168
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
@@ -1619,7 +1619,7 @@ DrawFunc_Init_Variant1:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Str_No_0xCEE
+	lda_24	xbc, 0xeab004
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0, 0x23
@@ -1649,7 +1649,7 @@ DrawFunc_Init_Variant1:
 	.byte 0x37
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, Str_No_0xE56
+	ld	xiy, 0xeab16c
 	.byte 0xf3
 	swi	5
 	ldio	1, 52
@@ -1684,11 +1684,11 @@ DrawFunc_Init_Variant1:
 	jr	z, 11
 	cps	l, 1
 	jr	nz, 14
-	ld	xwa, Str_No_0xE5E
+	ld	xwa, 0xeab174
 	jr	12
-	ld	xwa, Str_No_0xE62
+	ld	xwa, 0xeab178
 	jr	5
-	ld	xwa, Str_No_0xE66
+	ld	xwa, 0xeab17c
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
@@ -1696,7 +1696,7 @@ DrawFunc_Init_Variant1:
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
-	lda_24	xbc, Str_No_0xDEE
+	lda_24	xbc, 0xeab104
 	lds32	xhl, 0
 	.byte 0xc3
 	reti
@@ -1726,7 +1726,7 @@ DrawFunc_Init_Variant1:
 	.byte 0x37
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, Str_No_0xE6A
+	ld	xiy, 0xeab180
 	lda	xix, (xsp+264)
 	lds	bc, 4
 	.byte 0x95
@@ -1773,12 +1773,12 @@ DrawFunc_Init_Variant1:
 	jr	z, 11
 	cps	l, 1
 	jr	nz, 14
-	ld	xwa, Str_No_0xE72
+	ld	xwa, 0xeab188
 	jr	12
 	.byte 0x40
 	.long FmtStr_pct2d
 	jr	5
-	ld	xwa, Str_No_0xE7A
+	ld	xwa, 0xeab190
 	.ascii "89h#¿"
 	.byte 0x04
 	ldw	bc, 11
@@ -1787,11 +1787,11 @@ DrawFunc_Init_Variant1:
 	jr	z, 11
 	cps	l, 1
 	jr	nz, 14
-	ld	xwa, Str_No_0xE7E
+	ld	xwa, 0xeab194
 	jr	12
-	ld	xwa, Str_No_0xE82
+	ld	xwa, 0xeab198
 	jr	5
-	ld	xwa, Str_No_0xE86
+	ld	xwa, 0xeab19c
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
@@ -1799,7 +1799,7 @@ DrawFunc_Init_Variant1:
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
-	lda_24	xbc, Str_No_0xDEE
+	lda_24	xbc, 0xeab104
 	lds32	xhl, 0
 	.byte 0xc3
 	reti
@@ -1856,7 +1856,7 @@ DrawFunc_Init_Variant1:
 	cps	l, 1
 	jr	nz, 20
 	.byte 0x92, 0x04
-	ld	xwa, Data_CharMapFormatBlock_0x08
+	ld	xwa, 0xeab1a8
 	jr	18
 	.byte 0x92, 0x04
 	pushw	234
@@ -1864,7 +1864,7 @@ DrawFunc_Init_Variant1:
 	push	xbc
 	jr	9
 	.byte 0x92, 0x04
-	ld	xwa, Data_CharMapFormatBlock_0x10
+	ld	xwa, 0xeab1b0
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
@@ -1872,7 +1872,7 @@ DrawFunc_Init_Variant1:
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
-	lda_24	xbc, Str_No_0xDEE
+	lda_24	xbc, 0xeab104
 	lds32	xhl, 0
 	.byte 0xc3
 	reti
@@ -2393,7 +2393,7 @@ HexCharToNibble_Invalid:
 FontGlyph_ByteData:
 	ld	a, (xwa)
 	extz	wa
-	lda_24	xde, Data_CharMapFormatBlock_0x14
+	lda_24	xde, 0xeab1b4
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -2408,7 +2408,7 @@ FontGlyph_ByteData:
 	ld	(xbc), a
 	ret
 	lds	de, 0
-	lda_24	xhl, Data_CharMapFormatBlock_0x14
+	lda_24	xhl, 0xeab1b4
 	ld	a, (xwa)
 	.byte 0xc3
 	reti
@@ -2434,7 +2434,7 @@ FontGlyph_ByteData:
 ; =============================================================================
 InitPaletteRGB:
 	lda_24 xde, 0x0324fc
-	lda_24 xwa, NakaDbg_LowerCaseChars2_0x960
+	lda_24 xwa, 0xeb37de
 	ld xbc, xwa
 	st_dri3b C, 0xe1, 0x00, 0x04
 
@@ -4214,7 +4214,7 @@ PmBank_OnPaint:
 	push xde
 	pushw 0xff
 	pushw 0xf7
-	ld xde, TransposeNoteStr_C_0x12
+	ld xde, 0xed1726
 	call DrawString
 	st_dri3b A, 0xfd, 0x08, 0x01
 	ldw (xbc), 0x8
@@ -4235,7 +4235,7 @@ PmBank_OnPaint:
 	push xde
 	pushw 0xfb
 	pushw 0xf7
-	ld xde, TransposeNoteStr_C_0x26
+	ld xde, 0xed173a
 	call DrawString
 	st_dri3b A, 0xfd, 0x08, 0x01
 	ldw (xbc), 0x0
@@ -4256,7 +4256,7 @@ PmBank_OnPaint:
 	push xde
 	pushw 0xff
 	pushw 0xf7
-	ld xde, TransposeNoteStr_C_0x58
+	ld xde, 0xed176c
 	call DrawString
 	st_dri3b A, 0xfd, 0x08, 0x01
 	ldw (xbc), 0x28
@@ -4277,7 +4277,7 @@ PmBank_OnPaint:
 	push xde
 	pushw 0xff
 	pushw 0xf5
-	ld xde, TransposeNoteStr_C_0x64
+	ld xde, 0xed1778
 	call DrawString
 	ld_sril XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000f
@@ -4299,7 +4299,7 @@ PmBank_OnSelect:
 	ld xwa, (xwa + 48)
 	ld wa, (xwa)
 	sla wa, 3
-	lda_24 xbc, VariationStr_V1_0x3C
+	lda_24 xbc, 0xed167e
 	st_dri3b E, 0x07, 0xe4, 0xe0
 	st_dri3b D, 0xfd, 0x0c, 0x01
 	lds bc, 4
@@ -4317,7 +4317,7 @@ PmBank_OnSelect:
 	ld xwa, (xwa + 44)
 	ld wa, (xwa)
 	sla wa, 3
-	lda_24 xbc, VariationStr_V1_0x3C
+	lda_24 xbc, 0xed167e
 	st_dri3b E, 0x07, 0xe4, 0xe0
 	st_dri3b D, 0xfd, 0x0c, 0x01
 	lds bc, 4
@@ -4398,11 +4398,11 @@ ToneGen_WriteParamByIndex:
 	ld iz, bc
 	ld bc, wa
 	ld wa, iz
-	lda_24 xiy, VariationStr_V1_0x3C
+	lda_24 xiy, 0xed167e
 	cps bc, 5
 	jrl ugt, ToneGen_WriteParam_Return
 	add bc, bc
-	lda_24 xix, TransposeNoteStr_C_0x18E
+	lda_24 xix, 0xed18a2
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
 	lda_24 xix, ToneGen_ParamWriteDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -4425,7 +4425,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xwa, xbc
 	ld	xbc, xde
-	ld	xde, TransposeNoteStr_C_0x7C
+	ld	xde, 0xed1790
 	call	DrawString
 	lda	xbc, (xsp+2)
 	lda	xwa, (xsp+6)
@@ -4439,7 +4439,7 @@ ToneGen_ParamWriteDispatch:
 	push	xde
 	pushw	iz
 	pushw	247
-	ld	xde, TransposeNoteStr_C_0xA0
+	ld	xde, 0xed17b4
 	jrl	271
 	inc	8, xiy
 	lda	xix, (xsp+6)
@@ -4460,7 +4460,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xwa, xbc
 	ld	xbc, xde
-	ld	xde, TransposeNoteStr_C_0xC6
+	ld	xde, 0xed17da
 	call	DrawString
 	lda	xbc, (xsp+2)
 	lda	xwa, (xsp+6)
@@ -4474,7 +4474,7 @@ ToneGen_ParamWriteDispatch:
 	push	xde
 	pushw	iz
 	pushw	247
-	ld	xde, TransposeNoteStr_C_0xE4
+	ld	xde, 0xed17f8
 	jrl	183
 	lda	xiy, (xiy+16)
 	lda	xix, (xsp+6)
@@ -4494,7 +4494,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	wa
 	pushw	247
 	ld	xwa, xde
-	ld	xde, TransposeNoteStr_C_0x10C
+	ld	xde, 0xed1820
 	jrl	136
 	lda	xiy, (xiy+24)
 	lda	xix, (xsp+6)
@@ -4514,7 +4514,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	wa
 	pushw	247
 	ld	xwa, xde
-	ld	xde, TransposeNoteStr_C_0x12A
+	ld	xde, 0xed183e
 	jr	90
 	lda	xiy, (xiy+32)
 	lda	xix, (xsp+6)
@@ -4534,7 +4534,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	wa
 	pushw	247
 	ld	xwa, xde
-	ld	xde, TransposeNoteStr_C_0x148
+	ld	xde, 0xed185c
 	jr	44
 	lda	xiy, (xiy+40)
 	lda	xix, (xsp+6)
@@ -4554,7 +4554,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	wa
 	pushw	247
 	ld	xwa, xde
-	ld	xde, TransposeNoteStr_C_0x16A
+	ld	xde, 0xed187e
 	call	DrawString
 
 ToneGen_WriteParam_Return:
@@ -4578,7 +4578,7 @@ WallHomeEditCheck:
 	cp xwa, 0x9
 	jr gt, WallHomeEditCheck_ReturnFalse
 	add xwa, xwa
-	add xwa, TransposeNoteStr_C_0x1B2
+	add xwa, 0xed18c6
 	ld wa, (xwa)
 	lda_24 xix, WallHomeEdit_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -4622,7 +4622,7 @@ WallHomeEditCheck_ReturnFalse:
 	ld xbc, (xwa)
 	or xde, xde
 	jr nz, WallHomeEdit_LoadSndAddr3
-	ld xwa, TransposeNoteStr_C_0x19A
+	ld xwa, 0xed18ae
 	jr WallHomeEdit_PushAddr
 
 WallHomeEdit_PushSndAddr:
@@ -4633,7 +4633,7 @@ WallHomeEdit_PushSndAddr:
 	jr WallHomeEdit_CallAudio
 
 WallHomeEdit_LoadSndAddr3:
-	ld xwa, TransposeNoteStr_C_0x1AA
+	ld xwa, 0xed18be
 
 WallHomeEdit_PushAddr:
 	push xwa
@@ -4667,7 +4667,7 @@ WallMenuEditCheck:
 	cp xwa, 0x9
 	jr gt, WallOthEditCheck_RetZero
 	add xwa, xwa
-	add xwa, TransposeNoteStr_C_0x1DE
+	add xwa, 0xed18f2
 	ld wa, (xwa)
 	lda_24 xix, WallMenuEdit_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -4680,11 +4680,11 @@ WallMenuEdit_EventDispatch:
 	jr	z, 11
 	or	xwa, xwa
 	jr	nz, 14
-	ld	xwa, TransposeNoteStr_C_0x1C6
+	ld	xwa, 0xed18da
 	jr	12
-	ld	xwa, TransposeNoteStr_C_0x1CE
+	ld	xwa, 0xed18e2
 	jr	5
-	ld	xwa, TransposeNoteStr_C_0x1D6
+	ld	xwa, 0xed18ea
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
@@ -4715,7 +4715,7 @@ WallOthEditCheck:
 	cp xwa, 0x9
 	jr gt, WallOthCheckLoop_RetZero
 	add xwa, xwa
-	add xwa, TransposeNoteStr_C_0x20A
+	add xwa, 0xed191e
 	ld wa, (xwa)
 	lda_24 xix, WallOthEdit_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -4728,11 +4728,11 @@ WallOthEdit_EventDispatch:
 	jr	z, 11
 	or	xwa, xwa
 	jr	nz, 14
-	ld	xwa, TransposeNoteStr_C_0x1F2
+	ld	xwa, 0xed1906
 	jr	12
-	ld	xwa, TransposeNoteStr_C_0x1FA
+	ld	xwa, 0xed190e
 	jr	5
-	ld	xwa, TransposeNoteStr_C_0x202
+	ld	xwa, 0xed1916
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
@@ -4839,7 +4839,7 @@ WallUsrIni_ReturnZero:
 WallSureLngCheck:
 	cp xbc, 0x1e0009f
 	jr nz, WallSureLng_ReturnZero
-	lda_24 xhl, TransposeNoteStr_C_0x21E
+	lda_24 xhl, 0xed1932
 	ret
 
 WallSureLng_ReturnZero:
@@ -5291,7 +5291,7 @@ MainSysControl:
 	cp wa, 0x8
 	jr gt, MainSysControl_PostDispatchFinalize
 	add wa, wa
-	lda_24 xix, TransposeNoteStr_C_0x40E
+	lda_24 xix, 0xed1b22
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, MainSysCtrl_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -5318,13 +5318,13 @@ MainSysCtrl_Entry5_VoiceInit:
 	call Voice_InitBankDataSafe
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry6:
-	call VoiceData_ExtendedParamSetup_0x27
+	call 0xfc7ea9
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry7:
-	call VoiceData_ExtendedParamSetup_0x40
+	call 0xfc7ec2
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry8:
-	call VoiceData_ExtendedParamSetup_0xAF
+	call 0xfc7f31
 
 
 MainSysControl_PostDispatchFinalize:
@@ -5371,7 +5371,7 @@ CntIniFunc:
 	cp xde, 0x5
 	jr ugt, CntIniFunc_ReturnZero
 	add xde, xde
-	add xde, TransposeNoteStr_C_0x420
+	add xde, 0xed1b34
 	ld de, (xde)
 	lda_24 xix, CntIniFunc_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
@@ -5472,7 +5472,7 @@ AcFreeSplit_LookupNoteLabel:
 	exts xhl
 	divs hl, 0xc
 	sla hl, 2
-	lda_24 xbc, SplitNoteStr_C_0x04
+	lda_24 xbc, 0xed1baa
 	ld_sril3 XWA, 0x07, 0xe4, 0xec
 	push xwa
 	ld xwa, 0x4181
@@ -5518,7 +5518,7 @@ AcFreeSplit_LookupSecondNote:
 	exts xhl
 	divs hl, 0xc
 	sla hl, 2
-	lda_24 xbc, SplitNoteStr_C_0x04
+	lda_24 xbc, 0xed1baa
 	ld_sril3 XWA, 0x07, 0xe4, 0xec
 	push xwa
 	ld xwa, 0x4181
@@ -5626,7 +5626,7 @@ AcTranspose_ValueChanged:
 
 AcTranspose_FormatLabel:
 	sla wa, 2
-	lda_24 xde, OctaveDigitStr_0B_0x32
+	lda_24 xde, 0xed1c1c
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
 	push xwa
 	pushw 0xed

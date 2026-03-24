@@ -1423,7 +1423,7 @@ SeMenu_BitShiftMask_End:
 	calr	64771
 	lds	wa, 1
 	calr	64532
-	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	0xf0f04a
 	inc	2, xsp
 	ret
 	dec	6, xsp
@@ -2388,7 +2388,7 @@ SeMenu_SetupPartDisplay_End:
 	ld	(xbc), 32
 	ret
 	extz	wa
-	lda_24	xde, GUI_DisplayStructData_0x1129
+	lda_24	xde, 0xe0e107
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -2398,7 +2398,7 @@ SeMenu_SetupPartDisplay_End:
 	ld	(xbc), 0
 	jr	14
 	extz	wa
-	lda_24	xde, GUI_DisplayStructData_0x118A
+	lda_24	xde, 0xe0e168
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -3700,7 +3700,7 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	256
 	pushw	59
 	pushw	51
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	0xf0f149
 	inc	8, xsp
 	lda	xbc, (xsp+18)
 	lds	wa, 2
@@ -4072,7 +4072,7 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	256
 	pushw	59
 	pushw	51
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	0xf0f149
 	inc	8, xsp
 	lda	xbc, (xsp+30)
 	lds	wa, 3
@@ -4730,7 +4730,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x04, 0x9f
 	rcf
 	.byte 0x04
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	inc	8, xsp
 	popw	iz
 	lda	xsp, (xsp+10)
@@ -4755,7 +4755,7 @@ SeMenu_ApplyPartEdit_Data2:
 	div	a, 12
 	ld	a, w
 	extz	wa
-	lda_24	xde, GUI_DisplayStructData_0x1110
+	lda_24	xde, 0xe0e0ee
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -4774,7 +4774,7 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	254
 	pushw	73
 	pushw	48
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	0xf0f149
 	inc	8, xsp
 	lda	xbc, (xsp+18)
 	ldw	wa, 10
@@ -4887,21 +4887,21 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	254
 	pushw	97
 	pushw	48
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	pushw	121
 	.byte 0x9f
 	push_f
 	.byte 0x04
 	pushw	97
 	.byte 0x9f, 0x1c, 0x04
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	0xf0ee33
 	pushw	121
 	.byte 0x9f
 	ex_ff
 	.byte 0x04
 	pushw	97
 	.byte 0x9f, 0x1a, 0x04
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	0xf0ee33
 	lda	xsp, (xsp+24)
 	pushw	121
 	.byte 0x9f
@@ -4998,7 +4998,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x04
 	pushw	iz
 	pushw	48
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	.byte 0xd7
 	swi	2
 	.byte 0x04, 0x9f
@@ -5017,7 +5017,7 @@ SeMenu_ApplyPartEdit_Data2:
 	swi	2
 	.byte 0x04, 0x9f
 	ldb	b, 4
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	pushw	121
 	.byte 0x9f
 	pushw	wa
@@ -5026,7 +5026,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x9f
 	pushw	ix
 	.byte 0x04
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	0xf0ee33
 	lda	xsp, (xsp+32)
 	pushw	121
 	.byte 0x9f
@@ -5043,7 +5043,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x04, 0x9f
 	incf
 	.byte 0x04
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	0xf0ee33
 	inc	8, xsp
 	pop	xiz
 	lda	xsp, (xsp+28)
@@ -5065,7 +5065,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+24)
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, GUI_DisplayStructData_0x111D
+	lda_24	xbc, 0xe0e0fb
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -5200,7 +5200,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x04, 0x9f, 0x04, 0x04, 0x9f
 	ccf
 	.byte 0x04
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	ld	wa, (xsp+8)
 	.byte 0x9f
 	ldwio	160, 0x9f28
@@ -5210,7 +5210,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x9f
 	push_f
 	.byte 0x04
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	.byte 0x9f
 	rcf
 	.byte 0x04, 0x9f
@@ -5355,7 +5355,7 @@ SeMenu_ApplyPartEdit_Data2:
 	incf
 	.byte 0x04
 	pushw	67
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	.byte 0x9f
 	ccf
 	.byte 0x04, 0xd7
@@ -5439,7 +5439,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x04
 	pushw	wa
 	pushw	bc
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	.byte 0x9f
 	rcf
 	.byte 0x04, 0xd7
@@ -5450,7 +5450,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x04, 0xd7
 	swi	2
 	.byte 0x04
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	lda	xsp, (xsp+16)
 	.byte 0x9f
 	ldio	4, 11
@@ -5474,7 +5474,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x04, 0xd7
 	swi	2
 	.byte 0x04
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	0xf0ee33
 	inc	8, xsp
 	pop	xiz
 	lda	xsp, (xsp+16)
@@ -5533,7 +5533,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.long NakaObj_FmuteVol_DataEntry
 	pushw	118
 	pushw	67
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	0xf0f149
 	inc	8, xsp
 	ld	a, (xsp+10)
 	.byte 0x8f, 0x04, 0xc1
@@ -5547,7 +5547,7 @@ SeMenu_ApplyPartEdit_Data2:
 	incf
 	.byte 0x04
 	pushw	67
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	pushw	iz
 	.byte 0xd7
 	swi	2
@@ -5557,7 +5557,7 @@ SeMenu_ApplyPartEdit_Data2:
 	swi	2
 	decm8	6, (xwa-40)
 	pushw	wa
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	lda	xsp, (xsp+16)
 	pushw	iz
 	pushw	232
@@ -5569,7 +5569,7 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	iz
 	push	xiz
 	pushw	67
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	.byte 0x9f
 	rcf
 	.byte 0x04, 0xd7
@@ -5580,7 +5580,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0xd7
 	swi	2
 	.byte 0x04
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	lda	xsp, (xsp+16)
 	.byte 0x9f, 0x08
 	.long NakaInst_data_E80B04
@@ -5590,7 +5590,7 @@ SeMenu_ApplyPartEdit_Data2:
 	swi	2
 	incm8	6, (xwa-40)
 	pushw	wa
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	inc	8, xsp
 	.byte 0x9f
 	ei	4
@@ -5598,7 +5598,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0xd7
 	swi	2
 	.byte 0x04
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	0xf0ee33
 	inc	8, xsp
 	pop	xiz
 	lda	xsp, (xsp+12)
@@ -5708,7 +5708,7 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	232
 	pushw	77
 	pushw	67
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	0xf0f149
 	inc	8, xsp
 	ld	bc, iz
 	sub	bc, 67
@@ -5732,7 +5732,7 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	iz
 	pushw	wa
 	pushw	de
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	inc	8, xsp
 	.byte 0x8f, 0x04
 	push	xsp
@@ -5753,7 +5753,7 @@ SeMenu_ApplyPartEdit_Data2:
 	rcf
 	.byte 0x04
 	pushw	iz
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	.byte 0x9f
 	ccf
 	.byte 0x04
@@ -5766,7 +5766,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	wa, iz
 	add	wa, 10
 	pushw	wa
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	lda	xsp, (xsp+16)
 	.byte 0x9f
 	ret
@@ -5776,7 +5776,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	wa, (xsp+14)
 	sub	wa, 10
 	pushw	wa
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	inc	8, xsp
 	ldw	bc, 232
 	.byte 0x9f
@@ -5800,7 +5800,7 @@ SeMenu_ApplyPartEdit_Data2:
 	.byte 0x04, 0x9f
 	ret
 	.byte 0x04
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	0xf0edfc
 	.byte 0x9f
 	ret
 	.byte 0x04
@@ -5809,7 +5809,7 @@ SeMenu_ApplyPartEdit_Data2:
 	push_f
 	.byte 0x04
 	pushw	iz
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	0xf0ee33
 	.byte 0x9f
 	ex_ff
 	.byte 0x04, 0x9f, 0x1a, 0x04, 0x9f
@@ -6670,12 +6670,12 @@ SeMenu_StoreEffectCoeff_Data:
 	ld	(xbc), a
 	ret
 	lda	xsp, (xsp-40)
-	ld	xiy, GUI_DisplayStructData_0x120C
+	ld	xiy, 0xe0e1ea
 	lda	xix, (xsp+22)
 	.byte 0x85
 	rcf
 	ldiw
-	ld	xiy, GUI_DisplayStructData_0x120F
+	ld	xiy, 0xe0e1ed
 	lda	xix, (xsp+18)
 	.byte 0x85
 	rcf
@@ -6847,7 +6847,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	0xf07333
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -6855,7 +6855,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, GUI_DisplayStructData_0x1222
+	lda_24	xde, 0xe0e200
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -6866,7 +6866,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	0xf07333
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -6874,7 +6874,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, GUI_DisplayStructData_0x126A
+	lda_24	xde, 0xe0e248
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -6885,7 +6885,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	0xf07333
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -6893,7 +6893,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, GUI_DisplayStructData_0x12B2
+	lda_24	xde, 0xe0e290
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -6904,7 +6904,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	0xf07333
 	cp	hl, 0xffff
 	jr	z, 25
 	ld	a, (xsp)
@@ -6912,7 +6912,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, GUI_DisplayStructData_0x12FA
+	lda_24	xde, 0xe0e2d8
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -6945,7 +6945,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	0xf074bc
 	.byte 0xc7
 	swi	3
 	.byte 0x8b
@@ -6955,9 +6955,9 @@ SeMenu_RefreshPartDisplay_Data:
 	pushw	4
 	.byte 0xbf, 0x04
 	.asciz "080'"
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	0xf06f37
 	lds	wa, 2
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	0xf07499
 	.byte 0xd7
 	swi	2
 	halt
@@ -6989,7 +6989,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	0xf074bc
 	.byte 0xc7
 	swi	3
 	.byte 0x8b
@@ -7000,9 +7000,9 @@ SeMenu_RefreshPartDisplay_Data:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 39
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	0xf06f37
 	lds	wa, 3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	0xf07499
 	.byte 0xd7
 	swi	2
 	halt
@@ -7031,7 +7031,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	0xf074bc
 	.byte 0xc7
 	swi	3
 	.byte 0x8b
@@ -7042,9 +7042,9 @@ SeMenu_RefreshPartDisplay_Data:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 39
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	0xf06f37
 	lds	wa, 4
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	0xf07499
 	.byte 0xd7
 	swi	2
 	halt
@@ -7073,7 +7073,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lda	xbc, (xsp+2)
 	ld	a, (xsp+14)
 	extz	wa
-	lda_24	xde, GUI_DisplayStructData_0x1342
+	lda_24	xde, 0xe0e320
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -7085,14 +7085,14 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	0xf074bc
 	lda	xwa, (xsp+2)
-	call	SeMenu_BitShiftMask_End_0x14
+	call	0xf06b72
 	cps	l, 1
 	jr	nz, 54
 	ld	a, (xsp+5)
 	extz	wa
-	lda_24	xbc, GUI_DisplayStructData_0x1362
+	lda_24	xbc, 0xe0e340
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
@@ -7158,7 +7158,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	0xf074bc
 	.byte 0xc7
 	swi	3
 	.byte 0x8b
@@ -7172,9 +7172,9 @@ SeMenu_RefreshPartDisplay_Data:
 	push	xwa
 	ldw	wa, 39
 	lds	de, 0
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	0xf06f37
 	lds	wa, 6
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	0xf07499
 	.byte 0xd7
 	swi	2
 	halt
@@ -7192,7 +7192,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ldw	wa, 39
 	lds	bc, 1
 	lds	de, 1
-	call	SeMenu_ApplyPartEdit_Data2_0x17C1
+	call	0xf08e2d
 	ret
 	cps	a, 0
 	jr	nz, 9
@@ -7202,7 +7202,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ldw	wa, 39
 	lds	bc, 2
 	lds	de, 1
-	jp	SeMenu_ApplyPartEdit_Data2_0x17C1
+	jp	0xf08e2d
 	dec	2, xsp
 	cps	a, 0
 	jr	nz, 41
@@ -7226,7 +7226,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ldw	wa, 39
 	lds	bc, 3
 	lds	de, 1
-	call	SeMenu_ApplyPartEdit_Data2_0x17C1
+	call	0xf08e2d
 	inc	2, xsp
 	ret
 	dec	2, xsp
@@ -7252,7 +7252,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ldw	wa, 39
 	lds	bc, 4
 	lds	de, 1
-	call	SeMenu_ApplyPartEdit_Data2_0x17C1
+	call	0xf08e2d
 	inc	2, xsp
 	ret
 	cps	a, 0
@@ -7266,34 +7266,34 @@ SeMenu_RefreshPartDisplay_Data:
 	extz	wa
 	ldw	bc, 9
 	lds	de, 0
-	jp	SeMenu_ApplyPartEdit_Data2_0x332
+	jp	0xf0799e
 	extz	wa
 	ldw	bc, 10
 	lds	de, 0
-	jp	SeMenu_ApplyPartEdit_Data2_0x396
+	jp	0xf07a02
 	extz	wa
 	ldw	bc, 8
 	ldw	de, 11
-	jp	SeMenu_ApplyPartEdit_Data2_0x3FA
+	jp	0xf07a66
 	extz	wa
 	ldw	bc, 12
 	lds	de, 0
-	jp	SeMenu_ApplyPartEdit_Data2_0x498
+	jp	0xf07b04
 	extz	wa
 	ldw	bc, 16
 	ldw	de, 13
-	jp	SeMenu_ApplyPartEdit_Data2_0x4FC
+	jp	0xf07b68
 	extz	wa
 	ldw	bc, 14
 	lds	de, 0
-	jp	SeMenu_ApplyPartEdit_Data2_0x59C
+	jp	0xf07c08
 	extz	wa
 	lds	bc, 7
 	ldw	de, 15
-	jp	SeMenu_ApplyPartEdit_Data2_0x602
+	jp	0xf07c6e
 	cps	a, 0
 	ret	z
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	0xf06d01
 	ret
 	cps	a, 0
 	jr	nz, 7
@@ -7301,7 +7301,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lds	bc, 0
 	jr	15
 	lds	wa, 1
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	0xf06fae
 	cps	l, 0
 	ret	z
 	ldw	wa, 40
@@ -7314,7 +7314,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lds	bc, 0
 	jr	15
 	lds	wa, 2
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	0xf06fae
 	cps	l, 0
 	ret	z
 	ldw	wa, 40
@@ -7324,9 +7324,9 @@ SeMenu_RefreshPartDisplay_Data:
 	cps	a, 0
 	jr	nz, 6
 	lds	wa, 0
-	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
+	jp	0xf07966
 	lds	wa, 3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	0xf06fae
 	cps	l, 0
 	ret	z
 	ldw	wa, 40
@@ -7336,9 +7336,9 @@ SeMenu_RefreshPartDisplay_Data:
 	cps	a, 0
 	jr	nz, 6
 	lds	wa, 1
-	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
+	jp	0xf07966
 	lds	wa, 4
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	0xf06fae
 	cps	l, 0
 	ret	z
 	ldw	wa, 40
@@ -7361,25 +7361,25 @@ SeMenu_RefreshPartDisplay_Data:
 	ret
 	extz	wa
 	ldw	bc, 20
-	jp	SeMenu_ApplyPartEdit_Data2_0x6A2
+	jp	0xf07d0e
 	extz	wa
 	ldw	bc, 21
-	jp	SeMenu_ApplyPartEdit_Data2_0x732
+	jp	0xf07d9e
 	extz	wa
 	ldw	bc, 22
-	jp	SeMenu_ApplyPartEdit_Data2_0x7C2
+	jp	0xf07e2e
 	extz	wa
 	ldw	bc, 19
-	jp	SeMenu_ApplyPartEdit_Data2_0x852
+	jp	0xf07ebe
 	extz	wa
 	ldw	bc, 17
-	jp	SeMenu_ApplyPartEdit_Data2_0x8A1
+	jp	0xf07f0d
 	extz	wa
 	ldw	bc, 18
-	jp	SeMenu_ApplyPartEdit_Data2_0x8F4
+	jp	0xf07f60
 	cps	a, 0
 	ret	z
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	0xf06d01
 	ret
 	cps	a, 0
 	jr	nz, 7
@@ -7387,7 +7387,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lds	bc, 0
 	jr	15
 	lds	wa, 1
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	0xf06fae
 	cps	l, 0
 	ret	z
 	ldw	wa, 41
@@ -7400,7 +7400,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lds	bc, 0
 	jr	15
 	lds	wa, 2
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	0xf06fae
 	cps	l, 0
 	ret	z
 	ldw	wa, 41
@@ -7410,7 +7410,7 @@ SeMenu_RefreshPartDisplay_Data:
 	cps	a, 0
 	ret	z
 	lds	wa, 3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	0xf06fae
 	cps	l, 0
 	ret	z
 	ldw	wa, 41
@@ -7420,7 +7420,7 @@ SeMenu_RefreshPartDisplay_Data:
 	cps	a, 0
 	ret	z
 	lds	wa, 4
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	0xf06fae
 	cps	l, 0
 	ret	z
 	ldw	wa, 41
@@ -7446,22 +7446,22 @@ SeMenu_RefreshPartDisplay_Data:
 	jp	SeMenu_ApplyPartEdit_Data2
 	extz	wa
 	lds	bc, 1
-	jp	SeMenu_ApplyPartEdit_Data2_0x39
+	jp	0xf076a5
 	extz	wa
 	lds	bc, 1
-	jp	SeMenu_ApplyPartEdit_Data2_0xB6
+	jp	0xf07722
 	extz	wa
 	lds	bc, 1
-	jp	SeMenu_ApplyPartEdit_Data2_0x133
+	jp	0xf0779f
 	extz	wa
 	lds	bc, 1
-	jp	SeMenu_ApplyPartEdit_Data2_0x1B0
+	jp	0xf0781c
 	extz	wa
 	lds	bc, 1
-	jp	SeMenu_ApplyPartEdit_Data2_0x22B
+	jp	0xf07897
 	extz	wa
 	lds	bc, 1
-	jp	SeMenu_ApplyPartEdit_Data2_0x292
+	jp	0xf078fe
 	cps	a, 0
 	.byte 0xf2, 0x01
 	jr	pl, -16
@@ -7476,24 +7476,24 @@ SeMenu_RefreshPartDisplay_Data:
 	jp	SeMenu_SendEvent
 	lds	wa, 1
 	lds	bc, 1
-	jp	SeMenu_TransferPartValues_EndData_0x20E
+	jp	0xf06fdc
 	cps	a, 0
 	ret	z
 	lds	wa, 1
 	lds	bc, 2
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	0xf06fdc
 	ret
 	cps	a, 0
 	ret	z
 	lds	wa, 1
 	lds	bc, 3
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	0xf06fdc
 	ret
 	cps	a, 0
 	ret	z
 	lds	wa, 1
 	lds	bc, 4
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	0xf06fdc
 	ret
 	cps	a, 0
 	ret	nz

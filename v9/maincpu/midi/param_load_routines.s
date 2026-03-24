@@ -61,7 +61,7 @@ ParaLoadOpt_CaseC:
 	cp wa, 0xc
 	jrl gt, MidiFunc_SendEvtReturnAlt
 	add wa, wa
-	lda_24 xix, FileTransfer_BlankStatus_0x6E_
+	lda_24 xix, 0xe7fe3a
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, ParaLoadOpt_DispatchTable_A
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -188,7 +188,7 @@ ParaLoadOpt_CaseF:
 	cp wa, 0xc
 	jrl gt, MidiFunc_SendEventReturn
 	add wa, wa
-	lda_24 xix, FileTransfer_BlankStatus_0x88_
+	lda_24 xix, 0xe7fe54
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, ParaLoadOpt_DispatchTable_B
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -314,7 +314,7 @@ AcParaLoadOptGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, ParaLoadOpt_GridCheck3
 	add xbc, xbc
-	add xbc, FileTransfer_BlankStatus_0xC6_
+	add xbc, 0xe7fe92
 	ld bc, (xbc)
 	lda_24 xix, ParaLoadOpt_GridHandler
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -405,7 +405,7 @@ ParaLoadOpt_GridReturn:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, FileTransfer_BlankStatus_0xA2_
+	lda_24 xbc, 0xe7fe6e
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
@@ -463,7 +463,7 @@ ParaLoadOpt_GridDelegateProc:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, FileTransfer_BlankStatus_0xB4_
+	lda_24 xbc, 0xe7fe80
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
@@ -570,11 +570,11 @@ ParaLoadOptGridCheck:
 	push xiz
 	ld xhl, xde
 	ld xde, xbc
-	ld xiy, NakaInst_INITIAL_0x0A_
+	ld xiy, 0xe7ff02
 	lda xix, (xsp + 28)
 	ldw bc, 0x8
 	ldirw
-	ld xiy, MidiPart_PageStr_1of3_0x0A_
+	ld xiy, 0xe7ed44
 	lda xix, (xsp + 20)
 	lds bc, 4
 	ldirw
@@ -583,7 +583,7 @@ ParaLoadOptGridCheck:
 	ld (xsp + 4), xwa
 	lda xbc, (xsp + 28)
 	lda xiy, (xsp + 20)
-	lda_24 xwa, UserMemory_ConfirmData_0x16_
+	lda_24 xwa, 0xe7feb6
 	ld (xsp + 8), xwa
 	lda_24 xiz, 0x0340f6
 	lda xwa, (xiy + 2)
@@ -598,7 +598,7 @@ ParaLoadOptGridCheck:
 	cp xde, 0x6
 	jrl gt, ParaLoadOpt_ReturnZero
 	add xde, xde
-	add xde, NakaInst_INITIAL_0x1A_
+	add xde, 0xe7ff12
 	ld de, (xde)
 	lda_24 xix, ParaLoadOpt_GridDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8

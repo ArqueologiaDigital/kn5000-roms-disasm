@@ -738,7 +738,7 @@ GetEditSwPoint:
 	cp hl, 0xc
 	jrl ugt, EditSwParam_Default
 	add hl, hl
-	lda_24 xix, DiskWarning_ConfirmStrings_0xE70
+	lda_24 xix, 0xea9b1c
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	lda_24 xix, EditSwParam_Mode0
 	jp_dri 8, 0x07, 0xf0, 0xec
@@ -832,7 +832,7 @@ SetWallPaper:
 	cps wa, 5
 	jr gt, SetWallPaper_Default
 	add wa, wa
-	lda_24 xix, DiskWarning_ConfirmStrings_0xE8A
+	lda_24 xix, 0xea9b36
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SetWallPaper_DispatchData
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -1125,7 +1125,7 @@ IvDirmdScreenProc:
 	cp xbc, 0xe
 	jrl gt, DirmdEmu_CaseE
 	add xbc, xbc
-	add xbc, DiskWarning_ConfirmStrings_0xE96
+	add xbc, 0xea9b42
 	ld bc, (xbc)
 	lda_24 xix, DirmdEmu_CaseB
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -1258,7 +1258,7 @@ GetDirmdFlag:
 DirmdTitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, DiskWarning_ConfirmStrings_0xEB4
+	ld xiy, 0xea9b60
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -1276,16 +1276,16 @@ DirmdEmu_CaseF:
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
 	ldw	wa, 245
-	call	TextRender_PopAndReturn_0x09
-	call	GraphicsRender_ByteData_0x67
+	call	0xfb144a
+	call	0xfb14b7
 	ldw	wa, 255
-	call	GraphicsRender_ByteData_0x06
-	ld	xwa, DiskWarning_ConfirmStrings_0xEC4
-	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_0x1BDA
-	ld	xwa, DiskWarning_ConfirmStrings_0xED6
-	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_0x1BDB
+	call	0xfb1456
+	ld	xwa, 0xea9b70
+	call	0xfa2ea1
+	jp	0xf824c0
+	ld	xwa, 0xea9b82
+	call	0xfa2ea1
+	jp	0xf824c1
 	lda	xsp, (xsp-256)
 	pushw	iz
 	pushm	(xsp+264)
@@ -1298,16 +1298,16 @@ DirmdEmu_CaseF:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+2)
-	call	DbMemo_DrawContent_Loop_0x61
+	call	0xfa2ea1
 	ld	wa, iz
 	ld	bc, (xsp+264)
-	call	AudioCtrl_DataBlock_0x1BDC
+	call	0xf824c2
 	popw	iz
 	.byte 0xf3, 0xfd, 0x00, 0x01, 0x37
 	ret
-	ld	xwa, DiskWarning_ConfirmStrings_0xF00
-	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_0x1BDD
+	ld	xwa, 0xea9bac
+	call	0xfa2ea1
+	jp	0xf824c3
 DirmdEmulator_Entry:
 
 DirmdEmulator:
@@ -1319,7 +1319,7 @@ DirmdEmulator:
 	cp xbc, 0xf
 	jrl gt, DirmdEmu_DefaultCase
 	add xbc, xbc
-	add xbc, DiskWarning_ConfirmStrings_0xF12
+	add xbc, 0xea9bbe
 	ld bc, (xbc)
 	lda_24 xix, DirmdEmulator_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -1427,7 +1427,7 @@ WindowProc:
 	cp xbc, 0x9
 	jrl gt, WindowProc_DefaultHandler
 	add xbc, xbc
-	add xbc, DiskWarning_ConfirmStrings_0xF32
+	add xbc, 0xea9bde
 	ld bc, (xbc)
 	lda_24 xix, WindowProc_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -1833,7 +1833,7 @@ AcNaming_QueryCharSet:
 	ld wa, hl
 	extz xwa
 	sll xwa, 2
-	ld xbc, Data_SoundEditorCharsLayout_0x18
+	ld xbc, 0xea9eea
 	add xbc, xwa
 	ld xwa, (xbc)
 	st32_24 0x0274e4, xwa

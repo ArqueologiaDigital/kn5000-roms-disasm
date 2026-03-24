@@ -174,7 +174,7 @@ VoiceChannel_ApplyPitchFlags:
 	ld xix, SeqTrack_ChannelMapIdentity
 	cpdi8 4600, 1
 	jr z, VoiceChannel_SelectChannelBank
-	ld xix, SeqTrack_ChannelMapIdentity_0x10_
+	ld xix, 0xf2436b
 
 VoiceChannel_SelectChannelBank:
 	ld_srib3 A, 0x07, 0xf0, 0xf4
@@ -332,7 +332,7 @@ VoiceChannel_GetParamBlock:
 
 VoiceChannel_GetParamBlockAlt:
 	push xix
-	ld xix, VoiceChannel_ParamTable1_0x40_
+	ld xix, 0xf26c5e
 	ld_sril3 XHL, 0x07, 0xf0, 0xec
 	pop xix
 
@@ -507,7 +507,7 @@ SoundGen_UpdateAndWriteChannel:
 	jr SoundGen_ApplyChannelParam
 
 SoundGen_SelectChannelTable:
-	ld xix, SeqTrack_ChannelMapIdentity_0x10_
+	ld xix, 0xf2436b
 	cpdi8 4600, 1
 	jr nz, SoundGen_SelectAltChannelTable
 	ld xix, SeqTrack_ChannelMapIdentity
@@ -1009,11 +1009,11 @@ SMF_SetupActiveChannel:
 	pop xde
 	stda16 0x28af, xhl
 	stdi16 9830, 5
-	ld xiy, SMF_HeaderConstants_0x04_
+	ld xiy, 0xf2823e
 	ld xix, 0x13fa
 	lds bc, 7
 	ldirw
-	ld xiy, SMF_HeaderConstants_0x12_
+	ld xiy, 0xf2824c
 	lds bc, 4
 	ldir85
 	xor wa, wa
@@ -1079,10 +1079,10 @@ SMF_Setup_FileUnderflow:
 	jp SMF_FlushAndFinalize
 
 SMF_Setup_WriteLoop:
-	ld xiy, SMF_HeaderConstants_0x42_
+	ld xiy, 0xf2827c
 	cpdi8 4324, 0
 	jr nz, SMF_Setup_SelectTablePtr
-	ld xiy, SMF_HeaderConstants_0x4A_
+	ld xiy, 0xf28284
 
 SMF_Setup_SelectTablePtr:
 	ldda32 xix, 4376
@@ -1139,7 +1139,7 @@ SMF_ScanAndProcessChannel:
 	ld b, l
 	sla l, 1
 	push xix
-	ld xix, SMF_HeaderConstants_0x1A_
+	ld xix, 0xf28254
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	cp hl, 0xffff
@@ -1453,7 +1453,7 @@ SMF_WriteVol_PanAndPitch:
 	xor h, h
 	sla l, 1
 	push xix
-	ld xix, SMF_HeaderConstants_0x1A_
+	ld xix, 0xf28254
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	cp hl, 0xffff
@@ -1536,7 +1536,7 @@ SMF_WriteRPN_FineTune:
 	ld xix, 0xf1a0
 	ld_srib3 L, 0x07, 0xf0, 0xec
 	sla hl, 1
-	ld xix, SMF_HeaderConstants_0x1A_
+	ld xix, 0xf28254
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	ld xiy, 0xf460
@@ -1638,7 +1638,7 @@ SMF_WriteRPN_CoarseTune:
 	ld xix, 0xf1a0
 	ld_srib3 L, 0x07, 0xf0, 0xec
 	sla l, 1
-	ld xix, SMF_HeaderConstants_0x1A_
+	ld xix, 0xf28254
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	ld xiy, 0xf460
@@ -1735,7 +1735,7 @@ SMF_WriteRPN_Transpose:
 	ld xix, 0xf1a0
 	ld_srib3 L, 0x07, 0xf0, 0xec
 	sla l, 1
-	ld xix, SMF_HeaderConstants_0x1A_
+	ld xix, 0xf28254
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	ld xiy, 0xf460
@@ -2276,7 +2276,7 @@ SMF_ProgramChange_ProcessPatch:
 	ldda8 l, 4213
 	ld xix, 0xf1a0
 	ld_srib3 L, 0x07, 0xf0, 0xec
-	ld xix, SMF_HeaderConstants_0x52_
+	ld xix, 0xf2828c
 	ld_srib3 L, 0x07, 0xf0, 0xec
 	stda8 6748, l
 	pop xix
@@ -3048,7 +3048,7 @@ FileOpen_NormalizeName:
 	ld xwa, xde
 	ld a, (xwa)
 	extz wa
-	lda_24 xbc, CharMap_FullPermutation_0x660_
+	lda_24 xbc, 0xeed778
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	bit 1, a
 	jr z, FileOpen_NormalizeNoUpper
@@ -8394,7 +8394,7 @@ SeqChan_ByteBlockB:
 SeqChan_ByteBlockC:
 	push	xiz
 	ld	xiz, (xsp+20)
-	call	FDC_ClearDiskChangeStatus_0x12_
+	call	0xf51e43
 	cps	hl, 0
 	jr	z, 9
 	call	FDC_ClearDiskChangeStatus
@@ -8518,7 +8518,7 @@ SeqChan_ByteBlockD:
 	calr	65246
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_0x736_
+	call	0xf50822
 	inc	8, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -8539,7 +8539,7 @@ SeqChan_ByteBlockD:
 	ld	xwa, (xwa+26)
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_0x736_
+	call	0xf50822
 	inc	4, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -8561,7 +8561,7 @@ SeqChan_ByteBlockD:
 	calr	65167
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_0x736_
+	call	0xf50822
 	inc	8, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -8580,7 +8580,7 @@ SeqChan_ByteBlockD:
 	calr	65130
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_0x736_
+	call	0xf50822
 	inc	8, xsp
 	cps	hl, 0
 	jr	z, 5
@@ -8949,7 +8949,7 @@ FDC_Format2DD_Start:
 	push_werp 0xfa
 	lds wa, 0
 	calr FDC_SetSectorLength
-	lda_24 xwa, Display_FontPalette_Table_0x21E_
+	lda_24 xwa, 0xe45076
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -8963,7 +8963,7 @@ FDC_Format2DD_Start:
 	jrl FDC_CmdFrame_Epilogue
 
 FDC_Format2DD_Step2:
-	lda_24 xwa, Display_FontPalette_Table_0x1FE_
+	lda_24 xwa, 0xe45056
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -8994,7 +8994,7 @@ FDC_Format2DD_WriteBoot:
 	push xwa
 	call Memset
 	pushw 0x20
-	lda_24 xwa, Display_FontPalette_Table_0x25E_
+	lda_24 xwa, 0xe450b6
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9031,7 +9031,7 @@ FDC_Format2DD_WriteFAT1:
 	push xwa
 	call Memset
 	pushw 0x3
-	lda_24 xwa, Display_FontPalette_Table_0x27E_
+	lda_24 xwa, 0xe450d6
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9116,7 +9116,7 @@ FDC_Format2DD_WriteDataSec1:
 	push xwa
 	call Memset
 	pushw 0x3
-	lda_24 xwa, Display_FontPalette_Table_0x27E_
+	lda_24 xwa, 0xe450d6
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9326,7 +9326,7 @@ FDC_Format2HD_Start:
 	push_werp 0xfa
 	lds wa, 0
 	calr FDC_SetSectorLength
-	lda_24 xwa, Display_FontPalette_Table_0x23E_
+	lda_24 xwa, 0xe45096
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9340,7 +9340,7 @@ FDC_Format2HD_Start:
 	jrl FdcOp_Epilogue20
 
 FDC_Format2HD_Step2:
-	lda_24 xwa, Display_FontPalette_Table_0x1FE_
+	lda_24 xwa, 0xe45056
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9371,7 +9371,7 @@ FDC_Format2HD_WriteBoot:
 	push xwa
 	call Memset
 	pushw 0x20
-	lda_24 xwa, Display_FontPalette_Table_0x282_
+	lda_24 xwa, 0xe450da
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9408,7 +9408,7 @@ FDC_Format2HD_WriteFAT1:
 	push xwa
 	call Memset
 	pushw 0x3
-	lda_24 xwa, Display_FontPalette_Table_0x2A2_
+	lda_24 xwa, 0xe450fa
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9478,7 +9478,7 @@ FDC_Format2HD_TrackTest:
 	push xwa
 	call Memset
 	pushw 0x3
-	lda_24 xwa, Display_FontPalette_Table_0x2A2_
+	lda_24 xwa, 0xe450fa
 	push xwa
 	ld xwa, (xsp + 16)
 	push xwa
@@ -9691,7 +9691,7 @@ GetMediaType_SetupReadCmd:
 	jrl GetMediaType_Epilogue
 
 GetMediaType_TryRecalib:
-	lda_24 xwa, Display_FontPalette_Table_0x24E_
+	lda_24 xwa, 0xe450a6
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9701,7 +9701,7 @@ GetMediaType_TryRecalib:
 	jrl GetMediaType_Epilogue
 
 GetMediaType_TryFormat2HD:
-	lda_24 xwa, Display_FontPalette_Table_0x23E_
+	lda_24 xwa, 0xe45096
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9747,7 +9747,7 @@ GetMediaType_Invalid:
 	jr GetMediaType_Epilogue
 
 GetMediaType_Try2DDHeader:
-	lda_24 xwa, Display_FontPalette_Table_0x21E_
+	lda_24 xwa, 0xe45076
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9818,7 +9818,7 @@ GetDiskFreeSpace:
 	cps wa, 6
 	jr gt, FileIO_ReadFreeSpaceViaFAT
 	add wa, wa
-	lda_24 xix, Display_FontPalette_Table_0x2AC_
+	lda_24 xix, 0xe45104
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, GetDiskFreeSpace_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -9874,7 +9874,7 @@ GetVolumeLabel:
 	cps wa, 6
 	jr gt, FileIO_ReadVolumeLabelEntry
 	add wa, wa
-	lda_24 xix, Display_FontPalette_Table_0x2C0_
+	lda_24 xix, 0xe45118
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, GetVolumeLabel_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -10676,7 +10676,7 @@ SndTable_ByteBlock_ReadOps:
 	.byte 0xf0
 	jrl	ule, -134
 	sti8_24	0x2357e, 0
-	call	Show_ScreenGroup_Entry_0x7A_
+	call	0xef1c16
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -11155,9 +11155,9 @@ SeqDispatch_PostInit:
 	ret
 
 SeqDispatch_TrampolineBlock:
-	jp	SeqDispatch_TrampolineBlock_0x0B_
+	jp	0xf532dc
 	ret
-	jp	SeqDispatch_TrampolineBlock_0x0C_
+	jp	0xf532dd
 	ret
 	ret
 	ret
@@ -11202,7 +11202,7 @@ Rhythm_DispatchNote_Finalize:
 Rhythm_TransposeWithMod_Tramp:
 	jp Rhythm_TransposeWithMod
 Rhythm_TransposeTrampBlock:
-	jp	AccStyle_TempoLookupData_0x06_
+	jp	0xf55be9
 
 Seq_DispatcherTick:
 	cpdi8 0x8d36, 16
@@ -11345,7 +11345,7 @@ VoiceParam_Clamp_CheckRange:
 	jr TableLoad_Return
 
 VoiceParam_Clamp_LookupTable:
-	ld xwa, Display_FontPalette_Table_0x1532_
+	ld xwa, 0xe4638a
 	sla l, 1
 	and h, 0x7f
 	and h, 0x7
@@ -11373,7 +11373,7 @@ Seq_ReadTempoLookup:
 	xor xhl, xhl
 	ldda16 xwa, 1033
 	ld l, a
-	add xhl, Display_FontPalette_Table_0x1DBF_
+	add xhl, 0xe46c17
 	ld a, (xhl)
 	stda16 0x334b, xwa
 	ret
@@ -11398,7 +11398,7 @@ Seq_InputState_StoreFlag:
 	xor xhl, xhl
 	ldda8 l, 0x3280
 	sla l, 1
-	add xhl, Display_FontPalette_Table_0x1D46_
+	add xhl, 0xe46b9e
 	ld bc, (xhl)
 	xor hl, hl
 	ldda8 l, 0x327f

@@ -129,7 +129,7 @@ SoundBank_InitTrack_ByteFields:
 	xor iy, iy
 
 SoundBank_InitTrack_WordFields:
-	ld xix, SoundBank_DefaultTrackData_0x08_
+	ld xix, 0xf2312c
 	ld_sriw3 WA, 0x07, 0xf0, 0xf4
 	st_dri3w WA, 0x07, 0xec, 0xf4
 	add iy, 0x2
@@ -219,7 +219,7 @@ SoundBank_CopyChData:
 	jp SoundBank_CopyCh_InitRemaining
 
 SoundBank_CopyCh_FromDefault:
-	ld xiy, SoundBank_DefaultNamePadding_0x0A_
+	ld xiy, 0xf2324b
 	ldir85
 
 SoundBank_CopyCh_InitRemaining:
@@ -508,7 +508,7 @@ FloppyIO_ReadAndValidateHeader:
 	call FloppyIO_SelectReadMode
 	call FloppyIO_ConfigureSwitchboard
 	lds bc, 4
-	ld xiy, SMF_HeaderMagic_MThdMTrk_0x04_
+	ld xiy, 0xf236b3
 
 SMF_ReadMTrk_ByteLoop:
 	pushw bc

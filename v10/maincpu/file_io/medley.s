@@ -1420,7 +1420,7 @@ DiskSel_GetFileName:
 	jr DiskSel_FormatEntry
 
 DiskSel_EmptyFileName:
-	lda_24 xbc, Data_SaveLoadMenuTable_0x64
+	lda_24 xbc, 0xea0a54
 
 DiskSel_FormatEntry:
 	ld de, iz
@@ -4257,7 +4257,7 @@ InitializeCheap:
 PasswordText:
 	cp xbc, 0x1e0009f
 	jr nz, PasswordText_Exit
-	lda_24 xhl, NakaInst_WaitWinCtlSmf_0x7C8
+	lda_24 xhl, 0xea85c8
 	ret
 
 PasswordText_Exit:
@@ -4272,15 +4272,15 @@ CheckPasswordText:
 	jr z, CheckPwd_Type2
 	cps a, 1
 	jr nz, CheckPwd_Type0
-	ld xhl, NakaInst_WaitWinCtlSmf_0xA32
+	ld xhl, 0xea8832
 	jr CheckPwd_Return
 
 CheckPwd_Type2:
-	ld xhl, NakaInst_WaitWinCtlSmf_0xC0C
+	ld xhl, 0xea8a0c
 	jr CheckPwd_Return
 
 CheckPwd_Type0:
-	ld xhl, NakaInst_WaitWinCtlSmf_0x88E
+	ld xhl, 0xea868e
 
 CheckPwd_Return:
 	ret
@@ -4319,7 +4319,7 @@ WakeUp_HandleDirect:
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
-	ld xde, NakaInst_WaitWinCtlSmf_0xDF0
+	ld xde, 0xea8bf0
 	call SendEvent
 	jrl WakeUp_ReturnZero
 
@@ -4560,7 +4560,7 @@ CheckNo_HandleConfirm:
 DiskAttention:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_Type1
-	lda_24 xhl, NakaInst_WaitWinCtlSmf_0xDFE
+	lda_24 xhl, 0xea8bfe
 	ret
 
 CheckNo_Type1:
@@ -4570,7 +4570,7 @@ CheckNo_Type1:
 DiskSure:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_Type2
-	lda_24 xhl, NakaInst_WaitWinCtlSmf_0xE5C
+	lda_24 xhl, 0xea8c5c
 	ret
 
 CheckNo_Type2:
@@ -4580,7 +4580,7 @@ CheckNo_Type2:
 FormatText:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_Type3
-	lda_24 xhl, DiskWarning_ConfirmStrings_0x30
+	lda_24 xhl, 0xea8cdc
 	ret
 
 CheckNo_Type3:
@@ -4590,7 +4590,7 @@ CheckNo_Type3:
 DeleteText:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_CallFunc
-	lda_24 xhl, DiskWarning_ConfirmStrings_0x1C4
+	lda_24 xhl, 0xea8e70
 	ret
 
 CheckNo_CallFunc:
@@ -4644,7 +4644,7 @@ PwdChange_Type1:
 SaveText:
 	cp xbc, 0x1e0009f
 	jr nz, PwdChange_CallFunc
-	lda_24 xhl, DiskWarning_ConfirmStrings_0x47E
+	lda_24 xhl, 0xea912a
 	ret
 
 PwdChange_CallFunc:
@@ -4698,7 +4698,7 @@ PwdDel_Type1:
 InsertOptionText:
 	cp xbc, 0x1e0009f
 	jr nz, PwdDel_Type2
-	lda_24 xhl, DiskWarning_ConfirmStrings_0x790
+	lda_24 xhl, 0xea943c
 	ret
 
 PwdDel_Type2:
@@ -4708,7 +4708,7 @@ PwdDel_Type2:
 TypePriorityText:
 	cp xbc, 0x1e0009f
 	jr nz, PwdDel_CallFunc
-	lda_24 xhl, DiskWarning_ConfirmStrings_0x8AC
+	lda_24 xhl, 0xea9558
 	ret
 
 PwdDel_CallFunc:

@@ -50,7 +50,7 @@ SndParam_DispatchCallback:
 	jr nc, SndParam_NotFound
 	extz bc
 	sla bc, 2
-	lda_24 xde, Naka_MainDispatch_Table_0xDDC
+	lda_24 xde, 0xee10ec
 	st_dri3b C, 0x07, 0xe8, 0xe4
 	ld bc, (xsp + 12)
 	ld de, (xsp + 10)
@@ -88,7 +88,7 @@ SndParam_DispatchTypeDE5:
 	jr nc, SndParam_Epilogue
 	extz bc
 	sla bc, 2
-	lda_24 xde, Naka_MainDispatch_Table_0xE38
+	lda_24 xde, 0xee1148
 	st_dri3b B, 0x07, 0xe8, 0xe4
 	ld bc, (xsp + 12)
 	ld xhl, (xde)
@@ -180,7 +180,7 @@ SndParam_Lkp2_Dispatch:
 	jr nc, SndParam_Lkp2_NotFound
 	extz wa
 	sla wa, 2
-	lda_24 xbc, Naka_MainDispatch_Table_0xE00
+	lda_24 xbc, 0xee1110
 	st_dri3b C, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 6)
 	ld bc, (xsp + 12)
@@ -295,7 +295,7 @@ SndParam_RO_Dispatch:
 	jr nc, SndParam_RO_Epilogue
 	extz wa
 	sla wa, 2
-	lda_24 xbc, Naka_MainDispatch_Table_0xDC0
+	lda_24 xbc, 0xee10d0
 	st_dri3b A, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 6)
 	ld xhl, (xbc)
@@ -464,7 +464,7 @@ SndParam_RW_ProcessResult:
 	inc 3, a
 	extz wa
 	sla wa, 2
-	lda_24 xbc, Naka_MainDispatch_Table_0xE20
+	lda_24 xbc, 0xee1130
 	st_dri3b B, 0x07, 0xe4, 0xe0
 	ld xwa, xiz
 	ld bc, (xsp + 4)
@@ -516,7 +516,7 @@ SndParam_ResolveWidgetEx_Data:
 	nop
 	nop
 	ld	xwa, (xsp+14)
-	ld	xiy, Naka_ToshiParam_Table_0x6C8
+	ld	xiy, 0xedba38
 	ld	xix, xwa
 	ldiw
 	ldiw
@@ -588,7 +588,7 @@ SndParam_ResolveWidgetEx_Data:
 	ld	e, (xwa+15)
 	extz	de
 	sla	de, 2
-	lda_24	xhl, Naka_MainDispatch_Table_0xE20
+	lda_24	xhl, 0xee1130
 	exts	xde
 	add	xde, xhl
 	ld	xix, (xde)
@@ -794,7 +794,7 @@ SndParam_ResolveWidgetVariant2_Data:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, Naka_MainDispatch_Table_0xE50
+	lda_24	xde, 0xee1160
 	ld	l, (xwa+5)
 	extz	hl
 	.byte 0xe3
@@ -819,7 +819,7 @@ SndParam_ReadRegField:
 	ld c, (xwa + 4)
 	extz bc
 	sla bc, 2
-	lda_24 xde, Naka_MainDispatch_Table_0xE50
+	lda_24 xde, 0xee1160
 	ld_sril3 XDE, 0x07, 0xe8, 0xe4
 	or xde, xde
 	ret z
@@ -843,7 +843,7 @@ SndParam_ReadRegWithLUT:
 	ld e, (xwa + 11)
 	ld c, e
 	sla c, 2
-	lda_24 xhl, Naka_SubDispatch_A_Table_0x28
+	lda_24 xhl, 0xee0180
 	ld_sril3 XBC, 0x03, 0xec, 0xe4
 	ld c, (xbc)
 	cps e, 2
@@ -876,7 +876,7 @@ SndParam_CompareRegField:
 	ld a, (xbc + 4)
 	extz wa
 	sla wa, 2
-	lda_24 xde, Naka_MainDispatch_Table_0xE50
+	lda_24 xde, 0xee1160
 	ld_sril3 XDE, 0x07, 0xe8, 0xe0
 	or xde, xde
 	jr z, SndParam_CompareNotFound
@@ -923,7 +923,7 @@ SndParam_ReadRegWord:
 	ld c, (xwa + 4)
 	extz bc
 	sla bc, 2
-	lda_24 xde, Naka_MainDispatch_Table_0xE50
+	lda_24 xde, 0xee1160
 	ld_sril3 XDE, 0x07, 0xe8, 0xe4
 	or xde, xde
 	ret z
@@ -933,7 +933,7 @@ SndParam_ReadRegWord:
 	ld_sriw3 DE, 0x07, 0xe8, 0xe4
 	ld a, (xwa + 11)
 	sla a, 2
-	lda_24 xbc, Naka_SubDispatch_B_Table_0x04
+	lda_24 xbc, 0xee019c
 	ld_sril3 XWA, 0x03, 0xe4, 0xe0
 	lds hl, 0
 
@@ -951,7 +951,7 @@ SndParam_ReadRegBitfield:
 	ld c, (xwa + 4)
 	extz bc
 	sla bc, 2
-	lda_24 xde, Naka_MainDispatch_Table_0xE50
+	lda_24 xde, 0xee1160
 	ld_sril3 XIX, 0x07, 0xe8, 0xe4
 	or xix, xix
 	jr z, SndParam_BitfieldReturn
@@ -996,7 +996,7 @@ SndParam_ReadRegAddress:
 	ld a, (xwa + 4)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, Naka_MainDispatch_Table_0xE50
+	lda_24 xbc, 0xee1160
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	or xwa, xwa
 	ret z
@@ -1006,7 +1006,7 @@ SndParam_ReadRegAddress:
 	ret
 
 SndParam_ResetDefaultTable:
-	ld xiy, Naka_ToshiParam_Table_0x6BC
+	ld xiy, 0xedba2c
 	ld xix, 0x96d4
 	lds bc, 6
 	ldirw
@@ -1026,7 +1026,7 @@ SndParam_RegisterEntry_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xhl, Naka_MainDispatch_Table_0xE50
+	lda_24	xhl, 0xee1160
 	.byte 0xe3
 	reti
 	or	xwa, xix
@@ -1045,7 +1045,7 @@ SndParam_RegisterEntry_Data:
 	cp	ix, bc
 	jr	ge, 3
 	.byte 0xc7, 0xe6, 0x99
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x96e0
 	lds	bc, 6
 	ldirw
@@ -1122,7 +1122,7 @@ SndParam_RegisterEntryAlt_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xix, Naka_MainDispatch_Table_0xE50
+	lda_24	xix, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xe0
@@ -1143,7 +1143,7 @@ SndParam_RegisterEntryAlt_Data:
 	cp	ix, bc
 	jr	ge, 3
 	.byte 0xc7, 0xe6, 0x99
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x96ec
 	lds	bc, 6
 	ldirw
@@ -1203,7 +1203,7 @@ SndParam_RegisterEntryAlt_Data:
 	ret
 SndParam_UpdateEntry_Data:
 	ld	de, bc
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x96f8
 	lds	bc, 6
 	ldirw
@@ -1246,7 +1246,7 @@ SndParam_RegisterMultiField_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Naka_MainDispatch_Table_0xE50
+	lda_24	xbc, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -1255,7 +1255,7 @@ SndParam_RegisterMultiField_Data:
 	jr	f, -24
 	.byte 0xe0
 	jrl	z, 177
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x9704
 	lds	bc, 6
 	ldirw
@@ -1344,14 +1344,14 @@ SndParam_RegisterBitfield_Data:
 	ld	c, (xhl)
 	extz	bc
 	sla	bc, 2
-	lda_24	xix, Naka_MainDispatch_Table_0xE50
+	lda_24	xix, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xe4
 	ldb	h, 238
 	.byte 0xe6
 	jrl	z, 143
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x9710
 	lds	bc, 6
 	ldirw
@@ -1369,7 +1369,7 @@ SndParam_RegisterBitfield_Data:
 	ld	de, bc
 	ld	c, (xwa+11)
 	sla	c, 2
-	lda_24	xiy, Naka_SubDispatch_B_Table_0x04
+	lda_24	xiy, 0xee019c
 	.byte 0xe3
 	pop_sr
 	.byte 0xf4, 0xe4
@@ -1428,7 +1428,7 @@ SndParam_RegisterLinked_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xix, Naka_MainDispatch_Table_0xE50
+	lda_24	xix, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xe0
@@ -1448,7 +1448,7 @@ SndParam_RegisterLinked_Data:
 	cp	bc, de
 	jr	ge, 3
 	.byte 0xc7, 0xe6, 0x99
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x971c
 	lds	bc, 6
 	ldirw
@@ -1548,7 +1548,7 @@ SndParam_RegisterLinked2_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Naka_MainDispatch_Table_0xE50
+	lda_24	xbc, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -1565,7 +1565,7 @@ SndParam_RegisterLinked2_Data:
 	cp	a, l
 	jr	nc, 2
 	ld	l, a
-	lda_24	xbc, NakaInst_Param_IdxA0_01_0x12
+	lda_24	xbc, 0xee0154
 	ld	a, (xde+11)
 	cp	a, 255
 	jr	z, 10
@@ -1699,14 +1699,14 @@ SndParam_RegisterSimple_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Naka_MainDispatch_Table_0xE50
+	lda_24	xbc, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
 	ldb	h, 238
 	.byte 0xe6
 	jr	z, 114
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x9734
 	lds	bc, 6
 	ldirw
@@ -1756,7 +1756,7 @@ SndParam_RegisterSimple_Data:
 	inc	6, xsp
 	ret
 SndParam_DeregisterEntry_Data:
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x9740
 	lds	bc, 6
 	ldirw
@@ -1774,14 +1774,14 @@ SndParam_RegisterChained_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Naka_MainDispatch_Table_0xE50
+	lda_24	xbc, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
 	ldb	h, 238
 	.byte 0xe6
 	jrl	z, 222
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x974c
 	lds	bc, 6
 	ldirw
@@ -1895,14 +1895,14 @@ SndParam_RegisterChained2_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Naka_MainDispatch_Table_0xE50
+	lda_24	xbc, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
 	ldb	h, 238
 	.byte 0xe6
 	jrl	z, 212
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x9758
 	lds	bc, 6
 	ldirw
@@ -2011,7 +2011,7 @@ SndParam_RegisterComplex_Data:
 	ld	a, (xwa+4)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Naka_MainDispatch_Table_0xE50
+	lda_24	xbc, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -2019,7 +2019,7 @@ SndParam_RegisterComplex_Data:
 	jr	f, -24
 	.byte 0xe0
 	jrl	z, 251
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x9764
 	lds	bc, 6
 	ldirw
@@ -2143,7 +2143,7 @@ SndParam_NotifyQuick_Data:
 	ld	a, (xiz+4)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Naka_MainDispatch_Table_0xE50
+	lda_24	xbc, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -2184,7 +2184,7 @@ SndParam_RegisterDual_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Naka_MainDispatch_Table_0xE50
+	lda_24	xbc, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -2192,7 +2192,7 @@ SndParam_RegisterDual_Data:
 	jr	f, -24
 	.byte 0xe0
 	jrl	z, 275
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x9774
 	lds	bc, 6
 	ldirw
@@ -2220,7 +2220,7 @@ SndParam_RegisterDual_Data:
 	.byte 0xcb
 	swi	7
 	ld	w, c
-	lda_24	xbc, NakaInst_Param_IdxA0_01_0x12
+	lda_24	xbc, 0xee0154
 	ld	a, (xde+11)
 	cp	a, 255
 	jr	z, 10
@@ -2331,14 +2331,14 @@ SndParam_RegisterOffset_Data:
 	ld	a, (xde)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Naka_MainDispatch_Table_0xE50
+	lda_24	xbc, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
 	ldb	w, 232
 	.byte 0xe0
 	jrl	z, 141
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x9780
 	lds	bc, 6
 	ldirw
@@ -2407,7 +2407,7 @@ SndParam_RegisterWide_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, Naka_MainDispatch_Table_0xE50
+	lda_24	xbc, 0xee1160
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -2416,7 +2416,7 @@ SndParam_RegisterWide_Data:
 	jr	f, -24
 	.byte 0xe0
 	jrl	z, 238
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, 0xedba2c
 	ld	xix, 0x978c
 	lds	bc, 6
 	ldirw
@@ -2572,7 +2572,7 @@ SndParam_EncodeFieldSub_Data:
 	extz	hl
 	ret
 SndParam_ClampReverbTime:
-	ld32_24	xwa, Naka_MainDispatch_Table_0xF70
+	ld32_24	xwa, 0xee1280
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40
@@ -2640,7 +2640,7 @@ SndParam_DecodeFieldAlt_Data:
 	extz	hl
 	ret
 SndParam_ClampDelayTime:
-	ld32_24	xwa, Naka_MainDispatch_Table_0xF70
+	ld32_24	xwa, 0xee1280
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40
@@ -3158,7 +3158,7 @@ SndParam_InitHashTable:
 	st_dri3b B, 0xe5, 0xf8, 0x3f
 
 SndParam_InitHashFillLoop:
-	ld xiy, Naka_ToshiParam_Table_0x6CC
+	ld xiy, 0xedba3c
 	ld xix, xwa
 	lds bc, 4
 	ldirw
@@ -3174,7 +3174,7 @@ SndParam_RegisterAllWidgets:
 SndParam_RegisterLoop:
 	ld xbc, xiz
 	sll xbc, 2
-	ld xwa, Naka_SubDispatch_B_Table_0x08
+	ld xwa, 0xee01a0
 	add xwa, xbc
 	ld xbc, (xwa)
 	ld xwa, (xbc)
@@ -3289,7 +3289,7 @@ SndParam_ReregisterAll:
 SndParam_ReregisterLoop:
 	ld xbc, xiz
 	sll xbc, 2
-	ld xwa, Naka_SubDispatch_B_Table_0x08
+	ld xwa, 0xee01a0
 	add xwa, xbc
 	ld xhl, (xwa)
 	ld a, (xhl + 4)
@@ -3316,7 +3316,7 @@ SndParam_AllocAndInsert:
 	ld (xsp + 4), xwa
 	or xwa, xwa
 	jr nz, SndParam_AllocBuildKey
-	ld xwa, Naka_MainDispatch_Table_0x1250
+	ld xwa, 0xee1560
 	call Debug_PrintString
 	pushw 0x1
 	call Boot_HaltInstruction

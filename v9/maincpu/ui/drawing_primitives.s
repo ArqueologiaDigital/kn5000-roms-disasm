@@ -2091,7 +2091,7 @@ DrawWall_Deferred:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, DrawWall_Deferred_0x11_
+	lda_24 xbc, 0xfabbe5
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
 	jr DrawWall_DoCopy
@@ -2609,7 +2609,7 @@ DrawIcons_Impl_ColLoop:
 	ld a, c
 	extz wa
 	add wa, wa
-	lda_24 xbc, Str_No_0x8DC_
+	lda_24 xbc, 0xeaabf2
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	ld (xix), wa
 	inc 1, iy
@@ -2838,7 +2838,7 @@ DrawBitmapSP_DeferredPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, DrawBitmapSP_Return_0x06_
+	lda_24 xbc, 0xfac24a
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -3060,7 +3060,7 @@ DrawBitmapSPFast_DeferredPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, DrawBitmapSPFast_Return_0x06_
+	lda_24 xbc, 0xfac439
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -3189,7 +3189,7 @@ DrawBitmapSP2_DeferredPath:
 	ldw wa, 0x14
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, DrawBitmapSP2_Return_0x06_
+	lda_24 xbc, 0xfac579
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -3797,7 +3797,7 @@ DrawString_DeferredPath:
 	ldw wa, 0x1c
 	calr DrawQueue_Alloc
 	ld xiz, xhl
-	lda_24 xwa, DrawString_Return_0x07_
+	lda_24 xwa, 0xfacb69
 	ld (xhl), xwa
 	ld xwa, (xsp + 16)
 	ld xiy, xwa

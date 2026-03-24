@@ -2351,7 +2351,7 @@ SeqPlay_SaveState_CheckActive:
 	resda 1, 0x28b3
 	ldda8 a, 8956
 	extz wa
-	lda_24 xbc, WidgetData_DrawbarPositionTable_0x6A_
+	lda_24 xbc, 0xe444e2
 	ldmm_srib 0x07, 0xe4, 0xe0, 0xfc, 0x22
 	bitda 0, 0xf23c
 	jr nz, SeqPlay_ReassignVoicesAlt
@@ -2390,7 +2390,7 @@ SeqPlay_SaveState_SetPlayFlags:
 	setda 0, 9834
 	ldda8 a, 8956
 	extz wa
-	lda_24 xbc, WidgetData_DrawbarPositionTable_0x6A_
+	lda_24 xbc, 0xe444e2
 	ldmm_srib 0x07, 0xe4, 0xe0, 0xfc, 0x22
 	ldda8 c, 8970
 	set 0, c
@@ -2426,7 +2426,7 @@ SeqPlay_SaveState_CheckChordVoice:
 SeqPlay_SaveState_ChordShiftDone:
 	andda16 xbc, 0x28aa
 	jr z, SeqPlay_AssignBassVoice
-	lda_24 xbc, WidgetData_DrawbarPositionTable_0x82_
+	lda_24 xbc, 0xe444fa
 	bitda 1, 0x28b1
 	jr z, SeqPlay_SaveState_ChordAssignDirect
 	ldw wa, 0x12
@@ -2457,7 +2457,7 @@ SeqPlay_AssignBassVoice:
 SeqPlay_SaveState_BassShiftDone:
 	andda16 xbc, 0x28aa
 	jr z, SeqPlay_ReturnFalse
-	lda_24 xbc, WidgetData_DrawbarPositionTable_0x82_
+	lda_24 xbc, 0xe444fa
 	bitda 1, 0x28b1
 	jr z, SeqPlay_SaveState_BassAssignDirect
 	ldw wa, 0x12
@@ -3600,7 +3600,7 @@ SeqNote_ProcessCurrent_DrumCheck:
 	dec 1, a
 	extz wa
 	add wa, wa
-	lda_24 xbc, WidgetData_DrawbarPositionTable_0x86_
+	lda_24 xbc, 0xe444fe
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	andda16 xwa, 8982
 	jr nz, SeqNote_ProcessCurrent_ComparePos
@@ -3662,7 +3662,7 @@ VoiceConfig_SlotCheck_GetChannel:
 	dec 1, a
 	extz wa
 	add wa, wa
-	lda_24 xbc, WidgetData_DrawbarPositionTable_0x86_
+	lda_24 xbc, 0xe444fe
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	andda16 xwa, 8982
 	jr nz, VoiceConfig_SlotCheck_ReadData
@@ -3711,7 +3711,7 @@ VoiceConfig_EventType_GetChannel:
 	extz wa
 	ld de, wa
 	add de, de
-	lda_24 xhl, WidgetData_DrawbarPositionTable_0x86_
+	lda_24 xhl, 0xe444fe
 	ld_sriw3 DE, 0x07, 0xec, 0xe8
 	andda16 xde, 8982
 	jr nz, VoiceConfig_EventType_ReadData
@@ -6748,7 +6748,7 @@ SeqPlay_AssignChordVoices:
 	lda xsp, (xsp - 14)
 	ld (xsp + 10), c
 	ld (xsp + 12), wa
-	ld xiy, WidgetData_DrawbarPositionTable_0xA6_
+	ld xiy, 0xe4451e
 	lda xix, (xsp + 2)
 	lds bc, 4
 	ldirw
@@ -9584,7 +9584,7 @@ PartDetect_SingleVoiceFound:
 
 PartDetect_LookupAndApply:
 	extz hl
-	lda_24 xbc, WidgetData_DrawbarPositionTable_0xBE_
+	lda_24 xbc, 0xe44536
 	ld_srib3 E, 0x07, 0xe4, 0xec
 	setda 0, 9954
 	stda8 0x8d3a, e
@@ -9720,7 +9720,7 @@ AccompValidate_StoreResult:
 Seq_SyncPositionAndOutputMIDITiming:
 	dec 8, xsp
 	push xiz
-	ld xiy, WidgetData_DrawbarPositionTable_0x176_
+	ld xiy, 0xe445ee
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
@@ -10943,7 +10943,7 @@ Part_SendVoiceOffAndCCEvents:
 	jr z, SeqBuf_MidiEventReturnPath
 	ldto_berp A, 0xfb
 	extz wa
-	lda_24 xbc, WidgetData_DrawbarPositionTable_0xBE_
+	lda_24 xbc, 0xe44536
 	ld_srib3 C, 0x07, 0xe4, 0xe0
 	ldada xwa, 0xe37e
 	ld (xwa + 2), c
@@ -11000,7 +11000,7 @@ SeqVoiceSingle_FoundOrDone:
 
 SeqVoiceSingle_LookupAndApply:
 	extz hl
-	lda_24 xbc, WidgetData_DrawbarPositionTable_0xBE_
+	lda_24 xbc, 0xe44536
 	ld_srib3 E, 0x07, 0xe4, 0xec
 	setda 0, 9954
 	stda8 0x8d3a, e
@@ -12081,7 +12081,7 @@ SeqValPTK_ClampKeyValue:
 	ldw wa, 0xd
 
 SeqValPTK_LookupAndReturn:
-	lda_24 xix, WidgetData_DrawbarPositionTable_0x17A_
+	lda_24 xix, 0xe445f2
 	ld_srib3 L, 0x07, 0xf0, 0xe0
 	exts hl
 	ret
@@ -13062,25 +13062,25 @@ SeqVoice_InitReturnZero:
 
 ; AppEvent extended handler
 AppEvent_ExtendedHandler:
-	ld xwa, WidgetData_DrawbarPositionTable_0x12E_
+	ld xwa, 0xe445a6
 	jr Part_LoadAndApplyVoiceTable
-	ld xwa, WidgetData_DrawbarPositionTable_0x13A_
+	ld xwa, 0xe445b2
 	jr Part_LoadAndApplyVoiceTable
 
 Part_ApplyVoiceTableB:
-	ld xwa, WidgetData_DrawbarPositionTable_0x146_
+	ld xwa, 0xe445be
 	jr Part_LoadAndApplyVoiceTable
 
 Part_ApplyVoiceTableA:
-	ld xwa, WidgetData_DrawbarPositionTable_0x152_
+	ld xwa, 0xe445ca
 	jr Part_LoadAndApplyVoiceTable
 
 Part_ApplyVoiceTableC:
-	ld xwa, WidgetData_DrawbarPositionTable_0x15E_
+	ld xwa, 0xe445d6
 	jr Part_LoadAndApplyVoiceTable
 
 SeqVoice_ApplyTableEntry:
-	ld xwa, WidgetData_DrawbarPositionTable_0x122_
+	ld xwa, 0xe4459a
 	jr Part_LoadAndApplyVoiceTable
 
 Part_LoadAndApplyVoiceTable:
@@ -14285,7 +14285,7 @@ SeqVoice_ChainReturn:
 
 SeqData_CopyBlockWithLookup:
 	lda xsp, (xsp - 34)
-	ld xiy, WidgetData_DrawbarPositionTable_0x188_
+	ld xiy, 0xe44600
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -16050,7 +16050,7 @@ PartSubBlkA_WriteLoop32:
 	ldto_berp E, 0xfb
 	dec 1, e
 	extz de
-	lda_24 xhl, WidgetData_DrawbarPositionTable_0xD2_
+	lda_24 xhl, 0xe4454a
 	ld_srib3 E, 0x07, 0xec, 0xe8
 	calr Part_WriteSubBlock32
 	inc1_berp 0xfb
@@ -16066,7 +16066,7 @@ PartSubBlkA_WriteLoop48:
 	ldto_berp E, 0xfb
 	dec 1, e
 	extz de
-	lda_24 xhl, WidgetData_DrawbarPositionTable_0xF2_
+	lda_24 xhl, 0xe4456a
 	ld_srib3 E, 0x07, 0xec, 0xe8
 	calr Part_WriteSubBlock48
 	inc1_berp 0xfb
@@ -16090,7 +16090,7 @@ PartSubBlkB_WriteLoop32:
 	ldto_berp E, 0xfb
 	dec 1, e
 	extz de
-	lda_24 xhl, WidgetData_DrawbarPositionTable_0xE2_
+	lda_24 xhl, 0xe4455a
 	ld_srib3 E, 0x07, 0xec, 0xe8
 	calr Part_WriteSubBlock32
 	inc1_berp 0xfb
@@ -16106,7 +16106,7 @@ PartSubBlkB_WriteLoop48:
 	ldto_berp E, 0xfb
 	dec 1, e
 	extz de
-	lda_24 xhl, WidgetData_DrawbarPositionTable_0xF2_
+	lda_24 xhl, 0xe4456a
 	ld_srib3 E, 0x07, 0xec, 0xe8
 	calr Part_WriteSubBlock48
 	inc1_berp 0xfb
@@ -17900,11 +17900,11 @@ Rhythm_DispatchNoteAlloc:
 	ld (xsp + 14), xde
 	ld (xsp + 18), xbc
 	ld (xsp + 22), wa
-	ld xiy, WidgetData_DrawbarPositionTable_0x198_
+	ld xiy, 0xe44610
 	lda xix, (xsp + 10)
 	ldiw
 	ldiw
-	ld xiy, WidgetData_DrawbarPositionTable_0x19C_
+	ld xiy, 0xe44614
 	lda xix, (xsp + 6)
 	ldiw
 	ldiw
@@ -18057,11 +18057,11 @@ Rhythm_ExtendedNoteAlloc:
 	ld (xsp + 16), xde
 	ld (xsp + 20), xbc
 	ld (xsp + 24), wa
-	ld xiy, WidgetData_DrawbarPositionTable_0x1A0_
+	ld xiy, 0xe44618
 	lda xix, (xsp + 12)
 	ldiw
 	ldiw
-	ld xiy, WidgetData_DrawbarPositionTable_0x1A4_
+	ld xiy, 0xe4461c
 	lda xix, (xsp + 8)
 	ldiw
 	ldiw
@@ -18259,7 +18259,7 @@ SeqEvent_ProcessRhythm4Ch:
 	lda xsp, (xsp - 12)
 	push_werp 0xfa
 	ld (xsp + 10), xwa
-	ld xiy, WidgetData_DrawbarPositionTable_0x1A8_
+	ld xiy, 0xe44620
 	lda xix, (xsp + 2)
 	lds bc, 4
 	ldirw
@@ -18312,7 +18312,7 @@ SeqEvent_ProcessRhythm3Ch:
 	lda xsp, (xsp - 10)
 	push_werp 0xfa
 	ld (xsp + 8), xwa
-	ld xiy, WidgetData_DrawbarPositionTable_0x1B0_
+	ld xiy, 0xe44628
 	lda xix, (xsp + 2)
 	lds bc, 3
 	ldirw
@@ -18432,7 +18432,7 @@ SeqEvt_ProcessBlock:
 	ld	(xsp+8), a
 	ldw	(xsp), 0
 	ld	(xsp+2), 1
-	ld	xiy, WidgetData_DrawbarPositionTable_0x1B6_
+	ld	xiy, 0xe4462e
 	lda	xix, (xsp+4)
 	ldiw
 	ldiw
@@ -18487,7 +18487,7 @@ SeqEvt_ProcessBlock:
 	nop
 	nop
 	ld	(xsp+2), 1
-	ld	xiy, WidgetData_DrawbarPositionTable_0x1BA_
+	ld	xiy, 0xe44632
 	lda	xix, (xsp+4)
 	.byte 0x95
 	rcf
@@ -18607,7 +18607,7 @@ SeqInit_InitVoiceSubBlocks:
 Part_InitFromPreset:
 	lda xsp, (xsp - 16)
 	push xiz
-	ld xiy, WidgetData_CharsetMappingTable_0x10_
+	ld xiy, 0xe44646
 	lda xix, (xsp + 4)
 	ldw bc, 0x8
 	ldirw
@@ -19849,13 +19849,13 @@ SeqStatus_ResetAndSendCmd:
 SeqPlay_WriteErrorToVoiceTable:
 	ldda8 a, 0x287a
 	extz wa
-	lda_24 xbc, WidgetData_DrawbarPositionTable_0x16A_
+	lda_24 xbc, 0xe445e2
 	ldmm_srib 0x07, 0xe4, 0xe0, 0x7a, 0x28
 	ret
 
 SeqData_SendVoiceTableBlock:
 	dec 6, xsp
-	ld xiy, WidgetData_CharsetMappingTable_0x20_
+	ld xiy, 0xe44656
 	ld xix, xsp
 	lds bc, 2
 	ldirw
@@ -20198,7 +20198,7 @@ SeqEvent_MainHandler:
 	cp wa, 0xd
 	jrl gt, AppEvent_PostDefaultEvents
 	add wa, wa
-	lda_24 xix, WidgetData_CharsetMappingTable_0x248_
+	lda_24 xix, 0xe4487e
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SeqEvent_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -20461,7 +20461,7 @@ AppEvent_ChainDispatch1:
 	cp xbc, 0x1f
 	jrl ugt, AppEvent_Epilogue
 	add xbc, xbc
-	add xbc, WidgetData_CharsetMappingTable_0x2C0_
+	add xbc, 0xe448f6
 	ld bc, (xbc)
 	lda_24 xix, APP_EVENT_HANDLER_TABLE
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -20480,7 +20480,7 @@ AppEvtHandler_Branch_001:
 	ldw wa, 0x8
 AppEvtHandler_Branch_002:
 	sll wa, 2
-	lda_24 xix, WidgetData_CharsetMappingTable_0x29C_
+	lda_24 xix, 0xe448d2
 	ld_sril3 XWA, 0x07, 0xf0, 0xe0
 	cp (xwa), 0x11
 	jrl nc, AppEvent_Epilogue
@@ -20497,9 +20497,9 @@ AppEvtHandler_Branch_002:
 	cps wa, 7
 	jr gt, AppEvtHandler_Branch_003
 	add wa, wa
-	lda_24 xix, WidgetData_CharsetMappingTable_0x28C_
+	lda_24 xix, 0xe448c2
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, AppEvtHandler_Branch_002_0x4B_
+	lda_24 xix, 0xf441c9
 	jp_dri 8, 0x07, 0xf0, 0xe0
 	ldada xiz, 9744
 	ldada xwa, 9746
@@ -20557,9 +20557,9 @@ AppEvtHandler_Branch_006:
 	cps wa, 7
 	jr gt, AppEvtHandler_Branch_007
 	add wa, wa
-	lda_24 xix, WidgetData_CharsetMappingTable_0x27C_
+	lda_24 xix, 0xe448b2
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, AppEvtHandler_Branch_006_0x3B_
+	lda_24 xix, 0xf4427e
 	jp_dri 8, 0x07, 0xf0, 0xe0
 	ldada xiz, 9744
 	ldada xwa, 9746
@@ -20766,9 +20766,9 @@ AppEvtHandler_Branch_021:
 	cp xwa, 0x5
 	jrl ugt, AppEvtHandler_Branch_024
 	add xwa, xwa
-	add xwa, WidgetData_CharsetMappingTable_0x270_
+	add xwa, 0xe448a6
 	ld wa, (xwa)
-	lda_24 xix, AppEvtHandler_Branch_021_0x5E_
+	lda_24 xix, 0xf44517
 	jp_dri 8, 0x07, 0xf0, 0xe0
 	ldda8 a, 0xf1e9
 	cp a, 0x11
@@ -20852,9 +20852,9 @@ AppEvtHandler_Branch_024:
 	cp xwa, 0x5
 	jrl ugt, AppEvtHandler_Branch_027
 	add xwa, xwa
-	add xwa, WidgetData_CharsetMappingTable_0x264_
+	add xwa, 0xe4489a
 	ld wa, (xwa)
-	lda_24 xix, AppEvtHandler_Branch_024_0x97_
+	lda_24 xix, 0xf44647
 	jp_dri 8, 0x07, 0xf0, 0xe0
 	ldda8 a, 0xf1e1
 	cp a, 0x11
@@ -21034,7 +21034,7 @@ AppEvent_InlineHandler:
 	cp xbc, 0x1f
 	jrl ugt, SeqState_DispatchEntry
 	add xbc, xbc
-	add xbc, WidgetData_CharsetMappingTable_0x35C_
+	add xbc, 0xe44992
 	ld bc, (xbc)
 	lda_24 xix, AppEvent_SubDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -21049,7 +21049,7 @@ AppEvent_SubDispatch:
 	jr	le, 3
 	ldw	wa, 8
 	sll	wa, 2
-	lda_24	xix, WidgetData_CharsetMappingTable_0x338_
+	lda_24	xix, 0xe4496e
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xe0
@@ -21072,7 +21072,7 @@ AppEvent_SubDispatch:
 	cps	wa, 7
 	jr	gt, 82
 	add	wa, wa
-	lda_24	xix, WidgetData_CharsetMappingTable_0x328_
+	lda_24	xix, 0xe4495e
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -21139,7 +21139,7 @@ AppEvent_SubDispatch:
 	cps	wa, 7
 	jr	gt, 82
 	add	wa, wa
-	lda_24	xix, WidgetData_CharsetMappingTable_0x318_
+	lda_24	xix, 0xe4494e
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -21370,9 +21370,9 @@ AppEvent_SubDispatch:
 	cp	xwa, 5
 	jrl	ugt, 163
 	add	xwa, xwa
-	add	xwa, WidgetData_CharsetMappingTable_0x30C_
+	add	xwa, 0xe44942
 	ld	wa, (xwa)
-	lda_24	xix, AppEvent_SubDispatch_0x3A6_
+	lda_24	xix, 0xf44c4a
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe0
@@ -21471,9 +21471,9 @@ AppEvent_SubDispatch:
 	cp	xwa, 5
 	jrl	ugt, 163
 	add	xwa, xwa
-	add	xwa, WidgetData_CharsetMappingTable_0x300_
+	add	xwa, 0xe44936
 	ld	wa, (xwa)
-	lda_24	xix, AppEvent_SubDispatch_0x4CC_
+	lda_24	xix, 0xf44d70
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe0
@@ -21912,7 +21912,7 @@ SeqState_LabelDispatch:
 	cp bc, 0xf
 	jrl gt, AppEvent_PopIzSkip2Ret
 	add bc, bc
-	lda_24 xix, WidgetData_CharsetMappingTable_0x3AC_
+	lda_24 xix, 0xe449e2
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
 	lda_24 xix, SoundData_HandlerDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -21963,7 +21963,7 @@ AppEvent_RecordClampLow:
 	ldw bc, 0xf
 
 AppEvent_RecordDispatch:
-	lda_24 xix, WidgetData_CharsetMappingTable_0x39C_
+	lda_24 xix, 0xe449d2
 	ld_srib3 A, 0x07, 0xf0, 0xe4
 	ld (xsp + 4), a
 	inc 1, a
@@ -21975,7 +21975,7 @@ AppEvent_RecordDispatch:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, wa
-	lda_24 xbc, WidgetData_CharsetMappingTable_0x226_
+	lda_24 xbc, 0xe4485c
 	ldmm_sriw 0x07, 0xe4, 0xe0, 0x4f, 0x0d
 	call BmDrEdit_SaveSequencerState
 	jr AppEvent_PopIzSkip2Ret
@@ -22107,9 +22107,9 @@ EffEdit_ParamChangeA:
 	stdi8 0xe38c, 1
 	ldda16 xwa, 0x2976
 	extz wa
-	lda_24 xde, WidgetData_CharsetMappingTable_0x1A6_
+	lda_24 xde, 0xe447dc
 	ld_srib3 E, 0x07, 0xe8, 0xe0
-	lda_24 xwa, WidgetData_CharsetMappingTable_0x126_
+	lda_24 xwa, 0xe4475c
 	cps e, 0
 	jr ge, EffEdit_ParamAPositive
 	ld c, (xwa)
@@ -22157,9 +22157,9 @@ EffEdit_ParamChangeB:
 	stdi8 0xe38c, 1
 	ldda16 xwa, 0x2976
 	extz wa
-	lda_24 xde, WidgetData_CharsetMappingTable_0xA6_
+	lda_24 xde, 0xe446dc
 	ld_srib3 E, 0x07, 0xe8, 0xe0
-	lda_24 xwa, WidgetData_CharsetMappingTable_0x26_
+	lda_24 xwa, 0xe4465c
 	cps e, 0
 	jr ge, EffEdit_ParamBPositive
 	ld c, (xwa)
@@ -22268,7 +22268,7 @@ EffEdit_DSPConfigBlock:
 	extz	de
 	lda	xhl, (xsp+2)
 	push	xhl
-	call	DSPCfg_Data_ParamDispatch_0x1C9_
+	call	0xfdcea0
 	cps	hl, 0
 	jrl	lt, 696
 	ldda8	a, 0x8d38
@@ -22847,7 +22847,7 @@ ApPlaySyori:
 	cps bc, 7
 	jrl gt, AppEvent_ReturnZero
 	add bc, bc
-	lda_24 xix, WidgetData_CharsetMappingTable_0x3FC_
+	lda_24 xix, 0xe44a32
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
 	lda_24 xix, SeqAccomp_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -23049,7 +23049,7 @@ SeqAccomp_ParamDelivery:
 	cp xwa, 0xb
 	jrl ugt, AppEvent_ReturnZero
 	add xwa, xwa
-	add xwa, WidgetData_CharsetMappingTable_0x3E4_
+	add xwa, 0xe44a1a
 	ld wa, (xwa)
 	lda_24 xix, SeqAccomp_SubHandlerA
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -23200,9 +23200,9 @@ SeqAccomp_SubHandlerA:
 	jr	nz, 16
 	call	SeqPlay_DataBlock_BBE
 	jr	10
-	call	SeqPlay_DataBlock_BBE_0xF4_
+	call	0xf38cb2
 	jr	4
-	call	SeqPlay_DataBlock_BBE_0x155_
+	call	0xf38d13
 	ldda32	xwa, 0x2972
 	ld	xbc, 0x01c0000f
 	lds32	xde, 7
@@ -23251,7 +23251,7 @@ SeqAccomp_SubChain:
 	cp xwa, 0xb
 	jrl ugt, AppEvent_ReturnZero
 	add xwa, xwa
-	add xwa, WidgetData_CharsetMappingTable_0x3CC_
+	add xwa, 0xe44a02
 	ld wa, (xwa)
 	lda_24 xix, SeqAccomp_SubHandlerB
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -23418,11 +23418,11 @@ SeqAccomp_SubHandlerB:
 	jr	z, 14
 	cp	xwa, 8
 	jr	nz, 16
-	call	SeqPlay_DataBlock_BBE_0x2C_
+	call	0xf38bea
 	jr	10
-	call	SeqPlay_DataBlock_BBE_0x126_
+	call	0xf38ce4
 	jr	4
-	call	SeqPlay_DataBlock_BBE_0x19B_
+	call	0xf38d59
 	.byte 0xe1
 	.ascii "r) A"
 	retd	0xc000
@@ -23811,7 +23811,7 @@ NoteEditSy_SendModeScrollReset:
 	cps bc, 7
 	ret gt
 	add bc, bc
-	lda_24 xix, WidgetData_CharsetMappingTable_0x40C_
+	lda_24 xix, 0xe44a42
 	ld_sriw3 BC, 0x07, 0xf0, 0xe4
 	lda_24 xix, NoteEditSy_ModeDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -24014,7 +24014,7 @@ NoteEditSy_HandleUpScroll:
 	cp xde, 0xe
 	jrl ugt, NoteEditSy_ReturnZero
 	add xde, xde
-	add xde, WidgetData_CharsetMappingTable_0x434_
+	add xde, 0xe44a6a
 	ld de, (xde)
 	lda_24 xix, NoteEditSy_UpScroll_Param0
 	jp_dri 8, 0x07, 0xf0, 0xe8
@@ -24075,7 +24075,7 @@ NoteEditSy_HandleDownScroll:
 	cp xde, 0xb
 	jr ugt, NoteEditSy_ReturnZero
 	add xde, xde
-	add xde, WidgetData_CharsetMappingTable_0x41C_
+	add xde, 0xe44a52
 	ld de, (xde)
 	lda_24 xix, NoteEditSy_DownScroll_Param0
 	jp_dri 8, 0x07, 0xf0, 0xe8
@@ -25056,7 +25056,7 @@ MainExeCall:
 	cp wa, 0x10
 	jrl gt, MainExe_ReturnZero
 	add wa, wa
-	lda_24 xix, WidgetData_CharsetMappingTable_0x452_
+	lda_24 xix, 0xe44a88
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, MainExe_HandleD6
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -25591,16 +25591,16 @@ HelpLang_DispatchDataBlock:
 	jr	z, 11
 	cps	e, 1
 	jr	nz, 28
-	ld	xwa, WidgetData_CharsetMappingTable_0x4A6_
+	ld	xwa, 0xe44adc
 	jr	26
-	ld	xwa, WidgetData_CharsetMappingTable_0x4D8_
+	ld	xwa, 0xe44b0e
 	jr	19
-	ld	xwa, WidgetData_CharsetMappingTable_0x50A_
+	ld	xwa, 0xe44b40
 	jr	12
 	.byte 0x40
 	.long FontPalette_Gradient7
 	jr	5
-	ld	xwa, WidgetData_CharsetMappingTable_0x474_
+	ld	xwa, 0xe44aaa
 	.byte 0xc3
 	reti
 	.byte 0xe0, 0xe4
@@ -25613,35 +25613,35 @@ HelpLang_DispatchDataBlock:
 	ld	xbc, 0x01c00001
 	lds32	xde, 0
 	call	ApPostEvent
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BBE_
+	ld	xwa, 0xe70010
 	ld	xbc, 0x01c00001
 	lds32	xde, 0
 	jr	96
 	cps	a, 2
 	jr	nz, 30
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BC5_
+	ld	xwa, 0xe70017
 	ld	xbc, 0x01c00001
 	lds32	xde, 0
 	call	ApPostEvent
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BC7_
+	ld	xwa, 0xe70019
 	ld	xbc, 0x01c00001
 	lds32	xde, 0
 	jr	62
 	cps	a, 3
 	jr	nz, 30
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BD2_
+	ld	xwa, 0xe70024
 	ld	xbc, 0x01c00001
 	lds32	xde, 0
 	call	ApPostEvent
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BD4_
+	ld	xwa, 0xe70026
 	ld	xbc, 0x01c00001
 	lds32	xde, 0
 	jr	28
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BDA_
+	ld	xwa, 0xe7002c
 	ld	xbc, 0x01c00001
 	lds32	xde, 0
 	call	ApPostEvent
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BDD_
+	ld	xwa, 0xe7002f
 	ld	xbc, 0x01c00001
 	lds32	xde, 0
 	call	ApPostEvent
@@ -25659,13 +25659,13 @@ HelpLangChkMain:
 	call Get_Region_Code
 	cps l, 3
 	jr nz, HelpLang_SetRegion5
-	ld xwa, Bitmap_MIDIConnections_2_0x3BB8_
+	ld xwa, 0xe7000a
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	jr HelpLang_PostEvent
 
 HelpLang_SetRegion5:
-	ld xwa, Bitmap_MIDIConnections_2_0x3BB3_
+	ld xwa, 0xe70005
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 
@@ -30214,7 +30214,7 @@ SeqPart_CheckBothCompatible:
 	add xwa, xbc
 	ld a, (xwa)
 	extz wa
-	lda_24 xbc, FontPalette_Gradient7_0x32_
+	lda_24 xbc, 0xe44ba4
 	ldmm_srib 0x07, 0xe4, 0xe0, 0x7c, 0x28
 	calr SeqPart_SetupWithDispatch
 	cpdi8 0x287a, 0
@@ -31246,7 +31246,7 @@ SeqPart_ByteBlockA95A:
 	jrl	z, 323
 	stda8	3386, a
 	extz	wa
-	lda_24	xde, FontPalette_Gradient7_0x32_
+	lda_24	xde, 0xe44ba4
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -31401,7 +31401,7 @@ SeqPart_ByteBlockA95A:
 	swi	2
 	halt
 	ret
-	call	AppEvent_ExtendedHandler_0x07_
+	call	0xf3ff26
 	call	SeqVoice_InitReturnZero
 	.byte 0xf1
 	jrl	ge, -20440
@@ -32208,7 +32208,7 @@ SeqPart_DualLoadPartB:
 	jr z, SeqPart_DualLoadExit
 	stda8 3386, a
 	extz wa
-	lda_24 xbc, FontPalette_Gradient7_0x32_
+	lda_24 xbc, 0xe44ba4
 	ldmm_srib 0x07, 0xe4, 0xe0, 0x7c, 0x28
 	stda8 3378, e
 	calr SeqPart_DualCopySetup
@@ -33642,7 +33642,7 @@ SeqPart_VelocityCurveCalc:
 	cp wa, 0xa
 	jrl gt, SeqPart_VelRangeToZone
 	add wa, wa
-	lda_24 xix, Display_FontPalette_Table_0x68_
+	lda_24 xix, 0xe44ec0
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SeqPart_VelCurveData
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -33659,13 +33659,13 @@ SeqPart_VelCurveData:
 	jr	nc, 2
 	ldb	e, 1
 	extz	de
-	lda_24	xbc, Display_FontPalette_Table_0x1E_
+	lda_24	xbc, 0xe44e76
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
 	pop_f
 	.byte 0x40, 0x26
-	ld	xbc, Display_FontPalette_Table_0x44_
+	ld	xbc, 0xe44e9c
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
@@ -33690,13 +33690,13 @@ SeqPart_VelCurveData:
 	jr	nc, 2
 	ldb	e, 3
 	extz	de
-	lda_24	xbc, Display_FontPalette_Table_0x20_
+	lda_24	xbc, 0xe44e78
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
 	pop_f
 	.byte 0x40, 0x26
-	ld	xbc, Display_FontPalette_Table_0x46_
+	ld	xbc, 0xe44e9e
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
@@ -33737,7 +33737,7 @@ SeqPart_VelCurveData:
 	jr	nc, 2
 	ldb	e, 7
 	extz	de
-	lda_24	xbc, Display_FontPalette_Table_0x24_
+	lda_24	xbc, 0xe44e7c
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
@@ -33764,7 +33764,7 @@ SeqPart_VelCurveData:
 	jr	nc, 2
 	ldb	e, 2
 	extz	de
-	lda_24	xbc, Display_FontPalette_Table_0x2C_
+	lda_24	xbc, 0xe44e84
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
@@ -33803,7 +33803,7 @@ SeqPart_VelCurveData:
 	jr	nc, 2
 	ldb	e, 5
 	extz	de
-	lda_24	xbc, Display_FontPalette_Table_0x30_
+	lda_24	xbc, 0xe44e88
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
@@ -33892,9 +33892,9 @@ SeqPart_VelZone11:
 
 SeqPart_VelZoneLookup:
 	extz de
-	lda_24 xbc, Display_FontPalette_Table_0x36_
+	lda_24 xbc, 0xe44e8e
 	ldmm_srib 0x07, 0xe4, 0xe8, 0x40, 0x26
-	ld xbc, Display_FontPalette_Table_0x5C_
+	ld xbc, 0xe44eb4
 	ldmm_srib 0x07, 0xe4, 0xe8, 0x42, 0x26
 	ldda8 l, 9792
 	ldda8 c, 9786

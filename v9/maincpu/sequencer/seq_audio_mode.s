@@ -71,7 +71,7 @@ AccPedal_PartOffsetTable:
 
 AccPedal_ProcessAllChanges:
 	xor wa, wa
-	ld xhl, Display_FontPalette_Table_0x1D58_
+	ld xhl, 0xe46bb0
 	ldda8 a, 1075
 	bit_dri 0, 0x07, 0xec, 0xe0
 	jrl z, AccPedal_ReadBankAndReturn
@@ -139,7 +139,7 @@ AccPedal_ReadBankAndReturn:
 
 AccVoice_ReadBankAssign:
 	xor wa, wa
-	ld xhl, Display_FontPalette_Table_0x1D58_
+	ld xhl, 0xe46bb0
 	ldda8 a, 1075
 	ld_srib3 A, 0x07, 0xec, 0xe0
 	bitda 0, 0x3283
@@ -438,7 +438,7 @@ AccChord_DispatchVoiceChange:
 AccChord_CheckVoiceBit2:
 	bitda 2, 0x330a
 	jr z, AccChord_CheckLeftPedal0
-	ld xhl, Display_FontPalette_Table_0x1D58_
+	ld xhl, 0xe46bb0
 	bit_dri 0, 0x03, 0xec, 0xe4
 	jr z, AccChord_CheckLeftPedal0
 	anddi8 0x330a, 251
@@ -530,7 +530,7 @@ AccChord_CheckPitchDirty:
 AccChord_CheckPitchLeftPedal1:
 	bitda 1, 0x32fb
 	jr z, AccChord_NullRet
-	ld xhl, Display_FontPalette_Table_0x1D58_
+	ld xhl, 0xe46bb0
 	bit_dri 0, 0x03, 0xec, 0xe4
 	jr z, AccChord_NullRet
 	anddi8 0x3329, 192
@@ -627,7 +627,7 @@ AccVoice_ComputeChannelIndex:
 	sla wa, 2
 	xor l, l
 	add hl, wa
-	ld xiy, Display_FontPalette_Table_0x2EA_
+	ld xiy, 0xe45142
 	ld_sriw3 WA, 0x07, 0xf4, 0xec
 	add hl, 0x2
 	ld_sriw3 IY, 0x07, 0xf4, 0xec
@@ -656,7 +656,7 @@ AccVoice_PatchFromDirect:
 
 AccVoice_StorePatchAndLookup:
 	stda8 1075, a
-	ld xhl, Display_FontPalette_Table_0x1D46_
+	ld xhl, 0xe46b9e
 	sla a, 1
 	ld_sriw3 WA, 0x03, 0xec, 0xe0
 	stda16 0x327b, xwa
@@ -665,7 +665,7 @@ AccVoice_StorePatchAndLookup:
 AccStyle_ReadVoiceParam:
 	ld_srib W, (xiy + 0x03da)
 	ld_srib A, (xiy + 0x03d0)
-	ld xhl, Display_FontPalette_Table_0x1D32_
+	ld xhl, 0xe46b8a
 	ld_srib3 A, 0x03, 0xec, 0xe0
 	ret
 
@@ -685,7 +685,7 @@ AccPatch_ClampedSetParam:
 	ld w, a
 	calr AccVoice_ResolveParamAddr
 	ld a, (xiy + 12)
-	ld xhl, Display_FontPalette_Table_0x1D32_
+	ld xhl, 0xe46b8a
 	ld_srib3 A, 0x03, 0xec, 0xe0
 	ret
 

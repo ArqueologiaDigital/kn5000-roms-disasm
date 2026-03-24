@@ -22,14 +22,14 @@ JumpInsertFunc:
 	cp xbc, 0x9
 	jr gt, JumpInsert_Error
 	add xbc, xbc
-	add xbc, DiskWarning_ConfirmStrings_0xA38_
+	add xbc, 0xea96e4
 	ld bc, (xbc)
 	lda_24 xix, JumpInsert_DispatchBody
 	jp_dri 8, 0x07, 0xf0, 0xe4
 JumpInsert_DispatchBody:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, DiskWarning_ConfirmStrings_0x9DE_
+	ld	xbc, 0xea968a
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -67,7 +67,7 @@ FilePriorityFunc:
 	ld wa, (xde + 8)
 	and wa, 0x1
 	sla wa, 2
-	lda_24 xbc, DiskWarning_ConfirmStrings_0xA4C_
+	lda_24 xbc, 0xea96f8
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 10)
@@ -472,7 +472,7 @@ WaitingFunc_DrawMessage:
 	ld8_24 a, 0x0340e4
 	extz wa
 	sla wa, 2
-	lda_24 xbc, DiskWarning_ConfirmStrings_0xA6C_
+	lda_24 xbc, 0xea9718
 	ld_sril3 XIZ, 0x07, 0xe4, 0xe0
 	push xiz
 	call Strlen

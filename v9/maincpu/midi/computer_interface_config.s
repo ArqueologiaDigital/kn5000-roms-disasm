@@ -48,7 +48,7 @@ MdCmptCnctFunc:
 	ld xhl, xde
 	ld xde, xbc
 	ld xiz, xwa
-	ld xiy, SplitPoint_NoteEntry_C_Code_0x66_
+	ld xiy, 0xe7f844
 	lda xix, (xsp + 4)
 	ldiw
 	ldiw
@@ -164,11 +164,11 @@ PcgModeGridEventStart:
 	jr z, PcgModeDisplayString_Bank1
 	cps de, 0
 	jr nz, PcgModeDefaultCase
-	ld xwa, SplitPoint_NoteEntry_C_Code_0xD2_
+	ld xwa, 0xe7f8b0
 	jr PcgMode_CopyStrEntry
 
 PcgModeDisplayString_Bank1:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0xDC_
+	ld xwa, 0xe7f8ba
 	jr PcgMode_CopyStrEntry
 
 PcgMode_CopyStrCustom:
@@ -179,7 +179,7 @@ PcgMode_CopyStrCustom:
 	jr PcgMode_CallStrcpy
 
 PcgModeDefaultCase:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0xF0_
+	ld xwa, 0xe7f8ce
 
 PcgMode_CopyStrEntry:
 	push xwa
@@ -229,11 +229,11 @@ DrumType_GridEvent:
 	jr z, DrumType_CopyStrBank1
 	cps de, 0
 	jr nz, DrumType_CopyStrDefault
-	ld xwa, SplitPoint_NoteEntry_C_Code_0xFA_
+	ld xwa, 0xe7f8d8
 	jr DrumType_CopyStrEntry
 
 DrumType_CopyStrBank1:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0x104_
+	ld xwa, 0xe7f8e2
 	jr DrumType_CopyStrEntry
 
 DrumType_CopyStrCustom:
@@ -244,7 +244,7 @@ DrumType_CopyStrCustom:
 	jr DrumType_CallStrcpy
 
 DrumType_CopyStrDefault:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0x118_
+	ld xwa, 0xe7f8f6
 
 DrumType_CopyStrEntry:
 	push xwa
@@ -282,7 +282,7 @@ MdSetupLoadFunc:
 	cp xhl, 0x9
 	jr gt, SetupLoadInvalidIndex
 	add xhl, xhl
-	add xhl, NakaInst_OFF_WidgetTbl2_0x12_
+	add xhl, 0xe7f928
 	ld hl, (xhl)
 	lda_24 xix, SetupLoadOptionJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xec

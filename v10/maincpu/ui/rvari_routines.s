@@ -818,13 +818,13 @@ RVari_Confirm_TypeF_Loop:
 RVari_ConfirmF_CheckSelected:
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, NakaInst_Rock_Pop_0x24
+	lda_24 xbc, 0xecfda8
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, NakaInst_Rock_Pop_0x24
+	lda_24 xbc, 0xecfda8
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	st_dri3b A, 0xfd, 0x14, 0x02
@@ -922,13 +922,13 @@ RVari_ConfirmF_Btn_Draw:
 RVari_Confirm_TypeF_SubItems:
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, NakaInst_Rock_Pop_0x28
+	lda_24 xbc, 0xecfdac
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, NakaInst_Rock_Pop_0x28
+	lda_24 xbc, 0xecfdac
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	st_dri3b A, 0xfd, 0x14, 0x02
@@ -947,7 +947,7 @@ RVari_Confirm_TypeF_SubItems:
 	ld c, (xsp + 8)
 	extz bc
 	sla bc, 2
-	lda_24 xhl, SeqChan_Map_2ch_0x02
+	lda_24 xhl, 0xecfdd4
 	ld_sril3 XHL, 0x07, 0xec, 0xe4
 	lds32 xbc, 1
 	push xbc
@@ -1354,14 +1354,14 @@ RVari_EnumNotifyF_CheckSelected:
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
-	lda_24 xbc, NakaInst_Rock_Pop_0x24
+	lda_24 xbc, 0xecfda8
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
-	lda_24 xbc, NakaInst_Rock_Pop_0x24
+	lda_24 xbc, 0xecfda8
 	ld_srib3 A, 0x07, 0xe4, 0xe0
 	extz wa
 	st_dri3b A, 0xfd, 0x14, 0x02

@@ -525,7 +525,7 @@ Voice_DecodeNoteChannel:
 	and l, 0xf
 	sla hl, 1
 	push xix
-	ld xix, Voice_NoteChannelTable1_0x402
+	ld xix, 0xf71455
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	jr Voice_DecodeRet
@@ -539,7 +539,7 @@ Voice_DecodeNonPercussion:
 	or a, h
 	ld hl, wa
 	push xix
-	ld xix, Voice_NoteChannelTable1_0x02
+	ld xix, 0xf71055
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 
@@ -1065,7 +1065,7 @@ Voice_NoteChannelTable1:
 	or	l, h
 	xor	h, h
 	push	xix
-	ld	xix, Voice_NoteChannelTable1_0x43F
+	ld	xix, 0xf71492
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xec
@@ -1240,7 +1240,7 @@ Voice_DecodeNoteChannel2:
 	or a, h
 	ld hl, wa
 	push xix
-	ld xix, Voice_NoteChannelTable2_0x02
+	ld xix, 0xf715b4
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	ret
@@ -1728,7 +1728,7 @@ Voice_ClampBankIndex:
 	xor h, h
 	sla hl, 1
 	push xix
-	ld xix, Voice_BankIndexTable_0x02
+	ld xix, 0xf719d2
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 	ret
@@ -1760,7 +1760,7 @@ Voice_DecodeStandard:
 	or a, h
 	ld hl, wa
 	push xix
-	ld xix, Voice_NoteParamTable_0x02
+	ld xix, 0xf71a26
 	ld_sriw3 HL, 0x07, 0xf0, 0xec
 	pop xix
 
@@ -2459,7 +2459,7 @@ AccPlay_NoteAllocAndWrite:
 	push xix
 	ldda8 l, 0x7f38
 	xor h, h
-	ld xix, Display_FontPalette_Table_0x12EA
+	ld xix, 0xe46142
 	ld_srib3 A, 0x07, 0xf0, 0xec
 	xor w, w
 	sla wa, 2
@@ -3594,7 +3594,7 @@ AcVocalGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, AcVocalGrid_FuncCallC
 	add xbc, xbc
-	add xbc, MidiPart_PageStr_1of3_0x42
+	add xbc, 0xe7ed7c
 	ld bc, (xbc)
 	lda_24 xix, AcVocalGrid_DialSetup
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -3653,7 +3653,7 @@ AcVocalGrid_DialSetup:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, MidiPart_PageStr_1of3_0x12
+	lda_24 xbc, 0xe7ed4c
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
@@ -3711,7 +3711,7 @@ AcVocalGrid_CheckEvent91:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, MidiPart_PageStr_1of3_0x2A
+	lda_24 xbc, 0xe7ed64
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
@@ -3818,17 +3818,17 @@ VocalistGridCheck:
 	lda xsp, (xsp - 48)
 	push xiz
 	ld xhl, xbc
-	ld xiy, MidiPart_OctaveStr_m2_0x64
+	ld xiy, 0xe7eec0
 	lda xix, (xsp + 20)
 	ldw bc, 0x10
 	ldirw
-	ld xiy, MidiPart_PageStr_1of3_0x0A
+	ld xiy, 0xe7ed44
 	lda xix, (xsp + 12)
 	lds bc, 4
 	ldirw
 	ld xix, xhl
 	lda xbc, (xsp + 12)
-	lda_24 xwa, MidiPart_OctaveStr_m2_0x04
+	lda_24 xwa, 0xe7ee60
 	ld (xsp + 8), xwa
 	lda xiy, (xbc + 2)
 	cp xhl, 0x1e0008d
@@ -3840,7 +3840,7 @@ VocalistGridCheck:
 	cp xwa, 0x6
 	jrl gt, AcVocalist_ReturnZero
 	add xwa, xwa
-	add xwa, MidiPart_ColWidthData_0x28
+	add xwa, 0xe7f098
 	ld wa, (xwa)
 	lda_24 xix, VocalistGrid_DispatchData
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -3869,7 +3869,7 @@ VocalistGrid_DispatchData:
 	sla	bc, 3
 	ld	ix, bc
 	add	ix, wa
-	lda_24	xde, MidiPart_OctaveStr_m2_0x04
+	lda_24	xde, 0xe7ee60
 	.byte 0xe3
 	reti
 	cp	xwa, xwa
@@ -3919,7 +3919,7 @@ VocalistGrid_DispatchData:
 	sla	bc, 3
 	ld	ix, bc
 	add	ix, wa
-	lda_24	xde, MidiPart_OctaveStr_m2_0x04
+	lda_24	xde, 0xe7ee60
 	.byte 0xe3
 	reti
 	cp	xwa, xwa
@@ -3995,7 +3995,7 @@ VocalistGrid_DispatchData:
 	.byte 0xe8, 0xc8
 	.long MidiPart_ColWidthData
 	ld	wa, (xwa)
-	lda_24	xix, VocalistGrid_DispatchData_0x160
+	lda_24	xix, 0xf73a98
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe0
@@ -4007,9 +4007,9 @@ VocalistGrid_DispatchData:
 	jr	z, 13
 	cp	wa, 17
 	jr	nz, 25
-	ld	xwa, MidiPart_OctaveStr_m2_0x84
+	ld	xwa, 0xe7eee0
 	jr	5
-	ld	xwa, MidiPart_OctaveStr_m2_0x90
+	ld	xwa, 0xe7eeec
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
@@ -4086,11 +4086,11 @@ VocalistGrid_DispatchData:
 	or	xsp, xsp
 	nop
 	jr	19
-	ld	xwa, MidiPart_OctaveStr_m2_0xD8
+	ld	xwa, 0xe7ef34
 	jr	12
-	ld	xwa, MidiPart_OctaveStr_m2_0xE4
+	ld	xwa, 0xe7ef40
 	jr	5
-	ld	xwa, MidiPart_OctaveStr_m2_0xF0
+	ld	xwa, 0xe7ef4c
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
@@ -4106,9 +4106,9 @@ VocalistGrid_DispatchData:
 	jr	z, 13
 	cp	wa, 121
 	jr	nz, 25
-	ld	xwa, MidiPart_OctaveStr_m2_0xFC
+	ld	xwa, 0xe7ef58
 	jr	5
-	ld	xwa, MidiPart_OctaveStr_m2_0x108
+	ld	xwa, 0xe7ef64
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
@@ -4152,7 +4152,7 @@ VocalistGrid_DispatchData:
 	and	bc, 128
 	sra	bc, 7
 	sla	bc, 2
-	lda_24	xwa, MidiPart_PageStr_1of3_0x50
+	lda_24	xwa, 0xe7ed8a
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xe4
@@ -4168,13 +4168,13 @@ VocalistGrid_DispatchData:
 	lda	xde, (xsp+12)
 	ld	xbc, 0x01e0008c
 	jrl	840
-	ld	xwa, MidiPart_OctaveStr_m2_0x12E
+	ld	xwa, 0xe7ef8a
 	.byte 0x91
 	push	xsp
 	nop
 	nop
 	jr	z, 5
-	ld	xwa, MidiPart_OctaveStr_m2_0x128
+	ld	xwa, 0xe7ef84
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
@@ -4212,7 +4212,7 @@ VocalistGrid_CheckHandler:
 	cp xwa, 0x13
 	jrl ugt, AcVocalist_ReturnZero
 	add xwa, xwa
-	add xwa, MidiPart_AfterStr_0x34
+	add xwa, 0xe7f048
 	ld wa, (xwa)
 	lda_24 xix, VocalistGrid_CheckDispData
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -4224,9 +4224,9 @@ VocalistGrid_CheckDispData:
 	jr	z, 13
 	cp	hl, 17
 	jr	nz, 25
-	ld	xwa, MidiPart_OctaveStr_m2_0x134
+	ld	xwa, 0xe7ef90
 	jr	5
-	ld	xwa, MidiPart_OctaveStr_m2_0x140
+	ld	xwa, 0xe7ef9c
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
@@ -4307,11 +4307,11 @@ VocalistGrid_CheckDispData:
 	jr	z, 11
 	cps	hl, 0
 	jr	nz, 37
-	ld	xwa, MidiPart_OctaveStr_m2_0x17C
+	ld	xwa, 0xe7efd8
 	jr	19
-	ld	xwa, MidiPart_OctaveStr_m2_0x188
+	ld	xwa, 0xe7efe4
 	jr	12
-	ld	xwa, MidiPart_OctaveStr_m2_0x194
+	ld	xwa, 0xe7eff0
 	jr	5
 	.byte 0x40
 	.long MidiPart_RecvTransStr
@@ -4332,7 +4332,7 @@ VocalistGrid_CheckDispData:
 	jr	z, 13
 	cp	hl, 121
 	jr	nz, 22
-	ld	xwa, MidiPart_RecvTransStr_0x0C
+	ld	xwa, 0xe7f008
 	jr	5
 	.byte 0x40
 	.long MidiPart_AfterStr
@@ -4380,7 +4380,7 @@ VocalistGrid_CheckDispData:
 	ld	xwa, 0x2d0e
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, MidiPart_PageStr_1of3_0x50
+	lda_24	xwa, 0xe7ed8a
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -4421,7 +4421,7 @@ VocalistGrid_CheckDispData:
 	ld	xwa, 0x2d12
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
-	lda_24	xwa, MidiPart_PageStr_1of3_0x50
+	lda_24	xwa, 0xe7ed8a
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -4448,10 +4448,10 @@ VocalistGrid_CheckDispData:
 	ldb	w, 29
 	.byte 0x37, 0xd4
 	swi	4
-	ld	xwa, MidiPart_AfterStr_0x2E
+	ld	xwa, 0xe7f042
 	cps	hl, 0
 	jr	z, 5
-	ld	xwa, MidiPart_AfterStr_0x28
+	ld	xwa, 0xe7f03c
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
@@ -4489,7 +4489,7 @@ AcVocalist_ListSetup:
 	cp xhl, 0x5
 	jr ugt, AcVocalist_ListCase1
 	add xhl, xhl
-	add xhl, MidiPart_ColWidthData_0x36
+	add xhl, 0xe7f0a6
 	ld hl, (xhl)
 	lda_24 xix, AcVocalist_ListDispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
@@ -4519,11 +4519,11 @@ PsHarmOnOffBoxProc:
 	ld (xsp + 20), xde
 	ld xiz, xbc
 	ld (xsp + 24), xwa
-	ld xiy, MidiPart_HarmLocalStr_0x18
+	ld xiy, 0xe7f0ce
 	lda xix, (xsp + 16)
 	ldiw
 	ldiw
-	ld xiy, MidiPart_HarmLocalStr_0x1C
+	ld xiy, 0xe7f0d2
 	lda xix, (xsp + 8)
 	lds bc, 4
 	ldirw
@@ -4604,7 +4604,7 @@ PsHarm_DrawActiveBox:
 	lda xix, (xde + 22)
 	cp xhl, 0x5
 	jr nz, PsHarm_DrawActiveLabel
-	ld32_24 xde, MidiPart_ColWidthData_0x42
+	ld32_24 xde, 0xe7f0b2
 	ld xhl, (xix)
 	push xhl
 	pushw 0xff
@@ -4643,7 +4643,7 @@ PsHarm_DrawInactiveBox:
 	lda xix, (xde + 22)
 	cp xhl, 0x5
 	jr nz, PsHarm_DrawInactiveLabel
-	ld32_24 xde, MidiPart_ColWidthData_0x42
+	ld32_24 xde, 0xe7f0b2
 	ld xhl, (xix)
 	push xhl
 	pushw 0xff
@@ -4727,7 +4727,7 @@ MainVocalistPage1OKFunc:
 	cps de, 5
 	jr ugt, VocalistPage_Handler
 	add de, de
-	lda_24 xix, MidiPart_HarmLocalStr_0x24
+	lda_24 xix, 0xe7f0da
 	ld_sriw3 DE, 0x07, 0xf0, 0xe8
 	lda_24 xix, VocalistPage1OK_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
@@ -4896,7 +4896,7 @@ RevSel_HandleConfirm:
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
-	ld xde, MidiPart_HarmLocalStr_0x30
+	ld xde, 0xe7f0e6
 
 RevSel_SendAndRet:
 	call SendEvent
@@ -4986,7 +4986,7 @@ EqSel_HandleConfirm:
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
-	ld xde, MidiPart_HarmLocalStr_0x36
+	ld xde, 0xe7f0ec
 	jr EqSel_SendEvent
 
 EqSel_HandleDial:
@@ -5098,7 +5098,7 @@ RevEqSel_HandleConfirm:
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
-	ld xde, MidiPart_HarmLocalStr_0x3C
+	ld xde, 0xe7f0f2
 	jr RevEqSel_SendEvent
 
 RevEqSel_HandleDial:
@@ -5252,7 +5252,7 @@ StsAttention_ReturnZero:
 StsGMOnCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsGMOn_ReturnZero
-	lda_24 xhl, GMMode_Attention_English2_0x204
+	lda_24 xhl, 0xe7f34e
 	ret
 
 StsGMOn_ReturnZero:
@@ -5262,7 +5262,7 @@ StsGMOn_ReturnZero:
 StsGMOffCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsGMOff_ReturnZero
-	lda_24 xhl, GMMode_Attention_English2_0x47C
+	lda_24 xhl, 0xe7f5c6
 	ret
 
 StsGMOff_ReturnZero:
@@ -5272,7 +5272,7 @@ StsGMOff_ReturnZero:
 StsAreYouSureCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsAreYouSure_ReturnZero
-	lda_24 xhl, GMMode_Attention_English2_0x494
+	lda_24 xhl, 0xe7f5de
 	ret
 
 StsAreYouSure_ReturnZero:
@@ -5373,7 +5373,7 @@ TtMdGm_ReturnZero:
 StsSplitCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsSplit_ReturnZero
-	lda_24 xhl, GMMode_Attention_English2_0x514
+	lda_24 xhl, 0xe7f65e
 	ret
 
 StsSplit_ReturnZero:
@@ -5386,7 +5386,7 @@ SplitPointFunc:
 	ld (xsp + 8), xde
 	ld xde, xbc
 	ld (xsp + 12), xwa
-	ld xiy, SplitPoint_NoteEntry_C_Code_0x38
+	ld xiy, 0xe7f816
 	lda xix, (xsp + 4)
 	ldiw
 	ldiw
@@ -5446,7 +5446,7 @@ Draw_keybed_maybe_for_indicating_split_point:
 	ld c, b
 	extz bc
 	sla bc, 2
-	lda_24 xde, SplitPoint_NoteEntry_C_Code_0x04
+	lda_24 xde, 0xe7f7e2
 	ld_sril3 XBC, 0x07, 0xe8, 0xe4
 	pushw 0x34
 	ldw de, 0x39
@@ -5567,27 +5567,27 @@ R12Octave_HandleNoteEvt:
 	jr z, R12Octave_Octave2
 	cp wa, 0x28
 	jr nz, R12Octave_OctaveDefault
-	ld xwa, SplitPoint_NoteEntry_C_Code_0x42
+	ld xwa, 0xe7f820
 	jr R12Octave_StringCopyAndSendEvent
 
 R12Octave_Octave2:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0x48
+	ld xwa, 0xe7f826
 	jr R12Octave_StringCopyAndSendEvent
 
 R12Octave_Octave3:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0x4E
+	ld xwa, 0xe7f82c
 	jr R12Octave_StringCopyAndSendEvent
 
 R12Octave_Octave4:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0x54
+	ld xwa, 0xe7f832
 	jr R12Octave_StringCopyAndSendEvent
 
 R12Octave_Octave5:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0x5A
+	ld xwa, 0xe7f838
 	jr R12Octave_StringCopyAndSendEvent
 
 R12Octave_OctaveDefault:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0x60
+	ld xwa, 0xe7f83e
 
 R12Octave_StringCopyAndSendEvent:
 	push xwa

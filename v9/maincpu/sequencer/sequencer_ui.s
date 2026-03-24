@@ -98,7 +98,7 @@ InitializeYoko:
 PartSelLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, PartSelLang_ReturnZero
-	lda_24 xhl, NakaWidgetPtrTbl_SmfDp_0x1FC8_
+	lda_24 xhl, 0xe26078
 	ret
 
 PartSelLang_ReturnZero:
@@ -108,7 +108,7 @@ PartSelLang_ReturnZero:
 AfterLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, AfterLang_ReturnZero
-	lda_24 xhl, NakaWidgetPtrTbl_SmfDp_0x1FE0_
+	lda_24 xhl, 0xe26090
 	ret
 
 AfterLang_ReturnZero:
@@ -118,7 +118,7 @@ AfterLang_ReturnZero:
 TrAsPreLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, TrAsPreLang_ReturnZero
-	lda_24 xhl, NakaWidgetPtrTbl_SmfDp_0x1FF8_
+	lda_24 xhl, 0xe260a8
 	ret
 
 TrAsPreLang_ReturnZero:
@@ -128,7 +128,7 @@ TrAsPreLang_ReturnZero:
 AtentionLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, AtentionLang_ReturnZero
-	lda_24 xhl, NakaWidgetPtrTbl_SmfDp_0x2010_
+	lda_24 xhl, 0xe260c0
 	ret
 
 AtentionLang_ReturnZero:
@@ -138,7 +138,7 @@ AtentionLang_ReturnZero:
 AreYouSureLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, AreYouSureLang_ReturnZero
-	lda_24 xhl, NakaWidgetPtrTbl_SmfDp_0x2028_
+	lda_24 xhl, 0xe260d8
 	ret
 
 AreYouSureLang_ReturnZero:
@@ -148,7 +148,7 @@ AreYouSureLang_ReturnZero:
 GmOnSureLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, GmOnSureLang_ReturnZero
-	lda_24 xhl, NakaWidgetPtrTbl_SmfDp_0x2040_
+	lda_24 xhl, 0xe260f0
 	ret
 
 GmOnSureLang_ReturnZero:
@@ -158,7 +158,7 @@ GmOnSureLang_ReturnZero:
 GmOffSureLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, GmOffSureLang_ReturnZero
-	lda_24 xhl, NakaWidgetPtrTbl_SmfDp_0x2058_
+	lda_24 xhl, 0xe26108
 	ret
 
 GmOffSureLang_ReturnZero:
@@ -171,7 +171,7 @@ TrAsSureLangCheck:
 	ldda8 a, 0x2873
 	extz wa
 	sla wa, 2
-	lda_24 xbc, NakaWidgetPtrTbl_SmfDp_0x2070_
+	lda_24 xbc, 0xe26120
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ldda8 a, 4438
@@ -186,7 +186,7 @@ TrAsSureLangCheck:
 	ld8_24 a, 0x0340e4
 	extz wa
 	sla wa, 2
-	lda_24 xbc, NakaWidgetPtrTbl_SmfDp_0x1DA0_
+	lda_24 xbc, 0xe25e50
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0x2
@@ -2286,7 +2286,7 @@ AcTrAsGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, TrAsGrid_PassThrough
 	add xbc, xbc
-	add xbc, NakaWidgetPtrTbl_SmfDp_0x238A_
+	add xbc, 0xe2643a
 	ld bc, (xbc)
 	lda_24 xix, TrAsGrid_HandleInit
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -2604,11 +2604,11 @@ TrAsGrid_GetWidgetLabel:
 TrAsGrid_GetDirectionLabel:
 	bitda 0, 3296
 	jr nz, TrAsGrid_DirectionLabel2
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2332_
+	ld xwa, 0xe263e2
 	jr TrAsGrid_PushLabelAddr
 
 TrAsGrid_DirectionLabel2:
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x235E_
+	ld xwa, 0xe2640e
 
 TrAsGrid_PushLabelAddr:
 	push xwa
@@ -2705,13 +2705,13 @@ TrAsGrid_Epilogue:
 TrAsGrid_LookupTable:
 	extz wa
 	add wa, wa
-	lda_24 xbc, NakaWidgetPtrTbl_SmfDp_0x2398_
+	lda_24 xbc, 0xe26448
 	ld_sriw3 HL, 0x07, 0xe4, 0xe0
 	ret
 
 TrAsGrid_ByteData1:
 	extz	wa
-	lda_24	xde, NakaWidgetPtrTbl_SmfDp_0x23B8_
+	lda_24	xde, 0xe26468
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -2726,7 +2726,7 @@ TrAsGrid_ByteData1:
 	jr	z, 2
 	dec	1, a
 	extz	wa
-	ld	xbc, NakaWidgetPtrTbl_SmfDp_0x23CC_
+	ld	xbc, 0xe2647c
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
@@ -2774,7 +2774,7 @@ TrAsGridCheck:
 	cp xwa, 0x6
 	jrl gt, TrAsGridChk_ReturnZero
 	add xwa, xwa
-	add xwa, NakaWidgetPtrTbl_SmfDp_0x2420_
+	add xwa, 0xe264d0
 	ld wa, (xwa)
 	lda_24 xix, TrAsGridChk_ByteData
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -3040,7 +3040,7 @@ TrAsGridChk_Part1_AdjustUp:
 TrAsGridChk_Part1_SendAudio:
 	extz hl
 	sla hl, 2
-	ld xbc, NakaWidgetPtrTbl_SmfDp_0x221A_
+	ld xbc, 0xe262ca
 	ld_sril3 XWA, 0x07, 0xe4, 0xec
 	push xwa
 	lda xwa, (xsp + 8)
@@ -3061,10 +3061,10 @@ TrAsGridChk_Part2_Start:
 	calr TrAsGrid_LookupTable
 	andda16 xhl, 0xf1d0
 	lda xbc, (xsp + 4)
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23E4_
+	ld xwa, 0xe26494
 	cps hl, 0
 	jr z, TrAsGridChk_Part2_PushCmd
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23E0_
+	ld xwa, 0xe26490
 
 TrAsGridChk_Part2_PushCmd:
 	push xwa
@@ -3087,7 +3087,7 @@ TrAsGridChk_Part2_PushCmd:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jrl nz, TrAsGridChk_Part2_Finish
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23E8_
+	ld xwa, 0xe26498
 	jr TrAsGridChk_SendExtraAudioCmd
 
 TrAsGridChk_Part2_CheckType0:
@@ -3095,7 +3095,7 @@ TrAsGridChk_Part2_CheckType0:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part2_Finish
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23EC_
+	ld xwa, 0xe2649c
 	jr TrAsGridChk_SendExtraAudioCmd
 
 TrAsGridChk_Part2_UpDir:
@@ -3104,10 +3104,10 @@ TrAsGridChk_Part2_UpDir:
 	calr TrAsGrid_LookupTable
 	andda16 xhl, 0xf1d0
 	lda xbc, (xsp + 4)
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23F4_
+	ld xwa, 0xe264a4
 	cps hl, 0
 	jr z, TrAsGridChk_Part2_UpPushCmd
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23F0_
+	ld xwa, 0xe264a0
 
 TrAsGridChk_Part2_UpPushCmd:
 	push xwa
@@ -3130,7 +3130,7 @@ TrAsGridChk_Part2_UpPushCmd:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part2_Finish
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23F8_
+	ld xwa, 0xe264a8
 	jr TrAsGridChk_SendExtraAudioCmd
 
 TrAsGridChk_Part2_UpCheckType0:
@@ -3138,7 +3138,7 @@ TrAsGridChk_Part2_UpCheckType0:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part2_Finish
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x23FC_
+	ld xwa, 0xe264ac
 
 TrAsGridChk_SendExtraAudioCmd:
 	push xwa
@@ -3161,10 +3161,10 @@ TrAsGridChk_Part3_Start:
 	extz wa
 	calr TrAsGrid_LookupTable
 	andda16 xhl, 0xf290
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2404_
+	ld xwa, 0xe264b4
 	cps hl, 0
 	jr z, TrAsGridChk_Part3_PushCmd
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2400_
+	ld xwa, 0xe264b0
 
 TrAsGridChk_Part3_PushCmd:
 	push xwa
@@ -3188,7 +3188,7 @@ TrAsGridChk_Part3_PushCmd:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jrl nz, TrAsGridChk_Part3_Finish
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2408_
+	ld xwa, 0xe264b8
 	jr TrAsGridChk_SendExtraAudioCmd2
 
 TrAsGridChk_Part3_CheckType0:
@@ -3196,7 +3196,7 @@ TrAsGridChk_Part3_CheckType0:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part3_Finish
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x240C_
+	ld xwa, 0xe264bc
 	jr TrAsGridChk_SendExtraAudioCmd2
 
 TrAsGridChk_Part3_UpDir:
@@ -3204,10 +3204,10 @@ TrAsGridChk_Part3_UpDir:
 	extz wa
 	calr TrAsGrid_LookupTable
 	andda16 xhl, 0xf290
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2414_
+	ld xwa, 0xe264c4
 	cps hl, 0
 	jr z, TrAsGridChk_Part3_UpPushCmd
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2410_
+	ld xwa, 0xe264c0
 
 TrAsGridChk_Part3_UpPushCmd:
 	push xwa
@@ -3231,7 +3231,7 @@ TrAsGridChk_Part3_UpPushCmd:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part3_Finish
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2418_
+	ld xwa, 0xe264c8
 	jr TrAsGridChk_SendExtraAudioCmd2
 
 TrAsGridChk_Part3_UpCheckType0:
@@ -3239,7 +3239,7 @@ TrAsGridChk_Part3_UpCheckType0:
 	calr TrAsGrid_CheckTrackType
 	cps l, 1
 	jr nz, TrAsGridChk_Part3_Finish
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x241C_
+	ld xwa, 0xe264cc
 
 TrAsGridChk_SendExtraAudioCmd2:
 	push xwa
@@ -3321,7 +3321,7 @@ VoiceConfig_LookupByScreenType:
 	jr z, VoiceConfig_LoadTableA
 	cp hl, 0xe1
 	jr nz, VoiceConfig_ReturnZeroShort
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x242E_
+	ld xwa, 0xe264de
 
 VoiceConfig_ReadFromTable:
 	add xwa, xiz
@@ -3349,11 +3349,11 @@ VoiceConfig_SetType5:
 	jr VoiceConfig_LookupByScreenType
 
 VoiceConfig_LoadTableA:
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2434_
+	ld xwa, 0xe264e4
 	jr VoiceConfig_ReadFromTable
 
 VoiceConfig_LoadTableB:
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x243A_
+	ld xwa, 0xe264ea
 	jr VoiceConfig_ReadFromTable
 
 VoiceConfig_ReturnZeroShort:
@@ -3579,7 +3579,7 @@ SmfMuteChSelFunc:
 	cp xbc, 0x9
 	jr gt, MuteChSel_ReturnZero
 	add xbc, xbc
-	add xbc, NakaWidgetPtrTbl_SmfDp_0x2500_
+	add xbc, 0xe265b0
 	ld bc, (xbc)
 	lda_24 xix, MuteChSel_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -3587,7 +3587,7 @@ SmfMuteChSelFunc:
 MuteChSel_Dispatch:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, NakaWidgetPtrTbl_SmfDp_0x2460_
+	ld	xbc, 0xe26510
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -3622,7 +3622,7 @@ SqTrAsPsSongFunc:
 	cp xbc, 0x9
 	jr gt, SqTrAsPsSong_ReturnZero
 	add xbc, xbc
-	add xbc, NakaWidgetPtrTbl_SmfDp_0x25AE_
+	add xbc, 0xe2665e
 	ld bc, (xbc)
 	lda_24 xix, SqTrAsPsSong_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -3630,7 +3630,7 @@ SqTrAsPsSongFunc:
 SqTrAsPsSong_Dispatch:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, NakaWidgetPtrTbl_SmfDp_0x2514_
+	ld	xbc, 0xe265c4
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -3668,7 +3668,7 @@ SqAftSetFunc:
 	jr nz, SqAftSet_Case2
 	ld wa, (xde + 8)
 	sla wa, 2
-	lda_24 xbc, NakaWidgetPtrTbl_SmfDp_0x25C2_
+	lda_24 xbc, 0xe26672
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 10)
@@ -3699,7 +3699,7 @@ SqAftSet_LookupExit:
 SqAftSet_LookupTableEntry:
 	extz wa
 	add wa, wa
-	lda_24 xbc, NakaWidgetPtrTbl_SmfDp_0x25D6_
+	lda_24 xbc, 0xe26686
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	st16_24 0x021086, xwa
 	ret
@@ -3716,7 +3716,7 @@ MuteChSetFunc:
 	cp xwa, 0x9
 	jr gt, MuteChSetFunc_Exit
 	add xwa, xwa
-	add xwa, NakaWidgetPtrTbl_SmfDp_0x26B6_
+	add xwa, 0xe26766
 	ld wa, (xwa)
 	lda_24 xix, MuteChSet_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -3725,7 +3725,7 @@ MuteChSetFunc:
 MuteChSet_Dispatch:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, NakaWidgetPtrTbl_SmfDp_0x25F6_
+	ld	xbc, 0xe266a6
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -4027,10 +4027,10 @@ AcDemoMedley_HandleScrollEvent:
 	ld xwa, xiz
 	call InheritedProc
 	lda xbc, (xsp + 4)
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x26D6_
+	ld xwa, 0xe26786
 	cpi8_24 0x021090, 0x01
 	jr nz, DPPlayDsp_CheckEntry
-	ld xwa, NakaWidgetPtrTbl_SmfDp_0x26CA_
+	ld xwa, 0xe2677a
 
 ; DPPlayDspCheck entry
 DPPlayDsp_CheckEntry:
@@ -4065,7 +4065,7 @@ DemoMedDspCheck:
 	cp xwa, 0x9
 	jr gt, DPLoad_DspReturn
 	add xwa, xwa
-	add xwa, MedleyDisp_Blank_0x18_
+	add xwa, 0xe267aa
 	ld wa, (xwa)
 	lda_24 xix, DemoMedDsp_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -4074,7 +4074,7 @@ DemoMedDspCheck:
 DemoMedDsp_Dispatch:
 	ld	xhl, (xde+14)
 	ld	xbc, (xde+18)
-	ld	xwa, MedleyDisp_Blank_0x0C_
+	ld	xwa, 0xe2679e
 	or	xhl, xhl
 	jr	nz, 5
 	.byte 0x40
@@ -4113,7 +4113,7 @@ DPPlayDspCheck:
 	cp xwa, 0x9
 	jr gt, DPPlay_DspReturn
 	add xwa, xwa
-	add xwa, PlayModeStr_Play_0x0C_
+	add xwa, 0xe267ca
 	ld wa, (xwa)
 	lda_24 xix, DPPlayDsp_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -4122,7 +4122,7 @@ DPPlayDspCheck:
 DPPlayDsp_Dispatch:
 	ld	xhl, (xde+14)
 	ld	xbc, (xde+18)
-	ld	xwa, PlayModeStr_Play_0x06_
+	ld	xwa, 0xe267c4
 	or	xhl, xhl
 	jr	nz, 5
 	.byte 0x40
@@ -4161,7 +4161,7 @@ DPPauseDspCheck:
 	cp xwa, 0x9
 	jr gt, DPPause_DspReturn
 	add xwa, xwa
-	add xwa, PlayModeStr_Pause_0x0C_
+	add xwa, 0xe267ea
 	ld wa, (xwa)
 	lda_24 xix, DPPauseDsp_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -4170,7 +4170,7 @@ DPPauseDspCheck:
 DPPauseDsp_Dispatch:
 	ld	xhl, (xde+14)
 	ld	xbc, (xde+18)
-	ld	xwa, PlayModeStr_Pause_0x06_
+	ld	xwa, 0xe267e4
 	or	xhl, xhl
 	jr	nz, 5
 	.byte 0x40
@@ -4772,15 +4772,15 @@ HelpFuncChkFunc:
 	jrl nz, HelpFunc_ReturnZero
 	or xiz, xiz
 	jrl nz, HelpFunc_ReturnZero
-	ld xwa, Bitmap_MIDIConnections_2_0x3BCA_
+	ld xwa, 0xe7001c
 	ld xbc, 0x1e0007f
 	lds32 xde, 1
 	call SendEvent
-	ld xwa, Bitmap_MIDIConnections_2_0x3BD5_
+	ld xwa, 0xe70027
 	ld xbc, 0x1e0007f
 	lds32 xde, 1
 	call SendEvent
-	ld xwa, Bitmap_MIDIConnections_2_0x3BDC_
+	ld xwa, 0xe7002e
 	ld xbc, 0x1e0007f
 	lds32 xde, 1
 	call SendEvent
@@ -4912,7 +4912,7 @@ HelpTtlFunc_ClampMin:
 
 HelpTtlFunc_LookupSlide:
 	sll wa, 2
-	lda_24 xix, NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las_0x3F4_
+	lda_24 xix, 0xe343ee
 	ld_sril3 XWA, 0x07, 0xf0, 0xe0
 	push xwa
 	ld xwa, (xde + 18)
@@ -5389,7 +5389,7 @@ AcIndexToggle_SendVisibility:
 	ld xwa, (xwa + 46)
 	ld xbc, 0x1e80070
 	call ApFuncCall
-	ld xwa, Bitmap_MIDIConnections_2_0x3BB0_
+	ld xwa, 0xe70002
 	ld xbc, 0x1c0000d
 	lds32 xde, 0
 	jrl SendNoteDeleteEvent
@@ -5522,7 +5522,7 @@ AcIndexToggleFunc_CheckMatch:
 AttAreYouSureCheck:
 	cp xbc, 0x1e0009f
 	jr nz, AttModePreCheck_ReturnZero
-	lda_24 xhl, NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las_0x4DA_
+	lda_24 xhl, 0xe344d4
 	ret
 
 AttModePreCheck_ReturnZero:
@@ -5532,7 +5532,7 @@ AttModePreCheck_ReturnZero:
 AttAttentionCheck:
 	cp xbc, 0x1e0009f
 	jr nz, AttAttentionCheck_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0x14_
+	lda_24 xhl, 0xe344ec
 	ret
 
 AttAttentionCheck_ReturnZero:
@@ -5542,7 +5542,7 @@ AttAttentionCheck_ReturnZero:
 StsSeqMenu1Check:
 	cp xbc, 0x1e0009f
 	jr nz, StsSeqMenu1Check_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0x2C_
+	lda_24 xhl, 0xe34504
 	ret
 
 StsSeqMenu1Check_ReturnZero:
@@ -5552,7 +5552,7 @@ StsSeqMenu1Check_ReturnZero:
 StsSeqMenu2Check:
 	cp xbc, 0x1e0009f
 	jr nz, StsSeqMenu2Check_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0x44_
+	lda_24 xhl, 0xe3451c
 	ret
 
 StsSeqMenu2Check_ReturnZero:
@@ -5562,7 +5562,7 @@ StsSeqMenu2Check_ReturnZero:
 StsEasyRec1Check:
 	cp xbc, 0x1e0009f
 	jr nz, StsEasyRec1Check_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0x5C_
+	lda_24 xhl, 0xe34534
 	ret
 
 StsEasyRec1Check_ReturnZero:
@@ -5572,7 +5572,7 @@ StsEasyRec1Check_ReturnZero:
 StsEasyRec2Check:
 	cp xbc, 0x1e0009f
 	jr nz, StsEasyRec2Check_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0x74_
+	lda_24 xhl, 0xe3454c
 	ret
 
 StsEasyRec2Check_ReturnZero:
@@ -5582,7 +5582,7 @@ StsEasyRec2Check_ReturnZero:
 StsPnlWrtCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsPnlWrtCheck_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0x8C_
+	lda_24 xhl, 0xe34564
 	ret
 
 StsPnlWrtCheck_ReturnZero:
@@ -5592,7 +5592,7 @@ StsPnlWrtCheck_ReturnZero:
 StsTrkClr1Check:
 	cp xbc, 0x1e0009f
 	jr nz, StsTrkClr1Check_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0xA4_
+	lda_24 xhl, 0xe3457c
 	ret
 
 StsTrkClr1Check_ReturnZero:
@@ -5602,7 +5602,7 @@ StsTrkClr1Check_ReturnZero:
 StsTrkClr2Check:
 	cp xbc, 0x1e0009f
 	jr nz, StsTrkClr2Check_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0xBC_
+	lda_24 xhl, 0xe34594
 	ret
 
 StsTrkClr2Check_ReturnZero:
@@ -5612,7 +5612,7 @@ StsTrkClr2Check_ReturnZero:
 StsNtDrEditCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsNtDrEditCheck_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0xD4_
+	lda_24 xhl, 0xe345ac
 	ret
 
 StsNtDrEditCheck_ReturnZero:
@@ -5622,7 +5622,7 @@ StsNtDrEditCheck_ReturnZero:
 AttTrkClrCheck:
 	cp xbc, 0x1e0009f
 	jr nz, AttTrkClrCheck_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0xEC_
+	lda_24 xhl, 0xe345c4
 	ret
 
 AttTrkClrCheck_ReturnZero:
@@ -5632,7 +5632,7 @@ AttTrkClrCheck_ReturnZero:
 AttSongClrCheck:
 	cp xbc, 0x1e0009f
 	jr nz, AttSongClrCheck_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0x104_
+	lda_24 xhl, 0xe345dc
 	ret
 
 AttSongClrCheck_ReturnZero:
@@ -5642,7 +5642,7 @@ AttSongClrCheck_ReturnZero:
 StsAtPunchCheck:
 	cp xbc, 0x1e0009f
 	jr nz, StsAtPunchCheck_ReturnZero
-	lda_24 xhl, ExtDevice_ModeDispatch_Table_0x11C_
+	lda_24 xhl, 0xe345f4
 	ret
 
 StsAtPunchCheck_ReturnZero:
@@ -5749,14 +5749,14 @@ NoteEditBox_HandleFocusLost:
 	cp l, (xiy + 30)
 	jrl nz, NoteEdit_ReturnZero
 	lda xix, (xsp + 28)
-	ld xwa, NakaInst_NO_OPERATION_0x1F0_
+	ld xwa, 0xe33758
 	add xwa, (xsp + 90)
 	ld a, (xwa)
 	extz wa
 	ld (xix), wa
 	lda xbc, (xix + 2)
 	ldw (xbc), 0xb9
-	ld xwa, NakaInst_NO_OPERATION_0x1FC_
+	ld xwa, 0xe33764
 	add xwa, (xsp + 90)
 	ld a, (xwa)
 	extz wa
@@ -5807,7 +5807,7 @@ NoteEditBox_SetupGrid:
 	cp xhl, 0x9
 	jr ugt, NoteEditBoxProc_SetupGridDisplay
 	add xhl, xhl
-	add xhl, ExtDevice_ModeDispatch_Table_0x17C_
+	add xhl, 0xe34654
 	ld hl, (xhl)
 	lda_24 xix, NoteEditBox_EventDispatch1
 	jp_dri 8, 0x07, 0xf0, 0xec
@@ -5875,7 +5875,7 @@ NoteEditBox_GridDispatch2:
 	cp xwa, 0xb
 	jrl ugt, NoteEditBoxProc_ClassifyGridPosition
 	add xwa, xwa
-	add xwa, ExtDevice_ModeDispatch_Table_0x164_
+	add xwa, 0xe3463c
 	ld wa, (xwa)
 	lda_24 xix, NoteEditBox_EventDispatch2
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -5891,7 +5891,7 @@ NoteEditBox_EventDispatch2:
 	ld	c, (xsp+10)
 	extz	bc
 	sla	bc, 3
-	lda_24	xde, NakaInst_NO_OPERATION_0x208_
+	lda_24	xde, 0xe33770
 	.byte 0xf3
 	reti
 	or	xix, xwa
@@ -5930,7 +5930,7 @@ NoteEditBox_EventDispatch2:
 	ld	a, (xsp+10)
 	extz	wa
 	sla	wa, 3
-	lda_24	xbc, NakaInst_NO_OPERATION_0x208_
+	lda_24	xbc, 0xe33770
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe0
@@ -5987,7 +5987,7 @@ NoteEditBox_EventDispatch2:
 	ld	a, (xsp+10)
 	extz	wa
 	sla	wa, 3
-	lda_24	xbc, NakaInst_NO_OPERATION_0x208_
+	lda_24	xbc, 0xe33770
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe0
@@ -6040,7 +6040,7 @@ NoteEditBox_EventDispatch2:
 	lda	xwa, (xsp+20)
 	ld	(xwa), hl
 	lda	xhl, (xwa+2)
-	lda_24	xix, NakaInst_NO_OPERATION_0x208_
+	lda_24	xix, 0xe33770
 	ld	bc, (xix+66)
 	ld	(xhl), bc
 	lda	xbc, (xsp+16)
@@ -6075,7 +6075,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0x89
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, NakaInst_NO_OPERATION_0x250_
+	lda_24	xbc, 0xe337b8
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -6115,7 +6115,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0xd7, 0xe2, 0x88
 	pushw	wa
 	ld	(xsp+10), wa
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x140_
+	ld	xwa, 0xe34618
 	push	xwa
 	lda	xwa, (xsp+42)
 	push	xwa
@@ -6192,7 +6192,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0x89
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, NakaInst_NO_OPERATION_0x268_
+	lda_24	xbc, 0xe337d0
 	.byte 0xd3
 	reti
 	.byte 0xe4, 0xe0
@@ -6223,7 +6223,7 @@ NoteEditBox_EventDispatch2:
 	swi	3
 	dec	6, wa
 	ldwio	159, 1032
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x148_
+	ld	xwa, 0xe34620
 	jr	21
 	ld	wa, (xsp+8)
 	extz	xwa
@@ -6231,7 +6231,7 @@ NoteEditBox_EventDispatch2:
 	.byte 0xd7, 0xe2, 0x88
 	pushw	wa
 	ld	(xsp+10), wa
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x14C_
+	ld	xwa, 0xe34624
 	push	xwa
 	push	xde
 	call	Sprintf_Locked
@@ -6584,7 +6584,7 @@ NoteEditGrid_LoadCoordinates:
 	ld c, (xsp + 10)
 	extz bc
 	sla bc, 3
-	lda_24 xde, NakaInst_NO_OPERATION_0x208_
+	lda_24 xde, 0xe33770
 	st_dri3b B, 0x07, 0xe8, 0xe4
 	ld bc, (xde)
 	ld (xwa), bc
@@ -6631,11 +6631,11 @@ NoteEdit_FormatEntry:
 	ld xwa, (xsp + 90)
 	cp xwa, 0xb
 	jr ugt, NoteEdit_ReturnZero
-	add xwa, ExtDevice_ModeDispatch_Table_0x154_
+	add xwa, 0xe3462c
 	ld wa, (xwa)
 	extz wa
 	sll wa, 1
-	ld xix, ExtDevice_ModeDispatch_Table_0x160_
+	ld xix, 0xe34638
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, NoteEditBox_GridDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -6667,7 +6667,7 @@ NoteEditFunc:
 	ld xwa, xbc
 	cp xbc, 0x1e80069
 	jrl z, NoteEdit_GetScreenId
-	lda_24 xhl, NakaInst_NO_OPERATION_0x27A_
+	lda_24 xhl, 0xe337e2
 	cp xbc, 0x1e8006b
 	jrl z, NoteEdit_FormatNoteNameLow
 	cp xbc, 0x1e8006a
@@ -6686,7 +6686,7 @@ NoteEditFunc:
 	cp xwa, 0xf
 	jrl gt, NoteEdit_DefaultReturn
 	add xwa, xwa
-	add xwa, ExtDevice_ModeDispatch_Table_0x21C_
+	add xwa, 0xe346f4
 	ld wa, (xwa)
 	lda_24 xix, NoteEdit_FormatTempo
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -6717,11 +6717,11 @@ NoteEdit_FormatTempoString:
 	ldda16 xwa, 0x2782
 	inc 1, wa
 	pushw wa
-	ld xwa, ExtDevice_ModeDispatch_Table_0x19C_
+	ld xwa, 0xe34674
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	push_sd16w 0x84, 0x27
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1A2_
+	ld xwa, 0xe3467a
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	call GetTitleNow
@@ -6731,7 +6731,7 @@ NoteEdit_FormatTempoString:
 	jr nz, NoteEdit_FormatNoteOther
 	pushw 0x9
 	muls wa, 0x9
-	lda_24 xbc, Naka_Help_569_E30113_0x833_
+	lda_24 xbc, 0xe30946
 	exts xwa
 	add xwa, xbc
 	push xwa
@@ -6743,27 +6743,27 @@ NoteEdit_FormatTempoString:
 
 NoteEdit_FormatNoteOther:
 	pushw wa
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1A8_
+	ld xwa, 0xe34680
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	ldda8 a, 0x2788
 	extz wa
 	pushw wa
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1AC_
+	ld xwa, 0xe34684
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	ldda8 a, 0x278a
 	extz wa
 	pushw wa
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1B2_
+	ld xwa, 0xe3468a
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	push_sd16w 0x8c, 0x27
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1B8_
+	ld xwa, 0xe34690
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	push_sd16w 0x8e, 0x27
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1BC_
+	ld xwa, 0xe34694
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	ldda16 xde, 0x2792
@@ -6789,11 +6789,11 @@ NoteEdit_FormatNoteOther:
 	jr NoteEdit_GateTimeStrcpy
 
 NoteEdit_GateTime0C:
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1C8_
+	ld xwa, 0xe346a0
 	jr NoteEdit_GateTimePushFormat
 
 NoteEdit_GateTime10:
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1D0_
+	ld xwa, 0xe346a8
 
 NoteEdit_GateTimePushFormat:
 	push xwa
@@ -6802,19 +6802,19 @@ NoteEdit_GateTimePushFormat:
 	jr NoteEdit_GateTimeStrcpy
 
 NoteEdit_GateTime18:
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1D8_
+	ld xwa, 0xe346b0
 	jr NoteEdit_GateTimePushAndCopy
 
 NoteEdit_GateTime20:
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1E0_
+	ld xwa, 0xe346b8
 	jr NoteEdit_GateTimePushAndCopy
 
 NoteEdit_GateTime30:
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1E8_
+	ld xwa, 0xe346c0
 	jr NoteEdit_GateTimePushAndCopy
 
 NoteEdit_GateTime60:
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1F0_
+	ld xwa, 0xe346c8
 
 NoteEdit_GateTimePushAndCopy:
 	push xwa
@@ -6839,7 +6839,7 @@ NoteEdit_FormatChordType:
 	addda8_24 a, 0x021096
 	extz wa
 	pushw wa
-	ld xwa, ExtDevice_ModeDispatch_Table_0x1FC_
+	ld xwa, 0xe346d4
 
 NoteEdit_PushFormatAndCopy:
 	push xwa
@@ -6872,7 +6872,7 @@ NoteEdit_GetParamValue:
 	cp xde, 0xd
 	jr ugt, NoteEdit_GetTempoValue
 	add xde, xde
-	add xde, ExtDevice_ModeDispatch_Table_0x200_
+	add xde, 0xe346d8
 	ld de, (xde)
 	lda_24 xix, NoteEdit_ParamJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe8
@@ -7295,7 +7295,7 @@ AcEntertainerGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, EntGrid_CellAction3
 	add xbc, xbc
-	add xbc, ExtDevice_ModeDispatch_Table_0x26A_
+	add xbc, 0xe34742
 	ld bc, (xbc)
 	lda_24 xix, AcEntertainer_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -7361,7 +7361,7 @@ EntGrid_PostMainEvent:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, ExtDevice_ModeDispatch_Table_0x246_
+	lda_24 xbc, 0xe3471e
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
@@ -7419,7 +7419,7 @@ EntGrid_CheckOverflow1:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, ExtDevice_ModeDispatch_Table_0x258_
+	lda_24 xbc, 0xe34730
 	ld_sriw3 WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
@@ -7543,19 +7543,19 @@ EntertainerGridCheck:
 	push xiz
 	ld (xsp + 58), xde
 	ld (xsp + 62), xbc
-	ld xiy, ExtDevice_ModeDispatch_Table_0x29C_
+	ld xiy, 0xe34774
 	lda xix, (xsp + 48)
 	lds bc, 5
 	ldirw
-	ld xiy, Naka_Help_569_E30113_0x82B_
+	ld xiy, 0xe3093e
 	lda xix, (xsp + 40)
 	lds bc, 4
 	ldirw
 	ld xde, (xsp + 62)
 	ld (xsp + 20), xde
-	lda_24 xwa, NakaData_WidgetDescriptors_0x1530_
+	lda_24 xwa, 0xe32390
 	ld (xsp + 12), xwa
-	lda_24 xwa, NakaData_WidgetDescriptors_0x139A_
+	lda_24 xwa, 0xe321fa
 	ld (xsp + 8), xwa
 	lda_24 xwa, NakaData_WidgetDescriptors
 	ld (xsp + 4), xwa
@@ -7570,7 +7570,7 @@ EntertainerGridCheck:
 	ld (xsp + 32), xwa
 	cp xde, 0x1e8000f
 	jrl z, EntGridCheck_Default
-	lda_24 xwa, NakaData_WidgetDescriptors_0x1C1A_
+	lda_24 xwa, 0xe32a7a
 	ld (xsp + 16), xwa
 	cp xde, 0x1e8000e
 	jrl z, EntGridCheck_Return
@@ -7584,7 +7584,7 @@ EntertainerGridCheck:
 	cp xwa, 0x6
 	jrl gt, SndParam_ReturnZero
 	add xwa, xwa
-	add xwa, ExtDevice_ModeDispatch_Table_0x31A_
+	add xwa, 0xe347f2
 	ld wa, (xwa)
 	lda_24 xix, SndParam_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -7616,7 +7616,7 @@ SndParam_Dispatch:
 	cp	wa, 8
 	jrl	gt, 1317
 	add	wa, wa
-	lda_24	xix, ExtDevice_ModeDispatch_Table_0x308_
+	lda_24	xix, 0xe347e0
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -7632,14 +7632,14 @@ SndParam_Dispatch:
 	push_sr
 	cp	xbc, 0x01c00019
 	jr	nz, 16
-	lda_24	xbc, ExtDevice_ModeDispatch_Table_0x278_
+	lda_24	xbc, 0xe34750
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe8
 	ldb	w, 217
 	sub	(xix-38), xix
 	jr	14
-	lda_24	xbc, ExtDevice_ModeDispatch_Table_0x278_
+	lda_24	xbc, 0xe34750
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe8
@@ -7682,7 +7682,7 @@ SndParam_Dispatch:
 	cp	wa, 8
 	jrl	gt, 1145
 	add	wa, wa
-	lda_24	xix, ExtDevice_ModeDispatch_Table_0x2F6_
+	lda_24	xix, 0xe347ce
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -7695,7 +7695,7 @@ SndParam_Dispatch:
 	ldb	b, 219
 	.byte 0xec
 	push_sr
-	lda_24	xwa, ExtDevice_ModeDispatch_Table_0x278_
+	lda_24	xwa, 0xe34750
 	.byte 0xe3
 	reti
 	.byte 0xe0, 0xec
@@ -7733,7 +7733,7 @@ SndParam_Dispatch:
 	push_sr
 	nop
 	nop
-	lda_24	xix, ExtDevice_ModeDispatch_Table_0x278_
+	lda_24	xix, 0xe34750
 	ld	xiz, (xsp+58)
 	jr	18
 	ld	iy, bc
@@ -7768,13 +7768,13 @@ SndParam_Dispatch:
 	lda	xde, (xsp+40)
 	ld	xbc, 0x01e0008c
 	jrl	916
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x2BA_
+	ld	xwa, 0xe34792
 	.byte 0x92
 	push	xsp
 	nop
 	nop
 	jr	z, 5
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x2B0_
+	ld	xwa, 0xe34788
 	push	xwa
 	push	xbc
 	call	Strcpy
@@ -7803,7 +7803,7 @@ EntGridCheck_Handler:
 	jrl nz, SndParam_ReturnZero
 	ld wa, (xhl)
 	sla wa, 2
-	lda_24 xbc, ExtDevice_ModeDispatch_Table_0x278_
+	lda_24 xbc, 0xe34750
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xbc, (xsp + 24)
 	cp xde, 0x4e13
@@ -7842,10 +7842,10 @@ EntGridCheck_Handler:
 
 EntGridCheck_Handle4140:
 	call SndParam_LookupReadOnly
-	ld xwa, ExtDevice_ModeDispatch_Table_0x2D8_
+	ld xwa, 0xe347b0
 	cps hl, 0
 	jr z, EntGridCheck_CopyStringResult
-	ld xwa, ExtDevice_ModeDispatch_Table_0x2CE_
+	ld xwa, 0xe347a6
 
 EntGridCheck_CopyStringResult:
 	push xwa
@@ -8353,7 +8353,7 @@ SqplyVal_HandleScrollEvent:
 	lda xhl, (xsp + 52)
 	ld xwa, (xsp + 60)
 	sll xwa, 3
-	ld xde, NakaInst_NO_OPERATION_0x22_
+	ld xde, 0xe3358a
 	add xde, xwa
 	ld wa, (xde)
 	ld (xhl), wa
@@ -8468,7 +8468,7 @@ SqplyVal_HandleExtraParams:
 	cp xhl, 0x7
 	jrl ugt, SqplyVal_ReturnZero
 	add xhl, xhl
-	add xhl, ExtDevice_ModeDispatch_Table_0x334_
+	add xhl, 0xe3480c
 	ld hl, (xhl)
 	lda_24 xix, SqplyVal_ExtraParamsData
 	jp_dri 8, 0x07, 0xf0, 0xec
@@ -8850,7 +8850,7 @@ SqedtVal_HandleScrollEvent:
 	lda xhl, (xsp + 58)
 	ld xwa, (xsp + 66)
 	sll xwa, 3
-	ld xde, NakaInst_NO_OPERATION_0x82_
+	ld xde, 0xe335ea
 	add xde, xwa
 	ld wa, (xde)
 	ld (xhl), wa
@@ -8899,7 +8899,7 @@ SqedtVal_ClearDrawBuffer:
 	cp xwa, 0xe
 	jrl ugt, SqedtVal_ReturnZero
 	add xwa, xwa
-	add xwa, ExtDevice_ModeDispatch_Table_0x344_
+	add xwa, 0xe3481c
 	ld wa, (xwa)
 	lda_24 xix, SqedtVal_DrawParamsData
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -9215,50 +9215,50 @@ SqedtFixProc:
 	push xiz
 	ld xhl, xbc
 	ld xiz, xwa
-	ld xiy, ExtDevice_ModeDispatch_Table_0x3B2_
+	ld xiy, 0xe3488a
 	lda xix, (xsp + 100)
 	lds bc, 2
 	ldirw
 	ldi85
-	ld xiy, ExtDevice_ModeDispatch_Table_0x3B8_
+	ld xiy, 0xe34890
 	lda xix, (xsp + 96)
 	ldi85
 	ldiw
-	ld xiy, ExtDevice_ModeDispatch_Table_0x3BC_
+	ld xiy, 0xe34894
 	lda xix, (xsp + 90)
 	lds bc, 2
 	ldirw
 	ldi85
-	ld xiy, ExtDevice_ModeDispatch_Table_0x3C2_
+	ld xiy, 0xe3489a
 	lda xix, (xsp + 84)
 	lds bc, 3
 	ldirw
-	ld xiy, ExtDevice_ModeDispatch_Table_0x3C8_
+	ld xiy, 0xe348a0
 	lda xix, (xsp + 78)
 	lds bc, 3
 	ldirw
-	ld xiy, ExtDevice_ModeDispatch_Table_0x3CE_
+	ld xiy, 0xe348a6
 	lda xix, (xsp + 76)
 	ldiw
-	ld xiy, ExtDevice_ModeDispatch_Table_0x3D0_
+	ld xiy, 0xe348a8
 	lda xix, (xsp + 62)
 	lds bc, 7
 	ldirw
-	ld xiy, ExtDevice_ModeDispatch_Table_0x3DE_
+	ld xiy, 0xe348b6
 	lda xix, (xsp + 48)
 	lds bc, 6
 	ldirw
 	ldi85
-	ld xiy, ExtDevice_ModeDispatch_Table_0x3EC_
+	ld xiy, 0xe348c4
 	lda xix, (xsp + 34)
 	lds bc, 7
 	ldirw
-	ld xiy, ExtDevice_ModeDispatch_Table_0x3FA_
+	ld xiy, 0xe348d2
 	lda xix, (xsp + 26)
 	lds bc, 3
 	ldirw
 	ldi85
-	ld xiy, ExtDevice_ModeDispatch_Table_0x402_
+	ld xiy, 0xe348da
 	lda xix, (xsp + 20)
 	lds bc, 2
 	ldirw
@@ -10115,7 +10115,7 @@ SqedtVal3_HandleScrollEvent:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	lda xhl, (xsp + 54)
-	lda_24 xde, NakaInst_NO_OPERATION_0x82_
+	lda_24 xde, 0xe335ea
 	ld_sriw WA, (xde + 0x00f8)
 	ld (xhl), wa
 	lda xbc, (xhl + 2)
@@ -10174,7 +10174,7 @@ SqedtVal3_FillBufferLoop1:
 	pushm (xhl + 24)
 	call DrawStringLeftJustify
 	lda xhl, (xsp + 54)
-	lda_24 xde, NakaInst_NO_OPERATION_0x82_
+	lda_24 xde, 0xe335ea
 	ld_sriw WA, (xde + 0x0100)
 	ld (xhl), wa
 	lda xbc, (xhl + 2)
@@ -10233,7 +10233,7 @@ SqedtVal3_FillBufferLoop2:
 	pushm (xhl + 24)
 	call DrawStringLeftJustify
 	lda xhl, (xsp + 54)
-	lda_24 xde, NakaInst_NO_OPERATION_0x82_
+	lda_24 xde, 0xe335ea
 	ld_sriw WA, (xde + 0x0108)
 	ld (xhl), wa
 	lda xbc, (xhl + 2)
@@ -10292,7 +10292,7 @@ SqedtVal3_FillBufferLoop3:
 	pushm (xhl + 24)
 	call DrawStringLeftJustify
 	lda xhl, (xsp + 54)
-	lda_24 xde, NakaInst_NO_OPERATION_0x82_
+	lda_24 xde, 0xe335ea
 	ld_sriw WA, (xde + 0x0110)
 	ld (xhl), wa
 	lda xbc, (xhl + 2)
@@ -10497,7 +10497,7 @@ SqedtVal2_HandleScrollEvent:
 	lda xhl, (xsp + 58)
 	ld xwa, (xsp + 66)
 	sll xwa, 3
-	ld xde, NakaInst_NO_OPERATION_0x82_
+	ld xde, 0xe335ea
 	add xde, xwa
 	ld wa, (xde)
 	ld (xhl), wa
@@ -10553,7 +10553,7 @@ SqplyVal_ExtraParams:
 	cp xhl, 0xf
 	jrl ugt, AccIll_ReturnZero2
 	add xhl, xhl
-	add xhl, ExtDevice_ModeDispatch_Table_0x408_
+	add xhl, 0xe348e0
 	ld hl, (xhl)
 	lda_24 xix, AccIll_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
@@ -10778,7 +10778,7 @@ SqedtVal2_UpScrollModeA2:
 	ldto_berp A, 0xfb
 	extz wa
 	sla wa, 3
-	lda_24 xiy, ExtDevice_ModeDispatch_Table_0x37A_
+	lda_24 xiy, 0xe34852
 	st_dri3b E, 0x07, 0xf4, 0xe0
 	ld wa, (xiy + 2)
 	ld (xbc), wa
@@ -10794,7 +10794,7 @@ SqedtVal2_UpScrollDefault:
 	ldto_berp A, 0xfb
 	extz wa
 	sla wa, 3
-	lda_24 xiy, ExtDevice_ModeDispatch_Table_0x362_
+	lda_24 xiy, 0xe3483a
 	st_dri3b E, 0x07, 0xf4, 0xe0
 	ld wa, (xiy + 2)
 	ld (xbc), wa
@@ -10823,7 +10823,7 @@ SqedtVal2_HandleDownScrollEvent:
 SqedtVal2_DownScrollModeA2:
 	lda xhl, (xsp + 58)
 	lda xde, (xhl + 2)
-	lda_24 xbc, ExtDevice_ModeDispatch_Table_0x3A2_
+	lda_24 xbc, 0xe3487a
 	st_dri3b A, 0x07, 0xe4, 0xe0
 	ld wa, (xbc + 2)
 	ld (xde), wa
@@ -10839,7 +10839,7 @@ SqedtVal2_DownScrollModeA2:
 SqedtVal2_DownScrollDefault:
 	lda xhl, (xsp + 58)
 	lda xde, (xhl + 2)
-	lda_24 xbc, ExtDevice_ModeDispatch_Table_0x38A_
+	lda_24 xbc, 0xe34862
 	st_dri3b A, 0x07, 0xe4, 0xe0
 	ld wa, (xbc + 2)
 	ld (xde), wa
@@ -11940,11 +11940,11 @@ EffectBoxProc:
 	st_dri3l XDE, 0xfd, 0x4e, 0x01
 	st_dri3l XBC, 0xfd, 0x52, 0x01
 	st_dri3l XWA, 0xfd, 0x56, 0x01
-	ld xiy, ExtDevice_ModeDispatch_Table_0x428_
+	ld xiy, 0xe34900
 	lda xix, (xsp + 12)
 	ldiw
 	ldiw
-	ld xiy, ExtDevice_ModeDispatch_Table_0x42C_
+	ld xiy, 0xe34904
 	lda xix, (xsp + 8)
 	ldiw
 	ldiw
@@ -12017,7 +12017,7 @@ EffectBox_HandleInitEvent:
 	ld xbc, 0x1e8000b
 	lds32 xde, 0
 	call ApFuncCall
-	ld xbc, NakaInst_NO_OPERATION_0x12_
+	ld xbc, 0xe3357a
 	add xbc, xhl
 	st_dri3b W, 0xfd, 0x46, 0x01
 	lda xde, (xwa + 2)
@@ -12181,7 +12181,7 @@ EffectBox_PostFillSetup:
 	lda xbc, (xde + 2)
 	ld wa, iz
 	extz xwa
-	ld xhl, NakaInst_NO_OPERATION_0x1A_
+	ld xhl, 0xe33582
 	add xhl, xwa
 	ld a, (xhl)
 	extz wa
@@ -12242,7 +12242,7 @@ EffectBox_PostFill3Setup:
 	lda xbc, (xde + 2)
 	ld wa, iz
 	extz xwa
-	ld xhl, NakaInst_NO_OPERATION_0x1A_
+	ld xhl, 0xe33582
 	add xhl, xwa
 	ld a, (xhl)
 	extz wa
@@ -12424,7 +12424,7 @@ EffectBox_HandleSelectEvent:
 	add wa, 0x3d
 	ld (xde), wa
 	lda xbc, (xix + 2)
-	ld xwa, NakaInst_NO_OPERATION_0x1A_
+	ld xwa, 0xe33582
 	add_sril_rm XWA, 0xfd, 0x4e, 0x01
 	ld a, (xwa)
 	extz wa
@@ -12475,7 +12475,7 @@ EffectBox_NameSetup:
 	cp xhl, 0x6
 	jr ugt, EffectBoxProc_CopyNameAndSetup
 	add xhl, xhl
-	add xhl, ExtDevice_ModeDispatch_Table_0x430_
+	add xhl, 0xe34908
 	ld hl, (xhl)
 	lda_24 xix, EffectBox_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xec
@@ -12965,7 +12965,7 @@ Equalizer_HandleSelectEvent:
 	lda xix, (xsp + 80)
 	ld xhl, (xsp + 88)
 	add xhl, xhl
-	ld xwa, ExtDevice_ModeDispatch_Table_0x44E_
+	ld xwa, 0xe34926
 	add xwa, xhl
 	ld wa, (xwa)
 	ld (xix), wa
@@ -12974,7 +12974,7 @@ Equalizer_HandleSelectEvent:
 	add wa, 0x3c
 	ld (xde), wa
 	lda xbc, (xix + 2)
-	ld xwa, ExtDevice_ModeDispatch_Table_0x43E_
+	ld xwa, 0xe34916
 	add xwa, xhl
 	ld wa, (xwa)
 	ld (xbc), wa
@@ -13024,7 +13024,7 @@ EffectBox_StateDispatch:
 	cp xbc, 0x6
 	jr ugt, EffectBox_State1
 	add xbc, xbc
-	add xbc, ExtDevice_ModeDispatch_Table_0x45E_
+	add xbc, 0xe34936
 	ld bc, (xbc)
 	lda_24 xix, SeqAccomp_Dispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -13531,7 +13531,7 @@ SqplyFunc:
 	cp xhl, 0x9
 	jrl gt, SqplyFunc_ReturnZero
 	add xhl, xhl
-	add xhl, ExtDevice_ModeDispatch_Table_0x660_
+	add xhl, 0xe34b38
 	ld hl, (xhl)
 	lda_24 xix, SqplyFunc_ParamFormatData
 	jp_dri 8, 0x07, 0xf0, 0xec
@@ -13541,11 +13541,11 @@ SqplyFunc_ParamFormatData:
 	ld	wa, de
 	cp	de, 0x8002
 	jr	nz, 7
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5C4_
+	ld	xwa, 0xe34a9c
 	jr	11
 	cp	wa, 0x8001
 	jr	nz, 22
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5C8_
+	ld	xwa, 0xe34aa0
 	push	xwa
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
@@ -13554,21 +13554,21 @@ SqplyFunc_ParamFormatData:
 	inc	8, xsp
 	jrl	356
 	pushw	wa
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5CC_
+	ld	xwa, 0xe34aa4
 	jrl	332
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ldda8	a, 9010
 	extz	wa
 	pushw	wa
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5D0_
+	ld	xwa, 0xe34aa8
 	jrl	312
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ldda8	a, 7528
 	extz	wa
 	pushw	wa
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5D6_
+	ld	xwa, 0xe34aae
 	jrl	292
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
@@ -13581,31 +13581,31 @@ SqplyFunc_ParamFormatData:
 	pushw	wa
 	inc	6, w
 	reti
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5DA_
+	ld	xwa, 0xe34ab2
 	jr	5
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5E0_
+	ld	xwa, 0xe34ab8
 	push	xwa
 	.byte 0xa1
 	.ascii " 8h6¡!ñ±"
 	pushw	wa
 	inc	6, a
 	reti
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5E6_
+	ld	xwa, 0xe34abe
 	jr	5
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5EC_
+	ld	xwa, 0xe34ac4
 	push	xwa
 	push	xbc
 	jr	30
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5F8_
+	ld	xwa, 0xe34ad0
 	.byte 0xc1
 	push	xde
 	pushw	wa
 	push	xsp
 	nop
 	jr	z, 5
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5F2_
+	ld	xwa, 0xe34aca
 	push	xwa
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
@@ -13621,11 +13621,11 @@ SqplyFunc_ParamFormatData:
 	.byte 0xd1
 	ldb	w, 37
 	.byte 0x04
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x5FE_
+	ld	xwa, 0xe34ad6
 	jr	9
 	.byte 0xd1, 0x1c
 	ldb	e, 4
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x604_
+	ld	xwa, 0xe34adc
 	jrl	149
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
@@ -13635,11 +13635,11 @@ SqplyFunc_ParamFormatData:
 	.byte 0xd1
 	ldb	b, 37
 	.byte 0x04
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x60A_
+	ld	xwa, 0xe34ae2
 	jr	9
 	.byte 0xd1
 	calr	1061
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x610_
+	ld	xwa, 0xe34ae8
 	jr	113
 
 SqplyFunc_FormatRhythmPattern:
@@ -13650,13 +13650,13 @@ SqplyFunc_FormatRhythmPattern:
 	lda xbc, (xwa + 18)
 	cp de, 0x8002
 	jr nz, SqplyFunc_CheckPattern8001
-	ld xwa, ExtDevice_ModeDispatch_Table_0x616_
+	ld xwa, 0xe34aee
 	jr SqplyFunc_CopyPatternString
 
 SqplyFunc_CheckPattern8001:
 	cp hl, 0x8001
 	jr nz, SqplyFunc_FormatPatternNumeric
-	ld xwa, ExtDevice_ModeDispatch_Table_0x61C_
+	ld xwa, 0xe34af4
 
 SqplyFunc_CopyPatternString:
 	push xwa
@@ -13676,14 +13676,14 @@ SqplyFunc_FormatIntro:
 	ld xwa, (xsp + 4)
 	ld (xsp), xwa
 	push_sd16w 0x38, 0xf2
-	ld xwa, ExtDevice_ModeDispatch_Table_0x628_
+	ld xwa, 0xe34b00
 	jr SqplyFunc_PushFormatAddr
 
 SqplyFunc_FormatEnding:
 	ld xwa, (xsp + 4)
 	ld (xsp), xwa
 	push_sd16w 0x3a, 0xf2
-	ld xwa, ExtDevice_ModeDispatch_Table_0x62E_
+	ld xwa, 0xe34b06
 	push xwa
 	ld xwa, (xsp + 6)
 	lda xbc, (xwa + 18)
@@ -13697,7 +13697,7 @@ SqplyFunc_FormatFillIn:
 	ld xwa, (xsp + 4)
 	ld (xsp), xwa
 	push_sd16w 0x3f, 0xf2
-	ld xwa, ExtDevice_ModeDispatch_Table_0x634_
+	ld xwa, 0xe34b0c
 
 SqplyFunc_PushFormatAddr:
 	push xwa
@@ -13721,7 +13721,7 @@ SqplyFunc_HandleGetValue:
 	cp xwa, 0xa
 	jr ugt, SqplyFunc_GetValueDefault
 	add xwa, xwa
-	add xwa, ExtDevice_ModeDispatch_Table_0x64A_
+	add xwa, 0xe34b22
 	ld wa, (xwa)
 	lda_24 xix, SqplyFunc_GetValueDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -13859,7 +13859,7 @@ SqplyFunc_HandlePartQuery:
 	cps wa, 7
 	jr gt, SqplyFunc_ReturnZero
 	add wa, wa
-	lda_24 xix, ExtDevice_ModeDispatch_Table_0x63A_
+	lda_24 xix, 0xe34b12
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SqplyFunc_PartQueryDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -13916,7 +13916,7 @@ SqedtFunc:
 	cp xde, 0x27
 	jrl gt, SeqFunc_ReturnZeroJmp
 	add xde, xde
-	add xde, NakaInst_2d_0xD0_
+	add xde, 0xe34d20
 	ld de, (xde)
 	lda_24 xix, Sqedt_ParamDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
@@ -13932,7 +13932,7 @@ Sqedt_ParamDispatch:
 	cps	hl, 7
 	jr	gt, 58
 	add	hl, hl
-	lda_24	xix, NakaInst_2d_0xC0_
+	lda_24	xix, 0xe34d10
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xec
@@ -13966,7 +13966,7 @@ Sqedt_ParamDispatch:
 	cps	hl, 7
 	jr	gt, 88
 	add	hl, hl
-	lda_24	xix, NakaInst_2d_0xB0_
+	lda_24	xix, 0xe34d00
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xec
@@ -13979,14 +13979,14 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	rcf
 	ldb	h, 4
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x674_
+	ld	xwa, 0xe34b4c
 	jr	64
 	.byte 0xd1
 	calr	1062
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x67A_
+	ld	xwa, 0xe34b52
 	jr	53
 	.byte 0xd1, 0xd7, 0xf1, 0x04
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x680_
+	ld	xwa, 0xe34b58
 	jr	42
 	.byte 0xd1
 	cp	bc, ix
@@ -14002,11 +14002,11 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	pushw	bc
 	.byte 0xf2, 0x04
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x692_
+	ld	xwa, 0xe34b6a
 	jr	9
 	.byte 0xd1, 0x06
 	ldb	h, 4
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x698_
+	ld	xwa, 0xe34b70
 	jrl	1151
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14017,7 +14017,7 @@ Sqedt_ParamDispatch:
 	cps	hl, 7
 	jr	gt, 88
 	add	hl, hl
-	lda_24	xix, NakaInst_2d_0xA0_
+	lda_24	xix, 0xe34cf0
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xec
@@ -14031,17 +14031,17 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	ccf
 	ldb	h, 4
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x69E_
+	ld	xwa, 0xe34b76
 	jr	64
 	.byte 0xd1
 	ldb	w, 38
 	.byte 0x04
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x6A4_
+	ld	xwa, 0xe34b7c
 	jr	53
 	.byte 0xd1
 	pushw	ix
 	ldb	h, 4
-	ld	xwa, ExtDevice_ModeDispatch_Table_0x6AA_
+	ld	xwa, 0xe34b82
 	jr	42
 	.byte 0xd1
 	ldb	h, 38
@@ -14051,16 +14051,16 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	swi	4
 	ldb	e, 4
-	ld	xwa, NakaInst_3d_0x06_
+	ld	xwa, 0xe34b8e
 	jr	20
 	.byte 0xd1
 	swi	2
 	ldb	e, 4
-	ld	xwa, NakaInst_3d_0x0C_
+	ld	xwa, 0xe34b94
 	jr	9
 	.byte 0xd1
 	ldio	38, 4
-	ld	xwa, NakaInst_3d_0x12_
+	ld	xwa, 0xe34b9a
 	jrl	1031
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14110,7 +14110,7 @@ Sqedt_ParamDispatch:
 	jr	8
 	exts	de
 	pushw	de
-	ld	xwa, NakaInst_3d_0x3E_
+	ld	xwa, 0xe34bc6
 	jrl	910
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14119,18 +14119,18 @@ Sqedt_ParamDispatch:
 	jr	le, 10
 	exts	de
 	pushw	de
-	ld	xwa, NakaInst_3d_0x44_
+	ld	xwa, 0xe34bcc
 	jr	24
 	cps	e, 0
 	jr	ge, 12
 	neg	e
 	exts	de
 	pushw	de
-	ld	xwa, NakaInst_3d_0x4C_
+	ld	xwa, 0xe34bd4
 	jr	8
 	exts	de
 	pushw	de
-	ld	xwa, NakaInst_3d_0x54_
+	ld	xwa, 0xe34bdc
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14141,7 +14141,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 0xf1e0
 	extz	wa
 	muls	wa, 9
-	ld	xbc, ExtDevice_ModeDispatch_Table_0x53E_
+	ld	xbc, 0xe34a16
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -14152,7 +14152,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 0xf1f6
 	extz	wa
 	muls	wa, 15
-	ld	xbc, ExtDevice_ModeDispatch_Table_0x55A_
+	ld	xbc, 0xe34a32
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -14162,7 +14162,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9728
 	extz	wa
 	pushw	wa
-	ld	xwa, NakaInst_3d_0x5A_
+	ld	xwa, 0xe34be2
 	jrl	767
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14172,17 +14172,17 @@ Sqedt_ParamDispatch:
 	cps	e, 0
 	jr	le, 8
 	pushw	wa
-	ld	xwa, NakaInst_3d_0x60_
+	ld	xwa, 0xe34be8
 	jr	22
 	cps	e, 0
 	jr	ge, 12
 	neg	e
 	exts	de
 	pushw	de
-	ld	xwa, NakaInst_3d_0x68_
+	ld	xwa, 0xe34bf0
 	jr	6
 	pushw	wa
-	ld	xwa, NakaInst_3d_0x70_
+	ld	xwa, 0xe34bf8
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14196,7 +14196,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9750
 	extz	wa
 	muls	wa, 9
-	lda_24	xde, Naka_Help_569_E30113_0x833_
+	lda_24	xde, 0xe30946
 	exts	xwa
 	add	xwa, xde
 	push	xwa
@@ -14208,7 +14208,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9750
 	extz	wa
 	pushw	wa
-	ld	xwa, NakaInst_3d_0x76_
+	ld	xwa, 0xe34bfe
 	jr	61
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14219,7 +14219,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9816
 	extz	wa
 	muls	wa, 9
-	lda_24	xde, Naka_Help_569_E30113_0x833_
+	lda_24	xde, 0xe30946
 	exts	xwa
 	add	xwa, xde
 	push	xwa
@@ -14231,7 +14231,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9816
 	extz	wa
 	pushw	wa
-	ld	xwa, NakaInst_3d_0x7E_
+	ld	xwa, 0xe34c06
 	push	xwa
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+18)
@@ -14243,14 +14243,14 @@ Sqedt_ParamDispatch:
 	ldda8	a, 0xf1d3
 	extz	wa
 	pushw	wa
-	ld	xwa, NakaInst_3d_0x86_
+	ld	xwa, 0xe34c0e
 	jrl	550
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ldda8	a, 0xf1d4
 	extz	wa
 	pushw	wa
-	ld	xwa, NakaInst_3d_0x8C_
+	ld	xwa, 0xe34c14
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14260,7 +14260,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 0xf1d5
 	extz	wa
 	pushw	wa
-	ld	xwa, NakaInst_3d_0x92_
+	ld	xwa, 0xe34c1a
 	jrl	501
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14272,7 +14272,7 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	cp	xbc, xde
 	.byte 0x04
-	ld	xwa, NakaInst_3d_0x98_
+	ld	xwa, 0xe34c20
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14282,7 +14282,7 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	pushw	wa
 	ldb	h, 4
-	ld	xwa, NakaInst_3d_0x9E_
+	ld	xwa, 0xe34c26
 	jrl	442
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14294,7 +14294,7 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	cp	xbc, xsp
 	.byte 0x04
-	ld	xwa, NakaInst_3d_0xA4_
+	ld	xwa, 0xe34c2c
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14304,7 +14304,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9770
 	extz	wa
 	pushw	wa
-	ld	xwa, NakaInst_3d_0xAA_
+	ld	xwa, 0xe34c32
 	jrl	381
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14314,7 +14314,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	.byte 0xd1, 0xe2, 0xf1, 0x04
-	ld	xwa, NakaInst_3d_0xB0_
+	ld	xwa, 0xe34c38
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14324,7 +14324,7 @@ Sqedt_ParamDispatch:
 	.byte 0xd1
 	pushw	iz
 	ldb	h, 4
-	ld	xwa, NakaInst_3d_0xB6_
+	ld	xwa, 0xe34c3e
 	jrl	323
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14354,7 +14354,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9776
 	extz	wa
 	pushw	wa
-	ld	xwa, NakaInst_3d_0xC2_
+	ld	xwa, 0xe34c4a
 	jrl	245
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14378,7 +14378,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9994
 	extz	wa
 	pushw	wa
-	ld	xwa, NakaInst_2d_0x06_
+	ld	xwa, 0xe34c56
 	jrl	181
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14386,7 +14386,7 @@ Sqedt_ParamDispatch:
 	ldda8	a, 9998
 	extz	wa
 	muls	wa, 3
-	ld	xbc, ExtDevice_ModeDispatch_Table_0x4C6_
+	ld	xbc, 0xe3499e
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -14400,7 +14400,7 @@ SqedtFunc_Case0:
 	ldda8 a, 0x2878
 	extz wa
 	muls wa, 0x6
-	ld xbc, ExtDevice_ModeDispatch_Table_0x4FC_
+	ld xbc, 0xe349d4
 	exts xwa
 	add xwa, xbc
 	push xwa
@@ -14431,7 +14431,7 @@ SqedtFunc_Case2:
 
 SqedtFunc_Case2_CopyParam:
 	push_sd16w 0x28, 0x27
-	ld xwa, NakaInst_2d_0x12_
+	ld xwa, 0xe34c62
 	push xwa
 	ld xwa, (xsp + 10)
 	lda xbc, (xwa + 18)
@@ -14458,7 +14458,7 @@ SqedtFunc_CheckMode_CopyParam:
 	ldda8 a, 0x286c
 	extz wa
 	pushw wa
-	ld xwa, NakaInst_2d_0x1C_
+	ld xwa, 0xe34c6c
 	push xwa
 	ld xwa, (xsp + 10)
 	ld xwa, (xwa + 18)
@@ -14519,7 +14519,7 @@ SeqFunc_ReturnZeroJmp:
 	cps wa, 6
 	jrl gt, SqedtFunc_ReturnNegOne
 	add wa, wa
-	lda_24 xix, NakaInst_2d_0x92_
+	lda_24 xix, 0xe34ce2
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, Sqedt_ValueDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -14533,9 +14533,9 @@ Sqedt_ValueDispatch:
 	cp	hl, 8
 	jrl	gt, 183
 	add	hl, hl
-	lda_24	xix, NakaInst_2d_0x80_
+	lda_24	xix, 0xe34cd0
 	ld_rrw	hl, xix, hl
-	lda_24	xix, Sqedt_ValueDispatch_0x28_
+	lda_24	xix, 0xf35054
 	jp_rr	8, xix, hl
 	ldb	l, 0
 	jrl	158
@@ -14548,9 +14548,9 @@ Sqedt_ValueDispatch:
 	cps	hl, 7
 	jrl	gt, 135
 	add	hl, hl
-	lda_24	xix, NakaInst_2d_0x70_
+	lda_24	xix, 0xe34cc0
 	ld_rrw	hl, xix, hl
-	lda_24	xix, Sqedt_ValueDispatch_0x58_
+	lda_24	xix, 0xf35084
 	jp_rr	8, xix, hl
 	ldb	l, 1
 	jr	111
@@ -14561,9 +14561,9 @@ Sqedt_ValueDispatch:
 	cp	hl, 8
 	jr	gt, 93
 	add	hl, hl
-	lda_24	xix, NakaInst_2d_0x5E_
+	lda_24	xix, 0xe34cae
 	ld_rrw	hl, xix, hl
-	lda_24	xix, Sqedt_ValueDispatch_0x82_
+	lda_24	xix, 0xf350ae
 	jp_rr	8, xix, hl
 	ldb	l, 2
 	jr	69
@@ -14629,7 +14629,7 @@ SqedtFunc_SignExtend:
 	cp wa, 0xe
 	jrl gt, SeqFunc_ReturnZeroJmp
 	add wa, wa
-	lda_24 xix, NakaInst_2d_0x40_
+	lda_24 xix, 0xe34c90
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SeqFormat_DispatchA
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -14669,9 +14669,9 @@ SeqFormat_DispatchA:
 	cp	wa, 15
 	jrl	gt, -402
 	add	wa, wa
-	lda_24	xix, NakaInst_2d_0x20_
+	lda_24	xix, 0xe34c70
 	ld_rrw	wa, xix, wa
-	lda_24	xix, SeqFormat_DispatchA_0x70_
+	lda_24	xix, 0xf351ad
 	jp_rr	8, xix, wa
 	cpi8_24	0x03e2e0, 0
 	jrl	nz, -433
@@ -14740,7 +14740,7 @@ SqedtFunc_StateChainB:
 	cp wa, 0xd
 	jrl gt, SqedtFunc_GetFieldAddr_BySelector
 	add wa, wa
-	lda_24 xix, NakaInst_2d_0x120_
+	lda_24 xix, 0xe34d70
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, SeqFormat_DispatchB
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -15101,7 +15101,7 @@ DspItem0CngFunc:
 	cp xiy, 0x10
 	jrl gt, EffectEdit_ReturnZero
 	add xiy, xiy
-	add xiy, NakaInst_2d_0x154_
+	add xiy, 0xe34da4
 	ld iy, (xiy)
 	lda_24 xix, DspItem0_DisplayEffectName
 	jp_dri 8, 0x07, 0xf0, 0xf4
@@ -15111,7 +15111,7 @@ DspItem0_DisplayEffectName:
 	ldda16 xwa, 0x2976
 	extz xwa
 	sll xwa, 2
-	ld xbc, NakaData_WidgetDescriptors_0x1C1A_
+	ld xbc, 0xe32a7a
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -15135,7 +15135,7 @@ DspItem0_DisplayParamNames:
 	ld a, (xwa)
 	extz wa
 	muls wa, 0x11
-	lda_24 xbc, NakaData_WidgetDescriptors_0x1664_
+	lda_24 xbc, 0xe324c4
 	exts xwa
 	add xwa, xbc
 	push xwa
@@ -15163,7 +15163,7 @@ DspItem0_DisplayParamValues:
 	ld a, (xwa)
 	extz wa
 	add wa, wa
-	lda_24 xbc, NakaData_WidgetDescriptors_0x15B8_
+	lda_24 xbc, 0xe32418
 	exts xwa
 	add xwa, xbc
 	push xwa
@@ -15237,7 +15237,7 @@ DspItem0_TypeChangeHandler:
 	cp xde, 0x8
 	jr ugt, DspItem0_TypeDispatch
 	add xde, xde
-	add xde, NakaInst_2d_0x142_
+	add xde, 0xe34d92
 	ld de, (xde)
 	lda_24 xix, DspItem0_TypeDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
@@ -15330,7 +15330,7 @@ EqualizerCngFunc:
 	jrl z, Equalizer_ParamByIndex
 	cp xbc, 0x1e80013
 	jr z, Equalizer_DispatchA
-	lda_24 xbc, NakaData_WidgetDescriptors_0x139A_
+	lda_24 xbc, 0xe321fa
 	ldada xhl, 0x2978
 	sub xwa, 0x1e80061
 	cp xwa, 0x0
@@ -15338,7 +15338,7 @@ EqualizerCngFunc:
 	cp xwa, 0x8
 	jrl gt, Equalizer_ParamString
 	add xwa, xwa
-	add xwa, NakaInst_2d_0x18C_
+	add xwa, 0xe34ddc
 	ld wa, (xwa)
 	lda_24 xix, Equalizer_DispatchA
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -15346,15 +15346,15 @@ EqualizerCngFunc:
 ; EqualizerCngFunc dispatch A
 Equalizer_DispatchA:
 	ld xwa, xde
-	lda_24 xbc, Naka_Help_569_E30113_0xCEB_
-	lda_24 xde, Naka_Help_569_E30113_0xCB3_
+	lda_24 xbc, 0xe30dfe
+	lda_24 xde, 0xe30dc6
 	dec 2, xwa
 	cp xwa, 0x0
 	jrl c, Equalizer_LookupParamByIndex
 	cp xwa, 0x6
 	jrl ugt, Equalizer_LookupParamByIndex
 	add xwa, xwa
-	add xwa, NakaInst_2d_0x17E_
+	add xwa, 0xe34dce
 	ld wa, (xwa)
 	lda_24 xix, Equalizer_DispatchB
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -15433,7 +15433,7 @@ Equalizer_ParamByIndex:
 	jr c, Equalizer_ReturnParamAddr
 	cp xde, 0x6
 	jr ugt, Equalizer_ReturnParamAddr
-	add xde, NakaInst_2d_0x176_
+	add xde, 0xe34dc6
 	ld a, (xde)
 	exts wa
 	st_dri3b C, 0x07, 0xe4, 0xe0
@@ -15475,7 +15475,7 @@ Equalizer_LookupParamString:
 	ld xbc, xwa
 	sll xbc, 2
 	add xbc, xwa
-	ld xwa, NakaData_WidgetDescriptors_0x1530_
+	ld xwa, 0xe32390
 	add xwa, xbc
 	push xwa
 	jr FormatEqParam_CopyAndReturn
@@ -15548,7 +15548,7 @@ Equalizer_CmdDispatch:
 	cp xwa, 0xe
 	jrl gt, ParamCmd_ReturnZero
 	add xwa, xwa
-	add xwa, NakaInst_2d_0x19E_
+	add xwa, 0xe34dee
 	ld wa, (xwa)
 	lda_24 xix, Equalizer_CmdCase0
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -15658,11 +15658,11 @@ FormatParamValueStr:
 
 ; Equalizer format dispatch
 Equalizer_FormatDispatch:
-	lda_24 xix, NakaInst_2d_0x1D8_
+	lda_24 xix, 0xe34e28
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	extz wa
 	sll wa, 1
-	ld xix, NakaInst_2d_0x204_
+	ld xix, 0xe34e54
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, EqFormat_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -15676,40 +15676,40 @@ EqFormat_DispatchTable:
 
 FormatParamString:
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x11A6_
+	ld xwa, 0xe32006
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x1196_
+	ld xwa, 0xe31ff6
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0xFA2_
+	ld xwa, 0xe31e02
 	jrl FormatParamStr_CopyEnumName
 
 ; Equalizer format default
 Equalizer_FormatDefault:
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0xDAE_
+	ld xwa, 0xe31c0e
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0xBBA_
+	ld xwa, 0xe31a1a
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0xBB0_
+	ld xwa, 0xe31a10
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0xA42_
+	ld xwa, 0xe318a2
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x84E_
+	ld xwa, 0xe316ae
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x65A_
+	ld xwa, 0xe314ba
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x466_
+	ld xwa, 0xe312c6
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x272_
+	ld xwa, 0xe310d2
 	jr FormatParamStr_CopyEnumName
 	add bc, bc
 	ld_sriw3 WA, 0x07, 0xe8, 0xe4
@@ -15717,21 +15717,21 @@ Equalizer_FormatDefault:
 	jr ge, EqFormat_NegativeValue
 	neg wa
 	pushw wa
-	ld xwa, NakaInst_2d_0x1BC_
+	ld xwa, 0xe34e0c
 	jr SendAudioCommand
 
 EqFormat_NegativeValue:
 	pushw wa
 	cps wa, 0
 	jr le, EqFormat_PositiveValue
-	ld xwa, NakaInst_2d_0x1C2_
+	ld xwa, 0xe34e12
 	jr SendAudioCommand
 
 EqFormat_PositiveValue:
-	ld xwa, NakaInst_2d_0x1C8_
+	ld xwa, 0xe34e18
 	jr SendAudioCommand
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x1F4_
+	ld xwa, 0xe31054
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
 	ld xwa, NakaData_WidgetDescriptors
@@ -15761,7 +15761,7 @@ Equalizer_CopyFixedString:
 PrepareAudioParam:
 	add bc, bc
 	push_sriw 0x07, 0xe8, 0xe4
-	ld xwa, NakaInst_2d_0x1D4_
+	ld xwa, 0xe34e24
 
 SendAudioCommand:
 	push xwa

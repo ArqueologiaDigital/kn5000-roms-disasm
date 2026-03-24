@@ -28,7 +28,7 @@ AcGridBoxProc:
 	cp xwa, 0x6
 	jrl gt, AcGridBox_Default
 	add xwa, xwa
-	add xwa, Data_SoundEditorCharsLayout_0x386
+	add xwa, 0xeaa258
 	ld wa, (xwa)
 	lda_24 xix, AcGridBox_Init
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -237,7 +237,7 @@ GridCheck:
 	cp xwa, 0x6
 	jr gt, GridCheck_Return
 	add xwa, xwa
-	add xwa, Data_SoundEditorCharsLayout_0x39A
+	add xwa, 0xeaa26c
 	ld wa, (xwa)
 	lda_24 xix, GridCheck_JumpEnd
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -735,7 +735,7 @@ PasTableCheck:
 	jr nz, PasTableCheck_Return
 	ld xwa, (xde)
 	sll xwa, 2
-	ld xbc, Data_SoundEditorCharsLayout_0x3B0
+	ld xbc, 0xeaa282
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -779,7 +779,7 @@ AcOnOff_GetText:
 	ld wa, (xwa)
 	extz xwa
 	sll xwa, 2
-	ld xbc, Data_SoundEditorCharsLayout_0x3C8
+	ld xbc, 0xeaa29a
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -1911,7 +1911,7 @@ RamEditCheck:
 	cp xwa, 0x9
 	jr gt, RamEditCheck_NotHandled
 	add xwa, xwa
-	add xwa, Data_SoundEditorCharsLayout_0x3E8
+	add xwa, 0xeaa2ba
 	ld wa, (xwa)
 	lda_24 xix, RamEditCheck_JumpStart
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -2227,7 +2227,7 @@ BitEditCheck:
 	ld wa, (xde + 8)
 	and wa, 0x1
 	sla wa, 2
-	lda_24 xbc, Data_SoundEditorCharsLayout_0x3FC
+	lda_24 xbc, 0xeaa2ce
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 10)
@@ -3388,7 +3388,7 @@ ButtonState_Paint_Default:
 	pushm (xhl + 32)
 	ld xde, xhl
 	pushm (xde + 22)
-	ld xde, Data_SoundEditorCharsLayout_0x410
+	ld xde, 0xeaa2e2
 	call DrawStringCentered
 	st_dri3b W, 0xfd, 0x18, 0x01
 	ld_sriw BC, (xsp + 0x0112)
@@ -3406,7 +3406,7 @@ ButtonState_Paint_Default:
 	pushm (xhl + 32)
 	ld xde, xhl
 	pushm (xde + 22)
-	ld xde, Data_SoundEditorCharsLayout_0x414
+	ld xde, 0xeaa2e6
 
 ButtonState_Paint_DrawAndReturn:
 	call DrawStringCentered
@@ -3421,7 +3421,7 @@ ButtonState_DispatchDSP:
 	cp wa, 0x10
 	jrl gt, ButtonState_Paint_DrawAligned
 	add wa, wa
-	lda_24 xix, Str_No_0x04
+	lda_24 xix, 0xeaa31a
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, ButtonState_DispatchDSP_InlineData
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -3432,30 +3432,30 @@ ButtonState_DispatchDSP_InlineData:
 	ld	xbc, 0x01e0003a
 	call	SendEvent
 	jr	100
-	ld	xwa, Data_SoundEditorCharsLayout_0x418
+	ld	xwa, 0xeaa2ea
 	jr	82
-	ld	xwa, Data_SoundEditorCharsLayout_0x41C
+	ld	xwa, 0xeaa2ee
 	jr	75
-	ld	xwa, Data_SoundEditorCharsLayout_0x420
+	ld	xwa, 0xeaa2f2
 	jr	68
-	ld	xwa, Data_SoundEditorCharsLayout_0x424
+	ld	xwa, 0xeaa2f6
 	jr	61
 	.byte 0x40
 	.long NakaInst_OK
 	jr	54
-	ld	xwa, NakaInst_OK_0x04
+	ld	xwa, 0xeaa2fe
 	jr	47
-	ld	xwa, NakaInst_OK_0x08
+	ld	xwa, 0xeaa302
 	jr	40
-	ld	xwa, NakaInst_OK_0x0C
+	ld	xwa, 0xeaa306
 	jr	33
-	ld	xwa, NakaInst_OK_0x0E
+	ld	xwa, 0xeaa308
 	jr	26
-	ld	xwa, NakaInst_OK_0x10
+	ld	xwa, 0xeaa30a
 	jr	19
-	ld	xwa, NakaInst_OK_0x14
+	ld	xwa, 0xeaa30e
 	jr	12
-	ld	xwa, NakaInst_OK_0x18
+	ld	xwa, 0xeaa312
 	jr	5
 	.byte 0x40
 	.long Str_No
@@ -3663,11 +3663,11 @@ AcIndexEdit_DispatchDSP:
 	jrl mi, AcIndexEdit_ReturnZeroJmp
 	cp wa, 0x10
 	jrl gt, AcIndexEdit_ReturnZeroJmp
-	lda_24 xix, Str_No_0x26
+	lda_24 xix, 0xeaa33c
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	extz wa
 	sll wa, 1
-	ld xix, Str_No_0x38
+	ld xix, 0xeaa34e
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, AcIndexEdit_DispatchDSP_InlineData
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -5174,7 +5174,7 @@ IvFixWin_Paint:
 	calr PsInvisibleBoxProc
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
-	ld xde, Str_No_0x6E
+	ld xde, 0xeaa384
 	jr IvFixWin_Dispatch
 
 IvFixWin_Init:
@@ -5233,7 +5233,7 @@ IvNaming_Paint:
 	calr PsInvisibleBoxProc
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1c0000f
-	ld xde, Str_No_0x74
+	ld xde, 0xeaa38a
 	jr IvNaming_Dispatch
 
 IvNaming_Init:
@@ -5332,7 +5332,7 @@ IvTrackSwitch_Paint:
 	calr PsInvisibleBoxProc
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
-	ld xde, Str_No_0x7A
+	ld xde, 0xeaa390
 	jr IvTrackSwitch_Dispatch
 
 IvTrackSwitch_Init:
@@ -5440,7 +5440,7 @@ DefaultClass_Paint:
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
-	ld xde, Str_No_0x80
+	ld xde, 0xeaa396
 	call SendEvent
 	lds32 xhl, 0
 
@@ -5749,7 +5749,7 @@ IvShowHideProc:
 	calr PsInvisibleBoxProc
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1c0000f
-	ld xde, Str_No_0xB0
+	ld xde, 0xeaa3c6
 	call SendEvent
 	jr IvShowHide_ReturnZero
 
@@ -6248,7 +6248,7 @@ AcMixerVol_Paint:
 	ld de, (xde + 28)
 	extz xde
 	sll xde, 2
-	ld xhl, Str_No_0xF4
+	ld xhl, 0xeaa40a
 	add xhl, xde
 	ld xde, (xhl)
 	lds32 xhl, 3
@@ -6282,7 +6282,7 @@ AcMixerVol_Confirm:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	ld xwa, Str_No_0x1F6
+	ld xwa, 0xeaa50c
 	add xwa, xbc
 	ld xwa, (xwa)
 	call SndParam_LookupReadOnly
@@ -6294,7 +6294,7 @@ AcMixerVol_Confirm:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	lda_24 xwa, Str_No_0x1FA
+	lda_24 xwa, 0xeaa510
 	add xwa, xbc
 	ld xwa, (xwa)
 	call SndParam_LookupReadOnly
@@ -6375,7 +6375,7 @@ AcMixerVol_Confirm:
 	pushw 0x0
 	pushw 0x0
 	pushw 0x1
-	ld xde, Str_No_0x39E
+	ld xde, 0xeaa6b4
 	call DrawStringReverse
 	jrl UIList_ReturnZeroJmp
 
@@ -6422,7 +6422,7 @@ AcMixerVol_PartSelect_DrawIcon:
 	ld (xwa + 2), bc
 	ld bc, (xsp + 10)
 	sla bc, 2
-	lda_24 xde, Str_No_0x30E
+	lda_24 xde, 0xeaa624
 	ld_sril3 XBC, 0x07, 0xe8, 0xe4
 	call DrawBitmapFast
 	jrl UIList_ReturnZeroJmp
@@ -6440,7 +6440,7 @@ AcMixerVol_ValueChange:
 	sll xwa, 2
 	add xwa, xde
 	add xwa, xwa
-	ld xbc, Str_No_0x1F6
+	ld xbc, 0xeaa50c
 	add xbc, xwa
 	ld xhl, (xsp + 36)
 	ld xwa, (xhl)
@@ -6492,7 +6492,7 @@ AcMixerVol_OK:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	lda_24 xwa, Str_No_0x1FA
+	lda_24 xwa, 0xeaa510
 	add xwa, xbc
 	ld xwa, (xwa)
 	call SndParam_LookupReadOnly
@@ -6507,7 +6507,7 @@ AcMixerVol_OK:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, Str_No_0x1F6
+	ld xbc, 0xeaa50c
 	add xbc, xwa
 	ld xwa, (xbc + 4)
 	ld de, (xbc + 8)
@@ -6525,7 +6525,7 @@ AcMixerVol_OK_Mute:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, Str_No_0x1F6
+	ld xbc, 0xeaa50c
 	add xbc, xwa
 	ld de, (xbc + 8)
 	ld xwa, (xsp + 36)
@@ -6576,7 +6576,7 @@ AcMixerVol_FastScroll:
 	ld xwa, (xsp + 36)
 	bit 7, wa
 	jr z, AcMixerVol_FastScroll_Increment
-	ld xde, Str_No_0x1F6
+	ld xde, 0xeaa50c
 	add xde, xbc
 	ld xwa, (xde)
 	ld de, (xde + 8)
@@ -6584,7 +6584,7 @@ AcMixerVol_FastScroll:
 	jr AcMixerVol_FastScroll_Apply
 
 AcMixerVol_FastScroll_Increment:
-	ld xde, Str_No_0x1F6
+	ld xde, 0xeaa50c
 	add xde, xbc
 	ld xwa, (xde)
 	ld de, (xde + 8)
@@ -6629,7 +6629,7 @@ AcMixerVol_Reset:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, Str_No_0x1F6
+	ld xbc, 0xeaa50c
 	add xbc, xwa
 	ld xwa, (xbc + 4)
 	ld de, (xbc + 8)
@@ -6748,7 +6748,7 @@ DbMemo_Paint:
 	call DrawDesignBox
 	ld xwa, (xsp + 106)
 	ld xbc, 0x1c00025
-	ld xde, Str_No_0x3A4
+	ld xde, 0xeaa6ba
 	call SendEvent
 
 DbMemo_ReturnZero:
@@ -7088,7 +7088,7 @@ DbMemDump_OK:
 	cp xwa, 0x5
 	jr ugt, DbMemDump_OK_DefaultFallthrough
 	sll xwa, 2
-	add xwa, Str_No_0x3E4
+	add xwa, 0xeaa6fa
 	ld xwa, (xwa)
 	ld xiz, xwa
 
@@ -7396,7 +7396,7 @@ DbDebugMenu_Init:
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	lda_24 xde, Str_No_0x42E
+	lda_24 xde, 0xeaa744
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
 	cp xwa, 0xffffffff
 	jrl z, PsMenuBox_ZeroReturn
@@ -7415,7 +7415,7 @@ DbDebugMenu_Close:
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	lda_24 xde, Str_No_0x42E
+	lda_24 xde, 0xeaa744
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
 	cp xwa, 0xffffffff
 	jr z, DbDebugMenu_Close_CallMenu
@@ -7460,7 +7460,7 @@ DbDebugMenu_Confirm:
 	ld xde, (xde + 42)
 	ld de, (xde)
 	sla de, 2
-	lda_24 xhl, Str_No_0x3FC
+	lda_24 xhl, 0xeaa712
 	ld_sril3 XDE, 0x07, 0xec, 0xe8
 	lds32 xhl, 3
 	push xhl
@@ -7484,7 +7484,7 @@ DbDebugMenu_OK:
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	lda_24 xde, Str_No_0x42E
+	lda_24 xde, 0xeaa744
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
 	cp xwa, 0xffffffff
 	jr z, DbDebugMenu_OK_Advance
@@ -7505,7 +7505,7 @@ DbDebugMenu_OK_Advance:
 	ld xbc, (xwa)
 	ld wa, (xbc)
 	sla wa, 2
-	lda_24 xhl, Str_No_0x3FC
+	lda_24 xhl, 0xeaa712
 	ld_sril3 XWA, 0x07, 0xec, 0xe0
 	cp (xwa), 0x0
 	jr nz, DbDebugMenu_OK_CheckValid
@@ -7515,7 +7515,7 @@ DbDebugMenu_OK_CheckValid:
 	ld xwa, (xde)
 	ld wa, (xwa)
 	sla wa, 2
-	lda_24 xbc, Str_No_0x42E
+	lda_24 xbc, 0xeaa744
 	st_dri3b A, 0x07, 0xe4, 0xe0
 	ld xwa, (xbc)
 	cp xwa, 0xffffffff
@@ -7569,15 +7569,15 @@ PsTrackSwitchProc:
 	st_dri3l XDE, 0xfd, 0xae, 0x00
 	ld xde, xbc
 	st_dri3l XWA, 0xfd, 0xb2, 0x00
-	ld xiy, Str_No_0x43A
+	ld xiy, 0xeaa750
 	lda xix, (xsp + 38)
 	ldw bc, 0x28
 	ldirw
-	ld xiy, Str_No_0x4DA
+	ld xiy, 0xeaa7f0
 	lda xix, (xsp + 18)
 	ldw bc, 0xa
 	ldirw
-	ld xiy, Str_No_0x504
+	ld xiy, 0xeaa81a
 	lda xix, (xsp + 8)
 	lds bc, 5
 	ldirw
@@ -8200,7 +8200,7 @@ AcTrkSw_Select_LowTrack:
 	jr AcTrkSw_Select_DrawTrack
 
 AcTrkSw_Select_HighTrack:
-	lda_24 xhl, Str_No_0x514
+	lda_24 xhl, 0xeaa82a
 
 AcTrkSw_Select_DrawTrack:
 	pop xiz
@@ -8238,7 +8238,7 @@ AcTrkSw_ShowHide:
 	jr AcTrkSw_ShowHide_Refresh
 
 AcTrkSw_ShowHide_CheckDirty:
-	lda_24 xhl, Str_No_0x51E
+	lda_24 xhl, 0xeaa834
 
 AcTrkSw_ShowHide_Refresh:
 	pop xiz
@@ -8247,7 +8247,7 @@ AcTrkSw_ShowHide_Refresh:
 LanguageCheck:
 	cp xbc, 0x1e0009f
 	jr nz, ObjectProc_ClassDispatch
-	lda_24 xhl, Str_No_0x52E
+	lda_24 xhl, 0xeaa844
 	ret
 
 ; ObjectProc class dispatch with dual handler
@@ -8290,7 +8290,7 @@ ObjectProc:
 	cp xwa, 0x13
 	jrl gt, ExitWindow_Init
 	add xwa, xwa
-	add xwa, Str_No_0x58E
+	add xwa, 0xeaa8a4
 	ld wa, (xwa)
 	lda_24 xix, AcTrkSw_Return
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -8529,7 +8529,7 @@ ExitWindow_Paint:
 	st_dri3b B, 0xe5, 0xc0, 0x01
 
 ExitWindow_Confirm:
-	ld xiy, Str_No_0x5B6
+	ld xiy, 0xeaa8cc
 	ld xix, xwa
 	lds bc, 7
 	ldirw
@@ -8541,7 +8541,7 @@ ExitWindow_Confirm:
 	st_dri3b B, 0xe5, 0x00, 0x16
 
 ExitWindow_OK:
-	ld xiy, Str_No_0x5C6
+	ld xiy, 0xeaa8dc
 	ld xix, xwa
 	ldw bc, 0xb
 	ldirw
@@ -8554,7 +8554,7 @@ ExitWindow_OK:
 	lda_24 xwa, SupportClassProc
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0x37
-	lda_24 xwa, NakaInst_IT_Off_0x08
+	lda_24 xwa, 0xeb7690
 	ld (xbc + 10), xwa
 	ldw wa, 0x260
 	calr RegisterObjectTable
@@ -8773,7 +8773,7 @@ InputDialog_Confirm:
 	add xwa, xbc
 	ld xwa, (xwa + 10)
 	add xix, xwa
-	lda_24 xwa, Str_No_0x5DE
+	lda_24 xwa, 0xeaa8f4
 	ld (xix), xwa
 	incm 1, (xhl + 8)
 	ld xhl, (xsp + 8)
@@ -8824,7 +8824,7 @@ UnRegisterObject:
 	add xix, xhl
 	ld xwa, (xix + 10)
 	add xde, xwa
-	lda_24 xwa, Str_No_0x5E0
+	lda_24 xwa, 0xeaa8f6
 	ld (xde), xwa
 	decm 1, (xbc + 8)
 	pop xiz
@@ -8988,7 +8988,7 @@ ClassProc:
 	cp xbc, 0x7
 	jrl gt, TitleWidget_OK_AdvanceDone
 	add xbc, xbc
-	add xbc, Str_No_0x5E2
+	add xbc, 0xeaa8f8
 	ld bc, (xbc)
 	lda_24 xix, ClassProc_Event_LoadFromWA
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -9566,7 +9566,7 @@ ModeProc:
 	cp xbc, 0x5
 	jrl gt, GetMode_DispatchDSP
 	add xbc, xbc
-	add xbc, Str_No_0x5F2
+	add xbc, 0xeaa908
 	ld bc, (xbc)
 	lda_24 xix, NakaWidget_ReturnZero
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -9810,7 +9810,7 @@ UnregisteredMode:
 	ld xwa, 0xffffffff
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0xffff
-	lda_24 xwa, Str_No_0x5FE
+	lda_24 xwa, 0xeaa914
 	ld (xbc + 10), xwa
 	ret
 
@@ -9848,7 +9848,7 @@ UnregisteredTitle:
 	ld xwa, 0xffffffff
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0xffff
-	lda_24 xwa, Str_No_0x600
+	lda_24 xwa, 0xeaa916
 	ld (xbc + 10), xwa
 	ld xwa, 0xffffffff
 	ld (xbc + 14), xwa
@@ -9896,7 +9896,7 @@ TitleProc:
 	sll xwa, 3
 	sub xwa, (xsp + 30)
 	add xwa, xwa
-	ld xbc, Str_No_0x602
+	ld xbc, 0xeaa918
 	add xbc, xwa
 	ld xwa, (xbc + 8)
 	cp xiz, 0x1e000a6
@@ -9951,7 +9951,7 @@ TitleProc:
 	cp xde, 0x5
 	jrl gt, EnumList_Select_Send
 	add xde, xde
-	add xde, Str_No_0x6AA
+	add xde, 0xeaa9c0
 	ld de, (xde)
 	lda_24 xix, TitleProc_EventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe8
@@ -10645,7 +10645,7 @@ EnumList_OK_ScrollUp_Done:
 	sll xwa, 3
 	sub xwa, (xsp + 30)
 	add xwa, xwa
-	ld xbc, Str_No_0x602
+	ld xbc, 0xeaa918
 	add xbc, xwa
 	ld xwa, (xbc + 8)
 	ld xbc, (xbc)
@@ -10667,7 +10667,7 @@ EnumList_HitTest:
 	sll xbc, 3
 	sub xbc, (xsp + 30)
 	add xbc, xbc
-	lda_24 xwa, Str_No_0x606
+	lda_24 xwa, 0xeaa91c
 	add xwa, xbc
 	ld xwa, (xwa)
 	cp xwa, 0x1c00015
@@ -10690,7 +10690,7 @@ EnumList_HitTest_Loop:
 	sll xbc, 3
 	sub xbc, (xsp + 30)
 	add xbc, xbc
-	ld xwa, Str_No_0x602
+	ld xwa, 0xeaa918
 	add xwa, xbc
 	ld xbc, (xwa + 4)
 	ld xde, (xwa)
@@ -10792,7 +10792,7 @@ EnumList_Reset:
 	ld wa, iz
 	extz xwa
 	add xwa, xwa
-	ld xbc, Str_No_0x6B6
+	ld xbc, 0xeaa9cc
 	add xbc, xwa
 	ld wa, (xbc)
 	st16_24 0x02bc32, xwa
@@ -10978,7 +10978,7 @@ ViewableProc:
 	cp xwa, 0x6
 	jrl gt, Viewable_DefaultDispatch
 	add xwa, xwa
-	add xwa, Str_No_0x6D0
+	add xwa, 0xeaa9e6
 	ld wa, (xwa)
 	lda_24 xix, Viewable_GetClassProc
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -12387,7 +12387,7 @@ BoxStyle7_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x6DE
+	ld xwa, 0xeaa9f4
 	jr BoxStyle7_CheckInner
 
 BoxStyle7_CalcWidth:
@@ -12404,7 +12404,7 @@ BoxStyle7_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x6E8
+	ld xwa, 0xeaa9fe
 
 BoxStyle7_CheckInner:
 	push xwa
@@ -12510,7 +12510,7 @@ BoxStyle8_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x6EE
+	ld xwa, 0xeaaa04
 	jr BoxStyle8_CheckInner
 
 BoxStyle8_CalcWidth:
@@ -12527,7 +12527,7 @@ BoxStyle8_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x6FA
+	ld xwa, 0xeaaa10
 
 BoxStyle8_CheckInner:
 	push xwa
@@ -12633,7 +12633,7 @@ BoxStyle9_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x700
+	ld xwa, 0xeaaa16
 	jr BoxStyle9_CheckInner
 
 BoxStyle9_CalcWidth:
@@ -12650,7 +12650,7 @@ BoxStyle9_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x70C
+	ld xwa, 0xeaaa22
 
 BoxStyle9_CheckInner:
 	push xwa
@@ -12756,7 +12756,7 @@ BoxStyle10_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x712
+	ld xwa, 0xeaaa28
 	jr BoxStyle10_CheckInner
 
 BoxStyle10_CalcWidth:
@@ -12773,7 +12773,7 @@ BoxStyle10_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x71E
+	ld xwa, 0xeaaa34
 
 BoxStyle10_CheckInner:
 	push xwa
@@ -12880,7 +12880,7 @@ BoxStyle11_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x724
+	ld xwa, 0xeaaa3a
 	jr BoxStyle11_CheckInner
 
 BoxStyle11_CalcWidth:
@@ -12897,7 +12897,7 @@ BoxStyle11_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x730
+	ld xwa, 0xeaaa46
 
 BoxStyle11_CheckInner:
 	push xwa
@@ -13003,7 +13003,7 @@ BoxStyle12_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x736
+	ld xwa, 0xeaaa4c
 	jr BoxStyle12_CheckInner
 
 BoxStyle12_CalcWidth:
@@ -13020,7 +13020,7 @@ BoxStyle12_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x742
+	ld xwa, 0xeaaa58
 
 BoxStyle12_CheckInner:
 	push xwa
@@ -13125,7 +13125,7 @@ BoxStyle13_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x748
+	ld xwa, 0xeaaa5e
 	jr BoxStyle13_CheckInner
 
 BoxStyle13_CalcWidth:
@@ -13143,7 +13143,7 @@ BoxStyle13_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x754
+	ld xwa, 0xeaaa6a
 
 BoxStyle13_CheckInner:
 	push xwa
@@ -14824,7 +14824,7 @@ FontIDProc:
 	jr SliderH_CalcThumb
 
 SliderH_Setup:
-	ld16_24 xhl, NakaData_WidgetNames_0x624
+	ld16_24 xhl, 0xeada94
 	exts xhl
 	jrl SliderH_ReturnAlt5
 
@@ -14942,14 +14942,14 @@ IconIDProc:
 	ld_sril XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
 	sll xwa, 2
-	ld xbc, Str_InitializeRoot_0x12
+	ld xbc, 0xeb193c
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
 	jr SliderV_CalcThumb
 
 SliderV_Setup:
-	ld16_24 xhl, Str_InitializeRoot_0x10
+	ld16_24 xhl, 0xeb193a
 	extz xhl
 	jrl BitmapIDProc_Return
 
@@ -14979,7 +14979,7 @@ SliderV_CalcRange:
 	ld (xwa), xbc
 	ld xwa, (xwa)
 	sll xwa, 2
-	ld xbc, Str_InitializeRoot_0x12
+	ld xbc, 0xeb193c
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -15020,7 +15020,7 @@ SliderV_ReturnZero:
 SliderV_ReturnAlt:
 	ld xbc, xiz
 	sll xbc, 2
-	ld xwa, Str_InitializeRoot_0x12
+	ld xwa, 0xeb193c
 	add xwa, xbc
 	ld xwa, (xwa)
 	or xwa, xwa
@@ -15066,14 +15066,14 @@ BitmapIDProc:
 	ld_sril XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
 	sll xwa, 2
-	ld xbc, Data_CharMapFormatBlock_0x22C
+	ld xbc, 0xeab3cc
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
 	jr DrawHelper_A_CalcThumb
 
 DrawHelper_A_Setup:
-	ld16_24 xhl, Data_CharMapFormatBlock_0x22A
+	ld16_24 xhl, 0xeab3ca
 	extz xhl
 	jrl ApFuncIDProc_Return
 
@@ -15103,7 +15103,7 @@ DrawHelper_A_CalcRange:
 	ld (xwa), xbc
 	ld xwa, (xwa)
 	sll xwa, 2
-	ld xbc, Data_CharMapFormatBlock_0x22C
+	ld xbc, 0xeab3cc
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -15144,7 +15144,7 @@ DrawHelper_A_ReturnZero:
 DrawHelper_A_ReturnAlt:
 	ld xbc, xiz
 	sll xbc, 2
-	ld xwa, Data_CharMapFormatBlock_0x22C
+	ld xwa, 0xeab3cc
 	add xwa, xbc
 	ld xwa, (xwa)
 	or xwa, xwa
@@ -16686,12 +16686,12 @@ ModeID_GetCurrent:
 	jr nz, ModeID_GetCurrent_HasName
 	ld xwa, (xiz)
 	push xwa
-	ld xwa, Str_No_0x866
+	ld xwa, 0xeaab7c
 	jr ModeID_GetCurrent_SendAudio
 
 ModeID_GetCurrent_HasName:
 	push xhl
-	ld xwa, Str_No_0x86A
+	ld xwa, 0xeaab80
 
 ModeID_GetCurrent_SendAudio:
 	push xwa
@@ -16931,12 +16931,12 @@ TitleID_GetCurrent:
 	jr nz, TitleID_GetCurrent_HasName
 	ld xwa, (xiz)
 	push xwa
-	ld xwa, Str_No_0x892
+	ld xwa, 0xeaaba8
 	jr TitleID_GetCurrent_SendAudio
 
 TitleID_GetCurrent_HasName:
 	push xhl
-	ld xwa, Str_No_0x896
+	ld xwa, 0xeaabac
 
 TitleID_GetCurrent_SendAudio:
 	push xwa
@@ -17090,11 +17090,11 @@ NameProc:
 	jr ConstFlagProc_ReturnZero
 
 NameProc_Init:
-	ld xwa, Str_No_0x8B6
+	ld xwa, 0xeaabcc
 	jr NameProc_Close
 
 NameProc_Init_SetPtr:
-	ld xwa, Str_No_0x8BC
+	ld xwa, 0xeaabd2
 
 NameProc_Close:
 	push xwa
@@ -17158,11 +17158,11 @@ ConstFlagProc:
 	jr ConstFlagProc_Default_Done
 
 ConstFlagProc_GetValue:
-	ld xwa, Str_No_0x8C0
+	ld xwa, 0xeaabd6
 	jr ConstFlagProc_SetValue
 
 ConstFlagProc_GetValue_Set:
-	ld xwa, Str_No_0x8C8
+	ld xwa, 0xeaabde
 
 ConstFlagProc_SetValue:
 	push xwa
@@ -17265,7 +17265,7 @@ CommonIDProc:
 	cp xde, 0x6
 	jrl gt, CommonIDProc_Default
 	add xde, xde
-	add xde, Str_No_0x8CE
+	add xde, 0xeaabe4
 	ld de, (xde)
 	lda_24 xix, CommonIDProc_JumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe8

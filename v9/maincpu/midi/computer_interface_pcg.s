@@ -55,7 +55,7 @@ AcPcgOutGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, PcgOutGrid_DefaultHandler
 	add xbc, xbc
-	add xbc, NakaInst_INITIAL_0x28_
+	add xbc, 0xe7ff20
 	ld bc, (xbc)
 	lda_24 xix, PcgOutGridBoxEventDispatch
 	jp_dri 8, 0x07, 0xf0, 0xe4
@@ -267,11 +267,11 @@ PcgOutGridCheck:
 	push xiz
 	ld xiz, xde
 	ld (xsp + 44), xbc
-	ld xiy, UserMemory_FormatStrings_0x16_
+	ld xiy, 0xe7ff44
 	lda xix, (xsp + 12)
 	lds bc, 5
 	ldirw
-	ld xiy, MidiPart_PageStr_1of3_0x0A_
+	ld xiy, 0xe7ed44
 	lda xix, (xsp + 4)
 	lds bc, 4
 	ldirw
@@ -290,7 +290,7 @@ PcgOutGridCheck:
 	cp xwa, 0x6
 	jrl gt, PcgOutGridCheckComplete
 	add xwa, xwa
-	add xwa, UserMemory_FormatStrings_0xC0_
+	add xwa, 0xe7ffee
 	ld wa, (xwa)
 	lda_24 xix, PcgOutGridCheckJumpTable
 	jp_dri 8, 0x07, 0xf0, 0xe0

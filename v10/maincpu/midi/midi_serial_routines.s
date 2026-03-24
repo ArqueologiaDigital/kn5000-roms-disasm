@@ -700,7 +700,7 @@ MIDI_CHANNEL_MESSAGE_DISPATCHER:
 	and a, 0x70
 	srl a, 2
 	xor w, w
-	ld xix, MIDI_CHANNEL_HANDLER_JUMP_TABLE_0x01
+	ld xix, 0xfcf761
 	ld_sril3 XIX, 0x07, 0xf0, 0xe0
 	jp (xix)
 MIDI_CHANNEL_HANDLER_JUMP_TABLE:

@@ -79,7 +79,7 @@ DemoStyleTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DemoStyleTtlFunc_Exit
 	add xde, xde
-	add xde, SepaOut_FormatData_Tail_0xD7_
+	add xde, 0xe201c4
 	ld de, (xde)
 	lda_24 xix, DemoStyle_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe8
@@ -154,7 +154,7 @@ DemoSoundTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DemoSoundTtlFunc_Exit
 	add xde, xde
-	add xde, SepaOut_FormatData_Tail_0xE3_
+	add xde, 0xe201d0
 	ld de, (xde)
 	lda_24 xix, DemoSound_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe8
@@ -228,7 +228,7 @@ DemoRhyTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DemoRhyTtlFunc_Exit
 	add xde, xde
-	add xde, SepaOut_FormatData_Tail_0xEF_
+	add xde, 0xe201dc
 	ld de, (xde)
 	lda_24 xix, DemoRhythm_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe8

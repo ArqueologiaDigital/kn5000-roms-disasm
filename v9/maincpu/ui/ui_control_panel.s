@@ -524,7 +524,7 @@ AcFileSfx_HandleSfxEvent:
 	ldw (xsp + 4), 0x1
 
 AcFileSfx_DrawLoop:
-	lda_24 xhl, DiskWarning_ConfirmStrings_0xB46_
+	lda_24 xhl, 0xea97f2
 	ld xwa, (xsp + 8)
 	lda xix, (xwa + 22)
 	lda xwa, (xsp + 16)
@@ -2578,7 +2578,7 @@ MainPmanControl:
 	cp xwa, 0x5
 	jrl gt, MainTitle_SendEventDone
 	add xwa, xwa
-	add xwa, DiskWarning_ConfirmStrings_0xD4C_
+	add xwa, 0xea99f8
 	ld wa, (xwa)
 	lda_24 xix, MainPmanCtrl_DispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -3017,7 +3017,7 @@ GetClientBox2:
 
 CtrlPanel_DispatchByIndex:
 	add wa, wa
-	lda_24 xix, DiskWarning_ConfirmStrings_0xD58_
+	lda_24 xix, 0xea9a04
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, CtrlPanel_FrameDispatchTable
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -3331,11 +3331,11 @@ GroupBoxProc:
 
 ; Control panel function dispatch
 CtrlPanel_FuncDispatch:
-	add xwa, DiskWarning_ConfirmStrings_0xE2E_
+	add xwa, 0xea9ada
 	ld wa, (xwa)
 	extz wa
 	sll wa, 1
-	ld xix, DiskWarning_ConfirmStrings_0xE56_
+	ld xix, 0xea9b02
 	ld_sriw3 WA, 0x07, 0xf0, 0xe0
 	lda_24 xix, GroupBox_HandlePartChange
 	jp_dri 8, 0x07, 0xf0, 0xe0
@@ -3760,7 +3760,7 @@ GroupBox_HandleStateCompare:
 	ldi_werp 0xee, 0
 	extz xhl
 	sll xhl, 2
-	lda_24 xwa, DiskWarning_ConfirmStrings_0xDAE_
+	lda_24 xwa, 0xea9a5a
 	ld xde, xwa
 	add xde, xhl
 	ld xbc, (xsp + 30)
