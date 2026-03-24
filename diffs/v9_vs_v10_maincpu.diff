@@ -1,6 +1,6 @@
 diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s' '--exclude=kn5000_v9_program.s' v9/maincpu/audio/note_voice_mapping.s v10/maincpu/audio/note_voice_mapping.s
---- v9/maincpu/audio/note_voice_mapping.s	2026-03-24 22:46:14.574049910 +0000
-+++ v10/maincpu/audio/note_voice_mapping.s	2026-03-24 22:54:31.814796534 +0000
+--- v9/maincpu/audio/note_voice_mapping.s	2026-03-24 23:05:04.663531114 +0000
++++ v10/maincpu/audio/note_voice_mapping.s	2026-03-24 23:05:04.671062738 +0000
 @@ -26655,9 +26655,14 @@
  	ret
  
@@ -52,15 +52,6 @@ diff -ru '--exclude=*.bin' '--exclude=generated' '--exclude=kn5000_v10_program.s
  HdaeRom_DataDispatch_Block3:
  	lda	xhl, (xwa+18833)
  	.byte 0xf3, 0xe1, 0xa7
-@@ -27883,7 +27891,7 @@
- 	ret
- 
- PostTmSave_ByteBlock:
--	calr	64570
-+	calr	64567
- 	cps	l, 6
- 	jr	ugt, 7
- 	cps	l, 1
 @@ -27934,9 +27942,9 @@
  	.byte 0x8f
  	push_sr

@@ -27883,7 +27883,7 @@ PostTmSave:
 	ret
 
 PostTmSave_ByteBlock:
-	calr	64570
+	calr	SendPartDataBlock_InitVal4
 	cps	l, 6
 	jr	ugt, 7
 	cps	l, 1
