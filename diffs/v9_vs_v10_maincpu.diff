@@ -16,15 +16,11 @@ diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio
 > 	lds	hl, 0
 > 	ret
 > 
-27937c27945
-< 	ld	xwa, 0xe91e376f
----
-> 	ld	xwa, 0xe61e376f
-28197c28205
+28195c28203
 < 	.byte 0xed
 ---
 > 	swi	3
-28270c28278
+28268c28276
 < 	.byte 0x9b, 0x08, 0xff	; cp (xhl+8), sp  [v10: cp (xbc+8), xsp]
 ---
 > 	cp	(xbc+8), xsp

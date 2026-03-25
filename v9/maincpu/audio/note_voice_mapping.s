@@ -27931,11 +27931,9 @@ TmFlashWrite_Block1_Entry:
 	extz	bc
 	cps	de, 0
 	jr	lt, 123
-	.byte 0x8f
-	push	sr
-	push	xsp
-	ld	xwa, 0xe91e376f
-	swi	4
+	.byte	0x8f, 0x02, 0x3f, 0x40	; cp (xsp+2), 0x40
+	jr	nc, 55
+	calr	HdaeRom_DataHandler
 	calr	HdaeRom_DataDispatch_Block
 	ld	c, (xsp)
 	extz	bc
