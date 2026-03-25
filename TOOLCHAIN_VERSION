@@ -7,7 +7,7 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 8f0500a845ac (8f0500a845ac3d8b7ee84c276c60c116bb9210c9)
-Date: 2026-03-17 11:07:30 +0000
-Subject: Revert "Fix PC-relative offset computation for numeric branch targets"
+Commit: ae485d66855d (ae485d66855d416387e848a5a23f238000493199)
+Date: 2026-03-25 09:53:15 +0000
+Subject: TLCS-900: Add parenthesized direct address operand syntax
 Repository: /mnt/shared/llvm-project
