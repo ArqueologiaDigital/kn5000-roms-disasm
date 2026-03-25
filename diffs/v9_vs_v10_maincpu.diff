@@ -9,32 +9,30 @@ diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio
 > 	call	COMM_BuildAndSendPacket
 > 	ret
 > 
-27756a27762
-> 
-27768c27774,27777
+27769c27774,27777
 < 	jrl	SendPartDataBlock_SetWord7
 ---
 > 	calr SendPartDataBlock_SetWord7
 > 	lds hl, 0
 > 	ret
 > 
-27936c27945
+27937c27945
 < 	ld	xwa, 0xe91e376f
 ---
 > 	ld	xwa, 0xe61e376f
-28196c28205
+28197c28205
 < 	.byte 0xed
 ---
 > 	swi	3
-28269c28278
+28270c28278
 < 	.byte 0x9b, 0x08, 0xff	; cp (xhl+8), sp  [v10: cp (xbc+8), xsp]
 ---
 > 	cp	(xbc+8), xsp
-28540c28549
+28541c28549
 < 	pushw 0xaca		; Sprintf_OutputCallback & 0xffff
 ---
 > 	pushw 0xad8		; Sprintf_OutputCallback & 0xffff
-28561c28570
+28562c28570
 < 	pushw	0xaca		; Sprintf_OutputCallback & 0xffff
 ---
 > 	pushw	0xad8		; Sprintf_OutputCallback & 0xffff

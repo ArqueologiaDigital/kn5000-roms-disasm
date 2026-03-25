@@ -27754,6 +27754,7 @@ HdaeRom_DataDispatch_SetWord:
 	pop	xiz
 	lda	xsp, (xsp+440)
 	ret
+
 HdaeRom_DataDispatch_Block:
 	lda_24	xde, (0x1e0000)
 	lda_24	xwa, (CharMap_FullPermutation_0x454)
