@@ -1,0 +1,968 @@
+; =============================================================================
+; file_io/composer_filters.asm - Composer Load and Filter Operations
+; =============================================================================
+; Composer file loading and load/save filter routines.
+;
+; Key routines:
+;   FmmComposerLoadFunc              - Composer file loading
+;   FmmLoadFilterFunc                - Load filter settings
+;   FmmSaveFilterFunc                - Save filter settings
+; =============================================================================
+
+FmmComposerLoadFunc:
+	dec 2, xsp
+	pushw iz
+	cp xbc, 0x1c00018
+	jrl z, CompLoad_HandleScroll
+	cp xbc, 0x1c00017
+	jrl z, CompLoad_HandleScroll
+	cp xbc, 0x1c0000b
+	jrl z, CompLoad_HandleShow
+	cp xbc, 0x1e50004
+	jrl z, CompLoad_HandleSelection
+	cp xbc, 0x1c00013
+	jrl nz, CompLoad_Return
+	cp xde, 0x3
+	jrl z, CompLoad_HandleAbort
+	cp xde, 0x2
+	jrl nz, CompLoad_Return
+	stdi8 (0x84fe), 0
+	lds wa, 1
+	calr InitializeOperationState
+	ld xwa, 0x600026
+	ld xbc, 0x1c00001
+	lds32 xde, 5
+	call ApPostEvent
+	cpdi16 0x8500, 0
+	jr ge, CompLoad_DispatchState
+	call GetDiskSizeInfo
+	extz hl
+	stda16 (0x8500), xhl
+	calr SignalProgressUpdate
+
+CompLoad_DispatchState:
+	ldw_d16 xwa, (0x8500)
+	cps wa, 1
+	jrl z, CompLoad_HandleSuccess
+	cps wa, 0
+	jr z, CompLoad_HandleError
+	cps wa, 5
+	jr z, CompLoad_HandleCancel
+	cpdi16 0x8502, 0
+	jr ge, CompLoad_ContinueWait
+	call GetEncodedFileSizeData
+	stda16 (0x8502), xhl
+	call FileIO_SearchAndLoadFile
+	call GetEncodedFreeSpaceData
+	calr SignalProgressUpdate
+
+CompLoad_ContinueWait:
+	ld xwa, 0x600026
+	ld xbc, 0x1c00002
+	lds32 xde, 0
+	call ApPostEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c0000a
+	lds32 xde, 0
+	jrl CompLoad_DispatchWidget
+
+CompLoad_HandleCancel:
+	ld xwa, 0x600026
+	ld xbc, 0x1c00002
+	lds32 xde, 0
+	call ApPostEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 1
+	call ApPostEvent
+	lds wa, 1
+	call UI_PostPartChangeEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 0
+	call ApPostEvent
+	stdi8 (0x7f42), 0
+	ldw wa, 0xee
+	jr CompLoad_CallStatusDisplay
+
+CompLoad_HandleError:
+	ld xwa, 0x600026
+	ld xbc, 0x1c00002
+	lds32 xde, 0
+	call ApPostEvent
+	ldw wa, 0x7d
+	call UI_PostModeChangeEvent
+	jrl CompLoad_Return
+
+CompLoad_HandleSuccess:
+	calr ResetProgressIndication
+	ld xwa, 0x600026
+	ld xbc, 0x1c00002
+	lds32 xde, 0
+	call ApPostEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 1
+	call ApPostEvent
+	lds wa, 1
+	call UI_PostPartChangeEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 0
+	call ApPostEvent
+	stdi8 (0x7f42), 2
+	ldw wa, 0xee
+
+CompLoad_CallStatusDisplay:
+	call SoundCtrl_SendCommand
+	jrl CompLoad_Return
+
+CompLoad_HandleAbort:
+	calr CancelOperationCleanup
+	jrl CompLoad_Return
+
+CompLoad_HandleSelection:
+	stda32 0x7f7c, xde
+	call GetCurrentFileIndex
+	stda16 (0x7f80), xhl
+	cps hl, 0
+	jr lt, CompLoad_Selection_Negative
+	exts xhl
+	ldda32 xwa, (0x7f7c)
+	ld xbc, 0x1e50002
+	ld xde, xhl
+	jrl CompLoad_DispatchWidget
+
+CompLoad_Selection_Negative:
+	stdi16 (0x7f80), 0
+	ldda32 xwa, (0x7f7c)
+	ld xbc, 0x1e50002
+	lds32 xde, 0
+	jrl CompLoad_DispatchWidget
+
+CompLoad_HandleShow:
+	lds iz, 0
+
+CompLoad_DrawItemLoop:
+	ld wa, iz
+	ld hl, wa
+	sll hl, 5
+	lda_d16 xde, (0x850c)
+	extz xhl
+	add xhl, xde
+	stb_erp C, 0xf8
+	ld (xhl), c
+	lds bc, 3
+	call FileIO_CheckRecordByFile
+	cps l, 0
+	jr z, CompLoad_DrawItem_Empty
+	ld wa, iz
+	call GetFileEntryPtr
+	ld xbc, xhl
+	jr CompLoad_DrawItem_Continue
+
+CompLoad_DrawItem_Empty:
+	lda_24 xbc, (DiskOp_ChannelCfgTable_0x80)
+
+CompLoad_DrawItem_Continue:
+	ld de, iz
+	ld wa, de
+	sll wa, 5
+	lds hl, 1
+	add hl, wa
+	lda_d16 xix, (0x850c)
+	extz xhl
+	add xhl, xix
+	inc 1, de
+	pushw 0x6
+	pushw 0x0
+	ld xwa, xhl
+	call FileIO_ReadHeader_ParseLoop
+	ld de, iz
+	sll de, 5
+	lda_d16 xbc, (0x850c)
+	extz xde
+	add xde, xbc
+	ldda32 xwa, (0x7f7c)
+	ld xbc, 0x1c0000f
+	call ApPostEvent
+	inc 1, iz
+	cp iz, 0x14
+	jr lt, CompLoad_DrawItemLoop
+	jrl CompLoad_Return
+
+CompLoad_HandleScroll:
+	ldw_d16 xwa, (0x7f80)
+	ld (xsp + 2), wa
+	or xde, xde
+	jr nz, CompLoad_PageScroll
+	cp xbc, 0x1c00018
+	jr nz, CompLoad_ScrollUp
+	cp wa, 0x13
+	jrl ge, CompLoad_GetSelection
+	inc 1, wa
+	jr CompLoad_StorePosition
+
+CompLoad_ScrollUp:
+	cp xbc, 0x1c00017
+	jrl nz, CompLoad_GetSelection
+	cps wa, 0
+	jrl le, CompLoad_GetSelection
+	dec 1, wa
+	jr CompLoad_StorePosition
+
+CompLoad_PageScroll:
+	cp xde, 0x1
+	jr nz, CompLoad_PageDown
+	cp wa, 0xa
+	jrl lt, CompLoad_GetSelection
+	sub wa, 0xa
+	jr CompLoad_StorePosition
+
+CompLoad_PageDown:
+	cp xde, 0x2
+	jr nz, CompLoad_OpLoad
+	ld bc, wa
+	add bc, 0xa
+	cp bc, 0x13
+	jrl gt, CompLoad_GetSelection
+	add wa, 0xa
+
+CompLoad_StorePosition:
+	stda16 (0x7f80), xwa
+	jrl CompLoad_UpdateDisplay
+
+CompLoad_OpLoad:
+	cp xde, 0x3
+	jrl nz, CompLoad_GetSelection
+	call CheckFileSystemStatus
+	cps hl, 0
+	jr z, CompLoad_GetSelection
+	ld xwa, 0x600026
+	ld xbc, 0x1c00001
+	lds32 xde, 5
+	call ApPostEvent
+	lds iz, 0
+
+CompLoad_HideButtons_Loop:
+	stb_erp A, 0xf8
+	extz wa
+	call FileIO_FormatName_Copy
+	inc 1, iz
+	cp iz, 0x8
+	jr lt, CompLoad_HideButtons_Loop
+	lds wa, 3
+	call FileIO_FormatName_Loop
+	lds wa, 0
+	calr InitializeOperationState
+	call FileIO_ParseDirectoryEntry
+	ld wa, hl
+	lds bc, 1
+	calr FileIO_ValidateSignedValue
+	stb_d8 (0x7f42), l
+	calr SignalProgressUpdate
+	ld xwa, 0x600026
+	ld xbc, 0x1c00002
+	lds32 xde, 0
+	call ApPostEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 1
+	call ApPostEvent
+	lds wa, 1
+	call UI_PostPartChangeEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 0
+	call ApPostEvent
+	ldw wa, 0xee
+	call SoundCtrl_SendCommand
+
+CompLoad_GetSelection:
+	ldw_d16 xwa, (0x7f80)
+
+CompLoad_UpdateDisplay:
+	cp (xsp + 2), wa
+	jr z, CompLoad_Return
+	call NotifyUIOfSelectionChange
+	ldw_d16 xde, (0x7f80)
+	exts xde
+	ldda32 xwa, (0x7f7c)
+	ld xbc, 0x1e50002
+	call ApPostEvent
+	ld de, (xsp + 2)
+	sll de, 5
+	lda_d16 xbc, (0x850c)
+	extz xde
+	add xde, xbc
+	ldda32 xwa, (0x7f7c)
+	ld xbc, 0x1c0000f
+	call ApPostEvent
+	ldw_d16 xde, (0x7f80)
+	sll de, 5
+	lda_d16 xbc, (0x850c)
+	extz xde
+	add xde, xbc
+	ldda32 xwa, (0x7f7c)
+	ld xbc, 0x1c0000f
+
+CompLoad_DispatchWidget:
+	call ApPostEvent
+
+CompLoad_Return:
+	lds32 xhl, 0
+	popw iz
+	inc 2, xsp
+	ret
+
+RenderFilterDisplay:
+	dec 6, xsp
+	ld (xsp), c
+	ld (xsp + 2), xwa
+	ld xwa, (xsp + 2)
+	ld c, (xsp)
+	lda_dpi XHL, 0xe0
+	ld (xsp + 2), xwa
+	cp (xsp), 0x0
+	jr nz, RenderFilter_CheckType1
+	call GetCurrentFileType
+	cps l, 0
+	jr z, RenderFilter_CheckType1
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0x82
+	jrl RenderFilter_CopyAndReturn
+
+RenderFilter_CheckType1:
+	cp (xsp), 0x1
+	jr nz, RenderFilter_CheckGeneric
+	call GetCurrentFileType
+	cps l, 0
+	jr z, RenderFilter_CheckGeneric
+	lds wa, 0
+	call FileIO_CheckRecordValid
+	cps l, 0
+	jr z, RenderFilter_Type1_Unavail
+	lds wa, 0
+	call FileIO_WriteRecordName_Done
+	cps l, 0
+	jr z, RenderFilter_Type1_Restricted
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0x88
+	jrl RenderFilter_CopyAndReturn
+
+RenderFilter_Type1_Restricted:
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0x8E
+	jr RenderFilter_CopyAndReturn
+
+RenderFilter_Type1_Unavail:
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0x94
+	jr RenderFilter_CopyAndReturn
+
+RenderFilter_CheckGeneric:
+	ld a, (xsp)
+	extz wa
+	call FileIO_CheckRecordValid
+	cps l, 0
+	jr z, RenderFilter_CheckType2
+	ld a, (xsp)
+	extz wa
+	call FileIO_WriteRecordName_Done
+	cps l, 0
+	jr z, RenderFilter_Generic_Restricted
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0x9A
+	jr RenderFilter_CopyAndReturn
+
+RenderFilter_Generic_Restricted:
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0xA0
+	jr RenderFilter_CopyAndReturn
+
+RenderFilter_CheckType2:
+	cp (xsp), 0x2
+	jr nz, RenderFilter_Default
+	ldw wa, 0x8
+	call FileIO_CheckRecordValid
+	cps l, 0
+	jr z, RenderFilter_Default
+	ldw wa, 0x9
+	call FileIO_CheckRecordValid
+	cps l, 0
+	jr z, RenderFilter_Default
+	ld a, (xsp)
+	extz wa
+	call FileIO_WriteRecordName_Done
+	cps l, 0
+	jr z, RenderFilter_Type2_Restricted
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0xA6
+	jr RenderFilter_CopyAndReturn
+
+RenderFilter_Type2_Restricted:
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0xAC
+	jr RenderFilter_CopyAndReturn
+
+RenderFilter_Default:
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0xB2
+
+RenderFilter_CopyAndReturn:
+	call FileIO_CopyString
+	inc 6, xsp
+	ret
+
+FmmLoadFilterFunc:
+	dec 6, xsp
+	ld (xsp + 2), xde
+	cp xbc, 0x1c00018
+	jr z, LoadFilter_HandleScroll
+	cp xbc, 0x1c00017
+	jr z, LoadFilter_HandleScroll
+	cp xbc, 0x1c0000b
+	jr z, LoadFilter_HandleShow
+	cp xbc, 0x1e50004
+	jrl nz, LoadFilter_Return
+	ld xwa, (xsp + 2)
+	stda32 0x7f82, xwa
+	jrl LoadFilter_Return
+
+LoadFilter_HandleShow:
+	ldw (xsp), 0x0
+
+LoadFilter_DrawLoop:
+	ld wa, (xsp)
+	sll wa, 4
+	lda_d16 xbc, (0x7f86)
+	extz xwa
+	add xwa, xbc
+	ld bc, (xsp)
+	extz bc
+	calr RenderFilterDisplay
+	ld de, (xsp)
+	sll de, 4
+	lda_d16 xbc, (0x7f86)
+	extz xde
+	add xde, xbc
+	ldda32 xwa, (0x7f82)
+	ld xbc, 0x1c0000f
+	call ApPostEvent
+	incm 1, (xsp)
+	cpw (xsp), 0x8
+	jr lt, LoadFilter_DrawLoop
+	jrl LoadFilter_Return
+
+LoadFilter_HandleScroll:
+	ld xwa, (xsp + 2)
+	cp xwa, 0x8
+	jrl nc, LoadFilter_OpLoad
+	cp xbc, 0x1c00017
+	jr nz, LoadFilter_ScrollDown
+	cp xwa, 0x1
+	jr nz, LoadFilter_ScrollUp_CheckZero
+	call GetCurrentFileType
+	cps l, 0
+	jr z, LoadFilter_ScrollUp_CheckZero
+	lds wa, 0
+	jr LoadFilter_ShowButton
+
+LoadFilter_ScrollUp_CheckZero:
+	ld xwa, (xsp + 2)
+	or xwa, xwa
+	jr nz, LoadFilter_ScrollUp_Restore
+	call GetCurrentFileType
+	cps l, 0
+	jr nz, LoadFilter_UpdateDisplay
+
+LoadFilter_ScrollUp_Restore:
+	ld xwa, (xsp + 2)
+	extz wa
+
+LoadFilter_ShowButton:
+	call FileIO_FormatName_Loop
+	jr LoadFilter_UpdateDisplay
+
+LoadFilter_ScrollDown:
+	ld xwa, (xsp + 2)
+	cp xwa, 0x1
+	jr nz, LoadFilter_ScrollDown_CheckZero
+	call GetCurrentFileType
+	cps l, 0
+	jr z, LoadFilter_ScrollDown_CheckZero
+	lds wa, 0
+	jr LoadFilter_HideButton
+
+LoadFilter_ScrollDown_CheckZero:
+	ld xwa, (xsp + 2)
+	or xwa, xwa
+	jr nz, LoadFilter_ScrollDown_Restore
+	call GetCurrentFileType
+	cps l, 0
+	jr nz, LoadFilter_UpdateDisplay
+
+LoadFilter_ScrollDown_Restore:
+	ld xwa, (xsp + 2)
+	extz wa
+
+LoadFilter_HideButton:
+	call FileIO_FormatName_Copy
+
+LoadFilter_UpdateDisplay:
+	ld xwa, (xsp + 2)
+	ld c, a
+	extz bc
+	ld wa, bc
+	sla wa, 4
+	lda_d16 xde, (0x7f86)
+	exts xwa
+	add xwa, xde
+	calr RenderFilterDisplay
+	ld xwa, (xsp + 2)
+	extz wa
+	sla wa, 4
+	lda_d16 xbc, (0x7f86)
+	stb_dri B, 0x07, 0xe4, 0xe0
+	ldda32 xwa, (0x7f82)
+	ld xbc, 0x1c0000f
+	call ApPostEvent
+	jrl LoadFilter_Return
+
+LoadFilter_OpLoad:
+	ld xwa, (xsp + 2)
+	cp xwa, 0xa
+	jrl nz, LoadFilter_Return
+	call CheckFileSystemStatus
+	cps hl, 0
+	jrl z, LoadFilter_Return
+	call FileIO_WriteRecordName_Loop
+	cps hl, 0
+	jrl z, LoadFilter_Return
+	ld xwa, 0x600026
+	ld xbc, 0x1c00001
+	lds32 xde, 5
+	call ApPostEvent
+	call GetCurrentFileIndex
+	extz hl
+	ld wa, hl
+	calr FileIO_MidiOutSendByte
+	lds wa, 0
+	calr InitializeOperationState
+	call FileIO_ParseDirectoryEntry
+	ld wa, hl
+	lds bc, 1
+	calr FileIO_ValidateSignedValue
+	stb_d8 (0x7f42), l
+	calr SignalProgressUpdate
+	ld xwa, 0x600026
+	ld xbc, 0x1c00002
+	lds32 xde, 0
+	call ApPostEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 1
+	call ApPostEvent
+	cpdi16 0xf19e, 0
+	jr z, LoadFilter_Load_ShowCode1
+	lds wa, 2
+	call FileIO_WriteRecordName_Done
+	cps l, 0
+	jr z, LoadFilter_Load_ShowCode1
+	lds wa, 2
+	call FileIO_CheckRecordValid
+	cps l, 0
+	jr nz, LoadFilter_Load_ShowCodeA
+	ldw wa, 0x8
+	call FileIO_CheckRecordValid
+	cps l, 0
+	jr z, LoadFilter_Load_ShowCode1
+
+LoadFilter_Load_ShowCodeA:
+	ldw wa, 0xa
+	jr LoadFilter_Load_CallHandler
+
+LoadFilter_Load_ShowCode1:
+	lds wa, 1
+
+LoadFilter_Load_CallHandler:
+	call UI_PostPartChangeEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 0
+	call ApPostEvent
+	ldw wa, 0xee
+	call SoundCtrl_SendCommand
+
+LoadFilter_Return:
+	lds32 xhl, 0
+	inc 6, xsp
+	ret
+
+RenderSaveFilterDisplay:
+	dec 6, xsp
+	ld (xsp), c
+	ld (xsp + 2), xwa
+	ld xwa, (xsp + 2)
+	ld c, (xsp)
+	lda_dpi XHL, 0xe0
+	ld (xsp + 2), xwa
+	ld a, c
+	extz wa
+	call FileIO_FormatName_Return
+	cps l, 0
+	jr z, RenderSaveFilter_Unavail
+	cp (xsp), 0x1
+	jr nz, RenderSaveFilter_Available
+	call FileIO_GetRecordAttr_Check
+	cps l, 0
+	jr z, RenderSaveFilter_Available
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0xB8
+	jr RenderSaveFilter_CopyAndReturn
+
+RenderSaveFilter_Available:
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0xBE
+	jr RenderSaveFilter_CopyAndReturn
+
+RenderSaveFilter_Unavail:
+	ld xwa, (xsp + 2)
+	ld xbc, DiskOp_ChannelCfgTable_0xC4
+
+RenderSaveFilter_CopyAndReturn:
+	call FileIO_CopyString
+	inc 6, xsp
+	ret
+
+FmmSaveFilterFunc:
+	dec 6, xsp
+	ld (xsp + 2), xde
+	cp xbc, 0x1c00018
+	jr z, SaveFilter_HandleScroll
+	cp xbc, 0x1c00017
+	jr z, SaveFilter_HandleScroll
+	cp xbc, 0x1c0000b
+	jr z, SaveFilter_HandleShow
+	cp xbc, 0x1e50004
+	jrl nz, SaveFilter_Return
+	ld xwa, (xsp + 2)
+	stda32 0x8006, xwa
+	jrl SaveFilter_Return
+
+SaveFilter_HandleShow:
+	ldw (xsp), 0x0
+
+SaveFilter_DrawLoop:
+	ld wa, (xsp)
+	sll wa, 4
+	lda_d16 xbc, (0x800a)
+	extz xwa
+	add xwa, xbc
+	ld bc, (xsp)
+	extz bc
+	calr RenderSaveFilterDisplay
+	ld de, (xsp)
+	sll de, 4
+	lda_d16 xbc, (0x800a)
+	extz xde
+	add xde, xbc
+	ldda32 xwa, (0x8006)
+	ld xbc, 0x1c0000f
+	call ApPostEvent
+	incm 1, (xsp)
+	cpw (xsp), 0x8
+	jr lt, SaveFilter_DrawLoop
+	jrl SaveFilter_Return
+
+SaveFilter_HandleScroll:
+	ld xwa, (xsp + 2)
+	cp xwa, 0x8
+	jrl nc, SaveFilter_SelectAll
+	cp xwa, 0x1
+	jr nz, SaveFilter_ScrollOther
+	cp xbc, 0x1c00017
+	jr nz, SaveFilter_ScrollDown
+	call FileIO_GetRecordAttr_Check
+	cps l, 0
+	jr z, SaveFilter_ScrollUp_Unavail
+	call FileIO_SetModeFlag_Reading
+	ld xwa, (xsp + 2)
+	extz wa
+	jr SaveFilter_UnlockFilter
+
+SaveFilter_ScrollUp_Unavail:
+	ld xwa, (xsp + 2)
+	extz wa
+	jr SaveFilter_LockFilter
+
+SaveFilter_ScrollDown:
+	ld xwa, (xsp + 2)
+	extz wa
+	call FileIO_FormatName_Return
+	cps l, 0
+	jr z, SaveFilter_ScrollDown_Unlock
+	call FileIO_GetRecordAttr_Check
+	cps l, 0
+	jr nz, SaveFilter_UpdateDisplay
+	ld xwa, (xsp + 2)
+	extz wa
+	jr SaveFilter_UnlockFilter
+
+SaveFilter_ScrollDown_Unlock:
+	call FileIO_GetRecordAttr_Check
+	cps l, 0
+	jr nz, SaveFilter_UpdateDisplay
+	call FileIO_SetModeFlag_Writing
+	ld xwa, (xsp + 2)
+	extz wa
+	jr SaveFilter_LockFilter
+
+SaveFilter_ScrollOther:
+	ld xwa, (xsp + 2)
+	extz wa
+	cp xbc, 0x1c00017
+	jr nz, SaveFilter_UnlockFilter
+
+SaveFilter_LockFilter:
+	call FileIO_BuildRecordPath_Done
+	jr SaveFilter_UpdateDisplay
+
+SaveFilter_UnlockFilter:
+	call FileIO_BuildRecordPath_Return
+
+SaveFilter_UpdateDisplay:
+	ld xwa, (xsp + 2)
+	ld c, a
+	extz bc
+	ld wa, bc
+	sla wa, 4
+	lda_d16 xde, (0x800a)
+	exts xwa
+	add xwa, xde
+	calr RenderSaveFilterDisplay
+	ld xwa, (xsp + 2)
+	extz wa
+	sla wa, 4
+	lda_d16 xbc, (0x800a)
+	stb_dri B, 0x07, 0xe4, 0xe0
+	ldda32 xwa, (0x8006)
+	ld xbc, 0x1c0000f
+	jrl SaveFilter_DispatchWidget
+
+SaveFilter_SelectAll:
+	ld xwa, (xsp + 2)
+	cp xwa, 0x8
+	jr nz, SaveFilter_DeselectAll
+	call FileIO_SetModeFlag_Reading
+	ldw (xsp), 0x0
+
+SaveFilter_SelectAll_Loop:
+	ld wa, (xsp)
+	extz wa
+	cpw (xsp), 0x6
+	jr ge, SaveFilter_SelectAll_Unlock
+	call FileIO_BuildRecordPath_Done
+	jr SaveFilter_SelectAll_Update
+
+SaveFilter_SelectAll_Unlock:
+	call FileIO_BuildRecordPath_Return
+
+SaveFilter_SelectAll_Update:
+	ld wa, (xsp)
+	sll wa, 4
+	lda_d16 xbc, (0x800a)
+	extz xwa
+	add xwa, xbc
+	ld bc, (xsp)
+	extz bc
+	calr RenderSaveFilterDisplay
+	ld de, (xsp)
+	sll de, 4
+	lda_d16 xbc, (0x800a)
+	extz xde
+	add xde, xbc
+	ldda32 xwa, (0x8006)
+	ld xbc, 0x1c0000f
+	call ApPostEvent
+	incm 1, (xsp)
+	cpw (xsp), 0x8
+	jr lt, SaveFilter_SelectAll_Loop
+	jrl SaveFilter_Return
+
+SaveFilter_DeselectAll:
+	ld xwa, (xsp + 2)
+	cp xwa, 0x9
+	jr nz, SaveFilter_OpSave
+	call FileIO_SetModeFlag_Reading
+	ldw (xsp), 0x0
+
+SaveFilter_DeselectAll_Loop:
+	ld wa, (xsp)
+	extz wa
+	call FileIO_BuildRecordPath_Done
+	ld wa, (xsp)
+	sll wa, 4
+	lda_d16 xbc, (0x800a)
+	extz xwa
+	add xwa, xbc
+	ld bc, (xsp)
+	extz bc
+	calr RenderSaveFilterDisplay
+	ld de, (xsp)
+	sll de, 4
+	lda_d16 xbc, (0x800a)
+	extz xde
+	add xde, xbc
+	ldda32 xwa, (0x8006)
+	ld xbc, 0x1c0000f
+	call ApPostEvent
+	incm 1, (xsp)
+	cpw (xsp), 0x8
+	jr lt, SaveFilter_DeselectAll_Loop
+	jrl SaveFilter_Return
+
+SaveFilter_OpSave:
+	ld xwa, (xsp + 2)
+	cp xwa, 0xa
+	jrl nz, SaveFilter_OpFormat
+	call FileIO_FormatName_Done
+	cps hl, 0
+	jrl z, SaveFilter_OpFormat
+	calr SelectPasswordMode
+	cps hl, 0
+	jr z, SaveFilter_Save_NoPwd
+	lds32 xde, 0
+	ldb_d8 e, (0x8a0c)
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c50004
+	jr SaveFilter_DispatchWidget
+
+SaveFilter_Save_NoPwd:
+	call CheckFileSystemStatus
+	cps hl, 0
+	jr z, SaveFilter_Save_Execute
+	cpib_da (0x0340ea), 0x00
+	jr z, SaveFilter_Save_Execute
+	ld xwa, 0xffffffff
+	ld xbc, 0x1c50000
+	lds32 xde, 1
+	call ApPostEvent
+	ld xwa, 0x600037
+	ld xbc, 0x1c00001
+	lds32 xde, 0
+
+SaveFilter_DispatchWidget:
+	call ApPostEvent
+	jrl SaveFilter_Return
+
+SaveFilter_Save_Execute:
+	ld xwa, 0x600026
+	ld xbc, 0x1c00001
+	lds32 xde, 5
+	call ApPostEvent
+	lds wa, 0
+	calr InitializeOperationState
+	call FileIO_SaveAllRegions
+	ld wa, hl
+	lds bc, 5
+	calr FileIO_ValidateSignedValue
+	stb_d8 (0x7f42), l
+	call FileIO_ResetCurrentRecord
+	call GetEncodedFreeSpaceData
+	call GetEncodedFileSizeData
+	stda16 (0x8502), xhl
+	calr SignalProgressUpdate
+	ld xwa, 0x600026
+	ld xbc, 0x1c00002
+	lds32 xde, 0
+	call ApPostEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 1
+	call ApPostEvent
+	lds wa, 1
+	call UI_PostPartChangeEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 0
+	call ApPostEvent
+	ldw wa, 0xee
+	jr SaveFilter_CallStatusDisplay
+
+SaveFilter_OpFormat:
+	ld xwa, (xsp + 2)
+	cp xwa, 0x32
+	jr nz, SaveFilter_ResetAll
+	ld xwa, 0x600026
+	ld xbc, 0x1c00001
+	lds32 xde, 5
+	call ApPostEvent
+	lds wa, 0
+	calr InitializeOperationState
+	call FileIO_SaveAllRegions
+	ld wa, hl
+	lds bc, 5
+	calr FileIO_ValidateSignedValue
+	stb_d8 (0x7f42), l
+	call FileIO_ResetCurrentRecord
+	call GetEncodedFreeSpaceData
+	call GetEncodedFileSizeData
+	stda16 (0x8502), xhl
+	calr SignalProgressUpdate
+	ld xwa, 0x600026
+	ld xbc, 0x1c00002
+	lds32 xde, 0
+	call ApPostEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 1
+	call ApPostEvent
+	lds wa, 1
+	call UI_PostPartChangeEvent
+	ld xwa, 0xffffffff
+	ld xbc, 0x1e0009e
+	lds32 xde, 0
+	call ApPostEvent
+	ldw wa, 0xee
+
+SaveFilter_CallStatusDisplay:
+	call SoundCtrl_SendCommand
+	jr SaveFilter_Return
+
+SaveFilter_ResetAll:
+	ld xwa, (xsp + 2)
+	cp xwa, 0xb
+	jr nz, SaveFilter_Return
+	call FileIO_SetModeFlag_Reading
+	ldw (xsp), 0x0
+
+SaveFilter_ResetAll_Loop:
+	ld wa, (xsp)
+	extz wa
+	call FileIO_BuildRecordPath_Return
+	ld wa, (xsp)
+	sll wa, 4
+	lda_d16 xbc, (0x800a)
+	extz xwa
+	add xwa, xbc
+	ld bc, (xsp)
+	extz bc
+	calr RenderSaveFilterDisplay
+	ld de, (xsp)
+	sll de, 4
+	lda_d16 xbc, (0x800a)
+	extz xde
+	add xde, xbc
+	ldda32 xwa, (0x8006)
+	ld xbc, 0x1c0000f
+	call ApPostEvent
+	incm 1, (xsp)
+	cpw (xsp), 0x8
+	jr lt, SaveFilter_ResetAll_Loop
+
+SaveFilter_Return:
+	lds32 xhl, 0
+	inc 6, xsp
+	ret
+

@@ -1,0 +1,6563 @@
+; =============================================================================
+; DSP Configuration & SysEx Processing
+; =============================================================================
+;
+; DSP effect parameter handlers (reverb, chorus, EQ, compressor)
+; and System Exclusive (SysEx) command processing. Manages effect
+; presets and real-time parameter editing.
+; =============================================================================
+
+SysEx_ClampVoiceIndex8:
+	cp a, 0x8
+	jr c, SysEx_ClampVoiceIndex8_DoLookup
+	ldb a, 0x0
+
+SysEx_ClampVoiceIndex8_DoLookup:
+	extz wa
+	lda_24 xbc, (MidiPkt_EventType_Table_0x358)
+	ldb_sri L, 0x07, 0xe4, 0xe0
+	ret
+
+SysEx_ApplyToSlot4B_Data:
+	dec	2, xsp
+	push	xiz
+	ldda32	xwa, (0xbcac)
+	ldw	bc, 11
+	call	SeqData_ReadFieldByIndex
+	ld	(xsp+4), l
+	ld	a, (xsp+4)
+	extz	wa
+	calr	87
+	ld	(xsp+4), l
+	ld	xwa, 0x4b04
+	call	DSPCfg_ReadParam_Map0
+	.byte 0xd7
+	swi	2
+	cp	(xhl-41), de
+	inc	1, wa
+	push	xsp
+	lds	iz, 0
+	.byte 0xd7
+	swi	2
+	inc	2, wa
+	ldw	de, 0x88de
+	exts	xwa
+	add	xwa, 0x4b10
+	call	DSPCfg_ResolveAndExtract
+	cps	hl, 1
+	jr	z, 4
+	cps	hl, 2
+	jr	nz, 21
+	ld	wa, iz
+	exts	xwa
+	add	xwa, 0x4b10
+	ld	c, (xsp+4)
+	extz	bc
+	call	DSPCfg_WriteParamFull
+	jr	7
+	inc	1, iz
+	.byte 0xd7
+	swi	2
+	.byte 0xf6
+	jr	lt, -50
+	push	xiz
+	call	SwbtWr_ReinitOutputBank
+	pop	xiz
+	pop	xiz
+	inc	2, xsp
+	ret
+
+SysEx_ClampVoiceIndex128:
+	cp a, 0x80
+	jr c, SysEx_ClampVoiceIndex128_DoLookup
+	ldb a, 0x0
+
+SysEx_ClampVoiceIndex128_DoLookup:
+	extz wa
+	lda_24 xbc, (MidiPkt_EventType_Table_0x360)
+	ldb_sri L, 0x07, 0xe4, 0xe0
+	ret
+
+SysEx_ApplyToSlot49_Data:
+	dec	2, xsp
+	push	xiz
+	ldda32	xwa, (0xbcac)
+	ldw	bc, 11
+	call	SeqData_ReadFieldByIndex
+	ld	(xsp+4), l
+	ld	a, (xsp+4)
+	extz	wa
+	calr	93
+	extz	hl
+	ld	xwa, 0x4900
+	ld	bc, hl
+	call	DSPCfg_WriteParamFull
+	cps	hl, 0
+	jr	lt, 72
+	ld	xwa, 0x4904
+	call	DSPCfg_ReadParam_Map0
+	.byte 0xd7
+	swi	2
+	cp	(xhl-41), de
+	inc	1, wa
+	.byte 0x37
+	lds	iz, 0
+	.byte 0xd7
+	swi	2
+	inc	2, wa
+	pushw	de
+	ld	a, (xsp+4)
+	extz	wa
+	.byte 0xc7
+	swi	0
+	.byte 0x8b
+	extz	bc
+	calr	191
+	ld	bc, hl
+	cp	bc, 0xd8f0
+	jr	z, 14
+	ld	wa, iz
+	exts	xwa
+	add	xwa, 0x4910
+	call	DSPCfg_WriteParamFull
+	inc	1, iz
+	.byte 0xd7
+	swi	2
+	.byte 0xf6
+	jr	lt, -42
+	push	xiz
+	call	SwbtWr_ReinitOutputBank
+	pop	xiz
+	pop	xiz
+	inc	2, xsp
+	ret
+
+SysEx_ClampVoiceIndex8_49:
+	cp a, 0x8
+	jr c, SysEx_ClampVoiceIndex8_49_DoLookup
+	ldb a, 0x0
+
+SysEx_ClampVoiceIndex8_49_DoLookup:
+	extz wa
+	lda_24 xbc, (MidiPkt_EventType_Table_0x3E0)
+	ldb_sri L, 0x07, 0xe4, 0xe0
+	ret
+
+SysEx_ApplyToSlot49_Format_Data:
+	dec	2, xsp
+	push	xiz
+	ldda32	xwa, (0xbcac)
+	ldw	bc, 11
+	call	SeqData_ReadFieldByIndex
+	ld	(xsp+4), l
+	ld	a, (xsp+4)
+	extz	wa
+	calr	87
+	ld	(xsp+4), l
+	ld	xwa, 0x4904
+	call	DSPCfg_ReadParam_Map0
+	.byte 0xd7
+	swi	2
+	cp	(xhl-41), de
+	inc	1, wa
+	push	xsp
+	lds	iz, 0
+	.byte 0xd7
+	swi	2
+	inc	2, wa
+	ldw	de, 0x88de
+	exts	xwa
+	add	xwa, 0x4910
+	call	DSPCfg_ResolveAndExtract
+	cps	hl, 1
+	jr	z, 4
+	cps	hl, 2
+	jr	nz, 21
+	ld	wa, iz
+	exts	xwa
+	add	xwa, 0x4910
+	ld	c, (xsp+4)
+	extz	bc
+	call	DSPCfg_WriteParamFull
+	jr	7
+	inc	1, iz
+	.byte 0xd7
+	swi	2
+	.byte 0xf6
+	jr	lt, -50
+	push	xiz
+	call	SwbtWr_ReinitOutputBank
+	pop	xiz
+	pop	xiz
+	inc	2, xsp
+	ret
+
+SysEx_ClampVoiceIndex128_49:
+	cp a, 0x80
+	jr c, SysEx_ClampVoiceIndex128_49_DoLookup
+	ldb a, 0x0
+
+SysEx_ClampVoiceIndex128_49_DoLookup:
+	extz wa
+	lda_24 xbc, (MidiPkt_EventType_Table_0x3E8)
+	ldb_sri L, 0x07, 0xe4, 0xe0
+	ret
+
+SysEx_DispatchByChannel:
+	ldw hl, 0xd8f0
+	ld e, c
+	extz de
+	add de, de
+	extz wa
+	cps wa, 0
+	ret mi
+	cps wa, 7
+	ret gt
+	add wa, wa
+	lda_24 xix, (MidiPkt_EventType_Table_0x4D4)
+	ldw_sri WA, 0x07, 0xf0, 0xe0
+	lda_24 xix, (SysEx_ChannelHandler_4B_Data)
+	jp_ind 8, 0x07, 0xf0, 0xe0
+
+SysEx_ChannelHandler_4B_Data:
+	cps	c, 5
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x468
+	jr	77
+	cps	c, 7
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x472
+	jr	66
+	cps	c, 5
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x480
+	jr	55
+	cps	c, 7
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x48A
+	jr	44
+	cp	c, 8
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x498
+	jr	32
+	cp	c, 8
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x4A8
+	jr	20
+	cps	c, 7
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x4B8
+	jr	9
+	cps	c, 7
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x4C6
+	.byte 0xd3
+	reti
+	.byte 0xe0, 0xe8
+	ldb	c, 14
+
+SysEx_DispatchByChannel_49:
+	ldw hl, 0xd8f0
+	ld e, c
+	extz de
+	add de, de
+	extz wa
+	cps wa, 0
+	ret mi
+	cps wa, 7
+	ret gt
+	add wa, wa
+	lda_24 xix, (MidiPkt_EventType_Table_0x538)
+	ldw_sri WA, 0x07, 0xf0, 0xe0
+	lda_24 xix, (SysEx_ChannelHandler_49_Data)
+	jp_ind 8, 0x07, 0xf0, 0xe0
+
+SysEx_ChannelHandler_49_Data:
+	cps	c, 5
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x4E4
+	jr	75
+	cps	c, 5
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x4EE
+	jr	64
+	cps	c, 5
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x4F8
+	jr	53
+	cps	c, 5
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x502
+	jr	42
+	cps	c, 5
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x50C
+	jr	31
+	cps	c, 5
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x516
+	jr	20
+	cps	c, 6
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x520
+	jr	9
+	cps	c, 6
+	ret	nc
+	ld	xwa, MidiPkt_EventType_Table_0x52C
+	.byte 0xd3
+	reti
+	.byte 0xe0, 0xe8
+	ldb	c, 14
+
+SysEx_ValidateRolandHeader:
+	cp c, 0xa
+	ret ugt
+	cp_spib_im 0xe0, 0xf0
+	ret nz
+	inc 1, xwa
+	cp_spib_im 0xe0, 0x41
+	ret nz
+	inc 1, xwa
+	cp_spib_im 0xe0, 0x42
+	ret nz
+	cp_spib_im 0xe0, 0x12
+	ret nz
+	cp_spib_im 0xe0, 0x40
+	ret nz
+	cp_spib_im 0xe0, 0x01
+	ret nz
+	cps c, 0
+	jr nz, SysEx_ValidateRolandHeader_NonZeroChan
+	lda_24 xbc, (0x00f180)
+	add xbc, 0x2e0
+	jr SysEx_ValidateRolandHeader_Dispatch
+
+SysEx_ValidateRolandHeader_NonZeroChan:
+	dec 1, c
+	extz bc
+	sla bc, 11
+	ld de, bc
+	exts xde
+	lda_24 xbc, (0x0ab000)
+	add xbc, xde
+	add xbc, 0x2e0
+
+SysEx_ValidateRolandHeader_Dispatch:
+	ldb_spi E, 0xe0
+	cp e, 0x3a
+	jr z, SysEx_ValidateRolandHeader_Cmd3A
+	cp e, 0x38
+	jr z, SysEx_ValidateRolandHeader_Cmd38
+	cp e, 0x33
+	jr z, SysEx_ValidateRolandHeader_Cmd33
+	cp e, 0x30
+	ret nz
+	ld a, (xwa)
+	extz wa
+	jr SysEx_ApplyVoiceParam_4B
+
+SysEx_ValidateRolandHeader_Cmd33:
+	ld a, (xwa)
+	extz wa
+	jrl SysEx_ApplyVoiceParam_4B_128
+
+SysEx_ValidateRolandHeader_Cmd38:
+	ld a, (xwa)
+	extz wa
+	jrl SysEx_ApplyVoiceParam_49
+
+SysEx_ValidateRolandHeader_Cmd3A:
+	ld a, (xwa)
+	extz wa
+	calr SysEx_ApplyVoiceParam_49_128
+	ret
+
+SysEx_ApplyVoiceParam_4B:
+	dec 8, xsp
+	push xiz
+	ld (xsp + 6), xbc
+	ld (xsp + 10), a
+	lda_d16 xwa, (0xfc8e)
+	sub xwa, 0xf980
+	add (xsp + 6), xwa
+	ld a, (xsp + 10)
+	extz wa
+	calr SysEx_ClampVoiceIndex8
+	extz hl
+	ld xwa, 0x4b00
+	ld bc, hl
+	ld xde, (xsp + 6)
+	call DSPCfg_WriteParamSimple
+	cps hl, 0
+	jr lt, SysEx_ApplyVoiceParam_4B_Return
+	lda_d16 xwa, (0xfc8e)
+	cp xwa, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_4B_ReadSubParams
+	ld a, (xwa)
+	ld (xsp + 4), a
+	ld a, (xsp + 10)
+	extz wa
+	calr SysEx_ClampVoiceIndex8
+	stb_d8 (0xfc8e), l
+
+SysEx_ApplyVoiceParam_4B_ReadSubParams:
+	ld xwa, 0x4b04
+	call DSPCfg_ReadParam_Map0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
+	jr ge, SysEx_ApplyVoiceParam_4B_IterateSlots
+	lda_d16 xbc, (0xfc8e)
+	cp xbc, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_4B_SkipRestore
+	ld a, (xsp + 4)
+	ld (xbc), a
+
+SysEx_ApplyVoiceParam_4B_SkipRestore:
+	jr SysEx_ApplyVoiceParam_4B_Return
+
+SysEx_ApplyVoiceParam_4B_IterateSlots:
+	lds iz, 0
+	cpiw_erp 0xfa, 0
+	jr le, SysEx_ApplyVoiceParam_4B_RestoreSlotId
+
+SysEx_ApplyVoiceParam_4B_SlotLoop:
+	ld a, (xsp + 10)
+	extz wa
+	stb_erp C, 0xf8
+	extz bc
+	calr SysEx_DispatchByChannel_49
+	ld bc, hl
+	cp bc, 0xd8f0
+	jr z, SysEx_ApplyVoiceParam_4B_SlotNext
+	ld wa, iz
+	exts xwa
+	add xwa, 0x4b10
+	ld xde, (xsp + 6)
+	call DSPCfg_WriteParamSimple
+
+SysEx_ApplyVoiceParam_4B_SlotNext:
+	inc 1, iz
+	cpw_erp IZ, 0xfa
+	jr lt, SysEx_ApplyVoiceParam_4B_SlotLoop
+
+SysEx_ApplyVoiceParam_4B_RestoreSlotId:
+	lda_d16 xbc, (0xfc8e)
+	cp xbc, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_4B_Return
+	ld a, (xsp + 4)
+	ld (xbc), a
+
+SysEx_ApplyVoiceParam_4B_Return:
+	pop xiz
+	inc 8, xsp
+	ret
+
+SysEx_ApplyVoiceParam_4B_128:
+	dec 8, xsp
+	push xiz
+	ld (xsp + 6), xbc
+	ld (xsp + 10), a
+	lda_d16 xwa, (0xfc8e)
+	sub xwa, 0xf980
+	add (xsp + 6), xwa
+	ld a, (xsp + 10)
+	extz wa
+	calr SysEx_ClampVoiceIndex128
+	ld (xsp + 10), l
+	lda_d16 xbc, (0xfc8e)
+	cp xbc, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_4B_128_ReadSub
+	ld a, (xbc)
+	ld (xsp + 4), a
+	ld xwa, (xsp + 6)
+	ld a, (xwa)
+	ld (xbc), a
+
+SysEx_ApplyVoiceParam_4B_128_ReadSub:
+	ld xwa, 0x4b04
+	call DSPCfg_ReadParam_Map0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
+	jr ge, SysEx_ApplyVoiceParam_4B_128_IterateSlots
+	lda_d16 xbc, (0xfc8e)
+	cp xbc, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_4B_128_SkipRestore
+	ld a, (xsp + 4)
+	ld (xbc), a
+
+SysEx_ApplyVoiceParam_4B_128_SkipRestore:
+	jr SysEx_ApplyVoiceParam_4B_128_Return
+
+SysEx_ApplyVoiceParam_4B_128_IterateSlots:
+	lds iz, 0
+	cpiw_erp 0xfa, 0
+	jr le, SysEx_ApplyVoiceParam_4B_128_RestoreSlotId
+
+SysEx_ApplyVoiceParam_4B_128_SlotLoop:
+	ld wa, iz
+	exts xwa
+	add xwa, 0x4b10
+	call DSPCfg_ResolveAndExtract
+	cps hl, 1
+	jr z, SysEx_ApplyVoiceParam_4B_128_WriteSlot
+	cps hl, 2
+	jr nz, SysEx_ApplyVoiceParam_4B_128_SlotNext
+
+SysEx_ApplyVoiceParam_4B_128_WriteSlot:
+	ld wa, iz
+	exts xwa
+	add xwa, 0x4b10
+	ld c, (xsp + 10)
+	extz bc
+	ld xde, (xsp + 6)
+	call DSPCfg_WriteParamSimple
+	jr SysEx_ApplyVoiceParam_4B_128_RestoreSlotId
+
+SysEx_ApplyVoiceParam_4B_128_SlotNext:
+	inc 1, iz
+	cpw_erp IZ, 0xfa
+	jr lt, SysEx_ApplyVoiceParam_4B_128_SlotLoop
+
+SysEx_ApplyVoiceParam_4B_128_RestoreSlotId:
+	lda_d16 xbc, (0xfc8e)
+	cp xbc, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_4B_128_Return
+	ld a, (xsp + 4)
+	ld (xbc), a
+
+SysEx_ApplyVoiceParam_4B_128_Return:
+	pop xiz
+	inc 8, xsp
+	ret
+
+SysEx_ApplyVoiceParam_49:
+	dec 8, xsp
+	push xiz
+	ld (xsp + 6), xbc
+	ld (xsp + 10), a
+	lda_d16 xwa, (0xfc74)
+	sub xwa, 0xf980
+	add (xsp + 6), xwa
+	ld a, (xsp + 10)
+	extz wa
+	calr SysEx_ClampVoiceIndex8_49
+	extz hl
+	ld xwa, 0x4900
+	ld bc, hl
+	ld xde, (xsp + 6)
+	call DSPCfg_WriteParamSimple
+	cps hl, 0
+	jr lt, SysEx_ApplyVoiceParam_49_Return
+	lda_d16 xwa, (0xfc74)
+	cp xwa, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_49_ReadSubParams
+	ld a, (xwa)
+	ld (xsp + 4), a
+	ld a, (xsp + 10)
+	extz wa
+	calr SysEx_ClampVoiceIndex8_49
+	stb_d8 (0xfc74), l
+
+SysEx_ApplyVoiceParam_49_ReadSubParams:
+	ld xwa, 0x4904
+	call DSPCfg_ReadParam_Map0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
+	jr ge, SysEx_ApplyVoiceParam_49_IterateSlots
+	lda_d16 xbc, (0xfc74)
+	cp xbc, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_49_SkipRestore
+	ld a, (xsp + 4)
+	ld (xbc), a
+
+SysEx_ApplyVoiceParam_49_SkipRestore:
+	jr SysEx_ApplyVoiceParam_49_Return
+
+SysEx_ApplyVoiceParam_49_IterateSlots:
+	lds iz, 0
+	cpiw_erp 0xfa, 0
+	jr le, SysEx_ApplyVoiceParam_49_RestoreSlotId
+
+SysEx_ApplyVoiceParam_49_SlotLoop:
+	ld a, (xsp + 10)
+	extz wa
+	stb_erp C, 0xf8
+	extz bc
+	calr SysEx_DispatchByChannel
+	ld bc, hl
+	cp bc, 0xd8f0
+	jr z, SysEx_ApplyVoiceParam_49_SlotNext
+	ld wa, iz
+	exts xwa
+	add xwa, 0x4910
+	ld xde, (xsp + 6)
+	call DSPCfg_WriteParamSimple
+
+SysEx_ApplyVoiceParam_49_SlotNext:
+	inc 1, iz
+	cpw_erp IZ, 0xfa
+	jr lt, SysEx_ApplyVoiceParam_49_SlotLoop
+
+SysEx_ApplyVoiceParam_49_RestoreSlotId:
+	lda_d16 xbc, (0xfc74)
+	cp xbc, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_49_Return
+	ld a, (xsp + 4)
+	ld (xbc), a
+
+SysEx_ApplyVoiceParam_49_Return:
+	pop xiz
+	inc 8, xsp
+	ret
+
+SysEx_ApplyVoiceParam_49_128:
+	dec 8, xsp
+	push xiz
+	ld (xsp + 6), xbc
+	ld (xsp + 10), a
+	lda_d16 xwa, (0xfc74)
+	sub xwa, 0xf980
+	add (xsp + 6), xwa
+	ld a, (xsp + 10)
+	extz wa
+	calr SysEx_ClampVoiceIndex128_49
+	ld (xsp + 10), l
+	lda_d16 xbc, (0xfc74)
+	cp xbc, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_49_128_ReadSub
+	ld a, (xbc)
+	ld (xsp + 4), a
+	ld xwa, (xsp + 6)
+	ld a, (xwa)
+	ld (xbc), a
+
+SysEx_ApplyVoiceParam_49_128_ReadSub:
+	ld xwa, 0x4904
+	call DSPCfg_ReadParam_Map0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
+	jr ge, SysEx_ApplyVoiceParam_49_128_IterateSlots
+	lda_d16 xbc, (0xfc74)
+	cp xbc, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_49_128_SkipRestore
+	ld a, (xsp + 4)
+	ld (xbc), a
+
+SysEx_ApplyVoiceParam_49_128_SkipRestore:
+	jr SysEx_ApplyVoiceParam_49_128_Return
+
+SysEx_ApplyVoiceParam_49_128_IterateSlots:
+	lds iz, 0
+	cpiw_erp 0xfa, 0
+	jr le, SysEx_ApplyVoiceParam_49_128_RestoreSlotId
+
+SysEx_ApplyVoiceParam_49_128_SlotLoop:
+	ld wa, iz
+	exts xwa
+	add xwa, 0x4910
+	call DSPCfg_ResolveAndExtract
+	cps hl, 1
+	jr z, SysEx_ApplyVoiceParam_49_128_WriteSlot
+	cps hl, 2
+	jr nz, SysEx_ApplyVoiceParam_49_128_SlotNext
+
+SysEx_ApplyVoiceParam_49_128_WriteSlot:
+	ld wa, iz
+	exts xwa
+	add xwa, 0x4910
+	ld c, (xsp + 10)
+	extz bc
+	ld xde, (xsp + 6)
+	call DSPCfg_WriteParamSimple
+	jr SysEx_ApplyVoiceParam_49_128_RestoreSlotId
+
+SysEx_ApplyVoiceParam_49_128_SlotNext:
+	inc 1, iz
+	cpw_erp IZ, 0xfa
+	jr lt, SysEx_ApplyVoiceParam_49_128_SlotLoop
+
+SysEx_ApplyVoiceParam_49_128_RestoreSlotId:
+	lda_d16 xbc, (0xfc74)
+	cp xbc, (xsp + 6)
+	jr z, SysEx_ApplyVoiceParam_49_128_Return
+	ld a, (xsp + 4)
+	ld (xbc), a
+
+SysEx_ApplyVoiceParam_49_128_Return:
+	pop xiz
+	inc 8, xsp
+	ret
+
+SysEx_ApplyAndReloadPreset:
+	push xiz
+	extz bc
+	cp a, 0x63
+	jr z, SysEx_ApplyAndReloadPreset_Type63
+	cp a, 0x61
+	jr z, SysEx_ApplyAndReloadPreset_Type61
+	ldw hl, 0xffff
+	jrl AssswbWr_Return
+
+SysEx_ApplyAndReloadPreset_Type61:
+	ld xwa, 0x4900
+	ld xde, 0xfc74
+	call DSPCfg_WriteParamSimple
+	cps hl, 0
+	jrl lt, AssswbWr_ReturnFail
+	ld xwa, 0x4904
+	call DSPCfg_ReadParam_Map0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
+	jrl lt, AssswbWr_ReturnFail
+	lds iz, 0
+	cpiw_erp 0xfa, 0
+	jrl le, AssswbWr_ReturnFail
+
+SysEx_ApplyAndReloadPreset_Type61_Loop:
+	ld wa, iz
+	exts xwa
+	add xwa, 0x4910
+	call DSPCfg_ReadParam_Map1
+	ld bc, hl
+	ld wa, iz
+	exts xwa
+	add xwa, 0x4910
+	ld xde, 0xfc74
+	call DSPCfg_WriteParamSimple
+	inc 1, iz
+	cpw_erp IZ, 0xfa
+	jr lt, SysEx_ApplyAndReloadPreset_Type61_Loop
+	jr AssswbWr_ReturnFail
+
+SysEx_ApplyAndReloadPreset_Type63:
+	ld xwa, 0x4b00
+	ld xde, 0xfc8e
+	call DSPCfg_WriteParamSimple
+	cps hl, 0
+	jr lt, AssswbWr_ReturnFail
+	ld xwa, 0x4b04
+	call DSPCfg_ReadParam_Map0
+	ldw_erp HL, 0xfa
+	cpiw_erp 0xfa, 0
+	jr lt, AssswbWr_ReturnFail
+	lds iz, 0
+	cpiw_erp 0xfa, 0
+	jr le, AssswbWr_ReturnFail
+
+SysEx_ApplyAndReloadPreset_Type63_Loop:
+	ld wa, iz
+	exts xwa
+	add xwa, 0x4b10
+	call DSPCfg_ReadParam_Map1
+	ld bc, hl
+	ld wa, iz
+	exts xwa
+	add xwa, 0x4b10
+	ld xde, 0xfc8e
+	call DSPCfg_WriteParamSimple
+	inc 1, iz
+	cpw_erp IZ, 0xfa
+	jr lt, SysEx_ApplyAndReloadPreset_Type63_Loop
+
+AssswbWr_ReturnFail:
+	lds hl, 0
+
+AssswbWr_Return:
+	pop xiz
+	ret
+AssswbWr:
+	ldw_d16 xhl, (0x90de)
+	cp hl, 0x1fc
+	jr nc, AssswbWr_BufferFull
+	lda_d16 xix, (0xbd3c)
+	extz xhl
+	add xhl, xix
+	lda_dpi XBC, 0xec
+	lda_dpi XHL, 0xec
+	lda_dpi XIY, 0xec
+	ld a, (xsp + 4)
+	lda_dpi XBC, 0xec
+	ld (xhl), 0xff
+	ldw_d16 xwa, (0x90de)
+	inc 4, wa
+	stda16 (0x90de), xwa
+
+AssswbWr_BufferFull:
+	retd 0x2
+
+AddswbWr:
+	ldw_d16 xhl, (0x90e2)
+	cp hl, 0xfc
+	jr nc, AddswbWr_BufferFull
+	lda_d16 xix, (0xbf39)
+	extz xhl
+	add xhl, xix
+	lda_dpi XBC, 0xec
+	lda_dpi XHL, 0xec
+	lda_dpi XIY, 0xec
+	ld a, (xsp + 4)
+	lda_dpi XBC, 0xec
+	ld (xhl), 0xff
+	ldw_d16 xwa, (0x90e2)
+	inc 4, wa
+	stda16 (0x90e2), xwa
+
+AddswbWr_BufferFull:
+	retd 0x2
+
+SwbtWr:
+	lda_d16 xix, (0xc039)
+	ld xiy, xix
+	lda xhl, (xix + 60)
+	cp (xix), 0xff
+	jr z, SwbtWr_CheckSpace
+
+SwbtWr_ScanEnd:
+	inc 4, xiy
+	cp (xiy), 0xff
+	jr nz, SwbtWr_ScanEnd
+
+SwbtWr_CheckSpace:
+	cp xiy, xhl
+	jr nc, SwbtWr_Done
+	lda_dpi XBC, 0xf4
+	lda_dpi XHL, 0xf4
+	lda_dpi XIY, 0xf4
+	ld a, (xsp + 4)
+	lda_dpi XBC, 0xf4
+	ld (xiy), 0xff
+
+SwbtWr_Done:
+	retd 0x2
+
+SwbtWr_CallProcessAll:
+	push xiz
+	calr SwbtWr_ProcessAll
+	pop xiz
+	ret
+
+SwbtWr_SoundBankParamTable:
+	.byte 0x3e, 0x1e, 0x3e, 0x00, 0x5e, 0x0e, 0x3e, 0x1e
+	.byte 0x57, 0x00, 0x5e, 0x0e, 0x3e, 0x1e, 0x70, 0x00
+	.byte 0x5e, 0x0e
+
+SwbtWr_ProcessAll:
+	ld xiy, 0xbf39
+	ld xix, 0xbd3c
+	ldw_d16 xbc, (0x90e2)
+	srl bc, 1
+	cps bc, 0
+	jr z, SwbtWr_ProcessAll_CompactDone
+	ldirw
+
+SwbtWr_ProcessAll_CompactDone:
+	ld (xix), 0xff
+	sub xix, 0xbd3c
+	stda16 (0x90de), xix
+	stdi8 (0xbf39), 255
+	stdi16 (0x90e2), 0
+	ret
+
+SwbtWr_InitBank1:
+	ld xiy, Naka_DisplayMode_Table_0x10
+	stda32 0xc081, xiy
+	ld xiy, UIState_DefaultConfig_A_0x4
+	stda32 0xc085, xiy
+	ld xiy, 0xbd3c
+	stda32 0xc089, xiy
+	calr SwbtWr_DispatchLoop_Init
+	ret
+
+SwbtWr_InitBank2:
+	ld xiy, Naka_RenderMode_A_Table
+	stda32 0xc081, xiy
+	ld xiy, UIState_DefaultConfig_B_0x4
+	stda32 0xc085, xiy
+	ld xiy, 0xbd3c
+	stda32 0xc089, xiy
+	calr SwbtWr_DispatchLoop_Init
+	ret
+
+SwbtWr_InitBank3:
+	ld xiy, Naka_EventHandler_Table
+	stda32 0xc081, xiy
+	ld xiy, UIState_DefaultConfig_C_0x4
+	stda32 0xc085, xiy
+	ld xiy, 0xc039
+	stda32 0xc089, xiy
+	calr SwbtWr_DispatchLoop_Init
+	ret
+
+SwbtWr_DispatchLoop_Init:
+	stdi16 (0xc07b), 0
+
+SwbtWr_DispatchLoop:
+	ldda32 xiy, (0xc089)
+	addda16 xiy, 0xc07b
+	cp (xiy), 0xff
+	jr z, SwbtWr_DispatchLoop_PostCallbacks
+	ldda32 xix, (0xc081)
+	xor hl, hl
+	ld l, (xiy)
+	stb_d8 (0xc080), l
+	cp l, 0xbf
+	jr ugt, SwbtWr_DispatchLoop_NextEvent
+	sla hl, 2
+	ld_sril3 XHL, 0x07, 0xf0, 0xec
+	ld wa, (xiy + 1)
+	ld c, (xiy + 3)
+
+SwbtWr_DispatchLoop_ScanCallbacks:
+	cpw (xhl), 0xffff
+	jr nz, SwbtWr_DispatchLoop_ExecuteCallback
+	cpw (xhl + 2), 0xffff
+	jr z, SwbtWr_DispatchLoop_NextEvent
+
+SwbtWr_DispatchLoop_ExecuteCallback:
+	stda16 (0xc07d), xwa
+	stb_d8 (0xc07f), c
+	push_sd16w 0x7b, 0xc0
+	push_sd16w 0x81, 0xc0
+	push_sd16w 0x83, 0xc0
+	push_sd16w 0x85, 0xc0
+	push_sd16w 0x87, 0xc0
+	push xwa
+	push xbc
+	push xde
+	push xhl
+	push xiy
+	push xix
+	ld xde, (xhl)
+	call (xde)
+	pop xix
+	pop xiy
+	pop xhl
+	pop xde
+	pop xbc
+	pop xwa
+	popw_dd16 0x87, 0xc0
+	popw_dd16 0x85, 0xc0
+	popw_dd16 0x83, 0xc0
+	popw_dd16 0x81, 0xc0
+	popw_dd16 0x7b, 0xc0
+	add xhl, 0x4
+	jr SwbtWr_DispatchLoop_ScanCallbacks
+
+SwbtWr_DispatchLoop_NextEvent:
+	adddi16 0xc07b, 4
+	jrl SwbtWr_DispatchLoop
+
+SwbtWr_DispatchLoop_PostCallbacks:
+	ldda32 xix, (0xc085)
+
+SwbtWr_PostCallback_Loop:
+	cpw (xix), 0xffff
+	jr z, SwbtWr_PostCallback_Done
+	push xix
+	ld xix, (xix)
+	call (xix)
+	pop xix
+	add xix, 0x4
+	jr SwbtWr_PostCallback_Loop
+
+SwbtWr_PostCallback_Done:
+	ret
+
+SwbtWr_QueueMainEvent:
+	cpdi16 0x90de, 507
+	jr ugt, SwbtWr_QueueMainEvent_Done
+	ld xhl, 0xbd3c
+	addda16 xhl, 0x90de
+	ld (xhl), de
+	ld (xhl + 2), wa
+	ld (xhl + 4), 0xff
+	adddi8 0x90de, 4
+
+SwbtWr_QueueMainEvent_Done:
+	ret
+
+SwbtWr_QueuePostEvent:
+	cpdi16 0x90e2, 251
+	jr ugt, SwbtWr_QueuePostEvent_Done
+	ld xhl, 0xbf39
+	addda16 xhl, 0x90e2
+	ld (xhl), de
+	ld (xhl + 2), wa
+	ld (xhl + 4), 0xff
+	adddi16 0x90e2, 4
+
+SwbtWr_QueuePostEvent_Done:
+	ret
+
+SwbtWr_TrailingBytecode:
+	ld	xhl, 0xc039
+	cp	(xhl), 255
+	jr	z, 6
+	add	hl, 4
+	jr	-11
+	cp	xhl, 0xc074
+	jr	ugt, 9
+	ld	(xhl), de
+	ld	(xhl+2), wa
+	ld	(xhl+4), 255
+	ret
+
+PreLswLoad:
+	calr VoiceParam_SaveReverbChorus
+	jp SndParam_SyncDisplayBitmap
+
+PostLswLoad:
+	cps wa, 0
+	jp_24 lt, Voice_CopyFromScratch
+	cpib_da (0x0340f6), 0x00
+	call_24 z, VoiceParam_RestoreReverbChorus
+	call ToneGen_DispatchByMode
+	call SwbtWr_NullRet
+	call ToneGen_Config_InitAllEntries
+	call ToneGen_DSPCfg_ResetAll
+	lds wa, 1
+	call BitMapOut_GetRenderMode_CheckBit3
+	call SoundParam_NotifyMultipleChanges
+	lds wa, 1
+	call BitMapOut_GetRenderMode_Return
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call SwbtWr_ReinitOutputBank
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	call SeqTimer_UpdateTempoReg
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call SwbtWr_CallProcessAll
+	call SwbtWr_ReinitOutputBank
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	ret
+
+PreLswSave:
+	ret
+
+PostLswSave:
+	ret
+
+PrePmLoad:
+	ret
+
+PostPmLoad:
+	cps wa, 0
+	ret lt
+	call ToneGen_Config_InitAllChannels
+	call ToneGen_DSPCfg_ResetAllChannels
+	ret
+
+PrePmSave:
+	ret
+
+PostPmSave:
+	ret
+
+PreMidiLoad:
+	ret
+
+PostMidiLoad:
+	ret
+
+PreMidiSave:
+	ret
+
+PostMidiSave:
+	ret
+
+VoiceParam_SaveReverbChorus:
+	dec 4, xsp
+	pushw_erp 0xfa
+	lda_d16 xwa, (0xc08e)
+	ld (xsp + 2), xwa
+	ldib_erp 0xfb, 0
+
+VoiceParam_SaveReverbChorus_Loop:
+	stb_erp A, 0xfb
+	extz wa
+	call VoiceData_LookupPtrByIndex
+	lda xbc, (xhl + 12)
+	ld xde, xbc
+	inc 1, xde
+	ld xwa, (xsp + 2)
+	ld c, (xbc)
+	lda_dpi XHL, 0xe0
+	ld (xsp + 2), xwa
+	ld c, (xde)
+	lda_dpi XHL, 0xe0
+	ld (xsp + 2), xwa
+	inc1b_erp 0xfb
+	cp_erpb 0xfb, 0x19
+	jr c, VoiceParam_SaveReverbChorus_Loop
+	pushw 0xe
+	pushw 0x0
+	pushw 0xfd50
+	ld xwa, (xsp + 8)
+	push xwa
+	call Mem_Copy
+	lda xsp, (xsp + 10)
+	popw_erp 0xfa
+	inc 4, xsp
+	ret
+
+VoiceParam_RestoreReverbChorus:
+	dec 4, xsp
+	pushw_erp 0xfa
+	lda_d16 xwa, (0xc08e)
+	ld (xsp + 2), xwa
+	ldib_erp 0xfb, 0
+
+VoiceParam_RestoreReverbChorus_Loop:
+	stb_erp A, 0xfb
+	extz wa
+	call VoiceData_LookupPtrByIndex
+	lda xde, (xhl + 12)
+	ld xhl, xde
+	inc 1, xhl
+	andmi8 (xde), 0xf8
+	ld xwa, (xsp + 2)
+	ldb_spi C, 0xe0
+	ld (xsp + 2), xwa
+	and c, 0x7
+	or (xde), c
+	ld xwa, (xsp + 2)
+	ldb_spi C, 0xe0
+	ld (xhl), c
+	ld (xsp + 2), xwa
+	inc1b_erp 0xfb
+	cp_erpb 0xfb, 0x19
+	jr c, VoiceParam_RestoreReverbChorus_Loop
+	pushw 0xe
+	ld xwa, (xsp + 4)
+	push xwa
+	pushw 0x0
+	pushw 0xfd50
+	call Mem_Copy
+	lda xsp, (xsp + 10)
+	popw_erp 0xfa
+	inc 4, xsp
+	ret
+
+BitMapOut_ComputeRegionDelta:
+	lda_d16 xwa, (0xfda2)
+	lda_d16 xbc, (0xf980)
+	sub xwa, xbc
+	pushw wa
+	push xbc
+	pushw 0x0
+	pushw 0xf460
+	call Mem_Copy
+	lda xsp, (xsp + 10)
+	ret
+
+BitMapOut_PrepareAndRender:
+	pushw iz
+	ld iz, wa
+	call Audio_ConfigureDSP
+	ld wa, iz
+	calr BitMapOut_RenderDisplay
+	popw iz
+	ret
+
+BitMapOut_RenderDisplay:
+	lda xsp, (xsp - 34)
+	push xiz
+	lds wa, 2
+	call BitMapOut_GetRenderMode_CheckBit3
+	call BitMapOut_SaveDisplayToROM
+	lda_d16 xbc, (0xfc5a)
+	ld a, (xbc + 8)
+	ldb_erp A, 0xf9
+	ld a, (xbc + 9)
+	ldb_erp A, 0xfb
+	ldmi16 (xsp + 4), 0x8d3a
+	lda_d16 xbc, (0xfd96)
+	ld a, (xbc + 1)
+	ld (xsp + 6), a
+	ld a, (xbc + 11)
+	ld (xsp + 8), a
+	pushw 0x4
+	pushw 0x0
+	pushw 0xfc54
+	lda xwa, (xsp + 40)
+	push xwa
+	call Mem_Copy
+	pushw 0x18
+	pushw 0x0
+	pushw 0xfcdc
+	lda xwa, (xsp + 26)
+	push xwa
+	call Mem_Copy
+	lda xsp, (xsp + 20)
+	calr VoiceParam_SaveReverbChorus
+	lda_d16 xix, (0xf460)
+	lda_d16 xbc, (0xf980)
+	ld xhl, xbc
+	lda_d16 xwa, (0xfd5e)
+	sub xwa, xbc
+	ld de, wa
+	srl de, 1
+	lds bc, 0
+	cps de, 0
+	jr ule, BitMapOut_CopyRegion_Done
+
+BitMapOut_CopyRegion_Loop:
+	ld_spiw WA, 0xf1
+	stw_dpi WA, 0xed
+	inc 1, bc
+	ld wa, bc
+	cp wa, de
+	jr c, BitMapOut_CopyRegion_Loop
+
+BitMapOut_CopyRegion_Done:
+	pushw 0x4
+	lda xwa, (xsp + 36)
+	push xwa
+	pushw 0x0
+	pushw 0xfc54
+	call Mem_Copy
+	pushw 0x18
+	lda xwa, (xsp + 22)
+	push xwa
+	pushw 0x0
+	pushw 0xfcdc
+	call Mem_Copy
+	lda xsp, (xsp + 20)
+	cpdi8 (4596), 1
+	jr nz, BitMapOut_SkipRestore
+	cpib_da (0x0340f7), 0x00
+	jr nz, BitMapOut_MergeOutputFields
+
+BitMapOut_SkipRestore:
+	calr VoiceParam_RestoreReverbChorus
+
+BitMapOut_MergeOutputFields:
+	lda_d16 xix, (0xfd96)
+	lda xbc, (xix + 1)
+	lda_d16 xhl, (0xf980)
+	ld xwa, xbc
+	sub xwa, xhl
+	lda_d16 xde, (0xf460)
+	ld xiy, xde
+	add xiy, xwa
+	ld w, (xiy)
+	res 7, w
+	ld a, (xbc)
+	and a, 0x80
+	ldb_erp A, 0xe2
+	ld a, w
+	orb_erp A, 0xe2
+	ld w, a
+	ld (xbc), w
+	lda xbc, (xix + 11)
+	ld xwa, xbc
+	sub xwa, xhl
+	add xde, xwa
+	ld w, (xde)
+	and w, 0xc0
+	ld a, (xbc)
+	and a, 0x3f
+	ldb_erp A, 0xe2
+	orb_erp W, 0xe2
+	ld (xbc), w
+	lda_d16 xbc, (0xfc5a)
+	ld a, (xbc + 5)
+	ldb_erp A, 0xf8
+	ld a, (xbc + 6)
+	ldb_erp A, 0xfa
+	stb_erp A, 0xf9
+	ld (xbc + 8), a
+	stb_erp A, 0xfb
+	ld (xbc + 9), a
+	mrdb5 0x8f, 0x04, 0x19, 0x3a, 0x8d
+	call ToneGen_InitAllChannelEntries_Skip
+	call BitMapOut_DetectChanges
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call SwbtWr_ReinitOutputBank
+	call SwbtWr_CallProcessAll
+	call SwbtWr_ReinitOutputBank
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	pushw 0x0
+	ldw wa, 0x48
+	lds bc, 5
+	lds de, 0
+	call AddswbWr
+	ld w, (xsp + 6)
+	and w, 0x80
+	lda_d16 xbc, (0xfd97)
+	ld a, (xbc)
+	res 7, a
+	ld (xbc), a
+	or a, w
+	ld (xbc), a
+	ld e, a
+	extz de
+	pushw 0x7f
+	ldw wa, 0x98
+	lds bc, 1
+	call AddswbWr
+	ldb_d8 e, (0xfda1)
+	ld c, e
+	and c, 0xc0
+	ld a, (xsp + 8)
+	and a, 0xc0
+	xor a, c
+	extz de
+	extz wa
+	pushw wa
+	ldw wa, 0x98
+	ldw bc, 0xb
+	call AddswbWr
+	lda_d16 xbc, (0xfc5a)
+	stb_erp A, 0xf8
+	and a, 0x3f
+	ld (xbc + 5), a
+	stb_erp A, 0xfa
+	and a, 0x3c
+	ld (xbc + 6), a
+	call PartSelect_UpdateDisplayState
+	call ToneGen_DispatchByMode
+	call SwbtWr_NullRet
+	pushw 0x0
+	ldw wa, 0x48
+	lds bc, 7
+	lds de, 0
+	call AddswbWr
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call SwbtWr_CallProcessAll
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call SwbtWr_ReinitOutputBank
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	pushw 0x0
+	ldw wa, 0x91
+	lds bc, 3
+	lds de, 4
+	call AddswbWr
+	lds wa, 2
+	call BitMapOut_GetRenderMode_Return
+	pop xiz
+	lda xsp, (xsp + 34)
+	ret
+
+SeqOut_WriteTimedBytes:
+	push xiz
+	ld iz, (xsp + 8)
+	ei 6
+	cpdi8 (0xb7e0), 0; zero means MIDI
+	jr nz, SeqOut_WriteTimedBytes_CompIface
+	call SeqBuf_MidiOut_GetTimingValue
+	cp hl, iz
+	jr c, SeqOut_WriteTimedBytes_BufferFull
+	ld xwa, (xsp + 10)
+	push xwa
+	pushw iz
+	call SeqBuf_MidiOut_WriteBytes
+	inc 6, xsp
+	ldw_erp HL, 0xfa
+	call MIDI_SC0_ENABLE_TX
+	jr MIDI_SeqProcess_DisableIntReturn
+
+SeqOut_WriteTimedBytes_BufferFull:
+	ldi_erpw 0xfa, 0xff, 0xff
+	jr MIDI_SeqProcess_DisableIntReturn
+
+SeqOut_WriteTimedBytes_CompIface:
+	ldb_d8 a, (0xc1e4)
+	cps a, 2
+	jr z, SeqOut_WriteTimedBytes_PC2Timing
+	cps a, 1
+	jr z, SeqOut_WriteTimedBytes_SerialWrite
+	cps a, 0
+	jr nz, MIDI_SeqProcess_DisableIntReturn
+
+SeqOut_WriteTimedBytes_SerialWrite:
+	call SeqBuf_MidiOut_GetTimingValue
+	cp hl, iz
+	jr c, MIDI_SeqProcess_DisableIntReturn
+	ld xwa, (xsp + 10)
+	push xwa
+	pushw iz
+	call SeqBuf3_WriteBytes
+	inc 6, xsp
+	ldw_erp HL, 0xfa
+	calr SeqBuf3_EnableTx_Stub
+	jr MIDI_SeqProcess_DisableIntReturn
+
+SeqOut_WriteTimedBytes_PC2Timing:
+	call SeqBuf3_GetTimingValue
+	ldw_erp HL, 0xfa
+
+MIDI_SeqProcess_DisableIntReturn:
+	ei 0
+	stw_erp HL, 0xfa
+	pop xiz
+	ret
+
+MidiSeq_ReceiveAndForward:
+	pushw iz
+	ldw iz, 0xffff
+	ei 6
+	cpdi8 (0xb7e0), 0; zero means MIDI
+	jr nz, MidiSeq_ReceiveAndForward_CompIface
+	ld xwa, (xsp + 8)
+	ld a, (xwa)
+	extz wa
+	call MIDI_RX_BYTE_DISPATCHER
+	call SeqMain_GetTimingValue
+	ld iz, hl
+	jr MidiSeq_ReceiveAndForward_Exit
+
+MidiSeq_ReceiveAndForward_CompIface:
+	ldb_d8 a, (0xc1e4)
+	cps a, 2
+	jr z, MidiSeq_ReceiveAndForward_PC2Forward
+	cps a, 1
+	jr z, MidiSeq_ReceiveAndForward_SerialTiming
+	cps a, 0
+	jr nz, MidiSeq_ReceiveAndForward_Exit
+
+MidiSeq_ReceiveAndForward_SerialTiming:
+	call SeqBuf3_GetTimingValue
+	ld iz, hl
+	jr MidiSeq_ReceiveAndForward_Exit
+
+MidiSeq_ReceiveAndForward_PC2Forward:
+	call SeqBuf_MidiOut_GetTimingValue
+	cp hl, (xsp + 6)
+	jr c, MidiSeq_ReceiveAndForward_Exit
+	ld xwa, (xsp + 8)
+	cp (xwa), 0xfe
+	jr z, MidiSeq_ReceiveAndForward_Exit
+	ld a, (xwa)
+	extz wa
+	pushw wa
+	call SeqBuf3_WriteByte
+	inc 2, xsp
+	ld iz, hl
+
+MidiSeq_ReceiveAndForward_Exit:
+	ei 0
+	ld hl, iz
+	popw iz
+	ret
+
+MidiSeq_SendMultiByteWithTiming:
+	dec 2, xsp
+	pushw iz
+	ei 6
+	cpdi8 (0xb7e0), 0; zero means MIDI
+	jr nz, MidiSeq_SendMultiByte_CompIface
+	call SeqMain_GetTimingValue
+	ld (xsp + 2), hl
+	jrl MidiSeq_SendMultiByte_Exit
+
+MidiSeq_SendMultiByte_CompIface:
+	ldb_d8 a, (0xc1e4)
+	ld iz, (xsp + 8)
+	cps a, 1
+	jr z, MidiSeq_SendMultiByte_SerialCountInit
+	cps a, 2
+	jr z, MidiSeq_SendMultiByte_PC2CountInit
+	cps a, 0
+	jr nz, MidiSeq_SendMultiByte_Exit
+
+MidiSeq_SendMultiByte_PC2CountInit:
+	ld wa, iz
+	dec 1, iz
+	cps wa, 0
+	jr z, MidiSeq_SendMultiByte_Exit
+
+MidiSeq_SendMultiByte_PC2SendLoop:
+	ld xwa, (xsp + 10)
+	ld a, (xwa)
+	extz wa
+	call MIDI_RX_BYTE_DISPATCHER
+	call SeqBuf_MidiOut_GetTimingValue
+	cps hl, 1
+	jr lt, MidiSeq_SendMultiByte_PC2NextByte
+	ld xwa, (xsp + 10)
+	cp (xwa), 0xfe
+	jr z, MidiSeq_SendMultiByte_PC2NextByte
+	ld a, (xwa)
+	extz wa
+	pushw wa
+	call SeqBuf_MidiOut_WriteByte
+	inc 2, xsp
+	ld (xsp + 2), hl
+	call MIDI_SC0_ENABLE_TX
+
+MidiSeq_SendMultiByte_PC2NextByte:
+	lds32 xwa, 1
+	add (xsp + 10), xwa
+	ld wa, iz
+	dec 1, iz
+	cps wa, 0
+	jr nz, MidiSeq_SendMultiByte_PC2SendLoop
+	jr MidiSeq_SendMultiByte_Exit
+
+MidiSeq_SendMultiByte_SerialCountInit:
+	ld wa, iz
+	dec 1, iz
+	cps wa, 0
+	jr z, MidiSeq_SendMultiByte_Exit
+
+MidiSeq_SendMultiByte_SerialSendLoop:
+	call SeqBuf_MidiOut_GetTimingValue
+	cps hl, 1
+	jr lt, MidiSeq_SendMultiByte_SerialNextByte
+	ld xwa, (xsp + 10)
+	cp (xwa), 0xfe
+	jr z, MidiSeq_SendMultiByte_SerialNextByte
+	ld a, (xwa)
+	extz wa
+	pushw wa
+	call SeqBuf_MidiOut_WriteByte
+	inc 2, xsp
+	ld (xsp + 2), hl
+	call MIDI_SC0_ENABLE_TX
+
+MidiSeq_SendMultiByte_SerialNextByte:
+	lds32 xwa, 1
+	add (xsp + 10), xwa
+	ld wa, iz
+	dec 1, iz
+	cps wa, 0
+	jr nz, MidiSeq_SendMultiByte_SerialSendLoop
+
+MidiSeq_SendMultiByte_Exit:
+	ei 0
+	ld hl, (xsp + 2)
+	popw iz
+	inc 2, xsp
+	ret
+
+SeqBuf_DspSysEx_DataReadLoop:
+	dec 2, xsp
+
+SeqBuf_DspSysEx_ReadAndForward_Loop:
+	call SeqBuf_DspSysEx_ReadByte
+	cp hl, 0xffff
+	jr z, SeqBuf_DspSysEx_ReadAndForward_Done
+	ld (xsp), l
+	lda xwa, (xsp)
+	push xwa
+	pushw 0x1
+	calr MidiSeq_SendMultiByteWithTiming
+	inc 6, xsp
+	jr SeqBuf_DspSysEx_ReadAndForward_Loop
+
+SeqBuf_DspSysEx_ReadAndForward_Done:
+	inc 2, xsp
+	ret
+
+SeqBuf3_EnableTx_Stub:
+	ret
+
+MidiSysEx_BuildAndSend:
+	lda xsp, (xsp - 12)
+	push xiz
+	ld (xsp + 10), de
+	ld (xsp + 12), c
+	ld (xsp + 14), a
+	ldw (xsp + 8), 0x2
+	pushw 0x7
+	call Malloc
+	inc 2, xsp
+	ld xiz, xhl
+	ld (xsp + 4), xiz
+	or xiz, xiz
+	jr z, MidiSysEx_BuildAndSend_Exit
+	pushw 0x7
+	pushw 0xee
+	pushw 0x4fb2
+	push xiz
+	call Mem_Copy
+	lda xsp, (xsp + 10)
+	lda xbc, (xiz + 5)
+	ld xde, xbc
+	cpw (xsp + 10), 0xffff
+	jr z, MidiSysEx_ApplyChannel
+	ld a, (xsp + 14)
+	and a, 0xf
+	or (xiz), a
+	ld de, (xsp + 10)
+	sra de, 7
+	ld xwa, (xsp + 4)
+	ld (xwa + 2), e
+	ld de, (xsp + 10)
+	and de, 0x7f
+	ld (xwa + 4), e
+	ld xde, (xsp + 4)
+	ldw (xsp + 8), 0x7
+
+MidiSysEx_ApplyChannel:
+	ld a, (xsp + 14)
+	and a, 0xf
+	or (xbc), a
+	ld c, (xsp + 12)
+	res 7, c
+	ld xwa, (xsp + 4)
+	ld (xwa + 6), c
+	push xde
+	pushm (xsp + 12)
+	calr SeqOut_WriteTimedBytes
+	stdi8 (1060), 0
+	ld xwa, (xsp + 10)
+	push xwa
+	call Free
+	lda xsp, (xsp + 10)
+
+MidiSysEx_BuildAndSend_Exit:
+	pop xiz
+	lda xsp, (xsp + 12)
+	ret
+
+MIDI_BroadcastControlChange:
+	dec 8, xsp
+	pushw_erp 0xfa
+	ld xiy, WidgetParam_SelfRef_Table_0x19E
+	lda xix, (xsp + 2)
+	lds bc, 3
+	ldirw
+	ldi85
+	ldib_erp 0xfb, 0
+
+MIDI_BroadcastCC_MidiOutLoop:
+	stb_erp A, 0xfb
+	or a, 0xb0
+	ld (xsp + 2), a
+	ei 6
+	lda xwa, (xsp + 2)
+	push xwa
+	pushw 0x7
+	call SeqBuf_MidiOut_WriteBytes
+	inc 6, xsp
+	ei 0
+	call MIDI_SC0_ENABLE_TX
+	inc1b_erp 0xfb
+	cp_erpb 0xfb, 0x0f
+	jr ule, MIDI_BroadcastCC_MidiOutLoop
+	ldib_erp 0xfb, 0
+
+MIDI_BroadcastCC_CommLoop:
+	lda xde, (xsp + 2)
+	stb_erp A, 0xfb
+	or a, 0xb0
+	ld (xde), a
+	lds wa, 4
+	lds bc, 7
+	call sendCOMM
+	inc1b_erp 0xfb
+	cp_erpb 0xfb, 0x0f
+	jr ule, MIDI_BroadcastCC_CommLoop
+	stdi8 (1060), 0
+	popw_erp 0xfa
+	inc 8, xsp
+	ret
+
+CompIface_SendActiveSensing:
+	ldb_d8 a, (0xb7e0)
+	cps a, 0	; MIDI
+	ret z
+	cps a, 3	;  PC2
+	jr z, CompIface_SendActiveSensing_PC2
+	cps a, 2	;  PC1
+	jr z, CompIface_SendActiveSensing_PC1MAC
+	cps a, 1	;  MAC
+	ret nz
+
+CompIface_SendActiveSensing_PC1MAC:
+	push	sr
+	ei 0
+	lds wa, 4
+	lds bc, 1
+	ld xde, WidgetParam_SelfRef_Table_0x1A8	;	PC1 or MAC (0F5h)
+	call sendCOMM
+	pop	sr
+	ret
+
+CompIface_SendActiveSensing_PC2:
+	push	sr
+	ei 0
+	lds wa, 4
+	lds bc, 1
+	ld xde, WidgetParam_SelfRef_Table_0x1A6	;	PC2 (0F4h)
+	call sendCOMM
+	pop	sr
+	ret
+
+MidiOut_RealtimeDispatch_Data:
+	.byte 0xc1, 0x80, 0xc0
+	push	xsp
+	cp	(xwa-80), iz
+	.byte 0xc1
+	jrl	pl, 16320
+	ret
+	ret	nz
+	ldb_d8	a, (0xc07f)
+	and	a, 3
+	ret	z
+	ldb_d8	a, (0xc07e)
+	and	a, 3
+	stb_d8	(0xc1e4), a
+	ret
+
+MidiOut_SerializeAndSend:
+	pushw iz
+	lds iz, 0
+	cpdi8 (0xb7e0), 0; zero means MIDI
+	jrl z, MidiOut_SerializeAndSend_Exit
+
+MidiOut_SerializeRealtimeLoop:
+	cp iz, 0x108
+	jrl nc, MidiOut_FlushBuffer
+	resda 4, 1065
+	ldb_d8 a, (1065)
+	and a, 0x1f
+	jr z, MidiOut_ReadSysExByte
+	bitda 0, (1065)
+	jr z, MidiOut_CheckStart
+	resda 0, 1065
+	bitda 4, (0xfd50)
+	jr nz, MidiOut_SerializeRealtimeLoop
+	ld wa, iz
+	inc 1, iz
+	lda_d16 xbc, (0xc0d2)
+	extz xwa
+	add xwa, xbc
+	ld (xwa), 0xf8
+	jr MidiOut_SerializeRealtimeLoop
+
+MidiOut_CheckStart:
+	lda_d16 xwa, (0xc0d2)
+	bitda 1, (1065)
+	jr z, MidiOut_CheckContinue
+	resda 1, 1065
+	bitda 4, (0xfd50)
+	jr nz, MidiOut_SerializeRealtimeLoop
+	ld bc, iz
+	inc 1, iz
+	extz xbc
+	add xbc, xwa
+	ld (xbc), 0xfa
+	jr MidiOut_SerializeRealtimeLoop
+
+MidiOut_CheckContinue:
+	bitda 2, (1065)
+	jr z, MidiOut_CheckStop
+	resda 2, 1065
+	bitda 4, (0xfd50)
+	jr nz, MidiOut_SerializeRealtimeLoop
+	ld bc, iz
+	inc 1, iz
+	extz xbc
+	add xbc, xwa
+	ld (xbc), 0xfb
+	jr MidiOut_SerializeRealtimeLoop
+
+MidiOut_CheckStop:
+	bitda 3, (1065)
+	jr z, MidiOut_SerializeRealtimeLoop
+	resda 3, 1065
+	bitda 4, (0xfd50)
+	jrl nz, MidiOut_SerializeRealtimeLoop
+	ld bc, iz
+	inc 1, iz
+	extz xbc
+	add xbc, xwa
+	ld (xbc), 0xfc
+	jrl MidiOut_SerializeRealtimeLoop
+
+MidiOut_ReadSysExByte:
+	call SeqBuf3_ReadByte
+	cp hl, 0xffff
+	jr z, MidiOut_FlushBuffer
+	ld wa, iz
+	inc 1, iz
+	lda_d16 xbc, (0xc0d2)
+	extz xwa
+	add xwa, xbc
+	ld (xwa), l
+	cp l, 0xf7
+	jrl nz, MidiOut_SerializeRealtimeLoop
+
+MidiOut_FlushBuffer:
+	cps iz, 0
+	jr z, MidiOut_SerializeAndSend_Exit
+	ei 0
+	lds wa, 4
+	ld bc, iz
+	ld xde, 0xc0d2
+	call sendCOMM
+
+MidiOut_SerializeAndSend_Exit:
+	popw iz
+	ret
+
+MidiThru_Disable:
+	resda 6, 0xb7e2
+	ret
+
+MidiThru_Enable:
+	setda 6, 0xb7e2
+	ret
+
+GET_COMPUTER_INTERFACE_SELECTION:
+	ldb_d8 l, (0xb7e0)
+	ret
+
+CompIface_ProcessInput:
+	bitda 3, (0xc1f0)
+	jrl z, CompIface_RampControl
+	bitda 2, (1054)
+	jr z, CompIface_FilterBySource
+	bitda 2, (1057)
+	jr z, CompIface_FilterBySource
+	bitda 4, (0xc1f0)
+	jr z, CompIface_CheckUpDown
+	bitda 5, (0xc1f0)
+	jr z, CompIface_CheckUpDown
+	cpdi16 0x28a8, 0
+	jr nz, CompIface_SetPedalBit
+	jr CompIface_CallFilterA
+
+CompIface_CheckUpDown:
+	bitda 4, (0xc1f0)
+	jr z, CompIface_RampDown
+	call AccWrap_PlayModeStartPlay
+	setda 7, 0x34cd
+	jr CompIface_PostProcess
+
+CompIface_RampDown:
+	bitda 5, (0xc1f0)
+	jr z, CompIface_PostProcess
+	cpdi16 0x28a8, 0
+	jr z, CompIface_RampDown_Start
+	setda 1, 9834
+
+CompIface_RampDown_Start:
+	call AccWrap_PlayModeStopExpr
+	jr CompIface_CallSync
+
+CompIface_FilterBySource:
+	bitda 2, (1054)
+	jr z, CompIface_FromSource2
+	bitda 4, (0xc1f0)
+	jr z, CompIface_PostProcess
+	call AccWrap_PlayModeDispatch
+	jr CompIface_PostProcess
+
+CompIface_FromSource2:
+	bitda 2, (1057)
+	jr z, CompIface_PostProcess
+	bitda 5, (0xc1f0)
+	jr z, CompIface_PostProcess
+	call SeqState_GetFlags
+	and hl, 0x7
+	jr z, CompIface_Source2_ZeroCheck
+	call SqTrSel_CaseG
+	jr CompIface_PostProcess
+
+CompIface_Source2_ZeroCheck:
+	cpdi16 0x28a8, 0
+	jr z, CompIface_CallFilterA
+
+CompIface_SetPedalBit:
+	setda 1, 9834
+
+CompIface_CallFilterA:
+	call AccWrap_PlayModeDispatch
+
+CompIface_CallSync:
+	call SeqPlay_StopAndResetAll
+
+CompIface_PostProcess:
+	call AccompSeq_StopSequence
+	bitda 6, (0xc1f0)
+	ret z
+	ldw_d16 xwa, (1033)
+	subda16 xwa, 0xc1ea
+	cpda16 xwa, 0xc1fc
+	ret ule
+	ld xwa, 0x40c1
+	lds bc, 0
+	lds de, 3
+	call SoundParam_NotifyChange
+	resda 3, 0xc1f0
+	ldw wa, 0x4e
+	call CtrlPanel_SetIndicatorLED
+	ret
+
+CompIface_RampControl:
+	ldw_d16 xwa, (1033)
+	ld bc, wa
+	subda16 xbc, 0xc1ea
+	bitda 0, (0xc1f0)
+	jr z, CompIface_RampDown_Apply
+	cp bc, 0xf
+	ret c
+	stda16 (0xc1ea), xwa
+	ldw_d16 xbc, (0xc1ee)
+	extz xbc
+	ldw_d16 xwa, (0xc1f8)
+	extz xwa
+	add xbc, xwa
+	cp xbc, 0x7f00
+	jr le, CompIface_RampUp_Clamp
+	ld xbc, 0x7f00
+
+CompIface_RampUp_Clamp:
+	stda16 (0xc1ee), xbc
+	srl bc, 8
+	stb_d8 (0xc1ec), c
+	extz bc
+	ld xwa, 0x4005
+	lds de, 1
+	call SoundParam_NotifyChange
+	cpdi8 (0xc1ec), 127
+	ret nz
+	resda 0, 0xc1f0
+	ld xwa, 0x40c0
+	lds bc, 0
+	lds de, 1
+	call SoundParam_NotifyChange
+	ret
+
+CompIface_RampDown_Apply:
+	bitda 1, (0xc1f0)
+	ret z
+	cp bc, 0xf
+	ret c
+	stda16 (0xc1ea), xwa
+	ldw_d16 xbc, (0xc1ee)
+	extz xbc
+	ldw_d16 xwa, (0xc1fa)
+	extz xwa
+	sub xbc, xwa
+	jr ge, CompIface_RampDown_Clamp
+	lds32 xbc, 0
+
+CompIface_RampDown_Clamp:
+	stda16 (0xc1ee), xbc
+	srl bc, 8
+	stb_d8 (0xc1ec), c
+	extz bc
+	ld xwa, 0x4005
+	lds de, 1
+	call SoundParam_NotifyChange
+	cpdi8 (0xc1ec), 0
+	ret nz
+	resda 1, 0xc1f0
+	setda 3, 0xc1f0
+	ldw wa, 0x4e
+	lds bc, 1
+	lds de, 0
+	call CtrlPanel_IndicatorDispatch
+	ret
+
+CompIface_ResetPedal:
+	bitda 2, (0xc1f0)
+	ret z
+	resda 2, 0xc1f0
+	ldw wa, 0x4d
+	call CtrlPanel_SetIndicatorLED
+	setda 0, 0xc1f0
+	ret
+
+CompIface_SetMax:
+	ldw wa, 0x7f
+	calr CompIface_WriteVolume
+	push xde
+	push xhl
+	push xix
+	push xiz
+	call SwbtWr_CallProcessAll
+	call SwbtWr_ReinitBothBanks
+	pop xiz
+	pop xix
+	pop xhl
+	pop xde
+	ret
+
+CompIface_ScaleValue:
+	push xiz
+	ld iz, bc
+	extz xiz
+	ldb w, 0x0
+	extz xwa
+	ld xbc, 0x1d4c0
+	call Math_MultiplyAccumulate
+	ld xwa, xhl
+	ld xbc, xiz
+	call Math_DivideU32
+	pop xiz
+	ret
+
+CompIface_ScaleAndNormalize:
+	push xiz
+	ld iz, bc
+	extz xiz
+	ldb w, 0x0
+	extz xwa
+	ld xbc, 0x1ef0
+	call Math_MultiplyAccumulate
+	ld xwa, xhl
+	ld xbc, xiz
+	call Math_DivideU32
+	ld xbc, xhl
+	ld xwa, 0x7f00
+	call Math_DivideU32
+	pop xiz
+	ret
+
+CompIface_WriteVolume:
+	ldb_d8 c, (0xc1ec)
+	cp c, a
+	ret z
+	stb_d8 (0xc1ec), a
+	ld c, a
+	extz bc
+	sll bc, 8
+	stda16 (0xc1ee), xbc
+	ld c, a
+	extz bc
+	ld xwa, 0x4005
+	lds de, 3
+	call SoundParam_NotifyChange
+	ret
+
+Audio_ConfigureDSP:
+	anddi8 (0xc1f0), 243
+	anddi8 (0xc1f0), 252
+	ld xwa, 0x40c0
+	lds bc, 0
+	lds de, 1
+	call SoundParam_NotifyChange
+	ldw wa, 0x4d
+	call CtrlPanel_SetIndicatorLED
+	ld xwa, 0x40c1
+	lds bc, 0
+	lds de, 1
+	call SoundParam_NotifyChange
+	ldw wa, 0x4e
+	call CtrlPanel_SetIndicatorLED
+	ldw wa, 0x7f
+	jr CompIface_WriteVolume
+DSPCfg_ProcessInput:
+	ldb_d8 c, (0xc080)
+	ldb_d8 e, (0xc07d)
+	cp c, 0x48
+	jrl z, DSPCfg_ScaleFactor_Dispatch
+	ldb_d8 a, (0xc07f)
+	cp c, 0x70
+	jrl z, DSPCfg_CompressorDispatch
+	cp c, 0x98
+	ret nz
+	cp e, 0xb
+	ret nz
+	ld c, a
+	and a, 0xc0
+	ret z
+	bitda 0, (0xc1f0)
+	jr z, DSPCfg_Chorus_Active
+	bit 7, c
+	jr z, DSPCfg_Reverb_CheckSustain
+	bitda 7, (0xc07e)
+	jr nz, DSPCfg_Reverb_CheckSustain
+	resda 0, 0xc1f0
+
+DSPCfg_Reverb_CheckSustain:
+	bitda 6, (0xc07f)
+	jrl z, DSPCfg_UpdateOutputVolume
+	bitda 6, (0xc07e)
+	jrl z, DSPCfg_UpdateOutputVolume
+	resda 0, 0xc1f0
+	jrl DSPCfg_SetFadeBit
+
+DSPCfg_Chorus_Active:
+	bitda 2, (0xc1f0)
+	jr z, DSPCfg_FadeOut_Active
+	bit 7, c
+	jr z, DSPCfg_Chorus_CheckSustain
+	bitda 7, (0xc07e)
+	jr nz, DSPCfg_Chorus_CheckSustain
+	resda 2, 0xc1f0
+	ldw wa, 0x4d
+	call CtrlPanel_SetIndicatorLED
+
+DSPCfg_Chorus_CheckSustain:
+	bitda 6, (0xc07f)
+	jrl z, DSPCfg_UpdateOutputVolume
+	bitda 6, (0xc07e)
+	jrl z, DSPCfg_UpdateOutputVolume
+	resda 2, 0xc1f0
+	ldw wa, 0x4d
+	call CtrlPanel_SetIndicatorLED
+	setda 1, 0xc1f0
+	ldw wa, 0x7f
+	calr CompIface_WriteVolume
+	jrl DSPCfg_UpdateOutputVolume
+
+DSPCfg_FadeOut_Active:
+	bitda 1, (0xc1f0)
+	jr z, DSPCfg_EQ_Active
+	bit 7, c
+	jr z, DSPCfg_FadeOut_CheckSustain
+	bitda 7, (0xc07e)
+	jr z, DSPCfg_FadeOut_CheckSustain
+	setda 0, 0xc1f0
+	resda 1, 0xc1f0
+
+DSPCfg_FadeOut_CheckSustain:
+	bitda 6, (0xc07f)
+	jr z, DSPCfg_UpdateOutputVolume
+	bitda 6, (0xc07e)
+	jr nz, DSPCfg_UpdateOutputVolume
+	resda 1, 0xc1f0
+	jr DSPCfg_UpdateOutputVolume
+
+DSPCfg_EQ_Active:
+	bitda 3, (0xc1f0)
+	jr z, DSPCfg_Idle_EnableChorus
+	bit 7, c
+	jr z, DSPCfg_EQ_CheckSustain
+	bitda 7, (0xc07e)
+	jr z, DSPCfg_EQ_CheckSustain
+	setda 0, 0xc1f0
+	resda 3, 0xc1f0
+	ldw wa, 0x4e
+	call CtrlPanel_SetIndicatorLED
+
+DSPCfg_EQ_CheckSustain:
+	bitda 6, (0xc07f)
+	jr z, DSPCfg_UpdateOutputVolume
+	bitda 6, (0xc07e)
+	jr nz, DSPCfg_UpdateOutputVolume
+	resda 3, 0xc1f0
+	ldw wa, 0x4e
+	call CtrlPanel_SetIndicatorLED
+	jr DSPCfg_UpdateOutputVolume
+
+DSPCfg_Idle_EnableChorus:
+	bit 7, c
+	jr z, DSPCfg_Idle_CheckSustain
+	bitda 7, (0xc07e)
+	jr z, DSPCfg_Idle_CheckSustain
+	setda 2, 0xc1f0
+	ldw wa, 0x4d
+	lds bc, 1
+	lds de, 0
+	call CtrlPanel_IndicatorDispatch
+	lds wa, 0
+	calr CompIface_WriteVolume
+
+DSPCfg_Idle_CheckSustain:
+	bitda 6, (0xc07f)
+	jr z, DSPCfg_UpdateOutputVolume
+	bitda 6, (0xc07e)
+	jr z, DSPCfg_UpdateOutputVolume
+
+DSPCfg_SetFadeBit:
+	setda 1, 0xc1f0
+
+DSPCfg_UpdateOutputVolume:
+	ldb_d8 a, (0xc1f0)
+	and a, 0x3
+	jr nz, DSPCfg_CheckChorusMuted
+	ldw wa, 0x7f
+	calr CompIface_WriteVolume
+
+DSPCfg_CheckChorusMuted:
+	bitda 2, (0xc1f0)
+	ret z
+	lds wa, 0
+	calr CompIface_WriteVolume
+	ret
+
+DSPCfg_CompressorDispatch:
+	ld c, a
+	and a, 0xff
+	cps e, 7
+	jr z, DSPCfg_CompParam_SubType7
+	cps e, 6
+	jr z, DSPCfg_CompParam_SubType6
+	cps e, 5
+	ret nz
+	cps a, 0
+	ret z
+	ld xwa, 0x2a00
+	call SndParam_LookupReadOnly
+	stb_d8 (0xc1f2), l
+	extz hl
+	ldw_d16 xbc, (0xc1f6)
+	ld wa, hl
+	calr CompIface_ScaleAndNormalize
+	stda16 (0xc1f8), xhl
+	ret
+
+DSPCfg_CompParam_SubType6:
+	cps a, 0
+	ret z
+	ld xwa, 0x2a01
+	call SndParam_LookupReadOnly
+	stb_d8 (0xc1f4), l
+	extz hl
+	ldw_d16 xbc, (0xc1f6)
+	ld wa, hl
+	calr CompIface_ScaleAndNormalize
+	stda16 (0xc1fa), xhl
+	ldw_d16 xbc, (0xc1f6)
+	lds wa, 1
+	jrl DSPCfg_ScaleFactor_StoreResult
+
+DSPCfg_CompParam_SubType7:
+	bit 0, c
+	jr z, DSPCfg_CompParam_Bit1
+	ld xwa, 0x2a10
+	call SndParam_LookupReadOnly
+	and hl, 0x1
+	sla hl, 4
+	anddi8 (0xc1f0), 239
+	orddm16 0xc1f0, xhl
+
+DSPCfg_CompParam_Bit1:
+	bitda 1, (0xc07f)
+	jr z, DSPCfg_CompParam_Bit2
+	ld xwa, 0x2a11
+	call SndParam_LookupReadOnly
+	and hl, 0x1
+	sla hl, 5
+	anddi8 (0xc1f0), 223
+	orddm16 0xc1f0, xhl
+
+DSPCfg_CompParam_Bit2:
+	bitda 2, (0xc07f)
+	ret z
+	ld xwa, 0x2a12
+	call SndParam_LookupReadOnly
+	and hl, 0x1
+	sla hl, 6
+	anddi8 (0xc1f0), 191
+	orddm16 0xc1f0, xhl
+	ret
+
+DSPCfg_ScaleFactor_Dispatch:
+	cp e, 0x9
+	jr z, DSPCfg_ScaleFactor_Update
+	cp e, 0x8
+	ret nz
+
+DSPCfg_ScaleFactor_Update:
+	lds32 xwa, 4
+	call SndParam_LookupReadOnly
+	stda16 (0xc1f6), xhl
+	ldb_d8 a, (0xc1f2)
+	extz wa
+	ld bc, hl
+	calr CompIface_ScaleAndNormalize
+	stda16 (0xc1f8), xhl
+	ldb_d8 a, (0xc1f4)
+	extz wa
+	ldw_d16 xbc, (0xc1f6)
+	calr CompIface_ScaleAndNormalize
+	stda16 (0xc1fa), xhl
+	ldw_d16 xbc, (0xc1f6)
+	lds wa, 1
+
+DSPCfg_ScaleFactor_StoreResult:
+	calr CompIface_ScaleValue
+	stda16 (0xc1fc), xhl
+	ret
+
+DSPCfg_LookupMidiMap:
+	extz xwa
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
+	add xbc, xwa
+	ld a, (xbc)
+	jp VoiceData_LookupPtrByIndex
+
+DSPCfg_ExtractFieldPair:
+	ld xix, xde
+	ld xde, xwa
+	ld w, (xix + 4)
+	ld a, w
+	and a, 0xf0
+	ldb_erp A, 0xf4
+	extz iy
+	and w, 0xf
+	ld a, w
+	extz wa
+	cps wa, 2
+	jr nz, DSPCfg_ExtractAdjustType2
+	ld l, (xix + 5)
+	and l, 0x1f
+
+DSPCfg_ExtractAdjustType2:
+	ld (xde), iy
+	ld (xbc), wa
+	ret
+
+DSPCfg_ExtractFieldSingle:
+	ld l, (xde + 4)
+	ld e, l
+	and e, 0xf0
+	ldb_erp E, 0xf0
+	extz ix
+	and l, 0xf
+	extz hl
+	ld (xwa), ix
+	ld (xbc), hl
+	ret
+
+DSPCfg_WriteParam:
+	lda xsp, (xsp - 10)
+	push xiz
+	ld (xsp + 12), de
+	ld xde, xbc
+	ld xiz, xwa
+	ld xwa, (xsp + 22)
+	ld wa, (xwa)
+	ld (xsp + 4), wa
+	ld a, (xde + 2)
+	ldb_erp A, 0xe6
+	lda xwa, (xsp + 10)
+	ld bc, (xsp + 12)
+	ld hl, bc
+	srl hl, 8
+	cp_erpb 0xe6, 0x76
+	jrl z, DSPCfg_WriteParam_Type76
+	cp_erpb 0xe6, 0x70
+	jr z, DSPCfg_WriteParam_Type70
+	and c, 0xff
+	cp_erpb 0xe6, 0x67
+	jr z, DSPCfg_WriteParam_Type64_67
+	cp_erpb 0xe6, 0x64
+	jr z, DSPCfg_WriteParam_Type64_67
+	ld wa, (xsp + 12)
+	ld (xiz), a
+
+DSPCfg_WriteParam_SetMask:
+	ldb e, 0xff
+
+DSPCfg_WriteParam_Exit:
+	ld xwa, (xsp + 22)
+	ld bc, (xsp + 4)
+	ld (xwa), bc
+	ld xwa, (xsp + 18)
+	ld (xwa), e
+	lds hl, 0
+	pop xiz
+	lda xsp, (xsp + 10)
+	retd 0x8
+
+DSPCfg_WriteParam_Type64_67:
+	ld (xiz), l
+	ld (xiz + 1), c
+	jr DSPCfg_WriteParam_SetMask
+
+DSPCfg_WriteParam_Type70:
+	lda xbc, (xsp + 6)
+	calr DSPCfg_ExtractFieldSingle
+	ld wa, (xsp + 10)
+	lda xbc, (xiz + 1)
+	cp wa, 0x20
+	jr z, DSPCfg_WriteParam_Type70_Sub20
+	cp wa, 0x10
+	jr z, DSPCfg_WriteParam_Type70_Sub10
+	ld wa, (xsp + 12)
+	sra wa, 2
+	and a, 0x7
+	ld e, a
+	ld a, (xiz)
+	and a, 0xf8
+	add a, e
+	ld (xiz), a
+	ld wa, (xsp + 12)
+	sla wa, 6
+	and a, 0xc0
+	ld e, a
+	ld a, (xbc)
+	and a, 0x3f
+	add a, e
+	ld (xbc), a
+	jr DSPCfg_WriteParam_SetMask7
+
+DSPCfg_WriteParam_Type70_Sub10:
+	ld wa, (xsp + 12)
+	sla wa, 3
+	and a, 0xf8
+	ld c, a
+	ld a, (xiz)
+	and a, 0x7
+	add a, c
+	ld (xiz), a
+	ldb e, 0xf8
+	jr DSPCfg_WriteParam_Exit
+
+DSPCfg_WriteParam_Type70_Sub20:
+	ld wa, (xsp + 12)
+	and a, 0x3f
+	ld e, a
+	ld a, (xbc)
+	and a, 0xc0
+	add a, e
+	ld (xbc), a
+	jr DSPCfg_WriteParam_IncCounter
+
+DSPCfg_WriteParam_Type76:
+	lda xbc, (xsp + 8)
+	calr DSPCfg_ExtractFieldPair
+	ld wa, (xsp + 10)
+	cp wa, 0x10
+	jr z, DSPCfg_WriteParam_Type76_Sub10
+	ld wa, (xsp + 12)
+	sra wa, 2
+	and a, 0x7
+	ld c, a
+	ld a, (xiz)
+	and a, 0xf8
+	add a, c
+	ld (xiz), a
+	ld wa, (xsp + 12)
+	sla wa, 6
+	and a, 0xc0
+	ld e, a
+	lda xbc, (xiz + 1)
+	ld a, (xbc)
+	and a, 0x3f
+	add a, e
+	ld (xbc), a
+
+DSPCfg_WriteParam_SetMask7:
+	ldb e, 0x7
+	jrl DSPCfg_WriteParam_Exit
+
+DSPCfg_WriteParam_Type76_Sub10:
+	ld wa, (xsp + 12)
+	and a, 0x3f
+	ld c, a
+	cpw (xsp + 8), 0x2
+	jr nz, DSPCfg_WriteParam_Type76_NotType2
+	ld (xiz), c
+	jr DSPCfg_WriteParam_SetMask3F
+
+DSPCfg_WriteParam_Type76_NotType2:
+	lda xde, (xiz + 1)
+	ld a, (xde)
+	and a, 0xc0
+	add a, c
+	ld (xde), a
+
+DSPCfg_WriteParam_IncCounter:
+	incm 1, (xsp + 4)
+
+DSPCfg_WriteParam_SetMask3F:
+	ldb e, 0x3f
+	jrl DSPCfg_WriteParam_Exit
+
+DSPCfg_PackAddress:
+	ld e, (xwa + 1)
+	and e, 0xff
+	extz de
+	ld c, (xwa)
+	extz bc
+	sll bc, 8
+	ld hl, bc
+	ldb l, 0x0
+	add hl, de
+	ld bc, hl
+	srl bc, 8
+	cp bc, 0xf0
+	jr z, DSPCfg_PackAddress_ReturnInput
+	extz xhl
+	add xwa, xhl
+
+DSPCfg_PackAddress_ReturnInput:
+	ld xhl, xwa
+	ret
+
+DSPCfg_ReadField:
+	lda xsp, (xsp - 12)
+	push xiz
+	ld (xsp + 12), xde
+	ld xde, xbc
+	ld xbc, xwa
+	ldiw_erp 0xfa, 0
+	ld l, (xbc + 1)
+	extz hl
+	ld a, (xbc)
+	extz wa
+	ld iz, wa
+	sll iz, 8
+	add iz, hl
+	ld xwa, (xsp + 20)
+	ld wa, (xwa)
+	ld (xsp + 4), wa
+	ld a, (xde + 2)
+	ldb_erp A, 0xee
+	lda xwa, (xsp + 10)
+	cp_erpb 0xee, 0x76
+	jr z, DSPCfg_ReadField_Type76
+	ld hl, iz
+	cp_erpb 0xee, 0x70
+	jr z, DSPCfg_ReadField_Type70
+	cp_erpb 0xee, 0x68
+	jr z, DSPCfg_ReadField_Type68_Unsigned
+	cp_erpb 0xee, 0x67
+	jr z, DSPCfg_ReadField_GoWidth2
+	cp_erpb 0xee, 0x64
+	jr z, DSPCfg_ReadField_GoWidth2
+	ld l, (xbc)
+	exts hl
+
+DSPCfg_ReadField_SetWidth1:
+	ldiw_erp 0xfa, 1
+
+DSPCfg_ReadField_StoreAndReturn:
+	ld xwa, (xsp + 12)
+	stw_erp BC, 0xfa
+	ld (xwa), bc
+	ld xwa, (xsp + 20)
+	ld bc, (xsp + 4)
+	ld (xwa), bc
+	pop xiz
+	lda xsp, (xsp + 12)
+	retd 0x4
+
+DSPCfg_ReadField_GoWidth2:
+	jr DSPCfg_ReadField_SetWidth2
+
+DSPCfg_ReadField_Type68_Unsigned:
+	ld l, (xbc)
+	exts hl
+	and hl, 0xff
+	jr DSPCfg_ReadField_SetWidth1
+
+DSPCfg_ReadField_Type70:
+	lda xbc, (xsp + 6)
+	calr DSPCfg_ExtractFieldSingle
+	ld wa, (xsp + 10)
+	cp wa, 0x20
+	jr z, DSPCfg_ReadField_Type70_Width32
+	cp wa, 0x10
+	jr z, DSPCfg_ReadField_Type70_Width16
+	ld wa, iz
+	srl wa, 6
+	and wa, 0x1f
+	ld hl, wa
+	cpw (xsp + 6), 0x1
+	jr nz, DSPCfg_ReadField_StoreAndReturn
+	jr DSPCfg_ReadField_SetWidth2
+
+DSPCfg_ReadField_Type70_Width16:
+	ldw wa, 0xb
+	jr DSPCfg_ReadField_Type76_ShiftAndMask
+
+DSPCfg_ReadField_Type70_Width32:
+	ld hl, iz
+	and hl, 0x3f
+
+DSPCfg_ReadField_SetWidth2:
+	ldiw_erp 0xfa, 2
+	jr DSPCfg_ReadField_StoreAndReturn
+
+DSPCfg_ReadField_Type76:
+	lda xbc, (xsp + 8)
+	calr DSPCfg_ExtractFieldPair
+	ld wa, (xsp + 10)
+	cp wa, 0x10
+	jr z, DSPCfg_ReadField_Type76_Width16
+	lds wa, 6
+
+DSPCfg_ReadField_Type76_ShiftAndMask:
+	ld bc, iz
+	and a, 0xf
+	jr z, DSPCfg_ReadField_Type76_Mask5Bits
+	srla bc
+
+DSPCfg_ReadField_Type76_Mask5Bits:
+	and bc, 0x1f
+	ld hl, bc
+	jr DSPCfg_ReadField_StoreAndReturn
+
+DSPCfg_ReadField_Type76_Width16:
+	cpw (xsp + 8), 0x2
+	jr nz, DSPCfg_ReadField_Type70_Width32
+	ld wa, iz
+	srl wa, 8
+	and wa, 0x3f
+	ld hl, wa
+	jrl DSPCfg_ReadField_SetWidth1
+
+DSPCfg_WriteMultiField:
+	lda xsp, (xsp - 14)
+	push xiz
+	ld (xsp + 12), de
+	ld xiz, xbc
+	ld (xsp + 14), xwa
+	ldw (xsp + 10), 0x0
+	ldw (xsp + 8), 0x0
+	ldw (xsp + 4), 0x0
+	cpw (xsp + 12), 0x0
+	jr ule, DSPCfg_WriteMultiField_Final
+
+DSPCfg_WriteMultiField_Loop:
+	ld wa, (xsp + 10)
+	add (xsp + 8), wa
+	lda xde, (xsp + 10)
+	lda xwa, (xsp + 8)
+	push xwa
+	ld xwa, (xsp + 18)
+	ld xbc, xiz
+	calr DSPCfg_ReadField
+	lds bc, 0
+	cpw (xsp + 10), 0x0
+	jr ule, DSPCfg_WriteMultiField_AdvanceAddr
+
+DSPCfg_WriteMultiField_AccumXWA:
+	lds32 xwa, 1
+	add (xsp + 14), xwa
+	inc 1, bc
+	cp bc, (xsp + 10)
+	jr c, DSPCfg_WriteMultiField_AccumXWA
+
+DSPCfg_WriteMultiField_AdvanceAddr:
+	ld xwa, xiz
+	calr DSPCfg_PackAddress
+	ld xiz, xhl
+	incm 1, (xsp + 4)
+	ld wa, (xsp + 4)
+	cp wa, (xsp + 12)
+	jr c, DSPCfg_WriteMultiField_Loop
+
+DSPCfg_WriteMultiField_Final:
+	ld wa, (xsp + 10)
+	add (xsp + 8), wa
+	lda xwa, (xsp + 8)
+	push xwa
+	lda xwa, (xsp + 10)
+	push xwa
+	ld xwa, (xsp + 22)
+	ld xbc, xiz
+	ld de, (xsp + 38)
+	calr DSPCfg_WriteParam
+	ld xbc, (xsp + 26)
+	ld wa, (xsp + 8)
+	ld (xbc), a
+	ld xbc, (xsp + 22)
+	ld a, (xsp + 6)
+	ld (xbc), a
+	pop xiz
+	lda xsp, (xsp + 14)
+	retd 0xa
+
+DSPCfg_ReadMultiField:
+	lda xsp, (xsp - 12)
+	push xiz
+	ld (xsp + 10), de
+	ld (xsp + 12), xbc
+	ld xiz, xwa
+	ldw (xsp + 8), 0x0
+	ldw (xsp + 6), 0x0
+	ldw (xsp + 4), 0x0
+	cpw (xsp + 10), 0x0
+	jr ule, DSPCfg_ReadMultiField_Final
+
+DSPCfg_ReadMultiField_Loop:
+	ld wa, (xsp + 8)
+	add (xsp + 6), wa
+	lda xde, (xsp + 8)
+	lda xwa, (xsp + 6)
+	push xwa
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	calr DSPCfg_ReadField
+	lds wa, 0
+	cpw (xsp + 8), 0x0
+	jr ule, DSPCfg_ReadMultiField_PackAndNext
+
+DSPCfg_ReadMultiField_AdvancePtr:
+	inc 1, xiz
+	inc 1, wa
+	cp wa, (xsp + 8)
+	jr c, DSPCfg_ReadMultiField_AdvancePtr
+
+DSPCfg_ReadMultiField_PackAndNext:
+	ld xwa, (xsp + 12)
+	calr DSPCfg_PackAddress
+	ld (xsp + 12), xhl
+	incm 1, (xsp + 4)
+	ld wa, (xsp + 4)
+	cp wa, (xsp + 10)
+	jr c, DSPCfg_ReadMultiField_Loop
+
+DSPCfg_ReadMultiField_Final:
+	ld wa, (xsp + 8)
+	add (xsp + 6), wa
+	lda xde, (xsp + 8)
+	lda xwa, (xsp + 6)
+	push xwa
+	ld xwa, xiz
+	ld xbc, (xsp + 16)
+	calr DSPCfg_ReadField
+	pop xiz
+	lda xsp, (xsp + 12)
+	ret
+
+DSPCfg_GetParamCount:
+	ld l, (xwa)
+	extz hl
+	ret
+
+DSPCfg_ReadViaTableLookup:
+	dec 2, xsp
+	push xiz
+	ld xiz, xbc
+	ld (xsp + 4), wa
+	ld xwa, xiz
+	calr DSPCfg_GetParamCount
+	exts xhl
+	sll xhl, 2
+	ld xbc, WidgetParam_Config_058_0x36
+	add xbc, xhl
+	ld xbc, (xbc)
+	lda xwa, (xiz + 1)
+	ld de, (xsp + 4)
+	calr DSPCfg_ReadMultiField
+	pop xiz
+	inc 2, xsp
+	ret
+
+DSPCfg_StoreByte_ReturnZero:
+	ld (xbc), a
+	lds hl, 0
+	ret
+
+DSPCfg_WriteViaTableLookup:
+	dec 4, xsp
+	push xiz
+	ld xiz, xde
+	ld (xsp + 4), bc
+	ld (xsp + 6), wa
+	ld xwa, xiz
+	calr DSPCfg_GetParamCount
+	exts xhl
+	sll xhl, 2
+	ld xbc, WidgetParam_Config_058_0x36
+	add xbc, xhl
+	ld xbc, (xbc)
+	lda xwa, (xiz + 1)
+	pushm (xsp + 4)
+	ld xde, (xsp + 18)
+	push xde
+	ld xde, (xsp + 18)
+	push xde
+	ld de, (xsp + 16)
+	calr DSPCfg_WriteMultiField
+	pop xiz
+	inc 4, xsp
+	retd 0x8
+
+DSPCfg_ExtractPairFromStruct:
+	pushw iz
+	ld xhl, xbc
+	ld c, (xwa + 1)
+	and c, 0xff
+	ldb_erp C, 0xf4
+	extz iy
+	ld c, (xwa)
+	exts bc
+	ld ix, bc
+	sla ix, 8
+	or ix, iy
+	lda xiy, (xwa + 2)
+	ld c, (xiy + 1)
+	and c, 0xff
+	extz bc
+	ld a, (xiy)
+	exts wa
+	ld iz, wa
+	sla iz, 8
+	or iz, bc
+	lda xbc, (xiy + 2)
+	ld xwa, xbc
+	inc 1, xwa
+	ld c, (xbc)
+	ldb_erp C, 0xf4
+	ld c, (xwa)
+	exts bc
+	ld (xhl), ix
+	ld (xde), iz
+	ld xwa, (xsp + 10)
+	ld (xwa), bc
+	ld xbc, (xsp + 6)
+	stb_erp A, 0xf4
+	ld (xbc), a
+	popw iz
+	retd 0x8
+
+DSPCfg_LookupAndExtract:
+	dec 8, xsp
+	extz xbc
+	sll xbc, 2
+	ld xde, ToneKit_ParamBlock_116_0x7C
+	add xde, xbc
+	mul wa, 0x6
+	add xwa, (xde)
+	lda xbc, (xsp + 6)
+	lda xde, (xsp + 4)
+	lda xhl, (xsp + 2)
+	push xhl
+	lda xhl, (xsp + 4)
+	push xhl
+	calr DSPCfg_ExtractPairFromStruct
+	ld hl, (xsp + 2)
+	inc 8, xsp
+	ret
+
+DSPCfg_Data_001:
+	extz	xwa
+	ld	xbc, ToneKit_VoiceDispatch_Table_0x31C
+	add	xbc, xwa
+	ld	l, (xbc)
+	extz	hl
+	ret
+
+DSPCfg_GetSlotCount:
+	extz xwa
+	ld xbc, ToneKit_ParamBlock_116_0x18
+	add xbc, xwa
+	ld l, (xbc)
+	extz hl
+	ret
+
+DSPCfg_Data_002:
+	extz	xwa
+	ld	xbc, ToneKit_VoiceDispatch_Table_0x320
+	add	xbc, xwa
+	ld	l, (xbc)
+	extz	hl
+	ret
+
+DSPCfg_FindSlot63:
+	dec 2, xsp
+	push xiz
+	ld iz, wa
+	ldw (xsp + 4), 0xffff
+	ld wa, iz
+	calr DSPCfg_GetSlotCount
+	ldw_erp HL, 0xfa
+	ld wa, iz
+	exts xwa
+	sll xwa, 2
+	ld xbc, WidgetParam_Config_058_0x36
+	add xbc, xwa
+	ld xwa, (xbc)
+	lds iz, 0
+	cpiw_erp 0xfa, 0
+	jr le, DSPCfg_FindSlot63_Return
+
+DSPCfg_FindSlot63_Loop:
+	cp (xwa + 2), 0x63
+	jr nz, DSPCfg_FindSlot63_Next
+	ld (xsp + 4), iz
+
+DSPCfg_FindSlot63_Next:
+	calr DSPCfg_PackAddress
+	ld xwa, xhl
+	inc 1, iz
+	cpw_erp IZ, 0xfa
+	jr lt, DSPCfg_FindSlot63_Loop
+
+DSPCfg_FindSlot63_Return:
+	ld hl, (xsp + 4)
+	pop xiz
+	inc 2, xsp
+	ret
+
+DSPCfg_Data_003:
+	dec	8, xsp
+	push	xiz
+	ld	iz, wa
+	ld	xwa, xbc
+	calr	65182
+	sla	hl, 2
+	lda_24	xbc, (ToneKit_ParamBlock_116_0x7C)
+	mul	iz, 6
+	ld	xwa, xiz
+	.byte 0xe3
+	reti
+	.byte 0xe4
+	add	xwa, xix
+	lda	xbc, (xsp+10)
+	lda	xde, (xsp+8)
+	lda	xhl, (xsp+4)
+	push	xhl
+	lda	xhl, (xsp+10)
+	push	xhl
+	calr	65252
+	ldw	hl, 0xffff
+	.byte 0x8f, 0x06
+	push	xsp
+	.byte 0x01
+	jr	nz, 2
+	lds	hl, 0
+	pop	xiz
+	inc	8, xsp
+	ret
+	cps	wa, 4
+	jr	ge, 8
+	cps	wa, 0
+	jr	lt, 4
+	lds	hl, 0
+	jr	3
+	ldw	hl, 0xffff
+	ret
+
+DSPCfg_DecodeParamIdRange:
+	lda xsp, (xsp - 10)
+	push xiz
+	ld (xsp + 6), xde
+	ld (xsp + 10), xbc
+	ld xiz, xwa
+	ldw (xsp + 4), 0x0
+	ld xwa, (xsp + 22)
+	calr DSPCfg_GetParamCount
+	ld xwa, xiz
+	cp xiz, 0x4947
+	jr ugt, DSPCfg_DecodeParamIdRange_Invalid
+	cp xiz, 0x4940
+	jr nc, DSPCfg_DecodeParamIdRange_4940
+	cp xiz, 0x4927
+	jr ugt, DSPCfg_DecodeParamIdRange_Invalid
+	cp xiz, 0x4910
+	jr nc, DSPCfg_DecodeParamIdRange_4910
+	sub xwa, 0x4900
+	cp xwa, 0x0
+	jr c, DSPCfg_DecodeParamIdRange_Invalid
+	cp xwa, 0x7
+	jr ugt, DSPCfg_DecodeParamIdRange_Invalid
+	add xwa, ToneKit_VoiceDispatch_Table_0x32A
+	ld c, (xwa)
+	exts bc
+	ld xwa, (xsp + 6)
+	ld (xwa), bc
+	jr DSPCfg_DecodeParamIdRange_Return
+
+DSPCfg_DecodeParamIdRange_4910:
+	ld xwa, (xsp + 6)
+	ldw (xwa), 0x1
+	ld xwa, 0x4910
+	jr DSPCfg_DecodeParamIdRange_CalcOffset
+
+DSPCfg_DecodeParamIdRange_4940:
+	ld xwa, (xsp + 6)
+	ldw (xwa), 0x4
+	ld xwa, 0x4940
+
+DSPCfg_DecodeParamIdRange_CalcOffset:
+	ld xbc, xiz
+	sub xbc, xwa
+	ld xwa, (xsp + 10)
+	ld (xwa), bc
+	jr DSPCfg_DecodeParamIdRange_Return
+
+DSPCfg_DecodeParamIdRange_Invalid:
+	ld xwa, (xsp + 6)
+	ldw (xwa), 0xffff
+	ld xwa, (xsp + 10)
+	ldw (xwa), 0xffff
+	ldw (xsp + 4), 0xffff
+
+DSPCfg_DecodeParamIdRange_Return:
+	ld xwa, (xsp + 18)
+	ld (xwa), hl
+	ld hl, (xsp + 4)
+	pop xiz
+	lda xsp, (xsp + 10)
+	retd 0x8
+
+DSPCfg_ResolveParamToSlot:
+	lda xsp, (xsp - 14)
+	push xiz
+	ld (xsp + 10), xde
+	ld (xsp + 14), xbc
+	ld xiz, xwa
+	cp xiz, 0x4f00
+	jr ugt, DSPCfg_ResolveParamToSlot_OutOfRange
+	cp xiz, 0x4900
+	jr nc, DSPCfg_ResolveParamToSlot_Range49
+
+DSPCfg_ResolveParamToSlot_OutOfRange:
+	ldw hl, 0xffff
+	jrl DSPCfg_ResolveParamToSlot_StoreResult
+
+DSPCfg_ResolveParamToSlot_Range49:
+	cp xiz, 0x4a00
+	jr nc, DSPCfg_ResolveParamToSlot_Range4A
+	ldw (xsp + 8), 0x0
+	lds wa, 0
+	calr DSPCfg_LookupMidiMap
+	ld (xsp + 4), xhl
+	ld xwa, (xsp + 4)
+	push xwa
+	ld xwa, (xsp + 26)
+	push xwa
+	ld xwa, xiz
+	ld xbc, (xsp + 38)
+	ld xde, (xsp + 34)
+	jrl DSPCfg_ResolveParamToSlot_CallDecode
+
+DSPCfg_ResolveParamToSlot_Range4A:
+	cp xiz, 0x4b00
+	jr nc, DSPCfg_ResolveParamToSlot_Range4B
+	ldw (xsp + 8), 0x1
+	lds wa, 1
+	calr DSPCfg_LookupMidiMap
+	ld (xsp + 4), xhl
+	ld xwa, xiz
+	sub xwa, 0x200
+	ld xbc, (xsp + 4)
+	push xbc
+	ld xbc, (xsp + 26)
+	push xbc
+	ld xbc, (xsp + 38)
+	ld xde, (xsp + 34)
+	jrl DSPCfg_ResolveParamToSlot_CallDecode
+
+DSPCfg_ResolveParamToSlot_Range4B:
+	cp xiz, 0x4c00
+	jr nc, DSPCfg_ResolveParamToSlot_Range4C
+	ldw (xsp + 8), 0x1
+	lds wa, 1
+	calr DSPCfg_LookupMidiMap
+	ld (xsp + 4), xhl
+	ld xwa, xiz
+	sub xwa, 0x200
+	ld xbc, (xsp + 4)
+	push xbc
+	ld xbc, (xsp + 26)
+	push xbc
+	ld xbc, (xsp + 38)
+	ld xde, (xsp + 34)
+	jr DSPCfg_ResolveParamToSlot_CallDecode
+
+DSPCfg_ResolveParamToSlot_Range4C:
+	cp xiz, 0x4d00
+	jr nc, DSPCfg_ResolveParamToSlot_Range4D
+	ldw (xsp + 8), 0x4
+	lds wa, 4
+	calr DSPCfg_LookupMidiMap
+	ld (xsp + 4), xhl
+	ld xwa, xiz
+	sub xwa, 0x300
+	ld xbc, (xsp + 4)
+	push xbc
+	ld xbc, (xsp + 26)
+	push xbc
+	ld xbc, (xsp + 38)
+	ld xde, (xsp + 34)
+	jr DSPCfg_ResolveParamToSlot_CallDecode
+
+DSPCfg_ResolveParamToSlot_Range4D:
+	cp xiz, 0x4e00
+	jr nc, DSPCfg_ResolveParamToSlot_Range4E
+	ldw (xsp + 8), 0x2
+	lds wa, 2
+	calr DSPCfg_LookupMidiMap
+	ld (xsp + 4), xhl
+	ld xwa, xiz
+	sub xwa, 0x400
+	ld xbc, (xsp + 4)
+	push xbc
+	ld xbc, (xsp + 26)
+	push xbc
+	ld xbc, (xsp + 38)
+	ld xde, (xsp + 34)
+	jr DSPCfg_ResolveParamToSlot_CallDecode
+
+DSPCfg_ResolveParamToSlot_Range4E:
+	ldw (xsp + 8), 0x3
+	lds wa, 3
+	calr DSPCfg_LookupMidiMap
+	ld (xsp + 4), xhl
+	ld xwa, xiz
+	sub xwa, 0x500
+	ld xbc, (xsp + 4)
+	push xbc
+	ld xbc, (xsp + 26)
+	push xbc
+	ld xbc, (xsp + 38)
+	ld xde, (xsp + 34)
+
+DSPCfg_ResolveParamToSlot_CallDecode:
+	calr DSPCfg_DecodeParamIdRange
+
+DSPCfg_ResolveParamToSlot_StoreResult:
+	ld xwa, (xsp + 14)
+	ld xbc, (xsp + 4)
+	ld (xwa), xbc
+	ld xwa, (xsp + 10)
+	ld bc, (xsp + 8)
+	ld (xwa), bc
+	pop xiz
+	lda xsp, (xsp + 14)
+	retd 0xc
+
+DSPCfg_ResolveAndExtract:
+	lda xsp, (xsp - 12)
+	lda xde, (xsp + 4)
+	lda xbc, (xsp + 2)
+	push xbc
+	lda xbc, (xsp + 4)
+	push xbc
+	lda xbc, (xsp + 14)
+	push xbc
+	lda xbc, (xsp + 20)
+	calr DSPCfg_ResolveParamToSlot
+	cps hl, 0
+	jr nz, DSPCfg_ResolveAndExtract_Return
+	ld wa, (xsp + 2)
+	ld bc, (xsp + 6)
+	calr DSPCfg_LookupAndExtract
+
+DSPCfg_ResolveAndExtract_Return:
+	lda xsp, (xsp + 12)
+	ret
+
+DSPCfg_ResolveWithFallback:
+	lda xsp, (xsp - 18)
+	pushw iz
+	ld iz, bc
+	ld (xsp + 16), xwa
+	lda xde, (xsp + 8)
+	lda xwa, (xsp + 6)
+	push xwa
+	lda xwa, (xsp + 8)
+	push xwa
+	lda xwa, (xsp + 18)
+	push xwa
+	lda xbc, (xsp + 24)
+	ld xwa, (xsp + 28)
+	calr DSPCfg_ResolveParamToSlot
+	ld (xsp + 2), hl
+	cps iz, 0
+	jr z, DSPCfg_ResolveWithFallback_CheckType
+	ld wa, (xsp + 10)
+	extz xwa
+	sll xwa, 2
+	ld xbc, ToneKit_VoiceDispatch_Table_0x18C
+	add xbc, xwa
+	ld xwa, (xbc)
+	ld (xsp + 12), xwa
+	ld wa, (xsp + 8)
+	extz xwa
+	add xwa, xwa
+	ld xbc, ToneKit_VoiceDispatch_Table_0x332
+	add xbc, xwa
+	ld bc, (xbc)
+	sll bc, 8
+	extz xbc
+	ld xwa, (xsp + 16)
+	sub xwa, xbc
+	lda xbc, (xsp + 6)
+	lda xde, (xsp + 4)
+	ld xhl, (xsp + 12)
+	push xhl
+	lda xhl, (xsp + 14)
+	push xhl
+	calr DSPCfg_DecodeParamIdRange
+	ld (xsp + 2), hl
+
+DSPCfg_ResolveWithFallback_CheckType:
+	ld wa, (xsp + 10)
+	cpw (xsp + 2), 0x0
+	jr nz, DSPCfg_ResolveWithFallback_Return
+	ld bc, (xsp + 4)
+	cp bc, 0x9
+	jr z, DSPCfg_ResolveWithFallback_Type9
+	cp bc, 0x8
+	jr z, DSPCfg_ResolveWithFallback_Type8
+	cps bc, 1
+	jr z, DSPCfg_ResolveWithFallback_Type1
+	cps bc, 0
+	jr nz, DSPCfg_ResolveWithFallback_UnknownType
+	ld (xsp + 2), wa
+	jr DSPCfg_ResolveWithFallback_Return
+
+DSPCfg_ResolveWithFallback_Type1:
+	ld wa, (xsp + 6)
+	ld xbc, (xsp + 12)
+	calr DSPCfg_ReadViaTableLookup
+	ld (xsp + 2), hl
+	ld xwa, (xsp + 16)
+	cp xwa, 0x491d
+	jr nz, DSPCfg_ResolveWithFallback_Return
+	ld xwa, 0x4900
+	calr DSPCfg_ReadParam_Map0
+	cp hl, 0x35
+	jr z, DSPCfg_ResolveWithFallback_SndParam4003
+	cp hl, 0xf
+	jr nz, DSPCfg_ResolveWithFallback_Return
+
+DSPCfg_ResolveWithFallback_SndParam4003:
+	ld xwa, 0x4003
+	call SndParam_LookupReadOnly
+	ld (xsp + 2), hl
+	jr DSPCfg_ResolveWithFallback_Return
+
+DSPCfg_ResolveWithFallback_Type8:
+	ld wa, (xsp + 10)
+	calr DSPCfg_GetSlotCount
+	ld (xsp + 2), hl
+	jr DSPCfg_ResolveWithFallback_Return
+
+DSPCfg_ResolveWithFallback_Type9:
+	calr DSPCfg_FindSlot63
+	ld (xsp + 2), hl
+	jr DSPCfg_ResolveWithFallback_Return
+
+DSPCfg_ResolveWithFallback_UnknownType:
+	ldw (xsp + 2), 0xffff
+
+DSPCfg_ResolveWithFallback_Return:
+	ld hl, (xsp + 2)
+	popw iz
+	lda xsp, (xsp + 18)
+	ret
+
+DSPCfg_ReadParam_Map0:
+	lds bc, 0
+	jrl DSPCfg_ResolveWithFallback
+
+DSPCfg_ReadParam_Map1:
+	lds bc, 1
+	jrl DSPCfg_ResolveWithFallback
+
+DSPCfg_ClampAndExtract:
+	lda xsp, (xsp - 16)
+	pushw iz
+	ld (xsp + 12), xde
+	ld (xsp + 16), bc
+	ld iz, wa
+	ld xwa, (xsp + 12)
+	ld wa, (xwa)
+	ld (xsp + 2), wa
+	ld wa, iz
+	calr DSPCfg_GetSlotCount
+	cp (xsp + 16), hl
+	jr nc, DSPCfg_ClampAndExtract_NoSlot
+	ld wa, iz
+	extz xwa
+	sll xwa, 2
+	ld xbc, ToneKit_ParamBlock_116_0x7C
+	add xbc, xwa
+	ld wa, (xsp + 16)
+	mul wa, 0x6
+	add xwa, (xbc)
+	lda xbc, (xsp + 10)
+	lda xde, (xsp + 8)
+	lda xhl, (xsp + 4)
+	push xhl
+	lda xhl, (xsp + 10)
+	push xhl
+	calr DSPCfg_ExtractPairFromStruct
+	ld wa, (xsp + 2)
+	cp wa, (xsp + 10)
+	jr ge, DSPCfg_ClampAndExtract_CheckMax
+	ldw hl, 0xfffe
+	ld wa, (xsp + 10)
+	ld (xsp + 2), wa
+	jr DSPCfg_ClampAndExtract_Return
+
+DSPCfg_ClampAndExtract_CheckMax:
+	ld wa, (xsp + 2)
+	cp wa, (xsp + 8)
+	jr le, DSPCfg_ClampAndExtract_InRange
+	ldw hl, 0xfffd
+	ld wa, (xsp + 8)
+	ld (xsp + 2), wa
+	jr DSPCfg_ClampAndExtract_Return
+
+DSPCfg_ClampAndExtract_InRange:
+	lds hl, 0
+	jr DSPCfg_ClampAndExtract_Return
+
+DSPCfg_ClampAndExtract_NoSlot:
+	ldw hl, 0xffff
+
+DSPCfg_ClampAndExtract_Return:
+	ld xwa, (xsp + 12)
+	ld bc, (xsp + 2)
+	ld (xwa), bc
+	popw iz
+	lda xsp, (xsp + 16)
+	ret
+
+DSPCfg_ValidateSlotForWrite:
+	cp wa, 0x63
+	jr ugt, DSPCfg_ValidateSlotForWrite_Invalid
+	ld de, wa
+	extz xde
+	sll xde, 2
+	ld xhl, WidgetParam_Config_058_0x36
+	add xhl, xde
+	ld xde, (xhl)
+	or xde, xde
+	jr z, DSPCfg_ValidateSlotForWrite_Invalid
+	cps bc, 4
+	jr z, DSPCfg_ValidateSlotForWrite_Slot4
+	cps bc, 3
+	jr z, DSPCfg_ValidateSlotForWrite_Slot3
+	cps bc, 2
+	jr z, DSPCfg_ValidateSlotForWrite_Slot2
+	cps bc, 1
+	jr z, DSPCfg_ValidateSlotForWrite_Slot1
+	cps bc, 0
+	jr nz, DSPCfg_ValidateSlotForWrite_Invalid
+	cp wa, 0x10
+	jr c, DSPCfg_ValidateSlotForWrite_Valid
+	cp wa, 0x1b
+	jr ugt, DSPCfg_ValidateSlotForWrite_Valid
+
+DSPCfg_ValidateSlotForWrite_Invalid:
+	ldw hl, 0xffff
+
+DSPCfg_ValidateSlotForWrite_Ret:
+	ret
+
+DSPCfg_ValidateSlotForWrite_Slot1:
+	cp wa, 0x9
+	jr z, DSPCfg_ValidateSlotForWrite_Valid
+	cp wa, 0xa
+	jr z, DSPCfg_ValidateSlotForWrite_Valid
+	cp wa, 0x10
+	jr c, DSPCfg_ValidateSlotForWrite_Invalid
+	cp wa, 0x1b
+	jr ugt, DSPCfg_ValidateSlotForWrite_Invalid
+	jr DSPCfg_ValidateSlotForWrite_Valid
+
+DSPCfg_ValidateSlotForWrite_Slot2:
+	cp wa, 0x39
+	jr c, DSPCfg_ValidateSlotForWrite_Invalid
+	cp wa, 0x3c
+	jr ugt, DSPCfg_ValidateSlotForWrite_Invalid
+	jr DSPCfg_ValidateSlotForWrite_Valid
+
+DSPCfg_ValidateSlotForWrite_Slot3:
+	cp wa, 0x58
+	jr c, DSPCfg_ValidateSlotForWrite_Invalid
+	cp wa, 0x5b
+	jr ugt, DSPCfg_ValidateSlotForWrite_Invalid
+	jr DSPCfg_ValidateSlotForWrite_Valid
+
+DSPCfg_ValidateSlotForWrite_Slot4:
+	cp wa, 0x4f
+	jr nz, DSPCfg_ValidateSlotForWrite_Invalid
+
+DSPCfg_ValidateSlotForWrite_Valid:
+	lds hl, 0
+	jr DSPCfg_ValidateSlotForWrite_Ret
+
+DSPCfg_WriteParamFull:
+	lda xsp, (xsp - 22)
+	pushw iz
+	ld (xsp + 18), bc
+	ld (xsp + 20), xwa
+	lda xde, (xsp + 6)
+	lda xwa, (xsp + 4)
+	push xwa
+	lda xwa, (xsp + 6)
+	push xwa
+	lda xwa, (xsp + 16)
+	push xwa
+	lda xbc, (xsp + 26)
+	ld xwa, (xsp + 32)
+	calr DSPCfg_ResolveParamToSlot
+	ld iz, hl
+	cps iz, 0
+	jrl nz, DSPCfg_WriteParamFull_Return
+	ld wa, (xsp + 2)
+	cps wa, 1
+	jr z, DSPCfg_WriteParamFull_Type1
+	cps wa, 0
+	jrl nz, DSPCfg_WriteParamFull_UnknownType
+	ld wa, (xsp + 18)
+	ld bc, (xsp + 6)
+	calr DSPCfg_ValidateSlotForWrite
+	ld iz, hl
+	cp iz, 0xffff
+	jrl z, DSPCfg_WriteParamFull_Return
+	ld wa, (xsp + 18)
+	ld xbc, (xsp + 14)
+	calr DSPCfg_StoreByte_ReturnZero
+	ld iz, hl
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
+	add xbc, xwa
+	ld a, (xbc)
+	extz wa
+	ld bc, (xsp + 18)
+	ldb b, 0x0
+	ld e, c
+	extz de
+	pushw 0xff
+	lds bc, 0
+	call AssswbWr
+	jrl DSPCfg_WriteParamFull_Return
+
+DSPCfg_WriteParamFull_Type1:
+	ld wa, (xsp + 8)
+	ld bc, (xsp + 4)
+	lda xde, (xsp + 18)
+	calr DSPCfg_ClampAndExtract
+	ld iz, hl
+	cp iz, 0xffff
+	jr z, DSPCfg_WriteParamFull_Check491D
+	lda xwa, (xsp + 12)
+	lda xbc, (xsp + 10)
+	cps iz, 0
+	jr nz, DSPCfg_WriteParamFull_Type1_Clamped
+	push xwa
+	push xbc
+	ld wa, (xsp + 12)
+	ld bc, (xsp + 26)
+	ld xde, (xsp + 22)
+	calr DSPCfg_WriteViaTableLookup
+	ld iz, hl
+	jr DSPCfg_WriteParamFull_Type1_Notify
+
+DSPCfg_WriteParamFull_Type1_Clamped:
+	push xwa
+	push xbc
+	ld wa, (xsp + 12)
+	ld bc, (xsp + 26)
+	ld xde, (xsp + 22)
+	calr DSPCfg_WriteViaTableLookup
+
+DSPCfg_WriteParamFull_Type1_Notify:
+	ld wa, (xsp + 6)
+	extz xwa
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
+	add xbc, xwa
+	ld a, (xbc)
+	extz wa
+	ld c, (xsp + 12)
+	inc 1, c
+	extz bc
+	ld de, (xsp + 18)
+	ldb d, 0x0
+	extz de
+	ld l, (xsp + 10)
+	extz hl
+	pushw hl
+	call AssswbWr
+
+DSPCfg_WriteParamFull_Check491D:
+	ld xwa, (xsp + 20)
+	cp xwa, 0x491d
+	jr nz, DSPCfg_WriteParamFull_Return
+	ld xwa, 0x4900
+	calr DSPCfg_ReadParam_Map0
+	cp hl, 0x35
+	jr z, DSPCfg_WriteParamFull_Notify4003
+	cp hl, 0xf
+	jr nz, DSPCfg_WriteParamFull_Return
+
+DSPCfg_WriteParamFull_Notify4003:
+	ld bc, (xsp + 18)
+	ld xwa, 0x4003
+	lds de, 3
+	call SoundParam_NotifyChange
+	jr DSPCfg_WriteParamFull_Return
+
+DSPCfg_WriteParamFull_UnknownType:
+	ldw iz, 0xffff
+
+DSPCfg_WriteParamFull_Return:
+	ld hl, iz
+	popw iz
+	lda xsp, (xsp + 22)
+	ret
+
+DSPCfg_WriteParamSimple:
+	lda xsp, (xsp - 26)
+	pushw iz
+	ld (xsp + 18), xde
+	ld (xsp + 22), bc
+	ld (xsp + 24), xwa
+	lda xde, (xsp + 6)
+	lda xwa, (xsp + 4)
+	push xwa
+	lda xwa, (xsp + 6)
+	push xwa
+	lda xwa, (xsp + 16)
+	push xwa
+	lda xbc, (xsp + 26)
+	ld xwa, (xsp + 36)
+	calr DSPCfg_ResolveParamToSlot
+	ld iz, hl
+	cps iz, 0
+	jrl nz, DSPCfg_WriteParamSimple_Return
+	ld wa, (xsp + 2)
+	cps wa, 1
+	jr z, DSPCfg_WriteParamSimple_Type1
+	cps wa, 0
+	jrl nz, DSPCfg_WriteParamSimple_UnknownType
+	ld wa, (xsp + 22)
+	ld bc, (xsp + 6)
+	calr DSPCfg_ValidateSlotForWrite
+	ld iz, hl
+	cp iz, 0xffff
+	jr z, DSPCfg_WriteParamSimple_Return
+	ld wa, (xsp + 22)
+	ld xbc, (xsp + 18)
+	calr DSPCfg_StoreByte_ReturnZero
+	ld iz, hl
+	jr DSPCfg_WriteParamSimple_Return
+
+DSPCfg_WriteParamSimple_Type1:
+	ld wa, (xsp + 8)
+	ld bc, (xsp + 4)
+	lda xde, (xsp + 22)
+	calr DSPCfg_ClampAndExtract
+	ld iz, hl
+	cp iz, 0xffff
+	jr z, DSPCfg_WriteParamSimple_Check491D
+	lda xwa, (xsp + 12)
+	lda xbc, (xsp + 10)
+	cps iz, 0
+	jr nz, DSPCfg_WriteParamSimple_Type1_Clamped
+	push xwa
+	push xbc
+	ld wa, (xsp + 12)
+	ld bc, (xsp + 30)
+	ld xde, (xsp + 26)
+	calr DSPCfg_WriteViaTableLookup
+	ld iz, hl
+	jr DSPCfg_WriteParamSimple_Check491D
+
+DSPCfg_WriteParamSimple_Type1_Clamped:
+	push xwa
+	push xbc
+	ld wa, (xsp + 12)
+	ld bc, (xsp + 30)
+	ld xde, (xsp + 26)
+	calr DSPCfg_WriteViaTableLookup
+
+DSPCfg_WriteParamSimple_Check491D:
+	ld xwa, (xsp + 24)
+	cp xwa, 0x491d
+	jr nz, DSPCfg_WriteParamSimple_Return
+	ld xwa, 0x4900
+	calr DSPCfg_ReadParam_Map0
+	cp hl, 0x35
+	jr z, DSPCfg_WriteParamSimple_Notify4003
+	cp hl, 0xf
+	jr nz, DSPCfg_WriteParamSimple_Return
+
+DSPCfg_WriteParamSimple_Notify4003:
+	ld bc, (xsp + 22)
+	ld xwa, 0x4003
+	lds de, 3
+	call SoundParam_NotifyChange
+	jr DSPCfg_WriteParamSimple_Return
+
+DSPCfg_WriteParamSimple_UnknownType:
+	ldw iz, 0xffff
+
+DSPCfg_WriteParamSimple_Return:
+	ld hl, iz
+	popw iz
+	lda xsp, (xsp + 26)
+	ret
+
+DSPCfg_WriteParamDelta:
+	lda xsp, (xsp - 16)
+	pushw iz
+	ld iz, bc
+	ld (xsp + 14), xwa
+	lda xde, (xsp + 6)
+	lda xwa, (xsp + 4)
+	push xwa
+	lda xwa, (xsp + 6)
+	push xwa
+	lda xwa, (xsp + 16)
+	push xwa
+	lda xbc, (xsp + 22)
+	ld xwa, (xsp + 26)
+	calr DSPCfg_ResolveParamToSlot
+	cps hl, 0
+	jr nz, DSPCfg_WriteParamDelta_Return
+	ld wa, (xsp + 2)
+	cps wa, 1
+	jr z, DSPCfg_WriteParamDelta_Type1
+	cps wa, 0
+	jr nz, DSPCfg_WriteParamDelta_BadType
+	ld xwa, (xsp + 10)
+	calr DSPCfg_GetParamCount
+	add iz, hl
+	ld xwa, (xsp + 14)
+	ld bc, iz
+	jr DSPCfg_WriteParamDelta_CallWrite
+
+DSPCfg_WriteParamDelta_Type1:
+	ld wa, (xsp + 4)
+	ld xbc, (xsp + 10)
+	calr DSPCfg_ReadViaTableLookup
+	add iz, hl
+	ld xwa, (xsp + 14)
+	ld bc, iz
+
+DSPCfg_WriteParamDelta_CallWrite:
+	calr DSPCfg_WriteParamFull
+	jr DSPCfg_WriteParamDelta_Return
+
+DSPCfg_WriteParamDelta_BadType:
+	ldw hl, 0xffff
+
+DSPCfg_WriteParamDelta_Return:
+	popw iz
+	lda xsp, (xsp + 16)
+	ret
+
+DSPCfg_WriteAllSlots_Direct:
+	lda xsp, (xsp - 18)
+	push xiz
+	ld (xsp + 16), xbc
+	ld (xsp + 20), wa
+	ld xwa, (xsp + 16)
+	calr DSPCfg_GetParamCount
+	ld wa, hl
+	ld bc, (xsp + 20)
+	calr DSPCfg_ValidateSlotForWrite
+	ld (xsp + 4), hl
+	cpw (xsp + 4), 0x0
+	jrl z, DSPCfg_WriteAllSlots_Direct_Return
+	lds wa, 1
+	ld xbc, (xsp + 16)
+	calr DSPCfg_StoreByte_ReturnZero
+	ld wa, (xsp + 20)
+	extz xwa
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
+	add xbc, xwa
+	ld a, (xbc)
+	pushw 0xff
+	lds bc, 0
+	lds de, 1
+	call AssswbWr
+	ld xwa, (xsp + 16)
+	calr DSPCfg_GetParamCount
+	ld (xsp + 6), hl
+	ld wa, (xsp + 6)
+	sla wa, 2
+	lda_24 xbc, (ToneKit_VoiceDispatch_Table_0x18C)
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld (xsp + 8), xwa
+	lds iz, 0
+	jr DSPCfg_WriteAllSlots_Direct_CheckCount
+
+DSPCfg_WriteAllSlots_Direct_Loop:
+	ld wa, iz
+	ld xbc, (xsp + 8)
+	calr DSPCfg_ReadViaTableLookup
+	ldw_erp HL, 0xfa
+	lda xwa, (xsp + 14)
+	push xwa
+	lda xwa, (xsp + 16)
+	push xwa
+	ld wa, iz
+	stw_erp BC, 0xfa
+	ld xde, (xsp + 24)
+	calr DSPCfg_WriteViaTableLookup
+	ld wa, (xsp + 20)
+	extz xwa
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
+	add xbc, xwa
+	ld a, (xbc)
+	extz wa
+	ld c, (xsp + 14)
+	inc 1, c
+	extz bc
+	stw_erp DE, 0xfa
+	ldb d, 0x0
+	extz de
+	ld l, (xsp + 12)
+	extz hl
+	pushw hl
+	call AssswbWr
+	inc 1, iz
+
+DSPCfg_WriteAllSlots_Direct_CheckCount:
+	ld wa, (xsp + 6)
+	calr DSPCfg_GetSlotCount
+	cp iz, hl
+	jr c, DSPCfg_WriteAllSlots_Direct_Loop
+
+DSPCfg_WriteAllSlots_Direct_Return:
+	ld hl, (xsp + 4)
+	pop xiz
+	lda xsp, (xsp + 18)
+	ret
+
+DSPCfg_WriteAllSlots_Clamped:
+	lda xsp, (xsp - 18)
+	push xiz
+	ld (xsp + 16), xbc
+	ld (xsp + 20), wa
+	ldiw_erp 0xfa, 0
+	ld xwa, (xsp + 16)
+	calr DSPCfg_GetParamCount
+	ld (xsp + 4), hl
+	ld wa, (xsp + 4)
+	sla wa, 2
+	lda_24 xbc, (ToneKit_VoiceDispatch_Table_0x18C)
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld (xsp + 6), xwa
+	lds iz, 0
+	jr DSPCfg_WriteAllSlots_Clamped_CheckCount
+
+DSPCfg_WriteAllSlots_Clamped_Loop:
+	ld wa, iz
+	ld xbc, (xsp + 16)
+	calr DSPCfg_ReadViaTableLookup
+	ld (xsp + 14), hl
+	ld wa, (xsp + 4)
+	lda xde, (xsp + 14)
+	ld bc, iz
+	calr DSPCfg_ClampAndExtract
+	cps hl, 0
+	jr z, DSPCfg_WriteAllSlots_Clamped_Next
+	ld wa, iz
+	ld xbc, (xsp + 6)
+	calr DSPCfg_ReadViaTableLookup
+	ld (xsp + 14), hl
+	lda xwa, (xsp + 12)
+	push xwa
+	lda xwa, (xsp + 14)
+	push xwa
+	ld bc, (xsp + 22)
+	ld wa, iz
+	ld xde, (xsp + 24)
+	calr DSPCfg_WriteViaTableLookup
+	ld wa, (xsp + 20)
+	extz xwa
+	ld xbc, ToneKit_VoiceDispatch_Table_0x324
+	add xbc, xwa
+	ld a, (xbc)
+	extz wa
+	ld c, (xsp + 12)
+	inc 1, c
+	extz bc
+	ld de, (xsp + 14)
+	ldb d, 0x0
+	extz de
+	ld l, (xsp + 10)
+	extz hl
+	pushw hl
+	call AssswbWr
+	ldi_erpw 0xfa, 0xff, 0xff
+
+DSPCfg_WriteAllSlots_Clamped_Next:
+	inc 1, iz
+
+DSPCfg_WriteAllSlots_Clamped_CheckCount:
+	ld wa, (xsp + 4)
+	calr DSPCfg_GetSlotCount
+	cp iz, hl
+	jr c, DSPCfg_WriteAllSlots_Clamped_Loop
+	stw_erp HL, 0xfa
+	pop xiz
+	lda xsp, (xsp + 18)
+	ret
+
+DSPCfg_WriteAllSlots_Combined:
+	dec 4, xsp
+	push xiz
+	ld (xsp + 4), xbc
+	ld iz, wa
+	ld wa, iz
+	ld xbc, (xsp + 4)
+	calr DSPCfg_WriteAllSlots_Direct
+	ldw_erp HL, 0xfa
+	ld wa, iz
+	ld xbc, (xsp + 4)
+	calr DSPCfg_WriteAllSlots_Clamped
+	stw_erp WA, 0xfa
+	add wa, hl
+	ldiw_erp 0xfa, 0
+	cps wa, 0
+	jr z, DSPCfg_WriteAllSlots_Combined_Done
+	ldi_erpw 0xfa, 0xff, 0xff
+
+DSPCfg_WriteAllSlots_Combined_Done:
+	stw_erp HL, 0xfa
+	pop xiz
+	inc 4, xsp
+	ret
+
+DSPCfg_Data_ParamDispatch:
+	lda	xsp, (xsp-14)
+	push	xiz
+	ld	(xsp+14), xde
+	ld	xde, xbc
+	ld	xbc, xwa
+	ld	qiz, 0
+	ldw	(xsp+8), 0
+	ld	l, (xbc+1)
+	extz	hl
+	ld	a, (xbc)
+	extz	wa
+	ld	iz, wa
+	sll	iz, 8
+	add	iz, hl
+	ld	xwa, (xsp+34)
+	ld	a, (xwa)
+	ld	(xsp+4), a
+	ld	a, (xde+2)
+	ld	(xsp+6), a
+	lda	xwa, (xsp+12)
+	cp	(xsp+6), 118
+	jrl	z, 159
+	ld	hl, iz
+	cp	(xsp+6), 112
+	jr	z, 70
+	cp	(xsp+6), 103
+	jr	z, 59
+	.byte 0x8f, 0x06
+	.ascii "?df5Å"
+	ldb	l, 219
+	zcf
+	.byte 0xd7
+	swi	2
+	cp	(xbc+37), xsp
+	ld	xwa, (xsp+14)
+	ld	bc, qiz
+	ld	(xwa), bc
+	ld	xwa, (xsp+34)
+	ld	c, (xsp+4)
+	ld	(xwa), c
+	ld	xwa, (xsp+30)
+	ld	(xwa), e
+	ld	xbc, (xsp+26)
+	ld	a, (xsp+6)
+	ld	(xbc), a
+	ld	xbc, (xsp+22)
+	ld	wa, (xsp+8)
+	ld	(xbc), a
+	pop	xiz
+	lda	xsp, (xsp+14)
+	retd	16
+	.byte 0xd7
+	swi	2
+	and	(xde+104), xiy
+	lda	xbc, (xsp+8)
+	calr	62102
+	ld	wa, (xsp+12)
+	cp	wa, 32
+	jr	z, 49
+	cp	wa, 16
+	jr	z, 28
+	ld	wa, iz
+	srl	wa, 6
+	and	wa, 31
+	ld	hl, wa
+	ldb	e, 7
+	cpw	(xsp+8), 1
+	jr	nz, -90
+	.byte 0xd7
+	swi	2
+	.byte 0xa9
+	incm8	1, (xsp+4)
+	jr	-98
+	ld	wa, iz
+	srl	wa, 11
+	and	wa, 31
+	ld	hl, wa
+	ldb	e, 248
+	jr	-113
+	ld	hl, iz
+	and	hl, 63
+	.byte 0xd7
+	swi	2
+	.byte 0xa9, 0x8f, 0x04
+	.ascii "a%?x~"
+	swi	7
+	lda	xbc, (xsp+10)
+	calr	61982
+	ld	wa, (xsp+12)
+	cp	wa, 16
+	jr	z, 16
+	ld	wa, iz
+	srl	wa, 6
+	and	wa, 31
+	ld	hl, wa
+	ldb	e, 7
+	jrl	-161
+	cpw	(xsp+10), 2
+	jr	nz, -55
+	ld	wa, iz
+	srl	wa, 8
+	and	wa, 63
+	ld	hl, wa
+	.byte 0xd7
+	swi	2
+	and	xiy, (xbc+104)
+	lda	xsp, (xsp-24)
+	pushw	iz
+	ld	(xsp+16), e
+	ld	(xsp+18), xbc
+	ld	(xsp+22), xwa
+	ldw	(xsp+14), 0
+	ldw	iz, 0xffff
+	ld	(xsp+10), 0
+	ld	(xsp+8), 122
+	ld	xwa, (xsp+30)
+	ld	a, (xwa)
+	ld	(xsp+2), a
+	inc	1, iz
+	ld	wa, (xsp+14)
+	add	(xsp+10), a
+	ld	a, (xsp+8)
+	ld	(xsp+4), a
+	lda	xde, (xsp+14)
+	lda	xwa, (xsp+10)
+	push	xwa
+	lda	xwa, (xsp+16)
+	push	xwa
+	lda	xwa, (xsp+16)
+	push	xwa
+	lda	xwa, (xsp+18)
+	push	xwa
+	ld	xwa, (xsp+38)
+	ld	xbc, (xsp+34)
+	calr	65185
+	lds	bc, 0
+	cpw	(xsp+14), 0
+	jr	ule, 12
+	lds32	xwa, 1
+	add	(xsp+22), xwa
+	inc	1, bc
+	cp	bc, (xsp+14)
+	jr	c, -12
+	ld	xwa, (xsp+18)
+	calr	62201
+	ld	(xsp+18), xhl
+	ld	a, (xsp+10)
+	cp	a, (xsp+16)
+	jr	ugt, 16
+	ld	a, (xsp+10)
+	cp	a, (xsp+16)
+	jr	nz, -88
+	ld	a, (xsp+2)
+	.byte 0x8f
+	incf
+	adddm8	0xa066, l
+	ldwio	33, 4239
+	.byte 0xf1
+	jr	ule, 20
+	.byte 0x8f, 0x04
+	push	xsp
+	jrl	f, 1134
+	dec	3, iz
+	jr	2
+	dec	1, iz
+	.byte 0x8f, 0x06
+	push	xsp
+	.byte 0x01
+	jr	nz, 2
+	inc	1, iz
+	ld	a, (xsp+12)
+	cpl	a
+	.byte 0x8f
+	push	sr
+	subdm8	0x8bc9, l
+	calr	45088
+	ld	xhl, 0xbf4e8bde
+	push_f
+	.byte 0x37
+	retd	4
+	lda	xsp, (xsp-10)
+	push	xiz
+	ld	(xsp+10), e
+	ld	(xsp+12), c
+	.byte 0xbf, 0x04
+	push	sr
+	nop
+	nop
+	extz	wa
+	sub	wa, 97
+	cps	wa, 0
+	jr	lt, 78
+	cps	wa, 5
+	jr	gt, 74
+	add	wa, wa
+	lda_24	xix, (ToneKit_VoiceDispatch_Table_0x33C)
+	.byte 0xd3
+	reti
+	.byte 0xf0, 0xe0
+	ldb	w, 242
+	.byte 0xd3, 0xce
+	swi	5
+	ldw	ix, 2035
+	.byte 0xf0, 0xe0
+	mul	xiz, xwa
+	nop
+	popw	bc
+	nop
+	nop
+	lds	wa, 0
+	jr	48
+	ld	xiz, 0x4a00
+	jr	5
+	ld	xiz, 0x4b00
+	lds	wa, 1
+	jr	32
+	ld	xiz, 0x4c00
+	lds	wa, 4
+	jr	23
+	ld	xiz, 0x4d00
+	lds	wa, 2
+	jr	14
+	ld	xiz, 0x4e00
+	lds	wa, 3
+	jr	5
+	.byte 0xbf, 0x04
+	push	sr
+	swi	7
+	swi	7
+	cp	(xsp+12), 1
+	jr	c, 75
+	cp	(xsp+12), 17
+	jr	nc, 69
+	calr	61611
+	ld	(xsp+6), xhl
+	ld	xwa, (xsp+6)
+	calr	62523
+	extz	xhl
+	sll	xhl, 2
+	ld	xbc, WidgetParam_Config_058_0x36
+	add	xbc, xhl
+	ld	xbc, (xbc)
+	lds32	xwa, 1
+	add	(xsp+6), xwa
+	ld	e, (xsp+12)
+	dec	1, e
+	extz	de
+	lda	xwa, (xsp+10)
+	push	xwa
+	ld	xwa, (xsp+10)
+	calr	65183
+	cp	hl, 0xffff
+	jr	nz, 7
+	.byte 0xbf, 0x04
+	push	sr
+	swi	7
+	swi	7
+	jr	8
+	add	hl, 16
+	exts	xhl
+	add	xiz, xhl
+	ld	xwa, (xsp+18)
+	ld	(xwa), xiz
+	ld	hl, (xsp+4)
+	pop	xiz
+	lda	xsp, (xsp+10)
+	retd	4
+
+DSPCfg_CheckParamTableEntry:
+	lds hl, 0
+	cp wa, 0x63
+	jr ugt, DSPCfg_CheckParamTableEntry_NotFound
+	extz xwa
+	sll xwa, 2
+	ld xbc, WidgetParam_Config_058_0x36
+	add xbc, xwa
+	ld xwa, (xbc)
+	or xwa, xwa
+	ret nz
+
+DSPCfg_CheckParamTableEntry_NotFound:
+	ldw hl, 0xffff
+	ret
+
+DSPCfg_ReadFieldSimple:
+	lda xsp, (xsp - 10)
+	push xiz
+	ld (xsp + 10), xde
+	ld xde, xbc
+	ld xbc, xwa
+	ldiw_erp 0xfa, 0
+	ld l, (xbc + 1)
+	extz hl
+	ld a, (xbc)
+	extz wa
+	ld iz, wa
+	sll iz, 8
+	add iz, hl
+	ld xwa, (xsp + 18)
+	ld wa, (xwa)
+	ld (xsp + 4), wa
+	ld a, (xde + 2)
+	cp a, 0x70
+	jr z, DSPCfg_ReadFieldSimple_Type70
+	cp a, 0x67
+	jr z, DSPCfg_ReadFieldSimple_Type64_67
+	cp a, 0x64
+	jr z, DSPCfg_ReadFieldSimple_Type64_67
+	ld l, (xbc)
+	exts hl
+	ldiw_erp 0xfa, 1
+
+DSPCfg_ReadFieldSimple_StoreReturn:
+	ld xwa, (xsp + 10)
+	stw_erp BC, 0xfa
+	ld (xwa), bc
+	ld xwa, (xsp + 18)
+	ld bc, (xsp + 4)
+	ld (xwa), bc
+	pop xiz
+	lda xsp, (xsp + 10)
+	retd 0x4
+
+DSPCfg_ReadFieldSimple_Type64_67:
+	ld hl, iz
+	jr DSPCfg_ReadFieldSimple_SetWidth2
+
+DSPCfg_ReadFieldSimple_Type70:
+	lda xwa, (xsp + 8)
+	lda xbc, (xsp + 6)
+	calr DSPCfg_ExtractFieldSingle
+	ld wa, (xsp + 8)
+	ld hl, iz
+	cp wa, 0x20
+	jr z, DSPCfg_ReadFieldSimple_SetWidth2
+	cp wa, 0x10
+	jr z, DSPCfg_ReadFieldSimple_StoreReturn
+	cpw (xsp + 6), 0x1
+	jr nz, DSPCfg_ReadFieldSimple_StoreReturn
+
+DSPCfg_ReadFieldSimple_SetWidth2:
+	ldiw_erp 0xfa, 2
+	jr DSPCfg_ReadFieldSimple_StoreReturn
+
+DSPCfg_ApplyParamStruct:
+	lda xsp, (xsp - 22)
+	push xiz
+	ld (xsp + 22), xwa
+	ld xiz, (xsp + 22)
+	ld a, (xiz)
+	extz wa
+	ld (xsp + 4), wa
+	lda_24 xbc, (ToneKit_ParamBlock_116_0x18)
+	ld wa, (xsp + 4)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	extz wa
+	ld (xsp + 6), wa
+	ld wa, (xsp + 4)
+	calr DSPCfg_CheckParamTableEntry
+	ld (xsp + 8), hl
+	cpw (xsp + 8), 0x0
+	jrl nz, DSPCfg_ApplyParamStruct_Return
+	cpw (xsp + 4), 0x10
+	jr lt, DSPCfg_ApplyParamStruct_Normal
+	cpw (xsp + 4), 0x1b
+	jr gt, DSPCfg_ApplyParamStruct_Normal
+	lda xde, (xiz + 5)
+	ld a, (xde)
+	ld (xiz + 6), a
+	lda xbc, (xiz + 4)
+	ld a, (xbc)
+	ld (xde), a
+	lda xde, (xiz + 3)
+	ld a, (xde)
+	ld (xbc), a
+	lda xbc, (xiz + 2)
+	ld a, (xbc)
+	ld (xde), a
+	ld (xbc), 0x0
+	jrl DSPCfg_ApplyParamStruct_Return
+
+DSPCfg_ApplyParamStruct_Normal:
+	ldw (xsp + 20), 0x0
+	ldw (xsp + 18), 0x0
+	ld a, (xiz + 21)
+	extz wa
+	ld (xsp + 10), wa
+	ld xwa, (xsp + 22)
+	lda xiz, (xwa + 1)
+	ld wa, (xsp + 4)
+	exts xwa
+	sll xwa, 2
+	ld xbc, WidgetParam_Config_058_0x36
+	add xbc, xwa
+	ld xwa, (xbc)
+	ld (xsp + 14), xwa
+	ldw (xsp + 12), 0x0
+	ld wa, (xsp + 6)
+	cps wa, 0
+	jr ule, DSPCfg_ApplyParamStruct_CheckSpecial
+
+DSPCfg_ApplyParamStruct_ReadLoop:
+	ld wa, (xsp + 20)
+	add (xsp + 18), wa
+	lda xde, (xsp + 20)
+	lda xwa, (xsp + 18)
+	push xwa
+	ld xwa, xiz
+	ld xbc, (xsp + 18)
+	calr DSPCfg_ReadFieldSimple
+	lds wa, 0
+	cpw (xsp + 20), 0x0
+	jr ule, DSPCfg_ApplyParamStruct_PackNext
+
+DSPCfg_ApplyParamStruct_AdvancePtr:
+	inc 1, xiz
+	inc 1, wa
+	cp wa, (xsp + 20)
+	jr c, DSPCfg_ApplyParamStruct_AdvancePtr
+
+DSPCfg_ApplyParamStruct_PackNext:
+	ld xwa, (xsp + 14)
+	calr DSPCfg_PackAddress
+	ld (xsp + 14), xhl
+	incm 1, (xsp + 12)
+	ld wa, (xsp + 6)
+	cp (xsp + 12), wa
+	jr c, DSPCfg_ApplyParamStruct_ReadLoop
+
+DSPCfg_ApplyParamStruct_CheckSpecial:
+	ld de, (xsp + 4)
+	ld bc, (xsp + 10)
+	cpw (xsp + 4), 0x63
+	jr z, DSPCfg_ApplyParamStruct_Offset2
+	cp de, 0x62
+	jr z, DSPCfg_ApplyParamStruct_Offset2
+	cp de, 0x61
+	jr z, DSPCfg_ApplyParamStruct_Offset2
+	cp de, 0x60
+	jr z, DSPCfg_ApplyParamStruct_Offset2
+	cp de, 0x35
+	jr z, DSPCfg_ApplyParamStruct_Offset2
+	cp de, 0xf
+	jr z, DSPCfg_ApplyParamStruct_Offset2
+	cp de, 0x23
+	jr z, DSPCfg_ApplyParamStruct_Offset2
+	cp de, 0x22
+	jr z, DSPCfg_ApplyParamStruct_Offset2
+	cp de, 0x21
+	jr z, DSPCfg_ApplyParamStruct_Offset2
+	cp de, 0x20
+	jr nz, DSPCfg_ApplyParamStruct_Offset1
+
+DSPCfg_ApplyParamStruct_Offset2:
+	lds32 xwa, 2
+	jr DSPCfg_ApplyParamStruct_WriteLoop
+
+DSPCfg_ApplyParamStruct_Offset1:
+	lds32 xwa, 1
+
+DSPCfg_ApplyParamStruct_WriteLoop:
+	ld xde, xiz
+	sub xde, xwa
+	ld (xde), c
+	ldw (xsp + 20), 0x0
+	ldw (xsp + 18), 0x0
+	ld xwa, (xsp + 22)
+	lda xiz, (xwa + 1)
+	ld wa, (xsp + 4)
+	exts xwa
+	sll xwa, 2
+	ld xbc, WidgetParam_Config_058_0x36
+	add xbc, xwa
+	ld xwa, (xbc)
+	ld (xsp + 14), xwa
+	ldw (xsp + 12), 0x0
+	ld wa, (xsp + 6)
+	cps wa, 0
+	jr ule, DSPCfg_ApplyParamStruct_Return
+
+DSPCfg_ApplyParamStruct_WriteReadLoop:
+	ld wa, (xsp + 20)
+	add (xsp + 18), wa
+	lda xde, (xsp + 20)
+	lda xwa, (xsp + 18)
+	push xwa
+	ld xwa, xiz
+	ld xbc, (xsp + 18)
+	calr DSPCfg_ReadFieldSimple
+	cpw (xsp + 20), 0x2
+	jr nz, DSPCfg_ApplyParamStruct_WriteSkip2Byte
+	ld wa, hl
+	ldb w, 0x0
+	ld (xiz), a
+	sra hl, 8
+	ldb h, 0x0
+	ld (xiz + 1), l
+
+DSPCfg_ApplyParamStruct_WriteSkip2Byte:
+	lds wa, 0
+	cpw (xsp + 20), 0x0
+	jr ule, DSPCfg_ApplyParamStruct_WritePackNext
+
+DSPCfg_ApplyParamStruct_WriteAdvancePtr:
+	inc 1, xiz
+	inc 1, wa
+	cp wa, (xsp + 20)
+	jr c, DSPCfg_ApplyParamStruct_WriteAdvancePtr
+
+DSPCfg_ApplyParamStruct_WritePackNext:
+	ld xwa, (xsp + 14)
+	calr DSPCfg_PackAddress
+	ld (xsp + 14), xhl
+	incm 1, (xsp + 12)
+	ld wa, (xsp + 6)
+	cp (xsp + 12), wa
+	jr c, DSPCfg_ApplyParamStruct_WriteReadLoop
+
+DSPCfg_ApplyParamStruct_Return:
+	ld hl, (xsp + 8)
+	pop xiz
+	lda xsp, (xsp + 22)
+	ret
+
+DSPCfg_ApplyParamStructFull:
+	lda xsp, (xsp - 68)
+	push xiz
+	ldw (xsp + 4), 0x0
+	ldb_spi E, 0xe0
+	extz de
+	ld (xsp + 30), de
+	lda xbc, (xwa - 1)
+	ld (xsp + 56), xbc
+	lda xbc, (xwa + 13)
+	ld (xsp + 16), xbc
+	lda xbc, (xwa + 2)
+	ld (xsp + 68), xbc
+	lda xbc, (xwa + 6)
+	ld (xsp + 52), xbc
+	lda xbc, (xwa + 10)
+	ld (xsp + 36), xbc
+	lda xbc, (xwa + 12)
+	ld (xsp + 60), xbc
+	cp de, 0x51
+	jrl z, DSPCfg_EventType51
+	lda xbc, (xwa + 3)
+	ld (xsp + 64), xbc
+	lda xbc, (xwa + 7)
+	ld (xsp + 48), xbc
+	cp de, 0x50
+	jrl z, DSPCfg_EventType50
+	lda xbc, (xwa + 8)
+	ld (xsp + 44), xbc
+	cp de, 0x46
+	jrl z, DSPCfg_EventType46
+	lda xbc, (xwa + 14)
+	ld (xsp + 12), xbc
+	lda xbc, (xwa + 15)
+	ld (xsp + 8), xbc
+	cp de, 0x44
+	jrl z, DSPCfg_EventType44
+	lda xbc, (xwa + 11)
+	ld (xsp + 32), xbc
+	cp de, 0x42
+	jrl z, DSPCfg_EventType42
+	lda xbc, (xwa + 9)
+	ld (xsp + 40), xbc
+	cp de, 0x40
+	jrl z, DSPCfg_EventType40
+	cp de, 0x36
+	jrl z, DSPCfg_EventType36
+	cp de, 0x35
+	jrl z, DSPCfg_EventType35
+	cp de, 0x34
+	jrl z, DSPCfg_EventType34
+	lda xbc, (xwa + 4)
+	ld (xsp + 60), xbc
+	lda xbc, (xwa + 5)
+	ld (xsp + 56), xbc
+	cp de, 0x32
+	jrl z, DSPCfg_EventType32
+	cp de, 0x30
+	jrl z, DSPCfg_EventType30
+	cp de, 0x1b
+	jr gt, DSPCfg_ApplyParamStructFull_RangeCheck
+	cp de, 0x10
+	jrl ge, DSPCfg_EventType10to1B
+
+DSPCfg_ApplyParamStructFull_RangeCheck:
+	ld bc, (xsp + 30)
+	dec 1, bc
+	cps bc, 0
+	jr lt, AssSwb_SwapEntriesAndDispatch
+	cp bc, 0x8
+	jr le, DspConfig_EventDispatch
+	sub bc, 0x12
+	cp bc, 0x9
+	jr lt, AssSwb_SwapEntriesAndDispatch
+	cp bc, 0x14
+	jr gt, AssSwb_SwapEntriesAndDispatch
+
+; DSP config event dispatch
+DspConfig_EventDispatch:
+	add bc, bc
+	lda_24 xix, (ToneKit_VoiceDispatch_Table_0x348)
+	ldw_sri BC, 0x07, 0xf0, 0xe4
+	lda_24 xix, (AssSwb_SwapEntriesAndDispatch)
+	jp_ind 8, 0x07, 0xf0, 0xe4
+
+AssSwb_SwapEntriesAndDispatch:
+	ldw (xsp + 4), 0xffff
+	jrl DSPCfg_Epilogue
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xix, (xwa + 1)
+	ld l, (xix)
+	ld xbc, (xsp + 68)
+	ld e, (xbc)
+	ld xiy, (xsp + 64)
+	ld c, (xiy)
+	ld (xwa), e
+	ld (xix), c
+	ld xwa, (xsp + 68)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld (xiy), l
+	ld xwa, (xsp + 60)
+	ld (xwa), 0x0
+	jrl DSPCfg_Epilogue
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xix, (xwa + 1)
+	ld l, (xix)
+	ld xbc, (xsp + 68)
+	ld e, (xbc)
+	ld xiy, (xsp + 64)
+	ld c, (xiy)
+	ld (xwa), e
+	ld (xix), c
+	ld xwa, (xsp + 68)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld (xiy), l
+	ld xwa, (xsp + 60)
+	ld (xwa), 0x1
+	jrl DSPCfg_Epilogue
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xhl, (xwa + 1)
+	ld e, (xhl)
+	ld xix, (xsp + 68)
+	ld c, (xix)
+	ld (xwa), 0x1e
+	ld (xhl), 0x56
+	ld (xix), 0x5
+	ld xwa, (xsp + 64)
+	ld (xwa), 0x0
+	ld xwa, (xsp + 60)
+	ld (xwa), c
+	ld xwa, (xsp + 56)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld xwa, (xsp + 52)
+	ld (xwa), e
+	ld xwa, (xsp + 48)
+	ld (xwa), 0x1
+	jrl DSPCfg_Epilogue
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xhl, (xwa + 1)
+	ld e, (xhl)
+	ld xbc, (xsp + 68)
+	ld d, (xbc)
+	ld xbc, (xsp + 64)
+	ld c, (xbc)
+	ldb_erp C, 0xea
+	ld xbc, (xsp + 60)
+	ld c, (xbc)
+	ldb_erp C, 0xeb
+	ld xbc, (xsp + 56)
+	ld c, (xbc)
+	ldb_erp C, 0xf0
+	ld xbc, (xsp + 52)
+	ld c, (xbc)
+	ldb_erp C, 0xf4
+	ld xbc, (xsp + 48)
+	ld c, (xbc)
+	ldb_erp C, 0xf8
+	ld (xwa), d
+	stb_erp A, 0xea
+	ld (xhl), a
+	ld xbc, (xsp + 68)
+	stb_erp A, 0xeb
+	ld (xbc), a
+	ld xbc, (xsp + 64)
+	stb_erp A, 0xf0
+	ld (xbc), a
+	ld xbc, (xsp + 60)
+	stb_erp A, 0xf4
+	ld (xbc), a
+	ld xbc, (xsp + 56)
+	stb_erp A, 0xf8
+	ld (xbc), a
+	ld xwa, (xsp + 52)
+	ld (xwa), 0x5b
+	ld xwa, (xsp + 48)
+	ld (xwa), 0x98
+	ld xwa, (xsp + 44)
+	ld (xwa), 0x5c
+	ld xwa, (xsp + 40)
+	ld (xwa), 0x58
+	ld xwa, (xsp + 36)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld xwa, (xsp + 32)
+	ld (xwa), e
+	jrl DSPCfg_Epilogue
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xix, (xwa + 1)
+	ld l, (xix)
+	ld xbc, (xsp + 68)
+	ld e, (xbc)
+	ld xiy, (xsp + 64)
+	ld c, (xiy)
+	ld (xwa), e
+	ld (xix), c
+	ld xwa, (xsp + 68)
+	ld (xwa), 0x0
+	ld c, (xsp + 6)
+	ld (xiy), c
+	ld xwa, (xsp + 60)
+	ld (xwa), l
+	jrl DSPCfg_Epilogue
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xbc, (xwa + 1)
+	ld (xsp + 56), xbc
+	ld c, (xbc)
+	ld (xsp + 48), c
+	ld xbc, (xsp + 68)
+	ld (xsp + 52), xbc
+	ld e, (xbc)
+	ld xbc, (xsp + 64)
+	ld (xsp + 68), xbc
+	ld c, (xbc)
+	ld (xsp + 50), c
+	ld xbc, (xsp + 60)
+	ld (xsp + 64), xbc
+	ld c, (xbc)
+	ld (xsp + 62), c
+	mul e, 0xc
+	extz de
+	div e, 0x5
+	ldb c, 0x63
+	cp e, 0x63
+	jr ugt, DSPCfg_EventType36_ClampResult
+	ld c, e
+
+DSPCfg_EventType36_ClampResult:
+	ld (xwa), c
+	ld xde, (xsp + 56)
+	ld c, (xsp + 50)
+	ld (xde), c
+	ld xbc, (xsp + 52)
+	ld (xbc), 0x3c
+	ld xde, (xsp + 68)
+	ld c, (xsp + 62)
+	ld (xde), c
+	ld xbc, (xsp + 64)
+	ld (xbc), 0x0
+	ld c, (xsp + 6)
+	ld (xwa + 5), c
+	ld c, (xsp + 48)
+	ld (xwa + 6), c
+	jrl DSPCfg_Epilogue
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xix, (xwa + 1)
+	ld e, (xix)
+	ld xbc, (xsp + 68)
+	ld d, (xbc)
+	ld xbc, (xsp + 64)
+	ld l, (xbc)
+	ld xiy, (xsp + 60)
+	ld c, (xiy)
+	ld (xwa), 0x50
+	ld (xix), d
+	ld xwa, (xsp + 68)
+	ld (xwa), l
+	ld xwa, (xsp + 64)
+	ld (xwa), c
+	ld (xiy), 0x5a
+	ld xwa, (xsp + 56)
+	ld (xwa), 0x0
+	ld xwa, (xsp + 52)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld xwa, (xsp + 48)
+	ld (xwa), e
+	jrl DSPCfg_Epilogue
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xix, (xwa + 1)
+	ld e, (xix)
+	ld xbc, (xsp + 68)
+	ld d, (xbc)
+	ld xbc, (xsp + 64)
+	ld l, (xbc)
+	ld xiy, (xsp + 60)
+	ld c, (xiy)
+	ld (xwa), 0x50
+	ld (xix), d
+	ld xwa, (xsp + 68)
+	ld (xwa), l
+	ld xwa, (xsp + 64)
+	ld (xwa), c
+	ld (xiy), 0x5a
+	ld xwa, (xsp + 56)
+	ld (xwa), 0x0
+	ld xwa, (xsp + 52)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld xwa, (xsp + 48)
+	ld (xwa), e
+	jrl DSPCfg_Epilogue
+
+DSPCfg_EventType30:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xix, (xwa + 1)
+	ld e, (xix)
+	ld xbc, (xsp + 68)
+	ld l, (xbc)
+	ld xiy, (xsp + 64)
+	ld c, (xiy)
+	ld (xwa), l
+	ld (xix), c
+	ld xwa, (xsp + 68)
+	ld (xwa), 0x5a
+	ld (xiy), 0x0
+	ld xwa, (xsp + 60)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld xwa, (xsp + 56)
+	ld (xwa), e
+	jrl DSPCfg_Epilogue
+
+DSPCfg_EventType32:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xix, (xwa + 1)
+	ld e, (xix)
+	ld xbc, (xsp + 68)
+	ld l, (xbc)
+	ld xiy, (xsp + 64)
+	ld c, (xiy)
+	ld (xwa), l
+	ld (xix), c
+	ld xwa, (xsp + 68)
+	ld (xwa), 0x5a
+	ld (xiy), 0x0
+	ld xwa, (xsp + 60)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld xwa, (xsp + 56)
+	ld (xwa), e
+	jrl DSPCfg_Epilogue
+
+DSPCfg_EventType34:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xbc, (xwa + 1)
+	ld l, (xbc)
+	ld (xwa), 0x2
+	ld (xbc), 0x0
+	ld xbc, (xsp + 68)
+	ld (xbc), 0x63
+	ld xde, (xsp + 64)
+	ld c, (xsp + 6)
+	ld (xde), c
+	jrl DSPCfg_EventType36_StoreTail
+
+DSPCfg_EventType35:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xix, (xwa + 1)
+	ld c, (xix)
+	ldb_erp C, 0xea
+	ld xbc, (xsp + 68)
+	ld h, (xbc)
+	ld xbc, (xsp + 64)
+	ld d, (xbc)
+	lda xiy, (xwa + 4)
+	ld l, (xiy)
+	lda xiz, (xwa + 5)
+	ld e, (xiz)
+	ld xbc, (xsp + 52)
+	ld c, (xbc)
+	ldb_erp C, 0xee
+	ld xbc, (xsp + 48)
+	ld c, (xbc)
+	ldb_erp C, 0xeb
+	ld xbc, (xsp + 44)
+	ld b, (xbc)
+	stb_erp C, 0xeb
+	ld (xwa), c
+	ld (xix), b
+	ld xwa, (xsp + 68)
+	ld (xwa), 0x40
+	ld xwa, (xsp + 64)
+	ld (xwa), d
+	ld (xiy), l
+	ld (xiz), 0xa
+	ld xwa, (xsp + 52)
+	ld (xwa), 0xa
+	ld xwa, (xsp + 48)
+	ld (xwa), 0x3c
+	ld xwa, (xsp + 44)
+	ld (xwa), e
+	ld xbc, (xsp + 40)
+	stb_erp A, 0xee
+	ld (xbc), a
+	ld xwa, (xsp + 36)
+	ld (xwa), 0x48
+	ld xwa, (xsp + 32)
+	ld (xwa), 0x4f
+	ld xwa, (xsp + 60)
+	stb_erp C, 0xea
+	ld (xwa), c
+	ld xwa, (xsp + 16)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld xwa, (xsp + 12)
+	ld (xwa), h
+	ld xwa, (xsp + 8)
+	ld (xwa), 0x0
+	jrl DSPCfg_Epilogue
+
+DSPCfg_EventType36:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xde, (xwa + 1)
+	ld l, (xde)
+	ld xix, (xsp + 68)
+	ld c, (xix)
+	ld (xwa), c
+	ld (xde), 0x5a
+	ld (xix), 0x0
+	ld xde, (xsp + 64)
+	ld c, (xsp + 6)
+	ld (xde), c
+
+DSPCfg_EventType36_StoreTail:
+	ld (xwa + 4), l
+	jrl DSPCfg_Epilogue
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xix, (xwa + 1)
+	ld l, (xix)
+	ld xbc, (xsp + 68)
+	ld e, (xbc)
+	ld xiy, (xsp + 64)
+	ld c, (xiy)
+	ld (xwa), e
+	ld (xix), c
+	ld xwa, (xsp + 68)
+	ld (xwa), 0x0
+	ld c, (xsp + 6)
+	ld (xiy), c
+	ld xwa, (xsp + 60)
+	ld (xwa), l
+	jrl DSPCfg_Epilogue
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xhl, (xwa + 1)
+	ld e, (xhl)
+	ld xbc, (xsp + 68)
+	ld d, (xbc)
+	ld xbc, (xsp + 64)
+	ld c, (xbc)
+	ldb_erp C, 0xea
+	ld xbc, (xsp + 60)
+	ld c, (xbc)
+	ldb_erp C, 0xeb
+	ld xbc, (xsp + 56)
+	ld c, (xbc)
+	ldb_erp C, 0xf0
+	ld xbc, (xsp + 52)
+	ld c, (xbc)
+	ldb_erp C, 0xf4
+	ld xbc, (xsp + 48)
+	ld c, (xbc)
+	ldb_erp C, 0xf8
+	ld (xwa), d
+	stb_erp A, 0xea
+	ld (xhl), a
+	ld xbc, (xsp + 68)
+	stb_erp A, 0xeb
+	ld (xbc), a
+	ld xbc, (xsp + 64)
+	stb_erp A, 0xf0
+	ld (xbc), a
+	ld xbc, (xsp + 60)
+	stb_erp A, 0xf4
+	ld (xbc), a
+	ld xbc, (xsp + 56)
+	stb_erp A, 0xf8
+	ld (xbc), a
+	ld xwa, (xsp + 52)
+	ld (xwa), 0x12
+	ld xwa, (xsp + 48)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld xwa, (xsp + 44)
+	ld (xwa), e
+	jrl DSPCfg_Epilogue
+
+DSPCfg_EventType40:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xbc, (xwa + 1)
+	ld (xsp + 56), xbc
+	ld c, (xbc)
+	ldb_erp C, 0xea
+	ld xbc, (xsp + 68)
+	ld c, (xbc)
+	ldb_erp C, 0xee
+	ld xbc, (xsp + 64)
+	ld c, (xbc)
+	ldb_erp C, 0xe6
+	lda xix, (xwa + 4)
+	ld h, (xix)
+	lda xiy, (xwa + 5)
+	ld d, (xiy)
+	ld xiz, (xsp + 52)
+	ld b, (xiz)
+	ld xiz, (xsp + 48)
+	ld l, (xiz)
+	ld xiz, (xsp + 44)
+	ld e, (xiz)
+	ld xiz, (xsp + 40)
+	ld c, (xiz)
+	ldb_erp C, 0xe7
+	ld xiz, (xsp + 36)
+	ld c, (xiz)
+	ldb_erp C, 0xeb
+	ld xiz, (xsp + 32)
+	ld c, (xiz)
+	ldb_erp C, 0xef
+	stb_erp C, 0xee
+	ld (xwa), c
+	ld xiz, (xsp + 56)
+	stb_erp A, 0xe6
+	ld (xiz), a
+	ld xiz, (xsp + 68)
+	ld (xiz), h
+	ld xiz, (xsp + 64)
+	ld (xiz), d
+	ld (xix), b
+	ld (xiy), l
+	ld xwa, (xsp + 52)
+	ld (xwa), e
+	ld xwa, (xsp + 48)
+	stb_erp C, 0xe7
+	ld (xwa), c
+	ld xwa, (xsp + 44)
+	stb_erp C, 0xeb
+	ld (xwa), c
+	ld xwa, (xsp + 40)
+	stb_erp C, 0xef
+	ld (xwa), c
+	ld xwa, (xsp + 36)
+	ld (xwa), 0x0
+	ld xwa, (xsp + 32)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld xwa, (xsp + 60)
+	stb_erp C, 0xea
+	ld (xwa), c
+	jrl DSPCfg_Epilogue
+
+DSPCfg_EventType42:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xbc, (xwa + 1)
+	ld (xsp + 40), xbc
+	ld c, (xbc)
+	ld (xsp + 58), c
+	ld xbc, (xsp + 68)
+	ld e, (xbc)
+	ld xbc, (xsp + 64)
+	ld l, (xbc)
+	lda xbc, (xwa + 4)
+	ld (xsp + 28), xbc
+	ld d, (xbc)
+	lda xbc, (xwa + 5)
+	ld (xsp + 24), xbc
+	ld c, (xbc)
+	ldb_erp C, 0xea
+	ld xbc, (xsp + 52)
+	ld c, (xbc)
+	ldb_erp C, 0xee
+	ld xbc, (xsp + 48)
+	ld c, (xbc)
+	ldb_erp C, 0xeb
+	ld xbc, (xsp + 44)
+	ld h, (xbc)
+	lda xbc, (xwa + 9)
+	ld (xsp + 20), xbc
+	ld c, (xbc)
+	ldb_erp C, 0xef
+	ld xbc, (xsp + 36)
+	ld c, (xbc)
+	ldb_erp C, 0xf0
+	ld xbc, (xsp + 32)
+	ld b, (xbc)
+	ld xiy, (xsp + 60)
+	ld c, (xiy)
+	ldb_erp C, 0xe6
+	ld (xwa), e
+	ld xwa, (xsp + 40)
+	ld (xwa), l
+	ld xiy, (xsp + 68)
+	ld (xiy), d
+	ld xiy, (xsp + 64)
+	stb_erp A, 0xea
+	ld (xiy), a
+	ld xiy, (xsp + 28)
+	stb_erp A, 0xee
+	ld (xiy), a
+	stb_erp C, 0xeb
+	ld xwa, (xsp + 24)
+	ld (xwa), c
+	ld xwa, (xsp + 52)
+	ld (xwa), h
+	ld xwa, (xsp + 48)
+	stb_erp C, 0xef
+	ld (xwa), c
+	ld xwa, (xsp + 44)
+	ld (xwa), 0x50
+	stb_erp C, 0xf0
+	ld xwa, (xsp + 20)
+	ld (xwa), c
+	ld xwa, (xsp + 36)
+	ld (xwa), b
+	ld xwa, (xsp + 32)
+	stb_erp C, 0xe6
+	ld (xwa), c
+	ld xwa, (xsp + 60)
+	ld (xwa), 0x5a
+	ld xwa, (xsp + 16)
+	ld (xwa), 0x0
+	ld xwa, (xsp + 12)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld xwa, (xsp + 8)
+	ld c, (xsp + 58)
+	ld (xwa), c
+	jrl DSPCfg_Epilogue
+
+DSPCfg_EventType44:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xbc, (xwa + 1)
+	ld (xsp + 40), xbc
+	ld c, (xbc)
+	ld (xsp + 58), c
+	ld xbc, (xsp + 68)
+	ld c, (xbc)
+	ldb_erp C, 0xea
+	ld xbc, (xsp + 64)
+	ld h, (xbc)
+	lda xbc, (xwa + 4)
+	ld (xsp + 32), xbc
+	ld d, (xbc)
+	lda xbc, (xwa + 5)
+	ld (xsp + 28), xbc
+	ld l, (xbc)
+	ld xbc, (xsp + 52)
+	ld e, (xbc)
+	ld xbc, (xsp + 48)
+	ld c, (xbc)
+	ldb_erp C, 0xee
+	ld xbc, (xsp + 44)
+	ld c, (xbc)
+	ldb_erp C, 0xeb
+	lda xbc, (xwa + 9)
+	ld (xsp + 24), xbc
+	ld c, (xbc)
+	ldb_erp C, 0xef
+	ld xbc, (xsp + 36)
+	ld c, (xbc)
+	ldb_erp C, 0xf0
+	lda xbc, (xwa + 11)
+	ld (xsp + 20), xbc
+	ld c, (xbc)
+	ldb_erp C, 0xf4
+	ld xbc, (xsp + 60)
+	ld b, (xbc)
+	stb_erp C, 0xea
+	ld (xwa), c
+	ld xwa, (xsp + 40)
+	ld (xwa), h
+	ld xwa, (xsp + 68)
+	ld (xwa), d
+	ld xwa, (xsp + 64)
+	ld (xwa), l
+	ld xwa, (xsp + 32)
+	ld (xwa), e
+	ld xiz, (xsp + 28)
+	stb_erp A, 0xee
+	ld (xiz), a
+	ld xiz, (xsp + 52)
+	stb_erp A, 0xeb
+	ld (xiz), a
+	ld xwa, (xsp + 48)
+	stb_erp C, 0xef
+	ld (xwa), c
+	ld xwa, (xsp + 44)
+	ld (xwa), 0x50
+	stb_erp C, 0xf0
+	ld xwa, (xsp + 24)
+	ld (xwa), c
+	ld xwa, (xsp + 36)
+	stb_erp C, 0xf4
+	ld (xwa), c
+	ld xwa, (xsp + 20)
+	ld (xwa), b
+	ld xwa, (xsp + 60)
+	ld (xwa), 0x5a
+	ld xwa, (xsp + 16)
+	ld (xwa), 0x0
+	ld xwa, (xsp + 12)
+	ld c, (xsp + 6)
+	ld (xwa), c
+	ld xwa, (xsp + 8)
+	ld c, (xsp + 58)
+	ld (xwa), c
+	jrl DSPCfg_Epilogue
+
+DSPCfg_EventType46:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xbc, (xwa + 1)
+	ld (xsp + 60), xbc
+	ld e, (xbc)
+	ld xbc, (xsp + 68)
+	ld c, (xbc)
+	ldb_erp C, 0xee
+	ld xbc, (xsp + 64)
+	ld c, (xbc)
+	ldb_erp C, 0xea
+	lda xix, (xwa + 4)
+	ld h, (xix)
+	lda xiy, (xwa + 5)
+	ld d, (xiy)
+	ld xbc, (xsp + 52)
+	ld l, (xbc)
+	ld xbc, (xsp + 48)
+	ld c, (xbc)
+	ldb_erp C, 0xeb
+	ld xbc, (xsp + 44)
+	ld c, (xbc)
+	ldb_erp C, 0xef
+	ld (xwa), 0x2
+	ld xbc, (xsp + 60)
+	ld (xbc), 0x0
+	ld xbc, (xsp + 68)
+	ld (xbc), 0x63
+	ld xiz, (xsp + 64)
+	stb_erp C, 0xee
+	ld (xiz), c
+	stb_erp C, 0xea
+	ld (xix), c
+	ld (xiy), h
+	ld xbc, (xsp + 52)
+	ld (xbc), d
+	ld xbc, (xsp + 48)
+	ld (xbc), l
+	ld xix, (xsp + 44)
+	stb_erp C, 0xeb
+	ld (xix), c
+	stb_erp C, 0xef
+	ld (xwa + 9), c
+	ld xhl, (xsp + 36)
+	ld c, (xsp + 6)
+	ld (xhl), c
+	ld (xwa + 11), e
+	jrl DSPCfg_Epilogue
+
+DSPCfg_EventType10to1B:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xix, (xwa + 1)
+	ld h, (xix)
+	ld xbc, (xsp + 68)
+	ld d, (xbc)
+	ld xbc, (xsp + 64)
+	ld l, (xbc)
+	ld xbc, (xsp + 60)
+	ld e, (xbc)
+	ld xiy, (xsp + 56)
+	ld c, (xiy)
+	ld (xwa), h
+	ld (xix), d
+	ld xwa, (xsp + 68)
+	ld (xwa), l
+	ld xwa, (xsp + 64)
+	ld (xwa), e
+	ld xwa, (xsp + 60)
+	ld (xwa), c
+	ld c, (xsp + 6)
+	ld (xiy), c
+	jrl DSPCfg_Epilogue
+
+DSPCfg_EventType50:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xbc, (xwa + 1)
+	ld (xsp + 44), xbc
+	ld c, (xbc)
+	ldb_erp C, 0xe7
+	ld xde, (xsp + 68)
+	ld c, (xde)
+	ldb_erp C, 0xeb
+	ld xhl, (xsp + 64)
+	ld c, (xhl)
+	ldb_erp C, 0xee
+	lda xix, (xwa + 4)
+	ld (xsp + 40), xix
+	ld c, (xix)
+	ldb_erp C, 0xea
+	lda xix, (xwa + 5)
+	ld (xsp + 32), xix
+	ld c, (xix)
+	ldb_erp C, 0xe6
+	ld xix, (xsp + 52)
+	ld h, (xix)
+	ld xix, (xsp + 48)
+	ld d, (xix)
+	lda xix, (xwa + 8)
+	ld b, (xix)
+	lda xiy, (xwa + 9)
+	ld l, (xiy)
+	ld xiz, (xsp + 36)
+	ld e, (xiz)
+	ld xiz, (xsp + 56)
+	ld (xiz), 0x62
+	ld (xwa), 0x5b
+	ld xiz, (xsp + 44)
+	ld (xiz), 0x98
+	ld xiz, (xsp + 68)
+	stb_erp C, 0xeb
+	ld (xiz), c
+	ld xiz, (xsp + 64)
+	stb_erp C, 0xee
+	ld (xiz), c
+	ld xiz, (xsp + 40)
+	stb_erp C, 0xea
+	ld (xiz), c
+	ld xiz, (xsp + 32)
+	stb_erp C, 0xe6
+	ld (xiz), c
+	ld xiz, (xsp + 52)
+	ld (xiz), h
+	ld xiz, (xsp + 48)
+	ld (xiz), d
+	ld (xix), b
+	ld (xiy), l
+	ld xhl, (xsp + 36)
+	ld (xhl), e
+	ld c, (xsp + 6)
+	ld (xwa + 11), c
+	ld xwa, (xsp + 60)
+	stb_erp C, 0xe7
+	ld (xwa), c
+	ld xwa, (xsp + 16)
+	ld (xwa), 0x0
+	jrl DSPCfg_Epilogue
+
+DSPCfg_EventType51:
+	ld c, (xwa)
+	ld (xsp + 6), c
+	lda xbc, (xwa + 1)
+	ld (xsp + 64), xbc
+	ld l, (xbc)
+	ld xbc, (xsp + 68)
+	ld c, (xbc)
+	ldb_erp C, 0xea
+	lda xbc, (xwa + 3)
+	ld (xsp + 48), xbc
+	ld h, (xbc)
+	lda xbc, (xwa + 4)
+	ld (xsp + 44), xbc
+	ld d, (xbc)
+	lda xbc, (xwa + 5)
+	ld (xsp + 40), xbc
+	ld c, (xbc)
+	ldb_erp C, 0xee
+	ld xbc, (xsp + 52)
+	ld e, (xbc)
+	lda xbc, (xwa + 7)
+	ld (xsp + 32), xbc
+	ld c, (xbc)
+	ldb_erp C, 0xeb
+	lda xbc, (xwa + 8)
+	ld (xsp + 28), xbc
+	ld c, (xbc)
+	ldb_erp C, 0xe7
+	lda xix, (xwa + 9)
+	ld c, (xix)
+	ldb_erp C, 0xe6
+	ld xiy, (xsp + 36)
+	ld b, (xiy)
+	ld xiy, (xsp + 56)
+	ld (xiy), 0x63
+	ld (xwa), 0x5b
+	ld xiy, (xsp + 64)
+	ld (xiy), 0x98
+	ld xiy, (xsp + 68)
+	stb_erp C, 0xea
+	ld (xiy), c
+	ld xiy, (xsp + 48)
+	ld (xiy), h
+	ld xiy, (xsp + 44)
+	ld (xiy), d
+	ld xiy, (xsp + 40)
+	stb_erp C, 0xee
+	ld (xiy), c
+	ld xiy, (xsp + 52)
+	ld (xiy), e
+	ld xiy, (xsp + 32)
+	stb_erp C, 0xeb
+	ld (xiy), c
+	stb_erp C, 0xe7
+	ld xde, (xsp + 28)
+	ld (xde), c
+	stb_erp C, 0xe6
+	ld (xix), c
+	ld xde, (xsp + 36)
+	ld (xde), b
+	ld c, (xsp + 6)
+	ld (xwa + 11), c
+	ld xwa, (xsp + 60)
+	ld (xwa), l
+	ld xwa, (xsp + 16)
+	ld (xwa), 0x1
+
+DSPCfg_Epilogue:
+	ld hl, (xsp + 4)
+	pop xiz
+	lda xsp, (xsp + 68)
+	ret
+
+DSPCfg_ReturnValueTable:
+	ret
+	ldw	hl, 256
+	ret
+	ldw	hl, 0xffff
+	ret
+	ldw	hl, 0xffff
+	ret
+	ldw	hl, 256
+	ret
+	ldw	hl, 256
+	ret
+
+
+	.include "boot/screen_group_dispatch.s"
+
+AudioInit_ProcessModeChange:
+	ldw_d16 xwa, (0xc594)
+	bit 2, wa
+	ret z
+	call Audio_CheckInitStatus
+	anddi16 0xc594, 0xfffb
+	bitda 1, (0xfc67)
+	jr z, AudioModeChange_Handler
+	ldw_d16 xwa, (0xc594)
+	bit 4, wa
+	jr nz, AudioModeChange_ClearVoiceFlags
+	setda 2, 0xc1fe
+	jr AudioModeChange_Handler
+
+AudioModeChange_ClearVoiceFlags:
+	stdi8 (0xc1fe), 0
+
+; Audio mode change handler
+AudioModeChange_Handler:
+	resda 3, 0xc1fe
+	stdi8 (0xc2b4), 255
+	stdi8 (0xc2bc), 255
+	stdi8 (0xc200), 255
+	stdi8 (0xc201), 255
+	ordi16 0xc59c, 257
+	ldb_d8 a, (0x8d34)
+	extz wa
+	sla wa, 2
+	lda_24 xbc, (SystemConfig_PointerTable_0x76)
+	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld xbc, xhl
+	lda_24 xwa, (AudioInit_MixFallbackDefault_0x5)
+	cp xwa, xbc
+	ret z
+	lds wa, 0
+	call (xhl)
+	call AudioInit_DrumRoutingCheck
+	call AudioInit_DrumSaveReturn
+	call AudioInit_VoiceParamCtrl
+	call AudioInit_ClearPartFlags_ByMode
+	call AudioInit_DispatchChanges
+	ret
+
+Audio_CheckSubsystemReady:
+	call Audio_CheckInitStatus
+	ldw_d16 xwa, (0xc598)
+	and wa, 0x60
+	call_24 z, AudioInit_RefreshToneBank
+	bitda 1, (0xfc67)
+	jr z, AudioSubsystem_Callback
+	ldw_d16 xwa, (0xc594)
+	bit 4, wa
+	jr nz, AudioSubsystem_ClearVoiceFlags
+	setda 2, 0xc1fe
+	jr AudioSubsystem_Callback
+
+AudioSubsystem_ClearVoiceFlags:
+	stdi8 (0xc1fe), 0
+
+; Audio subsystem callback
+AudioSubsystem_Callback:
+	resda 3, 0xc1fe
+	stdi8 (0xc2b4), 255
+	stdi8 (0xc2bc), 255
+	stdi8 (0xc200), 255
+	stdi8 (0xc201), 255
+	ordi16 0xc59c, 257
+	ldb_d8 a, (0x8d34)
+	extz wa
+	sla wa, 2
+	lda_24 xbc, (SystemConfig_PointerTable_0x76)
+	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld xbc, xhl
+	lda_24 xwa, (AudioInit_MixFallbackDefault_0x5)
+	cp xwa, xbc
+	ret z
+	lds wa, 0
+	call (xhl)
+	call AudioInit_DrumRoutingCheck
+	call AudioInit_DrumSaveReturn
+	call AudioInit_VoiceParamCtrl
+	call AudioInit_ClearPartFlags_ByMode
+	call AudioInit_DispatchChanges
+	ret
+
+AudioInit_SelectAndDispatch:
+	call AudioInit_SelectPriority
+	jp AudioInit_DispatchChanges
+
+AudioInit_CheckMIDIAndDispatch:
+	call AudioInit_CheckMIDIStatus
+	jp AudioInit_DispatchChanges
+
+Audio_InitDispatchReturn:
+	cps a, 0
+	jr z, AudioDispatch_ClearAccFlags
+	ldw_d16 xwa, (0xc598)
+	bit 2, wa
+	jr z, AudioDispatch_SetAccMode
+	bitda 0, (0x28b2)
+	jr z, AudioDispatch_SetAccMode
+
+AudioDispatch_ClearAccFlags:
+	anddi16 0xc596, 0xfdff
+	resda 0, 0x3284
+	call AudioInit_RefreshToneBank
+	stdi8 (0xc5a0), 0
+	jr AudioDispatch_CheckStereoMode
+
+AudioDispatch_SetAccMode:
+	ordi16 0xc596, 512
+	call AccAutoPlay_PeriodicCheck
+	ldw_d16 xwa, (0xc596)
+	and wa, 0x7
+	jr z, AudioDispatch_SetTimerBase
+	stdi8 (0xc5a0), 31
+	jr AudioDispatch_CheckStereoMode
+
+AudioDispatch_SetTimerBase:
+	stdi8 (0xc5a0), 16
+
+AudioDispatch_CheckStereoMode:
+	bitda 1, (0xfc67)
+	jr z, AudioVoice_Callback
+	ldw_d16 xwa, (0xc594)
+	bit 4, wa
+	jr nz, AudioDispatch_ClearVoiceFlags
+	setda 2, 0xc1fe
+	jr AudioDispatch_SetBusyFlag
+
+AudioDispatch_ClearVoiceFlags:
+	stdi8 (0xc1fe), 0
+
+AudioDispatch_SetBusyFlag:
+	ordi16 0xc59c, 1
+
+; Audio voice callback dispatch
+AudioVoice_Callback:
+	ldb_d8 a, (0x8d34)
+	extz wa
+	sla wa, 2
+	lda_24 xbc, (SystemConfig_PointerTable_0x76)
+	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld xbc, xhl
+	lda_24 xwa, (AudioInit_MixFallbackDefault_0x5)
+	cp xwa, xbc
+	jr z, AudioVoice_SkipToDispatch
+	lds wa, 0
+	call (xhl)
+	call AudioInit_ClearPartFlags_ByMode
+
+AudioVoice_SkipToDispatch:
+	jp AudioInit_DispatchChanges
+
+AudioMode_SetStereoFlags:
+	bitda 0, (0xfc69)
+	ret z
+	ordi16 0xc596, 128
+	ordi16 0xc594, 4
+	calr AudioInit_ProcessModeChange
+	ret
+
+AudioMode_ResetVoiceState:
+	bitda 1, (0xfc67)
+	jr z, AudioVoiceReset_Handler
+	ldw_d16 xwa, (0xc594)
+	bit 4, wa
+	jr nz, AudioVoiceReset_ClearFlags
+	setda 2, 0xc1fe
+	jr AudioVoiceReset_Handler
+
+AudioVoiceReset_ClearFlags:
+	stdi8 (0xc1fe), 0
+
+; Audio voice reset handler
+AudioVoiceReset_Handler:
+	resda 3, 0xc1fe
+	stdi8 (0xc2b4), 255
+	stdi8 (0xc2bc), 255
+	stdi8 (0xc200), 255
+	stdi8 (0xc201), 255
+	ordi16 0xc59c, 257
+	anddi16 0xc594, 0xfffd
+	ldb_d8 a, (0x8d34)
+	extz wa
+	sla wa, 2
+	lda_24 xbc, (SystemConfig_PointerTable_0x76)
+	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld xbc, xhl
+	lda_24 xwa, (AudioInit_MixFallbackDefault_0x5)
+	cp xwa, xbc
+	ret z
+	lds wa, 1
+	call (xhl)
+	call AudioInit_DrumRoutingCheck
+	call AudioInit_DrumSaveReturn
+	call AudioInit_VoiceParamCtrl
+	call AudioInit_ClearPartFlags_ByMode
+	call AudioInit_DispatchChanges
+	ret
+
+AudioMode_ConfigureExternal:
+	stdi8 (0xc1fe), 0
+	cps a, 0
+	jr z, AudioMode_ConfigExternal_Off
+	ordi16 0xc594, 16
+	jr AudioMode_ConfigExternal_Apply
+
+AudioMode_ConfigExternal_Off:
+	anddi16 0xc594, 0xffef
+	bitda 0, (0xfc66)
+	jr z, AudioMode_ConfigExternal_CheckBit1
+	setda 0, 0xc1fe
+
+AudioMode_ConfigExternal_CheckBit1:
+	bitda 1, (0xfc66)
+	jr z, AudioMode_ConfigExternal_CheckStereo
+	setda 1, 0xc1fe
+
+AudioMode_ConfigExternal_CheckStereo:
+	bitda 1, (0xfc67)
+	jr z, AudioMode_ConfigExternal_NoStereo
+	ordi16 0xc596, 32
+	jr AudioMode_ConfigExternal_MergeFlags
+
+AudioMode_ConfigExternal_NoStereo:
+	anddi16 0xc596, 0xffdf
+	ldw_d16 xwa, (0xc596)
+	and wa, 0x7
+	call_24 z, AudioInit_RefreshToneBank
+
+AudioMode_ConfigExternal_MergeFlags:
+	resda 2, 0xc1fe
+	ldb_d8 a, (0xfc67)
+	and a, 0x2
+	ld c, a
+	add a, c
+	orddm8 0xc1fe, a
+
+AudioMode_ConfigExternal_Apply:
+	ordi16 0xc594, 4
+	jrl AudioInit_ProcessModeChange
+; ============================================================================
+; UIState_ProcessMidiEvent - Process an incoming MIDI event in UI state
+; ============================================================================
+; Input:  MIDI event data
+; Output: None
+; Handles MIDI events (note on/off, control change, etc.) within the UI
+; state machine, updating relevant display elements.
+; ============================================================================
+UIState_ProcessMidiEvent:
+	cpdi8 (0xc080), 24
+	ret ugt
+	ldb_d8 l, (0xc080)
+	ldb_d8 h, (0xc07d)
+	ldb_d8 e, (0xc07f)
+	ldb_d8 d, (0xc07e)
+	ld a, l
+	extz wa
+	sla wa, 2
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0x7C)
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld a, h
+	cp a, 0x16
+	jrl z, UIStateEvt_TransposeUpdate
+	cp a, 0xd
+	jr z, UIStateEvt_VoiceAssign
+	cp a, 0xc
+	jr z, UIStateEvt_PartRouting
+	cps a, 0
+	ret nz
+	ld a, e
+	and a, 0xff
+	ret z
+	ordi16 0xc594, 4
+	ret
+
+UIStateEvt_PartRouting:
+	ld a, e
+	and a, 0x7
+	ret z
+	ld a, l
+	extz wa
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	extz wa
+	add wa, wa
+	ld hl, wa
+	add hl, 0x124
+	lda_d16 xix, (0xc1fe)
+	ld a, d
+	and a, 0x7
+	extz wa
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0x11C)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	and a, 0x7
+	sla a, 1
+	and_srib_im 0x07, 0xf0, 0xec, 0xf1
+	or_srib_mr A, 0x07, 0xf0, 0xec
+	ordi16 0xc594, 4
+	ret
+
+UIStateEvt_VoiceAssign:
+	ld a, e
+	and a, 0xf
+	jr z, UIStateEvt_ToneChange
+	bit 6, d
+	jr nz, UIStateEvt_VoiceAssign_Reset
+	ld a, l
+	extz wa
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	extz wa
+	lda_d16 xbc, (0xc222)
+	ld ix, wa
+	extz xix
+	add xix, xbc
+	ld a, d
+	and a, 0xf
+	ld (xix), a
+	jr UIStateEvt_VoiceAssign_Notify
+
+UIStateEvt_VoiceAssign_Reset:
+	ld a, l
+	extz wa
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	extz wa
+	lda_d16 xbc, (0xc222)
+	extz xwa
+	add xwa, xbc
+	ld (xwa), 0xff
+
+UIStateEvt_VoiceAssign_Notify:
+	ordi16 0xc59c, 2048
+	ordi16 0xc594, 4
+
+UIStateEvt_ToneChange:
+	bit 5, e
+	jr z, UIStateEvt_DrumAssign
+	bit 5, d
+	jr z, UIStateEvt_ToneChange_Set
+	ld a, l
+	extz wa
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	extz wa
+	lda_d16 xbc, (0xc202)
+	extz xwa
+	add xwa, xbc
+	ld (xwa), 0xff
+	cp l, 0x13
+	jr nz, Tone_WriteEndMarker
+	stdi8 (0xc218), 255
+	jr Tone_WriteEndMarker
+
+UIStateEvt_ToneChange_Set:
+	ld a, l
+	extz wa
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	extz wa
+	lda_d16 xbc, (0xc202)
+	ld ix, wa
+	extz xix
+	add xix, xbc
+	ld a, l
+	extz wa
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld (xix), a
+	cp l, 0x13
+	jr nz, Tone_WriteEndMarker
+	stdi8 (0xc218), 22
+
+Tone_WriteEndMarker:
+	ordi16 0xc59c, 4
+	ordi16 0xc594, 4
+
+UIStateEvt_DrumAssign:
+	bit 6, e
+	ret z
+	bit 6, d
+	jr z, UIStateEvt_DrumAssign_Set
+	ld a, l
+	extz wa
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	extz wa
+	lda_d16 xbc, (0xc222)
+	extz xwa
+	add xwa, xbc
+	ld (xwa), 0xff
+	jr UIStateEvt_DrumAssign_Notify
+
+UIStateEvt_DrumAssign_Set:
+	ld a, l
+	extz wa
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	extz wa
+	lda_d16 xbc, (0xc222)
+	ld de, wa
+	extz xde
+	add xde, xbc
+	ld a, l
+	extz wa
+	sla wa, 2
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0x7C)
+	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld a, (xwa + 13)
+	and a, 0xf
+	ld (xde), a
+
+UIStateEvt_DrumAssign_Notify:
+	ordi16 0xc59c, 8
+	ordi16 0xc594, 4
+	ret
+
+UIStateEvt_TransposeUpdate:
+	bit 0, e
+	ret z
+	bit 0, d
+	jr z, UIStateEvt_TransposeUpdate_Clear
+	ld a, l
+	extz wa
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	extz wa
+	add wa, wa
+	ld bc, wa
+	add bc, 0xe4
+	lda_d16 xde, (0xc1ff)
+	ldb_d8 a, (0xfc6a)
+	and a, 0xff
+	sub a, 0x40
+	lda_dri XBC, 0x07, 0xe8, 0xe4
+	jr UIStateEvt_TransposeUpdate_Apply
+
+UIStateEvt_TransposeUpdate_Clear:
+	ld a, l
+	extz wa
+	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	ldb_sri A, 0x07, 0xe4, 0xe0
+	extz wa
+	add wa, wa
+	add wa, 0xe4
+	lda_d16 xbc, (0xc1ff)
+	stib_ind 0x07, 0xe4, 0xe0, 0x00
+
+UIStateEvt_TransposeUpdate_Apply:
+	ordi16 0xc594, 4
+	ret
+
+UIStateEvt_ParamEdit_Data:
+	pushw	iz
+	ldb_d8	a, (0xc07d)
+	extz	wa
+	cps	wa, 0
+	jrl	mi, 606
+	cps	wa, 6
+	jrl	gt, 601
+	add	wa, wa
+	lda_24	xix, (AudioInit_VoiceDispatch_Table_0x150)
+	.byte 0xd3
+	reti
+	.byte 0xf0, 0xe0
+	ldb	w, 242
+	or	b, l
+	swi	5
+	ldw	ix, 2035
+	.byte 0xf0, 0xe0
+	and	bc, wa
+	jrl	nc, 8640
+	and	a, 7
+	jrl	z, 183
+	ldw_d16	wa, (0xc598)
+	bit	6, wa
+	jr	z, 44
+	ldb_d8	a, (0xfc5e)
+	and	a, 7
+	extz	wa
+	add	wa, wa
+	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
+	.byte 0xd3
+	reti
+	.byte 0xe4, 0xe0
+	ldb	h, 193
+	pop	xiy
+	swi	4
+	ldb	a, 201
+	mul	d, 216
+	ccf
+	add	wa, wa
+	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
+	.byte 0xd3
+	reti
+	.byte 0xe4, 0xe0, 0xe6
+	jr	60
+	ldw_d16	wa, (0xc598)
+	and	wa, 34
+	cp	wa, 32
+	jr	nz, 25
+	lds	iz, 2
+	ldb_d8	a, (0xfc5d)
+	and	a, 8
+	extz	wa
+	add	wa, wa
+	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
+	.byte 0xd3
+	reti
+	.byte 0xe4, 0xe0, 0xe6
+	jr	21
+	ldb_d8	a, (0xfc5d)
+	and	a, 15
+	extz	wa
+	add	wa, wa
+	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
+	.byte 0xd3
+	reti
+	.byte 0xe4, 0xe0
+	ldb	h, 209
+	.byte 0x96, 0xc5
+	ldb	w, 216
+	cpl	d
+	nop
+	jr	z, 18
+	ld	wa, iz
+	and	wa, 6
+	jr	z, 10
+	ldw_d16	wa, (0xc596)
+	and	wa, 7
+	jr	nz, 4
+	call	AudioInit_RefreshToneBank
+	.byte 0xd1, 0x96, 0xc5
+	push	xix
+	.byte 0xe8
+	swi	7
+	.byte 0xd1, 0x96, 0xc5
+	xor	xbc, xiz
+	.byte 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ldw_d16	wa, (0xc596)
+	and	wa, 7
+	jr	z, 7
+	stdi8	(0xc5a0), 31
+	jr	5
+	stdi8	(0xc5a0), 16
+	.byte 0xf1
+	jrl	nc, -13376
+	jrl	z, 379
+	.byte 0xf1
+	jrl	nz, -13376
+	jr	z, 8
+	.byte 0xd1, 0x96, 0xc5
+	push	xiz
+	rcf
+	nop
+	jr	6
+	.byte 0xd1, 0x96, 0xc5
+	push	xix
+	.byte 0xef
+	swi	7
+	.byte 0xd1, 0x9a, 0xc5
+	push	xiz
+	nop
+	ldb	w, 209
+	.byte 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	jrl	344
+	.byte 0xf1
+	jrl	nc, -12608
+	jr	z, 32
+	.byte 0xf1
+	jrl	nz, -12608
+	jr	z, 8
+	.byte 0xd1, 0x96, 0xc5
+	push	xiz
+	nop
+	.byte 0x04
+	jr	6
+	.byte 0xd1, 0x96, 0xc5
+	push	xix
+	swi	7
+	swi	3
+	.byte 0xd1, 0x9a, 0xc5
+	push	xiz
+	nop
+	ld	xwa, 0x3ec594d1
+	.byte 0x04
+	nop
+	.byte 0xf1
+	jrl	nc, -13120
+	jr	z, 32
+	.byte 0xd1, 0x96, 0xc5
+	push	xix
+	swi	7
+	ldx
+	.byte 0xf1
+	jrl	nz, -13120
+	jr	z, 8
+	.byte 0xd1, 0x96, 0xc5
+	push	xiz
+	nop
+	ldio	104, 6
+	.byte 0xd1, 0x96, 0xc5
+	push	xix
+	swi	7
+	ldx
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ldb_d8	a, (0xc07f)
+	and	a, 7
+	jrl	z, 258
+	ldw_d16	wa, (0xc598)
+	bit	6, wa
+	jr	z, 44
+	ldb_d8	a, (0xfc5e)
+	and	a, 7
+	extz	wa
+	add	wa, wa
+	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
+	.byte 0xd3
+	reti
+	.byte 0xe4, 0xe0
+	ldb	h, 193
+	pop	xiy
+	swi	4
+	ldb	a, 201
+	mul	d, 216
+	ccf
+	add	wa, wa
+	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
+	.byte 0xd3
+	reti
+	.byte 0xe4, 0xe0, 0xe6
+	jr	55
+	ldw_d16	wa, (0xc598)
+	bit	5, wa
+	jr	z, 25
+	lds	iz, 2
+	ldb_d8	a, (0xfc5d)
+	and	a, 8
+	extz	wa
+	add	wa, wa
+	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
+	.byte 0xd3
+	reti
+	.byte 0xe4, 0xe0, 0xe6
+	jr	21
+	ldb_d8	a, (0xfc5d)
+	and	a, 15
+	extz	wa
+	add	wa, wa
+	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
+	.byte 0xd3
+	reti
+	.byte 0xe4, 0xe0
+	ldb	h, 209
+	.byte 0x96, 0xc5
+	push	xix
+	.byte 0xe8
+	swi	7
+	.byte 0xd1, 0x96, 0xc5
+	xor	xbc, xiz
+	.byte 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ldw_d16	wa, (0xc596)
+	and	wa, 7
+	jr	z, 7
+	stdi8	(0xc5a0), 31
+	jr	117
+	stdi8	(0xc5a0), 16
+	jr	110
+	ldb_d8	a, (0xc07f)
+	and	a, 252
+	jr	z, 30
+	.byte 0xf1, 0x84
+	ldw	de, 0x6ec8
+	ccf
+	ldw_d16	wa, (0xc596)
+	bit	9, wa
+	jr	z, 9
+	ldb_d8	a, (0xfc5f)
+	and	a, 252
+	jr	nz, 0
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	.byte 0xf1
+	jrl	nc, -13888
+	jr	z, 65
+	.byte 0xf1
+	pop	xsp
+	swi	4
+	inc	6, a
+	incf
+	ldw_d16	wa, (0xc596)
+	bit	9, wa
+	.byte 0xf2, 0xf5, 0xf5
+	swi	5
+	.byte 0xe6, 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	jr	39
+	ldb_d8	a, (0xc07f)
+	and	a, 252
+	jr	z, 30
+	.byte 0xf1, 0x84
+	ldw	de, 0x6ec8
+	ccf
+	ldw_d16	wa, (0xc596)
+	bit	9, wa
+	jr	z, 9
+	ldb_d8	a, (0xfc5f)
+	and	a, 252
+	jr	nz, 0
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	popw	iz
+	ret
+UIStateEvt_VolumeMixer_Data:
+	ldb_d8	a, (0xc07d)
+	extz	wa
+	cps	wa, 0
+	ret	mi
+	cps	wa, 5
+	ret	gt
+	add	wa, wa
+	lda_24	xix, (AudioInit_VoiceDispatch_Table_0x15E)
+	.byte 0xd3
+	reti
+	.byte 0xf0, 0xe0
+	ldb	w, 242
+	push	xwa
+	.byte 0xe5
+	swi	5
+	ldw	ix, 2035
+	.byte 0xf0, 0xe0
+	and	bc, wa
+	jrl	nc, 8640
+	and	a, 31
+	jr	z, 22
+	.byte 0xc1
+	swi	6
+	andda8	a, 0xfc3c
+	jrl	nz, 8640
+	and	a, 3
+	orddm8	0xc1fe, a
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ldw_d16	wa, (0xc594)
+	bit	4, wa
+	ret	z
+	stdi8	(0xc1fe), 0
+	.byte 0xd1, 0x9a, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	ldb_d8	a, (0xc07f)
+	and	a, 31
+	jr	z, 58
+	.byte 0xf1
+	jrl	nz, -13888
+	jr	z, 8
+	.byte 0xd1, 0x96, 0xc5
+	push	xiz
+	ldb	w, 0
+	jr	19
+	.byte 0xd1, 0x96, 0xc5
+	push	xix
+	.byte 0xdf
+	swi	7
+	ldw_d16	wa, (0xc596)
+	and	wa, 7
+	.byte 0xf2, 0xf5, 0xf5
+	swi	5
+	.byte 0xe6, 0xf1
+	swi	6
+	.byte 0xc1, 0xb2
+	ldb_d8	a, (0xc07e)
+	and	a, 2
+	ld	c, a
+	add	a, c
+	orddm8	0xc1fe, a
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ldw_d16	wa, (0xc594)
+	bit	4, wa
+	ret	z
+	stdi8	(0xc1fe), 0
+	.byte 0xd1, 0x9a, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	.byte 0xf1
+	jrl	nc, -14144
+	jr	z, 26
+	.byte 0xf1
+	jrl	nz, -14144
+	jr	z, 8
+	.byte 0xd1, 0x96, 0xc5
+	push	xiz
+	.byte 0x80
+	nop
+	jr	6
+	.byte 0xd1, 0x96, 0xc5
+	push	xix
+	jrl	nc, -11777
+	.byte 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	.byte 0xf1
+	jrl	nc, -13888
+	ret	z
+	.byte 0xf1
+	jrl	nz, -13888
+	jr	z, 8
+	.byte 0xd1, 0x96, 0xc5
+	push	xiz
+	ldio	0, 104
+	.byte 0x06, 0xd1, 0x96, 0xc5
+	push	xix
+	ldx
+	swi	7
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	ldb_d8	a, (0xc07f)
+	and	a, 255
+	ret	z
+	lds	de, 0
+	cp	de, 26
+	jr	ge, 79
+	ld	wa, de
+	sla	wa, 2
+	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x7C)
+	.byte 0xe3
+	reti
+	.byte 0xe4, 0xe0
+	ldb	w, 184
+	ex_ff
+	inc	6, w
+	ldb	w, 218
+	add	w, (xwa-40)
+	add	wa, 228
+	lda_d16	xbc, (0xc1ff)
+	ld	hl, wa
+	extz	xhl
+	add	xhl, xbc
+	ldb_d8	a, (0xc07e)
+	and	a, 255
+	sub	a, 64
+	ld	(xhl), a
+	jr	19
+	ld	wa, de
+	add	wa, wa
+	add	wa, 228
+	lda_d16	xbc, (0xc1ff)
+	extz	xwa
+	add	xwa, xbc
+	ld	(xwa), 0
+	inc	1, de
+	cp	de, 26
+	jr	lt, -79
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	ldb_d8	a, (0xc07f)
+	and	a, 255
+	ret	z
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	ret
+UIStateEvt_EffectSelect_Data:
+	ldb_d8	a, (0xc07d)
+	cps	a, 4
+	jrl	z, 270
+	cps	a, 3
+	jrl	z, 238
+	cps	a, 2
+	jrl	z, 147
+	cps	a, 1
+	jr	z, 99
+	cps	a, 0
+	ret	nz
+	ldb_d8	a, (0xc07f)
+	and	a, 3
+	jr	z, 79
+	ldb_d8	a, (0xc07e)
+	and	a, 3
+	cps	a, 3
+	jr	z, 57
+	cps	a, 2
+	jr	z, 40
+	cps	a, 1
+	jr	z, 23
+	cps	a, 0
+	jr	nz, 56
+	ldb_d8	a, (0xfd03)
+	res	7, a
+	stb_d8	(0xc5a2), a
+	.byte 0xd1, 0x9a, 0xc5
+	push	xiz
+	nop
+	.byte 0x04
+	jr	37
+	stdi8	(0xc5a2), 55
+	.byte 0xd1, 0x9a, 0xc5
+	push	xiz
+	nop
+	.byte 0x04
+	jr	24
+	stdi8	(0xc5a2), 60
+	.byte 0xd1, 0x9a, 0xc5
+	push	xiz
+	nop
+	.byte 0x04
+	jr	11
+	stdi8	(0xc5a2), 67
+	.byte 0xd1, 0x9a, 0xc5
+	push	xiz
+	nop
+	.byte 0x04, 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	ldb_d8	a, (0xc07f)
+	res	7, a
+	cps	a, 0
+	ret	z
+	ldb_d8	a, (0xfd02)
+	and	a, 3
+	jr	nz, 11
+	ldb_d8	a, (0xc07e)
+	res	7, a
+	stb_d8	(0xc5a2), a
+	.byte 0xd1, 0x9a, 0xc5
+	push	xiz
+	nop
+	.byte 0x04, 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	ldb_d8	a, (0xc07f)
+	and	a, 255
+	ret	z
+	.byte 0xf1, 0x50
+	swi	5
+	sbc	w, e
+	.byte 0xf6
+	ldb_d8	a, (0xc07e)
+	and	a, 255
+	extz	wa
+	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x124)
+	.byte 0xc3
+	reti
+	.byte 0xe4, 0xe0
+	ldb	e, 219
+	and	(xwa-37), xsp
+	.byte 0x1a
+	nop
+	jr	nc, 37
+	ld	wa, hl
+	add	wa, wa
+	add	wa, 292
+	lda_d16	xbc, (0xc1ff)
+	extz	xwa
+	add	xwa, xbc
+	ld	c, e
+	and	c, 15
+	sla	c, 4
+	.byte 0x80
+	push	xix
+	retd	0xeb80
+	inc	1, hl
+	cp	hl, 26
+	jr	c, -37
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	ldb_d8	a, (0xc07f)
+	and	a, 255
+	ret	z
+	ldb_d8	a, (0xc07e)
+	and	a, 255
+	stb_d8	(0xe9c0), a
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	ldb_d8	a, (0xc07f)
+	and	a, 15
+	ret	z
+	ldb_d8	a, (0xc07e)
+	and	a, 15
+	stb_d8	(0xe9be), a
+	.byte 0xd1, 0x9a, 0xc5
+	push	xiz
+	nop
+	ld	xwa, 0x3ec594d1
+	.byte 0x04
+	nop
+	ret
+UIStateEvt_PlayModeGuard_Data:
+	; --- Guard/dispatch: check flags, set/clear bits, conditional calls (54 bytes) ---
+	cpdi8	(0xc07d), 2
+	ret nz
+	bitda	6, (0xc07e)
+	jr z, UIStateEvt_PlayModeGuard_ClearBit
+	ordi16	0xc596, 8192
+	ret
+UIStateEvt_PlayModeGuard_ClearBit:
+	anddi16	0xc596, 0xdfff
+	call Voice_UpdatePlayModeState
+	cp hl, 0x00ff
+	.byte 0xf2, 0xb8
+	ccf
+	swi	6
+	.byte 0xee
+	call NoteMap_FindBestMatch
+	cp hl, 0x00ff
+	ret z
+	call VoiceEvent_DispatchTable
+	ret
+
+
+UIStateEvt_ChannelConfig_Data:
+	ldb_d8	a, (0xc07d)
+	cp	a, 11
+	jrl	z, 326
+	cp	a, 12
+	jrl	z, 320
+	cp	a, 10
+	jrl	z, 314
+	cps	a, 3
+	jrl	z, 158
+	cps	a, 2
+	jrl	z, 146
+	cps	a, 1
+	ret	z
+	cps	a, 0
+	ret	nz
+	.byte 0xf1
+	jrl	nc, -12608
+	jr	z, 12
+	.byte 0xd1, 0x9c, 0xc5
+	push	xiz
+	ldio	0, 209
+	.byte 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	.byte 0xf1
+	jrl	nc, -12864
+	ret	z
+	.byte 0xf1
+	jrl	nz, -12864
+	jr	z, 66
+	lds	de, 0
+	cp	de, 26
+	jr	nc, 93
+	ld	wa, de
+	add	wa, wa
+	add	wa, 292
+	lda_d16	xbc, (0xc1ff)
+	ld	hl, wa
+	extz	xhl
+	add	xhl, xbc
+	ldb_d8	a, (0xfd04)
+	and	a, 255
+	extz	wa
+	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x124)
+	.byte 0xc3
+	reti
+	.byte 0xe4, 0xe0
+	ldb	a, 201
+	.byte 0xcc
+	retd	0xecc9
+	.byte 0x04, 0x83
+	push	xix
+	retd	0xe983
+	inc	1, de
+	cp	de, 26
+	jr	c, -56
+	jr	35
+	lds	de, 0
+	cp	de, 26
+	jr	nc, 27
+	ld	wa, de
+	add	wa, wa
+	add	wa, 292
+	lda_d16	xbc, (0xc1ff)
+	extz	xwa
+	add	xwa, xbc
+	.byte 0x80
+	push	xix
+	retd	0x61da
+	cp	de, 26
+	jr	c, -27
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	.byte 0xd1, 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	.byte 0xf1
+	jrl	nc, -14144
+	jr	z, 34
+	.byte 0xf1
+	jrl	nz, -14144
+	jr	z, 12
+	.byte 0xf1
+	ldb	b, 195
+	.byte 0xb4, 0xd1, 0x9c, 0xc5
+	push	xiz
+	ldio	0, 104
+	ldwio	241, 0xc322
+	.byte 0xbc, 0xd1, 0x9c, 0xc5
+	push	xiz
+	ldio	0, 209
+	.byte 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	.byte 0xf1
+	jrl	nc, -13632
+	jr	z, 68
+	.byte 0xf1
+	jrl	nz, -13632
+	jr	z, 26
+	.byte 0xf1
+	ld	xde, 0x44f1bec3
+	.byte 0xc3
+	ld	(xiz-15), h
+	.byte 0xc3, 0xbe, 0xf1
+	popw	wa
+	.byte 0xc3, 0xbe, 0xf1
+	popw	de
+	.byte 0xc3, 0xbe, 0xf1
+	popw	ix
+	.byte 0xc3, 0xbe
+	jr	30
+	.byte 0xf1
+	ld	xde, 0x44f1b6c3
+	.byte 0xc3, 0xb6, 0xf1
+	ld	xiz, 0x48f1b6c3
+	.byte 0xc3, 0xb6, 0xf1
+	popw	de
+	.byte 0xc3, 0xb6, 0xf1
+	popw	ix
+	.byte 0xc3, 0xb6, 0xd1, 0x9c, 0xc5
+	push	xiz
+	ldio	0, 209
+	.byte 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	.byte 0xf1
+	jrl	nc, -12608
+	jr	z, 12
+	.byte 0xd1, 0x9c, 0xc5
+	push	xiz
+	ldio	0, 209
+	.byte 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	.byte 0xf1
+	jrl	nc, -12352
+	ret	z
+	.byte 0xd1, 0x9c, 0xc5
+	push	xiz
+	ldio	0, 209
+	.byte 0x94, 0xc5
+	push	xiz
+	.byte 0x04
+	nop
+	ret
+	ld	xwa, 0x5000
+	call	SndParam_LookupReadOnly
+	cps	hl, 2
+	jr	z, 38
+	cps	hl, 1
+	jr	z, 15
+	cps	hl, 0
+	ret	nz
+	stdi8	(0xc362), 0
+	stdi8	(0xc363), 255
+	ret
+	ld	xwa, 0x5001
+	call	SndParam_LookupReadOnly
+	stb_d8	(0xc362), l
+	stdi8	(0xc363), 255
+	ret
+	stdi8	(0xc362), 0
+	ld	xwa, 0x5002
+	call	SndParam_LookupReadOnly
+	stb_d8	(0xc363), l
+	ret
+UIStateEvt_StubReturn:
+	ret
+	ret
+UIStateEvt_MuteToggle_Data:
+	ldb_d8	a, (0xc07d)
+	cp	a, 16
+	ret	nz
+	bitda	0, (0xc07f)
+	ret	z
+	bitda	0, (0xc07e)
+	jr	z, 8
+	ordi16	0xc594, 1
+	jr	6
+	anddi16	0xc594, 0xfffe
+	ordi16	0xc594, 4
+	ret
+	ret
+
+; ============================================================================
+; AudioInit_ConfigStereoVoice - Configure stereo voice routing and panning
+; ============================================================================
+; Input:  Voice index (from voice type table at 0xee8e62)
+; Output: Updates audio config flags at address 50588
+; Default handler in voice-source dispatch table. Routes voices by type:
+; simple stereo (type < 3) or extended routing with panning configuration.
+; ============================================================================
+	.include "audio/audioinit_routines.s"

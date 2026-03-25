@@ -1,0 +1,273 @@
+/**
+ * screendata_types.h — C struct definitions for ScreenData bytecode commands
+ *
+ * The KN5000 Style UI uses a bytecode format to describe screen layouts.
+ * Each command is a packed struct starting with an opcode byte.
+ *
+ * All multi-byte integers are little-endian (native for TLCS-900).
+ * All structs are __attribute__((packed)) to match the bytecode encoding.
+ */
+
+#ifndef SCREENDATA_TYPES_H
+#define SCREENDATA_TYPES_H
+
+#include <stdint.h>
+
+/* ── Opcodes ─────────────────────────────────────────────────── */
+
+#define SD_OP_HLINE        0x01
+#define SD_OP_VLINE_WIDGET 0x02  /* sub=0x0A → VLINE, else WIDGET */
+#define SD_OP_LABELED_REF  0x06
+#define SD_OP_SHORT_REF    0x07
+#define SD_OP_MESSAGE      0x08
+#define SD_OP_RECT         0x09
+#define SD_OP_FILLED_RECT  0x0A
+#define SD_OP_STRING       0x20
+#define SD_OP_UNKNOWN_23   0x23
+
+#define SD_SUB_VLINE       0x0A
+
+/* ── Coordinate types ────────────────────────────────────────── */
+
+/** Screen coordinate pair (little-endian 16-bit) */
+typedef struct __attribute__((packed)) {
+    uint16_t x;
+    uint16_t y;
+} sd_point_t;
+
+/* ── Fixed-size command structs ──────────────────────────────── */
+
+/** HLINE: horizontal line (op=0x01, 10 bytes) */
+typedef struct __attribute__((packed)) {
+    uint8_t    opcode;   /* SD_OP_HLINE */
+    uint8_t    length;   /* always 0x0A */
+    sd_point_t p1;
+    sd_point_t p2;
+} sd_hline_t;
+
+/** VLINE: vertical line (op=0x02, sub=0x0A, 10 bytes) */
+typedef struct __attribute__((packed)) {
+    uint8_t    opcode;   /* SD_OP_VLINE_WIDGET */
+    uint8_t    subtype;  /* SD_SUB_VLINE (0x0A) */
+    sd_point_t p1;
+    sd_point_t p2;
+} sd_vline_t;
+
+/** RECT: outline rectangle (op=0x09, 10 bytes) */
+typedef struct __attribute__((packed)) {
+    uint8_t    opcode;   /* SD_OP_RECT */
+    uint8_t    length;   /* always 0x0A */
+    sd_point_t top_left;
+    sd_point_t bottom_right;
+} sd_rect_t;
+
+/** FILLED_RECT: filled rectangle (op=0x0A, 10 bytes) */
+typedef struct __attribute__((packed)) {
+    uint8_t    opcode;   /* SD_OP_FILLED_RECT */
+    uint8_t    length;   /* always 0x0A */
+    sd_point_t top_left;
+    sd_point_t bottom_right;
+} sd_filled_rect_t;
+
+/** Selection box: inner + outer RECT pair */
+typedef struct __attribute__((packed)) {
+    sd_rect_t inner;
+    sd_rect_t outer;
+} sd_selection_box_t;
+
+/* ── Variable-length command structs ─────────────────────────── */
+/*
+ * For variable-length commands (STRING, LABELED_REF, SHORT_REF, MESSAGE),
+ * we define parameterized macros and concrete types for each text length.
+ *
+ * Usage:
+ *   SD_STRING_TYPE(3)  → sd_string_3_t  (STRING with 3-char text)
+ *   SD_LABELED_REF_TYPE(3) → sd_labeled_ref_3_t (REF with 3-char label)
+ */
+
+/** STRING: text at screen position (op=0x20) */
+#define SD_STRING_TYPE(text_len) \
+    struct __attribute__((packed)) { \
+        uint8_t opcode;  /* SD_OP_STRING */ \
+        uint8_t length;  /* 4 + text_len */ \
+        uint8_t x;       \
+        uint8_t y;       \
+        char    text[text_len]; \
+    }
+
+/** LABELED_REF: handler reference with label text (op=0x06) */
+#define SD_LABELED_REF_TYPE(label_len) \
+    struct __attribute__((packed)) { \
+        uint8_t  opcode; /* SD_OP_LABELED_REF */ \
+        uint8_t  length; /* 4 + label_len */ \
+        uint16_t addr;   \
+        char     label[label_len]; \
+    }
+
+/** SHORT_REF: compact reference (op=0x07) */
+#define SD_SHORT_REF_TYPE(data_len) \
+    struct __attribute__((packed)) { \
+        uint8_t opcode;  /* SD_OP_SHORT_REF */ \
+        uint8_t length;  /* 2 + data_len */ \
+        uint8_t data[data_len]; \
+    }
+
+/** MESSAGE: text message at position (op=0x08) */
+#define SD_MESSAGE_TYPE(text_len) \
+    struct __attribute__((packed)) { \
+        uint8_t opcode;  /* SD_OP_MESSAGE */ \
+        uint8_t length;  /* 4 + text_len */ \
+        uint8_t x;       \
+        uint8_t y;       \
+        char    text[text_len]; \
+    }
+
+/* ── Convenience typedefs for common sizes ───────────────────── */
+
+typedef SD_STRING_TYPE(1)  sd_string_1_t;    /* single-char (arrows, etc.) */
+typedef SD_STRING_TYPE(3)  sd_string_3_t;    /* "CTL", "BAL", etc. */
+typedef SD_STRING_TYPE(4)  sd_string_4_t;    /* "MEAS" */
+typedef SD_STRING_TYPE(5)  sd_string_5_t;    /* "VALUE", "TRACK" */
+typedef SD_STRING_TYPE(6)  sd_string_6_t;    /* "CURSOR" */
+typedef SD_STRING_TYPE(37) sd_string_37_t;   /* long label row */
+
+typedef SD_LABELED_REF_TYPE(1)  sd_labeled_ref_1_t;  /* single-byte param (chord box refs) */
+typedef SD_LABELED_REF_TYPE(2)  sd_labeled_ref_2_t;  /* "NO" */
+typedef SD_LABELED_REF_TYPE(3)  sd_labeled_ref_3_t;  /* "BAL", "ERS", "YES", "CLR", "CTL" */
+typedef SD_LABELED_REF_TYPE(4)  sd_labeled_ref_4_t;  /* "REST" */
+typedef SD_LABELED_REF_TYPE(6)  sd_labeled_ref_6_t;  /* "TRACK:" */
+
+typedef SD_SHORT_REF_TYPE(3)    sd_short_ref_3_t;    /* standard 5-byte shortref */
+typedef SD_SHORT_REF_TYPE(14)   sd_short_ref_14_t;   /* "STEP RECORD:" embedded text */
+
+typedef SD_MESSAGE_TYPE(13) sd_message_13_t; /* "Are You Sure?" */
+
+/* ── LCD special character codes ─────────────────────────────── */
+
+#define LCD_CHAR_FLAT   0x88  /* ♭ */
+#define LCD_CHAR_SHARP  0x8C  /* ♯ */
+#define LCD_CHAR_VBAR   0x8D  /* | (up arrow) */
+#define LCD_CHAR_DARROW 0x8E  /* ~ (down arrow) */
+
+/* Short aliases for chord name tables */
+#define FLAT  LCD_CHAR_FLAT
+#define SHARP LCD_CHAR_SHARP
+
+/* ── Chord name table macros ───────────────────────────────── */
+
+/** Chord root entry (2 chars, e.g. " C", "D♭", "F♯") */
+#define CHORD_ROOT(a, b)  (a), (b)
+
+/** Chord type entry (5 chars, right-padded with spaces) */
+#define CHORD_TYPE(a, b, c, d, e)  (a), (b), (c), (d), (e)
+
+/* ── Widget command (op=0x02, sub != 0x0A) ─────────────────── */
+
+/** WIDGET: UI widget element (15 bytes)
+ *  op=0x02, subtype != SD_SUB_VLINE
+ *  Contains handler address (24-bit, zero-extended to 32-bit LE)
+ */
+typedef struct __attribute__((packed)) {
+    uint8_t  opcode;     /* SD_OP_VLINE_WIDGET (0x02) */
+    uint8_t  subtype;    /* widget sub-type (not 0x0A) */
+    uint16_t id;         /* widget ID (LE) */
+    uint16_t flags;      /* widget flags (LE) */
+    uint8_t  ref_tag;    /* reference tag (0x06) */
+    uint32_t handler;    /* 24-bit handler address, zero-extended to 32-bit LE */
+    uint16_t param;      /* parameter value (LE) */
+    uint8_t  x;          /* screen x position */
+    uint8_t  y;          /* screen y position */
+} sd_widget_t;
+
+/** REF_EX: extended reference (op=0x06, length=0x0A, 10 bytes)
+ *  Used for row label references with binary parameter data
+ */
+typedef struct __attribute__((packed)) {
+    uint8_t  opcode;     /* SD_OP_LABELED_REF (0x06) */
+    uint8_t  length;     /* 0x0A */
+    uint16_t id;         /* reference ID (LE) */
+    uint8_t  data[6];    /* parameter data */
+} sd_ref_ex_t;
+
+/** NOP/PAD: padding command (10 bytes) */
+typedef struct __attribute__((packed)) {
+    uint8_t  opcode;     /* 0x00 */
+    uint8_t  length;     /* 0x0A */
+    uint8_t  data[8];    /* padding data */
+} sd_nop_10_t;
+
+/** NOP/PAD: padding command (12 bytes) */
+typedef struct __attribute__((packed)) {
+    uint8_t  opcode;     /* 0x00 or 0x03 */
+    uint8_t  length;     /* 0x0C */
+    uint8_t  data[10];   /* padding/setup data */
+} sd_nop_12_t;
+
+/* ── Space padding initializer ──────────────────────────────── */
+
+/** Fill N bytes with ASCII space (0x20) using GNU range designators */
+#define SD_SPACES(n) { [0 ... ((n)-1)] = ' ' }
+
+/* ── Helper for unknown opcodes ──────────────────────────────── */
+
+#define SD_UNKNOWN_TYPE(data_len) \
+    struct __attribute__((packed)) { \
+        uint8_t opcode;  \
+        uint8_t length;  \
+        uint8_t data[data_len]; \
+    }
+
+typedef SD_UNKNOWN_TYPE(3) sd_unknown_5_t;
+
+/* ── SETUP/CONTROL block types ─────────────────────────────── */
+
+/** Block header (11 bytes) — used for SETUP (type=0x03) and CTRL (type=0x04) blocks.
+ *  SETUP blocks are followed by variable-length cursor coordinate arrays.
+ *  CTRL blocks stand alone (no trailing data).
+ */
+typedef struct __attribute__((packed)) {
+    uint8_t  type;       /* 0x03=SETUP, 0x04=CTRL */
+    uint8_t  length;     /* 0x0B */
+    uint16_t id;         /* widget ID (LE) */
+    uint16_t flags;      /* flags (LE) */
+    uint8_t  tag;        /* reference tag (0x05 for SETUP, 0x0E for CTRL) */
+    uint32_t handler;    /* handler address (24-bit, zero-extended to 32-bit LE) */
+} sd_block_hdr_t;
+
+#define SD_BLOCK_SETUP  0x03
+#define SD_BLOCK_CTRL   0x04
+
+/** Config block (8 bytes, type=0x0E) */
+typedef struct __attribute__((packed)) {
+    uint8_t  type;       /* 0x0E */
+    uint8_t  length;     /* 0x08 */
+    uint16_t id;         /* reference ID (LE) */
+    uint16_t flags;      /* flags (LE) */
+    uint16_t param;      /* parameter (LE) */
+} sd_config_block_t;
+
+/** Boundary block (10 bytes, type=0x1B) — cursor movement boundary rectangle */
+typedef struct __attribute__((packed)) {
+    uint8_t  type;       /* 0x1B */
+    uint8_t  length;     /* 0x0A */
+    sd_point_t p1;       /* boundary point 1 */
+    sd_point_t p2;       /* boundary point 2 */
+} sd_boundary_block_t;
+
+/** Cursor selection rectangle (8 bytes) — (x1,y1)-(x2,y2) highlight box */
+typedef struct __attribute__((packed)) {
+    uint16_t x1;
+    uint16_t y1;
+    uint16_t x2;
+    uint16_t y2;
+} sd_cursor_rect_t;
+
+/** Value display entry (6 bytes) — right-aligned display rectangle for parameter values */
+typedef struct __attribute__((packed)) {
+    uint8_t  x;          /* left edge x position */
+    uint8_t  y;          /* y position */
+    uint16_t width;      /* display width in pixels */
+    uint16_t height;     /* display height in pixels */
+} sd_value_entry_t;
+
+#endif /* SCREENDATA_TYPES_H */
