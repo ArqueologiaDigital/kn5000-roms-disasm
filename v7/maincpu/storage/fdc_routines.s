@@ -2266,7 +2266,7 @@ FDC_CommandEntry_CopyParams:
 	; (EQU->inline label) FDC_MC_EXIT = 0xf97a3c
 
 
-	.org 0xf97d8d - 0xe00000, 0xff
+	; .org removed for v7 (was no-op safety margin in v9)
 FDC_HANDLER_DISPATCH_BASE:
 	calr FDC_InitSequence_Full
 	jr FDC_Handler_ExitStatus

@@ -2916,24 +2916,10 @@ Sprintf_DecExp_CheckRemainder:
 	jr ge, Sprintf_DecExp_ApplySign
 	dec 1, xiz
 
+; === v7-specific block: Sprintf_DecExp_ApplySign (27 bytes) ===
 Sprintf_DecExp_ApplySign:
-	cpw (xsp + 16), 0x0
-	jr ge, Sprintf_DecExp_Positive_Return
-	ld xwa, xiz
-	cpl wa
-	cplw_erp 0xe2
-	inc 1, xwa
-	ld xhl, xwa
-	jr Sprintf_DecExp_Return
-
-Sprintf_DecExp_Positive_Return:
-	ld xhl, xiz
-
-Sprintf_DecExp_Return:
-	pop xiz
-	inc 8, xsp
-	ret
-
+	.incbin "includes/generated/v7_block_sprintf_decexp_applysign.bin"
+; === end v7 block ===
 Sprintf_CopyBytes8:
 	ld xix, (xbc)
 	ld xiy, (xbc + 4)
@@ -3098,6 +3084,6 @@ Sprintf_StrLen_Return:
 	ret
 
 Sprintf_FillToEnd:
-	.fill 41912, 1, 0xff
+; v7: Use .org to auto-compute padding to reach Debug_PrintHexByte at 0xFFFE80
+	.org 0xfffe80 - 0xe00000, 0xff
 Sprintf_FillToVectors:
-	.fill 12710, 1, 0xff

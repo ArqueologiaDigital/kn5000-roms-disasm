@@ -1242,61 +1242,10 @@ SeqStep_VoiceReassignDone:
 SeqStep_VoiceReassignReturn:
 	ldb_erp C, 0xf9
 
+; === v7-specific block: SeqStep_VoiceReassignExit (120 bytes) ===
 SeqStep_VoiceReassignExit:
-	ldb_d8 c, (9994)
-	ld a, c
-	dec 1, a
-	cp a, e
-	jr nz, SeqStep_VoiceReassignError
-	ldib_erp 0xfa, 0
-	jr SeqStep_VoiceReassignCleanup
-
-SeqStep_VoiceReassignError:
-	ldb_erp C, 0xfa
-
-SeqStep_VoiceReassignCleanup:
-	stb_erp A, 0xf9
-	extz wa
-	ldw bc, 0xbd
-	call Part_ReadByteDirect
-	ldb_erp L, 0xfb
-	stb_erp A, 0xfa
-	extz wa
-	stb_erp E, 0xfb
-	extz de
-	ldw bc, 0xbd
-	call Part_WriteByte
-	stb_erp A, 0xf9
-	extz wa
-	lda xbc, (xsp + 6)
-	call SeqData_CopyBlock2K
-	stb_erp A, 0xfa
-	extz wa
-	lda xbc, (xsp + 6)
-	call Part_CopyBlock16
-	stb_erp A, 0xf9
-	extz wa
-	ldw bc, 0x110
-	call Part_ReadWord
-	ld de, hl
-	stb_erp A, 0xfa
-	extz wa
-	ldw bc, 0x110
-	call Part_WriteWord
-	stb_erp A, 0xf9
-	extz wa
-	stb_erp C, 0xfa
-	extz bc
-	call Part_CopyToBuffer
-	ldb_d8 c, (9994)
-	dec 1, c
-	ldb_da a, (0x00ffe3)
-	cp c, a
-	jr nz, SeqStep_VoiceReassignFinalExit
-	stb_d8 (7500), a
-	ldmm_sd24b 0xe3, 0xff, 0x00, 0x4e, 0x1d
-	call SetWall_LoadToneGenData
-
+	.incbin "includes/generated/v7_block_seqstep_voicereassignexit.bin"
+; === end v7 block ===
 SeqStep_VoiceReassignFinalExit:
 	pop xiz
 	lda xsp, (xsp + 22)
