@@ -27771,8 +27771,8 @@ HdaeRom_DataDispatch_Block2:
 	lda_dpi	XBC, 0xe8
 	cp	xbc, xhl
 	jr	c, HdaeRom_DataDispatch_Block2
-	calr SendPartDataBlock_SetWord7
-	lds hl, 0
+	calr	SendPartDataBlock_SetWord7
+	lds	hl, 0
 	ret
 
 HdaeRom_DataDispatch_Block3:

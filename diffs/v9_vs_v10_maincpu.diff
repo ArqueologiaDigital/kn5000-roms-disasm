@@ -12,8 +12,8 @@ diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio
 27769c27774,27777
 < 	jrl	SendPartDataBlock_SetWord7
 ---
-> 	calr SendPartDataBlock_SetWord7
-> 	lds hl, 0
+> 	calr	SendPartDataBlock_SetWord7
+> 	lds	hl, 0
 > 	ret
 > 
 27937c27945
