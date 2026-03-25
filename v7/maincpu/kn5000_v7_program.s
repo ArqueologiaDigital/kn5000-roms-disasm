@@ -111,2893 +111,1169 @@ ToneGen_ParamTable:
 ; =============================================================================
 ; Character Encoding Tables & System Core (ROM EEF588-FC3113)
 ; =============================================================================
-	.include "ui/char_encoding_naka_state.s"
-	.include "ui/charmap_dispatch_table.s"
-
-Boot_HaltInstruction:
-	halt
-
-Boot_PostHaltData:
-	.byte 0x0e, 0x68, 0x01, 0x0e
-
-
-; --- RESET Handler & Boot Sequence ---
-RESET_HANDLER:
-	; Hardware initialization code shared with table_data ROM
-	.include "shared/boot_hw_init.s"
-	; End of shared boot code (315 bytes)
-	ldio 0xd2, 0x29
-	ldio 0xd1, 0x00
-	and_sd8b_im 0xd3, 0xcf
-	and_sd8b_im 0xd3, 0xf0
-
-Boot_InitIOPorts:
-	stdi8 (304), 255
-	stdi8 (305), 255
-	stdi8 (306), 3
-	ldio 0x3a, 0x20
-	ld xsp, 0xc00
-	calr Boot_InitWorkRAM
-
-Boot_RunSelfTest:
-	call MainCPU_self_test_routines
-	call Get_Firmware_Version
-	cp l, 0xff
-	jr nz, Boot_PostSelfTest
-
-We_seem_to_be_running_boot_ROM_code:
-	call VGA_Setup
-	pushw 0x8
-	pushw 0x3
-	ld xwa, Bitmap_1bit_Please_Wait	; "Please Wait !!"
-	ldw bc, 0x30
-	ldw de, 0x50
-	call Draw_FlashMemUpdate_message_bitmap
-
-Boot_PostSelfTest:
-	lds32 xwa, 0
-	stda32 1033, xwa
-	stdi8 (1024), 2
-	call TaskSched_Init
-	stdi8 (1024), 3
-Boot_InitPeripherals:
-	calr Boot_ClearConfigFlag7
-	lda_dd8l XBC, (0xe4)
-	ld a, (xbc)
-	and a, 0x8f
-	or a, 0x30
-	ld (xbc), a
-	lda_dd8l XBC, (0xe6)
-	ld a, (xbc)
-	and a, 0xf8
-	or a, 0x3
-	ld (xbc), a
-	calr Detect_Region_Code
-	cpw_da (65482), 23205
-	jr z, Boot_FlashAndExtensions
-	lda_24 xde, (0x00066e)
-	srl xde, 1
-	ld xwa, 0xf980
-	ld xbc, 0x1e8000
-	call Copy_DE_words_from_XBC_to_XWA
-
-Boot_FlashAndExtensions:
-	call Flash_InitAllBanks
-	bit_dd8 0, 0x38	;  Is the optional HD-AE5000 board present?
-	jr nz, BootInit_SeqAndPanel
-	calr Get_Region_Code
-	cps l, 4
-	call_24 nz, HDAE5000_Parport_Setup	; if it is present (and this unit was sold in
-					; a specific market region), then call the
-					; HDAE5000 PPI init code
-
-; Boot initialization handler (SeqInit + CPanel scan)
-BootInit_SeqAndPanel:
-	call Seq_FullInit
-	ei 0
-	ldl_da xhl, (CPanel_InitDispatchTable)
-	call (xhl)
-	call CPanel_ScanButtons
-	stb_d8 (1026), l
-	call Get_Firmware_Version
-	cp l, 0xff
-	jr nz, User_didnt_request_flash_mem_update
-	call Check_for_Floppy_Disk_Change
-	cps hl, 0
-	jr z, User_didnt_request_flash_mem_update
-	cpdi8 (1026), 4
-	jr nz, User_didnt_request_flash_mem_update
-	call FLASH_MEM_UPDATE
-
-Boot_MainSequence_Trampoline:
-	jr Boot_MainSequence_Trampoline
-
-; ===========================================================================
-; User_didnt_request_flash_mem_update - Main Boot Sequence
-; ===========================================================================
-; This is the main boot path after power-on self-test and flash update check.
-; Initializes Sub-CPU communication, transfers firmware payload, and verifies
-; the transfer succeeded. On failure, displays the "ERROR in CPU data
-; transmission" dialog (Screen Group 7).
-;
-; Boot flow:
-;   1. Initialize DMA channels for inter-CPU communication
-;   2. Send 192KB Sub-CPU firmware payload
-;   3. Verify payload integrity (checksum validation)
-;   4. Check error flag - if set, display error dialog
-;   5. Continue to main UI initialization
-;
-; Error handling:
-;   - If SubCPU_Payload_Verify returns non-zero in HL, boot with error state
-;   - Error state (WA=2) displays error dialog via ScreenGroup_Dispatch
-;   - Eventually Screen Group 7 "CPU data transmission" error is shown
-;
-; See also:
-;   - SubCPU_Send_Payload - Payload transfer routine
-;   - SubCPU_Payload_Verify - Checksum verification
-;   - ErrorDialog_CPUTransmissionError - Error dialog widget
-; ===========================================================================
-User_didnt_request_flash_mem_update:
-	ldb_d8 a, (1026); Load boot combo code
-	extz wa
-	calr Boot_HandleFactoryReset	; Reset if combo 1 + invalid checksums
-	stiw_da (0x00ffca), 0x0000
-	set_dd8 0, 0x28	; Release Sub-CPU from reset
-	call SubCPU_Init_DMA_Channels	; Initialize DMA for inter-CPU comm
-	ei 0
-	calr SubCPU_Send_Payload	; Transfer 192KB Sub-CPU firmware
-	calr SubCPU_Payload_Verify	; Verify payload checksum
-	lds wa, 0
-	call ScreenGroup_Dispatch	; Display initial boot screen (group 0)
-	ei 0
-	call SelfTest_FirmwareVersionCheck
-	calr SubCPU_Payload_GetErrorFlag	; Check if payload transfer failed
-	cps hl, 0	; HL=0: success, HL!=0: error
-	jr nz, Boot_PayloadError	; Branch if error occurred
-	lds wa, 1	; Success: use screen group 1
-	jr Boot_DisplayScreen
-
-; Sub-CPU payload transfer or verification failed
-Boot_PayloadError:
-	lds wa, 2	; Error: use screen group 2
-
-Boot_DisplayScreen:
-	call ScreenGroup_Dispatch	; Display appropriate screen group
-	stdi8 (1024), 6
-	lds wa, 3
-	call ScreenGroup_Dispatch
-	stdi8 (1024), 128
-	stiw_da (0x00ffd4), 0x0000
-	ldb_d8 a, (1026); Load boot combo code
-	extz wa
-	calr Boot_HandleComboDisplay	; Handle combo 2 (LEDs) or combo 3 (version screen)
-	lds wa, 4
-	call Show_ScreenGroup	; Show screen group 4 (main UI initialization)
-	calr Boot_SetConfigFlag7
-	jp MainLoop
-
-Boot_GetButtonComboCode:
-	ldb_d8 l, (1026)
-	ret
-
-Boot_ClearAllInterruptEnables:
-	ldio 0xf0, 0x00
-	ldio 0xe0, 0x00
-	ldio 0xe1, 0x00
-	ldio 0xe2, 0x00
-	ldio 0xe3, 0x00
-	ldio 0xe4, 0x00
-	ldio 0xe5, 0x00
-	ldio 0xe6, 0x00
-	ldio 0xe7, 0x00
-	ldio 0xe8, 0x00
-	ldio 0xe9, 0x00
-	ldio 0xea, 0x00
-	ldio 0xeb, 0x00
-	ldio 0xec, 0x00
-	ldio 0xed, 0x00
-	ldio 0xee, 0x00
-	ldio 0xef, 0x00
-	ret
-
-; ===========================================================================
-; SubCPU_Send_Payload - Transfer 192KB Sub-CPU payload from Table Data ROM
-; ===========================================================================
-; Entry: None (reads from 0xfffeef to check if transfer should proceed)
-; Exit:  XIZ restored, payload transferred to Sub-CPU RAM
-; Notes: Sends the Sub-CPU firmware payload in multiple 64KB chunks:
-;        - 0x830000-0x870000 (5 x 64KB) -> Sub-CPU 0x050000-0x090000
-;        - Additional data from Table Data ROM -> Sub-CPU 0x00f000-0x02f000
-;        - Final 256 bytes -> Sub-CPU 0x000400 (entry point area)
-;        Uses E1 bulk transfer protocol via InterCPU_E1_Bulk_Transfer
-;        Includes 0x2000 and 0x100000 iteration delay loops for timing
-;        Called during boot sequence after SubCPU_Init_DMA_Channels
-; ===========================================================================
-SubCPU_Send_Payload:
-	push xiz
-	cpib_da (0xfffeef), 0xff
-	jrl nz, SubCPU_Payload_Done
-	lds32 xiz, 0
-
-SubCPU_Payload_DelayLoop_Short:
-	inc 1, xiz
-	cp xiz, 0x2000
-	jr c, SubCPU_Payload_DelayLoop_Short
-	ld xwa, 0x830000
-	ld xbc, 0x10000
-	ld xde, 0x50000
-	call InterCPU_E1_Bulk_Transfer
-	ld xwa, 0x840000
-	ld xbc, 0x10000
-	ld xde, 0x60000
-	call InterCPU_E1_Bulk_Transfer
-	ld xwa, 0x850000
-	ld xbc, 0x10000
-	ld xde, 0x70000
-	call InterCPU_E1_Bulk_Transfer
-	ld xwa, 0x860000
-	ld xbc, 0x10000
-	ld xde, 0x80000
-	call InterCPU_E1_Bulk_Transfer
-	ld xwa, 0x870000
-	ld xbc, 0x10000
-	ld xde, 0x90000
-	call InterCPU_E1_Bulk_Transfer
-	ld xiz, 0x800000
-	cpib_da (0xfffeed), 0xff
-	jr nz, SubCPU_Payload_TransferPart2
-	ld xiz, 0x50000
-	ld xwa, 0x3e0000
-	ld xbc, 0x50000
-	call SLIDE_Parse_Header
-	cp hl, 0xffff
-	jr nz, SubCPU_Payload_TransferPart2
-	ld xiz, 0x800000
-
-SubCPU_Payload_TransferPart2:
-	ldmm_sriw 0xf9, 0x00, 0x01, 0x04, 0x04
-	ld xwa, xiz
-	add xwa, 0x100
-	ld xbc, 0x10000
-	ld xde, 0xf000
-	call InterCPU_E1_Bulk_Transfer
-	ld xwa, xiz
-	add xwa, 0x10100
-	ld xbc, 0x10000
-	ld xde, 0x1f000
-	call InterCPU_E1_Bulk_Transfer
-	ld xwa, xiz
-	add xwa, 0x20100
-	ldw bc, 0xff00
-	ld xde, 0x2f000
-	call InterCPU_E1_Bulk_Transfer
-	ld xwa, xiz
-	ldw bc, 0x100
-	ld xde, 0x400
-	call InterCPU_E1_Bulk_Transfer
-	lds32 xiz, 0
-
-SubCPU_Payload_DelayLoop_Long:
-	inc 1, xiz
-	cp xiz, 0x100000
-	jr c, SubCPU_Payload_DelayLoop_Long
-
-SubCPU_Payload_Done:
-	pop xiz
-	ret
-
-Boot_ClearConfigFlag7:
-	resda 7, 1030
-	ret
-
-Boot_SetConfigFlag7:
-	setda 7, 1030
-	ret
-
-Boot_CheckConfigFlag7:
-	ldcf_dd16 7, 0x06, 0x04
-	scc8 c, a
-	cps a, 1
-	scc16 z, hl
-	ret
-
-; ===========================================================================
-; Boot_HandleComboDisplay - Handle boot-time combo display modes
-; ===========================================================================
-; Entry: A = combo code from CPanel_CheckSpecialCombos (0-4)
-; Called from Boot_DisplayScreen after subsystems are initialized.
-;   Combo 2: Show firmware version on control panel LEDs
-;   Combo 3: Show software version / internal build numbers screen
-;   Others: return (no special display)
-; ===========================================================================
-Boot_HandleComboDisplay:
-	cps a, 2
-	jr nz, Boot_HandleComboDisplay_Check3
-	; --- Combo 2: Firmware version on LEDs ---
-	call Get_Firmware_Version	; Returns version byte in L (0x0a = v10)
-	and l, 0xf
-	extz hl
-	lda_24 xbc, (LED_patterns_indicating_firmware_version); LED_patterns_indicating_firmware_version table
-	ldb_sri C, 0x07, 0xe4, 0xec	; Read LED pattern from table
-	extz bc
-	lds wa, 7
-	call Set_LEDs			; Display version on control panel LEDs
-	push xiz
-	call CPanel_Poll		; Poll control panel (keep LEDs updated)
-	pop xiz
-	ret
-
-Boot_HandleComboDisplay_Check3:
-	cps a, 3
-	ret nz
-	; --- Combo 3: Software version screen ---
-	ldw wa, 0xf0
-	call SoundCtrl_SendCommand		; Display SOFT VERSION screen
-	ret
-
-Boot_ParseTableDataTimestamp:
-	ld xwa, 0x9fffc4
-	push xwa
-	call ParseInt16
-	inc 4, xsp
-	ret
-
-Boot_GetSystemPointer:
-	ldw_d16 xhl, (1028)
-	ret
-
-Boot_ParseSubCPUTimestamp:
-	ld xwa, 0x87fff5
-	push xwa
-	call ParseInt16
-	inc 4, xsp
-	ret
-
-; ===========================================================================
-; Boot_HandleFactoryReset - Factory reset if combo 1 AND checksums invalid
-; ===========================================================================
-; Entry: A = combo code from CPanel_CheckSpecialCombos
-; If combo code == 1 (Initial Setting) AND DRAM[0xFFCA] != 0x5aa5
-; (payload checksums invalid, e.g. after Flash ROM replacement),
-; zero-fills all work DRAM and SRAM, then restarts the boot sequence.
-; Otherwise returns immediately (normal boot continues).
-; ===========================================================================
-Boot_HandleFactoryReset:
-	cpw_da (65482), 23205; DRAM[0xFFCA] == 0x5aa5 (valid checksums)?
-	ret z			; Yes -> checksums valid, skip reset
-	cps a, 1		; Combo code == 1 (Initial Setting)?
-	ret nz			; No -> not requesting reset, return
-	; --- Factory Reset: clear all DRAM and SRAM ---
-	call ToneGen_FlashReadAndRestore
-	ei 7
-	calr Boot_ClearAllInterruptEnables	; Clear all interrupt enables
-	ld xbc, 0x400
-
-FactoryReset_ClearDRAM:
-	lds32 xwa, 0
-	stl_dpi XWA, 0xe6
-	cp xbc, 0x100000
-	jr c, FactoryReset_ClearDRAM
-	ld xbc, 0x1e0000
-
-FactoryReset_ClearSRAM:
-	lds32 xwa, 0
-	stl_dpi XWA, 0xe6
-	cp xbc, 0x200000
-	jr c, FactoryReset_ClearSRAM
-	stiw_da (0x00ffca), 0x5aa5
-	jp Boot_InitIOPorts
-FactoryReset_TrailingByte:
-	ret
-
-Boot_ReadFDCStatus:
-	ldb_d8 l, (36458)
-	ret
 
 ; =============================================================================
-; Shared boot routines (Detect_Region_Code, Get_Region_Code, handlers)
-; Uses REGION_CODE_VAR and BOOT_ENTRY_POINT defined at top of file
+; v7-specific binary blob: all code + data from CharEncoding to ROM end
+; This replaces the v9 assembly code with v7 ROM bytes because the
+; code section has shifted addresses relative to v9.
 ; =============================================================================
-	.include "shared/boot_routines.s"
-
-; =============================================================================
-; Boot_CallInitHandlers - Call initialization handlers from table (Shared)
-; Configuration for maincpu: byte comparison, local indirect call helper
-; =============================================================================
-.equ INIT_FLAG_COMPARE_WORD, 0	; maincpu uses byte comparison
-.equ INDIRECT_CALL_HELPER, AudioMix_WriteChannelGroup	; indirect call helper in maincpu
-
-	.include "shared/boot_call_init_handlers.s"
-
-; --- System Handlers (interrupts, NMI, UI state machine, task scheduler) ---
-	.include "boot/system_handlers.s"
-
-; =============================================================================
-; VGA Initialization Code - Shared with table_data ROM
-; Uses macros and code from ../shared/vga_init.asm
-; =============================================================================
-
-; --- VGA Initialization & Display Subsystem ---
-	.include "shared/vga_init.s"
-	.include "display/scoop_display.s"
-	.include "display/scoop_editor_data.s"
-	.include "audio/semenu_routines.s"
-	.include "audio/sound_editor_ui.s"
-
-; VoiceSynth command handler case 0
-VoiceSynth_CmdCase0:
-	.byte 0xc2, 0x04, 0xdd, 0x03, 0x3f, 0x00, 0xb0, 0xf6
-	.byte 0x43, 0x14, 0x00, 0x28, 0x00, 0xb3, 0xe8, 0x0e
-; VoiceSynth command handler case 1
-VoiceSynth_CmdCase1:
-; Get resource info based on resource type (WA 0-9)
-; Uses offset table at RESOURCE_INFO_HANDLER_OFFSETS (10 entries)
-GetResouceInfo:
-	cp wa, 0x9
-	ret ugt
-	add wa, wa
-	lda_24 xix, (RESOURCE_INFO_HANDLER_OFFSETS)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (RESOURCE_INFO_HANDLERS)
-	jp_ind 8, 0x07, 0xf0, 0xe0
-; Resource info handlers - 10 handlers for different resource types
-RESOURCE_INFO_HANDLERS:
-	lda_d16 xwa, (63872)
-	ld (xbc), xwa
-	lda_d16 xwa, (65470)
-	ld xde, xwa
-	inc 2, xde
-	lda_d16 xwa, (63872)
-	sub xde, xwa
-	ld (xbc + 4), xde
-	ret
-
-ResInfo_GetSRAMBankRange:
-	lda_24 xwa, (0x1e7800)
-	ld (xbc), xwa
-	lda_24 xwa, (0x1e7800)
-	ld xde, xwa
-	lda_24 xwa, (0x1e8000)
-	sub xwa, xde
-	ld (xbc + 4), xwa
-	ret
-
-ResInfo_GetUserAreaRange:
-	lda_24 xwa, (0x1ed350)
-	ld (xbc), xwa
-	lda_24 xwa, (0x1ed350)
-	ld xde, xwa
-	lda_24 xwa, (0x200000)
-	sub xwa, xde
-	ld (xbc + 4), xwa
-	ret
-
-ResInfo_GetFlashBankRange:
-	lda_24 xwa, (0x1e0000)
-	ld (xbc), xwa
-	lda_24 xwa, (0x1e0000)
-	ld xde, xwa
-	lda_24 xwa, (0x1e7800)
-	sub xwa, xde
-	ld (xbc + 4), xwa
-	ret
-
-ResInfo_GetTableDataInfo:
-	ld xwa, 0x3d3000
-	ld (xbc), xwa
-	ld xwa, 0x400
-	ld (xbc + 4), xwa
-	ret
-
-ResInfo_GetSndParamRange:
-	lda_24 xwa, (0x0ab000)
-	ld (xbc), xwa
-	ld xwa, 0x5000
-	ld (xbc + 4), xwa
-	ret
-
-ResInfo_GetVoiceBankRange:
-	lda_24 xwa, (0x0b0000)
-	ld (xbc), xwa
-	lda_24 xwa, (0x0b0000)
-	ld xde, xwa
-	lda_24 xwa, (0x0fd800)
-	sub xwa, xde
-	ld (xbc + 4), xwa
-	ret
-
-ResInfo_GetToneGenRange:
-	lda_24 xwa, (0x094800)
-	ld (xbc), xwa
-	lda_24 xwa, (0x094800)
-	ld xde, xwa
-	lda_24 xwa, (0x0ab000)
-	sub xwa, xde
-	ld (xbc + 4), xwa
-	ret
-
-ResInfo_GetMspSettingsRange:
-	lda_24 xwa, (0x1e8800)
-	ld (xbc), xwa
-	lda_24 xwa, (0x1e8800)
-	ld xde, xwa
-	lda_24 xwa, (0x1ec400)
-	sub xwa, xde
-	ld (xbc + 4), xwa
-	ret
-
-ResInfo_GetResourceListPtr:
-	lda_24 xwa, (0xe1ffcc)
-	ld (xbc), xwa
-	lds32 xwa, 0
-	ld (xbc + 4), xwa
-	ret
-
-ResInfo_NullHandler:
-	ret
-
-rcm_ld_XAPR_j:
-	jp FloppyDisk_LoadNoteEvents
-
-rcm_sv_XAPR_j:
-	jp FloppyDisk_ComputeToneParams
-
-SetSepaOutMode:
-	lda xsp, (xsp - 20)
-	ld xiy, SepaOut_Config_0
-	lda xix, (xsp + 16)
-	ldiw
-	ldiw
-	ld xiy, 0xe1ffea
-	lda xix, (xsp + 12)
-	ldiw
-	ldiw
-	ld xiy, 0xe1ffee
-	lda xix, (xsp + 8)
-	ldiw
-	ldiw
-	ld xiy, 0xe1fff2
-	lda xix, (xsp + 4)
-	ldiw
-	ldiw
-	ld xiy, 0xe1fff6
-	ld xix, xsp
-	ldiw
-	ldiw
-	cps wa, 3
-	jrl z, SetSepaOut_Mode3
-	cps wa, 2
-	jrl z, SetSepaOut_Mode2
-	cps wa, 1
-	jr z, SetSepaOut_Mode1
-	cps wa, 0
-	jrl nz, FileIO_SendCommand_Return
-	ld (xsp + 17), 0x14
-	lda xwa, (xsp + 16)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 9), 0x14
-	lda xwa, (xsp + 8)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 17), 0x13
-	lda xwa, (xsp + 16)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 9), 0x13
-	lda xwa, (xsp + 8)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 17), 0x16
-	lda xwa, (xsp + 16)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 9), 0x16
-	lda xwa, (xsp + 8)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	jrl FileIO_SendCommand_Return
-
-SetSepaOut_Mode1:
-	ld (xsp + 13), 0x14
-	lda xwa, (xsp + 12)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 9), 0x14
-	lda xwa, (xsp + 8)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 17), 0x13
-	lda xwa, (xsp + 16)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 9), 0x13
-	lda xwa, (xsp + 8)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 17), 0x16
-	lda xwa, (xsp + 16)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 9), 0x16
-	lda xwa, (xsp + 8)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	jrl FileIO_SendCommand_Return
-
-SetSepaOut_Mode2:
-	ld (xsp + 13), 0x14
-	lda xwa, (xsp + 12)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 9), 0x14
-	lda xwa, (xsp + 8)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 13), 0x13
-	lda xwa, (xsp + 12)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 9), 0x13
-	lda xwa, (xsp + 8)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 13), 0x16
-	lda xwa, (xsp + 12)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 9), 0x16
-	lda xwa, (xsp + 8)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	jr FileIO_SendCommand_Return
-
-SetSepaOut_Mode3:
-	ld (xsp + 13), 0x14
-	lda xwa, (xsp + 12)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 1), 0x14
-	lda xwa, (xsp)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 13), 0x13
-	lda xwa, (xsp + 12)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 5), 0x13
-	lda xwa, (xsp + 4)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 13), 0x16
-	lda xwa, (xsp + 12)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-	ld (xsp + 5), 0x16
-	lda xwa, (xsp + 4)
-	ld xde, xwa
-	lds wa, 0
-	lds bc, 4
-	call sendCOMM
-
-FileIO_SendCommand_Return:
-	lda xsp, (xsp + 20)
-	ret
-
-fopen_ext:
-	jp FileIO_OpenWithMode
-
-fwrite_ext:
-	jp FileIO_WriteByte_Impl
-
-fread_ext:
-	jp FileIO_ReadBlock
-
-fclose_ext:
-	jp FileIO_CloseHandle
-
-ferror_ext:
-	jp FileIO_ReturnError
-
-rot_rdq_X:
-	jp TaskSched_YieldToQueue
-
-set_flg_X:
-	jp TaskSched_SignalEvent
-
-wai_flg_X:
-	jp TaskSched_WaitForEvent
-
-sig_sem_X:
-	jp Audio_Lock_Release
-
-preq_sem_X:
-	jp AudioLock_TryAcquire
-
-wai_sem_X:
-	jp Audio_Lock_Acquire
-
-ref_sem_X:
-	jp AudioLock_GetCount
-
-snd_msg_X:
-	jp TaskMsg_Send
-
-rcv_msg_X:
-	jp TaskMsg_Receive
-
-prcv_msg_X:
-	jp TaskMsg_TryReceive
-
-get_tid_X:
-	jp TaskSched_GetCurrentGroup
-
-pdly_tim_X:
-	jp TaskSched_DelayTicks
-
-PlayHalt:
-	dec 2, xsp
-	ld (xsp), a
-	call SeqBuf_Init
-	call NoteMap_SendAllNotesOff
-	call Part_ReinitAllActive
-	call AccWrap_PlayModeDispatch
-	cp (xsp), 0x0
-	jr z, PlayHalt_SkipSetFlag
-	setda 2, 10407
-
-PlayHalt_SkipSetFlag:
-	call AccompSeq_StopSequence
-	call AudioInit_RefreshToneBank
-	call NoteMap_ProcessAndMerge
-	call Voice_InitializeAll
-	call Voice_InitTablePair
-	call Voice_InitTableGroup
-	call MIDI_SendAllSoundOff
-	call MidiThru_Enable
-	inc 2, xsp
-	ret
-
-PlayStandBy:
-	bitda 2, (10407)
-	jr z, PlayStandBy_SkipClearFlag
-	resda 2, 10407
-
-PlayStandBy_SkipClearFlag:
-	resda 3, 10407
-	call SeqAcc_InitPlaybackState
-	jp MidiThru_Disable
-
-EditSwRefresh:
-	call CPanel_InitButtonState_SaveRegs
-	call RefreshSwEvent
-	jp RefreshApTask
-
-putc_mtx_bf_X:
-	extz wa
-	pushw wa
-	call SeqBuf_MidiOut_WriteByte
-	inc 2, xsp
-	ret
-
-putc_mrx_bf_X:
-	extz wa
-	pushw wa
-	call SeqMain_WriteByte
-	inc 2, xsp
-	ret
-
-midi_out_en_X:
-	jp MIDI_SC0_TX_DISPATCH
-
-GetAdr_sqbtof:
-	lda_d16 xhl, (1052)
-	ret
-
-GetAdr_sq_beadt:
-	lda_d16 xhl, (1051)
-	ret
-
-GetAdr_sqsrtc:
-	lda_d16 xhl, (1057)
-	ret
-
-GetAdr_rtmcfg:
-	lda_d16 xhl, (10407)
-	ret
-
-SetGlobalError:
-	stb_d8 (32578), a
-	ret
-
-malloc_X:
-	pushw wa
-	call Malloc
-	inc 2, xsp
-	ret
-
-free_X:
-	push xwa
-	call Free
-	inc 4, xsp
-	ret
-
-
-; --- Wallpaper & Demo Routines ---
-	.include "ui/setwall_routines.s"
-	.include "ui/ui_playback_modes.s"
-	.include "demo/demo_routines.s"
-	.include "demo/demo_seq_bridge.s"
-	.include "sequencer/smf_playback.s"
-	.include "sequencer/smf_tonegen_core.s"
-; --- SMF Event Processing, Sequencer UI & Engine ---
-	.include "sequencer/smf_event_processor.s"
-	.include "sequencer/seq_audio_mode.s"
-	.include "sequencer/rhythm_routines.s"
-	.include "sequencer/accompaniment_engine.s"
-Voice_InitBankDataSafe:
-	push xiz
-	call Voice_InitBankData
-	pop xiz
-	ret
-
-Voice_InitBankDataSafe_Alt1:
-	push	xiz
-	call	Voice_BankLookupCode
-	pop	xiz
-	ret
-	push	xiz
-	call	Voice_RefreshBankData
-	pop	xiz
-	ret
-	push	xiz
-	call	Voice_InitBankTables
-	pop	xiz
-	ret
-
-Voice_InitBankTables:
-	ld xiy, Voice_BankHeaderDefaults
-	ld xix, 0x1e8800
-	ldw bc, 0x10
-	ldirw
-	ldb a, 0xc
-
-Voice_InitBankTables_Loop:
-	ld xiy, Voice_BankSlotZeroInit
-	ldw bc, 0x8
-	ldirw
-	dec 1, a
-	jr nz, Voice_InitBankTables_Loop
-	ld xiy, BLOCK_OF_64_ZEROES
-	ld xix, 0x1e8a00
-	ldw bc, 0x20
-	ldirw
-	ld xiy, HEADER__COMPILE_BANKS
-	ld xix, 0x1e8a40
-	ldw bc, 0x20
-	ldirw
-	ld xiy, HEADER__USER_BANKS
-	ld xix, 0x1e8a80
-	ldw bc, 0x20
-	ldirw
-	ld xix, 0x1e8b00
-	ldb a, 0x39
-
-Voice_InitBankTables_SlotLoop:
-	ld xiy, Voice_SlotTemplate
-	ldw bc, 0x80
-	ldirw
-	dec 1, a
-	jr nz, Voice_InitBankTables_SlotLoop
-	stdi16 (32280), 57
-	ret
-
-	.include "audio/voice_bank_defaults.s"
-Voice_InitBankData:
-	calr Voice_InitBankTables
-	ld xiy, Voice_FactoryPresetData
-	ld xix, 0x1e8820
-	ldw bc, 0xf0
-	ldirw
-	ld xix, 0x1e8a00
-	ld xiy, BLOCK_OF_64_ZEROES
-	ldw bc, 0x60
-	ldirw
-	ld xix, 0x1e8b00
-	ld xiy, MSP_FACTORY_DEFAULTS
-	ldw bc, 0xa80
-	ldirw
-	calr CountAvailableVoiceSlots
-	ret
-
-Voice_BankLookupCode:
-	.byte 0x45, 0x00, 0x88, 0x1e, 0x00, 0xb5, 0x00, 0x48
-	.byte 0xbd, 0x01, 0x00, 0x00, 0xbd, 0x02, 0x00, 0x4b
-	ret
-
-Voice_RefreshBankData:
-	calr Voice_ComputeAllocSize
-	ret
-
-Voice_ResetToFactoryBanks:
-	ldw wa, 0xa
-	ld xhl, 0x7aec
-	ldw bc, 0xff
-	ldw de, 0xf6
-	calr Voice_SetBankParams
-	ld xhl, 0x7bec
-	calr Voice_SetBankParams
-	calr Voice_ReinitIfBankCountNonzero
-	calr Voice_ReinitIfBitFlagSet
-	calr CountAvailableVoiceSlots
-	ret
-
-Voice_SetBankParams:
-	ld (xhl + 256), wa
-	ld (xhl + 2), bc
-	ld (xhl + 4), wa
-	ld (xhl + 6), wa
-	ld (xhl + 8), de
-	ret
-
-Voice_ReinitIfBankCountNonzero:
-	ld xiy, 0x1e8800
-	add xiy, 0xe
-	ld wa, (xiy)
-	cps wa, 0
-	jr z, Voice_ReinitIfBankCount_Done
-	calr Voice_InitBankData
-
-Voice_ReinitIfBankCount_Done:
-	ret
-
-Voice_ReinitIfBitFlagSet:
-	ld xiy, 0x1e8800
-	add xiy, 0xa
-	ld a, (xiy)
-	bit 0, a
-	jr z, Voice_ReinitIfBitFlag_Done
-	calr Voice_InitBankData
-
-Voice_ReinitIfBitFlag_Done:
-	ret
-
-CountAvailableVoiceSlots:
-	ldw wa, 0x39
-	ldw de, 0x38
-
-CountVoiceSlots_Loop:
-	ld hl, de
-	calr Voice_GetSlotAddress
-	bitm 7, (xhl)
-	jr z, CountVoiceSlots_NotUsed
-	dec 1, wa
-
-CountVoiceSlots_NotUsed:
-	dec 1, de
-	cp de, 0xffff
-	jr z, CountVoiceSlots_Done
-	jr CountVoiceSlots_Loop
-
-CountVoiceSlots_Done:
-	stda16 (32280), xwa
-	ret
-
-Voice_GetSlotAddress:
-	and xhl, 0xffff
-	sla xhl, 8
-	add xhl, 0x1e8b00
-	ret
-
-Voice_ComputeAllocSize:
-	ld xhl, 0x3c00
-	ld xiy, 0x1e8800
-	add xiy, 0x200
-	add xiy, 0x3800
-	ldb c, 0x39
-
-Voice_AllocSize_Loop:
-	cps c, 0
-	jr z, Voice_AllocSize_Done
-	ld a, (xiy)
-	bit 7, a
-	jr nz, Voice_AllocSize_Done
-	sub xhl, 0x100
-	sub xiy, 0x100
-	dec 1, c
-	jr Voice_AllocSize_Loop
-
-Voice_AllocSize_Done:
-	ld xwa, xhl
-	add xwa, 0x3ff
-	and xwa, 0xfffffc00
-	srl xwa, 4
-	ld xiy, 0x1e881c
-	ld (xiy), wa
-	calr CountAvailableVoiceSlots
-	ret
-
-Voice_FactoryPresetData:
-	.incbin "includes/generated/voice_factory_presets.bin"
-
-; F6F60F:
-	.zero 32
-
-; MSP_FACTORY_DEFAULTS:	
-	.include "msp_factory_defaults.s"
-	.include "sequencer/seq_event_playback.s"
-	.include "midi/computer_interface_config.s"
-	.include "midi/ac_listener_handlers.s"
-	.include "midi/sysex_routines.s"
-	.include "midi/param_load_routines.s"
-	.include "ui/ui_control_panel.s"
-	.include "audio/presentation_sound_nav.s"
-	.include "ui/ui_window_procs.s"
-	exts	xwa
-	add	xwa, xhl
-	add	xde, xwa
-	bitm	7, (xde)
-	jr	z, 4
-	resm	6, (xde)
-	jr	2
-	setm	6, (xde)
-	incm8	1, (xsp+24)
-	ld	xwa, (xsp+12)
-	add	(xsp+4), xwa
-	ld	xwa, (xsp+4)
-	sra	xwa, 0
-	ld	(xbc), wa
-	ld	xwa, (xsp+16)
-	add	(xbc+2), wa
-	lds32	xwa, 1
-	add	(xsp+20), xwa
-	ld	xwa, (xsp+20)
-	cp	xwa, (xsp+8)
-	jrl	le, -249
-	jrl	330
-	ld	xwa, (xsp+8)
-	sla	xwa, 0
-	ld	xbc, (xsp+4)
-	call	Math_DivideSigned32
-	ld	xiz, xhl
-	ld	xwa, (xsp+16)
-	ld	xbc, xiz
-	call	Math_MultiplyAccumulate
-	ld	(xsp+16), xhl
-	ld	xbc, (xsp+34)
-	ld	xwa, xbc
-	inc	2, xwa
-	ld	(xsp+34), xwa
-	ld	wa, (xwa)
-	exts	xwa
-	ld	(xsp+8), xwa
-	sla	xwa, 0
-	ld	(xsp+8), xwa
-	ld	xwa, 32768
-	add	(xsp+8), xwa
-	lds32	xwa, 0
-	ld	(xsp+20), xwa
-	ld	xwa, (xsp+4)
-	cp	xwa, 0
-	jrl	lt, 255
-	cp	(xsp+24), 3
-	jr	ule, 7
-	ld	(xsp+24), 0
-	jrl	206
-	cp	(xsp+24), 1
-	jrl	ugt, 196
-	ldb_da	l, (257962)
-	ld	xwa, (xsp+34)
-	ld	wa, (xwa)
-	exts	xwa
-	ld	xde, xwa
-	sll	xde, 2
-	add	xde, xwa
-	sll	xde, 6
-	cps	l, 2
-	jrl	z, 146
-	cps	l, 1
-	jr	z, 117
-	cps	l, 0
-	jrl	nz, 160
-	ld	xhl, xbc
-	ld	iy, (xsp+50)
-	ld	wa, (xbc)
-	exts	xwa
-	add	xwa, xde
-	lda_24	xix, (277504)
-	add	xix, xwa
-	cpw	(xsp+50), 245
-	jr	z, 30
-	andmi8	(xix), 96
-	ld	wa, iy
-	and	wa, 159
-	add	(xix), a
-	ld	de, iy
-	and	de, 128
-	ld	a, (xix)
-	and	a, 128
-	extz	wa
-	cp	wa, de
-	jr	nz, 54
-	jr	105
-	ldl_da	xiy, (197714)
-	ld	de, (xhl)
-	exts	xde
-	ld	wa, (xhl+2)
-	exts	xwa
-	ld	xhl, xwa
-	sll	xhl, 2
-	add	xhl, xwa
-	sll	xhl, 6
-	add	xhl, xde
-	add	xiy, xhl
-	andmi8	(xix), 96
-	ld	a, (xiy)
-	and	a, 159
-	add	(xix), a
-	ld	e, (xiy)
-	and	e, 128
-	ld	a, (xix)
-	and	a, 128
-	cp	a, e
-	jr	z, 53
-	xormi8	(xix), 96
-	jr	48
-	ld	wa, (xbc)
-	exts	xwa
-	add	xwa, xde
-	lda_24	xde, (277504)
-	add	xde, xwa
-	bitm	7, (xde)
-	jr	z, 4
-	resm	5, (xde)
-	jr	27
-	setm	5, (xde)
-	jr	23
-	ld	wa, (xbc)
-	exts	xwa
-	add	xwa, xde
-	lda_24	xde, (277504)
-	add	xde, xwa
-	bitm	7, (xde)
-	jr	z, 4
-	resm	6, (xde)
-	jr	2
-	setm	6, (xde)
-	incm8	1, (xsp+24)
-	ld	xwa, (xsp+16)
-	add	(xsp+8), xwa
-	ld	xde, (xsp+8)
-	sra	xde, 0
-	ld	xwa, (xsp+34)
-	ld	(xwa), de
-	ld	xwa, (xsp+12)
-	add	(xbc), wa
-	lds32	xwa, 1
-	add	(xsp+20), xwa
-	ld	xwa, (xsp+20)
-	cp	xwa, (xsp+4)
-	jrl	le, -255
-	lda	xwa, (xsp+38)
-	ld	xbc, (xsp+30)
-	ld	bc, (xbc)
-	ld	(xwa+2), bc
-	ld	xbc, (xsp+56)
-	ld	bc, (xbc)
-	ld	(xwa), bc
-	ld	xbc, (xsp+52)
-	ld	bc, (xbc)
-	ld	(xwa+4), bc
-	ld	xbc, (xsp+26)
-	ld	bc, (xbc)
-	ld	(xwa+6), bc
-	calr	39507
-	pop	xiz
-	lda	xsp, (xsp+56)
-	ret
-	dec	2, xsp
-	push	xiz
-	ld	(xsp+4), bc
-	ld	xiz, xwa
-	calr	38931
-	cps	hl, 0
-	jr	z, 29
-	ldb_da	a, (257960)
-	stb_da	(257962), a
-	cpw_da	(197710), 0
-	jr	z, 51
-	ld	xwa, xiz
-	ld	bc, (xsp+4)
-	calr	78
-	jr	41
-	ldw	wa, 16
-	calr	38654
-	ld	xwa, xhl
-	lda_24	xbc, (16452973)
-	ld	(xwa), xbc
-	ld	xiy, xiz
-	lda	xix, (xwa+4)
-	lds	bc, 4
-	ldirw
-	ld	bc, (xsp+4)
-	ld	(xwa+12), bc
-	ldb_da	c, (257960)
-	ld	(xwa+14), c
-	calr	38403
-	pop	xiz
-	inc	2, xsp
-	ret
-	ld	xbc, xwa
-	lda	xwa, (xbc+4)
-	ld	de, (xbc+12)
-	ld	c, (xbc+14)
-	stb_da	(257962), c
-	cpw_da	(197710), 0
-	ret	z
-	ld	bc, de
-	calr	1
-	ret
-	lda	xsp, (xsp-18)
-	pushw	iz
-	ld	(xsp+14), bc
-	ld	(xsp+16), xwa
-	ld	xwa, (xsp+16)
-	inc	2, xwa
-	ld	(xsp+2), xwa
-	cpw	(xwa), 0
-	jr	ge, 7
-	ld	xwa, (xsp+2)
-	ldw	(xwa), 0
-	ld	xwa, (xsp+16)
-	cpw	(xwa), 0
-	jr	ge, 4
-	ldw	(xwa), 0
-	ld	xwa, (xsp+16)
-	lda	xhl, (xwa+4)
-	cpw	(xhl), 320
-	jr	lt, 4
-	ldw	(xhl), 319
-	ld	xwa, (xsp+16)
-	lda	xix, (xwa+6)
-	cpw	(xix), 240
-	jr	lt, 4
-	ldw	(xix), 239
-	ld	de, (xix)
-	ld	xwa, (xsp+2)
-	ld	iz, (xwa)
-	lda	xwa, (xsp+10)
-	lda	xbc, (xsp+6)
-	lda	xiy, (xbc+2)
-	ld	(xwa+2), iz
-	cp	de, iz
-	jr	nz, 20
-	ld	xde, (xsp+16)
-	ld	de, (xde)
-	ld	(xwa), de
-	ld	de, (xhl)
-	ld	(xbc), de
-	ld	de, (xix)
-	ld	(xiy), de
-	ld	de, (xsp+14)
-	jr	110
-	ld	xde, (xsp+16)
-	ld	de, (xde)
-	ld	(xwa), de
-	ld	de, (xhl)
-	ld	(xbc), de
-	ld	xde, (xsp+2)
-	ld	de, (xde)
-	ld	(xiy), de
-	ld	de, (xsp+14)
-	calr	61759
-	lda	xwa, (xsp+10)
-	ld	xbc, (xsp+16)
-	lda	xde, (xbc+6)
-	ld	bc, (xde)
-	ld	(xwa+2), bc
-	lda	xbc, (xsp+6)
-	ld	de, (xde)
-	ld	(xbc+2), de
-	ld	de, (xsp+14)
-	calr	61731
-	lda	xwa, (xsp+10)
-	ld	xhl, (xsp+16)
-	ld	bc, (xhl+2)
-	ld	(xwa+2), bc
-	ld	bc, (xhl)
-	ld	(xwa), bc
-	lda	xbc, (xsp+6)
-	ld	de, (xhl)
-	ld	(xbc), de
-	ld	de, (xhl+6)
-	ld	(xbc+2), de
-	ld	de, (xsp+14)
-	calr	61696
-	lda	xwa, (xsp+10)
-	ld	xbc, (xsp+16)
-	lda	xde, (xbc+4)
-	ld	bc, (xde)
-	ld	(xwa), bc
-	lda	xbc, (xsp+6)
-	ld	de, (xde)
-	ld	(xbc), de
-	ld	de, (xsp+14)
-	calr	61670
-	ld	xwa, (xsp+16)
-	calr	39144
-	popw	iz
-	lda	xsp, (xsp+18)
-	ret
-
-DrawText_QueueOrDirect:
-	lda xsp, (xsp - 16)
-	push xiz
-	ld (xsp + 8), xde
-	ld (xsp + 12), xbc
-	ld (xsp + 16), xwa
-	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
-	cps hl, 0
-	jr z, DrawText_QueueDeferred
-	ldb_da a, (0x03efa8)
-	stb_da (0x03efaa), a
-	cpw_da (197710), 0
-	jrl z, DrawText_PopAndReturn
-	ld xwa, (xsp + 28)
-	push xwa
-	pushm (xsp + 30)
-	pushm (xsp + 30)
-	ld xwa, (xsp + 24)
-	ld xbc, (xsp + 20)
-	ld xde, (xsp + 16)
-	calr TextRender_BeginDraw
-	jr DrawText_PopAndReturn
-
-DrawText_QueueDeferred:
-	ld xwa, (xsp + 8)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	inc 1, hl
-	ld wa, hl
-	calr DrawQueue_Alloc
-	ld (xsp + 4), xhl
-	ldw wa, 0x1e
-	calr DrawQueue_Alloc
-	ld xiz, xhl
-	lda_24 xwa, (0xfb0f31)
-	ld (xhl), xwa
-	ld xwa, (xsp + 16)
-	ld xiy, xwa
-	lda xix, (xhl + 4)
-	lds bc, 4
-	ldirw
-	ld xwa, (xsp + 12)
-	ld xiy, xwa
-	lda xix, (xhl + 12)
-	ldiw
-	ldiw
-	ld xbc, (xsp + 4)
-	ld (xhl + 16), xbc
-	ld xwa, (xsp + 8)
-	push xwa
-	push xbc
-	call Strcpy
-	inc 8, xsp
-	ld xwa, (xsp + 28)
-	ld (xiz + 20), xwa
-	ld wa, (xsp + 26)
-	ld (xiz + 24), wa
-	ld wa, (xsp + 24)
-	ld (xiz + 26), wa
-	ldb_da a, (0x03efa8)
-	ld (xiz + 28), a
-	ld xwa, xiz
-	calr DisplayCmd_DequeueAndExecute
-
-DrawText_PopAndReturn:
-	pop xiz
-	lda xsp, (xsp + 16)
-	retd 0x8
-	push xiz
-	ld xiz, xwa
-	lda xhl, (xiz + 4)
-	lda xbc, (xiz + 12)
-	ld xiy, (xiz + 20)
-	ld ix, (xiz + 24)
-	ld de, (xiz + 26)
-	ld a, (xiz + 28)
-	stb_da (0x03efaa), a
-	cpw_da (197710), 0
-	jr z, DrawText_DeferredFreeAndReturn
-	push xiy
-	pushw ix
-	pushw de
-	ld xde, (xiz + 16)
-	ld xwa, xhl
-	calr TextRender_BeginDraw
-
-DrawText_DeferredFreeAndReturn:
-	ld xwa, (xiz + 16)
-	calr DrawFunc_Return
-	pop xiz
-	ret
-
-TextRender_BeginDraw:
-	stb_dri L, 0xfd, 0xc6, 0xfe
-	push xiz
-	stl_dri XDE, 0xfd, 0x36, 0x01
-	stl_dri XWA, 0xfd, 0x3a, 0x01
-	ld_sril XWA, (xsp + 0x0136)
-	cp (xwa), 0x0
-	jrl z, TextRender_PopAndReturn
-	ld_sril XWA, (xsp + 0x013a)
-	inc 2, xwa
-	ld (xsp + 34), xwa
-	cpw (xwa), 0x0
-	jr ge, TextRender_ClampYOrigin
-	ld xwa, (xsp + 34)
-	ldw (xwa), 0x0
-
-TextRender_ClampYOrigin:
-	ld_sril XWA, (xsp + 0x013a)
-	cpw (xwa), 0x0
-	jr ge, TextRender_ClampXOrigin
-	ldw (xwa), 0x0
-
-TextRender_ClampXOrigin:
-	ld_sril XWA, (xsp + 0x013a)
-	inc 4, xwa
-	cpw (xwa), 0x140
-	jr lt, TextRender_ClampXRight
-	ldw (xwa), 0x13f
-
-TextRender_ClampXRight:
-	ld_sril XWA, (xsp + 0x013a)
-	lda xde, (xwa + 6)
-	cpw (xde), 0xf0
-	jr lt, TextRender_SetupColorAndFont
-	ldw (xde), 0xef
-
-TextRender_SetupColorAndFont:
-	ld xiy, xbc
-	stb_dri D, 0xfd, 0x2a, 0x01
-	ldiw
-	ldiw
-	ld_sril XIX, (xsp + 0x0146)
-	or xix, xix
-	jr nz, TextRender_ClampNullXStart
-	dec_sriw 2, 0xfd, 0x2c, 0x01
-
-TextRender_ClampNullXStart:
-	stb_dri C, 0xfd, 0x2a, 0x01
-	cpw (xhl), 0x0
-	jr ge, TextRender_ClampNullYStart
-	ldw (xhl), 0x0
-
-TextRender_ClampNullYStart:
-	lda xbc, (xhl + 2)
-	cpw (xbc), 0x0
-	jr ge, TextRender_LoadFontData
-	ldw (xbc), 0x0
-
-TextRender_LoadFontData:
-	ld xwa, 0x945c00
-	ld (xsp + 4), xwa
-	ld xwa, xix
-	sll xwa, 4
-	add (xsp + 4), xwa
-	ld xwa, (xsp + 4)
-	ld xiz, (xwa + 12)
-	ld xiy, (xwa + 8)
-	or xiz, xiz
-	jr nz, TextRender_StoreGlyphPos
-	ld wa, (xwa)
-	ld (xsp + 20), wa
-	ld xwa, (xsp + 4)
-	ld wa, (xwa + 6)
-	ld (xsp + 22), wa
-	jr TextRender_SetupGlyph
-
-TextRender_StoreGlyphPos:
-	ld (xsp + 8), xiz
-
-TextRender_SetupGlyph:
-	ld (xsp + 12), xiy
-	stb_dri H, 0xfd, 0x2e, 0x01
-	lda xiy, (xiz + 2)
-	ld wa, (xbc)
-	ld (xiy), wa
-	ld wa, (xhl)
-	ld (xiz), wa
-	ld wa, (xhl)
-	dec 1, wa
-	ld (xiz + 4), wa
-	ld xwa, (xsp + 4)
-	ld hl, (xwa + 2)
-	add hl, (xbc)
-	lda xbc, (xiz + 6)
-	ld wa, hl
-	ld (xbc), hl
-	or xix, xix
-	jr nz, TextRender_HasCustomFont
-	dec 1, wa
-	ld (xbc), wa
-
-TextRender_HasCustomFont:
-	ld xwa, (xsp + 34)
-	ld wa, (xwa)
-	cp (xiy), wa
-	jr ge, TextRender_DefaultFontWidth
-	ld (xiy), wa
-
-TextRender_DefaultFontWidth:
-	ld wa, (xde)
-	cp (xbc), wa
-	jr le, TextRender_CustomFontWidth
-	ld (xbc), wa
-
-TextRender_CustomFontWidth:
-	ld_sril XWA, (xsp + 0x0136)
-	push xwa
-	lda xwa, (xsp + 42)
-	push xwa
-	call Strcpy
-	inc 8, xsp
-	lda xwa, (xsp + 38)
-	ld (xsp + 30), xwa
-	ld xwa, (xsp + 4)
-	ld xwa, (xwa + 12)
-	or xwa, xwa
-	jr nz, TextRender_ProcessStringLoop
-	ld xwa, (xsp + 30)
-	push xwa
-	call Strlen
-	inc 4, xsp
-	ld wa, (xsp + 20)
-	mul xwa, xhl
-	jr TextRender_AddToDrawPos
-
-TextRender_ProcessStringLoop:
-	ld xwa, (xsp + 30)
-	cp (xwa), 0x0
-	jr z, TextRender_MaxWidthReached
-
-TextRender_CharWidthAccum:
-	ld xwa, (xsp + 30)
-	ldb_spi C, 0xe0
-	ld (xsp + 30), xwa
-	sub c, 0x20
-	extz bc
-	sla bc, 2
-	ld xwa, (xsp + 8)
-	exts xbc
-	add xbc, xwa
-	ld a, (xbc)
-	extz wa
-	ld (xsp + 20), wa
-	ld xwa, (xsp + 30)
-	cp (xwa), 0x0
-	jr nz, TextRender_CharWidthAccum
-
-TextRender_MaxWidthReached:
-	ld wa, (xsp + 20)
-
-TextRender_AddToDrawPos:
-	add_sriw_mr WA, 0xfd, 0x32, 0x01
-	stb_dri W, 0xfd, 0x2e, 0x01
-	lda xde, (xwa + 2)
-	ld_sril XBC, (xsp + 0x013a)
-	ld bc, (xbc + 2)
-	cp (xde), bc
-	jr ge, TextRender_ClampGlyphTop
-	ld (xde), bc
-
-TextRender_ClampGlyphTop:
-	ld de, (xwa)
-	ld_sril XBC, (xsp + 0x013a)
-	cp de, (xbc)
-	jr ge, TextRender_ClampGlyphLeft
-	ld bc, (xbc)
-	ld (xwa), bc
-
-TextRender_ClampGlyphLeft:
-	lda xde, (xwa + 4)
-	ld_sril XBC, (xsp + 0x013a)
-	ld bc, (xbc + 4)
-	cp (xde), bc
-	jr le, TextRender_ClampGlyphRight
-	ld (xde), bc
-
-TextRender_ClampGlyphRight:
-	lda xde, (xwa + 6)
-	ld_sril XBC, (xsp + 0x013a)
-	ld bc, (xbc + 6)
-	cp (xde), bc
-	jr le, TextRender_ClampGlyphBottom
-	ld (xde), bc
-
-TextRender_ClampGlyphBottom:
-	ldw_sri0 BC, (xsp + 0x0142)
-	cp bc, 0xf7
-	call_24 nz, ColorBlit2_Impl
-	lda xwa, (xsp + 38)
-	ld (xsp + 30), xwa
-	cp (xwa), 0x0
-	jrl z, TextRender_Finalize
-
-TextRender_CharEncodeAndDraw:
-	ld xhl, (xsp + 30)
-	ld c, (xhl)
-	extz bc
-	lda_24 xde, (0xeab1b4)
-	ldb_sri C, 0x07, 0xe8, 0xe4
-	ld (xhl), c
-	ld xbc, (xsp + 4)
-	ld xwa, (xbc + 12)
-	or xwa, xwa
-	jr nz, TextRender_CustomFontCharDraw
-	ld bc, (xbc + 2)
-	ld a, (xhl)
-	sub a, 0x20
-	extz wa
-	mrdw3 0x9f, 0x16, 0x40
-	mul xwa, xbc
-	ld (xsp + 16), xwa
-	ld xwa, (xsp + 12)
-	add (xsp + 16), xwa
-	jr TextRender_BeginScanLines
-
-TextRender_CustomFontCharDraw:
-	ld xwa, (xsp + 30)
-	ld c, (xwa)
-	sub c, 0x20
-	extz bc
-	sla bc, 2
-	ld xwa, (xsp + 8)
-	exts xbc
-	add xbc, xwa
-	ld a, (xbc)
-	extz wa
-	ld (xsp + 20), wa
-	ld (xsp + 22), wa
-	srl wa, 3
-	inc 1, wa
-	ld (xsp + 22), wa
-	ld wa, (xbc + 2)
-	extz xwa
-	ld (xsp + 16), xwa
-	ld xwa, (xsp + 12)
-	add (xsp + 16), xwa
-
-TextRender_BeginScanLines:
-	ldw (xsp + 26), 0x0
-	cpw (xsp + 22), 0x0
-	jrl ule, TextRender_AdvanceStringPointer
-
-TextRender_ScanLineLoop:
-	ld bc, (xsp + 26)
-	sll bc, 3
-	ld wa, (xsp + 20)
-	sub wa, bc
-	ld (xsp + 24), wa
-	cpw (xsp + 24), 0x8
-	jr c, TextRender_SelectDrawMode
-	ldw (xsp + 24), 0x8
-
-TextRender_SelectDrawMode:
-	ldb_da a, (0x03efaa)
-	cps a, 2
-	jrl z, TextRender_XorMode_Init
-	cps a, 1
-	jrl z, TextRender_BitMask5_Init
-	cps a, 0
-	jrl nz, TextRender_AdvanceToNextLine
-	ldw (xsp + 28), 0x0
-	jrl TextRender_BitMask4_CheckColumnEnd
-
-TextRender_BitMask4_DrawPixel:
-	ld xwa, (xsp + 16)
-	cp (xwa), 0x0
-	jrl z, TextRender_BitMask5_ProcessCharacter
-	stb_dri A, 0xfd, 0x26, 0x01
-	stb_dri W, 0xfd, 0x2a, 0x01
-	ld (xsp + 34), xwa
-	ld hl, (xwa + 2)
-	add hl, (xsp + 28)
-	ld de, hl
-	ld (xbc + 2), hl
-	ld_sril XWA, (xsp + 0x013a)
-	cp hl, (xwa + 2)
-	jrl lt, TextRender_BitMask5_ProcessCharacter
-	cp de, (xwa + 6)
-	jrl gt, TextRender_AdvanceToNextLine
-	ld wa, de
-	exts xwa
-	ld xde, xwa
-	sll xde, 2
-	add xde, xwa
-	sll xde, 6
-	ld xwa, (xsp + 34)
-	ld wa, (xwa)
-	exts xwa
-	add xwa, xde
-	lda_24 xix, (0x043c00)
-	add xix, xwa
-	lds hl, 0
-	cpw (xsp + 24), 0x0
-	jr ule, TextRender_BitMask5_ProcessCharacter
-
-TextRender_BitMask4_PixelLoop:
-	ld xwa, (xsp + 34)
-	ld de, (xwa)
-	add de, hl
-	ld (xbc), de
-	ld_sril XWA, (xsp + 0x013a)
-	cp de, (xwa)
-	jr lt, TextRender_BitMask4_Return
-	ld de, (xbc)
-	cp de, (xwa + 4)
-	jr gt, TextRender_BitMask5_ProcessCharacter
-	lds wa, 7
-	sub wa, hl
-	lds iy, 1
-	and a, 0xf
-	jr z, TextRender_BitMask4_ShiftAndTest
-	slaa iy
-
-TextRender_BitMask4_ShiftAndTest:
-	ld xwa, (xsp + 16)
-	ld a, (xwa)
-	extz wa
-	and wa, iy
-	jr z, TextRender_BitMask4_Return
-	andmi8 (xix), 0x60
-	ldw_sri0 DE, (xsp + 0x0144)
-	ld wa, de
-	and wa, 0x9f
-	add (xix), a
-	and de, 0x80
-	ld a, (xix)
-	and a, 0x80
-	extz wa
-	cp wa, de
-	jr z, TextRender_BitMask4_Return
-	xormi8 (xix), 0x60
-
-TextRender_BitMask4_Return:
-	inc 1, hl
-	inc 1, xix
-	cp hl, (xsp + 24)
-	jr c, TextRender_BitMask4_PixelLoop
-
-TextRender_BitMask5_ProcessCharacter:
-	lds32 xwa, 1
-	add (xsp + 16), xwa
-	incm 1, (xsp + 28)
-
-TextRender_BitMask4_CheckColumnEnd:
-	ld xwa, (xsp + 4)
-	ld wa, (xwa + 2)
-	cp (xsp + 28), wa
-	jrl c, TextRender_BitMask4_DrawPixel
-	jrl TextRender_AdvanceToNextLine
-
-TextRender_BitMask5_Init:
-	ldw (xsp + 28), 0x0
-	jrl TextRender_BitMask5_CheckColumnEnd
-
-TextRender_BitMask5_DrawPixel:
-	ld xwa, (xsp + 16)
-	cp (xwa), 0x0
-	jrl z, TextRender_BitMask5_AdvancePointer
-	stb_dri D, 0xfd, 0x26, 0x01
-	stb_dri B, 0xfd, 0x2a, 0x01
-	ld hl, (xde + 2)
-	add hl, (xsp + 28)
-	ld bc, hl
-	ld (xix + 2), hl
-	ld_sril XWA, (xsp + 0x013a)
-	cp hl, (xwa + 2)
-	jr lt, TextRender_BitMask5_AdvancePointer
-	cp bc, (xwa + 6)
-	jrl gt, TextRender_AdvanceToNextLine
-	ld wa, bc
-	exts xwa
-	ld xbc, xwa
-	sll xbc, 2
-	add xbc, xwa
-	sll xbc, 6
-	ld wa, (xde)
-	exts xwa
-	add xwa, xbc
-	lda_24 xiz, (0x043c00)
-	add xiz, xwa
-	lds hl, 0
-	cpw (xsp + 24), 0x0
-	jr ule, TextRender_BitMask5_AdvancePointer
-
-TextRender_BitMask5_PixelLoop:
-	ld bc, (xde)
-	add bc, hl
-	ld (xix), bc
-	ld_sril XIY, (xsp + 0x013a)
-	cp bc, (xiy)
-	jr lt, TextRender_BitMask5_Return
-	ld wa, (xix)
-	cp wa, (xiy + 4)
-	jr gt, TextRender_BitMask5_AdvancePointer
-	lds wa, 7
-	sub wa, hl
-	lds iy, 1
-	and a, 0xf
-	jr z, TextRender_BitMask5_ShiftAndTest
-	slaa iy
-
-TextRender_BitMask5_ShiftAndTest:
-	ld xwa, (xsp + 16)
-	ld a, (xwa)
-	extz wa
-	and wa, iy
-	jr z, TextRender_BitMask5_Return
-	bitm 7, (xiz)
-	jr z, TextRender_BitMask5_SetBit
-	resm 5, (xiz)
-	jr TextRender_BitMask5_Return
-
-TextRender_BitMask5_SetBit:
-	setm 5, (xiz)
-
-TextRender_BitMask5_Return:
-	inc 1, hl
-	inc 1, xiz
-	cp hl, (xsp + 24)
-	jr c, TextRender_BitMask5_PixelLoop
-
-TextRender_BitMask5_AdvancePointer:
-	lds32 xwa, 1
-	add (xsp + 16), xwa
-	incm 1, (xsp + 28)
-
-TextRender_BitMask5_CheckColumnEnd:
-	ld xwa, (xsp + 4)
-	ld wa, (xwa + 2)
-	cp (xsp + 28), wa
-	jrl c, TextRender_BitMask5_DrawPixel
-	jrl TextRender_AdvanceToNextLine
-
-TextRender_XorMode_Init:
-	ldw (xsp + 28), 0x0
-	jrl TextRender_CheckColumnEnd
-
-TextRender_XorMode_DrawPixel:
-	ld xwa, (xsp + 16)
-	cp (xwa), 0x0
-	jrl z, TextRender_AdvancePointerAndUpdateLine
-	stb_dri D, 0xfd, 0x26, 0x01
-	stb_dri B, 0xfd, 0x2a, 0x01
-	ld hl, (xde + 2)
-	add hl, (xsp + 28)
-	ld bc, hl
-	ld (xix + 2), hl
-	ld_sril XWA, (xsp + 0x013a)
-	cp hl, (xwa + 2)
-	jr lt, TextRender_AdvancePointerAndUpdateLine
-	cp bc, (xwa + 6)
-	jr gt, TextRender_AdvanceToNextLine
-	ld wa, bc
-	exts xwa
-	ld xbc, xwa
-	sll xbc, 2
-	add xbc, xwa
-	sll xbc, 6
-	ld wa, (xde)
-	exts xwa
-	.include "display/graphics_text_vga.s"
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-
-ChordProc_SendRefreshEvent:
-	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000f
-	call SendEvent
-
-UI_EventHandler_InitReturnZero:
-	lds32 xhl, 0
-
-UI_EventHandler_PopAndReturn:
-	pop xiz
-	stb_dri L, 0xfd, 0x04, 0x01
-	ret
-
-ChordProc_TrailingData:
-	.byte 0x43, 0x03, 0x00, 0x02, 0x01, 0x0e
-AcChordBoxProc_Entry:
-
-AcChordBoxProc:
-	stb_dri L, 0xfd, 0xfc, 0xfe
-	push xiz
-	ld xiz, xde
-	stl_dri XWA, 0xfd, 0x04, 0x01
-	cp xbc, 0x1c20001
-	jr z, AcChordBox_HandleChordUpdate
-	cp xbc, 0x1c00001
-	jr z, AcChordBox_HandleInitOrSelect
-	cp xbc, 0x1c20000
-	jr z, AcChordBox_HandleInitOrSelect
-	ld_sril XWA, (xsp + 0x0104)
-	ld xde, xiz
-	call InheritedProc
-	jr AcChordBox_PopAndReturn
-
-AcChordBox_HandleInitOrSelect:
-	ld_sril XWA, (xsp + 0x0104)
-	ld xde, xiz
-	call InheritedProc
-	ld xwa, 0x1420007
-	ld xbc, 0x1e2000d
-	lds32 xde, 0
-	call MainFuncCall
-	jr AcChordBox_ReturnZero
-
-AcChordBox_HandleChordUpdate:
-	ld_sril XWA, (xsp + 0x0104)
-	ld xde, xiz
-	call InheritedProc
-	push xiz
-	pushw 0xed
-	pushw 0x1c92
-	lda xwa, (xsp + 12)
-	push xwa
-	call Sprintf_Locked
-	lda xsp, (xsp + 12)
-	ld xwa, 0xc0
-	call SndParam_LookupReadOnly
-	cps hl, 0
-	jr nz, AcChordBox_ReturnZero
-	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000f
-	call SendEvent
-
-AcChordBox_ReturnZero:
-	lds32 xhl, 0
-
-AcChordBox_PopAndReturn:
-	pop xiz
-	stb_dri L, 0xfd, 0x04, 0x01
-	ret
-
-MainChordPre:
-	push xiz
-	cp xbc, 0x1e2000d
-	jrl nz, MainChordPre_ReturnZero
-	pushw 0x15
-	call Malloc
-	ld xiz, xhl
-	ld (xiz), 0x0
-	ldb_d8 a, (36160)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (Naka_MemoryC_Screens)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	push xiz
-	call Strcat
-	ldb_d8 a, (36162)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (0xecff6a)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	push xwa
-	push xiz
-	call Strcat
-	lda xsp, (xsp + 18)
-	cpdi8 (36164), 0
-	jr z, MainChordPre_EmptyChordStr
-	bitda 1, (52958)
-	jr z, MainChordPre_EmptyChordStr
-	ld xwa, 0xed1c96
-	jr MainChordPre_AppendChordSuffix
-
-MainChordPre_EmptyChordStr:
-	ld xwa, 0xed1c9a
-
-MainChordPre_AppendChordSuffix:
-	push xwa
-	push xiz
-	call Strcat
-	ldb_d8 a, (36162)
-	extz wa
-	sla wa, 2
-	lda_24 xbc, (0x03f2f8)
-	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	ldb_d8 a, (36160)
-	extz wa
-	sla wa, 2
-	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	ldb_d8 a, (36164)
-	extz wa
-	sla wa, 2
-	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	push xbc
-	push xiz
-	call Strcat
-	lda xsp, (xsp + 16)
-	ld xwa, 0xffffffff
-	ld xbc, 0x1c20001
-	ld xde, xiz
-	call ApPostEvent
-	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
-	ld xde, xiz
-	call ApPostEvent
-
-MainChordPre_ReturnZero:
-	lds32 xhl, 0
-	pop xiz
-	ret
-
-MainChordPre_ReturnDefaultResult:
-	ld xhl, 0x1020005
-	ret
-
-
-; =============================================================================
-; Extension Device Initialization (TOSHI) & Control Panel (ROM FC3114-FFFFFF)
-; =============================================================================
-	.include "extensions/extension_init.s"
-
-InitializeKSS:
-	ret
-
-InitializeUser12:
-	ret
-
-InitializeUser13:
-	ret
-
-InitializeUser14:
-	ret
-
-InitializeUser15:
-	ret
-
-InitializeUser16:
-	ret
-
-InitializeUser17:
-	ret
-
-InitializeUser18:
-	ret
-
-InitializeUser19:
-	ret
-
-InitializeUser20:
-	ret
-
-InitializeUser21:
-	ret
-
-InitializeUser22:
-	ret
-
-InitializeUser23:
-	ret
-
-InitializeUser24:
-	ret
-
-InitializeUser25:
-	ret
-
-InitializeUser26:
-	ret
-
-InitializeUser27:
-	ret
-
-InitializeUser28:
-	ret
-
-InitializeUser29:
-	ret
-
-InitializeUser30:
-	ret
-
-InitializeUser31:
-	ret
-
-EmptyRoutine_01:
-	ret
-
-CPanel_InitDispatchTable:
-	.long CPanel_InitSequence
-	.long EmptyRoutine_03
-	.long EmptyRoutine_03
-	.long EmptyRoutine_02
-
-CPanel_InitSequence:
-	ei 0
-	calr DELAY_51_TICKS
-	calr DELAY_51_TICKS
-	calr DELAY_51_TICKS
-	calr CPanel_InitHardware
-	calr DELAY_6_TICKS
-	calr DELAY_6_TICKS
-	calr DELAY_6_TICKS
-	calr DELAY_6_TICKS
-	calr CPanel_PollStartup
-	ret
-
-
-EmptyRoutine_02:
-	ret
-
-
-CPanel_RX_ProcessOrInit:
-	ldb_d8 a, (36236)
-	and a, 0xc0
-	jr z, CPanel_RX_SkipToProcess
-				; if CP_Flags_A.76 != 0:
-	ld xhl, 0x200ad
-	ldw (xhl - 4), 0x0
-	ldw (xhl - 8), 0x0
-	ldw (xhl - 2), 0x80
-	ei 6
-	stdi16 (36253), 0
-	stdi16 (36255), 0
-	ordi8 36242, 1	; CP_Flags_B.0 = 1
-	ei 0
-	jr CPanel_RX_Return
-				; else:
-CPanel_RX_SkipToProcess:
-	calr CPanel_RX_Process
-
-CPanel_RX_Return:
-	ret
-
-CPanel_Poll:
-	calr CPanel_InterruptPoll_MainLoop
-	ret
-
-CPanel_InitButtonState_SaveRegs:
-	push xix
-	push xiz
-	push xhl
-	push xde
-	calr CPanel_InitButtonState
-	pop xde
-	pop xhl
-	pop xiz
-	pop xix
-	ret
-
-
-CPanel_PanelDetection_Wrapper:
-	calr CPanel_PanelDetection
-	ret
-
-
-CPanel_KeyProcessing_Wrapper:
-	calr ToneGen_Config_AlignByte
-	ret
-
-
-EmptyRoutine_03:
-	ret
-
-
-	.include "ui/cpanel_routines.s"
-
-
-	.include "audio/tonegen_fileio_handlers.s"
-	.include "audio/audio_control_engine.s"
-	.include "boot/interrupt_vector_trampolines.s"
-
-; =============================================================================
-; SoundParam_NotifyChange -- Notify UI of sound parameter change
-; =============================================================================
-; Hashes parameter ID and triggers UI refresh for affected widgets.
-; Called after preset loads: 0x4002 for reverb, 0x4006 for EQ.
-; Args: xwa = parameter ID
-SoundParam_NotifyChange:
-	lda xsp, (xsp - 10)
-	push xiz
-	ld (xsp + 10), de
-	ld (xsp + 12), bc
-	ldw (xsp + 4), 0x0
-	ld xiz, xwa
-	lds32 xwa, 0
-	ld (xsp + 6), xwa
-	ld xhl, xiz
-	and xhl, 0xff
-	ld xwa, xhl
-	sll xwa, 9
-	add xwa, xhl
-	ld xhl, xiz
-	srl xhl, 8
-	and xhl, 0xff
-	add xhl, xwa
-	ld xwa, xhl
-	sll xwa, 9
-	add xwa, xhl
-	ld xhl, xiz
-	srl xhl, 0
-	and xhl, 0x1f
-	add xhl, xwa
-	ld xwa, xhl
-	ld xbc, 0x7ff
-	call DivMod32
-	ld ix, hl
-	jr SndParam_ProbeEntry
-
-
-; --- Sound Parameters, MIDI Serial, DSP & Voice Mapping ---
-	.include "audio/sndparam_routines.s"
-
-; MIDI Serial Communication routines (SC0)
-	.include "midi/midi_serial_routines.s"
-	.include "midi/midi_dispatch_handlers.s"
-	.include "audio/dsp_config_sysex.s"
-	.include "audio/note_voice_mapping.s"
-
-Debug_PrintHexByte:
-	push	xiz
-	calr	61
-	pop	xiz
-	ret
-	push	xiz
-	ld	w, a
-	srl	a, 4
-	calr	37
-	pushw	wa
-	calr	46
-	popw	wa
-	ld	a, w
-	and	a, 15
-	calr	24
-	calr	34
-	pop	xiz
-	ret
-
-Debug_PrintString:
-	push xiz
-	ld xix, xwa
-
-Debug_PrintString_Loop:
-	ldb_spi A, 0xf0
-	cps a, 0
-	jr z, Debug_PrintString_Done
-	push xix
-	calr Debug_UartDelay
-	pop xix
-	jr Debug_PrintString_Loop
-
-Debug_PrintString_Done:
-	pop xiz
-	ret
-
-Debug_UartHelpers:
-	.byte 0xc9, 0xcf, 0x0a, 0x6f, 0x04, 0xc9, 0xc8, 0x30, 0x0e, 0xc9, 0xc8, 0x57, 0x0e
-
-Debug_UartDelay:
-	ldw iz, 0xfe00
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	ret
-
-Debug_SWI_JumpTable:
-	swi	7
-	swi	7
-	jp	Boot_InitWorkRAM_Trailer
-	jp	HDAE5000_Init_DetectAndVerify
-	jp	Boot_InitIOPorts
-	jp	BOOT_ENTRY_POINT
-	ret
-
-Get_Firmware_Version:
-	ldb_da l, (FIRMWARE_VERSION)
-	ret
-
-ROM_PaddingFF:
-	.byte 0xff, 0xff, 0xff, 0x00, 0xff
-
-	.include "boot/rom_end_structure.s"
-
-; Labels emitted as .set (exact addresses from ORG/name)
-	.set SeqRingBuf_WriteDispatch_Table_0x11, 0xe00023
-	.set SeqRingBuf_WriteDispatch_Table_0x16, 0xe00028
-	.set LongStr_ics_KN5000_Program, 0xe00065
-	.set Str_gramDATAFILE22, 0xe00073
-	.set Str_AFILE22, 0xe0007c
-	.set NakaStr_DataFile1of2, 0xe000c3
-	.set Str_ableDATAFILEPCK, 0xe00111
-	.set NakaStr_DataFilePck, 0xe00113
-	.set NakaData_FileScreenConfig, 0xe0019e
-	.set NakaData_FileScreenDispatch, 0xe00302
-	.set Bitmap_1bit_FlashStatus_Icon, 0xe00800
-	.set ScoopDisp_BitmapDataBlock, 0xe00b04
-	.set ScoopDisp_EmptyBitmapData, 0xe00b28
-	.set NakaUI_ObjectTable_End, 0xe14c32
-	.set LongStr_Explore_1000_Musical, 0xe14c86
-	.set StrFld_ParaList_Font_0x06, 0xe16bac
-	.set Str_S2cGridBox, 0xe1708a
-	.set AlignedStr_CmpNameMenuBox, 0xe17096
-	.set NakaInst_AcApcToggle, 0xe17112
-	.set NakaInst_AcApcToggle_0x0C, 0xe1711e
-	.set Str_TEMPO, 0xe18d4c
-	.set Str_FROM, 0xe1a224
-	.set NumStr_11, 0xe1cde2
-	.set NumStr_10, 0xe1cde6
-	.set NumStr_9, 0xe1cdea
-	.set NumStr_8, 0xe1cdee
-	.set NumStr_7, 0xe1cdf2
-	.set NumStr_6, 0xe1cdf6
-	.set NumStr_5, 0xe1cdfa
-	.set NumStr_4, 0xe1cdfe
-	.set NumStr_3, 0xe1ce02
-	.set NumStr_2, 0xe1ce06
-	.set NumStr_1, 0xe1ce0a
-	.set NumStr_0, 0xe1ce0e
-	.set StrNotePos_FlatAlt, 0xe1dd4c
-	.set StrNotePos_FlatAltB8, 0xe1dd52
-	.set StrNotePos_AcNatural, 0xe1dd5a
-	.set WidgetDispatch_FDTestPtrTable, 0xe1ffb6
-	.set NakaDirectPlay_PropPtrTable, 0xe208a4
-	.set NakaStr_LyricsBox, 0xe20b7c
+	.incbin "v7_postshift_blob.bin"
+
+; Code-section labels with v7-specific addresses
+	.set AcApcMdBoxProc, 0x00f1abbc
+	.set AcApcMdBox_End, 0x00f1aceb
+	.set AcApcToggleProc, 0x00f1aa21
+	.set AcApcToggle_End, 0x00f1aa21
+	.set AcCmpMdBoxProc, 0x00f1a370
+	.set AcCmpRecBoxProc, 0x00f1bab0
+	.set AcCmpRecBox_Entry, 0x00f1bab0
+	.set AcCmpSetGridBoxProc, 0x00f1a434
+	.set AcCmpTempoBoxProc, 0x00f1bdb7
+	.set AcCmpTempoBox_Entry, 0x00f1bdb7
+	.set AcCurSongNameBoxProc, 0x00f2cb45
+	.set AcCurSong_End, 0x00f2cb45
+	.set AcCurrentSongBoxProc, 0x00f2cad1
+	.set AcDemoMedleyDispBoxProc, 0x00f2cad1
+	.set AcDemoSongBoxProc, 0x00f2ca32
+	.set AcDemoSong_End, 0x00f2cad1
+	.set AcDiskFileNameBoxProc, 0x00f2b6a6
+	.set AcDiskFileName_End, 0x00f2b74d
+	.set AcDocFileNoBoxProc, 0x00f2b942
+	.set AcDocFileNo_End, 0x00f2b9e9
+	.set AcDocSongNameBoxProc, 0x00f2b89b
+	.set AcDocSongName_End, 0x00f2b942
+	.set AcEasyCmpGridBoxProc, 0x00f1c017
+	.set AcMemNoBoxProc, 0x00f1b611
+	.set AcMemNoBox_Entry, 0x00f1b611
+	.set AcModeSelBoxProc, 0x00f2c973
+	.set AcMspBnkSlBoxProc, 0x00f1ca12
+	.set AcMspBnkSlBox_Entry, 0x00f1ca12
+	.set AcMuteToggleBoxProc, 0x00f2cdb0
+	.set AcPDFileNoBoxProc, 0x00f2ba90
+	.set AcPDSongNameBoxProc, 0x00f2b9e9
+	.set AcPDSongName_End, 0x00f2ba90
+	.set AcS2cMemNoBoxProc, 0x00f1aceb
+	.set AcSmfFileNameBoxProc, 0x00f2b74d
+	.set AcSmfFileName_End, 0x00f2b7f4
+	.set AcSmfSongNameBoxProc, 0x00f2b7f4
+	.set AcSmfSongName_End, 0x00f2b89b
+	.set AcSndArgGridBoxProc, 0x00f1d23e
+	.set AcSndArgGrid_BoxCase2, 0x00f1d23e
+	.set AcTrAsGridBoxProc, 0x00f2bef4
+	.set AccGuard_ProgramChangeCheck, 0x00f698be
+	.set AccStyle_JumpTable, 0x00f5c158
+	.set AccStyle_JumpTable2, 0x00f5c16f
+	.set AccStyle_TableDataEntry, 0x00f6d449
+	.set AccWrap_ReplayStop, 0x00f59693
+	.set AccWrap_ReplayStopAlt, 0x00f59697
+	.set AccompSeq_JumpTable, 0x00f6e22a
+	.set AddswbWr, 0x00fdaa53
+	.set AllBOut, 0x00fb2c9c
+	.set ApcOnBasFunc, 0x00f1aba4
+	.set ApcOnBas_End, 0x00f1abbc
+	.set ApcOnOffFunc, 0x00f1ab8c
+	.set AssswbWr, 0x00fdaa22
+	.set AttLangCheck, 0x00f1e01d
+	.set AudioInit_CheckMixMode, 0x00fde4b8
+	.set AudioInit_CheckSoundGroup, 0x00fde3a1
+	.set AudioInit_CheckSoundGroup51, 0x00fde430
+	.set AudioInit_ConfigStereoVoice, 0x00fde1dd
+	.set AudioInit_ConfigureVoiceFromFlags, 0x00fde2b4
+	.set AudioInit_PartConfig_CheckCarry, 0x00fe00ee
+	.set AudioInit_ProcessModeChange, 0x00fdd61c
+	.set AudioInit_PushAndConfigVoice, 0x00fde359
+	.set AudioInit_PushAndConfigVoiceAlt, 0x00fde375
+	.set AudioInit_SelectVoiceByType, 0x00fde2fe
+	.set Audio_ExternalCallback_End, 0x00f2aa08
+	.set Audio_FullReinitWithPreset, 0x00fc75b0
+	.set Audio_InitAllDefaults, 0x00fc747e
+	.set Audio_ReinitToneGenAndOutput, 0x00fc756c
+	.set Audio_ResetAfterPayloadError, 0x00fc74ee
+	.set BitMapOut, 0x00fb3b5a
+	.set BitMapOut_ByteData_DisplayUpdate, 0x00fb593b
+	.set BitMapOut_ByteData_PresetCopy, 0x00fb3f5f
+	.set BitMapOut_ByteData_RenderB, 0x00fb3caa
+	.set BitMapOut_ByteData_RenderC, 0x00fb3d56
+	.set BitMapOut_ByteData_RenderD, 0x00fb3d5b
+	.set BitMapOut_ByteData_RenderE, 0x00fb3e1d
+	.set BitMapOut_ByteData_RenderState, 0x00fb587d
+	.set BitMapOut_ByteData_TransitionSeq, 0x00fb3ec7
+	.set BitmapFinpic_ByteData, 0x00fb7653
+	.set ChangePalette, 0x00faeeba
+	.set ChangeWall, 0x00faedfe
+	.set CharEncoding_ExtendedHi, 0x00ef0069
+	.set CharMap_ActivePreamb_LoadDRAM, 0x00fedc41
+	.set CharMap_ActivePreamble, 0x00fedc2a
+	.set CharMap_NullPreamble_0, 0x00fedc27
+	.set CharMap_NullPreamble_1, 0x00fedc28
+	.set CharMap_NullPreamble_2, 0x00fedc29
+	.set CmEsyTtlFunc, 0x00f68815
+	.set CmpBkslTtlFunc, 0x00f67ede
+	.set CmpBksl_STtlFunc, 0x00f68057
+	.set CmpBndRngFunc, 0x00f1a301
+	.set CmpBndRng_End, 0x00f1a370
+	.set CmpClrNoFunc, 0x00f1b38b
+	.set CmpClrYesFunc, 0x00f1b378
+	.set CmpMenuTtlFunc, 0x00f679cc
+	.set CmpModeFunc, 0x00f6799b
+	.set CmpNameMenuBoxProc, 0x00f1dfec
+	.set CmpNameMenuBoxProc_Entry, 0x00f1dfec
+	.set CmpNameOkFunc, 0x00f1bed0
+	.set CmpNamingCheck, 0x00f1be7f
+	.set CmpNcpTtlFunc, 0x00f681f5
+	.set CmpRealTtlFunc, 0x00f67bea
+	.set CmpSetGridCheck, 0x00f1a864
+	.set CmpSetP1GridCheck, 0x00f1a6b2
+	.set CmpSetP1_TtlDispatch_Default, 0x00f1a434
+	.set CmpSetPageFunc, 0x00f1a9d7
+	.set CmpSetTtlFunc, 0x00f67a55
+	.set CmpStepTitleFunc, 0x00f69ede
+	.set ComporserNameBoxProc, 0x00f2b48a
+	.set ComposerBox_End, 0x00f2b579
+	.set CstmCpTtlFunc, 0x00f68e23
+	.set CtrlPanel_HandleKeyInput, 0x00f9833b
+	.set CtrlPanel_SetBit3_OnStyleD0D3, 0x00fc7004
+	.set CtrlPanel_SetResBit0_ViaLookup4C, 0x00fc70f9
+	.set CtrlPanel_SetResBit5_ViaLookup4C, 0x00fc7138
+	.set CtrlPanel_SetResBit6_ViaLookup, 0x00fc6f90
+	.set DSPCfg_ProcessInput, 0x00fdb5b8
+	.set DemoMedDsp_End, 0x00f2cdb0
+	.set Demo_SelectEntry_ByteTable, 0x00f866e5
+	.set EasyCmpGridCheck, 0x00f1c279
+	.set EasyCmp_TtlDefault, 0x00f1c017
+	.set EditSwRefresh, 0x00f1ed94
+	.set EffEdit_DSPConfigBlock, 0x00f454e3
+	.set Encoder_ReturnDefaultConstant_End, 0x00fc6626
+	.set ExtData_ToneParam_AltBody, 0x00fc8009
+	.set ExtData_ToneParam_AltDispatch, 0x00fc7f9f
+	.set ExtData_ToneParam_AltEntry, 0x00fc8008
+	.set ExtData_ToneParam_CheckMode, 0x00fc7f72
+	.set ExtData_ToneParam_DispatchHandler, 0x00fc7d77
+	.set ExtData_ToneParam_MultiChannel, 0x00fc812e
+	.set ExtData_VoiceParam_DispatchBytecode, 0x00fc6d4e
+	.set ExtData_Voice_CheckMode, 0x00fc83cc
+	.set ExtData_Voice_CheckMode3, 0x00fc84d8
+	.set ExtData_Voice_CompareAndDispatch, 0x00fc85c8
+	.set ExtData_Voice_CopyAndJump, 0x00fc85b9
+	.set ExtData_Voice_FullHandler, 0x00fc84e8
+	.set ExtData_Voice_MixedHandler, 0x00fc83e5
+	.set ExtData_Voice_RetEntry, 0x00fc83e4
+	.set ExtData_Voice_RetEntry2, 0x00fc84e7
+	.set FDLoadSaveTest, 0x00f1e5b0
+	.set FDemoText_ByteData_VoiceProbeA, 0x00f8430c
+	.set FDemoText_ByteData_VoiceProbeC, 0x00f8436a
+	.set FDemoText_ProcessVoiceFlags, 0x00f843db
+	.set FileIO_AllocBuffer, 0x00fc7f71
+	.set FileIO_ErrorCodeByteBlock, 0x00f8b0bf
+	.set FlashWrite, 0x00ef3c12
+	.set GetAdr_rtmcfg, 0x00f1edc7
+	.set GetAdr_sq_beadt, 0x00f1edbd
+	.set GetAdr_sqbtof, 0x00f1edb8
+	.set GetAdr_sqsrtc, 0x00f1edc2
+	.set GetDiskFreeSpace, 0x00f5234d
+	.set GetMediaType, 0x00f521e8
+	.set GetVolumeLabel, 0x00f523ca
+	.set HamaListProc, 0x00f1e846
+	.set HdaeRom_AltCheckResult, 0x00fea5f8
+	.set HdaeRom_AltEntry, 0x00fea4b3
+	.set HdaeRom_AltProcessBlock, 0x00fea532
+	.set HdaeRom_AltReadParam, 0x00fea593
+	.set HdaeRom_AltTableEntry0, 0x00fea6cf
+	.set HdaeRom_AltTableEntry1, 0x00fea6fb
+	.set HdaeRom_AltTableEntry2, 0x00fea757
+	.set HdaeRom_AltTableEntry3, 0x00fea783
+	.set HdaeRom_AltTableEntry4, 0x00fea7af
+	.set HdaeRom_AltTableEntry5, 0x00fea7e7
+	.set HdaeRom_AltTableEntry6, 0x00fea813
+	.set HdaeRom_AltTableEntry7, 0x00fea83f
+	.set HdaeRom_AltTableEntry8, 0x00fea840
+	.set HdaeRom_AltTableEntry9, 0x00fea841
+	.set HdaeRom_CheckResult, 0x00fea37e
+	.set HdaeRom_Entry, 0x00fea249
+	.set HdaeRom_FinishBlock, 0x00fea3c2
+	.set HdaeRom_ProcessBlock, 0x00fea2b1
+	.set HdaeRom_ReadParam, 0x00fea2f5
+	.set HdaeRom_TableEntry0, 0x00fea406
+	.set HdaeRom_TableEntry1, 0x00fea408
+	.set HdaeRom_TableEntry2, 0x00fea40a
+	.set HdaeRom_WriteParam, 0x00fea33a
+	.set HelpLang_DispatchDataBlock, 0x00f47659
+	.set IvExitModeTrSelProc, 0x00f2cdb0
+	.set IvNamingExitProc, 0x00f2bb37
+	.set IvNamingExit_ScreenData, 0x00f2bbcf
+	.set LoadFileSMF, 0x00f87bf8
+	.set LyricsBoxFuncProc, 0x00f2b1e0
+	.set LyricsBoxFuncProc_Boundary, 0x00f2b1e0
+	.set LyricsBoxFunc_End, 0x00f2b39b
+	.set LyricsBoxProc, 0x00f2aa08
+	.set MainCmpCpFunc, 0x00f69459
+	.set MainCmpSetFunc, 0x00f692a7
+	.set MainCstmNameFunc, 0x00f691c6
+	.set MainEsCmpFunc, 0x00f69748
+	.set MainMspBnkNameFunc, 0x00f6985a
+	.set MainS2cFunc, 0x00f692a7
+	.set MainStylCnvFunc, 0x00f6c7fa
+	.set MainTimeFlash_Boundary, 0x00fbc597
+	.set MeasureBoxFunc_End, 0x00f2b6a6
+	.set MeasureBoxProc, 0x00f2b579
+	.set Memful2LangCheck, 0x00f1e072
+	.set MemfulLangCheck, 0x00f1e061
+	.set MiddleCmpClrFunc, 0x00f693fa
+	.set MidiCh_IterateExpression, 0x00fc887c
+	.set MidiCh_IteratePan_Forward, 0x00fc87e6
+	.set MidiCh_IterateVolume_Forward, 0x00fc86f1
+	.set MidiCh_IterateVolume_Reverse, 0x00fc8771
+	.set MidiCtrl_ModeSwitch_Data, 0x00fd83fb
+	.set MidiOut_RealtimeDispatch_Data, 0x00fdb269
+	.set MidiPart_DataBlock, 0x00f7a945
+	.set MidiPkt_ArpChordHandler, 0x00fd72d8
+	.set MidiPkt_ArpExtHandler_A, 0x00fd73f7
+	.set MidiPkt_ArpExtHandler_B_Data, 0x00fd742b
+	.set MidiPkt_ArpExtHandler_C_Data, 0x00fd7452
+	.set MidiPkt_ArpExtHandler_D_Data, 0x00fd7482
+	.set MidiPkt_ArpExtHandler_E_Data, 0x00fd74a9
+	.set MidiPkt_ArpExtHandler_F_Data, 0x00fd74dd
+	.set MidiPkt_ArpExtHandler_G, 0x00fd7505
+	.set MidiPkt_ArpExtHandler_H_Data, 0x00fd7531
+	.set MidiPkt_ArpExtHandler_I_Data, 0x00fd7565
+	.set MidiPkt_ArpExtHandler_J, 0x00fd758d
+	.set MidiPkt_ArpExtHandler_K, 0x00fd75b9
+	.set MidiPkt_ArpExtHandler_L, 0x00fd75e9
+	.set MidiPkt_ArpExtHandler_M_Data, 0x00fd7611
+	.set MidiPkt_ArpExtHandler_N_Data, 0x00fd763f
+	.set MidiPkt_DispatchData_Chan1, 0x00fda036
+	.set MidiPkt_DispatchData_Chan2, 0x00fda03d
+	.set MidiPkt_DispatchData_Chan3, 0x00fda02f
+	.set MidiPkt_DispatchData_Chan4, 0x00fda028
+	.set MidiPkt_DispatchData_Chan5, 0x00fda044
+	.set MidiPkt_DispatchData_Chan6, 0x00fda04b
+	.set MidiPkt_DispatchSpecialType, 0x00fd9a1c
+	.set MidiPkt_DispatchViaTable_4D6A, 0x00fd989e
+	.set MidiPkt_DispatchViaTable_4D82, 0x00fd98d2
+	.set MidiPkt_DispatchViaTable_4D8E, 0x00fd9906
+	.set MidiPkt_DispatchViaTable_4D9A, 0x00fd993a
+	.set MidiPkt_DispatchViaTable_4DA6, 0x00fd996e
+	.set MidiPkt_DispatchViaTable_4DAE, 0x00fd99a2
+	.set MidiPkt_HandleCmdCode01, 0x00fd73ae
+	.set MidiPkt_InitSingleField_Data, 0x00fd7396
+	.set MidiPkt_Nop, 0x00fd989d
+	.set MidiPkt_RetStub_A, 0x00fd763d
+	.set MidiPkt_RetStub_B, 0x00fd763e
+	.set MidiPkt_SysExBulkTransfer_Data, 0x00fda150
+	.set MidiPkt_SysExProcessor_Data, 0x00fda107
+	.set MidiPkt_SysExValidator_Data, 0x00fda0c5
+	.set MidiSysEx_ProcessBlock, 0x00fd7966
+	.set MspBkslTtlFunc, 0x00f69857
+	.set MspBnkShow, 0x00f1c981
+	.set MspBnkSlBox_End, 0x00f1cb74
+	.set MspMeasBox_End, 0x00f1d014
+	.set MspMemBox_End, 0x00f1d09e
+	.set MspMenuTtlFunc, 0x00f69a1e
+	.set MspNameBnkFunc, 0x00f1c3d1
+	.set MspNameOkFunc, 0x00f1c4d6
+	.set MspNameOkFunc_End, 0x00f1cf9f
+	.set MspNameTtlFunc, 0x00f69aa5
+	.set MspNamingCheck, 0x00f1c48b
+	.set MspPlayModeFunc, 0x00f1d1a0
+	.set MspRGrpSetBnkFunc, 0x00f1cecf
+	.set MspRGrpSetGridCheck, 0x00f1ccd7
+	.set MspRecBnkBox_End, 0x00f1d121
+	.set MspRecModeFunc, 0x00f69b0b
+	.set MspRecTtlFunc, 0x00f69b27
+	.set MspRgpShowHideFunc, 0x00f1cf52
+	.set MspRgpShowHide_End, 0x00f1cf9f
+	.set Naka_PresentationRootState, 0x00ef013f
+	.set NormScreenProc, 0x00fbc597
+	.set NoteMap_SearchVoiceEntry, 0x00fe84c0
+	.set NotePool_DataBlock_8BA, 0x00f3c87f
+	.set PlayHalt, 0x00f1ed3e
+	.set PlayStandBy, 0x00f1ed7e
+	.set PostLswLoad, 0x00fdac6a
+	.set PostLswSave, 0x00fdacbe
+	.set PostMidiLoad, 0x00fdacd0
+	.set PostMidiSave, 0x00fdacd2
+	.set PostPmLoad, 0x00fdacc0
+	.set PostPmSave, 0x00fdacce
+	.set PostTmLoad, 0x00fefcc3
+	.set PostTmSave, 0x00fefd08
+	.set PreLswLoad, 0x00fdac63
+	.set PreLswSave, 0x00fdacbd
+	.set PreMidiLoad, 0x00fdaccf
+	.set PreMidiSave, 0x00fdacd1
+	.set PrePmLoad, 0x00fdacbf
+	.set PrePmSave, 0x00fdaccd
+	.set PreTmLoad, 0x00fefcc2
+	.set PreTmSave, 0x00fefd07
+	.set PsCmpCpFGrpBoxProc, 0x00f1b39e
+	.set PsCmpCpFGrpBox_Entry, 0x00f1b39e
+	.set PsCmpCpFPtnBoxProc, 0x00f1b611
+	.set PsCmpCpFPtnBox_Entry, 0x00f1b611
+	.set PsCmpCpFVariBoxProc, 0x00f1b39e
+	.set PsCmpCpFVariBox_Entry, 0x00f1b39e
+	.set PsCmpMeasBoxProc, 0x00f1bc3f
+	.set PsCmpMeasBox_Entry, 0x00f1bc3f
+	.set PsCmpMemBoxProc, 0x00f1bc3f
+	.set PsCmpMemBox_Entry, 0x00f1bc3f
+	.set PsCmpQtzBoxProc, 0x00f1b934
+	.set PsCmpQtzBox_Entry, 0x00f1c508
+	.set PsCstmCpBnkBoxProc, 0x00f1aceb
+	.set PsCstmCpBnkBox_Entry, 0x00f1b934
+	.set PsCstmCpNameBoxProc, 0x00f1b837
+	.set PsCstmCpNameBox_Entry, 0x00f1b837
+	.set PsCstmCpSwBoxProc, 0x00f1aceb
+	.set PsCstmCpSwBox_Entry, 0x00f1b7a1
+	.set PsCtmAttStrBoxProc, 0x00f1b934
+	.set PsCtmAttStrBox_Entry, 0x00f1b934
+	.set PsMspBnkNameBoxProc, 0x00f1cb74
+	.set PsMspMeasBoxProc, 0x00f1cf9f
+	.set PsMspMemBoxProc, 0x00f1cf9f
+	.set PsMspNameBnkProc, 0x00f1c508
+	.set PsMspNameBnk_End, 0x00f1c57f
+	.set PsMspRecBnkBoxProc, 0x00f1cf9f
+	.set PsMspRecPadBoxProc, 0x00f1d121
+	.set PsNameMemBoxProc, 0x00f1b611
+	.set PsNameMemBox_Entry, 0x00f1bf02
+	.set PsParaListBoxProc, 0x00f1d810
+	.set PsParaListBoxProc_Entry, 0x00f1d810
+	.set PsRgpSetBnkBoxProc, 0x00f1cf9f
+	.set PsRgpSetBnkBoxProc_Entry, 0x00f1d121
+	.set PsS2cFmeasBoxProc, 0x00f1ad62
+	.set PsS2cFmeas_End, 0x00f1ad62
+	.set PsS2cLmeasBoxProc, 0x00f1ad62
+	.set PsS2cLmeas_End, 0x00f1ae92
+	.set PsS2cTransBoxProc, 0x00f1ad62
+	.set PsSCTxtBox2Proc, 0x00f1dad5
+	.set PsSCTxtBox2Proc_Entry, 0x00f1dad5
+	.set PsSCTxtBoxProc, 0x00f1da6c
+	.set PsSCTxtBoxProc_Entry, 0x00f1da6c
+	.set PsSeqSongNoBoxProc, 0x00f1ae92
+	.set PsSeqSongNo_End, 0x00f1aeea
+	.set PsStylCnvVerProc, 0x00f1dad5
+	.set PsStylCnvVerProc_Entry, 0x00f1dad5
+	.set S2cGridBoxProc, 0x00f1af8b
+	.set S2cGridCheck, 0x00f1b26a
+	.set S2cMemNoBox_End, 0x00f1ad62
+	.set S2cShowHideFunc, 0x00f1b23e
+	.set S2cTtlFunc, 0x00f689de
+	.set SeMenu_NameEditor_End, 0x00f0ecc6
+	.set SeqByteBlock_PathNormalize, 0x00f500d7
+	.set SeqChan_DefaultHandler, 0x00fd7903
+	.set SeqChan_DispatchByType_Data, 0x00fd78e1
+	.set SeqChan_ProcessStepCmd, 0x00fd7660
+	.set SeqChan_RetStub_A, 0x00fd78df
+	.set SeqChan_RetStub_B, 0x00fd78e0
+	.set SeqChan_RetStub_C, 0x00fd7954
+	.set SeqChan_StepCmd_Field10_Data, 0x00fd77aa
+	.set SeqChan_StepCmd_Field11_Data, 0x00fd7834
+	.set SeqChan_StepCmd_Field12_Data, 0x00fd786d
+	.set SeqChan_StepCmd_Field13Write, 0x00fd78a6
+	.set SeqChan_StepCmd_Field13_Data, 0x00fd77d8
+	.set SeqChan_StepCmd_Field1to2, 0x00fd766d
+	.set SeqChan_StepCmd_Field20to21, 0x00fd7806
+	.set SeqChan_StepCmd_Field2to3, 0x00fd7699
+	.set SeqChan_StepCmd_Field4to5, 0x00fd76c5
+	.set SeqChan_StepCmd_Field5to6, 0x00fd76f1
+	.set SeqChan_StepCmd_Field6_Data, 0x00fd7721
+	.set SeqChan_StepCmd_Field8to9, 0x00fd774e
+	.set SeqChan_StepCmd_Field9to10, 0x00fd777c
+	.set SeqChan_WriteField_Data_A, 0x00fd7910
+	.set SeqChan_WriteField_Data_B, 0x00fd7921
+	.set SeqChan_WriteField_Data_C, 0x00fd7932
+	.set SeqChan_WriteField_Data_D, 0x00fd7943
+	.set SeqChan_WriteField_Data_E, 0x00fd7955
+	.set SeqDMA_MultiWrite_DspSysEx, 0x00ef317c
+	.set SeqDMA_MultiWrite_NoteEvent, 0x00ef317c
+	.set SeqDMA_MultiWrite_SoundEdit, 0x00ef317c
+	.set SeqDMA_MultiWrite_VoiceMap, 0x00ef317c
+	.set SeqDMA_Nop, 0x00ef317b
+	.set SeqDMA_WriteMidi_NoteOn, 0x00ef3250
+	.set SeqData_DispatchLoop_Check, 0x00fd8628
+	.set SeqData_FormatOutput_CaseC, 0x00fd871b
+	.set SeqData_FormatOutput_Data, 0x00fd8759
+	.set SeqData_FormatOutput_Default, 0x00fd872c
+	.set SeqData_FormatOutput_Dispatch, 0x00fd86b1
+	.set SeqLoadPost, 0x00f4784a
+	.set SeqLoadPre, 0x00f47842
+	.set SeqNameOK_End, 0x00f2cad1
+	.set SeqSavePost, 0x00f47935
+	.set SeqSavePre, 0x00f47915
+	.set SeqVoice_ValidateState_StoreChannel, 0x00f400ed
+	.set SetGlobalError, 0x00f1edcc
+	.set SetSepaOutMode, 0x00f1eb06
+	.set SetWall_X, 0x00f1ede1
+	.set SndArgGridCheck, 0x00f1d668
+	.set SndArgModeFunc, 0x00f69c2f
+	.set SndArgNmGet, 0x00f69cb7
+	.set SndArgTtlCheck, 0x00f1d7bf
+	.set SndArgTtlFunc, 0x00f69c60
+	.set SndArg_GridBnk_Case3, 0x00f1af8b
+	.set SndArrLangCheck, 0x00f1e094
+	.set SndMem1LangCheck, 0x00f1e050
+	.set SndMemLangCheck, 0x00f1e03f
+	.set SndParam_BatchUpdate_Data, 0x00fce36e
+	.set SndParam_ClampDelayTime, 0x00fce272
+	.set SndParam_ClampReverbTime, 0x00fce1df
+	.set SndParam_CompareRegField, 0x00fcd272
+	.set SndParam_DecodeFieldAlt_Data, 0x00fce22f
+	.set SndParam_DecodeField_Data, 0x00fce200
+	.set SndParam_DecrLookup_Via0300, 0x00fc6cd4
+	.set SndParam_DeregisterEntry_Data, 0x00fcda87
+	.set SndParam_EncodeFieldDirect_Data, 0x00fce179
+	.set SndParam_EncodeFieldSub_Data, 0x00fce1a8
+	.set SndParam_MaskShiftMerge_8F58, 0x00fc6cc0
+	.set SndParam_NotifyQuick_Data, 0x00fcddf0
+	.set SndParam_PackAndWrite, 0x00fce32f
+	.set SndParam_ProcessEntry, 0x00fea87f
+	.set SndParam_ReadRegAddress, 0x00fcd373
+	.set SndParam_ReadRegBitfield, 0x00fcd31a
+	.set SndParam_ReadRegField, 0x00fcd1f0
+	.set SndParam_ReadRegWithLUT, 0x00fcd22e
+	.set SndParam_ReadRegWord, 0x00fcd2d5
+	.set SndParam_RegisterBitfield_Data, 0x00fcd6b5
+	.set SndParam_RegisterChained2_Data, 0x00fcdbb3
+	.set SndParam_RegisterChained_Data, 0x00fcda9e
+	.set SndParam_RegisterComplex_Data, 0x00fcdcbe
+	.set SndParam_RegisterDual_Data, 0x00fcde45
+	.set SndParam_RegisterEntryAlt_Data, 0x00fcd4a2
+	.set SndParam_RegisterEntry_Data, 0x00fcd3ad
+	.set SndParam_RegisterLinked2_Data, 0x00fcd89d
+	.set SndParam_RegisterLinked_Data, 0x00fcd774
+	.set SndParam_RegisterMultiField_Data, 0x00fcd5ca
+	.set SndParam_RegisterOffset_Data, 0x00fcdf90
+	.set SndParam_RegisterSimple_Data, 0x00fcd9e4
+	.set SndParam_RegisterWide_Data, 0x00fce050
+	.set SndParam_ResetDefaultTable, 0x00fcd396
+	.set SndParam_ReturnInvalid, 0x00fce293
+	.set SndParam_ReturnNotFound, 0x00fcd1ec
+	.set SndParam_SetResBit0_Via028103, 0x00fc6c0e
+	.set SndParam_SetResBit1_ViaRegs0100_0101, 0x00fc6a76
+	.set SndParam_SetResBit2_ViaPartCC5D, 0x00fc6b77
+	.set SndParam_SetResBit3_Via4002, 0x00fc6af1
+	.set SndParam_SetResBit3_ViaRegs0101_0102, 0x00fc6ac8
+	.set SndParam_SetResBit4_Via0400, 0x00fc6cfc
+	.set SndParam_TableLookup_Via4100, 0x00fc6b2b
+	.set SndParam_UpdateEntry_Data, 0x00fcd578
+	.set SndParam_VoiceEntryLookup_ViaReg8000, 0x00fc6c48
+	.set SndParam_WriteFieldDirect_Data, 0x00fce297
+	.set SndParam_WriteFieldSub_Data, 0x00fce2d7
+	.set SndParam_WriteViaHash_Data, 0x00fce35b
+	.set SongNameBoxProc, 0x00f2b39b
+	.set SongNameBox_End, 0x00f2b48a
+	.set Song_SendPartDataBlocks, 0x00feb163
+	.set SoundFX_Handler_0, 0x00fe85f6
+	.set SoundFX_Handler_1, 0x00fe860a
+	.set SoundFX_Handler_10, 0x00fe8b91
+	.set SoundFX_Handler_11, 0x00fe8bb4
+	.set SoundFX_Handler_12, 0x00fe85e2
+	.set SoundFX_Handler_2, 0x00fe8669
+	.set SoundFX_Handler_3, 0x00fe86d2
+	.set SoundFX_Handler_4, 0x00fe873b
+	.set SoundFX_Handler_5, 0x00fe87d6
+	.set SoundFX_Handler_6, 0x00fe88a6
+	.set SoundFX_Handler_7, 0x00fe89a2
+	.set SoundFX_Handler_8, 0x00fe8a72
+	.set SoundFX_Handler_9, 0x00fe8b6e
+	.set SqAftSetFunc_End, 0x00f2cdb0
+	.set StylCnvContTtlFunc, 0x00f6c726
+	.set StylCnvLangCheck, 0x00f1e083
+	.set StylCnvModlTtlFunc, 0x00f6be25
+	.set StylCnvSelTtlFunc, 0x00f6c522
+	.set StylCnvStorBnkSel, 0x00f1d9f7
+	.set StylCnvStorBnk_ProcDataBlock, 0x00f1df87
+	.set StylCnvStorOkFunc, 0x00f1db4c
+	.set StylCnvStorTtlFunc, 0x00f6c7da
+	.set StylCnvTxtTtlFunc, 0x00f6bdda
+	.set StylCnvWaitTtlFunc, 0x00f6bd5c
+	.set SureLangCheck, 0x00f1e02e
+	.set SwbtWr, 0x00fdaa84
+	.set SwbtWr_ReinitBothBanks, 0x00ef14ae
+	.set SwbtWr_ReinitOutputBank, 0x00ef14c9
+	.set TestTitleFunc, 0x00f1e370
+	.set ToshiCmd_DefaultHandler_Ret, 0x00fc8e02
+	.set TrAsGridChk_End, 0x00f2c973
+	.set TrAsGrid_BoxProc, 0x00f2bef4
+	.set UIStateEvt_ChannelConfig_Data, 0x00fde01a
+	.set UIStateEvt_EffectSelect_Data, 0x00fddeac
+	.set UIStateEvt_MuteToggle_Data, 0x00fde1b2
+	.set UIStateEvt_NullHandler, 0x00fc73ef
+	.set UIStateEvt_ParamEdit_Data, 0x00fddad7
+	.set UIStateEvt_PlayModeGuard_Data, 0x00fddfe4
+	.set UIStateEvt_ProcessHandler, 0x00fea4b4
+	.set UIStateEvt_StubReturn, 0x00fde1b0
+	.set UIStateEvt_VoiceParamHandler, 0x00f202c2
+	.set UIStateEvt_VolumeMixer_Data, 0x00fddd43
+	.set UIState_CheckAndRenderBitmap, 0x00fc8d3c
+	.set UIState_DisplayUpdate_BitmapHandler, 0x00fcfc96
+	.set UIState_KeyScan_Dispatch, 0x00f9828a
+	.set UIState_NullReturn, 0x00fc7422
+	.set UIState_ProcessAltMode, 0x00fc7423
+	.set UIState_ProcessDisplayUpdate, 0x00fcfc81
+	.set UIState_ProcessExtendedMode, 0x00fc7396
+	.set UIState_ProcessKeyEvent, 0x00fea043
+	.set UIState_ProcessMidiEvent, 0x00fdd8b3
+	.set UIState_ProcessSimpleMode, 0x00fc7449
+	.set UIState_RenderBitmapData, 0x00fc8d89
+	.set UIState_SwitchForMidiFlags, 0x00fc73f0
+	.set UIState_SwitchOnDisplayMode, 0x00fc7361
+	.set UIState_UpdateControlBits, 0x00fc733c
+	.set UIWidget_MidiStreamControl, 0x00fc9275
+	.set VoiceConfig_End, 0x00f2ca32
+	.set VoiceParam_AssSwb_MultiBlock_Data, 0x00fd923b
+	.set VoiceSynth_CmdCase1, 0x00f1ea06
+	.set VwVariBoxProc, 0x00f1c57f
+	.set _findclose, 0x00f526a6
+	.set _findfirst, 0x00f52586
+	.set _findnext, 0x00f526e4
+	.set cmp_ld_ato, 0x00f6b82b
+	.set cmp_ld_mae, 0x00f6b820
+	.set cmp_sv_ato, 0x00f6b856
+	.set cmp_sv_mae, 0x00f6b844
+	.set fclose_ext, 0x00f1ed06
+	.set ferror_ext, 0x00f1ed0a
+	.set fopen_ext, 0x00f1ecfa
+	.set format_FD, 0x00f51a4b
+	.set fread_ext, 0x00f1ed02
+	.set free_X, 0x00f1edd9
+	.set fwrite_ext, 0x00f1ecfe
+	.set get_tid_X, 0x00f1ed36
+	.set malloc_X, 0x00f1edd1
+	.set midi_out_en_X, 0x00f1edb4
+	.set msp_ld_ato, 0x00f6b86d
+	.set msp_ld_mae, 0x00f6b862
+	.set msp_sv_ato, 0x00f6b895
+	.set msp_sv_mae, 0x00f6b87e
+	.set pdly_tim_X, 0x00f1ed3a
+	.set prcv_msg_X, 0x00f1ed32
+	.set preq_sem_X, 0x00f1ed1e
+	.set putc_mrx_bf_X, 0x00f1edaa
+	.set putc_mtx_bf_X, 0x00f1eda0
+	.set rcm_ld_XAPR_j, 0x00f1eafe
+	.set rcm_sv_XAPR_j, 0x00f1eb02
+	.set rcv_msg_X, 0x00f1ed2e
+	.set ref_sem_X, 0x00f1ed26
+	.set rot_rdq_X, 0x00f1ed0e
+	.set sendCOMM, 0x00ef32ca
+	.set set_flg_X, 0x00f1ed12
+	.set sig_sem_X, 0x00f1ed1a
+	.set snd_msg_X, 0x00f1ed2a
+	.set wai_flg_X, 0x00f1ed16
+	.set wai_sem_X, 0x00f1ed22
+
+; Restored .set directives from original
 	.set AlignedStr_AcMuteToggleBox, 0xe20b86
-	.set Str_ORCH, 0xe21ad2
-	.set NakaStr_PdMdlyOrcha, 0xe22322
-	.set Str_AFTER_TOUCH_SETTING, 0xe2364a
-	.set NakaStr_Gamelan, 0xe23c12
-	.set NakaWidget_Perf2Flute, 0xe23c1a
-	.set Str_SaxBrass, 0xe23cca
-	.set NakaWidget_Perf2Piano, 0xe23cd4
-	.set NakaStr_Organ, 0xe23d0a
-	.set Str_HokieDance, 0xe23e62
-	.set NakaWidget_Perf3JazzBand, 0xe23e6e
-	.set Str_GospelRevival, 0xe23ea4
-	.set NakaWidget_Perf3LatinOrch, 0xe23eb4
-	.set Str_OrganCombo, 0xe23eea
-	.set NakaWidget_Perf3BigBand, 0xe23ef6
-	.set Str_BigBandMid, 0xe23f2c
-	.set NakaWidget_Perf3SymphOrch, 0xe23f3a
-	.set NakaStr_Rhythm, 0xe2405e
-	.set NakaFld_TabIndexFunc, 0xe270ea
-	.set NakaDesc_SeqExitWidgets, 0xe2713c
-	.set NakaInst_SqedtVal, 0xe27564
-	.set NakaInst_SqedtVal_B, 0xe27574
-	.set NakaInst_EqualizerBox, 0xe27586
+	.set AlignedStr_CmpNameMenuBox, 0xe17096
+	.set AlignedStr_ON, 0xe8013c
+	.set AudioInit_PartConfig_Loop_0x26, 0xfe0053
+	.set Bitmap_1bit_FlashStatus_Icon, 0xe00800
+	.set Bitmap_AccompBitmapSpacer, 0xe878f9
+	.set Bitmap_MIDIConnections_Header, 0xe70b28
+	.set Bitmap_TechnichordBackground_1, 0xe90077
+	.set Bitmap_TechnichordBackground_2, 0xe90b3b
+	.set BmpFile_i0_bmp, 0xeb2aa6
+	.set BmpFile_i10_bmp, 0xeb2a56
+	.set BmpFile_i11_bmp, 0xeb2a4e
+	.set BmpFile_i12_bmp, 0xeb2a46
+	.set BmpFile_i13_bmp, 0xeb2a3e
+	.set BmpFile_i14_bmp, 0xeb2a36
+	.set BmpFile_i15_bmp, 0xeb2a2e
+	.set BmpFile_i16_bmp, 0xeb2a26
+	.set BmpFile_i17_bmp, 0xeb2a1e
+	.set BmpFile_i18_bmp, 0xeb2a16
+	.set BmpFile_i19_bmp, 0xeb2a0e
+	.set BmpFile_i1_bmp, 0xeb2a9e
+	.set BmpFile_i20_bmp, 0xeb2a06
+	.set BmpFile_i21_bmp, 0xeb29fe
+	.set BmpFile_i22_bmp, 0xeb29f6
+	.set BmpFile_i23_bmp, 0xeb29ee
+	.set BmpFile_i24_bmp, 0xeb29e6
+	.set BmpFile_i25_bmp, 0xeb29de
+	.set BmpFile_i26_bmp, 0xeb29d6
+	.set BmpFile_i27_bmp, 0xeb29ce
+	.set BmpFile_i28_bmp, 0xeb29c6
+	.set BmpFile_i29_bmp, 0xeb29be
+	.set BmpFile_i2_bmp, 0xeb2a96
+	.set BmpFile_i30_bmp, 0xeb29b6
+	.set BmpFile_i31_bmp, 0xeb29ae
+	.set BmpFile_i32_bmp, 0xeb29a6
+	.set BmpFile_i33_bmp, 0xeb299e
+	.set BmpFile_i34_bmp, 0xeb2996
+	.set BmpFile_i35_bmp, 0xeb298e
+	.set BmpFile_i36_bmp, 0xeb2986
+	.set BmpFile_i37_bmp, 0xeb297e
+	.set BmpFile_i38_bmp, 0xeb2976
+	.set BmpFile_i39_bmp, 0xeb296e
+	.set BmpFile_i40_bmp, 0xeb2966
+	.set BmpFile_i41_bmp, 0xeb295e
+	.set BmpFile_i42_bmp, 0xeb2956
+	.set BmpFile_i43_bmp, 0xeb294e
+	.set BmpFile_i44_bmp, 0xeb2946
+	.set BmpFile_i45_bmp, 0xeb293e
+	.set BmpFile_i46_bmp, 0xeb2936
+	.set BmpFile_i47_bmp, 0xeb292e
+	.set BmpFile_i48_bmp, 0xeb2926
+	.set BmpFile_i49_bmp, 0xeb291e
+	.set BmpFile_i50_bmp, 0xeb2916
+	.set BmpFile_i51_bmp, 0xeb290e
+	.set BmpFile_i52_bmp, 0xeb2906
+	.set BmpFile_i53_bmp, 0xeb28fe
+	.set BmpFile_i54_bmp, 0xeb28f6
+	.set BmpFile_i55_bmp, 0xeb28ee
+	.set BmpFile_i56_bmp, 0xeb28e6
+	.set BmpFile_i57_bmp, 0xeb28de
+	.set BmpFile_i58_bmp, 0xeb28d6
+	.set BmpFile_i59_bmp, 0xeb28ce
+	.set BmpFile_i5_bmp, 0xeb2a7e
+	.set BmpFile_i60_bmp, 0xeb28c6
+	.set BmpFile_i61_bmp, 0xeb28be
+	.set BmpFile_i62_bmp, 0xeb28b6
+	.set BmpFile_i63_bmp, 0xeb28ae
+	.set BmpFile_i64_bmp, 0xeb28a6
+	.set BmpFile_i65_bmp, 0xeb289e
+	.set BmpFile_i66_bmp, 0xeb2896
+	.set BmpFile_i67_bmp, 0xeb288e
+	.set BmpFile_i68_bmp, 0xeb2886
+	.set BmpFile_i69_bmp, 0xeb287e
+	.set BmpFile_i7_bmp, 0xeb2a6e
+	.set BmpFile_i8_bmp, 0xeb2a66
+	.set BmpFile_i9_bmp, 0xeb2a5e
+	.set CharMap_PermutationPtrTable_A, 0xeed3de
+	.set CharMap_PermutationPtrTable_B, 0xeed52b
+	.set Data_AcGridParamTable, 0xe7f9ac
+	.set Data_Dispatch_Entry, 0xf160b8
+	.set Data_Dispatch_Entry_0x39, 0xf160f1
+	.set Data_Dispatch_Entry_0x45, 0xf160fd
 	.set Data_NakaPresetConfig, 0xe278a9
-	.set NakaInst_FadeInOutSetting_Params, 0xe2df22
-	.set Str_ENGLISH, 0xe2df54
-	.set Str_ENGLISH_0x10, 0xe2df64
-	.set Str_ENGLISH_0x52, 0xe2dfa6
+	.set DiskWarning_GermanConfirm, 0xea8cbc
+	.set DisplayMode_FormatStr1, 0xe7f91c
+	.set DisplayMode_FormatStr2, 0xe7f922
+	.set DrawbarSlider_ConfigData, 0xe8cfeb
+	.set DrumDetailEdit_Entry_01, 0xf16006
+	.set DrumDetailEdit_Entry_02, 0xf16028
+	.set DrumDetailEdit_Entry_03, 0xf1604a
+	.set DrumDetailEdit_Entry_04, 0xf16056
+	.set DrumDetailEdit_Entry_05, 0xf16063
+	.set DrumDetailEdit_Entry_06, 0xf16070
+	.set DrumDetailEdit_Entry_07, 0xf16092
+	.set DrumDetailEdit_Entry_08, 0xf1609e
+	.set DrumDetailEdit_Entry_09, 0xf160ab
+	.set ENCODER_LUT_BREATH_INDEX, 0xeda2bc
+	.set ENCODER_LUT_BREATH_MULT, 0xeda3d2
+	.set ENCODER_LUT_BREATH_OFFSET, 0xeda3ea
+	.set ENCODER_LUT_BREATH_VALUE, 0xeda2d2
+	.set ENCODER_LUT_EXPRESSION, 0xeda482
+	.set ENCODER_LUT_FOOT, 0xeda402
+	.set ENCODER_LUT_VOLUME, 0xeda1bc
+	.set EffSeqScreen_ChordTypePtr_A, 0xed0072
+	.set EffSeqScreen_ChordTypePtr_B, 0xed009c
+	.set EffectParamEdit_Entry_01, 0xf1649b
+	.set EffectParamEdit_Entry_02, 0xf164a6
+	.set EffectParamEdit_Entry_03, 0xf164b5
+	.set EffectParamEdit_Entry_04, 0xf164c0
+	.set EffectParamEdit_Entry_05, 0xf164cb
+	.set EffectParamEdit_Entry_06, 0xf164d6
+	.set EffectParamEdit_Entry_07, 0xf164e1
+	.set EffectParamEdit_Entry_08, 0xf164ec
+	.set ExtDevScreen_DspEffectPage_Desc, 0xed734a
+	.set ExtDevScreen_DspEffect_Desc, 0xed729a
+	.set ExtDevScreen_EqualizerPage_Desc, 0xed75f2
+	.set ExtDevScreen_Equalizer_Desc, 0xed7542
+	.set ExtDevScreen_MidiCtrlAdvanced_Desc, 0xed723a
+	.set ExtDevScreen_MidiCtrlDetail_Desc, 0xed71b2
+	.set ExtDevScreen_MidiCtrlPage_Desc, 0xed70a2
+	.set ExtDevScreen_MidiCtrl_Desc, 0xed6ff2
+	.set ExtDevScreen_ReverbPage_Desc, 0xed74e2
+	.set ExtDevScreen_ReverbSetup_Desc, 0xed745a
+	.set ExtDevScreen_SndParamBank_Desc, 0xed690a
+	.set ExtDevScreen_SndParamPage_Desc, 0xed69a2
+	.set ExtDevScreen_UserInitWallpaper_Data, 0xed9f5c
+	.set ExtDevScreen_UserInitWallpaper_Flag, 0xed9f54
+	.set ExtDevScreen_VoiceMainPage_Desc, 0xed6c6e
+	.set ExtDevScreen_VoiceParamBank_Desc, 0xed6a7a
+	.set ExtDevScreen_VoiceParamDrums_Desc, 0xed6b52
+	.set ExtDevScreen_VoiceParamRhythm_Desc, 0xed6b0a
+	.set ExtDevScreen_VoiceSetup_Desc, 0xed6be2
+	.set FDC_CE_DISPATCH, 0xf9782a
+	.set FDC_CE_EXIT, 0xf97833
+	.set FDC_CMD_DISABLE, 0xf97c4b
+	.set FDC_CMD_DISPATCH_SUB, 0xf96d95
+	.set FDC_CMD_ENABLE, 0xf97c21
+	.set FDC_CMD_SEND, 0xf972f9
+	.set FDC_CONFIG_VERIFY, 0xf96bd0
+	.set FDC_DETECT_CHECK, 0xf974fe
+	.set FDC_DRIVE_DETECT, 0xf97544
+	.set FDC_DRIVE_STATUS, 0xf97592
+	.set FDC_INIT, 0xf96bbf
+	.set FDC_OUTPUT_CTRL, 0xf97c5b
+	.set FDC_POST_OP, 0xf975e2
+	.set FDC_PRE_OP_CHECK, 0xf975ac
+	.set FDC_SECTOR_XFER, 0xf97835
+	.set FDC_STATUS_HANDLER, 0xf97696
+	.set FDC_SX_EXIT, 0xf97967
+	.set FDC_SX_MAIN, 0xf9795e
+	.set FDC_TIMING_DELAY, 0xf975dc
+	.set FlashRead_BlockData_Field7, 0xf1589c
+	.set FlashRead_BlockData_Field8, 0xf15891
+	.set FmtStr_minuspct3d, 0xe34bbe
+	.set FmtStr_pct2d, 0xeab18c
+	.set FmtStr_pct3d, 0xe34614
+	.set FmtStr_pct3d_4B5E, 0xe34b5e
+	.set FmtStr_pluspct3d, 0xe34bb6
+	.set HdaeRom_AltDispatchOffsetTable, CharMap_PermutationPtrTable_B + 552
+	.set HdaeRom_DataHandler_0x22, 0xff0270
+	.set HdaeRom_DispatchOffsetTable, CharMap_PermutationPtrTable_B + 540
+	.set IconBitmapName_i96o, 0xeb2796
+	.set LongStr_1_2_3, 0xe34944
+	.set LongStr_Explore_1000_Musical, 0xe14c86
+	.set LongStr_Funktionen_zur_Erstellung, 0xe338e2
+	.set LongStr_Gunakan_SONG_CLEAR, 0xe33f22
+	.set LongStr_Gunakan_TRACK_CLEAR, 0xe340a6
+	.set LongStr_RKB_und_LKB, 0xe9c6fc
+	.set LongStr_SongClear_Spanish, 0xe33ee4
+	.set LongStr_TrackClear_Spanish, 0xe3405e
+	.set LongStr_ics_KN5000_Program, 0xe00065
+	.set MSP_FactoryPresetData_Continued, 0xf700bb
+	.set MemConfig_Handler_2, 0xefacf7
+	.set NakaData_CharaFontTable, 0xeada96
+	.set NakaData_DescriptorPad1, 0xe60008
+	.set NakaData_DescriptorPad_ZeroA, 0xe6009a
+	.set NakaData_DescriptorPad_ZeroB, 0xe600aa
+	.set NakaData_DescriptorPad_ZeroC, 0xe600da
+	.set NakaData_DescriptorSection_Start, 0xe60000
+	.set NakaData_DescriptorZero, 0xe600df
+	.set NakaData_DescriptorZero_PadA, 0xe600e4
+	.set NakaData_DescriptorZero_PadB, 0xe600ec
 	.set NakaData_EffectsBlock_Byte1, 0xe30001
 	.set NakaData_EffectsBlock_Byte2, 0xe30002
 	.set NakaData_EffectsBlock_Byte3, 0xe30003
 	.set NakaData_EffectsBlock_Byte5, 0xe30005
 	.set NakaData_EffectsStringPtrs, 0xe30006
-	.set Str_20469e32473220, 0xe30b2a
-	.set Str_42a03242322043, 0xe30b51
-	.set TableData_NullDialogText, 0xe33824
-	.set Str_ATTENTION, 0xe3382c
-	.set Str_Apakahyakinakandihapus, 0xe338a6
-	.set WarnStr_Featuresforcreatingas, 0xe338c2
-	.set LongStr_Funktionen_zur_Erstellung, 0xe338e2
-	.set LongStr_SongClear_Spanish, 0xe33ee4
-	.set LongStr_Gunakan_SONG_CLEAR, 0xe33f22
-	.set LongStr_TrackClear_Spanish, 0xe3405e
-	.set LongStr_Gunakan_TRACK_CLEAR, 0xe340a6
-	.set WarnStr_PresstheSTARTSTOPbutt, 0xe34104
-	.set WarnStr_PresstheSTARTSTOPbutt_0x26, 0xe3412a
-	.set FmtStr_pct3d, 0xe34614
-	.set LongStr_1_2_3, 0xe34944
-	.set FmtStr_pct3d_4B5E, 0xe34b5e
-	.set FmtStr_pluspct3d, 0xe34bb6
-	.set FmtStr_minuspct3d, 0xe34bbe
+	.set NakaData_ExternalBase, 0xe40000
+	.set NakaData_ExternalBase_0x66, 0xe40066
+	.set NakaData_ExternalBitmapBlock, 0xe40a09
+	.set NakaData_ExternalPadBlock_A, 0xe40096
+	.set NakaData_ExternalPadBlock_B, 0xe400a9
+	.set NakaData_FileScreenConfig, 0xe0019e
+	.set NakaData_FileScreenDispatch, 0xe00302
+	.set NakaData_NormalModeMap, 0xef001f
+	.set NakaData_NormalModeMap_0x07, 0xef0026
+	.set NakaData_PerfStyleCode, 0xf5001f
+	.set NakaData_PerfStyleCode_0x10, 0xf5002f
+	.set NakaData_PerfStyleCode_0x1A, 0xf50039
+	.set NakaData_PerfStyleCode_0x33, 0xf50052
+	.set NakaData_PerfStyleCode_0x59, 0xf50078
+	.set NakaData_RomEnd, 0xffffff
+	.set NakaData_StyleBitmapPad, 0xe41807
+	.set NakaData_Tables2Pad1, 0xe70015
+	.set NakaData_Tables2Pad2, 0xe7001e
+	.set NakaData_Tables2Pad3, 0xe700de
+	.set NakaData_TechnichordBitmap1, 0xe900d8
+	.set NakaData_TechnichordBitmap1_0x09, 0xe900e1
+	.set NakaData_TechnichordBitmap1_0x14, 0xe900ec
+	.set NakaData_TechnichordBitmap2, 0xe9013d
+	.set NakaData_TechnichordParams, 0xe50117
+	.set NakaData_UserMemoryConfig, 0xe400d0
+	.set NakaData_WidgetInit1, 0xfc645a
+	.set NakaData_WidgetInit2, 0xfc647f
+	.set NakaData_WidgetInit3, 0xfc64ea
+	.set NakaDesc_AcTchSensGridBox, 0xed2bf4
+	.set NakaDesc_IvMstStyleWindowPgCtl, 0xed2c0c
+	.set NakaDesc_IvPmemWindowPageCtl, 0xed2c22
+	.set NakaDesc_SeqExitWidgets, 0xe2713c
+	.set NakaDirectPlay_PropPtrTable, 0xe208a4
+	.set NakaFld_TabIndexFunc, 0xe270ea
+	.set NakaHandler_CommonSetting, 0xe56b5c
+	.set NakaHandler_CtrlMessages, 0xe56acc
+	.set NakaHandler_ProgChangeMidiOut, 0xe56cbc
+	.set NakaHandler_RealtimeMessages, 0xe56b14
+	.set NakaHandler_SplitPointDialog, 0xe57e6e
+	.set NakaInst_AcApcToggle, 0xe17112
+	.set NakaInst_AcApcToggle_0x0C, 0xe1711e
+	.set NakaInst_AcFSWAssGridBox, 0xed2be2
+	.set NakaInst_AcMstSugAlpGridBox, 0xed2b9a
+	.set NakaInst_AcTchSensGridBox, 0xed2bf6
+	.set NakaInst_BulkDumpCategorySelect, 0xe583a6
+	.set NakaInst_EqualizerBox, 0xe27586
+	.set NakaInst_FadeInOutSetting_Params, 0xe2df22
+	.set NakaInst_GM_0x5A, 0xe800ca
+	.set NakaInst_GM_0x5E, 0xe800ce
+	.set NakaInst_GM_0x6E, 0xe800de
+	.set NakaInst_Hard_Analogue_148_0x65, 0xec0a1b
+	.set NakaInst_InOutSettingGrid, 0xe57504
+	.set NakaInst_ItemLabel_RevEqPreset, 0xe5985a
+	.set NakaInst_IvMstStyleWindowPgCtl, 0xed2c0e
+	.set NakaInst_IvPmemWindowPageCtl, 0xed2c24
+	.set NakaInst_KN5000_GM, 0xe582e2
+	.set NakaInst_KN5000_MidiPresets, 0xe57982
+	.set NakaInst_KN5000_SysexBulkDump, 0xe57fa2
+	.set NakaInst_LEFT_0x04, 0xe800fa
+	.set NakaInst_MidiPresetConfig, 0xe578aa
+	.set NakaInst_MsaModeScreen, 0xed2c62
+	.set NakaInst_ON_E80168_0x6C, 0xe801d4
+	.set NakaInst_P_MEM_ON_OFF_PART, 0xe5904a
+	.set NakaInst_PresetSettingsLabel, 0xe59532
+	.set NakaInst_ProgChangeLabel, 0xe58fda
+	.set NakaInst_Receiving_Sysex, 0xe58742
+	.set NakaInst_SequencerComboBox, 0xe90130
+	.set NakaInst_SequencerComboBox_0x03, 0xe90133
+	.set NakaInst_SndModVocalistExtSeq, 0xe57f36
+	.set NakaInst_SqedtVal, 0xe27564
+	.set NakaInst_SqedtVal_B, 0xe27574
+	.set NakaInst_UserSettingSelector, 0xe57c8e
+	.set NakaInst_Value_GM, 0xe582a2
+	.set NakaInst_Value_SysexPresets, 0xe580d2
+	.set NakaInst_WITH_APC, 0xed00d5
+	.set NakaInst_WithAPC_GM, 0xe5821e
+	.set NakaInst_WithAPC_Presets, 0xe5804e
+	.set NakaInst_WithoutAPC_GM, 0xe58276
+	.set NakaInst_WithoutAPC_Presets, 0xe580a6
+	.set NakaStr_Bank, 0xea2d3e
+	.set NakaStr_Chara1Fnt, 0xeadb56
+	.set NakaStr_Chara1pFnt, 0xeadb1a
+	.set NakaStr_Chara2Fnt, 0xeadb4a
+	.set NakaStr_Chara3Fnt, 0xeadb3e
+	.set NakaStr_Chara4Fnt, 0xeadb32
+	.set NakaStr_Chara5Fnt, 0xeadb26
+	.set NakaStr_CtrlParam9e9, 0xed013b
+	.set NakaStr_DataFile1of2, 0xe000c3
+	.set NakaStr_DataFilePck, 0xe00113
+	.set NakaStr_Gamelan, 0xe23c12
+	.set NakaStr_LyricsBox, 0xe20b7c
+	.set NakaStr_Organ, 0xe23d0a
+	.set NakaStr_PdMdlyOrcha, 0xe22322
+	.set NakaStr_Rhythm, 0xe2405e
+	.set NakaStr_Single, 0xea2d36
+	.set NakaStr_SoundPreset176, 0xec00c7
+	.set NakaStr_SoundPresetBone, 0xec013f
+	.set NakaUI_ObjectTable_End, 0xe14c32
+	.set NakaWidget_Perf2Flute, 0xe23c1a
+	.set NakaWidget_Perf2Piano, 0xe23cd4
+	.set NakaWidget_Perf3BigBand, 0xe23ef6
+	.set NakaWidget_Perf3JazzBand, 0xe23e6e
+	.set NakaWidget_Perf3LatinOrch, 0xe23eb4
+	.set NakaWidget_Perf3SymphOrch, 0xe23f3a
+	.set Naka_SubDispatch_B_Table_0x6E, 0xee0206
+	.set NumStr_0, 0xe1ce0e
+	.set NumStr_1, 0xe1ce0a
+	.set NumStr_10, 0xe1cde6
+	.set NumStr_11, 0xe1cde2
+	.set NumStr_2, 0xe1ce06
+	.set NumStr_3, 0xe1ce02
+	.set NumStr_4, 0xe1cdfe
+	.set NumStr_5, 0xe1cdfa
+	.set NumStr_6, 0xe1cdf6
+	.set NumStr_7, 0xe1cdf2
+	.set NumStr_8, 0xe1cdee
+	.set NumStr_9, 0xe1cdea
 	.set Pad_AfterBitmap_Dredt0k, 0xe3def1
 	.set Pad_AfterBitmap_Dredt0k_2, 0xe3e0f1
-	.set Pad_BeforeBitmap_Dredt0d, 0xe3e2f2
-	.set NakaData_ExternalBase, 0xe40000
+	.set Pad_AfterBitmap_MIDIConnections_1, 0xe678ff
 	.set Pad_AfterNakaData_ExternalBase, 0xe40002
+	.set Pad_AfterNakaData_ExternalBase_0x66, 0xe4006e
+	.set Pad_AfterNakaData_Tables2Pad2, 0xe70022
+	.set Pad_AfterNakaData_UserMemoryConfig, 0xe40101
+	.set Pad_AfterNaka_DrawbarOrgan_Screens, 0xeee812
+	.set Pad_AfterStr_No, 0xeaaef4
+	.set Pad_BeforeBitmap_Dredt0d, 0xe3e2f2
+	.set Pad_BeforeNakaData_ExternalBase_0x66, 0xe40059
+	.set Pad_BeforeNakaData_StyleBitmapPad, 0xe40116
+	.set Pad_BeforeNakaData_UserMemoryConfig, 0xe400be
 	.set Pad_NakaExternal_Block1, 0xe40005
 	.set Pad_NakaExternal_Block2, 0xe40031
 	.set Pad_NakaExternal_Block3, 0xe40046
-	.set Pad_BeforeNakaData_ExternalBase_0x66, 0xe40059
-	.set NakaData_ExternalBase_0x66, 0xe40066
-	.set Pad_AfterNakaData_ExternalBase_0x66, 0xe4006e
 	.set Pad_NakaExternal_Block4, 0xe40081
-	.set NakaData_ExternalPadBlock_A, 0xe40096
-	.set NakaData_ExternalPadBlock_B, 0xe400a9
-	.set Pad_BeforeNakaData_UserMemoryConfig, 0xe400be
-	.set NakaData_UserMemoryConfig, 0xe400d0
-	.set Pad_AfterNakaData_UserMemoryConfig, 0xe40101
-	.set Pad_BeforeNakaData_StyleBitmapPad, 0xe40116
-	.set NakaData_ExternalBitmapBlock, 0xe40a09
-	.set NakaData_StyleBitmapPad, 0xe41807
+	.set Palette_8bit_RGBA, 0xeb37de
+	.set ParamStr08_font, 0xed2122
+	.set ParamStr08_fontcolor, 0xed211c
+	.set ParamStr08_func, 0xed212c
+	.set ParamStr08_page, 0xed2116
+	.set ParamStr08_varisupart, 0xed210e
+	.set ParamStr19_fixedcol, 0xed250c
+	.set ParamStr22_fixedcol, 0xed277e
+	.set ParamStr22_fixedrow, 0xed2774
+	.set ParamStr22_func, 0xed276e
+	.set ParamStr22_nowsongsubctgdtno, 0xed275c
+	.set PerfMode_Evt01_Handler, 0xef8b6d
+	.set PerfMode_Evt02_Handler, 0xef8dfb
+	.set RVari_SelectO_SecondItem_Draw_0x32, 0xfc0012
 	.set RhythmTiming_OffsetTable, 0xe46312
+	.set SLDstBankList_FuncBody_0x44, 0xf900b9
+	.set SLDstBankList_FuncBody_0x7C, 0xf900f1
+	.set ScoopDisp_BitmapDataBlock, 0xe00b04
+	.set ScoopDisp_DispatchTable_Extended_0x20, 0xef7779
+	.set ScoopDisp_EmptyBitmapData, 0xe00b28
+	.set SeMenu_DataBlock_01, 0xf1039e
+	.set SeMenu_DataBlock_02, 0xf1040d
+	.set SeMenu_DataBlock_03, 0xf1041d
+	.set SeMenu_DataBlock_04, 0xf10454
+	.set SeMenu_DataBlock_05, 0xf10464
+	.set SeMenu_DataBlock_06, 0xf1048e
+	.set SeMenu_DataBlock_07, 0xf104b8
+	.set SeMenu_DataBlock_08, 0xf104c8
+	.set SeMenu_DataBlock_09, 0xf104d8
+	.set SeMenu_DataBlock_10, 0xf104e8
+	.set SeMenu_DataBlock_11, 0xf10512
+	.set SeMenu_DataBlock_12, 0xf105c4
+	.set SeMenu_DataBlock_13, 0xf10676
+	.set SeMenu_DataBlock_14, 0xf10689
+	.set SeqChanContainer_ChordTypeRef_A, 0xed0212
+	.set SeqChanContainer_ChordTypeRef_B, 0xed029c
+	.set SeqChan_UnhandledCmd, 0x00fd7a90
+	.set SeqChan_UnhandledCmd_0x01, 0x00fd7a91
+	.set SeqChan_UnhandledCmd_0x02, 0x00fd7a92
+	.set SeqChan_UnhandledCmd_0x03, 0x00fd7a93
+	.set SeqChan_UnhandledCmd_0x12, 0x00fd7aa2
+	.set SeqData_SubDispatch_ParamA, 0xee3023
+	.set SeqData_SubDispatch_ParamB, 0xee3025
+	.set SeqRingBuf_WriteDispatch_Table_0x11, 0xe00023
+	.set SeqRingBuf_WriteDispatch_Table_0x16, 0xe00028
+	.set SeqVoice_ValidateAndProcessState_0x13, 0xf400ec
+	.set SoundName_160, 0xec00ec
+	.set SoundName_160_0x27, 0xec0113
+	.set SoundName_AstorsTango, 0xecb164
+	.set SoundName_BavarianFlutes, 0xecb3fc
+	.set SoundName_BeachPartySong, 0xecdbec
+	.set SoundName_CubanReeds, 0xecdcb4
+	.set SoundName_EasyDangdut, 0xece0dc
+	.set SoundName_HymnBand, 0xec89b4
+	.set SoundName_HymnBand_0x66, 0xec8a1a
+	.set SoundName_JamaicanBars, 0xecde44
+	.set SoundName_LatinoPiccolo, 0xecdd7c
+	.set SoundName_LushTango, 0xecb09c
+	.set SoundName_LushTango_0x66, 0xecb102
+	.set SoundName_MarleysDrums, 0xece2ac
+	.set SoundName_MournfulTenor, 0xec88ec
+	.set SoundName_NewOrganSamba, 0xecdf4c
+	.set SoundName_NiceKeroncong, 0xece014
+	.set SoundName_NotStrauss, 0xecb334
+	.set SoundName_NotStrauss_0x66, 0xecb39a
+	.set SoundName_PadangBeat, 0xece11c
+	.set SoundName_PreachTheWord, 0xec8a7c
+	.set SoundName_RastaVoice, 0xece1e4
+	.set SoundName_SOUNDRHYTHM, 0xed474a
+	.set SoundName_SambaUnion, 0xecde84
+	.set SoundName_SymphonicWaltz, 0xecb26c
+	.set SoundName_ToTheBone, 0xec013b
+	.set SoundProgram_ParamPtrTable, 0xedb2e4
+	.set StrFld_ParaList_Font_0x06, 0xe16bac
+	.set StrNotePos_AcNatural, 0xe1dd5a
+	.set StrNotePos_FlatAlt, 0xe1dd4c
+	.set StrNotePos_FlatAltB8, 0xe1dd52
+	.set StrPtrTable_DiskErr03, 0xe96344
+	.set StrPtrTable_DiskErr16, 0xe971de
+	.set StrPtrTable_DiskErr20_End, 0xe97bde
+	.set StrPtrTable_DiskErr24_French_End, 0xe9871a
+	.set StrPtrTable_DiskErr24_Start, 0xe97dc2
+	.set StrPtrTable_DiskErr28_Start, 0xe98aee
+	.set StrPtrTable_DiskErr30_End, 0xe99a0e
+	.set StrPtrTable_DiskErr41_Start, 0xe99cd4
+	.set StrPtrTable_DiskErr43_Start, 0xe9a2c4
+	.set StrPtrTable_Error55_Block2, 0xe9bf3a
+	.set StrPtrTable_Error55_End, 0xe9b92a
+	.set StrPtrTable_InitSettingWarning_Start, 0xe9cf14
+	.set StrPtrTable_SpecialTracks_Start, 0xe9c524
+	.set Str_20469e32473220, 0xe30b2a
+	.set Str_42a03242322043, 0xe30b51
+	.set Str_7f, 0xed46d2
+	.set Str_7f_4A82, 0xed4a82
+	.set Str_AFILE22, 0xe0007c
+	.set Str_AFTER_TOUCH_SETTING, 0xe2364a
+	.set Str_AL, 0xe8005f
+	.set Str_ALL_OFF, 0xea4082
+	.set Str_ATTENTION, 0xe3382c
+	.set Str_Apakahyakinakandihapus, 0xe338a6
+	.set Str_BACKUP, 0xea3d7a
+	.set Str_BeimEmpfangderSys, 0xe99edc
+	.set Str_BigBandMid, 0xe23f2c
+	.set Str_COMP, 0xea263a
+	.set Str_COMPOSER, 0xea2822
+	.set Str_COMP_3F6A, 0xea3f6a
+	.set Str_CUSTOM, 0xea26aa
+	.set Str_CUSTOM_3FDA, 0xea3fda
+	.set Str_DISK, 0xea2f0e
+	.set Str_DISKINSERTOPTION, 0xea66b6
+	.set Str_DISKNAME, 0xea1d7a
+	.set Str_DISPLAY_TYPE, 0xed4de2
+	.set Str_DiskErr12_French_0x5A, 0xe97114
+	.set Str_ENGLISH, 0xe2df54
+	.set Str_ENGLISH_0x10, 0xe2df64
+	.set Str_ENGLISH_0x52, 0xe2dfa6
+	.set Str_Err24APC_French_0x62, 0xe98676
+	.set Str_FILETYPEPRIORITY, 0xea6706
+	.set Str_FROM, 0xe1a224
+	.set Str_GospelRevival, 0xe23ea4
+	.set Str_HokieDance, 0xe23e62
+	.set Str_LOAD, 0xea2442
+	.set Str_LOAD_2952, 0xea2952
+	.set Str_LOAD_AS, 0xea2f3a
+	.set Str_MIDI, 0xea26d2
+	.set Str_MIDI_4002, 0xea4002
+	.set Str_NEXT, 0xea435a
+	.set Str_OFF, 0xea43bc
+	.set Str_ORCH, 0xe21ad2
+	.set Str_OrganCombo, 0xe23eea
+	.set Str_PANEL_MEMORY, 0xed477a
+	.set Str_PANEL_MEMORY_4922, 0xed4922
+	.set Str_PERFORM, 0xea3d2a
+	.set Str_PNL, 0xea3dca
+	.set Str_PREV, 0xea2e26
+	.set Str_PREV_471A, 0xea471a
+	.set Str_RHYTHM, 0xed4722
+	.set Str_RHYTHM_CUSTOM, 0xea27a2
+	.set Str_S2cGridBox, 0xe1708a
+	.set Str_SAVE, 0xea41d2
+	.set Str_SAVE_44A2, 0xea44a2
+	.set Str_SEQUENCER, 0xea3bb2
+	.set Str_SINGLE_LOAD, 0xea29a2
+	.set Str_SOUND_MEMORY, 0xea3b5a
+	.set Str_SaxBrass, 0xe23cca
+	.set Str_TEMPO, 0xe18d4c
+	.set Str_USER_INITIAL, 0xed5122
+	.set Str_VALUE, 0xed517a
+	.set Str_ableDATAFILEPCK, 0xe00111
+	.set Str_gramDATAFILE22, 0xe00073
+	.set Str_ol, 0xe80b12
+	.set StringData_PartModeNames, 0xeff827
+	.set StyleBmp_JustTheFlute, 0xebff9e
+	.set StyleBmp_KeyGrooves, 0xebff16
+	.set StyleBmp_KnopflerTribute, 0xebfe8e
+	.set StyleBmp_LAWarmth, 0xebfe06
+	.set StyleBmp_LastStarparade, 0xebfd7e
+	.set StyleBmp_LatinBallroom, 0xebfcf6
+	.set StyleBmp_LatinPassion, 0xebfc6e
+	.set StyleBmp_LatinoPiccolo, 0xebfbe6
+	.set StyleBmp_LetItShine, 0xebfb5e
+	.set StyleBmp_LikeSunday, 0xebfad6
+	.set StyleBmp_LionelsJazz, 0xebfa4e
+	.set StyleBmp_LondonsBigbone, 0xebf9c6
+	.set StyleBmp_MadTabs, 0xebf93e
+	.set StyleBmp_MamboJambo, 0xebf8b6
+	.set StyleBmp_MarchingPolka, 0xebf82e
+	.set StyleBmp_MaxsOrchestra, 0xebf7a6
+	.set StyleBmp_MellowJazzTabs, 0xebf696
+	.set StyleBmp_MellowSection, 0xebf60e
+	.set StyleBmp_MellowShuffle, 0xebf71e
+	.set StyleBmp_MerengueParty, 0xebf586
+	.set StyleBmp_MidnightTunes, 0xebf4fe
+	.set StyleBmp_MirandaMallets, 0xebf476
+	.set StyleBmp_ModernBoogie, 0xebf3ee
+	.set StyleBmp_MoiksMarchshow, 0xebf366
+	.set StyleBmp_MoschsMilitary, 0xebf2de
+	.set StyleBmp_MovieBallad, 0xebf256
+	.set StyleBmp_MusetteBallad, 0xebf1ce
+	.set StyleBmp_MuteSoloist, 0xebf146
+	.set StyleBmp_NashvilleDance, 0xebf0be
+	.set StyleBmp_NewJazzBallad, 0xebf036
+	.set StyleBmp_NewSquareDance, 0xebefae
+	.set StyleBmp_NiceKeroncong, 0xebef26
+	.set StyleBmp_NotRavels, 0xebee9e
+	.set StyleBmp_OceanVocals, 0xebee16
+	.set StyleBmp_OklahomaDance, 0xebed8e
+	.set StyleBmp_OldNewFunk, 0xebed06
+	.set StyleBmp_OldTimeSaloon, 0xebec7e
+	.set StyleBmp_OleGuitar, 0xebebf6
+	.set StyleBmp_OneTwoThree, 0xebeb6e
+	.set StyleBmp_OrchestralEight, 0xebeae6
+	.set StyleBmp_OrganistsSwing, 0xebea5e
+	.set StyleBmp_OverTheTopWah, 0xebe9d6
+	.set StyleBmp_ParadiseKeys, 0xebe94e
+	.set StyleBmp_PartyAccordion, 0xebe8c6
+	.set StyleBmp_PartyPopStack, 0xebe83e
+	.set StyleBmp_PennyFolkSong, 0xebe7b6
+	.set StyleBmp_PlateDance, 0xebe72e
+	.set StyleBmp_PolyDance, 0xebe6a6
+	.set StyleBmp_PopBridge, 0xebe61e
+	.set StyleBmp_PopLeader, 0xebe596
+	.set StyleBmp_PowerSaxSwing, 0xebe50e
+	.set StyleBmp_PuentesBigband, 0xebe486
+	.set StyleBmp_RadioOrchestra, 0xebe3fe
+	.set StyleBmp_RastaJambo, 0xebe376
+	.set StyleBmp_ReedItSwing, 0xebe2ee
+	.set StyleBmp_ReggaeDanceHit, 0xebe266
+	.set StyleBmp_ReinhardtsSolo, 0xebe1de
+	.set StyleBmp_RetroGroove, 0xebe156
+	.set StyleBmp_RickysStrat, 0xebe0ce
+	.set StyleBmp_RioHorns, 0xebe046
+	.set StyleBmp_RockFall, 0xebdfbe
+	.set StyleBmp_RockSymphony, 0xebdf36
+	.set StyleBmp_RollingWheels, 0xebdeae
+	.set StyleBmp_RossVocals, 0xebde26
+	.set StyleBmp_SambaParty, 0xebdd9e
+	.set StyleBmp_SambaUnion, 0xebdd16
+	.set StyleBmp_SantasHelpers, 0xebdc8e
+	.set StyleBmp_SaxDrumsRRoll, 0xebdb7e
+	.set StyleBmp_SaxMamboist, 0xebdc06
+	.set StyleBmp_SaxyMambo, 0xebdaf6
+	.set StyleBmp_SentimentalSolo, 0xebda6e
+	.set StyleBmp_SevilleOctaves, 0xebd9e6
+	.set StyleBmp_ShearingCombo, 0xebd95e
+	.set StyleBmp_ShuffleOrgan, 0xebd8d6
+	.set StyleBmp_SimpleBand, 0xebd84e
+	.set StyleBmp_SinatraStrings, 0xebd7c6
+	.set StyleBmp_SingItPlayIt, 0xebd73e
+	.set StyleBmp_SkeletonDance, 0xebd6b6
+	.set StyleBmp_SlapBackRock, 0xebd62e
+	.set StyleBmp_SlowSpinGroove, 0xebd5a6
+	.set StyleBmp_SmoothLips, 0xebd51e
+	.set StyleBmp_SoftRock, 0xebd496
+	.set StyleBmp_SolidDistortion, 0xebd40e
+	.set StyleBmp_SolidSixteen, 0xebd386
+	.set StyleBmp_SopranoGroove, 0xebd2fe
+	.set StyleBmp_SoulHorn, 0xebd276
+	.set StyleBmp_SoulVocalDuo, 0xebd1ee
+	.set StyleBmp_SoulfulWhaWha, 0xebd166
+	.set StyleBmp_SouthernStyle, 0xebd0de
+	.set StyleBmp_SpanishMoments, 0xebd056
+	.set StyleBmp_SpyraSteel, 0xebcfce
+	.set StyleBmp_SteelStrings, 0xebcf46
+	.set StyleBmp_StephaneDjango, 0xebcebe
+	.set StyleBmp_StreetTalk, 0xebce36
+	.set StyleBmp_SunnySpainMood, 0xebcdae
+	.set StyleBmp_SweepingBridge, 0xebcd26
+	.set StyleBmp_SweetSoprano, 0xebcc9e
+	.set StyleBmp_SwingB3Threes, 0xebcc16
+	.set StyleBmp_SwingSerenade, 0xebcb8e
+	.set StyleBmp_SwingingKeys, 0xebcb06
+	.set StyleBmp_SymphonyBallad, 0xebca7e
+	.set StyleBmp_SynthForSoul, 0xebc9f6
+	.set StyleBmp_SynthParty, 0xebc96e
+	.set StyleBmp_TakeItEasy, 0xebc8e6
+	.set StyleBmp_TangoMarcato, 0xebc85e
+	.set StyleBmp_TechnoFiddle, 0xebc7d6
+	.set StyleBmp_TennesseeGuitar, 0xebc74e
+	.set StyleBmp_TheDukesPiano, 0xebc6c6
+	.set StyleBmp_ThePartyBand, 0xebc63e
+	.set StyleBmp_TheatreBand, 0xebc5b6
+	.set StyleBmp_TirolerHarp, 0xebc52e
+	.set StyleBmp_TopBrassJive, 0xebc4a6
+	.set StyleBmp_TravoltaDance, 0xebc41e
+	.set StyleBmp_TwilightPiano, 0xebc396
+	.set StyleBmp_TwoStepDuo, 0xebc30e
+	.set StyleBmp_UptownHorns, 0xebc286
+	.set StyleBmp_VegasShowman, 0xebc1fe
+	.set StyleBmp_ViennaWoods, 0xebc176
+	.set StyleBmp_VocalBeats, 0xebc0ee
+	.set StyleBmp_WailersGuitar, 0xebc066
+	.set StyleBmp_WaltzingConcert, 0xebbfde
+	.set StyleBmp_WandrinKeys, 0xebbf56
+	.set StyleBmp_WeddingParty, 0xebbece
+	.set StyleBmp_WheelsofLife, 0xebbe46
+	.set StyleBmp_WildSideOrgan, 0xebbdbe
+	.set StyleBmp_WunderPops, 0xebbd36
+	.set StyleBmp_YeeHaFiddles, 0xebbcae
+	.set StyleBmp_ZachariasSwing, 0xebbc26
+	.set StyleBmp_i3obmp, 0xeb2a8e
+	.set StyleBmp_i4obmp, 0xeb2a86
+	.set StyleBmp_i6obmp, 0xeb2a76
+	.set StyleBmp_trashbmp, 0xeb2aae
+	.set StyleSound_BluesAlley_Data, 0xec8974
+	.set StyleSound_QuickWaltz_Data, 0xecb2f4
+	.set SubCPU_ToneDispatch_0x54, 0xefdb94
+	.set TableData_NullDialogText, 0xe33824
 	.set TechnichordParam_Block1, 0xe5002d
 	.set TechnichordParam_Block2, 0xe5006e
 	.set TechnichordParam_Block3, 0xe500be
 	.set TechnichordParam_Block4, 0xe500ce
 	.set TechnichordParam_Block5, 0xe500fe
-	.set NakaData_TechnichordParams, 0xe50117
-	.set NakaHandler_CtrlMessages, 0xe56acc
-	.set NakaHandler_RealtimeMessages, 0xe56b14
-	.set NakaHandler_CommonSetting, 0xe56b5c
-	.set NakaHandler_ProgChangeMidiOut, 0xe56cbc
-	.set NakaInst_InOutSettingGrid, 0xe57504
-	.set NakaInst_MidiPresetConfig, 0xe578aa
-	.set NakaInst_KN5000_MidiPresets, 0xe57982
-	.set NakaInst_UserSettingSelector, 0xe57c8e
-	.set NakaHandler_SplitPointDialog, 0xe57e6e
-	.set NakaInst_SndModVocalistExtSeq, 0xe57f36
-	.set NakaInst_KN5000_SysexBulkDump, 0xe57fa2
-	.set NakaInst_WithAPC_Presets, 0xe5804e
-	.set NakaInst_WithoutAPC_Presets, 0xe580a6
-	.set NakaInst_Value_SysexPresets, 0xe580d2
-	.set NakaInst_WithAPC_GM, 0xe5821e
-	.set NakaInst_WithoutAPC_GM, 0xe58276
-	.set NakaInst_Value_GM, 0xe582a2
-	.set NakaInst_KN5000_GM, 0xe582e2
-	.set NakaInst_BulkDumpCategorySelect, 0xe583a6
-	.set NakaInst_Receiving_Sysex, 0xe58742
-	.set NakaInst_ProgChangeLabel, 0xe58fda
-	.set NakaInst_P_MEM_ON_OFF_PART, 0xe5904a
-	.set NakaInst_PresetSettingsLabel, 0xe59532
-	.set NakaInst_ItemLabel_RevEqPreset, 0xe5985a
-	.set NakaData_DescriptorSection_Start, 0xe60000
-	.set NakaData_DescriptorPad1, 0xe60008
-	.set NakaData_DescriptorPad_ZeroA, 0xe6009a
-	.set NakaData_DescriptorPad_ZeroB, 0xe600aa
-	.set NakaData_DescriptorPad_ZeroC, 0xe600da
-	.set NakaData_DescriptorZero, 0xe600df
-	.set NakaData_DescriptorZero_PadA, 0xe600e4
-	.set NakaData_DescriptorZero_PadB, 0xe600ec
-	.set Pad_AfterBitmap_MIDIConnections_1, 0xe678ff
-	.set NakaData_Tables2Pad1, 0xe70015
-	.set NakaData_Tables2Pad2, 0xe7001e
-	.set Pad_AfterNakaData_Tables2Pad2, 0xe70022
-	.set NakaData_Tables2Pad3, 0xe700de
-	.set Bitmap_MIDIConnections_Header, 0xe70b28
-	.set DisplayMode_FormatStr1, 0xe7f91c
-	.set DisplayMode_FormatStr2, 0xe7f922
-	.set Data_AcGridParamTable, 0xe7f9ac
-	.set Str_AL, 0xe8005f
-	.set NakaInst_GM_0x5A, 0xe800ca
-	.set NakaInst_GM_0x5E, 0xe800ce
-	.set NakaInst_GM_0x6E, 0xe800de
-	.set NakaInst_LEFT_0x04, 0xe800fa
-	.set AlignedStr_ON, 0xe8013c
-	.set NakaInst_ON_E80168_0x6C, 0xe801d4
-	.set Transpose_String_Minus3, 0xe8068c
-	.set Transpose_String_Error, 0xe80692
-	.set Transpose_String_Plus1, 0xe806a4
-	.set Transpose_String_Zero, 0xe806aa
-	.set Str_ol, 0xe80b12
-	.set Bitmap_AccompBitmapSpacer, 0xe878f9
-	.set DrawbarSlider_ConfigData, 0xe8cfeb
-	.set Bitmap_TechnichordBackground_1, 0xe90077
-	.set NakaData_TechnichordBitmap1, 0xe900d8
-	.set NakaData_TechnichordBitmap1_0x09, 0xe900e1
-	.set NakaData_TechnichordBitmap1_0x14, 0xe900ec
-	.set NakaInst_SequencerComboBox, 0xe90130
-	.set NakaInst_SequencerComboBox_0x03, 0xe90133
-	.set NakaData_TechnichordBitmap2, 0xe9013d
-	.set Bitmap_TechnichordBackground_2, 0xe90b3b
-	.set StrPtrTable_DiskErr03, 0xe96344
-	.set Str_DiskErr12_French_0x5A, 0xe97114
-	.set StrPtrTable_DiskErr16, 0xe971de
-	.set StrPtrTable_DiskErr20_End, 0xe97bde
-	.set StrPtrTable_DiskErr24_Start, 0xe97dc2
-	.set Str_Err24APC_French_0x62, 0xe98676
-	.set StrPtrTable_DiskErr24_French_End, 0xe9871a
-	.set StrPtrTable_DiskErr28_Start, 0xe98aee
-	.set StrPtrTable_DiskErr30_End, 0xe99a0e
-	.set StrPtrTable_DiskErr41_Start, 0xe99cd4
-	.set Str_BeimEmpfangderSys, 0xe99edc
-	.set StrPtrTable_DiskErr43_Start, 0xe9a2c4
-	.set StrPtrTable_Error55_End, 0xe9b92a
-	.set StrPtrTable_Error55_Block2, 0xe9bf3a
-	.set StrPtrTable_SpecialTracks_Start, 0xe9c524
-	.set LongStr_RKB_und_LKB, 0xe9c6fc
-	.set StrPtrTable_InitSettingWarning_Start, 0xe9cf14
-	.set Str_DISKNAME, 0xea1d7a
-	.set Str_LOAD, 0xea2442
-	.set Str_COMP, 0xea263a
-	.set Str_CUSTOM, 0xea26aa
-	.set Str_MIDI, 0xea26d2
-	.set Str_RHYTHM_CUSTOM, 0xea27a2
-	.set Str_COMPOSER, 0xea2822
-	.set Str_LOAD_2952, 0xea2952
-	.set Str_SINGLE_LOAD, 0xea29a2
-	.set NakaStr_Single, 0xea2d36
-	.set NakaStr_Bank, 0xea2d3e
-	.set Str_PREV, 0xea2e26
-	.set Str_DISK, 0xea2f0e
-	.set Str_LOAD_AS, 0xea2f3a
-	.set Str_SOUND_MEMORY, 0xea3b5a
-	.set Str_SEQUENCER, 0xea3bb2
-	.set Str_PERFORM, 0xea3d2a
-	.set Str_BACKUP, 0xea3d7a
-	.set Str_PNL, 0xea3dca
-	.set Str_COMP_3F6A, 0xea3f6a
-	.set Str_CUSTOM_3FDA, 0xea3fda
-	.set Str_MIDI_4002, 0xea4002
-	.set Str_ALL_OFF, 0xea4082
-	.set Str_SAVE, 0xea41d2
-	.set Str_NEXT, 0xea435a
-	.set Str_OFF, 0xea43bc
-	.set Str_SAVE_44A2, 0xea44a2
-	.set Str_PREV_471A, 0xea471a
-	.set Str_DISKINSERTOPTION, 0xea66b6
-	.set Str_FILETYPEPRIORITY, 0xea6706
-	.set DiskWarning_GermanConfirm, 0xea8cbc
-	.set Pad_AfterStr_No, 0xeaaef4
-	.set FmtStr_pct2d, 0xeab18c
-	.set WidgetPropStr_Max, 0xeac1ba
-	.set WidgetPropStr_RangeFigures, 0xeac1be
-	.set NakaData_CharaFontTable, 0xeada96
-	.set NakaStr_Chara1pFnt, 0xeadb1a
-	.set NakaStr_Chara5Fnt, 0xeadb26
-	.set NakaStr_Chara4Fnt, 0xeadb32
-	.set NakaStr_Chara3Fnt, 0xeadb3e
-	.set NakaStr_Chara2Fnt, 0xeadb4a
-	.set NakaStr_Chara1Fnt, 0xeadb56
-	.set IconBitmapName_i96o, 0xeb2796
-	.set BmpFile_i69_bmp, 0xeb287e
-	.set BmpFile_i68_bmp, 0xeb2886
-	.set BmpFile_i67_bmp, 0xeb288e
-	.set BmpFile_i66_bmp, 0xeb2896
-	.set BmpFile_i65_bmp, 0xeb289e
-	.set BmpFile_i64_bmp, 0xeb28a6
-	.set BmpFile_i63_bmp, 0xeb28ae
-	.set BmpFile_i62_bmp, 0xeb28b6
-	.set BmpFile_i61_bmp, 0xeb28be
-	.set BmpFile_i60_bmp, 0xeb28c6
-	.set BmpFile_i59_bmp, 0xeb28ce
-	.set BmpFile_i58_bmp, 0xeb28d6
-	.set BmpFile_i57_bmp, 0xeb28de
-	.set BmpFile_i56_bmp, 0xeb28e6
-	.set BmpFile_i55_bmp, 0xeb28ee
-	.set BmpFile_i54_bmp, 0xeb28f6
-	.set BmpFile_i53_bmp, 0xeb28fe
-	.set BmpFile_i52_bmp, 0xeb2906
-	.set BmpFile_i51_bmp, 0xeb290e
-	.set BmpFile_i50_bmp, 0xeb2916
-	.set BmpFile_i49_bmp, 0xeb291e
-	.set BmpFile_i48_bmp, 0xeb2926
-	.set BmpFile_i47_bmp, 0xeb292e
-	.set BmpFile_i46_bmp, 0xeb2936
-	.set BmpFile_i45_bmp, 0xeb293e
-	.set BmpFile_i44_bmp, 0xeb2946
-	.set BmpFile_i43_bmp, 0xeb294e
-	.set BmpFile_i42_bmp, 0xeb2956
-	.set BmpFile_i41_bmp, 0xeb295e
-	.set BmpFile_i40_bmp, 0xeb2966
-	.set BmpFile_i39_bmp, 0xeb296e
-	.set BmpFile_i38_bmp, 0xeb2976
-	.set BmpFile_i37_bmp, 0xeb297e
-	.set BmpFile_i36_bmp, 0xeb2986
-	.set BmpFile_i35_bmp, 0xeb298e
-	.set BmpFile_i34_bmp, 0xeb2996
-	.set BmpFile_i33_bmp, 0xeb299e
-	.set BmpFile_i32_bmp, 0xeb29a6
-	.set BmpFile_i31_bmp, 0xeb29ae
-	.set BmpFile_i30_bmp, 0xeb29b6
-	.set BmpFile_i29_bmp, 0xeb29be
-	.set BmpFile_i28_bmp, 0xeb29c6
-	.set BmpFile_i27_bmp, 0xeb29ce
-	.set BmpFile_i26_bmp, 0xeb29d6
-	.set BmpFile_i25_bmp, 0xeb29de
-	.set BmpFile_i24_bmp, 0xeb29e6
-	.set BmpFile_i23_bmp, 0xeb29ee
-	.set BmpFile_i22_bmp, 0xeb29f6
-	.set BmpFile_i21_bmp, 0xeb29fe
-	.set BmpFile_i20_bmp, 0xeb2a06
-	.set BmpFile_i19_bmp, 0xeb2a0e
-	.set BmpFile_i18_bmp, 0xeb2a16
-	.set BmpFile_i17_bmp, 0xeb2a1e
-	.set BmpFile_i16_bmp, 0xeb2a26
-	.set BmpFile_i15_bmp, 0xeb2a2e
-	.set BmpFile_i14_bmp, 0xeb2a36
-	.set BmpFile_i13_bmp, 0xeb2a3e
-	.set BmpFile_i12_bmp, 0xeb2a46
-	.set BmpFile_i11_bmp, 0xeb2a4e
-	.set BmpFile_i10_bmp, 0xeb2a56
-	.set BmpFile_i9_bmp, 0xeb2a5e
-	.set BmpFile_i8_bmp, 0xeb2a66
-	.set BmpFile_i7_bmp, 0xeb2a6e
-	.set StyleBmp_i6obmp, 0xeb2a76
-	.set BmpFile_i5_bmp, 0xeb2a7e
-	.set StyleBmp_i4obmp, 0xeb2a86
-	.set StyleBmp_i3obmp, 0xeb2a8e
-	.set BmpFile_i2_bmp, 0xeb2a96
-	.set BmpFile_i1_bmp, 0xeb2a9e
-	.set BmpFile_i0_bmp, 0xeb2aa6
-	.set StyleBmp_trashbmp, 0xeb2aae
-	.set Palette_8bit_RGBA, 0xeb37de
-	.set StyleBmp_ZachariasSwing, 0xebbc26
-	.set StyleBmp_YeeHaFiddles, 0xebbcae
-	.set StyleBmp_WunderPops, 0xebbd36
-	.set StyleBmp_WildSideOrgan, 0xebbdbe
-	.set StyleBmp_WheelsofLife, 0xebbe46
-	.set StyleBmp_WeddingParty, 0xebbece
-	.set StyleBmp_WandrinKeys, 0xebbf56
-	.set StyleBmp_WaltzingConcert, 0xebbfde
-	.set StyleBmp_WailersGuitar, 0xebc066
-	.set StyleBmp_VocalBeats, 0xebc0ee
-	.set StyleBmp_ViennaWoods, 0xebc176
-	.set StyleBmp_VegasShowman, 0xebc1fe
-	.set StyleBmp_UptownHorns, 0xebc286
-	.set StyleBmp_TwoStepDuo, 0xebc30e
-	.set StyleBmp_TwilightPiano, 0xebc396
-	.set StyleBmp_TravoltaDance, 0xebc41e
-	.set StyleBmp_TopBrassJive, 0xebc4a6
-	.set StyleBmp_TirolerHarp, 0xebc52e
-	.set StyleBmp_TheatreBand, 0xebc5b6
-	.set StyleBmp_ThePartyBand, 0xebc63e
-	.set StyleBmp_TheDukesPiano, 0xebc6c6
-	.set StyleBmp_TennesseeGuitar, 0xebc74e
-	.set StyleBmp_TechnoFiddle, 0xebc7d6
-	.set StyleBmp_TangoMarcato, 0xebc85e
-	.set StyleBmp_TakeItEasy, 0xebc8e6
-	.set StyleBmp_SynthParty, 0xebc96e
-	.set StyleBmp_SynthForSoul, 0xebc9f6
-	.set StyleBmp_SymphonyBallad, 0xebca7e
-	.set StyleBmp_SwingingKeys, 0xebcb06
-	.set StyleBmp_SwingSerenade, 0xebcb8e
-	.set StyleBmp_SwingB3Threes, 0xebcc16
-	.set StyleBmp_SweetSoprano, 0xebcc9e
-	.set StyleBmp_SweepingBridge, 0xebcd26
-	.set StyleBmp_SunnySpainMood, 0xebcdae
-	.set StyleBmp_StreetTalk, 0xebce36
-	.set StyleBmp_StephaneDjango, 0xebcebe
-	.set StyleBmp_SteelStrings, 0xebcf46
-	.set StyleBmp_SpyraSteel, 0xebcfce
-	.set StyleBmp_SpanishMoments, 0xebd056
-	.set StyleBmp_SouthernStyle, 0xebd0de
-	.set StyleBmp_SoulfulWhaWha, 0xebd166
-	.set StyleBmp_SoulVocalDuo, 0xebd1ee
-	.set StyleBmp_SoulHorn, 0xebd276
-	.set StyleBmp_SopranoGroove, 0xebd2fe
-	.set StyleBmp_SolidSixteen, 0xebd386
-	.set StyleBmp_SolidDistortion, 0xebd40e
-	.set StyleBmp_SoftRock, 0xebd496
-	.set StyleBmp_SmoothLips, 0xebd51e
-	.set StyleBmp_SlowSpinGroove, 0xebd5a6
-	.set StyleBmp_SlapBackRock, 0xebd62e
-	.set StyleBmp_SkeletonDance, 0xebd6b6
-	.set StyleBmp_SingItPlayIt, 0xebd73e
-	.set StyleBmp_SinatraStrings, 0xebd7c6
-	.set StyleBmp_SimpleBand, 0xebd84e
-	.set StyleBmp_ShuffleOrgan, 0xebd8d6
-	.set StyleBmp_ShearingCombo, 0xebd95e
-	.set StyleBmp_SevilleOctaves, 0xebd9e6
-	.set StyleBmp_SentimentalSolo, 0xebda6e
-	.set StyleBmp_SaxyMambo, 0xebdaf6
-	.set StyleBmp_SaxDrumsRRoll, 0xebdb7e
-	.set StyleBmp_SaxMamboist, 0xebdc06
-	.set StyleBmp_SantasHelpers, 0xebdc8e
-	.set StyleBmp_SambaUnion, 0xebdd16
-	.set StyleBmp_SambaParty, 0xebdd9e
-	.set StyleBmp_RossVocals, 0xebde26
-	.set StyleBmp_RollingWheels, 0xebdeae
-	.set StyleBmp_RockSymphony, 0xebdf36
-	.set StyleBmp_RockFall, 0xebdfbe
-	.set StyleBmp_RioHorns, 0xebe046
-	.set StyleBmp_RickysStrat, 0xebe0ce
-	.set StyleBmp_RetroGroove, 0xebe156
-	.set StyleBmp_ReinhardtsSolo, 0xebe1de
-	.set StyleBmp_ReggaeDanceHit, 0xebe266
-	.set StyleBmp_ReedItSwing, 0xebe2ee
-	.set StyleBmp_RastaJambo, 0xebe376
-	.set StyleBmp_RadioOrchestra, 0xebe3fe
-	.set StyleBmp_PuentesBigband, 0xebe486
-	.set StyleBmp_PowerSaxSwing, 0xebe50e
-	.set StyleBmp_PopLeader, 0xebe596
-	.set StyleBmp_PopBridge, 0xebe61e
-	.set StyleBmp_PolyDance, 0xebe6a6
-	.set StyleBmp_PlateDance, 0xebe72e
-	.set StyleBmp_PennyFolkSong, 0xebe7b6
-	.set StyleBmp_PartyPopStack, 0xebe83e
-	.set StyleBmp_PartyAccordion, 0xebe8c6
-	.set StyleBmp_ParadiseKeys, 0xebe94e
-	.set StyleBmp_OverTheTopWah, 0xebe9d6
-	.set StyleBmp_OrganistsSwing, 0xebea5e
-	.set StyleBmp_OrchestralEight, 0xebeae6
-	.set StyleBmp_OneTwoThree, 0xebeb6e
-	.set StyleBmp_OleGuitar, 0xebebf6
-	.set StyleBmp_OldTimeSaloon, 0xebec7e
-	.set StyleBmp_OldNewFunk, 0xebed06
-	.set StyleBmp_OklahomaDance, 0xebed8e
-	.set StyleBmp_OceanVocals, 0xebee16
-	.set StyleBmp_NotRavels, 0xebee9e
-	.set StyleBmp_NiceKeroncong, 0xebef26
-	.set StyleBmp_NewSquareDance, 0xebefae
-	.set StyleBmp_NewJazzBallad, 0xebf036
-	.set StyleBmp_NashvilleDance, 0xebf0be
-	.set StyleBmp_MuteSoloist, 0xebf146
-	.set StyleBmp_MusetteBallad, 0xebf1ce
-	.set StyleBmp_MovieBallad, 0xebf256
-	.set StyleBmp_MoschsMilitary, 0xebf2de
-	.set StyleBmp_MoiksMarchshow, 0xebf366
-	.set StyleBmp_ModernBoogie, 0xebf3ee
-	.set StyleBmp_MirandaMallets, 0xebf476
-	.set StyleBmp_MidnightTunes, 0xebf4fe
-	.set StyleBmp_MerengueParty, 0xebf586
-	.set StyleBmp_MellowSection, 0xebf60e
-	.set StyleBmp_MellowJazzTabs, 0xebf696
-	.set StyleBmp_MellowShuffle, 0xebf71e
-	.set StyleBmp_MaxsOrchestra, 0xebf7a6
-	.set StyleBmp_MarchingPolka, 0xebf82e
-	.set StyleBmp_MamboJambo, 0xebf8b6
-	.set StyleBmp_MadTabs, 0xebf93e
-	.set StyleBmp_LondonsBigbone, 0xebf9c6
-	.set StyleBmp_LionelsJazz, 0xebfa4e
-	.set StyleBmp_LikeSunday, 0xebfad6
-	.set StyleBmp_LetItShine, 0xebfb5e
-	.set StyleBmp_LatinoPiccolo, 0xebfbe6
-	.set StyleBmp_LatinPassion, 0xebfc6e
-	.set StyleBmp_LatinBallroom, 0xebfcf6
-	.set StyleBmp_LastStarparade, 0xebfd7e
-	.set StyleBmp_LAWarmth, 0xebfe06
-	.set StyleBmp_KnopflerTribute, 0xebfe8e
-	.set StyleBmp_KeyGrooves, 0xebff16
-	.set StyleBmp_JustTheFlute, 0xebff9e
-	.set NakaStr_SoundPreset176, 0xec00c7
-	.set SoundName_160, 0xec00ec
-	.set SoundName_160_0x27, 0xec0113
-	.set SoundName_ToTheBone, 0xec013b
-	.set NakaStr_SoundPresetBone, 0xec013f
-	.set NakaInst_Hard_Analogue_148_0x65, 0xec0a1b
-	.set SoundName_MournfulTenor, 0xec88ec
-	.set StyleSound_BluesAlley_Data, 0xec8974
-	.set SoundName_HymnBand, 0xec89b4
-	.set SoundName_HymnBand_0x66, 0xec8a1a
-	.set SoundName_PreachTheWord, 0xec8a7c
-	.set SoundName_LushTango, 0xecb09c
-	.set SoundName_LushTango_0x66, 0xecb102
-	.set SoundName_AstorsTango, 0xecb164
-	.set SoundName_SymphonicWaltz, 0xecb26c
-	.set StyleSound_QuickWaltz_Data, 0xecb2f4
-	.set SoundName_NotStrauss, 0xecb334
-	.set SoundName_NotStrauss_0x66, 0xecb39a
-	.set SoundName_BavarianFlutes, 0xecb3fc
-	.set SoundName_BeachPartySong, 0xecdbec
-	.set SoundName_CubanReeds, 0xecdcb4
-	.set SoundName_LatinoPiccolo, 0xecdd7c
-	.set SoundName_JamaicanBars, 0xecde44
-	.set SoundName_SambaUnion, 0xecde84
-	.set SoundName_NewOrganSamba, 0xecdf4c
-	.set SoundName_NiceKeroncong, 0xece014
-	.set SoundName_EasyDangdut, 0xece0dc
-	.set SoundName_PadangBeat, 0xece11c
-	.set SoundName_RastaVoice, 0xece1e4
-	.set SoundName_MarleysDrums, 0xece2ac
-	.set EffSeqScreen_ChordTypePtr_A, 0xed0072
-	.set EffSeqScreen_ChordTypePtr_B, 0xed009c
-	.set NakaInst_WITH_APC, 0xed00d5
-	.set NakaStr_CtrlParam9e9, 0xed013b
-	.set SeqChanContainer_ChordTypeRef_A, 0xed0212
-	.set SeqChanContainer_ChordTypeRef_B, 0xed029c
-	.set ParamStr08_varisupart, 0xed210e
-	.set ParamStr08_page, 0xed2116
-	.set ParamStr08_fontcolor, 0xed211c
-	.set ParamStr08_font, 0xed2122
-	.set ParamStr08_func, 0xed212c
-	.set ParamStr19_fixedcol, 0xed250c
-	.set ParamStr22_nowsongsubctgdtno, 0xed275c
-	.set ParamStr22_func, 0xed276e
-	.set ParamStr22_fixedrow, 0xed2774
-	.set ParamStr22_fixedcol, 0xed277e
-	.set NakaInst_AcMstSugAlpGridBox, 0xed2b9a
-	.set NakaInst_AcFSWAssGridBox, 0xed2be2
-	.set NakaDesc_AcTchSensGridBox, 0xed2bf4
-	.set NakaInst_AcTchSensGridBox, 0xed2bf6
-	.set NakaDesc_IvMstStyleWindowPgCtl, 0xed2c0c
-	.set NakaInst_IvMstStyleWindowPgCtl, 0xed2c0e
-	.set NakaDesc_IvPmemWindowPageCtl, 0xed2c22
-	.set NakaInst_IvPmemWindowPageCtl, 0xed2c24
-	.set NakaInst_MsaModeScreen, 0xed2c62
-	.set Str_7f, 0xed46d2
-	.set Str_RHYTHM, 0xed4722
-	.set SoundName_SOUNDRHYTHM, 0xed474a
-	.set Str_PANEL_MEMORY, 0xed477a
-	.set Str_PANEL_MEMORY_4922, 0xed4922
-	.set Str_7f_4A82, 0xed4a82
-	.set Str_DISPLAY_TYPE, 0xed4de2
-	.set Str_USER_INITIAL, 0xed5122
-	.set Str_VALUE, 0xed517a
-	.set ExtDevScreen_SndParamBank_Desc, 0xed690a
-	.set ExtDevScreen_SndParamPage_Desc, 0xed69a2
-	.set ExtDevScreen_VoiceParamBank_Desc, 0xed6a7a
-	.set ExtDevScreen_VoiceParamRhythm_Desc, 0xed6b0a
-	.set ExtDevScreen_VoiceParamDrums_Desc, 0xed6b52
-	.set ExtDevScreen_VoiceSetup_Desc, 0xed6be2
-	.set ExtDevScreen_VoiceMainPage_Desc, 0xed6c6e
-	.set ExtDevScreen_MidiCtrl_Desc, 0xed6ff2
-	.set ExtDevScreen_MidiCtrlPage_Desc, 0xed70a2
-	.set ExtDevScreen_MidiCtrlDetail_Desc, 0xed71b2
-	.set ExtDevScreen_MidiCtrlAdvanced_Desc, 0xed723a
-	.set ExtDevScreen_DspEffect_Desc, 0xed729a
-	.set ExtDevScreen_DspEffectPage_Desc, 0xed734a
-	.set ExtDevScreen_ReverbSetup_Desc, 0xed745a
-	.set ExtDevScreen_ReverbPage_Desc, 0xed74e2
-	.set ExtDevScreen_Equalizer_Desc, 0xed7542
-	.set ExtDevScreen_EqualizerPage_Desc, 0xed75f2
-	.set ExtDevScreen_UserInitWallpaper_Flag, 0xed9f54
-	.set ExtDevScreen_UserInitWallpaper_Data, 0xed9f5c
-	.set ENCODER_LUT_VOLUME, 0xeda1bc
-	.set ENCODER_LUT_BREATH_INDEX, 0xeda2bc
-	.set ENCODER_LUT_BREATH_VALUE, 0xeda2d2
-	.set ENCODER_LUT_BREATH_MULT, 0xeda3d2
-	.set ENCODER_LUT_BREATH_OFFSET, 0xeda3ea
-	.set ENCODER_LUT_FOOT, 0xeda402
-	.set ENCODER_LUT_EXPRESSION, 0xeda482
 	.set ToshiParam_Entry_01, 0xeda704
 	.set ToshiParam_Entry_02, 0xeda71c
 	.set ToshiParam_Entry_03, 0xeda734
@@ -3025,12 +1301,16 @@ ROM_PaddingFF:
 	.set ToshiParam_Entry_25, 0xeda9d4
 	.set ToshiParam_Entry_26, 0xedaa04
 	.set ToshiParam_Entry_27, 0xedaa34
-	.set SoundProgram_ParamPtrTable, 0xedb2e4
-	.set WidgetParam_TestMode_Entry, 0xedba44
-	.set WidgetParam_SineWave_Entry, 0xedbaae
-	.set Naka_SubDispatch_B_Table_0x6E, 0xee0206
-	.set SeqData_SubDispatch_ParamA, 0xee3023
-	.set SeqData_SubDispatch_ParamB, 0xee3025
+	.set Transpose_String_Error, 0xe80692
+	.set Transpose_String_Minus3, 0xe8068c
+	.set Transpose_String_Plus1, 0xe806a4
+	.set Transpose_String_Zero, 0xe806aa
+	.set UIState_Evt05_Handler, 0xef955d
+	.set UIState_Evt06_Handler, 0xef9554
+	.set WarnStr_Featuresforcreatingas, 0xe338c2
+	.set WarnStr_PresstheSTARTSTOPbutt, 0xe34104
+	.set WarnStr_PresstheSTARTSTOPbutt_0x26, 0xe3412a
+	.set WidgetDispatch_FDTestPtrTable, 0xe1ffb6
 	.set WidgetParam_Entry_002_0x18, 0xee45d2
 	.set WidgetParam_Entry_002_0x30, 0xee45ea
 	.set WidgetParam_Entry_006_0x18, 0xee4662
@@ -3040,94 +1320,24 @@ ROM_PaddingFF:
 	.set WidgetParam_Entry_011_0x18, 0xee4752
 	.set WidgetParam_Entry_011_0x48, 0xee4782
 	.set WidgetParam_Entry_011_0x60, 0xee479a
-	.set CharMap_PermutationPtrTable_A, 0xeed3de
-	.set CharMap_PermutationPtrTable_B, 0xeed52b
-	.set Pad_AfterNaka_DrawbarOrgan_Screens, 0xeee812
-	.set NakaData_NormalModeMap, 0xef001f
-	.set NakaData_NormalModeMap_0x07, 0xef0026
-	.set ScoopDisp_DispatchTable_Extended_0x20, 0xef7779
-	.set PerfMode_Evt01_Handler, 0xef8b6d
-	.set PerfMode_Evt02_Handler, 0xef8dfb
-	.set UIState_Evt06_Handler, 0xef9554
-	.set UIState_Evt05_Handler, 0xef955d
-	.set MemConfig_Handler_2, 0xefacf7
-	.set SubCPU_ToneDispatch_0x54, 0xefdb94
-	.set StringData_PartModeNames, 0xeff827
-	.set SeMenu_DataBlock_01, 0xf1039e
-	.set SeMenu_DataBlock_02, 0xf1040d
-	.set SeMenu_DataBlock_03, 0xf1041d
-	.set SeMenu_DataBlock_04, 0xf10454
-	.set SeMenu_DataBlock_05, 0xf10464
-	.set SeMenu_DataBlock_06, 0xf1048e
-	.set SeMenu_DataBlock_07, 0xf104b8
-	.set SeMenu_DataBlock_08, 0xf104c8
-	.set SeMenu_DataBlock_09, 0xf104d8
-	.set SeMenu_DataBlock_10, 0xf104e8
-	.set SeMenu_DataBlock_11, 0xf10512
-	.set SeMenu_DataBlock_12, 0xf105c4
-	.set SeMenu_DataBlock_13, 0xf10676
-	.set SeMenu_DataBlock_14, 0xf10689
-	.set FlashRead_BlockData_Field8, 0xf15891
-	.set FlashRead_BlockData_Field7, 0xf1589c
-	.set DrumDetailEdit_Entry_01, 0xf16006
-	.set DrumDetailEdit_Entry_02, 0xf16028
-	.set DrumDetailEdit_Entry_03, 0xf1604a
-	.set DrumDetailEdit_Entry_04, 0xf16056
-	.set DrumDetailEdit_Entry_05, 0xf16063
-	.set DrumDetailEdit_Entry_06, 0xf16070
-	.set DrumDetailEdit_Entry_07, 0xf16092
-	.set DrumDetailEdit_Entry_08, 0xf1609e
-	.set DrumDetailEdit_Entry_09, 0xf160ab
-	.set Data_Dispatch_Entry, 0xf160b8
-	.set Data_Dispatch_Entry_0x39, 0xf160f1
-	.set Data_Dispatch_Entry_0x45, 0xf160fd
-	.set EffectParamEdit_Entry_01, 0xf1649b
-	.set EffectParamEdit_Entry_02, 0xf164a6
-	.set EffectParamEdit_Entry_03, 0xf164b5
-	.set EffectParamEdit_Entry_04, 0xf164c0
-	.set EffectParamEdit_Entry_05, 0xf164cb
-	.set EffectParamEdit_Entry_06, 0xf164d6
-	.set EffectParamEdit_Entry_07, 0xf164e1
-	.set EffectParamEdit_Entry_08, 0xf164ec
-	.set SeqVoice_ValidateAndProcessState_0x13, 0xf400ec
-	.set NakaData_PerfStyleCode, 0xf5001f
-	.set NakaData_PerfStyleCode_0x10, 0xf5002f
-	.set NakaData_PerfStyleCode_0x1A, 0xf50039
-	.set NakaData_PerfStyleCode_0x33, 0xf50052
-	.set NakaData_PerfStyleCode_0x59, 0xf50078
-	.set MSP_FactoryPresetData_Continued, 0xf700bb
-	.set SLDstBankList_FuncBody_0x44, 0xf900b9
-	.set SLDstBankList_FuncBody_0x7C, 0xf900f1
-	.set FDC_INIT, 0xf96bbf
-	.set FDC_CONFIG_VERIFY, 0xf96bd0
-	.set FDC_CMD_DISPATCH_SUB, 0xf96d95
-	.set FDC_CMD_SEND, 0xf972f9
-	.set FDC_DETECT_CHECK, 0xf974fe
-	.set FDC_DRIVE_DETECT, 0xf97544
-	.set FDC_DRIVE_STATUS, 0xf97592
-	.set FDC_PRE_OP_CHECK, 0xf975ac
-	.set FDC_TIMING_DELAY, 0xf975dc
-	.set FDC_POST_OP, 0xf975e2
-	.set FDC_STATUS_HANDLER, 0xf97696
-	.set FDC_CE_DISPATCH, 0xf9782a
-	.set FDC_CE_EXIT, 0xf97833
-	.set FDC_SECTOR_XFER, 0xf97835
-	.set FDC_SX_MAIN, 0xf9795e
-	.set FDC_SX_EXIT, 0xf97967
-	.set FDC_CMD_ENABLE, 0xf97c21
-	.set FDC_CMD_DISABLE, 0xf97c4b
-	.set FDC_OUTPUT_CTRL, 0xf97c5b
-	.set RVari_SelectO_SecondItem_Draw_0x32, 0xfc0012
-	.set NakaData_WidgetInit1, 0xfc645a
-	.set NakaData_WidgetInit2, 0xfc647f
-	.set NakaData_WidgetInit3, 0xfc64ea
-	.set SeqChan_UnhandledCmd, 0xfd8261
-	.set SeqChan_UnhandledCmd_0x01, 0xfd8262
-	.set SeqChan_UnhandledCmd_0x02, 0xfd8263
-	.set SeqChan_UnhandledCmd_0x03, 0xfd8264
-	.set SeqChan_UnhandledCmd_0x12, 0xfd8273
-	.set AudioInit_PartConfig_Loop_0x26, 0xfe0053
-	.set HdaeRom_DispatchOffsetTable, CharMap_PermutationPtrTable_B + 540
-	.set HdaeRom_AltDispatchOffsetTable, CharMap_PermutationPtrTable_B + 552
-	.set HdaeRom_DataHandler_0x22, 0xff0270
-	.set NakaData_RomEnd, 0xffffff
+	.set WidgetParam_SineWave_Entry, 0xedbaae
+	.set WidgetParam_TestMode_Entry, 0xedba44
+	.set WidgetPropStr_Max, 0xeac1ba
+	.set WidgetPropStr_RangeFigures, 0xeac1be
+
+	.set GetResouceInfo, 0x00f1ea06
+	.set MainMspRgpSetFunc, 0x00f69943
+	.set MiddleNameFunc, 0x00f69384
+	.set StylCnvCnvtTtlFunc, 0x00f6c27d
+
+	.set CtrlPanel_SetResBit6_ViaLookup4C, 0x00fc7155
+	.set EffectMode_ByteData_Block2, 0x00fb62a2
+	.set EffectMode_ByteData_Block3, 0x00fb636c
+	.set EffectMode_ByteData_Block4, 0x00fb6418
+	.set Encoder_ApplySystemModeSettings, 0x00fc6626
+	.set FDemoText_ByteData_VoiceProbeB, 0x00f84352
+	.set MidiCtrl_ModeSwitchHandler, 0x00fd7edb
+	.set MIDI_SC0_DISPATCH_TABLE, 0x00fcf191
+	.set SendPartDataBlock_Return5, 0x00fef1d9
+	.set SeqByteBlock_DispatchJumpTable, 0x00f52e9d
+	.set Seq_InitFuncTable, 0x00ef120b

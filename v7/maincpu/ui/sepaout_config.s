@@ -5,16 +5,9 @@
 ; =============================================================================
 
 RESOURCE_INFO_HANDLER_OFFSETS:
-	.short RESOURCE_INFO_HANDLERS - RESOURCE_INFO_HANDLERS
-	.short ResInfo_GetSRAMBankRange - RESOURCE_INFO_HANDLERS
-	.short ResInfo_GetUserAreaRange - RESOURCE_INFO_HANDLERS
-	.short ResInfo_GetSndParamRange - RESOURCE_INFO_HANDLERS
-	.short ResInfo_GetVoiceBankRange - RESOURCE_INFO_HANDLERS
-	.short ResInfo_GetToneGenRange - RESOURCE_INFO_HANDLERS
-	.short ResInfo_GetFlashBankRange - RESOURCE_INFO_HANDLERS
-	.short ResInfo_GetMspSettingsRange - RESOURCE_INFO_HANDLERS
-	.short ResInfo_GetResourceListPtr - RESOURCE_INFO_HANDLERS
-	.short ResInfo_GetTableDataInfo - RESOURCE_INFO_HANDLERS
+	; Precomputed relative offsets (identical in v7 and v9)
+	.byte 0x00, 0x00, 0x18, 0x00, 0x31, 0x00, 0x73, 0x00, 0x83, 0x00
+	.byte 0x9c, 0x00, 0x4a, 0x00, 0xb5, 0x00, 0xce, 0x00, 0x63, 0x00
 
 ; SepaOut configuration data (826 bytes, compiled from sepaout_config.c)
 SepaOut_Config_0:
