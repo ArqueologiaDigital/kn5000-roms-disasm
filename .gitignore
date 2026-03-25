@@ -37,3 +37,4 @@ maincpu/includes/generated/*.bin
 # Cruft and temporary files
 cruft_please_ignore/
 mame_driver/build_error.txt
+*/maincpu/includes/generated/*.bin
