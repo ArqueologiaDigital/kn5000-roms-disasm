@@ -28536,8 +28536,8 @@ Sprintf_Locked:
 	lda xwa, (xsp + 14)
 	inc 4, xwa
 	ld (xsp + 2), xwa
-	pushw 0xff
-	pushw 0xaca
+	pushw 0xff		; Sprintf_OutputCallback >> 16
+	pushw 0xaca		; Sprintf_OutputCallback & 0xffff
 	lda xwa, (xsp + 6)
 	push xwa
 	ld xwa, (xsp + 22)
@@ -28557,8 +28557,8 @@ Sprintf_Unlocked:
 	stl_da	(0x3c21c), xwa
 	ld	xwa, (xsp+4)
 	ld	(xwa), 0
-	pushw	255
-	pushw	2762
+	pushw	0xff		; Sprintf_OutputCallback >> 16
+	pushw	0xaca		; Sprintf_OutputCallback & 0xffff
 	lda	xwa, (xsp+16)
 	push	xwa
 	ld	xwa, (xsp+16)
@@ -28566,6 +28566,7 @@ Sprintf_Unlocked:
 	call	Sprintf_Core
 	lda	xsp, (xsp+12)
 	ret
+Sprintf_OutputCallback:
 	ldl_da	xbc, (0x3c21c)
 	lds32	xwa, 1
 	addl_da	0x3c21c, xwa

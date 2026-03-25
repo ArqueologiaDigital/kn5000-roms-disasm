@@ -31,18 +31,13 @@ diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio
 ---
 > 	cp	(xbc+8), xsp
 28540c28549
-< 	pushw 0xaca
+< 	pushw 0xaca		; Sprintf_OutputCallback & 0xffff
 ---
-> 	pushw 0xad8
+> 	pushw 0xad8		; Sprintf_OutputCallback & 0xffff
 28561c28570
-< 	pushw	2762
+< 	pushw	0xaca		; Sprintf_OutputCallback & 0xffff
 ---
-> 	pushw	2776
-diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio/sound_editor_ui.s v10/maincpu/audio/sound_editor_ui.s
-11848c11848
-< 	ld	xiz, 0xff182c
----
-> 	ld	xiz, Sprintf_Octal_ZeroFill_0x7
+> 	pushw	0xad8		; Sprintf_OutputCallback & 0xffff
 diff -r '--exclude=*.bin' '--exclude=*.o' '--exclude=generated' v9/maincpu/audio/sprintf_core.s v10/maincpu/audio/sprintf_core.s
 3103c3103
 < 	.fill 12710, 1, 0xff

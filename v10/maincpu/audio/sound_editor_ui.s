@@ -11845,7 +11845,7 @@ SeBitmap_EnvCurve5:
 	pushw	ix
 	pushw	ix
 	add	xhl, xsp
-	ld	xiz, Sprintf_Octal_ZeroFill_0x7
+	ld	xiz, 0xff182c
 	swi	7
 	swi	7
 	nop
