@@ -28196,16 +28196,10 @@ TmFlash_BulkTransferToSubCPU:
 	jr	gt, 72
 	add	hl, hl
 	lda_24	xix, (CharMap_FullPermutation_0x647)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 242
-	swi	3
-	reti
-	swi	7
-	ldw	ix, 2035
-	.byte 0xf0
-	cps	xix, 0
+	ldw_sri	hl, 0x07, 0xf0, 0xec
+	lda_24	xix, (VoiceParam_DispatchTable1)
+	.byte	0xf3, 0x07, 0xf0, 0xec, 0xd8	; jp (xix + hl) SRI dispatch
+VoiceParam_DispatchTable1:
 	ld	xbc, 470
 	jr	5
 	ld	xbc, 289
