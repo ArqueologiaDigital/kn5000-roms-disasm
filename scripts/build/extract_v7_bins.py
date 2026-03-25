@@ -28,8 +28,11 @@ for fp in sorted(glob.glob('v9/maincpu/**/*.s', recursive=True)):
     last_label = None
     for line in lines:
         s = line.strip()
-        if s.endswith(b':') and not s.startswith(b'.') and not s.startswith(b';'):
-            last_label = s[:-1].decode('latin-1')
+        # Match "LabelName:" at start of line (may have content after colon)
+        import re as _re
+        _m = _re.match(rb'^(\w+):', s)
+        if _m and not s.startswith(b'.') and not s.startswith(b';'):
+            last_label = _m.group(1).decode('latin-1')
         if b'.incbin' in s and b'generated/' in s:
             i1 = s.find(b'"') + 1
             i2 = s.find(b'"', i1)
@@ -74,3 +77,35 @@ os.makedirs(os.path.dirname(seq_path), exist_ok=True)
 with open(seq_path, 'wb') as f:
     f.write(seq_data)
 print(f"Fixed naka_sequencer_channels.bin: {len(seq_data)} bytes (v7 size)")
+
+# V7-specific data extractions: regions in .s files that use v9 pointer values
+# and need to be replaced with v7 ROM data.
+v7_data_extractions = [
+    # (bin_name, rom_start, rom_end)
+    ('v7_data_charmap_fullpermutation.bin', 0xEED118, 0xEEDD36),
+    ('v7_data_charmap_valuedata_b.bin', 0xEE8ED8, 0xEEAE08),
+    ('v7_data_fdtest_string_testtitlefunc.bin', 0xE1FD3E, 0xE1FFD2),
+    ('v7_data_keyscalenotestr_g.bin', 0xED1C82, 0xED1D4A),
+    ('v7_data_methodnamestr_mt_svariini.bin', 0xED2F4A, 0xED2FDA),
+    ('v7_data_msgtype_excsend.bin', 0xE55D94, 0xE55DF2),
+    ('v7_data_mtname_songnameset.bin', 0xE2104A, 0xE21078),
+    ('v7_data_naka_subdispatch_a_table.bin', 0xEE0158, 0xEE0198),
+    ('v7_data_naka_toshiparam_table.bin', 0xEDB370, 0xEDBAC0),
+    ('v7_data_procnamestr_normscreenproc.bin', 0xED3282, 0xED32E6),
+    ('v7_data_seqchan_commanddispatch_table.bin', 0xEE2D6C, 0xEE2F26),
+    ('v7_data_str_storetotalsetting_de.bin', 0xED0C8C, 0xED0F48),
+    ('v7_data_systemconfig_pointertable.bin', 0xEE8C7E, 0xEE8CF8),
+    ('v7_data_uistate_defaultconfig_b.bin', 0xEE86B0, 0xEE86D0),
+    ('v7_data_widgetparam_selfref_table.bin', 0xEE4E1C, 0xEE4FC6),
+    ('v7_data_encoder_region.bin', 0xEDA160, 0xEDA616),
+]
+
+gen_dir = 'v7/maincpu/includes/generated'
+for bin_name, rom_start, rom_end in v7_data_extractions:
+    rom_off = rom_start - 0xe00000
+    data = v7_rom[rom_off:rom_end - 0xe00000]
+    bin_path = os.path.join(gen_dir, bin_name)
+    with open(bin_path, 'wb') as f:
+        f.write(data)
+
+print(f"Extracted {len(v7_data_extractions)} v7-specific data bins")

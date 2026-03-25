@@ -589,7 +589,6 @@ rebuilt_ROMs/kn5000_v7_program.llvm.elf: rebuilt_ROMs/kn5000_v7_program.llvm.o v
 
 rebuilt_ROMs/kn5000_v7_program.llvm.rom: rebuilt_ROMs/kn5000_v7_program.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
-	python3 scripts/build/patch_v7_data.py $@ original_ROMs/kn5000_v7_program.rom
 
 # --- Subcpu payload ---
 rebuilt_ROMs/kn5000_subprogram_v142.llvm.o: v142/subcpu/kn5000_subprogram_v142.s

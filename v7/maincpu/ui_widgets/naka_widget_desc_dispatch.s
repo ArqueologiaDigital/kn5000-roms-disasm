@@ -79,54 +79,7 @@ MsgType_FlashWrite:	aligned_string "MT_FLASHWRITE"
 MsgType_MpstWrite:	aligned_string "MT_MPSTWRITE"
 MsgType_MpstLoad:	aligned_string "MT_MPSTLOAD"
 MsgType_DrawKey:	aligned_string "MT_DRAWKEY"
-MsgType_ExcSend:	aligned_string "MT_EXCSEND"
-	aligned_string "MT_PCGSEND"
-	incf
-	.byte 0x00			; padding
-	.byte 0xb5, 0x3f
-	ldx
-	.byte 0x00			; padding
-	pop_f
-	ld	xwa, 0x623600f7
-	.byte 0xf7
-	.byte 0x00			; padding
-	.byte 0xf1, 0x79, 0xf7
-	.byte 0x00			; padding
-	rcf
-	ld	xsp, 0x4d8c00f7
-	.byte 0xf7
-	.byte 0x00			; padding
-	muls	xsp, xsp
-	ldx
-	.byte 0x00			; padding
-	pushw bc
-	.byte 0x52
-	ldx
-	.byte 0x00			; padding
-	ld	xde, 0x5a00f736
-	.byte 0x57
-	ldx
-	.byte 0x00			; padding
-	pop xiz
-	jr	po, 16777207
-	.byte 0x00			; padding
-	.byte 0xda, 0x73
-	ldx
-	.byte 0x00			; padding
-	pushw bc
-	cp	l, (xhl)
-	.byte 0x00			; padding
-	jrl	po, 16775046
-	.byte 0x00			; padding
-	.byte 0xdc, 0x9a
-	ldx
-	.byte 0x00			; padding
-	.byte 0xf0, 0x9d, 0xf7
-	.byte 0x00			; padding
-	.byte 0x00			; padding
-	.byte 0x00			; padding
-	.byte 0x00			; padding
-	.byte 0x00			; padding
+MsgType_ExcSend:	.incbin "includes/generated/v7_data_msgtype_excsend.bin"
 MidiMenu_NakaProcName_Table:
 	.long NakaInst_AcVocalistListBoxProc
 	.long NakaInst_PsHarmOnOffBoxProc
