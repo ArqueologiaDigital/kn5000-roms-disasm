@@ -27757,7 +27757,7 @@ HdaeRom_DataDispatch:
 HdaeRom_DataDispatch_SetWord:
 	ldw	hl, 0xff9a
 	pop	xiz
-	st_dri3b L, 0xfd, 0xb8, 0x01
+	lda	xsp, (xsp+440)
 	ret
 
 HdaeRom_DataDispatch_Block:
